@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-9695-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9698-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15FC4A09AE9
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 19:56:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 392A9A09AC0
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 19:55:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBD55188E7BD
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 18:56:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAD65188E667
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 18:55:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601D4226551;
-	Fri, 10 Jan 2025 18:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 200B622757C;
+	Fri, 10 Jan 2025 18:42:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="x/fetZE9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jPSNrYrl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BC4215F5A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C774122540C
 	for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 18:41:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736534513; cv=none; b=qNYRsWRSAGDNof3hDUe9p5glBDrCdB6VA9LTfZ4/oDf+VNZ55QcJ9sAu/xrys5ITe5qjCG+LBieXacJ4u5N6XVq4TVgLT96/FMmNwUKfC5CIwavFEqN6YXqeA30yPWwHnMYBK/a1Y1h0kwE78l57c6Qbxs7BmLhVSbRbU6GEO6k=
+	t=1736534522; cv=none; b=sOWWhjdap0D7LiqMiLS579IT53ua/YFTglb0bvyp8JMXmsE/4LNE6uExFf3Dgooka0reY8zaH9WtH7rl+DS+VWDdfAvSSfRh+htzPUb17PbVx2HzDAMs+1Zlel+3tvkT4F3cwX5OGzYgJ0i0tiSAq6XxBw+UFBeysTD6faUWNsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736534513; c=relaxed/simple;
-	bh=4d7pidGbvdIp8iHsT7YACeXpM+11EgA5LY+ovyRSffk=;
+	s=arc-20240116; t=1736534522; c=relaxed/simple;
+	bh=grUiPSYSTM6ChkvRHUtI259QuAZLs69ifkTxsxb8DH0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ICDWdlvuVFA1lLPsF3pGltTstupdPQnZE8LYkIIq3FIloudcMt9UKB/gfo1AoDPk3FIjHpYfhYFq+F1iZyrr47ZW/KhDEzCv47rXDDPsr+Fig2yIlP6inDujHczWRaxwxk08SI8p/8V3+7QB29yiXEuIMqRxJbZS2qJ5fSeJ4R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=x/fetZE9; arc=none smtp.client-ip=209.85.221.73
+	 To:Cc:Content-Type; b=RAziUQAlBT2ngbzCUSI9bVNva9dsydZS+RIHpYf7zdPk1UXEeodweQ0diDzH7QlJNz74t0IVd6Pw6Wt22rpeNzLLI4brY8+Pq4az2DJ4vxFiV5QY3/aOzY/rClICHAF6BuFWtH/F00zZ641Vo629IHMybk1lbWGAUiHnMpQ3xvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jPSNrYrl; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-386333ea577so964912f8f.1
-        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 10:41:31 -0800 (PST)
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43625ceae52so12794085e9.0
+        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 10:41:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736534486; x=1737139286; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1736534489; x=1737139289; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fqV4f6s/Eo+EZ+PE2OCyE0kBm/vfnsLcFKRz+1otrE=;
-        b=x/fetZE9fqENNHA/TK7J3oNSgvGr+mTjENc36PJ4rqxoixGMSS2It48gQWpx5s1gLQ
-         Q1bsI0nE5oPMsCrnK07kvVUSVDiVdcnQz0NDggu7QBOA49tfKncNEEKcZ+tcwl35q1iB
-         ZW7Tq5/dKeWJMGEMwbIsEwh8eqNEPfjCaU15NIF/lDZc/wXJB2vS5oM+kKLEbmWg4eTH
-         FDOIZ8zuvDv/Sit/wd2xrxF+AyAShMGCcD3ko6RY2pPVMsItRF+lXGxNuvVyg5XVlQBO
-         8Nlrte9RJKZ5VdXMsskcV/p46JPYnucaAu8MnqMqBS0QbQzJ2h+yOejkpfafbu2lbMQe
-         STZA==
+        bh=lgAtsH7tF25YqHAENGvYLMvhBopdecMcg5W9s6t9Qm4=;
+        b=jPSNrYrl7m4sEbINchbPyJH0zkt7TPzr1VUx8iMrzYag9mmHclvO58cCt3cAm8eozj
+         kD77/P5Rsr8LLmY3c2VFMhDrQ+VnfNe1hyL29gEM0Kyf/nqcN/zv7swGGdZ4UI2xU9No
+         mrdH2o2O5V2Fl8j5e1aDbHt9lD2d5VPuEWNWFDDE/s7BsM2HED8amVxzPyZcFgDPHmVm
+         9AqCHcA/FHLUaJ3WLLSmxBF1FoEJVgYnF0FnihRUVfo+tjkRXjxiC80NPWmXufoZKtl3
+         8H8t2cNRnoNutG44qImfoLOIiTSr7Kc0HX3SflQDxcJHF9UlccVsZ5pRye8F6sty/Zgq
+         Lr+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736534486; x=1737139286;
+        d=1e100.net; s=20230601; t=1736534489; x=1737139289;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fqV4f6s/Eo+EZ+PE2OCyE0kBm/vfnsLcFKRz+1otrE=;
-        b=Ue38AIH8k0eD5x30qhqucDDz0BV/KHJA/LW8fjNWZR+mp4c0g94mr2aeSGGzU3kPNw
-         rr5JT7rvhM+USJFMAwd8+6DJArpeC1+su7hDYLfGSYZ17N+j7VZhmYPqLgm/dAnZhNTT
-         xq8RYotEYuOZQQaCZTAtRfoFiKVbynvsh90iD9pca5cr1xk/8F1h22G4YlvueF2zuw0D
-         nYb6WmvfjSSy1VB69LI3f9vKDVfKvJKSzl/dXEnvLajQm4LGwRS1n0B1LmfsA8MA5iff
-         FqmtckrMsrKxxHkeLgErkRIni5lIbqVaUE4ZMwC3yTJMR9RCvIlPiKTKlqWaPvz1cVNw
-         C9UA==
-X-Forwarded-Encrypted: i=1; AJvYcCVDjzBDA92OWngUKDHZxkU3DuLtDs1v1TCcvsK+w7oPu5iRwnhoGf43AuGzlKd9xI5JBUSzX+8wV3jr@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNkz703RjVKR+HcERWNnbO4P6RT4kXOqivoPnPCNak4UDEzH38
-	ckzASnCpEFg0s5Cj9wkrNTmO2LpoUZzKeyY15z5d0oCwnaZYjkxO1v7yFg1CViUytihEQvac77n
-	1nhH7zQNgqA==
-X-Google-Smtp-Source: AGHT+IFgJUpClA++DtJe4xQ45Yc9kKsVSyJCXKqF0cxpPlCBfuMButRzIe/JLM7ynzshFcOsnG5hhjluySNsEA==
-X-Received: from wrbeh5.prod.google.com ([2002:a05:6000:4105:b0:382:4235:c487])
+        bh=lgAtsH7tF25YqHAENGvYLMvhBopdecMcg5W9s6t9Qm4=;
+        b=TxtqdD8z/sKHKM8OJmQeFZB+zOLJj8uc0DUUzAMrLu5rp8pTZnYHRFEfXLHhsKRhqI
+         h1N4xRNXmYUp+ZEXhip3tgvcJsop2RAyZ3SyLAkzcjZLEzStD5Xxm9XQs6znNC+Dv8si
+         eAoGKq8Iy0tZtGqCpQirTpO7zeMAkV+iv2Cz2+uOegOPvKHf37dyuf2Yna7JXJuWdGku
+         CLazfH6XCjV8sHZPY89oHBXzSimJyWcufNNTkWX9WEYLdFsFvQDsGulWOnv+C4wsg8i4
+         hdjXiEDMGMTpyTRaofFnsW6ioHmIlzC2pYzbeof9GAOHYkQ0w9wIQnr8d/m4xC10b9Ng
+         KxjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWk3PSd7o85KtfQuGbj/WEj6DLQCgivdRQ9GfYH5bkCErZv90l6b4aVfX6MiRtJru0CqeySiNjVTzDm@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxrw7/gtH2fmxBRFupIhr0XfA2r3iJJkeys+tLZXPdovvUnTdWz
+	1CMsa6hPirI3c7hCBiAzoMFS4HyEa9PglVFcyQoewtjTTJqKs45E6jrCxIUv01DT0nUI4vnAKMw
+	txOHK5wwMEQ==
+X-Google-Smtp-Source: AGHT+IFeKlzdEnxlsx468YN6J+lzj2fJ2REIK9m1LE7fZOV2UV2JrR/PAzf48/PWmJ/jsXO7ZyblIN12CqtAPQ==
+X-Received: from wmqa17.prod.google.com ([2002:a05:600c:3491:b0:434:fa72:f1bf])
  (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:adf:8b5b:0:b0:38a:88bc:aea4 with SMTP id ffacd0b85a97d-38a88bcaebfmr7355114f8f.30.1736534486264;
- Fri, 10 Jan 2025 10:41:26 -0800 (PST)
-Date: Fri, 10 Jan 2025 18:40:44 +0000
+ 2002:a05:600c:4586:b0:434:9e1d:7626 with SMTP id 5b1f17b1804b1-436e26f4b91mr97248925e9.25.1736534488470;
+ Fri, 10 Jan 2025 10:41:28 -0800 (PST)
+Date: Fri, 10 Jan 2025 18:40:45 +0000
 In-Reply-To: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
 X-Mailer: b4 0.15-dev
-Message-ID: <20250110-asi-rfc-v2-v2-18-8419288bc805@google.com>
-Subject: [PATCH RFC v2 18/29] mm: asi: Map dynamic percpu memory as nonsensitive
+Message-ID: <20250110-asi-rfc-v2-v2-19-8419288bc805@google.com>
+Subject: [PATCH RFC v2 19/29] mm: asi: Stabilize CR3 in switch_mm_irqs_off()
 From: Brendan Jackman <jackmanb@google.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -126,160 +126,34 @@ Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
 	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
 	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
 	kvm@vger.kernel.org, linux-efi@vger.kernel.org, 
-	Brendan Jackman <jackmanb@google.com>, Reiji Watanabe <reijiw@google.com>, 
-	Junaid Shahid <junaids@google.com>
+	Brendan Jackman <jackmanb@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-From: Reiji Watanabe <reijiw@google.com>
+An ASI-restricted CR3 is unstable as interrupts can cause ASI-exits.
+Although we already unconditionally ASI-exit during context-switch, and
+before returning from the VM-run path, it's still possible to reach
+switch_mm_irqs_off() in a restricted context, because KVM code updates
+static keys, which requires using a temporary mm.
 
-Currently, all dynamic percpu memory is implicitly (and
-unintentionally) treated as sensitive memory.
-
-Unconditionally map pages for dynamically allocated percpu
-memory as global nonsensitive memory, other than pages that
-are allocated for pcpu_{first,reserved}_chunk during early
-boot via memblock allocator (these will be taken care by the
-following patch).
-
-We don't support sensitive percpu memory allocation yet.
-
-Co-developed-by: Junaid Shahid <junaids@google.com>
-Signed-off-by: Junaid Shahid <junaids@google.com>
-Signed-off-by: Reiji Watanabe <reijiw@google.com>
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
-
-WIP: Drop VM_SENSITIVE checks from percpu code
 ---
- mm/percpu-vm.c | 50 ++++++++++++++++++++++++++++++++++++++++++++------
- mm/percpu.c    |  4 ++--
- 2 files changed, 46 insertions(+), 8 deletions(-)
+ arch/x86/mm/tlb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/mm/percpu-vm.c b/mm/percpu-vm.c
-index cd69caf6aa8d8eded2395eb4bc4051b78ec6aa33..2935d7fbac41548819a94dcc60566bd18cde819a 100644
---- a/mm/percpu-vm.c
-+++ b/mm/percpu-vm.c
-@@ -132,11 +132,20 @@ static void pcpu_pre_unmap_flush(struct pcpu_chunk *chunk,
- 		pcpu_chunk_addr(chunk, pcpu_high_unit_cpu, page_end));
- }
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index c55733e144c7538ce7f97b74ea2b1b9c22497c32..ce5598f96ea7a84dc0e8623022ab5bfbba401b48 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -546,6 +546,9 @@ void switch_mm_irqs_off(struct mm_struct *unused, struct mm_struct *next,
+ 	bool need_flush;
+ 	u16 new_asid;
  
--static void __pcpu_unmap_pages(unsigned long addr, int nr_pages)
-+static void ___pcpu_unmap_pages(unsigned long addr, int nr_pages)
- {
- 	vunmap_range_noflush(addr, addr + (nr_pages << PAGE_SHIFT));
- }
- 
-+static void __pcpu_unmap_pages(unsigned long addr, int nr_pages,
-+			       unsigned long vm_flags)
-+{
-+	unsigned long size = nr_pages << PAGE_SHIFT;
++	/* Stabilize CR3, before reading or writing CR3 */
++	asi_exit();
 +
-+	asi_unmap(ASI_GLOBAL_NONSENSITIVE, (void *)addr, size);
-+	___pcpu_unmap_pages(addr, nr_pages);
-+}
-+
- /**
-  * pcpu_unmap_pages - unmap pages out of a pcpu_chunk
-  * @chunk: chunk of interest
-@@ -153,6 +162,8 @@ static void __pcpu_unmap_pages(unsigned long addr, int nr_pages)
- static void pcpu_unmap_pages(struct pcpu_chunk *chunk,
- 			     struct page **pages, int page_start, int page_end)
- {
-+	struct vm_struct **vms = (struct vm_struct **)chunk->data;
-+	unsigned long vm_flags = vms ? vms[0]->flags : VM_ALLOC;
- 	unsigned int cpu;
- 	int i;
- 
-@@ -165,7 +176,7 @@ static void pcpu_unmap_pages(struct pcpu_chunk *chunk,
- 			pages[pcpu_page_idx(cpu, i)] = page;
- 		}
- 		__pcpu_unmap_pages(pcpu_chunk_addr(chunk, cpu, page_start),
--				   page_end - page_start);
-+				   page_end - page_start, vm_flags);
- 	}
- }
- 
-@@ -190,13 +201,38 @@ static void pcpu_post_unmap_tlb_flush(struct pcpu_chunk *chunk,
- 		pcpu_chunk_addr(chunk, pcpu_high_unit_cpu, page_end));
- }
- 
--static int __pcpu_map_pages(unsigned long addr, struct page **pages,
--			    int nr_pages)
-+/*
-+ * __pcpu_map_pages() should not be called during the percpu initialization,
-+ * as asi_map() depends on the page allocator (which isn't available yet
-+ * during percpu initialization).  Instead, ___pcpu_map_pages() can be used
-+ * during the percpu initialization. But, any pages that are mapped with
-+ * ___pcpu_map_pages() will be treated as sensitive memory, unless
-+ * they are explicitly mapped with asi_map() later.
-+ */
-+static int ___pcpu_map_pages(unsigned long addr, struct page **pages,
-+			     int nr_pages)
- {
- 	return vmap_pages_range_noflush(addr, addr + (nr_pages << PAGE_SHIFT),
- 					PAGE_KERNEL, pages, PAGE_SHIFT);
- }
- 
-+static int __pcpu_map_pages(unsigned long addr, struct page **pages,
-+			    int nr_pages, unsigned long vm_flags)
-+{
-+	unsigned long size = nr_pages << PAGE_SHIFT;
-+	int err;
-+
-+	err = ___pcpu_map_pages(addr, pages, nr_pages);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * If this fails, pcpu_map_pages()->__pcpu_unmap_pages() will call
-+	 * asi_unmap() and clean up any partial mappings.
-+	 */
-+	return asi_map(ASI_GLOBAL_NONSENSITIVE, (void *)addr, size);
-+}
-+
- /**
-  * pcpu_map_pages - map pages into a pcpu_chunk
-  * @chunk: chunk of interest
-@@ -214,13 +250,15 @@ static int __pcpu_map_pages(unsigned long addr, struct page **pages,
- static int pcpu_map_pages(struct pcpu_chunk *chunk,
- 			  struct page **pages, int page_start, int page_end)
- {
-+	struct vm_struct **vms = (struct vm_struct **)chunk->data;
-+	unsigned long vm_flags = vms ? vms[0]->flags : VM_ALLOC;
- 	unsigned int cpu, tcpu;
- 	int i, err;
- 
- 	for_each_possible_cpu(cpu) {
- 		err = __pcpu_map_pages(pcpu_chunk_addr(chunk, cpu, page_start),
- 				       &pages[pcpu_page_idx(cpu, page_start)],
--				       page_end - page_start);
-+				       page_end - page_start, vm_flags);
- 		if (err < 0)
- 			goto err;
- 
-@@ -232,7 +270,7 @@ static int pcpu_map_pages(struct pcpu_chunk *chunk,
- err:
- 	for_each_possible_cpu(tcpu) {
- 		__pcpu_unmap_pages(pcpu_chunk_addr(chunk, tcpu, page_start),
--				   page_end - page_start);
-+				   page_end - page_start, vm_flags);
- 		if (tcpu == cpu)
- 			break;
- 	}
-diff --git a/mm/percpu.c b/mm/percpu.c
-index da21680ff294cb53dfb42bf0d3b3bbd2654d2cfa..c2d913c579bf07892957ac7f601a6a71defadc4b 100644
---- a/mm/percpu.c
-+++ b/mm/percpu.c
-@@ -3273,8 +3273,8 @@ int __init pcpu_page_first_chunk(size_t reserved_size, pcpu_fc_cpu_to_node_fn_t
- 			pcpu_populate_pte(unit_addr + (i << PAGE_SHIFT));
- 
- 		/* pte already populated, the following shouldn't fail */
--		rc = __pcpu_map_pages(unit_addr, &pages[unit * unit_pages],
--				      unit_pages);
-+		rc = ___pcpu_map_pages(unit_addr, &pages[unit * unit_pages],
-+				       unit_pages);
- 		if (rc < 0)
- 			panic("failed to map percpu area, err=%d\n", rc);
- 
+ 	/* We don't want flush_tlb_func() to run concurrently with us. */
+ 	if (IS_ENABLED(CONFIG_PROVE_LOCKING))
+ 		WARN_ON_ONCE(!irqs_disabled());
 
 -- 
 2.47.1.613.gc27f4b7a9f-goog
