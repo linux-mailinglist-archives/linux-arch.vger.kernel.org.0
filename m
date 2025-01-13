@@ -1,56 +1,67 @@
-Return-Path: <linux-arch+bounces-9718-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9719-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F2FBA0B5B9
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 12:31:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 508C5A0B61F
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 12:53:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E96D166551
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 11:31:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D3EC188513B
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 11:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82EA122CF16;
-	Mon, 13 Jan 2025 11:29:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BF61CAA99;
+	Mon, 13 Jan 2025 11:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="msBh88B7"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BsQUyE0M"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE7822CF2A;
-	Mon, 13 Jan 2025 11:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E401A8F98;
+	Mon, 13 Jan 2025 11:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736767795; cv=none; b=EGEVNJP+ZheiWPd6WUEYBhII2bMf1YBnPR2AsRGrRXfhjhC1m84b3uu5Q/lMnT07jBdM/Dxlrj6GBjb4chGbVBioxonwsUTocfIzVDHGn7f404bFu70xc4oVnbLPHzHLC7JNdhGrVTeoQw9sKiuHFsW6zDpmQYcYoIR9K4Myyos=
+	t=1736769184; cv=none; b=lf9+4Cyl8WgYFyo+mea9/tbjdaKJsVJcKclv1mZo3BuDwOznQ+gCqsuEGYwZ9c5vkKV7Vnioft2EYDPAxIY/yhNvvli2T2k3WRSbvxnWgNsDTlC2vVdKCr/4sRN2Zvwlz/1n44m+XrVP6T/OHqh2od1cGYiVCKwAn6FIRalK5+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736767795; c=relaxed/simple;
-	bh=ZyeWQJpTwGAGdbZR/bEhR0PM6mD78pCqdTSfYHfG17s=;
+	s=arc-20240116; t=1736769184; c=relaxed/simple;
+	bh=rj/R/90a7hLmRewZhsY/bA19NAKxOytvjRKPzmkvmTI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V5b1/Z7N1bLUYnBhNz+U+0NLz4FZJmbqdb5w95bdg8Ew+M47HjKuUZC2FzTreVJeQfhAluvdZxaxtvhikLzqxDzX/eZJMaRyV+BTCx0MZH3uvrjy9bVzKhaJBUC6ubPzuHarWZQYym8QvQAXLXPEcnOwhwUvXNcEwpPlKt8hiZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=msBh88B7; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=TkMb9saWDKoVdtAfj3qa4lA0CizVrZu729rv04Lulvo=; b=msBh88B7wWuH+agmzukCs9yUjG
-	0HifRnJNNLkU9Vny10uEY5Qh+OiJsv7Tu0Kks7NYZ3UDmxKfaRbf9Pw2gK/7uHsk4TPzrirMWaRiL
-	5BCrdvhYtxcsSAd/BMc5t3gObKHdq2OADpwaRfrcxsyqRs7GtQmKvbv3124PTRvr+6DGa2lRdHU9m
-	8pR1vGulJTMOZSVtYBjzhw2ipgWqmCXCk9SzCBRLldC/pBbxKqw51MjNA4c01jMyEleErgpPjaiq0
-	6pVUFRSzn7YzX5kQ9UwhOxj+ttbE2ABcuW70d3tNn1vMb6TZwJreWA4oa/+YZQRNootJNGZc+XSHn
-	jMKSNFZA==;
-Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tXIdT-00000000bu0-0Byw;
-	Mon, 13 Jan 2025 11:29:35 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7CCFA30057A; Mon, 13 Jan 2025 12:29:34 +0100 (CET)
-Date: Mon, 13 Jan 2025 12:29:34 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ph5UHDZj8SctAe/n4dSxSzPf5SOWIgf9qofjQeghexuNNs/lz4wN6bcqmaDLF+XgxcfJoPaY2WgVQCNAcLAyrmn0mftazyNfxrqt8rJdNWtjR+QNaIGS8u+qB18vvX0PmT7wevSjkuKdsX+lHOFmmOn7pWLeaLxXPTe+ja5ICt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=BsQUyE0M; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 549FF40E01F9;
+	Mon, 13 Jan 2025 11:52:55 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id xmIsbErgUaWY; Mon, 13 Jan 2025 11:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1736769173; bh=qSbRHcCxicQ2oaohgQJ8xn6gI1z5hxVzGPJ9KcO78ak=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BsQUyE0MpgT/tvDuXqOP2by5wxaln0pgDMNsyorzlEBunwnsVmYg6L2A1phKwPV7s
+	 kprzy+NBoNbYbHsJnT3YmhuYEeQN554Y35wC/mmKzG9UGAMJVta9IWmsj8KPfG/LMv
+	 XfD6aFYfx/eAJf4Z4WMS7uJGUgv47TyMQcsEz3kYN83euyk5ovQcb00rZstpPUl+k2
+	 XbESf4MoT3jT5DSHXgpKMVuLAP/j4GxI90mVoMrz7jo6PB/bu04vVroAIHe+P4wncu
+	 uMqHlK64sB5NHbaPMUduXTl1y6aXJwv3ihwZQc6RG0KfSGp8H2vD36ht30yi+eeqLV
+	 QWhvaRrxLFVJpiCA6H19MvlreYEL+92uTMcoce80ej/6rD/fnlBL+Ga63CK5k96ts0
+	 n2vTOs2LhW2VMmg+88LAPYd8NjdMMEnfr6zy1QtfqPlktXHYlwN/tkF4apvCcnQ3VS
+	 CTn1EUlTZTFJseWRU7RWGhnI4DqXJUlXgdmWfAh0Hogqv0/+Bj8DIm/1FQJ6J6gGJO
+	 EwdXtvJeMUKmR9tsmgnfLa4Pn6Qe8PTZ85dV6YjZqO3pPejIvC42f/ZubgkapbMYf6
+	 dhQef/RqIIoxyOJiBZ0pWPWElWKBrNqe3G6IJPjHGPHPAherBr5S2sILxabshks3Oo
+	 quZ4q2rdiiJ34vO8+Ur4yrU0=
+Received: from zn.tnic (pd953008e.dip0.t-ipconnect.de [217.83.0.142])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B4E3940E0269;
+	Mon, 13 Jan 2025 11:51:56 +0000 (UTC)
+Date: Mon, 13 Jan 2025 12:51:51 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
 	Mike Rapoport <rppt@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
@@ -91,65 +102,47 @@ Cc: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
 	linux-mips@vger.kernel.org, linux-mm@kvack.org,
 	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
 	linux-parisc@vger.kernel.or
-Subject: [PATCH] x86: Disable EXECMEM_ROX support
-Message-ID: <20250113112934.GA8385@noisy.programming.kicks-ass.net>
+Subject: Re: [PATCH] x86: Disable EXECMEM_ROX support
+Message-ID: <20250113115151.GDZ4T-VwIq_6ZafRE4@fat_crate.local>
 References: <20241023162711.2579610-1-rppt@kernel.org>
  <20241023162711.2579610-9-rppt@kernel.org>
  <Z4QM_RFfhNX_li_C@intel.com>
  <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
  <20250113111116.GF5388@noisy.programming.kicks-ass.net>
+ <20250113112934.GA8385@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250113111116.GF5388@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250113112934.GA8385@noisy.programming.kicks-ass.net>
 
-On Mon, Jan 13, 2025 at 12:11:16PM +0100, Peter Zijlstra wrote:
-
-> There's definiltely breakage with that module_writable_address()
-> nonsense in alternative.c that will not be fixed by that patch.
+On Mon, Jan 13, 2025 at 12:29:34PM +0100, Peter Zijlstra wrote:
+> On Mon, Jan 13, 2025 at 12:11:16PM +0100, Peter Zijlstra wrote:
 > 
-> The very simplest thing at this point is to remove:
+> > There's definiltely breakage with that module_writable_address()
+> > nonsense in alternative.c that will not be fixed by that patch.
+> > 
+> > The very simplest thing at this point is to remove:
+> > 
+> >      select ARCH_HAS_EXECMEM_ROX             if X86_64
+> > 
+> > and try again next cycle.
 > 
->      select ARCH_HAS_EXECMEM_ROX             if X86_64
-> 
-> and try again next cycle.
+> Boris asked I send it as a proper patch, so here goes. Perhaps next time
+> let x86 merge x86 code :/
 
-Boris asked I send it as a proper patch, so here goes. Perhaps next time
-let x86 merge x86 code :/
+I just love it how this went in without a single x86 maintainer Ack, it broke
+a bunch of things and then it is still there instead of getting reverted.
 
----
-Subject: x86: Disable EXECMEM_ROX support
+Let's not do this again please.
 
-The whole module_writable_address() nonsense made a giant mess of
-alternative.c, not to mention it still contains bugs -- notable some of the CFI
-variants crash and burn.
+-- 
+Regards/Gruss,
+    Boris.
 
-Mike has been working on patches to clean all this up again, but given the
-current state of things, this stuff just isn't ready.
-
-Disable for now, lets try again next cycle.
-
-Fixes: 5185e7f9f3bd ("x86/module: enable ROX caches for module text on 64 bit")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 9d7bd0ae48c4..ef6cfea9df73 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -83,7 +83,6 @@ config X86
- 	select ARCH_HAS_DMA_OPS			if GART_IOMMU || XEN
- 	select ARCH_HAS_EARLY_DEBUG		if KGDB
- 	select ARCH_HAS_ELF_RANDOMIZE
--	select ARCH_HAS_EXECMEM_ROX		if X86_64
- 	select ARCH_HAS_FAST_MULTIPLIER
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
+https://people.kernel.org/tglx/notes-about-netiquette
 
