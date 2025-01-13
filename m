@@ -1,175 +1,206 @@
-Return-Path: <linux-arch+bounces-9729-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9730-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566F2A0BE4E
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 18:07:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F0AFA0BE69
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 18:10:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7359C160F2D
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 17:07:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CCD11886788
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 17:10:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D151BC061;
-	Mon, 13 Jan 2025 17:07:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542EC1FBBF0;
+	Mon, 13 Jan 2025 17:09:36 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84AE01B4238;
-	Mon, 13 Jan 2025 17:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 300CB1FBBE8;
+	Mon, 13 Jan 2025 17:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736788020; cv=none; b=F2dTj1jKznSgRTFlBDfQiavX88mwSA3qY3UKAImAtwS2917elps+C0fMSXn/m+nBQ39zc8MI7/kp+/k+7/LySwUqxQ1fG/LQPc9nqFs4FMBFgxYuYfiIZ/qPOqwJnb4IGaIGiKT6YMD+doh1p3z8RjHB4rWZm0mtoaoNO1845l4=
+	t=1736788176; cv=none; b=i8o6jACaAc4QjXVXphYxX4kf+maUEDiQDeSnrjH9K3gsHspJ4x7xzFSPhcygQUUIA1ZSGMI2Z17vFPw6c48Gi3MGmNWJI781UqVAMAdCENIxCPshuwSxO5XiAVHhMaubYXjP5gEgwS9x1meNxS5nm3DtY14KK9I9vp8XnfDdVLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736788020; c=relaxed/simple;
-	bh=cD0Vf44zr3UOAOE4zgF1nw22M7rJdbsowP9tcc1Jdi4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AiPmVF3J8QoJYt6KRXzDOu4Cz8+otsRQhfJIo+cvawwr8FY1FKdIbq5VVLHaeEYcHv0O4MHQrzj9KaSyDImdByG/Kjzpg/JRRUZ6hz6KdwwsLNk+9wdcDK77yCcHNayxmRTBy1oIAPwULcqze6HgW42gE+3n8/9qiFRGCMoZzRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A2391BB0;
-	Mon, 13 Jan 2025 09:07:26 -0800 (PST)
-Received: from udebian.localdomain (unknown [10.1.25.34])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B00D83F673;
-	Mon, 13 Jan 2025 09:06:55 -0800 (PST)
-From: Yury Khrustalev <yury.khrustalev@arm.com>
-To: linux-arch@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Kevin Brodsky <kevin.brodsky@arm.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sandipan Das <sandipan@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	x86@kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	nd@arm.com,
-	Yury Khrustalev <yury.khrustalev@arm.com>
-Subject: [RESEND v4 3/3] selftests/powerpc: Use PKEY_UNRESTRICTED macro
-Date: Mon, 13 Jan 2025 17:06:19 +0000
-Message-Id: <20250113170619.484698-4-yury.khrustalev@arm.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250113170619.484698-1-yury.khrustalev@arm.com>
-References: <20250113170619.484698-1-yury.khrustalev@arm.com>
+	s=arc-20240116; t=1736788176; c=relaxed/simple;
+	bh=2p7Vt7jOMp86rYap/GwwZwHDtOoZfAcAbpaDyx0ixZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=RtzY9fY0N2t4WFYj/8R748TbWlOiFmsIAVSISuBiZiAXk3mSPdB5oZrF5Ys2Rphllxg+K/ae8d43vXocIJ0p7MxeX7bcKp1wPcJGKSf9t8AosH8f/aMAysqbXQLW/iEiy3FxDbANFL+k55i+swHtGM3CLKvM6WY4KwdVrV8Qn3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 3837172C90B;
+	Mon, 13 Jan 2025 20:09:26 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 150757CCB3A; Mon, 13 Jan 2025 19:09:25 +0200 (IST)
+Date: Mon, 13 Jan 2025 19:09:25 +0200
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Mike Frysinger <vapier@gentoo.org>,
+	Renzo Davoli <renzo@cs.unibo.it>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	strace-devel@lists.strace.io, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, linux-snps-arc@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+Subject: [PATCH v2 0/7] ptrace: introduce PTRACE_SET_SYSCALL_INFO API
+Message-ID: <20250113170925.GA392@altlinux.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Replace literal 0 with macro PKEY_UNRESTRICTED where pkey_*() functions
-are used in mm selftests for memory protection keys for ppc target.
+PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
+PTRACE_GET_SYSCALL_INFO by letting the ptracer modify details of
+system calls the tracee is blocked in.
 
-Signed-off-by: Yury Khrustalev <yury.khrustalev@arm.com>
-Suggested-by: Kevin Brodsky <kevin.brodsky@arm.com>
-Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+This API allows ptracers to obtain and modify system call details
+in a straightforward and architecture-agnostic way.
+
+Current implementation supports changing only those bits of system call
+information that are used by strace, namely, syscall number, syscall
+arguments, and syscall return value.
+
+Support of changing additional details returned by PTRACE_GET_SYSCALL_INFO,
+such as instruction pointer and stack pointer, could be added later
+if needed, by using struct ptrace_syscall_info.flags to specify
+the additional details that should be set.  Currently, flags and reserved
+fields of struct ptrace_syscall_info must be initialized with zeroes;
+arch, instruction_pointer, and stack_pointer fields are ignored.
+
+PTRACE_SET_SYSCALL_INFO currently supports only PTRACE_SYSCALL_INFO_ENTRY,
+PTRACE_SYSCALL_INFO_EXIT, and PTRACE_SYSCALL_INFO_SECCOMP operations.
+Other operations could be added later if needed.
+
+Ideally, PTRACE_SET_SYSCALL_INFO should have been introduced along with
+PTRACE_GET_SYSCALL_INFO, but it didn't happen.  The last straw that
+convinced me to implement PTRACE_SET_SYSCALL_INFO was apparent failure
+to provide an API of changing the first system call argument on riscv
+architecture [1].
+
+ptrace(2) man page:
+
+long ptrace(enum __ptrace_request request, pid_t pid, void *addr, void *data);
+...
+PTRACE_SET_SYSCALL_INFO
+       Modify information about the system call that caused the stop.
+       The "data" argument is a pointer to struct ptrace_syscall_info
+       that specifies the system call information to be set.
+       The "addr" argument should be set to sizeof(struct ptrace_syscall_info)).
+
+[1] https://lore.kernel.org/all/59505464-c84a-403d-972f-d4b2055eeaac@gmail.com/
 
 ---
-Note that I couldn't build these tests so I would appreciate if someone
-could check this patch. Thank you!
----
- tools/testing/selftests/powerpc/include/pkeys.h      | 2 +-
- tools/testing/selftests/powerpc/mm/pkey_exec_prot.c  | 2 +-
- tools/testing/selftests/powerpc/mm/pkey_siginfo.c    | 2 +-
- tools/testing/selftests/powerpc/ptrace/core-pkey.c   | 6 +++---
- tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c | 6 +++---
- 5 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/powerpc/include/pkeys.h b/tools/testing/selftests/powerpc/include/pkeys.h
-index 51729d9a7111..430cb4bd7472 100644
---- a/tools/testing/selftests/powerpc/include/pkeys.h
-+++ b/tools/testing/selftests/powerpc/include/pkeys.h
-@@ -85,7 +85,7 @@ int pkeys_unsupported(void)
- 	SKIP_IF(!hash_mmu);
- 
- 	/* Check if the system call is supported */
--	pkey = sys_pkey_alloc(0, 0);
-+	pkey = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	SKIP_IF(pkey < 0);
- 	sys_pkey_free(pkey);
- 
-diff --git a/tools/testing/selftests/powerpc/mm/pkey_exec_prot.c b/tools/testing/selftests/powerpc/mm/pkey_exec_prot.c
-index 0af4f02669a1..29b91b7456eb 100644
---- a/tools/testing/selftests/powerpc/mm/pkey_exec_prot.c
-+++ b/tools/testing/selftests/powerpc/mm/pkey_exec_prot.c
-@@ -72,7 +72,7 @@ static void segv_handler(int signum, siginfo_t *sinfo, void *ctx)
- 
- 		switch (fault_type) {
- 		case PKEY_DISABLE_ACCESS:
--			pkey_set_rights(fault_pkey, 0);
-+			pkey_set_rights(fault_pkey, PKEY_UNRESTRICTED);
- 			break;
- 		case PKEY_DISABLE_EXECUTE:
- 			/*
-diff --git a/tools/testing/selftests/powerpc/mm/pkey_siginfo.c b/tools/testing/selftests/powerpc/mm/pkey_siginfo.c
-index 2db76e56d4cb..e89a164c686b 100644
---- a/tools/testing/selftests/powerpc/mm/pkey_siginfo.c
-+++ b/tools/testing/selftests/powerpc/mm/pkey_siginfo.c
-@@ -83,7 +83,7 @@ static void segv_handler(int signum, siginfo_t *sinfo, void *ctx)
- 	    mprotect(pgstart, pgsize, PROT_EXEC))
- 		_exit(1);
- 	else
--		pkey_set_rights(pkey, 0);
-+		pkey_set_rights(pkey, PKEY_UNRESTRICTED);
- 
- 	fault_count++;
- }
-diff --git a/tools/testing/selftests/powerpc/ptrace/core-pkey.c b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-index f6da4cb30cd6..64c985445cb7 100644
---- a/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-+++ b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-@@ -124,16 +124,16 @@ static int child(struct shared_info *info)
- 	/* Get some pkeys so that we can change their bits in the AMR. */
- 	pkey1 = sys_pkey_alloc(0, PKEY_DISABLE_EXECUTE);
- 	if (pkey1 < 0) {
--		pkey1 = sys_pkey_alloc(0, 0);
-+		pkey1 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 		FAIL_IF(pkey1 < 0);
- 
- 		disable_execute = false;
- 	}
- 
--	pkey2 = sys_pkey_alloc(0, 0);
-+	pkey2 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	FAIL_IF(pkey2 < 0);
- 
--	pkey3 = sys_pkey_alloc(0, 0);
-+	pkey3 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	FAIL_IF(pkey3 < 0);
- 
- 	info->amr |= 3ul << pkeyshift(pkey1) | 2ul << pkeyshift(pkey2);
-diff --git a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-index d89474377f11..37794f82ed66 100644
---- a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-+++ b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-@@ -81,16 +81,16 @@ static int child(struct shared_info *info)
- 	/* Get some pkeys so that we can change their bits in the AMR. */
- 	pkey1 = sys_pkey_alloc(0, PKEY_DISABLE_EXECUTE);
- 	if (pkey1 < 0) {
--		pkey1 = sys_pkey_alloc(0, 0);
-+		pkey1 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 		CHILD_FAIL_IF(pkey1 < 0, &info->child_sync);
- 
- 		disable_execute = false;
- 	}
- 
--	pkey2 = sys_pkey_alloc(0, 0);
-+	pkey2 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	CHILD_FAIL_IF(pkey2 < 0, &info->child_sync);
- 
--	pkey3 = sys_pkey_alloc(0, 0);
-+	pkey3 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	CHILD_FAIL_IF(pkey3 < 0, &info->child_sync);
- 
- 	info->amr1 |= 3ul << pkeyshift(pkey1);
+Notes:
+    v2:
+    * Add patch to fix syscall_set_return_value() on powerpc
+    * Add patch to fix mips_get_syscall_arg() on mips
+    * Merge two patches adding syscall_set_arguments() implementations
+      from different sources into a single patch
+    * Add syscall_set_return_value() implementation on hexagon
+    * Add syscall_set_return_value() invocation to syscall_set_nr()
+      on arm and arm64.
+    * Fix syscall_set_nr() and mips_set_syscall_arg() on mips
+    * Add a comment to syscall_set_nr() on arc, powerpc, s390, sh,
+      and sparc
+    * Remove redundant ptrace_syscall_info.op assignments in
+      ptrace_get_syscall_info_*
+    * Minor style tweaks in ptrace_get_syscall_info_op()
+    * Remove syscall_set_return_value() invocation from
+      ptrace_set_syscall_info_entry()
+    * Skip syscall_set_arguments() invocation in case of syscall number -1
+      in ptrace_set_syscall_info_entry() 
+    * Split ptrace_syscall_info.reserved into ptrace_syscall_info.reserved
+      and ptrace_syscall_info.flags
+    * Use __kernel_ulong_t instead of unsigned long in set_syscall_info test
+
+Dmitry V. Levin (7):
+  powerpc: properly negate error in syscall_set_return_value()
+  mips: fix mips_get_syscall_arg() for O32 and N32
+  syscall.h: add syscall_set_arguments() and syscall_set_return_value()
+  syscall.h: introduce syscall_set_nr()
+  ptrace_get_syscall_info: factor out ptrace_get_syscall_info_op
+  ptrace: introduce PTRACE_SET_SYSCALL_INFO request
+  selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO
+
+ arch/arc/include/asm/syscall.h                |  25 +
+ arch/arm/include/asm/syscall.h                |  37 ++
+ arch/arm64/include/asm/syscall.h              |  29 ++
+ arch/csky/include/asm/syscall.h               |  13 +
+ arch/hexagon/include/asm/syscall.h            |  21 +
+ arch/loongarch/include/asm/syscall.h          |  15 +
+ arch/m68k/include/asm/syscall.h               |   7 +
+ arch/microblaze/include/asm/syscall.h         |   7 +
+ arch/mips/include/asm/syscall.h               |  72 ++-
+ arch/nios2/include/asm/syscall.h              |  16 +
+ arch/openrisc/include/asm/syscall.h           |  13 +
+ arch/parisc/include/asm/syscall.h             |  19 +
+ arch/powerpc/include/asm/syscall.h            |  26 +-
+ arch/riscv/include/asm/syscall.h              |  16 +
+ arch/s390/include/asm/syscall.h               |  24 +
+ arch/sh/include/asm/syscall_32.h              |  24 +
+ arch/sparc/include/asm/syscall.h              |  22 +
+ arch/um/include/asm/syscall-generic.h         |  19 +
+ arch/x86/include/asm/syscall.h                |  43 ++
+ arch/xtensa/include/asm/syscall.h             |  18 +
+ include/asm-generic/syscall.h                 |  30 ++
+ include/linux/ptrace.h                        |   3 +
+ include/uapi/linux/ptrace.h                   |   4 +-
+ kernel/ptrace.c                               | 153 +++++-
+ tools/testing/selftests/ptrace/Makefile       |   2 +-
+ .../selftests/ptrace/set_syscall_info.c       | 441 ++++++++++++++++++
+ 26 files changed, 1052 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/ptrace/set_syscall_info.c
+
 -- 
-2.39.5
-
+ldv
 
