@@ -1,179 +1,131 @@
-Return-Path: <linux-arch+bounces-9723-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9724-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71985A0BC86
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 16:48:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB2E7A0BD5F
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 17:28:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11F253A0F9A
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 15:48:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E077188ADC0
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 16:28:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499FB14B08E;
-	Mon, 13 Jan 2025 15:48:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F5E22F148;
+	Mon, 13 Jan 2025 16:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iE/CT9Gs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9OxD2cj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267DE240221;
-	Mon, 13 Jan 2025 15:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239AC22DFBB;
+	Mon, 13 Jan 2025 16:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736783291; cv=none; b=ZS+4g7j0xezCjwwpJSIspGPKpqkXNW762nNaTeKnl41yBJu7ieYo3sLiYxGiVZjUXwESIDd6TEsUFCCqhtQ9y/iHJMyyfjtK4f84C0pfr9w2jQDdLbiQvSUaLJvle7tc0l0OENkiYt1e54K5Fbrp3hpXQhc4DTvril8nq8FSwtk=
+	t=1736785573; cv=none; b=VSHQEYUu+5Y/4rbE0lYEMdmDhKGYitOGVgC1MBc6NtYKL90nfPOxxvkJMZ9HN4m0nqv5PXC1UrNzm3KRbK4IkbjlVhm2uUt8kxMNg1KQdc5R7hiVjYqmEYIVww6GzD2csB7whC60/zqYWYQkWWyP+RYOuAsnNu/VESxU6kwstX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736783291; c=relaxed/simple;
-	bh=ExydEF6oUbBv3mhxl1sgVJvfB6r3da1uy1h0Ey5whoQ=;
+	s=arc-20240116; t=1736785573; c=relaxed/simple;
+	bh=aIErGEJQ93Edr09sqGtwbrisP+GLeiu0+v58Z3b4+wg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=atkNRdODTGq9V0Cqwx1M/fF6WXhZzUQ3T13OSZ7s/pjZfmy/+uWEBP+Iv6AlUc8LpQ946n4KQZDMqrWOpZoYJ+G6FoNBiD+4M+9U2oRDkkXzCuMivZ/ZF5jG9/GYAFaKg6YZ7/hn5YwTB2skrR5phGeFKf82icvTLCHrFFRCkbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iE/CT9Gs; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736783289; x=1768319289;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ExydEF6oUbBv3mhxl1sgVJvfB6r3da1uy1h0Ey5whoQ=;
-  b=iE/CT9Gson6D3bFW+s7Bgby4OwbOTaNxvZMXsVlhlfmGR9OTeS7P4NPn
-   RXdjPTRY2CaXMuXQv2933QdWLv2AbhFcpBAFJXjikKCNJQNcQIYKizQ50
-   Y2CTJ9Q61hLRAH7zdYa3mD9v1HviBsW679kpWCZNxFRDzc5UKHO31lCrV
-   ICa/qBanp6MHR+VqXrznlGSHBFY76YGyqwwB4ou5jsOs66jXjyjoxoYSQ
-   pvk7O9iE+sPdfiiS92wzCeVxfKj1T6Pt5EDLoZaYDi9gWtcM/egE77y0P
-   68zyzY2o7E1XC635cegZf021mB61LoYeGgdF+TSHpU8AKODttDtbV+RT2
-   Q==;
-X-CSE-ConnectionGUID: IsQ+kTlqSIuTx9stxs+LjA==
-X-CSE-MsgGUID: xPzJLRa/TjCHnLqULFbWsg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="36340679"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="36340679"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 07:48:08 -0800
-X-CSE-ConnectionGUID: tF9prx5vSTOp32e9QHNHAA==
-X-CSE-MsgGUID: idxS4SPKSjyFVgzRZeU+/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="104693236"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.74])
-  by fmviesa008.fm.intel.com with SMTP; 13 Jan 2025 07:47:55 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Mon, 13 Jan 2025 17:47:54 +0200
-Date: Mon, 13 Jan 2025 17:47:54 +0200
-From: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Borislav Petkov <bp@alien8.de>, Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.or
-Subject: Re: [PATCH] x86: Disable EXECMEM_ROX support
-Message-ID: <Z4U1qqBekZ-_l1NS@intel.com>
-References: <20241023162711.2579610-1-rppt@kernel.org>
- <20241023162711.2579610-9-rppt@kernel.org>
- <Z4QM_RFfhNX_li_C@intel.com>
- <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
- <20250113111116.GF5388@noisy.programming.kicks-ass.net>
- <20250113112934.GA8385@noisy.programming.kicks-ass.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=m97huq+XW9hx1xWPfFMQsIgyUU6dkaAEMF7a8Ww/5Rntndp3n/CZRajQHv4Tuhe9UDOGeo+38/miGX7sTeww+A85U+rYgIjcaxGEroUMladSC155QsyYeY/6Xsbd6CV4ypfo8UTv9i3Rxo+o7BI7v7whh9XHYSng6hoAEgenA5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9OxD2cj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB06FC4CEE3;
+	Mon, 13 Jan 2025 16:26:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736785571;
+	bh=aIErGEJQ93Edr09sqGtwbrisP+GLeiu0+v58Z3b4+wg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f9OxD2cjCU02a1TFHaQkRJkHTJaf800j2ThaRkmaDO8PnvHYcKvQAfMic1HE/Vgu4
+	 bhoThTemMYdDsEruG0k1HE1twIt5p+okmQ1Fme2xsmkJ1BQLD8H+Zp7QUSFbDk27Gn
+	 B5ufSBakDorBmKAc7MajbPl5qEyM8Cvsp7UlPF7Qlqy8u3xJW5fG1y1vkiwGoluiPG
+	 TaVdI6SpQBvsCUt754VDxKLXg9xhYJFxRfy3Q35WM4nn1s+LKSVLKt3udttwPvQ+n7
+	 7RdzermO/y9ghDR77Ho+plqpTXITbyFwEjDbIrmeX2kZUFwI7wLBL/ndLmvBoivzIj
+	 msVg4+kWAVaUA==
+Date: Mon, 13 Jan 2025 16:26:01 +0000
+From: Will Deacon <will@kernel.org>
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: peterz@infradead.org, agordeev@linux.ibm.com, kevin.brodsky@arm.com,
+	alex@ghiti.fr, andreas@gaisler.com, palmer@dabbelt.com,
+	tglx@linutronix.de, david@redhat.com, jannh@google.com,
+	hughd@google.com, yuzhao@google.com, willy@infradead.org,
+	muchun.song@linux.dev, vbabka@kernel.org,
+	lorenzo.stoakes@oracle.com, akpm@linux-foundation.org,
+	rientjes@google.com, vishal.moola@gmail.com, arnd@arndb.de,
+	aneesh.kumar@kernel.org, npiggin@gmail.com,
+	dave.hansen@linux.intel.com, rppt@kernel.org, ryan.roberts@arm.com,
+	linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-um@lists.infradead.org
+Subject: Re: [PATCH v5 05/17] arm64: pgtable: use mmu gather to free p4d
+ level page table
+Message-ID: <20250113162600.GA14101@willie-the-truck>
+References: <cover.1736317725.git.zhengqi.arch@bytedance.com>
+ <3fd48525397b34a64f7c0eb76746da30814dc941.1736317725.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250113112934.GA8385@noisy.programming.kicks-ass.net>
-X-Patchwork-Hint: comment
+In-Reply-To: <3fd48525397b34a64f7c0eb76746da30814dc941.1736317725.git.zhengqi.arch@bytedance.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Mon, Jan 13, 2025 at 12:29:34PM +0100, Peter Zijlstra wrote:
-> On Mon, Jan 13, 2025 at 12:11:16PM +0100, Peter Zijlstra wrote:
+On Wed, Jan 08, 2025 at 02:57:21PM +0800, Qi Zheng wrote:
+> Like other levels of page tables, also use mmu gather mechanism to free
+> p4d level page table.
 > 
-> > There's definiltely breakage with that module_writable_address()
-> > nonsense in alternative.c that will not be fixed by that patch.
-> > 
-> > The very simplest thing at this point is to remove:
-> > 
-> >      select ARCH_HAS_EXECMEM_ROX             if X86_64
-> > 
-> > and try again next cycle.
-> 
-> Boris asked I send it as a proper patch, so here goes. Perhaps next time
-> let x86 merge x86 code :/
-> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> Originally-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
 > ---
-> Subject: x86: Disable EXECMEM_ROX support
+>  arch/arm64/include/asm/pgalloc.h |  1 -
+>  arch/arm64/include/asm/tlb.h     | 14 ++++++++++++++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
 > 
-> The whole module_writable_address() nonsense made a giant mess of
-> alternative.c, not to mention it still contains bugs -- notable some of the CFI
-> variants crash and burn.
-> 
-> Mike has been working on patches to clean all this up again, but given the
-> current state of things, this stuff just isn't ready.
-> 
-> Disable for now, lets try again next cycle.
-> 
-> Fixes: 5185e7f9f3bd ("x86/module: enable ROX caches for module text on 64 bit")
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/x86/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 9d7bd0ae48c4..ef6cfea9df73 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -83,7 +83,6 @@ config X86
->  	select ARCH_HAS_DMA_OPS			if GART_IOMMU || XEN
->  	select ARCH_HAS_EARLY_DEBUG		if KGDB
->  	select ARCH_HAS_ELF_RANDOMIZE
-> -	select ARCH_HAS_EXECMEM_ROX		if X86_64
->  	select ARCH_HAS_FAST_MULTIPLIER
->  	select ARCH_HAS_FORTIFY_SOURCE
->  	select ARCH_HAS_GCOV_PROFILE_ALL
+> diff --git a/arch/arm64/include/asm/pgalloc.h b/arch/arm64/include/asm/pgalloc.h
+> index 2965f5a7e39e3..1b4509d3382c6 100644
+> --- a/arch/arm64/include/asm/pgalloc.h
+> +++ b/arch/arm64/include/asm/pgalloc.h
+> @@ -85,7 +85,6 @@ static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgdp, p4d_t *p4dp)
+>  	__pgd_populate(pgdp, __pa(p4dp), pgdval);
+>  }
+>  
+> -#define __p4d_free_tlb(tlb, p4d, addr)  p4d_free((tlb)->mm, p4d)
+>  #else
+>  static inline void __pgd_populate(pgd_t *pgdp, phys_addr_t p4dp, pgdval_t prot)
+>  {
+> diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
+> index a947c6e784ed2..445282cde9afb 100644
+> --- a/arch/arm64/include/asm/tlb.h
+> +++ b/arch/arm64/include/asm/tlb.h
+> @@ -111,4 +111,18 @@ static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pudp,
+>  }
+>  #endif
+>  
+> +#if CONFIG_PGTABLE_LEVELS > 4
+> +static inline void __p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4dp,
+> +				  unsigned long addr)
+> +{
+> +	struct ptdesc *ptdesc = virt_to_ptdesc(p4dp);
+> +
+> +	if (!pgtable_l5_enabled())
+> +		return;
+> +
+> +	pagetable_p4d_dtor(ptdesc);
+> +	tlb_remove_ptdesc(tlb, ptdesc);
+> +}
 
-This one works for my hibernate woes.
+Should we update p4d_free() to call the destructor, too? It looks like
+it just does free_page() atm.
 
-In case you want it:
-Tested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-
--- 
-Ville Syrjälä
-Intel
+Will
 
