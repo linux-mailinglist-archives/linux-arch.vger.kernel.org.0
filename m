@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-9727-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9728-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F649A0BE4D
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BD0BA0BE4C
 	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 18:06:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F394A7A2F40
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 17:06:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 214561885D44
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jan 2025 17:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252B01BC061;
-	Mon, 13 Jan 2025 17:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A711BBBFE;
+	Mon, 13 Jan 2025 17:06:51 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699911FBBD3;
-	Mon, 13 Jan 2025 17:06:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C81B1B4238;
+	Mon, 13 Jan 2025 17:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736788001; cv=none; b=GplCKKAGDCMMG0LM62mbQv1LymaLzT3NA0T0fQsmyWMQaewy3JcJTIgCyO5no4dyEm/VTV3+rLlvSRbsTqlNXGmadAwQDpVGj1ppm6/ubYICS5qcwaDJMSyNvRBFfOQZR6qJARjTGPPkpdXgvBfUcRq7kRJX9CP4K+hVa6lLxJg=
+	t=1736788011; cv=none; b=tHWYopz+UZIr6fziF/uX5oQwBaH/rD/fc+DO+FGQEvTNSw8+svNoYuf0s/1Heum7XSebLt3vyaHm/lMGQKxzsb09lsVkZtdlHAIGydnfob8zcPURI1Hl3AHzv0O81NIdF0be3tBIaPymqOBdi/gAYiCZCRhnGQxGB+773R8hJNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736788001; c=relaxed/simple;
-	bh=C6PEC0ZSyV4CBA00BhLPYCgWd4YnWCztsvZHoYJR6og=;
+	s=arc-20240116; t=1736788011; c=relaxed/simple;
+	bh=G/zzlL5mlrphPEcEmPwhvUPHHWyaMwbKzlomV8GfxXE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fiRwoJjl4lj52Pbld96rdZ5pcl21sbSGJLjhblbk98YZGh1BBS6jt9B9Dku9+gwdTHxmmk945h0F1JJydhmadXSozLbNMj61PVya2mLEc9sDXs5WDHfV7EzZee/pSZMSodvdzmvhsUL7PQlJdN1keD+VTERZ4CqE9sW0aYJYuHA=
+	 MIME-Version; b=Jqn19k+XDQR8isHrKlahH5WW5s1DKiAzPHMIlhATuscQOMkIpbsWlnM11lkriNpH1ivHd8X/XVcC3wbdIgJCeHWQhEvsOeeVecS9HbhNRxVGNue/m0oEWOS7sZhEiFq0ZweyKPYb32Vl7oBlkvSoQoT/kjcFiTgwIO6pxtdP2xw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01E3C1424;
-	Mon, 13 Jan 2025 09:07:07 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA6671A25;
+	Mon, 13 Jan 2025 09:07:16 -0800 (PST)
 Received: from udebian.localdomain (unknown [10.1.25.34])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFD0E3F673;
-	Mon, 13 Jan 2025 09:06:35 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D4483F673;
+	Mon, 13 Jan 2025 09:06:46 -0800 (PST)
 From: Yury Khrustalev <yury.khrustalev@arm.com>
 To: linux-arch@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -50,9 +50,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	nd@arm.com,
 	Yury Khrustalev <yury.khrustalev@arm.com>
-Subject: [RESEND v4 1/3] mm/pkey: Add PKEY_UNRESTRICTED macro
-Date: Mon, 13 Jan 2025 17:06:17 +0000
-Message-Id: <20250113170619.484698-2-yury.khrustalev@arm.com>
+Subject: [RESEND v4 2/3] selftests/mm: Use PKEY_UNRESTRICTED macro
+Date: Mon, 13 Jan 2025 17:06:18 +0000
+Message-Id: <20250113170619.484698-3-yury.khrustalev@arm.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250113170619.484698-1-yury.khrustalev@arm.com>
 References: <20250113170619.484698-1-yury.khrustalev@arm.com>
@@ -64,39 +64,106 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Memory protection keys (pkeys) uapi has two macros for pkeys restrictions:
-
- - PKEY_DISABLE_ACCESS 0x1
- - PKEY_DISABLE_WRITE  0x2
-
-with implicit literal value of 0x0 that means "unrestricted". Code that
-works with pkeys has to use this literal value when implying that a pkey
-imposes no restrictions. This may reduce readability because 0 can be
-written in various ways (e.g. 0x0 or 0) and also because 0 in the context
-of pkeys can be mistaken for "no permissions" (akin PROT_NONE) while it
-actually means "no restrictions". This is important because pkeys are
-oftentimes used near mprotect() that uses PROT_ macros.
-
-This patch adds PKEY_UNRESTRICTED macro defined as 0x0.
+Replace literal 0 with macro PKEY_UNRESTRICTED where pkey_*() functions
+are used in mm selftests for memory protection keys.
 
 Signed-off-by: Yury Khrustalev <yury.khrustalev@arm.com>
+Suggested-by: Joey Gouly <joey.gouly@arm.com>
 Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 ---
- include/uapi/asm-generic/mman-common.h | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/mm/mseal_test.c            | 6 +++---
+ tools/testing/selftests/mm/pkey-helpers.h          | 3 ++-
+ tools/testing/selftests/mm/pkey_sighandler_tests.c | 4 ++--
+ tools/testing/selftests/mm/protection_keys.c       | 2 +-
+ 4 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-index 1ea2c4c33b86..ef1c27fa3c57 100644
---- a/include/uapi/asm-generic/mman-common.h
-+++ b/include/uapi/asm-generic/mman-common.h
-@@ -85,6 +85,7 @@
- /* compatibility flags */
- #define MAP_FILE	0
+diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+index 01675c412b2a..30ea37e8ecf8 100644
+--- a/tools/testing/selftests/mm/mseal_test.c
++++ b/tools/testing/selftests/mm/mseal_test.c
+@@ -218,7 +218,7 @@ bool seal_support(void)
+ bool pkey_supported(void)
+ {
+ #if defined(__i386__) || defined(__x86_64__) /* arch */
+-	int pkey = sys_pkey_alloc(0, 0);
++	int pkey = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
  
-+#define PKEY_UNRESTRICTED	0x0
- #define PKEY_DISABLE_ACCESS	0x1
- #define PKEY_DISABLE_WRITE	0x2
- #define PKEY_ACCESS_MASK	(PKEY_DISABLE_ACCESS |\
+ 	if (pkey > 0)
+ 		return true;
+@@ -1671,7 +1671,7 @@ static void test_seal_discard_ro_anon_on_pkey(bool seal)
+ 	setup_single_address_rw(size, &ptr);
+ 	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
+ 
+-	pkey = sys_pkey_alloc(0, 0);
++	pkey = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
+ 	FAIL_TEST_IF_FALSE(pkey > 0);
+ 
+ 	ret = sys_mprotect_pkey((void *)ptr, size, PROT_READ | PROT_WRITE, pkey);
+@@ -1683,7 +1683,7 @@ static void test_seal_discard_ro_anon_on_pkey(bool seal)
+ 	}
+ 
+ 	/* sealing doesn't take effect if PKRU allow write. */
+-	set_pkey(pkey, 0);
++	set_pkey(pkey, PKEY_UNRESTRICTED);
+ 	ret = sys_madvise(ptr, size, MADV_DONTNEED);
+ 	FAIL_TEST_IF_FALSE(!ret);
+ 
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index f7cfe163b0ff..10fa3ca9b05b 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -12,6 +12,7 @@
+ #include <stdlib.h>
+ #include <ucontext.h>
+ #include <sys/mman.h>
++#include <linux/mman.h>
+ 
+ #include "../kselftest.h"
+ 
+@@ -224,7 +225,7 @@ static inline u32 *siginfo_get_pkey_ptr(siginfo_t *si)
+ static inline int kernel_has_pkeys(void)
+ {
+ 	/* try allocating a key and see if it succeeds */
+-	int ret = sys_pkey_alloc(0, 0);
++	int ret = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
+ 	if (ret <= 0) {
+ 		return 0;
+ 	}
+diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+index c593a426341c..2015ed7e0928 100644
+--- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
++++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+@@ -314,7 +314,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
+ 	__write_pkey_reg(pkey_reg);
+ 
+ 	/* Protect the new stack with MPK 1 */
+-	pkey = pkey_alloc(0, 0);
++	pkey = pkey_alloc(0, PKEY_UNRESTRICTED);
+ 	pkey_mprotect(stack, STACK_SIZE, PROT_READ | PROT_WRITE, pkey);
+ 
+ 	/* Set up alternate signal stack that will use the default MPK */
+@@ -487,7 +487,7 @@ static void test_pkru_sigreturn(void)
+ 	__write_pkey_reg(pkey_reg);
+ 
+ 	/* Protect the stack with MPK 2 */
+-	pkey = pkey_alloc(0, 0);
++	pkey = pkey_alloc(0, PKEY_UNRESTRICTED);
+ 	pkey_mprotect(stack, STACK_SIZE, PROT_READ | PROT_WRITE, pkey);
+ 
+ 	/* Set up alternate signal stack that will use the default MPK */
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index 4990f7ab4cb7..cca7435a7bc5 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -491,7 +491,7 @@ int sys_pkey_alloc(unsigned long flags, unsigned long init_val)
+ int alloc_pkey(void)
+ {
+ 	int ret;
+-	unsigned long init_val = 0x0;
++	unsigned long init_val = PKEY_UNRESTRICTED;
+ 
+ 	dprintf1("%s()::%d, pkey_reg: 0x%016llx shadow: %016llx\n",
+ 			__func__, __LINE__, __read_pkey_reg(), shadow_pkey_reg);
 -- 
 2.39.5
 
