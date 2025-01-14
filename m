@@ -1,285 +1,191 @@
-Return-Path: <linux-arch+bounces-9745-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9746-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC132A10988
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 15:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F66FA10A72
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 16:12:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5DBC3A134B
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 14:35:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A584F3A4501
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 15:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476C31494DF;
-	Tue, 14 Jan 2025 14:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0502B18EFCC;
+	Tue, 14 Jan 2025 15:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4T5S0yt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XmNHmbHD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A70F7E105;
-	Tue, 14 Jan 2025 14:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B86156861;
+	Tue, 14 Jan 2025 15:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736865353; cv=none; b=UpDKv1ngYuFicHQfRJpp2xSC+MZ990n91uOAlmmouqGm042c5jdLscqruscHxsDNonsAXeMRQwqXS4wf8KiCUZrpLYXM7MymaOY+xUu9ui4vlhf61OnMqPaLB6+TmmV75PpDJpQjV3XdkyBfI6KRjJcHm+3z6X4Nat5WbBPh8lw=
+	t=1736867534; cv=none; b=FA4UYaKgYT4S9qDJ/qGWav7cBmIgDrBrQDGr862EuaSqRfZt3cwb4RfNfiOnSKPFp6d18+WQFyR4OOVJKJcUSLO7b4DXTpbRf1LuxvBmzKYCRrLOffNNI22ZoTKqst6B5SdFMH0fasjXPL/W7Ncipuf6uCjhakMx8evX9kit46s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736865353; c=relaxed/simple;
-	bh=uzieb3PpttrSGXVw+mO02BuIgTXRAr2xwj6otgCdt6s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l3owWCunZCCyS02Rp4RsmbSVm7eSonnft0zY9sId82xuBYvMwLkgxoyHTdwTtJWrcPCYtJ5c7o9Mp3dK/r/brBTFLoJdD3BZdmUTRUofgqUptyhyTAkmbLDX1jhgS8/ZDNTtGmWyApd5pPbV1gkuV78m6iSeYTwYEjJa+1WBjqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4T5S0yt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95ED1C4CEEC;
-	Tue, 14 Jan 2025 14:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736865352;
-	bh=uzieb3PpttrSGXVw+mO02BuIgTXRAr2xwj6otgCdt6s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=U4T5S0ytbZ2qJPTb9ndZYRk8WA9ZFaSMMqEKaRCurN0ZrwVtfS+Nfk+B+9xHd9El+
-	 rMLxp9WOm1yTzhoe4m29p8nW6aaIAeH3o6Ta9pLNkmZEcIboLVkSo5rLgSFD/VDsHp
-	 Tdljt257wXjbjsgdRxEQzEclRXeqE9mwTgeajX+7/SaR8MFetCBRY9DuKn/5NaOboE
-	 OZTff8UCtWu/VpTGWgSuI91HFiFCtlZ55y4KRfeaOgV7eRRzt0dEaBtXTIpTNxoNq2
-	 w2oNAIJhtjQFpr4dVOPTx2q9VqH2nkEpdgBZxMd9Hgy2dHld/5/ax04mmCnPd+zbW9
-	 1U/CbXmRDci6w==
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-71e35be77b5so1459684a34.1;
-        Tue, 14 Jan 2025 06:35:52 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUhhgH4WYVtyWcYJDqIvcyvuDv+10NhhoSR7FN/LKW5L9/AjhyZndI1MRSUyUT3sXHedjAI4UAjadzx@vger.kernel.org, AJvYcCVqUclJKSHwsEz13IKZ/s1GwFcBHIbrwR8TxuTpPjWsr6dl1VSlb+VaAUTAN6zB9m8cR4KSCK8DZWo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB1zyUIZ4jOh+pKPvVp4L+qZWiov04aeJkB45SgRmSKwyififQ
-	K52AjBXTkQQuFzIdVczhpBfS59RKo3I3SXqLmM4NCmMKO4Da8daIkBko9518OG/i5655my5ptNI
-	FQOj/6sY4U6ezTqcT2jiMSQV8mE8=
-X-Google-Smtp-Source: AGHT+IH1RknkEPNA5SHC3B1OkEK9Zf55bGrD/rzwlyGX6YRlIPqRgm9/BvsyUggkICMw+21bElzxL8TGau13Un9jx+c=
-X-Received: by 2002:a05:6870:2f18:b0:296:beb3:aa40 with SMTP id
- 586e51a60fabf-2aa0699904emr14988683fac.36.1736865351648; Tue, 14 Jan 2025
- 06:35:51 -0800 (PST)
+	s=arc-20240116; t=1736867534; c=relaxed/simple;
+	bh=aQSovnBzkHcuz6WM1TbLZmxPJoyUFcvs5ttR0CXBFIY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZOToU+Y3/L+CrRwSZM/DT0fBAyixN4khahIAdWEDDgaXclIwew3JkPQjigMxl3zgL1+1szyk7qCwU7zI+Y/3fwPpXTQ8VJ2oam55EgR1QSj8+JBqKZuNvr2tXzGj4CIeruHBtZsbACgO40vZhYK/c+0ur8YPlnvX2NdqL5PU8iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XmNHmbHD; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5d9837f201aso9688504a12.0;
+        Tue, 14 Jan 2025 07:12:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736867531; x=1737472331; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/HZZc+UEq0CGN1sRadnQj4s5cYW3b7K0MPBM2aTCRvM=;
+        b=XmNHmbHDCTbmVXnZGenyjmbc9M/Ph0Oj/6Fk3ji45aUJW7NyCRPwJ9HG5M4Uy/QKZO
+         HsXg1mCiXXexvMhEXpCTLHvCUroPa8diiybjhr/cscJnFaStxwRJN+AYo71hoCepBiLu
+         CpIRuHJjOQqVWx+U37XMnWsGutNyfuFtvnzLl6vIOB/LsYiwU/QzKocQCzypoLd+jO2f
+         tB4joiCNci2IYKasIdednmD07v6YTOcnem4VA7Lr3ojHoZSnszKYTQSs8mGuKjYdLaCG
+         E4mYGyJ2FTMJ99Kgp9UupQNuv1cjA/KdiqFkFJqmccH7kSftcvMlyG0WBngXpe/cI7gk
+         JrNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736867531; x=1737472331;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/HZZc+UEq0CGN1sRadnQj4s5cYW3b7K0MPBM2aTCRvM=;
+        b=GNnSOjZUlgPOi0vnmu1pzXct+nyJq6WjmOFWBP5+vDjs/YGw5a8U1pM4Zs5a7RcK+G
+         LK1EHbhZ1C0MMsq6kk2EuIyxUCTH8QoiE/QRXBMcOYHb3nrsyMm119b5zVDCpZlGkThP
+         vm29hwc2gDIXAEH7kkTrwg6gZqST1SyKc4wIi2dInPXQnMjL4R8hm3ZI5KvuRH6FD3Pv
+         TfGUcwVdZiFnsBb7D1h9jjBgV6snfzf9HCWN/0zOaBnmwTxOen5FhrF5pHHX0BIWU0BW
+         ViqHbbioFs9i4u+LAbDS3Te+FHPoHy3n7s3dsVkE8NKpHprcgCcD6otCnvUfAZiR6VnE
+         7faw==
+X-Forwarded-Encrypted: i=1; AJvYcCURme6O5MxgSsXGozgk74OU2cWiHU3XYPIFZmWYn2S7WHPsATDsiztl1tSzVCnGrN2PUprAMxiIZlF1qgJWFm6ZrXId@vger.kernel.org, AJvYcCVK/gb462B9yqdGBvluP3SlC+C1OSDYL69GzjXmVWEu8MOXFMKE9HSTUT7qYnx1GcFzmkrA/HKkvnUQrYuC@vger.kernel.org, AJvYcCVX2d7OfMpoqOI7yB1Cqb+KgTjC160xF/FrSnrnBn7UpwhaT4PQtpc5h4FLC6vU2RgmuWw=@vger.kernel.org, AJvYcCWm68LYiqTvRhsumW/e+D6x14NNpWC2X0U3mTPxxOH59H22mI6m3qCRuoUxvOIhP1frR15PlSwRRXCXTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYaurzjiE1q+VMj2RChnosqKNzaHgQ3nngyXn/SrXZ1MNBS/5a
+	7QAWYwWNv1KrQp7qUTvYsWQnfYWIVRgYG/I3C/iE8IIDLI1ArrNx
+X-Gm-Gg: ASbGnculcpW0BasaA97CXM21AW6pwUNj67qd0sMRpOdwVMUtWPDKWEKekKSPoHG6e0n
+	j2aYEqcEtqQydIhV8WxkdaBCtV22st02BzjMZpXNnKxuXoBB3EOduXD6EdZrcPJEYh5IAmVqqEW
+	PtTMvr2Xxgt2ERwbUddcQuF++7sVTiLG3BwOMTQSUOq6DFs2CPS/geOlRSOOv+LUb1YB4ik7/e0
+	as6OFiYjoi1Tcw79+iZIbylRC2k+VzlnDAuae6IuUM=
+X-Google-Smtp-Source: AGHT+IG/0yT3Wl8pMP0ffaB+beFLGUhnbi+/MuQ3opaHndPsnUahqVvRgymIA+k6+73HsX0bkC74RQ==
+X-Received: by 2002:a17:907:c1d:b0:aaf:137:b5fa with SMTP id a640c23a62f3a-ab2c3db0396mr1622731666b.26.1736867531297;
+        Tue, 14 Jan 2025 07:12:11 -0800 (PST)
+Received: from krava ([213.175.46.84])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab3261f1bb1sm204442366b.104.2025.01.14.07.12.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2025 07:12:10 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 14 Jan 2025 16:12:08 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Florent Revest <revest@chromium.org>,
+	linux-trace-kernel@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v22 00/20] tracing: fprobe: function_graph:
+ Multi-function graph and fprobe on fgraph
+Message-ID: <Z4Z-yC_mBTa6Ws70@krava>
+References: <173518987627.391279.3307342580035322889.stgit@devnote2>
+ <Z3aSuql3fnXMVMoM@krava>
+ <CAEf4BzZqpHcqRJscQtAJJ7tLMpdq4_Dr_j7APj=X2g-pnkELVg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250102150201.21639-1-frederic@kernel.org> <20250102150201.21639-4-frederic@kernel.org>
-In-Reply-To: <20250102150201.21639-4-frederic@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 14 Jan 2025 15:35:40 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hL5nhCD-A1Oa31zHxHfOjOMFfeRfc-AGR3vb9p_00tqA@mail.gmail.com>
-X-Gm-Features: AbW1kvYHnyXXcOAl3blrKjYldKJPLP7civgrZHPIfPETu_DDu39ZhH2fg7Gie-Q
-Message-ID: <CAJZ5v0hL5nhCD-A1Oa31zHxHfOjOMFfeRfc-AGR3vb9p_00tqA@mail.gmail.com>
-Subject: Re: [PATCH 3/6] x86/cpuidle: Move buggy mwait implementations away
- from CPUIDLE_FLAG_MWAIT
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzZqpHcqRJscQtAJJ7tLMpdq4_Dr_j7APj=X2g-pnkELVg@mail.gmail.com>
 
-On Thu, Jan 2, 2025 at 4:02=E2=80=AFPM Frederic Weisbecker <frederic@kernel=
-.org> wrote:
->
-> Buggy MWAIT implementations can't carry the CPUIDLE_FLAG_MWAIT flag
-> because they require IPIs to wake up. Therefore they shouldn't be
-> called with TIF_NR_POLLING.
->
-> Reported-by: Rafael J. Wysocki <rafael@kernel.org>
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+On Fri, Jan 10, 2025 at 04:04:37PM -0800, Andrii Nakryiko wrote:
+> On Thu, Jan 2, 2025 at 5:21 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Thu, Dec 26, 2024 at 02:11:16PM +0900, Masami Hiramatsu (Google) wrote:
+> > > Hi,
+> > >
+> > > Here is the 22nd version of the series to re-implement the fprobe on
+> > > function-graph tracer. The previous version is;
+> > >
+> > > https://lore.kernel.org/all/173379652547.973433.2311391879173461183.stgit@devnote2/
+> > >
+> > > This version is rebased on v6.13-rc4 with fixes on [3/20] for x86-32 and
+> > > [5/20] for build error.
+> >
+> >
+> > hi,
+> > I ran the bench and I'm seeing native_sched_clock being used
+> > again kretprobe_multi bench:
+> >
+> >      5.85%  bench            [kernel.kallsyms]                                        [k] native_sched_clock
+> >             |
+> >             ---native_sched_clock
+> >                sched_clock
+> >                |
+> >                 --5.83%--trace_clock_local
+> >                           ftrace_return_to_handler
+> >                           return_to_handler
+> >                           syscall
+> >                           bpf_prog_test_run_opts
+> 
+> completely unrelated, Jiri, but we should stop using
+> bpf_prog_test_run_opts() for benchmarking. It goes through FD
+> refcounting, which is unnecessary tiny overhead, but more importantly
+> it causes cache line bouncing between multiple CPUs (when doing
+> multi-threaded benchmarks), which skews and limits results.
 
-I would do a patch introducing arch_cpuidle_mwait_needs_ipi() or
-equivalent before patch [2/6] and I would use it in patch [2/6] right
-away.
+so you mean to switch directly to attaching/hitting kernel functions
+or perhaps better have kernel module for that?
 
-> ---
->  arch/arm/include/asm/cpuidle.h     |  2 ++
->  arch/arm64/include/asm/cpuidle.h   |  3 +++
->  arch/powerpc/include/asm/cpuidle.h |  4 ++++
->  arch/riscv/include/asm/cpuidle.h   |  2 ++
->  arch/x86/include/asm/cpuidle.h     | 12 ++++++++++++
->  drivers/acpi/processor_idle.c      |  4 +++-
->  drivers/idle/intel_idle.c          |  9 +++++++--
->  include/asm-generic/Kbuild         |  1 +
->  include/asm-generic/cpuidle.h      | 10 ++++++++++
->  9 files changed, 44 insertions(+), 3 deletions(-)
->  create mode 100644 arch/x86/include/asm/cpuidle.h
->  create mode 100644 include/asm-generic/cpuidle.h
->
-> diff --git a/arch/arm/include/asm/cpuidle.h b/arch/arm/include/asm/cpuidl=
-e.h
-> index 397be5ed30e7..0ea1d2ec837d 100644
-> --- a/arch/arm/include/asm/cpuidle.h
-> +++ b/arch/arm/include/asm/cpuidle.h
-> @@ -55,4 +55,6 @@ struct arm_cpuidle_irq_context { };
->  #define arm_cpuidle_save_irq_context(c)                (void)c
->  #define arm_cpuidle_restore_irq_context(c)     (void)c
->
-> +#include <asm-generic/cpuidle.h>
-> +
->  #endif
-> diff --git a/arch/arm64/include/asm/cpuidle.h b/arch/arm64/include/asm/cp=
-uidle.h
-> index 2047713e097d..ef49124135a7 100644
-> --- a/arch/arm64/include/asm/cpuidle.h
-> +++ b/arch/arm64/include/asm/cpuidle.h
-> @@ -38,4 +38,7 @@ struct arm_cpuidle_irq_context { };
->  #define arm_cpuidle_save_irq_context(c)                (void)c
->  #define arm_cpuidle_restore_irq_context(c)     (void)c
->  #endif
-> +
-> +#include <asm-generic/cpuidle.h>
-> +
->  #endif
-> diff --git a/arch/powerpc/include/asm/cpuidle.h b/arch/powerpc/include/as=
-m/cpuidle.h
-> index 0cce5dc7fb1c..788706bc04ec 100644
-> --- a/arch/powerpc/include/asm/cpuidle.h
-> +++ b/arch/powerpc/include/asm/cpuidle.h
-> @@ -102,4 +102,8 @@ static inline void report_invalid_psscr_val(u64 psscr=
-_val, int err)
->
->  #endif
->
-> +#ifndef __ASSEMBLY__
-> +#include <asm-generic/cpuidle.h>
-> +#endif
-> +
->  #endif
-> diff --git a/arch/riscv/include/asm/cpuidle.h b/arch/riscv/include/asm/cp=
-uidle.h
-> index 71fdc607d4bc..1f1b24901d86 100644
-> --- a/arch/riscv/include/asm/cpuidle.h
-> +++ b/arch/riscv/include/asm/cpuidle.h
-> @@ -21,4 +21,6 @@ static inline void cpu_do_idle(void)
->         wait_for_interrupt();
->  }
->
-> +#include <asm-generic/cpuidle.h>
-> +
->  #endif
-> diff --git a/arch/x86/include/asm/cpuidle.h b/arch/x86/include/asm/cpuidl=
-e.h
-> new file mode 100644
-> index 000000000000..a59db1a3314a
-> --- /dev/null
-> +++ b/arch/x86/include/asm/cpuidle.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_CPUIDLE_H
-> +#define _ASM_X86_CPUIDLE_H
-> +
-> +#include <asm/cpufeature.h>
-> +
-> +static inline bool arch_cpuidle_mwait_needs_ipi(void)
-> +{
-> +       return boot_cpu_has_bug(X86_BUG_MONITOR);
-> +}
-> +
-> +#endif /* _ASM_X86_CPUIDLE_H */
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.=
-c
-> index 66cb5536d91e..0f29dd92b346 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -23,6 +23,7 @@
->  #include <linux/perf_event.h>
->  #include <acpi/processor.h>
->  #include <linux/context_tracking.h>
-> +#include <asm/cpuidle.h>
->
->  /*
->   * Include the apic definitions for x86 to have the APIC timer related d=
-efines
-> @@ -806,7 +807,8 @@ static int acpi_processor_setup_cstates(struct acpi_p=
-rocessor *pr)
->                 if (cx->type =3D=3D ACPI_STATE_C1 || cx->type =3D=3D ACPI=
-_STATE_C2)
->                         drv->safe_state_index =3D count;
->
-> -               if (cx->entry_method =3D=3D ACPI_CSTATE_FFH)
-> +               if (cx->entry_method =3D=3D ACPI_CSTATE_FFH &&
-> +                   !arch_cpuidle_mwait_needs_ipi())
->                         state->flags |=3D CPUIDLE_FLAG_MWAIT;
->
->                 /*
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index d52723fbeb04..b2f494effd4a 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -56,6 +56,7 @@
->  #include <asm/mwait.h>
->  #include <asm/spec-ctrl.h>
->  #include <asm/fpu/api.h>
-> +#include <asm/cpuidle.h>
->
->  #define INTEL_IDLE_VERSION "0.5.1"
->
-> @@ -1787,7 +1788,10 @@ static void __init intel_idle_init_cstates_acpi(st=
-ruct cpuidle_driver *drv)
->                 if (cx->type > ACPI_STATE_C1)
->                         state->target_residency *=3D 3;
->
-> -               state->flags =3D MWAIT2flg(cx->address) | CPUIDLE_FLAG_MW=
-AIT;
-> +               state->flags =3D MWAIT2flg(cx->address);
-> +
-> +               if (!arch_cpuidle_mwait_needs_ipi())
-> +                       state->flags |=3D CPUIDLE_FLAG_MWAIT;
->
->                 if (cx->type > ACPI_STATE_C2)
->                         state->flags |=3D CPUIDLE_FLAG_TLB_FLUSHED;
-> @@ -2073,7 +2077,8 @@ static bool __init intel_idle_verify_cstate(unsigne=
-d int mwait_hint)
->
->  static void state_update_enter_method(struct cpuidle_state *state, int c=
-state)
->  {
-> -       state->flags |=3D CPUIDLE_FLAG_MWAIT;
-> +       if (!arch_cpuidle_mwait_needs_ipi())
-> +               state->flags |=3D CPUIDLE_FLAG_MWAIT;
+jirka
 
-Also, some code duplication could be avoided by having something like
-arch_x86_mwait_state() returning the flag if the condition is met:
-
-    state->flags |=3D arch_x86_mwait_state();
-
->
->         if (state->flags & CPUIDLE_FLAG_INIT_XSTATE) {
->                 /*
-> diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-> index 1b43c3a77012..7754da499d16 100644
-> --- a/include/asm-generic/Kbuild
-> +++ b/include/asm-generic/Kbuild
-> @@ -13,6 +13,7 @@ mandatory-y +=3D cacheflush.h
->  mandatory-y +=3D cfi.h
->  mandatory-y +=3D checksum.h
->  mandatory-y +=3D compat.h
-> +mandatory-y +=3D cpuidle.h
->  mandatory-y +=3D current.h
->  mandatory-y +=3D delay.h
->  mandatory-y +=3D device.h
-> diff --git a/include/asm-generic/cpuidle.h b/include/asm-generic/cpuidle.=
-h
-> new file mode 100644
-> index 000000000000..748a2022ed2a
-> --- /dev/null
-> +++ b/include/asm-generic/cpuidle.h
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_CPUIDLE_H
-> +#define __ASM_CPUIDLE_H
-> +
-> +static inline bool arch_cpuidle_mwait_needs_ipi(void)
-> +{
-> +       return true;
-> +}
-> +
-> +#endif /* __ASM_CPUIDLE_H */
-> --
-> 2.46.0
->
->
+> 
+> >                           trigger_producer_batch
+> >                           start_thread
+> >                           __GI___clone3
+> >
+> > I recall we tried to fix that before with [1] change, but that replaced
+> > later with [2] changes
+> >
+> > When I remove the trace_clock_local call in __ftrace_return_to_handler
+> > than the kretprobe-multi gets much faster (see last block below), so it
+> > seems worth to make it optional
+> >
+> > there's some decrease in kprobe_multi benchmark compared to base numbers,
+> > which I'm not sure yet why, but other than that it seems ok
+> >
+> > base:
+> >         kprobe         :   12.873 ± 0.011M/s
+> >         kprobe-multi   :   13.088 ± 0.052M/s
+> >         kretprobe      :    6.339 ± 0.003M/s
+> >         kretprobe-multi:    7.240 ± 0.002M/s
+> >
+> > fprobe_on_fgraph:
+> >         kprobe         :   12.816 ± 0.002M/s
+> >         kprobe-multi   :   12.126 ± 0.004M/s
+> >         kretprobe      :    6.305 ± 0.018M/s
+> >         kretprobe-multi:    7.740 ± 0.003M/s
+> >
+> > removed native_sched_clock call:
+> >         kprobe         :   12.850 ± 0.006M/s
+> >         kprobe-multi   :   12.115 ± 0.006M/s
+> >         kretprobe      :    6.270 ± 0.017M/s
+> >         kretprobe-multi:    9.190 ± 0.005M/s
+> >
+> >
+> > happy new year ;-) thanks,
+> >
+> > jirka
+> >
+> >
+> > [1] https://lore.kernel.org/bpf/172615389864.133222.14452329708227900626.stgit@devnote2/
+> > [2] https://lore.kernel.org/all/20240914214805.779822616@goodmis.org/
+> >
+> 
+> [...]
 
