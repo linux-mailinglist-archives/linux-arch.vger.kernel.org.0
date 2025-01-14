@@ -1,124 +1,198 @@
-Return-Path: <linux-arch+bounces-9784-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9785-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 929B0A110DD
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 20:10:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34698A112C5
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 22:14:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B087A168DB3
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 19:10:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FD53188488A
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 21:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193121FAC29;
-	Tue, 14 Jan 2025 19:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E030820E709;
+	Tue, 14 Jan 2025 21:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tdal1sZu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC371B85FA;
-	Tue, 14 Jan 2025 19:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948C620CCEA
+	for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2025 21:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736881839; cv=none; b=mTy/cYu/bJTqz4npTrdIlsNO95RzkOdY8sutkutGnBGxd3OJlEjHj+77U+R7ikpgrFOapKwUaN9LNILaAhP7jR7Z8jCfiaYexsYMwEfSzvp7747MVrzprxYZXER6DX5i8kcC96473Obp3lCignfwdSFvwtrFGYGhP1rbepUh4Fs=
+	t=1736889241; cv=none; b=ZZDBrhaTIHm/gUrNNLa4iwfhJ4PvLZot6GIdv6uXjyjn1V6nmhViwr1OaJXgim6ZpfJsrz/3qMf0F09J+t9eqV78+Snap/QvZMzKIfW3gVx6+yFckhkEKKu2bV6SpbpR12Z7oTSXCS+pGuMPfe8dDpK3stjQrJtYbdq8ZRskIxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736881839; c=relaxed/simple;
-	bh=r2ye69cdwNDbsX3S2TzJaJ3k24emtxeCPGVD/kKC9YY=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=hfUC3F7tHMO3piVXaWoDduf4FF4egMgRytdnww5+dRThOBTsiagMRjYY1/TkpuDT62+S4jbwIn73o1eBlVNzh+y6GsvOvapIm6lKkXtixX0+QVfTgAJ3oF3z4tEu6Tada7PaNF3oFCfJoR1OXlQ4eURGSRQCIUUb7JcTvf47G+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id E09EC92009C; Tue, 14 Jan 2025 20:10:34 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id DA84C92009B;
-	Tue, 14 Jan 2025 19:10:34 +0000 (GMT)
-Date: Tue, 14 Jan 2025 19:10:34 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Arnd Bergmann <arnd@arndb.de>
-cc: Geert Uytterhoeven <geert@linux-m68k.org>, 
-    Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-    =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>, 
-    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-    Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-    Baoquan He <bhe@redhat.com>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-    regressions@lists.linux.dev
-Subject: Re: [REGRESSION] mipsel: no RTC CMOS on the Malta platform in QEMU
-In-Reply-To: <13d0c3f1-7e6b-4f25-ae00-9e41a15ec36c@app.fastmail.com>
-Message-ID: <alpine.DEB.2.21.2501141707380.50458@angie.orcam.me.uk>
-References: <90b5b76d-25b6-4cdc-91ed-07ac930dc519@o2.pl> <99f75c66-4c2d-45dc-a808-b5ba440c7551@app.fastmail.com> <CAMuHMdXbuRLgDP2JtmdhnJF=AhpPa88356KU1yF1f8GMirWrcQ@mail.gmail.com> <08fe1ebb-b9c4-46c7-a6ab-5a336ec3b771@app.fastmail.com>
- <alpine.DEB.2.21.2501141605550.50458@angie.orcam.me.uk> <13d0c3f1-7e6b-4f25-ae00-9e41a15ec36c@app.fastmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1736889241; c=relaxed/simple;
+	bh=HPeOyPTCGGTDHOMXLb+UXWG1X7FxbwpONqdOtUySSrA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=tj/LHr+i71wxblHOosuBgaWrtQDJA2PLwksXZ5f4bVa0iLN6Rp+sbxGIRm0n+yucK1hSrtKStL0CqdCv6m8t2HttXXvjPp4Fvq7Qvh5xaE69fcC8PoSv1cxuYpXnKeZgDWO3alYixa1EstZuNexXt3YCIH1NZXoBXrNhCRXsKoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tdal1sZu; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ef91d5c863so10666532a91.2
+        for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2025 13:13:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736889239; x=1737494039; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9cRGGic7Te5o12Iwy1M3OB31drPOXRp+PHli2u04Fc=;
+        b=tdal1sZu79aUYEJfdP1gM9Xcda9j8Wwc4Tr5g7qpUO5NRZ7iabU1ZFvpgbZtTzfbBd
+         QHSuHYSZorVXmiWAGPR+NqJx0xIYP4Ro4dtIgEM2k1Ap0E6HbTMlDo7wxa77Rvy6jjph
+         z7ln0jTq4mLdSJFLR+HRPA5g+EPuLxoHVnBOMJa1iCdMwZBNwfPK5lU/umsM4pKTLkyn
+         xdFrMH4+9KXg4DO3kLyTN/L1RoO0oaZkWrp39eI25LyL6GbhY/NF0TCtt4ykMiSvfram
+         jXm1aHRzkXPSYYs0OljrbiGSfMUJYtQlNhWckV29e/yccyIiV2hPSJe5IJV1yElmyU+1
+         rYpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736889239; x=1737494039;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9cRGGic7Te5o12Iwy1M3OB31drPOXRp+PHli2u04Fc=;
+        b=iQMR5V8koxzuJ0GDPpzlQkw6UsSkKjeX6JPFQayEz3Wao06ZFK5acmcKHzpqDY5PHx
+         QH9pwiz77B2SA9PiKiK2Qk9KPLR26fp+gkukAgs3exbzgFO+z8GHSO7K9oDcnElvdVhQ
+         1uqEHLSLEnNGH4LBb/JLnihjPg3WEoS77mWOyG32ZDgaXYQ8CTcpRxaturlyyTC1TUhY
+         wNrm2g0J4wtiO4NmwScbUnfKiahZzbzYj4wGvfLtsnH3IosMusAXgNezbjU43a/LuPUF
+         7X8UDWEjJDGXYmj/NUXpmsnAc16XWt0/hNBk9P6CCZxOFe4ReVVgj4OMQbdAPfCPYcQn
+         RnSA==
+X-Forwarded-Encrypted: i=1; AJvYcCVUsyi8fAlwd3mfo7KW6jwumZEypIGrmjIMZ+q5jJUnchkZEcPQ4HCIxY+hxOmlnj1qibutElfh/vDe@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHj4vspqsbwrlwGHpZRE+ATnBW7S3VQUO9iK5Y9xfxI2zOkoqf
+	b1NVplyRAXRNLEjePnSPawD00XppAKZ3gCrBDIRusfObD32mtP6bfUbNCEdtepltz9FC8IJaDHG
+	uSA==
+X-Google-Smtp-Source: AGHT+IFnD8IBYtaFLZfmn+yp8faKF4j5W1D2QQ93HaiFkyR3KITtNCKyHKA+6Vtw5k/ROipPB4Gea/5UJbQ=
+X-Received: from pjbsn8.prod.google.com ([2002:a17:90b:2e88:b0:2f4:465d:5c61])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1f8b:b0:2ee:bf84:4fe8
+ with SMTP id 98e67ed59e1d1-2f548f1d44cmr36656404a91.30.1736889238866; Tue, 14
+ Jan 2025 13:13:58 -0800 (PST)
+Date: Tue, 14 Jan 2025 13:13:57 -0800
+In-Reply-To: <20250114175143.81438-26-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+References: <20250114175143.81438-1-vschneid@redhat.com> <20250114175143.81438-26-vschneid@redhat.com>
+Message-ID: <Z4bTlZkqihaAyGb4@google.com>
+Subject: Re: [PATCH v4 25/30] context_tracking,x86: Defer kernel text patching IPIs
+From: Sean Christopherson <seanjc@google.com>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, 
+	virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	loongarch@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	bcm-kernel-feedback-list@broadcom.com, Peter Zijlstra <peterz@infradead.org>, 
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov <alexey.amakhalov@broadcom.com>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Joel Fernandes <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, 
+	Tomas Glozar <tglozar@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, 
+	Mel Gorman <mgorman@suse.de>, Kees Cook <kees@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Christoph Hellwig <hch@infradead.org>, 
+	Shuah Khan <shuah@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, 14 Jan 2025, Arnd Bergmann wrote:
+On Tue, Jan 14, 2025, Valentin Schneider wrote:
+> text_poke_bp_batch() sends IPIs to all online CPUs to synchronize
+> them vs the newly patched instruction. CPUs that are executing in userspace
+> do not need this synchronization to happen immediately, and this is
+> actually harmful interference for NOHZ_FULL CPUs.
 
-> >> Yes, I think this would make the most sense, but the ordering
-> >> with the PCI initialization needs to be done carefully,
-> >> to ensure that PCI_IOBASE has its final value before the first
-> >> call to pci_remap_iospace().
-> >
-> >  Is defining PCI_IOBASE going to do the right thing for non-PCI MIPS 
-> > platforms, or should the definition be #ifdef CONFIG_PCI rather than 
-> > unconditional?  FWIW I think all PCI MIPS platforms support port I/O.
-> 
-> PCI_IOBASE should be defined whenever CONFIG_HAS_IOPORT is set.
+...
 
- Right, this will be more correctly scoped, so #ifdef CONFIG_HAS_IOPORT 
-then.
+> This leaves us with static keys and static calls.
 
-> Ideally that should allow using the generic inb/outb and
-> ioread/iowrite helpers from include/asm-generic/io.h, but
-> unfortunately those don't support the address swizzling required
-> on SGI and Octeon platforms.
+...
 
- Address swizzling should be generic: for an endianness boundary crossing 
-depending on its wiring there's always either a byte-lane or a bit-lane 
-matching policy (of course both may be implemented in the same system via 
-different mapping windows, such as with the Broadcom SiByte BCM1250 SoC 
-though we only use one in Linux, or with some kind of a bus configuration 
-register) and either byte swapping or address swizzling is required 
-accordingly for the relevant use cases.  But I guess for just a bunch of 
-systems that implement the bit-lane matching policy there's little 
-incentive for complicating the generic helpers.
+> @@ -2317,11 +2334,20 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
+>  	 * First step: add a int3 trap to the address that will be patched.
+>  	 */
+>  	for (i = 0; i < nr_entries; i++) {
+> -		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
+> -		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
+> +		void *addr = text_poke_addr(&tp[i]);
+> +
+> +		/*
+> +		 * There's no safe way to defer IPIs for patching text in
+> +		 * .noinstr, record whether there is at least one such poke.
+> +		 */
+> +		if (is_kernel_noinstr_text((unsigned long)addr))
+> +			cond = NULL;
 
-> These platforms look like they currently set a NULL pointer
-> as the I/O port base:
-> 
-> arch/mips/alchemy/common/setup.c:       set_io_port_base(0);
-> arch/mips/ath79/setup.c:        set_io_port_base(KSEG1);
-> arch/mips/bcm63xx/setup.c:      set_io_port_base(0);
-> arch/mips/bmips/setup.c:        set_io_port_base(0);
-> arch/mips/lantiq/prom.c:        set_io_port_base((unsigned long) KSEG1);
-> 
-> At least some of these, possibly all, also have a PCI or PCMCIA
-> host controller driver that sets a different value later
-> when that bus is probed.
+Maybe pre-check "cond", especially if multiple ranges need to be checked?  I.e.
 
-$ grep set_io_port_base arch/mips/pci/*
+		if (cond && is_kernel_noinstr_text(...))
+> +
+> +		tp[i].old = *((u8 *)addr);
+> +		text_poke(addr, &int3, INT3_INSN_SIZE);
+>  	}
+>  
+> -	text_poke_sync();
+> +	__text_poke_sync(cond);
+>  
+>  	/*
+>  	 * Second step: update all but the first byte of the patched range.
 
-reveals some, i.e. alchemy, and bmips I believe uses the generic handler.  
-Other ones may not support port I/O after all, especially where the 
-platform in question is meant to be used in PCI device mode.
+...
 
-> I don't see any I/O space getting set up for ath25, dec, ingenic,
-> loongson32, pic32, eyeq, nintendo64, and realtek-rtl. It looks to
-> me like any I/O port access on these turns into a misaligned NULL
-> pointer dereference, but there is a good chance I'm missing how
-> it gets set up there.
+> +/**
+> + * is_kernel_noinstr_text - checks if the pointer address is located in the
+> + *                    .noinstr section
+> + *
+> + * @addr: address to check
+> + *
+> + * Returns: true if the address is located in .noinstr, false otherwise.
+> + */
+> +static inline bool is_kernel_noinstr_text(unsigned long addr)
+> +{
+> +	return addr >= (unsigned long)__noinstr_text_start &&
+> +	       addr < (unsigned long)__noinstr_text_end;
+> +}
 
- There's no PCI with the dec platform (i.e. either no I/O bus at all or 
-TURBOchannel), so the PCI I/O space is irrelevant, and obviously the MIPS 
-architecture has no native I/O space.  I don't know about the other ones, 
-but I supppose at least some of them could be SoCs or systems with no PCI 
-either.
+This doesn't do the right thing for modules, which matters because KVM can be
+built as a module on x86, and because context tracking understands transitions
+to GUEST mode, i.e. CPUs that are running in a KVM guest will be treated as not
+being in the kernel, and thus will have IPIs deferred.  If KVM uses a static key
+or branch between guest_state_enter_irqoff() and guest_state_exit_irqoff(), the
+patching code won't wait for CPUs to exit guest mode, i.e. KVM could theoretically
+use the wrong static path.
 
-  Maciej
+I don't expect this to ever cause problems in practice, because patching code in
+KVM's VM-Enter/VM-Exit path that has *functional* implications, while CPUs are
+actively running guest code, would be all kinds of crazy.  But I do think we
+should plug the hole.
+
+If this issue is unique to KVM, i.e. is not a generic problem for all modules (I
+assume module code generally isn't allowed in the entry path, even via NMI?), one
+idea would be to let KVM register its noinstr section for text poking.
 
