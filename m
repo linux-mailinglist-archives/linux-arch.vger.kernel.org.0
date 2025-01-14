@@ -1,149 +1,285 @@
-Return-Path: <linux-arch+bounces-9744-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9745-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EF62A1043C
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 11:34:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC132A10988
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 15:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FEC6188106E
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 10:34:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5DBC3A134B
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 14:35:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A621D63DE;
-	Tue, 14 Jan 2025 10:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476C31494DF;
+	Tue, 14 Jan 2025 14:35:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxTH1TVO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4T5S0yt"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D47A1D47B4;
-	Tue, 14 Jan 2025 10:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A70F7E105;
+	Tue, 14 Jan 2025 14:35:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736850845; cv=none; b=TUOb1GXeafX3qljifWGD73m/wdUokJ188rHbMWdcVF8NWW2qWRwOk+XhiyQ30dCSQoadX3Wjhww6Uo58QouZCpsibHUMfp/0IvxdqB+wtwnFhgxrZ6T8SUx0PEe8A1lfC9pGqgh5IOaigXobLR47gkhfXz+ZWkz05ObimLeqULo=
+	t=1736865353; cv=none; b=UpDKv1ngYuFicHQfRJpp2xSC+MZ990n91uOAlmmouqGm042c5jdLscqruscHxsDNonsAXeMRQwqXS4wf8KiCUZrpLYXM7MymaOY+xUu9ui4vlhf61OnMqPaLB6+TmmV75PpDJpQjV3XdkyBfI6KRjJcHm+3z6X4Nat5WbBPh8lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736850845; c=relaxed/simple;
-	bh=PPBTXcmZ9FTKLOavDTSaaCxS+I83L8XKDLxpo1k4qF8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vDITmQRZk0j1ZoL1te8W1k1LUUa/sekHDnbfFE9NDXA8rySc8WaPBlrqOHJ9gO5KH9hs4dUx8MjhdOTZ2LWKMfqrzRwW0A+djVVuHuwo6rzje9QHu354eYH0yKfrAbrKSWfRtkY2DKUo3rdfRnSUUUmOPeoYFMUIHzBHE/Zoyyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxTH1TVO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 310DFC4CEE0;
-	Tue, 14 Jan 2025 10:33:56 +0000 (UTC)
+	s=arc-20240116; t=1736865353; c=relaxed/simple;
+	bh=uzieb3PpttrSGXVw+mO02BuIgTXRAr2xwj6otgCdt6s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l3owWCunZCCyS02Rp4RsmbSVm7eSonnft0zY9sId82xuBYvMwLkgxoyHTdwTtJWrcPCYtJ5c7o9Mp3dK/r/brBTFLoJdD3BZdmUTRUofgqUptyhyTAkmbLDX1jhgS8/ZDNTtGmWyApd5pPbV1gkuV78m6iSeYTwYEjJa+1WBjqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4T5S0yt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95ED1C4CEEC;
+	Tue, 14 Jan 2025 14:35:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736850844;
-	bh=PPBTXcmZ9FTKLOavDTSaaCxS+I83L8XKDLxpo1k4qF8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AxTH1TVOByRyemy5vzP15NHxHuJlYlyl1hQLGDalk4R7LH2WyA/2gx/XtNbKHP6IE
-	 BdijOVzI31N04UC33BwkWxuWMPpjOqJk4YPBcZWpHmsEzVSlAn6n8H3SvPSKjRt4Km
-	 MmpAYcYGmR2n+9td9dyxGX+GBgzUR73o9ZemtBsDbfqnix+wupk/YAt26zv5Z/Nt2Q
-	 YW8X2WGphjiIh5L1lDgafPSMz5AIFm6Q1aPh8ln+BKEZNUtlb11WMWugcnXi6M0GO3
-	 AVtW7Uph3adO04TefpnPeJyGrUuc2ovvVgVBTVrDhbVONzJzNVIc1qvOPiQR3KVK67
-	 Hr4Mh5R5VIq3w==
-Date: Tue, 14 Jan 2025 10:33:53 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Russell King <linux@armlinux.org.uk>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-	Nam Cao <namcao@linutronix.de>, linux-csky@vger.kernel.org
-Subject: Re: [PATCH v2 09/18] riscv: vdso: Switch to generic storage
- implementation
-Message-ID: <20250114-lustily-nuttiness-3bb7646515d5@spud>
-References: <20250110-vdso-store-rng-v2-0-350c9179bbf1@linutronix.de>
- <20250110-vdso-store-rng-v2-9-350c9179bbf1@linutronix.de>
- <20250113-kissable-monstrous-aace0cf7182e@spud>
- <20250114093609-6cb25835-f912-4f64-9ba7-54c67d4e2904@linutronix.de>
+	s=k20201202; t=1736865352;
+	bh=uzieb3PpttrSGXVw+mO02BuIgTXRAr2xwj6otgCdt6s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=U4T5S0ytbZ2qJPTb9ndZYRk8WA9ZFaSMMqEKaRCurN0ZrwVtfS+Nfk+B+9xHd9El+
+	 rMLxp9WOm1yTzhoe4m29p8nW6aaIAeH3o6Ta9pLNkmZEcIboLVkSo5rLgSFD/VDsHp
+	 Tdljt257wXjbjsgdRxEQzEclRXeqE9mwTgeajX+7/SaR8MFetCBRY9DuKn/5NaOboE
+	 OZTff8UCtWu/VpTGWgSuI91HFiFCtlZ55y4KRfeaOgV7eRRzt0dEaBtXTIpTNxoNq2
+	 w2oNAIJhtjQFpr4dVOPTx2q9VqH2nkEpdgBZxMd9Hgy2dHld/5/ax04mmCnPd+zbW9
+	 1U/CbXmRDci6w==
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-71e35be77b5so1459684a34.1;
+        Tue, 14 Jan 2025 06:35:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUhhgH4WYVtyWcYJDqIvcyvuDv+10NhhoSR7FN/LKW5L9/AjhyZndI1MRSUyUT3sXHedjAI4UAjadzx@vger.kernel.org, AJvYcCVqUclJKSHwsEz13IKZ/s1GwFcBHIbrwR8TxuTpPjWsr6dl1VSlb+VaAUTAN6zB9m8cR4KSCK8DZWo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxB1zyUIZ4jOh+pKPvVp4L+qZWiov04aeJkB45SgRmSKwyififQ
+	K52AjBXTkQQuFzIdVczhpBfS59RKo3I3SXqLmM4NCmMKO4Da8daIkBko9518OG/i5655my5ptNI
+	FQOj/6sY4U6ezTqcT2jiMSQV8mE8=
+X-Google-Smtp-Source: AGHT+IH1RknkEPNA5SHC3B1OkEK9Zf55bGrD/rzwlyGX6YRlIPqRgm9/BvsyUggkICMw+21bElzxL8TGau13Un9jx+c=
+X-Received: by 2002:a05:6870:2f18:b0:296:beb3:aa40 with SMTP id
+ 586e51a60fabf-2aa0699904emr14988683fac.36.1736865351648; Tue, 14 Jan 2025
+ 06:35:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="jwGvJ1ZaVXfjr5LT"
-Content-Disposition: inline
-In-Reply-To: <20250114093609-6cb25835-f912-4f64-9ba7-54c67d4e2904@linutronix.de>
-
-
---jwGvJ1ZaVXfjr5LT
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+References: <20250102150201.21639-1-frederic@kernel.org> <20250102150201.21639-4-frederic@kernel.org>
+In-Reply-To: <20250102150201.21639-4-frederic@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 14 Jan 2025 15:35:40 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hL5nhCD-A1Oa31zHxHfOjOMFfeRfc-AGR3vb9p_00tqA@mail.gmail.com>
+X-Gm-Features: AbW1kvYHnyXXcOAl3blrKjYldKJPLP7civgrZHPIfPETu_DDu39ZhH2fg7Gie-Q
+Message-ID: <CAJZ5v0hL5nhCD-A1Oa31zHxHfOjOMFfeRfc-AGR3vb9p_00tqA@mail.gmail.com>
+Subject: Re: [PATCH 3/6] x86/cpuidle: Move buggy mwait implementations away
+ from CPUIDLE_FLAG_MWAIT
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 14, 2025 at 09:40:11AM +0100, Thomas Wei=DFschuh wrote:
-> On Mon, Jan 13, 2025 at 07:48:15PM +0000, Conor Dooley wrote:
-> > On Fri, Jan 10, 2025 at 04:23:48PM +0100, Thomas Wei=DFschuh wrote:
-> > > The generic storage implementation provides the same features as the
-> > > custom one. However it can be shared between architectures, making
-> > > maintenance easier.
-> > >=20
-> > > Co-developed-by: Nam Cao <namcao@linutronix.de>
-> > > Signed-off-by: Nam Cao <namcao@linutronix.de>
-> > > Signed-off-by: Thomas Wei=DFschuh <thomas.weissschuh@linutronix.de>
-> >=20
-> > For rv64, nommu:
-> >   LD      vmlinux
-> > ld.lld: error: undefined symbol: vmf_insert_pfn
-> > >>> referenced by datastore.c
-> > >>>               lib/vdso/datastore.o:(vvar_fault) in archive vmlinux.a
-> >=20
-> > ld.lld: error: undefined symbol: _install_special_mapping
-> > >>> referenced by datastore.c
-> > >>>               lib/vdso/datastore.o:(vdso_install_vvar_mapping) in a=
-rchive vmlinux.a
-> >=20
-> > Later patches in the series don't make it build again.
-> > rv32 builds now though, so thanks for fixing that.
->=20
-> Thanks for the report.
-> Can you try to diff below?
+On Thu, Jan 2, 2025 at 4:02=E2=80=AFPM Frederic Weisbecker <frederic@kernel=
+.org> wrote:
+>
+> Buggy MWAIT implementations can't carry the CPUIDLE_FLAG_MWAIT flag
+> because they require IPIs to wake up. Therefore they shouldn't be
+> called with TIF_NR_POLLING.
+>
+> Reported-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 
-Ye, that resolved it. Thanks!
+I would do a patch introducing arch_cpuidle_mwait_needs_ipi() or
+equivalent before patch [2/6] and I would use it in patch [2/6] right
+away.
 
---jwGvJ1ZaVXfjr5LT
-Content-Type: application/pgp-signature; name="signature.asc"
+> ---
+>  arch/arm/include/asm/cpuidle.h     |  2 ++
+>  arch/arm64/include/asm/cpuidle.h   |  3 +++
+>  arch/powerpc/include/asm/cpuidle.h |  4 ++++
+>  arch/riscv/include/asm/cpuidle.h   |  2 ++
+>  arch/x86/include/asm/cpuidle.h     | 12 ++++++++++++
+>  drivers/acpi/processor_idle.c      |  4 +++-
+>  drivers/idle/intel_idle.c          |  9 +++++++--
+>  include/asm-generic/Kbuild         |  1 +
+>  include/asm-generic/cpuidle.h      | 10 ++++++++++
+>  9 files changed, 44 insertions(+), 3 deletions(-)
+>  create mode 100644 arch/x86/include/asm/cpuidle.h
+>  create mode 100644 include/asm-generic/cpuidle.h
+>
+> diff --git a/arch/arm/include/asm/cpuidle.h b/arch/arm/include/asm/cpuidl=
+e.h
+> index 397be5ed30e7..0ea1d2ec837d 100644
+> --- a/arch/arm/include/asm/cpuidle.h
+> +++ b/arch/arm/include/asm/cpuidle.h
+> @@ -55,4 +55,6 @@ struct arm_cpuidle_irq_context { };
+>  #define arm_cpuidle_save_irq_context(c)                (void)c
+>  #define arm_cpuidle_restore_irq_context(c)     (void)c
+>
+> +#include <asm-generic/cpuidle.h>
+> +
+>  #endif
+> diff --git a/arch/arm64/include/asm/cpuidle.h b/arch/arm64/include/asm/cp=
+uidle.h
+> index 2047713e097d..ef49124135a7 100644
+> --- a/arch/arm64/include/asm/cpuidle.h
+> +++ b/arch/arm64/include/asm/cpuidle.h
+> @@ -38,4 +38,7 @@ struct arm_cpuidle_irq_context { };
+>  #define arm_cpuidle_save_irq_context(c)                (void)c
+>  #define arm_cpuidle_restore_irq_context(c)     (void)c
+>  #endif
+> +
+> +#include <asm-generic/cpuidle.h>
+> +
+>  #endif
+> diff --git a/arch/powerpc/include/asm/cpuidle.h b/arch/powerpc/include/as=
+m/cpuidle.h
+> index 0cce5dc7fb1c..788706bc04ec 100644
+> --- a/arch/powerpc/include/asm/cpuidle.h
+> +++ b/arch/powerpc/include/asm/cpuidle.h
+> @@ -102,4 +102,8 @@ static inline void report_invalid_psscr_val(u64 psscr=
+_val, int err)
+>
+>  #endif
+>
+> +#ifndef __ASSEMBLY__
+> +#include <asm-generic/cpuidle.h>
+> +#endif
+> +
+>  #endif
+> diff --git a/arch/riscv/include/asm/cpuidle.h b/arch/riscv/include/asm/cp=
+uidle.h
+> index 71fdc607d4bc..1f1b24901d86 100644
+> --- a/arch/riscv/include/asm/cpuidle.h
+> +++ b/arch/riscv/include/asm/cpuidle.h
+> @@ -21,4 +21,6 @@ static inline void cpu_do_idle(void)
+>         wait_for_interrupt();
+>  }
+>
+> +#include <asm-generic/cpuidle.h>
+> +
+>  #endif
+> diff --git a/arch/x86/include/asm/cpuidle.h b/arch/x86/include/asm/cpuidl=
+e.h
+> new file mode 100644
+> index 000000000000..a59db1a3314a
+> --- /dev/null
+> +++ b/arch/x86/include/asm/cpuidle.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_X86_CPUIDLE_H
+> +#define _ASM_X86_CPUIDLE_H
+> +
+> +#include <asm/cpufeature.h>
+> +
+> +static inline bool arch_cpuidle_mwait_needs_ipi(void)
+> +{
+> +       return boot_cpu_has_bug(X86_BUG_MONITOR);
+> +}
+> +
+> +#endif /* _ASM_X86_CPUIDLE_H */
+> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.=
+c
+> index 66cb5536d91e..0f29dd92b346 100644
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/perf_event.h>
+>  #include <acpi/processor.h>
+>  #include <linux/context_tracking.h>
+> +#include <asm/cpuidle.h>
+>
+>  /*
+>   * Include the apic definitions for x86 to have the APIC timer related d=
+efines
+> @@ -806,7 +807,8 @@ static int acpi_processor_setup_cstates(struct acpi_p=
+rocessor *pr)
+>                 if (cx->type =3D=3D ACPI_STATE_C1 || cx->type =3D=3D ACPI=
+_STATE_C2)
+>                         drv->safe_state_index =3D count;
+>
+> -               if (cx->entry_method =3D=3D ACPI_CSTATE_FFH)
+> +               if (cx->entry_method =3D=3D ACPI_CSTATE_FFH &&
+> +                   !arch_cpuidle_mwait_needs_ipi())
+>                         state->flags |=3D CPUIDLE_FLAG_MWAIT;
+>
+>                 /*
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index d52723fbeb04..b2f494effd4a 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -56,6 +56,7 @@
+>  #include <asm/mwait.h>
+>  #include <asm/spec-ctrl.h>
+>  #include <asm/fpu/api.h>
+> +#include <asm/cpuidle.h>
+>
+>  #define INTEL_IDLE_VERSION "0.5.1"
+>
+> @@ -1787,7 +1788,10 @@ static void __init intel_idle_init_cstates_acpi(st=
+ruct cpuidle_driver *drv)
+>                 if (cx->type > ACPI_STATE_C1)
+>                         state->target_residency *=3D 3;
+>
+> -               state->flags =3D MWAIT2flg(cx->address) | CPUIDLE_FLAG_MW=
+AIT;
+> +               state->flags =3D MWAIT2flg(cx->address);
+> +
+> +               if (!arch_cpuidle_mwait_needs_ipi())
+> +                       state->flags |=3D CPUIDLE_FLAG_MWAIT;
+>
+>                 if (cx->type > ACPI_STATE_C2)
+>                         state->flags |=3D CPUIDLE_FLAG_TLB_FLUSHED;
+> @@ -2073,7 +2077,8 @@ static bool __init intel_idle_verify_cstate(unsigne=
+d int mwait_hint)
+>
+>  static void state_update_enter_method(struct cpuidle_state *state, int c=
+state)
+>  {
+> -       state->flags |=3D CPUIDLE_FLAG_MWAIT;
+> +       if (!arch_cpuidle_mwait_needs_ipi())
+> +               state->flags |=3D CPUIDLE_FLAG_MWAIT;
 
------BEGIN PGP SIGNATURE-----
+Also, some code duplication could be avoided by having something like
+arch_x86_mwait_state() returning the flag if the condition is met:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ4Y9kQAKCRB4tDGHoIJi
-0oHDAP9Da+NrCNJE56DtkPFciL+LH3SKSSwOWQ6oFB2bu8GWRQEA9RJt/Is3QV+w
-+n+t05VKvIADKDk9hc4FHnNawF8GUgg=
-=tDst
------END PGP SIGNATURE-----
+    state->flags |=3D arch_x86_mwait_state();
 
---jwGvJ1ZaVXfjr5LT--
+>
+>         if (state->flags & CPUIDLE_FLAG_INIT_XSTATE) {
+>                 /*
+> diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+> index 1b43c3a77012..7754da499d16 100644
+> --- a/include/asm-generic/Kbuild
+> +++ b/include/asm-generic/Kbuild
+> @@ -13,6 +13,7 @@ mandatory-y +=3D cacheflush.h
+>  mandatory-y +=3D cfi.h
+>  mandatory-y +=3D checksum.h
+>  mandatory-y +=3D compat.h
+> +mandatory-y +=3D cpuidle.h
+>  mandatory-y +=3D current.h
+>  mandatory-y +=3D delay.h
+>  mandatory-y +=3D device.h
+> diff --git a/include/asm-generic/cpuidle.h b/include/asm-generic/cpuidle.=
+h
+> new file mode 100644
+> index 000000000000..748a2022ed2a
+> --- /dev/null
+> +++ b/include/asm-generic/cpuidle.h
+> @@ -0,0 +1,10 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __ASM_CPUIDLE_H
+> +#define __ASM_CPUIDLE_H
+> +
+> +static inline bool arch_cpuidle_mwait_needs_ipi(void)
+> +{
+> +       return true;
+> +}
+> +
+> +#endif /* __ASM_CPUIDLE_H */
+> --
+> 2.46.0
+>
+>
 
