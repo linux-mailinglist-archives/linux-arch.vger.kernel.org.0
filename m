@@ -1,164 +1,199 @@
-Return-Path: <linux-arch+bounces-9782-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9783-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C585A11010
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 19:29:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E21EA110BA
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 20:04:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33272161507
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 18:29:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 824B37A2ED1
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 19:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0961FBC9B;
-	Tue, 14 Jan 2025 18:29:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DF0E1FBC98;
+	Tue, 14 Jan 2025 19:04:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="KFBFTQuv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DRvrKmYX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230141FAC50
-	for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2025 18:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44811B85FA;
+	Tue, 14 Jan 2025 19:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736879367; cv=none; b=hmLmuGvuDzYHbp2my5gW995EECgt1Up5o8aNRiNevFTq5l8DQWhHsg6A42ZwhgqxQaY7A59/2Xm2y5KLylUVFfCEBJ1k4y2af85Jo+S0yvJri6qa66Dn+gRaGuncne75gLC0Z+Z8/2Zh+0uonMOuK8SeeK62UXYBkl0zYMp3u9Y=
+	t=1736881489; cv=none; b=NCRYX7nwvIWTNMotZaV6UrAnpImx8SHX4+YmLmoJXJghGENr/dpfV4DmJnWs26QlknQzEGPboMwZv1ahksk0wpWAwaMwqhwNmHVKenGu3JsxrUHxQC/AxK/1DPSc7FemBLgyq9/r6Xb8oaA6/EinddxCrJLCKT3lRP9on7G8rNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736879367; c=relaxed/simple;
-	bh=jsa0CovMO5ZT70pqhIrCF6Xwrs9x8fVebY2Xd/EYn6o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ty/SALo0vFH45WMXZAfwvXe7CVrA6ymzWeeWOOTq9LxZOMtX4XLWt2hULPvKmW34IGSbeJ5IrTO4sEdsG3lVSAWFlVVkjDskmr8cwoAS+kIMG9cix6PhtL9wgkTtIHlunS5wV98nX69/x8LbRQm+FftwB+O82o3G31ACeHUdQCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=KFBFTQuv; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5d3bdccba49so9848501a12.1
-        for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2025 10:29:23 -0800 (PST)
+	s=arc-20240116; t=1736881489; c=relaxed/simple;
+	bh=OqGK6Z8tSyIVe/r/lJjFfsY83wr55JwqJyKsp3yVWF0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HJXNYkYwk55Z5bpG95ssKcuJRM5vXx0s1QK8CBu0K6WokSqA1hD3TPby+10xErfbg9flePH3xJCFDNUM9mfmrh9mfevJm6w27nmp83crX7D+IvVFZuHZjWryzcWlSERRlE4Sky1xc3Thoda3Em3iclWqip9WmQ8kVdc/Pep5WVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DRvrKmYX; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2eec9b3a1bbso7829974a91.3;
+        Tue, 14 Jan 2025 11:04:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1736879362; x=1737484162; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+L6x2g4BC/d/+jfoDGOj0pMskOpzz9VGXCLG5E4WwRY=;
-        b=KFBFTQuv4suEhQgFHTC00K5qiQ3Jw2kiLcP2Ut9JBRBrS6MG3+DcQWnTJ2OvOmD2ET
-         VmAoHdL2GNwADncv1A6R63Igi6HrsrO4q0Iy0Tf0ktWX9MhkhZAWTt4DFpf39SgVrvcn
-         goB1HrkuDsZ6EUUMHyn+nRAXkfPC0D6r+s8all1P1Tni6YRXh8p/Hn56TaO13lf8p0o+
-         e8waI5tHtQROzxqeDrKmwdFRhQ/JWlNMRBEbvpsdANDX4sa5h9naV2GPaEWOaWIvEYUT
-         GOIozzsliRXxnLRPkM//8kc56luukRtxY3CL4EKdxIA1Jd9xtXGcUDyU6uX7Lky9U82N
-         XglQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736879362; x=1737484162;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1736881487; x=1737486287; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+L6x2g4BC/d/+jfoDGOj0pMskOpzz9VGXCLG5E4WwRY=;
-        b=fuwXyyXJtRzDqtnBO02om5OKK/5DmfUWqLofALRwaTu3O5ghRaJzZM03N3rWCQgfAY
-         bPcE+jWUMuNOpBmisfUNNVrVgK5GBIF1NDenGPb9PBjK8nWXf5d12IWivLaOe4M9qcKf
-         HIcKqaVNqzkhiCkM6bbf44n/2Kv3sTgY08zrVzYoehXzjqHItcngQQ/6QmlenI0njceX
-         9MzkLlWZb6MQkp5KUhOua8XVdFfBsSRiudIerrYYHl3+Y48qaQaoWV5/z1WmPO1EZT5e
-         ehch/9Oah7yv9Nqw7U3vhN/3NnlMVgS150kwEiXmsj6kqB2h4ARObStVxg0Fe6vCIfNl
-         sHMA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkCF474mZ7ccYk5iXM56Xhi+YXETwRZAguEB1JFPzFmWFAbAyObZyTyszNwlOygSLV9Hg8FihaJtR4@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnsDp1uQhT7dfvjwaDHzaHBoJzXb+BrXdqv2fK/hhGZeornt6B
-	VuNIwZPpQr9WlOp/zKFFejyq5RAp30ktNBdAI0smiMIEMBUkYgH4ldSWQUXnSwE=
-X-Gm-Gg: ASbGnctuU+Df6k0+sN9cGqDeh+/rOp5X6t4pK1tqZtZVDBqpCRTQrLcasGTZJ1MrwbR
-	veCTFiVZFnr+IMD8TBCRB93Q4Csc+d5hJ/lY6awkhpLPx4IP25ZqXUuOD8l4GOI/szbVM2s4XT1
-	HdNLGW0C/Qj3pCYlOiQ0f9pDpqei5mp8NtnSwqplcAq/9Orhznhy/4frg5kPuJ2Yc03UPDIUFJq
-	8R3mGyrEHtZo7fKVSKhpNJm0m/dNfPVPTkqevZlLlYBq4pepfMgsrB7oRDJsvYgPDMKnwzOA4vZ
-	LcTj54PGexg83as6MKDBszYr6te04uCwpoYDbN/hIw==
-X-Google-Smtp-Source: AGHT+IElLRyBSSFsvDLttv+1rxbirlHss1/zCBNTWvitDc/Y1ed9oUs4kNSXL7wHp3+sai4oSrFAlg==
-X-Received: by 2002:a17:907:96a7:b0:aa6:2c18:aaa2 with SMTP id a640c23a62f3a-ab2ab73e7dbmr2340049566b.27.1736879362392;
-        Tue, 14 Jan 2025 10:29:22 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c905f04fsm659166066b.27.2025.01.14.10.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 10:29:21 -0800 (PST)
-Date: Tue, 14 Jan 2025 19:29:21 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, 
-	virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, 
-	Juergen Gross <jgross@suse.com>, Ajay Kaher <ajay.kaher@broadcom.com>, 
-	Alexey Makhalov <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ard Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Joel Fernandes <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>, 
-	Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, 
-	Tomas Glozar <tglozar@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Christoph Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
-	Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>, 
-	Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Yosry Ahmed <yosryahmed@google.com>, "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v4 10/30] riscv/paravirt: Mark pv_steal_clock static call
- as __ro_after_init
-Message-ID: <20250114-7fc0ed577ee91b6813f92806@orel>
-References: <20250114175143.81438-1-vschneid@redhat.com>
- <20250114175143.81438-11-vschneid@redhat.com>
+        bh=UEe097M6IZ1c6/MJ6EbTxRLtSdho/vi92Dh1E1/kKsQ=;
+        b=DRvrKmYXTsJgj2bNz07kKPEsWwkgYx3DLmd36Yjt6Krhdris/IjxQgJgsDsReCpWQZ
+         nvhP0RMjmrInIAHf3653GeHuRAkrbnCU4er8GNCaV3jGtfLgl2m6L48JfYLVzaZsnDWL
+         HbhJnuPg3w/uCYAB4UUeoyY2tNAp4MxEL5DhTSHR4GY0/i3wxubkrjxBPQ5oKEg/EztP
+         Xw1KxhiOHdRR3mXo5RQ4mBqb49CtFye1AHMXXg0GwYT0/Mg+x5WCFzP3BOmveIIgVsY7
+         ZJBZlQYuRi1gr/+5C/D/ZWCIao1kXibVCnBaeqw0jnafBk7gpSFVqPLoc8oHjJ78VyVu
+         Scxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736881487; x=1737486287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UEe097M6IZ1c6/MJ6EbTxRLtSdho/vi92Dh1E1/kKsQ=;
+        b=RU0n0a+GAbZeiXNXgt/K4ZSb3ENLg1Q1xcMbF40BG/MbWQn3yzBTSvP8GFoqCLwwPC
+         wN4tbZyUV9fb9nAeTDc1oN/57MxV6/siB/kKQ1nfeRucYIPeSBrWklVuhKR0SyrxVXTx
+         5EPr4THKbWqYHdtUYYnIPUWBbEX2MkeoCxwD7+EX3/Ik0PpDBhE7SvMnK4MkqrjwmFnI
+         cZ4VetAtmlTnDhiqJRN80H5dPLUJuodETjXPWxr6V0fa+RZElwTVo/VXR1GtSxOrK3sB
+         0jzhP4664l3z/pRszEvtgzDh6NcUAo6H7GQApn14nDzLwB/pBy4Xo5cWYv1vKTbhGqfb
+         lkXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2o3pkTSEisO4BSO4C9UNPGmN/PF1F64W/Ir3oEyQtb+KXMfc84uG6ElY/Pw6EnN2x9y7G5hPDsSha1bO/yhsdNbj1@vger.kernel.org, AJvYcCU8kEEeVKNNmcJms1atLk0LxnNla3Hi8zVfnpgbLs7ki6kPDrSpZ8DsD35w42Zr10tEG5Y=@vger.kernel.org, AJvYcCV6KE88UFx6VhjobCDwi0Co23emtd4RDrcVGE7QASVfZVXVWXrxzzdYVO1nSYgT1eWxvvSsHzjL5gyETg==@vger.kernel.org, AJvYcCWasxaJAeAwkyqfG8bRxLvtl0Dy3GcQPiy/9zBRLa0Fna5Ft4iqwF7EMRCp9OS9KFhnWhDAIjkaABYsikqi@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNS5nwx4B12biXNfozwy6j7/wJb6gk2OcR1qVeMZoZBLvNLxMc
+	nBeO9/U6/2wdAM3dSDAQzF6SRHkVH3y5t/UsVpejRUZMnLPCThviVkC0nsbHjDwYqbF7Uee63vx
+	namVAPrAMiglj78Z9E//VhC7xJSE=
+X-Gm-Gg: ASbGncsUWg0QYkAKXKxY+5jL30C4jk8bCRNPYnbc68YRzT3tQ+ofEUzKX4VcKL5sN17
+	pnlEB9XSAsHTYCCG24gA9AFtFYzR/yXYN0gV2
+X-Google-Smtp-Source: AGHT+IGPhIcGO+TQXrPWOO1ZPVU0z+5sWXrqDm55mqIBD3SrGU5BTvsIyI5REMrOuVa7A4fXcTnsa5fozQnQr150wfg=
+X-Received: by 2002:a17:90b:540e:b0:2ee:a76a:830 with SMTP id
+ 98e67ed59e1d1-2f548f1b2bfmr40980565a91.24.1736881486958; Tue, 14 Jan 2025
+ 11:04:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250114175143.81438-11-vschneid@redhat.com>
+References: <173518987627.391279.3307342580035322889.stgit@devnote2>
+ <Z3aSuql3fnXMVMoM@krava> <CAEf4BzZqpHcqRJscQtAJJ7tLMpdq4_Dr_j7APj=X2g-pnkELVg@mail.gmail.com>
+ <Z4Z-yC_mBTa6Ws70@krava>
+In-Reply-To: <Z4Z-yC_mBTa6Ws70@krava>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 14 Jan 2025 11:04:35 -0800
+X-Gm-Features: AbW1kva_e4D6M60XyDxQhwRiED82CFE6DG9gGIZh1M2JAQrmjpyscMamojYYM6U
+Message-ID: <CAEf4BzbuQxEWfTNRq9163Gi=SMDi3wCpfp+NEMVtz_BRYJxOdg@mail.gmail.com>
+Subject: Re: [PATCH v22 00/20] tracing: fprobe: function_graph: Multi-function
+ graph and fprobe on fgraph
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>, 
+	linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 14, 2025 at 06:51:23PM +0100, Valentin Schneider wrote:
-> The static call is only ever updated in:
-> 
->   __init pv_time_init()
->   __init xen_time_setup_guest()
-> 
-> so mark it appropriately as __ro_after_init.
-> 
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> ---
->  arch/riscv/kernel/paravirt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kernel/paravirt.c b/arch/riscv/kernel/paravirt.c
-> index fa6b0339a65de..dfe8808016fd8 100644
-> --- a/arch/riscv/kernel/paravirt.c
-> +++ b/arch/riscv/kernel/paravirt.c
-> @@ -30,7 +30,7 @@ static u64 native_steal_clock(int cpu)
->  	return 0;
->  }
->  
-> -DEFINE_STATIC_CALL(pv_steal_clock, native_steal_clock);
-> +DEFINE_STATIC_CALL_RO(pv_steal_clock, native_steal_clock);
->  
->  static bool steal_acc = true;
->  static int __init parse_no_stealacc(char *arg)
-> -- 
-> 2.43.0
+On Tue, Jan 14, 2025 at 7:12=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Fri, Jan 10, 2025 at 04:04:37PM -0800, Andrii Nakryiko wrote:
+> > On Thu, Jan 2, 2025 at 5:21=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> w=
+rote:
+> > >
+> > > On Thu, Dec 26, 2024 at 02:11:16PM +0900, Masami Hiramatsu (Google) w=
+rote:
+> > > > Hi,
+> > > >
+> > > > Here is the 22nd version of the series to re-implement the fprobe o=
+n
+> > > > function-graph tracer. The previous version is;
+> > > >
+> > > > https://lore.kernel.org/all/173379652547.973433.2311391879173461183=
+.stgit@devnote2/
+> > > >
+> > > > This version is rebased on v6.13-rc4 with fixes on [3/20] for x86-3=
+2 and
+> > > > [5/20] for build error.
+> > >
+> > >
+> > > hi,
+> > > I ran the bench and I'm seeing native_sched_clock being used
+> > > again kretprobe_multi bench:
+> > >
+> > >      5.85%  bench            [kernel.kallsyms]                       =
+                 [k] native_sched_clock
+> > >             |
+> > >             ---native_sched_clock
+> > >                sched_clock
+> > >                |
+> > >                 --5.83%--trace_clock_local
+> > >                           ftrace_return_to_handler
+> > >                           return_to_handler
+> > >                           syscall
+> > >                           bpf_prog_test_run_opts
+> >
+> > completely unrelated, Jiri, but we should stop using
+> > bpf_prog_test_run_opts() for benchmarking. It goes through FD
+> > refcounting, which is unnecessary tiny overhead, but more importantly
+> > it causes cache line bouncing between multiple CPUs (when doing
+> > multi-threaded benchmarks), which skews and limits results.
+>
+> so you mean to switch directly to attaching/hitting kernel functions
+> or perhaps better have kernel module for that?
 >
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+yes, cheap syscall (getpgid or something). Not a kernel module, that's
+logistical hassle.
+
+> jirka
+>
+> >
+> > >                           trigger_producer_batch
+> > >                           start_thread
+> > >                           __GI___clone3
+> > >
+> > > I recall we tried to fix that before with [1] change, but that replac=
+ed
+> > > later with [2] changes
+> > >
+> > > When I remove the trace_clock_local call in __ftrace_return_to_handle=
+r
+> > > than the kretprobe-multi gets much faster (see last block below), so =
+it
+> > > seems worth to make it optional
+> > >
+> > > there's some decrease in kprobe_multi benchmark compared to base numb=
+ers,
+> > > which I'm not sure yet why, but other than that it seems ok
+> > >
+> > > base:
+> > >         kprobe         :   12.873 =C2=B1 0.011M/s
+> > >         kprobe-multi   :   13.088 =C2=B1 0.052M/s
+> > >         kretprobe      :    6.339 =C2=B1 0.003M/s
+> > >         kretprobe-multi:    7.240 =C2=B1 0.002M/s
+> > >
+> > > fprobe_on_fgraph:
+> > >         kprobe         :   12.816 =C2=B1 0.002M/s
+> > >         kprobe-multi   :   12.126 =C2=B1 0.004M/s
+> > >         kretprobe      :    6.305 =C2=B1 0.018M/s
+> > >         kretprobe-multi:    7.740 =C2=B1 0.003M/s
+> > >
+> > > removed native_sched_clock call:
+> > >         kprobe         :   12.850 =C2=B1 0.006M/s
+> > >         kprobe-multi   :   12.115 =C2=B1 0.006M/s
+> > >         kretprobe      :    6.270 =C2=B1 0.017M/s
+> > >         kretprobe-multi:    9.190 =C2=B1 0.005M/s
+> > >
+> > >
+> > > happy new year ;-) thanks,
+> > >
+> > > jirka
+> > >
+> > >
+> > > [1] https://lore.kernel.org/bpf/172615389864.133222.14452329708227900=
+626.stgit@devnote2/
+> > > [2] https://lore.kernel.org/all/20240914214805.779822616@goodmis.org/
+> > >
+> >
+> > [...]
 
