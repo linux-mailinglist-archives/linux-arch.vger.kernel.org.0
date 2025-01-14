@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-9754-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9755-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCD14A10E61
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 18:55:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F96AA10E63
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 18:55:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE0451889E4A
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 17:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F5B8169C50
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Jan 2025 17:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D17A31FC101;
-	Tue, 14 Jan 2025 17:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A53451CDFB9;
+	Tue, 14 Jan 2025 17:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jTcnElGV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aumpFdCN"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100CB1FBCBE
-	for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2025 17:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCCD1FA14B
+	for <linux-arch@vger.kernel.org>; Tue, 14 Jan 2025 17:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736877312; cv=none; b=I1kjQ9EM3999inZNjjLQTA7EupRK1orVL/16NgsBUpfZEpELDEdv1s6k8cQmRTXLRdkpBNCPtpkzerq1LM+1pHanziiUc0074nXfyi8nU+3x5clYAPdb6CHyUqgZbxw9rFBOrIQDMu6UI3bEbSP9FgE3V829uM+V+xdqvcPZEHs=
+	t=1736877335; cv=none; b=OY0DWYIGovcdW7uz16qP5adR8/FZWvbdoCGgEpVck/4er/RU+EdEPL7gSQ5B3Dr55RBDF+H5ghm17Z7RJ5QbSrJuUBCtjjU1Yj4SifvGwsVTodvoyka6sW6K6aayiOjg72A60DIt3be7UcOCClTW3oqUdzdkgO/1BC7xwMF01DU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736877312; c=relaxed/simple;
-	bh=y/wHSkpDm/13uxwEFGeeXlBJL+JV6XQC91p1D0NpZ+s=;
+	s=arc-20240116; t=1736877335; c=relaxed/simple;
+	bh=NlQ4k0x5Qb/hGl0+i3VRobKcApuf5+hnJu3WxLcvMeg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OExx2oDpB3WsNicjpylqmRlKsjMf4f/CyGyHrV+aIeOeB0opL3pscCNw8NhD6qqY4ckP7QrCjuMHONU4xd7UA0d8jqW4VVPS3hP6JjngNOFugCPqPIhL3hJ+VanmfPqoGPDgjYcuSrg8yPavtda8MRA7FutztwMO4O8IuwwHjoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jTcnElGV; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=YrhitoslVCbfwVPdHZJ3djNzaI996h/B+bU+1WzdmUYLRpIFb8MKSBYNmOgVcCAF8h+5XjOqmCUSThpr8g5wn1gJZv/SgH1oWEzI3tuEecEBFzTSl5y2+cN7FjYtYTQuQeSwzOW8CuEARVoiBQhlv+B9X6XZ0eoTTHX02BQ1TaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aumpFdCN; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736877310;
+	s=mimecast20190719; t=1736877332;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tq2pU6+Sz+OC+aH2F2609vpzg9lrw/4sZVW/JKS6LBM=;
-	b=jTcnElGVl+HCTOWay4u9OobIOl315VUnU7YWfp2W4fp93e167H/VVl7AiMJFEmF0Wk8YWC
-	w8H2nYT9gI+4L1/IH3K2PePx6WxozFP/IsPKhY4RlLqc+l5nojxmRsHU8HCZXF0j/TdL+I
-	Vd5Q5wv1RbJXmjNF5hSuFt950CWNll0=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=yW4eDMpnPb09nDVWkM9p9gFnBpCcE/XnyyFFoIpXh9k=;
+	b=aumpFdCNIUo3PjNZscbIrPbaTkMNK/4rnF5jsuCQYqc3tdpO3Q+KAARz/a5Kc0WR/subUa
+	FWKKcTiVvJNJlttB5rUtp+T7ygl9PIn991zURzcb2ywyAeLSJ3VYaow8ecLf8eaobZaW6D
+	gRP88zuo6BuAYhD9yweFo36E2Ub5WOU=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-526-rasDThuXPT-KkBXykuo6Cg-1; Tue,
- 14 Jan 2025 12:55:06 -0500
-X-MC-Unique: rasDThuXPT-KkBXykuo6Cg-1
-X-Mimecast-MFC-AGG-ID: rasDThuXPT-KkBXykuo6Cg
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-346-TCnp728BMva_I5fFAbpK4A-1; Tue,
+ 14 Jan 2025 12:55:31 -0500
+X-MC-Unique: TCnp728BMva_I5fFAbpK4A-1
+X-Mimecast-MFC-AGG-ID: TCnp728BMva_I5fFAbpK4A
 Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F41581955F67;
-	Tue, 14 Jan 2025 17:55:01 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CC0371956053;
+	Tue, 14 Jan 2025 17:55:27 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.39.192.55])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 594CC19560AB;
-	Tue, 14 Jan 2025 17:54:36 +0000 (UTC)
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7D2BD195608A;
+	Tue, 14 Jan 2025 17:55:02 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
@@ -146,9 +146,9 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v4 05/30] jump_label: Add annotations for validating noinstr usage
-Date: Tue, 14 Jan 2025 18:51:18 +0100
-Message-ID: <20250114175143.81438-6-vschneid@redhat.com>
+Subject: [PATCH v4 06/30] static_call: Add read-only-after-init static calls
+Date: Tue, 14 Jan 2025 18:51:19 +0100
+Message-ID: <20250114175143.81438-7-vschneid@redhat.com>
 In-Reply-To: <20250114175143.81438-1-vschneid@redhat.com>
 References: <20250114175143.81438-1-vschneid@redhat.com>
 Precedence: bulk
@@ -167,44 +167,48 @@ noinstr region.  In that case the text poke code must trigger an
 immediate IPI to all CPUs, which can rudely interrupt an isolated NO_HZ
 CPU running in userspace.
 
-Some noinstr static branches may really need to be patched at runtime,
-despite the resulting disruption.  Add DEFINE_STATIC_KEY_*_NOINSTR()
-variants for those.  They don't do anything special yet; that will come
-later.
+If a noinstr static call only needs to be patched during boot, its key
+can be made ro-after-init to ensure it will never be patched at runtime.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- include/linux/jump_label.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ include/linux/static_call.h | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
-index f5a2727ca4a9a..88bb6e32fdcbc 100644
---- a/include/linux/jump_label.h
-+++ b/include/linux/jump_label.h
-@@ -385,6 +385,23 @@ struct static_key_false {
- #define DEFINE_STATIC_KEY_FALSE_RO(name)	\
- 	struct static_key_false name __ro_after_init = STATIC_KEY_FALSE_INIT
+diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+index 78a77a4ae0ea8..ea6ca57e2a829 100644
+--- a/include/linux/static_call.h
++++ b/include/linux/static_call.h
+@@ -192,6 +192,14 @@ extern long __static_call_return0(void);
+ 	};								\
+ 	ARCH_DEFINE_STATIC_CALL_TRAMP(name, _func)
  
-+/*
-+ * The _NOINSTR variants are used to tell objtool the static key is allowed to
-+ * be used in noinstr code.
-+ *
-+ * They should almost never be used, as they prevent code patching IPIs from
-+ * being deferred, which can be problematic for isolated NOHZ_FULL CPUs running
-+ * in pure userspace.
-+ *
-+ * If using one of these _NOINSTR variants, please add a comment above the
-+ * definition with the rationale.
-+ */
-+#define DEFINE_STATIC_KEY_TRUE_NOINSTR(name)					\
-+	DEFINE_STATIC_KEY_TRUE(name)
++#define DEFINE_STATIC_CALL_RO(name, _func)				\
++	DECLARE_STATIC_CALL(name, _func);				\
++	struct static_call_key __ro_after_init STATIC_CALL_KEY(name) = {\
++		.func = _func,						\
++		.type = 1,						\
++	};								\
++	ARCH_DEFINE_STATIC_CALL_TRAMP(name, _func)
 +
-+#define DEFINE_STATIC_KEY_FALSE_NOINSTR(name)					\
-+	DEFINE_STATIC_KEY_FALSE(name)
-+
- #define DECLARE_STATIC_KEY_FALSE(name)	\
- 	extern struct static_key_false name
+ #define DEFINE_STATIC_CALL_NULL(name, _func)				\
+ 	DECLARE_STATIC_CALL(name, _func);				\
+ 	struct static_call_key STATIC_CALL_KEY(name) = {		\
+@@ -200,6 +208,14 @@ extern long __static_call_return0(void);
+ 	};								\
+ 	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
  
++#define DEFINE_STATIC_CALL_NULL_RO(name, _func)				\
++	DECLARE_STATIC_CALL(name, _func);				\
++	struct static_call_key __ro_after_init STATIC_CALL_KEY(name) = {\
++		.func = NULL,						\
++		.type = 1,						\
++	};								\
++	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
++
+ #define DEFINE_STATIC_CALL_RET0(name, _func)				\
+ 	DECLARE_STATIC_CALL(name, _func);				\
+ 	struct static_call_key STATIC_CALL_KEY(name) = {		\
 -- 
 2.43.0
 
