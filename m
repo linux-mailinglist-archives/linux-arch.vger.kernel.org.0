@@ -1,143 +1,185 @@
-Return-Path: <linux-arch+bounces-9805-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9806-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6B05A1507A
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2025 14:26:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F669A150C4
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2025 14:45:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 455EB1885184
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2025 13:26:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C1E8169620
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jan 2025 13:45:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC27200106;
-	Fri, 17 Jan 2025 13:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F681FFC78;
+	Fri, 17 Jan 2025 13:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCvHMpF2"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MZHV+9J1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECADE1FF609;
-	Fri, 17 Jan 2025 13:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 410841FFC5B
+	for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2025 13:44:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737120339; cv=none; b=bkmePTx4/SxrARAOio/0gqSLXcSTWs34TYSWrNNZM2I3oPAcX4iPwzD6HcLhi4KxXNU//ACpWHdqph2gJar5i+Zsuz2ne6nghcY4r/IqsHI2ZGgKcBuEe1VWqL4bZKrbfX9/lUYJWLb4EjGeCba8NUqwr1hI1wlgDdiQmCuvMrU=
+	t=1737121501; cv=none; b=CrKkQtxwaHsf+6+Gxtl6+pMWO37+7+iBzBQ3cu6+53uhCwdwkff/QT/hfxjKHVE02pQlwmXf73y7uR60Sr4xYkQsWCsvcut1gQUsR3SfTURKIJ92sW91P7BJrFDZDmmtHWgrdkJkMLjHS73keCMtsCxOKMH9RFFYXmgNLfVBqIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737120339; c=relaxed/simple;
-	bh=i5g2DbcJlsukG3CuQeCOvnrmGoI0+t7RerfHcE2ITE8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ucdu0Os/gLhJRTQzLQuhS12caSJ1cmaga+uuBWqYmQadtDVdt3+LwH3iVzAOowAQdRBD71n1zbG/BlNUic/9ZhzLn0FqQNxUQhKhdPF5vYrs9oi3X/uqYuVq700AkviUM+DClMUABbX5bbkZAqwqR/6E1v3hLNCxpmggUA3OPrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nCvHMpF2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C43C4CEDD;
-	Fri, 17 Jan 2025 13:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737120338;
-	bh=i5g2DbcJlsukG3CuQeCOvnrmGoI0+t7RerfHcE2ITE8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nCvHMpF21/84VoMzTIfTmODZawDxjude8tCR6JJtkJECU6I5I9whWXy05LWEyoVNW
-	 KSzrpuQi7EY7p8WZMS465l3rzsHJ8EnYeKCSayrYuWoVdpTDqvziBmoejLV5qSMBK6
-	 f5E+BQjEiCRh0u6SKqq//93pPU+X4JoeMx70R+9aHhWo8pxelv+5LYbQpozArWbl4N
-	 fjahkxBv/te1ioiDTpeoXYuLizhvr0ePIgbB6YsYdqX4IS/429ehvwWhMUBrLB8HOx
-	 2ER9LwPKInXFc4sc8Z5xZ0s6RECYLRZli7PrwB954w5tTFqDoUfRjjNblQvSNEU4sb
-	 Uskxi7/yiLEew==
-Date: Fri, 17 Jan 2025 13:25:28 +0000
-From: Will Deacon <will@kernel.org>
-To: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: peterz@infradead.org, agordeev@linux.ibm.com, kevin.brodsky@arm.com,
-	alex@ghiti.fr, andreas@gaisler.com, palmer@dabbelt.com,
-	tglx@linutronix.de, david@redhat.com, jannh@google.com,
-	hughd@google.com, yuzhao@google.com, willy@infradead.org,
-	muchun.song@linux.dev, vbabka@kernel.org,
-	lorenzo.stoakes@oracle.com, akpm@linux-foundation.org,
-	rientjes@google.com, vishal.moola@gmail.com, arnd@arndb.de,
-	aneesh.kumar@kernel.org, npiggin@gmail.com,
-	dave.hansen@linux.intel.com, rppt@kernel.org, ryan.roberts@arm.com,
-	linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-um@lists.infradead.org
-Subject: Re: [PATCH v5 05/17] arm64: pgtable: use mmu gather to free p4d
- level page table
-Message-ID: <20250117132527.GA17058@willie-the-truck>
-References: <cover.1736317725.git.zhengqi.arch@bytedance.com>
- <3fd48525397b34a64f7c0eb76746da30814dc941.1736317725.git.zhengqi.arch@bytedance.com>
- <20250113162600.GA14101@willie-the-truck>
- <a017d072-943f-4008-bb1d-7be438804a44@bytedance.com>
+	s=arc-20240116; t=1737121501; c=relaxed/simple;
+	bh=3uGThAIZZrxCJ1Zag/yc29l3qlAKBV2/uT4Bw7pXLWs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AHZ4VqeoRmPdhYAC8UL475I81bUNRVHVjhoYbGQdE59w9Ttco2QRZLz8VZRz9c7sCCq8DPk0pxnCmhbfEZEFPaxhbhcLC93pBMGiJwoutpJG/7oTogYqCwSqRUseeYzNOEXsIa/3Qx8SSS4k/PAucBF+h28ZFxvwjYZa76CchRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MZHV+9J1; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737121498;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HEKKhsO2kOL/qF9SHnIE9a8dcD47/tUh4wLid3vzvOo=;
+	b=MZHV+9J1aUgCppsgpkJpQvMYzSoG8bhifFYQCfj/9s39EQl3oZJe672ABRiEOX8cuePG88
+	3H4b1jduRVI2XTe2rKcWYkNV8UBEftukh2MH9GB4kpf3dz+QS0I7nla6c06YGeayOfRZVY
+	03On0hJE0BKuZFwayCxYqjEIo6cGR24=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-634-A9em53-nOF6fueYfqxEW2w-1; Fri, 17 Jan 2025 08:44:57 -0500
+X-MC-Unique: A9em53-nOF6fueYfqxEW2w-1
+X-Mimecast-MFC-AGG-ID: A9em53-nOF6fueYfqxEW2w
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-467b19b5641so42993491cf.3
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jan 2025 05:44:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737121496; x=1737726296;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HEKKhsO2kOL/qF9SHnIE9a8dcD47/tUh4wLid3vzvOo=;
+        b=Acz87pOUA0i4SKe8nNaz3KlAWKUPq61l+FxU+f9PeP5JRvhTTMAnGtfzXA7Z/Uf4Gq
+         fniRK+UwL/KIwbiq5rViBw4IqiJ+Ioqvu71eZjHN4XbsvMglLsnhRfsirXeAupNTTaP+
+         Cw0QL4Qibyb75xPnpekKh+MCqFuXL3jgl2sQ+f/Ox6VPhDV4PybDyDn/xKGTHxzCTG+e
+         vlX2cAIKCkKCxGpiKE1sRDNvfmOJGEkkEaIgk84AuiMz6ZNzWVEqUG4ve/7kNfTFhLR6
+         tQ+Rwa4GC16slfriP9z7Uqp5rJbZGA6xC6yiALmQbI44cyQ91DJ0hg6FbCSP2+QEEP1H
+         xelg==
+X-Forwarded-Encrypted: i=1; AJvYcCXDLLCeVWMIIz8MCYqHg4yvufnVwxNUz7X/hlWJz2g56Dn/OkTMa9PhUrn+PtVOA7zOFwz3noQ5nWa8@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1nH4Onbkzh0CI7bFzHJWnrIRqGJhWg8EB0Y78TlFy/SNRAi7a
+	2nUG71WDnwQl0jKY5ZEoBBTNp46l382WcFEpG7KwMd6F0ayZSdfSYoFIA4jqWFAumkbo3Wz/SwD
+	5vrVRLj3ISALHLMcoXn+MScV7Rm7Y6jV97H06m7qh07GtwmbxCEJDj7KNApg=
+X-Gm-Gg: ASbGnctOztFDCJDcAjGsP4EQC32fWh/WV/Tb9WN9njs10lfjoyBrdOgVbMBuRGrnt4Q
+	naghJf1rsZTtx64Vwce7uZUIxOuwtbl5a4qtoQaTl3EefqBl/ow6D35LzbKd/6ZlkLDuNbpRorJ
+	qMMrZQ5vjGjvyTH6stYqN1n1Juwu6smpEqa4ZmKIhesyKmJrdaDgX16wfihc/CsJXTPX3HLwBQL
+	5cK5pV9ZttQXEPYiZPUM85QQrLMn3/NlJHJeQtpsRh+90dUnCuVkIZz8jq3OeRWYhuybBSTJvXw
+	L6qRLW4kiGM0rFz38fI/rUcrUr22wCssqx4sLPwAGw==
+X-Received: by 2002:a05:622a:1387:b0:467:674d:237f with SMTP id d75a77b69052e-46e12ad5f7bmr40518711cf.11.1737121496623;
+        Fri, 17 Jan 2025 05:44:56 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHmIl4MCDkHkFsxi8fUyXS99BtrKRZsY+6w06Ii3eQgKuqou3xcsKirOxy10aWGIFujuL9O5w==
+X-Received: by 2002:a05:622a:1387:b0:467:674d:237f with SMTP id d75a77b69052e-46e12ad5f7bmr40518371cf.11.1737121496270;
+        Fri, 17 Jan 2025 05:44:56 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46e1042ef63sm11228641cf.71.2025.01.17.05.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2025 05:44:55 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, virtualization@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+ xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+ linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com
+Cc: Peter Zijlstra <peterz@infradead.org>, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, Boris
+ Ostrovsky <boris.ostrovsky@oracle.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>, Frederic Weisbecker <frederic@kernel.org>, "Paul E.
+ McKenney" <paulmck@kernel.org>, Jason Baron <jbaron@akamai.com>, Steven
+ Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Neeraj
+ Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
+ <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, Boqun
+ Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli
+ <juri.lelli@redhat.com>, Clark Williams <williams@redhat.com>, Yair
+ Podemsky <ypodemsk@redhat.com>, Tomas Glozar <tglozar@redhat.com>, Vincent
+ Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
+ <mgorman@suse.de>, Kees Cook <kees@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Christoph Hellwig <hch@infradead.org>, Shuah
+ Khan <shuah@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Miguel
+ Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>, "Mike
+ Rapoport (Microsoft)" <rppt@kernel.org>, Samuel Holland
+ <samuel.holland@sifive.com>, Rong Xu <xur@google.com>, Nicolas Saenz
+ Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Yosry Ahmed <yosryahmed@google.com>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 26/30] x86,tlb: Make __flush_tlb_global()
+ noinstr-compliant
+In-Reply-To: <52311c3d-83cf-4dc4-bbcb-5fbca8eb249c@intel.com>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-27-vschneid@redhat.com>
+ <52311c3d-83cf-4dc4-bbcb-5fbca8eb249c@intel.com>
+Date: Fri, 17 Jan 2025 14:44:42 +0100
+Message-ID: <xhsmh5xmdh7w5.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a017d072-943f-4008-bb1d-7be438804a44@bytedance.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 
-On Tue, Jan 14, 2025 at 10:26:54AM +0800, Qi Zheng wrote:
-> Hi Will,
-> 
-> On 2025/1/14 00:26, Will Deacon wrote:
-> > On Wed, Jan 08, 2025 at 02:57:21PM +0800, Qi Zheng wrote:
-> > > Like other levels of page tables, also use mmu gather mechanism to free
-> > > p4d level page table.
-> > > 
-> > > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> > > Originally-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> > > Cc: linux-arm-kernel@lists.infradead.org
-> > > ---
-> > >   arch/arm64/include/asm/pgalloc.h |  1 -
-> > >   arch/arm64/include/asm/tlb.h     | 14 ++++++++++++++
-> > >   2 files changed, 14 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/arm64/include/asm/pgalloc.h b/arch/arm64/include/asm/pgalloc.h
-> > > index 2965f5a7e39e3..1b4509d3382c6 100644
-> > > --- a/arch/arm64/include/asm/pgalloc.h
-> > > +++ b/arch/arm64/include/asm/pgalloc.h
-> > > @@ -85,7 +85,6 @@ static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgdp, p4d_t *p4dp)
-> > >   	__pgd_populate(pgdp, __pa(p4dp), pgdval);
-> > >   }
-> > > -#define __p4d_free_tlb(tlb, p4d, addr)  p4d_free((tlb)->mm, p4d)
-> > >   #else
-> > >   static inline void __pgd_populate(pgd_t *pgdp, phys_addr_t p4dp, pgdval_t prot)
-> > >   {
-> > > diff --git a/arch/arm64/include/asm/tlb.h b/arch/arm64/include/asm/tlb.h
-> > > index a947c6e784ed2..445282cde9afb 100644
-> > > --- a/arch/arm64/include/asm/tlb.h
-> > > +++ b/arch/arm64/include/asm/tlb.h
-> > > @@ -111,4 +111,18 @@ static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pudp,
-> > >   }
-> > >   #endif
-> > > +#if CONFIG_PGTABLE_LEVELS > 4
-> > > +static inline void __p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4dp,
-> > > +				  unsigned long addr)
-> > > +{
-> > > +	struct ptdesc *ptdesc = virt_to_ptdesc(p4dp);
-> > > +
-> > > +	if (!pgtable_l5_enabled())
-> > > +		return;
-> > > +
-> > > +	pagetable_p4d_dtor(ptdesc);
-> > > +	tlb_remove_ptdesc(tlb, ptdesc);
-> > > +}
-> > 
-> > Should we update p4d_free() to call the destructor, too? It looks like
-> > it just does free_page() atm.
-> 
-> The patch #3 introduces the generic p4d_free() and lets arm64 to use it.
-> The patch #4 adds the destructor to generic p4d_free(). So IIUC, there
-> is no problem here.
+On 14/01/25 13:45, Dave Hansen wrote:
+> On 1/14/25 09:51, Valentin Schneider wrote:
+>> +	cr4 = this_cpu_read(cpu_tlbstate.cr4);
+>> +	asm volatile("mov %0,%%cr4": : "r" (cr4 ^ X86_CR4_PGE) : "memory");
+>> +	asm volatile("mov %0,%%cr4": : "r" (cr4) : "memory");
+>> +	/*
+>> +	 * In lieu of not having the pinning crap, hard fail if CR4 doesn't
+>> +	 * match the expected value. This ensures that anybody doing dodgy gets
+>> +	 * the fallthrough check.
+>> +	 */
+>> +	BUG_ON(cr4 != this_cpu_read(cpu_tlbstate.cr4));
+>
+> Let's say someone managed to write to cpu_tlbstate.cr4 where they
+> cleared one of the pinned bits.
+>
+> Before this patch, CR4 pinning would WARN_ONCE() about it pretty quickly
+> and also reset the cleared bits.
+>
+> After this patch, the first native_flush_tlb_global() can clear pinned
+> bits, at least until native_write_cr4() gets called the next time. That
+> seems like it'll undermine CR4 pinning at least somewhat.
+>
 
-Sorry, I missed that. In which case:
+The BUG_ON() should still catch any pinned bit mishandling, however...
 
-Acked-by: Will Deacon <will@kernel.org>
+> What keeps native_write_cr4() from being noinstr-compliant now? Is it
+> just the WARN_ONCE()?
+>
 
-Will
+I don't think that's even an issue since __WARN_printf() wraps the print in
+instrumentation_{begin,end}(). In v3 I made native_write_cr4() noinstr and
+added a non-noinstr wrapper to be used in existing callsites.
+
+AFAICT if acceptable we could make the whole thing noinstr and stick with
+that; Peter, is there something I missed that made you write the handmade
+noinstr CR4 RMW?
+
 
