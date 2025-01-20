@@ -1,494 +1,428 @@
-Return-Path: <linux-arch+bounces-9829-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9830-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08A32A1725A
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2025 18:47:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23916A173FF
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2025 22:14:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA0C17A4BCB
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2025 17:46:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6CE81883562
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2025 21:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2666A1F12E3;
-	Mon, 20 Jan 2025 17:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9289F1EE02F;
+	Mon, 20 Jan 2025 21:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Di/M6gV2"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="keYWi2oo";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="nfpJ21eI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD7D1F03D0;
-	Mon, 20 Jan 2025 17:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737395149; cv=none; b=JsTxl9z4HK3yz39TNFYyQKTmhAvYoULAEdohPr0WJX9gOJKSoB27ToLlk0IqHJZ7bjDHfR4GCkIufKJvhJD7FHfFkpXIblx/6XB9rjB7R5fzSfPK1osbUUfkog2mul0FiFZ2jtY9eKfLouwZ1DiVSEeUxiR6MSBUbR6r9aXqC1A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737395149; c=relaxed/simple;
-	bh=MdKjsanauiC7LwdkZFfsgUbSTeQZc+J9ZaaglNxxsks=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tu6b7zp8RViZIY6WE8isYjG3NpUft6UiRgEn9XoicJPhVMP+1JDVHHicNjm+SOpN0fQV7krrqB2P84ReqY3uHowwFLq5nuXyscR7s1ss3CnTETWcuhKef+4zpHEhyS95g6UpEsznQ0iEjNc4qNjM4Pcv/42qKzvqYU47O7PPu1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Di/M6gV2; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1737395133;
-	bh=MdKjsanauiC7LwdkZFfsgUbSTeQZc+J9ZaaglNxxsks=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Di/M6gV2PZR/Y+ULPHNpx2nP0AYRmpRur97hFwzhHG9qZT82EnocNOEeA3rqp3lz0
-	 h2+5CUwBdmHujmMocjg40PdHqjw5a1g3xHKKAaNvJi5l5iniwzPm4ALjx8K8HosPA8
-	 5uUlyHHmdUAigVH4CGaYEfN3OXur5Xhu8uUM9F6U=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 20 Jan 2025 18:44:25 +0100
-Subject: [PATCH v2 6/6] module: Introduce hash-based integrity checking
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7663F188A0E;
+	Mon, 20 Jan 2025 21:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737407683; cv=fail; b=hfOjZWqJDEK2zOs3yjzbXRrzZ2S9/KY3eEYfH4kkTBqIj+F131ReXwVAkAoEqDv6Jv2zhllrwhnG9UPZ0tH16Yul+Z1aBopZThim16mxuxI5SMoaoLIx+ROgUVayzZeD3aXAPdqU/BpKNguWRzdgashMFpp24DVVjyRl8YLEO+Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737407683; c=relaxed/simple;
+	bh=WgawQiZcqQsudbQnfsZWTzADJPbSNBA/VQffDFkagwo=;
+	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
+	 Content-Type:MIME-Version; b=gOF6tcR15sBEY9MrncsQ9aNVdIItRZ/iPEGtL4FGF9gzfgOJ+5dEGTAbfHpI0q0CWuRMP+sTFQMyNMqbVg7X0wCmpbsvi5ujmQ1O8unR9BX9Gabd+FA6WkKoWRVUxkR/BMkZ4aenqmO6w7ybijT0J8p8BZMqLSJWp5f8gCQ5uMI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=keYWi2oo; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=nfpJ21eI; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50KGMvih001612;
+	Mon, 20 Jan 2025 21:13:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=TAQoZ1WKIsTuj0ZwWM
+	hcxNVA61FgPdAcJrlWcbOlo04=; b=keYWi2ooKVZ1NGr8LWohM1o9JA579/5lIc
+	Je5Lz6fjuPBSbD3xzQPeInkETR/y8gtKTosCEEFzZc90tvfy1I1mJmMLaFwHhjR+
+	EXlql4SEyWMXWFjIiAEUSqCiCANKpQ1qP1dbl25ctISuxEMabuBnv3fsn9snn9jU
+	ThRXLyzhxmoNQ4y4RD+jo3PO+RTUobhKZies5u8u++C8mrPlvpoCcrBvH+Z8UR82
+	+ZAZ3PAlfADvg4NyDuNd2S0q8uHArmFnZ+wwqp17ah0PtwQbge8/iTEnwZ3imZHE
+	vcU36N6x2HaaBGfbpBsqzVzD9jk1FFqF+uVwPyEuGlUppHLJabdQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4485tm4awd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 20 Jan 2025 21:13:45 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50KJqHnR030442;
+	Mon, 20 Jan 2025 21:13:44 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2045.outbound.protection.outlook.com [104.47.58.45])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 449191r162-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 20 Jan 2025 21:13:44 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=G9xk5ftBSY8MQkkq3+vJjtcVCoP3xbdahY6xWoZkX/r5MyOwmLnH9UY186WluKRrJJXMIJi8UCIZ90FtnOWX2iMBe4uTBBR+rm+7Ly+6yIgsMjkaymU+3KpqOVqQItLlaEM2G56j0s9kNwmqZHlc8VD2dyKJfbsrnPsIQ6OtHfyH30WXzt/z1/xCIXv5euLKN/hTit2nFhWv6eks9pmDlpGL+fcJijUgjJ3/E/q2mZ3a/vdtGOIJbzr9ZowZurmLiYsxaeUONn4nQQFw5toY+/tqhWLfeJJTPTYAj/f32PX2Oo5+jzYaZNw/Kw1re4K+vnpuq9gruX4r0kLNnKx8lQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TAQoZ1WKIsTuj0ZwWMhcxNVA61FgPdAcJrlWcbOlo04=;
+ b=s/zAipc287hGH8LTBWkzfCibMDcdUlNAqgk9rDw3e06qzpng8sscquwYFHoXIJIlq01LVJ7G+EkmN5oVOgULN4z81Gn+eg93JfQE4uaylqUn6ZmHgZ2esIiuLO0P4n0SDaGJcQwRykLejkvB0VK66XNJl+ZZ/7o8a/YThz3UYExSRp0CxjpfyIpinp5dkVPwzhyBKbwTXRID02eC+Ud9bfhmzVcz9J3sVdtRo++Kfv5/MZCcIk31APPwzrqBiNxbXFzkNvI0aMdBpzhZIxiKN6sQVV+RWWulIPM7iqv8V8cgNk6glMK58AunV8bYLXwARlQf4OfV13MYLwQiC+7UYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TAQoZ1WKIsTuj0ZwWMhcxNVA61FgPdAcJrlWcbOlo04=;
+ b=nfpJ21eIW636AUoSw5eNJjT53k7RLpa2GdoQPwpI2Enjb+ptoFJ8yNvOC8a3zxgse88Yq+1PT8uCCKGM2UC+nyTcl9kRl2R0HDGHQ5PfjoqW1mSYbl26P08cC4an16STXH7BzVx4Ea2os3wmAsykKSFm0qWR7w+BdkKeKqUD5WA=
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
+ by BY5PR10MB4164.namprd10.prod.outlook.com (2603:10b6:a03:210::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.21; Mon, 20 Jan
+ 2025 21:13:27 +0000
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::25a9:32c2:a7b0:de9e]) by CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::25a9:32c2:a7b0:de9e%3]) with mapi id 15.20.8356.020; Mon, 20 Jan 2025
+ 21:13:27 +0000
+References: <20241107190818.522639-1-ankur.a.arora@oracle.com>
+User-agent: mu4e 1.4.10; emacs 27.2
+From: Ankur Arora <ankur.a.arora@oracle.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        pbonzini@redhat.com, vkuznets@redhat.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
+        lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
+        mtosatti@redhat.com, sudeep.holla@arm.com, cl@gentwo.org,
+        maz@kernel.org, misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+        zhenglifeng1@huawei.com, joao.m.martins@oracle.com,
+        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 00/15] arm64: support poll_idle()
+In-reply-to: <20241107190818.522639-1-ankur.a.arora@oracle.com>
+Date: Mon, 20 Jan 2025 13:13:25 -0800
+Message-ID: <8734hd89ze.fsf@oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR03CA0057.namprd03.prod.outlook.com
+ (2603:10b6:303:8e::32) To CO6PR10MB5409.namprd10.prod.outlook.com
+ (2603:10b6:5:357::14)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250120-module-hashes-v2-6-ba1184e27b7f@weissschuh.net>
-References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
-In-Reply-To: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
-To: Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
- Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
- kpcyrd <kpcyrd@archlinux.org>, linux-kbuild@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, 
- linux-doc@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737395132; l=14935;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=MdKjsanauiC7LwdkZFfsgUbSTeQZc+J9ZaaglNxxsks=;
- b=5IcmE9REX+FAANRF1h1BOnurKOwOaYMYqcpINOm6mCBcRkcTSJcMrGzt0fX37CpcqtYiEvLc0
- 1QQkiSWcpjND1eqQ23aAdahsCJmu7W0HC8zogLdLsmo3NKJQWBIePjD
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|BY5PR10MB4164:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3e8417c4-de8c-4fcf-e4de-08dd399747f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?JN3OB5lDIe1kqGhnjizyesMrLmg2/oV4gvIW7fUOXzQpTRqZJlc93wdyq/jP?=
+ =?us-ascii?Q?z7+QckLnhH2FS66QEK+XsZkfeMyHCxidn5uVduS+O8zL85jbwUKv4OyfudCB?=
+ =?us-ascii?Q?AI/6Fmd7GsNaS/I+hmGHHLmnsiZ15F64R6o2VYEAnWK+2kYWO2gpPay4ug6N?=
+ =?us-ascii?Q?IdJoXmLHtR0fpMdLiyrV0NC33H2M9HySLvrwlZ8n2Xk7QbibUuHHFPH6lMXW?=
+ =?us-ascii?Q?hV7rPBUevrjoamlJTRpnQKJPrSbec1yuPnP1ALb4l5Pf4j02mcQ+iQZQJg+s?=
+ =?us-ascii?Q?rsPiNX6Zt3jDQMAq4sWyBD0bYJSnsb2mJwLiO4xHODKMnkSgmqsY5I8zFQKP?=
+ =?us-ascii?Q?BE3r8kpU1DMG4LP4Num021l3u/7oFB8QT7BNaRHGG6CoACAPZhJ8fwA+ImRh?=
+ =?us-ascii?Q?Ja/6mLUEyvY2HjJHdEH6pn/5YIVvRoJFpA1jYUDbK0f1jUAHypKmBX4LThGR?=
+ =?us-ascii?Q?43zVyXysBtXIn7NcTlDuOIh1q4varaj6qwiXDLaFSTuhn78byYs8h6YqqFQC?=
+ =?us-ascii?Q?TSkxAz49K9Iv+tffFTdRj+8cj2PywGLmf6n6z8BqWOaRz0V9G1UCDFlCKWuc?=
+ =?us-ascii?Q?BRg9xUa2wJ0azNulmC56ALdmv+O0vRAUA2gK9qp4+wZRgKIiHxzNQ62DdcR9?=
+ =?us-ascii?Q?NVNAKneb/uhLXeZZ3bCfiwBGIqA7Stri3sDAlXCfewkfCiXo9hMiGhlS22YF?=
+ =?us-ascii?Q?WL0RLG/ts53wj7cEgjAiBuVPngrnY03s3Tj+DkvouZ0OtiwrmpFRw6T/58sF?=
+ =?us-ascii?Q?+RpUhHY6BHcKv4th/xb3aWKp6PUmnR4Vmj5G18yTS15r4l6FGiiD1hTHdJZp?=
+ =?us-ascii?Q?E40D+wiH/dDgVy1HPkBi1Emoq0AHV0dH7jeVn98mhRKl3zoluzyxYob8QwAf?=
+ =?us-ascii?Q?6M5qU+GQrAg5r6Vd1tr3oy4rjMvLqW0EWpQPKkTpTJiC7ZhKLDd2aag49/VO?=
+ =?us-ascii?Q?YsVhsZ76rdKnrkgyYVo8N4EX+Y9HM4FsfNZOoxd2KBVpQFOpsKzf/FsVCiFl?=
+ =?us-ascii?Q?XogwsW4SjXp6NwqCL4RNiyUhZRjkURyG77lTl3iE45Lblk+U982FKo55NYAA?=
+ =?us-ascii?Q?cme7eeQHZWrrI6E51TgCGISp3TmtuQcWjGk8aQkV/wbh1S0xePbTLDBsumBk?=
+ =?us-ascii?Q?C0NsDSgF35yLrm9PsfZZbIjoTpaBxoIWi3tTyguyezr+8PXowKPqhU0PcOgT?=
+ =?us-ascii?Q?SzI7c771nUaQ43QT+YMhpTh9V04yCGwEVRD3WvN4Lb0v7Cq46X/2MuIJogpu?=
+ =?us-ascii?Q?Vqyw6MV/136+aNLrqvh5VOtttbBBcZu3ZG+W9ZmlShBNboktqQreqC9W6u8q?=
+ =?us-ascii?Q?yFPR+7xKFMG/kwi3/ao1CrAs3fCRM/tik64dlB60IQxozA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?bHgSNnvGPuqgKDlqWtrO0FU6zlJq4QtVWwpQFp9qTWjL0NnboCqR1neJJsDJ?=
+ =?us-ascii?Q?E/6jRkJ6P8jNN0kFsZTexE3bLxKcnBgcn0MV5k6J3YCWRqhwyREZ4QDjvxZT?=
+ =?us-ascii?Q?2rd+3qP+SOohr+Axbzm9T/rgj1uB1+3crAWVjVIZL2Z/Rda7ysUN0+YOpuZS?=
+ =?us-ascii?Q?BfhesqwWNg22gT4oo/sVuW0UbTjtPm+VI3dlvYo2/+Kkfv0mPlqF6JAJxXw0?=
+ =?us-ascii?Q?Y+gb/aSkcd+PdakUaLTT7kz3qE/4oHH4i67a/RMkr3yzrcaBmB8BA1M4KwgI?=
+ =?us-ascii?Q?BVQZ0sNXXe4Sm51sWwQOlRJ/5DuiCOW16c2gM3YfRNBHDnpAgyoa2X+ILjf6?=
+ =?us-ascii?Q?+hJAOLb6cay38KnzhovLjpcj1Ynqv3qQ9eGMR41KmKBoad7yzjTiPli6r68Z?=
+ =?us-ascii?Q?M+xEznqGU1OJhPy5Yo52ZZUi/S/R+MUgpfW8Ki6LJzoGioqSmeAdQFz9hPRb?=
+ =?us-ascii?Q?By9SEzh5ea6/bi/kcs+D0tHdzFVo9Mj1jaRbELET1fORhiFbhDSKzvB3OAOC?=
+ =?us-ascii?Q?qEI53Uaf2meUJttbj7vynx10y9A2j8Z3B4PP1bH7dn+YREWlSRQb16nzHlaM?=
+ =?us-ascii?Q?wl8OkhJ8Sk8jjYAjKSIGdqUqvZvpkYfvp4hdN43ZH28Z4xx7X/uOogEH+gI/?=
+ =?us-ascii?Q?YSbpIlevhRb6Ps3h4EOnjHMWjQmjHk3WuROay8XpXYh+oFfq9Z3gujzHUOuH?=
+ =?us-ascii?Q?OERQYRk7t4ArOzCmYssfUYu5B5Zu1LMxnnS0tQp2JIWQ9o3usDLogNaxbSk2?=
+ =?us-ascii?Q?VTVKqWD9mK/wAQotaz/T96ZeYnJpHdT+romHlB63ltx6iSQmGgTFqI+WhRHj?=
+ =?us-ascii?Q?ZVnYHMe8kk7veDIKyNEXVnmVfU/LK5JgK1o1CehEMWfjyWZ8fb1My/b6hlh0?=
+ =?us-ascii?Q?SRONKKWjTbIXcgyvvdaa0Tbo0+NIEiCGYh8n9xqoIZWO9uhBoRY4PhNRXUjc?=
+ =?us-ascii?Q?8CxA7dXFEsdBpNeRLYr3nLSSk7e56EFM/wdUcLAlfqQctQCoTci9LYXtlCoY?=
+ =?us-ascii?Q?ctitiieRIW/nxVxRxP3vef4hRnzV2RKnmH+ABbhMnnQ1aOIf5sI4MM8dCJin?=
+ =?us-ascii?Q?u/f8Bliv4eUFEwFO/pj78062F1FNTXFIff3gyjcgtPMxO75VSiOUzdZQj4DJ?=
+ =?us-ascii?Q?3e1Rc7bgunuZJIE9ZSSkEVWKvGLWipmpNq0Kk0K4h6dRxFvj/Xrk3IPy/rB5?=
+ =?us-ascii?Q?fycAZZffxPB+mZ6hY6PsBYaJJw2cq71fY24YFS2XxipDhwgG58KCLeKclzlo?=
+ =?us-ascii?Q?LvvgUBKJytw8rAXjmGS4TH9UNrEEb0IqBC46DPPBvenwtQtPjmx9mbyAa7JD?=
+ =?us-ascii?Q?FZF78msUUp547vNkD9bz34riKAYtSOfzicW+zJ630XSwqRrwyyO4CwcvS3rT?=
+ =?us-ascii?Q?016Au0GFQEwLzkWXB8tswpbpLkPKzATofl5o9TbB1bBPok4p2qlaxYIoha0g?=
+ =?us-ascii?Q?pZfOL7g9Nz9rE34fuyKi8bYBh68Pamtuhmn1QCJm+OpcTDd7YXbFvaSyboCi?=
+ =?us-ascii?Q?w7b8UmFJBnWDYePwi4oHZ0pPkIjzLEx3tZtVn4oBiZY8ImnKqdCeNUu/Hba9?=
+ =?us-ascii?Q?z36aYq+53j3RTeEEvXat4/OiBqXtgyH5kcK0BJ5LX2MMrJFNp5YEPgdT1p0E?=
+ =?us-ascii?Q?3A=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	eqnzNMzoUeaBXaJoVlicfm8/TAhuWtnkQQaWxZx07Bh5GAwxhqivLH2hlhC88loeiEzcpG/nNEdvcqIuFGTNKAycYx6jgFxQRp4McE9W1OiFmx+8EATt671vBaFN8PoHRVhGv2UAQ7bCjTMkSXuqZgbHNihPw3TR3Nj9lcuERczNHfYh5JUhZ2g2U6tVZYDMGYusQdq5ajifZmQrDsfxFfMF/Pf7MjTxE35oCY5JjxgA0Ayjb/ThwxLVZAxberpR8mIPA3uw0+g/nsipG5anRMUeR0XjIEInVzpr4d6KC45Pkq0AUDG+sL87VlzcGBx8rWXYhdGZ3snq/7wyg3zoPPv7swgGSXDTlMgxDeI54PjwMmG4k3L3wdY+Z/wlKGqDvbBix8oxbk++JaL5YeDs4oPf7t+hQm/EDmoRmyyKhk/Fpgx7IsJyREs9tt9H7SmQAOucsg2mwPWRPEy6ymwxecV1vBRrvZmnp068PqW8kRA6gSguwwJO9dcyLbNkI3OBuQa5DzO54FtGp3OadNvyvprRmA1dMjuJN+VqYE8nKnpUAeoknnyQriRUtB27P+UoN0i0+B7zMT3CFnt1qH+bKLUQ3+W3RB40fh7li/CqYF8=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e8417c4-de8c-4fcf-e4de-08dd399747f6
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2025 21:13:26.9943
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: efkNbzUfqRMvQDznKVLb5DhnVL7Uuhz62HAayGlUMEmOjlkStU3MjT7HswRozahrcvea+APhzPSq6ZIDB82dmJy5r21oHiYy8meaxM005S8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4164
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-20_06,2025-01-20_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ adultscore=0 suspectscore=0 mlxscore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2411120000 definitions=main-2501200173
+X-Proofpoint-ORIG-GUID: NEJPyvhrRhTQ73SsZuZL6cGEDTIdLa5d
+X-Proofpoint-GUID: NEJPyvhrRhTQ73SsZuZL6cGEDTIdLa5d
 
-The current signature-based module integrity checking has some drawbacks
-in combination with reproducible builds:
-Either the module signing key is generated at build time, which makes
-the build unreproducible, or a static key is used, which precludes
-rebuilds by third parties and makes the whole build and packaging
-process much more complicated.
-Introduce a new mechanism to ensure only well-known modules are loaded
-by embedding a list of hashes of all modules built as part of the full
-kernel build into vmlinux.
 
-Non-builtin modules can be validated as before through signatures.
+Ankur Arora <ankur.a.arora@oracle.com> writes:
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- .gitignore                                   |  1 +
- Documentation/kbuild/reproducible-builds.rst |  5 ++-
- Makefile                                     |  8 ++++-
- include/asm-generic/vmlinux.lds.h            | 11 ++++++
- include/linux/module_hashes.h                | 17 +++++++++
- kernel/module/Kconfig                        | 17 ++++++++-
- kernel/module/Makefile                       |  1 +
- kernel/module/hashes.c                       | 52 ++++++++++++++++++++++++++++
- kernel/module/internal.h                     |  1 +
- kernel/module/main.c                         |  6 ++++
- scripts/Makefile.modfinal                    |  6 ++++
- scripts/Makefile.vmlinux                     |  5 +++
- scripts/link-vmlinux.sh                      | 25 ++++++++++++-
- scripts/module-hashes.sh                     | 26 ++++++++++++++
- security/lockdown/Kconfig                    |  2 +-
- 15 files changed, 178 insertions(+), 5 deletions(-)
+> This patchset adds support for polling in idle via poll_idle() on
+> arm64.
+>
+> There are two main changes in this version:
+>
+> 1. rework the series to take Catalin Marinas' comments on the semantics
+>    of smp_cond_load_relaxed() (and how earlier versions of this
+>    series were abusing them) into account.
 
-diff --git a/.gitignore b/.gitignore
-index 6839cf84acda0d2d3c236a2e42b0cb0fe1b14965..7c40151c3f5d0c15ac04cead5f21c291a98d779f 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -28,6 +28,7 @@
- *.gz
- *.i
- *.ko
-+*.ko.hash
- *.lex.c
- *.ll
- *.lst
-diff --git a/Documentation/kbuild/reproducible-builds.rst b/Documentation/kbuild/reproducible-builds.rst
-index f2dcc39044e66ddd165646e0b51ccb0209aca7dd..6a742ad745113a9267223b33810dbc7218c47d4c 100644
---- a/Documentation/kbuild/reproducible-builds.rst
-+++ b/Documentation/kbuild/reproducible-builds.rst
-@@ -79,7 +79,10 @@ generate a different temporary key for each build, resulting in the
- modules being unreproducible.  However, including a signing key with
- your source would presumably defeat the purpose of signing modules.
- 
--One approach to this is to divide up the build process so that the
-+Instead ``CONFIG_MODULE_HASHES`` can be used to embed a static list
-+of valid modules to load.
-+
-+Another approach to this is to divide up the build process so that the
- unreproducible parts can be treated as sources:
- 
- 1. Generate a persistent signing key.  Add the certificate for the key
-diff --git a/Makefile b/Makefile
-index b9464c88ac7230518a756bff5e6c5c8871cc5058..fc862ffd2df843c0b68bebc8f554b88850ba1541 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1535,8 +1535,10 @@ endif
- # is an exception.
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- KBUILD_BUILTIN := 1
-+ifndef CONFIG_MODULE_HASHES
- modules: vmlinux
- endif
-+endif
- 
- modules: modules_prepare
- 
-@@ -1916,7 +1918,11 @@ modules.order: $(build-dir)
- # KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
- # This is solely useful to speed up test compiles.
- modules: modpost
--ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-+ifdef CONFIG_MODULE_HASHES
-+ifeq ($(MODULE_HASHES_MODPOST_FINAL), 1)
-+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-+endif
-+else ifneq ($(KBUILD_MODPOST_NOFINAL),1)
- 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
- endif
- 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 54504013c74915c2ed923fb3afde024a69cdae6b..aebea528aac3d7209bcee12c25f750ab0f7576a5 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -486,6 +486,8 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
- 									\
- 	PRINTK_INDEX							\
- 									\
-+	MODULE_HASHES							\
-+									\
- 	/* Kernel symbol table: Normal symbols */			\
- 	__ksymtab         : AT(ADDR(__ksymtab) - LOAD_OFFSET) {		\
- 		__start___ksymtab = .;					\
-@@ -895,6 +897,15 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
- #define PRINTK_INDEX
- #endif
- 
-+#ifdef CONFIG_MODULE_HASHES
-+#define MODULE_HASHES							\
-+	.module_hashes : AT(ADDR(.module_hashes) - LOAD_OFFSET) {	\
-+	BOUNDED_SECTION_BY(.module_hashes, _module_hashes)		\
-+	}
-+#else
-+#define MODULE_HASHES
-+#endif
-+
- /*
-  * Discard .note.GNU-stack, which is emitted as PROGBITS by the compiler.
-  * Otherwise, the type of .notes section would become PROGBITS instead of NOTES.
-diff --git a/include/linux/module_hashes.h b/include/linux/module_hashes.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..5f2f0546e3875e6bc73bdd53aebaada7371b7f79
---- /dev/null
-+++ b/include/linux/module_hashes.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+#ifndef _LINUX_MODULE_HASHES_H
-+#define _LINUX_MODULE_HASHES_H
-+
-+#include <linux/compiler_attributes.h>
-+#include <linux/types.h>
-+#include <crypto/sha2.h>
-+
-+#define __module_hashes_section __section(".module_hashes")
-+#define MODULE_HASHES_HASH_SIZE SHA256_DIGEST_SIZE
-+
-+extern const u8 module_hashes[][MODULE_HASHES_HASH_SIZE];
-+
-+extern const typeof(module_hashes[0]) __start_module_hashes, __stop_module_hashes;
-+
-+#endif /* _LINUX_MODULE_HASHES_H */
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index a80de8d22efdd0f13b3eb579a8ff1e69029d0694..cdd30b9a08d8cdf3ec0595b5e414265b869d343e 100644
---- a/kernel/module/Kconfig
-+++ b/kernel/module/Kconfig
-@@ -212,7 +212,7 @@ config MODULE_SIG
- 
- config MODULE_SIG_POLICY
- 	def_bool y
--	depends on MODULE_SIG
-+	depends on MODULE_SIG || MODULE_HASHES
- 
- config MODULE_SIG_FORCE
- 	bool "Require modules to be validly signed"
-@@ -348,6 +348,21 @@ config MODULE_DECOMPRESS
- 
- 	  If unsure, say N.
- 
-+config MODULE_HASHES
-+	bool "Module hash validation"
-+	depends on $(success,cksum --algorithm sha256 --raw /dev/null)
-+	select CRYPTO_LIB_SHA256
-+	help
-+	  Validate modules by their hashes.
-+	  Only modules built together with the main kernel image can be
-+	  validated that way.
-+
-+	  This is a reproducible-build compatible alternative to a build-time
-+	  generated module keyring, as enabled by
-+	  CONFIG_MODULE_SIG_KEY=certs/signing_key.pem.
-+
-+	  Also see the warning in MODULE_SIG about stripping modules.
-+
- config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
- 	bool "Allow loading of modules with missing namespace imports"
- 	help
-diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 50ffcc413b54504db946af4dce3b41dc4aece1a5..6fe0c14ca5a05b49c1161fcfa8aaa130f89b70e1 100644
---- a/kernel/module/Makefile
-+++ b/kernel/module/Makefile
-@@ -23,3 +23,4 @@ obj-$(CONFIG_KGDB_KDB) += kdb.o
- obj-$(CONFIG_MODVERSIONS) += version.o
- obj-$(CONFIG_MODULE_UNLOAD_TAINT_TRACKING) += tracking.o
- obj-$(CONFIG_MODULE_STATS) += stats.o
-+obj-$(CONFIG_MODULE_HASHES) += hashes.o
-diff --git a/kernel/module/hashes.c b/kernel/module/hashes.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..1aa49767a39b4e0c495b17d3f2edcb5a6ceb839e
---- /dev/null
-+++ b/kernel/module/hashes.c
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#define pr_fmt(fmt) "module/hash: " fmt
-+
-+#include <linux/int_log.h>
-+#include <linux/module_hashes.h>
-+#include <linux/module.h>
-+#include <crypto/sha2.h>
-+#include "internal.h"
-+
-+static inline size_t module_hashes_count(void)
-+{
-+	return (__stop_module_hashes - __start_module_hashes) / MODULE_HASHES_HASH_SIZE;
-+}
-+
-+static __init __maybe_unused int module_hashes_init(void)
-+{
-+	size_t num_hashes = module_hashes_count();
-+	int num_width = (intlog10(num_hashes) >> 24) + 1;
-+	size_t i;
-+
-+	pr_debug("Known hashes (%zu):\n", num_hashes);
-+
-+	for (i = 0; i < num_hashes; i++)
-+		pr_debug("%*zu %*phN\n", num_width, i,
-+			 (int)sizeof(module_hashes[i]), module_hashes[i]);
-+
-+	return 0;
-+}
-+
-+#if IS_ENABLED(CONFIG_MODULE_DEBUG)
-+early_initcall(module_hashes_init);
-+#endif
-+
-+int module_hash_check(struct load_info *info, int flags)
-+{
-+	u8 digest[MODULE_HASHES_HASH_SIZE];
-+	size_t i;
-+
-+	sha256((const u8 *)info->hdr, info->len, digest);
-+
-+	for (i = 0; i < module_hashes_count(); i++) {
-+		if (memcmp(module_hashes[i], digest, MODULE_HASHES_HASH_SIZE) == 0) {
-+			pr_debug("allow %*phN\n", (int)sizeof(digest), digest);
-+			info->sig_ok = true;
-+			return 0;
-+		}
-+	}
-+
-+	pr_debug("block %*phN\n", (int)sizeof(digest), digest);
-+	return -ENOKEY;
-+}
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index c30abeefa60b884c4a69b1eb4f1123a4bbee4b47..9c927c212f862fff7000f1cfac3c7e391a2390ac 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -334,6 +334,7 @@ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
- 				char *secstrings, struct module *mod);
- 
- int module_sig_check(struct load_info *info, int flags);
-+int module_hash_check(struct load_info *info, int flags);
- 
- #ifdef CONFIG_DEBUG_KMEMLEAK
- void kmemleak_load_module(const struct module *mod, const struct load_info *info);
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index effe1db02973d4f60ff6cbc0d3b5241a3576fa3e..094ace81d795711b56d12a2abc75ea35449c8300 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3218,6 +3218,12 @@ static int module_integrity_check(struct load_info *info, int flags)
- {
- 	int err = 0;
- 
-+	if (IS_ENABLED(CONFIG_MODULE_HASHES)) {
-+		err = module_hash_check(info, flags);
-+		if (!err)
-+			return 0;
-+	}
-+
- 	if (IS_ENABLED(CONFIG_MODULE_SIG))
- 		err = module_sig_check(info, flags);
- 
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 5d01b553ec9a4565c8e5a6edd05665c409003bc1..080b4fc3a9ba5036b45f04a7e79f2fc02364f93a 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -43,6 +43,9 @@ quiet_cmd_btf_ko = BTF [M] $@
- 		$(RESOLVE_BTFIDS) -b $(objtree)/vmlinux $@;		\
- 	fi;
- 
-+quiet_cmd_cksum_ko =
-+      cmd_cksum_ko = cksum --algorithm sha256 --raw $@ > $@.hash
-+
- # Same as newer-prereqs, but allows to exclude specified extra dependencies
- newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
- 
-@@ -57,6 +60,9 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
- endif
-+ifdef CONFIG_MODULE_HASHES
-+	$(call cmd,cksum_ko)
-+endif
- 
- targets += $(modules:%.o=%.ko) $(modules:%.o=%.mod.o) .module-common.o
- 
-diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-index 873caaa553134e09d034e0c4e0ac7f07c9e3f31b..4b6ba03cdd5e4faad30a0b533407955c542c7a20 100644
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -79,6 +79,11 @@ ifdef CONFIG_DEBUG_INFO_BTF
- vmlinux: $(RESOLVE_BTFIDS)
- endif
- 
-+ifdef CONFIG_MODULE_HASHES
-+vmlinux: $(srctree)/scripts/module-hashes.sh
-+vmlinux: modules.order
-+endif
-+
- # module.builtin.ranges
- # ---------------------------------------------------------------------------
- ifdef CONFIG_BUILTIN_MODULE_RANGES
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 803c8d6f35a7f29fb68b29afa8546f4dde0bd4cb..db072e4e5d6581453a009a9e837042ba28a138ce 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -104,7 +104,7 @@ vmlinux_link()
- 	${ld} ${ldflags} -o ${output}					\
- 		${wl}--whole-archive ${objs} ${wl}--no-whole-archive	\
- 		${wl}--start-group ${libs} ${wl}--end-group		\
--		${kallsymso} ${btf_vmlinux_bin_o} ${arch_vmlinux_o} ${ldlibs}
-+		${kallsymso} ${btf_vmlinux_bin_o} ${module_hashes_o} ${arch_vmlinux_o} ${ldlibs}
- }
- 
- # generate .BTF typeinfo from DWARF debuginfo
-@@ -215,6 +215,7 @@ fi
- 
- btf_vmlinux_bin_o=
- kallsymso=
-+module_hashes_o=
- strip_debug=
- 
- if is_enabled CONFIG_KALLSYMS; then
-@@ -222,6 +223,17 @@ if is_enabled CONFIG_KALLSYMS; then
- 	kallsyms .tmp_vmlinux0.syms .tmp_vmlinux0.kallsyms
- fi
- 
-+if is_enabled CONFIG_MODULE_HASHES; then
-+	# At this point the hashes are still wrong.
-+	# This step reserves the exact amount of space for the objcopy step
-+	# after BTF generation.
-+	${srctree}/scripts/module-hashes.sh prealloc > .tmp_module_hashes.c
-+	module_hashes_o=.tmp_module_hashes.o
-+	info CC ${module_hashes_o}
-+	${CC} ${NOSTDINC_FLAGS} ${LINUXINCLUDE} ${KBUILD_CPPFLAGS} ${KBUILD_CFLAGS} \
-+		${KBUILD_CFLAGS_KERNEL} -c -o "${module_hashes_o}" ".tmp_module_hashes.c"
-+fi
-+
- if is_enabled CONFIG_KALLSYMS || is_enabled CONFIG_DEBUG_INFO_BTF; then
- 
- 	# The kallsyms linking does not need debug symbols, but the BTF does.
-@@ -302,6 +314,17 @@ if is_enabled CONFIG_BUILDTIME_TABLE_SORT; then
- 	fi
- fi
- 
-+if is_enabled CONFIG_MODULE_HASHES; then
-+	info MAKE modules
-+	${MAKE} -f Makefile MODULE_HASHES_MODPOST_FINAL=1 modules
-+	${srctree}/scripts/module-hashes.sh > .tmp_module_hashes.c
-+	info CC ${module_hashes_o}
-+	${CC} ${NOSTDINC_FLAGS} ${LINUXINCLUDE} ${KBUILD_CPPFLAGS} ${KBUILD_CFLAGS} \
-+		${KBUILD_CFLAGS_KERNEL} -c -o "${module_hashes_o}" ".tmp_module_hashes.c"
-+	${OBJCOPY} --dump-section .module_hashes=.tmp_module_hashes.bin ${module_hashes_o}
-+	${OBJCOPY} --update-section .module_hashes=.tmp_module_hashes.bin vmlinux
-+fi
-+
- # step a (see comment above)
- if is_enabled CONFIG_KALLSYMS; then
- 	if ! cmp -s System.map "${kallsyms_sysmap}"; then
-diff --git a/scripts/module-hashes.sh b/scripts/module-hashes.sh
-new file mode 100755
-index 0000000000000000000000000000000000000000..120ce924105c51cdd7a704cbec7e5fa356f9ce1a
---- /dev/null
-+++ b/scripts/module-hashes.sh
-@@ -0,0 +1,26 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+set -e
-+set -u
-+set -o pipefail
-+
-+prealloc="${1:-}"
-+
-+echo "#include <linux/module_hashes.h>"
-+echo
-+echo "const u8 module_hashes[][MODULE_HASHES_HASH_SIZE] __module_hashes_section = {"
-+
-+for mod in $(< modules.order); do
-+	mod="${mod/%.o/.ko}"
-+	if [ "$prealloc" = "prealloc" ]; then
-+		modhash=""
-+	else
-+		modhash="$(cat "$mod".hash | hexdump -v -e '"0x" 1/1 "%02x, "')"
-+	fi
-+	echo -e "\t/* $mod */"
-+	echo -e "\t{ $modhash},"
-+	echo
-+done
-+
-+echo "};"
-diff --git a/security/lockdown/Kconfig b/security/lockdown/Kconfig
-index 155959205b8eac2c85897a8c4c8b7ec471156706..60b240e3ef1f9609e3f3241befc0bbc7e4a3db74 100644
---- a/security/lockdown/Kconfig
-+++ b/security/lockdown/Kconfig
-@@ -1,7 +1,7 @@
- config SECURITY_LOCKDOWN_LSM
- 	bool "Basic module for enforcing kernel lockdown"
- 	depends on SECURITY
--	depends on !MODULES || MODULE_SIG
-+	depends on !MODULES || MODULE_SIG || MODULE_HASHES
- 	help
- 	  Build support for an LSM that enforces a coarse kernel lockdown
- 	  behaviour.
+There was a recent series adding resilient spinlocks which might also have
+use for an smp_cond_load_{acquire,release}_timeout() interface.
+(https://lore.kernel.org/lkml/20250107192202.GA36003@noisy.programming.kicks-ass.net/)
 
--- 
-2.48.1
+So, unless anybody has any objection I'm planning to split out this
+series into two parts:
+  - adding smp_cond_load_*_timeout() (with an arm64 implementation)
+  - arm64 support for poll_idle() and haltpoll
 
+
+Ankur
+
+>    This also allows dropping of the somewhat strained connections
+>    between haltpoll and the event-stream.
+>
+> 2. earlier versions of this series were adding support for poll_idle()
+>    but only using it in the haltpoll driver. Add Lifeng's patch to
+>    broaden it out by also polling in acpi-idle.
+>
+> The benefit of polling in idle is to reduce the cost of remote wakeups.
+> When enabled, these can be done just by setting the need-resched bit,
+> instead of sending an IPI, and incurring the cost of handling the
+> interrupt on the receiver side. When running on a VM it also saves
+> the cost of WFE trapping (when enabled.)
+>
+> Comparing sched-pipe performance on a guest VM:
+>
+> # perf stat -r 5 --cpu 4,5 -e task-clock,cycles,instructions,sched:sched_wake_idle_without_ipi \
+>   perf bench sched pipe -l 1000000 -c 4
+>
+> # no polling in idle
+>
+>  Performance counter stats for 'CPU(s) 4,5' (5 runs):
+>
+>          25,229.57 msec task-clock                       #    2.000 CPUs utilized               ( +-  7.75% )
+>     45,821,250,284      cycles                           #    1.816 GHz                         ( +- 10.07% )
+>     26,557,496,665      instructions                     #    0.58  insn per cycle              ( +-  0.21% )
+>                  0      sched:sched_wake_idle_without_ipi #    0.000 /sec
+>
+>             12.615 +- 0.977 seconds time elapsed  ( +-  7.75% )
+>
+>
+> # polling in idle (with haltpoll):
+>
+>  Performance counter stats for 'CPU(s) 4,5' (5 runs):
+>
+>          15,131.58 msec task-clock                       #    2.000 CPUs utilized               ( +- 10.00% )
+>     34,158,188,839      cycles                           #    2.257 GHz                         ( +-  6.91% )
+>     20,824,950,916      instructions                     #    0.61  insn per cycle              ( +-  0.09% )
+>          1,983,822      sched:sched_wake_idle_without_ipi #  131.105 K/sec                       ( +-  0.78% )
+>
+>              7.566 +- 0.756 seconds time elapsed  ( +- 10.00% )
+>
+> Tomohiro Misono and Haris Okanovic also report similar latency
+> improvements on Grace and Graviton systems (for v7) [1] [2].
+> Lifeng also reports improved context switch latency on a bare-metal
+> machine with acpi-idle [3].
+>
+> The series is in four parts:
+>
+>  - patches 1-4,
+>
+>     "asm-generic: add barrier smp_cond_load_relaxed_timeout()"
+>     "cpuidle/poll_state: poll via smp_cond_load_relaxed_timeout()"
+>     "cpuidle: rename ARCH_HAS_CPU_RELAX to ARCH_HAS_OPTIMIZED_POLL"
+>     "Kconfig: move ARCH_HAS_OPTIMIZED_POLL to arch/Kconfig"
+>
+>    add smp_cond_load_relaxed_timeout() and switch poll_idle() to
+>    using it. Also, do some munging of related kconfig options.
+>
+>  - patches 5-7,
+>
+>     "arm64: barrier: add support for smp_cond_relaxed_timeout()"
+>     "arm64: define TIF_POLLING_NRFLAG"
+>     "arm64: add support for polling in idle"
+>
+>    add support for the new barrier, the polling flag and enable
+>    poll_idle() support.
+>
+>  - patches 8, 9-13,
+>
+>     "ACPI: processor_idle: Support polling state for LPI"
+>
+>     "cpuidle-haltpoll: define arch_haltpoll_want()"
+>     "governors/haltpoll: drop kvm_para_available() check"
+>     "cpuidle-haltpoll: condition on ARCH_CPUIDLE_HALTPOLL"
+>     "arm64: idle: export arch_cpu_idle"
+>     "arm64: support cpuidle-haltpoll"
+>
+>     add support for polling via acpi-idle, and cpuidle-haltpoll.
+>
+>   - patches 14, 15,
+>      "arm64/delay: move some constants out to a separate header"
+>      "arm64: support WFET in smp_cond_relaxed_timeout()"
+>
+>     are RFC patches to enable WFET support.
+>
+> Changelog:
+>
+> v9:
+>
+>  - reworked the series to address a comment from Catalin Marinas
+>    about how v8 was abusing semantics of smp_cond_load_relaxed().
+>  - add poll_idle() support in acpi-idle (Lifeng Zheng)
+>  - dropped some earlier "Tested-by", "Reviewed-by" due to the
+>    above rework.
+>
+> v8: No logic changes. Largely respin of v7, with changes
+> noted below:
+>
+>  - move selection of ARCH_HAS_OPTIMIZED_POLL on arm64 to its
+>    own patch.
+>    (patch-9 "arm64: select ARCH_HAS_OPTIMIZED_POLL")
+>
+>  - address comments simplifying arm64 support (Will Deacon)
+>    (patch-11 "arm64: support cpuidle-haltpoll")
+>
+> v7: No significant logic changes. Mostly a respin of v6.
+>
+>  - minor cleanup in poll_idle() (Christoph Lameter)
+>  - fixes conflicts due to code movement in arch/arm64/kernel/cpuidle.c
+>    (Tomohiro Misono)
+>
+> v6:
+>
+>  - reordered the patches to keep poll_idle() and ARCH_HAS_OPTIMIZED_POLL
+>    changes together (comment from Christoph Lameter)
+>  - threshes out the commit messages a bit more (comments from Christoph
+>    Lameter, Sudeep Holla)
+>  - also rework selection of cpuidle-haltpoll. Now selected based
+>    on the architectural selection of ARCH_CPUIDLE_HALTPOLL.
+>  - moved back to arch_haltpoll_want() (comment from Joao Martins)
+>    Also, arch_haltpoll_want() now takes the force parameter and is
+>    now responsible for the complete selection (or not) of haltpoll.
+>  - fixes the build breakage on i386
+>  - fixes the cpuidle-haltpoll module breakage on arm64 (comment from
+>    Tomohiro Misono, Haris Okanovic)
+>
+> v5:
+>  - rework the poll_idle() loop around smp_cond_load_relaxed() (review
+>    comment from Tomohiro Misono.)
+>  - also rework selection of cpuidle-haltpoll. Now selected based
+>    on the architectural selection of ARCH_CPUIDLE_HALTPOLL.
+>  - arch_haltpoll_supported() (renamed from arch_haltpoll_want()) on
+>    arm64 now depends on the event-stream being enabled.
+>  - limit POLL_IDLE_RELAX_COUNT on arm64 (review comment from Haris Okanovic)
+>  - ARCH_HAS_CPU_RELAX is now renamed to ARCH_HAS_OPTIMIZED_POLL.
+>
+> v4 changes from v3:
+>  - change 7/8 per Rafael input: drop the parens and use ret for the final check
+>  - add 8/8 which renames the guard for building poll_state
+>
+> v3 changes from v2:
+>  - fix 1/7 per Petr Mladek - remove ARCH_HAS_CPU_RELAX from arch/x86/Kconfig
+>  - add Ack-by from Rafael Wysocki on 2/7
+>
+> v2 changes from v1:
+>  - added patch 7 where we change cpu_relax with smp_cond_load_relaxed per PeterZ
+>    (this improves by 50% at least the CPU cycles consumed in the tests above:
+>    10,716,881,137 now vs 14,503,014,257 before)
+>  - removed the ifdef from patch 1 per RafaelW
+>
+> Please review.
+>
+> [1] https://lore.kernel.org/lkml/TY3PR01MB111481E9B0AF263ACC8EA5D4AE5BA2@TY3PR01MB11148.jpnprd01.prod.outlook.com/
+> [2] https://lore.kernel.org/lkml/104d0ec31cb45477e27273e089402d4205ee4042.camel@amazon.com/
+> [3] https://lore.kernel.org/lkml/f8a1f85b-c4bf-4c38-81bf-728f72a4f2fe@huawei.com/
+>
+> Ankur Arora (10):
+>   asm-generic: add barrier smp_cond_load_relaxed_timeout()
+>   cpuidle/poll_state: poll via smp_cond_load_relaxed_timeout()
+>   cpuidle: rename ARCH_HAS_CPU_RELAX to ARCH_HAS_OPTIMIZED_POLL
+>   arm64: barrier: add support for smp_cond_relaxed_timeout()
+>   arm64: add support for polling in idle
+>   cpuidle-haltpoll: condition on ARCH_CPUIDLE_HALTPOLL
+>   arm64: idle: export arch_cpu_idle
+>   arm64: support cpuidle-haltpoll
+>   arm64/delay: move some constants out to a separate header
+>   arm64: support WFET in smp_cond_relaxed_timeout()
+>
+> Joao Martins (4):
+>   Kconfig: move ARCH_HAS_OPTIMIZED_POLL to arch/Kconfig
+>   arm64: define TIF_POLLING_NRFLAG
+>   cpuidle-haltpoll: define arch_haltpoll_want()
+>   governors/haltpoll: drop kvm_para_available() check
+>
+> Lifeng Zheng (1):
+>   ACPI: processor_idle: Support polling state for LPI
+>
+>  arch/Kconfig                              |  3 ++
+>  arch/arm64/Kconfig                        |  7 +++
+>  arch/arm64/include/asm/barrier.h          | 62 ++++++++++++++++++++++-
+>  arch/arm64/include/asm/cmpxchg.h          | 26 ++++++----
+>  arch/arm64/include/asm/cpuidle_haltpoll.h | 20 ++++++++
+>  arch/arm64/include/asm/delay-const.h      | 25 +++++++++
+>  arch/arm64/include/asm/thread_info.h      |  2 +
+>  arch/arm64/kernel/idle.c                  |  1 +
+>  arch/arm64/lib/delay.c                    | 13 ++---
+>  arch/x86/Kconfig                          |  5 +-
+>  arch/x86/include/asm/cpuidle_haltpoll.h   |  1 +
+>  arch/x86/kernel/kvm.c                     | 13 +++++
+>  drivers/acpi/processor_idle.c             | 43 +++++++++++++---
+>  drivers/cpuidle/Kconfig                   |  5 +-
+>  drivers/cpuidle/Makefile                  |  2 +-
+>  drivers/cpuidle/cpuidle-haltpoll.c        | 12 +----
+>  drivers/cpuidle/governors/haltpoll.c      |  6 +--
+>  drivers/cpuidle/poll_state.c              | 27 +++-------
+>  drivers/idle/Kconfig                      |  1 +
+>  include/asm-generic/barrier.h             | 42 +++++++++++++++
+>  include/linux/cpuidle.h                   |  2 +-
+>  include/linux/cpuidle_haltpoll.h          |  5 ++
+>  22 files changed, 252 insertions(+), 71 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/cpuidle_haltpoll.h
+>  create mode 100644 arch/arm64/include/asm/delay-const.h
+
+
+--
+ankur
 
