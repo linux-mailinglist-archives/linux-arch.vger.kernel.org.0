@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-9827-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9823-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39363A17249
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2025 18:46:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F621A17237
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2025 18:45:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0F861887F81
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2025 17:46:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B01A7A0605
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jan 2025 17:45:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FBAC1EF0A9;
-	Mon, 20 Jan 2025 17:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E635F1EE029;
+	Mon, 20 Jan 2025 17:45:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fUAhGFvi"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="pvkeEPHr"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF3140C03;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFCE1DFE14;
 	Mon, 20 Jan 2025 17:45:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737395145; cv=none; b=PRMGgG59rjo7jSpCzWfKN3wh+GYbQkPycuTPWOGOYLP/4dqGEw1RokR2FOQl3X4qEyVwvM9hcSZL7ND+BzBbIRbOivrRAV2shaEXkdE6KPQZCJw52kO36NsyVQsuLvb8lJQIOTSxPLq4w41B9+vmvBl6K3FKT3Q/krRLpYuabok=
+	t=1737395144; cv=none; b=fWNE3xaEsCe8lKQNaXCUkSQu5nW80OpTwezd4J6iFUQUl2/JkxttyH6S2nsSJ+GeqqDXcX4iFDULIykBTqHCbgFjf6ilsfvrc8gg5Q9BEm9edQGKFHQjxvH78akIif20brdz98sIdXcLq28bvnL5AcGQBObQn5YeLLtSmQm9v2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737395145; c=relaxed/simple;
-	bh=PeJKb4hucwQgPB+ZRwTgF5LxeJD4ryt7mGorsuT2C9g=;
+	s=arc-20240116; t=1737395144; c=relaxed/simple;
+	bh=eFE8eKbO4pWZaL11j78KVv6utQAl0cUhH525xL6hI5o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tr1Xlh97jPW89YyscDAuTiQ9MiQldGnC1Kb1cJ45bN2Ep1qlE2XYzz4XrCzgUlX2fA1ogWltS9wXP/qGY37pJVAz+BdXbvIeSHEn6jVKoHgZ0RhCQsguH0jdhu+J5S4MCw/rLNRaX6Yqbi/P7w/IRW7DM5CoTz/syaSmI4OMKxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fUAhGFvi; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=YoWsUOwYXZSUoW321LP3wInegDIXWnBH72R8BK3R5ej0DTReC0jChPuglvJrtEdIZeOgsFG03O4N1FJ+d0OjelSPurnNAtsgo3z+Gm9LpMTCayOJtAXJhD8DGPCeyoBLNQWswuMdsYNZzpUwikc2gMqtuwQZ+VTwAdX2IMwFW8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=pvkeEPHr; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1737395132;
-	bh=PeJKb4hucwQgPB+ZRwTgF5LxeJD4ryt7mGorsuT2C9g=;
+	s=mail; t=1737395133;
+	bh=eFE8eKbO4pWZaL11j78KVv6utQAl0cUhH525xL6hI5o=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fUAhGFvieGibWp2VJmcpy+GwxnXo2KS7qPDW+BktqS1oLNeoxcP2ktKAa1UZ37IdP
-	 zjg77gozyVh6X8wJlH94CVtO+kLJBVEEenN88DK0Oa2Sjf71zD4SKKF+NasNo11hGf
-	 GL0p+PatwRzAfikNHczJomBPMnodvreHB6hiWkUY=
+	b=pvkeEPHrKRw+yfyKuOPjl3X46G0uP5F+Wg36ErvPQhBHP6vUXdrpZjXrw9NcMcmtK
+	 pnRHrNi0dbUlvHnhfakwdOPhXl6r71BLvGs7jYe6Hw9dYkW0nQJ9PWdiIw+7eNvEY/
+	 7mh2ctMUYT94pg0iN2/DrP7wCoVBtiNxN1T3a8IY=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 20 Jan 2025 18:44:23 +0100
-Subject: [PATCH v2 4/6] module: Move lockdown check into generic module
- loader
+Date: Mon, 20 Jan 2025 18:44:24 +0100
+Subject: [PATCH v2 5/6] lockdown: Make the relationship to MODULE_SIG a
+ dependency
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250120-module-hashes-v2-4-ba1184e27b7f@weissschuh.net>
+Message-Id: <20250120-module-hashes-v2-5-ba1184e27b7f@weissschuh.net>
 References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
 In-Reply-To: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -68,60 +68,37 @@ Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
  linux-doc@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737395132; l=1576;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737395132; l=874;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=PeJKb4hucwQgPB+ZRwTgF5LxeJD4ryt7mGorsuT2C9g=;
- b=F83ENlvy7TmkkAZ5zKo3BpFCXUyf+IXj0q3zgdOerpkiq/H1Wyk9IbPP1VIPrf/y3PCF4tE0t
- DcnM4fQ/FUzD7gs+b3l4suCtjYHdrwExXswam8suyFL4bDqqqwyn5+g
+ bh=eFE8eKbO4pWZaL11j78KVv6utQAl0cUhH525xL6hI5o=;
+ b=8dA83wKAd3Hc6tOftrWqF/p7g+4ibEoT3lyBhHTbTQ7dsE2V7oG4U+strj5pxZV+ykpvxhAI6
+ AgAp3mLUgFkCx2AaxTMMLuYhpt+4Znru3wpqIF3NmQX8OMDaR7EOI78
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The lockdown check buried in module_sig_check() will not compose well
-with the introduction of hash-based module validation.
-Move it into module_integrity_check() which will work better.
+The new hash-based module integrity checking will also be able to
+satisfy the requirements of lockdown.
+Such an alternative is not representable with "select", so use
+"depends on" instead.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/module/main.c    | 6 +++++-
- kernel/module/signing.c | 3 +--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ security/lockdown/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c0ab5c37f9710a0091320c4d171275e63be9217e..effe1db02973d4f60ff6cbc0d3b5241a3576fa3e 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3221,7 +3221,11 @@ static int module_integrity_check(struct load_info *info, int flags)
- 	if (IS_ENABLED(CONFIG_MODULE_SIG))
- 		err = module_sig_check(info, flags);
- 
--	return err;
-+	if (err)
-+		return err;
-+	if (info->sig_ok)
-+		return 0;
-+	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
- }
- 
- /*
-diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-index e51920605da14771601327ea596dad2e12400518..029e1ef6f0e369fd48e8c81154b6c697ad7a6249 100644
---- a/kernel/module/signing.c
-+++ b/kernel/module/signing.c
-@@ -11,7 +11,6 @@
- #include <linux/module_signature.h>
- #include <linux/string.h>
- #include <linux/verification.h>
--#include <linux/security.h>
- #include <crypto/public_key.h>
- #include <uapi/linux/module.h>
- #include "internal.h"
-@@ -100,5 +99,5 @@ int module_sig_check(struct load_info *info, int flags)
- 		return -EKEYREJECTED;
- 	}
- 
--	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
-+	return 0;
- }
+diff --git a/security/lockdown/Kconfig b/security/lockdown/Kconfig
+index e84ddf48401010bcc0829a32db58e6f12bfdedcb..155959205b8eac2c85897a8c4c8b7ec471156706 100644
+--- a/security/lockdown/Kconfig
++++ b/security/lockdown/Kconfig
+@@ -1,7 +1,7 @@
+ config SECURITY_LOCKDOWN_LSM
+ 	bool "Basic module for enforcing kernel lockdown"
+ 	depends on SECURITY
+-	select MODULE_SIG if MODULES
++	depends on !MODULES || MODULE_SIG
+ 	help
+ 	  Build support for an LSM that enforces a coarse kernel lockdown
+ 	  behaviour.
 
 -- 
 2.48.1
