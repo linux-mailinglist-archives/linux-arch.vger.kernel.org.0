@@ -1,172 +1,148 @@
-Return-Path: <linux-arch+bounces-9843-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9844-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F211BA1832E
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 18:46:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3BDAA185FC
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 21:09:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D764F7A1FEF
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 17:46:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFC77162A48
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 20:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD631F55ED;
-	Tue, 21 Jan 2025 17:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D511F470D;
+	Tue, 21 Jan 2025 20:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yO547tQD"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sCq8l6Vl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D213E1E9B38
-	for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2025 17:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F151F7075
+	for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2025 20:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737481570; cv=none; b=snxd0/yw04yf+vMaXS8wj/KHCGWeGEXTyjVDUhGILgwHvarCmZC9QZbRZ5k8tJewMUo88HmJJrM3ptUn82wMhABQBX0CTaUXL/RD9W3dlJGLOnjNCF1k03eQjarGCWljxsoIkah3VHmjZnYtcbHcw+KfCUs7u5bHJSupYgBDWUI=
+	t=1737490194; cv=none; b=JRSnZiemY4Vdbv/8CwpWNp37aPYhWgskZbidZ1VBmfVpHkD40YVYYaRQQE46ToYjOIequvWkHHcMOdvqn6wxmQZen/eF/WW1fAtLlcQwa4Aj/pfCyFfeO/A0Iz7Ud38KeauavLQidS5VRCLqtKCRc1h3pHFOLZtFnTPpUU7RM5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737481570; c=relaxed/simple;
-	bh=uolMWjkRwog15wLHtUnNAgJ2+dDra/fTMVYKCdY/71I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h7wdBvvPepZnzrttoHROrC/LFMR592MMEfUY1CRE2a43G6zfLD/FVpSI+S8FkgR/+keJoeusQg9W2dS9OrrbzmWw/x9PGzdUATd4m49dRo/FK8a/beMMv6vjyy5LBLf1iuC3Te6+sLKAwKD982ofhnQhWebzh/xNoOJpE+/Qz8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yO547tQD; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-467896541e1so4891cf.0
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2025 09:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737481567; x=1738086367; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bx8WAbX+Bf/ENrO43oH1TTXYHStkZFkZKs48Y9wFiVw=;
-        b=yO547tQDkFjDi6wU9Gd4mkG/R6uKyNjazbeUjkhALQKD964lXSET7dc3sbyn/Ckki7
-         VSvyipUl4XJAbfFCZi+qRoS7ZZkIQhyTT327a973j7Tp9jbpxyr9R5VdSWBkTlVujVc8
-         TI8dDt1jELt37TXzGPtKlV7gAxdtt5VSe2B46974cedarQhKSfnynBXDYNk+OKVbNDnm
-         x12Py4jzVulOluOV2sBtxM8sLucic2PUZaY3iTOHp2AV52EA1weJWzxO8YaajmlaG9GW
-         OvfSmTN4HnKvnC7QHECiB/osEN6EP+SpHDIJhl/BcK0PPLnShVuGDgQZo82InANtn71e
-         3VQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737481567; x=1738086367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bx8WAbX+Bf/ENrO43oH1TTXYHStkZFkZKs48Y9wFiVw=;
-        b=JfwQCESJpzjowRyGzS+m+/7YeJm8sclg85kE3fKR1tLxBiKdbUduqNFevpowfLxN7+
-         SX4vko7RG3KAPQsSRVuiBawc+snBJb9GKPDEv3Z55IE2Ea1KvsxPQAonDjn2bsE5CKBp
-         X2F5P1lS05VL/bGKbMqeZBAjPaky/em4qTA00/l3CxandZSaD9FiSQTM4BEJklHqx0ec
-         Fw5ti9sKjMho8uYXW8R8DCdM1tAq43ZY58s88tCMYxLeoq28hyuHSyq29iYp3CX1bK0D
-         qA58z4Eiq4rvdB45u/pc4Iy5IOhaXC/s3V/WlgQQQbgMYzMWq5q91eZ0qTHIdreYK1YC
-         xbAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXJNIs70wiRllsqdbH24XJMlBCTpnxwFXPoutI18K5osl9H8/orYU91Q8O3cQlNNFRSPXLGHSwpzgvU@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCtN+uEQiEQ8eTa9JFkdRRBVArB+ff+8xl7GW0WV/UpTGb1Is2
-	ZbwbViJj8oa2nej9DV2h+sxjeypUFuz8TA64z1dsVa/7Kl9ByCcUiYLUQUquGR8acCqx0jDNeuC
-	r145GGwMmCnhCpA+bFZJjnLCTZ4r5EMH15aI0
-X-Gm-Gg: ASbGncvmyMhadQk21pYIGply7E+qHs6FeHzydjcqvG2I4AcxKoYHZ/KyASLQ7taM4G1
-	afgqs0+fi2l73vfof56M1uKhSDp5l2NKra2unKNYO4QU4Y18t9zBUW7zwk4HxoCZWrhwIO6PVFk
-	ZmfPp4Eg==
-X-Google-Smtp-Source: AGHT+IGd0/Z0rV2uyahLRAJzwEWM90n2xUjYQM8Nd/X2t9nhAEmY/ceslLrJI2CjEt53OBeRuRBjrcmowYTHlHU3kK4=
-X-Received: by 2002:ac8:5f4b:0:b0:46c:70b1:c5e4 with SMTP id
- d75a77b69052e-46e21081d40mr11291001cf.3.1737481566464; Tue, 21 Jan 2025
- 09:46:06 -0800 (PST)
+	s=arc-20240116; t=1737490194; c=relaxed/simple;
+	bh=fI17I6HuQGCEAlHpVmI6JQkePZVm+cAT2IugwsmNoM0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NZsr9zWlIfnco8bI30e8m+zQz6dK8kqbNx+11xUpveOrLfsOY4ctoewmiRZhRMnFybangdzRh1dItrdextR8AZpaQ6tdecjNGlq/WFk75XdHUe/RJ1xyTITc6IQc3PROZPMOO9W0CiKkHYkz12g3Hpkd3kXPUW7QA4lBo19cDHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sCq8l6Vl; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1737490180;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=7MsGtIYaWKOulbwuqadA1hPhFKScuzlkf6Zojvdyofw=;
+	b=sCq8l6VlXiQ+Y9MvDQ05R6I1sl7MwDLsW1PD9fe5Ce5IQITIdW/tjnum91Sc0CC90YVzgx
+	T5wrFIEFiywHonrhA82nF6Uro3G9+eEkylPuLA8yEWZp/oKvhevw1/aQ1xwor4viyzSV/W
+	ofzOHQXA63oNzUfhj1vEBR/PzqOKl0Y=
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Jann Horn <jannh@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Nick Piggin <npiggin@gmail.com>,
+	Hugh Dickins <hughd@google.com>,
+	linux-arch@vger.kernel.org
+Subject: [PATCH] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP vmas into free_pgtables()
+Date: Tue, 21 Jan 2025 20:09:29 +0000
+Message-ID: <20250121200929.188542-1-roman.gushchin@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250120212839.1675696-1-arnd@kernel.org>
-In-Reply-To: <20250120212839.1675696-1-arnd@kernel.org>
-From: Rong Xu <xur@google.com>
-Date: Tue, 21 Jan 2025 09:45:54 -0800
-X-Gm-Features: AWEUYZmEwIAZYDGYiWvXqx4GdOYlgecHA034aBbe62gbYaNi1kci1k83ZczQ4hI
-Message-ID: <CAF1bQ=QFxE8AvnpOeSjSeL1buxDDACKVNufLjw99cQir0pyS_Q@mail.gmail.com>
-Subject: Re: [PATCH] [RFC, DO NOT APPLY] vmlinux.lds: revert link speed regression
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, regressions@lists.linux.dev, 
-	Han Shen <shenhan@google.com>, Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Jann Horn <jannh@google.com>, Ard Biesheuvel <ardb@kernel.org>, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jan 20, 2025 at 1:29=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> I noticed a regression in the time it takes to fully link some randconfig
-> kernels and bisected this to commit 0043ecea2399 ("vmlinux.lds.h: Adjust
-> symbol ordering in text output section"), which (among other changes) mov=
-es
-> .text.unlikely ahead of .text.
->
-> Partially reverting this makes the final link over six times faster again=
-,
-> back to what it was in linux-6.12:
->
->                 linux-6.12      linux-6.13
-> ld.lld v20      1.2s            1.2s
-> ld.bfd v2.36    3.2s            5.2s
-> ld.bfd v2.39    59s             388s
->
-> According to the commit description, that revert is not allowed here
-> because with CONFIG_LD_DEAD_CODE_DATA_ELIMINATION, the .text.unlikely
-> section name conflicts with the function-section names. On the other
-> hand, the excessive link time happens both with and without that
-> option, so the order could be conditional.
+Commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas")
+added a forced tlbflush to tlb_vma_end(), which is required to avoid a
+race between munmap() and unmap_mapping_range(). However it added some
+overhead to other paths where tlb_vma_end() is used, but vmas are not
+removed, e.g. madvise(MADV_DONTNEED).
 
-Yes. The order could be conditional. As a matter of fact, the first
-version was conditional.
-I changed it based on the reviewer comments to reduce conditions for
-more maintainable code.
-I would like to work from the ld.bfd side to see if we can fix the problem.
+Fix this by moving the tlb flush out of tlb_end_vma() into
+free_pgtables(), somewhat similar to the stable version of the
+original commit: e.g. stable commit 895428ee124a ("mm: Force TLB flush
+for PFNMAP mappings before unlink_file_vma()").
 
--Rong
+Note, that if tlb->fullmm is set, no flush is required, as the whole
+mm is about to be destroyed.
 
->
-> I did not try to bisect the linker beyond trying multiple versions
-> I had installed already, and it does feel like the behavior of recent
-> versions (tested 2.39 and 2.42 with identical results) is broken in
-> some form that earlier versions were not. According to 'perf', most
-> of the time is spent in elf_link_adjust_relocs() and ext64l_r_offset().
->
-> I also did not try to narrow the problem down to specific kernel
-> configuration options, but from my first impression it does appear
-> to be rare, and unrelated to the Propeller options added in 6.13.
->
-> Cc: regressions@lists.linux.dev
-> Cc: Han Shen <shenhan@google.com>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Kees Cook <kees@kernel.org>
-> Fixes: 0043ecea2399 ("vmlinux.lds.h: Adjust symbol ordering in text outpu=
-t section")
-> Link: https://pastebin.com/raw/sWpbkapL (config)
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/asm-generic/vmlinux.lds.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
-nux.lds.h
-> index 54504013c749..61fa047023b5 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -588,10 +588,10 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PRO=
-PELLER_CLANG)
->                 *(.text.asan.* .text.tsan.*)                            \
->                 *(.text.unknown .text.unknown.*)                        \
->                 TEXT_SPLIT                                              \
-> -               TEXT_UNLIKELY                                           \
->                 . =3D ALIGN(PAGE_SIZE);                                  =
- \
->                 TEXT_HOT                                                \
->                 *(TEXT_MAIN .text.fixup)                                \
-> +               TEXT_UNLIKELY                                           \
->                 NOINSTR_TEXT                                            \
->                 *(.ref.text)
->
-> --
-> 2.39.5
->
+Suggested-by: Jann Horn <jannh@google.com>
+Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nick Piggin <npiggin@gmail.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-mm@kvack.org
+---
+ include/asm-generic/tlb.h | 16 ++++------------
+ mm/memory.c               |  7 +++++++
+ 2 files changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index 709830274b75..411daa96f57a 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -549,22 +549,14 @@ static inline void tlb_start_vma(struct mmu_gather *tlb, struct vm_area_struct *
+ 
+ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
+ {
+-	if (tlb->fullmm)
++	if (tlb->fullmm || IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS))
+ 		return;
+ 
+ 	/*
+-	 * VM_PFNMAP is more fragile because the core mm will not track the
+-	 * page mapcount -- there might not be page-frames for these PFNs after
+-	 * all. Force flush TLBs for such ranges to avoid munmap() vs
+-	 * unmap_mapping_range() races.
++	 * Do a TLB flush and reset the range at VMA boundaries; this avoids
++	 * the ranges growing with the unused space between consecutive VMAs.
+ 	 */
+-	if (tlb->vma_pfn || !IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS)) {
+-		/*
+-		 * Do a TLB flush and reset the range at VMA boundaries; this avoids
+-		 * the ranges growing with the unused space between consecutive VMAs.
+-		 */
+-		tlb_flush_mmu_tlbonly(tlb);
+-	}
++	tlb_flush_mmu_tlbonly(tlb);
+ }
+ 
+ /*
+diff --git a/mm/memory.c b/mm/memory.c
+index 398c031be9ba..2071415f68dd 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -365,6 +365,13 @@ void free_pgtables(struct mmu_gather *tlb, struct ma_state *mas,
+ {
+ 	struct unlink_vma_file_batch vb;
+ 
++	/*
++	 * Ensure we have no stale TLB entries by the time this mapping is
++	 * removed from the rmap.
++	 */
++	if (tlb->vma_pfn && !tlb->fullmm)
++		tlb_flush_mmu(tlb);
++
+ 	do {
+ 		unsigned long addr = vma->vm_start;
+ 		struct vm_area_struct *next;
+-- 
+2.48.0.rc2.279.g1de40edade-goog
+
 
