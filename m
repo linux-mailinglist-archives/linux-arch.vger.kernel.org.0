@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-9838-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9839-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D09EA17F31
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 14:56:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18C89A17F4F
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 15:00:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D6283A5CB0
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 13:56:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36E1D1888ED5
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 14:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CAB91F37A0;
-	Tue, 21 Jan 2025 13:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E3901F12EE;
+	Tue, 21 Jan 2025 14:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isvlPBsQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FXH6cakO"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4481F2380;
-	Tue, 21 Jan 2025 13:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0E81487F6;
+	Tue, 21 Jan 2025 14:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737467811; cv=none; b=L+0URZx6AWuvPyo8sjRimcXuNIKo6eG1Src4FZa+9Sxn3YmiprshgVACUUjwVi78bcNmSOu5txNN6dlfWk3WRJc2HSY9SmI62BQYDDKjeXD+Ix8bYaC91onrCyoO+Wyt/pscLImPT3c8th61Hgq206K2yVIbRGiIy2AQwri9/jk=
+	t=1737468024; cv=none; b=TmatCLmkgW3c57hVsNuVDHqoq9xoWSLWEIHqJ3YuHbh6VYoU+EofUxfqfQC6E9M119d6+guZiAoI6nZNJbyc21dzL67IBvT0U3SEo0bNEMHProXxg2hODKrrmB7dbXbkn8gh86xtx1NCrOBYXeY2cVKv4ird+lgWcizG8ieFti4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737467811; c=relaxed/simple;
-	bh=MqI6lrWOZQoTFNws7n2UwUgsmLRqEZNZodv6GljplcY=;
+	s=arc-20240116; t=1737468024; c=relaxed/simple;
+	bh=Q5S9rJetTl9cgCroBUGkg7SOjKEl71T4cDyTy00Ssfo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s0RNozjaB5DNC6/HxZmZVm8JMA7guwHGdhwoqM3d1yeJXguuzs7EnomVIb/Q8IIvmMTQX1bs4IlQNc1RGky9pfrL9LSZaPmPOTBsP9C92VYHI+SLqN9Ba8wnes77+IZY62K0cNoHcE4qcAnJGDYkle8GP8aePN+r8YaDiPfhWoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isvlPBsQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D92C4CEDF;
-	Tue, 21 Jan 2025 13:56:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YCwJCtObWkcQLZU+pjgmoJ/stcoua9YmzpiugY0auhm/IBV7rl4f/FmvwcQAhLky8cu4AeopsQBM0bqz4gil9F2yS+3YLM+V24/uIb7dNzHXEyDn4mTgZqmo1DK4A8HjRKMv0PcGduJOESZfQB3rIshdR+VZB8js3IrIa//O60o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FXH6cakO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C8CC4CEE0;
+	Tue, 21 Jan 2025 14:00:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737467810;
-	bh=MqI6lrWOZQoTFNws7n2UwUgsmLRqEZNZodv6GljplcY=;
+	s=k20201202; t=1737468023;
+	bh=Q5S9rJetTl9cgCroBUGkg7SOjKEl71T4cDyTy00Ssfo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=isvlPBsQ7TrI9disQI4ep5AL0JttTMJYCjeOXU0i2Ch/ZJhKtfxYn7noZla1QkDqv
-	 en2cxtzrpb+ySn8gOB8ZoZV2S+K1n5H3W3i1NokW2jFX5MYZAQKEGHyjcd+04RPzL6
-	 fTPenbokZbubnqvnOZIUv59tCiByEKKxVUoJRCVR2ClnBGXpdDVbmRMbF5RR0kls7U
-	 7c4EikX8Q0rBg27nmXW8SWsbwke1FjZREhy6DgcwG1U+Sf6B+2s64Bk1dTdAxFB7Uo
-	 aEgg3mljv5NxhaLk6HLG7ru2QC2RXk1FcHRWMYbZ4w1F80Cti9sUorhTjzrFo4+wEW
-	 S4aA+5YxpaHVg==
-Date: Tue, 21 Jan 2025 14:56:47 +0100
+	b=FXH6cakOFkqIb5zaMucRt18L87yvpwVZGaJxUhREOt4P68rgom62uMZqy68vIiJxY
+	 vC1cXMrRMcOwMAfmuxLEZ5bndo3NE4WwazkktDRZnaa3oxsql1H5GUr7t+fwMIx0bz
+	 XkAJkUT9nkasLdUoZuBKZrBbotzPsLrjgcHMO3sqMz38POYs+eMlsXPGM73jQ0n8iK
+	 MmzoQzjKnN6ACmqf4QPGnpglxf6uAX3/BRM7U3tqtHBoHNE7h6KqKMl22hpV4arvIi
+	 4EBHxuw1qzMJUStZM7S/rcVySHrJR+84rbhK+Ss3scFXmd7IzHbUAqqT0NZChxotoD
+	 A/lQ8LRjiOvEw==
+Date: Tue, 21 Jan 2025 15:00:20 +0100
 From: Frederic Weisbecker <frederic@kernel.org>
 To: Valentin Schneider <vschneid@redhat.com>
 Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -118,11 +118,11 @@ Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v4 03/30] rcu: Add a small-width RCU watching counter
- debug option
-Message-ID: <Z4-nn8snXYyzocQW@localhost.localdomain>
+Subject: Re: [PATCH v4 04/30] rcutorture: Make TREE04 use
+ CONFIG_RCU_DYNTICKS_TORTURE
+Message-ID: <Z4-odFAImP-_uLV7@localhost.localdomain>
 References: <20250114175143.81438-1-vschneid@redhat.com>
- <20250114175143.81438-4-vschneid@redhat.com>
+ <20250114175143.81438-5-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -132,21 +132,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250114175143.81438-4-vschneid@redhat.com>
+In-Reply-To: <20250114175143.81438-5-vschneid@redhat.com>
 
-Le Tue, Jan 14, 2025 at 06:51:16PM +0100, Valentin Schneider a écrit :
-> A later commit will reduce the size of the RCU watching counter to free up
-> some bits for another purpose. Paul suggested adding a config option to
-> test the extreme case where the counter is reduced to its minimum usable
-> width for rcutorture to poke at, so do that.
+Le Tue, Jan 14, 2025 at 06:51:17PM +0100, Valentin Schneider a écrit :
+> We now have an RCU_EXPERT config for testing small-sized RCU dynticks
+> counter:  CONFIG_RCU_DYNTICKS_TORTURE.
 > 
-> Make it only configurable under RCU_EXPERT. While at it, add a comment to
-> explain the layout of context_tracking->state.
+> Modify scenario TREE04 to exercise to use this config in order to test a
+> ridiculously small counter (2 bits).
 > 
 > Link: http://lore.kernel.org/r/4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop
 > Suggested-by: Paul E. McKenney <paulmck@kernel.org>
 > Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  tools/testing/selftests/rcutorture/configs/rcu/TREE04 | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE04 b/tools/testing/selftests/rcutorture/configs/rcu/TREE04
+> index dc4985064b3ad..67caf4276bb01 100644
+> --- a/tools/testing/selftests/rcutorture/configs/rcu/TREE04
+> +++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE04
+> @@ -16,3 +16,4 @@ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+>  CONFIG_RCU_EXPERT=y
+>  CONFIG_RCU_EQS_DEBUG=y
+>  CONFIG_RCU_LAZY=y
+> +CONFIG_RCU_DYNTICKS_TORTURE=y
 
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+
+
+> -- 
+> 2.43.0
+> 
+> 
 
