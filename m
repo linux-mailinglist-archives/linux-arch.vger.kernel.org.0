@@ -1,131 +1,172 @@
-Return-Path: <linux-arch+bounces-9842-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9843-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D21EA18301
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 18:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F211BA1832E
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 18:46:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E7FF7A1C4F
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 17:36:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D764F7A1FEF
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 17:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6731F5411;
-	Tue, 21 Jan 2025 17:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD631F55ED;
+	Tue, 21 Jan 2025 17:46:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F/Vhel2a"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yO547tQD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0561F5409
-	for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2025 17:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D213E1E9B38
+	for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2025 17:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737480980; cv=none; b=rMV5dPk8K2uoeyLH+lq6957SsjA/7MDGajG2nIz9/8+I2DivxzRGZsSpo622m7xjjDY15W1xF14RyXKB+C1pGT722sN0TCBZyt6s+QbZ0SPoq7qV5ORLFhdug+1Jv+k9cylrrvtX9wrFSn/+Dc8WkO3+oIsF8t6lVxnPNG6yqs8=
+	t=1737481570; cv=none; b=snxd0/yw04yf+vMaXS8wj/KHCGWeGEXTyjVDUhGILgwHvarCmZC9QZbRZ5k8tJewMUo88HmJJrM3ptUn82wMhABQBX0CTaUXL/RD9W3dlJGLOnjNCF1k03eQjarGCWljxsoIkah3VHmjZnYtcbHcw+KfCUs7u5bHJSupYgBDWUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737480980; c=relaxed/simple;
-	bh=kaibDFjXomFyHzSXXuoRTyzvHOyGuhRdxpJB+5UfQyM=;
+	s=arc-20240116; t=1737481570; c=relaxed/simple;
+	bh=uolMWjkRwog15wLHtUnNAgJ2+dDra/fTMVYKCdY/71I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wb6EePhHoUSP/Ay7e1hUaem3y4YkTRY775G1H0q+vUcskbUCjPAREVRziABHUTXcz08FnKb2D9vy17QpUY1bswZTi3cyq741ZxLRwR4cMjVbjshJQjgleUkOEs4Lr/F9RlLqyjQSF4sN2XBjgxQ5SaTagACwVYjmnopm3iTBODo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F/Vhel2a; arc=none smtp.client-ip=209.85.160.182
+	 To:Cc:Content-Type; b=h7wdBvvPepZnzrttoHROrC/LFMR592MMEfUY1CRE2a43G6zfLD/FVpSI+S8FkgR/+keJoeusQg9W2dS9OrrbzmWw/x9PGzdUATd4m49dRo/FK8a/beMMv6vjyy5LBLf1iuC3Te6+sLKAwKD982ofhnQhWebzh/xNoOJpE+/Qz8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yO547tQD; arc=none smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-467abce2ef9so911cf.0
-        for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2025 09:36:18 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-467896541e1so4891cf.0
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2025 09:46:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737480977; x=1738085777; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1737481567; x=1738086367; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bYocvZzKFXOf1dOmFr+W1pL8HyxuFiKuumlmBUt/QYE=;
-        b=F/Vhel2a4JdCp5+3jQZ5LDRl3f7qUJmoJMlduvi05UuTxncIR2J6W3Wk3GX7X2Iq+M
-         pBSgDTFN5AprxEmuJJAizaASJfwfj0Wy0/LRlys1UKFDX+RSvb7X3wPDL3F9NWv7jung
-         IkKu7PCm9d4sBWDx298iMWfU/kdAPgkeDjBg6IFF3ZvX+3RsrLP0IHhwkuzDznCO4GQM
-         VBwjCoD+Ipk+IjHc6MnUOf44gNZBkE1f7aSlcXlBP9Yk9lqKP4vYMV5iScOaNUN2ChmH
-         myBml8tWnS0I65WfWQIFCU0FkrsTiQd/tw9ggGKtZAO2vqaOAo85vwPnTAPt58w4uEnN
-         nSwg==
+        bh=Bx8WAbX+Bf/ENrO43oH1TTXYHStkZFkZKs48Y9wFiVw=;
+        b=yO547tQDkFjDi6wU9Gd4mkG/R6uKyNjazbeUjkhALQKD964lXSET7dc3sbyn/Ckki7
+         VSvyipUl4XJAbfFCZi+qRoS7ZZkIQhyTT327a973j7Tp9jbpxyr9R5VdSWBkTlVujVc8
+         TI8dDt1jELt37TXzGPtKlV7gAxdtt5VSe2B46974cedarQhKSfnynBXDYNk+OKVbNDnm
+         x12Py4jzVulOluOV2sBtxM8sLucic2PUZaY3iTOHp2AV52EA1weJWzxO8YaajmlaG9GW
+         OvfSmTN4HnKvnC7QHECiB/osEN6EP+SpHDIJhl/BcK0PPLnShVuGDgQZo82InANtn71e
+         3VQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737480977; x=1738085777;
+        d=1e100.net; s=20230601; t=1737481567; x=1738086367;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bYocvZzKFXOf1dOmFr+W1pL8HyxuFiKuumlmBUt/QYE=;
-        b=BBw4T4+T/3LnfWdfRAtwzPJpGElD2HMlti5lSxJdhNzG6w6jDtlwUuE2nqZAgKurx7
-         iceDyvIjJ4BE4MRQwJamH4nIPQ6AIHCh322OQdTDNB6+bwP/zUwkhTG2oLZs1skYXbGa
-         oWiRPjXgvyX5ILNxws1QLxesKt/I/3zKzc43spMu22nuLNZm6MrEfG73d1AowAuoYg4o
-         An43o0fgRGUU+6WM5UpstIW+FBXAcCOCDuowY8cYMTN51YtaMuN7u+HD9mYz+p3R6rUC
-         1Gsy7H56EJVp9Yhmy+V+DpAiGLVPgNsY9N26lP34h62Qs+tppiSIVXVwUsHIx84PHPqb
-         7wwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyH3vWM7jCwcXiTYcvj+eeslpNwNf8pNAoMPIE5bOSbJn4VjvctntUaNw7ySsgJwQhm9iNykVNk/Dr@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw05LWDvTZeBRXzbkLbIzgJGnBN+8Nf/Ir6jN6KoqquMaJm1Ece
-	o86qi8yE9/gNX5HOwWPjQ7dB26XCHchwm+yyOrrq7fJY7Dx7lWQ537tDHZsKFZ0jwatgOu6bMz9
-	eI3PXa10d+JKNxreDHqjScwNgU58Pdd40G9fS
-X-Gm-Gg: ASbGncuXv78fNsuPxuPeYpDtZgc74X7/kZRa9rgU4i7m+tMieV8U1LaWkQ6VY0aH+f3
-	r1H9DYkVukZqayuE2Ls40HVdfuCdNPg858DRJctiBchfOo8Ew/lHxPnZlw+dYudIgFZ70ySmOaQ
-	mAzfLopA==
-X-Google-Smtp-Source: AGHT+IFIrZRx7xQrWDRLQ69FuUYdW0SvjjzhrnjhSnOksbO+ngHVevTnFyfppx3QzIQZhDwNLsCaUtTO2x0P8LdfKLw=
-X-Received: by 2002:a05:622a:1e10:b0:466:7926:c69 with SMTP id
- d75a77b69052e-46e1fc28582mr12795651cf.20.1737480977190; Tue, 21 Jan 2025
- 09:36:17 -0800 (PST)
+        bh=Bx8WAbX+Bf/ENrO43oH1TTXYHStkZFkZKs48Y9wFiVw=;
+        b=JfwQCESJpzjowRyGzS+m+/7YeJm8sclg85kE3fKR1tLxBiKdbUduqNFevpowfLxN7+
+         SX4vko7RG3KAPQsSRVuiBawc+snBJb9GKPDEv3Z55IE2Ea1KvsxPQAonDjn2bsE5CKBp
+         X2F5P1lS05VL/bGKbMqeZBAjPaky/em4qTA00/l3CxandZSaD9FiSQTM4BEJklHqx0ec
+         Fw5ti9sKjMho8uYXW8R8DCdM1tAq43ZY58s88tCMYxLeoq28hyuHSyq29iYp3CX1bK0D
+         qA58z4Eiq4rvdB45u/pc4Iy5IOhaXC/s3V/WlgQQQbgMYzMWq5q91eZ0qTHIdreYK1YC
+         xbAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJNIs70wiRllsqdbH24XJMlBCTpnxwFXPoutI18K5osl9H8/orYU91Q8O3cQlNNFRSPXLGHSwpzgvU@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCtN+uEQiEQ8eTa9JFkdRRBVArB+ff+8xl7GW0WV/UpTGb1Is2
+	ZbwbViJj8oa2nej9DV2h+sxjeypUFuz8TA64z1dsVa/7Kl9ByCcUiYLUQUquGR8acCqx0jDNeuC
+	r145GGwMmCnhCpA+bFZJjnLCTZ4r5EMH15aI0
+X-Gm-Gg: ASbGncvmyMhadQk21pYIGply7E+qHs6FeHzydjcqvG2I4AcxKoYHZ/KyASLQ7taM4G1
+	afgqs0+fi2l73vfof56M1uKhSDp5l2NKra2unKNYO4QU4Y18t9zBUW7zwk4HxoCZWrhwIO6PVFk
+	ZmfPp4Eg==
+X-Google-Smtp-Source: AGHT+IGd0/Z0rV2uyahLRAJzwEWM90n2xUjYQM8Nd/X2t9nhAEmY/ceslLrJI2CjEt53OBeRuRBjrcmowYTHlHU3kK4=
+X-Received: by 2002:ac8:5f4b:0:b0:46c:70b1:c5e4 with SMTP id
+ d75a77b69052e-46e21081d40mr11291001cf.3.1737481566464; Tue, 21 Jan 2025
+ 09:46:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250120212839.1675696-1-arnd@kernel.org> <CAK7LNASo+wGhpCVhBi+ew1mOtLbSXgx3AiQ6D7RtXO5P=R0EfQ@mail.gmail.com>
- <fef7c633-5577-4cdf-803a-a1fe10787186@app.fastmail.com>
-In-Reply-To: <fef7c633-5577-4cdf-803a-a1fe10787186@app.fastmail.com>
+References: <20250120212839.1675696-1-arnd@kernel.org>
+In-Reply-To: <20250120212839.1675696-1-arnd@kernel.org>
 From: Rong Xu <xur@google.com>
-Date: Tue, 21 Jan 2025 09:36:04 -0800
-X-Gm-Features: AWEUYZnEsgcuCWBwvZBjbUeXp_Ck0mg61w9DJwmvH6xjwQ8ss7VEyk3ZAuur6X4
-Message-ID: <CAF1bQ=Qk7pRWUxAcZNPjFquukHpXgi=34NmMbuRBAwv5+KcWtQ@mail.gmail.com>
+Date: Tue, 21 Jan 2025 09:45:54 -0800
+X-Gm-Features: AWEUYZmEwIAZYDGYiWvXqx4GdOYlgecHA034aBbe62gbYaNi1kci1k83ZczQ4hI
+Message-ID: <CAF1bQ=QFxE8AvnpOeSjSeL1buxDDACKVNufLjw99cQir0pyS_Q@mail.gmail.com>
 Subject: Re: [PATCH] [RFC, DO NOT APPLY] vmlinux.lds: revert link speed regression
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, regressions@lists.linux.dev, 
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, regressions@lists.linux.dev, 
 	Han Shen <shenhan@google.com>, Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Jann Horn <jannh@google.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Linux-Arch <linux-arch@vger.kernel.org>
+	Jann Horn <jannh@google.com>, Ard Biesheuvel <ardb@kernel.org>, linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 20, 2025 at 11:42=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
+On Mon, Jan 20, 2025 at 1:29=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
-> On Tue, Jan 21, 2025, at 01:19, Masahiro Yamada wrote:
-> > On Tue, Jan 21, 2025 at 6:29=E2=80=AFAM Arnd Bergmann <arnd@kernel.org>=
- wrote:
-> >>
-> >>                 linux-6.12      linux-6.13
-> >> ld.lld v20      1.2s            1.2s
-> >> ld.bfd v2.36    3.2s            5.2s
-> >> ld.bfd v2.39    59s             388s
-> >>
-> >
-> > Is this problem specific to the BFD linker from binutils?
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> I only tried the bfd and lld linkers, but I assume it's limited
-> to the bfd one.
+> I noticed a regression in the time it takes to fully link some randconfig
+> kernels and bisected this to commit 0043ecea2399 ("vmlinux.lds.h: Adjust
+> symbol ordering in text output section"), which (among other changes) mov=
+es
+> .text.unlikely ahead of .text.
 >
-> > Did you observe a link speed regression with LLVM=3D1 build?
+> Partially reverting this makes the final link over six times faster again=
+,
+> back to what it was in linux-6.12:
 >
-> No, the ld.lld line above is what I see with LLVM=3D1, it's
-> very fast (1.2s) both before and after the change. New
-> ld.bfd versions were much slower before the regression
-> for this particular config and got even slower (seven minutes
-> for each of the three vmlinux link stages).
+>                 linux-6.12      linux-6.13
+> ld.lld v20      1.2s            1.2s
+> ld.bfd v2.36    3.2s            5.2s
+> ld.bfd v2.39    59s             388s
 >
+> According to the commit description, that revert is not allowed here
+> because with CONFIG_LD_DEAD_CODE_DATA_ELIMINATION, the .text.unlikely
+> section name conflicts with the function-section names. On the other
+> hand, the excessive link time happens both with and without that
+> option, so the order could be conditional.
 
-Can you send me the instructions to reproduce?
-I'm seeing a significant performance drop (18.5x slow down) with
-ld.bfd v2.39 when
-linking linux-6.12 (i.e without this change)
-
-I will take a look at ld.bfd. It looks like an ld.bfd issue.
+Yes. The order could be conditional. As a matter of fact, the first
+version was conditional.
+I changed it based on the reviewer comments to reduce conditions for
+more maintainable code.
+I would like to work from the ld.bfd side to see if we can fix the problem.
 
 -Rong
 
->       Arnd
+>
+> I did not try to bisect the linker beyond trying multiple versions
+> I had installed already, and it does feel like the behavior of recent
+> versions (tested 2.39 and 2.42 with identical results) is broken in
+> some form that earlier versions were not. According to 'perf', most
+> of the time is spent in elf_link_adjust_relocs() and ext64l_r_offset().
+>
+> I also did not try to narrow the problem down to specific kernel
+> configuration options, but from my first impression it does appear
+> to be rare, and unrelated to the Propeller options added in 6.13.
+>
+> Cc: regressions@lists.linux.dev
+> Cc: Han Shen <shenhan@google.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Kees Cook <kees@kernel.org>
+> Fixes: 0043ecea2399 ("vmlinux.lds.h: Adjust symbol ordering in text outpu=
+t section")
+> Link: https://pastebin.com/raw/sWpbkapL (config)
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
+nux.lds.h
+> index 54504013c749..61fa047023b5 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -588,10 +588,10 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PRO=
+PELLER_CLANG)
+>                 *(.text.asan.* .text.tsan.*)                            \
+>                 *(.text.unknown .text.unknown.*)                        \
+>                 TEXT_SPLIT                                              \
+> -               TEXT_UNLIKELY                                           \
+>                 . =3D ALIGN(PAGE_SIZE);                                  =
+ \
+>                 TEXT_HOT                                                \
+>                 *(TEXT_MAIN .text.fixup)                                \
+> +               TEXT_UNLIKELY                                           \
+>                 NOINSTR_TEXT                                            \
+>                 *(.ref.text)
+>
+> --
+> 2.39.5
+>
 
