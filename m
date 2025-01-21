@@ -1,148 +1,130 @@
-Return-Path: <linux-arch+bounces-9844-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9845-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3BDAA185FC
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 21:09:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99E68A18738
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 22:20:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFC77162A48
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 20:09:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C165C3A6D0E
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 21:18:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D511F470D;
-	Tue, 21 Jan 2025 20:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26A21BBBC4;
+	Tue, 21 Jan 2025 21:18:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sCq8l6Vl"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="t1RrP9iQ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NcSlaumx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F151F7075
-	for <linux-arch@vger.kernel.org>; Tue, 21 Jan 2025 20:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB0F23A9;
+	Tue, 21 Jan 2025 21:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737490194; cv=none; b=JRSnZiemY4Vdbv/8CwpWNp37aPYhWgskZbidZ1VBmfVpHkD40YVYYaRQQE46ToYjOIequvWkHHcMOdvqn6wxmQZen/eF/WW1fAtLlcQwa4Aj/pfCyFfeO/A0Iz7Ud38KeauavLQidS5VRCLqtKCRc1h3pHFOLZtFnTPpUU7RM5Y=
+	t=1737494294; cv=none; b=unQxstEJew1yKJin9LMmj5CFIGyVXVj9s/cSxEm16SUFn8u8xv3fRZkiXyBTvBj1tTjoiRn6sLfakC7jLnr/uYUutNDufRwB3HCvrU0m5ahbKw8DEHnOp3JNMwrGlZHDewP2Kq1tyLaFRFtKdJTTVbrZqQsYjxGrWinffgDiGdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737490194; c=relaxed/simple;
-	bh=fI17I6HuQGCEAlHpVmI6JQkePZVm+cAT2IugwsmNoM0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NZsr9zWlIfnco8bI30e8m+zQz6dK8kqbNx+11xUpveOrLfsOY4ctoewmiRZhRMnFybangdzRh1dItrdextR8AZpaQ6tdecjNGlq/WFk75XdHUe/RJ1xyTITc6IQc3PROZPMOO9W0CiKkHYkz12g3Hpkd3kXPUW7QA4lBo19cDHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sCq8l6Vl; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1737490180;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7MsGtIYaWKOulbwuqadA1hPhFKScuzlkf6Zojvdyofw=;
-	b=sCq8l6VlXiQ+Y9MvDQ05R6I1sl7MwDLsW1PD9fe5Ce5IQITIdW/tjnum91Sc0CC90YVzgx
-	T5wrFIEFiywHonrhA82nF6Uro3G9+eEkylPuLA8yEWZp/oKvhevw1/aQ1xwor4viyzSV/W
-	ofzOHQXA63oNzUfhj1vEBR/PzqOKl0Y=
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Jann Horn <jannh@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Nick Piggin <npiggin@gmail.com>,
-	Hugh Dickins <hughd@google.com>,
-	linux-arch@vger.kernel.org
-Subject: [PATCH] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP vmas into free_pgtables()
-Date: Tue, 21 Jan 2025 20:09:29 +0000
-Message-ID: <20250121200929.188542-1-roman.gushchin@linux.dev>
+	s=arc-20240116; t=1737494294; c=relaxed/simple;
+	bh=sXHu10aY2+J27YyWutuubChy8v/79YTwiDfhxvuUYos=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=sQBDYRllyOoKLTBAxUirl3iHkCWo9VWDynjj0WGIbx6tREJl6bxcXVwD3zSZCK4uZnoLYb1W7Emlg09yob7+v09y//puseaWt2soDc0SufzhN8LZYzLGmOCiVfbSkrupZ02X1l3B5gIOuT2QOuLhjUwfBEv1vV1Wu6V1qDKCvLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=t1RrP9iQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NcSlaumx; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.phl.internal (Postfix) with ESMTP id 68176138086D;
+	Tue, 21 Jan 2025 16:18:11 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Tue, 21 Jan 2025 16:18:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1737494291;
+	 x=1737580691; bh=B7VUtW6RNhlluTyQUoNjUJwfoJe71nWoT8+gGXcFYrY=; b=
+	t1RrP9iQ7U9Mwa235yzKdJsnJMXHDaaRpFo1VE05q7jIIr3p7Jxny/uOZE3+Jpqh
+	uvfO6UiaVZ1ikxlSSFi2+ffVG14uNQVVNlifF+DsdMXo1LYF9KH3qDERFlbitJGv
+	Xo9n6IstVxAd2LCRBXAG2aNuo7rw4/pldZ0hd21Pqw63WY4gbC+0+YeAinC8ummV
+	mJ9YNT11mtUKw98oOvdoXmkGEyXkPRa8cByaZU8ZbfBVgBtLqr4bSTYxxqOg1A8o
+	6hhotnd0ly4uCKoAhuTXYyE3aJ7SNjyguge7mM+XhunpAk6HH7AO/3D2AmZR1LxX
+	eo0RHe+m8d/yCqBv05mwCw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1737494291; x=
+	1737580691; bh=B7VUtW6RNhlluTyQUoNjUJwfoJe71nWoT8+gGXcFYrY=; b=N
+	cSlaumxAfIjTucRw+RQCxSAbvvcr5q6vCQwvSU/B5/9r7/CJUOkflgFwy/uJoJ63
+	bkS7y5D2AjysGOcJdc1kM5GWXC35NPCACXAXKUhLq7Zd65Jut1J4qP+HbDXDftDZ
+	wKB6I8HAvHT7DW2ScYIucEScrXCzjGL2LjwSALI1dDA4EFvN4M8gQT03qEc/KrhK
+	uKP8xPuW9yRHUOl/nyYw9YjQM309bfeWuSruJnS3qVkstPq7Gf60jpuRC6W2gzti
+	CMqwcXl1CgoF+AKo3nsRHjU7KB81FUdDe3Hcanhe78GepO9ty/sDcTCP3Jr6kooG
+	jqw9zWslFE9P7qOR1Fa4g==
+X-ME-Sender: <xms:Ew-QZ0kmyGRk83tFe5gm-gZ5i1sLAZwrV0FZyYvdjcwjkUcpoNPJ8Q>
+    <xme:Ew-QZz3_35yRqPrpVk5_Ym6LGud8rcdBXlKgvL6DhW7Rzgq82EFBtZI7x5rsnTuut
+    TPYBZ4W_jhfdVwsVnw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejvddguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvleehvddv
+    geejvdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    vddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhgrnhhnhhesghhoohhglhgvrd
+    gtohhmpdhrtghpthhtohepshhhvghnhhgrnhesghhoohhglhgvrdgtohhmpdhrtghpthht
+    ohepgihurhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprghruggssehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    khgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghsrghhihhrohihsehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtoheprhgvghhrvghsshhiohhnsheslhhishhtshdrlhhinhhugidruggvvh
+X-ME-Proxy: <xmx:Ew-QZyrTTDQmYlCpJ9r9Q8W8DM4KMlOB9xIgFO7Au6BGK-SXYRF-2Q>
+    <xmx:Ew-QZwkRCaYflkQNJs2ts8JvuXobxU6GTxuRZWz668Rafwi3pd7jng>
+    <xmx:Ew-QZy0bupXC-nsScxbY2judniakAZFX7XzhLZlmlI7wnFZeNuPEjA>
+    <xmx:Ew-QZ3ucColAhh9_sFnXK0ZiMq-HdN8Y8nbheD4UUPEPmYVSl9OM6w>
+    <xmx:Ew-QZ_vDPCfml-P1zAJqNKGYHtkOfTZHIGmmB4YIEJhW2Zjglqs6Uis7>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 1EBB02220072; Tue, 21 Jan 2025 16:18:11 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Date: Tue, 21 Jan 2025 22:17:50 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Rong Xu" <xur@google.com>, "Arnd Bergmann" <arnd@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, "Masahiro Yamada" <masahiroy@kernel.org>,
+ linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
+ "Han Shen" <shenhan@google.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Kees Cook" <kees@kernel.org>, "Jann Horn" <jannh@google.com>,
+ "Ard Biesheuvel" <ardb@kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>
+Message-Id: <c5855908-df1f-46be-a8cf-aba066b52585@app.fastmail.com>
+In-Reply-To: 
+ <CAF1bQ=QFxE8AvnpOeSjSeL1buxDDACKVNufLjw99cQir0pyS_Q@mail.gmail.com>
+References: <20250120212839.1675696-1-arnd@kernel.org>
+ <CAF1bQ=QFxE8AvnpOeSjSeL1buxDDACKVNufLjw99cQir0pyS_Q@mail.gmail.com>
+Subject: Re: [PATCH] [RFC, DO NOT APPLY] vmlinux.lds: revert link speed regression
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas")
-added a forced tlbflush to tlb_vma_end(), which is required to avoid a
-race between munmap() and unmap_mapping_range(). However it added some
-overhead to other paths where tlb_vma_end() is used, but vmas are not
-removed, e.g. madvise(MADV_DONTNEED).
+On Tue, Jan 21, 2025, at 18:45, Rong Xu wrote:
+> On Mon, Jan 20, 2025 at 1:29=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
+> wrote:
+>
+> Yes. The order could be conditional. As a matter of fact, the first
+> version was conditional.
+> I changed it based on the reviewer comments to reduce conditions for
+> more maintainable code.
+> I would like to work from the ld.bfd side to see if we can fix the pro=
+blem.
 
-Fix this by moving the tlb flush out of tlb_end_vma() into
-free_pgtables(), somewhat similar to the stable version of the
-original commit: e.g. stable commit 895428ee124a ("mm: Force TLB flush
-for PFNMAP mappings before unlink_file_vma()").
+Makes sense. At least once we understand what makes the linker so slow
+and fix future versions, it should also be possible to come up with
+a more effective workaround for the existing linkers that suffer from it.
 
-Note, that if tlb->fullmm is set, no flush is required, as the whole
-mm is about to be destroyed.
-
-Suggested-by: Jann Horn <jannh@google.com>
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Piggin <npiggin@gmail.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-mm@kvack.org
----
- include/asm-generic/tlb.h | 16 ++++------------
- mm/memory.c               |  7 +++++++
- 2 files changed, 11 insertions(+), 12 deletions(-)
-
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index 709830274b75..411daa96f57a 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -549,22 +549,14 @@ static inline void tlb_start_vma(struct mmu_gather *tlb, struct vm_area_struct *
- 
- static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
- {
--	if (tlb->fullmm)
-+	if (tlb->fullmm || IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS))
- 		return;
- 
- 	/*
--	 * VM_PFNMAP is more fragile because the core mm will not track the
--	 * page mapcount -- there might not be page-frames for these PFNs after
--	 * all. Force flush TLBs for such ranges to avoid munmap() vs
--	 * unmap_mapping_range() races.
-+	 * Do a TLB flush and reset the range at VMA boundaries; this avoids
-+	 * the ranges growing with the unused space between consecutive VMAs.
- 	 */
--	if (tlb->vma_pfn || !IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS)) {
--		/*
--		 * Do a TLB flush and reset the range at VMA boundaries; this avoids
--		 * the ranges growing with the unused space between consecutive VMAs.
--		 */
--		tlb_flush_mmu_tlbonly(tlb);
--	}
-+	tlb_flush_mmu_tlbonly(tlb);
- }
- 
- /*
-diff --git a/mm/memory.c b/mm/memory.c
-index 398c031be9ba..2071415f68dd 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -365,6 +365,13 @@ void free_pgtables(struct mmu_gather *tlb, struct ma_state *mas,
- {
- 	struct unlink_vma_file_batch vb;
- 
-+	/*
-+	 * Ensure we have no stale TLB entries by the time this mapping is
-+	 * removed from the rmap.
-+	 */
-+	if (tlb->vma_pfn && !tlb->fullmm)
-+		tlb_flush_mmu(tlb);
-+
- 	do {
- 		unsigned long addr = vma->vm_start;
- 		struct vm_area_struct *next;
--- 
-2.48.0.rc2.279.g1de40edade-goog
-
+     Arnd
 
