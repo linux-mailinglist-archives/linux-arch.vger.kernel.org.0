@@ -1,139 +1,94 @@
-Return-Path: <linux-arch+bounces-9833-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9834-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6D3DA178A8
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 08:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 658D2A17AA0
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 10:56:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 200E4165431
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 07:42:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A491716A546
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Jan 2025 09:56:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D061B414F;
-	Tue, 21 Jan 2025 07:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 749DA1DED4F;
+	Tue, 21 Jan 2025 09:56:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="lsoifdUU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Wa6h0j56"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RjjtbFSJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F35D1B4138;
-	Tue, 21 Jan 2025 07:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44935D2FB;
+	Tue, 21 Jan 2025 09:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737445323; cv=none; b=DZpmscuu0Ov/vwUoC+hyOQqd8oCGJvK7i2Y0mN0RtHqEAMyYFqrjD/++I2kVVoar3UTzSZbbhha6BGDqg5/5twneK4O4llDXhQmTpFRwRgLyYWp/CJwiq2ziEVZfUxf7RG/PCfepFszcfZp/L3V4kKVUuXOyQMo9wet1Yx7x88Q=
+	t=1737453368; cv=none; b=mAaRNmdCRI/VfvuQWkfegRlmomQL0QAV/fGkT5RBqTUNBqIWp4Qr/7/Wnv8aBsYrlJyA9NuaLGwhHmT7bZKa0uAHsi2tZd/vuX/+mBlntNXFS6DXCI93ouBzqiMugE9jEn/NjYP9iXASD41bN6TTacG97mFemuww/MYSh3zYi+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737445323; c=relaxed/simple;
-	bh=qsy6JmiVJF4S5wiCjBpb9sjc3adaXv95wl7FmfsQkGo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=pNOwB7fRZSkj68tCV4LZeKtczGHmhp0/dyJz8HOz8Jx+FGUc6uhre7h1M++KJpDhIkr9DGAbD32eJVM1Y6eNkb9YJW/rHsuAWPA1RRr9LSarJKSWEjyLjGttQ3B3+kmix2HafyYrIc6f8w7zGgQAE880Tko6dExw2oK7PYaFT6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=lsoifdUU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Wa6h0j56; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 72B891140198;
-	Tue, 21 Jan 2025 02:42:00 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Tue, 21 Jan 2025 02:42:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1737445320;
-	 x=1737531720; bh=9OiF7r3Rql105Zia0h2LASumVCmwQ5qUHnyz2aj97rs=; b=
-	lsoifdUUj2RIajNgeyvBlEdL+BPY/yQCpMdJSPdBjDCQG3pPBQxMQApXz22sscRS
-	RG4Ol8FAYUvckKdDZXO65nXlZRrhbCtqc7lxo88Ot8qoERmFBzTX3ZnJOUfx/U3J
-	ireWOUpcA9g13ebOZl/8K0JN0bycoXHOmJUzxO9QNX6l5+sTC1MmJbiEl3f1CeTB
-	kqmhi6HAcZQQcwytcCFGOdXmqIgVy7GtzRRq2YqvRJ4/7B71GMdpPeFznTXOgJAh
-	ilBU61Y4i0KzW6tkrOkZPijHN1JAaV5dqAi4TZ1lqtpdCZpcstuA2xK1lHqAG5V9
-	wo6GNQMa6mQaDG0B8UM3sg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1737445320; x=
-	1737531720; bh=9OiF7r3Rql105Zia0h2LASumVCmwQ5qUHnyz2aj97rs=; b=W
-	a6h0j56mcm7A+IXYqbD/KjUVoQXkYQuZxjhX+Igvw4JNjDFhkcna3R6nZaX/Y/y7
-	e/lWYvXMCKXcTOZU/KAZLQqBuYCiY+DZT2He1rZjTvhvUhyd50JsN8eOeUzWjLrK
-	yR9N3iDVcchENtbZbCOsHGdz6EAC/Ucm02IExiPATDktpL6cXDM60/FYFMOQriOC
-	Fwo5u5nFQGCWPiqwI5nT2Hnpu1Lj8+tj0ThNBZ+3YHiFWaw89PuiU13V9HuEP9DF
-	qNwbUpdTjPydx9y/StJFD1sOAMeUBSxb51AwPpfIt4loaLCCLwBvzHBwGONXtD50
-	vijq5aMSfma1YHD5qgmHw==
-X-ME-Sender: <xms:yE-PZ7cVbT7Fot3OtAXE1Lim99lvdJFVfOfIwM1-5euTtipaHP-eyw>
-    <xme:yE-PZxPFnpQ8qFuAp7dK_fGT58eeIiEJYUCL2cAiFWytYOUD0tGNeSDb2jCZLa_EM
-    UMntuq6-NBhcCUiq7k>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejtddguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
-    jeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvleehvddv
-    geejvdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
-    vddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhgrnhhnhhesghhoohhglhgvrd
-    gtohhmpdhrtghpthhtohepshhhvghnhhgrnhesghhoohhglhgvrdgtohhmpdhrtghpthht
-    ohepgihurhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprghruggssehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    khgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghsrghhihhrohihsehkvg
-    hrnhgvlhdrohhrghdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheprhgvghhrvghsshhiohhnsheslhhishhtshdrlhhinhhugidruggvvh
-X-ME-Proxy: <xmx:yE-PZ0hTjQs8sUsTN36JhFc9qax9FwFNRyLiykti_kwn0oqK-6E_jQ>
-    <xmx:yE-PZ8-RQl9nTLraS_KGH5sFr-i6tKNQA1fDMTAW3FeY7CTPdYZ7YQ>
-    <xmx:yE-PZ3vTb4fTLmEweJJ3JnB3TCm2h5x2NyTlSAr3tNuz-4euS8Hy-A>
-    <xmx:yE-PZ7Ep6ELT25NvZ29poHaoobJ6uSsLh1s6c7cGDVd0xL-QjnoxYw>
-    <xmx:yE-PZ7EKEFDzQj4xvtxl6ClaJh1cZSwPTmLtbxRQCbIyOfCQx_0vRhlH>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 180B12220072; Tue, 21 Jan 2025 02:41:59 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1737453368; c=relaxed/simple;
+	bh=Pq6+SwYN8tMjuzLRzEFPjm2o64W9oXSHb9lfpnhWEXA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OUGfpnhEUTWlin2qFrZM5SsE8aeud+EzPgyn3RRBdfQUu8cRLe7hg0Vs1PD4oTzP830XxQsHdsNwyO6jdcNZrEzGBaF/JRINPv6Mxi5VMh0H7ewA33NcxxQLSZzHYvT+UvERV2JUHF+4FCpsH+54exONevy9WDM5al13FW+qKFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RjjtbFSJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80EB2C4CEE3;
+	Tue, 21 Jan 2025 09:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737453367;
+	bh=Pq6+SwYN8tMjuzLRzEFPjm2o64W9oXSHb9lfpnhWEXA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RjjtbFSJ3q4X5KDw2bbNwJpHHR6tVsaEigmhBx7CUvGlwyG8YWW3UIFvplnr4pA3W
+	 y3orh5kmcaegA+g3PTNh5A134cHBfONE7CeRwul2GKYdVLFSo2UthbU0S5Bf5yY3d6
+	 rLV7ovzvhr6yXdrQMeacPxWEcnIuRFrOQRKNa/acD7/TcAacpIFa3FA1MRXNCVd8mZ
+	 EkFnc5NU9KvNo0LK0NrRdrgsv1rcoJ4xEkWdw1PCwEw9DOwAsmzdM9qdcrtCi6Ltup
+	 rAUK2Ji3HlQzqQ+pbMKL8R94rqwekU/I4n9ZAVn2Jj5OecZHqFjagGFl+qBdDiGVRG
+	 MYaeqen2dAFfw==
+Date: Tue, 21 Jan 2025 09:55:58 +0000
+From: Will Deacon <will@kernel.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, catalin.marinas@arm.com,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	pbonzini@redhat.com, vkuznets@redhat.com, rafael@kernel.org,
+	daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
+	lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
+	mtosatti@redhat.com, sudeep.holla@arm.com, cl@gentwo.org,
+	maz@kernel.org, misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+	zhenglifeng1@huawei.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 00/15] arm64: support poll_idle()
+Message-ID: <20250121095558.GA20954@willie-the-truck>
+References: <20241107190818.522639-1-ankur.a.arora@oracle.com>
+ <8734hd89ze.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 21 Jan 2025 08:41:38 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Masahiro Yamada" <masahiroy@kernel.org>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- regressions@lists.linux.dev, "Han Shen" <shenhan@google.com>,
- "Nathan Chancellor" <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>,
- "Rong Xu" <xur@google.com>, "Jann Horn" <jannh@google.com>,
- "Ard Biesheuvel" <ardb@kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>
-Message-Id: <fef7c633-5577-4cdf-803a-a1fe10787186@app.fastmail.com>
-In-Reply-To: 
- <CAK7LNASo+wGhpCVhBi+ew1mOtLbSXgx3AiQ6D7RtXO5P=R0EfQ@mail.gmail.com>
-References: <20250120212839.1675696-1-arnd@kernel.org>
- <CAK7LNASo+wGhpCVhBi+ew1mOtLbSXgx3AiQ6D7RtXO5P=R0EfQ@mail.gmail.com>
-Subject: Re: [PATCH] [RFC, DO NOT APPLY] vmlinux.lds: revert link speed regression
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8734hd89ze.fsf@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Tue, Jan 21, 2025, at 01:19, Masahiro Yamada wrote:
-> On Tue, Jan 21, 2025 at 6:29=E2=80=AFAM Arnd Bergmann <arnd@kernel.org=
-> wrote:
->>
->>                 linux-6.12      linux-6.13
->> ld.lld v20      1.2s            1.2s
->> ld.bfd v2.36    3.2s            5.2s
->> ld.bfd v2.39    59s             388s
->>
->
-> Is this problem specific to the BFD linker from binutils?
+On Mon, Jan 20, 2025 at 01:13:25PM -0800, Ankur Arora wrote:
+> 
+> Ankur Arora <ankur.a.arora@oracle.com> writes:
+> 
+> > This patchset adds support for polling in idle via poll_idle() on
+> > arm64.
+> >
+> > There are two main changes in this version:
+> >
+> > 1. rework the series to take Catalin Marinas' comments on the semantics
+> >    of smp_cond_load_relaxed() (and how earlier versions of this
+> >    series were abusing them) into account.
+> 
+> There was a recent series adding resilient spinlocks which might also have
+> use for an smp_cond_load_{acquire,release}_timeout() interface.
+> (https://lore.kernel.org/lkml/20250107192202.GA36003@noisy.programming.kicks-ass.net/)
 
-I only tried the bfd and lld linkers, but I assume it's limited
-to the bfd one.
+Urgh, that reminds me that I need to go look at that...
 
-> Did you observe a link speed regression with LLVM=3D1 build?
-
-No, the ld.lld line above is what I see with LLVM=3D1, it's
-very fast (1.2s) both before and after the change. New
-ld.bfd versions were much slower before the regression
-for this particular config and got even slower (seven minutes
-for each of the three vmlinux link stages).
-
-      Arnd
+Will
 
