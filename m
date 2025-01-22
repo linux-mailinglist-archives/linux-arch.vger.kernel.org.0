@@ -1,100 +1,65 @@
-Return-Path: <linux-arch+bounces-9849-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9850-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52955A18D11
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2025 08:50:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2168DA18F3D
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2025 11:06:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 281477A3766
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2025 07:50:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6536316C4F1
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jan 2025 10:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58F991C173D;
-	Wed, 22 Jan 2025 07:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48AC01F8909;
+	Wed, 22 Jan 2025 10:06:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WKfRRI1l"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Gb4+2Lp/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765BD28EC;
-	Wed, 22 Jan 2025 07:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8734516BE3A;
+	Wed, 22 Jan 2025 10:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737532240; cv=none; b=ZQx/9NafyJYtlK+MBl6X/ya6Du8vH/i33X0TFCpLXG+oRbgQuHxgSAyWEYp8RrwSk0iZ4pfZmJyHn0+QFuFdDdRbU40kzs8KZHMnFtyBXLqwK8VLMG8bpVj2coU7jR4BmZuuEDh2X4GS+92RtAPzah+zR8b6dYlOYoo/V3gGUuY=
+	t=1737540412; cv=none; b=gbytqjcsvt6/KWg5J/QvWz4X9sPVT9A/yjuXjF7aM+iKEj+bpr9nwoCvn9Jh9pr2QArj5NjrQsTbHpSfrzyYyuWW1/Z1RzoUO8X+NPCLm/bCaT8nxZovtPP6XD3kBhCg6Lja+kPxFC+9UXvkpmOJLkBgd2yX7Ots3zqPq4H6fR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737532240; c=relaxed/simple;
-	bh=IEhcvheF4V81iZY+p0ALVQuZPTmOS4DOoc5c5f3Go8g=;
+	s=arc-20240116; t=1737540412; c=relaxed/simple;
+	bh=NlYmcOrpCyHN/XyatmOclJl8OASsTjAfA8WVg6Zcw7c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Weh6X46oLsD8r7CM037wijSYWke/zVmZ3jBLT9dw6IlBUEh+0r+1cLXU0sfzWSByIFcjXUUF0pC2BEy8HZyaBNwUhWyfg/MFTm5IH57HTKsSIySMMQtTkZz6eG9eAJ40WOoNgSXqD4jDhRXVqIEucsNlC52UMdVzmOxMtmBtZ7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WKfRRI1l; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50M2A4Je009705;
-	Wed, 22 Jan 2025 07:49:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=YOmEKaCYp7BVYdSA921evwSGcBIDRQ
-	EOB9Qf7IL5hrk=; b=WKfRRI1lHye/PfeRq0CM+invZscqmJxiyfMJj6RqKDo+k0
-	oHw8bxFR10u4InxfkGzbtPQRnmjjRIxYD+e4Hdc6VNWvxRNBhElChMEKYTQww/ne
-	kooQLVgHcJbjlXo8YwFiHbBQ8lYIn1j20/tkdmwE9rGrifbH6of2GaRERifgPxvN
-	e6jGjgMPTSpOWNSK//eRAMpTyDt03PLcgP0/2Qj42QpNbLO975g3w4J/8kekr9qF
-	dPd8DDCPlAQUGXVLnf/2L8EUh+BlP8RuxoA5walvWUcYL4qLgoLMxpcBdMKwAzI/
-	K9cmGJQE5Hsas24CZr5x5+mJxBXMWUxPL2+9HvXg==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44aee1bs75-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 07:49:59 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50M4kx3X019330;
-	Wed, 22 Jan 2025 07:49:58 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 448pmsfk01-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 07:49:58 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50M7nu1d48300472
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 Jan 2025 07:49:56 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B223620040;
-	Wed, 22 Jan 2025 07:49:56 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4B9362004B;
-	Wed, 22 Jan 2025 07:49:56 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 22 Jan 2025 07:49:56 +0000 (GMT)
-Date: Wed, 22 Jan 2025 08:49:54 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>, linux-alpha@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, loongarch@lists.linux.dev,
-        x86@kernel.org
-Subject: Re: [PATCH v2 6/6] mm: Introduce ctor/dtor at PGD level
-Message-ID: <20250122074954.8685-A-hca@linux.ibm.com>
-References: <20250103184415.2744423-1-kevin.brodsky@arm.com>
- <20250103184415.2744423-7-kevin.brodsky@arm.com>
- <Z4/NTRDBXEEimdvc@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DBECrkqsL/6xmuTw0WBRoXVUcOg47mg7gMtOfaaf6tW+0IP5qObAU+seuBGW8wW4UeblF3iXn9HcYIAoGTqgMhMcBY2IYhTJTp3d88XJcQN6PmOhmy+DqIzUlN3kQe5SGXpL0gy4Atr3CncLUj2Sy97gpFTgXKCBtq/HhvqAaq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Gb4+2Lp/; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=+4aqblxBo0mSTU8WQnlzPUPzt49g8vCbbD65eJ7VJE0=; b=Gb4+2Lp/lGo8WDR8KXtfHjbDfl
+	4F15tHMq8LG+F0bd6ZE2kGbRbnqRwftqkkoURex3D0IPLM96mSJEia1fNnb+y7Vrn2fG/FJVgZ8r4
+	TYPrmrFwRfRHjQVUHSan93o+fBZAmJEWU0/Z03lMSMns5cPCvF9m8RF+ost/+g/o2tW4YPbVbcKSw
+	witQeG9dzQsZqLAqo5BGep+BxqL7MrW8CKAQ8BBTE3A+OgpqyPtoPP65Zo197G9s75EkJu6jR05Tc
+	R/3F16MGLdac4KiaJBDu5j8Gv77kEe1wsEmEBS1cZu+++MpOK3JazRUo7c3l6jfJQZ5ztbT3z2MdT
+	mJLd/wPw==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1taXdB-0000000DXET-1aaq;
+	Wed, 22 Jan 2025 10:06:41 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 28303300599; Wed, 22 Jan 2025 11:06:40 +0100 (CET)
+Date: Wed, 22 Jan 2025 11:06:39 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jann Horn <jannh@google.com>, Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Nick Piggin <npiggin@gmail.com>, Hugh Dickins <hughd@google.com>,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP
+ vmas into free_pgtables()
+Message-ID: <20250122100639.GF7145@noisy.programming.kicks-ass.net>
+References: <20250121200929.188542-1-roman.gushchin@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -103,54 +68,48 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z4/NTRDBXEEimdvc@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qTola2ylJwUaTSt4IdPRfZSdT02Tio3Q
-X-Proofpoint-GUID: qTola2ylJwUaTSt4IdPRfZSdT02Tio3Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-22_03,2025-01-22_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- lowpriorityscore=0 mlxlogscore=674 priorityscore=1501 bulkscore=0
- spamscore=0 malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501220053
+In-Reply-To: <20250121200929.188542-1-roman.gushchin@linux.dev>
 
-On Tue, Jan 21, 2025 at 05:37:33PM +0100, Alexander Gordeev wrote:
-> On Fri, Jan 03, 2025 at 06:44:15PM +0000, Kevin Brodsky wrote:
+On Tue, Jan 21, 2025 at 08:09:29PM +0000, Roman Gushchin wrote:
+> Commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas")
+> added a forced tlbflush to tlb_vma_end(), which is required to avoid a
+> race between munmap() and unmap_mapping_range(). However it added some
+> overhead to other paths where tlb_vma_end() is used, but vmas are not
+> removed, e.g. madvise(MADV_DONTNEED).
 > 
-> Hi Kevin,
-> ...
-> > diff --git a/arch/s390/include/asm/pgalloc.h b/arch/s390/include/asm/pgalloc.h
-> > index 5fced6d3c36b..b19b6ed2ab53 100644
-> > --- a/arch/s390/include/asm/pgalloc.h
-> > +++ b/arch/s390/include/asm/pgalloc.h
-> > @@ -130,11 +130,18 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
-> >  
-> >  static inline pgd_t *pgd_alloc(struct mm_struct *mm)
-> >  {
-> > -	return (pgd_t *) crst_table_alloc(mm);
-> > +	unsigned long *table = crst_table_alloc(mm);
-> > +
-> > +	if (!table)
-> > +		return NULL;
+> Fix this by moving the tlb flush out of tlb_end_vma() into
+> free_pgtables(), somewhat similar to the stable version of the
+> original commit: e.g. stable commit 895428ee124a ("mm: Force TLB flush
+> for PFNMAP mappings before unlink_file_vma()").
 > 
-> I do not know status of this series, but FWIW, this call is missed:
+> Note, that if tlb->fullmm is set, no flush is required, as the whole
+> mm is about to be destroyed.
 > 
-> 	crst_table_init(table, _REGION1_ENTRY_EMPTY); 
+> Suggested-by: Jann Horn <jannh@google.com>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-Why is that missing?
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 398c031be9ba..2071415f68dd 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -365,6 +365,13 @@ void free_pgtables(struct mmu_gather *tlb, struct ma_state *mas,
+>  {
+>  	struct unlink_vma_file_batch vb;
+>  
+> +	/*
+> +	 * Ensure we have no stale TLB entries by the time this mapping is
+> +	 * removed from the rmap.
 
-A pgd table can be a Region1, Region2, or Region3 table. The only caller of
-this function is mm_init() via mm_alloc_pgd(); and right after mm_alloc_pgd()
-there is a call to init_new_context() which will initialize the pgd correctly.
+This comment would be ever so much better if it would explain *why* this
+is important.
 
-I guess what really gets odd, and might be broken (haven't checked yet) is
-what happens on dynamic upgrade of page table levels (->crst_table_upgrade()).
+> +	 */
+> +	if (tlb->vma_pfn && !tlb->fullmm)
+> +		tlb_flush_mmu(tlb);
 
-With that a pgd may become a pud, and with that we get an imbalance with
-the ctor/dtor calls for the various page table levels when they get freed
-again. Plus, at first glance, it looks also broken that we have open-coded
-crst_alloc() calls instead of using the "proper" page table allocation API
-within crst_table_upgrade(), which again would cause an imbalance.
+I can't say I particularly like accessing vma_pfn outside of the
+mmu_gather code, but I'm also not sure its worth it to add a special
+helper.
+
+I do worry this makes the whole thing a little more fragile though.
 
