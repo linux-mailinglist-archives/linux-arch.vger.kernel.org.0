@@ -1,118 +1,213 @@
-Return-Path: <linux-arch+bounces-9868-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9869-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32B1CA19F8B
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2025 09:07:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BCE7A1A807
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2025 17:44:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C451163FF9
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2025 08:07:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1FDE3A080E
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jan 2025 16:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1748920B7EC;
-	Thu, 23 Jan 2025 08:07:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50942135BB;
+	Thu, 23 Jan 2025 16:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RyL7Mfke"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i34gYHvc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCB520B21F
-	for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2025 08:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789EF2135B7
+	for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2025 16:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737619625; cv=none; b=aQW4dZww8eqXBN5GCiHU1tzsoOBDa1rreatGeXR+K8TnJYFRTPQOOomt8IE9RRs8F6TL4hpuP8bM2DLRc7u2nI/iHXP0H4ZhkrCEOpU7Zl7nc+++SvAmjqJNB20mAmK3hwvzYrdHR+B+0UPC5pJkGiITR/O7X2dv3CdEtyEfvaY=
+	t=1737650670; cv=none; b=b+/2V4sQKobh+qu0e0AHK0sCuHyMlZth1QxiTBEBb7Ba+2A5Q0ZFjELprWKNurgusBsWlVlnl0dab2UM2zAUfmBTZBG4ZvKyg9nO4QICXylSRxUrWm9HxWEWX7ybWdy0cHDBHQqBETYOQhAw0/t9wZ4yOqFrO0Ww42eSi4BDeCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737619625; c=relaxed/simple;
-	bh=/OVVa4PFdyaTHkYGkZqNTwVtn3TyCCbn3A1XAyZZRrk=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=XPNYJ4ylwY8dUTIghHsowQOTwsNpW9U/SlI6yx5N1XO8qpXHz01TjLyHhR/7wIKIwaGa2aGXeGYhFbkIvuWzLR1e84jvYaTDmx7UKzD+PWaUOFH2ijgiGa76zvuT+NCMwnmkyizpVMGoA0olWyTOJ07RjANnSNNSuDm7MWBRoY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RyL7Mfke; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2166022c5caso8366965ad.2
-        for <linux-arch@vger.kernel.org>; Thu, 23 Jan 2025 00:07:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737619623; x=1738224423; darn=vger.kernel.org;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RxLyd0j5M0G3spzS+RTBF1u+LB8fnxQzXix63wIwVfk=;
-        b=RyL7MfkeW/CZ65tpJxmY0Z78UWkO0F1aKjkBjrlbVaWE4q4sIrmW/pFDhhYR3u4EdE
-         6ChccFdeI/DbyRpTQ0PBz2wsQC9k2dXolDSfU0qr0fiVpO9vtZUS4FQ8DN/7O0VERblM
-         q0Do6tVf8V7jApAQojKMy0L5aceeUdQc1stW+TRGtO3sq9K6gwTeQJX4/W0p8T6szQrM
-         rbUqVcNvLbUHjyDcMrRPd8KVawVXgWAFiRh14nj5cEo/822egGQ9fGH/sy96jCVR62lG
-         /sE1Fpd7Ixe0j3+C4tqVpbbwD4VkTTo0FvmG3Dvnw1Srw6lem5jco/D8io2UUj4hlYGU
-         +XFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737619623; x=1738224423;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RxLyd0j5M0G3spzS+RTBF1u+LB8fnxQzXix63wIwVfk=;
-        b=PjqCk4Qo3EMEAXyO/F6v9KnwNggAF8vsHpc7hjKb4W9j8FS31G495Mmn1X6EpyaUJG
-         uN8fvajHyr2vvgYanrrQP9Q4Lk+kzr66D58qVtkPrtIzvQMOb1ho8neBrwT+NVCH3nPE
-         NEnQX1tfRQ0NoBKjBTSXxFGlnRpGuYcKMrD5FMVqYFGKsKp68vewJwenOZsFQP9RZ0jc
-         KVUb0BOrwkRC7sLhrR6p5Fu7mSGUqIJ42QTubu4pL9jxN2NzgxRbFff6ugrvmaNxMOLj
-         /D0AVJoFptHGbu0xVs/cr+QPv1H6hEqPU/qPiUrzwO8Kkgk9K657wu93VkK6ftYK9egg
-         kE+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX9PgeIz+5HHqp66ipeX/lETahqPF4wIumQOM/MnpwI1PtK20qe2PRwaWQxYNAt35YXqQdADJ8VA/Xm@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAGWFP8wrpkOCn1IZKmtTI5XOsK7D0C21sRQd2/fcDgtPaul92
-	oJ+uHjrT0FhX1OyKMPTaqMrrAPhyRnj9kxF4QtPPEKA/yDR+5/Tesi8x/XkG3A==
-X-Gm-Gg: ASbGncttTip8j7EgnRaEJ65K/chj9FDtfcqp9VbHdKPN8/o45zZ+gDge6Y22+b8I3dP
-	qimFjNr09IU+uA05Int0rHarVapmDQjqGIV9J7r2fZfl3j6KMgynCaRByxdPpwY9BaisiD1GPlN
-	KgVhbh6gk13nhJNGz3GjTM9q4kpDJ9gISJFGGcrGf11FajWoXqoPM5fERnjklk1wmYpAVixRbZo
-	1WBYxO52QPYvPmd3IcuB+ZOQ0pIJI+P10cvz3bRTT1lJg4z8gujekHT/ykoG4D//6ztEUagI1FM
-	5k1HjxsXLntMefObmxOhqtVuzEkX+54runbdU9sS4nxt89vMjKj0X13n0LWObJFW
-X-Google-Smtp-Source: AGHT+IE7u+9Ai6CeI4NF8qNYNW7JMWK79y0CWYSHpK6OSfOIGBCitwQjVFd+BOZdZ8v0vVLAtIJgnQ==
-X-Received: by 2002:a05:6a00:6ca7:b0:728:e40d:c5fc with SMTP id d2e1a72fcca58-72dafbe2776mr32050779b3a.22.1737619622728;
-        Thu, 23 Jan 2025 00:07:02 -0800 (PST)
-Received: from darker.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab9c8da5sm12254458b3a.118.2025.01.23.00.07.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 00:07:01 -0800 (PST)
-Date: Thu, 23 Jan 2025 00:06:51 -0800 (PST)
-From: Hugh Dickins <hughd@google.com>
-To: Roman Gushchin <roman.gushchin@linux.dev>
-cc: Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org, 
-    linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>, 
-    Jann Horn <jannh@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-    Will Deacon <will@kernel.org>, 
-    "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
-    Nick Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP
- vmas into free_pgtables()
-In-Reply-To: <c549a9af-cd5f-fd77-1af6-a10b30dd3256@google.com>
-Message-ID: <cdc9cb25-c43c-e829-5483-2f28d57f609f@google.com>
-References: <20250122232716.1321171-1-roman.gushchin@linux.dev> <c549a9af-cd5f-fd77-1af6-a10b30dd3256@google.com>
+	s=arc-20240116; t=1737650670; c=relaxed/simple;
+	bh=T8hxQcKaqI+1aW9/Hkx8SZIfVhHvplvsbDjKt6G3WrM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p3T8BqI0aX6/AkJrHH79vW0JsePWu4rWi3F0DT2xrXSiadHOmGyI7OdAQ347Q+1kpdQsqaLGQLBRiT61b1ClMRFrGMx1Az6oH1xz6AUqntuglCM9j9hGv7psTXakqTNzB655y11o5NcX4LevkMZM3fxcbEMQMVG/JPhxmhZfldI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i34gYHvc; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1737650651;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tq6WrEXDOwQH8ujhQCQztubvc77Na0hjUaUvAtMBHDU=;
+	b=i34gYHvc+biDzphvaZftqRCYQACwkL6IF7oZHQuPzSaq/zmgBKPPeVKIJHdPGBn7IGtgwO
+	dVdPIOBZaMoEDLux6kZEK73MrKnOYbDawzd1gmY+SWuCC4dhwqtqP6B+MZhwos81k0RauF
+	iGsNS2cR9sDVp6zWaE/ZwBGTx1LFN48=
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Jann Horn <jannh@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Nick Piggin <npiggin@gmail.com>,
+	Hugh Dickins <hughd@google.com>,
+	linux-arch@vger.kernel.org
+Subject: [PATCH v3] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP vmas into free_pgtables()
+Date: Thu, 23 Jan 2025 16:43:58 +0000
+Message-ID: <20250123164358.2384447-1-roman.gushchin@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 22 Jan 2025, Hugh Dickins wrote:
-> On Wed, 22 Jan 2025, Roman Gushchin wrote:
-> 
-> > Commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas")
-> > added a forced tlbflush to tlb_vma_end(), which is required to avoid a
-> > race between munmap() and unmap_mapping_range(). However it added some
-> > overhead to other paths where tlb_vma_end() is used, but vmas are not
-> > removed, e.g. madvise(MADV_DONTNEED).
-> > 
-> > Fix this by moving the tlb flush out of tlb_end_vma() into
-> > free_pgtables(), somewhat similar to the stable version of the
-> > original commit: e.g. stable commit 895428ee124a ("mm: Force TLB flush
-> > for PFNMAP mappings before unlink_file_vma()").
-> > 
-> > Note, that if tlb->fullmm is set, no flush is required, as the whole
-> > mm is about to be destroyed.
-> > 
-> > v2:
-> >   - moved vma_pfn flag handling into tlb.h (by Peter Z.)
-> >   - added comments (by Peter Z.)
-> >   - fixed the vma_pfn flag setting (by Hugh D.)
+Commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas")
+added a forced tlbflush to tlb_vma_end(), which is required to avoid a
+race between munmap() and unmap_mapping_range(). However it added some
+overhead to other paths where tlb_vma_end() is used, but vmas are not
+removed, e.g. madvise(MADV_DONTNEED).
 
-And in v3, that changelog should be after the ---, not in the commit.
+Fix this by moving the tlb flush out of tlb_end_vma() into
+free_pgtables(), somewhat similar to the stable version of the
+original commit: e.g. stable commit 895428ee124a ("mm: Force TLB flush
+for PFNMAP mappings before unlink_file_vma()").
+
+Note, that if tlb->fullmm is set, no flush is required, as the whole
+mm is about to be destroyed.
+
+---
+
+v3:
+  - added initialization of vma_pfn in __tlb_reset_range() (by Hugh D.)
+
+v2:
+  - moved vma_pfn flag handling into tlb.h (by Peter Z.)
+  - added comments (by Peter Z.)
+  - fixed the vma_pfn flag setting (by Hugh D.)
+
+Suggested-by: Jann Horn <jannh@google.com>
+Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nick Piggin <npiggin@gmail.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-mm@kvack.org
+---
+ include/asm-generic/tlb.h | 49 ++++++++++++++++++++++++++++-----------
+ mm/memory.c               |  7 ++++++
+ 2 files changed, 42 insertions(+), 14 deletions(-)
+
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index 709830274b75..cdc95b69b91d 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -380,8 +380,16 @@ static inline void __tlb_reset_range(struct mmu_gather *tlb)
+ 	tlb->cleared_pmds = 0;
+ 	tlb->cleared_puds = 0;
+ 	tlb->cleared_p4ds = 0;
++
++	/*
++	 * vma_pfn can only be set in tlb_start_vma(), so let's
++	 * initialize it here. Also a tlb flush issued by
++	 * tlb_flush_mmu_pfnmap() will cancel the vma_pfn state,
++	 * so that unnecessary subsequent flushes are avoided.
++	 */
++	tlb->vma_pfn = 0;
+ 	/*
+-	 * Do not reset mmu_gather::vma_* fields here, we do not
++	 * Do not reset other mmu_gather::vma_* fields here, we do not
+ 	 * call into tlb_start_vma() again to set them if there is an
+ 	 * intermediate flush.
+ 	 */
+@@ -449,7 +457,14 @@ tlb_update_vma_flags(struct mmu_gather *tlb, struct vm_area_struct *vma)
+ 	 */
+ 	tlb->vma_huge = is_vm_hugetlb_page(vma);
+ 	tlb->vma_exec = !!(vma->vm_flags & VM_EXEC);
+-	tlb->vma_pfn  = !!(vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP));
++
++	/*
++	 * vma_pfn is checked and cleared by tlb_flush_mmu_pfnmap()
++	 * for a set of vma's, so it should be set if at least one vma
++	 * has VM_PFNMAP or VM_MIXEDMAP flags set.
++	 */
++	if (vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP))
++		tlb->vma_pfn = 1;
+ }
+ 
+ static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
+@@ -466,6 +481,20 @@ static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
+ 	__tlb_reset_range(tlb);
+ }
+ 
++static inline void tlb_flush_mmu_pfnmap(struct mmu_gather *tlb)
++{
++	/*
++	 * VM_PFNMAP and VM_MIXEDMAP maps are fragile because the core mm
++	 * doesn't track the page mapcount -- there might not be page-frames
++	 * for these PFNs after all. Force flush TLBs for such ranges to avoid
++	 * munmap() vs unmap_mapping_range() races.
++	 * Ensure we have no stale TLB entries by the time this mapping is
++	 * removed from the rmap.
++	 */
++	if (unlikely(!tlb->fullmm && tlb->vma_pfn))
++		tlb_flush_mmu_tlbonly(tlb);
++}
++
+ static inline void tlb_remove_page_size(struct mmu_gather *tlb,
+ 					struct page *page, int page_size)
+ {
+@@ -549,22 +578,14 @@ static inline void tlb_start_vma(struct mmu_gather *tlb, struct vm_area_struct *
+ 
+ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
+ {
+-	if (tlb->fullmm)
++	if (tlb->fullmm || IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS))
+ 		return;
+ 
+ 	/*
+-	 * VM_PFNMAP is more fragile because the core mm will not track the
+-	 * page mapcount -- there might not be page-frames for these PFNs after
+-	 * all. Force flush TLBs for such ranges to avoid munmap() vs
+-	 * unmap_mapping_range() races.
++	 * Do a TLB flush and reset the range at VMA boundaries; this avoids
++	 * the ranges growing with the unused space between consecutive VMAs.
+ 	 */
+-	if (tlb->vma_pfn || !IS_ENABLED(CONFIG_MMU_GATHER_MERGE_VMAS)) {
+-		/*
+-		 * Do a TLB flush and reset the range at VMA boundaries; this avoids
+-		 * the ranges growing with the unused space between consecutive VMAs.
+-		 */
+-		tlb_flush_mmu_tlbonly(tlb);
+-	}
++	tlb_flush_mmu_tlbonly(tlb);
+ }
+ 
+ /*
+diff --git a/mm/memory.c b/mm/memory.c
+index 398c031be9ba..c2a9effb2e32 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -365,6 +365,13 @@ void free_pgtables(struct mmu_gather *tlb, struct ma_state *mas,
+ {
+ 	struct unlink_vma_file_batch vb;
+ 
++	/*
++	 * VM_PFNMAP and VM_MIXEDMAP maps require a special handling here:
++	 * force flush TLBs for such ranges to avoid munmap() vs
++	 * unmap_mapping_range() races.
++	 */
++	tlb_flush_mmu_pfnmap(tlb);
++
+ 	do {
+ 		unsigned long addr = vma->vm_start;
+ 		struct vm_area_struct *next;
+-- 
+2.48.1.262.g85cc9f2d1e-goog
+
 
