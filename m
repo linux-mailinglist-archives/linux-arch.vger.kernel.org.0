@@ -1,66 +1,66 @@
-Return-Path: <linux-arch+bounces-9897-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9895-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E86CA1BF5B
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 00:59:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6435FA1BF62
+	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 00:59:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D42F07A363A
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2025 23:58:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEFCB3B0674
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2025 23:58:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A7221FA16C;
-	Fri, 24 Jan 2025 23:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 658821F9F7F;
+	Fri, 24 Jan 2025 23:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="fUnoSigK"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QXXOQ6N2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DCD91F9F67;
-	Fri, 24 Jan 2025 23:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E9F1F12FA;
+	Fri, 24 Jan 2025 23:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737762986; cv=none; b=h1jwcBBFpWoQWc68M1TCdMsfj0d5tW9pcpW09i6USfE2K2TuNaZ8Q2moiS0laXw6ipVM9IZ2Raas8SbDWYgsu/p8NJYMwoOjjQt0Ad6/KE9HGD4UW2OzMCMCA6qLbXJmiP03hci3qetsfvaYELLNUdErPHgqr1ofcYNHDiVVGXo=
+	t=1737762985; cv=none; b=A0Y9lhPNyNlTs/l4exYWBdDqNkFOmCbkx7ShyK4yQghjPLJeSi3XwnpInxWprzgDyVqFPGdHh41iJtK0k8X32E6+/n6y4asjaaGRHPWZ4pNRUXMg5RBToMZjGlR94WfGVbbcGh7l0P1kLedwsjfJjos3WgvwBVquMtL/P7nIMu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737762986; c=relaxed/simple;
-	bh=VDs2JcgsMRcQoxPc5jG5PW9l2zO89tAiKcTbOIEaz+s=;
+	s=arc-20240116; t=1737762985; c=relaxed/simple;
+	bh=TsZz4DGP6w00s3ZTot4Nn5rn1+kOmHLDotmoFkt2kso=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ts+MqoHLL40TpsBnuBqA2hGDVexgjIfWAudEcdp1GFliAfsySV2BJmGVyL3/S675eAm3v21DdAwdt2tD9ppEd3Q/ZLCnWXNtwYFhTCv//yd63lGEkL57R/jU2ON2wur14aC/1vJFRAIHzlj0Rync3mP0MPeK4EBmOPP1IqKg0iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=fUnoSigK; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=vB9fF7thywDp4hOzf3Ekia4lo8wolZQayAFJkujoWMn3/1l1e50ye9FNWPO2u1Tdb8zDZbQXiDrYHsroKEjAR5Q9tcx/IKCqsg3HSpWOr8bP0XV+1yenKfo87nqhraw1OFN/lLMh1fBERnq5ZzaQURzPILQnA2bzcQpxDirpqRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QXXOQ6N2; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50OI8hMZ022258;
-	Fri, 24 Jan 2025 23:55:54 GMT
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50OIioeL018166;
+	Fri, 24 Jan 2025 23:55:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=yJXvn
-	Yoxkm1NK3qwW6jmL1jgVFm2IaD/yhkctg4U92M=; b=fUnoSigK9HLwd6NsS95Dr
-	GyOpPYzCA/4kAye89j7nfUI1NddpqygTwjTKIAx8WdCkHtrXLbtzP35MIHAsmrUW
-	YVajTmDtXQjTlPNn92R8YLpqiHdUn002WI1acMbJkbOE6cMhRzIe1TEbnETKclZv
-	PO8InVxSqjARDaOLg0THwBHKBh7H5l7Xp4Mhgk1Fml5N0jH9z71iYiikv6v2wV/f
-	gSumYFsJlOo8v1MNe/KVyxtq253t9KB/+8zgIauIoMpKEGsrxO4wJMhdS9HhNoxx
-	qdHFU0fU68u6E+2F/P0wK00JlGdSUsPJJNY44LDZVvFxwFLeMFT0nDibDEg32Rfu
-	w==
+	:mime-version:references:subject:to; s=corp-2023-11-20; bh=W2H0c
+	tTufvhNvnXZJs2k6LGmiWdy4rqMSHVr4raXjx0=; b=QXXOQ6N23uk7G9VbZbPAF
+	f/QqSAc5iOsT9xCDTdmT6oyWhAgniQUG3Z7HmFAfZ0bDBwKBIvV+YT7Vjcn2YUsw
+	4BXCgx2yNsC2NOEOkIHJOoc4cywTGNGprHkX2qJmp3Xx+WG/52Czo16Ed3Ov5QhM
+	7/Iq8gqTqAgrLzC/67EBmTQU8e0ckWYvZEkC9eoZSGIttbuEitMyfH3mwJVOB5cq
+	nCTIcpd5kRDYGcIOT0w0nMvOGTNdnhFcaiRQEsEqsDLWzbY7hJ3r5tDcUZkZM2sm
+	w/OjPwtIAYWhM4xN3xfWaR0SlPwYAKwlvDlxi/32YuE+r3YbcTLRLr2NJor30AJL
+	g==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44awpx5vq1-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44b96am96t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 24 Jan 2025 23:55:53 +0000 (GMT)
+	Fri, 24 Jan 2025 23:55:57 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50OLKNdP036521;
-	Fri, 24 Jan 2025 23:55:53 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50ONC16b036516;
+	Fri, 24 Jan 2025 23:55:56 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44917u4ajv-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44917u4akt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 24 Jan 2025 23:55:53 +0000
+	Fri, 24 Jan 2025 23:55:56 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50ONsxQA018051;
-	Fri, 24 Jan 2025 23:55:52 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50ONsxQC018051;
+	Fri, 24 Jan 2025 23:55:55 GMT
 Received: from localhost.us.oracle.com (dhcp-10-65-130-174.vpn.oracle.com [10.65.130.174])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44917u49ww-15;
-	Fri, 24 Jan 2025 23:55:52 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44917u49ww-16;
+	Fri, 24 Jan 2025 23:55:55 +0000
 From: Anthony Yznaga <anthony.yznaga@oracle.com>
 To: akpm@linux-foundation.org, willy@infradead.org, markhemm@googlemail.com,
         viro@zeniv.linux.org.uk, david@redhat.com, khalid@kernel.org
@@ -76,9 +76,9 @@ Cc: anthony.yznaga@oracle.com, jthoughton@google.com, corbet@lwn.net,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org, mhiramat@kernel.org,
         rostedt@goodmis.org, vasily.averin@linux.dev, xhao@linux.alibaba.com,
         pcc@google.com, neilb@suse.de, maz@kernel.org
-Subject: [PATCH 14/20] mm: create __do_mmap() to take an mm_struct * arg
-Date: Fri, 24 Jan 2025 15:54:48 -0800
-Message-ID: <20250124235454.84587-15-anthony.yznaga@oracle.com>
+Subject: [PATCH 15/20] mm: pass the mm in vma_munmap_struct
+Date: Fri, 24 Jan 2025 15:54:49 -0800
+Message-ID: <20250124235454.84587-16-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250124235454.84587-1-anthony.yznaga@oracle.com>
 References: <20250124235454.84587-1-anthony.yznaga@oracle.com>
@@ -93,159 +93,80 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-01-24_10,2025-01-23_01,2024-11-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
- spamscore=0 mlxlogscore=915 bulkscore=0 malwarescore=0 suspectscore=0
+ spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
  definitions=main-2501240162
-X-Proofpoint-ORIG-GUID: Oa18II2kZqrAU3hlh8jjOS5UYIop2-kj
-X-Proofpoint-GUID: Oa18II2kZqrAU3hlh8jjOS5UYIop2-kj
+X-Proofpoint-GUID: 3Bsi0dEb_NSrsadh2i7dfRhctL6iq62g
+X-Proofpoint-ORIG-GUID: 3Bsi0dEb_NSrsadh2i7dfRhctL6iq62g
 
-In preparation for mapping objects into an mshare region, create
-__do_mmap() to allow mapping into a specified mm. There are no
-functional changes otherwise.
+Allow unmap to work with an mshare host mm.
 
 Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 ---
- include/linux/mm.h | 16 ++++++++++++++++
- mm/mmap.c          |  7 +++----
- mm/vma.c           | 15 +++++++--------
- mm/vma.h           |  2 +-
- 4 files changed, 27 insertions(+), 13 deletions(-)
+ mm/vma.c | 10 ++++++----
+ mm/vma.h |  1 +
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9889c4757f45..80429d1a6ae4 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3398,10 +3398,26 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
- 	return __get_unmapped_area(file, addr, len, pgoff, flags, 0);
- }
- 
-+#ifdef CONFIG_MMU
-+unsigned long __do_mmap(struct file *file, unsigned long addr,
-+	unsigned long len, unsigned long prot, unsigned long flags,
-+	vm_flags_t vm_flags, unsigned long pgoff, unsigned long *populate,
-+	struct list_head *uf, struct mm_struct *mm);
-+static inline unsigned long do_mmap(struct file *file, unsigned long addr,
-+	unsigned long len, unsigned long prot, unsigned long flags,
-+	vm_flags_t vm_flags, unsigned long pgoff, unsigned long *populate,
-+	struct list_head *uf)
-+{
-+	return __do_mmap(file, addr, len, prot, flags, vm_flags, pgoff,
-+			 populate, uf, current->mm);
-+}
-+#else
- extern unsigned long do_mmap(struct file *file, unsigned long addr,
- 	unsigned long len, unsigned long prot, unsigned long flags,
- 	vm_flags_t vm_flags, unsigned long pgoff, unsigned long *populate,
- 	struct list_head *uf);
-+#endif
-+
- extern int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
- 			 unsigned long start, size_t len, struct list_head *uf,
- 			 bool unlock);
-diff --git a/mm/mmap.c b/mm/mmap.c
-index cda01071c7b1..2d327b148bfc 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -334,13 +334,12 @@ static inline bool file_mmap_ok(struct file *file, struct inode *inode,
-  * Returns: Either an error, or the address at which the requested mapping has
-  * been performed.
-  */
--unsigned long do_mmap(struct file *file, unsigned long addr,
-+unsigned long __do_mmap(struct file *file, unsigned long addr,
- 			unsigned long len, unsigned long prot,
- 			unsigned long flags, vm_flags_t vm_flags,
- 			unsigned long pgoff, unsigned long *populate,
--			struct list_head *uf)
-+			struct list_head *uf, struct mm_struct *mm)
- {
--	struct mm_struct *mm = current->mm;
- 	int pkey = 0;
- 
- 	*populate = 0;
-@@ -558,7 +557,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 			vm_flags |= VM_NORESERVE;
- 	}
- 
--	addr = mmap_region(file, addr, len, vm_flags, pgoff, uf);
-+	addr = mmap_region(file, addr, len, vm_flags, pgoff, uf, mm);
- 	if (!IS_ERR_VALUE(addr) &&
- 	    ((vm_flags & VM_LOCKED) ||
- 	     (flags & (MAP_POPULATE | MAP_NONBLOCK)) == MAP_POPULATE))
 diff --git a/mm/vma.c b/mm/vma.c
-index af1d549b179c..28942701e301 100644
+index 28942701e301..60a37a9eb15e 100644
 --- a/mm/vma.c
 +++ b/mm/vma.c
-@@ -2433,9 +2433,8 @@ static void __mmap_complete(struct mmap_state *map, struct vm_area_struct *vma)
+@@ -1174,7 +1174,7 @@ static void vms_complete_munmap_vmas(struct vma_munmap_struct *vms,
+ 	struct vm_area_struct *vma;
+ 	struct mm_struct *mm;
  
- static unsigned long __mmap_region(struct file *file, unsigned long addr,
- 		unsigned long len, vm_flags_t vm_flags, unsigned long pgoff,
--		struct list_head *uf)
-+		struct list_head *uf, struct mm_struct *mm)
- {
--	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma = NULL;
- 	int error;
- 	VMA_ITERATOR(vmi, mm, addr);
-@@ -2485,13 +2484,13 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
- 
- /**
-  * mmap_region() - Actually perform the userland mapping of a VMA into
-- * current->mm with known, aligned and overflow-checked @addr and @len, and
-+ * mm with known, aligned and overflow-checked @addr and @len, and
-  * correctly determined VMA flags @vm_flags and page offset @pgoff.
-  *
-  * This is an internal memory management function, and should not be used
-  * directly.
-  *
-- * The caller must write-lock current->mm->mmap_lock.
-+ * The caller must write-lock mm->mmap_lock.
-  *
-  * @file: If a file-backed mapping, a pointer to the struct file describing the
-  * file to be mapped, otherwise NULL.
-@@ -2508,12 +2507,12 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
+-	mm = current->mm;
++	mm = vms->mm;
+ 	mm->map_count -= vms->vma_count;
+ 	mm->locked_vm -= vms->locked_vm;
+ 	if (vms->unlock)
+@@ -1382,13 +1382,15 @@ static int vms_gather_munmap_vmas(struct vma_munmap_struct *vms,
+  * @start: The aligned start address to munmap
+  * @end: The aligned end address to munmap
+  * @uf: The userfaultfd list_head
++ * @mm: The mm struct
+  * @unlock: Unlock after the operation.  Only unlocked on success
   */
- unsigned long mmap_region(struct file *file, unsigned long addr,
- 			  unsigned long len, vm_flags_t vm_flags, unsigned long pgoff,
--			  struct list_head *uf)
-+			  struct list_head *uf, struct mm_struct *mm)
+ static void init_vma_munmap(struct vma_munmap_struct *vms,
+ 		struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 		unsigned long start, unsigned long end, struct list_head *uf,
+-		bool unlock)
++		struct mm_struct *mm, bool unlock)
  {
- 	unsigned long ret;
- 	bool writable_file_mapping = false;
++	vms->mm = mm;
+ 	vms->vmi = vmi;
+ 	vms->vma = vma;
+ 	if (vma) {
+@@ -1432,7 +1434,7 @@ int do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 	struct vma_munmap_struct vms;
+ 	int error;
  
--	mmap_assert_write_locked(current->mm);
-+	mmap_assert_write_locked(mm);
+-	init_vma_munmap(&vms, vmi, vma, start, end, uf, unlock);
++	init_vma_munmap(&vms, vmi, vma, start, end, uf, mm, unlock);
+ 	error = vms_gather_munmap_vmas(&vms, &mas_detach);
+ 	if (error)
+ 		goto gather_failed;
+@@ -2229,7 +2231,7 @@ static int __mmap_prepare(struct mmap_state *map, struct list_head *uf)
  
- 	/* Check to see if MDWE is applicable. */
- 	if (map_deny_write_exec(vm_flags, vm_flags))
-@@ -2532,13 +2531,13 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 		writable_file_mapping = true;
- 	}
+ 	/* Find the first overlapping VMA and initialise unmap state. */
+ 	vms->vma = vma_find(vmi, map->end);
+-	init_vma_munmap(vms, vmi, vms->vma, map->addr, map->end, uf,
++	init_vma_munmap(vms, vmi, vms->vma, map->addr, map->end, uf, map->mm,
+ 			/* unlock = */ false);
  
--	ret = __mmap_region(file, addr, len, vm_flags, pgoff, uf);
-+	ret = __mmap_region(file, addr, len, vm_flags, pgoff, uf, mm);
- 
- 	/* Clear our write mapping regardless of error. */
- 	if (writable_file_mapping)
- 		mapping_unmap_writable(file->f_mapping);
- 
--	validate_mm(current->mm);
-+	validate_mm(mm);
- 	return ret;
- }
- 
+ 	/* OK, we have overlapping VMAs - prepare to unmap them. */
 diff --git a/mm/vma.h b/mm/vma.h
-index a2e8710b8c47..e704f56577f3 100644
+index e704f56577f3..03d69321312d 100644
 --- a/mm/vma.h
 +++ b/mm/vma.h
-@@ -243,7 +243,7 @@ void mm_drop_all_locks(struct mm_struct *mm);
+@@ -49,6 +49,7 @@ struct vma_munmap_struct {
+ 	unsigned long exec_vm;
+ 	unsigned long stack_vm;
+ 	unsigned long data_vm;
++	struct mm_struct *mm;
+ };
  
- unsigned long mmap_region(struct file *file, unsigned long addr,
- 		unsigned long len, vm_flags_t vm_flags, unsigned long pgoff,
--		struct list_head *uf);
-+		struct list_head *uf, struct mm_struct *mm);
- 
- int do_brk_flags(struct vma_iterator *vmi, struct vm_area_struct *brkvma,
- 		 unsigned long addr, unsigned long request, unsigned long flags);
+ enum vma_merge_state {
 -- 
 2.43.5
 
