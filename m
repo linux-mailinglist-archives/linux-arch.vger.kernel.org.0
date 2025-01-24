@@ -1,66 +1,66 @@
-Return-Path: <linux-arch+bounces-9893-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9896-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40489A1BF51
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 00:58:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E059A1BF63
+	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 00:59:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C4E5163411
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2025 23:58:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FAB13AE3EE
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jan 2025 23:58:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22561EEA5D;
-	Fri, 24 Jan 2025 23:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73A111EEA2C;
+	Fri, 24 Jan 2025 23:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Mm1LIh12"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XeEkIkrW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332F11EEA2C;
-	Fri, 24 Jan 2025 23:56:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A8D1F9F52;
+	Fri, 24 Jan 2025 23:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737762980; cv=none; b=VjRNvnUDG9AD6y/Yp+1WcuY780rfohBHP4+3qY5Li0jbysL2ZtPdeLnLUbJUXGjeJgtM5fu7hZc0FqzFf2NFM7EK7tKKXtHJBroUQ+5KIoHgm4Rndna4UodeJ7lpFJDf+N91qKpTOl9GXxwSOx8Wbgz+aDx5IyN/8HVdcSMaYSI=
+	t=1737762985; cv=none; b=g8zNkWAOO7yusgIJ1kQlqToxcmFu+oxbBaY+Ig5HlAx4496tt6uHuoEpXlyBilCKfbFT5FA0QiyhD2ldJ+M/fgvJk1ipH085Hs1O/pyLEhFylOgjIhkPeEy0NVJR8H9R6NH9ViuMleR47p5xorMiKY6ygrVjN+AZDoTz/0Yl84s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737762980; c=relaxed/simple;
-	bh=lzvBO4yX3D/dD9KhQ92TR352Jq+289sMGHtFZgSsg8A=;
+	s=arc-20240116; t=1737762985; c=relaxed/simple;
+	bh=xCdkXXItEa2FHdDdBHgXXWt/ZfsvCW5Qe+7mnLT88Cs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jiOrisofpYsoqJQ+0eLR7iB3vE3zVO+TcNTTibQb53Ir0r6Bkak9Ybekcec2X5FrzEXn9YrqbQFJ5YfCYyTkkWP6/G9Ut48b8SEt5HazbGLz/1E9ge1mFf1elI3eyo5kOga1r1cidoc0UakP4ThQ2eIKChU5Q+iTQimaob7mA2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Mm1LIh12; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=dNGHjYE6K/TJBdqKBuVvKMf9B3alDmRuPCXdrlE/lqxb9vnR6RaAEVXXr0R959VAqstP0Vdzk4zoQutbiidvlS/KVodJ46T4WQPnpkyUptRrlZq8mQXQkaH4AtJvixnOBtGfPVyyiSAL6ezIgIIymMMY+L8y16COTSWBm+u4M1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=XeEkIkrW; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50OIbuNm019103;
-	Fri, 24 Jan 2025 23:55:48 GMT
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50OIeKEb031124;
+	Fri, 24 Jan 2025 23:55:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=brN5Y
-	FFSbK9qb6sU8kyqnzGs0ZV4dIdkz0Y2OGeQQDI=; b=Mm1LIh125wbmWKLr3jwj4
-	R7menthV7n7TpEZr/0aypVito0pT68YHzWA2WWLbgm9qulCEOARfgF22jhK4ghzu
-	JuFx9Tq5FDeJqPnFnV+tQfW55CPAHFNEg5nuyZD0XTE2kdsyH4gNFjFfdHuOH9ze
-	7sYTwIl4yAYK1WjO1snF2PKEEohEso8ZJ2pTjai5F6/SXKLeGDoRNdftR0fnjKV5
-	iuzXnAnoHPloNzwNDPGr1PwAmV+vfmrRujHz5+hIW2/YF2IwYvAYEi2v6xh5aP3e
-	NHyYjMFdt6qYoyOw47Z5bbiE65oHmOmMD1L48ApCP5PIAkliRqBYxIaESjoAgv/q
-	A==
+	:mime-version:references:subject:to; s=corp-2023-11-20; bh=nCdkv
+	5pMD/BW8EJZHRB98QYPFY1ik8038tE9HN9GQDQ=; b=XeEkIkrWDwXm5HtebbhBD
+	p3lABo0GMrvK4ZvGeh56K+Ji9vVwuOJ6CfP9WQgDNnIg/fylBvrEnda76gj1hlaH
+	djlWZy7JPMD3YWvJ07uS/u2FQf/WNtgihIgs+ahOJw7m476tTNkDwMXzkkvgVlMb
+	WaAhY1K9BmKIjf9cBYWQCBii9KnDOWEQ86r5Jgcb+DoKoPYGmvQzlxO/2s1/HjSE
+	2X8wi2WkZkemqVoSzjBSlGdAQCPFca5ePjZctgTNBHixFaMq6YMIwXCF0STwxFVX
+	1V8aXMFIhRqshW3vli+id7PjxsJ0s6TGm5KFe5oka0l703yelWNl+uHD03Bpstfy
+	Q==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4485qaw404-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4485nsmvn0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 24 Jan 2025 23:55:47 +0000 (GMT)
+	Fri, 24 Jan 2025 23:55:50 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50OLoFNG036500;
-	Fri, 24 Jan 2025 23:55:47 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50OMD09a036431;
+	Fri, 24 Jan 2025 23:55:50 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44917u4ag8-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 44917u4ahx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 24 Jan 2025 23:55:46 +0000
+	Fri, 24 Jan 2025 23:55:49 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50ONsxQ6018051;
-	Fri, 24 Jan 2025 23:55:45 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50ONsxQ8018051;
+	Fri, 24 Jan 2025 23:55:48 GMT
 Received: from localhost.us.oracle.com (dhcp-10-65-130-174.vpn.oracle.com [10.65.130.174])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44917u49ww-13;
-	Fri, 24 Jan 2025 23:55:45 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 44917u49ww-14;
+	Fri, 24 Jan 2025 23:55:48 +0000
 From: Anthony Yznaga <anthony.yznaga@oracle.com>
 To: akpm@linux-foundation.org, willy@infradead.org, markhemm@googlemail.com,
         viro@zeniv.linux.org.uk, david@redhat.com, khalid@kernel.org
@@ -76,9 +76,9 @@ Cc: anthony.yznaga@oracle.com, jthoughton@google.com, corbet@lwn.net,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org, mhiramat@kernel.org,
         rostedt@goodmis.org, vasily.averin@linux.dev, xhao@linux.alibaba.com,
         pcc@google.com, neilb@suse.de, maz@kernel.org
-Subject: [PATCH 12/20] mm/mshare: prepare for page table sharing support
-Date: Fri, 24 Jan 2025 15:54:46 -0800
-Message-ID: <20250124235454.84587-13-anthony.yznaga@oracle.com>
+Subject: [PATCH 13/20] x86/mm: enable page table sharing
+Date: Fri, 24 Jan 2025 15:54:47 -0800
+Message-ID: <20250124235454.84587-14-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250124235454.84587-1-anthony.yznaga@oracle.com>
 References: <20250124235454.84587-1-anthony.yznaga@oracle.com>
@@ -96,230 +96,151 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phis
  spamscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
  definitions=main-2501240162
-X-Proofpoint-GUID: np-h1M02s4XSflXejt2j3zPrBIjWPfJo
-X-Proofpoint-ORIG-GUID: np-h1M02s4XSflXejt2j3zPrBIjWPfJo
+X-Proofpoint-GUID: m7wXHyW69pLXZ8gl0E-xcyVHCx0Mq1Za
+X-Proofpoint-ORIG-GUID: m7wXHyW69pLXZ8gl0E-xcyVHCx0Mq1Za
 
-From: Khalid Aziz <khalid@kernel.org>
+Enable x86 support for handling page faults in an mshare region by
+redirecting page faults to operate on the mshare mm_struct and vmas
+contained in it.
+Some permissions checks are done using vma flags in architecture-specfic
+fault handling code so the actual vma needed to complete the handling
+is acquired before calling handle_mm_fault(). Because of this an
+ARCH_SUPPORTS_MSHARE config option is added.
 
-In preparation for enabling the handling of page faults in an mshare
-region provide a way to link an mshare shared page table to a process
-page table and otherwise find the actual vma in order to handle a page
-fault. Modify the unmap path to ensure that page tables in mshare regions
-are unlinked and kept intact when a process exits or an mshare region
-is explicitly unmapped.
-
-Signed-off-by: Khalid Aziz <khalid@kernel.org>
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 ---
- include/linux/mm.h |  6 +++++
- mm/memory.c        | 38 ++++++++++++++++++++++------
- mm/mshare.c        | 62 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 98 insertions(+), 8 deletions(-)
+ arch/Kconfig        |  3 +++
+ arch/x86/Kconfig    |  1 +
+ arch/x86/mm/fault.c | 37 ++++++++++++++++++++++++++++++++++++-
+ mm/Kconfig          |  2 +-
+ 4 files changed, 41 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1314af11596d..9889c4757f45 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1110,11 +1110,17 @@ static inline bool vma_is_anon_shmem(struct vm_area_struct *vma) { return false;
- int vma_is_stack_for_current(struct vm_area_struct *vma);
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 6682b2a53e34..32474cdcb882 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1640,6 +1640,9 @@ config HAVE_ARCH_PFN_VALID
+ config ARCH_SUPPORTS_DEBUG_PAGEALLOC
+ 	bool
  
- #ifdef CONFIG_MSHARE
-+vm_fault_t find_shared_vma(struct vm_area_struct **vma, unsigned long *addrp);
- static inline bool vma_is_mshare(const struct vm_area_struct *vma)
- {
- 	return vma->vm_flags & VM_MSHARE;
- }
- #else
-+static inline vm_fault_t find_shared_vma(struct vm_area_struct **vma, unsigned long *addrp)
-+{
-+	WARN_ON_ONCE(1);
-+	return VM_FAULT_SIGBUS;
-+}
- static inline bool vma_is_mshare(const struct vm_area_struct *vma)
- {
- 	return false;
-diff --git a/mm/memory.c b/mm/memory.c
-index 20bafbb10ea7..9374bb184a5f 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -263,7 +263,8 @@ static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
- 
- static inline void free_p4d_range(struct mmu_gather *tlb, pgd_t *pgd,
- 				unsigned long addr, unsigned long end,
--				unsigned long floor, unsigned long ceiling)
-+				unsigned long floor, unsigned long ceiling,
-+				bool shared_pud)
- {
- 	p4d_t *p4d;
- 	unsigned long next;
-@@ -275,7 +276,10 @@ static inline void free_p4d_range(struct mmu_gather *tlb, pgd_t *pgd,
- 		next = p4d_addr_end(addr, end);
- 		if (p4d_none_or_clear_bad(p4d))
- 			continue;
--		free_pud_range(tlb, p4d, addr, next, floor, ceiling);
-+		if (unlikely(shared_pud))
-+			p4d_clear(p4d);
-+		else
-+			free_pud_range(tlb, p4d, addr, next, floor, ceiling);
- 	} while (p4d++, addr = next, addr != end);
- 
- 	start &= PGDIR_MASK;
-@@ -297,9 +301,10 @@ static inline void free_p4d_range(struct mmu_gather *tlb, pgd_t *pgd,
- /*
-  * This function frees user-level page tables of a process.
-  */
--void free_pgd_range(struct mmu_gather *tlb,
-+static void __free_pgd_range(struct mmu_gather *tlb,
- 			unsigned long addr, unsigned long end,
--			unsigned long floor, unsigned long ceiling)
-+			unsigned long floor, unsigned long ceiling,
-+			bool shared_pud)
- {
- 	pgd_t *pgd;
- 	unsigned long next;
-@@ -355,10 +360,17 @@ void free_pgd_range(struct mmu_gather *tlb,
- 		next = pgd_addr_end(addr, end);
- 		if (pgd_none_or_clear_bad(pgd))
- 			continue;
--		free_p4d_range(tlb, pgd, addr, next, floor, ceiling);
-+		free_p4d_range(tlb, pgd, addr, next, floor, ceiling, shared_pud);
- 	} while (pgd++, addr = next, addr != end);
- }
- 
-+void free_pgd_range(struct mmu_gather *tlb,
-+			unsigned long addr, unsigned long end,
-+			unsigned long floor, unsigned long ceiling)
-+{
-+	__free_pgd_range(tlb, addr, end, floor, ceiling, false);
-+}
++config ARCH_SUPPORTS_MSHARE
++	bool
 +
- void free_pgtables(struct mmu_gather *tlb, struct ma_state *mas,
- 		   struct vm_area_struct *vma, unsigned long floor,
- 		   unsigned long ceiling, bool mm_wr_locked)
-@@ -395,9 +407,12 @@ void free_pgtables(struct mmu_gather *tlb, struct ma_state *mas,
+ config ARCH_SUPPORTS_PAGE_TABLE_CHECK
+ 	bool
  
- 			/*
- 			 * Optimization: gather nearby vmas into one call down
-+			 *
-+			 * Do not free the shared page tables of an mshare region.
- 			 */
- 			while (next && next->vm_start <= vma->vm_end + PMD_SIZE
--			       && !is_vm_hugetlb_page(next)) {
-+			       && !is_vm_hugetlb_page(next)
-+			       && !vma_is_mshare(next)) {
- 				vma = next;
- 				next = mas_find(mas, ceiling - 1);
- 				if (unlikely(xa_is_zero(next)))
-@@ -408,9 +423,11 @@ void free_pgtables(struct mmu_gather *tlb, struct ma_state *mas,
- 				unlink_file_vma_batch_add(&vb, vma);
- 			}
- 			unlink_file_vma_batch_final(&vb);
--			free_pgd_range(tlb, addr, vma->vm_end,
--				floor, next ? next->vm_start : ceiling);
-+			__free_pgd_range(tlb, addr, vma->vm_end,
-+				floor, next ? next->vm_start : ceiling,
-+				vma_is_mshare(vma));
- 		}
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 2e1a3e4386de..453a39098dfa 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -120,6 +120,7 @@ config X86
+ 	select ARCH_SUPPORTS_ACPI
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
++	select ARCH_SUPPORTS_MSHARE		if X86_64
+ 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
+ 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
+ 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index e6c469b323cc..4b55ade61a01 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1217,6 +1217,8 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 	struct mm_struct *mm;
+ 	vm_fault_t fault;
+ 	unsigned int flags = FAULT_FLAG_DEFAULT;
++	bool is_shared_vma;
++	unsigned long addr;
+ 
+ 	tsk = current;
+ 	mm = tsk->mm;
+@@ -1330,6 +1332,12 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 	if (!vma)
+ 		goto lock_mmap;
+ 
++	/* mshare does not support per-VMA locks yet */
++	if (vma_is_mshare(vma)) {
++		vma_end_read(vma);
++		goto lock_mmap;
++	}
 +
- 		vma = next;
- 	} while (vma);
- }
-@@ -6148,6 +6165,11 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 	if (ret)
- 		goto out;
+ 	if (unlikely(access_error(error_code, vma))) {
+ 		bad_area_access_error(regs, error_code, address, NULL, vma);
+ 		count_vm_vma_lock_event(VMA_LOCK_SUCCESS);
+@@ -1358,17 +1366,38 @@ void do_user_addr_fault(struct pt_regs *regs,
+ lock_mmap:
+ 
+ retry:
++	addr = address;
++	is_shared_vma = false;
+ 	vma = lock_mm_and_find_vma(mm, address, regs);
+ 	if (unlikely(!vma)) {
+ 		bad_area_nosemaphore(regs, error_code, address);
+ 		return;
+ 	}
  
 +	if (unlikely(vma_is_mshare(vma))) {
-+		WARN_ON_ONCE(1);
-+		return VM_FAULT_SIGBUS;
++		fault = find_shared_vma(&vma, &addr);
++
++		if (fault) {
++			mmap_read_unlock(mm);
++			goto done;
++		}
++
++		if (!vma) {
++			mmap_read_unlock(mm);
++			bad_area_nosemaphore(regs, error_code, address);
++			return;
++		}
++
++		is_shared_vma = true;
 +	}
 +
- 	if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
- 					    flags & FAULT_FLAG_INSTRUCTION,
- 					    flags & FAULT_FLAG_REMOTE)) {
-diff --git a/mm/mshare.c b/mm/mshare.c
-index 8dca4199dd01..9ada1544aeb1 100644
---- a/mm/mshare.c
-+++ b/mm/mshare.c
-@@ -42,6 +42,56 @@ static const struct mmu_notifier_ops mshare_mmu_ops = {
- 	.arch_invalidate_secondary_tlbs = mshare_invalidate_tlbs,
- };
+ 	/*
+ 	 * Ok, we have a good vm_area for this memory access, so
+ 	 * we can handle it..
+ 	 */
+ 	if (unlikely(access_error(error_code, vma))) {
++		if (unlikely(is_shared_vma))
++			mmap_read_unlock(vma->vm_mm);
+ 		bad_area_access_error(regs, error_code, address, mm, vma);
+ 		return;
+ 	}
+@@ -1386,7 +1415,11 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 	 * userland). The return to userland is identified whenever
+ 	 * FAULT_FLAG_USER|FAULT_FLAG_KILLABLE are both set in flags.
+ 	 */
+-	fault = handle_mm_fault(vma, address, flags, regs);
++	fault = handle_mm_fault(vma, addr, flags, regs);
++
++	if (unlikely(is_shared_vma) && ((fault & VM_FAULT_COMPLETED) ||
++	    (fault & VM_FAULT_RETRY) || fault_signal_pending(fault, regs)))
++		mmap_read_unlock(mm);
  
-+static p4d_t *walk_to_p4d(struct mm_struct *mm, unsigned long addr)
-+{
-+	pgd_t *pgd;
-+	p4d_t *p4d;
-+
-+	pgd = pgd_offset(mm, addr);
-+	p4d = p4d_alloc(mm, pgd, addr);
-+	if (!p4d)
-+		return NULL;
-+
-+	return p4d;
-+}
-+
-+/* Returns holding the host mm's lock for read.  Caller must release. */
-+vm_fault_t
-+find_shared_vma(struct vm_area_struct **vmap, unsigned long *addrp)
-+{
-+	struct vm_area_struct *vma, *guest = *vmap;
-+	struct mshare_data *m_data = guest->vm_private_data;
-+	struct mm_struct *host_mm = m_data->mm;
-+	unsigned long host_addr;
-+	p4d_t *p4d, *guest_p4d;
-+
-+	mmap_read_lock_nested(host_mm, SINGLE_DEPTH_NESTING);
-+	host_addr = *addrp - guest->vm_start + host_mm->mmap_base;
-+	p4d = walk_to_p4d(host_mm, host_addr);
-+	guest_p4d = walk_to_p4d(guest->vm_mm, *addrp);
-+	if (!p4d_same(*guest_p4d, *p4d)) {
-+		set_p4d(guest_p4d, *p4d);
-+		mmap_read_unlock(host_mm);
-+		return VM_FAULT_NOPAGE;
-+	}
-+
-+	*addrp = host_addr;
-+	vma = find_vma(host_mm, host_addr);
-+
-+	/* XXX: expand stack? */
-+	if (vma && vma->vm_start > host_addr)
-+		vma = NULL;
-+
-+	*vmap = vma;
-+
-+	/*
-+	 * release host mm lock unless a matching vma is found
-+	 */
-+	if (!vma)
-+		mmap_read_unlock(host_mm);
-+	return 0;
-+}
-+
- static int mshare_vm_op_split(struct vm_area_struct *vma, unsigned long addr)
- {
- 	return -EINVAL;
-@@ -53,9 +103,21 @@ static int mshare_vm_op_mprotect(struct vm_area_struct *vma, unsigned long start
- 	return -EINVAL;
- }
+ 	if (fault_signal_pending(fault, regs)) {
+ 		/*
+@@ -1414,6 +1447,8 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 		goto retry;
+ 	}
  
-+static void mshare_vm_op_unmap_page_range(struct mmu_gather *tlb,
-+				struct vm_area_struct *vma,
-+				unsigned long addr, unsigned long end,
-+				struct zap_details *details)
-+{
-+	/*
-+	 * The msharefs vma is being unmapped. Do not unmap pages in the
-+	 * mshare region itself.
-+	 */
-+}
-+
- static const struct vm_operations_struct msharefs_vm_ops = {
- 	.may_split = mshare_vm_op_split,
- 	.mprotect = mshare_vm_op_mprotect,
-+	.unmap_page_range = mshare_vm_op_unmap_page_range,
- };
++	if (unlikely(is_shared_vma))
++		mmap_read_unlock(vma->vm_mm);
+ 	mmap_read_unlock(mm);
+ done:
+ 	if (likely(!(fault & VM_FAULT_ERROR)))
+diff --git a/mm/Kconfig b/mm/Kconfig
+index ba3dbe31f86a..4fc056bb5643 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1360,7 +1360,7 @@ config PT_RECLAIM
  
- /*
+ config MSHARE
+ 	bool "Mshare"
+-	depends on MMU
++	depends on MMU && ARCH_SUPPORTS_MSHARE
+ 	help
+ 	  Enable msharefs: A ram-based filesystem that allows multiple
+ 	  processes to share page table entries for shared pages. A file
 -- 
 2.43.5
 
