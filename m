@@ -1,116 +1,113 @@
-Return-Path: <linux-arch+bounces-9904-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9905-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AFF5A1C031
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 02:24:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D04AA1C09A
+	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 04:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DA3C16D1E5
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 01:24:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50D60188ACF5
+	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 03:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D78F150980;
-	Sat, 25 Jan 2025 01:24:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813B214A62B;
+	Sat, 25 Jan 2025 03:14:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="unLAAWB2"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BSDs6y9v"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334891487DD
-	for <linux-arch@vger.kernel.org>; Sat, 25 Jan 2025 01:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 660FE41C6A;
+	Sat, 25 Jan 2025 03:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737768253; cv=none; b=sZ41W3nZU+QshcocMR6To+ueGNOpd63x08o5VU4wbeP3ILM0mu+9zgx49CXWgOH9kBCB3OUzHG61s0OB+S9HNJU9LYGS2uTnu5iph1fAxHsWpF4cit8i6y9NAR5asfAUsERERx4xyIHo08iQ/tmUOLj8naKslqrvAUOapupzcSQ=
+	t=1737774863; cv=none; b=oZk7BVnXeg8Qt9hZCfQGhlC0Qmq1VfvYvwOsvsQenvt9rVNFzfi+1t3K746HkG4buSrkVNpJeStRZGBWPmA1vUF8zMmsnQ2Ujmcyno2BtRVrNUX7QYmrC9rNt0tbD/LFBtRxG+Xs/O88JbRVNuEuAn2sP1ZTtskW63wivtV/feM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737768253; c=relaxed/simple;
-	bh=FYVfMxPYc+OFMvEkABiP1w05Cizf7xW4POCl2ZmnkxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G2NEb+/f1KQmsJaKD+laN3jOU0i0tsj/yLlTR/4iiBEs4xtdZxAn1tDZhWFmfp/39j69yorv+/z5kfjbMOvBpMyo5iOAZGUxqBejNNbj0UAthwPLeYx5PKpduTHTgdfq7ZpuzMZ0Zzs0cs4VHZ+H4AR9dSXrjQbRWeidfZYfCrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=unLAAWB2; arc=none smtp.client-ip=95.215.58.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Sat, 25 Jan 2025 01:23:54 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1737768239;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/pSbQD6T7cVkyHZaa4OI7IbTRYzdcQFCXIisyqs6sDM=;
-	b=unLAAWB20cFTyKOtxmF44nr4maB8AeQkhvOjERFWEZKOP1qB1ZW9wA8TkoaVA1GZSUFjSF
-	tbR2i3YhDxfsMGAdCkq4D5ukUiD8CNyvG8V9DBWKSOUezwkIZ0UDB3GJQpsp1rLAtVxwMd
-	ZFHNa5MFYur4wlTDVCLjuzS0gqWCJTI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jann Horn <jannh@google.com>, Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Nick Piggin <npiggin@gmail.com>, Hugh Dickins <hughd@google.com>,
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP
- vmas into free_pgtables()
-Message-ID: <Z5Q9KvugnVQv8QIO@google.com>
-References: <20250122232716.1321171-1-roman.gushchin@linux.dev>
- <20250123214531.GA969@noisy.programming.kicks-ass.net>
- <Z5LM4b2sC1fHgB3p@google.com>
- <20250124082250.GA13226@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1737774863; c=relaxed/simple;
+	bh=hXv4kAp4YbqFGX21eGRaMVPOd3yJyfAsnlnOx/Q1xwE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O0jx7UfV/ptk+RMokPe9EDmRLZH2uZzO5vZhtme+KWQCzMiaxDNSu57hckHhm7/F/I2xi9P9Yyl2XH1RCXASP9rwZvC36/x54cLTffN5R0KVrqflSURCacKYtFSDyUhNi+LlEBc1FYS5ukCi4Scne43JCR4QakiOiwx5dw3MNGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BSDs6y9v; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=LKGqliAQYfe3AJnaCi04iReaMdS/Hf0gmqHVuNgKRts=; b=BSDs6y9v4I5bElN06szPO6e4AQ
+	+V8dfXBZNRoJKzzHiP/XNBVUYCE546jZV9BfNxQOht4XhOo5dUvS4nXiHynotOubYBQgz0oIPeupA
+	V1KhCJMILZZdX4kFLHbSqWFdSTjwjrL0RzNwCk+3DgkBdH7qIYnNj+wbcD8VxiLBNrHDguW8YAqmB
+	N+rKf4CuMI13E06lIq1/bL7JVK32/sARSxKcjVZXyF3PyGBoTMNVBGFOI6G7FFiUM4lMPGTJ+URXQ
+	eW0xUlTVNZaW+e6N1MMpBtQiyljQGbv5tzp8eRj9uQTHU1x6fKjwmQ1MKsDK+EPWRKfBvMfmBKUf8
+	n/tNQLmg==;
+Received: from [50.53.2.24] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tbWcP-00000002qPI-0MmA;
+	Sat, 25 Jan 2025 03:13:57 +0000
+Message-ID: <879e64a0-f097-4bde-ae31-25a1adc30d5f@infradead.org>
+Date: Fri, 24 Jan 2025 19:13:45 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250124082250.GA13226@noisy.programming.kicks-ass.net>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/20] mm: Add msharefs filesystem
+To: Anthony Yznaga <anthony.yznaga@oracle.com>, akpm@linux-foundation.org,
+ willy@infradead.org, markhemm@googlemail.com, viro@zeniv.linux.org.uk,
+ david@redhat.com, khalid@kernel.org
+Cc: jthoughton@google.com, corbet@lwn.net, dave.hansen@intel.com,
+ kirill@shutemov.name, luto@kernel.org, brauner@kernel.org, arnd@arndb.de,
+ ebiederm@xmission.com, catalin.marinas@arm.com, mingo@redhat.com,
+ peterz@infradead.org, liam.howlett@oracle.com, lorenzo.stoakes@oracle.com,
+ vbabka@suse.cz, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
+ roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev,
+ tglx@linutronix.de, cgroups@vger.kernel.org, x86@kernel.org,
+ linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, mhiramat@kernel.org,
+ rostedt@goodmis.org, vasily.averin@linux.dev, xhao@linux.alibaba.com,
+ pcc@google.com, neilb@suse.de, maz@kernel.org
+References: <20250124235454.84587-1-anthony.yznaga@oracle.com>
+ <20250124235454.84587-2-anthony.yznaga@oracle.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250124235454.84587-2-anthony.yznaga@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 24, 2025 at 09:22:50AM +0100, Peter Zijlstra wrote:
-> On Thu, Jan 23, 2025 at 11:12:33PM +0000, Roman Gushchin wrote:
-> 
-> > > +static inline void tlb_free_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
-> > >  {
-> > >  	if (tlb->fullmm)
-> > >  		return;
-> > >  
-> > >  	/*
-> > >  	 * VM_PFNMAP is more fragile because the core mm will not track the
-> > > +	 * page mapcount -- there might not be page-frames for these PFNs
-> > > +	 * after all.
-> > > +	 *
-> > > +	 * Specifically() there is a race between munmap() and
-> > > +	 * unmap_mapping_range(), where munmap() will unlink the VMA, such
-> > > +	 * that unmap_mapping_range() will no longer observe the VMA and
-> > > +	 * no-op, without observing the TLBI, returning prematurely.
-> > > +	 *
-> > > +	 * So if we're about to unlink such a VMA, and we have pending
-> > > +	 * TLBI for such a vma, flush things now.
-> > >  	 */
-> > > +	if ((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) && tlb->vma_pfn)
-> > >  		tlb_flush_mmu_tlbonly(tlb);
-> > 
-> > Why do we need to re-check vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP) here?
-> 
-> No need, but an opportunity.
-> 
-> > In free_pgtables() we're iterating over multiple vma's. What if the first has
-> > no VM_PFNMAP set, but some other do? Idk if it's even possible, but it's not
-> > obvious that it's not possible either.
-> 
-> If we only need to flush PFN entries before unlinking PFN VMAs, then:
-> 
->  - if there are no PFNs pending (vma_pfn), we don't need to flush;
->  - if no PFN vma is being freed (vm_flags), we don't need to flush.
+Just nits:
 
-Right, but if I understand the code correctly, more than one vma can be
-freed by a single free_pgtables() invocation. Should we then check
-each vma's flags in the while loop in free_pgtables()? But then
-we're back to where we're now with multiple flushes.
 
-Do I misunderstand this?
+On 1/24/25 3:54 PM, Anthony Yznaga wrote:
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 1b501db06417..ba3dbe31f86a 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1358,6 +1358,15 @@ config PT_RECLAIM
+>  
+>  	  Note: now only empty user PTE page table pages will be reclaimed.
+>  
+> +config MSHARE
+> +	bool "Mshare"
+> +	depends on MMU
+> +	help
+> +	  Enable msharefs: A ram-based filesystem that allows multiple
 
-Thanks
+	                     RAM-based
+
+> +	  processes to share page table entries for shared pages. A file
+> +	  created on msharefs represents a shared region where all processes
+> +	  mapping that region will map objects within it with shared PTEs.
+> +	  Ioctls are used to configure and map objects into the shared region
+
+End the sentence above with a period.
+
+>  
+>  source "mm/damon/Kconfig"
+
+-- 
+~Randy
+
 
