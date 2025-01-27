@@ -1,89 +1,89 @@
-Return-Path: <linux-arch+bounces-9909-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9910-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1839EA1CF72
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2025 02:31:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F747A1CF8E
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2025 03:35:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52D09165CA3
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2025 01:31:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1F9D3A3BA5
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2025 02:34:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F86925A649;
-	Mon, 27 Jan 2025 01:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFAEF41C85;
+	Mon, 27 Jan 2025 02:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BG7Ld0Yt"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dCWHNA03"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCAFE25A63C
-	for <linux-arch@vger.kernel.org>; Mon, 27 Jan 2025 01:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4768825A654
+	for <linux-arch@vger.kernel.org>; Mon, 27 Jan 2025 02:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737941499; cv=none; b=dXBSXW3B3Q64rlc1ceTuu2nILoblQ40mQPKf43VvmxIZlai0A8GN29MDUn8KdsgQ6B6UpEng/hP13A+QxVNLZFTAHEAh0Uq7k20cKEC3baHSVHwVysXyzv/bYQjVKR0IpBTZeoW7mk1Cw6a3y58NtZi3JHVAjHM6BORc3APtY/E=
+	t=1737945295; cv=none; b=UWvKXcIqlCE+hWp58qUavWuEq3JqD1WoR5KgzSzSiN7YwQvpUZRfs2t8+vDNIF63ohO2TOHzrvQcDZ3xtfgyBVC4EcatUucqKeXYSMXUDFmS+peb9ErcPR/ZM/BDlGlOgS39YsEMM9jUUaTg6zFyAIM/NNpoPjFFp+GevvtJbpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737941499; c=relaxed/simple;
-	bh=C9oaLXpO6owfOTt2dwUE8h3tAvblW+8hazUUIkKzqu4=;
+	s=arc-20240116; t=1737945295; c=relaxed/simple;
+	bh=dC6O6GeUCt78YeHesy6iGFtCDtu8eSs5PaqWsyww2Zo=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=JSmr63xlcLd0k+Mo56JQqZOp/+DBebHp1Q/xwTNPUGQ4Ajfa9dO+c2y2GbQcuX6681CIWALosaANdgVQuYg/vo7s9oFeprb5VR4eeSK0HzTG+KqWowzxSpNN+D9KZ5HyPgjWjw/n6Iy6YkpUzYVz2Q+5w+x0IUU6NUejLbn6UB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BG7Ld0Yt; arc=none smtp.client-ip=209.85.214.172
+	 MIME-Version:Content-Type; b=DudSwPJHbLumPxvUkFdyjNFWsTNxuJwicVIFs5KUtl3DRuqBtc/m66Q9odtjiKWMMfdsKxKQuK/f6cgDc8BwXntNa/fn/zdG34Wfw4YQbNM9uCxZtrzS3ZvzD/yp/fuMOl3dqqwmnqw4b1Sv1QaKSfK33tIvOyMLGA0ahpCNkMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dCWHNA03; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-21675fd60feso86699255ad.2
-        for <linux-arch@vger.kernel.org>; Sun, 26 Jan 2025 17:31:37 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-216634dd574so45522905ad.2
+        for <linux-arch@vger.kernel.org>; Sun, 26 Jan 2025 18:34:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737941497; x=1738546297; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1737945292; x=1738550092; darn=vger.kernel.org;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=POceRtMWVWLLwpVXZyFlwaFV2xC0SiBcMp9OIByqfZ8=;
-        b=BG7Ld0YtBbudRPbCK45DhRDkzWEDC88EkET4QRjRmnem/PX5Hkhk2rXDJx0BOUn9zw
-         VzPAzdvHe0wAgwF/fjFalICsz+Yc2KTz7FTRtnTV7XshQqIHpDA4efDmsPTA+TWDFOE+
-         3d0bHozhTSRFZ6/s5/I/uGtwJ+AuI7W1RaZO4GxDHPREIh3IbHFUZSFBdXqpDfP7JRoL
-         yJmKxADzGJlqD6GV89kGI0i0sIKbm85XEcUhNRZZ46cjBMzAi2SpPzFr6bpU+7kXZozG
-         7m0XnnrZcTJYP359OG0b2LDbu7hzaV6EcC7G1jgPawq9TQiM6/hkJiJ7s5YMevTcEx3L
-         tQ8g==
+        bh=Hitrp1AjY/PBANuAUPERQVfYWmKYms3ba5pS3m1h084=;
+        b=dCWHNA03nmKEZNDTBAneA5iTED6BM+j1ikzN9HPQvLkcCATms+iYB0de+OETZTY+B0
+         fYaOF8nhU/o4ySi3VOUWao5FBZopj4/7yNVMK14/JE5id9rX6sg0y/sMU5dssAoVlyMT
+         YyAlD4dXHbl5/j7/1KY4V06bGfDBkUpyO+CXEjjHKxk147xH8nLfxZWPnpwkaAIJ3odn
+         Q2F992z9QPbWvKHmdE8jtcxjxcdA4/tLI5bEvSYEXXCJs+hKElUK/Eo90pQAbrj9Lh7O
+         o7D2mndBKbdW34fQf5nrjd9Mo8LGgtMXVD9wW1M+zUU7F8nI3jL7Cqxwt+Q8Uy3IPH0Y
+         NTtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737941497; x=1738546297;
+        d=1e100.net; s=20230601; t=1737945292; x=1738550092;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=POceRtMWVWLLwpVXZyFlwaFV2xC0SiBcMp9OIByqfZ8=;
-        b=P8jAmYM1tErQ+oi+hyg3pzCnB+cjG5h22iX0UG6dbhUYdMiDsJP0YZOQTPtm0nLOwM
-         kEWxCQB3p8qoYq1tjchc2CavJAMiSBbgVDxfFV85g2OEoztR4QvLzgH6MKx2YqkNBVDd
-         8GnrOY/FRgI10odCZKG5VYQvoa7mCNtWenZPIQzOhUZ1HnzKpbmjlFvazzFPfRUVTWfH
-         /eqfFrQhGwsysNDonbH3ZJ5fuys8r46k1DmjtX4R5isXDflimZb+xEGm2Wl06GE/yi5e
-         zeJ5HYXN9srVHljcA1V0aArWFqxNjMilu5LEeRwul91yan+dPe4vkROqLcmKqpGmCLao
-         YryQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUd2i5GoirysLHxc3nhs3z7ZFCiZLusoUFlKhFmBeCop8CYwV0dyQEkfQFe4N47iCfpBFuVTuG/f3Sw@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/UsKJ0kyNFBby7WbLaqSUM0h2ZPljsbrO19zHPR3057rCGtxY
-	He9Gxbc56uWlTFHZq1gHspJfeaBpAw2ir+UeBMcGtTndinEIz4hhbc9740Ms8A==
-X-Gm-Gg: ASbGncvK50k30kUsat3/cYRjFEmsrq9gF7EAlfMKh5cuTRhhPEb9RwgiAo4WLTnW8d+
-	9No2UqofFPztvxep0LrDlTLy8Rn0jjSq7a6TdmEnk0t7g1owThcJQBxajtpgpWIPjaHaBtJl83H
-	9+Wv7N1vh1D5XleNPltWZ5QJYJz7cFfqSMu1pb/YCzRfB6wzWDlGRRfFVsXvage8zLTC2dh2Q+P
-	rjUwPYeaz6vmjtMHgkNt29NW16ecT/XtCu5Rcma4IcJwVvW5PugxQc6W4KgaMQmx5xg8ew0FErX
-	1/ALB5ytotfsal5jPeEZjVH8F1S4gBuIkQc4rz3DpAR+uysj66JyL4wg4xX43sGK
-X-Google-Smtp-Source: AGHT+IF3nXHvDnjkTs9Lalq7+vB5ht9+80y0rjngMtsBffGQq/s/lUsmT7Sh1KnuAANnuh5JXv4mvw==
-X-Received: by 2002:a05:6a20:7f96:b0:1d9:c78f:4207 with SMTP id adf61e73a8af0-1eb2147d3f9mr58967025637.11.1737941496837;
-        Sun, 26 Jan 2025 17:31:36 -0800 (PST)
+        bh=Hitrp1AjY/PBANuAUPERQVfYWmKYms3ba5pS3m1h084=;
+        b=LRFg1FLxzMLuwAFP+2knPt3v8z+EHgb63cXXwJNNAnAuz3rIniPiZghBE6UB5w/Qus
+         B0NzUiHs6vSby3Z5gdUBwzIoh+LaBhKxgVJIMd/or1rB/ewtIDfrSipzKAou+0mafqAZ
+         +D4tXdw5eWyUS6pmIHwi6ys7nSHHL4ymJpkHejL5oE9Rl3nDEjPgi/kF0oG7le/PuB2i
+         0TNUCrq/4EnNHIwvSN8VG34eE3579aHt3Krtuq4I28fIyN2Bhfie5Puyt1dul9mEtSMu
+         yvP0pdRQfV0jGPI5synD+3bFqIMajcZk7ZVwwMUMeDm+SjLIspJrjtY9E1Rl/Jd7VpCD
+         ZPfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWU/L0VK9BhFmhhXLsdvl4mwsOHDqm1DMme5PNZ9NMoCXJbNkfZZCe9+qIe6eH/bEzXY0nZDYi9EbOP@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCZdzZY0lJ/aJobF0vIuSdB6akno0aRHDYgsCC7ma78YfrINI9
+	7eu7LymcrM6j8i3mQ+l/mfYukUHndvycLt9A6dWYS9B9ITJlfaU4dg/uPlNvEg==
+X-Gm-Gg: ASbGncsupIqEuzW1GgQ9HDL+lK3vlk0L6k58vayAUYESYo5BCEiIWX0K9yr4UYxLQ6x
+	LdhpQHxG/QRvwAQ/9zQUBZTBFslcU6JqasQdK9IN+rQ1x++ukUSg4YM42srhwhKdDqBu8XvKqlp
+	5pRIAIs8LTFNRi99xdx6dy7AAUsfQZ9lTi3IqduHcTSMzyv/g4kBsMXVvoytKcN1Ve9Uo8wZJE9
+	hHErnZlnxg6HeIwW6d64uzjfTtMQTCuljq9fOLMnQV5sWBO9kZMHD/RaRfHslyT6HXzKeLE0C1Y
+	4Ugq54qn+3DDlLCZu13gmLL6UD7EYEJiHROmyN7vqvwoyxeqi5knq2dq8ub7sFbs
+X-Google-Smtp-Source: AGHT+IGiu/swikkYWFBdEOfZ7nvltJFv4cFRPVj2396mtucRyMQnsKqob3RQxYYlmInvmFhb24glhw==
+X-Received: by 2002:a17:903:22c6:b0:205:4721:19c with SMTP id d9443c01a7336-21c355b73b2mr499638665ad.37.1737945290852;
+        Sun, 26 Jan 2025 18:34:50 -0800 (PST)
 Received: from darker.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac496cb2106sm5282233a12.67.2025.01.26.17.31.34
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da3ea3076sm52457395ad.68.2025.01.26.18.34.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jan 2025 17:31:35 -0800 (PST)
-Date: Sun, 26 Jan 2025 17:31:25 -0800 (PST)
+        Sun, 26 Jan 2025 18:34:49 -0800 (PST)
+Date: Sun, 26 Jan 2025 18:34:48 -0800 (PST)
 From: Hugh Dickins <hughd@google.com>
-To: Roman Gushchin <roman.gushchin@linux.dev>
-cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-    Hugh Dickins <hughd@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-    Jann Horn <jannh@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+To: Peter Zijlstra <peterz@infradead.org>
+cc: Hugh Dickins <hughd@google.com>, Jann Horn <jannh@google.com>, 
+    Roman Gushchin <roman.gushchin@linux.dev>, linux-kernel@vger.kernel.org, 
+    linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>, 
     Will Deacon <will@kernel.org>, 
     "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
     Nick Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP
+Subject: Re: [PATCH v2] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP
  vmas into free_pgtables()
-In-Reply-To: <32128611-60d5-147c-7e82-7b1dfbe8236b@google.com>
-Message-ID: <1e6330a1-c671-c8d0-7eab-e6b9fc7a9d2a@google.com>
-References: <20250123164358.2384447-1-roman.gushchin@linux.dev> <32128611-60d5-147c-7e82-7b1dfbe8236b@google.com>
+In-Reply-To: <20250124083139.GB13226@noisy.programming.kicks-ass.net>
+Message-ID: <d01c2d60-3901-1f66-770f-e9d12bfd89b5@google.com>
+References: <20250122232716.1321171-1-roman.gushchin@linux.dev> <20250123214531.GA969@noisy.programming.kicks-ass.net> <Z5LM4b2sC1fHgB3p@google.com> <26cd41c2-b8b6-0c1d-c36d-28f2f9f369be@google.com> <20250124083139.GB13226@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -92,133 +92,57 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 
-On Thu, 23 Jan 2025, Hugh Dickins wrote:
-> On Thu, 23 Jan 2025, Roman Gushchin wrote:
+On Fri, 24 Jan 2025, Peter Zijlstra wrote:
+> On Thu, Jan 23, 2025 at 08:42:36PM -0800, Hugh Dickins wrote:
+> > The changelog of commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush
+> > VM_PFNMAP vmas") has not helped me either.  Nor could I locate any
+> > discussion (Jann, Linus, Peter, Will?) that led up to it.
 > 
-> > Commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas")
-> > added a forced tlbflush to tlb_vma_end(), which is required to avoid a
-> > race between munmap() and unmap_mapping_range(). However it added some
-> > overhead to other paths where tlb_vma_end() is used, but vmas are not
-> > removed, e.g. madvise(MADV_DONTNEED).
-> > 
-> > Fix this by moving the tlb flush out of tlb_end_vma() into
-> > free_pgtables(), somewhat similar to the stable version of the
-> > original commit: e.g. stable commit 895428ee124a ("mm: Force TLB flush
-> > for PFNMAP mappings before unlink_file_vma()").
-> > 
-> > Note, that if tlb->fullmm is set, no flush is required, as the whole
-> > mm is about to be destroyed.
-> > 
-> > ---
-> 
-> As Liam said, thanks.
-> 
-> > 
-> > v3:
-> >   - added initialization of vma_pfn in __tlb_reset_range() (by Hugh D.)
-> > 
-> > v2:
-> >   - moved vma_pfn flag handling into tlb.h (by Peter Z.)
-> >   - added comments (by Peter Z.)
-> >   - fixed the vma_pfn flag setting (by Hugh D.)
-> > 
-> > Suggested-by: Jann Horn <jannh@google.com>
-> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Nick Piggin <npiggin@gmail.com>
-> > Cc: Hugh Dickins <hughd@google.com>
-> > Cc: linux-arch@vger.kernel.org
-> > Cc: linux-mm@kvack.org
-> > ---
-> >  include/asm-generic/tlb.h | 49 ++++++++++++++++++++++++++++-----------
-> >  mm/memory.c               |  7 ++++++
-> >  2 files changed, 42 insertions(+), 14 deletions(-)
-> 
+> Hmm, that was probably on security -- I should have those mails around
+> somewhere, I'll see if I can dig them up.
 
-I had quite a wobble on Friday, couldn't be sure of anything at all.
-But I've now spent longer, quietly thinking about this (v3) patch,
-and the various races; and with Jann's help, I do feel much more
-confident about it all today.
-
-> The code looks right to me now, but not the comments (I usually
-> prefer no comment to a wrong or difficult to get right comment).
-
-Yes, the code does look right to me now.  And although I can still quibble
-about the comments, I'd better not waste your time with that.  Let me say
-
-Acked-by: Hugh Dickins <hughd@google.com>
-
-while recognizing that this may not be the patch which goes into
-the tree, since Peter has other ideas on the naming and wording.
+That was very helpful, thank you: I've gone through a lot of confusion,
+but feeling more confident about it all today.
 
 > 
-> Except when I try to write a simple enough correct comment,
-> I find the code has to be changed, and that then suggests
-> further changes... Sigh.
+> > To me, Peter's patch looks much like yours, except wth different
+> > names and comments, plus the "vma" error you point out below.
 > 
-> (We could also go down a path of saying that all of the vma_pfn stuff
-> would be better under #fidef CONFIG_MMU_GATHER_MERGE_VMAS; but I
-> think we shall only confuse ourselves that way - it shouldn't be
-> enough to matter, so long as it does not add any extra TLB flushes.)
+> Yes, 3 differences:
 > 
-> > 
-> > diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-> > index 709830274b75..cdc95b69b91d 100644
-> > --- a/include/asm-generic/tlb.h
-> > +++ b/include/asm-generic/tlb.h
-> > @@ -380,8 +380,16 @@ static inline void __tlb_reset_range(struct mmu_gather *tlb)
-> >  	tlb->cleared_pmds = 0;
-> >  	tlb->cleared_puds = 0;
-> >  	tlb->cleared_p4ds = 0;
-> > +
-> > +	/*
-> > +	 * vma_pfn can only be set in tlb_start_vma(), so let's
-> > +	 * initialize it here. Also a tlb flush issued by
-> > +	 * tlb_flush_mmu_pfnmap() will cancel the vma_pfn state,
-> > +	 * so that unnecessary subsequent flushes are avoided.
+>  - naming;
+>  - the extra check;
+>  - the vma_pfn clearing condition.
 > 
-> No, that misses the point (or misses half of the point): the
-> tlb_flush_mmu_pfnmap() itself won't need to flush if for other reasons
-> we've done a TLB flush since the last VM_PFNMAP|VM_MIXEDMAP vma.
+> Under the assumption that this is all about those PFNs, the argument
+> (as also outlined in the email to Roman just now) is that you only need
+> to flush if both: you have pending TLBI for PFN and are indeed about to
+> unlink a PFN vma.
 > 
-> What I want to write is:
-> 	 * vma_pfn can only be set in tlb_start_vma(), so initialize it here.
-> 	 * And then any call to tlb_flush_mmu_tlbonly() will reset it again,
-> 	 * so that unnecessary subsequent flushes are avoided.
-> 
-> But once I look at tlb_flush_mmu_tlbonly(), I'm reminded that actually
-> it does nothing, if none of cleared_ptes etc. is set: so would not reset
-> vma_pfn in that case; which is okay-ish, but makes writing the comment hard.
-> 
-> So maybe tlb_flush_mmu_tlbonly() should do an explicit "tlb->vma_pfn = 0"
-> before returning early; but that then raises the question of whether it
-> would not be better just to initialize vma_pfn to 0 in __tlb_gather_mmu(),
-> not touch it in __tlb_reset_range(), but reset it to 0 at the start of
-> tlb_flush_mmu_tlbonly().
-> 
-> But it also makes me realize that tlb_flush_mmu_tlbonly() avoiding
-> __tlb_reset_range() when nothing was cleared, is not all that good:
-> because if flushing a small range is better than flushing a large range,
-> then it would be good to reset the range even when nothing was cleared
-> (though it looks stupid to reset all the fields just found 0 already).
+> If we've flushed the relevant PFNs earlier, for whatever reason,
+> batching, or the arch has !MERGE_VMAS or whatever, then we do not need
+> to flush again. So clearing vma_pfn in __tlb_reset_range() is the right
+> place.
 
-My paragraph (about the existing code, independent of your patch) looks
-nonsense to me now: if there was nothing to be cleared, then the range
-would not have been updated, so would not benefit from being reset.
+Yes, Roman moved to clearing vma_pfn in __tlb_reset_range() in his v3:
+we are all in agreement on that.
 
-It's still true that there would sometimes be an optimization in setting
-"tlb->vma_pfn = 0" in every tlb_flush_mmu_tlbonly(); but it's merely an
-optimization, for an unusual case, which you may find demands yet more
-thought than it deserves; my guess is that you will prefer not to add
-that change, and that's fine by me.
+> 
+> Similarly, if we don't ever actually free/unlink the PFN vma, we also
+> don't care.
 
-So, if you did respin and change the comment (but I don't insist), maybe:
-	 * vma_pfn can only be set in tlb_start_vma(), so initialize it here.
-	 * And then it will be reset again after any call to tlb_flush(),
-	 * so that unnecessary subsequent flushes are avoided.
+I cannot think of a case in which we arrive at free_pgtables(), but do not
+unlink the vma(s) which caused vma_pfn to be set.  If there is such a case,
+it's not worth optimizing for; and wrong to check just the first vma in the
+list (don't look only at the stable commit 895428ee124a which Roman cited -
+it had to be fixed by 891f03f688de afterwards).
+
+Personally, I prefer code inline in free_pgtables() which shows what's
+going on, as Roman did in v1, rather than struggling to devise a
+self-explanatory function name for something over there in tlb.h.
+
+But I may be in a minority on that, and his tlb_flush_mmu_pfnmap()
+is much more to the point than tlb_free_vma().
 
 Hugh
 
