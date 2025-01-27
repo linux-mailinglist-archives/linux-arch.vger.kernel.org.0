@@ -1,201 +1,224 @@
-Return-Path: <linux-arch+bounces-9908-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9909-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB542A1C53F
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 22:16:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1839EA1CF72
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2025 02:31:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEBD116553D
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Jan 2025 21:16:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52D09165CA3
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Jan 2025 01:31:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05757204583;
-	Sat, 25 Jan 2025 21:16:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F86925A649;
+	Mon, 27 Jan 2025 01:31:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PRUuz4gM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BG7Ld0Yt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AD2FC0A;
-	Sat, 25 Jan 2025 21:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCAFE25A63C
+	for <linux-arch@vger.kernel.org>; Mon, 27 Jan 2025 01:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737839793; cv=none; b=h/S2nyQOaJGg9GV+ltHIBrs3GJYUmLDxogK11XAdFEFz5zha1C21LAnCi/Na7Cq/JePhyDJnlSkYjP9h1NXLd4gWsaQ2WBTHtuYt7cf704w9lnVBBhIm/bruZHmWBD/8x5vpmNcb9bUTW49yZAqgJcrGqCgu6Ta2L0woREWYBIQ=
+	t=1737941499; cv=none; b=dXBSXW3B3Q64rlc1ceTuu2nILoblQ40mQPKf43VvmxIZlai0A8GN29MDUn8KdsgQ6B6UpEng/hP13A+QxVNLZFTAHEAh0Uq7k20cKEC3baHSVHwVysXyzv/bYQjVKR0IpBTZeoW7mk1Cw6a3y58NtZi3JHVAjHM6BORc3APtY/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737839793; c=relaxed/simple;
-	bh=SDFlf87Z4JWEowvZf5Iq5Pm0A9BrVo26wj1wJxRWjqk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OnOcaxKTpRC/TPLFLXdxBsxITRVLdJ8lvB4u4Kn6Dva7dssN52O8gecoHbN8WTOkoAjpyX0k+3ezaJPqyShKQaB3MiXIIHLw/vorHpSfESUA9/LxL9FJiDK69KczParYC0rccs+iTmREcf1P50J3GhjiMTMfe47W1Nk1hO/QbBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PRUuz4gM; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43618283d48so22640415e9.1;
-        Sat, 25 Jan 2025 13:16:31 -0800 (PST)
+	s=arc-20240116; t=1737941499; c=relaxed/simple;
+	bh=C9oaLXpO6owfOTt2dwUE8h3tAvblW+8hazUUIkKzqu4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=JSmr63xlcLd0k+Mo56JQqZOp/+DBebHp1Q/xwTNPUGQ4Ajfa9dO+c2y2GbQcuX6681CIWALosaANdgVQuYg/vo7s9oFeprb5VR4eeSK0HzTG+KqWowzxSpNN+D9KZ5HyPgjWjw/n6Iy6YkpUzYVz2Q+5w+x0IUU6NUejLbn6UB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BG7Ld0Yt; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-21675fd60feso86699255ad.2
+        for <linux-arch@vger.kernel.org>; Sun, 26 Jan 2025 17:31:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737839790; x=1738444590; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0ze29MjfXx3RmpsDYVSXrKwETuiQHNIWKeyGusIsqrg=;
-        b=PRUuz4gMG1E2wJlLvKZ0D34ufZpipp3fpt1iE9xFqym7kdGAW9hAazKprlCh39bEJT
-         Pe9ZmFxw2ZlpDgLo/hkWoz6iMa5B7OPnwCfzcSjJUSx1Pb1/wWuGnEl63nogZDtri3Mj
-         KtMdNcjxy0q1cm1o/K05NyC/9iSpO2+4xc7b7YEP/6IaZv8Myv45QeHzoH1WwzWe6XOW
-         MPioCCv4ZK+C7sM1Y0KQXlyfx0dRJoffvjCr+iwyIVCn3Qp6wd4/TJeS3AZs8WDJ21zU
-         +gIP+jD4XncnVEFBPwjNBhovTeDItlLr/I1kXFSmMXJa3mH9WoSjD8YUijHL5xruGD4Z
-         L4jg==
+        d=google.com; s=20230601; t=1737941497; x=1738546297; darn=vger.kernel.org;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=POceRtMWVWLLwpVXZyFlwaFV2xC0SiBcMp9OIByqfZ8=;
+        b=BG7Ld0YtBbudRPbCK45DhRDkzWEDC88EkET4QRjRmnem/PX5Hkhk2rXDJx0BOUn9zw
+         VzPAzdvHe0wAgwF/fjFalICsz+Yc2KTz7FTRtnTV7XshQqIHpDA4efDmsPTA+TWDFOE+
+         3d0bHozhTSRFZ6/s5/I/uGtwJ+AuI7W1RaZO4GxDHPREIh3IbHFUZSFBdXqpDfP7JRoL
+         yJmKxADzGJlqD6GV89kGI0i0sIKbm85XEcUhNRZZ46cjBMzAi2SpPzFr6bpU+7kXZozG
+         7m0XnnrZcTJYP359OG0b2LDbu7hzaV6EcC7G1jgPawq9TQiM6/hkJiJ7s5YMevTcEx3L
+         tQ8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737839790; x=1738444590;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ze29MjfXx3RmpsDYVSXrKwETuiQHNIWKeyGusIsqrg=;
-        b=ukYINQkSjZWHRK8txa0YJo8eKHQ0iR+enpT6bddv/51j05cjZIMPlpWsrn/wL3yu7c
-         Vio7p67+DEVuecMztFqvSUesyJ3T1+N2Duf+JzvePNBUN/a0V8XGnzCnmggj7RGPM9lP
-         1thZogXvfBZYTVC0GCef73Kt3AkRx/zir0lDU8HvoERNROOPOrUhhbypDXsRiAr1ICrH
-         RyL2qSyzGRMnS0fb9HFZYYa9isLnppk2ZUmsiH1FIJ2ws91k3Mf9VsAc1aRDhfDYBWIS
-         s0jCpP4mvmc/xBij5Ks73mRi64XBHmvFs4RrSV7mKMf/52bL78LLKOY6t977NfhcDVAW
-         7cXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvG6FTo4zXkR8KjdZFCVCLV/8tcug6kT4V/CU7UiuJ3iDxSoeqkk5JlkdO82vjPNo9IAKfbzOkgqxA@vger.kernel.org, AJvYcCVB3KBTCtbd/zFgBswSr9qoKV9VcIbrSF0maihp98QiQAF4j+wkdN8Eljj79K026j4wS8lpsOLJofE/iL0FJQ==@vger.kernel.org, AJvYcCW8IBF27XvwQVo48uMtxa/V/OSDx5wg1/fmZbvkqIiyzYlGXbbsr2rsIzDF5n5FE3oL4KeRFllZpNlhZKNzg75OwFUKS6DJ@vger.kernel.org, AJvYcCX8RAyfNO9dSZ/aKUP2NKqdEhMmZHnzwa8RvehldZ14oGy9H+aQiNxBDTkrgUrka6E4xUpCI/h5LWd6v7wf@vger.kernel.org, AJvYcCXPlx58JRf5zjZN5cBg3sdxezomCOfTZrf6iFE/YitwmfR5MJsCzlEMN7zJfcGUUDpKyCLkAPZwh84S@vger.kernel.org, AJvYcCXy4wC8Vsw7mUG2YCLHQzMeDbWICtPSQ4Hwkq4ppHZ7q03S3OfI3SKBuPvKDV2HZSXzZ3t5gUw55YdpGTHy@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoiQ2aF6EgXXZHOwlx4Typ8km4MGvQ0gLbuoI+vuvRe8KCGiax
-	d9viHbZHjDlfTXcSPV3Lw5tSIX9O6Xb2lzSWHvuxvMLUAMkldU2b
-X-Gm-Gg: ASbGncuW70CpBWP8jyXYTaI35NCX6PG7puFtbyQ8DgjTjDpKgIp5bLk+ERNdsCZlCEX
-	xHFBy15mGj3h5KHQ6QiTE5ZsdHvRjLftFgDQiu/f6Hs0NOAUqEu6sv/9kjo7bwY/UZxp6H/FkmM
-	6+BC7S0U4f5hYiDPQFdvHILBrEOEZnmAUYY+wwbm/q2E2jy+3C7YM/KfBSt10kTEqoKH2e/VLzh
-	DX7mPONH/xdCLUYYJLQ8SJXXp0AkGdCY4E/NJzqQgGhuUXlAQvBC/8mMyLxfaSWGX2UM73DeiqQ
-	5OIxCp6nap8ybt28kobjuStLLNlHgxwNdq1cB/VuQX/Kvmc=
-X-Google-Smtp-Source: AGHT+IELfmGSKKYpbr06m9ndT0x2MR7VyHmuIe6ybmA2w3pnO4RNREAKAULK2CdBNm2M6H6RrDIv/w==
-X-Received: by 2002:a05:600c:138a:b0:435:194:3cdf with SMTP id 5b1f17b1804b1-438914292demr321258325e9.19.1737839790030;
-        Sat, 25 Jan 2025 13:16:30 -0800 (PST)
-Received: from ?IPV6:2a02:a58:920d:7400:ab8f:6de:fa7e:730a? ([2a02:a58:920d:7400:ab8f:6de:fa7e:730a])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1c3c8csm6626617f8f.90.2025.01.25.13.16.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jan 2025 13:16:29 -0800 (PST)
-Message-ID: <91eadb0b-d898-43ca-9c10-48363e1c3e7a@gmail.com>
-Date: Sat, 25 Jan 2025 23:16:27 +0200
+        d=1e100.net; s=20230601; t=1737941497; x=1738546297;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=POceRtMWVWLLwpVXZyFlwaFV2xC0SiBcMp9OIByqfZ8=;
+        b=P8jAmYM1tErQ+oi+hyg3pzCnB+cjG5h22iX0UG6dbhUYdMiDsJP0YZOQTPtm0nLOwM
+         kEWxCQB3p8qoYq1tjchc2CavJAMiSBbgVDxfFV85g2OEoztR4QvLzgH6MKx2YqkNBVDd
+         8GnrOY/FRgI10odCZKG5VYQvoa7mCNtWenZPIQzOhUZ1HnzKpbmjlFvazzFPfRUVTWfH
+         /eqfFrQhGwsysNDonbH3ZJ5fuys8r46k1DmjtX4R5isXDflimZb+xEGm2Wl06GE/yi5e
+         zeJ5HYXN9srVHljcA1V0aArWFqxNjMilu5LEeRwul91yan+dPe4vkROqLcmKqpGmCLao
+         YryQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUd2i5GoirysLHxc3nhs3z7ZFCiZLusoUFlKhFmBeCop8CYwV0dyQEkfQFe4N47iCfpBFuVTuG/f3Sw@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/UsKJ0kyNFBby7WbLaqSUM0h2ZPljsbrO19zHPR3057rCGtxY
+	He9Gxbc56uWlTFHZq1gHspJfeaBpAw2ir+UeBMcGtTndinEIz4hhbc9740Ms8A==
+X-Gm-Gg: ASbGncvK50k30kUsat3/cYRjFEmsrq9gF7EAlfMKh5cuTRhhPEb9RwgiAo4WLTnW8d+
+	9No2UqofFPztvxep0LrDlTLy8Rn0jjSq7a6TdmEnk0t7g1owThcJQBxajtpgpWIPjaHaBtJl83H
+	9+Wv7N1vh1D5XleNPltWZ5QJYJz7cFfqSMu1pb/YCzRfB6wzWDlGRRfFVsXvage8zLTC2dh2Q+P
+	rjUwPYeaz6vmjtMHgkNt29NW16ecT/XtCu5Rcma4IcJwVvW5PugxQc6W4KgaMQmx5xg8ew0FErX
+	1/ALB5ytotfsal5jPeEZjVH8F1S4gBuIkQc4rz3DpAR+uysj66JyL4wg4xX43sGK
+X-Google-Smtp-Source: AGHT+IF3nXHvDnjkTs9Lalq7+vB5ht9+80y0rjngMtsBffGQq/s/lUsmT7Sh1KnuAANnuh5JXv4mvw==
+X-Received: by 2002:a05:6a20:7f96:b0:1d9:c78f:4207 with SMTP id adf61e73a8af0-1eb2147d3f9mr58967025637.11.1737941496837;
+        Sun, 26 Jan 2025 17:31:36 -0800 (PST)
+Received: from darker.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac496cb2106sm5282233a12.67.2025.01.26.17.31.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jan 2025 17:31:35 -0800 (PST)
+Date: Sun, 26 Jan 2025 17:31:25 -0800 (PST)
+From: Hugh Dickins <hughd@google.com>
+To: Roman Gushchin <roman.gushchin@linux.dev>
+cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+    Hugh Dickins <hughd@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+    Jann Horn <jannh@google.com>, Peter Zijlstra <peterz@infradead.org>, 
+    Will Deacon <will@kernel.org>, 
+    "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+    Nick Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP
+ vmas into free_pgtables()
+In-Reply-To: <32128611-60d5-147c-7e82-7b1dfbe8236b@google.com>
+Message-ID: <1e6330a1-c671-c8d0-7eab-e6b9fc7a9d2a@google.com>
+References: <20250123164358.2384447-1-roman.gushchin@linux.dev> <32128611-60d5-147c-7e82-7b1dfbe8236b@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/6] module: Introduce hash-based integrity checking
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
- Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
- kpcyrd <kpcyrd@archlinux.org>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
-Content-Language: en-US
-From: =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>
-In-Reply-To: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-On 1/20/25 19:44, Thomas Weißschuh wrote:
-> The current signature-based module integrity checking has some drawbacks
-> in combination with reproducible builds:
-> Either the module signing key is generated at build time, which makes
-> the build unreproducible, or a static key is used, which precludes
-> rebuilds by third parties and makes the whole build and packaging
-> process much more complicated.
-> Introduce a new mechanism to ensure only well-known modules are loaded
-> by embedding a list of hashes of all modules built as part of the full
-> kernel build into vmlinux.
+On Thu, 23 Jan 2025, Hugh Dickins wrote:
+> On Thu, 23 Jan 2025, Roman Gushchin wrote:
 > 
-> Interest has been proclaimed by NixOS, Arch Linux, Proxmox, SUSE and the
-> general reproducible builds community.
+> > Commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas")
+> > added a forced tlbflush to tlb_vma_end(), which is required to avoid a
+> > race between munmap() and unmap_mapping_range(). However it added some
+> > overhead to other paths where tlb_vma_end() is used, but vmas are not
+> > removed, e.g. madvise(MADV_DONTNEED).
+> > 
+> > Fix this by moving the tlb flush out of tlb_end_vma() into
+> > free_pgtables(), somewhat similar to the stable version of the
+> > original commit: e.g. stable commit 895428ee124a ("mm: Force TLB flush
+> > for PFNMAP mappings before unlink_file_vma()").
+> > 
+> > Note, that if tlb->fullmm is set, no flush is required, as the whole
+> > mm is about to be destroyed.
+> > 
+> > ---
 > 
-> To properly test the reproducibility in combination with CONFIG_INFO_BTF
-> another patch is needed:
-> "[PATCH bpf-next] kbuild, bpf: Enable reproducible BTF generation" [0]
-> (If you happen to test that one, please give some feedback)
+> As Liam said, thanks.
 > 
-> Questions for current patch:
-> * Naming
-> * Can the number of built-in modules be retrieved while building
->    kernel/module/hashes.o? This would remove the need for the
->    preallocation step in link-vmlinux.sh.
+> > 
+> > v3:
+> >   - added initialization of vma_pfn in __tlb_reset_range() (by Hugh D.)
+> > 
+> > v2:
+> >   - moved vma_pfn flag handling into tlb.h (by Peter Z.)
+> >   - added comments (by Peter Z.)
+> >   - fixed the vma_pfn flag setting (by Hugh D.)
+> > 
+> > Suggested-by: Jann Horn <jannh@google.com>
+> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: Nick Piggin <npiggin@gmail.com>
+> > Cc: Hugh Dickins <hughd@google.com>
+> > Cc: linux-arch@vger.kernel.org
+> > Cc: linux-mm@kvack.org
+> > ---
+> >  include/asm-generic/tlb.h | 49 ++++++++++++++++++++++++++++-----------
+> >  mm/memory.c               |  7 ++++++
+> >  2 files changed, 42 insertions(+), 14 deletions(-)
 > 
-> Further improvements:
-> * Use a LSM/IMA/Keyring to store and validate hashes
-> * Use MODULE_SIG_HASH for configuration
-> * UAPI for discovery?
-> 
-> [0] https://lore.kernel.org/lkml/20241211-pahole-reproducible-v1-1-22feae19bad9@weissschuh.net/
 
-Hello,
+I had quite a wobble on Friday, couldn't be sure of anything at all.
+But I've now spent longer, quietly thinking about this (v3) patch,
+and the various races; and with Jann's help, I do feel much more
+confident about it all today.
 
-Thank you for your work on helping to enable kernel lockdown coupled 
-with reproducible builds.
+> The code looks right to me now, but not the comments (I usually
+> prefer no comment to a wrong or difficult to get right comment).
 
-This may be out scope for this patch series, however I think it is worth 
-considering: How does one include hashes of modules that have not been 
-built as part of the kernel into the array? For example a DKMS module or 
-NVIDIA driver?
+Yes, the code does look right to me now.  And although I can still quibble
+about the comments, I'd better not waste your time with that.  Let me say
 
-A solution that may be worth considering would be to include a list of 
-modules hashes into the kernel command-line. It may be even worth 
-considering keeping a dynamic array of hashes that can be locked at a 
-given point in time?
+Acked-by: Hugh Dickins <hughd@google.com>
 
-All the best,
-Mihai
+while recognizing that this may not be the patch which goes into
+the tree, since Peter has other ideas on the naming and wording.
 
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
-> Changes in v2:
-> - Drop RFC state
-> - Mention interested parties in cover letter
-> - Expand Kconfig description
-> - Add compatibility with CONFIG_MODULE_SIG
-> - Parallelize module-hashes.sh
-> - Update Documentation/kbuild/reproducible-builds.rst
-> - Link to v1: https://lore.kernel.org/r/20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net
+> Except when I try to write a simple enough correct comment,
+> I find the code has to be changed, and that then suggests
+> further changes... Sigh.
 > 
-> ---
-> Thomas Weißschuh (6):
->        kbuild: add stamp file for vmlinux BTF data
->        module: Make module loading policy usable without MODULE_SIG
->        module: Move integrity checks into dedicated function
->        module: Move lockdown check into generic module loader
->        lockdown: Make the relationship to MODULE_SIG a dependency
->        module: Introduce hash-based integrity checking
+> (We could also go down a path of saying that all of the vma_pfn stuff
+> would be better under #fidef CONFIG_MMU_GATHER_MERGE_VMAS; but I
+> think we shall only confuse ourselves that way - it shouldn't be
+> enough to matter, so long as it does not add any extra TLB flushes.)
 > 
->   .gitignore                                   |  1 +
->   Documentation/kbuild/reproducible-builds.rst |  5 ++-
->   Makefile                                     |  8 ++++-
->   include/asm-generic/vmlinux.lds.h            | 11 ++++++
->   include/linux/module.h                       |  8 ++---
->   include/linux/module_hashes.h                | 17 +++++++++
->   kernel/module/Kconfig                        | 21 ++++++++++-
->   kernel/module/Makefile                       |  1 +
->   kernel/module/hashes.c                       | 52 +++++++++++++++++++++++++++
->   kernel/module/internal.h                     |  8 +----
->   kernel/module/main.c                         | 54 +++++++++++++++++++++++++---
->   kernel/module/signing.c                      | 24 +------------
->   scripts/Makefile.modfinal                    | 10 ++++--
->   scripts/Makefile.vmlinux                     |  5 +++
->   scripts/link-vmlinux.sh                      | 31 +++++++++++++++-
->   scripts/module-hashes.sh                     | 26 ++++++++++++++
->   security/lockdown/Kconfig                    |  2 +-
->   17 files changed, 238 insertions(+), 46 deletions(-)
-> ---
-> base-commit: 2cd5917560a84d69dd6128b640d7a68406ff019b
-> change-id: 20241225-module-hashes-7a50a7cc2a30
+> > 
+> > diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+> > index 709830274b75..cdc95b69b91d 100644
+> > --- a/include/asm-generic/tlb.h
+> > +++ b/include/asm-generic/tlb.h
+> > @@ -380,8 +380,16 @@ static inline void __tlb_reset_range(struct mmu_gather *tlb)
+> >  	tlb->cleared_pmds = 0;
+> >  	tlb->cleared_puds = 0;
+> >  	tlb->cleared_p4ds = 0;
+> > +
+> > +	/*
+> > +	 * vma_pfn can only be set in tlb_start_vma(), so let's
+> > +	 * initialize it here. Also a tlb flush issued by
+> > +	 * tlb_flush_mmu_pfnmap() will cancel the vma_pfn state,
+> > +	 * so that unnecessary subsequent flushes are avoided.
 > 
-> Best regards,
+> No, that misses the point (or misses half of the point): the
+> tlb_flush_mmu_pfnmap() itself won't need to flush if for other reasons
+> we've done a TLB flush since the last VM_PFNMAP|VM_MIXEDMAP vma.
+> 
+> What I want to write is:
+> 	 * vma_pfn can only be set in tlb_start_vma(), so initialize it here.
+> 	 * And then any call to tlb_flush_mmu_tlbonly() will reset it again,
+> 	 * so that unnecessary subsequent flushes are avoided.
+> 
+> But once I look at tlb_flush_mmu_tlbonly(), I'm reminded that actually
+> it does nothing, if none of cleared_ptes etc. is set: so would not reset
+> vma_pfn in that case; which is okay-ish, but makes writing the comment hard.
+> 
+> So maybe tlb_flush_mmu_tlbonly() should do an explicit "tlb->vma_pfn = 0"
+> before returning early; but that then raises the question of whether it
+> would not be better just to initialize vma_pfn to 0 in __tlb_gather_mmu(),
+> not touch it in __tlb_reset_range(), but reset it to 0 at the start of
+> tlb_flush_mmu_tlbonly().
+> 
+> But it also makes me realize that tlb_flush_mmu_tlbonly() avoiding
+> __tlb_reset_range() when nothing was cleared, is not all that good:
+> because if flushing a small range is better than flushing a large range,
+> then it would be good to reset the range even when nothing was cleared
+> (though it looks stupid to reset all the fields just found 0 already).
 
+My paragraph (about the existing code, independent of your patch) looks
+nonsense to me now: if there was nothing to be cleared, then the range
+would not have been updated, so would not benefit from being reset.
+
+It's still true that there would sometimes be an optimization in setting
+"tlb->vma_pfn = 0" in every tlb_flush_mmu_tlbonly(); but it's merely an
+optimization, for an unusual case, which you may find demands yet more
+thought than it deserves; my guess is that you will prefer not to add
+that change, and that's fine by me.
+
+So, if you did respin and change the comment (but I don't insist), maybe:
+	 * vma_pfn can only be set in tlb_start_vma(), so initialize it here.
+	 * And then it will be reset again after any call to tlb_flush(),
+	 * so that unnecessary subsequent flushes are avoided.
+
+Hugh
 
