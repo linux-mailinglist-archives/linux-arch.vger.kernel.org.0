@@ -1,87 +1,88 @@
-Return-Path: <linux-arch+bounces-9934-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9935-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D786A20736
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2025 10:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9239EA20764
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2025 10:37:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACE9B3A2330
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2025 09:21:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0A893A3FA5
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2025 09:37:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 731801DFD9A;
-	Tue, 28 Jan 2025 09:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCE8A199385;
+	Tue, 28 Jan 2025 09:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="STYX81fj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LF7mAiDr"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFC1198831
-	for <linux-arch@vger.kernel.org>; Tue, 28 Jan 2025 09:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D411148314
+	for <linux-arch@vger.kernel.org>; Tue, 28 Jan 2025 09:37:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738056095; cv=none; b=iAibpSke2+FWJbi4TPVzrBVXHM6SqFVo/glAa1fdjeQVpg4WNnX3TpGC23bdkywIx3RNaRlE2kC6otu2OW5Pg2/BhDYNBHdQkJ+BbwYS5M5clOnGHcVpDz5vRRZqhYNo9Ye+2mlvn9qrNfF+CEPoMx+pCQM0h9pCt7cXqItw3nQ=
+	t=1738057028; cv=none; b=Q4AXSjB++ZzfuWd646wCSHgzpeNIF9l2AteFMdyfPsWKkzAv1zdkkD3w1YUQ4rrzwFWoqNdvfiyI0q3mwjrGhlJgk2pT9DXsjGy4xbr4NYAtJ4iooe5seXqKXDQjbZxS6SjaIbnjnEM9YQocGdNW7fnL1fK4ZTwM39hM6UkPTJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738056095; c=relaxed/simple;
-	bh=mCmXjknTtIcjFJNty5WDJ3v8zj9pwJsL4dbbEBENa9w=;
+	s=arc-20240116; t=1738057028; c=relaxed/simple;
+	bh=uy/ODYMoI/6Ndd4T/4RpDF1O+qMkosDwU+nvXDqFSm4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HpSU9IDHMUgoYvfJPs771rV9N8Dute87POMPCM2nvfF3jN27CfLZcr3DRBz9V85sp+45bqavdcCduFti1DX3UB2oM2LRVcK+tOTe/6CnUxD9XJa/5MilRBf+Tj/EndkPX/CxcPlCvDSYign90NGuff0b7FDSgBHtF3RLqYTgpLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=STYX81fj; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=DRPRHcc+3vQzxHxp2F5enFcP3PVKDH2OUSnW9STNrBzDj+TdQYPieohSC1Ho8w861Zn0aUXyTjAg8+SP2J52AmKeUHCTxUSDkbw9ENaU9HGF94H/PVFLOlptAf6gZk81njIYIiYHt0wvXFxNcH6Xdiq28GMkbFjlhpSTu8QyrpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LF7mAiDr; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738056092;
+	s=mimecast20190719; t=1738057026;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=76CON/o+ODpZ363mQWv962ci7akBJ4jlp9OpVn0R1FU=;
-	b=STYX81fjg0DTH6g+VVyEHD8vKz+YGFpJkRG4jXEX5ph11QMnEn8liV4R4TolNCi8v0nx/U
-	HoVhqmdGb681aCekZaPq13dKsnAwrFM/jtJABRIHzC54TAhAqCNm6ZnjazEnm4V6S2k44U
-	QF4itQ56Nt/bIAnL/twFWy+lY5CDXNk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=kAwdFO2bf4WpnGkRmuAl6Musz+Y82R50ExvkyEscsL4=;
+	b=LF7mAiDrb2eOLCM/DZ+HDhwFyQxtbALYvLRzZIM/7E4TaxRbql38ygaAscGWniqA2cVqhi
+	ioKBnD7od3RaH4Lwy60KydKqWnYSwLhIGfMpCSUQgC9kK0VoLtTVqdHxcuqeLdj7F8Auvn
+	+EbMkZnmW46A9kv3TsQiq7l6KSN9UGU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-452-3F28RNyyPYmG8pvZNhuRhQ-1; Tue, 28 Jan 2025 04:21:29 -0500
-X-MC-Unique: 3F28RNyyPYmG8pvZNhuRhQ-1
-X-Mimecast-MFC-AGG-ID: 3F28RNyyPYmG8pvZNhuRhQ
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4359206e1e4so40985575e9.2
-        for <linux-arch@vger.kernel.org>; Tue, 28 Jan 2025 01:21:29 -0800 (PST)
+ us-mta-346-ChAnR6AgP0OQNkbxQI7iew-1; Tue, 28 Jan 2025 04:37:03 -0500
+X-MC-Unique: ChAnR6AgP0OQNkbxQI7iew-1
+X-Mimecast-MFC-AGG-ID: ChAnR6AgP0OQNkbxQI7iew
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-385e03f54d0so2140105f8f.3
+        for <linux-arch@vger.kernel.org>; Tue, 28 Jan 2025 01:37:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738056088; x=1738660888;
+        d=1e100.net; s=20230601; t=1738057022; x=1738661822;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=76CON/o+ODpZ363mQWv962ci7akBJ4jlp9OpVn0R1FU=;
-        b=XypnHeczkUa1w9i9liDU1d3j17w3fFm0o+w5PPXtyPSkapctRphauSKLjOAqsXEH6G
-         wMHC/gWuLG6Br2AMoe5WEXrTnfGpntbcfdoDzxUeDi1BXfvQ5yhlr/tHQ8U/+mNa+s8t
-         dTGvyrwJZqX0/WMi+gG54C/ejnLfOU5XZ1S0yTFHoQJl40Erz3A7mzgZDdIyhImDyLI9
-         cRdpddfCh9OzN6KVKHezHEU4xzmkil4Z/mCrW4dqkzpuzKQKwIoFESNo1q4eVPZuk3QX
-         hOjboapYHk0OuqDEr8yRRNpAcX8URy4cB48nwesewGbnL9Znrwexn59+jphyfUJpkkt4
-         GNtw==
-X-Forwarded-Encrypted: i=1; AJvYcCXuFAD6BtHSESRQdbM7HysLAcTsZMQLiqBta1LW9PegsbU6UM64y+I43c4hywYl2dsefkFPY23VliPP@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCa5j8UNyvaqbXVSU5l8LLf/70+zlIsYBPc56n9pUFS8PQAKc0
-	RFWjvCLYGN6LEcx0bfRaLjD+AcxpHXqsC//lyyero7j+Ax7tJ6w3rWKcKizo8N/I8Y2gleymJ/o
-	5ISwJSvzb8TWYGljlxvlFIp4Q2pB8YRNoskAJjJF9vFRuV7UVp4sC7eolHWs=
-X-Gm-Gg: ASbGncvP6yKF3rMOANZmhaC4agFYHDDLkrPBqsK/aDsVmznLH10QjWXx2tU4C5Um2kc
-	hZLJojPa6VZgZ6IkyGNFSmeU9ukqjgwZ1aSmRyUtNdEV7/BW/Hj+bLGy8Hu1UTUUXkD2Vc6trt0
-	9rimFzBJpz5aVCr4moGqOJIMKLeecdeBeotW5UTdABbFwaAyn4TG3YX8ogu2FgOi5Avf2fQW/Mb
-	sISTAq4ragxymttwrDHbjK1eU3BAZJSLqCCR5AC+a4lRLRTEuX7p5CO0d2IilYXmaYGJ6bSecWi
-	JklhzN2K3Ip8O7Ro1TDTsgj8BoO2BT344A==
-X-Received: by 2002:a05:6000:4011:b0:38a:4184:152a with SMTP id ffacd0b85a97d-38bf5669eb5mr44324575f8f.28.1738056087971;
-        Tue, 28 Jan 2025 01:21:27 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGvImmYvqk0afzoCeet3qVIqUfCCKPU1AYvRvME2bm0F6aJ80CkP/sZ5UP4Ft2i7kCCjB+S0Q==
-X-Received: by 2002:a05:6000:4011:b0:38a:4184:152a with SMTP id ffacd0b85a97d-38bf5669eb5mr44324508f8f.28.1738056087489;
-        Tue, 28 Jan 2025 01:21:27 -0800 (PST)
-Received: from [192.168.3.141] (p5b0c6662.dip0.t-ipconnect.de. [91.12.102.98])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1c4006sm13707156f8f.94.2025.01.28.01.21.23
+        bh=kAwdFO2bf4WpnGkRmuAl6Musz+Y82R50ExvkyEscsL4=;
+        b=NL5FBFklFamT2maxHA03Ml0lZWTbTj0bEd5Pb7VXeFbL1eYPU6Rxqtsk8WkL6eecPj
+         PKAPMcYHrNxobYMkrHOEQjgKkocc5XHfQhopP/qdtvfktKSTRxL2+iCNJ00T6wmhivl2
+         UFKXW9nFRp2xBcPh1+BRC8is07tmiVIBSHyu6b579RW/3LAnDTopG5c5Qc4SRymPh5/4
+         Zaw3HkEpFFhDoQz5LzawjGrCheeYhRaR+vCWnPRfsZat2+8yB3n0a90PQ23LUdo7EdEu
+         lTWj1uDSJ556TqwdTlpPVG1v1i4rdzjm28iCzIYyNQQ15SXlzCw0QusDaWg23HmurwM3
+         qvDg==
+X-Forwarded-Encrypted: i=1; AJvYcCV7We+veFaF9quDCczzUt1rLVQO/fNb892efkIFsDIed0NvOoG8NtxODR8km0vLlt5fUMeG2RKEU5Rb@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhHI6VbPn/ZDNvc+8LKz10BCrAnhfa6UIOJOGirEk5sIYbzq3z
+	watsOjDX7J54xY/9+a+dxep7aIxRVailPfURthhgTVXovbDNy8MeMlYnsP59Tjd8Q58OK65drb9
+	ejlLpvTaEkzU/zTfvoW8+gc0aKvT6i13C7Z2dAqlBlqhBio4jjm8xi1Xg/Os=
+X-Gm-Gg: ASbGncvV70u0V8TYZEex11GdjKL8S1Ev7N3UEWbEIMoBg/DJkHX7NeOWKR4w8zlx5vH
+	ayP6BP6WoicrV84k4djMWmeMjIEYittCnXJcs60yToYvnzb0bx0bgBIly1DzxH5XnjIOS5W//i1
+	2eU599+D7zReAA17T0UvM9v4h95i0alSXMlZpNlgIE4jaYHe7sduuJdIbZKL8wthSfNwuWKYiks
+	18WjM9zWJUIvcbB/qEa7R9GdGgvbkAgxPbl5HUK5l4Nwy4GGDEnVTJDnSZHS8YX/NwMnEmYCsWt
+	6mvkktHGVqxA2kqFqeFcxYUCTCsVZxm4WiQiKNHj8iYPzJl73WO9aFXHF9/79TlJ7nrV5911EyQ
+	2FqJ47Xham29hunfr+4uCfMq006dGK2N1
+X-Received: by 2002:a5d:4243:0:b0:386:2a3b:8aa with SMTP id ffacd0b85a97d-38bf57b3f56mr27286047f8f.37.1738057022519;
+        Tue, 28 Jan 2025 01:37:02 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHRbY/8dA2OVgaLcPdTrF4WjHj0tODpFOjXegLLTi7SabhIcsFMtsDARIuViWuL9zRaarVyuw==
+X-Received: by 2002:a5d:4243:0:b0:386:2a3b:8aa with SMTP id ffacd0b85a97d-38bf57b3f56mr27286001f8f.37.1738057022128;
+        Tue, 28 Jan 2025 01:37:02 -0800 (PST)
+Received: from ?IPV6:2003:cb:c73f:ce00:1be7:6d7f:3cc3:563d? (p200300cbc73fce001be76d7f3cc3563d.dip0.t-ipconnect.de. [2003:cb:c73f:ce00:1be7:6d7f:3cc3:563d])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1c4161sm13337357f8f.88.2025.01.28.01.36.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jan 2025 01:21:26 -0800 (PST)
-Message-ID: <c8e2e374-3ce9-45c9-8ae8-7e31fd084e57@redhat.com>
-Date: Tue, 28 Jan 2025 10:21:23 +0100
+        Tue, 28 Jan 2025 01:37:01 -0800 (PST)
+Message-ID: <404b500a-4a28-4a8a-a0f5-3c96c397be0b@redhat.com>
+Date: Tue, 28 Jan 2025 10:36:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -90,15 +91,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 00/20] Add support for shared PTEs across processes
-To: Andrew Morton <akpm@linux-foundation.org>,
- Anthony Yznaga <anthony.yznaga@oracle.com>
-Cc: willy@infradead.org, markhemm@googlemail.com, viro@zeniv.linux.org.uk,
- khalid@kernel.org, jthoughton@google.com, corbet@lwn.net,
- dave.hansen@intel.com, kirill@shutemov.name, luto@kernel.org,
- brauner@kernel.org, arnd@arndb.de, ebiederm@xmission.com,
- catalin.marinas@arm.com, mingo@redhat.com, peterz@infradead.org,
- liam.howlett@oracle.com, lorenzo.stoakes@oracle.com, vbabka@suse.cz,
- jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
+To: Anthony Yznaga <anthony.yznaga@oracle.com>, akpm@linux-foundation.org,
+ willy@infradead.org, markhemm@googlemail.com, viro@zeniv.linux.org.uk,
+ khalid@kernel.org
+Cc: jthoughton@google.com, corbet@lwn.net, dave.hansen@intel.com,
+ kirill@shutemov.name, luto@kernel.org, brauner@kernel.org, arnd@arndb.de,
+ ebiederm@xmission.com, catalin.marinas@arm.com, mingo@redhat.com,
+ peterz@infradead.org, liam.howlett@oracle.com, lorenzo.stoakes@oracle.com,
+ vbabka@suse.cz, jannh@google.com, hannes@cmpxchg.org, mhocko@kernel.org,
  roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev,
  tglx@linutronix.de, cgroups@vger.kernel.org, x86@kernel.org,
  linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -106,7 +106,6 @@ Cc: willy@infradead.org, markhemm@googlemail.com, viro@zeniv.linux.org.uk,
  rostedt@goodmis.org, vasily.averin@linux.dev, xhao@linux.alibaba.com,
  pcc@google.com, neilb@suse.de, maz@kernel.org
 References: <20250124235454.84587-1-anthony.yznaga@oracle.com>
- <20250127143339.b1f6b6d5586f319762c5e516@linux-foundation.org>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -154,76 +153,115 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250127143339.b1f6b6d5586f319762c5e516@linux-foundation.org>
+In-Reply-To: <20250124235454.84587-1-anthony.yznaga@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 27.01.25 23:33, Andrew Morton wrote:
-> On Fri, 24 Jan 2025 15:54:34 -0800 Anthony Yznaga <anthony.yznaga@oracle.com> wrote:
+> API
+> ===
 > 
->> Memory pages shared between processes require page table entries
->> (PTEs) for each process. Each of these PTEs consume some of
->> the memory and as long as the number of mappings being maintained
->> is small enough, this space consumed by page tables is not
->> objectionable. When very few memory pages are shared between
->> processes, the number of PTEs to maintain is mostly constrained by
->> the number of pages of memory on the system. As the number of shared
->> pages and the number of times pages are shared goes up, amount of
->> memory consumed by page tables starts to become significant. This
->> issue does not apply to threads. Any number of threads can share the
->> same pages inside a process while sharing the same PTEs. Extending
->> this same model to sharing pages across processes can eliminate this
->> issue for sharing across processes as well.
->>
->> ...
->>
->> API
->> ===
->>
->> mshare does not introduce a new API. It instead uses existing APIs
->> to implement page table sharing. The steps to use this feature are:
->>
->> 1. Mount msharefs on /sys/fs/mshare -
->>          mount -t msharefs msharefs /sys/fs/mshare
->>
->> 2. mshare regions have alignment and size requirements. Start
->>     address for the region must be aligned to an address boundary and
->>     be a multiple of fixed size. This alignment and size requirement
->>     can be obtained by reading the file /sys/fs/mshare/mshare_info
->>     which returns a number in text format. mshare regions must be
->>     aligned to this boundary and be a multiple of this size.
->>
->> 3. For the process creating an mshare region:
->>          a. Create a file on /sys/fs/mshare, for example -
->>                  fd = open("/sys/fs/mshare/shareme",
->>                                  O_RDWR|O_CREAT|O_EXCL, 0600);
->>
->>          b. Establish the starting address and size of the region
->>                  struct mshare_info minfo;
->>
->>                  minfo.start = TB(2);
->>                  minfo.size = BUFFER_SIZE;
->>                  ioctl(fd, MSHAREFS_SET_SIZE, &minfo)
- >>>>          c. Map some memory in the region
->>                  struct mshare_create mcreate;
->>
->>                  mcreate.addr = TB(2);
- >>                  mcreate.size = BUFFER_SIZE;>> 
-mcreate.offset = 0;
->>                  mcreate.prot = PROT_READ | PROT_WRITE;
->>                  mcreate.flags = MAP_ANONYMOUS | MAP_SHARED | MAP_FIXED;
->>                  mcreate.fd = -1;
->>
->>                  ioctl(fd, MSHAREFS_CREATE_MAPPING, &mcreate)
+> mshare does not introduce a new API. It instead uses existing APIs
+> to implement page table sharing. The steps to use this feature are:
 > 
-> I'm not really understanding why step a exists.  It's basically an
-> mmap() so why can't this be done within step d?
+> 1. Mount msharefs on /sys/fs/mshare -
+>          mount -t msharefs msharefs /sys/fs/mshare
+> 
+> 2. mshare regions have alignment and size requirements. Start
+>     address for the region must be aligned to an address boundary and
+>     be a multiple of fixed size. This alignment and size requirement
+>     can be obtained by reading the file /sys/fs/mshare/mshare_info
+>     which returns a number in text format. mshare regions must be
+>     aligned to this boundary and be a multiple of this size.
+> 
+> 3. For the process creating an mshare region:
+>          a. Create a file on /sys/fs/mshare, for example -
+>                  fd = open("/sys/fs/mshare/shareme",
+>                                  O_RDWR|O_CREAT|O_EXCL, 0600);
+> 
+>          b. Establish the starting address and size of the region
+>                  struct mshare_info minfo;
+> 
+>                  minfo.start = TB(2);
+>                  minfo.size = BUFFER_SIZE;
+>                  ioctl(fd, MSHAREFS_SET_SIZE, &minfo)
 
-Conceptually, it's defining the content of the virtual file: by creating 
-mappings/unmapping mappings/changing mappings. Some applications will 
-require multiple different mappings in such a virtual file.
+We could set the size using ftruncate, just like for any other file. It 
+would have to be the first thing after creating the file, and before we 
+allow any other modifications.
 
-Processes mmap the resulting virtual file.
+Idealy, we'd be able to get rid of the "start", use something resaonable 
+(e.g., TB(2)) internally, and allow processes to mmap() it at different 
+(suitably-aligned) addresses.
+
+I recall we discussed that in the past. Did you stumble over real 
+blockers such that we really must mmap() the file at the same address in 
+all processes? I recall some things around TLB flushing, but not sure. 
+So we might have to stick to an mmap address for now.
+
+When using fallocate/stat to set/query the file size, we could end up with:
+
+/*
+  * Set the address where this file can be mapped into processes. Other
+  * addresses are not supported for now, and mmap will fail. Changing the
+  * mmap address after mappings were already created is not supported.
+  */
+MSHAREFS_SET_MMAP_ADDRESS
+MSHAREFS_GET_MMAP_ADDRESS
+
+
+> 
+>          c. Map some memory in the region
+>                  struct mshare_create mcreate;
+> 
+>                  mcreate.addr = TB(2);
+
+Can we use the offset into the virtual file instead? We should be able 
+to perform that translation internally fairly easily I assume.
+
+>                  mcreate.size = BUFFER_SIZE;
+>                  mcreate.offset = 0;
+>                  mcreate.prot = PROT_READ | PROT_WRITE;
+>                  mcreate.flags = MAP_ANONYMOUS | MAP_SHARED | MAP_FIXED;
+>                  mcreate.fd = -1;
+> 
+>                  ioctl(fd, MSHAREFS_CREATE_MAPPING, &mcreate)
+
+Would examples with multiple mappings work already in this version?
+
+Did you experiment with other mappings (e.g., ordinary shared file 
+mappings), and what are the blockers to make that fly?
+
+> 
+>          d. Map the mshare region into the process
+>                  mmap((void *)TB(2), BUF_SIZE, PROT_READ | PROT_WRITE,
+>                          MAP_SHARED, fd, 0);
+> 
+>          e. Write and read to mshared region normally.
+> 
+> 4. For processes attaching an mshare region:
+>          a. Open the file on msharefs, for example -
+>                  fd = open("/sys/fs/mshare/shareme", O_RDWR);
+> 
+>          b. Get information about mshare'd region from the file:
+>                  struct mshare_info minfo;
+> 
+>                  ioctl(fd, MSHAREFS_GET_SIZE, &minfo);
+> 
+>          c. Map the mshare'd region into the process
+>                  mmap(minfo.start, minfo.size,
+>                          PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+> 
+> 5. To delete the mshare region -
+>                  unlink("/sys/fs/mshare/shareme");
+> 
+
+I recall discussions around cgroup accounting, OOM handling etc. I 
+thought the conclusion was that we need an "mshare process" where the 
+memory is accounted to, and once that process is killed (e.g., OOM), it 
+must tear down all mappings/pages etc.
+
+How does your design currently look like in that regard? E.g., how can 
+OOM handling make progress, how is cgroup accounting handled?
 
 -- 
 Cheers,
