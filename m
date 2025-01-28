@@ -1,260 +1,387 @@
-Return-Path: <linux-arch+bounces-9943-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9944-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAC5AA211CD
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2025 19:46:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2AA0A21250
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2025 20:42:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEB273A1CB8
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2025 18:46:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 418451674EA
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jan 2025 19:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99E31DDC1D;
-	Tue, 28 Jan 2025 18:46:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B4151DF96C;
+	Tue, 28 Jan 2025 19:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="p2LJM3Yi"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ml+nYzqD";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="usRGI80z"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2014.outbound.protection.outlook.com [40.92.19.14])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2E5BA27;
-	Tue, 28 Jan 2025 18:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.19.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB4322619;
+	Tue, 28 Jan 2025 19:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738090007; cv=fail; b=JonGf1fbRJ7y4ZN7Ud1ffOc3a0BtVcWxgkTdxAhUpb4gpvMammCil2O6AH9SkjS+JQVawRpYDnFI9WwUFgyO7ZBr+FcXtQwWgD1OnIG1Y4a9v4WACA9+QrSMOeK6f/XrUw3BYsFZXrnDqSqUtmOAlRg6WIyLGDUPu9y/NOmqbbs=
+	t=1738093316; cv=fail; b=KwApF4Fuwcpk8ETFAHezEJ/vtQ/ShOEO4vPDyYKuaxr/EnudrzGLiVyGtRBmjBNKBFb+ilBScDj9FU4y/S4ek98S4ai7OFz0q8qgeKALuiVHeNkKKVk5r5GVmnQ2yP07AubEnRuw++Tb7JA6h28IQ7HhHRmJhtEx1ODapWvsMg0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738090007; c=relaxed/simple;
-	bh=pNP8Hj0AfrNWhZi4vEXuJyMLbG93CR1Ku4mV/FRmfmA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rcsZAAaJ3oXovSZoyowpXi2wZJkR1l3bKAL7UklKEnGv0Qt4HS0PQkqRISbX1/FVBt0BYD/vE+qfwDTp3FRMOJLSym/RfsKlgVzaVdGZnN2UjqSfx4qxv0vk/ICvznCgSbzc6XYo0i39xn5l8gqZxLLkNPMztkMnuM5iA4PNzMc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=p2LJM3Yi; arc=fail smtp.client-ip=40.92.19.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	s=arc-20240116; t=1738093316; c=relaxed/simple;
+	bh=kxtubTkZ6BIPxzEaAxn/4s14OrpUmYimrUcMzd/BeDo=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=dvuDlyX695wQTkfO3C1PibkwfYlcjmpL9Z0XCHQAj0wCr6VTmStgaChAcIziQC2gfPMpGxVwpo+kUtpagLpfnVPtGYNVFfQ2j/4d67/gsiW+xavUyg/T6ytYYZJJX55fHN6TiSyhVuS5oPKcoITIo+QuEaEV8pk2ar4za/bQai0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ml+nYzqD; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=usRGI80z; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50SJXn1E024357;
+	Tue, 28 Jan 2025 19:40:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=1aHogasrhbWR8152lS4Q2j+0aX4pO7++oVrFdBPsnRY=; b=
+	Ml+nYzqDzmwQBtLYYwq6bcy4xMuaBkXAfZOh/i3dCQ6kigCkNwd26XZLwaBKaw8v
+	BoomjZvH+TxJIbKsO9Fp8qmV7tpvgXBlydKX5ywfPQwmjCIv48l5BbFB1p+sWnkF
+	XQ07TDsyHdM/Je+DC/iM1nmLpL8du/XwJ/cjqwgFslBhhioN1+Vsg/jvOwlpImlb
+	HXtSB/I0Tt0epO7bjQdlfAx0FL2+KaHn4ZTsbheZ/IC+xKQ++OeVPXV7rDf8gUqL
+	+ji72/Z4TIgGg84c5xf9KRXpBlTg/UU9ltV7MVkLjfhwTzb9IxvhcVilvVy1FyC8
+	pCrELNE94uD5YD3XooCgKA==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44f5ay8180-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Jan 2025 19:40:50 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50SJP4su004271;
+	Tue, 28 Jan 2025 19:40:49 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2043.outbound.protection.outlook.com [104.47.58.43])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44cpd8vnrv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Jan 2025 19:40:49 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QhHbD1pUwvd/1YlFpo3Ay+OBDMVRAGSKi10MKklBli7HS3s5HJ1UjjhIJL0GPoVKbHdkwAkGtdXOaaqOTiYtl9Tno9T3TUY5aBRDT5D4LL/9WF+dkREyFAJXh/9T3px3ELx0hVgPxpV4CBJHJWXBspU28Wxcdd/9HJ7xOG/va8nP/f1y6nw/qgGfncwOta77arFYACYqHXyDdpHa0Ec6Q70DrdcMFWbnu4YtdmuggMTtt01uUgSf/gqode7sfLMCoAvolCZFBzuPSTlk2AiLgNMphrhfxhk42YtLqPBqsgcvSTv3WbPDP5h3UnjITYJfIw+36+lOYVEc6JDvOLZNIg==
+ b=c/m/6djX6ObjrvyNC5qpV1p8zEE56a/O244UScnROkcOIJ09tvkUXnInnsR36wHIE3MVZQ8EmCWcNbJG8caqxncLx2rHq4tpFxsenfEHpKFGDtwnF+YXeE4LQdVdcBIRmp9UOoIC1tmoVJF/L8tgjuUaALqqRvanVAperztugXgP/Bss1XyYD/0P+G2jNbr6oov4JFkprAbD147UAdhBdUh6g4y/aBe+HSKjpXhSeFcWmcaaxaZvbyDuhaPElP/CIA6VjLR/5NP9SoxUU7KYYMjI05NbWYlDknsbXRO4NwXucqswhgknX9bphhrXOrdI78QKFkqPQ0wARV6fHYcZ/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fmwF8aTAKa3CjIOKgoqvxD4g/Cy1suZM+RTdGvpgk9A=;
- b=IZ//P8gq5/qQk9xycvdG98FLhO4g6bhep+KX18p43DZLkSBeom5gtJW5oS2HFuSzO++muhWVfzQtHmOaQZjaz7H5U9BJ8dM0cuG4tltBdco5Bvebqm7FP+IB+zrdmAMPxtZ00SRN0QP6x7T9K0pNZ/CsPPNcEloABtnK3HmcBqD2Bg2hjM0z0Df46ymS83u3H22pkRFjXEeo92g9JfThUm++9nYUPWDgF9jhcVY2GhcynD+tH22bNYi2gxJOCdZ+0hHndRE17HCojb3qzW8suBiixz4agdHTYakyS82m1oUy+Pb38+ZI/oNFPxI5l5sTKYxtrVp+FqPRgvE4wVUl+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=1aHogasrhbWR8152lS4Q2j+0aX4pO7++oVrFdBPsnRY=;
+ b=KrqRPnk2QsIxv/ClspBecQziDoNqOvrWBVRmBxLgI1AtTtmvDXtOznzViuiQrTdm+BUvMHbmlx5iF9m2GP7wBCARlc4saFcfkGyG0+1XzJDtgKgBSFJhDJfWYY19H5Kih+oEaYukvMmGmbkeqimgP28nxzHrL1bb8Xd+qxTGQqXZ/mPXAo1yR6Z/6/Y/bHvcITRNCCn3WXREei/p8D2yD5iq6nbwDFB8r0A1DtYSUxjE448EzAySmOHsSZtv4csLFN8rw2k836Yfd16GcbIWos1ZMNRqVABgM7wBBBCeFmHhoNjIIG7VLdpYxORttRfsaHEuQzk4vsPmJsPkWxwROQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fmwF8aTAKa3CjIOKgoqvxD4g/Cy1suZM+RTdGvpgk9A=;
- b=p2LJM3Yi5W/s6ehUgL4xVsuvPpA/VMOUDdOpWBx6ESitDwG8QM4xNy/ZPb/6ynEwrPQdGA6Wzq2c81qjDC6bZeu4ucFFqmXQbZiz9OVWMwceYM5aLc831cGuBK6jw2qkm1eaQ15tdw3C+kNZuYL/7IJmsPjwkjF8NrUfneYfMJU24PEB/yNy/+U4B/v6a1oMDAWmqouuo0G7uqc0km/oVYJRYTuPIzmKxvdSpNsF6MR8oUFtJXASGwO6HKpInij63v44opOI3dcG6cxS4tOldSsBH/xPYS5wgjy/fswZd6wDMwvNcOoQDJZN5CYmPuhjIqLeZr7SANJieuSRFK1hfg==
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by PH7PR02MB10108.namprd02.prod.outlook.com (2603:10b6:510:2e7::12) with
+ bh=1aHogasrhbWR8152lS4Q2j+0aX4pO7++oVrFdBPsnRY=;
+ b=usRGI80zXwStxmPsda4dyd+8Mnv0Igbjh2y8R3awSFghXGYCvzw6oQM+bHDhbQSciTWsr9SraRLLohrqksLdQF8SovfScqgO7NYQFMJBFWp9QsIaGQAirNRZhSbbvRlrLlWq0AF++n2HlVfMwXqWSONMMI6N+KNjszaCGfwrLPY=
+Received: from MW6PR10MB7660.namprd10.prod.outlook.com (2603:10b6:303:24b::12)
+ by PH0PR10MB7099.namprd10.prod.outlook.com (2603:10b6:510:26d::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.23; Tue, 28 Jan
- 2025 18:46:41 +0000
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df%4]) with mapi id 15.20.8377.009; Tue, 28 Jan 2025
- 18:46:41 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "wei.liu@kernel.org" <wei.liu@kernel.org>
-CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
-	<haiyangz@microsoft.com>, "decui@microsoft.com" <decui@microsoft.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
-	<will@kernel.org>, "tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
-	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de"
-	<arnd@arndb.de>, "jinankjain@linux.microsoft.com"
-	<jinankjain@linux.microsoft.com>, "muminulrussell@gmail.com"
-	<muminulrussell@gmail.com>, "skinsburskii@linux.microsoft.com"
-	<skinsburskii@linux.microsoft.com>, "mukeshrathor@microsoft.com"
-	<mukeshrathor@microsoft.com>
-Subject: RE: [PATCH v2 2/2] hyperv: Move arch/x86/hyperv/hv_proc.c to
- drivers/hv
-Thread-Topic: [PATCH v2 2/2] hyperv: Move arch/x86/hyperv/hv_proc.c to
- drivers/hv
-Thread-Index: AQHbbTjLMVJraRuZWkyXzYUCDAxOb7Msjxzw
-Date: Tue, 28 Jan 2025 18:46:41 +0000
-Message-ID:
- <SN6PR02MB41576BF484537D5A2D33C6B1D4EF2@SN6PR02MB4157.namprd02.prod.outlook.com>
-References:
- <1737596851-29555-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1737596851-29555-3-git-send-email-nunodasneves@linux.microsoft.com>
-In-Reply-To:
- <1737596851-29555-3-git-send-email-nunodasneves@linux.microsoft.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.22; Tue, 28 Jan
+ 2025 19:40:46 +0000
+Received: from MW6PR10MB7660.namprd10.prod.outlook.com
+ ([fe80::41fa:92d3:28b9:2a15]) by MW6PR10MB7660.namprd10.prod.outlook.com
+ ([fe80::41fa:92d3:28b9:2a15%5]) with mapi id 15.20.8377.021; Tue, 28 Jan 2025
+ 19:40:46 +0000
+Message-ID: <a6f26afa-e4df-4519-8287-39ec3eab181d@oracle.com>
+Date: Tue, 28 Jan 2025 11:40:34 -0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/20] Add support for shared PTEs across processes
+To: David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
+        willy@infradead.org, markhemm@googlemail.com, viro@zeniv.linux.org.uk,
+        khalid@kernel.org
+Cc: jthoughton@google.com, corbet@lwn.net, dave.hansen@intel.com,
+        kirill@shutemov.name, luto@kernel.org, brauner@kernel.org,
+        arnd@arndb.de, ebiederm@xmission.com, catalin.marinas@arm.com,
+        mingo@redhat.com, peterz@infradead.org, liam.howlett@oracle.com,
+        lorenzo.stoakes@oracle.com, vbabka@suse.cz, jannh@google.com,
+        hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeel.butt@linux.dev, muchun.song@linux.dev, tglx@linutronix.de,
+        cgroups@vger.kernel.org, x86@kernel.org, linux-doc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mhiramat@kernel.org, rostedt@goodmis.org,
+        vasily.averin@linux.dev, xhao@linux.alibaba.com, pcc@google.com,
+        neilb@suse.de, maz@kernel.org
+References: <20250124235454.84587-1-anthony.yznaga@oracle.com>
+ <404b500a-4a28-4a8a-a0f5-3c96c397be0b@redhat.com>
 Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|PH7PR02MB10108:EE_
-x-ms-office365-filtering-correlation-id: 955d4e97-12eb-42f9-ed39-08dd3fcc1ad5
-x-microsoft-antispam:
- BCL:0;ARA:14566002|8062599003|19110799003|15080799006|8060799006|461199028|12121999004|440099028|3412199025|12091999003|102099032;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?vX6JmYH60rm6Wa+B5mzqXIKs9ip+ktQJVZ1KcenUUmp3XGeImyldODKi170j?=
- =?us-ascii?Q?4FnZ5pGG/45a8s7Hxb5nOPw+x94gh7AWdLIhVMuzMVC9IRR/LiE8qe04UYJ9?=
- =?us-ascii?Q?7YW36AZnGxCAI3rYo8Qlh1DL6Em3nrcsBRf8+OSdrorB4VMktAxsJ94xkpiL?=
- =?us-ascii?Q?okv+e649MVt79VzhmTmbb8G5v53c9Bu+mhsiiCuwm6Jei+UK60YnH3XMMu5S?=
- =?us-ascii?Q?OC3/lZFetbpBQ0CJZ2avGuCVZV9YW+Atqt0UPhoWH2x4HrpKlYxo4WEX+L7H?=
- =?us-ascii?Q?8r2iIxoHdg2L3cTaTK4sVqGuLTDrhSMa9oafZYBJC6gN24lWcru2ebBaxJ8t?=
- =?us-ascii?Q?agmknRA957Bw9RXbNyC+x07UZFBww9xySuIzMsg41bcrsi8GdygakjQ6Tqci?=
- =?us-ascii?Q?B6/vF0vZ5AlwqwTbTP+mFnACS2xCXzbwa35LmCvwXEoslYDQN24UD6iTjFyy?=
- =?us-ascii?Q?khhCrcS1t86//OBeYfdulNKLHe3CP4CJiPBETlbEenfQeVB9hgj3PmfOwrrQ?=
- =?us-ascii?Q?yMPuBs5B5ziI9ZYKHd2vS9RYGNMJDSjcsVQ9wOVof9YBTaTsC9i8irV8dtV0?=
- =?us-ascii?Q?9dijMxB2zXnvXiivhGHYJye6kdAU3Y2aUhj1vvZ8ZHCADnWNq7T47JbpElfK?=
- =?us-ascii?Q?pvpAGYu4wA6r75Y3e8RAxF4SQLV5IeWPNBfwQFPJZzSJxIlimivkOOk8ahjG?=
- =?us-ascii?Q?YlCcv3iTOM7UyCQMwP4iZeRqSSH59PSpC2T4Y+WQtjMlK3aqUJgpDBGLBMu3?=
- =?us-ascii?Q?Gmw0h5ejTe+z4lLd/CymG5aoqqYErpIMRJbb7ddEL3nLxBNf+l1SRkNT2jQF?=
- =?us-ascii?Q?+ekdSshUhnE/Qn70L1077h3Y+ACrpMfq+wUwE0SI3gjEtnr+wZQq1WaJs6ma?=
- =?us-ascii?Q?w2Oie371jTdGgH9kxZgspt6Guf+eGUb0TwBcTugnojU0qk1lTf1mo2dgo9Dw?=
- =?us-ascii?Q?3/lQOE/+26HWXwKSQWOu7MveSnXmzEqcP4y6wu9UzNSwwKtxMxY7l2W5j+yS?=
- =?us-ascii?Q?PPCA0Mn/cqmt4OgkKR3G5grBz/gtORYB/DEqG9iG5En+RlHpFu5SLHpTHvgk?=
- =?us-ascii?Q?+QMGf4aG1dhK589H3G3S8cpgvxl/Dh58EYXgP2GfAKVnYzS1lG8=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?wqmtzEAxp2OD18aq7Zt2g06qX0n2dH4H8HkV8SlPmuJvPqOTTQ+Eqd2dmyC5?=
- =?us-ascii?Q?99szsx1aYSyrR4PkqRyyHTfVhryfzWM21G3UxO4eHCtiP1mB7pCXsppvE8mn?=
- =?us-ascii?Q?vOUOSdQNVBx07az+w5wf8YpeqeEN+l8tI1tt0ZMLq/C13C5MaEiWDqQUeF1v?=
- =?us-ascii?Q?Woi3Wtw6Ymkbfy1scs+iBLzEJAGStImUutB7kS9+yrHQxt1OWNZaH158zA0D?=
- =?us-ascii?Q?YQDaPIq0ER60BWR8lu6zrdwo9A9NuMlU3trv9HT++t3wFKhKPomma3iRCseW?=
- =?us-ascii?Q?ODbdHcwWf663YTeVuMo/+/zYNpd+1lU64rbi2vOutI7QnHi6odpsimRluRx8?=
- =?us-ascii?Q?7YkxXvSdDbspStWehQAEAtlIJ2dkdYtA3i5crIsVov6eyx/qbSHYzIhsS3qT?=
- =?us-ascii?Q?SQUMlmhvhhoPWm+ZlzUHF9FPDorFwvWOArX6syVdZqQdouV5TFWP03UZA+uX?=
- =?us-ascii?Q?rXoFLe1FPbKNKPKBByJrM1efmYebVVsSQ1ahiogFn3Kmqp4atDjvnaJPkFZ/?=
- =?us-ascii?Q?dlqJ3EzVmj5CyB/z3snhQnUME0sdedUZyZ2T5plUwZqEk9yJYIALP2NTdMAI?=
- =?us-ascii?Q?7DguKejb4A0MUKVyZDpyH7Afpe9/XSFj7jPetl40f7n5DWIITEC7edy9Ftl3?=
- =?us-ascii?Q?QQPm1W9Io1wlQ1WVQ0+eVEtkfWCsxZSeFPp5bCf3PdS3t33kYMtD6m74DWhx?=
- =?us-ascii?Q?0bDhuHLuLk0If0a3XtN6OwrjhR/qOkE/H0noru6shilxFe56uAUNjO5XCMyS?=
- =?us-ascii?Q?oYXVoWUfLPRPFHrq2hqgtfDXJCJzHNc8Lj6555WzR5gsoTVYKJwL/psYiRPt?=
- =?us-ascii?Q?jrD+mgxLsn2tRaKkUGigW3jFqW4LcQnHorwHaNB83Ij13VGeRTyPkVeg6Oa3?=
- =?us-ascii?Q?Vj0yXx5UGkJSXBFsz46p0HvVgMk8jAmT5A9bJncnKWo3qwoMUdyEanhV4vzR?=
- =?us-ascii?Q?VDdDiJ8aqcXBfirJeQJqwnYmpJn+53Smn2UtC59fwv36uOJQmSY6r5IOxbeK?=
- =?us-ascii?Q?4DUYpwaEPTdHvvwOfRm2T/iFlZSEznBJqaR7ucH2k/MnHbaWiDcT2YYXyMb/?=
- =?us-ascii?Q?Fo/Gl12ppdtcDIsGYWgmgW9w7dl/lSvzjz0S6XnLft19utvIFQsspoiYsS0b?=
- =?us-ascii?Q?cvhE2KWOt+2oTRuXj789LDcr2bCDJntpqF78u7L5kfERFdfMQYOoY4UJlWjd?=
- =?us-ascii?Q?aNuALeAhm7iBq4ChI91T1ZwcFFkVqVAov6TBuPOjTdB95HxN8jXpf+Xde4o?=
- =?us-ascii?Q?=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+From: Anthony Yznaga <anthony.yznaga@oracle.com>
+In-Reply-To: <404b500a-4a28-4a8a-a0f5-3c96c397be0b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BN9PR03CA0568.namprd03.prod.outlook.com
+ (2603:10b6:408:138::33) To MW6PR10MB7660.namprd10.prod.outlook.com
+ (2603:10b6:303:24b::12)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW6PR10MB7660:EE_|PH0PR10MB7099:EE_
+X-MS-Office365-Filtering-Correlation-Id: e494ffd0-cbbb-4098-cd8f-08dd3fd3a8c3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Z3o1elExeW95MEhPbGhOaFN6bjZCR05qRk5WWTBGbFhQdnhxWTczbm5PTkdk?=
+ =?utf-8?B?VlVHRFRMUnpxN3FLRU56dDN4S3ExU0xlbWJzV2xNRUtrNkdyUnlPbGZWaDI4?=
+ =?utf-8?B?blJFQVVYOUFPcHlJV1pSV0NRWTNQUlVPWnl3K3dBeCtpMDBzZ2JlVWV2TFow?=
+ =?utf-8?B?OEU4SzdIR1U4end4cElPclpvOUdEbWZaNDJNNUw0VTUwM2RLbEVKRlErMUlt?=
+ =?utf-8?B?MHI4RlFJbTdZVHNBZTZtTVJjaTdEWmVvQkRHVm5RRjVDQnFROXV5c1d1YXcy?=
+ =?utf-8?B?cnNLT0I0TEo0WkxXKzdMQ1JQMFdpMDVnQTh5OEFyWlM0RS8zSEl0SzFkTVpw?=
+ =?utf-8?B?elRucmhLN0U1ZW82bE95aGNybHNzaW5IUDdoTzlVMGRMNlgyS0g3VDdsRmlk?=
+ =?utf-8?B?Z0hzTHlYYWZOaTFkdnlvRFpucENFY0IxWDFrQXpUUm5PdmkyREZRdzBydUNk?=
+ =?utf-8?B?ekNaTC9qdmlVcEF1ZVZpUE1ISUFiYkNuM25sTERLTTBsNXVFWjdMT3dsUCtH?=
+ =?utf-8?B?QmlMK0p0b2hyL2tzM2VsUWdYK2NrQ0E3ZDcvOW96Sng5VXBDZWREcXpEODFP?=
+ =?utf-8?B?b3poZStzR3V4cytpODZ6Yzl5blZHelBwTzVpMW1YVTdXUTd3V2djTXVTTy9a?=
+ =?utf-8?B?QTJLa0dBYmc5YjYrTkVBeFNyNHBHaThhOUZGN1B0S0pmR21JUjhVWktkYWpy?=
+ =?utf-8?B?YnB3UFJ5MS9ZOUZ2N3dncHVpTXh3dnNja0o5eEg2Z0pzL25LQ3hncnVqc0N1?=
+ =?utf-8?B?VDk0V3pVR25jWko1dkRyQ3hzSHVLM2x6aDVhcGpuZ0ZNWTlycDVockFVTVE5?=
+ =?utf-8?B?b3Z2U0M2eldncURrNXEwSEM2cXVMbGVlOFJoQmo5TmQ4NjBlbWhTT1VOOXFU?=
+ =?utf-8?B?N2M3NVhNbnJRblc4QnFDc01Za0kzQ0VvOCtraTlzVGtHdVU3OGw0dHJZZVIy?=
+ =?utf-8?B?WHhWbFZReWJsb1RSUUxzc1RjOXg0b1pJcUhOYmtjSVRybk1KUEtTY0lKRnpM?=
+ =?utf-8?B?M3YyQldoU3hLQ1ovQ3FPZm9hZXNNajFhZmIyRWJNb0V1dnhSak91NG9uRUVh?=
+ =?utf-8?B?bUFKNXdFN25Tc3FlSGQ4d2t1N09ENTcxM2FMMXk0VUlScE1QS2VkTkhyNW8w?=
+ =?utf-8?B?MEhJRTY0c2E1UkEyTkxQOGJZT2RzL04xY0dkNEs1WkNabUpnczVyMTZtTlJR?=
+ =?utf-8?B?UmFZQXIrUHFvNENqMGVuYlpRSDNjZ0RVbFBRV28ybmI3MzZHT21aNE1BOWVM?=
+ =?utf-8?B?T1V6Tlp0eHV6UFp6a3M4M1JXeVdYV3FYRHdqaGM2UVl5VHVwWTZ1MUVwYzNP?=
+ =?utf-8?B?MUVuVlZoS3BGKzdjUEVzNGNSd2xxZllLSng1cUZ6MFVIb2trOVhXTUF2c3JU?=
+ =?utf-8?B?SVIydTJSQTJnMUtWWTljc2JMeWhpNUZGS3BoSC9KZDRGRWNXT0Q4Z1k1UXp3?=
+ =?utf-8?B?MEtKV0RiV2JzTHJEV1VxbmtZYW1NYVYxZ1ZITHY5Tjh5U0hxeFZWbFFSZUxT?=
+ =?utf-8?B?VmFwRnFhamNHOW95dWRMRHVKSDBKU01aUVFNcXFxZllvazJSSG1CZEdoekVS?=
+ =?utf-8?B?dkdLQ05oeDRLWmM5MWJMV2w4TFFMa1VZN2JGNVBVcVFGclNFTlNyMHFoSmt6?=
+ =?utf-8?B?TzhiajVMSFRWTnlxUG5lYWRNaXByNGl1YURIWnhzQnRtdGZuZkFYdlBHMUZw?=
+ =?utf-8?B?TElBOTB5TTI5aHB1Mk5sOEkyV0I2ME51UEFrM1RnQVMyMGFPRHdTWFJ6cS9o?=
+ =?utf-8?B?Z2x2U2h1TGFSMWZXWXFDQUV2aEdKT3gzd094YXZhV0NvaWNnTWZWTTJMMGVa?=
+ =?utf-8?B?WE1lK1pWSDl6bFJYVDBOZEwrTThOTHY0K2I4WmFPb2Q1eXF3T0Y5S2ZITnRu?=
+ =?utf-8?Q?24QaYxQMaO57n?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR10MB7660.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZmlnVm16WnljMXJ5RjA5UmFKYUVrRnBXZXZtMm5SK3BvUjNxYXowT201cUZX?=
+ =?utf-8?B?bzNtNkZ5cHpiYVVFYzBkSGx0OWNYb3c3bnNLRStZU2tsT0RrdVR4Y25jKzhz?=
+ =?utf-8?B?UFcwOUo2NTEyemYwYU9wZ0lqc2Z1dTVYVmNvaUdta2FtSlZnNU1GTTNtNTZX?=
+ =?utf-8?B?NkpPWFdhQTErU0RLUGVBQVptOERWcFlHaUVWQVo2UUhSOVpZSHFCb3ZCcTJN?=
+ =?utf-8?B?bUtoTzRaMVo5ZG4yWTUzemFqVkM4eVFJNjAvL2czTnFac0xFQXhBQmprUWRW?=
+ =?utf-8?B?Wk9kRkJmMWphZTNmdGVjMWNXYTJ2aHh6MDJ4YW1RUU1SSTVETWFia1F3RmdT?=
+ =?utf-8?B?RVBubW1OWWJrcFNIYThoNWtuY1RqZ2YwMm56NVhlMDNHYTU0eUJaZStvUU9l?=
+ =?utf-8?B?dFU4N3M5bExJVUZxR05BNHJuZEo4Y3RWOE9aSnA1R09DY1pMUE12NFBkSVBu?=
+ =?utf-8?B?WU4xMFFueWMzYXRwRXp3SUJzbE5lczE3Z3QxSjB0UDZNeU5rMllXbWY4c3NP?=
+ =?utf-8?B?UmNBdGcyWFFEUTdCOUN3bmFVUGFkd242RjVWVmwwaisyNXhtMng1bUFaK2Zl?=
+ =?utf-8?B?Z3F4Y29LaExVSndDa2pOL2lOdzFCNzMxTHRWTXB0QlI3UE5Lbk9vWFdEbEg5?=
+ =?utf-8?B?T3ZSQXFBcjVwbm1KS09oK2NUWWQ5NUVsRVNSZ2gyNHNsd3NsUnkyQm1wSTg4?=
+ =?utf-8?B?YkJsNE8yeFZ6VVBtZkJtSlppQW1oUDRBNVQ4cHlZN2dkV2tydXZWRHkyc0RI?=
+ =?utf-8?B?RzFDMWVWaHBRRWJiS1F1VlhjQlozbGJIUWoybmJZT0pVQjk2aHY1TWdNWkp6?=
+ =?utf-8?B?ZnVKak9sR3R6V1lNR01YaVdRdHovRUw0RTlRMEJ1OHM3NlZmNnVQbDBEMHNi?=
+ =?utf-8?B?TktVL2EyK2VwSjNFUHMzb0Uvd2NOSU04bVA1QVAxM3oxZVBNTU5LaWJsWWwv?=
+ =?utf-8?B?UGV4QzVQc1pXTzVJOUJHZDFEdGRFa1phTElVL2VHVzcwOEZrd01IbGFWamRH?=
+ =?utf-8?B?eGVCa01zZEhRNE5tRTZNTk9SUUhxZ1VqVVZseFhVdStjbCt6b1RGak1QWVBF?=
+ =?utf-8?B?VEJ1K3BSdko1bUpxMDZac2U4Mm1IVTJ1QnQrRUFpTTllNnYzRVdTa05EVnpF?=
+ =?utf-8?B?eWpySjJBalkwK3pqYTV3T29PZ1IxR3VuQTRKb3hZNVZ5dkdnZldkTDZoUzY5?=
+ =?utf-8?B?WE8rSVdkaFJsT1c2cGRjWEF1emJxK1FzYm1nWUJ4SytRY0V5RVcvS1hnaitS?=
+ =?utf-8?B?UTYrZVJBdGxEa0pVclRrZEpxR0VOa0lMSVBzeW13U25lakx0cElsY01WbkdO?=
+ =?utf-8?B?aTZlekg1VUJoMUxUenY1NEQzOWpQSVBhd1lRWTBSb0dnK0hCRjFXSGRxWXR2?=
+ =?utf-8?B?dU0ySDE3ckNMZGo2L1QzVE5HdzJWOVdnOE5kcWRSMVF4LzJQU0NMSHFuOHl1?=
+ =?utf-8?B?aEVuaTVnVS9mODUwSUQ5cEZBNG5xTzRvV29BS1Z4QzdHWm1DU0dzaGYwSFlH?=
+ =?utf-8?B?dEFkYmlqMHNmeG5EM3dFSmVqVTgvWVcyc3o2QXJOMzlIbThvZ2Y4eVdWcmJi?=
+ =?utf-8?B?cG9lRFloWUxuYlRWMmU0VW03SjYzWjhRTzNydlBEQ3gwdVQ1UnFPN2tPenBW?=
+ =?utf-8?B?R3JENVNiaGVwNE9FNmhYTVpQQnJGTVFpd1R6cTlkSWJNZU14Q05Wc0tGRDZM?=
+ =?utf-8?B?SjBWWTlEM2lkNjVsQ3VRSkFtUUtGZUVabWlWTmgxdVFOcGxLaGtTZ0cwYmJI?=
+ =?utf-8?B?K1RUQ2czblgyUlFYdUlkTnNOMVd6NGh6dmttTmljcjNFVkFJM1doTW9obFlJ?=
+ =?utf-8?B?SFdjUUNZNkJlOHFtR0FzeVR5OS9kUGRDK0JqRDRneHgyRjdrTFdwZzZrY1hs?=
+ =?utf-8?B?VHRFbnhXOVN2bDIzWEJHdS92djZndHlpSkJmTFk2WEk0VkFDQW14bGpFSDNz?=
+ =?utf-8?B?cCtiR0pHRTJBV0FlVHBScnltYStXbzM1N0d4S0RqQXJaaUZXZG1WcURGcWo0?=
+ =?utf-8?B?N0tjZ0ZtWmYwaEFBcTkwVk9XUWZTOVNyUllGQURJT2xYU3RzZ3V4STlScW1a?=
+ =?utf-8?B?cmVVK0pOVkZvMDljNFc5SnZnNjREV2hmY0IzMkZSTkhqS1M3dVFjSXhHYm00?=
+ =?utf-8?B?dm5nNmFrUGdpNmpPUk5BOXJYREdBdFRwL3dyUy9hNXdxRlRRNkliaXA4Z0Rr?=
+ =?utf-8?B?aXc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	6/4zRJ3sGgx8QDvBNDXDXvW2R3EeV3o/F/+83wosq5h7MqgdoPi0vx0ftRVMkZENll1ohDZ1+aILTRzkak7/HHj1LXvt8KcRD8lrvVkF1gLCKXsAdD0e/FzpAH8U20C5+5uGTZW5qHiEyS+ZmIOzbH7xRMqUcQ3Mcv/6CZg8EGGJ89qQ19AllXyKDx+gW6L5zjSpyB42YUhSWNqtPjk1dYL+LLBItkh6gLqGHktvZhyBCRjGh5aIB5MNlxpEN1oJrVZ9+SuW5KhpH+19tU5Zticoueth40Zi31kXQxkJUD8vGonCo0I3yCm4fO+bNW1cwCKoNnks6fmXG0hOrx2PxO6fqRcy1eW92M+ukBvXWmRbKJu1RJRaeW1kHXJPqCgzsAqwIt7wY8GUfjAbVdyV5CW/JY2AU/z42X/37cNYqCYvvRif0+kmWnmONOFmoX/j2jUtB3ebAHtq67OgBZbiC3bVfZ4OgK2Ff/WEd8flbG2LaOSOFJ+kEu6FXpXAM6lkYYDbY7tMIaUYVOMKvYjDFhOmpc6EiYzdrzNvBwxHH0wkXEbdrHqYU+zVdI5fAPhilRT/3akaHSCTOSzNyYIlaXZ5erazMHFTm2SxXDE+NZE=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e494ffd0-cbbb-4098-cd8f-08dd3fd3a8c3
+X-MS-Exchange-CrossTenant-AuthSource: MW6PR10MB7660.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 955d4e97-12eb-42f9-ed39-08dd3fcc1ad5
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2025 18:46:41.2430
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2025 19:40:46.0482
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR02MB10108
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pxwJO40du7SZuDsfJMeZjDvXKCOFHJUz3+3Slfsw/jQHH3ryO99R5jTAORyj6zvxfoM9hurg6yaqdn39wGKsQX13iS7Fesn0ae3odXvoTuM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB7099
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-28_04,2025-01-27_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 adultscore=0
+ malwarescore=0 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
+ definitions=main-2501280144
+X-Proofpoint-ORIG-GUID: ylYNJFbI1VtUb_NBF3jxGuPrZABX-Uz6
+X-Proofpoint-GUID: ylYNJFbI1VtUb_NBF3jxGuPrZABX-Uz6
 
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Wednesday, Ja=
-nuary 22, 2025 5:48 PM
->=20
-> These helpers are not specific to x86_64 and will be needed by common cod=
-e.
-> Remove some unnecessary #includes.
->=20
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> ---
->  arch/x86/hyperv/Makefile                  | 2 +-
->  arch/x86/include/asm/mshyperv.h           | 4 ----
->  drivers/hv/Makefile                       | 2 +-
->  {arch/x86/hyperv =3D> drivers/hv}/hv_proc.c | 4 ----
->  include/asm-generic/mshyperv.h            | 4 ++++
->  5 files changed, 6 insertions(+), 10 deletions(-)
->  rename {arch/x86/hyperv =3D> drivers/hv}/hv_proc.c (98%)
->=20
-> diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-> index 3a1548054b48..d55f494f471d 100644
-> --- a/arch/x86/hyperv/Makefile
-> +++ b/arch/x86/hyperv/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-y			:=3D hv_init.o mmu.o nested.o irqdomain.o ivm.o
-> -obj-$(CONFIG_X86_64)	+=3D hv_apic.o hv_proc.o
-> +obj-$(CONFIG_X86_64)	+=3D hv_apic.o
->  obj-$(CONFIG_HYPERV_VTL_MODE)	+=3D hv_vtl.o
->=20
->  ifdef CONFIG_X86_64
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
-erv.h
-> index 8d3ada3e8d0d..7dfca93ef048 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -56,10 +56,6 @@ u64 hv_tdx_hypercall(u64 control, u64 param1, u64 para=
-m2);
->  #define HV_AP_INIT_GPAT_DEFAULT		0x0007040600070406ULL
->  #define HV_AP_SEGMENT_LIMIT		0xffffffff
->=20
-> -int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
-> -int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
-> -int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flag=
-s);
-> -
->  /*
->   * If the hypercall involves no input or output parameters, the hypervis=
-or
->   * ignores the corresponding GPA pointer.
-> diff --git a/drivers/hv/Makefile b/drivers/hv/Makefile
-> index b992c0ed182b..9afcabb3fbd2 100644
-> --- a/drivers/hv/Makefile
-> +++ b/drivers/hv/Makefile
-> @@ -13,4 +13,4 @@ hv_vmbus-$(CONFIG_HYPERV_TESTING)	+=3D hv_debugfs.o
->  hv_utils-y :=3D hv_util.o hv_kvp.o hv_snapshot.o hv_utils_transport.o
->=20
->  # Code that must be built-in
-> -obj-$(subst m,y,$(CONFIG_HYPERV)) +=3D hv_common.o
-> +obj-$(subst m,y,$(CONFIG_HYPERV)) +=3D hv_common.o hv_proc.o
-> diff --git a/arch/x86/hyperv/hv_proc.c b/drivers/hv/hv_proc.c
-> similarity index 98%
-> rename from arch/x86/hyperv/hv_proc.c
-> rename to drivers/hv/hv_proc.c
-> index ac4c834d4435..3e410489f480 100644
-> --- a/arch/x86/hyperv/hv_proc.c
-> +++ b/drivers/hv/hv_proc.c
-> @@ -6,11 +6,7 @@
->  #include <linux/slab.h>
->  #include <linux/cpuhotplug.h>
->  #include <linux/minmax.h>
-> -#include <asm/hypervisor.h>
->  #include <asm/mshyperv.h>
-> -#include <asm/apic.h>
-> -
-> -#include <asm/trace/hyperv.h>
->=20
->  /*
->   * See struct hv_deposit_memory. The first u64 is partition ID, the rest
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index 98100466e0b2..faf5d27a76b1 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -217,6 +217,10 @@ void *hv_alloc_hyperv_page(void);
->  void *hv_alloc_hyperv_zeroed_page(void);
->  void hv_free_hyperv_page(void *addr);
->=20
-> +int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
-> +int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
-> +int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flag=
-s);
-> +
->  /**
->   * hv_cpu_number_to_vp_number() - Map CPU to VP.
->   * @cpu_number: CPU number in Linux terms
-> --
-> 2.34.1
 
-Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+On 1/28/25 1:36 AM, David Hildenbrand wrote:
+>> API
+>> ===
+>>
+>> mshare does not introduce a new API. It instead uses existing APIs
+>> to implement page table sharing. The steps to use this feature are:
+>>
+>> 1. Mount msharefs on /sys/fs/mshare -
+>>          mount -t msharefs msharefs /sys/fs/mshare
+>>
+>> 2. mshare regions have alignment and size requirements. Start
+>>     address for the region must be aligned to an address boundary and
+>>     be a multiple of fixed size. This alignment and size requirement
+>>     can be obtained by reading the file /sys/fs/mshare/mshare_info
+>>     which returns a number in text format. mshare regions must be
+>>     aligned to this boundary and be a multiple of this size.
+>>
+>> 3. For the process creating an mshare region:
+>>          a. Create a file on /sys/fs/mshare, for example -
+>>                  fd = open("/sys/fs/mshare/shareme",
+>>                                  O_RDWR|O_CREAT|O_EXCL, 0600);
+>>
+>>          b. Establish the starting address and size of the region
+>>                  struct mshare_info minfo;
+>>
+>>                  minfo.start = TB(2);
+>>                  minfo.size = BUFFER_SIZE;
+>>                  ioctl(fd, MSHAREFS_SET_SIZE, &minfo)
+>
+> We could set the size using ftruncate, just like for any other file. 
+> It would have to be the first thing after creating the file, and 
+> before we allow any other modifications.
+
+I'll look into this.
+
+
+>
+> Idealy, we'd be able to get rid of the "start", use something 
+> resaonable (e.g., TB(2)) internally, and allow processes to mmap() it 
+> at different (suitably-aligned) addresses.
+>
+> I recall we discussed that in the past. Did you stumble over real 
+> blockers such that we really must mmap() the file at the same address 
+> in all processes? I recall some things around TLB flushing, but not 
+> sure. So we might have to stick to an mmap address for now.
+
+It's not hard to implement this. It does have the affect that rmap walks 
+will find the internal VA rather than the actual VA for a given process. 
+For TLB flushing this isn't a problem for the current implementation 
+because all TLBs are flushed entirely. I don't know if there might be 
+other complications. It does mean that an offset rather than address 
+should be used when creating a mapping as you point out below.
+
+
+>
+> When using fallocate/stat to set/query the file size, we could end up 
+> with:
+>
+> /*
+>  * Set the address where this file can be mapped into processes. Other
+>  * addresses are not supported for now, and mmap will fail. Changing the
+>  * mmap address after mappings were already created is not supported.
+>  */
+> MSHAREFS_SET_MMAP_ADDRESS
+> MSHAREFS_GET_MMAP_ADDRESS
+
+I'll look into this, too.
+
+
+>
+>
+>>
+>>          c. Map some memory in the region
+>>                  struct mshare_create mcreate;
+>>
+>>                  mcreate.addr = TB(2);
+>
+> Can we use the offset into the virtual file instead? We should be able 
+> to perform that translation internally fairly easily I assume.
+
+Yes, an offset would be preferable. Especially if mapping the same file 
+at different VAs is implemented.
+
+
+>
+>>                  mcreate.size = BUFFER_SIZE;
+>>                  mcreate.offset = 0;
+>>                  mcreate.prot = PROT_READ | PROT_WRITE;
+>>                  mcreate.flags = MAP_ANONYMOUS | MAP_SHARED | MAP_FIXED;
+>>                  mcreate.fd = -1;
+>>
+>>                  ioctl(fd, MSHAREFS_CREATE_MAPPING, &mcreate)
+>
+> Would examples with multiple mappings work already in this version?
+>
+> Did you experiment with other mappings (e.g., ordinary shared file 
+> mappings), and what are the blockers to make that fly?
+
+Yes, multiple mappings works. And it's straightforward to make shared 
+file mappings work. I have a patch where I basically just copied code 
+from ksys_mmap_pgoff() into msharefs_create_mapping(). Needs some 
+refactoring and finessing to make it a real patch.
+
+
+>
+>>
+>>          d. Map the mshare region into the process
+>>                  mmap((void *)TB(2), BUF_SIZE, PROT_READ | PROT_WRITE,
+>>                          MAP_SHARED, fd, 0);
+>>
+>>          e. Write and read to mshared region normally.
+>>
+>> 4. For processes attaching an mshare region:
+>>          a. Open the file on msharefs, for example -
+>>                  fd = open("/sys/fs/mshare/shareme", O_RDWR);
+>>
+>>          b. Get information about mshare'd region from the file:
+>>                  struct mshare_info minfo;
+>>
+>>                  ioctl(fd, MSHAREFS_GET_SIZE, &minfo);
+>>
+>>          c. Map the mshare'd region into the process
+>>                  mmap(minfo.start, minfo.size,
+>>                          PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+>>
+>> 5. To delete the mshare region -
+>>                  unlink("/sys/fs/mshare/shareme");
+>>
+>
+> I recall discussions around cgroup accounting, OOM handling etc. I 
+> thought the conclusion was that we need an "mshare process" where the 
+> memory is accounted to, and once that process is killed (e.g., OOM), 
+> it must tear down all mappings/pages etc.
+>
+> How does your design currently look like in that regard? E.g., how can 
+> OOM handling make progress, how is cgroup accounting handled?
+
+
+There was some discussion on this at last year's LSF/MM, but it seemed 
+more like ideas rather than a conclusion on an approach. In any case, 
+tearing down everything if an owning process is killed does not work for 
+our internal use cases, and I think that was mentioned somewhere in 
+discussions. Plus it seems to me that yanking the mappings away from the 
+unsuspecting non-owner processes could be quite catastrophic. Shouldn't 
+an mshare virtual file be treated like any other in-memory file? Or do 
+such files get zapped somehow by OOM? Not saying we shouldn't do 
+anything for OOM, but I'm not sure what the answer is.
+
+
+Cgroups are tricky. At the mm alignment meeting last year a use case was 
+brought up where it would be desirable to have all pagetable pages 
+charged to one memcg rather than have them charged on a first touch 
+basis. It was proposed that perhaps an mshare file could associated with 
+a cgroup at the time it is created. I have figured out a way to do this 
+but I'm not versed enough in cgroups to know if the approach is viable. 
+The last three patches provided this functionality as well as 
+functionality that ensures a newly faulted in page is charged to the 
+current process. If everything, pagetable and faulted pages, should be 
+charged to the same cgroup then more work is definitely required. 
+Hopefully this provides enough context to move towards a complete solution.
+
+
+Anthony
+
 
