@@ -1,252 +1,113 @@
-Return-Path: <linux-arch+bounces-9957-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9958-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F420BA24B73
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Feb 2025 19:51:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE3A7A24BC5
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Feb 2025 21:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B121163143
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Feb 2025 18:51:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D8DF163EAA
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Feb 2025 20:10:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9D91CAA95;
-	Sat,  1 Feb 2025 18:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BDD71CCEE9;
+	Sat,  1 Feb 2025 20:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QDRlUn/L"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="UUTioE72"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473191BD01D;
-	Sat,  1 Feb 2025 18:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76431C5D52
+	for <linux-arch@vger.kernel.org>; Sat,  1 Feb 2025 20:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738435911; cv=none; b=GVBTvjiavU+hjHSsbYhUkW/Y9K/xGfkFqOUSOF7dNRXgZBgcHVJ5h1WoIDorwRSjehjLebFz+QP8QCOk07Nn5mXXkVoTZyavOobLcYwGhPy9OdXNQB1Sfc2wKcmgaQ6ZRlocb9c13fRUNuGL6dQu8eBLKAKXV4N+YbwHBIaIqkw=
+	t=1738440622; cv=none; b=bSDdyzC3FugJzlhYXT5Jscg3w2NCxhZZS0ElM9+FpJYoYUfXguEBAFiEaNn6hTXfgofQ3O1Ng63F8f7FokaLDF2hRBWYz8TFSRveAMolpuuUqqLKoYKsYuNJum75SS1eAk9uqSGt5hHIGG/758c54pBqB2jUo/NNvuM7IVaJyQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738435911; c=relaxed/simple;
-	bh=I7kiEVnW8jRrnhHw67TzHWe0xarJxl/6zRXpMspPRvA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sa4fSAX6auARScLKOzZw0gqBGjW82G03ZQYaDFpSJw5WL006uh3GAlpRQXxceTvGQvBQbh0YwrVXI5LZ7UivY4nzluGgj3Ti0U92St9t+SVK1N8eoGWmgX2+YEC7vYGEP+EXqA+GCdtQxiSjKkD1NdVpFetX/2o5DyvXBMSBGJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QDRlUn/L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECEAEC4CED3;
-	Sat,  1 Feb 2025 18:51:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738435910;
-	bh=I7kiEVnW8jRrnhHw67TzHWe0xarJxl/6zRXpMspPRvA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=QDRlUn/L5H2HOk3KB0WxhPbjFzUMLq5F66buBhlXO+q1lrh3Bbq1MS4JpizAmwTcj
-	 iDXt7AAH+b05pVaQNjnPY3V/pqRTNoxyJFxW3iTifFg4u2T1npDwRA81/woM/kQZcW
-	 UiSXkL6zz6x+pFPryHFFOPq9G6BZdWQSthBJ242Lnf31awwOsEAmtJnJsInyMnJpbv
-	 jE4CqlFBWUF6wdKK0fJwOsX/ONecNYMPnTGZP6PRFPb3BRDERXXa1tSM77RvIX/WMW
-	 dgFpYwd4YpnRaYqG2d1WGKv4uTQr0JqNxvoYnxVHIamDVdooVIse+b/1wQ90eC/AA6
-	 BT2SACyw6xqng==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH v3] kbuild: keep symbols for symbol_get() even with CONFIG_TRIM_UNUSED_KSYMS
-Date: Sun,  2 Feb 2025 03:51:41 +0900
-Message-ID: <20250201185143.1745708-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1738440622; c=relaxed/simple;
+	bh=dwKZ9e6C8H5YVBM0MWljIbNoLbFovSt/j2W45tqojAY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MaD7CUnAbpyG/1PkAkjH3GZ5AzB07Hoq7moZwshJuJQrqT8FJYASeMoyMalBd44qWfJ9bYoVbWDdq6K7Hv/QnMzL2Bl2Np7ScB2rSLXmJlgnQfWY2PWJ14menbVJYyZ9u2CBleEw8YoRwzwxfkhUI97GyZCv2KPzVU9ktJ6acE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=UUTioE72; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ab651f1dd36so643104966b.0
+        for <linux-arch@vger.kernel.org>; Sat, 01 Feb 2025 12:10:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1738440619; x=1739045419; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m7/IZGOLu+lbC+EOSNvACW6MUOzlKWZfo7umiRgi7s4=;
+        b=UUTioE72YBFF+11yoHXoPSMobUlakX1xOlYfKXLHeVpUPIr35p04lH5DvJQDfeiFAf
+         K2CwECDveZcARygvC7eq2EOoeqZBZk3/9JL5TLMP8K/H0W8ykpw3mcTaFtxv0V5doE4Q
+         R6qqaK0Pi1EHyLLK8wSRYjTUsRnf3VR8e6ieA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738440619; x=1739045419;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m7/IZGOLu+lbC+EOSNvACW6MUOzlKWZfo7umiRgi7s4=;
+        b=uAi4bgnrjIE9+nrnG+advLP6kLj6G4vjZJ2vASw13Kie4sf1yk788QH4VR0oCqjGLo
+         nxFT04H/KO3BGn1CoBAjTSEYG6uGTrTMSD482S9zRCI/kJDXvdUXLBKMPZI0ZkpsilKf
+         x301bfwTIuiXvmDXDbVx6aBGPfa7wt0Rutom+Yda0ZgKMmIxijKkzvFQ4wkFK1lYOxOE
+         4ve66le7RwjzVSiR0mE4dMNa94xGMiRgC0hjQisgv0AGA0tlpmeH41ptTY7Ba4BZRcu0
+         PjtbvUybrpfA/+E0sZDX5s3jlj5br0aTaOTdM4I3Dtugm2+pbF+3IDzPgKZWoVIwoV96
+         J3eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWk+0M47VQ+6BBztVIjiabXLMeRIQQ4tz+n1Yk3LCEhTrf35MMF+H10JfYcJLSlF63V/6iG3oh8rlu0@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmXNojesImCuqOGoUnxgH9AzjEVPLNrYB9r69HMbSPP7+KRrSt
+	otrSveJRFWfsdtJn2ZM4E17PMwMCK7nIa1ZcFY3jI5iJiFBjrqzDORJjZp7aAPms+pmwM18MHt9
+	PtC0=
+X-Gm-Gg: ASbGnctOsj6QjBVIQOkvnHCZAGsvEnhd6cxWF+xr9kDlCClTX24M8itFSCu7dHL2op7
+	+2q0ZkykXsUFg3L+e+RK4W8gpC12BaYTJ7h90yiOLYChWgAgQddVfGv8JvzWfznbM2zZwqAT3OB
+	v5vaspP4hVI8mhqkywYPSbOPgM0BhXQRdgwRQcOFIjBDf5PyF9fbJI7dLXQNB5DLZ5msOjeUrXu
+	8LAaAThyjbk+I1mdLSyjrV19AzkdnIlGozqPK3bplySPrDG/ocMRJydgMRFOB7NbQkjgul3HXKZ
+	11O5x42F1TliyDi9WcZyXMF3xJNUVRAWR4jCzoZVgbHstoRo5VV2i9w0Y/OLNzblwA==
+X-Google-Smtp-Source: AGHT+IEotNbbmBi349ZOwIuvnvsDwHCOBFWuHtX2u5G3kJX89qmdGIm4gAFtSC09pYrTFlLowbTCrQ==
+X-Received: by 2002:a17:907:7213:b0:ab2:d721:ed8e with SMTP id a640c23a62f3a-ab6cfda4266mr1517344766b.39.1738440618704;
+        Sat, 01 Feb 2025 12:10:18 -0800 (PST)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6e49ff3d4sm477657566b.112.2025.02.01.12.10.17
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Feb 2025 12:10:17 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5dc10fe4e62so6013023a12.1
+        for <linux-arch@vger.kernel.org>; Sat, 01 Feb 2025 12:10:17 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX1J+07G9kSjL/+jh4Klv63ceglzq5SkGJNXAywcfcLOcagdYoKU8Y5IyAxWZ0tqMKPL9uW24vmEsI/@vger.kernel.org
+X-Received: by 2002:a05:6402:270a:b0:5db:d9ac:b302 with SMTP id
+ 4fb4d7f45d1cf-5dc5effb6c9mr16000184a12.32.1738440616999; Sat, 01 Feb 2025
+ 12:10:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250201185143.1745708-1-masahiroy@kernel.org>
+In-Reply-To: <20250201185143.1745708-1-masahiroy@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 1 Feb 2025 12:10:00 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiWTPjGk5BDUu-49LeTAr21qurcv9BnjmrYi=ZqbFfufg@mail.gmail.com>
+X-Gm-Features: AWEUYZlBdDHAj8QtpERwR2LQThxWjeLDU2DywKdmKDGbnm9LYxABBIuPfrICgqA
+Message-ID: <CAHk-=wiWTPjGk5BDUu-49LeTAr21qurcv9BnjmrYi=ZqbFfufg@mail.gmail.com>
+Subject: Re: [PATCH v3] kbuild: keep symbols for symbol_get() even with CONFIG_TRIM_UNUSED_KSYMS
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Daniel Gomez <da.gomez@samsung.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Linus observed that the symbol_request(utf8_data_table) call fails when
-CONFIG_UNICODE=y and CONFIG_TRIM_UNUSED_KSYMS=y.
+On Sat, 1 Feb 2025 at 10:51, Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> This commit addresses the issue by leveraging modpost. Symbol names
+> passed to symbol_get() are recorded in the special .no_trim_symbol
+> section, which is then parsed by modpost to forcibly keep such symbols.
+> The .no_trim_symbol section is discarded by the linker scripts, so there
+> is no impact on the size of the final vmlinux or modules.
 
-symbol_get() relies on the symbol data being present in the ksymtab for
-symbol lookups. However, EXPORT_SYMBOL_GPL(utf8_data_table) is dropped
-due to CONFIG_TRIM_UNUSED_KSYMS, as no module references it in this case.
+LGTM. And I still assume that I'll just get it in some future kbuild fixes pull.
 
-Probably, this has been broken since commit dbacb0ef670d ("kconfig option
-for TRIM_UNUSED_KSYMS").
-
-This commit addresses the issue by leveraging modpost. Symbol names
-passed to symbol_get() are recorded in the special .no_trim_symbol
-section, which is then parsed by modpost to forcibly keep such symbols.
-The .no_trim_symbol section is discarded by the linker scripts, so there
-is no impact on the size of the final vmlinux or modules.
-
-This commit cannot resolve the issue for direct calls to __symbol_get()
-because the symbol name is not known at compile-time.
-
-Although symbol_get() may eventually be deprecated, this workaround
-should be good enough meanwhile.
-
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-Changes in v3:
- - More precise check in case symbol_get() is called from a module
-
-Changes in v2:
- - Call keep_no_trim_symbols() for modules as well.
-   EXPORT_SYMBOL() may disppear if symbol_get() calls a symbol
-   within this same module.
-
- include/asm-generic/vmlinux.lds.h |  1 +
- include/linux/module.h            |  5 ++++-
- scripts/mod/modpost.c             | 35 +++++++++++++++++++++++++++++++
- scripts/mod/modpost.h             |  6 ++++++
- scripts/module.lds.S              |  1 +
- 5 files changed, 47 insertions(+), 1 deletion(-)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 54504013c749..02a4adb4a999 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -1038,6 +1038,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
- 	*(.discard)							\
- 	*(.discard.*)							\
- 	*(.export_symbol)						\
-+	*(.no_trim_symbol)						\
- 	*(.modinfo)							\
- 	/* ld.bfd warns about .gnu.version* even when not emitted */	\
- 	*(.gnu.version*)						\
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 23792d5d7b74..30e5b19bafa9 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -306,7 +306,10 @@ extern int modules_disabled; /* for sysctl */
- /* Get/put a kernel symbol (calls must be symmetric) */
- void *__symbol_get(const char *symbol);
- void *__symbol_get_gpl(const char *symbol);
--#define symbol_get(x) ((typeof(&x))(__symbol_get(__stringify(x))))
-+#define symbol_get(x)	({ \
-+	static const char __notrim[] \
-+		__used __section(".no_trim_symbol") = __stringify(x); \
-+	(typeof(&x))(__symbol_get(__stringify(x))); })
- 
- /* modules using other modules: kdb wants to see this. */
- struct module_use {
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index e18ae7dc8140..36b28987a2f0 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -507,6 +507,9 @@ static int parse_elf(struct elf_info *info, const char *filename)
- 			info->modinfo_len = sechdrs[i].sh_size;
- 		} else if (!strcmp(secname, ".export_symbol")) {
- 			info->export_symbol_secndx = i;
-+		} else if (!strcmp(secname, ".no_trim_symbol")) {
-+			info->no_trim_symbol = (void *)hdr + sechdrs[i].sh_offset;
-+			info->no_trim_symbol_len = sechdrs[i].sh_size;
- 		}
- 
- 		if (sechdrs[i].sh_type == SHT_SYMTAB) {
-@@ -1566,6 +1569,14 @@ static void read_symbols(const char *modname)
- 	/* strip trailing .o */
- 	mod = new_module(modname, strlen(modname) - strlen(".o"));
- 
-+	/* save .no_trim_symbol section for later use */
-+	if (info.no_trim_symbol_len) {
-+		mod->no_trim_symbol = xmalloc(info.no_trim_symbol_len);
-+		memcpy(mod->no_trim_symbol, info.no_trim_symbol,
-+		       info.no_trim_symbol_len);
-+		mod->no_trim_symbol_len = info.no_trim_symbol_len;
-+	}
-+
- 	if (!mod->is_vmlinux) {
- 		license = get_modinfo(&info, "license");
- 		if (!license)
-@@ -1728,6 +1739,28 @@ static void handle_white_list_exports(const char *white_list)
- 	free(buf);
- }
- 
-+/*
-+ * Keep symbols recorded in the .no_trim_symbol section. This is necessary to
-+ * prevent CONFIG_TRIM_UNUSED_KSYMS from dropping EXPORT_SYMBOL because
-+ * symbol_get() relies on the symbol being present in the ksymtab for lookups.
-+ */
-+static void keep_no_trim_symbols(struct module *mod)
-+{
-+	unsigned long size = mod->no_trim_symbol_len;
-+
-+	for (char *s = mod->no_trim_symbol; s; s = next_string(s , &size)) {
-+		struct symbol *sym;
-+
-+		/*
-+		 * If find_symbol() returns NULL, this symbol is not provided
-+		 * by any module, and symbol_get() will fail.
-+		 */
-+		sym = find_symbol(s);
-+		if (sym)
-+			sym->used = true;
-+	}
-+}
-+
- static void check_modname_len(struct module *mod)
- {
- 	const char *mod_name;
-@@ -2254,6 +2287,8 @@ int main(int argc, char **argv)
- 		read_symbols_from_files(files_source);
- 
- 	list_for_each_entry(mod, &modules, list) {
-+		keep_no_trim_symbols(mod);
-+
- 		if (mod->dump_file || mod->is_vmlinux)
- 			continue;
- 
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index ffd0a52a606e..59366f456b76 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -111,6 +111,8 @@ struct module_alias {
-  *
-  * @dump_file: path to the .symvers file if loaded from a file
-  * @aliases: list head for module_aliases
-+ * @no_trim_symbol: .no_trim_symbol section data
-+ * @no_trim_symbol_len: length of the .no_trim_symbol section
-  */
- struct module {
- 	struct list_head list;
-@@ -128,6 +130,8 @@ struct module {
- 	// Actual imported namespaces
- 	struct list_head imported_namespaces;
- 	struct list_head aliases;
-+	char *no_trim_symbol;
-+	unsigned int no_trim_symbol_len;
- 	char name[];
- };
- 
-@@ -141,6 +145,8 @@ struct elf_info {
- 	char         *strtab;
- 	char	     *modinfo;
- 	unsigned int modinfo_len;
-+	char         *no_trim_symbol;
-+	unsigned int no_trim_symbol_len;
- 
- 	/* support for 32bit section numbers */
- 
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index c2f80f9141d4..450f1088d5fd 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -16,6 +16,7 @@ SECTIONS {
- 		*(.discard)
- 		*(.discard.*)
- 		*(.export_symbol)
-+		*(.no_trim_symbol)
- 	}
- 
- 	__ksymtab		0 : ALIGN(8) { *(SORT(___ksymtab+*)) }
--- 
-2.43.0
-
+          Linus
 
