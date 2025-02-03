@@ -1,291 +1,258 @@
-Return-Path: <linux-arch+bounces-9977-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9980-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2080A265B7
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2025 22:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62F18A26610
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2025 22:50:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49AF51884E95
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2025 21:34:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCE6C18855B0
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2025 21:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6311FE478;
-	Mon,  3 Feb 2025 21:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1FA211293;
+	Mon,  3 Feb 2025 21:49:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MGRgTysc"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="btrAWpOY";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="vzbPYNTA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB031A31;
-	Mon,  3 Feb 2025 21:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738618433; cv=none; b=jTGz55vjhi7XKxKnGS+F7eYq510q41+R2jo66dE1im/0d/vJqQoCX0UEZinB1pW8FH9z6N3N8DpY18R2izlqsZLtPOy8IL3gstzZSFcYAMJAcVpkax61lugIhbMWJtVLv7RdiyP/SGZLB/A9tGpX1A9q6NDscW2NrmhNYt2l1ss=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738618433; c=relaxed/simple;
-	bh=1mlaWCTrBrjSa0L+d8pSQwcBOgfwLLhUqX/gRxJbXYI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N7GhWa28yj8LI010+982hF8sHGKqkZtZadwsBr2ny9Uq2qGIw2n4VbSkHdaR8+gg+N2xvtFznHZLzqk+HZu/RM0y98u5NxZIqQMdi/GRDgrenJzPN8fI3OyJB9P44Cc0mYcAJE9CT9xupKq/0wJQiAC9cIxJife5NkEYQCLsDBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MGRgTysc; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4362bae4d7dso35034075e9.1;
-        Mon, 03 Feb 2025 13:33:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6735C21127D;
+	Mon,  3 Feb 2025 21:49:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738619385; cv=fail; b=MCYsDLjXmjU1OURZCVv2RDj1vx7cyEn/jRBpJXw+OzTDgxGfd03IQIP8w7p04WTk7abAQRmrdfw0XnGnFNDd7HuZMcO0QMnJCDvWBf1LVWWEg/NBG9g95Gl4edQ1CrYzblmTxdWu0Oxj88d36xy3cR6XCd+RbFoN8NYFDwaN/LU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738619385; c=relaxed/simple;
+	bh=XFxG0Wzd2uzczXApUmE4vKGd9a4qCWLNKyLy5/a5fko=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=fmhwzoRhJmM2mH11GKA4TqWzqxO6I8Ov3P90AFJSy7i2awRduBIPEhHU5acefsEpbH/FhB2tNGO4VwdvhNXu/T7SkJCMdS9SU1dhk6ZolrFyvjB4pALed4nmFGO4oEljfQWG5pYDd7+aNCboWdZjFHyxTM1Vn54qP3WLLEQwQEE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=btrAWpOY; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=vzbPYNTA; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 513JMuqG004453;
+	Mon, 3 Feb 2025 21:49:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2023-11-20; bh=94m69RYLqNBNbOPt
+	VbRk76UIyxyZap5Xoc4hnE8jFWU=; b=btrAWpOYSGgAxABhQUfE2kmKdxqlGh47
+	b/0007ZBdlQ51JUJz03W8y6yTdkdoAOG+d3iHj0VrIc3uif+iHW4zG76Otrqh/0l
+	7AjmopETTAtG3R8PDjtlV+SByxO7QEj10zM1pyJNXp/ycuF2NrAA/AJeqrupotpQ
+	3IxGtTfk/rwgWhfI24IyfGyp3yXNVd+59rWbrACsOdg/t1yl+yrd1VXU4zU1J5i2
+	N3GGh2ZDEOCkfd8eDJkGr4p1NV6oQWmyIkCmSPsFP0ZlnCsXQXr7Xq/sPbiGwsZu
+	XPK6QB0V/f2naIcDpHVyb/KEQ7bZJ8F1oJcFgYZW+0nVMDiNlwfK3w==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44hh73khr1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 03 Feb 2025 21:49:18 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 513LGWID029838;
+	Mon, 3 Feb 2025 21:49:17 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44j8p270x8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 03 Feb 2025 21:49:17 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pc6KdlG5Xb/pYOhsF+c2YKFv8evJDbqWO3MvHLaQtaGCACdpz3qiTZX3rnO1hbWjNMVPyCRnutw2Mj+QG6zCISIgn/0vUwYX9SSYNWa3ja05TaWA+28GWHQ4mJlBFVXuO4sUhtPBt5AjQyEgCcHHhevcQRXzxhfORH+74pS38Xo5CEVVOZYzMhb1WNOs5qVf6vpUzrbmAAXkGn2iixTfnIOwQNo/rP3dobv4De/D+v1CydTqZuX6YhBw8/FiuqZBhmWSox5RI6HSusDNPCfrRXR0UmTftWEyfiAxxfVORZPO8wS6ExwKDh47bv2AlXLZiOM916kUxvzCxqmpe6XPLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=94m69RYLqNBNbOPtVbRk76UIyxyZap5Xoc4hnE8jFWU=;
+ b=i4sK3dvBAzcI1dDTcdkfvJbBXs17GQ43U72tDx3ot4pQbEfLvx/NV0hMcnUHlRtOJODVBKidxE/RknWDzZBGPCylWZIgttt37s8f2oxwGVgGkZiQSvo40biBru1g7LmqcTRqMN83SCxvDPAqPnGGpbxyot7Xyv1PBVdu3r6FUgZbsLIlxSI4+9AQorLtugxVzNQEwoviNlumyeGJdSpZR/NAUpCrzsM4bMG7GZug+dDFl039W4MB1qP3ttfohMmWQwQY26DPsBsXjofvFn+z8bq0AM9F6cpaB7PlqPfgb+8f7e51/7Z84hpVbY9deEovDFysJnkFVbAo1CA8WQvE8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738618430; x=1739223230; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MrVMD2Z2i/6S/QLajy8AAiCtXVC5nD5sHVdo7QcfCdY=;
-        b=MGRgTyscMpcmoK6u3zkKQgZ+FmPV58t26jeNA/Hh40oy6R5lbr7uzCd6mxPaAXKGwm
-         gb5X48ymvaK2DBwhG4ZLkj9iwxjet2okBGNA+LOg+M0rPINTb0dyiO1hfyXtI4Iv2eW2
-         zTWp3fB0+uCQcUQ7PrDqYgMWEA8hGeQeNmnU71VJdi77+Yc3vevaZ0ojxCspt4malqxj
-         iUylOg4A4hradq4j4iHm+0L9iK8qXUarkLFo8HsyGdh/mhMjX+JubWkxbnu68iU0J5bG
-         Nsv1m2CxMs2JI5FVcyO5oC3TKlN+0YtWI5F+XdPa7PttG7Qyelpbm0G+jOFBQo2uFtc6
-         Ui4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738618430; x=1739223230;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MrVMD2Z2i/6S/QLajy8AAiCtXVC5nD5sHVdo7QcfCdY=;
-        b=oFv7enib4xs3fpHu2Kxjs+Vp0sD3TkoCW8QYzpJJ/0yZn+4MEoouysvKgaDDb4V2T+
-         ptu8GWxFS5gDflCozP69CRAIzgOsAzT268lOm2a/nXeijwGl/PtUvaMX7kcrhp2avkW1
-         3xzjxMW7VhWuFT/G/Aq0NUYz7J4nFGmELcEyMfhnj+zccJmLPBVNQ3kARaKxIVWVwhXl
-         WeULwNKgXsZi4kyI6dui6MyZZ3fOWQSFVDVDNQgETv0pAkOgr1iaGS+mA4i6Y2jW/DxF
-         1b/10+7xmhlPYOsUvicB2uSjQY7PFdKFpwKyNp01jKUawIW6QhgMZU1Wj0Exr92GY1q5
-         0LHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUOtmsB1OVnOB2xQeKWML/rsrORZEOsD4fhl3LmjiolTgq46Rr3nFpWP8SR2W2b/v86mykCxPhclHaSEWuV@vger.kernel.org, AJvYcCUXotuVTkaS4fmzuYfa7D0xOFksq7Jxzm3ZfdSdImZ4R9qk2flSogd9Crr46mIiQXm854Y=@vger.kernel.org, AJvYcCWfwwf84pDCmBPyKf4tw2BJYhQCMy8tUmBf6nlL+nGZENgYG+1vqwFuqz7A7ar2MttB3srtsVsMOBRSHw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhJoY9h5JEw2XGypymwsoLvbBAxJWN3jXFXWwZRCV/meSmwgvM
-	AcVPgdFjlhRGCPqylGdk7QHOSBhjQdr0QqOn+vch5FfWkHBBLnAh
-X-Gm-Gg: ASbGncvHNVdyOSOfkpyyjjVQOxJCUWZz9DQQtN8NJr0lkOPfHolkI9iLQzkCO3q2Q3C
-	pYz3ZYPKZZ5BCS6G2Vy6qEgtd4ujqDEMTDZGMOfI6roPBP/eyh9Zwr+wa8mQa7Qq8NMK0K7Ugs5
-	wh1LJDHZBIgxExU+7ANB/lLpK1c3tSk2FY+Ypy6fg2Dyu1Tt+kkNFN/nfvi1GqigncmYydnzA90
-	L1hfuZGZYRAspwi42/y/ykviegFcObzTLvIXuZKGskOlDMYrT7CbJwgPWS2Z680kpyADmjM/w1i
-	vsrv0qkT8cEAmw2LOtZ+pzXAzfoMA17ipeBbUpWHyXd3t1AYqvYQmA==
-X-Google-Smtp-Source: AGHT+IGSI4NMuXgo3YRTck+DTapndecyGzycBjJbvBcnwmDddI78Rk3ypPub97NycklrivXvcN7N3A==
-X-Received: by 2002:a05:600c:4e52:b0:434:9dfe:20e6 with SMTP id 5b1f17b1804b1-438dc3fc2b0mr196556595e9.23.1738618429820;
-        Mon, 03 Feb 2025 13:33:49 -0800 (PST)
-Received: from ?IPV6:2001:861:73:f8d0:2866:6e4b:d20:c37c? ([2001:861:73:f8d0:2866:6e4b:d20:c37c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438e23e6181sm166240945e9.18.2025.02.03.13.33.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Feb 2025 13:33:49 -0800 (PST)
-Message-ID: <a87f98bf-45b1-4ef5-aa77-02f7e61203f4@gmail.com>
-Date: Mon, 3 Feb 2025 22:33:48 +0100
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=94m69RYLqNBNbOPtVbRk76UIyxyZap5Xoc4hnE8jFWU=;
+ b=vzbPYNTACvO1IidJ0mYjIWjBgsX5ICFoLvORbmeZ+aKS0NCvvtz1TARJthFF/yqmOx0P9mCwOcWcl6LviXhQ5Z+xUlFpw8d+OoIUa9WHKWn0AsaXgP7PW4ZovqOtvGgD8upGSJDdRZPyW3lRY0/V6IJwYLMRUUgGwhKKgxSFkwk=
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
+ by IA1PR10MB6854.namprd10.prod.outlook.com (2603:10b6:208:425::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.23; Mon, 3 Feb
+ 2025 21:49:14 +0000
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::25a9:32c2:a7b0:de9e]) by CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::25a9:32c2:a7b0:de9e%6]) with mapi id 15.20.8398.020; Mon, 3 Feb 2025
+ 21:49:13 +0000
+From: Ankur Arora <ankur.a.arora@oracle.com>
+To: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc: arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org,
+        peterz@infradead.org, mark.rutland@arm.com, harisokn@amazon.com,
+        cl@gentwo.org, memxor@gmail.com, zhenglifeng1@huawei.com,
+        joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com, Ankur Arora <ankur.a.arora@oracle.com>
+Subject: [PATCH 0/4] barrier: Introduce smp_cond_load_*_timeout()
+Date: Mon,  3 Feb 2025 13:49:07 -0800
+Message-Id: <20250203214911.898276-1-ankur.a.arora@oracle.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MW4P222CA0028.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:303:114::33) To CO6PR10MB5409.namprd10.prod.outlook.com
+ (2603:10b6:5:357::14)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v22 19/20] ftrace: Add ftrace_get_symaddr to convert
- fentry_ip to symaddr
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
- Alan Maguire <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
- linux-arch@vger.kernel.org, kernel test robot <lkp@intel.com>,
- Florent Revest <revest@chromium.org>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <173518987627.391279.3307342580035322889.stgit@devnote2>
- <173519011487.391279.5450806886342723151.stgit@devnote2>
-Content-Language: en-US
-From: Gabriel de Perthuis <g2p.code@gmail.com>
-In-Reply-To: <173519011487.391279.5450806886342723151.stgit@devnote2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|IA1PR10MB6854:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68f8c2cc-f2b9-420a-d9b2-08dd449c9966
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?hibKEodXM2gOlTdqtqiApss2CsHZXDoPkRzjRbg4E6khfqFXXcBfqvvpPJrF?=
+ =?us-ascii?Q?31KHqfiZETFSepYj/Y/Z8ZyHwIZDz8CWOCAwarkblAiCUxHPsTK0E3lnyo0c?=
+ =?us-ascii?Q?gglQPRk5cWRptlWd5/pbbUyXIPiKi1nStpEg3Pn0WpdSUnd2Q8vfrfjWEr2Q?=
+ =?us-ascii?Q?FwXXQgR7i3NZSxsqfusb0JBKggxka5dDoKA35XtJAPrsrIUyxp1+hk6DCj1R?=
+ =?us-ascii?Q?BMBuHgRhc8fD1xSPib8C5YMe38zE8DEhvm8dYyjAKgh1tfhfhPe3B0uYUUP3?=
+ =?us-ascii?Q?ECkxw3Vy15C7qmb13OL6XTe28c0/lKdVSetWqe4576ZOtuv36FArtlN31Rmk?=
+ =?us-ascii?Q?50ebNMxTzlanZdRzgZfd1Mc41yjI/KUMEq3d5/EZhaTHoCPIpF6Psd6w01YF?=
+ =?us-ascii?Q?C3CT7DWXbAN1JWn095nBCF6HwhM7XJ8w7y/rgsTaRn4nsZ4gaggAkLPGKZdX?=
+ =?us-ascii?Q?sAhCZuttOcN7Uu1Fkh73MoZ+KheqMvGiLzacHm2lZBaLDiMD22+Bl4zVYu62?=
+ =?us-ascii?Q?/cq0tkdbgz1G2YrrTxczLirdCsYopQK6GdbdrfIE/NH9366ed0dNwJ1PR6A/?=
+ =?us-ascii?Q?aqquDbCYyuoUTeUsjU0+bPKIkyh0gZ79v8pPztvEN6PjvAd/Io7SfHKmvM5e?=
+ =?us-ascii?Q?q7O4EF0Jpq3QD//hXFcqHjyKWrPlZg95YtgmXObaNaZXSIXtoXQOtzfNtIw9?=
+ =?us-ascii?Q?mhnC0pHqww2W4Zaz+EdYp5nNt1NBmOeclmM+BWwy9ijXqrx+G12WZXJU5L1C?=
+ =?us-ascii?Q?innxdQ6XC2+faxkSdasnC0rkLnXYv7GGkvu97M2tMkWk27pA5FpaGjuReJaw?=
+ =?us-ascii?Q?+Y3xl/HQfAfYiYk3VLdflj1UPFH52ytdQsNaTwZg8AdsT1qWkg3Y1j3aEIPB?=
+ =?us-ascii?Q?4Vdj5zHfJrvHrqmJd776d7IkHGBwAvzGzVuJLz+UDa1ts3HTKDnZFyhfQk5U?=
+ =?us-ascii?Q?6SZAWYfgQSyzk1fhOLC7RGrGOQhzVkpMMAjEsxx/nJs+aIbf6qIjXZ7zUi8t?=
+ =?us-ascii?Q?sMNTn11BHxu+GiKqTZ0PqI1SX8hRjIHTYfQrUGYZrhfIxvDD5+TvvMSSi3HT?=
+ =?us-ascii?Q?hTcNpso+qpzevREKKpNmO+BPWiwQw5PEn3dBVRHJPzm/5zucS9I1iQZpOOPD?=
+ =?us-ascii?Q?TF3yg7e4+ifMxzJF2EaX9Bz4lTLNPXJAOINKhENEoYqt4YSbnQWFq/DiLfPj?=
+ =?us-ascii?Q?oTuvViTuQBQrtm2KLZ4HMsQG+wVQ3cx7SKqfPDmt8N2nek2780Xa8hk/xkYK?=
+ =?us-ascii?Q?IHfu7Y1s5MYVQEuqRJ4FUo2Z0Ea1Ykb2guP9wMPiIRGtHv4+RPu3mx2ja3u9?=
+ =?us-ascii?Q?FlRtqXGFnOWCqJbZg0+Ai55GBuD6SGt2ypYwPOMvLKS7bVbE7kXMpcPl5Bqf?=
+ =?us-ascii?Q?8IR20/KO3rs4LTnGXiSN2fOy6kRA0RfqNJ59u/A4iPl6zO88nw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?7Zz+2sbieKdcIkpO8K2B0SOtgftq55aqTd5zWR53a/jbUbSzlvAoZY6joiXX?=
+ =?us-ascii?Q?rUBVSykPHafmzVIZgeuPfDjuHXS5KcpRPVQBDZLXD+xTVmDsN1/z0WqmfzCA?=
+ =?us-ascii?Q?oczM70y1Iy9ubgu51e95wudNQHH2b5wyLoH+sZlzBds4BnAUbiHmABJQJDvH?=
+ =?us-ascii?Q?zUbDY1UrIX2NOql6odfJkEYkZ7GWv6y/ND19OeNi17a5M4AuX2AfSDYV701A?=
+ =?us-ascii?Q?88f4K5IoFSzvHEADAbX+JrNb9jZkM05ndnfNh2bn7v6fOCprF5WMoL+VvdEN?=
+ =?us-ascii?Q?rsuWyDWDVzSxNqWEm6zdTzYavtRCo6Rq9GUq8T98pl7zwZ7R2G8y3ggbNMlO?=
+ =?us-ascii?Q?CxtmFe05sY7fYwrSpodjffQ+CRuV91FFaDHlLAeuf7F1VJpBmQ87xj1U2A8r?=
+ =?us-ascii?Q?PsaRIE4l6uOcwnO9U4FFrrNImbWM5UtTU+F5kdepJ4HRTDQYpv3R9Ev5H2en?=
+ =?us-ascii?Q?fHMWWynqiSZ6Df8a/mciAHfqo//hcjsERJQoZ/7aYBJdoLWSBwGLs6tKZsRl?=
+ =?us-ascii?Q?6hlqEaBR49TQ6WvvW49ivZC7oC5J4pnRmI8MaqMIEqGLd//WVXnzHaI39fyG?=
+ =?us-ascii?Q?KEmm+Y/vdVLfZmoT6Sr0P1gr0I0khYHtseYFa13F4jxn6M62kOrqdJLGE0Sh?=
+ =?us-ascii?Q?GFQxTqgT/Wlo/UbpzZ/bRPWfoqY+Tn6zcMtkmPQfOHvnyntjl8tTQcoDf6HQ?=
+ =?us-ascii?Q?1+++8P+ztlgxfjnzbqKniKk4MpG4v/HVsAtMQcRn5xIrKCEvCA9WA2YVlDEd?=
+ =?us-ascii?Q?Z3TdkVAgfYbuy2IC4/xd55QP9Micc7Pdvf6Fbb7vPdeEdBoPbce4/oyeDJje?=
+ =?us-ascii?Q?lnNkBv4HIT3jUXDTmzRdywIa+GEpnS10KdEmGTlnkg5WmraXSpU7HR3mQH7S?=
+ =?us-ascii?Q?uN2DsdgN37vtpZu0tUnoXBheRFiUxWhuwcDh40Re/4gacQge/FjlxU2ImdAG?=
+ =?us-ascii?Q?0M8oOUl5swhMVNQjRip5MrYD5bdacQAE2S1rGcEBiUtZ2VpTq+eJwfEZ1PcB?=
+ =?us-ascii?Q?kvBTbLZpopppw+EnTiuFY2r5LJn4LNOn46UaQoKto6kc/JcDzVcKuQbHvZO6?=
+ =?us-ascii?Q?yyEUc8Hy6HhdbcOHKrpSUKYMc4Xz+EKexpgJ8klIwmECY7XrGqTBivX0msKW?=
+ =?us-ascii?Q?TC/BvS4sz87/GhBxoGUH0iavs1NCQt8Z23DKMwZh9uCLu3YlWMlQ046HJ9HI?=
+ =?us-ascii?Q?D2VDngdBxTiJBbXbP14FogVrGOdQmxCnx3QNl7xoo2fKa6JD/uA6DOTNNy9o?=
+ =?us-ascii?Q?tad/H67gX3IODvDmnn/W4drDXF9Z7Yy3wwIpF6grdxvYPcyFGIIihPfp24Ke?=
+ =?us-ascii?Q?wa66Cnbmy4ibswLNnsADAXPLBXOAoAsKjdBh0miBXYqLWboQJ+t7MbwHedjS?=
+ =?us-ascii?Q?hebD9bW/gSCeNOHqRLzCOV6GVDrgWXhjzkY3Iu9WcF1iuAWViJfTRVcwkBWs?=
+ =?us-ascii?Q?jDqKf3On41km8lIrGuKqe6ZF5H1+8Ry4cYuSLA9mmHwGnlOn5qPHjCqDiEWF?=
+ =?us-ascii?Q?Dj+ef6wGxJQ8LMMoBB6mlWz+SVYQi953dCieSK7GlhwLbtWY+blu8aGC3n0b?=
+ =?us-ascii?Q?UNZcKoCsLBD19ZHk/8nkr2V5FIcPOGbphdQScL7JgTnRnRXp8PD3oqhyjnqB?=
+ =?us-ascii?Q?tg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	BegUmvixl/pQjeLdj1dKI3PjQwSyOsFzC4UJo4XnE7IjXxVfkJuXkf/PQF9JSx9WJF+kIk8sqMhq0fzp/e+r2Fq8FuBAosM+gklyGKVLngcbJtafVHSLgM6XrrpTWvjjiaYmZPRN3Er8qpF1D21XLd+aAyZ78nBPNDXEM7zPL5WxHXoKQ8sXUL6QVCeySjA+7iJ879mFvkG3wUXpdXXyM/Mw1B6HXRdmvd0TiuG21b40k74nrBgTfTbBvy2CB02b3p/3xb+3KD8bJlyx4EymR/7/Z9HZHWaFWsiPbgh9IQt9TETZgt7MLI8gr9OLG+FIXqJP1gZYUntyEV5+oHHUGAh7w7bz3wBgIiqZO7dkA9NAIpXraCLvcOwDZTw5l4T0PpwEg95gdPfzcFnTa/5I6gYwNdLuunjEkENYG7BcGoynZloGWXNZMpKX1yuX+K32HTspidDnRUCYgyyIS5V/9vtWBHTki1/tXO7Zy3TqcVmypQ0EsWtoOLQZZ64yZTYS6deEMpkEJphtwyRgadbEOdmFrWK/H/yhRQoEFBz8n7cwYNhFeUnbWmOmhqN5jzf06MILn/qsqNcHVtVdv34YVCYcEM74QjVO0vuD2s0KVdA=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68f8c2cc-f2b9-420a-d9b2-08dd449c9966
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2025 21:49:13.8045
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ujAo1VFzxSoNCCrBCVyBN7xNOuW4W3yPieevoWiN4+qGpyNkNxCIYIY+7WEQrQK7af52x03UrhbQvtDCl4oKXOfN1UnIFd6IpWJUYl14uFc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6854
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-03_09,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 spamscore=0 malwarescore=0 mlxlogscore=870
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2501170000
+ definitions=main-2502030158
+X-Proofpoint-ORIG-GUID: hk52INCY7sUYkjt4d2tJG5xN3rnnkpIT
+X-Proofpoint-GUID: hk52INCY7sUYkjt4d2tJG5xN3rnnkpIT
 
-Hello,
+Hi,
 
-I got errors building Linux 6.14-rc1 that were solved by reverting this 
-patch and the one after (19/20 and 20/20).
+This series adds waited variants of the smp_cond_load() primitives:
+smp_cond_load_relaxed_timewait(), and smp_cond_load_acquire_timewait().
 
-Errors look like:
+There are two known users for these interfaces:
 
-In file included from ./arch/x86/include/asm/asm-prototypes.h:2,
-                  from <stdin>:3:
-./arch/x86/include/asm/ftrace.h: In function 'arch_ftrace_get_symaddr':
-./arch/x86/include/asm/ftrace.h:46:21: error: implicit declaration of 
-function 'get_kernel_nofault' [-Wimplicit-function-declaration]
-    46 |                 if (get_kernel_nofault(instr, (u32 *)(fentry_ip 
-- ENDBR_INSN_SIZE)))
-       | ^~~~~~~~~~~~~~~~~~
+ - poll_idle() [1]
+ - resilient queued spinlocks [2]
 
-Will send .config on request if needed.
+For both of these cases we want to wait on a condition but also want
+to terminate the wait at some point.
 
-Le 26/12/2024 à 06:15, Masami Hiramatsu (Google) a écrit :
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->
-> This introduces ftrace_get_symaddr() which tries to convert fentry_ip
-> passed by ftrace or fgraph callback to symaddr without calling
-> kallsyms API. It returns the symbol address or 0 if it fails to
-> convert it.
->
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202412061423.K79V55Hd-lkp@intel.com/
-> Closes: https://lore.kernel.org/oe-kbuild-all/202412061804.5VRzF14E-lkp@intel.com/
-> ---
->   Changes in v21:
->    - On arm64, fix the macro name to ftrace_get_symaddr() correctly.
->    - Define ftrace_get_symaddr() outside of CONFIG_DYNAMIC_FTRACE.
->   Changes in v19:
->    - Newly added.
-> ---
->   arch/arm64/include/asm/ftrace.h |    2 +
->   arch/arm64/kernel/ftrace.c      |   63 +++++++++++++++++++++++++++++++++++++++
->   arch/x86/include/asm/ftrace.h   |   21 +++++++++++++
->   include/linux/ftrace.h          |   13 ++++++++
->   4 files changed, 99 insertions(+)
->
-> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-> index 876e88ad4119..bfe3ce9df197 100644
-> --- a/arch/arm64/include/asm/ftrace.h
-> +++ b/arch/arm64/include/asm/ftrace.h
-> @@ -52,6 +52,8 @@ extern unsigned long ftrace_graph_call;
->   extern void return_to_handler(void);
->   
->   unsigned long ftrace_call_adjust(unsigned long addr);
-> +unsigned long arch_ftrace_get_symaddr(unsigned long fentry_ip);
-> +#define ftrace_get_symaddr(fentry_ip) arch_ftrace_get_symaddr(fentry_ip)
->   
->   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
->   #define HAVE_ARCH_FTRACE_REGS
-> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-> index 570c38be833c..d7c0d023dfe5 100644
-> --- a/arch/arm64/kernel/ftrace.c
-> +++ b/arch/arm64/kernel/ftrace.c
-> @@ -143,6 +143,69 @@ unsigned long ftrace_call_adjust(unsigned long addr)
->   	return addr;
->   }
->   
-> +/* Convert fentry_ip to the symbol address without kallsyms */
-> +unsigned long arch_ftrace_get_symaddr(unsigned long fentry_ip)
-> +{
-> +	u32 insn;
-> +
-> +	/*
-> +	 * When using patchable-function-entry without pre-function NOPS, ftrace
-> +	 * entry is the address of the first NOP after the function entry point.
-> +	 *
-> +	 * The compiler has either generated:
-> +	 *
-> +	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
-> +	 * func+04:		NOP		// To be patched to BL <caller>
-> +	 *
-> +	 * Or:
-> +	 *
-> +	 * func-04:		BTI	C
-> +	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
-> +	 * func+04:		NOP		// To be patched to BL <caller>
-> +	 *
-> +	 * The fentry_ip is the address of `BL <caller>` which is at `func + 4`
-> +	 * bytes in either case.
-> +	 */
-> +	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS))
-> +		return fentry_ip - AARCH64_INSN_SIZE;
-> +
-> +	/*
-> +	 * When using patchable-function-entry with pre-function NOPs, BTI is
-> +	 * a bit different.
-> +	 *
-> +	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
-> +	 * func+04:		NOP		// To be patched to BL <caller>
-> +	 *
-> +	 * Or:
-> +	 *
-> +	 * func+00:	func:	BTI	C
-> +	 * func+04:		NOP		// To be patched to MOV X9, LR
-> +	 * func+08:		NOP		// To be patched to BL <caller>
-> +	 *
-> +	 * The fentry_ip is the address of `BL <caller>` which is at either
-> +	 * `func + 4` or `func + 8` depends on whether there is a BTI.
-> +	 */
-> +
-> +	/* If there is no BTI, the func address should be one instruction before. */
-> +	if (!IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
-> +		return fentry_ip - AARCH64_INSN_SIZE;
-> +
-> +	/* We want to be extra safe in case entry ip is on the page edge,
-> +	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
-> +	 */
-> +	if ((fentry_ip & ~PAGE_MASK) < AARCH64_INSN_SIZE * 2) {
-> +		if (get_kernel_nofault(insn, (u32 *)(fentry_ip - AARCH64_INSN_SIZE * 2)))
-> +			return 0;
-> +	} else {
-> +		insn = *(u32 *)(fentry_ip - AARCH64_INSN_SIZE * 2);
-> +	}
-> +
-> +	if (aarch64_insn_is_bti(le32_to_cpu((__le32)insn)))
-> +		return fentry_ip - AARCH64_INSN_SIZE * 2;
-> +
-> +	return fentry_ip - AARCH64_INSN_SIZE;
-> +}
-> +
->   /*
->    * Replace a single instruction, which may be a branch or NOP.
->    * If @validate == true, a replaced instruction is checked against 'old'.
-> diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-> index cc92c99ef276..f9cb4d07df58 100644
-> --- a/arch/x86/include/asm/ftrace.h
-> +++ b/arch/x86/include/asm/ftrace.h
-> @@ -34,6 +34,27 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
->   	return addr;
->   }
->   
-> +static inline unsigned long arch_ftrace_get_symaddr(unsigned long fentry_ip)
-> +{
-> +#ifdef CONFIG_X86_KERNEL_IBT
-> +	u32 instr;
-> +
-> +	/* We want to be extra safe in case entry ip is on the page edge,
-> +	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
-> +	 */
-> +	if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
-> +		if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
-> +			return fentry_ip;
-> +	} else {
-> +		instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
-> +	}
-> +	if (is_endbr(instr))
-> +		fentry_ip -= ENDBR_INSN_SIZE;
-> +#endif
-> +	return fentry_ip;
-> +}
-> +#define ftrace_get_symaddr(fentry_ip)	arch_ftrace_get_symaddr(fentry_ip)
-> +
->   #ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
->   
->   #include <linux/ftrace_regs.h>
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 4c553fe9c026..07092dfb21a4 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -622,6 +622,19 @@ enum {
->   	FTRACE_MAY_SLEEP		= (1 << 5),
->   };
->   
-> +/* Arches can override ftrace_get_symaddr() to convert fentry_ip to symaddr. */
-> +#ifndef ftrace_get_symaddr
-> +/**
-> + * ftrace_get_symaddr - return the symbol address from fentry_ip
-> + * @fentry_ip: the address of ftrace location
-> + *
-> + * Get the symbol address from @fentry_ip (fast path). If there is no fast
-> + * search path, this returns 0.
-> + * User may need to use kallsyms API to find the symbol address.
-> + */
-> +#define ftrace_get_symaddr(fentry_ip) (0)
-> +#endif
-> +
->   #ifdef CONFIG_DYNAMIC_FTRACE
->   
->   void ftrace_arch_code_modify_prepare(void);
->
->
+Now, in theory, that can be worked around by making the time check a
+part of the conditional expression provided to smp_cond_load_*():
+
+   smp_cond_load_relaxed(&cvar, !VAL || time_check());
+
+That approach, however, runs into two problems:
+ 
+  - smp_cond_load_*() only allow waiting on a condition: this might
+    be okay when we are synchronously spin-waiting on the condition,
+    but not on architectures where are actually waiting for a store
+    to a cacheline.
+
+  - this semantic problem becomes a real problem on arm64 if the
+    event-stream is disabled. That means that there will be no
+    asynchronous event (the event-stream) that periodically wakes
+    the waiter, which might lead to an interminable wait if VAL is
+    never written to.
+
+This series extends the smp_cond_load_*() interfaces by adding two
+arguments: a time-check expression and its associated time limit.
+This is sufficient to allow for both a synchronously waited
+implementation (like the generic cpu_relax() based loop), or one
+where the CPU waits for a store to a cacheline with an out-of-band
+timer.
+
+Any comments appreciated!
+
+
+Ankur
+
+[1] https://lore.kernel.org/lkml/20241107190818.522639-3-ankur.a.arora@oracle.com/
+[2] https://lore.kernel.org/lkml/20250107140004.2732830-9-memxor@gmail.com/
+
+--
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: linux-arch@vger.kernel.org
+
+Ankur Arora (4):
+  asm-generic: barrier: Add smp_cond_load_relaxed_timewait()
+  asm-generic: barrier: Add smp_cond_load_acquire_timewait()
+  arm64: barrier: Add smp_cond_load_relaxed_timewait()
+  arm64: barrier: Add smp_cond_load_acquire_timewait()
+
+ arch/arm64/include/asm/barrier.h | 74 ++++++++++++++++++++++++++++++++
+ include/asm-generic/barrier.h    | 71 ++++++++++++++++++++++++++++++
+ 2 files changed, 145 insertions(+)
+
+-- 
+2.43.5
+
 
