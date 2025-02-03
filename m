@@ -1,165 +1,150 @@
-Return-Path: <linux-arch+bounces-9962-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9963-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D4C9A252FD
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2025 08:26:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97982A25450
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2025 09:23:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA6AD1629A8
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2025 07:26:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 585AE3A98A1
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Feb 2025 08:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5821E260C;
-	Mon,  3 Feb 2025 07:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E2A1FAC3E;
+	Mon,  3 Feb 2025 08:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eiXyn5H9";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="d4PQcDGa"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="2ZD/gxDY";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YgTrZQg2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D021F2AE99;
-	Mon,  3 Feb 2025 07:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63F51FAC50;
+	Mon,  3 Feb 2025 08:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738567598; cv=none; b=a+ViKcmsa3CdJf6hhgeAYsdThEbYW9rDEZ5etIjh/LO2fWEufIWEUhcdPJU6wf6ijuFiRy3rURafBBj9OmMue0DxwxbiRZm9VtQOV4U05m69W9zB7zxIVog4ldSX5gzYdlOT4gSt+I3oT41hXalSEyWGNJMx7L5bynrHHz6rlTg=
+	t=1738570736; cv=none; b=mYyjCnypxBlC170IY/CWdjFN1WjnTrJ/cbaWVItMCWLDZRwGmcDV09ummf5Qh+6rtsmJPU6eqaLCqJ4+7kMvTK7Ra6zyKSJDtoX8W2GDTkT3UWGIG4xmakzgWhawFLx/mfKT7wAYp4gIXGodutH9zoj9BXfX+wQIHFmPO66pG9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738567598; c=relaxed/simple;
-	bh=EsY9mv3Ft9PmhX/XvueUEsGFS8g7TsjkC+vY8EhZl/w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HBpcYXfuHZY9gnzCd8Enq817qd/EiTYtB4ktBmnQTgGeCw/MmLJ9KRw5yiT/dSjc1hmEA7rzU8AcOsQXds4fRXVdAVZYRx9WnD2BvKeXZAk1dsZfmc4zihGl00ZD/Phw69zU1UIcpNRwKVx1JNLKmSsHkjs4efrMHtpETZ8kyiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eiXyn5H9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=d4PQcDGa; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1738567588;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=eoaKnCKJmvXrDrdAtKF1Z2hUqlDG8isSz3qg8Dq/520=;
-	b=eiXyn5H9ROUyZGxFJu30+mPxwFPrKGl32gpnrHZ0Rx5hR8BvoaPxMufkZxWoLfQt/oVHpI
-	xrZKfbGEJWqrDqMZyAXgW0SlLEa4T2MKOfJl5/LqceaBJwNkGQvS0E+cidDZiOGPwO0hwg
-	hh9qgkY8tqtrgYJVDE1EeZ0FMgUsT9IrfXAQls25RhMkVehkZCGgBp8DTruUkoloe9YxYo
-	p3t0frl5Mu5wF1xXbAMQWIovYvoUYO8UtjiI0h+Bla9EIoj4rte0cK90uZV30aN6dqoNmH
-	6sxYu4Cqfk8Si8phAbYjktryMDQh7ddbgCLZyR6+ASpx2bkvXJAwCqqNM1GA/Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1738567588;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=eoaKnCKJmvXrDrdAtKF1Z2hUqlDG8isSz3qg8Dq/520=;
-	b=d4PQcDGan0h1MbBeRFanmWc858IWIMqjtDiAfjyQ9wcceJR8jlqxyohxVLJ+sS0KdcLFQ3
-	vcf3/jC/WbBJIuBg==
-Date: Mon, 03 Feb 2025 08:26:22 +0100
-Subject: [PATCH] iomap: Fix -Wmissing-prototypes on UM
+	s=arc-20240116; t=1738570736; c=relaxed/simple;
+	bh=50YAk0L0Q6yUtJ/22k5/0sx7XppJX7q/VbO4MlWl0kw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=sWlHtqvOAps/wheCZtm1cyx2pJ+LaPjHUMMr5w/sfbovB7MtkgYo//Jkz1gCPOXDeURsypXzBH7TJU0OIy7uf7nwgt93ifUYdUYeWg1n6lshR0eVq1OsO5mKuEugq5odPyCVmyLyI87mBUW3ZKut1ZrWJwrzbgG9H0mvq/WoaxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=2ZD/gxDY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YgTrZQg2; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id D5E2411400DB;
+	Mon,  3 Feb 2025 03:18:53 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Mon, 03 Feb 2025 03:18:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1738570733;
+	 x=1738657133; bh=FKdwgdQes6gNQQrLDoRfBEkdAHgeHZ2aOkctxwHArZs=; b=
+	2ZD/gxDYIT1tOo64wcQeqhFxay/eEyLkb60iou8pSaO8v6ZqBxacwiYO+Ze24wyz
+	GvUpqNIAy5uCN3aRLlfyUZeYpteapdIAEgIrmxYSJFs8dYWO/5hoeueWXxGz1glh
+	lCx+91slc1W0C9nhpDxnNFKWzdK1vVqNRsCRlnNqEHjDrJLgD23u+WCs0PG87GrN
+	ptkl0nwEZn9dYjmtwhHjMUN3AFtRP3ZR4yk15txV3gDNhveBeVgQaTIVy98XCE1z
+	E0L3Vh///BTzpOpcHL3C3gkp800wAN5BnVkYjmNpAbHO1xQXXbbpvmSQjV8nC9c1
+	nz+YMrDlEpgubb21Ri/a/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738570733; x=
+	1738657133; bh=FKdwgdQes6gNQQrLDoRfBEkdAHgeHZ2aOkctxwHArZs=; b=Y
+	gTrZQg2NZ8uFsNPmtM7f9YrEqkO/ldIoq8IivNkRGT0rxkyCUoeTo/hwPh31NWYG
+	Ko6tPFVjt9cVVHlXUY5sWSJ8jzE9U9sc5ejhThrvEO66sOzc1oySl1sA/GKSf94i
+	yRbYND+9jz0vRW9VEilRcQNioszYdESJuYrmcPqZvJ4/RlXrdKoAiRd887Nytuje
+	0edQ5OyF8NApGTZ6otRdQGcx7T2BcOYliv8O/JeIZ11zR6UxipGQv/zijwD4F1bd
+	yZmODpG4a67QWwBRWTfD3iiWHw2VhUFfkxGAfJHocqCWHl54YxomqpO8s56sqvTw
+	HDkWvFaw8a6oHv/EGzUGA==
+X-ME-Sender: <xms:7XugZ82DefEdJtQRO7iYN9QI_s1WEP8NO4qUxnkYx7-Wn8EyOcE2Bw>
+    <xme:7XugZ3FoGYwd6W3C-nEWFufyHO7wV0W-RXNSUiWzzKsQtNBQEf4YxOoVyNdGqGSIi
+    bwGucx23wQzxY0Zqxk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujedtkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvleehvddv
+    geejvdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeei
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehkvggvsheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhn
+    ihigrdguvgdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrd
+    horhhgpdhrtghpthhtohepphgrlhhmvghrsehrihhvohhsihhntgdrtghomhdprhgtphht
+    thhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:7XugZ05WM7heS1RCUCMQUV4HlkOe1HvCNEk_gx6MY9P9j2ICLP44yQ>
+    <xmx:7XugZ10_MQa89zXD94j5-O3odwolnKutwjgV3U12iVt_JDIoJswEDw>
+    <xmx:7XugZ_FM5S1hl7GfvN-cwqqrgpIrHtnywn55PbSQB56VcnnUoX9Iyw>
+    <xmx:7XugZ-_k1PqMf47wrfcfLEigYVJQ_bZvlzm1kz_rRbAQYT6ubnuprw>
+    <xmx:7XugZwMi2GBWG_DQlFaKJdKMeCX6MIaymEohi7jIqtOW9xXSFVTW9ZYO>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 6996A2220072; Mon,  3 Feb 2025 03:18:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250203-um-io-v1-1-822af81bcdac@linutronix.de>
-X-B4-Tracking: v=1; b=H4sIAJ1voGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDQyNL3dJc3cx8XbO0tJQ0Q0szc3OTZCWg2oKi1LTMCrA50bG1tQCNLY0
- LVwAAAA==
-X-Change-ID: 20250129-um-io-6ffdf196774c
-To: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>, 
- Palmer Dabbelt <palmer@rivosinc.com>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1738567587; l=3395;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=EsY9mv3Ft9PmhX/XvueUEsGFS8g7TsjkC+vY8EhZl/w=;
- b=kKbo6LD1ZXtwmDNrQdWmzvqMl1QObLTFzhsw3my4nhRNE1JfOgSUsOck+4eKAb960/5TyklOh
- P0A+VvNW8AXAXl6PRGIx7RpBcyhfjRblM2dXI8QlEBCEwHBqsHmbFBE
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Date: Mon, 03 Feb 2025 09:18:33 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ "Kees Cook" <kees@kernel.org>, "Palmer Dabbelt" <palmer@rivosinc.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
+Message-Id: <15b87c5f-92de-4201-9c67-a93d5dcefe68@app.fastmail.com>
+In-Reply-To: <20250203-um-io-v1-1-822af81bcdac@linutronix.de>
+References: <20250203-um-io-v1-1-822af81bcdac@linutronix.de>
+Subject: Re: [PATCH] iomap: Fix -Wmissing-prototypes on UM
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Building lib/iomap.o on UM triggers warnings about missing prototypes.
-These prototypes should be defined by asm-generic/iomap.h, depending on
-other symbols. For example "ioread64_lo_hi" is based on "readq".
-However the generic variants of those tested symbols are defined in
-asm-generic/io.h, only after asm-generic/iomap.h has already been
-included, breaking the ifdef logic.
+On Mon, Feb 3, 2025, at 08:26, Thomas Wei=C3=9Fschuh wrote:
+> Building lib/iomap.o on UM triggers warnings about missing prototypes.
+> These prototypes should be defined by asm-generic/iomap.h, depending on
+> other symbols. For example "ioread64_lo_hi" is based on "readq".
+> However the generic variants of those tested symbols are defined in
+> asm-generic/io.h, only after asm-generic/iomap.h has already been
+> included, breaking the ifdef logic.
 
-Move the inclusion of asm-generic/iomap.h in asm-generic/io.h after the
-generic symbols have been defined, so the checks can work.
+Sorry I never took the time to fix this so far.
 
-Triggered warnings:
+> --- a/include/asm-generic/io.h
+> +++ b/include/asm-generic/io.h
+> @@ -13,10 +13,6 @@
+>  #include <linux/types.h>
+>  #include <linux/instruction_pointer.h>
+>=20
+> -#ifdef CONFIG_GENERIC_IOMAP
+> -#include <asm-generic/iomap.h>
+> -#endif
+> -
+>  #include <asm/mmiowb.h>
+>  #include <asm-generic/pci_iomap.h>
+>=20
+> @@ -1250,4 +1246,8 @@ extern int devmem_is_allowed(unsigned long pfn);
+>=20
+>  #endif /* __KERNEL__ */
+>=20
+> +#ifdef CONFIG_GENERIC_IOMAP
+> +#include <asm-generic/iomap.h>
+> +#endif
+> +
+>  #endif /* __ASM_GENERIC_IO_H */
 
-$ make ARCH=um allyesconfig lib/iomap.o
-make[1]: Entering directory '/tmp/um'
-  GEN     Makefile
-  GEN     Makefile
-  CALL    scripts/checksyscalls.sh
-  CC      lib/iomap.o
-lib/iomap.c:156:5: error: no previous prototype for ‘ioread64_lo_hi’ [-Werror=missing-prototypes]
-  156 | u64 ioread64_lo_hi(const void __iomem *addr)
-      |     ^~~~~~~~~~~~~~
-lib/iomap.c:163:5: error: no previous prototype for ‘ioread64_hi_lo’ [-Werror=missing-prototypes]
-  163 | u64 ioread64_hi_lo(const void __iomem *addr)
-      |     ^~~~~~~~~~~~~~
-lib/iomap.c:170:5: error: no previous prototype for ‘ioread64be_lo_hi’ [-Werror=missing-prototypes]
-  170 | u64 ioread64be_lo_hi(const void __iomem *addr)
-      |     ^~~~~~~~~~~~~~~~
-lib/iomap.c:178:5: error: no previous prototype for ‘ioread64be_hi_lo’ [-Werror=missing-prototypes]
-  178 | u64 ioread64be_hi_lo(const void __iomem *addr)
-      |     ^~~~~~~~~~~~~~~~
-lib/iomap.c:264:6: error: no previous prototype for ‘iowrite64_lo_hi’ [-Werror=missing-prototypes]
-  264 | void iowrite64_lo_hi(u64 val, void __iomem *addr)
-      |      ^~~~~~~~~~~~~~~
-lib/iomap.c:272:6: error: no previous prototype for ‘iowrite64_hi_lo’ [-Werror=missing-prototypes]
-  272 | void iowrite64_hi_lo(u64 val, void __iomem *addr)
-      |      ^~~~~~~~~~~~~~~
-lib/iomap.c:280:6: error: no previous prototype for ‘iowrite64be_lo_hi’ [-Werror=missing-prototypes]
-  280 | void iowrite64be_lo_hi(u64 val, void __iomem *addr)
-      |      ^~~~~~~~~~~~~~~~~
-iomap.c:288:6: error: no previous prototype for ‘iowrite64be_hi_lo’ [-Werror=missing-prototypes]
-  288 | void iowrite64be_hi_lo(u64 val, void __iomem *addr)
-      |      ^~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+I have not tried it yet, but I suspect this is not the correct
+fix here. Unfortunately the indirect header inclusions in this
+file are way too complicated with corner cases in various
+architectures. How much testing have you given your patch
+across other targets? I think the last time we tried to address
+it, we broke mips or parisc.
 
-Fixes: 0fcb70851fbf ("Makefile.extrawarn: turn on missing-prototypes globally")
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- include/asm-generic/io.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index a5cbbf3e26ec7d06f7e67ee9731021031b39aa13..1bfdc4d5643054701c27073c146a6d8cc3903384 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -13,10 +13,6 @@
- #include <linux/types.h>
- #include <linux/instruction_pointer.h>
- 
--#ifdef CONFIG_GENERIC_IOMAP
--#include <asm-generic/iomap.h>
--#endif
--
- #include <asm/mmiowb.h>
- #include <asm-generic/pci_iomap.h>
- 
-@@ -1250,4 +1246,8 @@ extern int devmem_is_allowed(unsigned long pfn);
- 
- #endif /* __KERNEL__ */
- 
-+#ifdef CONFIG_GENERIC_IOMAP
-+#include <asm-generic/iomap.h>
-+#endif
-+
- #endif /* __ASM_GENERIC_IO_H */
-
----
-base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-change-id: 20250129-um-io-6ffdf196774c
-
-Best regards,
--- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-
+    Arnd
 
