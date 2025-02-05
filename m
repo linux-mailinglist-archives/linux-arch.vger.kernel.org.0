@@ -1,405 +1,505 @@
-Return-Path: <linux-arch+bounces-10007-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10009-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FE03A27D33
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Feb 2025 22:22:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D85A3A280AD
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2025 02:22:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D1FB3A5F0B
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Feb 2025 21:22:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FB63188764F
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2025 01:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB7621A952;
-	Tue,  4 Feb 2025 21:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097E725A63B;
+	Wed,  5 Feb 2025 01:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Fm2Y3+Uj"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Un9vUBt2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8A9219A8E;
-	Tue,  4 Feb 2025 21:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773C634545
+	for <linux-arch@vger.kernel.org>; Wed,  5 Feb 2025 01:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738704137; cv=none; b=T0sseMPX2vkZ3NJV3m2hbUW58AAIStjnCeBmvBtnINPdRAvTJh1dYkzt6DxhV3ZHSKxy7YwFIyT6JGoIiHlXqHjwP0oM3xsLI1U4RAxHrOcJzawoTYEWnA1pJi2Wa7tn79324x+tYHkD6eburaCY0DPSB1KztZAK10/oMAX70Lg=
+	t=1738718517; cv=none; b=kGtlS9SBwp43FoAxt5shxaphT6+vo1NVWM2SQ275Ne5aiy4Owaf6mu15K4zYK4qPKY3v5Ay0tQWYm5Se1EhCyEsLko2SvumZZyb6CyFyVwfbZlBEPUPoRUmv7GdMHPaCyEbXhq1BIdKx0UO1f5jRFeW5gbZCVIMMoSXIZluLYBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738704137; c=relaxed/simple;
-	bh=x67EsRxoyadiJ03IuHeHiad0kDJ8hMD/yoWv4p9tkiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MTFmN2c8NFVjYB5cC0+VebavAEOt07vbMLnDpRuH65zcybBgnEtGuF62Xz6yuvR/fLWd5JHzDrGWMxpY5dRnTzKgdjO8Ht9aJT7WYPi6JjUA87PrAylapBSeAPxvPyDbgSqX3WJeuQjy91gzH2A1Oz2DvPmQNSH9vEhGydtNhiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Fm2Y3+Uj; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1738704132;
-	bh=x67EsRxoyadiJ03IuHeHiad0kDJ8hMD/yoWv4p9tkiQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Fm2Y3+UjOgFYHCaWW90A59ft8+z5iDr0uyMEeYW4ZMRzKhSvzK4HNgg2y2NFgUWNO
-	 ad1/KYhzxRjbhG5Vch1/tDZNuCWuZDfm31FEKn5zXCo5KnDn52v2toPZdxR8RfNNfN
-	 KsVSzWG3BbY80BSCFiA0Dr3G+yzCPHfaWI/Wz6kE=
-Date: Tue, 4 Feb 2025 22:22:12 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>, 
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] module: Introduce hash-based integrity checking
-Message-ID: <b898c472-38f1-4604-9cfd-f763eb5198d8@t-8ch.de>
-References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
- <20250120-module-hashes-v2-6-ba1184e27b7f@weissschuh.net>
- <823ec325-e33d-4db2-8a35-537aead473a1@suse.com>
+	s=arc-20240116; t=1738718517; c=relaxed/simple;
+	bh=W4v82jeQ22Pz6GyT+jYcfnMYgeyfCPALxxXS3GQSCcY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UxA8qdRoiPtXc5xHgP4goImF6cjN+7R9REUDurlz3EjYlq7bj35BswxmINlL+wNZ5Y8tIenhcrksm9/LgCeSW/Pd4fUc8xzqeX7qEKKRlr/aRrr08k6kCcgb3TSRdt4xS1sGe3nnCJDj/01+0W1JkXBm1mhgYxhEcmfOGs71F0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Un9vUBt2; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2f9d17ac130so1421465a91.3
+        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2025 17:21:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738718514; x=1739323314; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WAelabJsFDQCp6OSdU0Y7aOri7VRZ4IciM6Wd7w26sc=;
+        b=Un9vUBt2hNGP9TEkE6D71VLewkxBjOc0mH+Czecc7gq5G9GmXoDrBmkonn3QDznRKl
+         o+kE4hQ4MuyRDZwV/qoGX6NaOR8cGu3PYOa3m7NhDigJc/NEA1mhFwQiXmMJZkfkIzMN
+         BLZpYBPxxxQiWwVSYA+p5CWyucHK7M9BXyHChY35awaXcSVRNDDzCgtg8/abpUYCl0vE
+         bNpuFKkzZhGOKqGu/PolYHkdCL+TreOHcrzKBz6xrrlhNk0c4a/P/fl7daV3+3RyDaKU
+         lpCgi5Cp5evW2aZ2Yi/mFzHN/pBVzTj5jbE53I3rxlHcAvQv+2G1OOuGsMhItZgvi7S5
+         Wu1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738718514; x=1739323314;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WAelabJsFDQCp6OSdU0Y7aOri7VRZ4IciM6Wd7w26sc=;
+        b=deX39adcavo/fN7+Eq7hAdMJYZiJ+EwT3rLxfRUgwmLRQdF4pdOAlmXi7VUwITI9Yf
+         LrEYoL3NBnH494mlQuKBCeiwlcv08NK6mLNzHq5Sh85aJepE309Q+LhLXbfXflWN+asF
+         iTMSLMi56gMPqIlLHpHEfZOAYHX/ttEhSMBKT3NeHYkc32RN6InE4sXGmZF1fy/LSGmh
+         i+qR9xJj1RtgYFzmcr1HXdfb+RWYOOB3U0i9mSYC7ClJuXQKMsnFLeTxJPpOPVE7j4G0
+         BkXme7zorK+VxrZSxKA4zeNln7+CM5H7Qg9XyJNx5rwTcqQJ2+UDkBUik0UBCMwg2S+P
+         t0VQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXI+KIbPnFLXi2kJmE7p+DzSGjW72s/W4ZwSBEomjrEm2ewwxjymhhXk+fZUmYsrYXsGca0lbRBp1Qo@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOesoc4xutLfwoF8beRpW5wnPTLKk9BgtrPYzAJHEFHd7hfIWQ
+	INi2xwV8I7fuvnH6CYOBQCyXkArUGiMcb7Fk3Za1m1yCU4CAx6maHnvt+BvGhpk=
+X-Gm-Gg: ASbGncvmmgJAW9r1Pe6oxV/ChSpSfS412JRH9qZ7odH3sTcyAYY0sf+BzUqYdvpJIx6
+	w4QFLfCpojKDh+hRKBm9FcGKZQd9908XBsdlLdl8SzEAHFiJHeCd/UXtXEMhNJnrk7nyEqUmQ7h
+	fFzz4/bol7MIHh4wdOTIr+ve1lSpm6mclaCiA37GhbKQGJ0suVIndwFe6JkcBcabe0jZXkrKJLI
+	gnCSL129vQ2sNZV6AvKjQJCP/+H/ksiBQalUux73r3BnG4QGrto/Op/w+bjmug1Ge2wGf7Cjcgp
+	K85qczq9kKbNbSowpCR73rEpGA==
+X-Google-Smtp-Source: AGHT+IE6Zkv813EgT0ESIaLEJg8jiQ4i2X0N7JUMSMiP3/aeLMnGI8u130cHLCiPsZbC78qiLiwi+w==
+X-Received: by 2002:a05:6a00:ad1:b0:726:64a5:5f67 with SMTP id d2e1a72fcca58-73035135003mr1488946b3a.12.1738718513349;
+        Tue, 04 Feb 2025 17:21:53 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69cec0fsm11457202b3a.137.2025.02.04.17.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Feb 2025 17:21:52 -0800 (PST)
+From: Deepak Gupta <debug@rivosinc.com>
+Subject: [PATCH v9 00/26] riscv control-flow integrity for usermode
+Date: Tue, 04 Feb 2025 17:21:47 -0800
+Message-Id: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <823ec325-e33d-4db2-8a35-537aead473a1@suse.com>
+X-B4-Tracking: v=1; b=H4sIACu9omcC/23OwW7DIAwG4FepOI/J4AKhp75HVUUJMasPSyrYU
+ Ksq7z6aHVZN+PZb+j/7ITIlpiwOu4dIVDjzMtfg33YiXIb5gyRPNQsNeg8eQRbTf9dOHyL3v12
+ JU0DUsYtm1KIWr4ki3zb0dK75wvlrSfftRlHP7cYpANXiipIgcRysGS0ZA/GYuCyZ5/Aelk/xF
+ It9VbqmYqtiYfKRwGFE11Dci6J9U3FV0U67QN6jDWND6f6UOk2lq8oUSO2HAUHD/1/Wdf0BTzS
+ pkokBAAA=
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+ Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
+ rick.p.edgecombe@intel.com, Deepak Gupta <debug@rivosinc.com>, 
+ Andy Chiu <andybnac@gmail.com>
+X-Mailer: b4 0.14.0
 
-Hi Petr,
+Basics and overview
+===================
 
-On 2025-02-03 15:22:54+0100, Petr Pavlu wrote:
-> On 1/20/25 18:44, Thomas Weißschuh wrote:
-> > The current signature-based module integrity checking has some drawbacks
-> > in combination with reproducible builds:
-> > Either the module signing key is generated at build time, which makes
-> > the build unreproducible, or a static key is used, which precludes
-> > rebuilds by third parties and makes the whole build and packaging
-> > process much more complicated.
-> > Introduce a new mechanism to ensure only well-known modules are loaded
-> > by embedding a list of hashes of all modules built as part of the full
-> > kernel build into vmlinux.
-> > 
-> > Non-builtin modules can be validated as before through signatures.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> >  .gitignore                                   |  1 +
-> >  Documentation/kbuild/reproducible-builds.rst |  5 ++-
-> >  Makefile                                     |  8 ++++-
-> >  include/asm-generic/vmlinux.lds.h            | 11 ++++++
-> >  include/linux/module_hashes.h                | 17 +++++++++
-> >  kernel/module/Kconfig                        | 17 ++++++++-
-> >  kernel/module/Makefile                       |  1 +
-> >  kernel/module/hashes.c                       | 52 ++++++++++++++++++++++++++++
-> >  kernel/module/internal.h                     |  1 +
-> >  kernel/module/main.c                         |  6 ++++
-> >  scripts/Makefile.modfinal                    |  6 ++++
-> >  scripts/Makefile.vmlinux                     |  5 +++
-> >  scripts/link-vmlinux.sh                      | 25 ++++++++++++-
-> >  scripts/module-hashes.sh                     | 26 ++++++++++++++
-> >  security/lockdown/Kconfig                    |  2 +-
-> >  15 files changed, 178 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/.gitignore b/.gitignore
-> > index 6839cf84acda0d2d3c236a2e42b0cb0fe1b14965..7c40151c3f5d0c15ac04cead5f21c291a98d779f 100644
-> > --- a/.gitignore
-> > +++ b/.gitignore
-> > @@ -28,6 +28,7 @@
-> >  *.gz
-> >  *.i
-> >  *.ko
-> > +*.ko.hash
-> >  *.lex.c
-> >  *.ll
-> >  *.lst
-> > diff --git a/Documentation/kbuild/reproducible-builds.rst b/Documentation/kbuild/reproducible-builds.rst
-> > index f2dcc39044e66ddd165646e0b51ccb0209aca7dd..6a742ad745113a9267223b33810dbc7218c47d4c 100644
-> > --- a/Documentation/kbuild/reproducible-builds.rst
-> > +++ b/Documentation/kbuild/reproducible-builds.rst
-> > @@ -79,7 +79,10 @@ generate a different temporary key for each build, resulting in the
-> >  modules being unreproducible.  However, including a signing key with
-> >  your source would presumably defeat the purpose of signing modules.
-> >  
-> > -One approach to this is to divide up the build process so that the
-> > +Instead ``CONFIG_MODULE_HASHES`` can be used to embed a static list
-> > +of valid modules to load.
-> > +
-> > +Another approach to this is to divide up the build process so that the
-> >  unreproducible parts can be treated as sources:
-> >  
-> >  1. Generate a persistent signing key.  Add the certificate for the key
-> > diff --git a/Makefile b/Makefile
-> > index b9464c88ac7230518a756bff5e6c5c8871cc5058..fc862ffd2df843c0b68bebc8f554b88850ba1541 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1535,8 +1535,10 @@ endif
-> >  # is an exception.
-> >  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> >  KBUILD_BUILTIN := 1
-> > +ifndef CONFIG_MODULE_HASHES
-> >  modules: vmlinux
-> >  endif
-> > +endif
-> >  
-> >  modules: modules_prepare
-> >  
-> 
-> I think that the way the feature is integrated into the build is
-> currently suboptimal. We should look how to make it properly orthogonal
-> with the BTF stuff and also try to obtain the number of modules early.
-> Sorry, I can't immediately provide any advice here as I need to
-> understand the relevant logic more myself.
+Software with larger attack surfaces (e.g. network facing apps like databases,
+browsers or apps relying on browser runtimes) suffer from memory corruption
+issues which can be utilized by attackers to bend control flow of the program
+to eventually gain control (by making their payload executable). Attackers are
+able to perform such attacks by leveraging call-sites which rely on indirect
+calls or return sites which rely on obtaining return address from stack memory.
 
-The feature should be usable without BTF. The ordering requirement does
-not only exist for BTF generation but also modpost.
-As for counting the modules early I'm hoping for some feedback from
-the kbuild experts.
+To mitigate such attacks, risc-v extension zicfilp enforces that all indirect
+calls must land on a landing pad instruction `lpad` else cpu will raise software
+check exception (a new cpu exception cause code on riscv).
+Similarly for return flow, risc-v extension zicfiss extends architecture with
 
-> > @@ -1916,7 +1918,11 @@ modules.order: $(build-dir)
-> >  # KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
-> >  # This is solely useful to speed up test compiles.
-> >  modules: modpost
-> > -ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-> > +ifdef CONFIG_MODULE_HASHES
-> > +ifeq ($(MODULE_HASHES_MODPOST_FINAL), 1)
-> > +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-> > +endif
-> > +else ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-> >  	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-> >  endif
-> >  
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> > index 54504013c74915c2ed923fb3afde024a69cdae6b..aebea528aac3d7209bcee12c25f750ab0f7576a5 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -486,6 +486,8 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
-> >  									\
-> >  	PRINTK_INDEX							\
-> >  									\
-> > +	MODULE_HASHES							\
-> > +									\
-> >  	/* Kernel symbol table: Normal symbols */			\
-> >  	__ksymtab         : AT(ADDR(__ksymtab) - LOAD_OFFSET) {		\
-> >  		__start___ksymtab = .;					\
-> > @@ -895,6 +897,15 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
-> >  #define PRINTK_INDEX
-> >  #endif
-> >  
-> > +#ifdef CONFIG_MODULE_HASHES
-> > +#define MODULE_HASHES							\
-> > +	.module_hashes : AT(ADDR(.module_hashes) - LOAD_OFFSET) {	\
-> > +	BOUNDED_SECTION_BY(.module_hashes, _module_hashes)		\
-> > +	}
-> > +#else
-> > +#define MODULE_HASHES
-> > +#endif
-> > +
-> >  /*
-> >   * Discard .note.GNU-stack, which is emitted as PROGBITS by the compiler.
-> >   * Otherwise, the type of .notes section would become PROGBITS instead of NOTES.
-> > diff --git a/include/linux/module_hashes.h b/include/linux/module_hashes.h
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..5f2f0546e3875e6bc73bdd53aebaada7371b7f79
-> > --- /dev/null
-> > +++ b/include/linux/module_hashes.h
-> > @@ -0,0 +1,17 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> > +
-> > +#ifndef _LINUX_MODULE_HASHES_H
-> > +#define _LINUX_MODULE_HASHES_H
-> > +
-> > +#include <linux/compiler_attributes.h>
-> > +#include <linux/types.h>
-> > +#include <crypto/sha2.h>
-> > +
-> > +#define __module_hashes_section __section(".module_hashes")
-> > +#define MODULE_HASHES_HASH_SIZE SHA256_DIGEST_SIZE
-> > +
-> > +extern const u8 module_hashes[][MODULE_HASHES_HASH_SIZE];
-> > +
-> > +extern const typeof(module_hashes[0]) __start_module_hashes, __stop_module_hashes;
-> > +
-> > +#endif /* _LINUX_MODULE_HASHES_H */
-> > diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> > index a80de8d22efdd0f13b3eb579a8ff1e69029d0694..cdd30b9a08d8cdf3ec0595b5e414265b869d343e 100644
-> > --- a/kernel/module/Kconfig
-> > +++ b/kernel/module/Kconfig
-> > @@ -212,7 +212,7 @@ config MODULE_SIG
-> >  
-> >  config MODULE_SIG_POLICY
-> >  	def_bool y
-> > -	depends on MODULE_SIG
-> > +	depends on MODULE_SIG || MODULE_HASHES
-> >  
-> >  config MODULE_SIG_FORCE
-> >  	bool "Require modules to be validly signed"
-> > @@ -348,6 +348,21 @@ config MODULE_DECOMPRESS
-> >  
-> >  	  If unsure, say N.
-> >  
-> > +config MODULE_HASHES
-> > +	bool "Module hash validation"
-> > +	depends on $(success,cksum --algorithm sha256 --raw /dev/null)
-> 
-> The cksum utility from GNU coreutils gained the --algorithm option in
-> 2021 [1] and the --raw option in 2023 [2], which looks quite recent.
-> The document process/changes.rst doesn't mention a minimum version for
-> coreutils. However, I'd consider using sha256sum or
-> 'openssl dgst -sha256 -binary' as that should cover more systems.
+- `sspush` instruction to push return address on a shadow stack
+- `sspopchk` instruction to pop return address from shadow stack
+  and compare with input operand (i.e. return address on stack)
+- `sspopchk` to raise software check exception if comparision above
+  was a mismatch
+- Protection mechanism using which shadow stack is not writeable via
+  regular store instructions
 
-Then I'd prefer 'openssl'. Or we reuse the 150 lines of sha256
-implementation from lib/crypto/sha256.c and have no external
-dependencies.
+More information an details can be found at extensions github repo [1].
 
-> [1] https://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commitdiff;h=ad6c8e1181a3966e35d68c1c354deb1c73f3e974
-> [2] https://git.savannah.gnu.org/gitweb/?p=coreutils.git;a=commitdiff;h=ead07bb3d461389bb52336109be7858458e49c38
-> 
-> > +	select CRYPTO_LIB_SHA256
-> > +	help
-> > +	  Validate modules by their hashes.
-> > +	  Only modules built together with the main kernel image can be
-> > +	  validated that way.
-> > +
-> > +	  This is a reproducible-build compatible alternative to a build-time
-> > +	  generated module keyring, as enabled by
-> > +	  CONFIG_MODULE_SIG_KEY=certs/signing_key.pem.
-> > +
-> > +	  Also see the warning in MODULE_SIG about stripping modules.
-> > +
-> >  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-> >  	bool "Allow loading of modules with missing namespace imports"
-> >  	help
-> > diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> > index 50ffcc413b54504db946af4dce3b41dc4aece1a5..6fe0c14ca5a05b49c1161fcfa8aaa130f89b70e1 100644
-> > --- a/kernel/module/Makefile
-> > +++ b/kernel/module/Makefile
-> > @@ -23,3 +23,4 @@ obj-$(CONFIG_KGDB_KDB) += kdb.o
-> >  obj-$(CONFIG_MODVERSIONS) += version.o
-> >  obj-$(CONFIG_MODULE_UNLOAD_TAINT_TRACKING) += tracking.o
-> >  obj-$(CONFIG_MODULE_STATS) += stats.o
-> > +obj-$(CONFIG_MODULE_HASHES) += hashes.o
-> > diff --git a/kernel/module/hashes.c b/kernel/module/hashes.c
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..1aa49767a39b4e0c495b17d3f2edcb5a6ceb839e
-> > --- /dev/null
-> > +++ b/kernel/module/hashes.c
-> > @@ -0,0 +1,52 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +
-> > +#define pr_fmt(fmt) "module/hash: " fmt
-> > +
-> > +#include <linux/int_log.h>
-> > +#include <linux/module_hashes.h>
-> > +#include <linux/module.h>
-> > +#include <crypto/sha2.h>
-> > +#include "internal.h"
-> > +
-> > +static inline size_t module_hashes_count(void)
-> > +{
-> > +	return (__stop_module_hashes - __start_module_hashes) / MODULE_HASHES_HASH_SIZE;
-> > +}
-> > +
-> > +static __init __maybe_unused int module_hashes_init(void)
-> > +{
-> > +	size_t num_hashes = module_hashes_count();
-> > +	int num_width = (intlog10(num_hashes) >> 24) + 1;
-> 
-> It is unlikely, but I suppose one could configure the kernel with
-> CONFIG_MODULE_DEBUG and CONFIG_MODULE_HASHES but without any actual
-> modules. In this corner case, intlog10() will be called with 0 and
-> produces a warning.
+Equivalent to landing pad (zicfilp) on x86 is `ENDBRANCH` instruction in Intel
+CET [3] and branch target identification (BTI) [4] on arm.
+Similarly x86's Intel CET has shadow stack [5] and arm64 has guarded control
+stack (GCS) [6] which are very similar to risc-v's zicfiss shadow stack.
 
-Ack.
+x86 and arm64 support for user mode shadow stack is already in mainline.
 
-> > +	size_t i;
-> > +
-> > +	pr_debug("Known hashes (%zu):\n", num_hashes);
-> > +
-> > +	for (i = 0; i < num_hashes; i++)
-> > +		pr_debug("%*zu %*phN\n", num_width, i,
-> > +			 (int)sizeof(module_hashes[i]), module_hashes[i]);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +#if IS_ENABLED(CONFIG_MODULE_DEBUG)
-> > +early_initcall(module_hashes_init);
-> > +#endif
-> > +
-> > +int module_hash_check(struct load_info *info, int flags)
-> > +{
-> > +	u8 digest[MODULE_HASHES_HASH_SIZE];
-> > +	size_t i;
-> > +
-> > +	sha256((const u8 *)info->hdr, info->len, digest);
-> > +
-> > +	for (i = 0; i < module_hashes_count(); i++) {
-> > +		if (memcmp(module_hashes[i], digest, MODULE_HASHES_HASH_SIZE) == 0) {
-> > +			pr_debug("allow %*phN\n", (int)sizeof(digest), digest);
-> > +			info->sig_ok = true;
-> > +			return 0;
-> > +		}
-> > +	}
-> > +
-> > +	pr_debug("block %*phN\n", (int)sizeof(digest), digest);
-> > +	return -ENOKEY;
-> > +}
-> > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> > index c30abeefa60b884c4a69b1eb4f1123a4bbee4b47..9c927c212f862fff7000f1cfac3c7e391a2390ac 100644
-> > --- a/kernel/module/internal.h
-> > +++ b/kernel/module/internal.h
-> > @@ -334,6 +334,7 @@ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-> >  				char *secstrings, struct module *mod);
-> >  
-> >  int module_sig_check(struct load_info *info, int flags);
-> > +int module_hash_check(struct load_info *info, int flags);
-> >  
-> >  #ifdef CONFIG_DEBUG_KMEMLEAK
-> >  void kmemleak_load_module(const struct module *mod, const struct load_info *info);
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index effe1db02973d4f60ff6cbc0d3b5241a3576fa3e..094ace81d795711b56d12a2abc75ea35449c8300 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3218,6 +3218,12 @@ static int module_integrity_check(struct load_info *info, int flags)
-> >  {
-> >  	int err = 0;
-> >  
-> > +	if (IS_ENABLED(CONFIG_MODULE_HASHES)) {
-> > +		err = module_hash_check(info, flags);
-> > +		if (!err)
-> > +			return 0;
-> > +	}
-> > +
-> >  	if (IS_ENABLED(CONFIG_MODULE_SIG))
-> >  		err = module_sig_check(info, flags);
-> >  
-> 
-> Nit: I'd write this function as follows to make the logic shorter and to
-> express that the code looks for the first handler that successfully
-> verifies the module by setting info->sig_ok.
-> 
-> static int module_integrity_check(struct load_info *info, int flags)
-> {
-> 	int err = 0;
-> 
-> 	if (IS_ENABLED(CONFIG_MODULE_HASHES))
-> 		err = module_hash_check(info, flags);
-> 
-> 	if (!info->sig_ok && IS_ENABLED(CONFIG_MODULE_SIG))
-> 		err = module_sig_check(info, flags);
-> 
-> 	if (err)
-> 		return err;
-> 	if (info->sig_ok)
-> 		return 0;
-> 	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
-> }
+Kernel awareness for user control flow integrity
+================================================
 
-Ack.
+This series picks up Samuel Holland's envcfg changes [2] as well. So if those are
+being applied independently, they should be removed from this series.
 
+Enabling:
 
-Thanks!
-Thomas
+In order to maintain compatibility and not break anything in user mode, kernel
+doesn't enable control flow integrity cpu extensions on binary by default.
+Instead exposes a prctl interface to enable, disable and lock the shadow stack
+or landing pad feature for a task. This allows userspace (loader) to enumerate
+if all objects in its address space are compiled with shadow stack and landing
+pad support and accordingly enable the feature. Additionally if a subsequent
+`dlopen` happens on a library, user mode can take a decision again to disable
+the feature (if incoming library is not compiled with support) OR terminate the
+task (if user mode policy is strict to have all objects in address space to be
+compiled with control flow integirty cpu feature). prctl to enable shadow stack
+results in allocating shadow stack from virtual memory and activating for user
+address space. x86 and arm64 are also following same direction due to similar
+reason(s).
+
+clone/fork:
+
+On clone and fork, cfi state for task is inherited by child. Shadow stack is
+part of virtual memory and is a writeable memory from kernel perspective
+(writeable via a restricted set of instructions aka shadow stack instructions)
+Thus kernel changes ensure that this memory is converted into read-only when
+fork/clone happens and COWed when fault is taken due to sspush, sspopchk or
+ssamoswap. In case `CLONE_VM` is specified and shadow stack is to be enabled,
+kernel will automatically allocate a shadow stack for that clone call.
+
+map_shadow_stack:
+
+x86 introduced `map_shadow_stack` system call to allow user space to explicitly
+map shadow stack memory in its address space. It is useful to allocate shadow
+for different contexts managed by a single thread (green threads or contexts)
+risc-v implements this system call as well.
+
+signal management:
+
+If shadow stack is enabled for a task, kernel performs an asynchronous control
+flow diversion to deliver the signal and eventually expects userspace to issue
+sigreturn so that original execution can be resumed. Even though resume context
+is prepared by kernel, it is in user space memory and is subject to memory
+corruption and corruption bugs can be utilized by attacker in this race window
+to perform arbitrary sigreturn and eventually bypass cfi mechanism.
+Another issue is how to ensure that cfi related state on sigcontext area is not
+trampled by legacy apps or apps compiled with old kernel headers.
+
+In order to mitigate control-flow hijacting, kernel prepares a token and place
+it on shadow stack before signal delivery and places address of token in
+sigcontext structure. During sigreturn, kernel obtains address of token from
+sigcontext struture, reads token from shadow stack and validates it and only
+then allow sigreturn to succeed. Compatiblity issue is solved by adopting
+dynamic sigcontext management introduced for vector extension. This series
+re-factor the code little bit to allow future sigcontext management easy (as
+proposed by Andy Chiu from SiFive)
+
+config and compilation:
+
+Introduce a new risc-v config option `CONFIG_RISCV_USER_CFI`. Selecting this
+config option picks the kernel support for user control flow integrity. This
+optin is presented only if toolchain has shadow stack and landing pad support.
+And is on purpose guarded by toolchain support. Reason being that eventually
+vDSO also needs to be compiled in with shadow stack and landing pad support.
+vDSO compile patches are not included as of now because landing pad labeling
+scheme is yet to settle for usermode runtime.
+
+To get more information on kernel interactions with respect to
+zicfilp and zicfiss, patch series adds documentation for
+`zicfilp` and `zicfiss` in following:
+Documentation/arch/riscv/zicfiss.rst
+Documentation/arch/riscv/zicfilp.rst
+
+How to test this series
+=======================
+
+Toolchain
+---------
+$ git clone git@github.com:sifive/riscv-gnu-toolchain.git -b cfi-dev
+$ riscv-gnu-toolchain/configure --prefix=<path-to-where-to-build> --with-arch=rv64gc_zicfilp_zicfiss --enable-linux --disable-gdb  --with-extra-multilib-test="rv64gc_zicfilp_zicfiss-lp64d:-static"
+$ make -j$(nproc)
+
+Qemu
+----
+Get the lastest qemu
+$ cd qemu
+$ mkdir build
+$ cd build
+$ ../configure --target-list=riscv64-softmmu
+$ make -j$(nproc)
+
+Opensbi
+-------
+$ git clone git@github.com:deepak0414/opensbi.git -b v6_cfi_spec_split_opensbi
+$ make CROSS_COMPILE=<your riscv toolchain> -j$(nproc) PLATFORM=generic
+
+Linux
+-----
+Running defconfig is fine. CFI is enabled by default if the toolchain
+supports it.
+
+$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc) defconfig
+$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc)
+
+In case you're building your own rootfs using toolchain, please make sure you
+pick following patch to ensure that vDSO compiled with lpad and shadow stack.
+
+"arch/riscv: compile vdso with landing pad"
+
+Branch where above patch can be picked
+https://github.com/deepak0414/linux-riscv-cfi/tree/vdso_user_cfi_v6.12-rc1
+
+Running
+-------
+
+Modify your qemu command to have:
+-bios <path-to-cfi-opensbi>/build/platform/generic/firmware/fw_dynamic.bin
+-cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
+
+vDSO related Opens (in the flux)
+=================================
+
+I am listing these opens for laying out plan and what to expect in future
+patch sets. And of course for the sake of discussion.
+
+Shadow stack and landing pad enabling in vDSO
+----------------------------------------------
+vDSO must have shadow stack and landing pad support compiled in for task
+to have shadow stack and landing pad support. This patch series doesn't
+enable that (yet). Enabling shadow stack support in vDSO should be
+straight forward (intend to do that in next versions of patch set). Enabling
+landing pad support in vDSO requires some collaboration with toolchain folks
+to follow a single label scheme for all object binaries. This is necessary to
+ensure that all indirect call-sites are setting correct label and target landing
+pads are decorated with same label scheme.
+
+How many vDSOs
+---------------
+Shadow stack instructions are carved out of zimop (may be operations) and if CPU
+doesn't implement zimop, they're illegal instructions. Kernel could be running on
+a CPU which may or may not implement zimop. And thus kernel will have to carry 2
+different vDSOs and expose the appropriate one depending on whether CPU implements
+zimop or not.
+
+References
+==========
+[1] - https://github.com/riscv/riscv-cfi
+[2] - https://lore.kernel.org/all/20240814081126.956287-1-samuel.holland@sifive.com/
+[3] - https://lwn.net/Articles/889475/
+[4] - https://developer.arm.com/documentation/109576/0100/Branch-Target-Identification
+[5] - https://www.intel.com/content/dam/develop/external/us/en/documents/catc17-introduction-intel-cet-844137.pdf
+[6] - https://lwn.net/Articles/940403/
+
+---
+changelog
+---------
+v9:
+- rebased on master (39a803b754d5 fix braino in "9p: fix ->rename_sem exclusion")
+- dropped "mm: Introduce ARCH_HAS_USER_SHADOW_STACK" (master has it from arm64/gcs)
+- dropped "prctl: arch-agnostic prctl for shadow stack" (master has it from arm64/gcs)
+
+v8:
+- rebased on palmer/for-next
+- dropped samuel holland's `envcfg` context switch patches.
+  they are in parlmer/for-next
+  
+v7:
+- Removed "riscv/Kconfig: enable HAVE_EXIT_THREAD for riscv"
+  Instead using `deactivate_mm` flow to clean up.
+  see here for more context
+  https://lore.kernel.org/all/20230908203655.543765-1-rick.p.edgecombe@intel.com/#t
+- Changed the header include in `kselftest`. Hopefully this fixes compile
+  issue faced by Zong Li at SiFive.
+- Cleaned up an orphaned change to `mm/mmap.c` in below patch
+  "riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE"
+- Lock interfaces for shadow stack and indirect branch tracking expect arg == 0
+  Any future evolution of this interface should accordingly define how arg should
+  be setup.
+- `mm/map.c` has an instance of using `VM_SHADOW_STACK`. Fixed it to use helper
+  `is_shadow_stack_vma`.
+- Link to v6: https://lore.kernel.org/r/20241008-v5_user_cfi_series-v6-0-60d9fe073f37@rivosinc.com
+
+v6:
+- Picked up Samuel Holland's changes as is with `envcfg` placed in
+  `thread` instead of `thread_info`
+- fixed unaligned newline escapes in kselftest
+- cleaned up messages in kselftest and included test output in commit message
+- fixed a bug in clone path reported by Zong Li
+- fixed a build issue if CONFIG_RISCV_ISA_V is not selected
+  (this was introduced due to re-factoring signal context
+  management code)
+
+v5:
+- rebased on v6.12-rc1
+- Fixed schema related issues in device tree file
+- Fixed some of the documentation related issues in zicfilp/ss.rst
+  (style issues and added index)
+- added `SHADOW_STACK_SET_MARKER` so that implementation can define base
+  of shadow stack.
+- Fixed warnings on definitions added in usercfi.h when
+  CONFIG_RISCV_USER_CFI is not selected.
+- Adopted context header based signal handling as proposed by Andy Chiu
+- Added support for enabling kernel mode access to shadow stack using
+  FWFT
+  (https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-firmware-features.adoc)
+- Link to v5: https://lore.kernel.org/r/20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com
+  (Note: I had an issue in my workflow due to which version number wasn't
+  picked up correctly while sending out patches)
+
+v4:
+- rebased on 6.11-rc6
+- envcfg: Converged with Samuel Holland's patches for envcfg management on per-
+thread basis.
+- vma_is_shadow_stack is renamed to is_vma_shadow_stack
+- picked up Mark Brown's `ARCH_HAS_USER_SHADOW_STACK` patch
+- signal context: using extended context management to maintain compatibility.
+- fixed `-Wmissing-prototypes` compiler warnings for prctl functions
+- Documentation fixes and amending typos.
+- Link to v4: https://lore.kernel.org/all/20240912231650.3740732-1-debug@rivosinc.com/
+
+v3:
+- envcfg
+  logic to pick up base envcfg had a bug where `ENVCFG_CBZE` could have been
+  picked on per task basis, even though CPU didn't implement it. Fixed in
+   this series.
+
+- dt-bindings
+  As suggested, split into separate commit. fixed the messaging that spec is
+  in public review
+
+- arch_is_shadow_stack change
+  arch_is_shadow_stack changed to vma_is_shadow_stack
+
+- hwprobe
+  zicfiss / zicfilp if present will get enumerated in hwprobe
+
+- selftests
+  As suggested, added object and binary filenames to .gitignore
+  Selftest binary anyways need to be compiled with cfi enabled compiler which
+  will make sure that landing pad and shadow stack are enabled. Thus removed
+  separate enable/disable tests. Cleaned up tests a bit.
+
+- Link to v3: https://lore.kernel.org/lkml/20240403234054.2020347-1-debug@rivosinc.com/
+
+v2:
+- Using config `CONFIG_RISCV_USER_CFI`, kernel support for riscv control flow
+  integrity for user mode programs can be compiled in the kernel.
+
+- Enabling of control flow integrity for user programs is left to user runtime
+
+- This patch series introduces arch agnostic `prctls` to enable shadow stack
+  and indirect branch tracking. And implements them on riscv.
+
+---
+Changes in v9:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v8: https://lore.kernel.org/r/20241111-v5_user_cfi_series-v8-0-dce14aa30207@rivosinc.com
+
+Changes in v8:
+- EDITME: describe what is new in this series revision.
+- EDITME: use bulletpoints and terse descriptions.
+- Link to v7: https://lore.kernel.org/r/20241029-v5_user_cfi_series-v7-0-2727ce9936cb@rivosinc.com
+
+---
+Andy Chiu (1):
+      riscv: signal: abstract header saving for setup_sigcontext
+
+Clément Léger (1):
+      riscv: Add Firmware Feature SBI extensions definitions
+
+Deepak Gupta (24):
+      mm: helper `is_shadow_stack_vma` to check shadow stack vma
+      dt-bindings: riscv: zicfilp and zicfiss in dt-bindings (extensions.yaml)
+      riscv: zicfiss / zicfilp enumeration
+      riscv: zicfiss / zicfilp extension csr and bit definitions
+      riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
+      riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+      riscv mm: manufacture shadow stack pte
+      riscv mmu: teach pte_mkwrite to manufacture shadow stack PTEs
+      riscv mmu: write protect and shadow stack
+      riscv/mm: Implement map_shadow_stack() syscall
+      riscv/shstk: If needed allocate a new shadow stack on clone
+      riscv: Implements arch agnostic shadow stack prctls
+      prctl: arch-agnostic prctl for indirect branch tracking
+      riscv/traps: Introduce software check exception
+      riscv/signal: save and restore of shadow stack for signal
+      riscv/kernel: update __show_regs to print shadow stack register
+      riscv/ptrace: riscv cfi status and state via ptrace and in core files
+      riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
+      riscv: enable kernel access to shadow stack memory via FWFT sbi call
+      riscv: kernel command line option to opt out of user cfi
+      riscv: create a config for shadow stack and landing pad instr support
+      riscv: Documentation for landing pad / indirect branch tracking
+      riscv: Documentation for shadow stack on riscv
+      kselftest/riscv: kselftest for user mode cfi
+
+ Documentation/arch/riscv/index.rst                 |   2 +
+ Documentation/arch/riscv/zicfilp.rst               | 115 +++++
+ Documentation/arch/riscv/zicfiss.rst               | 176 +++++++
+ .../devicetree/bindings/riscv/extensions.yaml      |  14 +
+ arch/riscv/Kconfig                                 |  20 +
+ arch/riscv/include/asm/asm-prototypes.h            |   1 +
+ arch/riscv/include/asm/cpufeature.h                |  13 +
+ arch/riscv/include/asm/csr.h                       |  16 +
+ arch/riscv/include/asm/entry-common.h              |   2 +
+ arch/riscv/include/asm/hwcap.h                     |   2 +
+ arch/riscv/include/asm/mman.h                      |  25 +
+ arch/riscv/include/asm/mmu_context.h               |   7 +
+ arch/riscv/include/asm/pgtable.h                   |  30 +-
+ arch/riscv/include/asm/processor.h                 |   2 +
+ arch/riscv/include/asm/sbi.h                       |  26 +
+ arch/riscv/include/asm/thread_info.h               |   3 +
+ arch/riscv/include/asm/usercfi.h                   |  89 ++++
+ arch/riscv/include/asm/vector.h                    |   3 +
+ arch/riscv/include/uapi/asm/hwprobe.h              |   2 +
+ arch/riscv/include/uapi/asm/ptrace.h               |  22 +
+ arch/riscv/include/uapi/asm/sigcontext.h           |   1 +
+ arch/riscv/kernel/Makefile                         |   1 +
+ arch/riscv/kernel/asm-offsets.c                    |   8 +
+ arch/riscv/kernel/cpufeature.c                     |   2 +
+ arch/riscv/kernel/entry.S                          |  31 +-
+ arch/riscv/kernel/head.S                           |  12 +
+ arch/riscv/kernel/process.c                        |  26 +-
+ arch/riscv/kernel/ptrace.c                         |  83 ++++
+ arch/riscv/kernel/signal.c                         | 142 +++++-
+ arch/riscv/kernel/sys_hwprobe.c                    |   2 +
+ arch/riscv/kernel/sys_riscv.c                      |  10 +
+ arch/riscv/kernel/traps.c                          |  43 ++
+ arch/riscv/kernel/usercfi.c                        | 524 +++++++++++++++++++++
+ arch/riscv/mm/init.c                               |   2 +-
+ arch/riscv/mm/pgtable.c                            |  17 +
+ include/linux/cpu.h                                |   4 +
+ include/uapi/linux/elf.h                           |   1 +
+ include/uapi/linux/prctl.h                         |  27 ++
+ kernel/sys.c                                       |  30 ++
+ mm/gup.c                                           |   2 +-
+ mm/mmap.c                                          |   2 +-
+ mm/vma.h                                           |  10 +-
+ tools/testing/selftests/riscv/Makefile             |   2 +-
+ tools/testing/selftests/riscv/cfi/.gitignore       |   3 +
+ tools/testing/selftests/riscv/cfi/Makefile         |  10 +
+ tools/testing/selftests/riscv/cfi/cfi_rv_test.h    |  84 ++++
+ tools/testing/selftests/riscv/cfi/riscv_cfi_test.c |  78 +++
+ tools/testing/selftests/riscv/cfi/shadowstack.c    | 375 +++++++++++++++
+ tools/testing/selftests/riscv/cfi/shadowstack.h    |  37 ++
+ 49 files changed, 2106 insertions(+), 33 deletions(-)
+---
+base-commit: 39a803b754d5224a3522016b564113ee1e4091b2
+change-id: 20240930-v5_user_cfi_series-3dc332f8f5b2
+--
+- debug
+
 
