@@ -1,802 +1,407 @@
-Return-Path: <linux-arch+bounces-10034-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10035-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56392A28146
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2025 02:30:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4F94A28426
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2025 07:14:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14FA11883DB2
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2025 01:30:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A83E7A2F33
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Feb 2025 06:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C453F230D26;
-	Wed,  5 Feb 2025 01:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A7B227B87;
+	Wed,  5 Feb 2025 06:14:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="c0O+ukiF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bc5kMGlt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BC9228C98
-	for <linux-arch@vger.kernel.org>; Wed,  5 Feb 2025 01:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738718567; cv=none; b=ueWdCMOruwhOyrImGlRjMv9L+XcM7AzyYZirttX3luzGExmirBNK3s/EYljkXbn+E4x1tygq+ppoKYpuuknonr90cS8bTGgzFKFbvc1+w2EfMDf+L8U0CeU/TRTM+vT5qX4b7gTeczFKbfjVK61InfJ9+eragOkPwV79/STzxnM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738718567; c=relaxed/simple;
-	bh=ALqPfs+yE9Sutp4spxrhbCTh8xfaqVKddbYQ02jvGHs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eq1Ru/gS/2bqpsJoC++OEIHSzRXCCWqyy9UYoB29Q+WRfn+8qdQQBqITOWEmLZ1MwDOsUC9lZBfW6+fUud0WxVej83+z+MXxHMAcTKXv0TWagj3SuxIyJr1wOEQMXd+4kT7fv7AlYNlokDxohuqtzNe5WJtifGZ/zaaZ8zJEnL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=c0O+ukiF; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2ef72924e53so10942990a91.3
-        for <linux-arch@vger.kernel.org>; Tue, 04 Feb 2025 17:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738718564; x=1739323364; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ruj/JnwPHtkrEOpCEVLVNX7RrlNYJUu0NWWeo3U6Fsk=;
-        b=c0O+ukiFpNJV6fu4bKLfJR4Ujy0VQsLoBbpaaeGh+wuB1XgNnGlLiLFo00C2JvuWLx
-         8022Ku7vwNoeRrB5/M1Ce/iAGkSBzOUa9DvJhvEQz+tZ9xvUQlRyezTligG1fMi94+EP
-         RlkboYC9GG9zQyCYU+ShDcC5AK+Lkqat+9vCR2xYUZ5pVyZ+GA1ftjW8KCPm4ape53gn
-         ANrxb7t+TWT1bXeE5frvhRbnAQrrpHEz5hS7igU9kGyGKID7cI6M48XBXiFYKvUDzl+X
-         mLcUE9rCSfh5nRkw6vkDpEFA1M9wzyDJ7w3OHGbRNjicOra9ypBPzvgH+x3cd8jWd5En
-         rCeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738718564; x=1739323364;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ruj/JnwPHtkrEOpCEVLVNX7RrlNYJUu0NWWeo3U6Fsk=;
-        b=Rxx/qrwkb4X17mTtWsO4wSsbSeiQx2ISnbgLQ9qNxJNz84e6D5zanmxXx8QR8iY+1n
-         ZQ66juaqIcyolelzY7j93Zn2CvX7Cru/dHiV8WJ4ufaNqT7reKlQQXYc2CgPdsS2om4K
-         rBlVy7CwG2TzGc2FjKhEr/4d+ZNOdH+k7wzXd++fK7QrqKjYFlSYHAfm1qe5mTg1AU9p
-         pwHtapnOjKTJohiIqPAFDLnygDDgmrancAdJha1mz4TdQFRec4VIL/Ot0Ek0eVX9xC8y
-         qC856ZaGPL8i0DYkjgA7SCTjxfUXtzzL1tHSz9g+0tVsWOuSClFTrxpdxhUOlLPjCMv6
-         4yNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWU7HnlW9lLfMZl6QQB8pRec0mXB5W3eCpBvN4PQyhOvbGUTu/NN5ALasx46ngYMcJMm55RJs1q0IRJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGUv6XjG9+ca7260ndjUlFhS1hTrFT7Llhd5AQu8+Y00LWX58o
-	zyw+8djf2+jVB4eXbO2OeefsC9qeFIeKhf+qyhX10lMmHkh01zSUIJGn7j+Scik=
-X-Gm-Gg: ASbGncvNarTmlQ4QfCXbJUNdQL/HRn8K7n2lwx8IvjSWtRsJV2oS3mvR/ANJJZb//pM
-	rgBppeT5+isnXOv64vi8dNxOOGt5iYNHdvvQ+zeibHqTPxy6lWoW6LRqhSLMgLQYm9LQcFcNin3
-	+mXWqSAxiyvFE2qS+eKZjPBU5F+KGBP+/cBZZCy4nJo+KQJ8e+AFlo9efwqjuSFeW/+e5SDEEfP
-	tQ5NNeoAejIyxXS5WpbtLLhmT6OqaEipAiYwugxzSnymOLM8kyt0o6iAZrHiJ87FdozIXDp8DL1
-	/Sc6CLkesxfodZPchfOZW0J80Q==
-X-Google-Smtp-Source: AGHT+IGovFmix8KI5SEIHoNgZcqFZZ5GF0zJzXSysIVc548LH6c/1u2ve/E4BqdnIk+ftzZNWRYx3A==
-X-Received: by 2002:aa7:9a82:0:b0:728:e906:e446 with SMTP id d2e1a72fcca58-7303521cbb1mr2012625b3a.24.1738718563525;
-        Tue, 04 Feb 2025 17:22:43 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69cec0fsm11457202b3a.137.2025.02.04.17.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 17:22:43 -0800 (PST)
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Tue, 04 Feb 2025 17:22:13 -0800
-Subject: [PATCH v9 26/26] kselftest/riscv: kselftest for user mode cfi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF71825A644;
+	Wed,  5 Feb 2025 06:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738736062; cv=fail; b=rllYEezL5GwZQm7uH3EIY5iDWU6UiqQF6IFu+APuezWT43r2/P9ZONyMEhXsXkhyf04QKMBJuxamzoqub9F9rylzAYTVIbNW0wHpHU2tLElc4v6DOKZaxzzv14shK0FA4TbCX62dzUnu8u1y5YztwTByorHGBDOjy8++SPKviRg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738736062; c=relaxed/simple;
+	bh=fdMzKEHwM9+ksucGuF84+5O+H5vWCz/Uka3Uw2xtnVY=;
+	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
+	 Content-Disposition:MIME-Version; b=nTJBuTd17A6H9jTK2hvRuI3IitKuO748N7dCqJBM5YKokv2K9e8IooUEyfRNyZBxd2x7s1XU7acfIYlfd2Y7iauOJ8zcscfEdU2biI+XvlT1sKdm1gcvHHnRgS6yh9oQ/c6so1z1bsG8FkpqS4lH2h4//Fr5WoB/mPekoUC/tqA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bc5kMGlt; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738736060; x=1770272060;
+  h=date:from:to:cc:subject:message-id:
+   content-transfer-encoding:mime-version;
+  bh=fdMzKEHwM9+ksucGuF84+5O+H5vWCz/Uka3Uw2xtnVY=;
+  b=bc5kMGltuUHoJPzF3Gi9q3zGuml8TRWj+WwArvcgiYs6+uAlmXvxyZR1
+   dE+oMEZsavK01m/joeQjwoIOQXHeVqoh9cFvOtV0UqajSbX+RSOMSvac1
+   JJlOU1eUMRtQ6kZVnm/YN+wqNICYgeranTqUMsww6fmJg5F3PyQ76Shen
+   OsUyY2PyNss53ZTkO6sdwf5uxQOgudEOtnBwfuZvgHTR3MwQIKIUF39dW
+   aR3MsTi3kiBMWHfFa0wNAXAG7JsJBY9LQvZ3Jtbez7Uthyr7R3M+YM5Yz
+   nhDKPVbt6h1ormxIieliVCARoe9v8EAf5h4j+UPnDeEZK/stCKwvh1wvL
+   w==;
+X-CSE-ConnectionGUID: +unNXDwBSyGrpAy/PomgXw==
+X-CSE-MsgGUID: vzDcbgSOThyvJ+08hvIAgg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="56822053"
+X-IronPort-AV: E=Sophos;i="6.13,260,1732608000"; 
+   d="scan'208";a="56822053"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 22:14:19 -0800
+X-CSE-ConnectionGUID: 9n2Qp2TXQXyFKfpA76si/w==
+X-CSE-MsgGUID: aBPhlWE8S4q2MNCJAF6pZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,260,1732608000"; 
+   d="scan'208";a="110695616"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Feb 2025 22:14:19 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Tue, 4 Feb 2025 22:14:18 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Tue, 4 Feb 2025 22:14:18 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Tue, 4 Feb 2025 22:14:15 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bo4zUNu+BPCkbu3YevJzhsovbIYaxEhOTyNGXaqoFTACF0d3SG+KaOXEP57q2gzY6rqgfL+DrC94ZryVVuaFRGbAyf+2CKj4zCZNYm1M69ZdOBSMOtWzUijKVO2+lKYuMNZowUfPxHmFjwlBpzHc4Pup8JSWlRgi0S/QihyEpu9cdX5XJRpddfGnPmGy+HQj0LRi+0d8j+2nsz+wLqRtnFgs47h+46CQpPvLLuASaeLkfyHRsw7274xGSvm6Ezgzsse66sO4lqGYOri2RWl6z88cw8bh7xyaXYx82/99Z7hr+cRvQO9dQQ6JRbhnVxBicJUVBo7AXAKgW9ruGL5bdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HgVdpC390ejkH2EST8BydzPMZv8zWafnPRMCe1wJHqU=;
+ b=ABaxUbZd29NCqbjix7GI3e7LfTDe2OnGydeLYDslpM1DELw/gh6Z7K1qM4P3Og0OcF5eMRMeYs+YQutwnSaT32+hoo7BEe2ti51gYOKcQ5WFDVJ+4q5V4D3tK8Dqibe+ZtaJPhHLxOcUzCT+E7W6GlqecjovMiGMYZtaGYum0rbC8ijHW7MJNRZSkpehAJ+QUQx9uZ4eh7d6xCH8jUVct3m2BYKfHT4DSIMy7XqhM0ak+JlIP5hx4FNuzFE8Y//FGdGclXRTWGad+uM6dVjbLeYxgNNZeXJ6r49CQeiKkXfofWIPBSPfSGyQwwxfMGYTqm0qLPp3NcodgQZGiHFi0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
+ by CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.11; Wed, 5 Feb
+ 2025 06:13:59 +0000
+Received: from LV3PR11MB8603.namprd11.prod.outlook.com
+ ([fe80::4622:29cf:32b:7e5c]) by LV3PR11MB8603.namprd11.prod.outlook.com
+ ([fe80::4622:29cf:32b:7e5c%3]) with mapi id 15.20.8398.025; Wed, 5 Feb 2025
+ 06:13:59 +0000
+Date: Wed, 5 Feb 2025 14:13:48 +0800
+From: kernel test robot <oliver.sang@intel.com>
+To: Vadim Fedorenko <vadfed@meta.com>
+CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-alpha@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+	<linux-parisc@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <oliver.sang@intel.com>
+Subject: [linus:master] [net_tstamp]  4aecca4c76:
+ redis.get_total_throughput_rps 1.5% improvement
+Message-ID: <202502051330.4d2f403b-lkp@intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR01CA0043.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::12) To LV3PR11MB8603.namprd11.prod.outlook.com
+ (2603:10b6:408:1b6::9)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250204-v5_user_cfi_series-v9-26-b37a49c5205c@rivosinc.com>
-References: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
-In-Reply-To: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Christian Brauner <brauner@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
- Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
- andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
- atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
- alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
- rick.p.edgecombe@intel.com, Deepak Gupta <debug@rivosinc.com>
-X-Mailer: b4 0.14.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|CO1PR11MB4820:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3f9a637-3f63-4568-19ed-08dd45ac4771
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?YuridmflQj7rADobsu+cKS20UCYXWLt17Y9yRiJjAw12JrD5eSlyCYmo0W?=
+ =?iso-8859-1?Q?1w6c66V+Hv2cC54InFA3rKGT9CERm50EMg1pgCaS4BphhDu2N4ECNMYkNZ?=
+ =?iso-8859-1?Q?ODxm/msOwu9uSofNhTP/h0x9phCcwgrkDuB3BOGThaqQl5rVxlrbTIQmnd?=
+ =?iso-8859-1?Q?4QxAFdxLbZxvxKEz0POFbT5eesKybbWdushUMP3M3eRbSoWo4x3x8ZDV4V?=
+ =?iso-8859-1?Q?oy46LdI2gLhcbibhx8AxC6SShd4hdcnowO7CKOF71C/Za7NgpUeqMSSVni?=
+ =?iso-8859-1?Q?6XvJOWf451PKx+HMvOuzNGYRnxfn/WP6D9OkX77LtXNUDX6eLV95b826l3?=
+ =?iso-8859-1?Q?8BMlBM6MIDPqDsAazfd8HWwhvpONS9XYQOUaeP5nAVcvfNopYPMW2xcCiV?=
+ =?iso-8859-1?Q?TK24syIBmqT5hJOS3nN3PyBMXF+dbpBiuD1CnMX4e/siU5Dv0vhOJLkSWq?=
+ =?iso-8859-1?Q?w3SjOlNg5J3YepLypQ1ieuStjRdZXh1R9vuzmC5IGy/D4FSx065XLy4LG2?=
+ =?iso-8859-1?Q?2F+kGvP6zg8AFhjKr5fpV1efHgzEabArqp08deG+zBx7wna+HOtVvfZjDi?=
+ =?iso-8859-1?Q?VITn8ICHY09FGxRyFUCJIzMG+8wqHZ/e95c/IQph1InvbEYog7uQwUAMiF?=
+ =?iso-8859-1?Q?cY+sysyhsr5bg5UOrIT/A0c25gxhs/Ybgymkh4hvedTY94e/33cud0Oawy?=
+ =?iso-8859-1?Q?bpaJjWEr3SLWB3exuPIkRKp2aLUVnl950QmocC6A2MtGtlMHDMg1VAWpcS?=
+ =?iso-8859-1?Q?ZqIC9pDUtOie/BV+mLCzj1nM8PPlpwUmfAQt9rwSm/7pUdoqGklfhQjWBl?=
+ =?iso-8859-1?Q?2d7jJv7y1ymj4QflLdAkn+PxEHY/4aqewVjXEIvZZ+Auks/GneEC5cC6/C?=
+ =?iso-8859-1?Q?bDCN+ITdLUH68hQyRS2v3XznQ04DFETHhF1C9NM9uR9mSiMtvbGz+qO0us?=
+ =?iso-8859-1?Q?gzNGTF5sqZgyttDAwnFl9o2h6+4A/wKaY5AZCeOSBsf8lUgmC4lGAiOP/g?=
+ =?iso-8859-1?Q?mhTi/syvISyCjwccG+qVO/lr0HzJ9/v95rQMfB9Mt4jz0u3xAlv+9QGRW9?=
+ =?iso-8859-1?Q?xjkN/gq2anL48oC8O9f99Y7HWJy65aw7lgqkgdA6zZuMZZshRf9X1kTaFW?=
+ =?iso-8859-1?Q?R8bgmREwSB+fD0asGuY2ZY2r7yb/HIzdpGeZdYJg/xvhb0VjgoUwnngXGh?=
+ =?iso-8859-1?Q?ZYcgRboUT4RfvM65CBOCkFpaFztBMTELirxeZv/g7HyJvBe3pbuRxEfcK8?=
+ =?iso-8859-1?Q?heF2YRxbe26lnb8+EhJduSzYW+dA5wxN4LTtGRJYmHzPtL3XJEF/4VsH/l?=
+ =?iso-8859-1?Q?VRLm7YurjWSDARtXUCngyAoBzk7YaF5X1iOjRILffah7N8j0NLDMdkOhbA?=
+ =?iso-8859-1?Q?CGKQE5+0SVHZxbR7lm/GISvD4vOtOSzA=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?6q4ksXm4ujZ9qQmiJ1nQNDa0hh3idpE7LOSvMTlYmEbf+nDr/GLQx5bpN2?=
+ =?iso-8859-1?Q?XUWnq85rbsbzLi/gjy3IFqt9Lj4JcFvTJnJjp/xn5jqnWfpc6RfmAp2BS6?=
+ =?iso-8859-1?Q?fXh+OdmUoYJMxXT7UBhJ1j8SCt2jfGB8nZ332NERw3RGfyu11x9xCeiyXL?=
+ =?iso-8859-1?Q?R7F73r1LGIm011XUiMb+0R/1/uGPjRhhDAaVck76jVpb/f0HJ0rd8pRe7/?=
+ =?iso-8859-1?Q?85zoPTNIuP6w2GFnH1C8x5kmB54irvPTZ/hs7pjz9ZDGABFY8qAZk8DEDl?=
+ =?iso-8859-1?Q?up2YXI6RmYFg6SuQeMhkSjFfPGKlVK9elj41/nScSxeSl/vvbel1vo04Ro?=
+ =?iso-8859-1?Q?Y0NVXtzPoo5/b589cyGLo6QCEffoMMzMoROAOr85c5tKnfrNK9ZpveKWva?=
+ =?iso-8859-1?Q?LTAnIFxfeZrSyu/XyB/9j7jiCyX7UczjWdWXJknZQUU+j1Th9YR/mWrNeF?=
+ =?iso-8859-1?Q?zUch4rVVGZ0nm0XTeR3TMcYl6hfrU8g3hqbmx1wfbu95baFMb9PtcIE+km?=
+ =?iso-8859-1?Q?gCkWwszJvNrzSNUzrTlSCWVOOezeA8mGo0/xTvoYvhylotif+YBogvbMv+?=
+ =?iso-8859-1?Q?WX9vUq+jO8hFOaHIn0xKRqNWjFpYdzi8wV50mn9RsrDDGV1YB63pBHT+EH?=
+ =?iso-8859-1?Q?BEjbzXhmpDBTZv5JYlnGHEXjjqsEZHNHj5KyBFc7FqSwuqV62RzUpV+VOY?=
+ =?iso-8859-1?Q?WSdexCHwNnAljild0SLx1c3IyMqP0OHnZU1u2IXBj7RmN+usBBmHRjkxG8?=
+ =?iso-8859-1?Q?P9ymC6bYMUVoVKBAVWurkEe/vjqVtN6MT6Zga+HCRlII39MQf3cUs/oYBk?=
+ =?iso-8859-1?Q?21F9ahf29uxxITVn7y+cTS6hmePYci4scFbAxjEmzcZFAdZSgjgN+SON3t?=
+ =?iso-8859-1?Q?9lF3AnF+CEXAsVJYkM0fh9yCPLDqH/4ESlaHfVCDNy0N9UjN3wrHs3GM/I?=
+ =?iso-8859-1?Q?mqXVd8v0chq+8lO/wO86raf1uFPO3dxNsVSU/6pcDla+lN/iX8ordkGETJ?=
+ =?iso-8859-1?Q?enNiSwIpLvLF/4pQObygjwQ79l5h5xuwhZdWpYXMMrcByG7Sm+2I/QPhyM?=
+ =?iso-8859-1?Q?u3H0tcvzeQB/tDRfDk0wfh4PAiszrHOfKuDL4sqy4XFDhL6JLnJl9zqdNj?=
+ =?iso-8859-1?Q?Vg57jCVkguPDYNML9SU/Cks7mW3Yw9M9vJGONuuM4vJX+LDcAXZ0q31Z5W?=
+ =?iso-8859-1?Q?oY0pk34eyQSvdmd6pM+FJSaZ66o0bUXmaGGerN5N2aer9TEs7VsifKV9u8?=
+ =?iso-8859-1?Q?bc4edLihHllEG3eUdJENIPr1kHgaf8FhO2lxM4fS8xxlmX67X1LIQezXwx?=
+ =?iso-8859-1?Q?mdAs0gxsCkTP0ZikZCMWYv7T+uEZYPM3jsOMqR/0dt3ZdVOfsz4/uTfInv?=
+ =?iso-8859-1?Q?gy+qqUdrNy+uL5BcRE7g0uY8hqGGepobEbqnPY/eaDYTcUVGwKeXCi9B3t?=
+ =?iso-8859-1?Q?D0IqlTI+8rT3EIAAcO54Z0BR58/o/PdalhD2EhtIubLHvUm/ltUy57J73k?=
+ =?iso-8859-1?Q?WTAYwxA6/OT/Xa9JMXUQeHXA1jVQtiWDJZaRcuJRUldzXAzaTDlcZSNQ1H?=
+ =?iso-8859-1?Q?K6E9CL1VdFmZjhZUwVbJAM5Gj89swl4MM4UyqSV4tfAkgC8m6KK51hho6E?=
+ =?iso-8859-1?Q?zti2NlYedHUteA0LXNSeSGwq6kvwdNytuvPsVZ5zqfOcs+WeqR//8Lhg?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3f9a637-3f63-4568-19ed-08dd45ac4771
+X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2025 06:13:59.2742
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: naDAWKJ9unNpIAvC0aEpwM51dr3gKm5vrvXu6n4u0FJH0qJBEndGntbGu2H8H75hKwiJvpxMNfMjMQqKTWDvKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4820
+X-OriginatorOrg: intel.com
 
-Adds kselftest for RISC-V control flow integrity implementation for user
-mode. There is not a lot going on in kernel for enabling landing pad for
-user mode. cfi selftest are intended to be compiled with zicfilp and
-zicfiss enabled compiler. Thus kselftest simply checks if landing pad and
-shadow stack for the binary and process are enabled or not. selftest then
-register a signal handler for SIGSEGV. Any control flow violation are
-reported as SIGSEGV with si_code = SEGV_CPERR. Test will fail on receiving
-any SEGV_CPERR. Shadow stack part has more changes in kernel and thus there
-are separate tests for that
 
-- Exercise `map_shadow_stack` syscall
-- `fork` test to make sure COW works for shadow stack pages
-- gup tests
-  Kernel uses FOLL_FORCE when access happens to memory via
-  /proc/<pid>/mem. Not breaking that for shadow stack.
-- signal test. Make sure signal delivery results in token creation on
-  shadow stack and consumes (and verifies) token on sigreturn
-- shadow stack protection test. attempts to write using regular store
-  instruction on shadow stack memory must result in access faults
+Hello,
 
-Test outut
-==========
+kernel test robot noticed a 1.5% improvement of redis.get_total_throughput_rps on:
 
-"""
-TAP version 13
-1..5
-  This is to ensure shadow stack is indeed enabled and working
-  This is to ensure shadow stack is indeed enabled and working
-ok 1 shstk fork test
-ok 2 map shadow stack syscall
-ok 3 shadow stack gup tests
-ok 4 shadow stack signal tests
-ok 5 memory protections of shadow stack memory
-"""
 
-Signed-off-by: Deepak Gupta <debug@rivosinc.com>
----
- tools/testing/selftests/riscv/Makefile             |   2 +-
- tools/testing/selftests/riscv/cfi/.gitignore       |   3 +
- tools/testing/selftests/riscv/cfi/Makefile         |  10 +
- tools/testing/selftests/riscv/cfi/cfi_rv_test.h    |  84 +++++
- tools/testing/selftests/riscv/cfi/riscv_cfi_test.c |  78 +++++
- tools/testing/selftests/riscv/cfi/shadowstack.c    | 375 +++++++++++++++++++++
- tools/testing/selftests/riscv/cfi/shadowstack.h    |  37 ++
- 7 files changed, 588 insertions(+), 1 deletion(-)
+commit: 4aecca4c76808f3736056d18ff510df80424bc9f ("net_tstamp: add SCM_TS_OPT_ID to provide OPT_ID in control message")
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
 
-diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-index 099b8c1f46f8..5671b4405a12 100644
---- a/tools/testing/selftests/riscv/Makefile
-+++ b/tools/testing/selftests/riscv/Makefile
-@@ -5,7 +5,7 @@
- ARCH ?= $(shell uname -m 2>/dev/null || echo not)
- 
- ifneq (,$(filter $(ARCH),riscv))
--RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector
-+RISCV_SUBTARGETS ?= abi hwprobe mm sigreturn vector cfi
- else
- RISCV_SUBTARGETS :=
- endif
-diff --git a/tools/testing/selftests/riscv/cfi/.gitignore b/tools/testing/selftests/riscv/cfi/.gitignore
-new file mode 100644
-index 000000000000..82545863bac6
---- /dev/null
-+++ b/tools/testing/selftests/riscv/cfi/.gitignore
-@@ -0,0 +1,3 @@
-+cfitests
-+riscv_cfi_test
-+shadowstack
-diff --git a/tools/testing/selftests/riscv/cfi/Makefile b/tools/testing/selftests/riscv/cfi/Makefile
-new file mode 100644
-index 000000000000..b65f7ff38a32
---- /dev/null
-+++ b/tools/testing/selftests/riscv/cfi/Makefile
-@@ -0,0 +1,10 @@
-+CFLAGS += -I$(top_srcdir)/tools/include
-+
-+CFLAGS += -march=rv64gc_zicfilp_zicfiss
-+
-+TEST_GEN_PROGS := cfitests
-+
-+include ../../lib.mk
-+
-+$(OUTPUT)/cfitests: riscv_cfi_test.c shadowstack.c
-+	$(CC) -o$@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/cfi/cfi_rv_test.h b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
-new file mode 100644
-index 000000000000..a9d5d6f8e29c
---- /dev/null
-+++ b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
-@@ -0,0 +1,84 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef SELFTEST_RISCV_CFI_H
-+#define SELFTEST_RISCV_CFI_H
-+#include <stddef.h>
-+#include <sys/types.h>
-+#include "shadowstack.h"
-+
-+#define RISCV_CFI_SELFTEST_COUNT RISCV_SHADOW_STACK_TESTS
-+
-+#define CHILD_EXIT_CODE_SSWRITE		10
-+#define CHILD_EXIT_CODE_SIG_TEST	11
-+
-+#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)			\
-+({									\
-+	register long _num  __asm__ ("a7") = (num);			\
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);		\
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);		\
-+	register long _arg3 __asm__ ("a2") = (long)(arg3);		\
-+	register long _arg4 __asm__ ("a3") = (long)(arg4);		\
-+	register long _arg5 __asm__ ("a4") = (long)(arg5);		\
-+									\
-+	__asm__ volatile(						\
-+		"ecall\n"						\
-+		: "+r"							\
-+		(_arg1)							\
-+		: "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5),	\
-+		  "r"(_num)						\
-+		: "memory", "cc"					\
-+	);								\
-+	_arg1;								\
-+})
-+
-+#define my_syscall3(num, arg1, arg2, arg3)				\
-+({									\
-+	register long _num  __asm__ ("a7") = (num);			\
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);		\
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);		\
-+	register long _arg3 __asm__ ("a2") = (long)(arg3);		\
-+									\
-+	__asm__ volatile(						\
-+		"ecall\n"						\
-+		: "+r" (_arg1)						\
-+		: "r"(_arg2), "r"(_arg3),				\
-+		  "r"(_num)						\
-+		: "memory", "cc"					\
-+	);								\
-+	_arg1;								\
-+})
-+
-+#ifndef __NR_prctl
-+#define __NR_prctl 167
-+#endif
-+
-+#ifndef __NR_map_shadow_stack
-+#define __NR_map_shadow_stack 453
-+#endif
-+
-+#define CSR_SSP 0x011
-+
-+#ifdef __ASSEMBLY__
-+#define __ASM_STR(x)    x
-+#else
-+#define __ASM_STR(x)    #x
-+#endif
-+
-+#define csr_read(csr)							\
-+({									\
-+	register unsigned long __v;					\
-+	__asm__ __volatile__ ("csrr %0, " __ASM_STR(csr)		\
-+				: "=r" (__v) :				\
-+				: "memory");				\
-+	__v;								\
-+})
-+
-+#define csr_write(csr, val)						\
-+({									\
-+	unsigned long __v = (unsigned long)(val);			\
-+	__asm__ __volatile__ ("csrw " __ASM_STR(csr) ", %0"		\
-+				: : "rK" (__v)				\
-+				: "memory");				\
-+})
-+
-+#endif
-diff --git a/tools/testing/selftests/riscv/cfi/riscv_cfi_test.c b/tools/testing/selftests/riscv/cfi/riscv_cfi_test.c
-new file mode 100644
-index 000000000000..cf33aa25cc73
---- /dev/null
-+++ b/tools/testing/selftests/riscv/cfi/riscv_cfi_test.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "../../kselftest.h"
-+#include <sys/signal.h>
-+#include <asm/ucontext.h>
-+#include <linux/prctl.h>
-+#include "cfi_rv_test.h"
-+
-+/* do not optimize cfi related test functions */
-+#pragma GCC push_options
-+#pragma GCC optimize("O0")
-+
-+void sigsegv_handler(int signum, siginfo_t *si, void *uc)
-+{
-+	struct ucontext *ctx = (struct ucontext *)uc;
-+
-+	if (si->si_code == SEGV_CPERR) {
-+		ksft_print_msg("Control flow violation happened somewhere\n");
-+		ksft_print_msg("PC where violation happened %lx\n", ctx->uc_mcontext.gregs[0]);
-+		exit(-1);
-+	}
-+
-+	/* all other cases are expected to be of shadow stack write case */
-+	exit(CHILD_EXIT_CODE_SSWRITE);
-+}
-+
-+bool register_signal_handler(void)
-+{
-+	struct sigaction sa = {};
-+
-+	sa.sa_sigaction = sigsegv_handler;
-+	sa.sa_flags = SA_SIGINFO;
-+	if (sigaction(SIGSEGV, &sa, NULL)) {
-+		ksft_print_msg("Registering signal handler for landing pad violation failed\n");
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int ret = 0;
-+	unsigned long lpad_status = 0, ss_status = 0;
-+
-+	ksft_print_header();
-+
-+	ksft_print_msg("Starting risc-v tests\n");
-+
-+	/*
-+	 * Landing pad test. Not a lot of kernel changes to support landing
-+	 * pad for user mode except lighting up a bit in senvcfg via a prctl
-+	 * Enable landing pad through out the execution of test binary
-+	 */
-+	ret = my_syscall5(__NR_prctl, PR_GET_INDIR_BR_LP_STATUS, &lpad_status, 0, 0, 0);
-+	if (ret)
-+		ksft_exit_fail_msg("Get landing pad status failed with %d\n", ret);
-+
-+	if (!(lpad_status & PR_INDIR_BR_LP_ENABLE))
-+		ksft_exit_fail_msg("Landing pad is not enabled, should be enabled via glibc\n");
-+
-+	ret = my_syscall5(__NR_prctl, PR_GET_SHADOW_STACK_STATUS, &ss_status, 0, 0, 0);
-+	if (ret)
-+		ksft_exit_fail_msg("Get shadow stack failed with %d\n", ret);
-+
-+	if (!(ss_status & PR_SHADOW_STACK_ENABLE))
-+		ksft_exit_fail_msg("Shadow stack is not enabled, should be enabled via glibc\n");
-+
-+	if (!register_signal_handler())
-+		ksft_exit_fail_msg("Registering signal handler for SIGSEGV failed\n");
-+
-+	ksft_print_msg("Landing pad and shadow stack are enabled for binary\n");
-+	execute_shadow_stack_tests();
-+
-+	return 0;
-+}
-+
-+#pragma GCC pop_options
-diff --git a/tools/testing/selftests/riscv/cfi/shadowstack.c b/tools/testing/selftests/riscv/cfi/shadowstack.c
-new file mode 100644
-index 000000000000..a0ef066e98ab
---- /dev/null
-+++ b/tools/testing/selftests/riscv/cfi/shadowstack.c
-@@ -0,0 +1,375 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "../../kselftest.h"
-+#include <sys/wait.h>
-+#include <signal.h>
-+#include <fcntl.h>
-+#include <asm-generic/unistd.h>
-+#include <sys/mman.h>
-+#include "shadowstack.h"
-+#include "cfi_rv_test.h"
-+
-+/* do not optimize shadow stack related test functions */
-+#pragma GCC push_options
-+#pragma GCC optimize("O0")
-+
-+void zar(void)
-+{
-+	unsigned long ssp = 0;
-+
-+	ssp = csr_read(CSR_SSP);
-+	ksft_print_msg("Spewing out shadow stack ptr: %lx\n"
-+			"  This is to ensure shadow stack is indeed enabled and working\n",
-+			ssp);
-+}
-+
-+void bar(void)
-+{
-+	zar();
-+}
-+
-+void foo(void)
-+{
-+	bar();
-+}
-+
-+void zar_child(void)
-+{
-+	unsigned long ssp = 0;
-+
-+	ssp = csr_read(CSR_SSP);
-+	ksft_print_msg("Spewing out shadow stack ptr: %lx\n"
-+			"  This is to ensure shadow stack is indeed enabled and working\n",
-+			ssp);
-+}
-+
-+void bar_child(void)
-+{
-+	zar_child();
-+}
-+
-+void foo_child(void)
-+{
-+	bar_child();
-+}
-+
-+typedef void (call_func_ptr)(void);
-+/*
-+ * call couple of functions to test push pop.
-+ */
-+int shadow_stack_call_tests(call_func_ptr fn_ptr, bool parent)
-+{
-+	ksft_print_msg("dummy calls for sspush and sspopchk in context of %s\n",
-+		       parent ? "parent" : "child");
-+
-+	(fn_ptr)();
-+
-+	return 0;
-+}
-+
-+/* forks a thread, and ensure shadow stacks fork out */
-+bool shadow_stack_fork_test(unsigned long test_num, void *ctx)
-+{
-+	int pid = 0, child_status = 0, parent_pid = 0, ret = 0;
-+	unsigned long ss_status = 0;
-+
-+	ksft_print_msg("Exercising shadow stack fork test\n");
-+
-+	ret = my_syscall5(__NR_prctl, PR_GET_SHADOW_STACK_STATUS, &ss_status, 0, 0, 0);
-+	if (ret) {
-+		ksft_exit_skip("Shadow stack get status prctl failed with errorcode %d\n", ret);
-+		return false;
-+	}
-+
-+	if (!(ss_status & PR_SHADOW_STACK_ENABLE))
-+		ksft_exit_skip("Shadow stack is not enabled, should be enabled via glibc\n");
-+
-+	parent_pid = getpid();
-+	pid = fork();
-+
-+	if (pid) {
-+		ksft_print_msg("Parent pid %d and child pid %d\n", parent_pid, pid);
-+		shadow_stack_call_tests(&foo, true);
-+	} else {
-+		shadow_stack_call_tests(&foo_child, false);
-+	}
-+
-+	if (pid) {
-+		ksft_print_msg("Waiting on child to finish\n");
-+		wait(&child_status);
-+	} else {
-+		/* exit child gracefully */
-+		exit(0);
-+	}
-+
-+	if (pid && WIFSIGNALED(child_status)) {
-+		ksft_print_msg("Child faulted, fork test failed\n");
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+/* exercise `map_shadow_stack`, pivot to it and call some functions to ensure it works */
-+#define SHADOW_STACK_ALLOC_SIZE 4096
-+bool shadow_stack_map_test(unsigned long test_num, void *ctx)
-+{
-+	unsigned long shdw_addr;
-+	int ret = 0;
-+
-+	ksft_print_msg("Exercising shadow stack map test\n");
-+
-+	shdw_addr = my_syscall3(__NR_map_shadow_stack, NULL, SHADOW_STACK_ALLOC_SIZE, 0);
-+
-+	if (((long)shdw_addr) <= 0) {
-+		ksft_print_msg("map_shadow_stack failed with error code %d\n",
-+			       (int)shdw_addr);
-+		return false;
-+	}
-+
-+	ret = munmap((void *)shdw_addr, SHADOW_STACK_ALLOC_SIZE);
-+
-+	if (ret) {
-+		ksft_print_msg("munmap failed with error code %d\n", ret);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+/*
-+ * shadow stack protection tests. map a shadow stack and
-+ * validate all memory protections work on it
-+ */
-+bool shadow_stack_protection_test(unsigned long test_num, void *ctx)
-+{
-+	unsigned long shdw_addr;
-+	unsigned long *write_addr = NULL;
-+	int ret = 0, pid = 0, child_status = 0;
-+
-+	ksft_print_msg("Exercising shadow stack protection test (WPT)\n");
-+
-+	shdw_addr = my_syscall3(__NR_map_shadow_stack, NULL, SHADOW_STACK_ALLOC_SIZE, 0);
-+
-+	if (((long)shdw_addr) <= 0) {
-+		ksft_print_msg("map_shadow_stack failed with error code %d\n",
-+			       (int)shdw_addr);
-+		return false;
-+	}
-+
-+	write_addr = (unsigned long *)shdw_addr;
-+	pid = fork();
-+
-+	/* no child was created, return false */
-+	if (pid == -1)
-+		return false;
-+
-+	/*
-+	 * try to perform a store from child on shadow stack memory
-+	 * it should result in SIGSEGV
-+	 */
-+	if (!pid) {
-+		/* below write must lead to SIGSEGV */
-+		*write_addr = 0xdeadbeef;
-+	} else {
-+		wait(&child_status);
-+	}
-+
-+	/* test fail, if 0xdeadbeef present on shadow stack address */
-+	if (*write_addr == 0xdeadbeef) {
-+		ksft_print_msg("Shadow stack WPT failed\n");
-+		return false;
-+	}
-+
-+	/* if child reached here, then fail */
-+	if (!pid) {
-+		ksft_print_msg("Shadow stack WPT failed: child reached unreachable state\n");
-+		return false;
-+	}
-+
-+	/* if child exited via signal handler but not for write on ss */
-+	if (WIFEXITED(child_status) &&
-+	    WEXITSTATUS(child_status) != CHILD_EXIT_CODE_SSWRITE) {
-+		ksft_print_msg("Shadow stack WPT failed: child wasn't signaled for write\n");
-+		return false;
-+	}
-+
-+	ret = munmap(write_addr, SHADOW_STACK_ALLOC_SIZE);
-+	if (ret) {
-+		ksft_print_msg("Shadow stack WPT failed: munmap failed, error code %d\n",
-+			       ret);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+#define SS_MAGIC_WRITE_VAL 0xbeefdead
-+
-+int gup_tests(int mem_fd, unsigned long *shdw_addr)
-+{
-+	unsigned long val = 0;
-+
-+	lseek(mem_fd, (unsigned long)shdw_addr, SEEK_SET);
-+	if (read(mem_fd, &val, sizeof(val)) < 0) {
-+		ksft_print_msg("Reading shadow stack mem via gup failed\n");
-+		return 1;
-+	}
-+
-+	val = SS_MAGIC_WRITE_VAL;
-+	lseek(mem_fd, (unsigned long)shdw_addr, SEEK_SET);
-+	if (write(mem_fd, &val, sizeof(val)) < 0) {
-+		ksft_print_msg("Writing shadow stack mem via gup failed\n");
-+		return 1;
-+	}
-+
-+	if (*shdw_addr != SS_MAGIC_WRITE_VAL) {
-+		ksft_print_msg("GUP write to shadow stack memory failed\n");
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+bool shadow_stack_gup_tests(unsigned long test_num, void *ctx)
-+{
-+	unsigned long shdw_addr = 0;
-+	unsigned long *write_addr = NULL;
-+	int fd = 0;
-+	bool ret = false;
-+
-+	ksft_print_msg("Exercising shadow stack gup tests\n");
-+	shdw_addr = my_syscall3(__NR_map_shadow_stack, NULL, SHADOW_STACK_ALLOC_SIZE, 0);
-+
-+	if (((long)shdw_addr) <= 0) {
-+		ksft_print_msg("map_shadow_stack failed with error code %d\n", (int)shdw_addr);
-+		return false;
-+	}
-+
-+	write_addr = (unsigned long *)shdw_addr;
-+
-+	fd = open("/proc/self/mem", O_RDWR);
-+	if (fd == -1)
-+		return false;
-+
-+	if (gup_tests(fd, write_addr)) {
-+		ksft_print_msg("gup tests failed\n");
-+		goto out;
-+	}
-+
-+	ret = true;
-+out:
-+	if (shdw_addr && munmap(write_addr, SHADOW_STACK_ALLOC_SIZE)) {
-+		ksft_print_msg("munmap failed with error code %d\n", ret);
-+		ret = false;
-+	}
-+
-+	return ret;
-+}
-+
-+volatile bool break_loop;
-+
-+void sigusr1_handler(int signo)
-+{
-+	break_loop = true;
-+}
-+
-+bool sigusr1_signal_test(void)
-+{
-+	struct sigaction sa = {};
-+
-+	sa.sa_handler = sigusr1_handler;
-+	sa.sa_flags = 0;
-+	sigemptyset(&sa.sa_mask);
-+	if (sigaction(SIGUSR1, &sa, NULL)) {
-+		ksft_print_msg("Registering signal handler for SIGUSR1 failed\n");
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+/*
-+ * shadow stack signal test. shadow stack must be enabled.
-+ * register a signal, fork another thread which is waiting
-+ * on signal. Send a signal from parent to child, verify
-+ * that signal was received by child. If not test fails
-+ */
-+bool shadow_stack_signal_test(unsigned long test_num, void *ctx)
-+{
-+	int pid = 0, child_status = 0, ret = 0;
-+	unsigned long ss_status = 0;
-+
-+	ksft_print_msg("Exercising shadow stack signal test\n");
-+
-+	ret = my_syscall5(__NR_prctl, PR_GET_SHADOW_STACK_STATUS, &ss_status, 0, 0, 0);
-+	if (ret) {
-+		ksft_print_msg("Shadow stack get status prctl failed with errorcode %d\n", ret);
-+		return false;
-+	}
-+
-+	if (!(ss_status & PR_SHADOW_STACK_ENABLE))
-+		ksft_print_msg("Shadow stack is not enabled, should be enabled via glibc\n");
-+
-+	/* this should be caught by signal handler and do an exit */
-+	if (!sigusr1_signal_test()) {
-+		ksft_print_msg("Registering sigusr1 handler failed\n");
-+		exit(-1);
-+	}
-+
-+	pid = fork();
-+
-+	if (pid == -1) {
-+		ksft_print_msg("Signal test: fork failed\n");
-+		goto out;
-+	}
-+
-+	if (pid == 0) {
-+		while (!break_loop)
-+			sleep(1);
-+
-+		exit(11);
-+		/* child shouldn't go beyond here */
-+	}
-+
-+	/* send SIGUSR1 to child */
-+	kill(pid, SIGUSR1);
-+	wait(&child_status);
-+
-+out:
-+
-+	return (WIFEXITED(child_status) &&
-+		WEXITSTATUS(child_status) == 11);
-+}
-+
-+int execute_shadow_stack_tests(void)
-+{
-+	int ret = 0;
-+	unsigned long test_count = 0;
-+	unsigned long shstk_status = 0;
-+	bool test_pass = false;
-+
-+	ksft_print_msg("Executing RISC-V shadow stack self tests\n");
-+	ksft_set_plan(RISCV_SHADOW_STACK_TESTS);
-+
-+	ret = my_syscall5(__NR_prctl, PR_GET_SHADOW_STACK_STATUS, &shstk_status, 0, 0, 0);
-+
-+	if (ret != 0)
-+		ksft_exit_fail_msg("Get shadow stack status failed with %d\n", ret);
-+
-+	/*
-+	 * If we are here that means get shadow stack status succeeded and
-+	 * thus shadow stack support is baked in the kernel.
-+	 */
-+	while (test_count < ARRAY_SIZE(shstk_tests)) {
-+		test_pass = (*shstk_tests[test_count].t_func)(test_count, NULL);
-+		ksft_test_result(test_pass, shstk_tests[test_count].name);
-+		test_count++;
-+	}
-+
-+	ksft_finished();
-+
-+	return 0;
-+}
-+
-+#pragma GCC pop_options
-diff --git a/tools/testing/selftests/riscv/cfi/shadowstack.h b/tools/testing/selftests/riscv/cfi/shadowstack.h
-new file mode 100644
-index 000000000000..b43e74136a26
---- /dev/null
-+++ b/tools/testing/selftests/riscv/cfi/shadowstack.h
-@@ -0,0 +1,37 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef SELFTEST_SHADOWSTACK_TEST_H
-+#define SELFTEST_SHADOWSTACK_TEST_H
-+#include <stddef.h>
-+#include <linux/prctl.h>
-+
-+/*
-+ * a cfi test returns true for success or false for fail
-+ * takes a number for test number to index into array and void pointer.
-+ */
-+typedef bool (*shstk_test_func)(unsigned long test_num, void *);
-+
-+struct shadow_stack_tests {
-+	char *name;
-+	shstk_test_func t_func;
-+};
-+
-+bool shadow_stack_fork_test(unsigned long test_num, void *ctx);
-+bool shadow_stack_map_test(unsigned long test_num, void *ctx);
-+bool shadow_stack_protection_test(unsigned long test_num, void *ctx);
-+bool shadow_stack_gup_tests(unsigned long test_num, void *ctx);
-+bool shadow_stack_signal_test(unsigned long test_num, void *ctx);
-+
-+static struct shadow_stack_tests shstk_tests[] = {
-+	{ "shstk fork test\n", shadow_stack_fork_test },
-+	{ "map shadow stack syscall\n", shadow_stack_map_test },
-+	{ "shadow stack gup tests\n", shadow_stack_gup_tests },
-+	{ "shadow stack signal tests\n", shadow_stack_signal_test},
-+	{ "memory protections of shadow stack memory\n", shadow_stack_protection_test }
-+};
-+
-+#define RISCV_SHADOW_STACK_TESTS ARRAY_SIZE(shstk_tests)
-+
-+int execute_shadow_stack_tests(void);
-+
-+#endif
+
+testcase: redis
+config: x86_64-rhel-9.4
+compiler: gcc-12
+test machine: 64 threads 2 sockets Intel(R) Xeon(R) Gold 6346 CPU @ 3.10GHz (Ice Lake) with 256G memory
+parameters:
+
+	all: 1
+	sc_overcommit_memory: 1
+	sc_somaxconn: 65535
+	thp_enabled: never
+	thp_defrag: never
+	cluster: cs-localhost
+	cpu_node_bind: even
+	nr_processes: 4
+	test: set,get
+	data_size: 1024
+	n_client: 5
+	requests: 68000000
+	n_pipeline: 3
+	key_len: 68000000
+	cpufreq_governor: performance
+
+
+
+
+
+
+Details are as below:
+-------------------------------------------------------------------------------------------------->
+
+
+The kernel config and materials to reproduce are available at:
+https://download.01.org/0day-ci/archive/20250205/202502051330.4d2f403b-lkp@intel.com
+
+=========================================================================================
+all/cluster/compiler/cpu_node_bind/cpufreq_governor/data_size/kconfig/key_len/n_client/n_pipeline/nr_processes/requests/rootfs/sc_overcommit_memory/sc_somaxconn/tbox_group/test/testcase/thp_defrag/thp_enabled:
+  1/cs-localhost/gcc-12/even/performance/1024/x86_64-rhel-9.4/68000000/5/3/4/68000000/debian-12-x86_64-20240206.cgz/1/65535/lkp-icl-2sp7/set,get/redis/never/never
+
+commit: 
+  34ea1df802 ("Merge branch 'net-mlx5-hw-counters-refactor'")
+  4aecca4c76 ("net_tstamp: add SCM_TS_OPT_ID to provide OPT_ID in control message")
+
+34ea1df802f79d44 4aecca4c76808f3736056d18ff5 
+---------------- --------------------------- 
+         %stddev     %change         %stddev
+             \          |                \  
+  18491785            +2.1%   18880098        proc-vmstat.numa_hint_faults
+  18483590            +2.0%   18850441        proc-vmstat.numa_hint_faults_local
+      8589 ± 97%    +255.7%      30553 ± 17%  proc-vmstat.numa_pages_migrated
+  21039386            +2.2%   21505792        proc-vmstat.numa_pte_updates
+      8589 ± 97%    +255.7%      30553 ± 17%  proc-vmstat.pgmigrate_success
+     25696 ± 12%     +14.4%      29397        proc-vmstat.pgreuse
+    252371            +1.5%     256108        redis.get_avg_throughput_rps
+     67.36            -1.5%      66.38        redis.get_avg_time_sec
+   1009486            +1.5%    1024432        redis.get_total_throughput_rps
+    269.45            -1.5%     265.52        redis.get_total_time_sec
+    257.67            -1.1%     254.83        redis.time.percent_of_cpu_this_job_got
+    337.27            -2.4%     329.05        redis.time.system_time
+ 3.957e+09            +1.3%  4.008e+09        perf-stat.i.branch-instructions
+  38469227            +1.6%   39070923        perf-stat.i.branch-misses
+     32.20            +0.8       33.01        perf-stat.i.cache-miss-rate%
+    136208            +1.2%     137857        perf-stat.i.context-switches
+      1.34            -1.0%       1.32        perf-stat.i.cpi
+ 1.948e+10            +1.3%  1.974e+10        perf-stat.i.instructions
+      9.12            +2.2%       9.32        perf-stat.i.metric.K/sec
+    224090            +2.5%     229667        perf-stat.i.minor-faults
+    224090            +2.5%     229667        perf-stat.i.page-faults
+      1.33           -34.1%       0.88 ± 70%  perf-stat.overall.cpi
+    714.76           -33.9%     472.47 ± 70%  perf-stat.overall.cycles-between-cache-misses
+ 1.095e+08           -34.2%   72001076 ± 70%  perf-stat.ps.cache-references
+     15.93            -0.8       15.15        perf-profile.calltrace.cycles-pp.tcp_write_xmit.__tcp_push_pending_frames.tcp_sendmsg_locked.tcp_sendmsg.sock_write_iter
+     15.95            -0.7       15.22        perf-profile.calltrace.cycles-pp.__tcp_push_pending_frames.tcp_sendmsg_locked.tcp_sendmsg.sock_write_iter.vfs_write
+     14.40            -0.7       13.72        perf-profile.calltrace.cycles-pp.tcp_write_xmit.__tcp_push_pending_frames.tcp_sendmsg_locked.tcp_sendmsg.__sys_sendto
+     14.43            -0.6       13.79        perf-profile.calltrace.cycles-pp.__tcp_push_pending_frames.tcp_sendmsg_locked.tcp_sendmsg.__sys_sendto.__x64_sys_sendto
+     21.35            -0.6       20.74        perf-profile.calltrace.cycles-pp.tcp_sendmsg_locked.tcp_sendmsg.sock_write_iter.vfs_write.ksys_write
+     21.50            -0.5       20.96        perf-profile.calltrace.cycles-pp.tcp_sendmsg.sock_write_iter.vfs_write.ksys_write.do_syscall_64
+     16.98            -0.5       16.44        perf-profile.calltrace.cycles-pp.tcp_sendmsg_locked.tcp_sendmsg.__sys_sendto.__x64_sys_sendto.do_syscall_64
+     17.15            -0.5       16.66        perf-profile.calltrace.cycles-pp.tcp_sendmsg.__sys_sendto.__x64_sys_sendto.do_syscall_64.entry_SYSCALL_64_after_hwframe
+     21.61            -0.5       21.14        perf-profile.calltrace.cycles-pp.sock_write_iter.vfs_write.ksys_write.do_syscall_64.entry_SYSCALL_64_after_hwframe
+     22.26            -0.4       21.84        perf-profile.calltrace.cycles-pp.entry_SYSCALL_64_after_hwframe.write
+     21.76            -0.4       21.34        perf-profile.calltrace.cycles-pp.vfs_write.ksys_write.do_syscall_64.entry_SYSCALL_64_after_hwframe.write
+     22.24            -0.4       21.82        perf-profile.calltrace.cycles-pp.do_syscall_64.entry_SYSCALL_64_after_hwframe.write
+     21.95            -0.4       21.53        perf-profile.calltrace.cycles-pp.ksys_write.do_syscall_64.entry_SYSCALL_64_after_hwframe.write
+     22.65            -0.4       22.24        perf-profile.calltrace.cycles-pp.write
+     17.28            -0.4       16.87        perf-profile.calltrace.cycles-pp.__sys_sendto.__x64_sys_sendto.do_syscall_64.entry_SYSCALL_64_after_hwframe.__send
+     17.30            -0.4       16.92        perf-profile.calltrace.cycles-pp.__x64_sys_sendto.do_syscall_64.entry_SYSCALL_64_after_hwframe.__send
+     17.49            -0.4       17.12        perf-profile.calltrace.cycles-pp.do_syscall_64.entry_SYSCALL_64_after_hwframe.__send
+     17.51            -0.4       17.14        perf-profile.calltrace.cycles-pp.entry_SYSCALL_64_after_hwframe.__send
+     17.92            -0.4       17.57        perf-profile.calltrace.cycles-pp.__send
+      0.57            +0.0        0.62 ±  3%  perf-profile.calltrace.cycles-pp.skb_do_copy_data_nocache.tcp_sendmsg_locked.tcp_sendmsg.sock_write_iter.vfs_write
+      0.74 ±  2%      +0.1        0.79 ±  3%  perf-profile.calltrace.cycles-pp.tcp_stream_alloc_skb.tcp_sendmsg_locked.tcp_sendmsg.__sys_sendto.__x64_sys_sendto
+      1.34            +0.1        1.40        perf-profile.calltrace.cycles-pp.__inet_lookup_skb.tcp_v4_rcv.ip_protocol_deliver_rcu.ip_local_deliver_finish.__netif_receive_skb_one_core
+      3.85            +0.1        3.94        perf-profile.calltrace.cycles-pp.cpuidle_idle_call.do_idle.cpu_startup_entry.start_secondary.common_startup_64
+      1.87 ±  3%      +0.1        1.97        perf-profile.calltrace.cycles-pp.intel_idle.cpuidle_enter_state.cpuidle_enter.cpuidle_idle_call.do_idle
+      5.14            +0.1        5.24        perf-profile.calltrace.cycles-pp.cpu_startup_entry.start_secondary.common_startup_64
+      5.14            +0.1        5.25        perf-profile.calltrace.cycles-pp.start_secondary.common_startup_64
+      5.54            +0.1        5.64        perf-profile.calltrace.cycles-pp.common_startup_64
+      5.13            +0.1        5.24        perf-profile.calltrace.cycles-pp.do_idle.cpu_startup_entry.start_secondary.common_startup_64
+     10.08            +0.1       10.20        perf-profile.calltrace.cycles-pp.do_epoll_ctl.__x64_sys_epoll_ctl.do_syscall_64.entry_SYSCALL_64_after_hwframe.epoll_ctl
+     10.48            +0.1       10.61        perf-profile.calltrace.cycles-pp.__x64_sys_epoll_ctl.do_syscall_64.entry_SYSCALL_64_after_hwframe.epoll_ctl
+     11.15            +0.1       11.28        perf-profile.calltrace.cycles-pp.entry_SYSCALL_64_after_hwframe.epoll_ctl
+     11.03            +0.1       11.18        perf-profile.calltrace.cycles-pp.do_syscall_64.entry_SYSCALL_64_after_hwframe.epoll_ctl
+      6.79            +0.2        6.95        perf-profile.calltrace.cycles-pp.dictFind
+     12.44            +0.2       12.62        perf-profile.calltrace.cycles-pp.epoll_ctl
+     15.91            +0.2       16.10        perf-profile.calltrace.cycles-pp.tcp_v4_rcv.ip_protocol_deliver_rcu.ip_local_deliver_finish.__netif_receive_skb_one_core.process_backlog
+     16.00            +0.2       16.21        perf-profile.calltrace.cycles-pp.ip_protocol_deliver_rcu.ip_local_deliver_finish.__netif_receive_skb_one_core.process_backlog.__napi_poll
+     16.03            +0.2       16.24        perf-profile.calltrace.cycles-pp.ip_local_deliver_finish.__netif_receive_skb_one_core.process_backlog.__napi_poll.net_rx_action
+     16.78            +0.2       17.01        perf-profile.calltrace.cycles-pp.process_backlog.__napi_poll.net_rx_action.handle_softirqs.do_softirq
+     16.54            +0.2       16.78        perf-profile.calltrace.cycles-pp.__netif_receive_skb_one_core.process_backlog.__napi_poll.net_rx_action.handle_softirqs
+     16.80            +0.2       17.04        perf-profile.calltrace.cycles-pp.__napi_poll.net_rx_action.handle_softirqs.do_softirq.__local_bh_enable_ip
+     20.70            +0.3       20.96        perf-profile.calltrace.cycles-pp.net_rx_action.handle_softirqs.do_softirq.__local_bh_enable_ip.__dev_queue_xmit
+     21.08            +0.3       21.34        perf-profile.calltrace.cycles-pp.handle_softirqs.do_softirq.__local_bh_enable_ip.__dev_queue_xmit.ip_finish_output2
+     21.15            +0.3       21.42        perf-profile.calltrace.cycles-pp.do_softirq.__local_bh_enable_ip.__dev_queue_xmit.ip_finish_output2.__ip_queue_xmit
+     21.23            +0.3       21.50        perf-profile.calltrace.cycles-pp.__local_bh_enable_ip.__dev_queue_xmit.ip_finish_output2.__ip_queue_xmit.__tcp_transmit_skb
+     22.73            +0.3       23.03        perf-profile.calltrace.cycles-pp.__dev_queue_xmit.ip_finish_output2.__ip_queue_xmit.__tcp_transmit_skb.tcp_write_xmit
+     23.44            +0.3       23.77        perf-profile.calltrace.cycles-pp.__ip_queue_xmit.__tcp_transmit_skb.tcp_write_xmit.__tcp_push_pending_frames.tcp_sendmsg_locked
+     22.94            +0.3       23.28        perf-profile.calltrace.cycles-pp.ip_finish_output2.__ip_queue_xmit.__tcp_transmit_skb.tcp_write_xmit.__tcp_push_pending_frames
+     26.32            +0.4       26.68        perf-profile.calltrace.cycles-pp.__tcp_transmit_skb.tcp_write_xmit.__tcp_push_pending_frames.tcp_sendmsg_locked.tcp_sendmsg
+     30.37            -1.5       28.92        perf-profile.children.cycles-pp.tcp_write_xmit
+     30.39            -1.4       29.03        perf-profile.children.cycles-pp.__tcp_push_pending_frames
+     38.37            -1.1       37.23        perf-profile.children.cycles-pp.tcp_sendmsg_locked
+     38.66            -1.0       37.67        perf-profile.children.cycles-pp.tcp_sendmsg
+      1.32            -0.9        0.38 ±  2%  perf-profile.children.cycles-pp.tcp_event_new_data_sent
+      1.80 ±  2%      -0.9        0.88 ±  2%  perf-profile.children.cycles-pp.tcp_check_space
+      1.19 ±  2%      -0.9        0.27 ±  4%  perf-profile.children.cycles-pp.__mod_timer
+      1.22 ±  2%      -0.9        0.30 ±  3%  perf-profile.children.cycles-pp.sk_reset_timer
+     66.87            -0.5       66.34        perf-profile.children.cycles-pp.do_syscall_64
+     67.19            -0.5       66.67        perf-profile.children.cycles-pp.entry_SYSCALL_64_after_hwframe
+     21.61            -0.5       21.15        perf-profile.children.cycles-pp.sock_write_iter
+     21.82            -0.4       21.39        perf-profile.children.cycles-pp.vfs_write
+     22.02            -0.4       21.60        perf-profile.children.cycles-pp.ksys_write
+     17.29            -0.4       16.88        perf-profile.children.cycles-pp.__sys_sendto
+     22.78            -0.4       22.37        perf-profile.children.cycles-pp.write
+     17.31            -0.4       16.94        perf-profile.children.cycles-pp.__x64_sys_sendto
+     18.00            -0.4       17.65        perf-profile.children.cycles-pp.__send
+      0.23 ±  5%      -0.1        0.16 ±  6%  perf-profile.children.cycles-pp.tcp_event_data_recv
+      0.12 ±  4%      +0.0        0.13 ±  3%  perf-profile.children.cycles-pp.validate_xmit_skb
+      0.38 ±  2%      +0.0        0.40 ±  3%  perf-profile.children.cycles-pp.syscall_return_via_sysret
+      0.30 ±  4%      +0.0        0.32 ±  3%  perf-profile.children.cycles-pp.pick_next_task_fair
+      0.51 ±  2%      +0.0        0.54 ±  2%  perf-profile.children.cycles-pp._copy_from_iter
+      0.18 ±  5%      +0.0        0.21 ±  2%  perf-profile.children.cycles-pp.tcp_schedule_loss_probe
+      1.35            +0.1        1.40        perf-profile.children.cycles-pp.__inet_lookup_skb
+      1.49            +0.1        1.56        perf-profile.children.cycles-pp.tcp_stream_alloc_skb
+      0.76            +0.1        0.83        perf-profile.children.cycles-pp.skb_do_copy_data_nocache
+      4.02            +0.1        4.09        perf-profile.children.cycles-pp.cpuidle_enter
+      4.00            +0.1        4.07        perf-profile.children.cycles-pp.cpuidle_enter_state
+      0.24 ±  5%      +0.1        0.32 ±  5%  perf-profile.children.cycles-pp.release_sock
+      4.22            +0.1        4.32        perf-profile.children.cycles-pp.cpuidle_idle_call
+      1.93 ±  2%      +0.1        2.03        perf-profile.children.cycles-pp.intel_idle
+      5.53            +0.1        5.63        perf-profile.children.cycles-pp.do_idle
+      5.14            +0.1        5.25        perf-profile.children.cycles-pp.start_secondary
+      5.54            +0.1        5.64        perf-profile.children.cycles-pp.common_startup_64
+      5.54            +0.1        5.64        perf-profile.children.cycles-pp.cpu_startup_entry
+     10.12            +0.1       10.24        perf-profile.children.cycles-pp.do_epoll_ctl
+     10.50            +0.1       10.63        perf-profile.children.cycles-pp.__x64_sys_epoll_ctl
+     12.76            +0.2       12.93        perf-profile.children.cycles-pp.epoll_ctl
+      6.88            +0.2        7.05        perf-profile.children.cycles-pp.dictFind
+     15.94            +0.2       16.13        perf-profile.children.cycles-pp.tcp_v4_rcv
+     16.04            +0.2       16.25        perf-profile.children.cycles-pp.ip_local_deliver_finish
+     16.02            +0.2       16.23        perf-profile.children.cycles-pp.ip_protocol_deliver_rcu
+     16.55            +0.2       16.78        perf-profile.children.cycles-pp.__netif_receive_skb_one_core
+     16.81            +0.2       17.05        perf-profile.children.cycles-pp.__napi_poll
+     16.78            +0.2       17.02        perf-profile.children.cycles-pp.process_backlog
+     21.54            +0.3       21.79        perf-profile.children.cycles-pp.handle_softirqs
+     20.72            +0.3       20.98        perf-profile.children.cycles-pp.net_rx_action
+     21.16            +0.3       21.43        perf-profile.children.cycles-pp.do_softirq
+     21.31            +0.3       21.60        perf-profile.children.cycles-pp.__local_bh_enable_ip
+     22.76            +0.3       23.06        perf-profile.children.cycles-pp.__dev_queue_xmit
+     22.96            +0.3       23.29        perf-profile.children.cycles-pp.ip_finish_output2
+     23.46            +0.3       23.80        perf-profile.children.cycles-pp.__ip_queue_xmit
+     26.38            +0.3       26.72        perf-profile.children.cycles-pp.__tcp_transmit_skb
+      1.13 ±  2%      -1.0        0.18 ±  3%  perf-profile.self.cycles-pp.__mod_timer
+      1.79 ±  2%      -0.9        0.87 ±  2%  perf-profile.self.cycles-pp.tcp_check_space
+      0.22 ±  6%      -0.1        0.15 ±  7%  perf-profile.self.cycles-pp.tcp_event_data_recv
+      0.48            +0.0        0.50 ±  2%  perf-profile.self.cycles-pp.mod_objcg_state
+      0.32 ±  2%      +0.0        0.34        perf-profile.self.cycles-pp.call
+      0.50 ±  2%      +0.0        0.52 ±  2%  perf-profile.self.cycles-pp._copy_from_iter
+      0.17 ±  4%      +0.0        0.19 ±  3%  perf-profile.self.cycles-pp.ip_finish_output2
+      0.11 ±  9%      +0.0        0.14 ±  3%  perf-profile.self.cycles-pp.tcp_event_new_data_sent
+      0.27 ±  4%      +0.0        0.30 ±  3%  perf-profile.self.cycles-pp.__alloc_skb
+      0.21            +0.0        0.24 ±  3%  perf-profile.self.cycles-pp.kfree_skbmem
+      0.36 ±  3%      +0.0        0.40        perf-profile.self.cycles-pp._raw_spin_lock_bh
+      0.56 ±  2%      +0.0        0.60 ±  2%  perf-profile.self.cycles-pp.kmem_cache_free
+      0.13 ±  5%      +0.0        0.17 ±  5%  perf-profile.self.cycles-pp.vfs_write
+      0.00            +0.1        0.06 ±  9%  perf-profile.self.cycles-pp.__x64_sys_sendto
+      0.08 ±  8%      +0.1        0.14 ±  4%  perf-profile.self.cycles-pp.sock_write_iter
+      0.02 ± 99%      +0.1        0.09 ± 11%  perf-profile.self.cycles-pp.__sys_sendto
+      3.40            +0.1        3.50        perf-profile.self.cycles-pp.tcp_sendmsg_locked
+      1.93 ±  2%      +0.1        2.03        perf-profile.self.cycles-pp.intel_idle
+      0.00            +0.1        0.11 ±  5%  perf-profile.self.cycles-pp.__tcp_push_pending_frames
+      6.66            +0.1        6.78        perf-profile.self.cycles-pp.dictFind
+      0.00            +0.1        0.13 ±  2%  perf-profile.self.cycles-pp.tcp_sendmsg
+
+
+
+
+Disclaimer:
+Results have been estimated based on internal Intel analysis and are provided
+for informational purposes only. Any difference in system hardware or software
+design or configuration may affect actual performance.
+
 
 -- 
-2.34.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
