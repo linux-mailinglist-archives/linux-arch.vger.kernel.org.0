@@ -1,140 +1,161 @@
-Return-Path: <linux-arch+bounces-10041-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10042-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D1D7A2A6A3
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2025 12:02:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D06CDA2A6A4
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2025 12:02:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C8AF1889A50
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2025 11:02:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3900F1889860
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2025 11:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42AC622CBFC;
-	Thu,  6 Feb 2025 10:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AAB1218EA8;
+	Thu,  6 Feb 2025 11:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YopcJIKb"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YGZTZnxX";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gSo8yfFy"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f67.google.com (mail-ed1-f67.google.com [209.85.208.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D11F22CBF4;
-	Thu,  6 Feb 2025 10:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A2E2288EC;
+	Thu,  6 Feb 2025 11:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738839481; cv=none; b=M6NtpM1y6itMKuE3SELpZGcrrpwAqJJmC4edC1jzlcfOnitOSO9+TiqHRG7JS75ctnSlgyB7e14pwxouWeUXuE46pg1yg0km90Hah4JmAyHsEpq+/i2IDuwlfHOoNvNZHAZvHreFB13AVUgUiNKGbywbzBZmtMU0CjKeZWJLpJ8=
+	t=1738839605; cv=none; b=QpxMT13luwscfuRBNXqs+61Z6pk4AbMiBx+FsYQyetuz0uu+HoQqMg6Wdjj6eUbkHeq78WVJGMlvIO4GznmJ1M7kVe31U3EzV0AkWIlEZ1P4QRt93Qkx1QI2y7DfTI7JH+wXcKAgjhHrh6wkmXJEl48oFnQCqPBSyI5fi1sMrbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738839481; c=relaxed/simple;
-	bh=RWheo7jB9CFPRMRRn73ubD2be1ma2wgGJgQQNlUo3GI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BmJ0jwi7BMDVC9kwAuASpTnnKSD/Wr9nJcA5DfDjkrak/RmLZpQAv3HkzptVGG8bKzkpwffBFGPTlh9wd5DQ3UvJWzXhTFgSggN7Ba5A3NNHbG4o29l7H3e5WCmAoEpnYxxGR3ORke7r4uAxOyu0keZ5XyWo2uspdPlFtVJL2PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YopcJIKb; arc=none smtp.client-ip=209.85.208.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f67.google.com with SMTP id 4fb4d7f45d1cf-5dcdfa7df68so1372940a12.3;
-        Thu, 06 Feb 2025 02:57:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738839478; x=1739444278; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UCwEnHmZYStesPLVZzhLCy/SlMOkoHP6UZc4smqj+Is=;
-        b=YopcJIKbWyQURFRey38A2CrBw7jKRlPebgyy0nBN/QXMpypfKHR6VF9Ekblf/hxLkS
-         CVggz8y/3CZc7SxLmaN6a4ZM7EQQSZM6EnipBKrwLYe8B5LgGcG4hnESHL1GS7ez9TWy
-         4zEsyGRecYIzxWQVzNzQkgC4iGaknJP3kcu9HPb4mZEpheRHtdnaSWN+K4KORSD1nwXL
-         GrKcLSc8vuYU3GXZMFGvRpKV76Jh49RYg948qHz+sKhe1bE73FbX+LPHQcPH0DF7rOnL
-         R7OUwv/fy5lK9QmLlP5S1oDsCh+MPwqZE4crD7b94yS6kbBEpwar+6+ztio0Rt6nJcG5
-         tcmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738839478; x=1739444278;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UCwEnHmZYStesPLVZzhLCy/SlMOkoHP6UZc4smqj+Is=;
-        b=B47BqDMTwIvLRbOpLCNs0IU3QHKBn7qSRYN5a7SfvcyjHzN3PumN359fv6N7EapuPZ
-         /O7/5DBmKiveToPbgraP4YnhYt3cQcGkOoUZQ5OgQA1i0vlXdOfe5/OQEpVYuYEI8BBd
-         9DUOTVJpjhyL469yoZ73t7czSJjKdOcxK2PUj3WDDaMTf4GjQDRjLGKgzFc/h299F0SZ
-         7GBgkxwMWMRsygLhMs+i8SgaLky9ST0dkXXoHSx8Y9uUo/ABAPILNPaGba3dc9Yo9Rw7
-         SgyCUyUBVwGE9l5JonAJnodBnc0WNo+G4sVAbqdDxA1AJqA/qfi8H5YSei6Marp2ku+9
-         iMnw==
-X-Forwarded-Encrypted: i=1; AJvYcCUzMGW5XFAP+gZgVfSbKGTHh3l/uUd3Uq7G0Yfm03GOe0fxvbXU1kbsrytYxfcErjB5Ecuv8y96ianUixQM@vger.kernel.org, AJvYcCVyA5f2bmP8dz+XZAIL59bOotiFwYR0+JMqIJq1RdRsfdEMc9TvMWU2tNjma3KxXdynfGM22zlH8h7k@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoQnAc74ynIFUQOOoOuSHDy7VA7EqUsYVbn1QQz3ap8cMnfCzh
-	GMizBslVOEB9M8uUhwDcwDTNwp74BjMPJm3Na815qPlRWD/PsEnqPkcW61+vqjlU4QFoDmBlc4K
-	oR15Snbt7byJKABNEj4dGe9j4jyI=
-X-Gm-Gg: ASbGncsyAg7LummNFHx3BtYU7kS7eXdxHzNsqTYqrcb8ClnyBQTnxlpFPTH5J9nHrRd
-	8FhvXOULxqwVBtWG9d/BZxvacE+ncOJloPvDv2Do11JTkbCt/2Bnh8ec6LJfIOd+cegmmKhVvq4
-	o=
-X-Google-Smtp-Source: AGHT+IGP8tAW0CXvHNHg7p5sWcAX+S7UmNuU0OrOMLWbPyPHRVVI4cXsDxphL4+JA8N5RtUQ7mSHl6x3rrvdPIqiBpg=
-X-Received: by 2002:a05:6402:27c6:b0:5da:a97:ad73 with SMTP id
- 4fb4d7f45d1cf-5dcdb71bb7emr7512035a12.13.1738839477521; Thu, 06 Feb 2025
- 02:57:57 -0800 (PST)
+	s=arc-20240116; t=1738839605; c=relaxed/simple;
+	bh=xQ1t5p/G1PuTyMUQl7uec82DUkXuAxu+nr72fhZ0FqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L34PNd4Pms0OpTc29xkdbMK8Bhe5NuvGv/i4Hj0C7t/PkC/LSHDxAPwDlxWPfK2W+YYGa7Q1kOo5N8njwZUMipUcMNVloauY0W0CyWyj9khsSh6p5U8DeFeuMY0iu8MUitDzQSZeuOn0PW6RzTMuxuShbCDVAqvtiPocyGKr5os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YGZTZnxX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gSo8yfFy; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Thu, 6 Feb 2025 11:59:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1738839601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ru5WdIbpSL0IOKGQMyXAT/ZbwjxtTCZKvCRArp1oQDE=;
+	b=YGZTZnxXjpdI6oZKS05b+5XvnP+boGHN1C9QVygV7IAjLA8pAEovdmFAH8xFn7WI+w/Xhp
+	8K+GjBJMH0JXK40pNxioacxcseFzn+iXVx4WoYt+J0VaxAt6ID0MNK8tJHkPrEinPnHwJG
+	q7T7uflCus2GZC60/Vo9hxiLt7lbmMt3uhYS5TbYuilZ8s9n9kIooocVm9DSgR45+vozV8
+	mKs7HvnUnL+HLLe1fD2OiCIYZL6f6ix3Bee88IjX4iDMFE94To0mtXdotTD+DhoAabPdO5
+	+hTLhUwkR8YuE1I+6rX+payvbnygcsEtyByLEI0nCsLk7XsBFKKaA2MPCL7vew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1738839601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ru5WdIbpSL0IOKGQMyXAT/ZbwjxtTCZKvCRArp1oQDE=;
+	b=gSo8yfFya9Ajm2CmxNsGxQ1eCLyB3wbR/PEUj366khtBpyQwoXLrVFgUwGilu8dL/eMyJd
+	VQWqN9SewyqCZ4BQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Russell King <linux@armlinux.org.uk>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org, 
+	Nam Cao <namcao@linutronix.de>, linux-csky@vger.kernel.org, 
+	"Ridoux, Julien" <ridouxj@amazon.com>, "Luu, Ryan" <rluu@amazon.com>, kvm <kvm@vger.kernel.org>
+Subject: Re: [PATCH v3 00/18] vDSO: Introduce generic data storage
+Message-ID: <20250206110648-ec4cf3d0-0aef-4feb-a859-c69e53ab110c@linutronix.de>
+References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
+ <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250203214911.898276-1-ankur.a.arora@oracle.com>
-In-Reply-To: <20250203214911.898276-1-ankur.a.arora@oracle.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 6 Feb 2025 11:57:21 +0100
-X-Gm-Features: AWEUYZn3un_MskJWBGcJT6aFZUZFVS49qML1cEO5eTlJd56xDvMM1MKgwwStIVI
-Message-ID: <CAP01T75B-UjoKugBsCHnfjwMmL5Bdfs+-YK3QH7mLUJs0+mmCA@mail.gmail.com>
-Subject: Re: [PATCH 0/4] barrier: Introduce smp_cond_load_*_timeout()
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
-	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, 
-	zhenglifeng1@huawei.com, joao.m.martins@oracle.com, 
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
 
-On Mon, 3 Feb 2025 at 22:49, Ankur Arora <ankur.a.arora@oracle.com> wrote:
->
-> Hi,
->
-> This series adds waited variants of the smp_cond_load() primitives:
-> smp_cond_load_relaxed_timewait(), and smp_cond_load_acquire_timewait().
->
-> There are two known users for these interfaces:
->
->  - poll_idle() [1]
->  - resilient queued spinlocks [2]
->
-> For both of these cases we want to wait on a condition but also want
-> to terminate the wait at some point.
->
-> Now, in theory, that can be worked around by making the time check a
-> part of the conditional expression provided to smp_cond_load_*():
->
->    smp_cond_load_relaxed(&cvar, !VAL || time_check());
->
-> That approach, however, runs into two problems:
->
->   - smp_cond_load_*() only allow waiting on a condition: this might
->     be okay when we are synchronously spin-waiting on the condition,
->     but not on architectures where are actually waiting for a store
->     to a cacheline.
->
->   - this semantic problem becomes a real problem on arm64 if the
->     event-stream is disabled. That means that there will be no
->     asynchronous event (the event-stream) that periodically wakes
->     the waiter, which might lead to an interminable wait if VAL is
->     never written to.
->
-> This series extends the smp_cond_load_*() interfaces by adding two
-> arguments: a time-check expression and its associated time limit.
-> This is sufficient to allow for both a synchronously waited
-> implementation (like the generic cpu_relax() based loop), or one
-> where the CPU waits for a store to a cacheline with an out-of-band
-> timer.
->
-> Any comments appreciated!
->
+On Thu, Feb 06, 2025 at 09:31:42AM +0000, David Woodhouse wrote:
+> On Tue, 2025-02-04 at 13:05 +0100, Thomas Weißschuh wrote:
+> > Currently each architecture defines the setup of the vDSO data page on
+> > its own, mostly through copy-and-paste from some other architecture.
+> > Extend the existing generic vDSO implementation to also provide generic
+> > data storage.
+> > This removes duplicated code and paves the way for further changes to
+> > the generic vDSO implementation without having to go through a lot of
+> > per-architecture changes.
+> > 
+> > Based on v6.14-rc1 and intended to be merged through the tip tree.
 
-Thanks for splitting this and sending it out.
-+cc bpf@ for visibility (please keep it in cc for subsequent versions).
+Note: The real answer will need to come from the timekeeping
+maintainers, my personal two cents below.
 
->
->  [...]
+> Thanks for working on this. Is there a plan to expose the time data
+> directly to userspace in a form which is usable *other* than by
+> function calls which get the value of the clock at a given moment?
+
+There are no current plans that I am aware of.
+
+> For populating the vmclock device¹ we need to know the actual
+> relationship between the hardware counter (TSC, arch timer, etc.) and
+> real time in order to propagate that to the guest.
+> 
+> I see two options for doing this:
+> 
+>  1. Via userspace, exposing the vdso time data (and a notification when
+>     it changes?) and letting the userspace VMM populate the vmclock.
+>     This is complex for x86 because of TSC scaling; in fact userspace
+>     doesn't currently know the precise scaling from host to guest TSC
+>     so we'd have to be able to extract that from KVM.
+
+Exposing the raw vdso time data is problematic as it precludes any
+evolution to its datastructures, like the one we are currently doing.
+
+An additional, trimmed down and stable data structure could be used.
+But I don't think it makes sense. The vDSO is all about a stable
+highlevel function interface on top of an unstable data interface.
+However the vmclock needs the lowlevel data to populate its own
+datastructure, wrapping raw data access in function calls is unnecessary.
+If no functions are involved then the vDSO is not needed. The data can
+be maintained separately in any other place in the kernel and accessed
+or mapped by userspace from there.
+Also the vDSO does not have an active notification mechanism, this would
+probably be implemented through a filedescriptor, but then the data
+can also be mapped through exactly that fd.
+
+>  2. In kernel, asking KVM to populate the vmclock structure much like
+>     it does other pvclocks shared with the guest. KVM/x86 already uses
+>     pvclock_gtod_register_notifier() to hook changes; should we expand
+>     on that? The problem with that notifier is that it seems to be
+>     called far more frequently than I'd expect.
+
+This sounds better, especially as any custom ABI from the host kernel to
+the VMM would look a lot like the vmclock structure anyways.
+
+Timekeeper updates are indeed very frequent, but what are the concrete
+issues? That frequency is fine for regular vDSO data page updates,
+updating the vmclock data page should be very similar.
+The timekeeper core can pass context to the notifier callbacks, maybe
+this can be used to skip some expensive steps where possible.
+
+> ¹ https://gitlab.com/qemu-project/qemu/-/commit/3634039b93cc5
 
