@@ -1,161 +1,246 @@
-Return-Path: <linux-arch+bounces-10042-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10043-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D06CDA2A6A4
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2025 12:02:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DCDCA2AA4F
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2025 14:49:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3900F1889860
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2025 11:02:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B52A3A4B42
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Feb 2025 13:49:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AAB1218EA8;
-	Thu,  6 Feb 2025 11:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14AE01EA7F1;
+	Thu,  6 Feb 2025 13:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YGZTZnxX";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gSo8yfFy"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="sKJ7CCc+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A2E2288EC;
-	Thu,  6 Feb 2025 11:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FC41624EF
+	for <linux-arch@vger.kernel.org>; Thu,  6 Feb 2025 13:49:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738839605; cv=none; b=QpxMT13luwscfuRBNXqs+61Z6pk4AbMiBx+FsYQyetuz0uu+HoQqMg6Wdjj6eUbkHeq78WVJGMlvIO4GznmJ1M7kVe31U3EzV0AkWIlEZ1P4QRt93Qkx1QI2y7DfTI7JH+wXcKAgjhHrh6wkmXJEl48oFnQCqPBSyI5fi1sMrbg=
+	t=1738849758; cv=none; b=CfcRnut6l5SLzmuU2nBoEfE3P1F3MJh3N0pgW1QsYi7DucJEldxy2Jabp7ObVqgS+k/86DPMFNjzI65NQIdMPon5QrfhDaGCEDua3JLnREXSbrykEU4qkmeMtrGSMajRBw72JKwbSn76TtdwblGSgRFbr8zhi9vKaqOg92jVwS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738839605; c=relaxed/simple;
-	bh=xQ1t5p/G1PuTyMUQl7uec82DUkXuAxu+nr72fhZ0FqQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L34PNd4Pms0OpTc29xkdbMK8Bhe5NuvGv/i4Hj0C7t/PkC/LSHDxAPwDlxWPfK2W+YYGa7Q1kOo5N8njwZUMipUcMNVloauY0W0CyWyj9khsSh6p5U8DeFeuMY0iu8MUitDzQSZeuOn0PW6RzTMuxuShbCDVAqvtiPocyGKr5os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YGZTZnxX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gSo8yfFy; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Thu, 6 Feb 2025 11:59:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1738839601;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ru5WdIbpSL0IOKGQMyXAT/ZbwjxtTCZKvCRArp1oQDE=;
-	b=YGZTZnxXjpdI6oZKS05b+5XvnP+boGHN1C9QVygV7IAjLA8pAEovdmFAH8xFn7WI+w/Xhp
-	8K+GjBJMH0JXK40pNxioacxcseFzn+iXVx4WoYt+J0VaxAt6ID0MNK8tJHkPrEinPnHwJG
-	q7T7uflCus2GZC60/Vo9hxiLt7lbmMt3uhYS5TbYuilZ8s9n9kIooocVm9DSgR45+vozV8
-	mKs7HvnUnL+HLLe1fD2OiCIYZL6f6ix3Bee88IjX4iDMFE94To0mtXdotTD+DhoAabPdO5
-	+hTLhUwkR8YuE1I+6rX+payvbnygcsEtyByLEI0nCsLk7XsBFKKaA2MPCL7vew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1738839601;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ru5WdIbpSL0IOKGQMyXAT/ZbwjxtTCZKvCRArp1oQDE=;
-	b=gSo8yfFya9Ajm2CmxNsGxQ1eCLyB3wbR/PEUj366khtBpyQwoXLrVFgUwGilu8dL/eMyJd
-	VQWqN9SewyqCZ4BQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Russell King <linux@armlinux.org.uk>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org, 
-	Nam Cao <namcao@linutronix.de>, linux-csky@vger.kernel.org, 
-	"Ridoux, Julien" <ridouxj@amazon.com>, "Luu, Ryan" <rluu@amazon.com>, kvm <kvm@vger.kernel.org>
-Subject: Re: [PATCH v3 00/18] vDSO: Introduce generic data storage
-Message-ID: <20250206110648-ec4cf3d0-0aef-4feb-a859-c69e53ab110c@linutronix.de>
-References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
- <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
+	s=arc-20240116; t=1738849758; c=relaxed/simple;
+	bh=A6EvT/ybkDjxMJqnUueaONdHJGupkcrjgBVTOvJY/gU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SWnv+mJxgocTRGn0BLTTke+UVxpViQkpUw07+J+N7/6mkdgGE8siI4UAmHOhIPUzmjqnsNiy2dPn1gqYFkmoNsfjfsETV3ke13nJYC1AWogic1ivpDhDYURBoLVaBjcTfE5xe+SCujwqaoO+GRshkwLhb6ZZjKHV6ZWitVEzR5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=sKJ7CCc+; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-436249df846so6124205e9.3
+        for <linux-arch@vger.kernel.org>; Thu, 06 Feb 2025 05:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738849754; x=1739454554; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3+yUQpAX+o3b8spnwV7aqw1/aYSKStgrXep4Af2rWXQ=;
+        b=sKJ7CCc+Ke7igbp9Zqh/1l/RKZ6s5Qgzn7A6U+tcOo1kxHyJ8Yjj0+Da0pWmibj/zH
+         1CCyaGvcg1OaoF9J3LYWsR5yv4+ryyxMxREMmE3FIZlpUduq4AGhN0EzXkRDJxfl3NMw
+         CSeLRWClwUqE1TJUIA5oo+tsTB8LxDl/0wgaar/tTo3t3+NuVKxw4HrvfyjMs6HX8AFl
+         ZHwpnvPSAgJJA0XVvSP0t1HVMRRIwVJgU3BDrrfAs+8IPJrCtw0kB9CM0KhGk80eCj4X
+         OWyx/2AutlcfxRs1RervbX8yVC+ZKWEgGB8Z6jHXKHxLwcEvY6UXPax4cb8707wbagmN
+         3pmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738849754; x=1739454554;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+yUQpAX+o3b8spnwV7aqw1/aYSKStgrXep4Af2rWXQ=;
+        b=oWXAuyYH81uCZ0Eotjv3Qa9Th1U0G7oX2YpnJ33u42padTCWSdSl7t+qbhtjN0Tyas
+         X8GfHga/fIHM2QL1Tjsv27ZZsrEo1Xn9zK03eDuN9PK+Juxx6JNrJ3lYsNt5XBF7Wuip
+         o4dEDdIRX49AK/yYSqc5aT42UdYWlGA4atEu2jK9p/YFe9vyUouhN04YBPRc7lHGQMSv
+         37ZNyWkyTYFI9Tsof8LJYrgiUveyr1OHdufR9QKV4TX2En8B2J1cHjTA61Pn8cuuZYg9
+         65utQ8VEYIgFa5Lg19vw93NBu2xZCPOQH7yR+EwenWpn97nTdXLGcDHcW0/R3J1j8qDm
+         GY0w==
+X-Forwarded-Encrypted: i=1; AJvYcCV1soNmS6a61xAOUGlB+fkj2rI40PbjBtjnsQkRvNY7tgdLVnw3ip6kcthbgBfzUgvozo0ITRYEKm6E@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2tVaMuj4k8ur+KEazv+N+i6fbse9fHvV8Q54Giqkt+uD/eG7w
+	X7B+xb8wncTTWRSV3pQoLDUVDOj8C3UU91/+0jYTjES5RnNRBprGhEhxxhdfkzc=
+X-Gm-Gg: ASbGncsTXxkjaYK8V7xilBCUXJQ75/xWcdv47Vi5cO/KydlqAm41D6uwRhEkGjHEyq4
+	+nkXiFompvl4ZifMyW6rnhSUxp4SELGhIw1QiGQ+UsMsfDBQcgQBiMyC29fbuglmFbhMvG4t7Hq
+	bDAiZg3mYVX0QMemlEk/p9T2/Cx9f1P772LGGGMAXHvBDjQeAPIWJnTcRZQUduODVznufeVlBcT
+	OoE2lEPOUFdJ+7ZvoB8s9hAH4HbFBeBgi+BZtS4wB7wG7oD08b+NQcELGrXVSxBFm8nB6EwEjkd
+	myrMDDToeCKTyIUM4tj2sNjtEyVAwj2yBjmvtY6vcJqr1Ts7Nl5quRMwShBj
+X-Google-Smtp-Source: AGHT+IGg4Oxn/it/Gfzbb+ERjhH8cdtxBySZuTwU5SUr81Aju5a+rmMa6q+7lfy94Mm7DhC9V1Q64g==
+X-Received: by 2002:a05:600c:4452:b0:434:f82b:c5e6 with SMTP id 5b1f17b1804b1-4390d42cd07mr47760125e9.1.1738849753707;
+        Thu, 06 Feb 2025 05:49:13 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:e17:9700:16d2:7456:6634:9626? ([2a01:e0a:e17:9700:16d2:7456:6634:9626])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbdd368bdsm1831411f8f.33.2025.02.06.05.49.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Feb 2025 05:49:13 -0800 (PST)
+Message-ID: <fec3b7be-4259-4eef-87f9-b2cee5718cae@rivosinc.com>
+Date: Thu, 6 Feb 2025 14:49:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 14/26] riscv/traps: Introduce software check exception
+To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Christian Brauner <brauner@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+ Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+ atishp@rivosinc.com, evan@rivosinc.com, alexghiti@rivosinc.com,
+ samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com
+References: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
+ <20250204-v5_user_cfi_series-v9-14-b37a49c5205c@rivosinc.com>
+Content-Language: en-US
+From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+In-Reply-To: <20250204-v5_user_cfi_series-v9-14-b37a49c5205c@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
 
-On Thu, Feb 06, 2025 at 09:31:42AM +0000, David Woodhouse wrote:
-> On Tue, 2025-02-04 at 13:05 +0100, Thomas Weißschuh wrote:
-> > Currently each architecture defines the setup of the vDSO data page on
-> > its own, mostly through copy-and-paste from some other architecture.
-> > Extend the existing generic vDSO implementation to also provide generic
-> > data storage.
-> > This removes duplicated code and paves the way for further changes to
-> > the generic vDSO implementation without having to go through a lot of
-> > per-architecture changes.
-> > 
-> > Based on v6.14-rc1 and intended to be merged through the tip tree.
 
-Note: The real answer will need to come from the timekeeping
-maintainers, my personal two cents below.
 
-> Thanks for working on this. Is there a plan to expose the time data
-> directly to userspace in a form which is usable *other* than by
-> function calls which get the value of the clock at a given moment?
+On 05/02/2025 02:22, Deepak Gupta wrote:
+> zicfiss / zicfilp introduces a new exception to priv isa `software check
+> exception` with cause code = 18. This patch implements software check
+> exception.
 
-There are no current plans that I am aware of.
+Hey Deepak,
 
-> For populating the vmclock device¹ we need to know the actual
-> relationship between the hardware counter (TSC, arch timer, etc.) and
-> real time in order to propagate that to the guest.
+While not directly related to this patch, is the exception 18 delegation
+documented in the SBI doc ? I mean, should we specify that it is always
+delegated when implementing FWFT LANDING_PAD/SHADOW_STACK ?
+
+Thanks,
+
+ClÃ©ment
+
 > 
-> I see two options for doing this:
+> Additionally it implements a cfi violation handler which checks for code
+> in xtval. If xtval=2, it means that sw check exception happened because of
+> an indirect branch not landing on 4 byte aligned PC or not landing on
+> `lpad` instruction or label value embedded in `lpad` not matching label
+> value setup in `x7`. If xtval=3, it means that sw check exception happened
+> because of mismatch between link register (x1 or x5) and top of shadow
+> stack (on execution of `sspopchk`).
 > 
->  1. Via userspace, exposing the vdso time data (and a notification when
->     it changes?) and letting the userspace VMM populate the vmclock.
->     This is complex for x86 because of TSC scaling; in fact userspace
->     doesn't currently know the precise scaling from host to guest TSC
->     so we'd have to be able to extract that from KVM.
+> In case of cfi violation, SIGSEGV is raised with code=SEGV_CPERR.
+> SEGV_CPERR was introduced by x86 shadow stack patches.
+> 
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/asm-prototypes.h |  1 +
+>  arch/riscv/include/asm/entry-common.h   |  2 ++
+>  arch/riscv/kernel/entry.S               |  3 +++
+>  arch/riscv/kernel/traps.c               | 43 +++++++++++++++++++++++++++++++++
+>  4 files changed, 49 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
+> index cd627ec289f1..5a27cefd7805 100644
+> --- a/arch/riscv/include/asm/asm-prototypes.h
+> +++ b/arch/riscv/include/asm/asm-prototypes.h
+> @@ -51,6 +51,7 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_u);
+>  DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
+>  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
+>  DECLARE_DO_ERROR_INFO(do_trap_break);
+> +DECLARE_DO_ERROR_INFO(do_trap_software_check);
+>  
+>  asmlinkage void handle_bad_stack(struct pt_regs *regs);
+>  asmlinkage void do_page_fault(struct pt_regs *regs);
+> diff --git a/arch/riscv/include/asm/entry-common.h b/arch/riscv/include/asm/entry-common.h
+> index b28ccc6cdeea..34ed149af5d1 100644
+> --- a/arch/riscv/include/asm/entry-common.h
+> +++ b/arch/riscv/include/asm/entry-common.h
+> @@ -40,4 +40,6 @@ static inline int handle_misaligned_store(struct pt_regs *regs)
+>  }
+>  #endif
+>  
+> +bool handle_user_cfi_violation(struct pt_regs *regs);
+> +
+>  #endif /* _ASM_RISCV_ENTRY_COMMON_H */
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 00494b54ff4a..9c00cac3f6f2 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -472,6 +472,9 @@ SYM_DATA_START_LOCAL(excp_vect_table)
+>  	RISCV_PTR do_page_fault   /* load page fault */
+>  	RISCV_PTR do_trap_unknown
+>  	RISCV_PTR do_page_fault   /* store page fault */
+> +	RISCV_PTR do_trap_unknown /* cause=16 */
+> +	RISCV_PTR do_trap_unknown /* cause=17 */
+> +	RISCV_PTR do_trap_software_check /* cause=18 is sw check exception */
+>  SYM_DATA_END_LABEL(excp_vect_table, SYM_L_LOCAL, excp_vect_table_end)
+>  
+>  #ifndef CONFIG_MMU
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 8ff8e8b36524..3f7709f4595a 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -354,6 +354,49 @@ void do_trap_ecall_u(struct pt_regs *regs)
+>  
+>  }
+>  
+> +#define CFI_TVAL_FCFI_CODE	2
+> +#define CFI_TVAL_BCFI_CODE	3
+> +/* handle cfi violations */
+> +bool handle_user_cfi_violation(struct pt_regs *regs)
+> +{
+> +	bool ret = false;
+> +	unsigned long tval = csr_read(CSR_TVAL);
+> +
+> +	if ((tval == CFI_TVAL_FCFI_CODE && cpu_supports_indirect_br_lp_instr()) ||
+> +	    (tval == CFI_TVAL_BCFI_CODE && cpu_supports_shadow_stack())) {
+> +		do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
+> +			      "Oops - control flow violation");
+> +		ret = true;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +/*
+> + * software check exception is defined with risc-v cfi spec. Software check
+> + * exception is raised when:-
+> + * a) An indirect branch doesn't land on 4 byte aligned PC or `lpad`
+> + *    instruction or `label` value programmed in `lpad` instr doesn't
+> + *    match with value setup in `x7`. reported code in `xtval` is 2.
+> + * b) `sspopchk` instruction finds a mismatch between top of shadow stack (ssp)
+> + *    and x1/x5. reported code in `xtval` is 3.
+> + */
+> +asmlinkage __visible __trap_section void do_trap_software_check(struct pt_regs *regs)
+> +{
+> +	if (user_mode(regs)) {
+> +		irqentry_enter_from_user_mode(regs);
+> +
+> +		/* not a cfi violation, then merge into flow of unknown trap handler */
+> +		if (!handle_user_cfi_violation(regs))
+> +			do_trap_unknown(regs);
+> +
+> +		irqentry_exit_to_user_mode(regs);
+> +	} else {
+> +		/* sw check exception coming from kernel is a bug in kernel */
+> +		die(regs, "Kernel BUG");
+> +	}
+> +}
+> +
+>  #ifdef CONFIG_MMU
+>  asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs)
+>  {
+> 
 
-Exposing the raw vdso time data is problematic as it precludes any
-evolution to its datastructures, like the one we are currently doing.
-
-An additional, trimmed down and stable data structure could be used.
-But I don't think it makes sense. The vDSO is all about a stable
-highlevel function interface on top of an unstable data interface.
-However the vmclock needs the lowlevel data to populate its own
-datastructure, wrapping raw data access in function calls is unnecessary.
-If no functions are involved then the vDSO is not needed. The data can
-be maintained separately in any other place in the kernel and accessed
-or mapped by userspace from there.
-Also the vDSO does not have an active notification mechanism, this would
-probably be implemented through a filedescriptor, but then the data
-can also be mapped through exactly that fd.
-
->  2. In kernel, asking KVM to populate the vmclock structure much like
->     it does other pvclocks shared with the guest. KVM/x86 already uses
->     pvclock_gtod_register_notifier() to hook changes; should we expand
->     on that? The problem with that notifier is that it seems to be
->     called far more frequently than I'd expect.
-
-This sounds better, especially as any custom ABI from the host kernel to
-the VMM would look a lot like the vmclock structure anyways.
-
-Timekeeper updates are indeed very frequent, but what are the concrete
-issues? That frequency is fine for regular vDSO data page updates,
-updating the vmclock data page should be very similar.
-The timekeeper core can pass context to the notifier callbacks, maybe
-this can be used to skip some expensive steps where possible.
-
-> ¹ https://gitlab.com/qemu-project/qemu/-/commit/3634039b93cc5
 
