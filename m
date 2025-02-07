@@ -1,227 +1,132 @@
-Return-Path: <linux-arch+bounces-10060-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10061-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AF21A2D194
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Feb 2025 00:44:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0513DA2D1C7
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Feb 2025 00:50:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64DAF188A867
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2025 23:44:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 215363AD442
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2025 23:50:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 714311D958E;
-	Fri,  7 Feb 2025 23:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB1CF1D07BA;
+	Fri,  7 Feb 2025 23:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="IjycdCkM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c7Zyw6rK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C578D1D934D
-	for <linux-arch@vger.kernel.org>; Fri,  7 Feb 2025 23:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2985118FDAE;
+	Fri,  7 Feb 2025 23:50:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738971873; cv=none; b=Z6tfH2QaPCcCGOvN4wWgy34OR9aDsiBp5N9dO+HBucM4i1GXPrJOXlD7Yt7flmLw9obrwl7sFsbbBDl83UfH2SOEb8D7qOQu0s9hsj+ifsxclpfClN14IfMDWaGQ1hzm4QqKlJMKj0auBJVpacRGg1f+dEqWqCnG6ia8qkIcpbo=
+	t=1738972246; cv=none; b=qAiNt1AENWKl+231ZaDbFpljbM1GzhCg7fTl1WzqCq3fJmWjhKLmZEMduZTbwYr6c2lBdlTPnAmcqfzFMcb7BhhroIuPdR/udtGLoIJYkenA7z5FysQJOenqd3DX1WdyPE+cEDe4SUJCFyLZa0YMxyJpNq/Cr3b3scOEiucnjIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738971873; c=relaxed/simple;
-	bh=OV/hDOXoEY3RmBaaBXVJAqarimoMv+Fe1fAMJGktYVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b31wy/4sHL/8W9FATKQBYJF7EwckzUa4NUB1zmit3WmhWRkrZQAd6+3ZgEhyT/voCALGTafG4qRDGMzHaqzMHj8Dr16luCLhX34t4pfnt8vjkDvt6sJVHhGNQ6a2EIKf7wSKH1OtYcgfi5mxTKJfD0idALJMbwLv+XS3kxWdYZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=IjycdCkM; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2f9b9c0088fso4266894a91.0
-        for <linux-arch@vger.kernel.org>; Fri, 07 Feb 2025 15:44:31 -0800 (PST)
+	s=arc-20240116; t=1738972246; c=relaxed/simple;
+	bh=CYB3FSNwFShTpdPawetKpiJWckc8LHuMIECqtzbzRuA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p6qRm/xna1Ll1YZsrnx3Vt394WlEHaQDEPE7N5ptZoW0pdVELzRyVEm7egITs0RsNp8o9dY/jSBEJUBO9GgpUNnzs9OTFbNIU7LS8gOlp8YDjslrEOEnsdthfoZNIPM8FMIn1FsO/Y0vRLZiX26OTVyUiU1kXHLqx/96Nt6tjwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c7Zyw6rK; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-38dc6d55ebaso918466f8f.1;
+        Fri, 07 Feb 2025 15:50:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738971871; x=1739576671; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sFQiCNrm30AFPGwQY6ts0jjT1ZeITQwhTZXh/92SdFM=;
-        b=IjycdCkMxe6NfxYLAUVF/dGww4zeQhOE0GDVA/Ywk0p6EWl/iBFz+YZR+ecx/4mjBo
-         O6QBK6kkPc8QMSiuOlcY0LJvedvrwPgoozln14XLSVxdqPhdE+ek8Wm2mE+PBXP2bOim
-         lROjhOXiK8i3e/Q1i++JAUK/5qyOMEFUwHKulzrzlDf2bxUPbxcRs2rRjdj0+K/gYLug
-         4Np5mGYCtk+aqRlMAk6+Q0T0iHMV1S8pOLwKXem/FvYS5BtDo+q7o8CyQ4n9ba1nR8cc
-         p7qp/uIfdptzbrMPcouDb5f01x1AiRve2ZX1eQqSz1GKTjZEqK9f+hwrw9vAAVgVCHxY
-         F4sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738971871; x=1739576671;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1738972242; x=1739577042; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sFQiCNrm30AFPGwQY6ts0jjT1ZeITQwhTZXh/92SdFM=;
-        b=qjS/AwDgTZYGdLrorN69u02r9IGf7acpa67gbiLCG4rZNgYqlOtgA+MOU34WRQcq9H
-         suEzKYaK7jrIz0DaTtUBJguMnoKGT9Pr5CmIpReH/lB8OeC7jl+JILFRV11dv7q+WSI+
-         qGrN4mMxV6eRo9LHuJeL1ZfZCE/A80fg0H3cfBaJl9RvvQvkjX5zLJnNK6io/cN8wKK9
-         9bEk8yEU8QkjyZEUG51KgV4xmos0pztaabom7Plaohgv25dRY9YNzAphEl0vVCF+4y28
-         k0BLVkOWxi9eGzHyNlW4AFF923HGOuNAmGxJXtTsy8Iw1QsLViSWzz9IY7krG5wSI9Ix
-         6mpw==
-X-Forwarded-Encrypted: i=1; AJvYcCWM5bearU0OCeKAVAyi0lvfdWwsnyvK6vT3GI1kCUifOL3k3zkus1dGeCejo6gWwSNx0jxyTZnZfBXF@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVmwGAB3jppgENAt6VzZU7Ax5/4WU3Gs+FHVL7MTla3gose/21
-	VeVi3buvSpjopBdV7fFsK1st0utVh4Dm2TJq4mpmYtenoQU/YXONi30Jbaw3e2M=
-X-Gm-Gg: ASbGnct4Znkq/r/kwdkU5w3dFlZeTCXLl34rJyADWclycWT9fFcOlBCB3mUV428Shof
-	ORPC70iQT34QzX2iCsWd166w37NY+xT5+7xiwonVKg5fzv3mWrT7POflb9jAB3A2xXGWGi8iwWx
-	EchYF/OYPXEKdHE0oVCxeGhJKf8BO4GJGEBKNfPj4jEI334aFrIgL/l8mwHaT+dsNyPb84qVDMx
-	BlhnejRGTBNIyJZsb/T0kRjn79knT6btWT52R3C8YVws9NnOXNUW+5qQSds0Yj61lHCf6+M2G40
-	RYzr0McuY70bZnwCxRZUTTb+TQ==
-X-Google-Smtp-Source: AGHT+IEu/BmgD+AgLAp2nKonkfG6/YX8d0cZZKASE/tVvqPiMWzUevWv2BoO4p6W9X0pvQWJ2zpYLw==
-X-Received: by 2002:a17:90b:380e:b0:2fa:2133:bc87 with SMTP id 98e67ed59e1d1-2fa2133bf2amr8657814a91.6.1738971870845;
-        Fri, 07 Feb 2025 15:44:30 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3687d169sm36049505ad.202.2025.02.07.15.44.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 15:44:30 -0800 (PST)
-Date: Fri, 7 Feb 2025 15:44:27 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v9 01/26] mm: helper `is_shadow_stack_vma` to check
- shadow stack vma
-Message-ID: <Z6aa24/5M5Xdhe/A@debug.ba.rivosinc.com>
-References: <20250204-v5_user_cfi_series-v9-0-b37a49c5205c@rivosinc.com>
- <20250204-v5_user_cfi_series-v9-1-b37a49c5205c@rivosinc.com>
- <6543c6b6-da86-4c10-9b8c-e5fe6f6f7da9@suse.cz>
+        bh=USgMOjHrfaLirLOT5WzrXhmwlLjtY2e3GvXtshzzQDE=;
+        b=c7Zyw6rK1Lzqm4hzIYaSpqj4hgXLU2DimUsrbrNZ71qd57zMBowm0Y4A+3scX+fAq2
+         MwEyA+CWGuYQSw3ZuH6MgMrzrZvVafX+TfM3BRL3yAJMU9BxOw+Q94sAFW/qP2YHZxl2
+         seUswpuFiuWr3BDJV16MwR7IxGpcgrOR6e9T6qbE5Yokt2uBt+Kf2j9LeoSZ/dDgESjq
+         CE/NX0DuuP1vE6RNdmKiv7KxICtciiiGYbytk0eux8eMfMa4KUW/0cEJC5dpOY0o7Ynt
+         p2WCAu7fySol75OSiO1WxrFud2Ld+M7jyLo0NmwIOT2nSAFGrcO8/Y+FCnJGS8Vg5Dtg
+         hBtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738972242; x=1739577042;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=USgMOjHrfaLirLOT5WzrXhmwlLjtY2e3GvXtshzzQDE=;
+        b=obuQgRcUcgjO/cSUpxhY6y7T0tlkJ+oaI8dPMfZ3mKGCJDzN9n7mRD71uoQ6grucM4
+         J0V+HLYz8Yw1uHOb4bJzJ+d7l2pzl45pLmB3US5qnV0tTtbq0uL4St5YHyYJ8BrZXX98
+         cH/VetV60beG4X1dFx0DXEK/tg43loYHklWG5PU7mYAWgVVkawBw6PmrME2pnbR1XM7l
+         32g5SG22vOrwWboHFu7EKgIaIk7UJhGN4rnB4UOqYXo9+RXoQ9PlezLIixJs/DpGxzoF
+         Ng44vMnT9x+OYdWmrJSh+sjwh6JhDXPg+hRkXG/KJL3mw0QmnaS2w81I7NJB5CraVRxo
+         +SIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJnnGlUd5zYTyKQp8QDwssZkdWozw5k1jW6yMLjsKtjZQaZU5fNPic+99pGIBC08bVJy7i6vICEx8iTBju@vger.kernel.org, AJvYcCVAJHZU1bH+C7IAV8KCwF8d1y4eR4C7CSoFHQzTts6mGh2f7G52W8TajqLEYcM0xzDVEcV3FZqfZdAq5lYx@vger.kernel.org, AJvYcCVsLvsiQ/ap+750f8zGVeiZx3gdhctlyBkgVQ53xlphmfT3vaCYhb1zre3jUqR/k/QinX4JNKYhhidTHw==@vger.kernel.org, AJvYcCX2hPF8lq3zyy7ODfO+lpa8WYnkaM3VwglU7WIfBG44jMF3bZfKIR9eJbf7BAR+NaDPnGIFrxm86VKbOKQuqjVh@vger.kernel.org, AJvYcCXkPUxSaNxjeJ8ZSeHYyZZkq88iD2eeZtzAfSzwVxICAknBDI+08XHRs2NTjlL6oM/ULHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEvUb6DbfPl5n+yGWkWum+uT3nnZmbklg6IyfPcUY4ArhyR2wL
+	NIi00J/6GsynPUzihJ0YWZA6bWiQaJJaa5FmVYop13kXxrDY3QvSwrCQNLhrMZDwVObo6pkA5yA
+	E+mkCpyBGirrt/7rWu58Il4Ys+OQ=
+X-Gm-Gg: ASbGncvQrjZWg7pBiwFvt1dU/9YKESrsoIZu5biw0bqINe8WVgblcmo2xTYSLyUI3U4
+	ncwYrNitYPx7ObQ8p8hn/VVL/npQ27xSb+MthLBCKGXAOl+E3naSoSQue+ntgPRRS8fmnKYxQFY
+	8s0nmm1Tgv+di+6YF0cpfPvA741MY4
+X-Google-Smtp-Source: AGHT+IGdgzDpsGso08/WhacNlqhvHR4fHBB/5Nz0HBLIhyrzc3k6+vYm1v3vC1IFWO2rgyWwA0J32kxp6cJzNPaPo+I=
+X-Received: by 2002:a05:6000:1865:b0:38d:c0c0:b410 with SMTP id
+ ffacd0b85a97d-38dc960e4d7mr3988849f8f.0.1738972242115; Fri, 07 Feb 2025
+ 15:50:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <6543c6b6-da86-4c10-9b8c-e5fe6f6f7da9@suse.cz>
+References: <20250207012045.2129841-1-stephen.s.brennan@oracle.com> <20250207012045.2129841-3-stephen.s.brennan@oracle.com>
+In-Reply-To: <20250207012045.2129841-3-stephen.s.brennan@oracle.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 7 Feb 2025 15:50:31 -0800
+X-Gm-Features: AWEUYZkFsykde3fyEMInELSdBVAKmObvfOG_wL5GI8Zt-4AF2wq8l2htXaP5ptM
+Message-ID: <CAADnVQLiyezBW34dhkwZw+mWmkFAYMZUdHbOa4uYCdPbgS10SQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] btf: Add the option to include global variable types
+To: Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Kees Cook <kees@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Sami Tolvanen <samitolvanen@google.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, linux-arch <linux-arch@vger.kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Jann Horn <jannh@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Hao Luo <haoluo@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, linux-debuggers@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Song Liu <song@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 07, 2025 at 10:27:10AM +0100, Vlastimil Babka wrote:
->On 2/5/25 02:21, Deepak Gupta wrote:
->> VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) is used to encode shadow stack
->
->I see that arm GCS uses VM_HIGH_ARCH_6.
->
->> VMA on three architectures (x86 shadow stack, arm GCS and RISC-V shadow
->
->And RISC-V doesn't define it at all, not even in this patchset, or did I
->miss it somewhere?
+On Thu, Feb 6, 2025 at 5:21=E2=80=AFPM Stephen Brennan
+<stephen.s.brennan@oracle.com> wrote:
+> When the feature was implemented in pahole, my measurements indicated
+> that vmlinux BTF size increased by about 25.8%, and module BTF size
+> increased by 53.2%. Due to these increases, the feature is implemented
+> behind a new config option, allowing users sensitive to increased memory
+> usage to disable it.
 >
 
-hmm...
-Something wrong in my workflow and rebasing.
-Thanks for catching this.
+...
+> +config DEBUG_INFO_BTF_GLOBAL_VARS
+> +       bool "Generate BTF type information for all global variables"
+> +       default y
+> +       depends on DEBUG_INFO_BTF && PAHOLE_VERSION >=3D 128
+> +       help
+> +         Include type information for all global variables in the BTF. T=
+his
+> +         increases the size of the BTF information, which increases memo=
+ry
+> +         usage at runtime. With global variable types available, runtime
+> +         debugging and tracers may be able to provide more detail.
 
->> stack). In case architecture doesn't implement shadow stack, it's VM_NONE
->> Introducing a helper `is_shadow_stack_vma` to determine shadow stack vma
->> or not.
->
->This looks like an unfinished sentence. As if it was to continue with "...
->will allow us to ..." what?
->
->I'm not against a helper but this changelog is rather confusing and also
->code in arch/x86 and arch/arm64 isn't converted to the helper but testing
->VM_SHADOW_STACK still.
->
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> Reviewed-by: Mark Brown <broonie@kernel.org>
->> ---
->>  mm/gup.c  |  2 +-
->>  mm/mmap.c |  2 +-
->>  mm/vma.h  | 10 +++++++---
->>  3 files changed, 9 insertions(+), 5 deletions(-)
->>
->> diff --git a/mm/gup.c b/mm/gup.c
->> index 3883b307780e..8c64f3ff34ab 100644
->> --- a/mm/gup.c
->> +++ b/mm/gup.c
->> @@ -1291,7 +1291,7 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
->>  		    !writable_file_mapping_allowed(vma, gup_flags))
->>  			return -EFAULT;
->>
->> -		if (!(vm_flags & VM_WRITE) || (vm_flags & VM_SHADOW_STACK)) {
->> +		if (!(vm_flags & VM_WRITE) || is_shadow_stack_vma(vm_flags)) {
->>  			if (!(gup_flags & FOLL_FORCE))
->>  				return -EFAULT;
->>  			/*
->> diff --git a/mm/mmap.c b/mm/mmap.c
->> index cda01071c7b1..7b6be4eec35d 100644
->> --- a/mm/mmap.c
->> +++ b/mm/mmap.c
->> @@ -648,7 +648,7 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
->>   */
->>  static inline unsigned long stack_guard_placement(vm_flags_t vm_flags)
->>  {
->> -	if (vm_flags & VM_SHADOW_STACK)
->> +	if (is_shadow_stack_vma(vm_flags))
->>  		return PAGE_SIZE;
->>
->>  	return 0;
->> diff --git a/mm/vma.h b/mm/vma.h
->> index a2e8710b8c47..47482a25f5c3 100644
->> --- a/mm/vma.h
->> +++ b/mm/vma.h
->> @@ -278,7 +278,7 @@ static inline struct vm_area_struct *vma_prev_limit(struct vma_iterator *vmi,
->>  }
->>
->>  /*
->> - * These three helpers classifies VMAs for virtual memory accounting.
->> + * These four helpers classifies VMAs for virtual memory accounting.
->>   */
->>
->>  /*
->> @@ -289,6 +289,11 @@ static inline bool is_exec_mapping(vm_flags_t flags)
->>  	return (flags & (VM_EXEC | VM_WRITE | VM_STACK)) == VM_EXEC;
->>  }
->>
->> +static inline bool is_shadow_stack_vma(vm_flags_t vm_flags)
->> +{
->> +	return !!(vm_flags & VM_SHADOW_STACK);
->> +}
->> +
->>  /*
->>   * Stack area (including shadow stacks)
->>   *
->> @@ -297,7 +302,7 @@ static inline bool is_exec_mapping(vm_flags_t flags)
->>   */
->>  static inline bool is_stack_mapping(vm_flags_t flags)
->>  {
->> -	return ((flags & VM_STACK) == VM_STACK) || (flags & VM_SHADOW_STACK);
->> +	return ((flags & VM_STACK) == VM_STACK) || is_shadow_stack_vma(flags);
->>  }
->>
->>  /*
->> @@ -308,7 +313,6 @@ static inline bool is_data_mapping(vm_flags_t flags)
->>  	return (flags & (VM_WRITE | VM_SHARED | VM_STACK)) == VM_WRITE;
->>  }
->>
->> -
->>  static inline void vma_iter_config(struct vma_iterator *vmi,
->>  		unsigned long index, unsigned long last)
->>  {
->>
->
+This is not a solution.
+Even if it's changed to 'default n' distros will enable it
+like they enable everything and will suffer a regression.
+
+We need to add a new module like vmlinux_btf.ko that will contain
+this additional BTF data. For global vars and everything else we might need=
+.
+
+pw-bot: cr
 
