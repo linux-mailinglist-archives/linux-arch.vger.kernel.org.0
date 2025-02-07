@@ -1,282 +1,210 @@
-Return-Path: <linux-arch+bounces-10049-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10050-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 380BBA2C04D
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2025 11:16:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 551F8A2C9D7
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2025 18:08:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31160188BCDC
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2025 10:17:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4B8E3ACB90
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Feb 2025 17:07:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2408C18FDD5;
-	Fri,  7 Feb 2025 10:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED50919D072;
+	Fri,  7 Feb 2025 17:06:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JQrCMHr2"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gy5PdcJb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E291624ED;
-	Fri,  7 Feb 2025 10:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958EC192D8E
+	for <linux-arch@vger.kernel.org>; Fri,  7 Feb 2025 17:06:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738923411; cv=none; b=G8J/i2ZSkeke7Tw0Xr8WMJvM+7ie17x2veVsGIZJl/aotM1VT2qpG9bHPsZcOFL+AYvA8ew7m4KSB7/NBMZn30jYJaSR9oIvQMlVnjFSNp6d10nPUzMWfmokyxVcaH5jTXZysNMNXDvZgySyyS1PFLz9ClhNsz/4QbND7mT0Y5Q=
+	t=1738948016; cv=none; b=aN4d62bAwAUSNhzXFxEGj1jlERtUBrkv1X5rMdUJwKerq8/agoQC/MYAn9vMLTvKP4zB/O4pKiUiSE17McunwJaB/A8PmPA1rkS8zCWAGVaRGe0Wrn9AJyFITFQ/QU0QWm3Ae5k29eDygJKu+2VfMit28389MtoZlq1jOtAcgaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738923411; c=relaxed/simple;
-	bh=zVqX9Hq16/SBdTp2H/rBCvE55Od/Y0deJt0gh/PTA4k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ITburXgrMS2Cbx5vev5S2mZqisgnBPQzO3Ox9aSktHwMpMAHNpNXNEcCLid5CDUZ+HstoOHlxMM39Pn6j5awmIjwHzqL0Ai4sHqSK/w47m2RBbWoVw1Pn/MNXNiRBkCRid7rXuHK0Fs7wR26PtVWsJ4xZ9L6I+X0Z6etqPv/s/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JQrCMHr2; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zVqX9Hq16/SBdTp2H/rBCvE55Od/Y0deJt0gh/PTA4k=; b=JQrCMHr2BdrjS4NKrzUQ4brppT
-	UggDTJnj1TCbsw8d6uS/TP1LXzuCYCRpzvxXY3M1Udn1/rpXKT+D2yISKc9EHbbjlk1JMiwjezT0w
-	G/g1Rm0utnZUcDsOAhllHICdtEJxIYMJw/XeRN/mslhRg1XxSlNHhBbjnLxUXcGhEAIUycfIHwyAz
-	ItWZqc3X+RpAaZKfd7tucO6DvzefcQn0FPMOPsZAyCKizC/2AjVKxERO5/VgZ3Cnr4Chc1uCRoERY
-	AxTesLAbLLvoSEfjxsUL7zWXl8QA3C30qYHv/EpdvBIOHqKBDnTg+VDWbD2Y+xZaag8m8LicEjrBB
-	LIoBs9Rw==;
-Received: from 54-240-197-238.amazon.com ([54.240.197.238] helo=freeip.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tgLOp-00000007cdM-31OR;
-	Fri, 07 Feb 2025 10:15:52 +0000
-Message-ID: <0a6b88c0edd85a2ae0886e5454afea09cfcd3a24.camel@infradead.org>
-Subject: Re: [PATCH v3 00/18] vDSO: Introduce generic data storage
-From: David Woodhouse <dwmw2@infradead.org>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge
- Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>,  Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker
- <frederic@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore
- Ts'o <tytso@mit.edu>,  "Jason A. Donenfeld" <Jason@zx2c4.com>, Paul
+	s=arc-20240116; t=1738948016; c=relaxed/simple;
+	bh=I2e5fwjdOHrC389H955xUrW7Yt08enQx3eznrVoldiA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=S2uNv21u5T6+015ma2g4L0vJ3MsKINUoNLtYu3SMmfBLV2E/QQT5saND6dXjKGpNhF1skz2CkUEnOQvCKba3uZt0TdGSAF2ji72ChZlckL+CrKRvB/gTP2pO/ODpNqrNBgevYsA+hZ4I69UQJg2jJvsfF7ZKd9C57sASTkLadY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gy5PdcJb; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738948013;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YX0Ta551pNoazXrou1rxJx7Jk32CWnG6aaI06lzcMPk=;
+	b=Gy5PdcJbnHjL7K0E4kK4hk3QCTNCqxEyPsiDCzCFlFUSBHIc2grmLHdmMAyVhBThY98kTo
+	Rn3nUgHYCdFM20G/rcpSBWwefwHz9jwJs8u6D1csMFh2MzOkHWti/C/jlaIelyw2LMpFUx
+	xd9R5MoGiQw5qzU+xqO34VUPB//H/a4=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-411--foyzmhLPU6wdeDcdE2a5g-1; Fri, 07 Feb 2025 12:06:52 -0500
+X-MC-Unique: -foyzmhLPU6wdeDcdE2a5g-1
+X-Mimecast-MFC-AGG-ID: -foyzmhLPU6wdeDcdE2a5g
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-38dc56ef418so730703f8f.1
+        for <linux-arch@vger.kernel.org>; Fri, 07 Feb 2025 09:06:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738948011; x=1739552811;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YX0Ta551pNoazXrou1rxJx7Jk32CWnG6aaI06lzcMPk=;
+        b=mBQ8NccIR7aAdC+ydRenlou57VyICruF5ajbCFFKFzlALGXT+ZBseTZ1MXB9/nHLIR
+         0fjoac1Ya7TRBMhMWufP7z7JuAmr8zmq7WkYs18VYD7aW98LjayFH3F8fSYIuTdHe7wW
+         pLjvfp4RK4Kv/AlMXdkDgfqnS09TesZ1HBquavWdaTRqP0G/wteuYN2DZN98HHCCJqEd
+         +EdWSKU8YJ2j134ahOHRdn+80t05CSbQQRcJiWgyu32d4WAH5pMOOsH1dFvg9ggOFZ71
+         p4/b+ojv+DDPSRiXooaRAE6wcSx8xHOL75Rf/Cyv7fpmni4+E5YfD9C0Iogm8AUbirsX
+         I/vg==
+X-Forwarded-Encrypted: i=1; AJvYcCWR26C+cAkcSql4/v8oNNRWEECWMyomRCDpx5Tuueu9k24IxKRXbdMFOtVGOCEFjE74H0xsBlkugwwl@vger.kernel.org
+X-Gm-Message-State: AOJu0YwP29pMawohgoC0/NLWWmH1wB93pDJ4GNZNQ70cRgxBruCM7b7Z
+	wYDt7BhQVF4TVPZ1kXoSTkd2Rz7XsB3OyvyHfx9WxHgKegakiC0c+QYb2sLVA1p9gHzqZ+TxgTH
+	0Ly9nfwvEikqX5Ppg8ZaShq+qYiWZYeV+X1pGoCDE7MXeNaid2069672mUvA=
+X-Gm-Gg: ASbGncsaqycUV/3sZlps+ov2eqZkZPvIdfuAVvf/WJEto5iQwnTb8faPtj94Omx05d/
+	+dkHMmVezybGi/itnLvUInfIDKQaGMAm4LiLLtWWhmtrutVGiCqvTDOKcupzO6LRQmARFJjpnWg
+	/PpxXxI8r020bS+NQP2HpxnKJYpERVHFslO85gQ6NnrD88vaHbIWR/Tfoa1J726GcIX6Be+Flwx
+	26kCHg/qvr+bYkKRiHZHjdx2m/dQyyDLsmRVSLd1UfI8UVJIBNrpl48L870EvfWT6aqHXSeYDCy
+	mLY+MYIFXrQXuOiddlMVw1uxJahhpWCX1oCbgBUCeNHsUW6HpF6wldhlNVowrmTmug==
+X-Received: by 2002:a5d:638d:0:b0:386:5b2:a9d9 with SMTP id ffacd0b85a97d-38dc9497d11mr1924004f8f.53.1738948011061;
+        Fri, 07 Feb 2025 09:06:51 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEOdkgTDMixdzesAbzZ6LQT5F1eKCI9U7dpB+ZFF0HwYFgHj2Fc571j17/M7jlf73QfQ/8NiQ==
+X-Received: by 2002:a5d:638d:0:b0:386:5b2:a9d9 with SMTP id ffacd0b85a97d-38dc9497d11mr1923876f8f.53.1738948010215;
+        Fri, 07 Feb 2025 09:06:50 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4391dca0041sm59887155e9.14.2025.02.07.09.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Feb 2025 09:06:49 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
  Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Russell King <linux@armlinux.org.uk>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Madhavan
- Srinivasan <maddy@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,  Arnd Bergmann
- <arnd@arndb.de>, Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org,
-  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-riscv@lists.infradead.org, loongarch@lists.linux.dev, 
- linux-s390@vger.kernel.org, linux-mips@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org, Nam Cao
- <namcao@linutronix.de>, linux-csky@vger.kernel.org, "Ridoux, Julien"
- <ridouxj@amazon.com>, "Luu, Ryan" <rluu@amazon.com>, kvm
- <kvm@vger.kernel.org>
-Date: Fri, 07 Feb 2025 10:15:49 +0000
-In-Reply-To: <20250206110648-ec4cf3d0-0aef-4feb-a859-c69e53ab110c@linutronix.de>
-References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
-	 <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
-	 <20250206110648-ec4cf3d0-0aef-4feb-a859-c69e53ab110c@linutronix.de>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-Hn9nn97uh7ZrvK5eTG4M"
-User-Agent: Evolution 3.52.3-0ubuntu1 
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
+ <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Jason Baron <jbaron@akamai.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
+ Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 22/30] context_tracking: Exit CT_STATE_IDLE upon
+ irq/nmi entry
+In-Reply-To: <xhsmh5xm0pkuo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-23-vschneid@redhat.com>
+ <Z5A6NPqVGoZ32YsN@pavilion.home>
+ <xhsmh5xm0pkuo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+Date: Fri, 07 Feb 2025 18:06:45 +0100
+Message-ID: <xhsmhbjvdk7kq.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
 
+On 27/01/25 12:17, Valentin Schneider wrote:
+> On 22/01/25 01:22, Frederic Weisbecker wrote:
+>> And NMIs interrupting userspace don't call
+>> enter_from_user_mode(). In fact they don't call irqentry_enter_from_user_mode()
+>> like regular IRQs but irqentry_nmi_enter() instead. Well that's for archs
+>> implementing common entry code, I can't speak for the others.
+>>
+>
+> That I didn't realize, so thank you for pointing it out. Having another
+> look now, I mistook DEFINE_IDTENTRY_RAW(exc_int3) for the general case
+> when it really isn't :(
+>
+>> Unifying the behaviour between user and idle such that the IRQs/NMIs exit the
+>> CT_STATE can be interesting but I fear this may not come for free. You would
+>> need to save the old state on IRQ/NMI entry and restore it on exit.
+>>
+>
+> That's what I tried to avoid, but it sounds like there's no nice way around it.
+>
+>> Do we really need it?
+>>
+>
+> Well, my problem with not doing IDLE->KERNEL transitions on IRQ/NMI is that
+> this leads the IPI deferral logic to observe a technically-out-of-sync sate
+> for remote CPUs. Consider:
+>
+>   CPUx            CPUy
+>                     state := CT_STATE_IDLE
+>                     ...
+>                     ~>IRQ
+>                     ...
+>                     ct_nmi_enter()
+>                     [in the kernel proper by now]
+>
+>   text_poke_bp_batch()
+>     ct_set_cpu_work(CPUy, CT_WORK_SYNC)
+>       READ CPUy ct->state
+>       `-> CT_IDLE_STATE
+>       `-> defer IPI
+>
+>
+> I thought this meant I would need to throw out the "defer IPIs if CPU is
+> idle" part, but AIUI this also affects CT_STATE_USER and CT_STATE_GUEST,
+> which is a bummer :(
 
---=-Hn9nn97uh7ZrvK5eTG4M
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Soooo I've been thinking...
 
-On Thu, 2025-02-06 at 11:59 +0100, Thomas Wei=C3=9Fschuh wrote:
-> On Thu, Feb 06, 2025 at 09:31:42AM +0000, David Woodhouse wrote:
-> > On Tue, 2025-02-04 at 13:05 +0100, Thomas Wei=C3=9Fschuh wrote:
-> > > Currently each architecture defines the setup of the vDSO data page o=
-n
-> > > its own, mostly through copy-and-paste from some other architecture.
-> > > Extend the existing generic vDSO implementation to also provide gener=
-ic
-> > > data storage.
-> > > This removes duplicated code and paves the way for further changes to
-> > > the generic vDSO implementation without having to go through a lot of
-> > > per-architecture changes.
-> > >=20
-> > > Based on v6.14-rc1 and intended to be merged through the tip tree.
->=20
-> Note: The real answer will need to come from the timekeeping
-> maintainers, my personal two cents below.
->=20
-> > Thanks for working on this. Is there a plan to expose the time data
-> > directly to userspace in a form which is usable *other* than by
-> > function calls which get the value of the clock at a given moment?
->=20
-> There are no current plans that I am aware of.
->=20
-> > For populating the vmclock device=C2=B9 we need to know the actual
-> > relationship between the hardware counter (TSC, arch timer, etc.) and
-> > real time in order to propagate that to the guest.
-> >=20
-> > I see two options for doing this:
-> >=20
-> > =C2=A01. Via userspace, exposing the vdso time data (and a notification=
- when
-> > =C2=A0=C2=A0=C2=A0 it changes?) and letting the userspace VMM populate =
-the vmclock.
-> > =C2=A0=C2=A0=C2=A0 This is complex for x86 because of TSC scaling; in f=
-act userspace
-> > =C2=A0=C2=A0=C2=A0 doesn't currently know the precise scaling from host=
- to guest TSC
-> > =C2=A0=C2=A0=C2=A0 so we'd have to be able to extract that from KVM.
->=20
-> Exposing the raw vdso time data is problematic as it precludes any
-> evolution to its datastructures, like the one we are currently doing.
->=20
-> An additional, trimmed down and stable data structure could be used.
-> But I don't think it makes sense. The vDSO is all about a stable
-> highlevel function interface on top of an unstable data interface.
-> However the vmclock needs the lowlevel data to populate its own
-> datastructure, wrapping raw data access in function calls is unnecessary.
-> If no functions are involved then the vDSO is not needed. The data can
-> be maintained separately in any other place in the kernel and accessed
-> or mapped by userspace from there.
-> Also the vDSO does not have an active notification mechanism, this would
-> probably be implemented through a filedescriptor, but then the data
-> can also be mapped through exactly that fd.
->=20
-> > =C2=A02. In kernel, asking KVM to populate the vmclock structure much l=
-ike
-> > =C2=A0=C2=A0=C2=A0 it does other pvclocks shared with the guest. KVM/x8=
-6 already uses
-> > =C2=A0=C2=A0=C2=A0 pvclock_gtod_register_notifier() to hook changes; sh=
-ould we expand
-> > =C2=A0=C2=A0=C2=A0 on that? The problem with that notifier is that it s=
-eems to be
-> > =C2=A0=C2=A0=C2=A0 called far more frequently than I'd expect.
->=20
-> This sounds better, especially as any custom ABI from the host kernel to
-> the VMM would look a lot like the vmclock structure anyways.
->=20
-> Timekeeper updates are indeed very frequent, but what are the concrete
-> issues? That frequency is fine for regular vDSO data page updates,
-> updating the vmclock data page should be very similar.
-> The timekeeper core can pass context to the notifier callbacks, maybe
-> this can be used to skip some expensive steps where possible.
+Isn't
 
-In the context of a hypervisor with lots of guests running, that's a
-lot of pointless steal time. But it isn't just that; ISTR the result
-was also *inaccurate*.
+  (context_tracking.state & CT_RCU_WATCHING)
 
-I need to go back and reproduce the testing, but I think it was
-constantly adjusting the apparent rate even with no changed inputs from
-NTP. Where the number of clock counts per jiffy wasn't an integer, the
-notification would be constantly changing, for example to report 333333
-counts per jiffy for most of the time, and occasionally 333334 counts
-for a single jiffy before flipping back again. Or something like that.
+pretty much a proxy for knowing whether a CPU is executing in kernelspace,
+including NMIs?
 
---=-Hn9nn97uh7ZrvK5eTG4M
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+NMI interrupts userspace/VM/idle -> ct_nmi_enter()   -> it becomes true
+IRQ interrupts idle              -> ct_irq_enter()   -> it becomes true
+IRQ interrupts userspace         -> __ct_user_exit() -> it becomes true
+IRQ interrupts VM                -> __ct_user_exit() -> it becomes true
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI1MDIwNzEwMTU0
-OVowLwYJKoZIhvcNAQkEMSIEIERXi00+3GDk2E/p6131tegJ6jUhnrs0V9vxaiV5oZ2XMGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIASTyZ34SddFoE
-ocWSro73fUQgm5VHgrWVDJcQemFDotkX4gb22kx5AhMW01xylurQU2KXW1YBEOQIrP3o8Unp//jv
-n1kL/lZCEQLr0AVvHWzJz+r9T8YOOPqhuYjKTYH7bNJRf4JCovNzSXRbz6r0HtGf8/T5L+H4YdVg
-cEvCs/NnayU/HPIJEpncwWHDx+AuOts+aQ0/GnEI0Q+xZwDfCjrAZkrlMsSDd7WAdz0wwEt2uOEL
-eIBW+5nm/AhsNZfMrvIvoMNGudPj9RQuIQkl0bIB4TTBXEeHkyyqJKn7BDoChI/IyhAo43sGyeUx
-arvfQRzzlDeynusz+WVmgHFGQuiYr5BCqxvXomKqLaBMwv1kL//ffVhlw70jvv93NcISjRnvGgyJ
-QZZ0xxvfNid8xUMEnTAG0qXP77EBjLtcRC5ZCc1XO4Td6yRL1F3/zGUrERW7Zh+hOCtXW+GBOiOQ
-NidHrdr1VlFHbRv3/Q2TLePMD1j5WZp1sViLkBGiEsPa90DkKH0Si/t+h0ah+3+ONkNPMmhF5M+l
-7U+enM1hpdV4KIKxun/YRp3rWBOan4WThApe5yvo3ZJj6+4/qUOP9olIeBZwkGhv9gvyDBOtmkcm
-east0DnR7g7xSW1IhsmWjlSxM5cXw+ENzQ9+gYLa/jGq/5j6aCTvGXjG+71FaQEAAAAAAAA=
+IOW, if I gate setting deferred work by checking for this instead of
+explicitely CT_STATE_KERNEL, "it should work" and prevent the
+aforementioned issue? Or should I be out drinking instead? :-)
 
-
---=-Hn9nn97uh7ZrvK5eTG4M--
 
