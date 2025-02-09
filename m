@@ -1,165 +1,149 @@
-Return-Path: <linux-arch+bounces-10068-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10069-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EA1FA2E102
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Feb 2025 22:57:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BFC9A2E107
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Feb 2025 23:02:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E72F41612C9
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Feb 2025 21:57:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBC6E188641D
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Feb 2025 22:02:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCD41487D1;
-	Sun,  9 Feb 2025 21:57:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB021E00BF;
+	Sun,  9 Feb 2025 22:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="iIUdQr6H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlUULZz7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557B68248C
-	for <linux-arch@vger.kernel.org>; Sun,  9 Feb 2025 21:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203F21DFE29;
+	Sun,  9 Feb 2025 22:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739138266; cv=none; b=Z92hGZNnB9st4CmPbTfVsJYg5KGm7ryzd/xUjNhPz08BZrVCzeeDs5qz7NTcxAcb1JJ0CG0j7u2rAq5zf5t21mFldKBceR/u5BTgy5FhZAlO+GPDLc6o/P7Gs9aEO+q2H9IVT4MIxneVTpFQZynUPzDBKrtKOMxGdmnRoyjMQfk=
+	t=1739138548; cv=none; b=drnFwSHMgIrcaeV+M+WsJCGsOjfuBnBMvIHpF3G0TeacJPfTe3yuuvXKs3CuuGHQRidXoZYvgPTAhCQd93Dtgz32AeAwKgzFOZKt2IUoIMJjq7B2WMRgDbgqA8bxVwyCDxLLQjDjLl56twG4pi3fqSNjmGXiTyclcTvppbwbr3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739138266; c=relaxed/simple;
-	bh=1+PgwKYMyy1Uyiun2YPAegNy7jG9rxa8lMWSf+KF3FA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ogN0XlUUzJlif3CQqrEDNiU8nFFaKwRDAURLINhfWWKungm0bEdegtocOzEJzpDd7cYXwlXwld7ph8u/nVCy1e8WAYmzltvHiECt+hHwv5zXLESos+OdFbYbpaD2490ZAqkrvXRyxFURpDGsjKr5aoHNkst5jFIdBRTj46taPog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=iIUdQr6H; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-ab7b80326cdso102709866b.3
-        for <linux-arch@vger.kernel.org>; Sun, 09 Feb 2025 13:57:43 -0800 (PST)
+	s=arc-20240116; t=1739138548; c=relaxed/simple;
+	bh=n19fHMY0fBzL+SD4x4buAM62MKKVSOyuM/FO69KBres=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CSBSrE6wsnUE/Jj56kyfC4npnU1H2JchoV85SJpu7Mmisg5sdlMO9BKUkrcYUd9qBZAsm+b3APnr0ZDMdzWGMMrCsSpjeo7lKHNSaulI6Yn5xbRKb4CS6Lb3chfiWuxY+eknQ5odPIHAzoIwI5gxxPalOHVjroiuoakk+7WDjVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlUULZz7; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-38dc9eba8a1so1986614f8f.1;
+        Sun, 09 Feb 2025 14:02:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1739138262; x=1739743062; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A2PLT/XZrOM9Aa/16QfAGDi7D1uHeStXqgrW7NE/z7I=;
-        b=iIUdQr6H/UjnHe2UkzZu2+WutqkezN2utZ1BSV5hYWdicnlOPDlRSoXOrTuUMLroDt
-         IGYtJIBtg+8ZzAw37kBHWQ57cbvcsPrgH1ks++Te+CMtTBswcuXajctH1GYz7a5cldrU
-         Gh6yTcKv7TxM1pnGX2pQLMa/m6MpuMwGH6fsI=
+        d=gmail.com; s=20230601; t=1739138545; x=1739743345; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZrCBrsBGQ+tCvXOABWtiT76sFUcDv+I/VrUzIQbDTzU=;
+        b=IlUULZz7/mEyEXkkGWrFT54MeasS2ZNxzroeKAy1xnMSJLI9PJ18hh6y0Mj8kAriOh
+         dtf6KlZe8rnVZGAvOEXygvjXGaC8m2rmR91+JPERrIbvkRiybFXxY09Gc4CWP5U2+0zb
+         k4/BRdzLzTJ+eVJm1NQFZ+I+0u7Aqs2XvMz5s7Phd0pL5Kc/txuqy6yA5Hyt6f6rSjNH
+         l6I3wUJFKuINaEZKzhJi058udCe7aQTQhfIWPQbe4CatpGzbsc8dl5qo5yNgKocsWfmS
+         ZGrlBt1n5kLEhmtnSvhqoPtUGVofoHYB0E8fNa8ZHlt96CX69siPbhM+fiE3lgQR04j0
+         FftQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739138262; x=1739743062;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1739138545; x=1739743345;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=A2PLT/XZrOM9Aa/16QfAGDi7D1uHeStXqgrW7NE/z7I=;
-        b=choRc0yC9qaH/EBGB1YeO4+uSDxDq4gV8jZZ/QOp8RtLmqfMDehaen0AphL/KZtl7s
-         gRYtaL3Y0aWVSOuLxgVG3nokkeUkChbzfPsB/33R+sCl/NPm7e2WdZWL8eM39lYbpGzc
-         dmzQE7pupTLreKFjurJWWFPHQBTbIwMU7QzYcdxI9YLsd/YzkdZsU7b1Re9liEbEHuV2
-         TGjJS/X+unfk0RqLIv/loviWjJS24Ag1HkqkYnZ7MWGoBS/ORnp8eF919e/u6J5AahSV
-         ODuBB/5RbAlhgsLAbFo/zn9DMqjR7RfeW4PT9PfpZ+UMkNgT5b5xYphPTeOCVsRtD6ba
-         AZyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7EvnZCyK9bmU8kBhjRxasqEfs9Dzw/ZykUTFGac1Ffv+K6rfiaMB8asfqxKbnOPe1oqxBWp0Lpzq4@vger.kernel.org
-X-Gm-Message-State: AOJu0Yznxr3Pn91Jg8fKvtWxZjWenl0a129pcjNjRfxtmlHgqG1dTffq
-	U7nKVtHkZgI2O9t5ewGobDtprWGbSson5tYJ81+ufy7kru2kP513jaceT9G9/+px9D9gWyC50u7
-	uHRs=
-X-Gm-Gg: ASbGncsJLie0ASLjl0raIhDYEJv8nZR7xIOkpsNuXMMwj9/JRFeFoAOweKtyBFJPY6v
-	JYXo6oY10ARuqa+MMlPJGDSiq+203Nbayl9ZfDZUXC6uonc/QE4zdZ8aQ02cVAGPrxjnRxRcoYS
-	rFXeSN+jHvMrSpb/7wblAXXpZP/7dzhOvaRAy3KDp3M3CeGeSj9VmVG5VwbGz6auXdtS1i2nzfY
-	UF0nClRhba2LDqYqjEXdIg5LHnx8LdvL8TtjqrFuScn5N9eSttJqqZJq6i8OEG4zyNYULnQLRSg
-	Q8JHdTID39gQM41S+BMi8wJH2pVWobMeYWz4sSZd+ql7z/Rcw8pJr94b/tHMugMDbw==
-X-Google-Smtp-Source: AGHT+IHXcCvwiq2i5batLgdKROqZsfxeujQyPFdeX8EeWYph9nUy3GZSmzLWq8niLj4lYs+gQEwrQQ==
-X-Received: by 2002:a17:907:360c:b0:ab7:63fa:e4a8 with SMTP id a640c23a62f3a-ab7897b37ffmr1014860966b.0.1739138262402;
-        Sun, 09 Feb 2025 13:57:42 -0800 (PST)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5de4690311csm5493291a12.60.2025.02.09.13.57.41
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Feb 2025 13:57:41 -0800 (PST)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5de3c29e9b3so5122866a12.3
-        for <linux-arch@vger.kernel.org>; Sun, 09 Feb 2025 13:57:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXNcSGWBNaOh4Et/NjNmDhIHp6VVxRjU6vS9gilsixZ7/EYziaA2IGlJ3ad/+2b4KWDKOSDZPIcaKRn@vger.kernel.org
-X-Received: by 2002:a05:6402:4608:b0:5de:42f5:817b with SMTP id
- 4fb4d7f45d1cf-5de450b1c5dmr11409992a12.31.1739138261105; Sun, 09 Feb 2025
- 13:57:41 -0800 (PST)
+        bh=ZrCBrsBGQ+tCvXOABWtiT76sFUcDv+I/VrUzIQbDTzU=;
+        b=FzELA7shXKb/UdGH5fSa7Bey4sPxulHZNX8+XHsvFrrolB3s2OWFMG7GFmOyutiVNf
+         v6xjqPKl7AzBqoQI9wLmONHH8gNSqmnv6eCpdhe9MqWlHDeO3it50qye+TuJZ+h/uP35
+         us8BXrJvs+tSQvf49kyifRQvwCqPPfiiPWqghOBIwDp62l2s0CQuAfuAj2boW3ycrIkh
+         6Ht5a4uphmSOFwCOTgWoRMWEmtWvFlyYqcvHOxO9IvPAAESGVyBFMSHvOJvQPMst4dR4
+         1Zjfq+tCVC9f4jER7YRtgFLJABQVrOSfsysJdNDbTqv5pP7+kGPEVjoRnsYtgoPtADAC
+         giHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7PFAlWB88x+xAi4mZSZVhh0sSFFCxYFLoyi5sUy+VOTccZASpaKebDmFkxvH0lYYYOyLpxhpJu3dSFiVg@vger.kernel.org, AJvYcCWSZtGkL/fc0+ZRp+bF89+WQyO3Q9KhpB8tw97CTNFfIeMezH9gHECoEE2IjZF2wXjsp/lfm9mpUaI5@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZAI/nhuuoxS8ieJgeU8L4Xbo5nCJYa7YgNV4rQw0zsgAnh9p/
+	Hdx8PKN7hzmAQbfiyq5+V3zdCdE903ahJ0A82QIj/Pq7zuLU2sVm
+X-Gm-Gg: ASbGncvhwy6BhMd3o2L4iqZ2d2PUIukuGJA/rqSaxXlDnzUl4a6FZ0O2YTiQaJGGjrM
+	g+YwnUvr/+hACSoUsgOhvkutunupjN9zcWuFCBWzRkWw+MhjBWQDcyqF65b3ww+kpfb7sdtplvF
+	7a1MwFHA/ncrQufIiztT5rafoesRgshytyUG+0kefBPxew92ffFd6Eh6uGqBEwJn+Bwjm7xzGi8
+	sfNa5uNBh8SwvW648RJ0r3WZCzgL1F3xOUuldH8jwmZoLYwPl3AW7Brz1SxK0c7ux6Bef1XMOdJ
+	+oqJFrp9GmpVvW1c4jsU3MRbG1Nkdlji4qxumo26wu3wBH3t7CSBQtA1usOFwwWwJALLXg3N
+X-Google-Smtp-Source: AGHT+IGLh9i/kI8Ha8+Op3DoUswKsdryEtT21pr/+6nTQeWXoWEW/G6p3UUlYi/NxO5jEdod/Gguuw==
+X-Received: by 2002:a05:6000:2ad:b0:38d:e02d:5f4c with SMTP id ffacd0b85a97d-38de02d60b1mr208725f8f.10.1739138545239;
+        Sun, 09 Feb 2025 14:02:25 -0800 (PST)
+Received: from snowdrop.snailnet.com (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dd9a6153dsm2919003f8f.60.2025.02.09.14.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Feb 2025 14:02:24 -0800 (PST)
+From: David Laight <david.laight.linux@gmail.com>
+To: x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: David Laight <david.laight.linux@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Josh Poimboeuf <jpoimboe@redhat.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	linux-arch@vger.kernel.org,
+	Kees Cook <keescook@chromium.org>,
+	kernel-hardening@lists.openwall.com
+Subject: [PATCH v2 1/1] x86: In x86-64 barrier_nospec can always be lfence
+Date: Sun,  9 Feb 2025 22:02:22 +0000
+Message-Id: <20250209220222.212835-1-david.laight.linux@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250209191008.142153-1-david.laight.linux@gmail.com>
- <CAHk-=wiQQQ9yo84KCk=Y_61siPsrH=dF9t5LPva0Sbh_RZ0-3Q@mail.gmail.com> <20250209214047.4552e806@pumpkin>
-In-Reply-To: <20250209214047.4552e806@pumpkin>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 9 Feb 2025 13:57:24 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiSnNEWsvDariBQ4O-mz7Nc7LbkdKUQntREVCFWiMe9zw@mail.gmail.com>
-X-Gm-Features: AWEUYZlCxkYto5CUq_vVIa6_VQHZVTdppz3dRgjcGRBwEP6eBd4ulJsXEl4hnJA
-Message-ID: <CAHk-=wiSnNEWsvDariBQ4O-mz7Nc7LbkdKUQntREVCFWiMe9zw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] x86: In x86-64 barrier_nospec can always be lfence
-To: David Laight <david.laight.linux@gmail.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Josh Poimboeuf <jpoimboe@redhat.com>, 
-	Andi Kleen <ak@linux.intel.com>, Dan Williams <dan.j.williams@intel.com>, 
-	linux-arch@vger.kernel.org, Kees Cook <keescook@chromium.org>, 
-	kernel-hardening@lists.openwall.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Sun, 9 Feb 2025 at 13:40, David Laight <david.laight.linux@gmail.com> wrote:
->
-> Any idea what the one used to synchronise rdtsc should be?
-> 'lfence' is the right instruction (give or take), but it isn't
-> a speculation issue.
-> It really is 'wait for all memory accesses to finish' to give
-> a sensible(ish) answer for cycle timing.
+When barrier_nospec() was added the defintion was copied from the
+one used to synchronise rdtsc.
 
-No, even that is actually very different.
+On very old cpu rdtsc was a synchronising instruction.
+When this change X86_FEATURE_LFENCE_RDTSC (and a MFENCE copy) were
+(probably) added so lfence/mfence could be added to synchronise rdtsc.
+For old cpu (I think the code checks XMM2) no barrier was added.
 
-What happened was that 'lfence' was designed and documented - and
-named - as a memory fencing thing, but the *implementation* of it was
-basically about the front-end pipeline.
+I'm not sure why that code was used for barrier_nospec().
+Or why rdtsc ended up being synchronised by barrier_nospec().
+lfence is the right instruction (well as good as you get).
 
-IOW, ignore the name or the documentation. Think of "lfence" as a
-"this stops the pipeline until all previous instructions have
-retired". Because that is what it *is*.
+In any case all x86-64 cpu support XMM2 and lfence so there is
+to point using alternative().
+Separate the 32bit and 64bit definitions but leave the barrier
+missing on old 32bit cpu.
 
-So it's basically a synchronization instruction *regardless* of memory accesses.
+Signed-off-by: David Laight <david.laight.linux@gmail.com>
 
-Which is why it was then used for the rdtsc serialization - it
-basically says "don't *actually* read the TSC until you've finished
-everything you've started".
+v2: use a explicit lfence rather than __rmb().
+    Update commit message text w.r.t rdtsc.
+Signed-off-by: David Laight <david.laight.linux@gmail.com>
+---
+ arch/x86/include/asm/barrier.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-And which is why it ended up being used for speculation control, even
-though the instructions it serializes are *not* necessarily memory
-accesses at all, but things like the address conditional that precedes
-it.
+diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
+index 7b44b3c4cce1..b9af75624cf5 100644
+--- a/arch/x86/include/asm/barrier.h
++++ b/arch/x86/include/asm/barrier.h
+@@ -45,7 +45,11 @@
+ 	__mask; })
+ 
+ /* Prevent speculative execution past this barrier. */
+-#define barrier_nospec() alternative("", "lfence", X86_FEATURE_LFENCE_RDTSC)
++#ifdef CONFIG_X86_32
++#define barrier_nospec() alternative("", "lfence", X86_FEATURE_XMM2)
++#else
++#define barrier_nospec() asm volatile("lfence":::"memory")
++#endif
+ 
+ #define __dma_rmb()	barrier()
+ #define __dma_wmb()	barrier()
+-- 
+2.39.5
 
-So the speculation control use is literally "wait for the previous
-conditional branches to retire before continuing". Yes, the
-"continuing" tends to be a load, but that's almost incidental.
-
-> And on old cpu you want nothing - not a locked memory access.
-
-Well, back in the day, those locked instructions did the same thing.
-
-> I couldn't work out why __smp_mb() is so much stronger than the rmb()
-> and wmb() forms - I presume the is history there I wasn't looking for.
-
-So on x86, both read and write barriers are complete no-ops, because
-all reads are ordered, and all writes are ordered. So those only need
-compiler barriers to guarantee that the compiler itself doesn't
-re-order them.
-
-(Side note: earlier reads are also guaranteed to happen before later
-writes, so it's really only writes that can be delayed past reads, but
-we don't haev a barrier for that situation anyway. Also note that all
-of this is not "real" ordering, but only a guarantee that the
-user-visible semantics are AS IF they were actually ordered - if
-things are local in cache, ordering doesn't matter because no external
-CPU can *see* what the ordering was).
-
-So basically the only memory barriers that matter on x86 are the full
-"smp_mb()" that orders reads vs writes, and the ordering for
-non-ordered accesses used for IO.
-
-And then lfence is basically used for non-memory ordering too.
-
-                Linus
 
