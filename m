@@ -1,149 +1,114 @@
-Return-Path: <linux-arch+bounces-10069-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10070-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BFC9A2E107
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Feb 2025 23:02:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8DEDA2E1E3
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Feb 2025 02:10:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBC6E188641D
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Feb 2025 22:02:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D007C7A26C1
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Feb 2025 01:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB021E00BF;
-	Sun,  9 Feb 2025 22:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlUULZz7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F19F9C1;
+	Mon, 10 Feb 2025 01:10:29 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203F21DFE29;
-	Sun,  9 Feb 2025 22:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B485625;
+	Mon, 10 Feb 2025 01:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739138548; cv=none; b=drnFwSHMgIrcaeV+M+WsJCGsOjfuBnBMvIHpF3G0TeacJPfTe3yuuvXKs3CuuGHQRidXoZYvgPTAhCQd93Dtgz32AeAwKgzFOZKt2IUoIMJjq7B2WMRgDbgqA8bxVwyCDxLLQjDjLl56twG4pi3fqSNjmGXiTyclcTvppbwbr3I=
+	t=1739149829; cv=none; b=hDGekIXMQRA0TweTJ8Khr8Mhutg+hyo/yN1bh8fwrf3sb900NuyG3B3bJ62YLBErQWwfkijB7DOH8d2x+jDmPhWqOK2DAkYF2/cqI/GIG8qx1Q2VdfItFX/cnf42yRZ2zoVimrOroPFtKJmCp+aOquOD2Cx/CflVsW7U1rfJr2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739138548; c=relaxed/simple;
-	bh=n19fHMY0fBzL+SD4x4buAM62MKKVSOyuM/FO69KBres=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CSBSrE6wsnUE/Jj56kyfC4npnU1H2JchoV85SJpu7Mmisg5sdlMO9BKUkrcYUd9qBZAsm+b3APnr0ZDMdzWGMMrCsSpjeo7lKHNSaulI6Yn5xbRKb4CS6Lb3chfiWuxY+eknQ5odPIHAzoIwI5gxxPalOHVjroiuoakk+7WDjVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlUULZz7; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-38dc9eba8a1so1986614f8f.1;
-        Sun, 09 Feb 2025 14:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739138545; x=1739743345; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZrCBrsBGQ+tCvXOABWtiT76sFUcDv+I/VrUzIQbDTzU=;
-        b=IlUULZz7/mEyEXkkGWrFT54MeasS2ZNxzroeKAy1xnMSJLI9PJ18hh6y0Mj8kAriOh
-         dtf6KlZe8rnVZGAvOEXygvjXGaC8m2rmR91+JPERrIbvkRiybFXxY09Gc4CWP5U2+0zb
-         k4/BRdzLzTJ+eVJm1NQFZ+I+0u7Aqs2XvMz5s7Phd0pL5Kc/txuqy6yA5Hyt6f6rSjNH
-         l6I3wUJFKuINaEZKzhJi058udCe7aQTQhfIWPQbe4CatpGzbsc8dl5qo5yNgKocsWfmS
-         ZGrlBt1n5kLEhmtnSvhqoPtUGVofoHYB0E8fNa8ZHlt96CX69siPbhM+fiE3lgQR04j0
-         FftQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739138545; x=1739743345;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZrCBrsBGQ+tCvXOABWtiT76sFUcDv+I/VrUzIQbDTzU=;
-        b=FzELA7shXKb/UdGH5fSa7Bey4sPxulHZNX8+XHsvFrrolB3s2OWFMG7GFmOyutiVNf
-         v6xjqPKl7AzBqoQI9wLmONHH8gNSqmnv6eCpdhe9MqWlHDeO3it50qye+TuJZ+h/uP35
-         us8BXrJvs+tSQvf49kyifRQvwCqPPfiiPWqghOBIwDp62l2s0CQuAfuAj2boW3ycrIkh
-         6Ht5a4uphmSOFwCOTgWoRMWEmtWvFlyYqcvHOxO9IvPAAESGVyBFMSHvOJvQPMst4dR4
-         1Zjfq+tCVC9f4jER7YRtgFLJABQVrOSfsysJdNDbTqv5pP7+kGPEVjoRnsYtgoPtADAC
-         giHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7PFAlWB88x+xAi4mZSZVhh0sSFFCxYFLoyi5sUy+VOTccZASpaKebDmFkxvH0lYYYOyLpxhpJu3dSFiVg@vger.kernel.org, AJvYcCWSZtGkL/fc0+ZRp+bF89+WQyO3Q9KhpB8tw97CTNFfIeMezH9gHECoEE2IjZF2wXjsp/lfm9mpUaI5@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZAI/nhuuoxS8ieJgeU8L4Xbo5nCJYa7YgNV4rQw0zsgAnh9p/
-	Hdx8PKN7hzmAQbfiyq5+V3zdCdE903ahJ0A82QIj/Pq7zuLU2sVm
-X-Gm-Gg: ASbGncvhwy6BhMd3o2L4iqZ2d2PUIukuGJA/rqSaxXlDnzUl4a6FZ0O2YTiQaJGGjrM
-	g+YwnUvr/+hACSoUsgOhvkutunupjN9zcWuFCBWzRkWw+MhjBWQDcyqF65b3ww+kpfb7sdtplvF
-	7a1MwFHA/ncrQufIiztT5rafoesRgshytyUG+0kefBPxew92ffFd6Eh6uGqBEwJn+Bwjm7xzGi8
-	sfNa5uNBh8SwvW648RJ0r3WZCzgL1F3xOUuldH8jwmZoLYwPl3AW7Brz1SxK0c7ux6Bef1XMOdJ
-	+oqJFrp9GmpVvW1c4jsU3MRbG1Nkdlji4qxumo26wu3wBH3t7CSBQtA1usOFwwWwJALLXg3N
-X-Google-Smtp-Source: AGHT+IGLh9i/kI8Ha8+Op3DoUswKsdryEtT21pr/+6nTQeWXoWEW/G6p3UUlYi/NxO5jEdod/Gguuw==
-X-Received: by 2002:a05:6000:2ad:b0:38d:e02d:5f4c with SMTP id ffacd0b85a97d-38de02d60b1mr208725f8f.10.1739138545239;
-        Sun, 09 Feb 2025 14:02:25 -0800 (PST)
-Received: from snowdrop.snailnet.com (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dd9a6153dsm2919003f8f.60.2025.02.09.14.02.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Feb 2025 14:02:24 -0800 (PST)
-From: David Laight <david.laight.linux@gmail.com>
-To: x86@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Cc: David Laight <david.laight.linux@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Josh Poimboeuf <jpoimboe@redhat.com>,
-	Andi Kleen <ak@linux.intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-arch@vger.kernel.org,
-	Kees Cook <keescook@chromium.org>,
-	kernel-hardening@lists.openwall.com
-Subject: [PATCH v2 1/1] x86: In x86-64 barrier_nospec can always be lfence
-Date: Sun,  9 Feb 2025 22:02:22 +0000
-Message-Id: <20250209220222.212835-1-david.laight.linux@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1739149829; c=relaxed/simple;
+	bh=+W4hbUJf28Gl9qNEThEm55N/PJ9IbzHZk/DqSQ8Pvk4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=THyO0LMWddnMsFR1rBihoE9pgqaTuuYThCp8LYAaeepdcBk9UHCD6LaTQaLSNQpVdpxFwhwJrW5OzWLZFGNCqSW0whmZZbNlPptniVipGeVOreNBo/qhwUeyL+L+AmNJV83i3LHNNJz1+Rt7CH0cuNINUXWp49M2vAFFt9LtuIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=shelob.surriel.com; arc=none smtp.client-ip=96.67.55.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shelob.surriel.com
+Received: from fangorn.home.surriel.com ([10.0.13.7])
+	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <riel@shelob.surriel.com>)
+	id 1thIJ5-000000005Mx-0xoS;
+	Sun, 09 Feb 2025 20:09:51 -0500
+Message-ID: <15734b32cecddde7905d3a97005a0c883383cc74.camel@surriel.com>
+Subject: Re: [PATCH 1/1] x86: In x86-64 barrier_nospec can always be lfence
+From: Rik van Riel <riel@surriel.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>, David Laight
+	 <david.laight.linux@gmail.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, Thomas Gleixner	
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov	
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin"
+	 <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, Mathieu
+ Desnoyers	 <mathieu.desnoyers@efficios.com>, Josh Poimboeuf
+ <jpoimboe@redhat.com>, Andi Kleen <ak@linux.intel.com>, Dan Williams
+ <dan.j.williams@intel.com>, 	linux-arch@vger.kernel.org, Kees Cook
+ <keescook@chromium.org>, 	kernel-hardening@lists.openwall.com, "Paul
+ E.McKenney" <paulmck@kernel.org>
+Date: Sun, 09 Feb 2025 20:09:51 -0500
+In-Reply-To: <CAHk-=wiSnNEWsvDariBQ4O-mz7Nc7LbkdKUQntREVCFWiMe9zw@mail.gmail.com>
+References: <20250209191008.142153-1-david.laight.linux@gmail.com>
+	 <CAHk-=wiQQQ9yo84KCk=Y_61siPsrH=dF9t5LPva0Sbh_RZ0-3Q@mail.gmail.com>
+	 <20250209214047.4552e806@pumpkin>
+	 <CAHk-=wiSnNEWsvDariBQ4O-mz7Nc7LbkdKUQntREVCFWiMe9zw@mail.gmail.com>
+Autocrypt: addr=riel@surriel.com; prefer-encrypt=mutual;
+ keydata=mQENBFIt3aUBCADCK0LicyCYyMa0E1lodCDUBf6G+6C5UXKG1jEYwQu49cc/gUBTTk33A
+ eo2hjn4JinVaPF3zfZprnKMEGGv4dHvEOCPWiNhlz5RtqH3SKJllq2dpeMS9RqbMvDA36rlJIIo47
+ Z/nl6IA8MDhSqyqdnTY8z7LnQHqq16jAqwo7Ll9qALXz4yG1ZdSCmo80VPetBZZPw7WMjo+1hByv/
+ lvdFnLfiQ52tayuuC1r9x2qZ/SYWd2M4p/f5CLmvG9UcnkbYFsKWz8bwOBWKg1PQcaYHLx06sHGdY
+ dIDaeVvkIfMFwAprSo5EFU+aes2VB2ZjugOTbkkW2aPSWTRsBhPHhV6dABEBAAG0HlJpayB2YW4gU
+ mllbCA8cmllbEByZWRoYXQuY29tPokBHwQwAQIACQUCW5LcVgIdIAAKCRDOed6ShMTeg05SB/986o
+ gEgdq4byrtaBQKFg5LWfd8e+h+QzLOg/T8mSS3dJzFXe5JBOfvYg7Bj47xXi9I5sM+I9Lu9+1XVb/
+ r2rGJrU1DwA09TnmyFtK76bgMF0sBEh1ECILYNQTEIemzNFwOWLZZlEhZFRJsZyX+mtEp/WQIygHV
+ WjwuP69VJw+fPQvLOGn4j8W9QXuvhha7u1QJ7mYx4dLGHrZlHdwDsqpvWsW+3rsIqs1BBe5/Itz9o
+ 6y9gLNtQzwmSDioV8KhF85VmYInslhv5tUtMEppfdTLyX4SUKh8ftNIVmH9mXyRCZclSoa6IMd635
+ Jq1Pj2/Lp64tOzSvN5Y9zaiCc5FucXtB9SaWsgdmFuIFJpZWwgPHJpZWxAc3VycmllbC5jb20+iQE
+ +BBMBAgAoBQJSLd2lAhsjBQkSzAMABgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRDOed6ShMTe
+ g4PpB/0ZivKYFt0LaB22ssWUrBoeNWCP1NY/lkq2QbPhR3agLB7ZXI97PF2z/5QD9Fuy/FD/jddPx
+ KRTvFCtHcEzTOcFjBmf52uqgt3U40H9GM++0IM0yHusd9EzlaWsbp09vsAV2DwdqS69x9RPbvE/Ne
+ fO5subhocH76okcF/aQiQ+oj2j6LJZGBJBVigOHg+4zyzdDgKM+jp0bvDI51KQ4XfxV593OhvkS3z
+ 3FPx0CE7l62WhWrieHyBblqvkTYgJ6dq4bsYpqxxGJOkQ47WpEUx6onH+rImWmPJbSYGhwBzTo0Mm
+ G1Nb1qGPG+mTrSmJjDRxrwf1zjmYqQreWVSFEt26tBpSaWsgdmFuIFJpZWwgPHJpZWxAZmIuY29tP
+ okBPgQTAQIAKAUCW5LbiAIbIwUJEswDAAYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQznneko
+ TE3oOUEQgAsrGxjTC1bGtZyuvyQPcXclap11Ogib6rQywGYu6/Mnkbd6hbyY3wpdyQii/cas2S44N
+ cQj8HkGv91JLVE24/Wt0gITPCH3rLVJJDGQxprHTVDs1t1RAbsbp0XTksZPCNWDGYIBo2aHDwErhI
+ omYQ0Xluo1WBtH/UmHgirHvclsou1Ks9jyTxiPyUKRfae7GNOFiX99+ZlB27P3t8CjtSO831Ij0Ip
+ QrfooZ21YVlUKw0Wy6Ll8EyefyrEYSh8KTm8dQj4O7xxvdg865TLeLpho5PwDRF+/mR3qi8CdGbkE
+ c4pYZQO8UDXUN4S+pe0aTeTqlYw8rRHWF9TnvtpcNzZw==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: riel@surriel.com
 
-When barrier_nospec() was added the defintion was copied from the
-one used to synchronise rdtsc.
+On Sun, 2025-02-09 at 13:57 -0800, Linus Torvalds wrote:
+>=20
+> So on x86, both read and write barriers are complete no-ops, because
+> all reads are ordered, and all writes are ordered.
 
-On very old cpu rdtsc was a synchronising instruction.
-When this change X86_FEATURE_LFENCE_RDTSC (and a MFENCE copy) were
-(probably) added so lfence/mfence could be added to synchronise rdtsc.
-For old cpu (I think the code checks XMM2) no barrier was added.
+Given that this thread started with a reference
+to rdtsc, it may be worth keeping in mind that
+rdtsc reads themselves do not always appear to
+be ordered.
 
-I'm not sure why that code was used for barrier_nospec().
-Or why rdtsc ended up being synchronised by barrier_nospec().
-lfence is the right instruction (well as good as you get).
+Paul and I spotted some occasionaly "backwards
+TSC values" from the CSD lock instrumentation code,=C2=A0
+which went away when using ordered TSC reads:
 
-In any case all x86-64 cpu support XMM2 and lfence so there is
-to point using alternative().
-Separate the 32bit and 64bit definitions but leave the barrier
-missing on old 32bit cpu.
+https://lkml.iu.edu/hypermail/linux/kernel/2410.1/03202.html
 
-Signed-off-by: David Laight <david.laight.linux@gmail.com>
+I guess maybe a TSC read does not follow all the same
+rules as a memory read, sometimes?
 
-v2: use a explicit lfence rather than __rmb().
-    Update commit message text w.r.t rdtsc.
-Signed-off-by: David Laight <david.laight.linux@gmail.com>
----
- arch/x86/include/asm/barrier.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
-index 7b44b3c4cce1..b9af75624cf5 100644
---- a/arch/x86/include/asm/barrier.h
-+++ b/arch/x86/include/asm/barrier.h
-@@ -45,7 +45,11 @@
- 	__mask; })
- 
- /* Prevent speculative execution past this barrier. */
--#define barrier_nospec() alternative("", "lfence", X86_FEATURE_LFENCE_RDTSC)
-+#ifdef CONFIG_X86_32
-+#define barrier_nospec() alternative("", "lfence", X86_FEATURE_XMM2)
-+#else
-+#define barrier_nospec() asm volatile("lfence":::"memory")
-+#endif
- 
- #define __dma_rmb()	barrier()
- #define __dma_wmb()	barrier()
--- 
-2.39.5
-
+--=20
+All Rights Reversed.
 
