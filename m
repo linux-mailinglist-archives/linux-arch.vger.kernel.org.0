@@ -1,187 +1,516 @@
-Return-Path: <linux-arch+bounces-10117-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10118-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A144DA3153F
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Feb 2025 20:28:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CB42A3188A
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Feb 2025 23:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C19E3A1C92
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Feb 2025 19:27:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2B4818884AF
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Feb 2025 22:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D879267F76;
-	Tue, 11 Feb 2025 19:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6845F268FD4;
+	Tue, 11 Feb 2025 22:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="H1mk6Diq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kpJwh4ER"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GXfLrU81"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744B6267F67;
-	Tue, 11 Feb 2025 19:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF811E3DD6;
+	Tue, 11 Feb 2025 22:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739301870; cv=none; b=ozkpFW1S6Y+Kj4zsGYLayzJzldIlmn5jyuxiTBWOEGkU4oRB/x7IwADSFuN5SwTMcJS+ce2XJa1MjeKO3L1vrCF3DRP8LXoVYuGnTUE5c16+9EuER+ttCxVbY3urquXoP48qCkrP2SlUj2raZ2fjcGLGh7NmsO2nNYU6zMTKPac=
+	t=1739312556; cv=none; b=M9+SjCDhvktRGZ8uW7oixxK7pG9XzJoCv0q32Mx81Ckb2o8sqFJ+V1ZnPt6XGyZPv2GFZcGZ5uzT5W3+nSOYmQ4A6kjMcnGWYd+faiRD4e2y8UA15Cf7igH4EDUB0kDRR72a6pUCK++kZRJmTw4E/n0YH0g6vNgk61in2f0FBQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739301870; c=relaxed/simple;
-	bh=c3d2vNEaLKWV5MP/R/ATr1E1H0RvMwxHYf1Cp5qlV3I=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=P2UyWOC1qw7OhZcdqBzsiXLhZ1BD7ZxTuGLBbab+C4skTev0MlQXYnUY8NtGIaACbXOBch4QVCFBgCd3PO1KLnBfhum1y8GCDawbjtDS2cVFtG4e7zOn3m6gvNgUUaZGVE9PfO4GxS1hw7b//Rma3GV6VFMhPC9osuUK+XyBXoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=H1mk6Diq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kpJwh4ER; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailflow.phl.internal (Postfix) with ESMTP id 33B60201429;
-	Tue, 11 Feb 2025 14:24:27 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Tue, 11 Feb 2025 14:24:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1739301867;
-	 x=1739309067; bh=c3d2vNEaLKWV5MP/R/ATr1E1H0RvMwxHYf1Cp5qlV3I=; b=
-	H1mk6DiqkFxdaYDq+XrnH8tSDTT8Wz0IzX6XL6dUXhL78edeBCmXPGsNalqy0uVh
-	qfVX/eprmx9jfhnZLIibSxEnb/yvox+Psohl6D+biy1usicOOYfycAQ2/lHbv7lM
-	ms22mxqpOENU1kVoeVGl9qKtHG5mrujViCEqY0VqdFfcppxn9atgtNyvfUPWmoke
-	iSaUJwdmeT5vL2m9nOgiPbOQ8inT6fzN26/QdI3b3ROKoE+2F5hJFKlCRtQC3y3c
-	pNkD/sKqZig+fogqosYE5BTnVmyK6o10RK5f/h5GDNzrhM5tSiEXUMV0Q3nN/9rS
-	xa4XKlLduvuE5qltdHFuwA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1739301867; x=
-	1739309067; bh=c3d2vNEaLKWV5MP/R/ATr1E1H0RvMwxHYf1Cp5qlV3I=; b=k
-	pJwh4ERJCdsI83YQZOuod4nqq8kn1u8tNVYkl/OjbgBveJxUNjHPRWiuP/sMWePe
-	hWZL7RWcLgrDzeKv5GrR3PoYeTufoc3U4SB55vLC3FbOavO5wEdBzvHuqivBxaRF
-	6YUgMOaaWBUp0mJhL6e90goXp5VxfeaB5fOPaZMtqvaTzZGmRI8co5Pb+1yhZ1Jd
-	+tqS4S/sXSHnDsDIvtzzmvXuOx5xRuW4+VXNR41QorPX56/udIxvXWKZq54TC1r5
-	JYZoW9xCcEKfQyyQAwd/KvNTPMcZsKIIArH5WPCoYAMp23vY3HTia10D0pKRzo20
-	tsZ725bobRorlkRPbnT9Q==
-X-ME-Sender: <xms:56OrZ_4r1fGeTYVnaod-wO2NzZ2NHYdVHCIZdYDdVEN3CUE3aLipBw>
-    <xme:56OrZ04LaJcJB8g_4vy2jK4AcZwVH4jm5wnhLceIhsETEDChYT_p2vDhAdsalScNE
-    UHLbNjYgU53zxr38K0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegudekfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeh
-    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpsegrlhhivghnkedruggvpd
-    hrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgt
-    phhtthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtoh
-    eplhhinhhugiesrghrmhhlihhnuhigrdhorhhgrdhukhdprhgtphhtthhopegthhhrihhs
-    thhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhrtghpthhtohepuggrvhgvmh
-    esuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehmihgtseguihhgihhkohgurdhn
-    vghtpdhrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhrtghpthhtoh
-    eprghnughrvggrshesghgrihhslhgvrhdrtghomh
-X-ME-Proxy: <xmx:56OrZ2c8vfiXY8n3dexb_wHcIKTMgG6o3iBcrDJCGSo83cktB116vA>
-    <xmx:56OrZwKurjJ9VsGmWmqTvUmqikgs5yszNjLYSbIodcQKb37uQS1vVg>
-    <xmx:56OrZzKn0eY8SDxacs2AIw8al8AHb-BF-N93qSumfcz0FNW0tdUaZQ>
-    <xmx:56OrZ5y4eaI6MBsTqZJwzGJSKmez8ij-IaW_MKIlyU1hTpHti9F-SA>
-    <xmx:66OrZ5ZaEgYHz5-gr-91ZnpSgt3C2jX-ZjBTONvD9HLTwxOizyBpb0N7>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 6103B2220072; Tue, 11 Feb 2025 14:24:23 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1739312556; c=relaxed/simple;
+	bh=I9hmgU0WaXGGv4+Q5PEYKrdoFRuwJBxE8EUGoGhXDRE=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=OMpblTQqAwVXhE7z81QgoU8VixVXmEvfX4iPoANuOOjmz5RCG9yogQBZdqCcsV9g0lUH50+Jax3SPJOSxX2FRQMDq4HBEWiV+Aj+wRsUIVqTjFXobjqe9rkxkevBK1sVLPwIdxMniR+CMbdc7/mtWK1pk3A4GLC9IYjQYIhbCKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GXfLrU81; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 021152107AB1;
+	Tue, 11 Feb 2025 14:22:34 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 021152107AB1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1739312554;
+	bh=jquUHZhr02eqGZ7in0usAmu07m9dgjh9vvvP3ukF8cI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=GXfLrU81iMw/r/tA3amIqScOCvdRDD3HCnld2wcjtN0poms7xyvmPSgNZhnSuwKyt
+	 dva4wynaLPXr3jKcVL1nQWOpeM7Qay/g1rwk9Wr4vx5nKX4HggdGgd+/5o8G+RcCSi
+	 gud0c/W7/68Xa+qVgKrGfxeg94ryjn9VACXdUUy4=
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+To: linux-hyperv@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	iommu@lists.linux.dev
+Cc: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	mhklinux@outlook.com,
+	decui@microsoft.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	daniel.lezcano@linaro.org,
+	joro@8bytes.org,
+	robin.murphy@arm.com,
+	arnd@arndb.de,
+	jinankjain@linux.microsoft.com,
+	muminulrussell@gmail.com,
+	skinsburskii@linux.microsoft.com,
+	mukeshrathor@microsoft.com
+Subject: [PATCH] hyperv: Add CONFIG_MSHV_ROOT to gate hv_root_partition checks
+Date: Tue, 11 Feb 2025 14:21:55 -0800
+Message-Id: <1739312515-18848-1-git-send-email-nunodasneves@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Tue, 11 Feb 2025 20:24:02 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andrey Albershteyn" <aalbersh@redhat.com>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Matt Turner" <mattst88@gmail.com>,
- "Russell King" <linux@armlinux.org.uk>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Michal Simek" <monstr@monstr.eu>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>, "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Chris Zankel" <chris@zankel.net>,
- "Max Filippov" <jcmvbkbc@gmail.com>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>,
- =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
- =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>
-Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-xfs@vger.kernel.org
-Message-Id: <f4276a02-57cd-4703-be3c-4210e4a033a9@app.fastmail.com>
-In-Reply-To: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
-References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
-Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 11, 2025, at 18:22, Andrey Albershteyn wrote:
-> From: Andrey Albershteyn <aalbersh@redhat.com>
->
-> Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> extended attributes/flags. The syscalls take parent directory fd and
-> path to the child together with struct fsxattr.
->
-> This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> that file don't need to be open as we can reference it with a path
-> instead of fd. By having this we can manipulated inode extended
-> attributes not only on regular files but also on special ones. This
-> is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> we can not call ioctl() directly on the filesystem inode using fd.
->
-> This patch adds two new syscalls which allows userspace to get/set
-> extended inode attributes on special files by using parent directory
-> and a path - *at() like syscall.
->
-> Also, as vfs_fileattr_set() is now will be called on special files
-> too, let's forbid any other attributes except projid and nextents
-> (symlink can have an extent).
->
-> CC: linux-api@vger.kernel.org
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-xfs@vger.kernel.org
-> Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
+Introduce CONFIG_MSHV_ROOT as a tristate to enable root partition
+booting and future mshv driver functionality.
 
-I checked the syscall.tbl additions and the ABI to ensure that
-it follows the usual guidelines and is portable across
-all architectures, this looks good. Thanks for addressing
-my v1 comments:
+Change hv_root_partition into a function which always returns false
+if CONFIG_MSHV_ROOT=n.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Introduce hv_current_partition_type to store the type of partition
+(guest, root, or other kinds in future), and hv_identify_partition_type()
+to it up early in Hyper-V initialization.
 
-Disclaimer: I have no idea if the new syscalls are a good
-idea or if they are fit for the purpose, I trust the
-VFS maintainers will take care of reviewing that.
+Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+---
+Depends on
+https://lore.kernel.org/linux-hyperv/1738955002-20821-3-git-send-email-nunodasneves@linux.microsoft.com/
+
+ arch/arm64/hyperv/mshyperv.c       |  2 ++
+ arch/x86/hyperv/hv_init.c          | 10 ++++----
+ arch/x86/kernel/cpu/mshyperv.c     | 24 ++----------------
+ drivers/clocksource/hyperv_timer.c |  4 +--
+ drivers/hv/Kconfig                 | 12 +++++++++
+ drivers/hv/Makefile                |  3 ++-
+ drivers/hv/hv.c                    | 10 ++++----
+ drivers/hv/hv_common.c             | 32 +++++++++++++++++++-----
+ drivers/hv/vmbus_drv.c             |  2 +-
+ drivers/iommu/hyperv-iommu.c       |  4 +--
+ include/asm-generic/mshyperv.h     | 39 +++++++++++++++++++++++++-----
+ 11 files changed, 92 insertions(+), 50 deletions(-)
+
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index 29fcfd595f48..2265ea5ce5ad 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -61,6 +61,8 @@ static int __init hyperv_init(void)
+ 		ms_hyperv.features, ms_hyperv.priv_high, ms_hyperv.hints,
+ 		ms_hyperv.misc_features);
+ 
++	hv_identify_partition_type();
++
+ 	ret = hv_common_init();
+ 	if (ret)
+ 		return ret;
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 9be1446f5bd3..ddeb40930bc8 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -90,7 +90,7 @@ static int hv_cpu_init(unsigned int cpu)
+ 		return 0;
+ 
+ 	hvp = &hv_vp_assist_page[cpu];
+-	if (hv_root_partition) {
++	if (hv_root_partition()) {
+ 		/*
+ 		 * For root partition we get the hypervisor provided VP assist
+ 		 * page, instead of allocating a new page.
+@@ -242,7 +242,7 @@ static int hv_cpu_die(unsigned int cpu)
+ 
+ 	if (hv_vp_assist_page && hv_vp_assist_page[cpu]) {
+ 		union hv_vp_assist_msr_contents msr = { 0 };
+-		if (hv_root_partition) {
++		if (hv_root_partition()) {
+ 			/*
+ 			 * For root partition the VP assist page is mapped to
+ 			 * hypervisor provided page, and thus we unmap the
+@@ -317,7 +317,7 @@ static int hv_suspend(void)
+ 	union hv_x64_msr_hypercall_contents hypercall_msr;
+ 	int ret;
+ 
+-	if (hv_root_partition)
++	if (hv_root_partition())
+ 		return -EPERM;
+ 
+ 	/*
+@@ -518,7 +518,7 @@ void __init hyperv_init(void)
+ 	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+ 	hypercall_msr.enable = 1;
+ 
+-	if (hv_root_partition) {
++	if (hv_root_partition()) {
+ 		struct page *pg;
+ 		void *src;
+ 
+@@ -592,7 +592,7 @@ void __init hyperv_init(void)
+ 	 * If we're running as root, we want to create our own PCI MSI domain.
+ 	 * We can't set this in hv_pci_init because that would be too late.
+ 	 */
+-	if (hv_root_partition)
++	if (hv_root_partition())
+ 		x86_init.irqs.create_pci_msi_domain = hv_create_pci_msi_domain;
+ #endif
+ 
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index f285757618fc..4f01f424ea5b 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -33,8 +33,6 @@
+ #include <asm/numa.h>
+ #include <asm/svm.h>
+ 
+-/* Is Linux running as the root partition? */
+-bool hv_root_partition;
+ /* Is Linux running on nested Microsoft Hypervisor */
+ bool hv_nested;
+ struct ms_hyperv_info ms_hyperv;
+@@ -451,25 +449,7 @@ static void __init ms_hyperv_init_platform(void)
+ 	pr_debug("Hyper-V: max %u virtual processors, %u logical processors\n",
+ 		 ms_hyperv.max_vp_index, ms_hyperv.max_lp_index);
+ 
+-	/*
+-	 * Check CPU management privilege.
+-	 *
+-	 * To mirror what Windows does we should extract CPU management
+-	 * features and use the ReservedIdentityBit to detect if Linux is the
+-	 * root partition. But that requires negotiating CPU management
+-	 * interface (a process to be finalized). For now, use the privilege
+-	 * flag as the indicator for running as root.
+-	 *
+-	 * Hyper-V should never specify running as root and as a Confidential
+-	 * VM. But to protect against a compromised/malicious Hyper-V trying
+-	 * to exploit root behavior to expose Confidential VM memory, ignore
+-	 * the root partition setting if also a Confidential VM.
+-	 */
+-	if ((ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
+-	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
+-		hv_root_partition = true;
+-		pr_info("Hyper-V: running as root partition\n");
+-	}
++	hv_identify_partition_type();
+ 
+ 	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
+ 		hv_nested = true;
+@@ -618,7 +598,7 @@ static void __init ms_hyperv_init_platform(void)
+ 
+ # ifdef CONFIG_SMP
+ 	smp_ops.smp_prepare_boot_cpu = hv_smp_prepare_boot_cpu;
+-	if (hv_root_partition ||
++	if (hv_root_partition() ||
+ 	    (!ms_hyperv.paravisor_present && hv_isolation_type_snp()))
+ 		smp_ops.smp_prepare_cpus = hv_smp_prepare_cpus;
+ # endif
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index f00019b078a7..09549451dd51 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -582,7 +582,7 @@ static void __init hv_init_tsc_clocksource(void)
+ 	 * mapped.
+ 	 */
+ 	tsc_msr.as_uint64 = hv_get_msr(HV_MSR_REFERENCE_TSC);
+-	if (hv_root_partition)
++	if (hv_root_partition())
+ 		tsc_pfn = tsc_msr.pfn;
+ 	else
+ 		tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+@@ -627,7 +627,7 @@ void __init hv_remap_tsc_clocksource(void)
+ 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+ 		return;
+ 
+-	if (!hv_root_partition) {
++	if (!hv_root_partition()) {
+ 		WARN(1, "%s: attempt to remap TSC page in guest partition\n",
+ 		     __func__);
+ 		return;
+diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+index 862c47b191af..aac172942f6c 100644
+--- a/drivers/hv/Kconfig
++++ b/drivers/hv/Kconfig
+@@ -55,4 +55,16 @@ config HYPERV_BALLOON
+ 	help
+ 	  Select this option to enable Hyper-V Balloon driver.
+ 
++config MSHV_ROOT
++	tristate "Microsoft Hyper-V root partition support"
++	depends on HYPERV
++	depends on !HYPERV_VTL_MODE
++	depends on PAGE_SIZE_4KB
++	default n
++	help
++	  Select this option to enable support for booting and running as root
++	  partition on Microsoft Hyper-V.
++
++	  If unsure, say N.
++
+ endmenu
+diff --git a/drivers/hv/Makefile b/drivers/hv/Makefile
+index 9afcabb3fbd2..2b8dc954b350 100644
+--- a/drivers/hv/Makefile
++++ b/drivers/hv/Makefile
+@@ -13,4 +13,5 @@ hv_vmbus-$(CONFIG_HYPERV_TESTING)	+= hv_debugfs.o
+ hv_utils-y := hv_util.o hv_kvp.o hv_snapshot.o hv_utils_transport.o
+ 
+ # Code that must be built-in
+-obj-$(subst m,y,$(CONFIG_HYPERV)) += hv_common.o hv_proc.o
++obj-$(subst m,y,$(CONFIG_HYPERV)) += hv_common.o
++obj-$(subst m,y,$(CONFIG_MSHV_ROOT)) += hv_proc.o
+diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+index 36d9ba097ff5..93d82382351c 100644
+--- a/drivers/hv/hv.c
++++ b/drivers/hv/hv.c
+@@ -144,7 +144,7 @@ int hv_synic_alloc(void)
+ 		 * Synic message and event pages are allocated by paravisor.
+ 		 * Skip these pages allocation here.
+ 		 */
+-		if (!ms_hyperv.paravisor_present && !hv_root_partition) {
++		if (!ms_hyperv.paravisor_present && !hv_root_partition()) {
+ 			hv_cpu->synic_message_page =
+ 				(void *)get_zeroed_page(GFP_ATOMIC);
+ 			if (!hv_cpu->synic_message_page) {
+@@ -272,7 +272,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+ 	simp.as_uint64 = hv_get_msr(HV_MSR_SIMP);
+ 	simp.simp_enabled = 1;
+ 
+-	if (ms_hyperv.paravisor_present || hv_root_partition) {
++	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+ 		/* Mask out vTOM bit. ioremap_cache() maps decrypted */
+ 		u64 base = (simp.base_simp_gpa << HV_HYP_PAGE_SHIFT) &
+ 				~ms_hyperv.shared_gpa_boundary;
+@@ -291,7 +291,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+ 	siefp.as_uint64 = hv_get_msr(HV_MSR_SIEFP);
+ 	siefp.siefp_enabled = 1;
+ 
+-	if (ms_hyperv.paravisor_present || hv_root_partition) {
++	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+ 		/* Mask out vTOM bit. ioremap_cache() maps decrypted */
+ 		u64 base = (siefp.base_siefp_gpa << HV_HYP_PAGE_SHIFT) &
+ 				~ms_hyperv.shared_gpa_boundary;
+@@ -367,7 +367,7 @@ void hv_synic_disable_regs(unsigned int cpu)
+ 	 * addresses.
+ 	 */
+ 	simp.simp_enabled = 0;
+-	if (ms_hyperv.paravisor_present || hv_root_partition) {
++	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+ 		iounmap(hv_cpu->synic_message_page);
+ 		hv_cpu->synic_message_page = NULL;
+ 	} else {
+@@ -379,7 +379,7 @@ void hv_synic_disable_regs(unsigned int cpu)
+ 	siefp.as_uint64 = hv_get_msr(HV_MSR_SIEFP);
+ 	siefp.siefp_enabled = 0;
+ 
+-	if (ms_hyperv.paravisor_present || hv_root_partition) {
++	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+ 		iounmap(hv_cpu->synic_event_page);
+ 		hv_cpu->synic_event_page = NULL;
+ 	} else {
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index cb3ea49020ef..d1227e85c5b7 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -34,8 +34,11 @@
+ u64 hv_current_partition_id = HV_PARTITION_ID_SELF;
+ EXPORT_SYMBOL_GPL(hv_current_partition_id);
+ 
++enum hv_partition_type hv_current_partition_type;
++EXPORT_SYMBOL_GPL(hv_current_partition_type);
++
+ /*
+- * hv_root_partition, ms_hyperv and hv_nested are defined here with other
++ * ms_hyperv and hv_nested are defined here with other
+  * Hyper-V specific globals so they are shared across all architectures and are
+  * built only when CONFIG_HYPERV is defined.  But on x86,
+  * ms_hyperv_init_platform() is built even when CONFIG_HYPERV is not
+@@ -43,9 +46,6 @@ EXPORT_SYMBOL_GPL(hv_current_partition_id);
+  * here, allowing for an overriding definition in the module containing
+  * ms_hyperv_init_platform().
+  */
+-bool __weak hv_root_partition;
+-EXPORT_SYMBOL_GPL(hv_root_partition);
+-
+ bool __weak hv_nested;
+ EXPORT_SYMBOL_GPL(hv_nested);
+ 
+@@ -283,7 +283,7 @@ static void hv_kmsg_dump_register(void)
+ 
+ static inline bool hv_output_page_exists(void)
+ {
+-	return hv_root_partition || IS_ENABLED(CONFIG_HYPERV_VTL_MODE);
++	return hv_root_partition() || IS_ENABLED(CONFIG_HYPERV_VTL_MODE);
+ }
+ 
+ void __init hv_get_partition_id(void)
+@@ -594,7 +594,7 @@ EXPORT_SYMBOL_GPL(hv_setup_dma_ops);
+ 
+ bool hv_is_hibernation_supported(void)
+ {
+-	return !hv_root_partition && acpi_sleep_state_supported(ACPI_STATE_S4);
++	return !hv_root_partition() && acpi_sleep_state_supported(ACPI_STATE_S4);
+ }
+ EXPORT_SYMBOL_GPL(hv_is_hibernation_supported);
+ 
+@@ -683,3 +683,23 @@ u64 __weak hv_tdx_hypercall(u64 control, u64 param1, u64 param2)
+ 	return HV_STATUS_INVALID_PARAMETER;
+ }
+ EXPORT_SYMBOL_GPL(hv_tdx_hypercall);
++
++void hv_identify_partition_type(void)
++{
++	/*
++	 * Check partition creation and cpu management privileges
++	 *
++	 * Hyper-V should never specify running as root and as a Confidential
++	 * VM. But to protect against a compromised/malicious Hyper-V trying
++	 * to exploit root behavior to expose Confidential VM memory, ignore
++	 * the root partition setting if also a Confidential VM.
++	 */
++	if ((ms_hyperv.priv_high & HV_CREATE_PARTITIONS) &&
++	    (ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
++	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
++		hv_current_partition_type = HV_PARTITION_TYPE_ROOT;
++		pr_info("Hyper-V: running as root partition\n");
++	} else {
++		hv_current_partition_type = HV_PARTITION_TYPE_GUEST;
++	}
++}
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 0f6cd44fff29..844eba0429fa 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -2646,7 +2646,7 @@ static int __init hv_acpi_init(void)
+ 	if (!hv_is_hyperv_initialized())
+ 		return -ENODEV;
+ 
+-	if (hv_root_partition && !hv_nested)
++	if (hv_root_partition() && !hv_nested)
+ 		return 0;
+ 
+ 	/*
+diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
+index 2a86aa5d54c6..53e4b37716af 100644
+--- a/drivers/iommu/hyperv-iommu.c
++++ b/drivers/iommu/hyperv-iommu.c
+@@ -130,7 +130,7 @@ static int __init hyperv_prepare_irq_remapping(void)
+ 	    x86_init.hyper.msi_ext_dest_id())
+ 		return -ENODEV;
+ 
+-	if (hv_root_partition) {
++	if (hv_root_partition()) {
+ 		name = "HYPERV-ROOT-IR";
+ 		ops = &hyperv_root_ir_domain_ops;
+ 	} else {
+@@ -151,7 +151,7 @@ static int __init hyperv_prepare_irq_remapping(void)
+ 		return -ENOMEM;
+ 	}
+ 
+-	if (hv_root_partition)
++	if (hv_root_partition())
+ 		return 0; /* The rest is only relevant to guests */
+ 
+ 	/*
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 7adc10a4fa3e..6f898792fb51 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -28,6 +28,11 @@
+ 
+ #define VTPM_BASE_ADDRESS 0xfed40000
+ 
++enum hv_partition_type {
++	HV_PARTITION_TYPE_GUEST,
++	HV_PARTITION_TYPE_ROOT,
++};
++
+ struct ms_hyperv_info {
+ 	u32 features;
+ 	u32 priv_high;
+@@ -59,6 +64,7 @@ struct ms_hyperv_info {
+ extern struct ms_hyperv_info ms_hyperv;
+ extern bool hv_nested;
+ extern u64 hv_current_partition_id;
++extern enum hv_partition_type hv_current_partition_type;
+ 
+ extern void * __percpu *hyperv_pcpu_input_arg;
+ extern void * __percpu *hyperv_pcpu_output_arg;
+@@ -190,8 +196,6 @@ void hv_remove_crash_handler(void);
+ extern int vmbus_interrupt;
+ extern int vmbus_irq;
+ 
+-extern bool hv_root_partition;
+-
+ #if IS_ENABLED(CONFIG_HYPERV)
+ /*
+  * Hypervisor's notion of virtual processor ID is different from
+@@ -213,15 +217,12 @@ void __init hv_common_free(void);
+ void __init ms_hyperv_late_init(void);
+ int hv_common_cpu_init(unsigned int cpu);
+ int hv_common_cpu_die(unsigned int cpu);
++void hv_identify_partition_type(void);
+ 
+ void *hv_alloc_hyperv_page(void);
+ void *hv_alloc_hyperv_zeroed_page(void);
+ void hv_free_hyperv_page(void *addr);
+ 
+-int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
+-int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
+-int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
+-
+ /**
+  * hv_cpu_number_to_vp_number() - Map CPU to VP.
+  * @cpu_number: CPU number in Linux terms
+@@ -309,6 +310,7 @@ void hyperv_cleanup(void);
+ bool hv_query_ext_cap(u64 cap_query);
+ void hv_setup_dma_ops(struct device *dev, bool coherent);
+ #else /* CONFIG_HYPERV */
++static inline void hv_identify_partition_type(void) {}
+ static inline bool hv_is_hyperv_initialized(void) { return false; }
+ static inline bool hv_is_hibernation_supported(void) { return false; }
+ static inline void hyperv_cleanup(void) {}
+@@ -320,4 +322,29 @@ static inline enum hv_isolation_type hv_get_isolation_type(void)
+ }
+ #endif /* CONFIG_HYPERV */
+ 
++#if IS_ENABLED(CONFIG_MSHV_ROOT)
++static inline bool hv_root_partition(void)
++{
++	return	hv_current_partition_type == HV_PARTITION_TYPE_ROOT;
++}
++int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
++int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
++int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
++
++#else /* CONFIG_MSHV_ROOT */
++static inline bool hv_root_partition(void) { return false; }
++static inline int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
++{
++	return hv_result(U64_MAX);
++}
++static inline int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id)
++{
++	return hv_result(U64_MAX);
++}
++static inline int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags)
++{
++	return hv_result(U64_MAX);
++}
++#endif /* CONFIG_MSHV_ROOT */
++
+ #endif
+-- 
+2.34.1
+
 
