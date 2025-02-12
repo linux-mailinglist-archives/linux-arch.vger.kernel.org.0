@@ -1,149 +1,133 @@
-Return-Path: <linux-arch+bounces-10129-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10130-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E1A7A31E2E
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2025 06:47:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9F25A31F40
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2025 07:42:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDCB43A8C98
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2025 05:47:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C64EF188C4B6
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2025 06:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52EE31E5702;
-	Wed, 12 Feb 2025 05:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5134D1FCFF2;
+	Wed, 12 Feb 2025 06:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="iDrcQD4O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJHzF+Vz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F7E2BD10;
-	Wed, 12 Feb 2025 05:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA9C1FCF4F;
+	Wed, 12 Feb 2025 06:42:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739339247; cv=none; b=MApmJOwH1HK5aSuHSodTlRKSkvz9IfF1dgEPt7oXm8wVgAv2yPPBiIeOMxTY8ifp/dIZxJkjOSiAa9gzvT6eGbSNyd6UGS3QnypU9JU6HmPNN7ZrbqvbK0ampESLpaJfMXu4MC/kGUa8x0eHnXBDsFe3TUXd1o17hhFpQVeoF30=
+	t=1739342553; cv=none; b=iJHvuDMCmGDcl4vcZ3WrO8nFlt98tl9tbplneCIPKUzmAoFVCjY+bAb8rXy9BZq+7bFk7TDjCm1wxqcXmZiUG3xY1HU6VRqkrMBhx7YnVjZ4rRU1aDxyY1586/OzUodOEEe3Ukhr//f2lMUp51kQqpnVcXsep4nuLTDiqJSBPdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739339247; c=relaxed/simple;
-	bh=bKZCNONeJ8ga4R1OU5uHKgLTrt0Ti+1H6/HUJpIjnPw=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=o9ptK51ZZdO31zf9IKKQ7/nXtenGBLvjXWXj0Y2oXk8hs5/tt4kieQvqGZVNXe6iQXQo4eyEdmwo9BuE51cy6lZ3DHudoOz0XFhKKCyCGWIeoAyjFcL1ISCreDzwyeDtwBcla0iTGY3ihT2fBfyx40NcxjT1tqnTYfZSrhrC7t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=iDrcQD4O; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.35.166] (c-73-59-8-18.hsd1.wa.comcast.net [73.59.8.18])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 79DD82107AB7;
-	Tue, 11 Feb 2025 21:47:24 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 79DD82107AB7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1739339245;
-	bh=2cvrA/jSJRuBK0OsorOMxFgUQoJApVJ8Yjx0E2P1rLo=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=iDrcQD4OZx3ePmwlps16DC5hZu4V/C9DuCTp+LaKEl3ZiloWrQfyzNMez2hcdI1uh
-	 XoGNtNuo/7DezrquDlx4sVkCzw3MiKGoeavdOOsF58V7ipziEgE5uGKn0KEVwZT/wq
-	 1mG0nWC0EPeb5nGqsafzZiwgfjhKdlAW889o53ac=
-Message-ID: <20ba4b7c-bebb-4b1f-8c6c-4cd52a5083b5@linux.microsoft.com>
-Date: Tue, 11 Feb 2025 21:47:24 -0800
+	s=arc-20240116; t=1739342553; c=relaxed/simple;
+	bh=gcWrlH4VJdCzAwzQ0TQ13bD5T421NNpIotpvRoe8/0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lzRzV1neg+FOsd473NZmFZGj0Nf+ROKeoX+h6mODC3B+nFNwe4jIXiBYJBX5IneGttI1CstFh0qk4fUbanLOOz1K87Tq7eJfPSpQDOnPc4sdnLFQPFEy6PUjGF5xUkBj5+SEFqlEBpNV7k8nj5lcK9ZwDRvP/uyK20blkyWli0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJHzF+Vz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94EF6C4CEDF;
+	Wed, 12 Feb 2025 06:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739342552;
+	bh=gcWrlH4VJdCzAwzQ0TQ13bD5T421NNpIotpvRoe8/0s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XJHzF+VzfFWlp4P1JPrUMCQkbJ5KBGLBnHIArBL2rm8chHQT3+YCoPK4OJRy5r7E3
+	 sAEvp7f7Om4wRIuJbEio3qwxlaK3G6jul9C+7mhkn+/CcOPn94KJGKuYMJNv4kBrB9
+	 iyu0wu+S5Pof3d5E6GJVuoEPQE0wwdWUJY3opqtFifXLHL3cOus7Plu+nJbBT25k6Z
+	 MLozZWZUL+9x2+p6l1ZevMJfiIYKEVfvQADJL7cew3LCDAreCs1eXEpQof9x5Sqj/D
+	 D/2n2MOO/76zGJrkaqFhCTWkj5d65Lh9hCqXduyTu+7RL200etCIuJx6zTQ6XwCouc
+	 GTngHdXyvPRoQ==
+Date: Wed, 12 Feb 2025 07:42:28 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Roman Kisel <romank@linux.microsoft.com>
+Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de, 
+	catalin.marinas@arm.com, conor+dt@kernel.org, dave.hansen@linux.intel.com, 
+	decui@microsoft.com, haiyangz@microsoft.com, hpa@zytor.com, krzk+dt@kernel.org, 
+	kw@linux.com, kys@microsoft.com, lpieralisi@kernel.org, 
+	manivannan.sadhasivam@linaro.org, mingo@redhat.com, robh@kernel.org, ssengar@linux.microsoft.com, 
+	tglx@linutronix.de, wei.liu@kernel.org, will@kernel.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	x86@kernel.org, benhill@microsoft.com, bperkins@microsoft.com, 
+	sunilmut@microsoft.com
+Subject: Re: [PATCH hyperv-next v4 4/6] dt-bindings: microsoft,vmbus: Add GIC
+ and DMA coherence to the example
+Message-ID: <20250212-rough-terrier-of-serendipity-68a0db@krzk-bin>
+References: <20250212014321.1108840-1-romank@linux.microsoft.com>
+ <20250212014321.1108840-5-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- iommu@lists.linux.dev, eahariha@linux.microsoft.com, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, mhklinux@outlook.com,
- decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- daniel.lezcano@linaro.org, joro@8bytes.org, robin.murphy@arm.com,
- arnd@arndb.de, jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
- skinsburskii@linux.microsoft.com, mukeshrathor@microsoft.com
-Subject: Re: [PATCH] hyperv: Add CONFIG_MSHV_ROOT to gate hv_root_partition
- checks
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-References: <1739312515-18848-1-git-send-email-nunodasneves@linux.microsoft.com>
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-Content-Language: en-US
-In-Reply-To: <1739312515-18848-1-git-send-email-nunodasneves@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250212014321.1108840-5-romank@linux.microsoft.com>
 
-On 2/11/2025 2:21 PM, Nuno Das Neves wrote:
-> Introduce CONFIG_MSHV_ROOT as a tristate to enable root partition
-> booting and future mshv driver functionality.
-> 
-> Change hv_root_partition into a function which always returns false
-> if CONFIG_MSHV_ROOT=n.
-> 
-> Introduce hv_current_partition_type to store the type of partition
-> (guest, root, or other kinds in future), and hv_identify_partition_type()
-> to it up early in Hyper-V initialization.
+On Tue, Feb 11, 2025 at 05:43:19PM -0800, Roman Kisel wrote:
+> The existing example lacks the GIC interrupt controller property
+> making it not possible to boot on ARM64, and it lacks the DMA
 
-...to *set* it up early?
+GIC controller is not relevant to this binding.
 
+> coherence property making the kernel do more work on maintaining
+> CPU caches on ARM64 although the VMBus trancations are cache-coherent.
 > 
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+> Add the GIC node, specify DMA coherence, and define interrupt-parent
+> and interrupts properties in the example to provide a complete reference
+> for platforms utilizing GIC-based interrupts, and add the DMA coherence
+> property to not do extra work on the architectures where DMA defaults to
+> non cache-coherent.
+> 
+> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
-> Depends on
-> https://lore.kernel.org/linux-hyperv/1738955002-20821-3-git-send-email-nunodasneves@linux.microsoft.com/
-> 
->  arch/arm64/hyperv/mshyperv.c       |  2 ++
->  arch/x86/hyperv/hv_init.c          | 10 ++++----
->  arch/x86/kernel/cpu/mshyperv.c     | 24 ++----------------
->  drivers/clocksource/hyperv_timer.c |  4 +--
->  drivers/hv/Kconfig                 | 12 +++++++++
->  drivers/hv/Makefile                |  3 ++-
->  drivers/hv/hv.c                    | 10 ++++----
->  drivers/hv/hv_common.c             | 32 +++++++++++++++++++-----
->  drivers/hv/vmbus_drv.c             |  2 +-
->  drivers/iommu/hyperv-iommu.c       |  4 +--
->  include/asm-generic/mshyperv.h     | 39 +++++++++++++++++++++++++-----
->  11 files changed, 92 insertions(+), 50 deletions(-)
-> 
+>  .../devicetree/bindings/bus/microsoft,vmbus.yaml      | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 
-<snip>
+Last time I said: not tested by automation.
+Now: I see automation build failures, although I do not see anything
+incorrect in the code, so that's a bit surprising. Please confirm that
+binding was tested on latest dtschema.
+
+> 
+> diff --git a/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml b/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+> index a8d40c766dcd..5ec69226ab85 100644
+> --- a/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+> +++ b/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+> @@ -44,11 +44,22 @@ examples:
+>              #size-cells = <1>;
+>              ranges;
+>  
+> +            gic: intc@fe200000 {
+> +              compatible = "arm,gic-v3";
+> +              reg = <0x0 0xfe200000 0x0 0x10000>,   /* GIC Dist */
+> +                    <0x0 0xfe280000 0x0 0x200000>;  /* GICR */
+> +              interrupt-controller;
+> +              #interrupt-cells = <3>;
+> +            }
+
+I fail to see how this is relevant here. This is example only of vmbus.
+Look how other bindings are done. Drop the example.
+
 
 > +
-> +void hv_identify_partition_type(void)
-> +{
-> +	/*
-> +	 * Check partition creation and cpu management privileges
-> +	 *
-> +	 * Hyper-V should never specify running as root and as a Confidential
-> +	 * VM. But to protect against a compromised/malicious Hyper-V trying
-> +	 * to exploit root behavior to expose Confidential VM memory, ignore
-> +	 * the root partition setting if also a Confidential VM.
-> +	 */
-> +	if ((ms_hyperv.priv_high & HV_CREATE_PARTITIONS) &&
-> +	    (ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
-> +	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
-> +		hv_current_partition_type = HV_PARTITION_TYPE_ROOT;
-> +		pr_info("Hyper-V: running as root partition\n");
-> +	} else {
-> +		hv_current_partition_type = HV_PARTITION_TYPE_GUEST;
-> +	}
-> +}
+>              vmbus@ff0000000 {
+>                  compatible = "microsoft,vmbus";
+>                  #address-cells = <2>;
+>                  #size-cells = <1>;
+>                  ranges = <0x0f 0xf0000000 0x0f 0xf0000000 0x10000000>;
+> +                dma-coherent;
+> +                interrupt-parent = <&gic>;
+> +                interrupts = <1 2 1>;
 
-This should assume GUEST as default and modify to ROOT if all the checks pass.
+Use proper defines for known constants.
 
-<snip>
+Best regards,
+Krzysztof
 
-> +static inline int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
-> +{
-> +	return hv_result(U64_MAX);
-> +}
-
-Is there value in perhaps #defining hv_result_<whatever this is> as U64_MAX and returning that for documentation?
-For e.g. assuming this is something like EOPNOTSUPP
-
-#define HV_RESULT_NOT_SUPP U64_MAX
-
-static inline int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
-{ return hv_result(HV_RESULT_NOT_SUPP); }
-
-<snip>
-
-Thanks,
-Easwar (he/him)
 
