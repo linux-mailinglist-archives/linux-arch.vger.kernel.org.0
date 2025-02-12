@@ -1,44 +1,45 @@
-Return-Path: <linux-arch+bounces-10120-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10121-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAA92A31B4D
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2025 02:43:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9734A31B51
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2025 02:43:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67740167138
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2025 01:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E58DA3A6D96
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Feb 2025 01:43:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C7E86342;
-	Wed, 12 Feb 2025 01:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25D3813B787;
+	Wed, 12 Feb 2025 01:43:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="DLTomIWn"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="HBSEQ717"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E657080D;
-	Wed, 12 Feb 2025 01:43:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B10970830;
+	Wed, 12 Feb 2025 01:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739324605; cv=none; b=TDNJbDzAFZE4lJwR6t5PGKr4Zd2Tv6pv7/qa/GpZt4S1s5JV5WUO+I9gMrcDzednCAauxgufW7znmeqXp3qcOGeInc19WhdaApj9FP0qV61TvKrokJW2i5x8CBFkyE2SBMvXb73RYSlGTAVnfw5HDaJkK9L7EVmnmrnehBXwZ2o=
+	t=1739324606; cv=none; b=LH9F5yYjWTEacyqKEK97AQ9AlrZsoOL2wK+wAElv9RgzZjnas/pDvg3zYdvgNSgtVOrDw5MtKNjUxwuFZbYMtn7xJvoyfhtkx6Q5HFdzMiwNU5XTzzDAXaT1UX/9wNnbomAdowSGoPLPJpi/lQzTVktMDushZYT+A/8mc4sppSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739324605; c=relaxed/simple;
-	bh=2x4lj5NC+dRFGIx4IzjaPe8yqSh4IK03MPDatQfBLq0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EhUwUPPyc0vm1ENoLXjEyGJWyY0bOG/nVTaK4jrUn/l3bVhi6cLy+Lgh9Ci/LrDHCAgCXmXuAn/+4rw/eWbZzYzv1ZcuKfSCypq1dHzDboBFDDy+7fjwT6sZh7yEfXIs5A+LepwXXz/uZ23wYo40H8QBcVmn4OgsJoZ2RKe7lNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=DLTomIWn; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1739324606; c=relaxed/simple;
+	bh=DXxR4o7FdA/wM/d2xFuE/K8y5g6RoVwgzCVwcakdFzM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rGgajz1j9/aO25YMsM0KsXGyj4twgPEkeR9eDRBTns08BlHK9nGDSMhUtKuCABkD14xQ2cBMkAwVA6ph1dr1Ekc8vaOjzD3JwON2z/27erb95XeMo1LktS3+YOY87Uk12AzPgVrBcwcQAHouOtGIV5jIPNuDoTz4ZySEMrdmP2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=HBSEQ717; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 161072107AB3;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 7E4B22107AB7;
 	Tue, 11 Feb 2025 17:43:23 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 161072107AB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7E4B22107AB7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1739324603;
-	bh=ddwZkEyQUKT6tDzGOeyU00Um1SMbmEyI6A+GHcwsesQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=DLTomIWnXmvy/IgUyCEllQ0h6v7obN9NOU6KTW9W7PW3maU6+JODsXnYDU6UVXFLG
-	 nTMW4IaGnwY5732GzMTUMPuZ0cm0L7+xtXlRvGwcImzhI72265Nrsm1ZOCdGqq4nGW
-	 nMIJkUmwBYuWSFPcHEII/KpMJzeNA6go5qc7qyrc=
+	bh=ke8cvJN/HfyiHGq5dWCetxLWOqUXILvWweb02I4ZK1c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HBSEQ717Slt2XikuFXsv6EVMcSlkRpZmNGfZWorh0dzembs4fchjiNu946G6p0Pos
+	 NJEHBGxXxmJHGILF4w9YBh9Bc/mqdVs1wG8zfhiioyX0nYfyP+l2xWCwM3AF3DMOAd
+	 rIM8Kt2aVsfaBgHnF1RPL5yBOSEdHukKmafKctNA=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -70,144 +71,118 @@ To: arnd@arndb.de,
 Cc: benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v4 0/6] arm64: hyperv: Support Virtual Trust Level Boot
-Date: Tue, 11 Feb 2025 17:43:15 -0800
-Message-ID: <20250212014321.1108840-1-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v4 1/6] arm64: hyperv: Use SMCCC to detect hypervisor presence
+Date: Tue, 11 Feb 2025 17:43:16 -0800
+Message-ID: <20250212014321.1108840-2-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250212014321.1108840-1-romank@linux.microsoft.com>
+References: <20250212014321.1108840-1-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This patch set allows the Hyper-V code to boot on ARM64 inside a Virtual Trust
-Level. These levels are a part of the Virtual Secure Mode documented in the
-Top-Level Functional Specification available at
-https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm.
+The arm64 Hyper-V startup path relies on ACPI to detect
+running under a Hyper-V compatible hypervisor. That
+doesn't work on non-ACPI systems.
 
-The OpenHCL paravisor https://github.com/microsoft/openvmm/tree/main/openhcl
-can serve as a practical application of these patches on ARM64.
+Hoist the ACPI detection logic into a separate function. Then
+use the vendor-specific hypervisor service call (implemented
+recently in Hyper-V) via SMCCC in the non-ACPI case.
 
-For validation, I built kernels for the {x86_64, ARM64} x {VTL0, VTL2} set with
-a small initrd embedded into the kernel and booted VMs managed by Hyper-V and
-OpenVMM off of that.
+Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+---
+ arch/arm64/hyperv/mshyperv.c      | 43 +++++++++++++++++++++++++++----
+ arch/arm64/include/asm/mshyperv.h |  5 ++++
+ 2 files changed, 43 insertions(+), 5 deletions(-)
 
-[V4]
-    - Fixed wording to match acronyms defined in the "Terms and Abbreviations"
-      section of the SMCCC specification throughout the patch series.
-      **Thank you, Michael!**
-
-    - Replaced the hypervisor ID containing ASCII with an UUID as
-      required by the specification.
-      **Thank you, Michael!**
-
-    - Added an explicit check for `SMCCC_RET_NOT_SUPPORTED` when discovering the
-      hypervisor presence to make the backward compatibility obvious.
-      **Thank you, Saurabh!**
-
-    - Split the fix for `get_vtl(void)` out to make it easier to backport.
-    - Refactored the configuration options as requested to eliminate the risk
-      of building non-functional kernels with randomly selected options.
-      **Thank you, Michael!**
-
-    - Refactored the changes not to introduce an additional file with
-      a one-line function.
-      **Thank you, Wei!**
-
-    - Fixed change description for the VMBus DeviceTree changes, used
-      `scripts/get_maintainers.pl` on the latest kernel to get the up-to-date list
-      of maintainers as requested.
-      **Thank you, Krzysztof!**
-
-    - Removed the added (paranoidal+superfluous) checks for DMA coherence in the
-      VMBus driver and instead relied on the DMA and the OF subsystem code.
-      **Thank you, Arnd, Krzysztof, Michael!**
-
-    - Used another set of APIs for discovering the hardware interrupt number
-      in the VMBus driver to be able to build the driver as a module.
-      **Thank you, Michael, Saurabh!**
-
-    - Renamed the newly introduced `get_vmbus_root_device(void)` function to
-      `hv_get_vmbus_root_device(void)` as requested.
-      **Thank you, Wei!**
-
-    - Applied the suggested small-scale refactoring to simplify changes to the Hyper-V
-      PCI driver. Taking the offered liberty of doing the large scale refactoring
-      in another patch series.
-      **Thank you, Michael!**
-
-    - Added a fix for the issue discovered internally where the CPU would not
-      get the interrupt from a PCI device attached to VTL2 as the shared peripheral
-      interrupt number (SPI) was not offset by 32 (the first valid SPI number).
-      **Thank you, Brian!**
-
-[V3]
-    https://lore.kernel.org/lkml/20240726225910.1912537-1-romank@linux.microsoft.com/
-    - Employed the SMCCC function recently implemented in the Microsoft Hyper-V
-      hypervisor to detect running on Hyper-V/arm64. No dependence on ACPI/DT is
-      needed anymore although the source code still falls back to ACPI as the new
-      hypervisor might be available only in the Windows Insiders channel just
-      yet.
-    - As a part of the above, refactored detecting the hypervisor via ACPI FADT.
-    - There was a suggestion to explore whether it is feasible or not to express
-      that ACPI must be absent for the VTL mode and present for the regular guests
-      in the Hyper-V Kconfig file.
-      My current conclusion is that this will require refactoring in many places.
-      That becomes especially convoluted on x86_64 due to the MSI and APIC
-      dependencies. I'd ask to let us tackle that in another patch series (or chalk
-      up to nice-have's rather than fires to put out) to separate concerns and
-      decrease chances of breakage.
-    - While refactoring `get_vtl(void)` and the related code, fixed the hypercall
-      output address not to overlap with the input as the Hyper-V TLFS mandates:
-      "The input and output parameter lists cannot overlap or cross page boundaries."
-      See https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/hypercall-interface
-      for more.
-      Some might argue that should've been a topic for a separate patch series;
-      I'd counter that the change is well-contained (one line), has no dependencies,
-      and makes the code legal.
-    - Made the VTL boot code (c)leaner as was suggested.
-    - Set DMA cache coherency for the VMBus.
-    - Updated DT bindings in the VMBus documentation (separated out into a new patch).
-    - Fixed `vmbus_set_irq` to use the API that works both for the ACPI and OF.
-    - Reworked setting up the vPCI MSI IRQ domain in the non-ACPI case. The logic
-      looks a bit fiddly/ad-hoc as I couldn't find the API that would fit the bill.
-      Added comments to explain myself.
-
-[V2]
-    https://lore.kernel.org/all/20240514224508.212318-1-romank@linux.microsoft.com/
-    - Decreased number of #ifdef's
-    - Updated the wording in the commit messages to adhere to the guidlines
-    - Sending to the correct set of maintainers and mail lists
-
-[V1]
-    https://lore.kernel.org/all/20240510160602.1311352-1-romank@linux.microsoft.com/
-
-Roman Kisel (6):
-  arm64: hyperv: Use SMCCC to detect hypervisor presence
-  Drivers: hv: Enable VTL mode for arm64
-  Drivers: hv: Provide arch-neutral implementation of get_vtl()
-  dt-bindings: microsoft,vmbus: Add GIC and DMA coherence to the example
-  Drivers: hv: vmbus: Get the IRQ number from DeviceTree
-  PCI: hv: Get vPCI MSI IRQ domain from DeviceTree
-
- .../bindings/bus/microsoft,vmbus.yaml         | 11 +++
- arch/arm64/hyperv/mshyperv.c                  | 43 ++++++++++--
- arch/arm64/include/asm/mshyperv.h             |  5 ++
- arch/x86/hyperv/hv_init.c                     | 34 ---------
- drivers/hv/Kconfig                            | 10 +--
- drivers/hv/hv_common.c                        | 32 +++++++++
- drivers/hv/vmbus_drv.c                        | 59 +++++++++++++---
- drivers/pci/controller/pci-hyperv.c           | 69 +++++++++++++++++--
- include/asm-generic/mshyperv.h                |  6 ++
- include/hyperv/hvgdk_mini.h                   |  2 +-
- include/linux/hyperv.h                        |  2 +
- 11 files changed, 215 insertions(+), 58 deletions(-)
-
-
-base-commit: 2e03358be78b65d28b66e17aca9e0c8700b0df78
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index fc49949b7df6..fe6185bf3bf2 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -27,6 +27,36 @@ int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
+ 	return 0;
+ }
+ 
++static bool hyperv_detect_via_acpi(void)
++{
++	if (acpi_disabled)
++		return false;
++#if IS_ENABLED(CONFIG_ACPI)
++	/* Hypervisor ID is only available in ACPI v6+. */
++	if (acpi_gbl_FADT.header.revision < 6)
++		return false;
++	return strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8) == 0;
++#else
++	return false;
++#endif
++}
++
++static bool hyperv_detect_via_smccc(void)
++{
++	struct arm_smccc_res res = {};
++
++	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
++		return false;
++	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
++	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
++		return false;
++
++	return res.a0 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0 &&
++		res.a1 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1 &&
++		res.a2 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2 &&
++		res.a3 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3;
++}
++
+ static int __init hyperv_init(void)
+ {
+ 	struct hv_get_vp_registers_output	result;
+@@ -35,13 +65,11 @@ static int __init hyperv_init(void)
+ 
+ 	/*
+ 	 * Allow for a kernel built with CONFIG_HYPERV to be running in
+-	 * a non-Hyper-V environment, including on DT instead of ACPI.
++	 * a non-Hyper-V environment.
++	 *
+ 	 * In such cases, do nothing and return success.
+ 	 */
+-	if (acpi_disabled)
+-		return 0;
+-
+-	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
++	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smccc())
+ 		return 0;
+ 
+ 	/* Setup the guest ID */
+@@ -72,6 +100,11 @@ static int __init hyperv_init(void)
+ 		return ret;
+ 	}
+ 
++	ms_hyperv.vtl = get_vtl();
++	/* Report if non-default VTL */
++	if (ms_hyperv.vtl > 0)
++		pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
++
+ 	ms_hyperv_late_init();
+ 
+ 	hyperv_initialized = true;
+diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
+index 2e2f83bafcfb..a6d7eb9e167b 100644
+--- a/arch/arm64/include/asm/mshyperv.h
++++ b/arch/arm64/include/asm/mshyperv.h
+@@ -50,4 +50,9 @@ static inline u64 hv_get_msr(unsigned int reg)
+ 
+ #include <asm-generic/mshyperv.h>
+ 
++#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0	0x4d32ba58U
++#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1	0xcd244764U
++#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2	0x8eef6c75U
++#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3	0x16597024U
++
+ #endif
 -- 
 2.43.0
 
