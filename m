@@ -1,122 +1,158 @@
-Return-Path: <linux-arch+bounces-10141-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10142-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E68C5A33EF0
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2025 13:18:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDF77A34FEB
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2025 21:50:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6165E3A9420
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2025 12:17:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0E2F7A10FC
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2025 20:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4023A221569;
-	Thu, 13 Feb 2025 12:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD2432661A7;
+	Thu, 13 Feb 2025 20:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gj50goYM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KGIXqOEX"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="XeTAcxIr"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8C8227EB4;
-	Thu, 13 Feb 2025 12:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37EC91FFC59;
+	Thu, 13 Feb 2025 20:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739449029; cv=none; b=EhgSIJIkqlxN1V++c5J7HVVLeymcm4wleVG63U65TddQJ0w+A52deI/8he7OVoKbhqzq4xOxZalNKhJ8ZSHhBaSuJVX7YT9jPpzZQ+QWlZSPKhY5Zb+yNptZoDm2Qyzy3trT0ryR3UAB7PCOt+cXhzOYVWRcQsSWtrHMGhCclz0=
+	t=1739479819; cv=none; b=OcY7C5uzb0MUvdiOEZnPWJwQOPBVeOpEWw47JCHhVMZN+BHo8SEJxHMi5gvZDV6sdXlPKWUD9ZeY/xBV8W190sdOZifI6ZoVGrkwW/ilVAI6ijN0U+R970W/RANR00ily/zNyVwBGHIbjtt+191UwbtuJ/89lfxVom/lluxzpHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739449029; c=relaxed/simple;
-	bh=vlhlBzSkIneMGWYQBwFyfnTl25nGWzLsKGHhhsEs/qs=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=E6jJV1M3iln5CXusHDIk+9L9WvHDN5ygQXtdHzwl0W3wVM+WYTLyxCGRuw1y2psA0eZcMN/LMQdSZvo6t4VYS5ValGruu9JRIOK9YPrcNuv7BIaaKQREU+KCuOVG4CkWXbZIoGJlzdp2h6djLJLHNaAM54Qhzg3r3A2TbBHhHEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gj50goYM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KGIXqOEX; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 4B8C811401A0;
-	Thu, 13 Feb 2025 07:17:05 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-11.internal (MEProxy); Thu, 13 Feb 2025 07:17:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1739449025;
-	 x=1739535425; bh=vlhlBzSkIneMGWYQBwFyfnTl25nGWzLsKGHhhsEs/qs=; b=
-	gj50goYMrgEWpERcjDoQkgN9f3pgpWRaH9UTa9EeXqLr+vNsHhkSI10rDN2pRbPs
-	0dMsVZxIK8KbQJ+T7z0GfbemKmz7GcdahAp3mx+r+hvixy8hF7f7FN4zuGEm0grg
-	+OIwutIYnvZv9OcE9iL+nhLx7OG2D2dV+ja54OB39VnqKVdjTR/Pl9L2ckVtpLYf
-	nTOuF3/3/bFKCEEYaN6BQIbqw6bhYP6BfvS50t7yqcgctyoWAG4ACjticINh6EMo
-	jyNIMqrJOUGp/xRm9Y81r2U55gJz7ysedkHH4N2Nmfocl6tineRAWXK30FfDarhb
-	QnVbj5L6tsNXrDuw38j+sQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1739449025; x=
-	1739535425; bh=vlhlBzSkIneMGWYQBwFyfnTl25nGWzLsKGHhhsEs/qs=; b=K
-	GIXqOEXDGqLOiIjohIg/UsrKcsUsFtJQspSxYVUbqFU2MmRVSknGiAGOdHheWGKY
-	OT68kTYQCcvgc1Hr+5SJm0XWij0WkkhrP9aALWDJRbpMpu57WwTp6Md0Os+bSZ5j
-	v4JCkkKw6HtLiEW7PR0PT8cfTKOV/bw9r3rakcK8c81GB/mO/vWNxso1AwNTIlVP
-	JoTeaL8Kx0XIW8t/zEDvWal1fNogVXF/1apPPdqNUX4KgrCrGwJj1SJAmdDwOT5S
-	+KZxke609KApqoVkYMmInLZvrCjdGUc3chIcZyGQr8gwMJ0BIzXc83ULenyZfDvg
-	edV28qdFhn7EjVVoUkxQA==
-X-ME-Sender: <xms:weKtZxZ2Jx0SogXKgrce2SjWTjH38dKFCmZc39GEp1sDVs3S0TbyhA>
-    <xme:weKtZ4YnIxba5f_D6pt-4Ddpe2s4Uw3nT0sCRfd8VgWa25I8OCEAy8cHqGhtfw3Z-
-    _-vVmtxmZuU-ScxE3g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegieejhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeh
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmtghhvghhrggsodhhuhgrfigvih
-    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghorhgsvghtsehlfihnrdhnvghtpdhr
-    tghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhinhhugidqughotgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:weKtZz-QYp083JbvMAwwfYxmY3dIwwRyfVC1pJyvFu4paKpmoSO4jg>
-    <xmx:weKtZ_pwh3ESfCs4C12dD4F52BjHrnepmhkcN64rV-I_fx4sFyqDzw>
-    <xmx:weKtZ8p65zSwpqVmaWg9jlnDriUkxQ4bY-czD3PyRW4ZE5sYXgzvaA>
-    <xmx:weKtZ1Rg_13YwDOe9KgRY6eNSAXZxhNHKHsmkvGB94yG2QK4j3psMQ>
-    <xmx:weKtZ1k722L4lapCobovkiUcJ5fLaEUOUgSgs--Xdnd5DGEk9anU9dE->
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id EFD6F2220072; Thu, 13 Feb 2025 07:17:04 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1739479819; c=relaxed/simple;
+	bh=U90uAXy+tD0A67ngT98YeZk8dh7Nxm1Nq0igEW7awIg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=aftLjXNQB3KtSCk7CCTZOa91Y8L3h3cjghIKX5ql/a46yBSL4o5XqSZKdSP2omKi/gZhpZ2KOVVjytHKoqesihXdbN6jF8nmWm6oHHtHxQjGjaIbqnSXoB5283GOzd9x2TlngCetS8k71n0ZxdT/QAa7mCJGyXO/2dfRnTWf7hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=XeTAcxIr; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.184.60] (unknown [131.107.160.188])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 83E82203F3E5;
+	Thu, 13 Feb 2025 12:50:17 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 83E82203F3E5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1739479817;
+	bh=XzQPYU9YfHy6ub9VigT3rtdUgbT32pzX4StInrVw1E4=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=XeTAcxIrprlHTTTPMf8HhI8CE7pfNVAgM8QgQEmhFcRGXQvzr/nQBmciYK3jhEmJX
+	 tydKjmyGSzh+NZdxKyYLSaHG4PGn5nB5buGjbO5npIVqSIGOlOpl5UP27xsVYpBKIQ
+	 C2q46+OmyyevQ+L1KlcwRiLGpbRqE44dKts5w7gc=
+Message-ID: <a10abb83-1bb2-4e62-b537-8b8948b055ea@linux.microsoft.com>
+Date: Thu, 13 Feb 2025 12:50:17 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 13 Feb 2025 13:16:34 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
- "Linux Doc Mailing List" <linux-doc@vger.kernel.org>,
- "Jonathan Corbet" <corbet@lwn.net>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Message-Id: <607d3acb-0950-4ce3-b8b4-46fdeca3ce0d@app.fastmail.com>
-In-Reply-To: 
- <6d69b25e9c720e0e7fc037928695ece7c8a35034.1739447912.git.mchehab+huawei@kernel.org>
-References: <cover.1739447912.git.mchehab+huawei@kernel.org>
- <6d69b25e9c720e0e7fc037928695ece7c8a35034.1739447912.git.mchehab+huawei@kernel.org>
-Subject: Re: [PATCH RFCv2 1/5] include/asm-generic/io.h: fix kerneldoc markup
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH hyperv-next v4 4/6] dt-bindings: microsoft,vmbus: Add GIC
+ and DMA coherence to the example
+From: Roman Kisel <romank@linux.microsoft.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
+ catalin.marinas@arm.com, conor+dt@kernel.org, dave.hansen@linux.intel.com,
+ decui@microsoft.com, haiyangz@microsoft.com, hpa@zytor.com,
+ krzk+dt@kernel.org, kw@linux.com, kys@microsoft.com, lpieralisi@kernel.org,
+ manivannan.sadhasivam@linaro.org, mingo@redhat.com, robh@kernel.org,
+ ssengar@linux.microsoft.com, tglx@linutronix.de, wei.liu@kernel.org,
+ will@kernel.org, devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org,
+ benhill@microsoft.com, bperkins@microsoft.com, sunilmut@microsoft.com
+References: <20250212014321.1108840-1-romank@linux.microsoft.com>
+ <20250212014321.1108840-5-romank@linux.microsoft.com>
+ <20250212-rough-terrier-of-serendipity-68a0db@krzk-bin>
+ <bb863c8f-a92c-42d0-abc4-ff0b92f701c2@linux.microsoft.com>
+Content-Language: en-US
+In-Reply-To: <bb863c8f-a92c-42d0-abc4-ff0b92f701c2@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 13, 2025, at 13:06, Mauro Carvalho Chehab wrote:
-> Kerneldoc requires a "-" after the name of a function for it
-> to be recognized as a function.
->
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-I assume this will be merged through the documentation tree,
-let me know if you prefer me to add it to the asm-generic
-tree instead.
+On 2/12/2025 3:57 PM, Roman Kisel wrote:
+> 
+
+[...]
+
+Thank you for your guidance!! The below passes tests and addresses the
+feedback you have provided. If no further comments from you, I'll
+send the file in this form in the next version of the patch series (also
+fixing the commit title and description).
+
+
+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/bus/microsoft,vmbus.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: Microsoft Hyper-V VMBus
+
+maintainers:
+   - Saurabh Sengar <ssengar@linux.microsoft.com>
+
+description:
+   VMBus is a software bus that implement the protocols for communication
+   between the root or host OS and guest OSs (virtual machines).
+
+properties:
+   compatible:
+     const: microsoft,vmbus
+
+   ranges: true
+
+   '#address-cells':
+     const: 2
+
+   '#size-cells':
+     const: 1
+
+required:
+   - compatible
+   - ranges
+   - interrupts
+   - '#address-cells'
+   - '#size-cells'
+
+additionalProperties: true
+
+examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     soc {
+         #address-cells = <2>;
+         #size-cells = <1>;
+         bus {
+             compatible = "simple-bus";
+             #address-cells = <2>;
+             #size-cells = <1>;
+             ranges;
+
+             vmbus@ff0000000 {
+                 compatible = "microsoft,vmbus";
+                 #address-cells = <2>;
+                 #size-cells = <1>;
+                 ranges = <0x0f 0xf0000000 0x0f 0xf0000000 0x10000000>;
+                 dma-coherent;
+                 interrupt-parent = <&gic>;
+                 interrupts = <GIC_PPI 2 IRQ_TYPE_EDGE_RISING>;
+             };
+         };
+     };
+
+
+>> Best regards,
+>> Krzysztof
+> 
+
+-- 
+Thank you,
+Roman
+
 
