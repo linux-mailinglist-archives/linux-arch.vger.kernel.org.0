@@ -1,177 +1,178 @@
-Return-Path: <linux-arch+bounces-10150-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10151-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88B9BA3638B
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 17:49:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08A9DA3689A
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 23:44:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5644D3AE804
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 16:48:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 770B91894167
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 22:43:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DE1267738;
-	Fri, 14 Feb 2025 16:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B67211FC7ED;
+	Fri, 14 Feb 2025 22:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="IW63B+KZ"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="uVvwIooN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4010626738A;
-	Fri, 14 Feb 2025 16:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EA01A83E4;
+	Fri, 14 Feb 2025 22:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.184.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739551654; cv=none; b=qKMuln+igWwa3fXt5TQRGOwjoCA2SVZ+JVUTLmxUKy99Ijx2Y1RIhL91jsMt6VqACXEFXkaHiHXf8obi1nJw2z60L4CbFmU0ZlG5nb5MF5GDQofZttWLt0RAE8kbKb4/18EJYXk135Oqq1aacIY4Da3mjJI4vB2u1MQijcG/Tlg=
+	t=1739572958; cv=none; b=t9ZR8foNufGzx84aw5dcmgmgvTbJMZjJUSypsV6RM85rUyTTqQc3UtOqKEXYMAgKPE0pf6EmkBv8ei/xTpxZVpcKFhwU1IeIXQ+wc1D6s6KYZQwRxPG1GjY0NLxD11yelnqhtXlYW++GLS221FssX2yEXNpMfkQYkcg/WeMa8Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739551654; c=relaxed/simple;
-	bh=/rhhtehKnzVERc8rGOCCGCco2aFpt2BSW0xXHFau/Ho=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gc6jvGZxHzzNzRNbtqlU8t24t/liW8Rft2Ivs8m8MbF8nCQuqXjw60DtL1YJOXy5Vd0YwSgJXnJ/yZxZcDLgqewPRRJEnwMy3AxOwkNY/YNUSWEQeecYe6+xIc2acPFTi06W79GK/IWPIfdqVF+cMVS6O6o77DrFLuAXGssqiB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=IW63B+KZ; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 5AB9D203F3FA;
-	Fri, 14 Feb 2025 08:47:32 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5AB9D203F3FA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1739551652;
-	bh=28IvIq5nHgvTTsS1xkW6rKGY+23JWzsECQOgFfIsF5A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IW63B+KZ14zR7bqnRbpO33qkUJyw4qDrPsbj9UBbRpj0a+6lr+6RXpWIDuKREAgzH
-	 2Qg6HF8nC6RiAuSTMsFtmtMVu1yKOWfbHulTasDK13lhcgOfJ2rZeCJKN1EasDLBka
-	 ovOZ+fKPesWAq+xITmqp5mNqjeWSHCgiRBxJSqaY=
-Message-ID: <6e4685fe-68e9-43bd-96c5-b871edb1b971@linux.microsoft.com>
-Date: Fri, 14 Feb 2025 08:47:32 -0800
+	s=arc-20240116; t=1739572958; c=relaxed/simple;
+	bh=7dqr4+v5JkewaML+LxWNkl3XAl9W6+X9tfBXO3LYXGM=;
+	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=rU5dJus3wWICrjnAzPB0MqkOeJ7IZKb/tpoWAT4NENAVmE5E4qqukX/P6s6/L56J9KXEdTLJt39MbgXrEMjkaV6v74i9pRXWqQowX64v8iDg/j55IfJbRyCbK274HR0h1ufBTpln/1am5SGu/rP7eDAhiKzhf+fVMLEod4es0oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=uVvwIooN; arc=none smtp.client-ip=207.171.184.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1739572957; x=1771108957;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version:subject;
+  bh=7dqr4+v5JkewaML+LxWNkl3XAl9W6+X9tfBXO3LYXGM=;
+  b=uVvwIooNP9vigyVDogu9fa21idhXUw7zsV2ZV70WHJfZ/4TNqnuBx4YR
+   YTuOKLPMjzav4vD/rIJyOLfnOkr7ewBep7pXOlLedA41teypFHg/JGaB/
+   6KN7r0aZi7LgyoHwRXC3J3alY06ieXXWboS9URilnj2HQRuueMcbLEP7s
+   A=;
+X-IronPort-AV: E=Sophos;i="6.13,287,1732579200"; 
+   d="scan'208";a="494063818"
+Subject: Re: [PATCH 4/4] arm64: barrier: Add smp_cond_load_acquire_timewait()
+Thread-Topic: [PATCH 4/4] arm64: barrier: Add smp_cond_load_acquire_timewait()
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 22:42:36 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [10.0.38.20:46647]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.32.150:2525] with esmtp (Farcaster)
+ id 3dfd354f-13d0-43ce-9a83-fe979d8618ae; Fri, 14 Feb 2025 22:42:36 +0000 (UTC)
+X-Farcaster-Flow-ID: 3dfd354f-13d0-43ce-9a83-fe979d8618ae
+Received: from EX19D032UWA004.ant.amazon.com (10.13.139.56) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
+ Fri, 14 Feb 2025 22:42:35 +0000
+Received: from EX19D032UWA003.ant.amazon.com (10.13.139.37) by
+ EX19D032UWA004.ant.amazon.com (10.13.139.56) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
+ Fri, 14 Feb 2025 22:42:35 +0000
+Received: from EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497]) by
+ EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497%5]) with mapi id
+ 15.02.1544.014; Fri, 14 Feb 2025 22:42:35 +0000
+From: "Okanovic, Haris" <harisokn@amazon.com>
+To: "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "ankur.a.arora@oracle.com"
+	<ankur.a.arora@oracle.com>
+CC: "Okanovic, Haris" <harisokn@amazon.com>, "cl@gentwo.org" <cl@gentwo.org>,
+	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
+	"peterz@infradead.org" <peterz@infradead.org>, "memxor@gmail.com"
+	<memxor@gmail.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"arnd@arndb.de" <arnd@arndb.de>, "will@kernel.org" <will@kernel.org>,
+	"mark.rutland@arm.com" <mark.rutland@arm.com>, "konrad.wilk@oracle.com"
+	<konrad.wilk@oracle.com>, "zhenglifeng1@huawei.com"
+	<zhenglifeng1@huawei.com>, "boris.ostrovsky@oracle.com"
+	<boris.ostrovsky@oracle.com>
+Thread-Index: AQHbdoWTLOnOGDZdP0ajcFsBERkpC7NHdhIA
+Date: Fri, 14 Feb 2025 22:42:35 +0000
+Message-ID: <3b0de6589cb4f1b8bdc87b53fc7ff61a35659941.camel@amazon.com>
+References: <20250203214911.898276-1-ankur.a.arora@oracle.com>
+	 <20250203214911.898276-5-ankur.a.arora@oracle.com>
+In-Reply-To: <20250203214911.898276-5-ankur.a.arora@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <586C842FFADDDB488E24CA520892E0A2@amazon.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v4 1/6] arm64: hyperv: Use SMCCC to detect
- hypervisor presence
-To: Arnd Bergmann <arnd@arndb.de>, bhelgaas@google.com,
- Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>,
- Conor Dooley <conor+dt@kernel.org>, Dave Hansen
- <dave.hansen@linux.intel.com>, Dexuan Cui <decui@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, "H. Peter Anvin" <hpa@zytor.com>,
- krzk+dt@kernel.org, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Ingo Molnar <mingo@redhat.com>, Rob Herring <robh@kernel.org>,
- ssengar@linux.microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
- Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>,
- devicetree@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org
-Cc: benhill@microsoft.com, bperkins@microsoft.com, sunilmut@microsoft.com
-References: <20250212014321.1108840-1-romank@linux.microsoft.com>
- <20250212014321.1108840-2-romank@linux.microsoft.com>
- <1b14e3de-4d3e-420c-819c-31ffb2d448bd@app.fastmail.com>
- <593c22ca-6544-423d-84ee-7a06c6b8b5b9@linux.microsoft.com>
- <97887849-faa8-429b-862b-daf6faf89481@app.fastmail.com>
-Content-Language: en-US
-From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <97887849-faa8-429b-862b-daf6faf89481@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-
-
-On 2/14/2025 12:05 AM, Arnd Bergmann wrote:
-> On Fri, Feb 14, 2025, at 00:23, Roman Kisel wrote:
->> On 2/11/2025 10:54 PM, Arnd Bergmann wrote:
-> 
->> index a74600d9f2d7..86f75f44895f 100644
->> --- a/drivers/firmware/smccc/smccc.c
->> +++ b/drivers/firmware/smccc/smccc.c
->> @@ -67,6 +67,30 @@ s32 arm_smccc_get_soc_id_revision(void)
->>    }
->>    EXPORT_SYMBOL_GPL(arm_smccc_get_soc_id_revision);
->>
->> +bool arm_smccc_hyp_present(const uuid_t *hyp_uuid)
-> 
-> The interface looks good to me.
-
-Great :)
-
-> 
->> +{
->> +	struct arm_smccc_res res = {};
->> +	struct {
->> +		u32 dwords[4]
->> +	} __packed res_uuid;
-> 
-> The structure definition here looks odd because of the
-> unexplained __packed attribute and the nonstandard byteorder.
-> 
-
-Fair points, thank you, will straighten this out!
-
-> The normal uuid_t is defined as an array of 16 bytes,
-> so if you try to represent it in 32-bit words you need to
-> decide between __le32 and __be32 representation.
-> 
->> +	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
->> +		return false;
->> +	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
->> +	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
->> +		return false;
->> +
->> +	res_uuid.dwords[0] = res.a0;
->> +	res_uuid.dwords[1] = res.a1;
->> +	res_uuid.dwords[2] = res.a2;
->> +	res_uuid.dwords[3] = res.a3;
->> +
->> +	return uuid_equal((uuid_t *)&res_uuid, hyp_uuid);
-> 
-> The SMCCC standard defines the four words to be little-endian,
-> so in order to compare them against a uuid byte array, you'd
-> need to declare the array as __le32 and swap the result
-> members with cpu_to_le32().
-> 
-> Alternatively you could pass the four u32 values into the
-> function in place of the uuid.
-> 
-> Since the callers have the same endianess confusion, your
-> implementation ends up working correctly even on big-endian,
-> but I find it harder to follow when you call uuid_equal() on
-> something that is not the actual uuid_t value.
-> 
-
-I'll make sure the implementation is clearer, thanks!
-
->> +
->> +#define ARM_SMCCC_HYP_PRESENT(HYP) 								\
->> +	({															\
->> +		const u32 uuid_as_dwords[4] = {							\
->> +			ARM_SMCCC_VENDOR_HYP_UID_ ## HYP ## _REG_0,			\
->> +			ARM_SMCCC_VENDOR_HYP_UID_ ## HYP ## _REG_1,			\
-> 
-> I don't think using a macro is helpful here, it just makes
-> it impossible to grep for ARM_SMCCC_VENDOR_HYP_UID_* values when
-> reading the source.
-> 
-> I would suggest moving the UUID values into a variable next
-> to the caller like
-> 
-> #define ARM_SMCCC_VENDOR_HYP_UID_KVM \
->      UUID_INIT(0x28b46fb6, 0x2ec5, 0x11e9, 0xa9, 0xca, 0x4b, 0x56, 0x4d, 0x00, 0x3a, 0x74)
-> 
-> and then just pass that into arm_smccc_hyp_present(). (please
-> double-check the endianess of the definition here, I probably
-> got it wrong myself).
-
-Will remove the macro and will use UUID_INIT, appreciate taking the
-time to review the draft and your suggestions on improving it very much!
-
-> 
->       Arnd
-
--- 
-Thank you,
-Roman
-
+T24gTW9uLCAyMDI1LTAyLTAzIGF0IDEzOjQ5IC0wODAwLCBBbmt1ciBBcm9yYSB3cm90ZToNCj4g
+Q0FVVElPTjogVGhpcyBlbWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5p
+emF0aW9uLiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91
+IGNhbiBjb25maXJtIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCj4g
+DQo+IA0KPiANCj4gQWRkIHNtcF9jb25kX2xvYWRfYWNxdWlyZV90aW1ld2FpdCgpLiBUaGlzIGlz
+IHN1YnN0YW50aWFsbHkgc2ltaWxhcg0KPiB0byBzbXBfY29uZF9sb2FkX2FjcXVpcmUoKSB3aGVy
+ZSB3ZSB1c2UgYSBsb2FkLWFjcXVpcmUgaW4gdGhlIGxvb3ANCj4gYW5kIGF2b2lkIGFuIHNtcF9y
+bWIoKSBsYXRlci4NCj4gDQo+IFRvIGhhbmRsZSB0aGUgdW5saWtlbHkgY2FzZSBvZiB0aGUgZXZl
+bnQtc3RyZWFtIGJlaW5nIHVuYXZhaWxhYmxlLA0KPiBrZWVwIHRoZSBpbXBsZW1lbnRhdGlvbiBz
+aW1wbGUgYnkgZmFsbGluZyBiYWNrIHRvIHRoZSBnZW5lcmljDQo+IF9fc21wX2NvbmRfbG9hZF9y
+ZWxheGVkX3NwaW53YWl0KCkgd2l0aCBhbiBzbXBfcm1iKCkgdG8gZm9sbG93DQo+ICh2aWEgc21w
+X2FjcXVpcmVfX2FmdGVyX2N0cmxfZGVwKCkuKQ0KPiANCj4gQ2M6IFdpbGwgRGVhY29uIDx3aWxs
+QGtlcm5lbC5vcmc+DQo+IENjOiBDYXRhbGluIE1hcmluYXMgPGNhdGFsaW4ubWFyaW5hc0Bhcm0u
+Y29tPg0KPiBDYzogbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IFNpZ25l
+ZC1vZmYtYnk6IEFua3VyIEFyb3JhIDxhbmt1ci5hLmFyb3JhQG9yYWNsZS5jb20+DQo+IC0tLQ0K
+PiAgYXJjaC9hcm02NC9pbmNsdWRlL2FzbS9iYXJyaWVyLmggfCAzNiArKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDM2IGluc2VydGlvbnMoKykNCj4g
+DQo+IGRpZmYgLS1naXQgYS9hcmNoL2FybTY0L2luY2x1ZGUvYXNtL2JhcnJpZXIuaCBiL2FyY2gv
+YXJtNjQvaW5jbHVkZS9hc20vYmFycmllci5oDQo+IGluZGV4IDI1NzIxMjc1YTVhMi4uMjJkOTI5
+MWFlZThkIDEwMDY0NA0KPiAtLS0gYS9hcmNoL2FybTY0L2luY2x1ZGUvYXNtL2JhcnJpZXIuaA0K
+PiArKysgYi9hcmNoL2FybTY0L2luY2x1ZGUvYXNtL2JhcnJpZXIuaA0KPiBAQCAtMjMyLDYgKzIz
+MiwyMiBAQCBkbyB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICAgICAgICAgKHR5cGVvZigqcHRyKSlWQUw7
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gIH0pDQo+
+IA0KPiArI2RlZmluZSBfX3NtcF9jb25kX2xvYWRfYWNxdWlyZV90aW1ld2FpdChwdHIsIGNvbmRf
+ZXhwciwgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgdGltZV9leHByX25zLCB0aW1lX2xpbWl0X25zKSAgIFwNCj4gKyh7ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgXA0KPiArICAgICAgIHR5cGVvZihwdHIpIF9fUFRSID0gKHB0cik7ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgX191bnF1YWxfc2NhbGFyX3R5cGVv
+ZigqcHRyKSBWQUw7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gKyAgICAgICBm
+b3IgKDs7KSB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgXA0KPiArICAgICAgICAgICAgICAgVkFMID0gc21wX2xvYWRfYWNxdWlyZShfX1BUUik7
+ICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAgICBpZiAoY29uZF9l
+eHByKSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgYnJlYWs7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgXA0KPiArICAgICAgICAgICAgICAgX19jbXB3YWl0X3JlbGF4ZWQoX19QVFIsIFZB
+TCk7ICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAgICBpZiAoKHRp
+bWVfZXhwcl9ucykgPj0gKHRpbWVfbGltaXRfbnMpKSAgICAgICAgICAgICAgICAgIFwNCj4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgYnJlYWs7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgXA0KPiArICAgICAgIH0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgKHR5cGVvZigqcHRy
+KSlWQUw7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4g
+K30pDQo+ICsNCj4gIC8qDQo+ICAgKiBGb3IgdGhlIHVubGlrZWx5IGNhc2UgdGhhdCB0aGUgZXZl
+bnQtc3RyZWFtIGlzIHVuYXZhaWxhYmxlLA0KPiAgICogd2FyZCBvZmYgdGhlIHBvc3NpYmlsaXR5
+IG9mIHdhaXRpbmcgZm9yZXZlciBieSBmYWxsaW5nIGJhY2sNCj4gQEAgLTI1NCw2ICsyNzAsMjYg
+QEAgZG8geyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgXA0KPiAgICAgICAgICh0eXBlb2YoKnB0cikpX3ZhbDsgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICB9KQ0KPiANCj4g
+KyNkZWZpbmUgc21wX2NvbmRfbG9hZF9hY3F1aXJlX3RpbWV3YWl0KHB0ciwgY29uZF9leHByLCAg
+ICAgICAgICAgICAgICAgXA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHRpbWVfZXhwcl9ucywgdGltZV9saW1pdF9ucykgICAgICBcDQo+ICsoeyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwN
+Cj4gKyAgICAgICBfX3VucXVhbF9zY2FsYXJfdHlwZW9mKCpwdHIpIF92YWw7ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgXA0KPiArICAgICAgIGludCBfX3dmZSA9IGFyY2hfdGltZXJfZXZ0
+c3RybV9hdmFpbGFibGUoKTsgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IFwNCj4gKyAgICAgICBpZiAobGlrZWx5KF9fd2ZlKSkgeyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgXA0KPiArICAgICAgICAgICAgICAgX3ZhbCA9IF9fc21wX2Nv
+bmRfbG9hZF9hY3F1aXJlX3RpbWV3YWl0KHB0ciwgY29uZF9leHByLCBcDQo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdGltZV9leHByX25z
+LCAgIFwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB0aW1lX2xpbWl0X25zKTsgXA0KPiArICAgICAgIH0gZWxzZSB7ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAg
+ICAgICAgICBfdmFsID0gX19zbXBfY29uZF9sb2FkX3JlbGF4ZWRfc3BpbndhaXQocHRyLCBjb25k
+X2V4cHIsIFwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICB0aW1lX2V4cHJfbnMsICAgXA0KPiArICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRpbWVfbGltaXRfbnMpOyBcDQo+ICsgICAg
+ICAgICAgICAgICBzbXBfYWNxdWlyZV9fYWZ0ZXJfY3RybF9kZXAoKTsgICAgICAgICAgICAgICAg
+ICAgICAgICAgIFwNCj4gKyAgICAgICB9ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPiArICAgICAgICh0eXBlb2YoKnB0cikp
+X3ZhbDsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICt9
+KQ0KPiArDQo+ICsNCj4gICNpbmNsdWRlIDxhc20tZ2VuZXJpYy9iYXJyaWVyLmg+DQo+IA0KPiAg
+I2VuZGlmIC8qIF9fQVNTRU1CTFlfXyAqLw0KPiAtLQ0KPiAyLjQzLjUNCg0KVGVzdGVkIGJvdGgg
+cmVsYXhlZCBhbmQgYWNxdWlyZSB2YXJpYW50cyBvbiBBV1MgR3Jhdml0b24gKEFSTTY0DQpOZW92
+ZXJzZSBWMSkgd2l0aCB5b3VyIFY5IGhhbHRwb2xsIGNoYW5nZXMsIGF0b3AgbWFzdGVyIDEyOGM4
+Zjk2ZWIuDQoNClJldmlld2VkLWJ5OiBIYXJpcyBPa2Fub3ZpYyA8aGFyaXNva25AYW1hem9uLmNv
+bT4NClRlc3RlZC1ieTogSGFyaXMgT2thbm92aWMgPGhhcmlzb2tuQGFtYXpvbi5jb20+DQoNCg==
 
