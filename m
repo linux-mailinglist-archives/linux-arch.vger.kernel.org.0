@@ -1,290 +1,163 @@
-Return-Path: <linux-arch+bounces-10143-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10144-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C1BCA3521F
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 00:24:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BB77A35395
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 02:18:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2C6F1890B3B
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Feb 2025 23:24:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDFE17A3EBA
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 01:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06E5124292B;
-	Thu, 13 Feb 2025 23:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166C15464E;
+	Fri, 14 Feb 2025 01:18:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="aufp7fKv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LxK4asBA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4646D22D7BC;
-	Thu, 13 Feb 2025 23:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340793C17;
+	Fri, 14 Feb 2025 01:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739489038; cv=none; b=RRWhIzT2x2ZzQYE0WHefIbNN9E0AYi+wACbHiQ/RPGFeA4NtW7dzyR6WEu2UMYBiK7eg7uYiRvpNXTr2UKxG1y4f6UPTd0k9pIk6/SsqyzFHrsrpxZ9iXq24r+Az9b23/HjIY6eM+WUARNGlJaOqHvp1391IXLy0iFwXfcMCRBc=
+	t=1739495897; cv=none; b=UxF6JKagtyBAouxSqhVLD/0UICn4DZL11jtFYo8ODOO2kYlEk0MgosxsBSeFUjJu1pXifBZwCV4UHpv37gqRw7MiOgnubtYwF654++BMKS2MfztmunOuRNpCnPxfRzOXb5Sea6M0P2SXP3PYXS0A9qfEW0pCLGGZYbyddz3Ow54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739489038; c=relaxed/simple;
-	bh=l+cSvSfFeSSvWEX+0CLmMC7EeXoOaYuP0euT1eP9zjg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FMJe5+nxBoN+9sF8gur2u3TcmUplWHU+fwqSRe2qtAX/79qaEscKY830fH9Fz53pLi45fOu/zeHUq0Mb5paQbS5gzCks3a1UcLHdQVc3VS65w/y9SzVMVi6o31O3xvFUVNRufQfCFElbpCxlN1LrZluRupkO69dZLnKuqer6qg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=aufp7fKv; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7A9B7203F3E8;
-	Thu, 13 Feb 2025 15:23:56 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A9B7203F3E8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1739489036;
-	bh=Hk/UhzyNXmtkIV3ySCx19ki8dNWuqGbbCLmGSDE/xLs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aufp7fKvZThXkNOUfRjDldRf0rvzjk9ePefQmU34QNQDzjKEBlugM1QQnoyaGdByr
-	 UvcGblhHXCbjBa/k4MpcRsnzZtdKGCD/hDb4AqXA9uZUdtcTEEmtCsn/SbibhrumUh
-	 FawOmhzoUKT+be6mPRofqUQ3NjSfwRNz4fTK8QNo=
-Message-ID: <593c22ca-6544-423d-84ee-7a06c6b8b5b9@linux.microsoft.com>
-Date: Thu, 13 Feb 2025 15:23:56 -0800
+	s=arc-20240116; t=1739495897; c=relaxed/simple;
+	bh=7KmvRdNkOB8Mr3YZotzrxWe4W/LaMjQF7NLNIhjtF3o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bJlJNQkODJOS5M45SewxB58lbGSQzyNo50P0rg6RqoaQBItMkcXjgV2NEsm/dSEjMYl98R/4DmbIGc5wEeoFzLtZjIoUKxdVgQnojzfs+cjB1ucUzoeBLt4ybQD911p6Gng3w9PN+KdBBx06S8wtlUq7jWSVOC0j8g2Q6gEEAS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LxK4asBA; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-38dc5764fc0so1298582f8f.3;
+        Thu, 13 Feb 2025 17:18:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739495893; x=1740100693; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iZNgfoJpdQnnYrxgyLyaeefs7r2kSe1cqjB7lzYuaOY=;
+        b=LxK4asBATP1MeRU6Tug/wM5pDWexWygZDRfTC/vbdHU3zlvgXNcHgoKtsv/N7i/QUi
+         yHStzkJ9EXSAWeLe35ysovgUPeLF0lMz8BiU8Ei8q8NUF6CoRsoXbwZjD2CJGe1Jehep
+         /YphwX+NCcwrkQc9M+tUL1orVmCND1wwWjN8dEsFw3+PrmnJS6PNxUzoQ7yPqtcn2Ys2
+         noBbHtyL8GMwygxk/k5jiVcUDBi+oQ1ZUtR5qSpzis1AgBjt6vlXOZ7SUmcCySnsNSWD
+         nOLKldd9c8X7fdnygej1AWYDwZoKHee5p6EGmreiir7QXwCsGysJuesfJ4cQpijobsyg
+         BYpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739495893; x=1740100693;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iZNgfoJpdQnnYrxgyLyaeefs7r2kSe1cqjB7lzYuaOY=;
+        b=K9sz0Ifzh0KhZlYa/s2qoGXTbK1FnvCwvcIYJy3oVE9tUF98o6M4G/Ews2E/g/AS8T
+         uFnaKe/IlooekVw4fR5MlQGgIdIJNLFccitP+/PLTqody4Ja6sFOlqNJiLQINsETeXZv
+         RuR4alLglorvqnpUgpTefbtngDnp638g21a2+WrSH4ZnE/NW3R0AkKuPloje9pNWSVnA
+         HG2As89iXIpEDnI1w17j5VWJNnQ/cfALT9Ozm5wM6t4+vcqy61O7CL2IukEf8geeBbnb
+         8ypJcah44wWBP/Af9FVXMSJ10bxOWlDv20uD4RBOUvKISx+i07BZzHa8kfEp+5x9chOJ
+         z2jg==
+X-Forwarded-Encrypted: i=1; AJvYcCUIpVd5AYtEBCT0qaPbKvkpNNo6y2wDNR2Degx/QbYsLqjsLeIt7zidDeqVOG6RYVQeEvg=@vger.kernel.org, AJvYcCUMKQNpgipCLbMF7bAhixEJtcfPA+8jMD0V/TkMFS/Kn8GgZVBIu7jktE0bY+LTtzx/nb9hpWdeFrAhlQna@vger.kernel.org, AJvYcCUsHeDl7o90oPtinSl3Jsnk9mIZUqnwOpDzJS29GzOe05vOIx1m8IVDZgXdrbMrY7Xb5Sbr5+Y4pUFU4A==@vger.kernel.org, AJvYcCVXkEp4S1oFJ9zTiEVpV0l0EAoB1w8909YK9AoP3/Bel/goHAOzdNfhwsoD7qySO9ve+wl9cnHge3FIDlPA6boy@vger.kernel.org, AJvYcCXg7blZmWnYhHKW73CD0ZBnEDFdt6uBmDkKUKZc7FtzNBcAsTEL5eh6bbfn7lxIEzPXdhUo+RFnniCbKh6x@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbNqWKlSD3k+48L4bgacxvB5kK0HBa3VAeMGK41yAJQI80/kVK
+	8YObXNpHJVK7k9H9t4AidUuJMCmwGaRJ+61tB5n0fCFlxV+G19LcoRsMeF1Th1TpM+Wii3PVWdp
+	y+mOI7xBgxoMrIrhu3ye4Btjf5q+k6T/F
+X-Gm-Gg: ASbGnctEuk7Q3/s571M2HWEEyj3kOZogI6Xaio0Us2yfa/wwO/xVXBsJwgMjwVARHzf
+	03jwEodQFksPjZK2cmt7D2uU/B3yzvWuQIchF3TkiFr1fwKARAsbaOZCODbxBA/YFtStmn2lCCL
+	Xr8lCWQRJZvPgAHkjpva6l6Fj4H4wM
+X-Google-Smtp-Source: AGHT+IHjH3HbrV6sFGnOweivEcys63M8NcPKfcX22oOSM82lFAdrwn46q5GI7CB4DnW7A34GOs2t+/KwcM7+WXRkatg=
+X-Received: by 2002:a05:6000:1f88:b0:38d:dd8c:51db with SMTP id
+ ffacd0b85a97d-38dea2f982dmr10477713f8f.53.1739495893060; Thu, 13 Feb 2025
+ 17:18:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v4 1/6] arm64: hyperv: Use SMCCC to detect
- hypervisor presence
-To: Arnd Bergmann <arnd@arndb.de>, bhelgaas@google.com,
- Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>,
- Conor Dooley <conor+dt@kernel.org>, Dave Hansen
- <dave.hansen@linux.intel.com>, Dexuan Cui <decui@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, "H. Peter Anvin" <hpa@zytor.com>,
- krzk+dt@kernel.org, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Ingo Molnar <mingo@redhat.com>, Rob Herring <robh@kernel.org>,
- ssengar@linux.microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
- Wei Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>,
- devicetree@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org
-Cc: benhill@microsoft.com, bperkins@microsoft.com, sunilmut@microsoft.com
-References: <20250212014321.1108840-1-romank@linux.microsoft.com>
- <20250212014321.1108840-2-romank@linux.microsoft.com>
- <1b14e3de-4d3e-420c-819c-31ffb2d448bd@app.fastmail.com>
-Content-Language: en-US
-From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <1b14e3de-4d3e-420c-819c-31ffb2d448bd@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250207012045.2129841-1-stephen.s.brennan@oracle.com>
+ <20250207012045.2129841-3-stephen.s.brennan@oracle.com> <CAADnVQLiyezBW34dhkwZw+mWmkFAYMZUdHbOa4uYCdPbgS10SQ@mail.gmail.com>
+ <87a5asghj2.fsf@oracle.com>
+In-Reply-To: <87a5asghj2.fsf@oracle.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 13 Feb 2025 17:18:02 -0800
+X-Gm-Features: AWEUYZko1eBho3JB_JCiwey_VkI40uEQrrVuLZrlphS9FJjF_Fxjtl4z_U1OGOk
+Message-ID: <CAADnVQKLykG3akdPRTDgHDey9FW1LpixZHjLcj+eG2rhXo7V1w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] btf: Add the option to include global variable types
+To: Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Kees Cook <kees@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Sami Tolvanen <samitolvanen@google.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, linux-arch <linux-arch@vger.kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Jann Horn <jannh@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Hao Luo <haoluo@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, linux-debuggers@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Song Liu <song@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Feb 11, 2025 at 3:59=E2=80=AFPM Stephen Brennan
+<stephen.s.brennan@oracle.com> wrote:
+>
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+> > On Thu, Feb 6, 2025 at 5:21=E2=80=AFPM Stephen Brennan
+> > <stephen.s.brennan@oracle.com> wrote:
+> >> When the feature was implemented in pahole, my measurements indicated
+> >> that vmlinux BTF size increased by about 25.8%, and module BTF size
+> >> increased by 53.2%. Due to these increases, the feature is implemented
+> >> behind a new config option, allowing users sensitive to increased memo=
+ry
+> >> usage to disable it.
+> >>
+> >
+> > ...
+> >> +config DEBUG_INFO_BTF_GLOBAL_VARS
+> >> +       bool "Generate BTF type information for all global variables"
+> >> +       default y
+> >> +       depends on DEBUG_INFO_BTF && PAHOLE_VERSION >=3D 128
+> >> +       help
+> >> +         Include type information for all global variables in the BTF=
+. This
+> >> +         increases the size of the BTF information, which increases m=
+emory
+> >> +         usage at runtime. With global variable types available, runt=
+ime
+> >> +         debugging and tracers may be able to provide more detail.
+> >
+> > This is not a solution.
+> > Even if it's changed to 'default n' distros will enable it
+> > like they enable everything and will suffer a regression.
+> >
+> > We need to add a new module like vmlinux_btf.ko that will contain
+> > this additional BTF data. For global vars and everything else we might =
+need.
+>
+> Fair enough. I believe I had shared Alan Maguire's proof-of-concept for
+> that idea a while back for an older version of this feature:
+>
+> https://lore.kernel.org/all/20221104231103.752040-10-stephen.s.brennan@or=
+acle.com/
 
+Right vmlinux_extra was discussed in various context, so let's make it happ=
+en.
 
-On 2/11/2025 10:54 PM, Arnd Bergmann wrote:
-> On Wed, Feb 12, 2025, at 02:43, Roman Kisel wrote:
->> +static bool hyperv_detect_via_smccc(void)
->> +{
->> +	struct arm_smccc_res res = {};
->> +
->> +	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
->> +		return false;
->> +	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
->> +	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
->> +		return false;
->> +
->> +	return res.a0 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0 &&
->> +		res.a1 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1 &&
->> +		res.a2 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2 &&
->> +		res.a3 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3;
->> +}
-> 
-> I had to double-check that this function is safe to call on
-> other hypervisors, at least when they follow the smccc spec.
-> 
-> Seeing that we have the same helper function checking for
-> ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_* and there was another
-> patch set adding a copy for gunyah, I wonder if we can
-> put this into a drivers/firmware/smccc/smccc.c directly
-> the same way we handle soc_id, and make it return a uuid_t,
-> or perhaps take a constant uuid_t to compare against.
+> We can dust that off and include it for a new version of this series.
+> I'd be curious of what you'd like to see for kernel modules? A
+> three-level tree would be too complex, in my opinion.
 
-That would be very neat! I implemented the idea [1], please let me know
-what you think. I can use that in the next version of the patch series
-if looks good.
+What is the use case for vars in kernel modules?
 
-There is a function and a macro to make calling
-the function easier. As the SMCCC header is used by the assembler, too,
-hence I had to add __ASSEBLER__ guardrails. Another option could be to
-pass four u32's not to use uuid_t so the header stays a healthy food
-for the assembler :) For Gunyah, that would be
+> module BTF size increased by 53.2%.
 
-ARM_SMCCC_HYP_PRESENT(GUNYAH)
+This is the sum of all mods with vars divided by
+the sum of all mods without?
+Any outliers there?
+I would expect modules to have few global variables.
 
-when using the change below.
-
-
- From f0d645e900c24f5be045b0f831f1e11494967b7f Mon Sep 17 00:00:00 2001
-From: Roman Kisel <romank@linux.microsoft.com>
-Date: Thu, 13 Feb 2025 15:10:45 -0800
-Subject: [PATCH] drivers, smcc: Introduce arm_smccc_hyp_present
-
----
-  arch/arm64/hyperv/mshyperv.c       | 18 +----------------
-  drivers/firmware/smccc/kvm_guest.c |  9 +--------
-  drivers/firmware/smccc/smccc.c     | 24 ++++++++++++++++++++++
-  include/linux/arm-smccc.h          | 32 ++++++++++++++++++++++++++++++
-  4 files changed, 58 insertions(+), 25 deletions(-)
-
-diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-index 16e721d8e5df..0c5babe9e1ff 100644
---- a/arch/arm64/hyperv/mshyperv.c
-+++ b/arch/arm64/hyperv/mshyperv.c
-@@ -41,22 +41,6 @@ static bool hyperv_detect_via_acpi(void)
-  #endif
-  }
-
--static bool hyperv_detect_via_smccc(void)
--{
--	struct arm_smccc_res res = {};
--
--	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
--		return false;
--	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
--	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
--		return false;
--
--	return res.a0 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0 &&
--		res.a1 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1 &&
--		res.a2 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2 &&
--		res.a3 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3;
--}
--
-  static int __init hyperv_init(void)
-  {
-  	struct hv_get_vp_registers_output	result;
-@@ -69,7 +53,7 @@ static int __init hyperv_init(void)
-  	 *
-  	 * In such cases, do nothing and return success.
-  	 */
--	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smccc())
-+	if (!hyperv_detect_via_acpi() && !ARM_SMCCC_HYP_PRESENT(HYPERV))
-  		return 0;
-
-  	/* Setup the guest ID */
-diff --git a/drivers/firmware/smccc/kvm_guest.c 
-b/drivers/firmware/smccc/kvm_guest.c
-index f3319be20b36..ae37476cabc1 100644
---- a/drivers/firmware/smccc/kvm_guest.c
-+++ b/drivers/firmware/smccc/kvm_guest.c
-@@ -17,14 +17,7 @@ void __init kvm_init_hyp_services(void)
-  	struct arm_smccc_res res;
-  	u32 val[4];
-
--	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
--		return;
--
--	arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
--	if (res.a0 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0 ||
--	    res.a1 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1 ||
--	    res.a2 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2 ||
--	    res.a3 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3)
-+	if (!ARM_SMCCC_HYP_PRESENT(KVM))
-  		return;
-
-  	memset(&res, 0, sizeof(res));
-diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
-index a74600d9f2d7..86f75f44895f 100644
---- a/drivers/firmware/smccc/smccc.c
-+++ b/drivers/firmware/smccc/smccc.c
-@@ -67,6 +67,30 @@ s32 arm_smccc_get_soc_id_revision(void)
-  }
-  EXPORT_SYMBOL_GPL(arm_smccc_get_soc_id_revision);
-
-+bool arm_smccc_hyp_present(const uuid_t *hyp_uuid)
-+{
-+	struct arm_smccc_res res = {};
-+	struct {
-+		u32 dwords[4]
-+	} __packed res_uuid;
-+
-+	BUILD_BUG_ON(sizeof(res_uuid) != sizeof(uuid_t));
-+
-+	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
-+		return false;
-+	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
-+	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
-+		return false;
-+
-+	res_uuid.dwords[0] = res.a0;
-+	res_uuid.dwords[1] = res.a1;
-+	res_uuid.dwords[2] = res.a2;
-+	res_uuid.dwords[3] = res.a3;
-+
-+	return uuid_equal((uuid_t *)&res_uuid, hyp_uuid);
-+}
-+EXPORT_SYMBOL_GPL(arm_smccc_hyp_present);
-+
-  static int __init smccc_devices_init(void)
-  {
-  	struct platform_device *pdev;
-diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
-index 67f6fdf2e7cd..63925506a0e5 100644
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -7,6 +7,11 @@
-
-  #include <linux/args.h>
-  #include <linux/init.h>
-+
-+#ifndef __ASSEMBLER__
-+#include <linux/uuid.h>
-+#endif
-+
-  #include <uapi/linux/const.h>
-
-  /*
-@@ -333,6 +338,33 @@ s32 arm_smccc_get_soc_id_version(void);
-   */
-  s32 arm_smccc_get_soc_id_revision(void);
-
-+#ifndef __ASSEMBLER__
-+
-+/**
-+ * arm_smccc_hyp_present(const uuid_t *hyp_uuid)
-+ *
-+ * Returns `true` if the hypervisor advertises its presence via SMCCC.
-+ *
-+ * When the function returns `false`, the caller shall not assume that
-+ * there is no hypervisor running. Instead, the caller must fall back to
-+ * other approaches if any are available.
-+ */
-+bool arm_smccc_hyp_present(const uuid_t *hyp_uuid);
-+
-+#define ARM_SMCCC_HYP_PRESENT(HYP) 								\
-+	({															\
-+		const u32 uuid_as_dwords[4] = {							\
-+			ARM_SMCCC_VENDOR_HYP_UID_ ## HYP ## _REG_0,			\
-+			ARM_SMCCC_VENDOR_HYP_UID_ ## HYP ## _REG_1,			\
-+			ARM_SMCCC_VENDOR_HYP_UID_ ## HYP ## _REG_2,			\
-+			ARM_SMCCC_VENDOR_HYP_UID_ ## HYP ## _REG_3			\
-+		};														\
-+																\
-+		arm_smccc_hyp_present((const uuid_t *)uuid_as_dwords);	\
-+	})															\
-+
-+#endif /* !__ASSEMBLER__ */
-+
-  /**
-   * struct arm_smccc_res - Result from SMC/HVC call
-   * @a0-a3 result values from registers 0 to 3
--- 
-2.43.0
-
-
-
-> 
->        Arnd
-
--- 
-Thank you,
-Roman
-
+So before we decide on what to do with vars in mods lets figure out
+the need.
 
