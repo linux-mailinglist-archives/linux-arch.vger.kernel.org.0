@@ -1,178 +1,125 @@
-Return-Path: <linux-arch+bounces-10151-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10152-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08A9DA3689A
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 23:44:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 289EDA36EC2
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Feb 2025 15:21:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 770B91894167
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Feb 2025 22:43:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5FC8170E08
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Feb 2025 14:21:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B67211FC7ED;
-	Fri, 14 Feb 2025 22:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B1E71C84B5;
+	Sat, 15 Feb 2025 14:21:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="uVvwIooN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hEGS9Kir"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EA01A83E4;
-	Fri, 14 Feb 2025 22:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.184.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F1E19CC06;
+	Sat, 15 Feb 2025 14:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739572958; cv=none; b=t9ZR8foNufGzx84aw5dcmgmgvTbJMZjJUSypsV6RM85rUyTTqQc3UtOqKEXYMAgKPE0pf6EmkBv8ei/xTpxZVpcKFhwU1IeIXQ+wc1D6s6KYZQwRxPG1GjY0NLxD11yelnqhtXlYW++GLS221FssX2yEXNpMfkQYkcg/WeMa8Ag=
+	t=1739629311; cv=none; b=fyd5DuR67Sh0kVP5T9ortGu+tMpt4INs/qEKp+racsTtzp5U8A95C7u0HBf+3zC93l/TRqpoOwtkDmT+4jqVOxn4x4rki4Oa0z90XXJY6Sf4m239L/NZ58cqpUP5Fwu+lQHooAgCf2D5NOK3YMizRUzuQkiPzfzfdrpHqXn5yWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739572958; c=relaxed/simple;
-	bh=7dqr4+v5JkewaML+LxWNkl3XAl9W6+X9tfBXO3LYXGM=;
-	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rU5dJus3wWICrjnAzPB0MqkOeJ7IZKb/tpoWAT4NENAVmE5E4qqukX/P6s6/L56J9KXEdTLJt39MbgXrEMjkaV6v74i9pRXWqQowX64v8iDg/j55IfJbRyCbK274HR0h1ufBTpln/1am5SGu/rP7eDAhiKzhf+fVMLEod4es0oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=uVvwIooN; arc=none smtp.client-ip=207.171.184.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1739572957; x=1771108957;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version:subject;
-  bh=7dqr4+v5JkewaML+LxWNkl3XAl9W6+X9tfBXO3LYXGM=;
-  b=uVvwIooNP9vigyVDogu9fa21idhXUw7zsV2ZV70WHJfZ/4TNqnuBx4YR
-   YTuOKLPMjzav4vD/rIJyOLfnOkr7ewBep7pXOlLedA41teypFHg/JGaB/
-   6KN7r0aZi7LgyoHwRXC3J3alY06ieXXWboS9URilnj2HQRuueMcbLEP7s
-   A=;
-X-IronPort-AV: E=Sophos;i="6.13,287,1732579200"; 
-   d="scan'208";a="494063818"
-Subject: Re: [PATCH 4/4] arm64: barrier: Add smp_cond_load_acquire_timewait()
-Thread-Topic: [PATCH 4/4] arm64: barrier: Add smp_cond_load_acquire_timewait()
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 22:42:36 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.38.20:46647]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.32.150:2525] with esmtp (Farcaster)
- id 3dfd354f-13d0-43ce-9a83-fe979d8618ae; Fri, 14 Feb 2025 22:42:36 +0000 (UTC)
-X-Farcaster-Flow-ID: 3dfd354f-13d0-43ce-9a83-fe979d8618ae
-Received: from EX19D032UWA004.ant.amazon.com (10.13.139.56) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
- Fri, 14 Feb 2025 22:42:35 +0000
-Received: from EX19D032UWA003.ant.amazon.com (10.13.139.37) by
- EX19D032UWA004.ant.amazon.com (10.13.139.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1544.14;
- Fri, 14 Feb 2025 22:42:35 +0000
-Received: from EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497]) by
- EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497%5]) with mapi id
- 15.02.1544.014; Fri, 14 Feb 2025 22:42:35 +0000
-From: "Okanovic, Haris" <harisokn@amazon.com>
-To: "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "ankur.a.arora@oracle.com"
-	<ankur.a.arora@oracle.com>
-CC: "Okanovic, Haris" <harisokn@amazon.com>, "cl@gentwo.org" <cl@gentwo.org>,
-	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"peterz@infradead.org" <peterz@infradead.org>, "memxor@gmail.com"
-	<memxor@gmail.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"arnd@arndb.de" <arnd@arndb.de>, "will@kernel.org" <will@kernel.org>,
-	"mark.rutland@arm.com" <mark.rutland@arm.com>, "konrad.wilk@oracle.com"
-	<konrad.wilk@oracle.com>, "zhenglifeng1@huawei.com"
-	<zhenglifeng1@huawei.com>, "boris.ostrovsky@oracle.com"
-	<boris.ostrovsky@oracle.com>
-Thread-Index: AQHbdoWTLOnOGDZdP0ajcFsBERkpC7NHdhIA
-Date: Fri, 14 Feb 2025 22:42:35 +0000
-Message-ID: <3b0de6589cb4f1b8bdc87b53fc7ff61a35659941.camel@amazon.com>
-References: <20250203214911.898276-1-ankur.a.arora@oracle.com>
-	 <20250203214911.898276-5-ankur.a.arora@oracle.com>
-In-Reply-To: <20250203214911.898276-5-ankur.a.arora@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <586C842FFADDDB488E24CA520892E0A2@amazon.com>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1739629311; c=relaxed/simple;
+	bh=O3b2JU3w/ODuxO3MLy1UzoyGGGaXmBwx1eEl4Fz+mQw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RfEq7dqFwFUy/4Fwms5iZa4E4tzyYYcvH5OvKGKNaaYjJIu48she1vgxrtSnJ15VJxc5urCGh12XGz7dqF4lzx7RJtMO9miaRGNu8Wdhss1DFfF/Z0JYabyyy3ZLvTcyv6/m/vRHjuUuynxNqsT2Ct3g1e6cjSt9XEUkGHDoeVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hEGS9Kir; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862E6C4CEEB;
+	Sat, 15 Feb 2025 14:21:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739629310;
+	bh=O3b2JU3w/ODuxO3MLy1UzoyGGGaXmBwx1eEl4Fz+mQw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hEGS9Kir7L5VKuSvVoS3WRtvXngeEsvB3GpV/9fjCOCrhy9sYWKacXw8hfRSBUh7K
+	 pQZuyRLi1IsaXGh5mqgZF5yxp82d1nSThvgFxU/3GtN0sZ0D+XmFoeMJGfKfeR0RHa
+	 7UPYmkg7WVu8yxQcGHqTxN7kaaADW1ft3LFhoi82R3muUtYgP4rFVGadux8Ws4CURt
+	 bzfGrVEMPNYAJd+uQmsYUqD6yKPcm8MFiy76nPuP+mdpOoXzwxCaBVLF+sOiJJvhqD
+	 nvgZ5j2uO2rYTsGSomJLxTGBORrHL/rXl9k5ceasmIC1swXfsCfsIAz0jRm5ZnQA7i
+	 ofKhDMDYRJOKA==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-3072f8dc069so30378011fa.3;
+        Sat, 15 Feb 2025 06:21:50 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUEQa72l7iNrUozyP8ZgDz0DNRQ4PT6+Y1o4wlcQaZFWnCjeQ0MyOKfy8w/RnfMWAE1yDWB4Ed+59Fnk4Cu@vger.kernel.org, AJvYcCVWmcbJcwQJWYqHlSlyGGPSLsJvWTmxMqXfoUIkao1N0orAPWpkdGKYnsRILzTJ2iW/muM=@vger.kernel.org, AJvYcCVhPIneuuIiFaQDmaNRoa3IaGJ7a7xeHTweFxLuencKtPQN1TCi8E5S+lPZcqTNCT9VbDwWLYXFnLJIaUcR2ecn@vger.kernel.org, AJvYcCX3kQWokwX97aythkIvSL6Bj0GZgDOJxfWJKRWfAQTUN+B0dvhmzD1IlmKHxMwI43luUoj8wZ/YzWMYe5oj@vger.kernel.org, AJvYcCXuislqfI/BpS19OwxajBEHBci2Bl4m9TUAKntEqMxCohs3XcxsbiNdSsK5OElbKJJNSJdpKC4WFGv64g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgdQAi1vqYReQ5xCYtJB2X/7ZBOGMldOxf3uuZe1H/uid81Mub
+	QNVqFZt+8gkgXoVTzZd1HL0gw11bAQ0IOOKwBT3RVivGcn9uwG0KtB4+79gkrvBTAPIMOSeBA2W
+	YCfWSYlJsMIHI5l6uD2KSfqphrhA=
+X-Google-Smtp-Source: AGHT+IHJAH2llTK/8FUeOa/uyjvPOa+oEZ4jzkPOcw5/nJJ+S7w8Kd3yArGdplvM1hiKKoy+jgbSokUCpMby5X/HYDE=
+X-Received: by 2002:a2e:99d6:0:b0:308:fa1d:1fed with SMTP id
+ 38308e7fff4ca-30927afee15mr9904211fa.34.1739629309211; Sat, 15 Feb 2025
+ 06:21:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250207012045.2129841-1-stephen.s.brennan@oracle.com> <20250207012045.2129841-2-stephen.s.brennan@oracle.com>
+In-Reply-To: <20250207012045.2129841-2-stephen.s.brennan@oracle.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 15 Feb 2025 23:21:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQokoST0FnByeWywaghTMP2aG7hQaV1T=TcQ=1v4ZLQrg@mail.gmail.com>
+X-Gm-Features: AWEUYZk8XrdR9lJozRpCY9QyaANy91FqaGQymPUxQ0WR6PL3n7MJiW1ZBtl7LX4
+Message-ID: <CAK7LNAQokoST0FnByeWywaghTMP2aG7hQaV1T=TcQ=1v4ZLQrg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kallsyms: output rodata to ".kallsyms_rodata"
+To: Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Andrii Nakryiko <andrii@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Kees Cook <kees@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Sami Tolvanen <samitolvanen@google.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, linux-arch@vger.kernel.org, 
+	Stanislav Fomichev <sdf@fomichev.me>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Jann Horn <jannh@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Hao Luo <haoluo@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-kbuild@vger.kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-debuggers@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-T24gTW9uLCAyMDI1LTAyLTAzIGF0IDEzOjQ5IC0wODAwLCBBbmt1ciBBcm9yYSB3cm90ZToNCj4g
-Q0FVVElPTjogVGhpcyBlbWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5p
-emF0aW9uLiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91
-IGNhbiBjb25maXJtIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCj4g
-DQo+IA0KPiANCj4gQWRkIHNtcF9jb25kX2xvYWRfYWNxdWlyZV90aW1ld2FpdCgpLiBUaGlzIGlz
-IHN1YnN0YW50aWFsbHkgc2ltaWxhcg0KPiB0byBzbXBfY29uZF9sb2FkX2FjcXVpcmUoKSB3aGVy
-ZSB3ZSB1c2UgYSBsb2FkLWFjcXVpcmUgaW4gdGhlIGxvb3ANCj4gYW5kIGF2b2lkIGFuIHNtcF9y
-bWIoKSBsYXRlci4NCj4gDQo+IFRvIGhhbmRsZSB0aGUgdW5saWtlbHkgY2FzZSBvZiB0aGUgZXZl
-bnQtc3RyZWFtIGJlaW5nIHVuYXZhaWxhYmxlLA0KPiBrZWVwIHRoZSBpbXBsZW1lbnRhdGlvbiBz
-aW1wbGUgYnkgZmFsbGluZyBiYWNrIHRvIHRoZSBnZW5lcmljDQo+IF9fc21wX2NvbmRfbG9hZF9y
-ZWxheGVkX3NwaW53YWl0KCkgd2l0aCBhbiBzbXBfcm1iKCkgdG8gZm9sbG93DQo+ICh2aWEgc21w
-X2FjcXVpcmVfX2FmdGVyX2N0cmxfZGVwKCkuKQ0KPiANCj4gQ2M6IFdpbGwgRGVhY29uIDx3aWxs
-QGtlcm5lbC5vcmc+DQo+IENjOiBDYXRhbGluIE1hcmluYXMgPGNhdGFsaW4ubWFyaW5hc0Bhcm0u
-Y29tPg0KPiBDYzogbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IFNpZ25l
-ZC1vZmYtYnk6IEFua3VyIEFyb3JhIDxhbmt1ci5hLmFyb3JhQG9yYWNsZS5jb20+DQo+IC0tLQ0K
-PiAgYXJjaC9hcm02NC9pbmNsdWRlL2FzbS9iYXJyaWVyLmggfCAzNiArKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDM2IGluc2VydGlvbnMoKykNCj4g
-DQo+IGRpZmYgLS1naXQgYS9hcmNoL2FybTY0L2luY2x1ZGUvYXNtL2JhcnJpZXIuaCBiL2FyY2gv
-YXJtNjQvaW5jbHVkZS9hc20vYmFycmllci5oDQo+IGluZGV4IDI1NzIxMjc1YTVhMi4uMjJkOTI5
-MWFlZThkIDEwMDY0NA0KPiAtLS0gYS9hcmNoL2FybTY0L2luY2x1ZGUvYXNtL2JhcnJpZXIuaA0K
-PiArKysgYi9hcmNoL2FybTY0L2luY2x1ZGUvYXNtL2JhcnJpZXIuaA0KPiBAQCAtMjMyLDYgKzIz
-MiwyMiBAQCBkbyB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICAgICAgICAgKHR5cGVvZigqcHRyKSlWQUw7
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gIH0pDQo+
-IA0KPiArI2RlZmluZSBfX3NtcF9jb25kX2xvYWRfYWNxdWlyZV90aW1ld2FpdChwdHIsIGNvbmRf
-ZXhwciwgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgdGltZV9leHByX25zLCB0aW1lX2xpbWl0X25zKSAgIFwNCj4gKyh7ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgXA0KPiArICAgICAgIHR5cGVvZihwdHIpIF9fUFRSID0gKHB0cik7ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgX191bnF1YWxfc2NhbGFyX3R5cGVv
-ZigqcHRyKSBWQUw7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gKyAgICAgICBm
-b3IgKDs7KSB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgXA0KPiArICAgICAgICAgICAgICAgVkFMID0gc21wX2xvYWRfYWNxdWlyZShfX1BUUik7
-ICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAgICBpZiAoY29uZF9l
-eHByKSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gKyAgICAg
-ICAgICAgICAgICAgICAgICAgYnJlYWs7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgXA0KPiArICAgICAgICAgICAgICAgX19jbXB3YWl0X3JlbGF4ZWQoX19QVFIsIFZB
-TCk7ICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAgICBpZiAoKHRp
-bWVfZXhwcl9ucykgPj0gKHRpbWVfbGltaXRfbnMpKSAgICAgICAgICAgICAgICAgIFwNCj4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgYnJlYWs7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgXA0KPiArICAgICAgIH0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgKHR5cGVvZigqcHRy
-KSlWQUw7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4g
-K30pDQo+ICsNCj4gIC8qDQo+ICAgKiBGb3IgdGhlIHVubGlrZWx5IGNhc2UgdGhhdCB0aGUgZXZl
-bnQtc3RyZWFtIGlzIHVuYXZhaWxhYmxlLA0KPiAgICogd2FyZCBvZmYgdGhlIHBvc3NpYmlsaXR5
-IG9mIHdhaXRpbmcgZm9yZXZlciBieSBmYWxsaW5nIGJhY2sNCj4gQEAgLTI1NCw2ICsyNzAsMjYg
-QEAgZG8geyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgXA0KPiAgICAgICAgICh0eXBlb2YoKnB0cikpX3ZhbDsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICB9KQ0KPiANCj4g
-KyNkZWZpbmUgc21wX2NvbmRfbG9hZF9hY3F1aXJlX3RpbWV3YWl0KHB0ciwgY29uZF9leHByLCAg
-ICAgICAgICAgICAgICAgXA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHRpbWVfZXhwcl9ucywgdGltZV9saW1pdF9ucykgICAgICBcDQo+ICsoeyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwN
-Cj4gKyAgICAgICBfX3VucXVhbF9zY2FsYXJfdHlwZW9mKCpwdHIpIF92YWw7ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgXA0KPiArICAgICAgIGludCBfX3dmZSA9IGFyY2hfdGltZXJfZXZ0
-c3RybV9hdmFpbGFibGUoKTsgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IFwNCj4gKyAgICAgICBpZiAobGlrZWx5KF9fd2ZlKSkgeyAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgXA0KPiArICAgICAgICAgICAgICAgX3ZhbCA9IF9fc21wX2Nv
-bmRfbG9hZF9hY3F1aXJlX3RpbWV3YWl0KHB0ciwgY29uZF9leHByLCBcDQo+ICsgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdGltZV9leHByX25z
-LCAgIFwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICB0aW1lX2xpbWl0X25zKTsgXA0KPiArICAgICAgIH0gZWxzZSB7ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAg
-ICAgICAgICBfdmFsID0gX19zbXBfY29uZF9sb2FkX3JlbGF4ZWRfc3BpbndhaXQocHRyLCBjb25k
-X2V4cHIsIFwNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICB0aW1lX2V4cHJfbnMsICAgXA0KPiArICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRpbWVfbGltaXRfbnMpOyBcDQo+ICsgICAg
-ICAgICAgICAgICBzbXBfYWNxdWlyZV9fYWZ0ZXJfY3RybF9kZXAoKTsgICAgICAgICAgICAgICAg
-ICAgICAgICAgIFwNCj4gKyAgICAgICB9ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPiArICAgICAgICh0eXBlb2YoKnB0cikp
-X3ZhbDsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICt9
-KQ0KPiArDQo+ICsNCj4gICNpbmNsdWRlIDxhc20tZ2VuZXJpYy9iYXJyaWVyLmg+DQo+IA0KPiAg
-I2VuZGlmIC8qIF9fQVNTRU1CTFlfXyAqLw0KPiAtLQ0KPiAyLjQzLjUNCg0KVGVzdGVkIGJvdGgg
-cmVsYXhlZCBhbmQgYWNxdWlyZSB2YXJpYW50cyBvbiBBV1MgR3Jhdml0b24gKEFSTTY0DQpOZW92
-ZXJzZSBWMSkgd2l0aCB5b3VyIFY5IGhhbHRwb2xsIGNoYW5nZXMsIGF0b3AgbWFzdGVyIDEyOGM4
-Zjk2ZWIuDQoNClJldmlld2VkLWJ5OiBIYXJpcyBPa2Fub3ZpYyA8aGFyaXNva25AYW1hem9uLmNv
-bT4NClRlc3RlZC1ieTogSGFyaXMgT2thbm92aWMgPGhhcmlzb2tuQGFtYXpvbi5jb20+DQoNCg==
+On Fri, Feb 7, 2025 at 10:21=E2=80=AFAM Stephen Brennan
+<stephen.s.brennan@oracle.com> wrote:
+>
+> When vmlinux is linked, the rodata from kallsyms is placed arbitrarily
+> within the .rodata section. The linking process is repeated several
+> times, since the kallsyms data size changes, which shifts symbols,
+> requiring re-generating the data and re-linking.
+>
+> BTF is generated during the first link only. For variables, BTF includes
+> a BTF_K_DATASEC for each data section that may contain a variable, which
+> includes the variable's name, type, and offset within the data section.
+> Because the size of kallsyms data changes during later links, the
+> offsets of variables placed after it in .rodata will change. This means
+> that BTF_K_DATASEC information for those variables becomes inaccurate.
+>
+> This is not currently a problem, because BTF currently only generates
+> variable data for percpu variables. However, the next commit will add
+> support for generating BTF for all global variables, including for the
+> .rodata section.
+>
+> We could re-generate BTF each time vmlinux is linked, but this is quite
+> expensive, and should be avoided at all costs. Further as each chunk of
+> data (BTF and kallsyms) are re-generated, there's no guarantee that
+> their sizes will converge anyway.
+>
+> Instead, we can take advantage of the fact that BTF only cares to store
+> the offset of variables from the start of their section. Therefore, so
+> long as the kallsyms data is stored last in the .rodata section, no
+> offsets will be affected. Adjust kallsyms to output to .rodata.kallsyms,
+> and update the linker script to include this at the end of .rodata.
+>
+> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+> ---
+
+I am fine if this is helpful for BTF.
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
 
