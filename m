@@ -1,61 +1,60 @@
-Return-Path: <linux-arch+bounces-10185-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10186-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E8E6A39A5A
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 12:17:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E1D9A39A62
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 12:18:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97A4E3B751F
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:14:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 470323B6063
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:15:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E33623C385;
-	Tue, 18 Feb 2025 11:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA39723F291;
+	Tue, 18 Feb 2025 11:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="faa1OBJs"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Wz/STjJP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8A223BF9E;
-	Tue, 18 Feb 2025 11:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A18B1AF0B7;
+	Tue, 18 Feb 2025 11:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.79
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739877268; cv=fail; b=aeaRNzVQtvAoQS4Rnz1NckKLYtO6jnMyxx07/nsTPhhJ4fA1EwsEj64PBi6O2bNsarC7E6Qank9eg+UrdnpEDV9acJdD54P3SxT7FWRByZjH5zd1vEh2REPf9qF4i9X3LzAAFzVh3nfyrYxI/jRFbHPr1pxF6y+W0x2W3wvnMI4=
+	t=1739877287; cv=fail; b=EuNXqh7rjnGqy1OOPKer3r/HTJBq9BaEX5+BQ/ZK1hxJV/QoSdfon5LdB1TFQ9354tFrlhXTGj2MIRBkxZixwjr9Kpt/qPTIq79eV58GC5frOGkHbIUuuCunRPu1qRId4DRAKmXSZ9gT18hQvHM8TkLAA1vedn41Kvbu7CIeY/s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739877268; c=relaxed/simple;
-	bh=WCPL9rVr4j2Pb2uKP2Xa/RLtbkNnn3GWjdl/4E9pb00=;
+	s=arc-20240116; t=1739877287; c=relaxed/simple;
+	bh=+f+rSWC9UtbHJ4l8a0NmLEt4Eyqs+jgkvTffKW7w67E=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BXy2cb7gf3KSDP7b4bsspWldi1sJ8LI8eO4ZKjM3oIOP9e9rPvgYwFJqoj7ZFUC1H0e6ZFb8jdg3kuSs7D2O1DZHi2myRjdwasWgpK1mZRgmJYO9A7FmCLoDpvTds2MCf/x2xmnNJ2uzdeR6fHz0F+mTkHDHUgdBxwVB2ad0LKU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=faa1OBJs; arc=fail smtp.client-ip=40.107.243.71
+	 MIME-Version:Content-Type; b=HAxSsSXKWA525ZeUnvHMRlLbboC5lhStgroAIXuhIl75gxroPirEKzNU4gFWRZA+qmZXxWDrO+zKDNPZqA/q4lCruSNbGtFOdif2je4iwcKn79R+BLXISe+OPo+4jf+idNkQJ/t4j3oep/18SrGWF58mxjFXa6MQ1alL5U3ztO0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Wz/STjJP; arc=fail smtp.client-ip=40.107.223.79
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FWh6+hI5lYne5wdgh0KDcKhgmgvCK4D+ygfnKFhyhsrpLgRpwznON7cXzxWffKk/JaxWsej2kCBpMjkUn3FEyUpMase3YsPUuOKpukYlJWk7eC0zGfXJsebSzaNtC6m2Y656fV4z6Dvj5xlpFXbdToh6+3D6cot0yELQE445/mFWQp7gurSg0VdFUBwOyYlv8B3ImfgeSjyCMa6U/QZvqLOqsW5cPAD+8eOIjWsnR8wFBwZVGqfyfGafgNcWPeigAeYgwkdXmartVMASFtpzfEOR1xX7lvuvVpk3JKyCQ2kYDYpbZRdAHCaRNwrGJqbtM9F3t+2COVP/+U8ZOTH7Nw==
+ b=nLigjDcv/eipMARl70iKHE5bXl6ctDD2a20wYiJ8WdLaYL8arMmV+SO1dzpihPtZjafi9tzcB3FXyHp/gwwfSZaSzOPuCjf7vTvIRdPRbyiZg7R5ah2d4VIPRS386g9nyRCGyzSFfEu4C3azQe9lHrRW3Q6xmVs49ae5dyXZVaTN7dVW4l6LztuIfSwhP5l52ropBgfEGsGsux5eE0fhcw9F/n5sGN9TuUU0hLIRk5Yoafit7lLipKT4dwW86dySju07G39Ez+D4X7I/bn1SDELgDcWwujRctdkxbxh3123noE3McCfhCvnG3317ker6xJth7RF9OstMwCe5SC8/hg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KgaHBRP+oQfuGsFY+h4i5BGvzxvLvSYi1+FCYp43Xck=;
- b=Xj+l3E7vSNh+96iDm9SNoOZb1HPjh8RfJwWv+4kSZDS7hCWP4wRtgaA7FJiwIlDNda6spovpkTbKjMkz13yIGdkgEwcmCANdyS2I9uZTawh6Ak0pQKXa8iuR00r6fi1K/e8Pe6XtcHFkuEgmMcq4pLPqwkUt+Wu6V7n2g7W6BhSNqc1hfhkvj7XqEegMjygw2NMLwhifqoTdQYLWfhX3AvuTpz8N7k9Plo6zdJIvnFPhw2nvtfPvyJRD3VylRieKwaeM6bN00SEq18fh3qvJUQNJy48E07mepUqq1ehF4J8eUHUckiFv0fABr9uoOuJBHyuURaALy6xHe/X+ab+wiw==
+ bh=ppgZ84PrrhxUfU+/rclO4iDOQx/xzWduKUM9nPWvVV0=;
+ b=sQ1bSAAgux4vQo2k0pQZjGe8AGHiGzRZ+F5zw9EmpeIEZJBD5mwU65IaNgAJUMSWIw6h2dekm7DnIx/7HEeXBVD9TEvkPC8kN2y3cdfx8NB3fuvNUndAhb5IG2d/l2ARgm2NGCBjR3QB95UPb5TsWYPhjPF84jhvN3NHpJK05HcOyCFGgRncdMEuCeCyjzKzZQ8O+H3loQb/K1j0qqw0VTbSbpNC4ztKyoRP8xHwnRPuJ/Sz+sZhUeuTFue4q5R0fwQhmiHD6FW4xAqPT+Od1PQKEEX9j56jHgF3kNgT/QQvscWLC8AjFGHWufT1PhY3VonuGxQXWr58KSzgGV/SmA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KgaHBRP+oQfuGsFY+h4i5BGvzxvLvSYi1+FCYp43Xck=;
- b=faa1OBJsVctqfwG+siIYnpRI8/NHzxyah6BEKM5/LNHcw4Uka7TTVMQ/i7Wxf9hyVlLBPbWl/0JWwMxiB/kG1bEaApskmmcknmHWepPls7Zrriu5XLq1LJGKF/nRrwcL59Cnufw1nUImikKiy0bQkwdBtu7+/bw8kMuM4QIOH94=
-Received: from MN2PR01CA0023.prod.exchangelabs.com (2603:10b6:208:10c::36) by
- PH8PR12MB7422.namprd12.prod.outlook.com (2603:10b6:510:22a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.17; Tue, 18 Feb
- 2025 11:14:23 +0000
-Received: from BN3PEPF0000B078.namprd04.prod.outlook.com
- (2603:10b6:208:10c:cafe::be) by MN2PR01CA0023.outlook.office365.com
- (2603:10b6:208:10c::36) with Microsoft SMTP Server (version=TLS1_3,
+ bh=ppgZ84PrrhxUfU+/rclO4iDOQx/xzWduKUM9nPWvVV0=;
+ b=Wz/STjJP3sDY6TnzGhzDGGu7SvNrOZKhLagMomp9j2SsozSQiHwZO+/C/wyzcke/1vgupIgoWsOCI9+wEI7Yk4Fhnbi2IkzRu4SKnHpDV0DDcOTAPSM7oXbHThNVFoqG0AF092LUTyxBcV4vMPsmNGZytDgGk8xMTAL1SKnwHIQ=
+Received: from BL0PR01CA0015.prod.exchangelabs.com (2603:10b6:208:71::28) by
+ CY5PR12MB6202.namprd12.prod.outlook.com (2603:10b6:930:25::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8445.18; Tue, 18 Feb 2025 11:14:43 +0000
+Received: from BN3PEPF0000B074.namprd04.prod.outlook.com
+ (2603:10b6:208:71:cafe::c2) by BL0PR01CA0015.outlook.office365.com
+ (2603:10b6:208:71::28) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.19 via Frontend Transport; Tue,
- 18 Feb 2025 11:14:22 +0000
+ 18 Feb 2025 11:14:43 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +62,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B078.mail.protection.outlook.com (10.167.243.123) with Microsoft
+ BN3PEPF0000B074.mail.protection.outlook.com (10.167.243.119) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8466.11 via Frontend Transport; Tue, 18 Feb 2025 11:14:22 +0000
+ 15.20.8466.11 via Frontend Transport; Tue, 18 Feb 2025 11:14:43 +0000
 Received: from aiemdee.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 18 Feb
- 2025 05:14:14 -0600
+ 2025 05:14:35 -0600
 From: Alexey Kardashevskiy <aik@amd.com>
 To: <x86@kernel.org>
 CC: <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
@@ -90,9 +89,9 @@ CC: <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
 	<iommu@lists.linux.dev>, <linux-coco@lists.linux.dev>, Zhi Wang
 	<zhiw@nvidia.com>, AXu Yilun <yilun.xu@linux.intel.com>, "Aneesh Kumar K . V"
 	<aneesh.kumar@kernel.org>, Alexey Kardashevskiy <aik@amd.com>
-Subject: [RFC PATCH v2 11/22] KVM: SEV: Add TIO VMGEXIT
-Date: Tue, 18 Feb 2025 22:09:58 +1100
-Message-ID: <20250218111017.491719-12-aik@amd.com>
+Subject: [RFC PATCH v2 12/22] iommufd: Allow mapping from guest_memfd
+Date: Tue, 18 Feb 2025 22:09:59 +1100
+Message-ID: <20250218111017.491719-13-aik@amd.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250218111017.491719-1-aik@amd.com>
 References: <20250218111017.491719-1-aik@amd.com>
@@ -108,246 +107,183 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B078:EE_|PH8PR12MB7422:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c256334-0578-4c51-a172-08dd500d65bb
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B074:EE_|CY5PR12MB6202:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25c3facf-837b-4da8-0a74-08dd500d71d7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|82310400026|36860700013|1800799024|376014;
+	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?8/3ht+RFmZcYiZfoSPDltyFOeZiksGX2a97W5qqYQFRdLi2pXWID6HZu8loI?=
- =?us-ascii?Q?VIwZ5GbegQIB7zaTijVI+HVVHeyDUpFPKtmpVbKgRG6t7EKXlw3vVZx3GmCF?=
- =?us-ascii?Q?w8rdtVq0XEYTd889Qym7W0fZ5In8+QDR/IQ70N8c75xRygK2v1BrcITUBwxb?=
- =?us-ascii?Q?46JIMbqmQiu0X+11g0Jllf2J4Cw7RF/uO5yTr2E/i1bLI0p4sfhC0mS8cBFh?=
- =?us-ascii?Q?4hgvofSpAJ5gWreQelnDpxxUI3uv7xM5YxVr9LDe/KwDPrL3ZQjvzQTcn/ti?=
- =?us-ascii?Q?UDiVCQzo6TKOzbKVAbd1kp2DeX86I2lplbFJjLwyECyB6og6texu2hViC/lN?=
- =?us-ascii?Q?vitSqq4ULmUKyRiTTahre5cSjl4m2tyXJhcn9nWK9CCKR9HubUCZUcn56m2D?=
- =?us-ascii?Q?eIy9LP6cj1b0JwBZoPez37b9Yn2Dv6aMhbcaZ42sTFVGIeaiRM1To7/wWQBP?=
- =?us-ascii?Q?3Iz0DNUDpX2N6rxH/Vg/lGMRjC8DaNPxaxIH3OKKsuqiAs2Tjmlm1FT04V+V?=
- =?us-ascii?Q?Pe9VMkHuqHHWBskrwARiEZcoSK/zmG64is2SAezOigjB4pHlntFeDXlyjZcw?=
- =?us-ascii?Q?SB6mvJZg7OTeeyjzo4xw5JueCvsvSNv/n86j5zwgdyYMcejAeWifAtQUbnQ6?=
- =?us-ascii?Q?xFMHon6HbXdrFg9VggbjvIxBxxKw0MmdTUy0lj5aIV1F4taen6McNNOIOiI0?=
- =?us-ascii?Q?LzQmybOTEyLe30gWylGbxca0DCG5p/f2YrtkPtWJyjR51uE47lsfJwyghX4w?=
- =?us-ascii?Q?rL3oAOUalmQ4v+qOgFqyPvLmhwlGqkAHQNAJpGPW0W6GOEDg01UHD8ZU22Ui?=
- =?us-ascii?Q?H4M0wiTPMCVjopaukiBUK8++nlk3gjh209gIMehh0Hi/DdWz7hFxaDW2XGc+?=
- =?us-ascii?Q?mr0AYOnQxMD9sFi71Y987ZHH3mvTklgjFFq60LA+aAE8QCnfDdxjfm6M20Oq?=
- =?us-ascii?Q?WEkpEK3gA9eQ2yk8YgEb9wrFm3nwJBCFdUmvrDVTvCsXUycuQMgoihh2+iB/?=
- =?us-ascii?Q?lw4VV6R7y/gbWwxXTICI68c6KPvziP9G5sqTdK+6XeRN+OBbYOae+Q9x7d1A?=
- =?us-ascii?Q?a8SGPI8/6wn5IICFMFp1LDBF+gb9uEuPHs9gQQpNmcdijVsjJKK7k5F9EInw?=
- =?us-ascii?Q?Cmu39mqvzgR7n9bwAUTQyDSK5Q0uT/Oan295Z7cujehpVgdO8f0MkvWHlGpC?=
- =?us-ascii?Q?2ZcvMlbH/gZ8/kOW7ywWnxdxxPZ5Nb0aUmihuRaryQl0Q7xs9MsSlKocyDJ1?=
- =?us-ascii?Q?t/i11UrvGmzCSb9rvyLyXuqALWIwXEnCD2VzgjfXuGqH6XIGM54oF8HYL7YL?=
- =?us-ascii?Q?vISgjhV20t8Q343tIWzu5+ECDaiuqxtf4o/2dDwbfjR9QQFIO4NgPdsvTN4k?=
- =?us-ascii?Q?nm5IC4GFaLaMHlBxBFY2txEHlNJOdw8zUH0Gtf4YyXcZlTL1pxUZTRLDiG4w?=
- =?us-ascii?Q?ED4tpFJto/7CfmZe0JwmWcrmS/hdCM9x7ha23olSyDUjkEFc8GCzNWaY73q1?=
- =?us-ascii?Q?PSF5eiEWtyB45v8=3D?=
+	=?us-ascii?Q?w5IfIYMgEX0v30MHeMY2AqH+G/14aXFpt9bKPJqUb5RBeqq75YQ21e7HDew9?=
+ =?us-ascii?Q?7aQQnqXs8NRs+hDSzNboNgW+i0r4/31kZN4MMP+neU0gvhZYsNolijoVdVnB?=
+ =?us-ascii?Q?as9X39i6/FrT4dNs8sweVlk9I3g1nuOq7z80BCEqpk6CKyuff9ebCjtEZ0V0?=
+ =?us-ascii?Q?M7v2OEnsVOZJQF3/L2Imz8uc8KtjPFlDUVvh9tcdknmNNwO7rhf5dCE8TMd3?=
+ =?us-ascii?Q?n7OX1ivBUYL/FyezntThbR3CI6CbTk+IjaeqiMm0pGiPkEdLNiStyS59T9+e?=
+ =?us-ascii?Q?Nxb7oh1qhtFhJS4NRNwnYmiZ3GlDh3ElRJvw5k/VhCaOIpB8jaSfj348J/aM?=
+ =?us-ascii?Q?s2L0y/WrjCuiK97D0kdyQp6IM2vSG57BjtKNyeb1Hn4APb1fcuU7V7RyJTjV?=
+ =?us-ascii?Q?ZzFE0JMocTfF7wlubpFK1pFCOKVtEqhKex0CNbyxNU/qoHh7G6avHrmTnIu5?=
+ =?us-ascii?Q?RzeembwX5uxCmufyTTdvZVZg+ukxeTVGSood3ICVfRmQ9pFwacFiIxMSPM8r?=
+ =?us-ascii?Q?lxCOGvS8KqMwaEuzdnblMH/IOiHhQTeubUlRmehlalopyKsjmZqYH6hSwOYY?=
+ =?us-ascii?Q?VKJs78cE7E7PuPhubFYuCqhAOh3wMPwuKVvqCFuvZd9/UYpj/LoOjRZiLSSz?=
+ =?us-ascii?Q?b8afNuPg7Hq14b8HoPkd1ERxReUYVWPq1YbtZKWIqokqZ/TRd4fRgitoqkIo?=
+ =?us-ascii?Q?9EWi0e1XgF97cEGddJDAb61REkI8FdDSkkLcyq9Z+WC4xtWcRl3TW+u39wuk?=
+ =?us-ascii?Q?RjmmuXu6FpApTof8KmeC1ylDXFkO+hmLdfmo0wHWF2bMbpItJ1Ya4ZRpawsm?=
+ =?us-ascii?Q?zBu1meT++RT3WVD/E5mcHA9KCKqA4l8R+Zf5U1/JxUdk3kAWOS0O4TsKUL0U?=
+ =?us-ascii?Q?Zh8XGxaxPKr6Sk3ep4aEYfIybsaCh20Fv3MA+J6sCM1VXQbVlBekDHIZ0hYD?=
+ =?us-ascii?Q?5Nf0gklO65SmW3hr+sKIWZFbJ3ghfMiFtvCb+w59cmKreyGUi2k/0xaQoBT0?=
+ =?us-ascii?Q?T5yhmwHi7RPVJzfOgAesg+7fCbhZmcoz+CjO7W0CY69xxtyIEBDtJiokwamx?=
+ =?us-ascii?Q?3E9RKZ16RDBI0sZuo/Ar/65QxN7lvW16lLESd4+Bc1k3mog0vIvp22ZvNCrS?=
+ =?us-ascii?Q?55IZqwvagucGUJtba9N5xLGM8RyIYb1fO3G/anzJ9vExC/KcLdKasz4fyu9C?=
+ =?us-ascii?Q?gBhWWDH0xwDegHo9U0OLup1xzsjxn6Ow19fQTbyOkW/EWD1vI19pwNCtCikb?=
+ =?us-ascii?Q?Puelt9O9w6k+/UkM828fJvBI6kFArF8NZe+EgfLxNB1t2/7ksec3FXOCTLqJ?=
+ =?us-ascii?Q?SwufmUxtJwsCoYdzgCX00CvXUFPKkh8Cmq1alKm9tP7QzHg2yPeobhdgsq7F?=
+ =?us-ascii?Q?f3yYSmzWjMiZHFzSV1WUTiic/1KaDUqdrNapVD2DE2aOn/tKq22hrhPEBdjQ?=
+ =?us-ascii?Q?gQoOqpr1cRQ5w1uJSCGSNIRZMlTPhmvmJikeMr4o/zxqXeDqQ8VfMgQoga9C?=
+ =?us-ascii?Q?Wd2qAevRO4Wb7vU=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(82310400026)(36860700013)(1800799024)(376014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 11:14:22.7602
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 11:14:43.0724
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c256334-0578-4c51-a172-08dd500d65bb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25c3facf-837b-4da8-0a74-08dd500d71d7
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B078.namprd04.prod.outlook.com
+	BN3PEPF0000B074.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7422
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6202
 
-The SEV TIO spec defines a new TIO_GUEST_MESSAGE message to provide
-a secure communication channel between a SNP VM and the PSP, very
-similar to the GHCB GUEST MESSAGE. However the new call requires
-additional information about the host and guest PCI BDFn and
-the VM id (which is GCTX==guest context page). Since KVM does not
-know PCI, it exits to QEMU which has all the pieces to make the call
-to the PSP. This relies on necessary additional ioctl() are
-implemented separately, such as:
-- IOMMUFD "TDI bind" to bind a secure VF to a CoCo VM;
-- IOMMUFD "Guest Request" to manage secure DMA and MMIO;
-- SEV KVM ioctl() to call RMPUPDATE on MMIO ranges.
+CoCo VMs get their private memory allocated from guest_memfd
+("gmemfd") which is a KVM facility similar to memfd.
+At the moment gmemfds cannot mmap() so the usual GUP API does
+not work on these as expected.
 
-Define new VMGEXIT code - SEV_TIO_GUEST_REQUEST. Define its
-parameters in kvm_run::kvm_user_vmgexit. These include:
-- guest BDFn,
-- GHCB request/response buffers (encrypted guest pages),
-- space for certificate/measurements/interface repors
-(non encrypted guest pages).
+Use the existing IOMMU_IOAS_MAP_FILE API to allow mapping from
+fd + offset. Detect the gmemfd case in pfn_reader_user_pin() and
+simplified mapping.
 
-Some numeric values are out of order because numbers in between
-have been used at different stages of KVM SEV-SNP upstreaming process.
+The long term plan is to ditch this workaround and follow
+the usual memfd path.
 
 Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
 ---
- arch/x86/include/uapi/asm/svm.h |  2 +
- include/uapi/linux/kvm.h        | 24 +++++++
- arch/x86/kvm/svm/sev.c          | 70 ++++++++++++++++++++
- 3 files changed, 96 insertions(+)
+ drivers/iommu/iommufd/pages.c | 88 +++++++++++++++++++-
+ 1 file changed, 87 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-index 1814b413fd57..ac90a69e6327 100644
---- a/arch/x86/include/uapi/asm/svm.h
-+++ b/arch/x86/include/uapi/asm/svm.h
-@@ -116,6 +116,7 @@
- #define SVM_VMGEXIT_AP_CREATE			1
- #define SVM_VMGEXIT_AP_DESTROY			2
- #define SVM_VMGEXIT_SNP_RUN_VMPL		0x80000018
-+#define SVM_VMGEXIT_SEV_TIO_GUEST_REQUEST	0x80000020
- #define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
- #define SVM_VMGEXIT_TERM_REQUEST		0x8000fffe
- #define SVM_VMGEXIT_TERM_REASON(reason_set, reason_code)	\
-@@ -237,6 +238,7 @@
- 	{ SVM_VMGEXIT_GUEST_REQUEST,	"vmgexit_guest_request" }, \
- 	{ SVM_VMGEXIT_EXT_GUEST_REQUEST, "vmgexit_ext_guest_request" }, \
- 	{ SVM_VMGEXIT_AP_CREATION,	"vmgexit_ap_creation" }, \
-+	{ SVM_VMGEXIT_SEV_TIO_GUEST_REQUEST, "vmgexit_sev_tio_guest_request" }, \
- 	{ SVM_VMGEXIT_HV_FEATURES,	"vmgexit_hypervisor_feature" }, \
- 	{ SVM_EXIT_ERR,         "invalid_guest_state" }
+diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
+index 3427749bc5ce..457d8eaacd2c 100644
+--- a/drivers/iommu/iommufd/pages.c
++++ b/drivers/iommu/iommufd/pages.c
+@@ -53,6 +53,7 @@
+ #include <linux/overflow.h>
+ #include <linux/slab.h>
+ #include <linux/sched/mm.h>
++#include <linux/pagemap.h>
  
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 45e6d8fca9b9..cb3bc5b9c1e0 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -135,6 +135,28 @@ struct kvm_xen_exit {
- 	} u;
- };
- 
-+struct kvm_user_vmgexit {
-+#define KVM_USER_VMGEXIT_TIO_REQ	4
-+	__u32 type; /* KVM_USER_VMGEXIT_* type */
-+	union {
-+		struct {
-+			__u32 guest_rid;	/* in */
-+			__u16 ret;		/* out */
-+#define KVM_USER_VMGEXIT_TIO_REQ_FLAG_STATUS		BIT(0)
-+#define KVM_USER_VMGEXIT_TIO_REQ_FLAG_MMIO_VALIDATE	BIT(1)
-+#define KVM_USER_VMGEXIT_TIO_REQ_FLAG_MMIO_CONFIG	BIT(2)
-+			__u8  flags;		/* in */
-+			__u8  tdi_status;	/* out */
-+			__u64 data_gpa;		/* in */
-+			__u64 data_npages;	/* in/out */
-+			__u64 req_spa;		/* in */
-+			__u64 rsp_spa;		/* in */
-+			__u64 mmio_gpa;		/* in */
-+			__s32 fw_err;		/* out */
-+		} tio_req;
-+	};
-+} __packed;
-+
- #define KVM_S390_GET_SKEYS_NONE   1
- #define KVM_S390_SKEYS_MAX        1048576
- 
-@@ -178,6 +200,7 @@ struct kvm_xen_exit {
- #define KVM_EXIT_NOTIFY           37
- #define KVM_EXIT_LOONGARCH_IOCSR  38
- #define KVM_EXIT_MEMORY_FAULT     39
-+#define KVM_EXIT_VMGEXIT          40
- 
- /* For KVM_EXIT_INTERNAL_ERROR */
- /* Emulate instruction failed. */
-@@ -446,6 +469,7 @@ struct kvm_run {
- 			__u64 gpa;
- 			__u64 size;
- 		} memory_fault;
-+		struct kvm_user_vmgexit vmgexit;
- 		/* Fix the size of the union. */
- 		char padding[256];
- 	};
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 4916b916c20a..ea1cf33191b5 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -3390,6 +3390,8 @@ static int sev_es_validate_vmgexit(struct vcpu_svm *svm)
- 		    control->exit_info_1 == control->exit_info_2)
- 			goto vmgexit_err;
- 		break;
-+	case SVM_VMGEXIT_SEV_TIO_GUEST_REQUEST:
-+		break;
- 	default:
- 		reason = GHCB_ERR_INVALID_EVENT;
- 		goto vmgexit_err;
-@@ -4250,6 +4252,71 @@ static int snp_mmio_rmp_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 	return ret;
+ #include "double_span.h"
+ #include "io_pagetable.h"
+@@ -850,6 +851,88 @@ static long pin_memfd_pages(struct pfn_reader_user *user, unsigned long start,
+ 	return npages_out;
  }
  
-+static int snp_complete_sev_tio_guest_request(struct kvm_vcpu *vcpu)
++static bool is_guest_memfd(struct file *file)
 +{
-+	struct vcpu_svm *svm = to_svm(vcpu);
-+	struct vmcb_control_area *control = &svm->vmcb->control;
-+	gpa_t req_gpa = control->exit_info_1;
-+	struct kvm *kvm = vcpu->kvm;
-+	struct kvm_sev_info *sev;
-+	u8 msg_type = 0;
++	struct address_space *mapping = file_inode(file)->i_mapping;
 +
-+	if (!sev_snp_guest(kvm))
-+		return -EINVAL;
-+
-+	sev = &to_kvm_svm(kvm)->sev_info;
-+
-+	if (kvm_read_guest(kvm, req_gpa + offsetof(struct snp_guest_msg_hdr, msg_type),
-+			   &msg_type, 1))
-+		return -EIO;
-+
-+	if (msg_type == TIO_MSG_TDI_INFO_REQ)
-+		vcpu->arch.regs[VCPU_REGS_RDX] = vcpu->run->vmgexit.tio_req.tdi_status;
-+
-+	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb,
-+				SNP_GUEST_ERR(0, vcpu->run->vmgexit.tio_req.fw_err));
-+
-+	return 1; /* Resume guest */
++	return mapping_inaccessible(mapping) && mapping_unevictable(mapping);
 +}
 +
-+static int snp_sev_tio_guest_request(struct kvm_vcpu *vcpu, gpa_t req_gpa, gpa_t resp_gpa)
++static struct folio *guest_memfd_get_pfn(struct file *file, unsigned long index,
++					 unsigned long *pfn, int *max_order)
 +{
-+	struct kvm *kvm = vcpu->kvm;
-+	struct kvm_sev_info *sev;
-+	u8 msg_type;
++	struct folio *folio;
++	int ret = 0;
 +
-+	if (!sev_snp_guest(kvm))
-+		return SEV_RET_INVALID_GUEST;
++	folio = filemap_grab_folio(file_inode(file)->i_mapping, index);
 +
-+	sev = &to_kvm_svm(kvm)->sev_info;
++	if (IS_ERR(folio))
++		return folio;
 +
-+	if (kvm_read_guest(kvm, req_gpa + offsetof(struct snp_guest_msg_hdr, msg_type),
-+			   &msg_type, 1))
-+		return -EIO;
-+
-+	vcpu->run->exit_reason = KVM_EXIT_VMGEXIT;
-+	vcpu->run->vmgexit.type = KVM_USER_VMGEXIT_TIO_REQ;
-+	vcpu->run->vmgexit.tio_req.guest_rid = vcpu->arch.regs[VCPU_REGS_RCX];
-+	vcpu->run->vmgexit.tio_req.flags = 0;
-+	if (msg_type == TIO_MSG_TDI_INFO_REQ)
-+		vcpu->run->vmgexit.tio_req.flags |= KVM_USER_VMGEXIT_TIO_REQ_FLAG_STATUS;
-+	if (msg_type == TIO_MSG_MMIO_VALIDATE_REQ) {
-+		vcpu->run->vmgexit.tio_req.flags |= KVM_USER_VMGEXIT_TIO_REQ_FLAG_MMIO_VALIDATE;
-+		vcpu->run->vmgexit.tio_req.mmio_gpa = vcpu->arch.regs[VCPU_REGS_RDX];
++	if (folio_test_hwpoison(folio)) {
++		folio_unlock(folio);
++		folio_put(folio);
++		return ERR_PTR(-EHWPOISON);
 +	}
-+	if (msg_type == TIO_MSG_MMIO_CONFIG_REQ) {
-+		vcpu->run->vmgexit.tio_req.flags |= KVM_USER_VMGEXIT_TIO_REQ_FLAG_MMIO_CONFIG;
-+		vcpu->run->vmgexit.tio_req.mmio_gpa = vcpu->arch.regs[VCPU_REGS_RDX];
-+	}
-+	vcpu->run->vmgexit.tio_req.data_gpa = vcpu->arch.regs[VCPU_REGS_RAX];
-+	vcpu->run->vmgexit.tio_req.data_npages = vcpu->arch.regs[VCPU_REGS_RBX];
-+	vcpu->run->vmgexit.tio_req.req_spa = req_gpa;
-+	vcpu->run->vmgexit.tio_req.rsp_spa = resp_gpa;
-+	vcpu->arch.complete_userspace_io = snp_complete_sev_tio_guest_request;
 +
-+	return 0; /* Exit KVM */
++	*pfn = folio_pfn(folio) + (index & (folio_nr_pages(folio) - 1));
++	if (!max_order)
++		goto unlock_exit;
++
++	/* Refs for unpin_user_page_range_dirty_lock->gup_put_folio(FOLL_PIN) */
++	ret = folio_add_pins(folio, 1);
++	folio_put(folio); /* Drop ref from filemap_grab_folio */
++
++unlock_exit:
++	folio_unlock(folio);
++	if (ret)
++		folio = ERR_PTR(ret);
++
++	return folio;
 +}
 +
- static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
- {
- 	struct vmcb_control_area *control = &svm->vmcb->control;
-@@ -4530,6 +4597,9 @@ int sev_handle_vmgexit(struct kvm_vcpu *vcpu)
- 	case SVM_VMGEXIT_EXT_GUEST_REQUEST:
- 		ret = snp_handle_ext_guest_req(svm, control->exit_info_1, control->exit_info_2);
- 		break;
-+	case SVM_VMGEXIT_SEV_TIO_GUEST_REQUEST:
-+		ret = snp_sev_tio_guest_request(vcpu, control->exit_info_1, control->exit_info_2);
-+		break;
- 	case SVM_VMGEXIT_UNSUPPORTED_EVENT:
- 		vcpu_unimpl(vcpu,
- 			    "vmgexit: unsupported event - exit_info_1=%#llx, exit_info_2=%#llx\n",
++static long pin_guest_memfd_pages(struct pfn_reader_user *user, loff_t start, unsigned long npages,
++			       struct iopt_pages *pages)
++{
++	unsigned long offset = 0;
++	loff_t uptr = start;
++	long rc = 0;
++
++	for (unsigned long i = 0; i < npages; ++i, uptr += PAGE_SIZE) {
++		unsigned long gfn = 0, pfn = 0;
++		int max_order = 0;
++		struct folio *folio;
++
++		folio = guest_memfd_get_pfn(user->file, uptr >> PAGE_SHIFT, &pfn, &max_order);
++		if (IS_ERR(folio))
++			rc = PTR_ERR(folio);
++
++		if (rc == -EINVAL && i == 0) {
++			pr_err_once("Must be vfio mmio at gfn=%lx pfn=%lx, skipping\n", gfn, pfn);
++			return rc;
++		}
++
++		if (rc) {
++			pr_err("%s: %ld %ld %lx -> %lx\n", __func__,
++			       rc, i, (unsigned long) uptr, (unsigned long) pfn);
++			break;
++		}
++
++		if (i == 0)
++			offset = offset_in_folio(folio, start);
++
++		user->ufolios[i] = folio;
++	}
++
++	if (!rc) {
++		rc = npages;
++		user->ufolios_next = user->ufolios;
++		user->ufolios_offset = offset;
++	}
++
++	return rc;
++}
++
+ static int pfn_reader_user_pin(struct pfn_reader_user *user,
+ 			       struct iopt_pages *pages,
+ 			       unsigned long start_index,
+@@ -903,7 +986,10 @@ static int pfn_reader_user_pin(struct pfn_reader_user *user,
+ 
+ 	if (user->file) {
+ 		start = pages->start + (start_index * PAGE_SIZE);
+-		rc = pin_memfd_pages(user, start, npages);
++		if (is_guest_memfd(user->file))
++			rc = pin_guest_memfd_pages(user, start, npages, pages);
++		else
++			rc = pin_memfd_pages(user, start, npages);
+ 	} else if (!remote_mm) {
+ 		uptr = (uintptr_t)(pages->uptr + start_index * PAGE_SIZE);
+ 		rc = pin_user_pages_fast(uptr, npages, user->gup_flags,
 -- 
 2.47.1
 
