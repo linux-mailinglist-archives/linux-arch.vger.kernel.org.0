@@ -1,132 +1,96 @@
-Return-Path: <linux-arch+bounces-10204-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10205-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C436A3AC62
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 00:10:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFDCBA3AC96
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 00:35:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33F8D7A5252
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 23:09:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E0BE188F937
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 23:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BDB92862B7;
-	Tue, 18 Feb 2025 23:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652AC1D86F1;
+	Tue, 18 Feb 2025 23:35:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="JwX6soEL";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="jsCD3AUe"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RnhcRISy"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2053.outbound.protection.outlook.com [40.107.236.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E061D63EF;
-	Tue, 18 Feb 2025 23:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977271CAA67;
+	Tue, 18 Feb 2025 23:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739920228; cv=fail; b=HCLQUJdQ1uD9eVcw2XlBkWPkATEeQclGLkDSGJX9xVjwB8dh3sXKXn6FUejaMjgSdV5kP6ivRsudpAwcC8AW2veYp4T2aycYK/xjak/mMd+qyRW/jgfr13rQtC2YMgBkmasXyFTwQmOywlx76c29qMf5TwmHHEJmOUMVYk5vDdM=
+	t=1739921749; cv=fail; b=unsw5FBviCk7nHBOSSQhTAc6irhx6H6UrbQvhidb0PI1gbLNCv7dKJ9iWUNOmQEmYwgZDwVmsUaZbposJ6gKP0jj/luwv2c/tQVlNgPQvh1vbN59ut0Bx74yQRnxWWZEQUn0PtLBazXN3Jmy9F5KLl6UaZXDMyl7Flo5so2mxF8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739920228; c=relaxed/simple;
-	bh=qbYC2pUCaduTV7mTMmkQZBp2cyAimE7+OlzZoDRHbY4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 Content-Type:MIME-Version; b=nS9HHcDohqfEEWmHIfhfM924YnNBXDcFb6UZ80MSBP9TYIQmUwr0p44ggkbFQIKYzAitmHFqoK6f4cfqEpxkpqd8AdLbNyht9TQB0eVLawVRMxjs9i0Iq50Mk/ZLjj8eK+TySgWBpicCJiH8WxjDZN4IScQjy4iewuWQaYbjXVU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=JwX6soEL; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=jsCD3AUe; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51IMfYGl003770;
-	Tue, 18 Feb 2025 23:09:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=WNsP6ZlgCNksa0a8n78o3+vg0lVpB3kh6yGdXoYl7UU=; b=
-	JwX6soELXe9mS9JTV0ndEiaYmv9Xcb7kCrj7dG1rNLfhv1Mb27MEOn6KPyJ/rR+s
-	PbOUy/Y5crUo4G1sUaGR+BG8yecBRieBt1vIq/HCOd56wjoSbTVeb7uxyKTaPmI+
-	NEP4FIh7ORaj7UX7T4TZFXzh0pfCVosDDfAz52vpcpJ4SEYL9/HMj9E2EHihJMXc
-	JujF9qmB0Rw0mTDeReUcQHeus9i+YR1oU8XseQux6fZOO+NrXMlxt8Pe7MfsgxYx
-	/uvXq0jmrkj3pwv2xIhFXDxEMpHG+gEhob3CfMQwcSlmGdfRU0uZbWxNvvwMm5GK
-	SNur4eFKqVP1aznEzNeREA==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44w00ngf91-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Feb 2025 23:09:46 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51IL115u010522;
-	Tue, 18 Feb 2025 23:09:45 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44w07cr45b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Feb 2025 23:09:45 +0000
+	s=arc-20240116; t=1739921749; c=relaxed/simple;
+	bh=muMlvIqUcLF+ovrGpKBj7HnUDZEQwpkl3gsBdXtAjJQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=WYA1eUWr3EJl1HhrfP2dY5ADajvnZdjNu44Mzi2K0Wd8ow9ok5vOvvF6rHVuusmuEqYhb7s5cIA+IP9XAWWPhpZoWD0/C2sgswQ98Ty5f0QefzXk8DspaEbqFoAUsn1nKD6TIOHAMsand94Sk08M+DJank5mRiE8oA/uddCamsA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=RnhcRISy; arc=fail smtp.client-ip=40.107.236.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rkb1pAjnKk5oqL+Eg5EeUk5aDWarxjacUPVi0nTmgPgZYqGOlZ8vlDvQ0tG9uv+Z54ZKWnyebxX8mCigk8kJa3NcpVLLez3rj+3SScdaIMFg6tASlyXuJsX4wGwn+Zi8g2jujW1ffvVns44FW29lKMLTszrbKs81qLvj5OR0Rott3vvJdetd3NAM+V4vVVPyz8QA7FWCpZF3VIFI1Na7LNK1CKJRXJ+DMRuEq2bTSY/JClIiqHohNhun/g/viwADl53JT7Gb/Y5q/k2AZD0aeRXGdCyE17CjrQnrO7WE7hMkz8tf9Q/g4+O6qtAkcD5h1xL2Zi4V8gQ6cetfRkJkGg==
+ b=AG5JNBZtCXjDn5eaEvcWyzIw4GMEO9LBGcSz+DhtK8Oe1FKQh9ZAU5fhZZqAtuwrXfJ878J6enBWJEuiSWBC06EX0yDWGi61Bt+5fM0nj+6dIOEM8tttbf1TVB1zKxsr4l1Pe4UVy5vWIBHYYXrjoUVS6JPs8AG+plGs4dUoDgtrXQbekuS+LTOZLDDjCVNmSrw0O8t5DJgr4DI+1fAk2LtXNOIva+nDOzi7EuHNjvTuhMOvfFLifv4uezgFreS6Z0j7O78Tig9nznDLfY4M9BJR/2SWKY0YxnzK5im+2ztA03ipKay64It37k6bPPYY1nlqw3esVg7yCtX4sDTvtg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WNsP6ZlgCNksa0a8n78o3+vg0lVpB3kh6yGdXoYl7UU=;
- b=flKMfN5gN/yIIZrWWyOPJ6vhL5wB2cS2zOAHqB3jRaFa0LgilNo8MYCmILqES4j40GTocmL66cqbQWNGogoMC9wflAciscWI9D0aP0QQN3yBIdzffvBVWL4PIipDhl7bIK3k/xZuv4IaBjaWATIcOCRBDLiCtO2g8MryGsK8qAnGWXouQnNgmac//8FJ81RkMYIcLYTPqUd9MD86cttgAIW+HMSDAzCMzRBBD+QxNozZc80FsCSo8BjpQJnfalS/xJDVQXn8cA+GDFK51u7Tc0vlNi7/gvrAeTo3+6L6CtRLCNjX5J0t2+0oWS6Ntx9ZbR9nPf77LHrkgoh/93TjtA==
+ bh=v2msRbauNI29iakSlQWxGGHad/7AU8nVUYMyJ8UxKTs=;
+ b=kFIipG+vwdjVlvYlfehiTBe+Z1fYjNe+JwX8Ge5BfTbnW2J6WGob3AlloG5sPyR30zipvYpMKdRnzNWpvvlJZOGX2o6qCJyVObq8P+i15RbCu68KF8Ut2eWwb3nCQf2mYT1WyNWL/FAEow/+lfnaUWk3BRaQptBr04p36F2XD4by/HLZ7A8taXwh/DWQ79MFsq6CGnrlbVKLYXI1EJzOrF+C1Db/etSsc54a670Ny4lDexF5vQiO7xTOuhNvOBw26XpBfwWE33Z9aUQpEjuofzAXv5MWJn7XupP2b4AIIEP304RR3idlZqm+MO/k22C9tew17XKLkuv//GvF3C3wRQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WNsP6ZlgCNksa0a8n78o3+vg0lVpB3kh6yGdXoYl7UU=;
- b=jsCD3AUejx1DxwpF52Z88O6hrRlwp19CJsmj9KBkJ1KMvfo4pSTIy2GKAYuwMPQ/Q2zG4Rk6zzchfMExDuPzs0xAZaM6BjD6hVt/H88IJbmzfxLrm77HXxxhjizK2ZZnx36wt/gTDSFfWeOC/jXVDy/WdtFe7XEtWUL6zIUfGeA=
-Received: from PH8PR10MB6597.namprd10.prod.outlook.com (2603:10b6:510:226::20)
- by SJ0PR10MB5629.namprd10.prod.outlook.com (2603:10b6:a03:3e2::17) with
+ bh=v2msRbauNI29iakSlQWxGGHad/7AU8nVUYMyJ8UxKTs=;
+ b=RnhcRISyZL2k4ZXZbBbnEG3WPlhf5nfAinjDkxv2E8WL3d5ZlSnj06536lNfaDC35InIR+voSNnAk2IGKwMw6AMen9SX0esrSz6HF0o7qgYbvynH+HYECKDwvfxhyURm2jl0YHg02um3uEmiaAcQQ8CicX1wow5UW9AvTS+u5Q4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
+ by PH7PR12MB5806.namprd12.prod.outlook.com (2603:10b6:510:1d2::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Tue, 18 Feb
- 2025 23:09:43 +0000
-Received: from PH8PR10MB6597.namprd10.prod.outlook.com
- ([fe80::6874:4af6:bf0a:6ca]) by PH8PR10MB6597.namprd10.prod.outlook.com
- ([fe80::6874:4af6:bf0a:6ca%4]) with mapi id 15.20.8445.017; Tue, 18 Feb 2025
- 23:09:42 +0000
-From: Stephen Brennan <stephen.s.brennan@oracle.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-        Andrii Nakryiko
- <andrii@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>, Kees Cook
- <kees@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Martin KaFai Lau
- <martin.lau@linux.dev>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Eduard
- Zingerman <eddyz87@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        Kent Overstreet
- <kent.overstreet@linux.dev>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jann Horn <jannh@google.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Yonghong
- Song <yonghong.song@linux.dev>, Hao Luo <haoluo@google.com>,
-        Andrew Morton
- <akpm@linux-foundation.org>,
-        Linux Kbuild mailing list
- <linux-kbuild@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>, linux-debuggers@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>, Song
- Liu <song@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH 2/2] btf: Add the option to include global variable types
-In-Reply-To: <CAADnVQKLykG3akdPRTDgHDey9FW1LpixZHjLcj+eG2rhXo7V1w@mail.gmail.com>
-References: <20250207012045.2129841-1-stephen.s.brennan@oracle.com>
- <20250207012045.2129841-3-stephen.s.brennan@oracle.com>
- <CAADnVQLiyezBW34dhkwZw+mWmkFAYMZUdHbOa4uYCdPbgS10SQ@mail.gmail.com>
- <87a5asghj2.fsf@oracle.com>
- <CAADnVQKLykG3akdPRTDgHDey9FW1LpixZHjLcj+eG2rhXo7V1w@mail.gmail.com>
-Date: Tue, 18 Feb 2025 15:09:41 -0800
-Message-ID: <878qq2df4a.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: SJ0PR03CA0005.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::10) To PH8PR10MB6597.namprd10.prod.outlook.com
- (2603:10b6:510:226::20)
+ 2025 23:35:42 +0000
+Received: from CH3PR12MB9194.namprd12.prod.outlook.com
+ ([fe80::53fb:bf76:727f:d00f]) by CH3PR12MB9194.namprd12.prod.outlook.com
+ ([fe80::53fb:bf76:727f:d00f%5]) with mapi id 15.20.8445.016; Tue, 18 Feb 2025
+ 23:35:41 +0000
+Message-ID: <340d8dba-1b09-4875-8604-cd9f66ca1407@amd.com>
+Date: Wed, 19 Feb 2025 10:35:28 +1100
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [RFC PATCH v2 12/22] iommufd: Allow mapping from guest_memfd
+Content-Language: en-US
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: x86@kernel.org, kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Tom Lendacky <thomas.lendacky@amd.com>,
+ Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Robin Murphy <robin.murphy@arm.com>, Kevin Tian <kevin.tian@intel.com>,
+ Bjorn Helgaas <bhelgaas@google.com>, Dan Williams
+ <dan.j.williams@intel.com>, Christoph Hellwig <hch@lst.de>,
+ Nikunj A Dadhania <nikunj@amd.com>, Michael Roth <michael.roth@amd.com>,
+ Vasant Hegde <vasant.hegde@amd.com>, Joao Martins
+ <joao.m.martins@oracle.com>, Nicolin Chen <nicolinc@nvidia.com>,
+ Lu Baolu <baolu.lu@linux.intel.com>,
+ Steve Sistare <steven.sistare@oracle.com>, Lukas Wunner <lukas@wunner.de>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
+ iommu@lists.linux.dev, linux-coco@lists.linux.dev, Zhi Wang
+ <zhiw@nvidia.com>, AXu Yilun <yilun.xu@linux.intel.com>,
+ "Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
+References: <20250218111017.491719-1-aik@amd.com>
+ <20250218111017.491719-13-aik@amd.com> <20250218141634.GI3696814@ziepe.ca>
+From: Alexey Kardashevskiy <aik@amd.com>
+In-Reply-To: <20250218141634.GI3696814@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MEWPR01CA0174.ausprd01.prod.outlook.com
+ (2603:10c6:220:1f2::15) To CH3PR12MB9194.namprd12.prod.outlook.com
+ (2603:10b6:610:19f::7)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -134,354 +98,180 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR10MB6597:EE_|SJ0PR10MB5629:EE_
-X-MS-Office365-Filtering-Correlation-Id: f22c5718-6014-4af7-e9e6-08dd507153eb
+X-MS-TrafficTypeDiagnostic: CH3PR12MB9194:EE_|PH7PR12MB5806:EE_
+X-MS-Office365-Filtering-Correlation-Id: c16ad51d-0104-458e-ed4f-08dd5074f51c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|7053199007;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VXB4QTV1dkRkcUtQMTJxUDQwV1Rlc2FjL1F2R29YbU5QemtleFl5QUp2c1J0?=
- =?utf-8?B?MzdUR1ZYdHREa3owd1o3MFpJblM2cjdzNFlSTy80VkVBemhlOGhPRjNycit5?=
- =?utf-8?B?d1U0b2V5YS9WaERhZUczaFJDTE1lRXltcjE5SXBCR1d5eG1yZy9OdzJXaXNk?=
- =?utf-8?B?NUJmOGVBNldlOHpSOXQzU0ROOFE3WStQcnpuY2hMUTFHb0hNTHhRNWJRdVZr?=
- =?utf-8?B?TFBNVmNURjlRR1VnMjZ0ZC9TWWFINzVxOWpjalh3TFQvMWZlVU8yNnFqYmFs?=
- =?utf-8?B?WUFQeUt4c2ZxRVdtU2NheWl3eCs4WnRFOVdSY0RjMm9pNklrVXVMSnNxU29S?=
- =?utf-8?B?YVR6SlJlOFo4K2Z5V1RIQWRoajZUNzQvODNlK3gweG1rSldoTTE5UUh2OENr?=
- =?utf-8?B?OXpIUmdoc044TUlpR3lDV0lVR3FMZ09oQkQ0ZkgyU0E0NXIraFoxQVhyT09v?=
- =?utf-8?B?aEt1R1lwdFBRdVVYZFJTaUcxVGZPWWo2cWs4dVhqTTdSd2RZUEJGOWFpbFgv?=
- =?utf-8?B?bVBqSFQvdHFHR1lTMmJmSTZLdkhWZ29rWEcxditEdDd6T01sNEkzanVWSTNB?=
- =?utf-8?B?MGdoNlhaSUtQdTh1K3FOdlBwWStrdXB1ZlIwU3VZYVhTQzJ3SjlCRWdlTU50?=
- =?utf-8?B?blBDM2Y5elhuaElzQWdPQTNFaFFrWUtUQ0VhMUxxdEd3Q3NUdzJ5Vy9RODk2?=
- =?utf-8?B?TDhzdXZzUE9CT2tDNTY4ak5WM0hjWlkyRTFaZ1MwYlFUQ0FLaklHZFBpVm11?=
- =?utf-8?B?UHhYLytYaUQ3ZVExaGZUZDNRNlI0ZFRySU95YVVDMm5oMUtkZVZzYXcwekwz?=
- =?utf-8?B?bmEySXZEcGNJd0xXZHUwRElDR3ZNYmsvd0JjcWd6TUN3ckExbS9nQUJiV0Jz?=
- =?utf-8?B?RVlmOVNDNkNKWmRMdUt3U3pWWHZXTkw5YThJdTdCVThNazArTk1BRXZ2NWhC?=
- =?utf-8?B?N3VJUEF0NWQ1M25SaTgzOEhpYmorY29tZkpyTDdSOGdDZE4ya1VQbjlBUDh0?=
- =?utf-8?B?SmNZeGlCeDZSTFRzQ1BZblpxL2dZa28yRVYxZXorR21lT2pwampjeUlkSkVK?=
- =?utf-8?B?UktaQzRqTGRabEtkdkdIbGRLQzZxaURUWVdxbzJDcmdiQ0NjRS9ER3JGRlk5?=
- =?utf-8?B?V0IrR1RmRW83MUdZVnFhV1BBcDJhVHhodGFoa3hlMnN2QlNHdUcrU2tjUEJ0?=
- =?utf-8?B?UUVVa3J1VWJrZjdUbUtZRTFtTFVUQ1hzcUlMaXUwZGFmdVJaOTN0dTdHSzVM?=
- =?utf-8?B?ajNyUzdoMm4wRFJsYUoxUUlVNmNsd2tuZjgraXdxNEJSa0pJSlZmaU1WWitB?=
- =?utf-8?B?T0l0WVR4WEd6R01oYVV2QW9XM3VZNCs4Mm1PNFRHM1FlUzVyQmhNY2NIMksr?=
- =?utf-8?B?R3JjTld3TEFVVVZZcHF6Q08wWXdrSU5oUTd3WnhzRjBjd0p0OHZFeXRXb0VZ?=
- =?utf-8?B?Z0lzenl4bUVqU1VsTXQ5VlQ2M0tEZEt4SStZNHpQSVB2VXRoY0loT1cxSUhn?=
- =?utf-8?B?amkxWTZvL0c1OU91RHRSY21tVzlkYXJSMk1iM3JZVE5tTDYzWm1CZlVWRlBI?=
- =?utf-8?B?V1EyWitqMnpLRUt4WGVQZTh2cDg1aFFrUVBqYWtJT2dhaCt6SU5CMlJpM2RC?=
- =?utf-8?B?YkhkTXNOVjI1ZktuSm1EcW9nRks3YjBBdCszS2NNYkJBSlRoWWFTRCtRUEha?=
- =?utf-8?B?VGkvUmhLT21pazU5eitNTmYvSnlmSFhsQW9JQ0Y5djZTYmNmVjJDQlBFODl2?=
- =?utf-8?B?N3A1VVEzMDZzU3NyUVBldGlVdG80M1Zzb0ZWZlhzeUZnVG0zaStzb2M2M0dH?=
- =?utf-8?B?REFZL1lVZVpiQ2xRVjNBa0FYRGxMWmdVanNYWGxBYTJhZ1JJRWNBYWM2Y00y?=
- =?utf-8?Q?86qQ43oCKgJ2O?=
+	=?utf-8?B?bmU5V0xLRzlnYzMvV0hLWUlaNVdvSkVKOXk4YitJaVRGRjljZkdNU3c3Y2hM?=
+ =?utf-8?B?a2dxeEZlNVhGWFZmd1BSb1hDdUdQbElWUzFVWWpzbFEyYW9VYU1VQmFJTWhr?=
+ =?utf-8?B?cEdDc2pBVU4yTDR4Tk5Fb0JQdE9HanRjbDlPaVJXblVSQ05uVjl3ZmZyalQ2?=
+ =?utf-8?B?ek5FRVIwVnRzK25pN2lvSytxSis2NUcyODVVL2FNTGJuNitRS0lZekx0eE5o?=
+ =?utf-8?B?OVFzeWRBbG51Qlcxc0VKd2FRZk5PcHBSRmdDYlVaTFU3NUlhbTd6ZGRLazYr?=
+ =?utf-8?B?YzE3VlVXdHQ2MnFmdDhZNTNjTFFvODlkck40MS9wbTVGc3BYUVh4NVVUYWx1?=
+ =?utf-8?B?eWFLYXdhTUo4TG9ES0diYytpY2l3MjR5N0tPSFdhSmxTTHNGRmQvVU0wd2NN?=
+ =?utf-8?B?Yy9wcDhrOXV6Q0ZVTUJZYUNaVENtdmVrdEFZa0p1dGhoaXV0YytKaTZyUWJw?=
+ =?utf-8?B?UlVYTFRjKzRoZ3g5c0QweUdRVmlrTXo4Ym4vTzgrcTkzYUJOcUc1b0NIV1M2?=
+ =?utf-8?B?M1dDS2Rnc3Jua3Z4UE9Ocko3WFprengxTWRoRkRBOUNUZXllK3BWY1I4dlY1?=
+ =?utf-8?B?S1JhVkJjdnRuMjIxSjUrdG5YU2NndlV6Uzc0MHhyQXdsVU1VVm1NWUQ5ZkRQ?=
+ =?utf-8?B?dnBzRmx6NThnbENUckJBNjJ5R2libklOMUUzbVRuaG1zTnVyM0g1T3YvWkp3?=
+ =?utf-8?B?N0hTUzh2YjBtbUFnb0N3cS9ZR3VxejBDdThxOHIzcHNmR0FJejFLNGs5L0dk?=
+ =?utf-8?B?WEZWaS8yc0NISTk0a2lzMHBpbytKS3czb25PMFZqOWJoaFVhM1pnMlY2Nml2?=
+ =?utf-8?B?emYzOVFXb0dXUEhiREd4dEx0Q3UxNmdCN3hNOXBXbEdWOWNIMzdjNm9hV2Ra?=
+ =?utf-8?B?ckF1RHJja0hWWHdua3BXUHhPTEJJdjZtUy9YN2F2eWNoWkhyRlB4V3A4Mmtu?=
+ =?utf-8?B?RjNuVUsrRnNQWHBoOHhmZDlEbVRVZkU4ZzNDT3kxMjlXMHNhbWxDck1ncnZo?=
+ =?utf-8?B?WlZleFVNU2czY3ZhZmV1Q1czVkpLMHhmcjlPM0V5MlJncWpHYjN2RDlldmRS?=
+ =?utf-8?B?ejVteFdBVEw0SFowYU5HMUN3V3g2NmVPN2VQM2xxTzBBZ0pIWGdOenRJbFJi?=
+ =?utf-8?B?V2pGSFVGdXg0YUhjbVladkU5eHM0RVBuY3dsczB6TnQyYkpYeXVWZXFNN2dn?=
+ =?utf-8?B?UzFESGdkc1M0OVo2Z0VXOG5LWm5qMnEvZWZNL2xPQkZhbFU0blcrWjNrUFQx?=
+ =?utf-8?B?bHY5cUNaSEhlUWJtWWZQMlhGbDVwZ1FwcGc0SHFWYjRHT1FiRzFPbWQxQ0xS?=
+ =?utf-8?B?bUozd2FtanRZbDhuKzZxajhYS2s2YnVSL2ZjSjBOWXVNK1p2U3BvN1hBYlMv?=
+ =?utf-8?B?RHc1d3c3aHg1UVdEbDA5eGdhbFgrdUVWdUdQZkZDcktjREJFdXpOeHZtVjAy?=
+ =?utf-8?B?R0lONUoxa1p6T3ZIUzREWGYzK2tLLzRLNHVVS3VCSmZYNFkzNGNMaUhLUW5l?=
+ =?utf-8?B?bXl4SEVvcGVRK08wODUvcVN2RDZaNDgzVG1Ndk8zMDNqRmI5WW5jZzkzNmFW?=
+ =?utf-8?B?a3FCbkNZK2NkU0JtRGlLdEs3YXl2OC96RUdTNUtjZWlQQTlYMXZhYkZkSjBK?=
+ =?utf-8?B?c01uZkp2b1pPMHU1dWYwTnFGZUxWTGVDck5mcFBveFZoM280UGpXZkJHQVRw?=
+ =?utf-8?B?OGxoWllreHdod0dqcUpRazJMSkZ5VFhoUWljUkJUSVVXZjNOMTlWOFpNcUk4?=
+ =?utf-8?B?M1VtdFR1SXg5ZGhNWnJhNkp0Mm42ODBzWTZ0bzVIWmp0bFc2eWYvRE9CQnlm?=
+ =?utf-8?B?UmV0QXRUNVhDWklqbFordDZSaDRPNVUxN1VpSUk5MXR0T1BDUDc3Vk8yUXU1?=
+ =?utf-8?Q?b337Rj/iYQc+M?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6597.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9194.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WkFVellsNy81eGpZSE9PRDRyOW1abHBoZDcxSDJFaWtrVkxwTU5taFV4SkpH?=
- =?utf-8?B?aTRpRUhhc1NGSTVZSTlnQzlYQnRpTm9yV2VLTVFjVlRPRTI4VkFIU2tsS0VC?=
- =?utf-8?B?a1dkK1kzQnJzK2ZleUJaNHhKSkJYTGZlaThpb1dpQnlNMFpnVXRMYXlHTjRH?=
- =?utf-8?B?QWVOcDczYmdXQXZCSmtzN3B0cUg4S3J4VDh0L200ekorQkJLaDVrdXdtVzJU?=
- =?utf-8?B?cS9uVzJyOEd1MXovRTI1cDU3Q3o1Q0NCL1lKS0RMczA3TjJIdS9lUWlCZFIy?=
- =?utf-8?B?TmlWN3lwMjVqZk9GTFgrRUt0TWlQalBCWVBSVk9jN0lUSjlPdHZVQVh3S25h?=
- =?utf-8?B?K2QycTQ1SjVVNzRReWl5UTQxTG55VWVueGtuNzZZa2Y5L2JrR0VDLzFJdE5V?=
- =?utf-8?B?Q28xYmFFdy9aNDBlakpZdWM4Yk5yd1MxSkdZd21KeFdvVnBCc0FnSitCNXZ5?=
- =?utf-8?B?SGJlODdsL0F2dWNQSUgvemNTVzF3a29nVVpJM2EzTjJsU1IybjYrMTg5TVVt?=
- =?utf-8?B?QkFJVEhPUXB5eGsvZ0E1T1I4dk5keGh3dFVubGc0NXRUQU16V2tUWlluSHdh?=
- =?utf-8?B?azh6TTMzTG41SDNtZUVCa2lLOWJxM0dISmpWdnV3RGY2THVsYysvdVFhU1E4?=
- =?utf-8?B?d0lxSlpsdENRTjNvRFMxdVR6Vm0xSlRJMDl2bGtqbzR6amtjR0NRQmdMMnVr?=
- =?utf-8?B?SEE1Tk9hbzBFdXg2aGwyaVZtZmJnYkNrL1Qvb2RSZHZaUlJmQWVUaHFKVWNq?=
- =?utf-8?B?b0NvYVlXK2JMNmdXMC85ZzQzVmkzeTllMGF1cFd5cWZ2QlJxeFJucnVjRDdU?=
- =?utf-8?B?Nnd1YlFpdmhUV1QyN2ZBUGdrbmYwSFRLeGhaRk1MdGlENnF3Tm9rZ3ZzcHdm?=
- =?utf-8?B?RWd0R1pUaG0zT0ZnbTByK25ic3ZwN2xWb0FFMndNOEFCY0JYTEpUZXpsUGtn?=
- =?utf-8?B?MFcyNTFkYlhDM0g2VUFZT0NLRzJFallZM1hPSFlwTDFjK2F1UW5NLzdTT1Mw?=
- =?utf-8?B?RlM5amFwTlpmSVVFKytzZ1FuUlVHL1FxK2Yza0duTEVxbXROQnk4WnB3djNI?=
- =?utf-8?B?cW9jbElpUU85K1JSQTNpR2x2RFdHMW90ejdJd3pzU3ZuNmJ6OWYzWHFXdzRR?=
- =?utf-8?B?RVlSTmJpbjRjTENTeG1KeEpiOU1uZVc5aVpYTXRPMGt5dFFwdWdUSDljMlRU?=
- =?utf-8?B?MVpWZjlGY3VxK0tIajZKaEZKZ2JaTEswQ1E1M21DdDJmUHZRaEYrcHdwS2kw?=
- =?utf-8?B?WjZlVHBVL3hHYkhWT2xVbjZiU0tSZW5pa0hRejNGT1FBVUtSNnVUa3VPOGVo?=
- =?utf-8?B?MW8rWVZHekRYc2RQWkw0ZHAwYnQxbFF6TDVwT2xBQUUwMVVrelRIcFZmWWox?=
- =?utf-8?B?ajFVUDJOekpBakFiNC9qc3l5VXpBaUJmbXpOTTlwZm9IMjhRbTh0UG5Uc0Rt?=
- =?utf-8?B?czBCZlVjZXBzRXlEdmhOZ1hZQXdDUGZDMFllU1FwRHo0MVIrYlNuUmNPWC9L?=
- =?utf-8?B?QlNndStRZC80SldvenRZTmNwczg4TndrZWo4NXdVeDFTNVZCWUUrNEUzeEFK?=
- =?utf-8?B?dFVURFpGUWwyMzdQSkFwbCtUTllrMmVldTIzL1R6VVlXVzFTNmYvamUrbVpD?=
- =?utf-8?B?QW55T01IZHR4b2tXWnhDOC9zbjMyTWFTaXk2VHZrVFRib3hUT2daSW1ETGVE?=
- =?utf-8?B?dFlQSzFVWmpvSnJ3S1NoWVZjWVE5ZDEzV2hHc2FiRXRGRU56TjVFRlFQVm5j?=
- =?utf-8?B?V0dCdER5ZXZneExjb0R0aVZxTVY1aStkM2Jyc0ZLdUhGQytiSzBKU0JqQVRE?=
- =?utf-8?B?K1o2OHBVekNUd2xvc1haajRmcnZxRTdUZVNvNm82d3hoZWhFQkJmL3lUNlpP?=
- =?utf-8?B?YTI1R0FVSE9INTRsOTRBMkUzWk5vYXVmK1V1ODZGeHM1ZFl4TmJ1Z3I5anpL?=
- =?utf-8?B?N0QvTTRtUlZ2aFlGWWJDQlkwbFZJZGpsS1oreWM4MHRPU0lGZ3F5bmI5a0NJ?=
- =?utf-8?B?T25RUldHdkNGSkR1TUNOSWh3OXpsVnhwNUR6Qk9ST2tUSEFoTkhTT1JTQW8y?=
- =?utf-8?B?dFNlWndRcytNandJWVp6SWNkWlNZUHVpLzdRdi9pc2N4dTZ5MDlObnJHZGF6?=
- =?utf-8?B?NHhnNmtEUUdweU5zWGo3cVFvNFQzdHJJUkV5Y3YzS3hRVGJoYWt0SEZsRWZt?=
- =?utf-8?B?Tmc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	2qPxDycVHEKLomEgm1wGUBTR46/b1RbGEGEx+T2jyAhS5YiPRImMtoztXQ+YEP8ToQZwT2dKSHvULWwEHnyckFQ+PxugDtMQBq4g3mmyhD1twH22zKqTEOQlky3C9IyqccbmJlQmvur8BMkm3FNbApniJq0KzWz6GaoAx7vy+3dk6Yxf1uU5A7ShpxlguwPnsHMRBmSQXBZLpS7L29sqXZSeirDGGcwOJgJAE5M5UoabGA01PmQ5VE+s6Fc+RJNNI+fkGURzsZDpUMCnCn+XPnavTazUGLM1Hn4vTLjp9mTcA547X2Mf7aGFbffw6WnbJg2lj9m3zl5xz3c0Pu/O3u4O3/e6n/Q5pKiJ0wjr4S5whxLzSnVo/O7lf1ph9IAG51J2x2OboDokcaL257KDURCu7T/8Zna1oBaz0fef+N8GRtTohC8ta9IJ8o14XzidMefy8+t2sddpy3ldFkGmtWcb+ZLIxpaW+HVqg3KCcOI2UBsqy6SnV/jcr1DXNejOBYEnzeUlnQXdfHIyoTFDNW0jrdN7bXKYGISak7hxCGJSw7dq4nBrJ2ybN17SK40wUap439wv3dmGCrF1njJQsAacJhqNqgxdHQ6fDYHy0hw=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f22c5718-6014-4af7-e9e6-08dd507153eb
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6597.namprd10.prod.outlook.com
+	=?utf-8?B?ODB0MVBVZjJvVHc1UDc5Yk9LTmRjVUhaOFNqSFhYUFZrelFGZElKdXFWc1VR?=
+ =?utf-8?B?TnFtVjlGYThHM2FKRVpTWkxHWktBbzhJdWZHWkN3RWE5TDVTK0xCQlNsVlQv?=
+ =?utf-8?B?SG55NHBQSis4VDVrcFRidHBvWmtUVXF5T3dNRnVyQkx5ZFpLNnp3c29MUitH?=
+ =?utf-8?B?TmtrRmlnNldOUUxvRnE0WVlvZ0l3Vllaa21LMXNUdzVEcXlpWnhFb3BaNURv?=
+ =?utf-8?B?RmZZeGZ1THZiSG5EcjNMSm5tYk1kVmd4L3cyK1V0b1dKb1FXUWNza1FwUXds?=
+ =?utf-8?B?Vy9ENUovRTFuWEo3YXBaaG5YUlNqSnhsK2ZNNzNLaWgrWG9hTlV3RHZjem9y?=
+ =?utf-8?B?b1E3YWxhQXU1K3hDMUlZeitydUV6MTdaZW8xMGdwS3Iyem1wbEphOUVCUHNa?=
+ =?utf-8?B?aHBpY1RMa01TbWpWSDNhNlhuWHdLYjFiRlpUcXAxQWxXLzlUQmJUSzhoSFI1?=
+ =?utf-8?B?d0FBbXFUZkpoR0RtY1RtdTZNQnBtS3Vma2U4M1IzUkFiQTJweGd1R0VuL1dJ?=
+ =?utf-8?B?aGdicFBNMzV3NVRDYkFJNFpYVDF5eXYyTkRNSVMreTluWmZyeU43MEtMVjla?=
+ =?utf-8?B?L29mclVhWGROWUh0T2RNU0p3TDNzeEJ6L05QYW1aQXpjSjVLS2NyUCtRUzRS?=
+ =?utf-8?B?LzB3bk9Xa0hBVnBzQ3Z6dDg1cUZxZlIwMTBSb2RzeHloTW9SOExrUFpjcDZC?=
+ =?utf-8?B?T3cwcnlhMkp6Q1hWRUltTnF2WjJBNFpqTmFpajBKWTZDK2pGSTMrMWV6S0lx?=
+ =?utf-8?B?bGZSN0NGY3YwOWJSeWdSUExXc1VJMmI0bVFJdnFsdzQzVnpvNm91TythRDFq?=
+ =?utf-8?B?NlJJWU1QcmVHMHd1M29UbTR0QzdDTFRISDZ5RjZzYzAwUkVmbWpVZi8vekR4?=
+ =?utf-8?B?T1B2SFprdjRXTDF1eWZPcUkyOGhnUms1dW5GdS9IWHVySmZNK2hsTXJqdXRN?=
+ =?utf-8?B?bmlMUER1MHJoaDZvNGtsUHY2TzF3djhJOWgwdlJiQjJHYkIvREhJdDZ6dFl5?=
+ =?utf-8?B?VHl5WGQ2cVl6ZzRYSFdPZ3ZabnBJVHBVVGlnWGhxWFFlL3QzYmpiOE5VZXRl?=
+ =?utf-8?B?S1FUSU1LWGEwWVBGRTZmd2lmQkNaSU5vNzVYUHBRQkRybjI2cnI3K2lXays4?=
+ =?utf-8?B?aVpBK1lURjZCL2Exb0NYWnpiSGtkTmVuQ2JVMnVnUmM2bktZc2dHK1ZBTmFk?=
+ =?utf-8?B?aElBblpmYVMxME1mZzNlS1c5eXlvWW82bzdSbkV6MGxFYWR5TmIxVWpVTmpw?=
+ =?utf-8?B?c0xYYXZqREk3Z3dnZHhvR0JYQkdyMFY4aldTNStlUEdYZU1MTWl4OHd3T0R3?=
+ =?utf-8?B?NEJwQ1VSYXB3OFE1OWlyOG5iZElJcVFmNnlYUk5SaG1WdTVPUUk2ZUV5clNK?=
+ =?utf-8?B?dWNrSDYrNUNhemNiM3NIS0ZzU01DTVFxT3NqZER4SFI1aFAwSEx5M0FwSkN6?=
+ =?utf-8?B?bHBEODBqOUhuaHhSeDA3Z1R5WjUxRzl4T1NraWM2OVVUSmRZQ3lnV0NHSExP?=
+ =?utf-8?B?MkdMMS9TWC9pUWIzc3dBTzBXTW5wQVM0ZFg3WjR5czVHQ1g0QUpGU1RWYnM1?=
+ =?utf-8?B?NHh5R2w5WTNrZ2ZkZG1TYXRSZmtWQTRRd2xqWFVESzBBNHA0enRZdFgwdjVX?=
+ =?utf-8?B?azdUb3dZRWRtdnpOWXF2SEwyU1FtV1RudWdoc2dsRkZOVXRYdjd2U1dkUkpI?=
+ =?utf-8?B?UjVnNFlRTzdPTW1meFM2ODd0WjZzYWFyVDdnaDgzSzlOaEhITEw1elFNdXdX?=
+ =?utf-8?B?ZThyZlU4bHduRkJzOVV6NFJIZTRXTkt6Z2pqNklyamdycFNWaDE2WklIY0xq?=
+ =?utf-8?B?dSszWjdqS0k4Uzl5aU5JWGE1VXQwN1pDSnEwNjYveWFWb1JRdnYrZm44NGlk?=
+ =?utf-8?B?OVhaNVpRRUNLTWZQUVl3RHZNR2pOSk81WmdDQ21yczBzQTczZGsxSjZBZ3VK?=
+ =?utf-8?B?aW9oVFI2WUtONFVUejJ1VjFMMFZwT3RuU1hzS2VaU1I2cHBPczdRYjlJU2tN?=
+ =?utf-8?B?RDFFdC8xWWQ2SUVlWlU4NlozbjdzU0c4RTN0S0JNOTZHU3g2K2FaVlA1MlVG?=
+ =?utf-8?B?bnZ4TmwyQzNUNmJKTWRuODlkZWpyTHZNMGlpa1AxYXRJbUYzaTJxc1VBWExM?=
+ =?utf-8?Q?+TIrDZoo8FaIrvrvMTv/oiOTZ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c16ad51d-0104-458e-ed4f-08dd5074f51c
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB9194.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 23:09:42.8216
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 23:35:41.8689
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: APlBaAOMcnFfXoeu+uEei3Bz41oUyJUX4FfT3C04TJ1KT78lledOEFy6wTpUyW98RMtjbA3bQNj6gev3Ttu90n6uOGTCBp1T/hKx301iQlo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5629
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-18_11,2025-02-18_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 bulkscore=0
- mlxlogscore=999 malwarescore=0 suspectscore=0 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
- definitions=main-2502180155
-X-Proofpoint-ORIG-GUID: WAWgcxRKevVX-rJ22icTVapGOQlmTQWl
-X-Proofpoint-GUID: WAWgcxRKevVX-rJ22icTVapGOQlmTQWl
+X-MS-Exchange-CrossTenant-UserPrincipalName: AwyWV03hRN3NKH0qHDbJlNmK4xyu/oV3RaxzWvh9MRSfr8goUgZ+3Rayzr+dfDNaevxn1WCiYkZBsCfdSevTcA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5806
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-> On Tue, Feb 11, 2025 at 3:59=E2=80=AFPM Stephen Brennan
-[...]
->> We can dust that off and include it for a new version of this series.
->> I'd be curious of what you'd like to see for kernel modules? A
->> three-level tree would be too complex, in my opinion.
->
-> What is the use case for vars in kernel modules?
 
-The use case would be the same as for the core kernel. My primary
-motivation is to allow drgn to understand the types of global variables,
-and that extends to kernel modules too.
 
->> module BTF size increased by 53.2%.
->
-> This is the sum of all mods with vars divided by
-> the sum of all mods without?
+On 19/2/25 01:16, Jason Gunthorpe wrote:
+> On Tue, Feb 18, 2025 at 10:09:59PM +1100, Alexey Kardashevskiy wrote:
+>> CoCo VMs get their private memory allocated from guest_memfd
+>> ("gmemfd") which is a KVM facility similar to memfd.
+>> At the moment gmemfds cannot mmap() so the usual GUP API does
+>> not work on these as expected.
+>>
+>> Use the existing IOMMU_IOAS_MAP_FILE API to allow mapping from
+>> fd + offset. Detect the gmemfd case in pfn_reader_user_pin() and
+>> simplified mapping.
+>>
+>> The long term plan is to ditch this workaround and follow
+>> the usual memfd path.
+> 
+> How is that possible though?
 
-That was a poorly done comparison, so let me provide this one that I did
-using 6.13 and these patches. It was essentially a localmodconfig for a
-VM instance, so I could still do better by picking a popular
-distribution config. But I think this is far more representative.
+dunno, things evolve over years and converge somehow :)
 
-MODULE                   BASE   COMP    CHG     PCT
-drm.ko                   115833 123410  7577    6.54%
-iscsi_boot_sysfs.ko      2627   5380    2753    104.80%
-joydev.ko                1816   2289    473     26.05%
-libcxgbi.ko              24556  25266   710     2.89%
-drm_vram_helper.ko       22325  22751   426     1.91%
-nvme-tcp.ko              25044  25973   929     3.71%
-vfat.ko                  3448   3953    505     14.65%
-btrfs.ko                 275139 343686  68547   24.91%
-libiscsi.ko              21177  21977   800     3.78%
-xt_owner.ko              449    803     354     78.84%
-nft_ct.ko                4912   6157    1245    25.35%
-iscsi_ibft.ko            3967   4463    496     12.50%
-pcspkr.ko                283    682     399     140.99%
-crc32-pclmul.ko          390    771     381     97.69%
-nf_conntrack.ko          23686  28191   4505    19.02%
-iscsi_tcp.ko             16827  17750   923     5.49%
-nft_fib.ko               835    1117    282     33.77%
-nf_reject_ipv6.ko        699    981     282     40.34%
-rfkill.ko                4233   6410    2177    51.43%
-dm-region-hash.ko        6214   6496    282     4.54%
-cxgb3i.ko                35469  37078   1609    4.54%
-dm-mirror.ko             7576   8191    615     8.12%
-pvpanic-pci.ko           174    574     400     229.89%
-crct10dif-pclmul.ko      146    525     379     259.59%
-nvme-fabrics.ko          17341  18124   783     4.52%
-kvm-amd.ko               47302  51914   4612    9.75%
-crc8.ko                  221    405     184     83.26%
-ib_iser.ko               27769  29116   1347    4.85%
-sg.ko                    4234   5656    1422    33.59%
-intel_rapl_common.ko     5678   8446    2768    48.75%
-bochs.ko                 35643  36997   1354    3.80%
-sha1-ssse3.ko            790    1305    515     65.19%
-kvm-intel.ko             53802  59220   5418    10.07%
-nft_chain_nat.ko         279    714     435     155.91%
-vmlinux                  5484970        7330096 1845126 33.64%
-sha256-ssse3.ko          851    1378    527     61.93%
-nf_nat.ko                6341   7240    899     14.18%
-configs.ko               72     256     184     255.56%
-xt_comment.ko            151    507     356     235.76%
-ccp.ko                   30433  34782   4349    14.29%
-cxgb3.ko                 44981  47504   2523    5.61%
-crypto_simd.ko           1331   1613    282     21.19%
-iptable_filter.ko        855    1456    601     70.29%
-qedi.ko                  70653  72786   2133    3.02%
-drm_kms_helper.ko        63238  65000   1762    2.79%
-cnic.ko                  117074 117790  716     0.61%
-failover.ko              780    1216    436     55.90%
-nft_redir.ko             874    1529    655     74.94%
-serio_raw.ko             708    1234    526     74.29%
-nf_defrag_ipv6.ko        1520   2253    733     48.22%
-nf_defrag_ipv4.ko        306    770     464     151.63%
-nft_reject_ipv4.ko       517    939     422     81.62%
-nft_nat.ko               1192   1732    540     45.30%
-nft_reject_inet.ko       554    976     422     76.17%
-fuse.ko                  32181  41859   9678    30.07%
-nft_compat.ko            3705   4404    699     18.87%
-zstd_compress.ko         42597  43622   1025    2.41%
-tls.ko                   15140  20683   5543    36.61%
-virtio_pci.ko            8456   9193    737     8.72%
-blake2b_generic.ko       1364   1699    335     24.56%
-cryptd.ko                3697   4297    600     16.23%
-xor.ko                   1358   1879    521     38.37%
-intel_rapl_msr.ko        2851   3440    589     20.66%
-kvm.ko                   177060 256377  79317   44.80%
-cxgb4.ko                 215865 220844  4979    2.31%
-bnx2i.ko                 39524  41477   1953    4.94%
-dm-round-robin.ko        1795   2123    328     18.27%
-virtio_pci_legacy_dev.ko 909    1191    282     31.02%
-qla4xxx.ko               79040  82694   3654    4.62%
-nfs.ko                   108350 169642  61292   56.57%
-libata.ko                47301  66188   18887   39.93%
-ghash-clmulni-intel.ko   578    997     419     72.49%
-nf_reject_ipv4.ko        706    988     282     39.94%
-nft_reject.ko            820    1196    376     45.85%
-sunrpc.ko                127496 197841  70345   55.17%
-nft_fib_ipv4.ko          803    1257    454     56.54%
-scsi_transport_iscsi.ko  40419  57633   17214   42.59%
-lockd.ko                 36144  42137   5993    16.58%
-drm_shmem_helper.ko      32555  33043   488     1.50%
-nvme-core.ko             50275  58298   8023    15.96%
-iw_cm.ko                 13405  14796   1391    10.38%
-mdio.ko                  857    1041    184     21.47%
-bnx2.ko                  20354  21611   1257    6.18%
-net_failover.ko          1742   2187    445     25.55%
-ip_set.ko                11812  13093   1281    10.84%
-libcxgb.ko               8698   8980    282     3.24%
-dm-multipath.ko          8124   8898    774     9.53%
-grace.ko                 462    890     428     92.64%
-virtio_net.ko            12322  14896   2574    20.89%
-qed.ko                   228735 232231  3496    1.53%
-cdc-acm.ko               2923   3679    756     25.86%
-i2c-piix4.ko             1124   2341    1217    108.27%
-pvpanic-mmio.ko          177    625     448     253.11%
-virtio_scsi.ko           3154   3898    744     23.59%
-uio.ko                   2602   4295    1693    65.07%
-nft_fib_ipv6.ko          956    1410    454     47.49%
-cec.ko                   28370  29266   896     3.16%
-qemu_fw_cfg.ko           1601   3476    1875    117.11%
-ttm.ko                   23672  25727   2055    8.68%
-sd_mod.ko                9976   13030   3054    30.61%
-xfs.ko                   574594 926637  352043  61.27%
-libiscsi_tcp.ko          17444  17911   467     2.68%
-ib_cm.ko                 32324  62373   30049   92.96%
-aesni-intel.ko           3370   4922    1552    46.05%
-drm_client_lib.ko        27449  27794   345     1.26%
-virtio_pci_modern_dev.ko 2537   2819    282     11.12%
-rdma_cm.ko               32504  51823   19319   59.44%
-fat.ko                   11958  13297   1339    11.20%
-dm-log.ko                6529   6986    457     7.00%
-pata_acpi.ko             9231   9700    469     5.08%
-ata_piix.ko              10998  12598   1600    14.55%
-ipt_REJECT.ko            956    1311    355     37.13%
-drm_ttm_helper.ko        33160  33544   384     1.16%
-be2iscsi.ko              55078  56993   1915    3.48%
-i2c-smbus.ko             582    973     391     67.18%
-cuse.ko                  8435   9241    806     9.56%
-nft_fib_inet.ko          579    995     416     71.85%
-ib_core.ko               103656 123701  20045   19.34%
-pulse8-cec.ko            9153   9890    737     8.05%
-pvpanic.ko               494    1087    593     120.04%
-dm-mod.ko                31377  35265   3888    12.39%
-raid6_pq.ko              2774   4207    1433    51.66%
-nft_reject_ipv6.ko       517    939     422     81.62%
-cxgb4i.ko                47490  49021   1531    3.22%
-ata_generic.ko           9008   9666    658     7.30%
-vboxvideo.ko             47622  48844   1222    2.57%
-ip_tables.ko             3109   3564    455     14.63%
+>> +static struct folio *guest_memfd_get_pfn(struct file *file, unsigned long index,
+>> +					 unsigned long *pfn, int *max_order)
+>> +{
+>> +	struct folio *folio;
+>> +	int ret = 0;
+>> +
+>> +	folio = filemap_grab_folio(file_inode(file)->i_mapping, index);
+>> +
+>> +	if (IS_ERR(folio))
+>> +		return folio;
+>> +
+>> +	if (folio_test_hwpoison(folio)) {
+>> +		folio_unlock(folio);
+>> +		folio_put(folio);
+>> +		return ERR_PTR(-EHWPOISON);
+>> +	}
+>> +
+>> +	*pfn = folio_pfn(folio) + (index & (folio_nr_pages(folio) - 1));
+>> +	if (!max_order)
+>> +		goto unlock_exit;
+>> +
+>> +	/* Refs for unpin_user_page_range_dirty_lock->gup_put_folio(FOLL_PIN) */
+>> +	ret = folio_add_pins(folio, 1);
+>> +	folio_put(folio); /* Drop ref from filemap_grab_folio */
+>> +
+>> +unlock_exit:
+>> +	folio_unlock(folio);
+>> +	if (ret)
+>> +		folio = ERR_PTR(ret);
+>> +
+>> +	return folio;
+>> +}
+> 
+> Connecting iommufd to guestmemfd through the FD is broadly the right
+> idea, but I'm not sure this matches the design of guestmemfd regarding
+> pinnability. IIRC they were adamant that the pages would not be
+> pinned..
 
-ALL MODS                 9153268        11895301        2742033 29.96%
-vmlinux                  5484970        7330096 1845126 33.64%
-TOTAL                    14638238       19225397        4587159 31.34%
+uff I thought it was about "not mapped" rather than "non pinned".
 
-So this shows a 1.8 MiB increase in vmlinux size, or 33.6%.
-And for these modules in aggregate, an increase of 2.7 MiB or 30.0%.
+> folio_add_pins() just prevents the folio from being freed, it doesn't
+> prevent the guestmemfd code from messing with the filemap.
+> 
+> You should separate this from the rest of the series and discuss it
+> directly with the guestmemfd maintainers.
 
-> Any outliers there?
-> I would expect modules to have few global variables.
+Alright, thanks for the suggestion.
 
-In terms of outliers, there are groups that stand out to me:
+> As I understood it the requirement here is to have some kind of
+> invalidation callback so that iommufd can drop mappings,
 
-1. Large percentage increases are usually always for modules that had
-very tiny BTF before. The module system inherently creates a few
-global variables for each module, so there's always a slight constant
-increase of the BTF size (184 bytes, as far as I can tell), and in those
-cases it can be a quite large percentage. Here's an example,
-"configs.ko" which comes from the CONFIG_IKCONFIG enablement:
+Since shared<->private conversion is an ioctl() (kvm/gmemfd) so it is 
+ioctl() for iommufd then too. Oh well.
 
-BEFORE:
-    $ bpftool btf dump file ../build_pahole_novars/kernel/configs.ko -B ../=
-build_pahole_novars/vmlinux
-    [127877] CONST '(anon)' type_id=3D11124
-    [127878] ARRAY '(anon)' type_id=3D127877 index_type_id=3D21 nr_elems=3D=
-1
-    [127879] CONST '(anon)' type_id=3D127878
+> but I don't
+> really know and AFAIK AMD is special in wanting private pages mapped
+> to the hypervisor iommu..
 
-AFTER:
-    $ bpftool btf dump file ../build_pahole_vars/kernel/configs.ko -B ../bu=
-ild_pahole_vars/vmlinux
-    [162827] CONST '(anon)' type_id=3D11124
-    [162828] ARRAY '(anon)' type_id=3D162827 index_type_id=3D21 nr_elems=3D=
-1
-    [162829] CONST '(anon)' type_id=3D162828
-    [162830] VAR '____versions' type_id=3D162829, linkage=3Dstatic
-    [162831] DATASEC '__versions' size=3D64 vlen=3D1
-            type_id=3D162830 offset=3D0 size=3D64 (VAR '____versions')
-    [162832] VAR 'orc_header' type_id=3D8667, linkage=3Dstatic
-    [162833] DATASEC '.orc_header' size=3D20 vlen=3D1
-            type_id=3D162832 offset=3D0 size=3D20 (VAR 'orc_header')
-    [162834] VAR '__this_module' type_id=3D312, linkage=3Dglobal
-    [162835] DATASEC '.gnu.linkonce.this_module' size=3D1344 vlen=3D1
-            type_id=3D162834 offset=3D0 size=3D1344 (VAR '__this_module')
-
-What is, I think interesting, is that the types in that module were
-totally useless to begin with, because they were used by a variable
-which didn't even get emitted. So while this is a substantial
-percentage-wise increase, I think it's a net improvement for this and
-other modules.
-
-2. The largest absolute increases come from large, complex modules like
-xfs, kvm, sunrpc, btrfs, etc. For example, xfs had 5696 VAR
-declarations. What is disappointing is how much of this is due to
-automatically-generated "variables" from macros (e.g. tracepoints):
-Here is a list of variable prefixes like that:
-
-  print_fmt_*
-  trace_event_fields_*
-  trace_event_type_funcs_*
-  event_*
-  __SCK__tp_func_*
-  __bpf_trace_tp_map_*
-  __event_*
-  event_class_*
-  TRACE_SYSTEM_*
-  __TRACE_SYSTEM_*
-  __tracepoint_*
-
-These are, unfortunately, all valid declarations produced by macros and
-they correspond to valid symbols as well. If you look at the kallsyms
-for the modules (and core kernel), these variables are present there as
-well. It may indeed make sense to have kallsyms entries for them: I
-don't know.
-
-These are all, as far as I'm concerned, totally uninteresting types. If
-you want to access any of this data, you probably already know its type
-and wouldn't need a BTF declaration. Unfortunately, the flip side is
-that I don't think we have a good way to automatically detect these,
-outside of prefix matching, which quickly goes out of date as the kernel
-changes, and can have false positives as well. For kernel modules, many
-of these may appear in separate ELF sections, but for vmlinux, they
-don't. I'd be happy to eliminate types for these auto-generated kinds of
-variables, if we could somehow annotate them so that pahole knows to
-ignore them. For instance, maybe we cauld use
-
-__attribute__((btf_decl_tag("btf_omit")))
-
-as an instruction to pahole to omit declarations for these things?
-
+With in-place conversion, we could map the entire guest once in the HV 
+IOMMU and control the Cbit via the guest's IOMMU table (when available). 
 Thanks,
-Stephen
 
-> So before we decide on what to do with vars in mods lets figure out
-> the need.
+
+-- 
+Alexey
+
 
