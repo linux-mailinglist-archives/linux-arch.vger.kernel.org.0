@@ -1,87 +1,87 @@
-Return-Path: <linux-arch+bounces-10171-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10172-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D33BA3993E
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:40:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 893DFA3993C
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:40:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6C0F178058
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 10:36:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F5CA18998A1
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 10:36:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5A623ED6D;
-	Tue, 18 Feb 2025 10:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398041A5BBC;
+	Tue, 18 Feb 2025 10:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ha+WLSHf"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Cu0gdBXJ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511A22343BE
-	for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 10:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8529F23645D
+	for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 10:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739874772; cv=none; b=Yieb8S9zeGyd3YvZDeDVUMausmLflV8F6WBdqmjsydr06YCTcgoNiFr1yvCK3kKQFTnD1NM/mQGNFCwK3XdCu2QUwGRo7vN920ntgwKmK8TyfXRewQrTgjMoKXLP3zBcc1EzFF421LcEB9lB6XTJkMod61+zqNpsqi2BWEyiOFw=
+	t=1739874819; cv=none; b=k+CAYyHCsbxcr40T3iqlCh+U+CNV4j74XVIYj4URolgztIf9kXXU3NqCGb798kMjodeL9n8tL7gkEVrPnDG1V4IwA42868LaiVuklGg/rGrty/aDRyA3Ua1OVk6XCXRSi/aF0UBnQgvlF1NBlmIzSOGNDJlJOPR4Kc6pQCea6NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739874772; c=relaxed/simple;
-	bh=+uJBJa3r0XtKsYWPNH5y8q3bsTHuktgUgmTyXtel/ZE=;
+	s=arc-20240116; t=1739874819; c=relaxed/simple;
+	bh=db+mSdmfnMb8TI+b5scWjVaKxjg5A2SjdYzRDQFZkAU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f71AiiJd8N/lEWlZb4/IgWn9mebKBh1cQMvvulKkI1U88UvcW1bta2OSqGC/BzaCiPLcHPISMa/j/xx3iaQ7spyW4z0tDHWPxmIwLSSmRmlBt1rLVxjhFWasBRzuKns7LT0k9RgLCverlti8kZCo7rkbaCqUhe27qV7cwhkeBhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ha+WLSHf; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=fogN+PYNULZzywHri/MEPbFxVJkW3acOlW364n+GZzTDtaAKsmb9ELmnKzx5cvXddryknH+9wN09o627YFA7PKkrZpaX/+uiKobWX4NBkPvJq9SJYulawAYioLKjAXHi0x2+nVB5Ckn9jgmBuu6WihSeKlP4qyahNkUDY706fE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Cu0gdBXJ; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739874768;
+	s=mimecast20190719; t=1739874816;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zl+t4KaKTs9+cWw6JHoz3j9vod1OhAsIgp3kjHQDp0E=;
-	b=Ha+WLSHf2eQqouT3KBJjcgr2YoG7foL/f/jnHRr/h2FHd2a6y3zmqRucTFSr7QlrIlIjL/
-	3J98COoFyQnju3PVO13EOelIe27Y/nM+uh0P6BRcS+Jcgp3SgAlHy3ECDhJpU0z8/aKkMA
-	3dEbrPAuChIHkAT85KIHX1QWT7oDErE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=T1LOQMZfXNCEDy18+82jAtJj33pWYHUPkHE+taTmaK4=;
+	b=Cu0gdBXJCXQqw/jaZpIPpsw1dnxm14GgzJTjDVxPOvMRuCUhCDpwKC4cbfAUHAlEovrIef
+	+QZUYWgmAevPQWCT9f4M6HpW8DeJN5KtFw/UErWeuW/2u6aQMLkJ4GlCA9lxEVmqK1yq6/
+	juVZU4KT81lRQHhiqZPxlgWPSrqJSWM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-139-YzKF0r1bPn-QMNoOLqXfEg-1; Tue, 18 Feb 2025 05:32:46 -0500
-X-MC-Unique: YzKF0r1bPn-QMNoOLqXfEg-1
-X-Mimecast-MFC-AGG-ID: YzKF0r1bPn-QMNoOLqXfEg_1739874765
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-38f4156f3daso1402195f8f.2
-        for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 02:32:46 -0800 (PST)
+ us-mta-621-XsyF8QCVP8GvazaMigyTMg-1; Tue, 18 Feb 2025 05:33:34 -0500
+X-MC-Unique: XsyF8QCVP8GvazaMigyTMg-1
+X-Mimecast-MFC-AGG-ID: XsyF8QCVP8GvazaMigyTMg_1739874813
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4398ed35b10so5762095e9.1
+        for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 02:33:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739874765; x=1740479565;
+        d=1e100.net; s=20230601; t=1739874813; x=1740479613;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=zl+t4KaKTs9+cWw6JHoz3j9vod1OhAsIgp3kjHQDp0E=;
-        b=nGqVbSnudhnCixyAJNwLM2H2RDbkQgxDO0HIkWklkUFAx9prJ8zNYJK9AbOZ8gME4E
-         DsdSsrhlIhRbYc9kh9kw286ykhXazUAwSuTC8liSYaZTYdW35W0jl5KQk6j2wNQTZR/X
-         cbb8MVhptSq5D8UvdlDuaP+/OMUhnzzYfNuGJ4m4qNkIyKPJQJToUSdnGSuxVJxb6M88
-         Xrecje+DVk/+YUtNTtPmRtSnmVn7xo7xCLrQVrWp+AuTq0NqUjQrYRfgJHW/r1wawZ7F
-         6iFPIVHlXwyowMzrJvkE8XZMUUgCuEnOm2+BGoewxkI4wivu4dRvlboLhp6yV4w8oW6J
-         jdQA==
-X-Gm-Message-State: AOJu0Yx/EbpDDRwmVIb4ZPssjI6o2VIUuXpYl4HCjriwNTKBd1QVDWnr
-	pVtKZdvxJSXgTu1AEh5qPOcnB9FeqXV4DURYhleCuB0KkIVKi8fdGNv+9S5mHo7ENnc0kNlSEql
-	MCXqi8Pd+zVgEY1QaTHrIStTJ/G/dCAqjVMsj0S8CCAnnX0Z5CjLgD2lQheI=
-X-Gm-Gg: ASbGncvjekIe/NYIvi3TfZKV8IYZPGsIQbaBzBSZNOG58wVGloliQenEjWw+9+uiuZt
-	tJJ8MKUw8yn03jLxrWGDTpYhZFFTMQpKBoNMBKCn3md+rvanHkeUuTTNoQVYTCozD2oGKq1eao/
-	aDeJNeL6WcJOGSIA1HgUxxa/D37g1me33a8r2RiT/0Kc3ouY5DONl5TyI/fFh7SO7tW5AzvqPQJ
-	vqbn7k3ejZRd+P+2NKh2kcxTOzzyf2dR4LPLxtp4M01qwmwf5lweuMcrbQgwpTttGtAAWBm2b6V
-	5+UYG3oY80djEnfd+C0RRCsMxtvTWgNJ7xgHgkUUBymK3/prUeJ2APScNiecFuEneAbPw9EgumR
-	dTPbA2QUXp3rOTVgaQsozBgvDW3naQWQn
-X-Received: by 2002:a5d:444e:0:b0:385:d7f9:f157 with SMTP id ffacd0b85a97d-38f33f50c03mr11146146f8f.36.1739874765509;
-        Tue, 18 Feb 2025 02:32:45 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHFoZP2GHZ6yD/enVlIVfGFoZuVzgKIlrmVpkt2wTKjnhpYW41AK3ZcwVNJXA3ZnS3Vw67J9A==
-X-Received: by 2002:a5d:444e:0:b0:385:d7f9:f157 with SMTP id ffacd0b85a97d-38f33f50c03mr11146116f8f.36.1739874765191;
-        Tue, 18 Feb 2025 02:32:45 -0800 (PST)
+        bh=T1LOQMZfXNCEDy18+82jAtJj33pWYHUPkHE+taTmaK4=;
+        b=BPs9rLcOjy7wzv5xoApXYBnqHM8JaNhk4rd5cwOOw3uEFSKJ0ZkJbYcdLxVFhdfI/Q
+         pK25qpF7JyNw7gJWMfokAQH++82XNroiDhsNQ7IIcxvigNvmoyJpFdiljsd12Ip6uY9K
+         JUYeMgk+kN3uupa0qm+fnlQjP4C7tlcRSgekjQuz1UApPRWXJX0jKuv40IgK3IiPk95v
+         2qRVYQqMpXLhKX5bQTiRBhd7y4ZkwctCVmmicqrUokGbBTn+Cv9cGokRmM0t0r/s96Fd
+         cPoY6v4hVM+AqtwKnNv+OhekgdlkmJh2+Qsu59kea/2a9m1EODtcU3GAYvEDRHQJcOa8
+         sBhg==
+X-Gm-Message-State: AOJu0YxaGkpM4ZY82H9rPj6w4m0mEmuy5x8IHJMIyq2IfHGwe6DBajG5
+	fRpzAcJVaXEUd2rcXcAsJRmRz8j2nI1JJoeBWqmzGdXF9DOxGTOkKFtuKKO+jGTzHfKTZZ0eOu1
+	7RU8bZYKjHaGrUyU/4VTyQf+Z+zboSGHfjEIdGMJz11gZoXHeV8X8Rp3j5Bw=
+X-Gm-Gg: ASbGnctbD6Fk9wQEgYlIX8bSAZiEzCx06RKgy6YpgDK0NZZX5OEsf1RyJvoNDcNxMcF
+	2TERtE+U3hia2aah6LQJJPj7T56SCfu3Hy29BKOcXx+Ers4wz9YfgpfyhB28jobiM7UIbWch8fw
+	U6WljmkNBTrju9hcSVhj5uUf8cUZdTB4xDVwumo0B0Iwoii2XFpru2c91H5JezPw1aAAUF3Kjx5
+	PRbaH3zsqFEQtHIZ/igwYKUOzVCx4Mbjz6VlPzmipTWGexEfBlvN4L9JqtfFTFUCgE5CbCozFeo
+	8OxbknITtbo9Dq8CVMdFgW9mdqZh8OuV5m22ZsduSGT4OZJJkgQdAsWjDTNBHULOUMlnADgYR0K
+	ywA9umeBZlMPSzsxIgw0usxmjHd3uTth9
+X-Received: by 2002:a05:600c:354f:b0:439:6b57:c6b with SMTP id 5b1f17b1804b1-4396e700738mr113217985e9.17.1739874813353;
+        Tue, 18 Feb 2025 02:33:33 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG10HbiKwPJC3eaXgh0cFDz3lLRmRUxioOtL7qoeXgGZWfhvAtzEULY5k9Shgn7deaLtJSxFg==
+X-Received: by 2002:a05:600c:354f:b0:439:6b57:c6b with SMTP id 5b1f17b1804b1-4396e700738mr113217795e9.17.1739874813029;
+        Tue, 18 Feb 2025 02:33:33 -0800 (PST)
 Received: from ?IPV6:2003:cb:c70d:fb00:d3ed:5f44:1b2d:12af? (p200300cbc70dfb00d3ed5f441b2d12af.dip0.t-ipconnect.de. [2003:cb:c70d:fb00:d3ed:5f44:1b2d:12af])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f259f7df2sm14623376f8f.84.2025.02.18.02.32.40
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43987d1865asm46839995e9.3.2025.02.18.02.33.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2025 02:32:44 -0800 (PST)
-Message-ID: <4d38ad6a-a7ee-486b-a189-aca575eaa654@redhat.com>
-Date: Tue, 18 Feb 2025 11:32:40 +0100
+        Tue, 18 Feb 2025 02:33:31 -0800 (PST)
+Message-ID: <fcf41c06-ca68-4b26-9462-d96f7cda999c@redhat.com>
+Date: Tue, 18 Feb 2025 11:33:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -89,12 +89,12 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] mm: Make mk_pte() definition unconditional
+Subject: Re: [PATCH 7/7] mm: Add folio_mk_pte()
 To: "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
 Cc: linux-arch@vger.kernel.org, x86@kernel.org, linux-s390@vger.kernel.org,
  sparclinux@vger.kernel.org, linux-um@lists.infradead.org
 References: <20250217190836.435039-1-willy@infradead.org>
- <20250217190836.435039-7-willy@infradead.org>
+ <20250217190836.435039-8-willy@infradead.org>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -142,38 +142,17 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250217190836.435039-7-willy@infradead.org>
+In-Reply-To: <20250217190836.435039-8-willy@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 17.02.25 20:08, Matthew Wilcox (Oracle) wrote:
-> All architectures now use the common mk_pte() definition, so we
-> can remove the condition.
+> Removes a cast from folio to page in four callers of mk_pte().
 > 
 > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > ---
->   include/linux/mm.h | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 3ef11ff3922f..62dccde9c561 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1916,14 +1916,12 @@ static inline struct folio *pfn_folio(unsigned long pfn)
->   	return page_folio(pfn_to_page(pfn));
->   }
->   
-> -#ifndef mk_pte
->   #ifdef CONFIG_MMU
->   static inline pte_t mk_pte(struct page *page, pgprot_t pgprot)
->   {
->   	return pfn_pte(page_to_pfn(page), pgprot);
->   }
->   #endif
-> -#endif
->   
->   /**
->    * folio_maybe_dma_pinned - Report if a folio may be pinned for DMA.
+
+Yes, that looks good
 
 Acked-by: David Hildenbrand <david@redhat.com>
 
