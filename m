@@ -1,87 +1,87 @@
-Return-Path: <linux-arch+bounces-10169-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10170-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7ACBA39934
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:39:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3D2DA39962
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:43:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 050C118990F6
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 10:35:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61CA13B4508
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 10:35:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2B3A23C8AF;
-	Tue, 18 Feb 2025 10:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952061DB361;
+	Tue, 18 Feb 2025 10:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dGHJGA5+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gf5oTWV/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB4D1A2C29
-	for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 10:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8F6236A84
+	for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 10:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739874675; cv=none; b=TYJ1msAPKwaxed86m4McibdBIAhezFovTbQ84eCxcJ4N2iBeCeVfO75D24wdPQfayBrq441RyfCzSP5IBnFqWIOmJXEkXAhRpvsqWVwJogmC0FYeJLqoyT4w3IqGWn3zoK8dE1qr3YjVjd5/Kh4yGrwjRPWUHbSMTqXTrKpxy/o=
+	t=1739874736; cv=none; b=GPdxxw8WUcUS42URPY9ZhztiETSYiezuY39L/RUBBla6Aq/BsnE19mkv4w8pRCX6y1aSsw8c2rEsmcNiqi54hjiwWyj5LX/TcohW14KVUfJimaPp6pw58BsneHlZ0epBAno1u3KoI3yJY8FDKVm9gC6kp79QcQ2ReDQfuqXsM14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739874675; c=relaxed/simple;
-	bh=xIKwsVYSeT+yIT+J3E68TcAIy0/z4ZuetsggoO6Qyio=;
+	s=arc-20240116; t=1739874736; c=relaxed/simple;
+	bh=xTTAepB4hSls510JUC4iYlnWF+VYDHsdbUHpJ3Xebks=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J+MlJeCWUXw4gsFE5n2C6IgA58CdDJnC/AhlWubHL4V/5lxsSS3Q2aLyiktmt45naJ6yuh7cEBa6aZjK+mX3yFu7YsEMJsT3GyDe1BQh2fn587/exEeEjrTwI+yZa1OIvLqOQ5U1vdNBrjY8NxpmOtf6+w9S9bF7g1CIawnazTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dGHJGA5+; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=QboR6I+NekjzIPymTgR4Y8JAnpo+gJUBJNpMbeco8kOjqmz8r7Y+rsyii09iYCwkG0cCvjsOqAz2hE9tN9+rvsp/dehmOGy+OQom25n4KSI3Z3OD5Nm28Kat1fmVifmU02uSuSRVhKbignIy9LlLbD5VVUeuqm2pQs4FiizS858=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gf5oTWV/; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739874673;
+	s=mimecast20190719; t=1739874732;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bYHwcLVWT7ViqDSplojxQnlqWrz/ZE/8JhhVM+wg4bQ=;
-	b=dGHJGA5+veMCAHQzd2qJZE1c6v72hHxr1HXmGBVtXXsi5rVuUkzgcvjAsed49KVUBJTOy6
-	D5eQ6a/A0BkM0ynXso1bNqalZXFHmidUhYCMsic2pADDm7k+X0VwLfmi1BjWj7q+eywH4/
-	Q2FV/JTbgssD+gBP6podK58+1VEY6Iw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=6qQSUzHgCyxJavo98b2ypHiPRZXpN9/8Rj9BOTux8BQ=;
+	b=Gf5oTWV/KTLrXTa7ISFFgtx6XCokoKOupi8BIFKBtl57mVBYjuMTCzrguEJOaAHFlyzfBN
+	3PDCFV9oh26uv2z8Tr54daaroeJP+1LFLWvaGQj30GVuUIMxRa9r9Jc0W8zgTTROGflNm1
+	MmQpOUUYxIBechHMJQz0QQrIrkTk+9o=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-675-0-CflwmzPy6TBUpkCYY8GA-1; Tue, 18 Feb 2025 05:31:11 -0500
-X-MC-Unique: 0-CflwmzPy6TBUpkCYY8GA-1
-X-Mimecast-MFC-AGG-ID: 0-CflwmzPy6TBUpkCYY8GA_1739874671
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4393e8738b3so44950105e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 02:31:11 -0800 (PST)
+ us-mta-424-UANdVa-XOq-wDWd05ufG1w-1; Tue, 18 Feb 2025 05:32:11 -0500
+X-MC-Unique: UANdVa-XOq-wDWd05ufG1w-1
+X-Mimecast-MFC-AGG-ID: UANdVa-XOq-wDWd05ufG1w_1739874730
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-38f255d44acso1782330f8f.0
+        for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 02:32:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739874670; x=1740479470;
+        d=1e100.net; s=20230601; t=1739874730; x=1740479530;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=bYHwcLVWT7ViqDSplojxQnlqWrz/ZE/8JhhVM+wg4bQ=;
-        b=W8lTd60tYIUiikGxo6BNRHd7+1zZ5PyM/MEqnZiUsEynwmRutRHEpRHcUh/ASmJTt0
-         oNwySYbx2Hzg44I6Zn9GGX3M0RU3LPTZk/S5VfC/uQ6qnl8dkMhm84K4ig0AWOeKbLtv
-         rbD9AKPdQQdxnTCcf4R8lROeW0FWleQP3Jk/6MwTWUeOfT0y77FpPHNrh4kn70aVM1oZ
-         FBc1SPO5fYR5dFjqJAWP/eyNad1iu6Yum2MEyRmzt9lv4cmY5UhGhc5uRXVN1fIbQPSu
-         zVT/e2EhIhn1aB9HuuyEBuCEPGhlb6Z/uNM6RDuiiJvb7KwzxfVyFrlO8hULkirtlO5g
-         Y0mw==
-X-Gm-Message-State: AOJu0Yz5IL+F0z5evDxscNFdaB6n4Gcd2Y8YZWLsS55u5duYSfkdnkRi
-	s2oIoUXGNXSjpp48PTaUX3uU/TbVJiU2l03Orkew1hQFayU27nzfEomhm4UBF3pIEuGwIc2MIYh
-	noFDj/Bi9gnlBB53RrzForTLVqUxduiGifADs1DrH3H9NIK/WpXvjnnLKWpQ=
-X-Gm-Gg: ASbGncvWBnfL9TQqYKHVwHbvMN6Us2wZ6v995PwRWAyp6DKJS829h/Cno9rn7YBu/Is
-	/+yZkR7lVlXaLfhAwCaIF/TKzZdUXLbP/2u7oYcwPnn4h8jze1ubcQpWKQHU5K1D0sgEtwur52x
-	dv80IItwdUM7MXOK+h3ODA3GUmfKoo2eAkWaxnRa8KxsfklcOaxcRG/FJLCqB6sa7SX2WVsEqzR
-	Lx30Jn4iSyjCDftmXI7U+c3dYsJ4Hnt+Tr/ZDUhODRM8pP4KJYyYrjgjZdz5y1xmW7Wer8OfF78
-	5wiXT7SEc3DBB2IuEixWw2W7OC/l+2SQWoCwMSa7UIYGt3JE9Q6D4vx49im3NHkd5DUZ5qpXqzq
-	f1hmPO08ndZ5th2/Y0dbHLr4kLbb2nOn7
-X-Received: by 2002:a05:600c:1912:b0:439:6925:4d42 with SMTP id 5b1f17b1804b1-4396e69a291mr145157705e9.5.1739874670504;
-        Tue, 18 Feb 2025 02:31:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEKK/d9jTwRaJ76UZdUAwdd23rNzlgGNUJjR7HWeCisU6/6HAcioR2Kkp6B8p+CFTIAPK1yIw==
-X-Received: by 2002:a05:600c:1912:b0:439:6925:4d42 with SMTP id 5b1f17b1804b1-4396e69a291mr145157155e9.5.1739874669914;
-        Tue, 18 Feb 2025 02:31:09 -0800 (PST)
+        bh=6qQSUzHgCyxJavo98b2ypHiPRZXpN9/8Rj9BOTux8BQ=;
+        b=hAvKf4pb8tEAqOs5IHhrRtWIwOmM9Ql6bs5eqoqW9Jg1mSdnDwWeXm4SFnele1BLbW
+         gvKe/BKJelo13XGXCPwMKXwoOUSAuIhXgz0fSVgnsdX9sPCGT6JUizstbr7TxrABfomn
+         dCIfCcHu36PiS+rETyxLGHUNrVSPWe1dB+3zdFoe2NBmmK0nwSt/NlRPIa6DFkcv59uF
+         wxHlbRLu5t7GgQXNsxPsol7w6TALABCaXOOwhg6jIQH+bGUHQgMh0URwv/RdH9/kMIkx
+         V5oI06FwDtBArV18UfvvyAMmR362vp7PjfXZgSNzfkSJ8Hh6O0D3cjnRH9D40wg64Mqx
+         H4WA==
+X-Gm-Message-State: AOJu0YxcTDgEkndQ0xlCvGEiMucWIHztqF3OES/WvBNKvhN8fVo5Q+lk
+	fH7oo5VbGXBwGhmP6z4hgl+hYiZQsrDm5MvCWaaxIsoi/evkC9Q0IR7kY4+DwYsek3cKlah5kCy
+	kL1/NCi7AsMido1NswF3S5ZrkufR51twjXW5FjeRrwfopFe3BnYD8vgEDuVQ=
+X-Gm-Gg: ASbGnctJNqM0Iwen77xdv9CY5JD2Td//HDBQf6we7tfH9fLkPUuxSIXWQllxtoXO+wi
+	BD2l2tIsWB+tWRWpj/p1JHGCBJ/VZJU6zOcdBCzrODkHhnXau77SW69PvgpfUhjXomVbuvsnybg
+	LalosdoA6ZNwAskyUQKrMr5IQYHAF7MyDvtTe0/J14YjSprca+kYcdt8ANs77xmtZGIFETUfedQ
+	VSitvSijzNXBs6yPE9gnVNb/ElvRO5Unuil+X5qbypoHkIsohFI5UVDJIJT/Cyj/Aik3Q0B2b5Q
+	b3AWw/lh8AuIYhxzDCjq1cBVhtM+5rwxFfEikPjtRIDa72AZ4Hlymz6cLCZSsvj3Mne+3dNCppc
+	QZ+KRRcF7wI4bAReG3Km5Fr6XG83XyCwS
+X-Received: by 2002:a5d:5888:0:b0:38f:287a:43e2 with SMTP id ffacd0b85a97d-38f33f11a6amr10019563f8f.11.1739874729866;
+        Tue, 18 Feb 2025 02:32:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEHcoLtTGItTBQVw2jJchMRekN6vG0iQZFBlCtfZJTgat4RtCXNKhMX84MbQAT4tMgdFIp+iA==
+X-Received: by 2002:a5d:5888:0:b0:38f:287a:43e2 with SMTP id ffacd0b85a97d-38f33f11a6amr10019525f8f.11.1739874729381;
+        Tue, 18 Feb 2025 02:32:09 -0800 (PST)
 Received: from ?IPV6:2003:cb:c70d:fb00:d3ed:5f44:1b2d:12af? (p200300cbc70dfb00d3ed5f441b2d12af.dip0.t-ipconnect.de. [2003:cb:c70d:fb00:d3ed:5f44:1b2d:12af])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4395a1b824dsm176854065e9.34.2025.02.18.02.31.07
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f259d94acsm14844177f8f.75.2025.02.18.02.32.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2025 02:31:08 -0800 (PST)
-Message-ID: <65da326f-96a0-42ed-95e9-932c598b40f4@redhat.com>
-Date: Tue, 18 Feb 2025 11:31:06 +0100
+        Tue, 18 Feb 2025 02:32:09 -0800 (PST)
+Message-ID: <d3f1692f-3e80-495e-a39d-fc665732e0d6@redhat.com>
+Date: Tue, 18 Feb 2025 11:32:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -89,12 +89,12 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] mm: Set the pte dirty if the folio is already dirty
+Subject: Re: [PATCH 2/7] mm: Introduce a common definition of mk_pte()
 To: "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org
 Cc: linux-arch@vger.kernel.org, x86@kernel.org, linux-s390@vger.kernel.org,
  sparclinux@vger.kernel.org, linux-um@lists.infradead.org
 References: <20250217190836.435039-1-willy@infradead.org>
- <20250217190836.435039-2-willy@infradead.org>
+ <20250217190836.435039-3-willy@infradead.org>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -142,55 +142,17 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250217190836.435039-2-willy@infradead.org>
+In-Reply-To: <20250217190836.435039-3-willy@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 17.02.25 20:08, Matthew Wilcox (Oracle) wrote:
-> If the first access to a folio is a read that is then followed by a
-> write, we can save a page fault.  s390 implemented this in their
-> mk_pte() in commit abf09bed3cce ("s390/mm: implement software dirty
-> bits"), but other architectures can also benefit from this.
+> Most architectures simply call pfn_pte().  Centralise that as the normal
+> definition and remove the definition of mk_pte() from the architectures
+> which have either that exact definition or something similar.
 > 
 > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 > ---
->   arch/s390/include/asm/pgtable.h | 7 +------
->   mm/memory.c                     | 2 ++
->   2 files changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-> index 3ca5af4cfe43..3ee495b5171e 100644
-> --- a/arch/s390/include/asm/pgtable.h
-> +++ b/arch/s390/include/asm/pgtable.h
-> @@ -1451,12 +1451,7 @@ static inline pte_t mk_pte_phys(unsigned long physpage, pgprot_t pgprot)
->   
->   static inline pte_t mk_pte(struct page *page, pgprot_t pgprot)
->   {
-> -	unsigned long physpage = page_to_phys(page);
-> -	pte_t __pte = mk_pte_phys(physpage, pgprot);
-> -
-> -	if (pte_write(__pte) && PageDirty(page))
-> -		__pte = pte_mkdirty(__pte);
-> -	return __pte;
-> +	return mk_pte_phys(page_to_phys(page), pgprot);
->   }
->   
->   #define pgd_index(address) (((address) >> PGDIR_SHIFT) & (PTRS_PER_PGD-1))
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 539c0f7c6d54..4330560eee55 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -5124,6 +5124,8 @@ void set_pte_range(struct vm_fault *vmf, struct folio *folio,
->   
->   	if (write)
->   		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-> +	else if (pte_write(entry) && folio_test_dirty(folio))
-> +		entry = pte_mkdirty(entry);
->   	if (unlikely(vmf_orig_pte_uffd_wp(vmf)))
->   		entry = pte_mkuffd_wp(entry);
->   	/* copy-on-write page */
-
-Yes, that looks sane
 
 Acked-by: David Hildenbrand <david@redhat.com>
 
