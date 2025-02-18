@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-10176-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10177-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04622A39A0C
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 12:12:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3FB9A39A05
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 12:11:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 301FD3B4A9E
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:11:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7656718902C2
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:11:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FC2F23BF88;
-	Tue, 18 Feb 2025 11:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3D7F23BF91;
+	Tue, 18 Feb 2025 11:11:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="vChfCxfP"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="1mxrknL8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2069.outbound.protection.outlook.com [40.107.223.69])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2083.outbound.protection.outlook.com [40.107.236.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B2723AE96;
-	Tue, 18 Feb 2025 11:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D895522DF92;
+	Tue, 18 Feb 2025 11:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.83
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739877092; cv=fail; b=XncQfBVR05LbDhPrkcbt5Dx5OShEU8ERKpoejUSTa9/+vBb+ODLtSlSSKocWn62AmddlqgIoub5xBxu++5tr6JtjUuakcGzTJb4bbokEHwoooqlblPKQWve4SNllDd33Tsa7ymZjUvys6b4IeEWzYAbP+pDh128H9BUkkIby/kA=
+	t=1739877104; cv=fail; b=mlc0HncPvEPLl5Ngp+cm8EEDZ1lF1WQC76nOsV2DIkTms3BIyzNhtvJXkw1LGqrVm3TeghClaty52KyaT+0hlXQb/mR0KtRxm5zHaCfZY7XQQYrss7dxem3jXI7bM6WMEXsPudisXoaVezLYdKxVE6r6bazZzQsgWfG4zj7nY88=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739877092; c=relaxed/simple;
-	bh=X6rWdojPBRf5bzaPZ7/XEH//QoDvr0q9qqJwElpLpAE=;
+	s=arc-20240116; t=1739877104; c=relaxed/simple;
+	bh=1KVx7VYiVA/8sBupT6NnqbQAau2zF5M+T4XuMdB4EQM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VVnI7N868s3Rqs75hTGuNbpBqbjRoFqYJNc1UGMkig/9GC3Sg4DZ3Hpjyf5KLBV8PWftPzy6sHNFrPCwQ4MJQJknN+4UdhvMQB4Q222GKYX461kSnZYbTs+IMmstDsxdPBZT+bRG2zA/CTb1+qn1MvdakXTGuQz+vmHfW13CK6M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=vChfCxfP; arc=fail smtp.client-ip=40.107.223.69
+	 MIME-Version:Content-Type; b=H3/Vdz9gI9L5GImgQDYxLTf36QR5KWDgT+c7wqfMZ+BJhWRWVSX/Pyl4wnpYy6nqG4V+cuRZsKY/nOFfPfVXfSgvhpt6gWGRSFWBueq65A58EIgBDQxUBLv9DAcSWzOmeey79VOJQ2R1PUfyB2gZ4QihXqIXUrdyIjoK3n8O3f4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=1mxrknL8; arc=fail smtp.client-ip=40.107.236.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ggMwBt4s9uSTc/LzgR5RqgIVxVgYiMjZ4CyVMqavDyGbTRnu4iDZ4gOgxdUFfhpcqyDxp/SboiIUv2YdHl6t49a3W/T3iItoriT4yY56Df5i+orswDYVS9xdsRMLaFoJgoetXNoq0X5JjXDKUr0Z3cVAaLrirlt/sLoxKJJJdGOspPaM3dBJ8W6KzwNVcgyEqj008oGJq6UUREZTe1myxTWJhSi6wm+IlccJZ8Xi7xJeSWFRBd4Znj9/Rq65vaFuRgrgTdutXKO+ycN3nk88d4TguClfWQ7TTdlTss/ung01iDe3OGoSUYvZPeRM59AmsHfH+JVyiaU1pD0ZvUbaXQ==
+ b=eoyIkPlIIqIlALP0KlRDwj6chMX8vtWfqSzh/R6GSXjPzk2hOl+qtE3hal0MLB4oKHBLnCP9UP54YdRH4oDeohdmJOKF3Z3jTXnfqBz1hHJAIDnUQL2z89NyYh2rQcojDQNm90Y6efH31m/aclP3ykSyxyciBCilq/QKucVknCfU7w+7zVYAnyBCV5hFDQ/QV4lEUwvE0/2XJrkW+jqZf3fFluXhWg5Hzxj6OB5lt4B7H6gUmyD9yJiiJK56hQZAsK8XZ1bCh5ht9egoNFfhHNzKQZdz5Z7iihxLmTqhqVDkuAlS1NrSGbw3MVmOurs8DQQwkx6sS9tNXHVBpH7a2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=drMSr2NXcFgUCXNzn7sZBFn+PyFNxpFIonxBmsdVHqQ=;
- b=ioDOp5QhBjssU6P2VabKdhSTwwr0RHkkAxa5n54j/sMEJsn6oPNBZXl1RvLwzObeM+UWdZqa6qBPgYQBUrWefopRrIRqZWkKz8+CRjuSBu/SNhW9S4QYfQmUzE0LepPcFI2YPnYVC6dVNnoqvbDkTRjIlYgEhWBKETNGVXThXQMtf4bBAAc8xEUGBEWBSmxKICmjDRnkyc8vvd2xENfjUOqV4wbOTybDQmdybD2DhU/odRc2rtTFj8VNRR9B/M4IBehuimEJgrTBua9y81Pzb6eVnBhkFSIN/uvk/6A7XGFRmt9x5JfwdCLDVUzcBS/uXNK7xjADYBOfzaLm1p6RsQ==
+ bh=W3eqTs5hcL57MwXtdZf9Bn5hgb4AIxLs8NtJy7oIKfE=;
+ b=y8ffkDWIFXXhUI1sR6QivZ9E7bxwcOciOSV9BL01JIfX3qFsnNi9CZ+VKSJI1tlIDha7i2JW8jpgr/H0I4YItgWmrWfhIrEDw/zc8GtIfXr0bNSM+T0GSK8Gg3Dsup4EpFf+U7gVL4/P5JDSvhezFNM6zogpLGmBtTg1KOjD3dgK7zj+agHqItu6L1tQmstB5lM7codf7uDDen9bBSRu1Hy6IyqM28YIYJl2+f76/E3SZbk/YnqqXsP5RdzSQ6pXX/Lzymf0k44D7WwS6XFQR9Kw2F4f7NsnXz0vNDToW2T+1uzuv6kK/zTJ1B6UwZAoGnQ6Z+Vq9Of7FtdS6ZDMSw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=drMSr2NXcFgUCXNzn7sZBFn+PyFNxpFIonxBmsdVHqQ=;
- b=vChfCxfPs9dbUsXPUQkcsCs+rhMUr3xrE8RMI4YKUN1+JvrzqyA15Q4kPLFIEu9ZKZbgX8Cw0u9P3fDM8G5KJ63m8+QNxZFxkf9Qh8ZyjMMjUT9Qx8TgCkkwyW8sDyPRU7Da4kmOFiFFXXza55/IS4MhKqslHuLCuwUn3qpxwQM=
-Received: from BN9P222CA0011.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:10c::16)
- by CY8PR12MB7436.namprd12.prod.outlook.com (2603:10b6:930:50::17) with
+ bh=W3eqTs5hcL57MwXtdZf9Bn5hgb4AIxLs8NtJy7oIKfE=;
+ b=1mxrknL8Z9p/ERv/YzncgesTKb95yylnTpVn9Gd/BUyWLYU3VzXL6rw7Mly/92jB97GY7fZqFIa3me1EiPgx9FHEN/sY7RXwt/K8/f2X1AgSUl3bG9h1C82qjvf2goUyhvRrFDuJhjBYua8l4XTDLh2l+4isXLqglagTJ+dHu0A=
+Received: from BLAPR05CA0009.namprd05.prod.outlook.com (2603:10b6:208:36e::16)
+ by SJ0PR12MB7007.namprd12.prod.outlook.com (2603:10b6:a03:486::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.18; Tue, 18 Feb
- 2025 11:11:20 +0000
-Received: from BN3PEPF0000B075.namprd04.prod.outlook.com
- (2603:10b6:408:10c:cafe::b) by BN9P222CA0011.outlook.office365.com
- (2603:10b6:408:10c::16) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.19 via Frontend Transport; Tue,
- 18 Feb 2025 11:11:18 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Tue, 18 Feb
+ 2025 11:11:39 +0000
+Received: from BN3PEPF0000B078.namprd04.prod.outlook.com
+ (2603:10b6:208:36e:cafe::13) by BLAPR05CA0009.outlook.office365.com
+ (2603:10b6:208:36e::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.13 via Frontend Transport; Tue,
+ 18 Feb 2025 11:11:38 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B075.mail.protection.outlook.com (10.167.243.120) with Microsoft
+ BN3PEPF0000B078.mail.protection.outlook.com (10.167.243.123) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8466.11 via Frontend Transport; Tue, 18 Feb 2025 11:11:18 +0000
+ 15.20.8466.11 via Frontend Transport; Tue, 18 Feb 2025 11:11:38 +0000
 Received: from aiemdee.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 18 Feb
- 2025 05:11:10 -0600
+ 2025 05:11:30 -0600
 From: Alexey Kardashevskiy <aik@amd.com>
 To: <x86@kernel.org>
 CC: <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
@@ -90,9 +90,9 @@ CC: <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
 	<iommu@lists.linux.dev>, <linux-coco@lists.linux.dev>, Zhi Wang
 	<zhiw@nvidia.com>, AXu Yilun <yilun.xu@linux.intel.com>, "Aneesh Kumar K . V"
 	<aneesh.kumar@kernel.org>, Alexey Kardashevskiy <aik@amd.com>
-Subject: [RFC PATCH v2 02/22] PCI/IDE: Fixes to make it work on AMD SNP-SEV
-Date: Tue, 18 Feb 2025 22:09:49 +1100
-Message-ID: <20250218111017.491719-3-aik@amd.com>
+Subject: [RFC PATCH v2 03/22] PCI/IDE: Init IDs on all IDE streams beforehand
+Date: Tue, 18 Feb 2025 22:09:50 +1100
+Message-ID: <20250218111017.491719-4-aik@amd.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250218111017.491719-1-aik@amd.com>
 References: <20250218111017.491719-1-aik@amd.com>
@@ -108,310 +108,148 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B075:EE_|CY8PR12MB7436:EE_
-X-MS-Office365-Filtering-Correlation-Id: c77afa49-27fb-47d1-27a7-08dd500cf7b4
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B078:EE_|SJ0PR12MB7007:EE_
+X-MS-Office365-Filtering-Correlation-Id: 318a83ba-b4d2-4c9d-81b3-08dd500d03de
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|82310400026|36860700013;
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TYz8Q7wpSnNrDA06/9J78ZVY8aO4FD99MnslBNCrpNLWuYCoi8kNaZDExjka?=
- =?us-ascii?Q?biaMQdz/0/P+3V2QdoCAj+Ttf/+m0Y0sBJbZzUp7z69x7U8GiY4UB6Qf1l2O?=
- =?us-ascii?Q?40E+nrxoCfixJRE6kDHvBLWgi0KRtOqs9BbhIQwr1VXxtY6x1uIS19o2FZ+7?=
- =?us-ascii?Q?Rjqndf8CASG9lsAS6ad0H4QImyN4a6SDkitkeNqemiFHIi006s/T3xVhNAnx?=
- =?us-ascii?Q?mD4bNc4jzmbq7QVrJOql247Z0qFc7u2GeFlNULp2Gnc2xExplct5306qlm95?=
- =?us-ascii?Q?IW7yn7pRPqHpYNo+7KsqrBEGmTY95YjtLixpnjtkxtCOmwyM2voI3Y0dVMeg?=
- =?us-ascii?Q?GSXOyWLWubTXBdOMWtD4GLGbM9T7Apvv64KQRYsfpKcQGSBoHACSlcvqI9J7?=
- =?us-ascii?Q?6xwzaAcAUxwhdFabR4Fq9SRkNLcmVCksou/F5Mr919Rup70Y1vn8awiYZnK/?=
- =?us-ascii?Q?duq4Eihbufyhua/hP0rZb5iHW89+lL0htj3KmsHgxwQ6RGzB4c2ZWBz8imk5?=
- =?us-ascii?Q?nVrwImdSEkCmreQn4WBDk+Gde9MEYhI7erPkjK5NyPrPqVVO48/H24BVD+Na?=
- =?us-ascii?Q?u1GthnYuipnl5AiBglKaHol8v0z6awonsxzyc7dMS+3gcqQ4sROuVFQLFJGm?=
- =?us-ascii?Q?PmxwijifBHGflf6FmADm0BxZ4RU+4cVoePKbyHf8lKovzgGNaROHGDVtoe90?=
- =?us-ascii?Q?2MS2sp9Iqd2bo9oghMlQrrL1wDh4qr14wbAACXCQLXU0Xv4bgp7EZvu2UuEc?=
- =?us-ascii?Q?1Ys/rwJ+JotWIlWSaxWVObc6y4Ixm5d9oJQGjCPdlGrmu41DhI8tOFt64k/e?=
- =?us-ascii?Q?tRYYOdFbTmBmIXkbBVtTlgwfn+fvIBBiYm2UFszPMEzntAfDaisZ/mZ12l3H?=
- =?us-ascii?Q?4FnA5NZ/o6PHq57KCYAwRr7LbgZSnmkU9ljicsZPQzSZqHpLg/Yy0wozMnTY?=
- =?us-ascii?Q?C4v1q118UaO9RRu97qm9OEdmVGuw6aVKj4BfmSlLTlXe/haQbSy6ggBe0EmJ?=
- =?us-ascii?Q?GU3gKpBdV+XQf1ME9b43ftttRhuh6qdpjwrEcowF8dtDXQjgdGgAWXz5mTNO?=
- =?us-ascii?Q?jZ4SZcb43FDoYMUZqyZr+JtFhvvZXXBZY6+JarEVvEHPnd+m+e+rQen2Yaga?=
- =?us-ascii?Q?+yiywIc/jMLN1N12gJ2duYx74008RFRWRbKTjTay9xN68hR/ZfXVkIF4mEav?=
- =?us-ascii?Q?MNBEFlFIqpwcaVd+NQ9/pv3wfkGocOLketW8Uro8tak6skfG9jm+lmhs1HCI?=
- =?us-ascii?Q?RmBExR1MIalEx+c1ab1i7FEcNdyD6+UQfWaeWL1JEnjMcSal1JQUNKXDe9aQ?=
- =?us-ascii?Q?I5X2QufUNa5F9g8YEr8n3prevlUdMoiVB4XYtJiCHVymGbWZP/DV2RTXrTsP?=
- =?us-ascii?Q?pyVAefR5br4iMKkjoRAK73T5dpN5AxuNINJAWO2bIpJpOhDFo+iy/kprQCax?=
- =?us-ascii?Q?jgU+WMU4CctUwa9UPwtqVJxtHtZewyKGkeZnR7wBEhfwulY7TyqtBShwYI9X?=
- =?us-ascii?Q?WBwpa0ic0lpIDCY=3D?=
+	=?us-ascii?Q?DECNRsKf+vt9Z6fG7iY/R4mBhR9Krl/kqZukcwJYNTUSxvqQQvXImcanCObO?=
+ =?us-ascii?Q?+YZtTfzEW43AUMn5Ohesy17U3qaTgsRuE4UO/7Xkk/WySxXvjICG2E+RUMsE?=
+ =?us-ascii?Q?WQ9aVOh3N2doAON3rmOmM6j8ZCbhe/VLh/tCzRD9CU0RODlr8/JtsbbeV9L7?=
+ =?us-ascii?Q?bBp1Vx5tGX/iTdR3PUAv5dd4O19E0k+xaGBh5LMd9wAydrXDWfxm1BHwiifA?=
+ =?us-ascii?Q?73ajW60qICnF4fJWgY0fpRuFI+FI4A4HZ7qeWTtLtm4vJE0Td6Oi6LSqu1pq?=
+ =?us-ascii?Q?h/2lTf74j3tScIZ1NW1di7TwDuo/NW9TDlzCX2kzgBN2i/OpT8yQPuadCOjP?=
+ =?us-ascii?Q?bPZaqfuvxmLY9dlrYh5qB/85w+dr8USevYqpjIDp6NYmRiGt8g4YP/q3YGZ5?=
+ =?us-ascii?Q?CRNAKM+99vvlWOqoKdafsNWJJWayuSBnTJfaBn/KqNwNhEr5jTSY46uuxusD?=
+ =?us-ascii?Q?38QQoG0bhRluI3gs573+sEQKs9xoSik83Z1drg5cueLvYgLK4raP12sOCyub?=
+ =?us-ascii?Q?FC1FRTCmsZ6c7Zc2VUcWl4EFiXJ7W2gAEO5hcWD8l02YnuW2Ffqzzy6e3E8e?=
+ =?us-ascii?Q?9+ztxLo95rKK8ybeCoVzFN5DkQuoexkDBgVyEQ32u+F1nWcU5v7Ci4r0Pfp9?=
+ =?us-ascii?Q?wrgw1A9cHRaZQ2syfCXsUKj3dSjju0yg593M/zY6v78IJWaBDQwKc2xtstsX?=
+ =?us-ascii?Q?THl8LKLRWzgR5iIriPyrjl2V8gaDuw3zWUYszSgnnUdvalhNdbjZVo8/+zBr?=
+ =?us-ascii?Q?nSE6cD+T3B+sxlns58KuAO1Pp6TpKMfNoPoYj1jqxneQmVx6BfZPAiCL1P7u?=
+ =?us-ascii?Q?VKyV5xjq6ewL0XMdP3t/AiWF5em1qFrCj3dQiyKOcBrkgFJxvRewb9+8Ma4g?=
+ =?us-ascii?Q?cW7r6SBbIDf5GwiOw2B0+46idXSpC+ftbTzmFBCEXSPaQboKun2+UMJtbN99?=
+ =?us-ascii?Q?pM8AeaC1pEOGstIfYCwtF61JRJOp2IP7YNAPpisajxm32T+5WtWp9UZkGGgt?=
+ =?us-ascii?Q?sjU6Q4PDRthKocnjcXxl/s+yGgDcqQTImFkyMOAY66ZCf3lPGr8kMrr1K78w?=
+ =?us-ascii?Q?ulc0U6IxOqUvKOz78Ep2frlInsuD9zSLZLZANFMmlbhdm3CwtW/qav4oBj2I?=
+ =?us-ascii?Q?oDoBZpdgxYfHQfXEc4DlgYf+cf/yd57MPGuWBeCaTdjIHsjYz9zaYDT9noXW?=
+ =?us-ascii?Q?0RiMTxWO7EULBldrtU+PvX0VYGidwt2eMHpFLJmoArS6+4JWxPWmw8+5vXX9?=
+ =?us-ascii?Q?fJRyz1tx+3WUPXy9d1OJ/+3kGUP9LW6caFgnohclJbo3hZnkPFZkmi9tpjHI?=
+ =?us-ascii?Q?nTD6XsqVmB4esasO6DacRzSh/JexRqN3rrCGZR5p3cBXZ+U1ly0Zv5r2dXT/?=
+ =?us-ascii?Q?MkjVtho/Kef8fujK2zPSE0sgtSxbMH7zupabwQWrToNJg6ObnM69oULzF/Xf?=
+ =?us-ascii?Q?3KkOHlvKZYi+1PdlcKhY5GaK99Wlt3IbZBzIuPEGTGmW9XrGOX4dASFxzW5W?=
+ =?us-ascii?Q?8o21QVs5Bf/hJRQ=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:sk;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 11:11:18.1618
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 11:11:38.5564
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c77afa49-27fb-47d1-27a7-08dd500cf7b4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 318a83ba-b4d2-4c9d-81b3-08dd500d03de
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B075.namprd04.prod.outlook.com
+	BN3PEPF0000B078.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7436
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7007
 
-The IDE proposed patches do setup of endpoints while they should focus
-on root port.
+The PCIe spec defines two types of streams - selective and link.
+Each stream has an ID from the same bucket so a stream ID does not
+tell the type.
+The spec defines an "enable" bit for every stream and required
+stream IDs to be unique among all enabled stream but there is no such
+requirement for disabled streams.
 
-These are workarounds better be discussed in
-"[PATCH 00/11] PCI/TSM: Core infrastructure for PCI device security
-(TDISP)"
+However, when IDE_KM is programming keys, an IDE-capable device needs
+to know the type of stream being programmed to write it directly to
+the hardware as keys are relatively large, possibly many of them and
+devices often struggle with keeping around rather big data not being
+used.
+
+Walk through all streams on a device and initialize the IDs to some
+unique number, both link and selective.
+
+Probably should be a quirk if it turns out not to be a common issue.
 
 Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
 ---
- include/linux/pci-ide.h       | 19 +++--
- include/uapi/linux/pci_regs.h |  4 +-
- drivers/pci/ide.c             | 76 ++++++++++++++++----
- 3 files changed, 78 insertions(+), 21 deletions(-)
+ drivers/pci/ide.c | 29 ++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/pci-ide.h b/include/linux/pci-ide.h
-index 24e08a413645..f784fb16cc88 100644
---- a/include/linux/pci-ide.h
-+++ b/include/linux/pci-ide.h
-@@ -8,26 +8,33 @@
- 
- #include <linux/range.h>
- 
-+enum pci_ide_flags {
-+	PCI_IDE_SETUP_ROOT_PORT = BIT(0),
-+	PCI_IDE_SETUP_ROOT_PORT_MEM = BIT(1),
-+};
-+
- struct pci_ide {
- 	int domain;
- 	u16 devid_start;
- 	u16 devid_end;
-+	u16 rpid_start;
-+	u16 rpid_end;
- 	int stream_id;
- 	const char *name;
- 	int nr_mem;
- 	struct range mem[16];
-+	unsigned int dev_sel_ctl;
-+	unsigned int rootport_sel_ctl;
-+	enum pci_ide_flags flags;
- };
- 
- void pci_ide_stream_probe(struct pci_dev *pdev, struct pci_ide *ide);
- 
--enum pci_ide_flags {
--	PCI_IDE_SETUP_ROOT_PORT = BIT(0),
--};
--
- int pci_ide_stream_setup(struct pci_dev *pdev, struct pci_ide *ide,
- 			 enum pci_ide_flags flags);
--void pci_ide_stream_teardown(struct pci_dev *pdev, struct pci_ide *ide,
--			     enum pci_ide_flags flags);
-+void pci_ide_stream_teardown(struct pci_dev *pdev, struct pci_ide *ide);
- void pci_ide_enable_stream(struct pci_dev *pdev, struct pci_ide *ide);
- void pci_ide_disable_stream(struct pci_dev *pdev, struct pci_ide *ide);
-+int pci_ide_stream_state(struct pci_dev *pdev, struct pci_ide *ide, u32 *status, u32 *rpstatus);
-+
- #endif /* __PCI_IDE_H__ */
-diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
-index 498c6b298186..15bd8e2b3cf5 100644
---- a/include/uapi/linux/pci_regs.h
-+++ b/include/uapi/linux/pci_regs.h
-@@ -1293,9 +1293,9 @@
- /* Selective IDE Address Association Register Block, up to PCI_IDE_SEL_CAP_ASSOC_NUM */
- #define  PCI_IDE_SEL_ADDR_1(x)			(20 + (x) * 12)
- #define   PCI_IDE_SEL_ADDR_1_VALID		0x1
--#define   PCI_IDE_SEL_ADDR_1_BASE_LOW_MASK	0x000fff0
-+#define   PCI_IDE_SEL_ADDR_1_BASE_LOW_MASK	0x000fff00
- #define   PCI_IDE_SEL_ADDR_1_BASE_LOW_SHIFT	20
--#define   PCI_IDE_SEL_ADDR_1_LIMIT_LOW_MASK 	0xfff0000
-+#define   PCI_IDE_SEL_ADDR_1_LIMIT_LOW_MASK	0xfff00000
- #define   PCI_IDE_SEL_ADDR_1_LIMIT_LOW_SHIFT	20
- /* IDE Address Association Register 2 is "Memory Limit Upper" */
- /* IDE Address Association Register 3 is "Memory Base Upper" */
 diff --git a/drivers/pci/ide.c b/drivers/pci/ide.c
-index 500b63e149cf..3c53b27f8447 100644
+index 3c53b27f8447..5f1d5385d3a8 100644
 --- a/drivers/pci/ide.c
 +++ b/drivers/pci/ide.c
-@@ -50,10 +50,10 @@ void pci_ide_init(struct pci_dev *pdev)
+@@ -18,7 +18,7 @@ static int sel_ide_offset(u16 cap, int stream_id, int nr_ide_mem)
+ void pci_ide_init(struct pci_dev *pdev)
+ {
+ 	u16 ide_cap, sel_ide_cap;
+-	int nr_ide_mem = 0;
++	int nr_ide_mem = 0, i, link_num, sel_num, offset;
+ 	u32 val = 0;
+ 
+ 	if (!pci_is_pcie(pdev))
+@@ -33,6 +33,7 @@ void pci_ide_init(struct pci_dev *pdev)
+ 	 * require consistent number of address association blocks
+ 	 */
+ 	pci_read_config_dword(pdev, ide_cap + PCI_IDE_CAP, &val);
++
+ 	if ((val & PCI_IDE_CAP_SELECTIVE) == 0)
+ 		return;
+ 
+@@ -43,6 +44,9 @@ void pci_ide_init(struct pci_dev *pdev)
+ 			return;
+ 	}
+ 
++	link_num = PCI_IDE_CAP_LINK_TC_NUM(val) + 1;
++	sel_num = PCI_IDE_CAP_SELECTIVE_STREAMS_NUM(val) + 1;
++
+ 	if (val & PCI_IDE_CAP_LINK)
+ 		sel_ide_cap = ide_cap + PCI_IDE_LINK_STREAM +
+ 			      (PCI_IDE_CAP_LINK_TC_NUM(val) + 1) *
+@@ -50,12 +54,13 @@ void pci_ide_init(struct pci_dev *pdev)
  	else
  		sel_ide_cap = ide_cap + PCI_IDE_LINK_STREAM;
  
--	for (int i = 0; i < PCI_IDE_CAP_SELECTIVE_STREAMS_NUM(val); i++) {
-+	for (int i = 0; i < PCI_IDE_CAP_SELECTIVE_STREAMS_NUM(val) + 1; i++) {
+-	for (int i = 0; i < PCI_IDE_CAP_SELECTIVE_STREAMS_NUM(val) + 1; i++) {
++	for (i = 0; i < PCI_IDE_CAP_SELECTIVE_STREAMS_NUM(val) + 1; i++) {
  		if (i == 0) {
++			offset = 0;
  			pci_read_config_dword(pdev, sel_ide_cap, &val);
--			nr_ide_mem = PCI_IDE_SEL_CAP_ASSOC_NUM(val);
-+			nr_ide_mem = PCI_IDE_SEL_CAP_ASSOC_NUM(val) + 1;
+ 			nr_ide_mem = PCI_IDE_SEL_CAP_ASSOC_NUM(val) + 1;
  		} else {
- 			int offset = sel_ide_offset(sel_ide_cap, i, nr_ide_mem);
+-			int offset = sel_ide_offset(sel_ide_cap, i, nr_ide_mem);
++			offset = sel_ide_offset(sel_ide_cap, i, nr_ide_mem);
  
-@@ -118,7 +118,7 @@ void pci_set_nr_ide_streams(struct pci_host_bridge *hb, int nr)
- 	hb->nr_ide_streams = nr;
- 	sysfs_update_group(&hb->dev.kobj, &pci_ide_attr_group);
- }
--EXPORT_SYMBOL_NS_GPL(pci_set_nr_ide_streams, PCI_IDE);
-+EXPORT_SYMBOL_NS_GPL(pci_set_nr_ide_streams, "PCI_IDE");
+ 			pci_read_config_dword(pdev, offset, &val);
  
- void pci_init_host_bridge_ide(struct pci_host_bridge *hb)
- {
-@@ -148,6 +148,10 @@ void pci_ide_stream_probe(struct pci_dev *pdev, struct pci_ide *ide)
- 	else
- 		ide->devid_end = ide->devid_start;
- 
-+	/* Enable everything into the rootport by default */
-+	ide->rpid_start = 0;
-+	ide->rpid_end = 0xffff;
-+
- 	/* TODO: address association probing... */
- }
- EXPORT_SYMBOL_GPL(pci_ide_stream_probe);
-@@ -160,7 +164,7 @@ static void __pci_ide_stream_teardown(struct pci_dev *pdev, struct pci_ide *ide)
- 			     pdev->nr_ide_mem);
- 
- 	pci_write_config_dword(pdev, pos + PCI_IDE_SEL_CTL, 0);
--	for (int i = ide->nr_mem - 1; i >= 0; i--) {
-+	for (int i = min(ide->nr_mem, pdev->nr_ide_mem) - 1; i >= 0; i--) {
- 		pci_write_config_dword(pdev, pos + PCI_IDE_SEL_ADDR_3(i), 0);
- 		pci_write_config_dword(pdev, pos + PCI_IDE_SEL_ADDR_2(i), 0);
- 		pci_write_config_dword(pdev, pos + PCI_IDE_SEL_ADDR_1(i), 0);
-@@ -169,7 +173,7 @@ static void __pci_ide_stream_teardown(struct pci_dev *pdev, struct pci_ide *ide)
-         pci_write_config_dword(pdev, pos + PCI_IDE_SEL_RID_1, 0);
- }
- 
--static void __pci_ide_stream_setup(struct pci_dev *pdev, struct pci_ide *ide)
-+static int __pci_ide_stream_setup(struct pci_dev *pdev, struct pci_ide *ide, bool mem, bool rp)
- {
- 	int pos;
- 	u32 val;
-@@ -177,14 +181,20 @@ static void __pci_ide_stream_setup(struct pci_dev *pdev, struct pci_ide *ide)
- 	pos = sel_ide_offset(pdev->sel_ide_cap, ide->stream_id,
- 			     pdev->nr_ide_mem);
- 
--	val = FIELD_PREP(PCI_IDE_SEL_RID_1_LIMIT_MASK, ide->devid_end);
-+	val = FIELD_PREP(PCI_IDE_SEL_RID_1_LIMIT_MASK, rp ? ide->rpid_end : ide->devid_end);
- 	pci_write_config_dword(pdev, pos + PCI_IDE_SEL_RID_1, val);
- 
- 	val = FIELD_PREP(PCI_IDE_SEL_RID_2_VALID, 1) |
--	      FIELD_PREP(PCI_IDE_SEL_RID_2_BASE_MASK, ide->devid_start) |
-+	      FIELD_PREP(PCI_IDE_SEL_RID_2_BASE_MASK, rp ? ide->rpid_start : ide->devid_start) |
- 	      FIELD_PREP(PCI_IDE_SEL_RID_2_SEG_MASK, ide->domain);
- 	pci_write_config_dword(pdev, pos + PCI_IDE_SEL_RID_2, val);
- 
-+	if (!mem)
-+		return 0;
-+
-+	if (ide->nr_mem > pdev->nr_ide_mem)
-+		return -EINVAL;
-+
- 	for (int i = 0; i < ide->nr_mem; i++) {
- 		val = FIELD_PREP(PCI_IDE_SEL_ADDR_1_VALID, 1) |
- 		      FIELD_PREP(PCI_IDE_SEL_ADDR_1_BASE_LOW_MASK,
-@@ -201,6 +211,8 @@ static void __pci_ide_stream_setup(struct pci_dev *pdev, struct pci_ide *ide)
- 		val = upper_32_bits(ide->mem[i].start);
- 		pci_write_config_dword(pdev, pos + PCI_IDE_SEL_ADDR_3(i), val);
- 	}
-+
-+	return 0;
- }
- 
- /*
-@@ -248,10 +260,14 @@ int pci_ide_stream_setup(struct pci_dev *pdev, struct pci_ide *ide,
- 			goto err;
+@@ -68,6 +73,24 @@ void pci_ide_init(struct pci_dev *pdev)
+ 				return;
+ 			}
  		}
- 
--	__pci_ide_stream_setup(pdev, ide);
--	if (flags & PCI_IDE_SETUP_ROOT_PORT)
--		__pci_ide_stream_setup(rp, ide);
-+	rc = __pci_ide_stream_setup(pdev, ide, true, false);
-+	if (!rc && (flags & PCI_IDE_SETUP_ROOT_PORT))
-+		rc = __pci_ide_stream_setup(rp, ide, !!(flags & PCI_IDE_SETUP_ROOT_PORT_MEM), true);
 +
-+	if (rc)
-+		goto err;
- 
-+	ide->flags = flags;
- 	return 0;
- err:
- 	for (; mem >= 0; mem--)
-@@ -268,6 +284,7 @@ EXPORT_SYMBOL_GPL(pci_ide_stream_setup);
- 
- void pci_ide_enable_stream(struct pci_dev *pdev, struct pci_ide *ide)
- {
-+	struct pci_dev *rp = pcie_find_root_port(pdev);
- 	int pos;
- 	u32 val;
- 
-@@ -276,14 +293,27 @@ void pci_ide_enable_stream(struct pci_dev *pdev, struct pci_ide *ide)
- 
- 	val = FIELD_PREP(PCI_IDE_SEL_CTL_ID_MASK, ide->stream_id) |
- 	      FIELD_PREP(PCI_IDE_SEL_CTL_DEFAULT, 1);
-+	val |= FIELD_PREP(PCI_IDE_SEL_CTL_EN, 1);
-+	/* there is rootport and pdev is not it */
-+	if (rp && rp != pdev)
-+		val |= ide->dev_sel_ctl;
-+	else
-+		val |= ide->rootport_sel_ctl;
- 	pci_write_config_dword(pdev, pos + PCI_IDE_SEL_CTL, val);
-+
-+	if (ide->flags & PCI_IDE_SETUP_ROOT_PORT && rp && rp != pdev)
-+		pci_ide_enable_stream(rp, ide);
- }
- EXPORT_SYMBOL_GPL(pci_ide_enable_stream);
- 
- void pci_ide_disable_stream(struct pci_dev *pdev, struct pci_ide *ide)
- {
-+	struct pci_dev *rp = pcie_find_root_port(pdev);
- 	int pos;
- 
-+	if (ide->flags & PCI_IDE_SETUP_ROOT_PORT && rp && rp != pdev)
-+		pci_ide_disable_stream(rp, ide);
-+
- 	pos = sel_ide_offset(pdev->sel_ide_cap, ide->stream_id,
- 			     pdev->nr_ide_mem);
- 
-@@ -291,14 +321,13 @@ void pci_ide_disable_stream(struct pci_dev *pdev, struct pci_ide *ide)
- }
- EXPORT_SYMBOL_GPL(pci_ide_disable_stream);
- 
--void pci_ide_stream_teardown(struct pci_dev *pdev, struct pci_ide *ide,
--			     enum pci_ide_flags flags)
-+void pci_ide_stream_teardown(struct pci_dev *pdev, struct pci_ide *ide)
- {
- 	struct pci_host_bridge *hb = pci_find_host_bridge(pdev->bus);
- 	struct pci_dev *rp = pcie_find_root_port(pdev);
- 
- 	__pci_ide_stream_teardown(pdev, ide);
--	if (flags & PCI_IDE_SETUP_ROOT_PORT)
-+	if (ide->flags & PCI_IDE_SETUP_ROOT_PORT)
- 		__pci_ide_stream_teardown(rp, ide);
- 
- 	for (int i = ide->nr_mem - 1; i >= 0; i--)
-@@ -309,3 +338,24 @@ void pci_ide_stream_teardown(struct pci_dev *pdev, struct pci_ide *ide,
- 	clear_bit_unlock(ide->stream_id, hb->ide_stream_ids);
- }
- EXPORT_SYMBOL_GPL(pci_ide_stream_teardown);
-+
-+static int __pci_ide_stream_state(struct pci_dev *pdev, struct pci_ide *ide, u32 *status)
-+{
-+	int pos = sel_ide_offset(pdev->sel_ide_cap, ide->stream_id,
-+				 pdev->nr_ide_mem);
-+
-+	return pci_read_config_dword(pdev, pos + PCI_IDE_SEL_STS, status);
-+}
-+
-+int pci_ide_stream_state(struct pci_dev *pdev, struct pci_ide *ide, u32 *status, u32 *rpstatus)
-+{
-+	int ret = __pci_ide_stream_state(pdev, ide, status);
-+
-+	if (!ret && ide->flags & PCI_IDE_SETUP_ROOT_PORT) {
-+		struct pci_dev *rp = pcie_find_root_port(pdev);
-+
-+		ret = __pci_ide_stream_state(rp, ide, rpstatus);
++		/* Some devices insist on streamid to be unique even for not enabled streams */
++		val &= ~PCI_IDE_SEL_CTL_ID_MASK;
++		val |= FIELD_PREP(PCI_IDE_SEL_CTL_ID_MASK, i);
++		pci_write_config_dword(pdev, offset + PCI_IDE_SEL_CTL, val);
 +	}
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(pci_ide_stream_state);
++
++	if (val & PCI_IDE_CAP_LINK) {
++		/* Some devices insist on streamid to be unique even for not enabled streams */
++		for (i = 0; i < link_num; ++i) {
++			offset = ide_cap + PCI_IDE_LINK_STREAM + i * PCI_IDE_LINK_BLOCK_SIZE;
++
++			pci_read_config_dword(pdev, offset, &val);
++			val &= ~PCI_IDE_LINK_CTL_ID_MASK;
++			val |= FIELD_PREP(PCI_IDE_LINK_CTL_ID_MASK, i + sel_num);
++
++			pci_write_config_dword(pdev, offset, val);
++		}
+ 	}
+ 
+ 	pdev->ide_cap = ide_cap;
 -- 
 2.47.1
 
