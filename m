@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-10177-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10178-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3FB9A39A05
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 12:11:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E7E6A39A16
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 12:12:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7656718902C2
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:11:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8C1716F053
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:12:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3D7F23BF91;
-	Tue, 18 Feb 2025 11:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A8423C8BC;
+	Tue, 18 Feb 2025 11:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="1mxrknL8"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Px7ymLFN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2083.outbound.protection.outlook.com [40.107.236.83])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2079.outbound.protection.outlook.com [40.107.212.79])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D895522DF92;
-	Tue, 18 Feb 2025 11:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3216323C8AA;
+	Tue, 18 Feb 2025 11:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.79
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739877104; cv=fail; b=mlc0HncPvEPLl5Ngp+cm8EEDZ1lF1WQC76nOsV2DIkTms3BIyzNhtvJXkw1LGqrVm3TeghClaty52KyaT+0hlXQb/mR0KtRxm5zHaCfZY7XQQYrss7dxem3jXI7bM6WMEXsPudisXoaVezLYdKxVE6r6bazZzQsgWfG4zj7nY88=
+	t=1739877124; cv=fail; b=EDuEMYMs2Fs9PmFZfUEvOOxsd1enqIci9y8dLlaAIWLB38FpYg4XsHVcBgm+6YRj659vM6V5XY7uNvFSdUzaAcHIH7X1oScyHioGpyaCQo0/gsmPUMlHjcuYXUwu8S17t6+EEJV+KxGg7l/d2gOPNZflV6JfDYd5edditL5tp5E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739877104; c=relaxed/simple;
-	bh=1KVx7VYiVA/8sBupT6NnqbQAau2zF5M+T4XuMdB4EQM=;
+	s=arc-20240116; t=1739877124; c=relaxed/simple;
+	bh=Y7Wsa+Xb2X+VFPkBLwCQWUPIKUKUS3ILUHSf6QnJnyk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=H3/Vdz9gI9L5GImgQDYxLTf36QR5KWDgT+c7wqfMZ+BJhWRWVSX/Pyl4wnpYy6nqG4V+cuRZsKY/nOFfPfVXfSgvhpt6gWGRSFWBueq65A58EIgBDQxUBLv9DAcSWzOmeey79VOJQ2R1PUfyB2gZ4QihXqIXUrdyIjoK3n8O3f4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=1mxrknL8; arc=fail smtp.client-ip=40.107.236.83
+	 MIME-Version:Content-Type; b=Ex/DdRyHXwrkj1axDddU8YoE7oToZ9v9J9ARUG9mY4Qk1iAMV/Vsb5840WevB3kNOqRVfe0vkKBcDOe+TntqnldcdewDmw0NearaT9XWLVVpty1WEO2X2sFj32jyh2amJafOEBtwpguOF+jjLuhM/NsLKJrmDeSsYVY1cigy2BU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Px7ymLFN; arc=fail smtp.client-ip=40.107.212.79
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eoyIkPlIIqIlALP0KlRDwj6chMX8vtWfqSzh/R6GSXjPzk2hOl+qtE3hal0MLB4oKHBLnCP9UP54YdRH4oDeohdmJOKF3Z3jTXnfqBz1hHJAIDnUQL2z89NyYh2rQcojDQNm90Y6efH31m/aclP3ykSyxyciBCilq/QKucVknCfU7w+7zVYAnyBCV5hFDQ/QV4lEUwvE0/2XJrkW+jqZf3fFluXhWg5Hzxj6OB5lt4B7H6gUmyD9yJiiJK56hQZAsK8XZ1bCh5ht9egoNFfhHNzKQZdz5Z7iihxLmTqhqVDkuAlS1NrSGbw3MVmOurs8DQQwkx6sS9tNXHVBpH7a2A==
+ b=VMWklWh+flurOA4HXCxeBbfpQtnsEtz/+579W3nG6ypQZPMPEZfZGZuiX4k0dQqQm8rZ/64GRLA7C6ShUH1xX3UlFBPAXX0JH+L3KIflITaP2e1sIGLz2Ywg725EYRialcX2rYfLriQ/kJ6XQsupiFvKfbv41rphB3H1CoCoNO7qXiKShOnS5tU/cKq4Cqj5bCfOSDX/mxZCAZIrsrgs6UE/oalAfgYXTKzToNhvwvCBXIrNaDT+ozKk8tbw6azI0e5WZAXL8vbXeN243vr/Z+JJ53hz4hYFRIT7wvzeAqXJN/i7DQ5KZ8l6UPtzjOirP0ZlInqWAYM+quE79zM/DA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W3eqTs5hcL57MwXtdZf9Bn5hgb4AIxLs8NtJy7oIKfE=;
- b=y8ffkDWIFXXhUI1sR6QivZ9E7bxwcOciOSV9BL01JIfX3qFsnNi9CZ+VKSJI1tlIDha7i2JW8jpgr/H0I4YItgWmrWfhIrEDw/zc8GtIfXr0bNSM+T0GSK8Gg3Dsup4EpFf+U7gVL4/P5JDSvhezFNM6zogpLGmBtTg1KOjD3dgK7zj+agHqItu6L1tQmstB5lM7codf7uDDen9bBSRu1Hy6IyqM28YIYJl2+f76/E3SZbk/YnqqXsP5RdzSQ6pXX/Lzymf0k44D7WwS6XFQR9Kw2F4f7NsnXz0vNDToW2T+1uzuv6kK/zTJ1B6UwZAoGnQ6Z+Vq9Of7FtdS6ZDMSw==
+ bh=u3DZg1KUVh9AqHcIXcBCgnGEraSW5KDwb5irN2Agvek=;
+ b=K0YEsO/AE8wM0m7/PWr/47DpmHt8h15l/6DpmBEdx8TWV2IRjV/qFG5oUJNPq3K1df03zc1RYECPlIG/OnFPm+lTXFfn8xr3TJCDob8JP1vHZygzApjkDU0J6iUTosWvTr794L6E7GvWngzGgJ5DSVwbz36kOMZ1bXbUhryYbTHtcAndUud44wP4xZAY2qa56rqh5LMvaGZYmxavKMq6MlwEVJOk5N2JTsXVkMKTsrbHJsqaLlAe6tsznRnQE6yDAfLiG2KovhdZtF7SyRl9KmgkBWYy+OOaGdTH4SsZQ4PW03vJwJQzpPNGoFp6WP8BqWB9kc2L6CFk8jjZnRO+AA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W3eqTs5hcL57MwXtdZf9Bn5hgb4AIxLs8NtJy7oIKfE=;
- b=1mxrknL8Z9p/ERv/YzncgesTKb95yylnTpVn9Gd/BUyWLYU3VzXL6rw7Mly/92jB97GY7fZqFIa3me1EiPgx9FHEN/sY7RXwt/K8/f2X1AgSUl3bG9h1C82qjvf2goUyhvRrFDuJhjBYua8l4XTDLh2l+4isXLqglagTJ+dHu0A=
-Received: from BLAPR05CA0009.namprd05.prod.outlook.com (2603:10b6:208:36e::16)
- by SJ0PR12MB7007.namprd12.prod.outlook.com (2603:10b6:a03:486::8) with
+ bh=u3DZg1KUVh9AqHcIXcBCgnGEraSW5KDwb5irN2Agvek=;
+ b=Px7ymLFNNmjsH7BZI7JGvDKQY0YtPiLMm2oZf07tjYa9j6G5PmzbswuWhU1O3reNtNiq/rDi7rpXRfX5nsyFcfCcfgph3hsxOGHTc4GwLfq6WKNox8AwaehtSXrdX2cFLcpqGl87uHDrFlnUB9/Sv2Oj1GI10FqW3AybX7dJ1W0=
+Received: from BL0PR01CA0026.prod.exchangelabs.com (2603:10b6:208:71::39) by
+ PH0PR12MB7096.namprd12.prod.outlook.com (2603:10b6:510:21d::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Tue, 18 Feb
- 2025 11:11:39 +0000
-Received: from BN3PEPF0000B078.namprd04.prod.outlook.com
- (2603:10b6:208:36e:cafe::13) by BLAPR05CA0009.outlook.office365.com
- (2603:10b6:208:36e::16) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.13 via Frontend Transport; Tue,
- 18 Feb 2025 11:11:38 +0000
+ 2025 11:11:59 +0000
+Received: from BN3PEPF0000B074.namprd04.prod.outlook.com
+ (2603:10b6:208:71:cafe::6b) by BL0PR01CA0026.outlook.office365.com
+ (2603:10b6:208:71::39) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.19 via Frontend Transport; Tue,
+ 18 Feb 2025 11:11:58 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B078.mail.protection.outlook.com (10.167.243.123) with Microsoft
+ BN3PEPF0000B074.mail.protection.outlook.com (10.167.243.119) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8466.11 via Frontend Transport; Tue, 18 Feb 2025 11:11:38 +0000
+ 15.20.8466.11 via Frontend Transport; Tue, 18 Feb 2025 11:11:58 +0000
 Received: from aiemdee.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 18 Feb
- 2025 05:11:30 -0600
+ 2025 05:11:50 -0600
 From: Alexey Kardashevskiy <aik@amd.com>
 To: <x86@kernel.org>
 CC: <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
@@ -90,9 +90,9 @@ CC: <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
 	<iommu@lists.linux.dev>, <linux-coco@lists.linux.dev>, Zhi Wang
 	<zhiw@nvidia.com>, AXu Yilun <yilun.xu@linux.intel.com>, "Aneesh Kumar K . V"
 	<aneesh.kumar@kernel.org>, Alexey Kardashevskiy <aik@amd.com>
-Subject: [RFC PATCH v2 03/22] PCI/IDE: Init IDs on all IDE streams beforehand
-Date: Tue, 18 Feb 2025 22:09:50 +1100
-Message-ID: <20250218111017.491719-4-aik@amd.com>
+Subject: [RFC PATCH v2 04/22] iommu/amd: Report SEV-TIO support
+Date: Tue, 18 Feb 2025 22:09:51 +1100
+Message-ID: <20250218111017.491719-5-aik@amd.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250218111017.491719-1-aik@amd.com>
 References: <20250218111017.491719-1-aik@amd.com>
@@ -108,148 +108,119 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B078:EE_|SJ0PR12MB7007:EE_
-X-MS-Office365-Filtering-Correlation-Id: 318a83ba-b4d2-4c9d-81b3-08dd500d03de
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B074:EE_|PH0PR12MB7096:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd982f6b-2642-4d1e-3955-08dd500d0ffc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014;
+	BCL:0;ARA:13230040|82310400026|7416014|376014|1800799024|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?DECNRsKf+vt9Z6fG7iY/R4mBhR9Krl/kqZukcwJYNTUSxvqQQvXImcanCObO?=
- =?us-ascii?Q?+YZtTfzEW43AUMn5Ohesy17U3qaTgsRuE4UO/7Xkk/WySxXvjICG2E+RUMsE?=
- =?us-ascii?Q?WQ9aVOh3N2doAON3rmOmM6j8ZCbhe/VLh/tCzRD9CU0RODlr8/JtsbbeV9L7?=
- =?us-ascii?Q?bBp1Vx5tGX/iTdR3PUAv5dd4O19E0k+xaGBh5LMd9wAydrXDWfxm1BHwiifA?=
- =?us-ascii?Q?73ajW60qICnF4fJWgY0fpRuFI+FI4A4HZ7qeWTtLtm4vJE0Td6Oi6LSqu1pq?=
- =?us-ascii?Q?h/2lTf74j3tScIZ1NW1di7TwDuo/NW9TDlzCX2kzgBN2i/OpT8yQPuadCOjP?=
- =?us-ascii?Q?bPZaqfuvxmLY9dlrYh5qB/85w+dr8USevYqpjIDp6NYmRiGt8g4YP/q3YGZ5?=
- =?us-ascii?Q?CRNAKM+99vvlWOqoKdafsNWJJWayuSBnTJfaBn/KqNwNhEr5jTSY46uuxusD?=
- =?us-ascii?Q?38QQoG0bhRluI3gs573+sEQKs9xoSik83Z1drg5cueLvYgLK4raP12sOCyub?=
- =?us-ascii?Q?FC1FRTCmsZ6c7Zc2VUcWl4EFiXJ7W2gAEO5hcWD8l02YnuW2Ffqzzy6e3E8e?=
- =?us-ascii?Q?9+ztxLo95rKK8ybeCoVzFN5DkQuoexkDBgVyEQ32u+F1nWcU5v7Ci4r0Pfp9?=
- =?us-ascii?Q?wrgw1A9cHRaZQ2syfCXsUKj3dSjju0yg593M/zY6v78IJWaBDQwKc2xtstsX?=
- =?us-ascii?Q?THl8LKLRWzgR5iIriPyrjl2V8gaDuw3zWUYszSgnnUdvalhNdbjZVo8/+zBr?=
- =?us-ascii?Q?nSE6cD+T3B+sxlns58KuAO1Pp6TpKMfNoPoYj1jqxneQmVx6BfZPAiCL1P7u?=
- =?us-ascii?Q?VKyV5xjq6ewL0XMdP3t/AiWF5em1qFrCj3dQiyKOcBrkgFJxvRewb9+8Ma4g?=
- =?us-ascii?Q?cW7r6SBbIDf5GwiOw2B0+46idXSpC+ftbTzmFBCEXSPaQboKun2+UMJtbN99?=
- =?us-ascii?Q?pM8AeaC1pEOGstIfYCwtF61JRJOp2IP7YNAPpisajxm32T+5WtWp9UZkGGgt?=
- =?us-ascii?Q?sjU6Q4PDRthKocnjcXxl/s+yGgDcqQTImFkyMOAY66ZCf3lPGr8kMrr1K78w?=
- =?us-ascii?Q?ulc0U6IxOqUvKOz78Ep2frlInsuD9zSLZLZANFMmlbhdm3CwtW/qav4oBj2I?=
- =?us-ascii?Q?oDoBZpdgxYfHQfXEc4DlgYf+cf/yd57MPGuWBeCaTdjIHsjYz9zaYDT9noXW?=
- =?us-ascii?Q?0RiMTxWO7EULBldrtU+PvX0VYGidwt2eMHpFLJmoArS6+4JWxPWmw8+5vXX9?=
- =?us-ascii?Q?fJRyz1tx+3WUPXy9d1OJ/+3kGUP9LW6caFgnohclJbo3hZnkPFZkmi9tpjHI?=
- =?us-ascii?Q?nTD6XsqVmB4esasO6DacRzSh/JexRqN3rrCGZR5p3cBXZ+U1ly0Zv5r2dXT/?=
- =?us-ascii?Q?MkjVtho/Kef8fujK2zPSE0sgtSxbMH7zupabwQWrToNJg6ObnM69oULzF/Xf?=
- =?us-ascii?Q?3KkOHlvKZYi+1PdlcKhY5GaK99Wlt3IbZBzIuPEGTGmW9XrGOX4dASFxzW5W?=
- =?us-ascii?Q?8o21QVs5Bf/hJRQ=3D?=
+	=?us-ascii?Q?dx+oyvsVfXvnL8SmenmpbtHZTBuHzc7sf7cJyygCNRX0GHBML63vUf6ouGfQ?=
+ =?us-ascii?Q?QaTNBq8TYzvL7Pa5i4IsO/qQpV16yM7EOhOP7EGXua9QH7bZsmiFyKAvmxXY?=
+ =?us-ascii?Q?rto9bntQ2VGdlTcuowxOAkSOQeLO1jXvezSPFgD1VX8OV0NXvhx1mTYvVBmk?=
+ =?us-ascii?Q?m8SfznZNxczYawQ2/m4UlO832P0r/qxTU0X4CdDWxPzsXzwVK8qQtJgPHLMR?=
+ =?us-ascii?Q?G3MDH6v35z6CYC2o/BQ/f0QwI/mBKAXnA+rzf6X8DQnxL4oDK1pjkxp5RbER?=
+ =?us-ascii?Q?SzkCIL7f30EQVDCvsrWVLcvIvuIKIPcQBGVykjcQPpagZbHBZL8SfH+nhcV0?=
+ =?us-ascii?Q?9te1IDhbvrekK8+dRGG6CEGGU+73eSCOARWtU79KLdfG7oMgsGyW3VbxWD0b?=
+ =?us-ascii?Q?8hz/+TFwFOJWgMEPcOmd4fhCZG8d0/snWesWa5K5KdPwYic08zvGhf8PN+aT?=
+ =?us-ascii?Q?exdQbZjuoD4G3CVVLXBP1/odO1ay+HlyKhkVkdYEnfmFC4wYjXZrzqKoiBaT?=
+ =?us-ascii?Q?2J06RBoQrZAO5ARWssfjcfeFZi47vE3x0+WxBFVqr8JO8ztmzfK78sbHjiSb?=
+ =?us-ascii?Q?cAWVUfCIjJKb8t/JLPfSLaMXfAB1yPfke7K3MfwBI7QWKluM9Le9dINvN8jR?=
+ =?us-ascii?Q?BmSRAAmggXwIgBMrHNXb61+/i7s78D/PoT+OnhY5tzEZBunRK/c9KbxvuYeX?=
+ =?us-ascii?Q?9Va22TkNsNDpA4TdPO/V5CKZBuTdP1AVGEt8kVMH77ziKNE4gQG411IEkrmp?=
+ =?us-ascii?Q?AjPaNz/4+tzdV8QpfMMryB+BbUDlIa8w+8TjSc8xeV0VvU7Xm13In0sa1wl5?=
+ =?us-ascii?Q?trg65YEB3EBHOyErPmaQX7yXSBJBHK07xsADAELJvOoVs0ck3lwH9jtN23au?=
+ =?us-ascii?Q?E+Lutg203SWBR8pdBILGE4PvjLUdWXqxmdtmAK9xcoP9VcToPZl99YxrHuY8?=
+ =?us-ascii?Q?yvjJN7jd0N6mgNmhmceD9hnuibhHTmKuio4PRQnt4isqFkj8XgowUdEBBZTQ?=
+ =?us-ascii?Q?I5pxqKqeG3bvyibAg04T6glzlGPtdx+JTkvIEEIb1ofg6kEssAPYylEe8dp8?=
+ =?us-ascii?Q?XCUE2h5Xr/l9Qi1RRdCQJlvbXTxhXKaJEWhcxPFtr0L+bA+hc/ppeJUxSe17?=
+ =?us-ascii?Q?8mTrUl1Da8eAEgFQ8hWUzK2yKFSDjRJKOiaqjOe67B1a5ElTTbABlGNwDCa3?=
+ =?us-ascii?Q?HJR0fSNrj13pgBLfT8uDMxjXLNuOl/yqbI4YQ8nzrx5q0v7ZePSGjW5wQ7Sb?=
+ =?us-ascii?Q?cO7anUSJqt8aoyxJY+M0ojF47MGVuzxwmBME6ujKZ2s3Mc484c2ZnGtQ7FY+?=
+ =?us-ascii?Q?Ih52YJ2Xc6Bzv2kaWUMTTQ/DkZvVQ/QRGKYr4TiMJ+sqzxxvMuxPD0LPNPSK?=
+ =?us-ascii?Q?OIrRvu2ZN8kFGu8q98xVytB0ab2NXzBu1+tlnvhu83fkboi3FoGh3yCY/iU2?=
+ =?us-ascii?Q?f+HPRPWGQhDHcU5rQW43c8r6lqXzlh1/aWzRzW+nuZF8K7wd9l1S9ODt1tgJ?=
+ =?us-ascii?Q?nLk3y5EFUNlW/yM=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 11:11:38.5564
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 11:11:58.8994
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 318a83ba-b4d2-4c9d-81b3-08dd500d03de
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd982f6b-2642-4d1e-3955-08dd500d0ffc
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B078.namprd04.prod.outlook.com
+	BN3PEPF0000B074.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7007
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7096
 
-The PCIe spec defines two types of streams - selective and link.
-Each stream has an ID from the same bucket so a stream ID does not
-tell the type.
-The spec defines an "enable" bit for every stream and required
-stream IDs to be unique among all enabled stream but there is no such
-requirement for disabled streams.
+The AMD BIOS'es "SEV-TIO" switch is reported to the OS via IOMMU
+Extended Feature 2 register (EFR2), bit 1.
 
-However, when IDE_KM is programming keys, an IDE-capable device needs
-to know the type of stream being programmed to write it directly to
-the hardware as keys are relatively large, possibly many of them and
-devices often struggle with keeping around rather big data not being
-used.
-
-Walk through all streams on a device and initialize the IDs to some
-unique number, both link and selective.
-
-Probably should be a quirk if it turns out not to be a common issue.
+Add helper to parse the bit and report the feature presense.
 
 Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
 ---
- drivers/pci/ide.c | 29 ++++++++++++++++++--
- 1 file changed, 26 insertions(+), 3 deletions(-)
+ drivers/iommu/amd/amd_iommu_types.h | 1 +
+ include/linux/amd-iommu.h           | 2 ++
+ drivers/iommu/amd/init.c            | 9 +++++++++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/drivers/pci/ide.c b/drivers/pci/ide.c
-index 3c53b27f8447..5f1d5385d3a8 100644
---- a/drivers/pci/ide.c
-+++ b/drivers/pci/ide.c
-@@ -18,7 +18,7 @@ static int sel_ide_offset(u16 cap, int stream_id, int nr_ide_mem)
- void pci_ide_init(struct pci_dev *pdev)
- {
- 	u16 ide_cap, sel_ide_cap;
--	int nr_ide_mem = 0;
-+	int nr_ide_mem = 0, i, link_num, sel_num, offset;
- 	u32 val = 0;
+diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
+index 0bbda60d3cdc..b086fb632990 100644
+--- a/drivers/iommu/amd/amd_iommu_types.h
++++ b/drivers/iommu/amd/amd_iommu_types.h
+@@ -108,6 +108,7 @@
  
- 	if (!pci_is_pcie(pdev))
-@@ -33,6 +33,7 @@ void pci_ide_init(struct pci_dev *pdev)
- 	 * require consistent number of address association blocks
- 	 */
- 	pci_read_config_dword(pdev, ide_cap + PCI_IDE_CAP, &val);
+ 
+ /* Extended Feature 2 Bits */
++#define FEATURE_SEVSNPIO_SUP	BIT_ULL(1)
+ #define FEATURE_SNPAVICSUP	GENMASK_ULL(7, 5)
+ #define FEATURE_SNPAVICSUP_GAM(x) \
+ 	(FIELD_GET(FEATURE_SNPAVICSUP, x) == 0x1)
+diff --git a/include/linux/amd-iommu.h b/include/linux/amd-iommu.h
+index 062fbd4c9b77..cb1b94fdb63c 100644
+--- a/include/linux/amd-iommu.h
++++ b/include/linux/amd-iommu.h
+@@ -32,10 +32,12 @@ struct task_struct;
+ struct pci_dev;
+ 
+ extern void amd_iommu_detect(void);
++extern bool amd_iommu_sev_tio_supported(void);
+ 
+ #else /* CONFIG_AMD_IOMMU */
+ 
+ static inline void amd_iommu_detect(void) { }
++static inline bool amd_iommu_sev_tio_supported(void) { return false; }
+ 
+ #endif /* CONFIG_AMD_IOMMU */
+ 
+diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+index c5cd92edada0..9f2756d3bd73 100644
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -2156,6 +2156,9 @@ static void print_iommu_info(void)
+ 		if (check_feature(FEATURE_SNP))
+ 			pr_cont(" SNP");
+ 
++		if (check_feature2(FEATURE_SEVSNPIO_SUP))
++			pr_cont(" SEV-TIO");
 +
- 	if ((val & PCI_IDE_CAP_SELECTIVE) == 0)
- 		return;
- 
-@@ -43,6 +44,9 @@ void pci_ide_init(struct pci_dev *pdev)
- 			return;
+ 		pr_cont("\n");
  	}
  
-+	link_num = PCI_IDE_CAP_LINK_TC_NUM(val) + 1;
-+	sel_num = PCI_IDE_CAP_SELECTIVE_STREAMS_NUM(val) + 1;
+@@ -3856,4 +3859,10 @@ int amd_iommu_snp_disable(void)
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(amd_iommu_snp_disable);
 +
- 	if (val & PCI_IDE_CAP_LINK)
- 		sel_ide_cap = ide_cap + PCI_IDE_LINK_STREAM +
- 			      (PCI_IDE_CAP_LINK_TC_NUM(val) + 1) *
-@@ -50,12 +54,13 @@ void pci_ide_init(struct pci_dev *pdev)
- 	else
- 		sel_ide_cap = ide_cap + PCI_IDE_LINK_STREAM;
- 
--	for (int i = 0; i < PCI_IDE_CAP_SELECTIVE_STREAMS_NUM(val) + 1; i++) {
-+	for (i = 0; i < PCI_IDE_CAP_SELECTIVE_STREAMS_NUM(val) + 1; i++) {
- 		if (i == 0) {
-+			offset = 0;
- 			pci_read_config_dword(pdev, sel_ide_cap, &val);
- 			nr_ide_mem = PCI_IDE_SEL_CAP_ASSOC_NUM(val) + 1;
- 		} else {
--			int offset = sel_ide_offset(sel_ide_cap, i, nr_ide_mem);
-+			offset = sel_ide_offset(sel_ide_cap, i, nr_ide_mem);
- 
- 			pci_read_config_dword(pdev, offset, &val);
- 
-@@ -68,6 +73,24 @@ void pci_ide_init(struct pci_dev *pdev)
- 				return;
- 			}
- 		}
-+
-+		/* Some devices insist on streamid to be unique even for not enabled streams */
-+		val &= ~PCI_IDE_SEL_CTL_ID_MASK;
-+		val |= FIELD_PREP(PCI_IDE_SEL_CTL_ID_MASK, i);
-+		pci_write_config_dword(pdev, offset + PCI_IDE_SEL_CTL, val);
-+	}
-+
-+	if (val & PCI_IDE_CAP_LINK) {
-+		/* Some devices insist on streamid to be unique even for not enabled streams */
-+		for (i = 0; i < link_num; ++i) {
-+			offset = ide_cap + PCI_IDE_LINK_STREAM + i * PCI_IDE_LINK_BLOCK_SIZE;
-+
-+			pci_read_config_dword(pdev, offset, &val);
-+			val &= ~PCI_IDE_LINK_CTL_ID_MASK;
-+			val |= FIELD_PREP(PCI_IDE_LINK_CTL_ID_MASK, i + sel_num);
-+
-+			pci_write_config_dword(pdev, offset, val);
-+		}
- 	}
- 
- 	pdev->ide_cap = ide_cap;
++bool amd_iommu_sev_tio_supported(void)
++{
++	return check_feature2(FEATURE_SEVSNPIO_SUP);
++}
++EXPORT_SYMBOL_GPL(amd_iommu_sev_tio_supported);
+ #endif
 -- 
 2.47.1
 
