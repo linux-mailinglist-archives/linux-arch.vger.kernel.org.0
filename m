@@ -1,459 +1,393 @@
-Return-Path: <linux-arch+bounces-10173-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10174-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EA19A3997B
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:47:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38D0EA399F9
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 12:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BBA4167B01
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 10:47:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2C7B1891383
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Feb 2025 11:10:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC1A2238D35;
-	Tue, 18 Feb 2025 10:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0593223BF91;
+	Tue, 18 Feb 2025 11:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OiaG3eyU"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QTjAOU3l"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2044.outbound.protection.outlook.com [40.107.94.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DFB23644D
-	for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 10:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739875641; cv=none; b=j6vEztLTe3HUZozI/R4I9G6MueGEzrD5snwAPuSGLr2K94TFeb6YeEURUCcnGFyjpIZCplTqXGeD5lINu9H2Ewp269Lgp0tCZLmAVZoFD7xPnIkTK1ZzzFxDa74VqQnnlPc2nglTATLqMMTQPw8yig7z5Rvbg56i0ezFhq7jHvA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739875641; c=relaxed/simple;
-	bh=m6x83XXgK0LWOdngv9dpvmnSrqVpOaFeHWLJ3zbx7ZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A1fOtd6eV5pLDOnAcmR9nQMKnBtgDpIM+xmt0nasV7Ydhr+0Ii7xG/hATGfuvQ21i5yhE933jw4pgiQjFV2L8Sebt5PpZy9wHqUqljV/llIZN5dVZ2XWarfQeUy6gbbS+4PBtM8Nnk2EPUZ6ZimawVj1CEsI7evx7Yvo8RVtP+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OiaG3eyU; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739875637;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QXcsnJi++Pk2cLSeIniLPbmOjSFdWLOhirfJFMOIji8=;
-	b=OiaG3eyUSy3xNUJozvEyoz3Z+ekKAhVkg2M7HPpIoC8GnLOJbwSIwnddq6x/9gIecfp7lS
-	OyO2mFfn5y5647L4wi+ojtGOD5fKFpPNJ3QUbYVGBgHw7OEB3B7ybXKos7sDWXUMqM3U08
-	8SGWtmyin/pNJSzJ1AiXyVtmnZ5cOQ4=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-251-0YrNejrMNze5OkDB6QvDpQ-1; Tue, 18 Feb 2025 05:47:16 -0500
-X-MC-Unique: 0YrNejrMNze5OkDB6QvDpQ-1
-X-Mimecast-MFC-AGG-ID: 0YrNejrMNze5OkDB6QvDpQ_1739875635
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-abb4d3ef1a7so273694966b.3
-        for <linux-arch@vger.kernel.org>; Tue, 18 Feb 2025 02:47:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739875635; x=1740480435;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QXcsnJi++Pk2cLSeIniLPbmOjSFdWLOhirfJFMOIji8=;
-        b=gsmV6IW3Krmktan4oUC8xM+plKjh1+K+Tb4AXY0muy5Xo+GUoT0ga/3e8I6Trl308Z
-         Kyx//W55eUwjw2nb/+3/X3UwaIWM/5DbXYnr8V9tFW8VTnJwlRqi5xBLu57E3I1VqgBV
-         qW5xZMMS1JCFR2tliXKSPOe/bAUeN6+mTq7IuD6VqHmiS+msgW++WxgD1DnWH8DQ41sT
-         kH5I4KitI7+G0YOxm7/PXvUKS2/iAfoc5Z3XIrwNFa/mQfdLyr7UtLqhqnllUvhYw0BP
-         pHLKRI6HM6u61zXOYQL8VpWkobjWr7ll31iXGkQDJxGaIJ8yfh01tuf08nVK1KrgcJoI
-         jg7g==
-X-Forwarded-Encrypted: i=1; AJvYcCW61yE1BV8agmpx0l3vqUhA5BVSFoY3Bk4fkqwAz9ER70Kw1rkSNk8oV6UUhML9+6yfqPaRRSZ70j8e@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMAl/ZlrMcCQ8X/xoinE0jjV057oWgcOOZvJvO9wU7U7TJuyWE
-	pFxlOP9wkEvvJBqkoxG4NEXwNyd9Rd0xvCBC4w99E3912vbsNsT5rpHW1l/KnknIz6BVQY1eSzh
-	4EgPn/kOIvo7cedO6FQ0P24f2jxq0AZk6oCGvkDVwYnrvYogKVKMhXVEC/A==
-X-Gm-Gg: ASbGncugRz/qJeVibg/5jU86KoGB+uXTjROtD647KV8LNeRDZ3gsHm9yOsuxNDIUJyF
-	q+AAk5D0OedPVr/I/hPlM1wwTI9fBgfsactUttwZoCiuSw6dtWfLW6RC6NqpEt9w+L++MWWBZ65
-	zuKq9q1TfrJ/XbBIwuzbqTnLEYC5T9aH1YMWQWiUo1UWXiRK5fb5uAhiN45O4qIP8+OZIRzPk2Q
-	6GWJxk5q44dAjWqgM8r2AWJC+oh3OBnl6c9xpVBgD/7WDLwSAN0Nzcw+SbrwbJ58N8yq/8QnkzS
-	zY5xohM6HfO0aRl5cqE08sk7
-X-Received: by 2002:a17:906:3184:b0:ab7:6a57:1778 with SMTP id a640c23a62f3a-abb7053f377mr1167620766b.0.1739875634867;
-        Tue, 18 Feb 2025 02:47:14 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEDjqWGIxqhirP2hcY9y7A0p1iwbTQ22rYd9pDxOrA5JKHBlOYhOa+YID2cSPLhQPLwqXpUMA==
-X-Received: by 2002:a17:906:3184:b0:ab7:6a57:1778 with SMTP id a640c23a62f3a-abb7053f377mr1167615866b.0.1739875634345;
-        Tue, 18 Feb 2025 02:47:14 -0800 (PST)
-Received: from thinky (ip-217-030-074-039.aim-net.cz. [217.30.74.39])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb8915db0dsm506373166b.145.2025.02.18.02.47.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 02:47:13 -0800 (PST)
-Date: Tue, 18 Feb 2025 11:47:12 +0100
-From: Andrey Albershteyn <aalbersh@redhat.com>
-To: Richard Henderson <richard.henderson@linaro.org>, 
-	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>
-Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
-Message-ID: <65zr3fsrgum6gutsengfxz7sm3re4scyc7hqzbf63gmiz4oud2@czuvkmks3c2j>
-References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAB823AE96;
+	Tue, 18 Feb 2025 11:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739877046; cv=fail; b=do9I9efk/D4R+hutlPbPCz/4l8s7BK10N3CbeOxogJe1+P/FVOKUICPDyT1qH/tI7WletcsirZLBeADFJ5a/WZjkWFIkJXxbNRIMKU0mQvWQMasd3eFWQLT6cnqWa8Gxv72w46mwyb2Ztphg9ppz38yhbNPQb7lGFEdseOm23AY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739877046; c=relaxed/simple;
+	bh=3CIMMHlJgUgFrmEFyAJPzB5mfSGqdyzPfcpp2qLv3nE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rrDE072AxH1VOVXcbVbGivgKPQyAhO1otRx9nVsBCZzqfq6A4tgP5R46/dNuqq+R2ayVWaIWI+wBkh/jtDb5vYHK0FGbs4EXY3ia5zTuVOa07FbnlCOiWIRWkJTf9noRWoB5NSDHecKeKNMA5byF359/gC0XZNDek2ReLcWeTKQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QTjAOU3l; arc=fail smtp.client-ip=40.107.94.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pQzy6P2TavPzZActWopZPPZ/FEnBwo3NEMnFx42/rxUPzC+JFz2hRkgkPV5kQxQ3VScrek5rgIePHe0NtEm7V0k3OCJx4bt9/2ru4ylomXa1IJ4pqLrutyVypikKAjXFeh2RsDmdpTdChj3SV5ffnnyszhOytoae+gABK62QaXfOn0AHMIduu7J8hkzfFRF9LQiYh5fAp7j/VI4TzvexSZy2mTvG2LqU4peGtwQl0SoIu2S64IAoXQJO7BrhJwjzMnXhtVZEUIO+ozULOpYHZPxZhkOPPGNFSLV60GQc536vWnTkYmF3bU+LGgWO+83F+V+ojiUeUkQ/0iWfnOMhMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4LjYr4evbsIWdByov3Icl/PWXdikuFGSHDHGhtjU6Ek=;
+ b=tDb6Zk4plBHppUYi9sqUBEdlQfFKq/XeobleuKCwznuLz0ZI5+xJKcO3jfBqvpvP6tovtIwhXfi7fKWZTlPbyVaPlG4OWNgjGVTfvPHuggr3eM5d1tJWfFHGLeEDlIbv5fISBqov5ch2uSfkLqeLvkyEH7nkxBeAUwL29bFmls5ezJJOUNoF1UQA0Q2XT4ZU5PgUqqNSdFVVpKqtyrP94Kl0WF9Q3tYhqBGBkcGlIKqg48BWg4LO14YRlLOqkcb/f2A7FcZjGE0ZFAOFmtMcWZleCfD0KNMslht+3bygvuvje52gDTFLgesHVUQdOF8Z6Di/E12vKNagPaUfFbKsrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4LjYr4evbsIWdByov3Icl/PWXdikuFGSHDHGhtjU6Ek=;
+ b=QTjAOU3lj5OhmyAYfud6SezF9EdkDLsdqk6jFXNBkikKkL2bVyEL+tajzKXN5cDcraOr8jvsPMNKpXJrSRnC9YB5mujAtLdMqKKH6ckcPwDw8GvV0i/s8et7BeRBwdk65ek0KYlLzccZy8FZn7cw4X4r33m0g4t7+PkKCa8yWYg=
+Received: from PH7P220CA0085.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:32c::26)
+ by IA1PR12MB6116.namprd12.prod.outlook.com (2603:10b6:208:3e8::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.18; Tue, 18 Feb
+ 2025 11:10:38 +0000
+Received: from CY4PEPF0000EE3E.namprd03.prod.outlook.com
+ (2603:10b6:510:32c:cafe::8a) by PH7P220CA0085.outlook.office365.com
+ (2603:10b6:510:32c::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.14 via Frontend Transport; Tue,
+ 18 Feb 2025 11:10:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EE3E.mail.protection.outlook.com (10.167.242.16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8466.11 via Frontend Transport; Tue, 18 Feb 2025 11:10:37 +0000
+Received: from aiemdee.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 18 Feb
+ 2025 05:10:29 -0600
+From: Alexey Kardashevskiy <aik@amd.com>
+To: <x86@kernel.org>
+CC: <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+	<linux-pci@vger.kernel.org>, <linux-arch@vger.kernel.org>, "Sean
+ Christopherson" <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
+	"Tom Lendacky" <thomas.lendacky@amd.com>, Ashish Kalra
+	<ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>, Suravee Suthikulpanit
+	<suravee.suthikulpanit@amd.com>, Robin Murphy <robin.murphy@arm.com>, "Jason
+ Gunthorpe" <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>, Bjorn Helgaas
+	<bhelgaas@google.com>, Dan Williams <dan.j.williams@intel.com>, "Christoph
+ Hellwig" <hch@lst.de>, Nikunj A Dadhania <nikunj@amd.com>, Michael Roth
+	<michael.roth@amd.com>, Vasant Hegde <vasant.hegde@amd.com>, Joao Martins
+	<joao.m.martins@oracle.com>, Nicolin Chen <nicolinc@nvidia.com>, Lu Baolu
+	<baolu.lu@linux.intel.com>, Steve Sistare <steven.sistare@oracle.com>, "Lukas
+ Wunner" <lukas@wunner.de>, Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Dionna Glaze
+	<dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
+	<iommu@lists.linux.dev>, <linux-coco@lists.linux.dev>, Zhi Wang
+	<zhiw@nvidia.com>, AXu Yilun <yilun.xu@linux.intel.com>, "Aneesh Kumar K . V"
+	<aneesh.kumar@kernel.org>, Alexey Kardashevskiy <aik@amd.com>
+Subject: [RFC PATCH v2 00/22] TSM: Secure VFIO, TDISP, SEV TIO
+Date: Tue, 18 Feb 2025 22:09:47 +1100
+Message-ID: <20250218111017.491719-1-aik@amd.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3E:EE_|IA1PR12MB6116:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec7af72f-8c2f-4855-4031-08dd500cdfc4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|82310400026|1800799024|36860700013|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ay7HhRuVZawlIjIhODDBtXdACYwZkP0hHqC8DCwDHz2eBMHY2NQ2Wk/yVi6J?=
+ =?us-ascii?Q?Csb0PnPSVUCe08keB52k3P4T6DHOEnZb8PvsLfaurcMp8WvB2Xe+rmOkRXXm?=
+ =?us-ascii?Q?B1zlM5emiS1B1uG5rgxvVP/hB2raH4n0xfc9HFCWdeqKXknNGRWqpLgcv1Bf?=
+ =?us-ascii?Q?2bxyP67WsdvPNw3ScKHxJvd2ZQS1UFuJ8oxjnWwgJkhbqANXxJsUk/J7muZH?=
+ =?us-ascii?Q?MbP7Lv3d28l2XTa5A0yydNxE39LIH6hxqohmMrm0kKSoBBQK2/Y1/8uPBGpA?=
+ =?us-ascii?Q?/ISizYFuPm90beDanht8kBV9t9KN2TG75pxquBCEVPL0Mmmukay0Uc8M4MBh?=
+ =?us-ascii?Q?JNkVCCG2Nw5oBMxS69/Z1+5OGhWP+GGIW/QYfHBoX+g2n5EXC56mLyaz8IfG?=
+ =?us-ascii?Q?+ThbBiddV62KZXEp63jApcvKE2+EEKDT5GW3E31347ZyEJJGGMIHgsPfPiEK?=
+ =?us-ascii?Q?9WuPD+Ntn6jBtXEgVn0J4/pEy5LGhz3vql7SPbjx1eN6lxTvgdO0sjTq4i3d?=
+ =?us-ascii?Q?MLk49lb//R4NDGPtWsIq6oXGNDzZsxjf7mSdHjYe7Ll2R98cBOsg3zKccp45?=
+ =?us-ascii?Q?QU+NSHvGXuNBoXdkuvOP1B1s+rQ0iUw1Nl5mht89SN1GalVsWZofELHV0gxW?=
+ =?us-ascii?Q?yj91RbXRk3x1Q/xs0tJ5DMbZz/NrxLuk74PK9Y6o6/ITzbqcK4S6LMcW0JnP?=
+ =?us-ascii?Q?t0mZFt84X3VcdSwC7h9NUEqoOeg2uEnVrzIM/Jj46rez9eh34+rVul90JKUv?=
+ =?us-ascii?Q?LtQy6EjZRfZ7+Bor/a0gMBumYUwuLSOyrQujYETDSWn/FN9U2qfe3hN+Z8Or?=
+ =?us-ascii?Q?ND/JthbF6n4AZADLmahqSQ+3UNSIoT3akmiSR0i09OnKmTMAcMyYLw53/bLl?=
+ =?us-ascii?Q?ofcy/trgPNvsEYQUIkAgvr22u9RY5q/f8FEtvsYxoIoxlgyGw2kMZChrhJIo?=
+ =?us-ascii?Q?UY5h1mB3oNeH6O+IJ+zaZDIoHPMLMz6tzKzRJqDcyFiu65wH7QKaN9Kk68EJ?=
+ =?us-ascii?Q?HTGJ9FCdEs9jHQTe5/f+/MFypQOJkgvO9G0voA61LPKH0CRw0ii6mc1vdkaO?=
+ =?us-ascii?Q?oQYNNAPUJNVSRV8uxT8mXUJ5rlc46TWgyvchTU6IlpyY+ktVajSnhlBbU9d/?=
+ =?us-ascii?Q?ZdWFP7Uf6BX/3FyXY8MlFI5874VmQAIPThFSfDC/RU9KaxB8gbt4FodQPMFh?=
+ =?us-ascii?Q?wCozhwgA9wmi2tRT1lxRlxqEXy8x8vwRkmYDqbFxD3c1aScJaoSHZTJczn4J?=
+ =?us-ascii?Q?XMExbeAc6zn97QTTwNTEnaVFYuusb3Vp97TbmUu7xxinLEmLFOpKFl4U1YDR?=
+ =?us-ascii?Q?ZE6QPsItl6w6RD8wDASvBs/vyOj3RRChd4ArFHFbs3QzSRc4dk8sTG2fAvf/?=
+ =?us-ascii?Q?eF4yDuWMG6+qcVABqUNb0tAKfgzyIhrzpKKOytrzVLjUSdqEVG373cWw1cm7?=
+ =?us-ascii?Q?6PSTI9M5BNfoFNhoo7hD5cA+ObLZxT+9?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(1800799024)(36860700013)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2025 11:10:37.8769
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec7af72f-8c2f-4855-4031-08dd500cdfc4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE3E.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6116
 
-Got more comments below with private mail:
+Here are some patches to enable SEV-TIO on AMD Turin. It's been a while
+and got quiet and I kept fixing my tree and wondering if I am going in
+the right direction.
 
-On 2025-02-11 18:22:47, Andrey Albershteyn wrote:
-> From: Andrey Albershteyn <aalbersh@redhat.com>
-> 
-> Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> extended attributes/flags. The syscalls take parent directory fd and
-> path to the child together with struct fsxattr.
-> 
-> This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> that file don't need to be open as we can reference it with a path
-> instead of fd. By having this we can manipulated inode extended
-> attributes not only on regular files but also on special ones. This
-> is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> we can not call ioctl() directly on the filesystem inode using fd.
-> 
-> This patch adds two new syscalls which allows userspace to get/set
-> extended inode attributes on special files by using parent directory
-> and a path - *at() like syscall.
-> 
-> Also, as vfs_fileattr_set() is now will be called on special files
-> too, let's forbid any other attributes except projid and nextents
-> (symlink can have an extent).
-> 
-> CC: linux-api@vger.kernel.org
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-xfs@vger.kernel.org
-> Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
-> ---
-> v1:
-> https://lore.kernel.org/linuxppc-dev/20250109174540.893098-1-aalbersh@kernel.org/
-> 
-> Previous discussion:
-> https://lore.kernel.org/linux-xfs/20240520164624.665269-2-aalbersh@redhat.com/
-> 
-> XFS has project quotas which could be attached to a directory. All
-> new inodes in these directories inherit project ID set on parent
-> directory.
-> 
-> The project is created from userspace by opening and calling
-> FS_IOC_FSSETXATTR on each inode. This is not possible for special
-> files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
-> with empty project ID. Those inodes then are not shown in the quota
-> accounting but still exist in the directory. Moreover, in the case
-> when special files are created in the directory with already
-> existing project quota, these inode inherit extended attributes.
-> This than leaves them with these attributes without the possibility
-> to clear them out. This, in turn, prevents userspace from
-> re-creating quota project on these existing files.
-> ---
-> Changes in v3:
-> - Remove unnecessary "dfd is dir" check as it checked in user_path_at()
-> - Remove unnecessary "same filesystem" check
-> - Use CLASS() instead of directly calling fdget/fdput
-> - Link to v2: https://lore.kernel.org/r/20250122-xattrat-syscall-v2-1-5b360d4fbcb2@kernel.org
-> ---
->  arch/alpha/kernel/syscalls/syscall.tbl      |  2 +
->  arch/arm/tools/syscall.tbl                  |  2 +
->  arch/arm64/tools/syscall_32.tbl             |  2 +
->  arch/m68k/kernel/syscalls/syscall.tbl       |  2 +
->  arch/microblaze/kernel/syscalls/syscall.tbl |  2 +
->  arch/mips/kernel/syscalls/syscall_n32.tbl   |  2 +
->  arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 +
->  arch/mips/kernel/syscalls/syscall_o32.tbl   |  2 +
->  arch/parisc/kernel/syscalls/syscall.tbl     |  2 +
->  arch/powerpc/kernel/syscalls/syscall.tbl    |  2 +
->  arch/s390/kernel/syscalls/syscall.tbl       |  2 +
->  arch/sh/kernel/syscalls/syscall.tbl         |  2 +
->  arch/sparc/kernel/syscalls/syscall.tbl      |  2 +
->  arch/x86/entry/syscalls/syscall_32.tbl      |  2 +
->  arch/x86/entry/syscalls/syscall_64.tbl      |  2 +
->  arch/xtensa/kernel/syscalls/syscall.tbl     |  2 +
->  fs/inode.c                                  | 75 +++++++++++++++++++++++++++++
->  fs/ioctl.c                                  | 16 +++++-
->  include/linux/fileattr.h                    |  1 +
->  include/linux/syscalls.h                    |  4 ++
->  include/uapi/asm-generic/unistd.h           |  8 ++-
->  21 files changed, 133 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-> index c59d53d6d3f3490f976ca179ddfe02e69265ae4d..4b9e687494c16b60c6fd6ca1dc4d6564706a7e25 100644
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@ -506,3 +506,5 @@
->  574	common	getxattrat			sys_getxattrat
->  575	common	listxattrat			sys_listxattrat
->  576	common	removexattrat			sys_removexattrat
-> +577	common	getfsxattrat			sys_getfsxattrat
-> +578	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-> index 49eeb2ad8dbd8e074c6240417693f23fb328afa8..66466257f3c2debb3e2299f0b608c6740c98cab2 100644
-> --- a/arch/arm/tools/syscall.tbl
-> +++ b/arch/arm/tools/syscall.tbl
-> @@ -481,3 +481,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/arm64/tools/syscall_32.tbl b/arch/arm64/tools/syscall_32.tbl
-> index 69a829912a05eb8a3e21ed701d1030e31c0148bc..9c516118b154811d8d11d5696f32817430320dbf 100644
-> --- a/arch/arm64/tools/syscall_32.tbl
-> +++ b/arch/arm64/tools/syscall_32.tbl
-> @@ -478,3 +478,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-> index f5ed71f1910d09769c845c2d062d99ee0449437c..159476387f394a92ee5e29db89b118c630372db2 100644
-> --- a/arch/m68k/kernel/syscalls/syscall.tbl
-> +++ b/arch/m68k/kernel/syscalls/syscall.tbl
-> @@ -466,3 +466,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-> index 680f568b77f2cbefc3eacb2517f276041f229b1e..a6d59ee740b58cacf823702003cf9bad17c0d3b7 100644
-> --- a/arch/microblaze/kernel/syscalls/syscall.tbl
-> +++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-> @@ -472,3 +472,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> index 0b9b7e25b69ad592642f8533bee9ccfe95ce9626..cfe38fcebe1a0279e11751378d3e71c5ec6b6569 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> @@ -405,3 +405,5 @@
->  464	n32	getxattrat			sys_getxattrat
->  465	n32	listxattrat			sys_listxattrat
->  466	n32	removexattrat			sys_removexattrat
-> +467	n32	getfsxattrat			sys_getfsxattrat
-> +468	n32	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> index c844cd5cda620b2809a397cdd6f4315ab6a1bfe2..29a0c5974d1aa2f01e33edc0252d75fb97abe230 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> @@ -381,3 +381,5 @@
->  464	n64	getxattrat			sys_getxattrat
->  465	n64	listxattrat			sys_listxattrat
->  466	n64	removexattrat			sys_removexattrat
-> +467	n64	getfsxattrat			sys_getfsxattrat
-> +468	n64	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> index 349b8aad1159f404103bd2057a1e64e9bf309f18..6c00436807c57c492ba957fcd59af1202231cf80 100644
-> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> @@ -454,3 +454,5 @@
->  464	o32	getxattrat			sys_getxattrat
->  465	o32	listxattrat			sys_listxattrat
->  466	o32	removexattrat			sys_removexattrat
-> +467	o32	getfsxattrat			sys_getfsxattrat
-> +468	o32	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-> index d9fc94c869657fcfbd7aca1d5f5abc9fae2fb9d8..b3578fac43d6b65167787fcc97d2d09f5a9828e7 100644
-> --- a/arch/parisc/kernel/syscalls/syscall.tbl
-> +++ b/arch/parisc/kernel/syscalls/syscall.tbl
-> @@ -465,3 +465,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-> index d8b4ab78bef076bd50d49b87dea5060fd8c1686a..808045d82c9465c3bfa96b15947546efe5851e9a 100644
-> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
-> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-> @@ -557,3 +557,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-> index e9115b4d8b635b846e5c9ad6ce229605323723a5..78dfc2c184d4815baf8a9e61c546c9936d58a47c 100644
-> --- a/arch/s390/kernel/syscalls/syscall.tbl
-> +++ b/arch/s390/kernel/syscalls/syscall.tbl
-> @@ -469,3 +469,5 @@
->  464  common	getxattrat		sys_getxattrat			sys_getxattrat
->  465  common	listxattrat		sys_listxattrat			sys_listxattrat
->  466  common	removexattrat		sys_removexattrat		sys_removexattrat
-> +467  common	getfsxattrat		sys_getfsxattrat		sys_getfsxattrat
-> +468  common	setfsxattrat		sys_setfsxattrat		sys_setfsxattrat
-> diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-> index c8cad33bf250ea110de37bd1407f5a43ec5e38f2..d5a5c8339f0ed25ea07c4aba90351d352033c8a0 100644
-> --- a/arch/sh/kernel/syscalls/syscall.tbl
-> +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> @@ -470,3 +470,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-> index 727f99d333b304b3db0711953a3d91ece18a28eb..817dcd8603bcbffc47f3f59aa3b74b16486453d0 100644
-> --- a/arch/sparc/kernel/syscalls/syscall.tbl
-> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
-> @@ -512,3 +512,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-> index 4d0fb2fba7e208ae9455459afe11e277321d9f74..b4842c027c5d00c0236b2ba89387c5e2267447bd 100644
-> --- a/arch/x86/entry/syscalls/syscall_32.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-> @@ -472,3 +472,5 @@
->  464	i386	getxattrat		sys_getxattrat
->  465	i386	listxattrat		sys_listxattrat
->  466	i386	removexattrat		sys_removexattrat
-> +467	i386	getfsxattrat		sys_getfsxattrat
-> +468	i386	setfsxattrat		sys_setfsxattrat
-> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> index 5eb708bff1c791debd6cfc5322583b2ae53f6437..b6f0a7236aaee624cf9b484239a1068085a8ffe1 100644
-> --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> @@ -390,6 +390,8 @@
->  464	common	getxattrat		sys_getxattrat
->  465	common	listxattrat		sys_listxattrat
->  466	common	removexattrat		sys_removexattrat
-> +467	common	getfsxattrat		sys_getfsxattrat
-> +468	common	setfsxattrat		sys_setfsxattrat
->  
->  #
->  # Due to a historical design error, certain syscalls are numbered differently
-> diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-> index 37effc1b134eea061f2c350c1d68b4436b65a4dd..425d56be337d1de22f205ac503df61ff86224fee 100644
-> --- a/arch/xtensa/kernel/syscalls/syscall.tbl
-> +++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-> @@ -437,3 +437,5 @@
->  464	common	getxattrat			sys_getxattrat
->  465	common	listxattrat			sys_listxattrat
->  466	common	removexattrat			sys_removexattrat
-> +467	common	getfsxattrat			sys_getfsxattrat
-> +468	common	setfsxattrat			sys_setfsxattrat
-> diff --git a/fs/inode.c b/fs/inode.c
-> index 6b4c77268fc0ecace4ac78a9ca777fbffc277f4a..b2dddd9db4fabaf67a6cbf541a86978b290411ec 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -23,6 +23,9 @@
->  #include <linux/rw_hint.h>
->  #include <linux/seq_file.h>
->  #include <linux/debugfs.h>
-> +#include <linux/syscalls.h>
-> +#include <linux/fileattr.h>
-> +#include <linux/namei.h>
->  #include <trace/events/writeback.h>
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/timestamp.h>
-> @@ -2953,3 +2956,75 @@ umode_t mode_strip_sgid(struct mnt_idmap *idmap,
->  	return mode & ~S_ISGID;
->  }
->  EXPORT_SYMBOL(mode_strip_sgid);
-> +
-> +SYSCALL_DEFINE4(getfsxattrat, int, dfd, const char __user *, filename,
-> +		struct fsxattr __user *, fsx, unsigned int, at_flags)
-> +{
-> +	CLASS(fd, dir)(dfd);
-> +	struct fileattr fa;
-> +	struct path filepath;
-> +	int error;
-> +	unsigned int lookup_flags = 0;
-> +
-> +	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-> +		return -EINVAL;
-> +
-> +	if (at_flags & AT_SYMLINK_FOLLOW)
-> +		lookup_flags |= LOOKUP_FOLLOW;
-> +
-> +	if (at_flags & AT_EMPTY_PATH)
-> +		lookup_flags |= LOOKUP_EMPTY;
-> +
-> +	if (fd_empty(dir))
-> +		return -EBADF;
-> +
-> +	error = user_path_at(dfd, filename, lookup_flags, &filepath);
-> +	if (error)
-> +		return error;
-> +
-> +	error = vfs_fileattr_get(filepath.dentry, &fa);
+SEV-TIO allow a guest to establish trust in a device that supports TEE
+Device Interface Security Protocol (TDISP, defined in PCIe r6.0+) and
+then interact with the device via private memory.
 
-vfs_fileattr_get() returns ENOIOCTLCMD, where EOPNOTSUPP is more
-appropriate
+These include both guest and host support. QEMU also requires changes.
+This is more to show what it takes on AMD EPYC to pass through TDISP
+devices, hence "RFC".
 
-> +	if (!error)
-> +		error = copy_fsxattr_to_user(&fa, fsx);
-> +
-> +	path_put(&filepath);
-> +	return error;
-> +}
-> +
-> +SYSCALL_DEFINE4(setfsxattrat, int, dfd, const char __user *, filename,
-> +		struct fsxattr __user *, fsx, unsigned int, at_flags)
-		^ can be const
-> +{
-> +	CLASS(fd, dir)(dfd);
-> +	struct fileattr fa;
-> +	struct path filepath;
-> +	int error;
-> +	unsigned int lookup_flags = 0;
-> +
-> +	if ((at_flags & ~(AT_SYMLINK_FOLLOW | AT_EMPTY_PATH)) != 0)
-> +		return -EINVAL;
-> +
-> +	if (at_flags & AT_SYMLINK_FOLLOW)
-> +		lookup_flags |= LOOKUP_FOLLOW;
-> +
-> +	if (at_flags & AT_EMPTY_PATH)
-> +		lookup_flags |= LOOKUP_EMPTY;
-> +
-> +	if (fd_empty(dir))
-> +		return -EBADF;
-> +
-> +	if (copy_fsxattr_from_user(&fa, fsx))
-> +		return -EFAULT;
-> +
-> +	error = user_path_at(dfd, filename, lookup_flags, &filepath);
-> +	if (error)
-> +		return error;
-> +
-> +	error = mnt_want_write(filepath.mnt);
-> +	if (!error) {
-> +		error = vfs_fileattr_set(file_mnt_idmap(fd_file(dir)),
-> +					 filepath.dentry, &fa);
+Components affected:
+KVM
+IOMMUFD
+CCP (AMD)
+SEV-GUEST (AMD)
 
-same here with returned error
+New components:
+PCI IDE
+PCI TSM
+VIRT CoCo TSM
+VIRT CoCo TSM-HOST
+VIRT CoCo TSM-GUEST
+
+
+This is based on a merge of Lukas'es CMA and 1 week old upstream + some of Dan's patches:
+
+https://github.com/aik/linux/tree/tsm
+https://github.com/aik/qemu/tree/tsm
+
+Not using "[PATCH 03/11] coco/tsm: Introduce a class device for TEE Security Managers"
+yet as may be (may be) my approach makes sense too. Tried to stick to the terminology.
+I have done some changes on top of that, these are on github, not posting here as
+I expect those to be addressed in that thread:
+https://lore.kernel.org/linux-coco/173343739517.1074769.13134786548545925484.stgit@dwillia2-xfh.jf.intel.com/T/
+
+
+SEV TIO spec:
+https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58271_0_70.pdf
+Whitepaper:
+https://www.amd.com/content/dam/amd/en/documents/epyc-business-docs/white-papers/sev-tio-whitepaper.pdf
+
+
+Acronyms:
+
+TEE - Trusted Execution Environments, a concept of managing trust between the host
+	and devices
+TSM - TEE Security Manager (TSM), an entity which ensures security on the host
+PSP - AMD platform secure processor (also "ASP", "AMD-SP"), acts as TSM on AMD.
+SEV TIO - the TIO protocol implemented by the PSP and used by the host
+GHCB - guest/host communication block - a protocol for guest-to-host communication
+	via a shared page
+TDISP - TEE Device Interface Security Protocol (PCIe).
+
+
+Flow:
+
+- Boot host OS, load CCP and PCI TSM (they will load TSM-HOST too)
+- PCI TSM creates sysfs nodes in "coco/tsm: Add tsm and tsm-host modules" for all TDISP-capable devices
+- Enable IDE via "echo 0 > /sys/bus/pci/devices/0000:e1:00.0/tsm-dev/tdev:0000:e1:00.0/tsm_dev_connect"
+- Examine certificates/measurements/status via sysfs
+
+- run an SNP VM _without_ VFIO PCI device, wait till it is booted
+- hotplug a TDISP-capable PCI function, IOMMUFD must be used (not a VFIO container)
+- QEMU pins all guest memory via IOMMUFD map-from-fd ioctl()
+- the VM detects a TDISP-capable device, creates sysfs nodes in "coco/tsm: Add tsm-guest module"
+- the VM loads the device driver which goes as usual till enabling bus master (for convinience)
+- TSM-GUEST modules listens for bus master event (hacked in "pci: Add BUS_NOTIFY_PCI_BUS_MASTER event")
+- TSM-GUEST requests TDI ("trusted PCI VF") info, traps into QEMU
+- QEMU binds the VF to the Coco VM in the secure fw (AMD PSP) via IOMMUFD ioctl
+- QEMU reads certificates/measurements/interface report from the hosts sysfs and writes to the guest memory
+- the guest receives all the data, examines it (not in this series though)
+- the guest enables secure DMA and MMIO by calling GHCB which traps into QEMU
+- QEMU calls IOMMUFD ioctl to enable secure DMA and MMIO
+- the guest can now stop sharing memory for DMA (and expect DMA to encrypted memory to work) and
+start accessing validated MMIO with Cbit set.
+
+
+
+Assumptions
+
+This requires hotpligging into the VM vs passing the device via the command line as
+VFIO maps all guest memory as the device init step which is too soon as
+SNP LAUNCH UPDATE happens later and will fail if VFIO maps private memory before that.
+
+This requires the BME hack as MMIO and BusMaster enable bits cannot be 0 after MMIO
+validation is done and there are moments in the guest OS booting process when this
+appens.
+
+SVSM could help addressing these (not implemented).
+
+QEMU advertises TEE-IO capability to the VM. An additional x-tio flag is added to
+vfio-pci.
+
+Trying to avoid the device driver modification as much as possible at
+the moment as my test devices already exist in non-TDISP form and need to work without
+modification. Arguably this may not be always the case.
+
+
+TODOs
+
+Deal with PCI reset. Hot unplug+plug? Power states too.
+Actually collaborate with CMA.
+Other tons of things.
+
+
+The previous conversation is here:
+https://lore.kernel.org/r/20240823132137.336874-1-aik@amd.com
+
+
+Changes:
+v2:
+* redid the whole thing pretty much
+* RMPUPDATE API for QEMU
+* switched to IOMMUFD
+* mapping guest memory via IOMMUFD map-from-fd
+* marking resouces as validated
+* more modules
+* moved tons to the userspace (QEMU), such as TDI bind and GHCB guest requests
+
+
+Sean, get_maintainer.pl produced more than 100 emails for the entire
+patchset, should I have posted them all anyway?
+
+Please comment. Thanks.
+
+
+
+Alexey Kardashevskiy (22):
+  pci/doe: Define protocol types and make those public
+  PCI/IDE: Fixes to make it work on AMD SNP-SEV
+  PCI/IDE: Init IDs on all IDE streams beforehand
+  iommu/amd: Report SEV-TIO support
+  crypto: ccp: Enable SEV-TIO feature in the PSP when supported
+  KVM: X86: Define tsm_get_vmid
+  coco/tsm: Add tsm and tsm-host modules
+  pci/tsm: Add PCI driver for TSM
+  crypto/ccp: Implement SEV TIO firmware interface
+  KVM: SVM: Add uAPI to change RMP for MMIO
+  KVM: SEV: Add TIO VMGEXIT
+  iommufd: Allow mapping from guest_memfd
+  iommufd: amd-iommu: Add vdevice support
+  iommufd: Add TIO calls
+  KVM: X86: Handle private MMIO as shared
+  coco/tsm: Add tsm-guest module
+  resource: Mark encrypted MMIO resource on validation
+  coco/sev-guest: Implement the guest support for SEV TIO
+  RFC: pci: Add BUS_NOTIFY_PCI_BUS_MASTER event
+  sev-guest: Stop changing encrypted page state for TDISP devices
+  pci: Allow encrypted MMIO mapping via sysfs
+  pci: Define pci_iomap_range_encrypted
+
+ drivers/crypto/ccp/Makefile                 |   13 +
+ drivers/pci/Makefile                        |    3 +
+ drivers/virt/coco/Makefile                  |    2 +
+ drivers/virt/coco/guest/Makefile            |    3 +
+ drivers/virt/coco/host/Makefile             |    6 +
+ drivers/virt/coco/sev-guest/Makefile        |    2 +-
+ arch/x86/include/asm/kvm-x86-ops.h          |    1 +
+ arch/x86/include/asm/kvm_host.h             |    2 +
+ arch/x86/include/asm/sev.h                  |   31 +
+ arch/x86/include/uapi/asm/kvm.h             |   11 +
+ arch/x86/include/uapi/asm/svm.h             |    2 +
+ drivers/crypto/ccp/sev-dev-tio.h            |  111 ++
+ drivers/crypto/ccp/sev-dev.h                |   19 +
+ drivers/iommu/amd/amd_iommu_types.h         |    3 +
+ drivers/iommu/iommufd/iommufd_private.h     |    3 +
+ include/asm-generic/pci_iomap.h             |    4 +
+ include/linux/amd-iommu.h                   |    2 +
+ include/linux/device.h                      |    4 +
+ include/linux/device/bus.h                  |    3 +
+ include/linux/dma-direct.h                  |    8 +
+ include/linux/ioport.h                      |    2 +
+ include/linux/kvm_host.h                    |    2 +
+ include/linux/pci-doe.h                     |    4 +
+ include/linux/pci-ide.h                     |   19 +-
+ include/linux/pci.h                         |    2 +-
+ include/linux/psp-sev.h                     |   61 +-
+ include/linux/swiotlb.h                     |    8 +
+ include/linux/tsm.h                         |  315 ++++
+ include/uapi/linux/iommufd.h                |   26 +
+ include/uapi/linux/kvm.h                    |   24 +
+ include/uapi/linux/pci_regs.h               |    5 +-
+ include/uapi/linux/psp-sev.h                |    6 +-
+ include/uapi/linux/sev-guest.h              |   39 +
+ arch/x86/coco/sev/core.c                    |   19 +-
+ arch/x86/kvm/mmu/mmu.c                      |    6 +-
+ arch/x86/kvm/svm/sev.c                      |  205 +++
+ arch/x86/kvm/svm/svm.c                      |   12 +
+ arch/x86/mm/ioremap.c                       |    2 +
+ arch/x86/mm/mem_encrypt.c                   |    6 +
+ arch/x86/virt/svm/sev.c                     |   34 +-
+ drivers/crypto/ccp/sev-dev-tio.c            | 1664 ++++++++++++++++++++
+ drivers/crypto/ccp/sev-dev-tsm.c            |  709 +++++++++
+ drivers/crypto/ccp/sev-dev.c                |   94 +-
+ drivers/iommu/amd/init.c                    |    9 +
+ drivers/iommu/amd/iommu.c                   |   60 +-
+ drivers/iommu/iommufd/main.c                |    6 +
+ drivers/iommu/iommufd/pages.c               |   88 +-
+ drivers/iommu/iommufd/viommu.c              |  112 ++
+ drivers/pci/doe.c                           |    2 -
+ drivers/pci/ide.c                           |  103 +-
+ drivers/pci/iomap.c                         |   24 +
+ drivers/pci/mmap.c                          |   11 +-
+ drivers/pci/pci-sysfs.c                     |   27 +-
+ drivers/pci/pci.c                           |    3 +
+ drivers/pci/proc.c                          |    2 +-
+ drivers/pci/tsm.c                           |  233 +++
+ drivers/virt/coco/guest/tsm-guest.c         |  326 ++++
+ drivers/virt/coco/host/tsm-host.c           |  551 +++++++
+ drivers/virt/coco/sev-guest/sev_guest.c     |   10 +
+ drivers/virt/coco/sev-guest/sev_guest_tio.c |  738 +++++++++
+ drivers/virt/coco/tsm.c                     |  638 ++++++++
+ kernel/resource.c                           |   48 +
+ virt/kvm/kvm_main.c                         |    6 +
+ Documentation/virt/coco/tsm.rst             |  132 ++
+ drivers/crypto/ccp/Kconfig                  |    2 +
+ drivers/pci/Kconfig                         |   15 +
+ drivers/virt/coco/Kconfig                   |   14 +
+ drivers/virt/coco/guest/Kconfig             |    3 +
+ drivers/virt/coco/host/Kconfig              |    6 +
+ drivers/virt/coco/sev-guest/Kconfig         |    1 +
+ 70 files changed, 6614 insertions(+), 53 deletions(-)
+ create mode 100644 drivers/virt/coco/host/Makefile
+ create mode 100644 drivers/crypto/ccp/sev-dev-tio.h
+ create mode 100644 drivers/crypto/ccp/sev-dev-tio.c
+ create mode 100644 drivers/crypto/ccp/sev-dev-tsm.c
+ create mode 100644 drivers/pci/tsm.c
+ create mode 100644 drivers/virt/coco/guest/tsm-guest.c
+ create mode 100644 drivers/virt/coco/host/tsm-host.c
+ create mode 100644 drivers/virt/coco/sev-guest/sev_guest_tio.c
+ create mode 100644 drivers/virt/coco/tsm.c
+ create mode 100644 Documentation/virt/coco/tsm.rst
+ create mode 100644 drivers/virt/coco/host/Kconfig
 
 -- 
-- Andrey
+2.47.1
 
 
