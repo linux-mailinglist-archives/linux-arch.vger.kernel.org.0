@@ -1,125 +1,106 @@
-Return-Path: <linux-arch+bounces-10211-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10213-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C2EA3B40F
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 09:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03C1EA3B5CB
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 10:02:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE3881898A8D
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 08:33:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC221188B0FD
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 08:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED341CD208;
-	Wed, 19 Feb 2025 08:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243E31C9B97;
+	Wed, 19 Feb 2025 08:46:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5iNvIEi"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ug04kj8i"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1501C82F4;
-	Wed, 19 Feb 2025 08:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87651C7B62;
+	Wed, 19 Feb 2025 08:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739953972; cv=none; b=XKzuzH44PdV1cW2Qtul4619iflqk4Lw6FVL30vbCOiswlbjyvErodnn7PDS71MtlvnzdRwG46Hbw7vz92LaGOVE7Igfsc7Xc9TEmUdg44x6Th+y4Z13eMC0MJrAYrAJlyJFvxLkIrCwQqU/kJddEYvHm4yzZo1GScCfH1eqCVkw=
+	t=1739954809; cv=none; b=dUoOx0T8KGkk0MfY2NFiH2BOgSJ56l9tmSNZQ9SRoaz5nk35MQ1SrLfhd8jsMXZB7e8mRRC/3pRc4sWc/OMnVc/7vja7FSkC7VwM4Uwk1sj36cTbOtliFNiqmIHhBovZtFNSfNZkzH4u0dbVTV/le5noRcb4yG7rZe9lRc6nLZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739953972; c=relaxed/simple;
-	bh=aeuqk5Ez6XBK1bcBiwdwu3D8K0LeqXVto+XLcOhJeWA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pxb3khz+0ld4cNb7/f0/cUNbBzOx9+2RO+PExBTSCCnYDOMzjXrGyK+V6iXahixXHg88Ca9en+IBocOovYRfUcRrpi5Zx7nh8W7naMg39bJrgtccguB7xib0Ubx0ByeZESEp5fe5sSTYNv+f/ZEbtMu7kwUr8te2whQyIMzJ2lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5iNvIEi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1077C4CEEB;
-	Wed, 19 Feb 2025 08:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739953971;
-	bh=aeuqk5Ez6XBK1bcBiwdwu3D8K0LeqXVto+XLcOhJeWA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J5iNvIEiipPo7GxZiDEnaXU1XLfO/KSoV40wNgDuzdBkGvyBgTXmcBvD1D9H4vhwn
-	 eed7soqaUQvDVpTJHCn9zzFV3x9eozPWmr6Ce2c1tIgg1hGxS4b501DYJbCIhFszbg
-	 +yZL0LT2qrquT/zsDmWZMD2Avv6noTkW8lv/TS5ALEXuNMr/4KiIYNqZdu/qjRIvS3
-	 i/7AU4GfPTpynn3KfXkfcvkOKsCHKfdUCdb/COfmR691PghSIJu661FtiirymaYc4w
-	 6sP3GdJLqoOsu4orpy2+rskNkvj5N75D5TEMCvxAu9aN9ky1foNW0Fj2B7M0nPCj7q
-	 HZJQsmy2JyBXg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.98)
-	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1tkfVh-0000000Gv4L-4122;
-	Wed, 19 Feb 2025 09:32:49 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 01/27] include/asm-generic/io.h: fix kerneldoc markup
-Date: Wed, 19 Feb 2025 09:32:17 +0100
-Message-ID: <53fe92cda720035a5c72bc95a88a3d965bc9b1fc.1739952783.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <cover.1739952783.git.mchehab+huawei@kernel.org>
-References: <cover.1739952783.git.mchehab+huawei@kernel.org>
+	s=arc-20240116; t=1739954809; c=relaxed/simple;
+	bh=tnUmi/+GDTm7yWualJNQl5++GpWqIIggR47W1xDCCK0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V4+Nk0UeIJLLxLzxR/S8ZgBEsvhm/mj7YRbfiXVKH19zt7e42GjP41n0wbXIpPKo9bNhW30ENY20LYjWQUrER/+1zxcK0nnKC1rQzeLK42KVWgVgwYFD+YAURcGCcaRiaFC71EetqslOjbwIAG87f46obPwYGwaSTPAhmN1xSIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ug04kj8i; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51J75CS5019820;
+	Wed, 19 Feb 2025 08:46:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=tnUmi/+GDTm7yWualJNQl5++GpWqII
+	ggR47W1xDCCK0=; b=Ug04kj8iMYHe7BiulyxakjeqvhE5vGWEcPq1sZxyUUiMpV
+	L96GGlP4zARNaJAQWTwAIzJ7EYyj0/fLOO/eEeUz1Qm6PfyohszWQLhfigjhHJuO
+	9pkGDOD9Duvtl78Z15h0FvDq7LS487A6ZFmo8kLD6G82ubP/YDeq9iB1rUmZRZhV
+	Acyq1Urx+Hj4DKgbBOSfp73Oe9aQ9jKG9rh3AJoHS80RUjKxZQa0+nlkm+JhwtlT
+	46b85K1laetS/QWKGHZ9udfq6tm95YB6oytrzPAwgmJLUzssI8GbBT28E9SPsn4S
+	P1ZDUi46KCB2gRarv3/+GEPtr7ZabhTbY890Zxrw==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44vyyq2vp3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Feb 2025 08:46:30 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51J6YC18009702;
+	Wed, 19 Feb 2025 08:46:29 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44w03y33kv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Feb 2025 08:46:29 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51J8kREv49545472
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 19 Feb 2025 08:46:28 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D4C172004B;
+	Wed, 19 Feb 2025 08:46:27 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5CB2B20040;
+	Wed, 19 Feb 2025 08:46:27 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.179.14.227])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 19 Feb 2025 08:46:27 +0000 (GMT)
+Date: Wed, 19 Feb 2025 09:46:25 +0100
+From: Alexander Gordeev <agordeev@linux.ibm.com>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: linux-mm@kvack.org, linux-arch@vger.kernel.org, x86@kernel.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org
+Subject: Re: [PATCH 1/7] mm: Set the pte dirty if the folio is already dirty
+Message-ID: <Z7WaYRjS/VW2aKJN@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <20250217190836.435039-1-willy@infradead.org>
+ <20250217190836.435039-2-willy@infradead.org>
+ <Z7WJL+sgPLB3dboi@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z7WJL+sgPLB3dboi@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0vOIzLJ4HxK9oV3CqviyzbQJOr99MTrw
+X-Proofpoint-ORIG-GUID: 0vOIzLJ4HxK9oV3CqviyzbQJOr99MTrw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-19_03,2025-02-18_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0 clxscore=1015
+ spamscore=0 suspectscore=0 phishscore=0 mlxlogscore=414 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502190066
 
-Kerneldoc requires a "-" after the name of a function for it
-to be recognized as a function.
+> Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
 
-Add it.
-
-Fix those kernel-doc warnings:
-
-include/asm-generic/io.h:1215: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * memset_io    Set a range of I/O memory to a constant value
-include/asm-generic/io.h:1227: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * memcpy_fromio        Copy a block of data from I/O memory
-include/asm-generic/io.h:1239: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * memcpy_toio          Copy a block of data into I/O memory
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
----
- include/asm-generic/io.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index a5cbbf3e26ec..3c61c29ff6ab 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1212,7 +1212,7 @@ static inline void unxlate_dev_mem_ptr(phys_addr_t phys, void *addr)
- 
- #ifndef memset_io
- /**
-- * memset_io	Set a range of I/O memory to a constant value
-+ * memset_io -	Set a range of I/O memory to a constant value
-  * @addr:	The beginning of the I/O-memory range to set
-  * @val:	The value to set the memory to
-  * @count:	The number of bytes to set
-@@ -1224,7 +1224,7 @@ void memset_io(volatile void __iomem *addr, int val, size_t count);
- 
- #ifndef memcpy_fromio
- /**
-- * memcpy_fromio	Copy a block of data from I/O memory
-+ * memcpy_fromio -	Copy a block of data from I/O memory
-  * @dst:		The (RAM) destination for the copy
-  * @src:		The (I/O memory) source for the data
-  * @count:		The number of bytes to copy
-@@ -1236,7 +1236,7 @@ void memcpy_fromio(void *dst, const volatile void __iomem *src, size_t count);
- 
- #ifndef memcpy_toio
- /**
-- * memcpy_toio		Copy a block of data into I/O memory
-+ * memcpy_toio -	Copy a block of data into I/O memory
-  * @dst:		The (I/O memory) destination for the copy
-  * @src:		The (RAM) source for the data
-  * @count:		The number of bytes to copy
--- 
-2.48.1
-
+Sorry, I meant for s390.
+Can not judge the other archs impact.
 
