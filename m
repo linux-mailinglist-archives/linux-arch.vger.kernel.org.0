@@ -1,264 +1,293 @@
-Return-Path: <linux-arch+bounces-10230-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10232-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3D41A3CB75
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 22:31:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03316A3CD28
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 00:13:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A736A3A9FB8
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 21:30:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 644D218844AB
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 23:13:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD25E23536C;
-	Wed, 19 Feb 2025 21:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E45F325E476;
+	Wed, 19 Feb 2025 23:13:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gOHR1Yt0"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="bEj06RRH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
+Received: from CY4PR05CU001.outbound.protection.outlook.com (mail-westcentralusazolkn19010007.outbound.protection.outlook.com [52.103.7.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E620E15746F;
-	Wed, 19 Feb 2025 21:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E6125D52A;
+	Wed, 19 Feb 2025 23:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.7.7
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740000658; cv=fail; b=I9GoE+QWhyFaZ5q4035vspOCX8dn7h27IZmpKJWZv4DGQO1Ct/X2bY4l/yJ3RfIjBeSIYku5HLrcS4NkJ1pUrfS4hOX2yxjuV9p8QJ1gZAWFM04LiLS8bJpW0F4qTB9shGScb7YSw27ssURpdPPqSV/9BC17CWBQ674ESQwy5U4=
+	t=1740006812; cv=fail; b=GlUibMAZwYQLbpV7eD6er8kFn/AqarqInzXbX+o1F7IVHUHNP4W1ztpGk/AMmLF9xcXVZKJbQe4sKaexQ5Uj4ECjNj1F85nlR6ErVZVr32+8cVzlkW6u18nJ3DiRk22/Yv7Sc6gof0alvNITNdCiJ9ypb+c/+6f765GUzv33uMU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740000658; c=relaxed/simple;
-	bh=9EHyKzgADGM/EJpJWEy5A5QZ+nAgDoIiF9cKBRLhRyQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=klmjJ8OEfKLVwsiz5LcN3EJPCamtTi6JUGJITNYbDBddn2hjLBc3ajW2xYsbiFZROxN5cmFlfjQIdLGsXieaymkEzVoyiymuSu324eaBPlLZf9DXVp9dP/NzytvDg+qCe1tldd5pozmGqaWN0gbvVgysEgrClNBMedo52WiLYSU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gOHR1Yt0; arc=fail smtp.client-ip=40.107.243.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1740006812; c=relaxed/simple;
+	bh=HUFyyxD1IWd+B7BSeW4TrbdoaJn6iKiV5NIz0qNXRc4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=NzX5TwaTr5TVK4xySaAEyc6QT3C/xsWijIglAqFvJ7kAgKVK2f4ThGOAAeLEWj47ur/sK0RHPB+Swv9+3eJyS/nDqnK5VTemVtybIre+M8TamTZzKMyH4bC7WsySsfScQl+Np/KDibMgXwM+//DMA9LdMLPRGx4O6uOe0VAkTxI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=bEj06RRH; arc=fail smtp.client-ip=52.103.7.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BDgPJ1UbQ3Esq27sl8i8YEw0gkJZz4nlFm6M7aMsJ/jrVjdk6TzSfsf/kiL61vcI9BWkFMsxQ/U9U74FuiaqtZQHF48BsNlqS0ktwOL+iespVHtd0M7S63XgL7d0jMbTrQBYQF3QRPBBQaowQG3r1V9eZnb2gnLUSFeiy4HzNjz+VmO35xqrt0uKA3u/eMnFav7xurqpue6i7USXDvGK+DnTpMLfvW78STD7eAHYRXAomjhCM2uwZ4AXLJWr+v8d/Io9diiTPglfBTt2zFpyAMdR0VHkJcCYkX5HMK6o2iLBDjj/x+7aKeOvMSCUxLxj5sU91Eq9wTHLnR8IcYggdQ==
+ b=LMMfPEauNtIOvT11QP0FfJLq44dOv2m7b0uznSbcSovBH9IccuqzWaLpWsIxG28UvDHmFV+J1jxHh8l6Lu6YcrsTiMQ0qMEu9gjSSefFyop1TOezZCg0+Iz+XfF/4aTBmWnqAU4a0DyYs5MuPOfDfqri8RgQN2KDKNLMkUhXXM94XzhNhgrymxrA/N+zADDz4vtn+YaUJBtyYDT5QvOS3rTn7Xkl5Q9AIh1ykpc0KaI/bQvBJVZm7HKTqgKOQpue+kwNVtM9FwIsMsUxPtz+bnCdCFElnBbd04SNjmL6lQfviNArgHFNTnfcXhuGnojTJCBso+PnnbUkxPwp483/jQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9IcoYsuB9Y+TLT/NL6CnO+DW1g4W7y8ja7rTXsu8zos=;
- b=CeoKLYCIY3OYa+qWU3WMmi9qafxYVApi3+71ksps01B1K8rEUZ2BmDT6gG51UIm+ajaSDwYAWeMQC4pliSsoZqH4eta4XNlTiNF0JYAh4oQUwS7behTQXA0yE143n4mMm/hSKLdwwzdh1xEsbA/MS8C5YsEOSxOi3Vl4VvjO5xnDjvn8XAJBc6Ov5wAynZuOTJKjEpVVw6ujmqayCrAepWrQXH1PDn4YYGWSybpARKtlP+DrIQNomanHoaTibW1hbubwYFwoDbLIKB+sC1LUeUBERSPlym4Fj96caOL5dnNQ/U2M53UDINqAve2csgwTlgN43V9oKhMGlXmv05zkqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=ziepe.ca smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=nwctZs3DT27tQZmgHdO5PT0gQumApz19iC+i5uhmAO8=;
+ b=Qs/e8YBhP5DR9tw+YIB9smJSnEbNYfHDc6k8W4HjH3565Cxb/HDy/MM+suMzKO+qCHsEgp+/Fa/RXrhD1aAl4fd+Yb4TPeQWEtFEjMc2MtCbFl43H5WZoLPB6Yk7gecHYcGv8TS8PqzdsY5BMxlAaRpz1PnMaTwNlnJwxOgstX1UEFvxkHxCE8YncgX0OO2RloYrZb5iTulTM5K55ybOpsqSf8KE3LrdOSBLdLjZYC3p6hoEZOmlTnRatg+X9MOApEwz/ykYSneYJtv2uXpAo6vIy78vlnObC49LoG7vnUcyJdKo/26OViF9KpM9bWBfjYFWTUxtQSm3nCZHRNn2IQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9IcoYsuB9Y+TLT/NL6CnO+DW1g4W7y8ja7rTXsu8zos=;
- b=gOHR1Yt0LeCZcn86mB3Q2RoKeyFP462Wkf5XsUHq8XrQcKyrpc08rzFysg+7eAQ+bJsbwaXw1MLeerRZxxgINOm8eqntZxT9nYnRx48i6lS3mD2fWc+uOJxUXLxOFP5oBbNh+LExLG1pP+V6mOlNZP7eJ0dspWhEB6mLtH83xBI=
-Received: from BN9PR03CA0462.namprd03.prod.outlook.com (2603:10b6:408:139::17)
- by CH2PR12MB4136.namprd12.prod.outlook.com (2603:10b6:610:a4::14) with
+ bh=nwctZs3DT27tQZmgHdO5PT0gQumApz19iC+i5uhmAO8=;
+ b=bEj06RRHU2TKsORMgl7exL4+RdZPgh5nb19xOWPDqrj92Su2fPkstFG3SmE/XtQwKTxpkwQJyN8iVUGbLI9a5MVXQlBgiG4lR/YDCR/T+ysX8ksKT+vLQIekiKwNwRtNIVc0+dqaMdnO0pYpQq7LPA1w6lMTHWPJn2PqCjbY7DCAiXtykQ3+b2FddZdRDLCWX81Tvsd9nCwy2ni18+oGfybqKw622whjsY4vtcHYfwpIjT9uyHcnmnEfXr98Iw1ei/V6JeXI3fNbg2cx2bE9Koh3LDCvQD2iBMqBNKvgM/iYPvFK5OXlipVWdSsVyXn1nhxYJ1rUqwHNYFH+dwiksA==
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
+ by DM4PR02MB9192.namprd02.prod.outlook.com (2603:10b6:8:108::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.15; Wed, 19 Feb
- 2025 21:30:53 +0000
-Received: from BN3PEPF0000B36E.namprd21.prod.outlook.com
- (2603:10b6:408:139:cafe::15) by BN9PR03CA0462.outlook.office365.com
- (2603:10b6:408:139::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.19 via Frontend Transport; Wed,
- 19 Feb 2025 21:30:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN3PEPF0000B36E.mail.protection.outlook.com (10.167.243.165) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8489.2 via Frontend Transport; Wed, 19 Feb 2025 21:30:52 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 19 Feb
- 2025 15:30:52 -0600
-Date: Wed, 19 Feb 2025 15:30:37 -0600
-From: Michael Roth <michael.roth@amd.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-CC: Alexey Kardashevskiy <aik@amd.com>, <x86@kernel.org>,
-	<kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-	<linux-pci@vger.kernel.org>, <linux-arch@vger.kernel.org>, "Sean
- Christopherson" <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
-	"Tom Lendacky" <thomas.lendacky@amd.com>, Ashish Kalra
-	<ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>, Suravee Suthikulpanit
-	<suravee.suthikulpanit@amd.com>, Robin Murphy <robin.murphy@arm.com>, "Kevin
- Tian" <kevin.tian@intel.com>, Bjorn Helgaas <bhelgaas@google.com>, "Dan
- Williams" <dan.j.williams@intel.com>, Christoph Hellwig <hch@lst.de>, "Nikunj
- A Dadhania" <nikunj@amd.com>, Vasant Hegde <vasant.hegde@amd.com>, Joao
- Martins <joao.m.martins@oracle.com>, Nicolin Chen <nicolinc@nvidia.com>, Lu
- Baolu <baolu.lu@linux.intel.com>, Steve Sistare <steven.sistare@oracle.com>,
-	"Lukas Wunner" <lukas@wunner.de>, Jonathan Cameron
-	<Jonathan.Cameron@huawei.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
-	<iommu@lists.linux.dev>, <linux-coco@lists.linux.dev>, Zhi Wang
-	<zhiw@nvidia.com>, AXu Yilun <yilun.xu@linux.intel.com>, "Aneesh Kumar K . V"
-	<aneesh.kumar@kernel.org>
-Subject: Re: [RFC PATCH v2 12/22] iommufd: Allow mapping from guest_memfd
-Message-ID: <20250219213037.ku2wi7oyd5kxtwiv@amd.com>
-References: <20250218111017.491719-1-aik@amd.com>
- <20250218111017.491719-13-aik@amd.com>
- <20250218141634.GI3696814@ziepe.ca>
- <340d8dba-1b09-4875-8604-cd9f66ca1407@amd.com>
- <20250218235105.GK3696814@ziepe.ca>
- <06b850ab-5321-4134-9b24-a83aaab704bf@amd.com>
- <20250219133516.GL3696814@ziepe.ca>
- <20250219202324.uq2kq27kmpmptbwx@amd.com>
- <20250219203708.GO3696814@ziepe.ca>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.18; Wed, 19 Feb
+ 2025 23:13:28 +0000
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df%4]) with mapi id 15.20.8466.013; Wed, 19 Feb 2025
+ 23:13:28 +0000
+From: Michael Kelley <mhklinux@outlook.com>
+To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
+	"bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "conor+dt@kernel.org"
+	<conor+dt@kernel.org>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "decui@microsoft.com" <decui@microsoft.com>,
+	"haiyangz@microsoft.com" <haiyangz@microsoft.com>, "hpa@zytor.com"
+	<hpa@zytor.com>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, "kw@linux.com"
+	<kw@linux.com>, "kys@microsoft.com" <kys@microsoft.com>,
+	"lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+	"manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
+	"mingo@redhat.com" <mingo@redhat.com>, "robh@kernel.org" <robh@kernel.org>,
+	"ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "wei.liu@kernel.org"
+	<wei.liu@kernel.org>, "will@kernel.org" <will@kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-pci@vger.kernel.org"
+	<linux-pci@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>
+CC: "benhill@microsoft.com" <benhill@microsoft.com>, "bperkins@microsoft.com"
+	<bperkins@microsoft.com>, "sunilmut@microsoft.com" <sunilmut@microsoft.com>
+Subject: RE: [PATCH hyperv-next v4 1/6] arm64: hyperv: Use SMCCC to detect
+ hypervisor presence
+Thread-Topic: [PATCH hyperv-next v4 1/6] arm64: hyperv: Use SMCCC to detect
+ hypervisor presence
+Thread-Index: AQHbfO+k/PLWqmtG+UieQZ3kZhsVyrNPIuQA
+Date: Wed, 19 Feb 2025 23:13:28 +0000
+Message-ID:
+ <SN6PR02MB4157DB2F52501309D52D0870D4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
+References: <20250212014321.1108840-1-romank@linux.microsoft.com>
+ <20250212014321.1108840-2-romank@linux.microsoft.com>
+In-Reply-To: <20250212014321.1108840-2-romank@linux.microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|DM4PR02MB9192:EE_
+x-ms-office365-filtering-correlation-id: 5b2c91f0-686f-4b99-02bb-08dd513b04ee
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|8062599003|19110799003|461199028|8060799006|12121999004|15080799006|3412199025|440099028|41001999003|102099032;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?X111zJCaJB8EktlEfT7lHiYPjoC/G4hAvx49DqZbi5Srlq/XmtPe+M69C2k+?=
+ =?us-ascii?Q?3NliNcY8Bfj5ayBix7hOVQGzRy8Be7qKXNETAo1YPa9MEEKB5SyQJ7+QJkEs?=
+ =?us-ascii?Q?813lCh8eMjuPGr8fQtUdku3+bzYRKDPeEX79XZGA3PCEpS5LFlYBdPXYfX7e?=
+ =?us-ascii?Q?qKpJKM05XUsycGvMBQYolPeOsNt70/DSW4nKIBB8Exm0/vJ/lXKsRAT+QfwG?=
+ =?us-ascii?Q?xeRArcr3xT8BCFxeD3AE+dMDM6gq6ZUkRtOOo7l5ViSi1RPqAu5h+MBtleu9?=
+ =?us-ascii?Q?UISnZvWJdNtmZTf2aWH1N3yYLXtMXijJo3rr55vtT7vY+rz/OIIejQBhWdms?=
+ =?us-ascii?Q?YKtHovgSXzQLq/ycp891S70sajvM5s1/QYxbvJ7KTINZmLFwh/PDhukYlzxw?=
+ =?us-ascii?Q?MJzjydgEl7Ke5rLOxjoRuWNSekSjf7aUSR7nO/fp2AvfIq+jixkbIAJ2OThI?=
+ =?us-ascii?Q?a4UQTdwoLSqLb7/BkarsQj1/w44GrzeR6NUrDU8zPzy6z6mGQU9K2g175LTA?=
+ =?us-ascii?Q?I+482j43rWO4/V2QXdj9sxCTwsj66LfWIcbIZVswnVSc4F2pz/4CZ99Z+bbp?=
+ =?us-ascii?Q?3Vu+WgysLNUg8BqilmcMO9gU+0OwZgPzn8NxvKB/w/xA1lXPBCip7YXzrLWs?=
+ =?us-ascii?Q?nR61A2vgKl8cDvzdXxR8mXuN5lj1Z1FmTl3QzBS7nAQCov3tFLjcTfNUH3q+?=
+ =?us-ascii?Q?rNTRy2Hw2o0sDApXt8z59m2ShiIW9mPxFFbbLBzVsIphejUQQfp0d/x4tq2z?=
+ =?us-ascii?Q?UFmYQE/0BqoETQI55dTLswopvXi1DQoOs6dPgZPnS382y9cvqdMlPVdgtBJ4?=
+ =?us-ascii?Q?svkMDnHYIP1byMzQb2XT52b7smCwRKqh5n9ZxJpvkH/CoxbgTDh/g5yjUwfI?=
+ =?us-ascii?Q?IOJi3YX5TDbCwLiaFwn0s4cj2b1qj4b9qqRdnvjLKNF34iaO18wG6gth+DEI?=
+ =?us-ascii?Q?fNOfElQ8itDmrXxjrUFqN368SClsSnpsGTFjxfAXMrWcnexl7xsmMZb8vvka?=
+ =?us-ascii?Q?Sj3yoVwu8hUGt22O1cTMEqiqqYoIuwhIRrmeuw6v7MIOYJr4NMFMbZO5Gc0Z?=
+ =?us-ascii?Q?ze/KboIQL/G10qH+Sekpa5U9N2cKExN06mRVMCSS49qufXFIsfU=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?4pT30ozoDsjhb+NZvEztcEZKb/HxYMoCNzmW6c/HnXHh7OTpL6NacRcIA71e?=
+ =?us-ascii?Q?x0dm8NWZ2auNrt77J+rYP7MpGGtE3YubcfimcWCyfdeNVL7neu72R9ypUuCj?=
+ =?us-ascii?Q?aaDgEZ6P3Z3UsGcNg25CLmChdtRqCzVwRtLs5aUyEJQiDut1K9W4NQNJCeso?=
+ =?us-ascii?Q?/OL0S0oAGy0O+MWm6CMzrGd5Yd1eAPliSG1pkie8Mux9X6YM6Ie1U0bXglB5?=
+ =?us-ascii?Q?mI28NgThoaCzQtTJuiHSG4Cacl3cAntI6Lil6tzUavHg8etZw1FtvNnOpPNp?=
+ =?us-ascii?Q?16/fTR0r/mXKhU8p8tp8b5v5adMzhIGXQ64KCiRMz4G3dzMCDHbvCGoTCDdY?=
+ =?us-ascii?Q?ny+27vP3wBwra/gCn5b50R+heMTm4mRfo8oJFJBfvpbMSH0twiyW6EZuYfxm?=
+ =?us-ascii?Q?sX8wLEZG2cvvb3lQvl791WqD5mnDa416She8nRuUnxCMejfWsaTRql/P13/p?=
+ =?us-ascii?Q?m62Ov2ReIiHFLcoHSpoX57SwEbzNHVdp3p0D9O32LXG7URH4BVCCZ8s8Khzj?=
+ =?us-ascii?Q?c2Sjpi+XAzTUOvMA9Pokro4Ttl8hE3pENGOiST1MLqKxOZeYNLaC9ii/Jygs?=
+ =?us-ascii?Q?v/FT8envmP2A0lWGkKz1cvZCZvwd6s9GnB64ZC8mqtu8iEhLx2sIhmDkjKYn?=
+ =?us-ascii?Q?bwvbrvPG+I30kbOLG95fFug8A6ocuNDYDRJmh9z1or2LPYICDeysCfrH24vu?=
+ =?us-ascii?Q?VG3W3Q4zx8DoMQGjyyo3NcXC29kASWmreh2xdxH9HisG+LrCiQvv6xWD9sAK?=
+ =?us-ascii?Q?Crd8cHKM8HcbVY41Yq4EugwUNejMN3yp1QTo7t0dP5SKOLJTxOdHfIWOaTns?=
+ =?us-ascii?Q?CwMleZlYsE/wEyy8DmRXIoYLdejUZByTUyceOp4Y6IdHugB3ZJ0vn7lmdMLB?=
+ =?us-ascii?Q?fdRFwSj4rg+XZwfmOA5vZ8MheNy7gtvk2djS3z9Z7yTZ1mKWPExyPAXS06cV?=
+ =?us-ascii?Q?AmWM+FGHz/DBLhJ3TlfT7WwCbpqqmBl4YzruXpmo2P7fhi7bQ0TthDpaKtqp?=
+ =?us-ascii?Q?VePgBfo/5uaIizBCgC1Y7TsURM458/+Cs9B5MYUBfaNxXC7YoRoePrCCVQ3c?=
+ =?us-ascii?Q?p4/aMe48yAV66rNcsLnByrO7UnzucaRa8sInMe1OlNOgPX1920z1Wc98VRIs?=
+ =?us-ascii?Q?vDJoYphAQX88wGYeyqYtWn6pPQ01FvHkUZgNToZc9LNTxj8b4c0HZ61TdU/Y?=
+ =?us-ascii?Q?/RUlEIWl7S2dLIyV4d6jqiilVZA+NxuAhdSEUv4rP+eJ4WAc2iTyR9b5cno?=
+ =?us-ascii?Q?=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250219203708.GO3696814@ziepe.ca>
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B36E:EE_|CH2PR12MB4136:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8bb993ed-a4bb-4add-7fe8-08dd512cafe8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|36860700013|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?wxyUKPalpo6xou9cy1uguTfvw/Xy6hdpVOeiSdTLYtvbz/8AfcUCbgzQPHS8?=
- =?us-ascii?Q?eEqf/Y68x6jUATKiFU9GdUDi9IPY2mVp8a83Cj3xpJnQbeEs+7iCpvaCZF0M?=
- =?us-ascii?Q?0dcZv/0lHlv4tIn3bAouDYuTPQAEMqf1iHkeoUFFBOISnHL1zVMNN/VCiYLj?=
- =?us-ascii?Q?pqqT7g/Rtz2l8G6R7sqKhTUCQVytQInodW697bslGLmL+zdxrszjR+f+4kGU?=
- =?us-ascii?Q?TuBSiF17sd/TpwB2ysAyvt7oeQNB8J+vigd4raPlKtWv5D5WCfd+ZVcgTBe5?=
- =?us-ascii?Q?i5ik0VSbta9irJeJ8u+SSlcz2WMNkpccczo1Q8Eg1HpRy4xZ9FqoavUhwJT1?=
- =?us-ascii?Q?kK+3NgVZ7kbqjItXIwYoAaGTIDtEmbhbg/VImunGlR6itRB5k5fwKjgmIuQy?=
- =?us-ascii?Q?NRSgf6Dq1wJ2SIeinUHmsLD71ZVym/6zPAuvIU7ExM/j05xllZPD19UNGOFF?=
- =?us-ascii?Q?+exQjfHo0lcyAWBLcxzhT0MY0+f3Mu0kI4L7RA54SccTe4YfcS26aI2C7cjm?=
- =?us-ascii?Q?EkXnBPqNryawAeMxDDi1ZbaND9O+iWrG+/QXKhH4vXMpYT0edQa6DFyIDN0k?=
- =?us-ascii?Q?uWM/FKyemg8A22YhdNHRfh3hM0uamSc0AypqVSchIT2pLBzwNN2NzSLef9hJ?=
- =?us-ascii?Q?gbu4YdrH1Iz5qnTRF6OKy1Wh+AP0nwMBSEBABLhibvuCxLqDcLj7J5WwDHTv?=
- =?us-ascii?Q?SHaX+80t0bIqHBoWv6LTAq78Penxnae/bgCp2nyP8Y/+qMZBWsEX9/AorgkU?=
- =?us-ascii?Q?to+p2OCFPks7HOZF5aPhwou74XFkGpmO+lXG2iNj+oW/ufQh4rtktDy0PoGi?=
- =?us-ascii?Q?OPbWNI3KHk3z1XS9nwToTjZdxCwQQoKuma+X8eYLa/CKeza7F/KMxG2PLExA?=
- =?us-ascii?Q?tcAfue7dBZ99NM9skJPV1LdGzKj3NQweJ+5Z0vCkby8BReJ5qyy8/ZDULwKn?=
- =?us-ascii?Q?gVnMbHnThUrun7Rc3unQsExQGJuLCjbzaaEEFoEy7obGu07aB4tF1WkPLz3P?=
- =?us-ascii?Q?h9ShFzoeGAMBcKpDXuCK6dWykRfu7ztqXdENwH8qLAvwscyNJMAzwKLEXKrW?=
- =?us-ascii?Q?1oZMal80iJsiqzEciqMdadpnDU3sJTB81mn9EIUlBvYqtHUv8sT0HQTuLLRt?=
- =?us-ascii?Q?t1BTOceNZIeBiyn+N3EJS3yuVTs5mMqblo6flTXkPYtTlwFqycrn/l3MqKJt?=
- =?us-ascii?Q?knfo5l2Gu5ZAv3vkSIS18YlojbAmws9qHMhKs8ulhXuDmfWfhTdKST7/UY1z?=
- =?us-ascii?Q?HUm998HrVH7i6PqmG8m6pMwyX1JNmaDBkEEFrdhQQv9pHWGPoD+QpDt9Xiaa?=
- =?us-ascii?Q?AxyjHm/X6NOPePQAvwLTfzLqZS/HwTjogg8D82LdtIA7p+dZFEKxnd1+UziP?=
- =?us-ascii?Q?X9sTAefe9E0CXaOpkelMJGMFynkIW2RHBXxCWernMCYcmgy5R8pilAsNq9ha?=
- =?us-ascii?Q?8cJGnf7L49b8f+7qKZAip7jFq7Yf6/yxtYqHSkbChRZ/eaooL3f4Hx/S4U8s?=
- =?us-ascii?Q?tZd0Q+WUWDiFAJw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 21:30:52.7670
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b2c91f0-686f-4b99-02bb-08dd513b04ee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2025 23:13:28.3839
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb993ed-a4bb-4add-7fe8-08dd512cafe8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B36E.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4136
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR02MB9192
 
-On Wed, Feb 19, 2025 at 04:37:08PM -0400, Jason Gunthorpe wrote:
-> On Wed, Feb 19, 2025 at 02:23:24PM -0600, Michael Roth wrote:
-> > Just for clarity: at least for normal/nested page table (but I'm
-> > assuming the same applies to IOMMU mappings), 1G mappings are
-> > handled similarly as 2MB mappings as far as RMP table checks are
-> > concerned: each 2MB range is checked individually as if it were
-> > a separate 2MB mapping:
-> 
-> Well, IIRC we are dealing with the AMDv1 IO page table here which
-> supports more sizes than 1G and we likely start to see things like 4M
-> mappings and the like. So maybe there is some issue if the above
-> special case really only applies to 1G and only 1G.
+From: Roman Kisel <romank@linux.microsoft.com> Sent: Tuesday, February 11, =
+2025 5:43 PM
+>=20
+> The arm64 Hyper-V startup path relies on ACPI to detect
+> running under a Hyper-V compatible hypervisor. That
+> doesn't work on non-ACPI systems.
+>=20
+> Hoist the ACPI detection logic into a separate function. Then
+> use the vendor-specific hypervisor service call (implemented
+> recently in Hyper-V) via SMCCC in the non-ACPI case.
+>=20
+> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+> ---
+>  arch/arm64/hyperv/mshyperv.c      | 43 +++++++++++++++++++++++++++----
+>  arch/arm64/include/asm/mshyperv.h |  5 ++++
+>  2 files changed, 43 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index fc49949b7df6..fe6185bf3bf2 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -27,6 +27,36 @@ int hv_get_hypervisor_version(union
+> hv_hypervisor_version_info *info)
+>  	return 0;
+>  }
+>=20
+> +static bool hyperv_detect_via_acpi(void)
+> +{
+> +	if (acpi_disabled)
+> +		return false;
+> +#if IS_ENABLED(CONFIG_ACPI)
+> +	/* Hypervisor ID is only available in ACPI v6+. */
 
-I think the documentation only mentioned 1G specifically since that's
-the next level up in host/nested page table mappings, and that more
-generally anything mapping at a higher granularity than 2MB would be
-broken down into individual checks on each 2MB range within. But it's
-quite possible things are handled differently for IOMMU so definitely
-worth confirming.
+The comment is correct, but to me doesn't tell the full story.
+I initially wondered why the revision test < 6 was being done,
+since Hyper-V for ARM64 always provides ACPI 6.x or greater.
+But the test is needed to catch running in some unknown
+non-Hyper-V environment that has ACPI 5.x or less. In such a
+case, it can't be Hyper-V, so just return false instead of testing
+a bogus hypervisor_id field. Maybe a comment would help
+explain it to someone like me who was confused. :-)
 
-> 
-> > But the point still stands for 4K RMP entries and 2MB mappings: a 2MB
-> > mapping either requires private page RMP entries to be 2MB, or in the
-> > case of 2MB mapping of shared pages, every page in the range must be
-> > shared according to the corresponding RMP entries.
-> 
->  Is 4k RMP what people are running?
+> +	if (acpi_gbl_FADT.header.revision < 6)
+> +		return false;
+> +	return strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8) =3D=
+=3D 0;
+> +#else
+> +	return false;
+> +#endif
+> +}
+> +
+> +static bool hyperv_detect_via_smccc(void)
+> +{
+> +	struct arm_smccc_res res =3D {};
+> +
+> +	if (arm_smccc_1_1_get_conduit() !=3D SMCCC_CONDUIT_HVC)
+> +		return false;
+> +	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
+> +	if (res.a0 =3D=3D SMCCC_RET_NOT_SUPPORTED)
+> +		return false;
+> +
+> +	return res.a0 =3D=3D ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0 &&
+> +		res.a1 =3D=3D ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1 &&
+> +		res.a2 =3D=3D ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2 &&
+> +		res.a3 =3D=3D ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3;
+> +}
+> +
+>  static int __init hyperv_init(void)
+>  {
+>  	struct hv_get_vp_registers_output	result;
+> @@ -35,13 +65,11 @@ static int __init hyperv_init(void)
+>=20
+>  	/*
+>  	 * Allow for a kernel built with CONFIG_HYPERV to be running in
+> -	 * a non-Hyper-V environment, including on DT instead of ACPI.
+> +	 * a non-Hyper-V environment.
+> +	 *
+>  	 * In such cases, do nothing and return success.
+>  	 */
+> -	if (acpi_disabled)
+> -		return 0;
+> -
+> -	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
+> +	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smccc())
+>  		return 0;
+>=20
+>  	/* Setup the guest ID */
+> @@ -72,6 +100,11 @@ static int __init hyperv_init(void)
+>  		return ret;
+>  	}
+>=20
+> +	ms_hyperv.vtl =3D get_vtl();
 
-Unfortunately yes, but that's mainly due to guest_memfd only handling
-4K currently. Hopefully that will change soon, but in the meantime
-there's only experimental support for larger private page sizes that
-make use of 2MB RMP entries (via THP).
+The above statement looks like it will fail to compile on
+arm64 since the get_vtl() function is entirely on the x86
+side until Patch 3 of this series. As of this Patch 1, there's
+no declaration of get_vtl() available to arm64.
 
-But regardless, we'll still end up dealing with 4K RMP entries since
-we'll need to split 2MB RMP entries in response to private->conversions
-that aren't 2MB aligned/sized.
+> +	/* Report if non-default VTL */
+> +	if (ms_hyperv.vtl > 0)
+> +		pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
 
-> 
-> > I think, for the non-SEV-TIO use-case, it had more to do with inability
-> > to unmap a 4K range once a particular 4K page has been converted
-> 
-> Yes, we don't support unmap or resize. The entire theory of operation
-> has the IOPTEs cover the guest memory and remain static at VM boot
-> time. The RMP alone controls access and handles the static/private.
-> 
-> Assuming the host used 2M pages the IOPTEs in an AMDv1 table will be
-> sized around 2M,4M,8M just based around random luck.
-> 
-> So it sounds like you can get to a situation with a >=2M mapping in
-> the IOPTE but the guest has split it into private/shared at lower
-> granularity and the HW cannot handle this?
+Could this message include the VTL number as well? In the long
+run, I think there will be code at non-zero VTLs other than VTL 2.
 
-Remembering more details: the situation is a bit more specific to
-guest_memfd. In general, for non-SEV-TIO, everything in the IOMMU will
-be always be for shared pages, and because of that the RMP checks don't
-impose any additional restrictions on mapping size (a shared page can
-be mapped 2MB even if the RMP entry is 4K (the RMP page-size bit only
-really applies for private pages)).
+> +
+>  	ms_hyperv_late_init();
+>=20
+>  	hyperv_initialized =3D true;
+> diff --git a/arch/arm64/include/asm/mshyperv.h
+> b/arch/arm64/include/asm/mshyperv.h
+> index 2e2f83bafcfb..a6d7eb9e167b 100644
+> --- a/arch/arm64/include/asm/mshyperv.h
+> +++ b/arch/arm64/include/asm/mshyperv.h
+> @@ -50,4 +50,9 @@ static inline u64 hv_get_msr(unsigned int reg)
+>=20
+>  #include <asm-generic/mshyperv.h>
+>=20
+> +#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0	0x4d32ba58U
+> +#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1	0xcd244764U
+> +#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2	0x8eef6c75U
+> +#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3	0x16597024U
+> +
+>  #endif
+> --
+> 2.43.0
+>=20
 
-The issue with guest_memfd is that it is only used for private pages
-(at least until in-place conversion is supported), so when we "convert"
-shared pages to private we are essentially discarding those pages and
-re-allocating them via guest_memfd, so the mappings for those discarded
-pages become stale and need to be removed. But since this can happen
-at 4K granularities, we need to map as 4K because we don't have a way
-to split them later on (at least, not currently...).
-
-The other approach is to not discard these shared pages after conversion
-and just not free them back, which ends up using more host memory, but
-allows for larger IOMMU mappings.
-
-> 
-> > from shared to private if it was originally installed via a 2MB IOPTE,
-> > since the guest could actively be DMA'ing to other shared pages in
-> > the 2M range (but we can be assured it is not DMA'ing to a particular 4K
-> > page it has converted to private), and the IOMMU doesn't (AFAIK) have
-> > a way to atomically split an existing 2MB IOPTE to avoid this. 
-> 
-> The iommu can split it (with SW help), I'm working on that
-> infrastructure right now..
-> 
-> So you will get a notification that the guest has made a
-> private/public split and the iommu page table can be atomically
-> restructured to put an IOPTE boundary at the split.
-> 
-> Then the HW will not see IOPTEs that exceed the shared/private
-> granularity of the VM.
-
-That sounds very interesting. It would allow us to use larger IOMMU
-mappings even for guest_memfd as it exists today, while still supporting
-shared memory discard and avoiding the additional host memory usage
-mentioned above. Are there patches available publicly?
-
-Thanks,
-
-Mike
-
-> 
-> Jason
 
