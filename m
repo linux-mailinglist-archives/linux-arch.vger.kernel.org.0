@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10237-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10238-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6CCDA3CDDC
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 00:52:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 557A3A3CDE9
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 00:52:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C37631892F31
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 23:52:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC6AD178354
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Feb 2025 23:52:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D844E25E476;
-	Wed, 19 Feb 2025 23:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0CAA25EFB5;
+	Wed, 19 Feb 2025 23:52:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ktnrQxzh"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="p8uhgJHM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6D722ACD3;
-	Wed, 19 Feb 2025 23:52:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE4A22ACD3;
+	Wed, 19 Feb 2025 23:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740009122; cv=none; b=C3TLqr81a49OB+xXnHo1dSHl/yE/vuhTpslg6jrYRQRRPvoIH8YltvtdHD82Jo5F/O6EYz6gzk7bNmzv07jvFVBT35AnwLiPCHLzUFCIdV8lDJnI19mxy+GOVY8MwzaMvJZTmgudyyOD/XKpacXbhN3M2RmjjDwKHFigfM5k9mw=
+	t=1740009154; cv=none; b=nTEivRvs37JoqxZlJMyHAw5wN6UiJqNLR2iAisrBcsQVZWfImbdPVXf+FYfIh7AuqeKbW3FSmZFIS0Mav8wUsxymtTB9CSITbaaHcdQfVprHhjiX43iNYLVUZRO2UeZkTuYlopH7KxiG6wWiar9AhbRgF4z2JlHpsSIxE8Uwg/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740009122; c=relaxed/simple;
-	bh=RO7JdfFXhPm7FJVjjl/SPm5ADn0aCyjyX4nGYswilCQ=;
+	s=arc-20240116; t=1740009154; c=relaxed/simple;
+	bh=uy5hahpZ4+VHhTkwUXGrHQ/cWlIHhiLsB3s1y+oWXqU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dz+Pe5wZgg4yaaKk0fHWeiMSfegp48lgHpQQik7CspR6KdKw9TT06DsYG5+3okypVW2D8KQ2FAyv/XkaJd4YhvNBKsPPYgUnByZijS+aR4Yr3TpJDnPWqnrV7w4GOv++7yRUrSEivjqKrWljP3fKnJZRdGSB7ygCTcu9jRslcTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ktnrQxzh; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=gf0LTi85WGTkCoGNszQKRMirBIBe18PA45paRtOfEDZJ1Qpz6+jwgiVcZEcTzdOUEmbiNhmPB8Zw/jwee1F9vjFWiBsSSGyGCkdlFb0bo+GCK/pJP3EOhb/8U1dvr5SxKd+DSyzNnADKCvdSI0j+Blj66CQ5clSprmCYRPQGIJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=p8uhgJHM; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 01FA32043DEB;
-	Wed, 19 Feb 2025 15:51:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 01FA32043DEB
+Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 822C82043DEB;
+	Wed, 19 Feb 2025 15:52:31 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 822C82043DEB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740009120;
-	bh=AxsI5hx1U00SsNRDv901DQtcJhDoy9q2VCbcg6I8Ypc=;
+	s=default; t=1740009151;
+	bh=lkjbZIJnId5hXKF47xaevoT9UYXNhNvA9a35Ihx9HVI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ktnrQxzhg8EhdAYLRHWi59CTjsWdX+RZHt9AeHw4gX2wcmvSMV36JUDiq5apyQzps
-	 6sT7qtZaFzbfDnZh04pSaKBIoNSKDClg0OLz32kbUmBdY/90wSeu82XjEpHj7XUYtG
-	 SvfhXDK92ktiXTtrhL56mLp6jAldejO118ML+HFU=
-Message-ID: <5cd71475-b107-4269-829f-2c492f625aae@linux.microsoft.com>
-Date: Wed, 19 Feb 2025 15:51:59 -0800
+	b=p8uhgJHMJTyLtI9Kj8ip4E+Pz8nIRH/311y4oKUhGRNYJq4YGnP+52cI8mOMXLudW
+	 sd8WuEh4j+1ZNlBrLzloslmqW5Vi33WdQcMRlKYZyXjBj4eZgE4BAE8BdE+sIdKAUV
+	 b/8rSgRNmgU6HOqPCOVA70zlQNUeqsTwQLlQy/nc=
+Message-ID: <1defc59b-3e6c-4023-b57b-d81a4358e69e@linux.microsoft.com>
+Date: Wed, 19 Feb 2025 15:52:30 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,246 +49,589 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v4 6/6] PCI: hv: Get vPCI MSI IRQ domain from
- DeviceTree
-To: Bjorn Helgaas <helgaas@kernel.org>, rafael@kernel.org, lenb@kernel.org,
- linux-acpi@vger.kernel.org
-Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
- catalin.marinas@arm.com, conor+dt@kernel.org, dave.hansen@linux.intel.com,
- decui@microsoft.com, haiyangz@microsoft.com, hpa@zytor.com,
- krzk+dt@kernel.org, kw@linux.com, kys@microsoft.com, lpieralisi@kernel.org,
- manivannan.sadhasivam@linaro.org, mingo@redhat.com, robh@kernel.org,
- ssengar@linux.microsoft.com, tglx@linutronix.de, wei.liu@kernel.org,
- will@kernel.org, devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org,
- benhill@microsoft.com, bperkins@microsoft.com, sunilmut@microsoft.com
-References: <20250212174203.GA81135@bhelgaas>
+Subject: Re: [PATCH] hyperv: Add CONFIG_MSHV_ROOT to gate hv_root_partition
+ checks
+To: Michael Kelley <mhklinux@outlook.com>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+ "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Cc: "kys@microsoft.com" <kys@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
+ <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
+ "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+ "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+ "joro@8bytes.org" <joro@8bytes.org>,
+ "robin.murphy@arm.com" <robin.murphy@arm.com>, "arnd@arndb.de"
+ <arnd@arndb.de>,
+ "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
+ "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
+ "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
+ "mukeshrathor@microsoft.com" <mukeshrathor@microsoft.com>
+References: <1739312515-18848-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <SN6PR02MB4157F396B9FECAD555520DDED4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Language: en-US
-From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <20250212174203.GA81135@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <SN6PR02MB4157F396B9FECAD555520DDED4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 2/12/2025 9:42 AM, Bjorn Helgaas wrote:
-> On Tue, Feb 11, 2025 at 05:43:21PM -0800, Roman Kisel wrote:
-
-[...]
-
->>   	 */
->> -	hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
->> -							  fn, &hv_pci_domain_ops,
->> -							  chip_data);
->> +#ifdef CONFIG_ACPI
->> +	if (!acpi_disabled)
->> +		hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
->> +			fn, &hv_pci_domain_ops,
->> +			chip_data);
->> +#endif
->> +#if defined(CONFIG_OF)
->> +	if (!hv_msi_gic_irq_domain)
->> +		hv_msi_gic_irq_domain = irq_domain_create_hierarchy(
->> +			hv_pci_of_irq_domain_parent(), 0, HV_PCI_MSI_SPI_NR,
->> +			fn, &hv_pci_domain_ops,
->> +			chip_data);
->> +#endif
+On 2/19/2025 11:46 AM, Michael Kelley wrote:
+> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Tuesday, February 11, 2025 2:22 PM
+>>
+>> Introduce CONFIG_MSHV_ROOT as a tristate to enable root partition
+>> booting and future mshv driver functionality.
 > 
-> I don't know if acpi_irq_create_hierarchy() is helping or hurting
-> here.  It obscures the fact that the only difference is the first
-> argument to irq_domain_create_hierarchy().  If we could open-code or
-> have a helper to figure out that irq_domain "parent" argument for the
-> ACPI case, then we'd only have one call of
-> irq_domain_create_hierarchy() here and it seems like it might be
-> simpler.
+> This statement could use a bit more explanation as to "why".  Something
+> like:
+> 
+> Running in the root partition is a unique and specialized case that requires
+> additional code. The config option allows kernels built to run as a normal
+> Hyper-V guest to exclude this code, which is important since significant
+> additional code specific to the root partition is expected to be added over
+> time.
 > 
 
-Hey Bjorn, folks,
+This sounds good to me
 
-I've added few ACPI maintainers and the ACPI list as we're discussing
-making a small change to the ACPI subsystem to make one static variable
-available to make the code above less messy.
+> Related, what's the thinking behind making CONFIG_MSHV_ROOT be
+> tri-state? Obviously, it would allow most of the root partition code
+> to be loaded as a module instead of built-in to the kernel image, but is that
+> a useful scenario given the unique nature of running in the root partition?
+> Since the root partition environment is very specific and constrained,
+> perhaps just always building the root partition code into the kernel
+> makes sense. I'm asking purely as a question because I'm not familiar with
+> the details of how a root partition kernel is likely to be setup & run. If
+> possible, give a short explanation for the "why tri-state" question.
+> Remember, that's what commit message are for -- to answer the "why"
+> question as much as to summarize the "what" question.
+> 
 
-Change [1] makes the GSI dispatcher function available to
-the outside world. Would you suggest going in that direction or there
-is a better approach to converge the code above that deals with IRQ
-domains both in the ACPI and DT cases?
+In the past it enabled quicker development: I would iterate on the driver
+code and just rebuild and reinsert the module. I'll admit I haven't used that
+workflow in a while so I'm not sure how useful it still is.
 
-[1]
+Is there a *downside* (from upstream perspective) to keeping it a tristate
+that I'm not aware of? e.g. Would it be difficult to change it to a bool in
+future if we decide we really don't need it?
 
- From c6fb8bda21d6c00a308b1febc201a3a7e704c5a9 Mon Sep 17 00:00:00 2001
-From: Roman Kisel <romank@linux.microsoft.com>
-Date: Wed, 19 Feb 2025 15:04:06 -0800
-Subject: [PATCH] Refactor the ACPI GIC case
+While we're on this topic, do you know if CONFIG_HYPERV=m is ever used, and
+why?
 
----
-  drivers/acpi/irq.c                  | 14 ++++++-
-  drivers/pci/controller/pci-hyperv.c | 62 +++++++++++++++++------------
-  include/linux/acpi.h                |  5 ++-
-  3 files changed, 52 insertions(+), 29 deletions(-)
+>>
+>> Change hv_root_partition into a function which always returns false
+>> if CONFIG_MSHV_ROOT=n.
+> 
+> Again, help answer the "why" question. I think the goal is related to
+> the above by allowing the compiler to optimize away any "if (root partition)"
+> code when building for a normal Hyper-V guest.
+> 
+>>
+>> Introduce hv_current_partition_type to store the type of partition
+>> (guest, root, or other kinds in future), and hv_identify_partition_type()
+>> to it up early in Hyper-V initialization.
+>>
+>> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+>> ---
+>> Depends on
+>> https://lore.kernel.org/linux-hyperv/1738955002-20821-3-git-send-email-nunodasneves@linux.microsoft.com/
+>>
+>>  arch/arm64/hyperv/mshyperv.c       |  2 ++
+>>  arch/x86/hyperv/hv_init.c          | 10 ++++----
+>>  arch/x86/kernel/cpu/mshyperv.c     | 24 ++----------------
+>>  drivers/clocksource/hyperv_timer.c |  4 +--
+>>  drivers/hv/Kconfig                 | 12 +++++++++
+>>  drivers/hv/Makefile                |  3 ++-
+>>  drivers/hv/hv.c                    | 10 ++++----
+>>  drivers/hv/hv_common.c             | 32 +++++++++++++++++++-----
+>>  drivers/hv/vmbus_drv.c             |  2 +-
+>>  drivers/iommu/hyperv-iommu.c       |  4 +--
+>>  include/asm-generic/mshyperv.h     | 39 +++++++++++++++++++++++++-----
+>>  11 files changed, 92 insertions(+), 50 deletions(-)
+>>
+>> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+>> index 29fcfd595f48..2265ea5ce5ad 100644
+>> --- a/arch/arm64/hyperv/mshyperv.c
+>> +++ b/arch/arm64/hyperv/mshyperv.c
+>> @@ -61,6 +61,8 @@ static int __init hyperv_init(void)
+>>  		ms_hyperv.features, ms_hyperv.priv_high, ms_hyperv.hints,
+>>  		ms_hyperv.misc_features);
+>>
+>> +	hv_identify_partition_type();
+>> +
+>>  	ret = hv_common_init();
+>>  	if (ret)
+>>  		return ret;
+>> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+>> index 9be1446f5bd3..ddeb40930bc8 100644
+>> --- a/arch/x86/hyperv/hv_init.c
+>> +++ b/arch/x86/hyperv/hv_init.c
+>> @@ -90,7 +90,7 @@ static int hv_cpu_init(unsigned int cpu)
+>>  		return 0;
+>>
+>>  	hvp = &hv_vp_assist_page[cpu];
+>> -	if (hv_root_partition) {
+>> +	if (hv_root_partition()) {
+>>  		/*
+>>  		 * For root partition we get the hypervisor provided VP assist
+>>  		 * page, instead of allocating a new page.
+>> @@ -242,7 +242,7 @@ static int hv_cpu_die(unsigned int cpu)
+>>
+>>  	if (hv_vp_assist_page && hv_vp_assist_page[cpu]) {
+>>  		union hv_vp_assist_msr_contents msr = { 0 };
+>> -		if (hv_root_partition) {
+>> +		if (hv_root_partition()) {
+>>  			/*
+>>  			 * For root partition the VP assist page is mapped to
+>>  			 * hypervisor provided page, and thus we unmap the
+>> @@ -317,7 +317,7 @@ static int hv_suspend(void)
+>>  	union hv_x64_msr_hypercall_contents hypercall_msr;
+>>  	int ret;
+>>
+>> -	if (hv_root_partition)
+>> +	if (hv_root_partition())
+>>  		return -EPERM;
+>>
+>>  	/*
+>> @@ -518,7 +518,7 @@ void __init hyperv_init(void)
+>>  	rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+>>  	hypercall_msr.enable = 1;
+>>
+>> -	if (hv_root_partition) {
+>> +	if (hv_root_partition()) {
+>>  		struct page *pg;
+>>  		void *src;
+>>
+>> @@ -592,7 +592,7 @@ void __init hyperv_init(void)
+>>  	 * If we're running as root, we want to create our own PCI MSI domain.
+>>  	 * We can't set this in hv_pci_init because that would be too late.
+>>  	 */
+>> -	if (hv_root_partition)
+>> +	if (hv_root_partition())
+>>  		x86_init.irqs.create_pci_msi_domain = hv_create_pci_msi_domain;
+>>  #endif
+>>
+>> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+>> index f285757618fc..4f01f424ea5b 100644
+>> --- a/arch/x86/kernel/cpu/mshyperv.c
+>> +++ b/arch/x86/kernel/cpu/mshyperv.c
+>> @@ -33,8 +33,6 @@
+>>  #include <asm/numa.h>
+>>  #include <asm/svm.h>
+>>
+>> -/* Is Linux running as the root partition? */
+>> -bool hv_root_partition;
+>>  /* Is Linux running on nested Microsoft Hypervisor */
+>>  bool hv_nested;
+>>  struct ms_hyperv_info ms_hyperv;
+>> @@ -451,25 +449,7 @@ static void __init ms_hyperv_init_platform(void)
+>>  	pr_debug("Hyper-V: max %u virtual processors, %u logical processors\n",
+>>  		 ms_hyperv.max_vp_index, ms_hyperv.max_lp_index);
+>>
+>> -	/*
+>> -	 * Check CPU management privilege.
+>> -	 *
+>> -	 * To mirror what Windows does we should extract CPU management
+>> -	 * features and use the ReservedIdentityBit to detect if Linux is the
+>> -	 * root partition. But that requires negotiating CPU management
+>> -	 * interface (a process to be finalized). For now, use the privilege
+>> -	 * flag as the indicator for running as root.
+>> -	 *
+>> -	 * Hyper-V should never specify running as root and as a Confidential
+>> -	 * VM. But to protect against a compromised/malicious Hyper-V trying
+>> -	 * to exploit root behavior to expose Confidential VM memory, ignore
+>> -	 * the root partition setting if also a Confidential VM.
+>> -	 */
+>> -	if ((ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
+>> -	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
+>> -		hv_root_partition = true;
+>> -		pr_info("Hyper-V: running as root partition\n");
+>> -	}
+>> +	hv_identify_partition_type();
+>>
+>>  	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
+>>  		hv_nested = true;
+>> @@ -618,7 +598,7 @@ static void __init ms_hyperv_init_platform(void)
+>>
+>>  # ifdef CONFIG_SMP
+>>  	smp_ops.smp_prepare_boot_cpu = hv_smp_prepare_boot_cpu;
+>> -	if (hv_root_partition ||
+>> +	if (hv_root_partition() ||
+>>  	    (!ms_hyperv.paravisor_present && hv_isolation_type_snp()))
+>>  		smp_ops.smp_prepare_cpus = hv_smp_prepare_cpus;
+>>  # endif
+>> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+>> index f00019b078a7..09549451dd51 100644
+>> --- a/drivers/clocksource/hyperv_timer.c
+>> +++ b/drivers/clocksource/hyperv_timer.c
+>> @@ -582,7 +582,7 @@ static void __init hv_init_tsc_clocksource(void)
+>>  	 * mapped.
+>>  	 */
+>>  	tsc_msr.as_uint64 = hv_get_msr(HV_MSR_REFERENCE_TSC);
+>> -	if (hv_root_partition)
+>> +	if (hv_root_partition())
+>>  		tsc_pfn = tsc_msr.pfn;
+>>  	else
+>>  		tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+>> @@ -627,7 +627,7 @@ void __init hv_remap_tsc_clocksource(void)
+>>  	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+>>  		return;
+>>
+>> -	if (!hv_root_partition) {
+>> +	if (!hv_root_partition()) {
+>>  		WARN(1, "%s: attempt to remap TSC page in guest partition\n",
+>>  		     __func__);
+>>  		return;
+>> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+>> index 862c47b191af..aac172942f6c 100644
+>> --- a/drivers/hv/Kconfig
+>> +++ b/drivers/hv/Kconfig
+>> @@ -55,4 +55,16 @@ config HYPERV_BALLOON
+>>  	help
+>>  	  Select this option to enable Hyper-V Balloon driver.
+>>
+>> +config MSHV_ROOT
+>> +	tristate "Microsoft Hyper-V root partition support"
+>> +	depends on HYPERV
+>> +	depends on !HYPERV_VTL_MODE
+>> +	depends on PAGE_SIZE_4KB
+> 
+> Add a comment about why PAGE_SIZE_4KB is a requirement, even on
+> arm64 systems that can support guests with larger page sizes. We
+> discussed why in an earlier email thread, but somebody looking at
+> this in the future might wonder.
+> 
+>> +	default n
+>> +	help
+>> +	  Select this option to enable support for booting and running as root
+>> +	  partition on Microsoft Hyper-V.
+>> +
+>> +	  If unsure, say N.
+>> +
+> 
+> One thing to keep in mind:  Sometimes people build kernels with all
+> config options set to "Y".  We want to make sure that if someone does
+> that, the kernel will still run in a non-Hyper-V environment.  We had this
+> problem with CONFIG_HYPERV_VTL_MODE=y, where a kernel built with
+> that wouldn't run elsewhere, and that had to be fixed.  I don't think the
+> changes in this patch cause a problem in that regard, but it is something
+> to keep in mind for the future.
+> 
+> As I see it, setting CONFIG_MSHV_ROOT=y (or =m) just adds code to> the kernel image or modules list, and enables runtime detection of
+> whether the kernel is actually in the root partition. If not actually in the
+> root partition, the behavior is normal guest behavior. I think that is all good.
+> 
+Yes, agreed. The assumption we are working under is that enabling CONFIG_MSHV_ROOT
+doesn't break any normal guest or non-Hyper-V scenarios.
 
-diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
-index 1687483ff319..6243db610137 100644
---- a/drivers/acpi/irq.c
-+++ b/drivers/acpi/irq.c
-@@ -12,7 +12,7 @@
+Of course it's hard to always be certain that our code doesn't break some other
+config option at runtime, but we fix that whenever we see it (or exclude the
+combination via Kconfig).
 
-  enum acpi_irq_model_id acpi_irq_model;
+>>  endmenu
+>> diff --git a/drivers/hv/Makefile b/drivers/hv/Makefile
+>> index 9afcabb3fbd2..2b8dc954b350 100644
+>> --- a/drivers/hv/Makefile
+>> +++ b/drivers/hv/Makefile
+>> @@ -13,4 +13,5 @@ hv_vmbus-$(CONFIG_HYPERV_TESTING)	+= hv_debugfs.o
+>>  hv_utils-y := hv_util.o hv_kvp.o hv_snapshot.o hv_utils_transport.o
+>>
+>>  # Code that must be built-in
+>> -obj-$(subst m,y,$(CONFIG_HYPERV)) += hv_common.o hv_proc.o
+>> +obj-$(subst m,y,$(CONFIG_HYPERV)) += hv_common.o
+>> +obj-$(subst m,y,$(CONFIG_MSHV_ROOT)) += hv_proc.o
+> 
+> OK, so hv_proc.o is always built-in, regardless of whether
+> CONFIG_MSHV_ROOT=y or =m. I think that makes sense. The functions in
+> hv_proc.c are called somewhere in the middle of the kernel boot process,
+> and I'm unsure if the module loading mechanism is fully set up at the point
+> the functions are needed. This approach avoids any risk of not being able
+> to load the module. Presumably still-to-be-added code for the root partition
+> could be built as a module (though see my comment in the commit message).
+> 
 
--static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
-+static acpi_gsi_domain_disp_fn acpi_get_gsi_domain_id;
-  static u32 (*acpi_gsi_to_irq_fallback)(u32 gsi);
+Yep, that was the idea.
 
-  /**
-@@ -307,12 +307,22 @@ EXPORT_SYMBOL_GPL(acpi_irq_get);
-   *	for a given GSI
-   */
-  void __init acpi_set_irq_model(enum acpi_irq_model_id model,
--			       struct fwnode_handle *(*fn)(u32))
-+	acpi_gsi_domain_disp_fn fn)
-  {
-  	acpi_irq_model = model;
-  	acpi_get_gsi_domain_id = fn;
-  }
+>> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+>> index 36d9ba097ff5..93d82382351c 100644
+>> --- a/drivers/hv/hv.c
+>> +++ b/drivers/hv/hv.c
+>> @@ -144,7 +144,7 @@ int hv_synic_alloc(void)
+>>  		 * Synic message and event pages are allocated by paravisor.
+>>  		 * Skip these pages allocation here.
+>>  		 */
+>> -		if (!ms_hyperv.paravisor_present && !hv_root_partition) {
+>> +		if (!ms_hyperv.paravisor_present && !hv_root_partition()) {
+>>  			hv_cpu->synic_message_page =
+>>  				(void *)get_zeroed_page(GFP_ATOMIC);
+>>  			if (!hv_cpu->synic_message_page) {
+>> @@ -272,7 +272,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>>  	simp.as_uint64 = hv_get_msr(HV_MSR_SIMP);
+>>  	simp.simp_enabled = 1;
+>>
+>> -	if (ms_hyperv.paravisor_present || hv_root_partition) {
+>> +	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+>>  		/* Mask out vTOM bit. ioremap_cache() maps decrypted */
+>>  		u64 base = (simp.base_simp_gpa << HV_HYP_PAGE_SHIFT) &
+>>  				~ms_hyperv.shared_gpa_boundary;
+>> @@ -291,7 +291,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>>  	siefp.as_uint64 = hv_get_msr(HV_MSR_SIEFP);
+>>  	siefp.siefp_enabled = 1;
+>>
+>> -	if (ms_hyperv.paravisor_present || hv_root_partition) {
+>> +	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+>>  		/* Mask out vTOM bit. ioremap_cache() maps decrypted */
+>>  		u64 base = (siefp.base_siefp_gpa << HV_HYP_PAGE_SHIFT) &
+>>  				~ms_hyperv.shared_gpa_boundary;
+>> @@ -367,7 +367,7 @@ void hv_synic_disable_regs(unsigned int cpu)
+>>  	 * addresses.
+>>  	 */
+>>  	simp.simp_enabled = 0;
+>> -	if (ms_hyperv.paravisor_present || hv_root_partition) {
+>> +	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+>>  		iounmap(hv_cpu->synic_message_page);
+>>  		hv_cpu->synic_message_page = NULL;
+>>  	} else {
+>> @@ -379,7 +379,7 @@ void hv_synic_disable_regs(unsigned int cpu)
+>>  	siefp.as_uint64 = hv_get_msr(HV_MSR_SIEFP);
+>>  	siefp.siefp_enabled = 0;
+>>
+>> -	if (ms_hyperv.paravisor_present || hv_root_partition) {
+>> +	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+>>  		iounmap(hv_cpu->synic_event_page);
+>>  		hv_cpu->synic_event_page = NULL;
+>>  	} else {
+>> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+>> index cb3ea49020ef..d1227e85c5b7 100644
+>> --- a/drivers/hv/hv_common.c
+>> +++ b/drivers/hv/hv_common.c
+>> @@ -34,8 +34,11 @@
+>>  u64 hv_current_partition_id = HV_PARTITION_ID_SELF;
+>>  EXPORT_SYMBOL_GPL(hv_current_partition_id);
+>>
+>> +enum hv_partition_type hv_current_partition_type;
+>> +EXPORT_SYMBOL_GPL(hv_current_partition_type);
+>> +
+>>  /*
+>> - * hv_root_partition, ms_hyperv and hv_nested are defined here with other
+>> + * ms_hyperv and hv_nested are defined here with other
+>>   * Hyper-V specific globals so they are shared across all architectures and are
+>>   * built only when CONFIG_HYPERV is defined.  But on x86,
+>>   * ms_hyperv_init_platform() is built even when CONFIG_HYPERV is not
+>> @@ -43,9 +46,6 @@ EXPORT_SYMBOL_GPL(hv_current_partition_id);
+>>   * here, allowing for an overriding definition in the module containing
+>>   * ms_hyperv_init_platform().
+>>   */
+>> -bool __weak hv_root_partition;
+>> -EXPORT_SYMBOL_GPL(hv_root_partition);
+>> -
+>>  bool __weak hv_nested;
+>>  EXPORT_SYMBOL_GPL(hv_nested);
+>>
+>> @@ -283,7 +283,7 @@ static void hv_kmsg_dump_register(void)
+>>
+>>  static inline bool hv_output_page_exists(void)
+>>  {
+>> -	return hv_root_partition || IS_ENABLED(CONFIG_HYPERV_VTL_MODE);
+>> +	return hv_root_partition() || IS_ENABLED(CONFIG_HYPERV_VTL_MODE);
+>>  }
+>>
+>>  void __init hv_get_partition_id(void)
+>> @@ -594,7 +594,7 @@ EXPORT_SYMBOL_GPL(hv_setup_dma_ops);
+>>
+>>  bool hv_is_hibernation_supported(void)
+>>  {
+>> -	return !hv_root_partition && acpi_sleep_state_supported(ACPI_STATE_S4);
+>> +	return !hv_root_partition() && acpi_sleep_state_supported(ACPI_STATE_S4);
+>>  }
+>>  EXPORT_SYMBOL_GPL(hv_is_hibernation_supported);
+>>
+>> @@ -683,3 +683,23 @@ u64 __weak hv_tdx_hypercall(u64 control, u64 param1, u64 param2)
+>>  	return HV_STATUS_INVALID_PARAMETER;
+>>  }
+>>  EXPORT_SYMBOL_GPL(hv_tdx_hypercall);
+>> +
+>> +void hv_identify_partition_type(void)
+>> +{
+>> +	/*
+>> +	 * Check partition creation and cpu management privileges
+>> +	 *
+>> +	 * Hyper-V should never specify running as root and as a Confidential
+>> +	 * VM. But to protect against a compromised/malicious Hyper-V trying
+>> +	 * to exploit root behavior to expose Confidential VM memory, ignore
+>> +	 * the root partition setting if also a Confidential VM.
+>> +	 */
+>> +	if ((ms_hyperv.priv_high & HV_CREATE_PARTITIONS) &&
+>> +	    (ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
+>> +	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
+>> +		hv_current_partition_type = HV_PARTITION_TYPE_ROOT;
+>> +		pr_info("Hyper-V: running as root partition\n");
+>> +	} else {
+>> +		hv_current_partition_type = HV_PARTITION_TYPE_GUEST;
+>> +	}
+> 
+> If the flags indicate running in the root partition, but CONFIG_MSHV_ROOT=n,
+> perhaps that should probably be flagged with an error message. I haven't thought
+> through what to do then: Panic, keep running as a normal guest, or something else?
+> 
 
-+/**
-+ * acpi_get_gsi_dispatcher - Returns dispatcher function that
-+ *                           computes the domain fwnode for a
-+ *                           given GSI.
-+ */
-+acpi_gsi_domain_disp_fn acpi_get_gsi_dispatcher(void)
-+{
-+	return acpi_get_gsi_domain_id;
-+}
-+
-  /**
-   * acpi_set_gsi_to_irq_fallback - Register a GSI transfer
-   * callback to fallback to arch specified implementation.
-diff --git a/drivers/pci/controller/pci-hyperv.c 
-b/drivers/pci/controller/pci-hyperv.c
-index 24725bea9ef1..59e670e1cb6e 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -910,16 +910,29 @@ static struct irq_domain 
-*hv_pci_of_irq_domain_parent(void)
-  		of_node_put(parent);
-  	}
+If the kernel is run as root partition with CONFIG_MSHV_ROOT=n, I think it will crash
+or hang at some point later in boot.
 
--	/*
--	 * `domain == NULL` shouldn't happen.
--	 *
--	 * If somehow the code does end up in that state, treat this as a 
-configuration
--	 * issue rather than a hard error, emit a warning, and let the code 
-proceed.
--	 * The NULL parent domain is an acceptable option for the 
-`irq_domain_create_hierarchy`
--	 * function called later.
--	 */
-+	return domain;
-+}
-+
-+#endif
-+
-+#ifdef CONFIG_ACPI
-+
-+static struct irq_domain *hv_pci_acpi_irq_domain_parent(void)
-+{
-+	struct irq_domain *domain;
-+	acpi_gsi_domain_disp_fn gsi_domain_disp_fn;
-+
-+	if (acpi_irq_model != ACPI_IRQ_MODEL_GIC)
-+		return NULL;
-+	gsi_domain_disp_fn = acpi_get_gsi_dispatcher();
-+	if (!gsi_domain_disp_fn)
-+		return NULL;
-+	domain = irq_find_matching_fwnode(gsi_domain_disp_fn(0),
-+				     DOMAIN_BUS_ANY);
-+
-  	if (!domain)
--		WARN_ONCE(1, "No interrupt-parent found, check the DeviceTree data.\n");
-+		return NULL;
-+
-  	return domain;
-  }
+How about this:
 
-@@ -929,6 +942,7 @@ static int hv_pci_irqchip_init(void)
-  {
-  	static struct hv_pci_chip_data *chip_data;
-  	struct fwnode_handle *fn = NULL;
-+	struct irq_domain *irq_domain_parent = NULL;
-  	int ret = -ENOMEM;
+	if ((ms_hyperv.priv_high & HV_CREATE_PARTITIONS) &&
+	    (ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
+	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
+		pr_info("Hyper-V: running as root partition\n");
+		if (IS_ENABLED(CONFIG_MSHV_ROOT))
+			hv_current_partition_type = HV_PARTITION_TYPE_ROOT;
+		else
+			pr_crit("Hyper-V: CONFIG_MSHV_ROOT not enabled!\n");
+	}
 
-  	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
-@@ -944,29 +958,25 @@ static int hv_pci_irqchip_init(void)
-  	 * IRQ domain once enabled, should not be removed since there is no
-  	 * way to ensure that all the corresponding devices are also gone and
-  	 * no interrupts will be generated.
--	 *
--	 * In the ACPI case, the parent IRQ domain is supplied by the ACPI
--	 * subsystem, and it is the default GSI domain pointing to the GIC.
--	 * Neither is available outside of the ACPI subsystem, cannot avoid
--	 * the messy ifdef below.
--	 * There is apparently no such default in the OF subsystem, and
--	 * `hv_pci_of_irq_domain_parent` finds the parent IRQ domain that
--	 * points to the GIC as well.
--	 * None of these two cases reaches for the MSI parent domain.
-  	 */
-  #ifdef CONFIG_ACPI
-  	if (!acpi_disabled)
--		hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
--			fn, &hv_pci_domain_ops,
--			chip_data);
-+		irq_domain_parent = hv_pci_acpi_irq_domain_parent();
-  #endif
-  #if defined(CONFIG_OF)
--	if (!hv_msi_gic_irq_domain)
--		hv_msi_gic_irq_domain = irq_domain_create_hierarchy(
--			hv_pci_of_irq_domain_parent(), 0, HV_PCI_MSI_SPI_NR,
--			fn, &hv_pci_domain_ops,
--			chip_data);
-+	if (!irq_domain_parent)
-+		irq_domain_parent = hv_pci_of_irq_domain_parent();
-  #endif
-+	if (!irq_domain_parent) {
-+		WARN_ONCE(1, "Invalid firmware configuration for VMBus interrupts\n");
-+		ret = -EINVAL;
-+		goto free_chip;
-+	}
-+
-+	hv_msi_gic_irq_domain = irq_domain_create_hierarchy(
-+		irq_domain_parent, 0, HV_PCI_MSI_SPI_NR,
-+		fn, &hv_pci_domain_ops,
-+		chip_data);
+We could also BUG_ON() since it will almost certainly crash anyway, but maybe just
+letting it continue is ok.
 
-  	if (!hv_msi_gic_irq_domain) {
-  		pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 6adcd1b92b20..cd70a72c7073 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -336,8 +336,11 @@ int acpi_register_gsi (struct device *dev, u32 gsi, 
-int triggering, int polarity
-  int acpi_gsi_to_irq (u32 gsi, unsigned int *irq);
-  int acpi_isa_irq_to_gsi (unsigned isa_irq, u32 *gsi);
+>> +}
+>> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+>> index 0f6cd44fff29..844eba0429fa 100644
+>> --- a/drivers/hv/vmbus_drv.c
+>> +++ b/drivers/hv/vmbus_drv.c
+>> @@ -2646,7 +2646,7 @@ static int __init hv_acpi_init(void)
+>>  	if (!hv_is_hyperv_initialized())
+>>  		return -ENODEV;
+>>
+>> -	if (hv_root_partition && !hv_nested)
+>> +	if (hv_root_partition() && !hv_nested)
+>>  		return 0;
+>>
+>>  	/*
+>> diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
+>> index 2a86aa5d54c6..53e4b37716af 100644
+>> --- a/drivers/iommu/hyperv-iommu.c
+>> +++ b/drivers/iommu/hyperv-iommu.c
+>> @@ -130,7 +130,7 @@ static int __init hyperv_prepare_irq_remapping(void)
+>>  	    x86_init.hyper.msi_ext_dest_id())
+>>  		return -ENODEV;
+>>
+>> -	if (hv_root_partition) {
+>> +	if (hv_root_partition()) {
+>>  		name = "HYPERV-ROOT-IR";
+>>  		ops = &hyperv_root_ir_domain_ops;
+>>  	} else {
+>> @@ -151,7 +151,7 @@ static int __init hyperv_prepare_irq_remapping(void)
+>>  		return -ENOMEM;
+>>  	}
+>>
+>> -	if (hv_root_partition)
+>> +	if (hv_root_partition())
+>>  		return 0; /* The rest is only relevant to guests */
+>>
+>>  	/*
+>> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+>> index 7adc10a4fa3e..6f898792fb51 100644
+>> --- a/include/asm-generic/mshyperv.h
+>> +++ b/include/asm-generic/mshyperv.h
+>> @@ -28,6 +28,11 @@
+>>
+>>  #define VTPM_BASE_ADDRESS 0xfed40000
+>>
+>> +enum hv_partition_type {
+>> +	HV_PARTITION_TYPE_GUEST,
+>> +	HV_PARTITION_TYPE_ROOT,
+>> +};
+>> +
+>>  struct ms_hyperv_info {
+>>  	u32 features;
+>>  	u32 priv_high;
+>> @@ -59,6 +64,7 @@ struct ms_hyperv_info {
+>>  extern struct ms_hyperv_info ms_hyperv;
+>>  extern bool hv_nested;
+>>  extern u64 hv_current_partition_id;
+>> +extern enum hv_partition_type hv_current_partition_type;
+>>
+>>  extern void * __percpu *hyperv_pcpu_input_arg;
+>>  extern void * __percpu *hyperv_pcpu_output_arg;
+>> @@ -190,8 +196,6 @@ void hv_remove_crash_handler(void);
+>>  extern int vmbus_interrupt;
+>>  extern int vmbus_irq;
+>>
+>> -extern bool hv_root_partition;
+>> -
+>>  #if IS_ENABLED(CONFIG_HYPERV)
+>>  /*
+>>   * Hypervisor's notion of virtual processor ID is different from
+>> @@ -213,15 +217,12 @@ void __init hv_common_free(void);
+>>  void __init ms_hyperv_late_init(void);
+>>  int hv_common_cpu_init(unsigned int cpu);
+>>  int hv_common_cpu_die(unsigned int cpu);
+>> +void hv_identify_partition_type(void);
+>>
+>>  void *hv_alloc_hyperv_page(void);
+>>  void *hv_alloc_hyperv_zeroed_page(void);
+>>  void hv_free_hyperv_page(void *addr);
+>>
+>> -int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
+>> -int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
+>> -int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
+>> -
+>>  /**
+>>   * hv_cpu_number_to_vp_number() - Map CPU to VP.
+>>   * @cpu_number: CPU number in Linux terms
+>> @@ -309,6 +310,7 @@ void hyperv_cleanup(void);
+>>  bool hv_query_ext_cap(u64 cap_query);
+>>  void hv_setup_dma_ops(struct device *dev, bool coherent);
+>>  #else /* CONFIG_HYPERV */
+>> +static inline void hv_identify_partition_type(void) {}
+>>  static inline bool hv_is_hyperv_initialized(void) { return false; }
+>>  static inline bool hv_is_hibernation_supported(void) { return false; }
+>>  static inline void hyperv_cleanup(void) {}
+>> @@ -320,4 +322,29 @@ static inline enum hv_isolation_type hv_get_isolation_type(void)
+>>  }
+>>  #endif /* CONFIG_HYPERV */
+>>
+>> +#if IS_ENABLED(CONFIG_MSHV_ROOT)
+>> +static inline bool hv_root_partition(void)
+>> +{
+>> +	return	hv_current_partition_type == HV_PARTITION_TYPE_ROOT;
+> 
+> Nit: There's an extra space character after "return".
+> 
 
-+typedef struct fwnode_handle *(*acpi_gsi_domain_disp_fn)(u32);
-+
-  void acpi_set_irq_model(enum acpi_irq_model_id model,
--			struct fwnode_handle *(*)(u32));
-+	acpi_gsi_domain_disp_fn fn);
-+acpi_gsi_domain_disp_fn acpi_get_gsi_dispatcher(void);
-  void acpi_set_gsi_to_irq_fallback(u32 (*)(u32));
+Fixed for next version, thanks.
 
-  struct irq_domain *acpi_irq_create_hierarchy(unsigned int flags,
--- 
-2.43.0
-
-
-
--- 
-Thank you,
-Roman
+>> +}
+>> +int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
+>> +int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
+>> +int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
+>> +
+>> +#else /* CONFIG_MSHV_ROOT */
+>> +static inline bool hv_root_partition(void) { return false; }
+>> +static inline int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
+>> +{
+>> +	return hv_result(U64_MAX);
+>> +}
+>> +static inline int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id)
+>> +{
+>> +	return hv_result(U64_MAX);
+>> +}
+>> +static inline int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags)
+>> +{
+>> +	return hv_result(U64_MAX);
+>> +}
+>> +#endif /* CONFIG_MSHV_ROOT */
+>> +
+>>  #endif
+>> --
+>> 2.34.1
 
 
