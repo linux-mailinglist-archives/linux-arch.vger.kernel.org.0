@@ -1,116 +1,194 @@
-Return-Path: <linux-arch+bounces-10253-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10254-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 704B6A3E133
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 17:46:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D54DA3E217
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 18:18:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D16E860A08
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 16:41:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 511874242A9
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 17:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A038D20B81B;
-	Thu, 20 Feb 2025 16:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66AAB2135B3;
+	Thu, 20 Feb 2025 17:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="RfNgWwSK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DyQcz2mb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3758A20B812;
-	Thu, 20 Feb 2025 16:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4415E1DF749
+	for <linux-arch@vger.kernel.org>; Thu, 20 Feb 2025 17:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740069717; cv=none; b=e/ihQzpkQ3R0wdAVeXKJFKzz5kB3lBpJMyVllEWw09dQnQUAiIlGW1JZubumRht4B7y7UJGdTFkBhi0pZd/tWxBwSYCSwr3Zj9AO484JuOEXPPitZfeneeFNlP6b4rOEJLBs4vxW51A7/S7vSyOEmX48GGnFjsKqOUzSfRnwRfI=
+	t=1740071424; cv=none; b=umlk23M3hkPf3Qxo0Oe5Tu4OezmO5Pv+xUXWFpz2tJ9q1u9BJek8YEc15KGGLiTUgnGVnRIqQiARpIWb8NtpcatasTMux6OpYoW2NCfFxJsoc26uYcvRtDXEKwrCloiQ8UgjCBOHaT70AmoLCMXjDCMop0U2bvZ+lZk8TakEz1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740069717; c=relaxed/simple;
-	bh=TYfO4NMFHURGbPNs1cXbVVlPxLhwPSr2YHLvwtMjhy4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BfVsm20NTzoP24EQd3M8UGi1T/JHVzvfvHBNCjhRHTUGcBaP313EMYYrk2mNfkEsTBtTqrQ2AZjMF6cnb/wUt8xqLsX6OYd/O0duZMpSkKmiuOenhibsghHmXV94b8vrtpLC7C3OaMMki56/A+8biweE1xROHuk3QibOSXLsziw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=RfNgWwSK; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7A0F8203D5E9;
-	Thu, 20 Feb 2025 08:41:55 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A0F8203D5E9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740069715;
-	bh=pNJT56BxP7UvWA0Xz758yN9Ks+B/eGQRDTpNl6/uydA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RfNgWwSKvEiPibsl6QYn1+eHkT30Nn1lw5OPsw1d6PPbcISNOFjUL/xQSqvKSFf8o
-	 yoOIzOPYQSxDpQlLZwzRdyB7IKxJeSJ80SjCCl6Rmtksk16rj7gF1Vbsd9EZG8Perr
-	 ZiNK0h99Ko8rPXUvLfCrhbWuuKMw7GXCc7mIDVdc=
-Message-ID: <13059366-bf72-4e84-ab6c-032b735edaec@linux.microsoft.com>
-Date: Thu, 20 Feb 2025 08:41:55 -0800
+	s=arc-20240116; t=1740071424; c=relaxed/simple;
+	bh=kg7PYKt74NmqPx2oKNRGx3rLvGEcdQR61JIV5w6PyfE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Li55QK3cJe4MAbQaetR0qDag0fmmC5FRe2PwZQz457t5d20ApK8LmxKyoE8e9XTZeRLjuZybEx0GVPjjsbMYYVtTk6PvcWlEZRsDh6a4RjNFXi6xrm0uJ0u0wHOthQ7C2DfXfugWi4lHrAein3gR5X7y8QPC8JJraj5c9hwGeuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DyQcz2mb; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740071421;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kg7PYKt74NmqPx2oKNRGx3rLvGEcdQR61JIV5w6PyfE=;
+	b=DyQcz2mbIhCd7Vxrkn9ulxHcds8PLMgVrhq7RAvI4CAjGnZKtycuvEDoQZ/RwFBdQ0o53e
+	m4tBMmeD9f9zV1QIBNVuOR7azrvNIXv/8/1R/Z2WyNrtg39K0udjEz6B10lsibO4dNj4T7
+	aWL3dBzgF4mFZyuwLfF+/AukCJ1uDEo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-301-rrZZYz2_P9a44vA2fKZIUg-1; Thu, 20 Feb 2025 12:10:20 -0500
+X-MC-Unique: rrZZYz2_P9a44vA2fKZIUg-1
+X-Mimecast-MFC-AGG-ID: rrZZYz2_P9a44vA2fKZIUg_1740071419
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43995bff469so8782845e9.2
+        for <linux-arch@vger.kernel.org>; Thu, 20 Feb 2025 09:10:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740071419; x=1740676219;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kg7PYKt74NmqPx2oKNRGx3rLvGEcdQR61JIV5w6PyfE=;
+        b=msYICVoPhmBR11VL8cEQLpJowWNjk2m88NOYWg0Eztp2xLXG5OEb/bFSVsgakKRYhH
+         R5Y061jU5voJirAIIEBg62Jq6YBgKXyGkL2Gd1SfBM0WrRzdbrFdBB/Da44M76A2S15E
+         h9gYW0J50caz9+F6vyB6VQhlFGcYIgeXAzh5pNtRyE6PhdHxcUsjQ/Os5z55m0do7uon
+         UmEQ3Hlwt3RrnCHjqKJ32UtYt+JPXqY09xumsBHQP7NPv+DzgvHY/2O5KecTOw8lNFHT
+         VrtomcgrwS40rfsJ0f4B7cNN5dMuegPjq0k1wAvOuIWkovFonfrNvC9NXnYzuRP/KKcX
+         GxYg==
+X-Forwarded-Encrypted: i=1; AJvYcCXLCh/yz+WIfYFkrrqAFr9mvhETgJ00Sfmc5ZcafNVbK7JNTnHKw8Sb1BGcGj/y3l2DKddrneSBkEpO@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvFmc4CtkCSV5PENs3vLpcV2dByEXrCUxnjfqK16oVMjM1LgLE
+	2kJrw8rr4u1YB+PAM2oqWCBhYKYs19P61xWQuLJ4tAxy2bMbSBL8BSkAuJSXEF5/iheD3ntt+Lq
+	umKKOqEVCUBawPmwu89UYAcptnOhVMs/Xbph5nnXXSAY4YzjEpSNpdOCvCMg=
+X-Gm-Gg: ASbGncvEGVTpTwjSM4Bu16sPh0hYUOecrvxcVWnWFOLL5sFTP2eodl+wCyed0pOPLwi
+	qNo5uuYZYWD8kzBY8bppDIA9sBE9+yLZh4//PrSijQXTrWHzt/As1/OIyxvfv5+LJYqNk+vcTiV
+	bCtJN0tUnQOqN9b2k/Er/sVZWt4Chz+3XJG2ndMDC1nONJZ5yez7yS9iqWqIPt0D7WRLDRZbWTt
+	TNAKcNNtHqPraDzjlh1FupzUDPQaTJ3Z5IxVZr4IsgZJBqQ8ff8zH6x/6lYPfNWNSCa3DRZpnLf
+	7La70SklOKBP3WKb68HIpjB8AR+yO7cg62bsNOaZZsXu1nMJl3KZOfwH5RotQy5wRw==
+X-Received: by 2002:a05:600c:4fc2:b0:439:985b:17be with SMTP id 5b1f17b1804b1-439ae1eaa78mr175755e9.9.1740071418811;
+        Thu, 20 Feb 2025 09:10:18 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFqI8Joi794bN8Kdq45efIzQ+6oEZ5Dcj9tQjLghCqHxxqvkD27DzVgOIJ2kmb/SIiCpoKjvg==
+X-Received: by 2002:a05:600c:4fc2:b0:439:985b:17be with SMTP id 5b1f17b1804b1-439ae1eaa78mr175145e9.9.1740071418347;
+        Thu, 20 Feb 2025 09:10:18 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4395a0558e2sm247191865e9.11.2025.02.20.09.10.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Feb 2025 09:10:17 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Dave Hansen <dave.hansen@intel.com>, Jann Horn <jannh@google.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
+ <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
+ Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
+ Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+In-Reply-To: <eef09bdc-7546-462b-9ac0-661a44d2ceae@intel.com>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-30-vschneid@redhat.com>
+ <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
+ <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
+ <xhsmh5xlhk5p2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez1EAATYcX520Nnw=P8XtUDSr5pe+qGH1YVNk3xN2LE05g@mail.gmail.com>
+ <xhsmh34gkk3ls.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
+ <xhsmhjz9mj2qo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <d0450bc8-6585-49ca-9cad-49e65934bd5c@intel.com>
+ <xhsmhh64qhssj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <eef09bdc-7546-462b-9ac0-661a44d2ceae@intel.com>
+Date: Thu, 20 Feb 2025 18:10:15 +0100
+Message-ID: <xhsmhfrk84k5k.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v4 6/6] PCI: hv: Get vPCI MSI IRQ domain from
- DeviceTree
-To: Michael Kelley <mhklinux@outlook.com>, "arnd@arndb.de" <arnd@arndb.de>,
- "bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "decui@microsoft.com" <decui@microsoft.com>,
- "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "hpa@zytor.com" <hpa@zytor.com>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- "kw@linux.com" <kw@linux.com>, "kys@microsoft.com" <kys@microsoft.com>,
- "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
- "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
- "mingo@redhat.com" <mingo@redhat.com>, "robh@kernel.org" <robh@kernel.org>,
- "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
- "tglx@linutronix.de" <tglx@linutronix.de>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>, "will@kernel.org"
- <will@kernel.org>, "devicetree@vger.kernel.org"
- <devicetree@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>
-Cc: "benhill@microsoft.com" <benhill@microsoft.com>,
- "bperkins@microsoft.com" <bperkins@microsoft.com>,
- "sunilmut@microsoft.com" <sunilmut@microsoft.com>
-References: <20250212014321.1108840-1-romank@linux.microsoft.com>
- <20250212014321.1108840-7-romank@linux.microsoft.com>
- <SN6PR02MB4157911BEF8664EDE2B62835D4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Language: en-US
-From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB4157911BEF8664EDE2B62835D4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
+On 19/02/25 12:25, Dave Hansen wrote:
+> On 2/19/25 07:13, Valentin Schneider wrote:
+>>> Maybe I missed part of the discussion though. Is VMEMMAP your only
+>>> concern? I would have guessed that the more generic vmalloc()
+>>> functionality would be harder to pin down.
+>> Urgh, that'll teach me to send emails that late - I did indeed mean the
+>> vmalloc() range, not at all VMEMMAP. IIUC *neither* are present in the user
+>> kPTI page table and AFAICT the page table swap is done before the actual vmap'd
+>> stack (CONFIG_VMAP_STACK=y) gets used.
+>
+> OK, so rewriting your question... ;)
+>
+>> So what if the vmalloc() range *isn't* in the CR3 tree when a CPU is
+>> executing in userspace?
+>
+> The LDT and maybe the PEBS buffers are the only implicit supervisor
+> accesses to vmalloc()'d memory that I can think of. But those are both
+> handled specially and shouldn't ever get zapped while in use. The LDT
+> replacement has its own IPIs separate from TLB flushing.
+>
+> But I'm actually not all that worried about accesses while actually
+> running userspace. It's that "danger zone" in the kernel between entry
+> and when the TLB might have dangerous garbage in it.
+>
 
+So say we have kPTI, thus no vmalloc() mapped in CR3 when running
+userspace, and do a full TLB flush right before switching to userspace -
+could the TLB still end up with vmalloc()-range-related entries when we're
+back in the kernel and going through the danger zone?
 
-On 2/19/2025 3:29 PM, Michael Kelley wrote:
-> From: Roman Kisel <romank@linux.microsoft.com> Sent: Tuesday, February 11, 2025 5:43 PM
+> BTW, I hope this whole thing is turned off on 32-bit. There, we can
+> actually take and handle faults on the vmalloc() area. If you get one of
+> those faults in your "danger zone", it'll start running page fault code
+> which will branch out to god-knows-where and certainly isn't noinstr.
 
-[...]
-
->>   }
-> 
-> These changes to rename hv_dev to vmbus_root_device, along with the
-> introduction of hv_get_vmbus_root_device(), seem like a separate
-> patch from the vPCI changes. The rename is definitely needed because
-> "hv_dev" as a symbol is very overloaded. But the rename is "no functional
-> change", and it doesn't touch the pci-hyperv.c file. You don't have a
-> consumer for hv_get_vmbus_root_device() until the vPCI changes, but
-> that seems OK to me to be in the subsequent patch.
-> 
-
-Thanks, will split the NFC out! I've asked the ACPI maintainers if a
-small change in ACPI would be fine to make the functional part of this
-patch more palatable, too.
-
--- 
-Thank you,
-Roman
+Sounds... Fun. Thanks for pointing out the landmines.
 
 
