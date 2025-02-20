@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10251-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10252-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3C9A3E0FF
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 17:40:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2230A3E0EF
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 17:37:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B673B3B5A9C
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 16:35:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8608162716
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Feb 2025 16:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6980520DD43;
-	Thu, 20 Feb 2025 16:35:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9392202C36;
+	Thu, 20 Feb 2025 16:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="FabHF0Pv"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="O90HNH/W"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D279320C034;
-	Thu, 20 Feb 2025 16:35:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637F81FDA94;
+	Thu, 20 Feb 2025 16:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740069302; cv=none; b=nXctkDc+BVjyCcYji0tC+C3YT0inVUVdGh+xZOmsw939rpiYRKubSq5NFr+CDBwxXGaPJ1tVl0NU2NouSjcZAhADQWtPhdzFwsU3V4YiaR1YVIb+t+Q8OFyJqCKrXn86q8HlMxw38vhV7yl1JTKOaAs3e23K2C/uaGOUnuIb4tE=
+	t=1740069413; cv=none; b=drRBZLejAnocEZtg0HKhNwJ9kY9JD8rEHML5q+jcQE+vDLuc5NJH+DB2iQLPYlO2JD1abZ91YjRL+Z26mOi4yQJ9F/wm1LGP7LhTEqzsVrGzWYvQB63QVsXQU7hXUYGFioJCDkiEjEVJCrkXiJrMpmb5RRBl7shCnNxw2e/UUzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740069302; c=relaxed/simple;
-	bh=nKjCl1G2XWM1G1+RZhmlvTS4AT+mLpwU0ZzysKzfjOk=;
+	s=arc-20240116; t=1740069413; c=relaxed/simple;
+	bh=PQe7bripx++zcXNXBM1O/bP2KCfp3lJ2bUMK6DifAMI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IvKy8sEyoBPGwDPY1s+Fia9eAZ7zymtzAf/x0jhMySwdW9HVtNQofOab8J6mKtkAKSo+Yw3hK/0XJxP2PVpXgPL33M/n0WM28DazmgqgPxhRxnQfNWF8tBjFCCIWQ6lmwd23Sb0LUVQsPlbU3uIzqvsuVnLnEVPb1NpS6ZDAj2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=FabHF0Pv; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=aKYgfd8+wUGFG6qYkv0XwhOUCf/vK9axICrrDPQJ4vPYB9MjoWBMit7oXH5nsux+2YcND+MIbT2rnZnpFhHboo5PVmiVX0yivm6w7vNIk2Kayh5iZ1M9kdy23Ap7ybwtVb+gD8+ULQywDM7IfZCw1RR5V5Yji6SdNfsC6yyQkyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=O90HNH/W; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id F1D8920376F8;
-	Thu, 20 Feb 2025 08:34:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F1D8920376F8
+	by linux.microsoft.com (Postfix) with ESMTPSA id 8250A20376F8;
+	Thu, 20 Feb 2025 08:36:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8250A20376F8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740069300;
-	bh=ll4MapV9YYQHwTCOG3xJfA+Sudr/vOAtL9iS2dtf3J0=;
+	s=default; t=1740069411;
+	bh=cNwF/TmLe06a3bjDk2gyUgRGrHM5swdU3hTbrZcKuHQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FabHF0Pv9CtkRuEY+LxCxEqw+PX7OOBIDPKEL29N2aeyIMDHzhOQg1gf0RQO2lmoI
-	 CRtE1nDhCVV6idmCw6GqON120UCb0TBOM/r9zx91h9wa8UVVHQqcoz2IlXj6lCCtm7
-	 rQnELxtu7vmnEMRCugYJDyI4Tay8IR8t3zOiFDTo=
-Message-ID: <fa2d9e8d-7897-44eb-87e2-3a9118deb18a@linux.microsoft.com>
-Date: Thu, 20 Feb 2025 08:34:59 -0800
+	b=O90HNH/WVZcizQUG/bBmDXrhQmO6I6OuNcVudW3ubvh6sEMRKmFsVh320lL0RI82m
+	 gB+l+vwS3571aHGPAe9oRsh5knORk/AThp2CLTkuLZlJTg+MlM3A7nEWXVnzzet3Ai
+	 AneBCVj5jBieBuTrlJZTpjp/uzwBxBXe9+gGakck=
+Message-ID: <fb162f81-9365-425d-8153-75c2c7d5ff13@linux.microsoft.com>
+Date: Thu, 20 Feb 2025 08:36:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,8 +49,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v4 1/6] arm64: hyperv: Use SMCCC to detect
- hypervisor presence
+Subject: Re: [PATCH hyperv-next v4 2/6] Drivers: hv: Enable VTL mode for arm64
 To: Michael Kelley <mhklinux@outlook.com>, "arnd@arndb.de" <arnd@arndb.de>,
  "bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
  "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
@@ -79,90 +78,32 @@ Cc: "benhill@microsoft.com" <benhill@microsoft.com>,
  "bperkins@microsoft.com" <bperkins@microsoft.com>,
  "sunilmut@microsoft.com" <sunilmut@microsoft.com>
 References: <20250212014321.1108840-1-romank@linux.microsoft.com>
- <20250212014321.1108840-2-romank@linux.microsoft.com>
- <SN6PR02MB4157DB2F52501309D52D0870D4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <20250212014321.1108840-3-romank@linux.microsoft.com>
+ <SN6PR02MB4157EFEE74BD71B6392502A0D4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Language: en-US
 From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB4157DB2F52501309D52D0870D4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
+In-Reply-To: <SN6PR02MB4157EFEE74BD71B6392502A0D4C52@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 2/19/2025 3:13 PM, Michael Kelley wrote:
+On 2/19/2025 3:14 PM, Michael Kelley wrote:
 > From: Roman Kisel <romank@linux.microsoft.com> Sent: Tuesday, February 11, 2025 5:43 PM
->>
 
 [...]
 
->>   }
->>
->> +static bool hyperv_detect_via_acpi(void)
->> +{
->> +	if (acpi_disabled)
->> +		return false;
->> +#if IS_ENABLED(CONFIG_ACPI)
->> +	/* Hypervisor ID is only available in ACPI v6+. */
+>>   config HYPERV_VTL_MODE
+>>   	bool "Enable Linux to boot in VTL context"
+>> -	depends on X86_64 && HYPERV
+>> +	depends on (X86 || ARM64)
 > 
-> The comment is correct, but to me doesn't tell the full story.
-> I initially wondered why the revision test < 6 was being done,
-> since Hyper-V for ARM64 always provides ACPI 6.x or greater.
-> But the test is needed to catch running in some unknown
-> non-Hyper-V environment that has ACPI 5.x or less. In such a
-> case, it can't be Hyper-V, so just return false instead of testing
-> a bogus hypervisor_id field. Maybe a comment would help
-> explain it to someone like me who was confused. :-)
-> 
+> Any reason to choose "X86" instead of "X86_64"? I can't
+> imagine VTL mode making any sense for 32-bit, but maybe
+> I'm wrong! :-)
 
-Thanks, I'll extend the comment to tell the whole story!
-
-[...]
-
->> +	ms_hyperv.vtl = get_vtl();
-> 
-> The above statement looks like it will fail to compile on
-> arm64 since the get_vtl() function is entirely on the x86
-> side until Patch 3 of this series. As of this Patch 1, there's
-> no declaration of get_vtl() available to arm64.
-> 
-
-I used my working branch for testing
-https://github.com/romank-msft/linux-hyperv/tree/vtl_mode_arm64_v4
-and didn't move that code around when chunking into patches.
-Will fix the workflow, thanks for catching this!
-
->> +	/* Report if non-default VTL */
->> +	if (ms_hyperv.vtl > 0)
->> +		pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
-> 
-> Could this message include the VTL number as well? In the long
-> run, I think there will be code at non-zero VTLs other than VTL 2.
-> 
-
-Absolutely, will add!
-
->> +
->>   	ms_hyperv_late_init();
->>
->>   	hyperv_initialized = true;
->> diff --git a/arch/arm64/include/asm/mshyperv.h
->> b/arch/arm64/include/asm/mshyperv.h
->> index 2e2f83bafcfb..a6d7eb9e167b 100644
->> --- a/arch/arm64/include/asm/mshyperv.h
->> +++ b/arch/arm64/include/asm/mshyperv.h
->> @@ -50,4 +50,9 @@ static inline u64 hv_get_msr(unsigned int reg)
->>
->>   #include <asm-generic/mshyperv.h>
->>
->> +#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0	0x4d32ba58U
->> +#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1	0xcd244764U
->> +#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2	0x8eef6c75U
->> +#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3	0x16597024U
->> +
->>   #endif
->> --
->> 2.43.0
->>
+You're 100% right, appreciate your review very much :)
+Will tweak this in the next submission.
 
 -- 
 Thank you,
