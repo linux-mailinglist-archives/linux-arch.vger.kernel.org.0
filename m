@@ -1,307 +1,167 @@
-Return-Path: <linux-arch+bounces-10303-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10304-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED286A3F814
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 16:10:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49D3AA3F942
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 16:44:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6004702233
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 15:08:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6ECE619C518A
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 15:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F2A7211272;
-	Fri, 21 Feb 2025 15:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751D51D6DB9;
+	Fri, 21 Feb 2025 15:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="gNAhgefJ"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Aua5F14v";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hK/x4O6o"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
+Received: from flow-a5-smtp.messagingengine.com (flow-a5-smtp.messagingengine.com [103.168.172.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C22D208962
-	for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2025 15:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04601D5CCC;
+	Fri, 21 Feb 2025 15:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740150530; cv=none; b=icyoS1M08C8s67DSWRGOrRiUJb+dY0QQppi8WISUv2V46VbkeN+yKFPUZcgpJCZ4SMysLsmyhDXMLgsuDUi7ZRohZZwWwFDFHHpN9iqQ526qhX2ArpqZlU63TCQyR9qZjg4qHwZl6I5KNh7gn67kAd7EWLZZFMzhwmNrgTKnf8Y=
+	t=1740152532; cv=none; b=Mdx1IT/hsDFGOs8qoan9jttG/uhTSegkMlG843mNtdOwGYF4iM6Ue35+I0M9vQX8QmmShKghlWQgn8dQk8X/zXrRb3h2BiqyKHcoh9cP1/3pE3bT9XWccEa0UJgUVDr8dOzZn5jq1NauABA20fyRB0X24ndpOFbY0env+4bfbUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740150530; c=relaxed/simple;
-	bh=wOUwuoMFBlbf4VclPsw4Y8bvqcLAlISZ+OpN2COxUT0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qDflNaQYslBTf/S5t87P45aIk6t1km+tlqxbRToItcpjZVcAfBE7XlkjOoZasiVemGMLcHwaarlxoLMyyzTC00cyQpMZoJhKp2HqtUIk76artTFvFNMDII84ZDsg861A5bSxzFCmRPKCm5bZNKC9fY01dSWc9t3shOdaYz4UxNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=gNAhgefJ; arc=none smtp.client-ip=83.166.143.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Yztn21Cvqzp7v;
-	Fri, 21 Feb 2025 16:08:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1740150518;
-	bh=HAdXvLK8vfW//A0RH2Z8Vgvri1ljkOe8we8oEw/BRJo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gNAhgefJNSQqmpn1R7GjmCDcL8sBVj9Jy8ELxGlJDuSkOcQnFPususm4DJtyM7z3K
-	 N5uOW38hzFreoU0UXhfBHpXriYHLasoIWkBI7w0rFt5bmnCxNP0I8oGntObZgmF0Jy
-	 3Dxnzo71DVTvLCBMWTvR36ekCTxZrE3oQm+YSPuM=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Yztmx6Tb2zB0s;
-	Fri, 21 Feb 2025 16:08:33 +0100 (CET)
-Date: Fri, 21 Feb 2025 16:08:33 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Andrey Albershteyn <aalbersh@redhat.com>, 
-	Paul Moore <paul@paul-moore.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>, 
-	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
-Message-ID: <20250221.ahB8jei2Chie@digikod.net>
-References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+	s=arc-20240116; t=1740152532; c=relaxed/simple;
+	bh=QqbTVfRf9FmdvF8GodySpCwEsO8rjlDVjLOto+qoQ2k=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=WnXfwK3fqOvm3TRp1PBrUIB9WXVsnICw4/qc3hI6slLLAuHcK9BbiYmNd08HfNAm2Blj0qv1vakQ+4Rb/t8yGiQmY19PIJ3ls4l7Y6iFxdQnQO4yK8hs3Sp38AqNdZd4WSEWfg/+/tWWsd5vwA39OEeXlFU0SwmAT7Jr1sTgRD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Aua5F14v; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hK/x4O6o; arc=none smtp.client-ip=103.168.172.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailflow.phl.internal (Postfix) with ESMTP id 68A162008E9;
+	Fri, 21 Feb 2025 10:42:07 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-11.internal (MEProxy); Fri, 21 Feb 2025 10:42:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1740152527;
+	 x=1740159727; bh=Zogi8f8M8Um40C2L5aiooebB5l2P6zGuaVkKnMZ0aqo=; b=
+	Aua5F14vWebL0DOxXVcNVFiZkYyvO+ZDn0lBIGthpSro7L8yySiSiaVg08WR7pLs
+	JojgEjUtKFzq3p96R+2HmZUtkfnB835nBY2UB1NRwsKhE3G6/KpCcrJCM9nOPLjg
+	2axdv5yBZa5jZAlSVtFXsSKh6/ocWFYVTAyli8xq5LHUWD1AKQJ5G4+Mr/4ewUSx
+	Yn/azkxhSGwazkgtAuJI1r5HiztAgb54Hy57zjASBXgbNstUSX1FQ056H8+WzBWb
+	bY73DEtylf/GOrATlkUX6KJLQyEzNftkEsaFLVyJSfRZdT3QoOtN3rFZ19iqpA5R
+	KJtz9HVtMoMVC5CtzTJTYw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1740152527; x=
+	1740159727; bh=Zogi8f8M8Um40C2L5aiooebB5l2P6zGuaVkKnMZ0aqo=; b=h
+	K/x4O6oyNBPbMt/oANZVu7iwmMXMPEIsjZuQL8HZIOTsUUJO7Auhm1hFIArdijoJ
+	AB7VBKyq2IuRmCYnjPjcsdGs9S/cnI6aMm4jXLNLxVrlFDCnDgv/of6zLAJcxDcI
+	eL4AzPwv+QV8bY2ycaIOH64w/uZlZdCJ8e62DGEoD1siZA0vWqTZ/ReNgiqYKlv1
+	mihPOMp/ykpji+1Q19VspQRFz5r4aZTlYen0gNe9e7yhu15yzjE/MGurq1TMqurP
+	hR+5nH3l3BZzUbTYF6NMvpDtU6o63shcpD1jG8+Rp04xMu2H9dbuLLoa9S/eymhA
+	yXXAttMvAK8zmGaHmjzhA==
+X-ME-Sender: <xms:zJ64Z_O-mJRwvj1sCRG9GGTKNu1XV-MwxBvTkYAwkyjdP5scRxTp6w>
+    <xme:zJ64Z5-7kYr4fO9OJH0gelcDWR2xhP9EYBEJ8--FzYH7AgrGrnjPAP3VTDrGorGbV
+    -A7lGF4HomKqch4ruc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejtdegtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeg
+    gedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhosghinhdrmhhurhhphhihse
+    grrhhmrdgtohhmpdhrtghpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthho
+    pehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepug
+    grvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehnphhighhgihhnsehg
+    mhgrihhlrdgtohhmpdhrtghpthhtohepgihihihouhdrfigrnhhgtghonhhgsehgmhgrih
+    hlrdgtohhmpdhrtghpthhtohephhgvrhgsvghrthesghhonhguohhrrdgrphgrnhgrrdho
+    rhhgrdgruhdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtg
+    hpthhtohepiihijhhunhgphhhusehitghlohhuugdrtghomh
+X-ME-Proxy: <xmx:zJ64Z-QUkr7NyVicJsKDYCmEUML1cB41zvxitesRRl9w-vpZ4FIx9Q>
+    <xmx:zJ64ZzspC6JLy2xq6-H8dKC9b0W5UnN9XvAeR1biFGIhHAZHAhfaHQ>
+    <xmx:zJ64Z3dUc26wh_PxcfOohxsJWUrbvmi2AkE15Toc-0r6NXyMPFxzTg>
+    <xmx:zJ64Z_18mDWkVYuOyPdwsKM_ggsOAz5LQTjd3DnTKUlYpcS_8aoEYw>
+    <xmx:z564Z_SJKpL1igBqLIymTzZOJvFYGQRqn-AF7i_kx_KjtJ_VxT8ih3L7>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 469352220072; Fri, 21 Feb 2025 10:42:04 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
-X-Infomaniak-Routing: alpha
+Date: Fri, 21 Feb 2025 16:40:58 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Zijun Hu" <quic_zijuhu@quicinc.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Will Deacon" <will@kernel.org>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Herbert Xu" <herbert@gondor.apana.org.au>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Danilo Krummrich" <dakr@kernel.org>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
+ "Johannes Berg" <johannes@sipsolutions.net>,
+ "Jamal Hadi Salim" <jhs@mojatatu.com>,
+ "Cong Wang" <xiyou.wangcong@gmail.com>, "Jiri Pirko" <jiri@resnulli.us>,
+ "Jason Gunthorpe" <jgg@ziepe.ca>, "Leon Romanovsky" <leon@kernel.org>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>, "Lee Jones" <lee@kernel.org>,
+ "Thomas Graf" <tgraf@suug.ch>, "Christoph Hellwig" <hch@lst.de>,
+ "Marek Szyprowski" <m.szyprowski@samsung.com>,
+ "Robin Murphy" <robin.murphy@arm.com>,
+ "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>
+Cc: "Zijun Hu" <zijun_hu@icloud.com>, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-crypto@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+ linux-wireless@vger.kernel.org, linux-rdma@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+ linux-mtd@lists.infradead.org
+Message-Id: <5d662c4c-76f7-4e5c-82f3-2aeeaf9e3311@app.fastmail.com>
+In-Reply-To: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
+References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
+Subject: Re: [PATCH *-next 00/18] Remove weird and needless 'return' for void APIs
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-It looks security checks are missing.  With IOCTL commands, file
-permissions are checked at open time, but with these syscalls the path
-is only resolved but no specific access seems to be checked (except
-inode_owner_or_capable via vfs_fileattr_set).
+On Fri, Feb 21, 2025, at 14:02, Zijun Hu wrote:
+> This patch series is to remove weird and needless 'return' for
+> void APIs under include/ with the following pattern:
+>
+> api_header.h:
+>
+> void api_func_a(...);
+>
+> static inline void api_func_b(...)
+> {
+> 	return api_func_a(...);
+> }
+>
+> Remove the needless 'return' in api_func_b().
+>
+> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
 
-On Tue, Feb 11, 2025 at 06:22:47PM +0100, Andrey Albershteyn wrote:
-> From: Andrey Albershteyn <aalbersh@redhat.com>
-> 
-> Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> extended attributes/flags. The syscalls take parent directory fd and
-> path to the child together with struct fsxattr.
-> 
-> This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> that file don't need to be open as we can reference it with a path
-> instead of fd. By having this we can manipulated inode extended
-> attributes not only on regular files but also on special ones. This
-> is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> we can not call ioctl() directly on the filesystem inode using fd.
-> 
-> This patch adds two new syscalls which allows userspace to get/set
-> extended inode attributes on special files by using parent directory
-> and a path - *at() like syscall.
-> 
-> Also, as vfs_fileattr_set() is now will be called on special files
-> too, let's forbid any other attributes except projid and nextents
-> (symlink can have an extent).
-> 
-> CC: linux-api@vger.kernel.org
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-xfs@vger.kernel.org
-> Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
-> ---
-> v1:
-> https://lore.kernel.org/linuxppc-dev/20250109174540.893098-1-aalbersh@kernel.org/
-> 
-> Previous discussion:
-> https://lore.kernel.org/linux-xfs/20240520164624.665269-2-aalbersh@redhat.com/
-> 
-> XFS has project quotas which could be attached to a directory. All
-> new inodes in these directories inherit project ID set on parent
-> directory.
-> 
-> The project is created from userspace by opening and calling
-> FS_IOC_FSSETXATTR on each inode. This is not possible for special
-> files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
-> with empty project ID. Those inodes then are not shown in the quota
-> accounting but still exist in the directory. Moreover, in the case
-> when special files are created in the directory with already
-> existing project quota, these inode inherit extended attributes.
-> This than leaves them with these attributes without the possibility
-> to clear them out. This, in turn, prevents userspace from
-> re-creating quota project on these existing files.
-> ---
-> Changes in v3:
-> - Remove unnecessary "dfd is dir" check as it checked in user_path_at()
-> - Remove unnecessary "same filesystem" check
-> - Use CLASS() instead of directly calling fdget/fdput
-> - Link to v2: https://lore.kernel.org/r/20250122-xattrat-syscall-v2-1-5b360d4fbcb2@kernel.org
-> ---
->  arch/alpha/kernel/syscalls/syscall.tbl      |  2 +
->  arch/arm/tools/syscall.tbl                  |  2 +
->  arch/arm64/tools/syscall_32.tbl             |  2 +
->  arch/m68k/kernel/syscalls/syscall.tbl       |  2 +
->  arch/microblaze/kernel/syscalls/syscall.tbl |  2 +
->  arch/mips/kernel/syscalls/syscall_n32.tbl   |  2 +
->  arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 +
->  arch/mips/kernel/syscalls/syscall_o32.tbl   |  2 +
->  arch/parisc/kernel/syscalls/syscall.tbl     |  2 +
->  arch/powerpc/kernel/syscalls/syscall.tbl    |  2 +
->  arch/s390/kernel/syscalls/syscall.tbl       |  2 +
->  arch/sh/kernel/syscalls/syscall.tbl         |  2 +
->  arch/sparc/kernel/syscalls/syscall.tbl      |  2 +
->  arch/x86/entry/syscalls/syscall_32.tbl      |  2 +
->  arch/x86/entry/syscalls/syscall_64.tbl      |  2 +
->  arch/xtensa/kernel/syscalls/syscall.tbl     |  2 +
->  fs/inode.c                                  | 75 +++++++++++++++++++++++++++++
->  fs/ioctl.c                                  | 16 +++++-
->  include/linux/fileattr.h                    |  1 +
->  include/linux/syscalls.h                    |  4 ++
->  include/uapi/asm-generic/unistd.h           |  8 ++-
->  21 files changed, 133 insertions(+), 3 deletions(-)
-> 
+I have no objection to the changes, but I think you should
+describe the motivation for them beyond them being 'weird'.
 
-[...]
+Do these 'return' statements get in the way of some other
+work you are doing? Is there a compiler warning you want
+to enable to ensure they don't come back? Is this all of
+the instances in the kernel or just the ones you found by
+inspection?
 
-> diff --git a/fs/inode.c b/fs/inode.c
-> index 6b4c77268fc0ecace4ac78a9ca777fbffc277f4a..b2dddd9db4fabaf67a6cbf541a86978b290411ec 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -23,6 +23,9 @@
->  #include <linux/rw_hint.h>
->  #include <linux/seq_file.h>
->  #include <linux/debugfs.h>
-> +#include <linux/syscalls.h>
-> +#include <linux/fileattr.h>
-> +#include <linux/namei.h>
->  #include <trace/events/writeback.h>
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/timestamp.h>
-> @@ -2953,3 +2956,75 @@ umode_t mode_strip_sgid(struct mnt_idmap *idmap,
->  	return mode & ~S_ISGID;
->  }
->  EXPORT_SYMBOL(mode_strip_sgid);
-> +
-> +SYSCALL_DEFINE4(getfsxattrat, int, dfd, const char __user *, filename,
-> +		struct fsxattr __user *, fsx, unsigned int, at_flags)
-> +{
-> +	CLASS(fd, dir)(dfd);
-> +	struct fileattr fa;
-> +	struct path filepath;
-> +	int error;
-> +	unsigned int lookup_flags = 0;
-> +
-> +	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-> +		return -EINVAL;
-> +
-> +	if (at_flags & AT_SYMLINK_FOLLOW)
-> +		lookup_flags |= LOOKUP_FOLLOW;
-> +
-> +	if (at_flags & AT_EMPTY_PATH)
-> +		lookup_flags |= LOOKUP_EMPTY;
-> +
-> +	if (fd_empty(dir))
-> +		return -EBADF;
-> +
-> +	error = user_path_at(dfd, filename, lookup_flags, &filepath);
-> +	if (error)
-> +		return error;
-
-security_inode_getattr() should probably be called here.
-
-> +
-> +	error = vfs_fileattr_get(filepath.dentry, &fa);
-> +	if (!error)
-> +		error = copy_fsxattr_to_user(&fa, fsx);
-> +
-> +	path_put(&filepath);
-> +	return error;
-> +}
-> +
-> +SYSCALL_DEFINE4(setfsxattrat, int, dfd, const char __user *, filename,
-> +		struct fsxattr __user *, fsx, unsigned int, at_flags)
-> +{
-> +	CLASS(fd, dir)(dfd);
-> +	struct fileattr fa;
-> +	struct path filepath;
-> +	int error;
-> +	unsigned int lookup_flags = 0;
-> +
-> +	if ((at_flags & ~(AT_SYMLINK_FOLLOW | AT_EMPTY_PATH)) != 0)
-> +		return -EINVAL;
-> +
-> +	if (at_flags & AT_SYMLINK_FOLLOW)
-> +		lookup_flags |= LOOKUP_FOLLOW;
-> +
-> +	if (at_flags & AT_EMPTY_PATH)
-> +		lookup_flags |= LOOKUP_EMPTY;
-> +
-> +	if (fd_empty(dir))
-> +		return -EBADF;
-> +
-> +	if (copy_fsxattr_from_user(&fa, fsx))
-> +		return -EFAULT;
-> +
-> +	error = user_path_at(dfd, filename, lookup_flags, &filepath);
-> +	if (error)
-> +		return error;
-> +
-> +	error = mnt_want_write(filepath.mnt);
-> +	if (!error) {
-
-security_inode_setattr() should probably be called too.
-
-> +		error = vfs_fileattr_set(file_mnt_idmap(fd_file(dir)),
-> +					 filepath.dentry, &fa);
-> +		mnt_drop_write(filepath.mnt);
-> +	}
-> +
-> +	path_put(&filepath);
-> +	return error;
-> +}
-> diff --git a/fs/ioctl.c b/fs/ioctl.c
-> index 638a36be31c14afc66a7fd6eb237d9545e8ad997..dc160c2ef145e4931d625f1f93c2a8ae7f87abf3 100644
-> --- a/fs/ioctl.c
-> +++ b/fs/ioctl.c
-> @@ -558,8 +558,7 @@ int copy_fsxattr_to_user(const struct fileattr *fa, struct fsxattr __user *ufa)
->  }
->  EXPORT_SYMBOL(copy_fsxattr_to_user);
->  
-> -static int copy_fsxattr_from_user(struct fileattr *fa,
-> -				  struct fsxattr __user *ufa)
-> +int copy_fsxattr_from_user(struct fileattr *fa, struct fsxattr __user *ufa)
->  {
->  	struct fsxattr xfa;
->  
-> @@ -646,6 +645,19 @@ static int fileattr_set_prepare(struct inode *inode,
->  	if (fa->fsx_cowextsize == 0)
->  		fa->fsx_xflags &= ~FS_XFLAG_COWEXTSIZE;
->  
-> +	/*
-> +	 * The only use case for special files is to set project ID, forbid any
-> +	 * other attributes
-> +	 */
-> +	if (!(S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode))) {
-> +		if (fa->fsx_xflags & ~FS_XFLAG_PROJINHERIT)
-> +			return -EINVAL;
-> +		if (!S_ISLNK(inode->i_mode) && fa->fsx_nextents)
-> +			return -EINVAL;
-> +		if (fa->fsx_extsize || fa->fsx_cowextsize)
-> +			return -EINVAL;
-> +	}
-> +
->  	return 0;
->  }
->  
-> diff --git a/include/linux/fileattr.h b/include/linux/fileattr.h
-
-[...]
+    Arnd
 
