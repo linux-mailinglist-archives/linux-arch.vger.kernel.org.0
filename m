@@ -1,55 +1,55 @@
-Return-Path: <linux-arch+bounces-10288-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10292-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 770E6A3F556
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 14:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 85622A3F57E
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 14:16:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2B4D423011
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 13:09:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 221FE16D2E8
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 13:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88966215786;
-	Fri, 21 Feb 2025 13:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB79212FA1;
+	Fri, 21 Feb 2025 13:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="INf48+qw"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="k4/RDLYA"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C4A20CCE7;
-	Fri, 21 Feb 2025 13:05:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C1721CFED;
+	Fri, 21 Feb 2025 13:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740143145; cv=none; b=rAq3lHLgkn6aNfGGfhP4mMLYSC3KUxmqLOQlRfp7C6N92yBwbAygNQ5QQ8sUZSsobTBeenbdL7wX/dMD6MT7EPjPK1uEmn7xGuMj9JXIC8LyiNPHWvhML/UxV1FTuAUNcoKU0E0ImKw0iqVHaVCuHf3J9L0tWeV3DdcLFvoFX+o=
+	t=1740143149; cv=none; b=jswJR7YwHCttk4ShGLEULPS5Iz+L8jTmQRBCi5BJV+aOgeA9e1rGvindYSGX8y3EET1YsHvSBap7jeNsDbhq/XAi4CANYmsS92yICFG1nw+SZJc8POAdLiIYXt6/98H14q+Nu+O1o/GlQIZTEqZO8wq7/vkbskZkcG380xHxP/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740143145; c=relaxed/simple;
-	bh=d/y3uD6NR6ku4wGAdC+kZEJU/mnBsqGv4nI8GEFhe/o=;
+	s=arc-20240116; t=1740143149; c=relaxed/simple;
+	bh=TWoEPqZJdrU1mXzfAYO1Lq0kOZR4MuybGWiavzem1YY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=J12YQ5n8M0hUfh0SyQrLugaEu1r+7eAUQTdXOClSuiQAkB2JsM9X7SnWkdaPjfPUxGlXIJSIIGyaLUCtdoYXje2nRqw+Xyk6RICSncjPz7wRZLQUdeVK6h5nNKQ2bdvSx97v2B725CqKp1tvYlbrgSMd/ZjYFnWe7BpnGoL8egQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=INf48+qw; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:CC; b=ZSke0kjc+p+aypUb5mYjoxK6lFsJwbDfQLtmJt/wwPQr6/KOC/JpO4yfR1hrf9rB6TGNR2/dN0J/8uwYnKqBDj6p56qGAog/gGag9i7BtQ7pl3TXviQ/f+tTH2kvqwJylgk9trouEWnvjd4jYItkZ1xXEqZU3PiG7Wb4C+BVMzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=k4/RDLYA; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L603lr016207;
-	Fri, 21 Feb 2025 13:02:52 GMT
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L603ls016207;
+	Fri, 21 Feb 2025 13:02:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hDfWtNTdbaSs92T18904n8pbiB3wRUppd+SKmscGAlk=; b=INf48+qwdFqvjkyp
-	hr9FZ0HQLyNg4hcmSyTZNhBw4yXREh3pOc0jXnfrkIo2KSet8sVR2NT+eMvstrd1
-	QgIClbFUMlhYyV+yOrPSSx84dqMVISE+v0x2ZkchXsZk72MZ9TgvGRGmx8AF8+54
-	wT64OU5DrVYBsD2bvtGe7zdA6esj3sY0s05oEQCJ6VIjL/+LkM8VAXvn7JianplY
-	qqJVRrKRyhBgdM6L/otz/CY4O63/6dzAi6e1yktYQ5sIp9uoV2GYQd2wcA2P4HXQ
-	KYlfDcMeFbK049HxNCeabb/d2EddFjgDD/5D+oJuDwGdMO2d6fCIUEXFGpNluzua
-	AtDIxw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44xku6scbv-1
+	julPx67IQ3FmBl4gwmVVCyKrnfGS063OMiD1KD32OCg=; b=k4/RDLYACQM644LC
+	fiklJgZI5EwoIby5+xay8N3TUAlaSmASI6qLRkxLhRMDhZHUsNkLVBQai1O79Hqi
+	AyYDWXdSmGYpEdUSmb7xsD2Jb1LPVNH8TxdQCjmI1aSQalyhqcaCtmJ5E/aE6rPg
+	vpJYnj71GAzNgAPuD18KUAi51lCizP/r/evdR8lOUGF2uNprDyZXriQuBvhPMxtR
+	FSHKHewlb4OH9uXSA8S3e62Z+Ex14rpdxzZiR/Vmng3eHoEXGkFakDG49rAUf02a
+	L8SsmxfrJuc2yZxuZGwXiL5gCM+W1Dr/g48UCwmFG7BIb4Ugh935lyA+N5dOtLK6
+	C95jrg==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44xku6scbx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 13:02:36 +0000 (GMT)
+	Fri, 21 Feb 2025 13:02:52 +0000 (GMT)
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51LD2YTj015730
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51LD2ZUa020247
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Fri, 21 Feb 2025 13:02:35 GMT
 Received: from hu-zijuhu-lv.qualcomm.com (10.49.16.6) by
@@ -57,9 +57,9 @@ Received: from hu-zijuhu-lv.qualcomm.com (10.49.16.6) by
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1544.9; Fri, 21 Feb 2025 05:02:34 -0800
 From: Zijun Hu <quic_zijuhu@quicinc.com>
-Date: Fri, 21 Feb 2025 05:02:12 -0800
-Subject: [PATCH *-next 07/18] wifi: mac80211: Remove needless return in
- void API _ieee80211_hw_set()
+Date: Fri, 21 Feb 2025 05:02:13 -0800
+Subject: [PATCH *-next 08/18] net: sched: Remove needless return in void
+ API qdisc_watchdog_schedule_ns()
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250221-rmv_return-v1-7-cc8dff275827@quicinc.com>
+Message-ID: <20250221-rmv_return-v1-8-cc8dff275827@quicinc.com>
 References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
 In-Reply-To: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -124,38 +124,38 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gFqBDpJVue8M_4g_3XIvrl5JrEzUCHjB
-X-Proofpoint-GUID: gFqBDpJVue8M_4g_3XIvrl5JrEzUCHjB
+X-Proofpoint-ORIG-GUID: FYztKemt9Tqs0W9uKA0g8HoIcTexhhme
+X-Proofpoint-GUID: FYztKemt9Tqs0W9uKA0g8HoIcTexhhme
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-21_04,2025-02-20_02,2024-11-22_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 impostorscore=0 suspectscore=0 clxscore=1011
- mlxscore=0 bulkscore=0 phishscore=0 mlxlogscore=743 lowpriorityscore=0
+ malwarescore=0 spamscore=0 impostorscore=0 suspectscore=0 clxscore=1015
+ mlxscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2502100000 definitions=main-2502210096
 
-Remove needless 'return' in void API _ieee80211_hw_set()
-since both the API and __set_bit() are void functions.
+Remove needless 'return' in void API qdisc_watchdog_schedule_ns() since
+both the API and qdisc_watchdog_schedule_range_ns() are void functions.
 
 Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
 ---
- include/net/mac80211.h | 2 +-
+ include/net/pkt_sched.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/mac80211.h b/include/net/mac80211.h
-index c3ed2fcff8b7..3a654e9f41db 100644
---- a/include/net/mac80211.h
-+++ b/include/net/mac80211.h
-@@ -3091,7 +3091,7 @@ static inline bool _ieee80211_hw_check(struct ieee80211_hw *hw,
- static inline void _ieee80211_hw_set(struct ieee80211_hw *hw,
- 				     enum ieee80211_hw_flags flg)
+diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+index d7b7b6cd4aa1..b4d9ea54d947 100644
+--- a/include/net/pkt_sched.h
++++ b/include/net/pkt_sched.h
+@@ -78,7 +78,7 @@ void qdisc_watchdog_schedule_range_ns(struct qdisc_watchdog *wd, u64 expires,
+ static inline void qdisc_watchdog_schedule_ns(struct qdisc_watchdog *wd,
+ 					      u64 expires)
  {
--	return __set_bit(flg, hw->flags);
-+	__set_bit(flg, hw->flags);
+-	return qdisc_watchdog_schedule_range_ns(wd, expires, 0ULL);
++	qdisc_watchdog_schedule_range_ns(wd, expires, 0ULL);
  }
- #define ieee80211_hw_set(hw, flg)	_ieee80211_hw_set(hw, IEEE80211_HW_##flg)
  
+ static inline void qdisc_watchdog_schedule(struct qdisc_watchdog *wd,
 
 -- 
 2.34.1
