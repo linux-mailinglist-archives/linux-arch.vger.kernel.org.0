@@ -1,117 +1,143 @@
-Return-Path: <linux-arch+bounces-10313-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10314-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E6EBA3FFD0
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 20:37:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83CCAA40037
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 21:00:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57D0C17EE17
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 19:37:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C6B13BCCC6
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 19:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480071FF1A9;
-	Fri, 21 Feb 2025 19:37:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8C8253B4C;
+	Fri, 21 Feb 2025 19:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="nXuh8rCG"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="LlJcvvQO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2E11D7E50;
-	Fri, 21 Feb 2025 19:37:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446EA1FF1BD;
+	Fri, 21 Feb 2025 19:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740166631; cv=none; b=WruvxAK7FFkF9clZ5vCpWqlkXLGqmWvJRta3G6WMko6FDE8DC3cYwlcLUGMYh9rhkQ5BVpDzGJdzH4SxSnypEQCVg+YousihfUjC4mXWfdg2yR87cEvdQy4AmBJVSl7pAyI/JX+5BosqcnDQhgKgxE4Y3WIMpXa6CTjY/AMAt8E=
+	t=1740167804; cv=none; b=h6adcWImPGrby3RGQA/TyoorFLG4mtRq6kwLbMIphvxAxfWP6f11Pe84SuckCt0Y1Fe2a3cPf2lBKRQTpJYMcIlWvkKS9Qi0A9OBrHFlFxtOqDqJkym3C/OHl2uoid7DNwb+jr4RwEBEzLP+Ojw2eOwyya0g2Z9H/bquDHv7VR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740166631; c=relaxed/simple;
-	bh=zDxTSXduPQXA4xHKPlyHXnfxQxWR7o6zkvl4FTCCsPY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dmMWGoXoXEY6oa8NJhs9jrpdSplL+kDw7q2ViLlL0fllnhUaeKbbPldHibjk69kcp+JDhLIgdDjn64HeK+mChoNMUEZPIZpmWG6GvWoWFC8XUaYIrxRjYVJtiUslNOCSHXFSHRhinOh8y343oOmD50Fr5SuOr26mT0jwz/8vYhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=nXuh8rCG; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=zDxTSXduPQXA4xHKPlyHXnfxQxWR7o6zkvl4FTCCsPY=;
-	t=1740166629; x=1741376229; b=nXuh8rCGqsfC3M2xAznPkwmoiPBWtC+d9yFk7989Wm+EiBe
-	cq6CGtatT5XGh/DqtDIy+UVkvnpDwSnALN0h3GIkDMzWpdgd0M5LrLl9kUwr0WoiJ2jv9rXYWI98t
-	BX94haLt4oatQhLfxjfHjJ8bLruAkrTbhAq3hnbNU5LBsY850740i8Yk2zyjzlGjCma/Q8f9c/yHY
-	4YT8TYd3DU76NDpemOfAkK2N1vbWMftzJ6EIK6LI8rw1hG1xmbpVS/h91s7ASEIGED99av4bwzot4
-	uPBPOv8Vz33cBJ18VPWaTfUWMohuHYnxweLYJFnPgprQtfISwoRrqINnv6hgqgDg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1tlYp2-00000005Y57-49wJ;
-	Fri, 21 Feb 2025 20:36:29 +0100
-Message-ID: <9af9413b7ab41c6b2db5f862d0fa50e9de279d67.camel@sipsolutions.net>
-Subject: Re: [PATCH *-next 00/18] Remove weird and needless 'return' for
- void APIs
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Stephen Hemminger <stephen@networkplumber.org>, Zijun Hu
-	 <quic_zijuhu@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Will Deacon	
- <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Andrew
- Morton	 <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>, Peter
- Zijlstra	 <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, Thomas
- Gleixner	 <tglx@linutronix.de>, Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Danilo Krummrich	 <dakr@kernel.org>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski	 <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman	 <horms@kernel.org>, Jamal Hadi Salim
- <jhs@mojatatu.com>, Cong Wang	 <xiyou.wangcong@gmail.com>, Jiri Pirko
- <jiri@resnulli.us>, Jason Gunthorpe	 <jgg@ziepe.ca>, Leon Romanovsky
- <leon@kernel.org>, Linus Walleij	 <linus.walleij@linaro.org>, Bartosz
- Golaszewski <brgl@bgdev.pl>, Lee Jones	 <lee@kernel.org>, Thomas Graf
- <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,  Marek Szyprowski
- <m.szyprowski@samsung.com>, Robin Murphy <robin.murphy@arm.com>, Miquel
- Raynal	 <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>,
- Vignesh Raghavendra <vigneshr@ti.com>, Zijun Hu <zijun_hu@icloud.com>,
- linux-arch@vger.kernel.org, 	linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, 	iommu@lists.linux.dev,
- linux-mtd@lists.infradead.org
-Date: Fri, 21 Feb 2025 20:36:26 +0100
-In-Reply-To: <20250221110042.2ec3c276@hermes.local>
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
-	 <20250221110042.2ec3c276@hermes.local>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1740167804; c=relaxed/simple;
+	bh=cK5ZkX8ixBppP4FPmLCm8+Ao5vnaEUpf9lYimO9zlWk=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=evF4/UKic0vp9JksYUZMN2StsATGaW7m+KBYbSc+m8V1sdZoWUXGDcV3FOe5Dd74o9wz19hC6CfQMzCCUx47cjUPpCt9iXZ6zEXGe8l7Kw1wrqk8/cuPZxmXM8K6GhJHcianmRm22Sg0fLaswgKmkhEsQ4nKVsjNvXhZBu758VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=LlJcvvQO; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+	by linux.microsoft.com (Postfix) with ESMTPSA id B6B57204E5BC;
+	Fri, 21 Feb 2025 11:56:42 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B6B57204E5BC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1740167802;
+	bh=DXWUYYhpDF9cbvi+OP+J5thVCYC8+IMsDBUcsoZlY8E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LlJcvvQOgZJVX/Q2UUmFgjRVcib/5LYeSbCdU4Zbdhu4HAApNkZgNkHXz9Jrx1nZ6
+	 MryWgCW5svmFC9BEHwNZRdQGNVrTMSnT0pNorXrYQvcVL52PRKF8rWic1hWlsT8hP/
+	 b6O/RTJ2oaU7gllhyjwO7VBYtZBjNVSNyrI+fOKM=
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+To: linux-hyperv@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	iommu@lists.linux.dev,
+	mhklinux@outlook.com,
+	eahariha@linux.microsoft.com,
+	mukeshrathor@microsoft.com
+Cc: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	daniel.lezcano@linaro.org,
+	joro@8bytes.org,
+	robin.murphy@arm.com,
+	arnd@arndb.de,
+	jinankjain@linux.microsoft.com,
+	muminulrussell@gmail.com,
+	skinsburskii@linux.microsoft.com
+Subject: [PATCH v2 0/3] Introduce CONFIG_MSHV_ROOT for root partition code
+Date: Fri, 21 Feb 2025 11:56:32 -0800
+Message-Id: <1740167795-13296-1-git-send-email-nunodasneves@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-malware-bazaar: not-scanned
 
-On Fri, 2025-02-21 at 11:00 -0800, Stephen Hemminger wrote:
->=20
-> Is this something that could be done with a coccinelle script?
->=20
+Running in the root partition is a unique and specialized case that
+requires additional code. CONFIG_MSHV_ROOT allows Hyper-V guest kernels
+to exclude this code, which is important since significant additional code
+specific to the root partition is expected to be added over time.
 
-Almost enough to do this:
+To do this, change hv_root_partition to be a function which is stubbed out
+to return false if CONFIG_MSHV_ROOT=n, and don't compile hv_proc.c at all,
+stubbing out those functions with inline versions.
 
-@@
-identifier fn;
-expression E;
-@@
-void fn(...)
-{
-...
--return
-E;
-}
+Store the partition type (guest or root) in an enum hv_curr_partition_type,
+which can be extended beyond just guest and root partition.
 
+While at it, introduce hv_result_to_errno() to convert Hyper-V status codes
+to regular linux errors. This is useful because the caller of a hypercall
+helper function (such as those in hv_proc.c) usually can't and doesn't
+interpret the Hyper-V status, so it is better to convert it to an error code
+and reduce the possibility of misinterpreting it. This also alows the stubbed
+versions of the hv_proc.c functions to just return a linux error code.
 
-It takes a long time to run though, and does some wrong things as well:
-if the return is in the middle of the function, it still matches and
-removes it erroneously.
+Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+---
+Changes in v3:
+* Fix a typo [Easwar Hariharan]
+* Fix ret being initialized to HV_STATUS_SUCCESS in some hypercall helpers
+  [Michael Kelley]
+* Fix CONFIG_MSHV_ROOT being used in patch 2, before it is defined [Michael
+  Kelley]
+* Shorten hv_current_partition_type to hv_curr_partition_type [Mukesh Rathor]
 
-johannes
+Changes in v2:
+* Add patch to convert hypercall statuses to linux error codes [Easwar
+  Hariharan]
+* While at it, split the original patch into two logical pieces, one to change
+  hv_root_partition into a function, and one to introduce MSHV_CONFIG_ROOT
+* Improve the clarity of and add an error message to
+  hv_identify_partition_type() [Easwar Hariharan] [Michael Kelley]
+* Better explain *why* the patches are useful, in the commit messages [Michael
+  Kelley]
+* Add a Kconfig comment explaining why PAGE_SIZE_4KB is needed [Michael Kelley]
+* Minor style and typo fixes
+
+Nuno Das Neves (3):
+  hyperv: Convert hypercall statuses to linux error codes
+  hyperv: Change hv_root_partition into a function
+  hyperv: Add CONFIG_MSHV_ROOT to gate root partition support
+
+ arch/arm64/hyperv/mshyperv.c       |  2 +
+ arch/x86/hyperv/hv_init.c          | 10 ++---
+ arch/x86/kernel/cpu/mshyperv.c     | 24 +----------
+ drivers/clocksource/hyperv_timer.c |  4 +-
+ drivers/hv/Kconfig                 | 16 +++++++
+ drivers/hv/Makefile                |  3 +-
+ drivers/hv/hv.c                    | 10 ++---
+ drivers/hv/hv_common.c             | 69 +++++++++++++++++++++++++++---
+ drivers/hv/hv_proc.c               | 10 ++---
+ drivers/hv/vmbus_drv.c             |  2 +-
+ drivers/iommu/hyperv-iommu.c       |  4 +-
+ include/asm-generic/mshyperv.h     | 40 ++++++++++++++---
+ 12 files changed, 139 insertions(+), 55 deletions(-)
+
+-- 
+2.34.1
+
 
