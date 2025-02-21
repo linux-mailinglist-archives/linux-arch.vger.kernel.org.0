@@ -1,65 +1,65 @@
-Return-Path: <linux-arch+bounces-10278-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10284-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54C58A3F4EF
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 14:07:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52944A3F524
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 14:10:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE9C2422E79
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 13:05:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC7C618970C1
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 13:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A182B20D4E4;
-	Fri, 21 Feb 2025 13:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2CC22147E3;
+	Fri, 21 Feb 2025 13:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CUwUZJsl"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aygLxPOV"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBC6111A8;
-	Fri, 21 Feb 2025 13:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 107FB212B10;
+	Fri, 21 Feb 2025 13:05:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740143136; cv=none; b=dzyTPBpFCdvFykiUwoV1456OXis0K0wBXUj/d92lwJceLw+r2OattfR7pxnktMkKGlhvaSHXRRbSKXmq7Q4kgGGyKnoQX9PYSTuDdLW5JXkzCy3Pq4hnnxGytAWAvdSlG68nKx8az34geFRQqD5aP+tcenUYqLI2Xc9WinnXgZw=
+	t=1740143143; cv=none; b=ZBFB22A+7LwJhDrEkQTCLgutBsZa1fi9TlduPdfK52sT0QWmoNKDA02wojNA+IVfICdm4pwPG51uSdrdFDg89oTuvLZ1cO2+/oBUvC+zC/szdnB76juTXa8H6ysyF/+QWgFlKgMOkGmKJXaYewKSI88vtvkxJ7ZEXxmVott+SxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740143136; c=relaxed/simple;
-	bh=EhT2PNH7LIbQVW1etTbZoQcaNDfVTa2NpNh+myh3094=;
+	s=arc-20240116; t=1740143143; c=relaxed/simple;
+	bh=yNFaA19p8h62HDfV3ktVVtiKNLTkg+tmyGZrvACRMPQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=f60xtfp9zE83VWdKArBu9xwd8j8TyoYMtlnhuzQBjqtP3n++lxAiH5wcjea2O4UgtrA88vAVH8xatrltkGOOx/1OsEDwpTDfR4RquwjyapP+9EVeKTgeIQTMlg9zadfC9CUcB9pO7qz1ghNbbnDL77MXnqGvwH2MYO9AENx89WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CUwUZJsl; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:To:CC; b=tba4tdf4d4JW65gEShm7edNS6t2ldYbMTZlANQgmnfhGSJCjmhKzvchZtJBYfHvTyqgCEw8RsWAytYFkGAk7nWERfFfMwcyUk+BD7eNjuRSVueUbU0XyneH4FSrIZxwwQzj2mvdqOiA+SVcz6pconZHzN1L5HFQHycqnJ/SqPBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aygLxPOV; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L6ILqX018822;
-	Fri, 21 Feb 2025 13:02:40 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L5jYZB011610;
+	Fri, 21 Feb 2025 13:02:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	VXe5BH0CLWb34FDh3mku8unL00+Sgymv2t8WSQkUd70=; b=CUwUZJslP/4ngj7Y
-	gXYIMQOVcCgLwUNeDGzGlJRCS9L8HcSKvayznht2VrEd/lL1fg3hOBL361D7oM02
-	2qGwYY8Gpl4eBINWBd2Gzl9UWVpDjia4Fek9Y31Tn7wB5reYP+eENeh3FyX3rBvi
-	rJ0mQFyxs61ir3KJiLOV0jjvZ22Hl1Z5qwxKnVSjbJlvZezOJdlxHJc9cskZSeRA
-	L6q7Tnsox4XAYrdkKjBV9TLHzwj2FvwxhbHJyr4pUEgTgpQtFqdSFXsb3eVk4nH4
-	XGWv6G+MiGUMIj7hZ/pJoP+6UUof5bbVDgNfdMiSaMyBgM3+Hrf2JPK941Dg4mq0
-	RzN1dA==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44xm3rhaa6-1
+	W9lWiGuz5v5DWCpzFH3ubQp4f2L1ON220YOPxvOm0bw=; b=aygLxPOVSd2lX+w9
+	h/xFsEcnsqDBnLt77+Wy86i4ABEZZPZP1ySldnNXFvJPEm4KJYtxu9KnNoD7ds8j
+	+W2AoyBzOpmvQULDDQSB+1/UAHPxLyIYQeLUnMh7lfY6UZNtIYpjSSa/b8iIJO6S
+	/Fszyh5Hwk/snIgr/Bisr3fmiuQB6PnKQp05aGV25eG0GkqOboFvB9hrrMzK8OpT
+	NJVyxa9yhbaDnVSQFj4kOqYGqLSJqKvQret8B2rZ1suNRrCMcaw1FLplzNo50shS
+	3TLeXJ1IdzVpNrmAlhz/FBC/EUT4KdqKibCKM6sJfhgPS/2Or2ihfgocxpFQ4rBB
+	vlTaxQ==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44vyy3syrx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 13:02:40 +0000 (GMT)
+	Fri, 21 Feb 2025 13:02:44 +0000 (GMT)
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51LD2cra020298
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51LD2doK016899
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 13:02:38 GMT
+	Fri, 21 Feb 2025 13:02:39 GMT
 Received: from hu-zijuhu-lv.qualcomm.com (10.49.16.6) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 21 Feb 2025 05:02:37 -0800
+ 15.2.1544.9; Fri, 21 Feb 2025 05:02:38 -0800
 From: Zijun Hu <quic_zijuhu@quicinc.com>
-Date: Fri, 21 Feb 2025 05:02:17 -0800
-Subject: [PATCH *-next 12/18] siox: Remove needless return in void API
- siox_driver_unregister()
+Date: Fri, 21 Feb 2025 05:02:18 -0800
+Subject: [PATCH *-next 13/18] gpiolib: Remove needless return in two void
+ APIs
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250221-rmv_return-v1-12-cc8dff275827@quicinc.com>
+Message-ID: <20250221-rmv_return-v1-13-cc8dff275827@quicinc.com>
 References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
 In-Reply-To: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -124,38 +124,51 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: EBB6WKKcc5YXKjfEU7ajz-2xvo9w9S3v
-X-Proofpoint-GUID: EBB6WKKcc5YXKjfEU7ajz-2xvo9w9S3v
+X-Proofpoint-ORIG-GUID: f8nwErMqSFEHaDG-yzC1tOZaMKudrOhe
+X-Proofpoint-GUID: f8nwErMqSFEHaDG-yzC1tOZaMKudrOhe
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-21_04,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=761 phishscore=0 bulkscore=0 lowpriorityscore=0
- impostorscore=0 malwarescore=0 priorityscore=1501 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502210095
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 mlxlogscore=713 bulkscore=0 mlxscore=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 clxscore=1015
+ malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2502100000 definitions=main-2502210096
 
-Remove needless 'return' in void API siox_driver_unregister()
-since both the API and driver_unregister() are void functions.
+Remove needless 'return' in the following void APIs:
+
+gpio_set_value_cansleep()
+gpio_set_value()
+
+Since both the API and callee involved are void functions.
 
 Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
 ---
- include/linux/siox.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/gpio.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/siox.h b/include/linux/siox.h
-index 6bfbda3f634c..31a20ba03d3a 100644
---- a/include/linux/siox.h
-+++ b/include/linux/siox.h
-@@ -70,7 +70,7 @@ static inline int siox_driver_register(struct siox_driver *sdriver)
- 
- static inline void siox_driver_unregister(struct siox_driver *sdriver)
+diff --git a/include/linux/gpio.h b/include/linux/gpio.h
+index 6270150f4e29..c1ec62c11ed3 100644
+--- a/include/linux/gpio.h
++++ b/include/linux/gpio.h
+@@ -91,7 +91,7 @@ static inline int gpio_get_value_cansleep(unsigned gpio)
+ }
+ static inline void gpio_set_value_cansleep(unsigned gpio, int value)
  {
--	return driver_unregister(&sdriver->driver);
-+	driver_unregister(&sdriver->driver);
+-	return gpiod_set_raw_value_cansleep(gpio_to_desc(gpio), value);
++	gpiod_set_raw_value_cansleep(gpio_to_desc(gpio), value);
  }
  
- /*
+ static inline int gpio_get_value(unsigned gpio)
+@@ -100,7 +100,7 @@ static inline int gpio_get_value(unsigned gpio)
+ }
+ static inline void gpio_set_value(unsigned gpio, int value)
+ {
+-	return gpiod_set_raw_value(gpio_to_desc(gpio), value);
++	gpiod_set_raw_value(gpio_to_desc(gpio), value);
+ }
+ 
+ static inline int gpio_to_irq(unsigned gpio)
 
 -- 
 2.34.1
