@@ -1,181 +1,345 @@
-Return-Path: <linux-arch+bounces-10310-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10311-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DE80A3FF36
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 20:01:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F289EA3FF66
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 20:11:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBF3219C4728
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 19:01:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90A12705838
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 19:11:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E3B252913;
-	Fri, 21 Feb 2025 19:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26FAB250BE2;
+	Fri, 21 Feb 2025 19:10:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="UNYvQFMm"
+	dkim=pass (2048-bit key) header.d=dilger-ca.20230601.gappssmtp.com header.i=@dilger-ca.20230601.gappssmtp.com header.b="n0MEAhqx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C649250BE2
-	for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2025 19:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2932512DA
+	for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2025 19:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740164449; cv=none; b=Na/luswMlfxHNPOkA0UCUy2NlEGnObvFoaFxz8gk5AUMY507leetqLCOjq7uq3M+VmLkSSfWTzsOtXXV6tvvJ99BvGabBlCtNS8WjxI5ErqVMYtAI92RXfhGuAAvF9iE8zIe8DJTm9gdO9H90epb5Rq3mmwRMgkgzhYtBnxzmz4=
+	t=1740165051; cv=none; b=jVerzyJUKtvpoaYJrHRZv+g9XIc27A2qlMpBsBlwsGSf0L3JZ/fFL0CFZKkaKfbUkGWLb5sA6y6ow6X9TBSLm4PuX9l/XnShbEY02g+PnKw35bTR33dXkZFi7YBuTjjAWMVwYNKbpDPxmwftEqA3Jn8Q7QYnpIqf71tfZRBonSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740164449; c=relaxed/simple;
-	bh=8DcTK+BWqvLFgfUlFyhU8LrkRaYzJUE29H3MUIQ1fWs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=maQKEAtpx4PgCdgH5mEgPhwzPFvm+utKa/hKdsIgZXwLeGbKt0BRK3RGQ3L3h5NRl/OwCW22ehxNkq/cj/9wHfSGIucojaV4YdXg+gmJoyT49jrNDYpWrzcUWP+hYQTzpIPsQHQ+yPTuMCmcnogPAuiuR94jYhcTa6WF0JqtNvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=UNYvQFMm; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-220f4dd756eso51343585ad.3
-        for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2025 11:00:46 -0800 (PST)
+	s=arc-20240116; t=1740165051; c=relaxed/simple;
+	bh=yI3dmhSyYiDSIMoxMJSTIeV5baV544HSR0i+ct4QndM=;
+	h=From:Message-Id:Content-Type:Mime-Version:Subject:Date:
+	 In-Reply-To:Cc:To:References; b=bQ3eRqOVwl9Nv27I3GA03V/nIt4w6L6W4Oy64BiiiYcyHWUfRDVf9aleE7EOG9LKju7THH8xUuM9hHq8P5PE5DFxQabKqpZeurJNVrQZFNWxtT6pMJnJ24uJorKqOM27JIxnpoZ5Gbgum6J3fkrpgxjF/P0NTJDKdIq5pzPk+nI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dilger.ca; spf=pass smtp.mailfrom=dilger.ca; dkim=pass (2048-bit key) header.d=dilger-ca.20230601.gappssmtp.com header.i=@dilger-ca.20230601.gappssmtp.com header.b=n0MEAhqx; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dilger.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dilger.ca
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2210d92292eso75869925ad.1
+        for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2025 11:10:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1740164445; x=1740769245; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=77hh0wQ+sFBBrkK6MEd/a6yvUwrcItGhllYO30mC8s0=;
-        b=UNYvQFMm8ipUKK4diYQfDub/mJ3b9O2f8Chy60VevlYCmcNPan3W66AyRVIA6wmHxj
-         sEdXQvtj4pUx/R+o/c+9Zmw89vLM6qGHXoczVYe/kus4+VnTjeJqo+ISOq5INGRV0add
-         81hc29lvOOsp3WQW7s36p2Duld12MGGM3TexmriVIleBupxJSOy6Al3Ql+53xA39jkAm
-         tQzBJ5C2lr01f30oCQlgv9W7TdqF81kI7Go8YQ7NMuL+vxuNhMzx0DOGJQ7rvDh4FUnV
-         XCi9V8cVRDRleYhP/B6LzIiZc5tevohGrxttxwEdHxmKo7ox8fUQiKFYEXmpgPzY9T2p
-         XsfQ==
+        d=dilger-ca.20230601.gappssmtp.com; s=20230601; t=1740165047; x=1740769847; darn=vger.kernel.org;
+        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o8NE366pxsly7loJXwNdcaLiS4OyPKL0PK8UxThxSJc=;
+        b=n0MEAhqx2+hZ5bnEAkZLA1VCTkn4+8zG35idfs/IH1Ll4J4TpIgImdm5kSMQ7rq/gf
+         KPA3N2AA+snJ2z24fFuMpVtJeMzHX+GlD+nB5O0bvxxJCWGbBQ4+RYlml1orW6p3OggR
+         CO9W41yFjNEB7Gw3GBV2bMR7QB+KD/Cr49Tq3al7Ahfagx5oRTlD6Cq+bctOZ4q4LTvl
+         mvG5kT/JGmagjCQ7KyOstYqhW5E35HM50MkAoBBRON0qRI/eR3ckko9tTSr80X46LeEf
+         ZXlbzdnlcdbxg0yRADs3sPRh2Hn8wbaMcM6my938xOLTqGqJ+W+otj0T4/8L8dSsidrB
+         TtEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740164445; x=1740769245;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=77hh0wQ+sFBBrkK6MEd/a6yvUwrcItGhllYO30mC8s0=;
-        b=U2+gsCIcZQlLNt2rJNGENBU6m/6mLAtPp+ld+sQEQOOqR1fEumU1YoyXv9/Sx9O/C/
-         3SPolePQSNVzSiRB9A7lhZ6gseZFHTsp0F8JQwkNIAEvHaYtoiayYqozHI8CZpav4sge
-         Ei5pFMu8ew21cfZbD5/GBaEpEyuWu4ctdHZmTq8uumT4OuT8AwiU7t9TP76qlcEwE6SK
-         b4RvS1ha6i8vGP1CcraguX7IkRgrKfJ7c+DME/gmPK2E8fVvqgasp4cTGvdY+wb4u3I/
-         AbcUO7aqNKGL8gUgxpjDHH8I129UpT94a/45OTHRv9gjAVrJuMlzqTY/Fte9/1xLb/n2
-         aTTw==
-X-Forwarded-Encrypted: i=1; AJvYcCXKcqUu6CmX/nMoZmZVufT7S3VK86xQBxUH+lyKHZHWSQpsxa1Yd6v1orxuncDoPaCzXYA+1RYAEm52@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ1bjayjifqoy5heK8ESTFbYbWbX5LshcsLE+Nj1F77Qd2wVxj
-	K4IOBKOpmz4bWkPcoAZN+lPsL9FPOjGj1/8WXTrgcuh+0Km3bxM11ZUXmyC44tU=
-X-Gm-Gg: ASbGncuY+MQoAVw+1jdGraUwTBNYvuFHa+cv8dN8CV0MeOhsiZtZ3u3u64AXYHBIx/y
-	0L0FhuMpihlERcaPudh9zMS9TdMXXpG04S7qbq0/D8VbnaFy9t6UfhCzg0tz3GIWbDpPZsFlwQN
-	ce92/bU6JW2GHULUXfhY5Q66rALfyN2dmrT1/f2zS0oG9nW2otz9Cda//kH+TsdwzSNrY90D/jg
-	PIP+kTVDfjg/6Ern2beHX71pMkqXmPNDKPwNsq5ekTXTjloDcZ65FuJMHGBpkzgyatyywEKn6FZ
-	ZqPy43hf2eBwLCBp7NcXrosd6V0BoGt7R7DWrLZIGxX6o39DCSX5JeBOUrBuxhv5ROJWpp8gVY0
-	F1H8=
-X-Google-Smtp-Source: AGHT+IGGJurj1ywGFGfMqLad+W4V0w/HWPMlDvnZ5WiNoOtzbXCiXiC9jiI+n/maSmmLogJdgVe5uw==
-X-Received: by 2002:a17:903:2346:b0:21f:6fb9:9299 with SMTP id d9443c01a7336-2219ff5e7c8mr68299995ad.27.1740164445571;
-        Fri, 21 Feb 2025 11:00:45 -0800 (PST)
-Received: from hermes.local (204-195-96-226.wavecable.com. [204.195.96.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d5364676sm141352715ad.82.2025.02.21.11.00.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 11:00:45 -0800 (PST)
-Date: Fri, 21 Feb 2025 11:00:42 -0800
-From: Stephen Hemminger <stephen@networkplumber.org>
-To: Zijun Hu <quic_zijuhu@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Will Deacon
- <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Andrew
- Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>, Peter
- Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, Thomas
- Gleixner <tglx@linutronix.de>, Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>, "Rafael J. Wysocki"
- <rafael@kernel.org>, "Danilo Krummrich" <dakr@kernel.org>, Eric Dumazet
- <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Johannes Berg
- <johannes@sipsolutions.net>, "Jamal Hadi Salim" <jhs@mojatatu.com>, Cong
- Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>, Jason
- Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, "Bartosz Golaszewski" <brgl@bgdev.pl>, Lee
- Jones <lee@kernel.org>, Thomas Graf <tgraf@suug.ch>, Christoph Hellwig
- <hch@lst.de>, Marek Szyprowski <m.szyprowski@samsung.com>, Robin Murphy
- <robin.murphy@arm.com>, "Miquel Raynal" <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Zijun Hu <zijun_hu@icloud.com>, <linux-arch@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
- <linux-crypto@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-wireless@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
- <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
- <iommu@lists.linux.dev>, <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH *-next 00/18] Remove weird and needless 'return' for
- void APIs
-Message-ID: <20250221110042.2ec3c276@hermes.local>
-In-Reply-To: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
+        d=1e100.net; s=20230601; t=1740165047; x=1740769847;
+        h=references:to:cc:in-reply-to:date:subject:mime-version:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o8NE366pxsly7loJXwNdcaLiS4OyPKL0PK8UxThxSJc=;
+        b=jOXsqBqp1cHsrARaIkZfZlEGECwZuiUbzr+hg6OctbyFT0HPWpLsu0Zz8PvO1LJIxU
+         WpIJSJmIVPewPgfpJU1evwoDUlM4pNMvuMQKlGeSVN7Pn0RRYLwXNC+nh29Datd9efx+
+         Z25MLlWydt8bzYtYki4OeIuLJUaIGU0l4liJUGlYFlX25u/AYL3WkM2aj4p7alD1nHBR
+         UqjWv5NdPCPUMVAUiDF7qJ+Pl1stYiKN/2w5Xy+yepHclk6WsLB9GhGMKg4UPpJo6XOI
+         aPhwqXW400Q480JMEx84Y3PElhayjCiZnwxel5T7VJG/E4Xn+I6RUieub8KhB6GYWFK2
+         +n2w==
+X-Forwarded-Encrypted: i=1; AJvYcCViwiLt/dKCRbEGF0MCW6+D0l1LcIvHBtq8zLvxQokDgjP7WZSzNEHmWuw+m7gpXqivFgXLpvI7p9td@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8zU1yfXBA2GhdELb6u4CML6ULhVTJIELVL/E3Yc4z2tW7sMrE
+	Wae9XzfC+11GfngGoSYkwQvQTSuJWtCmt08fMKtdo0gBeeCbjqBurvKFbYh1jTo=
+X-Gm-Gg: ASbGncuZUx9p8gSwj++Pen4qtJocexZB1B1xC8+NnQAXeZvkWD9AIa7aV8yd41QujqP
+	rcsAPaxRTYQWFO4ZEHiQ3gj0QSzPfCmiMwk04sqMBRSU+v/9ZUzLmL3U7/mjUbLzmLoKJVqc6Vz
+	DO/bKZYJ9uXjsJNS71SFJB3XEX6ac7/8bB68u4cL/Q/iAizne4IaLCJ8DM5om1CRMbr5ykB8VyX
+	ZivkgUmxvAdYDaReiFZsGshN0Kweij5AiJg9wgQTKNcwL3BzNvI10M1tD/WAGqPsgRKChdEoZjP
+	IV3Dccz37HZmgK44WYeyrNSUtc6bgnSRIvuWfEslBqxjJ/a2gZ6D3m5nVz0JorI51t39TDX+bqs
+	=
+X-Google-Smtp-Source: AGHT+IGsm3cz8CMkWhqPkYHx4pUzXJeTLyxXX2E1Qoyi6Uk1q2t2thGJdA7X/AwDgfRGQ2QCuwoWdg==
+X-Received: by 2002:a05:6a20:8426:b0:1ee:6b16:983e with SMTP id adf61e73a8af0-1eef3c9ab1bmr8652308637.11.1740165047510;
+        Fri, 21 Feb 2025 11:10:47 -0800 (PST)
+Received: from cabot.adilger.int (S01068c763f81ca4b.cg.shawcable.net. [70.77.200.158])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-adb58618479sm12546754a12.33.2025.02.21.11.10.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 21 Feb 2025 11:10:46 -0800 (PST)
+From: Andreas Dilger <adilger@dilger.ca>
+Message-Id: <452C3BBF-0EF5-4B13-9D06-A94DF239EB03@dilger.ca>
+Content-Type: multipart/signed;
+ boundary="Apple-Mail=_D1D28E5B-2E34-4F06-A340-A87EB42CD305";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
+Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
+Date: Fri, 21 Feb 2025 12:10:41 -0700
+In-Reply-To: <20250221181135.GW21808@frogsfrogsfrogs>
+Cc: Andrey Albershteyn <aalbersh@redhat.com>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Matt Turner <mattst88@gmail.com>,
+ Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Michal Simek <monstr@monstr.eu>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Naveen N Rao <naveen@kernel.org>,
+ Heiko Carstens <hca@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>,
+ Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>,
+ Andy Lutomirski <luto@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>,
+ Chris Zankel <chris@zankel.net>,
+ Max Filippov <jcmvbkbc@gmail.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>,
+ =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?utf-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Arnd Bergmann <arnd@arndb.de>,
+ linux-alpha@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org,
+ linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org,
+ linux-security-module@vger.kernel.org,
+ linux-api@vger.kernel.org,
+ linux-arch@vger.kernel.org,
+ linux-xfs@vger.kernel.org
+To: "Darrick J. Wong" <djwong@kernel.org>
+References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+ <20250221181135.GW21808@frogsfrogsfrogs>
+X-Mailer: Apple Mail (2.3273)
+
+
+--Apple-Mail=_D1D28E5B-2E34-4F06-A340-A87EB42CD305
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
+
+On Feb 21, 2025, at 11:11 AM, Darrick J. Wong <djwong@kernel.org> wrote:
+>=20
+> On Tue, Feb 11, 2025 at 06:22:47PM +0100, Andrey Albershteyn wrote:
+>> From: Andrey Albershteyn <aalbersh@redhat.com>
+>>=20
+>> Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
+>> extended attributes/flags. The syscalls take parent directory fd and
+>> path to the child together with struct fsxattr.
+>>=20
+>> This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
+>> that file don't need to be open as we can reference it with a path
+>> instead of fd. By having this we can manipulated inode extended
+>> attributes not only on regular files but also on special ones. This
+>> is not possible with FS_IOC_FSSETXATTR ioctl as with special files
+>> we can not call ioctl() directly on the filesystem inode using fd.
+>>=20
+>> This patch adds two new syscalls which allows userspace to get/set
+>> extended inode attributes on special files by using parent directory
+>> and a path - *at() like syscall.
+>>=20
+>> Also, as vfs_fileattr_set() is now will be called on special files
+>> too, let's forbid any other attributes except projid and nextents
+>> (symlink can have an extent).
+>>=20
+>> CC: linux-api@vger.kernel.org
+>> CC: linux-fsdevel@vger.kernel.org
+>> CC: linux-xfs@vger.kernel.org
+>> Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
+>> ---
+>> v1:
+>> =
+https://lore.kernel.org/linuxppc-dev/20250109174540.893098-1-aalbersh@kern=
+el.org/
+>>=20
+>> Previous discussion:
+>> =
+https://lore.kernel.org/linux-xfs/20240520164624.665269-2-aalbersh@redhat.=
+com/
+>>=20
+>> XFS has project quotas which could be attached to a directory. All
+>> new inodes in these directories inherit project ID set on parent
+>> directory.
+>>=20
+>> The project is created from userspace by opening and calling
+>> FS_IOC_FSSETXATTR on each inode. This is not possible for special
+>> files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
+>> with empty project ID. Those inodes then are not shown in the quota
+>> accounting but still exist in the directory. Moreover, in the case
+>> when special files are created in the directory with already
+>> existing project quota, these inode inherit extended attributes.
+>> This than leaves them with these attributes without the possibility
+>> to clear them out. This, in turn, prevents userspace from
+>> re-creating quota project on these existing files.
+>> ---
+>> Changes in v3:
+>> - Remove unnecessary "dfd is dir" check as it checked in =
+user_path_at()
+>> - Remove unnecessary "same filesystem" check
+>> - Use CLASS() instead of directly calling fdget/fdput
+>> - Link to v2: =
+https://lore.kernel.org/r/20250122-xattrat-syscall-v2-1-5b360d4fbcb2@kerne=
+l.org
+>> ---
+>> arch/alpha/kernel/syscalls/syscall.tbl      |  2 +
+>> arch/arm/tools/syscall.tbl                  |  2 +
+>> arch/arm64/tools/syscall_32.tbl             |  2 +
+>> arch/m68k/kernel/syscalls/syscall.tbl       |  2 +
+>> arch/microblaze/kernel/syscalls/syscall.tbl |  2 +
+>> arch/mips/kernel/syscalls/syscall_n32.tbl   |  2 +
+>> arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 +
+>> arch/mips/kernel/syscalls/syscall_o32.tbl   |  2 +
+>> arch/parisc/kernel/syscalls/syscall.tbl     |  2 +
+>> arch/powerpc/kernel/syscalls/syscall.tbl    |  2 +
+>> arch/s390/kernel/syscalls/syscall.tbl       |  2 +
+>> arch/sh/kernel/syscalls/syscall.tbl         |  2 +
+>> arch/sparc/kernel/syscalls/syscall.tbl      |  2 +
+>> arch/x86/entry/syscalls/syscall_32.tbl      |  2 +
+>> arch/x86/entry/syscalls/syscall_64.tbl      |  2 +
+>> arch/xtensa/kernel/syscalls/syscall.tbl     |  2 +
+>> fs/inode.c                                  | 75 =
++++++++++++++++++++++++++++++
+>> fs/ioctl.c                                  | 16 +++++-
+>> include/linux/fileattr.h                    |  1 +
+>> include/linux/syscalls.h                    |  4 ++
+>> include/uapi/asm-generic/unistd.h           |  8 ++-
+>> 21 files changed, 133 insertions(+), 3 deletions(-)
+>>=20
+>=20
+> <cut to the syscall definitions>
+>=20
+>> diff --git a/fs/inode.c b/fs/inode.c
+>> index =
+6b4c77268fc0ecace4ac78a9ca777fbffc277f4a..b2dddd9db4fabaf67a6cbf541a86978b=
+290411ec 100644
+>> --- a/fs/inode.c
+>> +++ b/fs/inode.c
+>> @@ -23,6 +23,9 @@
+>> #include <linux/rw_hint.h>
+>> #include <linux/seq_file.h>
+>> #include <linux/debugfs.h>
+>> +#include <linux/syscalls.h>
+>> +#include <linux/fileattr.h>
+>> +#include <linux/namei.h>
+>> #include <trace/events/writeback.h>
+>> #define CREATE_TRACE_POINTS
+>> #include <trace/events/timestamp.h>
+>> @@ -2953,3 +2956,75 @@ umode_t mode_strip_sgid(struct mnt_idmap =
+*idmap,
+>> 	return mode & ~S_ISGID;
+>> }
+>> EXPORT_SYMBOL(mode_strip_sgid);
+>> +
+>> +SYSCALL_DEFINE4(getfsxattrat, int, dfd, const char __user *, =
+filename,
+>> +		struct fsxattr __user *, fsx, unsigned int, at_flags)
+>=20
+> Should the kernel require userspace to pass the size of the fsx =
+buffer?
+> That way we avoid needing to rev the interface when we decide to grow
+> the structure.
+
+Definitely having some extensibility would be good, and there isn't much
+room left today.
+
+The struct size change would be handled automatically by the ioctl()
+interface, but not the new syscall interface.
+
+Another option would be to use an xflags to indicate "larger struct"
+and then store the size after the end of the current struct.  It would
+also be possible to use one of the few remaining fields for this, but
+one is earmarked for the DOS flags and/or a bitmask of supported flags,
+and there isn't really any value to it until more fields are needed.
+
+ #define FS_XFLAG_LARGE_STRUCT 0x40000000
+
+ struct fsxattr {
+        __u32           fsx_xflags;     /* xflags field value (get/set) =
+*/
+        __u32           fsx_extsize;    /* extsize field value =
+(get/set)*/
+        __u32           fsx_nextents;   /* nextents field value (get)   =
+*/
+        __u32           fsx_projid;     /* project identifier (get/set) =
+*/
+        __u32           fsx_cowextsize; /* CoW extsize field value =
+(get/set)*/
+        unsigned char   fsx_pad[8];
+        __u32           fsx_fsxattr_size; /* struct size in bytes =
+(get/set) */
+        :
+        /* future fields */
+        :
+ };
+
+Not su
+
+Cheers, Andreas
+
+
+
+
+
+
+--Apple-Mail=_D1D28E5B-2E34-4F06-A340-A87EB42CD305
 Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
 
-On Fri, 21 Feb 2025 05:02:05 -0800
-Zijun Hu <quic_zijuhu@quicinc.com> wrote:
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - http://gpgtools.org
 
-> This patch series is to remove weird and needless 'return' for
-> void APIs under include/ with the following pattern:
-> 
-> api_header.h:
-> 
-> void api_func_a(...);
-> 
-> static inline void api_func_b(...)
-> {
-> 	return api_func_a(...);
-> }
-> 
-> Remove the needless 'return' in api_func_b().
-> 
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> ---
-> Zijun Hu (18):
->       mm/mmu_gather: Remove needless return in void API tlb_remove_page()
->       cpu: Remove needless return in void API suspend_enable_secondary_cpus()
->       crypto: api - Remove needless return in void API crypto_free_tfm()
->       crypto: scomp - Remove needless return in void API crypto_scomp_free_ctx()
->       sysfs: Remove needless return in void API sysfs_enable_ns()
->       skbuff: Remove needless return in void API consume_skb()
->       wifi: mac80211: Remove needless return in void API _ieee80211_hw_set()
->       net: sched: Remove needless return in void API qdisc_watchdog_schedule_ns()
->       ipv4/igmp: Remove needless return in void API ip_mc_dec_group()
->       IB/rdmavt: Remove needless return in void API rvt_mod_retry_timer()
->       ratelimit: Remove needless return in void API ratelimit_default_init()
->       siox: Remove needless return in void API siox_driver_unregister()
->       gpiolib: Remove needless return in two void APIs
->       PM: wakeup: Remove needless return in three void APIs
->       mfd: db8500-prcmu: Remove needless return in three void APIs
->       rhashtable: Remove needless return in three void APIs
->       dma-mapping: Remove needless return in five void APIs
->       mtd: nand: Do not return void function in void function
-> 
->  include/asm-generic/tlb.h           |  2 +-
->  include/crypto/internal/scompress.h |  2 +-
->  include/linux/cpu.h                 |  2 +-
->  include/linux/crypto.h              |  2 +-
->  include/linux/dma-mapping.h         | 12 ++++++------
->  include/linux/gpio.h                |  4 ++--
->  include/linux/igmp.h                |  2 +-
->  include/linux/mfd/dbx500-prcmu.h    |  6 +++---
->  include/linux/mtd/nand.h            | 18 ++++++++++++------
->  include/linux/pm_wakeup.h           |  6 +++---
->  include/linux/ratelimit.h           |  4 ++--
->  include/linux/rhashtable.h          |  6 +++---
->  include/linux/siox.h                |  2 +-
->  include/linux/skbuff.h              |  2 +-
->  include/linux/sysfs.h               |  2 +-
->  include/net/mac80211.h              |  2 +-
->  include/net/pkt_sched.h             |  2 +-
->  include/rdma/rdmavt_qp.h            |  2 +-
->  18 files changed, 42 insertions(+), 36 deletions(-)
-> ---
-> base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-> change-id: 20250221-rmv_return-f1dc82d492f0
-> 
-> Best regards,
+iQIzBAEBCAAdFiEEDb73u6ZejP5ZMprvcqXauRfMH+AFAme4z7EACgkQcqXauRfM
+H+DMlg//W/63bQNC/XI3qo1NyxMQFunTHhnYqVFQFStkBLA3/XOtyfbKmpsnlKLr
+jK9w1XjwDO8+0kQZ2F+7//daUt9DqS+ZUTe63OtpLcnnZmGkQW7GpCXa09oLRbXZ
+vkti5v1ki5colZRz0muZM7Hm3U304pO1xxzS8fCBm4jxUtL2AdCmSOo9UPEOdN7H
+Y1VK+ZF01cCCfjMXgudXQtIkMudjsaF6Va54vhHjtGz1ap1Y3VqbAkXV3i2emVYb
+bQflRMJ2q/P+HCDoqLQBWt9RTTPYCAipcMWjsibSZ8DpEKGrnVl9nRkUuXt+NfIz
+NDE9dlMnY6dZCW3zlMybiOoJRF+UABnZ62PIsmvRdI034873QgSmTC3JGu3iGxu4
+cZamq2anwU7zLjhKZRLocvFq3RrdWoe1Nm3YR0bX9mTr7T+X8bR2enN/PZjZ8ClO
+WXVVxnwwLmiCTUALx/1oBJXnal4mbGipMlydJshU6TNTpJK2lEFoi2kY5Tl8hP5J
+EewsY4UYyP9iAycLupBu1Z9pJrTCId94MJuHwZYT3snq9weo9+CKrx0rKWruzWAq
+PzjurjT13LOIBdDnsXSom6QhCEpswN1uxec3RwKsbexBcJCZZGVgjE6j8F37DjXi
+ETiuMxfdHDOZ26jidKARVcbJ4k1pN5198hUGf0/yfwBsJeRViBk=
+=oe2t
+-----END PGP SIGNATURE-----
 
-Is this something that could be done with a coccinelle script?
+--Apple-Mail=_D1D28E5B-2E34-4F06-A340-A87EB42CD305--
 
