@@ -1,317 +1,307 @@
-Return-Path: <linux-arch+bounces-10300-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10303-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EF4EA3F74A
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 15:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ED286A3F814
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 16:10:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 337B4863318
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 14:31:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6004702233
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Feb 2025 15:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7193220E019;
-	Fri, 21 Feb 2025 14:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F2A7211272;
+	Fri, 21 Feb 2025 15:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TrreS7Wm"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="gNAhgefJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [83.166.143.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D271D5CC5
-	for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2025 14:31:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C22D208962
+	for <linux-arch@vger.kernel.org>; Fri, 21 Feb 2025 15:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740148270; cv=none; b=rlL8fFmjEWpVhFnWOFMC2OE25PQ9DmXsi9+7T5Qjv29tbJARDqcgbLUt/D2hft0/6uTd6FzMAhX97XXMDOEwQDsOmDDPxR088h0tR9a3R+/mjdqoEk7xbC3twO4h1PdXJNiVmh/F9WzO6Fwcx7y3hxXwy2XxEHvfoELue1TAptw=
+	t=1740150530; cv=none; b=icyoS1M08C8s67DSWRGOrRiUJb+dY0QQppi8WISUv2V46VbkeN+yKFPUZcgpJCZ4SMysLsmyhDXMLgsuDUi7ZRohZZwWwFDFHHpN9iqQ526qhX2ArpqZlU63TCQyR9qZjg4qHwZl6I5KNh7gn67kAd7EWLZZFMzhwmNrgTKnf8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740148270; c=relaxed/simple;
-	bh=veepgX20VKQ7mobA43h1Wdze4ztrkbNNZBWYcgO9S0s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VSK926Nkv0vO/31S0iZR8B1puEG64nyR/qwUE6SoUJBH3LehG0Ceikrc9lbL4njrWxgNWpZIuImNr6CHsAi3+r+43sNz1pNvTGVj6Ezr7kSypG/WmxdqEKEoREMi6XtarhRHCZNjH8lm9XdgraYdLMmkiik2yIWSH/RnQYncq/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TrreS7Wm; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description;
-	bh=OPZaoplXu1Ps7T1qsZcLBPox+GXOWYr2sK+vfK2TF8U=; b=TrreS7WmUoSGumAOdSOC98rBTd
-	ggeQ0aoHD+zkND+Jl5LO9Ef+aLoo1VBvIhI5d/Lo5dcme7yECjTZ5LhB97/tLmIfIhxmuV784BW1r
-	NkgboQ7hAXm3+rfwPWs733REmeHam9jOLnT8ixeHWd1E0mj6VsupmyX4MGWLR97rywzzZpuBounLN
-	R7SSDr1Njo2rKNu5Ys1OgQZnOX5tbpaUbAHyeITD8CL7ugHSf9+NQ8RuKMb0vrSC+v9IhYCQbmtYX
-	102zdcigOT+Qfn4+QQk6laNYElp19Bnvnhfv+Oufpfug0e2s7+E4dkuJMNQPt/htXq/H4/Y3ptr0c
-	w4q2jEKA==;
-Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1tlU3W-0000000DzWe-3I4M;
-	Fri, 21 Feb 2025 14:31:06 +0000
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To: linux-mm@kvack.org
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	linux-arch@vger.kernel.org
-Subject: [PATCH 4/4] arch: Remove mk_pmd()
-Date: Fri, 21 Feb 2025 14:31:01 +0000
-Message-ID: <20250221143104.3334444-5-willy@infradead.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250221143104.3334444-1-willy@infradead.org>
-References: <20250221143104.3334444-1-willy@infradead.org>
+	s=arc-20240116; t=1740150530; c=relaxed/simple;
+	bh=wOUwuoMFBlbf4VclPsw4Y8bvqcLAlISZ+OpN2COxUT0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qDflNaQYslBTf/S5t87P45aIk6t1km+tlqxbRToItcpjZVcAfBE7XlkjOoZasiVemGMLcHwaarlxoLMyyzTC00cyQpMZoJhKp2HqtUIk76artTFvFNMDII84ZDsg861A5bSxzFCmRPKCm5bZNKC9fY01dSWc9t3shOdaYz4UxNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=gNAhgefJ; arc=none smtp.client-ip=83.166.143.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Yztn21Cvqzp7v;
+	Fri, 21 Feb 2025 16:08:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1740150518;
+	bh=HAdXvLK8vfW//A0RH2Z8Vgvri1ljkOe8we8oEw/BRJo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gNAhgefJNSQqmpn1R7GjmCDcL8sBVj9Jy8ELxGlJDuSkOcQnFPususm4DJtyM7z3K
+	 N5uOW38hzFreoU0UXhfBHpXriYHLasoIWkBI7w0rFt5bmnCxNP0I8oGntObZgmF0Jy
+	 3Dxnzo71DVTvLCBMWTvR36ekCTxZrE3oQm+YSPuM=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Yztmx6Tb2zB0s;
+	Fri, 21 Feb 2025 16:08:33 +0100 (CET)
+Date: Fri, 21 Feb 2025 16:08:33 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Andrey Albershteyn <aalbersh@redhat.com>, 
+	Paul Moore <paul@paul-moore.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>, 
+	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
+Message-ID: <20250221.ahB8jei2Chie@digikod.net>
+References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+X-Infomaniak-Routing: alpha
 
-There are now no callers of mk_huge_pmd() and mk_pmd().  Remove them.
+It looks security checks are missing.  With IOCTL commands, file
+permissions are checked at open time, but with these syscalls the path
+is only resolved but no specific access seems to be checked (except
+inode_owner_or_capable via vfs_fileattr_set).
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- arch/arc/include/asm/hugepage.h              |  2 --
- arch/arc/include/asm/pgtable-levels.h        |  1 -
- arch/arm/include/asm/pgtable-3level.h        |  1 -
- arch/arm64/include/asm/pgtable.h             |  1 -
- arch/loongarch/include/asm/pgtable.h         |  1 -
- arch/loongarch/mm/pgtable.c                  |  9 ---------
- arch/mips/include/asm/pgtable.h              |  3 ---
- arch/mips/mm/pgtable-32.c                    | 10 ----------
- arch/mips/mm/pgtable-64.c                    |  9 ---------
- arch/powerpc/include/asm/book3s/64/pgtable.h |  1 -
- arch/powerpc/mm/book3s64/pgtable.c           |  5 -----
- arch/riscv/include/asm/pgtable-64.h          |  2 --
- arch/s390/include/asm/pgtable.h              |  1 -
- arch/sparc/include/asm/pgtable_64.h          |  1 -
- arch/x86/include/asm/pgtable.h               |  2 --
- include/linux/huge_mm.h                      |  2 --
- 16 files changed, 51 deletions(-)
+On Tue, Feb 11, 2025 at 06:22:47PM +0100, Andrey Albershteyn wrote:
+> From: Andrey Albershteyn <aalbersh@redhat.com>
+> 
+> Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
+> extended attributes/flags. The syscalls take parent directory fd and
+> path to the child together with struct fsxattr.
+> 
+> This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
+> that file don't need to be open as we can reference it with a path
+> instead of fd. By having this we can manipulated inode extended
+> attributes not only on regular files but also on special ones. This
+> is not possible with FS_IOC_FSSETXATTR ioctl as with special files
+> we can not call ioctl() directly on the filesystem inode using fd.
+> 
+> This patch adds two new syscalls which allows userspace to get/set
+> extended inode attributes on special files by using parent directory
+> and a path - *at() like syscall.
+> 
+> Also, as vfs_fileattr_set() is now will be called on special files
+> too, let's forbid any other attributes except projid and nextents
+> (symlink can have an extent).
+> 
+> CC: linux-api@vger.kernel.org
+> CC: linux-fsdevel@vger.kernel.org
+> CC: linux-xfs@vger.kernel.org
+> Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
+> ---
+> v1:
+> https://lore.kernel.org/linuxppc-dev/20250109174540.893098-1-aalbersh@kernel.org/
+> 
+> Previous discussion:
+> https://lore.kernel.org/linux-xfs/20240520164624.665269-2-aalbersh@redhat.com/
+> 
+> XFS has project quotas which could be attached to a directory. All
+> new inodes in these directories inherit project ID set on parent
+> directory.
+> 
+> The project is created from userspace by opening and calling
+> FS_IOC_FSSETXATTR on each inode. This is not possible for special
+> files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
+> with empty project ID. Those inodes then are not shown in the quota
+> accounting but still exist in the directory. Moreover, in the case
+> when special files are created in the directory with already
+> existing project quota, these inode inherit extended attributes.
+> This than leaves them with these attributes without the possibility
+> to clear them out. This, in turn, prevents userspace from
+> re-creating quota project on these existing files.
+> ---
+> Changes in v3:
+> - Remove unnecessary "dfd is dir" check as it checked in user_path_at()
+> - Remove unnecessary "same filesystem" check
+> - Use CLASS() instead of directly calling fdget/fdput
+> - Link to v2: https://lore.kernel.org/r/20250122-xattrat-syscall-v2-1-5b360d4fbcb2@kernel.org
+> ---
+>  arch/alpha/kernel/syscalls/syscall.tbl      |  2 +
+>  arch/arm/tools/syscall.tbl                  |  2 +
+>  arch/arm64/tools/syscall_32.tbl             |  2 +
+>  arch/m68k/kernel/syscalls/syscall.tbl       |  2 +
+>  arch/microblaze/kernel/syscalls/syscall.tbl |  2 +
+>  arch/mips/kernel/syscalls/syscall_n32.tbl   |  2 +
+>  arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 +
+>  arch/mips/kernel/syscalls/syscall_o32.tbl   |  2 +
+>  arch/parisc/kernel/syscalls/syscall.tbl     |  2 +
+>  arch/powerpc/kernel/syscalls/syscall.tbl    |  2 +
+>  arch/s390/kernel/syscalls/syscall.tbl       |  2 +
+>  arch/sh/kernel/syscalls/syscall.tbl         |  2 +
+>  arch/sparc/kernel/syscalls/syscall.tbl      |  2 +
+>  arch/x86/entry/syscalls/syscall_32.tbl      |  2 +
+>  arch/x86/entry/syscalls/syscall_64.tbl      |  2 +
+>  arch/xtensa/kernel/syscalls/syscall.tbl     |  2 +
+>  fs/inode.c                                  | 75 +++++++++++++++++++++++++++++
+>  fs/ioctl.c                                  | 16 +++++-
+>  include/linux/fileattr.h                    |  1 +
+>  include/linux/syscalls.h                    |  4 ++
+>  include/uapi/asm-generic/unistd.h           |  8 ++-
+>  21 files changed, 133 insertions(+), 3 deletions(-)
+> 
 
-diff --git a/arch/arc/include/asm/hugepage.h b/arch/arc/include/asm/hugepage.h
-index 8a2441670a8f..7765dc105d54 100644
---- a/arch/arc/include/asm/hugepage.h
-+++ b/arch/arc/include/asm/hugepage.h
-@@ -40,8 +40,6 @@ static inline pmd_t pte_pmd(pte_t pte)
- #define pmd_young(pmd)		pte_young(pmd_pte(pmd))
- #define pmd_dirty(pmd)		pte_dirty(pmd_pte(pmd))
- 
--#define mk_pmd(page, prot)	pte_pmd(mk_pte(page, prot))
--
- #define pmd_trans_huge(pmd)	(pmd_val(pmd) & _PAGE_HW_SZ)
- 
- #define pfn_pmd(pfn, prot)	(__pmd(((pfn) << PAGE_SHIFT) | pgprot_val(prot)))
-diff --git a/arch/arc/include/asm/pgtable-levels.h b/arch/arc/include/asm/pgtable-levels.h
-index 55dbd2719e35..d1ce4b0f1071 100644
---- a/arch/arc/include/asm/pgtable-levels.h
-+++ b/arch/arc/include/asm/pgtable-levels.h
-@@ -142,7 +142,6 @@
- 
- #define pmd_pfn(pmd)		((pmd_val(pmd) & PMD_MASK) >> PAGE_SHIFT)
- #define pfn_pmd(pfn,prot)	__pmd(((pfn) << PAGE_SHIFT) | pgprot_val(prot))
--#define mk_pmd(page,prot)	pfn_pmd(page_to_pfn(page),prot)
- 
- #endif
- 
-diff --git a/arch/arm/include/asm/pgtable-3level.h b/arch/arm/include/asm/pgtable-3level.h
-index fa5939eb9864..7b71a3d414b7 100644
---- a/arch/arm/include/asm/pgtable-3level.h
-+++ b/arch/arm/include/asm/pgtable-3level.h
-@@ -209,7 +209,6 @@ PMD_BIT_FUNC(mkyoung,   |= PMD_SECT_AF);
- 
- #define pmd_pfn(pmd)		(((pmd_val(pmd) & PMD_MASK) & PHYS_MASK) >> PAGE_SHIFT)
- #define pfn_pmd(pfn,prot)	(__pmd(((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot)))
--#define mk_pmd(page,prot)	pfn_pmd(page_to_pfn(page),prot)
- 
- /* No hardware dirty/accessed bits -- generic_pmdp_establish() fits */
- #define pmdp_establish generic_pmdp_establish
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 64b469d799c6..5c0c184bf044 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -607,7 +607,6 @@ static inline pmd_t pmd_mkspecial(pmd_t pmd)
- #define __phys_to_pmd_val(phys)	__phys_to_pte_val(phys)
- #define pmd_pfn(pmd)		((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT)
- #define pfn_pmd(pfn,prot)	__pmd(__phys_to_pmd_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
--#define mk_pmd(page,prot)	pfn_pmd(page_to_pfn(page),prot)
- 
- #define pud_young(pud)		pte_young(pud_pte(pud))
- #define pud_mkyoung(pud)	pte_pud(pte_mkyoung(pud_pte(pud)))
-diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-index 9ba3a4ebcd98..a3f17914dbab 100644
---- a/arch/loongarch/include/asm/pgtable.h
-+++ b/arch/loongarch/include/asm/pgtable.h
-@@ -255,7 +255,6 @@ static inline void pmd_clear(pmd_t *pmdp)
- 
- #define pmd_page_vaddr(pmd)	pmd_val(pmd)
- 
--extern pmd_t mk_pmd(struct page *page, pgprot_t prot);
- extern void set_pmd_at(struct mm_struct *mm, unsigned long addr, pmd_t *pmdp, pmd_t pmd);
- 
- #define pte_page(x)		pfn_to_page(pte_pfn(x))
-diff --git a/arch/loongarch/mm/pgtable.c b/arch/loongarch/mm/pgtable.c
-index 22a94bb3e6e8..352d9b2e02ab 100644
---- a/arch/loongarch/mm/pgtable.c
-+++ b/arch/loongarch/mm/pgtable.c
-@@ -135,15 +135,6 @@ void kernel_pte_init(void *addr)
- 	} while (p != end);
- }
- 
--pmd_t mk_pmd(struct page *page, pgprot_t prot)
--{
--	pmd_t pmd;
--
--	pmd_val(pmd) = (page_to_pfn(page) << PFN_PTE_SHIFT) | pgprot_val(prot);
--
--	return pmd;
--}
--
- void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 		pmd_t *pmdp, pmd_t pmd)
- {
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index d69cfa5a8ac6..4852b005a72d 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -713,9 +713,6 @@ static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
- 
- #endif /* CONFIG_HAVE_ARCH_SOFT_DIRTY */
- 
--/* Extern to avoid header file madness */
--extern pmd_t mk_pmd(struct page *page, pgprot_t prot);
--
- static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- {
- 	pmd_val(pmd) = (pmd_val(pmd) & (_PAGE_CHG_MASK | _PAGE_HUGE)) |
-diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
-index 84dd5136d53a..e2cf2166d5cb 100644
---- a/arch/mips/mm/pgtable-32.c
-+++ b/arch/mips/mm/pgtable-32.c
-@@ -31,16 +31,6 @@ void pgd_init(void *addr)
- }
- 
- #if defined(CONFIG_TRANSPARENT_HUGEPAGE)
--pmd_t mk_pmd(struct page *page, pgprot_t prot)
--{
--	pmd_t pmd;
--
--	pmd_val(pmd) = (page_to_pfn(page) << PFN_PTE_SHIFT) | pgprot_val(prot);
--
--	return pmd;
--}
--
--
- void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 		pmd_t *pmdp, pmd_t pmd)
- {
-diff --git a/arch/mips/mm/pgtable-64.c b/arch/mips/mm/pgtable-64.c
-index 1e544827dea9..b24f865de357 100644
---- a/arch/mips/mm/pgtable-64.c
-+++ b/arch/mips/mm/pgtable-64.c
-@@ -90,15 +90,6 @@ void pud_init(void *addr)
- #endif
- 
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
--pmd_t mk_pmd(struct page *page, pgprot_t prot)
--{
--	pmd_t pmd;
--
--	pmd_val(pmd) = (page_to_pfn(page) << PFN_PTE_SHIFT) | pgprot_val(prot);
--
--	return pmd;
--}
--
- void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 		pmd_t *pmdp, pmd_t pmd)
- {
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/include/asm/book3s/64/pgtable.h
-index 6d98e6f08d4d..6ed93e290c2f 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
-@@ -1096,7 +1096,6 @@ static inline bool pmd_access_permitted(pmd_t pmd, bool write)
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- extern pmd_t pfn_pmd(unsigned long pfn, pgprot_t pgprot);
- extern pud_t pfn_pud(unsigned long pfn, pgprot_t pgprot);
--extern pmd_t mk_pmd(struct page *page, pgprot_t pgprot);
- extern pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot);
- extern pud_t pud_modify(pud_t pud, pgprot_t newprot);
- extern void set_pmd_at(struct mm_struct *mm, unsigned long addr,
-diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
-index ce64abea9e3e..81a1fa7dcc23 100644
---- a/arch/powerpc/mm/book3s64/pgtable.c
-+++ b/arch/powerpc/mm/book3s64/pgtable.c
-@@ -270,11 +270,6 @@ pud_t pfn_pud(unsigned long pfn, pgprot_t pgprot)
- 	return __pud_mkhuge(pud_set_protbits(__pud(pudv), pgprot));
- }
- 
--pmd_t mk_pmd(struct page *page, pgprot_t pgprot)
--{
--	return pfn_pmd(page_to_pfn(page), pgprot);
--}
--
- pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- {
- 	unsigned long pmdv;
-diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-index 0897dd99ab8d..188fadc1c21f 100644
---- a/arch/riscv/include/asm/pgtable-64.h
-+++ b/arch/riscv/include/asm/pgtable-64.h
-@@ -262,8 +262,6 @@ static inline unsigned long _pmd_pfn(pmd_t pmd)
- 	return __page_val_to_pfn(pmd_val(pmd));
- }
- 
--#define mk_pmd(page, prot)    pfn_pmd(page_to_pfn(page), prot)
--
- #define pmd_ERROR(e) \
- 	pr_err("%s:%d: bad pmd %016lx.\n", __FILE__, __LINE__, pmd_val(e))
- 
-diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-index db932beabc87..7d8d8793259a 100644
---- a/arch/s390/include/asm/pgtable.h
-+++ b/arch/s390/include/asm/pgtable.h
-@@ -1870,7 +1870,6 @@ static inline pmd_t pmdp_collapse_flush(struct vm_area_struct *vma,
- #define pmdp_collapse_flush pmdp_collapse_flush
- 
- #define pfn_pmd(pfn, pgprot)	mk_pmd_phys(((pfn) << PAGE_SHIFT), (pgprot))
--#define mk_pmd(page, pgprot)	pfn_pmd(page_to_pfn(page), (pgprot))
- 
- static inline int pmd_trans_huge(pmd_t pmd)
- {
-diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
-index ac115adb488f..5a6dc10486de 100644
---- a/arch/sparc/include/asm/pgtable_64.h
-+++ b/arch/sparc/include/asm/pgtable_64.h
-@@ -233,7 +233,6 @@ static inline pmd_t pfn_pmd(unsigned long page_nr, pgprot_t pgprot)
- 
- 	return __pmd(pte_val(pte));
- }
--#define mk_pmd(page, pgprot)	pfn_pmd(page_to_pfn(page), (pgprot))
- #endif
- 
- /* This one can be done with two shifts.  */
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 9f480bdafd20..d09d17cff956 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1347,8 +1347,6 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm,
- 
- #define flush_tlb_fix_spurious_fault(vma, address, ptep) do { } while (0)
- 
--#define mk_pmd(page, pgprot)   pfn_pmd(page_to_pfn(page), (pgprot))
--
- #define  __HAVE_ARCH_PMDP_SET_ACCESS_FLAGS
- extern int pmdp_set_access_flags(struct vm_area_struct *vma,
- 				 unsigned long address, pmd_t *pmdp,
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index 93e509b6c00e..78341bb40351 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -461,8 +461,6 @@ static inline bool is_huge_zero_pmd(pmd_t pmd)
- struct folio *mm_get_huge_zero_folio(struct mm_struct *mm);
- void mm_put_huge_zero_folio(struct mm_struct *mm);
- 
--#define mk_huge_pmd(page, prot) pmd_mkhuge(mk_pmd(page, prot))
--
- static inline bool thp_migration_supported(void)
- {
- 	return IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION);
--- 
-2.47.2
+[...]
 
+> diff --git a/fs/inode.c b/fs/inode.c
+> index 6b4c77268fc0ecace4ac78a9ca777fbffc277f4a..b2dddd9db4fabaf67a6cbf541a86978b290411ec 100644
+> --- a/fs/inode.c
+> +++ b/fs/inode.c
+> @@ -23,6 +23,9 @@
+>  #include <linux/rw_hint.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/debugfs.h>
+> +#include <linux/syscalls.h>
+> +#include <linux/fileattr.h>
+> +#include <linux/namei.h>
+>  #include <trace/events/writeback.h>
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/timestamp.h>
+> @@ -2953,3 +2956,75 @@ umode_t mode_strip_sgid(struct mnt_idmap *idmap,
+>  	return mode & ~S_ISGID;
+>  }
+>  EXPORT_SYMBOL(mode_strip_sgid);
+> +
+> +SYSCALL_DEFINE4(getfsxattrat, int, dfd, const char __user *, filename,
+> +		struct fsxattr __user *, fsx, unsigned int, at_flags)
+> +{
+> +	CLASS(fd, dir)(dfd);
+> +	struct fileattr fa;
+> +	struct path filepath;
+> +	int error;
+> +	unsigned int lookup_flags = 0;
+> +
+> +	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
+> +		return -EINVAL;
+> +
+> +	if (at_flags & AT_SYMLINK_FOLLOW)
+> +		lookup_flags |= LOOKUP_FOLLOW;
+> +
+> +	if (at_flags & AT_EMPTY_PATH)
+> +		lookup_flags |= LOOKUP_EMPTY;
+> +
+> +	if (fd_empty(dir))
+> +		return -EBADF;
+> +
+> +	error = user_path_at(dfd, filename, lookup_flags, &filepath);
+> +	if (error)
+> +		return error;
+
+security_inode_getattr() should probably be called here.
+
+> +
+> +	error = vfs_fileattr_get(filepath.dentry, &fa);
+> +	if (!error)
+> +		error = copy_fsxattr_to_user(&fa, fsx);
+> +
+> +	path_put(&filepath);
+> +	return error;
+> +}
+> +
+> +SYSCALL_DEFINE4(setfsxattrat, int, dfd, const char __user *, filename,
+> +		struct fsxattr __user *, fsx, unsigned int, at_flags)
+> +{
+> +	CLASS(fd, dir)(dfd);
+> +	struct fileattr fa;
+> +	struct path filepath;
+> +	int error;
+> +	unsigned int lookup_flags = 0;
+> +
+> +	if ((at_flags & ~(AT_SYMLINK_FOLLOW | AT_EMPTY_PATH)) != 0)
+> +		return -EINVAL;
+> +
+> +	if (at_flags & AT_SYMLINK_FOLLOW)
+> +		lookup_flags |= LOOKUP_FOLLOW;
+> +
+> +	if (at_flags & AT_EMPTY_PATH)
+> +		lookup_flags |= LOOKUP_EMPTY;
+> +
+> +	if (fd_empty(dir))
+> +		return -EBADF;
+> +
+> +	if (copy_fsxattr_from_user(&fa, fsx))
+> +		return -EFAULT;
+> +
+> +	error = user_path_at(dfd, filename, lookup_flags, &filepath);
+> +	if (error)
+> +		return error;
+> +
+> +	error = mnt_want_write(filepath.mnt);
+> +	if (!error) {
+
+security_inode_setattr() should probably be called too.
+
+> +		error = vfs_fileattr_set(file_mnt_idmap(fd_file(dir)),
+> +					 filepath.dentry, &fa);
+> +		mnt_drop_write(filepath.mnt);
+> +	}
+> +
+> +	path_put(&filepath);
+> +	return error;
+> +}
+> diff --git a/fs/ioctl.c b/fs/ioctl.c
+> index 638a36be31c14afc66a7fd6eb237d9545e8ad997..dc160c2ef145e4931d625f1f93c2a8ae7f87abf3 100644
+> --- a/fs/ioctl.c
+> +++ b/fs/ioctl.c
+> @@ -558,8 +558,7 @@ int copy_fsxattr_to_user(const struct fileattr *fa, struct fsxattr __user *ufa)
+>  }
+>  EXPORT_SYMBOL(copy_fsxattr_to_user);
+>  
+> -static int copy_fsxattr_from_user(struct fileattr *fa,
+> -				  struct fsxattr __user *ufa)
+> +int copy_fsxattr_from_user(struct fileattr *fa, struct fsxattr __user *ufa)
+>  {
+>  	struct fsxattr xfa;
+>  
+> @@ -646,6 +645,19 @@ static int fileattr_set_prepare(struct inode *inode,
+>  	if (fa->fsx_cowextsize == 0)
+>  		fa->fsx_xflags &= ~FS_XFLAG_COWEXTSIZE;
+>  
+> +	/*
+> +	 * The only use case for special files is to set project ID, forbid any
+> +	 * other attributes
+> +	 */
+> +	if (!(S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode))) {
+> +		if (fa->fsx_xflags & ~FS_XFLAG_PROJINHERIT)
+> +			return -EINVAL;
+> +		if (!S_ISLNK(inode->i_mode) && fa->fsx_nextents)
+> +			return -EINVAL;
+> +		if (fa->fsx_extsize || fa->fsx_cowextsize)
+> +			return -EINVAL;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/include/linux/fileattr.h b/include/linux/fileattr.h
+
+[...]
 
