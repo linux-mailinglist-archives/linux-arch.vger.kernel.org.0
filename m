@@ -1,253 +1,153 @@
-Return-Path: <linux-arch+bounces-10344-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10345-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A14F3A42812
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2025 17:39:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F30AAA42C07
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2025 19:52:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E96E67A70AE
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2025 16:38:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE5E417C8A5
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Feb 2025 18:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12A7B263F2B;
-	Mon, 24 Feb 2025 16:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67EAF266B52;
+	Mon, 24 Feb 2025 18:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NUjEJBXC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e1NinDUi"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A38263C7D
-	for <linux-arch@vger.kernel.org>; Mon, 24 Feb 2025 16:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8232266B4A;
+	Mon, 24 Feb 2025 18:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740415121; cv=none; b=tjHEo4EaTEZmxSC9BmtMU5k9Jj8Fjfy5nZ2CxK2otdJnzGpPV3Ax14Iza6G+VUamPzuGwp64h58uNUpHpmliKgVmshoObC20olEPGsxSehMxL9Ahkzvt2pg1e1A79LZmRBxyy0Lk4jY4V6puHlxPt3Xjwa8k07OWss9I0LwPMdo=
+	t=1740423113; cv=none; b=U2cPF3VMy8u1DrSW/FzOnZkadZMG9DvcPgA5BgD+IKbZB2DWikTpw45H7JiDZ60TXTTLIQwP1vKDcljdyBVyisfJ1P39mZ0babEOrEMlapZjqykDMWFxQ3iB3n4Gat8qEaaiXJGkueCgwt4uinVtlz46recNkQhTFwp5M01Xt1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740415121; c=relaxed/simple;
-	bh=MMSWJuJU5qsromQVdUd6ChbKWags0ip1ne8PGz+pULU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZWE2udCgKmAv7+M3MVQeNUAQQeysM0sk1sOrxWL29GSXiMXBmJocCxHAc6Juex335gg7LV81K/gW+bQEvmrR1+IYJVerRwYz9m2p2CqvGD12o3bAvWgkE1M9U9HXJJDvRCQriP49ZxOw2dsmvIWy/D43Z8VtjsKmZYlW3gVaI9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NUjEJBXC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740415118;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8HQ3dWVPqC2Dw8ff2CbnjKgP3N74oCRMEtHC7r2pq7E=;
-	b=NUjEJBXCiW+mxlHRaS1pvsfTBFG/cAexMHPuTNLejtoB0Uwv0rC07a8UShAhtQ9kD5lgMj
-	QTOuUbFJ3apELzNnVj9P2DUhyop1eFPp+5ZANy+xL+YsMpq4Z2o+t63uhCuO6slshAR5WU
-	ZKWeKUd/WB4U+dvBD6AHBO81QwpBMbQ=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-187-F-h6tqD9PwavHqhDcMRXQA-1; Mon, 24 Feb 2025 11:38:36 -0500
-X-MC-Unique: F-h6tqD9PwavHqhDcMRXQA-1
-X-Mimecast-MFC-AGG-ID: F-h6tqD9PwavHqhDcMRXQA_1740415113
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5dc5beb5eb0so3297327a12.1
-        for <linux-arch@vger.kernel.org>; Mon, 24 Feb 2025 08:38:34 -0800 (PST)
+	s=arc-20240116; t=1740423113; c=relaxed/simple;
+	bh=TUEqaIXpwI/RfqdyMieJkO4fzyFhGbd9bZvDzL0LVtg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=apph5K5wSIqAxM3D0friY3jcOJuUhThqf2lDs+7+a7DuYowtDODXkV322I6XaU3sFwLjpxHqzbln/0UOjUsrZQRO86/hgjDe/g1z3721KI64Ok/jmOfeG+ghv6v7C4esI0fiqrEHdwwJoDz5vkjIcQ0STVj4GUTj37hSm8lmIZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e1NinDUi; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2fc4418c0b9so7309770a91.0;
+        Mon, 24 Feb 2025 10:51:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740423111; x=1741027911; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TUEqaIXpwI/RfqdyMieJkO4fzyFhGbd9bZvDzL0LVtg=;
+        b=e1NinDUiIBwWKB75/J8RGZ3Egic/V/HYS01tcHTqEV24KffFTQt+e9JSrcdWkV2+rc
+         TWVHQBYWXdEn3434GizAUDoIf+mBFUHiijPWuE2hvDn1c85hXV9AIJtWiGhy7EZMkTdL
+         NzwuzBV9WevNfTj9Olweo01Y6YtoWiat4aCawuX1s9NzS9S7R5+m0t7AS60puFNEBC1s
+         zip4CLI9tK8mevOgsTHS+1mEnIjkMA4xm665Rpd2lGxyCua0ORDVolU3iqQ9xc/6uXil
+         ARrxczAii0lNtFMrS2y5GOlVNMdV56i7bE7xWL7eonrMApnz3x/GcfI3G2NNkZDWOZE1
+         2zCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740415113; x=1741019913;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8HQ3dWVPqC2Dw8ff2CbnjKgP3N74oCRMEtHC7r2pq7E=;
-        b=HQSCQeqtXRjqeAylLgdPhEOap5kPUyO06fyLI8S9tKxMWWTJIK/llEdxa/0bB0LEoa
-         BbeZOxA46s6ySaxVjNFP4ChuNH8nLkTDGJ7USzArGECnVjkl6JluWf+ff8MmA2+2iYDa
-         mK9eojQ+fLJzj2u/0WeaaLvfGWiwprIEkJt5IuxLzXkeAPsn6mEZX8nNC+C0G8KpahnW
-         IXFsZjdgOHvuouWdtoFIviuh5YUbmn1zAUZhBDp92TpP6ndy61U2vWFRFWuFtC14FaZp
-         3Oeq9gQ9fchVugT556gAE9WwsIMD3/yTFAJUF0Xr3OkyrPtawYFn8v52WcQom8/qz6aM
-         XqYw==
-X-Forwarded-Encrypted: i=1; AJvYcCULm8kwJfK509BN8g1vKzrF7Xl4ezLnLMvQakjUNpUB97fOPOCE3MPQngXL1qjm7/PRmoihFdrvYHOR@vger.kernel.org
-X-Gm-Message-State: AOJu0YxETLWfC8+GrEHaXniQZhsD03NWr7P0a7Tm7sA5NGXqBrPP8g9Y
-	NCHx8PPygHMwRd2dnxipuBeWtdxzp4cD3JuMzj2fzah7X99NXIobZKSsCKqy+iycifut5MCMTuy
-	xMebrsuW6aS3ylqc0SD4mWpaVgaqWORNdJ+NSrQm3RH8HlhxADrYtByrFcw==
-X-Gm-Gg: ASbGncs6e7/s3FpZ3jdL77PgYOPiHAzMLLK5BYhQt0ME9dBdgTXGpuZONrVZZqD/zpR
-	CfBR9PViOPTWVDMj/FumNHMf1yD7D1OullRG9DsyyTOLlxLeAOQL93EmpV1HoHj8/etrjdFpBR2
-	UEpTxmpwuA1XJr3jLUc0TGN6W6DeBE5BCDdD2Qf219asAuIMI7AtLwhYL86tamdRkcom5vAKJZk
-	ul83wMN5eoN3rmhj05FzW6H16CR0yZgfFubKSRjagL+6IfhkYAQivH9/CcTceQq7/GFVneNY/X6
-	Ic/NB9hSMU6jqAbopbpoUk+z2Lp2ZzwNpRE=
-X-Received: by 2002:a05:6402:2808:b0:5e0:2d53:b2a with SMTP id 4fb4d7f45d1cf-5e0b70c0d82mr36930903a12.3.1740415111905;
-        Mon, 24 Feb 2025 08:38:31 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFz+s0ONL8ejkTU1UmPgTYUJUij0Y+jBU/pmIRhrfprGz1EGlR/3qJKoYKtVNj3n95rvN+FPg==
-X-Received: by 2002:a05:6402:2808:b0:5e0:2d53:b2a with SMTP id 4fb4d7f45d1cf-5e0b70c0d82mr36930832a12.3.1740415111286;
-        Mon, 24 Feb 2025 08:38:31 -0800 (PST)
-Received: from thinky (ip-217-030-074-039.aim-net.cz. [217.30.74.39])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb4d3ef3c0sm1913191666b.41.2025.02.24.08.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2025 08:38:30 -0800 (PST)
-Date: Mon, 24 Feb 2025 17:38:29 +0100
-From: Andrey Albershteyn <aalbersh@redhat.com>
-To: Jan Kara <jack@suse.cz>
-Cc: Richard Henderson <richard.henderson@linaro.org>, 
-	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
-Message-ID: <pze5ejdkh5hr6qz75xbn65vmjyaw2iauseqdi52sjt3tzc6sk4@wi7vy4af5vof>
-References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
- <fyp7gcbeo3xlrh7zi7k6m5aa6h5otbufxq3kh5zvgr3sjdbxl3@4nkuwx46yajk>
+        d=1e100.net; s=20230601; t=1740423111; x=1741027911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TUEqaIXpwI/RfqdyMieJkO4fzyFhGbd9bZvDzL0LVtg=;
+        b=w1WbvQpFweZgDiSptST2sCBKFmDal1f5/xfvyGHnRd4uLYIjhsrOt0bjzAfmZUdejX
+         Uuzg1p0dTX+XaH3IZiIKzE5bqbbvwL3RFVboBKsNgCAgsbS7rtOun3xu4cTMTPP2dfB8
+         WGn7TM+Tx1QJfWCaog6NoZL8OOXdkT/0XZLalsqHm8lUbOPuul7ijgwhbtfyArAl14QY
+         dCQapjGITO32I9KZtqYEfiY8zWq80of0f5PMAK2Ils8S479/B3R+Hqhdloxz0fsGwcVn
+         H4Pc9ftJ8l2Yl4OMxUHPiA986GUYnY9yWYFc6USdeqPOtpnfEWz5F1cfLV9GZv5fo2DO
+         Ilxw==
+X-Forwarded-Encrypted: i=1; AJvYcCUJjDccSUEqMJvusfMlQ2HQj0y9RBSo84JlR+7XiY8QJPtzMYis/EJ+B52Ua3lZRU8gOVwD1FIDU3E62g==@vger.kernel.org, AJvYcCV1MjxSFx8Qr+9qUxnuLgVQQU1tYN3jrQcoef0iVu1Fe8N8R6IycZ80QtwqNVG8LGQu8M7ezo9Fz5PORLPvxv2i@vger.kernel.org, AJvYcCVxtp7w6YnuPgPWuF1D5zwAr91A+mO6Pf5IpliHfVfqJHrdAKdkp3b9j/qK7v6YH0xEDDG71mJxI2nPQWYE@vger.kernel.org, AJvYcCW20q4jPYzxeNiVdZ9PnR9sZrs/O1IXrA8Z9en8Tsr1F3EUXxZpThCP+Q2P36RGgzW5W28=@vger.kernel.org, AJvYcCX5aXtCYqyP5rhnjtzGF6ObMGWkxRgBoLGheKZkfHwhMrqozye7dqIJwdgmGthGg7RNVlJguL0xRjrGd9ox@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRhJoiYE5M/u1C15iGHFA/K1HCjn7HB4yr1KrzILqftw2aP81V
+	rtkXUOA7CPgqOvShEC/zsOM94kk77ugegQgtKWd1mI0i/AsPkZ/TbNH9w5gKT7v1Imw0y4EYTl0
+	a8KfYpNrNHmAcnuVgnTYb51MW/bk=
+X-Gm-Gg: ASbGnctyOcIbs3nmayznqSybb+QQSBvA8MWf0uh7TpFr5QUB0ezzlm74f3FuFWC/iji
+	/IepP6VXqSbak+5TXaQCFJjWaoUBFviQ1UgKfen8FFzaGUVx1gXIWh+HHQePjqwuXJx/AKdLr9+
+	/+o2tr8D3tKNFJShd8xWfbxvE=
+X-Google-Smtp-Source: AGHT+IEM92T52Wzy74biCjdt13zNava/7AlYK1wNiCPPQTiFKurSCN5AvJp5hFsbNvAbAeL2dN9RyVPPvrf75/LQ5Wo=
+X-Received: by 2002:a17:90b:1344:b0:2fc:a3b7:10a2 with SMTP id
+ 98e67ed59e1d1-2fce78cb879mr27572269a91.17.1740423110927; Mon, 24 Feb 2025
+ 10:51:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fyp7gcbeo3xlrh7zi7k6m5aa6h5otbufxq3kh5zvgr3sjdbxl3@4nkuwx46yajk>
+References: <20250207012045.2129841-1-stephen.s.brennan@oracle.com>
+ <20250207012045.2129841-2-stephen.s.brennan@oracle.com> <CAK7LNAQokoST0FnByeWywaghTMP2aG7hQaV1T=TcQ=1v4ZLQrg@mail.gmail.com>
+In-Reply-To: <CAK7LNAQokoST0FnByeWywaghTMP2aG7hQaV1T=TcQ=1v4ZLQrg@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 24 Feb 2025 10:51:38 -0800
+X-Gm-Features: AWEUYZlWebfCB8ebdoh-Z8K_EKpop-kMh4XUx8JTAFtvrkByBiikkkZM8iT5dTo
+Message-ID: <CAEf4Bzb9rYHTVkuxxSuoW=0P84M7UPkBr-4991KiMnFsv10hjA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kallsyms: output rodata to ".kallsyms_rodata"
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Stephen Brennan <stephen.s.brennan@oracle.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Andrii Nakryiko <andrii@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Kees Cook <kees@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Sami Tolvanen <samitolvanen@google.com>, Eduard Zingerman <eddyz87@gmail.com>, linux-arch@vger.kernel.org, 
+	Stanislav Fomichev <sdf@fomichev.me>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Jann Horn <jannh@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Hao Luo <haoluo@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-kbuild@vger.kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-debuggers@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-02-24 11:54:34, Jan Kara wrote:
-> On Tue 11-02-25 18:22:47, Andrey Albershteyn wrote:
-> > From: Andrey Albershteyn <aalbersh@redhat.com>
-> > 
-> > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> > extended attributes/flags. The syscalls take parent directory fd and
-> > path to the child together with struct fsxattr.
-> > 
-> > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> > that file don't need to be open as we can reference it with a path
-> > instead of fd. By having this we can manipulated inode extended
-> > attributes not only on regular files but also on special ones. This
-> > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> > we can not call ioctl() directly on the filesystem inode using fd.
-> > 
-> > This patch adds two new syscalls which allows userspace to get/set
-> > extended inode attributes on special files by using parent directory
-> > and a path - *at() like syscall.
-> > 
-> > Also, as vfs_fileattr_set() is now will be called on special files
-> > too, let's forbid any other attributes except projid and nextents
-> > (symlink can have an extent).
-> > 
-> > CC: linux-api@vger.kernel.org
-> > CC: linux-fsdevel@vger.kernel.org
-> > CC: linux-xfs@vger.kernel.org
-> > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
-> 
-> Some comments below:
-> 
-> > +SYSCALL_DEFINE4(getfsxattrat, int, dfd, const char __user *, filename,
-> > +		struct fsxattr __user *, fsx, unsigned int, at_flags)
-> > +{
-> > +	CLASS(fd, dir)(dfd);
-> > +	struct fileattr fa;
-> > +	struct path filepath;
-> > +	int error;
-> > +	unsigned int lookup_flags = 0;
-> > +
-> > +	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-> > +		return -EINVAL;
-> > +
-> > +	if (at_flags & AT_SYMLINK_FOLLOW)
-> 	    ^^ This should be !(at_flags & AT_SYMLINK_NOFOLLOW)?
-> 
-> In the check above you verify for AT_SYMLINK_NOFOLLOW and that also matches
-> what setxattrat() does...
+On Sat, Feb 15, 2025 at 6:21=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Fri, Feb 7, 2025 at 10:21=E2=80=AFAM Stephen Brennan
+> <stephen.s.brennan@oracle.com> wrote:
+> >
+> > When vmlinux is linked, the rodata from kallsyms is placed arbitrarily
+> > within the .rodata section. The linking process is repeated several
+> > times, since the kallsyms data size changes, which shifts symbols,
+> > requiring re-generating the data and re-linking.
+> >
+> > BTF is generated during the first link only. For variables, BTF include=
+s
+> > a BTF_K_DATASEC for each data section that may contain a variable, whic=
+h
+> > includes the variable's name, type, and offset within the data section.
+> > Because the size of kallsyms data changes during later links, the
+> > offsets of variables placed after it in .rodata will change. This means
+> > that BTF_K_DATASEC information for those variables becomes inaccurate.
+> >
+> > This is not currently a problem, because BTF currently only generates
+> > variable data for percpu variables. However, the next commit will add
+> > support for generating BTF for all global variables, including for the
+> > .rodata section.
+> >
+> > We could re-generate BTF each time vmlinux is linked, but this is quite
+> > expensive, and should be avoided at all costs. Further as each chunk of
+> > data (BTF and kallsyms) are re-generated, there's no guarantee that
+> > their sizes will converge anyway.
+> >
+> > Instead, we can take advantage of the fact that BTF only cares to store
+> > the offset of variables from the start of their section. Therefore, so
+> > long as the kallsyms data is stored last in the .rodata section, no
+> > offsets will be affected. Adjust kallsyms to output to .rodata.kallsyms=
+,
+> > and update the linker script to include this at the end of .rodata.
+> >
+> > Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+> > ---
+>
+> I am fine if this is helpful for BTF.
 
-Right, didn't notice that this is actually opposite to setxattrat(),
-will change that.
+This seems like a useful change all by itself even while the main
+feature of this patch set is still being developed and reviewed.
+Should we land just this .kallsyms_rodata change?
 
-> 
-> 
-> > +		lookup_flags |= LOOKUP_FOLLOW;
-> > +
-> > +	if (at_flags & AT_EMPTY_PATH)
-> > +		lookup_flags |= LOOKUP_EMPTY;
-> > +
-> > +	if (fd_empty(dir))
-> > +		return -EBADF;
-> 
-> This check is wrong and in fact the whole dfd handling looks buggy.
-> openat(2) manpage describes the expected behavior:
-> 
->        The dirfd argument is used in conjunction with the pathname argument as
->        follows:
-> 
->        •  If the pathname given in pathname is absolute,  then  dirfd  is  ig-
->           nored.
-> 	  ^^^^ This is what you break. If the pathname is absolute, you're
-> not expected to touch dirfd.
-> 
->        •  If  the pathname given in pathname is relative and dirfd is the spe-
->           cial value AT_FDCWD, then pathname is interpreted  relative  to  the
->           current working directory of the calling process (like open()).
->           ^^^ Also AT_FDCWD handling would be broken by the above check.
-> 
->        •  If  the  pathname  given  in pathname is relative, then it is inter-
->           preted relative to the directory referred to by the file  descriptor
->           dirfd  (rather than relative to the current working directory of the
->           calling process, as is done by open() for a relative pathname).   In
->           this  case,  dirfd  must  be a directory that was opened for reading
->           (O_RDONLY) or using the O_PATH flag.
-> 
->        If the pathname given in pathname is relative, and dirfd is not a valid
->        file descriptor, an error (EBADF) results.  (Specifying an invalid file
->        descriptor number in dirfd can be used as a means to ensure that  path-
->        name is absolute.)
-> 
-> > +
-> > +	error = user_path_at(dfd, filename, lookup_flags, &filepath);
-> 		^^^ And user_path_at() isn't quite what you need either
-> because with AT_EMPTY_PATH we also want to allow for filename to be NULL
-> (not just empty string) and user_path_at() does not support that. That's
-> why I in my previous replies suggested you should follow what setxattrat()
-> does and that sadly it is more painful than it should be. You need
-> something like:
-> 
-> 	name = getname_maybe_null(filename, at_flags);
-> 	if (!name) {
-> 		CLASS(fd, f)(dfd);
-> 
-> 		if (fd_empty(f))
-> 			return -EBADF;
-> 		error = vfs_fileattr_get(file_dentry(fd_file(f)), &fa);
-> 	} else {
-> 		error = filename_lookup(dfd, filename, lookup_flags, &filepath,
-> 					NULL);
-> 		if (error)
-> 			goto out;
-> 		error = vfs_fileattr_get(filepath.dentry, &fa);
-> 		path_put(&filepath);
-> 	}
-> 	if (!error)
-> 		error = copy_fsxattr_to_user(&fa, fsx);
-> out:
-> 	putname(name);
-> 	return error;
-> 
-> Longer term, we need to provide user_path_maybe_null_at() for this but I
-> don't want to drag you into this cleanup :)
-
-Oh, I missed that, thanks for pointing this out, I will change it as
-suggested.
-
--- 
-- Andrey
-
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
 
