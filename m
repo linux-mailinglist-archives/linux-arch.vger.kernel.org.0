@@ -1,165 +1,182 @@
-Return-Path: <linux-arch+bounces-10363-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10364-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D37CA44529
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 16:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48370A44767
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 18:08:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5D9227AC476
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 15:58:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5C7D7A5156
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 16:59:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5581662EF;
-	Tue, 25 Feb 2025 15:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 319E6191F60;
+	Tue, 25 Feb 2025 17:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hcOfCPg6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B7UDOO39"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7AD1552F5;
-	Tue, 25 Feb 2025 15:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9752B1922E0;
+	Tue, 25 Feb 2025 17:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740499168; cv=none; b=knpTuebUBAwjmj21VroOkMpOwiQuACfn6ErTPZLNfifJ3FCB6+SYmqaTSSUfk4HfJcJSOEUAw1AZfrKkYjnMBJWIbm69B79pSpy5B+fL3o24oIFXpmiR8rFb6tQ6Qgd1B7Qh1RW+xALo2rtL+ShNXgevABUQg5kE0wRf02BT1M4=
+	t=1740502812; cv=none; b=o5p2BbCucyoC0jv+MniVfcXKot1VEBOXRjeXm1Gvk/cIsGx4ebIWFuTyJ9/9kqRVG/KPJ65LXrq+JSFQDbFB5xixzO6frPRUW0le8vsC03Mbifn1ZZSK6Zby48oSzZqDtovgx1RMxefITZISow5TY04khDTL7myZ3Jq6Nc0JsZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740499168; c=relaxed/simple;
-	bh=5BKzhjbCX0A+Ckqb9LCw0vp1xrvfcOr/debaeQvehd8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FAyVW2W39+KEXYjtPe5U8/tnWXEhJ1V2ulQknvvW7ut2MPnBHQEYAemejBFz7XnvgkyBXuCAl60/ZGIb8Tc0JukRdqTXqWhNND5o6WWHsz1gVO7rR2vBqRNSa9JGnNkEHXYZEp4SBMBwKn0Tb5XqAi7lULIAAR6id4TRG6LThB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hcOfCPg6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 377C2C4CEDD;
-	Tue, 25 Feb 2025 15:59:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740499167;
-	bh=5BKzhjbCX0A+Ckqb9LCw0vp1xrvfcOr/debaeQvehd8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hcOfCPg62Mp6p/gGtsnSxwqeC+vKxdWbUHnaP0lhK9+JD4bU00iwT2OXd68fSYasS
-	 cMGHk14Swd2/bs18Mw+XCs/M5g9hO4nFPN0Ad0v9g1xE2A9OCjxI2KFldk5FNdIDjn
-	 6E9m81StJWl7+TqHJObUe/YJwJ7lmLNHRT9OGwEAOMO9UjBY3ljMeb+SDLleZcmrad
-	 7KNBAlXezxSZE8YKAYBXGYKCx63g46BsIA9/Ts0WWq6vzlXJCD9vHcwme0PfK8ESP6
-	 08LqrVwRicdu/SNhfCpUvJXkehDRbEwBSi3DKCbLms+TjzZu3gFvEovMZrnaatKyJs
-	 GmUKFT+3vHHCw==
-Date: Tue, 25 Feb 2025 07:59:26 -0800
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Amir Goldstein <amir73il@gmail.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-	Linux-Arch <linux-arch@vger.kernel.org>, linux-xfs@vger.kernel.org,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
-Message-ID: <20250225155926.GD6265@frogsfrogsfrogs>
-References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
- <20250221181135.GW21808@frogsfrogsfrogs>
- <CAOQ4uxgyYBFqkq6cQsso4LxJsPJ4uECOdskXmz-nmGhhV5BQWg@mail.gmail.com>
- <20250224-klinke-hochdekoriert-3f6be89005a8@brauner>
- <6b51ffa2-9d67-4466-865e-e703c1243352@app.fastmail.com>
- <20250225-strom-kopflos-32062347cd13@brauner>
- <3c860dc0-ba8d-4324-b286-c160b7d8d2c4@app.fastmail.com>
- <20250225-testfahrt-seilwinde-64e6f44c01ce@brauner>
+	s=arc-20240116; t=1740502812; c=relaxed/simple;
+	bh=zGSOvI3eokZTCm8J4P/eTT839Us8R/hog2lZsbFk+hU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n8sDg1U+DFc+aWp/OLsD/bEmr+h+1fGuIrGai43pC1yoc4or+h5p7JYSCKunQ2VDBXaT0cEFWKwTBw0gV6zrUQFauKrfC5cC0d5+nbSw3f1mjXcfUC5MEkxrTrkDnvMm3ULohWoTYJpOcaNylZBfFqWamE8N2VOxJhKFN7J2DbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B7UDOO39; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2fcb6c42c47so9161494a91.1;
+        Tue, 25 Feb 2025 09:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740502810; x=1741107610; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zGSOvI3eokZTCm8J4P/eTT839Us8R/hog2lZsbFk+hU=;
+        b=B7UDOO39sm6KY2KbFodq2tgW4Y9J03JDMgI1iRcB7lDiCVcONCGc2VDYiYyAIsA172
+         GHujYXxtQshW/o1RKls9fD8qijzeyb5S+EA8VD3Gi+ABD2RL+m6W84OHbOQWdNqsxj1d
+         Xq7R0Cm9SkUCNaifnubZzeL3gfsPeFtnXQ8lOeYNROa/j3u0vbzymEFR+xrBeTZL/DnX
+         VZpU0PES12MCA445jdjcJmLMD9EAkWbDhy1FNQlRimTrzVn8uQJQQxZDhvT2iStY2SJc
+         L4pQr9G94M1d86h7s6ibvFMnS6zWunCKFPBprObIzfQ4Zp4is4c0FDhwhLdeytMPEPr8
+         Y04w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740502810; x=1741107610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zGSOvI3eokZTCm8J4P/eTT839Us8R/hog2lZsbFk+hU=;
+        b=cG6OUbbPbqw6zP32mIU5jhSRsMFHyz8wfOtInGV2cuL5LzLV/JHMC0kLVMy4fQJXDB
+         V9mSsYC1FW1Wxwm7dcgOcVst5Lk0swphTntsYIgB+OZKOde9H8cHp+/VBmMQAhEojdJD
+         ZzrdHZfxnVu97RbiWdjQyfDKZvE4VuWKCavJDCX7g9ULHvEys96uYMj7z+uw31Sa8Bnu
+         7J3XNNfo7w1yoQygWGxwn3+0WgTE5MTdv6WHZM8dilX0Q6HIBVHpX58kmshWWwAocfmW
+         cw4dlwDERp1lxh+xe48NrHvaYoPPUdxRReCd28djbEGeMwwRhKaAtCQXOfAh9rKlGO0v
+         60Hw==
+X-Forwarded-Encrypted: i=1; AJvYcCU+Z4RcegwOUORhB26ENUVvMKoc5sfL6eOBp2kfWi0q4MLvbeJJrCNJRp/trInwrMcrIWJk78+5/eFvY/3Y@vger.kernel.org, AJvYcCVxF4rFmnL9469JLQFIcjKZqa0yblqUJDsHBn3lPOOGZcO3G4kguWlHWqUg5OFmY2/a7KucVDooT7wKLg==@vger.kernel.org, AJvYcCWcp1bt869Wl55LdEqJjvU9IkbBL4xpO9dA6LVThpdLcVpS0kILIETblLxSZu5O1zCP//k=@vger.kernel.org, AJvYcCWf0f98lgCWn9Rf8hqUPI+Wq1KIfDiHLJmiciv8ZYBzKn0WeUVDCq16sVhbB5ZZi+IOw+JICAKpyf8+OnKQ@vger.kernel.org, AJvYcCXCtJgG55d6QU2sNwMW5HyH0BmkbnyTnr9z7K6c8HHLerWZHyX/ztYhoVZgPb9MrDnMUHCYWZYGcqsAG2q5rS4j@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOdJsx7TyLu8cLtg6jfOJvZu9uPpv3RndVPqUzbvZ+KYQ7SK6E
+	xWIXVbgCMe8o9d2/mvPBWiduWI+VJc6bSrjKAExoI4qNaRbRMFrY3H9loZ9rzgWGsWGEHLCWJo5
+	lQWn1NULbcClUvotnhvteJ6HpbLM=
+X-Gm-Gg: ASbGnctIHi1wHaVEbtMBRqEkICT9PKKGncAHidipL6ScQp84A52in3fpC/BlHAmCtGe
+	UZkoM5ABrzwHnt9KfPafqA4tFZfkZdZqJ8sEBCMP+rUk9/xXNkKMuEMbnxAlfogdbGWqs7OJCs0
+	YBRQuIWoOLk9gUMg3/NjyKNt8=
+X-Google-Smtp-Source: AGHT+IEqGX/0s3L9HOzk4Sz5iomAqtCqwfcqNvGFpgeCqLV+ITRzR2oQPU+QlnRFoROJ8TnyuhJGLs8Sn0eBQ85lycM=
+X-Received: by 2002:a17:90b:6c4:b0:2fa:1a23:c01d with SMTP id
+ 98e67ed59e1d1-2fe68ae3f9dmr5490807a91.21.1740502807682; Tue, 25 Feb 2025
+ 09:00:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250225-testfahrt-seilwinde-64e6f44c01ce@brauner>
+References: <20250207012045.2129841-1-stephen.s.brennan@oracle.com>
+ <20250207012045.2129841-2-stephen.s.brennan@oracle.com> <CAK7LNAQokoST0FnByeWywaghTMP2aG7hQaV1T=TcQ=1v4ZLQrg@mail.gmail.com>
+ <CAEf4Bzb9rYHTVkuxxSuoW=0P84M7UPkBr-4991KiMnFsv10hjA@mail.gmail.com> <87eczm6ckn.fsf@oracle.com>
+In-Reply-To: <87eczm6ckn.fsf@oracle.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 25 Feb 2025 08:59:54 -0800
+X-Gm-Features: AWEUYZm71T4KvCmI2nwm6g0nvCi2k88IvtzTenbxtSBKIzvf9AgIN9hu_viY36I
+Message-ID: <CAEf4BzZnQmjWLijCZdsNvFTmrAM+ioDW3YygmOZRHqadCg1_rw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kallsyms: output rodata to ".kallsyms_rodata"
+To: Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Andrii Nakryiko <andrii@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Kees Cook <kees@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Sami Tolvanen <samitolvanen@google.com>, Eduard Zingerman <eddyz87@gmail.com>, linux-arch@vger.kernel.org, 
+	Stanislav Fomichev <sdf@fomichev.me>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Jann Horn <jannh@google.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Hao Luo <haoluo@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-kbuild@vger.kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-debuggers@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 25, 2025 at 12:24:08PM +0100, Christian Brauner wrote:
-> On Tue, Feb 25, 2025 at 11:40:51AM +0100, Arnd Bergmann wrote:
-> > On Tue, Feb 25, 2025, at 11:22, Christian Brauner wrote:
-> > > On Tue, Feb 25, 2025 at 09:02:04AM +0100, Arnd Bergmann wrote:
-> > >> On Mon, Feb 24, 2025, at 12:32, Christian Brauner wrote:
-> > >> 
-> > >> The ioctl interface relies on the existing behavior, see
-> > >> 0a6eab8bd4e0 ("vfs: support FS_XFLAG_COWEXTSIZE and get/set of
-> > >> CoW extent size hint") for how it was previously extended
-> > >> with an optional flag/word. I think that is fine for the syscall
-> > >> as well, but should be properly documented since it is different
-> > >> from how most syscalls work.
-> > >
-> > > If we're doing a new system call I see no reason to limit us to a
-> > > pre-existing structure or structure layout.
-> > 
-> > Obviously we could create a new structure, but I also see no
-> > reason to do so. The existing ioctl interface was added in
-> > in 2002 as part of linux-2.5.35 with 16 bytes of padding, half
-> > of which have been used so far.
-> > 
-> > If this structure works for another 23 years before we run out
-> > of spare bytes, I think that's good enough. Building in an
-> > incompatible way to handle potential future contents would
-> > just make it harder to use for any userspace that wants to
-> > use the new syscalls but still needs a fallback to the
-> > ioctl version.
-> 
-> The fact that this structure has existed since the dawn of time doesn't
-> mean it needs to be retained when adding a completely new system call.
-> 
-> People won't mix both. They either switch to the new interface because
-> they want to get around the limitations of the old interface or they
-> keep using the old interface and the associated workarounds.
-> 
-> In another thread they keep arguing about new extensions for Windows
-> that are going to be added to the ioctl interface and how to make it fit
-> into this. That just shows that it's very hard to predict from the
-> amount of past changes how many future changes are going to happen. And
-> if an interface is easy to extend it might well invite new changes that
-> people didn't want to or couldn't make using the old interface.
+On Mon, Feb 24, 2025 at 5:24=E2=80=AFPM Stephen Brennan
+<stephen.s.brennan@oracle.com> wrote:
+>
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+> > On Sat, Feb 15, 2025 at 6:21=E2=80=AFAM Masahiro Yamada <masahiroy@kern=
+el.org> wrote:
+> >>
+> >> On Fri, Feb 7, 2025 at 10:21=E2=80=AFAM Stephen Brennan
+> >> <stephen.s.brennan@oracle.com> wrote:
+> >> >
+> >> > When vmlinux is linked, the rodata from kallsyms is placed arbitrari=
+ly
+> >> > within the .rodata section. The linking process is repeated several
+> >> > times, since the kallsyms data size changes, which shifts symbols,
+> >> > requiring re-generating the data and re-linking.
+> >> >
+> >> > BTF is generated during the first link only. For variables, BTF incl=
+udes
+> >> > a BTF_K_DATASEC for each data section that may contain a variable, w=
+hich
+> >> > includes the variable's name, type, and offset within the data secti=
+on.
+> >> > Because the size of kallsyms data changes during later links, the
+> >> > offsets of variables placed after it in .rodata will change. This me=
+ans
+> >> > that BTF_K_DATASEC information for those variables becomes inaccurat=
+e.
+> >> >
+> >> > This is not currently a problem, because BTF currently only generate=
+s
+> >> > variable data for percpu variables. However, the next commit will ad=
+d
+> >> > support for generating BTF for all global variables, including for t=
+he
+> >> > .rodata section.
+> >> >
+> >> > We could re-generate BTF each time vmlinux is linked, but this is qu=
+ite
+> >> > expensive, and should be avoided at all costs. Further as each chunk=
+ of
+> >> > data (BTF and kallsyms) are re-generated, there's no guarantee that
+> >> > their sizes will converge anyway.
+> >> >
+> >> > Instead, we can take advantage of the fact that BTF only cares to st=
+ore
+> >> > the offset of variables from the start of their section. Therefore, =
+so
+> >> > long as the kallsyms data is stored last in the .rodata section, no
+> >> > offsets will be affected. Adjust kallsyms to output to .rodata.kalls=
+yms,
+> >> > and update the linker script to include this at the end of .rodata.
+> >> >
+> >> > Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+> >> > ---
+> >>
+> >> I am fine if this is helpful for BTF.
+> >
+> > This seems like a useful change all by itself even while the main
+> > feature of this patch set is still being developed and reviewed.
+> > Should we land just this .kallsyms_rodata change?
+>
+> I would be happy to see it merged now.
+>
+> I don't think it would help anything other than BTF, because most other
+> things (e.g. kallsyms) refer to symbols via an absolute address. Using
+> the section offset seems pretty uncommon.
+>
+> But it still is a nice cleanup anyway.
 
-Agreed, I don't think it's hard to enlarge struct fsxattr in the
-existing ioctl interface; either we figure out how to make the kernel
-fill out the "missing" bytes with an internal getfsxattr call, or we
-make it return some errno if we would be truncating real output due to
-struct size limits and leave a note in the manpage that "EL3HLT means
-use a bigger structure definition"
+I was thinking about possible use cases of some tooling wanting to
+access kallsyms data from vmlinux (instead of from /proc/kallsyms).
+But, frankly, having a separate section doesn't help all that much
+even there. We either way seem to have ELF symbols pointing to
+relevant pieces of information, so it's not hard to get it even if
+it's part of .rodata. So I guess we don't have to rush landing this
+patch separately.
 
-Then both interfaces can plod along for another 30 years. :)
-
---D
+>
+> Thanks,
+> Stephen
 
