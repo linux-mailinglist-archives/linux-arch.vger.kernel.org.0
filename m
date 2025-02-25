@@ -1,130 +1,199 @@
-Return-Path: <linux-arch+bounces-10351-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10352-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95EA2A4341F
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 05:28:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAB45A4360F
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 08:25:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F45A189D5B2
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 04:28:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B804517389D
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 07:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077D019AD86;
-	Tue, 25 Feb 2025 04:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28BAD256C6C;
+	Tue, 25 Feb 2025 07:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LT0pFtlj"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Crrc19jd";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="whzV6Y3h"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925CD189F57;
-	Tue, 25 Feb 2025 04:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF3C18A6BA;
+	Tue, 25 Feb 2025 07:25:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740457697; cv=none; b=sfOYH7xSuByATQzuwg6h7Oe0GkUf6Rl/JOWrozprWoEKXE5OOWgfSgACGsteSmnnpPPIJ+B00w9LaIHMXT2CJdXNwxb7FefBWZu+9thfCLUkeKNVVT+ziA7lqxc8C0b6cugPb8d9yYGx7GKGH/GPN8K8w16XfGDxNdrRsvAZmqk=
+	t=1740468328; cv=none; b=O5JCTTjWdKWNbjjb/LY89quHyuUCs6EfCqhCo+9ykpUvUahoPjuU9OaLml3DlDwffiWt51CHPNHHCQG8Ekxo+QMr+cLJ8CrfdbnY2Owjg5q8rH5zMUEThaDCreNzGHpZm51jqFdzBgNtDhpjOgy3vYFVMEld2vAG2PxIqLYQHB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740457697; c=relaxed/simple;
-	bh=WTxSpawuERK/ZBZBLzdcu4rQ44kJS8Ior+f3QaFbD4A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PIsSp8j9P5F6CKprZf+NCAPNa0W8b6CETdwO9Wt6Ggaub0+lsFaNzpYAUJMgydmLl8TTFPeKXhaOkb6ygqOQ8pPvPJgRFwc/J860oXAfErO8/MTsIAP7hLEIDI+69xxhF1OIaQQzJLAb5rBKafkrZT+0Y0v9pQ5kG25BaUPFkV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LT0pFtlj; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22101839807so1867915ad.3;
-        Mon, 24 Feb 2025 20:28:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740457696; x=1741062496; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9DwzRod25NBc/IUFnmtj6zNS9Dw9ri8JzR7lTV9LJ3w=;
-        b=LT0pFtljzcgPd9RNr3f5J8os3VwPqM4z8pL9+7OrnnWO+cMgH/IJFNBxqCBJLBRyuA
-         USJSmqo+pwt4mjPVQ+rGw0uppwhNWxSOIzoKlC1tNa+4F1gAHorWSwZ6h8RcEpfXJLz+
-         zmv89rv+mwLVmZUZblquSvHfbcCZbONDeis2nTcsDTliGfFAvwA/h6BNqFrwimDTVBnG
-         6U8mmwvYjqGN1MwqHrc3o2Ptvan+HWTsdeTV+3Q5jk2aCKyTI7sMIxndFr9WfcC0Zh8N
-         QaWWoW55wHgqcmN+TC8L1ug9D5rYDtykzQ+HuceQK8P2qbOxEutGJOQkA1l5wWxmD+mZ
-         c6fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740457696; x=1741062496;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9DwzRod25NBc/IUFnmtj6zNS9Dw9ri8JzR7lTV9LJ3w=;
-        b=ld4Bh0pS54/vyRBEBn1JO1ML7vXM0j9C+5zYeCXU9/2cGRH+ZayzGc5bOYEqhBGH9e
-         OltoFY38U9d9CTz4VUKE3is1Y9r+tcWo8HAK96kH9FG0EiJnN+68+51kMJOlOe4gnObg
-         rwydrByZ7QyZvQHtQQRk2A0vUECbfcPpmrWABVEzo/gCVDdxa23THi5Pbl8OBBURTLg/
-         VDTJVL5y8CR7wIm2GfO3jE6THJmQFk3DMKqGwtJLuv1g9OngYRwOKzhDwb3kS43vMXdi
-         vAZ981QparE2/++/6PNSa74ZT3pEWWbpYmyBzq3pI2hbPmj3hNEGAhWJNsQ10N2LLqc4
-         Ek9A==
-X-Forwarded-Encrypted: i=1; AJvYcCWdVmlZgghvTHyodF4mYuEXinmeGFCCwY79W/2ENtRRdArXWjk9b8zhnsVLvAEPOA+L+AABT8cEn/qQi7vN@vger.kernel.org, AJvYcCWwmcqoSdHv1TeRLxRzqp2aNxnoJ49sSuCNoagFegEnbmq3i9OHFDSJCzXNdMDph2hu4i6HqlNDMHZq@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoNIA0g1fPb5k6RAKn/EhPSY9BHvKviS7bRR3j6oU5Sdxbb0fn
-	kO/7n2VY+qslvto6ruE3gmYrrvydVEf4JqzTcea6JHMc1Vohs5WD
-X-Gm-Gg: ASbGncsgfmjR7Z8yWxbAPRRsXtfJ40qd6+EkVnnSlduSQS89g25BkuadjKCcE5c6FzD
-	W1ccFD7ayDxHPnJdHLEHu4VgoLXkkwOTLd33+3vn7q9q4kfB5GNafM9CfGepw43ooFLT9pTs+lj
-	evUOuQXI+BlmDig/xL6jlI/nORZPZWn8H7SM83IP92Hz4VIBe02FZ0YUfwIdsb8UH9FRIWtAl+k
-	oEpKwkl+jXP+9J3lzAll62/QuliKejdi323ZHOv5fPpZJ4w3wJh5LHmGkr46r9ldrK2KsQRrTc6
-	q2vawH32R/3bbt6+UToT8yOZj+pKubv5ZEhsSm7t4am/tsGWd0lNi0WyGyI2ZfvAM1TnYTjS
-X-Google-Smtp-Source: AGHT+IG1fPJ5D8vBakIA4rQzjp6ci4WMzPWgrPPMcgkL0SJnknv5G1QU8PC/Wd/vT1m9BvjnKBlxCA==
-X-Received: by 2002:a05:6a00:1390:b0:732:5651:e897 with SMTP id d2e1a72fcca58-73426ce80bbmr23106330b3a.11.1740457695745;
-        Mon, 24 Feb 2025 20:28:15 -0800 (PST)
-Received: from [10.0.2.15] (KD106167137155.ppp-bb.dion.ne.jp. [106.167.137.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a518a10sm500364b3a.0.2025.02.24.20.28.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Feb 2025 20:28:14 -0800 (PST)
-Message-ID: <ec893c4e-b4eb-4279-be66-1ca7e6bce7b1@gmail.com>
-Date: Tue, 25 Feb 2025 13:28:08 +0900
+	s=arc-20240116; t=1740468328; c=relaxed/simple;
+	bh=jBWBE67xp0aA/g9uYHMJWanv7CTWes7h1prFsPBs1Oo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=h3eEbhQnKgXHBITh5Oa5zSQYSwyPH9K1fFGF7mpTwwJCxwP3vJLAe71+7o1rCCq6xJRVhCkBwfWkI3YLBXHM86+4kJIL3K5rUBZqCi2zl/7HG7WMr5BluxuDdXSs4AyNV7XSmqTsUrjFp9fu61rqgMqGCWO9LId7vi8uHZGvXFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Crrc19jd; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=whzV6Y3h; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfout.stl.internal (Postfix) with ESMTP id 72696114016E;
+	Tue, 25 Feb 2025 02:25:23 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-11.internal (MEProxy); Tue, 25 Feb 2025 02:25:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1740468323;
+	 x=1740554723; bh=iNyMNq0Sztwv4vKDhGfFbMXIy/g1nHUCGUIykQmuxWc=; b=
+	Crrc19jdVh7/XBZAtR/NMXS4XDxP15gWTLHCfBDvQS676Lg8rynDp3eHsGxkQzOL
+	NA6+6MAjUiLoPQmu2RiInQC2bPTzaEHZhxFhtAxG2nKrgD7yJhCiJ8Mt9IiufWsV
+	fPYYYk3p5Lcd5wsAIlI2JQk1MLZqu4oPDJasJheax161IJ46K91fFfPtJDj5SbM9
+	T0hntAh8i6J0zAFYKwdj1gkrvLFe4deGMjOv2P5WVvP4N4BSrELOBLc708mfUPHI
+	43UjhAa34yyhwVHf7ypmWXQX7TAxCgyOweBC5H7/+C7Gg2vuf7hs7iJekp2//I2n
+	Jvica6vniO0L8eUGctctwg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1740468323; x=
+	1740554723; bh=iNyMNq0Sztwv4vKDhGfFbMXIy/g1nHUCGUIykQmuxWc=; b=w
+	hzV6Y3hj5gWp/iDMqIx98JPoZOcwRLI9d1i8zlOU/RAUy+7IN5uPMPBjab2NCQyd
+	LMkj8W6q1/gHgLHDo98I6REoWQ/IUlycP4gdzmxqrs5rcWd4rE0QTrqe/Qq7ipcR
+	1TukjGbHToX6OBLGcTfynSUtg3pNqUrMJsH86ZMon4tgVd+2U1H1kYo2UhyvUMtK
+	CQVql3lLJY9IZSvDdmpfF/B6UYL6tVYb1VwSb36/JmunHby+rrqYNWFvnfPklsV9
+	W3GQb+SCgqfTcQp6qF5/y02gx4enLl5etsFLUDfQEOKg7vDo/I3wk5qWMiRSnz2E
+	A1qzcH81WGbVu17pqlUyw==
+X-ME-Sender: <xms:YnC9Z5OsvGdCkLa8wabjaJTLcmVWPy5Wdd2Ke6lK7Dgz_iTRXyrtyw>
+    <xme:YnC9Z7-o24c8cmpv9z2zXbEtBtMS6U1bIeklSCOAeb2rH1Aw6X5r2okyM9s4a7b1D
+    i42G82D6MsV7ZDpwpI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekuddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvleehvddv
+    geejvdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeef
+    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpsegrlhhivghnkedruggvpd
+    hrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphht
+    thhopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhrtghpthhtoheptghonhhorh
+    doughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehlphhivghrrghlihhsiheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeifvghirdhl
+    ihhusehkvghrnhgvlhdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorh
+    hg
+X-ME-Proxy: <xmx:YnC9Z4TLllvXzTwlowYa5Jl6FRZHwh6ru6z9sep9rQhEYu4E3BZ9YQ>
+    <xmx:YnC9Z1uroNTLiTE5A1YAFBUh0k6-cPSW_lmVz7j_174A7gOMX1F-pA>
+    <xmx:YnC9Zxd8hAA5ROl-8MVUO9kMTxx065-aCcG2Kcv_6QaygErRfoifPA>
+    <xmx:YnC9Zx0cABgPWS_vwgD1TtiRl_Bgj3jIOVHMSFv_zLyLLtjt_krAXw>
+    <xmx:Y3C9Z3G9Q7Jowr_Z_hgrXH8Sz7iSue9CIWALq-YXJHQQDGYgj76VkLzo>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 16C1B2220072; Tue, 25 Feb 2025 02:25:21 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH memory-model 7/7] tools/memory-model: Distinguish between
- syntactic and semantic tags
-To: "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, lkmm@lists.linux.dev, kernel-team@meta.com,
- mingo@kernel.org
-Cc: stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
- peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
- dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
- Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
- Akira Yokosawa <akiyks@gmail.com>
-References: <8cfb51e3-9726-4285-b8ca-0d0abcacb07e@paulmck-laptop>
- <20250220161403.800831-7-paulmck@kernel.org>
-Content-Language: en-US
-From: Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20250220161403.800831-7-paulmck@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Tue, 25 Feb 2025 08:24:51 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Roman Kisel" <romank@linux.microsoft.com>
+Cc: benhill@microsoft.com, bperkins@microsoft.com, sunilmut@microsoft.com,
+ bhelgaas@google.com, "Borislav Petkov" <bp@alien8.de>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "Dexuan Cui" <decui@microsoft.com>,
+ "Haiyang Zhang" <haiyangz@microsoft.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, krzk+dt@kernel.org,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+ "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Rob Herring" <robh@kernel.org>,
+ ssengar@linux.microsoft.com, "Thomas Gleixner" <tglx@linutronix.de>,
+ "Wei Liu" <wei.liu@kernel.org>, "Will Deacon" <will@kernel.org>,
+ devicetree@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org
+Message-Id: <55b65ba6-4abe-478c-a173-4622c30ddd7b@app.fastmail.com>
+In-Reply-To: <14a199d8-1cf3-49bc-8e0d-92d9c8407b4f@linux.microsoft.com>
+References: <20250212014321.1108840-1-romank@linux.microsoft.com>
+ <20250212014321.1108840-2-romank@linux.microsoft.com>
+ <1b14e3de-4d3e-420c-819c-31ffb2d448bd@app.fastmail.com>
+ <593c22ca-6544-423d-84ee-7a06c6b8b5b9@linux.microsoft.com>
+ <97887849-faa8-429b-862b-daf6faf89481@app.fastmail.com>
+ <6e4685fe-68e9-43bd-96c5-b871edb1b971@linux.microsoft.com>
+ <14a199d8-1cf3-49bc-8e0d-92d9c8407b4f@linux.microsoft.com>
+Subject: Re: [PATCH hyperv-next v4 1/6] arm64: hyperv: Use SMCCC to detect hypervisor
+ presence
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 20 Feb 2025 08:14:03 -0800, Paul E. McKenney wrote:
-> From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> 
-> Not all annotated accesses provide the semantics their syntactic tags
-> would imply. For example, an 'acquire tag on a write does not imply that
-> the write is finally in the Acquire set and provides acquire ordering.
-> 
-> To distinguish in those cases between the syntactic tags and actual
-> sets, we capitalize the former, so 'ACQUIRE tags may be present on both
-> reads and writes, but only reads will appear in the Acquire set.
-> 
-> For tags where the two concepts are the same we do not use specific
-> capitalization to make this distinction.
-> 
-> Reported-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-> Tested-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+On Tue, Feb 25, 2025, at 00:22, Roman Kisel wrote:
+> Hi Arnd,
+>
+> [...]
+>
+>>> I would suggest moving the UUID values into a variable next
+>>> to the caller like
+>>>
+>>> #define ARM_SMCCC_VENDOR_HYP_UID_KVM \
+>>> =C2=A0=C2=A0=C2=A0=C2=A0 UUID_INIT(0x28b46fb6, 0x2ec5, 0x11e9, 0xa9,=
+ 0xca, 0x4b, 0x56,=20
+>>> 0x4d, 0x00, 0x3a, 0x74)
+>>>
+>>> and then just pass that into arm_smccc_hyp_present(). (please
+>>> double-check the endianess of the definition here, I probably
+>>> got it wrong myself).
+>
+> I worked out a variation [1] of the change that you said looked good.
+>
+> Here, there is a helper macro for creating uuid_t's when checking
+> for the hypervisor running via SMCCC to avoid using the bare UUID_INIT=
+.=20
+> Valiadted with KVM/arm64 and Hyper-V/arm64. Do you think this is a
+> better approach than converting by hand?
+>
+> If that looks too heavy, maybe could leave out converting the expected
+> register values to UUID, and pass the expected register values to
+> arm_smccc_hyp_present directly. That way, instead of
+>
+> bool arm_smccc_hyp_present(const uuid_t *hyp_uuid);
+>
+> we'd have
+>
+> bool arm_smccc_hyp_present(u32 reg0, u32 reg1, u32 reg2, u32 reg2);
+>
+>
+> Please let me know what you think!
 
-Tested-by: Akira Yokosawa <akiyks@gmail.com> # herdtools7.7.58
+The patch looks correct to me, but I agree it's a little silly
+to convert register values into uuid format on both sides.
 
-> ---
->  .../Documentation/herd-representation.txt     |  44 ++--
->  tools/memory-model/linux-kernel.bell          |  22 +-
->  tools/memory-model/linux-kernel.def           | 198 +++++++++---------
->  3 files changed, 132 insertions(+), 132 deletions(-)
+>   static bool hyperv_detect_via_smccc(void)
+>   {
+> -	struct arm_smccc_res res =3D {};
+> +	uuid_t hyperv_uuid =3D HYP_UUID_INIT(ARM_SMCCC_VENDOR_HYP_UID_HYPERV=
+_REG_0,
+> +		ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1,
+> +		ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2,
+> +		ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3);
 
+If you want to declare a uuid here, I think you should remove the
+ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_{0,1,2,3} macros and just
+have UUID in normal UUID_INIT() notation as we do for
+other UUIDs.
+
+If you want to keep the four 32-bit values and pass them into
+arm_smccc_hyp_present() directly, I think that is also fine,
+but in that case, I would try to avoid calling it a UUID.
+
+How are the kvm and hyperv values specified originally?
+From the SMCCC document it seems like they are meant to be
+UUIDs, so I would expect them to be in canonical form rather
+than the smccc return values, but I could not find a document
+for them.
+
+     Arnd
 
