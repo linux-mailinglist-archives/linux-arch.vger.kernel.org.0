@@ -1,192 +1,149 @@
-Return-Path: <linux-arch+bounces-10349-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10350-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE741A4332D
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 03:38:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CFF3A43414
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 05:24:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 377F2188B711
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 02:38:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6824516658C
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Feb 2025 04:24:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF4A14D2BB;
-	Tue, 25 Feb 2025 02:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B9D1684AE;
+	Tue, 25 Feb 2025 04:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PXiJB1RM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JMeFjPHQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851BE1487F8
-	for <linux-arch@vger.kernel.org>; Tue, 25 Feb 2025 02:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BF4EEA9;
+	Tue, 25 Feb 2025 04:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740451090; cv=none; b=AJY+eHu45nVMYKwNlXEm2gKa1m44RMsKY23NGOc4Esyf3cwqG6AFK8yb+opxjRo4S0OoSe4q23kPBTVN2RsIt5ZKFCEkhhZL0wacgRI72kACgTsLT1a6lDaBxg3QoXpofciYirZFJM9FtHehMX7/7frKz7PwK5rKFp1LLKaZ27g=
+	t=1740457473; cv=none; b=L+HaxXZLC4/WBU8V2eN2fNokoP3L4MDS9iizeDu1NTSEagunbqO9LKzCvYBXHD41rNGFMcB5acoxDYNWscbqQkV2T9IVn01XaROWQww1bzaWFuSFyuKFR7IIcqUFWONKzcsWd6gzk69alWJV2RJ7lrlw1+sH6oFZ0jfN1E80PSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740451090; c=relaxed/simple;
-	bh=oNdZT9w7aQq5QrNlfacj7MIC7lBCM1O2Jgg5tGeZrlc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jnzPdMFW2XGN75dltoRlfflCQnmfmCIAf8T9i8EyjBYNi0Z+qZ9HK7SPXKPrfdMyYJ2w9+tKV4Vw+CAzxJeSuuQFEhUBZBt7GRS5wtvaXvIDdzOo282KidGum9rs3PM4amPcMDzS+hW9z37mHIjuCKnvO/xtoOGT8t9TArwVGRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PXiJB1RM; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e5dd697475dso3916408276.3
-        for <linux-arch@vger.kernel.org>; Mon, 24 Feb 2025 18:38:08 -0800 (PST)
+	s=arc-20240116; t=1740457473; c=relaxed/simple;
+	bh=0xBlOnbwWPcpFpEFFwo3az9IHLdEaVF/e2PiZf+/3Tw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EHa+CIL6COxJl/jZFJxqkKrYBrEFi3CN4Ls4oFcckSIENVSLnI/BgOhsUg1TykjFpfjKNyJ2knQeIgEAXFCIQS+4OHnTIdAGyi/q19wr6IYxY2k3yrMVHLF5PhNMoEDB5Gzawu/pAst5Njnw36Lf8CR9lAXnyPQ7mAdjb+TrCXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JMeFjPHQ; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-220e6028214so111589345ad.0;
+        Mon, 24 Feb 2025 20:24:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1740451087; x=1741055887; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UqK9lSPHR3oAe986F8iXqkMz9AYMYHr6QgwL+NcZdiU=;
-        b=PXiJB1RMf5Ayu1sFntsMseLpkqRBTF4jtusBDoA7lIOaD1hImCEuB98mD7KjihjNEm
-         7fNp/VQCbbklqF+swIeJh6BIUl9R6sM56jyD/ZUgddfOcMyDbhG0GWHimbes3enZW4n8
-         Wi7PKbQqFBPZTQJdcyI+bDt9As46rQkJqFlX+E7f/Y87mPkomV50RT15HLVnOd7+Dzod
-         UlIJsLAfTVYHytm4RjU4qTTJy3MwaGeTBQ6ZBPrM511unJ82cS99ozdSy1CBi1B4kogB
-         ALgwG9OqEUfL4LwlVxlOdSdaUm56MIbb/abk01HTkCEn7e/qAaJBTSsuE4gOyYwdQc5l
-         V4cw==
+        d=gmail.com; s=20230601; t=1740457471; x=1741062271; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0QXq0XS1DMAs9J2jLZ98jTCNHr/BGJPzzAtLUhi5pf0=;
+        b=JMeFjPHQv1n6JVl6L3ZsUU2S9CDlUmv87pIYrvSKg5R/Q2JtQd47frw1gu3J+4wtAI
+         4ZIGgdHU9J9xs6GHpuWJ6rhxzfhMiqavHcFBltkCFXVSh9/OFVQXvSg9aOWGyFdAR059
+         Tf+MyO9i7UX/JN7vRGXgxp+pzOW/tNIg09p/v4sPVOUf1lCnvFigk0DrDi76KpsnW9Qf
+         N4jEok7ZaaJ6BqhFemC91MEK7u3rxnqPPZh6npCglAgiHF58ypTnJPxKcuJZcfDU9KqE
+         oU2xigke7PnsAs38f49SLzRLkQNcMWPTmZgHLombcvFEv/aK+c9Dw6dOQQdgm9vmpK4I
+         LmdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740451087; x=1741055887;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UqK9lSPHR3oAe986F8iXqkMz9AYMYHr6QgwL+NcZdiU=;
-        b=ZiNz2W6hAuP217YNjn3HMTg9eVq7fAJIEp9OZmqNVWwUXyPvlIy4deRjzjDOf77Q8q
-         yzrGq0Ok7DJTL/umDEGoH5jYHuhOW7fShI+LObe1YffeZ+wa8u+EY2j86a20pBm/na7b
-         53C+vhUvXFtqkaXRDQ16ZjmNR8h3Ldz7HZ8byGTA9GtS9eJLyWfPwwWElxvt9tNYUskg
-         MQbrt2/7fdWT7IKOUrJmA85oN0e0Db3ktPyL6fGKSLTsJZBfzqxmObjSkxiaRZNCEkQ9
-         RC32ASutfKVeGOJP+nFPxHzsBw67w8ZaOuq7FvM8R8zdCJINgzEpyMlMr0izAQi5Cmkb
-         y4vg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJSaWpT2i26A1C2xEkP+z2Tv1UyEbt10j4BxLZEw+9TwsdR4RpmYyjGiVnBKBE/YZSxCI9dqptsETM@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTZczO+5HrgVTMIuIemxlmHdr4f6XstjVXmVf6AcDx1my5uo8c
-	vA3W6Wih7dYb/k9lc4gayshsqNe2MfQb/xwMS3MazHNVupm7bguOxGOqs0wPQNGy2OuZtGQHQt6
-	b+RKBp63B+o0A78Fn0gfvviVTz/A6TmTrR1SX
-X-Gm-Gg: ASbGncvvTyRyrLEuoGmYZrCeKQ7PmNSfM4ckzG+gxRrd5hGBrDeHUj7sghOk8SmxDZV
-	gQLC4N+Dx+kTagV047nceKjfnJ6z5Ueznd1val6MRHtWSj3qaf3fivzaM2p8jVDUNgyorYwH1lw
-	48vTVInZ4=
-X-Google-Smtp-Source: AGHT+IFEtqZjFjUUtEoV6clplX0tg01lvFBOsWs6wVdmIF0VuIZ0SAwc4zHx33tyK9MjmhuD5ygseR4l9mjGvJrZ59E=
-X-Received: by 2002:a05:6902:270a:b0:e57:3c46:fc86 with SMTP id
- 3f1490d57ef6-e607a56713bmr1172129276.48.1740451087319; Mon, 24 Feb 2025
- 18:38:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740457471; x=1741062271;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0QXq0XS1DMAs9J2jLZ98jTCNHr/BGJPzzAtLUhi5pf0=;
+        b=ToyfD1c8qAxIMv7S3FcYf1FM6rDmImIJadY/A+a0+3UHwRRSPdfawJlLvij4Oemwlz
+         OGcjFOwsmTk897oifAewA27nfAntMPpJwjJcZy+tCl30D54KXJX6diINxNOdxPa7d6ID
+         DFo1twQmcKAp6eQ74XFJnfQvnscVHTryGRqrX7ZG9FNpnvrOgjSHXQ+2AAMxyH2rP3Df
+         khWobxJdH31MeKZxtlevDeMqgf6rduAur7r7Pyt07mBM4QO0y8ttrYsD29FF0IUomE6Q
+         eFbWXNtox2+F5QP1MLGFFh86+rr4wIFIHIKu4iDE4P6Hk2HHkHKrddRHFZskaGSjfsxp
+         rVXA==
+X-Forwarded-Encrypted: i=1; AJvYcCVDpD+V88m6fh3ZOWTtcBWOfzH5uYtRo+6/M2lfMrkFI8sx4KxIYp6baUJVtMpdiTi7gHkAlRVsu24i@vger.kernel.org, AJvYcCW9T8mjd0jf1OKd4CyKfhpnxWGCUq1KYHV3grM4NkmpXltp34vK2U5tVEvd5varuzCFLrolECxLxldz4g+y@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZJIN6PWLL4xF1uzKwsExPqfx6Gh5KOR0tcdFuFOegP+LSZf8c
+	wgYgAfFmO3aOOwsk3LmPqMUUatnv9cPTi2yBeBSh1QUsVRQfNr1U
+X-Gm-Gg: ASbGncsOSs91i5cYXyaRscB05yExAPXZ7a6R5ydqfUiAVoEGKQ3e5nXToO6PymGwyn7
+	Nj7tBXxr+XnGTf7I+cj4/cH31awQZUX2T4123idA8ZqFDcgK/PaGllMXoH6YOBWdXXxa1RD2pfW
+	1bjA4btuWxZ7bGfRX6xIBHbZHHH4Frcnwv8jBveQOWYLm8bz3+VLoxJgPgA2utVq2sveAIXQoAr
+	EPmHLGvk6DCJOWMeKm2nWmKBINTJrT9rPuU3QuZnN+fIHKKwgI5rXEgGbs1x7FwnKTw+Z+gamUJ
+	MWjJJSlUf9glI63j94+x1t/9cnKazbJ7+aYREDeKauEghqXrye2ZSexTbS+hcDeU6DkUJV5O
+X-Google-Smtp-Source: AGHT+IHFL6RvLCzMfkpdq/lhGiaA43IWa0AsYFBQKyWXztLMGiZRzji2e0BFIghxYbY4ZIqQsN1xWw==
+X-Received: by 2002:a17:902:f60b:b0:216:725c:a137 with SMTP id d9443c01a7336-2219ffb8b58mr294789865ad.28.1740457471345;
+        Mon, 24 Feb 2025 20:24:31 -0800 (PST)
+Received: from [10.0.2.15] (KD106167137155.ppp-bb.dion.ne.jp. [106.167.137.155])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2230a0ae9basm4341005ad.226.2025.02.24.20.24.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Feb 2025 20:24:31 -0800 (PST)
+Message-ID: <105532ce-a41d-4f14-8172-cd68bdffae1d@gmail.com>
+Date: Tue, 25 Feb 2025 13:24:24 +0900
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
- <20250221.ahB8jei2Chie@digikod.net> <jvo6uj7ro5czlo5ukw3vtf5mpqgrbuksqq4j63s2i6gwrjpz4m@kghpcqyi7gwb>
-In-Reply-To: <jvo6uj7ro5czlo5ukw3vtf5mpqgrbuksqq4j63s2i6gwrjpz4m@kghpcqyi7gwb>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 24 Feb 2025 21:37:56 -0500
-X-Gm-Features: AQ5f1JrNItPBrIagfKvZGb3Z7zpj-znT5mFIJQvEadvcpFUdxtbR_1MPSlEQmag
-Message-ID: <CAHC9VhRrs=W4JtuphkADPVG9MX8jxQLfmC9=2taj+cfZgNOt3Q@mail.gmail.com>
-Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
-To: Andrey Albershteyn <aalbersh@redhat.com>
-Cc: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-xfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH memory-model 6/7] tools/memory-model: Switch to softcoded
+ herd7 tags
+To: "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, lkmm@lists.linux.dev, kernel-team@meta.com,
+ mingo@kernel.org
+Cc: stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+ peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+ dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+ Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+ Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+ Akira Yokosawa <akiyks@gmail.com>
+References: <8cfb51e3-9726-4285-b8ca-0d0abcacb07e@paulmck-laptop>
+ <20250220161403.800831-6-paulmck@kernel.org>
+Content-Language: en-US
+From: Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20250220161403.800831-6-paulmck@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 24, 2025 at 11:00=E2=80=AFAM Andrey Albershteyn <aalbersh@redha=
-t.com> wrote:
-> On 2025-02-21 16:08:33, Micka=C3=ABl Sala=C3=BCn wrote:
-> > It looks security checks are missing.  With IOCTL commands, file
-> > permissions are checked at open time, but with these syscalls the path
-> > is only resolved but no specific access seems to be checked (except
-> > inode_owner_or_capable via vfs_fileattr_set).
+On Thu, 20 Feb 2025 08:14:02 -0800, Paul E. McKenney wrote:
+> From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> 
+> A new version of herd7 provides a -lkmmv2 switch which overrides the old herd7
+> behavior of simply ignoring any softcoded tags in the .def and .bell files. We
+> port LKMM to this version of herd7 by providing the switch in linux-kernel.cfg
+> and reporting an error if the LKMM is used without this switch.
+> 
+> To preserve the semantics of LKMM, we also softcode the Noreturn tag on atomic
+> RMW which do not return a value and define atomic_add_unless with an Mb tag in
+> linux-kernel.def.
+> 
+> We update the herd-representation.txt accordingly and clarify some of the
+> resulting combinations.
+> 
 
-...
+Having failed to hear from Jonas or Hernan in response to my question at:
 
-> > On Tue, Feb 11, 2025 at 06:22:47PM +0100, Andrey Albershteyn wrote:
+    https://lore.kernel.org/lkmm/ec97f28e-31ad-4a45-ac87-fab91e27d4ee@gmail.com/
 
-...
+, let me guess.  Past contributions strongly suggest that Hernan looks after
+herd7 changes and Jonas takes care of LKMM side of changes.
 
-> > > +SYSCALL_DEFINE4(setfsxattrat, int, dfd, const char __user *, filenam=
-e,
-> > > +           struct fsxattr __user *, fsx, unsigned int, at_flags)
-> > > +{
-> > > +   CLASS(fd, dir)(dfd);
-> > > +   struct fileattr fa;
-> > > +   struct path filepath;
-> > > +   int error;
-> > > +   unsigned int lookup_flags =3D 0;
-> > > +
-> > > +   if ((at_flags & ~(AT_SYMLINK_FOLLOW | AT_EMPTY_PATH)) !=3D 0)
-> > > +           return -EINVAL;
-> > > +
-> > > +   if (at_flags & AT_SYMLINK_FOLLOW)
-> > > +           lookup_flags |=3D LOOKUP_FOLLOW;
-> > > +
-> > > +   if (at_flags & AT_EMPTY_PATH)
-> > > +           lookup_flags |=3D LOOKUP_EMPTY;
-> > > +
-> > > +   if (fd_empty(dir))
-> > > +           return -EBADF;
-> > > +
-> > > +   if (copy_fsxattr_from_user(&fa, fsx))
-> > > +           return -EFAULT;
-> > > +
-> > > +   error =3D user_path_at(dfd, filename, lookup_flags, &filepath);
-> > > +   if (error)
-> > > +           return error;
-> > > +
-> > > +   error =3D mnt_want_write(filepath.mnt);
-> > > +   if (!error) {
-> >
-> > security_inode_setattr() should probably be called too.
->
-> Aren't those checks for something different - inode attributes
-> ATTR_*?
-> (sorry, the naming can't be more confusing)
->
-> Looking into security_inode_setattr() it seems to expect struct
-> iattr, which works with inode attributes (mode, time, uid/gid...).
-> These new syscalls work with filesystem inode extended flags/attributes
-> FS_XFLAG_* in fsxattr->fsx_xflags. Let me know if I missing
-> something here
+So my suggestion is to add a Co-developed-by tag of Hernan here:
 
-A valid point.  While these are two different operations, with
-different structs/types, I suspect that most LSMs will consider them
-to be roughly equivalent from an access control perspective, which is
-why I felt the existing security_inode_{set,get}attr() hooks seemed
-appropriate.  However, there likely is value in keeping the ATTR and
-FSX operations separate; those LSMs that wish to treat them the same
-can easily do so in their respective LSM callbacks.
+Co-developed-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+> Signed-off-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+> Tested-by: Boqun Feng <boqun.feng@gmail.com>
 
-With all this in mind, I think it probably makes sense to create two
-new LSM hooks, security_inode_{get,set}fsxattr().  The get hook should
-probably be placed inside vfs_fileattr_get() just before the call to
-the inode's fileattr_get() method, and the set hook should probably be
-placed inside vfs_fileattr_set(), inside the inode lock and after a
-successful call to fileattr_set_prepare().
+, and let me add a Tested-by:
 
-Does that sound better to everyone?
+Tested-by: Akira Yokosawa <akiyks@gmail.com> # herdtools7.7.58
 
---=20
-paul-moore.com
+        Thanks, Akira
+
+> ---
+>  .../Documentation/herd-representation.txt     | 27 ++++++++++---------
+>  tools/memory-model/README                     |  2 +-
+>  tools/memory-model/linux-kernel.bell          |  3 +++
+>  tools/memory-model/linux-kernel.cfg           |  1 +
+>  tools/memory-model/linux-kernel.def           | 18 +++++++------
+>  5 files changed, 30 insertions(+), 21 deletions(-)
+
 
