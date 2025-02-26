@@ -1,78 +1,78 @@
-Return-Path: <linux-arch+bounces-10389-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10390-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DA19A46C02
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 21:08:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 252A4A46C04
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 21:08:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6FD4169760
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 20:07:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4E5016E09F
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 20:07:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAAAB25B693;
-	Wed, 26 Feb 2025 20:06:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC6C25D522;
+	Wed, 26 Feb 2025 20:06:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e25AnWkb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h1O6Bxek"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED8925A320;
-	Wed, 26 Feb 2025 20:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E758625B663;
+	Wed, 26 Feb 2025 20:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740600387; cv=none; b=Cppogz2aZha5fPECDkZ4L4oeTzggRht/Ua+FiA0MffeCMaHEnEcxkoDlM9Zqjta+VvM0H7kchISFrgNZFZzXLTiAgHg/pJ2unPYpvikyNrFX1mmIzpLhk3/E9DglaCdyFuMe2WbB9Z20vG0ry95oN4AWCkwGFGbXza1YPObQeqA=
+	t=1740600388; cv=none; b=kaV5DfvBcAGfxEYxCogldWA8kr1ELTpfZo+159dAwi+Pw808wFmb6OrUbPRtx6i0PRnYbkPIefrLYAtbzHxgJIfIQHzOYE5gjKux71GHzIFq0+Oa2xPi/iT1TR1EZMiFvH2w0fWHbBYceTNsA/MBFtSk/pfHHe57yF0gD5A+4n8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740600387; c=relaxed/simple;
-	bh=cQHG3g1r38YJDnNG41nqfDZRX+Fhd7xpe66aiwM0lQY=;
+	s=arc-20240116; t=1740600388; c=relaxed/simple;
+	bh=UTc/zIxMZzlnepV3eF829gkrOKS/3bcc1+fy1YyKaRA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MAP5gJlbaZT2978I0pyIHr8B8PZKOVcLQZtb3lwAvj4nSobHIGlut7rjKSM2ZCESnqhMZ6vrmY1FHU6xhLozdfbaB06utM7GG4V2IQsKqqhH59lH9KtaKZguNRggFmwg4yNigbU4erFEChN8esy95lq9zF9+cOsmccB+pWryhhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e25AnWkb; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=mMIX+L1TjTfNj7q2iYkMJpPEjMLvbKV9c9YfQwwQ8cY8eWQA9+0GLr4Gq+ce1aDwnRyEIk5/JwqzjKFkTAGH1hfqyuRRd5enJJlKBVJG1m+1paSneFJjBUpKuBbaeBfEU898HguhmIlWKIyVaeXHoWunHSHmrDjV3hdcrGDxMhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h1O6Bxek; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-220e989edb6so3562105ad.1;
-        Wed, 26 Feb 2025 12:06:25 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2233622fdffso2546445ad.2;
+        Wed, 26 Feb 2025 12:06:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740600385; x=1741205185; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740600386; x=1741205186; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Z/vUG3UQf9enQcfjnJw3LUMuFVnqA0Sb2HUdnSE0x+8=;
-        b=e25AnWkby1BSSWTvj2KJAesszA7Z2URjJTV+edz6EZfQ3P2TR+BaX2BEqynJ6YrVD9
-         GtS2Ny3EQPuSZc2w1bUWVzfP0h3wBd4lJMkdtf/lCL+z9ouBMPNUaW+mrszEMoXMGqM+
-         rUzPAAqggxbUIpmBmVXrtsJtdLU/uBhQCUzFVgB90c0dq9AdJNFW1ndVSGKlxZGH7Llg
-         Lb2A5s6dsWO6w+R7yjQYYijogwuo68LQMpUhPGc6lAmXHU7MYUMSYw58AC4h02lSc02m
-         RIusCP2z6lAYa1I1ft/yzS4mXrTF4Xi3tqKl1RoGOBzUae29P6DxnMbFg4320ZImIf+w
-         YVRQ==
+        bh=mH64ves2q9+0JDxQKA5wFB9C86aVirya4owjszWIQYM=;
+        b=h1O6BxekuYXimLJZs13M1OAW0ptceKxL5Dze3LDXSzkLNBQltpEqoDEzHIZp5gpWR1
+         mMRo03gS1zVGjeJWbS7e+PTjKADFU/5NyD+Mi+BrUfYA0pE9CGRrwwAnUfpbJaq9ju+M
+         fKQYOwsgZTYoxtFNPYpMqn9KE2gRQMJ14gNpBIledNRF1FS3DIx8UwAZJAE+niJHSj5s
+         VyhdfJKskQTY9xwTTuh8hI+C8Dp/XRM99ps8yv7QL7sNdPHxH/dEqEb1ZKm+Il0ki60U
+         GnCAcAhHer8/1WljdlKlldgPJ9yj7vQkhG62IHAGx0HnN3VM+L+vi1IGbpAOW1PORST0
+         aHqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740600385; x=1741205185;
+        d=1e100.net; s=20230601; t=1740600386; x=1741205186;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/vUG3UQf9enQcfjnJw3LUMuFVnqA0Sb2HUdnSE0x+8=;
-        b=ukuK7Nm9Xq46T8FKleM2v2LPUVKsSydUauI0Bc+wmiB8w2ukLa6pydroV3sB1eJCSX
-         f55Uwrp1TvVKwdHNcDzXL2XxmYBQCeyEY1Aldoz+76WOodBoJ3OKBcKniOkFK+uwEomH
-         cmqgjdYw4xxzwEsVdU77cUZmoK9ZlVo4+lYIWV1OTygL5bsu3jdgEU7G5RS5rqGpRVcg
-         cAbX9za43Ioj9ALJtpQeUhVyqtwAJ6Ng8q2ja70ztDM4KWBRUadfz81RwLL31pTB09Cr
-         GVl+wBt+kfxjBPX4gDuEoVl0DkfqOa79xrwrSGuWFi7OnmxzWA3+Baf5CifU/8/YpHMf
-         PYcg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3TDt+awxsbLNNMi7kLS1vyFf+5iawUsscNKFbt0zUttu6sfS1/8JxeVZGtVMYjljSNXC78e8oiyGgYXeo@vger.kernel.org, AJvYcCVZXTO3/qh0GPb+ZQo6rWyICBtX2V7SE1yAy4knCWYcpP7MTVGJNin7JoZjs3SpSOljIHdiv8tZSPoW@vger.kernel.org, AJvYcCX+5coVYVBeqdhyfBW8F3A78g9muORPWX9Kmh8E/AOTyhnCkiJAaIW8zEeURkNDu+IDU8Rw+qhtJcEaw8SX@vger.kernel.org, AJvYcCXF4qy42ArLLzJ6+n2D+aQfgxjIG+0BjYdbZ6Rd1eDIrlh71MflGIno/Avt0wsqqQPmaqeRcZkR9veE@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiAkNEtp9Tn8D/7cRYS9U28Ads+3kRqkZAawsh8V38fHf30hwH
-	Qocp4iBQiGZQINoYIfXC2k1kWJWFTFmSLgP1cpyxGLvY276dWwY6
-X-Gm-Gg: ASbGnctrD3M0APRoZgGPkEtaxd0gydIG539htIHRK54xnt8Mpoxgtfqigv2dGgklG4d
-	jJzy52ITrHi9GAlauPLeH7tntIAUx+8Wz1ZEWTEIVpWzEYbsO0nqEhtUuKoUmutMBBixtR27Eq1
-	vZZXsf0ZUUSy5Uj23kgcaYN/aMb6nPRuh+vbQvCLNSknlwXzNxcELmOd3q/CyTfmxtRJmLBQ52C
-	v54Njw5pfpUpthRdn1MKUkPFmuc3unZdDHOJfByzzClpy9PjBiG5NE00nZPdJRF5f9zo3d0+Y+P
-	8V8zntTrb6MKEj1P49mT1t/Na9RG4VNH3YvhkpqA9MKYVzmcbj5glgQrtrV233uoaEAtuD26OyZ
-	I3Vnx
-X-Google-Smtp-Source: AGHT+IHy/rKJWflxjO2CYWjEzwlC1ugGoBV5DueR1VDTIbMe0tXx9+DJ84m4wOXWUhH3FkRLr6BgtA==
-X-Received: by 2002:a17:903:1984:b0:223:4b88:77ff with SMTP id d9443c01a7336-2234b887eb6mr6111025ad.6.1740600384997;
-        Wed, 26 Feb 2025 12:06:24 -0800 (PST)
+        bh=mH64ves2q9+0JDxQKA5wFB9C86aVirya4owjszWIQYM=;
+        b=RsUgJmbusO9jcG5bb47dCYZ50jt83JZs3AFZRph95jdYxrO9GimC7vOerYRsAS/ZWX
+         Tnpk1TuZGgu5azRiqnyjJocJqta8JYpbLtYC2ZV2mMuScxz3XGa2V4zWy7O+XRKoK6G/
+         oIMQ/WmRQgbHafOX3zgRu9s/h9SEyY9X8pK0qEKvBN8p71YcBN1F99iuX7TS7pcxcdn+
+         LAuVIn7WIGOyIbJtYLjIyzSjnn875jzefN0CE+GuA5L0MQPKvaxxt0flBZg7zSrFQMEX
+         gituhQM1v2Jes22sw+ubLlU7RJ5KB6gtXwqh2qBiE5DVZNOFSehHLO5Y8JbSlQp3SeEc
+         Fdmg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8RP5TXiGR5Mgk0+Y/LqOaffSHnF1bnH53cAVLT2CFJjpawU88ISVNCuBBOMM75W9tNXvHKSNDMAvn@vger.kernel.org, AJvYcCUAuEi94yMobvarAJPherjqLVjRUjef43gc7FbFc9pyjOwY2RTCXsespQ+mEPrdlEOuIxejWDsmXGzaA4QY@vger.kernel.org, AJvYcCVora5bKRoMuPeM2lvDekyE5vayPbkQ/h5VbJC7fWzfWMkZTIwe37li0otNVz8yBbbufdZ06nkBo7B1u5Rc@vger.kernel.org, AJvYcCW6/oUQ8PFcqQA8Yw9TuiMTjnhUiwp4PvGwvZdyvzTYRLoctzzg7YmHnohgfJNG5fSbzoS9JzDciSuk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+ByJ5na7fgieEs4dk+JkM+dwxS2kAnqgNlA0CK+Q3hK0RfLpp
+	hw0eutwcR3Chj1uh8Zwty42clv3uJO4kg2hxGmbWn4Yd5BuIapi8qXlV/Q==
+X-Gm-Gg: ASbGnctTSDxpr3CFq6fa2gvbcictE4sPq5fpFEyLP4571g7Wg9t/S1m1T+daoEI0t7D
+	y2F+mYcmzX6g0qujrpVnL0iGjaYQs4i2R1YL0Vp2t8sD8D8we/DIN6+0TqUFfEtSff+dfvJw1qF
+	8UkHMQIiDeA+frK/JU320bfi5x9b4x+7VqYulLZHCnYURof0C8dXbR89rT8OLWiXPCWfOaFsFYs
+	6vsjURHRhBbzdhIOaB0xaQLCKlmQAOANUogNBcn/c+kjwVXIi5OsMzYkfozao5DVdKoM6wXyMtp
+	M8DmTQ2PaHGEHMgONK06+tNgLRNFDQsuKBmX+ObmdulICnJGCYXxp9bZ+BsxeD6pwXrYEZNyuPz
+	252iO
+X-Google-Smtp-Source: AGHT+IGzBwtzQDRDAs0JclxfPDV4nz4s+N8wLmnCj+U3UG0rX0BVn//fyDyApXzDXvU2Te59jwDqzQ==
+X-Received: by 2002:a05:6a00:929d:b0:730:9752:d02a with SMTP id d2e1a72fcca58-734790a81bcmr14110219b3a.4.1740600386108;
+        Wed, 26 Feb 2025 12:06:26 -0800 (PST)
 Received: from localhost.localdomain (c-67-160-120-253.hsd1.wa.comcast.net. [67.160.120.253])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a81bbc7sm3959455b3a.127.2025.02.26.12.06.24
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a81bbc7sm3959455b3a.127.2025.02.26.12.06.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 12:06:24 -0800 (PST)
+        Wed, 26 Feb 2025 12:06:25 -0800 (PST)
 From: mhkelley58@gmail.com
 X-Google-Original-From: mhklinux@outlook.com
 To: kys@microsoft.com,
@@ -95,9 +95,9 @@ Cc: x86@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pci@vger.kernel.org,
 	linux-arch@vger.kernel.org
-Subject: [PATCH 4/7] x86/hyperv: Use hv_hvcall_*() to set up hypercall arguments -- part 2
-Date: Wed, 26 Feb 2025 12:06:09 -0800
-Message-Id: <20250226200612.2062-5-mhklinux@outlook.com>
+Subject: [PATCH 5/7] Drivers: hv: Use hv_hvcall_*() to set up hypercall arguments
+Date: Wed, 26 Feb 2025 12:06:10 -0800
+Message-Id: <20250226200612.2062-6-mhklinux@outlook.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250226200612.2062-1-mhklinux@outlook.com>
 References: <20250226200612.2062-1-mhklinux@outlook.com>
@@ -114,222 +114,130 @@ From: Michael Kelley <mhklinux@outlook.com>
 
 Update hypercall call sites to use the new hv_hvcall_*() functions
 to set up hypercall arguments. Since these functions zero the
-fixed portion of input memory, remove now redundant calls to memset()
-and explicit zero'ing of input fields.
+fixed portion of input memory, remove now redundant zero'ing of
+input fields.
 
-For hv_mark_gpa_visibility(), use the computed batch_size instead
-of HV_MAX_MODIFY_GPA_REP_COUNT. Also update the associated gpa_page_list[]
-field to have zero size, which is more consistent with other array
-arguments to hypercalls. Due to the interaction with the calling
-hv_vtom_set_host_visibility(), HV_MAX_MODIFY_GPA_REP_COUNT cannot be
-completely eliminated without some further restructuring, but that's
-for another patch set.
-
-Similarly, for the nested flush functions, update the gpa_list[] to
-have zero size. Again, separate restructuring would be required to
-completely eliminate the need for HV_MAX_FLUSH_REP_COUNT.
-
-Finally, hyperv_flush_tlb_others_ex() requires special handling
-because the input consists of two arrays -- one for the hv_vp_set and
-another for the gva list. The batch_size computed by hv_hvcall_in_array()
-is adjusted to account for the number of entries in the hv_vp_set.
+hv_post_message() requires additional updates. The payload area is
+treated as an array to avoid wasting cycles on zero'ing it and
+then overwriting with memcpy(). To allow treatment as an array,
+the corresponding payload[] field is updated to have zero size.
 
 Signed-off-by: Michael Kelley <mhklinux@outlook.com>
 ---
- arch/x86/hyperv/ivm.c       | 18 +++++++++---------
- arch/x86/hyperv/mmu.c       | 17 +++--------------
- arch/x86/hyperv/nested.c    | 14 +++++---------
- include/hyperv/hvgdk_mini.h |  4 ++--
- 4 files changed, 19 insertions(+), 34 deletions(-)
+ drivers/hv/hv.c           | 8 +++++---
+ drivers/hv/hv_balloon.c   | 4 ++--
+ drivers/hv/hv_common.c    | 2 +-
+ drivers/hv/hv_proc.c      | 8 ++++----
+ drivers/hv/hyperv_vmbus.h | 2 +-
+ 5 files changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index ec7880271cf9..1e4f65aef09b 100644
---- a/arch/x86/hyperv/ivm.c
-+++ b/arch/x86/hyperv/ivm.c
-@@ -465,30 +465,30 @@ static int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
- {
- 	struct hv_gpa_range_for_visibility *input;
- 	u64 hv_status;
-+	int batch_size;
- 	unsigned long flags;
+diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+index a38f84548bc2..d98e83b4a6fd 100644
+--- a/drivers/hv/hv.c
++++ b/drivers/hv/hv.c
+@@ -66,7 +66,8 @@ int hv_post_message(union hv_connection_id connection_id,
+ 	if (hv_isolation_type_tdx() && ms_hyperv.paravisor_present)
+ 		aligned_msg = this_cpu_ptr(hv_context.cpu_context)->post_msg_page;
+ 	else
+-		aligned_msg = *this_cpu_ptr(hyperv_pcpu_input_arg);
++		hv_hvcall_in_array(&aligned_msg, sizeof(*aligned_msg),
++					sizeof(aligned_msg->payload[0]));
  
- 	/* no-op if partition isolation is not enabled */
- 	if (!hv_is_isolation_supported())
- 		return 0;
- 
--	if (count > HV_MAX_MODIFY_GPA_REP_COUNT) {
--		pr_err("Hyper-V: GPA count:%d exceeds supported:%lu\n", count,
--			HV_MAX_MODIFY_GPA_REP_COUNT);
-+	local_irq_save(flags);
-+	batch_size = hv_hvcall_in_array(&input, sizeof(*input),
-+					sizeof(input->gpa_page_list[0]));
-+	if (unlikely(!input)) {
-+		local_irq_restore(flags);
- 		return -EINVAL;
- 	}
- 
--	local_irq_save(flags);
--	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--
--	if (unlikely(!input)) {
-+	if (count > batch_size) {
-+		pr_err("Hyper-V: GPA count:%d exceeds supported:%u\n", count,
-+			batch_size);
+ 	aligned_msg->connectionid = connection_id;
+ 	aligned_msg->reserved = 0;
+@@ -80,8 +81,9 @@ int hv_post_message(union hv_connection_id connection_id,
+ 						  virt_to_phys(aligned_msg), 0);
+ 		else if (hv_isolation_type_snp())
+ 			status = hv_ghcb_hypercall(HVCALL_POST_MESSAGE,
+-						   aligned_msg, NULL,
+-						   sizeof(*aligned_msg));
++					aligned_msg, NULL,
++					struct_size(aligned_msg, payload,
++					      HV_MESSAGE_PAYLOAD_QWORD_COUNT));
+ 		else
+ 			status = HV_STATUS_INVALID_PARAMETER;
+ 	} else {
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index fec2f18679e3..2def8b8794ee 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -1582,14 +1582,14 @@ static int hv_free_page_report(struct page_reporting_dev_info *pr_dev_info,
+ 	WARN_ON_ONCE(nents > HV_MEMORY_HINT_MAX_GPA_PAGE_RANGES);
+ 	WARN_ON_ONCE(sgl->length < (HV_HYP_PAGE_SIZE << page_reporting_order));
+ 	local_irq_save(flags);
+-	hint = *this_cpu_ptr(hyperv_pcpu_input_arg);
++
++	hv_hvcall_in_array(&hint, sizeof(*hint), sizeof(hint->ranges[0]));
+ 	if (!hint) {
  		local_irq_restore(flags);
- 		return -EINVAL;
+ 		return -ENOSPC;
  	}
  
- 	input->partition_id = HV_PARTITION_ID_SELF;
- 	input->host_visibility = visibility;
--	input->reserved0 = 0;
--	input->reserved1 = 0;
- 	memcpy((void *)input->gpa_page_list, pfn, count * sizeof(*pfn));
- 	hv_status = hv_do_rep_hypercall(
- 			HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY, count,
-diff --git a/arch/x86/hyperv/mmu.c b/arch/x86/hyperv/mmu.c
-index 1f7c3082a36d..ab9db23247c1 100644
---- a/arch/x86/hyperv/mmu.c
-+++ b/arch/x86/hyperv/mmu.c
-@@ -72,7 +72,7 @@ static void hyperv_flush_tlb_multi(const struct cpumask *cpus,
+ 	hint->heat_type = HV_EXTMEM_HEAT_HINT_COLD_DISCARD;
+-	hint->reserved = 0;
+ 	for_each_sg(sgl, sg, nents, i) {
+ 		union hv_gpa_page_range *range;
+ 
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index 9804adb4cc56..a6b1cdfbc8d4 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -293,7 +293,7 @@ void __init hv_get_partition_id(void)
+ 	u64 status, pt_id;
+ 
+ 	local_irq_save(flags);
+-	output = *this_cpu_ptr(hyperv_pcpu_input_arg);
++	hv_hvcall_inout(NULL, 0, &output, sizeof(*output));
+ 	status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, &output);
+ 	pt_id = output->partition_id;
+ 	local_irq_restore(flags);
+diff --git a/drivers/hv/hv_proc.c b/drivers/hv/hv_proc.c
+index 2fae18e4f7d2..d8f3b74d5306 100644
+--- a/drivers/hv/hv_proc.c
++++ b/drivers/hv/hv_proc.c
+@@ -73,7 +73,8 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
  
  	local_irq_save(flags);
  
--	flush = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	max_gvas = hv_hvcall_in_array(&flush, sizeof(*flush), sizeof(flush->gva_list[0]));
+-	input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
++	hv_hvcall_in_array(&input_page, sizeof(*input_page),
++			sizeof(input_page->gpa_page_list[0]));
  
- 	if (unlikely(!flush)) {
- 		local_irq_restore(flags);
-@@ -86,13 +86,10 @@ static void hyperv_flush_tlb_multi(const struct cpumask *cpus,
- 		 */
- 		flush->address_space = virt_to_phys(info->mm->pgd);
- 		flush->address_space &= CR3_ADDR_MASK;
--		flush->flags = 0;
- 	} else {
--		flush->address_space = 0;
- 		flush->flags = HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES;
- 	}
+ 	input_page->partition_id = partition_id;
  
--	flush->processor_mask = 0;
- 	if (cpumask_equal(cpus, cpu_present_mask)) {
- 		flush->flags |= HV_FLUSH_ALL_PROCESSORS;
- 	} else {
-@@ -139,8 +136,6 @@ static void hyperv_flush_tlb_multi(const struct cpumask *cpus,
- 	 * We can flush not more than max_gvas with one hypercall. Flush the
- 	 * whole address space if we were asked to do more.
- 	 */
--	max_gvas = (PAGE_SIZE - sizeof(*flush)) / sizeof(flush->gva_list[0]);
--
- 	if (info->end == TLB_FLUSH_ALL) {
- 		flush->flags |= HV_FLUSH_NON_GLOBAL_MAPPINGS_ONLY;
- 		status = hv_do_hypercall(HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE,
-@@ -179,7 +174,7 @@ static u64 hyperv_flush_tlb_others_ex(const struct cpumask *cpus,
- 	if (!(ms_hyperv.hints & HV_X64_EX_PROCESSOR_MASKS_RECOMMENDED))
- 		return HV_STATUS_INVALID_PARAMETER;
+@@ -124,9 +125,8 @@ int hv_call_add_logical_proc(int node, u32 lp_index, u32 apic_id)
+ 	do {
+ 		local_irq_save(flags);
  
--	flush = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	max_gvas = hv_hvcall_in_array(&flush, sizeof(*flush), sizeof(flush->gva_list[0]));
+-		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+ 		/* We don't do anything with the output right now */
+-		output = *this_cpu_ptr(hyperv_pcpu_output_arg);
++		hv_hvcall_inout(&input, sizeof(*input), &output, sizeof(*output));
  
- 	if (info->mm) {
- 		/*
-@@ -188,14 +183,10 @@ static u64 hyperv_flush_tlb_others_ex(const struct cpumask *cpus,
- 		 */
- 		flush->address_space = virt_to_phys(info->mm->pgd);
- 		flush->address_space &= CR3_ADDR_MASK;
--		flush->flags = 0;
- 	} else {
--		flush->address_space = 0;
- 		flush->flags = HV_FLUSH_ALL_VIRTUAL_ADDRESS_SPACES;
- 	}
+ 		input->lp_index = lp_index;
+ 		input->apic_id = apic_id;
+@@ -167,7 +167,7 @@ int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags)
+ 	do {
+ 		local_irq_save(irq_flags);
  
--	flush->hv_vp_set.valid_bank_mask = 0;
--
- 	flush->hv_vp_set.format = HV_GENERIC_SET_SPARSE_4K;
- 	nr_bank = cpumask_to_vpset_skip(&flush->hv_vp_set, cpus,
- 			info->freed_tables ? NULL : cpu_is_lazy);
-@@ -206,9 +197,7 @@ static u64 hyperv_flush_tlb_others_ex(const struct cpumask *cpus,
- 	 * We can flush not more than max_gvas with one hypercall. Flush the
- 	 * whole address space if we were asked to do more.
- 	 */
--	max_gvas =
--		(PAGE_SIZE - sizeof(*flush) - nr_bank *
--		 sizeof(flush->hv_vp_set.bank_contents[0])) /
-+	max_gvas -= (nr_bank * sizeof(flush->hv_vp_set.bank_contents[0])) /
- 		sizeof(flush->gva_list[0]);
+-		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
++		hv_hvcall_in(&input, sizeof(*input));
  
- 	if (info->end == TLB_FLUSH_ALL) {
-diff --git a/arch/x86/hyperv/nested.c b/arch/x86/hyperv/nested.c
-index 1083dc8646f9..88c39ac8d0aa 100644
---- a/arch/x86/hyperv/nested.c
-+++ b/arch/x86/hyperv/nested.c
-@@ -29,15 +29,13 @@ int hyperv_flush_guest_mapping(u64 as)
- 
- 	local_irq_save(flags);
- 
--	flush = *this_cpu_ptr(hyperv_pcpu_input_arg);
--
-+	hv_hvcall_in(&flush, sizeof(*flush));
- 	if (unlikely(!flush)) {
- 		local_irq_restore(flags);
- 		goto fault;
- 	}
- 
- 	flush->address_space = as;
--	flush->flags = 0;
- 
- 	status = hv_do_hypercall(HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE,
- 				 flush, NULL);
-@@ -90,25 +88,23 @@ int hyperv_flush_guest_mapping_range(u64 as,
- 	u64 status;
- 	unsigned long flags;
- 	int ret = -ENOTSUPP;
--	int gpa_n = 0;
-+	int batch_size, gpa_n = 0;
- 
- 	if (!hv_hypercall_pg || !fill_flush_list_func)
- 		goto fault;
- 
- 	local_irq_save(flags);
- 
--	flush = *this_cpu_ptr(hyperv_pcpu_input_arg);
--
-+	batch_size = hv_hvcall_in_array(&flush, sizeof(*flush),
-+					sizeof(flush->gpa_list[0]));
- 	if (unlikely(!flush)) {
- 		local_irq_restore(flags);
- 		goto fault;
- 	}
- 
- 	flush->address_space = as;
--	flush->flags = 0;
--
- 	gpa_n = fill_flush_list_func(flush, data);
--	if (gpa_n < 0) {
-+	if (gpa_n < 0 || gpa_n > batch_size) {
- 		local_irq_restore(flags);
- 		goto fault;
- 	}
-diff --git a/include/hyperv/hvgdk_mini.h b/include/hyperv/hvgdk_mini.h
-index 58895883f636..70e5d7ee40c8 100644
---- a/include/hyperv/hvgdk_mini.h
-+++ b/include/hyperv/hvgdk_mini.h
-@@ -533,7 +533,7 @@ union hv_gpa_page_range {
- struct hv_guest_mapping_flush_list {
- 	u64 address_space;
- 	u64 flags;
--	union hv_gpa_page_range gpa_list[HV_MAX_FLUSH_REP_COUNT];
-+	union hv_gpa_page_range gpa_list[];
+ 		input->partition_id = partition_id;
+ 		input->vp_index = vp_index;
+diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
+index 29780f3a7478..44b5e8330d9d 100644
+--- a/drivers/hv/hyperv_vmbus.h
++++ b/drivers/hv/hyperv_vmbus.h
+@@ -101,7 +101,7 @@ struct hv_input_post_message {
+ 	u32 reserved;
+ 	u32 message_type;
+ 	u32 payload_size;
+-	u64 payload[HV_MESSAGE_PAYLOAD_QWORD_COUNT];
++	u64 payload[];
  };
  
- struct hv_tlb_flush {	 /* HV_INPUT_FLUSH_VIRTUAL_ADDRESS_LIST */
-@@ -1218,7 +1218,7 @@ struct hv_gpa_range_for_visibility {
- 	u32 host_visibility : 2;
- 	u32 reserved0 : 30;
- 	u32 reserved1;
--	u64 gpa_page_list[HV_MAX_MODIFY_GPA_REP_COUNT];
-+	u64 gpa_page_list[];
- } __packed;
  
- #if defined(CONFIG_X86)
 -- 
 2.25.1
 
