@@ -1,78 +1,78 @@
-Return-Path: <linux-arch+bounces-10390-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10391-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 252A4A46C04
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 21:08:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DB7DA46BFD
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 21:07:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4E5016E09F
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 20:07:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D9367A2CC7
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 20:06:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC6C25D522;
-	Wed, 26 Feb 2025 20:06:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D149425D55A;
+	Wed, 26 Feb 2025 20:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h1O6Bxek"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CI/7btwn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E758625B663;
-	Wed, 26 Feb 2025 20:06:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D31B25C6F6;
+	Wed, 26 Feb 2025 20:06:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740600388; cv=none; b=kaV5DfvBcAGfxEYxCogldWA8kr1ELTpfZo+159dAwi+Pw808wFmb6OrUbPRtx6i0PRnYbkPIefrLYAtbzHxgJIfIQHzOYE5gjKux71GHzIFq0+Oa2xPi/iT1TR1EZMiFvH2w0fWHbBYceTNsA/MBFtSk/pfHHe57yF0gD5A+4n8=
+	t=1740600389; cv=none; b=qB10aVfnW56ZPr2B7XH2NTbXG1R77jIiVfQXN/fvgPoMR0qgY/jkxFnJkAPS+XG9IISTT3WMpzBGkpiiyIKu4aWzEyGTNoXCx3dF3KtagavM7IKp+TGxPuAYEeoWvFFn1dQyoU9lR/eDU/zif6H1BGxk3+LTVJs/zH6wKLvwkNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740600388; c=relaxed/simple;
-	bh=UTc/zIxMZzlnepV3eF829gkrOKS/3bcc1+fy1YyKaRA=;
+	s=arc-20240116; t=1740600389; c=relaxed/simple;
+	bh=M5iM+v3BE6xddWKmrkHslf0oPFkrxg8orhL4OW9AAeo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mMIX+L1TjTfNj7q2iYkMJpPEjMLvbKV9c9YfQwwQ8cY8eWQA9+0GLr4Gq+ce1aDwnRyEIk5/JwqzjKFkTAGH1hfqyuRRd5enJJlKBVJG1m+1paSneFJjBUpKuBbaeBfEU898HguhmIlWKIyVaeXHoWunHSHmrDjV3hdcrGDxMhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h1O6Bxek; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=oYG1A8TS39t9jTZqaBiSBrsBFEddMnsABxuDQLRJ0/Q+zf51yp8XRDB4jIB1qRT5qtp4TY/rvloeTUiTzj2qKrIvzOZKqe6vcF06lGOPhveNSJcwX8CgWa6i3LY3o29fhohbI7zeIm8NLreSN/st83/AKeT4ZNcXZCU75KCU7eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CI/7btwn; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2233622fdffso2546445ad.2;
-        Wed, 26 Feb 2025 12:06:26 -0800 (PST)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-222e8d07dc6so4873105ad.1;
+        Wed, 26 Feb 2025 12:06:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740600386; x=1741205186; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740600387; x=1741205187; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=mH64ves2q9+0JDxQKA5wFB9C86aVirya4owjszWIQYM=;
-        b=h1O6BxekuYXimLJZs13M1OAW0ptceKxL5Dze3LDXSzkLNBQltpEqoDEzHIZp5gpWR1
-         mMRo03gS1zVGjeJWbS7e+PTjKADFU/5NyD+Mi+BrUfYA0pE9CGRrwwAnUfpbJaq9ju+M
-         fKQYOwsgZTYoxtFNPYpMqn9KE2gRQMJ14gNpBIledNRF1FS3DIx8UwAZJAE+niJHSj5s
-         VyhdfJKskQTY9xwTTuh8hI+C8Dp/XRM99ps8yv7QL7sNdPHxH/dEqEb1ZKm+Il0ki60U
-         GnCAcAhHer8/1WljdlKlldgPJ9yj7vQkhG62IHAGx0HnN3VM+L+vi1IGbpAOW1PORST0
-         aHqw==
+        bh=ELYv+am9ZuaVjiWbWFLOkRsJsowJRkAsb1c2IjCc1to=;
+        b=CI/7btwnRApQ+SWSowIj2GPzT+XPhsuXtIx2v8G0q2tgzutiTDj+zkWyqZKkvehAD1
+         Bw01N0PZCDKIcHsLcJp+ylCyVfll41qOB3RXyW4vtefCxEpqsJIND3g3w/7EbXvXVHmd
+         vxvQNdYHD10an4HzP+vw4EOMuvz7nyeNyYwGvFf4w5VaVRC0uTtSwn5edOXVaBu/LKOL
+         nfq+e8fd6eFI2nHfGIZtlTRtwHMUaTwh2xZxxf9uBVXALmjYUg8+i3lJ0FUxSaX1doZk
+         NKDob6H+K1x/DywErZpkZFw6ktQKH3xNlGsDz1D0gdDzNY80UDMUegmM/OR1bSDgwFWQ
+         7RhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740600386; x=1741205186;
+        d=1e100.net; s=20230601; t=1740600387; x=1741205187;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=mH64ves2q9+0JDxQKA5wFB9C86aVirya4owjszWIQYM=;
-        b=RsUgJmbusO9jcG5bb47dCYZ50jt83JZs3AFZRph95jdYxrO9GimC7vOerYRsAS/ZWX
-         Tnpk1TuZGgu5azRiqnyjJocJqta8JYpbLtYC2ZV2mMuScxz3XGa2V4zWy7O+XRKoK6G/
-         oIMQ/WmRQgbHafOX3zgRu9s/h9SEyY9X8pK0qEKvBN8p71YcBN1F99iuX7TS7pcxcdn+
-         LAuVIn7WIGOyIbJtYLjIyzSjnn875jzefN0CE+GuA5L0MQPKvaxxt0flBZg7zSrFQMEX
-         gituhQM1v2Jes22sw+ubLlU7RJ5KB6gtXwqh2qBiE5DVZNOFSehHLO5Y8JbSlQp3SeEc
-         Fdmg==
-X-Forwarded-Encrypted: i=1; AJvYcCU8RP5TXiGR5Mgk0+Y/LqOaffSHnF1bnH53cAVLT2CFJjpawU88ISVNCuBBOMM75W9tNXvHKSNDMAvn@vger.kernel.org, AJvYcCUAuEi94yMobvarAJPherjqLVjRUjef43gc7FbFc9pyjOwY2RTCXsespQ+mEPrdlEOuIxejWDsmXGzaA4QY@vger.kernel.org, AJvYcCVora5bKRoMuPeM2lvDekyE5vayPbkQ/h5VbJC7fWzfWMkZTIwe37li0otNVz8yBbbufdZ06nkBo7B1u5Rc@vger.kernel.org, AJvYcCW6/oUQ8PFcqQA8Yw9TuiMTjnhUiwp4PvGwvZdyvzTYRLoctzzg7YmHnohgfJNG5fSbzoS9JzDciSuk@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+ByJ5na7fgieEs4dk+JkM+dwxS2kAnqgNlA0CK+Q3hK0RfLpp
-	hw0eutwcR3Chj1uh8Zwty42clv3uJO4kg2hxGmbWn4Yd5BuIapi8qXlV/Q==
-X-Gm-Gg: ASbGnctTSDxpr3CFq6fa2gvbcictE4sPq5fpFEyLP4571g7Wg9t/S1m1T+daoEI0t7D
-	y2F+mYcmzX6g0qujrpVnL0iGjaYQs4i2R1YL0Vp2t8sD8D8we/DIN6+0TqUFfEtSff+dfvJw1qF
-	8UkHMQIiDeA+frK/JU320bfi5x9b4x+7VqYulLZHCnYURof0C8dXbR89rT8OLWiXPCWfOaFsFYs
-	6vsjURHRhBbzdhIOaB0xaQLCKlmQAOANUogNBcn/c+kjwVXIi5OsMzYkfozao5DVdKoM6wXyMtp
-	M8DmTQ2PaHGEHMgONK06+tNgLRNFDQsuKBmX+ObmdulICnJGCYXxp9bZ+BsxeD6pwXrYEZNyuPz
-	252iO
-X-Google-Smtp-Source: AGHT+IGzBwtzQDRDAs0JclxfPDV4nz4s+N8wLmnCj+U3UG0rX0BVn//fyDyApXzDXvU2Te59jwDqzQ==
-X-Received: by 2002:a05:6a00:929d:b0:730:9752:d02a with SMTP id d2e1a72fcca58-734790a81bcmr14110219b3a.4.1740600386108;
-        Wed, 26 Feb 2025 12:06:26 -0800 (PST)
+        bh=ELYv+am9ZuaVjiWbWFLOkRsJsowJRkAsb1c2IjCc1to=;
+        b=GzPqNuoiWYeYJ3LTpBuyNptW0tZGrfci5CrQVhf+DlxuP4xGRwFhdfaUzyLF3+Vn7E
+         9/iUTrsIcwVVtDcdHdVN5eU6esjwZJrd3LZhbHeEuGuLcmiOVb13qs96XLFXeOGde0yT
+         ARLuXc/ynv1ymqcxz1ZNAh3SeyUrdF+yyVXAVGKcP0p6gdSqABhvku8NqHngc9wwM7L0
+         HVcSiAvmjnpPJkB+pRgXD4nAmILMDENUJzr8K+bpnNvl0aFMcs8Lwjqb2Ucdjpln/jFr
+         5lYsoCGWne3o781nj5Li5gPCKTz4bjJCg/X7Cc9T8gtw2aXPMpBguIZP9RloMQLMLOjr
+         RduQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/f01Hp8hWewAMAaGnEnZuJoUyze6Oj7if3ZtsJEpWf3KVqGMbLwAxarb8/hCZc+lbb3KZrrcA/8HU@vger.kernel.org, AJvYcCUf97Zf9uC5InqAMKl7Nh4fZMXJ5d4khRHAcBnAIGr7ZFJMBLBGm2LJM6mAeUrkbPHuEbgM9vM186dX@vger.kernel.org, AJvYcCUznwb4QxCqYY3esdDet3XaF7fOjMfOTtT4AQe/mlemDqeEsfxyPmsFl1Ik9PVGj+bp8F4R3BkrvmsHg2Cn@vger.kernel.org, AJvYcCWC/llG700Jxhx7mh4rMbWH8M9ZfJbXqh9iYCe3PHUYHp+09ILqhbFD2sinSweud2iCR6AAqL5oMEKXhJB4@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9l0Oqsezp3QOYe4QfHms3oz6UiVp4wHIwhPsnuYga2UK5uZnH
+	IhFAjWlba568tbHLu+vY0YO1lVOP8/aHBdYv9lAehMJua2L46quO
+X-Gm-Gg: ASbGncuGUOJ3mh4zg6FP63dT4648DPsM3Bew8KQPRYeMBHhAjpe+1ANQJb1OOrV4FzO
+	FxDOcsx1yD89ubjtcoEH8hA4oBdurOlmK7pKQ95ei5oqg2KblV5WH3UpBpyZn67a9J7RP2q/C5K
+	DUFtg0l8gfsqHIBqyE3tWgBQt9UqD/zG3Q2nN7j65IEDI0Kji3dXKW+6cF81NnKkEUpUmj2gFOY
+	v1gPEz2LZFNUlCEwzToigXrU6gA24BAcDhW1rvccJJRflA/nAjUOzaOJw+cFSBxyGtbngkbtHwv
+	/eIOWwCFFH3N06/kGrOWtqYICbl5eM6RUSzvXUmSmPdAXxIy72aeT3iBeqXXBNQvf5nPp0XydVG
+	DXSnl
+X-Google-Smtp-Source: AGHT+IEF9gSycAUTpsQfXxyyfb4BCEiV6gy3DT9yWoYp/0qBCfPYI4EN3aEwUEcsNwLTBnte36b+ig==
+X-Received: by 2002:a17:902:ce8d:b0:220:e91f:4408 with SMTP id d9443c01a7336-2234b083b0bmr8783675ad.22.1740600387328;
+        Wed, 26 Feb 2025 12:06:27 -0800 (PST)
 Received: from localhost.localdomain (c-67-160-120-253.hsd1.wa.comcast.net. [67.160.120.253])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a81bbc7sm3959455b3a.127.2025.02.26.12.06.25
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a81bbc7sm3959455b3a.127.2025.02.26.12.06.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 12:06:25 -0800 (PST)
+        Wed, 26 Feb 2025 12:06:27 -0800 (PST)
 From: mhkelley58@gmail.com
 X-Google-Original-From: mhklinux@outlook.com
 To: kys@microsoft.com,
@@ -95,9 +95,9 @@ Cc: x86@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pci@vger.kernel.org,
 	linux-arch@vger.kernel.org
-Subject: [PATCH 5/7] Drivers: hv: Use hv_hvcall_*() to set up hypercall arguments
-Date: Wed, 26 Feb 2025 12:06:10 -0800
-Message-Id: <20250226200612.2062-6-mhklinux@outlook.com>
+Subject: [PATCH 6/7] PCI: hv: Use hv_hvcall_*() to set up hypercall arguments
+Date: Wed, 26 Feb 2025 12:06:11 -0800
+Message-Id: <20250226200612.2062-7-mhklinux@outlook.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250226200612.2062-1-mhklinux@outlook.com>
 References: <20250226200612.2062-1-mhklinux@outlook.com>
@@ -114,130 +114,68 @@ From: Michael Kelley <mhklinux@outlook.com>
 
 Update hypercall call sites to use the new hv_hvcall_*() functions
 to set up hypercall arguments. Since these functions zero the
-fixed portion of input memory, remove now redundant zero'ing of
-input fields.
-
-hv_post_message() requires additional updates. The payload area is
-treated as an array to avoid wasting cycles on zero'ing it and
-then overwriting with memcpy(). To allow treatment as an array,
-the corresponding payload[] field is updated to have zero size.
+fixed portion of input memory, remove now redundant calls to memset().
 
 Signed-off-by: Michael Kelley <mhklinux@outlook.com>
 ---
- drivers/hv/hv.c           | 8 +++++---
- drivers/hv/hv_balloon.c   | 4 ++--
- drivers/hv/hv_common.c    | 2 +-
- drivers/hv/hv_proc.c      | 8 ++++----
- drivers/hv/hyperv_vmbus.h | 2 +-
- 5 files changed, 13 insertions(+), 11 deletions(-)
+ drivers/pci/controller/pci-hyperv.c | 14 ++++++--------
+ include/hyperv/hvgdk_mini.h         |  2 +-
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-index a38f84548bc2..d98e83b4a6fd 100644
---- a/drivers/hv/hv.c
-+++ b/drivers/hv/hv.c
-@@ -66,7 +66,8 @@ int hv_post_message(union hv_connection_id connection_id,
- 	if (hv_isolation_type_tdx() && ms_hyperv.paravisor_present)
- 		aligned_msg = this_cpu_ptr(hv_context.cpu_context)->post_msg_page;
- 	else
--		aligned_msg = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+		hv_hvcall_in_array(&aligned_msg, sizeof(*aligned_msg),
-+					sizeof(aligned_msg->payload[0]));
- 
- 	aligned_msg->connectionid = connection_id;
- 	aligned_msg->reserved = 0;
-@@ -80,8 +81,9 @@ int hv_post_message(union hv_connection_id connection_id,
- 						  virt_to_phys(aligned_msg), 0);
- 		else if (hv_isolation_type_snp())
- 			status = hv_ghcb_hypercall(HVCALL_POST_MESSAGE,
--						   aligned_msg, NULL,
--						   sizeof(*aligned_msg));
-+					aligned_msg, NULL,
-+					struct_size(aligned_msg, payload,
-+					      HV_MESSAGE_PAYLOAD_QWORD_COUNT));
- 		else
- 			status = HV_STATUS_INVALID_PARAMETER;
- 	} else {
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index fec2f18679e3..2def8b8794ee 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1582,14 +1582,14 @@ static int hv_free_page_report(struct page_reporting_dev_info *pr_dev_info,
- 	WARN_ON_ONCE(nents > HV_MEMORY_HINT_MAX_GPA_PAGE_RANGES);
- 	WARN_ON_ONCE(sgl->length < (HV_HYP_PAGE_SIZE << page_reporting_order));
- 	local_irq_save(flags);
--	hint = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+
-+	hv_hvcall_in_array(&hint, sizeof(*hint), sizeof(hint->ranges[0]));
- 	if (!hint) {
- 		local_irq_restore(flags);
- 		return -ENOSPC;
- 	}
- 
- 	hint->heat_type = HV_EXTMEM_HEAT_HINT_COLD_DISCARD;
--	hint->reserved = 0;
- 	for_each_sg(sgl, sg, nents, i) {
- 		union hv_gpa_page_range *range;
- 
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 9804adb4cc56..a6b1cdfbc8d4 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -293,7 +293,7 @@ void __init hv_get_partition_id(void)
- 	u64 status, pt_id;
- 
- 	local_irq_save(flags);
--	output = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	hv_hvcall_inout(NULL, 0, &output, sizeof(*output));
- 	status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, &output);
- 	pt_id = output->partition_id;
- 	local_irq_restore(flags);
-diff --git a/drivers/hv/hv_proc.c b/drivers/hv/hv_proc.c
-index 2fae18e4f7d2..d8f3b74d5306 100644
---- a/drivers/hv/hv_proc.c
-+++ b/drivers/hv/hv_proc.c
-@@ -73,7 +73,8 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
+diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+index 44d7f4339306..b7bfda00544d 100644
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -638,8 +638,8 @@ static void hv_arch_irq_unmask(struct irq_data *data)
  
  	local_irq_save(flags);
  
--	input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	hv_hvcall_in_array(&input_page, sizeof(*input_page),
-+			sizeof(input_page->gpa_page_list[0]));
+-	params = *this_cpu_ptr(hyperv_pcpu_input_arg);
+-	memset(params, 0, sizeof(*params));
++	hv_hvcall_in_array(&params, sizeof(*params),
++			sizeof(params->int_target.vp_set.bank_contents[0]));
+ 	params->partition_id = HV_PARTITION_ID_SELF;
+ 	params->int_entry.source = HV_INTERRUPT_SOURCE_MSI;
+ 	params->int_entry.msi_entry.address.as_uint32 = int_desc->address & 0xffffffff;
+@@ -1034,11 +1034,9 @@ static void hv_pci_read_mmio(struct device *dev, phys_addr_t gpa, int size, u32
  
- 	input_page->partition_id = partition_id;
+ 	/*
+ 	 * Must be called with interrupts disabled so it is safe
+-	 * to use the per-cpu input argument page.  Use it for
+-	 * both input and output.
++	 * to use the per-cpu argument page.
+ 	 */
+-	in = *this_cpu_ptr(hyperv_pcpu_input_arg);
+-	out = *this_cpu_ptr(hyperv_pcpu_input_arg) + sizeof(*in);
++	hv_hvcall_inout(&in, sizeof(*in), &out, sizeof(*out));
+ 	in->gpa = gpa;
+ 	in->size = size;
  
-@@ -124,9 +125,8 @@ int hv_call_add_logical_proc(int node, u32 lp_index, u32 apic_id)
- 	do {
- 		local_irq_save(flags);
+@@ -1067,9 +1065,9 @@ static void hv_pci_write_mmio(struct device *dev, phys_addr_t gpa, int size, u32
  
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
- 		/* We don't do anything with the output right now */
--		output = *this_cpu_ptr(hyperv_pcpu_output_arg);
-+		hv_hvcall_inout(&input, sizeof(*input), &output, sizeof(*output));
- 
- 		input->lp_index = lp_index;
- 		input->apic_id = apic_id;
-@@ -167,7 +167,7 @@ int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags)
- 	do {
- 		local_irq_save(irq_flags);
- 
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+		hv_hvcall_in(&input, sizeof(*input));
- 
- 		input->partition_id = partition_id;
- 		input->vp_index = vp_index;
-diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-index 29780f3a7478..44b5e8330d9d 100644
---- a/drivers/hv/hyperv_vmbus.h
-+++ b/drivers/hv/hyperv_vmbus.h
-@@ -101,7 +101,7 @@ struct hv_input_post_message {
+ 	/*
+ 	 * Must be called with interrupts disabled so it is safe
+-	 * to use the per-cpu input argument memory.
++	 * to use the per-cpu argument page.
+ 	 */
+-	in = *this_cpu_ptr(hyperv_pcpu_input_arg);
++	hv_hvcall_in_array(&in, sizeof(*in), sizeof(in->data[0]));
+ 	in->gpa = gpa;
+ 	in->size = size;
+ 	switch (size) {
+diff --git a/include/hyperv/hvgdk_mini.h b/include/hyperv/hvgdk_mini.h
+index 70e5d7ee40c8..cb25ac1e3ac5 100644
+--- a/include/hyperv/hvgdk_mini.h
++++ b/include/hyperv/hvgdk_mini.h
+@@ -1342,7 +1342,7 @@ struct hv_mmio_write_input {
+ 	u64 gpa;
+ 	u32 size;
  	u32 reserved;
- 	u32 message_type;
- 	u32 payload_size;
--	u64 payload[HV_MESSAGE_PAYLOAD_QWORD_COUNT];
-+	u64 payload[];
- };
+-	u8 data[HV_HYPERCALL_MMIO_MAX_DATA_LENGTH];
++	u8 data[];
+ } __packed;
  
- 
+ #endif /* _HV_HVGDK_MINI_H */
 -- 
 2.25.1
 
