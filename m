@@ -1,207 +1,236 @@
-Return-Path: <linux-arch+bounces-10382-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10383-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDC10A46716
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 17:53:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C6C5A4672A
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 17:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E99F43A591F
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 16:53:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 785C93A540A
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 16:57:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506BB21171A;
-	Wed, 26 Feb 2025 16:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFB5821C9E8;
+	Wed, 26 Feb 2025 16:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z/dw0KG1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTSPOZJE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DE122257F
-	for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2025 16:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD3D2904;
+	Wed, 26 Feb 2025 16:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740588786; cv=none; b=pYrJyYcCE2v6/7OTJqcwQuGw73Tr6MX6LWihdoEvPpm62b8O8Xxw8SpCnvQ8U2t2+tHTkzUh4ZVDD8kF9soZXWZtCMwkCIujZbliwZ9y1bUHf9asODj2sEVgycg/AqyDP+tYShOMarRNKllnflyOz7+SXwHlxqLcrEGP4JqQgP8=
+	t=1740589072; cv=none; b=RSlOVLkRQUqkc4YPz5ggEADbxGwUAtMjJquJJPbDGc/t0mgjqyWaPD5wxFAaEUVV/QuGc91mHLwWsQeE1vmS5/N17NHATKfVFdoqa1qWx60jCU8EtKKFq7Irt86CiPU32UEZHRazf2q3CG0W6dPsEqHkKJsmJ7zSoHQNHLjS5P8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740588786; c=relaxed/simple;
-	bh=Qf/Qm0nkzf7U3vlvRsLDs3vQoV9ABJSWnA6WtOiN2ig=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=lbSmQpA3BAWpsBoWDs8huDZpElOXyBt3+WRzF96rq6s9EPZc+rMi6xu5PwB6feA6FUkMWXx5wg1NC3gymwLzG03bAU7ddTpsDtG8iP3/5jBKmNjlc583voHj80JDrJL1+doE2WMlsW7qpgfmdmZDVxbZ/PRGKC+zEFURe6Rqt54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z/dw0KG1; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740588783;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qf/Qm0nkzf7U3vlvRsLDs3vQoV9ABJSWnA6WtOiN2ig=;
-	b=Z/dw0KG134zsO4a2TKX2m3WCDrkQvwzpl4Yz4guYIBsTGu6ntdyOZbMrKTR3Gt4mcpBmDm
-	q6slYwFtHbLjReBgvyfdYAAh5VXHcEWT/KBllTykYhxd21vo4M9yaF4Lyc3IrXGNXioPTy
-	hDS9vOBn8FlorTwC/wfsKVh+oK9od6Q=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-518-oC2dcvKxPDG-8uv__ZnyZw-1; Wed, 26 Feb 2025 11:52:55 -0500
-X-MC-Unique: oC2dcvKxPDG-8uv__ZnyZw-1
-X-Mimecast-MFC-AGG-ID: oC2dcvKxPDG-8uv__ZnyZw_1740588774
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4394040fea1so441665e9.0
-        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2025 08:52:55 -0800 (PST)
+	s=arc-20240116; t=1740589072; c=relaxed/simple;
+	bh=oDzNzJQCQCpod+FlpG1cOpfLw0rTcV7/aHUCSfgM1II=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cS0PDz6y02che7m7+TllDWExRxC1lsCtMaCy9jj0gjzUEfr+3yuMAHOv5RbpdP+laqalVEz/kNPA2zTdhpYqEJnQKNOQgZNwpm8KY8RzVPqWSRbdxWUfzjBBySjuN4GT9iqRfhcb1nEa+ouCFmtjYuqploz6TOVYRCLE6ne49AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTSPOZJE; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-22349bb8605so3197605ad.0;
+        Wed, 26 Feb 2025 08:57:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740589071; x=1741193871; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W00ofEXGknDTyL3Hozx7OoQOLaiK6RbK+sTUYcCUMas=;
+        b=NTSPOZJEd9tcFYTkzQLYOXK/16bGm+lDHKOGkLZHwvek6tu/MupUipo+m31BrG4VSK
+         HDN2/KDdYMlgSGZaS6ulu3knr4UoZEvCidJAovbW4xRV1lYjIgYwAX68Ga7d9it4q0GM
+         iVmj615TE7XaACcGAF3UohhF7gScVP2l/HPxNltdyO/Clq/uHZSpuqFKZo9R5JV0n9Gq
+         3Oy446H+UhzqI45+d6T2bsFtD5oRiFGxtWRZNVpm+NufF2gaM7VZ8Bi9tTR1UBqKBbU4
+         AQ5ZcB4pEVDkzQLXWK6zIkki5UlElrcRbRC/WER9I5ReodIYYK0SoziN7+Xx7W1D8UDW
+         LB1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740588774; x=1741193574;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qf/Qm0nkzf7U3vlvRsLDs3vQoV9ABJSWnA6WtOiN2ig=;
-        b=BxH+FM1qfYrgHo1zhi7HRpSExzHnPiPSL12U0zcGCrnGXvlLWrvf9KrM+L65AXeHaE
-         JQA29WynxZAo+dDr3DGkANapjoLUP/A4GF1kYsx8WjXS8ccb6xSKRF9qOvEHem7H6CfN
-         O6xlZPADQcDrqPF4NH4I4nS/R8zeb3bdM+1v8QkkZBiB0PuGmwuMutCgJ41CB1yyU2Z6
-         LhDIGMeNnEvAquCq7nu3Ev4nJwFzXIp4wocROhVnX0emm9Vu5gY55sFX20NwAgb82VlL
-         VYqUqLTLhdhQC5VPxa5/KFwjKOnYrWVWND0EOyf4yvLQ6svBolYV5AQY2ePiMQthMH6l
-         yRHA==
-X-Forwarded-Encrypted: i=1; AJvYcCUda/q/RShHeD0mdajHLBj8oA35Y50BzrQllWlyn/BnJrdDNatmMA9IR8OTZhM9f1habh53I0MASRl6@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywe65knLTpSBsGAkIqOtqJ+hgOgOykjUfRC36cBQ2/j2HxKZvpo
-	yTAXyiRitRRWxMsuL+ztHdQ9DWDfw7JZdzwtktCqaRSlsR8smJgZzLSQRonqYAlEys8j82iIdCK
-	PxdI3R3eT/1RFdLq65KzaUE4EChnjK+Z6Zkuwkho/VmQmpDT7PsPeICOVPZ0=
-X-Gm-Gg: ASbGncvNuCmTrVkALL9PdBlau3f0FgDvydofUV72aZKhmkuBV0h7Hus/W7GYOWiV/gr
-	jcTBpdkUtqTtZxlVuk4gx6c7TcPvX67oTk/SjZatu+/ICE8chYFsBQK3OeK5bsqTKKraxUVQZex
-	z/vSiG+QF3rU2Sa6KxAuqGyknHFUQBSMqrrWPIOh5hffZCs8YuxV44bfefOawzN8D6O3NcaclgE
-	mZxuGGfz7Jk2a2hsAsGbz/fyt/e2NDxspKKHd7fgGPPsbcC96svhDNS2QlacjdiBUK4W8xLrR+o
-	ROs0iTDiB6fw2r9jEY3BPSlxDcADGROGP1I+clN4x/S4l8NnBfEkgYiCKFTBc4bcF7kUpgiql0R
-	2
-X-Received: by 2002:a05:600c:ca:b0:439:91c7:895a with SMTP id 5b1f17b1804b1-43afddc6489mr797295e9.7.1740588774289;
-        Wed, 26 Feb 2025 08:52:54 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGWpDWParbyEFSiQubNArY/pYMHk4T+vY7Yfjqs/xu0tXoSgFv+Leti7F7TfR+hujI+3HmBjw==
-X-Received: by 2002:a05:600c:ca:b0:439:91c7:895a with SMTP id 5b1f17b1804b1-43afddc6489mr797035e9.7.1740588773857;
-        Wed, 26 Feb 2025 08:52:53 -0800 (PST)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390d98c0642sm2242326f8f.81.2025.02.26.08.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 08:52:53 -0800 (PST)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Dave Hansen <dave.hansen@intel.com>, Jann Horn <jannh@google.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
- kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
- Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
- <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
- Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
- Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
- <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
- Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
- <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
- <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
- <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
- Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
- Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
- Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
- Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
- Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
- <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
- <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
- Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
- Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
- Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
- Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
- <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
- Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
- flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
-In-Reply-To: <408ebd8b-4bfb-4c4f-b118-7fe853c6e897@intel.com>
-References: <20250114175143.81438-1-vschneid@redhat.com>
- <20250114175143.81438-30-vschneid@redhat.com>
- <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
- <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
- <xhsmh5xlhk5p2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <CAG48ez1EAATYcX520Nnw=P8XtUDSr5pe+qGH1YVNk3xN2LE05g@mail.gmail.com>
- <xhsmh34gkk3ls.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <352317e3-c7dc-43b4-b4cb-9644489318d0@intel.com>
- <xhsmhjz9mj2qo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <d0450bc8-6585-49ca-9cad-49e65934bd5c@intel.com>
- <xhsmhh64qhssj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <eef09bdc-7546-462b-9ac0-661a44d2ceae@intel.com>
- <xhsmhfrk84k5k.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <408ebd8b-4bfb-4c4f-b118-7fe853c6e897@intel.com>
-Date: Wed, 26 Feb 2025 17:52:50 +0100
-Message-ID: <xhsmhfrk0lkbh.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+        d=1e100.net; s=20230601; t=1740589071; x=1741193871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W00ofEXGknDTyL3Hozx7OoQOLaiK6RbK+sTUYcCUMas=;
+        b=o2fMoaHXM50qWaG0xqLbM9gbJz076QemUQfnB3TFKUrTePVTBQdfTAkHL3XaqD1Ajk
+         wooPr8dgzgCVdmFispK23Jyy6jiuV/xJOZqjVA6u5XBy1NFcVK6wvj/SGt5nzJ+DOdMU
+         0UwAP1vzxhgKDzRUUz368RFlNPFcuAY2mDBH5FJDv5z1QaEbuAyv6/7ZKTm7Dv35+NVi
+         jyDebmDW9TulKIqWbKTnC2xiFC68glxs9VYfPnNWF48TJkMjhBPcHvINsX9vaT1tEcFV
+         GVgWY+VsUVVAfTDcFa8LlhPZ6fTLcfyzCc4db0h9IbzlKHmcxpaPG0Ze759+Xi16Gnm0
+         Z4ig==
+X-Forwarded-Encrypted: i=1; AJvYcCUNy0WFPMEmNkkZlXHdqX3EuqdjI3kAWCfgW8A81zrapKLZLToMqwoelWH3c7KsDSoG5fEdeyzxKNZKJw==@vger.kernel.org, AJvYcCUUBq5I2XC8o/BaKGP7QhvK95iF1qgWO37f/1O+oN4+PN5CLZ+WXoIj5e3J2le+GvDDjpJxl6EMXl0a/wmx@vger.kernel.org, AJvYcCVVsTozvrKdcERnnlrjFFFvG5UUr0Z3jbXU6hPaBzyPNArogAjjvXDRUI2pg7j1e8hiaxc=@vger.kernel.org, AJvYcCVgb9ExtE73mwZ3JRdfL45SNLZbv/zo1/7r1dZzpBAxSsRt52SP/xRYrw1PffzTjQgNB0fNvKobb34Tv4GQTHLG@vger.kernel.org, AJvYcCW+oaawNeDPybFZ3MHASLieNUXPcV91FO/vNqMWoPxQCU8XDV1YaTHY6u8fKAcasC1I4wt2WDTsmOB9Ogwe@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6wwKs9hYYfooHoyhslLE8HRBhDh55jNbkeVbXOd1bm4ZsoLtx
+	cNgjU9v91n9MoQnTP6I8dTEgv+bW/2qTmCkf4e/jw7XXX1NJdi205yDNLQ9wyZeXz7tb6/40I1d
+	l4kIKd9PRTqye6DIN9MBhIBpbY+s=
+X-Gm-Gg: ASbGncu7I2p+mwH4UI933zOI7/QeR6b5myswBzEqb1DoXkLwcPDr4ncssibX6nAPZMM
+	nAoSSl4IkmRUD+SWvJxlZadMIJB+px41YKUkW4BUBmq+pLQhMo6A5cWP0QJutyUoUR2Wh2ttwAc
+	OnZuJ67R3W4VJZvcMxQgEKPAI=
+X-Google-Smtp-Source: AGHT+IEgGbTxa5fw9Tzi+zukInErP5tYADKg37pvA52HJFQbFmG6OY3lcDtNCZ78IPi05FLe6gVOZF5uM4bgca5k6Uw=
+X-Received: by 2002:a17:90b:54c7:b0:2fc:a3b7:1099 with SMTP id
+ 98e67ed59e1d1-2fe68ac95e7mr12048949a91.4.1740589070678; Wed, 26 Feb 2025
+ 08:57:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20250207012045.2129841-1-stephen.s.brennan@oracle.com>
+ <20250207012045.2129841-3-stephen.s.brennan@oracle.com> <CAADnVQLiyezBW34dhkwZw+mWmkFAYMZUdHbOa4uYCdPbgS10SQ@mail.gmail.com>
+ <83a42276-22cc-4642-8ce6-7ef16fa93d9c@oracle.com> <CAEf4BzYvFnqeZjNy_b_VP9DEpBaTMWuMAau8j6ZAWtgwcE5ysg@mail.gmail.com>
+ <6c89777a-65dc-44da-83cd-005cb6c82430@oracle.com>
+In-Reply-To: <6c89777a-65dc-44da-83cd-005cb6c82430@oracle.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 26 Feb 2025 08:57:38 -0800
+X-Gm-Features: AQ5f1JrDtsm8c0OwuLqeBst-uB_gQt0f_-0bBGt8FY0lP-kpDaIh-BvZG47lX_k
+Message-ID: <CAEf4BzbyjuM8wXChRejxkYFSm0o=+udr7uGink-5Wo1Ayb6M_A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] btf: Add the option to include global variable types
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Stephen Brennan <stephen.s.brennan@oracle.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Kees Cook <kees@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Sami Tolvanen <samitolvanen@google.com>, Eduard Zingerman <eddyz87@gmail.com>, 
+	linux-arch <linux-arch@vger.kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Kent Overstreet <kent.overstreet@linux.dev>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Jann Horn <jannh@google.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Hao Luo <haoluo@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, linux-debuggers@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Song Liu <song@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 20/02/25 09:38, Dave Hansen wrote:
-> On 2/20/25 09:10, Valentin Schneider wrote:
->>> The LDT and maybe the PEBS buffers are the only implicit supervisor
->>> accesses to vmalloc()'d memory that I can think of. But those are both
->>> handled specially and shouldn't ever get zapped while in use. The LDT
->>> replacement has its own IPIs separate from TLB flushing.
->>>
->>> But I'm actually not all that worried about accesses while actually
->>> running userspace. It's that "danger zone" in the kernel between entry
->>> and when the TLB might have dangerous garbage in it.
->>>
->> So say we have kPTI, thus no vmalloc() mapped in CR3 when running
->> userspace, and do a full TLB flush right before switching to userspace -
->> could the TLB still end up with vmalloc()-range-related entries when we're
->> back in the kernel and going through the danger zone?
+On Wed, Feb 26, 2025 at 6:20=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
+om> wrote:
 >
-> Yes, because the danger zone includes the switch back to the kernel CR3
-> with vmalloc() fully mapped. All bets are off about what's in the TLB
-> the moment that CR3 write occurs.
+> On 25/02/2025 21:52, Andrii Nakryiko wrote:
+> > On Tue, Feb 25, 2025 at 2:02=E2=80=AFAM Alan Maguire <alan.maguire@orac=
+le.com> wrote:
+> >>
+> >> On 07/02/2025 23:50, Alexei Starovoitov wrote:
+> >>> On Thu, Feb 6, 2025 at 5:21=E2=80=AFPM Stephen Brennan
+> >>> <stephen.s.brennan@oracle.com> wrote:
+> >>>> When the feature was implemented in pahole, my measurements indicate=
+d
+> >>>> that vmlinux BTF size increased by about 25.8%, and module BTF size
+> >>>> increased by 53.2%. Due to these increases, the feature is implement=
+ed
+> >>>> behind a new config option, allowing users sensitive to increased me=
+mory
+> >>>> usage to disable it.
+> >>>>
+> >>>
+> >>> ...
+> >>>> +config DEBUG_INFO_BTF_GLOBAL_VARS
+> >>>> +       bool "Generate BTF type information for all global variables=
+"
+> >>>> +       default y
+> >>>> +       depends on DEBUG_INFO_BTF && PAHOLE_VERSION >=3D 128
+> >>>> +       help
+> >>>> +         Include type information for all global variables in the B=
+TF. This
+> >>>> +         increases the size of the BTF information, which increases=
+ memory
+> >>>> +         usage at runtime. With global variable types available, ru=
+ntime
+> >>>> +         debugging and tracers may be able to provide more detail.
+> >>>
+> >>> This is not a solution.
+> >>> Even if it's changed to 'default n' distros will enable it
+> >>> like they enable everything and will suffer a regression.
+> >>>
+> >>> We need to add a new module like vmlinux_btf.ko that will contain
+> >>> this additional BTF data. For global vars and everything else we migh=
+t need.
+> >>>
+> >>
+> >> In this area, I've been exploring adding support for
+> >> CONFIG_DEBUG_INFO_BTF=3Dm , so that the BTF info for vmlinux is delive=
+red
+> >> via a module. From the consumer side, everything looks identical
+> >> (/sys/kernel/btf/vmlinux is there etc), it is just that the .BTF secti=
+on
+> >> is delivered via btf_vmlinux.ko instead. The original need for this wa=
+s
+> >> that embedded folks noted that because in the current situation BTF da=
+ta
+> >> is in vmlinux, they cannot enable BTF because such small-footprint
+> >> systems do not support a large vmlinux binary. However they could
+> >> potentially use kernel BTF if it was delivered via a module. The other
+> >> nice thing about module delivery in the general case is we can make us=
+e
+> >> of module compression. In experiments I see a 5.8Mb vmlinux BTF reduce
+> >> to a 1.8Mb btf_vmlinux.ko.gz module on-disk.
+> >>
+> >> The challenge in delivering vmlinux BTF in a module is that on module
+> >> load during boot other modules expect vmlinux BTF to be there when
+> >> adding their own BTF to /sys/kernel/btf. And kfunc registration from
+> >> kernel and modules expects this also. So support for deferred BTF modu=
+le
+> >> load/kfunc registration is required too. I've implemented the former a=
+nd
+> >> now am working on the latter. Hope to have some RFC patches ready soon=
+,
+> >> but it looks feasible at this point.
+> >
+> > Lazy btf_vmlinux.ko loading when BTF is actually needed (i.e., when
+> > user reads /sys/kernel/btf/vmlinux for the first time; or when BPF
+> > program is validated and needs kernel BTF) would be great. Curious too
+> > see how all that fits together!
+> >
+> >>
+> >> Assuming such an option was available to small-footprint systems, shou=
+ld
+> >> we consider adding global variables to core vmlinux BTF along with
+> >> per-cpu variables? Then vmlinux BTF extras could be used for some of t=
+he
+> >> additional optional representations like function site-specific data
+> >> (inlines etc)? Or are there other factors other than on-disk footprint
+> >> that we need to consider? Thanks!
+> >
+> > I'd keep BTF for variables separate from "core" vmlinux BTF. We can
+> > have /sys/kernel/btf/vmlinux.vars, which would depend on
+> > /sys/kernel/btf/vmlinux as a base BTF. Separately, we could eventually
+> > have /sys/kernel/btf/vmlinux.inlines which would also have
+> > /sys/kernel/btf/vmlinux as base BTF. If no one needs vmlinux.vars on
+> > the system, we won't need to waste memory on it. Seems more modular
+> > and extensible.
+> >
 >
-> Actually, you could probably use that.
+> Sounds good. So thinking about how this fits with
+> CONFIG_DEBUG_INFO_BTF=3Dm, perhaps the approach would be to use
+> btf_vmlinux.ko for all such extensible /sys/kernel/btf/vmlinux.vars,
+> vmlinux.inlines etc. Each of these is derived from .BTF.vars ,
+> .BTF.inlines sections in btf_vmlinux.ko. These are optionally included
+> via CONFIG_DEBUG_INFO_BTF_EXTRAS list. If CONFIG_DEBUG_INFO_BTF=3Dy the
+> core vmlinux section stays in vmlinux itself and the extras are
+> delivered via btf_vmlinux.ko, but if CONFIG_DEBUG_INFO_BTF=3Dm, the
+> vmlinux .BTF section is delivered in btf_vmlinux.ko too.
 >
-> If a mapping is in the PTI user page table, you can't defer the flushes
-> for it. Basically the same rule for text poking in the danger zone.
+> If this makes sense, I'll try and put together the
+> CONFIG_DEBUG_INFO_BTF=3Dm support first, and that will give us a
+> btf_vmlinux.ko to work with for delivery of extras. Thanks!
+
+I'd keep our options open as to whether btf_vmlinux.ko contains all
+vmlinux BTFs (core BTF, inlines, variables) or we have a separate
+module for some subsets. E.g., variables, while a useful thing,
+probably won't be used all that frequently (i.e., only while debugging
+with drgn), so co-locating it with vmlinux BTF itself might be a waste
+in most cases.
+
+But other than that makes sense.
+
 >
-> If there's a deferred flush pending, make sure that all of the
-> SWITCH_TO_KERNEL_CR3's fully flush the TLB. You'd need something similar
-> to user_pcid_flush_mask.
+> Alan
 >
-
-Right, that's what I (roughly) had in mind...
-
-> But, honestly, I'm still not sure this is worth all the trouble. If
-> folks want to avoid IPIs for TLB flushes, there are hardware features
-> that *DO* that. Just get new hardware instead of adding this complicated
-> pile of software that we have to maintain forever. In 10 years, we'll
-> still have this software *and* 95% of our hardware has the hardware
-> feature too.
-
-... But yeah, it pretty much circumvents arch_context_tracking_work, or at
-the very least adds an early(er) flushing of the context tracking
-work... Urgh.
-
-Thank you for grounding my wild ideas into reality. I'll try to think some
-more see if I see any other way out (other than "buy hardware that does
-what you want and ditch the one that doesn't").
-
+> >>
+> >> Alan
+> >>
+> >>> pw-bot: cr
+> >>>
+> >>
+>
 
