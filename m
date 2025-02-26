@@ -1,263 +1,147 @@
-Return-Path: <linux-arch+bounces-10372-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10373-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 095EDA45C27
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 11:51:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A250FA45D27
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 12:30:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82C4F188E990
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 10:51:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E520D172EEF
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 11:30:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE1D2459D4;
-	Wed, 26 Feb 2025 10:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD75C2153EB;
+	Wed, 26 Feb 2025 11:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UlE9sQot"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="rWtw35VN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from pv50p00im-ztdg10011301.me.com (pv50p00im-ztdg10011301.me.com [17.58.6.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6661E1E06;
-	Wed, 26 Feb 2025 10:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DCF215050
+	for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2025 11:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740567081; cv=none; b=CGp7vPlQ30eR1u/iq+eusSl++KY/YcJSibu17LZZ0dswyYIov2IB6AjEJIeRHYMVmg0YQAbDRmr5vo4EB4b3iT4hA0JWoF88HRmMbTbs4eMVsfSZUPjUH9ryvSQ4+J07R4CzJtV7D+PO4p13yEK/qszFp2jsc2eAvquKbxBztKg=
+	t=1740569439; cv=none; b=FqHAyGEP8Drhq0zo8nGU6SlhoIWq+FbuzAtEkQIl/voEyDnUUqcjHOqN7wzwMn1hw6nlogFuWGE8vsd6qxKrjOzdxmhck5Mwv46SCCR7tvSQMp3OygyA+wZd30c8IkCqYPmiMbbj5XQBYdFl3D31Krw4KAE6T8o0adxIxTqN+CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740567081; c=relaxed/simple;
-	bh=EJRmzJTFJ8NjApj/tf5SNaCRDGeunDMttv5+CnuEb8g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o18l93/Cw/mGvg/pEFfcHJIfhrAVEE3FSVVIJjbDCxA1VNY8uevD0HGuMAS53ghr2ddy1PiMRHtKvR9NJXfvbB3e2ALL5xZkn14TzZ7UaHSt3HZJSH1vfA5O06+xQFbnHOKd/21TCvfXduPQTBoWyrA2thGPHjwt+e/1dCGUi8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UlE9sQot; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740567080; x=1772103080;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EJRmzJTFJ8NjApj/tf5SNaCRDGeunDMttv5+CnuEb8g=;
-  b=UlE9sQotNuJP83URwUVTRDNCrtJ0cn8w3IYzUFK/t0XbwkygwmzMFLKQ
-   Lg6I52zLO9O48c/I+bZE/PnTB1I+dtfJNyhL/U6PVIn5NLWNrisnIRbiN
-   TnG9QGYkQYk5cyQPysaGPITigr/3PPe69ytVObfWqs9eKHb64cDD3Iaim
-   PU2gWWERqUYrtEUbkoSwsDAjZvEeHTR8UuUyAqZVCTSLA6Kc4AripAYXC
-   7RBmionF/lhRXpi+1obxhMQry+7mkXrhqmzHNPpfOEPcCE1lW5EoNHDXo
-   aw4cPHXwRrigGXbQZEBHxBLlS5oKiz9teAWJ7udxzFIfwF74W1/m52DNM
-   g==;
-X-CSE-ConnectionGUID: SNaOmWMVRH+D9KDR6a6Dcg==
-X-CSE-MsgGUID: 91xqQ0xKQA63LOhGDqCOkQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41603139"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="41603139"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2025 02:51:18 -0800
-X-CSE-ConnectionGUID: Sp/DqdCSR8Glw85ZGwduvg==
-X-CSE-MsgGUID: ixcL/gLGQqim/7ZZJYfvsQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="147490774"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orviesa002.jf.intel.com with ESMTP; 26 Feb 2025 02:51:09 -0800
-Date: Wed, 26 Feb 2025 18:49:18 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Alexey Kardashevskiy <aik@amd.com>
-Cc: x86@kernel.org, kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Robin Murphy <robin.murphy@arm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Christoph Hellwig <hch@lst.de>, Nikunj A Dadhania <nikunj@amd.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Vasant Hegde <vasant.hegde@amd.com>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Lu Baolu <baolu.lu@linux.intel.com>,
-	Steve Sistare <steven.sistare@oracle.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
-	iommu@lists.linux.dev, linux-coco@lists.linux.dev,
-	Zhi Wang <zhiw@nvidia.com>,
-	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
-Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
-Message-ID: <Z77xrqLtJfB84dJF@yilunxu-OptiPlex-7050>
-References: <20250218111017.491719-1-aik@amd.com>
- <20250218111017.491719-15-aik@amd.com>
- <Z72GmixR6NkzXAl7@yilunxu-OptiPlex-7050>
- <2fe6b3c6-3eed-424d-87f0-34c4e7e1c906@amd.com>
+	s=arc-20240116; t=1740569439; c=relaxed/simple;
+	bh=SNcREccD3RAme9xYt3R+kilxl7SAdbri9ontWGXnon8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NATwmVanCs5baVK1/l8S0p3WIm48X6Se3M3TuL+tlPtnraRmF931pCL2aMWQwSe9vqJrPLCmJx0/Zi9JXc8jioWVX03fNH3wPZNG9GQRtgTKZNBTH4ik0dJK9xF3fHxW3YOGNm4YwsYVh0ANh1xNqZWlZfnAhvqryHoWMPwSq/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=rWtw35VN; arc=none smtp.client-ip=17.58.6.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=SOdlXl7RXO630hj2D8KbTA/iuYN0f3n9ChpjV2oMRbU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
+	b=rWtw35VN5C7ebUryxGYabBiGNkfRxevNXaKu3lmmbcfRwCfqvGmsARTKGVlEDc3vJ
+	 IUw+i/jF2/O7wPykYL7GtrScwR7YHPk2KZArZBlYEByVg4HG2euMsCf4SLAhxqqINe
+	 T4aLRNRVMNlFJyn+/hO3Lmf6LkZiGLt8eWLCMvUUCNYIgCuhqhS16/5+FYQBrqDBv9
+	 cTNT5EvlskIwUWEEZthrUNkKMbaMBoPHtGY9C1f3/Wkj+mhDFLP1F1CqAqbIZvoN+x
+	 V8XpPNLsrc2QkugOEEdKPXC0Zg7dBaQpmDQ+gMVmCM7ShlzUTzFJzMqx6xBRgIBMy+
+	 ioIbkere3zE9w==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10011301.me.com (Postfix) with ESMTPSA id EAC1C18036A;
+	Wed, 26 Feb 2025 11:30:23 +0000 (UTC)
+Message-ID: <d70d059e-37aa-431d-986c-5666f006d610@icloud.com>
+Date: Wed, 26 Feb 2025 19:30:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2fe6b3c6-3eed-424d-87f0-34c4e7e1c906@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH *-next 01/18] mm/mmu_gather: Remove needless return in
+ void API tlb_remove_page()
+To: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Cc: Zijun Hu <quic_zijuhu@quicinc.com>, Peter Zijlstra
+ <peterz@infradead.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ "David S. Miller" <davem@davemloft.net>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
+ Jiri Pirko <jiri@resnulli.us>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
+ Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Robin Murphy <robin.murphy@arm.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+ netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+ linux-mtd@lists.infradead.org
+References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
+ <20250221-rmv_return-v1-1-cc8dff275827@quicinc.com>
+ <20250221200137.GH7373@noisy.programming.kicks-ass.net>
+ <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com>
+ <20250224132354.GC11590@noisy.programming.kicks-ass.net>
+ <a28f04e5-ccde-4a08-b8fa-a9fa685240b1@icloud.com>
+ <15c121c7-aeed-480e-8b1a-8ff23b4a3654@intel.com>
+Content-Language: en-US
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <15c121c7-aeed-480e-8b1a-8ff23b4a3654@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: BXt7ADwYEBiuzX8MsPltF1M0d6Q_8HN4
+X-Proofpoint-ORIG-GUID: BXt7ADwYEBiuzX8MsPltF1M0d6Q_8HN4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-26_02,2025-02-26_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
+ clxscore=1015 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=993
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2502260092
 
-On Wed, Feb 26, 2025 at 11:12:32AM +1100, Alexey Kardashevskiy wrote:
+On 2025/2/26 01:27, Przemek Kitszel wrote:
+>>>>> It might not be your preferred coding style, but it is not completely
+>>>>> pointless.
+>>>>
+>>>> based on below C spec such as C17 description. i guess language C does
+>>>> not like this usage "return void function in void function";
+>>>
+>>> This is GNU extension IIRC. Note kernel uses GNU11, not C11
+>>
+>> any link to share about GNU11's description for this aspect ? (^^)
+> this is new for C17 or was there for long time?
 > 
+
+Standard C spec has that description for long time.
+Standard C11 spec also has that description.
+
+> even if this is an extension, it is very nice for generating locked
+> wrappers, so you don't have to handle void case specially
 > 
-> On 25/2/25 20:00, Xu Yilun wrote:
-> > On Tue, Feb 18, 2025 at 10:10:01PM +1100, Alexey Kardashevskiy wrote:
-> > > When a TDISP-capable device is passed through, it is configured as
-> > > a shared device to begin with. Later on when a VM probes the device,
-> > > detects its TDISP capability (reported via the PCIe ExtCap bit
-> > > called "TEE-IO"), performs the device attestation and transitions it
-> > > to a secure state when the device can run encrypted DMA and respond
-> > > to encrypted MMIO accesses.
-> > > 
-> > > Since KVM is out of the TCB, secure enablement is done in the secure
-> > > firmware. The API requires PCI host/guest BDFns, a KVM id hence such
-> > > calls are routed via IOMMUFD, primarily because allowing secure DMA
-> > > is the major performance bottleneck and it is a function of IOMMU.
-> > 
-> > I still have concern about the vdevice interface for bind. Bind put the
-> > device to LOCKED state, so is more of a device configuration rather
-> > than an iommu configuration. So seems more reasonable put the API in VFIO?
+> void foo_bar(...)
+> {
+>     lockdep_assert_held(&a_lock);
+>     /// ...
+> }
 > 
-> IOMMUFD means pretty much VFIO (in the same way "VFIO means KVM" as 95+% of
-> VFIO users use it from KVM, although VFIO works fine without KVM) so not
-> much difference where to put this API and can be done either way. VFIO is
+> // generated
+> void foo_bar_lock(...)
+> {
+>     scoped_guard(mutex, &a_lock)
+>         return foo_bar(...);
 
-Er... I cannot agree. There are clear responsibilities for
-VFIO/IOMMUFD/KVM each. They don't overlap each other. So I don't think
-either way is OK. VFIO still controls the overall device behavior
-and it is VFIO's decision to hand over user DMA setup to IOMMUFD. IIUC
-that's why VFIO_DEVICE_ATTACH_IOMMUFD_PT should be a VFIO API.
+above is able to be written as below:
+      scoped_guard(mutex, &a_lock) {
+	foo_bar(...);
+	return;
+      }
+> }
+i will list my reasons why this usage "return void function in void
+function" is not good in cover letter [00/18] of this series.
 
-E.g. I don't think VFIO driver would expect its MMIO access suddenly
-failed without knowing what happened.
 
-> reasonable, the immediate problem is that IOMMUFD's vIOMMU knows the guest
-> BDFn (well, for AMD) and VFIO PCI does not.
-
-For Intel, it is host BDF. But I think this is TSM architecture
-difference that could be hidden in TSM framework. From TSM caller's POV,
-it could just be a magic number identifying the TDI.
-
-Back to your concern, I don't think it is a problem. From your patch,
-vIOMMU doesn't know the guest BDFn by nature, it is just the user
-stores the id in vdevice via iommufd_vdevice_alloc_ioctl(). A proper
-VFIO API could also do this work.
-
-I'm suggesting a VFIO API:
-
-/*
- * @tdi_id: A TSM recognizable TDI identifier
- *	    On input, user suggests the TDI identifier number for TSM.
- *	    On output, TSM's decision of the TDI identifier number.
- */
-struct vfio_pci_tsm_bind {
-	__u32 argsz;
-	__u32 flags;
-	__u32 tdi_id;
-	__u32 pad;
-};
-
-#define VFIO_DEVICE_TSM_BIND		_IO(VFIO_TYPE, VFIO_BASE + 22)
-
-I need the tdi_id as output cause I don't want any outside TSM user and
-Guest to assume what the TDI id should be.
-
-static int vfio_pci_ioctl_tsm_bind(struct vfio_pci_core_device *vdev,
-				   void __user *arg)
-{
-	unsigned long minsz = offsetofend(struct vfio_pci_tsm_bind, tdi_id);
-	struct pci_dev *pdev = vdev->pdev;
-	struct kvm *kvm = vdev->vdev.kvm;
-	struct vfio_pci_tsm_bind bind;
-
-	if (copy_from_user(&bind, arg, minsz))
-		return -EFAULT;
-
-	ret = pci_tsm_dev_bind(pdev, kvm, &bind.tdi_id);
-
-}
-
-A call to TSM makes TSM driver know the tdi_id and could find the real
-device inside TSM via tdi_id. Following TSM call could directly use
-tdi_id as parameter.
-
-The implementation is basically no difference from:
-
-+       vdev = container_of(iommufd_get_object(ucmd->ictx, cmd->vdevice_id,
-+                                              IOMMUFD_OBJ_VDEVICE),
-
-The real concern is the device owner, VFIO, should initiate the bind.
-
-> 
-> 
-> > > Add TDI bind to do the initial binding of a passed through PCI
-> > > function to a VM. Add a forwarder for TIO GUEST REQUEST. These two
-> > > call into the TSM which forwards the calls to the PSP.
-> > > 
-> > > Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
-> > > ---
-> > > 
-> > > Both enabling secure DMA (== "SDTE Write") and secure MMIO (== "MMIO
-> > > validate") are TIO GUEST REQUEST messages. These are encrypted and
-> > > the HV (==IOMMUFD or KVM or VFIO) cannot see them unless the guest
-> > > shares some via kvm_run::kvm_user_vmgexit (and then QEMU passes those
-> > > via ioctls).
-> > > 
-> > > This RFC routes all TIO GUEST REQUESTs via IOMMUFD which arguably should
-> > > only do so only for "SDTE Write" and leave "MMIO validate" for VFIO.
-> > 
-> > The fact is HV cannot see the guest requests, even I think HV never have
-> > to care about the guest requests. HV cares until bind, then no HV side
-> > MMIO & DMA access is possible, any operation/state after bind won't
-> > affect HV more. And HV could always unbind to rollback guest side thing.
-> > 
-> > That said guest requests are nothing to do with any host side component,
-> > iommu or vfio. It is just the message posting between VM & firmware. I
-> > suppose KVM could directly do it by calling TSM driver API.
-> 
-> No, it could not as the HV needs to add the host BDFn to the guest's request
-> before calling the firmware and KVM does not have that knowledge.
-
-I think if TSM has knowledge about tdi_id, KVM doesn't have to know host BDFn.
-Just let TSM handle the vendor difference. Not sure if this solves all
-the problem.
-
-> 
-> These guest requests are only partly encrypted as the guest needs
-> cooperation from the HV. The guest BDFn comes unencrypted from the VM to let
-> the HV find the host BDFn and do the bind.
-
-It is not about HV never touch any message content. It is about HV
-doesn't (and shouldn't, since some info is encrypted) influence any host
-behavior by executing guest request, so no need to route to any other
-component.
-
-Thanks,
-Yilun
-
-> 
-> Also, say, in order to enable MMIO range, the host needs to "rmpupdate"
-> MMIOs first (and then the firmware does "pvalidate") so it needs to know the
-> range which is in unencrypted part of guest request.
-> 
-> Here is a rough idea: https://github.com/aik/qemu/commit/f804b65aff5b
-> 
-> A TIO Guest request is made of:
-> - guest page with unencrypted header (msg type is essential) and encrypted
-> body for consumption by the firmware;
-> - a couple of 64bit bit fields and RAX/RBX/... in shared GHCB page.
-> 
-> Thanks,
-> 
-> > Thanks,
-> > Yilun
-> 
-> -- 
-> Alexey
-> 
 
