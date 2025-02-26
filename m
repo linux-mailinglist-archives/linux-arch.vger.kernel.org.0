@@ -1,137 +1,144 @@
-Return-Path: <linux-arch+bounces-10374-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10375-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69461A45D9A
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 12:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 726A8A4603B
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 14:08:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99CC1174BF5
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 11:48:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2632E165625
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 13:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1D0219312;
-	Wed, 26 Feb 2025 11:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65643214A67;
+	Wed, 26 Feb 2025 13:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="f8lZWyvS"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="T/QbiIKv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pv50p00im-ztdg10011301.me.com (pv50p00im-ztdg10011301.me.com [17.58.6.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15647218858
-	for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2025 11:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDE61891A9
+	for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2025 13:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740570353; cv=none; b=uY9eBIeMBS35aKEFLFESgobDFE/1sYVm5KkCPYHeyXwRvCIivTFzJRx20+dR7+lSy1XhFR36s+SsMIcC3rPHkeoGMv2NDkLR0j1L1oHwjl4d/aXA7YA6N1VzyrHv6w4EQ/q2bnDb6KWtyMHONZmY/AnF2pNQ+S8/z69GHgMBSvA=
+	t=1740575288; cv=none; b=jL4ilLZWAOWpnp5AQA8l+isxPLwaKU2u6P467pYf5zUUrg72mX6OUI/Yki0Q414NiK7JxFnADhTiRI5Knyxd4CxxnJMcSQML4ZY37gAKP7yUzNbFriybMqAKkALQK3yn0hqH8s7JjmP8goz6nZ7/wMHr8aKlQDasQcMLkL7TIf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740570353; c=relaxed/simple;
-	bh=C0kSWoh3LIV+HuMudMUFcqmX7KtzIL+dLkLS0LuQI+w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dPpyqAxKbl3yHXkeg2f85LxHTum34p4RQneFDJPj8zf0OOEK1cbjEuTLDWXTG6rO3KCgWg8jmpCfOB2HqaQ1altDMkWDubcAKpGB81c6N8yUzR/02QflMiFLX1DdWmNWKmO1mBx23OECasC9hfBP77FosLQ4CzqFxk1Fq/HOBU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=f8lZWyvS; arc=none smtp.client-ip=17.58.6.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; bh=UlmH7lnQ/SSIrKM5aMl2BHpkT+fwdodZZLv8W8GXIsc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
-	b=f8lZWyvSDPQwKr7SDXIE6VdW5kZrI22cRU+v86cMZBg8M63ib8K+MKQDsZPYVZ+Mz
-	 VIc01nNZYPIWEtaq9AznMiQTF7n48OFpxRM5YhSgpY2okVb9cwuvzP1KIikiB+2fRu
-	 d+7AduZcNoirLHLK7K4h8pgvS0d1L0tQbLrFrF/Od88tDX/EZXod457QB5bg4qbmFp
-	 DbogBPgs3Q7iQQ0mZfmhQRiw2/P900rSG5OeZM5GDf/tYeCwP0bcGCpZ97ZFFl8n8G
-	 biW93Aup+84jC3T2ck5W5lDGV0KXW+sjwetmqndyZG8OIOv24PsphQXGiGBlN7Elxi
-	 r4aI2TycTa3Rw==
-Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztdg10011301.me.com (Postfix) with ESMTPSA id 5CEAB180350;
-	Wed, 26 Feb 2025 11:45:37 +0000 (UTC)
-Message-ID: <a6dfff9c-ab0e-4308-81e7-62d8ea04d62b@icloud.com>
-Date: Wed, 26 Feb 2025 19:45:34 +0800
+	s=arc-20240116; t=1740575288; c=relaxed/simple;
+	bh=gZlf2V4DZl06PCel9kKPigzKNxKnfgpO2YLnb7fz6Tg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mgLrExG4RD7ZeWH3HZ4cQoAraeHGTNgDXw1pSMqb6EvkObw0viDx6HOw2WETfmqNaJGkiPD1z+kdXEG3GH+p0iJLgbUefebGjoCtnBW9n9gYG3TS3rPdsSp6iIO8d432CzkRDP18mGsAWZxodCdhfDDCZgiQldgRw2Ofj3tpwYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=T/QbiIKv; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c0a4b030f2so873261485a.0
+        for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2025 05:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1740575285; x=1741180085; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ECSFx2fiYRGYbPUPOKEj5uQjkNpa71sMCoCExCmYew=;
+        b=T/QbiIKvtcqcqQSWAzZogMWpsvqW+MI/HTEr2rnGR+RwQZ9gmuTns4FjikIKYrcMze
+         4FJMlwQCBDA+2A++4l1iyFsZYKWksJ55MgCltjETpB4KXpMP2UB+UUdUr4JoNrxVpNt/
+         ELA1o4PGTsQmKZgR77zNp8cVXLbpRGexH2ALUw/bkZ+arvQw+JoETdEeUG2bLQ/wIITc
+         fiLAcA65IEtHSJ/NA0jKRPWwTHgQyPhNVJ9V1BZTXxvoMn2S6pN4DaauGRgO8LlqJGVm
+         a77QBoeHa0ihVuzWgR0h+w8mUy7w83ixeRqFPZaVUu8Oe4/BkxuzBv2ZajAEDbYKcmzo
+         OBUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740575285; x=1741180085;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ECSFx2fiYRGYbPUPOKEj5uQjkNpa71sMCoCExCmYew=;
+        b=R84kAs5QBlICtNg+4sTzUUaq9r3A5zKQlq66ovHmcettMHhyfO6JEfs33Y/WL+nypM
+         5V4WcAOw6DNSM1aZGM6QHVBJIV5yM8LgQLCL/Ww216qwemoFvnpwxu5SlaRkj73MI5MJ
+         wUNe5KIZFepMFrYY8rFI9oJDT3p6STOOpB0yWjHrGQR4bBAdhNBJti0A7r7jx4Hc5RvN
+         GjK6FUxX9sS5tDqZgzIt9AIC+qxTjfBeXHd7ND4XkaHYdDsJfAIsU2KYtcmpGkMXXstz
+         jZhfwEVICp+sBFRlD48fQa4bZN8EKBJejGa9sNS9dE5IQf7sMI03IWFKU8BAsqH8K3ej
+         /ZRA==
+X-Forwarded-Encrypted: i=1; AJvYcCWlkFzJvakzsFhlE+kjGZg+ZADmcLRx8nhxD4eykH33LyX60dbCCjg2BJie/rQ/L5e0IoXin67XqpMA@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw73lVyBtEiVkvUWuOg4mQ8M1yNyz0XRI5a+Q0nr+tLXTDddCkH
+	b0XB2k2K25ykOMqkEE3lz972kKNFxhkG/yGFaFk7GTFp2tDopXrMpcvV5alPMjw=
+X-Gm-Gg: ASbGnctb4JdtpCDFBJ9KpP2VMNTbWGQ9OIfV9l900jngwnF3AOUryCyVIZpFue7TemD
+	S68/QUlOAkC3QyIvHTQjvuM+EWduEA1WPgFX1pWaEpsbzaxDXm/X0iG42iSWMZLrE5emiv0LciC
+	WFzNK5yY2aiPRRPcjonxN1HzcXVbnYv4IMpjsr9vwNP5ZiDfDct6sPb1txePueWtk7ji6e0uZ1l
+	sp9gTxcJg860taeY77VPAQ191WFGoVlLVGioKQU4iXZezJq3tzw3ylzZJ8RGIC1JEtCR17dkpEx
+	fPdO8IKFhLJCHSZ1c/TROo/UAStnld6Bv0Yu6VY3JFweW0pGdRxWIofrP4O5dwoANyzIubQqFBs
+	=
+X-Google-Smtp-Source: AGHT+IHSaPI2di23wd/r7DmUcJvEuSIfSDJiLalxe/seFWwJNz69RZ6l150d7LgWyVVQcH9URorRQA==
+X-Received: by 2002:a05:620a:44c1:b0:7c0:c650:e243 with SMTP id af79cd13be357-7c0cf8ea459mr3058987685a.30.1740575285615;
+        Wed, 26 Feb 2025 05:08:05 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-128-5.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.128.5])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c2c0fb4sm237968885a.56.2025.02.26.05.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2025 05:08:04 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1tnH8u-000000007Mk-0RRT;
+	Wed, 26 Feb 2025 09:08:04 -0400
+Date: Wed, 26 Feb 2025 09:08:04 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Alexey Kardashevskiy <aik@amd.com>
+Cc: Xu Yilun <yilun.xu@linux.intel.com>, x86@kernel.org,
+	kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Christoph Hellwig <hch@lst.de>, Nikunj A Dadhania <nikunj@amd.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Vasant Hegde <vasant.hegde@amd.com>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Steve Sistare <steven.sistare@oracle.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
+	iommu@lists.linux.dev, linux-coco@lists.linux.dev,
+	Zhi Wang <zhiw@nvidia.com>,
+	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
+Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
+Message-ID: <20250226130804.GG5011@ziepe.ca>
+References: <20250218111017.491719-1-aik@amd.com>
+ <20250218111017.491719-15-aik@amd.com>
+ <Z72GmixR6NkzXAl7@yilunxu-OptiPlex-7050>
+ <2fe6b3c6-3eed-424d-87f0-34c4e7e1c906@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH *-next 01/18] mm/mmu_gather: Remove needless return in
- void API tlb_remove_page()
-To: David Howells <dhowells@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Johannes Berg <johannes@sipsolutions.net>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
- Jiri Pirko <jiri@resnulli.us>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
- Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Robin Murphy <robin.murphy@arm.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, iommu@lists.linux.dev,
- linux-mtd@lists.infradead.org
-References: <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com>
- <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
- <20250221-rmv_return-v1-1-cc8dff275827@quicinc.com>
- <20250221200137.GH7373@noisy.programming.kicks-ass.net>
- <2298251.1740496596@warthog.procyon.org.uk>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <2298251.1740496596@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: iqw5w_RmeMXu0iJloMXtrzoP0X8vVIzf
-X-Proofpoint-ORIG-GUID: iqw5w_RmeMXu0iJloMXtrzoP0X8vVIzf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-26_02,2025-02-26_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=985
- malwarescore=0 clxscore=1011 phishscore=0 bulkscore=0 adultscore=0
- spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2502260094
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2fe6b3c6-3eed-424d-87f0-34c4e7e1c906@amd.com>
 
-On 2025/2/25 23:16, David Howells wrote:
-> Zijun Hu <zijun_hu@icloud.com> wrote:
+On Wed, Feb 26, 2025 at 11:12:32AM +1100, Alexey Kardashevskiy wrote:
+> > I still have concern about the vdevice interface for bind. Bind put the
+> > device to LOCKED state, so is more of a device configuration rather
+> > than an iommu configuration. So seems more reasonable put the API in VFIO?
 > 
->>>>  static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
->>>>  {
->>>> -	return tlb_remove_page_size(tlb, page, PAGE_SIZE);
->>>> +	tlb_remove_page_size(tlb, page, PAGE_SIZE);
->>>>  }
->>> So I don't mind removing it, but note that that return enforces
->>> tlb_remove_page_size() has void return type.
->>>
->>
->> tlb_remove_page_size() is void function already. (^^)
-> 
-> That may be true... for now.  But if that is changed in the future, then you
-> will get an error indicating something you need to go and look at... so in
-> that regard, it's *better* to do this ;-)
-> 
+> IOMMUFD means pretty much VFIO (in the same way "VFIO means KVM" as 95+% of
+> VFIO users use it from KVM, although VFIO works fine without KVM) so not
+> much difference where to put this API and can be done either way. VFIO is
+> reasonable, the immediate problem is that IOMMUFD's vIOMMU knows the guest
+> BDFn (well, for AMD) and VFIO PCI does not.
 
-i understand your point.
+I would re-enforce what I said before, VFIO & iommufd alone should be
+able to operate a TDISP device and get device encrpytion without
+requiring KVM.
 
-if the callee tlb_remove_page_size() is in the same module with the
-caller tlb_remove_page. it is meaningless to watch the callee's return type.
+It makes sense that if the secure firmware object handles (like the
+viommu, vdevice, vBDF) are accessed through iommufd then iommufd will
+relay operations against those handles.
 
-otherwise, provided the callee is a API which is provided by other
-module author. once the author changes the API's return type, he/she
-must take effort to cleanup this weird and lots of usages, that is not
-nice for API provider.
-
-this is a common issue. i will list my reasons why this usage is not
-good in cover letter of this series
-> David
-> 
-
+Jason
 
