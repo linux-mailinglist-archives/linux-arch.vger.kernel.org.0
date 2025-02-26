@@ -1,50 +1,50 @@
-Return-Path: <linux-arch+bounces-10373-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10374-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A250FA45D27
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 12:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 69461A45D9A
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 12:49:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E520D172EEF
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 11:30:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99CC1174BF5
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 11:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD75C2153EB;
-	Wed, 26 Feb 2025 11:30:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1D0219312;
+	Wed, 26 Feb 2025 11:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="rWtw35VN"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="f8lZWyvS"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from pv50p00im-ztdg10011301.me.com (pv50p00im-ztdg10011301.me.com [17.58.6.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DCF215050
-	for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2025 11:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15647218858
+	for <linux-arch@vger.kernel.org>; Wed, 26 Feb 2025 11:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740569439; cv=none; b=FqHAyGEP8Drhq0zo8nGU6SlhoIWq+FbuzAtEkQIl/voEyDnUUqcjHOqN7wzwMn1hw6nlogFuWGE8vsd6qxKrjOzdxmhck5Mwv46SCCR7tvSQMp3OygyA+wZd30c8IkCqYPmiMbbj5XQBYdFl3D31Krw4KAE6T8o0adxIxTqN+CU=
+	t=1740570353; cv=none; b=uY9eBIeMBS35aKEFLFESgobDFE/1sYVm5KkCPYHeyXwRvCIivTFzJRx20+dR7+lSy1XhFR36s+SsMIcC3rPHkeoGMv2NDkLR0j1L1oHwjl4d/aXA7YA6N1VzyrHv6w4EQ/q2bnDb6KWtyMHONZmY/AnF2pNQ+S8/z69GHgMBSvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740569439; c=relaxed/simple;
-	bh=SNcREccD3RAme9xYt3R+kilxl7SAdbri9ontWGXnon8=;
+	s=arc-20240116; t=1740570353; c=relaxed/simple;
+	bh=C0kSWoh3LIV+HuMudMUFcqmX7KtzIL+dLkLS0LuQI+w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NATwmVanCs5baVK1/l8S0p3WIm48X6Se3M3TuL+tlPtnraRmF931pCL2aMWQwSe9vqJrPLCmJx0/Zi9JXc8jioWVX03fNH3wPZNG9GQRtgTKZNBTH4ik0dJK9xF3fHxW3YOGNm4YwsYVh0ANh1xNqZWlZfnAhvqryHoWMPwSq/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=rWtw35VN; arc=none smtp.client-ip=17.58.6.40
+	 In-Reply-To:Content-Type; b=dPpyqAxKbl3yHXkeg2f85LxHTum34p4RQneFDJPj8zf0OOEK1cbjEuTLDWXTG6rO3KCgWg8jmpCfOB2HqaQ1altDMkWDubcAKpGB81c6N8yUzR/02QflMiFLX1DdWmNWKmO1mBx23OECasC9hfBP77FosLQ4CzqFxk1Fq/HOBU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=f8lZWyvS; arc=none smtp.client-ip=17.58.6.40
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; bh=SOdlXl7RXO630hj2D8KbTA/iuYN0f3n9ChpjV2oMRbU=;
+	s=1a1hai; bh=UlmH7lnQ/SSIrKM5aMl2BHpkT+fwdodZZLv8W8GXIsc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
-	b=rWtw35VN5C7ebUryxGYabBiGNkfRxevNXaKu3lmmbcfRwCfqvGmsARTKGVlEDc3vJ
-	 IUw+i/jF2/O7wPykYL7GtrScwR7YHPk2KZArZBlYEByVg4HG2euMsCf4SLAhxqqINe
-	 T4aLRNRVMNlFJyn+/hO3Lmf6LkZiGLt8eWLCMvUUCNYIgCuhqhS16/5+FYQBrqDBv9
-	 cTNT5EvlskIwUWEEZthrUNkKMbaMBoPHtGY9C1f3/Wkj+mhDFLP1F1CqAqbIZvoN+x
-	 V8XpPNLsrc2QkugOEEdKPXC0Zg7dBaQpmDQ+gMVmCM7ShlzUTzFJzMqx6xBRgIBMy+
-	 ioIbkere3zE9w==
+	b=f8lZWyvSDPQwKr7SDXIE6VdW5kZrI22cRU+v86cMZBg8M63ib8K+MKQDsZPYVZ+Mz
+	 VIc01nNZYPIWEtaq9AznMiQTF7n48OFpxRM5YhSgpY2okVb9cwuvzP1KIikiB+2fRu
+	 d+7AduZcNoirLHLK7K4h8pgvS0d1L0tQbLrFrF/Od88tDX/EZXod457QB5bg4qbmFp
+	 DbogBPgs3Q7iQQ0mZfmhQRiw2/P900rSG5OeZM5GDf/tYeCwP0bcGCpZ97ZFFl8n8G
+	 biW93Aup+84jC3T2ck5W5lDGV0KXW+sjwetmqndyZG8OIOv24PsphQXGiGBlN7Elxi
+	 r4aI2TycTa3Rw==
 Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztdg10011301.me.com (Postfix) with ESMTPSA id EAC1C18036A;
-	Wed, 26 Feb 2025 11:30:23 +0000 (UTC)
-Message-ID: <d70d059e-37aa-431d-986c-5666f006d610@icloud.com>
-Date: Wed, 26 Feb 2025 19:30:20 +0800
+	by pv50p00im-ztdg10011301.me.com (Postfix) with ESMTPSA id 5CEAB180350;
+	Wed, 26 Feb 2025 11:45:37 +0000 (UTC)
+Message-ID: <a6dfff9c-ab0e-4308-81e7-62d8ea04d62b@icloud.com>
+Date: Wed, 26 Feb 2025 19:45:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -54,9 +54,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH *-next 01/18] mm/mmu_gather: Remove needless return in
  void API tlb_remove_page()
-To: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: Zijun Hu <quic_zijuhu@quicinc.com>, Peter Zijlstra
- <peterz@infradead.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To: David Howells <dhowells@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
  Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
  Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
@@ -81,67 +80,58 @@ Cc: Zijun Hu <quic_zijuhu@quicinc.com>, Peter Zijlstra
  linux-rdma@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-pm@vger.kernel.org, iommu@lists.linux.dev,
  linux-mtd@lists.infradead.org
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
+References: <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com>
+ <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
  <20250221-rmv_return-v1-1-cc8dff275827@quicinc.com>
  <20250221200137.GH7373@noisy.programming.kicks-ass.net>
- <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com>
- <20250224132354.GC11590@noisy.programming.kicks-ass.net>
- <a28f04e5-ccde-4a08-b8fa-a9fa685240b1@icloud.com>
- <15c121c7-aeed-480e-8b1a-8ff23b4a3654@intel.com>
+ <2298251.1740496596@warthog.procyon.org.uk>
 Content-Language: en-US
 From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <15c121c7-aeed-480e-8b1a-8ff23b4a3654@intel.com>
+In-Reply-To: <2298251.1740496596@warthog.procyon.org.uk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: BXt7ADwYEBiuzX8MsPltF1M0d6Q_8HN4
-X-Proofpoint-ORIG-GUID: BXt7ADwYEBiuzX8MsPltF1M0d6Q_8HN4
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: iqw5w_RmeMXu0iJloMXtrzoP0X8vVIzf
+X-Proofpoint-ORIG-GUID: iqw5w_RmeMXu0iJloMXtrzoP0X8vVIzf
 X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-26_02,2025-02-26_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
- clxscore=1015 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=993
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2502260092
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=985
+ malwarescore=0 clxscore=1011 phishscore=0 bulkscore=0 adultscore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2502260094
 
-On 2025/2/26 01:27, Przemek Kitszel wrote:
->>>>> It might not be your preferred coding style, but it is not completely
->>>>> pointless.
->>>>
->>>> based on below C spec such as C17 description. i guess language C does
->>>> not like this usage "return void function in void function";
+On 2025/2/25 23:16, David Howells wrote:
+> Zijun Hu <zijun_hu@icloud.com> wrote:
+> 
+>>>>  static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
+>>>>  {
+>>>> -	return tlb_remove_page_size(tlb, page, PAGE_SIZE);
+>>>> +	tlb_remove_page_size(tlb, page, PAGE_SIZE);
+>>>>  }
+>>> So I don't mind removing it, but note that that return enforces
+>>> tlb_remove_page_size() has void return type.
 >>>
->>> This is GNU extension IIRC. Note kernel uses GNU11, not C11
 >>
->> any link to share about GNU11's description for this aspect ? (^^)
-> this is new for C17 or was there for long time?
+>> tlb_remove_page_size() is void function already. (^^)
+> 
+> That may be true... for now.  But if that is changed in the future, then you
+> will get an error indicating something you need to go and look at... so in
+> that regard, it's *better* to do this ;-)
 > 
 
-Standard C spec has that description for long time.
-Standard C11 spec also has that description.
+i understand your point.
 
-> even if this is an extension, it is very nice for generating locked
-> wrappers, so you don't have to handle void case specially
+if the callee tlb_remove_page_size() is in the same module with the
+caller tlb_remove_page. it is meaningless to watch the callee's return type.
+
+otherwise, provided the callee is a API which is provided by other
+module author. once the author changes the API's return type, he/she
+must take effort to cleanup this weird and lots of usages, that is not
+nice for API provider.
+
+this is a common issue. i will list my reasons why this usage is not
+good in cover letter of this series
+> David
 > 
-> void foo_bar(...)
-> {
->     lockdep_assert_held(&a_lock);
->     /// ...
-> }
-> 
-> // generated
-> void foo_bar_lock(...)
-> {
->     scoped_guard(mutex, &a_lock)
->         return foo_bar(...);
-
-above is able to be written as below:
-      scoped_guard(mutex, &a_lock) {
-	foo_bar(...);
-	return;
-      }
-> }
-i will list my reasons why this usage "return void function in void
-function" is not good in cover letter [00/18] of this series.
-
 
 
