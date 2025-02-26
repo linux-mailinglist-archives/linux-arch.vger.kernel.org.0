@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-10399-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10403-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61FD6A46F16
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 00:09:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09D92A46F24
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 00:10:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A8E41886DF3
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 23:09:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1206F3AE6FE
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Feb 2025 23:10:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61FC525F7A0;
-	Wed, 26 Feb 2025 23:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C97826DCE2;
+	Wed, 26 Feb 2025 23:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="hVsQQQTQ"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="s6pP91LC"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BF925BAC2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0E8725DAF2;
 	Wed, 26 Feb 2025 23:09:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740611342; cv=none; b=SMU5WpIDme21eIz9ZMmGploOW6eAEisxLtEBTbnKq9t6Q3fTwC3ui+USOfaNmer2qRw07gVxsyKwckrZ3bfDHvguib1rxed4DxDHw1HhlD0Rkro+KnvY/up2c6yLeBLApRwspI4Af5BlOhxrhIU/s8YVqQYwyFENxleecI3xQCU=
+	t=1740611344; cv=none; b=kjtB2CJgUH7O+5cOT8/5p1Yk/k/hecCVZVXSmXhwa7O7YZnyUcTFIS8Pfw4O4p3wduUMMtt9HXYoyrbqyCcJlmauOaIflDfQFThP/eSOYCnlgLADYe4Dv1j+aEITCyg35OEki+PBQjfDtMqZjOxU78hAgMI+wbFNO7ScvdoRPWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740611342; c=relaxed/simple;
-	bh=Tjiwlomon09lvMY1LOgu+AFKsitGDCDqrTT8GCnHQ5Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=Jmi5SLhkXwpSTssjc9BA6h7klsQ1FoMBHzd1oep9fJtEBExHvl3OVa3d0XrhoFdDicwRasC0yvmLuCDVNzJHuui6wVFEUHMlhSHnfpulyShhrWrEzCYO1hh4qMnt9JZAKLnnXi2jk7lkJ527Ps25ZWB5oI6oE/4/CepMdEsBbyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=hVsQQQTQ; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1740611344; c=relaxed/simple;
+	bh=yskLp/RgLbVA0wN4tUVY/jLv3HYRsfDs9J8O7Rmk0bo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=p2sh8PEdzFPkIFdDEWEwZXEZyrqoT1fAXRLS0hrLSYLkEyXzvv84H1ItzGeecdn5CtRORtgL2JzbgnnO4c75IZ8M/AouBHv9mZvpBiJh/nqvu6gU91YhNvg7PD10ziSwOVDAvIl01mvrRdYf0tKHEMPFyMZEX0CiRb3aIVQJKoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=s6pP91LC; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 134C7210EACB;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 2F71C210EAC6;
 	Wed, 26 Feb 2025 15:08:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 134C7210EACB
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2F71C210EAC6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1740611339;
-	bh=yjD84+39ofH8LlqfBUgCcc45h/R6E9HXWRzoiTskxns=;
+	bh=dX/iJYTkA0XwCK7YEqZooviM5NNKs8hNc+nR73ij2r0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hVsQQQTQShvLTt+iFCAH3+/5ieAFs0xpdePBg5Q6XGjSVNMJ9N5p/SEJdcPGstlzL
-	 K4n5E+5TClLzMxltTzwjOCz7XkEE4lvlUzkEqtaE/N4HxV0Y4cjHE8GcZPScM1jZiE
-	 aMFrMKJeC63snJEoptkg9QrXB9pto0JG5J4byyY4=
+	b=s6pP91LC/LLt4Zos509aAzMpzYWj0UmXWJ9I2LWsMt0jLxEe2jeFVevg40Zn0SAVO
+	 fB9TJdo7QZlpcZ3WZJRGcVEH7/80MR2VwN6UQYHw5bX6HtHTqNl6s80QF7Obi9JtEy
+	 /mwI/o03MprioEi7N0me2peh9ZLX7/fmeodRyxLU=
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 To: linux-hyperv@vger.kernel.org,
 	x86@kernel.org,
@@ -78,9 +78,9 @@ Cc: kys@microsoft.com,
 	rafael@kernel.org,
 	lenb@kernel.org,
 	corbet@lwn.net
-Subject: [PATCH v5 05/10] acpi: numa: Export node_to_pxm()
-Date: Wed, 26 Feb 2025 15:07:59 -0800
-Message-Id: <1740611284-27506-6-git-send-email-nunodasneves@linux.microsoft.com>
+Subject: [PATCH v5 06/10] Drivers/hv: Export some functions for use by root partition module
+Date: Wed, 26 Feb 2025 15:08:00 -0800
+Message-Id: <1740611284-27506-7-git-send-email-nunodasneves@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
 References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
@@ -90,27 +90,72 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 
-node_to_pxm() is used by hv_numa_node_to_pxm_info().
-That helper will be used by Hyper-V root partition module code
-when CONFIG_MSHV_ROOT=m.
+get_hypervisor_version, hv_call_deposit_pages, hv_call_create_vp,
+hv_call_deposit_pages, and hv_call_create_vp are all needed in module
+with CONFIG_MSHV_ROOT=m.
 
 Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 ---
- drivers/acpi/numa/srat.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/hyperv/mshyperv.c   | 1 +
+ arch/x86/kernel/cpu/mshyperv.c | 1 +
+ drivers/hv/hv_common.c         | 1 +
+ drivers/hv/hv_proc.c           | 3 ++-
+ 4 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/numa/srat.c b/drivers/acpi/numa/srat.c
-index 00ac0d7bb8c9..ce815d7cb8f6 100644
---- a/drivers/acpi/numa/srat.c
-+++ b/drivers/acpi/numa/srat.c
-@@ -51,6 +51,7 @@ int node_to_pxm(int node)
- 		return PXM_INVAL;
- 	return node_to_pxm_map[node];
- }
-+EXPORT_SYMBOL_GPL(node_to_pxm);
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index 2265ea5ce5ad..4e27cc29c79e 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -26,6 +26,7 @@ int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
  
- static void __acpi_map_pxm_to_node(int pxm, int node)
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(hv_get_hypervisor_version);
+ 
+ static int __init hyperv_init(void)
  {
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 2c29dfd6de19..0116d0e96ef9 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -420,6 +420,7 @@ int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(hv_get_hypervisor_version);
+ 
+ static void __init ms_hyperv_init_platform(void)
+ {
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index ce20818688fe..252fd66ad4db 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -717,6 +717,7 @@ int hv_result_to_errno(u64 status)
+ 	}
+ 	return -EIO;
+ }
++EXPORT_SYMBOL_GPL(hv_result_to_errno);
+ 
+ void hv_identify_partition_type(void)
+ {
+diff --git a/drivers/hv/hv_proc.c b/drivers/hv/hv_proc.c
+index 8fc30f509fa7..20c8cee81e2b 100644
+--- a/drivers/hv/hv_proc.c
++++ b/drivers/hv/hv_proc.c
+@@ -108,6 +108,7 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
+ 	kfree(counts);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(hv_call_deposit_pages);
+ 
+ int hv_call_add_logical_proc(int node, u32 lp_index, u32 apic_id)
+ {
+@@ -194,4 +195,4 @@ int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags)
+ 
+ 	return ret;
+ }
+-
++EXPORT_SYMBOL_GPL(hv_call_create_vp);
 -- 
 2.34.1
 
