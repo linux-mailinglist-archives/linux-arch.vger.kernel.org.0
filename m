@@ -1,166 +1,138 @@
-Return-Path: <linux-arch+bounces-10428-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10429-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62150A48468
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 17:13:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED3E6A485BD
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 17:52:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D404918951CB
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 16:08:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 190823A73D9
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 16:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D2D19F10A;
-	Thu, 27 Feb 2025 16:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 677DC1D63CE;
+	Thu, 27 Feb 2025 16:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="YDmBIf3V"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TgAEzflL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SaT8nWR3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0ED19C57C;
-	Thu, 27 Feb 2025 16:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDCF1CEAA3;
+	Thu, 27 Feb 2025 16:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740672166; cv=none; b=kotlZfeUl12C+/ivOk3dnUamD3vZyH/eiKu7ZFvT21iYHP/QydUuVV5mPLpcCBeKLTDVkiqI7CPCvaD9ZVZV/V/8xSSHUoRwrUE2VdTcLihTH+aRX1D6pexHLF38KDStkaLE8PE2Y/yQKHI5w2Ts15fL6ALf3e3YTaeJ4GfP1Gg=
+	t=1740675048; cv=none; b=BnW+pGSa0Ptwg2Jr9sTdj60R6KXNRouVZOIqXyNQUorrbUFONOfX31+OTQS2LUoQTvpzNQWPNjEcPqjOdtpBjFv9VN7iXAYo4mncGZZ7jmwsG2D++UzBqmE44qXcSUP92K9z3qvSrRihD0x8X5JBPwEwhk0B0ubRRfG5RrdNybs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740672166; c=relaxed/simple;
-	bh=RFl2o37WVKCpXjjZioydmxS1a7oCxw26tEAC3SJ6bFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LuksfX4ygY6Xf98QM5EWF3fj2I82E6qbtP/UfUgacnPYfAc2Fj9+H080WRwsR/TVWx7wJXfWL+ClSkq7UCELsRBDdY60k3bE+4lrx0mCiud3gVetL82Xamt24ZaxvaA4UyVvpI2ouO/XhumQkQ22UEJMzroVL80e9S6r0PJOgBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=YDmBIf3V; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id ECDEB40E0202;
-	Thu, 27 Feb 2025 16:02:40 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 7vNDSrtYzXsR; Thu, 27 Feb 2025 16:02:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1740672156; bh=FUZpHDr4StgHr+/B0BvhYI7K2GkGl5sit6N8LUylnSA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YDmBIf3VPJ/AzvjLAt7ulTJSyvWP3TrND3nM3FTp8uM3qLAs2bIl8ejzn5OaWXpxa
-	 YLDt4O4V8ilXogR6DZlzQKbkRCy5OvqRms/DgGRubj3SCIXG+NDrtGjmAdztORJ76o
-	 jnTo3q7a3j+1YsPyAWh396spuDhLMoraz8hICqSiVxpXv//tdyscstmlX4K5ElCyUC
-	 Fo5wXtgzT2Gcogpirx0i6zn+JJ4OVUFCh+xs/ssOG1WmVNaSLEyCw+ukiO7C9BYR/U
-	 k0RNsQy8gzN9FuFb9ogOTLp6XlVDnYTAqTdxD6i2Rcvl7S+ElZ8fnXQpvdHwc8Yuz6
-	 7OhoP5y0nN6SNR4qzLOQgoZO/8da+r6rH02HIj334MvqkfPbIq33QogIrhpX2J2pI+
-	 cBQ0wMg/l3zy6OmK+3fUYri3TpAqGzhksTsprK5NoYgEKfoSzQb2DAa6yjc8sxHN8a
-	 i0cftrHa8BLifDvDIFfSqikRd/4i1DFBqgVM0WmR/Pas6XyYIFd53elX0/WnlrxgPt
-	 jy4H+dAXmy2cJyuCkHjAEfafgAmmJvYCKPqnqd7MjlGbzPJYMcyZ7HqaBsH3YbiCFg
-	 U2PuqxLAkp49Qig8WQuZKqfCLnpFVRLIBRCJK9s8dsnrR/9Qu7ad1uB5gu1MISGABz
-	 Juk4iWe2stm872WWu6WazSDw=
-Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1B97E40E0200;
-	Thu, 27 Feb 2025 16:02:01 +0000 (UTC)
-Date: Thu, 27 Feb 2025 17:01:55 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Alexey Kardashevskiy <aik@amd.com>
-Cc: x86@kernel.org, kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Robin Murphy <robin.murphy@arm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Christoph Hellwig <hch@lst.de>, Nikunj A Dadhania <nikunj@amd.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Vasant Hegde <vasant.hegde@amd.com>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Lu Baolu <baolu.lu@linux.intel.com>,
-	Steve Sistare <steven.sistare@oracle.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
-	iommu@lists.linux.dev, linux-coco@lists.linux.dev,
-	Zhi Wang <zhiw@nvidia.com>, AXu Yilun <yilun.xu@linux.intel.com>,
-	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
-Subject: Re: [RFC PATCH v2 20/22] sev-guest: Stop changing encrypted page
- state for TDISP devices
-Message-ID: <20250227160155.GCZ8CMcz5sQnKotIME@fat_crate.local>
-References: <20250218111017.491719-1-aik@amd.com>
- <20250218111017.491719-21-aik@amd.com>
+	s=arc-20240116; t=1740675048; c=relaxed/simple;
+	bh=JUzvFr/L9hG2I9Kl/VtNPVSYTrIJ8DUb9rsWFBd3hUQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=DNCvgeGUVc4FtfFXkpW6HU8Ns2Kc7/MTMWhOpYlOL5yTu/RZvpiUJurjPLT7gbnxmgWExN8EraAj7shlMRuCbQIygJ/02WY8WI/eypPzTdlx0tRCAklD/TINbzam96SJIVF/5QqQA/l9eebmj0bystuwLV9Lw2LUjpuj5CVulV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TgAEzflL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SaT8nWR3; arc=none smtp.client-ip=202.12.124.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 5CA2925401FB;
+	Thu, 27 Feb 2025 11:50:43 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-11.internal (MEProxy); Thu, 27 Feb 2025 11:50:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1740675043;
+	 x=1740761443; bh=RucrbLFK1Gj167AVqzf5zw6rBdv8KCHQV3OyIQOZ904=; b=
+	TgAEzflLwsxJacoJb5txmx3U+Kb0DViF/QQ8kKIuQZZx8RGi3JxwatMuT0UcY5XI
+	svxDR9zl4tuZ56o3MObNFrsh4bHq6n5WoxRW2xcW6j2olHYy2XcbbWWfHS9TB4eB
+	bP83mfkRLyPJELGMuUbi1rsZr28JyZLXpT5eNhwQ5CkeFqnXN4w4jUYsbKAkKdK1
+	aVlNUxOjGphW1DD63jQ426C7jJiKHgaP0Tm8Ndv9MfnSD3ad8byYVmvLU/9tmxLw
+	V0dogT+8u1hG+vPVRs4FuM6D1jY3fvbSgXWDODQuH6wEOs9SWINTpjOksBSiIWlp
+	vgvcEvO4Ug7Vqe6KlAmY/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1740675043; x=
+	1740761443; bh=RucrbLFK1Gj167AVqzf5zw6rBdv8KCHQV3OyIQOZ904=; b=S
+	aT8nWR3z5G/0ASRqe11JADRpwqf1f9S4470CyYBIBjMTFTdwEZMer1RZDNb2xDYf
+	kU8quHP0wLrLdvJCxQ3W84/OeYkAevoq4dFb5cAAeHzTZ9Imrq57L4vpOlsByVde
+	/M083py+WT7BhfFk328FmzhsXYdlSXhzHXZ67uVpTJYhfpXE9OmVj/KDWPmU91Bb
+	YYp/yUOOv72GNfKBvziwQeUIHg/9MG6rDp2ccl9IKwjv4JhxwPfMIMm6qhwOJHWW
+	T4toYQbVXrjwYXh9GHjfcgkVExM3r2m4RVM+XKMeksBf9GBBYU2tOEUJrluwq4oD
+	Y23gmirG1a9XMnQimjEPw==
+X-ME-Sender: <xms:4pfAZ25EeT644YUSYiyIF4tfgF64VEFYxAGYysXSqoZ85HE9fEsR3w>
+    <xme:4pfAZ_4Se06om99kiUyChlntbMNaWeSHGjMQ7_yHAfeBy7lfoWyhsHw-_7ne9NqYP
+    rH2tD1t7zO_NmlzxPU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekjeelkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeei
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhn
+    ihigrdguvgdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrd
+    horhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidr
+    ihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhk
+    vghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:4pfAZ1ei_7quZLmd9VlKCZWzm5eRWRiJiRtjwFQG9c_fxKJbTC6U6Q>
+    <xmx:4pfAZzK1yak04vjTsZd_3XeDHlwOaPgqhHKV-e7oZlifRbq-Ql8P2g>
+    <xmx:4pfAZ6LWCCYfX8mK7BXC70FX41iHQWEAt2lfisks9K1HiZUEBAK2nA>
+    <xmx:4pfAZ0yL1_yVkl1WxxwO6or0eN-KP969kEqsSpKSP3uz90KH-glkYg>
+    <xmx:45fAZ8i_W--UPEoRbVKtGJra0LUcQQTZU3mN6rt2fketMh_S8LzG-TTy>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 8CCB22220076; Thu, 27 Feb 2025 11:50:42 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250218111017.491719-21-aik@amd.com>
+Date: Thu, 27 Feb 2025 17:50:22 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org
+Message-Id: <74c253e6-1433-42b2-aabe-f6a85aeca099@app.fastmail.com>
+In-Reply-To: <Z8CCrqzCfwzIpJ-3@smile.fi.intel.com>
+References: <20250227141910.3819351-1-arnd@kernel.org>
+ <Z8CCrqzCfwzIpJ-3@smile.fi.intel.com>
+Subject: Re: [PATCH] asm-generic/io.h: rework split ioread64/iowrite64 helpers
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 18, 2025 at 10:10:07PM +1100, Alexey Kardashevskiy wrote:
-> diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
-> index d7e30d4f7503..3bd533d2e65d 100644
-> --- a/include/linux/dma-direct.h
-> +++ b/include/linux/dma-direct.h
-> @@ -94,6 +94,14 @@ static inline dma_addr_t phys_to_dma_unencrypted(struct device *dev,
->   */
->  static inline dma_addr_t phys_to_dma(struct device *dev, phys_addr_t paddr)
->  {
-> +#if defined(CONFIG_TSM_GUEST) || defined(CONFIG_TSM_GUEST_MODULE)
-> +	if (dev->tdi_enabled) {
-> +		dev_warn_once(dev, "(TIO) Disable SME");
-> +		if (!dev->tdi_validated)
-> +			dev_warn(dev, "TDI is not validated, DMA @%llx will fail", paddr);
-> +		return phys_to_dma_unencrypted(dev, paddr);
-> +	}
-> +#endif
->  	return __sme_set(phys_to_dma_unencrypted(dev, paddr));
->  }
->  
-> diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
-> index 3dae0f592063..67bea31fa42a 100644
-> --- a/include/linux/swiotlb.h
-> +++ b/include/linux/swiotlb.h
-> @@ -173,6 +173,14 @@ static inline bool is_swiotlb_force_bounce(struct device *dev)
->  {
->  	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
->  
-> +#if defined(CONFIG_TSM_GUEST) || defined(CONFIG_TSM_GUEST_MODULE)
-> +	if (dev->tdi_enabled) {
-> +		dev_warn_once(dev, "(TIO) Disable SWIOTLB");
-> +		if (!dev->tdi_validated)
-> +			dev_warn(dev, "TDI is not validated");
-> +		return false;
-> +	}
-> +#endif
->  	return mem && mem->force_bounce;
->  }
->  
-> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-> index 95bae74fdab2..c9c99154bec9 100644
-> --- a/arch/x86/mm/mem_encrypt.c
-> +++ b/arch/x86/mm/mem_encrypt.c
-> @@ -19,6 +19,12 @@
->  /* Override for DMA direct allocation check - ARCH_HAS_FORCE_DMA_UNENCRYPTED */
->  bool force_dma_unencrypted(struct device *dev)
->  {
-> +#if defined(CONFIG_TSM_GUEST) || defined(CONFIG_TSM_GUEST_MODULE)
-> +	if (dev->tdi_enabled) {
-> +		dev_warn_once(dev, "(TIO) Disable decryption");
-> +		return false;
-> +	}
-> +#endif
+On Thu, Feb 27, 2025, at 16:20, Andy Shevchenko wrote:
+> On Thu, Feb 27, 2025 at 03:19:01PM +0100, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> There are two incompatible sets of definitions of these eight functions:
+>> On 64-bit architectures setting CONFIG_HAS_IOPORT, they turn into
+>> either pair of 32-bit PIO (inl/outl) accesses or a single 64-bit MMIO
+>> (readq/writeq). On other 64-bit architectures, they are always split
+>> into 32-bit accesses.
+>> 
+>> Depending on which header gets included in a driver, there are
+>> additionally definitions for ioread64()/iowrite64() that are
+>> expected to produce a 64-bit register MMIO access on all 64-bit
+>> architectures.
+>> 
+>> To separate the conflicting definitions, make the version in
+>> include/linux/io-64-nonatomic-*.h visible on all architectures
+>> but pick the one from lib/iomap.c on architectures that set
+>> CONFIG_GENERIC_IOMAP in place of the default fallback.
+>
+> Thanks, this is good to go in my opinion,
+> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Duplicated code with ugly ifdeffery. Perhaps do a helper which you call
-everywhere instead?
+Thanks, I've put it into my asm-generic tree now.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+    Arnd
 
