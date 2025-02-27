@@ -1,150 +1,359 @@
-Return-Path: <linux-arch+bounces-10424-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10425-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB39AA47E77
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 14:04:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E21F9A48154
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 15:32:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2CC73A9207
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 13:04:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70CE219C36D0
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Feb 2025 14:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C43122F174;
-	Thu, 27 Feb 2025 13:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF64A233128;
+	Thu, 27 Feb 2025 14:19:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Dpw3udR3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RM9lzni/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3111EB5ED;
-	Thu, 27 Feb 2025 13:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F2E1662EF;
+	Thu, 27 Feb 2025 14:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740661469; cv=none; b=C5ITfpT4jcwVHPphaBwnLNLxsBkWZHknJf27p7kLafZYNzsQER/8cbATXfJsQxWxRP/npSOGDLcCO5/bLgmvkUnLpvlmWGW3/ENqC6AsLofmqOyBFVXt0Ajxu0L+/fFxJjbo8K8zyDG/dLPRB0tDdypV7v1CnzhT1G7feaUyEvw=
+	t=1740665954; cv=none; b=DpKTGOjEwPWvqEPTnl7WKexJh8zCzwSeZSSd28xYPjtNYs+CUofnEhEurlZFCief+q19zvhV+huxZ7cAMzHhrznXgQuhHNdnsPygELS6hSfjx5VrcANdXEKY4XECjNhRzi+iHwC6+C/za2jMqewGJRi8nwcs+k8gN+PMv0glsak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740661469; c=relaxed/simple;
-	bh=RhAn648KZjGR1zL9fk7lBgC1kuhesOSbeueMHlrV+FQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h3fhmBk9yNtZedd0uJfc6NMuRGpGM6oJBgaLn6l9YyJbMAPgyUga06ncKCQdauJ7mN5K9jc3/6wZd4tpACP54NvLTeDhZdJ4sfAKyhZ4b9DIjjshdPzL99wzFGw3EedNmfPBQQis/Uj4MELnRO0Ozx9ytmCHG+sOgLxtS5hvPzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Dpw3udR3; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=C4NTJOJ3dCAJ9+vpvzEprQrWJrpsHSJFBRqUQ8todYw=; b=Dpw3udR3BJAFq9SyV4WrEEtnAj
-	4AK/f2BJmM2iCspBbFHcvyAYokish3HnL+MnOj7JlEsRpxTpwaGNuOZ0GjF1xl2kJOx4qt3J2ahuW
-	az6fb102wILROrGzFvXwJPaH58zNpMOOcrCBc343TieQO3/CDGnn7X1+s/6kO95pgHKXAnEejIoZr
-	eB7TVgWCB6dlZRGlAflwAymbuHq47SCX9B61CP43qWtZ2O6ijiX7nvvVtATjJJOXC5cOJJTTKtd0a
-	0oXIb31u03yt/F+rw+NDupYNgVgy0IBHz3v3ZGkJAqcax4tYjHYegxiTUmQ4/XbT5eUfHjXU340Lp
-	d0XLYfiw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tndYL-0000000Hb1D-0gW6;
-	Thu, 27 Feb 2025 13:03:49 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 45472300472; Thu, 27 Feb 2025 14:03:47 +0100 (CET)
-Date: Thu, 27 Feb 2025 14:03:47 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Zijun Hu <zijun_hu@icloud.com>
-Cc: Zijun Hu <quic_zijuhu@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	s=arc-20240116; t=1740665954; c=relaxed/simple;
+	bh=RLgVlnTpy9CI9sjxADDXsi5z9lnhfW8JBanO63WvXjs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UkhvMSMHhD7/pUcOrQq1nIO2AKh4MRg/IavG84+lk0RsOSKcAuLKVy8jr10rTeuKOGJzH894QoFviuZDxORTvNhGXaNyWFsy9fIrk9B0VAbeVLiAxVpCVlx01T0H8x2oPb+MCwTAYnbVIrqA7y25go6gjpxLtCQRMvNcRb+4Sxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RM9lzni/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7BFEC4CEE6;
+	Thu, 27 Feb 2025 14:19:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740665954;
+	bh=RLgVlnTpy9CI9sjxADDXsi5z9lnhfW8JBanO63WvXjs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RM9lzni/OUsu2Lf9dbRHYmCRw7TXPSAfzhY+CH7uUuaEJh57vecuOmRg3n3YwBK4x
+	 F5OvaS6i26loyLEAvOQIxJZKhgYBBhu/OhPIU2/R/arhxSzbOPqjxAX4U/TITYSISE
+	 OOovpKScaNqbEUNECNhHZoTFebOrTAvefRqj6PA3w3ChH7W0VJI2cwl9Q8WX8Bpd9v
+	 j4c6WOwR4YlBC+yMdDSskewdx9WixeQ/8p3xV8YXXRBmofF9W0WmWMhUjlZtKJ/l4/
+	 KRC7lbO8s2sUl97aCAo+h12+OQe3kEJjGq3RhNfoRCGOD4N5qYqvu7uwp6LBJym3CV
+	 rgX5munMmx6Fg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
-	Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	iommu@lists.linux.dev, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH *-next 00/18] Remove weird and needless 'return' for void
- APIs
-Message-ID: <20250227130347.GA5880@noisy.programming.kicks-ass.net>
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
- <46d17d84-5298-4460-96b0-9c62672167a0@icloud.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] asm-generic/io.h: rework split ioread64/iowrite64 helpers
+Date: Thu, 27 Feb 2025 15:19:01 +0100
+Message-Id: <20250227141910.3819351-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <46d17d84-5298-4460-96b0-9c62672167a0@icloud.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 27, 2025 at 08:48:19PM +0800, Zijun Hu wrote:
-> On 2025/2/21 21:02, Zijun Hu wrote:
-> > void api_func_a(...);
-> > 
-> > static inline void api_func_b(...)
-> > {
-> > 	return api_func_a(...);
-> > }
-> 
-> The Usage : Return void function in void function
-> 
-> IMO, perhaps, the usage is not good since:
-> 
-> A) STD C does not like the usage, and i find GCC has no description
-> about the usage.
->    C11/C17: 6.8.6.4 The return statement
->    "A return statement with an expression shall not appear in a
-> function whose return type is void"
+From: Arnd Bergmann <arnd@arndb.de>
 
-We really don't use STD C, the kernel is littered with extensions.
+There are two incompatible sets of definitions of these eight functions:
+On 64-bit architectures setting CONFIG_HAS_IOPORT, they turn into
+either pair of 32-bit PIO (inl/outl) accesses or a single 64-bit MMIO
+(readq/writeq). On other 64-bit architectures, they are always split
+into 32-bit accesses.
 
-> B) According to discussion, the usage have function that return type
->    of the callee api_func_a() is monitored. but this function has below
-> shortcoming as well:
-> 
-> the monitor is not needed if the caller api_func_b() is in the same
-> module with the callee api_func_a(), otherwise, provided the callee is
-> a API and provided by author of other module. the author needs to clean
-> up lot of usages of the API if he/she changes the API's return type from
-> void to any other type, so it is not nice to API provider.
-> 
-> C) perhaps, most ordinary developers don't known the function mentioned
->    by B), and also feel strange for the usage
+Depending on which header gets included in a driver, there are
+additionally definitions for ioread64()/iowrite64() that are
+expected to produce a 64-bit register MMIO access on all 64-bit
+architectures.
 
-It is quite common to do kernel wide updates using scripts / cocinelle.
+To separate the conflicting definitions, make the version in
+include/linux/io-64-nonatomic-*.h visible on all architectures
+but pick the one from lib/iomap.c on architectures that set
+CONFIG_GENERIC_IOMAP in place of the default fallback.
 
-If you have a specialization that wraps a function to fill out a default
-value, then you want the return types to keep matching.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ include/asm-generic/iomap.h           | 36 ++++++------------------
+ include/linux/io-64-nonatomic-hi-lo.h | 16 +++++++++++
+ include/linux/io-64-nonatomic-lo-hi.h | 16 +++++++++++
+ lib/iomap.c                           | 40 +++++++++++++--------------
+ 4 files changed, 60 insertions(+), 48 deletions(-)
 
-Ex.
+diff --git a/include/asm-generic/iomap.h b/include/asm-generic/iomap.h
+index 196087a8126e..9f3f25d7fc58 100644
+--- a/include/asm-generic/iomap.h
++++ b/include/asm-generic/iomap.h
+@@ -31,42 +31,22 @@ extern unsigned int ioread16(const void __iomem *);
+ extern unsigned int ioread16be(const void __iomem *);
+ extern unsigned int ioread32(const void __iomem *);
+ extern unsigned int ioread32be(const void __iomem *);
+-#ifdef CONFIG_64BIT
+-extern u64 ioread64(const void __iomem *);
+-extern u64 ioread64be(const void __iomem *);
+-#endif
+ 
+-#ifdef readq
+-#define ioread64_lo_hi ioread64_lo_hi
+-#define ioread64_hi_lo ioread64_hi_lo
+-#define ioread64be_lo_hi ioread64be_lo_hi
+-#define ioread64be_hi_lo ioread64be_hi_lo
+-extern u64 ioread64_lo_hi(const void __iomem *addr);
+-extern u64 ioread64_hi_lo(const void __iomem *addr);
+-extern u64 ioread64be_lo_hi(const void __iomem *addr);
+-extern u64 ioread64be_hi_lo(const void __iomem *addr);
+-#endif
++extern u64 __ioread64_lo_hi(const void __iomem *addr);
++extern u64 __ioread64_hi_lo(const void __iomem *addr);
++extern u64 __ioread64be_lo_hi(const void __iomem *addr);
++extern u64 __ioread64be_hi_lo(const void __iomem *addr);
+ 
+ extern void iowrite8(u8, void __iomem *);
+ extern void iowrite16(u16, void __iomem *);
+ extern void iowrite16be(u16, void __iomem *);
+ extern void iowrite32(u32, void __iomem *);
+ extern void iowrite32be(u32, void __iomem *);
+-#ifdef CONFIG_64BIT
+-extern void iowrite64(u64, void __iomem *);
+-extern void iowrite64be(u64, void __iomem *);
+-#endif
+ 
+-#ifdef writeq
+-#define iowrite64_lo_hi iowrite64_lo_hi
+-#define iowrite64_hi_lo iowrite64_hi_lo
+-#define iowrite64be_lo_hi iowrite64be_lo_hi
+-#define iowrite64be_hi_lo iowrite64be_hi_lo
+-extern void iowrite64_lo_hi(u64 val, void __iomem *addr);
+-extern void iowrite64_hi_lo(u64 val, void __iomem *addr);
+-extern void iowrite64be_lo_hi(u64 val, void __iomem *addr);
+-extern void iowrite64be_hi_lo(u64 val, void __iomem *addr);
+-#endif
++extern void __iowrite64_lo_hi(u64 val, void __iomem *addr);
++extern void __iowrite64_hi_lo(u64 val, void __iomem *addr);
++extern void __iowrite64be_lo_hi(u64 val, void __iomem *addr);
++extern void __iowrite64be_hi_lo(u64 val, void __iomem *addr);
+ 
+ /*
+  * "string" versions of the above. Note that they
+diff --git a/include/linux/io-64-nonatomic-hi-lo.h b/include/linux/io-64-nonatomic-hi-lo.h
+index f32522bb3aa5..cdb86c8f514c 100644
+--- a/include/linux/io-64-nonatomic-hi-lo.h
++++ b/include/linux/io-64-nonatomic-hi-lo.h
+@@ -101,22 +101,38 @@ static inline void iowrite64be_hi_lo(u64 val, void __iomem *addr)
+ 
+ #ifndef ioread64
+ #define ioread64_is_nonatomic
++#ifdef CONFIG_GENERIC_IOREMAP
++#define ioread64 __ioread64_hi_lo
++#else
+ #define ioread64 ioread64_hi_lo
+ #endif
++#endif
+ 
+ #ifndef iowrite64
+ #define iowrite64_is_nonatomic
++#ifdef CONFIG_GENERIC_IOREMAP
++#define iowrite64 __iowrite64_hi_lo
++#else
+ #define iowrite64 iowrite64_hi_lo
+ #endif
++#endif
+ 
+ #ifndef ioread64be
+ #define ioread64be_is_nonatomic
++#ifdef CONFIG_GENERIC_IOREMAP
++#define ioread64be __ioread64be_hi_lo
++#else
+ #define ioread64be ioread64be_hi_lo
+ #endif
++#endif
+ 
+ #ifndef iowrite64be
+ #define iowrite64be_is_nonatomic
++#ifdef CONFIG_GENERIC_IOREMAP
++#define iowrite64be __iowrite64be_hi_lo
++#else
+ #define iowrite64be iowrite64be_hi_lo
+ #endif
++#endif
+ 
+ #endif	/* _LINUX_IO_64_NONATOMIC_HI_LO_H_ */
+diff --git a/include/linux/io-64-nonatomic-lo-hi.h b/include/linux/io-64-nonatomic-lo-hi.h
+index 448a21435dba..c4575e6a44d9 100644
+--- a/include/linux/io-64-nonatomic-lo-hi.h
++++ b/include/linux/io-64-nonatomic-lo-hi.h
+@@ -101,22 +101,38 @@ static inline void iowrite64be_lo_hi(u64 val, void __iomem *addr)
+ 
+ #ifndef ioread64
+ #define ioread64_is_nonatomic
++#ifdef CONFIG_GENERIC_IOREMAP
++#define ioread64 __ioread64_lo_hi
++#else
+ #define ioread64 ioread64_lo_hi
+ #endif
++#endif
+ 
+ #ifndef iowrite64
+ #define iowrite64_is_nonatomic
++#ifdef CONFIG_GENERIC_IOREMAP
++#define iowrite64 __iowrite64_lo_hi
++#else
+ #define iowrite64 iowrite64_lo_hi
+ #endif
++#endif
+ 
+ #ifndef ioread64be
+ #define ioread64be_is_nonatomic
++#ifdef CONFIG_GENERIC_IOREMAP
++#define ioread64be __ioread64be_lo_hi
++#else
+ #define ioread64be ioread64be_lo_hi
+ #endif
++#endif
+ 
+ #ifndef iowrite64be
+ #define iowrite64be_is_nonatomic
++#ifdef CONFIG_GENERIC_IOREMAP
++#define iowrite64be __iowrite64be_lo_hi
++#else
+ #define iowrite64be iowrite64be_lo_hi
+ #endif
++#endif
+ 
+ #endif	/* _LINUX_IO_64_NONATOMIC_LO_HI_H_ */
+diff --git a/lib/iomap.c b/lib/iomap.c
+index 4f8b31baa575..a65717cd86f7 100644
+--- a/lib/iomap.c
++++ b/lib/iomap.c
+@@ -111,7 +111,7 @@ EXPORT_SYMBOL(ioread16be);
+ EXPORT_SYMBOL(ioread32);
+ EXPORT_SYMBOL(ioread32be);
+ 
+-#ifdef readq
++#ifdef CONFIG_64BIT
+ static u64 pio_read64_lo_hi(unsigned long port)
+ {
+ 	u64 lo, hi;
+@@ -153,21 +153,21 @@ static u64 pio_read64be_hi_lo(unsigned long port)
+ }
+ 
+ __no_kmsan_checks
+-u64 ioread64_lo_hi(const void __iomem *addr)
++u64 __ioread64_lo_hi(const void __iomem *addr)
+ {
+ 	IO_COND(addr, return pio_read64_lo_hi(port), return readq(addr));
+ 	return 0xffffffffffffffffULL;
+ }
+ 
+ __no_kmsan_checks
+-u64 ioread64_hi_lo(const void __iomem *addr)
++u64 __ioread64_hi_lo(const void __iomem *addr)
+ {
+ 	IO_COND(addr, return pio_read64_hi_lo(port), return readq(addr));
+ 	return 0xffffffffffffffffULL;
+ }
+ 
+ __no_kmsan_checks
+-u64 ioread64be_lo_hi(const void __iomem *addr)
++u64 __ioread64be_lo_hi(const void __iomem *addr)
+ {
+ 	IO_COND(addr, return pio_read64be_lo_hi(port),
+ 		return mmio_read64be(addr));
+@@ -175,19 +175,19 @@ u64 ioread64be_lo_hi(const void __iomem *addr)
+ }
+ 
+ __no_kmsan_checks
+-u64 ioread64be_hi_lo(const void __iomem *addr)
++u64 __ioread64be_hi_lo(const void __iomem *addr)
+ {
+ 	IO_COND(addr, return pio_read64be_hi_lo(port),
+ 		return mmio_read64be(addr));
+ 	return 0xffffffffffffffffULL;
+ }
+ 
+-EXPORT_SYMBOL(ioread64_lo_hi);
+-EXPORT_SYMBOL(ioread64_hi_lo);
+-EXPORT_SYMBOL(ioread64be_lo_hi);
+-EXPORT_SYMBOL(ioread64be_hi_lo);
++EXPORT_SYMBOL(__ioread64_lo_hi);
++EXPORT_SYMBOL(__ioread64_hi_lo);
++EXPORT_SYMBOL(__ioread64be_lo_hi);
++EXPORT_SYMBOL(__ioread64be_hi_lo);
+ 
+-#endif /* readq */
++#endif /* CONFIG_64BIT */
+ 
+ #ifndef pio_write16be
+ #define pio_write16be(val,port) outw(swab16(val),port)
+@@ -236,7 +236,7 @@ EXPORT_SYMBOL(iowrite16be);
+ EXPORT_SYMBOL(iowrite32);
+ EXPORT_SYMBOL(iowrite32be);
+ 
+-#ifdef writeq
++#ifdef CONFIG_64BIT
+ static void pio_write64_lo_hi(u64 val, unsigned long port)
+ {
+ 	outl(val, port);
+@@ -261,7 +261,7 @@ static void pio_write64be_hi_lo(u64 val, unsigned long port)
+ 	pio_write32be(val, port + sizeof(u32));
+ }
+ 
+-void iowrite64_lo_hi(u64 val, void __iomem *addr)
++void __iowrite64_lo_hi(u64 val, void __iomem *addr)
+ {
+ 	/* Make sure uninitialized memory isn't copied to devices. */
+ 	kmsan_check_memory(&val, sizeof(val));
+@@ -269,7 +269,7 @@ void iowrite64_lo_hi(u64 val, void __iomem *addr)
+ 		writeq(val, addr));
+ }
+ 
+-void iowrite64_hi_lo(u64 val, void __iomem *addr)
++void __iowrite64_hi_lo(u64 val, void __iomem *addr)
+ {
+ 	/* Make sure uninitialized memory isn't copied to devices. */
+ 	kmsan_check_memory(&val, sizeof(val));
+@@ -277,7 +277,7 @@ void iowrite64_hi_lo(u64 val, void __iomem *addr)
+ 		writeq(val, addr));
+ }
+ 
+-void iowrite64be_lo_hi(u64 val, void __iomem *addr)
++void __iowrite64be_lo_hi(u64 val, void __iomem *addr)
+ {
+ 	/* Make sure uninitialized memory isn't copied to devices. */
+ 	kmsan_check_memory(&val, sizeof(val));
+@@ -285,7 +285,7 @@ void iowrite64be_lo_hi(u64 val, void __iomem *addr)
+ 		mmio_write64be(val, addr));
+ }
+ 
+-void iowrite64be_hi_lo(u64 val, void __iomem *addr)
++void __iowrite64be_hi_lo(u64 val, void __iomem *addr)
+ {
+ 	/* Make sure uninitialized memory isn't copied to devices. */
+ 	kmsan_check_memory(&val, sizeof(val));
+@@ -293,12 +293,12 @@ void iowrite64be_hi_lo(u64 val, void __iomem *addr)
+ 		mmio_write64be(val, addr));
+ }
+ 
+-EXPORT_SYMBOL(iowrite64_lo_hi);
+-EXPORT_SYMBOL(iowrite64_hi_lo);
+-EXPORT_SYMBOL(iowrite64be_lo_hi);
+-EXPORT_SYMBOL(iowrite64be_hi_lo);
++EXPORT_SYMBOL(__iowrite64_lo_hi);
++EXPORT_SYMBOL(__iowrite64_hi_lo);
++EXPORT_SYMBOL(__iowrite64be_lo_hi);
++EXPORT_SYMBOL(__iowrite64be_hi_lo);
+ 
+-#endif /* readq */
++#endif /* CONFIG_64BIT */
+ 
+ /*
+  * These are the "repeat MMIO read/write" functions.
+-- 
+2.39.5
 
-return_type foo(type1 a1, type2 a2);
-
-return_type my_foo(type1 a1)
-{
-	return foo(a1, value);
-}
-
-is a normal thing to do. The whole STD C cannot return void bollocks
-breaks that when return_type := void, so in that regards I would call
-this a STD C defect.
 
