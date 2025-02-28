@@ -1,283 +1,173 @@
-Return-Path: <linux-arch+bounces-10462-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10463-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ACD4A49387
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 09:30:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 667A7A49491
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 10:15:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80FBF18936AC
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 08:31:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64BFE17091F
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 09:15:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 855F92512C6;
-	Fri, 28 Feb 2025 08:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D315E2561B4;
+	Fri, 28 Feb 2025 09:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dui1sz6N"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CR5nCp5R"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4307B24F5A8
-	for <linux-arch@vger.kernel.org>; Fri, 28 Feb 2025 08:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3842F24A046;
+	Fri, 28 Feb 2025 09:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740731448; cv=none; b=Zp3kIGGP3xfUYl2Ch4WWmduXXLyQeIHr8bnxH04KEnZ5+u7qCuZqMnUgHGd7lEDDZjCozxi6+T3DM/L7jBICudAe5tzjJqw53s++KkpTzPenpH1IUXfa+QI+k+NaXP5t0O7ZRip1WzLqJgznA33rLlu2Dk6p/ZSvMDa0pIjmAYQ=
+	t=1740734148; cv=none; b=D7tPKHv7xRbSz7h9evuEFSFQqYkUAo37YE6kl0mYYjTCKOyM4B7e6nqP2EwpH1ampV1xfWmqZGlIgPMdHbaju0mQm2ika6BQbaXJRjcsDQ9ofQNc/dHTFxy2E4A0NR79DuFZO79BUQ5/l5vatI1tD2e4E06/QtVzOHND7If2/qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740731448; c=relaxed/simple;
-	bh=9JRh0vQu00gcGDgHvqANg3ZiBZ1ZNLJx8nUj+BWm9B0=;
+	s=arc-20240116; t=1740734148; c=relaxed/simple;
+	bh=XUXziA+nTZDBj2Li7foJzUDDRkHQt+bXPdaAGNeKlqE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pUdy80sMQgQ+bsAxtbcuu2QBPMSPGRnCTpJGHR3h/slVgvpqZ8pps8cnE9OugMADQZ00knKEuUmsOk6iU6NtVcldj4pm5masd5udTRkgaDjwmOiIbd+9uHmDk1cg8EBD/Qobcz6T5gDa0a0PqhS9xF0BgePDy5fI5ov2ekIGrWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Dui1sz6N; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740731445;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IAk7T/agbjQFnKEBQSUNnzMrHpjZ/FADtSxLOMcXTqc=;
-	b=Dui1sz6NBA52u2gWpD/Jv+g8u440V4PvsD6EoEGuq/Ll7p0AYhpNTwHGVZ96KDS+MCI+BG
-	nmnAyQoBXTSDiRxAIUUEvXikd9FOA3L2GXJvbWFiKg9SGqjwySmg1KmYFUCquaqftV+Poi
-	qhHzNfOdmnFIGCJUrXcO88GNm+YxEdg=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-546-EevVJcqvO7urnCuFCydfVA-1; Fri, 28 Feb 2025 03:30:43 -0500
-X-MC-Unique: EevVJcqvO7urnCuFCydfVA-1
-X-Mimecast-MFC-AGG-ID: EevVJcqvO7urnCuFCydfVA_1740731442
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-abbba16956bso232692666b.2
-        for <linux-arch@vger.kernel.org>; Fri, 28 Feb 2025 00:30:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740731442; x=1741336242;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IAk7T/agbjQFnKEBQSUNnzMrHpjZ/FADtSxLOMcXTqc=;
-        b=C6K5hpu/thCUjhssegmk6QFm93V4ce12pGCD648aLBwr4vGqIJmTB2BvZQDbq7R39C
-         ac7dOp+lqrbvidITS81xw+4quexbS/oqB4KAeVHDpXKV2wRa4sJcjq5xr3Q8KuBX4nXg
-         Rf9SApI7yWkGLRjCXkT6rKsux5YvrAFmJAgC/ccgkqmv7CFbyv8cjFcOCqc64VSmT+oB
-         3UAb/69awHO2xCOLNNF+2ssA7jUZjzt3Pdwzfkmc3HsIatoNG3olHf64eNYfX26uWf1f
-         BkzPbN2dsXRw2VE6U414z1nHIWKFu16/6Knq07or/pZqS0kNIgEnhfCNuwjPUr3OV5EP
-         Hp4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWdeiarmaS4hM7ob0f+xskliG0w/8J84aetUaWRx3cxIPHPh+MWqbX8CWou77Th5HYqsNec0ZpE+qIo@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3t2rPbgFsCh4IZupKJBzEMSAuJWQ0UsWwSHmQbVTmOGoBJLLD
-	RiiNo2hkmXB/Og5ZYBBI+o4khv7USqmt54HlQMVLDns71FYK/VMsq2TnBfb1xwD369RQ2UidI4N
-	ZqYF0Q1pFixNhcD2g5qxumtbVQ4lEXc80ZXtALbz/n0+VO2Y8f+N21YrhLA==
-X-Gm-Gg: ASbGnctg9DpHC8Rvvk845ShagOV7rWPBazsmNGbN/60G84FaB+BhGy9AWxHi30ve/0D
-	q3KDM6WU/N6iSuWpAzeCaOyCC8BoESgs9Yj+ZhEL7iH/3gFUOK73cLMIGcDbUogqUcE1g1XPgz0
-	ZwuV9t550KL4P29yZXV8nwGd75+ndaxgZn/C3/V3kutss4c+mHiiOh9aFa+iiOiaYTKo82LGWMX
-	cX6ILK3VXtZFItPbsbhO5fBMGws1UWbO+RUUuSI2kYj/nrtu23ef67AwZ9QyB3YG/mpQSCV6lTY
-	g4xSTiyxCJAsua9P41sLkM5Ox2T53wrw+A0=
-X-Received: by 2002:a17:907:2d08:b0:abf:22cd:9a7e with SMTP id a640c23a62f3a-abf261f5471mr234889166b.30.1740731441878;
-        Fri, 28 Feb 2025 00:30:41 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGZIWf4Mi/ez8uccBE3ejxNf0ox83n9Aynget7e7VbyIxs4sY20lz/2ANqi9H9OCRURVdUpFw==
-X-Received: by 2002:a17:907:2d08:b0:abf:22cd:9a7e with SMTP id a640c23a62f3a-abf261f5471mr234884766b.30.1740731441289;
-        Fri, 28 Feb 2025 00:30:41 -0800 (PST)
-Received: from thinky (ip-217-030-074-039.aim-net.cz. [217.30.74.39])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c74c714sm254400566b.124.2025.02.28.00.30.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 00:30:40 -0800 (PST)
-Date: Fri, 28 Feb 2025 09:30:38 +0100
-From: Andrey Albershteyn <aalbersh@redhat.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: "Darrick J. Wong" <djwong@kernel.org>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
-	Theodore Tso <tytso@mit.edu>
-Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
-Message-ID: <ihkez5xfcuocis7cmipvts2vxnfan2ub5kcpvsrnzm37glwnax@nxp72byvetye>
-References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
- <20250221181135.GW21808@frogsfrogsfrogs>
- <CAOQ4uxgyYBFqkq6cQsso4LxJsPJ4uECOdskXmz-nmGhhV5BQWg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TfoZmfDuuKyErNSgkxk/qBhzsAxp5LEyKK4lQgOR2wlcka2cldWoYO/e6X0iaOy7hvod7sh3x2XXWtL3ZfwKDy/scKSdJS2lRABEGe11iPCFdzutA3xbK6L2VIKgM1gNmAitRmAgU8UBPdl4704Nj6abNVmkeFwTQ4ZszcIkfrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CR5nCp5R; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51S18l30011287;
+	Fri, 28 Feb 2025 09:15:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=zbXmaRcT2XwkeDCQc4Fd1apB2+M2uJ
+	/a3I4PM1YAgw0=; b=CR5nCp5RBt4kqQy37SzzjYHulkurnB3J6loL1dYZQg3Jw1
+	TRY9FbD2yoZUIsQVu6vsPdB5oazypxeGOE/y89LUz6G1yoNa9PUfNPYP2KzLVc0v
+	ZiyzOnQtoPGKdXFSlsTpr8tRUOGIDGYQqLWU6hidsyNQkR1fKOog+hefQ8uMHdrw
+	hFm12FlgrIhjMZ6tdM0hVcKdXERHMr/0MlGFhklKGj2N30F4q1DxvpYkJF4ja58y
+	nX29zfVCJR4mlOQIPg1jSadnA2UY2/yrU5LwwrNca73oF3TbmlhImTtVeLhRyTV4
+	gPAZVh0J2t72Vp2yFxz65407FMZoUhJRHinNpd+g==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45337ahym7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Feb 2025 09:15:17 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 51S8xMff016279;
+	Fri, 28 Feb 2025 09:15:16 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45337ahym5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Feb 2025 09:15:16 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51S7xvWL002595;
+	Fri, 28 Feb 2025 09:15:15 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44yu4k5avf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 28 Feb 2025 09:15:15 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51S9FBd120578658
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 28 Feb 2025 09:15:11 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B3A512004B;
+	Fri, 28 Feb 2025 09:15:11 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B32D720040;
+	Fri, 28 Feb 2025 09:15:10 +0000 (GMT)
+Received: from osiris (unknown [9.171.87.109])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 28 Feb 2025 09:15:10 +0000 (GMT)
+Date: Fri, 28 Feb 2025 10:15:09 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Lyude Paul <lyude@redhat.com>
+Cc: rust-for-linux@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Juergen Christ <jchrist@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:S390 ARCHITECTURE" <linux-s390@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v9 2/9] preempt: Introduce __preempt_count_{sub,
+ add}_return()
+Message-ID: <20250228091509.8985B18-hca@linux.ibm.com>
+References: <20250227221924.265259-1-lyude@redhat.com>
+ <20250227221924.265259-3-lyude@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxgyYBFqkq6cQsso4LxJsPJ4uECOdskXmz-nmGhhV5BQWg@mail.gmail.com>
+In-Reply-To: <20250227221924.265259-3-lyude@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: PXilDMwrSa6mnq-6V0CgFdcdACh3D8aI
+X-Proofpoint-GUID: uvIo6Uq09NLmGDRrJ19UmGamCa1Xy5fB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-28_02,2025-02-27_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=670
+ priorityscore=1501 impostorscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 mlxscore=0 phishscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502280064
 
-On 2025-02-21 20:15:24, Amir Goldstein wrote:
-> On Fri, Feb 21, 2025 at 7:13 PM Darrick J. Wong <djwong@kernel.org> wrote:
-> >
-> > On Tue, Feb 11, 2025 at 06:22:47PM +0100, Andrey Albershteyn wrote:
-> > > From: Andrey Albershteyn <aalbersh@redhat.com>
-> > >
-> > > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> > > extended attributes/flags. The syscalls take parent directory fd and
-> > > path to the child together with struct fsxattr.
-> > >
-> > > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> > > that file don't need to be open as we can reference it with a path
-> > > instead of fd. By having this we can manipulated inode extended
-> > > attributes not only on regular files but also on special ones. This
-> > > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> > > we can not call ioctl() directly on the filesystem inode using fd.
-> > >
-> > > This patch adds two new syscalls which allows userspace to get/set
-> > > extended inode attributes on special files by using parent directory
-> > > and a path - *at() like syscall.
-> > >
-> > > Also, as vfs_fileattr_set() is now will be called on special files
-> > > too, let's forbid any other attributes except projid and nextents
-> > > (symlink can have an extent).
-> > >
-> > > CC: linux-api@vger.kernel.org
-> > > CC: linux-fsdevel@vger.kernel.org
-> > > CC: linux-xfs@vger.kernel.org
-> > > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
-> > > ---
-> > > v1:
-> > > https://lore.kernel.org/linuxppc-dev/20250109174540.893098-1-aalbersh@kernel.org/
-> > >
-> > > Previous discussion:
-> > > https://lore.kernel.org/linux-xfs/20240520164624.665269-2-aalbersh@redhat.com/
-> > >
-> > > XFS has project quotas which could be attached to a directory. All
-> > > new inodes in these directories inherit project ID set on parent
-> > > directory.
-> > >
-> > > The project is created from userspace by opening and calling
-> > > FS_IOC_FSSETXATTR on each inode. This is not possible for special
-> > > files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
-> > > with empty project ID. Those inodes then are not shown in the quota
-> > > accounting but still exist in the directory. Moreover, in the case
-> > > when special files are created in the directory with already
-> > > existing project quota, these inode inherit extended attributes.
-> > > This than leaves them with these attributes without the possibility
-> > > to clear them out. This, in turn, prevents userspace from
-> > > re-creating quota project on these existing files.
-> > > ---
-> > > Changes in v3:
-> > > - Remove unnecessary "dfd is dir" check as it checked in user_path_at()
-> > > - Remove unnecessary "same filesystem" check
-> > > - Use CLASS() instead of directly calling fdget/fdput
-> > > - Link to v2: https://lore.kernel.org/r/20250122-xattrat-syscall-v2-1-5b360d4fbcb2@kernel.org
-> > > ---
-> > >  arch/alpha/kernel/syscalls/syscall.tbl      |  2 +
-> > >  arch/arm/tools/syscall.tbl                  |  2 +
-> > >  arch/arm64/tools/syscall_32.tbl             |  2 +
-> > >  arch/m68k/kernel/syscalls/syscall.tbl       |  2 +
-> > >  arch/microblaze/kernel/syscalls/syscall.tbl |  2 +
-> > >  arch/mips/kernel/syscalls/syscall_n32.tbl   |  2 +
-> > >  arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 +
-> > >  arch/mips/kernel/syscalls/syscall_o32.tbl   |  2 +
-> > >  arch/parisc/kernel/syscalls/syscall.tbl     |  2 +
-> > >  arch/powerpc/kernel/syscalls/syscall.tbl    |  2 +
-> > >  arch/s390/kernel/syscalls/syscall.tbl       |  2 +
-> > >  arch/sh/kernel/syscalls/syscall.tbl         |  2 +
-> > >  arch/sparc/kernel/syscalls/syscall.tbl      |  2 +
-> > >  arch/x86/entry/syscalls/syscall_32.tbl      |  2 +
-> > >  arch/x86/entry/syscalls/syscall_64.tbl      |  2 +
-> > >  arch/xtensa/kernel/syscalls/syscall.tbl     |  2 +
-> > >  fs/inode.c                                  | 75 +++++++++++++++++++++++++++++
-> > >  fs/ioctl.c                                  | 16 +++++-
-> > >  include/linux/fileattr.h                    |  1 +
-> > >  include/linux/syscalls.h                    |  4 ++
-> > >  include/uapi/asm-generic/unistd.h           |  8 ++-
-> > >  21 files changed, 133 insertions(+), 3 deletions(-)
-> > >
-> >
-> > <cut to the syscall definitions>
-> >
-> > > diff --git a/fs/inode.c b/fs/inode.c
-> > > index 6b4c77268fc0ecace4ac78a9ca777fbffc277f4a..b2dddd9db4fabaf67a6cbf541a86978b290411ec 100644
-> > > --- a/fs/inode.c
-> > > +++ b/fs/inode.c
-> > > @@ -23,6 +23,9 @@
-> > >  #include <linux/rw_hint.h>
-> > >  #include <linux/seq_file.h>
-> > >  #include <linux/debugfs.h>
-> > > +#include <linux/syscalls.h>
-> > > +#include <linux/fileattr.h>
-> > > +#include <linux/namei.h>
-> > >  #include <trace/events/writeback.h>
-> > >  #define CREATE_TRACE_POINTS
-> > >  #include <trace/events/timestamp.h>
-> > > @@ -2953,3 +2956,75 @@ umode_t mode_strip_sgid(struct mnt_idmap *idmap,
-> > >       return mode & ~S_ISGID;
-> > >  }
-> > >  EXPORT_SYMBOL(mode_strip_sgid);
-> > > +
-> > > +SYSCALL_DEFINE4(getfsxattrat, int, dfd, const char __user *, filename,
-> > > +             struct fsxattr __user *, fsx, unsigned int, at_flags)
-> >
-> > Should the kernel require userspace to pass the size of the fsx buffer?
-> > That way we avoid needing to rev the interface when we decide to grow
-> > the structure.
-> >
+On Thu, Feb 27, 2025 at 05:10:13PM -0500, Lyude Paul wrote:
+> From: Boqun Feng <boqun.feng@gmail.com>
 > 
-> This makes sense to me, but I see that Andreas proposed other ways,
-> as long as we have a plan on how to extend the struct if we need more space.
-> 
-> Andrey, I am sorry to bring this up in v3, but I would like to request
-> two small changes before merging this API.
-> 
-> This patch by Pali [1] adds fsx_xflags_mask for the filesystem to
-> report the supported set of xflags.
-> 
-> It was argued that we can make this change with the existing ioctl,
-> because it is not going to break xfs_io -c lsattr/chattr, which is fine,
-> but I think that we should merge the fsx_xflags_mask change along
-> with getfsxattrat() which is a new UAPI.
-> 
-> The second request is related to setfsxattrat().
-> With current FS_IOC_FSSETXATTR, IIUC, xfs ignores unsupported
-> fsx_xflags. I think this needs to be fixed before merging setfsxattrat().
-> It's ok that a program calling FS_IOC_FSSETXATTR will not know
-> if unsupported flags will be ignored, because that's the way it is,
-> but I think that setfsxattrat() must return -EINVAL for trying to
-> set unsupported xflags.
-> 
-> As I explained in [2] I think it is fine if FS_IOC_FSSETXATTR
-> will also start returning -EINVAL for unsupported flags, but I would
-> like setfsxattrat() to make that a guarantee.
-> 
-> There was an open question, what does fsx_xflags_mask mean
-> for setfsxattrat() - it is a mask like in inode_set_flags() as Andreas
-> suggested? I think that would be a good idea.
-> 
-> Thanks,
-> Amir.
-> 
-> [1] https://lore.kernel.org/linux-fsdevel/20250216164029.20673-4-pali@kernel.org/
-> [2] https://lore.kernel.org/linux-fsdevel/CAOQ4uxjwQJiKAqyjEmKUnq-VihyeSsxyEy2F+J38NXwrAXurFQ@mail.gmail.com/
-> 
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Lyude Paul <lyude@redhat.com>
+> ---
+>  arch/arm64/include/asm/preempt.h | 18 ++++++++++++++++++
+>  arch/s390/include/asm/preempt.h  | 19 +++++++++++++++++++
+>  arch/x86/include/asm/preempt.h   | 10 ++++++++++
+>  include/asm-generic/preempt.h    | 14 ++++++++++++++
+>  4 files changed, 61 insertions(+)
+...
+> diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
+> index 6ccd033acfe52..67a6e265e9fff 100644
+> --- a/arch/s390/include/asm/preempt.h
+> +++ b/arch/s390/include/asm/preempt.h
+> @@ -98,6 +98,25 @@ static __always_inline bool should_resched(int preempt_offset)
+>  	return unlikely(READ_ONCE(get_lowcore()->preempt_count) == preempt_offset);
+>  }
+>  
+> +static __always_inline int __preempt_count_add_return(int val)
+> +{
+> +	/*
+> +	 * With some obscure config options and CONFIG_PROFILE_ALL_BRANCHES
+> +	 * enabled, gcc 12 fails to handle __builtin_constant_p().
+> +	 */
+> +	if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES)) {
+> +		if (__builtin_constant_p(val) && (val >= -128) && (val <= 127)) {
+> +			return val + __atomic_add_const(val, &get_lowcore()->preempt_count);
+> +		}
+> +	}
+> +	return val + __atomic_add(val, &get_lowcore()->preempt_count);
+> +}
 
-I'm fine with making Pali's patchset a dependency for this syscall,
-as if vfs_fileattr_set() will start returning EINVAL on unsupported
-flags this syscall will pass it through (ioctls will need to ignore
-it). And as these syscalls use fsxattr anyway the fsx_xflags_mask
-field will be here.
+This should just be
 
--- 
-- Andrey
+static __always_inline int __preempt_count_add_return(int val)
+{
+	return val + __atomic_add(val, &get_lowcore()->preempt_count);
+}
 
+since __atomic_add_const() won't return the original value.
+
+Well.. at least it should not, but the way it is currently implemented it
+indeed does sometimes depending on config options - there is room for
+improvement. That's my fault - going to address that.
+
+I couldn't find any cover letter for the whole patch series which describes
+what this is about, and why it is needed.
+It looks like some Rust enablement?
 
