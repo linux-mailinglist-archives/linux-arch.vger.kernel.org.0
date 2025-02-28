@@ -1,221 +1,199 @@
-Return-Path: <linux-arch+bounces-10471-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10472-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80433A4A0E1
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 18:52:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDF5FA4A43A
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 21:26:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D652189A4A7
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 17:52:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1E7F88674F
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 20:23:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25DA1C1F00;
-	Fri, 28 Feb 2025 17:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BE7F23F387;
+	Fri, 28 Feb 2025 20:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MQu9vcZG"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="AHwXlfxC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1345815ECDF
-	for <linux-arch@vger.kernel.org>; Fri, 28 Feb 2025 17:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66DCC23F372;
+	Fri, 28 Feb 2025 20:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740765153; cv=none; b=M1p3fLPkyZd7sMUYjJUp6A7wy+vxuR/mZyVcv9pFi7j3tr5oVjpDKoV0oN9jaUh6ax5ULklFcSv1qB6yTstuy03UA+wBE+xqm9ynnYzuv9sFcttDg4Rdg8WAMyY2t2qKFS22dSks4Z8EraNrBhjKu7Tkm6BkY2ThTqsmjAMpnBc=
+	t=1740774127; cv=none; b=BEOY/ULgCUl5tVok3ayVxJhiivvgN48Ng+j8LNBiek/OfiQwmwg3Bd3LMRz1OsRelJ5klWuqOjvEG9rc7ffyD30O/Lzos9waJau3nsguC3lmy5dL0xYhNtIr+QLgbAJiLV/jmgBT7u2KZZyWGPoh2vDeoFdCrNhQF+ht/+4bOBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740765153; c=relaxed/simple;
-	bh=+Ht1MQGBmqZtoknpD5M16MZiWZKcnDJ92gH5Uo7A9gs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=gzu88D6Yipx+AQHbjbJpk5q3O+n8haSRszvk/JP11lfSg9oqbwjiL6w+fG1M32ItN3e1914RI0DV0DvZy9npPyD8m3QIJu5mJcbfepUaFd1M9XIj2ispaGXQ4UuRVC3gMWer+Sty6QFnq3WeYZdJph3bO/FOVi8E1MUK4KRPosQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MQu9vcZG; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740765153; x=1772301153;
-  h=date:from:to:cc:subject:message-id;
-  bh=+Ht1MQGBmqZtoknpD5M16MZiWZKcnDJ92gH5Uo7A9gs=;
-  b=MQu9vcZGinOZKKmM2uhfsdw7QR4oQRL/Sk40sRHoZGBpAsazCYKMD8Um
-   w4wlYMylPMGX86wklW5sqI8moyz7dC2SN3WXVHZMf0O/lcEd4H+Yq5APf
-   aHHBD1i7pF3SB4y8wG/IL+nlsNYddHpZzsWN9WtWDQMwPCociwT3DlsXu
-   N5VZNV42cPZdOwumywz8ed2HwhIvKMS7Zxch6C7FzciG7FxzzHpOeuEPA
-   aHdseRAKD8ivTVDDXb+EYi96+ooaOwpfjI72cWwRyJrzKXG2kN45vtvV1
-   Nir4esBbqb0B/xVH9TX5VWnWZmsqNN/Xv5YzsL4m1xx/YeSmoN+z/x5Dc
-   A==;
-X-CSE-ConnectionGUID: T93AMft7S6aJaHYt/0NDWg==
-X-CSE-MsgGUID: 5Sv/YbQ+Skej4l9891kfvw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="45354781"
-X-IronPort-AV: E=Sophos;i="6.13,323,1732608000"; 
-   d="scan'208";a="45354781"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 09:52:32 -0800
-X-CSE-ConnectionGUID: d+0yjymbTwCK2qGuzSbY1g==
-X-CSE-MsgGUID: NKBEVqZhR/2wkvh3ptRGRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,323,1732608000"; 
-   d="scan'208";a="122540495"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 28 Feb 2025 09:52:30 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1to4XE-000FJu-0A;
-	Fri, 28 Feb 2025 17:52:28 +0000
-Date: Sat, 01 Mar 2025 01:51:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD REGRESSION
- 55d422e4e5bf7aece2038533451a9bd5e5181e95
-Message-ID: <202503010131.d7uB8Qsp-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1740774127; c=relaxed/simple;
+	bh=Y/3SElz8iaYCwSjvitdnGgLgPxggp/GvYFsotcJQ/cE=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=c8oMfEheqiPv+qt8rWCxfjt+9xPsoqY1ROljywGwjdvBMORJmoHwPVip3bLnm8QPNUJ1wUNcA+tHXGcnKv+ERTD/134iETi1tBxwA/zDgoZwvOQGga8BeeeEtUBLB6OVhz/0Lnoa6n91bM1KaN1CvE4qhp9fKnJBRptA2cvKDPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=AHwXlfxC; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.35.166] (c-24-22-154-137.hsd1.wa.comcast.net [24.22.154.137])
+	by linux.microsoft.com (Postfix) with ESMTPSA id C698A210D0EA;
+	Fri, 28 Feb 2025 12:22:04 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C698A210D0EA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1740774125;
+	bh=1+ex/PI1EKCfFK1H+WPecE98rrnjNmYMX0MiAFRCvj8=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=AHwXlfxC/UwT2KDJZxxxubZgc0m3IVcGilsc4NKNEzIU5QifQ07agHrbNmiy942b/
+	 rGO0voh/5Ip81GdgnjtJf1upTMe1spMlPxdqIAknZzNZF4SIv/ruxvWbY+bmOnnn9V
+	 AkU2wGDVWiIRjauUiCOlel9XnD8iCjZ/Xdt+LH3g=
+Message-ID: <9254eaa1-8ff0-4dd6-a443-5f127049bdaa@linux.microsoft.com>
+Date: Fri, 28 Feb 2025 12:22:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: eahariha@linux.microsoft.com,
+ Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+ linux-hyperv@vger.kernel.org, x86@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-acpi@vger.kernel.org, kys@microsoft.com,
+ haiyangz@microsoft.com, wei.liu@kernel.org, mhklinux@outlook.com,
+ decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, hpa@zytor.com, daniel.lezcano@linaro.org,
+ joro@8bytes.org, robin.murphy@arm.com, arnd@arndb.de,
+ jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
+ skinsburskii@linux.microsoft.com, mrathor@linux.microsoft.com,
+ ssengar@linux.microsoft.com, apais@linux.microsoft.com,
+ Tianyu.Lan@microsoft.com, stanislav.kinsburskiy@gmail.com,
+ gregkh@linuxfoundation.org, vkuznets@redhat.com, prapal@linux.microsoft.com,
+ muislam@microsoft.com, anrayabh@linux.microsoft.com, rafael@kernel.org,
+ lenb@kernel.org, corbet@lwn.net
+Subject: Re: [PATCH v5 01/10] hyperv: Convert Hyper-V status codes to strings
+To: Roman Kisel <romank@linux.microsoft.com>
+References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1740611284-27506-2-git-send-email-nunodasneves@linux.microsoft.com>
+ <74af19c4-639f-4bcc-b667-b5f102bbb312@linux.microsoft.com>
+ <8338dd00-3aa4-418f-a547-1c19623358cb@linux.microsoft.com>
+ <49a69fe3-fca5-426d-999d-61ee0c8f60f3@linux.microsoft.com>
+ <70b62e52-639a-4026-9a52-102d1de46ffd@linux.microsoft.com>
+ <212cc582-845d-42b2-89f2-1e9579f752ec@linux.microsoft.com>
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+Content-Language: en-US
+In-Reply-To: <212cc582-845d-42b2-89f2-1e9579f752ec@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 55d422e4e5bf7aece2038533451a9bd5e5181e95  io.h: drop unused headers
+On 2/28/2025 9:20 AM, Roman Kisel wrote:
+> 
+> 
+> On 2/27/2025 3:25 PM, Easwar Hariharan wrote:
+>> On 2/27/2025 3:08 PM, Roman Kisel wrote:
+> 
+> [...]
+> 
+>>> Would be great to learn the details to understand how this function is
+>>> going to improve the situation:
+>>>
+>>> 1. How come the hex error code was useless, what is not matching
+>>>     anything in the Linux headers?
+>>
+>> It doesn't match anything in the Linux headers, but it's an NTSTATUS, not HVSTATUS.
+>>
+> 
+> That is what it looks like from the code, I posted the details in the
+> parallel thread.
+> 
+> Here is a fix:
+> https://lore.kernel.org/linux-hyperv/20250227233110.36596-1-romank@linux.microsoft.com/
+> 
+> Also I think the commit description in your patch
+> 
+> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d2138eab8cde61e0e6f62d0713e45202e8457d6d
+> 
+> conflates the hypervisor (ours runs bare-metal, Type 1) and the VMMs
+> (Virtual Machine Monitors)+VSPs (Virtual Service Providers, e.g StorVSP
+> that implements SCSI) running in the host/root/dom0 partition.
 
-Error/Warning (recently discovered and may have been fixed):
+Agreed, that was what I was led to believe, your patch would help with that
+miscommunication, though not in its current form. See my review comment in that
+thread.
 
-    https://lore.kernel.org/oe-kbuild-all/202502280726.h7lhKtT4-lkp@intel.com
-    https://lore.kernel.org/oe-kbuild-all/202502280814.ATzYxKLc-lkp@intel.com
+> 
+>> Coming from the PoV of a user, it would be a much more useful message to see:
+>>
+>> [  249.512760] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#683 cmd 0x28 status: scsi 0x2 srb 0x4 hv STATUS_UNSUCCESSFUL
+>>
+>> than
+>>
+>> [  249.512760] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#683 cmd 0x28 status: scsi 0x2 srb 0x4 hv 0xc0000001
+>>
+> 
+> It is likely that the PoV of a user that you've mentioned is actually
+> a PoV of a (kernel) developer.
 
-    ERROR: modpost: "__ioread64_lo_hi" [drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.ko] undefined!
-    ERROR: modpost: "__iowrite64_hi_lo" [drivers/crypto/caam/caam_jr.ko] undefined!
-    ERROR: modpost: "__iowrite64_lo_hi" [drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.ko] undefined!
-    ERROR: modpost: "__iowrite64be_hi_lo" [drivers/crypto/caam/caam_jr.ko] undefined!
-    drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c:68:2: error: call to undeclared function '__iowrite64_lo_hi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c:73:9: error: call to undeclared function '__ioread64_lo_hi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    drivers/vfio/pci/vfio_pci_rdwr.c:65:1: error: call to undeclared function '__iowrite64be_lo_hi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    drivers/vfio/pci/vfio_pci_rdwr.c:91:1: error: call to undeclared function '__ioread64be_lo_hi'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    include/linux/io-64-nonatomic-hi-lo.h:105:18: error: implicit declaration of function '__ioread64_hi_lo'; did you mean 'ioread64_hi_lo'? [-Wimplicit-function-declaration]
-    include/linux/io-64-nonatomic-hi-lo.h:114:19: error: implicit declaration of function '__iowrite64_hi_lo'; did you mean 'iowrite64_hi_lo'? [-Wimplicit-function-declaration]
-    include/linux/io-64-nonatomic-hi-lo.h:123:20: error: implicit declaration of function '__ioread64be_hi_lo'; did you mean 'ioread64be_hi_lo'? [-Wimplicit-function-declaration]
-    include/linux/io-64-nonatomic-hi-lo.h:132:21: error: implicit declaration of function '__iowrite64be_hi_lo'; did you mean 'iowrite64be_hi_lo'? [-Wimplicit-function-declaration]
-    include/linux/io-64-nonatomic-lo-hi.h:105:18: error: implicit declaration of function '__ioread64_lo_hi'; did you mean 'ioread64_lo_hi'? [-Wimplicit-function-declaration]
-    include/linux/io-64-nonatomic-lo-hi.h:114:19: error: implicit declaration of function '__iowrite64_lo_hi'; did you mean 'iowrite64_lo_hi'? [-Wimplicit-function-declaration]
-    include/linux/io-64-nonatomic-lo-hi.h:123:20: error: implicit declaration of function '__ioread64be_lo_hi'; did you mean 'ioread64be_lo_hi'? [-Wimplicit-function-declaration]
-    include/linux/io-64-nonatomic-lo-hi.h:132:21: error: implicit declaration of function '__iowrite64be_lo_hi'; did you mean 'iowrite64be_lo_hi'? [-Wimplicit-function-declaration]
+Actually, no, it's PoV of the WSL users that are having the discussion in
+the linked github issue. FWIW, that issue also occurred in Azure with multiple
+incidents coming into our queue because of the unusable flood of error messages.
 
-Error/Warning ids grouped by kconfigs:
+> It is hard to imagine that folks running
+> web sites, DB servers, LoBs, LLMs, etc. in Hyper-V VMs care about the
+> lowest software level of the virt stack in the form of the symbolic
+> name or the hex code. They need their VMs to be reliable or suggest
+> what the user may try if a configuration error is suspected.
+> 
+> To make the error log message useful to the user, the message should
+> mention ways of remediation or at least hint what might've gotten
+> wedged. Without that, that's only useful for the people who work with
+> the kernel code proper or the kernel interface to the user land.
 
-recent_errors
-|-- arc-randconfig-001-20250228
-|   `-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__iowrite64_lo_hi
-|-- csky-randconfig-001-20250228
-|   |-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__ioread64_lo_hi
-|   `-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__iowrite64_lo_hi
-|-- hexagon-allmodconfig
-|   |-- drivers-dma-dw-axi-dmac-dw-axi-dmac-platform.c:error:call-to-undeclared-function-__ioread64_lo_hi-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- drivers-dma-dw-axi-dmac-dw-axi-dmac-platform.c:error:call-to-undeclared-function-__iowrite64_lo_hi-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- hexagon-allyesconfig
-|   |-- drivers-dma-dw-axi-dmac-dw-axi-dmac-platform.c:error:call-to-undeclared-function-__ioread64_lo_hi-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- drivers-dma-dw-axi-dmac-dw-axi-dmac-platform.c:error:call-to-undeclared-function-__iowrite64_lo_hi-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- parisc-randconfig-002-20250228
-|   |-- ERROR:__ioread64_lo_hi-drivers-dma-dw-axi-dmac-dw-axi-dmac-platform.ko-undefined
-|   |-- ERROR:__iowrite64_hi_lo-drivers-crypto-caam-caam_jr.ko-undefined
-|   |-- ERROR:__iowrite64_lo_hi-drivers-dma-dw-axi-dmac-dw-axi-dmac-platform.ko-undefined
-|   `-- ERROR:__iowrite64be_hi_lo-drivers-crypto-caam-caam_jr.ko-undefined
-|-- powerpc-randconfig-001-20250228
-|   |-- include-linux-io-nonatomic-hi-lo.h:error:implicit-declaration-of-function-__ioread64_hi_lo
-|   |-- include-linux-io-nonatomic-hi-lo.h:error:implicit-declaration-of-function-__ioread64be_hi_lo
-|   |-- include-linux-io-nonatomic-hi-lo.h:error:implicit-declaration-of-function-__iowrite64_hi_lo
-|   |-- include-linux-io-nonatomic-hi-lo.h:error:implicit-declaration-of-function-__iowrite64be_hi_lo
-|   |-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__ioread64_lo_hi
-|   |-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__ioread64be_lo_hi
-|   |-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__iowrite64_lo_hi
-|   `-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__iowrite64be_lo_hi
-|-- powerpc-randconfig-003-20250228
-|   |-- drivers-dma-dw-axi-dmac-dw-axi-dmac-platform.c:error:call-to-undeclared-function-__ioread64_lo_hi-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   |-- drivers-dma-dw-axi-dmac-dw-axi-dmac-platform.c:error:call-to-undeclared-function-__iowrite64_lo_hi-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   |-- drivers-vfio-pci-vfio_pci_rdwr.c:error:call-to-undeclared-function-__ioread64be_lo_hi-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- drivers-vfio-pci-vfio_pci_rdwr.c:error:call-to-undeclared-function-__iowrite64be_lo_hi-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- riscv-randconfig-002-20250228
-|   |-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__ioread64_lo_hi
-|   `-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__iowrite64_lo_hi
-`-- xtensa-randconfig-002-20250228
-    |-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__ioread64_lo_hi
-    |-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__ioread64be_lo_hi
-    |-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__iowrite64_lo_hi
-    `-- include-linux-io-nonatomic-lo-hi.h:error:implicit-declaration-of-function-__iowrite64be_lo_hi
+There's a step between seeing the issue and fixing it that you're missing,
+i.e. the reporting.
 
-elapsed time: 1458m
+An issue that says "flood of hv_storvsc errors reporting status
+unsuccessful" is better than the same without that status information:
+https://github.com/microsoft/WSL/issues/9173
 
-configs tested: 67
-configs skipped: 1
+> 
+> So I'd think that the hex error codes from the hypervisor give the user
+> exactly as much as the error symbolic names do to get the system to the
+> desired state: nothing. 
+I continue to disagree, seeing HV_STATUS_NO_RESOURCES is better than 0x1D,
+because the user may think to look at `top` or `free -h` or similar to see
+what could be killed to improve the situation.
 
-tested configs:
-alpha                           allyesconfig    gcc-14.2.0
-arc                             allmodconfig    gcc-13.2.0
-arc                             allyesconfig    gcc-13.2.0
-arc                  randconfig-001-20250228    gcc-13.2.0
-arc                  randconfig-002-20250228    gcc-13.2.0
-arm                             allmodconfig    gcc-14.2.0
-arm                             allyesconfig    gcc-14.2.0
-arm                  randconfig-001-20250228    clang-21
-arm                  randconfig-002-20250228    gcc-14.2.0
-arm                  randconfig-003-20250228    gcc-14.2.0
-arm                  randconfig-004-20250228    gcc-14.2.0
-arm64                           allmodconfig    clang-18
-arm64                randconfig-001-20250228    gcc-14.2.0
-arm64                randconfig-002-20250228    clang-21
-arm64                randconfig-003-20250228    clang-16
-arm64                randconfig-004-20250228    gcc-14.2.0
-csky                 randconfig-001-20250228    gcc-14.2.0
-csky                 randconfig-002-20250228    gcc-14.2.0
-hexagon                         allmodconfig    clang-21
-hexagon                         allyesconfig    clang-18
-hexagon              randconfig-001-20250228    clang-19
-hexagon              randconfig-002-20250228    clang-21
-i386       buildonly-randconfig-001-20250228    clang-19
-i386       buildonly-randconfig-002-20250228    clang-19
-i386       buildonly-randconfig-003-20250228    gcc-12
-i386       buildonly-randconfig-004-20250228    clang-19
-i386       buildonly-randconfig-005-20250228    clang-19
-i386       buildonly-randconfig-006-20250228    clang-19
-loongarch            randconfig-001-20250228    gcc-14.2.0
-loongarch            randconfig-002-20250228    gcc-14.2.0
-nios2                randconfig-001-20250228    gcc-14.2.0
-nios2                randconfig-002-20250228    gcc-14.2.0
-parisc               randconfig-001-20250228    gcc-14.2.0
-parisc               randconfig-002-20250228    gcc-14.2.0
-powerpc              randconfig-001-20250228    gcc-14.2.0
-powerpc              randconfig-002-20250228    clang-16
-powerpc              randconfig-003-20250228    clang-18
-powerpc64            randconfig-001-20250228    clang-16
-powerpc64            randconfig-002-20250228    clang-18
-powerpc64            randconfig-003-20250228    gcc-14.2.0
-riscv                randconfig-001-20250228    gcc-14.2.0
-riscv                randconfig-002-20250228    gcc-14.2.0
-s390                            allmodconfig    clang-19
-s390                            allyesconfig    gcc-14.2.0
-s390                 randconfig-001-20250228    gcc-14.2.0
-s390                 randconfig-002-20250228    clang-17
-sh                              allmodconfig    gcc-14.2.0
-sh                              allyesconfig    gcc-14.2.0
-sh                   randconfig-001-20250228    gcc-14.2.0
-sh                   randconfig-002-20250228    gcc-14.2.0
-sparc                           allmodconfig    gcc-14.2.0
-sparc                randconfig-001-20250228    gcc-14.2.0
-sparc                randconfig-002-20250228    gcc-14.2.0
-sparc64              randconfig-001-20250228    gcc-14.2.0
-sparc64              randconfig-002-20250228    gcc-14.2.0
-um                              allmodconfig    clang-21
-um                              allyesconfig    gcc-12
-um                   randconfig-001-20250228    clang-21
-um                   randconfig-002-20250228    clang-21
-x86_64     buildonly-randconfig-001-20250228    clang-19
-x86_64     buildonly-randconfig-002-20250228    clang-19
-x86_64     buildonly-randconfig-003-20250228    gcc-12
-x86_64     buildonly-randconfig-004-20250228    clang-19
-x86_64     buildonly-randconfig-005-20250228    gcc-12
-x86_64     buildonly-randconfig-006-20250228    gcc-12
-xtensa               randconfig-001-20250228    gcc-14.2.0
-xtensa               randconfig-002-20250228    gcc-14.2.0
+> Even less when the error reported "Unknown" :)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I agree on the uselessness of "Unknown" to the user, except as already mentioned
+below, as a prompt for the code to be updated.
+
+> 
+>>> 2. How having "Unknown" in the log can possibly be better?
+>>
+>> IMHO, seeing "Unknown" in an error report means that there's a new return value
+>> that needs to be mapped to errno in hv_status_to_errno() and updated here as well.
+>>
+> 
+> It means that to the developer. To the user, it means the developers
+> messed something up and to make matters even worse they didn't leave any
+> breadcrumbs (e.g. the hex code) to see what's wrong to help the user and
+> themselves: there is just that "Unknown" thing in the log.
+
+I think Nuno's compromise addresses this very well, to also print the hex code.
+
+> 
+>>> 3. Given that the select hv status codes and the proposed strings have
+>>>     1:1 correspondence, and there is the 1:N catch-all case for the
+>>>     "Unknown", how's that better?
+>>>
+>>
+>> I didn't really follow this question, but I suppose the answer to Q2 answers this as
+>> well. If not, please expand and I'll try to answer.
+>>
+> 
+> Sorry about that chunk, hit "Send" without looking the e-mail over
+> another time. Appreciate the discussion very much!
+> 
+> 
+>> Thanks,
+>> Easwar (he/him)
+> 
+
 
