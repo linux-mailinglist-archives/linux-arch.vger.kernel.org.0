@@ -1,79 +1,99 @@
-Return-Path: <linux-arch+bounces-10464-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10465-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3F3CA494CF
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 10:24:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 479C9A49B12
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 14:56:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89F361894F2A
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 09:24:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 023F2188E92D
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 13:56:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1AD3256C9C;
-	Fri, 28 Feb 2025 09:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D28C26D5A4;
+	Fri, 28 Feb 2025 13:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lGT3I5C6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NnH7vM73"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C098E25335E;
-	Fri, 28 Feb 2025 09:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D412421CC78;
+	Fri, 28 Feb 2025 13:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740734663; cv=none; b=lOIjdSnTH0BvZjKYaxdKNzcKL9h1nmE9DSWC40fdyBYpPPyXN8s2ieLKkbSaZS06nL98fkqjoQQurURf2KLTJ7goC9uUmG9szHqN4sdUF1CkldtPCFtPK78apsqqCX9HrWwK8/aXgWFiPYm6SU4soBTTPHnIJGoVsU+ragwOEUk=
+	t=1740750969; cv=none; b=i3ZA7u5qGFXFqImrXcwZhgkRdygoahWewRCp3kmvRLRa0a/AfyrzBuXb0dYoWE1OoDe2z7jcglcGDs5BLtZnDlVxMJIyHya3eVQQKc4rugXPjCf6GhWorEIsUwqQxxHDJFBbcizIR3L+8DYTFM6iBbfFUSng/N00/faENalvPsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740734663; c=relaxed/simple;
-	bh=/jeHPGx6jm3R1xDJMMDaYjvBALHQReLwn93izWT/Byo=;
+	s=arc-20240116; t=1740750969; c=relaxed/simple;
+	bh=1IRowyiOxlD3aJXg1mzDgOLSKDvuTpO5rwTj3G6RUt0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K3nxNTGJgXWRGkTndFnGMCFISUT1tCd9SUZhXmwEUtKnHS5rl15lR1uXf+kWn9u0KSwD0mfiA1kWM999Cv2AQBKHrib7xu2bc0XKqpN54ScllE3MDVp6r5u2d5o3F3/8zUw3bTNYDUcfuLdzoCuzS1bLVzReoe5OjaZs6YO1bc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lGT3I5C6; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=/jeHPGx6jm3R1xDJMMDaYjvBALHQReLwn93izWT/Byo=; b=lGT3I5C6xKvNBqb7eUq6t1oyMA
-	TKIoHFnWDeq6k809BZtIhypUMx/9yIkACdkXQsfqZYh7cwTuKb8ur/v3r/e5h0DhBJ7GTxELBBPEU
-	PTDcCY+uNMxYO7Xe+1tKuuw7l8JEuOEXdotDmQ4ZVDppqjXNnkVBRnI2BabPZrL1epAJperOINnok
-	HMNUOGxzSMonqZ/qtdGSBxtHwSbHx0UdOrL4iRIGbukCttTLYAOvEFxW0+Egs5aypmVtYUFOJ9K/u
-	w8uSkvz+kQfsap8Fz6keuxovTlnUfUO3DPZs4jiUEUryiItJ/OScuvrcSrd/yiSegPuDFjnc0M7a/
-	VThUpajQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tnwbG-00000003wMH-2wNy;
-	Fri, 28 Feb 2025 09:24:07 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id E673D300756; Fri, 28 Feb 2025 10:24:05 +0100 (CET)
-Date: Fri, 28 Feb 2025 10:24:05 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Lyude Paul <lyude@redhat.com>, rust-for-linux@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Boqun Feng <boqun.feng@gmail.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=NDUf7dgdsLvApRgi4adzflRd2ttTE6DtiDWHFNcAd0Ga7cM60nVOcQ6MDf0PTBNPgScIpK3dQXHHX1iwjbD405+PCgQEj7ajwRgDAV7iaSnRrAD9FF+659PXNIzCt+zL8aW7KG/9vIB9JS16QJHRw7Kd4CfAXTKe5KEXtLtzJow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NnH7vM73; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EA8C4CEE2;
+	Fri, 28 Feb 2025 13:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740750968;
+	bh=1IRowyiOxlD3aJXg1mzDgOLSKDvuTpO5rwTj3G6RUt0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NnH7vM73Zjpr8yZOH5QgfgQiSw0pmBWJwyV6oH4lnUx6KcNNLgBYYJulfb/SOKw4i
+	 Zkm3msW661FidfCoi/ar4s+MKouda8UuOKQJVozVEXvAvSibmI7k9WxUPFNYkImrpm
+	 nMJqrfmWsggXRbny/dSvcLd6O/w5mYI7U35gabE5OMAnP119A+B9Z9gcS1udwYaPDT
+	 haSivt5w98I2lC6hpiCjEl3HQRzpovHqj3M+6AQ/d9NOf1QW57gfgkHOWFS4Y8Iwt4
+	 dVExS2M99VzccMzDPnxcN2Fshmin/V/WHUi6c8awMapcLOMc4QlOWwdQMyM3HZ2OR4
+	 n0uklzJCb+JTQ==
+Date: Fri, 28 Feb 2025 15:55:38 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>, Dev Jain <dev.jain@arm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
 	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juergen Christ <jchrist@linux.ibm.com>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	"moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:S390 ARCHITECTURE" <linux-s390@vger.kernel.org>,
-	"open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v9 2/9] preempt: Introduce __preempt_count_{sub,
- add}_return()
-Message-ID: <20250228092405.GE5880@noisy.programming.kicks-ass.net>
-References: <20250227221924.265259-1-lyude@redhat.com>
- <20250227221924.265259-3-lyude@redhat.com>
- <20250228091509.8985B18-hca@linux.ibm.com>
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v7 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Z8HAWu4zQFeg19KR@kernel.org>
+References: <20241023162711.2579610-1-rppt@kernel.org>
+ <20241023162711.2579610-8-rppt@kernel.org>
+ <16863478-2195-435e-a899-559df097bc59@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,28 +102,118 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250228091509.8985B18-hca@linux.ibm.com>
+In-Reply-To: <16863478-2195-435e-a899-559df097bc59@arm.com>
 
-On Fri, Feb 28, 2025 at 10:15:09AM +0100, Heiko Carstens wrote:
+Hi Ryan,
 
-> I couldn't find any cover letter for the whole patch series which describes
-> what this is about, and why it is needed.
-> It looks like some Rust enablement?
+On Thu, Feb 27, 2025 at 11:13:29AM +0000, Ryan Roberts wrote:
+> Hi Mike,
+> 
+> Drive by review comments below...
+> 
+> 
+> On 23/10/2024 17:27, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > Using large pages to map text areas reduces iTLB pressure and improves
+> > performance.
+> > 
+> > Extend execmem_alloc() with an ability to use huge pages with ROX
+> > permissions as a cache for smaller allocations.
+> > 
+> > To populate the cache, a writable large page is allocated from vmalloc with
+> > VM_ALLOW_HUGE_VMAP, filled with invalid instructions and then remapped as
+> > ROX.
+> > 
+> > The direct map alias of that large page is exculded from the direct map.
+> > 
+> > Portions of that large page are handed out to execmem_alloc() callers
+> > without any changes to the permissions.
+> > 
+> > When the memory is freed with execmem_free() it is invalidated again so
+> > that it won't contain stale instructions.
+> > 
+> > An architecture has to implement execmem_fill_trapping_insns() callback
+> > and select ARCH_HAS_EXECMEM_ROX configuration option to be able to use
+> > the ROX cache.
+> > 
+> > The cache is enabled on per-range basis when an architecture sets
+> > EXECMEM_ROX_CACHE flag in definition of an execmem_range.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> > Tested-by: kdevops <kdevops@lists.linux.dev>
+> > ---
+> 
+> [...]
+> 
+> > +
+> > +static int execmem_cache_populate(struct execmem_range *range, size_t size)
+> > +{
+> > +	unsigned long vm_flags = VM_ALLOW_HUGE_VMAP;
+> > +	unsigned long start, end;
+> > +	struct vm_struct *vm;
+> > +	size_t alloc_size;
+> > +	int err = -ENOMEM;
+> > +	void *p;
+> > +
+> > +	alloc_size = round_up(size, PMD_SIZE);
+> > +	p = execmem_vmalloc(range, alloc_size, PAGE_KERNEL, vm_flags);
+> 
+> Shouldn't this be passing PAGE_KERNEL_ROX? Otherwise I don't see how the
+> allocated memory is ROX? I don't see any call below where you change the permission.
 
-Yeah, more or less.
+The memory is allocated RW, filled with invalid instructions, unammped in
+vmalloc space, removed from the direct map and then mapped as ROX in
+vmalloc address space.
+ 
+> Given the range has the pgprot in it, you could just drop passing the pgprot
+> explicitly here and have execmem_vmalloc() use range->pgprot directly?
 
-It's replacing local_irq_save() and all related functions
-(spin_lock_irqsave etc..) that take a flags argument with this new thing
-that frobs a recursion count in preempt_count(), obviating the need to
-carry the local flags argument around.
+Here range->prprot and the prot passed to vmalloc are different.
+ 
+> Thanks,
+> Ryan
+> 
+> > +	if (!p)
+> > +		return err;
+> > +
+> > +	vm = find_vm_area(p);
+> > +	if (!vm)
+> > +		goto err_free_mem;
+> > +
+> > +	/* fill memory with instructions that will trap */
+> > +	execmem_fill_trapping_insns(p, alloc_size, /* writable = */ true);
+> > +
+> > +	start = (unsigned long)p;
+> > +	end = start + alloc_size;
+> > +
+> > +	vunmap_range(start, end);
+> > +
+> > +	err = execmem_set_direct_map_valid(vm, false);
+> > +	if (err)
+> > +		goto err_free_mem;
+> > +
+> > +	err = vmap_pages_range_noflush(start, end, range->pgprot, vm->pages,
+> > +				       PMD_SHIFT);
+> > +	if (err)
+> > +		goto err_free_mem;
+> > +
+> > +	err = execmem_cache_add(p, alloc_size);
+> > +	if (err)
+> > +		goto err_free_mem;
+> > +
+> > +	return 0;
+> > +
+> > +err_free_mem:
+> > +	vfree(p);
+> > +	return err;
+> > +}
+> 
+> [...]
+> 
 
-This is nice, even for C code, less flags muck to carry around.
-
-It would be even better if they then went and deleted all of the _irq /
-_irqsave nonsense entirely.
-
-Yes, that's going to be a big patch :-)
-
-Also, IIRC there is some arch stuff that comes unstuck if you do this
-blindly (I tried at some point, it didn't boot).
+-- 
+Sincerely yours,
+Mike.
 
