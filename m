@@ -1,126 +1,116 @@
-Return-Path: <linux-arch+bounces-10473-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10474-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D449A4A5E4
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 23:27:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11A62A4A5F0
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 23:32:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 405723AB3BF
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 22:27:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 211A9176EC4
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Feb 2025 22:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD7F51DE4F1;
-	Fri, 28 Feb 2025 22:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8291D9A5D;
+	Fri, 28 Feb 2025 22:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="iPaqpljp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oHI9W8HF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A8331DE2C4;
-	Fri, 28 Feb 2025 22:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA9E723F385
+	for <linux-arch@vger.kernel.org>; Fri, 28 Feb 2025 22:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740781619; cv=none; b=AW93kx5JNKA1JclU6GlnRXY4ejn8cP+4sPcgGVlJbcpZ+oPnjG/sKHxn1quLvFZzwbXeuslgNphNRQVZsL4zbo9QyTfedPpZ9Iva55l5ufugVxd120OQ+fpnrlz1abQpQD/9q28+qWxdodTN6trmU54iu90tnhrVKQlITS0J7BQ=
+	t=1740781920; cv=none; b=FGU57icBzcLjeirjvR/xLoQEux+REGb2Jeqo/vnJaM28a+7HOMPJeiutMKvjzTyTPnNlHh6wI8ERpToN3bkYn+KOgjXsUgEfanEBC4KOqxugcLdznXsr7+jXJ29mXTKwhk7lYVGf9EHRr9ZmZLE8mNvZlJ4QdBl+4CI8j4Y7lSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740781619; c=relaxed/simple;
-	bh=EroVIw18pxTxZJ5SU7P+p+0Qd9h+XB1JAMjk4ODpyp8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GcdbEu88fPtqepCZhBI5E1yKtpz5dePJoq7u+fLYJ6zdvjVnje4oPQ3IJahSy/GXP6m9L7UIhgHe6cWtuXIvoBES3E5g6hukuebd5DmH2GTqDcbhO9m61UVpOl2j89QZ6nhz5cpXUe8+pH2CSaOXFtaz+Yr1u/012Js/t/w2wrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=iPaqpljp; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id BB67A210D0EB;
-	Fri, 28 Feb 2025 14:26:57 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BB67A210D0EB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740781618;
-	bh=1A0wwVr+M5YdleD5WdQbyvCNYbPCnowwpdIat8Rx3jU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iPaqpljp0SPsYOEXK7VBrtInRVWgckeDIadHTBLILkbz6lm3ZiSAC5yniZwL98w9Q
-	 F7FNXGkQStzvgrEgW0HShsyY3FA7178mzv+tFFHskRkkW3SP/1XHSFHHr1amJtB1+D
-	 9HGrCNlzv6+oPzIhOR72qkgcAaskPXKU8ovhxizY=
-Message-ID: <65e3bf97-8d3c-4a53-a3ad-42a16c0456d1@linux.microsoft.com>
-Date: Fri, 28 Feb 2025 14:26:57 -0800
+	s=arc-20240116; t=1740781920; c=relaxed/simple;
+	bh=7VdCPxYkfok9dqzeKBzVOHS01KTB1/rxGf2qARYtYx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PuxU4uGpFT+X51j9A6HSBkO6akGaTUrZov7Raj7k4PJ1VjnVIEJa+MgPKg/fBqoC+SNYaLT8aykG1PjcwW06wHnAqBEB5gQxV+XpuUSkB3MVIUoKrKM1RtzIjQvZu90GhXGy+uzO0J6ne2AQFCRKHgAPqyPtGA1AkmVHmj4u+dM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oHI9W8HF; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740781919; x=1772317919;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7VdCPxYkfok9dqzeKBzVOHS01KTB1/rxGf2qARYtYx0=;
+  b=oHI9W8HFrcJULKv1nUrvQzbZI4I5IqqqTyn2jh+PgCXCh36My+AErLAu
+   sy3MTYzCgKyUnVIvrpYoTFLnU02vKG3qLrgREnjllVtjsjXjBfTxzOlJ4
+   GZddLvuSgCRt5OPg6E3Vy4Hd8fuDcgyKSI10Vl4EHZnzRw3sDGavf8Puy
+   g9tStSanfzjqSs070NUm+m56XBcse8P6HEu1T4/FK8MpnkkKVg2QlZqRA
+   JHVS9Jr6SWATnFz8v4pMJ7l4JbI1IQACKyeW7VgPAi85aKqYNcqghuWWB
+   3ZPXOmX1F6fyVkAT32iIi9hhIJLq12U/uP1pfZK+sI+9KEa2uBWNZRGM4
+   A==;
+X-CSE-ConnectionGUID: 8UH7rgGgSj+P5mw88K0Ttg==
+X-CSE-MsgGUID: VqKX3jxNTY+4+AGQM1TCBQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41919146"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="41919146"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 14:31:58 -0800
+X-CSE-ConnectionGUID: PhfWagAzTlK6PCGIMNH//g==
+X-CSE-MsgGUID: 9+mDJ/VVT6CmTBhf6EY+SQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="154634263"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 28 Feb 2025 14:31:57 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1to8te-000FaI-0k;
+	Fri, 28 Feb 2025 22:31:54 +0000
+Date: Sat, 1 Mar 2025 06:31:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:master 1/3] ld.lld: error: undefined symbol:
+ __ioread64_lo_hi
+Message-ID: <202503010627.d4L934cN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 01/10] hyperv: Convert Hyper-V status codes to strings
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
- linux-hyperv@vger.kernel.org, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-acpi@vger.kernel.org, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, mhklinux@outlook.com,
- decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, hpa@zytor.com, daniel.lezcano@linaro.org,
- joro@8bytes.org, robin.murphy@arm.com, arnd@arndb.de,
- jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
- skinsburskii@linux.microsoft.com, mrathor@linux.microsoft.com,
- ssengar@linux.microsoft.com, apais@linux.microsoft.com,
- Tianyu.Lan@microsoft.com, stanislav.kinsburskiy@gmail.com,
- gregkh@linuxfoundation.org, vkuznets@redhat.com, prapal@linux.microsoft.com,
- muislam@microsoft.com, anrayabh@linux.microsoft.com, rafael@kernel.org,
- lenb@kernel.org, corbet@lwn.net
-References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-2-git-send-email-nunodasneves@linux.microsoft.com>
- <74af19c4-639f-4bcc-b667-b5f102bbb312@linux.microsoft.com>
- <8338dd00-3aa4-418f-a547-1c19623358cb@linux.microsoft.com>
- <49a69fe3-fca5-426d-999d-61ee0c8f60f3@linux.microsoft.com>
- <70b62e52-639a-4026-9a52-102d1de46ffd@linux.microsoft.com>
- <212cc582-845d-42b2-89f2-1e9579f752ec@linux.microsoft.com>
- <9254eaa1-8ff0-4dd6-a443-5f127049bdaa@linux.microsoft.com>
-Content-Language: en-US
-From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <9254eaa1-8ff0-4dd6-a443-5f127049bdaa@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+head:   3a5810be18b2c47e348ca10635500c535e4edd44
+commit: 3ec387b24655b02ee623ca554941f33922356f5b [1/3] asm-generic/io.h: rework split ioread64/iowrite64 helpers
+config: i386-buildonly-randconfig-006-20250301 (https://download.01.org/0day-ci/archive/20250301/202503010627.d4L934cN-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250301/202503010627.d4L934cN-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503010627.d4L934cN-lkp@intel.com/
 
-On 2/28/2025 12:22 PM, Easwar Hariharan wrote:
-> On 2/28/2025 9:20 AM, Roman Kisel wrote:
->>
+All errors (new ones prefixed by >>):
 
-[...]
-
->>
->> So I'd think that the hex error codes from the hypervisor give the user
->> exactly as much as the error symbolic names do to get the system to the
->> desired state: nothing.
-> I continue to disagree, seeing HV_STATUS_NO_RESOURCES is better than 0x1D,
-> because the user may think to look at `top` or `free -h` or similar to see
-> what could be killed to improve the situation.
-> 
-
-I agree that the symbolic name might save the step of looking up the
-error code in the headers. Now, the next step depends on how much the
-user is into virt technologies (if at all). That is
-to illustrate the point that a hint in the logs (or in the
-Documentation) is crucial of what to do next.
-
-The symbolic name might mislead; a hex code maybe with an addition of
-"please look up what may fix this at <URL> or report the problem here
-<URL>" would look better to _my imaginary_ customer :) That would be
-as much friendly as possible, if the kernel needs to print any of that
-at all. Likely the VMM in the user land if it gets that code as-is.
-
-Thank you for the fair critique and the time!
-
-[...]
-
->>> Thanks,
->>> Easwar (he/him)
->>
-> 
+>> ld.lld: error: undefined symbol: __ioread64_lo_hi
+   >>> referenced by ntb_hw_switchtec.c:862 (drivers/ntb/hw/mscc/ntb_hw_switchtec.c:862)
+   >>>               drivers/ntb/hw/mscc/ntb_hw_switchtec.o:(switchtec_ntb_add) in archive vmlinux.a
+   >>> referenced by ntb_hw_switchtec.c:1103 (drivers/ntb/hw/mscc/ntb_hw_switchtec.c:1103)
+   >>>               drivers/ntb/hw/mscc/ntb_hw_switchtec.o:(switchtec_ntb_init_crosslink) in archive vmlinux.a
+   >>> referenced by ntb_hw_switchtec.c:1103 (drivers/ntb/hw/mscc/ntb_hw_switchtec.c:1103)
+   >>>               drivers/ntb/hw/mscc/ntb_hw_switchtec.o:(switchtec_ntb_init_crosslink) in archive vmlinux.a
+   >>> referenced 14 more times
+--
+>> ld.lld: error: undefined symbol: __iowrite64_lo_hi
+   >>> referenced by ntb_hw_switchtec.c:1102 (drivers/ntb/hw/mscc/ntb_hw_switchtec.c:1102)
+   >>>               drivers/ntb/hw/mscc/ntb_hw_switchtec.o:(switchtec_ntb_init_crosslink) in archive vmlinux.a
+   >>> referenced by ntb_hw_switchtec.c:1102 (drivers/ntb/hw/mscc/ntb_hw_switchtec.c:1102)
+   >>>               drivers/ntb/hw/mscc/ntb_hw_switchtec.o:(switchtec_ntb_init_crosslink) in archive vmlinux.a
+   >>> referenced by ntb_hw_switchtec.c:1102 (drivers/ntb/hw/mscc/ntb_hw_switchtec.c:1102)
+   >>>               drivers/ntb/hw/mscc/ntb_hw_switchtec.o:(switchtec_ntb_init_crosslink) in archive vmlinux.a
+   >>> referenced 31 more times
 
 -- 
-Thank you,
-Roman
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
