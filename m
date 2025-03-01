@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10480-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10481-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0C87A4A76A
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 02:30:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFFDEA4A78E
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 02:38:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CFA818975D9
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 01:30:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C296B7AB7C4
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 01:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451577082E;
-	Sat,  1 Mar 2025 01:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9999735962;
+	Sat,  1 Mar 2025 01:38:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="dVMt1oTi"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VBJyQn4I"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAA445D477;
-	Sat,  1 Mar 2025 01:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F3A2182D7;
+	Sat,  1 Mar 2025 01:38:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740792588; cv=none; b=YuparL6TcDy/exdwugNIqjv7EcU4rbev3S+pe3DyT798z7pgWqfUAdGh1BNjEO5y9tV7KA8Dhl7JUSYdmkiqVJ+8XoYaSogaqy1G93mM6nrZ3QdUd0YSpfBPK5GmC4S9WNFox5xiXCD7SzUTHxxRLeyS+5+KBqD2xAPoxoaHtwA=
+	t=1740793086; cv=none; b=YWdiJ2/obK+GnJn9j19Jmt/NaPqI78gYWn+OLuH640PUwMntFweGU1F22evfSlt6JjSowqaazi6ekjMOnR932byeRIsCqif41lcKFDRfKQgW7tSxnFNhcV8CO0A2TTJZvUXUjmZ2tULl4Zy24yo4xjLlnYKkDRi1jWyX4xJwk/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740792588; c=relaxed/simple;
-	bh=QD4AKrECpbvvBe/L3b3AXHIL8c+PuFGrRL2Ip37IsHI=;
+	s=arc-20240116; t=1740793086; c=relaxed/simple;
+	bh=MRySq0VswusZ4YKSZr5pKh3kiER+G1pU5MqAUOj/Jtk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZuXrv+oMjAlx6PHhpZXGH1SpMRr3V+Qsv8XhUMkRNfG6b+5y84OmpDPBYAlEBmT8wsNLM3iEzOwD+f58OvNGwE5B83qtuSI0DcaKiCnA1zCTIt/cQLenTboac18qMwMbgjzQcZ5lKBjIndwyqZ+TzfjYDjVqTNCoAlEUfixexOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=dVMt1oTi; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=cQdMS6gnHjTXESwSpONQNTfvFcru6vds8706fVgMH9RaYVQq4tQkepkqOmdS747SY9FsaVx2xy8ADN2+aACcWa967IhEUulTva/6Z19GzLKED9Mq0WP9MjXUzrKiuO6WMffyNpQp7z19PZvFU1/jz1fuERZpAz20Jtl9JNWEQ3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VBJyQn4I; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 5B7392038A22;
-	Fri, 28 Feb 2025 17:29:45 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5B7392038A22
+	by linux.microsoft.com (Postfix) with ESMTPSA id EABF02038A20;
+	Fri, 28 Feb 2025 17:38:03 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EABF02038A20
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740792586;
-	bh=fQg7ILySdOBkHpl5o6FQRwzicfVWX7YnpeaSEDtj2sU=;
+	s=default; t=1740793084;
+	bh=SwI2RPp0lc2nI+b9PwlTDvKqHyEE6M7HzsQHovIJa8k=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dVMt1oTiRRQ7OGgYHkGszBrYb6DwmvGTKzAkC7zxJ7vhypSMUVdQSb5RPsPegs7hq
-	 pL5qmK2plw2PPZXVObyenXvjKLpY7YNkd9rX2G00/f1U0/Bv9YGkAmZQiERen3U12o
-	 6g+WiBMCMDAIIAXOnsGNj6LKq5VClmYw5bsYIF3s=
-Message-ID: <c299e02a-83a5-462a-a6a8-ae34c6bb2831@linux.microsoft.com>
-Date: Fri, 28 Feb 2025 17:29:42 -0800
+	b=VBJyQn4In+Z6OoD5b3tU9zACXIqUuuGyTy9YFEoBwVxvJ8gxMvk7GLb1YfVzwFMNa
+	 MZ8P4/K9yMIFqxYCeT9cetKxvXCUpEfmrHCnZy1M1IRPhUWK6daGHv6lNZ/YA/J8gg
+	 mlyLZ5ytzxYgjDEsIlhr6XLI37+XeT9ZA3oJ/ehw=
+Message-ID: <bcb300dd-762f-495d-9d07-16b81ff70602@linux.microsoft.com>
+Date: Fri, 28 Feb 2025 17:38:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -51,13 +51,13 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v5 10/10] Drivers: hv: Introduce mshv_root module to
  expose /dev/mshv to VMMs
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: linux-hyperv@vger.kernel.org, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-acpi@vger.kernel.org, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, mhklinux@outlook.com,
- decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+To: Roman Kisel <romank@linux.microsoft.com>, linux-hyperv@vger.kernel.org,
+ x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-acpi@vger.kernel.org
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+ mhklinux@outlook.com, decui@microsoft.com, catalin.marinas@arm.com,
+ will@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
  dave.hansen@linux.intel.com, hpa@zytor.com, daniel.lezcano@linaro.org,
  joro@8bytes.org, robin.murphy@arm.com, arnd@arndb.de,
  jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
@@ -69,90 +69,50 @@ Cc: linux-hyperv@vger.kernel.org, x86@kernel.org,
  lenb@kernel.org, corbet@lwn.net
 References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
  <1740611284-27506-11-git-send-email-nunodasneves@linux.microsoft.com>
- <8ce2dc94-d4e7-45d7-8228-e8afd2bef3bc@linux.microsoft.com>
+ <f332b77a-940f-4007-a44a-de64878d5201@linux.microsoft.com>
 Content-Language: en-US
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <8ce2dc94-d4e7-45d7-8228-e8afd2bef3bc@linux.microsoft.com>
+In-Reply-To: <f332b77a-940f-4007-a44a-de64878d5201@linux.microsoft.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/26/2025 8:59 PM, Easwar Hariharan wrote:
+On 2/27/2025 10:50 AM, Roman Kisel wrote:
+> 
+> 
+> 
 > On 2/26/2025 3:08 PM, Nuno Das Neves wrote:
 >> Provide a set of IOCTLs for creating and managing child partitions when
 >> running as root partition on Hyper-V. The new driver is enabled via
 >> CONFIG_MSHV_ROOT.
 >>
->> A brief overview of the interface:
->>
->> MSHV_CREATE_PARTITION is the entry point, returning a file descriptor
->> representing a child partition. IOCTLs on this fd can be used to map
->> memory, create VPs, etc.
->>
->> Creating a VP returns another file descriptor representing that VP which
->> in turn has another set of corresponding IOCTLs for running the VP,
->> getting/setting state, etc.
->>
->> MSHV_ROOT_HVCALL is a generic "passthrough" hypercall IOCTL which can be
->> used for a number of partition or VP hypercalls. This is for hypercalls
->> that do not affect any state in the kernel driver, such as getting and
->> setting VP registers and partition properties, translating addresses,
->> etc. It is "passthrough" because the binary input and output for the
->> hypercall is only interpreted by the VMM - the kernel driver does
->> nothing but insert the VP and partition id where necessary (which are
->> always in the same place), and execute the hypercall.
->>
->> Co-developed-by: Wei Liu <wei.liu@kernel.org>
->> Signed-off-by: Wei Liu <wei.liu@kernel.org>
->> Co-developed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
->> Signed-off-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
->> Co-developed-by: Praveen K Paladugu <prapal@linux.microsoft.com>
->> Signed-off-by: Praveen K Paladugu <prapal@linux.microsoft.com>
->> Co-developed-by: Mukesh Rathor <mrathor@linux.microsoft.com>
->> Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
->> Co-developed-by: Jinank Jain <jinankjain@microsoft.com>
->> Signed-off-by: Jinank Jain <jinankjain@microsoft.com>
->> Co-developed-by: Muminul Islam <muislam@microsoft.com>
->> Signed-off-by: Muminul Islam <muislam@microsoft.com>
->> Co-developed-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
->> Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
->> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
->> ---
 > 
-> I see some issues reported by checkpatch, both vanilla and --strict.
-> <snip>
-
-Yes, most of them are from --strict.
-
-The macro argument reuse ones are a non-issue I think. I suppose this
-could be cleaned up for the vp_ and pt_ macros, I might do that.
-
-"struct mutex/spinlock_t definition without comment" - I'm not sure
-if that's really needed. The code that uses these primitives
-demonstrates their purpose better than a comment, I think.
-
-"Avoid CamelCase" - Some Hyper-V definitions that use the original
-CamelCase definitions are introduced in this patch. These are
-stats-related - partition and vp statistics that can be gathered
-from the hypervisor. In a future patch these will be converted to
-strings and displayed in debugfs, and... hmm, to be honest I'm not
-sure why they need to remain in CamelCase when we convert everything
-else to Linux style... For now there are only 2 of these definitions
-and they're only defined in mshv_root_main.c so I think it's ok.
-I'll consider what to do when the rest of the stats code is proposed,
-which includes a big chunk of these CamelCase definitions.
-
-"Use of volatile is usually wrong" - I admit I'm not an expert in
-this area. We use it for a pointer to hv_synic_event_ring, similar
-to how it is used to access hv_synic_event_flags_page in vmbus_drv.c.
-
-"Added, moved or deleted file(s), does MAINTAINERS need updating?" -
-drivers/hv is already listed in MAINTAINERS.
-
-Thanks
-Nuno
-
+> [...]
 > 
-> Thanks,
-> Easwar (he/him)
+> 
+> As I understood, the changes fall into these buckets:
+> 
+> 1. Partition management (VPs and memory). Built of the top of fd's which
+>    looks as the right approach. There is ref counting etc.
+> 2. Scheduling. Here, there is the mature KVM and Xen code dto find
+>    inspiration in. Xen being the Type 1 hypervisor should likely be
+>    closer to MSHV in my understanding.
+> 3. IOCTL code allocation. Not sure how this is allocated yet given that
+>    the patch series has been through a multi-year review, that must be
+>    settled by now.
+> 4. IOCTLs themselves. The majority just marshals data to the
+>    hypervisor.
+> 
+This is a good summary, thanks.
+
+> Despite the rather large size of the patch, I spot-checked the places
+> where I have the chance to make an informed decision, and could not find
+> anything that'd stand out as suspicious to me. Going to extrapolate that
+> the patch itself should be good enough. Given that this code has been in
+> development and validation for a few years, I'd vote to merge it. That
+> will also enable upstreaming the rest of the VTL mode code that powers
+> Azure Boost (https://github.com/microsoft/OHCL-Linux-Kernel)
+> 
+> Reviewed-by: Roman Kisel <romank@linux.microsoft.com>
+> 
 
 
