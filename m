@@ -1,267 +1,201 @@
-Return-Path: <linux-arch+bounces-10482-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10483-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14278A4A970
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 08:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA36CA4AD46
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 19:14:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A86F83B78DE
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 07:24:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C10E33A3618
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 18:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D361C5D6A;
-	Sat,  1 Mar 2025 07:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20981B3927;
+	Sat,  1 Mar 2025 18:14:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtscTzal"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kgV1PEcX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE981B87D1;
-	Sat,  1 Mar 2025 07:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212FB8BF8
+	for <linux-arch@vger.kernel.org>; Sat,  1 Mar 2025 18:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740813871; cv=none; b=q/lrASCUG8cJkKL9UQ6ex7RfFT5igJmo+EJVDofq3TOGAvll6qGnYuISvMZfBMee4jGPnzvHjHAu5YagAQe1xTpTKDV2FbLnD3w4I0j4MZbCk1zWjUiQo5VouB4cYArLXrNA0MpldmuO1P14ilghOIB2inVzTRnAZ8RqnsZfUpo=
+	t=1740852858; cv=none; b=n6boLaXZDQZ+XEFQ7+24mTLlgASxWJdbx57MZGEhSyjKiE+QP/ye5mXgmjqM9yYV3kbr2ioTSBYj3CBzhb4TMy5KPXyLcpz+7Bq8C5YpKjRmbjZHpV9qNMCoK44jbJOf1j70aZcSyyMiFvAJF2fKaO/BPWS/9llS235Jnt8SKW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740813871; c=relaxed/simple;
-	bh=zNyC5lhRK0Jp4F93R1ijsSaURdoFR2R28yW7mia17cM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hmIaCfSUuUyAwzhAQ0Jrs/ioobSgF7YXBKxTiSNXnXdC9wGzWPZJY4f1XYl2Bv/2NKYoYBwaNlxUtF2tvLLVfHN/A0gbk0tJXf82UJbDIIb1g3/g99XdeBrsfaKVxNMRrIYD3OhErwQVf4/ZH33dzUVlCKT64ny14jpASaQ8JRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gtscTzal; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800D1C4CEDD;
-	Sat,  1 Mar 2025 07:24:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740813870;
-	bh=zNyC5lhRK0Jp4F93R1ijsSaURdoFR2R28yW7mia17cM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gtscTzalpXI+EBlbvhmEfLi9LdExvWsiMbsCojuFb6z7D6TJ+eIyI5Zu0dNVt1+Rt
-	 R7KC6887+sVZtgnQ19+IkfSlJqXOab6/YNi9aZBAtp/VgQU/JqRJpIH8eBc4GGjByG
-	 /iEET/+yluuuSKQHZY8L55Rx9HismpEadrVB6zyppH+G3FGWR/3bh3ot8dW5rcHNI7
-	 NKKycvvnkEsnUXv1eFIzBBP8cwd+jkC4/L6TStK9cq+p4BvnEfW2RzlrWF5UZglu5h
-	 /IAlH97YxPUeMyrnxQe6BmmTiig5TOwLHznM4yMtuGGFo8JCLj5r1JCg4T+JRGSA6x
-	 kS+2S3GSKmFcQ==
-Date: Sat, 1 Mar 2025 09:23:51 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
-	linux-efi@vger.kernel.org, Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH RFC v2 02/29] x86: Create
- CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
-Message-ID: <Z8K2B3WJoICVbDj3@kernel.org>
-References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
- <20250110-asi-rfc-v2-v2-2-8419288bc805@google.com>
+	s=arc-20240116; t=1740852858; c=relaxed/simple;
+	bh=1Seyb5egjFClyUJEN8T+Qm0k0LZGnpOOgOvcVMyj+Qw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mmKC1ejaziBz/Fabc++NetQGuCegjyKmNzE/9ZaoVnnRjonRU6vs727LzqirH+EJUn1YDTIsDmQOWvORbVjIYL2Cy3cG/bPPUiTMl3fpnCq0Zj232pj94JOaTf4tqmHcWJtHmwryElEnT6LgjnxdZ+CKdZRNZD1k9Yvool4yRIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kgV1PEcX; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740852857; x=1772388857;
+  h=date:from:to:cc:subject:message-id;
+  bh=1Seyb5egjFClyUJEN8T+Qm0k0LZGnpOOgOvcVMyj+Qw=;
+  b=kgV1PEcXs2f0+48dVaOotX3QY4NCUiRkFpLCgl5W2R0MX92KhibLHcvy
+   x6t1VcGw42Ev5T/SpV/AT/112VReCUhqDHRvc55lc0GgcGUYRUxdf6WnP
+   q12Jeea8oKvl1Y7qfYKrJUdbiVkq8nVorfA68z4svmV6twJR/V5JpNDjI
+   De5/nC2Uqo9wlVEAPV8UQKd7DDlp4Q6m7nBPx1ePVmg7cTo7ZsHMZMaqk
+   3vQIYPo8sN/m1hJTUA1F33h5DZY7XmvuYsh5/mfczXuZmW8DfhKMJb1pe
+   TWXkVyI+h5X8kCM4vvOW44vCL+UNNTLQwGuwhFTW0kQ3JnkpcGHXiu3aB
+   w==;
+X-CSE-ConnectionGUID: bEmAw7IbSLep3u0f4mMbHg==
+X-CSE-MsgGUID: +pIi+cuBT/W1PneId8I+AA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41956753"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="41956753"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 10:14:16 -0800
+X-CSE-ConnectionGUID: SNG2KwOKRMGLUOm2Mz7e/Q==
+X-CSE-MsgGUID: YT6KS24VT4eq6XvrGqK1aw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="122862511"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 01 Mar 2025 10:14:15 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1toRLo-000GXu-09;
+	Sat, 01 Mar 2025 18:14:12 +0000
+Date: Sun, 02 Mar 2025 02:13:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD REGRESSION
+ 3a5810be18b2c47e348ca10635500c535e4edd44
+Message-ID: <202503020233.g4daJ0CT-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250110-asi-rfc-v2-v2-2-8419288bc805@google.com>
 
-Hi Brendan,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 3a5810be18b2c47e348ca10635500c535e4edd44  io.h: drop unused headers
 
-On Fri, Jan 10, 2025 at 06:40:28PM +0000, Brendan Jackman wrote:
-> Currently a nop config. Keeping as a separate commit for easy review of
-> the boring bits. Later commits will use and enable this new config.
-> 
-> This config is only added for non-UML x86_64 as other architectures do
-> not yet have pending implementations. It also has somewhat artificial
-> dependencies on !PARAVIRT and !KASAN which are explained in the Kconfig
-> file.
-> 
-> Co-developed-by: Junaid Shahid <junaids@google.com>
-> Signed-off-by: Junaid Shahid <junaids@google.com>
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> ---
->  arch/alpha/include/asm/Kbuild      |  1 +
->  arch/arc/include/asm/Kbuild        |  1 +
->  arch/arm/include/asm/Kbuild        |  1 +
->  arch/arm64/include/asm/Kbuild      |  1 +
->  arch/csky/include/asm/Kbuild       |  1 +
->  arch/hexagon/include/asm/Kbuild    |  1 +
->  arch/loongarch/include/asm/Kbuild  |  3 +++
->  arch/m68k/include/asm/Kbuild       |  1 +
->  arch/microblaze/include/asm/Kbuild |  1 +
->  arch/mips/include/asm/Kbuild       |  1 +
->  arch/nios2/include/asm/Kbuild      |  1 +
->  arch/openrisc/include/asm/Kbuild   |  1 +
->  arch/parisc/include/asm/Kbuild     |  1 +
->  arch/powerpc/include/asm/Kbuild    |  1 +
->  arch/riscv/include/asm/Kbuild      |  1 +
->  arch/s390/include/asm/Kbuild       |  1 +
->  arch/sh/include/asm/Kbuild         |  1 +
->  arch/sparc/include/asm/Kbuild      |  1 +
->  arch/um/include/asm/Kbuild         |  2 +-
->  arch/x86/Kconfig                   | 14 ++++++++++++++
->  arch/xtensa/include/asm/Kbuild     |  1 +
->  include/asm-generic/asi.h          |  5 +++++
->  22 files changed, 41 insertions(+), 1 deletion(-)
+Error/Warning (recently discovered and may have been fixed):
 
-I don't think this all is needed. You can put asi.h with stubs used outside
-of arch/x86 in include/linux and save you the hassle of updating every
-architecture.
- 
-> diff --git a/arch/sparc/include/asm/Kbuild b/arch/sparc/include/asm/Kbuild
-> index 43b0ae4c2c2112d4d4d3cb3c60e787b175172dea..cb9062c9be17fe276cc92d2ac99d8b165f6297bf 100644
-> --- a/arch/sparc/include/asm/Kbuild
-> +++ b/arch/sparc/include/asm/Kbuild
-> @@ -4,3 +4,4 @@ generated-y += syscall_table_64.h
->  generic-y += agp.h
->  generic-y += kvm_para.h
->  generic-y += mcs_spinlock.h
-> +generic-y += asi.h
+    https://lore.kernel.org/oe-kbuild-all/202503010627.d4L934cN-lkp@intel.com
 
-sparc already has include/asm/asi.h, this will break the build
+    ld.lld: error: undefined symbol: __ioread64_hi_lo
+    ld.lld: error: undefined symbol: __ioread64_lo_hi
+    ld.lld: error: undefined symbol: __ioread64be_hi_lo
+    ld.lld: error: undefined symbol: __iowrite64_hi_lo
+    ld.lld: error: undefined symbol: __iowrite64_lo_hi
+    ld.lld: error: undefined symbol: __iowrite64be_hi_lo
 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 7b9a7e8f39acc8e9aeb7d4213e87d71047865f5c..5a50582eb210e9d1309856a737d32b76fa1bfc85 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2519,6 +2519,20 @@ config MITIGATION_PAGE_TABLE_ISOLATION
->  
->  	  See Documentation/arch/x86/pti.rst for more details.
->  
-> +config MITIGATION_ADDRESS_SPACE_ISOLATION
-> +	bool "Allow code to run with a reduced kernel address space"
-> +	default n
-> +	depends on X86_64 && !PARAVIRT && !UML
-> +	help
-> +	  This feature provides the ability to run some kernel code
-> +	  with a reduced kernel address space. This can be used to
-> +	  mitigate some speculative execution attacks.
-> +
-> +	  The !PARAVIRT dependency is only because of lack of testing; in theory
-> +	  the code is written to work under paravirtualization. In practice
-> +	  there are likely to be unhandled cases, in particular concerning TLB
-> +	  flushes.
-> +
+Error/Warning ids grouped by kconfigs:
 
-If you expect other architectures might implement ASI the config would better
-fit into init/Kconfig or mm/Kconfig and in arch/x86/Kconfig will define
-ARCH_HAS_MITIGATION_ADDRESS_SPACE_ISOLATION.
+recent_errors
+|-- i386-buildonly-randconfig-003-20250301
+|   |-- ld.lld:error:undefined-symbol:__ioread64_hi_lo
+|   |-- ld.lld:error:undefined-symbol:__ioread64be_hi_lo
+|   |-- ld.lld:error:undefined-symbol:__iowrite64_hi_lo
+|   `-- ld.lld:error:undefined-symbol:__iowrite64be_hi_lo
+`-- i386-buildonly-randconfig-006-20250301
+    |-- ld.lld:error:undefined-symbol:__ioread64_lo_hi
+    `-- ld.lld:error:undefined-symbol:__iowrite64_lo_hi
 
->  config MITIGATION_RETPOLINE
->  	bool "Avoid speculative indirect branches in kernel"
->  	select OBJTOOL if HAVE_OBJTOOL
-> diff --git a/arch/xtensa/include/asm/Kbuild b/arch/xtensa/include/asm/Kbuild
-> index fa07c686cbcc2153776a478ac4093846f01eddab..07cea6902f98053be244d026ed594fe7246755a6 100644
-> --- a/arch/xtensa/include/asm/Kbuild
-> +++ b/arch/xtensa/include/asm/Kbuild
-> @@ -8,3 +8,4 @@ generic-y += parport.h
->  generic-y += qrwlock.h
->  generic-y += qspinlock.h
->  generic-y += user.h
-> +generic-y += asi.h
-> diff --git a/include/asm-generic/asi.h b/include/asm-generic/asi.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..c4d9a5ff860a96428422a15000c622aeecc2d664
-> --- /dev/null
-> +++ b/include/asm-generic/asi.h
-> @@ -0,0 +1,5 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_GENERIC_ASI_H
-> +#define __ASM_GENERIC_ASI_H
-> +
-> +#endif
+elapsed time: 1447m
 
-IMHO it should be include/linux/asi.h, with something like
+configs tested: 88
+configs skipped: 1
 
-#infdef __LINUX_ASI_H
-#define __LINUX_ASI_H
+tested configs:
+alpha                           allyesconfig    gcc-14.2.0
+arc                  randconfig-001-20250301    gcc-13.2.0
+arc                  randconfig-002-20250301    gcc-13.2.0
+arm                  randconfig-001-20250301    gcc-14.2.0
+arm                  randconfig-002-20250301    gcc-14.2.0
+arm                  randconfig-003-20250301    clang-21
+arm                  randconfig-004-20250301    clang-21
+arm64                randconfig-001-20250301    gcc-14.2.0
+arm64                randconfig-002-20250301    clang-21
+arm64                randconfig-003-20250301    clang-15
+arm64                randconfig-004-20250301    clang-17
+csky                 randconfig-001-20250301    gcc-14.2.0
+csky                 randconfig-002-20250301    gcc-14.2.0
+hexagon                         allmodconfig    clang-21
+hexagon                         allyesconfig    clang-18
+hexagon              randconfig-001-20250301    clang-21
+hexagon              randconfig-002-20250301    clang-21
+i386                            allmodconfig    clang-19
+i386                             allnoconfig    clang-19
+i386                            allyesconfig    clang-19
+i386       buildonly-randconfig-001-20250301    clang-19
+i386       buildonly-randconfig-002-20250301    clang-19
+i386       buildonly-randconfig-003-20250301    clang-19
+i386       buildonly-randconfig-004-20250301    clang-19
+i386       buildonly-randconfig-005-20250301    gcc-12
+i386       buildonly-randconfig-006-20250301    clang-19
+i386                               defconfig    clang-19
+loongarch            randconfig-001-20250301    gcc-14.2.0
+loongarch            randconfig-002-20250301    gcc-14.2.0
+nios2                randconfig-001-20250301    gcc-14.2.0
+nios2                randconfig-002-20250301    gcc-14.2.0
+openrisc                         allnoconfig    clang-15
+parisc                           allnoconfig    clang-15
+parisc               randconfig-001-20250301    gcc-14.2.0
+parisc               randconfig-002-20250301    gcc-14.2.0
+powerpc                          allnoconfig    clang-15
+powerpc              randconfig-001-20250301    clang-17
+powerpc              randconfig-002-20250301    clang-19
+powerpc              randconfig-003-20250301    clang-21
+powerpc64            randconfig-001-20250301    gcc-14.2.0
+powerpc64            randconfig-002-20250301    clang-21
+powerpc64            randconfig-003-20250301    gcc-14.2.0
+riscv                            allnoconfig    clang-15
+riscv                randconfig-001-20250301    gcc-14.2.0
+riscv                randconfig-002-20250301    gcc-14.2.0
+s390                            allmodconfig    clang-19
+s390                             allnoconfig    clang-15
+s390                            allyesconfig    gcc-14.2.0
+s390                 randconfig-001-20250301    clang-15
+s390                 randconfig-002-20250301    gcc-14.2.0
+sh                              allmodconfig    gcc-14.2.0
+sh                              allyesconfig    gcc-14.2.0
+sh                   randconfig-001-20250301    gcc-14.2.0
+sh                   randconfig-002-20250301    gcc-14.2.0
+sparc                           allmodconfig    gcc-14.2.0
+sparc                randconfig-001-20250301    gcc-14.2.0
+sparc                randconfig-002-20250301    gcc-14.2.0
+sparc64              randconfig-001-20250301    gcc-14.2.0
+sparc64              randconfig-002-20250301    gcc-14.2.0
+um                              allmodconfig    clang-21
+um                               allnoconfig    clang-15
+um                              allyesconfig    gcc-12
+um                   randconfig-001-20250301    gcc-12
+um                   randconfig-002-20250301    gcc-12
+x86_64                           allnoconfig    clang-19
+x86_64                          allyesconfig    clang-19
+x86_64     buildonly-randconfig-001-20250301    clang-19
+x86_64     buildonly-randconfig-001-20250302    gcc-12
+x86_64     buildonly-randconfig-002-20250301    clang-19
+x86_64     buildonly-randconfig-002-20250302    gcc-12
+x86_64     buildonly-randconfig-003-20250301    gcc-11
+x86_64     buildonly-randconfig-003-20250302    gcc-12
+x86_64     buildonly-randconfig-004-20250301    gcc-12
+x86_64     buildonly-randconfig-004-20250302    gcc-12
+x86_64     buildonly-randconfig-005-20250301    gcc-12
+x86_64     buildonly-randconfig-005-20250302    gcc-12
+x86_64     buildonly-randconfig-006-20250301    clang-19
+x86_64     buildonly-randconfig-006-20250302    gcc-12
+x86_64                             defconfig    clang-19
+x86_64                                 kexec    clang-19
+x86_64                              rhel-9.4    clang-19
+x86_64                          rhel-9.4-bpf    clang-18
+x86_64                         rhel-9.4-func    clang-19
+x86_64                        rhel-9.4-kunit    clang-18
+x86_64                          rhel-9.4-ltp    clang-18
+x86_64                         rhel-9.4-rust    clang-18
+xtensa               randconfig-001-20250301    gcc-14.2.0
+xtensa               randconfig-002-20250301    gcc-14.2.0
 
-#ifdef CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
-
-#include <asm/asi.h>
-
-#else /* CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION */
-
-/* stubs for functions used outside arch/ */
-
-#endif /* CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION */
-
-#endif /* __LINUX_ASI_H */
-
--- 
-Sincerely yours,
-Mike.
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
