@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10477-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10478-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC4D7A4A716
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 01:38:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C9E6A4A735
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 01:46:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5AA316F9D7
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 00:38:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8BD2170BCE
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 00:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E838411CBA;
-	Sat,  1 Mar 2025 00:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C8C524F;
+	Sat,  1 Mar 2025 00:46:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="duIgKnzi"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JxcXei0X"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65E8DD2FB;
-	Sat,  1 Mar 2025 00:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592602BD11;
+	Sat,  1 Mar 2025 00:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740789504; cv=none; b=Tt9HlsbIYDItXnvaD+iozmdgdKbS90JgFMD3qq1mPPD7urweoMEZbC4RBQCdneeX0IHzaCJ7CgEVzBYOPAOVF3tvFpKroIw+n8y9ETuWn32awY0KzUaOmle3APD4BXh0n8Z/4xpnb1vBL84wMCCbpX+59gAAiQA9t/QsX49lL8Q=
+	t=1740790009; cv=none; b=OuBXAeEEK7/JDWalgfo7wGiPiU7dPHA6UYxvtlqvmROR3E6x2g4+vKPP/kzr1NbH0Bi6Tm0fFLeTtJ0/e8/LTQKjkNT+R108qX12NMFpUOrPwp7Rpwke2oJETTivMqdKr5VFLGKA4gDuENkwPWGPbv/c9fsstIlU0tJSjk4UApA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740789504; c=relaxed/simple;
-	bh=n6zaxksd6Q1NUg/ohWVJeoMwMSB2pFa01Kpp7ynuDkA=;
+	s=arc-20240116; t=1740790009; c=relaxed/simple;
+	bh=1GcrbKM0W+xco/xPOZwmUuKLn1JfH7TBComa6MgoQuM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bVG4WkUaxc93p30oX/JhJ26KJnRlOTBsVTmQVm9bgRWU2bjbe/uN2LKkd77M5kM0eqKNZh3tdBuomOcE/m0zCA9+wpxBH1VzOHKjIcbg3UI6a+vYIOxKskLP7ua2zjQlj6SJ9sCgvEPWf2LKceu82KOuE1ftFqiPIl6U5I/AnI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=duIgKnzi; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=gNmAMOHyLHYKc5tKAQe6NvNzrey1Pz8dVCOyycLCcQVvX7hoHfiM1coWdXdmoQSiJ+5+Wmehvyc2nYHoURs/aBzRB35rBNjLup6iGZ9vQc4BY0nYDkwZRqTzTvkobeEZj31LDSiO8i5kESQ+IYto2sVjqE/6SE/qZjbGf0eHdPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JxcXei0X; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 297612038A22;
-	Fri, 28 Feb 2025 16:38:22 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 297612038A22
+	by linux.microsoft.com (Postfix) with ESMTPSA id 368A42038A22;
+	Fri, 28 Feb 2025 16:46:47 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 368A42038A22
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740789502;
-	bh=KckT26d6nP7QZ+/ykn1bui1INDXn2fKcmCtw1s0XLcA=;
+	s=default; t=1740790007;
+	bh=oiUqgUon8AD01nBVhduxpuk4xMddkmJW/EZy9Txee9Y=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=duIgKnzi0YqTq8nTW9lxdfwU+lhdDZ68Vr54Cm+FjinsQ//tXQ7RD7UbvDDOFpnVx
-	 sYy/xwGAy3qPvhtmpRTpd5Dfusaj2uSOkBm0IIB6rTEsHLeoFoJdheCAczw3nq9Pta
-	 L5r2XPnSPzFfbwnylYl8fKpNlQQ9xS/sED3vuer0=
-Message-ID: <7de9b06d-9a32-48b5-beda-2e19b36ae9c9@linux.microsoft.com>
-Date: Fri, 28 Feb 2025 16:38:19 -0800
+	b=JxcXei0X7JZ6TPla41vqyX1jd2nfE1hywjtm232onPaWTj6aBvV0wMcfResSE5ynS
+	 upSr6tgNMe+F8nhLigKKTq50KQ4Lq5/jzz6O/EG21ZsBG3y1etOHYgc7cGMVYtw9p6
+	 UHgZ8oAv3WOM3ws1W4kEO7LnB7Q5jfPS4GC1tnpg=
+Message-ID: <8a475342-62b6-4669-8baf-10279cdc3835@linux.microsoft.com>
+Date: Fri, 28 Feb 2025 16:46:44 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,8 +49,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 08/10] x86: hyperv: Add mshv_handler irq handler and
- setup function
+Subject: Re: [PATCH v5 09/10] hyperv: Add definitions for root partition
+ driver to hv headers
 To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
 Cc: linux-hyperv@vger.kernel.org, x86@kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -68,103 +68,117 @@ Cc: linux-hyperv@vger.kernel.org, x86@kernel.org,
  anrayabh@linux.microsoft.com, rafael@kernel.org, lenb@kernel.org,
  corbet@lwn.net
 References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-9-git-send-email-nunodasneves@linux.microsoft.com>
- <Z7-nDUe41XHyZ8RJ@skinsburskii.>
+ <1740611284-27506-10-git-send-email-nunodasneves@linux.microsoft.com>
+ <Z7-o-VnE6iffOi7Z@skinsburskii.>
 Content-Language: en-US
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <Z7-nDUe41XHyZ8RJ@skinsburskii.>
+In-Reply-To: <Z7-o-VnE6iffOi7Z@skinsburskii.>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2/26/2025 3:43 PM, Stanislav Kinsburskii wrote:
-> On Wed, Feb 26, 2025 at 03:08:02PM -0800, Nuno Das Neves wrote:
->> This will handle SYNIC interrupts such as intercepts, doorbells, and
->> scheduling messages intended for the mshv driver.
+On 2/26/2025 3:51 PM, Stanislav Kinsburskii wrote:
+> On Wed, Feb 26, 2025 at 03:08:03PM -0800, Nuno Das Neves wrote:
+>> A few additional definitions are required for the mshv driver code
+>> (to follow). Introduce those here and clean up a little bit while
+>> at it.
 >>
 >> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
->> Reviewed-by: Wei Liu <wei.liu@kernel.org>
->> Reviewed-by: Tianyu Lan <tiala@microsoft.com>
 >> ---
->>  arch/x86/kernel/cpu/mshyperv.c | 9 +++++++++
->>  drivers/hv/hv_common.c         | 5 +++++
->>  include/asm-generic/mshyperv.h | 1 +
->>  3 files changed, 15 insertions(+)
+>>  include/hyperv/hvgdk_mini.h |  64 ++++++++++++++++-
+>>  include/hyperv/hvhdk.h      | 132 ++++++++++++++++++++++++++++++++++--
+>>  include/hyperv/hvhdk_mini.h |  91 +++++++++++++++++++++++++
+>>  3 files changed, 280 insertions(+), 7 deletions(-)
 >>
->> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
->> index 0116d0e96ef9..616e9a5d77b4 100644
->> --- a/arch/x86/kernel/cpu/mshyperv.c
->> +++ b/arch/x86/kernel/cpu/mshyperv.c
->> @@ -107,6 +107,7 @@ void hv_set_msr(unsigned int reg, u64 value)
->>  }
->>  EXPORT_SYMBOL_GPL(hv_set_msr);
+>> diff --git a/include/hyperv/hvgdk_mini.h b/include/hyperv/hvgdk_mini.h
+>> index 58895883f636..e4a3cca0cbce 100644
+>> --- a/include/hyperv/hvgdk_mini.h
+>> +++ b/include/hyperv/hvgdk_mini.h
+>  @@ -1325,6 +1344,49 @@ struct hv_retarget_device_interrupt {	 /* HV_INPUT_RETARGET_DEVICE_INTERRUPT */
+>>  	struct hv_device_interrupt_target int_target;
+>>  } __packed __aligned(8);
 >>  
->> +static void (*mshv_handler)(void);
->>  static void (*vmbus_handler)(void);
->>  static void (*hv_stimer0_handler)(void);
->>  static void (*hv_kexec_handler)(void);
->> @@ -117,6 +118,9 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
->>  	struct pt_regs *old_regs = set_irq_regs(regs);
+>> +enum hv_intercept_type {
+>> +#if defined(CONFIG_X86_64)
+> 
+> Prehaps it would be nice to have per-arch headers for such structures
+> instead.
+> 
+The goal with these files is to reflect the Hyper-V code closely, in order
+to make porting the definitions to Linux as easy as possible. Splitting
+these into per-arch headers is not my preferred approach because it is
+counter to that goal.
+
+>> +	HV_INTERCEPT_TYPE_X64_IO_PORT			= 0x00000000,
+>> +	HV_INTERCEPT_TYPE_X64_MSR			= 0x00000001,
+>> +	HV_INTERCEPT_TYPE_X64_CPUID			= 0x00000002,
+>> +#endif
+>> +	HV_INTERCEPT_TYPE_EXCEPTION			= 0x00000003,
+>> +	/* Used to be HV_INTERCEPT_TYPE_REGISTER */
+>> +	HV_INTERCEPT_TYPE_RESERVED0			= 0x00000004,
+>> +	HV_INTERCEPT_TYPE_MMIO				= 0x00000005,
+>> +#if defined(CONFIG_X86_64)
+>> +	HV_INTERCEPT_TYPE_X64_GLOBAL_CPUID		= 0x00000006,
+>> +	HV_INTERCEPT_TYPE_X64_APIC_SMI			= 0x00000007,
+>> +#endif
+>> +	HV_INTERCEPT_TYPE_HYPERCALL			= 0x00000008,
+>> +#if defined(CONFIG_X86_64)
+>> +	HV_INTERCEPT_TYPE_X64_APIC_INIT_SIPI		= 0x00000009,
+>> +	HV_INTERCEPT_MC_UPDATE_PATCH_LEVEL_MSR_READ	= 0x0000000A,
+>> +	HV_INTERCEPT_TYPE_X64_APIC_WRITE		= 0x0000000B,
+>> +	HV_INTERCEPT_TYPE_X64_MSR_INDEX			= 0x0000000C,
+>> +#endif
+>> +	HV_INTERCEPT_TYPE_MAX,
+>> +	HV_INTERCEPT_TYPE_INVALID			= 0xFFFFFFFF,
+>> +};
+>> +
+>> +union hv_intercept_parameters {
+>> +	/*  HV_INTERCEPT_PARAMETERS is defined to be an 8-byte field. */
+>> +	__u64 as_uint64;
+> 
+> Should this one be "u64" instead of "__u64" (here and below) ?
+> 
+Yes, it looks like a few of the uapi types are still lingering, oops!
+
+>> +#if defined(CONFIG_X86_64)
+>> +	/* HV_INTERCEPT_TYPE_X64_IO_PORT */
+>> +	__u16 io_port;
+>> +	/* HV_INTERCEPT_TYPE_X64_CPUID */
+>> +	__u32 cpuid_index;
+>> +	/* HV_INTERCEPT_TYPE_X64_APIC_WRITE */
+>> +	__u32 apic_write_mask;
+>> +	/* HV_INTERCEPT_TYPE_EXCEPTION */
+>> +	__u16 exception_vector;
+>> +	/* HV_INTERCEPT_TYPE_X64_MSR_INDEX */
+>> +	__u32 msr_index;
+>> +#endif
+>> +	/* N.B. Other intercept types do not have any parameters. */
+>> +};
+>> +
+>>  /* Data structures for HVCALL_MMIO_READ and HVCALL_MMIO_WRITE */
+>>  #define HV_HYPERCALL_MMIO_MAX_DATA_LENGTH 64
 >>  
->>  	inc_irq_stat(irq_hv_callback_count);
->> +	if (mshv_handler)
->> +		mshv_handler();
+>> diff --git a/include/hyperv/hvhdk.h b/include/hyperv/hvhdk.h
+>> index 64407c2a3809..1b447155c338 100644
+>> --- a/include/hyperv/hvhdk.h
+>> +++ b/include/hyperv/hvhdk.h
+>> @@ -19,11 +19,24 @@
+>>  
+>>  #define HV_VP_REGISTER_PAGE_VERSION_1	1u
+>>  
+>> +#define HV_VP_REGISTER_PAGE_MAX_VECTOR_COUNT		7
+>> +
+>> +union hv_vp_register_page_interrupt_vectors {
+>> +	u64 as_uint64;
+>> +	struct {
+>> +		u8 vector_count;
+>> +		u8 vector[HV_VP_REGISTER_PAGE_MAX_VECTOR_COUNT];
+>> +	} __packed;
+>> +} __packed;
 > 
-> Can mshv_handler be defined as a weak symbol doing nothing instead
-> of defining it a null pointer?
-> This should allow to simplify this code and get rid of
-> hv_setup_mshv_handler, which looks redundant.
+> Packed attribute for the union looks redundant.
 > 
-Interesting, I tested this and it does seems to work! It seems like
-a good change, thanks.
+Good point, I can remove it in the next version
 
 > Reviewed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-> 
->> +
->>  	if (vmbus_handler)
->>  		vmbus_handler();
->>  
->> @@ -126,6 +130,11 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
->>  	set_irq_regs(old_regs);
->>  }
->>  
->> +void hv_setup_mshv_handler(void (*handler)(void))
->> +{
->> +	mshv_handler = handler;
->> +}
->> +
->>  void hv_setup_vmbus_handler(void (*handler)(void))
->>  {
->>  	vmbus_handler = handler;
->> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
->> index 2763cb6d3678..f5a07fd9a03b 100644
->> --- a/drivers/hv/hv_common.c
->> +++ b/drivers/hv/hv_common.c
->> @@ -677,6 +677,11 @@ void __weak hv_remove_vmbus_handler(void)
->>  }
->>  EXPORT_SYMBOL_GPL(hv_remove_vmbus_handler);
->>  
->> +void __weak hv_setup_mshv_handler(void (*handler)(void))
->> +{
->> +}
->> +EXPORT_SYMBOL_GPL(hv_setup_mshv_handler);
->> +
->>  void __weak hv_setup_kexec_handler(void (*handler)(void))
->>  {
->>  }
->> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
->> index 1f46d19a16aa..a05f12e63ccd 100644
->> --- a/include/asm-generic/mshyperv.h
->> +++ b/include/asm-generic/mshyperv.h
->> @@ -208,6 +208,7 @@ void hv_setup_kexec_handler(void (*handler)(void));
->>  void hv_remove_kexec_handler(void);
->>  void hv_setup_crash_handler(void (*handler)(struct pt_regs *regs));
->>  void hv_remove_crash_handler(void);
->> +void hv_setup_mshv_handler(void (*handler)(void));
->>  
->>  extern int vmbus_interrupt;
->>  extern int vmbus_irq;
->> -- 
->> 2.34.1
->>
 
 
