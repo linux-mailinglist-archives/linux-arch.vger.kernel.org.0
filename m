@@ -1,201 +1,277 @@
-Return-Path: <linux-arch+bounces-10483-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10484-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA36CA4AD46
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 19:14:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78F00A4B175
+	for <lists+linux-arch@lfdr.de>; Sun,  2 Mar 2025 13:20:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C10E33A3618
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Mar 2025 18:14:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73DC318884B0
+	for <lists+linux-arch@lfdr.de>; Sun,  2 Mar 2025 12:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20981B3927;
-	Sat,  1 Mar 2025 18:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877041DF75B;
+	Sun,  2 Mar 2025 12:20:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kgV1PEcX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XLAcy+qL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212FB8BF8
-	for <linux-arch@vger.kernel.org>; Sat,  1 Mar 2025 18:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528C71DF733;
+	Sun,  2 Mar 2025 12:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740852858; cv=none; b=n6boLaXZDQZ+XEFQ7+24mTLlgASxWJdbx57MZGEhSyjKiE+QP/ye5mXgmjqM9yYV3kbr2ioTSBYj3CBzhb4TMy5KPXyLcpz+7Bq8C5YpKjRmbjZHpV9qNMCoK44jbJOf1j70aZcSyyMiFvAJF2fKaO/BPWS/9llS235Jnt8SKW4=
+	t=1740918022; cv=none; b=n206KnPNuxRAyMKpgGdLPE0WPGXvscM1+a5SvBOaEvOg7RSZXcIiBj5KMjVQO23NuJMvx6F15jJCSuM1YBk2SfBKTToh82BRyfpZxpqtv6G/zxgCH7SLC8VViZAHTOFS1uhBjANMa+ivTcUX8Xy6WVt6WywGtkQDTR21yw9wkPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740852858; c=relaxed/simple;
-	bh=1Seyb5egjFClyUJEN8T+Qm0k0LZGnpOOgOvcVMyj+Qw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=mmKC1ejaziBz/Fabc++NetQGuCegjyKmNzE/9ZaoVnnRjonRU6vs727LzqirH+EJUn1YDTIsDmQOWvORbVjIYL2Cy3cG/bPPUiTMl3fpnCq0Zj232pj94JOaTf4tqmHcWJtHmwryElEnT6LgjnxdZ+CKdZRNZD1k9Yvool4yRIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kgV1PEcX; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740852857; x=1772388857;
-  h=date:from:to:cc:subject:message-id;
-  bh=1Seyb5egjFClyUJEN8T+Qm0k0LZGnpOOgOvcVMyj+Qw=;
-  b=kgV1PEcXs2f0+48dVaOotX3QY4NCUiRkFpLCgl5W2R0MX92KhibLHcvy
-   x6t1VcGw42Ev5T/SpV/AT/112VReCUhqDHRvc55lc0GgcGUYRUxdf6WnP
-   q12Jeea8oKvl1Y7qfYKrJUdbiVkq8nVorfA68z4svmV6twJR/V5JpNDjI
-   De5/nC2Uqo9wlVEAPV8UQKd7DDlp4Q6m7nBPx1ePVmg7cTo7ZsHMZMaqk
-   3vQIYPo8sN/m1hJTUA1F33h5DZY7XmvuYsh5/mfczXuZmW8DfhKMJb1pe
-   TWXkVyI+h5X8kCM4vvOW44vCL+UNNTLQwGuwhFTW0kQ3JnkpcGHXiu3aB
-   w==;
-X-CSE-ConnectionGUID: bEmAw7IbSLep3u0f4mMbHg==
-X-CSE-MsgGUID: +pIi+cuBT/W1PneId8I+AA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41956753"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="41956753"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2025 10:14:16 -0800
-X-CSE-ConnectionGUID: SNG2KwOKRMGLUOm2Mz7e/Q==
-X-CSE-MsgGUID: YT6KS24VT4eq6XvrGqK1aw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="122862511"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 01 Mar 2025 10:14:15 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1toRLo-000GXu-09;
-	Sat, 01 Mar 2025 18:14:12 +0000
-Date: Sun, 02 Mar 2025 02:13:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD REGRESSION
- 3a5810be18b2c47e348ca10635500c535e4edd44
-Message-ID: <202503020233.g4daJ0CT-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1740918022; c=relaxed/simple;
+	bh=g6N4TpIZBNJ6Fua7mVfbapNWidlbTbgUQQkGOYDnX5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OhIV7TsKKFc9eF8Xcj3iWbZUuqyXeuRLYI4fltL40sYCL0zmNvZZgSrW/LcmjLP49PwgXOSAiNPdn8itlL9KSdyhhRAb6TYOuL7xfyZv4VGAcYkrdTDs9GrM9S0livIwI86tzlEHITh8WM5GzjYMMSDzwbwJyMqQzhEkSByttv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XLAcy+qL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69891C4CED6;
+	Sun,  2 Mar 2025 12:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740918021;
+	bh=g6N4TpIZBNJ6Fua7mVfbapNWidlbTbgUQQkGOYDnX5w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XLAcy+qLxtnm5pMuivx8y1wbx2whPxwRO/rtRwHb3XGTBqVLv3H+H+3nfqpeiVTcs
+	 Z8lfoi1AD8UU6wierd4zqGyjqm2XgDBTFpyi1W0HUpAccz8CZZfwoap8XIs48kX6CM
+	 f65c3R0PoNN+S8rIzp2IT3MHFOrvriGPG50wn0FSzq7G1E9xIH+fomhG3PH0clazK/
+	 cuQYFYDwhpmUVesZZFvWCIXQxzNrG6is9mG/+Ao0tNiCJG7f9Ytj2Gp9KWDRZSVXNh
+	 idBB961t1iIPDDhfJ52Qjsy9qgiCACyIbivPMIRAKk58il9vU7ldji9EtwFN/hvYOm
+	 zwPxA25FKE5uQ==
+Received: by pali.im (Postfix)
+	id A4C237B3; Sun,  2 Mar 2025 13:20:07 +0100 (CET)
+Date: Sun, 2 Mar 2025 13:20:07 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Andrey Albershteyn <aalbersh@redhat.com>
+Cc: Amir Goldstein <amir73il@gmail.com>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-xfs@vger.kernel.org,
+	Theodore Tso <tytso@mit.edu>
+Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
+Message-ID: <20250302122007.4oxtugidf4vxx3vy@pali>
+References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+ <20250221181135.GW21808@frogsfrogsfrogs>
+ <CAOQ4uxgyYBFqkq6cQsso4LxJsPJ4uECOdskXmz-nmGhhV5BQWg@mail.gmail.com>
+ <ihkez5xfcuocis7cmipvts2vxnfan2ub5kcpvsrnzm37glwnax@nxp72byvetye>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ihkez5xfcuocis7cmipvts2vxnfan2ub5kcpvsrnzm37glwnax@nxp72byvetye>
+User-Agent: NeoMutt/20180716
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 3a5810be18b2c47e348ca10635500c535e4edd44  io.h: drop unused headers
+On Friday 28 February 2025 09:30:38 Andrey Albershteyn wrote:
+> On 2025-02-21 20:15:24, Amir Goldstein wrote:
+> > On Fri, Feb 21, 2025 at 7:13 PM Darrick J. Wong <djwong@kernel.org> wrote:
+> > >
+> > > On Tue, Feb 11, 2025 at 06:22:47PM +0100, Andrey Albershteyn wrote:
+> > > > From: Andrey Albershteyn <aalbersh@redhat.com>
+> > > >
+> > > > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
+> > > > extended attributes/flags. The syscalls take parent directory fd and
+> > > > path to the child together with struct fsxattr.
+> > > >
+> > > > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
+> > > > that file don't need to be open as we can reference it with a path
+> > > > instead of fd. By having this we can manipulated inode extended
+> > > > attributes not only on regular files but also on special ones. This
+> > > > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
+> > > > we can not call ioctl() directly on the filesystem inode using fd.
+> > > >
+> > > > This patch adds two new syscalls which allows userspace to get/set
+> > > > extended inode attributes on special files by using parent directory
+> > > > and a path - *at() like syscall.
+> > > >
+> > > > Also, as vfs_fileattr_set() is now will be called on special files
+> > > > too, let's forbid any other attributes except projid and nextents
+> > > > (symlink can have an extent).
+> > > >
+> > > > CC: linux-api@vger.kernel.org
+> > > > CC: linux-fsdevel@vger.kernel.org
+> > > > CC: linux-xfs@vger.kernel.org
+> > > > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
+> > > > ---
+> > > > v1:
+> > > > https://lore.kernel.org/linuxppc-dev/20250109174540.893098-1-aalbersh@kernel.org/
+> > > >
+> > > > Previous discussion:
+> > > > https://lore.kernel.org/linux-xfs/20240520164624.665269-2-aalbersh@redhat.com/
+> > > >
+> > > > XFS has project quotas which could be attached to a directory. All
+> > > > new inodes in these directories inherit project ID set on parent
+> > > > directory.
+> > > >
+> > > > The project is created from userspace by opening and calling
+> > > > FS_IOC_FSSETXATTR on each inode. This is not possible for special
+> > > > files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
+> > > > with empty project ID. Those inodes then are not shown in the quota
+> > > > accounting but still exist in the directory. Moreover, in the case
+> > > > when special files are created in the directory with already
+> > > > existing project quota, these inode inherit extended attributes.
+> > > > This than leaves them with these attributes without the possibility
+> > > > to clear them out. This, in turn, prevents userspace from
+> > > > re-creating quota project on these existing files.
+> > > > ---
+> > > > Changes in v3:
+> > > > - Remove unnecessary "dfd is dir" check as it checked in user_path_at()
+> > > > - Remove unnecessary "same filesystem" check
+> > > > - Use CLASS() instead of directly calling fdget/fdput
+> > > > - Link to v2: https://lore.kernel.org/r/20250122-xattrat-syscall-v2-1-5b360d4fbcb2@kernel.org
+> > > > ---
+> > > >  arch/alpha/kernel/syscalls/syscall.tbl      |  2 +
+> > > >  arch/arm/tools/syscall.tbl                  |  2 +
+> > > >  arch/arm64/tools/syscall_32.tbl             |  2 +
+> > > >  arch/m68k/kernel/syscalls/syscall.tbl       |  2 +
+> > > >  arch/microblaze/kernel/syscalls/syscall.tbl |  2 +
+> > > >  arch/mips/kernel/syscalls/syscall_n32.tbl   |  2 +
+> > > >  arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 +
+> > > >  arch/mips/kernel/syscalls/syscall_o32.tbl   |  2 +
+> > > >  arch/parisc/kernel/syscalls/syscall.tbl     |  2 +
+> > > >  arch/powerpc/kernel/syscalls/syscall.tbl    |  2 +
+> > > >  arch/s390/kernel/syscalls/syscall.tbl       |  2 +
+> > > >  arch/sh/kernel/syscalls/syscall.tbl         |  2 +
+> > > >  arch/sparc/kernel/syscalls/syscall.tbl      |  2 +
+> > > >  arch/x86/entry/syscalls/syscall_32.tbl      |  2 +
+> > > >  arch/x86/entry/syscalls/syscall_64.tbl      |  2 +
+> > > >  arch/xtensa/kernel/syscalls/syscall.tbl     |  2 +
+> > > >  fs/inode.c                                  | 75 +++++++++++++++++++++++++++++
+> > > >  fs/ioctl.c                                  | 16 +++++-
+> > > >  include/linux/fileattr.h                    |  1 +
+> > > >  include/linux/syscalls.h                    |  4 ++
+> > > >  include/uapi/asm-generic/unistd.h           |  8 ++-
+> > > >  21 files changed, 133 insertions(+), 3 deletions(-)
+> > > >
+> > >
+> > > <cut to the syscall definitions>
+> > >
+> > > > diff --git a/fs/inode.c b/fs/inode.c
+> > > > index 6b4c77268fc0ecace4ac78a9ca777fbffc277f4a..b2dddd9db4fabaf67a6cbf541a86978b290411ec 100644
+> > > > --- a/fs/inode.c
+> > > > +++ b/fs/inode.c
+> > > > @@ -23,6 +23,9 @@
+> > > >  #include <linux/rw_hint.h>
+> > > >  #include <linux/seq_file.h>
+> > > >  #include <linux/debugfs.h>
+> > > > +#include <linux/syscalls.h>
+> > > > +#include <linux/fileattr.h>
+> > > > +#include <linux/namei.h>
+> > > >  #include <trace/events/writeback.h>
+> > > >  #define CREATE_TRACE_POINTS
+> > > >  #include <trace/events/timestamp.h>
+> > > > @@ -2953,3 +2956,75 @@ umode_t mode_strip_sgid(struct mnt_idmap *idmap,
+> > > >       return mode & ~S_ISGID;
+> > > >  }
+> > > >  EXPORT_SYMBOL(mode_strip_sgid);
+> > > > +
+> > > > +SYSCALL_DEFINE4(getfsxattrat, int, dfd, const char __user *, filename,
+> > > > +             struct fsxattr __user *, fsx, unsigned int, at_flags)
+> > >
+> > > Should the kernel require userspace to pass the size of the fsx buffer?
+> > > That way we avoid needing to rev the interface when we decide to grow
+> > > the structure.
+> > >
+> > 
+> > This makes sense to me, but I see that Andreas proposed other ways,
+> > as long as we have a plan on how to extend the struct if we need more space.
+> > 
+> > Andrey, I am sorry to bring this up in v3, but I would like to request
+> > two small changes before merging this API.
+> > 
+> > This patch by Pali [1] adds fsx_xflags_mask for the filesystem to
+> > report the supported set of xflags.
+> > 
+> > It was argued that we can make this change with the existing ioctl,
+> > because it is not going to break xfs_io -c lsattr/chattr, which is fine,
+> > but I think that we should merge the fsx_xflags_mask change along
+> > with getfsxattrat() which is a new UAPI.
+> > 
+> > The second request is related to setfsxattrat().
+> > With current FS_IOC_FSSETXATTR, IIUC, xfs ignores unsupported
+> > fsx_xflags. I think this needs to be fixed before merging setfsxattrat().
+> > It's ok that a program calling FS_IOC_FSSETXATTR will not know
+> > if unsupported flags will be ignored, because that's the way it is,
+> > but I think that setfsxattrat() must return -EINVAL for trying to
+> > set unsupported xflags.
+> > 
+> > As I explained in [2] I think it is fine if FS_IOC_FSSETXATTR
+> > will also start returning -EINVAL for unsupported flags, but I would
+> > like setfsxattrat() to make that a guarantee.
+> > 
+> > There was an open question, what does fsx_xflags_mask mean
+> > for setfsxattrat() - it is a mask like in inode_set_flags() as Andreas
+> > suggested? I think that would be a good idea.
+> > 
+> > Thanks,
+> > Amir.
+> > 
+> > [1] https://lore.kernel.org/linux-fsdevel/20250216164029.20673-4-pali@kernel.org/
+> > [2] https://lore.kernel.org/linux-fsdevel/CAOQ4uxjwQJiKAqyjEmKUnq-VihyeSsxyEy2F+J38NXwrAXurFQ@mail.gmail.com/
+> > 
+> 
+> I'm fine with making Pali's patchset a dependency for this syscall,
+> as if vfs_fileattr_set() will start returning EINVAL on unsupported
+> flags this syscall will pass it through (ioctls will need to ignore
+> it). And as these syscalls use fsxattr anyway the fsx_xflags_mask
+> field will be here.
+> 
+> -- 
+> - Andrey
+> 
 
-Error/Warning (recently discovered and may have been fixed):
+Hello Andrey, if I understand correctly then it is needed for new
+setfsxattrat() call to return EINVAL on any unsupported flags since
+beginning.
 
-    https://lore.kernel.org/oe-kbuild-all/202503010627.d4L934cN-lkp@intel.com
-
-    ld.lld: error: undefined symbol: __ioread64_hi_lo
-    ld.lld: error: undefined symbol: __ioread64_lo_hi
-    ld.lld: error: undefined symbol: __ioread64be_hi_lo
-    ld.lld: error: undefined symbol: __iowrite64_hi_lo
-    ld.lld: error: undefined symbol: __iowrite64_lo_hi
-    ld.lld: error: undefined symbol: __iowrite64be_hi_lo
-
-Error/Warning ids grouped by kconfigs:
-
-recent_errors
-|-- i386-buildonly-randconfig-003-20250301
-|   |-- ld.lld:error:undefined-symbol:__ioread64_hi_lo
-|   |-- ld.lld:error:undefined-symbol:__ioread64be_hi_lo
-|   |-- ld.lld:error:undefined-symbol:__iowrite64_hi_lo
-|   `-- ld.lld:error:undefined-symbol:__iowrite64be_hi_lo
-`-- i386-buildonly-randconfig-006-20250301
-    |-- ld.lld:error:undefined-symbol:__ioread64_lo_hi
-    `-- ld.lld:error:undefined-symbol:__iowrite64_lo_hi
-
-elapsed time: 1447m
-
-configs tested: 88
-configs skipped: 1
-
-tested configs:
-alpha                           allyesconfig    gcc-14.2.0
-arc                  randconfig-001-20250301    gcc-13.2.0
-arc                  randconfig-002-20250301    gcc-13.2.0
-arm                  randconfig-001-20250301    gcc-14.2.0
-arm                  randconfig-002-20250301    gcc-14.2.0
-arm                  randconfig-003-20250301    clang-21
-arm                  randconfig-004-20250301    clang-21
-arm64                randconfig-001-20250301    gcc-14.2.0
-arm64                randconfig-002-20250301    clang-21
-arm64                randconfig-003-20250301    clang-15
-arm64                randconfig-004-20250301    clang-17
-csky                 randconfig-001-20250301    gcc-14.2.0
-csky                 randconfig-002-20250301    gcc-14.2.0
-hexagon                         allmodconfig    clang-21
-hexagon                         allyesconfig    clang-18
-hexagon              randconfig-001-20250301    clang-21
-hexagon              randconfig-002-20250301    clang-21
-i386                            allmodconfig    clang-19
-i386                             allnoconfig    clang-19
-i386                            allyesconfig    clang-19
-i386       buildonly-randconfig-001-20250301    clang-19
-i386       buildonly-randconfig-002-20250301    clang-19
-i386       buildonly-randconfig-003-20250301    clang-19
-i386       buildonly-randconfig-004-20250301    clang-19
-i386       buildonly-randconfig-005-20250301    gcc-12
-i386       buildonly-randconfig-006-20250301    clang-19
-i386                               defconfig    clang-19
-loongarch            randconfig-001-20250301    gcc-14.2.0
-loongarch            randconfig-002-20250301    gcc-14.2.0
-nios2                randconfig-001-20250301    gcc-14.2.0
-nios2                randconfig-002-20250301    gcc-14.2.0
-openrisc                         allnoconfig    clang-15
-parisc                           allnoconfig    clang-15
-parisc               randconfig-001-20250301    gcc-14.2.0
-parisc               randconfig-002-20250301    gcc-14.2.0
-powerpc                          allnoconfig    clang-15
-powerpc              randconfig-001-20250301    clang-17
-powerpc              randconfig-002-20250301    clang-19
-powerpc              randconfig-003-20250301    clang-21
-powerpc64            randconfig-001-20250301    gcc-14.2.0
-powerpc64            randconfig-002-20250301    clang-21
-powerpc64            randconfig-003-20250301    gcc-14.2.0
-riscv                            allnoconfig    clang-15
-riscv                randconfig-001-20250301    gcc-14.2.0
-riscv                randconfig-002-20250301    gcc-14.2.0
-s390                            allmodconfig    clang-19
-s390                             allnoconfig    clang-15
-s390                            allyesconfig    gcc-14.2.0
-s390                 randconfig-001-20250301    clang-15
-s390                 randconfig-002-20250301    gcc-14.2.0
-sh                              allmodconfig    gcc-14.2.0
-sh                              allyesconfig    gcc-14.2.0
-sh                   randconfig-001-20250301    gcc-14.2.0
-sh                   randconfig-002-20250301    gcc-14.2.0
-sparc                           allmodconfig    gcc-14.2.0
-sparc                randconfig-001-20250301    gcc-14.2.0
-sparc                randconfig-002-20250301    gcc-14.2.0
-sparc64              randconfig-001-20250301    gcc-14.2.0
-sparc64              randconfig-002-20250301    gcc-14.2.0
-um                              allmodconfig    clang-21
-um                               allnoconfig    clang-15
-um                              allyesconfig    gcc-12
-um                   randconfig-001-20250301    gcc-12
-um                   randconfig-002-20250301    gcc-12
-x86_64                           allnoconfig    clang-19
-x86_64                          allyesconfig    clang-19
-x86_64     buildonly-randconfig-001-20250301    clang-19
-x86_64     buildonly-randconfig-001-20250302    gcc-12
-x86_64     buildonly-randconfig-002-20250301    clang-19
-x86_64     buildonly-randconfig-002-20250302    gcc-12
-x86_64     buildonly-randconfig-003-20250301    gcc-11
-x86_64     buildonly-randconfig-003-20250302    gcc-12
-x86_64     buildonly-randconfig-004-20250301    gcc-12
-x86_64     buildonly-randconfig-004-20250302    gcc-12
-x86_64     buildonly-randconfig-005-20250301    gcc-12
-x86_64     buildonly-randconfig-005-20250302    gcc-12
-x86_64     buildonly-randconfig-006-20250301    clang-19
-x86_64     buildonly-randconfig-006-20250302    gcc-12
-x86_64                             defconfig    clang-19
-x86_64                                 kexec    clang-19
-x86_64                              rhel-9.4    clang-19
-x86_64                          rhel-9.4-bpf    clang-18
-x86_64                         rhel-9.4-func    clang-19
-x86_64                        rhel-9.4-kunit    clang-18
-x86_64                          rhel-9.4-ltp    clang-18
-x86_64                         rhel-9.4-rust    clang-18
-xtensa               randconfig-001-20250301    gcc-14.2.0
-xtensa               randconfig-002-20250301    gcc-14.2.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Then I could extend it for new flags without breaking backward
+or forward compatibility of the setfsxattrat() call.
 
