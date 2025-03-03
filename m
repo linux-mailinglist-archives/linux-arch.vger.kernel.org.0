@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-10489-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10488-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A50A6A4BE16
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 12:20:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41B34A4BDDC
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 12:16:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 937083B9A49
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 11:13:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCE46188A4BF
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 11:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A8AF1F3B85;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 023F91F1934;
 	Mon,  3 Mar 2025 11:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XmXWkKs1";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="daDT/5PB"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2En2gryv";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fMJ9NStB"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F1D1E573B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F7C1EB192;
 	Mon,  3 Mar 2025 11:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741000273; cv=none; b=OWRsludeM1Obj7Xkrk3LPJfwfCb+N057o9/dfp3Z9Jr9M6bxVOnlTkU/Uqai40PrE9mpcH11a0ln0da8eygUIzGtg/zueVZbdK7vP4powupe1J47EG+J85BRix1FVLptfHS917S2a+NOskCb/gWvSz8EvNXLHNYmI8uXx1NJHzU=
+	t=1741000272; cv=none; b=ciaIpP8uZZcNP61b9gR72t7JBGGyQIvE1tlGEfG6NEATMrUiZT1NyE4eE3pPkTOmj2jRoAaTfo3IlIo4ik/HQtgA5RpVxteb8DaPf0IlwCiY+gQyKTYUvGVbDHoifJzIl2TEDynChiO69HdLQE/4UkuLwsSe+ok43mfXtFTPlq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741000273; c=relaxed/simple;
-	bh=QicJWSkRxiGmzzoQ0Aniprry18vJY+DCMdz2bkhHj00=;
+	s=arc-20240116; t=1741000272; c=relaxed/simple;
+	bh=qO63nBGsfFZGS5UvPElZMjXJL0LBJQSO8+qHJeKx1PI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uJJb5s/SrZx5IifQjKFBC6OM+C0t7z81jvZG4viBhtr83n30dHa39xNqP2LAeWf2Cvk9gvYUXszkHVeIkFvRkc8dVEMZTufEilnuIF0vlzPZv1BWmNFkXRqpXOk87FkfFXbSpE+Rz8cbLspF4/jfBBsth36lm+XakSWzj9uZa/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XmXWkKs1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=daDT/5PB; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=fEi24MOtMqnNn6mG7CnG3v7rYkMUlE+oJS4/ZHa75TcrEVkC+JEVHX43qtkJyg5pJP75kSlf+VU4scZ3bVlpe8mHAHRbAgh9mIZ1/ayFT2WvCpWBOsJIPjMwQbKWS9Ys5OmdQ0RuoR1P7bPSf3hQQQaBHecKxWUlW+nXw0HniWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2En2gryv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fMJ9NStB; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1741000268;
+	s=2020; t=1741000269;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TOb1j+830+L2uc5mgMSRGFN3ViOd+N17QiffCrSYHk4=;
-	b=XmXWkKs18KvBgwCLec9sE2WfytIol8uBJMrocKvJVLbeiOYYi4FaLohlwg2bG4tNOaAosv
-	u/weCBoaVG0JKctHLyYHHYK47Mta9LgUbpf0rB+op47Golj1hfJ7gkkO9lQY/w10+fEljY
-	6IGSd4P7CBHQfRNt9LjCH12rYr/zg2eH74yz4kSq1iQYuVWyv+larEEmeu9Q8zFMVwfjvT
-	EdLy6uzdF0kguXQpqZWK22VArwZdItGzGam4LCcMGiul8kd15o/sjXZ354UtlcWc5YvF/U
-	U9/kOxK+C0JCRIoXNYKeQYQz8HNeaPGfZ4VWkdItWhdU4mCgDMHm1CbZ/OTTPw==
+	bh=uY4A0H+/yXHEBsdmbGCdTr/QiTwADD1cYzSVXD6cRGg=;
+	b=2En2gryv8KFjGlwpTPafhFfDRNSmhcpEmGQwq4W1X7xGPlQYEGfajgK4J23nkcTFzAsH3G
+	nerhaf4T8jW/arCzkNVebRrc38yLVH5FsQp8gTCI0Y5Zz2yQdXK6bzfq18+x+qSd85H881
+	yDFM0kX98uWCtQinDsrdW75dsCehjZahArgBH2ODjHERe7NpIfLTkdG8Y0ejPtI+cwbK5y
+	wC2p9FgP76oe+11PqrzQAnJqsbZ1TUHoP8trE7DEXNSjW4L26zpyRlMOkzd1VhH8ocEiXE
+	SH4zl5jNdRNhxKoz/EtsTDyC8/Im56SYE1emomuTD7+ZMWAVgSFPwAzMO9B1sQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1741000268;
+	s=2020e; t=1741000269;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TOb1j+830+L2uc5mgMSRGFN3ViOd+N17QiffCrSYHk4=;
-	b=daDT/5PBEsCo5YvUqMaO/OFqg8j4UWG6U+YVX4tUUbVhnThgHXXAeFdxh16iUrDM7UiwNX
-	eoviGFLDEC8Du5Bg==
-Date: Mon, 03 Mar 2025 12:11:03 +0100
-Subject: [PATCH 01/19] vdso: Introduce vdso/cache.h
+	bh=uY4A0H+/yXHEBsdmbGCdTr/QiTwADD1cYzSVXD6cRGg=;
+	b=fMJ9NStByy0aoH300sXCDuvSmTKmPwN9oRCy+0LoPVQKid/pIMStDs5YY5V5hqyqvvSvkh
+	RgcXpGDAy62Y4ZAQ==
+Date: Mon, 03 Mar 2025 12:11:04 +0100
+Subject: [PATCH 02/19] arm64: Make asm/cache.h compatible with vDSO
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250303-vdso-clock-v1-1-c1b5c69a166f@linutronix.de>
+Message-Id: <20250303-vdso-clock-v1-2-c1b5c69a166f@linutronix.de>
 References: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
 In-Reply-To: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -86,79 +86,45 @@ Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
  linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741000267; l=2031;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741000267; l=1100;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=QicJWSkRxiGmzzoQ0Aniprry18vJY+DCMdz2bkhHj00=;
- b=GtEtpiK0bFbVap25sLkJQRfP4QgJXwKc/eEYZUJvPvc3sE2U4JP5GeW1CvH6eCUWZ4Gd03Xdo
- esTi0v4kjEwDDKsbHURqiM8BoZI6WHvtyKXGg9Tunv9JgZNVRL4XaXD
+ bh=qO63nBGsfFZGS5UvPElZMjXJL0LBJQSO8+qHJeKx1PI=;
+ b=EaqHkujR1rhytCCyC8BgQ0toXrLScUCDuVyGkAIyqqU3O/xruMDXNDdz9/q3f+NSwc3DVeTt7
+ ZebywgTu1j6Amvsjq9J9UOSZovWCSoRrcwqe8z8X/2EK+MCrQmt4c3V
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The vDSO implementation can only include headers from the vdso/
-namespace. To enable the usage of ____cacheline_aligned from
-the vDSO, move it and its dependencies into a new header vdso/cache.h.
-Keep compatibility by including vdso/cache.h from linux/cache.h.
+asm/cache.h can be used during the vDSO build through vdso/cache.h.
+Not all definitions in it are compatible with the vDSO, especially the
+compat vDSO.
+Hide the more complex definitions from the vDSO build.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- include/linux/cache.h |  9 +--------
- include/vdso/cache.h  | 15 +++++++++++++++
- 2 files changed, 16 insertions(+), 8 deletions(-)
+ arch/arm64/include/asm/cache.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/cache.h b/include/linux/cache.h
-index ca2a05682a54b51af991154a99f57a00c88fc5a8..e69768f50d5327b874ba4bd56609300526511a69 100644
---- a/include/linux/cache.h
-+++ b/include/linux/cache.h
-@@ -3,16 +3,13 @@
- #define __LINUX_CACHE_H
+diff --git a/arch/arm64/include/asm/cache.h b/arch/arm64/include/asm/cache.h
+index 06a4670bdb0b9b7552d553cee3cc70a6e15b2b93..99cd6546e72e35cfbceec7ce0a0f64498dfadd38 100644
+--- a/arch/arm64/include/asm/cache.h
++++ b/arch/arm64/include/asm/cache.h
+@@ -35,7 +35,7 @@
+ #define ARCH_DMA_MINALIGN	(128)
+ #define ARCH_KMALLOC_MINALIGN	(8)
  
- #include <uapi/linux/kernel.h>
-+#include <vdso/cache.h>
- #include <asm/cache.h>
+-#ifndef __ASSEMBLY__
++#if !defined(__ASSEMBLY__) && !defined(BUILD_VDSO)
  
- #ifndef L1_CACHE_ALIGN
- #define L1_CACHE_ALIGN(x) __ALIGN_KERNEL(x, L1_CACHE_BYTES)
+ #include <linux/bitops.h>
+ #include <linux/kasan-enabled.h>
+@@ -118,6 +118,6 @@ static inline u32 __attribute_const__ read_cpuid_effective_cachetype(void)
+ 	return ctr;
+ }
+ 
+-#endif	/* __ASSEMBLY__ */
++#endif /* !defined(__ASSEMBLY__) && !defined(BUILD_VDSO) */
+ 
  #endif
- 
--#ifndef SMP_CACHE_BYTES
--#define SMP_CACHE_BYTES L1_CACHE_BYTES
--#endif
--
- /**
-  * SMP_CACHE_ALIGN - align a value to the L2 cacheline size
-  * @x: value to align
-@@ -63,10 +60,6 @@
- #define __ro_after_init __section(".data..ro_after_init")
- #endif
- 
--#ifndef ____cacheline_aligned
--#define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
--#endif
--
- #ifndef ____cacheline_aligned_in_smp
- #ifdef CONFIG_SMP
- #define ____cacheline_aligned_in_smp ____cacheline_aligned
-diff --git a/include/vdso/cache.h b/include/vdso/cache.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..f89d48304bf8f101df581aee0e32a2efa9d2fb2d
---- /dev/null
-+++ b/include/vdso/cache.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __VDSO_CACHE_H
-+#define __VDSO_CACHE_H
-+
-+#include <asm/cache.h>
-+
-+#ifndef SMP_CACHE_BYTES
-+#define SMP_CACHE_BYTES L1_CACHE_BYTES
-+#endif
-+
-+#ifndef ____cacheline_aligned
-+#define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
-+#endif
-+
-+#endif	/* __VDSO_ALIGN_H */
 
 -- 
 2.48.1
