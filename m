@@ -1,189 +1,155 @@
-Return-Path: <linux-arch+bounces-10486-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10487-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EF87A4B798
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 06:35:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 367A8A4BDE2
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 12:16:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5DC63AC947
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 05:34:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54D5116E6AD
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 11:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 081A11DDA3C;
-	Mon,  3 Mar 2025 05:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4ED1F30A2;
+	Mon,  3 Mar 2025 11:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dqzVwvQM"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wLmUqqTw";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FEFBlftn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600658635C;
-	Mon,  3 Mar 2025 05:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0637D137C37;
+	Mon,  3 Mar 2025 11:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740980100; cv=none; b=nn5EVYStP4eQFrhrhQhcEy13qsDQBdK17PBQ8TaFcrc8CIpnq0ySGGSmb/qQdQuAhk7ZpAwyzJjuJ2H2hvaXN3JG0dz3UaPbC3nup2VLdYw9vF+0QwrF4hEJCnDD27wjJvZjALp77hjmQG21s0DnnwaSSe92incjThgFZFJ0upo=
+	t=1741000272; cv=none; b=JVp2zHqfz2DIoueXS1gizTjSygzhGA2x4PjuEj816YAsd1XwSgWLFZ91FiemYGW0vIjxt0WKjYqfO+194IZ66ztdaaWZc0ek8G7jpaVwHh0bRDZoJ2mDjUvdbSq7wIbLm25rtkvVKVEwRa583RIjfx14cJUeDGqiE5FuMyjiOe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740980100; c=relaxed/simple;
-	bh=hD6xzP3FpFewH9I665wRKi/LE9Ov9GLuAPFoz3tFtBo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KraR2gLMV8PV1LbFyZkr2yKr4tQbIiwbcMn4APrYZNcqmTjL87J630oBUUhcEz1vXW8y0nyvJ9k6BDVpDrwUuzyXymP7Q/z0991USx1lyrBFSKmqZfzJWuHlnR8mvakQ1WDO7EXABvVQ2kN/Zm6pgVTtNIuJDewspPF7kAkaZvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dqzVwvQM; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740980100; x=1772516100;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hD6xzP3FpFewH9I665wRKi/LE9Ov9GLuAPFoz3tFtBo=;
-  b=dqzVwvQMVEaBYLAiIyDrTH5mmjTlFFLLhGUp08JyFIyzPnB5AZlarXUe
-   Ng7761e37Ln2bmPINWx9mpE7tJ39EeVy2lrSms/YgKsU3arWTjcXZsJM9
-   KYh7XSSUlBrGgk6/4tmT/xgQdSYbJ0hoOmP3ekZFVb1bNhDyXCOOSMCYm
-   eu8xnbA2EZjrQFavAWd2D6LuLoF43uZqw8hsmbydMOVou9GNdBR7/uNV7
-   Rdqf1DFj7kUlodfDm8lb/YWICXNdVgqQcd0LNTLb2QCs+XUKTgSJdIt9P
-   xDWBEacXwWBfCkXIebAvVrSJGWLuQm4PDJezTdS0EWS1Z79Iz0Su6eumE
-   g==;
-X-CSE-ConnectionGUID: kX6/eKeBRI6DJF684CsS2w==
-X-CSE-MsgGUID: AmT8OIObQ4C1I37c3firDg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="64301592"
-X-IronPort-AV: E=Sophos;i="6.13,328,1732608000"; 
-   d="scan'208";a="64301592"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 21:34:59 -0800
-X-CSE-ConnectionGUID: 0DG/Qx3+S8OpHKZszWb+pg==
-X-CSE-MsgGUID: kxKYVUmhSwaPW7RpjZz9WQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,328,1732608000"; 
-   d="scan'208";a="122499750"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa005.fm.intel.com with ESMTP; 02 Mar 2025 21:34:51 -0800
-Date: Mon, 3 Mar 2025 13:32:47 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Alexey Kardashevskiy <aik@amd.com>, x86@kernel.org, kvm@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arch@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Christoph Hellwig <hch@lst.de>, Nikunj A Dadhania <nikunj@amd.com>,
-	Michael Roth <michael.roth@amd.com>,
-	Vasant Hegde <vasant.hegde@amd.com>,
-	Joao Martins <joao.m.martins@oracle.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	Lu Baolu <baolu.lu@linux.intel.com>,
-	Steve Sistare <steven.sistare@oracle.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
-	iommu@lists.linux.dev, linux-coco@lists.linux.dev,
-	Zhi Wang <zhiw@nvidia.com>,
-	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
-Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
-Message-ID: <Z8U+/0IYyn7XX3ao@yilunxu-OptiPlex-7050>
-References: <20250218111017.491719-1-aik@amd.com>
- <20250218111017.491719-15-aik@amd.com>
- <Z72GmixR6NkzXAl7@yilunxu-OptiPlex-7050>
- <2fe6b3c6-3eed-424d-87f0-34c4e7e1c906@amd.com>
- <Z77xrqLtJfB84dJF@yilunxu-OptiPlex-7050>
- <20250226131202.GH5011@ziepe.ca>
- <Z7/jFhlsBrbrloia@yilunxu-OptiPlex-7050>
- <20250301003711.GR5011@ziepe.ca>
+	s=arc-20240116; t=1741000272; c=relaxed/simple;
+	bh=JRTZEJBPOrhvUumVmufXGEQ++pbOss4FsXl+ME7xP/I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Pk+LQWCpFgYtEMBIi2QvEFq2CmQrXVC5cUHBka2MSZNLkwN4ZrRf35cTAxNSD8cU4xqpltNruw18YKkjAgDDLsXmQ5onN3XRWUuxFSmU71VivMyrz0WhcxXG48T0PrH7WGj6eNM8++dEFU5OQ/YdPFv2tf+XLVHPwQCOx3jVZN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wLmUqqTw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FEFBlftn; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1741000267;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=IQ622J09wSnJWNXssDApHCSJm6KRM8/tA7lFNZ5FTck=;
+	b=wLmUqqTwTEyy8MN+fvUkhrzIqy6uOM6lVHR4jNdAeed/O8S0iqujK3aI4lGi+I3tqudxPw
+	s2kIvGZ/MXyYVsQ2TqmdwnG18vmfKYSXzOhf5Aw9fndCMClBY7UvTjVWEXtE3xS5f7RqVn
+	PQf7QcpBStHo1rBnCeWDhILSYYwI7qMGPTS0RviAt1Oy2cNEs180RPDVdtyda8W1ns7Iy9
+	F6Vnmc2BDvBIXsbn8MLerHwdRVwBXudM4h3rwx+UXEWi/LSPZEzXXnHpFdlZzAcnAwiUAP
+	5Lj2VkmHFVjYjg3fvs/gqFY0Ct2mskGOlUZKpYaitXChC2S6wwZYvOmvbnkzNg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1741000267;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=IQ622J09wSnJWNXssDApHCSJm6KRM8/tA7lFNZ5FTck=;
+	b=FEFBlftntzm1vKKKD24mat2WNu3kCRIaYgAe0BZIAp5Y/dJrf3bIDUHH00UOGa0SCDwvKB
+	I30YLz81uY0Z1kDA==
+Subject: [PATCH 00/19] vdso: Rework struct vdso_time_data and introduce
+ struct vdso_clock
+Date: Mon, 03 Mar 2025 12:11:02 +0100
+Message-Id: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250301003711.GR5011@ziepe.ca>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAEaOxWcC/03M0QrCIBTG8VcZ5zpDZdrWVe8Ru1h6bIeGhi5ZD
+ N89GwRd/j/4fhskjIQJzs0GETMlCr6GODRgptHfkZGtDZJLxaVsWbYpMDMH82BOcMfFybS3jkM
+ 9PCM6WnfsOtSeKC0hvnc7i+/6Y9Q/kwXjrNMC+1GrUffqMpN/LTF4Wo8WYSilfAAsE0v1qAAAA
+ A==
+X-Change-ID: 20250224-vdso-clock-f10f017c4b80
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+ Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+ Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+ linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741000267; l=2911;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=JRTZEJBPOrhvUumVmufXGEQ++pbOss4FsXl+ME7xP/I=;
+ b=1QrxVPPkzlKNesg8VwMiDXqZyZeYfZHfZ0peP4IrutVSqOiCMC4+/wyQO3rgzJ5xf+SxSKr84
+ +t7EqeEhu9OAio50sRM6KyHRpohlV/LcxVaombILHk3/QzfOiPs5F4E
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Fri, Feb 28, 2025 at 08:37:11PM -0400, Jason Gunthorpe wrote:
-> On Thu, Feb 27, 2025 at 11:59:18AM +0800, Xu Yilun wrote:
-> > On Wed, Feb 26, 2025 at 09:12:02AM -0400, Jason Gunthorpe wrote:
-> > > On Wed, Feb 26, 2025 at 06:49:18PM +0800, Xu Yilun wrote:
-> > > 
-> > > > E.g. I don't think VFIO driver would expect its MMIO access suddenly
-> > > > failed without knowing what happened.
-> > > 
-> > > What do people expect to happen here anyhow? Do you still intend to
-> > > mmap any of the MMIO into the hypervisor? No, right? It is all locked
-> > 
-> > Not expecting mmap the MMIO, but I switched to another way. VFIO doesn't
-> > disallow mmap until bind, and if there is mmap on bind, bind failed.
-> > That's my understanding of your comments.
-> 
-> That seems reasonable
-> 
-> > Another concern is about dma-buf importer (e.g. KVM) mapping the MMIO.
-> > Recall we are working on the VFIO dma-buf solution, on bind/unbind the
-> > MMIO accessibility is being changed and importers should be notified to
-> > remove their mapping beforehand, and rebuild later if possible.
-> > An immediate requirement for Intel TDX is, KVM should remove secure EPT
-> > mapping for MMIO before unbind.
-> 
-> dmabuf can do that..
+To support multiple PTP clocks, the VDSO data structure needs to be
+reworked. All clock specific data will end up in struct vdso_clock and in
+struct vdso_time_data there will be an array of it.
 
-Yes, dmabuf can do that via notify. dmabuf is implemented in VFIO,
-so iommufd/vdevice couldn't operate on dmabuf and send the notify.
+This series is based on and intended to be merged through tip/timers/vdso.
 
-> 
-> > > > The implementation is basically no difference from:
-> > > > 
-> > > > +       vdev = container_of(iommufd_get_object(ucmd->ictx, cmd->vdevice_id,
-> > > > +                                              IOMMUFD_OBJ_VDEVICE),
-> > > > 
-> > > > The real concern is the device owner, VFIO, should initiate the bind.
-> > > 
-> > > There is a big different, the above has correct locking, the other
-> > > does not :)
-> > 
-> > Could you elaborate more on that? Any locking problem if we implement
-> > bind/unbind outside iommufd. Thanks in advance.
-> 
-> You will be unable to access any information iommufd has in the viommu
-> and vdevice objects. So you will not be able to pass a viommu ID or
-> vBDF to the secure world unless you enter through an iommufd path, and
-> use iommufd_get_object() to obtain the required locks.
->  
-> I don't know what the API signatures are for all three platforms to
-> tell if this is a problem or not.
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Anna-Maria Behnsen (15):
+      vdso: Make vdso_time_data cacheline aligned
+      vdso/datapage: Define for vdso_data to make rework of vdso possible
+      vdso/helpers: Prepare introduction of struct vdso_clock
+      vdso/gettimeofday: Prepare introduction of struct vdso_clock
+      vdso/gettimeofday: Prepare do_hres() for introduction of struct vdso_clock
+      vdso/gettimeofday: Prepare do_hres_timens() for introduction of struct vdso_clock
+      vdso/gettimeofday: Prepare do_coarse() for introduction of struct vdso_clock
+      vdso/gettimeofday: Prepare do_coarse_timens() for introduction of struct vdso_clock
+      vdso/gettimeofday: Prepare helper functions for introduction of struct vdso_clock
+      vdso/vsyscall: Prepare introduction of struct vdso_clock
+      vdso/namespace: Rename timens_setup_vdso_data() to reflect new vdso_clock struct
+      time/namespace: Prepare introduction of struct vdso_clock
+      x86/vdso: Prepare introduction of struct vdso_clock
+      vdso: Move arch related data before basetime
+      vdso: Rework struct vdso_time_data and introduce struct vdso_clock
 
-Seems not a problem for Intel TDX. Basically secure DMA settings for TDX
-is just to build the secure IOMMUPT, only need host BDF. Also secure
-device setting needs no secure DMA info.
+Nam Cao (2):
+      arm64/vdso: Prepare introduction of struct vdso_clock
+      powerpc/vdso: Prepare introduction of struct vdso_clock
 
-All these settings cannot really take function until guest verifies them
-and does TDISP start. Guest verification does not (should not) need host
-awareness.
+Thomas Weißschuh (2):
+      vdso: Introduce vdso/cache.h
+      arm64: Make asm/cache.h compatible with vDSO
 
-Our solution is, separate the secure DMA setting and secure device setting
-in different components, iommufd & vfio.
+ arch/arm64/include/asm/cache.h                    |   4 +-
+ arch/arm64/include/asm/vdso/compat_gettimeofday.h |   6 +-
+ arch/arm64/include/asm/vdso/vsyscall.h            |   4 +-
+ arch/powerpc/include/asm/vdso/gettimeofday.h      |   2 +-
+ arch/s390/kernel/time.c                           |  11 +-
+ arch/x86/include/asm/vdso/gettimeofday.h          |  16 +--
+ include/asm-generic/vdso/vsyscall.h               |   2 +-
+ include/linux/cache.h                             |   9 +-
+ include/vdso/cache.h                              |  15 +++
+ include/vdso/datapage.h                           |  48 ++++---
+ include/vdso/helpers.h                            |  20 +--
+ kernel/time/namespace.c                           |  20 +--
+ kernel/time/vsyscall.c                            |  47 +++----
+ lib/vdso/datastore.c                              |   6 +-
+ lib/vdso/gettimeofday.c                           | 146 ++++++++++++----------
+ 15 files changed, 196 insertions(+), 160 deletions(-)
+---
+base-commit: ac1a42f4e4e296b5ba5fdb39444f65d6e5196240
+change-id: 20250224-vdso-clock-f10f017c4b80
 
-Guest require bind:
-  - ioctl(iommufd, IOMMU_VIOMMU_ALLOC, {.type = IOMMU_VIOMMU_TYPE_KVM_VALID,
-					.kvm_fd = kvm_fd,
-					.out_viommu_id = &viommu_id});
-  - ioctl(iommufd, IOMMU_HWPT_ALLOC, {.flag = IOMMU_HWPT_ALLOC_TRUSTED,
-				      .pt_id = viommu_id,
-				      .out_hwpt_id = &hwpt_id});
-  - ioctl(vfio_fd, VFIO_DEVICE_ATTACH_IOMMUFD_PT, {.pt_id = hwpt_id})
-    - do secure DMA setting in Intel iommu driver.
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-  - ioctl(vfio_fd, VFIO_DEVICE_TSM_BIND, ...)
-    - do bind in Intel TSM driver.
-
-Thanks,
-Yilun
-
-> 
-> Jason
 
