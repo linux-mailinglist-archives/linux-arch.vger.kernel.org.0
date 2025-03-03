@@ -1,60 +1,61 @@
-Return-Path: <linux-arch+bounces-10487-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10489-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 367A8A4BDE2
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 12:16:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A50A6A4BE16
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 12:20:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54D5116E6AD
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 11:13:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 937083B9A49
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 11:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4ED1F30A2;
-	Mon,  3 Mar 2025 11:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A8AF1F3B85;
+	Mon,  3 Mar 2025 11:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wLmUqqTw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FEFBlftn"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XmXWkKs1";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="daDT/5PB"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0637D137C37;
-	Mon,  3 Mar 2025 11:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F1D1E573B;
+	Mon,  3 Mar 2025 11:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741000272; cv=none; b=JVp2zHqfz2DIoueXS1gizTjSygzhGA2x4PjuEj816YAsd1XwSgWLFZ91FiemYGW0vIjxt0WKjYqfO+194IZ66ztdaaWZc0ek8G7jpaVwHh0bRDZoJ2mDjUvdbSq7wIbLm25rtkvVKVEwRa583RIjfx14cJUeDGqiE5FuMyjiOe8=
+	t=1741000273; cv=none; b=OWRsludeM1Obj7Xkrk3LPJfwfCb+N057o9/dfp3Z9Jr9M6bxVOnlTkU/Uqai40PrE9mpcH11a0ln0da8eygUIzGtg/zueVZbdK7vP4powupe1J47EG+J85BRix1FVLptfHS917S2a+NOskCb/gWvSz8EvNXLHNYmI8uXx1NJHzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741000272; c=relaxed/simple;
-	bh=JRTZEJBPOrhvUumVmufXGEQ++pbOss4FsXl+ME7xP/I=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Pk+LQWCpFgYtEMBIi2QvEFq2CmQrXVC5cUHBka2MSZNLkwN4ZrRf35cTAxNSD8cU4xqpltNruw18YKkjAgDDLsXmQ5onN3XRWUuxFSmU71VivMyrz0WhcxXG48T0PrH7WGj6eNM8++dEFU5OQ/YdPFv2tf+XLVHPwQCOx3jVZN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wLmUqqTw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FEFBlftn; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1741000273; c=relaxed/simple;
+	bh=QicJWSkRxiGmzzoQ0Aniprry18vJY+DCMdz2bkhHj00=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=uJJb5s/SrZx5IifQjKFBC6OM+C0t7z81jvZG4viBhtr83n30dHa39xNqP2LAeWf2Cvk9gvYUXszkHVeIkFvRkc8dVEMZTufEilnuIF0vlzPZv1BWmNFkXRqpXOk87FkfFXbSpE+Rz8cbLspF4/jfBBsth36lm+XakSWzj9uZa/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XmXWkKs1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=daDT/5PB; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1741000267;
+	s=2020; t=1741000268;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=IQ622J09wSnJWNXssDApHCSJm6KRM8/tA7lFNZ5FTck=;
-	b=wLmUqqTwTEyy8MN+fvUkhrzIqy6uOM6lVHR4jNdAeed/O8S0iqujK3aI4lGi+I3tqudxPw
-	s2kIvGZ/MXyYVsQ2TqmdwnG18vmfKYSXzOhf5Aw9fndCMClBY7UvTjVWEXtE3xS5f7RqVn
-	PQf7QcpBStHo1rBnCeWDhILSYYwI7qMGPTS0RviAt1Oy2cNEs180RPDVdtyda8W1ns7Iy9
-	F6Vnmc2BDvBIXsbn8MLerHwdRVwBXudM4h3rwx+UXEWi/LSPZEzXXnHpFdlZzAcnAwiUAP
-	5Lj2VkmHFVjYjg3fvs/gqFY0Ct2mskGOlUZKpYaitXChC2S6wwZYvOmvbnkzNg==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TOb1j+830+L2uc5mgMSRGFN3ViOd+N17QiffCrSYHk4=;
+	b=XmXWkKs18KvBgwCLec9sE2WfytIol8uBJMrocKvJVLbeiOYYi4FaLohlwg2bG4tNOaAosv
+	u/weCBoaVG0JKctHLyYHHYK47Mta9LgUbpf0rB+op47Golj1hfJ7gkkO9lQY/w10+fEljY
+	6IGSd4P7CBHQfRNt9LjCH12rYr/zg2eH74yz4kSq1iQYuVWyv+larEEmeu9Q8zFMVwfjvT
+	EdLy6uzdF0kguXQpqZWK22VArwZdItGzGam4LCcMGiul8kd15o/sjXZ354UtlcWc5YvF/U
+	U9/kOxK+C0JCRIoXNYKeQYQz8HNeaPGfZ4VWkdItWhdU4mCgDMHm1CbZ/OTTPw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1741000267;
+	s=2020e; t=1741000268;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=IQ622J09wSnJWNXssDApHCSJm6KRM8/tA7lFNZ5FTck=;
-	b=FEFBlftntzm1vKKKD24mat2WNu3kCRIaYgAe0BZIAp5Y/dJrf3bIDUHH00UOGa0SCDwvKB
-	I30YLz81uY0Z1kDA==
-Subject: [PATCH 00/19] vdso: Rework struct vdso_time_data and introduce
- struct vdso_clock
-Date: Mon, 03 Mar 2025 12:11:02 +0100
-Message-Id: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TOb1j+830+L2uc5mgMSRGFN3ViOd+N17QiffCrSYHk4=;
+	b=daDT/5PBEsCo5YvUqMaO/OFqg8j4UWG6U+YVX4tUUbVhnThgHXXAeFdxh16iUrDM7UiwNX
+	eoviGFLDEC8Du5Bg==
+Date: Mon, 03 Mar 2025 12:11:03 +0100
+Subject: [PATCH 01/19] vdso: Introduce vdso/cache.h
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -63,11 +64,9 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAEaOxWcC/03M0QrCIBTG8VcZ5zpDZdrWVe8Ru1h6bIeGhi5ZD
- N89GwRd/j/4fhskjIQJzs0GETMlCr6GODRgptHfkZGtDZJLxaVsWbYpMDMH82BOcMfFybS3jkM
- 9PCM6WnfsOtSeKC0hvnc7i+/6Y9Q/kwXjrNMC+1GrUffqMpN/LTF4Wo8WYSilfAAsE0v1qAAAA
- A==
-X-Change-ID: 20250224-vdso-clock-f10f017c4b80
+Message-Id: <20250303-vdso-clock-v1-1-c1b5c69a166f@linutronix.de>
+References: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
+In-Reply-To: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
  Vincenzo Frascino <vincenzo.frascino@arm.com>, 
  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
@@ -87,69 +86,81 @@ Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
  linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741000267; l=2911;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741000267; l=2031;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=JRTZEJBPOrhvUumVmufXGEQ++pbOss4FsXl+ME7xP/I=;
- b=1QrxVPPkzlKNesg8VwMiDXqZyZeYfZHfZ0peP4IrutVSqOiCMC4+/wyQO3rgzJ5xf+SxSKr84
- +t7EqeEhu9OAio50sRM6KyHRpohlV/LcxVaombILHk3/QzfOiPs5F4E
+ bh=QicJWSkRxiGmzzoQ0Aniprry18vJY+DCMdz2bkhHj00=;
+ b=GtEtpiK0bFbVap25sLkJQRfP4QgJXwKc/eEYZUJvPvc3sE2U4JP5GeW1CvH6eCUWZ4Gd03Xdo
+ esTi0v4kjEwDDKsbHURqiM8BoZI6WHvtyKXGg9Tunv9JgZNVRL4XaXD
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-To support multiple PTP clocks, the VDSO data structure needs to be
-reworked. All clock specific data will end up in struct vdso_clock and in
-struct vdso_time_data there will be an array of it.
-
-This series is based on and intended to be merged through tip/timers/vdso.
+The vDSO implementation can only include headers from the vdso/
+namespace. To enable the usage of ____cacheline_aligned from
+the vDSO, move it and its dependencies into a new header vdso/cache.h.
+Keep compatibility by including vdso/cache.h from linux/cache.h.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-Anna-Maria Behnsen (15):
-      vdso: Make vdso_time_data cacheline aligned
-      vdso/datapage: Define for vdso_data to make rework of vdso possible
-      vdso/helpers: Prepare introduction of struct vdso_clock
-      vdso/gettimeofday: Prepare introduction of struct vdso_clock
-      vdso/gettimeofday: Prepare do_hres() for introduction of struct vdso_clock
-      vdso/gettimeofday: Prepare do_hres_timens() for introduction of struct vdso_clock
-      vdso/gettimeofday: Prepare do_coarse() for introduction of struct vdso_clock
-      vdso/gettimeofday: Prepare do_coarse_timens() for introduction of struct vdso_clock
-      vdso/gettimeofday: Prepare helper functions for introduction of struct vdso_clock
-      vdso/vsyscall: Prepare introduction of struct vdso_clock
-      vdso/namespace: Rename timens_setup_vdso_data() to reflect new vdso_clock struct
-      time/namespace: Prepare introduction of struct vdso_clock
-      x86/vdso: Prepare introduction of struct vdso_clock
-      vdso: Move arch related data before basetime
-      vdso: Rework struct vdso_time_data and introduce struct vdso_clock
+ include/linux/cache.h |  9 +--------
+ include/vdso/cache.h  | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 8 deletions(-)
 
-Nam Cao (2):
-      arm64/vdso: Prepare introduction of struct vdso_clock
-      powerpc/vdso: Prepare introduction of struct vdso_clock
+diff --git a/include/linux/cache.h b/include/linux/cache.h
+index ca2a05682a54b51af991154a99f57a00c88fc5a8..e69768f50d5327b874ba4bd56609300526511a69 100644
+--- a/include/linux/cache.h
++++ b/include/linux/cache.h
+@@ -3,16 +3,13 @@
+ #define __LINUX_CACHE_H
+ 
+ #include <uapi/linux/kernel.h>
++#include <vdso/cache.h>
+ #include <asm/cache.h>
+ 
+ #ifndef L1_CACHE_ALIGN
+ #define L1_CACHE_ALIGN(x) __ALIGN_KERNEL(x, L1_CACHE_BYTES)
+ #endif
+ 
+-#ifndef SMP_CACHE_BYTES
+-#define SMP_CACHE_BYTES L1_CACHE_BYTES
+-#endif
+-
+ /**
+  * SMP_CACHE_ALIGN - align a value to the L2 cacheline size
+  * @x: value to align
+@@ -63,10 +60,6 @@
+ #define __ro_after_init __section(".data..ro_after_init")
+ #endif
+ 
+-#ifndef ____cacheline_aligned
+-#define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
+-#endif
+-
+ #ifndef ____cacheline_aligned_in_smp
+ #ifdef CONFIG_SMP
+ #define ____cacheline_aligned_in_smp ____cacheline_aligned
+diff --git a/include/vdso/cache.h b/include/vdso/cache.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..f89d48304bf8f101df581aee0e32a2efa9d2fb2d
+--- /dev/null
++++ b/include/vdso/cache.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __VDSO_CACHE_H
++#define __VDSO_CACHE_H
++
++#include <asm/cache.h>
++
++#ifndef SMP_CACHE_BYTES
++#define SMP_CACHE_BYTES L1_CACHE_BYTES
++#endif
++
++#ifndef ____cacheline_aligned
++#define ____cacheline_aligned __attribute__((__aligned__(SMP_CACHE_BYTES)))
++#endif
++
++#endif	/* __VDSO_ALIGN_H */
 
-Thomas Weißschuh (2):
-      vdso: Introduce vdso/cache.h
-      arm64: Make asm/cache.h compatible with vDSO
-
- arch/arm64/include/asm/cache.h                    |   4 +-
- arch/arm64/include/asm/vdso/compat_gettimeofday.h |   6 +-
- arch/arm64/include/asm/vdso/vsyscall.h            |   4 +-
- arch/powerpc/include/asm/vdso/gettimeofday.h      |   2 +-
- arch/s390/kernel/time.c                           |  11 +-
- arch/x86/include/asm/vdso/gettimeofday.h          |  16 +--
- include/asm-generic/vdso/vsyscall.h               |   2 +-
- include/linux/cache.h                             |   9 +-
- include/vdso/cache.h                              |  15 +++
- include/vdso/datapage.h                           |  48 ++++---
- include/vdso/helpers.h                            |  20 +--
- kernel/time/namespace.c                           |  20 +--
- kernel/time/vsyscall.c                            |  47 +++----
- lib/vdso/datastore.c                              |   6 +-
- lib/vdso/gettimeofday.c                           | 146 ++++++++++++----------
- 15 files changed, 196 insertions(+), 160 deletions(-)
----
-base-commit: ac1a42f4e4e296b5ba5fdb39444f65d6e5196240
-change-id: 20250224-vdso-clock-f10f017c4b80
-
-Best regards,
 -- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+2.48.1
 
 
