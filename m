@@ -1,245 +1,189 @@
-Return-Path: <linux-arch+bounces-10485-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10486-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA6C2A4B4E2
-	for <lists+linux-arch@lfdr.de>; Sun,  2 Mar 2025 22:14:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EF87A4B798
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 06:35:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 946F01890040
-	for <lists+linux-arch@lfdr.de>; Sun,  2 Mar 2025 21:14:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5DC63AC947
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Mar 2025 05:34:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B6C1E9B33;
-	Sun,  2 Mar 2025 21:14:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 081A11DDA3C;
+	Mon,  3 Mar 2025 05:35:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mnS5VI7X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dqzVwvQM"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDDD1D54FE
-	for <linux-arch@vger.kernel.org>; Sun,  2 Mar 2025 21:14:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600658635C;
+	Mon,  3 Mar 2025 05:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740950067; cv=none; b=FsgSpTCzrquoey2Kr3kv9GPoU9fIGrP6ow0G8QNEXxEi6UzZEuEOrdO/pJBNbYLcduxX0Xas+0oUhH7I50b+3/kxydrAL84wqrglr4wNpXZ50C/VCcjYmHBcF5P3gSHlJAD/DhhNGAXEnwu7b0A/ZPnbfLCs+BD3leTzMkRI3wQ=
+	t=1740980100; cv=none; b=nn5EVYStP4eQFrhrhQhcEy13qsDQBdK17PBQ8TaFcrc8CIpnq0ySGGSmb/qQdQuAhk7ZpAwyzJjuJ2H2hvaXN3JG0dz3UaPbC3nup2VLdYw9vF+0QwrF4hEJCnDD27wjJvZjALp77hjmQG21s0DnnwaSSe92incjThgFZFJ0upo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740950067; c=relaxed/simple;
-	bh=4Icxa0I8IeFaQlDn63EmFlFMh0Rch6PPgu74ZDWfWXg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=qdzFL2Mx1ZaZL3Q004KXONMxC0pL92sLFyBtIPIoKIxP6pQE6HRkXZPNi3AdXy7XkqoJkgT1ryyedSVNlT+z7uk91OcgUJMaXEkbZYHvdpX11yniynco5Hp1GLp7GX1IgUjal5I36xjjH04F1mycy3iAJnaQSNazHQyQ1uAzMio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mnS5VI7X; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1740980100; c=relaxed/simple;
+	bh=hD6xzP3FpFewH9I665wRKi/LE9Ov9GLuAPFoz3tFtBo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KraR2gLMV8PV1LbFyZkr2yKr4tQbIiwbcMn4APrYZNcqmTjL87J630oBUUhcEz1vXW8y0nyvJ9k6BDVpDrwUuzyXymP7Q/z0991USx1lyrBFSKmqZfzJWuHlnR8mvakQ1WDO7EXABvVQ2kN/Zm6pgVTtNIuJDewspPF7kAkaZvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dqzVwvQM; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740950065; x=1772486065;
-  h=date:from:to:cc:subject:message-id;
-  bh=4Icxa0I8IeFaQlDn63EmFlFMh0Rch6PPgu74ZDWfWXg=;
-  b=mnS5VI7X5VdYfkHrUKXKr9fMRvmnGs/eQZxM/eOg/wGv1ZGt4Zdljxo9
-   kRvOGsqWhEc+4li8WXu72bfiYkW5pdvPBwuqTgMT6WS/e5vEi4IojlHkk
-   hrjeMbcB26wyU4SHDxGl3mIhpMR7TXMkR60TEomCgGI1fl4qbBACl91PH
-   qI25Fh54kg8hSNM0kNi3wKBN3QJ3rl29rRDQhVFjlELxvOBajHjgYiO9H
-   jPe7bOoSUITUsYUEvTRuhwJsLCfNe/p0JWtuw1HXnO6/iTXb5qf92q2gW
-   AySnUI7QP3nYTvzn1Ax8XkP9yuQTIdJfFftdYdr8ziledp8LC29TX/P5X
-   w==;
-X-CSE-ConnectionGUID: sq5ag1mXQsuzXSsRKNm+HQ==
-X-CSE-MsgGUID: tXPhWrpZSNe6KvrOoiFmnA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="41733335"
+  t=1740980100; x=1772516100;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hD6xzP3FpFewH9I665wRKi/LE9Ov9GLuAPFoz3tFtBo=;
+  b=dqzVwvQMVEaBYLAiIyDrTH5mmjTlFFLLhGUp08JyFIyzPnB5AZlarXUe
+   Ng7761e37Ln2bmPINWx9mpE7tJ39EeVy2lrSms/YgKsU3arWTjcXZsJM9
+   KYh7XSSUlBrGgk6/4tmT/xgQdSYbJ0hoOmP3ekZFVb1bNhDyXCOOSMCYm
+   eu8xnbA2EZjrQFavAWd2D6LuLoF43uZqw8hsmbydMOVou9GNdBR7/uNV7
+   Rdqf1DFj7kUlodfDm8lb/YWICXNdVgqQcd0LNTLb2QCs+XUKTgSJdIt9P
+   xDWBEacXwWBfCkXIebAvVrSJGWLuQm4PDJezTdS0EWS1Z79Iz0Su6eumE
+   g==;
+X-CSE-ConnectionGUID: kX6/eKeBRI6DJF684CsS2w==
+X-CSE-MsgGUID: AmT8OIObQ4C1I37c3firDg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11361"; a="64301592"
 X-IronPort-AV: E=Sophos;i="6.13,328,1732608000"; 
-   d="scan'208";a="41733335"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 13:14:25 -0800
-X-CSE-ConnectionGUID: kLsZ6JFeTTGJDjeS0in29g==
-X-CSE-MsgGUID: vycb1p3QS2qYiqoreN8J9A==
+   d="scan'208";a="64301592"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 21:34:59 -0800
+X-CSE-ConnectionGUID: 0DG/Qx3+S8OpHKZszWb+pg==
+X-CSE-MsgGUID: kxKYVUmhSwaPW7RpjZz9WQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,328,1732608000"; 
-   d="scan'208";a="118523596"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 02 Mar 2025 13:14:24 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1toqdZ-000Hdm-1q;
-	Sun, 02 Mar 2025 21:14:16 +0000
-Date: Mon, 03 Mar 2025 05:13:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 9e81c965742c2a9a28cf59416fee40e7cb1b773e
-Message-ID: <202503030521.mlOCM7jt-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+   d="scan'208";a="122499750"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa005.fm.intel.com with ESMTP; 02 Mar 2025 21:34:51 -0800
+Date: Mon, 3 Mar 2025 13:32:47 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Alexey Kardashevskiy <aik@amd.com>, x86@kernel.org, kvm@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-arch@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Christoph Hellwig <hch@lst.de>, Nikunj A Dadhania <nikunj@amd.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Vasant Hegde <vasant.hegde@amd.com>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Steve Sistare <steven.sistare@oracle.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
+	iommu@lists.linux.dev, linux-coco@lists.linux.dev,
+	Zhi Wang <zhiw@nvidia.com>,
+	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
+Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
+Message-ID: <Z8U+/0IYyn7XX3ao@yilunxu-OptiPlex-7050>
+References: <20250218111017.491719-1-aik@amd.com>
+ <20250218111017.491719-15-aik@amd.com>
+ <Z72GmixR6NkzXAl7@yilunxu-OptiPlex-7050>
+ <2fe6b3c6-3eed-424d-87f0-34c4e7e1c906@amd.com>
+ <Z77xrqLtJfB84dJF@yilunxu-OptiPlex-7050>
+ <20250226131202.GH5011@ziepe.ca>
+ <Z7/jFhlsBrbrloia@yilunxu-OptiPlex-7050>
+ <20250301003711.GR5011@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250301003711.GR5011@ziepe.ca>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 9e81c965742c2a9a28cf59416fee40e7cb1b773e  io.h: drop unused headers
+On Fri, Feb 28, 2025 at 08:37:11PM -0400, Jason Gunthorpe wrote:
+> On Thu, Feb 27, 2025 at 11:59:18AM +0800, Xu Yilun wrote:
+> > On Wed, Feb 26, 2025 at 09:12:02AM -0400, Jason Gunthorpe wrote:
+> > > On Wed, Feb 26, 2025 at 06:49:18PM +0800, Xu Yilun wrote:
+> > > 
+> > > > E.g. I don't think VFIO driver would expect its MMIO access suddenly
+> > > > failed without knowing what happened.
+> > > 
+> > > What do people expect to happen here anyhow? Do you still intend to
+> > > mmap any of the MMIO into the hypervisor? No, right? It is all locked
+> > 
+> > Not expecting mmap the MMIO, but I switched to another way. VFIO doesn't
+> > disallow mmap until bind, and if there is mmap on bind, bind failed.
+> > That's my understanding of your comments.
+> 
+> That seems reasonable
+> 
+> > Another concern is about dma-buf importer (e.g. KVM) mapping the MMIO.
+> > Recall we are working on the VFIO dma-buf solution, on bind/unbind the
+> > MMIO accessibility is being changed and importers should be notified to
+> > remove their mapping beforehand, and rebuild later if possible.
+> > An immediate requirement for Intel TDX is, KVM should remove secure EPT
+> > mapping for MMIO before unbind.
+> 
+> dmabuf can do that..
 
-elapsed time: 1445m
+Yes, dmabuf can do that via notify. dmabuf is implemented in VFIO,
+so iommufd/vdevice couldn't operate on dmabuf and send the notify.
 
-configs tested: 152
-configs skipped: 7
+> 
+> > > > The implementation is basically no difference from:
+> > > > 
+> > > > +       vdev = container_of(iommufd_get_object(ucmd->ictx, cmd->vdevice_id,
+> > > > +                                              IOMMUFD_OBJ_VDEVICE),
+> > > > 
+> > > > The real concern is the device owner, VFIO, should initiate the bind.
+> > > 
+> > > There is a big different, the above has correct locking, the other
+> > > does not :)
+> > 
+> > Could you elaborate more on that? Any locking problem if we implement
+> > bind/unbind outside iommufd. Thanks in advance.
+> 
+> You will be unable to access any information iommufd has in the viommu
+> and vdevice objects. So you will not be able to pass a viommu ID or
+> vBDF to the secure world unless you enter through an iommufd path, and
+> use iommufd_get_object() to obtain the required locks.
+>  
+> I don't know what the API signatures are for all three platforms to
+> tell if this is a problem or not.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Seems not a problem for Intel TDX. Basically secure DMA settings for TDX
+is just to build the secure IOMMUPT, only need host BDF. Also secure
+device setting needs no secure DMA info.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-alpha                               defconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                                 defconfig    gcc-13.2.0
-arc                 nsimosci_hs_smp_defconfig    gcc-13.2.0
-arc                   randconfig-001-20250302    gcc-13.2.0
-arc                   randconfig-002-20250302    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                     davinci_all_defconfig    clang-21
-arm                                 defconfig    clang-21
-arm                          ep93xx_defconfig    clang-21
-arm                            mps2_defconfig    clang-15
-arm                        mvebu_v5_defconfig    gcc-14.2.0
-arm                        mvebu_v7_defconfig    clang-15
-arm                            qcom_defconfig    clang-17
-arm                   randconfig-001-20250302    gcc-14.2.0
-arm                   randconfig-002-20250302    clang-21
-arm                   randconfig-003-20250302    gcc-14.2.0
-arm                   randconfig-004-20250302    clang-21
-arm                        shmobile_defconfig    gcc-14.2.0
-arm                        vexpress_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                               defconfig    gcc-14.2.0
-arm64                 randconfig-001-20250302    clang-18
-arm64                 randconfig-002-20250302    gcc-14.2.0
-arm64                 randconfig-003-20250302    gcc-14.2.0
-arm64                 randconfig-004-20250302    clang-16
-csky                              allnoconfig    gcc-14.2.0
-csky                                defconfig    gcc-14.2.0
-csky                  randconfig-001-20250302    gcc-14.2.0
-csky                  randconfig-002-20250302    gcc-14.2.0
-hexagon                          allmodconfig    clang-21
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-18
-hexagon                             defconfig    clang-21
-hexagon               randconfig-001-20250302    clang-21
-hexagon               randconfig-002-20250302    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250302    gcc-12
-i386        buildonly-randconfig-002-20250302    clang-19
-i386        buildonly-randconfig-003-20250302    gcc-12
-i386        buildonly-randconfig-004-20250302    gcc-12
-i386        buildonly-randconfig-005-20250302    gcc-12
-i386        buildonly-randconfig-006-20250302    gcc-12
-i386                                defconfig    clang-19
-loongarch                        alldefconfig    gcc-14.2.0
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch                           defconfig    gcc-14.2.0
-loongarch             randconfig-001-20250302    gcc-14.2.0
-loongarch             randconfig-002-20250302    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                                defconfig    gcc-14.2.0
-m68k                        m5407c3_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-microblaze                          defconfig    gcc-14.2.0
-microblaze                      mmu_defconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                          ath25_defconfig    clang-16
-mips                         bigsur_defconfig    gcc-14.2.0
-mips                   sb1250_swarm_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20250302    gcc-14.2.0
-nios2                 randconfig-002-20250302    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                generic-32bit_defconfig    gcc-14.2.0
-parisc                randconfig-001-20250302    gcc-14.2.0
-parisc                randconfig-002-20250302    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc                       ebony_defconfig    clang-18
-powerpc                      ep88xc_defconfig    gcc-14.2.0
-powerpc                    gamecube_defconfig    clang-16
-powerpc                 mpc832x_rdb_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250302    gcc-14.2.0
-powerpc               randconfig-002-20250302    gcc-14.2.0
-powerpc               randconfig-003-20250302    clang-16
-powerpc                     tqm8540_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250302    gcc-14.2.0
-powerpc64             randconfig-002-20250302    gcc-14.2.0
-powerpc64             randconfig-003-20250302    gcc-14.2.0
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-21
-riscv                               defconfig    clang-19
-riscv                 randconfig-001-20250302    clang-21
-riscv                 randconfig-002-20250302    clang-16
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-15
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    clang-15
-s390                  randconfig-001-20250302    clang-17
-s390                  randconfig-002-20250302    clang-19
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                     magicpanelr2_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250302    gcc-14.2.0
-sh                    randconfig-002-20250302    gcc-14.2.0
-sh                           se7721_defconfig    gcc-14.2.0
-sh                             sh03_defconfig    gcc-14.2.0
-sh                        sh7757lcr_defconfig    gcc-14.2.0
-sh                  sh7785lcr_32bit_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250302    gcc-14.2.0
-sparc                 randconfig-002-20250302    gcc-14.2.0
-sparc                       sparc32_defconfig    gcc-14.2.0
-sparc64                             defconfig    gcc-14.2.0
-sparc64               randconfig-001-20250302    gcc-14.2.0
-sparc64               randconfig-002-20250302    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-21
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250302    gcc-12
-um                    randconfig-002-20250302    clang-16
-um                           x86_64_defconfig    clang-15
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250302    clang-19
-x86_64      buildonly-randconfig-002-20250302    clang-19
-x86_64      buildonly-randconfig-003-20250302    gcc-12
-x86_64      buildonly-randconfig-004-20250302    gcc-12
-x86_64      buildonly-randconfig-005-20250302    gcc-12
-x86_64      buildonly-randconfig-006-20250302    gcc-12
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250302    gcc-14.2.0
-xtensa                randconfig-002-20250302    gcc-14.2.0
+All these settings cannot really take function until guest verifies them
+and does TDISP start. Guest verification does not (should not) need host
+awareness.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Our solution is, separate the secure DMA setting and secure device setting
+in different components, iommufd & vfio.
+
+Guest require bind:
+  - ioctl(iommufd, IOMMU_VIOMMU_ALLOC, {.type = IOMMU_VIOMMU_TYPE_KVM_VALID,
+					.kvm_fd = kvm_fd,
+					.out_viommu_id = &viommu_id});
+  - ioctl(iommufd, IOMMU_HWPT_ALLOC, {.flag = IOMMU_HWPT_ALLOC_TRUSTED,
+				      .pt_id = viommu_id,
+				      .out_hwpt_id = &hwpt_id});
+  - ioctl(vfio_fd, VFIO_DEVICE_ATTACH_IOMMUFD_PT, {.pt_id = hwpt_id})
+    - do secure DMA setting in Intel iommu driver.
+
+  - ioctl(vfio_fd, VFIO_DEVICE_TSM_BIND, ...)
+    - do bind in Intel TSM driver.
+
+Thanks,
+Yilun
+
+> 
+> Jason
 
