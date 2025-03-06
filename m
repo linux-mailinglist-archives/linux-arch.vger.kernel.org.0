@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-10546-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10547-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CEDDA5559B
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 19:53:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 99850A555AF
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 19:53:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9A85172020
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 18:53:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81296172726
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 18:53:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FF126BDBC;
-	Thu,  6 Mar 2025 18:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A9F26BDA0;
+	Thu,  6 Mar 2025 18:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sU7/prHN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Giroq7hT"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A2C26B955;
-	Thu,  6 Mar 2025 18:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD7D25C702;
+	Thu,  6 Mar 2025 18:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741287171; cv=none; b=UhS5xYJq1SV3OChj+bhw78BRtW5E1m51Ni752PZ//G1ck26LMlqD4N8iHAIs6o8+oRUSzxQrl/kmxb7Yc6obYk2cDsgfVRUNx0VjOD1VDhwjIEsV0WB0VPGX3/M3Iu+GUNGqpMViecTPXGVjFVDiljWewEKYw6yZH3puvegMg5s=
+	t=1741287184; cv=none; b=VEfyx1Drs9iBO1If8HTg9BT+oCv4dmDGCYtCIO7J5A71zEfasaZc5b1Zc8YhUhzHkgEwPz5cD7VZBnFryvTqJLp/qHXxysyEixSGTWiNRAHhoBZ6je/LoHQTT1kRoA1l5XFi7H+Xi6DuYkjdxaM8flfKWC81Px718QtkF4NMsd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741287171; c=relaxed/simple;
-	bh=zHkXxvTCym0KhjWbRn9ukBtTCkXKX0nK77Ga6+2Q1YQ=;
+	s=arc-20240116; t=1741287184; c=relaxed/simple;
+	bh=uD5faVqJ7G6OTY8H5Svd8uEX7wWQ143lrl+QSf2xljc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aRMvkHKPV+el0CS5QhJfwofvmomOGfUyjuNU3lTfxICWqMBOkqTea5os9kVcuXFW7/WI/GYwMrHwuJ7f0AeVa3VaA8LUvVMtj8ttwnPhAq4UScXjP1ccFu3hM/aTpu0XESG9lM4lV9xZIVVCR98zhxWkWDQmSGoDftucoBLQ8Qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sU7/prHN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3777BC4CEE4;
-	Thu,  6 Mar 2025 18:52:38 +0000 (UTC)
+	 MIME-Version; b=Bc1DrsWZyMqQWy5d/cHs+z5ApK9U0zke7QI5jHo/Dj3ZHhapmEVyHD7WGmEH8+lBIzEqHbTCS65RMQ6DOS1neLONPk9fr/+GVNB67NXNQ7X54t0L0O33Wda56VCHRlG66QflXMQ584Cu6Wyui1+Pix9l0NeaWpSCvZkHdOWu7Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Giroq7hT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFD1C4CEEB;
+	Thu,  6 Mar 2025 18:52:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741287170;
-	bh=zHkXxvTCym0KhjWbRn9ukBtTCkXKX0nK77Ga6+2Q1YQ=;
+	s=k20201202; t=1741287184;
+	bh=uD5faVqJ7G6OTY8H5Svd8uEX7wWQ143lrl+QSf2xljc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sU7/prHNQYg50lA7Hgqj0K1JV1oudrxegE/7Yx9axrVAFFToyFBUGUG74ycwlXmZO
-	 aq0XBTYCBQmpUJCkwEU/Dntqz+qE3P71BesMhHmp+sBEjPmFo7vSnZ1AiTchdUe70i
-	 DuW4Y+bWiYoNGCgn5z3IrutQmgNDmAGNn+R5Q7kZGJZMIg21W1EcBEi7sD7/iGD9UL
-	 Ke2xqsg+DakqZUrIVCcLXoVSSNTU6Qc9K22RHZSnsQwI+wRQEE/KhepO8LXgXyv5ig
-	 o7R10Dqr4mttjq4pi8tkEwtM4iS1U3Oolo7BJkl6KzqCiWI4vyw/wcu4aZDHmjHKeg
-	 JTD2x/pwRnwNg==
+	b=Giroq7hT2g3vsvEZ2g+QDA6pleXlCgJ831y/Fi3Wjhg80Qvyzg+4WeJi56qeahcuZ
+	 BnB/BJAkrOWMctvhyQiwDEOKAODheMIY8JlcVpXK5m/bif8P0mWEql2C7GcEAP8YDq
+	 y5I3KMdkU9l7AIEqGFvXGvfoPMAU64jJ7mxxyGtY4aMTIFjIzONPRhlRs09lt/nZQC
+	 Dfy3fEyUNo74jl61ggLHzXPiXbsdY95YwK3QPmGVyWMPsISrjHbonWwydEU9fwsHjj
+	 Cokp3+w/v07caKL3v7HrEl6YuLcjwgCcPlwVGGWzrWhcdLmjUmXtBEydZY3rL4XdE2
+	 sLgtFWbfjejNg==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -99,9 +99,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	linux-arch@vger.kernel.org,
 	linux-mm@kvack.org,
 	x86@kernel.org
-Subject: [PATCH 05/13] MIPS: make setup_zero_pages() use memblock
-Date: Thu,  6 Mar 2025 20:51:15 +0200
-Message-ID: <20250306185124.3147510-6-rppt@kernel.org>
+Subject: [PATCH 06/13] nios2: move pr_debug() about memory start and end to setup_arch()
+Date: Thu,  6 Mar 2025 20:51:16 +0200
+Message-ID: <20250306185124.3147510-7-rppt@kernel.org>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250306185124.3147510-1-rppt@kernel.org>
 References: <20250306185124.3147510-1-rppt@kernel.org>
@@ -115,82 +115,40 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Allocating the zero pages from memblock is simpler because the memory is
-already reserved.
-
-This will also help with pulling out memblock_free_all() to the generic
+This will help with pulling out memblock_free_all() to the generic
 code and reducing code duplication in arch::mem_init().
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/mips/include/asm/mmzone.h |  2 --
- arch/mips/mm/init.c            | 16 +++++-----------
- 2 files changed, 5 insertions(+), 13 deletions(-)
+ arch/nios2/kernel/setup.c | 2 ++
+ arch/nios2/mm/init.c      | 2 --
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/include/asm/mmzone.h b/arch/mips/include/asm/mmzone.h
-index 14226ea42036..602a21aee9d4 100644
---- a/arch/mips/include/asm/mmzone.h
-+++ b/arch/mips/include/asm/mmzone.h
-@@ -20,6 +20,4 @@
- #define nid_to_addrbase(nid) 0
- #endif
+diff --git a/arch/nios2/kernel/setup.c b/arch/nios2/kernel/setup.c
+index da122a5fa43b..a4cffbfc1399 100644
+--- a/arch/nios2/kernel/setup.c
++++ b/arch/nios2/kernel/setup.c
+@@ -149,6 +149,8 @@ void __init setup_arch(char **cmdline_p)
+ 	memory_start = memblock_start_of_DRAM();
+ 	memory_end = memblock_end_of_DRAM();
  
--extern void setup_zero_pages(void);
++	pr_debug("%s: start=%lx, end=%lx\n", __func__, memory_start, memory_end);
++
+ 	setup_initial_init_mm(_stext, _etext, _edata, _end);
+ 	init_task.thread.kregs = &fake_regs;
+ 
+diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
+index a2278485de19..aa692ad30044 100644
+--- a/arch/nios2/mm/init.c
++++ b/arch/nios2/mm/init.c
+@@ -65,8 +65,6 @@ void __init mem_init(void)
+ 	unsigned long end_mem   = memory_end; /* this must not include
+ 						kernel stack at top */
+ 
+-	pr_debug("mem_init: start=%lx, end=%lx\n", memory_start, memory_end);
 -
- #endif /* _ASM_MMZONE_H_ */
-diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
-index 3db6082c611e..f51cd97376df 100644
---- a/arch/mips/mm/init.c
-+++ b/arch/mips/mm/init.c
-@@ -59,25 +59,19 @@ EXPORT_SYMBOL(zero_page_mask);
- /*
-  * Not static inline because used by IP27 special magic initialization code
-  */
--void setup_zero_pages(void)
-+static void __init setup_zero_pages(void)
- {
--	unsigned int order, i;
--	struct page *page;
-+	unsigned int order;
- 
- 	if (cpu_has_vce)
- 		order = 3;
- 	else
- 		order = 0;
- 
--	empty_zero_page = __get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
-+	empty_zero_page = (unsigned long)memblock_alloc(PAGE_SIZE << order, PAGE_SIZE);
- 	if (!empty_zero_page)
- 		panic("Oh boy, that early out of memory?");
- 
--	page = virt_to_page((void *)empty_zero_page);
--	split_page(page, order);
--	for (i = 0; i < (1 << order); i++, page++)
--		mark_page_reserved(page);
--
- 	zero_page_mask = ((PAGE_SIZE << order) - 1) & PAGE_MASK;
- }
- 
-@@ -470,9 +464,9 @@ void __init mem_init(void)
- 	BUILD_BUG_ON(IS_ENABLED(CONFIG_32BIT) && (PFN_PTE_SHIFT > PAGE_SHIFT));
- 
- 	maar_init();
--	memblock_free_all();
- 	setup_zero_pages();	/* Setup zeroed pages.  */
- 	mem_init_free_highmem();
-+	memblock_free_all();
- 
- #ifdef CONFIG_64BIT
- 	if ((unsigned long) &_text > (unsigned long) CKSEG0)
-@@ -486,8 +480,8 @@ void __init mem_init(void)
- void __init mem_init(void)
- {
- 	high_memory = (void *) __va(get_num_physpages() << PAGE_SHIFT);
--	memblock_free_all();
- 	setup_zero_pages();	/* This comes from node 0 */
-+	memblock_free_all();
- }
- #endif /* !CONFIG_NUMA */
+ 	end_mem &= PAGE_MASK;
+ 	high_memory = __va(end_mem);
  
 -- 
 2.47.2
