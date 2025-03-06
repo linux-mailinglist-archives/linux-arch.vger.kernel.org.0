@@ -1,246 +1,311 @@
-Return-Path: <linux-arch+bounces-10539-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10540-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C8EDA55503
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 19:30:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9396A55532
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 19:40:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 120DC7A7A32
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 18:29:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD99B3A7504
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 18:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9121826BD80;
-	Thu,  6 Mar 2025 18:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D785526B2C4;
+	Thu,  6 Mar 2025 18:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="uufxKclH"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="RvXAotkX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazolkn19013077.outbound.protection.outlook.com [52.103.20.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C627C25A625;
-	Thu,  6 Mar 2025 18:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.20.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741285826; cv=fail; b=C2/gPU7VEDUvCvHGcxH6ZQ1KCVAKyTwEOYbxkwJkyZxO02Bm5qJlzcyBZG24P66qQzNhkNbD2PP9O87jClb3YbNcQRdQxjitk23c19ju5CU6zvBjju6roHIYJC/MlQN/0J+Jzi4PiVVHTO80DemoS54gvyIRFPsqVAVCvOa1CfI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741285826; c=relaxed/simple;
-	bh=NqFfNx9XSc5EtVev+VsorndNTZ143KzEkMTNdGPqAj4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Lg5QEhv9iYTwwt+zXBx8MppPFK6kFZJ+uP0k29jigKNF0ewvzvdq7c4W9wLGLi5rSWs+LL8rKU/0ghm9wsgexFZyT1rONhaFxZnBiyRygckrIL2sNSNR8EiTMCSS1SeQVAD9eBvorehugtnhdHeU9AWyVJnysdxtyYZfePHSR5Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=uufxKclH; arc=fail smtp.client-ip=52.103.20.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ne0c2W6axgwuEOFdOfGjAjlYuWstPcsPzWwHs/Magz+zrsmmzNoDPAvcKZzvqBj3rfVqsOSToAUAbj4ErlZl6mOFORYdumzLY5azA5pKkpzw+6JwcW4Yq2NNwDs3Yxzyleg0CS7i0vJY0+qEfVP8mDGkXENp4vIKZG61bUcbhpg4sX4Bes3nW6JxMdv9+nJX1Es9ugBU9fNCXJplaGvkuSznTjWQI9+TWxkU2jhLCdp+bkI5gAKeM3i6F2B4/PFXWEvlYn/ZHXVqGZCKZ/ONNvF6QrIo2q6Aq4/Xpp4dR1k8kOEg4Vd9RRt35NPIAX8i020YR2M7ZsTdB24GjRNEZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sT25yCgOyMkXEFigAmVoCDlKaoYjtM5GchMERP6bPx4=;
- b=Wrsc2bD4wqLEgb+fz3F8dcslbmsyPkBLQINF8oBi8zBBwqqbCVQykf+c7IeUs2TS8jCbCaaWaOOZ9NKM6Se1M4JrNtc1kRlbnJdl9Gfnh6MbK8Ah/DyuDM5Hxmkfa9josfGIo7xGf65OuPVbrAMIuDwRySQyywSrgl4e2NAaINhcJOGLl7F1FPQ1a2MBZE/MqY8+Pk6IovUOQ2EhlQlIXfKHH13xRuRbXMF4PiUcnN12d8vk3xZrG24RMWENyukK0cR3lWkRcx3xqrYp+33vFiDo+o0q1o3o5DmZ2JtZMBgANwxaF1LeX5OqDitwwoCa0NrZiqmYQ0eZg3UAg8ULxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sT25yCgOyMkXEFigAmVoCDlKaoYjtM5GchMERP6bPx4=;
- b=uufxKclH8PzQ9HWZ0v+wADWqXntkbFbB+qPAugauDMcv9ik8Ty3IltUzlVFx4qZGhIEgehw1hU8wT3hfav4VLv87Zte9uRnnG/dS1vRyOJ9eEmzH3ZfZ7TdQrg47WSmsxJsf00V1Ig8k+FznLxLYpiWTvFvQohK1jK+tndnedolO1RApislk2iBPqIW2YH/XqsV0qPZ2b56O0wPe3IXOFs/XrWDUXnzoo11RX3ntSJpP9uevXjMLi3+5WIcm2WBofAewTXw0SJ+dphP+Ubtg8VUaRvGWozFp25yPEhtIf9xyxczvgJhBUiLoT1t0XmuOyOZ9pT0k2KrFW9fthAf4bQ==
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by LV3PR02MB10332.namprd02.prod.outlook.com (2603:10b6:408:1ae::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.16; Thu, 6 Mar
- 2025 18:30:21 +0000
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.8511.017; Thu, 6 Mar 2025
- 18:30:21 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>
-CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
-	<haiyangz@microsoft.com>, "wei.liu@kernel.org" <wei.liu@kernel.org>,
-	"decui@microsoft.com" <decui@microsoft.com>, "catalin.marinas@arm.com"
-	<catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
-	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "hpa@zytor.com"
-	<hpa@zytor.com>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"joro@8bytes.org" <joro@8bytes.org>, "robin.murphy@arm.com"
-	<robin.murphy@arm.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	"jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
-	"muminulrussell@gmail.com" <muminulrussell@gmail.com>,
-	"skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
-	"mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>,
-	"ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-	"apais@linux.microsoft.com" <apais@linux.microsoft.com>,
-	"Tianyu.Lan@microsoft.com" <Tianyu.Lan@microsoft.com>,
-	"stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"vkuznets@redhat.com" <vkuznets@redhat.com>, "prapal@linux.microsoft.com"
-	<prapal@linux.microsoft.com>, "muislam@microsoft.com"
-	<muislam@microsoft.com>, "anrayabh@linux.microsoft.com"
-	<anrayabh@linux.microsoft.com>, "rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
-Subject: RE: [PATCH v5 02/10] x86/mshyperv: Add support for extended Hyper-V
- features
-Thread-Topic: [PATCH v5 02/10] x86/mshyperv: Add support for extended Hyper-V
- features
-Thread-Index: AQHbiKNsELlhg/nkb06Cn8BpRqwg0bNmdgqQ
-Date: Thu, 6 Mar 2025 18:30:21 +0000
-Message-ID:
- <SN6PR02MB4157CBBC2D186E1944E6773AD4CA2@SN6PR02MB4157.namprd02.prod.outlook.com>
-References:
- <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-3-git-send-email-nunodasneves@linux.microsoft.com>
-In-Reply-To:
- <1740611284-27506-3-git-send-email-nunodasneves@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|LV3PR02MB10332:EE_
-x-ms-office365-filtering-correlation-id: cf623953-caed-4f16-f8ca-08dd5cdcf3e7
-x-microsoft-antispam:
- BCL:0;ARA:14566002|19110799003|8062599003|461199028|15080799006|8060799006|3412199025|440099028|102099032;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?qeKOayBOAVN6qWUjDLWfh8zV5UDLuA3GPJTkwRKtllgWxIKXLKNFU3WJv3Ai?=
- =?us-ascii?Q?zxc7lfna09h4tAJwIMc5lH9Qe0aPcrvTpcmqSt2FLq22Ay6tNv0ZtAnLdy3G?=
- =?us-ascii?Q?L3s7wttMwWvPYjM8kiXNMLHtAxBvttnExn/evx/sfJv36eirHuOZKQOHq8Ii?=
- =?us-ascii?Q?eAhJi2TfiZHDjquaG6lcV5I+0jFc4vu+qWKHUQV6jpd8rI1rLd6yWqhGRmAs?=
- =?us-ascii?Q?svjmrb8OKMwnQYqas60WoW77Mma7is8Kc8dVYcNwYmZRiT4pwbRV5vXFTr1v?=
- =?us-ascii?Q?nB181/5MRCN14NUcA5UOLCfdW7hfkuGLIKa8mF4c/NbuYK+OE3TTl/FoEy0k?=
- =?us-ascii?Q?qUvfC++cROdov42zPoanOczwGpYAHcXRJ/TY2ADJzganWDg9lHYgxDvB3iFa?=
- =?us-ascii?Q?3zG/0fMdMkO9uSQKqX9KhJtBOtjYlWnN/aVB40iD1GHY9kdPYvEvwD6hR7rj?=
- =?us-ascii?Q?HWhGb1yJYuiYugOoDpe+YK/A83zMU4n9FcPTVjfsqorbdMfzTi3RBexc73sL?=
- =?us-ascii?Q?KsEz9dccwu7A1NfgNq0IGZyc5swMhfNnQVn+SGc8f+YB0bVrbNPHbtkC4vSn?=
- =?us-ascii?Q?PuJ+KQ4LvGKutdKXe8+tZyB2sDz6+zDFVcCnqEKrOGewjzD/oSlbrPIxIYhn?=
- =?us-ascii?Q?pE5EpCot8LKGdS1Dy6sxVPjALnBzCKH5+DFMs6phr9UMZuKYleY7yCW4FxvK?=
- =?us-ascii?Q?yTpBczXA4bjvPVWFJwwcS/rKV45WWNkIEaFy4jSFHNJuuxWJ3sOy1mmGbcfl?=
- =?us-ascii?Q?Fay61VgylfJNxt/LMdj5pu/BkONvyGaVQU0N/8a4oSWVg1arMcPDHTyOdeFD?=
- =?us-ascii?Q?X0cyCXAbCdkx+QCGxxQ73air5Ox31EP0EaxXIGBtSxDL3kAjh+UZWUGXPAAi?=
- =?us-ascii?Q?eXAnFQ3rp9L7wIkecXxpZrmh3b64DV9Y/pqOUgXCcaU+KKpqQ9RgYePgNpqx?=
- =?us-ascii?Q?vvw303q3ND+Pzxg4y9yqwlD+9g0wsR2Rq5rvyKBVR8HpIZuUGTHFv4g5Lf+Z?=
- =?us-ascii?Q?cn10gqtdPRkf6maPdeVaIE7ZZQsxtqv0VdggX3zCJibgUr0=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?oGAkwqQ5d/FsB30KVkcwf4ORTSQYU8/meFtXilj0MRbsHr7WWn6ZMwtE1cew?=
- =?us-ascii?Q?r+vqh/auuw2VmtLtQeX5iYAbmIOh+M+WcRz1em6oNkg/Y7TXztIfqiQbOKxp?=
- =?us-ascii?Q?BkgvnDsP1lmlx+VJtzVkYcVS0FW5RXwk7I0BDGTHzLKmybpEZk8LedXAY/GB?=
- =?us-ascii?Q?ATOiPRj/CiBsILR1cmLH9aO3FkRGVspJx2fP2uizzPFSgrJwDdOSUeCiWtn2?=
- =?us-ascii?Q?89vNBYv44b91XqOMkRz+xiI9BeWZB7wdda0MoTnmIpgVLGwb8ol4FlOOnXgh?=
- =?us-ascii?Q?t5k6gJMySTIwp0YyQg2r9Fzo8kShzSO82o11pZVjDj1svvGbc+jiZWKWL9Zd?=
- =?us-ascii?Q?/yDkvxCTNhtt9lZN7k9ZW1hyMezkBD48Jh2fHdo1oJHx/UWp3GlynangiCvp?=
- =?us-ascii?Q?PoAxdpsNCPuhDz3ZES34v6yv6hJeOOYHRLxlWZzQPgi9mlyR0+Ae++Z2qhrS?=
- =?us-ascii?Q?OJnNXb+5j6HHUfWw6DLSh7bYPBeqmr8nYWsZnbgVqWk/lxXch9sbh8VHgEQx?=
- =?us-ascii?Q?C/a7vfPcbma6jReVw/fHhA6xz3gHBmAhqhy3kGIAn+9mQh0uShzKPQdamnt0?=
- =?us-ascii?Q?IJaEKDR4l3Oit5Lg56RMqLhbY5u1qV10WUM/gqy8iK+s5Ruzl1y5L5qCBfpo?=
- =?us-ascii?Q?CpUQ7S/2rMrjMNA9Rq4j9zt0xO2Pd25WrB2Bjv4mpuY14reHIAvcseuEhX1w?=
- =?us-ascii?Q?V/Im0h0y4aayDsCCfGhXO/W2iDKJKGyQTTEqqw4X/2255H+Qqxs3raQQNZbL?=
- =?us-ascii?Q?rET5/S/JFW39DxDCluPOGZtfoYeolt+gO+z796MPQA52PT3gmrAG29NDDZ2q?=
- =?us-ascii?Q?/bODToLiFsQ8T8Y70B8klRn6vv5HU1BsYvuOAIRqiISKVyrNc2XHuC51Tm5/?=
- =?us-ascii?Q?W6z70JbUBfE2MT1jei7234T65OmnkUlIW8JXVGP5qRvuNaTNxnE8z4xtJxfH?=
- =?us-ascii?Q?HjBQRXFGfPWj9q9d+vDR7iWavPdHf4fHJubWpMbt5xz9HalJidUMvXifSGGy?=
- =?us-ascii?Q?gqkIKNlZMptipawRcxu+Cy46c3UN/DftR8I99PInP6I/bAT4jEW9eqc4YYZo?=
- =?us-ascii?Q?ae6vkrB2F2fod4LPpYwE209a1R7uhjRXhv2e1+jlcZcD4TLjfX3JhBWRuLEj?=
- =?us-ascii?Q?7hI8X2fruy4DYECv2QOtdI5KxLvMsnaBto83GnwKObMJJbjypzxE6/jJSxzh?=
- =?us-ascii?Q?o2fmkf5b6DD7aGw8Rh6NZKeQ8Gz4VaqiXGPDMdUvTXoFHW0BgrMRSXtskog?=
- =?us-ascii?Q?=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D8E1DE4EC;
+	Thu,  6 Mar 2025 18:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741286445; cv=none; b=pjUrmp3UThQRBpFubcFz/cSdRrPID0Gw9MmmbMDnAmEYyzSVs41c6ZqE4x0OCzwMeV9XiZkCoWVSwFcX8ccY4/210/ccnDHX9cgqit8Fgo6uXTQQLlB36YW9qh2HyYc29RhLpZiypoRF4tddcl4EqGOOKr42WfBNHfyXxeQCttc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741286445; c=relaxed/simple;
+	bh=sRFO7PCYbFU0nj0ofW9VfqWOBfCazZa4ih1Upbeqg9M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aNz9TCLPT5IFkbSrI7yU/QG2AQN/Jhge9IeJtK4DMKER0yRZe2tJnLp63udQC6JJ0rNw74Pl2aL+OK/cBhJ/F6CIYqyATL9knGIJWzNlap+MGNDxzJuXyZxXIE+PfizMJ6ne/yAXtASv7Nkc7FhpYfudH3rfwCQai5jA67QgcnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=RvXAotkX; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
+	by linux.microsoft.com (Postfix) with ESMTPSA id B2CB2210EAFD;
+	Thu,  6 Mar 2025 10:40:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B2CB2210EAFD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1741286442;
+	bh=Pt+Q7ht3AhnugEHbu9jM29WLMOV6R6cpgBm7yDdOmI4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RvXAotkXsVNPl95MOg6Uq/Wny/i6873I+B2RsRJbkpebrKLzlP3l6rQlkTVLzn17I
+	 q//txb2AfRgNN+XPBOkUYvbfzveUAIc50dGar7vmFW4VER6m2Rzf3dqZwCzkrQSCvH
+	 QLQbPV68EWDCjrQr27ObjMSZGS38jVXIDV9lUtZk=
+Message-ID: <9123b404-f6f8-464b-bad8-b793ea6fb21e@linux.microsoft.com>
+Date: Thu, 6 Mar 2025 10:40:30 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf623953-caed-4f16-f8ca-08dd5cdcf3e7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2025 18:30:21.0691
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR02MB10332
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 01/10] hyperv: Convert Hyper-V status codes to strings
+To: Michael Kelley <mhklinux@outlook.com>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+ "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Cc: "kys@microsoft.com" <kys@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
+ <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
+ "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "hpa@zytor.com" <hpa@zytor.com>,
+ "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+ "joro@8bytes.org" <joro@8bytes.org>,
+ "robin.murphy@arm.com" <robin.murphy@arm.com>, "arnd@arndb.de"
+ <arnd@arndb.de>,
+ "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
+ "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
+ "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
+ "mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>,
+ "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+ "apais@linux.microsoft.com" <apais@linux.microsoft.com>,
+ "Tianyu.Lan@microsoft.com" <Tianyu.Lan@microsoft.com>,
+ "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "vkuznets@redhat.com" <vkuznets@redhat.com>,
+ "prapal@linux.microsoft.com" <prapal@linux.microsoft.com>,
+ "muislam@microsoft.com" <muislam@microsoft.com>,
+ "anrayabh@linux.microsoft.com" <anrayabh@linux.microsoft.com>,
+ "rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org"
+ <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
+References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1740611284-27506-2-git-send-email-nunodasneves@linux.microsoft.com>
+ <SN6PR02MB41577560030C55503D1BAFDCD4CA2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB4157629A6197A8A6C992BB75D4CA2@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Language: en-US
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <SN6PR02MB4157629A6197A8A6C992BB75D4CA2@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Wednesday, Fe=
-bruary 26, 2025 3:08 PM
->=20
-> From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
->=20
-> Extend the "ms_hyperv_info" structure to include a new field,
-> "ext_features", for capturing extended Hyper-V features.
-> Update the "ms_hyperv_init_platform" function to retrieve these features
-> using the cpuid instruction and include them in the informational output.
->=20
-> Signed-off-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> ---
->  arch/x86/kernel/cpu/mshyperv.c | 6 ++++--
->  include/asm-generic/mshyperv.h | 1 +
->  2 files changed, 5 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
-v.c
-> index 4f01f424ea5b..2c29dfd6de19 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -434,13 +434,15 @@ static void __init ms_hyperv_init_platform(void)
->  	 */
->  	ms_hyperv.features =3D cpuid_eax(HYPERV_CPUID_FEATURES);
->  	ms_hyperv.priv_high =3D cpuid_ebx(HYPERV_CPUID_FEATURES);
-> +	ms_hyperv.ext_features =3D cpuid_ecx(HYPERV_CPUID_FEATURES);
->  	ms_hyperv.misc_features =3D cpuid_edx(HYPERV_CPUID_FEATURES);
->  	ms_hyperv.hints    =3D cpuid_eax(HYPERV_CPUID_ENLIGHTMENT_INFO);
->=20
->  	hv_max_functions_eax =3D cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTION=
-S);
->=20
-> -	pr_info("Hyper-V: privilege flags low 0x%x, high 0x%x, hints 0x%x, misc=
- 0x%x\n",
-> -		ms_hyperv.features, ms_hyperv.priv_high, ms_hyperv.hints,
-> +	pr_info("Hyper-V: privilege flags low 0x%x, high 0x%x, ext 0x%x, hints =
-0x%x, misc 0x%x\n",
-> +		ms_hyperv.features, ms_hyperv.priv_high,
-> +		ms_hyperv.ext_features, ms_hyperv.hints,
->  		ms_hyperv.misc_features);
->=20
->  	ms_hyperv.max_vp_index =3D cpuid_eax(HYPERV_CPUID_IMPLEMENT_LIMITS);
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index dc4729dba9ef..c020d5d0ec2a 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -36,6 +36,7 @@ enum hv_partition_type {
->  struct ms_hyperv_info {
->  	u32 features;
->  	u32 priv_high;
-> +	u32 ext_features;
->  	u32 misc_features;
->  	u32 hints;
->  	u32 nested_features;
-> --
-> 2.34.1
+On 3/6/2025 10:09 AM, Michael Kelley wrote:
+> From: Michael Kelley <mhklinux@outlook.com> Sent: Thursday, March 6, 2025 9:58 AM
+> 
+>>
+>> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Wednesday, February
+>> 26, 2025 3:08 PM
+>>>
+>>> Introduce hv_result_to_string() for this purpose. This allows
+>>> hypercall failures to be debugged more easily with dmesg.
+>>>
+>>> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+>>> ---
+>>>  drivers/hv/hv_common.c         | 65 ++++++++++++++++++++++++++++++++++
+>>>  drivers/hv/hv_proc.c           | 13 ++++---
+>>>  include/asm-generic/mshyperv.h |  1 +
+>>>  3 files changed, 74 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+>>> index 9804adb4cc56..ce20818688fe 100644
+>>> --- a/drivers/hv/hv_common.c
+>>> +++ b/drivers/hv/hv_common.c
+>>> @@ -740,3 +740,68 @@ void hv_identify_partition_type(void)
+>>>  			pr_crit("Hyper-V: CONFIG_MSHV_ROOT not enabled!\n");
+>>>  	}
+>>>  }
+>>> +
+>>> +const char *hv_result_to_string(u64 hv_status)
+>>> +{
+>>> +	switch (hv_result(hv_status)) {
+>>> +	case HV_STATUS_SUCCESS:
+>>> +		return "HV_STATUS_SUCCESS";
+>>> +	case HV_STATUS_INVALID_HYPERCALL_CODE:
+>>> +		return "HV_STATUS_INVALID_HYPERCALL_CODE";
+>>> +	case HV_STATUS_INVALID_HYPERCALL_INPUT:
+>>> +		return "HV_STATUS_INVALID_HYPERCALL_INPUT";
+>>> +	case HV_STATUS_INVALID_ALIGNMENT:
+>>> +		return "HV_STATUS_INVALID_ALIGNMENT";
+>>> +	case HV_STATUS_INVALID_PARAMETER:
+>>> +		return "HV_STATUS_INVALID_PARAMETER";
+>>> +	case HV_STATUS_ACCESS_DENIED:
+>>> +		return "HV_STATUS_ACCESS_DENIED";
+>>> +	case HV_STATUS_INVALID_PARTITION_STATE:
+>>> +		return "HV_STATUS_INVALID_PARTITION_STATE";
+>>> +	case HV_STATUS_OPERATION_DENIED:
+>>> +		return "HV_STATUS_OPERATION_DENIED";
+>>> +	case HV_STATUS_UNKNOWN_PROPERTY:
+>>> +		return "HV_STATUS_UNKNOWN_PROPERTY";
+>>> +	case HV_STATUS_PROPERTY_VALUE_OUT_OF_RANGE:
+>>> +		return "HV_STATUS_PROPERTY_VALUE_OUT_OF_RANGE";
+>>> +	case HV_STATUS_INSUFFICIENT_MEMORY:
+>>> +		return "HV_STATUS_INSUFFICIENT_MEMORY";
+>>> +	case HV_STATUS_INVALID_PARTITION_ID:
+>>> +		return "HV_STATUS_INVALID_PARTITION_ID";
+>>> +	case HV_STATUS_INVALID_VP_INDEX:
+>>> +		return "HV_STATUS_INVALID_VP_INDEX";
+>>> +	case HV_STATUS_NOT_FOUND:
+>>> +		return "HV_STATUS_NOT_FOUND";
+>>> +	case HV_STATUS_INVALID_PORT_ID:
+>>> +		return "HV_STATUS_INVALID_PORT_ID";
+>>> +	case HV_STATUS_INVALID_CONNECTION_ID:
+>>> +		return "HV_STATUS_INVALID_CONNECTION_ID";
+>>> +	case HV_STATUS_INSUFFICIENT_BUFFERS:
+>>> +		return "HV_STATUS_INSUFFICIENT_BUFFERS";
+>>> +	case HV_STATUS_NOT_ACKNOWLEDGED:
+>>> +		return "HV_STATUS_NOT_ACKNOWLEDGED";
+>>> +	case HV_STATUS_INVALID_VP_STATE:
+>>> +		return "HV_STATUS_INVALID_VP_STATE";
+>>> +	case HV_STATUS_NO_RESOURCES:
+>>> +		return "HV_STATUS_NO_RESOURCES";
+>>> +	case HV_STATUS_PROCESSOR_FEATURE_NOT_SUPPORTED:
+>>> +		return "HV_STATUS_PROCESSOR_FEATURE_NOT_SUPPORTED";
+>>> +	case HV_STATUS_INVALID_LP_INDEX:
+>>> +		return "HV_STATUS_INVALID_LP_INDEX";
+>>> +	case HV_STATUS_INVALID_REGISTER_VALUE:
+>>> +		return "HV_STATUS_INVALID_REGISTER_VALUE";
+>>> +	case HV_STATUS_OPERATION_FAILED:
+>>> +		return "HV_STATUS_OPERATION_FAILED";
+>>> +	case HV_STATUS_TIME_OUT:
+>>> +		return "HV_STATUS_TIME_OUT";
+>>> +	case HV_STATUS_CALL_PENDING:
+>>> +		return "HV_STATUS_CALL_PENDING";
+>>> +	case HV_STATUS_VTL_ALREADY_ENABLED:
+>>> +		return "HV_STATUS_VTL_ALREADY_ENABLED";
+>>> +	default:
+>>> +		return "Unknown";
+>>> +	};
+>>> +	return "Unknown";
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(hv_result_to_string);
+>>> +
+>>> diff --git a/drivers/hv/hv_proc.c b/drivers/hv/hv_proc.c
+>>> index 2fae18e4f7d2..8fc30f509fa7 100644
+>>> --- a/drivers/hv/hv_proc.c
+>>> +++ b/drivers/hv/hv_proc.c
+>>> @@ -87,7 +87,8 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32
+>>> num_pages)
+>>>  				     page_count, 0, input_page, NULL);
+>>>  	local_irq_restore(flags);
+>>>  	if (!hv_result_success(status)) {
+>>> -		pr_err("Failed to deposit pages: %lld\n", status);
+>>> +		pr_err("%s: Failed to deposit pages: %s\n", __func__,
+>>> +		       hv_result_to_string(status));
+>>>  		ret = hv_result_to_errno(status);
+>>>  		goto err_free_allocations;
+>>>  	}
+>>> @@ -137,8 +138,9 @@ int hv_call_add_logical_proc(int node, u32 lp_index, u32 apic_id)
+>>>
+>>>  		if (hv_result(status) != HV_STATUS_INSUFFICIENT_MEMORY) {
+>>>  			if (!hv_result_success(status)) {
+>>> -				pr_err("%s: cpu %u apic ID %u, %lld\n", __func__,
+>>> -				       lp_index, apic_id, status);
+>>> +				pr_err("%s: cpu %u apic ID %u, %s\n",
+>>> +				       __func__, lp_index, apic_id,
+>>> +				       hv_result_to_string(status));
+>>>  				ret = hv_result_to_errno(status);
+>>>  			}
+>>>  			break;
+>>> @@ -179,8 +181,9 @@ int hv_call_create_vp(int node, u64 partition_id, u32 vp_index,
+>>> u32 flags)
+>>>
+>>>  		if (hv_result(status) != HV_STATUS_INSUFFICIENT_MEMORY) {
+>>>  			if (!hv_result_success(status)) {
+>>> -				pr_err("%s: vcpu %u, lp %u, %lld\n", __func__,
+>>> -				       vp_index, flags, status);
+>>> +				pr_err("%s: vcpu %u, lp %u, %s\n",
+>>> +				       __func__, vp_index, flags,
+>>> +				       hv_result_to_string(status));
+>>>  				ret = hv_result_to_errno(status);
+>>>  			}
+>>>  			break;
+>>> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+>>> index b13b0cda4ac8..dc4729dba9ef 100644
+>>> --- a/include/asm-generic/mshyperv.h
+>>> +++ b/include/asm-generic/mshyperv.h
+>>> @@ -298,6 +298,7 @@ static inline int cpumask_to_vpset_skip(struct hv_vpset *vpset,
+>>>  	return __cpumask_to_vpset(vpset, cpus, func);
+>>>  }
+>>>
+>>> +const char *hv_result_to_string(u64 hv_status);
+>>>  int hv_result_to_errno(u64 status);
+>>>  void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die);
+>>>  bool hv_is_hyperv_initialized(void);
+>>> --
+>>> 2.34.1
+>>
+>> I've read through the other comments on this patch. I definitely vote
+>> for outputting both the hex code along with a string translation, which
+>> could be empty if the hex code is unrecognized by the translation code.
+>>
+>> I can see providing something like hv_hvcall_err() as Nuno proposed, since
+>> that standardizes the text output. But I wonder if it would be too limiting.
+>> For example, in the changes above, both hv_call_add_logical_proc() and
+>> hv_call_create_vp() output additional debugging values, which we probably
+>> don't want to give up.
+>>
+>> Lastly, from an implementation standpoint, rather than using a big
+>> switch statement, build a static array of entries that each have the
+>> hex code and string equivalent. Then hv_result_to_string() loops through
+>> the array looking for a match. This won't be any slower than the big switch
+>> statement. I've seen other places in the kernel where string names are
+>> output, and looking up the strings in a static array is the typical approach.
+>> You'll have to work through the details and see if avoids being too clumsy,
+>> but I think it will be OK.
+>>
+> 
+> Better yet, also include the translated errno in each static array entry.
+> Then hv_result_to_errno() can do the same kind of lookup instead of
+> having its own switch statement. I did a quick look to see if the two
+> functions might be combined to do only a single lookup, but that looks
+> somewhat clumsy unless someone else spots a better way to handle it.
+> The cost of doing two lookups doesn't really matter in an error case.
+> 
+> FWIW, hv_result_to_errno() and the new hv_result_to_string() are both
+> slightly misnamed. The input argument is a full 64-bit hv_status, not the
+> smaller 16-bit result field. hv_status_to_errno() and hv_status_to_string()
+> would be more precise.
+> 
+Hmm, well I'll admit I was and still am rather confused on this point.
 
-Are any of the extended features available on arm64? This code is obviously=
- x86 specific,
-so ms_hyperv.ext_features will be zero on arm64. From what I can see, ext_f=
-eatures is
-referenced only in Patch 10 of this series, and in code that is under #ifde=
-f CONFIG_X86_64,
-so that should be OK.
+In the TLFS (section 3.8) the entire 64-bit return value is called the
+"hypercall result value".
+The 16-bit HV_STATUS part is *also* called the "result" in this section.
+Later, in section 3.12, the 16-bit field is referred to as a "status value
+field".
+Furthermore, the name of the 16-bit value, itself, is HV_STATUS.
 
-The pr_info() line will now be slightly different on x86 and arm64 since ar=
-m64 won't have
-the "ext" field, but I think that's OK too.
+Despite the inconsistency, in my mind it makes the most sense that the
+16-bit HV_STATUS part the "status" and the entire 64-bit return value the
+"result". I am aware that elsewhere (and in the driver patches in this
+series), the name "status" is used to refer to the entire 64-bit return
+value.
 
-Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+These functions were actually called hv_status_to_errno() and hv_status_to_string()
+in the past, but I changed them to use "result" by following my own logic, and I
+thought this also matched the naming of hv_result() and hv_result_success().
+However I now realize that the "result" in these names refers to the *output* of
+these functions... they take a u64 status as a parameter after all..
+
+So in the end I'm rather bothered by this whole situation. I can change these
+names back to "status" (although hv_result_to_errno() is already merged, I
+could send a fixup), or I could keep "result", which I think is a more
+logical name for the 64-bit value, even though it somewhat contradicts how
+the term is already used in the kernel.
+
+Given it doesn't seem to be well-defined in the first place, I'm not really
+sure the best route.
+
+Nuno
+
+> Michael
+
 
