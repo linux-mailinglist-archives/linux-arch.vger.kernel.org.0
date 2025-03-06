@@ -1,84 +1,66 @@
-Return-Path: <linux-arch+bounces-10530-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10531-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15D94A50B7C
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Mar 2025 20:29:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C729A54314
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 07:49:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C611B1891E34
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Mar 2025 19:29:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F97B7A67FB
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Mar 2025 06:48:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98FD6254AEC;
-	Wed,  5 Mar 2025 19:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D888D1A23BC;
+	Thu,  6 Mar 2025 06:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="HlX6kVPC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l8cJypSN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EE924CEEA
-	for <linux-arch@vger.kernel.org>; Wed,  5 Mar 2025 19:28:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D7619C556;
+	Thu,  6 Mar 2025 06:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741202926; cv=none; b=atcOL7JA5WrxtqVb3KUOfgbrn5eilmpq5mkKWh7MePO3Lo5i0lImuQXsPBzAj81/tavXs6DXqTPN3O2ubXveXJJDobLQYpj51JZi2F5THNsYxNSPTP0Dhlq4VGXHhTrPNc0PuSfi73z0OiDQmCPoypScOM98VBsrVMMuH9Ov/Gk=
+	t=1741243787; cv=none; b=JjAsez+ZEfT62mXQeI4W9UnPdfvw/7it1QFaVmI978TKRWU4p/W2cQ/+duZhRaQy58ms3McI09zrbZFR0ANwncJxP///mCIDADD30r9McFTK/Uif1QZKP5Pp0N3ucAqhhPv0SJ7sxJRWAGF13+Xz45nxpU6XeSFiZXE9az+V5AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741202926; c=relaxed/simple;
-	bh=yags00HimzcK4ADiEl0X3eL1vhGMGirpJlRolnATCxg=;
+	s=arc-20240116; t=1741243787; c=relaxed/simple;
+	bh=nihPbFWpYPqsBosZAhoIw4NpSVYZ7ujfvelE5cg2qlQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n8wZe6WO9THhvmXKl16qDfY5gF+r2Vd2nkE5I2jaHYqDowWLb8qqH1EVLM4tY8E26FpKrRmqJIq3dzk+d/XTCkYJieYOgwYDAGRaXknTONObbiurDxEvm7lGaro9CLm5MUycL/AC4RAmb/9SnbNChMTmiKHEA2eXnD64IJWu7zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=HlX6kVPC; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7c3c9f7b1a6so131369985a.1
-        for <linux-arch@vger.kernel.org>; Wed, 05 Mar 2025 11:28:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1741202924; x=1741807724; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tTrOJMautZJ74CE8chK1zIyRNkTfUPScJmXz0FQll+Y=;
-        b=HlX6kVPCcDWX2J8jzIl6Kp+Bc2+epQmkuUJ99tAWx6cGtWThzWCWCHp+m/fUib/pVs
-         joW9oxp998DtgTv35UdPDxS4R3zWy3/tnlp6KqfCBNNkv0vB2c3pfb6/QCoSCR/4ArNC
-         ICe5Hn3Ml26/nzOUj58mQsT6Pe+Wiuasn9vSKOmsy8nqIhSq/f2yy7ZVN7Dd6gjPHuEu
-         uhz0E9XJIH9fUmiFi4sYjsAAFhHue6x5/Vy/OF+bKVHhaFbfZYkEFn3KY1UGOIwr2FQH
-         m9DB8zWuv0CoqtHSQQgIHGdT8m0JSOQUzQAJ+6LgpCDxKd75sn8mCpiXS/WmqYWzwCI2
-         kweQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741202924; x=1741807724;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tTrOJMautZJ74CE8chK1zIyRNkTfUPScJmXz0FQll+Y=;
-        b=lLzZLKrpdUI9wCDpYkpJShZwJ+tesDj1c606+nUt+H+rNOfZ+TIBUE8yKfZAcS1lAz
-         b50zO7TR4Q+sUIAtADfu0Vv32sxdntFVPc2Dswr8jMWVa0fqlL2WvBi3ui81nK0F77vd
-         4AJqKitL74pMCvq3pPIKE8Q//rlC774BnrLYAe/lpkR2z3Cd/PUEVj6DZ0K5pRMqHh90
-         Gt32/MGy1e3cfGKMGyUBfoWACDyvwlmJRcnau3eo0vQh/14F2bhHFooGwtbMLo1fFpya
-         Ajb3seoohiPblsOJtrm3W5tWiErjNFc7v0VKUp9yiHM2//CstggVwqjdTphJql+7dNqy
-         t9eA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeyQHJzzSzTa+4L+CHm8hsZdbNb7c1wKXJQUsIncheA5fRoZjGEnBPaOvZpDJ9HdsMcBJWsiQYBZwp@vger.kernel.org
-X-Gm-Message-State: AOJu0YysNW4pFyC1VOcxvZ7F3HcliqV7j/RQaO79EdR5Oc36zI7FwHL7
-	QAi8PBdXeTOuCbHEBh2oSOqVJP6fuqLwMv1HG5c5lS+TWYyiBWgh5CTyAUe0UbE=
-X-Gm-Gg: ASbGncs3PpBoeH0mGIVGeMPXWGcRA+s1INFLdAPKqMk8BjrFOFVkWk5w5DMbTfkRx3U
-	0VRxLK/jwV8Yaa3PmLokuQOCXbnqLzyTs8nKPG+h7qz83bgTXATkxV3S46lsAFYsVm824rlF3fD
-	ifxPQ+6y+XkFSX5PuFkXhxU1Vw24NN5i3f0uIPlyjx41TLAZnU5whecH5mxCHSjNp0kMJ1NMyoj
-	4Lc2DaWL/EBdpMdSJ33kxtkpuQnwXJtsjHzZwEXJ3kJvAUbPCr3Dp6UkdK90nc67TuzfcBQ7hq9
-	2Kd5lb4O7UU02thm46F+HHfLZyCy5fM0OnC6WDX/aWZG8r5ccXI2KmLTTv00uOCBSXU22u4njb+
-	7DEeeR78B4c01G2+pTw==
-X-Google-Smtp-Source: AGHT+IEHx2UVGeNJCjdCHNzkys/fqlsDci1nQ/1m9GKN7AMZGI83uk7z1IQe+K7jbrNiF4r725P/BQ==
-X-Received: by 2002:a05:620a:6285:b0:7c0:b350:820 with SMTP id af79cd13be357-7c3e39b1392mr81853985a.5.1741202923780;
-        Wed, 05 Mar 2025 11:28:43 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-128-5.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.128.5])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3c9f640cbsm324838085a.108.2025.03.05.11.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 11:28:43 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1tpuQ6-00000001VBp-37wk;
-	Wed, 05 Mar 2025 15:28:42 -0400
-Date: Wed, 5 Mar 2025 15:28:42 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Xu Yilun <yilun.xu@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lSK/mmRjUfX+psHW+FPPQ9FW/ppqceTvMRA79uGjWAhiQOl4R2QawoWzztRkayvdk2xDCCszLFDw/zuA3T4JKSNMq+5TluIYgGpUXy9wUXgEsnpZS77oibaB9zEo1lutLEew56vub1lCpGj92ZcTDaCfishNqmEReebvloXSavE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l8cJypSN; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741243786; x=1772779786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nihPbFWpYPqsBosZAhoIw4NpSVYZ7ujfvelE5cg2qlQ=;
+  b=l8cJypSNKs+Tt3tSJtZPaE1YYYsmzOBytiKizccEkjQFmDJHR/rjR9SL
+   71G4THNnbki4NNOPFeHrJW5UAjNwbSC53xOhvIaHeTcKdhwgTbTHGHYnD
+   JQs3IMrVqcDB4TVDr51aKKLSgdR8BeZ1vAbLKL3E1YXXlAmHIbcLTkHMN
+   Z6aVq3pr/UpzhYnJsbieCcAuknUNmPARYLjCLVy9XAzHL24OrP0Re7OdJ
+   4u3b62gbTbqutW7A1r8O65HGaMZh47gUX16DaHSCK+x4QNuFvdMfzNYeS
+   I09Piene9hR96XNdARYyTLqxcqubMici7vMo6r5HZ95NFa4asf6lUQ41E
+   A==;
+X-CSE-ConnectionGUID: iJDp6BPvS+qJyim822jdFw==
+X-CSE-MsgGUID: 3arLx5d1RYWyHY1EScb8Rw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="41488707"
+X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
+   d="scan'208";a="41488707"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 22:49:45 -0800
+X-CSE-ConnectionGUID: 0YQ+ToHsQFqTfy8LYBXmaA==
+X-CSE-MsgGUID: eXWNYvDpQmebOFbpoNF84w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,225,1736841600"; 
+   d="scan'208";a="123948108"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa004.jf.intel.com with ESMTP; 05 Mar 2025 22:49:37 -0800
+Date: Thu, 6 Mar 2025 14:47:23 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
 Cc: Alexey Kardashevskiy <aik@amd.com>, x86@kernel.org, kvm@vger.kernel.org,
 	linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org,
 	linux-arch@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
@@ -105,7 +87,7 @@ Cc: Alexey Kardashevskiy <aik@amd.com>, x86@kernel.org, kvm@vger.kernel.org,
 	Zhi Wang <zhiw@nvidia.com>,
 	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
 Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
-Message-ID: <20250305192842.GE354403@ziepe.ca>
+Message-ID: <Z8lE+5OpqZc746mT@yilunxu-OptiPlex-7050>
 References: <20250218111017.491719-1-aik@amd.com>
  <20250218111017.491719-15-aik@amd.com>
  <Z72GmixR6NkzXAl7@yilunxu-OptiPlex-7050>
@@ -115,6 +97,7 @@ References: <20250218111017.491719-1-aik@amd.com>
  <Z7/jFhlsBrbrloia@yilunxu-OptiPlex-7050>
  <20250301003711.GR5011@ziepe.ca>
  <Z8U+/0IYyn7XX3ao@yilunxu-OptiPlex-7050>
+ <20250305192842.GE354403@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -123,42 +106,91 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z8U+/0IYyn7XX3ao@yilunxu-OptiPlex-7050>
+In-Reply-To: <20250305192842.GE354403@ziepe.ca>
 
-On Mon, Mar 03, 2025 at 01:32:47PM +0800, Xu Yilun wrote:
-> All these settings cannot really take function until guest verifies them
-> and does TDISP start. Guest verification does not (should not) need host
-> awareness.
+On Wed, Mar 05, 2025 at 03:28:42PM -0400, Jason Gunthorpe wrote:
+> On Mon, Mar 03, 2025 at 01:32:47PM +0800, Xu Yilun wrote:
+> > All these settings cannot really take function until guest verifies them
+> > and does TDISP start. Guest verification does not (should not) need host
+> > awareness.
+> > 
+> > Our solution is, separate the secure DMA setting and secure device setting
+> > in different components, iommufd & vfio.
+> > 
+> > Guest require bind:
+> >   - ioctl(iommufd, IOMMU_VIOMMU_ALLOC, {.type = IOMMU_VIOMMU_TYPE_KVM_VALID,
+> > 					.kvm_fd = kvm_fd,
+> > 					.out_viommu_id = &viommu_id});
+> >   - ioctl(iommufd, IOMMU_HWPT_ALLOC, {.flag = IOMMU_HWPT_ALLOC_TRUSTED,
+> > 				      .pt_id = viommu_id,
+> > 				      .out_hwpt_id = &hwpt_id});
+> >   - ioctl(vfio_fd, VFIO_DEVICE_ATTACH_IOMMUFD_PT, {.pt_id = hwpt_id})
+> >     - do secure DMA setting in Intel iommu driver.
+> > 
+> >   - ioctl(vfio_fd, VFIO_DEVICE_TSM_BIND, ...)
+> >     - do bind in Intel TSM driver.
 > 
-> Our solution is, separate the secure DMA setting and secure device setting
-> in different components, iommufd & vfio.
+> Except what do command do you issue to the secure world for TSM_BIND
+> and what are it's argument? Again you can't include the vBDF or vIOMMU
+> ID here.
+
+Bind for TDX doesn't require vBDF or vIOMMU ID. The seamcall is like:
+
+u64 tdh_devif_create(u64 stream_id,     // IDE stream ID, PF0 stuff
+                     u64 devif_id,      // TDI ID, it is the host BDF
+                     u64 tdr_pa,        // TDX VM core metadate page, TDX Connect uses it as CoCo-VM ID
+                     u64 devifcs_pa)    // metadate page provide to firmware
+
+While for AMD:
+        ...
+        b.guest_device_id = guest_rid;  //TDI ID, it is the vBDF
+        b.gctx_paddr = gctx_paddr;      //AMDs CoCo-VM ID
+
+        ret = sev_tio_do_cmd(SEV_CMD_TIO_TDI_BIND, &b, ...
+
+
+Neither of them use vIOMMU ID or any IOMMU info, so the only concern is
+vBDF.
+
+Basically from host POV the two interfaces does the same thing, connect
+the CoCo-VM ID with the TDI ID, for which Intel uses host BDF while AMD
+uses vBDF. But AMD firmware cannot know anything meaningful about the
+vBDF, it is just a magic number to index TDI metadata.
+
+So I don't think we have to introduce vBDF concept in kernel. AMD uses
+QEMU created vBDF as TDI ID, that's fine, QEMU should ensure the
+validity of the vBDF.
+
 > 
-> Guest require bind:
->   - ioctl(iommufd, IOMMU_VIOMMU_ALLOC, {.type = IOMMU_VIOMMU_TYPE_KVM_VALID,
-> 					.kvm_fd = kvm_fd,
-> 					.out_viommu_id = &viommu_id});
->   - ioctl(iommufd, IOMMU_HWPT_ALLOC, {.flag = IOMMU_HWPT_ALLOC_TRUSTED,
-> 				      .pt_id = viommu_id,
-> 				      .out_hwpt_id = &hwpt_id});
->   - ioctl(vfio_fd, VFIO_DEVICE_ATTACH_IOMMUFD_PT, {.pt_id = hwpt_id})
->     - do secure DMA setting in Intel iommu driver.
+> vfio also can't validate that the hwpt is in the right state when it
+> executes this function.
+
+Not sure if VFIO has to validate, or is there a requirement that
+secure DMA should be in right state before bind. TDX doesn't require
+this, and I didn't see the requirement in SEV-TIO spec. I.e. the
+bind firmware calls don't check DMA state.
+
+In my opinion, TDI bind means put device in LOCKED state and related
+metadate management in firmware. After bind the DMA cannot work. It
+is the guest's resposibility to validate everything (including DMA)
+is in the right state, then issues RUN, then DMA works. I.e. guest tsm
+calls check DMA state.  That's why I think Secure DMA configuration
+on host could be in a separated flow from bind.
+
 > 
->   - ioctl(vfio_fd, VFIO_DEVICE_TSM_BIND, ...)
->     - do bind in Intel TSM driver.
+> You could also issue the TSM bind against the idev on the iommufd
+> side..
 
-Except what do command do you issue to the secure world for TSM_BIND
-and what are it's argument? Again you can't include the vBDF or vIOMMU
-ID here.
+But I cannot figure out how idev could ensure no mmap on VFIO, and how
+idev could call dma_buf_move_notify.
 
-vfio also can't validate that the hwpt is in the right state when it
-executes this function.
+Thanks,
+Yilun
 
-You could also issue the TSM bind against the idev on the iommufd
-side..
-
-Part of my problem here is I don't see anyone who seems to have read
-all three specs and is trying to mush them together. Everyone is
-focused on their own spec. I know there are subtle differences :\
-
-Jason
+> 
+> Part of my problem here is I don't see anyone who seems to have read
+> all three specs and is trying to mush them together. Everyone is
+> focused on their own spec. I know there are subtle differences :\
+> 
+> Jason
 
