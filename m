@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-10583-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10584-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B025FA57481
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 23:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B22BCA57483
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 23:04:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D98D3B2502
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 22:04:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77D013B55DA
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 22:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D4BF25BAC2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA1A325C6F4;
 	Fri,  7 Mar 2025 22:03:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="OS0h5GSd"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="iBGHimUa"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38EC0259C92;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8389623FC52;
 	Fri,  7 Mar 2025 22:03:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741384991; cv=none; b=jEsxm8twdW9rUshJRl+I4qpYIZ98vuiumN4cKWIw9Jpys1OyVuuuTvZ6z9TnmWQZifg3RrKvisLsOy6GzvU6dqxmH9GXvT2ChoG/a+SZaBEevE+BBRW5JNo8eynQdulvN6AYLT8v/BXPeyWKXc46impmwb0j6KCg/4T3UUvCIyU=
+	t=1741384991; cv=none; b=HPXrYerr/6BZGuqPIwtOM9d2V45SuTqKkKLWXjE6uS4+EGBv8Q7shimhgtir2q/8smNkxGB1VTiaTxm6ebG5JZkweiXDHUgBFYkI1O+mOxolzTqM6qNrkbuY1HWR35W2xVF5mr7xXxodpAkBRo6fu83DxRVm97aWTbQgnl3QJUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741384991; c=relaxed/simple;
-	bh=mXjcVxS6yhJ7Be6C5xFnfTQiQKB5EKMcoKN9jqGsmlg=;
+	bh=hUUlCe0zLLNDf+LUO74j5kG1FU9tABP9vr6RL060iXo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MeLtifIi8OzH+pvLJ0ezLkfHU6HL4XsyyBO7/cJUUwBzivNsUxMLzfhgd/Vg1VWy3h56sWLCS86MNvoGeMziPx9Xbo0pb+3J4IdYWmAFwljswT/fqxSiS+a2j0CFqAEm5xb1P1S3NXqp622V6+dDC8/gKAVT8TJh2qHoz4lnxnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=OS0h5GSd; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=RcCld+UtT7A1OybS2RQMfSKYcWs4HH2YeaVGtL+c0ovtGwFfIvMNLzWxAWAzf9WSTwZNOPI0nJaAHfk1paBtgXfzfh5OaIJt7/lZYnKCgFalkYVazoB9bHL3dUFbflfxmm66xFBNNdWb3tHvdc6f0QAN4Qx/M6UcBDR+ozVlMK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=iBGHimUa; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 869FD2038F48;
+	by linux.microsoft.com (Postfix) with ESMTPSA id E48E22038F49;
 	Fri,  7 Mar 2025 14:03:08 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 869FD2038F48
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E48E22038F49
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741384988;
-	bh=aR5FsxsIycmRcn42PG+oTQzQG5IybM8JAOJ2uJYYZWk=;
+	s=default; t=1741384989;
+	bh=RnBu2ZStCw20R54YIGGFM80PlgjrKLos5zUu92A3sAY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OS0h5GSdSB83+eNsI9lehhfII7iCqqXhVnSvJ/hbLXpRQzaqZfooB0Vzd+4V8oTk6
-	 i26BmsHR2wCE6ElhQM5dcmfdZVOjl4nsRhp6ZKiSYY8qb4iAGpBMXT4fZHiUUwFHGM
-	 lHsypdTC78wxPh3kC8K/061cp7wmt0we2hrq4iZY=
+	b=iBGHimUaz7nSniGi92IPqwTc8s1B3OFyfQZ8Xgs+Bw+hsOAqpAcPyiK0tH7X78bMW
+	 KwEldsjFk1uCyIUpwpURzzoPgFu3ft6Dmo9S3HIzrjs3AGhbf1Rli++ggN3YzjViLv
+	 muwgCnhOg1upZtMWMn69B7+jkBsb40A5xP76EBpc=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -83,9 +83,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v5 08/11] Drivers: hv: vmbus: Get the IRQ number from DeviceTree
-Date: Fri,  7 Mar 2025 14:03:00 -0800
-Message-ID: <20250307220304.247725-9-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v5 09/11] Drivers: hv: vmbus: Introduce hv_get_vmbus_root_device()
+Date: Fri,  7 Mar 2025 14:03:01 -0800
+Message-ID: <20250307220304.247725-10-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250307220304.247725-1-romank@linux.microsoft.com>
 References: <20250307220304.247725-1-romank@linux.microsoft.com>
@@ -97,73 +97,117 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The VMBus driver uses ACPI for interrupt assignment on
-arm64 hence it won't function in the VTL mode where only
-DeviceTree can be used.
+The ARM64 PCI code for hyperv needs to know the VMBus root
+device, and it is private.
 
-Update the VMBus driver to discover interrupt configuration
-from DT.
+Provide a function that returns it. Rename it from "hv_dev"
+as "hv_dev" as a symbol is very overloaded. No functional
+changes.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
-Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 ---
- drivers/hv/vmbus_drv.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ drivers/hv/vmbus_drv.c | 23 +++++++++++++++--------
+ include/linux/hyperv.h |  2 ++
+ 2 files changed, 17 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 75eb1390b45c..c8474b48dcd2 100644
+index c8474b48dcd2..7bfafe702963 100644
 --- a/drivers/hv/vmbus_drv.c
 +++ b/drivers/hv/vmbus_drv.c
-@@ -2345,6 +2345,36 @@ static int vmbus_acpi_add(struct platform_device *pdev)
- }
- #endif
+@@ -45,7 +45,8 @@ struct vmbus_dynid {
+ 	struct hv_vmbus_device_id id;
+ };
  
-+static int __maybe_unused vmbus_set_irq(struct platform_device *pdev)
+-static struct device  *hv_dev;
++/* VMBus Root Device */
++static struct device  *vmbus_root_device;
+ 
+ static int hyperv_cpuhp_online;
+ 
+@@ -80,9 +81,15 @@ static struct resource *fb_mmio;
+ static struct resource *hyperv_mmio;
+ static DEFINE_MUTEX(hyperv_mmio_lock);
+ 
++struct device *hv_get_vmbus_root_device(void)
 +{
-+	struct irq_data *data;
-+	int irq;
-+	irq_hw_number_t hwirq;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq == 0) {
-+		pr_err("VMBus interrupt mapping failure\n");
-+		return -EINVAL;
-+	}
-+	if (irq < 0) {
-+		pr_err("VMBus interrupt data can't be read from DeviceTree, error %d\n", irq);
-+		return irq;
-+	}
-+
-+	data = irq_get_irq_data(irq);
-+	if (!data) {
-+		pr_err("No interrupt data for VMBus virq %d\n", irq);
-+		return -ENODEV;
-+	}
-+	hwirq = irqd_to_hwirq(data);
-+
-+	vmbus_irq = irq;
-+	vmbus_interrupt = hwirq;
-+	pr_debug("VMBus virq %d, hwirq %d\n", vmbus_irq, vmbus_interrupt);
-+
-+	return 0;
++	return vmbus_root_device;
 +}
++EXPORT_SYMBOL_GPL(hv_get_vmbus_root_device);
 +
- static int vmbus_device_add(struct platform_device *pdev)
+ static int vmbus_exists(void)
  {
- 	struct resource **cur_res = &hyperv_mmio;
-@@ -2359,6 +2389,12 @@ static int vmbus_device_add(struct platform_device *pdev)
+-	if (hv_dev == NULL)
++	if (vmbus_root_device == NULL)
+ 		return -ENODEV;
+ 
+ 	return 0;
+@@ -861,7 +868,7 @@ static int vmbus_dma_configure(struct device *child_device)
+ 	 * On x86/x64 coherence is assumed and these calls have no effect.
+ 	 */
+ 	hv_setup_dma_ops(child_device,
+-		device_get_dma_attr(hv_dev) == DEV_DMA_COHERENT);
++		device_get_dma_attr(vmbus_root_device) == DEV_DMA_COHERENT);
+ 	return 0;
+ }
+ 
+@@ -1930,7 +1937,7 @@ int vmbus_device_register(struct hv_device *child_device_obj)
+ 		     &child_device_obj->channel->offermsg.offer.if_instance);
+ 
+ 	child_device_obj->device.bus = &hv_bus;
+-	child_device_obj->device.parent = hv_dev;
++	child_device_obj->device.parent = vmbus_root_device;
+ 	child_device_obj->device.release = vmbus_device_release;
+ 
+ 	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
+@@ -2292,7 +2299,7 @@ static int vmbus_acpi_add(struct platform_device *pdev)
+ 	struct acpi_device *ancestor;
+ 	struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
+ 
+-	hv_dev = &device->dev;
++	vmbus_root_device = &device->dev;
+ 
+ 	/*
+ 	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
+@@ -2383,7 +2390,7 @@ static int vmbus_device_add(struct platform_device *pdev)
+ 	struct device_node *np = pdev->dev.of_node;
+ 	int ret;
+ 
+-	hv_dev = &pdev->dev;
++	vmbus_root_device = &pdev->dev;
+ 
+ 	ret = of_range_parser_init(&parser, np);
+ 	if (ret)
+@@ -2702,7 +2709,7 @@ static int __init hv_acpi_init(void)
  	if (ret)
  		return ret;
  
-+#ifndef HYPERVISOR_CALLBACK_VECTOR
-+	ret = vmbus_set_irq(pdev);
-+	if (ret)
-+		return ret;
-+#endif
-+
- 	for_each_of_range(&parser, &range) {
- 		struct resource *res;
+-	if (!hv_dev) {
++	if (!vmbus_root_device) {
+ 		ret = -ENODEV;
+ 		goto cleanup;
+ 	}
+@@ -2733,7 +2740,7 @@ static int __init hv_acpi_init(void)
  
+ cleanup:
+ 	platform_driver_unregister(&vmbus_platform_driver);
+-	hv_dev = NULL;
++	vmbus_root_device = NULL;
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+index 7f4f8d8bdf43..1f0851fde041 100644
+--- a/include/linux/hyperv.h
++++ b/include/linux/hyperv.h
+@@ -1333,6 +1333,8 @@ static inline void *hv_get_drvdata(struct hv_device *dev)
+ 	return dev_get_drvdata(&dev->device);
+ }
+ 
++struct device *hv_get_vmbus_root_device(void);
++
+ struct hv_ring_buffer_debug_info {
+ 	u32 current_interrupt_mask;
+ 	u32 current_read_index;
 -- 
 2.43.0
 
