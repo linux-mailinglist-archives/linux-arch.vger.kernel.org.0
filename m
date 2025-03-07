@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10590-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10591-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E70FA5761C
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Mar 2025 00:32:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD37DA5762C
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Mar 2025 00:36:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1B4B3B0073
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 23:32:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D74E189B5B2
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 23:36:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7AC520C024;
-	Fri,  7 Mar 2025 23:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7C52135B5;
+	Fri,  7 Mar 2025 23:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="fOGcYbIG"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="hRXz7RZY"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C561624DC;
-	Fri,  7 Mar 2025 23:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BBD72135AC;
+	Fri,  7 Mar 2025 23:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741390322; cv=none; b=RHsAZ1KcgSIjUcjVmuzIFVMW9kT49NIlf3r77VeDKdyIzKSpV3QyLyfRWP5Btp8m9mdTnykijGfHWo8VLMCojS8qmBcKWHKcGTjNWdqZ9KN/5Cooc0k6MWbXdF/rZvbpLo2J9Rg+XQN0QIkeFl3KUPML6jdDQIO5Y7zfD2LGgQU=
+	t=1741390578; cv=none; b=D4MRlMhkrjyEJyE5wiw658r39SU8qgLDonF7F6AF66Y1oB4jrNrQncWNK+lidbDgQAKJEkFAiu8CXw7lAWUUpVijD9TVpCvmH4ELt7Q+e115oB8gZ+H72cyLQ5dPj78eUA/2YFkx/RLSHtuGxFjkhESTXPZBvVttSpRy88Fah3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741390322; c=relaxed/simple;
-	bh=ucX0RaBRa9NkjU23G2OMjxVLiU+Sz0yOllDnrB8fB4Y=;
+	s=arc-20240116; t=1741390578; c=relaxed/simple;
+	bh=oKXypGS+UWpAZ6bvzRd1RflS3yJ1s7aitXHt/9YOrtw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H340w3nJDisJnWU2FTsV6rApvAOyOAAb1ouOaGhZhKvUq0x8TCcHefxn3g7eUgOsrYdqgs8fQaFVxMWXMMREO39Ze6g5CsugQMNNBvGz30YcHAqSrev3uz/A+RH/KJkn/B9dhyiTDnY/H1QT1HV2jkZTlfztOa/ptyt3EomRjf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=fOGcYbIG; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=qZLhoAMbk74pjEuDrSJquIDeSK84pvTPyql2SjBWsKlyw4tG3qwLFoY+0+FJprI5ZSl+Was5noYzx8VskLF2Su/lI+YmN2I0VLaz3LcPKs5bcEEy/ZfX2l2Dk5cfIDjGlAk+zu9Mb0IXOQFD81jFywMwYzHDF3B/f4lFPNAgtXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=hRXz7RZY; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id DFF032038F3C;
-	Fri,  7 Mar 2025 15:31:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DFF032038F3C
+	by linux.microsoft.com (Postfix) with ESMTPSA id 18B652038F3D;
+	Fri,  7 Mar 2025 15:36:15 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 18B652038F3D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741390320;
-	bh=R/z26xRYrdOF9/25EAMJ8oFtAqkfyDKd66CIcFmsW4w=;
+	s=default; t=1741390575;
+	bh=pvMewxoixOT50Mq8lWiSZg7G62SZLT+bu1HI67HwrAw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fOGcYbIGxY0X3G24A//zVNiFIRPoiFY80LL+AXj23EOP8M+ywr+gbKdaQO/Qj+j3a
-	 v3+fngnRbCZwDdvAwSMZ52LiSB13x748OSZFZCFZCvAOg45w3DT9CfSg76JZ6Lnbuc
-	 NGOzo+XGsNfS5BXfJYkYq4X11bppkU8bw4mmfbsA=
-Message-ID: <7de75d5a-c284-4ab8-b275-ec245608ed5c@linux.microsoft.com>
-Date: Fri, 7 Mar 2025 15:31:42 -0800
+	b=hRXz7RZYKpsMsBEckWZTZVYOLoxBMc9Q+K2eeXTV0Lc30zdIpL2u+MOHVjL2vBieo
+	 ANjWIswYp1+CX+mEBK0jI66DtErlmDOeaBg8v4E/mKPbv/pNkrk1tX0vNxbeUG7FOA
+	 I+tZQyx8nDCEksJhoNtWOW/Z/YE3YiqeKevehgL0=
+Message-ID: <5ffb92c5-2133-4b47-a1eb-b1acca2c4388@linux.microsoft.com>
+Date: Fri, 7 Mar 2025 15:35:58 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,7 +49,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 07/10] Drivers: hv: Introduce per-cpu event ring tail
+Subject: Re: [PATCH v5 09/10] hyperv: Add definitions for root partition
+ driver to hv headers
 To: Michael Kelley <mhklinux@outlook.com>,
  "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
  "x86@kernel.org" <x86@kernel.org>,
@@ -88,197 +89,528 @@ Cc: "kys@microsoft.com" <kys@microsoft.com>,
  "rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org"
  <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
 References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-8-git-send-email-nunodasneves@linux.microsoft.com>
- <SN6PR02MB4157107676CF415A464C2C25D4D52@SN6PR02MB4157.namprd02.prod.outlook.com>
- <63437aa6-d45a-4b7a-b222-5901c03c48e0@linux.microsoft.com>
- <SN6PR02MB415710BED37BDD375B0D769AD4D52@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <1740611284-27506-10-git-send-email-nunodasneves@linux.microsoft.com>
+ <SN6PR02MB41575301E96B82BF3813828BD4D52@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Language: en-US
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB415710BED37BDD375B0D769AD4D52@SN6PR02MB4157.namprd02.prod.outlook.com>
+In-Reply-To: <SN6PR02MB41575301E96B82BF3813828BD4D52@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/7/2025 3:21 PM, Michael Kelley wrote:
-> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, March 7, 2025 2:07 PM
+On 3/7/2025 9:26 AM, Michael Kelley wrote:
+> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Wednesday, February 26, 2025 3:08 PM
 >>
->> On 3/7/2025 9:02 AM, Michael Kelley wrote:
->>> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Wednesday, February 26, 2025 3:08 PM
->>>>
->>>> Add a pointer hv_synic_eventring_tail to track the tail pointer for the
->>>> SynIC event ring buffer for each SINT.
->>>>
->>>> This will be used by the mshv driver, but must be tracked independently
->>>> since the driver module could be removed and re-inserted.
->>>>
->>>> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
->>>> Reviewed-by: Wei Liu <wei.liu@kernel.org>
->>>> ---
->>>>  drivers/hv/hv_common.c | 34 ++++++++++++++++++++++++++++++++--
->>>>  1 file changed, 32 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
->>>> index 252fd66ad4db..2763cb6d3678 100644
->>>> --- a/drivers/hv/hv_common.c
->>>> +++ b/drivers/hv/hv_common.c
->>>> @@ -68,6 +68,16 @@ static void hv_kmsg_dump_unregister(void);
->>>>
->>>>  static struct ctl_table_header *hv_ctl_table_hdr;
->>>>
->>>> +/*
->>>> + * Per-cpu array holding the tail pointer for the SynIC event ring buffer
->>>> + * for each SINT.
->>>> + *
->>>> + * We cannot maintain this in mshv driver because the tail pointer should
->>>> + * persist even if the mshv driver is unloaded.
->>>> + */
->>>> +u8 __percpu **hv_synic_eventring_tail;
->>>
->>> I think the "__percpu" is in the wrong place here. This placement
->>> is likely to cause errors from the "sparse" tool.  It should be
->>>
->>> u8 * __percpu *hv_synic_eventring_tail;
->>>
->>> See the way hyperv_pcpu_input_arg, for example, is defined.  And
->>> see commit db3c65bc3a13 where I fixed hyperv_pcpu_input_arg.
->>>
->> Thanks. I'll fix it.
+>> A few additional definitions are required for the mshv driver code
+>> (to follow). Introduce those here and clean up a little bit while
+>> at it.
 >>
->>>> +EXPORT_SYMBOL_GPL(hv_synic_eventring_tail);
->>>
->>> The "extern" declaration for this variable is in Patch 10 of the series
->>> in drivers/hv/mshv_root.h. I guess that's OK, but I would normally
->>> expect to find such a declaration in the header file associated with
->>> where the variable is defined, which in this case is mshyperv.h.
->>> Perhaps you are trying to restrict its usage to just mshv?
->>>
->> Yes, that's the idea - it should only be used by the driver.
+>> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+>> ---
+>>  include/hyperv/hvgdk_mini.h |  64 ++++++++++++++++-
+>>  include/hyperv/hvhdk.h      | 132 ++++++++++++++++++++++++++++++++++--
+>>  include/hyperv/hvhdk_mini.h |  91 +++++++++++++++++++++++++
+>>  3 files changed, 280 insertions(+), 7 deletions(-)
 >>
->>>> +
->>>>  /*
->>>>   * Hyper-V specific initialization and shutdown code that is
->>>>   * common across all architectures.  Called from architecture
->>>> @@ -90,6 +100,9 @@ void __init hv_common_free(void)
->>>>
->>>>  	free_percpu(hyperv_pcpu_input_arg);
->>>>  	hyperv_pcpu_input_arg = NULL;
->>>> +
->>>> +	free_percpu(hv_synic_eventring_tail);
->>>> +	hv_synic_eventring_tail = NULL;
->>>>  }
->>>>
->>>>  /*
->>>> @@ -372,6 +385,11 @@ int __init hv_common_init(void)
->>>>  		BUG_ON(!hyperv_pcpu_output_arg);
->>>>  	}
->>>>
->>>> +	if (hv_root_partition()) {
->>>> +		hv_synic_eventring_tail = alloc_percpu(u8 *);
->>>> +		BUG_ON(hv_synic_eventring_tail == NULL);
->>>> +	}
->>>> +
->>>>  	hv_vp_index = kmalloc_array(nr_cpu_ids, sizeof(*hv_vp_index),
->>>>  				    GFP_KERNEL);
->>>>  	if (!hv_vp_index) {
->>>> @@ -460,6 +478,7 @@ void __init ms_hyperv_late_init(void)
->>>>  int hv_common_cpu_init(unsigned int cpu)
->>>>  {
->>>>  	void **inputarg, **outputarg;
->>>> +	u8 **synic_eventring_tail;
->>>>  	u64 msr_vp_index;
->>>>  	gfp_t flags;
->>>>  	const int pgcount = hv_output_page_exists() ? 2 : 1;
->>>> @@ -472,8 +491,8 @@ int hv_common_cpu_init(unsigned int cpu)
->>>>  	inputarg = (void **)this_cpu_ptr(hyperv_pcpu_input_arg);
->>>>
->>>>  	/*
->>>> -	 * hyperv_pcpu_input_arg and hyperv_pcpu_output_arg memory is already
->>>> -	 * allocated if this CPU was previously online and then taken offline
->>>> +	 * The per-cpu memory is already allocated if this CPU was previously
->>>> +	 * online and then taken offline
->>>>  	 */
->>>>  	if (!*inputarg) {
->>>>  		mem = kmalloc(pgcount * HV_HYP_PAGE_SIZE, flags);
->>>> @@ -485,6 +504,17 @@ int hv_common_cpu_init(unsigned int cpu)
->>>>  			*outputarg = (char *)mem + HV_HYP_PAGE_SIZE;
->>>>  		}
->>>>
->>>> +		if (hv_root_partition()) {
->>>> +			synic_eventring_tail = (u8 **)this_cpu_ptr(hv_synic_eventring_tail);
->>>> +			*synic_eventring_tail = kcalloc(HV_SYNIC_SINT_COUNT,
->>>> +							sizeof(u8), flags);
->>>> +
->>>> +			if (unlikely(!*synic_eventring_tail)) {
->>>> +				kfree(mem);
->>>> +				return -ENOMEM;
->>>> +			}
->>>> +		}
->>>> +
->>>
->>> Adding this code under the "if(!*inputarg)" implicitly ties the lifecycle of
->>> synic_eventring_tail to the lifecycle of hyperv_pcpu_input_arg and
->>> hyperv_pcpu_output_arg. Is there some logical relationship between the
->>> two that warrants tying the lifecycles together (other than just both being
->>> per-cpu)?  hyperv_pcpu_input_arg and hyperv_pcpu_output_arg have an
->>> unusual lifecycle management in that they aren't freed when a CPU goes
->>> offline, as described in the comment in hv_common_cpu_die(). Does
->>> synic_eventring_tail also need that same unusual lifecycle?
->>>
->> I thought about it, and no I don't think it shares the same exact lifecycle.
->> It's only used by the mshv_root driver - it just needs to remain present
->> whenever there's a chance the module could be re-inserted and expect it to
->> be there.
+>> diff --git a/include/hyperv/hvgdk_mini.h b/include/hyperv/hvgdk_mini.h
+>> index 58895883f636..e4a3cca0cbce 100644
+>> --- a/include/hyperv/hvgdk_mini.h
+>> +++ b/include/hyperv/hvgdk_mini.h
+>> @@ -13,7 +13,7 @@ struct hv_u128 {
+>>  	u64 high_part;
+>>  } __packed;
 >>
->>> Assuming there's no logical relationship, I'm thinking synic_eventring_tail
->>> should be managed independent of the other two. If it does need the
->>> unusual lifecycle, make sure to add a comment in hv_common_cpu_die()
->>> explaining why. If it doesn't need the unusual lifecycle, maybe just do
->>> the normal thing of allocating it in hv_common_cpu_init() and freeing
->>> it in hv_common_cpu_die().
->>>
->> Yep, I suppose it should just be freed normally then, assuming
->> hv_common_cpu_die() is only called when the hypervisor is going to reset
->> (or remove) the synic pages for this partition. Is that the case here?
+>> -/* NOTE: when adding below, update hv_status_to_string() */
+>> +/* NOTE: when adding below, update hv_result_to_string() */
+>>  #define HV_STATUS_SUCCESS			    0x0
+>>  #define HV_STATUS_INVALID_HYPERCALL_CODE	    0x2
+>>  #define HV_STATUS_INVALID_HYPERCALL_INPUT	    0x3
+>> @@ -51,6 +51,7 @@ struct hv_u128 {
+>>  #define HV_HYP_PAGE_SHIFT		12
+>>  #define HV_HYP_PAGE_SIZE		BIT(HV_HYP_PAGE_SHIFT)
+>>  #define HV_HYP_PAGE_MASK		(~(HV_HYP_PAGE_SIZE - 1))
+>> +#define HV_HYP_LARGE_PAGE_SHIFT		21
 >>
+>>  #define HV_PARTITION_ID_INVALID		((u64)0)
+>>  #define HV_PARTITION_ID_SELF		((u64)-1)
+>> @@ -374,6 +375,10 @@ union hv_hypervisor_version_info {
+>>  #define HV_SHARED_GPA_BOUNDARY_ACTIVE			BIT(5)
+>>  #define HV_SHARED_GPA_BOUNDARY_BITS			GENMASK(11, 6)
+>>
+>> +/* HYPERV_CPUID_FEATURES.ECX bits. */
+>> +#define HV_VP_DISPATCH_INTERRUPT_INJECTION_AVAILABLE	BIT(9)
+>> +#define HV_VP_GHCB_ROOT_MAPPING_AVAILABLE		BIT(10)
+>> +
+>>  enum hv_isolation_type {
+>>  	HV_ISOLATION_TYPE_NONE	= 0,	/*
+>> HV_PARTITION_ISOLATION_TYPE_NONE */
+>>  	HV_ISOLATION_TYPE_VBS	= 1,
+>> @@ -437,9 +442,12 @@ union hv_vp_assist_msr_contents {	 /*
+>> HV_REGISTER_VP_ASSIST_PAGE */
+>>  #define HVCALL_MAP_GPA_PAGES				0x004b
+>>  #define HVCALL_UNMAP_GPA_PAGES				0x004c
+>>  #define HVCALL_CREATE_VP				0x004e
+>> +#define HVCALL_INSTALL_INTERCEPT			0x004d
 > 
-> Yes, it is the case here. A particular vCPU can be taken offline
-> independent of other vCPUs in the VM (such as by writing "0"
-> to /sys/devices/system/cpu/cpu<nn>/online). When that happens
-> the vCPU going offline runs hv_synic_cleanup() first, and then it
-> runs hv_cpu_die(), which calls hv_common_cpu_die(). So by the
-> time hv_common_cpu_die() runs, the synic_message_page and
-> synic_event_page will have been unmapped and the pointers set
-> to NULL.
+> This is numerically out-of-order.  Should be before HVCALL_CREATE_VP.
 > 
-> On arm64, there is no hv_cpu_init()/die(), and the "common"
-> versions are called directly. Perhaps at some point in the future there
-> will be arm64 specific things to be done, and hv_cpu_init()/die()
-> will need to be added. But the ordering is the same and
-> hv_synic_cleanup() runs first.
-> 
-> So, yes, since synic_eventring_tail is tied to the synic, it sounds like
-> the normal lifecycle could be used, like with the VP assist page that
-> is handled in hv_cpu_init()/die() on x86.
-> 
-Great, thanks for the clarification! I'll fix it for v6.
+Oops! Thanks for spotting that.
 
-Nuno
-
->> Otherwise we'd want to retain it, in case mshv_root ever needs it again for
->> that CPU in the lifetime of this partition.
+>>  #define HVCALL_DELETE_VP				0x004f
+>>  #define HVCALL_GET_VP_REGISTERS				0x0050
+>>  #define HVCALL_SET_VP_REGISTERS				0x0051
+>> +#define HVCALL_TRANSLATE_VIRTUAL_ADDRESS		0x0052
+>> +#define HVCALL_CLEAR_VIRTUAL_INTERRUPT			0x0056
+>>  #define HVCALL_DELETE_PORT				0x0058
+>>  #define HVCALL_DISCONNECT_PORT				0x005b
+>>  #define HVCALL_POST_MESSAGE				0x005c
+>> @@ -447,12 +455,15 @@ union hv_vp_assist_msr_contents {	 /*
+>> HV_REGISTER_VP_ASSIST_PAGE */
+>>  #define HVCALL_POST_DEBUG_DATA				0x0069
+>>  #define HVCALL_RETRIEVE_DEBUG_DATA			0x006a
+>>  #define HVCALL_RESET_DEBUG_SESSION			0x006b
+>> +#define HVCALL_MAP_STATS_PAGE				0x006c
+>> +#define HVCALL_UNMAP_STATS_PAGE				0x006d
+>>  #define HVCALL_ADD_LOGICAL_PROCESSOR			0x0076
+>>  #define HVCALL_GET_SYSTEM_PROPERTY			0x007b
+>>  #define HVCALL_MAP_DEVICE_INTERRUPT			0x007c
+>>  #define HVCALL_UNMAP_DEVICE_INTERRUPT			0x007d
+>>  #define HVCALL_RETARGET_INTERRUPT			0x007e
+>>  #define HVCALL_NOTIFY_PORT_RING_EMPTY			0x008b
+>> +#define HVCALL_REGISTER_INTERCEPT_RESULT		0x0091
+>>  #define HVCALL_ASSERT_VIRTUAL_INTERRUPT			0x0094
+>>  #define HVCALL_CREATE_PORT				0x0095
+>>  #define HVCALL_CONNECT_PORT				0x0096
+>> @@ -460,12 +471,18 @@ union hv_vp_assist_msr_contents {	 /*
+>> HV_REGISTER_VP_ASSIST_PAGE */
+>>  #define HVCALL_GET_VP_ID_FROM_APIC_ID			0x009a
+>>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE	0x00af
+>>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST	0x00b0
+>> +#define HVCALL_SIGNAL_EVENT_DIRECT			0x00c0
+>> +#define HVCALL_POST_MESSAGE_DIRECT			0x00c1
+>>  #define HVCALL_DISPATCH_VP				0x00c2
+>> +#define HVCALL_GET_GPA_PAGES_ACCESS_STATES		0x00c9
+>> +#define HVCALL_ACQUIRE_SPARSE_SPA_PAGE_HOST_ACCESS	0x00d7
+>> +#define HVCALL_RELEASE_SPARSE_SPA_PAGE_HOST_ACCESS	0x00d8
+>>  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY	0x00db
+>>  #define HVCALL_MAP_VP_STATE_PAGE			0x00e1
+>>  #define HVCALL_UNMAP_VP_STATE_PAGE			0x00e2
+>>  #define HVCALL_GET_VP_STATE				0x00e3
+>>  #define HVCALL_SET_VP_STATE				0x00e4
+>> +#define HVCALL_GET_VP_CPUID_VALUES			0x00f4
+>>  #define HVCALL_MMIO_READ				0x0106
+>>  #define HVCALL_MMIO_WRITE				0x0107
 >>
->> Nuno
+>> @@ -807,6 +824,8 @@ struct hv_x64_table_register {
+>>  	u64 base;
+>>  } __packed;
 >>
->>> The code as written in your patch isn't wrong and would work OK. But
->>> the structure implies a relationship with hyperv_pcpu_*_arg that I
->>> suspect doesn't exist.
->>>
->>> Michael
->>>
->>>>  		if (!ms_hyperv.paravisor_present &&
->>>>  		    (hv_isolation_type_snp() || hv_isolation_type_tdx())) {
->>>>  			ret = set_memory_decrypted((unsigned long)mem, pgcount);
->>>> --
->>>> 2.34.1
+>> +#define HV_NORMAL_VTL	0
+>> +
+>>  union hv_input_vtl {
+>>  	u8 as_uint8;
+>>  	struct {
+>> @@ -1325,6 +1344,49 @@ struct hv_retarget_device_interrupt {	 /*
+>> HV_INPUT_RETARGET_DEVICE_INTERRUPT */
+>>  	struct hv_device_interrupt_target int_target;
+>>  } __packed __aligned(8);
+>>
+>> +enum hv_intercept_type {
+>> +#if defined(CONFIG_X86_64)
+>> +	HV_INTERCEPT_TYPE_X64_IO_PORT			= 0x00000000,
+>> +	HV_INTERCEPT_TYPE_X64_MSR			= 0x00000001,
+>> +	HV_INTERCEPT_TYPE_X64_CPUID			= 0x00000002,
+>> +#endif
+>> +	HV_INTERCEPT_TYPE_EXCEPTION			= 0x00000003,
+>> +	/* Used to be HV_INTERCEPT_TYPE_REGISTER */
+>> +	HV_INTERCEPT_TYPE_RESERVED0			= 0x00000004,
+>> +	HV_INTERCEPT_TYPE_MMIO				= 0x00000005,
+>> +#if defined(CONFIG_X86_64)
+>> +	HV_INTERCEPT_TYPE_X64_GLOBAL_CPUID		= 0x00000006,
+>> +	HV_INTERCEPT_TYPE_X64_APIC_SMI			= 0x00000007,
+>> +#endif
+>> +	HV_INTERCEPT_TYPE_HYPERCALL			= 0x00000008,
+>> +#if defined(CONFIG_X86_64)
+>> +	HV_INTERCEPT_TYPE_X64_APIC_INIT_SIPI		= 0x00000009,
+>> +	HV_INTERCEPT_MC_UPDATE_PATCH_LEVEL_MSR_READ	= 0x0000000A,
+>> +	HV_INTERCEPT_TYPE_X64_APIC_WRITE		= 0x0000000B,
+>> +	HV_INTERCEPT_TYPE_X64_MSR_INDEX			= 0x0000000C,
+>> +#endif
+>> +	HV_INTERCEPT_TYPE_MAX,
+>> +	HV_INTERCEPT_TYPE_INVALID			= 0xFFFFFFFF,
+>> +};
+>> +
+>> +union hv_intercept_parameters {
+>> +	/*  HV_INTERCEPT_PARAMETERS is defined to be an 8-byte field. */
+>> +	__u64 as_uint64;
+>> +#if defined(CONFIG_X86_64)
+>> +	/* HV_INTERCEPT_TYPE_X64_IO_PORT */
+>> +	__u16 io_port;
+>> +	/* HV_INTERCEPT_TYPE_X64_CPUID */
+>> +	__u32 cpuid_index;
+>> +	/* HV_INTERCEPT_TYPE_X64_APIC_WRITE */
+>> +	__u32 apic_write_mask;
+>> +	/* HV_INTERCEPT_TYPE_EXCEPTION */
+>> +	__u16 exception_vector;
+>> +	/* HV_INTERCEPT_TYPE_X64_MSR_INDEX */
+>> +	__u32 msr_index;
+>> +#endif
+>> +	/* N.B. Other intercept types do not have any parameters. */
+>> +};
+>> +
+>>  /* Data structures for HVCALL_MMIO_READ and HVCALL_MMIO_WRITE */
+>>  #define HV_HYPERCALL_MMIO_MAX_DATA_LENGTH 64
+>>
+>> diff --git a/include/hyperv/hvhdk.h b/include/hyperv/hvhdk.h
+>> index 64407c2a3809..1b447155c338 100644
+>> --- a/include/hyperv/hvhdk.h
+>> +++ b/include/hyperv/hvhdk.h
+>> @@ -19,11 +19,24 @@
+>>
+>>  #define HV_VP_REGISTER_PAGE_VERSION_1	1u
+>>
+>> +#define HV_VP_REGISTER_PAGE_MAX_VECTOR_COUNT		7
+>> +
+>> +union hv_vp_register_page_interrupt_vectors {
+>> +	u64 as_uint64;
+>> +	struct {
+>> +		u8 vector_count;
+>> +		u8 vector[HV_VP_REGISTER_PAGE_MAX_VECTOR_COUNT];
+>> +	} __packed;
+>> +} __packed;
+>> +
+>>  struct hv_vp_register_page {
+>>  	u16 version;
+>>  	u8 isvalid;
+>>  	u8 rsvdz;
+>>  	u32 dirty;
+>> +
+>> +#if IS_ENABLED(CONFIG_X86)
+>> +
+>>  	union {
+>>  		struct {
+>>  			/* General purpose registers
+>> @@ -95,6 +108,22 @@ struct hv_vp_register_page {
+>>  	union hv_x64_pending_interruption_register pending_interruption;
+>>  	union hv_x64_interrupt_state_register interrupt_state;
+>>  	u64 instruction_emulation_hints;
+>> +	u64 xfem;
+>> +
+>> +	/*
+>> +	 * Fields from this point are not included in the register page save chunk.
+>> +	 * The reserved field is intended to maintain alignment for unsaved fields.
+>> +	 */
+>> +	u8 reserved1[0x100];
+>> +
+>> +	/*
+>> +	 * Interrupts injected as part of HvCallDispatchVp.
+>> +	 */
+>> +	union hv_vp_register_page_interrupt_vectors interrupt_vectors;
+>> +
+>> +#elif IS_ENABLED(CONFIG_ARM64)
+>> +	/* Not yet supported in ARM */
+>> +#endif
+>>  } __packed;
+>>
+>>  #define HV_PARTITION_PROCESSOR_FEATURES_BANKS 2
+>> @@ -299,10 +328,11 @@ union hv_partition_isolation_properties {
+>>  #define HV_PARTITION_ISOLATION_HOST_TYPE_RESERVED   0x2
+>>
+>>  /* Note: Exo partition is enabled by default */
+>> -#define HV_PARTITION_CREATION_FLAG_EXO_PARTITION                    BIT(8)
+>> -#define HV_PARTITION_CREATION_FLAG_LAPIC_ENABLED                    BIT(13)
+>> -#define HV_PARTITION_CREATION_FLAG_INTERCEPT_MESSAGE_PAGE_ENABLED   BIT(19)
+>> -#define HV_PARTITION_CREATION_FLAG_X2APIC_CAPABLE                   BIT(22)
+>> +#define HV_PARTITION_CREATION_FLAG_GPA_SUPER_PAGES_ENABLED		BIT(4)
+>> +#define HV_PARTITION_CREATION_FLAG_EXO_PARTITION			BIT(8)
+>> +#define HV_PARTITION_CREATION_FLAG_LAPIC_ENABLED			BIT(13)
+>> +#define HV_PARTITION_CREATION_FLAG_INTERCEPT_MESSAGE_PAGE_ENABLED	BIT(19)
+>> +#define HV_PARTITION_CREATION_FLAG_X2APIC_CAPABLE			BIT(22)
+>>
+>>  struct hv_input_create_partition {
+>>  	u64 flags;
+>> @@ -349,13 +379,23 @@ struct hv_input_set_partition_property {
+>>  enum hv_vp_state_page_type {
+>>  	HV_VP_STATE_PAGE_REGISTERS = 0,
+>>  	HV_VP_STATE_PAGE_INTERCEPT_MESSAGE = 1,
+>> +	HV_VP_STATE_PAGE_GHCB,
 > 
+> Seems like this enum member should have an explicit value assigned
+> since it is part of the contract with the hypervisor.
+> 
+Fair enough. They are just 0, 1, 2, but I agree it's better to be
+explicit with the ABI values.
+
+>>  	HV_VP_STATE_PAGE_COUNT
+>>  };
+>>
+>>  struct hv_input_map_vp_state_page {
+>>  	u64 partition_id;
+>>  	u32 vp_index;
+>> -	u32 type; /* enum hv_vp_state_page_type */
+>> +	u16 type; /* enum hv_vp_state_page_type */
+>> +	union hv_input_vtl input_vtl;
+>> +	union {
+>> +		u8 as_uint8;
+>> +		struct {
+>> +			u8 map_location_provided : 1;
+>> +			u8 reserved : 7;
+>> +		};
+>> +	} flags;
+>> +	u64 requested_map_location;
+>>  } __packed;
+>>
+>>  struct hv_output_map_vp_state_page {
+>> @@ -365,7 +405,14 @@ struct hv_output_map_vp_state_page {
+>>  struct hv_input_unmap_vp_state_page {
+>>  	u64 partition_id;
+>>  	u32 vp_index;
+>> -	u32 type; /* enum hv_vp_state_page_type */
+>> +	u16 type; /* enum hv_vp_state_page_type */
+>> +	union hv_input_vtl input_vtl;
+>> +	u8 reserved0;
+>> +} __packed;
+>> +
+>> +struct hv_x64_apic_eoi_message {
+>> +	__u32 vp_index;
+>> +	__u32 interrupt_vector;
+>>  } __packed;
+>>
+>>  struct hv_opaque_intercept_message {
+>> @@ -515,6 +562,13 @@ struct hv_synthetic_timers_state {
+>>  	u64 reserved[5];
+>>  } __packed;
+>>
+>> +struct hv_async_completion_message_payload {
+>> +	__u64 partition_id;
+>> +	__u32 status;
+>> +	__u32 completion_count;
+>> +	__u64 sub_status;
+>> +} __packed;
+>> +
+>>  union hv_input_delete_vp {
+>>  	u64 as_uint64[2];
+>>  	struct {
+>> @@ -649,6 +703,57 @@ struct hv_input_set_vp_state {
+>>  	union hv_input_set_vp_state_data data[];
+>>  } __packed;
+>>
+>> +union hv_x64_vp_execution_state {
+>> +	__u16 as_uint16;
+>> +	struct {
+>> +		__u16 cpl:2;
+>> +		__u16 cr0_pe:1;
+>> +		__u16 cr0_am:1;
+>> +		__u16 efer_lma:1;
+>> +		__u16 debug_active:1;
+>> +		__u16 interruption_pending:1;
+>> +		__u16 vtl:4;
+>> +		__u16 enclave_mode:1;
+>> +		__u16 interrupt_shadow:1;
+>> +		__u16 virtualization_fault_active:1;
+>> +		__u16 reserved:2;
+>> +	} __packed;
+>> +};
+>> +
+>> +struct hv_x64_intercept_message_header {
+>> +	__u32 vp_index;
+>> +	__u8 instruction_length:4;
+>> +	__u8 cr8:4; /* Only set for exo partitions */
+>> +	__u8 intercept_access_type;
+>> +	union hv_x64_vp_execution_state execution_state;
+>> +	struct hv_x64_segment_register cs_segment;
+>> +	__u64 rip;
+>> +	__u64 rflags;
+>> +} __packed;
+>> +
+>> +union hv_x64_memory_access_info {
+>> +	__u8 as_uint8;
+>> +	struct {
+>> +		__u8 gva_valid:1;
+>> +		__u8 gva_gpa_valid:1;
+>> +		__u8 hypercall_output_pending:1;
+>> +		__u8 tlb_locked_no_overlay:1;
+>> +		__u8 reserved:4;
+>> +	} __packed;
+>> +};
+>> +
+>> +struct hv_x64_memory_intercept_message {
+>> +	struct hv_x64_intercept_message_header header;
+>> +	__u32 cache_type; /* enum hv_cache_type */
+>> +	__u8 instruction_byte_count;
+>> +	union hv_x64_memory_access_info memory_access_info;
+>> +	__u8 tpr_priority;
+>> +	__u8 reserved1;
+>> +	__u64 guest_virtual_address;
+>> +	__u64 guest_physical_address;
+>> +	__u8 instruction_bytes[16];
+>> +} __packed;
+>> +
+>>  /*
+>>   * Dispatch state for the VP communicated by the hypervisor to the
+>>   * VP-dispatching thread in the root on return from HVCALL_DISPATCH_VP.
+>> @@ -716,6 +821,7 @@ static_assert(sizeof(struct hv_vp_signal_pair_scheduler_message)
+>> ==
+>>  #define HV_DISPATCH_VP_FLAG_SKIP_VP_SPEC_FLUSH		0x8
+>>  #define HV_DISPATCH_VP_FLAG_SKIP_CALLER_SPEC_FLUSH	0x10
+>>  #define HV_DISPATCH_VP_FLAG_SKIP_CALLER_USER_SPEC_FLUSH	0x20
+>> +#define HV_DISPATCH_VP_FLAG_SCAN_INTERRUPT_INJECTION	0x40
+>>
+>>  struct hv_input_dispatch_vp {
+>>  	u64 partition_id;
+>> @@ -730,4 +836,18 @@ struct hv_output_dispatch_vp {
+>>  	u32 dispatch_event; /* enum hv_vp_dispatch_event */
+>>  } __packed;
+>>
+>> +struct hv_input_modify_sparse_spa_page_host_access {
+>> +	u32 host_access : 2;
+>> +	u32 reserved : 30;
+>> +	u32 flags;
+>> +	u64 partition_id;
+>> +	u64 spa_page_list[];
+>> +} __packed;
+>> +
+>> +/* hv_input_modify_sparse_spa_page_host_access flags */
+>> +#define HV_MODIFY_SPA_PAGE_HOST_ACCESS_MAKE_EXCLUSIVE  0x1
+>> +#define HV_MODIFY_SPA_PAGE_HOST_ACCESS_MAKE_SHARED     0x2
+>> +#define HV_MODIFY_SPA_PAGE_HOST_ACCESS_LARGE_PAGE      0x4
+>> +#define HV_MODIFY_SPA_PAGE_HOST_ACCESS_HUGE_PAGE       0x8
+>> +
+>>  #endif /* _HV_HVHDK_H */
+>> diff --git a/include/hyperv/hvhdk_mini.h b/include/hyperv/hvhdk_mini.h
+>> index f8a39d3e9ce6..42e7876455b5 100644
+>> --- a/include/hyperv/hvhdk_mini.h
+>> +++ b/include/hyperv/hvhdk_mini.h
+>> @@ -36,6 +36,52 @@ enum hv_scheduler_type {
+>>  	HV_SCHEDULER_TYPE_MAX
+>>  };
+>>
+>> +/* HV_STATS_AREA_TYPE */
+>> +enum hv_stats_area_type {
+>> +	HV_STATS_AREA_SELF = 0,
+>> +	HV_STATS_AREA_PARENT = 1,
+>> +	HV_STATS_AREA_INTERNAL = 2,
+>> +	HV_STATS_AREA_COUNT
+>> +};
+>> +
+>> +enum hv_stats_object_type {
+>> +	HV_STATS_OBJECT_HYPERVISOR		= 0x00000001,
+>> +	HV_STATS_OBJECT_LOGICAL_PROCESSOR	= 0x00000002,
+>> +	HV_STATS_OBJECT_PARTITION		= 0x00010001,
+>> +	HV_STATS_OBJECT_VP			= 0x00010002
+>> +};
+>> +
+>> +union hv_stats_object_identity {
+>> +	/* hv_stats_hypervisor */
+>> +	struct {
+>> +		u8 reserved[15];
+>> +		u8 stats_area_type;
+>> +	} __packed hv;
+>> +
+>> +	/* hv_stats_logical_processor */
+>> +	struct {
+>> +		u32 lp_index;
+>> +		u8 reserved[11];
+>> +		u8 stats_area_type;
+>> +	} __packed lp;
+>> +
+>> +	/* hv_stats_partition */
+>> +	struct {
+>> +		u64 partition_id;
+>> +		u8  reserved[7];
+>> +		u8  stats_area_type;
+>> +	} __packed partition;
+>> +
+>> +	/* hv_stats_vp */
+>> +	struct {
+>> +		u64 partition_id;
+>> +		u32 vp_index;
+>> +		u16 flags;
+>> +		u8  reserved;
+>> +		u8  stats_area_type;
+>> +	} __packed vp;
+>> +};
+>> +
+>>  enum hv_partition_property_code {
+>>  	/* Privilege properties */
+>>  	HV_PARTITION_PROPERTY_PRIVILEGE_FLAGS			= 0x00010000,
+>> @@ -47,19 +93,45 @@ enum hv_partition_property_code {
+>>
+>>  	/* Compatibility properties */
+>>  	HV_PARTITION_PROPERTY_PROCESSOR_XSAVE_FEATURES		=
+>> 0x00060002,
+>> +	HV_PARTITION_PROPERTY_XSAVE_STATES                      = 0x00060007,
+>>  	HV_PARTITION_PROPERTY_MAX_XSAVE_DATA_SIZE		= 0x00060008,
+>>  	HV_PARTITION_PROPERTY_PROCESSOR_CLOCK_FREQUENCY		=
+>> 0x00060009,
+>>  };
+>>
+>> +enum hv_snp_status {
+>> +	HV_SNP_STATUS_NONE = 0,
+>> +	HV_SNP_STATUS_AVAILABLE = 1,
+>> +	HV_SNP_STATUS_INCOMPATIBLE = 2,
+>> +	HV_SNP_STATUS_PSP_UNAVAILABLE = 3,
+>> +	HV_SNP_STATUS_PSP_INIT_FAILED = 4,
+>> +	HV_SNP_STATUS_PSP_BAD_FW_VERSION = 5,
+>> +	HV_SNP_STATUS_BAD_CONFIGURATION = 6,
+>> +	HV_SNP_STATUS_PSP_FW_UPDATE_IN_PROGRESS = 7,
+>> +	HV_SNP_STATUS_PSP_RB_INIT_FAILED = 8,
+>> +	HV_SNP_STATUS_PSP_PLATFORM_STATUS_FAILED = 9,
+>> +	HV_SNP_STATUS_PSP_INIT_LATE_FAILED = 10,
+>> +};
+>> +
+>>  enum hv_system_property {
+>>  	/* Add more values when needed */
+>>  	HV_SYSTEM_PROPERTY_SCHEDULER_TYPE = 15,
+>> +	HV_DYNAMIC_PROCESSOR_FEATURE_PROPERTY = 21,
+>> +};
+>> +
+>> +enum hv_dynamic_processor_feature_property {
+>> +	/* Add more values when needed */
+>> +	HV_X64_DYNAMIC_PROCESSOR_FEATURE_MAX_ENCRYPTED_PARTITIONS = 13,
+>> +	HV_X64_DYNAMIC_PROCESSOR_FEATURE_SNP_STATUS = 16,
+>>  };
+>>
+>>  struct hv_input_get_system_property {
+>>  	u32 property_id; /* enum hv_system_property */
+>>  	union {
+>>  		u32 as_uint32;
+>> +#if IS_ENABLED(CONFIG_X86)
+>> +		/* enum hv_dynamic_processor_feature_property */
+>> +		u32 hv_processor_feature;
+>> +#endif
+>>  		/* More fields to be filled in when needed */
+>>  	};
+>>  } __packed;
+>> @@ -67,9 +139,28 @@ struct hv_input_get_system_property {
+>>  struct hv_output_get_system_property {
+>>  	union {
+>>  		u32 scheduler_type; /* enum hv_scheduler_type */
+>> +#if IS_ENABLED(CONFIG_X86)
+>> +		u64 hv_processor_feature_value;
+>> +#endif
+>>  	};
+>>  } __packed;
+>>
+>> +struct hv_input_map_stats_page {
+>> +	u32 type; /* enum hv_stats_object_type */
+>> +	u32 padding;
+>> +	union hv_stats_object_identity identity;
+>> +} __packed;
+>> +
+>> +struct hv_output_map_stats_page {
+>> +	u64 map_location;
+>> +} __packed;
+>> +
+>> +struct hv_input_unmap_stats_page {
+>> +	u32 type; /* enum hv_stats_object_type */
+>> +	u32 padding;
+>> +	union hv_stats_object_identity identity;
+>> +} __packed;
+>> +
+>>  struct hv_proximity_domain_flags {
+>>  	u32 proximity_preferred : 1;
+>>  	u32 reserved : 30;
+>> --
+>> 2.34.1
 
 
