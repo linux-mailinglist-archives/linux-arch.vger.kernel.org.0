@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-10580-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10581-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53810A57477
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 23:04:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E970DA57470
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 23:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 471DC189B1F5
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 22:04:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1753E174E10
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 22:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF94725A33D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0A0325A33F;
 	Fri,  7 Mar 2025 22:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="IpqejOvo"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="MnViV2co"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D81C2580F7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C45E257AED;
 	Fri,  7 Mar 2025 22:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741384990; cv=none; b=fsmYfXS3OlIl8SDMuZpDejJvdSewpLxiU4ABQ3tVPmneJJDgWYRBcB+cxGuNit9eoyQdYdOD1ivvqTlcLaeAkUm1fRWobY4owHJDSWkMxsdjgE1NiHWM5OHEl0qwsEvqatcCcC/kzWnUxbnhfQ0g4W/4V1N5WbZZMEZz8MDT37s=
+	t=1741384990; cv=none; b=JMkbqEypO4bh8otitCb5hE/M7VkIbhb1kbUDWLMcLetj0aSbMt8cBYnXVml0DXQAR0rU1kOQIZMQ9LejOcUxxIeZFlqUR4t+aTdwp5/oUCzJsnhYW33It+sNJ9WbQNfij5HlHnwzZ957DZheZ+BIlqIRgpAd1Aevt7+1gqKn6rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741384990; c=relaxed/simple;
-	bh=79aHzr8RUR8X0QjS0Nutfo1COTiyDYExxJNO3oOJY7A=;
+	bh=cvz/ZTsNhYKR7Jb164PPQT4b9Cqedmh8XCmTmf4kZQE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CY7hPYZhDo8MFCoc2WpPBQhUB7gso74JnCixJrJrtfR6+l51R0WA+TmGzVFE42ICWjxTbtfSaDZ6BQABiO6UsM5SSsLgQPECfOx855SIbG7sZy7jZZyzQLFqHReDu19WpSB6tZdIrJBgAHB+sCLDhpYgudQ00Zs4RufMRky+PuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=IpqejOvo; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=hMlqHJFToEzLFUGBKVo2peJftapzJUHr63cKdD6PvT9miab3d6xqB0/JiZxbWjzNauyF7lCtOctCGgxPyjRm7JilqzF19v+hJmN6M+ddVp93p/gfF7bcbyOws1IDT8zsW2ViJF3RsxJhiKII2b5WNpf2wDsfu/bAgsM8i3mQh3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=MnViV2co; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 6F4FE2038F42;
+	by linux.microsoft.com (Postfix) with ESMTPSA id C7C432038F46;
 	Fri,  7 Mar 2025 14:03:07 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6F4FE2038F42
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C7C432038F46
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741384987;
-	bh=6ejp9VKGmkMNi+YMzNEKy938J5ilfGRLZaNcUOciZXc=;
+	s=default; t=1741384988;
+	bh=DHCZgN2nv/auyPY8jlf5/CxWk9DcxsvUe9NZhUMgcn4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IpqejOvogwQq7fkkJFIx5UBw258yMNgVwiwVKJvbpy7zSfNJoFCESKEOdRtEsRVzU
-	 KtEBac0X5rQj0SiRXp2qHjP14FGW3zGctOmx//BDA18H70eNtXBrxpaTt9aPiUX8DM
-	 nM3PNV8Mzyu/hfO+lGVVs4oJe5vB/dYj7w9l6J10=
+	b=MnViV2cok80SEu3yXZPLruR5ncKfFuUB/DN7G00ORVAuMxkiQGqPfq064cRXssxSt
+	 SfJhMBk2aVXinFXplzZThgtTbdnZR2XdvsyJlDk6Q6MLVD9keTNL32J4TCwZ6P9x4k
+	 ig35M2awNRwyMkTjxYPev4uCYmeSyu1H+cHpbIIo=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -83,9 +83,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v5 05/11] arm64: hyperv: Initialize the Virtual Trust Level field
-Date: Fri,  7 Mar 2025 14:02:57 -0800
-Message-ID: <20250307220304.247725-6-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v5 06/11] arm64, x86: hyperv: Report the VTL the system boots in
+Date: Fri,  7 Mar 2025 14:02:58 -0800
+Message-ID: <20250307220304.247725-7-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250307220304.247725-1-romank@linux.microsoft.com>
 References: <20250307220304.247725-1-romank@linux.microsoft.com>
@@ -97,30 +97,43 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Various parts of the hyperv code need to know what VTL
-the kernel runs at, most notably VMBus needs that to
-establish communication with the host.
+The hyperv guest code might run in various Virtual Trust Levels.
 
-Initialize the Virtual Trust Level field to enable
-booting in the Virtual Trust Level.
+Report the level when the kernel boots in the non-default (0)
+one.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 ---
- arch/arm64/hyperv/mshyperv.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/hyperv/mshyperv.c | 2 ++
+ arch/x86/hyperv/hv_vtl.c     | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-index c647db56fd6b..a7db03f5413d 100644
+index a7db03f5413d..3bc16dbee758 100644
 --- a/arch/arm64/hyperv/mshyperv.c
 +++ b/arch/arm64/hyperv/mshyperv.c
-@@ -107,6 +107,7 @@ static int __init hyperv_init(void)
- 
+@@ -108,6 +108,8 @@ static int __init hyperv_init(void)
  	if (ms_hyperv.priv_high & HV_ACCESS_PARTITION_ID)
  		hv_get_partition_id();
-+	ms_hyperv.vtl = get_vtl();
+ 	ms_hyperv.vtl = get_vtl();
++	if (ms_hyperv.vtl > 0) /* non default VTL */
++		pr_info("Linux runs in Hyper-V Virtual Trust Level %d\n", ms_hyperv.vtl);
  
  	ms_hyperv_late_init();
  
+diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
+index 4e1b1e3b5658..c21bee7e8ff3 100644
+--- a/arch/x86/hyperv/hv_vtl.c
++++ b/arch/x86/hyperv/hv_vtl.c
+@@ -24,7 +24,7 @@ static bool __init hv_vtl_msi_ext_dest_id(void)
+ 
+ void __init hv_vtl_init_platform(void)
+ {
+-	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
++	pr_info("Linux runs in Hyper-V Virtual Trust Level %d\n", ms_hyperv.vtl);
+ 
+ 	x86_platform.realmode_reserve = x86_init_noop;
+ 	x86_platform.realmode_init = x86_init_noop;
 -- 
 2.43.0
 
