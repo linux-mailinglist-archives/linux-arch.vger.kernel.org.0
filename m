@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10573-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10574-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC8E7A573CA
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 22:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D003FA57413
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 22:55:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 276813B512A
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 21:39:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2E2E3B1155
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 21:55:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA442586E2;
-	Fri,  7 Mar 2025 21:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E5620C01A;
+	Fri,  7 Mar 2025 21:55:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="I19wXnmt"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="SnZFHeoT"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F0002580DB;
-	Fri,  7 Mar 2025 21:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A9DF2080FD;
+	Fri,  7 Mar 2025 21:55:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741383541; cv=none; b=Aj+naqrSxf8QjvBmsCxkXfkchiAsADUbeJV8zn7RjXlxBklWTdvt3bHgmpAHKtrOGfZUhUSqMWPmO+XquuJYdQLs6uA3wKhomzSUzHM7SjhUgLJw4kUc2kIuFK9yAog5qwp1qciRHo3TxX8/wtz5LOV3vEHrZGVR2Ca8W5xN6YY=
+	t=1741384526; cv=none; b=gDB7UthQqr1VbomEuN4Z6LQJg+tcH2LL6m6jLljkJfjaqRjK2XJYbbJp17qLBxctu7BzKfC8Dy6I1rZ2kxHimdSEMDxGRF/9yZut2mJsqdlRCoj67JygIJwTQcyFSkv1iAOvByVHlGeaLUz+/h6XZ5znK011OcNs3ZI8+kVS73o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741383541; c=relaxed/simple;
-	bh=+wi8o9NkAeErLhcfBbbC/HrwvBoXP4xttRM/E2ADzf4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JNbaAj/k6SiFUODeA+xY6Wzf/E379E5Qu9tpk9PtlpzgABD5ajUttU08il3iMr6DVnSZ7AbpevaRa/mHeNLYY/fg6G+0/mCafRQxQqRq9LzhL9dNRr09Wj6DjuHt+clM3I2zwek6bsXdOYeNFp0PPj44M1F2GuTtIPlMzwRFxoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=I19wXnmt; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1741384526; c=relaxed/simple;
+	bh=lClzBMRdUULwzoMLwEqwrMgSFr14uRCRgTFs1G4m8e0=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=QIjcB8sA7a6wiIFMUlIZiWGhJsfKA3SayTqSaWqbPZhXSP7gCbReIr4I1hS0IRm4x5CuqlGVBe3q/gaB4NW3kPRL9s7WOdZBk7lFb4o2Zl0537uUCJ2KoG+H1kT3XIUVqosSrnQ7YlWNAkNwk/YY7Z43HdhExGcVg4/yLxYISVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=SnZFHeoT; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 5141B2038F3B;
-	Fri,  7 Mar 2025 13:38:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5141B2038F3B
+Received: from [192.168.35.166] (c-24-22-154-137.hsd1.wa.comcast.net [24.22.154.137])
+	by linux.microsoft.com (Postfix) with ESMTPSA id E30EB2038F3B;
+	Fri,  7 Mar 2025 13:55:23 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E30EB2038F3B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741383540;
-	bh=PErTl8OjCmr+pXwdzsQjeewJzsWEtdQvnkkFx+B+7d4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=I19wXnmtMTh5TKUlGJZ1jrhcfilqlen7AEI9d0oLMxbG8/LUNvkfP6s7gePdSXzP4
-	 atNUJWmjNO40FAQcmyGeeiz6CUyVP5t/l6f4UyWBLO8gk2CkeZnnor3kJ8YVqEjKMd
-	 6KM77EOO72WSaKZMIexUsot5lon5rj3stvV+gx/c=
-Message-ID: <bed778c5-4642-4429-914d-7ef2e6ecccc6@linux.microsoft.com>
-Date: Fri, 7 Mar 2025 13:38:42 -0800
+	s=default; t=1741384524;
+	bh=BYiqT5jddIJjKfv2s/zeQhMm81+sjONX7rRhWau6sX8=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=SnZFHeoT4mDZsn5Rlyo65kO8j7OrCyFjXp+yUsoaUMwBj04Pv8Hr4YbS0zY1M5JBI
+	 KzbKWXQF8/IhMnTVs9LQmBaZigJf+/bNz8HHHuNKFlreUORpgb5AXo51iKtcbOmmA6
+	 dV2IMIxGY2uY01fbJKBPdec4cij7cYKcHmJG8rSE=
+Message-ID: <9cd97b0e-dfd3-4923-961e-00ba09eb6cef@linux.microsoft.com>
+Date: Fri, 7 Mar 2025 13:55:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,17 +49,15 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 06/10] Drivers/hv: Export some functions for use by
- root partition module
-To: Michael Kelley <mhklinux@outlook.com>,
+Cc: Michael Kelley <mhklinux@outlook.com>, eahariha@linux.microsoft.com,
  "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
  "x86@kernel.org" <x86@kernel.org>,
  "linux-arm-kernel@lists.infradead.org"
  <linux-arm-kernel@lists.infradead.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
- "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Cc: "kys@microsoft.com" <kys@microsoft.com>,
+ "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+ "kys@microsoft.com" <kys@microsoft.com>,
  "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
  "wei.liu@kernel.org" <wei.liu@kernel.org>,
  "decui@microsoft.com" <decui@microsoft.com>,
@@ -88,99 +86,94 @@ Cc: "kys@microsoft.com" <kys@microsoft.com>,
  "anrayabh@linux.microsoft.com" <anrayabh@linux.microsoft.com>,
  "rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org"
  <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
+Subject: Re: [PATCH v5 03/10] arm64/hyperv: Add some missing functions to
+ arm64
+To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-7-git-send-email-nunodasneves@linux.microsoft.com>
- <SN6PR02MB415706E75693B821FAF0A231D4CA2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <1740611284-27506-4-git-send-email-nunodasneves@linux.microsoft.com>
+ <5f3d660d-fe2e-4ac1-94a7-66d6c8ffe579@linux.microsoft.com>
+ <2fee888a-4f81-40aa-9545-617a49a7fb30@linux.microsoft.com>
+ <SN6PR02MB41579F4147561B96A2C1C057D4CA2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <7f689725-f676-4465-974d-ca2477d445f7@linux.microsoft.com>
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
 Content-Language: en-US
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB415706E75693B821FAF0A231D4CA2@SN6PR02MB4157.namprd02.prod.outlook.com>
+In-Reply-To: <7f689725-f676-4465-974d-ca2477d445f7@linux.microsoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/6/2025 11:23 AM, Michael Kelley wrote:
-> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Wednesday, February 26, 2025 3:08 PM
+On 3/7/2025 1:36 PM, Nuno Das Neves wrote:
+> On 3/6/2025 11:05 AM, Michael Kelley wrote:
+>> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Thursday, February 27, 2025 4:21 PM
+>>>
+>>> On 2/26/2025 9:56 PM, Easwar Hariharan wrote:
+>>>> On 2/26/2025 3:07 PM, Nuno Das Neves wrote:
+>>>>> These non-nested msr and fast hypercall functions are present in x86,
+>>>>> but they must be available in both architetures for the root partition
+>>>>
+>>>> nit: *architectures*
+>>>>
+>>>>
+>>> Thanks!
+>>>
+>>>>> driver code.
+>>>>>
+>>>>> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+>>>>> ---
+>>>>>  arch/arm64/hyperv/hv_core.c       | 17 +++++++++++++++++
+>>>>>  arch/arm64/include/asm/mshyperv.h | 12 ++++++++++++
+>>>>>  include/asm-generic/mshyperv.h    |  2 ++
+>>>>>  3 files changed, 31 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/hyperv/hv_core.c b/arch/arm64/hyperv/hv_core.c
+>>>>> index 69004f619c57..e33a9e3c366a 100644
+>>>>> --- a/arch/arm64/hyperv/hv_core.c
+>>>>> +++ b/arch/arm64/hyperv/hv_core.c
+>>>>> @@ -53,6 +53,23 @@ u64 hv_do_fast_hypercall8(u16 code, u64 input)
+>>>>>  }
+>>>>>  EXPORT_SYMBOL_GPL(hv_do_fast_hypercall8);
+>>>>>
+>>>>> +/*
+>>>>> + * hv_do_fast_hypercall16 -- Invoke the specified hypercall
+>>>>> + * with arguments in registers instead of physical memory.
+>>>>> + * Avoids the overhead of virt_to_phys for simple hypercalls.
+>>>>> + */
+>>>>> +u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
+>>>>> +{
+>>>>> +	struct arm_smccc_res	res;
+>>>>> +	u64			control;
+>>>>> +
+>>>>> +	control = (u64)code | HV_HYPERCALL_FAST_BIT;
+>>>>> +
+>>>>> +	arm_smccc_1_1_hvc(HV_FUNC_ID, control, input1, input2, &res);
+>>>>> +	return res.a0;
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(hv_do_fast_hypercall16);
+>>>>> +
+>>>>
+>>>> I'd like this to have been in arch/arm64/include/asm/mshyperv.h like its x86
+>>>> counterpart, but that's just my personal liking of symmetry. I see why it's here
+>>>> with its slow and 8-byte brethren.
+>>>>
+>>> Good point, I don't see a good reason this can't be in the header.
+>>
+>> I was trying to remember if there was some reason I originally put
+>> hv_do_hypercall() and hv_do_fast_hypercall8() in the .c file instead of
+>> the header like on x86. But I don't remember a reason. During
+>> development, the code changed several times, and there might have
+>> been a reason that didn't persistent in the version that was finally
+>> accepted upstream.
+>>
+>> My only comment is that hv_do_hypercall() and the 8 and 16 "fast"
+>> versions should probably stay together one place on the arm64 side,
+>> even if it doesn't match x86.
 >>
 > 
-> Nit: For the patch Subject line, use prefix "Drivers: hv:" instead of with a slash.
-> That's what we usually use and what you have used for other patches in this
-> series.
+> I think I'll just keep them together here for now then. They
+> could be moved to the header in future if it seems worth doing.
 > 
-Thanks, I thought I checked these but I guess I missed this! I'll update for v6.
 
->> get_hypervisor_version, hv_call_deposit_pages, hv_call_create_vp,
->> hv_call_deposit_pages, and hv_call_create_vp are all needed in module
->> with CONFIG_MSHV_ROOT=m.
->>
->> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> 
-> Modulo the nit:
-> 
-> Reviewed-by: Michael Kelley <mhklinux@outlook.com>
-> 
->> ---
->>  arch/arm64/hyperv/mshyperv.c   | 1 +
->>  arch/x86/kernel/cpu/mshyperv.c | 1 +
->>  drivers/hv/hv_common.c         | 1 +
->>  drivers/hv/hv_proc.c           | 3 ++-
->>  4 files changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
->> index 2265ea5ce5ad..4e27cc29c79e 100644
->> --- a/arch/arm64/hyperv/mshyperv.c
->> +++ b/arch/arm64/hyperv/mshyperv.c
->> @@ -26,6 +26,7 @@ int hv_get_hypervisor_version(union hv_hypervisor_version_info
->> *info)
->>
->>  	return 0;
->>  }
->> +EXPORT_SYMBOL_GPL(hv_get_hypervisor_version);
->>
->>  static int __init hyperv_init(void)
->>  {
->> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
->> index 2c29dfd6de19..0116d0e96ef9 100644
->> --- a/arch/x86/kernel/cpu/mshyperv.c
->> +++ b/arch/x86/kernel/cpu/mshyperv.c
->> @@ -420,6 +420,7 @@ int hv_get_hypervisor_version(union hv_hypervisor_version_info
->> *info)
->>
->>  	return 0;
->>  }
->> +EXPORT_SYMBOL_GPL(hv_get_hypervisor_version);
->>
->>  static void __init ms_hyperv_init_platform(void)
->>  {
->> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
->> index ce20818688fe..252fd66ad4db 100644
->> --- a/drivers/hv/hv_common.c
->> +++ b/drivers/hv/hv_common.c
->> @@ -717,6 +717,7 @@ int hv_result_to_errno(u64 status)
->>  	}
->>  	return -EIO;
->>  }
->> +EXPORT_SYMBOL_GPL(hv_result_to_errno);
->>
->>  void hv_identify_partition_type(void)
->>  {
->> diff --git a/drivers/hv/hv_proc.c b/drivers/hv/hv_proc.c
->> index 8fc30f509fa7..20c8cee81e2b 100644
->> --- a/drivers/hv/hv_proc.c
->> +++ b/drivers/hv/hv_proc.c
->> @@ -108,6 +108,7 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
->>  	kfree(counts);
->>  	return ret;
->>  }
->> +EXPORT_SYMBOL_GPL(hv_call_deposit_pages);
->>
->>  int hv_call_add_logical_proc(int node, u32 lp_index, u32 apic_id)
->>  {
->> @@ -194,4 +195,4 @@ int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags)
->>
->>  	return ret;
->>  }
->> -
->> +EXPORT_SYMBOL_GPL(hv_call_create_vp);
->> --
->> 2.34.1
+I was really hoping the answer here would be to move all of them together to the header,
+but oh well.
 
+<snip>
 
