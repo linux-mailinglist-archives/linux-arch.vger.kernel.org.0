@@ -1,69 +1,88 @@
-Return-Path: <linux-arch+bounces-10563-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10564-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 828B0A56131
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 07:52:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B82CA56BDF
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 16:23:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A63C3AE2D5
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 06:52:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B85177ADAE6
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Mar 2025 15:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE3619F13F;
-	Fri,  7 Mar 2025 06:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C1D621CC43;
+	Fri,  7 Mar 2025 15:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z4Kfm9ma"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="mYAdAwxv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57E819DFA7;
-	Fri,  7 Mar 2025 06:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7F121D3E5
+	for <linux-arch@vger.kernel.org>; Fri,  7 Mar 2025 15:17:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741330329; cv=none; b=a45OsXWJytHK2SmAPF8nWxKuszscPtkz/SYmhIlctA6FPMj/LqkozImElRHLed22ceP8eoN2wPdHcCk9yA34ysCSiXccegsaQNDj1I/EmANWNxLJoT2AADCv3LGHxZKb/MxK4AcqPnLqbwjpR/NZMPY+WwLsS9C2zmdckB/iEQE=
+	t=1741360670; cv=none; b=T1/qJUjie9IMircAT3YYcV69bnfMX76VishfebzysXB/oElROuyK1AeByhusaWJxaeAYcU2FXQlbAVbpgf2AWHHWUgVZOBAP0KvEzZxjKtP43TGRns7+L3VKUrGi6pP2uieluuDKBx/J9NbVhdnY5evzRU2Z+Mjn1GQnn/fpmx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741330329; c=relaxed/simple;
-	bh=0FboRi4T5lRhBpOLmxfTGg8DNG9FS+J/OvKiP4g1uVM=;
+	s=arc-20240116; t=1741360670; c=relaxed/simple;
+	bh=rX0uMtq0RVZw5cLocHPJ4iQ1QgIw8r0WsZ5PnIUFg/k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FzRlJLFGhFTksWNeuIl12MmiEP3ZBrB/sZWwwW/cJwFbitPkVAp68lqD3/9jervXGvzb0SBExouqTYRTJDmRwu/39VwISNe0m5cx3uBe1yWItN5XdOaPc2BL5L+XkRF8L+1bauBjdXySbpg7DAsBeDz0qOpAKNmp5Eh9fcPETpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z4Kfm9ma; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741330328; x=1772866328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0FboRi4T5lRhBpOLmxfTGg8DNG9FS+J/OvKiP4g1uVM=;
-  b=Z4Kfm9makxyVipxRXMcPGI4emlaIPxZqFUh8PAWEzx8OQ+K9DEcmoP6u
-   Ekt2QKkJ8pkNE76WmBG/QM31ah7zfqrGV2JNMvtQB1qwiA8smhUI4CwmC
-   p/y96BkgrGoimVQ1tZtju2INIvV3qx0UcRz6Dlz+X+gUjo98e0xo4JsLn
-   WDcksOu637MJXlwO/XHesSdmaBvsNypVIBTyJiGd9NsSzssQcPDiRFMOR
-   BXKbsjSMmyvvJLzLVS7Z2XVLQim+Idxgg9bqs26/dNvpB4xiUDzXIuFEE
-   VlNcUnGFlNPDnyh5mBSaHABi+Y/7vcGYhEvp97vXbsGIBdt/ZcQMNNrIG
-   A==;
-X-CSE-ConnectionGUID: 7bYbQ2y5Rryz5wQ4o7dKzA==
-X-CSE-MsgGUID: kcLRTQY8TReadBGDPm66Bw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="53769939"
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="53769939"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 22:52:07 -0800
-X-CSE-ConnectionGUID: fMKAQkc6S7ifR+dbATnnfQ==
-X-CSE-MsgGUID: 7tBYnb24QYOZP5v4PpdyhQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="123425163"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa003.fm.intel.com with ESMTP; 06 Mar 2025 22:52:00 -0800
-Date: Fri, 7 Mar 2025 14:49:44 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Alexey Kardashevskiy <aik@amd.com>, x86@kernel.org, kvm@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arch@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=oT4/yZrihuJc2++bjOzdKvM1cUgYt0LLNaMtd9e1fGn7XzK+fWSauYRZsiWIX6FdgztY23v5AQKxS/Kbu6KGi/Utg0hxlp02oGkZhxpYz4JXQoBHa8z3ew0kmeH6uQsjVPIFzzkoMswoQD22H8ntmq6m70r6g7efhn24eNMk3PY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=mYAdAwxv; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7c3d0e90c4eso309228085a.1
+        for <linux-arch@vger.kernel.org>; Fri, 07 Mar 2025 07:17:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1741360667; x=1741965467; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kCAKy1MLCn9h59tEwZqypamw7ZoTBGTa4RgpePYYALo=;
+        b=mYAdAwxvOF/FNKH8ghHWZmZmVqxewrCco3QLKzVoay/uP2SagsmrLgck+MK8C0BE9M
+         p5Iv5tc49YScJNaj2Rnv6egDmCWLi+kHBxIkpweWKabbqDPoKWhkMgldw/0J38gj0jz2
+         vufiHwYAYMsmehRUDGr3bVI4NVAFoJjrMF8dluSvVHBRKg6OAeDG4tsWs3SwHWrmeRlS
+         oDfDvpIUpL18c4PqDn8Yro63tRRKk6tB3iE7Ej05DoCLsVj++pVTQ0uY94K20MPW5zUv
+         IgmJhXjzv5XvU83qktfr42Pl7vbpw5veI6GpaXuB15HnnHqLdUOclLw9uMDN9vK9PVQs
+         WK8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741360667; x=1741965467;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kCAKy1MLCn9h59tEwZqypamw7ZoTBGTa4RgpePYYALo=;
+        b=gmJnX0XLGSir8Ho0cFrfhy3eYuMKqH4oIoNm02AeTemmDy1UJnvdE3OsK5KzagqUDH
+         FMGFzudWYNcoZJiutJsL/DrIxYvk7DmGn6Ush+WTmm7mY1DGc3h4/pVfmjyGX7JqcL5i
+         ZY8yVop1HVeRzh6Z8ptdkykYzSe63X3rOWeBaieIJVhkAk4bnz8xaSWQAEWgrEQs8H8r
+         HeW/BbZTtXVQIyv7SDs7CoLBToR7o7xrNr/gHVXlO76Nq2oOPy5jV3BeMxEBxbyjJoZi
+         SCy2LczcF+aOGoM+Y/PdcfNScop4L8Uu75ftxZ5g+N5NDSGZAZH5Ls1LApBsPS8RAWcR
+         +9UA==
+X-Forwarded-Encrypted: i=1; AJvYcCWk7CHJPygpbEur0gOUL48gQ+Dh28wGeyFedWFOM0VCpivI2/TToWTLJeoJZIatB6RrS+ezifabWs4d@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsPLxgsvF8Fhf+Y8kcS4Xt1T7tudDX93AWYG39RPS8v3EPa2J6
+	qtvNjorm/RTL3R/W8xQHpt9w0gwmX0VuGT3jOdPxkZjjdjDhN3o1IZrFBQ8F1uQ=
+X-Gm-Gg: ASbGncsYAByDz9bwIOWBYVgfsJ4YqaGswE5VdH7zFpzhI+PreyRbsaG8l7gmuF49XIJ
+	EquDIK0c+4RV4Ir0XGeX/VCbhXh+/uTEAcQOpFfO15W1IazNJxUm1lKE4crjsAyMZ0cVUmP7PiD
+	mxeGYb6n2cOzcfHL0LcXoQJrX0NElaMaBubLuYo5am2cABVn0ErDG4K7nDbK3gHk2SVmnP/AVq6
+	iGWPxPdky294Jn5yqaE0Fu61W2xfFnn8aBpnJlmFUnEKXqTODdevdDZtGl0XOuVCRRzHLFndqel
+	qCJUs4bkjnzD/xdWMqLLajW9fEAjyltaZEF5nhSDA0TB2qJLPgSOmzgMyLVRZHxlf/sOrAknvKg
+	IMi80jjlBUxT0lfpXdg==
+X-Google-Smtp-Source: AGHT+IGPtlWnpTlq97dHBsYv9Qj2zzhftXBWiYKJa7fQGbPL61VR64KLpfRR/UmiZXjz25h9+jNuNw==
+X-Received: by 2002:a05:620a:27ce:b0:7c3:cbad:5735 with SMTP id af79cd13be357-7c499d46c20mr545047685a.28.1741360667128;
+        Fri, 07 Mar 2025 07:17:47 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-128-5.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.128.5])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c3e5511328sm252963085a.105.2025.03.07.07.17.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Mar 2025 07:17:46 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1tqZSL-00000001ljV-3gSE;
+	Fri, 07 Mar 2025 11:17:45 -0400
+Date: Fri, 7 Mar 2025 11:17:45 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Alexey Kardashevskiy <aik@amd.com>
+Cc: Xu Yilun <yilun.xu@linux.intel.com>, x86@kernel.org,
+	kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
 	Paolo Bonzini <pbonzini@redhat.com>,
 	Tom Lendacky <thomas.lendacky@amd.com>,
 	Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
@@ -87,7 +106,7 @@ Cc: Alexey Kardashevskiy <aik@amd.com>, x86@kernel.org, kvm@vger.kernel.org,
 	Zhi Wang <zhiw@nvidia.com>,
 	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
 Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
-Message-ID: <Z8qXCI6Wwygvwhya@yilunxu-OptiPlex-7050>
+Message-ID: <20250307151745.GH354403@ziepe.ca>
 References: <Z72GmixR6NkzXAl7@yilunxu-OptiPlex-7050>
  <2fe6b3c6-3eed-424d-87f0-34c4e7e1c906@amd.com>
  <Z77xrqLtJfB84dJF@yilunxu-OptiPlex-7050>
@@ -97,7 +116,7 @@ References: <Z72GmixR6NkzXAl7@yilunxu-OptiPlex-7050>
  <Z8U+/0IYyn7XX3ao@yilunxu-OptiPlex-7050>
  <20250305192842.GE354403@ziepe.ca>
  <Z8lE+5OpqZc746mT@yilunxu-OptiPlex-7050>
- <20250306182614.GF354403@ziepe.ca>
+ <c5c31890-14fc-4fab-8cd4-d4dcfdecdd2d@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -106,54 +125,19 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250306182614.GF354403@ziepe.ca>
+In-Reply-To: <c5c31890-14fc-4fab-8cd4-d4dcfdecdd2d@amd.com>
 
-On Thu, Mar 06, 2025 at 02:26:14PM -0400, Jason Gunthorpe wrote:
-> On Thu, Mar 06, 2025 at 02:47:23PM +0800, Xu Yilun wrote:
+On Fri, Mar 07, 2025 at 01:19:11PM +1100, Alexey Kardashevskiy wrote:
+> > > Part of my problem here is I don't see anyone who seems to have read
+> > > all three specs and is trying to mush them together. Everyone is
+> > > focused on their own spec. I know there are subtle differences :\
 > 
-> > While for AMD:
-> >         ...
-> >         b.guest_device_id = guest_rid;  //TDI ID, it is the vBDF
-> >         b.gctx_paddr = gctx_paddr;      //AMDs CoCo-VM ID
-> > 
-> >         ret = sev_tio_do_cmd(SEV_CMD_TIO_TDI_BIND, &b, ...
-> > 
-> > 
-> > Neither of them use vIOMMU ID or any IOMMU info, so the only concern is
-> > vBDF.
-> 
-> I think that is enough, we should not be putting this in VFIO if it
-> cannot execute it for AMD :\
+> One is SEV TIO (earlier version published), another one TDX Connect (which I
+> do not have and asked above) and what is the third one here? Or is it 4 as
+> ARM and RiscV both doing this now? Thanks,
 
-OK. With these discussion, my understanding is it can execute for AMD
-but we don't duplicate the effort for vdevice->id.
+ARM will come with a spec someday, I don't know about RISCV. Maybe it
+is 4..
 
-We can swtich to vdevice and try to solve the rest problems.
-
-> 
-> > > You could also issue the TSM bind against the idev on the iommufd
-> > > side..
-> > 
-> > But I cannot figure out how idev could ensure no mmap on VFIO, and how
-> > idev could call dma_buf_move_notify.
-> 
-> I suggest you start out this way from the VFIO. Put the device in a CC
-> mode which bans the mmap entirely and pass that CC capable as a flag
-> into iommufd when creating the idev.
-
-IIUC, it basically switches back to my previous implementation for mmap.
-
-https://lore.kernel.org/kvm/20250107142719.179636-9-yilun.xu@linux.intel.com/
-
-I can do that.
-
-Thanks,
-yilun
-
-> 
-> If it really needs to be dyanmic a VFIO feature could change the CC
-> mode and that could call back to iommufd to synchronize if that is
-> allowed.
-> 
-> Jason
+Jason
 
