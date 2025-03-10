@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10644-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10645-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04197A59C32
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 18:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77205A59CCB
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 18:15:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D8C816E01C
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 17:10:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1955016F197
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 17:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE407233724;
-	Mon, 10 Mar 2025 17:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC7C231A2A;
+	Mon, 10 Mar 2025 17:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="l1AipWqa"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="izQvo7Lt"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F71822D79B;
-	Mon, 10 Mar 2025 17:09:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910CC22FACA;
+	Mon, 10 Mar 2025 17:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741626588; cv=none; b=mVe3aiB928ZEqkhgbpofJRFxq1CRpOGXriWhhhmeCr3QWjLierbTXE/90fAtJ1RswfVN2nVQd3nouBbShTrd+casM/xH6br7b2URCp9kIbKq0CCXNVASSniHtBIF5n1Z2sWmlxEuw4iUDP7Gzcbn/H9CVGXwB6F7iRPFFugU3eA=
+	t=1741626915; cv=none; b=Z1NFjbDJKobfe8QCTeIa7UvUFOVJaGcVdlCX2H5/4nQHovwW9A6sVGhKYJ4gCTNRBnap05v/24zcS3EFX1SmWl41/67AoA/swHTHNtsVF66KEAqnA9PG+f6tAgDj4qcyi8o6Fnj0wI7SBG/taAi76KApjGPvOkeAN+z+IVbgwT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741626588; c=relaxed/simple;
-	bh=yVNu05pqKMvUkTRfJJGadIbGslAZMjfMrFefbqDKqXM=;
+	s=arc-20240116; t=1741626915; c=relaxed/simple;
+	bh=bWqJ4FD0rh4Jv7wGJ1mKbUp1hDMD5nvjAYgteY/Eo4U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k2RTmOnBwcjSlPXADnO0iaVp7lmFZjUc084/f1+etIhPO59NTbsbaPHB6QpqHtbnAklvGLGILkl0ic5kSLBJFUEdwe0Swm1XzB78IDI8vXNeggsaN7lL7zTWOxrBmQcugIX2giAshJwE3HEeCY42kWeYidOw2138bjFUreGk5Ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=l1AipWqa; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=J/7QbO8GnHje7q1Y7SlMMFPHc2fvlb0VnuoC2Zrq4kp/eM+/a2jaCAGLYL+mPiOLpUIHuLBgXdRuh0fh1/YXDd7wGQeQpPkOVu4ARSZOr7t3m2cMVlE9InNsX6IUpVBECv3i+8xN9X3J/PRcqqdEorGgefqukTd3QyojLrF/iyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=izQvo7Lt; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 0DA692038F32;
-	Mon, 10 Mar 2025 10:09:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0DA692038F32
+	by linux.microsoft.com (Postfix) with ESMTPSA id BFF802038F32;
+	Mon, 10 Mar 2025 10:15:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BFF802038F32
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741626586;
-	bh=ZPp0js6+jrg5sVe7XA7ERrTixZv7xjbVVvf7fRlGlAE=;
+	s=default; t=1741626913;
+	bh=eME4gRmjVE3w6nzuhE7xqtEmYJ+fLHcjVchsKhgalL8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=l1AipWqanSYF7uSInl5in5VBJSpUKdzXNs6Z6Cc5jMQikOncxE6pClVlB5vRa3No/
-	 iDoZQTAoQd9hGHqs2vaxzFNRGIT6LEpWYSUp2mlFkdRWAt98W4RXVrPRI1lDqFK6Qv
-	 S3kLzNTctjFEFKHQ9Tw6wh1lVjMxr+HbU/Mq8eew=
-Message-ID: <e3414583-0437-4fc4-b464-1426e5fe9628@linux.microsoft.com>
-Date: Mon, 10 Mar 2025 10:09:45 -0700
+	b=izQvo7LtPEn8QdsyQJfUA53eTxUOuoeOz82pbmQ0wQaG1gObJiMFAQaBdi4A4iWNR
+	 uP46JGVDaO3cRF/G9lVcXt9kOcQnz5el35Sjj0jweE8RV1fyt3eecjS3tkMovWnNwm
+	 xH3wS8Mi9wqAyRiK3OyMT3uXWKNOYhhn5jgty0K8=
+Message-ID: <319aac20-229e-4a81-b2c5-e870453634bb@linux.microsoft.com>
+Date: Mon, 10 Mar 2025 10:15:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,9 +49,9 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v5 09/11] Drivers: hv: vmbus: Introduce
- hv_get_vmbus_root_device()
-To: Tianyu Lan <ltykernel@gmail.com>
+Subject: Re: [PATCH hyperv-next v5 11/11] PCI: hv: Get vPCI MSI IRQ domain
+ from DeviceTree
+To: Bjorn Helgaas <helgaas@kernel.org>
 Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
  catalin.marinas@arm.com, conor+dt@kernel.org, dave.hansen@linux.intel.com,
  decui@microsoft.com, haiyangz@microsoft.com, hpa@zytor.com,
@@ -67,171 +67,97 @@ Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
  linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org,
  apais@microsoft.com, benhill@microsoft.com, bperkins@microsoft.com,
  sunilmut@microsoft.com
-References: <20250307220304.247725-1-romank@linux.microsoft.com>
- <20250307220304.247725-10-romank@linux.microsoft.com>
- <CAMvTesCFZ6sxQp7qqSDjD9idRjVHxh96Sp4betomgFH-OFLZ3Q@mail.gmail.com>
+References: <20250310164122.GA551965@bhelgaas>
 Content-Language: en-US
 From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <CAMvTesCFZ6sxQp7qqSDjD9idRjVHxh96Sp4betomgFH-OFLZ3Q@mail.gmail.com>
+In-Reply-To: <20250310164122.GA551965@bhelgaas>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 3/10/2025 6:41 AM, Tianyu Lan wrote:
-> On Sat, Mar 8, 2025 at 6:05 AM Roman Kisel <romank@linux.microsoft.com> wrote:
+On 3/10/2025 9:41 AM, Bjorn Helgaas wrote:
+> On Fri, Mar 07, 2025 at 02:03:03PM -0800, Roman Kisel wrote:
+>> The hyperv-pci driver uses ACPI for MSI IRQ domain configuration on
+>> arm64. It won't be able to do that in the VTL mode where only DeviceTree
+>> can be used.
 >>
->> The ARM64 PCI code for hyperv needs to know the VMBus root
->> device, and it is private.
->>
->> Provide a function that returns it. Rename it from "hv_dev"
->> as "hv_dev" as a symbol is very overloaded. No functional
->> changes.
+>> Update the hyperv-pci driver to get vPCI MSI IRQ domain in the DeviceTree
+>> case, too.
 >>
 >> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > 
-> Why change all device's parent to vmbus_root_device?
+> A couple minor comments below, but I don't have any objection to this,
+> so if it's OK with the pci-hyperv.c folks, it's OK with me.
 > 
 
-No changes from my account of the code. Please let me know if I am
-misunderstanding the question.
+Bjorn, thanks a lot for your help and guidance! I'll be most happy to
+incorporate your suggestions into the next version of the series :)
 
-> The ARM64 platform uses the device tree to enumerate vmbus
-> devices..  Can we find the root device via device tree? vmbus
-> code on the x86 use ACPI and it seems to work via ACPI.
-> 
-> 
-
-Right, we find it from the DT as shown in the next patch:
-
-+static struct irq_domain *hv_pci_of_irq_domain_parent(void)
-+{
-+	struct device_node *parent;
-+	struct irq_domain *domain;
-+
-+	parent = of_irq_find_parent(hv_get_vmbus_root_device()->of_node);
-+	domain = NULL;
-+	if (parent) {
-+		domain = irq_find_host(parent);
-+		of_node_put(parent);
-+	}
-+
-+	return domain;
-+}
-+
-
-and later use it for `irq_create_hierarchy()`. Please let me know
-if I missed anything in your question.
-
->> ---
->>   drivers/hv/vmbus_drv.c | 23 +++++++++++++++--------
->>   include/linux/hyperv.h |  2 ++
->>   2 files changed, 17 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
->> index c8474b48dcd2..7bfafe702963 100644
->> --- a/drivers/hv/vmbus_drv.c
->> +++ b/drivers/hv/vmbus_drv.c
->> @@ -45,7 +45,8 @@ struct vmbus_dynid {
->>          struct hv_vmbus_device_id id;
->>   };
->>
->> -static struct device  *hv_dev;
->> +/* VMBus Root Device */
->> +static struct device  *vmbus_root_device;
->>
->>   static int hyperv_cpuhp_online;
->>
->> @@ -80,9 +81,15 @@ static struct resource *fb_mmio;
->>   static struct resource *hyperv_mmio;
->>   static DEFINE_MUTEX(hyperv_mmio_lock);
->>
->> +struct device *hv_get_vmbus_root_device(void)
+>> +#ifdef CONFIG_OF
+>> +
+>> +static struct irq_domain *hv_pci_of_irq_domain_parent(void)
 >> +{
->> +       return vmbus_root_device;
+>> +	struct device_node *parent;
+>> +	struct irq_domain *domain;
+>> +
+>> +	parent = of_irq_find_parent(hv_get_vmbus_root_device()->of_node);
+>> +	domain = NULL;
+>> +	if (parent) {
+>> +		domain = irq_find_host(parent);
+>> +		of_node_put(parent);
+>> +	}
+>> +
+>> +	return domain;
+> 
+> I think this would be a little simpler as:
+> 
+>    parent = of_irq_find_parent(hv_get_vmbus_root_device()->of_node);
+>    if (!parent)
+>      return NULL;
+> 
+>    domain = irq_find_host(parent);
+>    of_node_put(parent);
+>    return domain;
+> 
 >> +}
->> +EXPORT_SYMBOL_GPL(hv_get_vmbus_root_device);
 >> +
->>   static int vmbus_exists(void)
->>   {
->> -       if (hv_dev == NULL)
->> +       if (vmbus_root_device == NULL)
->>                  return -ENODEV;
->>
->>          return 0;
->> @@ -861,7 +868,7 @@ static int vmbus_dma_configure(struct device *child_device)
->>           * On x86/x64 coherence is assumed and these calls have no effect.
->>           */
->>          hv_setup_dma_ops(child_device,
->> -               device_get_dma_attr(hv_dev) == DEV_DMA_COHERENT);
->> +               device_get_dma_attr(vmbus_root_device) == DEV_DMA_COHERENT);
->>          return 0;
->>   }
->>
->> @@ -1930,7 +1937,7 @@ int vmbus_device_register(struct hv_device *child_device_obj)
->>                       &child_device_obj->channel->offermsg.offer.if_instance);
->>
->>          child_device_obj->device.bus = &hv_bus;
->> -       child_device_obj->device.parent = hv_dev;
->> +       child_device_obj->device.parent = vmbus_root_device;
->>          child_device_obj->device.release = vmbus_device_release;
->>
->>          child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
->> @@ -2292,7 +2299,7 @@ static int vmbus_acpi_add(struct platform_device *pdev)
->>          struct acpi_device *ancestor;
->>          struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
->>
->> -       hv_dev = &device->dev;
->> +       vmbus_root_device = &device->dev;
->>
->>          /*
->>           * Older versions of Hyper-V for ARM64 fail to include the _CCA
->> @@ -2383,7 +2390,7 @@ static int vmbus_device_add(struct platform_device *pdev)
->>          struct device_node *np = pdev->dev.of_node;
->>          int ret;
->>
->> -       hv_dev = &pdev->dev;
->> +       vmbus_root_device = &pdev->dev;
->>
->>          ret = of_range_parser_init(&parser, np);
->>          if (ret)
->> @@ -2702,7 +2709,7 @@ static int __init hv_acpi_init(void)
->>          if (ret)
->>                  return ret;
->>
->> -       if (!hv_dev) {
->> +       if (!vmbus_root_device) {
->>                  ret = -ENODEV;
->>                  goto cleanup;
->>          }
->> @@ -2733,7 +2740,7 @@ static int __init hv_acpi_init(void)
->>
->>   cleanup:
->>          platform_driver_unregister(&vmbus_platform_driver);
->> -       hv_dev = NULL;
->> +       vmbus_root_device = NULL;
->>          return ret;
->>   }
->>
->> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
->> index 7f4f8d8bdf43..1f0851fde041 100644
->> --- a/include/linux/hyperv.h
->> +++ b/include/linux/hyperv.h
->> @@ -1333,6 +1333,8 @@ static inline void *hv_get_drvdata(struct hv_device *dev)
->>          return dev_get_drvdata(&dev->device);
->>   }
->>
->> +struct device *hv_get_vmbus_root_device(void);
+>> +#endif
 >> +
->>   struct hv_ring_buffer_debug_info {
->>          u32 current_interrupt_mask;
->>          u32 current_read_index;
->> --
->> 2.43.0
->>
->>
+>> +#ifdef CONFIG_ACPI
+>> +
+>> +static struct irq_domain *hv_pci_acpi_irq_domain_parent(void)
+>> +{
+>> +	struct irq_domain *domain;
+>> +	acpi_gsi_domain_disp_fn gsi_domain_disp_fn;
+>> +
+>> +	if (acpi_irq_model != ACPI_IRQ_MODEL_GIC)
+>> +		return NULL;
+>> +	gsi_domain_disp_fn = acpi_get_gsi_dispatcher();
+>> +	if (!gsi_domain_disp_fn)
+>> +		return NULL;
+>> +	domain = irq_find_matching_fwnode(gsi_domain_disp_fn(0),
+>> +				     DOMAIN_BUS_ANY);
+>> +
+>> +	if (!domain)
+>> +		return NULL;
+>> +
+>> +	return domain;
 > 
+>    if (!domain)
+>      return NULL;
 > 
+>    return domain;
+> 
+> is the same as:
+> 
+>    return domain;
+> 
+> or even just:
+> 
+>    return irq_find_matching_fwnode(gsi_domain_disp_fn(0), DOMAIN_BUS_ANY);
+> 
+>> +}
 
 -- 
 Thank you,
