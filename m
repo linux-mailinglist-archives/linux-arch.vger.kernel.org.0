@@ -1,81 +1,81 @@
-Return-Path: <linux-arch+bounces-10631-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10632-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8A6A598B2
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 15:59:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EF4AA598B9
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 15:59:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E7A83A5A06
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 14:58:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FA5816E1BA
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 14:59:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC31A23875A;
-	Mon, 10 Mar 2025 14:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADF9239592;
+	Mon, 10 Mar 2025 14:53:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="001MDNVH"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="Ct+JB6P8"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A16238169
-	for <linux-arch@vger.kernel.org>; Mon, 10 Mar 2025 14:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D294238D51
+	for <linux-arch@vger.kernel.org>; Mon, 10 Mar 2025 14:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741618401; cv=none; b=mJe7kB7OthwtZ7fSjHv+oyiNagAPj0n0X28kvifyuLd9KPN69QSD30cA1k4jpjtr+APaiC3eowG4cQCrQMwdU/PUcoDSTSug8zcb5RvICNlggkRnSMKy51L74esSxhVkKHDMLlcXSv3MLBugKQ25dmyGO53MUmwS+nqzQ860urA=
+	t=1741618404; cv=none; b=kLyFWTEDHW3+ykU4NNtnGVCOmol7ugP0B9lPNJMDhvi8ncgviEbCOiujNhg9ScV6f6NBwdbj9S/D8dZ4TO7QjnLDmF+A8mSQa58msLQ4cJP9Z0vizHph9HSP4NcRxQt16Do734mRIknoCObCWpHwYEjIWRglnBFRzW84Lh0/BNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741618401; c=relaxed/simple;
-	bh=NmVWKk7RCdoTm8/kxl5H6XmDwgptfJerdilzp6YHjbI=;
+	s=arc-20240116; t=1741618404; c=relaxed/simple;
+	bh=lD6rgHPb/ib2WH9dder9ZLKtBlS2SotatDP0DK7YItE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PyX6XfjKVjpvrm/p1GIvVQ+Fr60cJv2mlQNmuSCV53Ny2y3NmNtMJLfn34LFTjo8XWn3mB6dO7sIw8VSF9TbS0mNEU15u/uTwXnei5DGQAJSwhkoEcSNHvklDtK7QedUAsn2k+NBKi6erspvRXqEk3pFyM3Za6D7xUGFjczvPAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=001MDNVH; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:To:Cc; b=BxmG7PBgKjuIUoGO+Cr1L5bIoZKi5lqMTG7HZLjTEbvOD97IwqamorpOc04QGYH0h/pBra/omjKFTD2QNcEYruZElye/DAk1o0drhWKYVwjQ4WyaEfzPBmrbDz84ln/p8Gbt1gOrbhaIuEruSArgMDci/xLmlOdg+k/tOsNzq5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=Ct+JB6P8; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-22334203781so95792075ad.0
-        for <linux-arch@vger.kernel.org>; Mon, 10 Mar 2025 07:53:19 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-22349bb8605so78603845ad.0
+        for <linux-arch@vger.kernel.org>; Mon, 10 Mar 2025 07:53:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741618399; x=1742223199; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741618402; x=1742223202; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BEoq6zqSeLFMaXOoiuM7yp6ZSaKHVlNR4X3PvApIHRU=;
-        b=001MDNVHlC1le3S/p3HpJjvvRY1zWlgI7KtAcZRY/0MIZyG2mLNEY95y0IK+V2WarG
-         MJJOCnOK10PlxOPHAIX08BPn2OjLCRoB9QlZZwXVNknopwgUgFClom06HTKqOKFF1g91
-         yjNwR/9DnNTCex/suq/biq2N1c+CHhS7+kiY/cwHEaIdBNlPYnGde3oprqKifrr8f3qg
-         zTyXQmFw1Odpv1AhL4vVA5Sl61WG3HSX/RAdSZUSqsGogS73lJ5fSIFwDWXgbenw9a7p
-         JrTwrZqZhiyjHptDYnm0hz/vj/99iTc7WB/SLoV5zrvrHZJUXIbICtAYM/zsqWL7Qr3x
-         3bfw==
+        bh=a5uI84SXblQRDID2BHNWhhHsRc7xVUDdoiei4kS9c/0=;
+        b=Ct+JB6P8gBFhU2GL68I9x56icjkLjP62AapuT2jcDeENjphhxaGGU3o+qC8dvKrJ0g
+         2VfkE9773u7mT4/bPGU8BwIZlfR+Ynatelwu14iYwVM6exIiH6gjp+3B4XjVdJfL4EYs
+         4qC50m+e0mG7AbBt3fM2AWvnhDyCBIpD8l2BTMQceznIti+vPI3gt2Y8jENfIaqA2a9t
+         YRel1XQSF1IYenBIUAg/xE4OMXKixw6zVwXIxoQBEQQPIM3e5Gk7KDzclPmCj/1bCMaG
+         In0BU9boVSJlZ7ykEefPbMdFA3Qx0QxQ6esFxVSSS91DR0SnEDmlQDd66ojWVQcUwJ2q
+         gKZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741618399; x=1742223199;
+        d=1e100.net; s=20230601; t=1741618402; x=1742223202;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BEoq6zqSeLFMaXOoiuM7yp6ZSaKHVlNR4X3PvApIHRU=;
-        b=JNMve1ogT881gXc399I+GJWz4M4yt5F1m0UVgd+TCUYM62BxUmUHCHrp84/01twXPG
-         OXPVuAa2z/lSm33y5xOGhMQ3K+en4Ymd9SbVE5NmNbzahwrRFFGoggPs/DdkVeG1FCbr
-         Kq1vYEW1AIBSFbNlECfaEdA9aA6moyJtVblGCvgBjKRjzVAS6A/6PqF+K4L5+6RVeYcS
-         CgZKSwt9gB5/HWq6TUmCQx8AiCfCTONpZT1Ow96mzn1fmLql8LwDT33Wg5MNsgm2FYBP
-         LH3GI91iQ/8MKT3EptN9h8VjhxtEUdDNMCtVofo3k88ChXgTp8hxLakbX8iTK6ITO4k6
-         L+SA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIevUoNgsn1sYZtiseYRr1Sa9LG0v8sZOW4GvT2zDmZPwYzDRym0eN9ucT6ioTYH5F7oYbEZylXAM/@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzn+uCDG5cA2PSEy/tYGXFcmIHPPfBHI9L2X0plzcSNDq+HsulR
-	yhqvd1LnmqOuxN+r70qVY3fJA0AsEYz9K4ohAxFHg2r5fQZtgQlzbCMT5iWYLjw=
-X-Gm-Gg: ASbGncu2AYq2r3zcRVRnT73aNo4wxZpLJGXCLslPKsMSFfIhxqs093w+IXpj1WpsnZW
-	JPgyveRh8rGLq1Gh6p902fYdE/06dHNFjjxTfBNgAsPjTzhVR7r4jVWRyCBPP1DkLcfQ7Y8yIcb
-	Gx2N89NDRlZKRS8YTqjCugET+ft1Mgii7tLtROiANc/Hvm8oFF1rhqBlUH1UAdI4EygdSHpBTvC
-	KayaHpawTaqLmJ6Zt9a/UlJ6IMXJr/+bAWtq/FN0DTeGzEr0CtDS1FCoDeS+U3JtN4ZhCVZJaH9
-	MJBbv4PNEDcbXura1Zn4MskmrDUGEKgVN40ZEqfhOuWmTrgAFpInh9A=
-X-Google-Smtp-Source: AGHT+IEx/P9VhGmpM9Qve+8fxlnJz5OWfBkRKBtIDANK/IPRQR8t6D11CbRKG5Xc1EPx3A5RF0LL1A==
-X-Received: by 2002:a05:6a00:2b4f:b0:736:b923:5323 with SMTP id d2e1a72fcca58-736bc0fb12dmr15850983b3a.10.1741618399230;
-        Mon, 10 Mar 2025 07:53:19 -0700 (PDT)
+        bh=a5uI84SXblQRDID2BHNWhhHsRc7xVUDdoiei4kS9c/0=;
+        b=wfMfvAj6r9z5vJv1H/Ts+hUEpAdoxO/O0ug0iPGWWQRLGbAc3dwEX0vDBXRKjRZ8sD
+         hdJFrzuX4HLcgfeLQkobHoYGa5HY4NuXBKrYndi9FmcbXcbO/NmFHRXT5ZxmUliL9/zX
+         iMYXGq09rezE59MBF2bELL2RyPbrd2lj+4jI9c7wYpKQdccbZY1strfmdOJaeZD6SUSS
+         4vL4CGvtk0e/C78RRz04kSfE7xJT6JibaaRVRDeJ99faxI0Of/Fz78TXODl3R+NNR5tp
+         s4nhj1oaobfE0CiSTW7jhKIt45mzVKaMIxFAa0sibefqnhBLxwIbfkEytgYe5U5rqiWH
+         Ot5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUV4/zbUtyhOj0q6XrRGixWjKBXJaMd8L2Oi/HD4E9zKuCJJ8lJ/0fyoOmq1aAmLKhE7oKQbFnTHs2b@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFpWcTOH+nf2/Z65wWvARUba/d0nXAcUvbH/p2HvaDl2LtwDZi
+	dtrRekXU0BuluLhW1YJCx31epj9Lf9hBVZTmR+SzwFJWfDqPyx1kXY5payUR25E=
+X-Gm-Gg: ASbGncuue0AzJReMv66kUfCPCU0+PFqUH6Ewoimlba+EBHw/PNkz3OYg4AM2b5GC3WD
+	eh6SZP+NMd0EosSZFx+2E43uv75w8duKWJMT0zF/BvIanrpK4UOkwWxBhIhJAcUuR6Dd2H98Kjx
+	z9z0v5k6NuXoBLZTrsh7j1GP0doTsgXNEPmlxzriv3Uf79JQQgWWFdZYHMNOgl+AZryhzbX1Efn
+	LdEfNk591iHWWZdTax0XqjT+ZQDC0IsPhXGTr80G1ROv1qlTm2GgfkU9nM4tOP4W4kiXBm/n9yu
+	ku1dKgFdesjXNzPyKmIpqo6aUTk+hpUcWsvVw7STd6jxxfP2ZuJ0S78=
+X-Google-Smtp-Source: AGHT+IFjDwjQ9fbG75ByIkC5Z62BpsOlmfgaoy0NDr7CGAoT4eOeNPAoaYep0Q4HRAItC/SdOQSQyA==
+X-Received: by 2002:a05:6a00:4b4a:b0:736:54c9:df2c with SMTP id d2e1a72fcca58-736aaab75e8mr18259867b3a.15.1741618401679;
+        Mon, 10 Mar 2025 07:53:21 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736d11d4600sm2890275b3a.116.2025.03.10.07.53.16
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736d11d4600sm2890275b3a.116.2025.03.10.07.53.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Mar 2025 07:53:18 -0700 (PDT)
+        Mon, 10 Mar 2025 07:53:21 -0700 (PDT)
 From: Deepak Gupta <debug@rivosinc.com>
-Date: Mon, 10 Mar 2025 07:52:41 -0700
-Subject: [PATCH v11 19/27] riscv/hwprobe: zicfilp / zicfiss enumeration in
- hwprobe
+Date: Mon, 10 Mar 2025 07:52:42 -0700
+Subject: [PATCH v11 20/27] riscv: Add Firmware Feature SBI extensions
+ definitions
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250310-v5_user_cfi_series-v11-19-86b36cbfb910@rivosinc.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250310-v5_user_cfi_series-v11-20-86b36cbfb910@rivosinc.com>
 References: <20250310-v5_user_cfi_series-v11-0-86b36cbfb910@rivosinc.com>
 In-Reply-To: <20250310-v5_user_cfi_series-v11-0-86b36cbfb910@rivosinc.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
@@ -111,43 +111,62 @@ Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
  andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
  atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
  alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
- rick.p.edgecombe@intel.com, Deepak Gupta <debug@rivosinc.com>
+ rick.p.edgecombe@intel.com
 X-Mailer: b4 0.14.0
 
-Adding enumeration of zicfilp and zicfiss extensions in hwprobe syscall.
+From: Clément Léger <cleger@rivosinc.com>
 
-Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+Add necessary SBI definitions to use the FWFT extension.
+
+Signed-off-by: Clément Léger <cleger@rivosinc.com>
 ---
- arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
- arch/riscv/kernel/sys_hwprobe.c       | 2 ++
- 2 files changed, 4 insertions(+)
+ arch/riscv/include/asm/sbi.h | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-index c3c1cc951cb9..c1b537b50158 100644
---- a/arch/riscv/include/uapi/asm/hwprobe.h
-+++ b/arch/riscv/include/uapi/asm/hwprobe.h
-@@ -73,6 +73,8 @@ struct riscv_hwprobe {
- #define		RISCV_HWPROBE_EXT_ZCMOP		(1ULL << 47)
- #define		RISCV_HWPROBE_EXT_ZAWRS		(1ULL << 48)
- #define		RISCV_HWPROBE_EXT_SUPM		(1ULL << 49)
-+#define		RISCV_HWPROBE_EXT_ZICFILP	(1ULL << 50)
-+#define		RISCV_HWPROBE_EXT_ZICFISS	(1ULL << 51)
- #define RISCV_HWPROBE_KEY_CPUPERF_0	5
- #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
- #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
-diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
-index bcd3b816306c..d802ff707913 100644
---- a/arch/riscv/kernel/sys_hwprobe.c
-+++ b/arch/riscv/kernel/sys_hwprobe.c
-@@ -108,6 +108,8 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
- 		EXT_KEY(ZCB);
- 		EXT_KEY(ZCMOP);
- 		EXT_KEY(ZICBOZ);
-+		EXT_KEY(ZICFILP);
-+		EXT_KEY(ZICFISS);
- 		EXT_KEY(ZICOND);
- 		EXT_KEY(ZIHINTNTL);
- 		EXT_KEY(ZIHINTPAUSE);
+diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
+index 3d250824178b..23bfb254e3f4 100644
+--- a/arch/riscv/include/asm/sbi.h
++++ b/arch/riscv/include/asm/sbi.h
+@@ -35,6 +35,7 @@ enum sbi_ext_id {
+ 	SBI_EXT_DBCN = 0x4442434E,
+ 	SBI_EXT_STA = 0x535441,
+ 	SBI_EXT_NACL = 0x4E41434C,
++	SBI_EXT_FWFT = 0x46574654,
+ 
+ 	/* Experimentals extensions must lie within this range */
+ 	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
+@@ -401,6 +402,31 @@ enum sbi_ext_nacl_feature {
+ 
+ #define SBI_NACL_SHMEM_SRET_X(__i)		((__riscv_xlen / 8) * (__i))
+ #define SBI_NACL_SHMEM_SRET_X_LAST		31
++/* SBI function IDs for FW feature extension */
++#define SBI_EXT_FWFT_SET		0x0
++#define SBI_EXT_FWFT_GET		0x1
++
++enum sbi_fwft_feature_t {
++	SBI_FWFT_MISALIGNED_EXC_DELEG		= 0x0,
++	SBI_FWFT_LANDING_PAD			= 0x1,
++	SBI_FWFT_SHADOW_STACK			= 0x2,
++	SBI_FWFT_DOUBLE_TRAP			= 0x3,
++	SBI_FWFT_PTE_AD_HW_UPDATING		= 0x4,
++	SBI_FWFT_LOCAL_RESERVED_START		= 0x5,
++	SBI_FWFT_LOCAL_RESERVED_END		= 0x3fffffff,
++	SBI_FWFT_LOCAL_PLATFORM_START		= 0x40000000,
++	SBI_FWFT_LOCAL_PLATFORM_END		= 0x7fffffff,
++
++	SBI_FWFT_GLOBAL_RESERVED_START		= 0x80000000,
++	SBI_FWFT_GLOBAL_RESERVED_END		= 0xbfffffff,
++	SBI_FWFT_GLOBAL_PLATFORM_START		= 0xc0000000,
++	SBI_FWFT_GLOBAL_PLATFORM_END		= 0xffffffff,
++};
++
++#define SBI_FWFT_GLOBAL_FEATURE_BIT		(1 << 31)
++#define SBI_FWFT_PLATFORM_FEATURE_BIT		(1 << 30)
++
++#define SBI_FWFT_SET_FLAG_LOCK			(1 << 0)
+ 
+ /* SBI spec version fields */
+ #define SBI_SPEC_VERSION_DEFAULT	0x1
 
 -- 
 2.34.1
