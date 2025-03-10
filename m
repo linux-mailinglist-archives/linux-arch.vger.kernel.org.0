@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10643-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10644-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A56DA59C0D
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 18:08:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04197A59C32
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 18:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54F943A7EF9
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 17:08:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D8C816E01C
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 17:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61FA9233713;
-	Mon, 10 Mar 2025 17:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE407233724;
+	Mon, 10 Mar 2025 17:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ASdtXEiz"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="l1AipWqa"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A553C233703;
-	Mon, 10 Mar 2025 17:05:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F71822D79B;
+	Mon, 10 Mar 2025 17:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741626359; cv=none; b=ppsWn3bquSi14YMAsXznb6HZI56yM6PEUubKU6y4YtHn6USt0DH+TJ7RWqVETqgCjMvnyW78ZSwjFIu/PjbAv4jFXWfR9TJYTKBbTjQs2r34/uoCuYG3nPHF4+1TZ00LuSSsOASBVWhR2kn9zxDEsqiZPAHdI8+Z1Vb++5fJiRo=
+	t=1741626588; cv=none; b=mVe3aiB928ZEqkhgbpofJRFxq1CRpOGXriWhhhmeCr3QWjLierbTXE/90fAtJ1RswfVN2nVQd3nouBbShTrd+casM/xH6br7b2URCp9kIbKq0CCXNVASSniHtBIF5n1Z2sWmlxEuw4iUDP7Gzcbn/H9CVGXwB6F7iRPFFugU3eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741626359; c=relaxed/simple;
-	bh=Yr8aJ2IZDKlLsVdnrX3O2mRmkiDeU1PvYFcf0WrFd84=;
+	s=arc-20240116; t=1741626588; c=relaxed/simple;
+	bh=yVNu05pqKMvUkTRfJJGadIbGslAZMjfMrFefbqDKqXM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=skt0XEv8uxc4Vy8yXkuImlCa17ouhBhe6ARqrIggCN7RliV0ZPwazYQLGobArPgE4TWRcKWtN2rahTzvtv7kG57zEKmmDSNqOSbTYqNsDeSoC2K1g+9yXFG8Eh5T5TMia7miH5obKItQH4J8N5ze9w711kn8FXoDa7ap+J2GrsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ASdtXEiz; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=k2RTmOnBwcjSlPXADnO0iaVp7lmFZjUc084/f1+etIhPO59NTbsbaPHB6QpqHtbnAklvGLGILkl0ic5kSLBJFUEdwe0Swm1XzB78IDI8vXNeggsaN7lL7zTWOxrBmQcugIX2giAshJwE3HEeCY42kWeYidOw2138bjFUreGk5Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=l1AipWqa; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id CA8B82038F32;
-	Mon, 10 Mar 2025 10:05:56 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CA8B82038F32
+	by linux.microsoft.com (Postfix) with ESMTPSA id 0DA692038F32;
+	Mon, 10 Mar 2025 10:09:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0DA692038F32
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741626357;
-	bh=9k2ujwCkxT/pnQt2SpcTPLQF5W45ehk16LpQKOSM9kE=;
+	s=default; t=1741626586;
+	bh=ZPp0js6+jrg5sVe7XA7ERrTixZv7xjbVVvf7fRlGlAE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ASdtXEizJBNBlir7Guq6DH/+cVwx7N/FgUmEK+XbPU0pYIqCSwEx1mx/GflRf57tm
-	 MnevelamszmPc2/kut2m5GTFfDoExBbWYXR6coPOMciOGK6Yb1hRgiEuFq0zuoi++a
-	 4wrrUAgnXET7zmFf32p4ObaaELCgZyEhfx4WpkTk=
-Message-ID: <c7f9d861-f617-4064-8c98-2ace06e9c25e@linux.microsoft.com>
-Date: Mon, 10 Mar 2025 10:05:56 -0700
+	b=l1AipWqanSYF7uSInl5in5VBJSpUKdzXNs6Z6Cc5jMQikOncxE6pClVlB5vRa3No/
+	 iDoZQTAoQd9hGHqs2vaxzFNRGIT6LEpWYSUp2mlFkdRWAt98W4RXVrPRI1lDqFK6Qv
+	 S3kLzNTctjFEFKHQ9Tw6wh1lVjMxr+HbU/Mq8eew=
+Message-ID: <e3414583-0437-4fc4-b464-1426e5fe9628@linux.microsoft.com>
+Date: Mon, 10 Mar 2025 10:09:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,9 +49,9 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v5 07/11] dt-bindings: microsoft,vmbus: Add
- interrupts and DMA coherence
-To: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH hyperv-next v5 09/11] Drivers: hv: vmbus: Introduce
+ hv_get_vmbus_root_device()
+To: Tianyu Lan <ltykernel@gmail.com>
 Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
  catalin.marinas@arm.com, conor+dt@kernel.org, dave.hansen@linux.intel.com,
  decui@microsoft.com, haiyangz@microsoft.com, hpa@zytor.com,
@@ -68,85 +68,169 @@ Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
  apais@microsoft.com, benhill@microsoft.com, bperkins@microsoft.com,
  sunilmut@microsoft.com
 References: <20250307220304.247725-1-romank@linux.microsoft.com>
- <20250307220304.247725-8-romank@linux.microsoft.com>
- <20250310-demonic-ferret-of-judgment-5dbdbf@krzk-bin>
+ <20250307220304.247725-10-romank@linux.microsoft.com>
+ <CAMvTesCFZ6sxQp7qqSDjD9idRjVHxh96Sp4betomgFH-OFLZ3Q@mail.gmail.com>
 Content-Language: en-US
 From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <20250310-demonic-ferret-of-judgment-5dbdbf@krzk-bin>
+In-Reply-To: <CAMvTesCFZ6sxQp7qqSDjD9idRjVHxh96Sp4betomgFH-OFLZ3Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 3/10/2025 2:28 AM, Krzysztof Kozlowski wrote:
-> On Fri, Mar 07, 2025 at 02:02:59PM -0800, Roman Kisel wrote:
->> To boot on ARM64, VMBus requires configuring interrupts. Missing
->> DMA coherence property is sub-optimal as the VMBus transations are
->> cache-coherent.
+On 3/10/2025 6:41 AM, Tianyu Lan wrote:
+> On Sat, Mar 8, 2025 at 6:05 AM Roman Kisel <romank@linux.microsoft.com> wrote:
 >>
->> Add interrupts to be able to boot on ARM64. Add DMA coherence to
->> avoid doing extra work on maintaining caches on ARM64.
-> 
-> How do you add it?
-> 
-
-I added properties to the node. Should I fix the description, or I am
-misunderstanding the question?
-
+>> The ARM64 PCI code for hyperv needs to know the VMBus root
+>> device, and it is private.
+>>
+>> Provide a function that returns it. Rename it from "hv_dev"
+>> as "hv_dev" as a symbol is very overloaded. No functional
+>> changes.
 >>
 >> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+> 
+> Why change all device's parent to vmbus_root_device?
+> 
+
+No changes from my account of the code. Please let me know if I am
+misunderstanding the question.
+
+> The ARM64 platform uses the device tree to enumerate vmbus
+> devices..  Can we find the root device via device tree? vmbus
+> code on the x86 use ACPI and it seems to work via ACPI.
+> 
+> 
+
+Right, we find it from the DT as shown in the next patch:
+
++static struct irq_domain *hv_pci_of_irq_domain_parent(void)
++{
++	struct device_node *parent;
++	struct irq_domain *domain;
++
++	parent = of_irq_find_parent(hv_get_vmbus_root_device()->of_node);
++	domain = NULL;
++	if (parent) {
++		domain = irq_find_host(parent);
++		of_node_put(parent);
++	}
++
++	return domain;
++}
++
+
+and later use it for `irq_create_hierarchy()`. Please let me know
+if I missed anything in your question.
+
 >> ---
->>   .../devicetree/bindings/bus/microsoft,vmbus.yaml          | 8 +++++++-
->>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>   drivers/hv/vmbus_drv.c | 23 +++++++++++++++--------
+>>   include/linux/hyperv.h |  2 ++
+>>   2 files changed, 17 insertions(+), 8 deletions(-)
 >>
->> diff --git a/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml b/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
->> index a8d40c766dcd..3ab7d0116626 100644
->> --- a/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
->> +++ b/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
->> @@ -28,13 +28,16 @@ properties:
->>   required:
->>     - compatible
->>     - ranges
->> +  - interrupts
->>     - '#address-cells'
->>     - '#size-cells'
->>   
->> -additionalProperties: false
->> +additionalProperties: true
+>> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+>> index c8474b48dcd2..7bfafe702963 100644
+>> --- a/drivers/hv/vmbus_drv.c
+>> +++ b/drivers/hv/vmbus_drv.c
+>> @@ -45,7 +45,8 @@ struct vmbus_dynid {
+>>          struct hv_vmbus_device_id id;
+>>   };
+>>
+>> -static struct device  *hv_dev;
+>> +/* VMBus Root Device */
+>> +static struct device  *vmbus_root_device;
+>>
+>>   static int hyperv_cpuhp_online;
+>>
+>> @@ -80,9 +81,15 @@ static struct resource *fb_mmio;
+>>   static struct resource *hyperv_mmio;
+>>   static DEFINE_MUTEX(hyperv_mmio_lock);
+>>
+>> +struct device *hv_get_vmbus_root_device(void)
+>> +{
+>> +       return vmbus_root_device;
+>> +}
+>> +EXPORT_SYMBOL_GPL(hv_get_vmbus_root_device);
+>> +
+>>   static int vmbus_exists(void)
+>>   {
+>> -       if (hv_dev == NULL)
+>> +       if (vmbus_root_device == NULL)
+>>                  return -ENODEV;
+>>
+>>          return 0;
+>> @@ -861,7 +868,7 @@ static int vmbus_dma_configure(struct device *child_device)
+>>           * On x86/x64 coherence is assumed and these calls have no effect.
+>>           */
+>>          hv_setup_dma_ops(child_device,
+>> -               device_get_dma_attr(hv_dev) == DEV_DMA_COHERENT);
+>> +               device_get_dma_attr(vmbus_root_device) == DEV_DMA_COHERENT);
+>>          return 0;
+>>   }
+>>
+>> @@ -1930,7 +1937,7 @@ int vmbus_device_register(struct hv_device *child_device_obj)
+>>                       &child_device_obj->channel->offermsg.offer.if_instance);
+>>
+>>          child_device_obj->device.bus = &hv_bus;
+>> -       child_device_obj->device.parent = hv_dev;
+>> +       child_device_obj->device.parent = vmbus_root_device;
+>>          child_device_obj->device.release = vmbus_device_release;
+>>
+>>          child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
+>> @@ -2292,7 +2299,7 @@ static int vmbus_acpi_add(struct platform_device *pdev)
+>>          struct acpi_device *ancestor;
+>>          struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
+>>
+>> -       hv_dev = &device->dev;
+>> +       vmbus_root_device = &device->dev;
+>>
+>>          /*
+>>           * Older versions of Hyper-V for ARM64 fail to include the _CCA
+>> @@ -2383,7 +2390,7 @@ static int vmbus_device_add(struct platform_device *pdev)
+>>          struct device_node *np = pdev->dev.of_node;
+>>          int ret;
+>>
+>> -       hv_dev = &pdev->dev;
+>> +       vmbus_root_device = &pdev->dev;
+>>
+>>          ret = of_range_parser_init(&parser, np);
+>>          if (ret)
+>> @@ -2702,7 +2709,7 @@ static int __init hv_acpi_init(void)
+>>          if (ret)
+>>                  return ret;
+>>
+>> -       if (!hv_dev) {
+>> +       if (!vmbus_root_device) {
+>>                  ret = -ENODEV;
+>>                  goto cleanup;
+>>          }
+>> @@ -2733,7 +2740,7 @@ static int __init hv_acpi_init(void)
+>>
+>>   cleanup:
+>>          platform_driver_unregister(&vmbus_platform_driver);
+>> -       hv_dev = NULL;
+>> +       vmbus_root_device = NULL;
+>>          return ret;
+>>   }
+>>
+>> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+>> index 7f4f8d8bdf43..1f0851fde041 100644
+>> --- a/include/linux/hyperv.h
+>> +++ b/include/linux/hyperv.h
+>> @@ -1333,6 +1333,8 @@ static inline void *hv_get_drvdata(struct hv_device *dev)
+>>          return dev_get_drvdata(&dev->device);
+>>   }
+>>
+>> +struct device *hv_get_vmbus_root_device(void);
+>> +
+>>   struct hv_ring_buffer_debug_info {
+>>          u32 current_interrupt_mask;
+>>          u32 current_read_index;
+>> --
+>> 2.43.0
+>>
+>>
 > 
-> This is neither explained in commit msg nor correct.
-> 
-
-Not explained, as there is no good explanation as described below.
-
-> Drop the change. You cannot have device bindings ending with 'true'
-> here - see talks, example-bindings, writing-schema and whatever resource
-> is there.
-> 
-
-Thanks, I'll put more effort into bringing this into a better form!
-If you have time, could you comment on the below?
-
-The Documentation says
-
-   * additionalProperties: true
-     Rare case, used for schemas implementing common set of properties.
-Such schemas are supposed to be referenced by other schemas, which then 
-use 'unevaluatedProperties: false'.  Typically bus or common-part schemas.
-
-This is a bus so I added that line to the YAML, and I saw it in many
-other YAML files. Without that line, there was a warning from the local
-DT validation described in the Documentation about not having pin
-controls which was weird, and adding
-
-"additionalProperties: true"
-
-fixed the warnings (didn't debug much though). As a side note, there was
-a similar warning coming from another YAML during running DT schema
-validation as described in the Documentation so maybe warnings are fine.
-
-> Best regards,
-> Krzysztof
 > 
 
 -- 
