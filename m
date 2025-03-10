@@ -1,63 +1,71 @@
-Return-Path: <linux-arch+bounces-10600-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10601-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 729E5A589A4
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 01:22:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ECCAA589A7
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 01:31:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E206A7A4C79
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 00:21:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9CFE3A9610
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 00:30:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416CFB664;
-	Mon, 10 Mar 2025 00:22:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4504182D0;
+	Mon, 10 Mar 2025 00:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bWoq/Wfj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eneyuQA7"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFF5A923;
-	Mon, 10 Mar 2025 00:22:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7345A632;
+	Mon, 10 Mar 2025 00:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741566131; cv=none; b=REu7xqDZyVvTS0diucu9uhUjtpEwjFVbcMI0ljj2kjcMbbObn9EMj1GdjUYc6qhrcn9glZW10CMPZ1RQAcnHVj5/raQm8uYpCtILddIAk5I/04OT2Bs0yv5ch6eN8iMTUwqZN9RQrs8ElC8jZsdnZ2PwwQ1rJzwzqsyFrM5Vwzw=
+	t=1741566666; cv=none; b=EcKsYhqweNz3jBxfLSC2TzGc4rNev7cPBJmWVUqnayKeiOeyBbRFl3o0OtQOgdlHJOjZ11yPcWAMysOX7qtJjXdVB4F7+Uu8bge7+no8C5bJdw0Yw7CfCCZSq6oR4Kz4Z95MO0nA63SZabFrQy7dgIE1NtYkBvPt78sa/nmBJK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741566131; c=relaxed/simple;
-	bh=FYjQC5mh8x+Hka3tJHdCG5/gL2oMN/JPR566i+y+ZE4=;
+	s=arc-20240116; t=1741566666; c=relaxed/simple;
+	bh=127U7j9Ed6A/U+MTwMIn2yifTZmeLRlUzJiRx4bf5Qg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lqfVugto1lQtB8AeJHzBvE1/0ZxpClVC6Up0wlD5RyEHWqXbxHkKI44NrjRwCZPrxdSR46imI2hxCCsVsNFV67QiFauCyaCDX41Sn21D9fhvhSIii0jVxKFRF0bQVE9envBD6s8sIXy8Uhl7LhKBCm3Ke2GcfAjFA69gtHZnJBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bWoq/Wfj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 137A5C4CEE3;
-	Mon, 10 Mar 2025 00:22:10 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=p2OeRBwqIShIwGgie66OoX3Ywi7XacK2QVIo0phYbVAM/KKw5L4EQB4rjvshqZKrYqPwlBCF1JnQMrUADlpVCM0Bkeo4jofTBtFt0HDscfbxTUURILzqkS864Q+LCLOsOZ4qmoD9k9klged1Pa3E81e7Wi7aJVkwNWUiViNBO3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eneyuQA7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF5BC4CEE3;
+	Mon, 10 Mar 2025 00:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741566130;
-	bh=FYjQC5mh8x+Hka3tJHdCG5/gL2oMN/JPR566i+y+ZE4=;
+	s=k20201202; t=1741566665;
+	bh=127U7j9Ed6A/U+MTwMIn2yifTZmeLRlUzJiRx4bf5Qg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bWoq/WfjxHOollcBZFzbuS2LL5a2hh3EvGiVEeillSO6nSKlyjiy3r7gD0RujkLBl
-	 qmI/XPB17xvuob1ImnJmfq3/MGZsajC7FhIiXiMA9AmXjJe/mAvgjWMeNz+VYDK/Qc
-	 Ymyuza6kxYy+EAilWgAYeOqNPD3hC8QRfdnsRelOIfnntqygfjkA/ziVDNtgjRvYZ8
-	 W+5fRKSiTE0f9q8m9iysuEdplycCeKvtwyO3dQ6gsvFXfWtqq/v8t6sirzmatiRgOn
-	 J4qKHOGYSu4/JTskx7/UVcrk+1ZiaAhXjJyhSY1C6BUjRPB6gh7vwnddK94aykxRi/
-	 Vj/E2zyA1AUvQ==
-Date: Mon, 10 Mar 2025 00:22:08 +0000
+	b=eneyuQA7ykopq6S8UEKfLVTAcoh47yfGIyP+jGj+MeeDBzaNFNhxvkIPnaRvDW4GR
+	 3ElSa1Rcld7O5AzJkk8twIU5lFCgWiBf5vNLPutmhvohsLYdekOvuQxlcATOOmNSOL
+	 oy+78DKZe/m1Q8ZxkYJJvGoPrVwC1BrNfuxgULZNHz65IH/M/37K/rifMBJJpuVcom
+	 N+TobUAr9cPgkoULGmReb1NG5sZjys6iojuvRBPAwPXGsncjJKQ2ONRM5aUK0ykDOe
+	 yCd+V0vOGqXO+XPoZw9/6/ZJu0a+v7uQNA+ckeDwo4Su72E7JnlkAVup+KFU6O2u9D
+	 /UkG5nAGdv14g==
+Date: Mon, 10 Mar 2025 00:31:04 +0000
 From: Wei Liu <wei.liu@kernel.org>
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc: mhklinux@outlook.com, kys@microsoft.com, haiyangz@microsoft.com,
-	wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	hpa@zytor.com, lpieralisi@kernel.org, kw@linux.com,
-	manivannan.sadhasivam@linaro.org, robh@kernel.org,
-	bhelgaas@google.com, arnd@arndb.de, x86@kernel.org,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 1/7] x86/hyperv: Fix output argument to hypercall that
- changes page visibility
-Message-ID: <Z84wsC8ADzZusVVY@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
-References: <20250226200612.2062-1-mhklinux@outlook.com>
- <20250226200612.2062-2-mhklinux@outlook.com>
- <f6115867-281d-4c97-87d2-3698e6474b7a@linux.microsoft.com>
+To: Roman Kisel <romank@linux.microsoft.com>
+Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
+	catalin.marinas@arm.com, conor+dt@kernel.org,
+	dave.hansen@linux.intel.com, decui@microsoft.com,
+	haiyangz@microsoft.com, hpa@zytor.com, joey.gouly@arm.com,
+	krzk+dt@kernel.org, kw@linux.com, kys@microsoft.com,
+	lenb@kernel.org, lpieralisi@kernel.org,
+	manivannan.sadhasivam@linaro.org, mark.rutland@arm.com,
+	maz@kernel.org, mingo@redhat.com, oliver.upton@linux.dev,
+	rafael@kernel.org, robh@kernel.org, ssengar@linux.microsoft.com,
+	sudeep.holla@arm.com, suzuki.poulose@arm.com, tglx@linutronix.de,
+	wei.liu@kernel.org, will@kernel.org, yuzenghui@huawei.com,
+	devicetree@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	x86@kernel.org, apais@microsoft.com, benhill@microsoft.com,
+	bperkins@microsoft.com, sunilmut@microsoft.com
+Subject: Re: [PATCH hyperv-next v5 06/11] arm64, x86: hyperv: Report the VTL
+ the system boots in
+Message-ID: <Z84yyAqkqJ2ZyAd-@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
+References: <20250307220304.247725-1-romank@linux.microsoft.com>
+ <20250307220304.247725-7-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -66,52 +74,56 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f6115867-281d-4c97-87d2-3698e6474b7a@linux.microsoft.com>
+In-Reply-To: <20250307220304.247725-7-romank@linux.microsoft.com>
 
-On Wed, Feb 26, 2025 at 02:59:53PM -0800, Nuno Das Neves wrote:
-> On 2/26/2025 12:06 PM, mhkelley58@gmail.com wrote:
-> > From: Michael Kelley <mhklinux@outlook.com>
-> > 
-> > The hypercall in hv_mark_gpa_visibility() is invoked with an input
-> > argument and an output argument. The output argument ostensibly returns
-> > the number of pages that were processed. But in fact, the hypercall does
-> > not provide any output, so the output argument is spurious.
-> > 
-> > The spurious argument is harmless because Hyper-V ignores it, but in the
-> > interest of correctness and to avoid the potential for future problems,
-> > remove it.
-> > 
-> > Signed-off-by: Michael Kelley <mhklinux@outlook.com>
-> > ---
-> > I have not provided a "Fixes:" tag because the error causes no impact.
-> > There's no value in backporting the fix.
-> > 
-> >  arch/x86/hyperv/ivm.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-> > index dd68d9ad9b22..ec7880271cf9 100644
-> > --- a/arch/x86/hyperv/ivm.c
-> > +++ b/arch/x86/hyperv/ivm.c
-> > @@ -464,7 +464,6 @@ static int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
-> >  			   enum hv_mem_host_visibility visibility)
-> >  {
-> >  	struct hv_gpa_range_for_visibility *input;
-> > -	u16 pages_processed;
-> >  	u64 hv_status;
-> >  	unsigned long flags;
-> >  
-> > @@ -493,7 +492,7 @@ static int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
-> >  	memcpy((void *)input->gpa_page_list, pfn, count * sizeof(*pfn));
-> >  	hv_status = hv_do_rep_hypercall(
-> >  			HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY, count,
-> > -			0, input, &pages_processed);
-> > +			0, input, NULL);
-> >  	local_irq_restore(flags);
-> >  
-> >  	if (hv_result_success(hv_status))
+On Fri, Mar 07, 2025 at 02:02:58PM -0800, Roman Kisel wrote:
+> The hyperv guest code might run in various Virtual Trust Levels.
 > 
-> Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+> Report the level when the kernel boots in the non-default (0)
+> one.
+> 
+> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+> ---
+>  arch/arm64/hyperv/mshyperv.c | 2 ++
+>  arch/x86/hyperv/hv_vtl.c     | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index a7db03f5413d..3bc16dbee758 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -108,6 +108,8 @@ static int __init hyperv_init(void)
+>  	if (ms_hyperv.priv_high & HV_ACCESS_PARTITION_ID)
+>  		hv_get_partition_id();
+>  	ms_hyperv.vtl = get_vtl();
+> +	if (ms_hyperv.vtl > 0) /* non default VTL */
 
-Applied to hyperv-fixes, thanks!
+"non-default".
+
+> +		pr_info("Linux runs in Hyper-V Virtual Trust Level %d\n", ms_hyperv.vtl);
+>  
+>  	ms_hyperv_late_init();
+>  
+> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
+> index 4e1b1e3b5658..c21bee7e8ff3 100644
+> --- a/arch/x86/hyperv/hv_vtl.c
+> +++ b/arch/x86/hyperv/hv_vtl.c
+> @@ -24,7 +24,7 @@ static bool __init hv_vtl_msi_ext_dest_id(void)
+>  
+>  void __init hv_vtl_init_platform(void)
+>  {
+> -	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
+> +	pr_info("Linux runs in Hyper-V Virtual Trust Level %d\n", ms_hyperv.vtl);
+
+Where isn't there a check for ms_hyperv.vtl > 0 here?
+
+Please be consistent across different architectures.
+
+>  
+>  	x86_platform.realmode_reserve = x86_init_noop;
+>  	x86_platform.realmode_init = x86_init_noop;
+> -- 
+> 2.43.0
+> 
+> 
 
