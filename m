@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-10664-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10665-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1FADA5AD05
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 00:26:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1918A5AEA6
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 00:42:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 513923AF489
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 23:26:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 342511892FA5
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 23:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 464FB221542;
-	Mon, 10 Mar 2025 23:26:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B38ED221F03;
+	Mon, 10 Mar 2025 23:42:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="I72JgchD"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="ZOh5hLIz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazolkn19011038.outbound.protection.outlook.com [52.103.13.38])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazolkn19012052.outbound.protection.outlook.com [52.103.2.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6491117332C;
-	Mon, 10 Mar 2025 23:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.13.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08921DE3D2;
+	Mon, 10 Mar 2025 23:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.2.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741649193; cv=fail; b=OxYjltu2YGfdMbSsyVJ8ICg9m8KFOALsggZg204kPlio8xGmby7y606a9RywjxBajIhQAtRXDWwA2WFjGtjDVOJfItbxKOSLzCbhb4Jn3m22/2c8Y+fOqaYnYIhix9QUmoIg/UVBbBJW2wQRY49kQhFE2ZA3W9W0ddVlUT1uOAU=
+	t=1741650127; cv=fail; b=iIC4sIbydIgn3rgSOEVGb2OHXAKcUg0I0YN6mKRyF5iZ+Wsx2YvLSfOjW4XQfvA9fFFUMYU5/X98uzDkqJAi6JiDIq0P5hZWlcgwgnWybv6y+72LmmQEK5x0fUSzdzIvVHnuJLMmDMchQN6Hj+af5ic4jQTNs1WBGPvFUn6gucQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741649193; c=relaxed/simple;
-	bh=JIjLv+oIuvnlCP7A9MLzbHvj94KLPsPZdIG68kDH8Gs=;
+	s=arc-20240116; t=1741650127; c=relaxed/simple;
+	bh=1fGTfAogzp5qeVqBpzVCoFrnxNxppYxD5aDsHsFp3eU=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Csscc17I0cTYPofTbZ3ToYaJOYq/iP6awcZbUDVcQfLbICQxrHBXabOdXmircpwQI+S0aR4DRJ2d9JptNzdRt6806/7HRDNzDnaDsKfaHR+sv4HyOpcInTirT0+iz/iyCBEkMzMMzF/bLOKF1qVm9QnLT61pVPCWtD1U+YaWRWI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=I72JgchD; arc=fail smtp.client-ip=52.103.13.38
+	 Content-Type:MIME-Version; b=j14ZI6kRCGcmVoIC0O+ZF6p+KNORCdhaJ2nN3GN1rNpTTJP2YfBmyb7ndSiWpklLD7N+S9WEKqU6Fn8rMXKet2AA2Bysjc3etoD+Mh4YF19fwvfaxEcCv/uhImOo3sHqHbPNAzfG20Br6eKtEFIX0DACqC2o/aU3OX+CqMbR6Ds=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=ZOh5hLIz; arc=fail smtp.client-ip=52.103.2.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ajp0NmcH6HTv0sNx5NUq1d7d2dBVqKCHcwa7BTMvWgJhO4I5ejrTvN06LmS7m6Z9mEb+BWJpQA5z9h6++1OtwNZPxw+sRt6YvQoneUMQUqKlBzpUx1u24RTDpR0dMf7k4an3Mns+w9DlgpOj8dFXr2sMJHR6fk70y9BKAX0TAu/2SWX7fbUO2Kppj0w+/PBJPfPf9UVOarSycj16Riapm6zhuW9hviQBL+KjI97GxRA2Vui//0EZvMepoZmzwXMmc4KRizujxAMLYK18GlkMk1VJSYxqMIeq+pQKFLnaR9JzNLFHsVaV1RplZEJKWjVO1RaqFilg82Rihch8T4TdIQ==
+ b=NAi5ILOiBrXogn1VbGqh7XZylrLXTSTSTmXYuEnrZ//BwJpk5IlbMplTDEPztu4V/p120ydAkcUyisY1u+5HTRAFlduK/cIseyLG14beFbwiO6+hj9IuGA6O33rhH2s0qtnzATFM5fIjWfj3iEY8HKr2lAoZlcxJ6z4XQwOGqStnLSqrgSlsAiqb5+uwBefpkIupzpFn+GVup2R5PoednVVkoOYVRYjYDiEGi7/Iso4iQ6z1JuHHVO96IxKl80K0uZImjHrzu7lwci9IziKibV8HYzC0nz+tZLiNsV/+5Y5F9+m7WOzbFQwKq+OcxMb12CgVkFcQtXOKaeU74ORfRA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qHsgBKeyYWsVs5LSLW1A7nMSqh8ic8Pi4x56UBXMzuM=;
- b=d1nKWVXEcFiZS9BWJ9v7WGI5/i1uDwY+du0AE1i1RxbmqPr3x71li7X3RA5Aei8yohGQnOMjBGCL43bA4e5KjLCVRcK4nmvUr9JoSYKd67/DWnLFMgE4LjBu8GMV6HQ4pj91e8tav4kpeh59OPVmaHkj3Qxnr4/LAx0kTTLupy2Lf4qgvmYss2kY7JAqV1STDChUedxyeys1eU3z6RORxQu3DZsXglXLQnb6lH55OdmVfm3lGdGvuIsoZNtZnx/W2bw3qwsCfjMlnyb2X2ZWe2+Rk4jfnm1KqzEEYH86lppYBwc9nBjJXHQpQ4AmQjY3EWP7VTV5eRW62b8pMDc4oA==
+ bh=Xi6BMJ2S1d8wCSOgoXMUuMKz9nEwODTNYCL65GwQ8Lw=;
+ b=seo4QtWAQeelPKHAm1K98IS4ftHRqvI2paI668bpXpassa0NGN2pdsfM835v8thAIUhX4aVBT3D1Gxm5fmuHfftfXB/f1W9q0SLo2LSAsSffGrE40kz/LZk91qjLj6enuBAF/jVZbbGSy6sg09JIzMbnYwXe9p2QBIDg0zLCImsbdDVGZSas4ZqIsdy4zIMQ30ohp5dKLRL14F5AKJgFcFHLDDVfvZ6NGNZHxp9jIK0szw3N4K+kITTsYjU8xzB5nvb2ZJI91o6NubYBcq74oatLA8tm01SIYg47SmdTbjd7wX9amv+UEiUj3qSqi22reuAftA9MV6jb3d1Avis5+w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qHsgBKeyYWsVs5LSLW1A7nMSqh8ic8Pi4x56UBXMzuM=;
- b=I72JgchDeg8SSZlRGtkisNj2ZUbTNQxW1AiBnZPLECEUcUeswLFWg2HnIyiSfiMeW+DWH0etYwMexec6bNLa8vylIU7o1IZnFrI4R3diq6ZLdnm/ji8ZLFPt7mnvDQvCsGd/a9OzWiQSIsIYqnLFSVgRLvK0WUaEOBwlmqcICvRqX9kretMprK0aEE2QBbdQh+T56MbeAvQsaqknS/WbaF8zfmvczIRhOpNhwLik2c+UMXHf5EbmKBFZGSu/WGGcr64KZkI8f85RWA7kxnh9C/LoKV5i0C4H+2/g00IE5YiZg1r4ZxUh3R5FcMgKU6G2RWnJO15cRDzRRXGb92bTTg==
+ bh=Xi6BMJ2S1d8wCSOgoXMUuMKz9nEwODTNYCL65GwQ8Lw=;
+ b=ZOh5hLIz5oB4NDdA06QsF3wCG5xRDrkeszXd0OruW55jr+tdo31AkGY/InIRZIKBvfRFBPAr+9ZE+yBpXJ/VRSlRYVyCAhZ0Ak5d4mDlyg4r8DMTUJ5RInhel6nyerxhHyxI65U0EhIyhUEl1rdVHfb/lO/OalbDK8j0cFS3aADB1UqC4xfpeFlTgegtklJuLgKp9dV+Gi5bK7Qt7qlxLiOiCj+ChpTVICqA3hd3oQA46V+vsgzLHTnBzQLLVeaLqPGxPcW/6KbxLqxmvle9p4DDRPkJpzWos+48BtYY3Vv2mHoCYgZZH/R300YnzGnPjO/GzP6LmksiUi5ZpYzOag==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by CYXPR02MB10265.namprd02.prod.outlook.com (2603:10b6:930:de::6) with
+ by SJ0PR02MB7439.namprd02.prod.outlook.com (2603:10b6:a03:295::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.26; Mon, 10 Mar
- 2025 23:26:28 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.22; Mon, 10 Mar
+ 2025 23:42:02 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.8511.026; Mon, 10 Mar 2025
- 23:26:28 +0000
+ 23:42:02 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 	"bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
@@ -87,69 +87,69 @@ To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 CC: "apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
 	<benhill@microsoft.com>, "bperkins@microsoft.com" <bperkins@microsoft.com>,
 	"sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Subject: RE: [PATCH hyperv-next v5 10/11] ACPI: irq: Introduce
- acpi_get_gsi_dispatcher()
-Thread-Topic: [PATCH hyperv-next v5 10/11] ACPI: irq: Introduce
- acpi_get_gsi_dispatcher()
-Thread-Index: AQHbj60q0kiMzHfDAEOpT69BLMQC1rNtBngA
-Date: Mon, 10 Mar 2025 23:26:28 +0000
+Subject: RE: [PATCH hyperv-next v5 11/11] PCI: hv: Get vPCI MSI IRQ domain
+ from DeviceTree
+Thread-Topic: [PATCH hyperv-next v5 11/11] PCI: hv: Get vPCI MSI IRQ domain
+ from DeviceTree
+Thread-Index: AQHbj60+s6/ZI2Ez5UqL6yl7lUAhFrNtCWbw
+Date: Mon, 10 Mar 2025 23:42:02 +0000
 Message-ID:
- <SN6PR02MB41570D82338A45E13B7A3689D4D62@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB4157FB49E2120B206294D439D4D62@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20250307220304.247725-1-romank@linux.microsoft.com>
- <20250307220304.247725-11-romank@linux.microsoft.com>
-In-Reply-To: <20250307220304.247725-11-romank@linux.microsoft.com>
+ <20250307220304.247725-12-romank@linux.microsoft.com>
+In-Reply-To: <20250307220304.247725-12-romank@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|CYXPR02MB10265:EE_
-x-ms-office365-filtering-correlation-id: f8635f16-a65a-4595-5923-08dd602afbdf
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SJ0PR02MB7439:EE_
+x-ms-office365-filtering-correlation-id: c2f3ac24-f2a7-4cd2-68be-08dd602d286e
 x-microsoft-antispam:
- BCL:0;ARA:14566002|19110799003|8062599003|8060799006|15080799006|461199028|12121999004|41001999003|440099028|102099032|3412199025;
+ BCL:0;ARA:14566002|19110799003|15080799006|461199028|8062599003|8060799006|12091999003|41001999003|440099028|102099032|3412199025;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?3p6405cN5MITk/ynfMygVxTnsnfgKkw5IXW4gcyF/VRE/TeReQATiXzR+rLK?=
- =?us-ascii?Q?zbIVLZ801qQXHZZVRAgrKUaNvEPqKnYISP5rvicLNhmVft3nmoBJyPEziB2f?=
- =?us-ascii?Q?D37yRVaUHb3euwvL/5XkAUXKlZLNolpdlUouew9LjpxIMBIOraWUdJks7JPf?=
- =?us-ascii?Q?Kpm7xz9exeT2sVdRfUDE7ot/UaWtKmA5VwoYaSL6lnmAAAERnUhvKs2hjCPI?=
- =?us-ascii?Q?7RbflrvZyusS8gU7ch1NyfOWOhBlEa0ZIcqi4T1zncY2o4RzcbgUxDMz3BHK?=
- =?us-ascii?Q?WpHRUZMxKFoAh/WFCe3wBjc8QPFtpGgzI9Fs8g7fXNna+5+CaTIbLvYCTJcb?=
- =?us-ascii?Q?5eN3CCf0q71JeYAoWYsCAgUDPVqbJG6cmR4cTeDocUIn0SA4pRk7SyE4t/s9?=
- =?us-ascii?Q?PYR9dV30oftBq4qt230jHLnf+xoFvb8X2AEZAvglWqiTyBOKjbzLpF0yyj7M?=
- =?us-ascii?Q?1Jgf9Rmyb42y/6lnoe8tiUmUn+PdDY5z/hEQJNGelv0bkY1uh8XVMpSznefY?=
- =?us-ascii?Q?DAEz1COFdLrrLji9eeafDm4Kz5GlNePhdPt/hBeAnMDMVdETBiy16RdP67lh?=
- =?us-ascii?Q?qS8kPieWhuvB/WZKnMTqaIUbGHUi4ycZ4XOB6HmZCZV61PHji1xBBM0RcoKZ?=
- =?us-ascii?Q?eEyj3PmL26vd+/vo9ShnHsMXgpwbErdrjuwCCscjNwqBT3se7wEKjJUerB0n?=
- =?us-ascii?Q?MwzcRkKW44FMfAntTkJfM4HkN7FSQ+1m468sQroOJpYL0lCcJ0RlayBYeZfA?=
- =?us-ascii?Q?tfkG/sjNtYadKXUWiOkAdJpi0wBdy8KmhOGNpr6vdG134bI1VemXjg/BOQtD?=
- =?us-ascii?Q?dW1StfBe4lKUHD2TJyFMegeqOf5I0JYsUrviy24Xs+I8L2hObZnkrf79hDru?=
- =?us-ascii?Q?g/zUZhVy3zGGPNTFiDa730V/Cw7VJOfXML72JlW8VzrFDm6pyOO90yI6vbLI?=
- =?us-ascii?Q?y6SATG19M6ZHdVSaW8/dbEU+tcGaFiuFjbll7FLCJNV5RiKD82bLo5dXhTMS?=
- =?us-ascii?Q?9oTAvYZyqhhVpFzGlY5kDxT5skN1PQeuKOLww6xH/zPnTH7+qM+3JwUQvQ2u?=
- =?us-ascii?Q?eKPu9kUqSkWmVSfqxhNA+8D02+42eTqivg0rv6Clc/qeCz9cu24=3D?=
+ =?us-ascii?Q?wVG905riZSPBtfocoeP3UGgYLzt51VgD1ZUneetgWC5vh9rYVOImrUO1UJIH?=
+ =?us-ascii?Q?hOYqc//BT5GJaN5+/z/Tsz4PIpYfDHdwfst/iMHmp8PCUEwQla91UMPHBY5x?=
+ =?us-ascii?Q?djNzNPVTyzbjn4arxniDbuk/31yFzQ5zHKJYP7+dAnaH38DQ8jHjHO3RrL1z?=
+ =?us-ascii?Q?d3pBoCRu1ETAMK9VLv5//dqTxyZR0ZdvKyA5cBm9NynM3h9fmdbqBKKw2DYt?=
+ =?us-ascii?Q?gIFP3lbBWf8Z2rPHg2hH8IV15QrejIYaAWPhQMMvMwi5iAKiJCtgAXPWQ47g?=
+ =?us-ascii?Q?Wt946Hh6jXwO9OTDGk4Pg5HELgDb53IVGQGc/cEfHUUxaEGJiI9QTBzYCUfd?=
+ =?us-ascii?Q?2B+eQG5OTIx1iLmFqAeQ4xRWYYCfjErhk5NQBe7mi5tP6jkL+Q//MLaRQnes?=
+ =?us-ascii?Q?EunQCv95CAWW+YRh77CGnraB98529LxSq52F4rLyaqXgyDt324fwFEziRd9V?=
+ =?us-ascii?Q?EhokZv2oMJS+UwTF/WTJZQ6ZTg6A0vHnaL5YHqXZc0aNw75sabe5osQ/GEjx?=
+ =?us-ascii?Q?URK7Ps9/taWiQ5HA3Y7UkWOS05pS3hJR5DjGQs1Ny4clpEGPdBNVHTRkFOro?=
+ =?us-ascii?Q?qdfuxft3EuGsC62/I1/uORmrxZQjcyA7JZNM+x1qaIJ0lRVs/XhrakW3ZV5Y?=
+ =?us-ascii?Q?OR6bBp8th80ii8MwlZukImCw858wNVJkLAOs7xeTCzT1TVPWnYnQ4911dqeJ?=
+ =?us-ascii?Q?uzmgqy0NOBu2nIdMmM7QVYWIIrDQrO+0QmB35WQBPu/+hzWJ9xEYF5a7uq4J?=
+ =?us-ascii?Q?5dT0DlRT/Gsd85v/GhAu1IAM7jap0wWfONE6tUlHxAwo2JLNERYx8kj+kl0B?=
+ =?us-ascii?Q?VE9vDKi2pL0frmvCQH1qph7Dwladz2P/uRJvOEVPMCD5m5VCFA3A3LJm85D3?=
+ =?us-ascii?Q?3Avx76zhwPbKPoQfPJmptkC2ISJ/X2k9kB8yh7FMi7fwDYcq7MUBcUz/Yh9c?=
+ =?us-ascii?Q?fV4IkMiBn5amLZElvrRH9MCdusqvrV1mjXyJO87L+aSjppmUErJdUSfMsm9l?=
+ =?us-ascii?Q?Odqq6xd0ut9Wa9RcMq4Gx5gb1CLJ5ECkRfuqId/x9Sc8uA5EIpsK+BpkgVc6?=
+ =?us-ascii?Q?FjAtA6nq3OGVG3XF83kp50LxxmCFk/3mXJfs8UH9IzLx4sIuwtk=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?2bovsa1yPwRRDgxmRPy6+wIION6eCcG0f27BLYl01S9+OId0hxRkWN7vbUOJ?=
- =?us-ascii?Q?7/x4QPSHTWXA9a6dc8/oTzMyf7E1DRs7vLsyGzQdWUZSDccX3gtC5uxWjR3g?=
- =?us-ascii?Q?Gj5YcicDYac2gDE73hlwDhdFsmq+Bu3LNCFuRbeNMiNgEc2vY4YoG/gHkPHd?=
- =?us-ascii?Q?JD3S48daTzllfnHqmkvA6Bv1ILumjMpKitXN8KP6QPu5cpasMq7erBztFwgf?=
- =?us-ascii?Q?OzdW+8qj9Xpscu92qMz160RmsUPaP3SVXuwq8fmu3OgM/m0n5nIpnjphXUrq?=
- =?us-ascii?Q?e+mRwPRCF46MVrKmnOvSz+Njgm2tS0N/pYtRKSz6kZk44hN5PGgfoUik0+HQ?=
- =?us-ascii?Q?B2JV5LNYzYyJZl+Bkc+trV+13H5/RCZ81G/8tFJUpNBMRi/2AMjn3YAwZtTW?=
- =?us-ascii?Q?Naz7p5V8DM8mfj0hb1aF4uJfMbKjr0cmbJqvDhS1zqOWyK2LXUwTBkBYbH+h?=
- =?us-ascii?Q?aTitFN7/I2dSFBJ+jEZSVcGDt3TVea+Cf56g7XCuZFpyjEANRTK93ce4l6MA?=
- =?us-ascii?Q?gzjaYHkvBRSlzaZItoUYJErbINd8KKubDWIxGgVAlLI0W5IEkS6zzNYxS50y?=
- =?us-ascii?Q?hgt67JTnoaECn6Kn8kw8Qja2dK+cYXeZqmbp1ZSizUkgWzWj1nHXu0K3X46s?=
- =?us-ascii?Q?NZlGJ3/emZ3b5BbPCdp99MmawgkagScQv2AMn2b65P9ZJRbycA5VPNWB9e6s?=
- =?us-ascii?Q?fGZwWzxDtm7JSY95yG8rmr0XELd66NO8DyFAQbL8Beapn/LPP/YJaBFREbKc?=
- =?us-ascii?Q?40ZShH/x3n66iH7v0Tnl2UE9RzHoY99aMLX78rSJlNfOmd/JmpIveD67z9v8?=
- =?us-ascii?Q?xC7bsvkeX0x58UTEMxdZa33qpJ1JYHUeyqlBxSxsvRawxfFbgAP2f2SilxQ4?=
- =?us-ascii?Q?II9wBKQ0mdc7ZrwIVFG180Jd/DU4GRTpCiJ9Ka+f3ECuLWSrl2GG3TF8W8Yi?=
- =?us-ascii?Q?INP1NxB/XGLLSPvRYZcfrh3pJ0oUHAVQlL74ekZFAZTioAeCIKQsFWOS6veK?=
- =?us-ascii?Q?CoLdRm2JsfdtwYJCtq00vKlWpVXYlGnY/laVyB4zmtb1juA4iBize2izNT5+?=
- =?us-ascii?Q?OpYj8W3oKGqpqu2eYTphS6plu9vT6cdijP7FMHI6bOrdtBD07SUpdifekP1j?=
- =?us-ascii?Q?xUboAF+nEhNIA3uUGXLrxyxnEd7HDwAWJkxoI47yUTyWvT857ziVfgFCLXSq?=
- =?us-ascii?Q?SBmI+qar8XIbD1rSrnwwMqHbVnJGqfLuZeff+1W5Vmc98cdkJZmasmuMcjA?=
+ =?us-ascii?Q?p+c7bCf0nHYQYSokrhIkt2vaeMuvHc6BbYv0pR+RbOqChvYgBZcDhIseGAux?=
+ =?us-ascii?Q?/FqW5T46I5K9CX5gnNIghik4b/XfQzpi8BLetCnIAXoodHl8iBaeB2akRjp8?=
+ =?us-ascii?Q?zZuxvIyZFazMP7YCneFDAueKYkEQBAfbIemcfkuLjEHNCEilRB6F5JOu/gkE?=
+ =?us-ascii?Q?Z4o25jiMl3ptkzcJQVxEFVTiC5kjgfPzozuMZLeWK9oA+sSL1CVc7KyeI6ht?=
+ =?us-ascii?Q?5A/C+8QICoBaERy5LPpNRmXvMcYiRPB2sqv5VtUyzKb7CIDWLhlXZT/ib4Yn?=
+ =?us-ascii?Q?pyb0Pdc478ZMlDhJNDkF9nNRUuXp6619eu+v049oKVrFTTShFedBLo24UsfY?=
+ =?us-ascii?Q?Gf4/UBEkBpgbjLoEj+O2E1LdS4nzKnw8TguFFOE1pCGqaxF8VZe3cvIbjcG3?=
+ =?us-ascii?Q?4n1q27ITJg72qtgi6LdlkFbSaMSb9y7IaZVXJBd8NYEeXYzUjhJ7M5Wd4xmJ?=
+ =?us-ascii?Q?+RmtoBGPSpWDS95FTFjtr0STOwofp9qcJh2j70PF5D9+lceVRhUYqAAeXdlW?=
+ =?us-ascii?Q?3R7HXijJqFQBuP2CMPXDWLzG4dtpDB7n8wVY8V96dEoL1mSvOkWVUQP7RA5/?=
+ =?us-ascii?Q?6J2sDKT65fl28mAd/DUxi74LyTFWKxqCClRCa1GTH2IQ4qzCtX9KYKS0I51z?=
+ =?us-ascii?Q?MPR1Z90B1sF+uXAA8pGM2vicrRwk6TxlWqKLN6zdfI3gHruf2Z8CNWIO97wy?=
+ =?us-ascii?Q?Q3lQH3TGP7mmUf9j9IDNSA6dwDKvH/uLOqjWjFYj6DI+5xpawtH+HifDPZox?=
+ =?us-ascii?Q?s+uli79yTUWf6/EwRIUWl1vdZBI0m0cIii7ORQlKgN6wgWJ8rl2Nmx06Jz4J?=
+ =?us-ascii?Q?s9bY1/hIyP2/EYdtqRdbKMxqXI3TF1CP/1ey9r9Zxz9UqTSA1asMgTnIHBOE?=
+ =?us-ascii?Q?zBmyvmsQ7zbFvyBSYrOWILc/XlCcsmlMTUbXLLdoHwbAxl4H4shEf03DVLCW?=
+ =?us-ascii?Q?x2+akkENcU3edmAQKZBvfIW2REj+bGxXVQpmxQ4ugbsBtpnAxlaLqwACGIsH?=
+ =?us-ascii?Q?PGvbPycIahb7zY6oJUdW3RREGFUV06aIcCVbUkjEkUWDT0F78HMUCI/EHFQh?=
+ =?us-ascii?Q?5ZBe/yRrbg4eAB97L52oRhCpnVMUazdX/wAAh09hQq8v3gDf0vtMNE8F95O0?=
+ =?us-ascii?Q?qlsYhsU1G3GXBC/a2hyT4npFzbVPPnOAP3gSjtxsD2dLzFjPTwHsmCYsB+kW?=
+ =?us-ascii?Q?IFeQ4XAU/Vp91FgnEMw1c6ECO7o8Mv2iApZM8hElHroOFzXZ7+VbEbDZyvQ?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -163,101 +163,173 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8635f16-a65a-4595-5923-08dd602afbdf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2025 23:26:28.6571
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2f3ac24-f2a7-4cd2-68be-08dd602d286e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2025 23:42:02.4498
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR02MB10265
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7439
 
 From: Roman Kisel <romank@linux.microsoft.com> Sent: Friday, March 7, 2025 =
 2:03 PM
 >=20
-> Using acpi_irq_create_hierarchy() in the cases where the code
-> also handles OF leads to code duplication as the ACPI subsystem
-> doesn't provide means to compute the IRQ domain parent whereas
-> the OF does.
+> The hyperv-pci driver uses ACPI for MSI IRQ domain configuration on
+> arm64. It won't be able to do that in the VTL mode where only DeviceTree
+> can be used.
 >=20
-> Introduce acpi_get_gsi_dispatcher() so that the drivers relying
-> on both ACPI and OF may use irq_domain_create_hierarchy() in the
-> common code paths.
->=20
-> No functional changes.
+> Update the hyperv-pci driver to get vPCI MSI IRQ domain in the DeviceTree
+> case, too.
 >=20
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  drivers/acpi/irq.c   | 14 ++++++++++++--
->  include/linux/acpi.h |  5 ++++-
->  2 files changed, 16 insertions(+), 3 deletions(-)
+>  drivers/pci/controller/pci-hyperv.c | 79 ++++++++++++++++++++++++++---
+>  1 file changed, 73 insertions(+), 6 deletions(-)
 >=20
-> diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
-> index 1687483ff319..6243db610137 100644
-> --- a/drivers/acpi/irq.c
-> +++ b/drivers/acpi/irq.c
-> @@ -12,7 +12,7 @@
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller=
+/pci-hyperv.c
+> index 6084b38bdda1..9740006a8c73 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -50,6 +50,7 @@
+>  #include <linux/irqdomain.h>
+>  #include <linux/acpi.h>
+>  #include <linux/sizes.h>
+> +#include <linux/of_irq.h>
+>  #include <asm/mshyperv.h>
 >=20
->  enum acpi_irq_model_id acpi_irq_model;
+>  /*
+> @@ -817,9 +818,17 @@ static int hv_pci_vec_irq_gic_domain_alloc(struct ir=
+q_domain *domain,
+>  	int ret;
 >=20
-> -static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
-> +static acpi_gsi_domain_disp_fn acpi_get_gsi_domain_id;
->  static u32 (*acpi_gsi_to_irq_fallback)(u32 gsi);
+>  	fwspec.fwnode =3D domain->parent->fwnode;
+> -	fwspec.param_count =3D 2;
+> -	fwspec.param[0] =3D hwirq;
+> -	fwspec.param[1] =3D IRQ_TYPE_EDGE_RISING;
+> +	if (is_of_node(fwspec.fwnode)) {
+> +		/* SPI lines for OF translations start at offset 32 */
+> +		fwspec.param_count =3D 3;
+> +		fwspec.param[0] =3D 0;
+> +		fwspec.param[1] =3D hwirq - 32;
+> +		fwspec.param[2] =3D IRQ_TYPE_EDGE_RISING;
+> +	} else {
+> +		fwspec.param_count =3D 2;
+> +		fwspec.param[0] =3D hwirq;
+> +		fwspec.param[1] =3D IRQ_TYPE_EDGE_RISING;
+> +	}
 >=20
->  /**
-> @@ -307,12 +307,22 @@ EXPORT_SYMBOL_GPL(acpi_irq_get);
->   *	for a given GSI
->   */
->  void __init acpi_set_irq_model(enum acpi_irq_model_id model,
-> -			       struct fwnode_handle *(*fn)(u32))
-> +	acpi_gsi_domain_disp_fn fn)
->  {
->  	acpi_irq_model =3D model;
->  	acpi_get_gsi_domain_id =3D fn;
->  }
+>  	ret =3D irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
+>  	if (ret)
+> @@ -887,10 +896,53 @@ static const struct irq_domain_ops hv_pci_domain_op=
+s =3D {
+>  	.activate =3D hv_pci_vec_irq_domain_activate,
+>  };
 >=20
-> +/**
-> + * acpi_get_gsi_dispatcher - Returns dispatcher function that
-> + *                           computes the domain fwnode for a
-> + *                           given GSI.
-> + */
-> +acpi_gsi_domain_disp_fn acpi_get_gsi_dispatcher(void)
+> +#ifdef CONFIG_OF
+> +
+> +static struct irq_domain *hv_pci_of_irq_domain_parent(void)
 > +{
-> +	return acpi_get_gsi_domain_id;
+> +	struct device_node *parent;
+> +	struct irq_domain *domain;
+> +
+> +	parent =3D of_irq_find_parent(hv_get_vmbus_root_device()->of_node);
+> +	domain =3D NULL;
+> +	if (parent) {
+> +		domain =3D irq_find_host(parent);
+> +		of_node_put(parent);
+> +	}
+> +
+> +	return domain;
 > +}
 
-This new function is needed by pci-hyperv.c. It will
-need to be marked as EXPORT_SYMBOL_GPL since
-pci-hyperv.c can be built as a module.
+You could insert the following and avoid the #ifdef's in hv_pci_irqchip_ini=
+t():
+
+#else
+static struct irq_domain *hv_pci_of_irq_domain_parent(void) {return NULL;}
 
 > +
->  /**
->   * acpi_set_gsi_to_irq_fallback - Register a GSI transfer
->   * callback to fallback to arch specified implementation.
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 4e495b29c640..abc51288e867 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -336,8 +336,11 @@ int acpi_register_gsi (struct device *dev, u32 gsi, =
-int triggering, int
-> polarity
->  int acpi_gsi_to_irq (u32 gsi, unsigned int *irq);
->  int acpi_isa_irq_to_gsi (unsigned isa_irq, u32 *gsi);
->=20
-> +typedef struct fwnode_handle *(*acpi_gsi_domain_disp_fn)(u32);
+> +#endif
 > +
->  void acpi_set_irq_model(enum acpi_irq_model_id model,
-> -			struct fwnode_handle *(*)(u32));
-> +	acpi_gsi_domain_disp_fn fn);
-> +acpi_gsi_domain_disp_fn acpi_get_gsi_dispatcher(void);
->  void acpi_set_gsi_to_irq_fallback(u32 (*)(u32));
+> +#ifdef CONFIG_ACPI
+> +
+> +static struct irq_domain *hv_pci_acpi_irq_domain_parent(void)
+> +{
+> +	struct irq_domain *domain;
+> +	acpi_gsi_domain_disp_fn gsi_domain_disp_fn;
+> +
+> +	if (acpi_irq_model !=3D ACPI_IRQ_MODEL_GIC)
+> +		return NULL;
+> +	gsi_domain_disp_fn =3D acpi_get_gsi_dispatcher();
+> +	if (!gsi_domain_disp_fn)
+> +		return NULL;
+> +	domain =3D irq_find_matching_fwnode(gsi_domain_disp_fn(0),
+> +				     DOMAIN_BUS_ANY);
+> +
+> +	if (!domain)
+> +		return NULL;
+> +
+> +	return domain;
+> +}
+
+Same here:
+
+#else
+static struct irq_domain *hv_pci_acpi_irq_domain_parent(void) {return NULL;=
+}
+
+I don't know if it's better or not. Just a suggestion -- keep what you have=
+ if
+you prefer.
+
+> +
+> +#endif
+> +
+>  static int hv_pci_irqchip_init(void)
+>  {
+>  	static struct hv_pci_chip_data *chip_data;
+>  	struct fwnode_handle *fn =3D NULL;
+> +	struct irq_domain *irq_domain_parent =3D NULL;
+>  	int ret =3D -ENOMEM;
 >=20
->  struct irq_domain *acpi_irq_create_hierarchy(unsigned int flags,
+>  	chip_data =3D kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> @@ -907,9 +959,24 @@ static int hv_pci_irqchip_init(void)
+>  	 * way to ensure that all the corresponding devices are also gone and
+>  	 * no interrupts will be generated.
+>  	 */
+> -	hv_msi_gic_irq_domain =3D acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_N=
+R,
+> -							  fn, &hv_pci_domain_ops,
+> -							  chip_data);
+> +#ifdef CONFIG_ACPI
+> +	if (!acpi_disabled)
+> +		irq_domain_parent =3D hv_pci_acpi_irq_domain_parent();
+> +#endif
+> +#if defined(CONFIG_OF)
+> +	if (!irq_domain_parent)
+> +		irq_domain_parent =3D hv_pci_of_irq_domain_parent();
+> +#endif
+> +	if (!irq_domain_parent) {
+> +		WARN_ONCE(1, "Invalid firmware configuration for VMBus interrupts\n");
+> +		ret =3D -EINVAL;
+> +		goto free_chip;
+> +	}
+> +
+> +	hv_msi_gic_irq_domain =3D irq_domain_create_hierarchy(
+> +		irq_domain_parent, 0, HV_PCI_MSI_SPI_NR,
+> +		fn, &hv_pci_domain_ops,
+> +		chip_data);
+>=20
+>  	if (!hv_msi_gic_irq_domain) {
+>  		pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
 > --
 > 2.43.0
 >=20
 
-I'm not at all expert in ACPI code and IRQ domains, but the changes
-here look reasonable to me. Modulo adding the EXPORT_SYMBOL_GPL,
+Overall, I think the code looks right, though I'm not an expert in this are=
+a. I'll
+give my Reviewed-by: once Bjorn's coding suggestions are incorporated.
 
-Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+Michael
 
