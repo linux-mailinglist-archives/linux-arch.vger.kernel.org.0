@@ -1,73 +1,73 @@
-Return-Path: <linux-arch+bounces-10605-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10606-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A0EEA594EB
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 13:44:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 584B6A5951D
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 13:51:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D43853AA63B
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 12:43:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 133B216CE0B
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 12:51:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC12227574;
-	Mon, 10 Mar 2025 12:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DE222836C;
+	Mon, 10 Mar 2025 12:51:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NYEfG9IY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MhLDU9d6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C7D226D11;
-	Mon, 10 Mar 2025 12:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53793227B9E;
+	Mon, 10 Mar 2025 12:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741610486; cv=none; b=t4dS3mdcDc2PO04npzaMWscWumHLjc4P35yEr9wwV9HQx+ZpzSvOZ7iXPzo48fPM2kEvyn8d2d4KGVeJfEqC2Ud/FJ3lPaQi7I+CL5uycWVqtI3W3NVy1o2lTUBGC1HhTjqvTmmZDywvtxcldaNidkFX1qj6Xq0uCaZ0gNt+auM=
+	t=1741611060; cv=none; b=XkUU+Lg6IbCXbt0tyoOQowcjgQ4IlaOwP9236oOs0aqmPKlJXjR5/ZWwFvY1FNgFa5X5maPlGF3wWhlm1ImG4IMEvh9V9aRldFimM83s5ACZb3MMeSbHaLzSMez/X1ihHbhypYwLRwndj2LgfW7T7cDLoFyt3G8dxP0f/RengyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741610486; c=relaxed/simple;
-	bh=u2hb92Bf5/2pZjEymGfvJqesYHZmbFv63xQHrBpvJ/A=;
+	s=arc-20240116; t=1741611060; c=relaxed/simple;
+	bh=m7RpVIHY+r0sfU2i8cmIAET2MityHo7vaehhJ6cZD5Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lbp7gUFDsoUtxomN4uOXuPPD/gK+CA8N3ej7BAhbyq3QnmX+Eu1F5p/kVPf9N4sABK/Gq7cso+nVRqGN01Hs/H84gH9TE+Sulbl11yBLjtnUkgMIODUkVlGcYN46iyGrpdwzQYP64RQAn/vxOiH6Rn2J61iP45fe5O4lzkCS0AM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NYEfG9IY; arc=none smtp.client-ip=209.85.208.53
+	 To:Cc:Content-Type; b=bKLHYyTCKZ+fwEZh1WdzesGLNEcU8ArWThpSA9x5NW52Hw5lWsI/A/iM0C3hRx4GY4sl34oia1z6ZgjwH6vY6cHl+IwJjpXMNRGax6nHwVpxK2Qbe/R4hpdAFV7KEVDI0U88I8UpJ7d4NIKI4g7PihsEH0avFdhcQkGbG8GVuWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MhLDU9d6; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e614da8615so3781033a12.1;
-        Mon, 10 Mar 2025 05:41:24 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac2902f7c2aso209033466b.1;
+        Mon, 10 Mar 2025 05:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741610483; x=1742215283; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741611056; x=1742215856; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u2hb92Bf5/2pZjEymGfvJqesYHZmbFv63xQHrBpvJ/A=;
-        b=NYEfG9IYonEalasQ9ZEuO9Sm6iR1UT+qGCc6vybQZKwRGbQ1MJeRmLgH2JV2Ho1pTB
-         gfF3b/ZK1jK7o8nJjwTMMKeCSHn7BOqQVH4oBU/6BIo8+5OqHSHTWmwln/uF595P+bph
-         E+n27ZhXj9qpGjQZj2/i3Z1lYAXVdscbHMJIVHqWXxHBB+5XtSjRGCJthsDH0s0TRaE6
-         KqeVVOasS52fLs2HVKBPnArnZmKkXxPkXXYoNrZceBN3ba9jJ6Xw2II+avaSFt+1Vd5h
-         qbTsd9uENAJTEBim6FXsfwqDMm7ASQEaCOwoVKtmv+u2017XP7vfJvh1sCW7/v72bSZD
-         JEdQ==
+        bh=m7RpVIHY+r0sfU2i8cmIAET2MityHo7vaehhJ6cZD5Q=;
+        b=MhLDU9d6JMxTIliQCHLpM10w6CGvtoeDzsGFSZHJzwOcySGufaePLvVFVVeYr3zEap
+         nTKVhklOSxVFf3lHBoPHGs/cM2INkWarqU7LYaRe89DaN9g1TzHbeN0c6rjHngSHPm2X
+         qiMDxNPWhFaqnWQfqiwYBYYPHmFv5OTu7WdEZoQmJ6HRgaDY4KvT8rv0VME+vvArJkWR
+         dfwmUjd16QgXQUq93RSJsA9L1ZQy5tvPuZIdCI0opn/M0KQRgzIC0EEclIo8r+SmpMOI
+         2ln4aYYGj2an42EquunFpJuzGzB/aycwpYvXr0q4PT9ThE9Fhr0/rowCBUbfZRczvGFK
+         I6aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741610483; x=1742215283;
+        d=1e100.net; s=20230601; t=1741611056; x=1742215856;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u2hb92Bf5/2pZjEymGfvJqesYHZmbFv63xQHrBpvJ/A=;
-        b=AsMZJbT9oyos9i1MSG3qMA8TSd9SakqD4MH8G1zoqunBupIm2PjxHzTvbRmJ7R1e4W
-         0HXC73ZUXO+AJEyffb+WqHE6X9LMRYPjIaZDC1QdVGv5KQW6bz+542OGpnCXPiS/7Eu6
-         sfZSW8nQ+xYrt8RTj5DsDBR7fhlvbSL/huPuB/i9l87CCVAxmsrRwaYi/lCWkK1GSn1q
-         1LdLbhbiOxMRAz3d66ELBtTK+1VYcg7OkWP7C/xsSxTlyoCVU1iFC+zgyhzeW82Iw5l7
-         kLxJWn5HK/ofuzvYRayI6KoP+5kfotUDoGCQz9o5A4zC7Fz7KeG5iv9zS7wuvfpo5Wk3
-         yjfg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7ds+QJIc8pkRmdApUBh9PSLvEGcKtXCqNAZ5m2zj6OWm1GKlIVsgTRwJEylfE9rSl/9J/aqS2oxNkWw==@vger.kernel.org, AJvYcCUW6m28mYCnQ220RRVpfxis23crw/MTJEQHYR6ribD4UaZMXaoUOWIoL5oy3uHdu5GFyXfeLKfmgqG1@vger.kernel.org, AJvYcCUWllh4a99yJ6AGbK+D1zoEMZ3rYfBiJ/B59BUidQZNx4nV2BIoW95J8VYekYjMK+/ZcjDD1z5foAUxtIRu@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKteSMDaVH2yVFoc9cMzSFM3FtyC+MbrMM0rkobGSaUw2D3QcE
-	3w7f5DOIUXWMMhaV8wLYo66BIalAsr8Hj7iykPrrJyaHANl6UGHxUvOfnV9BSqJkFJ2rbVry5Bw
-	4vFfCOAQskVU8+WAePERF2yJslSY=
-X-Gm-Gg: ASbGncuNIgcJl3M6kB+MeETJUQvPqTyVsZymsLSrqfc6WCqPzfo4eA+UhVDZy/PahVL
-	XnS3Kuu9skNZYZLi4NLfvQEuL5NJDKH2MjPeJNua8rGWISeSibGTCJqndoXzUNSeeqJ8ppuCaoE
-	rsNfxui+iZW1dZICF+1L9TzBSCRxzZcmFZiSZjUKdtgrwR
-X-Google-Smtp-Source: AGHT+IGbhuSl05kaEcLr4vaNaYcnvbu8eAnHPI3X7260iUe/HNnjduw+l6Z5dyOdVihAIIZ0GFIAt8i2L6PXQgKu7P0=
-X-Received: by 2002:a05:6402:34d6:b0:5e0:8a34:3b5c with SMTP id
- 4fb4d7f45d1cf-5e614d92d51mr11025464a12.0.1741610482533; Mon, 10 Mar 2025
- 05:41:22 -0700 (PDT)
+        bh=m7RpVIHY+r0sfU2i8cmIAET2MityHo7vaehhJ6cZD5Q=;
+        b=NI9J7f4hTwX74G7RUj/XpRmBCN+phaapa4N6AjFHoIkHYETyVaZXQK8lOSoU1cJi7u
+         Hw09cX5N6VMQWQ+pKkYMt99VinLOatcnYMIp6DTevYpRxzAzoiDuE4Sj4tVZvniCA56V
+         /xHtfi7LnZeiRDuDN6Uf86Bbx5jpcZhMk3DU6XmQqTM3EYbetR7eEgQ1xpUAOBbB7G+Z
+         MIpi4LR2rL6Om3anIjMr5yd6PJg+fltcq0URXK0Pmh6mAzad0NKOKr9xpkbxLCXy4ORk
+         jmb7j/xxc6ARe4vhgDSs045EvXoLVCs5xoI2iIlpiHVQ+ZMej7kDGCqTeFbZQXUlzlUh
+         4MdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVngT/eGuXSkVBFvfIaxcE3PjwMqHOWPGWdfrnrgZhSmz0l4CYifEMTXqHVaQO5vffwQmiXmz+qY0iipQ==@vger.kernel.org, AJvYcCX30wDtwmzgb1asSgy0Ap/6GJn5qZeUrvxjcQrrSACJtxLGFOG6hSAWR0fNj2cCa78l4/9MzS5KUdbT@vger.kernel.org, AJvYcCXT9b0adJGTOVUeB5h5kUY9q5n3a2bXrqMHxgdRt6/Ad8zLe22SMep755/Ukmx9TfYNaPHMHbh0Cs6CAxTb@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbFZr3gurbwQqmBGJ8GdztkbgvcRa2mdwJqhRB9yWzGVGhBS8z
+	YJiBx8GXtl8tenzaQplCU5FiFHQY/8xxDiFCNofVJN7u/PbQkm/R9CYOrWH8UN9bU2C589oq5DH
+	3n+uMiwd8nCKTfJZdeBL6hfX8QAU=
+X-Gm-Gg: ASbGncsjof+fWUVpqBxkB2q+BsG2tXYo3A5tRDR0dOYjHzopWC3gc3mYHSGJ00Q5Ayy
+	89gFD09rSuHMCjL2yKhD643thCmP3ldXq977z/ievpDxc5eEY4ejncYTCDKeK+rW+8tQrBKwfnc
+	tkA/J0WDvaMFkPxjNHM4GVqnVlNVWf10JKqwCGbJpDzls2
+X-Google-Smtp-Source: AGHT+IEEhoCLJZRXY4Rijvv9tI0tLl/IUwNp5Orm1PRrbMcRZugzWXJ7hXwK/krnr0EUihHMQKx/Fjue7P0l/J3Yjb0=
+X-Received: by 2002:a17:906:99c2:b0:abf:4708:863e with SMTP id
+ a640c23a62f3a-ac252fb9b4emr1577886666b.39.1741611056422; Mon, 10 Mar 2025
+ 05:50:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -75,14 +75,13 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-10-git-send-email-nunodasneves@linux.microsoft.com>
-In-Reply-To: <1740611284-27506-10-git-send-email-nunodasneves@linux.microsoft.com>
+ <1740611284-27506-6-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1740611284-27506-6-git-send-email-nunodasneves@linux.microsoft.com>
 From: Tianyu Lan <ltykernel@gmail.com>
-Date: Mon, 10 Mar 2025 20:40:46 +0800
-X-Gm-Features: AQ5f1JpetGYU9QId_nDle89d5pd0l8CdMTUEIA_r5WaM_0vYFhAkX03EaOPPaVA
-Message-ID: <CAMvTesB5dCD5Cx+CE8oPQ35OHC+C=tyXbHQ0BNxSABEFVK53Tg@mail.gmail.com>
-Subject: Re: [PATCH v5 09/10] hyperv: Add definitions for root partition
- driver to hv headers
+Date: Mon, 10 Mar 2025 20:50:20 +0800
+X-Gm-Features: AQ5f1JrW4lh036PUCGXkQlwffXrplxrlmEnJajhWhVG9u6jh4khODFbp1KsY5xA
+Message-ID: <CAMvTesAh9hK3r81TqbSwB58c1zuXpMzhk=7=gt2cR1QvpJC35Q@mail.gmail.com>
+Subject: Re: [PATCH v5 05/10] acpi: numa: Export node_to_pxm()
 To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 Cc: linux-hyperv@vger.kernel.org, x86@kernel.org, 
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
@@ -102,22 +101,18 @@ Cc: linux-hyperv@vger.kernel.org, x86@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 27, 2025 at 7:11=E2=80=AFAM Nuno Das Neves
+On Thu, Feb 27, 2025 at 7:10=E2=80=AFAM Nuno Das Neves
 <nunodasneves@linux.microsoft.com> wrote:
 >
-> A few additional definitions are required for the mshv driver code
-> (to follow). Introduce those here and clean up a little bit while
-> at it.
+> node_to_pxm() is used by hv_numa_node_to_pxm_info().
+> That helper will be used by Hyper-V root partition module code
+> when CONFIG_MSHV_ROOT=3Dm.
 >
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 > ---
 
-It may be better to unify data type u8, u16, u32, u64 or __u8, __u16,
-__u32, __u64 in the hvhdk.h.
-
-Others like good.
-
 Reviewed-by: Tianyu Lan <tiala@microsoft.com>
+
 
 --=20
 Thanks
