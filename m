@@ -1,262 +1,191 @@
-Return-Path: <linux-arch+bounces-10654-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10655-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9028AA5A608
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 22:18:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CED6A5A614
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 22:21:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1622E1894328
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 21:18:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 897DE16661F
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 21:21:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F0EF1E0DB5;
-	Mon, 10 Mar 2025 21:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F9A1DF996;
+	Mon, 10 Mar 2025 21:21:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="j/Ad610Z"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="C1hTxUvP";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iyQRqWqS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazolkn19010005.outbound.protection.outlook.com [52.103.11.5])
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA54A1BDAA0;
-	Mon, 10 Mar 2025 21:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.11.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741641466; cv=fail; b=QwrGdFLwmqrdejW9UUKZBVvJrxxnDCMOwzpFoT3fsUDGVeuLn6E0xfgyefqZ+AtfzUNelOm91XvbPfMmW0G/ZfBK5ZRkP1ecJch7u7kIZBf69DMfCulvobh9I82OuxfSekpp6E9fMxwezrs0TrHIx9WF6qBTRsY2ZwsrnwOsyR8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741641466; c=relaxed/simple;
-	bh=0hvf1qZ1xx1Mt7/LFEn58XIVzGLCTDQlXBHtp2bPP48=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=iP3HZi9eYktaHi57QjU9EvGupipPUV7LuovzzcqndywUcnlI+aWKKGKBhJAnNH8t3jFy62SLaQhQ/0AVX6EbxyeR6XXf/w8Od8gGLOZJ3F1E3YAYLSUTpaK+Cm/Ro8/M/5yeiu5zBkuIaeL4yXARO7sYKZTYbm17Z1VWZIJRi/Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=j/Ad610Z; arc=fail smtp.client-ip=52.103.11.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d64hbmqaLtZP6YGeBk+giCwH9//s5vsqGMA5C5z+QXWGYsXKfq8Ieb8ClW9g7eKutHGhqpJmyvovC/iBEViFMC/StZGrf44AartEPF49JjGuThX10+aNCr4IE765ixuLj3zjt3qb3jJzD+NirUWylv/SUp0EiTYgn2vGlCT5t+yHrPR2Z8STfH8YZI5/zFYtjrLGeB6nTRDSa2CwsCSDWxXpW/Y0c3HIaWnM7ryFnKi8Y5sZnZpBEPVNV8ttoRa20pmtW7p/bSfY134oJ5QTNB4k7zPnW4fJHyoatzXapLa/rLNylQv4mwLGJBUj1ZSL16C2BClmdLLYQeqgmc0QPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dXt3Z5f7/S8ccYY9MM4V/7LUgMP0xysLNyp61PkfcTQ=;
- b=OefPk7FzS1cvDAccNdv2HXNuAl4l5NNEl08KjpDFSoUy1H42gB/OxEOtXnT1kgU9/m+ekbTwqyGPAR52mjauHOh+eSPaR40WURSzCeFIzuagFDTNrXErBEI0jm1H+3LXBXaBovlyE57UIbNA+ergOPnLldVvehTj7Xy2p6rELsrRxs8C6N+GSTYzqlx07GvEq17tYqUcprI145ZBN2EZyoBJ1cZK+PdhyR0b0N9jPomu7XlzUyxZNZM5eCEIgv9lW5pUw9opNbGW/8wJZ5SNiktRUdn710eHbsWO3d9rrIipLcru37HtqLH+FFo9rUg7W0HrMMguAx2ZRNq9wdgxlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dXt3Z5f7/S8ccYY9MM4V/7LUgMP0xysLNyp61PkfcTQ=;
- b=j/Ad610Z832bbcFi/9aX/3uZn+ZxVsDfQPJcFe68J7p43191Jk3xYq5iRlzpP+/gBE2px6lbgzBXGNKMoXiT2Os+6e4w3k230HGjF9fZjTWIfjrh6LorOUk5sPeny0AstKtu7ivjW3e+CpNngj7mrV9rJRNZtwynS7mpeSbmOdfvU3Qvn3twCaUJhgl1mb+V7jsshGqDcTWRxilzYHfquq2DE5XAx93rqwhMbpfGGqOHIb0x+xbI/PxzuX4iTFql59xnU9R7bWQgga1qgHdu4b2j6KgohtiHOdLPCMiHGlAgZWGAIAdaB09xvFPDaOhhuYONNOp/1Dj+8c2T/uABLw==
-Received: from BN7PR02MB4148.namprd02.prod.outlook.com (2603:10b6:406:f6::17)
- by CH4PR02MB10682.namprd02.prod.outlook.com (2603:10b6:610:245::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Mon, 10 Mar
- 2025 21:17:41 +0000
-Received: from BN7PR02MB4148.namprd02.prod.outlook.com
- ([fe80::1c3a:f677:7a85:4911]) by BN7PR02MB4148.namprd02.prod.outlook.com
- ([fe80::1c3a:f677:7a85:4911%4]) with mapi id 15.20.8511.026; Mon, 10 Mar 2025
- 21:17:41 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	"bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "conor+dt@kernel.org"
-	<conor+dt@kernel.org>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "decui@microsoft.com" <decui@microsoft.com>,
-	"haiyangz@microsoft.com" <haiyangz@microsoft.com>, "hpa@zytor.com"
-	<hpa@zytor.com>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "kw@linux.com" <kw@linux.com>,
-	"kys@microsoft.com" <kys@microsoft.com>, "lenb@kernel.org" <lenb@kernel.org>,
-	"lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-	"manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
-	"mark.rutland@arm.com" <mark.rutland@arm.com>, "maz@kernel.org"
-	<maz@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>, "rafael@kernel.org"
-	<rafael@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
-	"ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-	"sudeep.holla@arm.com" <sudeep.holla@arm.com>, "suzuki.poulose@arm.com"
-	<suzuki.poulose@arm.com>, "tglx@linutronix.de" <tglx@linutronix.de>,
-	"wei.liu@kernel.org" <wei.liu@kernel.org>, "will@kernel.org"
-	<will@kernel.org>, "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-hyperv@vger.kernel.org"
-	<linux-hyperv@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pci@vger.kernel.org"
-	<linux-pci@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>
-CC: "apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
-	<benhill@microsoft.com>, "bperkins@microsoft.com" <bperkins@microsoft.com>,
-	"sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Subject: RE: [PATCH hyperv-next v5 02/11] arm64: hyperv: Use SMCCC to detect
- hypervisor presence
-Thread-Topic: [PATCH hyperv-next v5 02/11] arm64: hyperv: Use SMCCC to detect
- hypervisor presence
-Thread-Index: AQHbj6zgflKUJy2gVEaT33EB4TlLprNs4/Ow
-Date: Mon, 10 Mar 2025 21:17:41 +0000
-Message-ID:
- <BN7PR02MB414898162A26B7424D92DDA7D4D62@BN7PR02MB4148.namprd02.prod.outlook.com>
-References: <20250307220304.247725-1-romank@linux.microsoft.com>
- <20250307220304.247725-3-romank@linux.microsoft.com>
-In-Reply-To: <20250307220304.247725-3-romank@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN7PR02MB4148:EE_|CH4PR02MB10682:EE_
-x-ms-office365-filtering-correlation-id: e055dd90-2ca6-43ce-cf28-08dd6018fdf4
-x-microsoft-antispam:
- BCL:0;ARA:14566002|15080799006|8060799006|461199028|8062599003|19110799003|41001999003|102099032|440099028|3412199025;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?Ygav4iM9FBOtuv+sIRQZ4Ue+rPiVuz9nzRtuLBsOdaGJeu2ZH3fFeKrOil6b?=
- =?us-ascii?Q?vc/etF0rWrKhQ3HPOsQ7bD0MUHe3Heonvvq9rGL2SNE2Z3kM4TGTEluU1Q0x?=
- =?us-ascii?Q?KPHoXttoEWqUoacJ8b30MKSWkdRpE/GHJAxIbr8E+v4C+wYzsYsShDOaDssZ?=
- =?us-ascii?Q?5ey5kNIzGfuL7EvttRVk1OnCnd/9if+p+9AWVk8Ok04Mt7RObBMbVAmCSWTa?=
- =?us-ascii?Q?u05r61IroxPWBIgvVVTdc91/ALUly6l5By4ChYchaeDjUarrxvYKNkNgNIJL?=
- =?us-ascii?Q?ICc6L1v/yPfk0O545j+iArUSFgybLK38t5SPZfyC1ySxjASyaLWztk/LyNhA?=
- =?us-ascii?Q?bmwV9sd6UIsyBIJvbLn2hYRa980WpFPCiSI1fztGfZyM2793juL0rAmUP67d?=
- =?us-ascii?Q?V0ra2HCaNk/grgbNbCBYFrONg8EuvrjA7SnjZnE9fbLhCNC2uiw3FHQY2BKp?=
- =?us-ascii?Q?dej4s2NhnY8oDFyyOTetUO3nI521m6SL9onDSp9/hWY+O9hDmkpTSnO5rdLb?=
- =?us-ascii?Q?NeZcaWxBkOFs+y7b7Q1VPF7ultxy9LXG0DALauJRBS0ViIHHCJ1XFnpXP3Ui?=
- =?us-ascii?Q?1tVz0V9PkD2UQSITQaPtnqa1/qBwBBvZwBPFRZIiqjRwZAl8Ii45FHmMMXTu?=
- =?us-ascii?Q?PX3096iIe/pKCdr9VFlUUSty3sfYpaC3mA56ltGKm8e0IComTPT33reSfT/o?=
- =?us-ascii?Q?rpwmH6w0064nx0clsNPfgpyEzFCa0td0hr56ES6LBAk3E+Hz9rT97Ui7QVlK?=
- =?us-ascii?Q?n2bB1RpuBJtwr/Y12NO5szcuvkX7uGjWXN5fPUD4AyqGnFL01oIQTDUB14oM?=
- =?us-ascii?Q?b/E1t1321dh8DTgLDA0YrOgh7skB+7A/dCcakER1dGZd63IkqzyH2/xLed94?=
- =?us-ascii?Q?ISqjbnwElRvJmG3UTUw3JQmgbnzaSVn8bJnYV8usb6WloPtEtfSGPZR6tigY?=
- =?us-ascii?Q?Hhi09i7x2xisU+8TcXymk7vSpLkKLZ/J1Tp3QzPCJfiNSX+Homp+A6kZg63h?=
- =?us-ascii?Q?s6FPcw51gIYtTp/Vad1YGTNBC/EEl+EiUfLnNmzKe7XNB9xWwLCJJDSio6d1?=
- =?us-ascii?Q?e8H7wRArkDVJ7sSN9EMxnnHX3axp8g=3D=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?irg/E1VQP6mTKfs4eR1QH8ukm0TazXzv1meRZIBkguJvR2D5lFIeZt9ZpqwG?=
- =?us-ascii?Q?WpP6nwmVvMmerG5eeWg4pnE0B8MOpGMGDQP+uHp9nLvB2wg9hU+2oGuPee1k?=
- =?us-ascii?Q?4KRHSwAWg4Z24jbl1I4iU4wvUgU68p0MiFNxdStFNTvtDNeTmYzr/cNZD2Mj?=
- =?us-ascii?Q?rbCjyXF/Fo6LsbYsHf9akVzlnP9ZjG8s8qO9Jy0TAHmyyO/wDr9mNC9ZMrsz?=
- =?us-ascii?Q?dvmeKVQbXrSLFBMr//CHp7SfaJ79kAAyxE9af2H67zxWpRqxnpRQrDKUBjaF?=
- =?us-ascii?Q?mUATcg7u0CX5tfCWHerOn7+9c1qbx0OiV0R2XN8hSTqTnvsb7UxJFljvUxBv?=
- =?us-ascii?Q?SGotgGCiI2Lj4RxKuYkJPK7Oh3IFCx2vVrzp3gd+6c07XWumvGLlpXp2EFzh?=
- =?us-ascii?Q?wPEx1uwjSqUzj+7OBoNCuSO28t6XGCymveLnfaXbXXxL6GZm5AzIew/TzUPH?=
- =?us-ascii?Q?StUv19aoHNGc0S1+QrfvZhgp65INyuogEEDXya7XJKtjvIeX+6yxz3Oq/4ec?=
- =?us-ascii?Q?T0O4rBK6MkV2w5SpNNqY31C/klfTeEYYn12A1FN7MhRDY01DfBzOgH9Xq4ia?=
- =?us-ascii?Q?Ojn4LiRssHH6XRzWMctRvg9T1jBfeP/it+ba5G5HlNeRB5lnGmdMTJvLx2Wb?=
- =?us-ascii?Q?YFoJsdzxRBB9eg+/rnF02Z6Zlio2D4IjIkg8HxWKh2iakQcPs3UmXsdRL0hm?=
- =?us-ascii?Q?6sArcOhUpaTN37jEUWiB3tWvzg3QcdVjKePw/12ETUD+r7Odp2SmBW4VhXqM?=
- =?us-ascii?Q?+RHU/e9VMi8W0b2KRbnG+h+U3WnwrVYHGun/P1/YWKCnFU38/5R3G747gzqr?=
- =?us-ascii?Q?a9/Q7hBSgl7Soa/t2h9k+CWE8LmGCR4lzbGVYZCIOLl/EcULBq1NZ2+qL3oz?=
- =?us-ascii?Q?kgJ3dn/d3UNlcc5bZtxUdfAa01JompyE5gVQpPvMuwXWxVBt+9RYABLO4Ijj?=
- =?us-ascii?Q?IwcvL+7PvAptJPSLttge6fcdxaeLKueJgNhN8E6NO85W5gxy979fHRdCTMdj?=
- =?us-ascii?Q?bCQxPsNP/mzzqS83ucQ7WRMo8uS72hGOrXrl+RwkvK+SjD/FSHhXkT11DIGm?=
- =?us-ascii?Q?rOljD4CGvvvUwFRbLyt4cGIFHGVz3Aa6JhK6KYBC6EA4hL7z/W4kelgCHMPx?=
- =?us-ascii?Q?7ZQIdRS7cnIxRoByepMf4ly46tFm/uTuc98pZ1v1/gfOn4kuSbJafy1esXY3?=
- =?us-ascii?Q?oi+KEQPmY+hKrLwZfo+3xt+ITOzaN/TsT8MtQn3byH7gi3ZQ9anfZghpOQs?=
- =?us-ascii?Q?=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40FD1DD525;
+	Mon, 10 Mar 2025 21:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741641670; cv=none; b=Ca8pQYcM3Rcy9U27Gs19Xz7c2Vgff/ACtWj3QI/RUsBDyTRquUNSTtXVsFh+MKeWl/iJHTOe5qTDQjLXuSeAnDcGgtROOre3WS8pehgO2/ZEvt4iBaspsvJ17RRRqO2PfBSRtTseRmdh5+Fl0VLYo8K28RKO5C9NcvEe4ZcwwDI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741641670; c=relaxed/simple;
+	bh=b+pL5tPz/STvzduyR8tAJGIpWCTLY7xMzNfVgLy+oho=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=CXaIAdATkW+xCnbdn6sfgOJg+EBk6pZuCGK0Zm3oaVPKcejZs5FnfP4ySvDQghtfeef7yOhwG+ei9VDX5eyS8PNfRRV8U0jH2dD45m5pw2LBeNZkEaKOvVV/+ZR4qUqbFbnWk8PYRLp+FHLjdlwlPPLW22DRJdj1N/7JhUVQG/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=C1hTxUvP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iyQRqWqS; arc=none smtp.client-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailflow.stl.internal (Postfix) with ESMTP id 939871D41B86;
+	Mon, 10 Mar 2025 17:21:06 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Mon, 10 Mar 2025 17:21:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1741641666;
+	 x=1741648866; bh=E4HKlxVjhIt2MzhfvIo5qMqiVK9k8HOzhVxjjAVbOk0=; b=
+	C1hTxUvPA3Fb5iBKVyaB9S0GfSvuHye+iANMUYbqz2WEwKh+PjF2Ig9bEJQVXL8W
+	kdPPlIgBhaXBR9cfmZ0PE2Am21WLFpDOSC8cX4CRdGVkwDQwLrkIeM5p0hpYbe13
+	dTxmdFfOvUlpJHQMFzsNCj740xYgX3HO88YG9+874W9W3ONJKWU3JnOvcNKUU/4u
+	knNl6Vi+hohsFjz5X2QG4iDQUTaDl2o6gl+/SgTvwh+IxFXmzMQL8wdboNLh14A/
+	aarOTRDHRANpQ7jaacfHOdK2NKw4xhhoPCgcdkDHdrFJ9fRJG33i70Yr/2EzUjdG
+	KxdDzQVgaqrYOM7VHlF73A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1741641666; x=
+	1741648866; bh=E4HKlxVjhIt2MzhfvIo5qMqiVK9k8HOzhVxjjAVbOk0=; b=i
+	yQRqWqSGI6Kt3YUKxrmI/FlE9b26ffQwpxP94u4VFt4R8vOueVcX3AoCZMSsXlsf
+	XL00t5hz0HKoZQiWWgBfXmCi3KczhguDU8kRNtshw4wzTjqLWf4R4c8bJijn8DFl
+	5yAnjsGkIz+NVAjzqe0v8OCUxD15L05INUOiZ6x/J4ac0ZBqVNbvzgRHbmj5t9Ba
+	3j6HgC/97L/dQ3YDHejXKY/xvQz/hLUQihBs2DCB1G8au5Q5PvHhOBLiHxE0gHPx
+	sXxfmR9U/Us8LYPKZcy0PiBDAB8ri/wnT4GnQ5IYNOMthafCCbqTTLAJKEw4GxLS
+	2eWJA70Uin2M61IfU8uCQ==
+X-ME-Sender: <xms:wVfPZ2JStQfl-VXaWTJ_QuMzQ3ObrIeeleBzBmQxfF4Du39ikrBCLg>
+    <xme:wVfPZ-I7hmahTLPWORKx4-GCw39p0HhoYbrARohYV_QOvY1Fl0dBQ8OowZ2_vQTBT
+    5KFklbFDw_9R3vrcUA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddtgeduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    geefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsphesrghlihgvnhekrdguvg
+    dprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghp
+    thhtohepjhhovgihrdhgohhulhihsegrrhhmrdgtohhmpdhrtghpthhtohepmhgrrhhkrd
+    hruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtohepshhuuggvvghprdhhohhllhgr
+    segrrhhmrdgtohhmpdhrtghpthhtohepshhuiihukhhirdhpohhulhhoshgvsegrrhhmrd
+    gtohhmpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdprhgtphht
+    thhopeihuhiivghnghhhuhhisehhuhgrfigvihdrtghomhdprhgtphhtthhopegtohhnoh
+    hrodgutheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:wVfPZ2vjrGidv7HfBCACY-yGDYl3EfwXvQhqp8jKyTCtNAEsgJj2fQ>
+    <xmx:wVfPZ7ZidpufvcbZMZOogXc8KetgC1YVnS_aBECkUMRpwdLI0iDxwg>
+    <xmx:wVfPZ9ZPI552vps1YoMhGOloTLMV3PrxFhTqMlOyR0s_NrkTI0YDFg>
+    <xmx:wVfPZ3De8byh2Bv17Og3Rg_scmCx5lM1v133qfZGoZiEq96RKyOTzg>
+    <xmx:wlfPZ-pxMLQep5aMAHOoE69Tz3LFoYiwRsd_W-SJ689j4Q6-j_dfe3KI>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2BEF92220072; Mon, 10 Mar 2025 17:21:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN7PR02MB4148.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: e055dd90-2ca6-43ce-cf28-08dd6018fdf4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2025 21:17:41.2539
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH4PR02MB10682
+Date: Mon, 10 Mar 2025 22:20:41 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Michael Kelley" <mhklinux@outlook.com>,
+ "Roman Kisel" <romank@linux.microsoft.com>,
+ "bhelgaas@google.com" <bhelgaas@google.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "Dexuan Cui" <decui@microsoft.com>,
+ "Haiyang Zhang" <haiyangz@microsoft.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Joey Gouly" <joey.gouly@arm.com>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+ "K. Y. Srinivasan" <kys@microsoft.com>, "Len Brown" <lenb@kernel.org>,
+ "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+ "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Marc Zyngier" <maz@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Oliver Upton" <oliver.upton@linux.dev>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Rob Herring" <robh@kernel.org>,
+ "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+ "Sudeep Holla" <sudeep.holla@arm.com>,
+ "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Wei Liu" <wei.liu@kernel.org>,
+ "Will Deacon" <will@kernel.org>, "Zenghui Yu" <yuzenghui@huawei.com>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+ "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>
+Cc: "apais@microsoft.com" <apais@microsoft.com>,
+ "benhill@microsoft.com" <benhill@microsoft.com>,
+ "bperkins@microsoft.com" <bperkins@microsoft.com>,
+ "sunilmut@microsoft.com" <sunilmut@microsoft.com>
+Message-Id: <119cfb59-d68b-4718-b7cb-90cba67827e8@app.fastmail.com>
+In-Reply-To: 
+ <BN7PR02MB41488C06B7E42830C700318DD4D62@BN7PR02MB4148.namprd02.prod.outlook.com>
+References: <20250307220304.247725-1-romank@linux.microsoft.com>
+ <20250307220304.247725-4-romank@linux.microsoft.com>
+ <e0f81049-688e-4f53-a002-5d246281bf8d@app.fastmail.com>
+ <BN7PR02MB41488C06B7E42830C700318DD4D62@BN7PR02MB4148.namprd02.prod.outlook.com>
+Subject: Re: [PATCH hyperv-next v5 03/11] Drivers: hv: Enable VTL mode for arm64
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Roman Kisel <romank@linux.microsoft.com> Sent: Friday, March 7, 2025 =
-2:03 PM
->=20
-> The arm64 Hyper-V startup path relies on ACPI to detect
-> running under a Hyper-V compatible hypervisor. That
-> doesn't work on non-ACPI systems.
->=20
-> Hoist the ACPI detection logic into a separate function. Then
-> use the vendor-specific hypervisor service call (implemented
-> recently in Hyper-V) via SMCCC in the non-ACPI case.
->=20
-> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
-> ---
->  arch/arm64/hyperv/mshyperv.c | 43 +++++++++++++++++++++++++++++++-----
->  1 file changed, 38 insertions(+), 5 deletions(-)
->=20
-> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-> index 29fcfd595f48..c647db56fd6b 100644
-> --- a/arch/arm64/hyperv/mshyperv.c
-> +++ b/arch/arm64/hyperv/mshyperv.c
-> @@ -27,6 +27,41 @@ int hv_get_hypervisor_version(union hv_hypervisor_vers=
-ion_info
-> *info)
->  	return 0;
->  }
->=20
-> +static bool __init hyperv_detect_via_acpi(void)
-> +{
-> +	if (acpi_disabled)
-> +		return false;
-> +#if IS_ENABLED(CONFIG_ACPI)
-> +	/*
-> +	 * Hypervisor ID is only available in ACPI v6+, and the
-> +	 * structure layout was extended in v6 to accommodate that
-> +	 * new field.
-> +	 *
-> +	 * At the very minimum, this check makes sure not to read
-> +	 * past the FADT structure.
-> +	 *
-> +	 * It is also needed to catch running in some unknown
-> +	 * non-Hyper-V environment that has ACPI 5.x or less.
-> +	 * In such a case, it can't be Hyper-V.
-> +	 */
-> +	if (acpi_gbl_FADT.header.revision < 6)
-> +		return false;
-> +	return strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8) =3D=
-=3D 0;
-> +#else
-> +	return false;
-> +#endif
-> +}
-> +
-> +static bool __init hyperv_detect_via_smccc(void)
-> +{
-> +	uuid_t hyperv_uuid =3D UUID_INIT(
-> +		0x4d32ba58, 0x4764, 0xcd24,
-> +		0x75, 0x6c, 0xef, 0x8e,
-> +		0x24, 0x70, 0x59, 0x16);
-> +
-> +	return arm_smccc_hyp_present(&hyperv_uuid);
-> +}
-> +
->  static int __init hyperv_init(void)
->  {
->  	struct hv_get_vp_registers_output	result;
-> @@ -35,13 +70,11 @@ static int __init hyperv_init(void)
->=20
->  	/*
->  	 * Allow for a kernel built with CONFIG_HYPERV to be running in
-> -	 * a non-Hyper-V environment, including on DT instead of ACPI.
-> +	 * a non-Hyper-V environment.
-> +	 *
->  	 * In such cases, do nothing and return success.
->  	 */
-> -	if (acpi_disabled)
-> -		return 0;
-> -
-> -	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
-> +	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smccc())
->  		return 0;
->=20
->  	/* Setup the guest ID */
-> --
-> 2.43.0
->=20
+On Mon, Mar 10, 2025, at 22:01, Michael Kelley wrote:
+> From: Arnd Bergmann <arnd@arndb.de> Sent: Saturday, March 8, 2025 1:05 PM
+>> >  config HYPERV_VTL_MODE
+>> >  	bool "Enable Linux to boot in VTL context"
+>> > -	depends on X86_64 && HYPERV
+>> > +	depends on (X86_64 || ARM64)
+>> >  	depends on SMP
+>> > +	select OF_EARLY_FLATTREE
+>> > +	select OF
+>> >  	default n
+>> >  	help
+>> 
+>> Having the dependency below the top-level Kconfig entry feels a little
+>> counterintuitive. You could flip that back as it was before by doing
+>> 
+>>       select HYPERV_VTL_MODE if !ACPI
+>>       depends on ACPI || SMP
+>> 
+>> in the HYPERV option, leaving the dependency on HYPERV in
+>> HYPERV_VTL_MODE.
+>
+> I would argue that we don't ever want to implicitly select
+> HYPERV_VTL_MODE because of some other config setting or
+> lack thereof.  VTL mode is enough of a special case that it should
+> only be explicitly selected. If someone omits ACPI, then HYPERV
+> should not be selectable unless HYPERV_VTL_MODE is explicitly
+> selected.
+>
+> The last line of the comment for HYPERV_VTL_MODE says
+> "A kernel built with this option must run at VTL2, and will not run
+> as a normal guest."  In other words, don't choose this unless you
+> 100% know that VTL2 is what you want.
 
-Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+It sounds like the latter is the real problem: enabling a feature
+should never prevent something else from working. Can you describe
+what VTL context is and why it requires an exception to a rather
+fundamental rule here? If you build a kernel that runs on every
+single piece of arm64 hardware and every hypervisor, why can't
+you add HYPERV_VTL_MODE to that as an option?
 
+      Arnd
 
