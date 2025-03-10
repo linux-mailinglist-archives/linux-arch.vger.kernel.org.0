@@ -1,191 +1,222 @@
-Return-Path: <linux-arch+bounces-10655-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10656-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CED6A5A614
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 22:21:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2895A5A666
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 22:47:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 897DE16661F
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 21:21:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BE0C1890893
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Mar 2025 21:47:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F9A1DF996;
-	Mon, 10 Mar 2025 21:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 294871D63ED;
+	Mon, 10 Mar 2025 21:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="C1hTxUvP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iyQRqWqS"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="PLevEC7A"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40FD1DD525;
-	Mon, 10 Mar 2025 21:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A0ED4437C;
+	Mon, 10 Mar 2025 21:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741641670; cv=none; b=Ca8pQYcM3Rcy9U27Gs19Xz7c2Vgff/ACtWj3QI/RUsBDyTRquUNSTtXVsFh+MKeWl/iJHTOe5qTDQjLXuSeAnDcGgtROOre3WS8pehgO2/ZEvt4iBaspsvJ17RRRqO2PfBSRtTseRmdh5+Fl0VLYo8K28RKO5C9NcvEe4ZcwwDI=
+	t=1741643223; cv=none; b=g+uD3gwFGTmnM0L5blIJVi4CV7iMN7VCMHStmtZdbho9kVjDyNwRscjJzUbw9uCiVxIgDHDY8riMxa1bwlLEo3YtXMOKD361mJ3817zApsIMcl0I7YzkAw8nPYr6TlE3z+08r0Z5pEeCnvWhZLBs3sauLGq7tt1ck1lFcINdCcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741641670; c=relaxed/simple;
-	bh=b+pL5tPz/STvzduyR8tAJGIpWCTLY7xMzNfVgLy+oho=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=CXaIAdATkW+xCnbdn6sfgOJg+EBk6pZuCGK0Zm3oaVPKcejZs5FnfP4ySvDQghtfeef7yOhwG+ei9VDX5eyS8PNfRRV8U0jH2dD45m5pw2LBeNZkEaKOvVV/+ZR4qUqbFbnWk8PYRLp+FHLjdlwlPPLW22DRJdj1N/7JhUVQG/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=C1hTxUvP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iyQRqWqS; arc=none smtp.client-ip=202.12.124.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailflow.stl.internal (Postfix) with ESMTP id 939871D41B86;
-	Mon, 10 Mar 2025 17:21:06 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Mon, 10 Mar 2025 17:21:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1741641666;
-	 x=1741648866; bh=E4HKlxVjhIt2MzhfvIo5qMqiVK9k8HOzhVxjjAVbOk0=; b=
-	C1hTxUvPA3Fb5iBKVyaB9S0GfSvuHye+iANMUYbqz2WEwKh+PjF2Ig9bEJQVXL8W
-	kdPPlIgBhaXBR9cfmZ0PE2Am21WLFpDOSC8cX4CRdGVkwDQwLrkIeM5p0hpYbe13
-	dTxmdFfOvUlpJHQMFzsNCj740xYgX3HO88YG9+874W9W3ONJKWU3JnOvcNKUU/4u
-	knNl6Vi+hohsFjz5X2QG4iDQUTaDl2o6gl+/SgTvwh+IxFXmzMQL8wdboNLh14A/
-	aarOTRDHRANpQ7jaacfHOdK2NKw4xhhoPCgcdkDHdrFJ9fRJG33i70Yr/2EzUjdG
-	KxdDzQVgaqrYOM7VHlF73A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1741641666; x=
-	1741648866; bh=E4HKlxVjhIt2MzhfvIo5qMqiVK9k8HOzhVxjjAVbOk0=; b=i
-	yQRqWqSGI6Kt3YUKxrmI/FlE9b26ffQwpxP94u4VFt4R8vOueVcX3AoCZMSsXlsf
-	XL00t5hz0HKoZQiWWgBfXmCi3KczhguDU8kRNtshw4wzTjqLWf4R4c8bJijn8DFl
-	5yAnjsGkIz+NVAjzqe0v8OCUxD15L05INUOiZ6x/J4ac0ZBqVNbvzgRHbmj5t9Ba
-	3j6HgC/97L/dQ3YDHejXKY/xvQz/hLUQihBs2DCB1G8au5Q5PvHhOBLiHxE0gHPx
-	sXxfmR9U/Us8LYPKZcy0PiBDAB8ri/wnT4GnQ5IYNOMthafCCbqTTLAJKEw4GxLS
-	2eWJA70Uin2M61IfU8uCQ==
-X-ME-Sender: <xms:wVfPZ2JStQfl-VXaWTJ_QuMzQ3ObrIeeleBzBmQxfF4Du39ikrBCLg>
-    <xme:wVfPZ-I7hmahTLPWORKx4-GCw39p0HhoYbrARohYV_QOvY1Fl0dBQ8OowZ2_vQTBT
-    5KFklbFDw_9R3vrcUA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddtgeduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
-    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    geefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsphesrghlihgvnhekrdguvg
-    dprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghp
-    thhtohepjhhovgihrdhgohhulhihsegrrhhmrdgtohhmpdhrtghpthhtohepmhgrrhhkrd
-    hruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtohepshhuuggvvghprdhhohhllhgr
-    segrrhhmrdgtohhmpdhrtghpthhtohepshhuiihukhhirdhpohhulhhoshgvsegrrhhmrd
-    gtohhmpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdprhgtphht
-    thhopeihuhiivghnghhhuhhisehhuhgrfigvihdrtghomhdprhgtphhtthhopegtohhnoh
-    hrodgutheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:wVfPZ2vjrGidv7HfBCACY-yGDYl3EfwXvQhqp8jKyTCtNAEsgJj2fQ>
-    <xmx:wVfPZ7ZidpufvcbZMZOogXc8KetgC1YVnS_aBECkUMRpwdLI0iDxwg>
-    <xmx:wVfPZ9ZPI552vps1YoMhGOloTLMV3PrxFhTqMlOyR0s_NrkTI0YDFg>
-    <xmx:wVfPZ3De8byh2Bv17Og3Rg_scmCx5lM1v133qfZGoZiEq96RKyOTzg>
-    <xmx:wlfPZ-pxMLQep5aMAHOoE69Tz3LFoYiwRsd_W-SJ689j4Q6-j_dfe3KI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 2BEF92220072; Mon, 10 Mar 2025 17:21:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1741643223; c=relaxed/simple;
+	bh=dA9v5nwjHnH2LSju91UgbojSTyOeExYFFM/iFQ3lW6U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rCZL9DLsNzJgqDDqNk57A/A7MTkkRwZsG7Wa6pnhwHq5+BEi0+r1wAfJp5/O0Y8MdcjEZ0WhCMTWjoBUuEDj5QHv95A9Z7XumwBAjqWM4Gjgq+3yJpfg8jKlQ2xWFNP/mGaxA9M6EK4eD8hOoCWBKEFLHAeYuegcQWVVV+7hMUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=PLevEC7A; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 1AE9D205492E;
+	Mon, 10 Mar 2025 14:47:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1AE9D205492E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1741643220;
+	bh=35SjqWqIW52cDDYKL7wXrX16ndmpcJ/RLK/QVZatMbA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PLevEC7AXcMPAd0pY7CAOea160MnPpKdr7WEv6MrZnGBCpYlCuBzpuETS4KkkO8Au
+	 6Zo8yUuLL7tvFiZAF75VRwZafL0dNuQnj85+7jrnaez8s17wb79rOwVkQjeGVgCUP8
+	 uxdylMSk9Px+9pgIVZ/eniOqvEy2BT6hlmgmmr7w=
+Message-ID: <71a95f7d-d38b-4f4f-b384-9ad4095bd272@linux.microsoft.com>
+Date: Mon, 10 Mar 2025 14:46:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 10 Mar 2025 22:20:41 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Michael Kelley" <mhklinux@outlook.com>,
- "Roman Kisel" <romank@linux.microsoft.com>,
- "bhelgaas@google.com" <bhelgaas@google.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Dexuan Cui" <decui@microsoft.com>,
- "Haiyang Zhang" <haiyangz@microsoft.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Joey Gouly" <joey.gouly@arm.com>,
- "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>, "Len Brown" <lenb@kernel.org>,
- "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
- "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
- "Mark Rutland" <mark.rutland@arm.com>, "Marc Zyngier" <maz@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Oliver Upton" <oliver.upton@linux.dev>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "Rob Herring" <robh@kernel.org>,
- "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
- "Sudeep Holla" <sudeep.holla@arm.com>,
- "Suzuki K Poulose" <suzuki.poulose@arm.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Wei Liu" <wei.liu@kernel.org>,
- "Will Deacon" <will@kernel.org>, "Zenghui Yu" <yuzenghui@huawei.com>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
- "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
- Linux-Arch <linux-arch@vger.kernel.org>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 08/10] x86: hyperv: Add mshv_handler irq handler and
+ setup function
+To: Michael Kelley <mhklinux@outlook.com>,
+ Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc: "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>,
  "linux-arm-kernel@lists.infradead.org"
  <linux-arm-kernel@lists.infradead.org>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>
-Cc: "apais@microsoft.com" <apais@microsoft.com>,
- "benhill@microsoft.com" <benhill@microsoft.com>,
- "bperkins@microsoft.com" <bperkins@microsoft.com>,
- "sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Message-Id: <119cfb59-d68b-4718-b7cb-90cba67827e8@app.fastmail.com>
-In-Reply-To: 
- <BN7PR02MB41488C06B7E42830C700318DD4D62@BN7PR02MB4148.namprd02.prod.outlook.com>
-References: <20250307220304.247725-1-romank@linux.microsoft.com>
- <20250307220304.247725-4-romank@linux.microsoft.com>
- <e0f81049-688e-4f53-a002-5d246281bf8d@app.fastmail.com>
- <BN7PR02MB41488C06B7E42830C700318DD4D62@BN7PR02MB4148.namprd02.prod.outlook.com>
-Subject: Re: [PATCH hyperv-next v5 03/11] Drivers: hv: Enable VTL mode for arm64
-Content-Type: text/plain
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+ "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+ "kys@microsoft.com" <kys@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
+ <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
+ "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "hpa@zytor.com" <hpa@zytor.com>,
+ "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+ "joro@8bytes.org" <joro@8bytes.org>,
+ "robin.murphy@arm.com" <robin.murphy@arm.com>, "arnd@arndb.de"
+ <arnd@arndb.de>,
+ "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
+ "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
+ "mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>,
+ "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+ "apais@linux.microsoft.com" <apais@linux.microsoft.com>,
+ "Tianyu.Lan@microsoft.com" <Tianyu.Lan@microsoft.com>,
+ "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "vkuznets@redhat.com" <vkuznets@redhat.com>,
+ "prapal@linux.microsoft.com" <prapal@linux.microsoft.com>,
+ "muislam@microsoft.com" <muislam@microsoft.com>,
+ "anrayabh@linux.microsoft.com" <anrayabh@linux.microsoft.com>,
+ "rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org"
+ <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
+References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1740611284-27506-9-git-send-email-nunodasneves@linux.microsoft.com>
+ <Z7-nDUe41XHyZ8RJ@skinsburskii.>
+ <7de9b06d-9a32-48b5-beda-2e19b36ae9c9@linux.microsoft.com>
+ <SN6PR02MB41573673D5F786E6C47FC08ED4D52@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Language: en-US
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <SN6PR02MB41573673D5F786E6C47FC08ED4D52@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 10, 2025, at 22:01, Michael Kelley wrote:
-> From: Arnd Bergmann <arnd@arndb.de> Sent: Saturday, March 8, 2025 1:05 PM
->> >  config HYPERV_VTL_MODE
->> >  	bool "Enable Linux to boot in VTL context"
->> > -	depends on X86_64 && HYPERV
->> > +	depends on (X86_64 || ARM64)
->> >  	depends on SMP
->> > +	select OF_EARLY_FLATTREE
->> > +	select OF
->> >  	default n
->> >  	help
->> 
->> Having the dependency below the top-level Kconfig entry feels a little
->> counterintuitive. You could flip that back as it was before by doing
->> 
->>       select HYPERV_VTL_MODE if !ACPI
->>       depends on ACPI || SMP
->> 
->> in the HYPERV option, leaving the dependency on HYPERV in
->> HYPERV_VTL_MODE.
->
-> I would argue that we don't ever want to implicitly select
-> HYPERV_VTL_MODE because of some other config setting or
-> lack thereof.  VTL mode is enough of a special case that it should
-> only be explicitly selected. If someone omits ACPI, then HYPERV
-> should not be selectable unless HYPERV_VTL_MODE is explicitly
-> selected.
->
-> The last line of the comment for HYPERV_VTL_MODE says
-> "A kernel built with this option must run at VTL2, and will not run
-> as a normal guest."  In other words, don't choose this unless you
-> 100% know that VTL2 is what you want.
+On 3/7/2025 9:38 AM, Michael Kelley wrote:
+> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, February 28, 2025 4:38 PM
+>>
+>> On 2/26/2025 3:43 PM, Stanislav Kinsburskii wrote:
+>>> On Wed, Feb 26, 2025 at 03:08:02PM -0800, Nuno Das Neves wrote:
+>>>> This will handle SYNIC interrupts such as intercepts, doorbells, and
+>>>> scheduling messages intended for the mshv driver.
+>>>>
+>>>> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+>>>> Reviewed-by: Wei Liu <wei.liu@kernel.org>
+>>>> Reviewed-by: Tianyu Lan <tiala@microsoft.com>
+>>>> ---
+>>>>  arch/x86/kernel/cpu/mshyperv.c | 9 +++++++++
+>>>>  drivers/hv/hv_common.c         | 5 +++++
+>>>>  include/asm-generic/mshyperv.h | 1 +
+>>>>  3 files changed, 15 insertions(+)
+>>>>
+>>>> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+>>>> index 0116d0e96ef9..616e9a5d77b4 100644
+>>>> --- a/arch/x86/kernel/cpu/mshyperv.c
+>>>> +++ b/arch/x86/kernel/cpu/mshyperv.c
+>>>> @@ -107,6 +107,7 @@ void hv_set_msr(unsigned int reg, u64 value)
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(hv_set_msr);
+>>>>
+>>>> +static void (*mshv_handler)(void);
+>>>>  static void (*vmbus_handler)(void);
+>>>>  static void (*hv_stimer0_handler)(void);
+>>>>  static void (*hv_kexec_handler)(void);
+>>>> @@ -117,6 +118,9 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
+>>>>  	struct pt_regs *old_regs = set_irq_regs(regs);
+>>>>
+>>>>  	inc_irq_stat(irq_hv_callback_count);
+>>>> +	if (mshv_handler)
+>>>> +		mshv_handler();
+>>>
+>>> Can mshv_handler be defined as a weak symbol doing nothing instead
+>>> of defining it a null pointer?
+>>> This should allow to simplify this code and get rid of
+>>> hv_setup_mshv_handler, which looks redundant.
+>>>
+>> Interesting, I tested this and it does seems to work! It seems like
+>> a good change, thanks.
+> 
+> Just be a bit careful. When CONFIG_HYPERV=n, mshyperv.c still gets
+> built even through none of the other Hyper-V related files do.  There
+> are #ifdef CONFIG_HYPERV in mshyperv.c to eliminate references to
+> Hyper-V files that wouldn't be built. I'd suggest doing a test build with
+> that configuration to make sure it's all clean.
+> 
+Thanks Michael - I don't think it would be an issue since the __weak version
+would be defined in mshyperv.c itself, replacing the function pointer.
 
-It sounds like the latter is the real problem: enabling a feature
-should never prevent something else from working. Can you describe
-what VTL context is and why it requires an exception to a rather
-fundamental rule here? If you build a kernel that runs on every
-single piece of arm64 hardware and every hypervisor, why can't
-you add HYPERV_VTL_MODE to that as an option?
+However, I went and tested this __weak version again with CONFIG_MSHV_ROOT=m
+and it does not actually work. Everything seems ok at first (it compiles,
+can insert the module), but upon starting a guest, the interrupts don't get
+delivered to the root (or rather, they don't get handled by mshv_hander()).
 
-      Arnd
+This seems to match with what the ld docs say - There's an option
+LD_DYNAMIC_LINK to allow __weak symbols to be overridden by the dynamic
+linker, but this is not enabled in the kernel.
+
+So I will stick with the current implementation.
+
+Nuno
+
+> Michael
+> 
+>>
+>>> Reviewed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+>>>
+>>>> +
+>>>>  	if (vmbus_handler)
+>>>>  		vmbus_handler();
+>>>>
+>>>> @@ -126,6 +130,11 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
+>>>>  	set_irq_regs(old_regs);
+>>>>  }
+>>>>
+>>>> +void hv_setup_mshv_handler(void (*handler)(void))
+>>>> +{
+>>>> +	mshv_handler = handler;
+>>>> +}
+>>>> +
+>>>>  void hv_setup_vmbus_handler(void (*handler)(void))
+>>>>  {
+>>>>  	vmbus_handler = handler;
+>>>> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+>>>> index 2763cb6d3678..f5a07fd9a03b 100644
+>>>> --- a/drivers/hv/hv_common.c
+>>>> +++ b/drivers/hv/hv_common.c
+>>>> @@ -677,6 +677,11 @@ void __weak hv_remove_vmbus_handler(void)
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(hv_remove_vmbus_handler);
+>>>>
+>>>> +void __weak hv_setup_mshv_handler(void (*handler)(void))
+>>>> +{
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(hv_setup_mshv_handler);
+>>>> +
+>>>>  void __weak hv_setup_kexec_handler(void (*handler)(void))
+>>>>  {
+>>>>  }
+>>>> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+>>>> index 1f46d19a16aa..a05f12e63ccd 100644
+>>>> --- a/include/asm-generic/mshyperv.h
+>>>> +++ b/include/asm-generic/mshyperv.h
+>>>> @@ -208,6 +208,7 @@ void hv_setup_kexec_handler(void (*handler)(void));
+>>>>  void hv_remove_kexec_handler(void);
+>>>>  void hv_setup_crash_handler(void (*handler)(struct pt_regs *regs));
+>>>>  void hv_remove_crash_handler(void);
+>>>> +void hv_setup_mshv_handler(void (*handler)(void));
+>>>>
+>>>>  extern int vmbus_interrupt;
+>>>>  extern int vmbus_irq;
+>>>> --
+>>>> 2.34.1
+>>>>
+> 
+
 
