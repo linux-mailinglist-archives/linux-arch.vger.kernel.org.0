@@ -1,119 +1,142 @@
-Return-Path: <linux-arch+bounces-10675-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10676-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60757A5D244
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 23:06:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 796A6A5D35F
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Mar 2025 00:50:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E352B189C1BC
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 22:06:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 169F1189D093
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 23:51:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60410264A8C;
-	Tue, 11 Mar 2025 22:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="JMh6fI6C"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7684A233159;
+	Tue, 11 Mar 2025 23:50:47 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE391199FBA;
-	Tue, 11 Mar 2025 22:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E87522F3B0;
+	Tue, 11 Mar 2025 23:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741730784; cv=none; b=YHCBTqvoymG0w3fwSHvUnPaeVnbt1zkNElUXgvLHIOSSNwtCiYpheK+SF/FFH5kKna95M6EsPJCi7xz2nf2h/PgLWVeLUoWuDa5mDhw8W6DiWCONg0koMGnpSwl0dr/CWddhFKBaZgAwqQ27cRqlDWDAqpap+WMjbJurOhuwQ8c=
+	t=1741737047; cv=none; b=cOTcS2z0i6IcPTS7Pd2Kvu06qA3gx9AkifYZ0wpQxR2iGq0sDwTy883MS9oaV2BFvPko9oF9VeYSogFGVDA6RnEjA59s01uS8R0mbseJXf7zSX4jZdzweOVFON+0XSlHLxKft11wehTa6FTc+aalZgzKyxQ9QctHD1ZtHOmMo78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741730784; c=relaxed/simple;
-	bh=1FsEAoBQCwul9SXkYZakBAby+nof+BFT5YLa9ZLbmWo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jE5bBFsU4YQI5slNlwSO4amX1ivljkuFZHYXDhy4K2frMb6sbqTYqeyyExw/IhYSZi7Dvo4UFJyk3lZJHGqEN9ZpbhBogVuvoTzcTmYqB9thFvFWzM2Se1e7cCf8GWeLqogCXL/azMkhWpuEMSun2TuuByr5FTr9aithxY12Wq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=JMh6fI6C; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=VEtYjw1bJy2FyEgqNltD6h1CKY3ei2RKfjZVJcAYac8=; b=JMh6fI6ClsD77q6QFlO594QFyv
-	sKF4LPcJaQcTQzRqy28KBHvEvNbva/Q4T4karOQKqy3zGz5C6FZf26kql8lG10rd/yWDclC8ace2t
-	E8nv+RSCOd4MSUMTE37Jd6pwCjUlHw6IB88o86uJeQeu1vXLQvCcelUpTMH5zI9UW1Ln/0xzTIYnc
-	+ZxX47CDZdxAPYKw9IFXZpxwHKBPV2C5StuOVk/ouA+IPkzqmTobJn+hz8OlhffXTedE2VG2aUA6F
-	6ipRngplcXCrRC298lr1CqzLj89tc6A4tBT19pldI+iCk9Vc5UcPgIif4YSb1J3UDshYyiuaHWSri
-	JsTs7FhA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38464)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1ts7j7-0004gC-0h;
-	Tue, 11 Mar 2025 22:05:29 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1ts7j4-0003rB-0F;
-	Tue, 11 Mar 2025 22:05:26 +0000
-Date: Tue, 11 Mar 2025 22:05:25 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Mark Brown <broonie@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Stafford Horne <shorne@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH 10/13] arch, mm: set high_memory in free_area_init()
-Message-ID: <Z9CzpTlA2e0jR7UJ@shell.armlinux.org.uk>
-References: <20250306185124.3147510-1-rppt@kernel.org>
- <20250306185124.3147510-11-rppt@kernel.org>
- <cee346ec-5fa5-4d0b-987b-413ee585dbaa@sirena.org.uk>
- <Z9Cl8JKkRGhaRrgM@kernel.org>
- <5e40219b-f149-4e0f-aa10-c09fa183945e@sirena.org.uk>
+	s=arc-20240116; t=1741737047; c=relaxed/simple;
+	bh=TXKNlSM0TKSxzdZrN7xHlcVd6ac01W3pV0YwZDnIsdI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wo6Y9vV41vlSLcAL3Ydtm3ANj4f30JCqgd2b9bdqIgxBzFHYIlmQiN95E2yy/J0qMyiGGWKttwNSymqA2ePbZZtWvellZs1g2CZNmAdxBiF7n71zBm/3mvj7McOYzMQ9KYVeCBMHfXRAejiIRx3eMlYsxRNNTPC8tFEr+FsXBX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4767b3f8899so3665911cf.0;
+        Tue, 11 Mar 2025 16:50:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741737044; x=1742341844;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OJ/N6RDNJhsKkhEU6U2fwKdV9v3px1FNP1P5wQQOOck=;
+        b=KGv0Hu0JnlGCMxXeEXybJzTN54SSnlHgCJiRXcA/WkwfNN2C3A3gRTXGc1PHV6xaNz
+         ib44Lvkdl6YTw0wtdwrh5XkZ4A2oY1BIt7ufKyWe0/s2TLH+LpqT8P5hpBHEqwUVl7t7
+         rETNolN9R9ACFN59XDeil85KxhTtdh/JnE6822Wutr36evOF9KtWKFnPOBn6jU8q+zdy
+         sXwqN2De1cWfdD+K/k0BpsATX9jQIABq+E7cgaoIPFfNO8sq6A2UXslPBCaj4hNlhsHM
+         g3Qv1aKSPdMJZRqhYgEGW2k+x6LMobpOJmEjofOy03O8MAFR6LDl2A7jMUSy3Y/8O0Ng
+         z1bg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/xySYAhN7APpMvWRDpDr7Pr5gNpEQq6+UJJOjA58jzzAs5QcgKSzikzClajjlR/0FDVDyZQj77bTV0A==@vger.kernel.org, AJvYcCUHhE1kKKT2G6TG+VcgoaTfe0HGAlcjkoA6OpNhBX01HgE8REi6/Hsn5DC2DzXil7ryX3FHKx624PQwrw==@vger.kernel.org, AJvYcCUQpSbcmsNCwKtVKORapuoJpQbSyOBKcQw1yMyqqZIjcmQGtuGeltqIX5DzDIuAu9OxY6n2kYbUE+kIvQ==@vger.kernel.org, AJvYcCUf6VjIrkHMCWNnFZ6GoGsCt6APRuHGmJ09Jo6629L/2y0QC5WWEtXz+X78LXO+0Oi5uaNfZyYOpQ+mFL7p@vger.kernel.org, AJvYcCUgCsubRse2Eb5Nk2CU9WbvK85oAf7BYfiAmzp0fgcig+gbqtepsgN/NG73SlqEb/1IqpXwS7hKbYo=@vger.kernel.org, AJvYcCVx2ei5MrJMJ/ZSTKdvdHuNW2Avo/dsMt6XzkWuZoYoK+lSJ6w9jBzNee52rC0bG6oF9YK3PZqG68XwsA==@vger.kernel.org, AJvYcCWCMJkXd53HONhsSwAclqWdzv8LptoPkQONFi6vMhO7sG8FgsmUTDlSvCXymln3jhMcbSnio9LGsetaig==@vger.kernel.org, AJvYcCWY0gmtDOw3MgZXKk0JzeEX3VZ00CTPoQnI8Vl8aRqSj0pLRTPJp0zqqfexUbiVhy1yvWU/F7GRg1p12IQflg==@vger.kernel.org, AJvYcCX1FWBmiN5EnNTxqeWPk4HRapuFO1rVKlwDHzPciomO9xyzQmXNxHEr89hh3MBbjhofXSsupAt0hq9n6k0R@vger.kernel.org, AJvYcCXaAncR1lob
+ 4nPNMX2xx9kNYbmjUss0guakHTNFSpMze4cqxjcmUMXjxY6iY4LEpOhtIc8JipNku7diZ43csFU=@vger.kernel.org, AJvYcCXmzO0sDbfefmIwzKwKG9Q+KVE1pWtpcTh5OmNWpiBCUjm/N23aSWETVqayakyoJ6ngcGcDtGOf6RpwPA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrjEFW/gjU09IOfpSBwwDpitjG52v+lwmYcIZU8plH4rA4FgSo
+	VRHFnyZHpMohFSki6T+Vbmurg1ZllLbgqPgA5VjH3FljBuIb0Vyt3p2Oa92F
+X-Gm-Gg: ASbGncvRt7wsJBZkor7/yL/sad8FKy2ZjXurwESDbVJQot3VP+ow1FOfQeKt9Ll+UXZ
+	pAUGMZFkUZwtqua+OeufdqJrwFnSU/wCFLzrswsr8dD3ola2QsGNyYfbJGCP0Q/jt5BQ1V8ScpB
+	cAyrHEIwwmxFSL1usgCJJllgphtoJcPIiPN0cUfqeRb8742nZtR+R6b651DCpykGTCflJmJLoZ6
+	kjdhKMr4f5aD2Fw/ZMEIRs86qWZ2prLzRBdT32qhehoLyR8fMUy5mZt30MF8QIRho8csO2hz16f
+	vJ7lCLIIg7Wd+eOLJJERLmEdSeKWB2P6aCSXrCthYd4+bjH/Y9O1XrvYx5VNQsJvNlnw0ph+1BM
+	uY7CJorAXCNao+3IxEiTAVw==
+X-Google-Smtp-Source: AGHT+IGALKglwXNRoQ9JXD4IpnpoNwy1ysC7RXpt0d7G0uAlcb34NlJWbtFYr/UNudjbnPuk8c8BTg==
+X-Received: by 2002:a05:6102:548c:b0:4b3:fee3:2820 with SMTP id ada2fe7eead31-4c34ddc00f0mr3361686137.9.1741729303096;
+        Tue, 11 Mar 2025 14:41:43 -0700 (PDT)
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com. [209.85.221.181])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4c2fb4217e4sm2456115137.4.2025.03.11.14.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Mar 2025 14:41:43 -0700 (PDT)
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-524038ba657so270806e0c.0;
+        Tue, 11 Mar 2025 14:41:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUFifAk/Bfr5xmQD0nc2vtczAQO+RA5Gf/Kp1151AsLI2TVMbtJFi8fx0fDTGzoPtw69dY5OVYnTCIB51ryEo4=@vger.kernel.org,
+ AJvYcCUUxbOv97BbHSBh9ELshx2qS+VAzrOMnFYTu4p0aDdG5mCGvWSLUuLXRqX56gOC7Ua9RJI8vv5/uMm2XA==@vger.kernel.org,
+ AJvYcCUf2za9+Kcoi+DkvqtsF2VjqJAxm63Td0aZOYe7NLttdHFTHHB1WHnkVlqLh+M9RtuYaR2mXtu17zkQWA==@vger.kernel.org,
+ AJvYcCUrSUuolE9quGEQmEQWgYtaGkIvK0BPW72W7uAk/D4IbQARqwkO9UOrTI51YPp7Roh7BWSKs3K+HzoxFA==@vger.kernel.org,
+ AJvYcCVNR8UwTRXEu7uaE1WoxiGl9fgnZuOyAvzOvuOAgo9r/amC/e/rYMsUMuXZdRgete3OU+Cz6neIGVE=@vger.kernel.org,
+ AJvYcCVTHUDVajnbIMFbfCbzNM1WLvlwq5xM7cu73Mv1/ZO7MxegKtib1dJ4cLpRoqG3fXq7MeYki4RpFI3Vv05p@vger.kernel.org,
+ AJvYcCVTynyIxtGuzP+6NLr/p4AVqqdrH8s46p4oY4cJoe1PR2S7ewuzdJPzSwhBWiu+mfZ8b3pdMPGW7qyY/Q==@vger.kernel.org,
+ AJvYcCVh1QlOPvgB2z/m7Pv3Gxeba+FaFodKsCRWfKUDGkI5RPuxobv/1z5+ruMhcaPp7d8p4RkDWC/RVGY5BQ==@vger.kernel.org,
+ AJvYcCWZO4d3P3IBdkgtVvdxiKT/RGAcOioBEwSicjFhcPUZmasf7GMWprZCeH8EZhQoClGKRWu2Ww7zXnePJL1/yA==@vger.kernel.org,
+ AJvYcCXRxHbnrkrmekqKF+QpTX+oE70XJ3y3t/rfK96zvuzUDs6AkGaYrdk7kBLVghx619Vq9PJmQ00ycM432g==@vger.kernel.org,
+ AJvYcCXo9ljE8GT9CCpAJr0xUN9j4QHKJUhNbAR/KRiLxzcSUa05YTW6Jz7rIPLU86HQgWiSiwITc5dfxQxkwtS8@vger.kernel.org
+X-Received: by 2002:a05:6122:489c:b0:523:e4c6:dddb with SMTP id
+ 71dfb90a1353d-52419478380mr4380371e0c.0.1741729302782; Tue, 11 Mar 2025
+ 14:41:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250306185124.3147510-1-rppt@kernel.org> <20250306185124.3147510-11-rppt@kernel.org>
+ <cee346ec-5fa5-4d0b-987b-413ee585dbaa@sirena.org.uk> <Z9Cl8JKkRGhaRrgM@kernel.org>
+ <5e40219b-f149-4e0f-aa10-c09fa183945e@sirena.org.uk>
 In-Reply-To: <5e40219b-f149-4e0f-aa10-c09fa183945e@sirena.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 11 Mar 2025 22:41:28 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUGnBeo69NkYsv35YHp6H9GJSu-hoES2A8_0WhpX1zFhQ@mail.gmail.com>
+X-Gm-Features: AQ5f1Jp2UP71Gi3RsrYhaKY-FGNeXSzj4L3BI-snK3mtBDJzZMW7SrRY1lIN6cU
+Message-ID: <CAMuHMdUGnBeo69NkYsv35YHp6H9GJSu-hoES2A8_0WhpX1zFhQ@mail.gmail.com>
+Subject: Re: [PATCH 10/13] arch, mm: set high_memory in free_area_init()
+To: Mark Brown <broonie@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Guo Ren <guoren@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, 
+	Stafford Horne <shorne@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, 
+	Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	x86@kernel.org, Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 11, 2025 at 09:33:29PM +0000, Mark Brown wrote:
+Hi Mark,
+
+On Tue, 11 Mar 2025 at 22:33, Mark Brown <broonie@kernel.org> wrote:
+> On Tue, Mar 11, 2025 at 11:06:56PM +0200, Mike Rapoport wrote:
+> > On Tue, Mar 11, 2025 at 05:51:06PM +0000, Mark Brown wrote:
+> > > This patch appears to be causing breakage on a number of 32 bit arm
+> > > platforms, including qemu's virt-2.11,gic-version=3.  Affected platforms
+> > > die on boot with no output, a bisect with qemu points at this commit and
+> > > those for physical platforms appear to be converging on the same place.
+>
+> > Can you share how this can be reproduced with qemu?
+>
+> https://lava.sirena.org.uk/scheduler/job/1184953
+>
+> Turns out it's actually producing output on qemu:
+>
 > [    0.000000] Booting Linux on physical CPU 0x0
 > [    0.000000] Linux version 6.14.0-rc6-next-20250311 (tuxmake@tuxmake) (arm-linux-gnueabihf-gcc (Debian 13.3.0-5) 13.3.0, GNU ld (GNU Binutils for Debian) 2.43.1) #1 SMP @1741691801
 > [    0.000000] CPU: ARMv7 Processor [414fc0f0] revision 0 (ARMv7), cr=10c5387d
@@ -126,33 +149,20 @@ On Tue, Mar 11, 2025 at 09:33:29PM +0000, Mark Brown wrote:
 > [    0.000000] Memory policy: Data cache writealloc
 > [    0.000000] efi: UEFI not found.
 > [    0.000000] cma: Reserved 64 MiB at 0x00000000
+>
+> - I'd only been sampling the logs for the physical platforms, none of
+> which had shown anything.
 
-If that CMA address is correct, then it's wrong. virt machines start
-DRAM at 0x40000000. This is a small memory VM:
+Hangs that early need "earlycon", which the qemu boot above does have.
 
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000040000000-0x0000000045ffffff]
-[    0.000000]   HighMem  empty
+Gr{oetje,eeting}s,
 
-and this is a larger memory VM:
-
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000040000000-0x000000006fffffff]
-[    0.000000]   HighMem  [mem 0x0000000070000000-0x000000007fffffff]
-
-Neither have CMA enabled (it's not necessary for a VM).
-
-On a real platform where CMA and highmem is enabled, then:
-
-[    0.000000] cma: Reserved 16 MiB at 0x4f000000 on node -1
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000010000000-0x000000003fffffff]
-[    0.000000]   HighMem  [mem 0x0000000040000000-0x000000004fffffff]
-
-So that "cma:" line you are seeing is indicating that something is very
-very wrong - it should definitely not be zero.
+                        Geert
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
