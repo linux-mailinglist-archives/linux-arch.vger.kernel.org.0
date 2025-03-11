@@ -1,148 +1,126 @@
-Return-Path: <linux-arch+bounces-10670-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10671-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80B5BA5CD08
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 19:01:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65672A5D167
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 22:07:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B40EA17B44C
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 18:01:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F34517CC4D
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 21:07:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CAF263890;
-	Tue, 11 Mar 2025 18:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8585263F31;
+	Tue, 11 Mar 2025 21:07:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="f7mlYYFt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C1iHqPEK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9C325C6F5
-	for <linux-arch@vger.kernel.org>; Tue, 11 Mar 2025 18:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504F91386DA;
+	Tue, 11 Mar 2025 21:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741716078; cv=none; b=AMAQmRWz57cMDjAOtG14dT6yd6AnkgJmru5LpxjrEgi3gt4BtU+bcc6Kaj0CuiX5IQzKgyNoOn7Ysgxon451I0sWZUN/wWXNX8JXVRxMHdtbIEZkDeNpSLSZZlUyv+sccxCrLzaTl3S/hdRlb6cPlNIi/2jSvKjuKewcRL4T1Rg=
+	t=1741727240; cv=none; b=PL3zvAbWTUDu+7deZ69JBiNfkRyosqmvycJD0EhgsxOyVAqp1oLI+mTwQSzIpuHh8Pr08Ri+W4S/a6IDYu1RreIXmaFKkimQT1nWY7nQkaaOF9ky8YKb/475xY+f2yzm/ztIDCcujm68NPnRemQlMhHiuaQrfiwz+64CUWVvBQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741716078; c=relaxed/simple;
-	bh=YGUtbaoC0vpuFL55AG2VRarJ9dc5j39vjlLJQCOeDKA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tSkJuSHseD32S+NqFGoCwiCbyABGX058TnokxL4W+i5jBcv0FX3hP0EI5UwUWOG8gGG+YkZ1MqeMCw9mbfBK3kHCj3Y8NdlW///GTkn79DN0+Yd+u61UYOlgaknOV7YM7rVtJ1LGtN0rdmbH1TT8Me9tXW8TzFJg4ZARaRuCuTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=f7mlYYFt; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52BFPPV5026868
-	for <linux-arch@vger.kernel.org>; Tue, 11 Mar 2025 18:01:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	YGUtbaoC0vpuFL55AG2VRarJ9dc5j39vjlLJQCOeDKA=; b=f7mlYYFt7jkvBncL
-	ycrW6gqllkYuuuP3eTk0nPUOru3/oztfu4M12Rsz0adLFr5RPvGIcBuN8ygDnBmu
-	/pZof8XL1WNBqVfjFWFebjQsJwKSYA/mhNQBJ53Fno+SvN9PH5R7kxj7/1naiuDM
-	oKRz8gEx/HBvBDWeoO00EaDM8YgLJm2OmidoWAvqsCRy5ZMbzzwnjY1jsrIVwGPp
-	o/9GxJe7/wVT3DfWhZNrMExav2YbW4Ft2kB/xLtC44/ARLdQL0wqQ692IQ8iwMnk
-	GI3X+9EPx+rPEusBSj6czHHjjZmdw+FFSiQwBbo8X6mI+9vXEmCFPZjukOmu5YoZ
-	DNS4pA==
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 458ewk9jcf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-arch@vger.kernel.org>; Tue, 11 Mar 2025 18:01:15 +0000 (GMT)
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2242f3fd213so70490205ad.1
-        for <linux-arch@vger.kernel.org>; Tue, 11 Mar 2025 11:01:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741716074; x=1742320874;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGUtbaoC0vpuFL55AG2VRarJ9dc5j39vjlLJQCOeDKA=;
-        b=TwD5ClmYu3+ydkI2aTXRCF4Dtl/D/tO6YSRMcDEGpXsxjlnSXxCuKyiDOrLO5VpqOT
-         La0Ozm+STVbBo2EINeOoFt6af+8VNBBbypglThzTkWGHrGQoU60WKG9T7Li2Csl+dRzz
-         kknyti3QcYAL69f1EweXEKXFWv9yboSHR3Gf+PixTewuAvRCADEFvvm1mGJGXIgov2NJ
-         RZF5YFYpIiV5POt1UO9BXo9zSxfGBKMST/kZBntsBZjwwpZXm7CLqRrdMa3uPNKit0Ae
-         Bb62/WHa5evPOq0Iwe8Va2ljXddqtHKLo5QFwk3lNyZbGtZ9+nC3K9R1Z7qugSnLW8so
-         6Jeg==
-X-Forwarded-Encrypted: i=1; AJvYcCVB6VWL1wFWWGboLJXDq3vDJWU0mNphcvd7mobUN+Li5zNR3jP/BgFXH6FeWP/jPMbZzp84WzPeZ0aE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj78QTZELQZsXMf5kbCsQ+HI9U766lVvcXQk90CKMSARpi/+0f
-	LJNOom2bN7S5rNO2bdLzOqEGjIjdGs/Y4KmN6IFmyU0dGfrdRuoUWQKoiaDSCafihSyhnTnwpAW
-	o+9HPzK9hrMMp0VUpT86BAam4Z3rTlSJUqgygGuyrgcJ2QhU9LzF9SBIlhQQk
-X-Gm-Gg: ASbGncvMHeVZOLYLyaAAjEywEV2+xZ7hPLoLAK3SMfwxgmd+ZklxOyaeTSuep2LbVJ0
-	T3yX3vazrtvwqz8OFSra/8yh1eeE1t6igJqiwyYO12MA3RTAlC+N77FY2slM7ZaECX2gLbCQWTU
-	JAVMSK2NVqMbb+QTMK2dUuFtBd/WFZEQC+UWBsOOBGvJKrXzqcihEDqpOuq24kxMffzP3prq/pt
-	Y7USKbueWJOedprbXCcttQ2E1naISWA+mie90Jegl3MKMX9OrGwoFhOGTq6hMthHeJwtYJFatJE
-	7lizi14FTebRo4htNnjNcGa5MKw7a8IFGxWZg4DmHg/65aisqY0s
-X-Received: by 2002:a17:902:ceca:b0:224:2175:b0cd with SMTP id d9443c01a7336-22428aa1c02mr211881735ad.26.1741716074125;
-        Tue, 11 Mar 2025 11:01:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFV1XMOUAaf3mrw2N9csl6TPk+/0MVQ+tofdzFboBXtSDMFtl99aFN84M5tc6CNvpuZXGk9IQ==
-X-Received: by 2002:a17:902:ceca:b0:224:2175:b0cd with SMTP id d9443c01a7336-22428aa1c02mr211881145ad.26.1741716073692;
-        Tue, 11 Mar 2025 11:01:13 -0700 (PDT)
-Received: from [10.81.24.74] (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410a92016sm100936345ad.190.2025.03.11.11.01.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Mar 2025 11:01:13 -0700 (PDT)
-Message-ID: <fcd132af-03e4-496d-ba70-0097e90a83cf@oss.qualcomm.com>
-Date: Tue, 11 Mar 2025 11:01:09 -0700
+	s=arc-20240116; t=1741727240; c=relaxed/simple;
+	bh=rNimSVN80xWe5rcUWVjkmfCgcoptPPb9Jv9OZmpPkd4=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X1z2akSPjKUnyHGPupSdQxL2wMGpC1BlofJAYH2/e/HwbR7yL4PglCJ/JZT/8in8IkPoEBSxy04VJw7IvJ7mjw1QRA8C/ic3jmcIvJk53lJtTsWY899Bsp/qpw3M2++lPkKdQOqHioCZjZMdureHxxQ4UK22Dx1+5ASZiGa9hLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C1iHqPEK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BDBC4CEE9;
+	Tue, 11 Mar 2025 21:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741727240;
+	bh=rNimSVN80xWe5rcUWVjkmfCgcoptPPb9Jv9OZmpPkd4=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=C1iHqPEKFmOZ1AdRri3tQAqNRCUTPzRJDLMlo7w9miEeyKlINu4yaWAdRhzIs0paH
+	 jfkQRnK0XKmpkNOb3HtMEZGNKykGUrnuj1eWXqoXCuk4rS12Ikm530MvS19u7Mf4J3
+	 tH/UJQzFzlpWZeIQ8GU3qF5sOrZxvuNLkXsoHttkETnhl82ybMrj85LRdzmLv+hBla
+	 wPX3Fb5aCd0lbfNzAcpKqyB8kieIZqzft75UbkCyh4kRvACkkIIDZ2qg0qRSwpfeTU
+	 KbinhUeYSjsKqONFQqPFUHd8wwI3NPOSMI/Iwxdn5G8aIP9ZQgz2eFjKKr2GfyLFcr
+	 AI9TcpmJNf73w==
+Date: Tue, 11 Mar 2025 23:06:56 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Stafford Horne <shorne@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
+	Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH 10/13] arch, mm: set high_memory in free_area_init()
+Message-ID: <Z9Cl8JKkRGhaRrgM@kernel.org>
+References: <20250306185124.3147510-1-rppt@kernel.org>
+ <20250306185124.3147510-11-rppt@kernel.org>
+ <cee346ec-5fa5-4d0b-987b-413ee585dbaa@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 10/10] Drivers: hv: Introduce mshv_root module to
- expose /dev/mshv to VMMs
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        linux-hyperv@vger.kernel.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-acpi@vger.kernel.org
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        mhklinux@outlook.com, decui@microsoft.com, catalin.marinas@arm.com,
-        will@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, daniel.lezcano@linaro.org,
-        joro@8bytes.org, robin.murphy@arm.com, arnd@arndb.de,
-        jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
-        skinsburskii@linux.microsoft.com, mrathor@linux.microsoft.com,
-        ssengar@linux.microsoft.com, apais@linux.microsoft.com,
-        Tianyu.Lan@microsoft.com, stanislav.kinsburskiy@gmail.com,
-        gregkh@linuxfoundation.org, vkuznets@redhat.com,
-        prapal@linux.microsoft.com, muislam@microsoft.com,
-        anrayabh@linux.microsoft.com, rafael@kernel.org, lenb@kernel.org,
-        corbet@lwn.net
-References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-11-git-send-email-nunodasneves@linux.microsoft.com>
-From: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <1740611284-27506-11-git-send-email-nunodasneves@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=Tr8chCXh c=1 sm=1 tr=0 ts=67d07a6b cx=c_pps a=cmESyDAEBpBGqyK7t0alAg==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=aMAvcm_y2WmIjkiga5kA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
- a=1OuFwYUASf3TG4hYMiVC:22
-X-Proofpoint-GUID: FSsF5UJohZwjAxvWTuXUoq3MW2r23z4c
-X-Proofpoint-ORIG-GUID: FSsF5UJohZwjAxvWTuXUoq3MW2r23z4c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-11_05,2025-03-11_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 mlxlogscore=621 spamscore=0 lowpriorityscore=0
- mlxscore=0 clxscore=1011 phishscore=0 malwarescore=0 impostorscore=0
- bulkscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
- definitions=main-2503110115
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cee346ec-5fa5-4d0b-987b-413ee585dbaa@sirena.org.uk>
 
-On 2/26/25 15:08, Nuno Das Neves wrote:
-...
-> +
-> +MODULE_AUTHOR("Microsoft");
-> +MODULE_LICENSE("GPL");
-> +
+Hi Mark,
 
-Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
-description is missing"), a module without a MODULE_DESCRIPTION() will
-result in a warning with make W=1. Please add a MODULE_DESCRIPTION()
-to avoid this warning.
+On Tue, Mar 11, 2025 at 05:51:06PM +0000, Mark Brown wrote:
+> On Thu, Mar 06, 2025 at 08:51:20PM +0200, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > high_memory defines upper bound on the directly mapped memory.
+> > This bound is defined by the beginning of ZONE_HIGHMEM when a system has
+> > high memory and by the end of memory otherwise.
+> > 
+> > All this is known to generic memory management initialization code that
+> > can set high_memory while initializing core mm structures.
+> > 
+> > Remove per-architecture calculation of high_memory and add a generic
+> > version to free_area_init().
+> 
+> This patch appears to be causing breakage on a number of 32 bit arm
+> platforms, including qemu's virt-2.11,gic-version=3.  Affected platforms
+> die on boot with no output, a bisect with qemu points at this commit and
+> those for physical platforms appear to be converging on the same place.
 
-This is a canned review based upon finding a MODULE_LICENSE without a
-MODULE_DESCRIPTION.
+Can you share how this can be reproduced with qemu?
 
-/jeff
+-- 
+Sincerely yours,
+Mike.
 
