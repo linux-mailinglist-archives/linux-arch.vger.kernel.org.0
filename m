@@ -1,147 +1,123 @@
-Return-Path: <linux-arch+bounces-10667-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10668-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 177A4A5B8F0
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 07:01:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FBE8A5BB1C
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 09:49:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55C6817219E
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 06:01:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 396FE3AE87C
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Mar 2025 08:49:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BB51EEA23;
-	Tue, 11 Mar 2025 05:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB0D7226865;
+	Tue, 11 Mar 2025 08:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dmTErZmr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CPihtWYX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFEC81E7C2F;
-	Tue, 11 Mar 2025 05:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B71225A2D;
+	Tue, 11 Mar 2025 08:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741672666; cv=none; b=kdC0VLOm6T49XH4TMxoYAZchwl4zN0HmEjOP7RIQpp6pYsPfwxrHL/Jg9bAuQnIJ8yMXHE1WMOQMJ9kAtjdbbbdQqCjbROSB77m3Vy0FQIha5amzSf1XI2JnuKFbTGuGk1JnmQ6aCXO4VzL5CjE4L+WiXZCb5VtvNustkejzcBA=
+	t=1741682970; cv=none; b=UJx6I83Vw4DRoYoBkU3D/QLk7LEskDH8Vp8/PteAh+GZG3OJBoUUewU3em3cmX97LNU1+ssvwyO3EKkgiRpVbU0bXqemEjKuLb48XioX3jl0fkG3h/eT06gEH7dK/LY4xiB3AtlJFSOWogdN6IllL8HRC+scRTed/w9vmoHVBZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741672666; c=relaxed/simple;
-	bh=BYwU/E93/QHnTs75zXL/K5KaaL59dt5dqcEKsspSbzo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t6dpsoZ0VxKAuWORjIO9mpfXc0gdRGAi9S5JNsG2g3jXhohwF4Yp/vrR7td22L8hutpf9LHTrZtfYLGSlJleL96yUhPuljyeLLe+21NbjtX2F4mZDN88MIfNhfHUygaU3mdaWrvYoGLiSJzqpOtq18t4E2gbHcxIWhViUxQeAbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dmTErZmr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B78FCC4CEE9;
-	Tue, 11 Mar 2025 05:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741672666;
-	bh=BYwU/E93/QHnTs75zXL/K5KaaL59dt5dqcEKsspSbzo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dmTErZmrStaJuWPq1Y2KiGUlkJyWnCTthhB4B91JAVbdcH9I2nMKyf/7Fd4sug/pB
-	 N7nEu2kNBk1O0Ul+w/IBo19oXH5glyY2bbtD6tCtn0BJHbkHTd1iWoNnx2w3T9m+7H
-	 IxxQVA4Y4Lv0jGi6PXT0q9QqF5s7ZqRI2g89QBdwAFMPmOQwhOa9TxU3xtlxsqpRqF
-	 lYy7nKRBTlEc1vamVRBquPAmfL9PiTgEWIBb6xcf97y28M06V5hY0PpqPM3HaTZw4K
-	 HfU+XsvU0VemNSiwuoybyIXmF+A+kWMDABoLN29HvFjqUrPbxMBmNFc1zs7FVelcPG
-	 fJ1v7DiVKuKeg==
-Date: Tue, 11 Mar 2025 07:57:23 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Stafford Horne <shorne@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH 05/13] MIPS: make setup_zero_pages() use memblock
-Message-ID: <Z8_Qw9Soe5bzWJ44@kernel.org>
-References: <20250306185124.3147510-1-rppt@kernel.org>
- <20250306185124.3147510-6-rppt@kernel.org>
+	s=arc-20240116; t=1741682970; c=relaxed/simple;
+	bh=LmfmlNfv8EBghYIYwUUYQrDDOcBM3L2YR/qg/xhcj88=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UtVXVnhyloXFWSfEPSnVglj02xp8JcKuNX4oyMbE+aZmPl78vy9jje+aImrflT42c9O3SZ5ugshF8lNh3+MplJ5zS3Wml2Ubab8XpU7CNnXZ/kuVzzl/6dCnFylwa/xFM+5hV1hqyLLIrT8wtCncNxbWJyRCZWZfIgEZt3AugCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CPihtWYX; arc=none smtp.client-ip=209.85.208.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f68.google.com with SMTP id 4fb4d7f45d1cf-5e5e7fd051bso5032118a12.0;
+        Tue, 11 Mar 2025 01:49:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741682967; x=1742287767; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=++ArMbZp2/d1UeSQje2LNI+0PmtQnJ5AtRnBL5XuDLQ=;
+        b=CPihtWYXI5DU2QH+99Os+I9dosjymVPOgHG51csak8BWeXLkennP+LJKr+iw+U20bp
+         D80O8u1eX8xPzBBb9V6VQQyLoqYtfaUhAcEHO9+XMTVO2CUUPg83w/peWUI0xqOPvDwI
+         n3oCeNLyWF0ATVCDc80Dshrmrc8GqmvXL8BDdzGs0YhgyXElWMTmE3CA73JpoDEsd+BA
+         cf/CCoV7La2oGV9zxRkNuEh+dIcFWA/F9avuPie+ENzlHeNU0RiCX18KwAXcoqhrHUUs
+         MGPuwlRaAmduO/8CqfgogT2so1xPcrqxZQ8UJEIDR/kanVUtrMOUC7V3eotbMpLZIzMk
+         KqbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741682967; x=1742287767;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=++ArMbZp2/d1UeSQje2LNI+0PmtQnJ5AtRnBL5XuDLQ=;
+        b=WuZMd5RVvMkQb3FSMiIuIjhsSWpVCvku2Nb24tyFemdLrTDlHUM9Ovovyg+gIced7l
+         7UzC7UYjbzUrBYaT8Xa2hryrh3hUDPHYuBm0Ail2SLMeKITj7K9HjB3r0Ujdg7VoK9W5
+         MUwF8o4R3jvohfwYZzIaXX3UyzmEb4Lc1prepdX1T8OXecoNuOJkxQQFcKIhF5Csv/N8
+         dyP1JAMcZCK4S6SOyXs3YWzhQVG46JSDHC+gndeCXrPPnhR9tzyekPA00ffQtVHHnd8s
+         o69aC6CcNjL2R/tlnzE2+5kSdyHQIub0qnsPbxz6appBZGd0JK8NS/v4RHVwXD796MtH
+         mq7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUl7doI8qg2dQutowecy3oSjhqJ5RWkFTZwT+jsQr/DyTIal5+aj/n4L4/aizNwgg7WhKOvZo8XlD/O@vger.kernel.org, AJvYcCVYq5yYD8PWzyMN15YndTGjcHcf9h75YLvyO3KcsQ7OTCky96uD0qbufK4lVJGB55hZ+j1cb9UWpRrI/P7t@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSazElftGKoalwqLPk/F1likiWsERqSi4Sl3eXVHrWeaCuBBQv
+	iYq1/cHVrPAGvLMnLzqgniyqsi/KEMJo7sZsw47k23J/UtR/89xlWPLGFMpa138qVynfqUrM+J4
+	Y/yB9XpI4L+WYd0uD9DltAhe5Sjs=
+X-Gm-Gg: ASbGncshZn9gsfmFQwxPIXTJNdajpcps2XTro48O9fzyyuZ/NU3dgrPb9NfBdwFa3HQ
+	HfFlSZEEBa0ZYWO3ubB1ae1W0o4arm2pwDT6kb+gc+jfqjO7SVhYogu9N/4zs08gL8u6ZYakN9G
+	7HQpA9mmM1dWxyrjed4k0RzydS7jXpafuEExEXHlHsDkCZH9g=
+X-Google-Smtp-Source: AGHT+IGep4cbVrjWQJvr0mN3/apVTOGtpDu9f6P3w5E+xknHRprszHROkevCtShu3x+t9pcnSMI5YywqEB76R9BU62w=
+X-Received: by 2002:a05:6402:3595:b0:5d9:a54:f8b4 with SMTP id
+ 4fb4d7f45d1cf-5e75df5b635mr3626584a12.11.1741682967313; Tue, 11 Mar 2025
+ 01:49:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250306185124.3147510-6-rppt@kernel.org>
+References: <20250203214911.898276-1-ankur.a.arora@oracle.com>
+ <20250203214911.898276-2-ankur.a.arora@oracle.com> <Z8dRalfxYcJIcLGj@arm.com> <87pliusihc.fsf@oracle.com>
+In-Reply-To: <87pliusihc.fsf@oracle.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 11 Mar 2025 09:48:51 +0100
+X-Gm-Features: AQ5f1Jot1V-VvnJHopJ0Pc5_tyFD4QArR33_q-1sHlVuL6D8A0tNs3txvQgyXFI
+Message-ID: <CAP01T76TWAPz4fXh6EoqHLCAxtgbzyvZib72QeFoTSx-0WKPtQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] asm-generic: barrier: Add smp_cond_load_relaxed_timewait()
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	arnd@arndb.de, will@kernel.org, peterz@infradead.org, mark.rutland@arm.com, 
+	harisokn@amazon.com, cl@gentwo.org, zhenglifeng1@huawei.com, 
+	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Mar 06, 2025 at 08:51:15PM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Allocating the zero pages from memblock is simpler because the memory is
-> already reserved.
-> 
-> This will also help with pulling out memblock_free_all() to the generic
-> code and reducing code duplication in arch::mem_init().
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  arch/mips/include/asm/mmzone.h |  2 --
->  arch/mips/mm/init.c            | 16 +++++-----------
->  2 files changed, 5 insertions(+), 13 deletions(-)
- 
-Andrew can you please pick this as a fixup?
+On Thu, 6 Mar 2025 at 08:53, Ankur Arora <ankur.a.arora@oracle.com> wrote:
+>
+>
+> Catalin Marinas <catalin.marinas@arm.com> writes:
+>
+> > On Mon, Feb 03, 2025 at 01:49:08PM -0800, Ankur Arora wrote:
+> >> Add smp_cond_load_relaxed_timewait(), a timed variant of
+> >> smp_cond_load_relaxed(). This is useful for cases where we want to
+> >> wait on a conditional variable but don't want to wait indefinitely.
+> >
+> > Bikeshedding: why not "timeout" rather than "timewait"?
+>
+> Well my reasons, such as they are, also involved a fair amount of bikeshedding:
+>
+>  - timewait and spinwait have same length names which just minimized all
+>    the indentation issues.
+>  - timeout seems to suggest a timing mechanism of some kind.
 
-From 148713d17cbdf7a3ad08f18ba203185b70c0e7c2 Mon Sep 17 00:00:00 2001
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Date: Tue, 11 Mar 2025 07:51:27 +0200
-Subject: [PATCH] MIPS: use memblock_alloc_or_panic() in setup_zero_page()
+I would also be in favor of timewait naming, since this is not a
+generic timeout primitive, the alternative naming is useful to
+distinguish it.
+The wait can be off by 100us or so for arm64 when we need to break out
+but that's tolerable for some cases.
+I've also taken a copy of the thing in [0] so it can begin using the
+in-tree implementation once it's merged.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/mips/mm/init.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+  [0]: https://lore.kernel.org/bpf/20250303152305.3195648-9-memxor@gmail.com
 
-diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
-index 6ea27bbd387e..a673d3d68254 100644
---- a/arch/mips/mm/init.c
-+++ b/arch/mips/mm/init.c
-@@ -68,9 +68,7 @@ static void __init setup_zero_pages(void)
- 	else
- 		order = 0;
- 
--	empty_zero_page = (unsigned long)memblock_alloc(PAGE_SIZE << order, PAGE_SIZE);
--	if (!empty_zero_page)
--		panic("Oh boy, that early out of memory?");
-+	empty_zero_page = (unsigned long)memblock_alloc_or_panic(PAGE_SIZE << order, PAGE_SIZE);
- 
- 	zero_page_mask = ((PAGE_SIZE << order) - 1) & PAGE_MASK;
- }
--- 
-2.47.2
-
--- 
-Sincerely yours,
-Mike.
+>
+> [...]
 
