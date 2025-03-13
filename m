@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-10724-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10725-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9846CA5F674
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 14:51:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B1ECA5F681
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 14:51:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E48D517A84D
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 13:51:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB73019C06EC
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 13:51:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB03267F48;
-	Thu, 13 Mar 2025 13:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB6C4267F42;
+	Thu, 13 Mar 2025 13:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RGAoZ9Bv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rfg04cX8"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DDB267B9A;
-	Thu, 13 Mar 2025 13:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92271267B64;
+	Thu, 13 Mar 2025 13:51:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741873850; cv=none; b=DdlhKrq88NV9l2RMVfpguZ1CDmHAb5Lslu75SNshxTl6o9R3E5CDLCGi4/f01P2KXdQwtofJTtfG4NFt5390pRGP/PxJ+HfY9bExUd8mPcXCHNJXpCmNf2AdJb7ZziLvJrNSPg8byvZgY5tXcs+N2VO+cX8lYVvPkD6bnBrMlZo=
+	t=1741873863; cv=none; b=YYtG5IKXqZwZdHZLqu4CERrue7Fv1SaVTRm75/eZc15zhAd0QpWjmsP1QXytAL8eaE5nfqKBZjJUObuA01hd9Ax0dgFpZ44b92kZU8RyRnGsiU9DA7i3yPydKmouIi/wo1vwlLRLFgTu0kI/DckYWHayURu0fl7ZDXgLDG9dB3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741873850; c=relaxed/simple;
-	bh=XIr08FortiFXYgvy+0ilxZfO/dI5xt5VoYYHY8PPi6U=;
+	s=arc-20240116; t=1741873863; c=relaxed/simple;
+	bh=3f2PL8+tvQz4kqOX8BsTM2Qrh30qjoJp6oFsaw3/420=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LtL4Ui/pg7uteG0QmddETKGsKBJsc5ECy3UNdIIwXZ/nK1ka2hci8726KFYC1OxcSjQocsh7E9pXzmoVsJVN9vl12kRQEoTzSRPOFB2qaNcs7grNqxTv7wSy5UMiZDN7COqFqeg1uPCwr9MRrXFc7o08QciHSXwHTjXiwDVHLhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RGAoZ9Bv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF707C4AF0C;
-	Thu, 13 Mar 2025 13:50:36 +0000 (UTC)
+	 MIME-Version; b=oI5qH4nbCImGolYizkPtnXhXtOaUH6yZJMDtmq8UmIrO1nA7xex0gnp1wgyrR/Ho/NU9E3HokEw46vJxynQ3WTwXjwJAfLREE16YObDdpSmoVRe9tkiA/pYgOUAqnUis0ltgdktWRbDWvzVtk4LzGIJ7MxkPgCjK/UPKaBWDp04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rfg04cX8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233FDC4CEEB;
+	Thu, 13 Mar 2025 13:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741873849;
-	bh=XIr08FortiFXYgvy+0ilxZfO/dI5xt5VoYYHY8PPi6U=;
+	s=k20201202; t=1741873863;
+	bh=3f2PL8+tvQz4kqOX8BsTM2Qrh30qjoJp6oFsaw3/420=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RGAoZ9Bv6t2SSbQIAmvfk2jcoGAYo67odXJQH4I/ojEZbm/bm80r5mMCH3HqOTqxP
-	 iEZpCsT3i67pyvVHb2yzKWbGZdZItWV2Ob4FFoey9K3/aEHHq8giXuNiumJO7DmCve
-	 4eHUz/CEruq5Di7XV6/wke3HQWVq7E0atmm7IkJdrFuZ4qYFw3TQ9EOIhb1g+we9g4
-	 9Hqp5mqUVK6+lA5SzALUuWJtjGkTzvZsWBVyO01BMp72OTgxynma6l2j5xAvRQ/lS9
-	 IVRmBa6Xj3JWKUq1hEOzK9uv2OFR3tfR/4HK06dHKYPgIsu9Am8T7kbNr4q9/Gwpoe
-	 NNdSNeFMp0c7w==
+	b=Rfg04cX8uRvlfnBvZ49PtoBxznACelq74wTMIN8qaGJSvGheiS5WY6EK6llc1XTtF
+	 6gfjK8h75FHHUhNF68dOsS/oFtjdkjJ/UdR0JOkjjNhf5t/t1YN6tT6GfUQu20OxSn
+	 sbuSoNpq+VCYRnQZPmaeVNtJCUjqNbpq4ZSW1ecITC7ukkhURcBZHswtmqwfq9PUxP
+	 RWxubMbulZgriXyglKo2XBY7VMr6SwCl2LDKXrjFYY2eYuzUNOABYWueIt6T5V5EjL
+	 Sgo45wepOzt0oGbaLtKllAiqkUdgwedzAj+a3s0rcnt1uUTdhMjbsGZmC+q9b9/wNZ
+	 UK2vqcKRO6tkw==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -101,9 +101,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	linux-arch@vger.kernel.org,
 	linux-mm@kvack.org,
 	x86@kernel.org
-Subject: [PATCH v2 02/13] csky: move setup_initrd() to setup.c
-Date: Thu, 13 Mar 2025 15:49:52 +0200
-Message-ID: <20250313135003.836600-3-rppt@kernel.org>
+Subject: [PATCH v2 03/13] hexagon: move initialization of init_mm.context init to paging_init()
+Date: Thu, 13 Mar 2025 15:49:53 +0200
+Message-ID: <20250313135003.836600-4-rppt@kernel.org>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250313135003.836600-1-rppt@kernel.org>
 References: <20250313135003.836600-1-rppt@kernel.org>
@@ -117,141 +117,46 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Memory used by initrd should be reserved as soon as possible before
-there any memblock allocations that might overwrite that memory.
-
-This will also help with pulling out memblock_free_all() to the generic
+This will help with pulling out memblock_free_all() to the generic
 code and reducing code duplication in arch::mem_init().
 
-Acked by: Guo Ren (csky) <guoren@kernel.org>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/csky/kernel/setup.c | 43 ++++++++++++++++++++++++++++++++++++++++
- arch/csky/mm/init.c      | 43 ----------------------------------------
- 2 files changed, 43 insertions(+), 43 deletions(-)
+ arch/hexagon/mm/init.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
-index fe715b707fd0..e0d6ca86ea8c 100644
---- a/arch/csky/kernel/setup.c
-+++ b/arch/csky/kernel/setup.c
-@@ -12,6 +12,45 @@
- #include <asm/mmu_context.h>
- #include <asm/pgalloc.h>
+diff --git a/arch/hexagon/mm/init.c b/arch/hexagon/mm/init.c
+index 3458f39ca2ac..508bb6a8dcc9 100644
+--- a/arch/hexagon/mm/init.c
++++ b/arch/hexagon/mm/init.c
+@@ -59,14 +59,6 @@ void __init mem_init(void)
+ 	 *  To-Do:  someone somewhere should wipe out the bootmem map
+ 	 *  after we're done?
+ 	 */
+-
+-	/*
+-	 * This can be moved to some more virtual-memory-specific
+-	 * initialization hook at some point.  Set the init_mm
+-	 * descriptors "context" value to point to the initial
+-	 * kernel segment table's physical address.
+-	 */
+-	init_mm.context.ptbase = __pa(init_mm.pgd);
+ }
  
-+#ifdef CONFIG_BLK_DEV_INITRD
-+static void __init setup_initrd(void)
-+{
-+	unsigned long size;
-+
-+	if (initrd_start >= initrd_end) {
-+		pr_err("initrd not found or empty");
-+		goto disable;
-+	}
-+
-+	if (__pa(initrd_end) > PFN_PHYS(max_low_pfn)) {
-+		pr_err("initrd extends beyond end of memory");
-+		goto disable;
-+	}
-+
-+	size = initrd_end - initrd_start;
-+
-+	if (memblock_is_region_reserved(__pa(initrd_start), size)) {
-+		pr_err("INITRD: 0x%08lx+0x%08lx overlaps in-use memory region",
-+		       __pa(initrd_start), size);
-+		goto disable;
-+	}
-+
-+	memblock_reserve(__pa(initrd_start), size);
-+
-+	pr_info("Initial ramdisk at: 0x%p (%lu bytes)\n",
-+		(void *)(initrd_start), size);
-+
-+	initrd_below_start_ok = 1;
-+
-+	return;
-+
-+disable:
-+	initrd_start = initrd_end = 0;
-+
-+	pr_err(" - disabling initrd\n");
-+}
-+#endif
-+
- static void __init csky_memblock_init(void)
- {
- 	unsigned long lowmem_size = PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET);
-@@ -40,6 +79,10 @@ static void __init csky_memblock_init(void)
- 		max_low_pfn = min_low_pfn + sseg_size;
- 	}
+ void sync_icache_dcache(pte_t pte)
+@@ -103,6 +95,12 @@ static void __init paging_init(void)
  
-+#ifdef CONFIG_BLK_DEV_INITRD
-+	setup_initrd();
-+#endif
+ 	free_area_init(max_zone_pfn);  /*  sets up the zonelists and mem_map  */
+ 
++	/*
++	 * Set the init_mm descriptors "context" value to point to the
++	 * initial kernel segment table's physical address.
++	 */
++	init_mm.context.ptbase = __pa(init_mm.pgd);
 +
- 	max_zone_pfn[ZONE_NORMAL] = max_low_pfn;
- 
- 	mmu_init(min_low_pfn, max_low_pfn);
-diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-index bde7cabd23df..ab51acbc19b2 100644
---- a/arch/csky/mm/init.c
-+++ b/arch/csky/mm/init.c
-@@ -42,45 +42,6 @@ unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
- 						__page_aligned_bss;
- EXPORT_SYMBOL(empty_zero_page);
- 
--#ifdef CONFIG_BLK_DEV_INITRD
--static void __init setup_initrd(void)
--{
--	unsigned long size;
--
--	if (initrd_start >= initrd_end) {
--		pr_err("initrd not found or empty");
--		goto disable;
--	}
--
--	if (__pa(initrd_end) > PFN_PHYS(max_low_pfn)) {
--		pr_err("initrd extends beyond end of memory");
--		goto disable;
--	}
--
--	size = initrd_end - initrd_start;
--
--	if (memblock_is_region_reserved(__pa(initrd_start), size)) {
--		pr_err("INITRD: 0x%08lx+0x%08lx overlaps in-use memory region",
--		       __pa(initrd_start), size);
--		goto disable;
--	}
--
--	memblock_reserve(__pa(initrd_start), size);
--
--	pr_info("Initial ramdisk at: 0x%p (%lu bytes)\n",
--		(void *)(initrd_start), size);
--
--	initrd_below_start_ok = 1;
--
--	return;
--
--disable:
--	initrd_start = initrd_end = 0;
--
--	pr_err(" - disabling initrd\n");
--}
--#endif
--
- void __init mem_init(void)
- {
- #ifdef CONFIG_HIGHMEM
-@@ -92,10 +53,6 @@ void __init mem_init(void)
- #endif
- 	high_memory = (void *) __va(max_low_pfn << PAGE_SHIFT);
- 
--#ifdef CONFIG_BLK_DEV_INITRD
--	setup_initrd();
--#endif
--
- 	memblock_free_all();
- 
- #ifdef CONFIG_HIGHMEM
+ 	/*
+ 	 * Start of high memory area.  Will probably need something more
+ 	 * fancy if we...  get more fancy.
 -- 
 2.47.2
 
