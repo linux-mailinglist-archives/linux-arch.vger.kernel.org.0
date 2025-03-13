@@ -1,168 +1,190 @@
-Return-Path: <linux-arch+bounces-10703-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10704-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C282A5ED18
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 08:35:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0117FA5F1C8
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 12:03:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D47F63A6665
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 07:35:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDEED188B97F
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 11:04:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6556225F995;
-	Thu, 13 Mar 2025 07:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A388265CC7;
+	Thu, 13 Mar 2025 11:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aRjHhLxI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bu+a/iHj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAE413BC3F;
-	Thu, 13 Mar 2025 07:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0DC1EF084;
+	Thu, 13 Mar 2025 11:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741851310; cv=none; b=LyaGzSaFaHVj2eW3rMak5nL0zkR/dLRJN24JZudoZx9DUx7kbbVMMOxS16Zf4wNnKPTp8xyys19dXTPGFIAY0gh6G06X7VEI1VwECtCNE4PC9ZGz5s5cRbiQR57XFPN9IoAbMNlKuaVLwXhihdjnxgRYqSWXz42QkAVwjhAS3CU=
+	t=1741863830; cv=none; b=F62oxT/5hpH8PA18hjOW5To0ozflX2yH+PPynBmoPS6GTGS1hdT26e6KHuxY/Biy0/zIW2IpIYU72Ot/vsIm38uKeK7MhLMFHzG68cX5OuRDBLTEok7RYphgNd0V5wfQ2dK/0gSOmjIdQmZaYKxe1usrWDBt5nQ6Y45l+qzFEXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741851310; c=relaxed/simple;
-	bh=EdxGxN+VRDwhAkSIvCST7YEsLLAsc4WQBymWR5igh5U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E+Bzq0heDFLEQl94852tNB76BLnXjSDAbcM6duFNqL+MOWFPijhG7lUkEgGTM1JmVxNO6k1ktNC2325KEhCbtJnl5OTOGJQ4MQvADzxc5tDbJac6qcrEE1I4v36O1r6KzqJo16SYdKxw6NgwuWk5tCItihWP+prC4S6FOzDqjo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aRjHhLxI; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5e614da8615so1283047a12.1;
-        Thu, 13 Mar 2025 00:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741851307; x=1742456107; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YUsrUN0Sa3eMBis7ScutQ4swK59H4nn7rnZNJQLZ63Y=;
-        b=aRjHhLxIyJf/6HTj4bJrNEPoxP+KrM9Vtd90FIA8N1OINusUEJRklZuMueLAJnBj2j
-         /v06sI7x0T4jt8RIs9EALuWpIPfspg85Ev1racAvLlW7r5YwsHJS65nrsckpdX5mRJk8
-         PK6/OII/01fp0O94ci2Iq5gAjIU0aQMsB1noXn7V6KKUNigob5c+/LSbHrn6Kw5g2+cs
-         41fu5H7pu400cYcHqpsC1081HghYBn2OvxLErES5UN0QAZ3epiiJ3D3SrSRctFvlL3eN
-         43ioQjnkZPD3S/I3gIKvhWAh3pZiNGCD7AVzoyY8hF0wbdI+qjPHYW1R3HytZmFuXRIR
-         1Feg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741851307; x=1742456107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YUsrUN0Sa3eMBis7ScutQ4swK59H4nn7rnZNJQLZ63Y=;
-        b=tUgkei0m8aTf7cikGISMv3R9Z/SkNdB8am+ZAwd4/6fp4qRQCoosEwPMj49pLK3Lw8
-         u2UBA4HRS6moFVzeU4KiUaONOB/5hhA+noXZOvTHZhTbbI+6qsVYKojBePQ6KzvYuTqY
-         k96BjSeotHkqyERul4tRrOstQlCwU9GQWoc3OXToS22C5GXqb5wOrClhgRrWzLYNHTF1
-         OwUAsP4FLPyx73Iva7FtOhfiZ7MuyTkrhfShH/oH6lnYPtHXxew9n3Bk7oP8AuqaN32z
-         mKmvZynZHEnNdCSuI9JX3HDkHedIsOXgp4waxSRWKl89gRa9p3s1Os8hCRztJI4pcQn7
-         G9QQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUFlU6/P726+E3MXCbIsB0xiT2H7LGhVoIKcLgI3zEfPJs+kIkQpe3fLkDPnowLgcj/NjY1BuWug4QQiQ==@vger.kernel.org, AJvYcCV/+3uEQ2/pIHGnDdi+od93T50CKMM3E792Lg5HjxLjLoAynmd9m8X5EM9EoJ4n6xzm50YObqJQDbftS6lX@vger.kernel.org, AJvYcCVHgbvJHnnFWzfIdSyYHIIqlDktsqeIL7gENTZwc9gjcK9SGn183Tg5Um6wyouba+YT6WMB2jxGGX0y@vger.kernel.org
-X-Gm-Message-State: AOJu0YzK31OG/tpUD/M+i80W22/C0lsEKzXO3jbxraaQvOAFI2YVUu6q
-	tnowNeONr3djZkzmgpHyjPE6JoGs9S8OaGJE4aXf4mSY+n1on3RNc3wzEJ95gGARMui4egY0tmG
-	74zy/9JObzfHzvfdklA7TvyBEeP/joZ5exVsCwQ==
-X-Gm-Gg: ASbGncsN+wpYnzlHvkBbvEkGIFCQ0DFGsYgSVwnc1+mYkmbPOsQKcCyFNrQ5k/6hyJm
-	tN+M+h7Ww1ULmlGhLe+aMNG2h+JwahfcznlL2vuzN/IBtp0wUJLrMhkZAHzrfvwRa80deY9hh4e
-	Ij76pd2iQqGTJsYUar6iMuuvI66mMGSs8Zr0qUOshPDER6
-X-Google-Smtp-Source: AGHT+IG0AbFafmJCSVXuCn9+d9aJ6rWGv0lewSciVuUOX99LLiYxCavfe+aGJvWGZ3Z6k5yceyGSjWwk/zr0TjlaX0g=
-X-Received: by 2002:a05:6402:2550:b0:5e5:9c04:777 with SMTP id
- 4fb4d7f45d1cf-5e814d805b7mr1311903a12.6.1741851306525; Thu, 13 Mar 2025
- 00:35:06 -0700 (PDT)
+	s=arc-20240116; t=1741863830; c=relaxed/simple;
+	bh=PRm49VmHjxWTEv5l+Jj3Z5fYyVs179E0dso2MnFLV8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uh6VOSLAjwZrRjwr7hJBv/QHuNJ4n0atLGgFH4nEEtPsWA3AM8tPOasrTIfkVD+WNcyPcz6Td1X9KdAdfcYFFrRfGp/un+i3Rafjo3Id2z9jf6TWl5TRrmJiDRDG5NVdf/L3IVzqnbNR7ilzC1g0XjLLsS6ohLopQhEx/P7+NLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bu+a/iHj; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741863830; x=1773399830;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PRm49VmHjxWTEv5l+Jj3Z5fYyVs179E0dso2MnFLV8g=;
+  b=Bu+a/iHjaxv6aq/ERCMb7HUyNC8LskCA5J1Qwx43aK9CBSwz+oKPzWBI
+   lV/Tu2j5lCSfYyPW8ducbEdHtVc5mtx+tQjlj42kX3l1QYZ7+RxvL7UDu
+   N5B81yfgf5nqy54lm47fcRBptgQz4mqqUbvMoY8+8f/pnO5T/NyALzEy1
+   GpuN7i620LbVZh768CV6OAtAdFG+uo087Iy+L98K/er3Yinsgp3n2Roh3
+   szmDFo2kzr65qA4uLft/At6eewqeL6S1wUtQ1W/sm21Qav8idDst9WHxu
+   aw8cLY0WGBMz8sBNPSSO1Q1AUQM6h04SwuzpWwbE8z+FACvZdwQxp2HHo
+   Q==;
+X-CSE-ConnectionGUID: 7Tsr1VKUQu6MehpV1MvHiA==
+X-CSE-MsgGUID: +ceLFAgxR8Cjjl22rBNHug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="42880217"
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="42880217"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 04:03:49 -0700
+X-CSE-ConnectionGUID: Qsefzw/4RSOyJmWwfTvfZQ==
+X-CSE-MsgGUID: c60qU6WUQcmlcM/iLDH6CQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="120881485"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orviesa010.jf.intel.com with ESMTP; 13 Mar 2025 04:03:41 -0700
+Date: Thu, 13 Mar 2025 19:01:06 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Alexey Kardashevskiy <aik@amd.com>
+Cc: x86@kernel.org, kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Robin Murphy <robin.murphy@arm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Christoph Hellwig <hch@lst.de>, Nikunj A Dadhania <nikunj@amd.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Vasant Hegde <vasant.hegde@amd.com>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Steve Sistare <steven.sistare@oracle.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
+	iommu@lists.linux.dev, linux-coco@lists.linux.dev,
+	Zhi Wang <zhiw@nvidia.com>,
+	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
+Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
+Message-ID: <Z9K68m8iq3cDXShL@yilunxu-OptiPlex-7050>
+References: <20250218111017.491719-1-aik@amd.com>
+ <20250218111017.491719-15-aik@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-8-git-send-email-nunodasneves@linux.microsoft.com>
- <CAMvTesAW-9Mo0oY6UUh2anp6DQCSsVCUhBiV2-bKp2VD_N0DYw@mail.gmail.com> <5e3e8c30-912c-4fe3-bfac-1ae21242473b@linux.microsoft.com>
-In-Reply-To: <5e3e8c30-912c-4fe3-bfac-1ae21242473b@linux.microsoft.com>
-From: Tianyu Lan <ltykernel@gmail.com>
-Date: Thu, 13 Mar 2025 15:34:28 +0800
-X-Gm-Features: AQ5f1JpFmeyU-ZXvz0ptwRLZ-nTkXcfB_mlOTr3vDPCyoNGFdLAtzHdNo9-Hw44
-Message-ID: <CAMvTesAPeLBfYVa5TGx-o6p+0g_Q1bn6s+nZK5i7NK8QGyfbTA@mail.gmail.com>
-Subject: Re: [PATCH v5 07/10] Drivers: hv: Introduce per-cpu event ring tail
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc: linux-hyperv@vger.kernel.org, x86@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-acpi@vger.kernel.org, kys@microsoft.com, 
-	haiyangz@microsoft.com, wei.liu@kernel.org, mhklinux@outlook.com, 
-	decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, hpa@zytor.com, daniel.lezcano@linaro.org, 
-	joro@8bytes.org, robin.murphy@arm.com, arnd@arndb.de, 
-	jinankjain@linux.microsoft.com, muminulrussell@gmail.com, 
-	skinsburskii@linux.microsoft.com, mrathor@linux.microsoft.com, 
-	ssengar@linux.microsoft.com, apais@linux.microsoft.com, 
-	Tianyu.Lan@microsoft.com, stanislav.kinsburskiy@gmail.com, 
-	gregkh@linuxfoundation.org, vkuznets@redhat.com, prapal@linux.microsoft.com, 
-	muislam@microsoft.com, anrayabh@linux.microsoft.com, rafael@kernel.org, 
-	lenb@kernel.org, corbet@lwn.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250218111017.491719-15-aik@amd.com>
 
-On Thu, Mar 13, 2025 at 3:45=E2=80=AFAM Nuno Das Neves
-<nunodasneves@linux.microsoft.com> wrote:
->
-> On 3/10/2025 6:01 AM, Tianyu Lan wrote:
-> > On Thu, Feb 27, 2025 at 7:09=E2=80=AFAM Nuno Das Neves
-> > <nunodasneves@linux.microsoft.com> wrote:
-> >>
-> >> Add a pointer hv_synic_eventring_tail to track the tail pointer for th=
-e
-> >> SynIC event ring buffer for each SINT.
-> >>
-> >> This will be used by the mshv driver, but must be tracked independentl=
-y
-> >> since the driver module could be removed and re-inserted.
-> >>
-> >> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> >> Reviewed-by: Wei Liu <wei.liu@kernel.org>
-> >
-> > It's better to expose a function to check the tail instead of exposing
-> > hv_synic_eventring_tail directly.
-> >
-> What is the advantage of using a function for this? We need to both set
-> and get the tail.
+> +int iommufd_vdevice_tsm_bind_ioctl(struct iommufd_ucmd *ucmd)
+> +{
+> +	struct iommu_vdevice_tsm_bind *cmd = ucmd->cmd;
+> +	struct iommufd_viommu *viommu;
+> +	struct iommufd_vdevice *vdev;
+> +	struct iommufd_device *idev;
+> +	struct tsm_tdi *tdi;
+> +	int rc = 0;
+> +
+> +	viommu = iommufd_get_viommu(ucmd, cmd->viommu_id);
 
-We may add lock or check to avoid race conditions and this depends on the
-user case. This is why I want to see how mshv driver uses it.
+Why need user to input viommu_id? And why get viommu here?
+The viommu is always available after vdevice is allocated, is it?
 
->
-> > BTW, how does mshv driver use hv_synic_eventring_tail? Which patch
-> > uses it in this series?
-> >
-> This variable stores indices into the synic eventring page (one for each
-> SINT, and per-cpu). Each SINT has a ringbuffer of u32 messages. The tail
-> index points to the latest one.
->
-> This is only used for doorbell messages today. The message in this case i=
-s
-> a port number which is used to lookup and invoke a callback, which signal=
-s
-> ioeventfd(s), to notify the VMM of a guest MMIO write.
->
-> It is used in patch 10.
+int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
+{
+	...
 
-I found "extern u8 __percpu **hv_synic_eventring_tail;" in the
-drivers/hv/mshv_root.h of patch 10.
-I seem to miss the code to use it.
+	vdev->viommu = viommu;
+	refcount_inc(&viommu->obj.users);
+	...
+}
 
-+int hv_call_unmap_stat_page(enum hv_stats_object_type type,
-+                           const union hv_stats_object_identity *identity)=
-;
-+int hv_call_modify_spa_host_access(u64 partition_id, struct page **pages,
-+                                  u64 page_struct_count, u32 host_access,
-+                                  u32 flags, u8 acquire);
-+
-+extern struct mshv_root mshv_root;
-+extern enum hv_scheduler_type hv_scheduler_type;
-+extern u8 __percpu **hv_synic_eventring_tail;
-+
-+#endif /* _MSHV_ROOT_H_ */
+> +	if (IS_ERR(viommu))
+> +		return PTR_ERR(viommu);
+> +
+> +	idev = iommufd_get_device(ucmd, cmd->dev_id);
+> +	if (IS_ERR(idev)) {
+> +		rc = PTR_ERR(idev);
+> +		goto out_put_viommu;
+> +	}
+> +
+> +	vdev = container_of(iommufd_get_object(ucmd->ictx, cmd->vdevice_id,
+> +					       IOMMUFD_OBJ_VDEVICE),
+> +			    struct iommufd_vdevice, obj);
+> +	if (IS_ERR(idev)) {
+                   ^
+vdev?
 
---=20
-Thanks
-Tianyu Lan
+> +		rc = PTR_ERR(idev);
+> +		goto out_put_dev;
+> +	}
+> +
+> +	tdi = tsm_tdi_get(idev->dev);
+
+And do we still need dev_id for the struct device *? vdevice also has
+this info.
+
+int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
+{
+        ...
+	vdev->dev = idev->dev;
+	get_device(idev->dev);
+        ...
+}
+
+
+> +	if (!tdi) {
+> +		rc = -ENODEV;
+> +		goto out_put_vdev;
+> +	}
+> +
+> +	rc = tsm_tdi_bind(tdi, vdev->id, cmd->kvmfd);
+> +	if (rc)
+> +		goto out_put_tdi;
+> +
+> +	vdev->tsm_bound = true;
+> +
+> +	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
+> +out_put_tdi:
+> +	tsm_tdi_put(tdi);
+> +out_put_vdev:
+> +	iommufd_put_object(ucmd->ictx, &vdev->obj);
+> +out_put_dev:
+> +	iommufd_put_object(ucmd->ictx, &idev->obj);
+> +out_put_viommu:
+> +	iommufd_put_object(ucmd->ictx, &viommu->obj);
+> +	return rc;
+> +}
+
+Another concern is do we need an unbind ioctl? We don't bind on vdevice
+create so it seems not symmetrical we only unbind on vdevice destroy.
+
+Thanks,
+Yilun
+
+
 
