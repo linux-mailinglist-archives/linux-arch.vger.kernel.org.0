@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-10723-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10724-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F07DA5F667
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 14:51:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9846CA5F674
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 14:51:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAFAB3BAF46
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 13:50:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E48D517A84D
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 13:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D20D267F54;
-	Thu, 13 Mar 2025 13:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB03267F48;
+	Thu, 13 Mar 2025 13:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vM8kjhfl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RGAoZ9Bv"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B044D41760;
-	Thu, 13 Mar 2025 13:50:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DDB267B9A;
+	Thu, 13 Mar 2025 13:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741873836; cv=none; b=sZCpO0tllpA7ZjbMpBP1L6RN3dD7VPYQk8hW5ABm6Y8s0r613jiRHOgs9H4SYdbFGb4olnnFa45U9FY3Mm7/+i5/72iA0FLFowne1nccqkPcOLbMCBM118EhyZX4jeTdLnAhE0mUOSjTq4uW0wSaRwBSfTFLRtA2sq6LQUBXUGs=
+	t=1741873850; cv=none; b=DdlhKrq88NV9l2RMVfpguZ1CDmHAb5Lslu75SNshxTl6o9R3E5CDLCGi4/f01P2KXdQwtofJTtfG4NFt5390pRGP/PxJ+HfY9bExUd8mPcXCHNJXpCmNf2AdJb7ZziLvJrNSPg8byvZgY5tXcs+N2VO+cX8lYVvPkD6bnBrMlZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741873836; c=relaxed/simple;
-	bh=xXhNVtoRAjb56OLfL+MIUyuiC6fNrGdmFypg4AHZHss=;
+	s=arc-20240116; t=1741873850; c=relaxed/simple;
+	bh=XIr08FortiFXYgvy+0ilxZfO/dI5xt5VoYYHY8PPi6U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F0tRbEm6Sw0aH8UNYdtC4Y2EmyQL4DZd7EPFH/JzoaKhXzkjRtFKmLAXVIzJjfFa9/9YQenuRug0O39q0JJstCK9oVVIgCn+reHTrruzyqpEULueCQDXwmMn+Ci5i9M/9FY8EBC/h53FVU/M4xIpL8pvVaT/zpo4mP5u2/hPHF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vM8kjhfl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EA7C4CEEB;
-	Thu, 13 Mar 2025 13:50:23 +0000 (UTC)
+	 MIME-Version; b=LtL4Ui/pg7uteG0QmddETKGsKBJsc5ECy3UNdIIwXZ/nK1ka2hci8726KFYC1OxcSjQocsh7E9pXzmoVsJVN9vl12kRQEoTzSRPOFB2qaNcs7grNqxTv7wSy5UMiZDN7COqFqeg1uPCwr9MRrXFc7o08QciHSXwHTjXiwDVHLhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RGAoZ9Bv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF707C4AF0C;
+	Thu, 13 Mar 2025 13:50:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741873836;
-	bh=xXhNVtoRAjb56OLfL+MIUyuiC6fNrGdmFypg4AHZHss=;
+	s=k20201202; t=1741873849;
+	bh=XIr08FortiFXYgvy+0ilxZfO/dI5xt5VoYYHY8PPi6U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vM8kjhflpGv3ifczYRBjucOLjPNbTjYEFQMj1aEp0KsLhRKStFJlWIGjAEJLt2da+
-	 HjtiQkCtGzrOP1Lfase8Tm5L6D5Mn8i2K2X8xlpqdSbVd+khSOen+r9N4+2Ckwctvl
-	 vd45q3fsT5VFequdtDMR6RGd84DUAVt5h+T7EQZSGqGj3wc9JcT8Kf80HGB1m/4qV/
-	 YmMUDr49NOXjSCqI/uf+x2MqyPp4kBxltU4mmCjCvwKgvY2LEte6vnTXfX463yflwU
-	 D9m/XyUzL5ubJawlpBJuZyq0tgbiYauzm+IdYU+m35MKZ0/I3YkEYIrUzw4+S42UjY
-	 9rlNZpu0kjehA==
+	b=RGAoZ9Bv6t2SSbQIAmvfk2jcoGAYo67odXJQH4I/ojEZbm/bm80r5mMCH3HqOTqxP
+	 iEZpCsT3i67pyvVHb2yzKWbGZdZItWV2Ob4FFoey9K3/aEHHq8giXuNiumJO7DmCve
+	 4eHUz/CEruq5Di7XV6/wke3HQWVq7E0atmm7IkJdrFuZ4qYFw3TQ9EOIhb1g+we9g4
+	 9Hqp5mqUVK6+lA5SzALUuWJtjGkTzvZsWBVyO01BMp72OTgxynma6l2j5xAvRQ/lS9
+	 IVRmBa6Xj3JWKUq1hEOzK9uv2OFR3tfR/4HK06dHKYPgIsu9Am8T7kbNr4q9/Gwpoe
+	 NNdSNeFMp0c7w==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -101,9 +101,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	linux-arch@vger.kernel.org,
 	linux-mm@kvack.org,
 	x86@kernel.org
-Subject: [PATCH v2 01/13] arm: mem_init: use memblock_phys_free() to free DMA memory on SA1111
-Date: Thu, 13 Mar 2025 15:49:51 +0200
-Message-ID: <20250313135003.836600-2-rppt@kernel.org>
+Subject: [PATCH v2 02/13] csky: move setup_initrd() to setup.c
+Date: Thu, 13 Mar 2025 15:49:52 +0200
+Message-ID: <20250313135003.836600-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250313135003.836600-1-rppt@kernel.org>
 References: <20250313135003.836600-1-rppt@kernel.org>
@@ -117,36 +117,141 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-This will help to pull out memblock_free_all() to generic code.
+Memory used by initrd should be reserved as soon as possible before
+there any memblock allocations that might overwrite that memory.
 
+This will also help with pulling out memblock_free_all() to the generic
+code and reducing code duplication in arch::mem_init().
+
+Acked by: Guo Ren (csky) <guoren@kernel.org>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/arm/mm/init.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/csky/kernel/setup.c | 43 ++++++++++++++++++++++++++++++++++++++++
+ arch/csky/mm/init.c      | 43 ----------------------------------------
+ 2 files changed, 43 insertions(+), 43 deletions(-)
 
-diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
-index 5345d218899a..9aec1cb2386f 100644
---- a/arch/arm/mm/init.c
-+++ b/arch/arm/mm/init.c
-@@ -277,14 +277,14 @@ void __init mem_init(void)
+diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
+index fe715b707fd0..e0d6ca86ea8c 100644
+--- a/arch/csky/kernel/setup.c
++++ b/arch/csky/kernel/setup.c
+@@ -12,6 +12,45 @@
+ #include <asm/mmu_context.h>
+ #include <asm/pgalloc.h>
  
- 	set_max_mapnr(pfn_to_page(max_pfn) - mem_map);
- 
--	/* this will put all unused low memory onto the freelists */
--	memblock_free_all();
--
- #ifdef CONFIG_SA1111
- 	/* now that our DMA memory is actually so designated, we can free it */
--	free_reserved_area(__va(PHYS_OFFSET), swapper_pg_dir, -1, NULL);
-+	memblock_phys_free(PHYS_OFFSET, __pa(swapper_pg_dir) - PHYS_OFFSET);
- #endif
- 
-+	/* this will put all unused low memory onto the freelists */
-+	memblock_free_all();
++#ifdef CONFIG_BLK_DEV_INITRD
++static void __init setup_initrd(void)
++{
++	unsigned long size;
 +
- 	free_highpages();
++	if (initrd_start >= initrd_end) {
++		pr_err("initrd not found or empty");
++		goto disable;
++	}
++
++	if (__pa(initrd_end) > PFN_PHYS(max_low_pfn)) {
++		pr_err("initrd extends beyond end of memory");
++		goto disable;
++	}
++
++	size = initrd_end - initrd_start;
++
++	if (memblock_is_region_reserved(__pa(initrd_start), size)) {
++		pr_err("INITRD: 0x%08lx+0x%08lx overlaps in-use memory region",
++		       __pa(initrd_start), size);
++		goto disable;
++	}
++
++	memblock_reserve(__pa(initrd_start), size);
++
++	pr_info("Initial ramdisk at: 0x%p (%lu bytes)\n",
++		(void *)(initrd_start), size);
++
++	initrd_below_start_ok = 1;
++
++	return;
++
++disable:
++	initrd_start = initrd_end = 0;
++
++	pr_err(" - disabling initrd\n");
++}
++#endif
++
+ static void __init csky_memblock_init(void)
+ {
+ 	unsigned long lowmem_size = PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET);
+@@ -40,6 +79,10 @@ static void __init csky_memblock_init(void)
+ 		max_low_pfn = min_low_pfn + sseg_size;
+ 	}
  
- 	/*
++#ifdef CONFIG_BLK_DEV_INITRD
++	setup_initrd();
++#endif
++
+ 	max_zone_pfn[ZONE_NORMAL] = max_low_pfn;
+ 
+ 	mmu_init(min_low_pfn, max_low_pfn);
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index bde7cabd23df..ab51acbc19b2 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -42,45 +42,6 @@ unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
+ 						__page_aligned_bss;
+ EXPORT_SYMBOL(empty_zero_page);
+ 
+-#ifdef CONFIG_BLK_DEV_INITRD
+-static void __init setup_initrd(void)
+-{
+-	unsigned long size;
+-
+-	if (initrd_start >= initrd_end) {
+-		pr_err("initrd not found or empty");
+-		goto disable;
+-	}
+-
+-	if (__pa(initrd_end) > PFN_PHYS(max_low_pfn)) {
+-		pr_err("initrd extends beyond end of memory");
+-		goto disable;
+-	}
+-
+-	size = initrd_end - initrd_start;
+-
+-	if (memblock_is_region_reserved(__pa(initrd_start), size)) {
+-		pr_err("INITRD: 0x%08lx+0x%08lx overlaps in-use memory region",
+-		       __pa(initrd_start), size);
+-		goto disable;
+-	}
+-
+-	memblock_reserve(__pa(initrd_start), size);
+-
+-	pr_info("Initial ramdisk at: 0x%p (%lu bytes)\n",
+-		(void *)(initrd_start), size);
+-
+-	initrd_below_start_ok = 1;
+-
+-	return;
+-
+-disable:
+-	initrd_start = initrd_end = 0;
+-
+-	pr_err(" - disabling initrd\n");
+-}
+-#endif
+-
+ void __init mem_init(void)
+ {
+ #ifdef CONFIG_HIGHMEM
+@@ -92,10 +53,6 @@ void __init mem_init(void)
+ #endif
+ 	high_memory = (void *) __va(max_low_pfn << PAGE_SHIFT);
+ 
+-#ifdef CONFIG_BLK_DEV_INITRD
+-	setup_initrd();
+-#endif
+-
+ 	memblock_free_all();
+ 
+ #ifdef CONFIG_HIGHMEM
 -- 
 2.47.2
 
