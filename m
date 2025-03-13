@@ -1,122 +1,157 @@
-Return-Path: <linux-arch+bounces-10746-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10747-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4324A5FDB1
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 18:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41FAEA5FED5
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 19:08:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D18519C4213
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 17:24:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 245031893542
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 18:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE21B172767;
-	Thu, 13 Mar 2025 17:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D18F1EA7D4;
+	Thu, 13 Mar 2025 18:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvyGRkVE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JVmEhSdO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8E01624CC;
-	Thu, 13 Mar 2025 17:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80891DC9AF
+	for <linux-arch@vger.kernel.org>; Thu, 13 Mar 2025 18:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741886668; cv=none; b=WNc+IoCdOzosNRJayJMsc9XdNeCgF2T86fZjMMz6S09/WYA+mec5CJxV/V5FiY+gmRr9hXKLsR052zCRTVhu1EcT8JGAj1KWSLKZBMD7BSjRSeQW/jawNZBJsFdWRpcdDhROR2SuuDG9G+iCJKbcsQQGrVw/WZ8spOZRFY+saCA=
+	t=1741889288; cv=none; b=rLQhu0z+BFWOGMNcF4A7SGsxb+uyRszbamQVVBdGcWDVK4R5bap5TECtB4DlqJenFP/PWOQFrZzoLxkl/sG1Bpy4IsfvsHamdkJwH1LEn9CF3deuUX2+vGShvZJ07TZheFSZV/pBYZOlkqU+Y+n1tdDm6LTojIQ9E73D27Qh50s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741886668; c=relaxed/simple;
-	bh=9/zmAAvs9NnopuZELdGFf5m30SQkrIgaibjOTSU2/4g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oF1MsDHDAL/hhXmpVhA3tZ1FD19XShI3STC8Qg7JFRNLi4tQzkfXHtHcqmtxku/05GNebJwR/0owXclIHMMaELLn5AlcOl74H9is2vR9WFrsDK7FIdgtR8Y22uHyBmiHWK/+LNUfQ0VRKiTsL5N+nuBZLbHHHNQXd8/6TbmiLFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvyGRkVE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C81C4CEDD;
-	Thu, 13 Mar 2025 17:24:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741886668;
-	bh=9/zmAAvs9NnopuZELdGFf5m30SQkrIgaibjOTSU2/4g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LvyGRkVE67SzBgb1QxytGP4oCaiDm1tJxrYa6S762f1uCVELy9kUizXLZYLA53dFI
-	 LKB6AnaccFkz/obvqyj95f4NBc0qIbgjsCSr6injy9nOKRnZ631Nz5jY6vtJhqfK9W
-	 lfOaWqXafcfENzy2fADO6wmw4xv83Pcbrnp64dabwgF4V67YDxdHN3robsRH2ge3my
-	 yyXxef+KA/0d2CifdqcRiTFlknqGJdXOg+TWR6xgA6Yw9w3MkQfmaKGP78AmYUgaDq
-	 AxdUBErN29IHX2+C/CRP8J164+HWq5+oXjim9xRBBRx3EWs4UmnF9OTuMnKZeD2CHi
-	 43mLTvGtWzx2g==
-Date: Thu, 13 Mar 2025 18:24:25 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Alessandro Carminati <acarmina@redhat.com>, 
-	linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>, 
-	Arthur Grillo <arthurgrillo@riseup.net>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Naresh Kamboju <naresh.kamboju@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Guenter Roeck <linux@roeck-us.net>, Alessandro Carminati <alessandro.carminati@gmail.com>, 
-	Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com, 
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	loongarch@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
-Message-ID: <20250313-abiding-vivid-robin-159dfa@houat>
-References: <20250313114329.284104-1-acarmina@redhat.com>
- <202503131016.5DCEAEC945@keescook>
+	s=arc-20240116; t=1741889288; c=relaxed/simple;
+	bh=UkNKXb1bKramp3ecbD5yyn/qkZfQyoZLvEdDU3QZzHw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jp5CU0gTQx7LqatmZ+AQ34cazg7KXt6raVOvc4Gv16X8JEiDx6pH9bL7yoIHKiEzL+triuk4ehzz4IjhwBntjEYG0FXG5+8kpHFOdn6bEZTaFQFXuXqoef+iJWw24MJSHrfR+I5QmetpUyxOhntdAqhxJ+hNa2bY+VUyAFDsXog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JVmEhSdO; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4769e30af66so29861cf.1
+        for <linux-arch@vger.kernel.org>; Thu, 13 Mar 2025 11:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741889285; x=1742494085; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MQ3C4fOkeNWFHbw5y8h5vEhHAYC7Z2Nh+a7nGhBzcEA=;
+        b=JVmEhSdOuZ0EGN/kFyDiKUEUx9zOgQUnWqOb4kfI8V5p3tXlPQsfQJDW1PaobEiun7
+         XrQV3es3S2mknWDaUT5C7Gpq1Xuokwd8Hk3oMaPMEXsCwx1b7JKfmIgPQ1OVjUaLbhEh
+         b3YQmVF3L+RGtVpgz6im5drDMUbvWz83JaXcbvY5UFrDCdqh4FCIgD1lWLmkL/IaiM4U
+         Ori10N2WUAkS1hLJH/kGj8ri/kmr78mu51hClwATOd7yrN+ejIoCN9H6W0XKgzYrHTv4
+         /7dmUCnkqMbKOer8dNeE/2+x1rXErN4EIJpRk1fucKIQyuyRp/NKMWLmY7r9TCeluSYc
+         9ldw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741889285; x=1742494085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MQ3C4fOkeNWFHbw5y8h5vEhHAYC7Z2Nh+a7nGhBzcEA=;
+        b=oRhEq1D0A8B2srhCO/LEoLj9vaJ5xpLGnXV+nAZPSG67u38cQNpWNvtNYh5P/2xSRC
+         mB7V/3ujRdZQD0JMbw6Okl4gp5hbPli4bY4DmNWXRdOIX5fAcgdHhHLYShFOyKL7qCSN
+         tPrpZYDa28LAkku2FoAa7LpMm3lA+7M49/bzAMv/Iz7lCJvRbYCzV4UmDsjE8zFTtx/e
+         ZOPdUlj1k8mKn03omGrwWVKlyyjC0RmwPuDHLevLfkiMGG72sJ76KWTJX9ZJpyTsXhgB
+         C9mZp5c6R2A2/dUbmiWUETFlFgpGYQl0BBZ205OXhHy98NbeGpjys+dRdvt1catfyY3D
+         NToA==
+X-Forwarded-Encrypted: i=1; AJvYcCWDzxiXYu7BCB0tUDoKqXg8SYkJVf0NQfw9zniuXjKrUsD1+8ho7Z8CbwRZoJPwPonpBwTOdfI5tEMU@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpCABYCLTb7gOTwAnCr9FMAUePrXXzAv8SenjKMmUO4x07RQUG
+	AV10PNCpnuHu21e5Po+i0wpDohiRgGF5DjsHJbHUGC+QC04/EGEV/AKihM35JeOkLnjsxbRdkTU
+	I47fwikeSlnI0p8rcDJRpIKF1MVt/qgx4zS4E
+X-Gm-Gg: ASbGncvsfn6ThmqYDQbaBLK5+4qV/Eay32Owp39OWS1ZbRRSP/KyU9rR44A1hd4qSI8
+	5Jp7JGbtyVi2yrDRXmbU4VxTxm1zMSuNhQxtS1LCpc8DKaelXqs8nc87uf9C2XSezYu81EFYRmF
+	73R3mHx01Ecx42V9liRt29Ism4c8Chf4+UFqg0/PKkGiRkWhfUpCVI2b6a
+X-Google-Smtp-Source: AGHT+IHrpWqTbMqDznsTHsJ8E9Do30+x9d4gdSw8dj7dE/tKMqx+yW62kkvZYTMbk6yRcBICLabCKUwu3xD7MbVZ4tg=
+X-Received: by 2002:ac8:5f4b:0:b0:471:9480:a14b with SMTP id
+ d75a77b69052e-476c6a5313cmr230021cf.12.1741889285223; Thu, 13 Mar 2025
+ 11:08:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="te6o3coodwf7546n"
-Content-Disposition: inline
-In-Reply-To: <202503131016.5DCEAEC945@keescook>
-
-
---te6o3coodwf7546n
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20250313143002.9118-1-petr.pavlu@suse.com> <jmcazyqlkimqhswwqn2du7ik5sbm5fommonrgovy5d6knqbqcr@xebmu4akkkoy>
+In-Reply-To: <jmcazyqlkimqhswwqn2du7ik5sbm5fommonrgovy5d6knqbqcr@xebmu4akkkoy>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 13 Mar 2025 11:07:53 -0700
+X-Gm-Features: AQ5f1JqTh6MJsjdch2B1hiY959vhHY_r5y3ZS715LvCN36Z2QzffjAcAKrSyahw
+Message-ID: <CAJuCfpEpFqLX-WtXzSdktkp7w3s3JWeSqeG_fms6Ydun+docTA@mail.gmail.com>
+Subject: Re: [PATCH] codetag: Avoid unused alloc_tags sections/symbols
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
-MIME-Version: 1.0
 
-Hi,
+On Thu, Mar 13, 2025 at 10:16=E2=80=AFAM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+>
+> On Thu, Mar 13, 2025 at 03:29:20PM +0100, Petr Pavlu wrote:
+> > With CONFIG_MEM_ALLOC_PROFILING=3Dn, vmlinux and all modules unnecessar=
+ily
+> > contain the symbols __start_alloc_tags and __stop_alloc_tags, which def=
+ine
+> > an empty range. In the case of modules, the presence of these symbols a=
+lso
+> > forces the linker to create an empty .codetag.alloc_tags section.
+> >
+> > Update codetag.lds.h to make the data conditional on
+> > CONFIG_MEM_ALLOC_PROFILING.
+> >
+> > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>
+> Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
 
-On Thu, Mar 13, 2025 at 10:17:49AM -0700, Kees Cook wrote:
-> On Thu, Mar 13, 2025 at 11:43:15AM +0000, Alessandro Carminati wrote:
-> > Some unit tests intentionally trigger warning backtraces by passing bad
-> > parameters to kernel API functions. Such unit tests typically check the
-> > return value from such calls, not the existence of the warning backtrac=
-e.
->=20
-> Thanks for picking this series back up! I honestly thought this had
-> already landed. :)
->=20
-> > With CONFIG_KUNIT enabled, image size increase with this series applied=
- is
-> > approximately 1%. The image size increase (and with it the functionality
-> > introduced by this series) can be avoided by disabling
-> > CONFIG_KUNIT_SUPPRESS_BACKTRACE.
->=20
-> Yeah, as with my prior review, I'm a fan of this. It makes a bunch of my
-> very noisy tests much easier to deal with.
+Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
-And for the record, we're also affected by this in DRM and would very
-much like to get it merged in one shape or another.
-
-Maxime
-
---te6o3coodwf7546n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZ9MUyAAKCRDj7w1vZxhR
-xdXjAQCCwQNRXUI4bvpTeTrsH0SDbsLYjlm1aQi9V/DpasrOoQD/cFET4LceVGmh
-WT9gLea6FEbCN1GQ2T9KOoLGuMrzTAw=
-=uGit
------END PGP SIGNATURE-----
-
---te6o3coodwf7546n--
+>
+> > ---
+> >  include/asm-generic/codetag.lds.h | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/co=
+detag.lds.h
+> > index 372c320c5043..0ea1fa678405 100644
+> > --- a/include/asm-generic/codetag.lds.h
+> > +++ b/include/asm-generic/codetag.lds.h
+> > @@ -2,6 +2,12 @@
+> >  #ifndef __ASM_GENERIC_CODETAG_LDS_H
+> >  #define __ASM_GENERIC_CODETAG_LDS_H
+> >
+> > +#ifdef CONFIG_MEM_ALLOC_PROFILING
+> > +#define IF_MEM_ALLOC_PROFILING(...) __VA_ARGS__
+> > +#else
+> > +#define IF_MEM_ALLOC_PROFILING(...)
+> > +#endif
+> > +
+> >  #define SECTION_WITH_BOUNDARIES(_name)       \
+> >       . =3D ALIGN(8);                   \
+> >       __start_##_name =3D .;            \
+> > @@ -9,7 +15,7 @@
+> >       __stop_##_name =3D .;
+> >
+> >  #define CODETAG_SECTIONS()           \
+> > -     SECTION_WITH_BOUNDARIES(alloc_tags)
+> > +     IF_MEM_ALLOC_PROFILING(SECTION_WITH_BOUNDARIES(alloc_tags))
+> >
+> >  /*
+> >   * Module codetags which aren't used after module unload, therefore ha=
+ve the
+> > @@ -28,6 +34,6 @@
+> >   * unload them individually once unused.
+> >   */
+> >  #define MOD_SEPARATE_CODETAG_SECTIONS()              \
+> > -     MOD_SEPARATE_CODETAG_SECTION(alloc_tags)
+> > +     IF_MEM_ALLOC_PROFILING(MOD_SEPARATE_CODETAG_SECTION(alloc_tags))
+> >
+> >  #endif /* __ASM_GENERIC_CODETAG_LDS_H */
+> >
+> > base-commit: 80e54e84911a923c40d7bee33a34c1b4be148d7a
+> > --
+> > 2.43.0
+> >
 
