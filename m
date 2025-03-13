@@ -1,217 +1,256 @@
-Return-Path: <linux-arch+bounces-10695-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10696-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C44A5EAE6
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 06:10:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 449BCA5EB97
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 07:19:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 546C93B78F3
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 05:10:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A35973B71E5
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 06:19:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D880D1F8EFC;
-	Thu, 13 Mar 2025 05:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EA451FA84F;
+	Thu, 13 Mar 2025 06:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="ivBTiH40"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bGjw6W0K"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azolkn19010013.outbound.protection.outlook.com [52.103.10.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDBE1CBA02;
-	Thu, 13 Mar 2025 05:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.10.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741842616; cv=fail; b=MPchVp2JZH43pXfDvem6gx15EhAxeUwA/WDgPWLAMSd5bH24PVpXs4DtLJtfOEKBJPM6f2xtcod71GSPRLtIwcQWqOvBUKTbuxTnzVOdbbC8a+CXvfh4M+OBTAY3u8hQ0DdBHfqlq5ZbtdUFSzQrGUZ8DMBf3fuaxarRocd5HW0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741842616; c=relaxed/simple;
-	bh=scbspkoJzrPjYVr2/A8UL61H/UIAYsiuC3IeHjqp2Ag=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=HLbD50AgmgbP/s3HPdycJcmlKLhprwa4dzZnTaPerU/qhokR2VaK3DOR8zhfCqhgd4WsJWQ6PPXa9aPBlKzY1SRmq/NvDdhU+0uOwe9wpUkRgwVyMIBQVSvbbdcHesPu820ylTJeR5Gu0yjQmSdWLyWkjMa/h1wByMWtszlovLY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=ivBTiH40; arc=fail smtp.client-ip=52.103.10.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=A8tp5/X0Z58SYrfh74PcQED3V4V5cPENEeXvBEqfqv2P32y5KuJsY8ZoFCmxo+qWb+DE2qXBQvKci2V1vxoPrmd0fn7blbzfr5CAtcIHlZWUvMhA06ahg6wkPH1DljXFWjip7yE7cBybrpS05fjDV7PLbNCJewCjyjf6Ghj2Drk2oUcuX6ekA76KCFRTHs/2GZsEwFvS+WVH/2P8Gr0OkCTJd7Jzq3OAQAbNxF4hP6NavxZjSbGAL1tbyJ9rJcsjCyorg5ArJRjGHhfZOW6lZyiVlWoIhMekeqn8w41t77j0WqiVsB5+Mgv2SqOv85z8oBg3euj1mQ5iCoU1wDFK/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Vy9yWzdGitYJmKP//r1mXHpU72sPabkjGQB7hEgOm8=;
- b=zPpFd2+45BFmr6Vwl/KPpbGDYs0KhKuU6xQN+lcgKKooppw52kwE+hpHAr4caT/UBdVMoPeo9ZoVWXKiryxcyN76SGR6N0nk4wCh0WuZrUi014rd5wGtnxSPM2L3HfIlLOAPIDR51apr5bGd4T6XGAi5h2zWPC/vXsmc9pGO4VVTntVqLpvLnT9rbJ7m5S+puliyugPUgiJu1kt0khVOhLbWi+uJA7us1laczcQrowC7yiyic1vvxYmhXfNYnWYv2enTPhj79UwXuP+1MXUTkpy+5/PYlCZnqt5KqmuUtj+Gq4yWCbTlvijSPC8p8vDuUYuFZJMS6jRPm8oazPjI8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Vy9yWzdGitYJmKP//r1mXHpU72sPabkjGQB7hEgOm8=;
- b=ivBTiH40CorDnfBQF5x0L6va4bQ4/66x6eTOwq/4il1lgPHjOIiHucLvxvaU9r8nndS6v1AJ41F0/MOTZdUDCD8mZcXs1PSitGXkzJnrqlGTOFU+7dYUR5nWAzH2BHXCTPU7vNC2luyEHUQPCBpsuBM6iMC12YmtQsuSDxO6TpKr3EOaGh3DI7aSpOr5gi8qJwassTIrKERdTOAeiwiz/XRkUvmMT+ZsgPh/MGVqANVBwRLa9WGjW8LKGjUup89lV3O+j20ZUZNdZEa7QsjEZx2U+brhmWFSPc834fgy2W2FoxPejGiS3eLGoPCZMFyXqKNM92RV4L8w4SuA9C0wJg==
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by SJ0PR02MB8685.namprd02.prod.outlook.com (2603:10b6:a03:3e5::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Thu, 13 Mar
- 2025 05:10:10 +0000
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.8511.026; Thu, 13 Mar 2025
- 05:10:10 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Roman Kisel <romank@linux.microsoft.com>, Arnd Bergmann <arnd@arndb.de>,
-	"bhelgaas@google.com" <bhelgaas@google.com>, Borislav Petkov <bp@alien8.de>,
-	Catalin Marinas <catalin.marinas@arm.com>, Conor Dooley
-	<conor+dt@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, Dexuan Cui
-	<decui@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, "H. Peter
- Anvin" <hpa@zytor.com>, Joey Gouly <joey.gouly@arm.com>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>, Lorenzo
- Pieralisi <lpieralisi@kernel.org>, Manivannan Sadhasivam
-	<manivannan.sadhasivam@linaro.org>, Mark Rutland <mark.rutland@arm.com>, Marc
- Zyngier <maz@kernel.org>, Ingo Molnar <mingo@redhat.com>, Oliver Upton
-	<oliver.upton@linux.dev>, "Rafael J . Wysocki" <rafael@kernel.org>, Rob
- Herring <robh@kernel.org>, "ssengar@linux.microsoft.com"
-	<ssengar@linux.microsoft.com>, Sudeep Holla <sudeep.holla@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Wei
- Liu <wei.liu@kernel.org>, Will Deacon <will@kernel.org>, Zenghui Yu
-	<yuzenghui@huawei.com>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-hyperv@vger.kernel.org"
-	<linux-hyperv@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-pci@vger.kernel.org"
-	<linux-pci@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>
-CC: "apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
-	<benhill@microsoft.com>, "bperkins@microsoft.com" <bperkins@microsoft.com>,
-	"sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Subject: RE: [PATCH hyperv-next v5 03/11] Drivers: hv: Enable VTL mode for
- arm64
-Thread-Topic: [PATCH hyperv-next v5 03/11] Drivers: hv: Enable VTL mode for
- arm64
-Thread-Index:
- AQHbj6zpmH+gYA9h/kGlfIiTOb0OO7NpvEQAgAMg+bCAAAf2gIAAB/GQgALt7ICAAB+EgIAAD2iAgAB+wuA=
-Date: Thu, 13 Mar 2025 05:10:10 +0000
-Message-ID:
- <SN6PR02MB4157A635B0D1B43A2ED2664DD4D32@SN6PR02MB4157.namprd02.prod.outlook.com>
-References: <20250307220304.247725-1-romank@linux.microsoft.com>
- <20250307220304.247725-4-romank@linux.microsoft.com>
- <e0f81049-688e-4f53-a002-5d246281bf8d@app.fastmail.com>
- <BN7PR02MB41488C06B7E42830C700318DD4D62@BN7PR02MB4148.namprd02.prod.outlook.com>
- <119cfb59-d68b-4718-b7cb-90cba67827e8@app.fastmail.com>
- <BN7PR02MB4148FC15ADF0E49327262B92D4D62@BN7PR02MB4148.namprd02.prod.outlook.com>
- <caa0d793-3f05-4d7c-88d0-224ec0503cfb@linux.microsoft.com>
- <45171fb1-7533-449f-83d4-066d038c839f@app.fastmail.com>
- <996deaab-e1d1-4f04-ba31-c0dcab2d5e1d@linux.microsoft.com>
-In-Reply-To: <996deaab-e1d1-4f04-ba31-c0dcab2d5e1d@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SJ0PR02MB8685:EE_
-x-ms-office365-filtering-correlation-id: 63069523-896f-499a-f054-08dd61ed5416
-x-microsoft-antispam:
- BCL:0;ARA:14566002|19110799003|15080799006|8060799006|461199028|8062599003|10035399004|440099028|3412199025|4302099013|102099032|56899033|12091999003|1602099012;
-x-microsoft-antispam-message-info:
- =?iso-8859-2?Q?lxjhaKAHrGLnB4bTbdqRMAVyqXFFeOMwLR4N2Yn0f2PsVs/HbxZDx2zSGU?=
- =?iso-8859-2?Q?2/UXMDcB2pWAjm1WKmatXoBeOvB4kQH0Jrx8VCzZqTUt0qF0bqM4I/9pjp?=
- =?iso-8859-2?Q?FCcSZmX+nU0R1RTP8iaCThmiYxbRUMMhVHhiCMXWVTjAnWMqfzbc4c21qO?=
- =?iso-8859-2?Q?Ie7U47/72AAaEIU9OLoMbwaCsRetUp6mMg4Igq1A+TLRv9Jy36oGgKOa1g?=
- =?iso-8859-2?Q?LMSC9/RHwvK4TL26kPpjT8yQGYbFN4ZEesqNMmalUNV4WxLwPleCNVkglS?=
- =?iso-8859-2?Q?jIHI6E0uvpj4oqbYsa5O4HPu8gfeRHzlOYZYswBw4FaeEckuXFX2WrGr3q?=
- =?iso-8859-2?Q?fYJ1jLHEkOb08uDbhZ2DQz8cxMWJvhofAKZrDjtUjVIzwrfNiral+ILapG?=
- =?iso-8859-2?Q?5rmgGSoRuI+cmV+40nbx3oeZ4u5bPVuGK/TWMyhQUZB8aJOP18tZqCZP8E?=
- =?iso-8859-2?Q?O/A5F18VYhVss2DeIpWmudlXPIYIwz475Ml4mCdso6E+sElCSFufXkFGCn?=
- =?iso-8859-2?Q?HqM4dSyH1AhOJG8G8qg8zI0bJEgIEbROSEJiAFPIt+TBPcJXfhCnw/i/l6?=
- =?iso-8859-2?Q?QQ3aJzIjkYlldfQAiLkSPQfnqNGqHlDj+oWzm9ddLEBy33Kz922vSFrRJ9?=
- =?iso-8859-2?Q?wVVaXjty+IWXyFJhWF1KgGz6x/TsYiskpOVbYrvq3I6+dzSNDGtGFY6Zhr?=
- =?iso-8859-2?Q?Q4ilkktQASf9pKXXNVrVigGxJI0KevL66DYVSNAS8BiTll2k78nUcBKEXA?=
- =?iso-8859-2?Q?ir7Xf/VWkllLcSCgzLnRrp+Q8ypp7FgeobBbl/vGGFRd1b0ZbbhTY+62zz?=
- =?iso-8859-2?Q?LrbIBtvHBZeNpeG3tswePW2snDn0DGRd15En3/Pv28/veUafNOikFrIxwd?=
- =?iso-8859-2?Q?qwwyoT7QMwwMrHwDhnVKwVBwB38Q1wVEwcivWW6HJjwbGJbOhritnDFVUw?=
- =?iso-8859-2?Q?cU7d5AVc9YsF9n62moMhtyrlAXjl4rzF3xb5V20PaXz+hOvtXCIAdZQxbq?=
- =?iso-8859-2?Q?dZnAXqhNxImARVDTL8LXhE/neBdkCkt4Nmegv+yFHWGx8z9gWxgsTmcqRL?=
- =?iso-8859-2?Q?vg7j/JlQKyxV7SnLDSDjRx+aMVlY0S3Q3h/Fl1XGVFyfmgfxT3sGgZs8sd?=
- =?iso-8859-2?Q?UF5KEHENNESR5BmVytjCKw9ypj3crp4ISpcFbon7sK4mmFDzhYQqCpswVs?=
- =?iso-8859-2?Q?jnCeRuK89clKFr044/9m5/rT9D43KYnnwCGm5mr9kMTSa05rL/Q6pHUB3+?=
- =?iso-8859-2?Q?gTH7puyRUw0vz6wKjLn8vIz+Hql9bpjDdiVmyT0guU0LGSdy8/Ic4wj883?=
- =?iso-8859-2?Q?0Dp7?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-2?Q?SQcZErHDzOOiPhCC3+DAAxDCF0L4XKbhjjDWTY1wXFNF+2ddqnz2H0LT4b?=
- =?iso-8859-2?Q?fLw/+MBuwtRpRAgqpKxv1cV8GWUQ7+Eru18AzTc6s/VTqOYdcjnIGSVlqZ?=
- =?iso-8859-2?Q?5IG2hXP20NiEEO0Cz6cOuxeuSUBThDv7KH/1MgnUpb8clwHM/lfgVVHF4t?=
- =?iso-8859-2?Q?sv8iMc1FgciLBomDCv6VEs0HN+OxLS7xWxRKT3VLkAEv54kQx5cSuIrr0a?=
- =?iso-8859-2?Q?FMdLEAKdRE+wmBMihLfvfws/0kyqorr1ap+xDk6jYVzUan4B25y8NdMank?=
- =?iso-8859-2?Q?o52VahN9ktwFCfKLYqagMGch/fnAhT07PQJJcmpu6Z9mIs0P+tpiDV2SgT?=
- =?iso-8859-2?Q?B3OwhcayDIwWsWE3c9fOLgRKYFg839RSgpnv2XqjrZU9+EvhNyprOvVBTN?=
- =?iso-8859-2?Q?JLj7h/nqT2i+vI/bPlVKrBHMwB45USJqofVAEMtlr0sJNiI8Bh3VjULfW6?=
- =?iso-8859-2?Q?BnonQTRPpIzoX1nKZJYMZYnbHeCyo/XNRAaMGkaAzixC/r/rFxOqjwj/nQ?=
- =?iso-8859-2?Q?smufy1f7O413icJu3rIhJZYzcXIQlBI44JhoJgCzMHzXpGjrf1LWNgLXPS?=
- =?iso-8859-2?Q?Br3mcN6a9KHsJgCJnfwrNplmUo48IwYrm95vupRYx8mjvYc5XuVEgltCSW?=
- =?iso-8859-2?Q?w8R+T7ycH5XTpTIVeCwSGB5HXu9nScD0Ddb+wCGl3QTp1CGiN+fU/XB7lC?=
- =?iso-8859-2?Q?vKxq6lkcB+Xzu0es5S74QgFUMIYSutJHi+Pmk0LHD7w3IOgZjVbjC+gjG+?=
- =?iso-8859-2?Q?QwsL27jtrz9d7ZUTCCTxYZrGFmbub5NCw6iJSVuu2O52djHE7IVtMUaE17?=
- =?iso-8859-2?Q?VRpsxSqailRRsvM12gg5sv3Tq6wKcHklGf+9IchLYC0kJjzDIjtn46NTY4?=
- =?iso-8859-2?Q?hP03CvzW2OjbsGLWy3VXWwPLsGBLYFQTzdDFCKj0iZhN1UbA3QvqOtkoaB?=
- =?iso-8859-2?Q?6o+hJ4TCQFNImvBQaq5Zb1YWROg/a8s41H5hEV/6WVq+5URr0VKNtc1jcr?=
- =?iso-8859-2?Q?9OxI56mbhXNiPabyZTzSuWZLs3pod5pCo552qFYzBEZ2s0Oqrc0CKFeXY7?=
- =?iso-8859-2?Q?UWBy2MJJ/WF0uocU4xYLuJH92FMXvgBsfgXSiQxK70dr8q9P/Y/zfDgl/u?=
- =?iso-8859-2?Q?9FKaQJ9Kak+5Dep/HzbkeM6CKMIcGCMeKahtKn5Edai6pBeinl+pTCUs5E?=
- =?iso-8859-2?Q?qQcBfzDdJkn15rc68eAXaEzHO5af14a3KF0RyxR+BWqyFIjVC5duGQaz/Z?=
- =?iso-8859-2?Q?RZlP8C7e2VApQjSV4xM/6KLP+0T+mFKDrBx705omM=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600D52F2E;
+	Thu, 13 Mar 2025 06:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741846768; cv=none; b=VGhUU6kfntWuo9bhP8XA9BDT0zyOLUgLfwAWqDpIh4UOB9fAGL55U9FTiFSywQahlA6tstzkpGtdMTuQtWZJRs+B0muCNAVEb0BaThKMGv7ffD1Xz6uWBkCNN4fa9nGozVcJPsNwtj9ko0rZ/LZbtOuQrtJXf1iQDu0V3molF+A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741846768; c=relaxed/simple;
+	bh=6+Op+lyCycwJhs/YJ17iT1umDzfeT7rmCXKyOJCk7ZM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lJcQ9bio+17p7meAtFI4fsOnS3h2RtbWulmJOFsOkxmkOYQnkrBtaNJ3fNkGe7kZsqJa5bgJgNgNq6ubEMsfgZq6WrbEUskTzrLQ1XvaoxfGjGf15u4kwzLKesv4SGVI4wBi9UW18p0Xxn+VWfTm08tIPaPrLpo0gdm5a4c4bTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bGjw6W0K; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22409077c06so15406825ad.1;
+        Wed, 12 Mar 2025 23:19:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741846765; x=1742451565; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:reply-to:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5AEORV8hgJxqEhMV8ZMadRplYEF+lyBFwpCTbagzejc=;
+        b=bGjw6W0KG2axLriXShAQsAUiyCr18L27zMPzN2R38EDPyBbkkxRFa/2oJHKOcrHJHM
+         VIVeO3ZdVs7krBJA1QGb8SWQ4NwQAG2SpokG5kflSfr2P6lTntXUA2GdsAAzNSYZNwv6
+         jwy+nObxvbcLAUyxFPrywpfufFELb1DCSLHiYwq71L7F6EmAN5yQW+n0/0vPdmRiBcHH
+         lDcszVyOP//Wtvo7BZHN45idQ8Km/TpvWTi9+yGbgkqbSGVUBh+xjgdJ8+3/XuJHtbfU
+         qxgCCUPdXbe20FAanIHO/9OuS6M2GkKRo3clw5+JT0cpPCXmJUB2NIo5NvphIUZn8Ox9
+         Dl0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741846765; x=1742451565;
+        h=content-transfer-encoding:mime-version:reply-to:message-id:date
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5AEORV8hgJxqEhMV8ZMadRplYEF+lyBFwpCTbagzejc=;
+        b=ohk+zz97jeBT1hXriY5qK7ujDqljPxEWV4TXE9+w4f4twcUyblsdQeTzCxXjFqxhEV
+         Vdq1TfegHSdfq3/lUIxc4DAbmttC8nkEBgymnfKPnHKLTlSXRu30G1ZLwHBaZIRQ6n71
+         SKUMCLmbfiSjWkad9Ry5N5bcOfYzNmCxcVUonpH6x2AeiR6OkD8caKhvzClakwNN1cOk
+         TLlpN5fHd5hI1NB+e35++DwbkzmMzNOuQOR2qd6Fd+nxbllSCP4VRBFh/RLu11sEgOFA
+         Mgc/OUVYT8zfYV9JdHcV1CzKForz0npWYDCURSe1YSllrd7Xz5jZv2LwMIFoJBhGd9t4
+         hISw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFNT2UhNQpqef7UAvr6JgsIse8mBj0Tjza1AGAeENsSX2Z6ZU8NG9MsOW79aaFF4SaZq4W7BXcJ+mx@vger.kernel.org, AJvYcCVYtHrG1cWs9ISAz/me5gm1PF5tBlEAy0CMkS+iFGxUugmD5kvB8lZsaZRKDkVBUvnDms6MLVgRuS4MReSu@vger.kernel.org, AJvYcCXOo550haPH83YOTzqzxcX4oPFnB7QNZ5I+VFITUHzv73jPK/IOMA8QtCjCMo3sXPkwEO9AXRnFLLMwXEwc@vger.kernel.org, AJvYcCXmgRdXfnlIP7J8yj3Mj/H3bp085WsQQIgXCnOUwS55XtAFF52tuhzPz/JKu2FO5AdKttl1mcUurEr8@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyyq8Hwl7rilKfABb/UqzySvUpB2MZkfdQjDPbfLhTOLzslAe1F
+	MMG87W7wY3anhTjAKIlmSxeTHxIl6DPRayHzTWd6tVqbqMlN9j9c
+X-Gm-Gg: ASbGnct6rudYaTQppnjDPHcHBNHA+V2zbOylEST3pU+7kLhmT/j4D3UB7OV362ozi2Q
+	dQTZm4IxhmugmZSk8wmU22suYjG2BO99GCcm/iE67IAcqKZ5qMac7PgbYzJybnfDu7EgxVZphLc
+	MXbIEyGKLg/e/PwooflteTn9LVD8KC/GXagGibwK7SXI5TqHaTCWUqQErzGIZWi2R6fQCYdOkdQ
+	2IAasJWT4ZgWUIBKkdyrnw73ed1v7cMVwm+tphSCm72zSdEFRHWfzUmTXn/d2T6kgFpXlNpYhes
+	DrtVr++LGuNOFMosa8OH5WJ/bHt+JlFRmldk4/Ajp/QBGVgAsmSanm2T/RUhptdHiLNzwbHISAx
+	wV2ZVUYtL9lYr4OYrVjEKlVI=
+X-Google-Smtp-Source: AGHT+IEus6VFy47YaAw3pn+3kom0RXfYbUHDNa127pXeDRAp5C/cxTv4BWeEGn3OlBfTu5QxnnHJYw==
+X-Received: by 2002:a17:903:283:b0:224:194c:6942 with SMTP id d9443c01a7336-22428bded4amr397258325ad.34.1741846765523;
+        Wed, 12 Mar 2025 23:19:25 -0700 (PDT)
+Received: from localhost.localdomain (c-67-160-120-253.hsd1.wa.comcast.net. [67.160.120.253])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68880dfsm5856985ad.38.2025.03.12.23.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Mar 2025 23:19:25 -0700 (PDT)
+From: mhkelley58@gmail.com
+X-Google-Original-From: mhklinux@outlook.com
+To: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	hpa@zytor.com,
+	lpieralisi@kernel.org,
+	kw@linux.com,
+	manivannan.sadhasivam@linaro.org,
+	robh@kernel.org,
+	bhelgaas@google.com,
+	arnd@arndb.de
+Cc: x86@kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: [PATCH v2 0/6] hyperv: Introduce new way to manage hypercall args
+Date: Wed, 12 Mar 2025 23:19:05 -0700
+Message-Id: <20250313061911.2491-1-mhklinux@outlook.com>
+X-Mailer: git-send-email 2.25.1
+Reply-To: mhklinux@outlook.com
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63069523-896f-499a-f054-08dd61ed5416
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2025 05:10:10.1788
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8685
+Content-Transfer-Encoding: 8bit
 
-From: Roman Kisel <romank@linux.microsoft.com> Sent: Wednesday, March 12, 2=
-025 2:21 PM
->=20
-> On 3/12/2025 1:25 PM, Arnd Bergmann wrote:
-> > On Wed, Mar 12, 2025, at 19:33, Roman Kisel wrote:
-> >>
-> >> That's a minimal extension, its surprise factor is very low. It has no=
-t
-> >> been seen to cause issues. If no one has strong opinions against that,
-> >> I'd send that in V6.
-> >>
-> >
-> > Works for me. Thanks for your detailed explanations.
-> >
->=20
-> Thank you for your review very much!
->=20
+From: Michael Kelley <mhklinux@outlook.com>
 
-My original concern [1] with this minimal change is that it allows building
-a normal Linux kernel (i.e., not for VTL 2) for Hyper-V with CONFIG_ACPI=3D=
-n.
-Such a kernel will not run in a Hyper-V VM since ACPI is required unless
-building for and running in VTL 2. Current upstream code disallows
-CONFIG_HYPERV=3Dy with CONFIG_ACPI=3Dn.
+This patch set introduces a new way to manage the use of the per-cpu
+memory that is usually the input and output arguments to Hyper-V
+hypercalls. Current code allocates the "hyperv_pcpu_input_arg", and in
+some configurations, the "hyperv_pcpu_output_arg". Each is a 4 KiB
+page of memory allocated per-vCPU. A hypercall call site disables
+interrupts, then uses this memory to set up the input parameters for
+the hypercall, read the output results after hypercall execution, and
+re-enable interrupts. The open coding of these steps has led to
+inconsistencies, and in some cases, violation of the generic
+requirements for the hypercall input and output as described in the
+Hyper-V Top Level Functional Spec (TLFS)[1]. This patch set introduces
+a new family of inline functions to replace the open coding. The new
+functions encapsulate key aspects of the use of per-vCPU memory for
+hypercall input and output,and ensure that the TLFS requirements are
+met (max size of 1 page each for input and output, no overlap of input
+and output, aligned to 8 bytes, etc.).
 
-However, I don't want to make too big of a deal about now allowing this
-misconfiguration. Arguably it's not likely to happen, and the solution is
-"don't do that".  So if we want to go back to the minimal set of changes to
-drivers/hv/Kconfig as Roman proposes, I won't object further. I just want
-to sure everyone is clear on the tradeoffs.
+With this change, hypercall call sites no longer directly access
+"hyperv_pcpu_input_arg" and "hyperv_pcpu_output_arg". Instead, one of
+a family of new functions provides the per-cpu memory that a hypercall
+call site uses to set up hypercall input and output areas.
+Conceptually, there is no longer a difference between the "per-vCPU
+input page" and "per-vCPU output page". Only a single per-vCPU page is
+allocated, and it is used to provide both hypercall input and output.
+All current hypercalls can fit their input and output within that single
+page, though the new code allows easy changing to two pages should a
+future hypercall require a full page for each of the input and output.
 
-Michael
+The new functions always zero the fixed-size portion of the hypercall
+input area (but not any array portion -- see below) so that
+uninitialized memory isn't inadvertently passed to the hypercall.
+Current open-coded hypercall call sites are inconsistent on this point,
+and use of the new functions addresses that inconsistency. The output
+area is not zero'ed by the new code as it is Hyper-V's responsibility
+to provide legal output.
 
-[1] https://lore.kernel.org/linux-hyperv/SN6PR02MB4157E15EFE263BBA3D8DFC51D=
-4EC2@SN6PR02MB4157.namprd02.prod.outlook.com/
+When the input or output (or both) contain an array, the new code
+calculates and returns how many array entries fit within the per-cpu
+memory page, which is effectively the "batch size" for the hypercall
+processing multiple entries. This batch size can then be used in the
+hypercall control word to specify the repetition count. This
+calculation of the batch size replaces current open coding of the
+batch size, which is prone to errors. Note that the array portion of
+the input area is *not* zero'ed. The arrays are almost always 64-bit
+GPAs or something similar, and zero'ing that much memory seems
+wasteful at runtime when it will all be overwritten. The hypercall
+call site is responsible for ensuring that no part of the array is
+left uninitialized (just as with current code).
+
+The new family of functions is realized as a single inline function
+that handles the most complex case, which is a hypercall with input
+and output, both of which contain arrays. Simpler cases are mapped to
+this most complex case with #define wrappers that provide zero or NULL
+for some arguments. Several of the arguments to this new function
+must be compile-time constants generated by "sizeof()" expressions.
+As such, most of the code in the new function is evaluated by the
+compiler, with the result that the runtime code paths are no longer
+than with the current open coding. An exception is the new code
+generated to zero the fixed-size portion of the input area in cases
+where it was not previously done.
+
+Use of the new function typically (but not always) saves a few lines
+of code at each hypercall call site. This is traded off against the
+lines of code added for the new functions. With code currently
+upstream, the net is an add of about 60 lines of code and comments.
+However, as additional hypercall call sites are upstreamed from the
+OpenHCL project[2] in support of Linux running in the Hyper-V root
+partition and in VTLs other than VTL 0, the net lines of code added is
+nearly zero.
+
+A couple hypercall call sites have requirements that are not 100%
+handled by the new function. These still require some manual open-
+coded adjustment or open-coded batch size calculations -- see the
+individual patches in this series. Suggestions on how to do better
+are welcome.
+
+The patches in the series do the following:
+
+Patch 1: Introduce the new family of functions for assigning hypercall
+         input and output arguments.
+
+Patch 2 to 5: Change existing hypercall call sites to use one of the new
+         functions. In some cases, tweaks to the hypercall argument data
+         structures are necessary, but these tweaks are making the data
+         structures more consistent with the overall pattern. These
+         four patches are independent of each other, and can go in any
+         order. The breakup into 4 patches is for ease of review.
+
+Patch 6: Update the name of the variable used to hold the per-cpu memory
+         used for hypercall arguments. Remove code for managing the
+	 per-cpu output page.
+
+Patch 1 from v1 of the patch set has been dropped in v2. It was a bug
+fix that has already been picked up.
+
+The new code compiles and runs successfully on x86 and arm64. Separate
+from this patch set, for evaluation purposes I also applied the
+changes to the additional hypercall call sites in the OpenHCL
+project[2]. However, I don't have the hardware or Hyper-V
+configurations needed to test running in the Hyper-V root partition or
+in a VTL other than VTL 0. So the related hypercall call sites still
+need to be tested to make sure I didn't break anything. Hopefully
+someone with the necessary configurations and Hyper-V versions can
+help with that testing.
+
+For gcc 9.4.0, I've looked at the generated code for a couple of
+hypercall call sites on both x86 and arm64 to ensure that it boils
+down to the equivalent of the current open coding. I have not looked
+at the generated code for later gcc versions or for Clang/LLVM, but
+there's no reason to expect something worse as the code isn't doing
+anything tricky.
+
+This patch set is built against linux-next20250311.
+
+[1] https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/tlfs
+[2] https://github.com/microsoft/OHCL-Linux-Kernel
+
+Michael Kelley (6):
+  Drivers: hv: Introduce hv_hvcall_*() functions for hypercall arguments
+  x86/hyperv: Use hv_hvcall_*() to set up hypercall arguments -- part 1
+  x86/hyperv: Use hv_hvcall_*() to set up hypercall arguments -- part 2
+  Drivers: hv: Use hv_hvcall_*() to set up hypercall arguments
+  PCI: hv: Use hv_hvcall_*() to set up hypercall arguments
+  Drivers: hv: Replace hyperv_pcpu_input/output_arg with hyperv_pcpu_arg
+
+ arch/x86/hyperv/hv_apic.c           |  10 ++-
+ arch/x86/hyperv/hv_init.c           |  12 ++--
+ arch/x86/hyperv/hv_vtl.c            |   9 +--
+ arch/x86/hyperv/irqdomain.c         |  17 +++--
+ arch/x86/hyperv/ivm.c               |  18 ++---
+ arch/x86/hyperv/mmu.c               |  19 ++---
+ arch/x86/hyperv/nested.c            |  14 ++--
+ drivers/hv/hv.c                     |  11 +--
+ drivers/hv/hv_balloon.c             |   4 +-
+ drivers/hv/hv_common.c              |  57 +++++----------
+ drivers/hv/hv_proc.c                |   8 +--
+ drivers/hv/hyperv_vmbus.h           |   2 +-
+ drivers/pci/controller/pci-hyperv.c |  18 +++--
+ include/asm-generic/mshyperv.h      | 103 +++++++++++++++++++++++++++-
+ include/hyperv/hvgdk_mini.h         |   6 +-
+ 15 files changed, 184 insertions(+), 124 deletions(-)
+
+-- 
+2.25.1
+
 
