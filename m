@@ -1,45 +1,46 @@
-Return-Path: <linux-arch+bounces-10722-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10723-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F21DA5F655
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 14:50:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F07DA5F667
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 14:51:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B5753A7E3D
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 13:50:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAFAB3BAF46
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Mar 2025 13:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A667267B6A;
-	Thu, 13 Mar 2025 13:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D20D267F54;
+	Thu, 13 Mar 2025 13:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aBWKPm/h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vM8kjhfl"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0590A7603F;
-	Thu, 13 Mar 2025 13:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B044D41760;
+	Thu, 13 Mar 2025 13:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741873823; cv=none; b=G8lrQ7b3wuR43h2LgsUMdAd/itIPaD6reYek4Zbt2Bxg25pF9gVXAL9k+yWJV5kkQY05UJMcqtraRz3X5BpHto08lnq0PS6fQh2hGOYh2We35Dbi6vElnOu2GBopT20e+7OO1EGacoNT8DMpu0WMHQlbCj9Q/+CayW7B6sX4DOs=
+	t=1741873836; cv=none; b=sZCpO0tllpA7ZjbMpBP1L6RN3dD7VPYQk8hW5ABm6Y8s0r613jiRHOgs9H4SYdbFGb4olnnFa45U9FY3Mm7/+i5/72iA0FLFowne1nccqkPcOLbMCBM118EhyZX4jeTdLnAhE0mUOSjTq4uW0wSaRwBSfTFLRtA2sq6LQUBXUGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741873823; c=relaxed/simple;
-	bh=62myLVbZVVZFvzPE89he3yMa/a5QAFc2vHsMKxeLVb8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GIB9bRAf2ZokgW7BIFb32QXwx91mCHg7tLYfrP9Jo0aXmCfmZaonSxHU+w6M8rvQZmfEt/WK00DM7JPIcPBdwNmxF6zz6+9RApC1doafFEB/GYIcYlTxUtbhSlC7pHwOjSrrg6OTnZBf6L1VLiC0V6P0ThVhIZzhNy5Lqj60ZU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBWKPm/h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C704BC4CEEA;
-	Thu, 13 Mar 2025 13:50:09 +0000 (UTC)
+	s=arc-20240116; t=1741873836; c=relaxed/simple;
+	bh=xXhNVtoRAjb56OLfL+MIUyuiC6fNrGdmFypg4AHZHss=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=F0tRbEm6Sw0aH8UNYdtC4Y2EmyQL4DZd7EPFH/JzoaKhXzkjRtFKmLAXVIzJjfFa9/9YQenuRug0O39q0JJstCK9oVVIgCn+reHTrruzyqpEULueCQDXwmMn+Ci5i9M/9FY8EBC/h53FVU/M4xIpL8pvVaT/zpo4mP5u2/hPHF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vM8kjhfl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EA7C4CEEB;
+	Thu, 13 Mar 2025 13:50:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741873822;
-	bh=62myLVbZVVZFvzPE89he3yMa/a5QAFc2vHsMKxeLVb8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=aBWKPm/h37x/i5+4FCPzxXZYbNjC4QtR+6/uzYQ4j82YaZ0nkwcNlRiBhZ3s4R+Lr
-	 UbF6tAw/GLOmZOSjCm3jrX37f1OqnkT6FdjX3Szfhc1wjS/Zyf835B0imLzLMqYjcF
-	 W5cI3ghKtUKRswhAYc77+5GSp1YmJnwSpf+x4AqcOGMZBAqFa6QHJIit/O7bFjGzmZ
-	 g/lU9Dt6wqDCDU2wFqrq4LXF68UvvU/ytVgt54uUuF2Vagcx8WobuHEk6mGKRWMGKp
-	 aLWh5ch4M9p8CvWw5jWVVvEJFFmiQHZ9S4CLDqJpDLqZJs/1wj2uAhd2lAzYblfH7W
-	 BgZb5J0KHNyow==
+	s=k20201202; t=1741873836;
+	bh=xXhNVtoRAjb56OLfL+MIUyuiC6fNrGdmFypg4AHZHss=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=vM8kjhflpGv3ifczYRBjucOLjPNbTjYEFQMj1aEp0KsLhRKStFJlWIGjAEJLt2da+
+	 HjtiQkCtGzrOP1Lfase8Tm5L6D5Mn8i2K2X8xlpqdSbVd+khSOen+r9N4+2Ckwctvl
+	 vd45q3fsT5VFequdtDMR6RGd84DUAVt5h+T7EQZSGqGj3wc9JcT8Kf80HGB1m/4qV/
+	 YmMUDr49NOXjSCqI/uf+x2MqyPp4kBxltU4mmCjCvwKgvY2LEte6vnTXfX463yflwU
+	 D9m/XyUzL5ubJawlpBJuZyq0tgbiYauzm+IdYU+m35MKZ0/I3YkEYIrUzw4+S42UjY
+	 9rlNZpu0kjehA==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -100,10 +101,12 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	linux-arch@vger.kernel.org,
 	linux-mm@kvack.org,
 	x86@kernel.org
-Subject: [PATCH v2 00/13] arch, mm: reduce code duplication in mem_init()
-Date: Thu, 13 Mar 2025 15:49:50 +0200
-Message-ID: <20250313135003.836600-1-rppt@kernel.org>
+Subject: [PATCH v2 01/13] arm: mem_init: use memblock_phys_free() to free DMA memory on SA1111
+Date: Thu, 13 Mar 2025 15:49:51 +0200
+Message-ID: <20250313135003.836600-2-rppt@kernel.org>
 X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250313135003.836600-1-rppt@kernel.org>
+References: <20250313135003.836600-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -114,95 +117,36 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Hi,
+This will help to pull out memblock_free_all() to generic code.
 
-Every architecture has implementation of mem_init() function and some
-even more than one. All these release free memory to the buddy
-allocator, most of them set high_memory to the end of directly
-addressable memory and many of them set max_mapnr for FLATMEM case.
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+---
+ arch/arm/mm/init.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-These patches pull the commonalities into the generic code and refactor
-some of the mem_init() implementations so that many of them can be just
-dropped.
-
-v2 changes:
-* don't use generic version for setting high_memory on architectures
-  that use that varialble earlier than free_area_init()
-* use memblock_alloc_or_panig() to allocate zero pages on MIPS and s390
-* fix alignment in allocation of zero pages on s390
-* add Acked-by
-
-v1: https://lore.kernel.org/all/20250306185124.3147510-1-rppt@kernel.org
-
-Mike Rapoport (Microsoft) (13):
-  arm: mem_init: use memblock_phys_free() to free DMA memory on SA1111
-  csky: move setup_initrd() to setup.c
-  hexagon: move initialization of init_mm.context init to paging_init()
-  MIPS: consolidate mem_init() for NUMA machines
-  MIPS: make setup_zero_pages() use memblock
-  nios2: move pr_debug() about memory start and end to setup_arch()
-  s390: make setup_zero_pages() use memblock
-  xtensa: split out printing of virtual memory layout to a function
-  arch, mm: set max_mapnr when allocating memory map for FLATMEM
-  arch, mm: set high_memory in free_area_init()
-  arch, mm: streamline HIGHMEM freeing
-  arch, mm: introduce arch_mm_preinit
-  arch, mm: make releasing of memory to page allocator more explicit
-
- arch/alpha/mm/init.c               |  8 ----
- arch/arc/mm/init.c                 | 25 +----------
- arch/arm/mm/init.c                 | 43 +------------------
- arch/arm64/mm/init.c               | 12 +-----
- arch/csky/kernel/setup.c           | 43 +++++++++++++++++++
- arch/csky/mm/init.c                | 67 ------------------------------
- arch/hexagon/mm/init.c             | 32 ++------------
- arch/loongarch/kernel/numa.c       |  6 ---
- arch/loongarch/mm/init.c           |  8 ----
- arch/m68k/mm/init.c                |  2 -
- arch/microblaze/mm/init.c          | 25 -----------
- arch/mips/include/asm/mmzone.h     |  2 -
- arch/mips/loongson64/numa.c        |  7 ----
- arch/mips/mm/init.c                | 51 ++++-------------------
- arch/mips/sgi-ip27/ip27-memory.c   |  9 ----
- arch/nios2/kernel/setup.c          |  3 +-
- arch/nios2/mm/init.c               | 16 +------
- arch/openrisc/mm/init.c            |  6 ---
- arch/parisc/mm/init.c              |  4 --
- arch/powerpc/kernel/setup-common.c |  2 -
- arch/powerpc/mm/mem.c              | 18 +-------
- arch/riscv/mm/init.c               |  5 +--
- arch/s390/mm/init.c                | 20 +--------
- arch/sh/mm/init.c                  | 10 -----
- arch/sparc/mm/init_32.c            | 31 +-------------
- arch/sparc/mm/init_64.c            |  4 --
- arch/um/include/shared/mem_user.h  |  1 -
- arch/um/kernel/mem.c               |  9 ++--
- arch/um/kernel/physmem.c           | 12 ------
- arch/um/kernel/um_arch.c           |  2 -
- arch/x86/include/asm/highmem.h     |  3 --
- arch/x86/include/asm/numa.h        |  4 --
- arch/x86/include/asm/numa_32.h     | 13 ------
- arch/x86/kernel/setup.c            |  2 -
- arch/x86/mm/Makefile               |  2 -
- arch/x86/mm/highmem_32.c           | 34 ---------------
- arch/x86/mm/init_32.c              | 41 ++----------------
- arch/x86/mm/init_64.c              |  7 ++--
- arch/x86/mm/numa_32.c              |  3 --
- arch/xtensa/mm/init.c              | 66 +++++++----------------------
- include/asm-generic/memory_model.h |  5 ++-
- include/linux/memblock.h           |  1 -
- include/linux/mm.h                 | 13 +-----
- mm/internal.h                      |  3 +-
- mm/memblock.c                      |  3 +-
- mm/memory.c                        | 16 -------
- mm/mm_init.c                       | 65 +++++++++++++++++++++++++----
- mm/nommu.c                         |  6 ---
- 48 files changed, 158 insertions(+), 612 deletions(-)
- delete mode 100644 arch/x86/include/asm/numa_32.h
- delete mode 100644 arch/x86/mm/highmem_32.c
-
-
-base-commit: d082ecbc71e9e0bf49883ee4afd435a77a5101b6
+diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
+index 5345d218899a..9aec1cb2386f 100644
+--- a/arch/arm/mm/init.c
++++ b/arch/arm/mm/init.c
+@@ -277,14 +277,14 @@ void __init mem_init(void)
+ 
+ 	set_max_mapnr(pfn_to_page(max_pfn) - mem_map);
+ 
+-	/* this will put all unused low memory onto the freelists */
+-	memblock_free_all();
+-
+ #ifdef CONFIG_SA1111
+ 	/* now that our DMA memory is actually so designated, we can free it */
+-	free_reserved_area(__va(PHYS_OFFSET), swapper_pg_dir, -1, NULL);
++	memblock_phys_free(PHYS_OFFSET, __pa(swapper_pg_dir) - PHYS_OFFSET);
+ #endif
+ 
++	/* this will put all unused low memory onto the freelists */
++	memblock_free_all();
++
+ 	free_highpages();
+ 
+ 	/*
 -- 
 2.47.2
 
