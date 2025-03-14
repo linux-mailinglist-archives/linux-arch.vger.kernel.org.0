@@ -1,81 +1,80 @@
-Return-Path: <linux-arch+bounces-10864-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10865-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80CF0A61F29
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 22:47:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0118A61F2F
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 22:47:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55486463190
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 21:47:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A349A7A450E
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 21:46:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E9D215F5C;
-	Fri, 14 Mar 2025 21:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51A5C22173D;
+	Fri, 14 Mar 2025 21:40:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="S0uXSpRY"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="xolLXZQ5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31DD215F6C
-	for <linux-arch@vger.kernel.org>; Fri, 14 Mar 2025 21:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04DC21B8E7
+	for <linux-arch@vger.kernel.org>; Fri, 14 Mar 2025 21:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741988439; cv=none; b=kDP4xY0oZjyAq7Tcma/iE1WA6BN4j+f3SE9YgVUHQ8my4ufagcH3jYKdyPx4DD8D3cgqtH+Nk5pJ23do164xklN92OoujvU90GI282Fem3XD1TRzLSU8sn2mfdNlUa4G0LntP5bc8C+sjIw+WjKaMzU9mJEK8HW6g32Jl7yGvoI=
+	t=1741988443; cv=none; b=nhGeFMyn2iJxaGmocK0UbHdFO7lELKcDyy124kUE8ciTUVrHA0FhTM3JTuIe0V9vpZMaqDA6r/3UUG2tr4uELp/oa/WgPgMa3/SYcwe8+czGXzd4t1OUftu3IeuPA0S0RfqHC5mMy5+a9lp5f0mxYpyBhJkCmKVOigZw9RXAxL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741988439; c=relaxed/simple;
-	bh=3orD1W7Kw+agXF/qi5rQLC4b8lruZigL8wXAgYYBwII=;
+	s=arc-20240116; t=1741988443; c=relaxed/simple;
+	bh=2mXwzpNblS+0QvY5CtsrDRD2hx9HeGK0fUeA127n3qU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ROejLX7F5Pv0FvGYuBLAfAcNPw0o5zuWYvOhg4je/4vZer9hd+JFCgTgKCMJKeAEfypHq6djXa25sJJnYlOGMKlukPZC/HXbye3V29vm7H4TyPmMah/OzlhC2OoeHOtcsgwtkrLH7/nx8RwhUjph69ZBKiiJNAJ7/ndahoWG9+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=S0uXSpRY; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:To:Cc; b=Ub4QPODJDZXGgvy/55zbNOBfj9CTr+pQSe3krAnKHVY/b4jNHJJDBhbNXF47BbHjKoq9/1wflu3JNlzSiAo1fgu8xoSWJz33U8FSIcghHCd2yZMdfi8KJPbT4yuru+LKgU5pPlf7L0Ntp5rG87DDC7aHJWTpx7E1Pu4dA0XKGuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=xolLXZQ5; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2239c066347so54033295ad.2
-        for <linux-arch@vger.kernel.org>; Fri, 14 Mar 2025 14:40:36 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2240b4de12bso69484275ad.2
+        for <linux-arch@vger.kernel.org>; Fri, 14 Mar 2025 14:40:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741988436; x=1742593236; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741988439; x=1742593239; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=S58lE55A7IFUYe9923mKAAObQ+TwOi1jWkuglFq4t0Q=;
-        b=S0uXSpRY6MJcghMoyLSrRY3VWz7r4z27fEBE1/Gfqj+QcF3dK9hLHrr58IUPBPcQU1
-         RpDDf2Isd9XZ13o6h0C4NQBUotr+pv99gLd7Lf2RwWoqstcUAXvxD2ndHRD781XXmj4U
-         FkPNm9MbznXc/3ycGvoqA4Y8YenYasPfJZQmClBxPu/3a8TIgqQFa7ZLs2c3mwN7mkHs
-         yuMW6AjQG2J2yg57i4fqaDaz6rn8Z9QYSJhOaaAONQz/ZlAG0Uyp+EhKR6UJIMDDtJw3
-         EWaCLfOvJxG87s7aSDNS/+5uTw72Xdj4TLElP9mfWZ9daPcUuxPRD9CmtWQfLRAq3hts
-         7aZQ==
+        bh=ZcP/paQnVT7Rdltm9MHSxDkYfx/z6vUAqK1vSSq+KwM=;
+        b=xolLXZQ50LhIhuIJlSC8R8/zwLS9m5+SESTolL7mUv6lnw+Wc0LeDE52V5KHEEb9qo
+         Hs8H4PlRKAZ6hmLE6SmUtDlwJSig+bC1kkRoTpO8zLPXGB6ZJsUHGYL3YYxkSIR+p8rJ
+         oNcLwl8Vbe2XU2DgVmCNYK2L3E5YlPHQg1Qoy9O+m650vepNlWjuLTL0fRTbdJm+3cBP
+         qlDDNJPpM3fIFbGGFEggsA7/zme0tIR+IXOeAsaBhMZwLrLSHTP6rcBP/OILNYyKIjav
+         7pocsBJaq9U8VcbwOZkRj5pW3KEbQhqplyc7v0YEdtfcrKcbHbN2BfX2fJcxm+mBsn01
+         EKSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741988436; x=1742593236;
+        d=1e100.net; s=20230601; t=1741988439; x=1742593239;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S58lE55A7IFUYe9923mKAAObQ+TwOi1jWkuglFq4t0Q=;
-        b=unYGAPCwR74Lm8ha33k/IXI87TSS2z/0/MIWsfWuizVwqSwe0qByTl9TkBdieBmut4
-         hkXwzTKYxS6U57hXVmLaBf8K6Ey/oQqI2oB4jG2qvvkvE15H3iN6i6d8MnKoQdOaPQjp
-         ID+Z5vApAkHSqoGy1rBRsf4h41KgOnTnzhWGkfZq+yqIAQIW+geFObZXFVTTAIKFXYqA
-         rtVaiaj4nTylSyHhcrqD0gDAYFMO523VdMZGq8T/533nYPCi1kanCL642GoGGMFkKcMH
-         thKmNX4xPeJ3OjVjKOFqpvQKartJc+i+0VwkddQD3BProcIWNAk0lTOkG60MTwaimUOH
-         etDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWCG6ONVu9Oy6zvXBCE0VPJ7rJ7FTF3HGD2OvbwoSeG/ttLqbfaNPP9BCSnBEIKs/+n0qjmxSDsc8C1@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmSTXJJFU/kgd1szL3ytp1p8H4PjVS2PGrzD9wrZ3xail+CCYA
-	/uy6fm8ZvurDL+zgmd0F5gVKNx/Phn1o8Dbbwf5iCYiRh/Szk6TMYekz+9xXJ0Y=
-X-Gm-Gg: ASbGnctyWVcnsAaTnOOTN/+J7qcKoKix+bg1NmH1Gw/Ka+Lb+unz6bjqYEroXDQsS4G
-	o4vbCEjoS8x8D/DMOnPLpV2nmCzy6HMGjRF0jJ5y8uBVPqbVnwaiwA94vPwoqwON38iPygY+a85
-	Kzs+Z0sucWMm7hMowUsJHThtljtGaPxPYu7Y9efMzCvzRdxe0V55SQ4enCtJWSMTXIIyaG2dssg
-	eaz1PYxyfEuazZShtZJQwxdwcVyX5oRE4wCkrwZFXNwbc2GJFgZlLJuZsiQNZdJBqoIznlzIPWT
-	Ecd/mqS11bvZeLA0gMbyU58c+VqCIRz6gjjEUv9lac/dJmg393Aho948hgFFz5ncsw==
-X-Google-Smtp-Source: AGHT+IHxioJjWTqWYTnSKNhIGhNEZD+Fw6H3+v9MmF1O2GdMnurdCyxzj4vsKuZgW7kLmsjMSOe+qA==
-X-Received: by 2002:a17:902:da90:b0:224:10a2:cae7 with SMTP id d9443c01a7336-225e0af9d92mr50203725ad.40.1741988436457;
-        Fri, 14 Mar 2025 14:40:36 -0700 (PDT)
+        bh=ZcP/paQnVT7Rdltm9MHSxDkYfx/z6vUAqK1vSSq+KwM=;
+        b=pIfqVLBXuURE/egxyrXsCZ7urlbbNmNBgF+SC7iFiVa5PH7/4NGFV1XUlj97Rxh32y
+         aXwGYILL9VL2+cVtZOGlqebVqcv8quFmbdOzTsbsvaQLyV+a3AT7sL1EhjCQnmbW8M6i
+         8u1IHZiq1ntNrLVfpjgoOqtydIcmb4+pkhw9QkIv9iNRtGEG7JlGj/v2jRMSuDKOZuYP
+         FdC7A+8tWcpMPZ/cJJ+/xdNbjL6Xc8c3TzBf1/dGMBH4wjc+EQ2ReCB9RMESl9Q/ULze
+         FpgBMxDxYAcb40WSZHV9MjnZINIRW2wGOsq4Oq7YZWgbaGhKDUK1wFkjVDaG20lYqTPO
+         KBrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVVo59ECKNvpv1A+KGN6rKHggHvkIlLrZigthfTMSmqGemaW4B8vaf72SRWjTejQx0kJRVWtirOC4CW@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYs6QlR2YRotwh4CYwb883NVPji4RseZ6eUBFI8Vg+fIwj63x0
+	iy3xZ5MZTx0L5IEZiCiTVtHFjl70GyQKy3Ndb9d1TqG74sof3SDN8gklzYhx6Mk=
+X-Gm-Gg: ASbGncse8u7zLFVZaL4q9F7nuIIwEXEeqLMm7PAqgtEAQJMOXjjflxz8HYi0yJRUJbK
+	yX6PzN8XnPZBgXGKLJDuelya8Fxi5iF7ljI8c++gmbWlwfILVl3YxbgzWM2Oc7Pz5bFSf/Hsgt1
+	N8RPd4Si7WakuNGhvgtSuHvODlL7WvYKpz9/YkYODkQsM43k2pQTv7f5GrxRduypf3xHKD94hzW
+	oYUkaa7nzBZ0FrdTZVkhGdA7MwziBoUhECrZPkcxB/J22Pa8kinC1lkgye6LGRgoWAAGxntOE5p
+	GlxxcSFsUxOgnYQjjwTLP2zYJxy3ItrTm2uPitPhSVFkLiNWGTsmQm4=
+X-Google-Smtp-Source: AGHT+IFAr9w0NnfJekHlQM0Z291vOiYWAmpXp0eFWmQKfncujb2meKT0mbAImpm+WZ61lNPTT6Tc/g==
+X-Received: by 2002:a17:902:f70c:b0:224:191d:8a79 with SMTP id d9443c01a7336-225e0ac31aamr56778535ad.27.1741988439190;
+        Fri, 14 Mar 2025 14:40:39 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a6e09sm33368855ad.55.2025.03.14.14.40.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a6e09sm33368855ad.55.2025.03.14.14.40.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 14:40:36 -0700 (PDT)
+        Fri, 14 Mar 2025 14:40:38 -0700 (PDT)
 From: Deepak Gupta <debug@rivosinc.com>
-Date: Fri, 14 Mar 2025 14:39:45 -0700
-Subject: [PATCH v12 26/28] riscv: Documentation for landing pad / indirect
- branch tracking
+Date: Fri, 14 Mar 2025 14:39:46 -0700
+Subject: [PATCH v12 27/28] riscv: Documentation for shadow stack on riscv
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -84,7 +83,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250314-v5_user_cfi_series-v12-26-e51202b53138@rivosinc.com>
+Message-Id: <20250314-v5_user_cfi_series-v12-27-e51202b53138@rivosinc.com>
 References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
 In-Reply-To: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
@@ -115,45 +114,45 @@ Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
  Deepak Gupta <debug@rivosinc.com>
 X-Mailer: b4 0.14.0
 
-Adding documentation on landing pad aka indirect branch tracking on riscv
-and kernel interfaces exposed so that user tasks can enable it.
+Adding documentation on shadow stack for user mode on riscv and kernel
+interfaces exposed so that user tasks can enable it.
 
 Reviewed-by: Zong Li <zong.li@sifive.com>
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
  Documentation/arch/riscv/index.rst   |   1 +
- Documentation/arch/riscv/zicfilp.rst | 115 +++++++++++++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
+ Documentation/arch/riscv/zicfiss.rst | 176 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 177 insertions(+)
 
 diff --git a/Documentation/arch/riscv/index.rst b/Documentation/arch/riscv/index.rst
-index eecf347ce849..be7237b69682 100644
+index be7237b69682..e240eb0ceb70 100644
 --- a/Documentation/arch/riscv/index.rst
 +++ b/Documentation/arch/riscv/index.rst
-@@ -14,6 +14,7 @@ RISC-V architecture
-     uabi
+@@ -15,6 +15,7 @@ RISC-V architecture
      vector
      cmodx
-+    zicfilp
+     zicfilp
++    zicfiss
  
      features
  
-diff --git a/Documentation/arch/riscv/zicfilp.rst b/Documentation/arch/riscv/zicfilp.rst
+diff --git a/Documentation/arch/riscv/zicfiss.rst b/Documentation/arch/riscv/zicfiss.rst
 new file mode 100644
-index 000000000000..a188d78fcde6
+index 000000000000..5ba389f15b3f
 --- /dev/null
-+++ b/Documentation/arch/riscv/zicfilp.rst
-@@ -0,0 +1,115 @@
++++ b/Documentation/arch/riscv/zicfiss.rst
+@@ -0,0 +1,176 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
 +:Author: Deepak Gupta <debug@rivosinc.com>
 +:Date:   12 January 2024
 +
-+====================================================
-+Tracking indirect control transfers on RISC-V Linux
-+====================================================
++=========================================================
++Shadow stack to protect function returns on RISC-V Linux
++=========================================================
 +
 +This document briefly describes the interface provided to userspace by Linux
-+to enable indirect branch tracking for user mode applications on RISV-V
++to enable shadow stack for user mode applications on RISV-V
 +
 +1. Feature Overview
 +--------------------
@@ -161,103 +160,164 @@ index 000000000000..a188d78fcde6
 +Memory corruption issues usually result in to crashes, however when in hands of
 +an adversary and if used creatively can result into variety security issues.
 +
-+One of those security issues can be code re-use attacks on program where adversary
-+can use corrupt function pointers and chain them together to perform jump oriented
-+programming (JOP) or call oriented programming (COP) and thus compromising control
-+flow integrity (CFI) of the program.
++One of those security issues can be code re-use attacks on program where
++adversary can use corrupt return addresses present on stack and chain them
++together to perform return oriented programming (ROP) and thus compromising
++control flow integrity (CFI) of the program.
 +
-+Function pointers live in read-write memory and thus are susceptible to corruption
-+and allows an adversary to reach any program counter (PC) in address space. On
-+RISC-V zicfilp extension enforces a restriction on such indirect control
-+transfers:
++Return addresses live on stack and thus in read-write memory and thus are
++susceptible to corruption and allows an adversary to reach any program counter
++(PC) in address space. On RISC-V ``zicfiss`` extension provides an alternate
++stack termed as shadow stack on which return addresses can be safely placed in
++prolog of the function and retrieved in epilog. ``zicfiss`` extension makes
++following changes:
 +
-+- indirect control transfers must land on a landing pad instruction ``lpad``.
-+  There are two exception to this rule:
++- PTE encodings for shadow stack virtual memory
++  An earlier reserved encoding in first stage translation i.e.
++  PTE.R=0, PTE.W=1, PTE.X=0  becomes PTE encoding for shadow stack pages.
 +
-+  - rs1 = x1 or rs1 = x5, i.e. a return from a function and returns are
-+    protected using shadow stack (see zicfiss.rst)
++- ``sspush x1/x5`` instruction pushes (stores) ``x1/x5`` to shadow stack.
 +
-+  - rs1 = x7. On RISC-V compiler usually does below to reach function
-+    which is beyond the offset possible J-type instruction::
++- ``sspopchk x1/x5`` instruction pops (loads) from shadow stack and compares
++  with ``x1/x5`` and if un-equal, CPU raises ``software check exception`` with
++  ``*tval = 3``
 +
-+      auipc x7, <imm>
-+      jalr (x7)
++Compiler toolchain makes sure that function prologue have ``sspush x1/x5`` to
++save return address on shadow stack in addition to regular stack. Similarly
++function epilogs have ``ld x5, offset(x2)`` followed by ``sspopchk x5`` to
++ensure that popped value from regular stack matches with popped value from
++shadow stack.
 +
-+	Such form of indirect control transfer are still immutable and don't rely
-+    on memory and thus rs1=x7 is exempted from tracking and considered software
-+    guarded jumps.
++2. Shadow stack protections and linux memory manager
++-----------------------------------------------------
 +
-+``lpad`` instruction is pseudo of ``auipc rd, <imm_20bit>`` with ``rd=x0`` and
-+is a HINT nop. ``lpad`` instruction must be aligned on 4 byte boundary and
-+compares 20 bit immediate withx7. If ``imm_20bit`` == 0, CPU don't perform any
-+comparision with ``x7``. If ``imm_20bit`` != 0, then ``imm_20bit`` must match
-+``x7`` else CPU will raise ``software check exception`` (``cause=18``) with
-+``*tval = 2``.
++As mentioned earlier, shadow stack get new page table encodings and thus have
++some special properties assigned to them and instructions that operate on them
++as below:
 +
-+Compiler can generate a hash over function signatures and setup them (truncated
-+to 20bit) in x7 at callsites and function prologues can have ``lpad`` with same
-+function hash. This further reduces number of program counters a call site can
-+reach.
++- Regular stores to shadow stack memory raises access store faults. This way
++  shadow stack memory is protected from stray inadvertant writes.
 +
-+2. ELF and psABI
++- Regular loads to shadow stack memory are allowed. This allows stack trace
++  utilities or backtrace functions to read true callstack (not tampered).
++
++- Only shadow stack instructions can generate shadow stack load or shadow stack
++  store.
++
++- Shadow stack load / shadow stack store on read-only memory raises AMO/store
++  page fault. Thus both ``sspush x1/x5`` and ``sspopchk x1/x5`` will raise AMO/
++  store page fault. This simplies COW handling in kernel During fork, kernel
++  can convert shadow stack pages into read-only memory (as it does for regular
++  read-write memory) and as soon as subsequent ``sspush`` or ``sspopchk`` in
++  userspace is encountered, then kernel can perform COW.
++
++- Shadow stack load / shadow stack store on read-write, read-write-execute
++  memory raises an access fault. This is a fatal condition because shadow stack
++  should never be operating on read-write, read-write-execute memory.
++
++3. ELF and psABI
 +-----------------
 +
-+Toolchain sets up :c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_FCFI` for property
++Toolchain sets up :c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_BCFI` for property
 +:c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_AND` in notes section of the object file.
 +
-+3. Linux enabling
++4. Linux enabling
 +------------------
 +
 +User space programs can have multiple shared objects loaded in its address space
 +and it's a difficult task to make sure all the dependencies have been compiled
-+with support of indirect branch. Thus it's left to dynamic loader to enable
-+indirect branch tracking for the program.
++with support of shadow stack. Thus it's left to dynamic loader to enable
++shadow stack for the program.
 +
-+4. prctl() enabling
++5. prctl() enabling
 +--------------------
 +
-+:c:macro:`PR_SET_INDIR_BR_LP_STATUS` / :c:macro:`PR_GET_INDIR_BR_LP_STATUS` /
-+:c:macro:`PR_LOCK_INDIR_BR_LP_STATUS` are three prctls added to manage indirect
-+branch tracking. prctls are arch agnostic and returns -EINVAL on other arches.
++:c:macro:`PR_SET_SHADOW_STACK_STATUS` / :c:macro:`PR_GET_SHADOW_STACK_STATUS` /
++:c:macro:`PR_LOCK_SHADOW_STACK_STATUS` are three prctls added to manage shadow
++stack enabling for tasks. prctls are arch agnostic and returns -EINVAL on other
++arches.
 +
-+* prctl(PR_SET_INDIR_BR_LP_STATUS, unsigned long arg)
++* prctl(PR_SET_SHADOW_STACK_STATUS, unsigned long arg)
 +
-+If arg1 is :c:macro:`PR_INDIR_BR_LP_ENABLE` and if CPU supports ``zicfilp``
-+then kernel will enabled indirect branch tracking for the task. Dynamic loader
-+can issue this :c:macro:`prctl` once it has determined that all the objects
-+loaded in address space support indirect branch tracking. Additionally if there
-+is a `dlopen` to an object which wasn't compiled with ``zicfilp``, dynamic
++If arg1 :c:macro:`PR_SHADOW_STACK_ENABLE` and if CPU supports ``zicfiss`` then
++kernel will enable shadow stack for the task. Dynamic loader can issue this
++:c:macro:`prctl` once it has determined that all the objects loaded in address
++space have support for shadow stack. Additionally if there is a
++:c:macro:`dlopen` to an object which wasn't compiled with ``zicfiss``, dynamic
 +loader can issue this prctl with arg1 set to 0 (i.e.
-+:c:macro:`PR_INDIR_BR_LP_ENABLE` being clear)
++:c:macro:`PR_SHADOW_STACK_ENABLE` being clear)
 +
-+* prctl(PR_GET_INDIR_BR_LP_STATUS, unsigned long arg)
++* prctl(PR_GET_SHADOW_STACK_STATUS, unsigned long *arg)
 +
 +Returns current status of indirect branch tracking. If enabled it'll return
-+:c:macro:`PR_INDIR_BR_LP_ENABLE`
++:c:macro:`PR_SHADOW_STACK_ENABLE`.
 +
-+* prctl(PR_LOCK_INDIR_BR_LP_STATUS, unsigned long arg)
++* prctl(PR_LOCK_SHADOW_STACK_STATUS, unsigned long arg)
 +
-+Locks current status of indirect branch tracking on the task. User space may
-+want to run with strict security posture and wouldn't want loading of objects
-+without ``zicfilp`` support in it and thus would want to disallow disabling of
-+indirect branch tracking. In that case user space can use this prctl to lock
-+current settings.
++Locks current status of shadow stack enabling on the task. User space may want
++to run with strict security posture and wouldn't want loading of objects
++without ``zicfiss`` support in it and thus would want to disallow disabling of
++shadow stack on current task. In that case user space can use this prctl to
++lock current settings.
 +
-+5. violations related to indirect branch tracking
-+--------------------------------------------------
++5. violations related to returns with shadow stack enabled
++-----------------------------------------------------------
 +
-+Pertaining to indirect branch tracking, CPU raises software check exception in
-+following conditions:
++Pertaining to shadow stack, CPU raises software check exception in following
++condition:
 +
-+- missing ``lpad`` after indirect call / jmp
-+- ``lpad`` not on 4 byte boundary
-+- ``imm_20bit`` embedded in ``lpad`` instruction doesn't match with ``x7``
-+
-+In all 3 cases, ``*tval = 2`` is captured and software check exception is
-+raised (``cause=18``)
++- On execution of ``sspopchk x1/x5``, ``x1/x5`` didn't match top of shadow
++  stack. If mismatch happens then cpu does ``*tval = 3`` and raise software
++  check exception.
 +
 +Linux kernel will treat this as :c:macro:`SIGSEV`` with code =
 +:c:macro:`SEGV_CPERR` and follow normal course of signal delivery.
++
++6. Shadow stack tokens
++-----------------------
++Regular stores on shadow stacks are not allowed and thus can't be tampered
++with via arbitrary stray writes due to bugs. Method of pivoting / switching to
++shadow stack is simply writing to csr ``CSR_SSP`` changes active shadow stack.
++This can be problematic because usually value to be written to ``CSR_SSP`` will
++be loaded somewhere in writeable memory and thus allows an adversary to
++corruption bug in software to pivot to an any address in shadow stack range.
++Shadow stack tokens can help mitigate this problem by making sure that:
++
++- When software is switching away from a shadow stack, shadow stack pointer
++  should be saved on shadow stack itself and call it ``shadow stack token``
++
++- When software is switching to a shadow stack, it should read the
++  ``shadow stack token`` from shadow stack pointer and verify that
++  ``shadow stack token`` itself is pointer to shadow stack itself.
++
++- Once the token verification is done, software can perform the write to
++  ``CSR_SSP`` to switch shadow stack.
++
++Here software can be user mode task runtime itself which is managing various
++contexts as part of single thread. Software can be kernel as well when kernel
++has to deliver a signal to user task and must save shadow stack pointer. Kernel
++can perform similar procedure by saving a token on user shadow stack itself.
++This way whenever :c:macro:`sigreturn` happens, kernel can read the token and
++verify the token and then switch to shadow stack. Using this mechanism, kernel
++helps user task so that any corruption issue in user task is not exploited by
++adversary by arbitrarily using :c:macro:`sigreturn`. Adversary will have to
++make sure that there is a ``shadow stack token`` in addition to invoking
++:c:macro:`sigreturn`
++
++7. Signal shadow stack
++-----------------------
++Following structure has been added to sigcontext for RISC-V::
++
++    struct __sc_riscv_cfi_state {
++        unsigned long ss_ptr;
++    };
++
++As part of signal delivery, shadow stack token is saved on current shadow stack
++itself and updated pointer is saved away in :c:macro:`ss_ptr` field in
++:c:macro:`__sc_riscv_cfi_state` under :c:macro:`sigcontext`. Existing shadow
++stack allocation is used for signal delivery. During :c:macro:`sigreturn`,
++kernel will obtain :c:macro:`ss_ptr` from :c:macro:`sigcontext` and verify the
++saved token on shadow stack itself and switch shadow stack.
 
 -- 
 2.34.1
