@@ -1,638 +1,305 @@
-Return-Path: <linux-arch+bounces-10754-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10755-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1369A6076A
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 03:15:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3035A6079B
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 03:49:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 723BC19C2FB2
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 02:15:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D6CE19C4C8D
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 02:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C0A832C85;
-	Fri, 14 Mar 2025 02:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BFA36F30F;
+	Fri, 14 Mar 2025 02:49:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="hKgiynss"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="MO938J7e"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EED8837;
-	Fri, 14 Mar 2025 02:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741918544; cv=none; b=KBFVquWGLkGuua3GTGghiOufg6CBqJuPw+g4S6JABiAh9mtzk8AJcvjGUFzK06v8oQ0BhuaZ1ur4IB+OdFxK/DYijf3KMTd9VmpEg/l92BHhUZ+a5jThvsI8xxOSCeMlEB8k1tgpg3p2V60fQz4dDoUyoxONziXXK6+vnmQxkB8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741918544; c=relaxed/simple;
-	bh=6FoLNt32SQsmFw2HDUU7bFTjObgHdMjANGDu8e27Ch0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ONVPN4jWed8hHuPhup2tvJv6JXO3NzcqboMxhprOxnFyThrQmUyJbIR+mMMUkk7bK/233IP7OY/m8UJ3UC42Gwz8Iwr+y7K+fIVlwy21L33/b8+05Nc/0SCQ2kDkk5jlrvqiNu501e/+4B0yzr3092A6mPKfbwPTZiyujRdQXTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=hKgiynss; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.11.134] (76-14-231-56.or.wavecable.com [76.14.231.56])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 19D182033437;
-	Thu, 13 Mar 2025 19:15:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 19D182033437
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741918541;
-	bh=H7QiqwLD4prcSORdmDVIt3EMTb2eEPwqy7Jd/uto5q8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hKgiynssVngIM6CXmr7OSPnDt6X7FX+Av0WhPujd3l1AiaXkDcrsWlHN80E5Bddy+
-	 rjLjxDMHv8HASjpX5HMHDkZWsbty2VevyBO+8bEbG3AthzAxqXG7KOEATpG5OL7lj8
-	 ClMnBNw9VCuwcq71jaZWorwPgRJ+XhPtkG1g8V5g=
-Message-ID: <adfdd111-f838-48a4-b77d-4207f3ab9976@linux.microsoft.com>
-Date: Thu, 13 Mar 2025 19:15:39 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2041.outbound.protection.outlook.com [40.107.102.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B861F957;
+	Fri, 14 Mar 2025 02:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741920569; cv=fail; b=YEcudk4PELzVkGyj9FiJMGm9s43mKJddBDOS/TTk294WS6bBNpYdc/BM2aO57vyO2XfTSTgh18cZq9xz7AO9SbuuqmOKc/sNK53vQaDg/mO3/fLWfDTIFUnNMjyVrhMQuyny6Kio+/2o56bn3d6j9owrAjlkhmH0RABp+3MNtKs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741920569; c=relaxed/simple;
+	bh=2SbB/5DmYKZWKZ1UCThufa1RkyhQNGAd0bJx3/rAGoU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=KC9y+pP1hyJkkA1EMfIoRG+MvvsaI1YHlwX9IKhdnFUpanKu58GACO+bLQRJ0JOdxxqH/PUTF5oTxEhji3BSBAp162zS7s3SY31DmH9xqvmREs+mV5mDJxtxc8ceQUGjJMJYNP1lFqbb3nvyKEC5DDvyWIrVnINg3IUuYsRoIMg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=MO938J7e; arc=fail smtp.client-ip=40.107.102.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nqTYjv15mZRFGhFXIGTYReXMGy+aqS5CotS3zQzrpC41j8MBfls9qWhT5MWQjXHkMwXHWCzaS+ejJsT4i9v0s6+ncVOWESdEoUQn882Xu/+0U4Y0NTk/NwE8wZmlqv69yPUIZYaITA4SlBi/X6G0SVCRtwH1WXiQWXZKxqRpq+cpTuuorydcsuwjhg3Qb23pAfa/9euEtGliWwr/03LtOTiwZCfNRIG/UPLV137iIMdSwTiv2MLXVZis+6u6NacWDdRsa8UgfRelriC50+MRjTckPM72FvjKj2oQ23qVH+MeuXirlDUQ1AnxG5tL8DjsAMkcfzYftC/WCDtUazf6wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DHql7R9L+oDmcvs2af4YLdsOV2gR04X6Az5uS5aafow=;
+ b=psCfHllD+O46J/TQ177Wq402pA5Xa63NqSFI/CJ97qEJ7ruxCV6SyDTNVy1lrB5Xp3oxp7OpfbUkbvDLSE5/zrERDPj4G9SJh2S9flsrWT0qan4/r2h4kahY6m8Q37cDlLMH7TAFb3JFfuvW2sRDJboNAX6qNXlW0LgdrapfKixZsU5cKCkpw/RKBYsG9hxzGcTIEPEi3PJYvfy1yhg3XUdWt9WNcGrCBgy97USdSuc7IlXrBneBEcgfUvheXeWQF9ccqt1w/yGeZF4EfY/Oy1wM23LMiBQel+fmVe1AGiYYIQf0SIvr563xq08JiyXcCS3DWe+cSMQqpZxCV+4rvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DHql7R9L+oDmcvs2af4YLdsOV2gR04X6Az5uS5aafow=;
+ b=MO938J7eBO9LzhsryyZtihYDTCmeYpR869Ky8oDZk90E0EC8fN4/YME/S28ntc3YGW98b3zRCaS13GgGBXRaEpkkcc+CgWe+sm6fuFz+irs2+P06ULbSlFyddBJSyapcywX8I+2bN0qGNg99AmRITabraHgBC0Jyj0PZfh3+BcA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
+ by SN7PR12MB7787.namprd12.prod.outlook.com (2603:10b6:806:347::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Fri, 14 Mar
+ 2025 02:49:22 +0000
+Received: from CH3PR12MB9194.namprd12.prod.outlook.com
+ ([fe80::53fb:bf76:727f:d00f]) by CH3PR12MB9194.namprd12.prod.outlook.com
+ ([fe80::53fb:bf76:727f:d00f%3]) with mapi id 15.20.8534.027; Fri, 14 Mar 2025
+ 02:49:21 +0000
+Message-ID: <59bda561-2a21-494d-983f-2a1e647def6c@amd.com>
+Date: Fri, 14 Mar 2025 13:49:08 +1100
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
+Content-Language: en-US
+To: Xu Yilun <yilun.xu@linux.intel.com>
+Cc: x86@kernel.org, kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Tom Lendacky <thomas.lendacky@amd.com>,
+ Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Robin Murphy <robin.murphy@arm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Kevin Tian <kevin.tian@intel.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Dan Williams <dan.j.williams@intel.com>, Christoph Hellwig <hch@lst.de>,
+ Nikunj A Dadhania <nikunj@amd.com>, Michael Roth <michael.roth@amd.com>,
+ Vasant Hegde <vasant.hegde@amd.com>, Joao Martins
+ <joao.m.martins@oracle.com>, Nicolin Chen <nicolinc@nvidia.com>,
+ Lu Baolu <baolu.lu@linux.intel.com>,
+ Steve Sistare <steven.sistare@oracle.com>, Lukas Wunner <lukas@wunner.de>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
+ iommu@lists.linux.dev, linux-coco@lists.linux.dev, Zhi Wang
+ <zhiw@nvidia.com>, "Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
+References: <20250218111017.491719-1-aik@amd.com>
+ <20250218111017.491719-15-aik@amd.com>
+ <Z9K68m8iq3cDXShL@yilunxu-OptiPlex-7050>
+From: Alexey Kardashevskiy <aik@amd.com>
+In-Reply-To: <Z9K68m8iq3cDXShL@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MEAPR01CA0038.ausprd01.prod.outlook.com (2603:10c6:201::26)
+ To CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 10/10] Drivers: hv: Introduce mshv_root module to
- expose /dev/mshv to VMMs
-To: Michael Kelley <mhklinux@outlook.com>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
- "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Cc: "kys@microsoft.com" <kys@microsoft.com>,
- "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>,
- "decui@microsoft.com" <decui@microsoft.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
- <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
- "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "hpa@zytor.com" <hpa@zytor.com>,
- "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
- "joro@8bytes.org" <joro@8bytes.org>,
- "robin.murphy@arm.com" <robin.murphy@arm.com>, "arnd@arndb.de"
- <arnd@arndb.de>,
- "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
- "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
- "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
- "mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>,
- "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
- "apais@linux.microsoft.com" <apais@linux.microsoft.com>,
- "Tianyu.Lan@microsoft.com" <Tianyu.Lan@microsoft.com>,
- "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "vkuznets@redhat.com" <vkuznets@redhat.com>,
- "prapal@linux.microsoft.com" <prapal@linux.microsoft.com>,
- "muislam@microsoft.com" <muislam@microsoft.com>,
- "anrayabh@linux.microsoft.com" <anrayabh@linux.microsoft.com>,
- "rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org"
- <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
-References: <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-11-git-send-email-nunodasneves@linux.microsoft.com>
- <SN6PR02MB4157C3F431CD26EDA05E4AD4D4D32@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Language: en-US
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB4157C3F431CD26EDA05E4AD4D4D32@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB9194:EE_|SN7PR12MB7787:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4f72cb2e-59ce-445e-a05a-08dd62a2d256
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dStBeEZMaVNBZy92TlUxck1pbFBXRkVzNXgvTktFL3ZXS3ZtL0V5ajdRV3Iw?=
+ =?utf-8?B?Rk9FWGt0Q2UyelJzQWxBZ0xPWHIxRGwyVXNHSGNHSW04NU5FUTkrOTMwOEZY?=
+ =?utf-8?B?TGkwTzNDb0R3Q1UvZ1JCR2FUeXNjQ2hTRk55MndCTVdTZjZGclRyVzV3eTdP?=
+ =?utf-8?B?Tmg4aVVwWktzd3RDZ083NU1rSllsT1IxQk81ZUtRSWVTbDJrZ1hWby9nbzVl?=
+ =?utf-8?B?TkY0WldZektHN2ZpVXRyTm9aYmJIdGNyYTdCU2xheFk4VEUrV1VLVHJmTnBi?=
+ =?utf-8?B?RWpYbnorYS9WaWxCOFc3SmJmSnF3OHFTN2E4UGU0bVpMUWxPUFBZczJqbDkv?=
+ =?utf-8?B?eEFpTm1DK3dpRWJXZ0k3WGxsM3NobDZXMUcvSVZOWVE0bW92VkxIRTRnMEZQ?=
+ =?utf-8?B?d25YSUw3QzMvQ0hvL0kzTi90ZnFKUDVDMm83RkprRzRIREpmMkZhZjFXSVpC?=
+ =?utf-8?B?VDJNbmlpb2F3MExXamFHWTRCOHh5dVE2b1lsVmEvUHNRa3ZDcDdqYXdLNGxh?=
+ =?utf-8?B?TUcxK2dsMGI2c1BOL3pkcmgxOHlkTDkwN3ZRa3F0aUNMUGFWeHF3QW94aGht?=
+ =?utf-8?B?Vlc4NzRHLzZZS21mUXp1SnJKQlMvVVVydVhmT0RlaWd6cnNvNUlnaUhvZ3Ri?=
+ =?utf-8?B?c3hVZURhNDJNRGYwRlg0NTRWdE5xd2dwelJDdTJ6OW5mZWdTNkNqUnU4azFP?=
+ =?utf-8?B?MGlqOW5YLzJOOG1SS3EvekpwS0pYL0l4UDlKM29LQnhpYi9hSE82eDNYNG02?=
+ =?utf-8?B?VGU1b1NMekFCK1VhTVlocVgwbjFJM01sbmdFMlNKUlY0OWFJS0cxcnNxVFhD?=
+ =?utf-8?B?eVBaSHBlb3NzYVN4SWdVektyaFNNa1RBSFBza1ZHKy9UTGpRamoxdE5VclIw?=
+ =?utf-8?B?ZW4reEVWd3BTSE1uOUhvOEQyNzEzakVTY09IMWtWSjZyMDYzSVk3QWVQNmdL?=
+ =?utf-8?B?S1NyOXg2Sm1hUTZvWHF0VDZIN2tUMnQ2QWFGMW5xb1dGKy84VHFXWnRrY0ZD?=
+ =?utf-8?B?WVFCcWZWaG5sVmFzVFhUNStBeGxoRjZMY3dOdEhTVHJFU0VSYiszNEluTVIy?=
+ =?utf-8?B?dzRYMUUrdEpUSWphbFU1SWpwdlhDNEpPSWxOYVlCRHpMNmpwL3NVNURWZmtt?=
+ =?utf-8?B?c0M2VEZJczVLR09PaEIvNkJnOGFrbXBURnB0QzVxcjdmcGphM2pPSXN1Ump0?=
+ =?utf-8?B?dDF5YWtySWZjcTU2WGRyTm1lWGY2Q0lYSjcvckZxU1hvMElwU0tnRm15ZW5p?=
+ =?utf-8?B?bmxLYVIrMC9ZRkdJZnY0SVljNWY3L1cyNDdSWHNMbEN6czB0bllLLy9HYzRj?=
+ =?utf-8?B?dVRHZUxJYnA3dmFqNTNsaFV2eldBTi9iK1BMTzFzOGF0bm9pK3A5WFlJNHhL?=
+ =?utf-8?B?MlRPdUthUlRFSTFYUEovL0E0RkFwdnZTT1E5Y3d3QmRDODdKVEdlalBtQUhR?=
+ =?utf-8?B?UUt6dC9JaFZnK1BKWkFkRDVpeEZvVDFlYVpTWGovVEorLzVMQXdWMlg2UE1a?=
+ =?utf-8?B?TTJmRnVEMnJxZkh4L2tsdnRhY05zaHVjWkxGM3ZqU0pWaTJkNlNZMVZIdUh3?=
+ =?utf-8?B?KzFEbW0vMnJpTlBYem5UTHRhdE1HcmdpSnFZek1MZTRWVzVSYjlHdVJVVWRP?=
+ =?utf-8?B?NHdCSThnb3dadUxQbWRFazIvaDRMejFid1pOMWdsMXBxNklIVkhyRkZNU2tH?=
+ =?utf-8?B?YTdjL3hxaHJYejhzMWhaYlROTXMydVp0UUNBMmx4d0trVnY1dVVQbEpUcW9l?=
+ =?utf-8?B?Z0JtSGFKRklNOTZaQkxaREJmYnlVd3pZWUFJRmdlWGdSMEtVZ2tzR2VZZDZZ?=
+ =?utf-8?B?K210clVBMWhwZi9xdGNZNDU1Y0dkNU9sbEdNbFc5ZmtNdWU3YjlMUTMza21F?=
+ =?utf-8?Q?i36ITORt9Vu/3?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9194.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZXdYOEw2eEtLOVN1dy9qZzduR21SKzgraXRlNmhTNFRaclZ4S3BCYWFpRVB5?=
+ =?utf-8?B?MHBHL2NxZUxZYXl2TnNTVHNHdEVpVXBMUmRHR2JNTFNxc3RhcGpxQzRoM1p5?=
+ =?utf-8?B?a1FqN3M5cjAzN2JqTUVxc1Q3SnZPQUlFNVlMcHl4emFpUFl1VWNRYVJwVjdj?=
+ =?utf-8?B?M0hyTGJ2TkwwSlVrTExoNTdVYnpPbkk0U1dLbHlSTXJHdmZOYWd4TDB1amU2?=
+ =?utf-8?B?dzNTVm5YOGZvenQ4M0dHb3dVNm5yQThLZU1TVFV0N2hUQ1hDNE9GQlVka1NR?=
+ =?utf-8?B?V2tpMndIcnZVNGRzYnJGMVIxUDlmWTBrNWxmMkN1SFpQcjB2NkpQVzIxQ0dI?=
+ =?utf-8?B?V3pncXJyYmdENVIvNlJFS3lOR1BLck1IVy81ZDVDaGRHVzNTQmdEMUxzQ1Bm?=
+ =?utf-8?B?SERER0hQb3o4a3BPdXdsR2Z3ZFdFL3dNNHVQT2d5U3VTL3ArVHJhMlc2QnJX?=
+ =?utf-8?B?UHBibUdrOWhtakEzZkM4SGlGNmtEWEdabWVDbUJYbW1NY1NUaXpzUE1rOUhQ?=
+ =?utf-8?B?K3dVSnEra0dWNk8vYU9ybXBrZVJVTndCWEpRbWswRU9NcWVmSXZkR3U2ZnBY?=
+ =?utf-8?B?a3dEVmhNMnl4R241S1FiSE80N0JEdHlaaTk2TC8yWnpWeDZRZkdNMjhaeEdj?=
+ =?utf-8?B?OEI2blB5RnB6cDJFaFpoQWdEbk0xaUUveDVPKzQyM1JPejVCUGo1Q0FYb0Qx?=
+ =?utf-8?B?eTVoSGtqalNJMngyMkYvUU1WSTU2bGpaSVpCQzFma1hZYSttdEJYL3V4WnVj?=
+ =?utf-8?B?N1FvVkNWb3ArOENxdU1aUXZsb0xhek5xejg5THV2ZzAzUGVBYXQ4dnZnL21L?=
+ =?utf-8?B?amtZQTFQNDJDL2dGNTZnNHhPUkVsZ3VnUXJlVzd6eTZ0OVJTcVV6RVNiV2NK?=
+ =?utf-8?B?Mzk2cnFWRnZYMFBNREtQaHY5cTRFb1ZrdWN6UU55Uk51cjdpb2JUSUcrQnQ0?=
+ =?utf-8?B?aGdHaHlPbFEyeGtCM2xDVERCWDl2S0lpRmo1d09wdzgxN1hzSmZWclRhTmla?=
+ =?utf-8?B?b1hCd2k5NUtMaUFtMDJUTVNNQ0g3ZTMxUHlJVWFTSGgxc0F3SU9Ob0pUTmdw?=
+ =?utf-8?B?dW5jSm5IUUJjYnpJRmttbThraUlLalo1bDUrSFFpTVhabzR6K1J1UUJQdklL?=
+ =?utf-8?B?YTZIUnRsblVXUjNQL0FSNUQ3UisxMHRWeVJ5ZjIrU0hNQVdnd0FyVmVLa3lJ?=
+ =?utf-8?B?SHN5MXN6MzllME9EV012WHFKVGx0dDJvMnRMbUNKU1NGSjBuK1MrTXpzMHFt?=
+ =?utf-8?B?akJJUHZSV09NenhURklDTXlnY2t0Z2xOUURvRG5HQzZJR3lieFRIMkZVQ0Y0?=
+ =?utf-8?B?cXo2cUZqZXFzZE5VYTV2b3A1QjRsbkVpb25jNTlnNHpSdmtWTWVkSjk5dXVT?=
+ =?utf-8?B?T1N5cW5sVXdPZ1haQW5ua0NSdmQ2SSs3WTNVbG9MMjFlL3pMMVdWZnd1R0Iz?=
+ =?utf-8?B?NlRMS2lrSW16QzFWY1BlRU14U1VqbnFqcUlvSGJSRjBPT2ZnamhidkdUWmVi?=
+ =?utf-8?B?bDE4aFlCWGJKanZ1dElGL3prblB6Z01iZGlXWHNZUEhHYzZHeVF6Sjh3ZElp?=
+ =?utf-8?B?Vm9aNml3dTRrM0ZkOThmSE9IaG56aDE2dkkxdmZJbWtkaS9Qdlptd3I2aHZn?=
+ =?utf-8?B?UXpOSFdjVmVWY1YrRWQvVHptMmpjZUlwTGhnMWtDNHJJRTlpYVdmS1lRZ3Vy?=
+ =?utf-8?B?ZjNoaVpXeDhVMHd3L2kvbkt1M0ZZaU91T2N2LzhkKzRmek55NDE5V1cvWjdH?=
+ =?utf-8?B?ZTRTbUkyVXlMb2IvTmM4RFFoZWxWSWlRaTIwODFCcThtcWkveG1OandST01K?=
+ =?utf-8?B?SFBBWDZqQ1NuZUtzazcrTlFuQkJ4VE9USWRBRkQxMFgxYmtLcy9NODhrWm5T?=
+ =?utf-8?B?aFFZV29vUGRVL2hsQkp3a29hRDJYS0tVcnpMMmFmWkU4R0ozYit4bmNGcklW?=
+ =?utf-8?B?YzRidkdYS0pRR1E4dXU2MWVUVFg0eStXZnJMc29zY2srVUZNY3pEU3VyeXpo?=
+ =?utf-8?B?WlBaTDlqYWVrNVJNYWRidkp3TFhrS1IzK0hLeDVpRGkrdUs3M3BtRjFmN2ti?=
+ =?utf-8?B?ZXcrcmhuVGxvaUFBRHE1dXFlaHpEV0lTdndBb09VdkQyc0lxYmlLNERzRk5W?=
+ =?utf-8?Q?fF4TF4TQfyBDwKIoYfrL76VaW?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f72cb2e-59ce-445e-a05a-08dd62a2d256
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB9194.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2025 02:49:21.1372
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /lYf8PUEJay1i7im2iOWyVix76RXzNQ2ZbqlfkjYms1jLXR+w1Gki5rWrcwfgybCPb0MxOfzr8BRK0jv05Ojvw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7787
 
-On 3/13/2025 9:43 AM, Michael Kelley wrote:
-> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Wednesday, February 26, 2025 3:08 PM
->>
-> 
-> I've done a partial review of the code in this patch.  See comments inline
-> as usual.
-> 
-> I'd like to still review most of the code in mshv_root_main.c, and maybe
-> some of mshv_synic.c and include/uapi/linux/mshv.c. I'll send a separate
-> email with those comments when I complete them. The patch is huge, so
-> I'm breaking my review comments into two parts.
-> 
-> I've glanced through mshv_eventfd.c, mshv_eventfd.h, and mshv_irq.c,
-> but I don't have enough knowledge/expertise in these areas to add any
-> useful comments, so I'm not planning to review them further.
-> 
-Thanks for taking a look. Just so you know, I was getting ready to post v6 of
-this patchset when I saw this email. So not all the comments will be addressed
-in the next version, but I've noted them and I will keep an eye out for the
-second part if you send it after v6 is posted.
 
-<snip>
->> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst
->> b/Documentation/userspace-api/ioctl/ioctl-number.rst
->> index 6d1465315df3..66dcfaae698b 100644
->> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
->> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
->> @@ -370,6 +370,8 @@ Code  Seq#    Include File                                           Comments
->>  0xB7  all    uapi/linux/remoteproc_cdev.h                            <mailto:linux-
->> remoteproc@vger.kernel.org>
->>  0xB7  all    uapi/linux/nsfs.h                                       <mailto:Andrei Vagin
->> <avagin@openvz.org>>
->>  0xB8  01-02  uapi/misc/mrvl_cn10k_dpi.h                              Marvell CN10K DPI driver
->> +0xB8  all    uapi/linux/mshv.h                                       Microsoft Hyper-V /dev/mshv driver
-> 
-> Hmmm. Doesn't this mean that the mshv ioctls overlap with the Marvell
-> CN10K DPI ioctls? Is that intentional? I thought the goal of the central
-> registry in ioctl-number.rst is to avoid overlap.
-> 
-Yes, they overlap. In practice it really doesn't matter IMO - IOCTL numbers
-are only interpreted by the driver of the device that the ioctl() syscall
-is made on.
 
-I believe the whole scheme to generate unique IOCTL numbers and try not to
-overlap them was is some case I'm not familiar with - something like
-multiple drivers handling IOCTLs on the same device FD? And maybe it's handy
-in debugging if you see an IOCTL number in isolation and want to know where
-it comes from?
-
-On a practical note, we have been using this IOCTL range for some time
-in other upstream code like our userspace rust library which interfaces with
-this driver (https://github.com/rust-vmm/mshv). So it would also be nice to
-keep that all working as much as possible with the kernel code that is on
-this mailing list.
-
-<snip>>> +#endif /* _MSHV_H */
->> diff --git a/drivers/hv/mshv_common.c b/drivers/hv/mshv_common.c
->> new file mode 100644
->> index 000000000000..d97631dcbee1
->> --- /dev/null
->> +++ b/drivers/hv/mshv_common.c
->> @@ -0,0 +1,161 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2024, Microsoft Corporation.
->> + *
->> + * This file contains functions that are called from one or more modules: ROOT,
->> + * DIAG, or VTL. If any of these modules are configured to build, this file is
-> 
-> What are the DIAG and VTL modules?  I see only a root module in the Makefile.
-> 
-Ah, yep, they are not in this patchset but will follow. I can remove thereferences to them here, and make this comment future tense: "functions that WILL
-be called from one or more modules".
-
-<snip>>> +
->> +struct mshv_vp {
->> +	u32 vp_index;
->> +	struct mshv_partition *vp_partition;
->> +	struct mutex vp_mutex;
->> +	struct hv_vp_register_page *vp_register_page;
->> +	struct hv_message *vp_intercept_msg_page;
->> +	void *vp_ghcb_page;
->> +	struct hv_stats_page *vp_stats_pages[2];
->> +	struct {
->> +		atomic64_t vp_signaled_count;
->> +		struct {
->> +			u64 intercept_suspend: 1;
->> +			u64 root_sched_blocked: 1; /* root scheduler only */
->> +			u64 root_sched_dispatched: 1; /* root scheduler only */
->> +			u64 reserved: 62;
-> 
-> Hmmm.  This looks like 65 bits allocated in a u64.
-> 
-Indeed it is, good catch
-
->> +
->> +	/*
->> +	 * Since MSHV does not support more than one async hypercall in flight
-> 
-> Wording is a bit messed up.  Drop the "Since"?
-> 
-Yep, thanks
-
->> +	 * for a single partition. Thus, it is okay to define per partition
->> +	 * async hypercall status.
->> +	 */
-<snip>
->> +
->> +extern struct mshv_root mshv_root;
->> +extern enum hv_scheduler_type hv_scheduler_type;
->> +extern u8 __percpu **hv_synic_eventring_tail;
-> 
-> Per comments on an earlier patch, the __percpu is in the wrong place.
-> 
-Thanks, will fix here too.
-<snip>>> +int hv_call_create_partition(u64 flags,
->> +			     struct hv_partition_creation_properties creation_properties,
->> +			     union hv_partition_isolation_properties isolation_properties,
->> +			     u64 *partition_id)
+On 13/3/25 22:01, Xu Yilun wrote:
+>> +int iommufd_vdevice_tsm_bind_ioctl(struct iommufd_ucmd *ucmd)
 >> +{
->> +	struct hv_input_create_partition *input;
->> +	struct hv_output_create_partition *output;
->> +	u64 status;
->> +	int ret;
->> +	unsigned long irq_flags;
+>> +	struct iommu_vdevice_tsm_bind *cmd = ucmd->cmd;
+>> +	struct iommufd_viommu *viommu;
+>> +	struct iommufd_vdevice *vdev;
+>> +	struct iommufd_device *idev;
+>> +	struct tsm_tdi *tdi;
+>> +	int rc = 0;
 >> +
->> +	do {
->> +		local_irq_save(irq_flags);
->> +		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
->> +		output = *this_cpu_ptr(hyperv_pcpu_output_arg);
->> +
->> +		memset(input, 0, sizeof(*input));
->> +		input->flags = flags;
->> +		input->compatibility_version = HV_COMPATIBILITY_21_H2;
->> +
->> +		memcpy(&input->partition_creation_properties, &creation_properties,
->> +		       sizeof(creation_properties));
+>> +	viommu = iommufd_get_viommu(ucmd, cmd->viommu_id);
 > 
-> This is an example of a generic question/concern that occurs in several places. By
-> doing a memcpy into the hypercall input, the assumption is that the creation
-> properties supplied by the caller have zeros in all the reserved or unused fields.
-> Is that a valid assumption?
+> Why need user to input viommu_id? And why get viommu here?
+> The viommu is always available after vdevice is allocated, is it?
+
+
+I thought it may be a good idea to hold a reference while doing 
+tsm_tdi_bind(), likely not needed.
+
+> int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
+> {
+> 	...
 > 
-When the entire struct is provided as a function parameter, I think it's a valid
-assumption that that struct is initialized correctly by the caller.
-
-The alternative (taking it to an extreme, in my opinion) is that we go through
-each field in the parameters and assign them all individually, which could be quite
-a lot of fields. E.g. going through all the bits in these structs with 60+ bitfields
-and re-setting them here to be sure the reserved bits are 0.
-
+> 	vdev->viommu = viommu;
+> 	refcount_inc(&viommu->obj.users);
+> 	...
+> }
+> 
+>> +	if (IS_ERR(viommu))
+>> +		return PTR_ERR(viommu);
 >> +
->> +		memcpy(&input->isolation_properties, &isolation_properties,
->> +		       sizeof(isolation_properties));
->> +
->> +		status = hv_do_hypercall(HVCALL_CREATE_PARTITION,
->> +					 input, output);
-<snip>>> +/* Ask the hypervisor to map guest ram pages or the guest mmio space */
->> +static int hv_do_map_gpa_hcall(u64 partition_id, u64 gfn, u64 page_struct_count,
->> +			       u32 flags, struct page **pages, u64 mmio_spa)
->> +{
->> +	struct hv_input_map_gpa_pages *input_page;
->> +	u64 status, *pfnlist;
->> +	unsigned long irq_flags, large_shift = 0;
->> +	int ret = 0, done = 0;
->> +	u64 page_count = page_struct_count;
->> +
->> +	if (page_count == 0 || (pages && mmio_spa))
->> +		return -EINVAL;
->> +
->> +	if (flags & HV_MAP_GPA_LARGE_PAGE) {
->> +		if (mmio_spa)
->> +			return -EINVAL;
->> +
->> +		if (!HV_PAGE_COUNT_2M_ALIGNED(page_count))
->> +			return -EINVAL;
->> +
->> +		large_shift = HV_HYP_LARGE_PAGE_SHIFT - HV_HYP_PAGE_SHIFT;
->> +		page_count >>= large_shift;
+>> +	idev = iommufd_get_device(ucmd, cmd->dev_id);
+>> +	if (IS_ERR(idev)) {
+>> +		rc = PTR_ERR(idev);
+>> +		goto out_put_viommu;
 >> +	}
 >> +
->> +	while (done < page_count) {
->> +		ulong i, completed, remain = page_count - done;
->> +		int rep_count = min(remain, HV_MAP_GPA_BATCH_SIZE);
->> +
->> +		local_irq_save(irq_flags);
->> +		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
->> +
->> +		input_page->target_partition_id = partition_id;
->> +		input_page->target_gpa_base = gfn + (done << large_shift);
->> +		input_page->map_flags = flags;
->> +		pfnlist = input_page->source_gpa_page_list;
->> +
->> +		for (i = 0; i < rep_count; i++)
->> +			if (flags & HV_MAP_GPA_NO_ACCESS) {
->> +				pfnlist[i] = 0;
->> +			} else if (pages) {
->> +				u64 index = (done + i) << large_shift;
->> +
->> +				if (index >= page_struct_count) {
-> 
-> Can this test ever be true?  It looks like the pages array must
-> have space for each 4K page even if mapping in 2Meg granularity.> But only every 512th entry in the pages array is looked at
-> (which seems a little weird). But based on how rep_count is set up,
-> I don't see how the algorithm could go past the end of the pages
-> array.
-> 
-I don't think the test can actually be true - IIRC I wrote it as a kind
-of "is my math correct?" sanity check, and there was a pr_err() or a
-WARN()here in a previous iteration of the code.
+>> +	vdev = container_of(iommufd_get_object(ucmd->ictx, cmd->vdevice_id,
+>> +					       IOMMUFD_OBJ_VDEVICE),
+>> +			    struct iommufd_vdevice, obj);
+>> +	if (IS_ERR(idev)) {
+>                     ^
+> vdev?
 
-The large page list is a bit weird - When we allocate the large pages in
-the kernel, we get all the (4K) page structs for that range back from the
-kernel, and we hang onto them. When mapping the large pages into the
-hypervisor we just have to map the PFN of the first page of each 2M page,
-hence the skipping.
+yes.
 
-Now I'm thinking about it again, maybe we can discard most of the 4K page
-structs the kernel gives back and keep it as a packed array of the "head"
-pages which are all we really need (and then also simplify this mapping
-code and save some memory).
-
-The current code was just the simplest way to add the large page
-functionality on top of what we already had, but looks like it could
-probably be improved.
-
->> +					ret = -EINVAL;
->> +					break;
->> +				}
->> +				pfnlist[i] = page_to_pfn(pages[index]);
->> +			} else {
->> +				pfnlist[i] = mmio_spa + done + i;
->> +			}
->> +		if (ret)
->> +			break;
 > 
-> This test could also go away if the ret = -EINVAL error above can't
-> happen.
-> 
-Ack
-<snip>
->> +
->> +/* Ask the hypervisor to map guest mmio space */
->> +int hv_call_map_mmio_pages(u64 partition_id, u64 gfn, u64 mmio_spa, u64 numpgs)
->> +{
->> +	int i;
->> +	u32 flags = HV_MAP_GPA_READABLE | HV_MAP_GPA_WRITABLE |
->> +		    HV_MAP_GPA_NOT_CACHED;
->> +
->> +	for (i = 0; i < numpgs; i++)
->> +		if (page_is_ram(mmio_spa + i))
-> 
-> FWIW, doing this check one-page-at-a-time is somewhat expensive if numpgs
-> is large.  The underlying data structures should support doing a single range
-> check, but I haven't looked at whether functions exist to do such a range check.
-> 
-Indeed - I'll make a note to investigate, thanks.
-
->> +			return -EINVAL;
->> +
->> +	return hv_do_map_gpa_hcall(partition_id, gfn, numpgs, flags, NULL,
->> +				   mmio_spa);
->> +}
->> +
->> +int hv_call_unmap_gpa_pages(u64 partition_id, u64 gfn, u64 page_count_4k,
->> +			    u32 flags)
->> +{
->> +	struct hv_input_unmap_gpa_pages *input_page;
->> +	u64 status, page_count = page_count_4k;
->> +	unsigned long irq_flags, large_shift = 0;
->> +	int ret = 0, done = 0;
->> +
->> +	if (page_count == 0)
->> +		return -EINVAL;
->> +
->> +	if (flags & HV_UNMAP_GPA_LARGE_PAGE) {
->> +		if (!HV_PAGE_COUNT_2M_ALIGNED(page_count))
->> +			return -EINVAL;
->> +
->> +		large_shift = HV_HYP_LARGE_PAGE_SHIFT - HV_HYP_PAGE_SHIFT;
->> +		page_count >>= large_shift;
+>> +		rc = PTR_ERR(idev);
+>> +		goto out_put_dev;
 >> +	}
 >> +
->> +	while (done < page_count) {
->> +		ulong completed, remain = page_count - done;
->> +		int rep_count = min(remain, HV_MAP_GPA_BATCH_SIZE);
+>> +	tdi = tsm_tdi_get(idev->dev);
 > 
-> Using HV_MAP_GPA_BATCH_SIZE seems a little weird here since there's
-> no input array and hence no constraint based on keeping input args to
-> just one page. Is it being used as an arbitrary limit so the rep_count
-> passed to the hypercall isn't "too large" for some definition of "too large"?
-> If that's the case, perhaps a separate #define and a comment would
-> make sense. I kept trying to figure out how the batch size for unmap was
-> related to the map hypercall, and I don't think there is any relationship.
+> And do we still need dev_id for the struct device *? vdevice also has
+> this info.
+
+Oh, likely no. Probably leftover from multiple rebases, or me not fully 
+following what nature these IDs are of (some are just numbers, some are 
+guest bdfn).
+
+
+> int iommufd_vdevice_alloc_ioctl(struct iommufd_ucmd *ucmd)
+> {
+>          ...
+> 	vdev->dev = idev->dev;
+> 	get_device(idev->dev);
+>          ...
+> }
 > 
-I think batching this was intentional so that we can be sure to re-enable
-interrupts periodically when unmapping an entire VM's worth of memory. That
-said, as you know the hypercall will return if it takes longer than a certain
-amount of time so I guess that is "built-in" in some sense.
-
-I think keeping the batching, but #defining a specific value for unmap as you
-suggest is a good idea.
-
-I'd be inclined to use a similar number (something like 512).
-
->> +
->> +		local_irq_save(irq_flags);
->> +		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
->> +
->> +		input_page->target_partition_id = partition_id;
->> +		input_page->target_gpa_base = gfn + (done << large_shift);
->> +		input_page->unmap_flags = flags;
->> +		status = hv_do_rep_hypercall(HVCALL_UNMAP_GPA_PAGES, rep_count,
->> +					     0, input_page, NULL);
->> +		local_irq_restore(irq_flags);
->> +
->> +		completed = hv_repcomp(status);
->> +		if (!hv_result_success(status)) {
->> +			ret = hv_result_to_errno(status);
->> +			break;
->> +		}
->> +
->> +		done += completed;
+> 
+>> +	if (!tdi) {
+>> +		rc = -ENODEV;
+>> +		goto out_put_vdev;
 >> +	}
 >> +
->> +	return ret;
->> +}
+>> +	rc = tsm_tdi_bind(tdi, vdev->id, cmd->kvmfd);
+>> +	if (rc)
+>> +		goto out_put_tdi;
 >> +
->> +int hv_call_get_gpa_access_states(u64 partition_id, u32 count, u64 gpa_base_pfn,
->> +				  union hv_gpa_page_access_state_flags state_flags,
->> +				  int *written_total,
->> +				  union hv_gpa_page_access_state *states)
->> +{
->> +	struct hv_input_get_gpa_pages_access_state *input_page;
->> +	union hv_gpa_page_access_state *output_page;
->> +	int completed = 0;
->> +	unsigned long remaining = count;
->> +	int rep_count, i;
->> +	u64 status;
->> +	unsigned long flags;
+>> +	vdev->tsm_bound = true;
 >> +
->> +	*written_total = 0;
->> +	while (remaining) {
->> +		local_irq_save(flags);
->> +		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
->> +		output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
->> +
->> +		input_page->partition_id = partition_id;
->> +		input_page->hv_gpa_page_number = gpa_base_pfn + *written_total;
->> +		input_page->flags = state_flags;
->> +		rep_count = min(remaining, HV_GET_GPA_ACCESS_STATES_BATCH_SIZE);
->> +
->> +		status = hv_do_rep_hypercall(HVCALL_GET_GPA_PAGES_ACCESS_STATES, rep_count,
->> +					     0, input_page, output_page);
->> +		if (!hv_result_success(status)) {
->> +			local_irq_restore(flags);
->> +			break;
->> +		}
->> +		completed = hv_repcomp(status);
->> +		for (i = 0; i < completed; ++i)
->> +			states[i].as_uint8 = output_page[i].as_uint8;
->> +
->> +		states += completed;
->> +		*written_total += completed;
->> +		remaining -= completed;
->> +		local_irq_restore(flags);
-> 
-> FWIW, this local_irq_restore() could move up three lines to before the progress
-> accounting is done.
-> 
-Good point, thanks.
-<snip>
->> +		memset(input, 0, sizeof(*input));
->> +		memset(output, 0, sizeof(*output));
-> 
-> Why is the output set to zero?  I would think Hyper-V is responsible for
-> ensuring that the output is properly populated, with unused fields/areas
-> set to zero.
-> 
-Overabundance of caution, I think! It doesn't need to be zeroed AFAIK.
-
-I recently did a some cleanup (in our internal tree) to make sure we are
-memset()ing the input and *not* memset()ing the output everywhere, but
-it didn't make it into this series. There are a few more places like this.
-
-<snip>
->> +
->> +int hv_call_set_vp_state(u32 vp_index, u64 partition_id,
->> +			 /* Choose between pages and bytes */
->> +			 struct hv_vp_state_data state_data, u64 page_count,
-> 
-> The size of "struct hv_vp_state_data" looks to be 24 bytes (3 64-bit words).
-> Is there a reason to pass this by value instead of as a pointer? I guess it works
-> like this, but it seems atypical.
-> 
-No particular reason. I'm guessing the compiler will pass this by copying it to this
-function's stack frame - 24 bytes is still rather small so I don't think it's an issue.
-
-I'm also under the impression the compiler may optimize this to a pointer since it is
-not modified?
-
-I usually only pass a pointer (for read-only values) when it's something really
-large that I *definitely* don't want to be copied on the stack (like, 100 bytes?).
-In that case I probably only have a pointer to vmalloc'd/kalloc()'d memory anyway.
-
-<snip>
->> +	local_irq_save(flags);
->> +	status = hv_do_fast_hypercall8(HVCALL_CLEAR_VIRTUAL_INTERRUPT,
->> +				       partition_id) &
->> +			HV_HYPERCALL_RESULT_MASK;
-> 
-> This "anding" with HV_HYPERCALL_RESULT_MASK should be removed.
-> 
-Yep, thanks.
-
->> +	local_irq_restore(flags);
-> 
-> The irq save/restore isn't needed here since this is a fast hypercall and
-> per-cpu arg memory is not used.
-> 
-Agreed, will remove these for the fast hypercall sites.
-
-<snip>
->> +		input->proximity_domain_info = hv_numa_node_to_pxm_info(node);
->> +		status = hv_do_hypercall(HVCALL_CREATE_PORT, input, NULL) &
->> +			 HV_HYPERCALL_RESULT_MASK;
-> 
-> Use the hv_status checking macros instead of and'ing with
-> HV_HYPERCALL_RESULT_MASK.
-> 
-Thanks, these need a bit of cleanup.
-
-<snip>
->> +	status = hv_do_fast_hypercall16(HVCALL_DELETE_PORT,
->> +					input.as_uint64[0],
->> +					input.as_uint64[1]) &
->> +			HV_HYPERCALL_RESULT_MASK;
->> +	local_irq_restore(flags);
-> 
-> Same a previous comment about and'ing.  And irq save/restore
-> isn't needed.
-> 
-ack
-
-<snip>
->> +		status = hv_do_hypercall(HVCALL_CONNECT_PORT, input, NULL) &
->> +			 HV_HYPERCALL_RESULT_MASK;
-> 
-> Same here.  Use hv_* macros.
-> 
-ack
-
-<snip>
->> +	status = hv_do_fast_hypercall16(HVCALL_DISCONNECT_PORT,
->> +					input.as_uint64[0],
->> +					input.as_uint64[1]) &
->> +			HV_HYPERCALL_RESULT_MASK;
->> +	local_irq_restore(flags);
-> 
-> Same as above.
-> 
-ack
-
-<snip>
->> +	local_irq_save(flags);
->> +	input.sint_index = sint_index;
->> +	status = hv_do_fast_hypercall8(HVCALL_NOTIFY_PORT_RING_EMPTY,
->> +				       input.as_uint64) &
->> +		 HV_HYPERCALL_RESULT_MASK;
->> +	local_irq_restore(flags);
-> 
-> Same as above.
-> 
-ack, and I'll double check we don't have other fast hypercall sites doing this
-
-<snip>>> +		/*
->> +		 * This is required to make sure that reserved field is set to
->> +		 * zero, because MSHV has a check to make sure reserved bits are
->> +		 * set to zero.
->> +		 */
-> 
-> Is this comment about checking reserved bits unique to this hypercall? If not, it
-> seems a little odd to see this comment here, but not other places where the input
-> is zero'ed.
-> 
-I agree the comment isn't necessary - memset()ing the input to zero should be the
-default policy. I'll remove it.
-
->> +		memset(input_page, 0, sizeof(*input_page));
->> +		/* Only set the partition id if you are making the pages
->> +		 * exclusive
->> +		 */
->> +		if (flags & HV_MODIFY_SPA_PAGE_HOST_ACCESS_MAKE_EXCLUSIVE)
->> +			input_page->partition_id = partition_id;
->> +		input_page->flags = flags;
->> +		input_page->host_access = host_access;
->> +
->> +		for (i = 0; i < rep_count; i++) {
->> +			u64 index = (done + i) << large_shift;
->> +
->> +			if (index >= page_struct_count)
->> +				return -EINVAL;
-> 
-> Can this test ever be true?
-> 
-See above in hv_do_map_gpa_hcall(), it's more of a sanity check or assert.
-
->> +
->> +			input_page->spa_page_list[i] =
->> +						page_to_pfn(pages[index]);
-> 
-> When large_shift is non-zero, it seems weird to be skipping over most
-> of the entries in the "pages" array.  But maybe there's a reason for that.
-> 
-See above where we do the same thing in hv_do_map_gpa_hcall(). The hypervisor
-only needs to see the "head" pages - the GPAs of the 2MB pages.
-
->> +		}
->> +
->> +		status = hv_do_rep_hypercall(code, rep_count, 0, input_page,
->> +					     NULL);
->> +		local_irq_restore(irq_flags);
->> +
->> +		completed = hv_repcomp(status);
->> +
->> +		if (!hv_result_success(status))
->> +			return hv_result_to_errno(status);
->> +
->> +		done += completed;
->> +	}
->> +
->> +	return 0;
+>> +	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
+>> +out_put_tdi:
+>> +	tsm_tdi_put(tdi);
+>> +out_put_vdev:
+>> +	iommufd_put_object(ucmd->ictx, &vdev->obj);
+>> +out_put_dev:
+>> +	iommufd_put_object(ucmd->ictx, &idev->obj);
+>> +out_put_viommu:
+>> +	iommufd_put_object(ucmd->ictx, &viommu->obj);
+>> +	return rc;
 >> +}
 > 
-> [snip the rest of the patch that I haven't reviewed yet]
+> Another concern is do we need an unbind ioctl? We don't bind on vdevice
+> create so it seems not symmetrical we only unbind on vdevice destroy.
+
+I'll add it as we progress. Just for now I have no flow to exercise it - 
+I accept the device into my SNP VM and that's it but if something in the 
+VM is unhappy about the device report, then we'll need to unbind and 
+continue using the device as untrusted. Thanks,
+
+(sorry for late response, still going through all comments here and in 
+Dan's threads)
+
 > 
-> Michael
+> Thanks,
+> Yilun
+> 
+> 
+
+-- 
+Alexey
 
 
