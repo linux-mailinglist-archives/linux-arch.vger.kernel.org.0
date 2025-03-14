@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-10827-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10830-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 599ABA61A76
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 20:29:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82077A61A7E
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 20:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D3447AC6D2
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 19:28:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE6D43BEDEF
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 19:29:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47DBC204F8A;
-	Fri, 14 Mar 2025 19:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46048205AA6;
+	Fri, 14 Mar 2025 19:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="hF2Rs62I"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QgsX3nal"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28071FF1AF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC81420459A;
 	Fri, 14 Mar 2025 19:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741980566; cv=none; b=PxYxDvMZteADwTmLE5PpgqIlwxEaHnX/cB51hrE8cld5Z/z73BGaJSbIMhorYlWMidJRg8BsCkGqJwmE/uryEMvbgF1HOpZTUd+KTrtOSjwjl7fOxWF01OA127WEtm4hmu12f8ZHC7QWDcuijDujVp+MokEQFJVn1LEChPH+TsY=
+	t=1741980567; cv=none; b=T5Y23mauDpdBL5nH5Bw+EVgmSJ98lbbfBxu6NgMMPde/Z8fGYdVTyX+8eWAwVPW9kIu0OZaSujE2EzlKSzVNFNnDt+sV+KdWeD7zjPCjV8KyXHo6tlHiPzZZdfZdiX4qr4HrewhFAp0iXCmt3aJYprCTEi1ngL1yHYo9Xe/s5UE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741980566; c=relaxed/simple;
-	bh=xB8z8s/FLR7dj/y8/AoU0F+w/kxSVGa9ajdx4JskRRM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=N5SaHJAQ7zdOiNuZWMFlPmcxfYI6FokHqRT2NzjZSSbqHmsTLSsKEpfx6uxFJu4mYSIkLM1SqDJjrWhhg5TwMka+wdJykQtZgeyvYl3r1vcLSn8HnDDL4nuk4kOsRJOeGNSNvaxjhXUvTJnxUWik7NZKwOXj9kmVH/y6VuXTGlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=hF2Rs62I; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1741980567; c=relaxed/simple;
+	bh=2DgA+WxtMeS5xEPea+yQ2oWUrQWJOpxLAqfjtUxE8zo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=ZifGWoUeQfkZXrKp6fPltu0+f5misOzheCmPWF11TtUoFTV+LDZsPcUuvlZoM+U9w3nviiL9ueFH/e9+SXkXneWEHgH+2cJcUk4lu3MU4kbF2vg+rkS8/u9NI4PRYbUmr4LmL7kIlU9SUZKhK5lLcBwGh7+ZZCJzxzvFJ5hn1rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QgsX3nal; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 2C4F82033457;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 5DAC22033459;
 	Fri, 14 Mar 2025 12:29:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2C4F82033457
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5DAC22033459
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1741980564;
-	bh=g87Yc4YJdBAnwCUZKSsKpodpokZkAet25OkUYeeBX+E=;
+	bh=kQpDXagoqiBnz1ULF4xuJAkhLPjv+oLVEWalqIw1Byo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hF2Rs62InylvP8rtjh/0ZN2Za3ug4zYjoggrSRhQ76on39C8v5TNVqXoUJ58hRCcZ
-	 m4nJ6WeuWWtgOoJC2CSCny1S9+FM7nkWUCqBX0E4AMuZhMIEm4dSiYxEPaBcBTx9OD
-	 oXqSqN7esrWKlvwJHqlewqO9GKBVmTFstXQbQnWE=
+	b=QgsX3nal9IDsR2TJGB/RRIgqwXlA1XJAcEFtFir/jWdb0FV+lxfTqCBlPUIFANd3e
+	 Vc6uZgDGxORP3rIneNmC1gyNtfyTIg+OL8ArNcTFcoLWqp//OtwVhCq7tPae3e10I1
+	 oGTCxEimeV33kN0de0MCS5Snl2CS0w1KGYaSPRZI=
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 To: linux-hyperv@vger.kernel.org,
 	x86@kernel.org,
@@ -79,9 +79,9 @@ Cc: kys@microsoft.com,
 	rafael@kernel.org,
 	lenb@kernel.org,
 	corbet@lwn.net
-Subject: [PATCH v6 02/10] x86/mshyperv: Add support for extended Hyper-V features
-Date: Fri, 14 Mar 2025 12:28:48 -0700
-Message-Id: <1741980536-3865-3-git-send-email-nunodasneves@linux.microsoft.com>
+Subject: [PATCH v6 03/10] arm64/hyperv: Add some missing functions to arm64
+Date: Fri, 14 Mar 2025 12:28:49 -0700
+Message-Id: <1741980536-3865-4-git-send-email-nunodasneves@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1741980536-3865-1-git-send-email-nunodasneves@linux.microsoft.com>
 References: <1741980536-3865-1-git-send-email-nunodasneves@linux.microsoft.com>
@@ -91,58 +91,91 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 
-From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+These non-nested msr and fast hypercall functions are present in x86,
+but they must be available in both architectures for the root partition
+driver code.
 
-Extend the "ms_hyperv_info" structure to include a new field,
-"ext_features", for capturing extended Hyper-V features.
-Update the "ms_hyperv_init_platform" function to retrieve these features
-using the cpuid instruction and include them in the informational output.
+While at it, remove the redundant 'extern' keywords from the
+hv_do_hypercall() variants in asm-generic/mshyperv.h.
 
-Signed-off-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
 Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Reviewed-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+Reviewed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
 Reviewed-by: Roman Kisel <romank@linux.microsoft.com>
-Reviewed-by: Tianyu Lan <tiala@microsoft.com>
-Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 ---
- arch/x86/kernel/cpu/mshyperv.c | 6 ++++--
- include/asm-generic/mshyperv.h | 1 +
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ arch/arm64/hyperv/hv_core.c       | 17 +++++++++++++++++
+ arch/arm64/include/asm/mshyperv.h | 13 +++++++++++++
+ include/asm-generic/mshyperv.h    |  6 ++++--
+ 3 files changed, 34 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 4f01f424ea5b..fd285b18d6b4 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -434,13 +434,15 @@ static void __init ms_hyperv_init_platform(void)
- 	 */
- 	ms_hyperv.features = cpuid_eax(HYPERV_CPUID_FEATURES);
- 	ms_hyperv.priv_high = cpuid_ebx(HYPERV_CPUID_FEATURES);
-+	ms_hyperv.ext_features = cpuid_ecx(HYPERV_CPUID_FEATURES);
- 	ms_hyperv.misc_features = cpuid_edx(HYPERV_CPUID_FEATURES);
- 	ms_hyperv.hints    = cpuid_eax(HYPERV_CPUID_ENLIGHTMENT_INFO);
+diff --git a/arch/arm64/hyperv/hv_core.c b/arch/arm64/hyperv/hv_core.c
+index 69004f619c57..e33a9e3c366a 100644
+--- a/arch/arm64/hyperv/hv_core.c
++++ b/arch/arm64/hyperv/hv_core.c
+@@ -53,6 +53,23 @@ u64 hv_do_fast_hypercall8(u16 code, u64 input)
+ }
+ EXPORT_SYMBOL_GPL(hv_do_fast_hypercall8);
  
- 	hv_max_functions_eax = cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS);
++/*
++ * hv_do_fast_hypercall16 -- Invoke the specified hypercall
++ * with arguments in registers instead of physical memory.
++ * Avoids the overhead of virt_to_phys for simple hypercalls.
++ */
++u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
++{
++	struct arm_smccc_res	res;
++	u64			control;
++
++	control = (u64)code | HV_HYPERCALL_FAST_BIT;
++
++	arm_smccc_1_1_hvc(HV_FUNC_ID, control, input1, input2, &res);
++	return res.a0;
++}
++EXPORT_SYMBOL_GPL(hv_do_fast_hypercall16);
++
+ /*
+  * Set a single VP register to a 64-bit value.
+  */
+diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
+index 2e2f83bafcfb..b721d3134ab6 100644
+--- a/arch/arm64/include/asm/mshyperv.h
++++ b/arch/arm64/include/asm/mshyperv.h
+@@ -40,6 +40,19 @@ static inline u64 hv_get_msr(unsigned int reg)
+ 	return hv_get_vpreg(reg);
+ }
  
--	pr_info("Hyper-V: privilege flags low 0x%x, high 0x%x, hints 0x%x, misc 0x%x\n",
--		ms_hyperv.features, ms_hyperv.priv_high, ms_hyperv.hints,
-+	pr_info("Hyper-V: privilege flags low %#x, high %#x, ext %#x, hints %#x, misc %#x\n",
-+		ms_hyperv.features, ms_hyperv.priv_high,
-+		ms_hyperv.ext_features, ms_hyperv.hints,
- 		ms_hyperv.misc_features);
- 
- 	ms_hyperv.max_vp_index = cpuid_eax(HYPERV_CPUID_IMPLEMENT_LIMITS);
++/*
++ * Nested is not supported on arm64
++ */
++static inline void hv_set_non_nested_msr(unsigned int reg, u64 value)
++{
++	hv_set_msr(reg, value);
++}
++
++static inline u64 hv_get_non_nested_msr(unsigned int reg)
++{
++	return hv_get_msr(reg);
++}
++
+ /* SMCCC hypercall parameters */
+ #define HV_SMCCC_FUNC_NUMBER	1
+ #define HV_FUNC_ID	ARM_SMCCC_CALL_VAL(			\
 diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 250c65236919..c8043efabf5a 100644
+index c8043efabf5a..c3697bc0598d 100644
 --- a/include/asm-generic/mshyperv.h
 +++ b/include/asm-generic/mshyperv.h
-@@ -36,6 +36,7 @@ enum hv_partition_type {
- struct ms_hyperv_info {
- 	u32 features;
- 	u32 priv_high;
-+	u32 ext_features;
- 	u32 misc_features;
- 	u32 hints;
- 	u32 nested_features;
+@@ -70,8 +70,10 @@ extern enum hv_partition_type hv_curr_partition_type;
+ extern void * __percpu *hyperv_pcpu_input_arg;
+ extern void * __percpu *hyperv_pcpu_output_arg;
+ 
+-extern u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
+-extern u64 hv_do_fast_hypercall8(u16 control, u64 input8);
++u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
++u64 hv_do_fast_hypercall8(u16 control, u64 input8);
++u64 hv_do_fast_hypercall16(u16 control, u64 input1, u64 input2);
++
+ bool hv_isolation_type_snp(void);
+ bool hv_isolation_type_tdx(void);
+ 
 -- 
 2.34.1
 
