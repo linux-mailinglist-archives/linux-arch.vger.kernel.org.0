@@ -1,315 +1,585 @@
-Return-Path: <linux-arch+bounces-10818-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10819-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E5E2A60BCE
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 09:35:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46243A60DE0
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 10:51:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDBDB7AAECE
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 08:34:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F412317C649
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 09:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771EC1C862E;
-	Fri, 14 Mar 2025 08:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="ZX6pQS8C"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88681F4E5D;
+	Fri, 14 Mar 2025 09:50:12 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D2A1B414F
-	for <linux-arch@vger.kernel.org>; Fri, 14 Mar 2025 08:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BD411F3D53;
+	Fri, 14 Mar 2025 09:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741941290; cv=none; b=dvxTIYhllHO0hs2a4IGYcvJR/Vs1OelUHWK9ycuBxFv8MCa0VdEniFHBtE0i9Ckhqx8YmVZtAM57QlAWNiHcd92knQPVJPxvLme4ovc0sMADVx4n5GN1BaoRgE6ZM8LVfILnEqtFOijmqMmFmwzZEAWrZhD2eTeSkjJNAANjApk=
+	t=1741945812; cv=none; b=SKqGqoisRBEWeQgsneqWIa7LgB7l737Xo+5kfqBhhNN0AtROixkEV+USmeIE6/xrZj9cLbk9HxI83N7dCXe+b+ZeGxzXTt+K8K9+/76CCIAEHDf6e0awVr9CYTq8xcCjZfHnABPxmn4C6frOEIyiA+eOyzTP9w08qzRGKq+AY7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741941290; c=relaxed/simple;
-	bh=5OarQnCgTAfdocmYPDrI94tCD2az3gBLGjrATX3zRF0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TGgGqxn0MQyufE8Nd/O1KhWVBt4xW/PR+XL32gTLTydaMTe/rP/ZClOEHD/ZBoJi0WWesWUHQpRsz3eDX2TOZ6/Q+gjEQLH+oV9kEDOR2Z+bSJgRlQs7WPaKOA0Ljwxr8ImFmKnFO1ZvgDNWbwJCmgoQ2LgZZJrmnz0RXbrpvi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=ZX6pQS8C; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-85ae131983eso162972739f.0
-        for <linux-arch@vger.kernel.org>; Fri, 14 Mar 2025 01:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1741941287; x=1742546087; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bm74IWNiiddtjCmKDIAkneaMK7FpbJuBZ2ZaX1ZQ1kw=;
-        b=ZX6pQS8CA8sOlSwbzuDg4s1RIS/l5u6Tl+MWW7j/4eqXrW0Pyb7d2+y/dCWX7meg4u
-         6BuAWQNFN168Q8j6G6Kj3PoV+ddtd4vN7DuYDQdFa3DllG6HhBIp5496HaK7YHdxfaFC
-         Zh+Pceg1h69NFSa3eah8hnSWqbA0gIWz8O13sl46uVlt1K068o0G/Eyb6Moe02+3wiK5
-         tQJVJgK6Ns6YDYxiK/93Gozdoh8sy9UkG1bdLlKrekYqHsjpRqsLHtSiFHCGTIKFLZPF
-         3/uIAPKsJ4ZFAfDxzV4wOVs1Hvxf4sTo9nqw3CcGz1M5E5oxmtDxI8XHAPJSZAA5O6ZR
-         oDIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741941287; x=1742546087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bm74IWNiiddtjCmKDIAkneaMK7FpbJuBZ2ZaX1ZQ1kw=;
-        b=agZGQV5YDKZAC9CgdhcEQHYpJ9w9kMoKl6qqOkyAdwUYyquPM6GgkmfQxtj0MzFC5M
-         u7Aqoms81OmS3PmrWvbge1M1RB57EoLtNdNoC3ePFPgGLJOtpMM5K1CzGyC9ja4LkBRo
-         puMePEOVmxMRO7BkDxQgLQMBBB2/kp+ajCutTtdtk4msxg5nHj1+FCZgd0Q7IhTTr/aA
-         +hSVfSpwcIWGkWr+3+UKXer91lUE5BpLmFF9is7WJLutcp7FlCrivsvgIkmrUmHEjbMz
-         q57rQNUfo+hC/SEO1UtS9+7z8I+mwYDhl8+m2COpvtQrjD6n3ifxB2XMHQPsmCL1aLgZ
-         R2Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCVgppVI4ObmT3QkGddhppnFz5zLbaUaFu5wDf/lghG+lNSZ94ZVz7mbzuu+RiR7FCVejs6WpXkZVvJY@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA3chfll09AuH/0Z/dhGKs67xSfP3i6SXnIgNlyEbiyir7L1g+
-	XhPbNJ2wj/Kg+JZXPqv0dz7u0UQZt0/p2vwE2XZjxBl11sTfDFmewQnfWfjEDkSMG7PPce/rIbE
-	KZrXhdR+bK36dP6Mx11T+ijf/ucj8tQ9nJISwZQ==
-X-Gm-Gg: ASbGncvPpXGwO3RNN0uTgdw9NWelx5AFkbrFGOJXv2XNW/JzwJKainCa5BrzifWCHfm
-	jS8SfiSFUE4P8x9z07Y2Yo54KNzqvp+EMrOOCl0sDl/DYvoLOfxno+geVhw369l1D3z5aa0eGGv
-	PioXqQORu7Dvc20dbNNdwamMMyLOE=
-X-Google-Smtp-Source: AGHT+IFRA5Az3Um9tJHHRXJFx+3mnIqGojBtFl6JREsVb2G4EXt33cQMlFoJn1d6ltMZlRWKhpPmG6wKGqrSmlkGBr0=
-X-Received: by 2002:a05:6602:3f08:b0:85b:5869:b5b with SMTP id
- ca18e2360f4ac-85dc48334c9mr187830339f.6.1741941286887; Fri, 14 Mar 2025
- 01:34:46 -0700 (PDT)
+	s=arc-20240116; t=1741945812; c=relaxed/simple;
+	bh=ItygPhVOMyAP9b92OVwMZceKD88YUZs2rOSEhpxC3OY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W1RMX4PU43qukPvjd1UB4mgDO0DkBhsyXgHmQ2N1vwEiWHoa6iGkfxC2h8LvTJQvAt/0RbinDJ4IAPCVn8PnHdyNHVgxRN+S4PwhGrvm5f0AdTafB6D/Q/KGe/VNOCHHYEov2fuN0Nimgyy3jYyLjprj6U00cmdR3478MXEAul4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4ZDf9G0vWrz9sS8;
+	Fri, 14 Mar 2025 10:25:22 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 7fTc4ZCXKSeV; Fri, 14 Mar 2025 10:25:22 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4ZDf9F4S45z9sSK;
+	Fri, 14 Mar 2025 10:25:21 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7CF118B77A;
+	Fri, 14 Mar 2025 10:25:21 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 65diyAgfwB8G; Fri, 14 Mar 2025 10:25:21 +0100 (CET)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id EF57F8B770;
+	Fri, 14 Mar 2025 10:25:18 +0100 (CET)
+Message-ID: <4b9627f2-65ff-4baf-931f-4e23b5732e6b@csgroup.eu>
+Date: Fri, 14 Mar 2025 10:25:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250310-v5_user_cfi_series-v11-0-86b36cbfb910@rivosinc.com> <20250310-v5_user_cfi_series-v11-25-86b36cbfb910@rivosinc.com>
-In-Reply-To: <20250310-v5_user_cfi_series-v11-25-86b36cbfb910@rivosinc.com>
-From: Zong Li <zong.li@sifive.com>
-Date: Fri, 14 Mar 2025 16:34:36 +0800
-X-Gm-Features: AQ5f1JpXeE6tU44day2kKwZlk-ke3YkF8t6JJiPonVbxjr2JHrkve7GNBaApiH4
-Message-ID: <CANXhq0qTYAuc_2A+51-BxEKKT67t3-d_nj3-R2O=+khHNOR+AQ@mail.gmail.com>
-Subject: Re: [PATCH v11 25/27] riscv: Documentation for landing pad / indirect
- branch tracking
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
-	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/13] arch, mm: set max_mapnr when allocating memory
+ map for FLATMEM
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+ Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>,
+ Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ "David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Guo Ren
+ <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
+ Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Mark Brown <broonie@kernel.org>,
+ Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
+ Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>,
+ Stafford Horne <shorne@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>,
+ Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+ linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, x86@kernel.org
+References: <20250313135003.836600-1-rppt@kernel.org>
+ <20250313135003.836600-10-rppt@kernel.org>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20250313135003.836600-10-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 10, 2025 at 11:44=E2=80=AFPM Deepak Gupta <debug@rivosinc.com> =
-wrote:
->
-> Adding documentation on landing pad aka indirect branch tracking on riscv
-> and kernel interfaces exposed so that user tasks can enable it.
->
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+
+
+Le 13/03/2025 à 14:49, Mike Rapoport a écrit :
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> max_mapnr is essentially the size of the memory map for systems that use
+> FLATMEM. There is no reason to calculate it in each and every architecture
+> when it's anyway calculated in alloc_node_mem_map().
+> 
+> Drop setting of max_mapnr from architecture code and set it once in
+> alloc_node_mem_map().
+
+As far as I can see alloc_node_mem_map() is called quite late.
+
+I fear that it will regress commit daa9ada2093e ("powerpc/mm: Fix boot 
+crash with FLATMEM")
+
+Can you check ?
+
+Christophe
+
+> 
+> While on it, move definition of mem_map and max_mapnr to mm/mm_init.c so
+> there won't be two copies for MMU and !MMU variants.
+> 
+> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>	# x86
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
->  Documentation/arch/riscv/index.rst   |   1 +
->  Documentation/arch/riscv/zicfilp.rst | 115 +++++++++++++++++++++++++++++=
-++++++
->  2 files changed, 116 insertions(+)
->
-> diff --git a/Documentation/arch/riscv/index.rst b/Documentation/arch/risc=
-v/index.rst
-> index eecf347ce849..be7237b69682 100644
-> --- a/Documentation/arch/riscv/index.rst
-> +++ b/Documentation/arch/riscv/index.rst
-> @@ -14,6 +14,7 @@ RISC-V architecture
->      uabi
->      vector
->      cmodx
-> +    zicfilp
->
->      features
->
-> diff --git a/Documentation/arch/riscv/zicfilp.rst b/Documentation/arch/ri=
-scv/zicfilp.rst
-> new file mode 100644
-> index 000000000000..a188d78fcde6
-> --- /dev/null
-> +++ b/Documentation/arch/riscv/zicfilp.rst
-> @@ -0,0 +1,115 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+>   arch/alpha/mm/init.c               |  1 -
+>   arch/arc/mm/init.c                 |  5 -----
+>   arch/arm/mm/init.c                 |  2 --
+>   arch/csky/mm/init.c                |  4 ----
+>   arch/loongarch/mm/init.c           |  1 -
+>   arch/microblaze/mm/init.c          |  4 ----
+>   arch/mips/mm/init.c                |  8 --------
+>   arch/nios2/kernel/setup.c          |  1 -
+>   arch/nios2/mm/init.c               |  2 +-
+>   arch/openrisc/mm/init.c            |  1 -
+>   arch/parisc/mm/init.c              |  1 -
+>   arch/powerpc/kernel/setup-common.c |  2 --
+>   arch/riscv/mm/init.c               |  1 -
+>   arch/s390/mm/init.c                |  1 -
+>   arch/sh/mm/init.c                  |  1 -
+>   arch/sparc/mm/init_32.c            |  1 -
+>   arch/um/include/shared/mem_user.h  |  1 -
+>   arch/um/kernel/physmem.c           | 12 ------------
+>   arch/um/kernel/um_arch.c           |  1 -
+>   arch/x86/mm/init_32.c              |  3 ---
+>   arch/xtensa/mm/init.c              |  1 -
+>   include/asm-generic/memory_model.h |  5 +++--
+>   include/linux/mm.h                 | 11 -----------
+>   mm/memory.c                        |  8 --------
+>   mm/mm_init.c                       | 25 +++++++++++++++++--------
+>   mm/nommu.c                         |  4 ----
+>   26 files changed, 21 insertions(+), 86 deletions(-)
+> 
+> diff --git a/arch/alpha/mm/init.c b/arch/alpha/mm/init.c
+> index 61c2198b1359..ec0eeae9c653 100644
+> --- a/arch/alpha/mm/init.c
+> +++ b/arch/alpha/mm/init.c
+> @@ -276,7 +276,6 @@ srm_paging_stop (void)
+>   void __init
+>   mem_init(void)
+>   {
+> -	set_max_mapnr(max_low_pfn);
+>   	high_memory = (void *) __va(max_low_pfn * PAGE_SIZE);
+>   	memblock_free_all();
+>   }
+> diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
+> index 6a71b23f1383..7ef883d58dc1 100644
+> --- a/arch/arc/mm/init.c
+> +++ b/arch/arc/mm/init.c
+> @@ -154,11 +154,6 @@ void __init setup_arch_memory(void)
+>   
+>   	arch_pfn_offset = min(min_low_pfn, min_high_pfn);
+>   	kmap_init();
+> -
+> -#else /* CONFIG_HIGHMEM */
+> -	/* pfn_valid() uses this when FLATMEM=y and HIGHMEM=n */
+> -	max_mapnr = max_low_pfn - min_low_pfn;
+> -
+>   #endif /* CONFIG_HIGHMEM */
+>   
+>   	free_area_init(max_zone_pfn);
+> diff --git a/arch/arm/mm/init.c b/arch/arm/mm/init.c
+> index 9aec1cb2386f..d4bcc745a044 100644
+> --- a/arch/arm/mm/init.c
+> +++ b/arch/arm/mm/init.c
+> @@ -275,8 +275,6 @@ void __init mem_init(void)
+>   	swiotlb_init(max_pfn > arm_dma_pfn_limit, SWIOTLB_VERBOSE);
+>   #endif
+>   
+> -	set_max_mapnr(pfn_to_page(max_pfn) - mem_map);
+> -
+>   #ifdef CONFIG_SA1111
+>   	/* now that our DMA memory is actually so designated, we can free it */
+>   	memblock_phys_free(PHYS_OFFSET, __pa(swapper_pg_dir) - PHYS_OFFSET);
+> diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+> index ab51acbc19b2..ba6694d6170a 100644
+> --- a/arch/csky/mm/init.c
+> +++ b/arch/csky/mm/init.c
+> @@ -46,10 +46,6 @@ void __init mem_init(void)
+>   {
+>   #ifdef CONFIG_HIGHMEM
+>   	unsigned long tmp;
+> -
+> -	set_max_mapnr(highend_pfn - ARCH_PFN_OFFSET);
+> -#else
+> -	set_max_mapnr(max_low_pfn - ARCH_PFN_OFFSET);
+>   #endif
+>   	high_memory = (void *) __va(max_low_pfn << PAGE_SHIFT);
+>   
+> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
+> index ca5aa5f46a9f..00449df50db1 100644
+> --- a/arch/loongarch/mm/init.c
+> +++ b/arch/loongarch/mm/init.c
+> @@ -78,7 +78,6 @@ void __init paging_init(void)
+>   
+>   void __init mem_init(void)
+>   {
+> -	max_mapnr = max_low_pfn;
+>   	high_memory = (void *) __va(max_low_pfn << PAGE_SHIFT);
+>   
+>   	memblock_free_all();
+> diff --git a/arch/microblaze/mm/init.c b/arch/microblaze/mm/init.c
+> index 4520c5741579..857cd2b44bcf 100644
+> --- a/arch/microblaze/mm/init.c
+> +++ b/arch/microblaze/mm/init.c
+> @@ -104,17 +104,13 @@ void __init setup_memory(void)
+>   	 *
+>   	 * min_low_pfn - the first page (mm/bootmem.c - node_boot_start)
+>   	 * max_low_pfn
+> -	 * max_mapnr - the first unused page (mm/bootmem.c - node_low_pfn)
+>   	 */
+>   
+>   	/* memory start is from the kernel end (aligned) to higher addr */
+>   	min_low_pfn = memory_start >> PAGE_SHIFT; /* minimum for allocation */
+> -	/* RAM is assumed contiguous */
+> -	max_mapnr = memory_size >> PAGE_SHIFT;
+>   	max_low_pfn = ((u64)memory_start + (u64)lowmem_size) >> PAGE_SHIFT;
+>   	max_pfn = ((u64)memory_start + (u64)memory_size) >> PAGE_SHIFT;
+>   
+> -	pr_info("%s: max_mapnr: %#lx\n", __func__, max_mapnr);
+>   	pr_info("%s: min_low_pfn: %#lx\n", __func__, min_low_pfn);
+>   	pr_info("%s: max_low_pfn: %#lx\n", __func__, max_low_pfn);
+>   	pr_info("%s: max_pfn: %#lx\n", __func__, max_pfn);
+> diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
+> index 820e35a59d4d..eb61a73520a0 100644
+> --- a/arch/mips/mm/init.c
+> +++ b/arch/mips/mm/init.c
+> @@ -415,15 +415,7 @@ void __init paging_init(void)
+>   		       " %ldk highmem ignored\n",
+>   		       (highend_pfn - max_low_pfn) << (PAGE_SHIFT - 10));
+>   		max_zone_pfns[ZONE_HIGHMEM] = max_low_pfn;
+> -
+> -		max_mapnr = max_low_pfn;
+> -	} else if (highend_pfn) {
+> -		max_mapnr = highend_pfn;
+> -	} else {
+> -		max_mapnr = max_low_pfn;
+>   	}
+> -#else
+> -	max_mapnr = max_low_pfn;
+>   #endif
+>   	high_memory = (void *) __va(max_low_pfn << PAGE_SHIFT);
+>   
+> diff --git a/arch/nios2/kernel/setup.c b/arch/nios2/kernel/setup.c
+> index a4cffbfc1399..2a40150142c3 100644
+> --- a/arch/nios2/kernel/setup.c
+> +++ b/arch/nios2/kernel/setup.c
+> @@ -158,7 +158,6 @@ void __init setup_arch(char **cmdline_p)
+>   	*cmdline_p = boot_command_line;
+>   
+>   	find_limits(&min_low_pfn, &max_low_pfn, &max_pfn);
+> -	max_mapnr = max_low_pfn;
+>   
+>   	memblock_reserve(__pa_symbol(_stext), _end - _stext);
+>   #ifdef CONFIG_BLK_DEV_INITRD
+> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
+> index aa692ad30044..3cafa87ead9e 100644
+> --- a/arch/nios2/mm/init.c
+> +++ b/arch/nios2/mm/init.c
+> @@ -51,7 +51,7 @@ void __init paging_init(void)
+>   	pagetable_init();
+>   	pgd_current = swapper_pg_dir;
+>   
+> -	max_zone_pfn[ZONE_NORMAL] = max_mapnr;
+> +	max_zone_pfn[ZONE_NORMAL] = max_low_pfn;
+>   
+>   	/* pass the memory from the bootmem allocator to the main allocator */
+>   	free_area_init(max_zone_pfn);
+> diff --git a/arch/openrisc/mm/init.c b/arch/openrisc/mm/init.c
+> index d0cb1a0126f9..9093c336e158 100644
+> --- a/arch/openrisc/mm/init.c
+> +++ b/arch/openrisc/mm/init.c
+> @@ -193,7 +193,6 @@ void __init mem_init(void)
+>   {
+>   	BUG_ON(!mem_map);
+>   
+> -	max_mapnr = max_low_pfn;
+>   	high_memory = (void *)__va(max_low_pfn * PAGE_SIZE);
+>   
+>   	/* clear the zero-page */
+> diff --git a/arch/parisc/mm/init.c b/arch/parisc/mm/init.c
+> index 61c0a2477072..2cdfc0b1195c 100644
+> --- a/arch/parisc/mm/init.c
+> +++ b/arch/parisc/mm/init.c
+> @@ -563,7 +563,6 @@ void __init mem_init(void)
+>   #endif
+>   
+>   	high_memory = __va((max_pfn << PAGE_SHIFT));
+> -	set_max_mapnr(max_low_pfn);
+>   	memblock_free_all();
+>   
+>   #ifdef CONFIG_PA11
+> diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
+> index a08b0ede4e64..68d47c53876c 100644
+> --- a/arch/powerpc/kernel/setup-common.c
+> +++ b/arch/powerpc/kernel/setup-common.c
+> @@ -957,8 +957,6 @@ void __init setup_arch(char **cmdline_p)
+>   
+>   	/* Parse memory topology */
+>   	mem_topology_setup();
+> -	/* Set max_mapnr before paging_init() */
+> -	set_max_mapnr(max_pfn);
+>   	high_memory = (void *)__va(max_low_pfn * PAGE_SIZE);
+>   
+>   	/*
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 15b2eda4c364..157c9ca51541 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -298,7 +298,6 @@ static void __init setup_bootmem(void)
+>   	high_memory = (void *)(__va(PFN_PHYS(max_low_pfn)));
+>   
+>   	dma32_phys_limit = min(4UL * SZ_1G, (unsigned long)PFN_PHYS(max_low_pfn));
+> -	set_max_mapnr(max_low_pfn - ARCH_PFN_OFFSET);
+>   
+>   	reserve_initrd_mem();
+>   
+> diff --git a/arch/s390/mm/init.c b/arch/s390/mm/init.c
+> index f8333feb6a7e..36fed6dffb38 100644
+> --- a/arch/s390/mm/init.c
+> +++ b/arch/s390/mm/init.c
+> @@ -159,7 +159,6 @@ void __init mem_init(void)
+>   	cpumask_set_cpu(0, &init_mm.context.cpu_attach_mask);
+>   	cpumask_set_cpu(0, mm_cpumask(&init_mm));
+>   
+> -	set_max_mapnr(max_low_pfn);
+>           high_memory = (void *) __va(max_low_pfn * PAGE_SIZE);
+>   
+>   	pv_init();
+> diff --git a/arch/sh/mm/init.c b/arch/sh/mm/init.c
+> index 289a2fecebef..72aea5cd1b85 100644
+> --- a/arch/sh/mm/init.c
+> +++ b/arch/sh/mm/init.c
+> @@ -290,7 +290,6 @@ void __init paging_init(void)
+>   	 */
+>   	max_low_pfn = max_pfn = memblock_end_of_DRAM() >> PAGE_SHIFT;
+>   	min_low_pfn = __MEMORY_START >> PAGE_SHIFT;
+> -	set_max_mapnr(max_low_pfn - min_low_pfn);
+>   
+>   	nodes_clear(node_online_map);
+>   
+> diff --git a/arch/sparc/mm/init_32.c b/arch/sparc/mm/init_32.c
+> index d96a14ffceeb..6b58da14edc6 100644
+> --- a/arch/sparc/mm/init_32.c
+> +++ b/arch/sparc/mm/init_32.c
+> @@ -275,7 +275,6 @@ void __init mem_init(void)
+>   
+>   	taint_real_pages();
+>   
+> -	max_mapnr = last_valid_pfn - pfn_base;
+>   	high_memory = __va(max_low_pfn << PAGE_SHIFT);
+>   	memblock_free_all();
+>   
+> diff --git a/arch/um/include/shared/mem_user.h b/arch/um/include/shared/mem_user.h
+> index adfa08062f88..d4727efcf23d 100644
+> --- a/arch/um/include/shared/mem_user.h
+> +++ b/arch/um/include/shared/mem_user.h
+> @@ -47,7 +47,6 @@ extern int iomem_size;
+>   #define ROUND_4M(n) ((((unsigned long) (n)) + (1 << 22)) & ~((1 << 22) - 1))
+>   
+>   extern unsigned long find_iomem(char *driver, unsigned long *len_out);
+> -extern void mem_total_pages(unsigned long physmem, unsigned long iomem);
+>   extern void setup_physmem(unsigned long start, unsigned long usable,
+>   			  unsigned long len);
+>   extern void map_memory(unsigned long virt, unsigned long phys,
+> diff --git a/arch/um/kernel/physmem.c b/arch/um/kernel/physmem.c
+> index a74f17b033c4..af02b5f9911d 100644
+> --- a/arch/um/kernel/physmem.c
+> +++ b/arch/um/kernel/physmem.c
+> @@ -22,18 +22,6 @@ static int physmem_fd = -1;
+>   unsigned long high_physmem;
+>   EXPORT_SYMBOL(high_physmem);
+>   
+> -void __init mem_total_pages(unsigned long physmem, unsigned long iomem)
+> -{
+> -	unsigned long phys_pages, iomem_pages, total_pages;
+> -
+> -	phys_pages  = physmem >> PAGE_SHIFT;
+> -	iomem_pages = iomem   >> PAGE_SHIFT;
+> -
+> -	total_pages = phys_pages + iomem_pages;
+> -
+> -	max_mapnr = total_pages;
+> -}
+> -
+>   void map_memory(unsigned long virt, unsigned long phys, unsigned long len,
+>   		int r, int w, int x)
+>   {
+> diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
+> index 79ea97d4797e..6414cbf00572 100644
+> --- a/arch/um/kernel/um_arch.c
+> +++ b/arch/um/kernel/um_arch.c
+> @@ -419,7 +419,6 @@ void __init setup_arch(char **cmdline_p)
+>   
+>   	stack_protections((unsigned long) init_task.stack);
+>   	setup_physmem(uml_physmem, uml_reserved, physmem_size);
+> -	mem_total_pages(physmem_size, iomem_size);
+>   	uml_dtb_init();
+>   	read_initrd();
+>   
+> diff --git a/arch/x86/mm/init_32.c b/arch/x86/mm/init_32.c
+> index ac41b1e0940d..6d2f8cb9451e 100644
+> --- a/arch/x86/mm/init_32.c
+> +++ b/arch/x86/mm/init_32.c
+> @@ -650,9 +650,6 @@ void __init initmem_init(void)
+>   
+>   	memblock_set_node(0, PHYS_ADDR_MAX, &memblock.memory, 0);
+>   
+> -#ifdef CONFIG_FLATMEM
+> -	max_mapnr = IS_ENABLED(CONFIG_HIGHMEM) ? highend_pfn : max_low_pfn;
+> -#endif
+>   	__vmalloc_start_set = true;
+>   
+>   	printk(KERN_NOTICE "%ldMB LOWMEM available.\n",
+> diff --git a/arch/xtensa/mm/init.c b/arch/xtensa/mm/init.c
+> index 01577d33e602..9f1b0d5fccc7 100644
+> --- a/arch/xtensa/mm/init.c
+> +++ b/arch/xtensa/mm/init.c
+> @@ -164,7 +164,6 @@ void __init mem_init(void)
+>   {
+>   	free_highpages();
+>   
+> -	max_mapnr = max_pfn - ARCH_PFN_OFFSET;
+>   	high_memory = (void *)__va(max_low_pfn << PAGE_SHIFT);
+>   
+>   	memblock_free_all();
+> diff --git a/include/asm-generic/memory_model.h b/include/asm-generic/memory_model.h
+> index 6d1fb6162ac1..a3b5029aebbd 100644
+> --- a/include/asm-generic/memory_model.h
+> +++ b/include/asm-generic/memory_model.h
+> @@ -19,11 +19,12 @@
+>   #define __page_to_pfn(page)	((unsigned long)((page) - mem_map) + \
+>   				 ARCH_PFN_OFFSET)
+>   
+> +/* avoid <linux/mm.h> include hell */
+> +extern unsigned long max_mapnr;
 > +
-> +:Author: Deepak Gupta <debug@rivosinc.com>
-> +:Date:   12 January 2024
+>   #ifndef pfn_valid
+>   static inline int pfn_valid(unsigned long pfn)
+>   {
+> -	/* avoid <linux/mm.h> include hell */
+> -	extern unsigned long max_mapnr;
+>   	unsigned long pfn_offset = ARCH_PFN_OFFSET;
+>   
+>   	return pfn >= pfn_offset && (pfn - pfn_offset) < max_mapnr;
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 7b1068ddcbb7..fdf20503850e 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -45,17 +45,6 @@ extern int sysctl_page_lock_unfairness;
+>   void mm_core_init(void);
+>   void init_mm_internals(void);
+>   
+> -#ifndef CONFIG_NUMA		/* Don't use mapnrs, do it properly */
+> -extern unsigned long max_mapnr;
+> -
+> -static inline void set_max_mapnr(unsigned long limit)
+> -{
+> -	max_mapnr = limit;
+> -}
+> -#else
+> -static inline void set_max_mapnr(unsigned long limit) { }
+> -#endif
+> -
+>   extern atomic_long_t _totalram_pages;
+>   static inline unsigned long totalram_pages(void)
+>   {
+> diff --git a/mm/memory.c b/mm/memory.c
+> index b4d3d4893267..126fdd3001e3 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -95,14 +95,6 @@
+>   #warning Unfortunate NUMA and NUMA Balancing config, growing page-frame for last_cpupid.
+>   #endif
+>   
+> -#ifndef CONFIG_NUMA
+> -unsigned long max_mapnr;
+> -EXPORT_SYMBOL(max_mapnr);
+> -
+> -struct page *mem_map;
+> -EXPORT_SYMBOL(mem_map);
+> -#endif
+> -
+>   static vm_fault_t do_fault(struct vm_fault *vmf);
+>   static vm_fault_t do_anonymous_page(struct vm_fault *vmf);
+>   static bool vmf_pte_changed(struct vm_fault *vmf);
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 2630cc30147e..50a93714e1c6 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -36,6 +36,14 @@
+>   
+>   #include <asm/setup.h>
+>   
+> +#ifndef CONFIG_NUMA
+> +unsigned long max_mapnr;
+> +EXPORT_SYMBOL(max_mapnr);
 > +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> +Tracking indirect control transfers on RISC-V Linux
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
+> +struct page *mem_map;
+> +EXPORT_SYMBOL(mem_map);
+> +#endif
 > +
-> +This document briefly describes the interface provided to userspace by L=
-inux
-> +to enable indirect branch tracking for user mode applications on RISV-V
+>   #ifdef CONFIG_DEBUG_MEMORY_INIT
+>   int __meminitdata mminit_loglevel;
+>   
+> @@ -1617,7 +1625,7 @@ static void __init alloc_node_mem_map(struct pglist_data *pgdat)
+>   	start = pgdat->node_start_pfn & ~(MAX_ORDER_NR_PAGES - 1);
+>   	offset = pgdat->node_start_pfn - start;
+>   	/*
+> -		 * The zone's endpoints aren't required to be MAX_PAGE_ORDER
+> +	 * The zone's endpoints aren't required to be MAX_PAGE_ORDER
+>   	 * aligned but the node_mem_map endpoints must be in order
+>   	 * for the buddy allocator to function correctly.
+>   	 */
+> @@ -1633,14 +1641,15 @@ static void __init alloc_node_mem_map(struct pglist_data *pgdat)
+>   	pr_debug("%s: node %d, pgdat %08lx, node_mem_map %08lx\n",
+>   		 __func__, pgdat->node_id, (unsigned long)pgdat,
+>   		 (unsigned long)pgdat->node_mem_map);
+> -#ifndef CONFIG_NUMA
 > +
-> +1. Feature Overview
-> +--------------------
+>   	/* the global mem_map is just set as node 0's */
+> -	if (pgdat == NODE_DATA(0)) {
+> -		mem_map = NODE_DATA(0)->node_mem_map;
+> -		if (page_to_pfn(mem_map) != pgdat->node_start_pfn)
+> -			mem_map -= offset;
+> -	}
+> -#endif
+> +	WARN_ON(pgdat != NODE_DATA(0));
 > +
-> +Memory corruption issues usually result in to crashes, however when in h=
-ands of
-> +an adversary and if used creatively can result into variety security iss=
-ues.
+> +	mem_map = pgdat->node_mem_map;
+> +	if (page_to_pfn(mem_map) != pgdat->node_start_pfn)
+> +		mem_map -= offset;
 > +
-> +One of those security issues can be code re-use attacks on program where=
- adversary
-> +can use corrupt function pointers and chain them together to perform jum=
-p oriented
-> +programming (JOP) or call oriented programming (COP) and thus compromisi=
-ng control
-> +flow integrity (CFI) of the program.
-> +
-> +Function pointers live in read-write memory and thus are susceptible to =
-corruption
-> +and allows an adversary to reach any program counter (PC) in address spa=
-ce. On
-> +RISC-V zicfilp extension enforces a restriction on such indirect control
-> +transfers:
-> +
-> +- indirect control transfers must land on a landing pad instruction ``lp=
-ad``.
-> +  There are two exception to this rule:
-> +
-> +  - rs1 =3D x1 or rs1 =3D x5, i.e. a return from a function and returns =
-are
-> +    protected using shadow stack (see zicfiss.rst)
-> +
-> +  - rs1 =3D x7. On RISC-V compiler usually does below to reach function
-> +    which is beyond the offset possible J-type instruction::
-> +
-> +      auipc x7, <imm>
-> +      jalr (x7)
-> +
-> +       Such form of indirect control transfer are still immutable and do=
-n't rely
-> +    on memory and thus rs1=3Dx7 is exempted from tracking and considered=
- software
-> +    guarded jumps.
-> +
-> +``lpad`` instruction is pseudo of ``auipc rd, <imm_20bit>`` with ``rd=3D=
-x0`` and
-> +is a HINT nop. ``lpad`` instruction must be aligned on 4 byte boundary a=
-nd
-> +compares 20 bit immediate withx7. If ``imm_20bit`` =3D=3D 0, CPU don't p=
-erform any
-> +comparision with ``x7``. If ``imm_20bit`` !=3D 0, then ``imm_20bit`` mus=
-t match
-> +``x7`` else CPU will raise ``software check exception`` (``cause=3D18``)=
- with
-> +``*tval =3D 2``.
-> +
-> +Compiler can generate a hash over function signatures and setup them (tr=
-uncated
-> +to 20bit) in x7 at callsites and function prologues can have ``lpad`` wi=
-th same
-> +function hash. This further reduces number of program counters a call si=
-te can
-> +reach.
-> +
-> +2. ELF and psABI
-> +-----------------
-> +
-> +Toolchain sets up :c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_FCFI` for prope=
-rty
-> +:c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_AND` in notes section of the obje=
-ct file.
-> +
-> +3. Linux enabling
-> +------------------
-> +
-> +User space programs can have multiple shared objects loaded in its addre=
-ss space
-> +and it's a difficult task to make sure all the dependencies have been co=
-mpiled
-> +with support of indirect branch. Thus it's left to dynamic loader to ena=
-ble
-> +indirect branch tracking for the program.
-> +
-> +4. prctl() enabling
-> +--------------------
-> +
-> +:c:macro:`PR_SET_INDIR_BR_LP_STATUS` / :c:macro:`PR_GET_INDIR_BR_LP_STAT=
-US` /
-> +:c:macro:`PR_LOCK_INDIR_BR_LP_STATUS` are three prctls added to manage i=
-ndirect
-> +branch tracking. prctls are arch agnostic and returns -EINVAL on other a=
-rches.
-> +
-> +* prctl(PR_SET_INDIR_BR_LP_STATUS, unsigned long arg)
-> +
-> +If arg1 is :c:macro:`PR_INDIR_BR_LP_ENABLE` and if CPU supports ``zicfil=
-p``
-> +then kernel will enabled indirect branch tracking for the task. Dynamic =
-loader
-> +can issue this :c:macro:`prctl` once it has determined that all the obje=
-cts
-> +loaded in address space support indirect branch tracking. Additionally i=
-f there
-> +is a `dlopen` to an object which wasn't compiled with ``zicfilp``, dynam=
-ic
-> +loader can issue this prctl with arg1 set to 0 (i.e.
-> +:c:macro:`PR_INDIR_BR_LP_ENABLE` being clear)
-> +
-> +* prctl(PR_GET_INDIR_BR_LP_STATUS, unsigned long arg)
-> +
-> +Returns current status of indirect branch tracking. If enabled it'll ret=
-urn
-> +:c:macro:`PR_INDIR_BR_LP_ENABLE`
-> +
-> +* prctl(PR_LOCK_INDIR_BR_LP_STATUS, unsigned long arg)
-> +
-> +Locks current status of indirect branch tracking on the task. User space=
- may
-> +want to run with strict security posture and wouldn't want loading of ob=
-jects
-> +without ``zicfilp`` support in it and thus would want to disallow disabl=
-ing of
-> +indirect branch tracking. In that case user space can use this prctl to =
-lock
-> +current settings.
-> +
-> +5. violations related to indirect branch tracking
-> +--------------------------------------------------
-> +
-> +Pertaining to indirect branch tracking, CPU raises software check except=
-ion in
-> +following conditions:
-> +
-> +- missing ``lpad`` after indirect call / jmp
-> +- ``lpad`` not on 4 byte boundary
-> +- ``imm_20bit`` embedded in ``lpad`` instruction doesn't match with ``x7=
-``
-> +
-> +In all 3 cases, ``*tval =3D 2`` is captured and software check exception=
- is
-> +raised (``cause=3D18``)
-> +
-> +Linux kernel will treat this as :c:macro:`SIGSEV`` with code =3D
-> +:c:macro:`SEGV_CPERR` and follow normal course of signal delivery.
->
+> +	max_mapnr = end - start;
+>   }
+>   #else
+>   static inline void alloc_node_mem_map(struct pglist_data *pgdat) { }
+> diff --git a/mm/nommu.c b/mm/nommu.c
+> index baa79abdaf03..f0209dd26dfa 100644
+> --- a/mm/nommu.c
+> +++ b/mm/nommu.c
+> @@ -44,16 +44,12 @@
+>   
+>   void *high_memory;
+>   EXPORT_SYMBOL(high_memory);
+> -struct page *mem_map;
+> -unsigned long max_mapnr;
+> -EXPORT_SYMBOL(max_mapnr);
+>   unsigned long highest_memmap_pfn;
+>   int sysctl_nr_trim_pages = CONFIG_NOMMU_INITIAL_TRIM_EXCESS;
+>   int heap_stack_gap = 0;
+>   
+>   atomic_long_t mmap_pages_allocated;
+>   
+> -EXPORT_SYMBOL(mem_map);
+>   
+>   /* list of mapped, potentially shareable regions */
+>   static struct kmem_cache *vm_region_jar;
 
-LGTM.
-
-Reviewed-by: Zong Li <zong.li@sifive.com>
-> --
-> 2.34.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
