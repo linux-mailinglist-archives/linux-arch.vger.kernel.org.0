@@ -1,71 +1,71 @@
-Return-Path: <linux-arch+bounces-10776-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10779-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3787A609AB
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 08:16:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E880CA609A9
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 08:16:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CC2C3B3C5B
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 07:14:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8B6117F42B
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Mar 2025 07:15:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10D3D17BEC5;
-	Fri, 14 Mar 2025 07:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4376A1E521B;
+	Fri, 14 Mar 2025 07:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NPGK4T5W"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ILX5Oqpu"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F5D1946B8
-	for <linux-arch@vger.kernel.org>; Fri, 14 Mar 2025 07:11:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0F31EE7B3
+	for <linux-arch@vger.kernel.org>; Fri, 14 Mar 2025 07:12:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741936315; cv=none; b=pdBUfHGIC6Mdb+WWR92NDtC+MmbsAdfW1k28tfM6CZWOJHMc2Z8vD2crNUhmovG1wDS5EQg/hCaMxCb9d6+gLiKu5SXtNDrrOhfUZcTh3JlwnQgTcNvH2J8Zfavr7QRC/QNU+ez7DEw87nvnNWrTYQhC7DQGdAF6WaX9C3TZtxM=
+	t=1741936322; cv=none; b=mjTPGzDdVSckfYAdjP4OW+b5URpWDEikdyFhELbphHpmpajSzrjhygAZdpHJLwHo+SckYQ7um7I0sF8xP5EvemcSZPY3/IL3hzKkG/Q7c1ikKKo2FQceqYCZh1rFJcffSLrIRP74JfvsWDDWb5Ppzk8kwD/hwPVSfvXAFn7yefQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741936315; c=relaxed/simple;
-	bh=PoiuYi+UdxZabu4PqUnzQiwnxr1s1h7qshT5USHYTW0=;
+	s=arc-20240116; t=1741936322; c=relaxed/simple;
+	bh=KkmkmAuetJOmZ51LkCpnDWW6Qh90sIhoC9OqtrRDe9Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pBiQlCSTZW4aJxxWx3c2sWlQQZ5h7ucdi7x0ZHG39D5PTh4/Jz8usYAxWaH9N9pRODs2ubwLAXkBhRpEOv82Sn6pNwGTOWxvJ4csqn6EUtvvHfO0Dgf1lsvkNL8uBSumpR861MasThnRDM3Jc9sgLnn7PYR2lZWWDov6bNf96iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NPGK4T5W; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=h9FoJLubuySvo3lnzTdui/fDqyMjNJNGt2TLXiUZLJl18+VF5TLtU7Tz9P4k9AxoTZgPVrKlefqI23ayZgBtYjZJGSYE2xxlyy44CXBmwCuJ8ZsayvFCsJ/ocFbSonTUJFxI8G0evsZ3nLlHaqtajlF2sLXQ8DzCe9N0Kew8B7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ILX5Oqpu; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741936313;
+	s=mimecast20190719; t=1741936319;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=w/icU0rYwhHsmyhqcav7daSw50Oq8EusYXXaJtzC4eA=;
-	b=NPGK4T5WX6v9sdZSZQI9axvGaF8daon8fRFby0NJJS4uGhtWBjeGX5ew7ex9lYZVMugpRh
-	8xt2SSy2wms2ty05Mh6U+RuXxUSlBRghPKB7gJGtcAQ1WZ3raQISaOXUp8L0zZPtlo3Nkw
-	M2SSJUBBxrDB8GljZ5C3Y6IL+OdqbD8=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=FeukQ1SXpPcXv8185pK8ZpJPa413R1od3ox35AbmyJQ=;
+	b=ILX5OqpubHTNHGefR7J2gVRjS771RRCxqlJfN5jrSPe0LxtRcmOq7qqrFZIjOikHaZSAJG
+	7W8dm6Jpka4q0bUcTks9+CeHnQQyGAlb8JRn6/TSnTHDMr5b7jLMQOx8E3S0Or/Gj19hlh
+	uy+GwQolHX9nZIpH0GKGysPgMW6Edp8=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-437-x6CbKFiCP9qx__h2jOT-7w-1; Fri,
- 14 Mar 2025 03:11:51 -0400
-X-MC-Unique: x6CbKFiCP9qx__h2jOT-7w-1
-X-Mimecast-MFC-AGG-ID: x6CbKFiCP9qx__h2jOT-7w_1741936310
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-475-HRbBm6RYNz6bE2k3uri9xw-1; Fri,
+ 14 Mar 2025 03:11:56 -0400
+X-MC-Unique: HRbBm6RYNz6bE2k3uri9xw-1
+X-Mimecast-MFC-AGG-ID: HRbBm6RYNz6bE2k3uri9xw_1741936315
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D58A5180AB1C;
-	Fri, 14 Mar 2025 07:11:50 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E668C1955DB9;
+	Fri, 14 Mar 2025 07:11:54 +0000 (UTC)
 Received: from thuth-p1g4.redhat.com (unknown [10.44.32.82])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CCC7C18001DE;
-	Fri, 14 Mar 2025 07:11:48 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A210F18001D4;
+	Fri, 14 Mar 2025 07:11:51 +0000 (UTC)
 From: Thomas Huth <thuth@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org,
 	Thomas Huth <thuth@redhat.com>,
 	Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 20/41] nios2: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
-Date: Fri, 14 Mar 2025 08:09:51 +0100
-Message-ID: <20250314071013.1575167-21-thuth@redhat.com>
+Subject: [PATCH 21/41] nios2: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+Date: Fri, 14 Mar 2025 08:09:52 +0100
+Message-ID: <20250314071013.1575167-22-thuth@redhat.com>
 In-Reply-To: <20250314071013.1575167-1-thuth@redhat.com>
 References: <20250314071013.1575167-1-thuth@redhat.com>
 Precedence: bulk
@@ -77,11 +77,13 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-__ASSEMBLY__ is only defined by the Makefile of the kernel, so
-this is not really useful for uapi headers (unless the userspace
-Makefile defines it, too). Let's switch to __ASSEMBLER__ which
-gets set automatically by the compiler when compiling assembly
-code.
+While the GCC and Clang compilers already define __ASSEMBLER__
+automatically when compiling assembly code, __ASSEMBLY__ is a
+macro that only gets defined by the Makefiles in the kernel.
+This can be very confusing when switching between userspace
+and kernelspace coding, or when dealing with uapi headers that
+rather should use __ASSEMBLER__ instead. So let's standardize on
+the __ASSEMBLER__ macro that is provided by the compilers now.
 
 This is a completely mechanical patch (done with a simple "sed -i"
 statement).
@@ -89,29 +91,176 @@ statement).
 Cc: Dinh Nguyen <dinguyen@kernel.org>
 Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
- arch/nios2/include/uapi/asm/ptrace.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/nios2/include/asm/entry.h       | 4 ++--
+ arch/nios2/include/asm/page.h        | 4 ++--
+ arch/nios2/include/asm/processor.h   | 4 ++--
+ arch/nios2/include/asm/ptrace.h      | 4 ++--
+ arch/nios2/include/asm/registers.h   | 4 ++--
+ arch/nios2/include/asm/setup.h       | 4 ++--
+ arch/nios2/include/asm/thread_info.h | 4 ++--
+ arch/nios2/include/asm/traps.h       | 2 +-
+ 8 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/arch/nios2/include/uapi/asm/ptrace.h b/arch/nios2/include/uapi/asm/ptrace.h
-index 2b91dbe5bcfee..1298db9f0fc98 100644
---- a/arch/nios2/include/uapi/asm/ptrace.h
-+++ b/arch/nios2/include/uapi/asm/ptrace.h
-@@ -13,7 +13,7 @@
- #ifndef _UAPI_ASM_NIOS2_PTRACE_H
- #define _UAPI_ASM_NIOS2_PTRACE_H
+diff --git a/arch/nios2/include/asm/entry.h b/arch/nios2/include/asm/entry.h
+index bafb7b2ca59fc..cb25ed56450ab 100644
+--- a/arch/nios2/include/asm/entry.h
++++ b/arch/nios2/include/asm/entry.h
+@@ -10,7 +10,7 @@
+ #ifndef _ASM_NIOS2_ENTRY_H
+ #define _ASM_NIOS2_ENTRY_H
+ 
+-#ifdef __ASSEMBLY__
++#ifdef __ASSEMBLER__
+ 
+ #include <asm/processor.h>
+ #include <asm/registers.h>
+@@ -117,5 +117,5 @@
+ 	addi	sp, sp, SWITCH_STACK_SIZE
+ .endm
+ 
+-#endif /* __ASSEMBLY__ */
++#endif /* __ASSEMBLER__ */
+ #endif /* _ASM_NIOS2_ENTRY_H */
+diff --git a/arch/nios2/include/asm/page.h b/arch/nios2/include/asm/page.h
+index 2897ec1b74f61..00a51623d38a5 100644
+--- a/arch/nios2/include/asm/page.h
++++ b/arch/nios2/include/asm/page.h
+@@ -26,7 +26,7 @@
+ #define PAGE_OFFSET	\
+ 	(CONFIG_NIOS2_MEM_BASE + CONFIG_NIOS2_KERNEL_REGION_BASE)
  
 -#ifndef __ASSEMBLY__
 +#ifndef __ASSEMBLER__
  
- #include <linux/types.h>
+ /*
+  * This gives the physical RAM offset.
+@@ -90,6 +90,6 @@ extern struct page *mem_map;
  
-@@ -80,5 +80,5 @@ struct user_pt_regs {
- 	__u32		regs[49];
- };
+ #include <asm-generic/getorder.h>
+ 
+-#endif /* !__ASSEMBLY__ */
++#endif /* !__ASSEMBLER__ */
+ 
+ #endif /* _ASM_NIOS2_PAGE_H */
+diff --git a/arch/nios2/include/asm/processor.h b/arch/nios2/include/asm/processor.h
+index eb44130364a9a..d9521c3c2df98 100644
+--- a/arch/nios2/include/asm/processor.h
++++ b/arch/nios2/include/asm/processor.h
+@@ -36,7 +36,7 @@
+ /* Kuser helpers is mapped to this user space address */
+ #define KUSER_BASE		0x1000
+ #define KUSER_SIZE		(PAGE_SIZE)
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ 
+ # define TASK_SIZE		0x7FFF0000UL
+ # define TASK_UNMAPPED_BASE	(PAGE_ALIGN(TASK_SIZE / 3))
+@@ -72,6 +72,6 @@ extern unsigned long __get_wchan(struct task_struct *p);
+ 
+ #define cpu_relax()	barrier()
  
 -#endif /* __ASSEMBLY__ */
 +#endif /* __ASSEMBLER__ */
- #endif /* _UAPI_ASM_NIOS2_PTRACE_H */
+ 
+ #endif /* _ASM_NIOS2_PROCESSOR_H */
+diff --git a/arch/nios2/include/asm/ptrace.h b/arch/nios2/include/asm/ptrace.h
+index 9da34c3022a27..96cbcd40c7ce5 100644
+--- a/arch/nios2/include/asm/ptrace.h
++++ b/arch/nios2/include/asm/ptrace.h
+@@ -18,7 +18,7 @@
+ /* This struct defines the way the registers are stored on the
+    stack during a system call.  */
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ struct pt_regs {
+ 	unsigned long  r8;	/* r8-r15 Caller-saved GP registers */
+ 	unsigned long  r9;
+@@ -78,5 +78,5 @@ extern void show_regs(struct pt_regs *);
+ 
+ int do_syscall_trace_enter(void);
+ void do_syscall_trace_exit(void);
+-#endif /* __ASSEMBLY__ */
++#endif /* __ASSEMBLER__ */
+ #endif /* _ASM_NIOS2_PTRACE_H */
+diff --git a/arch/nios2/include/asm/registers.h b/arch/nios2/include/asm/registers.h
+index 95b67dd16f818..165dab26221f2 100644
+--- a/arch/nios2/include/asm/registers.h
++++ b/arch/nios2/include/asm/registers.h
+@@ -6,7 +6,7 @@
+ #ifndef _ASM_NIOS2_REGISTERS_H
+ #define _ASM_NIOS2_REGISTERS_H
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ #include <asm/cpuinfo.h>
+ #endif
+ 
+@@ -44,7 +44,7 @@
+ 
+ /* tlbmisc register bits */
+ #define TLBMISC_PID_SHIFT	4
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ #define TLBMISC_PID_MASK	((1UL << cpuinfo.tlb_pid_num_bits) - 1)
+ #endif
+ #define TLBMISC_WAY_MASK	0xf
+diff --git a/arch/nios2/include/asm/setup.h b/arch/nios2/include/asm/setup.h
+index 908a1526d1bd7..6d3f26a71cb51 100644
+--- a/arch/nios2/include/asm/setup.h
++++ b/arch/nios2/include/asm/setup.h
+@@ -8,7 +8,7 @@
+ 
+ #include <asm-generic/setup.h>
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ #ifdef __KERNEL__
+ 
+ extern char exception_handler_hook[];
+@@ -18,6 +18,6 @@ extern char fast_handler_end[];
+ extern void pagetable_init(void);
+ 
+ #endif/* __KERNEL__ */
+-#endif /* __ASSEMBLY__ */
++#endif /* __ASSEMBLER__ */
+ 
+ #endif /* _ASM_NIOS2_SETUP_H */
+diff --git a/arch/nios2/include/asm/thread_info.h b/arch/nios2/include/asm/thread_info.h
+index 5abac9893b32b..83df79286d62e 100644
+--- a/arch/nios2/include/asm/thread_info.h
++++ b/arch/nios2/include/asm/thread_info.h
+@@ -24,7 +24,7 @@
+ #define THREAD_SIZE_ORDER	1
+ #define THREAD_SIZE		8192 /* 2 * PAGE_SIZE */
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ 
+ /*
+  * low level task data that entry.S needs immediate access to
+@@ -61,7 +61,7 @@ static inline struct thread_info *current_thread_info(void)
+ 
+ 	return (struct thread_info *)(sp & ~(THREAD_SIZE - 1));
+ }
+-#endif /* !__ASSEMBLY__ */
++#endif /* !__ASSEMBLER__ */
+ 
+ /*
+  * thread information flags
+diff --git a/arch/nios2/include/asm/traps.h b/arch/nios2/include/asm/traps.h
+index afd77bef01c65..133a3dedbc3e8 100644
+--- a/arch/nios2/include/asm/traps.h
++++ b/arch/nios2/include/asm/traps.h
+@@ -12,7 +12,7 @@
+ 
+ #define TRAP_ID_SYSCALL		0
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ void _exception(int signo, struct pt_regs *regs, int code, unsigned long addr);
+ void do_page_fault(struct pt_regs *regs, unsigned long cause,
+ 		   unsigned long address);
 -- 
 2.48.1
 
