@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-10874-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10875-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 959F4A622DF
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 01:20:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BE9A622E4
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 01:20:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F60019C456D
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 00:20:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E51288221C
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 00:20:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E152145A0B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DCCD21345;
 	Sat, 15 Mar 2025 00:19:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="K4ToaNaF"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="cac0nYhW"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 091896FC3;
-	Sat, 15 Mar 2025 00:19:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FCB208A0;
+	Sat, 15 Mar 2025 00:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741997978; cv=none; b=a+0lqArddim1h4+ZMF+y1vqZRHAchQ8+eri+tyRAasRCc9Nt6R1l5nI3Gnk/VdxkhnEM+usKWcsJC4vPynFAtYmp8cxk3+kuOfRCiQkRAXsY96rvJf7i/xcBIn3LahLMJMn55uhJzWbvQSpmcCx14tUB+tcshPXR8oAOftBMyuo=
+	t=1741997978; cv=none; b=cbpEgXHVIqchXLl0t2HEwLH2xrxNoiSPCkDnruupmKVdT7yrXpXvyFT9FcwgF+tmTQtSCJfEf6SBnUaSW9UdDb5aZAvKEgSB/w5OHakGT+acpC0dBFph8yUOAoSXRL7uy8dFyOlyaoNjW75k8pnN+TUjvhRVqF/JtjnwK6tQCCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741997978; c=relaxed/simple;
-	bh=g/2uZiUyWa0cPWg+UTEOSSCeEUcj8RSAQPmZB3sx49k=;
+	bh=cra/GNuyMQV91GFqsW8dQ9HbAggpcs6Io/tZ112UIh0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UlOVWTMYXFEGqicuvWjRviOYLZnNDrwGqigR3ZwQaKjKmkDvQyX1f/Ohj2Wn2bt8ydvTlIpRT72nBQf8n8tFGzRsGMMVmFHQtl7YUAxaoHqKhbBavfsNSm24a7N3KCpx8iNUri4H7gP5fDQEnVx+SE5f9VK/O5jU58I5vNP6O04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=K4ToaNaF; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=kD1AS9q68oQ5ddREK3p/lVnKHoGZfhjuRwxsz7b6CboIFAQFw0LuJhQog/xiLqohv1XAxf+EJFhZDM85NEVV/2tAAe2LtiAsyjKmHm3bibMrrbiA0A/iIoa0j5Gw7cjI+UzCyYl2FwJglwV95O1UozPF1Nu5pSUhrn+iuZRK188=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=cac0nYhW; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 3D2F82038F38;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 9B8D02038A52;
 	Fri, 14 Mar 2025 17:19:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3D2F82038F38
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9B8D02038A52
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1741997975;
-	bh=Xd84y/Dt5kGdwOHOv/ySZ7avVCs31VnToN8B2fxVlBI=;
+	bh=NIRoaJMzXhRU+FEOMF0AnLyeJ+Xl1dVpfnO4TXIokQU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=K4ToaNaFpr0/1wcbNtPZbQaGBstjklj6nutG57i5Nh1TAFAOO9cx7IxYaN6CQUNkL
-	 6G3BryTp8ULqqG8RZbO7mXzsWVcwlBtd0qbaKwdjo3tRnw/NN0B1ID19EEoVdpftjV
-	 drW6A7Dih+jvHMo+BY5DjCNYYtfNUOKbLAfU6EvU=
+	b=cac0nYhWonKSodrgcm22k2UaS9TFPGH2L0yKUnuRyCzzIt1EGqE45j6m5xxZikYmV
+	 +jClSCydm9Z5xvpZQhb2vydLjRj1mcNwjNPciHvS+6BCTf+fYeG1Hhm/ZQqaLCAKs8
+	 LmtpfXtoSxYjfIiPMlAI1f/38L4NWn5yQ+6QcIqM=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -84,9 +84,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v6 06/11] arm64, x86: hyperv: Report the VTL the system boots in
-Date: Fri, 14 Mar 2025 17:19:26 -0700
-Message-ID: <20250315001931.631210-7-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v6 07/11] dt-bindings: microsoft,vmbus: Add interrupt and DMA coherence properties
+Date: Fri, 14 Mar 2025 17:19:27 -0700
+Message-ID: <20250315001931.631210-8-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250315001931.631210-1-romank@linux.microsoft.com>
 References: <20250315001931.631210-1-romank@linux.microsoft.com>
@@ -98,48 +98,70 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The hyperv guest code might run in various Virtual Trust Levels.
+To boot in the VTL mode, VMBus on arm64 needs interrupt description
+which the binding documentation lacks. The transactions on the bus are
+DMA coherent which is not mentioned as well.
 
-Report the level when the kernel boots in the non-default (0)
-one.
+Add the interrupt property and the DMA coherence property to the VMBus
+binding. Update the example to match that. Fix typos.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 ---
- arch/arm64/hyperv/mshyperv.c | 2 ++
- arch/x86/hyperv/hv_vtl.c     | 7 ++++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ .../bindings/bus/microsoft,vmbus.yaml           | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-index f251a08ada5b..ecbd2f5c955e 100644
---- a/arch/arm64/hyperv/mshyperv.c
-+++ b/arch/arm64/hyperv/mshyperv.c
-@@ -110,6 +110,8 @@ static int __init hyperv_init(void)
- 	if (ms_hyperv.priv_high & HV_ACCESS_PARTITION_ID)
- 		hv_get_partition_id();
- 	ms_hyperv.vtl = get_vtl();
-+	if (ms_hyperv.vtl > 0) /* non default VTL */
-+		pr_info("Linux runs in Hyper-V Virtual Trust Level %d\n", ms_hyperv.vtl);
+diff --git a/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml b/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+index a8d40c766dcd..ca288ea54b34 100644
+--- a/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
++++ b/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+@@ -10,8 +10,8 @@ maintainers:
+   - Saurabh Sengar <ssengar@linux.microsoft.com>
  
- 	ms_hyperv_late_init();
+ description:
+-  VMBus is a software bus that implement the protocols for communication
+-  between the root or host OS and guest OSs (virtual machines).
++  VMBus is a software bus that implements the protocols for communication
++  between the root or host OS and guest OS'es (virtual machines).
  
-diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
-index 582fe820e29c..038c896fdd60 100644
---- a/arch/x86/hyperv/hv_vtl.c
-+++ b/arch/x86/hyperv/hv_vtl.c
-@@ -55,7 +55,12 @@ static void  __noreturn hv_vtl_restart(char __maybe_unused *cmd)
+ properties:
+   compatible:
+@@ -25,9 +25,17 @@ properties:
+   '#size-cells':
+     const: 1
  
- void __init hv_vtl_init_platform(void)
- {
--	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
-+	/*
-+	 * This function is a no-op if the VTL mode is not enabled.
-+	 * If it is, this function runs if and only the kernel boots in
-+	 * VTL2 which the x86 hv initialization path makes sure of.
-+	 */
-+	pr_info("Linux runs in Hyper-V Virtual Trust Level %d\n", ms_hyperv.vtl);
++  dma-coherent: true
++
++  interrupts:
++    maxItems: 1
++    description: |
++      This interrupt is used to report a message from the host.
++
+ required:
+   - compatible
+   - ranges
++  - interrupts
+   - '#address-cells'
+   - '#size-cells'
  
- 	x86_platform.realmode_reserve = x86_init_noop;
- 	x86_platform.realmode_init = x86_init_noop;
+@@ -35,6 +43,8 @@ additionalProperties: false
+ 
+ examples:
+   - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
+     soc {
+         #address-cells = <2>;
+         #size-cells = <1>;
+@@ -49,6 +59,9 @@ examples:
+                 #address-cells = <2>;
+                 #size-cells = <1>;
+                 ranges = <0x0f 0xf0000000 0x0f 0xf0000000 0x10000000>;
++                dma-coherent;
++                interrupt-parent = <&gic>;
++                interrupts = <GIC_PPI 2 IRQ_TYPE_EDGE_RISING>;
+             };
+         };
+     };
 -- 
 2.43.0
 
