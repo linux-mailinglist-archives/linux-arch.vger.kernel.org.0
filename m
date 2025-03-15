@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-10885-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10886-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C4E0A62B83
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B46EA62B7F
 	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 12:00:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C5EA7AD505
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 10:59:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E71E819C05B1
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 11:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B1DF1F9413;
-	Sat, 15 Mar 2025 10:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFF01F9A95;
+	Sat, 15 Mar 2025 10:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+bdiqGN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="diX0xfqF"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F221F8EEC;
-	Sat, 15 Mar 2025 10:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4813F1F7098;
+	Sat, 15 Mar 2025 10:59:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742036373; cv=none; b=rKNkLbrARSjJLqPo3YtB2FAf7+vYyaGKVl3zYj2pHr2UakACnPxo2fZ23xDPFY75ZBw/dYHGyYP9WDRu4pqwtyv8+TODDz2n1JUgsKecbeN7rBj5lJYpyYS+hcQuqkONi0hnEgM2d+2IyjF9MOIYOBwYrvexbAPcZSFqvieV4vw=
+	t=1742036378; cv=none; b=bnzgyr2L/cD4eH7N5nBcihPMXev+0LksNQF+I4BohNL66GCFPFkDkaF/YyOQpfL2JFe5vUBW7sedBUK7w6C7bp9QCnN/DCtualZpcf6WmANBRgPOeB2L+380TC6gy4/QSjnnntu2+SjF85SuxTksUHzp/ZssK0fsujISToLeK3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742036373; c=relaxed/simple;
-	bh=/gsyKJhuoIen+vHsBslWnn/2C+BZeE5kQsZ8QckJoRI=;
+	s=arc-20240116; t=1742036378; c=relaxed/simple;
+	bh=A5i5/N269tmlctuJx50AMW6UOHChrJm88b2b4zSeyoA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YI7/t6AIHPqHFIA6s58JE8XM75eF0XLJT2QzCLfrIKlz1AMiNRc0I28KUDxBrcNyS9AV7tguLf4RlTrn+19ifrv/cqRCWZhkIqCnSOBUkur8o7Nqk9+DAd2A1A36zSLCmKjGjetQ+NhDqIBxEJgLMtxk6+RxE/ykKfKEGeBQS7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+bdiqGN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E94C1C4CEED;
-	Sat, 15 Mar 2025 10:59:27 +0000 (UTC)
+	 MIME-Version; b=O2uwLxFqj4KLq7lVTThC8d8xjFbagSmtSjSFYWH1n4qfdK/2lPUNSU6qrKqzj5HWBXefwzBGD5fsZYsrmSs3/AMTJueDmdhBfG46zpBqniRcI3ieDpEdCJ+G/8LC92bCrt+fh2xzudiKDARUtRGfQR0ujkdvKGfGghth2U4A5DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=diX0xfqF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19449C4CEE9;
+	Sat, 15 Mar 2025 10:59:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742036372;
-	bh=/gsyKJhuoIen+vHsBslWnn/2C+BZeE5kQsZ8QckJoRI=;
+	s=k20201202; t=1742036377;
+	bh=A5i5/N269tmlctuJx50AMW6UOHChrJm88b2b4zSeyoA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V+bdiqGN8Z8XOKssQQKhRShJZpgdJU/nDmTn2ED0MtuKUnS5le08t96rPYxjBIW3W
-	 EEjWDsWMb/VL49fo30BlNQ9aW1IqRkBdQPXhsa7JCcSJ1za3w9XXCKFqjVipuCYzSA
-	 QLgWrS+9HVDy5DynWbyMvCZD/o2pd8i++ywdtQGNubkvh+FjQqVI8ogvKUmXVh8UIm
-	 j5GRzafGvHy8Z9mU22LR87OV28V/hM7swqiMFSP+nmGB/4fJfA3M/nWf/b1J6du1xR
-	 PTMFl0VGtXo0jf4htyqvc7URq4YGmmI/oIvLIHhSVmacjGt5VEU2RtCM8nbfnFi8Fx
-	 tHb2HdNFzItjg==
+	b=diX0xfqF9v6ZGZRle7yS797sxjadb3E94MlDDS4u2Ag47HK7jKFgrf0+lFKqJyd4Z
+	 9zI1O0TL4ydGgnrIeulnAzEMTAwCyHN4aaYIjOJk4KG9iQ9AUEgXcaqj1ZPma2QWCj
+	 7R4G/nVWt1vuxaxJKUIQRdYxGdOY+kQSZryHNxz+vVP+V61ore9HhuE0ButGW2mWzR
+	 bZv7UuwIJNTuGwzwOmv42rKJQ/X2fJFY4DLlYwRmOt8Uuk/ln2ZGVjY/dlC/AIRZQf
+	 xIBQPHVRG8UBgapcN+S6EKST97e/EqLy5aOB9pu3G9miFJF68PdnfRDwdShSTHnAR1
+	 0xk0SMnqOCSoA==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-arch@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -68,9 +68,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-parisc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-sh@vger.kernel.org
-Subject: [PATCH 3/6] parisc: stop using asm-generic/iomap.h
-Date: Sat, 15 Mar 2025 11:59:04 +0100
-Message-Id: <20250315105907.1275012-4-arnd@kernel.org>
+Subject: [PATCH 4/6] powerpc: asm/io.h: remove split ioread64/iowrite64 helpers
+Date: Sat, 15 Mar 2025 11:59:05 +0100
+Message-Id: <20250315105907.1275012-5-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250315105907.1275012-1-arnd@kernel.org>
 References: <20250315105907.1275012-1-arnd@kernel.org>
@@ -84,87 +84,99 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-parisc uses custom iomap helpers to map bus specific function calls into
-a linear __iomem token, but it tries to use the declarations from the x86
-"generic iomap" code.
+In previous kernels, there were conflicting definitions for what
+ioread64_lo_hi() and similar functions were supposed to do on
+architectures with native 64-bit MMIO. Based on the actual usage in
+drivers, they are in fact expected to be a pair of 32-bit accesses on
+all architectures, which makes the powerpc64 definition wrong.
 
-Untangle the two by duplicating the required declations and dropping
-the #include that pulls in more stuff that is not needed here, to
-allow simplify the generic version later.
+Remove it and use the generic implementation instead.
+
+Drivers that want to have split lo/hi or hi/lo accesses on 32-bit
+architectures but can use 64-bit accesses where supported should instead
+use ioread64()/iowrite64() after including the corresponding header file.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/parisc/include/asm/io.h | 36 +++++++++++++++++++++++++++---------
- 1 file changed, 27 insertions(+), 9 deletions(-)
+ arch/powerpc/include/asm/io.h | 48 -----------------------------------
+ 1 file changed, 48 deletions(-)
 
-diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
-index 3143cf29ce27..59d85d2386bb 100644
---- a/arch/parisc/include/asm/io.h
-+++ b/arch/parisc/include/asm/io.h
-@@ -227,36 +227,54 @@ extern void outsl (unsigned long port, const void *src, unsigned long count);
- #define F_EXTEND(x) ((unsigned long)((x) | (0xffffffff00000000ULL)))
- 
- #ifdef CONFIG_64BIT
--#define ioread64 ioread64
--#define ioread64be ioread64be
--#define iowrite64 iowrite64
--#define iowrite64be iowrite64be
- extern u64 ioread64(const void __iomem *addr);
- extern u64 ioread64be(const void __iomem *addr);
-+#define ioread64 ioread64
-+#define ioread64be ioread64be
-+
- extern void iowrite64(u64 val, void __iomem *addr);
- extern void iowrite64be(u64 val, void __iomem *addr);
-+#define iowrite64 iowrite64
-+#define iowrite64be iowrite64be
- #endif
- 
--#include <asm-generic/iomap.h>
--/*
-- * These get provided from <asm-generic/iomap.h> since parisc does not
-- * select GENERIC_IOMAP.
-- */
-+extern void __iomem *ioport_map(unsigned long port, unsigned int nr);
-+extern void ioport_unmap(void __iomem *);
- #define ioport_map ioport_map
- #define ioport_unmap ioport_unmap
-+
-+extern unsigned int ioread8(const void __iomem *);
-+extern unsigned int ioread16(const void __iomem *);
-+extern unsigned int ioread16be(const void __iomem *);
-+extern unsigned int ioread32(const void __iomem *);
-+extern unsigned int ioread32be(const void __iomem *);
- #define ioread8 ioread8
- #define ioread16 ioread16
- #define ioread32 ioread32
- #define ioread16be ioread16be
+diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
+index fd92ac450169..d36c4ccaca08 100644
+--- a/arch/powerpc/include/asm/io.h
++++ b/arch/powerpc/include/asm/io.h
+@@ -738,35 +738,11 @@ static inline unsigned int ioread32be(const void __iomem *addr)
  #define ioread32be ioread32be
-+
-+extern void iowrite8(u8, void __iomem *);
-+extern void iowrite16(u16, void __iomem *);
-+extern void iowrite16be(u16, void __iomem *);
-+extern void iowrite32(u32, void __iomem *);
-+extern void iowrite32be(u32, void __iomem *);
- #define iowrite8 iowrite8
- #define iowrite16 iowrite16
- #define iowrite32 iowrite32
- #define iowrite16be iowrite16be
+ 
+ #ifdef __powerpc64__
+-static inline u64 ioread64_lo_hi(const void __iomem *addr)
+-{
+-	return readq(addr);
+-}
+-#define ioread64_lo_hi ioread64_lo_hi
+-
+-static inline u64 ioread64_hi_lo(const void __iomem *addr)
+-{
+-	return readq(addr);
+-}
+-#define ioread64_hi_lo ioread64_hi_lo
+-
+ static inline u64 ioread64be(const void __iomem *addr)
+ {
+ 	return readq_be(addr);
+ }
+ #define ioread64be ioread64be
+-
+-static inline u64 ioread64be_lo_hi(const void __iomem *addr)
+-{
+-	return readq_be(addr);
+-}
+-#define ioread64be_lo_hi ioread64be_lo_hi
+-
+-static inline u64 ioread64be_hi_lo(const void __iomem *addr)
+-{
+-	return readq_be(addr);
+-}
+-#define ioread64be_hi_lo ioread64be_hi_lo
+ #endif /* __powerpc64__ */
+ 
+ static inline void iowrite16be(u16 val, void __iomem *addr)
+@@ -782,35 +758,11 @@ static inline void iowrite32be(u32 val, void __iomem *addr)
  #define iowrite32be iowrite32be
-+
-+extern void ioread8_rep(const void __iomem *port, void *buf, unsigned long count);
-+extern void ioread16_rep(const void __iomem *port, void *buf, unsigned long count);
-+extern void ioread32_rep(const void __iomem *port, void *buf, unsigned long count);
- #define ioread8_rep ioread8_rep
- #define ioread16_rep ioread16_rep
- #define ioread32_rep ioread32_rep
-+
-+extern void iowrite8_rep(void __iomem *port, const void *buf, unsigned long count);
-+extern void iowrite16_rep(void __iomem *port, const void *buf, unsigned long count);
-+extern void iowrite32_rep(void __iomem *port, const void *buf, unsigned long count);
- #define iowrite8_rep iowrite8_rep
- #define iowrite16_rep iowrite16_rep
- #define iowrite32_rep iowrite32_rep
+ 
+ #ifdef __powerpc64__
+-static inline void iowrite64_lo_hi(u64 val, void __iomem *addr)
+-{
+-	writeq(val, addr);
+-}
+-#define iowrite64_lo_hi iowrite64_lo_hi
+-
+-static inline void iowrite64_hi_lo(u64 val, void __iomem *addr)
+-{
+-	writeq(val, addr);
+-}
+-#define iowrite64_hi_lo iowrite64_hi_lo
+-
+ static inline void iowrite64be(u64 val, void __iomem *addr)
+ {
+ 	writeq_be(val, addr);
+ }
+ #define iowrite64be iowrite64be
+-
+-static inline void iowrite64be_lo_hi(u64 val, void __iomem *addr)
+-{
+-	writeq_be(val, addr);
+-}
+-#define iowrite64be_lo_hi iowrite64be_lo_hi
+-
+-static inline void iowrite64be_hi_lo(u64 val, void __iomem *addr)
+-{
+-	writeq_be(val, addr);
+-}
+-#define iowrite64be_hi_lo iowrite64be_hi_lo
+ #endif /* __powerpc64__ */
+ 
+ struct pci_dev;
 -- 
 2.39.5
 
