@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-10887-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10888-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A515A62B8A
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 12:00:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31EE2A62B95
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 12:00:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5534019C0639
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 11:00:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C8EB3BF984
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 11:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12401FBEAB;
-	Sat, 15 Mar 2025 10:59:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAADD1FA856;
+	Sat, 15 Mar 2025 10:59:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUVpQhYu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DNNhAbIc"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792D61F8736;
-	Sat, 15 Mar 2025 10:59:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8692F1F8AE5;
+	Sat, 15 Mar 2025 10:59:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742036383; cv=none; b=ACj1C+Qb5MQsDLzRwSmbsXLN5iM45ZzBJEMpRBj4a/RymGIxYaPOGVnoZ3z1zJQKPch4CpplqU2qlJSbuBwLbAC/hzS/tQsrogZ6K/h/3TFo43Ep1kYjV9NOFm5Tcr6ah08vwPsSAJiKSW4+qrXwh3zjUByCJ4aXrpgw1oTLmGY=
+	t=1742036388; cv=none; b=SwlXx3MUiAn+2OaPXAVGuDtT8r7i4VPHCgoSa7rCJvb6hxaLfu21Isv5Bo1u88/yfkNyVcJZv2cH8m5wdiN3pN/vPxGBF3VvDAfvCXXv8yWgp6LU8Y796GlzanOQcDTSeS2bLiMY6VJH9KmxlAtGzLb/7RLA5UP9MUgdEZ8qV7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742036383; c=relaxed/simple;
-	bh=Ocgkmwh32rBMKgy+zdGqEw65Xp0hQcjH99SnZLPTggw=;
+	s=arc-20240116; t=1742036388; c=relaxed/simple;
+	bh=D1ohrsimuAws13B6dSJm4c6y+zLXLpUyAoEhItGWqLk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OcJtRwbolp+g6onnbd46ph6ort0ZV65J+yvcCsdWGsVos+CrmBlNaSHzz82C6fBiW7G1biDM5rkFCMSeT9OiAfKYKLOHqKwbfjOjliWJs36yzOADmjKxtO9xNV8KfFKnJkHWfA2ephvoKl/sntw/Z4qbXUdKWMbFnlGr1GOKDkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUVpQhYu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30993C4CEEE;
-	Sat, 15 Mar 2025 10:59:38 +0000 (UTC)
+	 MIME-Version; b=I6DBSVg5kDh5wyZOdGvTIitcz3DXyNxAvR7yQZnu2/wqGaG70vqbnlwRATvsGeugJNyQxkGb14HACFSiOmheLlxo06fLBacLYGFAMuw3lzYZ731iQU/I+VeEUeVUEIpeCYpJ4gPZjETr5e5usUIFrNgeCbaCoFukjr/nlbXAPtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DNNhAbIc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D88DC4CEEB;
+	Sat, 15 Mar 2025 10:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742036382;
-	bh=Ocgkmwh32rBMKgy+zdGqEw65Xp0hQcjH99SnZLPTggw=;
+	s=k20201202; t=1742036388;
+	bh=D1ohrsimuAws13B6dSJm4c6y+zLXLpUyAoEhItGWqLk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AUVpQhYuj8R5lbEwOh0aZKM4Y8Acv7xnv2sqN2YDbmHsBGQIRnSAadSmccWuUhLGT
-	 B2zQQZNue12j7UVtiRIi3lBxv1XbGOrom+jZtkUzpJ2+deEiBODnn7W3QWKla3ceU1
-	 GYV2/Na069BoOyrGstiOuC3wdYv0xUlIrPMg4kxEmnsRbUgLtVYe48rag7mxP2M5eB
-	 axYdBBMZ0oVU9NtoXi+62zLwYFuKGxqZImpznW8I8d5jaTR1tEElytVzvke4ayUNlA
-	 9dx74E971/xKPOLa+6rI3klRMrHQPi5ClKFesOM0BwTJhHjvhdSfgE8FtssAe++72I
-	 tgEKi0ZB6SDtQ==
+	b=DNNhAbIcf8rr4eGgVdyHX/E4D7k+KscqVldr3+lldQwAq/jdglR4SphehjOkkIAfo
+	 9MTwIzw6Z7O68YzXNinfAPSEpQJZ9wzcMof+k1SPnJ/7hFw6HtRWFJi1uTRy96dElT
+	 Yrn3toSD3j2xehdk6dinEZuvTCExMzPnp+nP9BfsYnK13ARddI0p7dvolMIAOxtoRp
+	 c3qisYBppYDADHR7fvA8+qJpI2/iweFvf6USys3kpwbK40VECL1kXsmdz6LVpJecQ5
+	 JJy8sF2gcnadf9t6j3+n8Bo9nIq6Lmmec6msUk1Pt+0xre7BMklDXjYqi4id+5RyP6
+	 qG4v1Q27bB3Og==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-arch@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -68,9 +68,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-parisc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-sh@vger.kernel.org
-Subject: [PATCH 5/6] mips: drop GENERIC_IOMAP wrapper
-Date: Sat, 15 Mar 2025 11:59:06 +0100
-Message-Id: <20250315105907.1275012-6-arnd@kernel.org>
+Subject: [PATCH 6/6] m68k/nommu: stop using GENERIC_IOMAP
+Date: Sat, 15 Mar 2025 11:59:07 +0100
+Message-Id: <20250315105907.1275012-7-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250315105907.1275012-1-arnd@kernel.org>
 References: <20250315105907.1275012-1-arnd@kernel.org>
@@ -84,120 +84,49 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-All PIO on MIPS platforms is memory mapped, so there is no benefit in
-the lib/iomap.c wrappers that switch between inb/outb and readb/writeb
-style accessses.
+There is no need to go through the GENERIC_IOMAP wrapper for PIO on
+nommu platforms, since these always come from PCI I/O space that is
+itself memory mapped.
 
-In fact, the '#define PIO_RESERVED 0' setting completely disables
-the GENERIC_IOMAP functionality, and the '#define PIO_OFFSET
-mips_io_port_base' setting is based on a misunderstanding of what the
-offset is meant to do.
-
-MIPS started using GENERIC_IOMAP in 2018 with commit b962aeb02205 ("MIPS:
-Use GENERIC_IOMAP") replacing a simple custom implementation of the same
-interfaces, but at the time the asm-generic/io.h version was not usable
-yet. Since the header is now always included, it's now possible to go
-back to the even simpler version.
-
-Use the normal GENERIC_PCI_IOMAP functionality for all mips platforms
-without the hacky GENERIC_IOMAP, and provide a custom pci_iounmap()
-for the CONFIG_PCI_DRIVERS_LEGACY case to ensure the I/O port base never
-gets unmapped.
-
-The readsl() prototype needs an extra 'const' keyword to make it
-compatible with the generic ioread32_rep() alias.
+Instead, the generic ioport_map() can just return the MMIO location
+of the ports directly by applying the PCI_IO_PA offset, while
+ioread32/iowrite32 trivially turn into readl/writel as they do
+on most other architectures.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/mips/Kconfig          |  2 +-
- arch/mips/include/asm/io.h | 21 ++++++++-------------
- arch/mips/lib/iomap-pci.c  |  9 +++++++++
- 3 files changed, 18 insertions(+), 14 deletions(-)
+ arch/m68k/Kconfig             | 2 +-
+ arch/m68k/include/asm/io_no.h | 4 ----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 1924f2d83932..2a2120a6d852 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -38,7 +38,6 @@ config MIPS
- 	select GENERIC_CMOS_UPDATE
- 	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_GETTIMEOFDAY
--	select GENERIC_IOMAP
- 	select GENERIC_IRQ_PROBE
+diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+index b2ed0308c0ea..b50c275fa94d 100644
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -18,7 +18,7 @@ config M68K
+ 	select DMA_DIRECT_REMAP if M68K_NONCOHERENT_DMA && !COLDFIRE
+ 	select GENERIC_ATOMIC64
+ 	select GENERIC_CPU_DEVICES
+-	select GENERIC_IOMAP if HAS_IOPORT
++	select GENERIC_IOMAP if HAS_IOPORT && MMU
  	select GENERIC_IRQ_SHOW
- 	select GENERIC_ISA_DMA if EISA
-@@ -47,6 +46,7 @@ config MIPS
- 	select GENERIC_LIB_CMPDI2
- 	select GENERIC_LIB_LSHRDI3
- 	select GENERIC_LIB_UCMPDI2
-+	select GENERIC_PCI_IOMAP
- 	select GENERIC_SCHED_CLOCK if !CAVIUM_OCTEON_SOC
- 	select GENERIC_SMP_IDLE_THREAD
- 	select GENERIC_IDLE_POLL_SETUP
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 0bddb568af7c..1fe56d1870a6 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -66,17 +66,6 @@ static inline void set_io_port_base(unsigned long base)
- 	mips_io_port_base = base;
- }
+ 	select GENERIC_LIB_ASHLDI3
+ 	select GENERIC_LIB_ASHRDI3
+diff --git a/arch/m68k/include/asm/io_no.h b/arch/m68k/include/asm/io_no.h
+index 2c96e8480173..516371d5587a 100644
+--- a/arch/m68k/include/asm/io_no.h
++++ b/arch/m68k/include/asm/io_no.h
+@@ -123,10 +123,6 @@ static inline void writel(u32 value, volatile void __iomem *addr)
+ #define PCI_IO_SIZE	0x00010000		/* 64k */
+ #define PCI_IO_MASK	(PCI_IO_SIZE - 1)
  
--/*
-- * Provide the necessary definitions for generic iomap. We make use of
-- * mips_io_port_base for iomap(), but we don't reserve any low addresses for
-- * use with I/O ports.
-- */
--
 -#define HAVE_ARCH_PIO_SIZE
--#define PIO_OFFSET	mips_io_port_base
--#define PIO_MASK	IO_SPACE_LIMIT
--#define PIO_RESERVED	0x0UL
--
- /*
-  * Enforce in-order execution of data I/O.  In the MIPS architecture
-  * these are equivalent to corresponding platform-specific memory
-@@ -397,8 +386,8 @@ static inline void writes##bwlq(volatile void __iomem *mem,		\
- 	}								\
- }									\
- 									\
--static inline void reads##bwlq(volatile void __iomem *mem, void *addr,	\
--			       unsigned int count)			\
-+static inline void reads##bwlq(const volatile void __iomem *mem,	\
-+			       void *addr, unsigned int count)		\
- {									\
- 	volatile type *__addr = addr;					\
- 									\
-@@ -555,6 +544,12 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
- 
- void __ioread64_copy(void *to, const void __iomem *from, size_t count);
- 
-+#ifdef CONFIG_PCI_DRIVERS_LEGACY
-+struct pci_dev;
-+void pci_iounmap(struct pci_dev *dev, void __iomem *addr);
-+#define pci_iounmap pci_iounmap
-+#endif
-+
- #include <asm-generic/io.h>
- 
- static inline void *isa_bus_to_virt(unsigned long address)
-diff --git a/arch/mips/lib/iomap-pci.c b/arch/mips/lib/iomap-pci.c
-index a9cb28813f0b..2f82c776c6d0 100644
---- a/arch/mips/lib/iomap-pci.c
-+++ b/arch/mips/lib/iomap-pci.c
-@@ -43,4 +43,13 @@ void __iomem *__pci_ioport_map(struct pci_dev *dev,
- 	return (void __iomem *) (ctrl->io_map_base + port);
- }
- 
-+void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
-+{
-+	struct pci_controller *ctrl = dev->bus->sysdata;
-+	void __iomem *base = (void __iomem *)ctrl->io_map_base;
-+
-+	if (addr < base || addr > (base + resource_size(ctrl->io_resource)))
-+		iounmap(addr);
-+}
-+
- #endif /* CONFIG_PCI_DRIVERS_LEGACY */
+-#define PIO_OFFSET	0
+-#define PIO_MASK	0xffff
+-#define PIO_RESERVED	0x10000
+ #define PCI_IOBASE	((void __iomem *) PCI_IO_PA)
+ #define PCI_SPACE_LIMIT	PCI_IO_MASK
+ #endif /* CONFIG_PCI */
 -- 
 2.39.5
 
