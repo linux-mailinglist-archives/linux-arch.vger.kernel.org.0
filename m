@@ -1,45 +1,46 @@
-Return-Path: <linux-arch+bounces-10882-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10883-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30B3AA62B5D
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 11:59:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03CAA62B65
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 11:59:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75D0117A8E2
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 10:59:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42DC0189E460
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 10:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEE3D1F582A;
-	Sat, 15 Mar 2025 10:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142381F7098;
+	Sat, 15 Mar 2025 10:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QeGm8n/1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q4hScGqi"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28741DFED;
-	Sat, 15 Mar 2025 10:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37301DFED;
+	Sat, 15 Mar 2025 10:59:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742036357; cv=none; b=SESsnxwjAJOlmzeU4NfXWDTBdHeQYH3COzVzR5jiUCXSae4SV31679ipwre5nAeV+sMBA+CGzPZ/+eH5FPCXSdSdcmbHM3pEMfS7u1Qd2+M0aZx/Pob65JrnUPv4m4r5RAk5dgdD1jBUdIpUNQN/2efKtZbyGMt7LDdgO6PP8Mk=
+	t=1742036363; cv=none; b=IbwxCvCeGmFC7SncOhsRCbLx/g9wEduSqQkVSpZ2b+8wXA+xZN3dvckhRs/HrYOaFCNrzrLieP7QeCUkf9H2qXdkZ1x4KhpTW9lBBJtBSv+V5yAwYzn7fietBrWQaY2BpyzfQEQVvav16pfiFTggxPBz60PszjVr6ReV+YFVmFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742036357; c=relaxed/simple;
-	bh=iNj1uai8aBt7DaA8QRTxehgmfPjURYUtO7lvJ9FyPYE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UcK00CFtR3oOVNeUxY775/obo6TKN7fomsztc3W/KR268KIhKMMFG75U35lp2Af3l+FWBGYvqG7E31EVM/jKNXFYAdMOp5J0bC94ReUu4reERW/arrotRQUEwYVRgqi9WKqHUavwDtECxF6t+huqwWcw09+NCrG35XLgGeV7ieY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QeGm8n/1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7029DC4CEE5;
-	Sat, 15 Mar 2025 10:59:12 +0000 (UTC)
+	s=arc-20240116; t=1742036363; c=relaxed/simple;
+	bh=XXA0f10ge76JURf0KA9hKmmXZONM5AkZ6ZqHtAnEIXc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=foDw6bFkweIKWVT2M9FDOJeXLDuDPk/mi03dkxgLd+tm+q+RWGEpBg0Qsjg7MHB7feS2yJyTYOKzngQ+EUyWnHdG/H89gao6bqkY/w4vG/IdcH1W4GP9k9ctq8ZFBbXbjKwHtcT8Too1bEFPKSuYg6j6JO45kTcx9hF7OKmF2dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q4hScGqi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94EACC4CEED;
+	Sat, 15 Mar 2025 10:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742036357;
-	bh=iNj1uai8aBt7DaA8QRTxehgmfPjURYUtO7lvJ9FyPYE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=QeGm8n/1yaBlknAiTM9PbcGBvfecLE14NaWyggw7irJxQ9ZUD4gwqWeD6R+76W8+o
-	 5gZQY1kDfZgbS3U5Ra1LSv3PhQMXoT5G/0Dkekya8DP5aDGcA/Nui9Iw/HTHBij+GU
-	 KaOwiwXausYMh5f+P2Dhq3ZRMVh0bV870WhMtPWKeMqxj3BUGb6y9gI31eLbZi6tpu
-	 2yddEKW6LavqZ+2iOUFrf5fg3qxiiVYyA5TbVg5+qaqjOZDpQJzNk/oRrL9Stu5ouB
-	 IwMueWvL5VGHzPMBsUALBkRyLFmjUPO0kQAnAqcZ0HX4E2/y0YbuJD6CcBwjOue+pl
-	 IOVRtFaA0/coQ==
+	s=k20201202; t=1742036362;
+	bh=XXA0f10ge76JURf0KA9hKmmXZONM5AkZ6ZqHtAnEIXc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Q4hScGqiOZR2G7+YZ+XeHtUATN3Mm6OjWKl7pPELBMWcUOaE7swU5/tXQXCtYrXgJ
+	 SPn6NIohA89E6WxLd4/4EO0PHl9zWKf0cYcPnPtM9euQEITLvQJY/l3Z6HMkfQ21kY
+	 peVZIewC2M2sq5nTydsNySsFoSWFAEU9A8haa53ye/om1SVbnSU9xmf1KmvRvkOXHc
+	 /lctotQq0rUR//VHF5ceYPM7gWypeEy7pueirktZ8wIvWBfKkm+w6ebJIp6scRyM7+
+	 AX/jfDmcpNQctPeQnPz5wN6oLaWuHKAAe4zqT7h6pZKObc96WoBAOr4+Q2Xof5tAPo
+	 AJ4N2+LBEjFYQ==
 From: Arnd Bergmann <arnd@kernel.org>
 To: linux-arch@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
@@ -67,10 +68,12 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linux-parisc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-sh@vger.kernel.org
-Subject: [PATCH 0/6] asm-generic: io.h cleanups
-Date: Sat, 15 Mar 2025 11:59:01 +0100
-Message-Id: <20250315105907.1275012-1-arnd@kernel.org>
+Subject: [PATCH 1/6] alpha: stop using asm-generic/iomap.h
+Date: Sat, 15 Mar 2025 11:59:02 +0100
+Message-Id: <20250315105907.1275012-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250315105907.1275012-1-arnd@kernel.org>
+References: <20250315105907.1275012-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -81,67 +84,77 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-After the previous round of cleanups for asm-generic/io,h on the
-ioread64 helpers, I had another look at the architecture specific
-versions, especially those that caused build failures in the past.
+Alpha has custom definitions for ioread64()/iowrite64(), which now
+don't exist in the lib/iomap.c variant. This is an endless source
+of build failures, since alpha tries to share a couple of function
+declarations.
 
-These are some simplifications that I would like to merge at the same
-time, please have a look. Hopefully these are all uncontroversial.
+Change alpha to have its own prototypes that match the definitions
+in arch/alpha/kerne/io.c instead.
 
-I have a few more patches for m68k that need a more thorough
-review and testing, will post them after the merge window.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/alpha/include/asm/io.h | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
-Arnd Bergmann (6):
-  alpha: stop using asm-generic/iomap.h
-  sh: remove duplicate ioread/iowrite helpers
-  parisc: stop using asm-generic/iomap.h
-  powerpc: asm/io.h: remove split ioread64/iowrite64 helpers
-  mips: drop GENERIC_IOMAP wrapper
-  m68k/nommu: stop using GENERIC_IOMAP
-
- arch/alpha/include/asm/io.h   |  31 ++++---
- arch/m68k/Kconfig             |   2 +-
- arch/m68k/include/asm/io_no.h |   4 -
- arch/mips/Kconfig             |   2 +-
- arch/mips/include/asm/io.h    |  21 ++---
- arch/mips/lib/iomap-pci.c     |   9 ++
- arch/parisc/include/asm/io.h  |  36 ++++++--
- arch/powerpc/include/asm/io.h |  48 ----------
- arch/sh/include/asm/io.h      |  30 ++-----
- arch/sh/kernel/Makefile       |   3 -
- arch/sh/kernel/iomap.c        | 162 ----------------------------------
- arch/sh/kernel/ioport.c       |   5 --
- arch/sh/lib/io.c              |   4 +-
- drivers/sh/clk/cpg.c          |  25 +++---
- 14 files changed, 84 insertions(+), 298 deletions(-)
- delete mode 100644 arch/sh/kernel/iomap.c
-
+diff --git a/arch/alpha/include/asm/io.h b/arch/alpha/include/asm/io.h
+index 65fe1e54c6da..fa3e4c246cda 100644
+--- a/arch/alpha/include/asm/io.h
++++ b/arch/alpha/include/asm/io.h
+@@ -10,10 +10,6 @@
+ #include <asm/machvec.h>
+ #include <asm/hwrpb.h>
+ 
+-/* The generic header contains only prototypes.  Including it ensures that
+-   the implementation we have here matches that interface.  */
+-#include <asm-generic/iomap.h>
+-
+ /*
+  * Virtual -> physical identity mapping starts at this offset
+  */
+@@ -276,13 +272,24 @@ extern void		__raw_writeq(u64 b, volatile void __iomem *addr);
+ #define __raw_writel __raw_writel
+ #define __raw_writeq __raw_writeq
+ 
+-/*
+- * Mapping from port numbers to __iomem space is pretty easy.
+- */
++extern unsigned int ioread8(const void __iomem *);
++extern unsigned int ioread16(const void __iomem *);
++extern unsigned int ioread32(const void __iomem *);
++extern u64 ioread64(const void __iomem *);
++
++extern void iowrite8(u8, void __iomem *);
++extern void iowrite16(u16, void __iomem *);
++extern void iowrite32(u32, void __iomem *);
++extern void iowrite64(u64, void __iomem *);
++
++extern void ioread8_rep(const void __iomem *port, void *buf, unsigned long count);
++extern void ioread16_rep(const void __iomem *port, void *buf, unsigned long count);
++extern void ioread32_rep(const void __iomem *port, void *buf, unsigned long count);
++
++extern void iowrite8_rep(void __iomem *port, const void *buf, unsigned long count);
++extern void iowrite16_rep(void __iomem *port, const void *buf, unsigned long count);
++extern void iowrite32_rep(void __iomem *port, const void *buf, unsigned long count);
+ 
+-/* These two have to be extern inline because of the extern prototype from
+-   <asm-generic/iomap.h>.  It is not legal to mix "extern" and "static" for
+-   the same declaration.  */
+ extern inline void __iomem *ioport_map(unsigned long port, unsigned int size)
+ {
+ 	return IO_CONCAT(__IO_PREFIX,ioportmap) (port);
+@@ -629,10 +636,6 @@ extern void outsl (unsigned long port, const void *src, unsigned long count);
+ #define RTC_PORT(x)	(0x70 + (x))
+ #define RTC_ALWAYS_BCD	0
+ 
+-/*
+- * These get provided from <asm-generic/iomap.h> since alpha does not
+- * select GENERIC_IOMAP.
+- */
+ #define ioread64 ioread64
+ #define iowrite64 iowrite64
+ #define ioread8_rep ioread8_rep
 -- 
 2.39.5
 
-Cc: Richard Henderson <richard.henderson@linaro.org>
-Cc: Matt Turner <mattst88@gmail.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Greg Ungerer <gerg@linux-m68k.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Naveen N Rao <naveen@kernel.org>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Julian Vetter <julian@outer-limits.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: linux-alpha@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-sh@vger.kernel.org
 
