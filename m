@@ -1,270 +1,234 @@
-Return-Path: <linux-arch+bounces-10880-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10881-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00DF1A6231B
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 01:28:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFDB6A623B0
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 02:11:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 371093B9721
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 00:27:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C59FD19C1C3B
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 01:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 538F753BE;
-	Sat, 15 Mar 2025 00:28:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C77199B8;
+	Sat, 15 Mar 2025 01:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="l0H9xAW0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UAG+Zegz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0374539A;
-	Sat, 15 Mar 2025 00:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741998482; cv=none; b=hHi4GjFC13s1OTSe7PWFLvmIXGCHyQmVnvEKzTJyBuSHyFHrFIPOM2xRrU6vgSzGKj9LiCcLi+VMylTN/HrlUG+JLtyoOQieLC9SPy7XIgHXNH6hrToMrQ1GfRZakKY1wtixwHC90UW/0F5t+Qa0kRpMwjFGA9mjoWVxJwNRj3s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741998482; c=relaxed/simple;
-	bh=jU9jCfXFTYFmG75GwuttCZ8jX2jORoC9uCSpLpHC3as=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=rQh+mLpHsTSI2fuTa2A9KZboIiaPYROmhahmR4n+g5Wq6pGl2GkRjR5VnqM3b0w3GEbyO4f7mzksdw7NEO3z7HJcLY4FuQSIGA94ssF1A+MPLAJEeeIO/t7udJj1Dh+VAoCpOG6qZXcIRjbQe1tVZ3UuAidnWH7UFsMsitRbH4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=l0H9xAW0; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id E241C2033459;
-	Fri, 14 Mar 2025 17:27:59 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E241C2033459
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1741998480;
-	bh=VNEN1PUmudLlgwlIXoK+DSpK44+ltl2xOPzZ+xDbo5U=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=l0H9xAW0nIQ9TnJPChXqQVZcmuTNMzDlpB/M2rKyu/JVGhk2zCvkd4fjPGmzS3CAf
-	 Uiu5dDiS4rJNiMczVVGeWqFnLbZubL+omoTiQRre9JKVz2WKagzzhCM3EhFhvlcoUQ
-	 5kfzeCf4qYdbK/bZao2St06jIy6Oqqxk98+QAxK0=
-Message-ID: <96bc4caf-b79a-4111-bafa-a7662260f4be@linux.microsoft.com>
-Date: Fri, 14 Mar 2025 17:27:59 -0700
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D700F4C8E;
+	Sat, 15 Mar 2025 01:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742001072; cv=fail; b=ZoMRm1FYlBUFIcIuFGcHDpAu3zpzFllVi+woXUWdL35Po83qknCon/8OEeN+W6VEse6lp3zYTpOfIwWyD+UloeWZOnGFHHjT0jWNi9t4wW+iunIDaYhsKSBwhMLHDcouteb1yJIEqUGWm6ZfxjEc2FrkTyKc0Iesx7kvDIrSKxI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742001072; c=relaxed/simple;
+	bh=cC/ECdImOITsEBFscO2auLmDFWYBaXffHEaYyEoq7Ws=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qYKLsh0nLzxLBvfDm+DFGQchX0yCwhxFZAT0JUflrMgc3kXcHg0M2TSi3KSU09FgtZjH1tIA2tzUjMQGEp8ma1CQNs+KDuAuuTHL2vKGRE3/DEgswfmWSL3KPGAeE2ieyrvfIziOSg7e0As4S3FKI1TJ1nkj3DhirmC+pKndpY0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UAG+Zegz; arc=fail smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742001071; x=1773537071;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=cC/ECdImOITsEBFscO2auLmDFWYBaXffHEaYyEoq7Ws=;
+  b=UAG+Zegz1caeyIUprkprUteDTn2UOuTxXZENBIYwsj6PhztGh8o2/xyB
+   QKZKAHNP2hrAb7Nk2dWbPy9BAsnfJmAE8mZp779gfeFkGTJapu/1q0Wdk
+   6bp7Xoo+mIOILkrqwZFiNGRzfZXOq1QgrZL7szg+J8NXnf9dVp1XXftVi
+   XVuBEpRXEcKO7biMgXV6BLpNfDHLPNY1sBQSPecO4fCa01Ya6CD23Cx2K
+   Gm1yj1fFytetmPXpaVs/jdCd1CQG4NVKwzYUosPgJbiPzpf4NXfe4Oh30
+   hsWPhHJIiP3VUyP7tz+TgYLdVlpJm38jGO/yZnfETjLZSauoajMRZ0tB/
+   g==;
+X-CSE-ConnectionGUID: 6JOJ4iBfQ2Oh+XxquxWXBg==
+X-CSE-MsgGUID: UmFg5MluRVGo1uDAFhJbjQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11373"; a="65626050"
+X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
+   d="scan'208";a="65626050"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2025 18:11:10 -0700
+X-CSE-ConnectionGUID: sBLq8/13RjatFfB6YTv2iA==
+X-CSE-MsgGUID: /EQ6jJgIQTmIyzP6sJCi+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,246,1736841600"; 
+   d="scan'208";a="152374414"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 Mar 2025 18:11:09 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Fri, 14 Mar 2025 18:11:08 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14 via Frontend Transport; Fri, 14 Mar 2025 18:11:08 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.172)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Fri, 14 Mar 2025 18:11:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tQuLD/waTS/utm3rWpXY8gKjJzbFcHPLgYxGDOhGqeEyIrA6565t+zsFG3Er2sWfQi5qoG0vqZqHr79wAytYUUQ3DqbOhU1vIIWU5uVp8IoINVf2O4isEL32csnULbTkADZ3Y5R9HDzpbqmpZyVYUJg9AOOxjetS09W7122MkGXk5881TC6wgVH4nrgbQMNyqzzpuUR9/xUnoWFyz5GbpHgu3a6E6MGUB0tNmc2ooBV7LtpE5waQvm4wLd47XrQSGd9YpRXv21mO69m7xTbOPeVCngju8WEcIaFAIjw7UsJ/Pyv8sY0X8PrxvGIJZViG7zogTKKJsRl5c9Qifj+s9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LvIpbRD/dQK0nI23gpjg6SQq0zr8DHsGVOL3p78140c=;
+ b=Uh7/Q1Et3nqyWBOlJbVeWd0QugjkC+vEX4WR/8ydzAeDOYT4cbc2gEWl+FzUN2PToHNMV7k1d17WKFENDBs0j1R7OINrryf3BmhoQnFaYcFeZASOH7tQ8V+XPduxAe6lJ47NUgHfLZNjyz9KibXp6TANlwqNPT6tIYTxL9BdbQBXzuuTP+kaXbzEgiTje3NRrFSCgDK7L6uzTE224/G9bSwSN6EnDj8+MoTLtvtTepzuSvRUcWCbWFzFq+tLXfDKwu8TkbEQA8Fjkjac8lR8rq5DrjljYafqU0iHLh2xq3nzW4rIOhonpW8UqqngsibjZE1DBSuy1klNIWMOS+TxLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by DM6PR11MB4660.namprd11.prod.outlook.com (2603:10b6:5:2ad::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.28; Sat, 15 Mar
+ 2025 01:11:06 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6b05:74cf:a304:ecd8]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::6b05:74cf:a304:ecd8%4]) with mapi id 15.20.8534.027; Sat, 15 Mar 2025
+ 01:11:05 +0000
+Date: Fri, 14 Mar 2025 18:11:01 -0700
+From: Dan Williams <dan.j.williams@intel.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>, Alexey Kardashevskiy <aik@amd.com>
+CC: Xu Yilun <yilun.xu@linux.intel.com>, <x86@kernel.org>,
+	<kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+	<linux-pci@vger.kernel.org>, <linux-arch@vger.kernel.org>, "Sean
+ Christopherson" <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
+	"Tom Lendacky" <thomas.lendacky@amd.com>, Ashish Kalra
+	<ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>, Suravee Suthikulpanit
+	<suravee.suthikulpanit@amd.com>, Robin Murphy <robin.murphy@arm.com>, "Kevin
+ Tian" <kevin.tian@intel.com>, Bjorn Helgaas <bhelgaas@google.com>, "Dan
+ Williams" <dan.j.williams@intel.com>, Christoph Hellwig <hch@lst.de>, "Nikunj
+ A Dadhania" <nikunj@amd.com>, Michael Roth <michael.roth@amd.com>, Vasant
+ Hegde <vasant.hegde@amd.com>, Joao Martins <joao.m.martins@oracle.com>,
+	"Nicolin Chen" <nicolinc@nvidia.com>, Lu Baolu <baolu.lu@linux.intel.com>,
+	"Steve Sistare" <steven.sistare@oracle.com>, Lukas Wunner <lukas@wunner.de>,
+	"Jonathan Cameron" <Jonathan.Cameron@huawei.com>, Suzuki K Poulose
+	<suzuki.poulose@arm.com>, Dionna Glaze <dionnaglaze@google.com>, Yi Liu
+	<yi.l.liu@intel.com>, <iommu@lists.linux.dev>, <linux-coco@lists.linux.dev>,
+	Zhi Wang <zhiw@nvidia.com>, "Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
+Subject: Re: [RFC PATCH v2 14/22] iommufd: Add TIO calls
+Message-ID: <67d4d3a5622f9_12e3129480@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20250218111017.491719-1-aik@amd.com>
+ <20250218111017.491719-15-aik@amd.com>
+ <Z72GmixR6NkzXAl7@yilunxu-OptiPlex-7050>
+ <2fe6b3c6-3eed-424d-87f0-34c4e7e1c906@amd.com>
+ <20250226130804.GG5011@ziepe.ca>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250226130804.GG5011@ziepe.ca>
+X-ClientProxiedBy: MW4PR03CA0221.namprd03.prod.outlook.com
+ (2603:10b6:303:b9::16) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v6 01/11] arm64: kvm, smccc: Introduce and use
- API for detecting hypervisor presence
-From: Roman Kisel <romank@linux.microsoft.com>
-To: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
- catalin.marinas@arm.com, conor+dt@kernel.org, dan.carpenter@linaro.org,
- dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com,
- hpa@zytor.com, joey.gouly@arm.com, krzk+dt@kernel.org, kw@linux.com,
- kys@microsoft.com, lenb@kernel.org, lpieralisi@kernel.org,
- manivannan.sadhasivam@linaro.org, mark.rutland@arm.com, maz@kernel.org,
- mingo@redhat.com, oliver.upton@linux.dev, rafael@kernel.org,
- robh@kernel.org, ssengar@linux.microsoft.com, sudeep.holla@arm.com,
- suzuki.poulose@arm.com, tglx@linutronix.de, wei.liu@kernel.org,
- will@kernel.org, yuzenghui@huawei.com, devicetree@vger.kernel.org,
- kvmarm@lists.linux.dev, linux-acpi@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pci@vger.kernel.org, x86@kernel.org
-Cc: apais@microsoft.com, benhill@microsoft.com, bperkins@microsoft.com,
- sunilmut@microsoft.com
-References: <20250315001931.631210-1-romank@linux.microsoft.com>
- <20250315001931.631210-2-romank@linux.microsoft.com>
-Content-Language: en-US
-In-Reply-To: <20250315001931.631210-2-romank@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|DM6PR11MB4660:EE_
+X-MS-Office365-Filtering-Correlation-Id: 22c3414b-d3cc-4e1d-98d2-08dd635e429a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|1800799024|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?qlPWKt8tRXU8pnpHWdTwJVoEKUE3sf5CaROyFAselNgrs6JdJIK1ktppVTGz?=
+ =?us-ascii?Q?FudMPmwbmQcBu/Yq2hyhVqhA4GWQJzEZ7PKfzMbUpEijWP+Ya6k9ePfz1BJA?=
+ =?us-ascii?Q?furJYkpR82+HGt6wG3JlWHilhgCZEBfomoX8M0uK7qIfeMjtth2hfj+Fr1dU?=
+ =?us-ascii?Q?4JtDiJubEJi8stgsa2+jgBPfTQzIyeO84/pZUqynFI6r4WIcTUrjTRdPxVvG?=
+ =?us-ascii?Q?SPu5vwrnJGfI5Zh8+ByrbEZ/+ZoP2zqHr6AaRNqxup96mfaef1fafXDwTa4f?=
+ =?us-ascii?Q?TjYfe1OzC6roq1q97cP6lstv7vJXIpoUp5e07wuoeooV6RpbHCY8oUnSMD15?=
+ =?us-ascii?Q?ItEBEpCB1ZrSkLtcwMMM74iNi1qctPXkULG4iW0SGATqU8NfzITwOWo2AAwe?=
+ =?us-ascii?Q?70u+gcVcxKlrCKYTbcpCyCo9VIq8QlGLX7+Mc8IJPWlpAaFNfXFDSdXgfDgc?=
+ =?us-ascii?Q?FvKgymCKSpwxXwMpu5g8GG0rYQCUjZL1WOJKGoQu6R/CqIoiq1t8am+gB2av?=
+ =?us-ascii?Q?ikTCtXk9sRNNl/RJ/L+cIo5YMOj6X2S3RcLiRVi3lWYUFf+vVxoDFtedmK+j?=
+ =?us-ascii?Q?ZQ4TY4mxrdCFyfv71aNwz+MLECZPHOq+2nOIUiJ0G3PaR/tQ/8VPWaibQ/cA?=
+ =?us-ascii?Q?qnNA1HBLFCaulqeakCOfsz4chQsA1XR4PG3tOfdVbk9Mzk/OUVlpLUEATC87?=
+ =?us-ascii?Q?PCUOWbnwfYW1u3aQMxWxgQ9pm2R8IdEjdH7ct1pdlmwxkR1SPDhyLPtOBdzZ?=
+ =?us-ascii?Q?6tY0EAowcsN8b9SGF8peYDNaaBmdBsp5f4+jZql4SXVO7HIReWkHA4uHrYvD?=
+ =?us-ascii?Q?jWkzlINXKhgwAVwOq87a0PrHOn3+IbZxG/YX2SOnNvw9ddGM5Zctz3+EiePU?=
+ =?us-ascii?Q?ds4cXeG4ziUyycwAv6d74dFwMeyN31HrsaQr79AYmtltTqVPCkauhygBpkRn?=
+ =?us-ascii?Q?c2GiziTS5LBQBVUVTgZG+1K0eHRYNzyA3SxZKUQppaJeesxerl8lpbwVm5FK?=
+ =?us-ascii?Q?Btu6WD2HeXCWhBKoX6hGJYMn+1DNqkVqNmZ7CORl8v7KJAhZkQ9uPTcN1Z9l?=
+ =?us-ascii?Q?hcO6Oo3hXfaqAnfPpO5+bR6rulpGouJeTblVajks6SIDw9Ge7DkTm6BayQPK?=
+ =?us-ascii?Q?VtCrLg3XtawtSJNEi+nVNrXiDRGR/m38FJcXPL3jJg6c4nYxSVSoduS9Fv1x?=
+ =?us-ascii?Q?7/X+FFf15Jcbo6S4T6B5jgLJIs3uwD1zpRn7thKXaHyapZaAdc7A/t1hMYBT?=
+ =?us-ascii?Q?wRmlAD2l2HrfC2uUtcSe/HooLYdX94a/Ha93rTWmzNculzWF7pF/CQ8i2Y5t?=
+ =?us-ascii?Q?D9aw6wwayzPyWkJf5FYEIuIWQ/a5WjoZJUNOBc3+nojpFq0ZafLMQcK8fL7x?=
+ =?us-ascii?Q?lt5G+EasVbF9cGqVGdlgn8TOyht8?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6+UPmsxEE9lsvq2DsnwL0meSkLyRzyaxtHZLTKpcA/hUcn6FDLgzoIzQ6AHi?=
+ =?us-ascii?Q?3EqtC1pUDcts7zEsOq6iNqlzdJFRQskV6it7afNZg6KHTrMxygVreoAIO+/x?=
+ =?us-ascii?Q?MAtrpiB52rFLC7agonvaKts6frzbAFFr4UuJoUtlmo1TW8UFrIdDYxuoeyj2?=
+ =?us-ascii?Q?ZN/xxJkz9O6arZSdFb5aYTHITHB34VTE8so40j0dn81ed5sbWiIyoMRr5JQI?=
+ =?us-ascii?Q?3W6aoj9fmVq8vLnfdXGdwAn/vYIS2WPR+Y9V2fatuQVx22x2wi4SdpWY4fzd?=
+ =?us-ascii?Q?R0xsMmupkvfddKqowaEW180T7+p1Oefzt5IWdrJe6nsl/6/Qg0ijWOFXDOj+?=
+ =?us-ascii?Q?5nee+YK/rT00iKDlw0QejrY66VqhgdB6QwyHr2g4zf3TxwzbqyJccSeNHGML?=
+ =?us-ascii?Q?DFy2AJRg8BwneTGfSTYvdkq8xb9kCMiDyI7A4Hf8NRVLy8pJJw9Lbfc3dMP4?=
+ =?us-ascii?Q?TKZAV21AcKKkxCEL/TTRGtAS3pM9b4YYe/ay6fQkOb7SWvLuQfj2l7h3kq6w?=
+ =?us-ascii?Q?BdS7ZQQprs7MW+h8drxsv3ipm+fzpuZvG2HbpMMIqGOaOa0fkWcqda/1p1c5?=
+ =?us-ascii?Q?lztXxym7ZOv3yccBejWna14ikQUE7v/N2g+aZinw7EUiw+pc8eXNwzTifkY0?=
+ =?us-ascii?Q?Y46u7cuCbGvHI8+rLhUcjg4mCkNRO3fYJSf5WOO8KX+pXgNbIEiijuwiHAdr?=
+ =?us-ascii?Q?oqIGDn0ox12yfcN92i5cYHasG9AK7/okI+EUmArSc38asNx6rsYvgBDrJaVj?=
+ =?us-ascii?Q?8+3bkptB6MCGeSuJi/usg4WBV5thT3q0sNyuORq1VlE+FL1TNPNoTJX5N2Bx?=
+ =?us-ascii?Q?jL4qjxNPIJoCC5QoAS6TIwAoYiQSH6Dx+mYkAH644jmtIBt6K84qjbhEcW6r?=
+ =?us-ascii?Q?8OgMf0lgLrNTUCOWrZ1vmVgNvS+oUg2O8n+d7zPuWAot8+4sFoLH1T07VBPc?=
+ =?us-ascii?Q?RUlVSVpqhICr6p867sdps3XADunsNPkfYEXFq7DE8/gm3xEEJ42Han5/HI+C?=
+ =?us-ascii?Q?+O5Ntnqt3CVai12mLj2TtsrLRgnHVPUDYw9HgYPaTJ2rdqNcrVkLxvZ5DqFG?=
+ =?us-ascii?Q?6puej3ZDfRh8Kmy90ZGw2ZcpRBQyRzBpOgEuDqbKUb597Sh2D6XpgN1GoifS?=
+ =?us-ascii?Q?NKxZroGkSGgEsrPW9X1dOyT3usi7bgBS8sBmpJIh+zhGhkn2nP9TndaJD/Ku?=
+ =?us-ascii?Q?Qsa9v5AePGxIcA387NY+8gASAZXYWkOE9gT1EHRI2vj/4nWFlt2RdWh6xw+a?=
+ =?us-ascii?Q?4LjdiAk1QVIkK5CmOvbTmnEvaSgSA7tk1YgpVBHy/lidy2UWHEVtZqmOsU34?=
+ =?us-ascii?Q?GSCL9SYQRWJrlQ7D/MLSAhtaEJX5CG0LqiivAWfDkzqtBAJgaMVEuq6yQa4T?=
+ =?us-ascii?Q?UKGU6gvnLs+9qzlQD/MEUZQ2qQtCayHp8fb8PUSGvugVatrFuWGAYtjWC4Nt?=
+ =?us-ascii?Q?vCIlYBKm2iikjIZAdSfxv2U1map2feX4WUkIkgfgqSx79VsSVuYEYt9qAcRk?=
+ =?us-ascii?Q?5QTscryAKggN2PQExPQpbugW+KPL5tIzQ+ZkJv1xK8iWk4vdrhPR2hwkX4rQ?=
+ =?us-ascii?Q?aguph4bwyGBCGG/QYwhDQ1/cBmNo/S+kfnjhB3AqrnLIAtmp0yhbVGTqWNI0?=
+ =?us-ascii?Q?DQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22c3414b-d3cc-4e1d-98d2-08dd635e429a
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2025 01:11:05.3594
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AT0arrLSykrUNlAlatbMmm1sIPKPkJ3JdNZAENQp3SpWPmJDbTGUTDMPIMKcDzAgn52WIQb1bLLMnM0hVh64Gp4H2EC+xzRFqHIy78/AF0M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4660
+X-OriginatorOrg: intel.com
 
-
-
-On 3/14/2025 5:19 PM, Roman Kisel wrote:
-> The KVM/arm64 uses SMCCC to detect hypervisor presence. That code is
-> private, and it follows the SMCCC specification. Other existing and
-> emerging hypervisor guest implementations can and should use that
-> standard approach as well.
+Jason Gunthorpe wrote:
+> On Wed, Feb 26, 2025 at 11:12:32AM +1100, Alexey Kardashevskiy wrote:
+> > > I still have concern about the vdevice interface for bind. Bind put the
+> > > device to LOCKED state, so is more of a device configuration rather
+> > > than an iommu configuration. So seems more reasonable put the API in VFIO?
+> > 
+> > IOMMUFD means pretty much VFIO (in the same way "VFIO means KVM" as 95+% of
+> > VFIO users use it from KVM, although VFIO works fine without KVM) so not
+> > much difference where to put this API and can be done either way. VFIO is
+> > reasonable, the immediate problem is that IOMMUFD's vIOMMU knows the guest
+> > BDFn (well, for AMD) and VFIO PCI does not.
 > 
-> Factor out a common infrastructure that the guests can use, update KVM
-> to employ the new API. The central notion of the SMCCC method is the
-> UUID of the hypervisor, and the API follows that.
-> 
-> No functional changes. Validated with a KVM/arm64 guest.
-> 
-> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> I would re-enforce what I said before, VFIO & iommufd alone should be
+> able to operate a TDISP device and get device encrpytion without
+> requiring KVM.
 
-While the change is Acked, here is the caveat maybe.
+Without requiring KVM, but still requiring a TVM context per TDISP
+expectations?
 
-This patch produces warnings wtih sparse and CHECK_ENDING.
-That said, the kernel build produces a whole lot more other warnings
-from building with sparse by itself and/or with CHECK_ENDING.
+I.e. I am still trying to figure out if you are talking about
+device-authentication and encryption without KVM, TDISP without a
+TVM (not sure what that is), or TDISP state management relative to a
+shared concept of a "TVM context" that KVM also references.
 
-I am not sure how to proceed with that, thinking I should
-not add warnings yet at the same time there are many others.
-Not certain if folks take these signals as fyi or blockers.
+> It makes sense that if the secure firmware object handles (like the
+> viommu, vdevice, vBDF) are accessed through iommufd then iommufd will
+> relay operations against those handles.
 
-Decided to send V6 to trim the V5 discussion threads by implementing
-suggestions and fixes.
-
-> ---
->   arch/arm64/kvm/hypercalls.c        |  5 +--
->   drivers/firmware/smccc/kvm_guest.c | 10 ++----
->   drivers/firmware/smccc/smccc.c     | 19 +++++++++++
->   include/linux/arm-smccc.h          | 55 +++++++++++++++++++++++++++---
->   4 files changed, 73 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> index 27ce4cb44904..92b9bc1ea8e8 100644
-> --- a/arch/arm64/kvm/hypercalls.c
-> +++ b/arch/arm64/kvm/hypercalls.c
-> @@ -353,10 +353,7 @@ int kvm_smccc_call_handler(struct kvm_vcpu *vcpu)
->   			val[0] = gpa;
->   		break;
->   	case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
-> -		val[0] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0;
-> -		val[1] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1;
-> -		val[2] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2;
-> -		val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
-> +		UUID_TO_SMCCC_RES(ARM_SMCCC_VENDOR_HYP_UID_KVM, val);
->   		break;
->   	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
->   		val[0] = smccc_feat->vendor_hyp_bmap;
-> diff --git a/drivers/firmware/smccc/kvm_guest.c b/drivers/firmware/smccc/kvm_guest.c
-> index f3319be20b36..b5084b309ea0 100644
-> --- a/drivers/firmware/smccc/kvm_guest.c
-> +++ b/drivers/firmware/smccc/kvm_guest.c
-> @@ -14,17 +14,11 @@ static DECLARE_BITMAP(__kvm_arm_hyp_services, ARM_SMCCC_KVM_NUM_FUNCS) __ro_afte
->   
->   void __init kvm_init_hyp_services(void)
->   {
-> +	uuid_t kvm_uuid = ARM_SMCCC_VENDOR_HYP_UID_KVM;
->   	struct arm_smccc_res res;
->   	u32 val[4];
->   
-> -	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
-> -		return;
-> -
-> -	arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
-> -	if (res.a0 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0 ||
-> -	    res.a1 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1 ||
-> -	    res.a2 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2 ||
-> -	    res.a3 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3)
-> +	if (!arm_smccc_hyp_present(&kvm_uuid))
->   		return;
->   
->   	memset(&res, 0, sizeof(res));
-> diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
-> index a74600d9f2d7..7399f27d58e5 100644
-> --- a/drivers/firmware/smccc/smccc.c
-> +++ b/drivers/firmware/smccc/smccc.c
-> @@ -67,6 +67,25 @@ s32 arm_smccc_get_soc_id_revision(void)
->   }
->   EXPORT_SYMBOL_GPL(arm_smccc_get_soc_id_revision);
->   
-> +bool arm_smccc_hyp_present(const uuid_t *hyp_uuid)
-> +{
-> +	struct arm_smccc_res res = {};
-> +
-> +	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
-> +		return false;
-> +	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
-> +	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
-> +		return false;
-> +
-> +	return ({
-> +		const uuid_t uuid = SMCCC_RES_TO_UUID(res.a0, res.a1, res.a2, res.a3);
-> +		const bool present = uuid_equal(&uuid, hyp_uuid);
-> +
-> +		present;
-> +	});
-> +}
-> +EXPORT_SYMBOL_GPL(arm_smccc_hyp_present);
-> +
->   static int __init smccc_devices_init(void)
->   {
->   	struct platform_device *pdev;
-> diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
-> index 67f6fdf2e7cd..726f18221f1c 100644
-> --- a/include/linux/arm-smccc.h
-> +++ b/include/linux/arm-smccc.h
-> @@ -7,6 +7,11 @@
->   
->   #include <linux/args.h>
->   #include <linux/init.h>
-> +
-> +#ifndef __ASSEMBLER__
-> +#include <linux/uuid.h>
-> +#endif
-> +
->   #include <uapi/linux/const.h>
->   
->   /*
-> @@ -107,10 +112,10 @@
->   			   ARM_SMCCC_FUNC_QUERY_CALL_UID)
->   
->   /* KVM UID value: 28b46fb6-2ec5-11e9-a9ca-4b564d003a74 */
-> -#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0	0xb66fb428U
-> -#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1	0xe911c52eU
-> -#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2	0x564bcaa9U
-> -#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3	0x743a004dU
-> +#define ARM_SMCCC_VENDOR_HYP_UID_KVM UUID_INIT(\
-> +	0xb66fb428, 0xc52e, 0xe911, \
-> +	0xa9, 0xca, 0x4b, 0x56, \
-> +	0x4d, 0x00, 0x3a, 0x74)
->   
->   /* KVM "vendor specific" services */
->   #define ARM_SMCCC_KVM_FUNC_FEATURES		0
-> @@ -333,6 +338,48 @@ s32 arm_smccc_get_soc_id_version(void);
->    */
->   s32 arm_smccc_get_soc_id_revision(void);
->   
-> +#ifndef __ASSEMBLER__
-> +
-> +/**
-> + * arm_smccc_hyp_present(const uuid_t *hyp_uuid)
-> + *
-> + * Returns `true` if the hypervisor advertises its presence via SMCCC.
-> + *
-> + * When the function returns `false`, the caller shall not assume that
-> + * there is no hypervisor running. Instead, the caller must fall back to
-> + * other approaches if any are available.
-> + */
-> +bool arm_smccc_hyp_present(const uuid_t *hyp_uuid);
-> +
-> +#define SMCCC_RES_TO_UUID(r0, r1, r2, r3) \
-> +	UUID_INIT( \
-> +		cpu_to_le32(lower_32_bits(r0)), \
-> +		cpu_to_le32(lower_32_bits(r1)) & 0xffff, \
-> +		cpu_to_le32(lower_32_bits(r1)) >> 16, \
-> +		cpu_to_le32(lower_32_bits(r2)) & 0xff, \
-> +		(cpu_to_le32(lower_32_bits(r2)) >> 8) & 0xff, \
-> +		(cpu_to_le32(lower_32_bits(r2)) >> 16) & 0xff, \
-> +		(cpu_to_le32(lower_32_bits(r2)) >> 24) & 0xff, \
-> +		cpu_to_le32(lower_32_bits(r3)) & 0xff, \
-> +		(cpu_to_le32(lower_32_bits(r3)) >> 8) & 0xff, \
-> +		(cpu_to_le32(lower_32_bits(r3)) >> 16) & 0xff, \
-> +		(cpu_to_le32(lower_32_bits(r3)) >> 24) & 0xff \
-> +	)
-> +
-> +#define UUID_TO_SMCCC_RES(uuid_init, regs) do { \
-> +		const uuid_t uuid = uuid_init; \
-> +		(regs)[0] = le32_to_cpu((u32)uuid.b[0] | (uuid.b[1] << 8) | \
-> +						((uuid.b[2]) << 16) | ((uuid.b[3]) << 24)); \
-> +		(regs)[1] = le32_to_cpu((u32)uuid.b[4] | (uuid.b[5] << 8) | \
-> +						((uuid.b[6]) << 16) | ((uuid.b[7]) << 24)); \
-> +		(regs)[2] = le32_to_cpu((u32)uuid.b[8] | (uuid.b[9] << 8) | \
-> +						((uuid.b[10]) << 16) | ((uuid.b[11]) << 24)); \
-> +		(regs)[3] = le32_to_cpu((u32)uuid.b[12] | (uuid.b[13] << 8) | \
-> +						((uuid.b[14]) << 16) | ((uuid.b[15]) << 24)); \
-> +	} while (0)
-> +
-> +#endif /* !__ASSEMBLER__ */
-> +
->   /**
->    * struct arm_smccc_res - Result from SMC/HVC call
->    * @a0-a3 result values from registers 0 to 3
-
--- 
-Thank you,
-Roman
-
+Yes, that tracks.
 
