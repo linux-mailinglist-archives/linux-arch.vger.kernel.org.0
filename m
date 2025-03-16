@@ -1,211 +1,248 @@
-Return-Path: <linux-arch+bounces-10891-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10892-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6E3EA631E2
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 19:49:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 486FCA63538
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Mar 2025 12:10:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AF947A9614
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Mar 2025 18:48:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B71E3A7925
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Mar 2025 11:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82A9B195808;
-	Sat, 15 Mar 2025 18:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461931A239E;
+	Sun, 16 Mar 2025 11:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SC2mtGbh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CBdP1WRS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468F0189916;
-	Sat, 15 Mar 2025 18:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD471A00ED
+	for <linux-arch@vger.kernel.org>; Sun, 16 Mar 2025 11:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742064546; cv=none; b=on/vNjQsMBtG3fbaWYmRFU1YNGW99tJruuOmfkMTwOs8nL/fBEOZao2TQIhMCR15PFUKvUgPxfZ7pMh3gxtv+dJd0HN+rhzDYrsgEm988tEoWQq+1AqSOqAh2hDRM82LrBdXa4fjO2mqqwEPsSkWd2kUZ5IvFpjdmM48nraBI6s=
+	t=1742123415; cv=none; b=lZxOhjvE7HSETwufUYESN3QXyZHecXnztzgv1LtL05DYQzFZ8IWEkvxYiVovCq7SWJZ6BYOVOOAVedOkW179IFJ55uNZy70gjVyKE7fTHgf2IkGPW4LwYUZxsxYqbpZH+lTN2PlD+Y5nE++tiws5KYbWc/ACymc58sMH/MDICAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742064546; c=relaxed/simple;
-	bh=OnKnsixMsIfR9PWM2GKcKb1NM2Qu2lps2DgKe5a/iVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=r1BfnLxOBNdRXT3chfqL7LhFiiZsERPdKkpa0tcmdgaXGr2DLnzB6EaLXd0FKAG7Tpk8IE7Nqzpw+dJxld53r6uO4G9kpEQNW63w+sDnetIp9pr3FtIEme38BaSFP/Ex3QQaPiNFGQExwPWC6EhZjqIiWm9EFFihhaxcp/t+i2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SC2mtGbh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72D6FC4CEE5;
-	Sat, 15 Mar 2025 18:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742064544;
-	bh=OnKnsixMsIfR9PWM2GKcKb1NM2Qu2lps2DgKe5a/iVM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=SC2mtGbhf3T7iUSmBYdVeklwCEwI13OQ6a3CqVJG9hdTduV8tMC8viwCK5PQ5svgt
-	 yEFwpbQLSaMovvNo1DNNefn270I4Y9SmAYepdWmGF1MrsZeUpF0i3fAo4inK54pOG0
-	 L1gMGSoCR0of0daaOOodYfCP662k/xMF040MMUZ9NsYjiQXym4MYKxKO7qDvid3sTo
-	 WkOrWCyoYBuXRICkq5ZpEQyirDW90mN0J2qI74H3xxsjoI9IxeZATbGITayZiz9pZQ
-	 AIQvWwR+kA/Me6BczXJbR4gkhcjMt2l5z0GTgKpd4AhA2hUQVs02M2A1EHulV0TXJU
-	 dR2CF94O0F6cw==
-Date: Sat, 15 Mar 2025 13:49:03 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Roman Kisel <romank@linux.microsoft.com>
-Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
-	catalin.marinas@arm.com, conor+dt@kernel.org,
-	dan.carpenter@linaro.org, dave.hansen@linux.intel.com,
-	decui@microsoft.com, haiyangz@microsoft.com, hpa@zytor.com,
-	joey.gouly@arm.com, krzk+dt@kernel.org, kw@linux.com,
-	kys@microsoft.com, lenb@kernel.org, lpieralisi@kernel.org,
-	manivannan.sadhasivam@linaro.org, mark.rutland@arm.com,
-	maz@kernel.org, mingo@redhat.com, oliver.upton@linux.dev,
-	rafael@kernel.org, robh@kernel.org, ssengar@linux.microsoft.com,
-	sudeep.holla@arm.com, suzuki.poulose@arm.com, tglx@linutronix.de,
-	wei.liu@kernel.org, will@kernel.org, yuzenghui@huawei.com,
-	devicetree@vger.kernel.org, kvmarm@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	x86@kernel.org, apais@microsoft.com, benhill@microsoft.com,
-	bperkins@microsoft.com, sunilmut@microsoft.com
-Subject: Re: [PATCH hyperv-next v6 11/11] PCI: hv: Get vPCI MSI IRQ domain
- from DeviceTree
-Message-ID: <20250315184903.GA848938@bhelgaas>
+	s=arc-20240116; t=1742123415; c=relaxed/simple;
+	bh=Bq7RowSkz4on9hBKf74g4thOMJs0a6qQEkFX7fLAcWw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=e4dR/BJHpbZJhoJsWoRR/0UhycvUeGnfqjSXksJj4Ui7zVMtIGqJCo9UFMP3lveJrCInPEvHoK9BTfNXWx/vI/+PSKtpgpJViOK3HNX+xZkLx46d+1yBQGC2GfYDv0Osi23fnWBC7mSNdRWr+v9HHf6kqTOcBY9EEe3++2EsF5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CBdP1WRS; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742123413; x=1773659413;
+  h=date:from:to:cc:subject:message-id;
+  bh=Bq7RowSkz4on9hBKf74g4thOMJs0a6qQEkFX7fLAcWw=;
+  b=CBdP1WRSYOtynn6xV68we4CAgxi8qATasS3IfK7kHVMsxGYH6DUlEdgA
+   DjgCAiAYktsQZQiv1QFr9cpN7XdXcoIVFFL7gwonE10/Py50QFPGM+lFA
+   LEZui1kEsP9yOS6di/kRkCB1N7Jpl32B9/okWgPq+LZFLyOFw1Mbawvzh
+   tBtt+kmSsVKOJPS0luA4wZsCcfxfZgQ4LT9NbMxxJHMClh43bo+zxW+sd
+   KWFyFMZJJhqMv56/8rjHkAHkyALVgquC8PhW0Ei4QoMvbWu8DzfREquXS
+   HzsWUtGWgK0ZWZYe4HfEne+2Mtyg9mQ9LXXeqaJ0XscN1Z5l8xfm/dswv
+   Q==;
+X-CSE-ConnectionGUID: y+ln2wMCQtSieYssyoGjCw==
+X-CSE-MsgGUID: rGtfLeJGSSS5nAbFFfmAew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11374"; a="43136800"
+X-IronPort-AV: E=Sophos;i="6.14,251,1736841600"; 
+   d="scan'208";a="43136800"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2025 04:10:13 -0700
+X-CSE-ConnectionGUID: kLbNjveDRhGoWbQ2Lgi00Q==
+X-CSE-MsgGUID: ClUpElMvSca1jZnkk+Oblg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,251,1736841600"; 
+   d="scan'208";a="122432579"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 16 Mar 2025 04:10:11 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ttlsf-000ByJ-0d;
+	Sun, 16 Mar 2025 11:10:09 +0000
+Date: Sun, 16 Mar 2025 19:09:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 9d48cc07d0d7f72d4d44c75f5f7d3471d60f2213
+Message-ID: <202503161915.ovxeaLNm-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250315001931.631210-12-romank@linux.microsoft.com>
 
-On Fri, Mar 14, 2025 at 05:19:31PM -0700, Roman Kisel wrote:
-> The hyperv-pci driver uses ACPI for MSI IRQ domain configuration on
-> arm64. It won't be able to do that in the VTL mode where only DeviceTree
-> can be used.
-> 
-> Update the hyperv-pci driver to get vPCI MSI IRQ domain in the DeviceTree
-> case, too.
-> 
-> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 9d48cc07d0d7f72d4d44c75f5f7d3471d60f2213  m68k/nommu: stop using GENERIC_IOMAP
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+elapsed time: 1444m
 
-Looks good to me; trivial whitespace comment below.
+configs tested: 155
+configs skipped: 7
 
-> ---
->  drivers/pci/controller/pci-hyperv.c | 73 ++++++++++++++++++++++++++---
->  1 file changed, 67 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index 6084b38bdda1..cbff19e8a07c 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -50,6 +50,7 @@
->  #include <linux/irqdomain.h>
->  #include <linux/acpi.h>
->  #include <linux/sizes.h>
-> +#include <linux/of_irq.h>
->  #include <asm/mshyperv.h>
->  
->  /*
-> @@ -817,9 +818,17 @@ static int hv_pci_vec_irq_gic_domain_alloc(struct irq_domain *domain,
->  	int ret;
->  
->  	fwspec.fwnode = domain->parent->fwnode;
-> -	fwspec.param_count = 2;
-> -	fwspec.param[0] = hwirq;
-> -	fwspec.param[1] = IRQ_TYPE_EDGE_RISING;
-> +	if (is_of_node(fwspec.fwnode)) {
-> +		/* SPI lines for OF translations start at offset 32 */
-> +		fwspec.param_count = 3;
-> +		fwspec.param[0] = 0;
-> +		fwspec.param[1] = hwirq - 32;
-> +		fwspec.param[2] = IRQ_TYPE_EDGE_RISING;
-> +	} else {
-> +		fwspec.param_count = 2;
-> +		fwspec.param[0] = hwirq;
-> +		fwspec.param[1] = IRQ_TYPE_EDGE_RISING;
-> +	}
->  
->  	ret = irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
->  	if (ret)
-> @@ -887,10 +896,47 @@ static const struct irq_domain_ops hv_pci_domain_ops = {
->  	.activate = hv_pci_vec_irq_domain_activate,
->  };
->  
-> +#ifdef CONFIG_OF
-> +
-> +static struct irq_domain *hv_pci_of_irq_domain_parent(void)
-> +{
-> +	struct device_node *parent;
-> +	struct irq_domain *domain;
-> +
-> +	parent = of_irq_find_parent(hv_get_vmbus_root_device()->of_node);
-> +	if (!parent)
-> +		return NULL;
-> +	domain = irq_find_host(parent);
-> +	of_node_put(parent);
-> +
-> +	return domain;
-> +}
-> +
-> +#endif
-> +
-> +#ifdef CONFIG_ACPI
-> +
-> +static struct irq_domain *hv_pci_acpi_irq_domain_parent(void)
-> +{
-> +	struct irq_domain *domain;
-> +	acpi_gsi_domain_disp_fn gsi_domain_disp_fn;
-> +
-> +	if (acpi_irq_model != ACPI_IRQ_MODEL_GIC)
-> +		return NULL;
-> +	gsi_domain_disp_fn = acpi_get_gsi_dispatcher();
-> +	if (!gsi_domain_disp_fn)
-> +		return NULL;
-> +	return irq_find_matching_fwnode(gsi_domain_disp_fn(0),
-> +				     DOMAIN_BUS_ANY);
-> +}
-> +
-> +#endif
-> +
->  static int hv_pci_irqchip_init(void)
->  {
->  	static struct hv_pci_chip_data *chip_data;
->  	struct fwnode_handle *fn = NULL;
-> +	struct irq_domain *irq_domain_parent = NULL;
->  	int ret = -ENOMEM;
->  
->  	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
-> @@ -907,9 +953,24 @@ static int hv_pci_irqchip_init(void)
->  	 * way to ensure that all the corresponding devices are also gone and
->  	 * no interrupts will be generated.
->  	 */
-> -	hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
-> -							  fn, &hv_pci_domain_ops,
-> -							  chip_data);
-> +#ifdef CONFIG_ACPI
-> +	if (!acpi_disabled)
-> +		irq_domain_parent = hv_pci_acpi_irq_domain_parent();
-> +#endif
-> +#if defined(CONFIG_OF)
-> +	if (!irq_domain_parent)
-> +		irq_domain_parent = hv_pci_of_irq_domain_parent();
-> +#endif
-> +	if (!irq_domain_parent) {
-> +		WARN_ONCE(1, "Invalid firmware configuration for VMBus interrupts\n");
-> +		ret = -EINVAL;
-> +		goto free_chip;
-> +	}
-> +
-> +	hv_msi_gic_irq_domain = irq_domain_create_hierarchy(
-> +		irq_domain_parent, 0, HV_PCI_MSI_SPI_NR,
-> +		fn, &hv_pci_domain_ops,
-> +		chip_data);
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This is a different style of indenting the parameters than other
-similar cases in this file, which line up parameters on subsequent
-lines under the open parenthesis.
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+alpha                               defconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                                 defconfig    gcc-13.2.0
+arc                        nsimosci_defconfig    gcc-13.2.0
+arc                   randconfig-001-20250315    gcc-13.2.0
+arc                   randconfig-002-20250315    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    gcc-14.2.0
+arm                                 defconfig    clang-14
+arm                            mmp2_defconfig    gcc-14.2.0
+arm                          moxart_defconfig    gcc-14.2.0
+arm                             mxs_defconfig    clang-15
+arm                   randconfig-001-20250315    gcc-14.2.0
+arm                   randconfig-002-20250315    clang-21
+arm                   randconfig-003-20250315    clang-21
+arm                   randconfig-004-20250315    gcc-14.2.0
+arm                        realview_defconfig    clang-16
+arm                       spear13xx_defconfig    gcc-14.2.0
+arm                        spear6xx_defconfig    clang-15
+arm                           u8500_defconfig    gcc-14.2.0
+arm                        vexpress_defconfig    gcc-14.2.0
+arm                         wpcm450_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                               defconfig    gcc-14.2.0
+arm64                 randconfig-001-20250315    gcc-14.2.0
+arm64                 randconfig-002-20250315    gcc-14.2.0
+arm64                 randconfig-003-20250315    clang-16
+arm64                 randconfig-004-20250315    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                                defconfig    gcc-14.2.0
+csky                  randconfig-001-20250315    gcc-14.2.0
+csky                  randconfig-002-20250315    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-18
+hexagon                             defconfig    clang-21
+hexagon               randconfig-001-20250315    clang-21
+hexagon               randconfig-002-20250315    clang-17
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250315    gcc-12
+i386        buildonly-randconfig-002-20250315    clang-19
+i386        buildonly-randconfig-003-20250315    clang-19
+i386        buildonly-randconfig-004-20250315    clang-19
+i386        buildonly-randconfig-005-20250315    gcc-11
+i386        buildonly-randconfig-006-20250315    gcc-12
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch                           defconfig    gcc-14.2.0
+loongarch             randconfig-001-20250315    gcc-14.2.0
+loongarch             randconfig-002-20250315    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                                defconfig    gcc-14.2.0
+m68k                        m5307c3_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+microblaze                          defconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                   sb1250_swarm_defconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250315    gcc-14.2.0
+nios2                 randconfig-002-20250315    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+openrisc                 simple_smp_defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20250315    gcc-14.2.0
+parisc                randconfig-002-20250315    gcc-14.2.0
+parisc64                            defconfig    gcc-14.1.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                          allyesconfig    clang-21
+powerpc                       holly_defconfig    clang-21
+powerpc                 linkstation_defconfig    clang-20
+powerpc                     mpc5200_defconfig    clang-21
+powerpc                      ppc44x_defconfig    clang-21
+powerpc               randconfig-001-20250315    clang-21
+powerpc               randconfig-002-20250315    gcc-14.2.0
+powerpc               randconfig-003-20250315    clang-18
+powerpc                     tqm8560_defconfig    gcc-14.2.0
+powerpc                         wii_defconfig    gcc-14.2.0
+powerpc64             randconfig-001-20250315    gcc-14.2.0
+powerpc64             randconfig-002-20250315    clang-18
+powerpc64             randconfig-003-20250315    gcc-14.2.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-16
+riscv                            allyesconfig    clang-21
+riscv                               defconfig    clang-21
+riscv                 randconfig-001-20250315    gcc-14.2.0
+riscv                 randconfig-002-20250315    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20250315    clang-19
+s390                  randconfig-002-20250315    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                ecovec24-romimage_defconfig    gcc-14.2.0
+sh                          landisk_defconfig    gcc-14.2.0
+sh                    randconfig-001-20250315    gcc-14.2.0
+sh                    randconfig-002-20250315    gcc-14.2.0
+sh                           se7619_defconfig    gcc-14.2.0
+sh                           se7712_defconfig    gcc-14.2.0
+sh                           se7724_defconfig    gcc-14.2.0
+sh                          urquell_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250315    gcc-14.2.0
+sparc                 randconfig-002-20250315    gcc-14.2.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250315    gcc-14.2.0
+sparc64               randconfig-002-20250315    gcc-14.2.0
+um                               alldefconfig    clang-21
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250315    gcc-12
+um                    randconfig-002-20250315    clang-18
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250315    gcc-12
+x86_64      buildonly-randconfig-002-20250315    clang-19
+x86_64      buildonly-randconfig-003-20250315    clang-19
+x86_64      buildonly-randconfig-004-20250315    clang-19
+x86_64      buildonly-randconfig-005-20250315    clang-19
+x86_64      buildonly-randconfig-006-20250315    gcc-12
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                          iss_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20250315    gcc-14.2.0
+xtensa                randconfig-002-20250315    gcc-14.2.0
 
->  	if (!hv_msi_gic_irq_domain) {
->  		pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
-> -- 
-> 2.43.0
-> 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
