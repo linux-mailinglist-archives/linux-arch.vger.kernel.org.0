@@ -1,171 +1,299 @@
-Return-Path: <linux-arch+bounces-10899-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10900-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2297A64052
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Mar 2025 06:53:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C991CA64C8C
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Mar 2025 12:29:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3B227A6D94
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Mar 2025 05:52:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6835188F779
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Mar 2025 11:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F54979D2;
-	Mon, 17 Mar 2025 05:53:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZuQjbch/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 801AA237160;
+	Mon, 17 Mar 2025 11:29:44 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655591DAC97
-	for <linux-arch@vger.kernel.org>; Mon, 17 Mar 2025 05:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DD61236436;
+	Mon, 17 Mar 2025 11:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742190828; cv=none; b=FtlTwUdzIPj1KKK5uyMJka9F9U7LTRQjEn/BoKTReQbBmWvE9AGH0ig8znv9a01rnhU3Xb7aCfROJ9JarEHaAdHBCABDnb8jLENv1n5kIPUyRd4gh6LqYED4WjLP7qcjv8PB7dra2lPyfLhogwPiqcbJq5uNy51vVJMYoLCCVEc=
+	t=1742210984; cv=none; b=MOqpd1bdmMCsSNTIPrrMFfJQIWgGFOSqjckJoxIUggoitvF6P5q5NI0bBinlKgmstnUh1hnJKLRBw193Cnh0B8BYr2SfA7vEP5QJ1wZHg0KgXNdgVn/X0X5ltXLYULy+0fBPkzmcUw6zUr7heJ/r0v0/iaaWVrpk4W8fWeTk9ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742190828; c=relaxed/simple;
-	bh=ZC/6+JYvonNNHIzSSYj6thbc5jJ7k+4Id/R5EozysVQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Oo6Y7s8R1Nb64Vl1+YVt2XXoZAHlH9V+9FMUx2QizwVUiYkMkbXLzPX7kktLzx6u8jWc9VJ0M+eOW77Wo0++ncBmP/1SRmk6YyGyuN+p+uSzuRSZFYh/Z+nOKiXkHwYxR8R0iYm21mDfYiN8fPIUXul9hjRxOx5ZKOp3X+swARA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZuQjbch/; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742190825;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=yJSwFIlGY7BDW0pv2lJcIUhQ6GnEUIX+K984DHSx7ao=;
-	b=ZuQjbch/IkM+QJJ8TdHCnS3m3S5xK2y8dIp9+vRrLWZo5Ij2b22O98aoX0spp4IQhCGtjR
-	4gNiBtPBt6pOyli0Kfg5gfwy2LF1MRyVJip/+EIpDEFEhFrWNU87gFPqVnnni4ZOnvGEtg
-	2gfqiOha7reY2qZPh0Jb/Xuzqh8heds=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-665-pmCi3DxiOy2J0tmdLWdePg-1; Mon, 17 Mar 2025 01:53:43 -0400
-X-MC-Unique: pmCi3DxiOy2J0tmdLWdePg-1
-X-Mimecast-MFC-AGG-ID: pmCi3DxiOy2J0tmdLWdePg_1742190823
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3913aea90b4so1620057f8f.2
-        for <linux-arch@vger.kernel.org>; Sun, 16 Mar 2025 22:53:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742190823; x=1742795623;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yJSwFIlGY7BDW0pv2lJcIUhQ6GnEUIX+K984DHSx7ao=;
-        b=KUDsabtF4n1dXbT4+7FpvgxSmAxshm6AddolnBCKzN+VSOiIvF7lSBrSWwlG9/7NxV
-         0qTnbn59QdKEwIJw7MZBFi669J272d7XkA61Fq+yoJFvgYI786thWQhWa6/wiY2CFUbw
-         IwPR7hb1HqUKzQXU2DTmLaeK18MbAiULb3Be5ZZGEU9WF/Z4/OLVta6TZrLpXbThGB+B
-         Vy91Fb36lGRtwmtbYK7Z+gD+dHhCShzXIhxocmydDW3jhlV89gR6oPSVWZ3It+Ab03u4
-         V4oIz3vUgpJCX1F0Gdj/QseYhvUIeUYLAyyXzQ0AMeQWxYfVfzSzE20IWjAlvsEC8Np8
-         VBGw==
-X-Forwarded-Encrypted: i=1; AJvYcCUhBAh+B5Yy+gaxhp4qjksaDlgpDQ02aTy8WLdrA/AwQ0zmOtoQUit/epGlcr+xYMhcVAFGriTiwuDV@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlcrG6LUWRPqbpPqsmb0cz/b3XQ4iLLRXw1HKweaHCHVjwqIUV
-	Rx2dJcQRSBjY/K1849WizTGhkwBfkOQYEKUxIYLG8mg6tK2BCAm+WbIIiLwyCLHHoBNtjtnHKgD
-	pRKMLw0tClDEEF44Qq2r8eCq4Q/YF8YM4ZJstCvMIlo60ZJ6RRtlShttIFRc=
-X-Gm-Gg: ASbGncuZJwuMLxmCOq4l1004JxOG7SyLhT1uJsxuKrfeiNJ4DCpAVmYBEG9l0SCMuxF
-	VaxCzUi84MU5E7SXl6TXB020ZREi7SRnlxWef9HNAXGto5HsXt7wZujKVyCpqFZxKfMufkU7yht
-	xJn6lO2qEHp67j5TEfm3HwmkhQgrK0E2sQcdLqLB4k7TKP7/onVUw7TKDbLdM7YK3NUoFqsGLIH
-	B9uZeWlSS6MCC2Nvcy08qLIiEu/Cp2vhGA9ijImLEz23jCFhjDOKX2BNDkMLnJcNK0vTr4ojJno
-	ErGym/2tqq3IpUJkBLrSb4KzQU0UAwG4THhNG9p17w68pGo=
-X-Received: by 2002:a05:6000:1564:b0:38f:28a1:501e with SMTP id ffacd0b85a97d-3971d03df3dmr11234513f8f.8.1742190822676;
-        Sun, 16 Mar 2025 22:53:42 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHtjOENIyCfOT6tNpPeHPmJrmieg7Pzl4jhXNmifxKuaNYBpJi1mV6co6CHPM/RjVt5PivTlw==
-X-Received: by 2002:a05:6000:1564:b0:38f:28a1:501e with SMTP id ffacd0b85a97d-3971d03df3dmr11234504f8f.8.1742190822258;
-        Sun, 16 Mar 2025 22:53:42 -0700 (PDT)
-Received: from [192.168.0.7] (ip-109-42-51-207.web.vodafone.de. [109.42.51.207])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d2010e2d6sm94247155e9.38.2025.03.16.22.53.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Mar 2025 22:53:41 -0700 (PDT)
-Message-ID: <330db6bc-1525-4091-b433-19d0db3655f4@redhat.com>
-Date: Mon, 17 Mar 2025 06:53:40 +0100
+	s=arc-20240116; t=1742210984; c=relaxed/simple;
+	bh=CFrYoZQRyimdBrmP/wFQMT8RlZP7qZLZb+JQWLgySes=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j1RA93KfoGqkh1+A7hpHJAe4AhiChaHRTqzZPLHP/sZIQV50uxlkHgYOzZPQIYzit9VkPDurGN3ratJj8biXXWxT67ar47oZuFRk+YpDsnYyZ2oTC3dbrZRF3uN5wM7F78WZes4Y2splJi1y8Ra5WJy8nDfgpBCCSPtR5JjYaZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3083613D5;
+	Mon, 17 Mar 2025 04:29:49 -0700 (PDT)
+Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CEB43F694;
+	Mon, 17 Mar 2025 04:29:33 -0700 (PDT)
+Date: Mon, 17 Mar 2025 11:29:30 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Roman Kisel <romank@linux.microsoft.com>
+Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
+	catalin.marinas@arm.com, conor+dt@kernel.org,
+	dan.carpenter@linaro.org, dave.hansen@linux.intel.com,
+	decui@microsoft.com, haiyangz@microsoft.com, hpa@zytor.com,
+	joey.gouly@arm.com, krzk+dt@kernel.org, kw@linux.com,
+	kys@microsoft.com, lenb@kernel.org, lpieralisi@kernel.org,
+	manivannan.sadhasivam@linaro.org, maz@kernel.org, mingo@redhat.com,
+	oliver.upton@linux.dev, rafael@kernel.org, robh@kernel.org,
+	ssengar@linux.microsoft.com, sudeep.holla@arm.com,
+	suzuki.poulose@arm.com, tglx@linutronix.de, wei.liu@kernel.org,
+	will@kernel.org, yuzenghui@huawei.com, devicetree@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-acpi@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, x86@kernel.org, apais@microsoft.com,
+	benhill@microsoft.com, bperkins@microsoft.com,
+	sunilmut@microsoft.com
+Subject: Re: [PATCH hyperv-next v6 01/11] arm64: kvm, smccc: Introduce and
+ use API for detecting hypervisor presence
+Message-ID: <Z9gHmkNOsd29viHj@J2N7QTR9R3.cambridge.arm.com>
+References: <20250315001931.631210-1-romank@linux.microsoft.com>
+ <20250315001931.631210-2-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 40/41] scripts/dtc: Update fdt.h to the latest version
-To: Rob Herring <robh@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
- devicetree@vger.kernel.org
-References: <20250314071013.1575167-1-thuth@redhat.com>
- <20250314071013.1575167-41-thuth@redhat.com>
- <20250314204701.GA2210106-robh@kernel.org>
-Content-Language: en-US
-From: Thomas Huth <thuth@redhat.com>
-Autocrypt: addr=thuth@redhat.com; keydata=
- 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
-In-Reply-To: <20250314204701.GA2210106-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250315001931.631210-2-romank@linux.microsoft.com>
 
-On 14/03/2025 21.47, Rob Herring wrote:
-> On Fri, Mar 14, 2025 at 08:10:11AM +0100, Thomas Huth wrote:
->> Update the header to this upstream version to change the
->> __ASSEMBLY__ macro into __ASSEMBLER__ :
->>
->> https://web.git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=f4c53f4ebf78
->>
->> Cc: Rob Herring <robh@kernel.org>
->> Cc: Saravana Kannan <saravanak@google.com>
->> Cc: devicetree@vger.kernel.org
->> Signed-off-by: Thomas Huth <thuth@redhat.com>
->> ---
->>   scripts/dtc/libfdt/fdt.h | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, Mar 14, 2025 at 05:19:21PM -0700, Roman Kisel wrote:
+> The KVM/arm64 uses SMCCC to detect hypervisor presence. That code is
+> private, and it follows the SMCCC specification. Other existing and
+> emerging hypervisor guest implementations can and should use that
+> standard approach as well.
 > 
-> Are you wanting me to apply this or ack it? Normally we only change dtc
-> with the sync with upstream script.
+> Factor out a common infrastructure that the guests can use, update KVM
+> to employ the new API. The central notion of the SMCCC method is the
+> UUID of the hypervisor, and the API follows that.
+> 
+> No functional changes. Validated with a KVM/arm64 guest.
+> 
+> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm64/kvm/hypercalls.c        |  5 +--
+>  drivers/firmware/smccc/kvm_guest.c | 10 ++----
+>  drivers/firmware/smccc/smccc.c     | 19 +++++++++++
+>  include/linux/arm-smccc.h          | 55 +++++++++++++++++++++++++++---
+>  4 files changed, 73 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> index 27ce4cb44904..92b9bc1ea8e8 100644
+> --- a/arch/arm64/kvm/hypercalls.c
+> +++ b/arch/arm64/kvm/hypercalls.c
+> @@ -353,10 +353,7 @@ int kvm_smccc_call_handler(struct kvm_vcpu *vcpu)
+>  			val[0] = gpa;
+>  		break;
+>  	case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
+> -		val[0] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0;
+> -		val[1] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1;
+> -		val[2] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2;
+> -		val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
+> +		UUID_TO_SMCCC_RES(ARM_SMCCC_VENDOR_HYP_UID_KVM, val);
+>  		break;
+>  	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+>  		val[0] = smccc_feat->vendor_hyp_bmap;
+> diff --git a/drivers/firmware/smccc/kvm_guest.c b/drivers/firmware/smccc/kvm_guest.c
+> index f3319be20b36..b5084b309ea0 100644
+> --- a/drivers/firmware/smccc/kvm_guest.c
+> +++ b/drivers/firmware/smccc/kvm_guest.c
+> @@ -14,17 +14,11 @@ static DECLARE_BITMAP(__kvm_arm_hyp_services, ARM_SMCCC_KVM_NUM_FUNCS) __ro_afte
+>  
+>  void __init kvm_init_hyp_services(void)
+>  {
+> +	uuid_t kvm_uuid = ARM_SMCCC_VENDOR_HYP_UID_KVM;
+>  	struct arm_smccc_res res;
+>  	u32 val[4];
+>  
+> -	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
+> -		return;
+> -
+> -	arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
+> -	if (res.a0 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0 ||
+> -	    res.a1 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1 ||
+> -	    res.a2 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2 ||
+> -	    res.a3 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3)
+> +	if (!arm_smccc_hyp_present(&kvm_uuid))
+>  		return;
+>  
+>  	memset(&res, 0, sizeof(res));
+> diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
+> index a74600d9f2d7..7399f27d58e5 100644
+> --- a/drivers/firmware/smccc/smccc.c
+> +++ b/drivers/firmware/smccc/smccc.c
+> @@ -67,6 +67,25 @@ s32 arm_smccc_get_soc_id_revision(void)
+>  }
+>  EXPORT_SYMBOL_GPL(arm_smccc_get_soc_id_revision);
+>  
+> +bool arm_smccc_hyp_present(const uuid_t *hyp_uuid)
+> +{
+> +	struct arm_smccc_res res = {};
+> +
+> +	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
+> +		return false;
+> +	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
+> +	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
+> +		return false;
+> +
+> +	return ({
+> +		const uuid_t uuid = SMCCC_RES_TO_UUID(res.a0, res.a1, res.a2, res.a3);
+> +		const bool present = uuid_equal(&uuid, hyp_uuid);
+> +
+> +		present;
+> +	});
+> +}
 
-As long as this series is still under discussion, I think an ack is sufficient.
+This use of a statement expression is bizarre, and the function would be
+clearer without it, e.g.
 
-  Thanks,
-   Thomas
+| bool arm_smccc_hyp_present(const uuid_t *hyp_uuid)
+| {
+| 	struct arm_smccc_res res = {};
+| 	uuid_t uuid;
+| 
+| 	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
+| 		return false;
+| 
+| 	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
+| 	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
+| 		return false;
+| 	
+| 	uuid_t = SMCCC_RES_TO_UUID(res.a0, res.a1, res.a2, res.a3);
+| 	return uuid_equal(&uuid, hyp_uuid);
+| }
 
+As noted below, I'd prefer if this were renamed to something like
+arm_smccc_hypervisor_has_uuid(), to more clearly indicate what is being
+checked.
+
+[...]
+
+> +/**
+> + * arm_smccc_hyp_present(const uuid_t *hyp_uuid)
+> + *
+> + * Returns `true` if the hypervisor advertises its presence via SMCCC.
+> + *
+> + * When the function returns `false`, the caller shall not assume that
+> + * there is no hypervisor running. Instead, the caller must fall back to
+> + * other approaches if any are available.
+> + */
+> +bool arm_smccc_hyp_present(const uuid_t *hyp_uuid);
+
+I'd prefer if this were:
+
+| /*
+|  * Returns whether a specific hypervisor UUID is advertised for the
+|  * Vendor Specific Hypervisor Service range.
+|  */
+| bool arm_smccc_hypervisor_has_uuid(const uuid_t *uuid);
+
+> +#define SMCCC_RES_TO_UUID(r0, r1, r2, r3) \
+> +	UUID_INIT( \
+> +		cpu_to_le32(lower_32_bits(r0)), \
+> +		cpu_to_le32(lower_32_bits(r1)) & 0xffff, \
+> +		cpu_to_le32(lower_32_bits(r1)) >> 16, \
+> +		cpu_to_le32(lower_32_bits(r2)) & 0xff, \
+> +		(cpu_to_le32(lower_32_bits(r2)) >> 8) & 0xff, \
+> +		(cpu_to_le32(lower_32_bits(r2)) >> 16) & 0xff, \
+> +		(cpu_to_le32(lower_32_bits(r2)) >> 24) & 0xff, \
+> +		cpu_to_le32(lower_32_bits(r3)) & 0xff, \
+> +		(cpu_to_le32(lower_32_bits(r3)) >> 8) & 0xff, \
+> +		(cpu_to_le32(lower_32_bits(r3)) >> 16) & 0xff, \
+> +		(cpu_to_le32(lower_32_bits(r3)) >> 24) & 0xff \
+> +	)
+
+I think this'd be clearer if we did something similar to what we did for
+the SMCCC SOC_ID name:
+
+  https://lore.kernel.org/linux-arm-kernel/20250219005932.3466-1-paul@os.amperecomputing.com/
+
+... and pack/unpack the bytes explicitly, e.g.
+
+| static inline uuid smccc_res_to_uuid(u32 r0, u32, r1, u32 r2, u32 r3)
+| {
+| 	uuid_t uuid = {
+| 		.b = {
+| 			[0]  = (r0 >> 0)  & 0xff,
+| 			[1]  = (r0 >> 8)  & 0xff,
+| 			[2]  = (r0 >> 16) & 0xff,
+| 			[3]  = (r0 >> 24) & 0xff,
+| 
+| 			[4]  = (r1 >> 0)  & 0xff,
+| 			[5]  = (r1 >> 8)  & 0xff,
+| 			[6]  = (r1 >> 16) & 0xff,
+| 			[7]  = (r1 >> 24) & 0xff,
+| 
+| 			[8]  = (r2 >> 0)  & 0xff,
+| 			[9]  = (r2 >> 8)  & 0xff,
+| 			[10] = (r2 >> 16) & 0xff,
+| 			[11] = (r2 >> 24) & 0xff,
+| 
+| 			[12] = (r3 >> 0)  & 0xff,
+| 			[13] = (r3 >> 8)  & 0xff,
+| 			[14] = (r3 >> 16) & 0xff,
+| 			[15] = (r3 >> 24) & 0xff,
+| 		},
+| 	};
+| 
+| 	return uuid;
+| }
+
+... which is a bit more verbose, but clearly aligns with what the SMCCC
+spec says w.r.t. packing/unpacking, and should avoid warnings about
+endianness conversions.
+
+> +
+> +#define UUID_TO_SMCCC_RES(uuid_init, regs) do { \
+> +		const uuid_t uuid = uuid_init; \
+> +		(regs)[0] = le32_to_cpu((u32)uuid.b[0] | (uuid.b[1] << 8) | \
+> +						((uuid.b[2]) << 16) | ((uuid.b[3]) << 24)); \
+> +		(regs)[1] = le32_to_cpu((u32)uuid.b[4] | (uuid.b[5] << 8) | \
+> +						((uuid.b[6]) << 16) | ((uuid.b[7]) << 24)); \
+> +		(regs)[2] = le32_to_cpu((u32)uuid.b[8] | (uuid.b[9] << 8) | \
+> +						((uuid.b[10]) << 16) | ((uuid.b[11]) << 24)); \
+> +		(regs)[3] = le32_to_cpu((u32)uuid.b[12] | (uuid.b[13] << 8) | \
+> +						((uuid.b[14]) << 16) | ((uuid.b[15]) << 24)); \
+> +	} while (0)
+> +
+> +#endif /* !__ASSEMBLER__ */
+
+IMO it'd be clearer to initialise a uuid_t beforehand, and then allow
+the helper to unpack the bytes, e.g.
+
+static inline u32 smccc_uuid_to_reg(const uuid_t uuid, int reg)
+{
+	u32 val = 0;
+
+	val |= (u32)(uuid.b[4 * reg + 0] << 0)
+	val |= (u32)(uuid.b[4 * reg + 1] << 8)
+	val |= (u32)(uuid.b[4 * reg + 2] << 16)
+	val |= (u32)(uuid.b[4 * reg + 3] << 24)
+
+	return val:
+}
+
+#define UUID_TO_SMCCC_RES(uuid, regs)		\
+do {						\
+	(regs)[0] = smccc_uuid_to_reg(uuid, 0); \
+	(regs)[1] = smccc_uuid_to_reg(uuid, 1); \
+	(regs)[2] = smccc_uuid_to_reg(uuid, 2); \
+	(regs)[3] = smccc_uuid_to_reg(uuid, 3); \
+} while (0)
+
+... though arguably at that point you can get rid of the
+UUID_TO_SMCCC_RES() macro and just expand that directly at the callsite.
+
+Mark.
 
