@@ -1,137 +1,249 @@
-Return-Path: <linux-arch+bounces-10903-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10904-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86E69A64F56
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Mar 2025 13:40:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BC11A652E4
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Mar 2025 15:21:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4E69188F814
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Mar 2025 12:40:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2636166A43
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Mar 2025 14:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292F6238D32;
-	Mon, 17 Mar 2025 12:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E7Ar7yyZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C2123FC75;
+	Mon, 17 Mar 2025 14:21:33 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2DF18BC3D;
-	Mon, 17 Mar 2025 12:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6327838DEC;
+	Mon, 17 Mar 2025 14:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742215226; cv=none; b=J3E9sKDuBUf4wzyXx272Izo7ldHZ5D6rxLBG4sEc3xoZU+bEy1yUBBxDUWVQqoHbfHUKe3hauj9XCNEtvu0E5z4LNuTh+wTyXNStQvjWj97pPu7/mao0bt03pmwv/ET48+yF58GERfkbPDHtpg7UWNnn1maXp4gL4mVY0D96yX0=
+	t=1742221293; cv=none; b=F5ss4ik13r0SXKgRUpN0VmNjShs/Lq2kau+SNpGSleo9gITMCcbHKmo/ouxLlnX5p5iNnyWJgLWdHPL0zztGbgYYBXzbFJqsO1+IJK3ufD+pT14pqSZ9r99F817w+T3SYz8btp9YeEy/TyHQasxC4VuxVIo4ATDoJCNb8c9bDWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742215226; c=relaxed/simple;
-	bh=Qm34pbxAa6RjHCc2A1aXJ4qBOugE70Km6ONzqhDGMKA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NbXfT+CrxcTqYHciP/HJrGLlKbDsA3OTDjozsfD7Ji2ELgjvAKzTnsJeMnz5Y4+bMi596LHbuef/j0E1RoTNTyEHDan+1tyTfxC8twSQ/IBmsD97aOu3y+BnGpXGuEtHplNIs0iXOaLzF4sbe2aS/eVzPrppEFWVoCpwPOLWSs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E7Ar7yyZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A338C4CEE9;
-	Mon, 17 Mar 2025 12:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742215225;
-	bh=Qm34pbxAa6RjHCc2A1aXJ4qBOugE70Km6ONzqhDGMKA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=E7Ar7yyZci/sFoCidNgE8WXrHkJCdBUtC5+SBI7ElJU6LgZqLiSvRPlv1xqMCdR+2
-	 JdSknt+r47jh4J64JDHOV3bC2f8CCEHU9CwoE9ISsT1r2OFEQaCkooFpGyY2cq0AUS
-	 8BJqKWvVNVKmYaiENoybfTCks4OV2Hujobg04vepdZYEAJYEHgTYSVQtuBbCiU49Wg
-	 w4Y7etNdGOWGUdqy5s7jSxyR/7rnszsVQfJoCdbVmwcu/WQyL4uucGKWINrXNoVXHO
-	 5i4vQUYMXA8gu7KzsUBsrs+oDW3h+voixjT+nCGjato5WHQworTVVXnwjAQoo5sK7c
-	 ZdFal0K6UlYKw==
-Message-ID: <e3dfe753-fb5f-4f2f-9d24-da8a4f01be19@kernel.org>
-Date: Mon, 17 Mar 2025 07:40:20 -0500
+	s=arc-20240116; t=1742221293; c=relaxed/simple;
+	bh=560EJqXe1kaJyMpXXzuweNBrFt7OtRD5CVucaoPpPBg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wlcv+04o0IuM69Ay2oaljBWSRX0kcD9n6udjLxohjfzmqZ8kasqT44P6HmJEMscy7mY/6OXYlVwFWPEkcTw6odI5mKgaKMHv9xaku0FgdcNfMXXiouWUM4yvU8j+bVP2TKWfXSAPP11ASgBBOjMmb8JCOmcwhNeVxljtLtT3ogs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89EB513D5;
+	Mon, 17 Mar 2025 07:21:39 -0700 (PDT)
+Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FD433F63F;
+	Mon, 17 Mar 2025 07:21:26 -0700 (PDT)
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+To: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org,
+	Kevin Brodsky <kevin.brodsky@arm.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Yang Shi <yang@os.amperecomputing.com>,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-openrisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	sparclinux@vger.kernel.org
+Subject: [PATCH 00/11] Always call constructor for kernel page tables
+Date: Mon, 17 Mar 2025 14:16:49 +0000
+Message-ID: <20250317141700.3701581-1-kevin.brodsky@arm.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/13] nios2: move pr_debug() about memory start and
- end to setup_arch()
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
- Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>,
- Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "David S. Miller" <davem@davemloft.net>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Guo Ren
- <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
- Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Madhavan Srinivasan <maddy@linux.ibm.com>, Mark Brown <broonie@kernel.org>,
- Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>,
- Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
- Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>,
- Stafford Horne <shorne@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>,
- Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
- linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, x86@kernel.org
-References: <20250313135003.836600-1-rppt@kernel.org>
- <20250313135003.836600-7-rppt@kernel.org>
-Content-Language: en-US
-From: Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20250313135003.836600-7-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/13/25 08:49, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> This will help with pulling out memblock_free_all() to the generic
-> code and reducing code duplication in arch::mem_init().
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->   arch/nios2/kernel/setup.c | 2 ++
->   arch/nios2/mm/init.c      | 2 --
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/nios2/kernel/setup.c b/arch/nios2/kernel/setup.c
-> index da122a5fa43b..a4cffbfc1399 100644
-> --- a/arch/nios2/kernel/setup.c
-> +++ b/arch/nios2/kernel/setup.c
-> @@ -149,6 +149,8 @@ void __init setup_arch(char **cmdline_p)
->   	memory_start = memblock_start_of_DRAM();
->   	memory_end = memblock_end_of_DRAM();
->   
-> +	pr_debug("%s: start=%lx, end=%lx\n", __func__, memory_start, memory_end);
-> +
->   	setup_initial_init_mm(_stext, _etext, _edata, _end);
->   	init_task.thread.kregs = &fake_regs;
->   
-> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-> index a2278485de19..aa692ad30044 100644
-> --- a/arch/nios2/mm/init.c
-> +++ b/arch/nios2/mm/init.c
-> @@ -65,8 +65,6 @@ void __init mem_init(void)
->   	unsigned long end_mem   = memory_end; /* this must not include
->   						kernel stack at top */
->   
-> -	pr_debug("mem_init: start=%lx, end=%lx\n", memory_start, memory_end);
-> -
->   	end_mem &= PAGE_MASK;
->   	high_memory = __va(end_mem);
->   
+There has been much confusion around exactly when page table
+constructors/destructors (pagetable_*_[cd]tor) are supposed to be
+called. They were initially introduced for user PTEs only (to support
+split page table locks), then at the PMD level for the same purpose.
+Accounting was added later on, starting at the PTE level and then moving
+to higher levels (PMD, PUD). Finally, with my earlier series "Account
+page tables at all levels" [1], the ctor/dtor is run for all levels, all
+the way to PGD.
 
-Acked-By: Dinh Nguyen <dinguyen@kernel.org>
+I thought this was the end of the story, and it hopefully is for user
+pgtables, but I was wrong for what concerns kernel pgtables. The current
+situation there makes very little sense:
+
+* At the PTE level, the ctor/dtor is not called (at least in the generic
+  implementation). Specific helpers are used for kernel pgtables at this
+  level (pte_{alloc,free}_kernel()) and those have never called the
+  ctor/dtor, most likely because they were initially irrelevant in the
+  kernel case.
+
+* At all other levels, the ctor/dtor is normally called. This is
+  potentially wasteful at the PMD level (more on that later).
+
+This series aims to ensure that the ctor/dtor is always called for kernel
+pgtables, as it already is for user pgtables. Besides consistency, the
+main motivation is to guarantee that ctor/dtor hooks are systematically
+called; this makes it possible to insert hooks to protect page tables [2],
+for instance. There is however an extra challenge: split locks are not
+used for kernel pgtables, and it would therefore be wasteful to
+initialise them (ptlock_init()).
+
+It is worth clarifying exactly when split locks are used. They clearly
+are for user pgtables, but as illustrated in commit 61444cde9170 ("ARM:
+8591/1: mm: use fully constructed struct pages for EFI pgd
+allocations"), they also are for special page tables like efi_mm. The
+one case where split locks are definitely unused is pgtables owned by
+init_mm; this is consistent with the behaviour of apply_to_pte_range().
+
+The approach chosen in this series is therefore to pass the mm
+associated to the pgtables being constructed to
+pagetable_{pte,pmd}_ctor() (patch 1), and skip ptlock_init() if
+mm == &init_mm (patch 2 and 6). This makes it possible to call the PTE
+ctor/dtor from pte_{alloc,free}_kernel() without unintended consequences
+(patch 2). As a result the accounting functions are now called at
+all levels for kernel pgtables, and split locks are never initialised.
+
+In configurations where ptlocks are dynamically allocated (32-bit,
+PREEMPT_RT, etc.) and ARCH_ENABLE_SPLIT_PMD_PTLOCK is selected, this
+series results in the removal of a kmem_cache allocation for every
+kernel PMD. Additionally, for certain architectures that do not use
+<asm-generic/pgalloc.h> such as s390, the same optimisation occurs at
+the PTE level.
+
+---
+
+Things get more complicated when it comes to special pgtable allocators
+(patch 7-11). All architectures need such allocators to create initial
+kernel pgtables; we are not concerned with those as the ctor cannot be
+called so early in the boot sequence. However, those allocators may also
+be used later in the boot sequence or during normal operations. There
+are two main use-cases:
+
+1. Mapping EFI memory: efi_mm (arm, arm64, riscv)
+2. arch_add_memory(): init_mm
+
+The ctor is already explicitly run (at the PTE/PMD level) in the first
+case, as required for pgtables that are not associated with init_mm.
+However the same allocators may also be used for the second use-case (or
+others), and this is where it gets messy. Patch 1 calls the ctor with
+NULL as mm in those situations, as the actual mm isn't available.
+Practically this means that ptlocks will be unconditionally initialised.
+This is fine on arm - create_mapping_late() is only used for the EFI
+mapping. On arm64, __create_pgd_mapping() is also used by
+arch_add_memory(); patch 7/8/10 ensure that ctors are called at all
+levels with the appropriate mm. The situation is similar on riscv, but
+propagating the mm down to the ctor would require significant
+refactoring. Since they are already called unconditionally, this series
+leaves riscv no worse off - patch 9 adds comments to clarify the
+situation.
+
+From a cursory look at other architectures implementing
+arch_add_memory(), s390 and x86 may also need a similar treatment to add
+constructor calls. This is to be taken care of in a future version or as
+a follow-up.
+
+---
+
+The complications in those special pgtable allocators beg the question:
+does it really make sense to treat efi_mm and init_mm differently in
+e.g. apply_to_pte_range()? Maybe what we really need is a way to tell if
+an mm corresponds to user memory or not, and never use split locks for
+non-user mm's. Feedback and suggestions welcome!
+
+- Kevin
+
+[1] https://lore.kernel.org/linux-mm/20250103184415.2744423-1-kevin.brodsky@arm.com/
+[2] https://lore.kernel.org/linux-hardening/20250203101839.1223008-1-kevin.brodsky@arm.com/
+---
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Andreas Larsson <andreas@gaisler.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Yang Shi <yang@os.amperecomputing.com>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-openrisc@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: sparclinux@vger.kernel.org
+---
+Kevin Brodsky (11):
+  mm: Pass mm down to pagetable_{pte,pmd}_ctor
+  mm: Call ctor/dtor for kernel PTEs
+  m68k: mm: Call ctor/dtor for kernel PTEs
+  powerpc: mm: Call ctor/dtor for kernel PTEs
+  sparc64: mm: Call ctor/dtor for kernel PTEs
+  mm: Skip ptlock_init() for kernel PMDs
+  arm64: mm: Use enum to identify pgtable level instead of *_SHIFT
+  arm64: mm: Always call PTE/PMD ctor in __create_pgd_mapping()
+  riscv: mm: Clarify ctor mm argument in alloc_{pte,pmd}_late
+  arm64: mm: Call PUD/P4D ctor in __create_pgd_mapping()
+  riscv: mm: Call PUD/P4D ctor in special kernel pgtable alloc
+
+ arch/arm/mm/mmu.c                        |  2 +-
+ arch/arm64/mm/mmu.c                      | 91 ++++++++++++++----------
+ arch/csky/include/asm/pgalloc.h          |  2 +-
+ arch/loongarch/include/asm/pgalloc.h     |  2 +-
+ arch/m68k/include/asm/mcf_pgalloc.h      |  8 ++-
+ arch/m68k/include/asm/motorola_pgalloc.h | 10 +--
+ arch/m68k/mm/motorola.c                  |  6 +-
+ arch/microblaze/mm/pgtable.c             |  2 +-
+ arch/mips/include/asm/pgalloc.h          |  2 +-
+ arch/openrisc/mm/ioremap.c               |  2 +-
+ arch/parisc/include/asm/pgalloc.h        |  2 +-
+ arch/powerpc/mm/book3s64/pgtable.c       |  2 +-
+ arch/powerpc/mm/pgtable-frag.c           | 30 ++++----
+ arch/riscv/mm/init.c                     | 26 ++++---
+ arch/s390/include/asm/pgalloc.h          |  2 +-
+ arch/s390/mm/pgalloc.c                   |  2 +-
+ arch/sparc/mm/init_64.c                  | 29 ++++----
+ arch/sparc/mm/srmmu.c                    |  2 +-
+ arch/x86/mm/pgtable.c                    |  2 +-
+ include/asm-generic/pgalloc.h            | 11 ++-
+ include/linux/mm.h                       | 10 +--
+ 21 files changed, 137 insertions(+), 108 deletions(-)
+
+
+base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
+-- 
+2.47.0
+
 
