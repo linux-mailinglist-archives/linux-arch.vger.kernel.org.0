@@ -1,107 +1,153 @@
-Return-Path: <linux-arch+bounces-10926-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10927-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2388A6738D
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 13:14:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EBB7A67896
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 17:00:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEF2F17B199
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 12:14:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE22F3A5089
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 15:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A1720B7E9;
-	Tue, 18 Mar 2025 12:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC4820F091;
+	Tue, 18 Mar 2025 15:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVHlHUak"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ACF9207A2A;
-	Tue, 18 Mar 2025 12:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C1C20E6FA;
+	Tue, 18 Mar 2025 15:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742300073; cv=none; b=kBpIEWGjSdIkvYRQZ46U/b//DpKHXPUPr6sY11l6+2tARXnpnOKpj2OQDItps4RnkMceiGLfi8XV71E2Y2L5JeZCMFTeCGNrXMc9r7km3J4gsAlAlOHsGULaK7L/p+SUcoaxUJtF6HtLNeR9Ubw+pJ26YpjYhPthrZwsFvJzekI=
+	t=1742313596; cv=none; b=oeS/Mand7Jxau2tE7KN0QjTULTOje8cy4jkTkTRSbwgjXMdjJVRJDlyvyZ8ZWusVS7TC6ZSVEmjp1+X5iz0jwAHSlHIhO2/VGCTqLAAsOgtu/5gM9ugBowfPmutJb8Kk78yeT6njuLVdeE+rPl+aGm6/S9eE0qRs+9TlxBSLQp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742300073; c=relaxed/simple;
-	bh=64IIiCxSmb90ZQ6fmueb4xJ3WQaFIC2OATzJjR0a98k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lb4bg8Lxm72ZgZtTw1mAFX4wKq72MKdllVCyRi7AmvchSybPt4cmKJ4nOWyn0aLFzFfxwcrQzSsPrTI6/8fBSUVVrgeNDoBAWEaLupA7aaqf8QJMFRhzFoQujRU1VRtJLTdfwIRriEl4n/7+r9g5pcWt7HAzIaVdrq550gRlJCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E278013D5;
-	Tue, 18 Mar 2025 05:14:38 -0700 (PDT)
-Received: from [10.57.85.104] (unknown [10.57.85.104])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7AF4D3F673;
-	Tue, 18 Mar 2025 05:14:22 -0700 (PDT)
-Message-ID: <e79f9aa9-ce1b-4d42-8a61-aebaae1744fc@arm.com>
-Date: Tue, 18 Mar 2025 13:14:18 +0100
+	s=arc-20240116; t=1742313596; c=relaxed/simple;
+	bh=wnqlTyxAgZ8CuVhXT9duPOO4NgjQBjimZKlWtsOUGPY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rtNuxbEvsVojzW+7QvI93xBrqK3voNzfEGfkR3KtDUInYvUpBBq1aSF4wLJuRPQj0dePFNL+uDuqbEJwQso12VjNFc/tMypWHZORL2C34DxQBfoMRU4cECQo1rMSPOTt2wSTx13hsD6oQY2+NdGL24MCI4no+22mDotXMgSNrnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVHlHUak; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58FD2C4CEDD;
+	Tue, 18 Mar 2025 15:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742313596;
+	bh=wnqlTyxAgZ8CuVhXT9duPOO4NgjQBjimZKlWtsOUGPY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WVHlHUakLlfN9xeuBYO1EJf+5CyU+WJKRkilNy467a1BnupPF2HSzG6De1fpXKFV+
+	 ix9jYHBoyySgyb6uel1Y6KTQEzU4+Rwm0HghzRyuSjF71hbCSnTEGnernC5xUEtu10
+	 +UeOIc/V5TKw7+jkC51H/NeBuaIOzIXiqjJlwYzUGV3n3dFHQ9MxYqNWDakJi0E6hg
+	 3eBuUyUh9Yz/C8EPNMpPnQhIe07ID+3WJ5N3wJyQiVpq4Skm6z+pxWjAjp5DobEjiB
+	 6Jrg3x/R+DiIvD5NG4zUjWrrB/2tNu1hT+SvmfpVy3qQGAt9drIa3KhZDqAUmDABl/
+	 j7eCAm37AJZIQ==
+Date: Tue, 18 Mar 2025 15:59:47 +0000
+From: Will Deacon <will@kernel.org>
+To: Alessandro Carminati <acarmina@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alessandro Carminati <alessandro.carminati@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org,
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH v4 07/14] arm64: Add support for suppressing warning
+ backtraces
+Message-ID: <20250318155946.GC13829@willie-the-truck>
+References: <20250313114329.284104-1-acarmina@redhat.com>
+ <20250313114329.284104-8-acarmina@redhat.com>
+ <20250313122503.GA7438@willie-the-truck>
+ <CAGegRW5r3V2-_44-X353vS-GZwDYG=SVwc6MzSGE8GdFQuFoKA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/11] Always call constructor for kernel page tables
-To: Ryan Roberts <ryan.roberts@arm.com>, linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
- Andreas Larsson <andreas@gaisler.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "David S. Miller" <davem@davemloft.net>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Mark Rutland <mark.rutland@arm.com>, Matthew Wilcox <willy@infradead.org>,
- Michael Ellerman <mpe@ellerman.id.au>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Peter Zijlstra <peterz@infradead.org>, Qi Zheng
- <zhengqi.arch@bytedance.com>, Will Deacon <will@kernel.org>,
- Yang Shi <yang@os.amperecomputing.com>, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-References: <20250317141700.3701581-1-kevin.brodsky@arm.com>
- <70349335-84ee-4bca-a3d6-d7cf3c05b92b@arm.com>
-Content-Language: en-GB
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <70349335-84ee-4bca-a3d6-d7cf3c05b92b@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGegRW5r3V2-_44-X353vS-GZwDYG=SVwc6MzSGE8GdFQuFoKA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 17/03/2025 16:30, Ryan Roberts wrote:
-> On 17/03/2025 14:16, Kevin Brodsky wrote:
->> The complications in those special pgtable allocators beg the question:
->> does it really make sense to treat efi_mm and init_mm differently in
->> e.g. apply_to_pte_range()? Maybe what we really need is a way to tell if
->> an mm corresponds to user memory or not, and never use split locks for
->> non-user mm's. Feedback and suggestions welcome!
-> The difference in treatment is whether or not the ptl is taken, right? So the
-> real question is when calling apply_to_pte_range() for efi_mm, is there already
-> a higher level serialization mechanism that prevents racy accesses? For init_mm,
-> I think this is handled implicitly because there is no way for user space to
-> cause apply_to_pte_range() for an arbitrary piece of kernel memory. Although I
-> can't even see where apply_to_page_range() is called for efi_mm.
+On Thu, Mar 13, 2025 at 05:40:59PM +0100, Alessandro Carminati wrote:
+> On Thu, Mar 13, 2025 at 1:25 PM Will Deacon <will@kernel.org> wrote:
+> >
+> > On Thu, Mar 13, 2025 at 11:43:22AM +0000, Alessandro Carminati wrote:
+> > > diff --git a/arch/arm64/include/asm/bug.h b/arch/arm64/include/asm/bug.h
+> > > index 28be048db3f6..044c5e24a17d 100644
+> > > --- a/arch/arm64/include/asm/bug.h
+> > > +++ b/arch/arm64/include/asm/bug.h
+> > > @@ -11,8 +11,14 @@
+> > >
+> > >  #include <asm/asm-bug.h>
+> > >
+> > > +#ifdef HAVE_BUG_FUNCTION
+> > > +# define __BUG_FUNC  __func__
+> > > +#else
+> > > +# define __BUG_FUNC  NULL
+> > > +#endif
+> > > +
+> > >  #define __BUG_FLAGS(flags)                           \
+> > > -     asm volatile (__stringify(ASM_BUG_FLAGS(flags)));
+> > > +     asm volatile (__stringify(ASM_BUG_FLAGS(flags, %c0)) : : "i" (__BUG_FUNC));
+> >
+> > Why is 'i' the right asm constraint to use here? It seems a bit odd to
+> > use that for a pointer.
+> 
+> I received this code as legacy from a previous version.
+> In my review, I considered the case when HAVE_BUG_FUNCTION is defined:
+> Here, __BUG_FUNC is defined as __func__, which is the name of the
+> current function as a string literal.
+> Using the constraint "i" seems appropriate to me in this case.
+> 
+> However, when HAVE_BUG_FUNCTION is not defined:
+> __BUG_FUNC is defined as NULL. Initially, I considered it literal 0,
+> but after investigating your concern, I found:
+> 
+> ```
+> $ echo -E "#include <stdio.h>\n#include <stddef.h>\nint main()
+> {\nreturn 0;\n}" | aarch64-linux-gnu-gcc -E -dM - | grep NULL
+> #define NULL ((void *)0)
+> ```
+> 
+> I realized that NULL is actually a pointer that is not a link time
+> symbol, and using the "i" constraint with NULL may result in undefined
+> behavior.
+> 
+> Would the following alternative definition for __BUG_FUNC be more convincing?
+> 
+> ```
+> #ifdef HAVE_BUG_FUNCTION
+>     #define __BUG_FUNC __func__
+> #else
+>     #define __BUG_FUNC (uintptr_t)0
+> #endif
+> ```
+> Let me know your thoughts.
 
-The commit I mentioned above, 61444cde9170 ("ARM: 8591/1: mm: use fully
-constructed struct pages for EFI pgd allocations"), shows that
-apply_to_page_range() is called from efi_set_mapping_permissions(), and
-this indeed hasn't changed. It is itself called from efi_virtmap_init().
-I would expect that no locking at all is necessary here, since the
-mapping has just been created and surely isn't used yet. Now the
-question is where exactly init_mm is special-cased in this manner. I can
-see that walk_page_range() does something similar, there may be more
-cases. And the other question is whether those functions are ever used
-on special mm's, aside from efi_set_mapping_permissions().
-> FWIW, contpte.c has mm_is_user() which is used by arm64.
+Thanks for the analysis; I hadn't noticed this specific issue, it just
+smelled a bit fishy. Anyway, the diff above looks better, thanks.
 
-Interesting! But not pretty, that's basically checking that the mm is
-not &init_mm or &efi_mm... which wouldn't work for a generic
-implementation. It feels like adding some attribute to mm_struct
-wouldn't hurt. It looks like we've run out of MMF_* flags though :/
-
-- Kevin
+Will
 
