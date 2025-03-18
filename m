@@ -1,88 +1,107 @@
-Return-Path: <linux-arch+bounces-10925-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10926-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AE20A670A4
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 11:00:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2388A6738D
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 13:14:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 195587A31F4
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 09:59:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEF2F17B199
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 12:14:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9869F2080CD;
-	Tue, 18 Mar 2025 10:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="WvVnHM5g"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A1720B7E9;
+	Tue, 18 Mar 2025 12:14:34 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9F0207667;
-	Tue, 18 Mar 2025 10:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ACF9207A2A;
+	Tue, 18 Mar 2025 12:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742292005; cv=none; b=jj1qitwNReZtSKSHAUfYMOiRBhkVTfpUbG5LfJUDsk28Z/wTEzHmhtPDUsRkWCHcek/qfb3D7Fqus6ZJtnoAVtT/iYHQ0Fju5d2dThfA8w3UKu9xEoQIqz9T3mv6yn+U/W9tXUaJmT0w/8kOSS6VC187KNBasCzAy5HZZr37VRk=
+	t=1742300073; cv=none; b=kBpIEWGjSdIkvYRQZ46U/b//DpKHXPUPr6sY11l6+2tARXnpnOKpj2OQDItps4RnkMceiGLfi8XV71E2Y2L5JeZCMFTeCGNrXMc9r7km3J4gsAlAlOHsGULaK7L/p+SUcoaxUJtF6HtLNeR9Ubw+pJ26YpjYhPthrZwsFvJzekI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742292005; c=relaxed/simple;
-	bh=vJv1KkdXbPcvAghM29T8PsBL8Lb4ASjOFhvS2uQ91tE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pbET7aaDOZVBn1m6787sRR6qZKPSO2xUD/2vXV/ISz2Ab9Ap0DXFnzQ+xHCYKD8rXya4kV9/nEraB1IqvzPSMfuNEM0rvxdYm0j5XSEB4yPtslIBmMLSLHyWyyoOSi6/ewnI1yQAP0QH5CQN5D+BHS8J7pLKnHwFnrgUzhx0Rdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=WvVnHM5g; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=vJv1KkdXbPcvAghM29T8PsBL8Lb4ASjOFhvS2uQ91tE=;
-	t=1742292004; x=1743501604; b=WvVnHM5gN2mh20b4ydGc3t/AKz0KrOgl1NTaVmS8kZ+JS8k
-	V+Ql6nFvWbdamRIROixnwDQgOKJo1j4KAlkHZiKCKvuQUrPeUKhdsGvH7vHuNGNjy9D7ilCHqB3+V
-	3FKvmAOqZpg9Pph4hl2CovMxVDOc85jJYgSvEfD76cp36vJC2+u/b2RERfaJL8/1XXCWmE5r6lFVf
-	HXwKOFxIEdHLGuIkvfgtUqailHJWAhB10/UzEoKli1Z4w0vHpXTB9MWa/eH+Nm0cjo0ffVP/kqJuv
-	LzqPzkov2dkvnKdhMGgok3AE1Fkt/pLZDVoHK5pPHPUuEN9LcX0/Y+YWvKA4SvgA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1tuTjs-0000000FCgD-2h9m;
-	Tue, 18 Mar 2025 11:00:00 +0100
-Message-ID: <45e2f8f566539a766bc7e089e71211e320bc4fa6.camel@sipsolutions.net>
-Subject: Re: [PATCH 35/41] um: Replace __ASSEMBLY__ with __ASSEMBLER__ in
- the usermode headers
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, Richard
- Weinberger <richard@nod.at>, Anton Ivanov
- <anton.ivanov@cambridgegreys.com>, 	linux-um@lists.infradead.org
-Date: Tue, 18 Mar 2025 10:59:59 +0100
-In-Reply-To: <20250314071013.1575167-36-thuth@redhat.com>
-References: <20250314071013.1575167-1-thuth@redhat.com>
-	 <20250314071013.1575167-36-thuth@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1742300073; c=relaxed/simple;
+	bh=64IIiCxSmb90ZQ6fmueb4xJ3WQaFIC2OATzJjR0a98k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lb4bg8Lxm72ZgZtTw1mAFX4wKq72MKdllVCyRi7AmvchSybPt4cmKJ4nOWyn0aLFzFfxwcrQzSsPrTI6/8fBSUVVrgeNDoBAWEaLupA7aaqf8QJMFRhzFoQujRU1VRtJLTdfwIRriEl4n/7+r9g5pcWt7HAzIaVdrq550gRlJCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E278013D5;
+	Tue, 18 Mar 2025 05:14:38 -0700 (PDT)
+Received: from [10.57.85.104] (unknown [10.57.85.104])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7AF4D3F673;
+	Tue, 18 Mar 2025 05:14:22 -0700 (PDT)
+Message-ID: <e79f9aa9-ce1b-4d42-8a61-aebaae1744fc@arm.com>
+Date: Tue, 18 Mar 2025 13:14:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/11] Always call constructor for kernel page tables
+To: Ryan Roberts <ryan.roberts@arm.com>, linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+ Andreas Larsson <andreas@gaisler.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Mark Rutland <mark.rutland@arm.com>, Matthew Wilcox <willy@infradead.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, "Mike Rapoport (IBM)"
+ <rppt@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Peter Zijlstra <peterz@infradead.org>, Qi Zheng
+ <zhengqi.arch@bytedance.com>, Will Deacon <will@kernel.org>,
+ Yang Shi <yang@os.amperecomputing.com>, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+References: <20250317141700.3701581-1-kevin.brodsky@arm.com>
+ <70349335-84ee-4bca-a3d6-d7cf3c05b92b@arm.com>
+Content-Language: en-GB
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+In-Reply-To: <70349335-84ee-4bca-a3d6-d7cf3c05b92b@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2025-03-14 at 08:10 +0100, Thomas Huth wrote:
-> While the GCC and Clang compilers already define __ASSEMBLER__
-> automatically when compiling assembly code, __ASSEMBLY__ is a
-> macro that only gets defined by the Makefiles in the kernel.
-> This can be very confusing when switching between userspace
-> and kernelspace coding, so let's standardize on the __ASSEMBLER__
-> macro that is provided by the compilers now.
->=20
-> This is a completely mechanical patch (done with a simple "sed -i"
-> statement).
->=20
+On 17/03/2025 16:30, Ryan Roberts wrote:
+> On 17/03/2025 14:16, Kevin Brodsky wrote:
+>> The complications in those special pgtable allocators beg the question:
+>> does it really make sense to treat efi_mm and init_mm differently in
+>> e.g. apply_to_pte_range()? Maybe what we really need is a way to tell if
+>> an mm corresponds to user memory or not, and never use split locks for
+>> non-user mm's. Feedback and suggestions welcome!
+> The difference in treatment is whether or not the ptl is taken, right? So the
+> real question is when calling apply_to_pte_range() for efi_mm, is there already
+> a higher level serialization mechanism that prevents racy accesses? For init_mm,
+> I think this is handled implicitly because there is no way for user space to
+> cause apply_to_pte_range() for an arbitrary piece of kernel memory. Although I
+> can't even see where apply_to_page_range() is called for efi_mm.
 
-Looks fine, I guess - I'll assume that since it's part of a larger
-series you'll merge it elsewhere.
+The commit I mentioned above, 61444cde9170 ("ARM: 8591/1: mm: use fully
+constructed struct pages for EFI pgd allocations"), shows that
+apply_to_page_range() is called from efi_set_mapping_permissions(), and
+this indeed hasn't changed. It is itself called from efi_virtmap_init().
+I would expect that no locking at all is necessary here, since the
+mapping has just been created and surely isn't used yet. Now the
+question is where exactly init_mm is special-cased in this manner. I can
+see that walk_page_range() does something similar, there may be more
+cases. And the other question is whether those functions are ever used
+on special mm's, aside from efi_set_mapping_permissions().
+> FWIW, contpte.c has mm_is_user() which is used by arm64.
 
-johannes
+Interesting! But not pretty, that's basically checking that the mm is
+not &init_mm or &efi_mm... which wouldn't work for a generic
+implementation. It feels like adding some attribute to mm_struct
+wouldn't hurt. It looks like we've run out of MMF_* flags though :/
+
+- Kevin
 
