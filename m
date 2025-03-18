@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-10931-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10932-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8742FA67B80
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 19:01:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58375A67D60
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 20:55:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFDDA17FE14
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 18:01:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A86A2425768
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 19:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08451A9B52;
-	Tue, 18 Mar 2025 18:01:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD4321149C;
+	Tue, 18 Mar 2025 19:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="maIyz2F5"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="ScpAvU4y"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azolkn19010003.outbound.protection.outlook.com [52.103.10.3])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazolkn19010013.outbound.protection.outlook.com [52.103.11.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED99EACD;
-	Tue, 18 Mar 2025 18:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.10.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0500C207A01;
+	Tue, 18 Mar 2025 19:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.11.13
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742320901; cv=fail; b=IHfhLEKmWr6hhqL0K7BmxIYLRYQH6cE2dwV0XMN83C1B5b1yWMw++npbUCxXZnw+MWEeU77QKviEscKt1maWZ/i46nULcyA/ohLE3Nd4UvpU+GQv1TBcrYnq7YPdsWNyJTM898WkQPGojbX1C9I65AaO4+MTTWVIC0JRVU2ReuQ=
+	t=1742327696; cv=fail; b=B7enVyQ3NaIOgo6Y5ouoflczGhxFaAoHpr1xjuqAPBSLWUj6/w9m2s9rfgjq7v1xVJjx7I4ys+XoXENdOn57Inx+DbqzYSu24NZPfj4rX9tMFfZ9mLMwytFjwxGqJ6juvFOXxN/OEjyEigwIUIcwfVFznhddsh2rAaodF35rnm0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742320901; c=relaxed/simple;
-	bh=3BMWm4YU13UlRrhl/laTyw4qNuXWO8EeSs7bqNCihU4=;
+	s=arc-20240116; t=1742327696; c=relaxed/simple;
+	bh=ipwH3HykQ1ee3mR9kj3HPdWXuX1AFcYu1D04lqv7Sco=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=BDjvdU/jXpqLI6WY45Q9X5Bw3rmSVJ92Fiph8IzjBsxJqoYYFqywIKbAxBcqAKC95ew8j1nEY2oiQGPbL3SzTYAcsTHrdrahCUA1VSRYMcdth2EuArl6dlJNVnOa5i/XqX6CsN/rJKvehYdQqTkze3nV0Pxr5aGiWyqhZ4xMo2I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=maIyz2F5; arc=fail smtp.client-ip=52.103.10.3
+	 Content-Type:MIME-Version; b=ANkDigL7QvQiwfCH58xViCLRx5X06zloHhn/WPI3rVD5V7Cqf2ljNYfOPTDbh1G/RYzgiKBGbXJj3ad2UnDCMSRZuvfGTr6PDSqNiJPYzL7iZB+iKp+W76klFmCfOz78x28bZCBOWfyT8tjXFL6x7HV9Spfmg5o9lLZmhfti/Dc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=ScpAvU4y; arc=fail smtp.client-ip=52.103.11.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Vt71IrzkcWiPR1/Sj//kun2pyIONY4Y5PTyWVC8WOmIV3nAFMWMWMpD03zEUF6z/5p26DEnnVk7eczH3Umeh15/aTU+ZgwHA5DxBt0/BwQG5cyL/qc7+uIAVpUn9SpKnNC0GU5DOmi6JBTs1QppHP2KQsRNk86lq6H5Ep0JN3ani3uYi/eMjr+O7V2xfwTerwM4sVivvNdKrtqsq2F0mayrXYe2TIKv/Xjjs7HKhFZPfIMIUMfO9NZWhDFbtINfjCP9lkJMU/c+8xZrmD1klsxhdIA9SM3ShdxjgMVdZa5YWQl7LWpIdKQYnx+tV2o2ysGjS0bPlL4IsKaiIKhp/NQ==
+ b=kyMN+MGpw/dzI1d4Hdg1HtzU+TRmB0xw1nmmhoxgM746Oy8XV5X2vHTouVWifhSTCtQSDlMLsKJYI5qbrkQiE9j5wOi1polJenCcMFcCdBj3avIH8ZRVOG9TjZ9DbgBKk1dONbf13pBJOni9bMm+EbIRWEYjZZbkyxz2e4GBwE793QTYWP/0nxhxsHObfA37SMzGqrOWEP576Fg42Ydmr7r65tVVWGAxRkkQN5ScVJOlk33nJVnhOxQhZZYtdLSdktfgu+Loly83HC661rdhn/d+aUCHrFp2H9aIJUWq8Q4fxEP44QTTnWEHH9wP+F1YwBosDe1Suv+IAJBAN449Cw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zs6BuVbvU5lrjLsBCqVc2BxjV8i/J1qbRdWpTdLuSl4=;
- b=r2yYTDw8C1Jnnxwob7mxn7+EUi5zyCPftwkEz5swH4W/AwJCnGs4qQF6Z2ooUhptevcW42nMARt2ghOQVS9QOTSxQr0Kz5H1RxQ8KD1ORMumGZ9sM9HJRLvf5WE3rSv7RR2DxyGWTOi1Ceopx9dguLpJljbEYgDYOECmY8QFcTwKjByH+vkxmCa9FvT/fzmte1tbRucGIyodTVOSoelTu6hBRmJo+G/ccmJKNaE19k/++0tolLQ3ouj9+cOacIQBO+MH7ToOde+SbrCZFKMpwcoyqdLDWTJMbr/Z5eSyymGfG4AuQRwwH5/pg/6bQKWp3BdX0EtjMsNzHoUmG5ybOw==
+ bh=8Azz7whBTenxG92fkFLvM3E+yjOlKC75QID7t7cCW1c=;
+ b=Hq0J/071Kczqit5R9E87Uno7kW0evAeVOkkJNoNVAjjJImtNQ1VgUg91G4NWQrPR8ewcz4Yda9WEaH9dtK9CNIUfWAvyzYJS4oFPL0Sxae25rxOESJgYKA4jOiNAzxjTJZjJOX+gdfoeWwifZRrA5IFktTi2tHoj0FkbZiCG+uKEhhVRV9q1w0Vsh9FNFKJiyCerAalCJgWlq/9mItuntAS/0EPjp4Z+1XZpJjO/ZfppoaLRWyr6WXQRimx16SD0mL3s5IkSWiSRNZ7eJgE8W6B1njd/aqMvzoz7LioAyEyiwly8jO2fUaHb7GKg2qJB5AhcsT3SMOL3HoCOhAG03A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zs6BuVbvU5lrjLsBCqVc2BxjV8i/J1qbRdWpTdLuSl4=;
- b=maIyz2F5OGwDj6qDfy7vY9igfzzg97VeZn1R3t8VoKY/Ym2D3+gn4y4g+aJ2QGJHAmW4ntEl/RjNWbUYWGdaVq0+eRvQ1HjZWUQxIxom6WJTZfL66uqrEousoIzk8UuST7g+degGSA+fbbP9phLgJ8JmaYdck58I8qVKC0oStmoRaIym+ter8cqnn27jJ7W7IBadKI11UFs5WVOmCaytMTMACQwQl1QSwkiscNApsV9KBBIyVjTjpUfmme+2g6wF+PbwjCyzs3Z3b2PT1ufAyNjROX79Nrl4qt8zVfZpK5PtJZnS/E5HXfKTa7dXt29nYAR1p/NxdHdQD+S/d1+cqw==
+ bh=8Azz7whBTenxG92fkFLvM3E+yjOlKC75QID7t7cCW1c=;
+ b=ScpAvU4ySkR0fT6tvI9diiFliaXUDluzHemSOWZHFV8ndKZpYGAbq+6gf85ySmVOf5dRn043IIoyR0AXHeET4LI09KN5vVdCylhV2fSidVYqKp3Dlhd/l9AlvgJyFjmRGzMSL1+xX2NoT2uM9bxxpSdipnqzD9/hwTVhw7u8AG/OlmpxJdHS2d3BOEm54vAK8npPS+mNzw5oiLFcswWmcsVmmU6HsYss2pP+YRPexN8fgp/uIQqwXJhRfCf45G3pGm3Pvyre5sFQiLb/wLJ5JdUQp4PJLafxOizLvDgQVJlL/SeIdJERTbubSVa/X5dysvtQeVtfP/VaR+caqDcFKA==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by SA3PR02MB9311.namprd02.prod.outlook.com (2603:10b6:806:312::8) with
+ by SA6PR02MB10479.namprd02.prod.outlook.com (2603:10b6:806:40a::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Tue, 18 Mar
- 2025 18:01:36 +0000
+ 2025 19:54:49 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.8534.031; Tue, 18 Mar 2025
- 18:01:36 +0000
+ 19:54:49 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
 	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
@@ -86,70 +86,73 @@ CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
 	<prapal@linux.microsoft.com>, "anrayabh@linux.microsoft.com"
 	<anrayabh@linux.microsoft.com>, "rafael@kernel.org" <rafael@kernel.org>,
 	"lenb@kernel.org" <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
-Subject: RE: [PATCH v6 01/10] hyperv: Log hypercall status codes as strings
-Thread-Topic: [PATCH v6 01/10] hyperv: Log hypercall status codes as strings
-Thread-Index: AQHblRdnD16Gq+LbxUi4ncmhWYIbZrN5MUUw
-Date: Tue, 18 Mar 2025 18:01:36 +0000
+Subject: RE: [PATCH v6 10/10] Drivers: hv: Introduce mshv_root module to
+ expose /dev/mshv to VMMs
+Thread-Topic: [PATCH v6 10/10] Drivers: hv: Introduce mshv_root module to
+ expose /dev/mshv to VMMs
+Thread-Index: AQHblRdnpUjohn3xT068AvEhHN692rN5UJDA
+Date: Tue, 18 Mar 2025 19:54:49 +0000
 Message-ID:
- <SN6PR02MB4157E630EC520DC487139372D4DE2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB4157261B9C4AA8CF89A30317D4DE2@SN6PR02MB4157.namprd02.prod.outlook.com>
 References:
  <1741980536-3865-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1741980536-3865-2-git-send-email-nunodasneves@linux.microsoft.com>
+ <1741980536-3865-11-git-send-email-nunodasneves@linux.microsoft.com>
 In-Reply-To:
- <1741980536-3865-2-git-send-email-nunodasneves@linux.microsoft.com>
+ <1741980536-3865-11-git-send-email-nunodasneves@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SA3PR02MB9311:EE_
-x-ms-office365-filtering-correlation-id: 6ff95d3d-d0e5-4367-adf1-08dd6646ecf1
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SA6PR02MB10479:EE_
+x-ms-office365-filtering-correlation-id: e3c641c2-6fb1-449e-8cd4-08dd6656bde9
 x-microsoft-antispam:
- BCL:0;ARA:14566002|19110799003|15080799006|8060799006|461199028|8062599003|102099032|440099028|3412199025|13041999003|41001999003;
+ BCL:0;ARA:14566002|15080799006|461199028|8062599003|19110799003|8060799006|12121999004|102099032|3412199025|440099028|41001999003|12091999003;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?7mitemPgKrLecN2p0Lb41E69f0S4uYU+jbML0aus2w2SC3LsyqGmQ7fXFFOx?=
- =?us-ascii?Q?lZeL40nmgRevSvyisgfBhysg75+29JiLnvF+REpDabVGajFU4gVAGetYLz/9?=
- =?us-ascii?Q?5Q0fhS3+z74eIpemkX/44+AtCcUTY2RICbcCfp+awD93ZvRqQ1pT4Viuj84M?=
- =?us-ascii?Q?He87P3LB8t7RwztdIzFw62nLY+R4Gw3dcICHuDRpXlbVovw7l7VklQNmPSeF?=
- =?us-ascii?Q?HYWLsRRJC02UMckPI0Dnkp9lyZoT0P6FAJ5rk852ysx/qEm//KpQuGcoFQLe?=
- =?us-ascii?Q?pJlXFj5GDfS24Ap6Wjg3F3lrpcQ/wYifGfo0cn8e33PYvZhd6czDTW5I8H/n?=
- =?us-ascii?Q?opPdrWSwEivkEs+Hp4nO8Upaag3gtTSuHQvJsgH8w9VchIZdpy9eu2ncy7oZ?=
- =?us-ascii?Q?RioeEtLRrQkov96mz8MYpEHv6ATi4Iv7v3Adp2NkJz7chUABOqPcStwRcZeD?=
- =?us-ascii?Q?3BB6oDbRIbWnJlgm+LImJuiVQNHEgMv+HD3Y2WPfj4PljXSq4iGCRAg68Zpa?=
- =?us-ascii?Q?ZBypT/6GHTpbOeHLVmB7Ax1GiLcNUKnwF1frjBaTMJExUSvF+JY9RhUrMQOe?=
- =?us-ascii?Q?s78FpFhdTEe5sqYMyDIvP7RzaMtMgBvaQqvizNnBlykCxE2gGYGS7VCO7l+P?=
- =?us-ascii?Q?FrRUdtxqhWK5kui0qKlCWZRjEzZfMLlTcT8R7xILphUcDFkjpgwWK6vf5sp9?=
- =?us-ascii?Q?EGGK9O3QBWJ7TjPpH2XjWnqimSQAQvJWM0ny4J3I+mlhdYVj2gX6LR72KVRU?=
- =?us-ascii?Q?ixg2CAXK8hTKnA2ICTm5gh3QBGNSmzAfBlFWZF2a1jhFeDSbBMYZu8RmgH3h?=
- =?us-ascii?Q?ggfblJXIk9M06F1/ebxQwuzBbTRIAWdA0NsfPazjurJcSR07Q/CEASPnQ7Cf?=
- =?us-ascii?Q?5n1CLONyHZpM3+us82a+yooh9V2MiWn5v60RStaxtJicBwNYSxZhdNmB6RbR?=
- =?us-ascii?Q?1qH1+7tYHUiAdXQhnEonM9g8+yU0eLxowGsj1hNJBD4WbWToc4Pp651XvpRT?=
- =?us-ascii?Q?5mYy79OgqvLsXdO+Gqbo5x2KwZ7CDkjF6cYRcPm97F/xt7eAnvl2Y5GoFgT9?=
- =?us-ascii?Q?FNYYh8MNh8RoYXXlDr5GrrS92gnh3dINEKC3gWwxutFmDQZYULTSgjn99mlv?=
- =?us-ascii?Q?g/1juZGoqG5tO2ysh9bHOPSh6INYe9tR6g=3D=3D?=
+ =?us-ascii?Q?YrldPbDzPpYwGCsSnAS7yxEXueU9lT8Kr8EYhqz7L1QFaDQtArT6sLAwDDMh?=
+ =?us-ascii?Q?Io4CovbCakQRX1Ub8hORvnhvznAIzpxCPlQZy5t3afVWZdf+Ncs8DK/nIdee?=
+ =?us-ascii?Q?omGZDzq/ShEfHuC+px6tPrUNIRGmKKdgCbz9cB3phBioga1ZvRB2WE5/VeT8?=
+ =?us-ascii?Q?/2nTxRJ0IHB33Ti9RbuBBf1vBZVCKA7bRFlr9JXEOlfUfgqS9jJNQhlcTp1N?=
+ =?us-ascii?Q?TkV8hFMlDuBcuBuHH34aKGeOowhD3bpPax8VG7M1a+Yls53TcC1fEScItOQi?=
+ =?us-ascii?Q?/Vm/GlSNT8QtU5QTgY71+lpDiWELubKaOigRU6XYnzPYiw2FX6UZ6VqfJ2v5?=
+ =?us-ascii?Q?qrYnNsIkt1M+eSXr81IEvT2fuJidgQinyAUEewh63Qmh1WYut+R+rvl4Sz39?=
+ =?us-ascii?Q?pgLuwsZCvodH2icsRiviUmVgS+PKqyuioUbAezJ+V0phXV1YhRLYSrphxC0e?=
+ =?us-ascii?Q?jwiwZRMqngTXibP/3PgWTXUm+unWK3z76gJhTL3XaPlU4PlZXmtX4X7do3xZ?=
+ =?us-ascii?Q?UPSKhUI3xkKqqxYwusoVcVGeoh3ToBilU6s+/orPFgDxukZ/erCOc6QfbyBm?=
+ =?us-ascii?Q?OKyMvprE9T3DnTEAaBO/TEiDQHgDMdeiyDQRgqb0oZvYlaDKhu7YksxGUlRc?=
+ =?us-ascii?Q?Zzbx02kxO+3ubgt98WQO6UrQOoNjR7aZaAyEwCTgrifm/RhS7gzhdzd2y2Wn?=
+ =?us-ascii?Q?Zdqn7voFu9tvQBUkdyD45yXe8nUReN8jiube2pFLST+oYYmW7XX+KR7WVafv?=
+ =?us-ascii?Q?RMxrU1gpv3Hp2w55IlMzIyY+EhH33nkqxGYY8UhdA0w/0kvUg+Sd+XpXSMC7?=
+ =?us-ascii?Q?bwhuEuDAOjj3VBcN8OvfvPWB+pB+Kv2v9Uj/x4cKwr6tSl6lk8mcxAc7kTOz?=
+ =?us-ascii?Q?+KIGh3+Qmc5ftFo3P6CqEYJNmRdQNdNiS9afnjMz4g84T4wr8B9xPL+IfUCq?=
+ =?us-ascii?Q?J028JS20Y0qGyes+hZziCRxFgyW5gWTVOFTQ3feROjDwOrIgJFYYUKOGCbAb?=
+ =?us-ascii?Q?Y9bkfRkDl2jgEq9YHb0CsXvI7pGCR1HBtjo88pS/Vh5kH4r8cbd3ZGVJwKw+?=
+ =?us-ascii?Q?bq9H8IqNo/PgLlz1Ec3XwKpWnJ5+eAb7mE9QL2QtrrC98W74Ld+ZctgmOM1b?=
+ =?us-ascii?Q?m2E7Q1Y+ClEKry54tRCnvXy8apvs8NdcttuFfU9BjK0WXOAd5yd8drObAuZZ?=
+ =?us-ascii?Q?xTgHMlQjIJbeK6Az?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?/iZDq1o+O9PoPRa8uQJTjXFXOAOZQcDYIolEpm4K5PA9/tDfiaMBYPVj44/2?=
- =?us-ascii?Q?FSnpBL0VaB+v7mWEXUkQ7qgNxozhVwXN9gT8QY8uD05o6VN12f6cdD31pUpX?=
- =?us-ascii?Q?wdSKcmS8osT5BvxCXTVVzn0BLBq6X4RbXxgZI33wiG2dfGVaerkxbgFJ0M8B?=
- =?us-ascii?Q?8EGe/+i5LUMcuMaxVCPgMNKDRCWM1n0RW5eQ0YQZNdNkVot+kVYLV9M1dHuB?=
- =?us-ascii?Q?d6WmXK+UtDvSONWTEBUHwPnQaaqpcNjOWN47PC6kwQqEV71Sr5OsytHOsLaH?=
- =?us-ascii?Q?cs7K7b1nLPACVrsa+tKD5d5DjR0N26TeIuX42rzbuhC5UnQPfdJ2EKnbaYNF?=
- =?us-ascii?Q?7fHwiJvaD3MEXC1Zbou6gU2hAfs+XDj42b4L6PKlE3BcJ6hiPFeNN7kdzke3?=
- =?us-ascii?Q?y/JeF78U43tGuklr/eGtYEnUGwf+ERDfpdbeGuY39QiM/TmPzzc/JZghRNkw?=
- =?us-ascii?Q?6j84ZDXdP5GdWzerVmTzuvJbP97iJ8R1PugliiaGftMf/SW9pLU3hs3zyjMT?=
- =?us-ascii?Q?00n4M2ghkwJavOK4K8Tfzpeh4HK4/xULDrIohcyfgXNdpR5N7Rt742yMZY9U?=
- =?us-ascii?Q?Lxul2OGjDQfv2wcU9Z1PYrMTx9yqao76vfTw4+oihrQKYIiUl5HgqlzJopPF?=
- =?us-ascii?Q?v4Fi3lRtefugsL4QGdoWISqMwmJ2sbID99pCZZ7oswV9B9QDtrKwYo3wNoMt?=
- =?us-ascii?Q?lDYLnf41m3/h8dUCKaonH0poCMzgW9Pj4WqrAATbH8KqI1oygqPDp8VSiD8y?=
- =?us-ascii?Q?NAEfmsI5chgu/A2dLEd4pMEcbdjEIO0qjhTWRq4WLgayxMU8yaBjbuBnRBFL?=
- =?us-ascii?Q?HignraN6t83myIDxSL+9Uiq1rKsJfGA642heVDz8+NrSb0ZshX510buGZ3qc?=
- =?us-ascii?Q?y94yjPIYu/zIH6i5thYwQj8jgtROQpPGvbGS9DUhnvcEYLqDeWKBvLv3saMl?=
- =?us-ascii?Q?B6qY2X1N1NitCNFg4c2jhLTLLLx52JiQ1BF/zpAjLnzmDT5Z2VmyqyGY6Cw7?=
- =?us-ascii?Q?2BoAFkXilxqxeng21RqLeIHNRPSm7mYqylo2f/76O7pSYGutzDoV6fsFRc3K?=
- =?us-ascii?Q?A6k24Tj8crLxgTNPyVLDadUPHrn06/txQonDmrtvx1+w68kRATI4jebOjmZ9?=
- =?us-ascii?Q?i54i8RNYxpJ4zmswD/rBVctElyrA+eLfAx/PkaSiVsXRZadwvwyfDgkxGq8A?=
- =?us-ascii?Q?10pDIItjbaLqQg8uZn5leP6rNtlk/bDvFvKfoOgTbL+SczQvQZmG+NT9D5s?=
+ =?us-ascii?Q?JrtVrplUvHztfOP81Hi6dCa3Lc88rqoNqBRj2pEvIXNHD+cTtrfBGl/80/FO?=
+ =?us-ascii?Q?I7B9FsLIDefiXCfX7JYFYxHoLacKRbxTc/78dcv6hDiKKoKMPbl1c1L3VVJB?=
+ =?us-ascii?Q?idV9YYPk1WNSb8PRhljzql6ZnyjMsa7MK8H4ffS/wbMQ/Ee6GEfZKUtHOjgu?=
+ =?us-ascii?Q?fy97hi7KT8QjRzRjTRlbbJ+Gw76z+8zEWXOpkyWZ5sutEdsCLLTwMxUhoLbE?=
+ =?us-ascii?Q?C85WRvfNNRYwUGUj4ozm9XETtXLZT2G6zQ3qlYhJ1aVgili3yB3Mzs177tQL?=
+ =?us-ascii?Q?V5YHB85kldBrXg+/n1KOYvANvydGdGnrMDJAF0eXZizk/FweXFO79bM++b5l?=
+ =?us-ascii?Q?W+1qsvdzopLYX2NSt1p2CaabF2YzeBJ7KYTQTk5s85Ai6g4r6RY00i+u1yH4?=
+ =?us-ascii?Q?icrTXol+1h7rsxEiQz/zXZk7AL6noAraT8vWtHGT5O6LxLZqjdDen6mdc4qE?=
+ =?us-ascii?Q?1KwY8uJJkaAmRM8K9N89ehD0o17nTItPpQTno0HHPrHXSMgdjPt2JkH17Fp7?=
+ =?us-ascii?Q?MBqTvw8aI2gqBbAq5tXg7yIturLpLXsh015D1z9Bra4U0ecuW6zK0K3oYhMG?=
+ =?us-ascii?Q?ToPwj7VmAgepIpcVb7pkJq1iG4CExf0bF9MzC5Cjl+PajSui2tJtN8wC0WAA?=
+ =?us-ascii?Q?wAoJ+nckRKVOSSYisEw+9T0Ib5+aPDEPQe/z1UVfL13e/lYzvse5aAw6ELsJ?=
+ =?us-ascii?Q?wHFlOEdE0c58Bqvo8MQ2IikG1DDiCeQTnJfQObz33bZpO7rcU9BHLR8mZJtO?=
+ =?us-ascii?Q?SA+zhvT3TGPzUNwJpK7OHmzIYPLcIOdHuqY+m8Z7KBKz8SkXae58HH/txe7U?=
+ =?us-ascii?Q?ybeMtT8twDHfQ1thWJ5tTiI0KLC2AJjOAtsE8OsknT2eO4O6YQkM6pDzXGth?=
+ =?us-ascii?Q?MWGWfa0I0Jx6W0PFHyRxyV4rZm5KIohRdtG4ETs2kSuuSLPmOoWoRlEB6ZnG?=
+ =?us-ascii?Q?1U40kIa/7JxO6TniG79Ec6XS0LRzvVPZa5sZVRcwz0V/rj/bUlIyqo/TrXlX?=
+ =?us-ascii?Q?rhgYbaEsIdTbhex4buMwCl+TuAhAbEDumP4QIe/FN3I1UIGx9z20MV0PxgJ3?=
+ =?us-ascii?Q?pg4NJkKoX2IRuy2dvjd17QJkvkYXCexaL5sIt4cmRsqnWSdHjqv5DY837ObK?=
+ =?us-ascii?Q?20fe6rrSIupmkIVxpaoUecpmWs1MyZK4b7GUwEqeGApkR05louzeKVfFqdVE?=
+ =?us-ascii?Q?pW6lNLVc4JpoaYLHfF1eylPSPEV0xbIkiaxnEXVcx/ZWgg9qyjY2jT1AcSs?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -163,240 +166,308 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ff95d3d-d0e5-4367-adf1-08dd6646ecf1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2025 18:01:36.4878
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3c641c2-6fb1-449e-8cd4-08dd6656bde9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2025 19:54:49.5880
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR02MB9311
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR02MB10479
 
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, March=
  14, 2025 12:29 PM
->=20
-> Introduce hv_status_printk() macros as a convenience to log hypercall
-> errors, formatting them with the status code (HV_STATUS_*) as a raw hex
-> value and also as a string, which saves some time while debugging.
->=20
-> Create a table of HV_STATUS_ codes with strings and mapped errnos, and
-> use it for hv_result_to_string() and hv_result_to_errno().
->=20
-> Use the new hv_status_printk()s in hv_proc.c, hyperv-iommu.c, and
-> irqdomain.c hypercalls to aid debugging in the root partition.
->=20
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> Reviewed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-> ---
->  arch/x86/hyperv/irqdomain.c    |   6 +-
->  drivers/hv/hv_common.c         | 129 ++++++++++++++++++++++++---------
->  drivers/hv/hv_proc.c           |  10 +--
->  drivers/iommu/hyperv-iommu.c   |   4 +-
->  include/asm-generic/mshyperv.h |  13 ++++
->  5 files changed, 118 insertions(+), 44 deletions(-)
 >
+> Provide a set of IOCTLs for creating and managing child partitions when
+> running as root partition on Hyper-V. The new driver is enabled via
+> CONFIG_MSHV_ROOT.
+>=20
 
 [snip]
 =20
 > +
-> +struct hv_status_info {
-> +	char *string;
-> +	int errno;
-> +	u16 code;
-> +};
-> +
-> +/*
-> + * Note on the errno mappings:
-> + * A failed hypercall is usually only recoverable (or loggable) near
-> + * the call site where the HV_STATUS_* code is known. So the errno
-> + * it gets converted to is not too useful further up the stack.
-> + * Provide a few mappings that could be useful, and revert to -EIO
-> + * as a fallback.
-> + */
-> +static const struct hv_status_info hv_status_infos[] =3D {
-> +#define _STATUS_INFO(status, errno) { #status, (errno), (status) }
-> +	_STATUS_INFO(HV_STATUS_SUCCESS,				0),
-> +	_STATUS_INFO(HV_STATUS_INVALID_HYPERCALL_CODE,		-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_INVALID_HYPERCALL_INPUT,		-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_INVALID_ALIGNMENT,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_INVALID_PARAMETER,		-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_ACCESS_DENIED,			-EIO),
-> +	_STATUS_INFO(HV_STATUS_INVALID_PARTITION_STATE,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_OPERATION_DENIED,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_UNKNOWN_PROPERTY,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_PROPERTY_VALUE_OUT_OF_RANGE,	-EIO),
-> +	_STATUS_INFO(HV_STATUS_INSUFFICIENT_MEMORY,		-ENOMEM),
-> +	_STATUS_INFO(HV_STATUS_INVALID_PARTITION_ID,		-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_INVALID_VP_INDEX,		-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_NOT_FOUND,			-EIO),
-> +	_STATUS_INFO(HV_STATUS_INVALID_PORT_ID,			-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_INVALID_CONNECTION_ID,		-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_INSUFFICIENT_BUFFERS,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_NOT_ACKNOWLEDGED,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_INVALID_VP_STATE,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_NO_RESOURCES,			-EIO),
-> +	_STATUS_INFO(HV_STATUS_PROCESSOR_FEATURE_NOT_SUPPORTED,	-EIO),
-> +	_STATUS_INFO(HV_STATUS_INVALID_LP_INDEX,		-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_INVALID_REGISTER_VALUE,		-EINVAL),
-> +	_STATUS_INFO(HV_STATUS_INVALID_LP_INDEX,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_INVALID_REGISTER_VALUE,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_OPERATION_FAILED,		-EIO),
-> +	_STATUS_INFO(HV_STATUS_TIME_OUT,			-EIO),
-> +	_STATUS_INFO(HV_STATUS_CALL_PENDING,			-EIO),
-> +	_STATUS_INFO(HV_STATUS_VTL_ALREADY_ENABLED,		-EIO),
-> +#undef _STATUS_INFO
-> +};
-> +
-> +static inline const struct hv_status_info *find_hv_status_info(u64 hv_st=
-atus)
+> +int
+> +hv_call_clear_virtual_interrupt(u64 partition_id)
 > +{
-> +	int i;
-> +	u16 code =3D hv_result(hv_status);
+> +	unsigned long flags;
+
+This local variable is now unused and will generate a compile warning.
+
+> +	int status;
 > +
-> +	for (i =3D 0; i < ARRAY_SIZE(hv_status_infos); ++i) {
-> +		const struct hv_status_info *info =3D &hv_status_infos[i];
+> +	status =3D hv_do_fast_hypercall8(HVCALL_CLEAR_VIRTUAL_INTERRUPT,
+> +				       partition_id);
 > +
-> +		if (info->code =3D=3D code)
-> +			return info;
+> +	return hv_result_to_errno(status);
+> +}
+> +
+> +int
+> +hv_call_create_port(u64 port_partition_id, union hv_port_id port_id,
+> +		    u64 connection_partition_id,
+> +		    struct hv_port_info *port_info,
+> +		    u8 port_vtl, u8 min_connection_vtl, int node)
+> +{
+> +	struct hv_input_create_port *input;
+> +	unsigned long flags;
+> +	int ret =3D 0;
+> +	int status;
+> +
+> +	do {
+> +		local_irq_save(flags);
+> +		input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +		memset(input, 0, sizeof(*input));
+> +
+> +		input->port_partition_id =3D port_partition_id;
+> +		input->port_id =3D port_id;
+> +		input->connection_partition_id =3D connection_partition_id;
+> +		input->port_info =3D *port_info;
+> +		input->port_vtl =3D port_vtl;
+> +		input->min_connection_vtl =3D min_connection_vtl;
+> +		input->proximity_domain_info =3D hv_numa_node_to_pxm_info(node);
+> +		status =3D hv_do_hypercall(HVCALL_CREATE_PORT, input, NULL);
+> +		local_irq_restore(flags);
+> +		if (hv_result_success(status))
+> +			break;
+> +
+> +		if (hv_result(status) !=3D HV_STATUS_INSUFFICIENT_MEMORY) {
+> +			ret =3D hv_result_to_errno(status);
+> +			break;
+> +		}
+> +		ret =3D hv_call_deposit_pages(NUMA_NO_NODE, port_partition_id, 1);
+> +
+> +	} while (!ret);
+> +
+> +	return ret;
+> +}
+> +
+> +int
+> +hv_call_delete_port(u64 port_partition_id, union hv_port_id port_id)
+> +{
+> +	union hv_input_delete_port input =3D { 0 };
+> +	unsigned long flags;
+
+Unused local variable.
+
+> +	int status;
+> +
+> +	input.port_partition_id =3D port_partition_id;
+> +	input.port_id =3D port_id;
+> +	status =3D hv_do_fast_hypercall16(HVCALL_DELETE_PORT,
+> +					input.as_uint64[0],
+> +					input.as_uint64[1]);
+> +
+> +	return hv_result_to_errno(status);
+> +}
+> +
+> +int
+> +hv_call_connect_port(u64 port_partition_id, union hv_port_id port_id,
+> +		     u64 connection_partition_id,
+> +		     union hv_connection_id connection_id,
+> +		     struct hv_connection_info *connection_info,
+> +		     u8 connection_vtl, int node)
+> +{
+> +	struct hv_input_connect_port *input;
+> +	unsigned long flags;
+> +	int ret =3D 0, status;
+> +
+> +	do {
+> +		local_irq_save(flags);
+> +		input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +		memset(input, 0, sizeof(*input));
+> +		input->port_partition_id =3D port_partition_id;
+> +		input->port_id =3D port_id;
+> +		input->connection_partition_id =3D connection_partition_id;
+> +		input->connection_id =3D connection_id;
+> +		input->connection_info =3D *connection_info;
+> +		input->connection_vtl =3D connection_vtl;
+> +		input->proximity_domain_info =3D hv_numa_node_to_pxm_info(node);
+> +		status =3D hv_do_hypercall(HVCALL_CONNECT_PORT, input, NULL);
+> +
+> +		local_irq_restore(flags);
+> +		if (hv_result_success(status))
+> +			break;
+> +
+> +		if (hv_result(status) !=3D HV_STATUS_INSUFFICIENT_MEMORY) {
+> +			ret =3D hv_result_to_errno(status);
+> +			break;
+> +		}
+> +		ret =3D hv_call_deposit_pages(NUMA_NO_NODE,
+> +					    connection_partition_id, 1);
+> +	} while (!ret);
+> +
+> +	return ret;
+> +}
+> +
+> +int
+> +hv_call_disconnect_port(u64 connection_partition_id,
+> +			union hv_connection_id connection_id)
+> +{
+> +	union hv_input_disconnect_port input =3D { 0 };
+> +	unsigned long flags;
+
+Unused local variable.
+
+> +	int status;
+> +
+> +	input.connection_partition_id =3D connection_partition_id;
+> +	input.connection_id =3D connection_id;
+> +	input.is_doorbell =3D 1;
+> +	status =3D hv_do_fast_hypercall16(HVCALL_DISCONNECT_PORT,
+> +					input.as_uint64[0],
+> +					input.as_uint64[1]);
+> +
+> +	return hv_result_to_errno(status);
+> +}
+> +
+> +int
+> +hv_call_notify_port_ring_empty(u32 sint_index)
+> +{
+> +	union hv_input_notify_port_ring_empty input =3D { 0 };
+> +	unsigned long flags;
+
+Unused.
+
+> +	int status;
+> +
+> +	input.sint_index =3D sint_index;
+> +	status =3D hv_do_fast_hypercall8(HVCALL_NOTIFY_PORT_RING_EMPTY,
+> +				       input.as_uint64);
+> +
+> +	return hv_result_to_errno(status);
+> +}
+> +
+> +int hv_call_map_stat_page(enum hv_stats_object_type type,
+> +			  const union hv_stats_object_identity *identity,
+> +			  void **addr)
+> +{
+> +	unsigned long flags;
+> +	struct hv_input_map_stats_page *input;
+> +	struct hv_output_map_stats_page *output;
+> +	u64 status, pfn;
+> +	int ret;
+> +
+> +	do {
+> +		local_irq_save(flags);
+> +		input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +		output =3D *this_cpu_ptr(hyperv_pcpu_output_arg);
+> +
+> +		memset(input, 0, sizeof(*input));
+> +		input->type =3D type;
+> +		input->identity =3D *identity;
+> +
+> +		status =3D hv_do_hypercall(HVCALL_MAP_STATS_PAGE, input, output);
+> +		pfn =3D output->map_location;
+> +
+> +		local_irq_restore(flags);
+> +		if (hv_result(status) !=3D HV_STATUS_INSUFFICIENT_MEMORY) {
+> +			if (hv_result_success(status))
+> +				break;
+
+If this "break" is taken, "ret" may be uninitialized and the return value i=
+s
+stack garbage. This bug was also in v5 and I didn't notice it in my
+previous review.
+
+> +			return hv_result_to_errno(status);
+> +		}
+> +
+> +		ret =3D hv_call_deposit_pages(NUMA_NO_NODE,
+> +					    hv_current_partition_id, 1);
+> +		if (ret)
+> +			return ret;
+> +	} while (!ret);
+> +
+> +	*addr =3D page_address(pfn_to_page(pfn));
+> +
+> +	return ret;
+> +}
+> +
+> +int hv_call_unmap_stat_page(enum hv_stats_object_type type,
+> +			    const union hv_stats_object_identity *identity)
+> +{
+> +	unsigned long flags;
+> +	struct hv_input_unmap_stats_page *input;
+> +	u64 status;
+> +
+> +	local_irq_save(flags);
+> +	input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +
+> +	memset(input, 0, sizeof(*input));
+> +	input->type =3D type;
+> +	input->identity =3D *identity;
+> +
+> +	status =3D hv_do_hypercall(HVCALL_UNMAP_STATS_PAGE, input, NULL);
+> +	local_irq_restore(flags);
+> +
+> +	return hv_result_to_errno(status);
+> +}
+> +
+> +int hv_call_modify_spa_host_access(u64 partition_id, struct page **pages=
+,
+> +				   u64 page_struct_count, u32 host_access,
+> +				   u32 flags, u8 acquire)
+> +{
+> +	struct hv_input_modify_sparse_spa_page_host_access *input_page;
+> +	u64 status;
+> +	int done =3D 0;
+> +	unsigned long irq_flags, large_shift =3D 0;
+> +	u64 page_count =3D page_struct_count;
+> +	u16 code =3D acquire ? HVCALL_ACQUIRE_SPARSE_SPA_PAGE_HOST_ACCESS :
+> +			     HVCALL_RELEASE_SPARSE_SPA_PAGE_HOST_ACCESS;
+> +
+> +	if (page_count =3D=3D 0)
+> +		return -EINVAL;
+> +
+> +	if (flags & HV_MODIFY_SPA_PAGE_HOST_ACCESS_LARGE_PAGE) {
+> +		if (!HV_PAGE_COUNT_2M_ALIGNED(page_count))
+> +			return -EINVAL;
+> +		large_shift =3D HV_HYP_LARGE_PAGE_SHIFT - HV_HYP_PAGE_SHIFT;
+> +		page_count >>=3D large_shift;
 > +	}
 > +
-> +	return NULL;
+> +	while (done < page_count) {
+> +		ulong i, completed, remain =3D page_count - done;
+> +		int rep_count =3D min(remain,
+> +				HV_MODIFY_SPARSE_SPA_PAGE_HOST_ACCESS_MAX_PAGE_COUNT);
+> +
+> +		local_irq_save(irq_flags);
+> +		input_page =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +
+> +		memset(input_page, 0, sizeof(*input_page));
+> +		/* Only set the partition id if you are making the pages
+> +		 * exclusive
+> +		 */
+> +		if (flags & HV_MODIFY_SPA_PAGE_HOST_ACCESS_MAKE_EXCLUSIVE)
+> +			input_page->partition_id =3D partition_id;
+> +		input_page->flags =3D flags;
+> +		input_page->host_access =3D host_access;
+> +
+> +		for (i =3D 0; i < rep_count; i++) {
+> +			u64 index =3D (done + i) << large_shift;
+> +
+> +			if (index >=3D page_struct_count)
+> +				return -EINVAL;
+> +
+> +			input_page->spa_page_list[i] =3D
+> +						page_to_pfn(pages[index]);
+> +		}
+> +
+> +		status =3D hv_do_rep_hypercall(code, rep_count, 0, input_page,
+> +					     NULL);
+> +		local_irq_restore(irq_flags);
+> +
+> +		completed =3D hv_repcomp(status);
+> +
+> +		if (!hv_result_success(status))
+> +			return hv_result_to_errno(status);
+> +
+> +		done +=3D completed;
+> +	}
+> +
+> +	return 0;
 > +}
-> +
-> +/* Convert a hypercall result into a linux-friendly error code. */
-> +int hv_result_to_errno(u64 status)
-> +{
-> +	const struct hv_status_info *info;
-> +
-> +	/* hv_do_hypercall() may return U64_MAX, hypercalls aren't possible */
-> +	if (unlikely(status =3D=3D U64_MAX))
-> +		return -EOPNOTSUPP;
-> +
-> +	info =3D find_hv_status_info(status);
-> +	if (info)
-> +		return info->errno;
-> +
-> +	return -EIO;
-> +}
-> +EXPORT_SYMBOL_GPL(hv_result_to_errno);
-> +
-> +const char *hv_result_to_string(u64 status)
-> +{
-> +	const struct hv_status_info *info;
-> +
-> +	if (unlikely(status =3D=3D U64_MAX))
-> +		return "Hypercall page missing!";
-> +
-> +	info =3D find_hv_status_info(status);
-> +	if (info)
-> +		return info->string;
-> +
-> +	return "Unknown";
-> +}
-> +EXPORT_SYMBOL_GPL(hv_result_to_string);
 
-I think the table-driven approach worked out pretty well. But here's a vers=
-ion that
-is even more compact, and avoids the duplicate testing for U64_MAX and havi=
-ng
-to special case both U64_MAX and not finding a match:
-
-+
-+struct hv_status_info {
-+	char *string;
-+	int errno;
-+	int code;
-+};
-+
-+/*
-+ * Note on the errno mappings:
-+ * A failed hypercall is usually only recoverable (or loggable) near
-+ * the call site where the HV_STATUS_* code is known. So the errno
-+ * it gets converted to is not too useful further up the stack.
-+ * Provide a few mappings that could be useful, and revert to -EIO
-+ * as a fallback.
-+ */
-+static const struct hv_status_info hv_status_infos[] =3D {
-+#define _STATUS_INFO(status, errno) { #status, (errno), (status) }
-+	_STATUS_INFO(HV_STATUS_SUCCESS,				0),
-+	_STATUS_INFO(HV_STATUS_INVALID_HYPERCALL_CODE,		-EINVAL),
-+	_STATUS_INFO(HV_STATUS_INVALID_HYPERCALL_INPUT,		-EINVAL),
-+	_STATUS_INFO(HV_STATUS_INVALID_ALIGNMENT,		-EIO),
-+	_STATUS_INFO(HV_STATUS_INVALID_PARAMETER,		-EINVAL),
-+	_STATUS_INFO(HV_STATUS_ACCESS_DENIED,			-EIO),
-+	_STATUS_INFO(HV_STATUS_INVALID_PARTITION_STATE,		-EIO),
-+	_STATUS_INFO(HV_STATUS_OPERATION_DENIED,		-EIO),
-+	_STATUS_INFO(HV_STATUS_UNKNOWN_PROPERTY,		-EIO),
-+	_STATUS_INFO(HV_STATUS_PROPERTY_VALUE_OUT_OF_RANGE,	-EIO),
-+	_STATUS_INFO(HV_STATUS_INSUFFICIENT_MEMORY,		-ENOMEM),
-+	_STATUS_INFO(HV_STATUS_INVALID_PARTITION_ID,		-EINVAL),
-+	_STATUS_INFO(HV_STATUS_INVALID_VP_INDEX,		-EINVAL),
-+	_STATUS_INFO(HV_STATUS_NOT_FOUND,			-EIO),
-+	_STATUS_INFO(HV_STATUS_INVALID_PORT_ID,			-EINVAL),
-+	_STATUS_INFO(HV_STATUS_INVALID_CONNECTION_ID,		-EINVAL),
-+	_STATUS_INFO(HV_STATUS_INSUFFICIENT_BUFFERS,		-EIO),
-+	_STATUS_INFO(HV_STATUS_NOT_ACKNOWLEDGED,		-EIO),
-+	_STATUS_INFO(HV_STATUS_INVALID_VP_STATE,		-EIO),
-+	_STATUS_INFO(HV_STATUS_NO_RESOURCES,			-EIO),
-+	_STATUS_INFO(HV_STATUS_PROCESSOR_FEATURE_NOT_SUPPORTED,	-EIO),
-+	_STATUS_INFO(HV_STATUS_INVALID_LP_INDEX,		-EINVAL),
-+	_STATUS_INFO(HV_STATUS_INVALID_REGISTER_VALUE,		-EINVAL),
-+	_STATUS_INFO(HV_STATUS_INVALID_LP_INDEX,		-EIO),
-+	_STATUS_INFO(HV_STATUS_INVALID_REGISTER_VALUE,		-EIO),
-+	_STATUS_INFO(HV_STATUS_OPERATION_FAILED,		-EIO),
-+	_STATUS_INFO(HV_STATUS_TIME_OUT,			-EIO),
-+	_STATUS_INFO(HV_STATUS_CALL_PENDING,			-EIO),
-+	_STATUS_INFO(HV_STATUS_VTL_ALREADY_ENABLED,		-EIO),
-+	{"Hypercall page missing!", -EOPNOTSUPP, -1}, /* code -1 is "no hypercall=
- page" */
-+	{"Unknown", -EIO, -2},  /* code -2 is "Not found" entry; must be last */
-+#undef _STATUS_INFO
-+};
-+
-+static inline const struct hv_status_info *find_hv_status_info(u64 hv_stat=
-us)
-+{
-+	int i, code;
-+	const struct hv_status_info *info;
-+
-+	/* hv_do_hypercall() may return U64_MAX, hypercalls aren't possible */
-+	if (unlikely(hv_status =3D=3D U64_MAX))
-+		code =3D -1;
-+	else
-+		code =3D hv_result(hv_status);
-+
-+	for (i =3D 0; i < ARRAY_SIZE(hv_status_infos); ++i) {
-+		info =3D &hv_status_infos[i];
-+		if (info->code =3D=3D code || info->code =3D=3D -2)
-+			break;
-+	}
-+
-+	return info;
-+}
-+
-+/* Convert a hypercall result into a linux-friendly error code. */
-+int hv_result_to_errno(u64 status)
-+{
-+	return find_hv_status_info(status)->errno;
-+}
-+EXPORT_SYMBOL_GPL(hv_result_to_errno);
-+
-+const char *hv_result_to_string(u64 status)
-+{
-+	return find_hv_status_info(status)->string;
-+}
-+EXPORT_SYMBOL_GPL(hv_result_to_string);
-
-It could be even more compact by exporting find_hv_status_info() and
-letting  hv_result_to_errno() and hv_result_to_string() be #defines to
-find_hv_status_info()->errno and find_hv_status_info()->string,
-respectively.
-
-Note that in struct hv_status_info, the "code" field is defined as "int"
-instead of "u16" so that it can contain sentinel values -1 and -2 that
-won't overlap with HV_STATUS_* values.
-
-Anyway, just a suggestion. The current code works from what I can
-see.
+Stopping here because that's where I stopped in Part 1 of my v5 review
+of this patch.
 
 Michael
 
