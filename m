@@ -1,208 +1,228 @@
-Return-Path: <linux-arch+bounces-10935-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10936-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DCBBA67DF5
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 21:23:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 741F6A67E13
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 21:39:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B86F19C3EF2
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 20:23:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE9C517B494
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 20:39:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B3111F0999;
-	Tue, 18 Mar 2025 20:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C736B20CCF8;
+	Tue, 18 Mar 2025 20:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="reo7Cfop"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmmQG2jQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazolkn19010015.outbound.protection.outlook.com [52.103.11.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466871DC9B4;
-	Tue, 18 Mar 2025 20:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.11.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742329405; cv=fail; b=LzJf6LjL/hZ12NnUFLYZ7Uci0RlKJSrXoMK5xi+nlLs2RdM5p4OWQAKsvdFVLwPsUs2cPnicgXbfwONaO5VGeGpJ6RGHw2FgCdgwLwmbD1+x75Qtzk+nBCtEStwmTs3P8G3fkZBpRs5s8LoyOTxYtyMrhec9t57iS2cEZ1Rg0QY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742329405; c=relaxed/simple;
-	bh=dl1pymMAa6aIrvCBIP/F1bo2g1vIX9avNqOp3F0BOxo=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=qHQug9Q5W0xYdCPOpd/DADZyq51pXMZca9gmvbcpH912fxgIzlPQRcLLNWUpD0IG599un5RxfvzLFrlcODSJGsGt6wtAXp0A1Rgokx4wSQxx+Am/lAN/a/huaKAtmKwNJKnujXxBGVVq5vm6hIib2AKEx6Jd2IOnGcYnGcOPMYI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=reo7Cfop; arc=fail smtp.client-ip=52.103.11.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JeqNe5wA7uctBr1KPxoNfLIpLF1mwmI2A0gZoqgQaY2aWPpok2OUYrIQZIS5Xw4gc/wQo13cyHIYGnZ5sOCCWL9z4epE9nSy9LOQoYrZ+o9cWWXyETJWRUhd6UQKlEUfJdLwTWTj1sHZoaI3/RPBlEAo8ZTclgjwRG/Eu9eB5M55A3n2lW61vFYUJvjGmQ+TOjBFa7knL8lMuCnrT+0iLq/SqeVoyiMCSAsaapKchXc3Jw5r30uEX+SvxaKYl/wi9BsoqQljvtmSMq6sCN5gdo0KvViosGOiLH+z+5t2o90RtnJ9iFhBhD8PlvbcujdYm21+7nUkmtzzJX0s+kWxOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jr3OaZ4LSp5pwntgspKPjNuXu3VN+TIfYWbMqx1m69o=;
- b=JxO5SEXS6gf3EkxTgDkRTFzv8STBln6LQRbmFNaNxtlEEztE6LDpqCk3x/XEltag/hJTQjQoCLCzNoP7F0SpyFAQjZX1XBK7CQSTv8lj2QOl081jYp3d+pM4deCxkmuEz+/iZjvcWfV4VSG87VsIB2KlvFNhexLinnT3Ex44kRSlTPIzEELwb+KBUiD68KyvhgkI3wd2elkE5Qy4PaDecgolNWoiMKdawm1YJznWqEwYWiYepLyA6nbF6rPmEVLrH1UTmYnQadNPMh6UUntJ2UPeARhoVxzCj1T37SmLjMxwfL8e90tgpUSzHsCtFGL77KbKFrc/Jkguuy2TI/RYMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jr3OaZ4LSp5pwntgspKPjNuXu3VN+TIfYWbMqx1m69o=;
- b=reo7CfoptGRw5r1xcpPqLpJ6rDJ08YsSnD+JNQaLwCpPcjMVnP3EAIhm8wGmS6+4IvB0uCzlUhuMOo6WORCF3Vak2rWBFpvxR2/k1xGv+YLAOy6xtAVJSKhC+njCwiGDK4xBXL9rLvSotuIfApOJ9mDFW9GmKziwaSKKQrDSEGzfNJvF9ZHpeR5sKE0jTZDpX7ML9b3ti/aVm3xO1iCPfih2TledD6W0VegNPhfErvgyb525wH4xB5HaOix/mjIWl0q1tvLV6Z4e/XFkIxe4vCiIYvVwQGcQV27JCr9ISkm2ueZVWMaSQi5921A0lJsuGW/KtgtCS+lJqogLdmq7Hg==
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by MW6PR02MB9693.namprd02.prod.outlook.com (2603:10b6:303:23f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Tue, 18 Mar
- 2025 20:23:19 +0000
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.8534.031; Tue, 18 Mar 2025
- 20:23:19 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Wei Liu <wei.liu@kernel.org>
-CC: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "ltykernel@gmail.com" <ltykernel@gmail.com>,
-	"stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"eahariha@linux.microsoft.com" <eahariha@linux.microsoft.com>,
-	"jeff.johnson@oss.qualcomm.com" <jeff.johnson@oss.qualcomm.com>,
-	"kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
-	<haiyangz@microsoft.com>, "decui@microsoft.com" <decui@microsoft.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
-	<will@kernel.org>, "tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "hpa@zytor.com"
-	<hpa@zytor.com>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"joro@8bytes.org" <joro@8bytes.org>, "robin.murphy@arm.com"
-	<robin.murphy@arm.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	"jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
-	"muminulrussell@gmail.com" <muminulrussell@gmail.com>,
-	"skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
-	"mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>,
-	"ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-	"apais@linux.microsoft.com" <apais@linux.microsoft.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"vkuznets@redhat.com" <vkuznets@redhat.com>, "prapal@linux.microsoft.com"
-	<prapal@linux.microsoft.com>, "anrayabh@linux.microsoft.com"
-	<anrayabh@linux.microsoft.com>, "rafael@kernel.org" <rafael@kernel.org>,
-	"lenb@kernel.org" <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
-Subject: RE: [PATCH v6 10/10] Drivers: hv: Introduce mshv_root module to
- expose /dev/mshv to VMMs
-Thread-Topic: [PATCH v6 10/10] Drivers: hv: Introduce mshv_root module to
- expose /dev/mshv to VMMs
-Thread-Index: AQHblRdnpUjohn3xT068AvEhHN692rN5UJDAgAAF7gCAAAXbAA==
-Date: Tue, 18 Mar 2025 20:23:19 +0000
-Message-ID:
- <SN6PR02MB41578462FA9CE129979F604DD4DE2@SN6PR02MB4157.namprd02.prod.outlook.com>
-References:
- <1741980536-3865-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1741980536-3865-11-git-send-email-nunodasneves@linux.microsoft.com>
- <SN6PR02MB4157261B9C4AA8CF89A30317D4DE2@SN6PR02MB4157.namprd02.prod.outlook.com>
- <Z9nQxOD1N2HZIyaF@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
-In-Reply-To:
- <Z9nQxOD1N2HZIyaF@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|MW6PR02MB9693:EE_
-x-ms-office365-filtering-correlation-id: de8ff147-e532-4268-dfda-08dd665ab914
-x-microsoft-antispam:
- BCL:0;ARA:14566002|8062599003|8060799006|19110799003|461199028|15080799006|3412199025|440099028|102099032;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?qzSVFQST3EWhBucvhFo30Yj/gS5JAzSxsk4tSWST0x7ApcwCn7+rgw5IQ6Q/?=
- =?us-ascii?Q?uSN/JYtwapLPqoTHqhmpFcbfobRhoG4A4kn862JlDTJrAmIw5sB+32NAQY7E?=
- =?us-ascii?Q?EFe/tKSMy+E3cngWF4wie25coo9a6h1o+0rEoOLbaf9xkNct/DmpXm5eOFk2?=
- =?us-ascii?Q?XJvKUnZbJzXdgpJuXeJtyDCeX5qcqBPPVA+yPAMDljFydQKXhROF6wRj9+P1?=
- =?us-ascii?Q?iIJr6keTtAlf9jrju3aGEH/aYsiHR+FTnuIcHInIb6xBgBoQnnxnFSjES+v+?=
- =?us-ascii?Q?uTyBZOh+hjr84Szti61b7AmAq8AQA3U2hZyu48NyojVVJDLgPaZjSLVnMZAS?=
- =?us-ascii?Q?jzsgVICDThDqiuRoJoKTrVnkaiQNeuf3KN/jUpBUByD77nTUSXeacVJXRWBt?=
- =?us-ascii?Q?m8pxE5aNGQJ2gSweNr/o3U28BboD/X2XuuDNJ0TmoJYYqGSx+U3QsYg2HfvS?=
- =?us-ascii?Q?WzshOksEcqdw5nvMjTfzbWevlyAGBmtwrwbFJlS1TqnjwEdP7Zx3axtKJuhm?=
- =?us-ascii?Q?AuPqom1NlpEI1A9SMOr5iEy7yCHYI7fq9lIm/C83NEEtiO1LarNqGiiBCb3d?=
- =?us-ascii?Q?osJORvRpm2dBXmhnR9OY10cOk4pgZFB/ldHz88fPBJ5H+0hM7elXeZ0ockL/?=
- =?us-ascii?Q?ipWAwywsGhuIbzY2SrSQfrMunujuGOXGHLmZoO5qM+4ZjL31hCp2DjGzmf6g?=
- =?us-ascii?Q?hlIYdm9G9ihhanpByakZPOUjWbhP6setK/yY8X8ctPcy/HqeiFw+woMD8IFC?=
- =?us-ascii?Q?ssicB73dX7VT5iR6cM0XEN9w0xqT3+2uGUu1kNinP4QgwYPMQ5kZgSYl9uAm?=
- =?us-ascii?Q?x+6vWO2b6xc2IRwrmCrWwnYvige2qBQ/7YpKlM1GCUuFceIzmmcAb22TbKJe?=
- =?us-ascii?Q?7OgzLOhT+I9Xj9ztSCc1Ytjoz4gFuq/NaZvrO+ExPjveueK6OsNB3DBB3+IV?=
- =?us-ascii?Q?8yIEVtZExx2iwUol4cGkwbQm9BogIqyPlnJ53nJ4aMQaxcpjAq7QmZS1/dZV?=
- =?us-ascii?Q?dTq3q3ETDFjoNBTJj4qx58m/4KeWabgYcXcz0s7ikyx90XOgdDiRMFFeq+qy?=
- =?us-ascii?Q?sux2gQjX3iRF4gStzAwT1S4hnrR5Lw=3D=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?mQmXI4EglrgI9Xe7ZeCLPQaD7vYMLYnMcbACg2wn8wBfH6FOKRhNfDQ5sq6K?=
- =?us-ascii?Q?0iAsCx83ndZ72JNgaSK53+ktJ6ATqbAUQ6InkxP0nWp+pJq8sSU0kH83VrbB?=
- =?us-ascii?Q?dk9+eN+Dtn3XZScKdI/BjymxELX0zOXg2YoKSXFvu6dxPSTZDcBSrNvDBqdy?=
- =?us-ascii?Q?hmnnnyuL2fHZDdJX2UqaQbIY2yFA1cDiJ/w9WcWJbOyw0uxP9wLUiiOxXY9h?=
- =?us-ascii?Q?pDDECx4M9QDT7BpWQhQfVG/TbII934Prhi987EnD897DGjfvgNfBIt9R2sjZ?=
- =?us-ascii?Q?eP204zUWkzmOEGI2Gi9pLmsfAy5Lqx0HBLV2m6Kuou25ysfRb7HVB4U3Dhm0?=
- =?us-ascii?Q?oSzGLjRUc6+tajTsEW9P8fGww/h/EjdpE4gS4RcoOpc5qp9t0iOQp+zLnayQ?=
- =?us-ascii?Q?CVxAqkY6vPCRED+6TBLmFtnHS26HX7/dgbqdCf6H8RAl4ZFhIKOI4AAuGl8t?=
- =?us-ascii?Q?b5vzbKPNO+I8u/mhB0MjuH+E5eaAo3ipXHxIFAZeB4MUdJIZ/d+u0QCn30Nh?=
- =?us-ascii?Q?yyYJ3/aKcWKiTFNb4dcm4nDm/6yg9lhSBFEsknMzP7lWM+QcPNRx7mL4OWe6?=
- =?us-ascii?Q?EpDC3Eom1hXHXhEnE0XKIwPB1lUdizDtStyI0dPiBkq4PvkZrR21UruCRZO8?=
- =?us-ascii?Q?e38qnrTPXtP461+CzsV96CQgKc6qfQBhRySdoQ6TSFKzNZOPddwV2vz+omjz?=
- =?us-ascii?Q?c1ul2U7eqWXney0icl2ZWG5NHVHqwdD9MfvjUOvZ/gedWSF9VnTt0eQxIi9P?=
- =?us-ascii?Q?Hjkn6SZnwosFf9D5ld82yjNLXk3+DBbRng40RRS7Vj1teJn98eSoaJrU6Wl7?=
- =?us-ascii?Q?4Blu9jKdG8egzoPYhcQ4VGixzYg0Afvwc/makntkFwuNWnq3TgNEftiJYZ/U?=
- =?us-ascii?Q?+53ZCtYBmMysB9IaIvLLQVpVqEBgv/8KquoqQf1X0fiFoafVw/mycIafSj3x?=
- =?us-ascii?Q?69JeJlpySp5ctukTI2uG9SiS39rmKR0NYQ7eoGB5+nD+K5o3GCauFlVS/nCV?=
- =?us-ascii?Q?9Ii0pMicQlwdnDmUk3IILEaz/ROsWSZeXo7SeftFwqmy2FZThe7BpvWJmDzL?=
- =?us-ascii?Q?otZHQoEoX0hf3WJmAeQwt6eA1dOuTT6Br2EBrFP3IpbFE/wULKCRBEnXN24c?=
- =?us-ascii?Q?BoVnpiYv+IJ858D6Ay2s9Ax97W7oEGUjgrj7a8Ws2OJcGoftWvIU7EjW5R8u?=
- =?us-ascii?Q?0bnclDe1gcAgDZYkUVTWltnMbomxUiMyTUZAxy3XVQDxCoLUlcYJMgoBgpw?=
- =?us-ascii?Q?=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89C451DC9B4;
+	Tue, 18 Mar 2025 20:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742330354; cv=none; b=ArfR+PXEzuWGFFZxU5FuyEUM78GwMMu/u7MUkhh3tjgi6fkJxXs3DEX4Od5UZyOPoize+QhZIl/6o+h+anCYmyZo+wZZPOgC5o14pDsiuyeY/QY5G51/0A5WMGY1z/Jb4ItfdYCND1oSvfWAlGs3GadsQs+TLLaOFs87shPEeKs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742330354; c=relaxed/simple;
+	bh=qOyqx98uYZaxnz8iL9sLUntJPSrsmCPx493u7R+Lnjk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cOGtwWVAyFSuJjMA599/Rs32b7i3xyAsVVJR5MsODFj+tIted+V5+BnCoSbDC2mlYg134CQQwe/KE9TURCQvtLCqYcH1L1DcJo8YzBSE68k6BDq+/xjTrJlK11wj1De91x+nW+NjUUw7njUl9KPuOu9b3icxqG6tGv3DE2buToQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmmQG2jQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B08C4CEDD;
+	Tue, 18 Mar 2025 20:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742330354;
+	bh=qOyqx98uYZaxnz8iL9sLUntJPSrsmCPx493u7R+Lnjk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jmmQG2jQTeVh/Wo0UkAwvIfRQMT2BJv/NcHjMw9/oC0Ydce8fyHd1L+aw+8KMafl3
+	 daX59WrcnM3SoKrzxsQacaGdCwHn7j0cgltFaXcG0FWxhVFtnkslrkuZDIzDoRzRx4
+	 IjWJucl8viLRZjB6jNb8ziUAEg2ZashS5lFUm9KOgrzWbB46qr5FlcAk0+otns60zv
+	 zhA+c7L2jF0UYcCtQPFuEa7cxrT2KfcgPaV1RSsgFeoXx2cdHyoL6Za5yJerW6sxM+
+	 ny/JMURbcz1jhTP1rnK9+tp3IAUvGeP8ZRwA/QKlgFzadPDgO1TfdclmN0zu740gQG
+	 fWnpzczIdmTNw==
+Date: Tue, 18 Mar 2025 13:39:06 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Greg Ungerer <gerg@linux-m68k.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Julian Vetter <julian@outer-limits.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org
+Subject: Re: [PATCH 5/6] mips: drop GENERIC_IOMAP wrapper
+Message-ID: <20250318203906.GA4089579@ax162>
+References: <20250315105907.1275012-1-arnd@kernel.org>
+ <20250315105907.1275012-6-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: de8ff147-e532-4268-dfda-08dd665ab914
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2025 20:23:19.4696
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR02MB9693
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250315105907.1275012-6-arnd@kernel.org>
 
-From: Wei Liu <wei.liu@kernel.org> Sent: Tuesday, March 18, 2025 1:00 PM
->=20
-> On Tue, Mar 18, 2025 at 07:54:49PM +0000, Michael Kelley wrote:
-> > From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, M=
-arch 14,
-> 2025 12:29 PM
-> > >
-> > > Provide a set of IOCTLs for creating and managing child partitions wh=
-en
-> > > running as root partition on Hyper-V. The new driver is enabled via
-> > > CONFIG_MSHV_ROOT.
-> > >
-> >
-> > [snip]
-> >
-> > > +
-> > > +int
-> > > +hv_call_clear_virtual_interrupt(u64 partition_id)
-> > > +{
-> > > +	unsigned long flags;
-> >
-> > This local variable is now unused and will generate a compile warning.
->=20
-> FWIW I noticed the same thing too and fixed them all while I committed
-> the patch.
->=20
+Hi Arnd,
 
-Ah, good. That just leaves the uninitialized "ret" in hv_call_map_stat_page=
-().
+On Sat, Mar 15, 2025 at 11:59:06AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> All PIO on MIPS platforms is memory mapped, so there is no benefit in
+> the lib/iomap.c wrappers that switch between inb/outb and readb/writeb
+> style accessses.
+> 
+> In fact, the '#define PIO_RESERVED 0' setting completely disables
+> the GENERIC_IOMAP functionality, and the '#define PIO_OFFSET
+> mips_io_port_base' setting is based on a misunderstanding of what the
+> offset is meant to do.
+> 
+> MIPS started using GENERIC_IOMAP in 2018 with commit b962aeb02205 ("MIPS:
+> Use GENERIC_IOMAP") replacing a simple custom implementation of the same
+> interfaces, but at the time the asm-generic/io.h version was not usable
+> yet. Since the header is now always included, it's now possible to go
+> back to the even simpler version.
+> 
+> Use the normal GENERIC_PCI_IOMAP functionality for all mips platforms
+> without the hacky GENERIC_IOMAP, and provide a custom pci_iounmap()
+> for the CONFIG_PCI_DRIVERS_LEGACY case to ensure the I/O port base never
+> gets unmapped.
+> 
+> The readsl() prototype needs an extra 'const' keyword to make it
+> compatible with the generic ioread32_rep() alias.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/mips/Kconfig          |  2 +-
+>  arch/mips/include/asm/io.h | 21 ++++++++-------------
+>  arch/mips/lib/iomap-pci.c  |  9 +++++++++
+>  3 files changed, 18 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 1924f2d83932..2a2120a6d852 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -38,7 +38,6 @@ config MIPS
+>  	select GENERIC_CMOS_UPDATE
+>  	select GENERIC_CPU_AUTOPROBE
+>  	select GENERIC_GETTIMEOFDAY
+> -	select GENERIC_IOMAP
+>  	select GENERIC_IRQ_PROBE
+>  	select GENERIC_IRQ_SHOW
+>  	select GENERIC_ISA_DMA if EISA
+> @@ -47,6 +46,7 @@ config MIPS
+>  	select GENERIC_LIB_CMPDI2
+>  	select GENERIC_LIB_LSHRDI3
+>  	select GENERIC_LIB_UCMPDI2
+> +	select GENERIC_PCI_IOMAP
+>  	select GENERIC_SCHED_CLOCK if !CAVIUM_OCTEON_SOC
+>  	select GENERIC_SMP_IDLE_THREAD
+>  	select GENERIC_IDLE_POLL_SETUP
+> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> index 0bddb568af7c..1fe56d1870a6 100644
+> --- a/arch/mips/include/asm/io.h
+> +++ b/arch/mips/include/asm/io.h
+> @@ -66,17 +66,6 @@ static inline void set_io_port_base(unsigned long base)
+>  	mips_io_port_base = base;
+>  }
+>  
+> -/*
+> - * Provide the necessary definitions for generic iomap. We make use of
+> - * mips_io_port_base for iomap(), but we don't reserve any low addresses for
+> - * use with I/O ports.
+> - */
+> -
+> -#define HAVE_ARCH_PIO_SIZE
+> -#define PIO_OFFSET	mips_io_port_base
+> -#define PIO_MASK	IO_SPACE_LIMIT
+> -#define PIO_RESERVED	0x0UL
+> -
+>  /*
+>   * Enforce in-order execution of data I/O.  In the MIPS architecture
+>   * these are equivalent to corresponding platform-specific memory
+> @@ -397,8 +386,8 @@ static inline void writes##bwlq(volatile void __iomem *mem,		\
+>  	}								\
+>  }									\
+>  									\
+> -static inline void reads##bwlq(volatile void __iomem *mem, void *addr,	\
+> -			       unsigned int count)			\
+> +static inline void reads##bwlq(const volatile void __iomem *mem,	\
+> +			       void *addr, unsigned int count)		\
+>  {									\
+>  	volatile type *__addr = addr;					\
+>  									\
+> @@ -555,6 +544,12 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
+>  
+>  void __ioread64_copy(void *to, const void __iomem *from, size_t count);
+>  
+> +#ifdef CONFIG_PCI_DRIVERS_LEGACY
+> +struct pci_dev;
+> +void pci_iounmap(struct pci_dev *dev, void __iomem *addr);
+> +#define pci_iounmap pci_iounmap
+> +#endif
+> +
+>  #include <asm-generic/io.h>
+>  
+>  static inline void *isa_bus_to_virt(unsigned long address)
+> diff --git a/arch/mips/lib/iomap-pci.c b/arch/mips/lib/iomap-pci.c
+> index a9cb28813f0b..2f82c776c6d0 100644
+> --- a/arch/mips/lib/iomap-pci.c
+> +++ b/arch/mips/lib/iomap-pci.c
+> @@ -43,4 +43,13 @@ void __iomem *__pci_ioport_map(struct pci_dev *dev,
+>  	return (void __iomem *) (ctrl->io_map_base + port);
+>  }
+>  
+> +void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
+> +{
+> +	struct pci_controller *ctrl = dev->bus->sysdata;
+> +	void __iomem *base = (void __iomem *)ctrl->io_map_base;
+> +
+> +	if (addr < base || addr > (base + resource_size(ctrl->io_resource)))
+> +		iounmap(addr);
+> +}
+> +
+>  #endif /* CONFIG_PCI_DRIVERS_LEGACY */
+> -- 
+> 2.39.5
+> 
 
-Michael
+This change as commit 976bf3aec388 ("mips: drop GENERIC_IOMAP wrapper") in
+-next introduces new instances of -Wnull-pointer-arithmetic when building
+certain mips configurations with clang.
+
+  $ make -skj"$(nproc)" ARCH=mips LLVM=1 mrproper malta_defconfig init/main.o
+  ...
+  In file included from init/main.c:17:
+  In file included from include/linux/module.h:17:
+  In file included from include/linux/kmod.h:9:
+  In file included from include/linux/umh.h:4:
+  In file included from include/linux/gfp.h:7:
+  In file included from include/linux/mmzone.h:22:
+  In file included from include/linux/mm_types.h:5:
+  In file included from include/linux/mm_types_task.h:14:
+  In file included from arch/mips/include/asm/page.h:181:
+  In file included from arch/mips/include/asm/io.h:553:
+  include/asm-generic/io.h:1175:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   1175 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+        |                                                   ~~~~~~~~~~ ^
+  1 warning generated.
+
+Cheers,
+Nathan
 
