@@ -1,161 +1,155 @@
-Return-Path: <linux-arch+bounces-10930-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10931-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46B56A67B47
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 18:46:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8742FA67B80
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 19:01:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 245FA19C655F
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 17:46:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFDDA17FE14
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 18:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC56F211A1E;
-	Tue, 18 Mar 2025 17:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08451A9B52;
+	Tue, 18 Mar 2025 18:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="PLP/MBxs"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="maIyz2F5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazolkn19010002.outbound.protection.outlook.com [52.103.11.2])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azolkn19010003.outbound.protection.outlook.com [52.103.10.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A9320D4F4;
-	Tue, 18 Mar 2025 17:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.11.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED99EACD;
+	Tue, 18 Mar 2025 18:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.10.3
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742319951; cv=fail; b=Dq3TqGG9vejBg6P6PhL3vjRaJ5I3+FMgfRVAwxE4HYE0F3MC7om61Y4DpMnQhZwX2cp5m7ncEkejQjvqYH4LExqzGPqjZk5Mx9gSSxdDoI9t/vsnmmx4em/48bQDr/IQ948GMtWNvqSCP9pCwI0tupXF7yc+UOFF1mv6kBtZAcQ=
+	t=1742320901; cv=fail; b=IHfhLEKmWr6hhqL0K7BmxIYLRYQH6cE2dwV0XMN83C1B5b1yWMw++npbUCxXZnw+MWEeU77QKviEscKt1maWZ/i46nULcyA/ohLE3Nd4UvpU+GQv1TBcrYnq7YPdsWNyJTM898WkQPGojbX1C9I65AaO4+MTTWVIC0JRVU2ReuQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742319951; c=relaxed/simple;
-	bh=+Ua50Yx9cUt6GmAilXGA/cyA3Pu1Cyq18ZNMl4aLGXQ=;
+	s=arc-20240116; t=1742320901; c=relaxed/simple;
+	bh=3BMWm4YU13UlRrhl/laTyw4qNuXWO8EeSs7bqNCihU4=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Feq41xPeirBMSEZssD7ALeYtPOA/sD3bw4tXCAS14i2l1WtD6ev5+SwJxkty20SRBxE/ZqPCUkP884zqwC6NoHlT9sysdl/GFIHBH8uCVlHhJB9dfRh3WFddSEa5DKxMuNVIewkhkchZlVZAMrSkz/YhPfT98+rKILliWiHW48E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=PLP/MBxs; arc=fail smtp.client-ip=52.103.11.2
+	 Content-Type:MIME-Version; b=BDjvdU/jXpqLI6WY45Q9X5Bw3rmSVJ92Fiph8IzjBsxJqoYYFqywIKbAxBcqAKC95ew8j1nEY2oiQGPbL3SzTYAcsTHrdrahCUA1VSRYMcdth2EuArl6dlJNVnOa5i/XqX6CsN/rJKvehYdQqTkze3nV0Pxr5aGiWyqhZ4xMo2I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=maIyz2F5; arc=fail smtp.client-ip=52.103.10.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OSOom1CXszD02lykJtMupV03SxVP+gb0hnEPKM+GHZQfFOpG+Lojw+/uDsm5qj9lyvuES+J0zcxuO7VrmGPGhNppzHJhXQuHfAOykRocpfVrG5YAd0EhVZqomai/iounumM2Z0izYJicihGLFV9MrTWvpkzN8UxWOZilJMv846dARZm/rWFb2bIwwuJ6VWzcNY5SlAmbFZWg6TZKHxsux5kj9yHnwM9+nZbNxdmcP5E6jiNeDan8MEmkQbW6R8p6LMYonNRE1J/8FNJxCAdDQMo1Oo4sLUj+9ThIkrcxHfLT6zesg5Zc/By7I8X9qRTADnPG4C6JIcZbCeYtaL+CzQ==
+ b=Vt71IrzkcWiPR1/Sj//kun2pyIONY4Y5PTyWVC8WOmIV3nAFMWMWMpD03zEUF6z/5p26DEnnVk7eczH3Umeh15/aTU+ZgwHA5DxBt0/BwQG5cyL/qc7+uIAVpUn9SpKnNC0GU5DOmi6JBTs1QppHP2KQsRNk86lq6H5Ep0JN3ani3uYi/eMjr+O7V2xfwTerwM4sVivvNdKrtqsq2F0mayrXYe2TIKv/Xjjs7HKhFZPfIMIUMfO9NZWhDFbtINfjCP9lkJMU/c+8xZrmD1klsxhdIA9SM3ShdxjgMVdZa5YWQl7LWpIdKQYnx+tV2o2ysGjS0bPlL4IsKaiIKhp/NQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rhwToxbE7ZgQn/o4lhk9jD+KvWLi1PpziAwUS7m12nw=;
- b=xI4mj4MbWn0ggurzOzcXEHQwL9L0roUFCwEY9zE6o1DIRkbmSbWBHK3eNcNx1AtlQ9BOQpt+gaz/QFZIdjjTMOo3Ze+I+HEp19qQ/YaW2xsZRpkB3lKgkId37DnjXnyVqnK/2B51eQyBcOOBzk4+WTeSjER3V+XmJZupBPBpSCk3uP/rBy7aUnyZnNI2uVtoxcSqZs7tNuxqPTgC8X6HInVuS2bAjG4tBdipn1SPQHVHfbTwBBqj3m40AuDPXiLkIXUosTMcQ5lGte4DuVyImvPqlBtoUoKBZX3B9d9n1JmQni310q9rLY2oHJAueW0rxWUin7JvY30fDZA+VJ0t2g==
+ bh=Zs6BuVbvU5lrjLsBCqVc2BxjV8i/J1qbRdWpTdLuSl4=;
+ b=r2yYTDw8C1Jnnxwob7mxn7+EUi5zyCPftwkEz5swH4W/AwJCnGs4qQF6Z2ooUhptevcW42nMARt2ghOQVS9QOTSxQr0Kz5H1RxQ8KD1ORMumGZ9sM9HJRLvf5WE3rSv7RR2DxyGWTOi1Ceopx9dguLpJljbEYgDYOECmY8QFcTwKjByH+vkxmCa9FvT/fzmte1tbRucGIyodTVOSoelTu6hBRmJo+G/ccmJKNaE19k/++0tolLQ3ouj9+cOacIQBO+MH7ToOde+SbrCZFKMpwcoyqdLDWTJMbr/Z5eSyymGfG4AuQRwwH5/pg/6bQKWp3BdX0EtjMsNzHoUmG5ybOw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rhwToxbE7ZgQn/o4lhk9jD+KvWLi1PpziAwUS7m12nw=;
- b=PLP/MBxs9YVTZ4fxWLtvX0NlfL5atlLKVuWUBEbzFXnRF1lwAWeZqm8r+Q842le9jw/MIeCs9qOOHWFEH6oPud1RaoWSeJDfhSQ0CD6ld7zt41wFx813ALosmOOxoMDdG/ISKX/wTwCLZVAYaqcpeIsDUqyLsBsk5MEbNrbsCxQltuwB3O7VKKAMLGnClm2ZJimPQ5D/+5bAwNQ/RcdlArw4YyVX3CRfip/um0SRs0cOh7ZaFz+p1sV6WqVJYDoQ5+UcYUX5vn51qGLcsbwaUXfpa/2GEuOEhaOWGKAq03jDfSzq5jjgiuNazsIlK9u2kLkxxfQxEbFEB7Mv+CthDQ==
+ bh=Zs6BuVbvU5lrjLsBCqVc2BxjV8i/J1qbRdWpTdLuSl4=;
+ b=maIyz2F5OGwDj6qDfy7vY9igfzzg97VeZn1R3t8VoKY/Ym2D3+gn4y4g+aJ2QGJHAmW4ntEl/RjNWbUYWGdaVq0+eRvQ1HjZWUQxIxom6WJTZfL66uqrEousoIzk8UuST7g+degGSA+fbbP9phLgJ8JmaYdck58I8qVKC0oStmoRaIym+ter8cqnn27jJ7W7IBadKI11UFs5WVOmCaytMTMACQwQl1QSwkiscNApsV9KBBIyVjTjpUfmme+2g6wF+PbwjCyzs3Z3b2PT1ufAyNjROX79Nrl4qt8zVfZpK5PtJZnS/E5HXfKTa7dXt29nYAR1p/NxdHdQD+S/d1+cqw==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by CH2PR02MB6582.namprd02.prod.outlook.com (2603:10b6:610:78::17) with
+ by SA3PR02MB9311.namprd02.prod.outlook.com (2603:10b6:806:312::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Tue, 18 Mar
- 2025 17:45:46 +0000
+ 2025 18:01:36 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.8534.031; Tue, 18 Mar 2025
- 17:45:46 +0000
+ 18:01:36 +0000
 From: Michael Kelley <mhklinux@outlook.com>
-To: Wei Liu <wei.liu@kernel.org>
-CC: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
 	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
 	"x86@kernel.org" <x86@kernel.org>, "linux-arm-kernel@lists.infradead.org"
 	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
 	<linux-kernel@vger.kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "linux-acpi@vger.kernel.org"
-	<linux-acpi@vger.kernel.org>, "kys@microsoft.com" <kys@microsoft.com>,
-	"haiyangz@microsoft.com" <haiyangz@microsoft.com>, "decui@microsoft.com"
-	<decui@microsoft.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
-	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"hpa@zytor.com" <hpa@zytor.com>, "daniel.lezcano@linaro.org"
-	<daniel.lezcano@linaro.org>, "joro@8bytes.org" <joro@8bytes.org>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>, "arnd@arndb.de"
-	<arnd@arndb.de>, "jinankjain@linux.microsoft.com"
-	<jinankjain@linux.microsoft.com>, "muminulrussell@gmail.com"
-	<muminulrussell@gmail.com>, "skinsburskii@linux.microsoft.com"
-	<skinsburskii@linux.microsoft.com>, "mrathor@linux.microsoft.com"
-	<mrathor@linux.microsoft.com>, "ssengar@linux.microsoft.com"
-	<ssengar@linux.microsoft.com>, "apais@linux.microsoft.com"
-	<apais@linux.microsoft.com>, "Tianyu.Lan@microsoft.com"
-	<Tianyu.Lan@microsoft.com>, "stanislav.kinsburskiy@gmail.com"
-	<stanislav.kinsburskiy@gmail.com>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, "vkuznets@redhat.com" <vkuznets@redhat.com>,
-	"prapal@linux.microsoft.com" <prapal@linux.microsoft.com>,
-	"muislam@microsoft.com" <muislam@microsoft.com>,
-	"anrayabh@linux.microsoft.com" <anrayabh@linux.microsoft.com>,
-	"rafael@kernel.org" <rafael@kernel.org>, "lenb@kernel.org" <lenb@kernel.org>,
-	"corbet@lwn.net" <corbet@lwn.net>
-Subject: RE: [PATCH v5 10/10] Drivers: hv: Introduce mshv_root module to
- expose /dev/mshv to VMMs
-Thread-Topic: [PATCH v5 10/10] Drivers: hv: Introduce mshv_root module to
- expose /dev/mshv to VMMs
-Thread-Index: AQHbiKNt140GtdgK20KtRyAXlJwH1rNxYTIggAfizgCAAAK9wA==
-Date: Tue, 18 Mar 2025 17:45:46 +0000
+	<linux-arch@vger.kernel.org>, "ltykernel@gmail.com" <ltykernel@gmail.com>,
+	"stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"eahariha@linux.microsoft.com" <eahariha@linux.microsoft.com>,
+	"jeff.johnson@oss.qualcomm.com" <jeff.johnson@oss.qualcomm.com>
+CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
+	<haiyangz@microsoft.com>, "wei.liu@kernel.org" <wei.liu@kernel.org>,
+	"decui@microsoft.com" <decui@microsoft.com>, "catalin.marinas@arm.com"
+	<catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
+	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "hpa@zytor.com"
+	<hpa@zytor.com>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+	"joro@8bytes.org" <joro@8bytes.org>, "robin.murphy@arm.com"
+	<robin.murphy@arm.com>, "arnd@arndb.de" <arnd@arndb.de>,
+	"jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
+	"muminulrussell@gmail.com" <muminulrussell@gmail.com>,
+	"skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
+	"mrathor@linux.microsoft.com" <mrathor@linux.microsoft.com>,
+	"ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+	"apais@linux.microsoft.com" <apais@linux.microsoft.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"vkuznets@redhat.com" <vkuznets@redhat.com>, "prapal@linux.microsoft.com"
+	<prapal@linux.microsoft.com>, "anrayabh@linux.microsoft.com"
+	<anrayabh@linux.microsoft.com>, "rafael@kernel.org" <rafael@kernel.org>,
+	"lenb@kernel.org" <lenb@kernel.org>, "corbet@lwn.net" <corbet@lwn.net>
+Subject: RE: [PATCH v6 01/10] hyperv: Log hypercall status codes as strings
+Thread-Topic: [PATCH v6 01/10] hyperv: Log hypercall status codes as strings
+Thread-Index: AQHblRdnD16Gq+LbxUi4ncmhWYIbZrN5MUUw
+Date: Tue, 18 Mar 2025 18:01:36 +0000
 Message-ID:
- <SN6PR02MB415725C0B70BBBE541D6F87DD4DE2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB4157E630EC520DC487139372D4DE2@SN6PR02MB4157.namprd02.prod.outlook.com>
 References:
- <1740611284-27506-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1740611284-27506-11-git-send-email-nunodasneves@linux.microsoft.com>
- <SN6PR02MB4157BE8AF5A1CDD39CF31124D4DF2@SN6PR02MB4157.namprd02.prod.outlook.com>
- <Z9msXAClr-vGn3GR@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
+ <1741980536-3865-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1741980536-3865-2-git-send-email-nunodasneves@linux.microsoft.com>
 In-Reply-To:
- <Z9msXAClr-vGn3GR@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
+ <1741980536-3865-2-git-send-email-nunodasneves@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|CH2PR02MB6582:EE_
-x-ms-office365-filtering-correlation-id: 6e16ab9e-8e25-4089-36fb-08dd6644b691
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SA3PR02MB9311:EE_
+x-ms-office365-filtering-correlation-id: 6ff95d3d-d0e5-4367-adf1-08dd6646ecf1
 x-microsoft-antispam:
- BCL:0;ARA:14566002|12121999004|8062599003|461199028|19110799003|8060799006|15080799006|10035399004|440099028|4302099013|3412199025|41001999003|102099032|1602099012;
+ BCL:0;ARA:14566002|19110799003|15080799006|8060799006|461199028|8062599003|102099032|440099028|3412199025|13041999003|41001999003;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?AL1Ib801r1fBeWD0LiNAvPNpQL8HdWiTD9o0ZjVNVgKxvhQ3pvCFIIwLGjUo?=
- =?us-ascii?Q?eDU/6fKKvbzi1HSjlJqhHnEKSQ2K3TqS8ZlpRg/4YyVmzi3kokXVDroHflcy?=
- =?us-ascii?Q?r6OH7Ud8+rYcNP/n+YcB0dA7FZgLAVNinVK0pxQ8uC8KndL64N30tHUi1dhf?=
- =?us-ascii?Q?CKvXdh+4ol93u+nBPsOvTICVB22w9amtgLxCkQ+6NWOFaEnlhdyUo0nVtPxN?=
- =?us-ascii?Q?LCiqZrga2DMPsjlx6bZzNBobEj2SwsEKMAx2z8uOI4tanY/TClcBD/IYdfAb?=
- =?us-ascii?Q?aY2j5A+3bQMuWPNTWhMOw3oNDfRvxrzRcguk53EL8NuafFyzJ+I3DMYWq4/7?=
- =?us-ascii?Q?5BRBPTGGX96ne/fVMqMI+vAnt/E6Bs8zPh3vHGqQfr6tAjo+hAjJ7vaCgGL3?=
- =?us-ascii?Q?5WGbdmz8eOWMIoV9+yyAWGFi2AoSgWLotKwgbGiIEfTEPSYMiR+UCCFpwEbc?=
- =?us-ascii?Q?Tzr05HY14pt5y5zIW1LhNQEDsSNbVvoYqgxxZ4iCkAm3HgDr5tKHhqOlnd4z?=
- =?us-ascii?Q?LK7tD29EsA6bwTHQQbMQ6WoVUosmLh8FDlQYbn8oNOyXsFDe1iYBqvjg4ftK?=
- =?us-ascii?Q?0B3kkWDQn4K/m22bMfR/nM7/RmhXGl/3vtpwFNJy36mZOBrno0IgB6CQurTn?=
- =?us-ascii?Q?VPnEOLXckHRGn17L56ahZpms5wQY6urjQVhn+HJRPrUdOGKVc8MoUM5LtXLE?=
- =?us-ascii?Q?MeltCaQe1ecxM20pjH7tluL8Ui1ekoiBPIfztSuq4MOhwuqcCGLTDQ8GkPn+?=
- =?us-ascii?Q?mnV36ICJklHMIUHegaTbVk2o+IbOAXfRwbCxwq8zm/HUJu+9EgJa1o93rUSy?=
- =?us-ascii?Q?inc8O/EFTNNfR8RQb017/i+eAM4EzpmYY5kq/ehrARj0DDn0CIOUY3fdC9jt?=
- =?us-ascii?Q?TM1dlpOCEZY6suhtFWHaCLM9Nk4mXqfkgG75KAOxQvNur0Z0yp0sJGle2lCM?=
- =?us-ascii?Q?cr2++aJzYIlkUuFn3Y+55IyBwsDJZhU/ZOFU64x3HOg/FdFGL2X2Gnp0r/wd?=
- =?us-ascii?Q?59/FP0n3hk9vYHidpJDp8ebmHR2z/egnvH0rvIlzWeU2FwsmrjZ1/8fDrRln?=
- =?us-ascii?Q?Y5BIMgZ5m1wth33L29uQeD1ecXbvN3bEQuhGcK7anIwa4MnPJWZH8oYpnKV+?=
- =?us-ascii?Q?vpi2Tev75n/GhkdqFz+ZQ7z9DipsdfZ6cV1Y8YDtp6jq1YAIsh57GTnAtX9d?=
- =?us-ascii?Q?yLs5CKt2pgnUHtZcOTOyCyzzugyffJcCXfEuFihTHALs5jhW1APxDJDd/+j5?=
- =?us-ascii?Q?n6uQbXdOT7vBwml5G3DF?=
+ =?us-ascii?Q?7mitemPgKrLecN2p0Lb41E69f0S4uYU+jbML0aus2w2SC3LsyqGmQ7fXFFOx?=
+ =?us-ascii?Q?lZeL40nmgRevSvyisgfBhysg75+29JiLnvF+REpDabVGajFU4gVAGetYLz/9?=
+ =?us-ascii?Q?5Q0fhS3+z74eIpemkX/44+AtCcUTY2RICbcCfp+awD93ZvRqQ1pT4Viuj84M?=
+ =?us-ascii?Q?He87P3LB8t7RwztdIzFw62nLY+R4Gw3dcICHuDRpXlbVovw7l7VklQNmPSeF?=
+ =?us-ascii?Q?HYWLsRRJC02UMckPI0Dnkp9lyZoT0P6FAJ5rk852ysx/qEm//KpQuGcoFQLe?=
+ =?us-ascii?Q?pJlXFj5GDfS24Ap6Wjg3F3lrpcQ/wYifGfo0cn8e33PYvZhd6czDTW5I8H/n?=
+ =?us-ascii?Q?opPdrWSwEivkEs+Hp4nO8Upaag3gtTSuHQvJsgH8w9VchIZdpy9eu2ncy7oZ?=
+ =?us-ascii?Q?RioeEtLRrQkov96mz8MYpEHv6ATi4Iv7v3Adp2NkJz7chUABOqPcStwRcZeD?=
+ =?us-ascii?Q?3BB6oDbRIbWnJlgm+LImJuiVQNHEgMv+HD3Y2WPfj4PljXSq4iGCRAg68Zpa?=
+ =?us-ascii?Q?ZBypT/6GHTpbOeHLVmB7Ax1GiLcNUKnwF1frjBaTMJExUSvF+JY9RhUrMQOe?=
+ =?us-ascii?Q?s78FpFhdTEe5sqYMyDIvP7RzaMtMgBvaQqvizNnBlykCxE2gGYGS7VCO7l+P?=
+ =?us-ascii?Q?FrRUdtxqhWK5kui0qKlCWZRjEzZfMLlTcT8R7xILphUcDFkjpgwWK6vf5sp9?=
+ =?us-ascii?Q?EGGK9O3QBWJ7TjPpH2XjWnqimSQAQvJWM0ny4J3I+mlhdYVj2gX6LR72KVRU?=
+ =?us-ascii?Q?ixg2CAXK8hTKnA2ICTm5gh3QBGNSmzAfBlFWZF2a1jhFeDSbBMYZu8RmgH3h?=
+ =?us-ascii?Q?ggfblJXIk9M06F1/ebxQwuzBbTRIAWdA0NsfPazjurJcSR07Q/CEASPnQ7Cf?=
+ =?us-ascii?Q?5n1CLONyHZpM3+us82a+yooh9V2MiWn5v60RStaxtJicBwNYSxZhdNmB6RbR?=
+ =?us-ascii?Q?1qH1+7tYHUiAdXQhnEonM9g8+yU0eLxowGsj1hNJBD4WbWToc4Pp651XvpRT?=
+ =?us-ascii?Q?5mYy79OgqvLsXdO+Gqbo5x2KwZ7CDkjF6cYRcPm97F/xt7eAnvl2Y5GoFgT9?=
+ =?us-ascii?Q?FNYYh8MNh8RoYXXlDr5GrrS92gnh3dINEKC3gWwxutFmDQZYULTSgjn99mlv?=
+ =?us-ascii?Q?g/1juZGoqG5tO2ysh9bHOPSh6INYe9tR6g=3D=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?bBVsoQLnFy3r9Y+OweQh6TxfE7f5hsQ52E1lFnIDXpe1PuAOAfS+CbWI+r4T?=
- =?us-ascii?Q?iwKk6gZ+y8iai1pW9sVtWz3ynd0jQAycZ6iMFzNh08eAkUAZn4W+ZlaTKcsU?=
- =?us-ascii?Q?mcCfv0TyLdt+qvKHjiMtnQs55LzD6AU/v10oja0sAkRrJTTFyMZIL8cyxJBB?=
- =?us-ascii?Q?IOFJKpwweorAXkWNy4whmWN9QBY8HzQSzGXbxOY+leBQVPZ+2aBiDyqm8AoS?=
- =?us-ascii?Q?OBVhVpd4djr+/mEn9VHCTrfk9BZ3K03eg6ccHETB19VZ/cY6K6dXvZdhQqCW?=
- =?us-ascii?Q?0LlBKeYuHiFQMNp7c424JYOiije9HRjP0yBGYZ4OSg4GCB8v/ls9FMQdYB41?=
- =?us-ascii?Q?B+odzTBV2adej6yY9tvEMArFtx5bM7OFmwhb870cViF+z3Yfal1imxQAZPVB?=
- =?us-ascii?Q?Z4o/O1vNOEVjMWGXkBCXy0CFEi+3hQdDMn2JS2bhspefV819aSAQkLqN32k0?=
- =?us-ascii?Q?VH4wOqO0ozNWO3N5O/ZSmWxl4fnzqUUN6zUHfAibOqNJsPFOijji+aHsZxun?=
- =?us-ascii?Q?/mYzsbWMjNjLYlhKhCL4HFM2WfRgzUVQwxiTCSoEj1ES1eN7/C13G6on4sad?=
- =?us-ascii?Q?B78OkO5fuO6iB2sUUNG72Ybg3cD7Onl52kNnfigVDhX0kEgQt7YWCQjrT3VW?=
- =?us-ascii?Q?j2qkNagdr88tG8lyuQ0dIDU1BBojThemllrX+u7gWtdfd9J0p3TpLPnt4nu/?=
- =?us-ascii?Q?WpiEgnj41O5hzDwKCSP/dTT54t4rhs9j/IiQ1rwbo5WwsWJLpS7CSNpBB65u?=
- =?us-ascii?Q?0OqSrp/alyxtNj+o+ItNe9+TE39sOaxMc5exQCqFypKqEPTdnEf8KzDdQ1ep?=
- =?us-ascii?Q?eEv03vHxdQxuc3EIJuwy07RG8QrfnDFtr8/vNEWrwlvq2McrkRGN1/TYqt9Q?=
- =?us-ascii?Q?SPDPpB/TRfq0BeQONn0zcFaIupBnQFxhRCb+wIpapaD1zZ3OYqnITPPRkI5u?=
- =?us-ascii?Q?0RXW3VXxcTxyEIIUSbef+7tJgNAaDWxE0g/tYwOvp8tw0Ob2/sv2QQjltaYq?=
- =?us-ascii?Q?vSYi3Ie36qyHFggLSU0Pj5c8aKUWKSLAxQcbosCQToj8Z76+e1KXpcn5OixF?=
- =?us-ascii?Q?WyuhU4EP63zCxaSBpj9KKnBcxaigdLrIpDapl3M8twHVrsJoucA3mXYWz1wZ?=
- =?us-ascii?Q?Ap5mRZhJ628rttjAKTeOQHBm47oRqmfo5TV+NexGtKghWcJMgGVe2NjZQvFr?=
- =?us-ascii?Q?s7LoFhFIcg8iW0ue4x83sDAQW1kFkFpk/tr6ivKgwUIHJ9pjXkXPXKfZkQU?=
+ =?us-ascii?Q?/iZDq1o+O9PoPRa8uQJTjXFXOAOZQcDYIolEpm4K5PA9/tDfiaMBYPVj44/2?=
+ =?us-ascii?Q?FSnpBL0VaB+v7mWEXUkQ7qgNxozhVwXN9gT8QY8uD05o6VN12f6cdD31pUpX?=
+ =?us-ascii?Q?wdSKcmS8osT5BvxCXTVVzn0BLBq6X4RbXxgZI33wiG2dfGVaerkxbgFJ0M8B?=
+ =?us-ascii?Q?8EGe/+i5LUMcuMaxVCPgMNKDRCWM1n0RW5eQ0YQZNdNkVot+kVYLV9M1dHuB?=
+ =?us-ascii?Q?d6WmXK+UtDvSONWTEBUHwPnQaaqpcNjOWN47PC6kwQqEV71Sr5OsytHOsLaH?=
+ =?us-ascii?Q?cs7K7b1nLPACVrsa+tKD5d5DjR0N26TeIuX42rzbuhC5UnQPfdJ2EKnbaYNF?=
+ =?us-ascii?Q?7fHwiJvaD3MEXC1Zbou6gU2hAfs+XDj42b4L6PKlE3BcJ6hiPFeNN7kdzke3?=
+ =?us-ascii?Q?y/JeF78U43tGuklr/eGtYEnUGwf+ERDfpdbeGuY39QiM/TmPzzc/JZghRNkw?=
+ =?us-ascii?Q?6j84ZDXdP5GdWzerVmTzuvJbP97iJ8R1PugliiaGftMf/SW9pLU3hs3zyjMT?=
+ =?us-ascii?Q?00n4M2ghkwJavOK4K8Tfzpeh4HK4/xULDrIohcyfgXNdpR5N7Rt742yMZY9U?=
+ =?us-ascii?Q?Lxul2OGjDQfv2wcU9Z1PYrMTx9yqao76vfTw4+oihrQKYIiUl5HgqlzJopPF?=
+ =?us-ascii?Q?v4Fi3lRtefugsL4QGdoWISqMwmJ2sbID99pCZZ7oswV9B9QDtrKwYo3wNoMt?=
+ =?us-ascii?Q?lDYLnf41m3/h8dUCKaonH0poCMzgW9Pj4WqrAATbH8KqI1oygqPDp8VSiD8y?=
+ =?us-ascii?Q?NAEfmsI5chgu/A2dLEd4pMEcbdjEIO0qjhTWRq4WLgayxMU8yaBjbuBnRBFL?=
+ =?us-ascii?Q?HignraN6t83myIDxSL+9Uiq1rKsJfGA642heVDz8+NrSb0ZshX510buGZ3qc?=
+ =?us-ascii?Q?y94yjPIYu/zIH6i5thYwQj8jgtROQpPGvbGS9DUhnvcEYLqDeWKBvLv3saMl?=
+ =?us-ascii?Q?B6qY2X1N1NitCNFg4c2jhLTLLLx52JiQ1BF/zpAjLnzmDT5Z2VmyqyGY6Cw7?=
+ =?us-ascii?Q?2BoAFkXilxqxeng21RqLeIHNRPSm7mYqylo2f/76O7pSYGutzDoV6fsFRc3K?=
+ =?us-ascii?Q?A6k24Tj8crLxgTNPyVLDadUPHrn06/txQonDmrtvx1+w68kRATI4jebOjmZ9?=
+ =?us-ascii?Q?i54i8RNYxpJ4zmswD/rBVctElyrA+eLfAx/PkaSiVsXRZadwvwyfDgkxGq8A?=
+ =?us-ascii?Q?10pDIItjbaLqQg8uZn5leP6rNtlk/bDvFvKfoOgTbL+SczQvQZmG+NT9D5s?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -169,90 +163,240 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e16ab9e-8e25-4089-36fb-08dd6644b691
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2025 17:45:46.2721
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ff95d3d-d0e5-4367-adf1-08dd6646ecf1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2025 18:01:36.4878
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6582
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR02MB9311
 
-From: Wei Liu <wei.liu@kernel.org> Sent: Tuesday, March 18, 2025 10:25 AM
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, March=
+ 14, 2025 12:29 PM
 >=20
-> On Mon, Mar 17, 2025 at 11:51:52PM +0000, Michael Kelley wrote:
-> > From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Wednesday=
-,
-> February 26, 2025 3:08 PM
-> [...]
-> > > +static long
-> > > +mshv_vp_ioctl_get_set_state(struct mshv_vp *vp,
-> > > +			    struct mshv_get_set_vp_state __user *user_args,
-> > > +			    bool is_set)
-> > > +{
-> > > +	struct mshv_get_set_vp_state args;
-> > > +	long ret =3D 0;
-> > > +	union hv_output_get_vp_state vp_state;
-> > > +	u32 data_sz;
-> > > +	struct hv_vp_state_data state_data =3D {};
-> > > +
-> > > +	if (copy_from_user(&args, user_args, sizeof(args)))
-> > > +		return -EFAULT;
-> > > +
-> > > +	if (args.type >=3D MSHV_VP_STATE_COUNT || mshv_field_nonzero(args, =
-rsvd) ||
-> > > +	    !args.buf_sz || !PAGE_ALIGNED(args.buf_sz) ||
-> > > +	    !PAGE_ALIGNED(args.buf_ptr))
-> > > +		return -EINVAL;
-> > > +
-> > > +	if (!access_ok((void __user *)args.buf_ptr, args.buf_sz))
-> > > +		return -EFAULT;
-> > > +
-> > > +	switch (args.type) {
-> > > +	case MSHV_VP_STATE_LAPIC:
-> > > +		state_data.type =3D HV_GET_SET_VP_STATE_LAPIC_STATE;
-> > > +		data_sz =3D HV_HYP_PAGE_SIZE;
-> > > +		break;
-> > > +	case MSHV_VP_STATE_XSAVE:
-> >
-> > Just FYI, you can put a semicolon after the colon on the above line, wh=
-ich
-> > adds a null statement, and then the C compiler will accept the definiti=
-on
-> > of local variable data_sz_64 without needing the odd-looking braces.
-> >
-> > See https://stackoverflow.com/questions/92396/why-cant-variables-be-dec=
-lared-in-a-switch-statement/19830820
-> >
+> Introduce hv_status_printk() macros as a convenience to log hypercall
+> errors, formatting them with the status code (HV_STATUS_*) as a raw hex
+> value and also as a string, which saves some time while debugging.
 >=20
-> This is a rarely seen pattern in the kernel, so I would prefer to keep
-> the braces for clarity.
+> Create a table of HV_STATUS_ codes with strings and mapped errnos, and
+> use it for hv_result_to_string() and hv_result_to_errno().
 >=20
->  $ git grep -A5 -P 'case\s+\w+:;$'
+> Use the new hv_status_printk()s in hv_proc.c, hyperv-iommu.c, and
+> irqdomain.c hypercalls to aid debugging in the root partition.
 >=20
-> This shows a few places are using this pattern. But they are not
-> declaring variables afterwards.
->=20
+> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+> Reviewed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+> ---
+>  arch/x86/hyperv/irqdomain.c    |   6 +-
+>  drivers/hv/hv_common.c         | 129 ++++++++++++++++++++++++---------
+>  drivers/hv/hv_proc.c           |  10 +--
+>  drivers/iommu/hyperv-iommu.c   |   4 +-
+>  include/asm-generic/mshyperv.h |  13 ++++
+>  5 files changed, 118 insertions(+), 44 deletions(-)
+>
 
-The braces just looked a little odd, particularly the way they are indented=
-. Another
-alternative is to move the variable to function scope, and avoid the issue =
-altogether.
-But I'm fine regardless of which approach you take, including keeping it li=
-ke it is.
+[snip]
+=20
+> +
+> +struct hv_status_info {
+> +	char *string;
+> +	int errno;
+> +	u16 code;
+> +};
+> +
+> +/*
+> + * Note on the errno mappings:
+> + * A failed hypercall is usually only recoverable (or loggable) near
+> + * the call site where the HV_STATUS_* code is known. So the errno
+> + * it gets converted to is not too useful further up the stack.
+> + * Provide a few mappings that could be useful, and revert to -EIO
+> + * as a fallback.
+> + */
+> +static const struct hv_status_info hv_status_infos[] =3D {
+> +#define _STATUS_INFO(status, errno) { #status, (errno), (status) }
+> +	_STATUS_INFO(HV_STATUS_SUCCESS,				0),
+> +	_STATUS_INFO(HV_STATUS_INVALID_HYPERCALL_CODE,		-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_INVALID_HYPERCALL_INPUT,		-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_INVALID_ALIGNMENT,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_INVALID_PARAMETER,		-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_ACCESS_DENIED,			-EIO),
+> +	_STATUS_INFO(HV_STATUS_INVALID_PARTITION_STATE,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_OPERATION_DENIED,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_UNKNOWN_PROPERTY,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_PROPERTY_VALUE_OUT_OF_RANGE,	-EIO),
+> +	_STATUS_INFO(HV_STATUS_INSUFFICIENT_MEMORY,		-ENOMEM),
+> +	_STATUS_INFO(HV_STATUS_INVALID_PARTITION_ID,		-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_INVALID_VP_INDEX,		-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_NOT_FOUND,			-EIO),
+> +	_STATUS_INFO(HV_STATUS_INVALID_PORT_ID,			-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_INVALID_CONNECTION_ID,		-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_INSUFFICIENT_BUFFERS,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_NOT_ACKNOWLEDGED,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_INVALID_VP_STATE,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_NO_RESOURCES,			-EIO),
+> +	_STATUS_INFO(HV_STATUS_PROCESSOR_FEATURE_NOT_SUPPORTED,	-EIO),
+> +	_STATUS_INFO(HV_STATUS_INVALID_LP_INDEX,		-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_INVALID_REGISTER_VALUE,		-EINVAL),
+> +	_STATUS_INFO(HV_STATUS_INVALID_LP_INDEX,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_INVALID_REGISTER_VALUE,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_OPERATION_FAILED,		-EIO),
+> +	_STATUS_INFO(HV_STATUS_TIME_OUT,			-EIO),
+> +	_STATUS_INFO(HV_STATUS_CALL_PENDING,			-EIO),
+> +	_STATUS_INFO(HV_STATUS_VTL_ALREADY_ENABLED,		-EIO),
+> +#undef _STATUS_INFO
+> +};
+> +
+> +static inline const struct hv_status_info *find_hv_status_info(u64 hv_st=
+atus)
+> +{
+> +	int i;
+> +	u16 code =3D hv_result(hv_status);
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(hv_status_infos); ++i) {
+> +		const struct hv_status_info *info =3D &hv_status_infos[i];
+> +
+> +		if (info->code =3D=3D code)
+> +			return info;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +/* Convert a hypercall result into a linux-friendly error code. */
+> +int hv_result_to_errno(u64 status)
+> +{
+> +	const struct hv_status_info *info;
+> +
+> +	/* hv_do_hypercall() may return U64_MAX, hypercalls aren't possible */
+> +	if (unlikely(status =3D=3D U64_MAX))
+> +		return -EOPNOTSUPP;
+> +
+> +	info =3D find_hv_status_info(status);
+> +	if (info)
+> +		return info->errno;
+> +
+> +	return -EIO;
+> +}
+> +EXPORT_SYMBOL_GPL(hv_result_to_errno);
+> +
+> +const char *hv_result_to_string(u64 status)
+> +{
+> +	const struct hv_status_info *info;
+> +
+> +	if (unlikely(status =3D=3D U64_MAX))
+> +		return "Hypercall page missing!";
+> +
+> +	info =3D find_hv_status_info(status);
+> +	if (info)
+> +		return info->string;
+> +
+> +	return "Unknown";
+> +}
+> +EXPORT_SYMBOL_GPL(hv_result_to_string);
 
-> > I learn something new every day! :-)
-> >
->=20
-> Yep, me too.
->=20
-> Thanks for reviewing the code. Nuno will address the comments. I can fix
-> them up.
+I think the table-driven approach worked out pretty well. But here's a vers=
+ion that
+is even more compact, and avoids the duplicate testing for U64_MAX and havi=
+ng
+to special case both U64_MAX and not finding a match:
 
-FYI, I may submit a few more comments on the v6 version of the patches.
-If there are changes you want to make based on my comments, I don't care
-if you fix up the existing patches, or take them later as follow up patches=
-.
-And of course, you may choose to not make changes.
++
++struct hv_status_info {
++	char *string;
++	int errno;
++	int code;
++};
++
++/*
++ * Note on the errno mappings:
++ * A failed hypercall is usually only recoverable (or loggable) near
++ * the call site where the HV_STATUS_* code is known. So the errno
++ * it gets converted to is not too useful further up the stack.
++ * Provide a few mappings that could be useful, and revert to -EIO
++ * as a fallback.
++ */
++static const struct hv_status_info hv_status_infos[] =3D {
++#define _STATUS_INFO(status, errno) { #status, (errno), (status) }
++	_STATUS_INFO(HV_STATUS_SUCCESS,				0),
++	_STATUS_INFO(HV_STATUS_INVALID_HYPERCALL_CODE,		-EINVAL),
++	_STATUS_INFO(HV_STATUS_INVALID_HYPERCALL_INPUT,		-EINVAL),
++	_STATUS_INFO(HV_STATUS_INVALID_ALIGNMENT,		-EIO),
++	_STATUS_INFO(HV_STATUS_INVALID_PARAMETER,		-EINVAL),
++	_STATUS_INFO(HV_STATUS_ACCESS_DENIED,			-EIO),
++	_STATUS_INFO(HV_STATUS_INVALID_PARTITION_STATE,		-EIO),
++	_STATUS_INFO(HV_STATUS_OPERATION_DENIED,		-EIO),
++	_STATUS_INFO(HV_STATUS_UNKNOWN_PROPERTY,		-EIO),
++	_STATUS_INFO(HV_STATUS_PROPERTY_VALUE_OUT_OF_RANGE,	-EIO),
++	_STATUS_INFO(HV_STATUS_INSUFFICIENT_MEMORY,		-ENOMEM),
++	_STATUS_INFO(HV_STATUS_INVALID_PARTITION_ID,		-EINVAL),
++	_STATUS_INFO(HV_STATUS_INVALID_VP_INDEX,		-EINVAL),
++	_STATUS_INFO(HV_STATUS_NOT_FOUND,			-EIO),
++	_STATUS_INFO(HV_STATUS_INVALID_PORT_ID,			-EINVAL),
++	_STATUS_INFO(HV_STATUS_INVALID_CONNECTION_ID,		-EINVAL),
++	_STATUS_INFO(HV_STATUS_INSUFFICIENT_BUFFERS,		-EIO),
++	_STATUS_INFO(HV_STATUS_NOT_ACKNOWLEDGED,		-EIO),
++	_STATUS_INFO(HV_STATUS_INVALID_VP_STATE,		-EIO),
++	_STATUS_INFO(HV_STATUS_NO_RESOURCES,			-EIO),
++	_STATUS_INFO(HV_STATUS_PROCESSOR_FEATURE_NOT_SUPPORTED,	-EIO),
++	_STATUS_INFO(HV_STATUS_INVALID_LP_INDEX,		-EINVAL),
++	_STATUS_INFO(HV_STATUS_INVALID_REGISTER_VALUE,		-EINVAL),
++	_STATUS_INFO(HV_STATUS_INVALID_LP_INDEX,		-EIO),
++	_STATUS_INFO(HV_STATUS_INVALID_REGISTER_VALUE,		-EIO),
++	_STATUS_INFO(HV_STATUS_OPERATION_FAILED,		-EIO),
++	_STATUS_INFO(HV_STATUS_TIME_OUT,			-EIO),
++	_STATUS_INFO(HV_STATUS_CALL_PENDING,			-EIO),
++	_STATUS_INFO(HV_STATUS_VTL_ALREADY_ENABLED,		-EIO),
++	{"Hypercall page missing!", -EOPNOTSUPP, -1}, /* code -1 is "no hypercall=
+ page" */
++	{"Unknown", -EIO, -2},  /* code -2 is "Not found" entry; must be last */
++#undef _STATUS_INFO
++};
++
++static inline const struct hv_status_info *find_hv_status_info(u64 hv_stat=
+us)
++{
++	int i, code;
++	const struct hv_status_info *info;
++
++	/* hv_do_hypercall() may return U64_MAX, hypercalls aren't possible */
++	if (unlikely(hv_status =3D=3D U64_MAX))
++		code =3D -1;
++	else
++		code =3D hv_result(hv_status);
++
++	for (i =3D 0; i < ARRAY_SIZE(hv_status_infos); ++i) {
++		info =3D &hv_status_infos[i];
++		if (info->code =3D=3D code || info->code =3D=3D -2)
++			break;
++	}
++
++	return info;
++}
++
++/* Convert a hypercall result into a linux-friendly error code. */
++int hv_result_to_errno(u64 status)
++{
++	return find_hv_status_info(status)->errno;
++}
++EXPORT_SYMBOL_GPL(hv_result_to_errno);
++
++const char *hv_result_to_string(u64 status)
++{
++	return find_hv_status_info(status)->string;
++}
++EXPORT_SYMBOL_GPL(hv_result_to_string);
+
+It could be even more compact by exporting find_hv_status_info() and
+letting  hv_result_to_errno() and hv_result_to_string() be #defines to
+find_hv_status_info()->errno and find_hv_status_info()->string,
+respectively.
+
+Note that in struct hv_status_info, the "code" field is defined as "int"
+instead of "u16" so that it can contain sentinel values -1 and -2 that
+won't overlap with HV_STATUS_* values.
+
+Anyway, just a suggestion. The current code works from what I can
+see.
 
 Michael
 
