@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-10952-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10953-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B936A68419
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 05:08:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30E0BA6842A
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 05:17:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6133424C79
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 04:08:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F8A716CA42
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 04:17:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87A320DD7D;
-	Wed, 19 Mar 2025 04:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD5122489F;
+	Wed, 19 Mar 2025 04:17:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QCHO07m7"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="BBdngRFj"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CEA42AEE2;
-	Wed, 19 Mar 2025 04:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B52FABA3D;
+	Wed, 19 Mar 2025 04:17:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742357292; cv=none; b=BCJKsrBiadc9Wgaio+p7svQCt7wBAZuGf3ttwhXk19ql/h0bQqisR31O9ZO2+fcnlJvlN4jpz/j2UES6iFiHpKwjtgB/jj2nLbJqTc+bXYQTvaqUT4ca3LL3TF1+uipK/fZ7mOYid9Pnv5Rlq9TCvchShKX9vLBvopWaZXQ7UTQ=
+	t=1742357869; cv=none; b=C9oKu9VThXi06Qy7UwMBcOWISREre285kLPC8LiSOzb6AR25rbKV60tn2HV/+2Mf2gswma1h82qQdP1oHqiVtML2BR4aIufKXqxQHfqmdcOyXza9Th7jLVpID9AaSForoYdzNpA0QCjsLOVJG4E+ZcKICoVSp45raGIZpCDJjdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742357292; c=relaxed/simple;
-	bh=aXxiyaT5dJvoxqaVKrkZrfJmcohOnXPw7gbvR+WA4Lo=;
+	s=arc-20240116; t=1742357869; c=relaxed/simple;
+	bh=7tN0hl+UoM/pMwvlvpmI4JcFPRDTf9VN+CH+JWsq6dE=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=lCipVFsdBswzl/7dk1gw6aqElickCg2H+uiQ+/8/IFpOFOVlUDt2EOyBLXRtpx22xeQPty7FXsRXoOTIGFM4XYlObt0sK5x42ege5u2Th+Jh5zIILI6DdXx+vQalULsBvtsi+/Kja3wC4JOMt+cbleeag0RrAbe30OcP6uVf13o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QCHO07m7; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=TiJG2cZ9zFClWaQXA/C6euo5A0nR06xFNMlfIJE6FcZyMC8xJ5t1azVPVJ0TO6B1rh6hpd/x105hPPgW4A8ImENEQDQPVVMueFhwVBVCE/OqyhJSmCHZztvpBgbOfbbapyLHh9Y0XGJyrZ90A46a1Ii7MTKVKFPwDMnB/QKbnh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=BBdngRFj; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.65.32.26] (unknown [20.236.10.66])
-	by linux.microsoft.com (Postfix) with ESMTPSA id EF9092025373;
-	Tue, 18 Mar 2025 21:08:09 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EF9092025373
+Received: from [100.65.32.26] (unknown [20.236.10.120])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 834772025373;
+	Tue, 18 Mar 2025 21:17:45 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 834772025373
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1742357291;
-	bh=ONzR6HCwazaLp6Y5MCq95xw25jXEGlNy15BjbvDTfa4=;
+	s=default; t=1742357866;
+	bh=i81vfxx6rnbOmwz/BGTkep+/cjFf5C0tzqdntf/uZX0=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=QCHO07m7FpcYme3eveUH4scwJxhTwlntXMBs+EPRpfKCCcTXCFuKDticTp8t3de3x
-	 gyuFRbSvX+QysyHSsHhqX/3WT8FgeDuzFH9Nss+Kt6sIr2qv4aUbv49Tyr+tJTnrlT
-	 usYh3V7lmxcE5jboBQuAqbZ04GiOUg+TOyIQ3fDY=
-Message-ID: <1a60c4f3-b93b-4bc2-9ded-07a1acd9d754@linux.microsoft.com>
-Date: Tue, 18 Mar 2025 21:08:16 -0700
+	b=BBdngRFjrm3qc8p3g6SsP6YR+S/l76EJSt+6UA9xAvo2M1xlEwANRzngSNQMKNQbI
+	 cTdh29l+lduUf0ovrmFq6mD+e4+hi6eBh9M1vDbP9QZmnxv8RWuOSzRQTDwnauV4Yb
+	 49k43AlBkgAET9m0J04z5EQLbb/kzxPuW8ODh9FM=
+Message-ID: <06d2ad24-7554-4e7c-86f7-9e22828cb725@linux.microsoft.com>
+Date: Tue, 18 Mar 2025 21:17:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -65,33 +65,36 @@ Cc: linux-hyperv@vger.kernel.org, x86@kernel.org,
  gregkh@linuxfoundation.org, vkuznets@redhat.com, prapal@linux.microsoft.com,
  anrayabh@linux.microsoft.com, rafael@kernel.org, lenb@kernel.org,
  corbet@lwn.net
-Subject: Re: [PATCH v6 03/10] arm64/hyperv: Add some missing functions to
- arm64
+Subject: Re: [PATCH v6 01/10] hyperv: Log hypercall status codes as strings
 To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 References: <1741980536-3865-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1741980536-3865-4-git-send-email-nunodasneves@linux.microsoft.com>
+ <1741980536-3865-2-git-send-email-nunodasneves@linux.microsoft.com>
 From: Easwar Hariharan <eahariha@linux.microsoft.com>
 Content-Language: en-US
-In-Reply-To: <1741980536-3865-4-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1741980536-3865-2-git-send-email-nunodasneves@linux.microsoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 3/14/2025 12:28 PM, Nuno Das Neves wrote:
-> These non-nested msr and fast hypercall functions are present in x86,
-> but they must be available in both architectures for the root partition
-> driver code.
+> Introduce hv_status_printk() macros as a convenience to log hypercall
+> errors, formatting them with the status code (HV_STATUS_*) as a raw hex
+> value and also as a string, which saves some time while debugging.
 > 
-> While at it, remove the redundant 'extern' keywords from the
-> hv_do_hypercall() variants in asm-generic/mshyperv.h.
+> Create a table of HV_STATUS_ codes with strings and mapped errnos, and
+> use it for hv_result_to_string() and hv_result_to_errno().
+> 
+> Use the new hv_status_printk()s in hv_proc.c, hyperv-iommu.c, and
+> irqdomain.c hypercalls to aid debugging in the root partition.
 > 
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 > Reviewed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-> Reviewed-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  arch/arm64/hyperv/hv_core.c       | 17 +++++++++++++++++
->  arch/arm64/include/asm/mshyperv.h | 13 +++++++++++++
->  include/asm-generic/mshyperv.h    |  6 ++++--
->  3 files changed, 34 insertions(+), 2 deletions(-)
+>  arch/x86/hyperv/irqdomain.c    |   6 +-
+>  drivers/hv/hv_common.c         | 129 ++++++++++++++++++++++++---------
+>  drivers/hv/hv_proc.c           |  10 +--
+>  drivers/iommu/hyperv-iommu.c   |   4 +-
+>  include/asm-generic/mshyperv.h |  13 ++++
+>  5 files changed, 118 insertions(+), 44 deletions(-)
 > 
 
 Looks good to me.
