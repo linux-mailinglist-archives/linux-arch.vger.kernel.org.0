@@ -1,259 +1,214 @@
-Return-Path: <linux-arch+bounces-10937-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10938-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B300AA67E85
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 22:14:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94F4DA6811D
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 01:15:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8600019C36A3
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Mar 2025 21:14:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EDCD7A75F3
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 00:14:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5594206F08;
-	Tue, 18 Mar 2025 21:14:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFDEC2FA;
+	Wed, 19 Mar 2025 00:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="dFI2VrSs";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mQ/4TodD"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="nk345Hev"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7737E1;
-	Tue, 18 Mar 2025 21:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99E3380
+	for <linux-arch@vger.kernel.org>; Wed, 19 Mar 2025 00:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742332445; cv=none; b=HGTXiaR2SLJjNdHNZKM64MEePs0t6pZTKnAGmTs9JspnrPjMQ2GFBguEsDRrfDGfjoyhZEM26m7brkd0F6BFHHADhmFEgaS19DX8I18fWUoBMSYiFthox1fnxHSjN9Eti2ZWSdm19mppQBZoLQdGCsertgnMJlUM2mugjTMdGts=
+	t=1742343338; cv=none; b=LBBXbybeYdAIyOesb6lEWGpGkg4J4sRvw6kR8abNFFGapMFNp7YFxL+F4Xx2nOIIYtWZr/IMxddLP4fhU4gxR1i7Nz3nyc4XcfPIw5GqpitdieoRKzKkSAPMgZNEAN9SLUD6E0N90s1ky9iYBo6uxLEnsziwzRbst+s78lL5SBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742332445; c=relaxed/simple;
-	bh=GB0MKorwfNVgHASjmfnIgFFRgN0GQO0DS1Q/f1fURzE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=HMpjT2bTi787HyqmJ9TuAs2VR3pEEqg6FACQrg4j8gLzl+lFZmc4l6jt4rE696kU816C/gS+s7HPC1bLnJV7LCkmucaCyeF/gGtTjDQXzAQfxdyFtTmGjziuFinv11XQvvAl4+My4jrhwdLbK9lQfi6wInm33ySL3NfNW+lGXA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=dFI2VrSs; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mQ/4TodD; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 9B9911140098;
-	Tue, 18 Mar 2025 17:14:01 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Tue, 18 Mar 2025 17:14:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742332441;
-	 x=1742418841; bh=6Wnno4ANVKxueaFjx6I4DVJGzAoa07LKkIYejE1OybM=; b=
-	dFI2VrSsmJvKZXQEWv0b+6lLs6h2rrXpBXnD1WDs/tjYgHOrEPqjQWYfpgJLJ6Dz
-	0uDpMTiYauSbiQ4w2sPcdGkd+qAIZWKppygqbk/wfeUy/5S3ligXhQnU0UPnPamc
-	bMnZNv6U/QohqSlf4tad3QFXfd4U1AKDR7poUyd+1pJ8gXBV9d6Bb9QjJlapLC1t
-	L6Z5wDmWa1pm8yDStkhgRHlWgUQ3Niz8m597DS0xsI8YtDvYLdJyqscOVqMvw+LZ
-	hArMs2YXZ8HI8A61ETHkr8uZL+3lzuAJPMVGi3NUeWSmci/NXyfy/ISbdCjh1fb0
-	anJmKVtYQJFh0/k9ChTKyA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742332441; x=
-	1742418841; bh=6Wnno4ANVKxueaFjx6I4DVJGzAoa07LKkIYejE1OybM=; b=m
-	Q/4TodDV8ABnaVLbk4J9v4V2dkLG+MvRKig12GI7AQAb9/7YOBqOyG3ROJb+rr5d
-	cHKzOapNwmhS7uGqA9TEOIa4fTT9tWJhEFIUwYJptXONDrOnkYzF0pIZ7nPtP3hC
-	+rKCCB/jOvJ4vRY86cSe6324xoxM3LCh2Pa8gn4Zbg5TyDwdyPYNaIOjAGvwnSzr
-	FetD+Tyn4ZBnH0mVXa0Cke3SEYdYO0pMR/KIjeKNAP1pYyGHJrQtlvJGxlJVs+Of
-	rs0V6sz1QQHX+/1G7GvCuJu/qx61R2ofEcLYus0wSVWAmhbajW+aAC/F5vkG2s4R
-	/FYA+2ozaAXrAOXwmKv7g==
-X-ME-Sender: <xms:F-LZZy9i0AVgHg-YAxTpb124c99eTBx38tHM1-Qg2LszbHeO1h4RUQ>
-    <xme:F-LZZyskOj8tXApOtq1mDy3oRBPQp9YoKEYYnrbImc_SZkPjIwH4UaD9XJBdVucmL
-    9sQE7_nZuFAQ2MGioo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeefgeelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
-    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    vdejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrghlph
-    hhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghr
-    ohihsegtshhgrhhouhhprdgvuhdprhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrih
-    gurdgruhdprhgtphhtthhopehmrghtthhsthekkeesghhmrghilhdrtghomhdprhgtphht
-    thhopehnphhighhgihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuggvlhhlvghrse
-    hgmhigrdguvgdprhgtphhtthhopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhr
-    tghpthhtohepjhgrmhgvshdrsghothhtohhmlhgvhieshhgrnhhsvghnphgrrhhtnhgvrh
-    hshhhiphdrtghomhdprhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:F-LZZ4BgRMG0eAxsIote5hKKvCoaN4SXRlCZ_otOdfFFvz7XHT5_Ig>
-    <xmx:F-LZZ6eCs_NZ5WlasQgWvDs0mRuVxgDQ-EqMCMskWnEdubX_9LcrWQ>
-    <xmx:F-LZZ3NvCIv8H_n97d6jL42SkKKWBkml4iYZkXFnXNXQIBGxCj9UZw>
-    <xmx:F-LZZ0lio7_8obwVeZUmRWtis46Jpxj8QNkQYa_yPycLplbdyZZcrg>
-    <xmx:GeLZZ6iI2zTTRi4-1WdYuNqLi26yaA5Xh5sDeCMxyU0p-pxYSjTiEUKV>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 1A2B82220072; Tue, 18 Mar 2025 17:13:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1742343338; c=relaxed/simple;
+	bh=pHQtgKFyhe1UEM5H1CkXAkQ9ckxP7iar9/3rqYLA8vg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GQFNh92H9PwbzOIIzWTJ7QlBEDB1JKpn9JiubtGJGSSiBjrr/AWswa0VQmeYmPwXUPui2OMNlOHoN7/1A3Pzyusaaqrp2+z0TuPJwXaL15KeNV3JOcF8+6bPx6FYUSN1/zkE8zQoi+LugnRVIJUssHf0LSbfbOxUHPr+zAbxSvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=nk345Hev; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-22359001f1aso7640055ad.3
+        for <linux-arch@vger.kernel.org>; Tue, 18 Mar 2025 17:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1742343336; x=1742948136; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+sBSgchPHWEySP2bfLrt8df0wwyowAu2mvbj20TByA=;
+        b=nk345HevUR7Q//BQX4OH2ApWTTxQWu7RzOO4UWTlq6Z+7yBat+zUay0hQOo3Xq9cUS
+         tr5tXyf2nFLDLxF3AWvhvuxljTtoNpPXFx5wJv+rdsQUjMXb9wlz/ap314zIRJTxT0wc
+         guhhaJT2dEcojI086aYopFnWAV51/HgX8zp+k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742343336; x=1742948136;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D+sBSgchPHWEySP2bfLrt8df0wwyowAu2mvbj20TByA=;
+        b=FEAQDGmcsZAm/HVHLEm9NRNlpUps00kGGuTjxIC8UVxcqum1LvBB5La7UOc1KY4Plj
+         eBGx2ZTooqryyOnu0AqIw8CyKkrrpl+rphocwkPS0TgjHrbVEYHgeRaRD31O3ycswVa/
+         Lscn6upg+cgdnZ3YkUADlv9MZGdRvv8P4YPl+sfyCuOsl18PoUVKADof00z1sa3wSzOv
+         XxDtpG/9oJhE9dnYqa0Bmij0w75L0KkNApr7o+XRzIeHeZAUMLZKig48RJ1rlx7BSGrr
+         L0qwyFFijsa4fknAZrm9RLfbWz00ZzPIpCjHoZkj7Q4amthPyoJ6M8snY7F8D52OLxmp
+         MVbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUfYJbYOSPl15GQubwucwG3e3WIWWlmK7DeZXi6UQQXWpS2INlnVxGpUpbfRj8J8lqZrFlB50GiEyOG@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTWAkHUV9L9NDsWjQY1V1uFAIKF22f0aIWknDJdhD6uPzUHR9I
+	N6N+YzpjElLkKigpnPbVehxYLxQNNOQ8G8AcstvK1rLgS/yw5lgt9FpRLqZuG7s=
+X-Gm-Gg: ASbGncs9k1+5mX9CO1LctY5g899zoNBixJVSafObg6W+Tu3nQ36rD2YCyD0QJrPeSd0
+	0wdiO0b1RQseMP6VP5nZJUbvxV8YoAbxY/ZJ9BiqP5Y9zUxAzVfKFmhzjL0LhYkUXtLqqJcxT6P
+	lH68+yL6LRL6lAyx/A57vDcI3QSPQnwsY8RPwgGAwqyJ+TvgexXcOvntI9RnQX5QzmrLHPpp8D8
+	nU/ZYJ2hxTZY3b3xPFb5gGG50ePy/2iaC+H1+fyAt7omZZsOhylnUofeurGlWuUXXQs7wxlCoJr
+	MOht1xDAL1QCtQSBt573dNxfN4M5vE9jrnliAHDX61kZ3RL97h+w
+X-Google-Smtp-Source: AGHT+IFUgmcp5ziiDMwrHetBewK21buOCfSn83hSdnwL6/awTXwLICTCoy55xovATS5hzbKk/tpnkQ==
+X-Received: by 2002:a17:902:f646:b0:223:90ec:80f0 with SMTP id d9443c01a7336-22649a3170emr9678415ad.22.1742343336040;
+        Tue, 18 Mar 2025 17:15:36 -0700 (PDT)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-225c68a4876sm101281375ad.70.2025.03.18.17.15.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Mar 2025 17:15:35 -0700 (PDT)
+From: Joe Damato <jdamato@fastly.com>
+To: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	asml.silence@gmail.com,
+	linux-fsdevel@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	viro@zeniv.linux.org.uk,
+	jack@suse.cz,
+	kuba@kernel.org,
+	shuah@kernel.org,
+	sdf@fomichev.me,
+	mingo@redhat.com,
+	arnd@arndb.de,
+	brauner@kernel.org,
+	akpm@linux-foundation.org,
+	tglx@linutronix.de,
+	jolsa@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Joe Damato <jdamato@fastly.com>
+Subject: [RFC -next 00/10] Add ZC notifications to splice and sendfile
+Date: Wed, 19 Mar 2025 00:15:11 +0000
+Message-ID: <20250319001521.53249-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T334a9a9a7e89e162
-Date: Tue, 18 Mar 2025 22:13:35 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nathan Chancellor" <nathan@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Matt Turner" <mattst88@gmail.com>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Greg Ungerer" <gerg@linux-m68k.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "Julian Vetter" <julian@outer-limits.org>,
- "Bjorn Helgaas" <bhelgaas@google.com>, linux-alpha@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org
-Message-Id: <5b2779f8-573d-401e-817e-979e02f811d3@app.fastmail.com>
-In-Reply-To: <20250318203906.GA4089579@ax162>
-References: <20250315105907.1275012-1-arnd@kernel.org>
- <20250315105907.1275012-6-arnd@kernel.org> <20250318203906.GA4089579@ax162>
-Subject: Re: [PATCH 5/6] mips: drop GENERIC_IOMAP wrapper
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 18, 2025, at 21:39, Nathan Chancellor wrote:
-> On Sat, Mar 15, 2025 at 11:59:06AM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+Greetings:
 
->>  void __ioread64_copy(void *to, const void __iomem *from, size_t count);
->>  
->> +#ifdef CONFIG_PCI_DRIVERS_LEGACY
->> +struct pci_dev;
->> +void pci_iounmap(struct pci_dev *dev, void __iomem *addr);
->> +#define pci_iounmap pci_iounmap
->> +#endif
->> +
->>  #include <asm-generic/io.h>
->>  
->>  static inline void *isa_bus_to_virt(unsigned long address)
->> diff --git a/arch/mips/lib/iomap-pci.c b/arch/mips/lib/iomap-pci.c
->> index a9cb28813f0b..2f82c776c6d0 100644
->> --- a/arch/mips/lib/iomap-pci.c
->> +++ b/arch/mips/lib/iomap-pci.c
->> @@ -43,4 +43,13 @@ void __iomem *__pci_ioport_map(struct pci_dev *dev,
->>  	return (void __iomem *) (ctrl->io_map_base + port);
->>  }
->>  
->> +void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
->> +{
->> +	struct pci_controller *ctrl = dev->bus->sysdata;
->> +	void __iomem *base = (void __iomem *)ctrl->io_map_base;
->> +
->> +	if (addr < base || addr > (base + resource_size(ctrl->io_resource)))
->> +		iounmap(addr);
->> +}
->> +
->>  #endif /* CONFIG_PCI_DRIVERS_LEGACY */
->> -- 
->> 2.39.5
->> 
->
-> This change as commit 976bf3aec388 ("mips: drop GENERIC_IOMAP wrapper") in
-> -next introduces new instances of -Wnull-pointer-arithmetic when building
-> certain mips configurations with clang.
->
+Welcome to the RFC.
 
-Thanks for the report, I missed that the generic ioport_map() function
-is missing the PCI_IOBASE macro, we should probably remove that from
-the asm-generic/io.h header and require architectures to define it
-themselves, since the NULL fallback is pretty much always wrong.
+Currently, when a user app uses sendfile the user app has no way to know
+if the bytes were transmit; sendfile simply returns, but it is possible
+that a slow client on the other side may take time to receive and ACK
+the bytes. In the meantime, the user app which called sendfile has no
+way to know whether it can overwrite the data on disk that it just
+sendfile'd.
 
-There is also a type mismatch between the MIPS
-PCI_IOBASE/mips_io_port_base and the one that asm-generic/io.h
-expects, so I had to add a couple of extra typecasts, which
-makes it rather ugly, but the change below seems to work.
+One way to fix this is to add zerocopy notifications to sendfile similar
+to how MSG_ZEROCOPY works with sendmsg. This is possible thanks to the
+extensive work done by Pavel [1].
 
-     Arnd
+To support this, two important user ABI changes are proposed:
 
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 1fe56d1870a6..78c6573f91f2 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -544,12 +544,16 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
- 
- void __ioread64_copy(void *to, const void __iomem *from, size_t count);
- 
--#ifdef CONFIG_PCI_DRIVERS_LEGACY
-+#if defined(CONFIG_PCI) && defined(CONFIG_PCI_DRIVERS_LEGACY)
- struct pci_dev;
- void pci_iounmap(struct pci_dev *dev, void __iomem *addr);
- #define pci_iounmap pci_iounmap
- #endif
- 
-+#ifndef PCI_IOBASE
-+#define PCI_IOBASE ((void __iomem *)mips_io_port_base)
-+#endif
-+
- #include <asm-generic/io.h>
- 
- static inline void *isa_bus_to_virt(unsigned long address)
-diff --git a/arch/mips/include/asm/mach-loongson64/spaces.h b/arch/mips/include/asm/mach-loongson64/spaces.h
-index ce04e998a37b..dbd26db5f2c5 100644
---- a/arch/mips/include/asm/mach-loongson64/spaces.h
-+++ b/arch/mips/include/asm/mach-loongson64/spaces.h
-@@ -7,9 +7,10 @@
- #endif /* CONFIG_64BIT */
- 
- /* Skip 128k to trap NULL pointer dereferences */
--#define PCI_IOBASE	_AC(0xc000000000000000 + SZ_128K, UL)
-+#define PCI_PORT_BASE	_AC(0xc000000000000000 + SZ_128K, UL)
-+#define PCI_IOBASE	(void __iomem *)PCI_PORT_BASE
- #define PCI_IOSIZE	SZ_16M
--#define MAP_BASE	(PCI_IOBASE + PCI_IOSIZE)
-+#define MAP_BASE	(PCI_PORT_BASE + PCI_IOSIZE)
- 
- #define IO_SPACE_LIMIT  (PCI_IOSIZE - 1)
- 
-diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-index a9f0570d0f04..a63d106c89c6 100644
---- a/arch/mips/include/asm/mach-ralink/spaces.h
-+++ b/arch/mips/include/asm/mach-ralink/spaces.h
-@@ -2,7 +2,7 @@
- #ifndef __ASM_MACH_RALINK_SPACES_H_
- #define __ASM_MACH_RALINK_SPACES_H_
- 
--#define PCI_IOBASE	mips_io_port_base
-+#define PCI_IOBASE	(void __iomem *)mips_io_port_base
- #define PCI_IOSIZE	SZ_64K
- #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
- 
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index a35dd7311795..b9f90f33fc9a 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -128,7 +128,7 @@ void __init prom_init(void)
- 	}
- 
- 	/* init base address of io space */
--	set_io_port_base(PCI_IOBASE);
-+	set_io_port_base((unsigned long)PCI_IOBASE);
- 
- 	if (loongson_sysconf.early_config)
- 		loongson_sysconf.early_config();
-@@ -178,7 +178,7 @@ static int __init add_legacy_isa_io(struct fwnode_handle *fwnode, resource_size_
- 		return -EINVAL;
- 	}
- 
--	vaddr = PCI_IOBASE + range->io_start;
-+	vaddr = (unsigned long)PCI_IOBASE + range->io_start;
- 
- 	vmap_page_range(vaddr, vaddr + size, hw_start, pgprot_device(PAGE_KERNEL));
+  - A new splice flag, SPLICE_F_ZC, which allows users to signal that
+    splice should generate zerocopy notifications if possible.
+
+  - A new system call, sendfile2, which is similar to sendfile64 except
+    that it takes an additional argument, flags, which allows the user
+    to specify either a "regular" sendfile or a sendfile with zerocopy
+    notifications enabled.
+
+In either case, user apps can read notifications from the error queue
+(like they would with MSG_ZEROCOPY) to determine when their call to
+sendfile has completed.
+
+I tested this RFC using the selftest modified in the last patch and also
+by using the selftest between two different physical hosts:
+
+# server
+./msg_zerocopy -4 -i eth0 -t 2 -v -r tcp
+
+# client (does the sendfiling)
+dd if=/dev/zero of=sendfile_data bs=1M count=8
+./msg_zerocopy -4 -i eth0 -D $SERVER_IP -v -l 1 -t 2 -z -f sendfile_data tcp
+
+I would love to get high level feedback from folks on a few things:
+
+  - Is this functionality, at a high level, something that would be
+    desirable / useful? I think so, but I'm of course I am biased ;)
+
+  - Is this approach generally headed in the right direction? Are the
+    proposed user ABI changes reasonable?
+
+If the above two points are generally agreed upon then I'd welcome
+feedback on the patches themselves :)
+
+This is kind of a net thing, but also kind of a splice thing so hope I
+am sending this to right places to get appropriate feedback. I based my
+code on the vfs/for-next tree, but am happy to rebase on another tree if
+desired. The cc-list got a little out of control, so I manually trimmed
+it down quite a bit; sorry if I missed anyone I should have CC'd in the
+process.
+
+Thanks,
+Joe
+
+[1]: https://lore.kernel.org/netdev/cover.1657643355.git.asml.silence@gmail.com/
+
+Joe Damato (10):
+  splice: Add ubuf_info to prepare for ZC
+  splice: Add helper that passes through splice_desc
+  splice: Factor splice_socket into a helper
+  splice: Add SPLICE_F_ZC and attach ubuf
+  fs: Add splice_write_sd to file operations
+  fs: Extend do_sendfile to take a flags argument
+  fs: Add sendfile2 which accepts a flags argument
+  fs: Add sendfile flags for sendfile2
+  fs: Add sendfile2 syscall
+  selftests: Add sendfile zerocopy notification test
+
+ arch/alpha/kernel/syscalls/syscall.tbl      |  1 +
+ arch/arm/tools/syscall.tbl                  |  1 +
+ arch/arm64/tools/syscall_32.tbl             |  1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |  1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |  1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |  1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |  1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |  1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |  1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |  1 +
+ arch/s390/kernel/syscalls/syscall.tbl       |  1 +
+ arch/sh/kernel/syscalls/syscall.tbl         |  1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |  1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |  1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |  1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |  1 +
+ fs/read_write.c                             | 40 +++++++---
+ fs/splice.c                                 | 87 +++++++++++++++++----
+ include/linux/fs.h                          |  2 +
+ include/linux/sendfile.h                    | 10 +++
+ include/linux/splice.h                      |  7 +-
+ include/linux/syscalls.h                    |  2 +
+ include/uapi/asm-generic/unistd.h           |  4 +-
+ net/socket.c                                |  1 +
+ scripts/syscall.tbl                         |  1 +
+ tools/testing/selftests/net/msg_zerocopy.c  | 54 ++++++++++++-
+ tools/testing/selftests/net/msg_zerocopy.sh |  5 ++
+ 27 files changed, 200 insertions(+), 29 deletions(-)
+ create mode 100644 include/linux/sendfile.h
+
+
+base-commit: 2e72b1e0aac24a12f3bf3eec620efaca7ab7d4de
+-- 
+2.43.0
+
 
