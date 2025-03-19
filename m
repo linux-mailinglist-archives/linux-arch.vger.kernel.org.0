@@ -1,244 +1,213 @@
-Return-Path: <linux-arch+bounces-10969-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10970-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 993ABA6982B
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 19:38:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62703A69851
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 19:48:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAB9A3B78E2
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 18:37:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0BC74807EF
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 18:48:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0161920F088;
-	Wed, 19 Mar 2025 18:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEBD214AD29;
+	Wed, 19 Mar 2025 18:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="rY4aAwr7"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xaQi4Ef4"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36BD20B20D
-	for <linux-arch@vger.kernel.org>; Wed, 19 Mar 2025 18:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44A820AF7B;
+	Wed, 19 Mar 2025 18:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742409455; cv=none; b=gay8ISXgZtXcp9NX/UPb3upvqafo1N6Qwv7fcH6IEI759CR5B2g285wU9+QSeRWYLn5cgCnsmf2UqSTySHBX8aPlDZpicouxQEyzkiynBS2B6niiaGpMueZSju0ADeE9h2KPn9LBNbCJ7ARZQiKlvzb4eqUK1+tZl5vmpq+eMDI=
+	t=1742410075; cv=none; b=j0O2vegd6vxliIbvNKei6yMrs5AK4Tr4KffBXOHelbCi9UvXVAtmBnHoXV8jjxxTvk78mE/6wTO/zaDF2ZqhRZIxgUSuvsMQsXH3U+hU9nLHz2+r0lGDmkzuw98WsYzku4fxrQLk0Qu3ACmLM4Xs8DqJvM2sqY9ga/opY6mtY8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742409455; c=relaxed/simple;
-	bh=Kfa8G/vNjaGYGNW0JEQ3dlKDH4NKHYZbxfNqGPSjPo4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=eHsBY6CCSw8DNmGYr8SfExnxT9SWrHCuRWciIVGnD3zYIlojiWqVrrkY7aRg1iXvApSde4hTxcFs/EEZdX4gtrtXybVnFnLdJvLJeURoUsPi/y3rSaFv43rXL/7T8hDklg2QJThPhfepkIAz0cmFiIsAQ4W4nP/mH3zT6ezu4JA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=rY4aAwr7; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-85e15dc8035so24344639f.0
-        for <linux-arch@vger.kernel.org>; Wed, 19 Mar 2025 11:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1742409452; x=1743014252; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tOU2TrWkWar/3vjS2cdu6jloemO8+tWZ3XM9RPU5SBM=;
-        b=rY4aAwr7MzroRirr+3kEnWfq9zhfrbVCQVhgq+OcvrjnPB2546k1DLITEOxdeavOYw
-         J/xv7QmLV2guZ0GpbEcemzbnmVSzjYkDJp7PgXCwo5dtCEP9UuXjcb92T5Tttx71t1H1
-         vkfVxatNPm6NRhDBdTWuTkdv0Jhw9U5pV20pDh8fdhJgHZvsd+6p9fXwMCdyBG012J9O
-         OPzVwQY96LHOn9KtXYAUmlwMV9Sc6NMvEM0w8bq+6QAk62DCCQEuqNgLJbLJ25CBaHfx
-         TKswsw1IPaW6VXT+b/mKN4vDGNsyA8ro3GgbgUEb30mw5dK9HB11bEQDcBGCkR9s0FYE
-         OFFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742409452; x=1743014252;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tOU2TrWkWar/3vjS2cdu6jloemO8+tWZ3XM9RPU5SBM=;
-        b=DLtiLoyiA1YagzZ+QQ26Si8aSMJB2lWtOtpR8MnekLJaGCyudXHfQU/7PS1SwB9/pf
-         ueaEJxoYI/TBCgLQtGHZdViTxbpj8zYCIBMOnJ8SUv9JijVfqmM8+cvyqZeSZNpsNqgN
-         I9WLq0CxlYd7ur0BoKdgolZcx3+nMBvlgCyb3oOtmYt9QiFuPOaDUDgbIfAMe0lapZu4
-         tU6rLK4K+RkcR9ldMtoDSLLVr7MFSG2VIUqGE2duNqpKH2VeIX0x5HF1pypFyAqWxZQR
-         HVEbyToW3paFt9xl5813ztbZo/eyOijJnSKIAeR7MrEPe74SY132Hb9wldfPPURM13O/
-         ZMVw==
-X-Forwarded-Encrypted: i=1; AJvYcCX9PdIcCmLr+MVoaAM2kRoQDZ0p36nHyq2F84cQutBvD3Z2BFxDGXpZ1tT5MTGNhxf2NTcGDL0zrWj7@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyfEmg7I6kKx4SBBTSgb4hr4N/TovWNjwf3XI/VmcDOgsA9XWq
-	Bp9KwzlB2QLtOqD+oAeKKEA/Y+AY19ChqKp6UTGRCzj87eAJu7QcBvJaHTTK844=
-X-Gm-Gg: ASbGncu28HjGpQCTQ91dYFyu61QuLaNDlUeRC5Y0kD+42sYgSFJWWqYiy2SFIj/LsyG
-	axeFq7e3+VoOsawAqQgFA431M8ys20zW2b2vPbvf1ixoNBIi3BUvTI4CrTQSZ1Q+GBRN/XerOTl
-	aupjfCD0oRYcGbE0ltxD8OVOW/bGwThoKPcUL4034CiTQoRfeMTJKI1DFvjAT7m4TsEWlwbSfNB
-	voWoRcZHeD2uTfcYxYg38WyMynJwAj322ije8D2qFZCiMwz5myIuobxpm5fFmdTiqc4l692Y+/2
-	sT5glOMG+Ai3Thd5IckbtJArmV+8jAkP95sHMU+7usnuq8aBtqs=
-X-Google-Smtp-Source: AGHT+IECcYnfpxvlC0iwBwA5lQBypcp+EaJg23jC62c//8nQymJPnN/mdYzW4CY8JWkJ1PAm8TMlJw==
-X-Received: by 2002:a05:6602:3587:b0:85d:a69f:371d with SMTP id ca18e2360f4ac-85e137b6f82mr529954939f.4.1742409451617;
-        Wed, 19 Mar 2025 11:37:31 -0700 (PDT)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f263702081sm3364488173.14.2025.03.19.11.37.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Mar 2025 11:37:31 -0700 (PDT)
-Message-ID: <dc3ebb86-f4b2-443a-9b0d-f5470fd773f1@kernel.dk>
-Date: Wed, 19 Mar 2025 12:37:29 -0600
+	s=arc-20240116; t=1742410075; c=relaxed/simple;
+	bh=Z67lfJxfXOSQRQn2QgIM7XZlMuhz0KwFLbCo1PIaWSw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s8fvWdJjlB9oC1XRkar2hawjCep7iDfdj1Dbrzy59Hn4QbQ+nj+aM25M9gb3yfiQ8eOrsfuLZWK1ZakIAwLdmW01x/3knCKJc/bAgKQgeWq1dLFSN+Ij3zINfDCl+6Ww282KjhDOEzFIQlfFI1QroIONpwfEeIS93biTrlyFORc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xaQi4Ef4; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 19 Mar 2025 18:47:31 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1742410061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zqyBVaYb9ts4lSaXiElKMyansdaMcGaJGQGVhzkplWo=;
+	b=xaQi4Ef4746B+A1AJBeekKoem5X9BsU2Zv43rk34K1b57B9N/UUB0WB7+ebMMyAm4dfIwQ
+	po8r8m5IqUgNRKUb/IkSMFPDZP7ikmojvJbVFmFRwuujjWoxhQaSwuSjM3plvtnggGTY0s
+	MOiuRmYvVaZE3dOZtPg1/9XMdLYCzcU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yosry Ahmed <yosry.ahmed@linux.dev>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Brendan Jackman <jackmanb@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
+	linux-efi@vger.kernel.org, Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH RFC v2 04/29] mm: asi: Add infrastructure for boot-time
+ enablement
+Message-ID: <Z9sRQ0cK0rupEiT-@google.com>
+References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
+ <20250110-asi-rfc-v2-v2-4-8419288bc805@google.com>
+ <20250319172935.GMZ9r-_zzXhyhHBLfj@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
-To: Joe Damato <jdamato@fastly.com>, Christoph Hellwig <hch@infradead.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- asml.silence@gmail.com, linux-fsdevel@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
- linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
- kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com,
- arnd@arndb.de, brauner@kernel.org, akpm@linux-foundation.org,
- tglx@linutronix.de, jolsa@kernel.org, linux-kselftest@vger.kernel.org
-References: <20250319001521.53249-1-jdamato@fastly.com>
- <Z9p6oFlHxkYvUA8N@infradead.org> <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
- <2d68bc91-c22c-4b48-a06d-fa9ec06dfb25@kernel.dk>
- <Z9r5JE3AJdnsXy_u@LQ3V64L9R2>
- <19e3056c-2f7b-4f41-9c40-98955c4a9ed3@kernel.dk>
- <Z9sCsooW7OSTgyAk@LQ3V64L9R2>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Z9sCsooW7OSTgyAk@LQ3V64L9R2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250319172935.GMZ9r-_zzXhyhHBLfj@fat_crate.local>
+X-Migadu-Flow: FLOW_OUT
 
-On 3/19/25 11:45 AM, Joe Damato wrote:
-> On Wed, Mar 19, 2025 at 11:20:50AM -0600, Jens Axboe wrote:
->> On 3/19/25 11:04 AM, Joe Damato wrote:
->>> On Wed, Mar 19, 2025 at 10:07:27AM -0600, Jens Axboe wrote:
->>>> On 3/19/25 9:32 AM, Joe Damato wrote:
->>>>> On Wed, Mar 19, 2025 at 01:04:48AM -0700, Christoph Hellwig wrote:
->>>>>> On Wed, Mar 19, 2025 at 12:15:11AM +0000, Joe Damato wrote:
->>>>>>> One way to fix this is to add zerocopy notifications to sendfile similar
->>>>>>> to how MSG_ZEROCOPY works with sendmsg. This is possible thanks to the
->>>>>>> extensive work done by Pavel [1].
->>>>>>
->>>>>> What is a "zerocopy notification" 
->>>>>
->>>>> See the docs on MSG_ZEROCOPY [1], but in short when a user app calls
->>>>> sendmsg and passes MSG_ZEROCOPY a completion notification is added
->>>>> to the error queue. The user app can poll for these to find out when
->>>>> the TX has completed and the buffer it passed to the kernel can be
->>>>> overwritten.
->>>>>
->>>>> My series provides the same functionality via splice and sendfile2.
->>>>>
->>>>> [1]: https://www.kernel.org/doc/html/v6.13/networking/msg_zerocopy.html
->>>>>
->>>>>> and why aren't you simply plugging this into io_uring and generate
->>>>>> a CQE so that it works like all other asynchronous operations?
->>>>>
->>>>> I linked to the iouring work that Pavel did in the cover letter.
->>>>> Please take a look.
->>>>>
->>>>> That work refactored the internals of how zerocopy completion
->>>>> notifications are wired up, allowing other pieces of code to use the
->>>>> same infrastructure and extend it, if needed.
->>>>>
->>>>> My series is using the same internals that iouring (and others) use
->>>>> to generate zerocopy completion notifications. Unlike iouring,
->>>>> though, I don't need a fully customized implementation with a new
->>>>> user API for harvesting completion events; I can use the existing
->>>>> mechanism already in the kernel that user apps already use for
->>>>> sendmsg (the error queue, as explained above and in the
->>>>> MSG_ZEROCOPY documentation).
->>>>
->>>> The error queue is arguably a work-around for _not_ having a delivery
->>>> mechanism that works with a sync syscall in the first place. The main
->>>> question here imho would be "why add a whole new syscall etc when
->>>> there's already an existing way to do accomplish this, with
->>>> free-to-reuse notifications". If the answer is "because splice", then it
->>>> would seem saner to plumb up those bits only. Would be much simpler
->>>> too...
->>>
->>> I may be misunderstanding your comment, but my response would be:
->>>
->>>   There are existing apps which use sendfile today unsafely and
->>>   it would be very nice to have a safe sendfile equivalent. Converting
->>>   existing apps to using iouring (if I understood your suggestion?)
->>>   would be significantly more work compared to calling sendfile2 and
->>>   adding code to check the error queue.
->>
->> It's really not, if you just want to use it as a sync kind of thing. If
->> you want to have multiple things in flight etc, yeah it could be more
->> work, you'd also get better performance that way. And you could use
->> things like registered buffers for either of them, which again would
->> likely make it more efficient.
+On Wed, Mar 19, 2025 at 06:29:35PM +0100, Borislav Petkov wrote:
+> On Fri, Jan 10, 2025 at 06:40:30PM +0000, Brendan Jackman wrote:
+> > Add a boot time parameter to control the newly added X86_FEATURE_ASI.
+> > "asi=on" or "asi=off" can be used in the kernel command line to enable
+> > or disable ASI at boot time. If not specified, ASI enablement depends
+> > on CONFIG_ADDRESS_SPACE_ISOLATION_DEFAULT_ON, which is off by default.
 > 
-> I haven't argued that performance would be better using sendfile2
-> compared to iouring, just that existing apps which already use
-> sendfile (but do so unsafely) would probably be more likely to use a
-> safe alternative with existing examples of how to harvest completion
-> notifications vs something more complex, like wrapping iouring.
+> I don't know yet why we need this default-on thing...
 
-Sure and I get that, just not sure it'd be worth doing on the kernel
-side for such (fairly) weak reasoning. The performance benefit is just a
-side note in that if you did do it this way, you'd potentially be able
-to run it more efficiently too. And regardless what people do or use
-now, they are generally always interested in that aspect.
+It's a convenience to avoid needing to set asi=on if you want ASI to be
+on by default. It's similar to HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON
+or ZSWAP_DEFAULT_ON.
 
->> If you just use it as a sync thing, it'd be pretty trivial to just wrap
->> a my_sendfile_foo() in a submit_and_wait operation, which issues and
->> waits on the completion in a single syscall. And if you want to wait on
->> the notification too, you could even do that in the same syscall and
->> wait on 2 CQEs. That'd be a downright trivial way to provide a sync way
->> of doing the same thing.
+[..]
+> > @@ -175,7 +184,11 @@ static __always_inline bool asi_is_restricted(void)
+> >  	return (bool)asi_get_current();
+> >  }
+> >  
+> > -/* If we exit/have exited, can we stay that way until the next asi_enter? */
+> > +/*
+> > + * If we exit/have exited, can we stay that way until the next asi_enter?
 > 
-> I don't disagree; I just don't know if app developers:
->   a.) know that this is possible to do, and
->   b.) know how to do it
+> What is that supposed to mean here?
 
-Writing that wrapper would be not even a screenful of code. Yes maybe
-they don't know how to do it now, but it's _really_ trivial to do. It'd
-take me roughly 1 min to do that, would be happy to help out with that
-side so it could go into a commit or man page or whatever.
+asi_is_relaxed() checks if the thread is outside an ASI critical
+section.
 
-> In general: it does seem a bit odd to me that there isn't a safe
-> sendfile syscall in Linux that uses existing completion notification
-> mechanisms.
+I say "the thread" because it will also return true if we are executing
+an interrupt that arrived during the critical section, even though the
+interrupt handler is not technically part of the critical section.
 
-Pretty natural, I think. sendfile(2) predates that by quite a bit, and
-the last real change to sendfile was using splice underneath. Which I
-did, and that was probably almost 20 years ago at this point...
+Now the reason it says "if we exit we stay that way" is probably
+referring to the fact that an asi_exit() when interrupting a critical
+section will be undone in the interrupt epilogue by re-entering ASI.
 
-I do think it makes sense to have a sendfile that's both fast and
-efficient, and can be used sanely with buffer reuse without relying on
-odd heuristics.
+I agree the wording here is confusing. We should probably describe this
+more explicitly and probably rename the function after the API
+discussions you had in the previous patch.
 
->>> I would also argue that there are likely user apps out there that
->>> use both sendmsg MSG_ZEROCOPY for certain writes (for data in
->>> memory) and also use sendfile (for data on disk). One example would
->>> be a reverse proxy that might write HTTP headers to clients via
->>> sendmsg but transmit the response body with sendfile.
->>>
->>> For those apps, the code to check the error queue already exists for
->>> sendmsg + MSG_ZEROCOPY, so swapping in sendfile2 seems like an easy
->>> way to ensure safe sendfile usage.
->>
->> Sure that is certainly possible. I didn't say that wasn't the case,
->> rather that the error queue approach is a work-around in the first place
->> for not having some kind of async notification mechanism for when it's
->> free to reuse.
 > 
-> Of course, I certainly agree that the error queue is a work around.
-> But it works, app use it, and its fairly well known. I don't see any
-> reason, other than historical context, why sendmsg can use this
-> mechanism, splice can, but sendfile shouldn't?
+> > + *
+> > + * When ASI is disabled, this returns true.
+> > + */
+> >  static __always_inline bool asi_is_relaxed(void)
+> >  {
+> >  	return !asi_get_target(current);
+[..]
+> > @@ -66,10 +73,36 @@ const char *asi_class_name(enum asi_class_id class_id)
+> >  	return asi_class_names[class_id];
+> >  }
+> >  
+> > +void __init asi_check_boottime_disable(void)
+> > +{
+> > +	bool enabled = IS_ENABLED(CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION_DEFAULT_ON);
+> > +	char arg[4];
+> > +	int ret;
+> > +
+> > +	ret = cmdline_find_option(boot_command_line, "asi", arg, sizeof(arg));
+> > +	if (ret == 3 && !strncmp(arg, "off", 3)) {
+> > +		enabled = false;
+> > +		pr_info("ASI disabled through kernel command line.\n");
+> > +	} else if (ret == 2 && !strncmp(arg, "on", 2)) {
+> > +		enabled = true;
+> > +		pr_info("Ignoring asi=on param while ASI implementation is incomplete.\n");
+> > +	} else {
+> > +		pr_info("ASI %s by default.\n",
+> > +			enabled ? "enabled" : "disabled");
+> > +	}
+> > +
+> > +	if (enabled)
+> > +		pr_info("ASI enablement ignored due to incomplete implementation.\n");
+> 
+> Incomplete how?
 
-My argument would be the same as for other features - if you can do it
-simpler this other way, why not consider that? The end result would be
-the same, you can do fast sendfile() with sane buffer reuse. But the
-kernel side would be simpler, which is always a kernel main goal for
-those of us that have to maintain it.
+This is referring to the fact that ASI is still not fully/correctly
+functional, but it will be after the following patches.
 
-Just adding sendfile2() works in the sense that it's an easier drop in
-replacement for an app, though the error queue side does mean it needs
-to change anyway - it's not just replacing one syscall with another. And
-if we want to be lazy, sure that's fine. I just don't think it's the
-best way to do it when we literally have a mechanism that's designed for
-this and works with reuse already with normal send zc (and receive side
-too, in the next kernel).
+I think it will be clearer if we just add the feature flag here so that
+we have something to check for in the following patches, but add the
+infrastructure for boot-time enablement at the end of the series when
+the impelemntation is complete.
 
--- 
-Jens Axboe
+Basically start by a feature flag that has no way of being enabled, use
+it in the implmentation, then add means of enabling it.
+
+> 
+> > +}
+> > +
+> >  static void __asi_destroy(struct asi *asi)
+> >  {
+> > -	lockdep_assert_held(&asi->mm->asi_init_lock);
+> > +	WARN_ON_ONCE(asi->ref_count <= 0);
+> > +	if (--(asi->ref_count) > 0)
+> 
+> Switch that to
+> 
+> include/linux/kref.h
+> 
+> It gives you a sanity-checking functionality too so you don't need the WARN...
+
+I think we hve internal changes that completely get rid of this
+ref_count and simplifies the lifetime handling that we can squash here.
+We basically keep ASI objects around until the process is torn down,
+which makes this simpler and avoids the need for complex synchronization
+when we try to context switch or run userspace without exiting ASI
+(spoiler alert :) ).
+
+> 
+> > +		return;
+> >  
+> > +	free_pages((ulong)asi->pgd, PGD_ALLOCATION_ORDER);
+> > +	memset(asi, 0, sizeof(struct asi));
+> 
+> And then you can do:
+> 
+> 	if (kref_put())
+> 		free_pages...
+> 
+> and so on.
+> 
+> Thx.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+> 
 
