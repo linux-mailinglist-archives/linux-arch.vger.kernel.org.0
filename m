@@ -1,150 +1,148 @@
-Return-Path: <linux-arch+bounces-10959-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10960-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBE49A693A2
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 16:36:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74BAFA6946B
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 17:11:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46E6B4605AF
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 15:32:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D89E319C2E80
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 16:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 249C81C8602;
-	Wed, 19 Mar 2025 15:32:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D91271DED4C;
+	Wed, 19 Mar 2025 16:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="VHEtRE82"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="y+r2+hEf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDB91B6556
-	for <linux-arch@vger.kernel.org>; Wed, 19 Mar 2025 15:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36411DE881
+	for <linux-arch@vger.kernel.org>; Wed, 19 Mar 2025 16:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742398346; cv=none; b=OHyhaLSMDU2Ed0xhdORYQ1R/LKT7VH1gZrIghKB/KO4u/63TiGYlVxf5HmEEEu08mnMtSgZ7JngzH7zporHd46XiXqH/muxcOiZHC9ZGASTNFads6CAf25fjRfA/f6F4pJ3Dy1RC3/3xzJg6MdCZY4GVwsb5DlDT3jm0b9m+Kcg=
+	t=1742400452; cv=none; b=H4cvMJXcbJc/9M0E0bz/aMqLtJ6kZuqHjx7E28m/N7Q7RCxT02PZzp+lR0Aw1l1u0doytbJiULiEsah/AAAjRczU6E/1jUg6YUIL4n5A789OvCDvlWwAmYsW2/rfngQP0IwJlFaTLom35gJrFu6gGVBB/9ZYJGNklEM0l5nxPyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742398346; c=relaxed/simple;
-	bh=DecHoeVvuZPf1798B6ofl0KEVe3MSa1ULHgC3f/pgt8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fx7i2NuawnxN+16b4KHLvsIbPID8aR5Xx33hQ8bvOkritnQ15D6RO16ozpu5AZwHTSPjEP8qCibLxIbHP47witf7jKSylZYWmCJ5dOTRC3to3PQbJkCG922Pu/Yjd8DQSxxxXvVVWKEofYZM8WabWSAeZ0Xf4wFJaYwz4um42yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=VHEtRE82; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-22359001f1aso27942965ad.3
-        for <linux-arch@vger.kernel.org>; Wed, 19 Mar 2025 08:32:24 -0700 (PDT)
+	s=arc-20240116; t=1742400452; c=relaxed/simple;
+	bh=n24KzPzMfIDbuu7S5CaFyw0UePwN7haHff4RjRQuRy4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=tm9DxORHnGN56Ifr1PwyE6NvdhOlp7lpX+AlwTw+99jl649uZAICSmQU5snjMAPeMKbiIm6iY4hovwpz8cLqmYh3037VGKPzWvC/nkNFTkNnes5acY+603GSh3Qxq4hP2hIIDuNTEekzx5Rdu0fdJQh2WAnpwNeuLxHAaM6U/4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=y+r2+hEf; arc=none smtp.client-ip=209.85.166.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-85b58d26336so546060839f.2
+        for <linux-arch@vger.kernel.org>; Wed, 19 Mar 2025 09:07:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1742398343; x=1743003143; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wn9F1c5LdYViJ/xCFgH69JHzYJf0t1bW8IYQTve3Il0=;
-        b=VHEtRE82dpW80KhRY2ibVphmyZxSCwFrNEb47iibxNFEoqgYfCoeXH/9f1C+JxXAbT
-         PkNtN2RH9ixJHgDd4g2ZrCjIHzNSfTmQkkSzMR6hR2OcmL3z96OUpkeVdVjnkLkJRjuH
-         YqVxFgFMdB3x7wAuV0MHrb7qir5rwBztA8CPs=
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1742400450; x=1743005250; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ija8XGDNXdwDWcF7Obpxn5AkOPtI89VS3WVbcU/kpys=;
+        b=y+r2+hEfjU2Zz7ALNOq5svFqzJiE9cuXQdmJA+P20x3ThNxa4mu8TtLObqNVlmroGR
+         OlmZyYGQuf90qEw4W3uFuM+qnOHzzxc8ucTo7UpOKYtNKkyBbOReAsQhAQo3E/IP7leE
+         E9wx4qFx45Oa2aV/2THQw+dab2TirOSA0A+EQ6K560wTR4bka8wphawWRyI/d1vJFHr+
+         qzQXF+jXmP7T7oWdIYtu4AfbRAkJbRlbzJRgprCtUulnirrdugfhtvRDW6HS5GWmBfRc
+         krNJStKgc3sx9SLXZLXnd0wZOcaGEL7gXh4wuw7XqjLN2dft+wd5LxMmSpHgutBnovf3
+         PLfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742398343; x=1743003143;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1742400450; x=1743005250;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wn9F1c5LdYViJ/xCFgH69JHzYJf0t1bW8IYQTve3Il0=;
-        b=K1IuoRG/s5ZRojbqxmGRHJ87y/G7CwnJw3ERsnOD3xSF1LaxWlmjX5jIhDMO6j8JvS
-         ewIoTNUVsu2Fr/iZTZNR8CX9FgIN/mm61UB5QQBjx8+WIgrxreWQzBKqMA1hmjrmQguZ
-         TnnSnhk1jSSDFZY4cidijBXng8xHN3jrKzEv/LAcvvAYacFKoB4yAZv2mXkt9sDQtgiU
-         iSU/7D28CIk6GTg8wh0sETOm/uUU2w8RqdKiZPQ2bYzrdZeKnHN7tszit9wXe9E+fIaj
-         j4dheW4pbu8DoYTQxCE6MZ8ZZhnrrlrLHzxmPXj1ig89hQNAPGRZeTUHp/wd6bxOWpG5
-         UlLg==
-X-Forwarded-Encrypted: i=1; AJvYcCXg60b3puY+JLNCObTTJDAV8iNSQrFbQxwD2FZ4CvQ85s8WmOg0UuzDfH70py1FzrxoYjQEEX4KRWxg@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+J2JsLUWGrMMFKOEE4Sp420wSut3B81Uo7uREoqv/PuFjY/fd
-	7xnRtj+B7U1nygG2euKJX/tGVuNb/TLWhaV1fWDX4f/aCnEjmNWOGfrY1m3Enyiuyu0o3FLfise
-	2
-X-Gm-Gg: ASbGncvf/MOEU7tKOiNIjkB1qu709K3sSr1WAAh1rwLtpc1rNQGESXnItxJuwnFqQw+
-	6+HRtPVNJKy48BApvNTa4k0F78ETCyLus9CUrmT5RmFOC1CmJB/c3zd1Nsafwq+DXiFmO3H4+Xq
-	Ua3T+FbY1X/WLmR1YT9KARQHZTOAnXjJbb2SgKOBWV2W1tv/IRgK5fFUkZqAZOgnSp+Y6VST9FX
-	1amA2+XrD2HZM+aj4D/f8BvnFtc0YIiqALBo/RMCgEH7OcxrKBLpmqmI1Gbi3RG/Qw66ytBXvKD
-	PhUqDKYz4oGRFjCeZ48UBOgStelcC5rMaA+MH46m7QxmDFM7mds/EgSCNf660vlzy7OGTHifKkr
-	l6UBijM9PM0OdkIzYdHIzCGzJQ8I=
-X-Google-Smtp-Source: AGHT+IE928EvL/A0pSVSiRkpQ590uJxm0F/MyNYT3ARIPaWUxA9t+V2zDq6An5Z8ZPQuHl4hSSFFbg==
-X-Received: by 2002:a05:6a20:a111:b0:1f5:a577:dd10 with SMTP id adf61e73a8af0-1fbed315b41mr5956837637.36.1742398343445;
-        Wed, 19 Mar 2025 08:32:23 -0700 (PDT)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af56ea96e58sm11106959a12.78.2025.03.19.08.32.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Mar 2025 08:32:22 -0700 (PDT)
-Date: Wed, 19 Mar 2025 08:32:19 -0700
-From: Joe Damato <jdamato@fastly.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asml.silence@gmail.com, linux-fsdevel@vger.kernel.org,
-	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	viro@zeniv.linux.org.uk, jack@suse.cz, kuba@kernel.org,
-	shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com, arnd@arndb.de,
-	brauner@kernel.org, akpm@linux-foundation.org, tglx@linutronix.de,
-	jolsa@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
-Message-ID: <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, asml.silence@gmail.com,
-	linux-fsdevel@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
-	kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me,
-	mingo@redhat.com, arnd@arndb.de, brauner@kernel.org,
-	akpm@linux-foundation.org, tglx@linutronix.de, jolsa@kernel.org,
-	linux-kselftest@vger.kernel.org
-References: <20250319001521.53249-1-jdamato@fastly.com>
- <Z9p6oFlHxkYvUA8N@infradead.org>
+        bh=Ija8XGDNXdwDWcF7Obpxn5AkOPtI89VS3WVbcU/kpys=;
+        b=fkr2Xs667VrxuCfSPvxnUSoX38BNC9m56ge7nP64HzVV+iUBClRM4ciRYzTtyFrfz9
+         15DfIAMRm0ZbHZVkS4KURQd2yQIPD/VoWZHea1QPoI+BYYFK8/91zDdh8gLj25GfLd9p
+         ISmnfDrXd7wZMOTcLTF/f5f4xecVzHYde6XaceAqmsEMvQkBYJ6tSsGPgxxy8EkdGXqG
+         w/xafawMrqKgisA5HP9X95Ph4WdOBxkrgea9tPGKVIE0dQSlrTHE7rxUZjdnnw2kPDwR
+         R5KrAdTyKkISs8NJsXiLM7EZiOmJOYkXfKzswuAj/WPzLgz7ctEFbnUT6oEBg7L1v7P9
+         4JPA==
+X-Forwarded-Encrypted: i=1; AJvYcCXWQYk4nDwYyLleq+/cvLO47SO0RbSUxz3US8GEb5+IA/7ofGsoJTyLlOAXlZOSmTyBthZ2I6ZtN+wF@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcI4f+zTkvSdqm69qfZTWYFHLU40BlITfGiHmoHbSMMgPEob1p
+	5EhH6bRBH5J71CPltlcBFK86U6Fj1nz7oyBYthn6IXCdcQw5lnQ9oPf4kZlDZ6o=
+X-Gm-Gg: ASbGncuq8u2rpou/VdBCuvAagt9JvLmgrgSRN8lahEW8ctDHz6VMzkO/TkVbXhlLVwe
+	ZxmfgBMWg85QXHXTuMT/DAAZPKwsNdMNctGJoGeMBIxk9/1CfZOnA38Fz/Z6ubWajnQIG/BYi6j
+	HcFkRadR56wlN95/InRB9rerO2NhKiv2ZpTkYNyvz2tW5KjvpPWB8bvK2/OGmhXPK24qyqsJsDo
+	EeEis7NmbWk6id2QBod2z94q/3/N/pqKhbaQLE8E5Umbbgbv3ciVyZR6PgXfnSRFa2utb0x8yq9
+	KnOXtHn0HVHVF+RAkTLzSPTOX8UzQHKpUrN7WkigKbjFGa9c92s=
+X-Google-Smtp-Source: AGHT+IFDBCFWtf4DEWZHOAZhQMfKg6BVxtB70LM/11gT5po4hUy91hL9GfbCfrY2dAmweb9btJ2fRg==
+X-Received: by 2002:a05:6e02:1d1d:b0:3d4:3aba:e5ce with SMTP id e9e14a558f8ab-3d586bb9f32mr38295495ab.20.1742400449657;
+        Wed, 19 Mar 2025 09:07:29 -0700 (PDT)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f263719730sm3269768173.36.2025.03.19.09.07.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Mar 2025 09:07:29 -0700 (PDT)
+Message-ID: <2d68bc91-c22c-4b48-a06d-fa9ec06dfb25@kernel.dk>
+Date: Wed, 19 Mar 2025 10:07:27 -0600
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z9p6oFlHxkYvUA8N@infradead.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
+To: Joe Damato <jdamato@fastly.com>, Christoph Hellwig <hch@infradead.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ asml.silence@gmail.com, linux-fsdevel@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
+ linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
+ kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com,
+ arnd@arndb.de, brauner@kernel.org, akpm@linux-foundation.org,
+ tglx@linutronix.de, jolsa@kernel.org, linux-kselftest@vger.kernel.org
+References: <20250319001521.53249-1-jdamato@fastly.com>
+ <Z9p6oFlHxkYvUA8N@infradead.org> <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 19, 2025 at 01:04:48AM -0700, Christoph Hellwig wrote:
-> On Wed, Mar 19, 2025 at 12:15:11AM +0000, Joe Damato wrote:
-> > One way to fix this is to add zerocopy notifications to sendfile similar
-> > to how MSG_ZEROCOPY works with sendmsg. This is possible thanks to the
-> > extensive work done by Pavel [1].
+On 3/19/25 9:32 AM, Joe Damato wrote:
+> On Wed, Mar 19, 2025 at 01:04:48AM -0700, Christoph Hellwig wrote:
+>> On Wed, Mar 19, 2025 at 12:15:11AM +0000, Joe Damato wrote:
+>>> One way to fix this is to add zerocopy notifications to sendfile similar
+>>> to how MSG_ZEROCOPY works with sendmsg. This is possible thanks to the
+>>> extensive work done by Pavel [1].
+>>
+>> What is a "zerocopy notification" 
 > 
-> What is a "zerocopy notification" 
+> See the docs on MSG_ZEROCOPY [1], but in short when a user app calls
+> sendmsg and passes MSG_ZEROCOPY a completion notification is added
+> to the error queue. The user app can poll for these to find out when
+> the TX has completed and the buffer it passed to the kernel can be
+> overwritten.
+> 
+> My series provides the same functionality via splice and sendfile2.
+> 
+> [1]: https://www.kernel.org/doc/html/v6.13/networking/msg_zerocopy.html
+> 
+>> and why aren't you simply plugging this into io_uring and generate
+>> a CQE so that it works like all other asynchronous operations?
+> 
+> I linked to the iouring work that Pavel did in the cover letter.
+> Please take a look.
+> 
+> That work refactored the internals of how zerocopy completion
+> notifications are wired up, allowing other pieces of code to use the
+> same infrastructure and extend it, if needed.
+> 
+> My series is using the same internals that iouring (and others) use
+> to generate zerocopy completion notifications. Unlike iouring,
+> though, I don't need a fully customized implementation with a new
+> user API for harvesting completion events; I can use the existing
+> mechanism already in the kernel that user apps already use for
+> sendmsg (the error queue, as explained above and in the
+> MSG_ZEROCOPY documentation).
 
-See the docs on MSG_ZEROCOPY [1], but in short when a user app calls
-sendmsg and passes MSG_ZEROCOPY a completion notification is added
-to the error queue. The user app can poll for these to find out when
-the TX has completed and the buffer it passed to the kernel can be
-overwritten.
+The error queue is arguably a work-around for _not_ having a delivery
+mechanism that works with a sync syscall in the first place. The main
+question here imho would be "why add a whole new syscall etc when
+there's already an existing way to do accomplish this, with
+free-to-reuse notifications". If the answer is "because splice", then it
+would seem saner to plumb up those bits only. Would be much simpler
+too...
 
-My series provides the same functionality via splice and sendfile2.
-
-[1]: https://www.kernel.org/doc/html/v6.13/networking/msg_zerocopy.html
-
-> and why aren't you simply plugging this into io_uring and generate
-> a CQE so that it works like all other asynchronous operations?
-
-I linked to the iouring work that Pavel did in the cover letter.
-Please take a look.
-
-That work refactored the internals of how zerocopy completion
-notifications are wired up, allowing other pieces of code to use the
-same infrastructure and extend it, if needed.
-
-My series is using the same internals that iouring (and others) use
-to generate zerocopy completion notifications. Unlike iouring,
-though, I don't need a fully customized implementation with a new
-user API for harvesting completion events; I can use the existing
-mechanism already in the kernel that user apps already use for
-sendmsg (the error queue, as explained above and in the
-MSG_ZEROCOPY documentation).
-
-Let me know if that answers your question or if you have other
-questions.
-
-Thanks,
-Joe
+-- 
+Jens Axboe
 
