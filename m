@@ -1,103 +1,81 @@
-Return-Path: <linux-arch+bounces-10953-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10954-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30E0BA6842A
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 05:17:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46D14A6865F
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 09:05:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F8A716CA42
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 04:17:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76A1C1896CC1
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Mar 2025 08:05:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD5122489F;
-	Wed, 19 Mar 2025 04:17:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC052505A1;
+	Wed, 19 Mar 2025 08:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="BBdngRFj"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="2IwkNzvV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B52FABA3D;
-	Wed, 19 Mar 2025 04:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD1A206F04;
+	Wed, 19 Mar 2025 08:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742357869; cv=none; b=C9oKu9VThXi06Qy7UwMBcOWISREre285kLPC8LiSOzb6AR25rbKV60tn2HV/+2Mf2gswma1h82qQdP1oHqiVtML2BR4aIufKXqxQHfqmdcOyXza9Th7jLVpID9AaSForoYdzNpA0QCjsLOVJG4E+ZcKICoVSp45raGIZpCDJjdk=
+	t=1742371493; cv=none; b=NOBeM/2has9Gq69ZmWiTEP5fss/FXnwXHPWqzL4033Y3wNKnn1+1sqDOkt9EtsewzhfZ/HJTrmoZO/M1HbIDkECnJLPWmVoNWKuPyupC06yf+SykjWhW7g+tlQdU4wk8ic3JQ2+kklKIhLJX8NjgyVWMwFvXooXSTcTu0M3vap4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742357869; c=relaxed/simple;
-	bh=7tN0hl+UoM/pMwvlvpmI4JcFPRDTf9VN+CH+JWsq6dE=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=TiJG2cZ9zFClWaQXA/C6euo5A0nR06xFNMlfIJE6FcZyMC8xJ5t1azVPVJ0TO6B1rh6hpd/x105hPPgW4A8ImENEQDQPVVMueFhwVBVCE/OqyhJSmCHZztvpBgbOfbbapyLHh9Y0XGJyrZ90A46a1Ii7MTKVKFPwDMnB/QKbnh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=BBdngRFj; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.65.32.26] (unknown [20.236.10.120])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 834772025373;
-	Tue, 18 Mar 2025 21:17:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 834772025373
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1742357866;
-	bh=i81vfxx6rnbOmwz/BGTkep+/cjFf5C0tzqdntf/uZX0=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=BBdngRFjrm3qc8p3g6SsP6YR+S/l76EJSt+6UA9xAvo2M1xlEwANRzngSNQMKNQbI
-	 cTdh29l+lduUf0ovrmFq6mD+e4+hi6eBh9M1vDbP9QZmnxv8RWuOSzRQTDwnauV4Yb
-	 49k43AlBkgAET9m0J04z5EQLbb/kzxPuW8ODh9FM=
-Message-ID: <06d2ad24-7554-4e7c-86f7-9e22828cb725@linux.microsoft.com>
-Date: Tue, 18 Mar 2025 21:17:52 -0700
+	s=arc-20240116; t=1742371493; c=relaxed/simple;
+	bh=FSNFV5aiawfVEPuMK3UBCZZb3/nWmzSnJzh+8OKYIrk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p5UNZfX3Davbj33OJihXvKkCurGXSDpkdPYpZLhzQ8RfExo+/mMtaaQAafByh1sS3e1wl59ZEAmaZgboKd7/RfM+gG4VmUvv1cmsRjlNWnwhyTE8FJUxbtI12039lLfdYaP1yr3GjhSsDizyHijftQyKnYWZuSXpvmip2egV4VI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=2IwkNzvV; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=FSNFV5aiawfVEPuMK3UBCZZb3/nWmzSnJzh+8OKYIrk=; b=2IwkNzvVlrZXNwyCeTEPJQ8F07
+	mHBnaZm+2SYzj9yte8H+h4ugukyHaooQN44YZ5VaYs/3ou0ePckDXk74CwhuRgUqJuOEPMfF6iUDe
+	hQcdu6v22lTgEkab4Iq6naRWcxrNTluRM+NprIS7DRr0K8wcCDfiM/OR9YYYL4flt14X9gs8tVHON
+	anS8xHd3sCoM8QzTE9EC30hBSL7mM7IG+1kla2ZQFM5VNpzj6JCVcSNivw+5a2PlLbRmVqasI3wrH
+	w9n+03TD5fFP8m+W6G2FuB3u4cNsXCeDEjRFy5YwdefmTPW/57pJqwp9vqByYtsQToDwsMDe5Qz0v
+	YcjedCWg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1tuoPw-00000008IXM-33MY;
+	Wed, 19 Mar 2025 08:04:48 +0000
+Date: Wed, 19 Mar 2025 01:04:48 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Joe Damato <jdamato@fastly.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	asml.silence@gmail.com, linux-fsdevel@vger.kernel.org,
+	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+	viro@zeniv.linux.org.uk, jack@suse.cz, kuba@kernel.org,
+	shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com, arnd@arndb.de,
+	brauner@kernel.org, akpm@linux-foundation.org, tglx@linutronix.de,
+	jolsa@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
+Message-ID: <Z9p6oFlHxkYvUA8N@infradead.org>
+References: <20250319001521.53249-1-jdamato@fastly.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: linux-hyperv@vger.kernel.org, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, mhklinux@outlook.com, ltykernel@gmail.com,
- stanislav.kinsburskiy@gmail.com, linux-acpi@vger.kernel.org,
- jeff.johnson@oss.qualcomm.com, eahariha@linux.microsoft.com,
- kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, hpa@zytor.com, daniel.lezcano@linaro.org,
- joro@8bytes.org, robin.murphy@arm.com, arnd@arndb.de,
- jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
- skinsburskii@linux.microsoft.com, mrathor@linux.microsoft.com,
- ssengar@linux.microsoft.com, apais@linux.microsoft.com,
- gregkh@linuxfoundation.org, vkuznets@redhat.com, prapal@linux.microsoft.com,
- anrayabh@linux.microsoft.com, rafael@kernel.org, lenb@kernel.org,
- corbet@lwn.net
-Subject: Re: [PATCH v6 01/10] hyperv: Log hypercall status codes as strings
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-References: <1741980536-3865-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1741980536-3865-2-git-send-email-nunodasneves@linux.microsoft.com>
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-Content-Language: en-US
-In-Reply-To: <1741980536-3865-2-git-send-email-nunodasneves@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250319001521.53249-1-jdamato@fastly.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On 3/14/2025 12:28 PM, Nuno Das Neves wrote:
-> Introduce hv_status_printk() macros as a convenience to log hypercall
-> errors, formatting them with the status code (HV_STATUS_*) as a raw hex
-> value and also as a string, which saves some time while debugging.
-> 
-> Create a table of HV_STATUS_ codes with strings and mapped errnos, and
-> use it for hv_result_to_string() and hv_result_to_errno().
-> 
-> Use the new hv_status_printk()s in hv_proc.c, hyperv-iommu.c, and
-> irqdomain.c hypercalls to aid debugging in the root partition.
-> 
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> Reviewed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-> ---
->  arch/x86/hyperv/irqdomain.c    |   6 +-
->  drivers/hv/hv_common.c         | 129 ++++++++++++++++++++++++---------
->  drivers/hv/hv_proc.c           |  10 +--
->  drivers/iommu/hyperv-iommu.c   |   4 +-
->  include/asm-generic/mshyperv.h |  13 ++++
->  5 files changed, 118 insertions(+), 44 deletions(-)
-> 
+On Wed, Mar 19, 2025 at 12:15:11AM +0000, Joe Damato wrote:
+> One way to fix this is to add zerocopy notifications to sendfile similar
+> to how MSG_ZEROCOPY works with sendmsg. This is possible thanks to the
+> extensive work done by Pavel [1].
 
-Looks good to me.
+What is a "zerocopy notification" and why aren't you simply plugging
+this into io_uring and generate a CQE so that it works like all other
+asynchronous operations?
 
-Reviewed-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 
