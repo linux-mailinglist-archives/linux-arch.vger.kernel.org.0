@@ -1,125 +1,204 @@
-Return-Path: <linux-arch+bounces-10982-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10983-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAF95A69F9A
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 06:57:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2B98A6A3FB
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 11:46:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67AB917FF60
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 05:57:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FBF3189E88B
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 10:45:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89AAF1D6194;
-	Thu, 20 Mar 2025 05:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AF9B224253;
+	Thu, 20 Mar 2025 10:44:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="0MDEI4JV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kdj3JpaA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE794B665;
-	Thu, 20 Mar 2025 05:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC3E22423E
+	for <linux-arch@vger.kernel.org>; Thu, 20 Mar 2025 10:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742450253; cv=none; b=f+fgR9mjCyZ5WaX4lsOY2gqmrxeXSohtQtU7nYdsz0+IxYx6aYJwjtV6tGTyADc3GA9UNjBfRuP8rQ6VD6c8DfNNaDPqQ67syiRhn+mm2aEonNDMYGg76CuTA3TI38/5QPnr8+S7tVb/QhBxV8QKU4k+5XRPERYuuuNjFN1OhNQ=
+	t=1742467485; cv=none; b=sDUHRr6wDuFeRI3y/H1twV74s5bo2UzE5wvfF0Xj22SCBPq+NglKy6kHykteuzfodg+UF9LoD7RkhvChEUnCfXV4eZ2f/QQNeQFlY14v1VtMhwk/gGUMo/Bi/CDovAMZeimfCgmOOc03qD9fJxpeg59scirjewU1TI2QiZSyLa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742450253; c=relaxed/simple;
-	bh=pOT0b8q3m3RNHNYoWJiTM8hh9YfacaYpgKl/S1A4rAQ=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gb1Y/DlHeWyqovyT1ahUmzHEmcevAmw+gMHv+H7k0FN4r3C5SwhCyF+rlI0VFawNKGwHIttoUPiCZW3zw7mFaEo5M18ERYMMucJouFC1tt6QJU4XKZw/A1rzZQS18LLl29zssTPK/rwGGnnEoOUcMKjTFdoIwN2x3nBV6G/HgQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=0MDEI4JV; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
-	:Content-Type:MIME-Version:References:Message-ID:Subject:To:From:Date:Sender:
-	Reply-To:Cc:Content-ID:Content-Description;
-	bh=RZ3fQEbT9mvcfdUWKbxqUehLqBK4yxe6EScMLHKEND4=; b=0MDEI4JVq+f4Isn7dudUNf2sL3
-	yfp/Vxiu3CN9jWIL4jaaZxg7jIcHh6PioXn9qjG+fjTWTkVI2hCFgc8Jmgy9wKUbFi2Bjquq4acjN
-	/VSoQ1LkYFafDoTGW76M2FC0HxPR2WCV+vy+lIpjuUsgAQ+tjxb7rcjmGIAR2OP7mLnRGkG7pfxud
-	4meDPogXRxxvcYnpbRpU7uSY10YG4wETStvAMH5JTGbrPLx9cZQF5HLQ/vuFSG/2iKYS+wxI+6EEH
-	2Vuxz191y4atjC/JYQc53ilRniq6r1ndT+FddolgQB6FfeNAIYdzFyZVTlcUvQFRFFmc5gOsQc713
-	zfuk8aHA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1tv8uH-0000000BGY1-1Xfp;
-	Thu, 20 Mar 2025 05:57:29 +0000
-Date: Wed, 19 Mar 2025 22:57:29 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Joe Damato <jdamato@fastly.com>, Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, asml.silence@gmail.com,
-	linux-fsdevel@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
-	kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me,
-	mingo@redhat.com, arnd@arndb.de, brauner@kernel.org,
-	akpm@linux-foundation.org, tglx@linutronix.de, jolsa@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
-Message-ID: <Z9uuSQ7SrigAsLmt@infradead.org>
-References: <20250319001521.53249-1-jdamato@fastly.com>
- <Z9p6oFlHxkYvUA8N@infradead.org>
- <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
- <2d68bc91-c22c-4b48-a06d-fa9ec06dfb25@kernel.dk>
- <Z9r5JE3AJdnsXy_u@LQ3V64L9R2>
- <19e3056c-2f7b-4f41-9c40-98955c4a9ed3@kernel.dk>
- <Z9sCsooW7OSTgyAk@LQ3V64L9R2>
+	s=arc-20240116; t=1742467485; c=relaxed/simple;
+	bh=O8zyyL1p84aMCSSYT842uw6SFy2rTfsgAblLzeFkCR0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=N0+X74Zu+SI+fksYt0sDMezki4xZg/osUhykjCICLsQSxQTSTa9SNHmGIKew1jgDdy7BcuGW2aHVBEKOUiK1ADfvIQm1DkU4MoySBUGTB0pjcMdOqxYFQc5oO3XD1i5mVa+AW6zRnAOkHWUym/LfqR7zKhuezlqruj9TsYqCcn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kdj3JpaA; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43d22c304adso7494525e9.0
+        for <linux-arch@vger.kernel.org>; Thu, 20 Mar 2025 03:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1742467480; x=1743072280; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j11DFSETqOLtc+vMOz1k4rHgXFA118EedepjEdU8Zqw=;
+        b=Kdj3JpaAcTMsJX0fWv0whfnlnrjaZjQkUoIxaVNNWymywgQ1lxYjwO8r7iq1JNp6QM
+         Ojbu13PJrvGpih/A3lZ8h//bm+lQo87tlhkP9QV9OC12v7CPJ6kEgjQXJce0C5ni+hLc
+         WK8hRYGR3L0Fg1Ms6LVwx4HmFLLx967l5J71fKJh2+DS8uT7oCIJlhzicsDfSOQYSkWF
+         sHWVXfORZG9aTGDrruW97o37vT+nFRgMDzAibG+h4BCecMAJVWL9zR8i+Q2//u9V8cvF
+         qTDTgtuLxb6b7EYFGNlNI/IdDW+67sG2wCaCd7GvxlgTKp/aIF7rCtp1mbYDuCw4iql2
+         FLfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742467480; x=1743072280;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j11DFSETqOLtc+vMOz1k4rHgXFA118EedepjEdU8Zqw=;
+        b=Pc3xPhutE4LSyMY5f2aTNidkzyTG3MAxzcgkHe9ixm6D6Ose/aachvF1xnCzdhnmfg
+         hIE0HZ7dJQEUZbBbTOem2diCHr+HC2rBWCISBVO4ns5eyaCHK+HHDloHjVPDGzi7c1MG
+         +g1JmdNEyuj1GnFcbDtEomsmzgcVytL8JvStgsNyVjoSiwrmIbr6SpTaXS32R0deIlmh
+         jO1vngAYhJ7BxmBu534Xd9v+bIWCnvedvo32+Gbt9W33g38LUuBMoeUzJCxVhXRSqx8n
+         TbIIPLG0sLvhyDs3WSMk43x3Mf58UbPrDcSfYgvGzEl0Mw2p7wxwRhpYPrLtbblC+D70
+         zkqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWR6aFuBxYDdtOFdkCvoDQ9nh6/0zRZwUsJuvwVd8XBPqqUiA+bVEogQzxaB2mmMPOB0ZvdbHGdohcO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyi80RXQmEE9iSnAmjaJG09UFiql9IqmoWkl2YBZ16nl0nH3p50
+	POtVGAX2PMnhAc7/AZidTFg8oBSmsn7i0jHX/C5AV34xQpzDmbciACqBgwWyNzEVTn+tdtG2M0D
+	zattOd1lOjQ==
+X-Google-Smtp-Source: AGHT+IHmhdHTuCMOMffmpvyIMCzJObzjHJotMPvb7/CKZriBN1WJ2Qe2CHVhTxdEuiWThlixsbw8H9oOiShQMA==
+X-Received: from wmgg15.prod.google.com ([2002:a05:600d:f:b0:43b:c450:ea70])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:1da2:b0:439:5f04:4f8d with SMTP id 5b1f17b1804b1-43d49187ba9mr20806165e9.12.1742467480075;
+ Thu, 20 Mar 2025 03:44:40 -0700 (PDT)
+Date: Thu, 20 Mar 2025 10:44:38 +0000
+In-Reply-To: <Z9sRQ0cK0rupEiT-@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z9sCsooW7OSTgyAk@LQ3V64L9R2>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Mime-Version: 1.0
+References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
+ <20250110-asi-rfc-v2-v2-4-8419288bc805@google.com> <20250319172935.GMZ9r-_zzXhyhHBLfj@fat_crate.local>
+ <Z9sRQ0cK0rupEiT-@google.com>
+X-Mailer: aerc 0.18.2
+Message-ID: <D8L164U8HBTB.G5MS86AIISLM@google.com>
+Subject: Re: [PATCH RFC v2 04/29] mm: asi: Add infrastructure for boot-time enablement
+From: Brendan Jackman <jackmanb@google.com>
+To: Yosry Ahmed <yosry.ahmed@linux.dev>, Borislav Petkov <bp@alien8.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	<x86@kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<linux-alpha@vger.kernel.org>, <linux-snps-arc@lists.infradead.org>, 
+	<linux-arm-kernel@lists.infradead.org>, <linux-csky@vger.kernel.org>, 
+	<linux-hexagon@vger.kernel.org>, <loongarch@lists.linux.dev>, 
+	<linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>, 
+	<linux-openrisc@vger.kernel.org>, <linux-parisc@vger.kernel.org>, 
+	<linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>, 
+	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>, 
+	<sparclinux@vger.kernel.org>, <linux-um@lists.infradead.org>, 
+	<linux-arch@vger.kernel.org>, <linux-mm@kvack.org>, 
+	<linux-trace-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>, 
+	<kvm@vger.kernel.org>, <linux-efi@vger.kernel.org>, 
+	Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Mar 19, 2025 at 10:45:22AM -0700, Joe Damato wrote:
-> I don't disagree; I just don't know if app developers:
->   a.) know that this is possible to do, and
->   b.) know how to do it
+On Wed Mar 19, 2025 at 6:47 PM UTC, Yosry Ahmed wrote:
+> On Wed, Mar 19, 2025 at 06:29:35PM +0100, Borislav Petkov wrote:
+> > On Fri, Jan 10, 2025 at 06:40:30PM +0000, Brendan Jackman wrote:
+> > > Add a boot time parameter to control the newly added X86_FEATURE_ASI.
+> > > "asi=on" or "asi=off" can be used in the kernel command line to enable
+> > > or disable ASI at boot time. If not specified, ASI enablement depends
+> > > on CONFIG_ADDRESS_SPACE_ISOLATION_DEFAULT_ON, which is off by default.
+> > 
+> > I don't know yet why we need this default-on thing...
+>
+> It's a convenience to avoid needing to set asi=on if you want ASI to be
+> on by default. It's similar to HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON
+> or ZSWAP_DEFAULT_ON.
+>
+> [..]
+> > > @@ -175,7 +184,11 @@ static __always_inline bool asi_is_restricted(void)
+> > >  	return (bool)asi_get_current();
+> > >  }
+> > >  
+> > > -/* If we exit/have exited, can we stay that way until the next asi_enter? */
+> > > +/*
+> > > + * If we exit/have exited, can we stay that way until the next asi_enter?
+> > 
+> > What is that supposed to mean here?
+>
+> asi_is_relaxed() checks if the thread is outside an ASI critical
+> section.
+>
+> I say "the thread" because it will also return true if we are executing
+> an interrupt that arrived during the critical section, even though the
+> interrupt handler is not technically part of the critical section.
+>
+> Now the reason it says "if we exit we stay that way" is probably
+> referring to the fact that an asi_exit() when interrupting a critical
+> section will be undone in the interrupt epilogue by re-entering ASI.
+>
+> I agree the wording here is confusing. We should probably describe this
+> more explicitly and probably rename the function after the API
+> discussions you had in the previous patch.
 
-So if you don't know that why do you even do the work?
+Yeah, this is confusing. It's trying to very concisely define the
+concept of "relaxed" but now I see it through Boris' eyes I realise
+it's really unhelpful to try and do that. And yeah we should probably
+just rework the terminology/API.
 
-> In general: it does seem a bit odd to me that there isn't a safe
-> sendfile syscall in Linux that uses existing completion notification
-> mechanisms.
+To re-iterate what Yosry said, aside from my too-clever comment style
+the more fundamental thing that's confusing here is that, using the
+terminology currently in the code there are two concepts at play:
 
-Agreed.  Where the existing notification mechanism is called io_uring.
+- The critical section: this is the path from asi_enter() to
+  asi_relax(). The critical section can be interrupted, and code
+  running in those interupts is not said to be "in the critical
+  section".
 
-> Of course, I certainly agree that the error queue is a work around.
-> But it works, app use it, and its fairly well known. I don't see any
-> reason, other than historical context, why sendmsg can use this
-> mechanism, splice can, but sendfile shouldn't?
+- Being "tense" vs "relaxed". Being "tense" means the _task_ is in a
+  critical section, but the current code might not be.
 
-Because sendmsg should never have done that it certainly should not
-spread beyond purely socket specific syscalls.
+This distinction is theoretically relevant because e.g. it's a bug to
+access sensitive data in a critical section, but it's OK to access it
+while in the tense state (we will switch to the restricted address
+space, but this is OK because we will have a chance to asi_enter()
+again before we get back to the untrusted code). 
 
-> If you feel very strongly that this cannot be merged without
-> dropping sendfile2 and only plumbing this through for splice, then
-> I'll drop the sendfile2 syscall when I submit officially (probably
-> next week?).
+BTW, just to be clear:
 
-Splice should also not do "error queue notifications".  Nothing
-new and certainly nothing outside of net/ should.
+1. Both of these are only relevant to code that's pretty deeply aware
+   of ASI. (TLB flushing code, entry code, stuff like that).
 
-> I do feel pretty strongly that it's more likely apps would use
-> sendfile2 and we'd have safer apps out in the wild. But, I could be
-> wrong.
+2. To be honest whenever you write:
 
-A purely synchronous sendfile that is safe is a good thing.  Spreading
-non-standard out of band notifications is not.  How to build that
-safe sendmsg is a good question, and a sendmsg2 might be a sane
-option for that.  The important thing is that the underlying code
-should use iocbs and ki_complete to notify I/O completion so that
-all the existing infrastucture like io_uring and in-kernel callers
-can reuse this.
+     if (asi_in_critical_section())
 
-Note that this also ties into the currently broken memory mamangement
-in the networking code that directly messeѕ with page references
-rather than notifying the caller about I/O completion.
+   You probably mean:
 
+     if (WARN_ON(asi_in_critical_section()))
+
+   For example if we try to flush the TLB in the critical section,
+   there's a thing we can do to handle it. But that really shouldn't
+   be necessary.  We want the critical section code to be very small
+   and straight-line code.
+
+   And indeed in the present code we don't use
+   asi_in_critical_section() for anything bur WARNing.
+
+> asi_is_relaxed() checks if the thread is outside an ASI critical
+> section.
+
+Now I see it written this way, this is probably the best way to
+conceptualise it. Instead of having two concepts "tense/relaxed" vs
+"ASI critical section" we could just say "the task is in a critical
+section" vs "the CPU is in a critical section". So we could have
+something like:
+
+bool asi_task_critical(void);
+bool asi_cpu_critical(void);
+
+(They could also accept an argument for the task/CPU, but I can't see
+any reason why you'd peek at another context like that).
+
+--
+
+For everything else, Ack to Boris or +1 to Yosry respectively.
 
