@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-10989-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10990-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AAE2A6AC49
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 18:43:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19C47A6AC4B
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 18:43:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 88686188F92C
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 17:43:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AEA3188F6F9
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 17:43:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC302253A9;
-	Thu, 20 Mar 2025 17:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A352253A4;
+	Thu, 20 Mar 2025 17:43:29 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCDC224231;
-	Thu, 20 Mar 2025 17:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9897F1494BB;
+	Thu, 20 Mar 2025 17:43:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742492578; cv=none; b=QEGK2Laj7JxF5GaXATbzLLc6Fn9WDFbaPlyEogsGzJUwNYFhO9gRUqlX6jOSvSwaA4webSz6sFb/sHI4GLG3KSn/Vh11Wdh840hx6TUMcAURl+0E0jhuosPZR/DykfC5CAe5e7TteWiwcAz0Ra2Y/cg+xSKL82aAw+NIO8u1kas=
+	t=1742492609; cv=none; b=jidnk38KUuEmGrPqwz4K0D1kH+ACiJ8XNBLCkD1X47Icx0MURsT+9mlGXJdfq7YKKzP8u0ZSUdQSPYJdwpJThEuJVaz9dI/6IpZzkTOx21NAZieoU3MScaQBwfvNc81lIYKAjh8ANoyuHY1thwiCFErGaJahZQeTHLH0fs+BDag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742492578; c=relaxed/simple;
-	bh=E5yd5RFVp2gC9uJp3ZevTlVPOweiUZNt/VR5UAR5F0c=;
+	s=arc-20240116; t=1742492609; c=relaxed/simple;
+	bh=Wnv6007JJ4oe/TcMxI2IqKPunpao+J+diV0lAkYwqf8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EPvg6jePnCGW5/It6QiR7gPTI5vn7owGgLcx+UK3dqR6g3RG5clvEbXAyRqUg8jXs0pZCi22j+Rqu/com2N+qCw3oTXywLqCfjw7CFoeGT1Asfgvx7y4kMU4mR/yN0BGafkfzkqhW1jjqbxKAFKIvViWaq4YaN2kYhyh1+deRFw=
+	 MIME-Version:Content-Type; b=KeI3OyGmo/RyyOUWknbvwYW5l8hByXOMASSba/m4zGN9WuT/iOFJBHwH9Azk69ST6bUMCGm4BMjqkfHSNnnfpniexi+0OvzWO6GYovIWDbT5rRrTYUXDV5AXXeMBgmxRZFK4BK6gpr7FghflYpaQg9i732dsVSMSOnSnACjbpvg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZJXpv5y5jz6L4v9;
-	Fri, 21 Mar 2025 01:37:59 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZJXsl1VN3z6K9M7;
+	Fri, 21 Mar 2025 01:40:27 +0800 (CST)
 Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4F7A714050A;
-	Fri, 21 Mar 2025 01:42:54 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id ABEA714050D;
+	Fri, 21 Mar 2025 01:43:25 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.19.247) by
  frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 20 Mar 2025 18:42:53 +0100
+ 15.1.2507.39; Thu, 20 Mar 2025 18:43:24 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: <linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<james.morse@arm.com>, <conor@kernel.org>, Yicong Yang
@@ -48,9 +48,9 @@ CC: <linux-arch@vger.kernel.org>, <linuxarm@huawei.com>, Yushan Wang
 	<gregkh@linuxfoundation.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
  Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>, Dan Williams <dan.j.williams@intel.com>
-Subject: [RFC PATCH 3/6] cache: coherency device class
-Date: Thu, 20 Mar 2025 17:41:15 +0000
-Message-ID: <20250320174118.39173-4-Jonathan.Cameron@huawei.com>
+Subject: [RFC PATCH 4/6] cache: Support cache maintenance for HiSilicon SoC Hydra Home Agent
+Date: Thu, 20 Mar 2025 17:41:16 +0000
+Message-ID: <20250320174118.39173-5-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
 References: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
@@ -65,280 +65,256 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
  frapeml500008.china.huawei.com (7.182.85.71)
 
-Some systems contain devices that are capable of issuing certain cache
-invalidation messages to all components in the system.  A typical use
-is when the memory backing a physical address is being changed, such
-as when a region is configured for CXL or a dynamic capacity event
-occurs.
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-These perform a similar action to the WBINVD instruction on x86 but
-may provide finer granularity and/or a richer set of actions.
+Hydra Home Agent is a device used for maintain cache coherency, add
+support of cache maintenance operations for it.
 
-Add a tiny device class to which drivers may register. Each driver
-provides an ops structure and the first op is Write Back and Invalidate
-by PA Range. The driver may over invalidate.
+Same as HiSilicon L3 cache and L3 cache PMU, memory resource of HHA
+conflicts with that of HHA PMU.  Same workaround is implemented here to
+workaround resource conflict check.
 
-An optional completion check is also provided. If present that should
-be called to ensure that the action has finished.
-
-If multiple agents are present in the system each should register
-with this class and the core code will issue the invalidate to all
-of them before checking for completion on each. This is done
-to avoid need for filtering in the core code which can become complex
-when interleave, potentially across different cache coherency hardware,
-is going on, so it is easier to tell everyone and let those who don't
-care do nothing.
-
-RFC question:
-1. Location.  Conor, do you mind us putting this in drivers/cache?
-   I'm more than happy to add a maintainers entry and not make this
-   your problem!
-2. Need to figure out if all agents have turned up yet?  No idea how
-   to ensure this.
-3. Is just iterating over devices registered with the class the
-   simplest solution?
-4. Given we have a nice device class, to which we can add sysfs
-   attributes, what info might be useful to userspace? It might
-   be useful to indicate how expensive a flush might be for example
-   or where in the topology of the system it is being triggered?
-
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Co-developed-by: Yushan Wang <wangyushan12@huawei.com>
+Signed-off-by: Yushan Wang <wangyushan12@huawei.com>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/cache/Kconfig           |   6 ++
- drivers/cache/Makefile          |   2 +
- drivers/cache/coherency_core.c  | 130 ++++++++++++++++++++++++++++++++
- include/linux/cache_coherency.h |  60 +++++++++++++++
- 4 files changed, 198 insertions(+)
+ drivers/cache/Kconfig        |  12 +++
+ drivers/cache/Makefile       |   1 +
+ drivers/cache/hisi_soc_hha.c | 193 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 206 insertions(+)
 
 diff --git a/drivers/cache/Kconfig b/drivers/cache/Kconfig
-index db51386c663a..45dc4b2935e7 100644
+index 45dc4b2935e7..6dab014bc581 100644
 --- a/drivers/cache/Kconfig
 +++ b/drivers/cache/Kconfig
-@@ -1,6 +1,12 @@
- # SPDX-License-Identifier: GPL-2.0
- menu "Cache Drivers"
- 
-+config CACHE_COHERENCY_CLASS
-+	bool "Cache coherency control class"
-+	help
-+	  Class to which coherency control drivers register allowing core kernel
-+	  subsystems to issue invalidations and similar coherency operations.
+@@ -6,6 +6,18 @@ config CACHE_COHERENCY_CLASS
+ 	help
+ 	  Class to which coherency control drivers register allowing core kernel
+ 	  subsystems to issue invalidations and similar coherency operations.
++if CACHE_COHERENCY_CLASS
 +
++config HISI_SOC_HHA
++	tristate "HiSilicon Hydra Home Agent (HHA) device driver"
++	depends on ARM64 && ACPI || COMPILE_TEST
++	help
++	  The Hydra Home Agent (HHA) is responsible of cache coherency
++	  on SoC. This drivers provides cache maintenance functions of HHA.
++
++	  This driver can be built as a module. If so, the module will be
++	  called hisi_soc_hha.
++endif
+ 
  config AX45MP_L2_CACHE
  	bool "Andes Technology AX45MP L2 Cache controller"
- 	depends on RISCV
 diff --git a/drivers/cache/Makefile b/drivers/cache/Makefile
-index 55c5e851034d..b72b20f4248f 100644
+index b72b20f4248f..48b319984b45 100644
 --- a/drivers/cache/Makefile
 +++ b/drivers/cache/Makefile
-@@ -3,3 +3,5 @@
- obj-$(CONFIG_AX45MP_L2_CACHE)		+= ax45mp_cache.o
- obj-$(CONFIG_SIFIVE_CCACHE)		+= sifive_ccache.o
+@@ -5,3 +5,4 @@ obj-$(CONFIG_SIFIVE_CCACHE)		+= sifive_ccache.o
  obj-$(CONFIG_STARFIVE_STARLINK_CACHE)	+= starfive_starlink_cache.o
-+
-+obj-$(CONFIG_CACHE_COHERENCY_CLASS)	+= coherency_core.o
-diff --git a/drivers/cache/coherency_core.c b/drivers/cache/coherency_core.c
+ 
+ obj-$(CONFIG_CACHE_COHERENCY_CLASS)	+= coherency_core.o
++obj-$(CONFIG_HISI_SOC_HHA)		+= hisi_soc_hha.o
+diff --git a/drivers/cache/hisi_soc_hha.c b/drivers/cache/hisi_soc_hha.c
 new file mode 100644
-index 000000000000..52cb4ceae00c
+index 000000000000..c2af06e5839e
 --- /dev/null
-+++ b/drivers/cache/coherency_core.c
-@@ -0,0 +1,130 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/drivers/cache/hisi_soc_hha.c
+@@ -0,0 +1,193 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Class to manage OS controlled coherency agents within the system.
-+ * Specifically to enable operations such as write back and invalidate.
++ * Driver for HiSilicon Hydra Home Agent (HHA).
 + *
-+ * Copyright: Huawei 2025
-+ * Some elements based on fwctl class as an example of a modern
-+ * lightweight class.
++ * Copyright (c) 2024 HiSilicon Technologies Co., Ltd.
++ * Author: Yicong Yang <yangyicong@hisilicon.com>
++ *         Yushan Wang <wangyushan12@huawei.com>
 + */
 +
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/bitfield.h>
++#include <linux/cacheflush.h>
 +#include <linux/cache_coherency.h>
-+#include <linux/container_of.h>
-+#include <linux/idr.h>
-+#include <linux/fs.h>
++#include <linux/device.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/kernel.h>
++#include <linux/memregion.h>
 +#include <linux/module.h>
-+#include <linux/slab.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
++#include <linux/spinlock.h>
 +
-+#include <asm/cacheflush.h>
++#define HISI_HHA_CTRL		0x5004
++#define   HISI_HHA_CTRL_EN	BIT(0)
++#define   HISI_HHA_CTRL_RANGE	BIT(1)
++#define   HISI_HHA_CTRL_TYPE	GENMASK(3, 2)
++#define HISI_HHA_START_L	0x5008
++#define HISI_HHA_START_H	0x500c
++#define HISI_HHA_LEN_L		0x5010
++#define HISI_HHA_LEN_H		0x5014
 +
-+static DEFINE_IDA(cache_coherency_ida);
++/* The maintain operation performs in a 128 Byte granularity */
++#define HISI_HHA_MAINT_ALIGN	128
 +
-+static void cache_coherency_device_release(struct device *device)
-+{
-+	struct cache_coherency_device *ccd =
-+		container_of(device, struct cache_coherency_device, dev);
++#define HISI_HHA_POLL_GAP_US		10
++#define HISI_HHA_POLL_TIMEOUT_US	50000
 +
-+	ida_free(&cache_coherency_ida, ccd->id);
-+}
-+
-+static struct class cache_coherency_class = {
-+	.name = "cache_coherency",
-+	.dev_release = cache_coherency_device_release,
++struct hisi_soc_hha {
++	struct cache_coherency_device ccd;
++	/* Locks HHA instance to forbid overlapping access. */
++	spinlock_t lock;
++	void __iomem *base;
 +};
 +
-+static int cache_inval_one(struct device *dev, void *data)
++static bool hisi_hha_cache_maintain_wait_finished(struct hisi_soc_hha *soc_hha)
 +{
-+	struct cache_coherency_device *ccd =
-+		container_of(dev, struct cache_coherency_device, dev);
++	u32 val;
 +
-+	if (!ccd->ops)
-+		return -EINVAL;
-+
-+	return ccd->ops->wbinv(ccd, data);
++	return !readl_poll_timeout_atomic(soc_hha->base + HISI_HHA_CTRL, val,
++					  !(val & HISI_HHA_CTRL_EN),
++					  HISI_HHA_POLL_GAP_US,
++					  HISI_HHA_POLL_TIMEOUT_US);
 +}
 +
-+static int cache_inval_done_one(struct device *dev, void *data)
-+{
-+	struct cache_coherency_device *ccd =
-+		container_of(dev, struct cache_coherency_device, dev);
-+	if (!ccd->ops)
-+		return -EINVAL;
-+
-+	return ccd->ops->done(ccd);
-+}
-+
-+static int cache_invalidate_memregion(int res_desc,
++static int hisi_hha_cache_do_maintain(struct hisi_soc_hha *soc_hha,
 +				      phys_addr_t addr, size_t size)
 +{
-+	int ret;
-+	struct cc_inval_params params = {
-+		.addr = addr,
-+		.size = size,
-+	};
++	int ret = 0;
++	u32 reg;
 +
-+	ret = class_for_each_device(&cache_coherency_class, NULL, &params,
-+				    cache_inval_one);
-+	if (ret)
-+		return ret;
++	if (!size || !IS_ALIGNED(size, HISI_HHA_MAINT_ALIGN))
++		return -EINVAL;
 +
-+	return class_for_each_device(&cache_coherency_class, NULL, NULL,
-+				     cache_inval_done_one);
++	/*
++	 * Hardware will maintain in a range of
++	 * [addr, addr + size + HISI_HHA_MAINT_ALIGN]
++	 */
++	size -= HISI_HHA_MAINT_ALIGN;
++
++	guard(spinlock)(&soc_hha->lock);
++
++	if (!hisi_hha_cache_maintain_wait_finished(soc_hha))
++		return -EBUSY;
++
++	writel(lower_32_bits(addr), soc_hha->base + HISI_HHA_START_L);
++	writel(upper_32_bits(addr), soc_hha->base + HISI_HHA_START_H);
++	writel(lower_32_bits(size), soc_hha->base + HISI_HHA_LEN_L);
++	writel(upper_32_bits(size), soc_hha->base + HISI_HHA_LEN_H);
++
++	reg = FIELD_PREP(HISI_HHA_CTRL_TYPE, 1); /* Clean Invalid */
++	reg |= HISI_HHA_CTRL_RANGE | HISI_HHA_CTRL_EN;
++	writel(reg, soc_hha->base + HISI_HHA_CTRL);
++
++	return ret;
 +}
 +
-+static const struct system_cache_flush_method cache_flush_method = {
-+	.invalidate_memregion = cache_invalidate_memregion,
-+};
-+
-+struct cache_coherency_device *
-+_cache_coherency_alloc_device(struct device *parent,
-+			      const struct coherency_ops *ops, size_t size)
++static int hisi_hha_cache_poll_maintain_done(struct hisi_soc_hha *soc_hha,
++					     phys_addr_t addr, size_t size)
 +{
++	guard(spinlock)(&soc_hha->lock);
 +
-+	if (!ops || !ops->wbinv)
-+		return NULL;
-+
-+	struct cache_coherency_device *ccd __free(kfree) = kzalloc(size, GFP_KERNEL);
-+
-+	if (!ccd)
-+		return NULL;
-+
-+	ccd->dev.class = &cache_coherency_class;
-+	ccd->dev.parent = parent;
-+	ccd->ops = ops;
-+	ccd->id = ida_alloc(&cache_coherency_ida, GFP_KERNEL);
-+
-+	if (dev_set_name(&ccd->dev, "cache_coherency%d", ccd->id))
-+		return NULL;
-+
-+ 	device_initialize(&ccd->dev);
-+
-+	return_ptr(ccd);
-+}
-+EXPORT_SYMBOL_NS_GPL(_cache_coherency_alloc_device, "CACHE_COHERENCY");
-+
-+int cache_coherency_device_register(struct cache_coherency_device *ccd)
-+{
-+	return device_add(&ccd->dev);
-+}
-+EXPORT_SYMBOL_NS_GPL(cache_coherency_device_register, "CACHE_COHERENCY");
-+
-+void cache_coherency_device_unregister(struct cache_coherency_device *ccd)
-+{
-+	device_del(&ccd->dev);
-+}
-+EXPORT_SYMBOL_NS_GPL(cache_coherency_device_unregister, "CACHE_COHERENCY");
-+
-+static int __init cache_coherency_init(void)
-+{
-+	int ret;
-+
-+	ret = class_register(&cache_coherency_class);
-+	if (ret)
-+		return ret;
-+
-+	//TODO: generalize
-+	arm64_set_sys_cache_flush_method(&cache_flush_method);
++	if (!hisi_hha_cache_maintain_wait_finished(soc_hha))
++		return -ETIMEDOUT;
 +
 +	return 0;
 +}
-+subsys_initcall(cache_coherency_init);
-diff --git a/include/linux/cache_coherency.h b/include/linux/cache_coherency.h
-new file mode 100644
-index 000000000000..d49be27ad4f1
---- /dev/null
-+++ b/include/linux/cache_coherency.h
-@@ -0,0 +1,60 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Cache coherency device drivers
-+ *
-+ * Copyright Huawei 2025
-+ */
-+#ifndef _LINUX_CACHE_COHERENCY_H_
-+#define _LINUX_CACHE_COHERENCY_H_
 +
-+#include <linux/cleanup.h>
-+#include <linux/device.h>
-+
-+struct cache_coherency_device;
-+struct cc_inval_params {
-+	phys_addr_t addr;
-+	size_t size;
-+};
-+struct coherency_ops {
-+	int (*wbinv)(struct cache_coherency_device *ccd, struct cc_inval_params *invp);
-+	int (*done)(struct cache_coherency_device *ccd);
-+};
-+
-+struct cache_coherency_device {
-+	struct device dev;
-+	const struct coherency_ops *ops;
-+	int id;
-+};
-+
-+int cache_coherency_device_register(struct cache_coherency_device *ccd);
-+void cache_coherency_device_unregister(struct cache_coherency_device *ccd);
-+
-+struct cache_coherency_device *
-+_cache_coherency_alloc_device(struct device *parent,
-+			      const struct coherency_ops *ops, size_t size);
-+
-+#define cache_coherency_alloc_device(parent, ops, drv_struct, member)		\
-+	({									\
-+		static_assert(__same_type(struct cache_coherency_device,	\
-+					  ((drv_struct *)NULL)->member));	\
-+		static_assert(offsetof(drv_struct, member) == 0);		\
-+		(drv_struct *)_cache_coherency_alloc_device(parent, ops,	\
-+							sizeof(drv_struct));	\
-+	})
-+
-+static inline struct cache_coherency_device *
-+	cache_coherency_device_get(struct cache_coherency_device *ccd)
++static int hisi_soc_hha_wbinv(struct cache_coherency_device *ccd, struct cc_inval_params *invp)
 +{
-+	get_device(&ccd->dev);
-+	return ccd;
++	struct hisi_soc_hha *hha = container_of(ccd, struct hisi_soc_hha, ccd);
++
++	return hisi_hha_cache_do_maintain(hha, invp->addr, invp->size);
 +}
 +
-+static inline void cache_coherency_device_put(struct cache_coherency_device *ccd)
++static int hisi_soc_hha_done(struct cache_coherency_device *ccd)
 +{
-+	put_device(&ccd->dev);
++	struct hisi_soc_hha *hha = container_of(ccd, struct hisi_soc_hha, ccd);
++
++	return hisi_hha_cache_poll_maintain_done(hha, 0, 0);
 +}
 +
-+DEFINE_FREE(cache_coherency_device, struct cache_coherency_device *,
-+	    if (_T) cache_coherency_device_put(_T));
++static const struct coherency_ops hha_ops = {
++	.wbinv = hisi_soc_hha_wbinv,
++	.done = hisi_soc_hha_done,
++};
 +
-+#endif
++DEFINE_FREE(hisi_soc_hha, struct hisi_soc_hha *, if (_T) cache_coherency_device_put(&_T->ccd))
++static int hisi_soc_hha_probe(struct platform_device *pdev)
++{
++	struct resource *mem;
++	int ret;
++
++	struct hisi_soc_hha *soc_hha __free(hisi_soc_hha) =
++		cache_coherency_alloc_device(&pdev->dev, &hha_ops,
++					     struct hisi_soc_hha, ccd);
++	if (!soc_hha)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, soc_hha);
++
++	spin_lock_init(&soc_hha->lock);
++
++	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!mem)
++		return -ENODEV;
++
++	/*
++	 * HHA cache driver share the same register region with HHA uncore PMU
++	 * driver in hardware's perspective, none of them should reserve the
++	 * resource to itself only.  Here exclusive access verification is
++	 * avoided by calling devm_ioremap instead of devm_ioremap_resource to
++	 * allow both drivers to exist at the same time.
++	 */
++	soc_hha->base = ioremap(mem->start, resource_size(mem));
++	if (IS_ERR_OR_NULL(soc_hha->base)) {
++		return dev_err_probe(&pdev->dev, PTR_ERR(soc_hha->base),
++				     "failed to remap io memory");
++	}
++
++	ret = cache_coherency_device_register(&soc_hha->ccd);
++	if (ret) {
++		iounmap(soc_hha->base);
++		return ret;
++	}
++
++	platform_set_drvdata(pdev, no_free_ptr(soc_hha));
++	return 0;
++}
++
++static void hisi_soc_hha_remove(struct platform_device *pdev)
++{
++	struct hisi_soc_hha *soc_hha = platform_get_drvdata(pdev);
++
++	cache_coherency_device_unregister(&soc_hha->ccd);
++	iounmap(soc_hha->base);
++	cache_coherency_device_put(&soc_hha->ccd);
++}
++
++static const struct acpi_device_id hisi_soc_hha_ids[] = {
++	{ "HISI0511", },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, hisi_soc_hha_ids);
++
++static struct platform_driver hisi_soc_hha_driver = {
++	.driver = {
++		.name = "hisi_soc_hha",
++		.acpi_match_table = hisi_soc_hha_ids,
++	},
++	.probe = hisi_soc_hha_probe,
++	.remove = hisi_soc_hha_remove,
++};
++
++module_platform_driver(hisi_soc_hha_driver);
++
++MODULE_IMPORT_NS("CACHE_COHERENCY");
++MODULE_DESCRIPTION("Hisilicon Hydra Home Agent driver supporting cache maintenance");
++MODULE_AUTHOR("Yicong Yang <yangyicong@hisilicon.com>");
++MODULE_AUTHOR("Yushan Wang <wangyushan12@huawei.com>");
++MODULE_LICENSE("GPL");
 -- 
 2.43.0
 
