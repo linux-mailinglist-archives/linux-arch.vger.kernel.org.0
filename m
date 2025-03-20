@@ -1,254 +1,166 @@
-Return-Path: <linux-arch+bounces-10997-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-10998-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82BA4A6AFB1
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 22:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CC97AA6AFCE
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 22:25:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8949188C65F
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 21:13:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A711E189D62A
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 21:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19EA01E8337;
-	Thu, 20 Mar 2025 21:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9996228CA9;
+	Thu, 20 Mar 2025 21:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iaMJ49FB"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="id1O5h57"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0E51E5B7E;
-	Thu, 20 Mar 2025 21:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC9222687A
+	for <linux-arch@vger.kernel.org>; Thu, 20 Mar 2025 21:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742505216; cv=none; b=tMUYL740RmojMHkcuC6jiiRm9TUIJzaQS1ms2Q5Mtuq2JvRhv1c6TbQIJe2ns+Op10ATzf8n3MYeFlaeHNjH+Y3eG5JKPi+FkJelR0MWWjgvYacAX2ENaIb/RsOn2z6GCl+gJHA1SE+BH0hVXfsqdxuWmPCkY5PHci201+XNbDw=
+	t=1742505936; cv=none; b=MbO50iKwwOApJu866cy5OlOvCJPp90i/R1S1/rOtBhu0fQ62fNBD34EM0KZDAdL8MERnwZoSFRlrOjqsdPSHlbcTfaFo43XFOU+0Lzg9CIylJnszttCUkwn+vGVqHJFw0QKONrPmANYeWk8Q1oTBI8YH1BWHVb7rxAeEdY1LxNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742505216; c=relaxed/simple;
-	bh=qT3pRQIRt1i35oXtu0ODXFreqqI/+Y7zQS4P0enG44U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qFLP9rJN421yN2FCYYVq4Pp2at8LvlIYUekpNWy9/cP77CsMee7b5EOJl9eC1Yqzecjdm3PYc7/pQ1ehiwDpGVGUdtZRnVu/ymzkBDKcDv5PrW16XiFNpKQEL2BzI5JZ8OiAeQNbOJCZ3Zy0O9sVkS4YF5O9t0jWcIJCyo82BQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iaMJ49FB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F231C4CEDD;
-	Thu, 20 Mar 2025 21:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742505215;
-	bh=qT3pRQIRt1i35oXtu0ODXFreqqI/+Y7zQS4P0enG44U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iaMJ49FB16G+FlJRuy97OCfjA+ZbWBl3XVzcBMcaKwrB06G5d36541muYB5cmaXHu
-	 YMMt/nHuOhUyOpB+eQ4xO2cyWMn+axk3d7aTdXz2tEEpUBygHFk0M9oDEEwHS0uJPd
-	 EKgLazyXP8IsrH66Cm5uouuHXXVNfRPzAwLWxRrU=
-Date: Thu, 20 Mar 2025 14:12:15 -0700
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	james.morse@arm.com, conor@kernel.org,
-	Yicong Yang <yangyicong@huawei.com>, linux-acpi@vger.kernel.org,
-	linux-arch@vger.kernel.org, linuxarm@huawei.com,
-	Yushan Wang <wangyushan12@huawei.com>, linux-mm@kvack.org,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [RFC PATCH 3/6] cache: coherency device class
-Message-ID: <2025032013-venus-request-b026@gregkh>
-References: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
- <20250320174118.39173-4-Jonathan.Cameron@huawei.com>
+	s=arc-20240116; t=1742505936; c=relaxed/simple;
+	bh=vI1BPqRdoy10g+WgmlSAf2KikeZLxUqHEVWTLCbIm9w=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=uWRZp0yqKMqQRm1t8Fo252qF5/D8eWNdzR3+YFLZrKooSRjdyrNRRTahfxNlb+10cgJUPdzz3Tmrxly8ujcZZQip+x3CsSuX2lXNfiE+7zcfvQRH+z3Qn2lTs6EMn9Wda4zgzslRV466TNBI7FaxxW3WfdN8KkoW6WR2Y56Poac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=id1O5h57; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cf861f936so1526905e9.3
+        for <linux-arch@vger.kernel.org>; Thu, 20 Mar 2025 14:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1742505932; x=1743110732; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:from:to:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/BM8p6OTMwPELuLuoM3O1JzZA7D2mDcWqh6aQhebe2w=;
+        b=id1O5h57dAQjiDasqV2/7bP8JCx+7wK0qTWvGUFZIikYjPdQhH440cY1WkFWuPLj3E
+         Wp7ELiRUOwLbv5xP26jsNv+e+z5qxeEWZEMtqgt6f3YuPZQ7GnRgkJbiDOFgVLYwjdiq
+         /IrpNJBwrDRmcHHY327m6kexMF28rtSydbs07mSXy9UtxD0wR5Vf9pRUPX2f3H1F/X17
+         BLbBNEnL9EBL4C4F6lnyA2w5DxOzdHlFTzNg/JFLzYwN5q59FOdRGCBMtAwJoJROJ/mb
+         bJzdsa09nUyagj+fGusJD4w9365g5eMjbI/lVbEVJ2yfgG+zA5kvI99zIvRdbfFbUWQ5
+         k9Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742505932; x=1743110732;
+        h=in-reply-to:references:subject:from:to:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/BM8p6OTMwPELuLuoM3O1JzZA7D2mDcWqh6aQhebe2w=;
+        b=t+Vm/hqKMeJWMb8Y+j7wjjYnv7ZI3Q4CJL4LCui4ETL++N0MDFVd1ME3chjrxZblWG
+         f6rwYtazbQEf5I9m1hSXDX9nW6G36EKRns5siGgQLT+xefYQUFX9FXz/MwJAHl2TyGnL
+         w3r6WBM0Ai3MKhgpM9zzUjNObcTl/ZrJ2OvEqu9Q2bf+7zH4TA/WjlIyiKSa9qwBa+jZ
+         k59eIQtJvqc5wHCvfeE5+uZA0ivPp5WS9i8INQe3aNAvqnUY4GG0Kau9/mDA8Nq331/s
+         Bs6CVpZb7pU+FkYLns0y/WFxpouoLTyzD7t/15ZYyH0s4Rld3W5/tvSGbc5yaXo53Nku
+         V9AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWmmxZbjAQJNdje8yeWp+ZesdCAYVoYTXm/dJ42Ob/jrsF4TrTdEOAikjLBR43ylufcZDzqi+Uy8CgJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqeBmCfWvYvh3SOeXw0rhCw8mb5Wg/I3pwlIIwaXSOqWBkbRwR
+	lUkaCtQxOzdOc7qMcHEnuDOlmRF+4Oig+69Bu9Sid+ODfLWnJA79ypn/6qEmrw4=
+X-Gm-Gg: ASbGncu49SD3Vx/TsXMj0jbRp/kaL/n01onfdtyZ+biknvYSvKjukqxyfVG31IMuO9t
+	7T5OcZjPPJOf/MFa5hxiCo1e4YE2z0NqKezoHvHxVNo5aJqySWR/1qYfb1x89Dja7xaKJ8P+fyS
+	nIDuzanvQlHOPekUEfE/zhONbq4XMbjzKIHVFIeTQ86HpTbo61x7MpWleroMd0qjjUBnzVURccP
+	841smmjsHiAwgXH5NIdRkyd+B0IDd+zlAdnuuCwYJdHT+nUZ+aFOY2S8wzdWqj3hOdi8pESxMcD
+	XIRKGt+mmqwBSV6DRDdfYgHvGUg869GUEnB+bJ1Bs/PaXOL5bIVPWNwRNvgQcWoIfEAZEt/C0Wl
+	wP4j0
+X-Google-Smtp-Source: AGHT+IENUyr/tuJjthynG7pDAFWYzf7OBnXUo8NpuhgchW3KTo0PDxUCxZfCqwEA5Mqzg2/ebVjxow==
+X-Received: by 2002:a05:600c:46c3:b0:439:8294:2115 with SMTP id 5b1f17b1804b1-43d50a53d12mr2494095e9.8.1742505931793;
+        Thu, 20 Mar 2025 14:25:31 -0700 (PDT)
+Received: from localhost (ip-89-103-73-235.bb.vodafone.cz. [89.103.73.235])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9efe55sm579763f8f.88.2025.03.20.14.25.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Mar 2025 14:25:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250320174118.39173-4-Jonathan.Cameron@huawei.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 20 Mar 2025 22:25:30 +0100
+Message-Id: <D8LESTM58PV0.7F6M6XYSL4BU@ventanamicro.com>
+Cc: <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
+ <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
+ <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
+ <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
+ <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
+ <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "Zong Li"
+ <zong.li@sifive.com>, "linux-riscv"
+ <linux-riscv-bounces@lists.infradead.org>
+To: "Deepak Gupta" <debug@rivosinc.com>, "Thomas Gleixner"
+ <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov"
+ <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>, "Lorenzo Stoakes"
+ <lorenzo.stoakes@oracle.com>, "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Conor Dooley" <conor@kernel.org>, "Rob Herring" <robh@kernel.org>,
+ "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Arnd Bergmann"
+ <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "Peter Zijlstra"
+ <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>, "Eric Biederman"
+ <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>, "Jonathan Corbet"
+ <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann Horn"
+ <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>
+From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
+Subject: Re: [PATCH v12 25/28] riscv: create a config for shadow stack and
+ landing pad instr support
+References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-25-e51202b53138@rivosinc.com>
+In-Reply-To: <20250314-v5_user_cfi_series-v12-25-e51202b53138@rivosinc.com>
 
-On Thu, Mar 20, 2025 at 05:41:15PM +0000, Jonathan Cameron wrote:
-> --- a/drivers/cache/Kconfig
-> +++ b/drivers/cache/Kconfig
-> @@ -1,6 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0
->  menu "Cache Drivers"
->  
-> +config CACHE_COHERENCY_CLASS
-> +	bool "Cache coherency control class"
-
-Why can't this be a module?  And why would anyone want to turn it off?
-
+2025-03-14T14:39:44-07:00, Deepak Gupta <debug@rivosinc.com>:
+> This patch creates a config for shadow stack support and landing pad inst=
+r
+> support. Shadow stack support and landing instr support can be enabled by
+> selecting `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wire=
+s
+> up path to enumerate CPU support and if cpu support exists, kernel will
+> support cpu assisted user mode cfi.
+>
+> If CONFIG_RISCV_USER_CFI is selected, select `ARCH_USES_HIGH_VMA_FLAGS`,
+> `ARCH_HAS_USER_SHADOW_STACK` and DYNAMIC_SIGFRAME for riscv.
+>
+> Reviewed-by: Zong Li <zong.li@sifive.com>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> @@ -250,6 +250,26 @@ config ARCH_HAS_BROKEN_DWARF5
+> +config RISCV_USER_CFI
+> +	def_bool y
+> +	bool "riscv userspace control flow integrity"
+> +	depends on 64BIT && $(cc-option,-mabi=3Dlp64 -march=3Drv64ima_zicfiss)
+> +	depends on RISCV_ALTERNATIVE
+> +	select ARCH_HAS_USER_SHADOW_STACK
+> +	select ARCH_USES_HIGH_VMA_FLAGS
+> +	select DYNAMIC_SIGFRAME
 > +	help
-> +	  Class to which coherency control drivers register allowing core kernel
-> +	  subsystems to issue invalidations and similar coherency operations.
+> +	  Provides CPU assisted control flow integrity to userspace tasks.
+> +	  Control flow integrity is provided by implementing shadow stack for
+> +	  backward edge and indirect branch tracking for forward edge in progra=
+m.
+> +	  Shadow stack protection is a hardware feature that detects function
+> +	  return address corruption. This helps mitigate ROP attacks.
+> +	  Indirect branch tracking enforces that all indirect branches must lan=
+d
+> +	  on a landing pad instruction else CPU will fault. This mitigates agai=
+nst
+> +	  JOP / COP attacks. Applications must be enabled to use it, and old us=
+er-
+> +	  space does not get protection "for free".
+> +	  default y
 
-What "core kernel subsystems"?
+A high level question to kick off my review:
 
-> +
->  config AX45MP_L2_CACHE
->  	bool "Andes Technology AX45MP L2 Cache controller"
->  	depends on RISCV
+Why are landing pads and shadow stacks merged together?
 
-Shouldn't all of these now depend on CACHE_COHERENCY_CLASS?
-
-> diff --git a/drivers/cache/Makefile b/drivers/cache/Makefile
-> index 55c5e851034d..b72b20f4248f 100644
-> --- a/drivers/cache/Makefile
-> +++ b/drivers/cache/Makefile
-> @@ -3,3 +3,5 @@
->  obj-$(CONFIG_AX45MP_L2_CACHE)		+= ax45mp_cache.o
->  obj-$(CONFIG_SIFIVE_CCACHE)		+= sifive_ccache.o
->  obj-$(CONFIG_STARFIVE_STARLINK_CACHE)	+= starfive_starlink_cache.o
-> +
-> +obj-$(CONFIG_CACHE_COHERENCY_CLASS)	+= coherency_core.o
-
-Why the blank line?
-
-> diff --git a/drivers/cache/coherency_core.c b/drivers/cache/coherency_core.c
-> new file mode 100644
-> index 000000000000..52cb4ceae00c
-> --- /dev/null
-> +++ b/drivers/cache/coherency_core.c
-> @@ -0,0 +1,130 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Class to manage OS controlled coherency agents within the system.
-> + * Specifically to enable operations such as write back and invalidate.
-> + *
-> + * Copyright: Huawei 2025
-> + * Some elements based on fwctl class as an example of a modern
-> + * lightweight class.
-> + */
-> +
-> +#include <linux/cache_coherency.h>
-> +#include <linux/container_of.h>
-> +#include <linux/idr.h>
-> +#include <linux/fs.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +
-> +#include <asm/cacheflush.h>
-> +
-> +static DEFINE_IDA(cache_coherency_ida);
-> +
-> +static void cache_coherency_device_release(struct device *device)
-> +{
-> +	struct cache_coherency_device *ccd =
-> +		container_of(device, struct cache_coherency_device, dev);
-> +
-> +	ida_free(&cache_coherency_ida, ccd->id);
-> +}
-> +
-> +static struct class cache_coherency_class = {
-> +	.name = "cache_coherency",
-> +	.dev_release = cache_coherency_device_release,
-> +};
-> +
-> +static int cache_inval_one(struct device *dev, void *data)
-> +{
-> +	struct cache_coherency_device *ccd =
-> +		container_of(dev, struct cache_coherency_device, dev);
-> +
-> +	if (!ccd->ops)
-> +		return -EINVAL;
-> +
-> +	return ccd->ops->wbinv(ccd, data);
-> +}
-> +
-> +static int cache_inval_done_one(struct device *dev, void *data)
-> +{
-> +	struct cache_coherency_device *ccd =
-> +		container_of(dev, struct cache_coherency_device, dev);
-> +	if (!ccd->ops)
-> +		return -EINVAL;
-> +
-> +	return ccd->ops->done(ccd);
-> +}
-> +
-> +static int cache_invalidate_memregion(int res_desc,
-> +				      phys_addr_t addr, size_t size)
-> +{
-> +	int ret;
-> +	struct cc_inval_params params = {
-> +		.addr = addr,
-> +		.size = size,
-> +	};
-> +
-> +	ret = class_for_each_device(&cache_coherency_class, NULL, &params,
-> +				    cache_inval_one);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return class_for_each_device(&cache_coherency_class, NULL, NULL,
-> +				     cache_inval_done_one);
-> +}
-> +
-> +static const struct system_cache_flush_method cache_flush_method = {
-> +	.invalidate_memregion = cache_invalidate_memregion,
-> +};
-> +
-> +struct cache_coherency_device *
-> +_cache_coherency_alloc_device(struct device *parent,
-> +			      const struct coherency_ops *ops, size_t size)
-> +{
-> +
-> +	if (!ops || !ops->wbinv)
-> +		return NULL;
-> +
-> +	struct cache_coherency_device *ccd __free(kfree) = kzalloc(size, GFP_KERNEL);
-> +
-> +	if (!ccd)
-> +		return NULL;
-> +
-> +	ccd->dev.class = &cache_coherency_class;
-> +	ccd->dev.parent = parent;
-> +	ccd->ops = ops;
-> +	ccd->id = ida_alloc(&cache_coherency_ida, GFP_KERNEL);
-> +
-> +	if (dev_set_name(&ccd->dev, "cache_coherency%d", ccd->id))
-> +		return NULL;
-> +
-> + 	device_initialize(&ccd->dev);
-> +
-> +	return_ptr(ccd);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(_cache_coherency_alloc_device, "CACHE_COHERENCY");
-> +
-> +int cache_coherency_device_register(struct cache_coherency_device *ccd)
-> +{
-> +	return device_add(&ccd->dev);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cache_coherency_device_register, "CACHE_COHERENCY");
-> +
-> +void cache_coherency_device_unregister(struct cache_coherency_device *ccd)
-> +{
-> +	device_del(&ccd->dev);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cache_coherency_device_unregister, "CACHE_COHERENCY");
-> +
-> +static int __init cache_coherency_init(void)
-> +{
-> +	int ret;
-> +
-> +	ret = class_register(&cache_coherency_class);
-> +	if (ret)
-> +		return ret;
-> +
-> +	//TODO: generalize
-> +	arm64_set_sys_cache_flush_method(&cache_flush_method);
-
-I'm guessing this will blow up the build on non-x86 builds :)
-
-> +struct cache_coherency_device {
-> +	struct device dev;
-> +	const struct coherency_ops *ops;
-> +	int id;
-> +};
-
-Classes are normally for user/kernel apis, what is this going to be used
-for?  I don't see any new user/kernel apis happening, so why do you need
-a struct device to be created?
-
-thanks,
-
-greg k-h
+Apart from adding build flexibility, we could also split the patches
+into two isolated series, because the features are independent.
 
