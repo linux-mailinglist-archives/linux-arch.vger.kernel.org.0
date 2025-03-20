@@ -1,185 +1,131 @@
-Return-Path: <linux-arch+bounces-11003-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11004-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EDACA6B0EC
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 23:33:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E69AA6B104
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 23:36:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CEE948503E
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 22:32:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B53E461172
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Mar 2025 22:36:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD2C228CB8;
-	Thu, 20 Mar 2025 22:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91C44212FBD;
+	Thu, 20 Mar 2025 22:36:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="middonsV"
+	dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b="JlEIF0yr"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DA4224249
-	for <linux-arch@vger.kernel.org>; Thu, 20 Mar 2025 22:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6133D994;
+	Thu, 20 Mar 2025 22:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742509886; cv=none; b=fMvZSaLzz88MV/o8CTxxqKsMQRm7/ow614GUxsCtzXfiyRz/MCkNQzh8jIAQgOapiUPD0WNS5jOP4Kwkq4r0N5uJf8f+/gHGumnMjQpLvCPIt3JfE3G/w93Igu0yIW4AZ4/O16KDgGj0s6BJ+F+VEA+s3rIbUv+WxqI6mLz4RmM=
+	t=1742510208; cv=none; b=SCf6wlShBQzAhX5+eQSdSwl32HsQ9CTLjhLGeu0Uj66JRU0ljvgdjL9k2flPx+aA9Mxm7UgqbgNN6vTLpY0dK1XktsEhYOwfmAk64ui8ZU4sddIxN1aD5i4t/8tyJ+q+NmkdaGtL+BFNektlnEB/r4IvRxLqCZ8mtOnPBu4p3yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742509886; c=relaxed/simple;
-	bh=IrTDX1xRoCekq5NEqfi8Ke8ahM5ujPZ5//oKaibGbYo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JyJXjE+U9wLKgpAlwbi7DsIvGX4mqbGJillIbtpeTYXbkUiKr9YPmC8j1OlxtJ+fdmaHR7jU4RtAnn0drB6QtVml0goRzy4cUThbhM2+VfJOAXwlHwCVWScVCZje2hbCSOmabol5X16N+fpHP/5eoGaMbFAa8SjQUpvZ6n0my3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=middonsV; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e455bf1f4d3so1068547276.2
-        for <linux-arch@vger.kernel.org>; Thu, 20 Mar 2025 15:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1742509884; x=1743114684; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IofsmlVDJhRwn5HSuRGp3pTAenUeDGvG4AuBmId2Qpg=;
-        b=middonsVSenVKcFMlRa4WpDsbHQFQfyLWM4nVOY+yQJ7ytYvfL9BP7Po3ZN9SZMxdm
-         1JLrKbT79ZGfc/jVHOsk2gj9Eu2Ti3k4KUgmh0xRo+o95hzrSQxWyd8HX7Mj8SNwoscl
-         QG8qq+bUmKJgxmrefRuOUsOcLo/4008DBjsFZpDtOkW/5YR7xyER+QkI3P8vOxImsrX0
-         hMzIqIuSdU/zxda0yZgdRmfJuQjmIcKqDY9MZ1Qe1WpMoszIRbnVdnQJZRDHmwT0Jvv0
-         6SBcgABG9ZjRXiqZQGvvwXkggcE8CFhoBFcgA+CHJV+g0vvSTXeArcwxfg+CpbOWzxC0
-         lE0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742509884; x=1743114684;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IofsmlVDJhRwn5HSuRGp3pTAenUeDGvG4AuBmId2Qpg=;
-        b=S7geIM5fPR1COjkctj08XDEvFSso0i69O4RzClLWwomzf5Kxo43blhy0/tBCSsTPwd
-         KMHwZuiT+2JFP3fmu32wLOvkDc1WaV6MsfIQo4ePS7SEcwLjNq7fHDz958gqr4BQVOT4
-         5M+qVN8mrUxB15ZqvxrR9N8wAWfoRWlG2Z3whtARJG58vJXJAFVI9CZoLJAC9AxZIXEn
-         ikf2zErniyk9c/Br8UybRE7SQcIUGravWoy8UAdX09auA9VAfa548a11/vRRy0s+rrGP
-         1Z04DKnWn2BDlh5gKvTyNMgBJZuYE/eRWeOFztkDjMCF4uE27jDs42ERbBqGTgzkIzJg
-         y+kg==
-X-Forwarded-Encrypted: i=1; AJvYcCW69YRBoupRO5/gBg7ng+DfI33bgDxaUswRIBHwnmQhg3co4sjKZiq9xC0VcdoU9fq3TtG0wCGBxM+Z@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQn7NsLv52nZGFS1ZZfty9lLSsMJm53IAVL9jhJp3gb5BWwlP0
-	P2DQR1XhUm7i5ybzFc+FMlmAGsLlkBQWyfLkyrN1HEd1JWh2ZBONvjZQhaAzMIu9Zg3gUiTjt6n
-	gpKf/bPoYjEGIeo0lHc55Snux+2iPbK3Ir5zr6Q==
-X-Gm-Gg: ASbGncuJg2LBtNFU6qpo8/7b6MQYvTEQJonJ7ZDZ35+Tm3XAIieRqZ8cDmVlXHTfMaw
-	7iecA3SdWBeDZswGa7LnSd29eBjIW+Cdb5MgguM6jhkJtqs+7hC0ocph3yGSl1SxIdYhKWPD3i6
-	VDtoCkD7cGVknwAiS08fjQIvqhR3s=
-X-Google-Smtp-Source: AGHT+IHFNCvqeNOK7sMsBmLPvgYWG7exVxSWvS9DNLcUgNmS336dZeeGcZ6AHSeGvrnkMyVPDEN8X9dkpWdV3lB6eDg=
-X-Received: by 2002:a05:690c:3809:b0:6e2:1527:446b with SMTP id
- 00721157ae682-700babe54c1mr17364757b3.3.1742509884010; Thu, 20 Mar 2025
- 15:31:24 -0700 (PDT)
+	s=arc-20240116; t=1742510208; c=relaxed/simple;
+	bh=erR5s/QHhOVYcVujRx1ocpZU2Mh19m8e4WQR3kZsKj4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BeKpkLn33mQvjQXYI6tLtvexGWCE4ROMVnyJXzD/uaPShytJatu9LI/Uyj4e/TSaSwQU87qlcxu2A7nbue/WgjJKbHgNP2wrprUQKmUe+T3K43cQTAelwAE+55jSw2d5YNcyjyglO8FnJf2B0OPFyXndnu8d3vlbG2hNA4kiCNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com; spf=pass smtp.mailfrom=iencinas.com; dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b=JlEIF0yr; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iencinas.com
+Message-ID: <ac0b1f3e-6abe-4de2-bf5a-a4b3207a22c3@iencinas.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iencinas.com;
+	s=key1; t=1742510203;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+c8qZOlmmvHFgj0oXWHinTIVH4usyV/Xq+r++ltUKVc=;
+	b=JlEIF0yrNmRwVufB3Vvc57KKZLVUuP3amyyNrRfA1EFfAoUti/XB5XsE35cix88xmS2/8X
+	sgSjd97bagnUtXBnl4Igy6LHVwnqw/doVKwQqkWjwi00HG520cn0QAmYVAyq0yiEinHx6H
+	/RONssKoN4sUrU3n5Xy/ji0DC4ty/d0evqdZcCbAqv+oZQDzvao8AC6GFl0n7Wz9pYFIvx
+	UkRP6otmjqSbq0nhWKl6xbUGDCPHDYFDZbiffcMaVDxq769H5pHqhgSidhORqbm06gXdLI
+	wNHejrs6kp4w+JVtB/Iv7dn3mfe8C+Ze/0fVFGq0ZzkP1ofmcDv3Yzqtjy16jw==
+Date: Thu, 20 Mar 2025 23:36:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-23-e51202b53138@rivosinc.com> <D8LF0RDZ6809.1I3MCCVSHRSQ2@ventanamicro.com>
-In-Reply-To: <D8LF0RDZ6809.1I3MCCVSHRSQ2@ventanamicro.com>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Thu, 20 Mar 2025 15:31:09 -0700
-X-Gm-Features: AQ5f1JrziMLdrjsoBdVgxAHm84jf6CZ2h4oWTVpyzciuX161uoZpfiFXMbIZdgY
-Message-ID: <CAKC1njQR9yARvWffjznjpeZK5zLFpg0-qCUo25_8niH29YL6uA@mail.gmail.com>
-Subject: Re: [PATCH v12 23/28] riscv: kernel command line option to opt out of
- user cfi
-To: =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
-	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
-	linux-riscv <linux-riscv-bounces@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 1/2] include/uapi/linux/swab.h: move default
+ implementation for swab macros into asm-generic
+To: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>
+Cc: Eric Biggers <ebiggers@kernel.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Zhihang Shao <zhihang.shao.iscas@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>
+References: <20250319-riscv-swab-v2-0-d53b6d6ab915@iencinas.com>
+ <20250319-riscv-swab-v2-1-d53b6d6ab915@iencinas.com>
+ <2afab9dc-e39c-4399-ac5a-87ade4da5ab0@app.fastmail.com>
+ <4d45df0c-d44e-4bb6-8daa-0dba1b834bc4@iencinas.com>
+ <07b8051b-9d5e-440e-b74d-1ca97402fe2a@app.fastmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ignacio Encinas Rubio <ignacio@iencinas.com>
+In-Reply-To: <07b8051b-9d5e-440e-b74d-1ca97402fe2a@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Mar 20, 2025 at 2:35=E2=80=AFPM Radim Kr=C4=8Dm=C3=A1=C5=99 <rkrcma=
-r@ventanamicro.com> wrote:
->
-> 2025-03-14T14:39:42-07:00, Deepak Gupta <debug@rivosinc.com>:
-> > This commit adds a kernel command line option using which user cfi can =
-be
-> > disabled.
-> >
-> > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> > ---
-> >  arch/riscv/kernel/usercfi.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> >
-> > diff --git a/arch/riscv/kernel/usercfi.c b/arch/riscv/kernel/usercfi.c
-> > index d31d89618763..813162ce4f15 100644
-> > --- a/arch/riscv/kernel/usercfi.c
-> > +++ b/arch/riscv/kernel/usercfi.c
-> > @@ -17,6 +17,8 @@
-> >  #include <asm/csr.h>
-> >  #include <asm/usercfi.h>
-> >
-> > +bool disable_riscv_usercfi;
-> > +
-> >  #define SHSTK_ENTRY_SIZE sizeof(void *)
-> >
-> >  bool is_shstk_enabled(struct task_struct *task)
-> > @@ -396,6 +398,9 @@ int arch_set_shadow_stack_status(struct task_struct=
- *t, unsigned long status)
-> >       unsigned long size =3D 0, addr =3D 0;
-> >       bool enable_shstk =3D false;
-> >
-> > +     if (disable_riscv_usercfi)
-> > +             return 0;
-> > +
-> >       if (!cpu_supports_shadow_stack())
-> >               return -EINVAL;
-> >
-> > @@ -475,6 +480,9 @@ int arch_set_indir_br_lp_status(struct task_struct =
-*t, unsigned long status)
-> >  {
-> >       bool enable_indir_lp =3D false;
-> >
-> > +     if (disable_riscv_usercfi)
-> > +             return 0;
-> > +
-> >       if (!cpu_supports_indirect_br_lp_instr())
-> >               return -EINVAL;
-> >
-> > @@ -507,3 +515,16 @@ int arch_lock_indir_br_lp_status(struct task_struc=
-t *task,
-> >
-> >       return 0;
-> >  }
-> > +
-> > +static int __init setup_global_riscv_enable(char *str)
-> > +{
-> > +     if (strcmp(str, "true") =3D=3D 0)
-> > +             disable_riscv_usercfi =3D true;
-> > +
-> > +     pr_info("Setting riscv usercfi to be %s\n",
-> > +             (disable_riscv_usercfi ? "disabled" : "enabled"));
-> > +
-> > +     return 1;
-> > +}
-> > +
-> > +__setup("disable_riscv_usercfi=3D", setup_global_riscv_enable);
->
-> I'd prefer two command line options instead.
 
-One for zicfilp and one for zicfiss ?
->
-> In any case, I think we still document params in kernel-parameters.txt.
 
-Noted, will do that.
+On 19/3/25 22:49, Arnd Bergmann wrote:
+> On Wed, Mar 19, 2025, at 22:37, Ignacio Encinas Rubio wrote:
+>> On 19/3/25 22:12, Arnd Bergmann wrote:
+>>> On Wed, Mar 19, 2025, at 22:09, Ignacio Encinas wrote:
+>>>> Move the default byteswap implementation into asm-generic so that it can
+>>>> be included from arch code.
+>>>>
+>>>> This is required by RISC-V in order to have a fallback implementation
+>>>> without duplicating it.
+>>>>
+>>>> Signed-off-by: Ignacio Encinas <ignacio@iencinas.com>
+>>>> ---
+>>>>  include/uapi/asm-generic/swab.h | 32 ++++++++++++++++++++++++++++++++
+>>>>  include/uapi/linux/swab.h       | 33 +--------------------------------
+>>>>  2 files changed, 33 insertions(+), 32 deletions(-)
+>>>>
+>>>
+>>> I think we should just remove these entirely in favor of the
+>>> compiler-povided built-ins.
+>>
+>> Got it. I assumed they existed to explicitly avoid relying on
+>> __builtin_bswap as they might not exist. However, I did a quick grep and
+>> found that there are some uses in the wild.
+> 
+> Right, I do remember when we had a discussion about this maybe
+> 15 years ago when gcc didn't have the builtins on all architectures
+> yet, but those versions are long gone, and we never cleaned it up.
+
+I just had a chance to look at this and it looks a bit more complex than
+I initially thought. ___constant_swab macros are used in more places
+than I expected, and {little,big}_endian.h define their own macros that
+are used elsewhere, ...
+
+It is not clear to me how to proceed here. I could:
+
+  1) Just remove ___constant_swab macros and replace them with
+  __builtin_swap everywhere
+
+  2) Go a step further and evaluate removing __constant_htonl and
+  relatives
+
+Let me know what you think is the best option :)
+
+I'll resend this series without this patch (and make the RISC-V use
+fall back into __builtin_bswap)
+ 
+>> I couldn't find compiler builtins for ___constant_swahb32 nor 
+>> ___constant_swahw32, so I guess I'll leave them as they are.
+> 
+> Correct. There are also 24-bit and 48-bit swap functions
+> in include/linux/unaligned.h that have no corresponding builtins.
+
+Thanks for clarifying!
 
