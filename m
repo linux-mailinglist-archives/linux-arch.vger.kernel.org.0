@@ -1,170 +1,145 @@
-Return-Path: <linux-arch+bounces-11040-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11041-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67B02A6C539
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 22:32:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B7FCA6C5FE
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 23:32:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94C087A36EC
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 21:31:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1322D189554E
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 22:32:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A758F231A2B;
-	Fri, 21 Mar 2025 21:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273E622AE5D;
+	Fri, 21 Mar 2025 22:32:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="fIRjMm4y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDTGb5ab"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B241F099D
-	for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 21:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0EA15D5B6;
+	Fri, 21 Mar 2025 22:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742592750; cv=none; b=HP3olebD5+L57xD8du0QD7GlY8BblJOvVPl2UcDIs7mtHqt5zDcUZUAi2KlpYHoqm2u0bUSGF/wCZcT4LsYBAjM/M3qKN58x3HXvMP4GwKjDW0uNCO8ZG7yHqHPQkR0/rsc6UzcKvuSAmvwyj4I25OYA+1sa6+f1CJfq+rW/GMQ=
+	t=1742596342; cv=none; b=Jgl/H5xT1lHITiV0ETkg8YCDBdhAtmn0cTJnZOngLD8kaBo3nEVu1kJ6ceXSEOeX0NHr34aiE1Cpgu/iK4wIU3GFE8NKL7kF/iwM5X2DFNmaNrOOb/Jrl9PX1pmiENj0SmMH+UrCFhVMHrOTJDECxdbhGz+uUyjliJR5jD3jl9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742592750; c=relaxed/simple;
-	bh=yG1Qzi6F+aGsBMpdWaT175/M25TWqxBfzW0aBc2Mby8=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=GKUO6Yce7eec4EALQ7LkJfBU5YiucK0MzVvQLeSLISdHFIf1ludixa6bVjRrBA94t5V3TRWaF5H2fDVdI6uY6Up8BiqIWjU/UF4b57Aq2VxXSY2QNHBE1kgOaco4PNCdHEAplu/deXtnCMjBiVn0/XH4pPncmxAxaGQ9sXIygXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fIRjMm4y; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4767b3f8899so35811901cf.0
-        for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 14:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1742592747; x=1743197547; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WkEW7se4kA9gakYYehbVu1ZGmOR39c99GGBG3Q74ESA=;
-        b=fIRjMm4y38rt6rR4EiVKrVqg8BgTJNJQzyxdGM3k4y0k9FWSEYB11GkLVZzJlOJC6P
-         LYoP8Lc8BN7MqvRpg1M6uwz5/HCvBNBnnUPff9qC9ZraQOsQ5GUQEawk8nwSJ2R7w19Z
-         Sk01Pvd8sjpeKYJJxvykAYmwnre5DsbtRyrfPhzlWJPMAhta6i64rgRDiNja4KVmxnVP
-         rzhGnDTCiEHE+V04jIUKueIyxF6Gr30GDSoRcl/LOSRTXDBhiSsLptTCSi6lTO7cgJdu
-         3HHzCXJxe7cd89ONE4gDisu7v9DNNUwILVxBToovN+8GcAfKKh+8f8rSbRrLTA/ycUPn
-         SCzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742592747; x=1743197547;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WkEW7se4kA9gakYYehbVu1ZGmOR39c99GGBG3Q74ESA=;
-        b=Nx0BnYhFYxYCWcIc7W9iqZui/NorLnNxIr7BdxZnQkbYvrTnm+yTDN2dda9O0tD8BN
-         CAzvo6MU2FTFTzwioDN/Ho7iFQuqme9b2cmE05VbxA6Gwdz4B5elcZK+gpmpFfQzGIXJ
-         5/ooAEG7FSBBTrP3HO31fcto2VeiwBo06Z95sfM0yAlMyCHUYP6tjvoZ0GiOIlsqbBMI
-         sNICF27SPMJC4MRr1FLfMswFQrmht1ao6PeRSoHmrZweabK/IVFPu868iQWVVlchegrm
-         BMtYg3wKnoAOiohC9CJrAD0j79y4Dd7nTSdtIonCSLOAaUKiaI9jsRB9ZbVomKrLNnEP
-         UM9A==
-X-Forwarded-Encrypted: i=1; AJvYcCWxDjmUPmimGmp8rI4U1FiPRJdhUVEswG6Az/H2un7RafjImUG5PuTd+WqhRUPdsNIGswXKzi1ib0L4@vger.kernel.org
-X-Gm-Message-State: AOJu0YymIC86H+W+rlYrwPiEkGOn6uov5bRoLzQFNxmO2SjkNPbrvA5Y
-	giRVSgzI6xjtosk41dKuNE1dggRhBnPdbWOkUNUVXAqsp1t2Sdt/n9NqOZ2HNQ==
-X-Gm-Gg: ASbGncsKo7vbTkV8M+2hvc65nyc5V/fSoX8W5N2vYF63EIeG4WcXbbz76NuPAb3e415
-	xrMNXqsLjueYvAe8KMgz+vgl+H3eZeHsyGcmRO80QnxMRIWtrw6Tglc20O+E7hG34KqJ4ZqA0Z4
-	7uNu6A0dU17+jhPkOnNo1AyMVTif4TE1+URV8JRd8dkAA1/u59V0VnDx2329Odk4IJCoRF9F3zn
-	yCF63kKtuuiXC7KMtUb0GWbfNqwojpO8uH3LbDz3p8QFWkoMuEMDvuL7vBV1zUBeuXcBcXa9GCt
-	H82ju+1mvLtcaOEjcnzch4HDH14AyFaTqd4bzUmMqdOdeRvPa62lLsbZlHSw5TmViyNKuLKDbtB
-	3WocFMoZlCVzUjA==
-X-Google-Smtp-Source: AGHT+IEqvMs9f3zdHkqatEuHHMLq+Pp1CGQwo1N+6m68HBYAt0XjQifVPk3cXxCHJ8EdFG+VR82ouA==
-X-Received: by 2002:a05:622a:1f98:b0:471:fef5:ee84 with SMTP id d75a77b69052e-4771d924e1emr70292591cf.7.1742592746683;
-        Fri, 21 Mar 2025 14:32:26 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4771d64d5f6sm16343541cf.81.2025.03.21.14.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 14:32:26 -0700 (PDT)
-Date: Fri, 21 Mar 2025 17:32:25 -0400
-Message-ID: <e2d5b27847fde03e0b4b9fc7a464fd87@paul-moore.com>
+	s=arc-20240116; t=1742596342; c=relaxed/simple;
+	bh=UzLNiQ5Wvn9rKAUANHTjv00uwdzSTTzEUgki6vN47rE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hvG1pg8s5aIUGKoUNvZ+Ov0RRnl8OJuf2fnKdD8uKufMbEkcdSAbjEtni3Tp3ws7NlhCKMqedGhvIF+u8Xyv8bFBVMYggPNqZwwU77imTabdeRigv+GnK/TZHxyCg4On8duRIF8QMER90zc1A+Kv8AKyjQkGOzOuI9g2LNBTO48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDTGb5ab; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF287C4CEE3;
+	Fri, 21 Mar 2025 22:32:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742596340;
+	bh=UzLNiQ5Wvn9rKAUANHTjv00uwdzSTTzEUgki6vN47rE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oDTGb5abR2KDLvK+8ds6skrd6W1UtIQ/hokDvvG5OHnrB5GRHzihjplyW9Dr6mGpr
+	 tEFr6YgI0z7nOq6Kx1wY3wBBfL5doWPuT5YcTSDhhAUucE8NvOQMIA0N9ya7UAm4fU
+	 Pb3O3ag7abVK/wR4RA8RqfmEbPRIEgpRBdh7dyJtt9VAYOPHFmnSzMGyM2u6cZusYc
+	 mWDW9sq91fVXSWYLo2rhrIdcTxgPAzhU0SAyO+t38GtP/8FppDTrHGkR3eLlvoEzoD
+	 3mwDR9Fy85FsneXge0VU8VtdxCaPsGl6+nMjgHrPGVaYbRTWumxuYDjRLg6I5kWrhN
+	 Aom54EoL5NaEQ==
+Date: Fri, 21 Mar 2025 22:32:15 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	james.morse@arm.com, Yicong Yang <yangyicong@huawei.com>,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linuxarm@huawei.com, Yushan Wang <wangyushan12@huawei.com>,
+	linux-mm@kvack.org, gregkh@linuxfoundation.org,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [RFC PATCH 0/6] Cache coherency management subsystem
+Message-ID: <20250321-failing-squatted-37a88909bde2@spud>
+References: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20250320_1749/pstg-lib:20250320_2248/pstg-pwork:20250320_1749
-From: Paul Moore <paul@paul-moore.com>
-To: Andrey Albershteyn <aalbersh@redhat.com>, Richard Henderson <richard.henderson@linaro.org>, 
-	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>
-Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, selinux@vger.kernel.org, Andrey Albershteyn <aalbersh@kernel.org>
-Subject: Re: [PATCH v4 1/3] lsm: introduce new hooks for setting/getting inode  fsxattr
-References: <20250321-xattrat-syscall-v4-1-3e82e6fb3264@kernel.org>
-In-Reply-To: <20250321-xattrat-syscall-v4-1-3e82e6fb3264@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="eWBfxz5cC1rG3K4K"
+Content-Disposition: inline
+In-Reply-To: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
 
-On Mar 21, 2025 Andrey Albershteyn <aalbersh@redhat.com> wrote:
-> 
-> Introduce new hooks for setting and getting filesystem extended
-> attributes on inode (FS_IOC_FSGETXATTR).
-> 
-> Cc: selinux@vger.kernel.org
-> Cc: Paul Moore <paul@paul-moore.com>
-> 
-> Signed-off-by: Andrey Albershteyn <aalbersh@kernel.org>
-> ---
->  fs/ioctl.c                    |  7 ++++++-
->  include/linux/lsm_hook_defs.h |  4 ++++
->  include/linux/security.h      | 16 ++++++++++++++++
->  security/security.c           | 32 ++++++++++++++++++++++++++++++++
->  4 files changed, 58 insertions(+), 1 deletion(-)
 
-Thanks Andrey, one small change below, but otherwise this looks pretty
-good.  If you feel like trying to work up the SELinux implementation but
-need some assitance please let me know, I'll be happy to help :)
+--eWBfxz5cC1rG3K4K
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> diff --git a/fs/ioctl.c b/fs/ioctl.c
-> index 638a36be31c14afc66a7fd6eb237d9545e8ad997..4434c97bc5dff5a3e8635e28745cd99404ff353e 100644
-> --- a/fs/ioctl.c
-> +++ b/fs/ioctl.c
-> @@ -525,10 +525,15 @@ EXPORT_SYMBOL(fileattr_fill_flags);
->  int vfs_fileattr_get(struct dentry *dentry, struct fileattr *fa)
->  {
->  	struct inode *inode = d_inode(dentry);
-> +	int error;
->  
->  	if (!inode->i_op->fileattr_get)
->  		return -ENOIOCTLCMD;
->  
-> +	error = security_inode_getfsxattr(inode, fa);
-> +	if (error)
-> +		return error;
-> +
->  	return inode->i_op->fileattr_get(dentry, fa);
->  }
->  EXPORT_SYMBOL(vfs_fileattr_get);
-> @@ -692,7 +697,7 @@ int vfs_fileattr_set(struct mnt_idmap *idmap, struct dentry *dentry,
->  			fa->flags |= old_ma.flags & ~FS_COMMON_FL;
->  		}
->  		err = fileattr_set_prepare(inode, &old_ma, fa);
-> -		if (!err)
-> +		if (!err && !security_inode_setfsxattr(inode, fa))
->  			err = inode->i_op->fileattr_set(idmap, dentry, fa);
->  	}
->  	inode_unlock(inode);
+On Thu, Mar 20, 2025 at 05:41:12PM +0000, Jonathan Cameron wrote:
+> Note that I've only a vague idea of who will care about this
+> so please do +CC others as needed.
+>=20
+> On x86 there is the much loved WBINVD instruction that causes a write back
+> and invalidate of all caches in the system. It is expensive but it is
+> necessary in a few corner cases. These are cases where the contents of
+> Physical Memory may change without any writes from the host. Whilst there
+> are a few reasons this might happen, the one I care about here is when
+> we are adding or removing mappings on CXL. So typically going from
+> there being actual memory at a host Physical Address to nothing there
+> (reads as zero, writes dropped) or visa-versa. That involves the
+> reprogramming of address decoders (HDM Decoders); in the near future
+> it may also include the device offering dynamic capacity extents. The
+> thing that makes it very hard to handle with CPU flushes is that the
+> instructions are normally VA based and not guaranteed to reach beyond
+> the Point of Coherence or similar. You might be able to (ab)use
+> various flush operations intended to ensure persistence memory but
+> in general they don't work either.
+>=20
+> So on other architectures such as ARM64 we have no instruction similar to
+> WBINVD but we may have device interfaces in the system that provide a way
+> to ensure a PA range undergoes the write back and invalidate action. This
+> RFC is to find a way to support those cache maintenance device interfaces.
+> The ones I know about are much more flexible than WBINVD, allowing
+> invalidation of particular PA ranges, or a much richer set of flush types
+> (not supported yet as not needed for upstream use cases).
+>=20
+> To illustrate how a solution might work, I've taken both a HiSilicon
+> design (slight quirk as registers overlap with existing PMU driver)
+> and more controversially a firmware interface proposal from ARM
+> (wrapped up in made up ACPI) that was dropped from the released spec
+> but for which the alpha spec is still available.
+>=20
+> Why drivers/cache?
+> - Mainly because it exists and smells like a reasonable place.
+> - Conor, you are maintainer for this currently do you mind us putting this
+>   stuff in there?
 
-I don't believe we want to hide or otherwise drop the LSM return code as
-that could lead to odd behavior, e.g. returning 0/success despite not
-having executed the fileattr_set operation.
+drivers/cache was just something to put the cache controller drivers we
+have on RISC-V that implement the various arch_dma*() callbacks in
+non-standard ways that made more sense than drivers/soc/<soc vendor>
+since the controllers are IP provided by CPU vendors. There's only
+two drivers here now, but I am aware of another two non-standard CMO
+mechanisms if the silicon with them so there'll likely be more in the
+future :) I'm only really maintainer of it to avoid it being another
+thing for Palmer to look after :)
 
---
-paul-moore.com
+I've only skimmed this for now, but I think it is reasonable to put them
+here. Maybe my skim is showing, but it would not surprise me to see a
+driver providing both non-standard arch_dma*() callbacks as well as
+dealing with CXL mappings via this new class on RISC-V in the future..
+Either way, I think it'd probably be a good idea to add ?you? as a
+co-maintainer if the directory is going to be used for your proposed
+interface/drivers, for what I hope is an obvious reason!
+
+--eWBfxz5cC1rG3K4K
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ93o7wAKCRB4tDGHoIJi
+0qSeAQCDYiitjFXwNZKbbEFUkUXhfIYYuu03HmpuYwBJ0POhpgEAmO04672uw1BL
+hytebcnudQFH53/qJg2okVO4XHPPLAw=
+=cvbz
+-----END PGP SIGNATURE-----
+
+--eWBfxz5cC1rG3K4K--
 
