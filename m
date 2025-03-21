@@ -1,181 +1,225 @@
-Return-Path: <linux-arch+bounces-11020-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11021-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 115D2A6C062
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 17:47:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87247A6C0D7
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 18:06:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F2F217129A
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 16:44:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB758189859D
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 17:06:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2E622CBF9;
-	Fri, 21 Mar 2025 16:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 091F922CBF9;
+	Fri, 21 Mar 2025 17:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="HZyv9eYa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYngl1c/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0CF1E7C0B
-	for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 16:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220102F43;
+	Fri, 21 Mar 2025 17:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742575459; cv=none; b=UOhRJ6vURx2jzTdbDIP/KiIllTK2Btz7t+3S2k+7BtojTg51zV8dPvHWprNgP1gzlnPVTqyndKZksZ1t3ialukyR5a/xsHJXUD4vifnyJvonojh0fuQPF9ja0ocdBVauEHydMME6eE964myBFKTFST2MgKOoA2gh7OUBzfIMMCg=
+	t=1742576763; cv=none; b=nh2JPmM7AEK5d63GrGTYX8D8vAhklhb1xwE/DnrS9NR1u4IPmwU1jkKfxRqtMLahN0T7Whx40Z81sjqxNikMM/GfCEcT6RXuey1chjGEWPSGQcIggTdEgY9GjgcfDHx1Rl3dYzpXNISWzKw/KQcHr/18WHt2FsKFzLGHTzIL3IU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742575459; c=relaxed/simple;
-	bh=IMeArOMSvV+SAUlYdgzoqB6lsnXPfljvOmj84MN0ick=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MXtAGLgS0s0vkWzBRt5wK8i9Jxr4pOz3OHUEhsTLViVgt0MTCNGLoyrT+MjzIHzHA6YNEm1AMc7ycrF6vWbnyzPw8vczOjosEsGHPxUQ+SIU3Utx5t1PMevPM4SKL+IZ/nEv44oTlUiws6PatQAj2jLSJTLoV+gkDVWSj7v+8rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=HZyv9eYa; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-225a28a511eso49907425ad.1
-        for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 09:44:17 -0700 (PDT)
+	s=arc-20240116; t=1742576763; c=relaxed/simple;
+	bh=n9/WVuTJiRxEQG1Hl0uQJuC2jaPbsPAQvGluwkYAflA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K9s76l3pugIlq90oyMt61Ksxym72sKYVLhd7ryYKPz8m+/qeCyGB3JGD15R4xkGnwjv+QzGo+8gqoisYj8nfG6VGSJV1aiyPIvf4sBb6VEEJ/1+XW6RriYYklK+fz3gjP+cd4jdAQOCN3aJ52JSTDHMoKGTurtsIRWa6EC6Vm0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYngl1c/; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-223f4c06e9fso38313515ad.1;
+        Fri, 21 Mar 2025 10:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1742575457; x=1743180257; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mdus/fJVv5Uld6yn8oFMkQzJNe6dHC2w9XvJ773goNA=;
-        b=HZyv9eYaGfAfS5TzyiAfne7e+Cj6w6knyN1bsuK0l23BH6/C2KhX2L3GiLz0dennJB
-         kK9slfnRaJ27l+T8IPNdM9DXo4h6Vj3Dth4GDHOzj+mBDaBhwYD0bkt3x8Lk51JO66uA
-         pgCNI/yZ0ZQ4pfX/PqXQ5YgmYZvQHpiDE/zXA=
+        d=gmail.com; s=20230601; t=1742576760; x=1743181560; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=DGn88oPkGY52kMYyELFbKZ2t+jeQDt845yU5wPNCV7I=;
+        b=iYngl1c/lGFAzAEOcU53oOWcjgSzio2s1pdT3JmGra8iE8li0NDHJRZrwiDvLHCRjs
+         nvI0zNmwSO5lnZj0wCqjTAQLCLd1+TeEa+o2qh6jOsNsQXLZDIovvDImvVlf+MJ+ai19
+         GWZ/ZFVRcd8RKt4ftjczzm7UKsOG+22CARGS8A6zJ0ngfa78NPQydduamJXYPwSH9EZ6
+         9003bTONlp/qhWwRDTcEJopGbGFTuM5qrUuQVKlTuh0712ogzMcqJ5NvKRfbO463wZxZ
+         xZmMJj8M+jJ3GWUQgOtQAbNWXYsZnrUZugxLhrp62HOPh+g2BGMMq+dL36zkG/rr7hPw
+         DS3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742575457; x=1743180257;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mdus/fJVv5Uld6yn8oFMkQzJNe6dHC2w9XvJ773goNA=;
-        b=ldnJClsyJ0oE8bDWU7mj/R4CKUQ5CFQZxCAtxx4ZhYiGzFEEfvSo07lSwK8DoupNrt
-         VR1ub6P622nffVB/aF8Ypi8zfvD1WMz7b/g5ZGqopZf+eq0ctAAmbNr8+cIIOO2SSuTI
-         UdMPPilGmqIQCqDuSZft7XA3SUbRx2L/xX7etsYbJ7uCPfC2pDUG3PmEq8XGsz4ioaeh
-         SI/OkPwjEY2AA5HGMrV9t/Rpq2NmP9QtlHJ0VyQX36psWSbZshgs+7iXWW58KFqkZdva
-         euBEteaTvpJuNznl5hM+BNWiYgV86Ry4cgGWE+RjV4nC/x3N/P+uIFe1mmt8wpj8ghxe
-         KF9w==
-X-Forwarded-Encrypted: i=1; AJvYcCXcND4tFmnrPhEuSV7rDBxvcC7bGJ4xVId0tTkMfqqaLWK8J7mlrPWbA77uNKIcZc1laQunxmSSckqT@vger.kernel.org
-X-Gm-Message-State: AOJu0YwshnCMWoZrkCekq6Bil5rPIWJGp109IwqPUTUF2WaTNXgss29L
-	SwCvfsfu+lmFU8hVvMzCZMOLysnnD72gH1epcT3+qdw5/OT2XlHYV9CGzi4BiDI=
-X-Gm-Gg: ASbGncvMxQqOBW4K0+rjXpvmxyYGqa35ZRtK/Q81NTpQ1Mxez9sizOaylt/Z6zn1Afb
-	WVfUV1l6EEhTcxEbVPX6mitKXTj7gOKq3X7b+0YWAZXNU/49SMNTeO+M4dxHITESO6pqVLXU29j
-	sADLcEFodXUpzVdKqP6wnFifrkyb91JlkjlAtMgfhEXJB7szkg4AuMzs85wiwb8unmoP92MAPcu
-	K0zzQPtjqQ9Py9FGo9/fgQhv3VLNQJ2EBJAn4ohjXTGue5iZBi/0Fr9O3iDDnpKHp7UjYB420QL
-	G6XXI0ef6orjNnBU+Stqk3BE8DyJYB0gJZwTmZk9qdE1xJQPstnGlNT6WkW/G+davdJs2VPKZNc
-	I+qU5wuuhnmnYgVy2
-X-Google-Smtp-Source: AGHT+IHNkHo8pQiFISfzkg8EmthIVkGNH6DyH204b4LoCrS28DjOE/rXN+w3HTspHp5hcO8dxdqoWw==
-X-Received: by 2002:a05:6a21:998b:b0:1f5:839e:ece8 with SMTP id adf61e73a8af0-1fe42f090e7mr7044509637.2.1742575456784;
-        Fri, 21 Mar 2025 09:44:16 -0700 (PDT)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af8a2843af9sm1984943a12.38.2025.03.21.09.44.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 09:44:16 -0700 (PDT)
-Date: Fri, 21 Mar 2025 09:44:12 -0700
-From: Joe Damato <jdamato@fastly.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Jens Axboe <axboe@kernel.dk>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, asml.silence@gmail.com,
-	linux-fsdevel@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
-	kuba@kernel.org, shuah@kernel.org, sdf@fomichev.me,
-	mingo@redhat.com, arnd@arndb.de, brauner@kernel.org,
-	akpm@linux-foundation.org, tglx@linutronix.de, jolsa@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
-Message-ID: <Z92XXFDVz_5fU2YQ@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Christoph Hellwig <hch@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asml.silence@gmail.com, linux-fsdevel@vger.kernel.org,
-	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-	viro@zeniv.linux.org.uk, jack@suse.cz, kuba@kernel.org,
-	shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com, arnd@arndb.de,
-	brauner@kernel.org, akpm@linux-foundation.org, tglx@linutronix.de,
-	jolsa@kernel.org, linux-kselftest@vger.kernel.org
-References: <20250319001521.53249-1-jdamato@fastly.com>
- <Z9p6oFlHxkYvUA8N@infradead.org>
- <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
- <2d68bc91-c22c-4b48-a06d-fa9ec06dfb25@kernel.dk>
- <Z9r5JE3AJdnsXy_u@LQ3V64L9R2>
- <19e3056c-2f7b-4f41-9c40-98955c4a9ed3@kernel.dk>
- <Z9sCsooW7OSTgyAk@LQ3V64L9R2>
- <Z9uuSQ7SrigAsLmt@infradead.org>
- <Z9xdPVQeLBrB-Anu@LQ3V64L9R2>
- <Z9z_f-kR0lBx8P_9@infradead.org>
+        d=1e100.net; s=20230601; t=1742576760; x=1743181560;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DGn88oPkGY52kMYyELFbKZ2t+jeQDt845yU5wPNCV7I=;
+        b=gny9UOCFPHO59n9ix1l8nWdSEi5Sh69DwAuKugCFcOlP+WoVUTxKlkxfMZsLQbUUJX
+         tLRDNq0Q+tp3NJVudkCHFxoSVdLgw6ScfCYh/2FWBPQ+rZj3XFP+GTjunNPZs3vzFrcU
+         A/z5HJykxM2XhGVhal/GZAwiiwougnFDT+EKRuPqTPcuBXg136zmETmkNTNIEbLfeC17
+         f2YSnwVGD0U9kITXwcHIjrOCnDHyWJuWs2zJ1RV5Ed8RwreaUg0ZvpJvsEr8wAbaq1EX
+         JqUQnzzSFXFThaSd3CmW3kSDkL2qcIMoEDDwwyCVee5YJsSe6BgtIu4yx52zXdOp/IKX
+         OkPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUOuVXnCc41j2VPEQ5iYx5r5k1g0IqSBNCtL6Y/0+xbyfdN6zZXcWygUR6lcpM66MG6RVsHN5j+4QiqeO31@vger.kernel.org, AJvYcCUzQeHKKJ+Effu/08oXMwMCwFiGWwnJTONemos4xwypZnLfs23H57Rmc3MdAzcLBCKrnioCTyNvY8Qp8OovhR3C@vger.kernel.org, AJvYcCUzhu/GB8vfREJptOfRWSYLzDnjyT1el4YRof/WsItv7R0N4CSEEcOHF2fm0cpJNi0ATcjhDB6sAJ4E@vger.kernel.org, AJvYcCV3fjalcH0vHDcE+5fQVUnMvX6Puxo0gmpO+y4rKm8s7uEDXTcB4oBVUDYwPCdBdjN8Q2+nDrXw7r1Zdw==@vger.kernel.org, AJvYcCW9/ydJlAw+Mu7t4kyv6aezLeteosn9p+7O/ygo8m9tHn7WPzm5EgurmbOHeEy0iVlrAUkJfV8AAgrqdvs5@vger.kernel.org, AJvYcCXZeXtzt7kVNpIvLL6pLEZSgHqXd3DNQvy9QDX8b7TegQs1zt9L4VOti2+TGg73gTKZ/NUckbx/0RE=@vger.kernel.org, AJvYcCXiIuS+Ueyz0g3sOubfDqN/xh/IGox3TI0pTIwmuoTksGN5kspMqzJzNe5rLGY8tU5Hhf7vG6ZYXYzR@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPLDThGOy6wSz5n0QCJhWa1iQOdDbv78UNV7x9bRQE+q3LRBTx
+	y29AA9Ii/QX6d4Sm0jfURwC2WMmxoLTli8G6qPqU6zYDYf4Rtpjz
+X-Gm-Gg: ASbGncsQf/H2A7/bucwuS8q5IdPsJmyV7y8E1XSYD1mZBD/6KjTh70GyNbt4adeYxBI
+	vGfGcPAYqjXuzSxB765411on0f6gZ5JQZaG8M3ylBvFEu4qj5q7FfING1Zr9K8cqe1YzSuUdVIS
+	JWfTZFX/ac5D4zokNy0QrlUHJv/rFsW2m0y5BP6MhO94kp1Am9FZpY2bWSekXLjhir7nkuZw2LD
+	humKf864SVqaF9B/U2Ctm6trjZYm06fhNsKdLRGqhl+F96YvMhjbOYGmoYXfIrz9GfTK9OUnu7w
+	4Eg586jMb49s6kbPrMlriaY59B6Bz/yxM/qneyyYwvM+zUMTWTtGF6x48kNd5vXEgEfmV1xd9JU
+	OY3l4RPoIVyFk0T2aGQ==
+X-Google-Smtp-Source: AGHT+IGlJ+Z2e1+BqNuKZjJeYaVTSO5uEIrxfNDx54p4mNFYbbGfGIs11ZjWWb6jUGSm+z6+aHdutQ==
+X-Received: by 2002:a17:902:ce84:b0:223:fb95:b019 with SMTP id d9443c01a7336-2265e7a1b2emr136230625ad.24.1742576760001;
+        Fri, 21 Mar 2025 10:06:00 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22780f45879sm19661595ad.65.2025.03.21.10.05.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Mar 2025 10:05:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b6bb68f0-7e93-4db2-9fe6-f615f06ddeb1@roeck-us.net>
+Date: Fri, 21 Mar 2025 10:05:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z9z_f-kR0lBx8P_9@infradead.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 10/14] s390: Add support for suppressing warning
+ backtraces
+To: Alessandro Carminati <acarmina@redhat.com>,
+ linux-kselftest@vger.kernel.org
+Cc: David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ =?UTF-8?Q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>,
+ Dan Carpenter <dan.carpenter@linaro.org>, Kees Cook <keescook@chromium.org>,
+ Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>,
+ Arthur Grillo <arthurgrillo@riseup.net>,
+ Brendan Higgins <brendan.higgins@linux.dev>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Maxime Ripard
+ <mripard@kernel.org>, =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?=
+ <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ Alessandro Carminati <alessandro.carminati@gmail.com>,
+ Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org,
+ kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ loongarch@lists.linux.dev, x86@kernel.org,
+ Linux Kernel Functional Testing <lkft@linaro.org>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>
+References: <20250313114329.284104-1-acarmina@redhat.com>
+ <20250313114329.284104-11-acarmina@redhat.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250313114329.284104-11-acarmina@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Mar 20, 2025 at 10:56:15PM -0700, Christoph Hellwig wrote:
-> On Thu, Mar 20, 2025 at 11:23:57AM -0700, Joe Damato wrote:
-> > In my other message to Jens I proposed:
-> >   - SPLICE_F_ZC for splice to generate zc completion notifications
-> >     to the error queue
-> >   - Modifying sendfile so that if SO_ZEROCOPY (which already exists)
-> >     is set on a network socket, zc completion notifications are
-> >     generated.
-> > 
-> > In both cases no new system call is needed and both splice and
-> > sendfile become safer to use. 
-> > 
-> > At some point in the future a mechanism built on top of iouring
-> > introduced as new system calls (sendmsg2, sendfile2, splice2, etc)
-> > can be built.
+On 3/13/25 04:43, Alessandro Carminati wrote:
+> From: Guenter Roeck <linux@roeck-us.net>
 > 
-> I strongly disagree with this.  This is spreading the broken
-> SO_ZEROCOPY to futher places outside the pure networking realm.  Don't
-> do that.
-
-OK. I won't proceed down that path. Thank you for the feedback.
- 
-> > > Because sendmsg should never have done that it certainly should not
-> > > spread beyond purely socket specific syscalls.
-> > 
-> > I don't know the entire historical context, but I presume sendmsg
-> > did that because there was no other mechanism at the time.
+> Add name of functions triggering warning backtraces to the __bug_table
+> object section to enable support for suppressing WARNING backtraces.
 > 
-> At least aio had been around for about 15 years at the point, but
-> networking folks tend to be pretty insular and reinvent things.
-
-Sorry, but whatever issue there is between networking and other
-folks is well beyond my understanding and historical context. I'm
-not a reviewer or maintainer or anything like that; I'm just a
-developer who saw a problem and wanted a solution.
-
-I've read your message loud and clear, though, and I won't proceed
-down the path I've proposed.
-
-I appreciate your feedback; this is precisely why I sent the RFC -
-to get comments - so thank you for taking a look and letting me
-know.
-
-> > As mentioned above and in other messages, it seems like it is
-> > possible to improve the networking parts of splice (and therefore
-> > sendfile) to make them safer to use without introducing a new system
-> > call.
-> > 
-> > Are you saying that you are against doing that, even if the code is
-> > network specific (but lives in fs/)?
+> To limit image size impact, the pointer to the function name is only added
+> to the __bug_table section if both CONFIG_KUNIT_SUPPRESS_BACKTRACE and
+> CONFIG_DEBUG_BUGVERBOSE are enabled. Otherwise, the __func__ assembly
+> parameter is replaced with a (dummy) NULL parameter to avoid an image size
+> increase due to unused __func__ entries (this is necessary because
+> __func__ is not a define but a virtual variable).
 > 
-> Yes.
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
+> ---
+>   arch/s390/include/asm/bug.h | 17 ++++++++++++++---
+>   1 file changed, 14 insertions(+), 3 deletions(-)
 > 
-> Please take the work and integrate it with the kiocb-based system
-> we use for all other in-kernel I/O that needs completion notifications
-> and which makes it trivial to integate with io_uring instead of
-> spreading an imcompatible and inferior event system.
+> diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
+> index c500d45fb465..44d4e9f24ae0 100644
+> --- a/arch/s390/include/asm/bug.h
+> +++ b/arch/s390/include/asm/bug.h
+> @@ -8,6 +8,15 @@
+>   
+>   #ifdef CONFIG_DEBUG_BUGVERBOSE
+>   
+> +#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
+> +# define HAVE_BUG_FUNCTION
+> +# define __BUG_FUNC_PTR	"	.long	%0-.\n"
+> +# define __BUG_FUNC	__func__
 
-If you have any suggestions or pointers to code I should look at for
-inspiration I would very much appreciate the guidance.
+gcc 7.5.0 on s390 barfs; it doesn't like the use of "__func__" with "%0-."
 
-Thanks for your time and energy in reviewing my RFC and responding.
+drivers/gpu/drm/bridge/analogix/analogix-i2c-dptx.c: In function 'anx_dp_aux_transfer':
+././include/linux/compiler_types.h:492:20: warning: asm operand 0 probably doesn't match constraints
 
-- Joe
+I was unable to find an alternate constraint that the compiler would accept.
+
+I don't know if the same problem is seen with older compilers on other architectures,
+or if the problem is relevant in the first place.
+
+gcc 10.3.0 and later do not have this problem. I also tried s390 builds with gcc 9.4
+and 9.5 but they both crash for unrelated reasons.
+
+If this is a concern, the best idea I have is to make KUNIT_SUPPRESS_BACKTRACE
+depend on, say,
+	depends on CC_IS_CLANG || (CC_IS_GCC && GCC_VERSION >= 100300)
+
+A more complex solution might be to define an architecture flag such
+as HAVE_SUPPRESS_BACKTRACE, make that conditional on the gcc version
+for s390 only, and make KUNIT_SUPPRESS_BACKTRACE depend on it.
+
+Guenter
+
 
