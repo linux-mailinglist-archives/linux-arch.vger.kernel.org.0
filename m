@@ -1,78 +1,78 @@
-Return-Path: <linux-arch+bounces-11010-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11011-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AA2AA6B510
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 08:31:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82CD4A6B51F
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 08:35:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6EEB07A5015
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 07:30:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10A8C3B658D
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 07:35:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D6641EBA0C;
-	Fri, 21 Mar 2025 07:31:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECAE92AF1B;
+	Fri, 21 Mar 2025 07:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="QQmtMvYU"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="OAPjI+Nt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4C91D516F
-	for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 07:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135601E571A
+	for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 07:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742542308; cv=none; b=XnqUlZazRg4Tm5LBeuEQFRo3MORM5QRazDY0QM/ZFZPDBNC2ihv9K8ZCmlDsABanO6EHLugnOHv8aASOwna/sBcumd07KKtYuSnrP+TkD8nYleIc4/S+lZVhrM+507+PCsPn0qX5/ZC1akWWVnkEXH/z4AKjVhYyvXjaSGtgVIo=
+	t=1742542554; cv=none; b=Bq3wrtdAhPoMfIQu/QpvwRUV04gG8u6mAJpW/iO1oElalgdT2ysKhGb6BGpHyKUaHWNu/RtP1K7EtohBkgy+v7PrApDCiZ+v36AbJln4PnM25hn8VEioeqHDB419R0bgku8upkUiJ6UPz6+oMbhE0kHk9Cy/Ku7KE9Q2+7js2Nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742542308; c=relaxed/simple;
-	bh=GdD46RXzLITLcyofqDJ2zWxNrp2LOOXutJPFHpVGBHo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=TJz8iQDwztAvaa9XTVUCAAEiPXLli+Xeq9bFzdT5dXUUoG2P0H5oWr2ugDI8zgiXNyGPxUv183OgJWVXOoEzLsPBSL307bEyIHxiXyZdi1rp0Fu6btfUpWG3MqWQOZEm1Fo7b+ux+g+CnkAYPYn3cHH7oUYXnCuuqE1qf9kypsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=QQmtMvYU; arc=none smtp.client-ip=209.85.128.48
+	s=arc-20240116; t=1742542554; c=relaxed/simple;
+	bh=oVEU4h1wTtlqlUbh+FEIic8QhsG6E3beaWkZ1pscJx8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=INi3BdfniGlHekf4H+pMVM91U5eCF5+Q/1i5YgxZc4O7vyhGMSkls0spy+/q1w+QvzJahY22q43xrQdPGU7Vgn7dgdSt9nJxespQKzdXdbJLcyfPTlQDZaphvBvmd7P8g1RaUuDLRP0x5MwNh/YPtN2v3xJOTPXhUr1zl6TwwD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=OAPjI+Nt; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43935d1321aso2143325e9.1
-        for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 00:31:46 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3912622c9c0so192511f8f.3
+        for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 00:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1742542305; x=1743147105; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
+        d=ventanamicro.com; s=google; t=1742542551; x=1743147351; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:from:to:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EA53ZruOOQL6IYeAD91OZdQ4lvT8qFBPlQC4O1CwTT0=;
-        b=QQmtMvYU6Q53j6hUeBMHzB4neX/xdvVL0pbT2TDe/5ndgYuMG1xp9WZ2C94YnnB4yO
-         pCL9UvOSe10UK3WdwdpwD15BYKaYijADRw//75nfLGm0rtB8amloFZXBoUcVQ/ZMWDKr
-         5o5LbeE24PyKNltBklqhUm0aj45cVDdrtbFxYzqU43K5HeMbM0eCD2Lqkf4ZJi82QqmO
-         vUrlonj1ubUhaKNdmuk6WclJdvRffA7sN6ABfu3fyqMzJvwnEXKR9Q6/YwgdcENc6hbs
-         QTz2K9PW2i0Lwsc2yFHBBL+RyISsYkPzpMV9U4aSHY39+iC85zugSnxTfQmAdYLPzcJq
-         CYNg==
+        bh=uE0YN48K2zRXVt+YdSQ/RPd3ayIjfmSlm7kfHTz7O6c=;
+        b=OAPjI+Nt8Mx7oV7aEVLf94wsdw+DPtnZFtkzH1+AA2u31jCIT1+VBXpuzC/2X46qXd
+         x558zm27VkDuYd75yDwCGQuu9lhq5Xj+h41lYnMHrm9krK9AyzXE2UAZUEYZRGp0WxMs
+         cJqdtk9U6Nx3CFN4imX/4xn2O2btcPml93+vKVoV4monqJ05p9WMdHx9rToeFw+yb/Dz
+         MIy/AwQZkpRzQWF65imYjbbFbhvMKNFMtxfo3QIfFjf2+Wc3aq0hmwkU66NjrQACmYMH
+         XFXCaiPgCRmEm/sRm7nFcbQmPR2a7RCeEsqkBAT5wj57EOelvetdxbMq82PQmd40/kob
+         1WhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742542305; x=1743147105;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
+        d=1e100.net; s=20230601; t=1742542551; x=1743147351;
+        h=in-reply-to:references:subject:from:to:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=EA53ZruOOQL6IYeAD91OZdQ4lvT8qFBPlQC4O1CwTT0=;
-        b=WotOLfLGlzxhqBwCCcGAVh1q54Hvrtlr9pasL4Bo7DF8daEuKRAllv72UeeKcVrp3O
-         vJf5aDsxR4/kdzk13VbDQ9PuYZpKavGkY0jlVSPFuz9pG6FlxBJppjOWzG7R2GA764eI
-         X5XDc1bPoXSkVhU4uhFteDgToX4TuRxLVwOSelndtIb7+fp1gi3l3eAlzPfwLUg4R+EX
-         eD3r2y6h4+fAI+CNuX9q0tS5O6QctNA171x/50FAwsgxzYJ8yAQ+hZ3lLirCt42RZ2IB
-         dvHvYFokD/xDp3LAXjs13ITkLXRYrcYly6N73hQwehProqFzIb9rBbKhzHrHE2XF602I
-         hQqA==
-X-Forwarded-Encrypted: i=1; AJvYcCVhgMf8QBVEnlDVbCFDCUI6P8UgPj2T64GuUarIKydKa87QOQU9da1TVhKMJj0f00AXQAkIQJ+9p8eU@vger.kernel.org
-X-Gm-Message-State: AOJu0YywF1Bpe2dRDlTKvFjj4PScjroewvZvojSlnaCiLpWzmPbN4LPH
-	mkYThsHcW7ZTPW6T/kIrJvdp/0+FxKNIxuBigFpb3FiW3Eo/u1XN5ZdpJITXrZs=
-X-Gm-Gg: ASbGncskJodVExdSPuay58g0FVVZc4XaOpo3suZUzwP+3hCxSrVoLn9woXTW7DTipWc
-	pRLZ//8cCcitw1WVqvy6iyMdGeUY49b8qN+J/L3Py6uSDcoAOnlKoWqUSjHRfxzXqs5u/v0AhbJ
-	0/vNM0EOkUcBGoWnd+aZ1lw/RVScMFqHKnUs008bbXNbpGCLoTFvGy1/RmTGm339SGu+oDSP2yE
-	HS5xqLo/47pcqu+5GovO/v2wjClCY42GZn8dSg/HR0sQGzORbRNoCStta0seziSDA3IrNk9KwPI
-	lixKKyFRJX3HN0x9xNLuR7+NthqZ20eRg3woM1c7hjkWkxkPen+2rjsRFKxNPHjreQ7NnhR5PfF
-	Znz4q
-X-Google-Smtp-Source: AGHT+IGUPJ1yScRfM5ZckM0YOEUPSKKsLT1uHikzcP6azc7wS+CuSOBN2Ombs1xBV9GpD69REV2V/A==
-X-Received: by 2002:a5d:64c7:0:b0:386:3a50:8c52 with SMTP id ffacd0b85a97d-3997f917397mr932780f8f.7.1742542304656;
-        Fri, 21 Mar 2025 00:31:44 -0700 (PDT)
+        bh=uE0YN48K2zRXVt+YdSQ/RPd3ayIjfmSlm7kfHTz7O6c=;
+        b=Wi50yjKTvEfuRsM+6yJ1VNom5YvW/p+2za6OZXlXpOFtMrgAYH9yyAzv6vToLbQwMB
+         O2wcaedOos8uqshA5OKKXCDl6hQokl8ilK2g0JBOv984eNXLBngFHWQ+Ov3srWBXpNQb
+         g/B1GN/2/BBM01Dsxri32dh5NT+2F97xioEW01j1CMELas6PxTIW3nbeZypo983GIhOk
+         3oXCApCGU2HguiKmY6yPlXNvTCtWKCZothPJYkMilT/01H3Xbc5S0nDzxMuJB6QbygOi
+         icVhff3n90wj3RIncka00bSypchMHDpebaAFK5+tT3tJQy+fHhIxrFhn/MrrJGJoefxK
+         EIEg==
+X-Forwarded-Encrypted: i=1; AJvYcCXPjvbLXozGHvwLKv+/xJW5J9IQlhGI1mv6eWP370mljTnyAm8dDtAANhJICINsD+z/a9xociOqBSQ7@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA3ALQMQrhi05k9shvKt44ktIALtJOI83i9hDpEMHAnkp+RAqT
+	gNJ6KFEI2u+Hpz2cPsKD//2YNNSdoD/JAyRM7gHieRkVS0N7mIsJwDwSs7Ti0j0=
+X-Gm-Gg: ASbGncsp1Mp2rWV0Q49Kj/Xz9u89pG/p9L++cMPAd9pzeG3G0bkYfiFXhoHfkmPilPj
+	x7wuoVtvpIINSwzNx8/sxB8yO+mZpIre+kxSRQ28SakSYfgybJXXqZvcG6RQjDVWpbIwf0lY67n
+	gYSuiTuWU4ly8tgKUqApaIYM+4OJS79scrMveZ8LgmW0PEtLc3bcOh32MWClwv7Aj5iltLUpztS
+	7PF/AFb3XFDeTcRT4xQCP4SsD/S6S3niMrPqxVU6UKtORDVpY0MZEyi9y4cxZBf91Ecc5Itm1W3
+	hxx/EIDUzipAuPCcLc2NyOKJ9qBDvtB5LteDsSTwgl4G2ARtk1+ax8jB15sqtNYZLSnOnu8uMMC
+	vmd7OtYwrDO4sKwc=
+X-Google-Smtp-Source: AGHT+IGZStgpQKD6s5SPSh0Un5MoJV2dCYto8osYkw90aX9XoWoskpnSL/J6+EfI/KAtzzUYKMCKnA==
+X-Received: by 2002:a05:6000:188f:b0:391:277e:c400 with SMTP id ffacd0b85a97d-3997f941b74mr851925f8f.13.1742542551154;
+        Fri, 21 Mar 2025 00:35:51 -0700 (PDT)
 Received: from localhost (ip-89-103-73-235.bb.vodafone.cz. [89.103.73.235])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9b260fsm1585165f8f.43.2025.03.21.00.31.44
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9b3f7csm1592933f8f.49.2025.03.21.00.35.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 00:31:44 -0700 (PDT)
+        Fri, 21 Mar 2025 00:35:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -81,10 +81,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 21 Mar 2025 08:31:43 +0100
-Message-Id: <D8LROZ1Y2LLF.20T6DQS0A39QN@ventanamicro.com>
-Subject: Re: [PATCH v12 23/28] riscv: kernel command line option to opt out
- of user cfi
+Date: Fri, 21 Mar 2025 08:35:49 +0100
+Message-Id: <D8LRS46QQ2FE.ZF1856CR80JM@ventanamicro.com>
 Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
  <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
  <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
@@ -107,26 +105,73 @@ Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
  <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
  <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
  <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "linux-riscv"
+ <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "Zong Li"
+ <zong.li@sifive.com>, "linux-riscv"
  <linux-riscv-bounces@lists.infradead.org>
 To: "Deepak Gupta" <debug@rivosinc.com>
 From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
+Subject: Re: [PATCH v12 22/28] riscv: enable kernel access to shadow stack
+ memory via FWFT sbi call
 References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-23-e51202b53138@rivosinc.com>
- <D8LF0RDZ6809.1I3MCCVSHRSQ2@ventanamicro.com>
- <CAKC1njQR9yARvWffjznjpeZK5zLFpg0-qCUo25_8niH29YL6uA@mail.gmail.com>
-In-Reply-To: <CAKC1njQR9yARvWffjznjpeZK5zLFpg0-qCUo25_8niH29YL6uA@mail.gmail.com>
+ <20250314-v5_user_cfi_series-v12-22-e51202b53138@rivosinc.com>
+ <D8LFQYX4EHF8.2AJ01XL34WK0W@ventanamicro.com>
+ <CAKC1njTyiaBkmHvAM8VT_MG4Cdch=H9P8r3C-m-=QQEuzyrRNA@mail.gmail.com>
+In-Reply-To: <CAKC1njTyiaBkmHvAM8VT_MG4Cdch=H9P8r3C-m-=QQEuzyrRNA@mail.gmail.com>
 
-2025-03-20T15:31:09-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, Mar 20, 2025 at 2:35=E2=80=AFPM Radim Kr=C4=8Dm=C3=A1=C5=99 <rkrc=
+2025-03-20T15:42:44-07:00, Deepak Gupta <debug@rivosinc.com>:
+> On Thu, Mar 20, 2025 at 3:10=E2=80=AFPM Radim Kr=C4=8Dm=C3=A1=C5=99 <rkrc=
 mar@ventanamicro.com> wrote:
->> 2025-03-14T14:39:42-07:00, Deepak Gupta <debug@rivosinc.com>:
->> > +__setup("disable_riscv_usercfi=3D", setup_global_riscv_enable);
 >>
->> I'd prefer two command line options instead.
+>> 2025-03-14T14:39:41-07:00, Deepak Gupta <debug@rivosinc.com>:
+>> > Kernel will have to perform shadow stack operations on user shadow sta=
+ck.
+>> > Like during signal delivery and sigreturn, shadow stack token must be
+>> > created and validated respectively. Thus shadow stack access for kerne=
+l
+>> > must be enabled.
+>>
+>> Why can't kernel access the user shadow stack through an aliased WR
+>> mapping?
 >
-> One for zicfilp and one for zicfiss ?
+> It can, although that opens up a can of worms. If this alternating
+> mapping is user mode
+> then ensuring that another threat in userspace can't write to this
+> address in this window
+> of signal handling.
 
-Yes.  I don't want to suggest the naming, because I would have used
-"nousercfi" without an argument for the current one.
+Right, it must not be user mode.
+
+>                     A kernel alternate mapping can be created, but
+> that can lead to all
+> sorts of requirements of ensuring the page is pinned down. IIRC, It
+> has been debated
+> on x86 shadow stack merge time as well on how a flaky alias mapping appro=
+ach can
+> become and weaken the threat model it is supposed to protect against.
+
+True.
+
+> Simply using `ssamoswap` is simple and serves the purpose. Enabling shado=
+w stack
+> access for the kernel doesn't have any adverse effect on the kernel.
+
+Makes sense.  We just depend on an extra feature, because we should
+consider the case when M-mode doesn't allow S-mode shadow stack, but
+S-mode can enable U-mode shadow stack:
+
+>> > ---
+>> > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+>> > @@ -320,6 +326,12 @@ SYM_CODE_START(_start_kernel)
+>> >       la tp, init_task
+>> >       la sp, init_thread_union + THREAD_SIZE
+>> >       addi sp, sp, -PT_SIZE_ON_STACK
+>> > +     li a7, SBI_EXT_FWFT
+>> > +     li a6, SBI_EXT_FWFT_SET
+>> > +     li a0, SBI_FWFT_SHADOW_STACK
+>> > +     li a1, 1 /* enable supervisor to access shadow stack access */
+>> > +     li a2, SBI_FWFT_SET_FLAG_LOCK
+>> > +     ecall
+>>
+>> I think the ecall can fail even on machines that have Zicfiss, so it
+>> would be good to disable user shadow stack if that happens.
 
