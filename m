@@ -1,79 +1,79 @@
-Return-Path: <linux-arch+bounces-11019-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11020-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DFBCA6C010
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 17:37:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 115D2A6C062
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 17:47:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 124D03A97DF
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 16:36:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F2F217129A
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 16:44:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3012D22B5AB;
-	Fri, 21 Mar 2025 16:36:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2E622CBF9;
+	Fri, 21 Mar 2025 16:44:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="MZHWkbQV"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="HZyv9eYa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F36D1E8351
-	for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 16:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0CF1E7C0B
+	for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 16:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742575001; cv=none; b=t8b3RimPfqyV3LCoeC8L8khf3d17h/45icQe7UCYZnv4J6yCE9JHhEmrG2D55daNNA0MPhk1CcnG4/l7+Sj2anzCZNPgT5lBEIVXPvnCvaPtP71O5Dy8IM1TslNnLeJY4TjEBEEa1Sv4MHySO4Dg6PSnNCacnTfaUUvLbJe1jWs=
+	t=1742575459; cv=none; b=UOhRJ6vURx2jzTdbDIP/KiIllTK2Btz7t+3S2k+7BtojTg51zV8dPvHWprNgP1gzlnPVTqyndKZksZ1t3ialukyR5a/xsHJXUD4vifnyJvonojh0fuQPF9ja0ocdBVauEHydMME6eE964myBFKTFST2MgKOoA2gh7OUBzfIMMCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742575001; c=relaxed/simple;
-	bh=Hjm+6X18HfhpHIGsOF0Wa+HjL7J2VCrd/SOk7TvJe8g=;
+	s=arc-20240116; t=1742575459; c=relaxed/simple;
+	bh=IMeArOMSvV+SAUlYdgzoqB6lsnXPfljvOmj84MN0ick=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HfGG/omqY/8nmmpe8FKiKedOYqDDLiR1yEekEZIgHQ1cCgvIhcDqXpuWVfFPusu7DL9GMRRJof9DZIcg5/abosoVfmOgS//baq8pTERZLY7K4oE+H5s5KnQNab9Z9Oj+Gx/6Djg47PvfPCwv36yYIFHzPup5BiG2XgbgKxbAGho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=MZHWkbQV; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=MXtAGLgS0s0vkWzBRt5wK8i9Jxr4pOz3OHUEhsTLViVgt0MTCNGLoyrT+MjzIHzHA6YNEm1AMc7ycrF6vWbnyzPw8vczOjosEsGHPxUQ+SIU3Utx5t1PMevPM4SKL+IZ/nEv44oTlUiws6PatQAj2jLSJTLoV+gkDVWSj7v+8rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=HZyv9eYa; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-225477548e1so42854825ad.0
-        for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 09:36:39 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-225a28a511eso49907425ad.1
+        for <linux-arch@vger.kernel.org>; Fri, 21 Mar 2025 09:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1742574999; x=1743179799; darn=vger.kernel.org;
+        d=fastly.com; s=google; t=1742575457; x=1743180257; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YALLnLfNqwU57i7wtFxN8i/4pwzBbw+w8xRGUYxzetU=;
-        b=MZHWkbQV4x7bg/O4wFFFfRPlZtESaA0v8NXS4bwNrJ6AjgL6ju53tkdph3LJaiNMme
-         Uzvt2rfsKBGYwXhkxusFMsVdUZtocME/uedeyElNWYuFM0pXYRhGn+chWuHm1avPkY+e
-         bLTWDD3vMSIqEuSER+745abq7dnQ3YJWC0/HI=
+        bh=mdus/fJVv5Uld6yn8oFMkQzJNe6dHC2w9XvJ773goNA=;
+        b=HZyv9eYaGfAfS5TzyiAfne7e+Cj6w6knyN1bsuK0l23BH6/C2KhX2L3GiLz0dennJB
+         kK9slfnRaJ27l+T8IPNdM9DXo4h6Vj3Dth4GDHOzj+mBDaBhwYD0bkt3x8Lk51JO66uA
+         pgCNI/yZ0ZQ4pfX/PqXQ5YgmYZvQHpiDE/zXA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742574999; x=1743179799;
+        d=1e100.net; s=20230601; t=1742575457; x=1743180257;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YALLnLfNqwU57i7wtFxN8i/4pwzBbw+w8xRGUYxzetU=;
-        b=awHJoJtClXaCdUHPj5dOYOZKNyEXIrH55ackVp+qOsDvqpZ82RrjO6+ioCYA5nPyv4
-         I35haxY4glHOEON0Drr0CrKfVDiBMUizSyTyWPlQg7FoXBuxK0jGX70w/j8UUp9+B/+K
-         3nkmsQc5VDO08TwZ2XcHLWgi1R4vI6KT2ulc6FE1Fiua6zrBj/Uk4v5cMS9ZN7kkuoGA
-         ZkvsOPSIjQC3tZ0JQUq7kDb9DpAYfxy7A5kDKAlmCw3TYTXaO8nDzGNoYTHGu2bZHpos
-         Yj29NHmiG8pHTUZzXbbvSDl9XlHQqxJMkglP8W22FmABwgA7K8JN4G/eth+4loXVBIuh
-         e7qg==
-X-Forwarded-Encrypted: i=1; AJvYcCWDVpVUAUNb9BOB44QFfsjPJLfaZrGO7V0b/oFJi1HQrGc7yUbDSJEa4CMiQrvm1OBh7NYEr1P5/Viq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9fGCdoqoh99BFG4i84vy+zMasDaKP7lyEFXxaEeQ6JlKknyaC
-	0oWZEM/xzNrXeDpwduSuAkPawUR5Xtt+j3jLuIgXfUxXZDz8rG9cnHIOui4XZaY=
-X-Gm-Gg: ASbGncuwSHfLHJnRYG1IUV5afZR/DIFcglI3PWflKw+0ErqbghphhnqSc0NJuedxDfj
-	ZiQCfBweFS8H7Qu829KEFcxvOPnj8fmf/AQLHzwVkTyehqLiyrXLzPcgAjsuE+ExBcVdDWhIAVB
-	iaJZNicua2VIIysYQRnIMfgHMVkpnF9AvLTqRsLsr9ACJGPpxyVbgqJUzZgJYN9yDHLYZx4ZYWi
-	V5ld4PqKNGABLNdf1xjRUZrhWQqBl437rfTbBDKcX+jDQyRWxnZdGyaBf8hCWPYtYJHDz+zfax4
-	t8lcmLtsopR4mtF8AcGnwudF8Qrhi95hw9Z41p6I0BYd/Z480n23OpP+cpifJFKYO4OLQAMv3It
-	JGGn47C8V2IvgJR10
-X-Google-Smtp-Source: AGHT+IHqu8khKPmdrz5ZxNhApg6woYn1wpjz3geiCjpfYxV9ENASu0IFRk3+3jTmUaVHH2l595zxFg==
-X-Received: by 2002:a17:903:46d0:b0:224:160d:3f54 with SMTP id d9443c01a7336-22780da858bmr63728105ad.31.1742574998924;
-        Fri, 21 Mar 2025 09:36:38 -0700 (PDT)
+        bh=mdus/fJVv5Uld6yn8oFMkQzJNe6dHC2w9XvJ773goNA=;
+        b=ldnJClsyJ0oE8bDWU7mj/R4CKUQ5CFQZxCAtxx4ZhYiGzFEEfvSo07lSwK8DoupNrt
+         VR1ub6P622nffVB/aF8Ypi8zfvD1WMz7b/g5ZGqopZf+eq0ctAAmbNr8+cIIOO2SSuTI
+         UdMPPilGmqIQCqDuSZft7XA3SUbRx2L/xX7etsYbJ7uCPfC2pDUG3PmEq8XGsz4ioaeh
+         SI/OkPwjEY2AA5HGMrV9t/Rpq2NmP9QtlHJ0VyQX36psWSbZshgs+7iXWW58KFqkZdva
+         euBEteaTvpJuNznl5hM+BNWiYgV86Ry4cgGWE+RjV4nC/x3N/P+uIFe1mmt8wpj8ghxe
+         KF9w==
+X-Forwarded-Encrypted: i=1; AJvYcCXcND4tFmnrPhEuSV7rDBxvcC7bGJ4xVId0tTkMfqqaLWK8J7mlrPWbA77uNKIcZc1laQunxmSSckqT@vger.kernel.org
+X-Gm-Message-State: AOJu0YwshnCMWoZrkCekq6Bil5rPIWJGp109IwqPUTUF2WaTNXgss29L
+	SwCvfsfu+lmFU8hVvMzCZMOLysnnD72gH1epcT3+qdw5/OT2XlHYV9CGzi4BiDI=
+X-Gm-Gg: ASbGncvMxQqOBW4K0+rjXpvmxyYGqa35ZRtK/Q81NTpQ1Mxez9sizOaylt/Z6zn1Afb
+	WVfUV1l6EEhTcxEbVPX6mitKXTj7gOKq3X7b+0YWAZXNU/49SMNTeO+M4dxHITESO6pqVLXU29j
+	sADLcEFodXUpzVdKqP6wnFifrkyb91JlkjlAtMgfhEXJB7szkg4AuMzs85wiwb8unmoP92MAPcu
+	K0zzQPtjqQ9Py9FGo9/fgQhv3VLNQJ2EBJAn4ohjXTGue5iZBi/0Fr9O3iDDnpKHp7UjYB420QL
+	G6XXI0ef6orjNnBU+Stqk3BE8DyJYB0gJZwTmZk9qdE1xJQPstnGlNT6WkW/G+davdJs2VPKZNc
+	I+qU5wuuhnmnYgVy2
+X-Google-Smtp-Source: AGHT+IHNkHo8pQiFISfzkg8EmthIVkGNH6DyH204b4LoCrS28DjOE/rXN+w3HTspHp5hcO8dxdqoWw==
+X-Received: by 2002:a05:6a21:998b:b0:1f5:839e:ece8 with SMTP id adf61e73a8af0-1fe42f090e7mr7044509637.2.1742575456784;
+        Fri, 21 Mar 2025 09:44:16 -0700 (PDT)
 Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22780f39772sm19205225ad.25.2025.03.21.09.36.36
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af8a2843af9sm1984943a12.38.2025.03.21.09.44.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 09:36:38 -0700 (PDT)
-Date: Fri, 21 Mar 2025 09:36:34 -0700
+        Fri, 21 Mar 2025 09:44:16 -0700 (PDT)
+Date: Fri, 21 Mar 2025 09:44:12 -0700
 From: Joe Damato <jdamato@fastly.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Jens Axboe <axboe@kernel.dk>, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org, asml.silence@gmail.com,
 	linux-fsdevel@vger.kernel.org, edumazet@google.com,
 	pabeni@redhat.com, horms@kernel.org, linux-api@vger.kernel.org,
@@ -83,9 +83,9 @@ Cc: Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
 	akpm@linux-foundation.org, tglx@linutronix.de, jolsa@kernel.org,
 	linux-kselftest@vger.kernel.org
 Subject: Re: [RFC -next 00/10] Add ZC notifications to splice and sendfile
-Message-ID: <Z92VkgwS1SAaad2Q@LQ3V64L9R2>
+Message-ID: <Z92XXFDVz_5fU2YQ@LQ3V64L9R2>
 Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@infradead.org>,
+	Christoph Hellwig <hch@infradead.org>, Jens Axboe <axboe@kernel.dk>,
 	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	asml.silence@gmail.com, linux-fsdevel@vger.kernel.org,
 	edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
@@ -94,7 +94,8 @@ Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
 	shuah@kernel.org, sdf@fomichev.me, mingo@redhat.com, arnd@arndb.de,
 	brauner@kernel.org, akpm@linux-foundation.org, tglx@linutronix.de,
 	jolsa@kernel.org, linux-kselftest@vger.kernel.org
-References: <Z9p6oFlHxkYvUA8N@infradead.org>
+References: <20250319001521.53249-1-jdamato@fastly.com>
+ <Z9p6oFlHxkYvUA8N@infradead.org>
  <Z9rjgyl7_61Ddzrq@LQ3V64L9R2>
  <2d68bc91-c22c-4b48-a06d-fa9ec06dfb25@kernel.dk>
  <Z9r5JE3AJdnsXy_u@LQ3V64L9R2>
@@ -103,7 +104,6 @@ References: <Z9p6oFlHxkYvUA8N@infradead.org>
  <Z9uuSQ7SrigAsLmt@infradead.org>
  <Z9xdPVQeLBrB-Anu@LQ3V64L9R2>
  <Z9z_f-kR0lBx8P_9@infradead.org>
- <ca1fbeba-b749-4c34-b4be-c80056eccc3a@kernel.dk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -112,44 +112,70 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ca1fbeba-b749-4c34-b4be-c80056eccc3a@kernel.dk>
+In-Reply-To: <Z9z_f-kR0lBx8P_9@infradead.org>
 
-On Fri, Mar 21, 2025 at 05:14:59AM -0600, Jens Axboe wrote:
-> On 3/20/25 11:56 PM, Christoph Hellwig wrote:
-> >> I don't know the entire historical context, but I presume sendmsg
-> >> did that because there was no other mechanism at the time.
+On Thu, Mar 20, 2025 at 10:56:15PM -0700, Christoph Hellwig wrote:
+> On Thu, Mar 20, 2025 at 11:23:57AM -0700, Joe Damato wrote:
+> > In my other message to Jens I proposed:
+> >   - SPLICE_F_ZC for splice to generate zc completion notifications
+> >     to the error queue
+> >   - Modifying sendfile so that if SO_ZEROCOPY (which already exists)
+> >     is set on a network socket, zc completion notifications are
+> >     generated.
 > > 
-> > At least aio had been around for about 15 years at the point, but
-> > networking folks tend to be pretty insular and reinvent things.
-> 
-> Yep...
-> 
-> >> It seems like Jens suggested that plumbing this through for splice
-> >> was a possibility, but sounds like you disagree.
+> > In both cases no new system call is needed and both splice and
+> > sendfile become safer to use. 
 > > 
-> > Yes, very strongly.
+> > At some point in the future a mechanism built on top of iouring
+> > introduced as new system calls (sendmsg2, sendfile2, splice2, etc)
+> > can be built.
 > 
-> And that is very much not what I suggested, fwiw.
+> I strongly disagree with this.  This is spreading the broken
+> SO_ZEROCOPY to futher places outside the pure networking realm.  Don't
+> do that.
 
-Your earlier message said:
+OK. I won't proceed down that path. Thank you for the feedback.
+ 
+> > > Because sendmsg should never have done that it certainly should not
+> > > spread beyond purely socket specific syscalls.
+> > 
+> > I don't know the entire historical context, but I presume sendmsg
+> > did that because there was no other mechanism at the time.
+> 
+> At least aio had been around for about 15 years at the point, but
+> networking folks tend to be pretty insular and reinvent things.
 
-  If the answer is "because splice", then it would seem saner to
-  plumb up those bits only. Would be much simpler too...
+Sorry, but whatever issue there is between networking and other
+folks is well beyond my understanding and historical context. I'm
+not a reviewer or maintainer or anything like that; I'm just a
+developer who saw a problem and wanted a solution.
 
-wherein I interpreted "plumb those bits" to mean plumbing the error
-queue notifications on TX completions.
+I've read your message loud and clear, though, and I won't proceed
+down the path I've proposed.
 
-My sincere apologies that I misunderstood your prior message and/or
-misconstrued what you said -- it was not clear to me what you meant.
+I appreciate your feedback; this is precisely why I sent the RFC -
+to get comments - so thank you for taking a look and letting me
+know.
 
-It is clear to me now, though, that adding a flag to splice as
-previously proposed and extending sendfile based on the SO_ZEROCOPY
-sock flag being set are both unacceptable solutions.
+> > As mentioned above and in other messages, it seems like it is
+> > possible to improve the networking parts of splice (and therefore
+> > sendfile) to make them safer to use without introducing a new system
+> > call.
+> > 
+> > Are you saying that you are against doing that, even if the code is
+> > network specific (but lives in fs/)?
+> 
+> Yes.
+> 
+> Please take the work and integrate it with the kiocb-based system
+> we use for all other in-kernel I/O that needs completion notifications
+> and which makes it trivial to integate with io_uring instead of
+> spreading an imcompatible and inferior event system.
 
-If you happen to have a suggestion of some piece of code that I
-should read (other than the iouring implementation) to inform how I
-might build an RFCv2, I would appreciate the pointer.
+If you have any suggestions or pointers to code I should look at for
+inspiration I would very much appreciate the guidance.
 
-Thanks for your time and energy,
-Joe
+Thanks for your time and energy in reviewing my RFC and responding.
+
+- Joe
 
