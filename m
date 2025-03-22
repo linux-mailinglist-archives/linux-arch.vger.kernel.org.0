@@ -1,145 +1,148 @@
-Return-Path: <linux-arch+bounces-11041-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11042-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B7FCA6C5FE
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 23:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B6E94A6C9FA
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Mar 2025 12:50:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1322D189554E
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Mar 2025 22:32:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F6DB1890442
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Mar 2025 11:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273E622AE5D;
-	Fri, 21 Mar 2025 22:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA9B220CCDA;
+	Sat, 22 Mar 2025 11:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDTGb5ab"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JSPi173G"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0EA15D5B6;
-	Fri, 21 Mar 2025 22:32:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D451F237C;
+	Sat, 22 Mar 2025 11:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742596342; cv=none; b=Jgl/H5xT1lHITiV0ETkg8YCDBdhAtmn0cTJnZOngLD8kaBo3nEVu1kJ6ceXSEOeX0NHr34aiE1Cpgu/iK4wIU3GFE8NKL7kF/iwM5X2DFNmaNrOOb/Jrl9PX1pmiENj0SmMH+UrCFhVMHrOTJDECxdbhGz+uUyjliJR5jD3jl9g=
+	t=1742644219; cv=none; b=OmPfjLO7edpQ7SWVBCmP/MOzVqU39sFwyE4Vcp3pIqjpDXy7J1lQHKPOHVD///9To1G2Ex7G4PUQyUFFRrm26mHSHx3x9MUl70ogL1Dg4GZjpWYtkx5+4B03puyHcvRhbu38sMlnjhibZaaRfp13q0ShE+w10R7pZ4DDIKrs2hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742596342; c=relaxed/simple;
-	bh=UzLNiQ5Wvn9rKAUANHTjv00uwdzSTTzEUgki6vN47rE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hvG1pg8s5aIUGKoUNvZ+Ov0RRnl8OJuf2fnKdD8uKufMbEkcdSAbjEtni3Tp3ws7NlhCKMqedGhvIF+u8Xyv8bFBVMYggPNqZwwU77imTabdeRigv+GnK/TZHxyCg4On8duRIF8QMER90zc1A+Kv8AKyjQkGOzOuI9g2LNBTO48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDTGb5ab; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF287C4CEE3;
-	Fri, 21 Mar 2025 22:32:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742596340;
-	bh=UzLNiQ5Wvn9rKAUANHTjv00uwdzSTTzEUgki6vN47rE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oDTGb5abR2KDLvK+8ds6skrd6W1UtIQ/hokDvvG5OHnrB5GRHzihjplyW9Dr6mGpr
-	 tEFr6YgI0z7nOq6Kx1wY3wBBfL5doWPuT5YcTSDhhAUucE8NvOQMIA0N9ya7UAm4fU
-	 Pb3O3ag7abVK/wR4RA8RqfmEbPRIEgpRBdh7dyJtt9VAYOPHFmnSzMGyM2u6cZusYc
-	 mWDW9sq91fVXSWYLo2rhrIdcTxgPAzhU0SAyO+t38GtP/8FppDTrHGkR3eLlvoEzoD
-	 3mwDR9Fy85FsneXge0VU8VtdxCaPsGl6+nMjgHrPGVaYbRTWumxuYDjRLg6I5kWrhN
-	 Aom54EoL5NaEQ==
-Date: Fri, 21 Mar 2025 22:32:15 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	james.morse@arm.com, Yicong Yang <yangyicong@huawei.com>,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linuxarm@huawei.com, Yushan Wang <wangyushan12@huawei.com>,
-	linux-mm@kvack.org, gregkh@linuxfoundation.org,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [RFC PATCH 0/6] Cache coherency management subsystem
-Message-ID: <20250321-failing-squatted-37a88909bde2@spud>
-References: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
+	s=arc-20240116; t=1742644219; c=relaxed/simple;
+	bh=dlb2c5+73X9T17Ga2GDXTcwT6vGIJCUSgIzW59AQZWg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:Content-Type:
+	 MIME-Version; b=rNu/UdTsJ1c5pdO2yRzhP45iGJGLb6WzIYPtw0M5oFFy3wcgFisFPOYlutfZE/oHwYCEnXBiXmd48mCJKFbC0lKX6u1dQxSe6SoWFLvWzDAFHwwzMrTb4gu5ewn9ETXTXhvFoOBukzapP4an6O01Jq2dt12/zbui0So78zMC6aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JSPi173G; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ac2902f7c2aso483215066b.1;
+        Sat, 22 Mar 2025 04:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742644216; x=1743249016; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:in-reply-to:date
+         :cc:to:from:subject:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JeCMKd6FN5Dtrxtkveh1+h24l/CzYAUf5GBYjF0Tj9I=;
+        b=JSPi173Gy9EisqpIuqxLAdt39Xzhxyi86yrBYhtu3gQ9Bsl+F68pXBXzEdYSsTnd7l
+         WSQNuJW6GLAFDTN8LRqAbhofx8u//QbbbI/KThok4rxMwo1e1YokPhXhb47TFqx+W+qF
+         jUF0gbKlsrw915WMfmz5dgZExnnXV2qsvlQH9dXDnfbLzjnxGyCpBt79eg/YSd6c+YaQ
+         nCegTCjWUDdI93OBACZ4LxfmfKgjPoPse7KZ30a+BdninHvI/iV8C5ALMX0R7r/DoqFn
+         icdZxEK7irobWx9TB+2bsZMg/53brsOdo2GOJb+iU0WqDHnFQqm+Xr4krAM5mIxYAyom
+         V62A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742644216; x=1743249016;
+        h=mime-version:user-agent:content-transfer-encoding:in-reply-to:date
+         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JeCMKd6FN5Dtrxtkveh1+h24l/CzYAUf5GBYjF0Tj9I=;
+        b=U+UgbvZ9dVbLTg4Q6gCTbe2jZE6v1HP4ev+gGg+GKVZpaANIIHT5mA4U/23AoAdzjN
+         3via79vm48Z1VCsTn1Qr970LKV6eJhoNOOSTxrypWaBEFpI/XIizdxADnZVi37BmHrhS
+         oPzRf9zGUPEgd+uDtg0UY7/8ocQuYKOee1eyEP4cKaWAZ6MHxO3faZRvDWsBthMfaWG1
+         oMNBlJ8NeXiWyG5Y0klEnRTbko53wf3yrh7Fh1ZaZKrcxky2PwVN4w4VXxTefyArLDVs
+         uVpirV00M6/NVeyQFwJ4qp4mUjep+c3i2Aa483QLzR5VC4JKFJpDoaswDKDRiNfaOnJb
+         YCdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUthLpHEKjq9kGU3PlowSene2JsY2dAIeE7jaSCeCcruLo2ZyoFRFWnw2ApPUuDrdKzffyfKfN9TxXXwA==@vger.kernel.org, AJvYcCWCjhZU/rhMFSTkM1ClSNdEq3LrM2GOg+iyHBAJAdEReusXE8lRpgXBU42k+KjXWTxdA2sbgekBmGpy@vger.kernel.org, AJvYcCWuMU6e8Wl5rrm48hXee7iaxWOSa7I/8vO904BnrPFFpjFm4u8u52fOONNxJm2pAqkC0Xs=@vger.kernel.org, AJvYcCWzcfwm8d5a4o+dPUMM9boHmg442qy6VzNcnHQfRJK+eS0KAabpY9rJfU1BH0xLpdhb7XbST5ZLWtNs3MBc@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUfzkeoghv+3UP9DpHrvrIisU0YENgnHrOzHrrhmNA7iItopuR
+	1sVX5KsILBs6NyPOflZkZ7oAu/1FNzBumSMmVvW76tXyyiYJpANv
+X-Gm-Gg: ASbGncu++nUuEKwWdvUvOKgVDG3MxX27HCZ3beBkDgHk6RSvnCAph1m2SF9cSLfwsCb
+	DJYe0xPO9JDgOcpD6n/n4axqI659vDcI5w6oMs662oyX3DN+TAXG9932U4yOQT1tF9Eq9YPAo1p
+	yyRnd9aNYm7CB+1ItIzC0kwMJgofD+Ej8eKjlfWmaLTYES8kEk7+c6Ho322cze0Q6irPFThekWq
+	HjQhVILrpfY5Pyxici++gLSOlPjaQqreQovGxWi3aqRS/Ggh4pM5HNAlbIUdGERsuPQkeLzHyE3
+	TIWSYvlsYCf9Vsna5aPR+v/L8kXZVEq9I1P1B2DtjysetYzjO6gn0CBafbpkDCAE1cb1lojTERL
+	MijCTeV/tCSN8m7wcwXeHXUo=
+X-Google-Smtp-Source: AGHT+IEphkVCVCfxAVXmQkZdk1aaFCEcND/QMO8xPKoiUSmAYimS0LjW+bLOcrDDhpSGnYro5fRwfQ==
+X-Received: by 2002:a17:907:ec81:b0:ac4:2b0:216f with SMTP id a640c23a62f3a-ac402b024c3mr372266766b.43.1742644215830;
+        Sat, 22 Mar 2025 04:50:15 -0700 (PDT)
+Received: from ?IPv6:2001:b07:5d29:f42d:82af:f891:3144:66d? ([2001:b07:5d29:f42d:82af:f891:3144:66d])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3efd4798dsm326399066b.161.2025.03.22.04.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Mar 2025 04:50:15 -0700 (PDT)
+Message-ID: <7177c7ae24b9f7ebbfc001166e09beadb81305ae.camel@gmail.com>
+Subject: Re: [RFC PATCH v2 05/22] crypto: ccp: Enable SEV-TIO feature in the
+ PSP when supported
+From: Francesco Lavra <francescolavra.fl@gmail.com>
+To: aik@amd.com
+Cc: Jonathan.Cameron@huawei.com, aneesh.kumar@kernel.org,
+ ashish.kalra@amd.com,  baolu.lu@linux.intel.com, bhelgaas@google.com,
+ dan.j.williams@intel.com,  dionnaglaze@google.com, hch@lst.de,
+ iommu@lists.linux.dev, jgg@ziepe.ca,  joao.m.martins@oracle.com,
+ joro@8bytes.org, kevin.tian@intel.com,  kvm@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-coco@lists.linux.dev, 
+ linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org, lukas@wunner.de, 
+ michael.roth@amd.com, nicolinc@nvidia.com, nikunj@amd.com,
+ pbonzini@redhat.com,  robin.murphy@arm.com, seanjc@google.com,
+ steven.sistare@oracle.com,  suravee.suthikulpanit@amd.com,
+ suzuki.poulose@arm.com, thomas.lendacky@amd.com,  vasant.hegde@amd.com,
+ x86@kernel.org, yi.l.liu@intel.com, yilun.xu@linux.intel.com, 
+ zhiw@nvidia.com
+Date: Sat, 22 Mar 2025 12:50:12 +0100
+In-Reply-To: <20250218111017.491719-6-aik@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="eWBfxz5cC1rG3K4K"
-Content-Disposition: inline
-In-Reply-To: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
 
+On 2025-02-18 at 11:09, Alexey Kardashevskiy wrote:
+> @@ -601,6 +603,25 @@ struct sev_data_snp_addr {
+>  	u64 address;				/* In/Out */
+>  } __packed;
+> =20
+> +/**
+> + * struct sev_data_snp_feature_info - SEV_CMD_SNP_FEATURE_INFO
+> command params
+> + *
+> + * @len: length of this struct
+> + * @ecx_in: subfunction index of CPUID Fn8000_0024
+> + * @feature_info_paddr: physical address of a page with
+> sev_snp_feature_info
+> + */
+> +#define SNP_FEATURE_FN8000_0024_EBX_X00_SEVTIO	1
 
---eWBfxz5cC1rG3K4K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+According to the SNP firmware ABI spec, support for SEV TIO commands is
+indicated by bit 1 (bit 0 is for SEV legacy commands).
 
-On Thu, Mar 20, 2025 at 05:41:12PM +0000, Jonathan Cameron wrote:
-> Note that I've only a vague idea of who will care about this
-> so please do +CC others as needed.
->=20
-> On x86 there is the much loved WBINVD instruction that causes a write back
-> and invalidate of all caches in the system. It is expensive but it is
-> necessary in a few corner cases. These are cases where the contents of
-> Physical Memory may change without any writes from the host. Whilst there
-> are a few reasons this might happen, the one I care about here is when
-> we are adding or removing mappings on CXL. So typically going from
-> there being actual memory at a host Physical Address to nothing there
-> (reads as zero, writes dropped) or visa-versa. That involves the
-> reprogramming of address decoders (HDM Decoders); in the near future
-> it may also include the device offering dynamic capacity extents. The
-> thing that makes it very hard to handle with CPU flushes is that the
-> instructions are normally VA based and not guaranteed to reach beyond
-> the Point of Coherence or similar. You might be able to (ab)use
-> various flush operations intended to ensure persistence memory but
-> in general they don't work either.
->=20
-> So on other architectures such as ARM64 we have no instruction similar to
-> WBINVD but we may have device interfaces in the system that provide a way
-> to ensure a PA range undergoes the write back and invalidate action. This
-> RFC is to find a way to support those cache maintenance device interfaces.
-> The ones I know about are much more flexible than WBINVD, allowing
-> invalidation of particular PA ranges, or a much richer set of flush types
-> (not supported yet as not needed for upstream use cases).
->=20
-> To illustrate how a solution might work, I've taken both a HiSilicon
-> design (slight quirk as registers overlap with existing PMU driver)
-> and more controversially a firmware interface proposal from ARM
-> (wrapped up in made up ACPI) that was dropped from the released spec
-> but for which the alpha spec is still available.
->=20
-> Why drivers/cache?
-> - Mainly because it exists and smells like a reasonable place.
-> - Conor, you are maintainer for this currently do you mind us putting this
->   stuff in there?
+> +static int snp_get_feature_info(struct sev_device *sev, u32 ecx,
+> struct sev_snp_feature_info *fi)
+> +{
+> +	struct sev_user_data_snp_status status =3D { 0 };
+> +	int psp_ret =3D 0, ret;
+> +
+> +	ret =3D snp_platform_status_locked(sev, &status, &psp_ret);
+> +	if (ret)
+> +		return ret;
+> +	if (ret !=3D SEV_RET_SUCCESS)
 
-drivers/cache was just something to put the cache controller drivers we
-have on RISC-V that implement the various arch_dma*() callbacks in
-non-standard ways that made more sense than drivers/soc/<soc vendor>
-since the controllers are IP provided by CPU vendors. There's only
-two drivers here now, but I am aware of another two non-standard CMO
-mechanisms if the silicon with them so there'll likely be more in the
-future :) I'm only really maintainer of it to avoid it being another
-thing for Palmer to look after :)
+s/ret/psp_ret/
 
-I've only skimmed this for now, but I think it is reasonable to put them
-here. Maybe my skim is showing, but it would not surprise me to see a
-driver providing both non-standard arch_dma*() callbacks as well as
-dealing with CXL mappings via this new class on RISC-V in the future..
-Either way, I think it'd probably be a good idea to add ?you? as a
-co-maintainer if the directory is going to be used for your proposed
-interface/drivers, for what I hope is an obvious reason!
+> +		return -EFAULT;
+> +	if (!status.feature_info)
+> +		return -ENOENT;
+> +
+> +	ret =3D snp_feature_info_locked(sev, ecx, fi, &psp_ret);
+> +	if (ret)
+> +		return ret;
+> +	if (ret !=3D SEV_RET_SUCCESS)
 
---eWBfxz5cC1rG3K4K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ93o7wAKCRB4tDGHoIJi
-0qSeAQCDYiitjFXwNZKbbEFUkUXhfIYYuu03HmpuYwBJ0POhpgEAmO04672uw1BL
-hytebcnudQFH53/qJg2okVO4XHPPLAw=
-=cvbz
------END PGP SIGNATURE-----
-
---eWBfxz5cC1rG3K4K--
+Same here
 
