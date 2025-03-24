@@ -1,146 +1,180 @@
-Return-Path: <linux-arch+bounces-11058-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11059-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7D1DA6D9A8
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 13:00:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B37EA6DC1D
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 14:51:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72C0C167C42
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 12:00:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3578F1894419
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 13:50:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA45209F2D;
-	Mon, 24 Mar 2025 12:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B687B25F7B0;
+	Mon, 24 Mar 2025 13:50:27 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD62F18D65F;
-	Mon, 24 Mar 2025 12:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8973914F9FB;
+	Mon, 24 Mar 2025 13:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742817652; cv=none; b=aqWXGq/aAKwtCSRwJUrc3O9njQEVyRWV78i97PenebhoLdWeYAPPAvvBc3Jbq8Ef9IngN6ZXOLmNU12zTx3PP2y1ROekM0Gh2ZpIJetzOmXly8JpCIYrK514eiwKhBetyxSZGG2TFCY/qc9Df4lMUT+5tmW7De3GGchFSud+y70=
+	t=1742824227; cv=none; b=HZhiqYp6djhngal4ckJYOI8y/0g0jLhYU07DxdtKT5FqcIMxMe/WwhDJW3kTrlth7b5sSHQsxMDgvJAxVYQBtqMyW/19UsaRA1nXmv0CifTzDACB8QxRL7T566ACBuffXf8cEG+SJD6npyRNeXrN3GwxnFZKNhk9qhTF1QGkIfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742817652; c=relaxed/simple;
-	bh=4z9ekr9axEjl595SBoFrIRppYmPBGV4MEUDc3iGBkEs=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tT5DvifXJwU8TkLVD6G1RTtDt8Gp0U+VnOHKs2Sm4X0FVCsC2kV0Q5iO+ziTe7yqWUQhlH42I/QK3bdspiawtyhmawgw/sA1RA8bTHaeWJPDRyp1FdW8+gM+LVFHWMIwPA3T+lNLl3jplpJWeINNYxROQLvLywH7e/qqr2JQjGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZLs415Lnbz6M4ly;
-	Mon, 24 Mar 2025 19:57:21 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 48F591400D4;
-	Mon, 24 Mar 2025 20:00:47 +0800 (CST)
-Received: from localhost (10.48.158.58) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 24 Mar
- 2025 13:00:44 +0100
-Date: Mon, 24 Mar 2025 12:00:40 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Conor Dooley <conor@kernel.org>
-CC: <linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<james.morse@arm.com>, Yicong Yang <yangyicong@huawei.com>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linuxarm@huawei.com>, Yushan Wang <wangyushan12@huawei.com>,
-	<linux-mm@kvack.org>, <gregkh@linuxfoundation.org>, Lorenzo Pieralisi
-	<lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Catalin
- Marinas" <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, "Dan
- Williams" <dan.j.williams@intel.com>
-Subject: Re: [RFC PATCH 0/6] Cache coherency management subsystem
-Message-ID: <20250324120040.00003d95@huawei.com>
-In-Reply-To: <20250321-failing-squatted-37a88909bde2@spud>
-References: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
-	<20250321-failing-squatted-37a88909bde2@spud>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1742824227; c=relaxed/simple;
+	bh=5DWVH+PYF6T7L8669uq6zv4/kb1H6dDU0ckc3N5uPHU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M22MfMyNm5+m6/QAEOKO1Oc4EbQwzJY6LyV9Q7YbWxdzonFDEFEHqxU589CUSjy8AD+nL6mj15CgVN28Ch0XUrT5mw78x/a0mDzHg5qlyWDlqr/5xxcPMRizqMKBI6ow96Uai+pn5e0bIhzZ0o0gYf6MJA1AYuFpBbTa7eHP8zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0AE6C4CEDD;
+	Mon, 24 Mar 2025 13:50:21 +0000 (UTC)
+Message-ID: <9076d00e-c469-4a05-a686-94e3e55c8389@linux-m68k.org>
+Date: Mon, 24 Mar 2025 23:50:19 +1000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/6] m68k/nommu: stop using GENERIC_IOMAP
+To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+ Linux-Arch <linux-arch@vger.kernel.org>
+Cc: Richard Henderson <richard.henderson@linaro.org>,
+ Matt Turner <mattst88@gmail.com>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Naveen N Rao <naveen@kernel.org>, Yoshinori Sato
+ <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Julian Vetter <julian@outer-limits.org>, Bjorn Helgaas
+ <bhelgaas@google.com>, linux-alpha@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org
+References: <20250315105907.1275012-1-arnd@kernel.org>
+ <20250315105907.1275012-7-arnd@kernel.org>
+ <64f226e5-7931-40ba-878a-a28688da82fd@linux-m68k.org>
+ <4a31c6a8-7c99-4d8f-8248-92e0e52b8db6@app.fastmail.com>
+Content-Language: en-US
+From: Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <4a31c6a8-7c99-4d8f-8248-92e0e52b8db6@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- frapeml500008.china.huawei.com (7.182.85.71)
 
-On Fri, 21 Mar 2025 22:32:15 +0000
-Conor Dooley <conor@kernel.org> wrote:
+Hi Arnd,
 
-> On Thu, Mar 20, 2025 at 05:41:12PM +0000, Jonathan Cameron wrote:
-> > Note that I've only a vague idea of who will care about this
-> > so please do +CC others as needed.
-> > 
-> > On x86 there is the much loved WBINVD instruction that causes a write back
-> > and invalidate of all caches in the system. It is expensive but it is
-> > necessary in a few corner cases. These are cases where the contents of
-> > Physical Memory may change without any writes from the host. Whilst there
-> > are a few reasons this might happen, the one I care about here is when
-> > we are adding or removing mappings on CXL. So typically going from
-> > there being actual memory at a host Physical Address to nothing there
-> > (reads as zero, writes dropped) or visa-versa. That involves the
-> > reprogramming of address decoders (HDM Decoders); in the near future
-> > it may also include the device offering dynamic capacity extents. The
-> > thing that makes it very hard to handle with CPU flushes is that the
-> > instructions are normally VA based and not guaranteed to reach beyond
-> > the Point of Coherence or similar. You might be able to (ab)use
-> > various flush operations intended to ensure persistence memory but
-> > in general they don't work either.
-> > 
-> > So on other architectures such as ARM64 we have no instruction similar to
-> > WBINVD but we may have device interfaces in the system that provide a way
-> > to ensure a PA range undergoes the write back and invalidate action. This
-> > RFC is to find a way to support those cache maintenance device interfaces.
-> > The ones I know about are much more flexible than WBINVD, allowing
-> > invalidation of particular PA ranges, or a much richer set of flush types
-> > (not supported yet as not needed for upstream use cases).
-> > 
-> > To illustrate how a solution might work, I've taken both a HiSilicon
-> > design (slight quirk as registers overlap with existing PMU driver)
-> > and more controversially a firmware interface proposal from ARM
-> > (wrapped up in made up ACPI) that was dropped from the released spec
-> > but for which the alpha spec is still available.
-> > 
-> > Why drivers/cache?
-> > - Mainly because it exists and smells like a reasonable place.
-> > - Conor, you are maintainer for this currently do you mind us putting this
-> >   stuff in there?  
+On 24/3/25 18:02, Arnd Bergmann wrote:
+> On Mon, Mar 24, 2025, at 02:33, Greg Ungerer wrote:
+>> Hi Arnd,
+>>
+>> On 15/3/25 20:59, Arnd Bergmann wrote:
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> There is no need to go through the GENERIC_IOMAP wrapper for PIO on
+>>> nommu platforms, since these always come from PCI I/O space that is
+>>> itself memory mapped.
+>>>
+>>> Instead, the generic ioport_map() can just return the MMIO location
+>>> of the ports directly by applying the PCI_IO_PA offset, while
+>>> ioread32/iowrite32 trivially turn into readl/writel as they do
+>>> on most other architectures.
+>>>
+>>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>>
+>> With this applied this fails to build for me:
+>>
+>>     UPD     include/generated/utsversion.h
+>>     CC      init/version-timestamp.o
+>>     LD      vmlinux
+>> m68k-linux-uclibc-ld: drivers/pci/quirks.o: in function
+>> `quirk_switchtec_ntb_dma_alias':
+>> quirks.c:(.text+0x23e4): undefined reference to `pci_iomap'
+>> m68k-linux-uclibc-ld: quirks.c:(.text+0x24fe): undefined reference to
+>> `pci_iounmap'
+>> m68k-linux-uclibc-ld: drivers/pci/quirks.o: in function
+>> `disable_igfx_irq':
+>> quirks.c:(.text+0x32f4): undefined reference to `pci_iomap'
+>> m68k-linux-uclibc-ld: quirks.c:(.text+0x3348): undefined reference to
+>> `pci_iounmap'
 > 
-> drivers/cache was just something to put the cache controller drivers we
-> have on RISC-V that implement the various arch_dma*() callbacks in
-> non-standard ways that made more sense than drivers/soc/<soc vendor>
-> since the controllers are IP provided by CPU vendors. There's only
-> two drivers here now, but I am aware of another two non-standard CMO
-> mechanisms if the silicon with them so there'll likely be more in the
-> future :) I'm only really maintainer of it to avoid it being another
-> thing for Palmer to look after :)
-
-I suspected as much :)
-
+> Thanks for the report, I was able to reproduce the problem now
+> and applied the fixup below. I had tested m5475evb_defconfig earlier,
+> and that built cleanly with PCI enabled, but I had missed how
+> that still used GENERIC_IOMAP because it has CONFIG_MMU enabled.
 > 
-> I've only skimmed this for now, but I think it is reasonable to put them
-> here. Maybe my skim is showing, but it would not surprise me to see a
-> driver providing both non-standard arch_dma*() callbacks as well as
-> dealing with CXL mappings via this new class on RISC-V in the future..
+> Does this fixup work for you?
 
-Absolutely.  The use of an ARM callback was just a place holder for now
-(Greg pointed that one out as well as I forgot to mention it in the patch
-description!)
+Yes, this looks good, works for me.
+Feel free to add this if you like:
 
-I think this will turn out to be at least some subset of implementations
-for other architectures unless they decide to go the route of an instruction
-(like x86).
+Acked-by: Greg Ungerer <gerg@linux-m68k.org>
 
-> Either way, I think it'd probably be a good idea to add ?you? as a
-> co-maintainer if the directory is going to be used for your proposed
-> interface/drivers, for what I hope is an obvious reason!
 
-Sure.  That would make sense.
+> On a related note, I'm curious about how the MCF54xx chips are
+> used in practice, as I see that they are the only coldfire chips
+> with PCI and they all have an MMU. Are there actual users of these
+> chips that have PCI but choose not to use the MMU?
 
-Jonathan
+No, I think everyone with these uses them with MMU enabled.
+
+It is probably more of an historical curiosity to use them with
+the MMU disabled. That supported pre-dated mainline kernels having
+full ColdFire MMU support by a good few years.
+
+Regards
+Greg
+
+
+
+>        Arnd
 > 
+> 8<-----
+>  From a36995e2a64711556c6773797367d165828f6705 Mon Sep 17 00:00:00 2001
+> From: Arnd Bergmann <arnd@arndb.de>
+> Date: Mon, 24 Mar 2025 07:53:47 +0100
+> Subject: [PATCH] m68k: coldfire: select PCI_IOMAP for PCI
+> 
+> After I dropped CONFIG_GENERIC_IOMAP, some PCI drivers started failing
+> to link when CONFIG_MMU is disabled:
+> 
+> ERROR: modpost: "pci_iounmap" [drivers/video/fbdev/i740fb.ko] undefined!
+> ERROR: modpost: "pci_iounmap" [drivers/video/fbdev/vt8623fb.ko] undefined!
+> ERROR: modpost: "pci_iomap_wc" [drivers/video/fbdev/vt8623fb.ko] undefined!
+> ERROR: modpost: "pci_iomap" [drivers/video/fbdev/vt8623fb.ko] undefined!
+> ERROR: modpost: "pci_iounmap" [drivers/video/fbdev/s3fb.ko] undefined!
+> ...
+> 
+> It turns out that there were two mistakes in my patch: on !MMU I forgot
+> to enable CONFIG_GENERIC_PCI_IOMAP, and for Coldfire with MMU enabled,
+> teh GENERIC_IOMAP was left in place but incorrectly configured.
+> 
+> Fixes: 9d48cc07d0d7 ("m68k/nommu: stop using GENERIC_IOMAP")
+> Reported-by: Greg Ungerer <gerg@linux-m68k.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+> index b50c275fa94d..eb5bb6d36899 100644
+> --- a/arch/m68k/Kconfig
+> +++ b/arch/m68k/Kconfig
+> @@ -18,12 +18,13 @@ config M68K
+>   	select DMA_DIRECT_REMAP if M68K_NONCOHERENT_DMA && !COLDFIRE
+>   	select GENERIC_ATOMIC64
+>   	select GENERIC_CPU_DEVICES
+> -	select GENERIC_IOMAP if HAS_IOPORT && MMU
+> +	select GENERIC_IOMAP if HAS_IOPORT && MMU && !COLDFIRE
+>   	select GENERIC_IRQ_SHOW
+>   	select GENERIC_LIB_ASHLDI3
+>   	select GENERIC_LIB_ASHRDI3
+>   	select GENERIC_LIB_LSHRDI3
+>   	select GENERIC_LIB_MULDI3
+> +	select GENERIC_PCI_IOMAP if PCI
+>   	select HAS_IOPORT if PCI || ISA || ATARI_ROM_ISA
+>   	select HAVE_ARCH_LIBGCC_H
+>   	select HAVE_ARCH_SECCOMP
 
 
