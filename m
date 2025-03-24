@@ -1,164 +1,146 @@
-Return-Path: <linux-arch+bounces-11057-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11058-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 290EAA6D896
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 11:48:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7D1DA6D9A8
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 13:00:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9732516C750
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 10:48:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72C0C167C42
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 12:00:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8775D25D91D;
-	Mon, 24 Mar 2025 10:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DqSoWvn2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA45209F2D;
+	Mon, 24 Mar 2025 12:00:52 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0066122339;
-	Mon, 24 Mar 2025 10:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD62F18D65F;
+	Mon, 24 Mar 2025 12:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742813299; cv=none; b=K938wWY4WcZ4k36GtCuJijgWnIWMIuU80hnsjweqryP62qO+JQYYCSF1b6GnqMLgWwyDsBpS/6xbM9/YzkiLRILUELjUn079p5gZ2lpHhqK3WCQIznWM5BvxY9nXm0gY7Q8lHNY/wMrolkfFCHgeZomNXrtaatJf1MlSxBV+jT8=
+	t=1742817652; cv=none; b=aqWXGq/aAKwtCSRwJUrc3O9njQEVyRWV78i97PenebhoLdWeYAPPAvvBc3Jbq8Ef9IngN6ZXOLmNU12zTx3PP2y1ROekM0Gh2ZpIJetzOmXly8JpCIYrK514eiwKhBetyxSZGG2TFCY/qc9Df4lMUT+5tmW7De3GGchFSud+y70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742813299; c=relaxed/simple;
-	bh=KKpN7ifW0FwxjJpOhtFmsCId4QhbQ/vnhrEMIbMuqjo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N/M583F3bFLBRbgvNC6CsoWSCzPDFJSzTP7SQG5SN9QyCW7SfRpH1nNs4vNWEIPxwze2XaBc9g6gZBdpEIA/jwcQXC5mD4MSmRQPlIqs426tsjOk2rjlEd3VVQjNNP4NObmAvwoP916Am3ZHl+aYqkvOwqfkxo6v0MRf0yUt7Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DqSoWvn2; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52O9ptko016767;
-	Mon, 24 Mar 2025 10:47:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=VIga+xvQk4RxwLl37s8roD8US+RxZH
-	6wgAnN7cz6dUM=; b=DqSoWvn2hNYTALQxMlD7ZFoi+4zq0N1yWuxe53qPbwlofS
-	11EDXetv8BM4utLmdlLw0MYgxwUAi5gSGHNoREjNHy90tDmAWBicdY3u5OsLqFNm
-	FswP8lh4U8KL0Z+kmbDMnrfazqs0pMLjoe8sYQPDDhg+bESIKfnjQkeT2J5kZ8gZ
-	uTpBQo4JY573uCvrEvB6/7EY+71e5v7MwS2GmtATqmPLrQY+OFUtee+p4N29MFed
-	yMLrXbyFZsn7mGVDVNB3gW9NBCAPa3n7ktStYlAB993VUD+ET9ZqifqLhNy/ADTm
-	3QJgYd+LcjsIPnDPueY9NsSPBS5ASB0qja99r70Q==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45jkqp44qf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 24 Mar 2025 10:47:11 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 52OAlA92022659;
-	Mon, 24 Mar 2025 10:47:10 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45jkqp44qc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 24 Mar 2025 10:47:10 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 52O77iAg025489;
-	Mon, 24 Mar 2025 10:47:09 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45j7wywy1a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 24 Mar 2025 10:47:09 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 52OAl5LT16187800
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 24 Mar 2025 10:47:05 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 694862004B;
-	Mon, 24 Mar 2025 10:47:05 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CD8DB20040;
-	Mon, 24 Mar 2025 10:47:03 +0000 (GMT)
-Received: from osiris (unknown [9.179.14.66])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 24 Mar 2025 10:47:03 +0000 (GMT)
-Date: Mon, 24 Mar 2025 11:47:02 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Alessandro Carminati <acarmina@redhat.com>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-kselftest@vger.kernel.org,
-        David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Diaz <daniel.diaz@linaro.org>, David Gow <davidgow@google.com>,
-        Arthur Grillo <arthurgrillo@riseup.net>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Alessandro Carminati <alessandro.carminati@gmail.com>,
-        Jani Nikula <jani.nikula@intel.com>, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        loongarch@lists.linux.dev, x86@kernel.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: Re: [PATCH v4 10/14] s390: Add support for suppressing warning
- backtraces
-Message-ID: <20250324104702.12139E73-hca@linux.ibm.com>
-References: <20250313114329.284104-1-acarmina@redhat.com>
- <20250313114329.284104-11-acarmina@redhat.com>
- <b6bb68f0-7e93-4db2-9fe6-f615f06ddeb1@roeck-us.net>
- <CAGegRW4GinPmsav5=VBfjXBKy4cUEs5FWv-ixXODk7ajZ69vYg@mail.gmail.com>
+	s=arc-20240116; t=1742817652; c=relaxed/simple;
+	bh=4z9ekr9axEjl595SBoFrIRppYmPBGV4MEUDc3iGBkEs=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tT5DvifXJwU8TkLVD6G1RTtDt8Gp0U+VnOHKs2Sm4X0FVCsC2kV0Q5iO+ziTe7yqWUQhlH42I/QK3bdspiawtyhmawgw/sA1RA8bTHaeWJPDRyp1FdW8+gM+LVFHWMIwPA3T+lNLl3jplpJWeINNYxROQLvLywH7e/qqr2JQjGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZLs415Lnbz6M4ly;
+	Mon, 24 Mar 2025 19:57:21 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 48F591400D4;
+	Mon, 24 Mar 2025 20:00:47 +0800 (CST)
+Received: from localhost (10.48.158.58) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 24 Mar
+ 2025 13:00:44 +0100
+Date: Mon, 24 Mar 2025 12:00:40 +0000
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Conor Dooley <conor@kernel.org>
+CC: <linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<james.morse@arm.com>, Yicong Yang <yangyicong@huawei.com>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linuxarm@huawei.com>, Yushan Wang <wangyushan12@huawei.com>,
+	<linux-mm@kvack.org>, <gregkh@linuxfoundation.org>, Lorenzo Pieralisi
+	<lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, "Dan
+ Williams" <dan.j.williams@intel.com>
+Subject: Re: [RFC PATCH 0/6] Cache coherency management subsystem
+Message-ID: <20250324120040.00003d95@huawei.com>
+In-Reply-To: <20250321-failing-squatted-37a88909bde2@spud>
+References: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
+	<20250321-failing-squatted-37a88909bde2@spud>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGegRW4GinPmsav5=VBfjXBKy4cUEs5FWv-ixXODk7ajZ69vYg@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -BXK6qMXWLef6jiJ2R9hHCsaI_IjDOmx
-X-Proofpoint-ORIG-GUID: 40o9NRITvQhnDK-iPsw_sUFfSwFPyp4T
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-24_04,2025-03-21_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- suspectscore=0 priorityscore=1501 impostorscore=0 spamscore=0 adultscore=0
- mlxscore=0 mlxlogscore=810 clxscore=1011 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503240076
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Fri, Mar 21, 2025 at 10:05:42PM +0100, Alessandro Carminati wrote:
-> > > +#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
-> > > +# define HAVE_BUG_FUNCTION
-> > > +# define __BUG_FUNC_PTR      "       .long   %0-.\n"
-> > > +# define __BUG_FUNC  __func__
-> >
-> > gcc 7.5.0 on s390 barfs; it doesn't like the use of "__func__" with "%0-."
+On Fri, 21 Mar 2025 22:32:15 +0000
+Conor Dooley <conor@kernel.org> wrote:
 
-...
-
-> GCC makes significant efforts to handle this, and for several
-> architectures, it manages to solve the problem.
-> However, this is not universally the case.
-> Additionally, -fPIC is not widely used in kernel code... I have only
-> seen it used for VDSO, the x86 boot piggyback decompressor, PowerPC
-> boot, and the s390x architecture.
+> On Thu, Mar 20, 2025 at 05:41:12PM +0000, Jonathan Cameron wrote:
+> > Note that I've only a vague idea of who will care about this
+> > so please do +CC others as needed.
+> > 
+> > On x86 there is the much loved WBINVD instruction that causes a write back
+> > and invalidate of all caches in the system. It is expensive but it is
+> > necessary in a few corner cases. These are cases where the contents of
+> > Physical Memory may change without any writes from the host. Whilst there
+> > are a few reasons this might happen, the one I care about here is when
+> > we are adding or removing mappings on CXL. So typically going from
+> > there being actual memory at a host Physical Address to nothing there
+> > (reads as zero, writes dropped) or visa-versa. That involves the
+> > reprogramming of address decoders (HDM Decoders); in the near future
+> > it may also include the device offering dynamic capacity extents. The
+> > thing that makes it very hard to handle with CPU flushes is that the
+> > instructions are normally VA based and not guaranteed to reach beyond
+> > the Point of Coherence or similar. You might be able to (ab)use
+> > various flush operations intended to ensure persistence memory but
+> > in general they don't work either.
+> > 
+> > So on other architectures such as ARM64 we have no instruction similar to
+> > WBINVD but we may have device interfaces in the system that provide a way
+> > to ensure a PA range undergoes the write back and invalidate action. This
+> > RFC is to find a way to support those cache maintenance device interfaces.
+> > The ones I know about are much more flexible than WBINVD, allowing
+> > invalidation of particular PA ranges, or a much richer set of flush types
+> > (not supported yet as not needed for upstream use cases).
+> > 
+> > To illustrate how a solution might work, I've taken both a HiSilicon
+> > design (slight quirk as registers overlap with existing PMU driver)
+> > and more controversially a firmware interface proposal from ARM
+> > (wrapped up in made up ACPI) that was dropped from the released spec
+> > but for which the alpha spec is still available.
+> > 
+> > Why drivers/cache?
+> > - Mainly because it exists and smells like a reasonable place.
+> > - Conor, you are maintainer for this currently do you mind us putting this
+> >   stuff in there?  
 > 
-> That said, GCC has been mitigating this issue, allowing us to treat a
-> non-compile-time constant as if it were one.
-> A proof of this is that, at least since GCC 11, the s390x version of
-> GCC is able to build this code.
-> Before that... certainly in GCC 7.5 it couldn't.
-> 
-> A simple fix would be to restrict usage to GCC versions greater than
-> 11 for s390.
+> drivers/cache was just something to put the cache controller drivers we
+> have on RISC-V that implement the various arch_dma*() callbacks in
+> non-standard ways that made more sense than drivers/soc/<soc vendor>
+> since the controllers are IP provided by CPU vendors. There's only
+> two drivers here now, but I am aware of another two non-standard CMO
+> mechanisms if the silicon with them so there'll likely be more in the
+> future :) I'm only really maintainer of it to avoid it being another
+> thing for Palmer to look after :)
 
-But please add that dependency only for this new feature for the time
-being. Right now I would not like to see that s390 is the only architecture
-(besides parisc) which requires a much higher minimum gcc level than every
-other architecture. Unless there are specific reasons.
+I suspected as much :)
+
+> 
+> I've only skimmed this for now, but I think it is reasonable to put them
+> here. Maybe my skim is showing, but it would not surprise me to see a
+> driver providing both non-standard arch_dma*() callbacks as well as
+> dealing with CXL mappings via this new class on RISC-V in the future..
+
+Absolutely.  The use of an ARM callback was just a place holder for now
+(Greg pointed that one out as well as I forgot to mention it in the patch
+description!)
+
+I think this will turn out to be at least some subset of implementations
+for other architectures unless they decide to go the route of an instruction
+(like x86).
+
+> Either way, I think it'd probably be a good idea to add ?you? as a
+> co-maintainer if the directory is going to be used for your proposed
+> interface/drivers, for what I hope is an obvious reason!
+
+Sure.  That would make sense.
+
+Jonathan
+> 
+
 
