@@ -1,124 +1,109 @@
-Return-Path: <linux-arch+bounces-11116-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11117-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34307A706FB
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 17:34:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91D9EA70717
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 17:39:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91108188E8BA
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 16:32:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5583818949C4
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 16:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78BFA25A2D0;
-	Tue, 25 Mar 2025 16:31:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6E01F4C95;
+	Tue, 25 Mar 2025 16:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WORJzFnm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OpkHJfnS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9AF4257AF2
-	for <linux-arch@vger.kernel.org>; Tue, 25 Mar 2025 16:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321AF19066D
+	for <linux-arch@vger.kernel.org>; Tue, 25 Mar 2025 16:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742920308; cv=none; b=kzFKRrhmQTl3erCZQRq+okfTRi6h3F9zQyLVGC9o+eM7mWBgzYprkzs1S3OBlIa2NkKX1KKjVGcfrKEGpHTrKxL6Piu+QMQ6CE08OIP6iCpUswfVt7fE/WQ8wozrEf0SilVTz0i/3OcqRvXXdGbkXtYgiaAnyoGuFoKmufcZ8Ng=
+	t=1742920625; cv=none; b=C4YiFAvjTdSEoQ7kjxQo/nK1C/+z29/GgA2n5CScuHAmr2rzt8+ivGXPgHH7WgvLR/NqvFUQxc608/02v9SrPxuFa+UPVbvQVoIXWm2qidhHtt2BnV2Fk2UZu+49aYWbqGl4DM+x8Q5he/RUcVYRjxlMCwJSD8jLdDjDwqU2io0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742920308; c=relaxed/simple;
-	bh=FqCTIgh8QO/t7KPUealsnN0UqFbnMBx72fTK2JxImZA=;
+	s=arc-20240116; t=1742920625; c=relaxed/simple;
+	bh=cdtKBuwq8KD1n7kXxsXZzrCM7kAgY9mfaSLYLssvPX0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AOAk+H+IposYafaSGrtdofcL2Kp+HGo1F5gUN6OA8/dYy7sRa78chmsF8lqE1RVcFdJifTG/ZiDzred2qfxt9rjH0D4E4lDJhbeZ9vGQa4xzMHcx5dok4B1R4b66S8YzHH4eCVHJHMBuZXps3mhrgtXOSwyjzpfo4obp6G5MD0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WORJzFnm; arc=none smtp.client-ip=209.85.216.44
+	 To:Cc:Content-Type; b=Ww0RsvR8FRz3YceiyDosVxUG6usVjZ2dUU6phpxGsVL4Vpf05YXlCOhBUezMtueND493i1YCIZv7XoZ7rtVY1bOE02MZq0ggHWebuKRIy6BOgx6tdHvbIx/ZhMs9zlB6CksywL6GWxyUfAUfK2g2kf+/92mpfteHU0T7Sh2TuTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OpkHJfnS; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-301cda78d48so11248985a91.0
-        for <linux-arch@vger.kernel.org>; Tue, 25 Mar 2025 09:31:46 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e789411187so11702a12.1
+        for <linux-arch@vger.kernel.org>; Tue, 25 Mar 2025 09:37:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742920306; x=1743525106; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FqCTIgh8QO/t7KPUealsnN0UqFbnMBx72fTK2JxImZA=;
-        b=WORJzFnmqQKLQHUQGsbgutdP+8FYmzlWK+Sx67omcM7DaFtCKKPb8Z1aI6m12IrsL9
-         j/zBWJ7yRpQ4ro0biN1qEl3ilk/F+brryi1dL0yPR9aboc7H5Kx6dHuyt74IjV1sDgQP
-         Oqwg3mEYtOayzX7HHHRotOsqNJXGX2SmNT7K/TunrVibClWg3GrWYhW1HlxVFLUMmU52
-         6X8dyttDKdzKlG0vVuoWfQExGI3A9qfwEp7RFQrCmSALEQJArEty1EdYxwwJhClhVmLR
-         8mskdbfsE/bSF74xIFKZ8Y5LN2rHsFINl9cBcx+wc3nGx9Ge2rwmXxFdOlNs4LE0hW20
-         hgCg==
+        d=google.com; s=20230601; t=1742920622; x=1743525422; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cdtKBuwq8KD1n7kXxsXZzrCM7kAgY9mfaSLYLssvPX0=;
+        b=OpkHJfnS0IIAT0vf0aMAo4BUOJUo0Gq8OsDgyMa3/urmO+q99LFNy9pd1DWfYjWsRr
+         fwKl4w5zmbyrCRY1y6/CMujBt2MO6SnDAoK0L/HQKPB9AmnMXsvRWERL0gkuuYnM+BiC
+         V7F9Up6QkAE9tw6XJOOGuvXklZD61C+TCyEYbOD6iCy8KTiFnz7ucDBDDvaPklgYtMLy
+         oNMg1DPQEXNJPj18Ldh0lmfNAqaanqVq0fwrH3wBKrkBfx3bSfXmOndRWM90tPF0cEaT
+         4jf2riM6frqvgWoi67Dq2qfjbpfqthx/pyJ/LCnBkRu6U3IYphMvMFtStL+RFVG2u6Ei
+         51JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742920306; x=1743525106;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FqCTIgh8QO/t7KPUealsnN0UqFbnMBx72fTK2JxImZA=;
-        b=UVJ0zOzDpL2HgeuAfPHOEUNH0UaQblTU3btE3z/YfxgXfwSThoL1ZWZJ74V+utL9WF
-         +zZCSAEcDuxBKAF+jT/YkxDeNrcpyF/xaqnqi8ybGjuyL1jy0cVMK+fYaJuZmKiI58lV
-         /2gthN6sqfedFE+XMDaT+aIzkRtw31rphBjrQ7gL9nS2DFDXIgqB6N0dKES6tT//B1Nn
-         A30QpjohK9muLsfUuQZApQ3vDsdu/5YEslIHcMPctI7JrgTMsWc3JvXGmUMPQMF0H1Ti
-         3c5oB6975OSCCkMzOvAoJ7xbuJJBxVQxQikC1JoT+kQL6WpN+vWoRZDZ+kmmNGLp85Ho
-         GpWw==
-X-Forwarded-Encrypted: i=1; AJvYcCWlEMGHea8COeOlMqoT1jZDxHmUvsS1pNrpwib8m2cDiTtbeuqnog9UEYX8tUybGr906qUGXnQzMSMv@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU1FkdfRX2FtRwbBJttq2VwqSaq7ud/uLySYQoVHM6dBG5nqSA
-	cj6IRZriF+PuNU9U7aJ9dq+KW4T9mXnFnnsVb5AtWmTDnHS3KZmoINF2egnNw5XLRDyKZEqZRjl
-	Oamok4Y5wf43DnYUPkVWKKC6EjTKqOGmhwHpa
-X-Gm-Gg: ASbGncvBrXkIREfeGwlmmGf+juUj0kok/wMICuJ21bN8kgMQk2wQimfH6Vau/9tienX
-	+Q/6sOHzQUvndP6VicyJoucWHIKYqOMlUsNY34RUoco27sN5ofsgLZD5VusECa/RmORKCaT2tZS
-	0hjnXnVIBWNSFnnTPL1tq7eNEj1GMs5yj+VXvCzkL1/J4WLrL5jKsuGTbRDPGNQsG0
-X-Google-Smtp-Source: AGHT+IE2SR9bpc54rZzeETcMjOZPU5KZizBq4WuPKmSbzaKhsMuxbQn4aRhsY1Rh/59zdT9tE5i7EBsD3SxvGx8pyiw=
-X-Received: by 2002:a17:90b:4a44:b0:2f4:4003:f3d4 with SMTP id
- 98e67ed59e1d1-3030ff08e4amr26346030a91.30.1742920305908; Tue, 25 Mar 2025
- 09:31:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742920622; x=1743525422;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cdtKBuwq8KD1n7kXxsXZzrCM7kAgY9mfaSLYLssvPX0=;
+        b=hRCs/Ve5E/fdWcfZCTD6BBuBLb46HwLiSOKxq6WeyXSGMBUNB8vQQU8ZxxpGJZOwNP
+         8BNUF9NCcKHOzVwHCu2JSdlEOZ73LsIpJE0qUcoasVRS61bWChZMqzL9Ow1XCcmxX22o
+         04uWwJYxOTHzW652vSHOlYCtce30O5AzcHzoQtsqj4eP6OqpjrdZLK6lLyU7EjinlK/Z
+         2xe2YJpDgLF0/T2b1IpLEg3IcJ2Wmj9/xcQSZb3kiPl/csMo3R6lcakTtUh/wd7jn4bN
+         I1nTUVHbqhbeiI7mHdava6jVI7NAo5TJC5BvO95l4Qm9fgGzP6KnTVoD3otJapq574DL
+         yR/w==
+X-Forwarded-Encrypted: i=1; AJvYcCXmyppo6u9hfs5a5Xbxtm6vWf3n/tpenHA3wSS1Yum3BCtx0WJmpZTlZwN3X2G09h+Z33fNBmt8VqZB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzf4/VQDF4aCq7BFcyjt1KdvTk5ZZXSPErkB7awrkNVh/99g5YS
+	y4bwczEChqOYsDqvjb22a7cl6Nj1bYlrKtv3p+pfYdsjWJuKwMu2ZGOgGz0cZddq7CYmiaeT5NF
+	ZkSTdguWzLo2D+tlUfA5/e+8aPazGQJPs/U8h
+X-Gm-Gg: ASbGnct0OSBfEO3t51c1eEBM5iulxUH6fGAjCXFIYdhLkCgAQbt2siOOPSox0DXr4f8
+	HAo9dXmWYC9FHbV3btD06PauAy1mZ+ES53VhQx0U7i9j/Rqv782YiqS5sgZphCmD9tpc12QM7z7
+	868ZNlnUI0LS9llAI/A6u8wWBEL76ALMO9LIzZXRoTY2XgtjLcY7iNEQ==
+X-Google-Smtp-Source: AGHT+IHPUGHREqco1DTnfO/F+aCYz8cAJ5qYMao8+1Nj74JN/TypPJxBO7NjUrPuX7a2MaW7apzLRdIsTLYZoT/21N0=
+X-Received: by 2002:a05:6402:2058:b0:5eb:5d50:4fec with SMTP id
+ 4fb4d7f45d1cf-5ec1d8fcf0dmr312539a12.0.1742920622152; Tue, 25 Mar 2025
+ 09:37:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250325-kcsan-rwonce-v1-1-36b3833a66ae@google.com> <26df580c-b2cc-4bb0-b15b-4e9b74897ff0@app.fastmail.com>
-In-Reply-To: <26df580c-b2cc-4bb0-b15b-4e9b74897ff0@app.fastmail.com>
-From: Marco Elver <elver@google.com>
-Date: Tue, 25 Mar 2025 17:31:09 +0100
-X-Gm-Features: AQ5f1JpE-9eEvuTImZnrBRyMVLS4S4ftn6GcJfbHDvLlEcvUIVnaUo1LgJcC6PM
-Message-ID: <CANpmjNMGr8-r_uPRMhwBGX42hbV+pavL7n1+zyBK167ZT7=nmA@mail.gmail.com>
+References: <20250325-kcsan-rwonce-v1-1-36b3833a66ae@google.com>
+ <26df580c-b2cc-4bb0-b15b-4e9b74897ff0@app.fastmail.com> <CANpmjNMGr8-r_uPRMhwBGX42hbV+pavL7n1+zyBK167ZT7=nmA@mail.gmail.com>
+In-Reply-To: <CANpmjNMGr8-r_uPRMhwBGX42hbV+pavL7n1+zyBK167ZT7=nmA@mail.gmail.com>
+From: Jann Horn <jannh@google.com>
+Date: Tue, 25 Mar 2025 17:36:26 +0100
+X-Gm-Features: AQ5f1Jp1Xe_G-CxRRO6kwph46Q35uuQWx_DCrGXZTFNG3il-9h0KD0k1zhEGxuE
+Message-ID: <CAG48ez2eECk+iU759BhPLrDJrGcBPT2dkAZg_O_c1fdD+HsifQ@mail.gmail.com>
 Subject: Re: [PATCH] rwonce: handle KCSAN like KASAN in read_word_at_a_time()
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Jann Horn <jannh@google.com>, Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
+To: Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
 	Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 25 Mar 2025 at 17:06, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Mar 25, 2025, at 17:01, Jann Horn wrote:
-> > Fixes: dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrastructure")
-> > Signed-off-by: Jann Horn <jannh@google.com>
->
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+On Tue, Mar 25, 2025 at 5:31=E2=80=AFPM Marco Elver <elver@google.com> wrot=
+e:
+> On Tue, 25 Mar 2025 at 17:06, Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Tue, Mar 25, 2025, at 17:01, Jann Horn wrote:
+> > > Fixes: dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrast=
+ructure")
+> > > Signed-off-by: Jann Horn <jannh@google.com>
+[...]
+> I have nothing pending yet. Unless you're very certain there'll be
+> more KCSAN patches,
 
-Acked-by: Marco Elver <elver@google.com>
+No, I don't know yet whether I'll have more KCSAN patches for 6.15.
 
-> > ---
-> > This is a low-priority fix. I've never actually hit this issue with
-> > upstream KCSAN.
-> > (I only noticed it because I... err... hooked up KASAN to the KCSAN
-> > hooks. Long story.)
+> I'd suggest that Arnd can take it. I'm fine with
+> KCSAN-related patches that aren't strongly dependent on each other
+> outside kernel/kcsan to go through whichever tree is closest.
 
-Sounds exciting... ;-)
-
-> > I'm not sure if this should go through Arnd's tree (because it's in
-> > rwonce.h) or Marco's (because it's a KCSAN thing).
-> > Going through Marco's tree (after getting an Ack from Arnd) might
-> > work a little better for me, I may or may not have more KCSAN patches
-> > in the future.
->
-> I agree it's easier if Marco takes it through his tree, as this
-> is something I rarely touch.
->
-> If Marco has nothing else pending for 6.15, I can take it though.
-
-I have nothing pending yet. Unless you're very certain there'll be
-more KCSAN patches, I'd suggest that Arnd can take it. I'm fine with
-KCSAN-related patches that aren't strongly dependent on each other
-outside kernel/kcsan to go through whichever tree is closest.
-
-Thanks,
--- Marco
+Sounds good to me.
 
