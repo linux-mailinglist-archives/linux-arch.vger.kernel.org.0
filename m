@@ -1,137 +1,152 @@
-Return-Path: <linux-arch+bounces-11118-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11119-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F1D5A70785
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 17:59:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B547DA707E7
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 18:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0343188C8F5
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 16:59:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 393B8169BA6
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 17:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF22125E476;
-	Tue, 25 Mar 2025 16:59:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cas0BCBQ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gvfwj1bg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D57A25F783;
+	Tue, 25 Mar 2025 17:19:55 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B301547C3;
-	Tue, 25 Mar 2025 16:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1896313633F;
+	Tue, 25 Mar 2025 17:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742921979; cv=none; b=WgrBXQZTJfQDCZGKgk3FPLFP28eTxfZAT6YeYVoCPUVayrKncYdHZQTZL8ownQIkH6sLlxOKipBONdXo7IzXxzt7FZ08FN2cXlvGZxSJOiVpzwc9YDcWd68sbMu1Irb4OZ6j9nQCIqtNPy/ea2mgtHo2Mj8QsBCFqoyjfhBrHpM=
+	t=1742923195; cv=none; b=JVnlwqVX6P2mPQEyZ+/VCGqJ4P18sGpLohEiLA42NvMdcuwFnvm6Gts6MotbeIPjngeCkr7IXavTEdHtxZ54NYjKzjnieHJbw52OYu20xq+NTnzQV8+qEdFr9x29mvagLSgEdt93kTrsER3utBA5TBu0NaZouBObCpg2MWJ/vlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742921979; c=relaxed/simple;
-	bh=4W3BIyRaHFe7PrPpyfwCQpUYd2ckXMij+VhkaR9rlRg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=bhEylzo2yb4uMkSavKE22T6TSmOGZOOAbyNkKq51nUFDl7Mm5zRoX9ngNYYDJOfHn+ASlv+QGpWmKOu7wuMX3nneAcfbG9kJJXWEyRSpC/YmIpGRoNzB/2I2cRx7k4Oev66bjYQ7XW6Vgr9+NQui5JCsncPOk00lVN6nN66dNVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cas0BCBQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gvfwj1bg; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfout.stl.internal (Postfix) with ESMTP id 40FF111401BA;
-	Tue, 25 Mar 2025 12:59:36 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Tue, 25 Mar 2025 12:59:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742921976;
-	 x=1743008376; bh=1kZo2dIkUctXPOLQlyuKriYib5RXb/4Fue46r1qeads=; b=
-	cas0BCBQftI1df3SZtZgrE0YSKFUoiJyXMQOZvaybeuvTrAn5y0BQdOii8p8E5Lo
-	Wy5wBLqr2saZP0030woUFSD1unTwp0GIwLS+gZ3LUiX+wzg1hloTmoTEy5NQKBrt
-	TLO5cvQh1XEOMZVWFkDbE0udFUT2AtDf2/m8OYtF0uuj6Huj20IwBagVLIPvRrcy
-	Z02qCi9bgS0s969pxMrXdpOr0ItgzsL+cch0ZQ4bR2Lv837ZKYxzuJiKc6Wh5kvN
-	yik/O/ciR6CKkpfyuBhVhYnHKsYnSySSvKtyhjAiZ+OXt+k8AV4Gn47IVrFSA3tv
-	DCyb8CSiQOMvyo+ZxlaxmA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1742921976; x=
-	1743008376; bh=1kZo2dIkUctXPOLQlyuKriYib5RXb/4Fue46r1qeads=; b=g
-	vfwj1bgtD3IXFawdKt9BBjcBjjtWJYms8t2QHBDDqLYUMAfzg1W8pwXNfc3jTXTh
-	RN76OFW3TqT6JTBwOPyijrPF2cTAZ61zQmRA4tycyAh6fxupY1jx5juG+TdS/k0Y
-	XY3Pki1aukDuffzt/yXm8sQa+/4byAii8Ut2YThF3EiZ9MSXdzAxxd64h3DLJl7u
-	FplSAPUWx+xkqyO06TlSSfDsipc1FLAn+mIfYLSplT/NWqNjLmiDRKiWn4Tun3kE
-	VMJV3FlU1uyWX8e/GOw1ULhDcJ3F0ZMzU5gRgA26AhFANYlEXiU/ngs7XEsqgFI+
-	EfvE1kpYpUNgAXK9sCLcw==
-X-ME-Sender: <xms:9-DiZxg08AyG8NQJG_o8Xk3DBrrx3Pw16TSkR8-tc1XrxE30DhysZA>
-    <xme:9-DiZ2DaKW-U94kxMtFazEIvd6UgUYctMBmcXRiaHOmJxIv-8_CaLVtXJ-wp5kQrA
-    xC3cuEJw5bgdEEZktc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieefudelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
-    tdejnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedv
-    vdegjedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepughvhihukhhovhesghhoohhglh
-    gvrdgtohhmpdhrtghpthhtohepvghlvhgvrhesghhoohhglhgvrdgtohhmpdhrtghpthht
-    ohepjhgrnhhnhhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhgrshgrnhdquggvvh
-    esghhoohhglhgvghhrohhuphhsrdgtohhmpdhrtghpthhtoheplhhinhhugidqrghrtghh
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvg
-    hlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:9-DiZxGT5HYiuXiurSrrYEElDS_5tE8daS5nTZe49bbPi4HvVLsePQ>
-    <xmx:9-DiZ2RQA5Lw5HAPc-QXlWJC5cLJfg920U1ceCsi5scu-fqOlefSRQ>
-    <xmx:9-DiZ-zWFjamXMMJ6ZN1uRs0CufpBX1dXFiiibdgfHzQl7Oiu7PjXw>
-    <xmx:9-DiZ84mSNf77RxbnO4xkODeSzNv2MOseFCKbeGE3YwKfWoZCFT71g>
-    <xmx:-ODiZ1oUaxOfKSLrcy47mz1kvH3WB-AvHtxfzNnliw2F8e4BWFi7cM5o>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C90822220072; Tue, 25 Mar 2025 12:59:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1742923195; c=relaxed/simple;
+	bh=XhmLROfnnL3FtaOH27gIOe9sbljr3QNEJt4khOaoGEw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=thXfkLpcysvlslOLNwAsjXCeCS6JfK6KctSbO2VGPV3RuKnyk0b5C13uS18qMml/OaXFTQll1YJumJb0xtEBlz6OVXMzXwT+u0OP1YIXmFUMXF7N6mj6jdKsM0A+dPbTQIyLF0c2blFZmvdsLhtgQIwwYgh2AD86/cle9R4yFAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.2.102] (213.87.136.199) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Tue, 25 Mar
+ 2025 20:19:41 +0300
+Message-ID: <05fec753-cdaa-45a5-a029-b6435c30eb07@omp.ru>
+Date: Tue, 25 Mar 2025 20:19:39 +0300
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T022a60d36d02d9f7
-Date: Tue, 25 Mar 2025 17:59:14 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jann Horn" <jannh@google.com>, "Marco Elver" <elver@google.com>
-Cc: "Dmitry Vyukov" <dvyukov@google.com>, kasan-dev@googlegroups.com,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Message-Id: <fbd8d426-e45f-4f2e-b201-20b8396b20f9@app.fastmail.com>
-In-Reply-To: 
- <CAG48ez2eECk+iU759BhPLrDJrGcBPT2dkAZg_O_c1fdD+HsifQ@mail.gmail.com>
-References: <20250325-kcsan-rwonce-v1-1-36b3833a66ae@google.com>
- <26df580c-b2cc-4bb0-b15b-4e9b74897ff0@app.fastmail.com>
- <CANpmjNMGr8-r_uPRMhwBGX42hbV+pavL7n1+zyBK167ZT7=nmA@mail.gmail.com>
- <CAG48ez2eECk+iU759BhPLrDJrGcBPT2dkAZg_O_c1fdD+HsifQ@mail.gmail.com>
-Subject: Re: [PATCH] rwonce: handle KCSAN like KASAN in read_word_at_a_time()
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH V3 25/43] rv64ilp32_abi: exec: Adapt 64lp64 env and
+ argv
+To: <guoren@kernel.org>, <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+	<torvalds@linux-foundation.org>, <paul.walmsley@sifive.com>,
+	<palmer@dabbelt.com>, <anup@brainfault.org>, <atishp@atishpatra.org>,
+	<oleg@redhat.com>, <kees@kernel.org>, <tglx@linutronix.de>,
+	<will@kernel.org>, <mark.rutland@arm.com>, <brauner@kernel.org>,
+	<akpm@linux-foundation.org>, <rostedt@goodmis.org>, <edumazet@google.com>,
+	<unicorn_wang@outlook.com>, <inochiama@outlook.com>, <gaohan@iscas.ac.cn>,
+	<shihua@iscas.ac.cn>, <jiawei@iscas.ac.cn>, <wuwei2016@iscas.ac.cn>,
+	<drew@pdp7.com>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	<ctsai390@andestech.com>, <wefu@redhat.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <josef@toxicpanda.com>, <dsterba@suse.com>,
+	<mingo@redhat.com>, <peterz@infradead.org>, <boqun.feng@gmail.com>,
+	<xiao.w.wang@intel.com>, <qingfang.deng@siflower.com.cn>,
+	<leobras@redhat.com>, <jszhang@kernel.org>, <conor.dooley@microchip.com>,
+	<samuel.holland@sifive.com>, <yongxuan.wang@sifive.com>,
+	<luxu.kernel@bytedance.com>, <david@redhat.com>, <ruanjinjie@huawei.com>,
+	<cuiyunhui@bytedance.com>, <wangkefeng.wang@huawei.com>,
+	<qiaozhe@iscas.ac.cn>
+CC: <ardb@kernel.org>, <ast@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <kvm@vger.kernel.org>,
+	<kvm-riscv@lists.infradead.org>, <linux-mm@kvack.org>,
+	<linux-crypto@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-input@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+	<linux-serial@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <maple-tree@lists.infradead.org>,
+	<linux-trace-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-atm-general@lists.sourceforge.net>, <linux-btrfs@vger.kernel.org>,
+	<netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
+	<linux-nfs@vger.kernel.org>, <linux-sctp@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>, <linux-media@vger.kernel.org>
+References: <20250325121624.523258-1-guoren@kernel.org>
+ <20250325121624.523258-26-guoren@kernel.org>
+Content-Language: en-US
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <20250325121624.523258-26-guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 03/25/2025 16:50:54
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 192097 [Mar 25 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 51 0.3.51
+ 68896fb0083a027476849bf400a331a2d5d94398
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info:
+	omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.136.199
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/25/2025 16:52:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/25/2025 3:18:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On Tue, Mar 25, 2025, at 17:36, Jann Horn wrote:
-> On Tue, Mar 25, 2025 at 5:31=E2=80=AFPM Marco Elver <elver@google.com>=
- wrote:
->> On Tue, 25 Mar 2025 at 17:06, Arnd Bergmann <arnd@arndb.de> wrote:
->> > On Tue, Mar 25, 2025, at 17:01, Jann Horn wrote:
->> > > Fixes: dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer inf=
-rastructure")
->> > > Signed-off-by: Jann Horn <jannh@google.com>
-> [...]
->> I have nothing pending yet. Unless you're very certain there'll be
->> more KCSAN patches,
->
-> No, I don't know yet whether I'll have more KCSAN patches for 6.15.
->
->> I'd suggest that Arnd can take it. I'm fine with
->> KCSAN-related patches that aren't strongly dependent on each other
->> outside kernel/kcsan to go through whichever tree is closest.
->
-> Sounds good to me.
+On 3/25/25 3:16 PM, guoren@kernel.org wrote:
 
-Applied, should be able send the PR tomorrow with the rest of
-my asm-generic changes.
+> From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+> 
+> The rv64ilp32 abi reuses the env and argv memory layout of the
+> lp64 abi, so leave the space to fit the lp64 struct layout.
+> 
+> Signed-off-by: Guo Ren (Alibaba DAMO Academy) <guoren@kernel.org>
+> ---
+>  fs/exec.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 506cd411f4ac..548d18b7ae92 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -424,6 +424,10 @@ static const char __user *get_user_arg_ptr(struct user_arg_ptr argv, int nr)
+>  	}
+>  #endif
+>  
+> +#if defined(CONFIG_64BIT) && (BITS_PER_LONG == 32)
 
-     Arnd
+   Parens don't seem necessary...
+
+> +	nr = nr * 2;
+
+   Why not nr *= 2?
+
+[...]
+
+MBR, Sergey
+
 
