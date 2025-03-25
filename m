@@ -1,169 +1,134 @@
-Return-Path: <linux-arch+bounces-11114-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11115-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C1CCA705F0
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 17:03:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52842A70604
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 17:06:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66F547A62F3
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 16:01:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8C1E1649D0
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 16:06:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BC2625A2DD;
-	Tue, 25 Mar 2025 16:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68D221D3F4;
+	Tue, 25 Mar 2025 16:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FvM8Zca1"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="esKtqLEC";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mBJCjyD8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4C921D3F4
-	for <linux-arch@vger.kernel.org>; Tue, 25 Mar 2025 16:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B55C13D8A0;
+	Tue, 25 Mar 2025 16:06:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742918506; cv=none; b=VZHMpDJG5X679c716/TjCY4euQFHW9jCUQk+jmb5N8GHHAcNw8GRfQ4AGhB1G8Y6pOF/yW5iVHAvxYa77Mnmv15vsa+2m4n8HKtMTNhfZBQfc38CDQxL0sUMYSWzSnufMH0iRpBJP1WOD5DQ+IGP/YRelTDeQsa1MCODo4XdOGc=
+	t=1742918780; cv=none; b=ee9FtrbrI6O/krMFCKtuoqw8uKwufbKSiuZZ6vSZn3CatKmY2FvZ+3mjAlqvhRduUlxpx25VVipMcaqKysI8Z4lcTx3KczrLxzwgYFNv+tV6VBvL3nJGrqKtiVnOYjBj4MXWkwlPoDMu2iwIbrye6qfzI+h1THx7GUm6PzYWgSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742918506; c=relaxed/simple;
-	bh=O2dKRA9uvJbAtmJ8DU5c5NB3nWRxzGZSCc3fQ+OAJwU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=n7Wtm6s5moorxAXP9fPmSQzMux5ENBSXwpz995fYfdY+HjiJlBESmkPzaj/FQZVvXbGXcskQfjVZkDi8qqcOODoS2lA9KQfyacQEsV6+k8H7/C9p94rHfW1wjxPuomxliFPEeLIzUJIkrVN59udV7n0DrI36fFsRPOnbmazobjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FvM8Zca1; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43cf3192d8bso60615e9.1
-        for <linux-arch@vger.kernel.org>; Tue, 25 Mar 2025 09:01:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742918503; x=1743523303; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rNLrWaHC+F16KWC7Wcys7gq72QWKKTUqdbgRYbG35Hw=;
-        b=FvM8Zca1YHsgXMcg2etmQqR+N6Yo8z0GMYgF3pru4QfLDpGjVPhXGD7yJKxJAjQLbL
-         8xKvpVk2YPDKJvIesnZwOvFVVNi7IO33d+grHovsdy8envdPbzvjXfsH3r6JkbiWrWpf
-         oWJj3iSVU3EiisP+hvckvEBEuqqoWJofHGAZYwNQX+HdhoB/l0wll9oR6BqJvek89bz5
-         +Fyx8FH143ZoR4t0BhNle6VVW9jlhIXcgCnt5/fSJ0fS4dQxAE150EJ8UpgVBwakLGGF
-         BZs10Qea5uiI7KcTdik82yHPtREVZp1qjts/BNc/wFJtpSO09dWj7tnOFwD74vslqKaO
-         MPkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742918503; x=1743523303;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rNLrWaHC+F16KWC7Wcys7gq72QWKKTUqdbgRYbG35Hw=;
-        b=rVJEz6dUk67T2gGWx2DSXCipMVelr6sLDLRJdhM1tym7rE4ssMA3k7b3UlNkbpt2ZU
-         Q5fSXg3h9QK0dPr5Wz0Rlr0E6s5q/5ruzIHcpGWthgydvkHmG9plYSmrc+vPW1t9GOf2
-         WpHcZtePl3nXkuzYhUUkoQ9qUkH5RqeU4NouUlTSsi3rEuMR9JaYmYSasOAdHfFUit4f
-         9W0CsKAWPERKjSRJM5UujSUFUozYHwRPwlBEVoCx9Yd5hKrF45JSJQkpcVnpDA8n0XFN
-         FOX5HU5wVqIS4cQe5U9VOwaJdIutROxodDg6A/vDyBlk20eblOksnmyiWcBoQYr5fIil
-         b4HA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdioKucSc+d2cpdQ7v3u7RgbGZTT7CA9Th6neSwlLzRgaMFb3N+MSnL+ERpgsK42MuoRJ7EXoNpQy5@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyu6KzAxtjH2P2e/49Js53nsAE7LuZelYtXxLHbq61jt6oYpT8G
-	d43rTV6mwILcwkVeWykjrlRjV4f5YngT7rr/JakdL+AcEAju/JRfB3c23auikQ==
-X-Gm-Gg: ASbGncvMhofMGNPxnnjxwUeEZITt1VioLvcf0N9P51t9QG6qq8lFyGgW4FpxwpkoR2e
-	PHfgw+0NmmSYuTRpGbC4SsY+wS1MaCj+9JltHLYLgt9d4UjpiXEpBqgmeKfKFesTE7xXuiy9k9p
-	bR6gFd2w4Qgb+kNQhcZWjcw4eV/5D7hIOIHMY928MUUuMxrUlEtDFvOk0rtvdhKa5xkLloWyxS1
-	2KH0oKvviU9iTZr5VAnUlnr7bWG5mBRZKuh1jMOJ91nUTYEm4ue+KZtOHuimCnIDY5723GTcQat
-	OoSDX4jJFiZsA5Eev3vVupkZNxfB80JW2g==
-X-Google-Smtp-Source: AGHT+IHsIR3lfUVsohrP4cvxcT+BcBgE15Za3l/+RapEBvyBlFjLjq5LVDT20yOcw4Ik++ZPr0Tzpg==
-X-Received: by 2002:a05:600c:1c8d:b0:43b:b106:bb1c with SMTP id 5b1f17b1804b1-43d591c2295mr4838215e9.0.1742918502385;
-        Tue, 25 Mar 2025 09:01:42 -0700 (PDT)
-Received: from localhost ([2a00:79e0:9d:4:1e00:1328:5257:156e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43fdeb6esm204516205e9.31.2025.03.25.09.01.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Mar 2025 09:01:41 -0700 (PDT)
-From: Jann Horn <jannh@google.com>
-Date: Tue, 25 Mar 2025 17:01:34 +0100
-Subject: [PATCH] rwonce: handle KCSAN like KASAN in read_word_at_a_time()
+	s=arc-20240116; t=1742918780; c=relaxed/simple;
+	bh=wni3V1/bvtXy3LA3Xm4VzfKB0NyrZZt/omgbUesO1Q4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=u82HrK2A7pcfx8zoQjh63WuJFzJrvBwODv0QhtUPs7eTdxluCkh+qRFuMse1DkTlSCxl8R17ldNMB+MuTsBpFATJb5avQpxGsfAmRF543d42g4VY2wqK2tNxjrpIIR1DSY9Yu/KK/8wx/Nhn4khqJYY6LLHFQbhRTR1PzL+BwjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=esKtqLEC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mBJCjyD8; arc=none smtp.client-ip=202.12.124.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id CDF3B2540092;
+	Tue, 25 Mar 2025 12:06:16 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Tue, 25 Mar 2025 12:06:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742918776;
+	 x=1743005176; bh=i5gIEhSWhDc/CD1KGDEUUBNtkR8QlRiEolUuUnkGdoo=; b=
+	esKtqLECGr8TnPL6JwLrbJMgFt9hAUdzWjtnA1hBjI7LokNiM1mzUpl4lmq1IBrA
+	LJOjm0W/xiAXT83nARr3cfy3Q2a4MvS/trAgesz2F09GJhWw3dNBStLevaETknjb
+	iU9xtTHQL3k3/28ZWAkT1TVPsd1/CyTI1OxtUra4Mz6AVj1d/yxkOu+cTZbZaptB
+	96qG1xIsLja+IX8lLTK+Ly8IeAd9Io+MziiKSz0obPJiLWlpgqn8c9zNDNg5Pc19
+	Dl3SNSgKjJwYJhViGL+CiICkbag2Pq3ahdFQM1AvZBrfaKEXeuMMAXqvcbTZXlO7
+	o0sxoD30kRjiA/VcUfVcKg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1742918776; x=
+	1743005176; bh=i5gIEhSWhDc/CD1KGDEUUBNtkR8QlRiEolUuUnkGdoo=; b=m
+	BJCjyD8cynsrLMJbTNALq1x9FuqAyfDCCxxqTW2tnG5K+Pkxr0gSBNcfs8xLOmFo
+	TiK0wZlWzkjl1OiTk1DxCewKkq/lPfotYFsVusKCNtsXlxGde9vvbLGUTw0DRc8W
+	sdzxFcAtlCYJbW9aeupmTAJSU7h7SdJ8BvpnvoRnKKqrNTaRyozQqHYCXWLAaDYX
+	2MNIB62+sDMypBkhAXp18sH+dnMoIDR6BJTfYJ1mT4jyvlmGkUq/Ef7W1Uvqvlcv
+	oHzWu5EiuhXnoxyCyshQRipCJtNWPfX4QIWS6N9oC07Us81ayEO+SynOxDsoT5ip
+	+25mIyqgQgDU6dWPgn3TQ==
+X-ME-Sender: <xms:eNTiZwQlPft4XSGRBXtVoJhgFD-vKRjCjv4oPdAhBskETnzprfZGtw>
+    <xme:eNTiZ9x28MeQ3cTw5PO5lrE7uhedBL9lD7oIfOxTU8hc6L2AUwszexsSBF4-LT1Y9
+    AxkH4qVgslJrAbGEv8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeftdekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepughvhihukhhovhesghhoohhglh
+    gvrdgtohhmpdhrtghpthhtohepvghlvhgvrhesghhoohhglhgvrdgtohhmpdhrtghpthht
+    ohepjhgrnhhnhhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhgrshgrnhdquggvvh
+    esghhoohhglhgvghhrohhuphhsrdgtohhmpdhrtghpthhtoheplhhinhhugidqrghrtghh
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvg
+    hlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:eNTiZ92bXH6QFbxQO7HBGMa0g4GARgz_nwJE28LhKcPrr6RmFCwNAw>
+    <xmx:eNTiZ0BXFpzb0QGtoIFoaLaggqk1VxeUOnLPOsKLZn4NPKnEZxM-Aw>
+    <xmx:eNTiZ5hqKrPp0M7VQwCUhrF7Pxau2BZKq4SuyuPhjyxp0dwGmUgcCw>
+    <xmx:eNTiZwqP2vlLz9nuyx9gTFNWMhpW2MI75QxDR3nefI3irdpX1BxA7g>
+    <xmx:eNTiZ3YkwhbNrX_V5IcNwWphY-Fxw97ZuQL3WccceM9V_GtiEYOel2E2>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 61E852220072; Tue, 25 Mar 2025 12:06:16 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-ThreadId: T022a60d36d02d9f7
+Date: Tue, 25 Mar 2025 17:05:55 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jann Horn" <jannh@google.com>, "Marco Elver" <elver@google.com>,
+ "Dmitry Vyukov" <dvyukov@google.com>
+Cc: kasan-dev@googlegroups.com, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Message-Id: <26df580c-b2cc-4bb0-b15b-4e9b74897ff0@app.fastmail.com>
+In-Reply-To: <20250325-kcsan-rwonce-v1-1-36b3833a66ae@google.com>
+References: <20250325-kcsan-rwonce-v1-1-36b3833a66ae@google.com>
+Subject: Re: [PATCH] rwonce: handle KCSAN like KASAN in read_word_at_a_time()
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250325-kcsan-rwonce-v1-1-36b3833a66ae@google.com>
-X-B4-Tracking: v=1; b=H4sIAF3T4mcC/x3MQQqAIBBA0avIrBtQw4VdJVrINNYQaChUIN09a
- fkW/zeoXIQrTKpB4Uuq5NRhBgW0h7QxytoNVlunR+vwoBoSljsnYiTvNVsykYKDnpyFozz/bl7
- e9wMgdafTXgAAAA==
-X-Change-ID: 20250325-kcsan-rwonce-c990e2c1fca5
-To: Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>, 
- Arnd Bergmann <arnd@arndb.de>
-Cc: kasan-dev@googlegroups.com, linux-arch@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1742918498; l=2606;
- i=jannh@google.com; s=20240730; h=from:subject:message-id;
- bh=O2dKRA9uvJbAtmJ8DU5c5NB3nWRxzGZSCc3fQ+OAJwU=;
- b=pD/K1HEzZBcPmL7dDKYAHw7aJiLQxHybO/JPTsCHTVCbR2lbNDnEkZVIXWh7hZC82JiFHIbka
- JyE20sMYsBeCBqqi9VId3Q0s9Ahg7NAmY7BkecpwJtQZlp2u/OebQm6
-X-Developer-Key: i=jannh@google.com; a=ed25519;
- pk=AljNtGOzXeF6khBXDJVVvwSEkVDGnnZZYqfWhP1V+C8=
 
-read_word_at_a_time() is allowed to read out of bounds by straddling the
-end of an allocation (and the caller is expected to then mask off
-out-of-bounds data). This works as long as the caller guarantees that the
-access won't hit a pagefault (either by ensuring that addr is aligned or by
-explicitly checking where the next page boundary is).
+On Tue, Mar 25, 2025, at 17:01, Jann Horn wrote:
+> Fixes: dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrastructure")
+> Signed-off-by: Jann Horn <jannh@google.com>
 
-Such out-of-bounds data could include things like KASAN redzones, adjacent
-allocations that are concurrently written to, or simply an adjacent struct
-field that is concurrently updated. KCSAN should ignore racy reads of OOB
-data that is not actually used, just like KASAN, so (similar to the code
-above) change read_word_at_a_time() to use __no_sanitize_or_inline instead
-of __no_kasan_or_inline, and explicitly inform KCSAN that we're reading
-the first byte.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-We do have an instrument_read() helper that calls into both KASAN and
-KCSAN, but I'm instead open-coding that here to avoid having to pull the
-entire instrumented.h header into rwonce.h.
+> ---
+> This is a low-priority fix. I've never actually hit this issue with
+> upstream KCSAN.
+> (I only noticed it because I... err... hooked up KASAN to the KCSAN
+> hooks. Long story.)
+>
+> I'm not sure if this should go through Arnd's tree (because it's in
+> rwonce.h) or Marco's (because it's a KCSAN thing).
+> Going through Marco's tree (after getting an Ack from Arnd) might
+> work a little better for me, I may or may not have more KCSAN patches
+> in the future.
 
-Also, since this read can be racy by design, we should technically do
-READ_ONCE(), so add that.
+I agree it's easier if Marco takes it through his tree, as this
+is something I rarely touch.
 
-Fixes: dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrastructure")
-Signed-off-by: Jann Horn <jannh@google.com>
----
-This is a low-priority fix. I've never actually hit this issue with
-upstream KCSAN.
-(I only noticed it because I... err... hooked up KASAN to the KCSAN
-hooks. Long story.)
+If Marco has nothing else pending for 6.15, I can take it though.
 
-I'm not sure if this should go through Arnd's tree (because it's in
-rwonce.h) or Marco's (because it's a KCSAN thing).
-Going through Marco's tree (after getting an Ack from Arnd) might
-work a little better for me, I may or may not have more KCSAN patches
-in the future.
----
- include/asm-generic/rwonce.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/include/asm-generic/rwonce.h b/include/asm-generic/rwonce.h
-index 8d0a6280e982..e9f2b84d2338 100644
---- a/include/asm-generic/rwonce.h
-+++ b/include/asm-generic/rwonce.h
-@@ -79,11 +79,14 @@ unsigned long __read_once_word_nocheck(const void *addr)
- 	(typeof(x))__read_once_word_nocheck(&(x));			\
- })
- 
--static __no_kasan_or_inline
-+static __no_sanitize_or_inline
- unsigned long read_word_at_a_time(const void *addr)
- {
-+	/* open-coded instrument_read(addr, 1) */
- 	kasan_check_read(addr, 1);
--	return *(unsigned long *)addr;
-+	kcsan_check_read(addr, 1);
-+
-+	return READ_ONCE(*(unsigned long *)addr);
- }
- 
- #endif /* __ASSEMBLY__ */
-
----
-base-commit: 2df0c02dab829dd89360d98a8a1abaa026ef5798
-change-id: 20250325-kcsan-rwonce-c990e2c1fca5
-
--- 
-Jann Horn <jannh@google.com>
-
+       Arnd
 
