@@ -1,162 +1,95 @@
-Return-Path: <linux-arch+bounces-11062-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11063-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B3DA6E37E
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 20:27:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF397A6F786
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 12:50:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DB2F17023D
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Mar 2025 19:27:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 457B53B036D
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Mar 2025 11:49:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78F3198E75;
-	Mon, 24 Mar 2025 19:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87D41F7586;
+	Tue, 25 Mar 2025 11:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ZHOurTVq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QQ4YoKGP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-8fad.mail.infomaniak.ch (smtp-8fad.mail.infomaniak.ch [83.166.143.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E491990BA;
-	Mon, 24 Mar 2025 19:27:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCF51E7C28;
+	Tue, 25 Mar 2025 11:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742844436; cv=none; b=olXiJB7eAuLWWb+HhxBU8nhJZpI/5Hbo2OCJhBllWyybSb8GGyuGpwrt9a+FfH8imwYQrOJrOgymVXdijaJzJ3FetBriT1uW4chD604gIV2qzCX0W2CDLrxLn8LeoS5mDA+YrJC7RjyB7NSOiJ4BfRYTWRyJqJ+rIAab51rMNoY=
+	t=1742903377; cv=none; b=X44nFHXY9BiELzWSN+EwClTIb3LHsLQGCRfzgbeI8yOjYgZ18QpVQ1MtZ+gHjAr0ylbv3qmZyu0ej8EmB6vucCvNJg/Z8PhBQJxgA8ZnH7Mb4vbmlPXlJyeUMd0KE6NHXfFJlep24GwuLUDWXkbmeot56Ac4Bl21OX6Oq1bUEGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742844436; c=relaxed/simple;
-	bh=P4P2z1eF/YNnOfLW8fBoOKbdAwyqWpJFO/rcNQNfqQo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KDkChI6jncu2zvmGkm8NEHE1qacfNW9Te+D/XibTAw2XAhrbYPTHhqJhgVKd14RdIcAZmDRx03ZCLZuNfzJSPeJNAh4f1JoOnnM40IrudtjMYWN7hh8dRCNWKbwen0RT8B8Ysea6M8HwQdqyMx4H888c16ezICAPw2ebwTwltvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ZHOurTVq; arc=none smtp.client-ip=83.166.143.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZM32x2TBHzdNB;
-	Mon, 24 Mar 2025 20:27:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1742844425;
-	bh=QBR/kecod01J1h193BKpllSnIdD5DJtmTOWxdGopk5I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZHOurTVqBYQHfSi3F6pdPowbpieWYs2igBgvPmtLeNtKh6bOX6LndXdRYsKY6jh9C
-	 KH3Sauy/1pIzJ/oIq5tcqOK2Grf+Vopzl7YTCM6Ps/dI4TzMQV42PBtmh1lSd4a4Ot
-	 uxKt6oeGXt0Fw5OGk8If/a4DunNXPqyIjb/UWnHQ=
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4ZM32v3B5vz9hp;
-	Mon, 24 Mar 2025 20:27:03 +0100 (CET)
-Date: Mon, 24 Mar 2025 20:27:02 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Andrey Albershteyn <aalbersh@redhat.com>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	selinux@vger.kernel.org, Andrey Albershteyn <aalbersh@kernel.org>
-Subject: Re: [PATCH v4 1/3] lsm: introduce new hooks for setting/getting
- inode  fsxattr
-Message-ID: <20250324.aThi9ioghiex@digikod.net>
-References: <20250321-xattrat-syscall-v4-1-3e82e6fb3264@kernel.org>
- <e2d5b27847fde03e0b4b9fc7a464fd87@paul-moore.com>
+	s=arc-20240116; t=1742903377; c=relaxed/simple;
+	bh=knOrW92YSJKBR3+ISRxDcXWEHNuwct3ut9Xv0PBHP3s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vi8dVils2ihOCvRnFMpdzh4jl6MorHHGRv9e3o77MueZPFXRQMsAOkvPqD/81yA2NUF0M4k9NfBVySV1lK4EuUJNzf/kTsz+apZmHXGfOUAcYVbkkUaotmnUlY22GpRJ3wisIJVfMFXQBbvO9LBJOUnJE6cw2cyoVb3pFyT4+PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QQ4YoKGP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAED7C4CEE4;
+	Tue, 25 Mar 2025 11:49:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742903377;
+	bh=knOrW92YSJKBR3+ISRxDcXWEHNuwct3ut9Xv0PBHP3s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QQ4YoKGPgj7gv+uuv8VGcqc1vpp/FINqJcxu1/I0G3w1tQkC/+T9oN9OvsW4Eg2u+
+	 A/LWC8c1aQitiXVTq/hsR0PR90yVapRJjy2ffwGTMB+9wgD4oY47O/aNKMn0E6MxH6
+	 hjAZGrker309RvCTl3dS/hyyA8NgTlxOGVqcR8qU/XLQkzuyB8KKIvNVBZW+ABvpFd
+	 J8BppAz5lYfmaNxxQn52VMn5i18kTsvOGG6dbj6Jaa2lfQKbthmCwFQMDI3yoBPB+D
+	 j7GFkZnwaSVeC+TmKK9k87j7dAJXwEkbnSSxkLdP5yE127uqrp0E5GMzt/+oR+XdOY
+	 N2dvVf6C+XFlg==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Lutomirski <luto@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	kernel test robot <oliver.sang@intel.com>,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-mm@kvack.org,
+	x86@kernel.org
+Subject: [PATCH 0/2] mm: fixes for fallouts from mem_init() cleanup
+Date: Tue, 25 Mar 2025 13:49:26 +0200
+Message-ID: <20250325114928.1791109-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e2d5b27847fde03e0b4b9fc7a464fd87@paul-moore.com>
-X-Infomaniak-Routing: alpha
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 21, 2025 at 05:32:25PM -0400, Paul Moore wrote:
-> On Mar 21, 2025 Andrey Albershteyn <aalbersh@redhat.com> wrote:
-> > 
-> > Introduce new hooks for setting and getting filesystem extended
-> > attributes on inode (FS_IOC_FSGETXATTR).
-> > 
-> > Cc: selinux@vger.kernel.org
-> > Cc: Paul Moore <paul@paul-moore.com>
-> > 
-> > Signed-off-by: Andrey Albershteyn <aalbersh@kernel.org>
-> > ---
-> >  fs/ioctl.c                    |  7 ++++++-
-> >  include/linux/lsm_hook_defs.h |  4 ++++
-> >  include/linux/security.h      | 16 ++++++++++++++++
-> >  security/security.c           | 32 ++++++++++++++++++++++++++++++++
-> >  4 files changed, 58 insertions(+), 1 deletion(-)
-> 
-> Thanks Andrey, one small change below, but otherwise this looks pretty
-> good.  If you feel like trying to work up the SELinux implementation but
-> need some assitance please let me know, I'll be happy to help :)
-> 
-> > diff --git a/fs/ioctl.c b/fs/ioctl.c
-> > index 638a36be31c14afc66a7fd6eb237d9545e8ad997..4434c97bc5dff5a3e8635e28745cd99404ff353e 100644
-> > --- a/fs/ioctl.c
-> > +++ b/fs/ioctl.c
-> > @@ -525,10 +525,15 @@ EXPORT_SYMBOL(fileattr_fill_flags);
-> >  int vfs_fileattr_get(struct dentry *dentry, struct fileattr *fa)
-> >  {
-> >  	struct inode *inode = d_inode(dentry);
-> > +	int error;
-> >  
-> >  	if (!inode->i_op->fileattr_get)
-> >  		return -ENOIOCTLCMD;
-> >  
-> > +	error = security_inode_getfsxattr(inode, fa);
-> > +	if (error)
-> > +		return error;
-> > +
-> >  	return inode->i_op->fileattr_get(dentry, fa);
-> >  }
-> >  EXPORT_SYMBOL(vfs_fileattr_get);
-> > @@ -692,7 +697,7 @@ int vfs_fileattr_set(struct mnt_idmap *idmap, struct dentry *dentry,
-> >  			fa->flags |= old_ma.flags & ~FS_COMMON_FL;
-> >  		}
-> >  		err = fileattr_set_prepare(inode, &old_ma, fa);
-> > -		if (!err)
-> > +		if (!err && !security_inode_setfsxattr(inode, fa))
-> >  			err = inode->i_op->fileattr_set(idmap, dentry, fa);
-> >  	}
-> >  	inode_unlock(inode);
-> 
-> I don't believe we want to hide or otherwise drop the LSM return code as
-> that could lead to odd behavior, e.g. returning 0/success despite not
-> having executed the fileattr_set operation.
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Yes, this should look something like this:
+Hi,
 
- 		err = fileattr_set_prepare(inode, &old_ma, fa);
- 		if (err)
- 			goto out;
- 		err = security_inode_setfsxattr(dentry, fa);
- 		if (err)
- 			goto out;
- 		err = inode->i_op->fileattr_set(idmap, dentry, fa);
- 		if (err)
- 			goto out;
+These are the fixes for fallouts from mem_init() cleanup reported by Nathan
+Chancellor and kbuild.
+The details are in the commit messages.
 
-> 
-> --
-> paul-moore.com
-> 
+Mike Rapoport (Microsoft) (2):
+  mm/mm_init: init holes in the end of the memory map for FLATMEM
+  memblock: don't release high memory to page allocator when HIGHMEM is off
+
+ mm/memblock.c |  3 +++
+ mm/mm_init.c  | 12 ++++++------
+ 2 files changed, 9 insertions(+), 6 deletions(-)
+
+
+base-commit: 0a1e082b64ccce165e7307a7b49d22b2504f9d1f
+-- 
+2.47.2
+
 
