@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-11138-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11139-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7F3A71A80
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 16:36:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD9A4A71AE0
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 16:43:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8CC684055D
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 15:32:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC3B47A82FD
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 15:39:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 250031F4165;
-	Wed, 26 Mar 2025 15:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735A11FCFEF;
+	Wed, 26 Mar 2025 15:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="h9CXDAO1"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QCZ/1a3p"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8431F2369;
-	Wed, 26 Mar 2025 15:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B661F583A;
+	Wed, 26 Mar 2025 15:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743003176; cv=none; b=hUQXm4FDE3TSnkqysZJ6rmZR/N+xmxESqrZqGDOQeqyGSy3GJQvcTSh+3gZGTAscYdXDBtG5uKD7StB8stB+1scZf78j7uvOBdmpFSL2bv0L9+JeEsGT/nI/4f04dbYw/KnqhAT32w/vfgqgCX66hkKqrUx0Xm3vSchqE35Rt48=
+	t=1743003451; cv=none; b=mb5wpHfIPA4SXVCIBHKF2mKgvRd2GrJrWsL74VkfCPCJHERZDsMZai/ylB5ZffV9Ngd6gRAs7ZgnWIAtAoP7EXFTmUktTAd18+sAYTSa/ZI51bCO6pBwa4X9EDni4nVKnC/wLDwf+8iww7eS1Xlo/x8M7ZjfoMDCBqi9svLvbns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743003176; c=relaxed/simple;
-	bh=QfFKHtPjhnsVEIyS3XzuUBPioCudwzrqL/GSdI3aKa8=;
+	s=arc-20240116; t=1743003451; c=relaxed/simple;
+	bh=X7FAEgRsV2xbboJ7QKOztmy6O5MW3v9XOfceR4QGwks=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MrR3+R4CLs0PFi1jp19GbhXBjZyEif48CJhoGDk2avP0TCepY6sHjgKngSInTbbjmRLWH1VBUrd1zBuEKfEjQFDFluG+SROraYYlaasND8PED7opOLEfB3Y3UCD5JWsrOsTK6VKaaVwTciv45zDo+HKzvWrGCfQFSes9nk2sCa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=h9CXDAO1; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=HYVB6x44gE4rKHzJcLxHvMSuDeclHUqkTGg/jvU3+nLvr8vyqHP7p99TFhf5XEokWIkzBXOQxNfKOucxfZtRiVz5VV4EC6sFsZEj8hAE/6iBPrHOaYm+ajIWrTr50hSupHUXteVvbhX7/sExJtTx1DkEUKy97HwLA4qJHFuuq4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QCZ/1a3p; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id A914B210C320;
-	Wed, 26 Mar 2025 08:32:53 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A914B210C320
+	by linux.microsoft.com (Postfix) with ESMTPSA id 204B22036597;
+	Wed, 26 Mar 2025 08:37:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 204B22036597
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1743003174;
-	bh=5dEhZXpJIQDYjKp44/xRbSpFUSHWMuuE2+/dnL6k/lU=;
+	s=default; t=1743003449;
+	bh=WjzFIgjV9jVjkAChBrIFVJQnAYd6k3ZAKIpA/MaT4yo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=h9CXDAO1ZrAH2QmyDPeZh9D575YKdAtnwcuvQxr+2h+cWYYQEZjW0lE1GdOfjm8h0
-	 WTL8D4VFuAxQbfVPl4CANyl7MImvzKVJrV1UkEJ6ZDQRtMcF1/oXVnUIM04GP/33qq
-	 SoTHHkrgirDlGx5JlRlVXulkrfzJWIihHsu4hJNE=
-Message-ID: <f8ccc874-e153-4b78-8159-9923dfa77fc3@linux.microsoft.com>
-Date: Wed, 26 Mar 2025 08:32:53 -0700
+	b=QCZ/1a3p+ZIUFWcAhkJvic5IwY8U0ufXEKXOuGNNCfYPOL2C8wZRVb0oHeZ26p7MN
+	 55ghDNm1zZbkc7h9pH8j0WaY5qfjqpwdKTYWPi2UX1+7ck4WlgOZl7f4IIiSvY3N3U
+	 3LSW1a2/cC6In4mf7262M02Vm2HMR/pY2ogrm5bY=
+Message-ID: <83b983a4-064e-4a81-9c58-239b630eb299@linux.microsoft.com>
+Date: Wed, 26 Mar 2025 08:37:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,8 +49,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v6 10/11] ACPI: irq: Introduce
- acpi_get_gsi_dispatcher()
+Subject: Re: [PATCH hyperv-next v6 11/11] PCI: hv: Get vPCI MSI IRQ domain
+ from DeviceTree
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
  catalin.marinas@arm.com, conor+dt@kernel.org, dan.carpenter@linaro.org,
@@ -68,112 +68,55 @@ Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
  apais@microsoft.com, benhill@microsoft.com, bperkins@microsoft.com,
  sunilmut@microsoft.com
 References: <20250315001931.631210-1-romank@linux.microsoft.com>
- <20250315001931.631210-11-romank@linux.microsoft.com>
- <CAJZ5v0g1bX_3zRUUf-=euuvhm1dPB6bjEXPH9O-kMGcZjRspcw@mail.gmail.com>
+ <20250315001931.631210-12-romank@linux.microsoft.com>
+ <CAJZ5v0jNEO2VcwmMXLZaS+Kqg3iBgHcWb65f90HKUADtPuvgqA@mail.gmail.com>
 Content-Language: en-US
 From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <CAJZ5v0g1bX_3zRUUf-=euuvhm1dPB6bjEXPH9O-kMGcZjRspcw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jNEO2VcwmMXLZaS+Kqg3iBgHcWb65f90HKUADtPuvgqA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 3/26/2025 7:55 AM, Rafael J. Wysocki wrote:
+On 3/26/2025 7:56 AM, Rafael J. Wysocki wrote:
 > On Sat, Mar 15, 2025 at 1:19 AM Roman Kisel <romank@linux.microsoft.com> wrote:
+
 [...]
+
+>> -                                                         chip_data);
+>> +#ifdef CONFIG_ACPI
+>> +       if (!acpi_disabled)
+>> +               irq_domain_parent = hv_pci_acpi_irq_domain_parent();
+>> +#endif
+>> +#if defined(CONFIG_OF)
 > 
-> This basically looks OK to me except for a couple of coding style
-> related nits below.
+> Why don't you do
+> 
+> #ifdef CONFIG_OF
+> 
+> here for consistency?
 > 
 
-Appreciate taking time to review this very much! Will squash the nits in
-the next version.
+Agree, that'd be easier on the eyes :) Will fix in the next version,
+thanks for the suggestion!
 
->> ---
->>   drivers/acpi/irq.c   | 15 +++++++++++++--
->>   include/linux/acpi.h |  5 ++++-
->>   2 files changed, 17 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
->> index 1687483ff319..8eb09e45e5c5 100644
->> --- a/drivers/acpi/irq.c
->> +++ b/drivers/acpi/irq.c
->> @@ -12,7 +12,7 @@
->>
->>   enum acpi_irq_model_id acpi_irq_model;
->>
->> -static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
->> +static acpi_gsi_domain_disp_fn acpi_get_gsi_domain_id;
->>   static u32 (*acpi_gsi_to_irq_fallback)(u32 gsi);
->>
->>   /**
->> @@ -307,12 +307,23 @@ EXPORT_SYMBOL_GPL(acpi_irq_get);
->>    *     for a given GSI
->>    */
->>   void __init acpi_set_irq_model(enum acpi_irq_model_id model,
->> -                              struct fwnode_handle *(*fn)(u32))
-> 
-> Please retain the indentation here and analogously below.
-> 
->> +       acpi_gsi_domain_disp_fn fn)
->>   {
->>          acpi_irq_model = model;
->>          acpi_get_gsi_domain_id = fn;
->>   }
->>
->> +/**
->> + * acpi_get_gsi_dispatcher - Returns dispatcher function that
->> + *                           computes the domain fwnode for a
->> + *                           given GSI.
->> + */
-> 
-> I would format this kerneldoc comment a bit differently:
-> 
-> /*
->   * acpi_get_gsi_dispatcher() - Get the GSI dispatcher function
->   *
->   * Return the dispatcher function that computes the domain fwnode for
-> a given GSI.
->   */
-> 
->> +acpi_gsi_domain_disp_fn acpi_get_gsi_dispatcher(void)
->> +{
->> +       return acpi_get_gsi_domain_id;
->> +}
->> +EXPORT_SYMBOL_GPL(acpi_get_gsi_dispatcher);
+>> +       if (!irq_domain_parent)
+>> +               irq_domain_parent = hv_pci_of_irq_domain_parent();
+>> +#endif
+>> +       if (!irq_domain_parent) {
+>> +               WARN_ONCE(1, "Invalid firmware configuration for VMBus interrupts\n");
+>> +               ret = -EINVAL;
+>> +               goto free_chip;
+>> +       }
 >> +
->>   /**
->>    * acpi_set_gsi_to_irq_fallback - Register a GSI transfer
->>    * callback to fallback to arch specified implementation.
->> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
->> index 4e495b29c640..abc51288e867 100644
->> --- a/include/linux/acpi.h
->> +++ b/include/linux/acpi.h
->> @@ -336,8 +336,11 @@ int acpi_register_gsi (struct device *dev, u32 gsi, int triggering, int polarity
->>   int acpi_gsi_to_irq (u32 gsi, unsigned int *irq);
->>   int acpi_isa_irq_to_gsi (unsigned isa_irq, u32 *gsi);
+>> +       hv_msi_gic_irq_domain = irq_domain_create_hierarchy(
+>> +               irq_domain_parent, 0, HV_PCI_MSI_SPI_NR,
+>> +               fn, &hv_pci_domain_ops,
+>> +               chip_data);
 >>
->> +typedef struct fwnode_handle *(*acpi_gsi_domain_disp_fn)(u32);
->> +
->>   void acpi_set_irq_model(enum acpi_irq_model_id model,
->> -                       struct fwnode_handle *(*)(u32));
->> +       acpi_gsi_domain_disp_fn fn);
->> +acpi_gsi_domain_disp_fn acpi_get_gsi_dispatcher(void);
->>   void acpi_set_gsi_to_irq_fallback(u32 (*)(u32));
->>
->>   struct irq_domain *acpi_irq_create_hierarchy(unsigned int flags,
+>>          if (!hv_msi_gic_irq_domain) {
+>>                  pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
 >> --
-> 
-> With the above addressed, please feel free to add
-> 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> to the patch and route it along with the rest of the series.
-> 
-
-Will do, thanks!
-
-> Thanks!
 
 -- 
 Thank you,
