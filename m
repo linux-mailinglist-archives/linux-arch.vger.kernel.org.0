@@ -1,246 +1,204 @@
-Return-Path: <linux-arch+bounces-11129-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11130-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4958A70FE3
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 05:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B83E1A71059
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 07:08:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68987189A5EA
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 04:26:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7671E1899CFF
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 06:08:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB745165F16;
-	Wed, 26 Mar 2025 04:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1F317A300;
+	Wed, 26 Mar 2025 06:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="l0bD727f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nco888oV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2076.outbound.protection.outlook.com [40.107.92.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B543130A7D;
-	Wed, 26 Mar 2025 04:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742963197; cv=fail; b=EAKEhb3uZkIay520MrwzRuXH/qc61RpjGoom1rkGl3PvJRm5+Nwt+91UJIOcIUkGajSmiiy4YLZYTo3OiFmJ8gAetbsds9PtSLrRx+hAeecgVkVP07oIc985/QIQZt2W2QSIq/BvNceGEOt5Nbk5iHaDVTy4ZWyWc1y3Cil73yY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742963197; c=relaxed/simple;
-	bh=VaQvaRtKhCVF2NWuZIDRLVX6SzG7/ZxvYcgpaN8v87k=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=o01QJ1Y53PKPgoURiurWf1bW5BCeViGKDyB+x92J4rfvI8xotb9nDF82b5PigPChAYXzezAMJjhFG5oHdRcriuQX+vyLCDxZESN7gQ2Nwn38r+mjXNWZ6CJijTjW5yMaTL8U3ziqiAov2G1gIY/VeVbrfoEhddX5YAvmEi9ZBqw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=l0bD727f; arc=fail smtp.client-ip=40.107.92.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=P6k4j6/RveLZRY1zfwdV6JpdGEe06cFfW0zoGaVLpC1nFKSpoTzRaUF/DLN+Rgpx4BtyC3k7a4eoZgajo8hqvBlS3YQPo34/Fw/4FEL2t4JnV/oDJmYsYbN85H7BKwQNpYOG3gIY1U4uTN8RPOwRJb84NEU0e/g6uvMyiQBBrdqQu8PToNrw3b2NJCmzx4Dk5/BZM5qzMb7zbIzZzHk48xddxlRnqK6yOhG04xJWuaYFv1ywcU8tLBdhtB73GEC6QFdJnYYSJmleXSMRRm65+LVSJ/2pP8ElHD3xbr4UYad65dEe6xGevCmYF4kfh3zSj0tAR8blUI+iu28n0bFt3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=siFjqx67TIeUW2F9kqCvK5OVhMZ2DdPsXHO06MeGGho=;
- b=Vgza5ZEuRcFbfWyD6WRvDP3SFjfcr8I0IsFR8KDckDLwLFdBhp9vR4LDtQ0ijbPQbhb7Jf9m86vzVmsy3pgiVyCHrqytuHJQI7M+BjQez//7OKP+5zZLQMPHaNlorrEv0hl8PbCtXe2Vs/K+1RTDvVdq7ZrcgIBnaJUHHOQahl0zi2gZxmM8MdiIByUXOwenEf7XiUotGCiVroUKpbhDORDgIs88Y3k7kHdtaiNf51OVJAgQmyIzT9uT5qtmgOhmZvoXp9nuYAyvgZJ4nKGNvWCyOGL1DXnbsVsCNc6NcM8cHd+VdgyvNOEKL1KTE6WPTUA3tqVs/KegFtc0Mh89CA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=siFjqx67TIeUW2F9kqCvK5OVhMZ2DdPsXHO06MeGGho=;
- b=l0bD727fGWxmTsxiDjez6NUmpZGIu4ES6xI5yOIdRCl1Ckfsn9dDgnbnAVHQiOHBgyEhqdMfbS3hmUsstqzLud1uyH23L+kw91H6q6T0OURPy8C2+s6UOW9Vske/ifwAWCyZdEr3hjQZwz+odb2E0t43mleuM0NVSqYRjBngCtc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7)
- by SA0PR12MB7091.namprd12.prod.outlook.com (2603:10b6:806:2d5::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.44; Wed, 26 Mar
- 2025 04:26:33 +0000
-Received: from CH3PR12MB9194.namprd12.prod.outlook.com
- ([fe80::53fb:bf76:727f:d00f]) by CH3PR12MB9194.namprd12.prod.outlook.com
- ([fe80::53fb:bf76:727f:d00f%4]) with mapi id 15.20.8534.042; Wed, 26 Mar 2025
- 04:26:32 +0000
-Message-ID: <bb1b8e3e-85e5-44c7-97b4-c8f86ecbf5c2@amd.com>
-Date: Wed, 26 Mar 2025 15:26:17 +1100
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [RFC PATCH v2 05/22] crypto: ccp: Enable SEV-TIO feature in the
- PSP when supported
-Content-Language: en-US
-To: Francesco Lavra <francescolavra.fl@gmail.com>
-Cc: Jonathan.Cameron@huawei.com, aneesh.kumar@kernel.org,
- ashish.kalra@amd.com, baolu.lu@linux.intel.com, bhelgaas@google.com,
- dan.j.williams@intel.com, dionnaglaze@google.com, hch@lst.de,
- iommu@lists.linux.dev, jgg@ziepe.ca, joao.m.martins@oracle.com,
- joro@8bytes.org, kevin.tian@intel.com, kvm@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-coco@lists.linux.dev,
- linux-crypto@vger.kernel.org, linux-pci@vger.kernel.org, lukas@wunner.de,
- michael.roth@amd.com, nicolinc@nvidia.com, nikunj@amd.com,
- pbonzini@redhat.com, robin.murphy@arm.com, seanjc@google.com,
- steven.sistare@oracle.com, suravee.suthikulpanit@amd.com,
- suzuki.poulose@arm.com, thomas.lendacky@amd.com, vasant.hegde@amd.com,
- x86@kernel.org, yi.l.liu@intel.com, yilun.xu@linux.intel.com, zhiw@nvidia.com
-References: <7177c7ae24b9f7ebbfc001166e09beadb81305ae.camel@gmail.com>
-From: Alexey Kardashevskiy <aik@amd.com>
-In-Reply-To: <7177c7ae24b9f7ebbfc001166e09beadb81305ae.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ME3PR01CA0071.ausprd01.prod.outlook.com
- (2603:10c6:220:1c1::8) To CH3PR12MB9194.namprd12.prod.outlook.com
- (2603:10b6:610:19f::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E484161310;
+	Wed, 26 Mar 2025 06:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742969282; cv=none; b=domLtPSzT0iHWoIhcDXwCm3Tew+dJRTFFj+eAvcLDaC/T0jxBgCN8BhGEPIBQjBWzufcp3MG/MdnDc74KEiUlvD9d3WT/m8sHb3+0gcAGug9KxjqeKxEqr2ZpDcSZCqvJDRPG68xzRWndbgBMnXjerw6KMLCKCFz2E98Hr+cu94=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742969282; c=relaxed/simple;
+	bh=17ilzGvreeHm226kkfQPsyEFUeLiEMTwZ00oVMu8jpY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W48BeqGsZ1t2fUTAFQgCKXQAJ2D2lsLPkia/1cEjjgkwUj1AtGXhZAh1J3pzEbi7BmbP0oCB6bkBZLaLOo1eDGFGtfruvav4HfVS0f4ntMYrBHUkByzROm8nICeEV4vSMYiZWGRtrTJfYo59dvB0+s1193+xM5VWnkmkVcMOa2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nco888oV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A181C4CEE8;
+	Wed, 26 Mar 2025 06:08:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742969281;
+	bh=17ilzGvreeHm226kkfQPsyEFUeLiEMTwZ00oVMu8jpY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Nco888oVkpWvjjpmwWCThvxb1AtfGv+uxSw1N4XjTkec3DRuVqc8KPvc5gyVt3uyU
+	 IV7JpaJMp0N1G9bNlo7QCS6M3AKZni7g3eSBUqYTCiax5dYr0YNhkTLa/iLtyFs7Wv
+	 HtMjo1vjIyvsz1Ery/OFJdGpHbx7zWh4Jt/U+jmcfT2/psOB/aVWJLouBgMnlcLXxi
+	 iQ6JWvJv52TlmS30JjLarPhhTiwvQVU+efwiS9Qj/9tY8Xh5NXnQExI9PhYTcscXed
+	 SkD/3WaA4QEW7XPf0f3AnBRtjzDT5qFOrBTZk3J5UH2yTDn5Ts9Hsd2ScdykbJt4y0
+	 tZfx12/Kj/UNA==
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43d04ea9d9aso29092765e9.3;
+        Tue, 25 Mar 2025 23:08:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU9kzT6BA6N6h87+Q5LlLgA6p87ybvkMC/+e6djgPiK1RymMroREloorw/Bntec6btNgNgetZU17M232IILkfIymvwb@vger.kernel.org, AJvYcCUVbdDsIGoZW4wbdqY4ExqKrN3GTpoOcnacZnfw+W/I8chaKcML5lVDxfc3oGE8dDMoIYxX+HsgFQJR@vger.kernel.org, AJvYcCUWFLdwe7lwdhY4QVROCbCYd3X5Z75wXRkc7rXh8Bb3MOQ/iX5hTefzd/uDQlQ6heWvo5SUOXpw+VWsHlw=@vger.kernel.org, AJvYcCUWVjZ3XPlrA7jPuJO8ObPIUkTqtojM3OAsLCv2ThaZeZOa1bWTc73BR2xmka/oT7upCfxC+jsXFSr6zaE7eBTa@vger.kernel.org, AJvYcCUXji1jIuFBG6161oCJDbIuWuOxiDghQbqsLh62XdF9sHT+YbtdOoFZu+cG3tZhdnYCFbqShie1ZbHRKorn@vger.kernel.org, AJvYcCVSSdzgOS1NRSOcHWRW3oVXx0h0/oTMccv6aez6FZny6stDw6CTkFz16OVdZUpx7iH9sYfKcWMkV0Ax+JE=@vger.kernel.org, AJvYcCW8dLA624cklmFoAEYOpSyGC8lEOBINpemT7x+eOHFqcBFx5qmqTxSclGVFBbZXyGf3D6cWYlO1@vger.kernel.org, AJvYcCWKmmi1flBpuF3G+U6llD8mK4tVWwRfZArstzUSyuicvzdNx/JjMVVaJ8ZqbXd8rYRL2W39AqTX47KJ@vger.kernel.org, AJvYcCWSFXTNbfuLsPiAFx9hNmQ2Rg5+J9l6zBhAUzyqM62EWaWk/3MROgU9CLU+f1wcdGmfUskw@vger.kernel.org, AJvYcCWg5lo1ykuKBd9P8pLYG73yQb1q
+ Njce0a/X3l4B+PcuIo7oZNsbWAvO38qA2S93fa4Bxpc=@vger.kernel.org, AJvYcCWlW/LFGElA26cSvMh5T2iUC4aAUqhgQ2QFusESKPKBIoSskwH7jjFtNn9AlU/HjDY29U9R7RCVPuU4hq4U@vger.kernel.org, AJvYcCWpjFEH9caShLPBc82kAI+KcbKOGDEvIR1UJ8N80RNns+V3DB54VBhnQC2CH3K/TuWHpgLgRxggi+yyD3TKPYAbig==@vger.kernel.org, AJvYcCWtl9TLsEYQyGtNQXjn0maTH/39t12gRR0DG7xVAuerstxRSuTXmZ7FmUZ5K/hJzy0QWx6YoMbaSmoRO38=@vger.kernel.org, AJvYcCXNYiqJuDYuZM0K38V1+gcnPcGpq6UDCwA6IKtUjBX8cI6qw6s5sDNduZy7vb9yLVFrjlZK1B2O5CDPPg==@vger.kernel.org, AJvYcCXR7x5G2gD1h/by+2WZSf7P5ZBqK431BkanWVf5fhQeAzIc9Y9w7R3OijTuglyPQCrUOszHGUjqsPfl6Lzn@vger.kernel.org, AJvYcCXYSHeE+0Gt8yLx89rxydHM8RwlmmB7Ygw17ELraN10jyl64fQFCh3sGcg9m1dsYd4+e/o/lz98rnrMFQ==@vger.kernel.org, AJvYcCXoo9sNwuUeUMHbqZtyAOo6Tw2gCN+1pRzUcCsAz7zyyPaEAF1/2sN/2RPsAIeBnbSfhMxzckn0o0f4EfWAXw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrNvgQ4sY2SyaFmXOIzWsOqjvA8XC9s2ct7PrwYX2cHCUovBuT
+	k+97K0wcz6PnrXIJRcnet1ccY9x+uRY0ikHO2UpmBuzyAj8und5YCwGZXKddIlDKJxJ3kg/rHL+
+	dDJ2u5APrOBCm+5G8XtZIcjUdNy4=
+X-Google-Smtp-Source: AGHT+IEuIFNoPjN0AZZplDS08UZSXPKtCbe3v92zS/QV8r4A1uiHzUqZnFSHaB3urAWjtmc7YALAB9tDHWY70m3ocVw=
+X-Received: by 2002:a05:6000:1fa7:b0:390:e5c6:920 with SMTP id
+ ffacd0b85a97d-3997f9008c2mr16208871f8f.3.1742969279888; Tue, 25 Mar 2025
+ 23:07:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB9194:EE_|SA0PR12MB7091:EE_
-X-MS-Office365-Filtering-Correlation-Id: df321fc1-92f8-4957-7e3a-08dd6c1e6309
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aWk0bGtqRDBlZXM0T3gzdEFoeVNkY3B4dTlDMjJXeUtRQWlpNXY0ZGtqMWly?=
- =?utf-8?B?WGJoL0ZMOElmL2NxamZjSWZTME5Ydjl5MFpodnJwRlAyaGVYcEZEK0hOTlAv?=
- =?utf-8?B?azE0eHpQZWF2UXRYWXlwcGVlcFBlampiRDZvR1pvN1RzbjQweDRVeUNjYjFZ?=
- =?utf-8?B?VTUwWVlZQUlUdnMrRU13V1E4RTJLRWF3ZnV0ZVAvMkdoaEhORUl0SHdFR2FZ?=
- =?utf-8?B?eVRzK3dzRWFSdStPNzVJQ3NSRzNBTWdNMlZ5MzdNOCtMWDFFVS8zNzVpWFhx?=
- =?utf-8?B?RzRqM1d6ZzlTNWxFcEVtcnRoOHlqNnlrREh4b0lkTUN5RTEzQmIrYzBFOXNY?=
- =?utf-8?B?TVBYVWlOZUJqbnhGQVNVM2VQSVVBS25FQUlJblJlYVB5Qk5lMXdSOEhBRjda?=
- =?utf-8?B?UE5QaVQ4Q0w1OVVGbnVQbTUvd2JZbDZJQXd5YzZZN3ZnMFpXeVUyMnpYNzNy?=
- =?utf-8?B?RjV3UmdCOU5iUlY1dzRSdXNLOStWZkFtM0Y0WFdBTVNHYkRrM0hUbFBZRzNw?=
- =?utf-8?B?UXNzMTJ2UXE1dmh1eVBOdzFsTG1EeURJaERKNG5LditWWC9iZ01MbEpyL1RY?=
- =?utf-8?B?NzljcTNnRVF1T3BRMlVYcVFWb2dML0RlcWVUNnNMTnl2QTU3Q21WRlVvL1dO?=
- =?utf-8?B?SnlJRkJxNTdDcHlJT1ordEMwOUREdjhMRENUMU1EdEdDZ3NsNFJtbC93TWxR?=
- =?utf-8?B?MXR1N1BTZXpVL1ZlaEtWSlpodWFBdVpkMlNVaEFOSy83b0U4Z1pxSWp5M0dT?=
- =?utf-8?B?d0JjRDJ5Z3o4ajhRdWFLR3JsWFJlN1pwSjNuR2ZiamhHNGRXdmExZTRzcW5C?=
- =?utf-8?B?UnF1RzZxdGFselBjVTBPVXdQTnc4aGtPajQvV1BheXB6M3BXTXI0SU1GZm5G?=
- =?utf-8?B?ZTdFTmFoMWp2b0t5c0RUMDgzUlhlY1d3dnU4c3pwZmJVZzdFVmZ2MUlQd2FE?=
- =?utf-8?B?MGdGRVZwZm4xdWx3akd4enJvS2t3MW5oSjQ2V0JUK0o4S2x1RktYblVrUzJU?=
- =?utf-8?B?R3VmbWJNZnIraGFBWUx0cjMrL3VIVFpHQ1JrN01RUTRUSEowOGtIZHNMK3dq?=
- =?utf-8?B?YXFDWWVReEZ0enAvQ2JYSFgwazVScmZOMjBkUHF2a1BDbythNWt1UTVOMnJa?=
- =?utf-8?B?WFZXWXFxYWV1SmlnTGlBVWJZSUlSL3lxbnZNRE9HVlR6S01hekJmL0hVS3l0?=
- =?utf-8?B?aDZKMTEzMFhwQUJSSlpCWCthcmxENGdsVUFiU0FUNEZkMVVLdzh5NEdQSlFp?=
- =?utf-8?B?RlhTMUVNeFVyVkVMWGY2Qnh0eHd6cE9yZnNMaVV2R2xVZnhHazhLSXdpT3VK?=
- =?utf-8?B?d3gvRVhCcUV1VlhHRlY0aEZBN1N6K0tmNmhqWm90Ny9NQTBLM29pR2dwdlZm?=
- =?utf-8?B?MGxQRjVvbFdlNUM1bG1WTHlCRWZxRjNLWVd6NWpyOURiT2YrMlhIb1FiUmZP?=
- =?utf-8?B?dGVOMkc3TXJwTndqeGNvOTBTSmRqRmZTNnMvU0RJQ0w2RlJvaGUyRGY3SGRa?=
- =?utf-8?B?b29HKzR0bm9jSGJ5SzVaRjFZaU1ZWXhPRFVwUHBQR2hCUE03WDFQSTl6YUxK?=
- =?utf-8?B?UFFlZ2kvNU8rdUJiUHRBbG41TUUxZEFBWllaNWJnQ3k1VzhaRElTNkxzRmVp?=
- =?utf-8?B?RTBPY21sNjFnZE5BQUltYkcwaG1ZeVRhZFgwNlVSSGNtdnJZZzloUWF3TGdI?=
- =?utf-8?B?LzlWcGExTVJuZWZXL216UlJSMytsRVdJaGxJUGkvay9VcFlibjJoU0JyMnpv?=
- =?utf-8?B?M2czSHg3NE93NjVaVUNPMXdSVjg5d09OZjhxM2pkZjNreUo2YlMwbTZ1Y1hO?=
- =?utf-8?B?UWpTTWF1TDFKcmo0TDhkWUZDQk0zL3A1Z0ExYk5iSGNqcnZXODF3NmZ0elJs?=
- =?utf-8?Q?5tvEbxeN6J6tA?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB9194.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cWpuU1g4TE9odjhjcWRmL3ZUVUFERVF3RXhhVjBiSytadFFjVHdQbkhCSWdP?=
- =?utf-8?B?cmlBUnhMMUVZTmpORFhoREJ4YVF2YjZFOWIrQ2RScjk2SjNNVVRTSXBlVllo?=
- =?utf-8?B?RC8zV2ZiaXczUjdqaE5wdG84SGFkdFV2d05GS1pyaFFVM3lSY0J5MGxZUmJQ?=
- =?utf-8?B?UmNieUhuZ2ZCOGlyNUw5ZHFpOHdFMzVYV1BrYTNqdG1sSlBpRmYvaGVwYS9t?=
- =?utf-8?B?UEx3YVh0U0cyYVU3S2FpcnZiZmxRRTd0ZEo1RERTSVZGOWxpbGliZjUyL2ZC?=
- =?utf-8?B?eVlFWi9qSlNUWXpRM0s0ZjA3OUl0QlQrQ2V5N2tBZ3NIMXRBZVRZaWJYOUlG?=
- =?utf-8?B?Tm16Z2h0QVkxdXZCR0NoWllOSUcrTDVBOW83ak9xdjNMMUdLT3N4Y2M0SWFH?=
- =?utf-8?B?NHhPTTlYTjdPMXRQdjNtZUg1UjBkTVY3UUdoRDQ1eGxBaFMxbXZrTzhJZ3c5?=
- =?utf-8?B?cUNYWjdUaHVPUWpzeGp6UmY3UDNuNHhxR2gyU3ZZc2JvK2RKanYzZFQ4RkU4?=
- =?utf-8?B?YmoxWVRJbGdmWnBGdDRKbENmM1NNaUpaMVM5aytHZmsxbFNraEhCVHhPYnF4?=
- =?utf-8?B?TURlM2JuT05TR0tCdVNsU3BFUGNMNTZVNC9DOVNhZzlNUlhmZ1JZODNUckVz?=
- =?utf-8?B?ME1yWjgwL3R3MXFYSmhYSEJVa3k5eEwzN0xtRzNiNFlSNC9Gd3VpcWRhRlZm?=
- =?utf-8?B?ODFmRzhuMWdHWkduaTNjRjBlRTk2bms3Snk1QjZPUGQ0bEdzdDluV2tka0JC?=
- =?utf-8?B?Q2ZENXFpK3NqbWdOekVpNEVsWDFMODJwQmtnWG4xdzRmdnVIZU1saG84VjJi?=
- =?utf-8?B?TXZocnVTclVRVUgwVWFOaWEzZTNQdVRXaXBjaW42T0k1YTMxU25mcElqWlM0?=
- =?utf-8?B?N0tyR1lhMDVxbmJzNmhHVnJYV3JjR2t3Q0FsQjZ5M29jMmFCMmtnVEtDeW1L?=
- =?utf-8?B?OUJPaG92NzhIcmZ6R3duOCtaMjJEMEpQai85Ly9BSkswRFJKbVJMRVFCZkor?=
- =?utf-8?B?Tk5zcjhZNGx3QWV6L3NwUXVHMmI2WU1nWkNGM0RERTQ0TG9xY1QycVd6QWFC?=
- =?utf-8?B?QjF4aUNGRzVrOUhXYWFBbWc4VTJYbDdsZkw3a2VYdlZLajhZME5LOTN2WFBk?=
- =?utf-8?B?cVM5Wmd2ekEvRTc1amVtL2ZBTTIzZUc4aU5saXBKNERDaHlmeEZ4Y0w3Zkwv?=
- =?utf-8?B?SDZQTjZaaEIzQkJ0ZHpsVVBueFB6cktKS3lQWVlsMnpYakwyRE5yWXkzRWlC?=
- =?utf-8?B?bC8xSG90MG11dFRKbVplQmY3VmpEMDRoS0pCNFNkS0FhNFBOWGxHbWdvYmNI?=
- =?utf-8?B?bm9odnJTaVBIN24xZFVrUmJ2MnJ3T2hKaWZsT0pGNG9WajNQQmJSc0lCQWly?=
- =?utf-8?B?R3lKTTAzMzFHUkNPOCtPVUs1bSswWmhINW1PS3ZmK1I1Z2psalhzS1FoZkh3?=
- =?utf-8?B?YkljMk9VaEgxblFDOExneE5paFVCbDJyRzFEanpXNHRqLzIxemdEUXBvb3Iw?=
- =?utf-8?B?U0pWYVk3NmZlcGRramNRaXpFUXh3SlVIZTh4UE9mL2Q4SGFmSXZVemVLQW1Q?=
- =?utf-8?B?VCs4UFd5OEM3eEpWaE5XTE4xek51NE9EbU0renRnaHRZazRZNmg5OWlBSEJH?=
- =?utf-8?B?Wm8ySUM1MEJ1NWNFNG9xY0VSVXRZTk9EQkpYZlEvem9ZSWZVaGpMSkpvUU10?=
- =?utf-8?B?OGc0K3dvY3ZBOXdaTEVSaThSeEJVNGJTTVp6OVB1MUZxRUE5L3pXNU1MQ3E2?=
- =?utf-8?B?RVVrYi9manZKTDZoaVd5VUo0anhIaDNQSXZHeFZvZXhoLzBiMkVjazNRallm?=
- =?utf-8?B?RHVSVk1LM1Iva0hyalhmRVZLN3FDRmY2aHFVMmNsYXVHL3MvUkh5TDQ1Qmd6?=
- =?utf-8?B?Qnpoek9UZzQ1bjV5ZWUwV2lsRm5NUGE4UEUrRWJwQmFQUlFSSkdRWGxMOGRP?=
- =?utf-8?B?Q2RJcWZKb2RBZ091dGI0MWx4VUYvMjYxVXNJTVZyT2RzM1FjcVJHUVZIQVdH?=
- =?utf-8?B?VW9Rc1VCc25hNStrUnJZYzlESmxSRlhwWThYRU16dDMrMFo4Z2hoektPbVlL?=
- =?utf-8?B?MWg0bXc0SlkzNi9iNU40NzNobU9zWm5jcDlWc2xYRnpRVE9jNU9tVE1MTFQ3?=
- =?utf-8?Q?fT+kFVV45snmEUJHg9rOnMPvu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df321fc1-92f8-4957-7e3a-08dd6c1e6309
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB9194.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2025 04:26:32.6366
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NjHC7JSdbFl3in1RIpL80n0BIEg0/6su3TB9N9SJ+dHE2GGijJjfBkdKsipRafwUvj1xe39OJhBwoGRcA9rsow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7091
+References: <20250325121624.523258-1-guoren@kernel.org> <20250325122640.GK36322@noisy.programming.kicks-ass.net>
+ <db3c9923-8800-4ed3-a352-4ee9ef79c0b7@app.fastmail.com>
+In-Reply-To: <db3c9923-8800-4ed3-a352-4ee9ef79c0b7@app.fastmail.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Wed, 26 Mar 2025 14:07:47 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSHpZMyUk+8HL0=bevCd4XZYRAkrPM600qLPCKxG+bfrg@mail.gmail.com>
+X-Gm-Features: AQ5f1JqPvj-l64SFz6C-IoAkuirA5RSoM_MAB1hbvMnwwKSuwLAnDrMsa14MaDw
+Message-ID: <CAJF2gTSHpZMyUk+8HL0=bevCd4XZYRAkrPM600qLPCKxG+bfrg@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 00/43] rv64ilp32_abi: Build CONFIG_64BIT
+ kernel-self with ILP32 ABI
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Peter Zijlstra <peterz@infradead.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Anup Patel <anup@brainfault.org>, 
+	Atish Patra <atishp@atishpatra.org>, Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Christian Brauner <brauner@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Eric Dumazet <edumazet@google.com>, Chen Wang <unicorn_wang@outlook.com>, 
+	Inochi Amaoto <inochiama@outlook.com>, gaohan@iscas.ac.cn, shihua@iscas.ac.cn, 
+	jiawei@iscas.ac.cn, wuwei2016@iscas.ac.cn, Drew Fustini <drew@pdp7.com>, 
+	"Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>, ctsai390@andestech.com, 
+	wefu@redhat.com, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, Ingo Molnar <mingo@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Xiao W Wang <xiao.w.wang@intel.com>, 
+	qingfang.deng@siflower.com.cn, Leonardo Bras <leobras@redhat.com>, 
+	Jisheng Zhang <jszhang@kernel.org>, "Conor.Dooley" <conor.dooley@microchip.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, yongxuan.wang@sifive.com, 
+	Xu Lu <luxu.kernel@bytedance.com>, David Hildenbrand <david@redhat.com>, 
+	Ruan Jinjie <ruanjinjie@huawei.com>, Yunhui Cui <cuiyunhui@bytedance.com>, 
+	Kefeng Wang <wangkefeng.wang@huawei.com>, qiaozhe@iscas.ac.cn, 
+	Ard Biesheuvel <ardb@kernel.org>, Alexei Starovoitov <ast@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-mm@kvack.org, 
+	linux-crypto@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	Linux-Arch <linux-arch@vger.kernel.org>, maple-tree@lists.infradead.org, 
+	linux-trace-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
+	linux-atm-general@lists.sourceforge.net, linux-btrfs@vger.kernel.org, 
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+	linux-nfs@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Mar 25, 2025 at 9:18=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Tue, Mar 25, 2025, at 13:26, Peter Zijlstra wrote:
+> > On Tue, Mar 25, 2025 at 08:15:41AM -0400, guoren@kernel.org wrote:
+> >> From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+> >>
+> >> Since 2001, the CONFIG_64BIT kernel has been built with the LP64 ABI,
+> >> but this patchset allows the CONFIG_64BIT kernel to use an ILP32 ABI
+> >
+> > Please, don't do this. This adds a significant maintenance burden on al=
+l
+> > of us.
+>
+> It would be easier to this with CONFIG_64BIT disabled and continue
+> treating CONFIG_64BIT to be the same as BITS_PER_LONG=3D64, but I still
+> think it's fundamentally a bad idea to support this in mainline
+> kernels in any variation, other than supporting regular 32-bit
+> compat mode tasks on a regular 64-bit kernel.
+>
+> >> The patchset targets RISC-V and is built on the RV64ILP32 ABI, which
+> >> was introduced into RISC-V's psABI in January 2025 [1]. This patchset
+> >> equips an rv64ilp32-abi kernel with all the functionalities of a
+> >> traditional lp64-abi kernel, yet restricts the address space to 2GiB.
+> >> Hence, the rv64ilp32-abi kernel simultaneously supports lp64-abi
+> >> userspace and ilp32-abi (compat) userspace, the same as the
+> >> traditional lp64-abi kernel.
+>
+> You declare the syscall ABI to be the native 64-bit ABI, but this
+> is fundamentally not true because a many uapi structures are
+> defined in terms of 'long' or pointer values, in particular in
+> the ioctl call.
 
+I modified uapi with
+void __user *msg_name;
+->
+union {void __user *msg_name; u64 __msg_name;};
+to make native 64-bit ABI.
 
-On 22/3/25 22:50, Francesco Lavra wrote:
-> On 2025-02-18 at 11:09, Alexey Kardashevskiy wrote:
->> @@ -601,6 +603,25 @@ struct sev_data_snp_addr {
->>   	u64 address;				/* In/Out */
->>   } __packed;
->>   
->> +/**
->> + * struct sev_data_snp_feature_info - SEV_CMD_SNP_FEATURE_INFO
->> command params
->> + *
->> + * @len: length of this struct
->> + * @ecx_in: subfunction index of CPUID Fn8000_0024
->> + * @feature_info_paddr: physical address of a page with
->> sev_snp_feature_info
->> + */
->> +#define SNP_FEATURE_FN8000_0024_EBX_X00_SEVTIO	1
-> 
-> According to the SNP firmware ABI spec, support for SEV TIO commands is
-> indicated by bit 1 (bit 0 is for SEV legacy commands).
+I would look at compat stuff instead of using __riscv_xlen macro.
 
-well, I wanted a bit number (which is 1) but this is wrong nevertheless:
+> This might work for an rv64ilp32 userspace that
+> uses the same headers and the same types, but you explicitly
+> say that the goal is to run native rv64 or compat rv32 tasks,
+> not rv64ilp32 (thanks!).
 
-present = (fi.ebx & SNP_FEATURE_FN8000_0024_EBX_X00_SEVTIO) != 0;
+It's not for rv64ilp32-abi userspace, no rv64ilp32-abi userspace
+introduced in the patch set.
+It's for native lp64-abi.
 
-should be:
+Let's discuss this in the first patch thread:
+uapi: Reuse lp64 ABI interface
 
-present = (fi.ebx & BIT(SNP_FEATURE_FN8000_0024_EBX_X00_SEVTIO)) != 0;
+>
+> As far as I can tell, there is no way to rectify this design flaw
+> other than to drop support for 64-bit userspace and only support
+> regular rv32 userspace. I'm also skeptical that supporting rv64
+> userspace helps in practice other than for testing, since
+> generally most memory overhead is in userspace rather than the
+> kernel, and there is much more to gain from shrinking the larger
+> userspace by running rv32 compat mode binaries on a 64-bit kernel
+> than the other way round.
 
-good spotting!
+The lp64-abi userspace rootfs works fine in this patch set, which
+proves the technique is valid. But the modification on uapi is raw,
+and I'm looking at compat stuff.
 
-> 
->> +static int snp_get_feature_info(struct sev_device *sev, u32 ecx,
->> struct sev_snp_feature_info *fi)
->> +{
->> +	struct sev_user_data_snp_status status = { 0 };
->> +	int psp_ret = 0, ret;
->> +
->> +	ret = snp_platform_status_locked(sev, &status, &psp_ret);
->> +	if (ret)
->> +		return ret;
->> +	if (ret != SEV_RET_SUCCESS)
-> 
-> s/ret/psp_ret/
+Supporting lp64-abi userspace is essential because riscv lp64-abi and
+ilp32-abi userspace are hybrid deployments when the target is
+ilp32-abi userspace. The lp64-abi provides a good supplement to
+ilp32-abi which eases the development.
 
-yeah I noticed this after posting. Thanks,
+>
+> If you remove the CONFIG_64BIT changes that Peter mentioned and
+> the support for ilp64 userland from your series, you end up
+> with a kernel that is very similar to a native rv32 kernel
+> but executes as rv64ilp32 and runs rv32 userspace. I don't have
+> any objections to that approach, and the same thing has come
+> up on arm64 as a possible idea as well, but I don't know if
+> that actually brings any notable advantage over an rv32 kernel.
+>
+> Are there CPUs that can run rv64 kernels and rv32 userspace
+> but not rv32 kernels, similar to what we have on Arm Cortex-A76
+> and Cortex-A510?
 
-> 
->> +		return -EFAULT;
->> +	if (!status.feature_info)
->> +		return -ENOENT;
->> +
->> +	ret = snp_feature_info_locked(sev, ecx, fi, &psp_ret);
->> +	if (ret)
->> +		return ret;
->> +	if (ret != SEV_RET_SUCCESS)
-> 
-> Same here
+Yes, there is, and it only supports rv32 userspace, not rv32 kernel.
+https://www.xrvm.com/product/xuantie/C908
 
--- 
-Alexey
+Here are the products:
+https://developer.canaan-creative.com/k230_canmv/en/dev/userguide/boards/ca=
+nmv_k230d.html
+http://riscv.org/ecosystem-news/2024/07/unpacking-the-canmv-k230-risc-v-boa=
+rd/
 
+--=20
+Best Regards
+ Guo Ren
 
