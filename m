@@ -1,123 +1,142 @@
-Return-Path: <linux-arch+bounces-11145-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11146-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78C17A72075
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 22:09:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BC7EA720B6
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 22:22:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A2411899345
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 21:09:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05C373BB51E
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 21:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 029AC25D539;
-	Wed, 26 Mar 2025 21:09:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56CC25EFAE;
+	Wed, 26 Mar 2025 21:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FbLHCo98"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KpNCyLAu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390AC49659
-	for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 21:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFC723AE79
+	for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 21:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743023375; cv=none; b=fohn17JJfckw4I4sDoOVoZGfNSpPBWBLDmWgdOCGv4oFhTUpb8XNs0vsQJd+862e5Y7rz0/PLQL2lnxQGwFpkq1kQfuzemnA/o5ZTyVuFcgDp+45ZTImGYjBXNq+nrFXHxIULxW0y05ICPdmvdUpCRuwrO7eK+4u6XGa/Kowu2Y=
+	t=1743024116; cv=none; b=YXjqU0/dfTYy8kU3KCisHe4Gj+/ZlZlJGJmDKh56SKyvvZFh5YqPKj9s23SraVo4lsHNAf/b1qmnluQl7m5FKGoA93aYi8LDz7HwkaaB3+4/1h6bbBBmUKSSYTOEIOw8d95P33IvFwV/VUGNRDr8sGZ0YlxXWLFkwKMbpx4YgnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743023375; c=relaxed/simple;
-	bh=N1Iw1CJ8p9YjJ/cpcO93upEpS735Wn8gFvx0ADY4HQc=;
+	s=arc-20240116; t=1743024116; c=relaxed/simple;
+	bh=P6V9ol/irj61zvGkj49jPh2uWIAWA/KyBPVCWmTBZC8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZmlhQCld96jqr7z/Bo7oDf5X0CIsUcmtZiElqdklAtJV2meFtKnGES7dnb8zvba/o9NNVyKwUzCL5qTZZcTK8dD3OEjXmIzbQeC6+RNcuaVqrqT4bU7dVHxlm/4EhwCSfMFlptQ3QIJDHLRy4FauhCjHHQ0c2IWsiDEvubxx5eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FbLHCo98; arc=none smtp.client-ip=209.85.208.53
+	 To:Cc:Content-Type; b=bpzux2oFFsSR4iaiPfmegxwq+gydjQ0c6BiNRywVqE3NJJhSQgZUre4zkRWgxzJNgEkOA+n4T3DtwBWYWX04Nw0uCnq3fMJn3niNJ9lBd32DUGxvXXq07CTYs8gZ+GR/4jfMFLPgMLonHlvfqRZZogSIfJtV2j9UAI+FmnL3c4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KpNCyLAu; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e50bae0f5bso3454a12.0
-        for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 14:09:33 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5e789411187so1277a12.1
+        for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 14:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743023372; x=1743628172; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1743024113; x=1743628913; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mn6ZXtt6CVZ3GL75/BKIeHmkynUInUG3RiCFW/2GGVA=;
-        b=FbLHCo98BNQbaIzelURIZhGhN3nxVLc2ZcD0Bt7Cc/zj1ciJjKSNQqi3lBAqGFRpSs
-         GMMv+lmjV4f8AsP/07Qs4vBSVgOivZGjN/mWlubhwLIo8UnU5H6jVCa4BURkjWw6xKW9
-         aAihdjzQh4Yo+bnfkqW2sroYSNFyRBAX01cnFrRiXWxdtfltu3j3V3f47tOBnq5k6z2t
-         nOzspXmbr73gAoTm17MqPV7sFlja1ZhD3fE1W6CqmG9X4tOh28MWm+x/n0nmHTBLLDJq
-         TotkMrb8mfH1evYKH+jFYr9kYM0DZsNy39rE4SCJqybHyDQN2pePA584HDk+nbU7IDNj
-         N9ZQ==
+        bh=FxMIaxzdKd25j5BobKFtyp9BpbbkbtzKIEHTHbqVE8I=;
+        b=KpNCyLAuF95VLGzdkKDKEvlMDsW6LLf21KmfH2CCLO4EFh9TgXapMF78JmSgjWR3wm
+         CxR9tQ0/DfytuDN+3Am5WmjySI1DbNuDQ6iYxQaLbbtVSBS+hgYLM3nEjle2so4JBTMP
+         HoGBKrf8riD5vKJafwMZzxm/HN2kCtBX2zjypMdtbN77PGuyFJG8cQ+TAGOXWw2IxrKE
+         qmIX7N7MKQWP7c5HiV566cdSZ8p2LrJCrUS0VCuWlW7zW5vV+4nq25/cKZWDcb15NDjz
+         T66HbOHZhwyEJx3azG6DIakjZd3+kb70rJLMc3Z7Eq9PHBykbJkZRPFckqtWNfWzuHX5
+         PcrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743023372; x=1743628172;
+        d=1e100.net; s=20230601; t=1743024113; x=1743628913;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mn6ZXtt6CVZ3GL75/BKIeHmkynUInUG3RiCFW/2GGVA=;
-        b=o5AstQyGlBlZH5M4mZOge9hnoptfJ2B3gW5EdsiYoe8ickSA4WE6drJgvu/jmlmMNt
-         KOC2BNVZzokgdS8fBfzA5rbEyCt4QNGwayTgorUFjaNWcZeYtzGgi1XlzhlRw99hLJXs
-         rxo1uwoIQJkSAvqduWIudjJfI715Sf6C8GeSPtluJnrG0dmGNB8+hfKgOEPdxy44M6s3
-         xRm2jEBRZK2lPYelLZIAN3CqtXg5yXoGWLeDy15UIa3WUlYd/PM62iciEjY4ZO1N/edN
-         1rjAQ++re9fW+lEO1xRM5zL8zAFTzHYZRvIh7t0vblsq512dWCd+DKdVpX+h/1EJFgY0
-         xdLQ==
-X-Gm-Message-State: AOJu0YwjN5UVQVbD9ftqQ7OAJ7vK/tYn099KIcqH4wE9cPO09aVpLQ/7
-	NWDDGGpuw2DWGIbSCzQnAIaCbx8DGSmX/yL2HHYarMrChrI/RHaSqmaAyAOkOd/STrUu5LuSUqN
-	2i17XgzW0dQJpLyDN/Doi5QGl8UG7f1STX0E55ZNb7ujrXDQq/1dRUpY=
-X-Gm-Gg: ASbGncuuzf3+77ByRE0Z5SwToWDcBi5ISO3k9+sgwm95LHt4bs0MM2YziemdAo3tMKY
-	i5aMTQWddZTmDD1y6edB40faSsNTeHp+PkIujlAtCj8HW6NY7yutSooBjfLI+esOi0dueOVaQo3
-	MnhoRVr3Fz26sATG5foKBtXS4sH/DslC6pgn8mrywUQoazFMInQ+SsviQ=
-X-Google-Smtp-Source: AGHT+IF5XYVtxnEMnp8UVx9idrWRetkioyCanAIqpXdGdCYrAu98yJ9b779Z+2gRPmY2TAzVTNKL5she3ojuvy4WlUA=
-X-Received: by 2002:aa7:c557:0:b0:5e5:c024:ec29 with SMTP id
- 4fb4d7f45d1cf-5eda8160d64mr14905a12.0.1743023372195; Wed, 26 Mar 2025
- 14:09:32 -0700 (PDT)
+        bh=FxMIaxzdKd25j5BobKFtyp9BpbbkbtzKIEHTHbqVE8I=;
+        b=UaITgfeT8bZ8BF9B46BzpMJfOTele5HZXo1lvvmld6cQmWxJXLPqIJvhIOf3Bv3+JY
+         sJH8pMuPQ9ZwaDygRskuyugPENuAr0bBqS+9AYkwTNUsT1o9Yk8i2FdD0oo6qFGlCVyw
+         FVCboz82CboaAdgGNgYpu9QcCFrRMJdxeNDUg3Q7cE2OE/WhGzeChYDMR+WTeOO3uwsN
+         Sp9PthruG/R2uxV/H861Lxd1J1CYIUmkWHE5vC1Dpg2mAE+mg5Waf3zKFZ6WEeMza41U
+         V8iGFR1C/EAIKHTIsskNOvdej+tUD8mA//dhhelWH3q/7kBgGePOml4m/HThrkoNfZvj
+         nctw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDRpxZvXKAxSm4xRV5lsO7NkQ4HzbEL15jVJcyjRZOlO0C9V9tvcx2lojCZUsvTEe+vuHXeS/xhwki@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4+z2GCXFrX2JA7bGDgAsVlXvxzfN2dS23CXvAwoOR1j9398/k
+	S1ByZtjDC5Iyc4E6Auln80NXgaxSN0/ORO9V+A7aUGCJM68m1xKsVX+uRw+afsP1Thk0lgce0xb
+	LcewGs30eKmuav/2BXSk3r9DlDbk9FsAcg4FK
+X-Gm-Gg: ASbGnctTNJNWBPq4APBCs7WafhIrsGBSl3TVOhISfS79Nl1+jLFV9vMGHWWZqbySlFu
+	35hT9h7UDDgqi8p+HRhpp/SFKzTXwZB7IxVavRAM6iMKkYkD6kQijT6yX9vSK2/kH7keUIisu/s
+	UzjYQW3wTTorUAUwNnmembYC/wXujFg6jErMQECfKG06RHxpxGP6eifuU=
+X-Google-Smtp-Source: AGHT+IE8kzG9HOPQV9zW2XiAapRcWyf13sKtcWkvsQE8PgKGtGYn8uvp97F8cRQncQNiapCuYJZbMoC+j+wiotiTmdU=
+X-Received: by 2002:aa7:d688:0:b0:5e4:afad:9a83 with SMTP id
+ 4fb4d7f45d1cf-5edaa299a33mr12983a12.2.1743024112866; Wed, 26 Mar 2025
+ 14:21:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <31097083-a444-4bd1-8722-d8b7c4b7a43a@app.fastmail.com>
-In-Reply-To: <31097083-a444-4bd1-8722-d8b7c4b7a43a@app.fastmail.com>
+References: <20250325-kcsan-rwonce-v1-1-36b3833a66ae@google.com>
+ <20250326203926.GA10484@ax162> <CAG48ez05PsJ3-JUBUMrM=zd5aMJ_ZQT4mhavgnCbXTYvxFPOhQ@mail.gmail.com>
+In-Reply-To: <CAG48ez05PsJ3-JUBUMrM=zd5aMJ_ZQT4mhavgnCbXTYvxFPOhQ@mail.gmail.com>
 From: Jann Horn <jannh@google.com>
-Date: Wed, 26 Mar 2025 22:08:55 +0100
-X-Gm-Features: AQ5f1Jrc_WaIP2U4wJ_EdK04Nd4TpZufnq_KcUHEOJYF7zycnekmFp_S3xzW9WU
-Message-ID: <CAG48ez0ZahF98zN+qKrizDC8MBM7CM=WMBOzk7ybr55Er37=pA@mail.gmail.com>
-Subject: Re: [GIT PULL] asm-generic changes for 6.15
-To: Arnd Bergmann <arnd@arndb.de>, Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 26 Mar 2025 22:21:16 +0100
+X-Gm-Features: AQ5f1JquhTVerEmqgNAhgQCsPngLTzI4uGjqymw9DsbgV3pWRPJXXIrAKOz8bcU
+Message-ID: <CAG48ez3uh48VZCVO3JD3uv9k5kZBHahr3dAita4hkHsLqyyA9w@mail.gmail.com>
+Subject: Re: [PATCH] rwonce: handle KCSAN like KASAN in read_word_at_a_time()
+To: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 26, 2025 at 8:43=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
-> The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f0=
-5b:
+On Wed, Mar 26, 2025 at 9:44=E2=80=AFPM Jann Horn <jannh@google.com> wrote:
+> On Wed, Mar 26, 2025 at 9:39=E2=80=AFPM Nathan Chancellor <nathan@kernel.=
+org> wrote:
+> > On Tue, Mar 25, 2025 at 05:01:34PM +0100, Jann Horn wrote:
+> > > Also, since this read can be racy by design, we should technically do
+> > > READ_ONCE(), so add that.
+> > >
+> > > Fixes: dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrast=
+ructure")
+> > > Signed-off-by: Jann Horn <jannh@google.com>
+> > ...
+> > > diff --git a/include/asm-generic/rwonce.h b/include/asm-generic/rwonc=
+e.h
+> > > index 8d0a6280e982..e9f2b84d2338 100644
+> > > --- a/include/asm-generic/rwonce.h
+> > > +++ b/include/asm-generic/rwonce.h
+> > > @@ -79,11 +79,14 @@ unsigned long __read_once_word_nocheck(const void=
+ *addr)
+> > >       (typeof(x))__read_once_word_nocheck(&(x));                     =
+ \
+> > >  })
+> > >
+> > > -static __no_kasan_or_inline
+> > > +static __no_sanitize_or_inline
+> > >  unsigned long read_word_at_a_time(const void *addr)
+> > >  {
+> > > +     /* open-coded instrument_read(addr, 1) */
+> > >       kasan_check_read(addr, 1);
+> > > -     return *(unsigned long *)addr;
+> > > +     kcsan_check_read(addr, 1);
+> > > +
+> > > +     return READ_ONCE(*(unsigned long *)addr);
+> >
+> > I bisected a boot hang that I see on arm64 with LTO enabled to this
+> > change as commit ece69af2ede1 ("rwonce: handle KCSAN like KASAN in
+> > read_word_at_a_time()") in -next. With LTO, READ_ONCE() gets upgraded t=
+o
+> > ldar / ldapr, which requires an aligned address to access, but
+> > read_word_at_a_time() can be called with an unaligned address. I
+> > confirmed this should be the root cause by removing the READ_ONCE()
+> > added above or removing the selects of DCACHE_WORD_ACCESS and
+> > HAVE_EFFICIENT_UNALIGNED_ACCESS in arch/arm64/Kconfig, which avoids
+> > the crash.
 >
->   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
->
-> are available in the Git repository at:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git ta=
-gs/asm-generic-6.15
->
-> for you to fetch changes up to ece69af2ede103e190ffdfccd9f9ec850606ab5e:
->
->   rwonce: handle KCSAN like KASAN in read_word_at_a_time() (2025-03-25 17=
-:50:38 +0100)
-[...]
-> Jann Horn (1):
->       rwonce: handle KCSAN like KASAN in read_word_at_a_time()
+> Oh, bleeeh. Thanks for figuring that out. I guess that means we should
+> remove that READ_ONCE() again to un-break the build. I'll send a patch
+> in a bit...
 
-Uh, sorry about this...
-
-Nathan Chancellor just pointed out that my commit "rwonce: handle
-KCSAN like KASAN in read_word_at_a_time()" breaks the arm64 build when
-LTO is enabled (<https://lore.kernel.org/all/20250326203926.GA10484@ax162/>=
-).
-I just posted a patch that undoes the buggy part of my patch at
-<https://lore.kernel.org/r/20250326-rwaat-fix-v1-1-600f411eaf23@google.com>=
-.
-
-@Linus: Sorry for throwing a spanner in the works here... maybe you
-should only pull up to the commit before mine (luckily mine's the last
-in the stack, and it's not important), or wait for Arnd to give his
-opinion.
+I sent a patch at
+<https://lore.kernel.org/all/20250326-rwaat-fix-v1-1-600f411eaf23@google.co=
+m/>.
 
