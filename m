@@ -1,128 +1,124 @@
-Return-Path: <linux-arch+bounces-11150-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11151-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 375D7A725AC
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 23:42:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABCBDA726A4
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 23:51:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D8C9188E3DF
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 22:42:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 943093B1DB7
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Mar 2025 22:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E410B1F55FB;
-	Wed, 26 Mar 2025 22:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA04025F780;
+	Wed, 26 Mar 2025 22:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ei6sMFtB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eKFe6WIU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FD4263F2C
-	for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 22:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CD91A3031
+	for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 22:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743028915; cv=none; b=GJupkFn2INTqcL5eAACtn7nVwQ4BaedszvUAPdPZN8cEc6YnVRuJSq0WoaMlU6f4Jq8MsicAo4L7V4bHtxu5yRdGxhTXy5U3YzOKMeI4xWS47inQAG1Wrf9/o9vApzICfT1aTsX82rrzx6azBMmAbfhjs/rft1jC49i3EIRd7sg=
+	t=1743029465; cv=none; b=WT1D8CG9vpS0edB0cVlOkvTs6kepX99qWD7VkG/WSc8R0lzAVJeEHT/WmAYQJraIQlJto+5rjPGkupBJXH1IuuSnSKRYjyIa/Pm5tvlmbYUMyrSzQMl700aSIphEe1lsQs1n22Eeo4754zwMwoq9WQzfAgRDxll7DwMNykfQCVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743028915; c=relaxed/simple;
-	bh=tmaH+3YPGuLoi/3X44ITjHuWcR3F46JKpcVfWvhcJH0=;
+	s=arc-20240116; t=1743029465; c=relaxed/simple;
+	bh=BOrvvv43yXOr35sq4KdL4n+0WD7H6VNVRPs2SXLF+Kc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MQbzOU3GBdaEPPXbfVsM8SeCPV0FF6St/lKLHpuk4kHBXuGxSFx13HDl889EO95itusXUlrRl6UMH3aDKYFi0Q9/EheD27SaYeGmXSe8wNfmynn1Ls/SyALycz6fXsg3KRAPeR8P43ak4cANFu26Ug7q+Sp+eMlaOMIrsLjOSOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ei6sMFtB; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ac2ab99e16eso71935966b.0
-        for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 15:41:53 -0700 (PDT)
+	 To:Cc:Content-Type; b=Sxn8wFivZPYnm+4EctNlUc4R03BZ2Up1WUv+ftFe+ppIbliFDavbA3yB8LY2vr9dTfoCnTaZDPpWK5/6VnGqNezA6OpNXa80FfqNK/1DGt0b2nXIoRc4ojzdRXCk3r7EJ8Vi7qdmnRR2PeSU9lfdyrlvYi1fYQYAQ8dmgpCZj0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eKFe6WIU; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5e5cbd8b19bso1926a12.1
+        for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 15:51:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1743028912; x=1743633712; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HIsAwdBBYfPSxKw2X4bvTfKKiRWcts7FEK1QYHHkrFs=;
-        b=ei6sMFtBCITnJCpgDnYQuiugNkKfzYAHscNOl4PLqWqnYlVVYe8f/+skypQlbLOJ5a
-         pdThhZFsgAIkT9KlLQVxq9GsUtXv2O0VpqgoKPLRdniACNg72GBNuz7vfiZU3t3dQx+N
-         pbPken2StG9LIOA4LIIBP1MnR5Gg7igp1omcg=
+        d=google.com; s=20230601; t=1743029462; x=1743634262; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BOrvvv43yXOr35sq4KdL4n+0WD7H6VNVRPs2SXLF+Kc=;
+        b=eKFe6WIUhSy4OnFrSoaaoTMC7u2p/+Tuw1so3enyFelI6m1jftcfFvMDZA/OwcPFZL
+         cTmQG6fC5rDiDLG8v6DjK7QHvALCmdJE+MuswG0TKabGUTyXZQdh9U9YI+/QQsOMiDYK
+         sXix6/TvyFE4Wx3+Fzb/aEz/Q36W5FdaOI8xm1slZPokzmInaqpDhFUSPQuCrFaRFIF3
+         4LOf++2hjrfFbq65POCBmdMD61vG0CWhuhrjDRUSSIL45fqKFDkPIpSaVgjvEbT69WK0
+         qpA86kg+DLj+cyTvXckrEvYskpiJlFcx6IU+3wzZSavonItMKEGyLrmSUjcY7FG/vpff
+         5YnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743028912; x=1743633712;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HIsAwdBBYfPSxKw2X4bvTfKKiRWcts7FEK1QYHHkrFs=;
-        b=ZGOQMAAAmozPH8xp0Wy5jxKVwc5jZq/gTWokWCk7OPmyqwQ/XV0VoqeBLGnWYFcfOh
-         Ma6YjP5NnVfDPYSk+jxiYM1UPS5b3A8OWakCrgsNEFsgNX/jQSCvdNqCyhhW2WJy9xrW
-         gZv7727CDOJu0M9I8o2oTs9CTKyXXRCDmI+CTcTIRkgdd663GGe0rVgVb11JcGNIDhw5
-         DuwBSWOkoXOa4dOG71+zfM9Ym4Kd7cJr+Qy+WiEGYZnSEq4JQQv/1U251HqW7SJwq5GX
-         LlDev3qrOM5WqFl2Q4iIF7oGDScuVHnlFAFr3uDh3zqJeuhVO6K7xZJ2ltqDfNQCLFG8
-         J7Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCXqkvE7t7m/5EPlZnq5W45EgiXsDiLW/OMoHmM61twcXWN5zZ/9azeBnTgU1ocbHnvcNR29xHAPPSKE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6eDlBMosyp2wY/5/LadscE/t89b2anz8cOqetAzHnNHRkEawV
-	sOLJwuCa9t1ojc03rYDaFE1IBuF71O7tifJG9eCmakWviKdaRGUD43f7uula/SnXatzwYnNCNeT
-	akgY=
-X-Gm-Gg: ASbGncuxMpzKxyL3rUkne4RXXeQ7sbh/ta/PrCFpT5uoG0LhMjUjy1iXxt029lhQ7FX
-	iQ2xQH1dMUkJ/7Swd/7kYbshujK9EBlpbGN0ctLNUDVxIgTwpeqa1C5rM+JOt9+ORcTTPsjHBav
-	mIv0gmhKUoPjP/Tn/Wbk5ZoMXSVlHQwZeA6EnE+GquZky7bvfR9o5dOQ2TxCcuf0U1H2PzpG/IV
-	ByaHlUvP2xQ0fiP6+frhdHLqTkcYKMk0pgW8E9e/PM135kqF3EN77+goOHZi3WjbzO82RkW6mRi
-	exOTuctmNZ3I9K9EZPhECjI/wBnxI+BEaQpfnP8zJA3dg207jIkWgja9TZ8xNGQ6jpyfkUbq8FY
-	IkW60vcvC6aUXYoeIFYQ=
-X-Google-Smtp-Source: AGHT+IESvi5TW4A7Ibcub/R+e5kCzcpnyr2FyHw5IV1Nfa272fPbHx0W8BZB4P+KruEJ+1q/kjVfSw==
-X-Received: by 2002:a17:906:6a1d:b0:ac2:7d72:c2ab with SMTP id a640c23a62f3a-ac6fb1a73dfmr91615666b.47.1743028911815;
-        Wed, 26 Mar 2025 15:41:51 -0700 (PDT)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3ef86e44dsm1097784666b.31.2025.03.26.15.41.50
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Mar 2025 15:41:51 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aaf0f1adef8so50541066b.3
-        for <linux-arch@vger.kernel.org>; Wed, 26 Mar 2025 15:41:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVpgeMj9sPXpm/MQTVQM6rOuwIS/z1vRbBWuPAcPkwkj7hC/DipRv3MP1LUQFcB4pj52dsQyP6CjggH@vger.kernel.org
-X-Received: by 2002:a17:907:d1a:b0:ac4:3d4:50b with SMTP id
- a640c23a62f3a-ac6faf4bc92mr92400166b.32.1743028910518; Wed, 26 Mar 2025
- 15:41:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743029462; x=1743634262;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BOrvvv43yXOr35sq4KdL4n+0WD7H6VNVRPs2SXLF+Kc=;
+        b=uZ7OeL9Bd78jmdu2yygHAzx12fk0rv2hucpNrfa76zP7slsZs/fu9UJaB3iP6BZXs/
+         Oyb5Og0dWOx/mR/RZaZkolvqnnT5qknzXNwvHqWsYHsNeAOe5rI0v5Nr9pPlUibcF0FU
+         VfFcAtQ/7lFQsGsTUexmZMRfPR/PEuaiUqYWT02VJFhbICGx+U5SAVL2FJdeze1FT3O6
+         x1WOMPWoYT3ti6VqT7KxqIMdLBRzJCPVHdUMMIT/hcZ25HqohxF3A1BGmw8JhXmihsTp
+         hDqk1eSxKwVZeO6kIczBCED6Ff9vLHwK2EKlmUi+DYsna1GS/hco9f/yOFSc4/JwKnIL
+         QTaA==
+X-Forwarded-Encrypted: i=1; AJvYcCVCMwHVA1eBRale+vWfpewHAnGcMI6fxJH0UNuVNapPiFpPnLjcvilh7b+Pmx5B75bv0Rm8dlhNba5a@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfMXuNKoY2nhaxqArbXmQdzjMnqjRpJHX89XqrVVxgfYccUbNx
+	QxtHpm3ZUprcb7jv2vh0z3EmQmj/z8jmQpnaDcDCiZDI+Ou5A0esRYby4/dYQnhqcoa25eTolT4
+	HX6db/gB2vUuhHLEmfbWn7qERNl4IolqtOSjK
+X-Gm-Gg: ASbGnct1E5HRYPySwSGURuyAHsAYBPL9hFw/l/J1jMLpMwPqlXDMLl6oUcRFoFDnevA
+	vrZyG7h15pW68mUUIVw7UsPLrYGptmgKCQh4ZNXKiVx+NoFN6JZeNN1zi3NcJmzhXkG03JHCdnb
+	cCOJrJVMdPi+gvZDzGuTIb7sCxBgA1lwH/lX9ncosQ1m8/SAxUnvsRd/I=
+X-Google-Smtp-Source: AGHT+IEgsOrfzjqoOVaCRUdXQZMnKM69qndvLDnySVU6Gn6KZ7HyRr93TDhl95KuAmAY4T7CRqnhsb8l97t1WcVAf/s=
+X-Received: by 2002:aa7:c954:0:b0:5dc:ccb4:cb11 with SMTP id
+ 4fb4d7f45d1cf-5edaae205aamr19582a12.4.1743029461262; Wed, 26 Mar 2025
+ 15:51:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250326-rwaat-fix-v1-1-600f411eaf23@google.com> <4b412238-b20a-4346-bf67-f31df0a9f259@app.fastmail.com>
-In-Reply-To: <4b412238-b20a-4346-bf67-f31df0a9f259@app.fastmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 26 Mar 2025 15:41:34 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wikuhxhdSEgqb-Lkb2ibQM_hAHR1Cu7yxg-gHZu1NF+ug@mail.gmail.com>
-X-Gm-Features: AQ5f1JrEsmQAOCm7pL6ucQGxLbFedCV1cucSaJ5TtT64ECZtdWuo9mNf3TsYhHg
-Message-ID: <CAHk-=wikuhxhdSEgqb-Lkb2ibQM_hAHR1Cu7yxg-gHZu1NF+ug@mail.gmail.com>
+References: <20250326-rwaat-fix-v1-1-600f411eaf23@google.com>
+ <4b412238-b20a-4346-bf67-f31df0a9f259@app.fastmail.com> <CAHk-=wikuhxhdSEgqb-Lkb2ibQM_hAHR1Cu7yxg-gHZu1NF+ug@mail.gmail.com>
+In-Reply-To: <CAHk-=wikuhxhdSEgqb-Lkb2ibQM_hAHR1Cu7yxg-gHZu1NF+ug@mail.gmail.com>
+From: Jann Horn <jannh@google.com>
+Date: Wed, 26 Mar 2025 23:50:23 +0100
+X-Gm-Features: AQ5f1JoMlU5g6NSl6UncTD8u6mGw6GHy9x8K4Y9hj5_mHgN8qGD6_Tf3xX5Nx5A
+Message-ID: <CAG48ez1qGW8MO9KbKnsjEZE=mP4o+K0yrK4YQuTa1cebYYNr8g@mail.gmail.com>
 Subject: Re: [PATCH] rwonce: fix crash by removing READ_ONCE() for unaligned read
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Jann Horn <jannh@google.com>, Marco Elver <elver@google.com>, 
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>, 
 	Nathan Chancellor <nathan@kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 26 Mar 2025 at 14:24, Arnd Bergmann <arnd@arndb.de> wrote:
+On Wed, Mar 26, 2025 at 11:41=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> On Wed, 26 Mar 2025 at 14:24, Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > I've applied this on top of the asm-generic branch, but I just sent
+> > the pull request with the regression to Linus an hour ago.
+> >
+> > I'll try to get a new pull request out tomorrow.
 >
-> I've applied this on top of the asm-generic branch, but I just sent
-> the pull request with the regression to Linus an hour ago.
+> I will ignore that pull request, and wait for your updated one.
 >
-> I'll try to get a new pull request out tomorrow.
+> That said, this whole thing worries me. The fact that the compiler
+> magically makes READ_ONCE() require alignment that it normally doesn't
+> require seems like a bug waiting to happen somewhere else.
 
-I will ignore that pull request, and wait for your updated one.
+To be clear, this is not the compiler's doing. The arch-specific arm64
+code defines a custom version of the __READ_ONCE() macro used by
+READ_ONCE() in LTO builds:
 
-That said, this whole thing worries me. The fact that the compiler
-magically makes READ_ONCE() require alignment that it normally doesn't
-require seems like a bug waiting to happen somewhere else.
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/arch/arm64/include/asm/rwonce.h
 
-Because I do think that we might want READ_ONCE() on unaligned data in
-general. Should said places generally use "get_unaligned()"? Sure. And
-are unaligned accesses potentially non-atomic anyway because of
-hardware? Also sure.
-
-But one reason for READ_ONCE() isn't for some kind of hardware
-atomicity, it is to avoid any ToCToU issues due to compilers doing bad
-things.
-
-And then this seems to be a serious issue with the whole "READ_ONCE()
-now requires alignment that it didn't require before".
-
-Put another way: I wonder what other cases may lurk around this all...
-
-           Linus
+/*
+ * When building with LTO, there is an increased risk of the compiler
+ * converting an address dependency headed by a READ_ONCE() invocation
+ * into a control dependency and consequently allowing for harmful
+ * reordering by the CPU.
+ *
+ * Ensure that such transformations are harmless by overriding the generic
+ * READ_ONCE() definition with one that provides RCpc acquire semantics
+ * when building with LTO.
+ */
 
