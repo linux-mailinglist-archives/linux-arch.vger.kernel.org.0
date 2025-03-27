@@ -1,152 +1,271 @@
-Return-Path: <linux-arch+bounces-11158-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11159-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04513A72E4C
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Mar 2025 12:00:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9F81A7300D
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Mar 2025 12:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12AAA3B9E9E
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Mar 2025 10:59:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C86FB7A6D6E
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Mar 2025 11:40:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6607920F067;
-	Thu, 27 Mar 2025 10:59:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C035C2135AF;
+	Thu, 27 Mar 2025 11:39:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="mBbNXLnV";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SjcI4p80"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GymUN+1D"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD61E207E19;
-	Thu, 27 Mar 2025 10:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC06120D514;
+	Thu, 27 Mar 2025 11:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743073171; cv=none; b=b5NW2jgOm4cs8cPfThIrLadABhXYL/ndcSFrA0oEwATuFpr4ummnyH68w8o4G2o8V8EX4d2BqcZu9a+3W4tQr7Bab8oazhaibcF6DBp660PFDV0MCamOyU3KFp8TwaIsCKhQtsi09kJy7yZq1hushDwB9MHIgLL7dU9fT5G/duM=
+	t=1743075584; cv=none; b=Xz6vJWVwRPCclLerA40gRC1IZC//GQ/i8HtOVYG5sYyZXj+R0lDJNBsS0yXEfSEiUBN1o3a6EY2LCG1igzLhLnj87xotUFql1OZV3Jo2gNctxX6afimb3+fTX57/iOFB9VxpK/jpunbp1+ctbUt0+OXeB9TodJhDoKDMikzNDjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743073171; c=relaxed/simple;
-	bh=JQbfQcJMqO9KshIZqN0e5ofOQ06DagmcUNwy6pAgmUU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=njRiLK+0mVy2EaMatGLsGnZNGkAcScYydTb27aVcUdkajCYh8upxXYoqk7I2tedElC6TjuMkpL7O8OWLlxT8PolIhrerVSDkfJbEUgx8MTRrzEKluFIeMZTMXy58DfUaSs+fFIRK75qJNF7+n5VBhR0kJxdN9iYoWwrPUyIWc6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=mBbNXLnV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SjcI4p80; arc=none smtp.client-ip=202.12.124.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id B4B332540109;
-	Thu, 27 Mar 2025 06:59:28 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Thu, 27 Mar 2025 06:59:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1743073168;
-	 x=1743159568; bh=YrbNA33LfsBoyoaksZ9yYlyDO700K4iNcAaTAar7X8c=; b=
-	mBbNXLnVNAJBFfNY+oUqBv5migTyd6bCUFDzy/w3jYASv85pePYKgmJ7sgfwAMcM
-	Aa4TDnKLOzu6fG3CPAr/eDR558UJMLsk+v2UwLthvRahRPps+jwffGVZFTBGXHdE
-	cRS/M7izgCc4wXzB0n9Br9GdppAHoc5IxTqENHpbI0W+iVGNV3rmIVDN5+JIEpnO
-	q5F5NOpXgX2CtnbDkZQCtcc9mL8x5TA0Z7X7102zloew/MNFxulR3f2wh7PqIhtb
-	ROxddjpkrxmMDtvzjj5PDbV9bwdDtdqQZWjq5IYel9Lslve/M2+b1SgWiXt/qcjs
-	5nDnx3LK2mOzCY0uzfI3XQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743073168; x=
-	1743159568; bh=YrbNA33LfsBoyoaksZ9yYlyDO700K4iNcAaTAar7X8c=; b=S
-	jcI4p80d2RB81VQVEqbg1fLpWgzmfWm+/IkchwiS+p+GrjVZAx48jAvLtukU0Ym3
-	Q3vnKCBwwcGwNdC6QhXDcq7YCMLtxrEEGhIcACfkYnQFAL3A1PdIzWXIsIxA3L0O
-	nPYOssXs5DszOjzxdPRCtNtUgrsowOfOSGoLLsNAAedt4MDv6QRcQZN6R9BieLqc
-	nxuy4errHKBQH6/lqSPPChyZm30o+GnqAIFGWgPDSobmEks5eO2WB+1ywafVG4b8
-	RwE4A01FmSxxxHTVnZc4Wh5uLkoxf95qHYv0tJS6KbwfYNU+Eu0bFJYODdbAfepu
-	wZhz0nfjzrRCyG5KlNGNA==
-X-ME-Sender: <xms:kC_lZ1hXZrd5eWnXvrtCfdPwvhWrQnHgg_8OJcthm7W7O3HZbdurCg>
-    <xme:kC_lZ6BcIiZMVZbK11-WBh_8eG_LzXq6ZwDxl9EoeX79bHApfbV8Yd2cBc-qRDESj
-    7Szpwy55xexQG01fAw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieekvdefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhepfefhheetffduvdfgieeghfejtedvkeetkeej
-    feekkeelffejteevvdeghffhiefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
-    rghrnhgusgdruggvpdhnsggprhgtphhtthhopeeipdhmohguvgepshhmthhpohhuthdprh
-    gtphhtthhopegvlhhvvghrsehgohhoghhlvgdrtghomhdprhgtphhtthhopehjrghnnhhh
-    sehgohhoghhlvgdrtghomhdprhgtphhtthhopehnrghthhgrnheskhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurghtihhonhdr
-    ohhrghdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdr
-    ohhrgh
-X-ME-Proxy: <xmx:kC_lZ1GIuTak-ptIzc-WMZTfu_1XVVYaBYtHajI4Z_UU8RxpUFh7qQ>
-    <xmx:kC_lZ6Q8BytdyfvRgKgQXMbW2iB6bUZbi5OghYJV9VvRhXOO02iLKg>
-    <xmx:kC_lZyzuAy70j41D7273XlBs_M6yC3o4I9tapqDJ3KFZqVy_EiNM5w>
-    <xmx:kC_lZw6NHlkmRTKtrca6EEz6ONaYeFDyRundAIi4w6Uyn5hfylPEsA>
-    <xmx:kC_lZ5pMHzs8x_aTI9Mt31-tMnEYH8Y2K-mebk0St3ZwZQx1GqVGsrfV>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 390832220073; Thu, 27 Mar 2025 06:59:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1743075584; c=relaxed/simple;
+	bh=HLTBY8S4ZTpJUpA3lXf5BDLlXk9fvudGXjyPq/LNYbM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EboAFcSnw3GsVBC5UpkADpFWYBO1bS7dfCtDx9JgEv39J0T0QWEAC5Ju3bkrpD9VlVsUS8HMsl76+XPB4PYUo8HnGC/um6fV2uGaKQTm+ve22oBs+6yMdCiKehSipVhBFJ+VZ8W+mXf93TGgeVbai2f4Lk9ebf1MQ8O/aM3KhPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GymUN+1D; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5e61da95244so1546058a12.2;
+        Thu, 27 Mar 2025 04:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743075581; x=1743680381; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H5YJ+HIPr7Xtl+bdBaUXFEAtySXgJKTavR2pWedTVNo=;
+        b=GymUN+1DDsJvfYJRDpFhJj0OJnFetds2IdVrjcWQtcMLTPrWurKDaQgNH2q+3vnpjh
+         ABewIkVTVYlunGabkMNI3EqjCZJ6sJiNplQBetPk7diietp7GKErMnTsXqYzx3R6A9eo
+         e5qsMgZN/PdoD+RbfSplV1bK263YK8632advVPlh3ss8O5sRpV22ly64jOfTGT1oKY4Y
+         JOWmPDFxALbEQllSj5aGENiu9mGEwXQPdbe6dJPr7jZZ6JK+H4NClpo3FY/RM8e/ICWQ
+         yNDdEQQC3dxXs1QXzyKWrGX58l7gB2X7HeiB6KvI9F8rRWXgRQlwar4uwpPWLr2CVDxm
+         6sCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743075581; x=1743680381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H5YJ+HIPr7Xtl+bdBaUXFEAtySXgJKTavR2pWedTVNo=;
+        b=MvSIYdYCW7fT2UfYKMvZikDj/IYEYAY3dW7Z0zQSNm4z6Kftl0PNCvTmwiaypCC1XK
+         Qfbj2jsGzMIr5keVhoyVUBCg0WxXzIJ6IkehAduW/xEIQCa6hVK9+PycXFjytOr1IG57
+         L2kIWNLQe93ZAX82vzB8gGfmvsW2O8Cx+SqrDk2u7EAfn7pCbcKetIopDde1rQ00bQRn
+         0otOdzx8NxdDSqXYCIey/t7OPI7Dd/hfhRN7GkDJ7nBfT2el207LC52TSC+HbzjwAXmw
+         5bsJLq8RmBKQKPnaiCWTNuhVf4eBv5CleMavGbWq3ywqhTO6xAqs4ehtSRqdSmxBjZde
+         pCoA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEn4+DU3aRS2iwctlVWc+HI97kbBicmV5fSEZJaIoeBBv/mW7BRbl7C11PbZnnjodixaKJtsnjAFxB1RdEDHbItCb/1QF9@vger.kernel.org, AJvYcCUKqSchGNmUHWKSFZ6fBbO+YPX2h6VBoswndf1BRjcPRapXsddlhAb+jsEWK4+dhWjBzEDzpJ/yrE9TXQ==@vger.kernel.org, AJvYcCUaBbPbREmkbhmxWP7LAp4mmheJa+n79KYxchkmin2Oxdknp/XseQ7ag3sQPhbNEY4n0x94INhghFMMhN+x@vger.kernel.org, AJvYcCUdp3C5Q97RaqmtRHzFW8JTWORNVq6bcPoQGtt8e5am15U2pQVN2klhp5w9JuQjONr6zLHFraytxKR6bZfT@vger.kernel.org, AJvYcCV5+PM2leCkf1OTyE9kgJVACzl0hQYTJrflbcRVnPh6JxwMJNCVoIWCgZ/UeVojU0TkHI0Fe+jdK6804A==@vger.kernel.org, AJvYcCVFplNedoYP8ShfaKL86rJHf6g8i5KJQz3uU6TOONIqUOpKusSut4vd9b90M4GdHU4c2sC02LkmFuib@vger.kernel.org, AJvYcCVQQTYk4+swU9Wv0Wj3hwz6JqYYWBRkqE0b6QP/7Wz4Ho8aXxVosmyaStALp9N8CzEvPpv3m9eM8T2CYA==@vger.kernel.org, AJvYcCVpIA/g+pU4DXU8FFBfg0cJxfowGus6Pok/CZ7fhfQu8X0As1ibyqnU5EL0km9SHnwHbrcgQKRke+k=@vger.kernel.org, AJvYcCX/DXRwrxdQYUVnhBwy1CQHGAOkOsr15yHU5UI5vKhpyqQiHb+wzgzfRHUnJIC6wXQ1zN/qjHpWjfaQDQ==@vger.kernel.org, AJvYcCXTKOqO
+ WNzYFL/rVYzJoVSfjCXuwVkXfQAo8fpZsG3w/9junMUAO6RYds6kRLhA/25fiGL2VTwRrsuV@vger.kernel.org, AJvYcCXXrB5aWG4JZYJ6VDgY2x2pI9RCHLfByb4G2ku+2usH8R4nlig9jVgIPgqRAYGLr1Jd0T7Ds872RYTCJR1Zmg==@vger.kernel.org, AJvYcCXpHM1uhitCXIudSl3ytB1LHmlfC7j1t6TGnrl60GDzBW9BCzhRSh0/sGL7U/shlCPiQzBIteJD/GeYcg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyL2tH5UMzVYIR8w8s5QI/BOz4W18M5vsegh4tvaWvQOYmgj1JG
+	ttZmAKsGTC8fhP70qrji6jnp/8YPoopOmBZrH3uGRkS2qV1/iKk4fDdweSSBxz6lZL/K+EzEWV/
+	Sm+ikNoZ+YKXXbH9Bfv+uV0ZcCJ4=
+X-Gm-Gg: ASbGncti0A4FctA4zwc8LIfSh3+rm5t/MAeVTPb47GDnyO9WeLPW0RFwreL+nEMSCG7
+	//JX22PPCjoMjzkIK7TmTrQqOmHvQfOyr3QiuWP0akyF8hijBwtHxaF9ognabUm/uqjEYyYQn+H
+	zpR/lUU1fPRI7lo+opqqV649zi1A==
+X-Google-Smtp-Source: AGHT+IGgy/miY5V7+MPkH09VPO41DMi/jMR8Bk4E49dQyif98hlWpMqsre9jbg/TLCs8zzkfhNjlalqvBIB5xRYILRM=
+X-Received: by 2002:a05:6402:518d:b0:5e7:b02b:6430 with SMTP id
+ 4fb4d7f45d1cf-5ed8f3fd122mr2772445a12.23.1743075580404; Thu, 27 Mar 2025
+ 04:39:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T4094621b06357a4d
-Date: Thu, 27 Mar 2025 11:58:31 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Nathan Chancellor" <nathan@kernel.org>
-Cc: "Jann Horn" <jannh@google.com>, "Marco Elver" <elver@google.com>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Message-Id: <0149da8d-957d-47e2-8711-6043a7701b6d@app.fastmail.com>
-In-Reply-To: 
- <CAHk-=wgJRECUF-7yt9pNxW_bc=4nJcxn5H3duW_HefY3pKwZag@mail.gmail.com>
-References: <20250326-rwaat-fix-v1-1-600f411eaf23@google.com>
- <4b412238-b20a-4346-bf67-f31df0a9f259@app.fastmail.com>
- <CAHk-=wikuhxhdSEgqb-Lkb2ibQM_hAHR1Cu7yxg-gHZu1NF+ug@mail.gmail.com>
- <20250326225444.GA1743548@ax162>
- <CAHk-=wgJRECUF-7yt9pNxW_bc=4nJcxn5H3duW_HefY3pKwZag@mail.gmail.com>
-Subject: Re: [PATCH] rwonce: fix crash by removing READ_ONCE() for unaligned read
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
+ <20250321-xattrat-syscall-v4-3-3e82e6fb3264@kernel.org> <CAOQ4uxj2Fqmc_pSD4bqqoQu7QjmgSVp2V15FbmBdTNqQ03aPGQ@mail.gmail.com>
+ <faqun3wrpvwrhwukql3niqvvauy5ngrpytx5bxbrv5xkounez3@m7j2znjuzapu>
+In-Reply-To: <faqun3wrpvwrhwukql3niqvvauy5ngrpytx5bxbrv5xkounez3@m7j2znjuzapu>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Thu, 27 Mar 2025 12:39:28 +0100
+X-Gm-Features: AQ5f1JofzJgaxJ0LZuoFvXDiOPJAJ8w60JwbZ8r4It-kQ_jhprqRZDypv8Lufbk
+Message-ID: <CAOQ4uxjs=Gg-ocwx_fkzc0gxQ_dHx-P9EAgz5ZwbdbrxV0T_EA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] fs: introduce getfsxattrat and setfsxattrat syscalls
+To: Andrey Albershteyn <aalbersh@redhat.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-xfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 27, 2025, at 01:49, Linus Torvalds wrote:
-> On Wed, 26 Mar 2025 at 15:54, Nathan Chancellor <nathan@kernel.org> wrote:
->>
->> > Put another way: I wonder what other cases may lurk around this all...
->>
->> That change has caused only one issue that I know of, which was fixed by
->> commit d3f450533bbc ("efi: tpm: Avoid READ_ONCE() for accessing the
->> event log"). I have not seen any since then until this point and I do
->> daily boots of -next with LTO enabled on both of my arm64 test machines.
+On Thu, Mar 27, 2025 at 10:33=E2=80=AFAM Andrey Albershteyn <aalbersh@redha=
+t.com> wrote:
 >
-> Ahh, ok. That makes me happier.
+> On 2025-03-23 09:56:25, Amir Goldstein wrote:
+> > On Fri, Mar 21, 2025 at 8:49=E2=80=AFPM Andrey Albershteyn <aalbersh@re=
+dhat.com> wrote:
+> > >
+> > > From: Andrey Albershteyn <aalbersh@redhat.com>
+> > >
+> > > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
+> > > extended attributes/flags. The syscalls take parent directory fd and
+> > > path to the child together with struct fsxattr.
+> > >
+> > > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
+> > > that file don't need to be open as we can reference it with a path
+> > > instead of fd. By having this we can manipulated inode extended
+> > > attributes not only on regular files but also on special ones. This
+> > > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
+> > > we can not call ioctl() directly on the filesystem inode using fd.
+> > >
+> > > This patch adds two new syscalls which allows userspace to get/set
+> > > extended inode attributes on special files by using parent directory
+> > > and a path - *at() like syscall.
+> > >
+> > > CC: linux-api@vger.kernel.org
+> > > CC: linux-fsdevel@vger.kernel.org
+> > > CC: linux-xfs@vger.kernel.org
+> > > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
+> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > > ---
+> > ...
+> > > +SYSCALL_DEFINE5(setfsxattrat, int, dfd, const char __user *, filenam=
+e,
+> > > +               struct fsxattr __user *, ufsx, size_t, usize,
+> > > +               unsigned int, at_flags)
+> > > +{
+> > > +       struct fileattr fa;
+> > > +       struct path filepath;
+> > > +       int error;
+> > > +       unsigned int lookup_flags =3D 0;
+> > > +       struct filename *name;
+> > > +       struct mnt_idmap *idmap;.
+> >
+> > > +       struct dentry *dentry;
+> > > +       struct vfsmount *mnt;
+> > > +       struct fsxattr fsx =3D {};
+> > > +
+> > > +       BUILD_BUG_ON(sizeof(struct fsxattr) < FSXATTR_SIZE_VER0);
+> > > +       BUILD_BUG_ON(sizeof(struct fsxattr) !=3D FSXATTR_SIZE_LATEST)=
+;
+> > > +
+> > > +       if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) !=3D =
+0)
+> > > +               return -EINVAL;
+> > > +
+> > > +       if (!(at_flags & AT_SYMLINK_NOFOLLOW))
+> > > +               lookup_flags |=3D LOOKUP_FOLLOW;
+> > > +
+> > > +       if (at_flags & AT_EMPTY_PATH)
+> > > +               lookup_flags |=3D LOOKUP_EMPTY;
+> > > +
+> > > +       if (usize > PAGE_SIZE)
+> > > +               return -E2BIG;
+> > > +
+> > > +       if (usize < FSXATTR_SIZE_VER0)
+> > > +               return -EINVAL;
+> > > +
+> > > +       error =3D copy_struct_from_user(&fsx, sizeof(struct fsxattr),=
+ ufsx, usize);
+> > > +       if (error)
+> > > +               return error;
+> > > +
+> > > +       fsxattr_to_fileattr(&fsx, &fa);
+> > > +
+> > > +       name =3D getname_maybe_null(filename, at_flags);
+> > > +       if (!name) {
+> > > +               CLASS(fd, f)(dfd);
+> > > +
+> > > +               if (fd_empty(f))
+> > > +                       return -EBADF;
+> > > +
+> > > +               idmap =3D file_mnt_idmap(fd_file(f));
+> > > +               dentry =3D file_dentry(fd_file(f));
+> > > +               mnt =3D fd_file(f)->f_path.mnt;
+> > > +       } else {
+> > > +               error =3D filename_lookup(dfd, name, lookup_flags, &f=
+ilepath,
+> > > +                                       NULL);
+> > > +               if (error)
+> > > +                       return error;
+> > > +
+> > > +               idmap =3D mnt_idmap(filepath.mnt);
+> > > +               dentry =3D filepath.dentry;
+> > > +               mnt =3D filepath.mnt;
+> > > +       }
+> > > +
+> > > +       error =3D mnt_want_write(mnt);
+> > > +       if (!error) {
+> > > +               error =3D vfs_fileattr_set(idmap, dentry, &fa);
+> > > +               if (error =3D=3D -ENOIOCTLCMD)
+> > > +                       error =3D -EOPNOTSUPP;
+> >
+> > This is awkward.
+> > vfs_fileattr_set() should return -EOPNOTSUPP.
+> > ioctl_setflags() could maybe convert it to -ENOIOCTLCMD,
+> > but looking at similar cases ioctl_fiemap(), ioctl_fsfreeze() the
+> > ioctl returns -EOPNOTSUPP.
+> >
+> > I don't think it is necessarily a bad idea to start returning
+> >  -EOPNOTSUPP instead of -ENOIOCTLCMD for the ioctl
+> > because that really reflects the fact that the ioctl is now implemented
+> > in vfs and not in the specific fs.
+> >
+> > and I think it would not be a bad idea at all to make that change
+> > together with the merge of the syscalls as a sort of hint to userspace
+> > that uses the ioctl, that the sycalls API exists.
+> >
+> > Thanks,
+> > Amir.
+> >
+>
+> Hmm, not sure what you're suggesting here. I see it as:
+> - get/setfsxattrat should return EOPNOTSUPP as it make more sense
+>   than ENOIOCTLCMD
+> - ioctl_setflags returns ENOIOCTLCMD which also expected
+>
+> Don't really see a reason to change what vfs_fileattr_set() returns
+> and then copying this if() to other places or start returning
+> EOPNOTSUPP.
 
-I've sent a new v2 pull request now.
+ENOIOCTLCMD conceptually means that the ioctl command is unknown
+This is not the case since ->fileattr_[gs]et() became a vfs API
+the ioctl command is handled by vfs and it is known, but individual
+filesystems may not support it, so conceptually, returning EOPNOTSUPP
+from ioctl() is more correct these days, exactly as is done with the ioctls
+FS_IOC_FIEMAP and FIFREEZE which were also historically per fs
+ioctls and made into a vfs API.
 
-> I guess unaligned READ_ONCE() code really shouldn't exist in generic
-> code anyway, since some architectures will fail any unaligned access.
+The fact that bcachefs does not implement ->fileattr_[gs]et() and does
+implement FS_IOC_FS[GS]ETXATTR is an oversight IMO, since it
+was probably merged after the vfs conversion patch.
 
-Even if the unaligned READ_ONCE()/WRITE_ONCE() doesn't fail, it may
-be surprising to callers when it is not atomic.
+This mistake means that bcachefs fileattr cannot be copied up by
+ovl_copy_fileattr() which uses the vfs API and NOT the ioctl.
 
-> But those architectures tend to not get a lot of testing (they are a
-> dying breed - good riddance), so "shouldn't exist" doesn't necessarily
-> equate to really not existing.
+However, if you would made the internal vfs API change that I suggested,
+it will have broken ovl_real_fileattr_get() and ovl_copy_fileattr(),
+so leave it for now - if I care enough I can do it later together with
+fixing the overlayfs and fuse code.
 
-Unfortunately, they don't seem to quite die out just yet, as both
-riscv and loongarch have gained support for CPUs without unaligned
-access even though they started out requiring it:
-
-https://lore.kernel.org/lkml/20231004151405.521596-1-cleger@rivosinc.com/
-https://lore.kernel.org/lkml/20230202084238.2408516-1-chenhuacai@loongson.cn/
-
-ARMv7 also has the annoying behavior of supporting unaligned word
-access, but not unaligned multi-word load/store with ldrd/strd
-on u64 variables.
-
-     Arnd
+Thanks,
+Amir.
 
