@@ -1,264 +1,296 @@
-Return-Path: <linux-arch+bounces-11172-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11173-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD6B0A74004
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Mar 2025 22:13:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA3FEA740B0
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Mar 2025 23:18:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9656B7A4F58
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Mar 2025 21:12:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89CD4189EFA9
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Mar 2025 22:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780971CCB21;
-	Thu, 27 Mar 2025 21:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 167421DC996;
+	Thu, 27 Mar 2025 22:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pjEZiBD8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dnoSbwpX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAB01C5D44;
-	Thu, 27 Mar 2025 21:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7533028366
+	for <linux-arch@vger.kernel.org>; Thu, 27 Mar 2025 22:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743109997; cv=none; b=c2KdwSLXP9K3+OHn/USovQkhSLEy8Nm49StS2iFwje2rLqjC3BHjkAbnuA9qkE+hKOQDFs4cSAK7zLqlpA8d3aSgL+pFV0AGst5XELQ5aRGckmtXMrE+EAbgxHgjfTA9W1cCsDPyxUR00rPMSCkfr9AAb/7gnMEMUZAIMWdUCzU=
+	t=1743113934; cv=none; b=FiioSSKHHUs2hAJwW+EUvckbpS1m/JAuLKeGZZg/87yTNkB1HTEoMPWt01zpjrEaDKKf0mfg9lfo7Xtci2QKGalc5LLli5P1aSna6oGxl6fUMGjQnyjmZl58Uh4+4vl1sDW2lHgW4Ms1ElSAfI9tslZxPBcTG/oPJrL8LHfoU2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743109997; c=relaxed/simple;
-	bh=UMe20iZUuagLPcGXISw0+QA+ECxOrxToOggTG9tCl7c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oNOTV/cT/GY2aJ5Kjyacm2I8GB1Hly37RK6gSkMEcS+Cxtpdj7YJJjJG2y9jJ41pnea4cp5NNRTQAs4zBbd0DLDlLLIYNgNrKSuc8J5ynMPmJOvAORPtFq5uKF1XpqqSn5GVKOzS4oM5Y0VtZOL8An+pBG6tqVGYeV5xNbPCvvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pjEZiBD8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A25C4CEDD;
-	Thu, 27 Mar 2025 21:13:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743109997;
-	bh=UMe20iZUuagLPcGXISw0+QA+ECxOrxToOggTG9tCl7c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pjEZiBD8e0ystDPIxq5rYB0BhzyFxROf/Ryj0zF5OUcIL6U1NSR+ohFVoWx75A5O1
-	 zUDoz9NmZeNhN/ml8TDozSK+FHArIgNzTxMJisrUKKp0QrJDSE/48Gm/7w9gYMhpsC
-	 0cjmF7vuhAtNHlUTYpDxoSTAP2NIVeQICKV+KIimhR/fvFSexTVvShIeniU2H9xu1t
-	 lHLCiQ6glh0GSWZ9t6y1BCD9rlFIlXjQRsKBMmV5eyX9HujEsmEI+WN4RIPfT1OqXc
-	 wkwp1dgNkF3j8gBSpRl+CYes246BZH+3WMNbFuFYx4I5178EjPlyXmTihrByrFKRp0
-	 bGdzAIry8bGnQ==
-Received: by pali.im (Postfix)
-	id 9561981B; Thu, 27 Mar 2025 22:13:01 +0100 (CET)
-Date: Thu, 27 Mar 2025 22:13:01 +0100
-From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Andrey Albershteyn <aalbersh@redhat.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org, selinux@vger.kernel.org,
-	Andrey Albershteyn <aalbersh@kernel.org>, linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] fs: introduce getfsxattrat and setfsxattrat
- syscalls
-Message-ID: <20250327211301.kdsohqou3s242coa@pali>
-References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
- <CAOQ4uxjQDUg8HFG+mSxMkR54zen7nC2jttzOKqh13Bx-uosh3Q@mail.gmail.com>
- <20250323103234.2mwhpsbigpwtiby4@pali>
- <CAOQ4uxiTKhGs1H-w1Hv-+MqY284m92Pvxfem0iWO+8THdzGvuA@mail.gmail.com>
- <20250327192629.ivnarhlkfbhbzjcl@pali>
- <CAOQ4uxhJ53h+1AjtF4B64onqvRfZsJ3n1OFikyJpXAPTyX45iQ@mail.gmail.com>
+	s=arc-20240116; t=1743113934; c=relaxed/simple;
+	bh=1bZqGWkAPNyrHBigej+vxJzZ/iQ8rAPmp7c7YW4rk9c=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=p9XS2MyHEyUNzK9/bYgJiUwtiwPvwwushdj2HWXpwTx8rJeEEgQC56p34gNB1AfAxe8rhGwoLY68QJKwD3WFGrPC6+kM89Nt0+gAV1NSCtEZAUFoSi4lFZhGiEag98636ubo/XUdIRYCnTdas5Y6+jCWPDaAe5VbD0fO5qkgeHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dnoSbwpX; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743113931; x=1774649931;
+  h=date:from:to:cc:subject:message-id;
+  bh=1bZqGWkAPNyrHBigej+vxJzZ/iQ8rAPmp7c7YW4rk9c=;
+  b=dnoSbwpXbnPq4aeVFg/K5RvjOCf5PzfkuFOP8B2V/Boqq19Yhu/RPxx2
+   kVAWtOhsL0u7JzW+kGjCPP+aKVqLJDObvtogiaR+2K0fkgYmBJc64xhvW
+   hZcM35jJ4WJz+Xo4i04DzL4lCT7JGh0woIQEQqzA9ySQOHRljjWHk/Yxq
+   cmUevlJoLUF5MWkamwWbQ0ci80Y63aQgBub/Ku9naLAsbAKt1Bgh1/xhi
+   zXD2ef1dwSGc7KJgdCwgpR5CGnT0SgNB355fAo2ycx9EBthPWhVMMTwjU
+   7lVoWaV89C6tCG9QnliZzvZGbXeZ828SzfWlxwzEwn2uTXGSDf1+Nxa2L
+   g==;
+X-CSE-ConnectionGUID: Q2oHD3F+RmyYU3DEYPzKIg==
+X-CSE-MsgGUID: Tz3H6rwvS3Sv6GkJnL4gAw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="69832151"
+X-IronPort-AV: E=Sophos;i="6.14,281,1736841600"; 
+   d="scan'208";a="69832151"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2025 15:18:51 -0700
+X-CSE-ConnectionGUID: qWUrvjQyQQqq18bdo5sZBQ==
+X-CSE-MsgGUID: bmdHhW0NScaRx/RMjr9v/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,281,1736841600"; 
+   d="scan'208";a="162511026"
+Received: from lkp-server02.sh.intel.com (HELO e98e3655d6d2) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 27 Mar 2025 15:18:49 -0700
+Received: from kbuild by e98e3655d6d2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1txvYk-0006z5-2K;
+	Thu, 27 Mar 2025 22:18:46 +0000
+Date: Fri, 28 Mar 2025 06:18:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 47a60391ae0ed04ffbb9bd8dcd94ad9d08b41288
+Message-ID: <202503280600.H0mWorDS-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxhJ53h+1AjtF4B64onqvRfZsJ3n1OFikyJpXAPTyX45iQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716
 
-On Thursday 27 March 2025 21:57:34 Amir Goldstein wrote:
-> On Thu, Mar 27, 2025 at 8:26 PM Pali Rohár <pali@kernel.org> wrote:
-> >
-> > On Thursday 27 March 2025 12:47:02 Amir Goldstein wrote:
-> > > On Sun, Mar 23, 2025 at 11:32 AM Pali Rohár <pali@kernel.org> wrote:
-> > > >
-> > > > On Sunday 23 March 2025 09:45:06 Amir Goldstein wrote:
-> > > > > On Fri, Mar 21, 2025 at 8:50 PM Andrey Albershteyn <aalbersh@redhat.com> wrote:
-> > > > > >
-> > > > > > This patchset introduced two new syscalls getfsxattrat() and
-> > > > > > setfsxattrat(). These syscalls are similar to FS_IOC_FSSETXATTR ioctl()
-> > > > > > except they use *at() semantics. Therefore, there's no need to open the
-> > > > > > file to get an fd.
-> > > > > >
-> > > > > > These syscalls allow userspace to set filesystem inode attributes on
-> > > > > > special files. One of the usage examples is XFS quota projects.
-> > > > > >
-> > > > > > XFS has project quotas which could be attached to a directory. All
-> > > > > > new inodes in these directories inherit project ID set on parent
-> > > > > > directory.
-> > > > > >
-> > > > > > The project is created from userspace by opening and calling
-> > > > > > FS_IOC_FSSETXATTR on each inode. This is not possible for special
-> > > > > > files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
-> > > > > > with empty project ID. Those inodes then are not shown in the quota
-> > > > > > accounting but still exist in the directory. This is not critical but in
-> > > > > > the case when special files are created in the directory with already
-> > > > > > existing project quota, these new inodes inherit extended attributes.
-> > > > > > This creates a mix of special files with and without attributes.
-> > > > > > Moreover, special files with attributes don't have a possibility to
-> > > > > > become clear or change the attributes. This, in turn, prevents userspace
-> > > > > > from re-creating quota project on these existing files.
-> > > > > >
-> > > > > > Christian, if this get in some mergeable state, please don't merge it
-> > > > > > yet. Amir suggested these syscalls better to use updated struct fsxattr
-> > > > > > with masking from Pali Rohár patchset, so, let's see how it goes.
-> > > > >
-> > > > > Andrey,
-> > > > >
-> > > > > To be honest I don't think it would be fair to delay your syscalls more
-> > > > > than needed.
-> > > >
-> > > > I agree.
-> > > >
-> > > > > If Pali can follow through and post patches on top of your syscalls for
-> > > > > next merge window that would be great, but otherwise, I think the
-> > > > > minimum requirement is that the syscalls return EINVAL if fsx_pad
-> > > > > is not zero. we can take it from there later.
-> > > >
-> > > > IMHO SYS_getfsxattrat is fine in this form.
-> > > >
-> > > > For SYS_setfsxattrat I think there are needed some modifications
-> > > > otherwise we would have problem again with backward compatibility as
-> > > > is with ioctl if the syscall wants to be extended in future.
-> > > >
-> > > > I would suggest for following modifications for SYS_setfsxattrat:
-> > > >
-> > > > - return EINVAL if fsx_xflags contains some reserved or unsupported flag
-> > > >
-> > > > - add some flag to completely ignore fsx_extsize, fsx_projid, and
-> > > >   fsx_cowextsize fields, so SYS_setfsxattrat could be used just to
-> > > >   change fsx_xflags, and so could be used without the preceding
-> > > >   SYS_getfsxattrat call.
-> > > >
-> > > > What do you think about it?
-> > >
-> > > I think all Andrey needs to do now is return -EINVAL if fsx_pad is not zero.
-> > >
-> > > You can use this later to extend for the semantics of flags/fields mask
-> > > and we can have a long discussion later on what this semantics should be.
-> > >
-> > > Right?
-> > >
-> > > Amir.
-> >
-> > It is really enough?
-> 
-> I don't know. Let's see...
-> 
-> > All new extensions later would have to be added
-> > into fsx_pad fields, and currently unused bits in fsx_xflags would be
-> > unusable for extensions.
-> 
-> I am working under the assumption that the first extension would be
-> to support fsx_xflags_mask and from there, you could add filesystem
-> flags support checks and then new flags. Am I wrong?
-> 
-> Obviously, fsx_xflags_mask would be taken from fsx_pad space.
-> After that extension is implemented, calling SYS_setfsxattrat() with
-> a zero fsx_xflags_mask would be silly for programs that do not do
-> the legacy get+set.
-> 
-> So when we introduce  fsx_xflags_mask, we could say that a value
-> of zero means that the mask is not being checked at all and unknown
-> flags in set syscall are ignored (a.k.a legacy ioctl behavior).
-> 
-> Programs that actually want to try and set without get will have to set
-> a non zero fsx_xflags_mask to do something useful.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 47a60391ae0ed04ffbb9bd8dcd94ad9d08b41288  rwonce: fix crash by removing READ_ONCE() for unaligned read
 
-Here we need to also solve the problem that without GET call we do not
-have valid values for fsx_extsize, fsx_projid, and fsx_cowextsize. So
-maybe we would need some flag in fsx_pad that fsx_extsize, fsx_projid,
-or fsx_cowextsize are ignored/masked.
+elapsed time: 1443m
 
-> I don't think this is great.
-> I would rather that the first version of syscalls will require the mask
-> and will always enforce filesystems supported flags.
+configs tested: 203
+configs skipped: 6
 
-It is not great... But what about this? In a first step (part of this
-syscall patch series) would be just a check that fsx_pad is zero.
-Non-zero will return -EINVAL.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-In next changes would added fsx_filter bit field, which for each
-fsx_xflags and also for fsx_extsize, fsx_projid, and fsx_cowextsize
-fields would add a new bit flag which would say (when SET) that the
-particular thing has to be ignored.
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    clang-19
+alpha                            allyesconfig    gcc-14.2.0
+alpha                               defconfig    gcc-14.2.0
+arc                              allmodconfig    clang-19
+arc                              allmodconfig    gcc-14.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    clang-19
+arc                              allyesconfig    gcc-14.2.0
+arc                                 defconfig    gcc-14.2.0
+arc                   randconfig-001-20250327    gcc-14.2.0
+arc                   randconfig-002-20250327    gcc-14.2.0
+arm                              allmodconfig    clang-19
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-21
+arm                              allyesconfig    clang-19
+arm                              allyesconfig    gcc-14.2.0
+arm                         assabet_defconfig    clang-18
+arm                                 defconfig    gcc-14.2.0
+arm                       imx_v6_v7_defconfig    gcc-14.2.0
+arm                         mv78xx0_defconfig    clang-19
+arm                        neponset_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250327    clang-21
+arm                   randconfig-002-20250327    gcc-5.5.0
+arm                   randconfig-003-20250327    clang-21
+arm                   randconfig-004-20250327    clang-16
+arm                           spitz_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-14.2.0
+arm64                               defconfig    gcc-14.2.0
+arm64                 randconfig-001-20250327    gcc-5.5.0
+arm64                 randconfig-002-20250327    clang-21
+arm64                 randconfig-003-20250327    clang-21
+arm64                 randconfig-004-20250327    clang-21
+csky                              allnoconfig    gcc-14.2.0
+csky                                defconfig    gcc-14.2.0
+csky                  randconfig-001-20250327    gcc-9.3.0
+csky                  randconfig-002-20250327    gcc-14.2.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    clang-19
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-19
+hexagon                          allyesconfig    clang-21
+hexagon                             defconfig    gcc-14.2.0
+hexagon               randconfig-001-20250327    clang-21
+hexagon               randconfig-002-20250327    clang-21
+i386                             alldefconfig    gcc-12
+i386                             allmodconfig    clang-20
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-20
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-20
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250327    clang-20
+i386        buildonly-randconfig-002-20250327    gcc-12
+i386        buildonly-randconfig-003-20250327    clang-20
+i386        buildonly-randconfig-004-20250327    clang-20
+i386        buildonly-randconfig-005-20250327    clang-20
+i386        buildonly-randconfig-006-20250327    gcc-12
+i386                                defconfig    clang-20
+i386                  randconfig-001-20250327    clang-20
+i386                  randconfig-002-20250327    clang-20
+i386                  randconfig-003-20250327    clang-20
+i386                  randconfig-004-20250327    clang-20
+i386                  randconfig-005-20250327    clang-20
+i386                  randconfig-006-20250327    clang-20
+i386                  randconfig-007-20250327    clang-20
+i386                  randconfig-011-20250327    gcc-12
+i386                  randconfig-012-20250327    gcc-12
+i386                  randconfig-013-20250327    gcc-12
+i386                  randconfig-014-20250327    gcc-12
+i386                  randconfig-015-20250327    gcc-12
+i386                  randconfig-016-20250327    gcc-12
+i386                  randconfig-017-20250327    gcc-12
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch                           defconfig    gcc-14.2.0
+loongarch             randconfig-001-20250327    gcc-14.2.0
+loongarch             randconfig-002-20250327    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                         amcore_defconfig    gcc-14.2.0
+m68k                       bvme6000_defconfig    gcc-14.2.0
+m68k                                defconfig    gcc-14.2.0
+m68k                          multi_defconfig    gcc-14.2.0
+m68k                        mvme147_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+microblaze                          defconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250327    gcc-11.5.0
+nios2                 randconfig-002-20250327    gcc-13.3.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-12
+openrisc                            defconfig    gcc-14.2.0
+openrisc                 simple_smp_defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-12
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20250327    gcc-14.2.0
+parisc                randconfig-002-20250327    gcc-14.2.0
+parisc64                            defconfig    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-21
+powerpc                          allyesconfig    gcc-14.2.0
+powerpc                 canyonlands_defconfig    clang-21
+powerpc                        cell_defconfig    gcc-14.2.0
+powerpc                     kmeter1_defconfig    gcc-14.2.0
+powerpc                 mpc837x_rdb_defconfig    gcc-14.2.0
+powerpc                      pasemi_defconfig    clang-21
+powerpc               randconfig-001-20250327    gcc-7.5.0
+powerpc               randconfig-002-20250327    gcc-9.3.0
+powerpc               randconfig-003-20250327    gcc-5.5.0
+powerpc                        warp_defconfig    gcc-14.2.0
+powerpc64                        alldefconfig    clang-21
+powerpc64             randconfig-001-20250327    gcc-9.3.0
+powerpc64             randconfig-002-20250327    clang-21
+powerpc64             randconfig-003-20250327    clang-16
+riscv                            allmodconfig    clang-21
+riscv                            allmodconfig    gcc-14.2.0
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-16
+riscv                            allyesconfig    gcc-14.2.0
+riscv                               defconfig    clang-21
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20250327    clang-21
+riscv                 randconfig-002-20250327    clang-21
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                          debug_defconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                                defconfig    gcc-12
+s390                                defconfig    gcc-14.2.0
+s390                  randconfig-001-20250327    gcc-6.5.0
+s390                  randconfig-002-20250327    clang-16
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-12
+sh                                  defconfig    gcc-14.2.0
+sh                    randconfig-001-20250327    gcc-5.5.0
+sh                    randconfig-002-20250327    gcc-9.3.0
+sh                  sh7785lcr_32bit_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250327    gcc-12.4.0
+sparc                 randconfig-002-20250327    gcc-10.3.0
+sparc64                             defconfig    gcc-12
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250327    gcc-6.5.0
+sparc64               randconfig-002-20250327    gcc-6.5.0
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-21
+um                               allyesconfig    clang-19
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250327    clang-19
+um                    randconfig-002-20250327    gcc-12
+um                           x86_64_defconfig    clang-15
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20250327    gcc-12
+x86_64      buildonly-randconfig-002-20250327    gcc-12
+x86_64      buildonly-randconfig-003-20250327    clang-20
+x86_64      buildonly-randconfig-004-20250327    clang-20
+x86_64      buildonly-randconfig-005-20250327    gcc-12
+x86_64      buildonly-randconfig-006-20250327    gcc-12
+x86_64                              defconfig    clang-20
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20250327    gcc-12
+x86_64                randconfig-002-20250327    gcc-12
+x86_64                randconfig-003-20250327    gcc-12
+x86_64                randconfig-004-20250327    gcc-12
+x86_64                randconfig-005-20250327    gcc-12
+x86_64                randconfig-006-20250327    gcc-12
+x86_64                randconfig-007-20250327    gcc-12
+x86_64                randconfig-008-20250327    gcc-12
+x86_64                randconfig-071-20250327    gcc-12
+x86_64                randconfig-072-20250327    gcc-12
+x86_64                randconfig-073-20250327    gcc-12
+x86_64                randconfig-074-20250327    gcc-12
+x86_64                randconfig-075-20250327    gcc-12
+x86_64                randconfig-076-20250327    gcc-12
+x86_64                randconfig-077-20250327    gcc-12
+x86_64                randconfig-078-20250327    gcc-12
+x86_64                               rhel-9.4    clang-20
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250327    gcc-14.2.0
+xtensa                randconfig-002-20250327    gcc-6.5.0
+xtensa                    smp_lx200_defconfig    gcc-14.2.0
 
-So when fsx_pad is all-zeros then fsx_filter (first field in fsx_pad)
-would say that nothing in fsx_xflags, fsx_extsize, fsx_projid, and
-fsx_cowextsize is ignored, and hence behave like before.
-
-And when something in fsx_pad/fsx_filter is set then it says which
-fields are ignored/filtered-out.
-
-> If you can get those patches (on top of current series) posted and
-> reviewed in time for the next merge window, including consensus
-> on the actual semantics, that would be the best IMO.
-
-I think that this starting to be more complicated to rebase my patches
-in a way that they do not affect IOCTL path but implement it properly
-for new syscall path. It does not sounds like a trivial thing which I
-would finish in merge window time and having proper review and consensus
-on this.
-
-> But I am just preparing a plan B in case you do not have time to
-> work on the patches or if consensus on the API extensions is not
-> reached on time.
-> 
-> I think that for plan B, the minimum is to verify zero pad field and
-> that is something that this syscall has to do anyway, because this
-> is the way that backward compact APIs work.
-> 
-> If you want the syscall to always return -EINVAL for setting xflags
-> that are currently undefined I agree that would be nice as well.
-> 
-> Thanks,
-> Amir.
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
