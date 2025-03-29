@@ -1,121 +1,107 @@
-Return-Path: <linux-arch+bounces-11180-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11181-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CD93A75293
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Mar 2025 23:53:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABC51A75491
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Mar 2025 08:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA2A33AD73A
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Mar 2025 22:52:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36CFE3AD9CD
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Mar 2025 07:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A01D1F180C;
-	Fri, 28 Mar 2025 22:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ILMyTjyB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4846F282F5;
+	Sat, 29 Mar 2025 07:14:24 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFB71E51E9;
-	Fri, 28 Mar 2025 22:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C585EE555;
+	Sat, 29 Mar 2025 07:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743202384; cv=none; b=X60ObQj/m/Ay8EtV5fJmOGINK1avj/drrvjw+glWJ2T8cqUjfJiaAYNf10fRlRE4mQ+r9OgKqKlaZckea5qrScfQbHh3FVEMOXdXQSIKOikj/lFMR5A+vBQcnZmbyLht4+qXlXZxDRYgXSN7oyYrfFWv+/2B+CiTubFgZDEtBfU=
+	t=1743232464; cv=none; b=brFRUl+/ETDuqQgIbe58fFHOOP6IGU6v+MrqOHpvaBd3LloSPeULiw+KLv2IZLF/zjOji92Wq66ikUGimjsiBcVyrNuowgUaWWmeH1/Zpm/S+ZKIfiiuCDnpFFipu2ZePypOof3V/scoiDu9Pa5vHv+8sNZLhnpc/QV/LVjVBTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743202384; c=relaxed/simple;
-	bh=uMHCMkIp1JpzwK/KslzBXCnJB3B/qFWTnmOMAK1in40=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=nStyfaehMKmRA/FYjTNvvt7nJJbJXwaMDzwAG2H3sVuHsa3TnU6ftsB428Wvn3vABBkFzIu4LBKf9J9M0COnuqOmIxMtbjLPBXQ5SiildSwZpaLur/swBTGFIk4OWxTAtCWjDzHBex8QLEAQydWnW3fwkYZHOvXAKcBpjrIwRYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ILMyTjyB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353EEC4CEE4;
-	Fri, 28 Mar 2025 22:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1743202383;
-	bh=uMHCMkIp1JpzwK/KslzBXCnJB3B/qFWTnmOMAK1in40=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ILMyTjyBso7K5+o4nbs26Pn5cHVWQm2GLLUBUU6L6Xi+fwqx2KCM3V3LBajgA8puB
-	 KnrvP/bQN8GP5OomQ+aEM6tjBdfck+qoFXs8ztHAbcsuc/oeySEGgq4ad2PiOAdMnP
-	 tYCiaYsel0JulQkbsLDNglaz+OTqx9udrazM6AgY=
-Date: Fri, 28 Mar 2025 15:53:01 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, Brendan Higgins
- <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar
- <rmoar@google.com>, Maxime Ripard <mripard@kernel.org>, Kees Cook
- <kees@kernel.org>, Alessandro Carminati <acarmina@redhat.com>,
- linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, Arnd
- Bergmann <arnd@arndb.de>, =?ISO-8859-1?Q?Ma=EDra?= Canal
- <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>, Daniel Diaz
- <daniel.diaz@linaro.org>, Arthur Grillo <arthurgrillo@riseup.net>, Naresh
- Kamboju <naresh.kamboju@linaro.org>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Ville =?ISO-8859-1?Q?Syrj=E4l=E4?=
- <ville.syrjala@linux.intel.com>, Daniel Vetter <daniel@ffwll.ch>, Thomas
- Zimmermann <tzimmermann@suse.de>, Alessandro Carminati
- <alessandro.carminati@gmail.com>, Jani Nikula <jani.nikula@intel.com>,
- dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v4 00/14] Add support for suppressing warning backtraces
-Message-Id: <20250328155301.ab5514e2ab8043512a8527bd@linux-foundation.org>
-In-Reply-To: <a998f3fa-495c-4165-884a-a11c5cb61e96@linuxfoundation.org>
-References: <20250313114329.284104-1-acarmina@redhat.com>
-	<202503131016.5DCEAEC945@keescook>
-	<20250313-abiding-vivid-robin-159dfa@houat>
-	<c8287bde-fa1c-4113-af22-4701d40d386e@roeck-us.net>
-	<20250313150505.cf1568bf7197a52a8ab302e6@linux-foundation.org>
-	<a998f3fa-495c-4165-884a-a11c5cb61e96@linuxfoundation.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1743232464; c=relaxed/simple;
+	bh=JSJAaEbxKHrj1mtwJ0nQl9ZXA31VR3uimlpharCw9+0=;
+	h=CC:Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=kbuz1j/RxL5x0/ulJHASnUJbvUoes5siJYu3DAZoPkyorgmdM3oRHacgsXH9/lqWfjNF6hJrJQJ1xmxtrtIb0yyb1VpfMQWmjuaKylvhu849svuLnuq5X4iY6OOkWydoY+9+L1BOIE27z/PE1ilBIsRVVTMxhR84oPBZAqWNCIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4ZPpWQ2TNJztRbD;
+	Sat, 29 Mar 2025 15:12:50 +0800 (CST)
+Received: from kwepemd200014.china.huawei.com (unknown [7.221.188.8])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4C43E1800B4;
+	Sat, 29 Mar 2025 15:14:16 +0800 (CST)
+Received: from [10.67.121.177] (10.67.121.177) by
+ kwepemd200014.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.10; Sat, 29 Mar 2025 15:14:15 +0800
+CC: <yangyicong@hisilicon.com>, <linux-cxl@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <james.morse@arm.com>,
+	<conor@kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linuxarm@huawei.com>, Yushan Wang
+	<wangyushan12@huawei.com>, <linux-mm@kvack.org>,
+	<gregkh@linuxfoundation.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
+ Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>, Dan Williams
+	<dan.j.williams@intel.com>
+Subject: Re: [RFC PATCH 2/6] arm64: Support
+ ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+To: Catalin Marinas <catalin.marinas@arm.com>, Jonathan Cameron
+	<Jonathan.Cameron@huawei.com>
+References: <20250320174118.39173-1-Jonathan.Cameron@huawei.com>
+ <20250320174118.39173-3-Jonathan.Cameron@huawei.com>
+ <Z-bo7AQ1h6VQr65V@arm.com>
+From: Yicong Yang <yangyicong@huawei.com>
+Message-ID: <64ae0e68-b025-4a33-9389-5393ee887fb4@huawei.com>
+Date: Sat, 29 Mar 2025 15:14:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+In-Reply-To: <Z-bo7AQ1h6VQr65V@arm.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemd200014.china.huawei.com (7.221.188.8)
 
-On Fri, 28 Mar 2025 16:14:55 -0600 Shuah Khan <skhan@linuxfoundation.org> wrote:
-
-> On 3/13/25 16:05, Andrew Morton wrote:
-> > On Thu, 13 Mar 2025 11:31:12 -0700 Guenter Roeck <linux@roeck-us.net> wrote:
-> > 
-> >> On Thu, Mar 13, 2025 at 06:24:25PM +0100, Maxime Ripard wrote:
-> >>>>
-> >>>> Yeah, as with my prior review, I'm a fan of this. It makes a bunch of my
-> >>>> very noisy tests much easier to deal with.
-> >>>
-> >>> And for the record, we're also affected by this in DRM and would very
-> >>> much like to get it merged in one shape or another.
-> >>>
-> >>
-> >> I was unable to get maintainers of major architectures interested enough
-> >> to provide feedback, and did not see a path forward. Maybe Alessandro
-> >> has more success than me.
-> > 
-> > I'll put them into mm.git, to advance things a bit.
+On 2025/3/29 2:22, Catalin Marinas wrote:
+> On Thu, Mar 20, 2025 at 05:41:14PM +0000, Jonathan Cameron wrote:
+>> +struct system_cache_flush_method {
+>> +	int (*invalidate_memregion)(int res_desc,
+>> +				    phys_addr_t start, size_t len);
+>> +};
+> [...]
+>> +int cpu_cache_invalidate_memregion(int res_desc, phys_addr_t start, size_t len)
+>> +{
+>> +	guard(spinlock_irqsave)(&scfm_lock);
+>> +	if (!scfm_data)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	return scfm_data->invalidate_memregion(res_desc, start, len);
+>> +}
 > 
-> I haven't heard from kunit maintainers yet. This thread got lost
-> in inbox due to travel.
+> WBINVD on x86 deals with the CPU caches as well. Even the API naming in
+> Linux implies CPU caches. IIUC, devices registering to the above on Arm
+> SoCs can only deal with system caches. Is it sufficient?
 > 
-> David/Brendan/Rae, Okay to take this series?
-> 
->
-> Andrew, Okay to take this through your tree - this needs merging.
 
+The device driver who register this method should handle this. If the
+hardware support maintaining the coherency among the system, for example
+on system cache invalidation the hardware is also able to invalidate the
+involved cachelines on all the subordinate caches (L1/L2/etc, by back
+invalidate snoop or other ways), then software don't need to invalidate
+the non-system cache explicitly. Otherwise the driver need to explicitly
+invalidate the non-system cache explicitly in their
+scfm_data::invalidate_memregion() method. Here in the generally code we
+simply don't know the capability of the hardware.
 
-The review for 07/14 made me expect an update - perhaps tweak the asm
-constraints and add a comment.  This can be addressed later, as long as
-we don't forget.
-
-However
-https://lkml.kernel.org/r/20250324104702.12139E73-hca@linux.ibm.com
-needs to be addressed before a merge.  The series in mm.git breaks the
-s390 build.
-
+Thanks.
 
 
