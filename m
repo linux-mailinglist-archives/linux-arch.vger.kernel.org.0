@@ -1,85 +1,85 @@
-Return-Path: <linux-arch+bounces-11185-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11186-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A688A75504
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Mar 2025 09:04:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5847A7550F
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Mar 2025 09:05:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 644E81704B4
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Mar 2025 08:04:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A08DB171E13
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Mar 2025 08:04:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E701B0F1E;
-	Sat, 29 Mar 2025 08:04:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F149C1B6CE5;
+	Sat, 29 Mar 2025 08:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3lqHRG8z"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kSVEOUCJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAAA1A5BA4
-	for <linux-arch@vger.kernel.org>; Sat, 29 Mar 2025 08:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0D21B4243
+	for <linux-arch@vger.kernel.org>; Sat, 29 Mar 2025 08:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743235453; cv=none; b=FpODY3JasEe+Nj7lMr4Lxz6fdmyJ6+ko5xEr6xFL+SISBW3SNjmWL3FFuNK/Ly80ZAe6QFkuYniuDtyzkYlMK47PmmxAOn6dNYwbrLzoRj3Ytkl3thB3eKmxFTHXBiX/sORLsgte2Xyxi7EInMVWnRxEzsuE5vDFUgAW4nTtO8g=
+	t=1743235459; cv=none; b=lJOaIGQnU8MTdx4DCeeSFlRxa3jZYBSA0zEibLG6Zii4gT/ZkU2T21wHSTDjg+wXNfcP8ehZMirtO8IOy/l//797kJw2Y8dMy5rVDM15o6D4z8uEuaC66HjY1232vziNucl3FmZP4EXzQ4eMiQPqxnkFcpKKyByHa9xSB7cD+qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743235453; c=relaxed/simple;
-	bh=5FntdXhsDNnVZYQ30yW/t041pfPheRZxcqJ8c0E1Pzc=;
+	s=arc-20240116; t=1743235459; c=relaxed/simple;
+	bh=HQwiKBO5BTDQsuARfuHyBWIeDQC85FIu4XUsYc9w2Wc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DKtKxBbuybIMczOSGJoaijrf7rGYlv8/tavFE9MrrRxAUG3YC5ytiUUZXxdG3ev9k2A+1/gNnOdWycMsZJxWEoqlrS0qJU10h8/UOK2q9iAxKZcYi2uxLldJIA7JqcghRiLkNaRXpqr1XRi2HEVv1uC6sH5A+sgXq3WmH5TpYmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3lqHRG8z; arc=none smtp.client-ip=209.85.219.52
+	 To:Cc:Content-Type; b=cmtERa9QM3jdslfqnvxeMVUoDYftAMXLWMGuYwilfkXuUx+n5FZvtd7ZK/SIXxakq0gECSJ94uROyXLvUXzaQ9k5gbT/euJf8udy3ucCaRtoqQsifF3Ni/e/utrO0eqrXP7tbANih2BDNux0zQbPz1HjxNidy+K0CwQoei0YkUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kSVEOUCJ; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6e41e17645dso28372036d6.2
-        for <linux-arch@vger.kernel.org>; Sat, 29 Mar 2025 01:04:10 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6e1b11859a7so12735786d6.1
+        for <linux-arch@vger.kernel.org>; Sat, 29 Mar 2025 01:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743235449; x=1743840249; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1743235455; x=1743840255; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5FntdXhsDNnVZYQ30yW/t041pfPheRZxcqJ8c0E1Pzc=;
-        b=3lqHRG8zIeJqtJXQ289SeKzUeNNjlv5SiSEOJ8wco1x+juCtDjHc1CIu8gTpVm6jbY
-         0vDnM2ab68X5vYv+9KR0crrmr4uUrqry1QXgMtkjotzEdcWPwsbAQGXz2FpAudiNAX5B
-         O7/o7sgiyeLS9ev3EGXCK1agJ7rwo46pq155SNjXKFzW1k07InjGYs1/9INvmqu4g2qJ
-         3u58prX2eiiGmbf9zOflqSJ5aa4BDXbTVllUkCN2GzDYYPAqp4XQ9WuhZmAI75TW0oU0
-         iXU6QpnyZ9moW6UvMCay8kTnO1VOWLLYJ9BjBsgQXFTMHxcnic8GC5JMguejS5/APG09
-         QmBA==
+        bh=NJKV95PszLmL0hnn1L90tXXVERFFa1igZtEfvWmH7BA=;
+        b=kSVEOUCJrHUoZgoMsLl/zf7SxYWrs6vszRS7KF2AM+gWW3So1lmZu3sMwV08ILK58a
+         EDhFj5jjwGN/Os2Ep+Z/vA2fVB20PbCICdoI4hWH9SaVfjcem4zBkPvCZhUITOrtJqj0
+         0EQSOFyEOxFQMyCeYYdiCfWP4AQ9m8vtF5RKc22HjAlSDY8ShVdnUtVs9o4qibl38DqE
+         jDglOxeu3G3MyQFs6KYZnyDh5FJw2G+YW5/aSoaFiATmV+vwIG2QF/3veM8yIaU0UOfh
+         UvRN/Gjzq/zlcfIEX76MqSZpEmiBpB/tmvRiCw9MW8xvB3YcwZK36NT2+h+fUgPmsrOB
+         MqMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743235449; x=1743840249;
+        d=1e100.net; s=20230601; t=1743235455; x=1743840255;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5FntdXhsDNnVZYQ30yW/t041pfPheRZxcqJ8c0E1Pzc=;
-        b=By4gQPQZ47GdOH4zMCPz6PzFA2FQOB7xdt2SDWJVPLQsfSExFnFDydotdKdMvfhxid
-         bZy7OUJLnaTu45OqSBrBqObZN09yHufYd8HZhWHfQctPAOf3oDk6vyh9i/tZ+Gf6YpQ/
-         iA1g8Q7YHQvdmMhjq4Kjf18Hkt/mqsGj1UgT8m/rvio7prE60tVW4vZ/a0gexJoasKyI
-         l/5LZ2egOnPc2CgBaYnG0qcN8RBxbWTSwD/9vhA0czwBzB/oHQ6IdioxS6mpoEhm0oN9
-         0NjGrp8MTNiEB1rwtOjQdOa67x4pGMmnWZGqBSE/ciFV9BDCpqxSfwAEEWDhTetKxmp0
-         k5YA==
-X-Forwarded-Encrypted: i=1; AJvYcCUyJ89mRCmM0VDgnW78NuqSmNJVgJ+fLuKlp/MuwSK9uMhUE/pT+xShrAhwQZ17v8dV4ELnWQje4jA7@vger.kernel.org
-X-Gm-Message-State: AOJu0YypqoIJv1FTlGt31Fgc/4pn5NffREi6Wp4YnVKpv1hWnPji1rTX
-	uiC3/8G6RhJdnmxp4XGdO+PFGnb7achuUzykKYIbNXSUp+kclUfEy5VzS4b/6/PhkmKJ0n+Sttk
-	iEd/h+ufWUMOS/CtgkeW9r7vmYWDaRay8IeWx
-X-Gm-Gg: ASbGncs7857FeSJkFk3YUxfirxKHj/4UdkwsMKCx+4sSD34iHrbZT73svhuYgWzKQ71
-	B+SvUIjTzwkcW5KlJrqTeutb2NGXbDmufYmh0kx5WD4qLGCUtzTvtHtR69rRC/t2Sws6gTQiTrU
-	Xc9hIpOfphRBA5OUso10q0vqXJGKU=
-X-Google-Smtp-Source: AGHT+IGFuDJ/yS0u8dS14Gv20AD9SchI1L60wuXbwG89moIXFiN8E7tD+sXircX+ivXQe8fclvFz4iylGbitphpvsqU=
-X-Received: by 2002:a05:6214:496:b0:6ea:d604:9e56 with SMTP id
- 6a1803df08f44-6eed6073e0cmr33102156d6.9.1743235448950; Sat, 29 Mar 2025
- 01:04:08 -0700 (PDT)
+        bh=NJKV95PszLmL0hnn1L90tXXVERFFa1igZtEfvWmH7BA=;
+        b=H9hxyS8hqfDr4jzvheEBjboN+yeNzAHzhU0i6GEyz5KdDR1+ZBPexDpS03NrWJYMpv
+         GyqyM7Crye+UpHzES2XEuqokfXkIRZUeez1FgaT2sjtPhTtKiKGX/OeK/XEF7eSU66dZ
+         FmPOo8YMP77+u6QGbBl2fwNNb7dHrLbQNgCyXUTV8+L0HJhMsJ3FOkAid2AXfoUosb04
+         d2dSQPLCfaNO3rjcmy8IN9YbJS6Q6rDrPwsVWLnCxwsrUBgTLQr+BJvZosihLXPvoVFg
+         TY3rkPl5f15tQLsjg1Q5Wxli9N0DoZJu+peAnH10v5FD0xHWKsn9vlRiNJXxHoZpXjtf
+         Rfvw==
+X-Forwarded-Encrypted: i=1; AJvYcCX8yP7DTDRGNn74M0SAaX7wdN+OopSbo+HR82xTBJcRFdlBWwnQ8b7Zf84JCzpPky/1ZQls5oHi1dUY@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfLyiIHCfJ2kEvZmZ+K5yJ2EIOBuzg0xa7xflu+owXxH35xwUc
+	4ZLQfaTBhzFFr3QfWcEw+FdSztNli9HojJdL+kmtGdwX71+3l/GOekjaoN3KcHMV4OjsXNQ6yG8
+	VnZb7FwQlu7RVRZQJrNauN6fCavPoL6zB1v4K
+X-Gm-Gg: ASbGnctWDtffzFTzsMO6RUUqYj6L4wILWiwPt3HGrWKlChOsZzCIwcJw2iKa+aLK1wz
+	NMZ04vEOUg3zcRz538nRsKYRX+cU6px1GpViuLC633zYYZx3mwp0xk+M/jtiAvFwoxT9KkJ/ipo
+	2yxoxzvAeCdov+OjoMmk3rMj55Lyk=
+X-Google-Smtp-Source: AGHT+IEc78D847LUde3+5bswzdf1ixUrsSY5twv855UuX9+/F9K0OsF+VDrVmnty/ImwqqAtDRcJZXHHN5I0PSHwDjI=
+X-Received: by 2002:ad4:5c42:0:b0:6eb:1e80:19fa with SMTP id
+ 6a1803df08f44-6eed5f6164cmr22680736d6.1.1743235454901; Sat, 29 Mar 2025
+ 01:04:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250313114329.284104-1-acarmina@redhat.com> <20250313114329.284104-4-acarmina@redhat.com>
-In-Reply-To: <20250313114329.284104-4-acarmina@redhat.com>
+References: <20250313114329.284104-1-acarmina@redhat.com> <20250313114329.284104-7-acarmina@redhat.com>
+In-Reply-To: <20250313114329.284104-7-acarmina@redhat.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 29 Mar 2025 16:03:56 +0800
-X-Gm-Features: AQ5f1JpicRKRSaCIuqiwug0PrStdjBYACeo4Eb48BhA0aZtbew_fx1TOosHWZm8
-Message-ID: <CABVgOSmrb_am5nxOxJaZ_JL_wf21xy6e9R2hvEuEiJG29P4y2A@mail.gmail.com>
-Subject: Re: [PATCH v4 03/14] kunit: Add test cases for backtrace warning suppression
+Date: Sat, 29 Mar 2025 16:04:01 +0800
+X-Gm-Features: AQ5f1JpT-aX1aghV5CTNaG4UuLzzr7X5SV4zHe81kzrsiyK5QNGcvsu-jzq-6nI
+Message-ID: <CABVgOSmofN-jw9AWpOTAvhE-d-oLW_MBnPx8QQ1GVLZb-sMEhg@mail.gmail.com>
+Subject: Re: [PATCH v4 06/14] x86: Add support for suppressing warning backtraces
 To: Alessandro Carminati <acarmina@redhat.com>
 Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>, 
 	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
@@ -98,38 +98,99 @@ Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
 	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
 	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
 	loongarch@lists.linux.dev, x86@kernel.org, 
-	Linux Kernel Functional Testing <lkft@linaro.org>
+	Linux Kernel Functional Testing <lkft@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000bc2e0d063176a18e"
+	boundary="000000000000191f40063176a286"
 
---000000000000bc2e0d063176a18e
+--000000000000191f40063176a286
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 13 Mar 2025 at 19:44, Alessandro Carminati <acarmina@redhat.com> wrote:
 >
 > From: Guenter Roeck <linux@roeck-us.net>
 >
-> Add unit tests to verify that warning backtrace suppression works.
+> Add name of functions triggering warning backtraces to the __bug_table
+> object section to enable support for suppressing WARNING backtraces.
 >
-> If backtrace suppression does _not_ work, the unit tests will likely
-> trigger unsuppressed backtraces, which should actually help to get
-> the affected architectures / platforms fixed.
+> To limit image size impact, the pointer to the function name is only added
+> to the __bug_table section if both CONFIG_KUNIT_SUPPRESS_BACKTRACE and
+> CONFIG_DEBUG_BUGVERBOSE are enabled. Otherwise, the __func__ assembly
+> parameter is replaced with a (dummy) NULL parameter to avoid an image size
+> increase due to unused __func__ entries (this is necessary because __func__
+> is not a define but a virtual variable).
 >
 > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
 > ---
-
-Always nice to have tests. :-)
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
---000000000000bc2e0d063176a18e
+
+>  arch/x86/include/asm/bug.h | 21 ++++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+> index e85ac0c7c039..f6e13fc675ab 100644
+> --- a/arch/x86/include/asm/bug.h
+> +++ b/arch/x86/include/asm/bug.h
+> @@ -35,18 +35,28 @@
+>
+>  #ifdef CONFIG_DEBUG_BUGVERBOSE
+>
+> +#ifdef CONFIG_KUNIT_SUPPRESS_BACKTRACE
+> +# define HAVE_BUG_FUNCTION
+> +# define __BUG_FUNC_PTR        __BUG_REL(%c1)
+> +# define __BUG_FUNC    __func__
+> +#else
+> +# define __BUG_FUNC_PTR
+> +# define __BUG_FUNC    NULL
+> +#endif /* CONFIG_KUNIT_SUPPRESS_BACKTRACE */
+> +
+>  #define _BUG_FLAGS(ins, flags, extra)                                  \
+>  do {                                                                   \
+>         asm_inline volatile("1:\t" ins "\n"                             \
+>                      ".pushsection __bug_table,\"aw\"\n"                \
+>                      "2:\t" __BUG_REL(1b) "\t# bug_entry::bug_addr\n"   \
+>                      "\t"  __BUG_REL(%c0) "\t# bug_entry::file\n"       \
+> -                    "\t.word %c1"        "\t# bug_entry::line\n"       \
+> -                    "\t.word %c2"        "\t# bug_entry::flags\n"      \
+> -                    "\t.org 2b+%c3\n"                                  \
+> +                    "\t"  __BUG_FUNC_PTR "\t# bug_entry::function\n"   \
+> +                    "\t.word %c2"        "\t# bug_entry::line\n"       \
+> +                    "\t.word %c3"        "\t# bug_entry::flags\n"      \
+> +                    "\t.org 2b+%c4\n"                                  \
+>                      ".popsection\n"                                    \
+>                      extra                                              \
+> -                    : : "i" (__FILE__), "i" (__LINE__),                \
+> +                    : : "i" (__FILE__), "i" (__BUG_FUNC), "i" (__LINE__),\
+>                          "i" (flags),                                   \
+>                          "i" (sizeof(struct bug_entry)));               \
+>  } while (0)
+> @@ -92,7 +102,8 @@ do {                                                         \
+>  do {                                                           \
+>         __auto_type __flags = BUGFLAG_WARNING|(flags);          \
+>         instrumentation_begin();                                \
+> -       _BUG_FLAGS(ASM_UD2, __flags, ANNOTATE_REACHABLE(1b));   \
+> +       if (!KUNIT_IS_SUPPRESSED_WARNING(__func__))                     \
+> +               _BUG_FLAGS(ASM_UD2, __flags, ANNOTATE_REACHABLE(1b));   \
+>         instrumentation_end();                                  \
+>  } while (0)
+>
+> --
+> 2.34.1
+>
+
+--000000000000191f40063176a286
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -219,14 +280,14 @@ uFrCoYIRlx4rSVHpBIKgnsgdm0SFQK72MPmIkfhfq9Fh0h8AjhF73sLO7K5BfwWkx1gwMySyNY0e
 PCRYr6WEVOkUJS0a0fui693ymMPFLQAimmz8EpyFok4Ju066StkYO1dIgUIla4x61auxkWHwnzGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAcDMKctW1GQKDKqEUSh4
-pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgm3R/ghgzBpj1jMOVW83mzw4C0AL9
-5UEGdIWFX/GO6EAwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
-MzI5MDgwNDA5WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+pjANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg2//D/Xyyvi5/ruv5pLyZ3Rv3y1HE
+7fNAKkTKrh5hWNEwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUw
+MzI5MDgwNDE1WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAVuI1QEd4DlrvS5gBl3QUy59Zf/mUB8dgId9VEYAz0al5EKjnUBz77/up2C+g4NEz
-0wLl0FVtlf3Yobp82pqwW3x0dwzzdrHbgari46VT5k6TcWhyzFWPFAiYjBbWUPKbFmYHg2fbspaH
-ZVQcmtvsl5j3YWFtdRXGpP23CO5/j7Ccqat1DtBfiaJGs8BiuMmbUCxU6DAJh9msFzW2HI81pjEn
-NzUg/rB4tvKa2KsGETAEK5aWEqlGuTZGfUAXRIp0Osxr0lOA061vD5zrxMAdt6qZY0hpsLn8WdQ1
-mMivBeGETU9GcOmYSrrowtgKlJbuS+r/mMiBqOPIH54sv3R6gA==
---000000000000bc2e0d063176a18e--
+AQEBBQAEggEASVlVFQXw4S3LvkoUEZJTR42uF61UnTKRZ1Lgt9fykLsQjDZijEnIOpMeJYkmZXyu
+7QcD+Ra2/VA+DA4I4QWkaSB0j7LwcrPn8LNP2wU66CUhrecq0speJgnRJyIkA0otoc+ER83dnzmH
+6bfJg20kfVB0h9LCjFXs5lKkV+4t6KuuqOcY/8NPt06C9aYf5Dwk2T1WxpNaORrGAEFflYWarP00
+r9guI0DFa/bKju/HEwOR1Tlhvz0kGdXggqfTm9F16r49EBBwyZO1aWjJ0/0ErT9jrLwUMOJmY1Xd
+W4bgW3fB7adVI0LPodpz2ViCEEios5AmV+rb2cKlmUfMzI3gCQ==
+--000000000000191f40063176a286--
 
