@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-11193-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11194-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F7B5A75CD9
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Mar 2025 23:54:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE848A75CE1
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Mar 2025 23:55:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B76D3168E8A
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Mar 2025 21:54:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA72B1886B29
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Mar 2025 21:55:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B08A1E102D;
-	Sun, 30 Mar 2025 21:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476C71E32DB;
+	Sun, 30 Mar 2025 21:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="kA0WqBxt"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="cuhBsgFK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazolkn19012049.outbound.protection.outlook.com [52.103.2.49])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azolkn19010003.outbound.protection.outlook.com [52.103.10.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696C91E00B4;
-	Sun, 30 Mar 2025 21:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.2.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE6B1E0E15;
+	Sun, 30 Mar 2025 21:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.10.3
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743371637; cv=fail; b=RamxxQp4tIxLS81W+I5VVY9MGBEE8aOUJKrvz9c8Rt/cD5zHPbZwMVAYaL2hmnGQdIGWxAtG4hIpY+64lAe+nFIW0+mXpgOhovlUVG0/rqFKYs1JJzTVOHGSCbtVwr67peUiGLBZHImwEulB6zMMkUYJKibq7RTAYSFTvss3KQk=
+	t=1743371642; cv=fail; b=IpjffgAGB57u+v9rMYGrGdjOaVWg+KNkovUtCjOg11mat1b9r0NxGzlUEdWgxckWuNoFqDK0As1w74eGHX9+JV2SHXi/hnGIAuq9TTo/bhi7RCTlFqGOhvMyB2mxtA5O/CVutz7XaEXZxTd1MDxFT0vJNTzOVqnh0bQ2eTkqG94=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743371637; c=relaxed/simple;
-	bh=aspQuQ+aJhvXpMtp6IjRMxm3wcLzUbzASxFhWZ+tF00=;
+	s=arc-20240116; t=1743371642; c=relaxed/simple;
+	bh=wQQuvRBieyv+npjj85+PCXF7Dop0emXOO/Vwsl2OTc4=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=FRQ/APQrvdDTO53j03Yc82aznhcp4hgcIXfoefOmTUbOY63nrFqeTsrncZeTzJwz20sv1342fjyhQ0jZ0Kl8UmrekCKwy+PiOVVoRi1e7yyNPZJ17zTCZlBz+FUZFA3ObyDm29x3Ogj/iVyp2DKFuYlKK4DQ7JBt2KBmUxJOrO8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=kA0WqBxt; arc=fail smtp.client-ip=52.103.2.49
+	 Content-Type:MIME-Version; b=Ka6s5L3SoMeUAruQUaI6WNo96WmgBXoN64+4nHf1RDgrUOLVQwfvm3e8PlWgl7LOufpCpGJf03tmhP6bh1JvHADgjj/42vx2TZPOwnBMVOY2TmBFnsYz2Rm+sk2V+3SI8nO7Ss4gi8BhcJ2DHVA3wcIUCht9uJKOSNvdXUS523c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=cuhBsgFK; arc=fail smtp.client-ip=52.103.10.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NX0B6e0Y/iPHUZZHhOZAXt4/K3a+p89TvCcNzZyXa42wq7R95jN5XRLDYmL53vKFt2GtNZ7vnJf6MCJzi6ix/MpAXI4fa/5rB5FJntCi58SutrCom49l+1jlvmPyoiGN/krCV8Zn+hIKQEHKcsPTuYdRydw50ufcpJlpJDy460MFKdGijFFmex8/gp43L13wY825BYGWeYvXbMFsUtzWbEBITY7PHZXPzVf3Msy4YCgltu90LoxEZ6T4TqmmyRkABcSm/5qVZhZqCK3EkVWt27tIUH1ec06RkCrON5/dlr4TQIWSVhpTgKnNsNNncVwTbm0d4GXG1deBbShIvzP+1Q==
+ b=t9fbxzin0HWm6hMt0/OXPM3RL3XcSWkLvFe79JiAYcv5cJ1DSUaNpT8oKDswvWZmUcblVJUgxW9rQV+kcj4UZupnUiWJgsuUj6F7IXVh2XYxMOrbsJxE4IYYq32RTVBTjCJgiynMAe/bqRACOE9Q9ui5cRBcQ6Ej2au9ItZgl9S7DC+9KKzX3u2qnv/iSZvJyLCLx0JdTWtzZaN663fZ/v+HtUcV5kWJgglSClPpZYIWC/OBk96qgsSUisvyTAbRWRPzN6bWpTWKc1TcYWAwmgdArN5dnZ7M9VppovheVNgB26r1Q3ngKUPrf+G9h6og5MJqg0CPLhmXpDBD0Fla1w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OGoIa4emq0wt1gdEE7rHOPaRVTngesHmF5MoQVx1adk=;
- b=ftZiDvJxFYW0oDsjQooqefkaWhDBeRplqUD0AANZK5iHq14g/+6t8Z09twfgyKbuaGVFBVGwkI26IzQpgfon5pF/Rjabppa7Z6mFqSj8fa2TDR4cQbRrQk+S3a+775+8/msOxWUrxhmSehV7+cGXeimicx52Nw6DJp7Ke7/sM+M2A4b+jt/LBaTsqYCaE0pEtA5tx7CB3sgKje5jylihw5LBmakLGowbVopO0aDmzl4XpWDE0p4uR3Rr3ccDQdJ7O1X6Fnh72UyRDi7agi6V8ztAfGChhnziD7GBo7cMOzWuksND/xD++IhBf4zyKbJdUVFkewpSw95QjHoDuqXiQg==
+ bh=iUfDCKVeDTEy8/xYtvtK24Xf+VH7VOlhdbkUow0hHIQ=;
+ b=VZZ0Z6fvueCjfX+ttqqYMwgYetUdYbseVoiP5G2eZgWImiUPQ9oaxRid9DMmSJVgqxuakKhLZ6BCOOp0tsLvPb/la/RgiwLjaiyW98PMRiVueDjPUxWcfNYVwjYPgZ6mC6jHweQXh/sMkiuoxx519T2gVPfdIugv3Wb/i/hann411BAQimFX9TO5ZI/dzwtfFtmG9Sypf9+/qlPSaZvHBuJ/XDODwBWsx621X8OO3FQyqo/IIPv2TZvEIEXJf7/9nKdqwP3OO6prBUbxTClfXAnTCgWSbmR1h0Wv1ole1yCljBn76Y4JCUZR75R8k1N6SfByBkjQyB6/g1MHgsO1ww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OGoIa4emq0wt1gdEE7rHOPaRVTngesHmF5MoQVx1adk=;
- b=kA0WqBxtFbYA1lQfRSxvBdCEWWrywR14c5gmifpRB9AiIaVw1P3nX8QoxRNyHnQv0Iyy6imFo2QSZdInl81a49pqZZXUuon3dLhRCR+QuiIKoDc302ZiBz53WYlaiyROgwQ9X4owXE21pl2l/SsAOWKKTggFHO0KSJ9cqnnNVgztSs9ydxBM4RNrCcB9wFxOF0uQgkHDnhA9PC3WdJH72rsiOASN32xjur3d9rzgvlzZkSHCSuN0g2eD+PJytvQww7Z1TAEdqEb3HXxia8u0f8jMP77wcdaPAFPKlFrPAfKeIv6lrU2qR/dKqZbrqp8h9TPYQttVXJDDxR/YuMmfDg==
+ bh=iUfDCKVeDTEy8/xYtvtK24Xf+VH7VOlhdbkUow0hHIQ=;
+ b=cuhBsgFKUVymbxObgzu+04fqNgkQ6QG3DFuP/QY2aQRbY0c2vjOQHbl4iozk+1vYrrQZn8vNQEEUf6cABKKqmLdSJMGErN65bEXVC2oEIqsGEXbRojuyl9lv025373hVgJutal3xD+ZTiYgUGCeIzSsC0oBPkdvsnAvGEx4l/Y4sPutGA18lmH/lg7qJX7J1JsGWO/irX4aqJxkDhU/M4SW2Qx7lvyL+8N5d22nRj5+F1i5sqhpjOZr9KQ3jAjja4Te8wS18EKqJge2UiMFAvY13yBgVWQTF1eaPD6S6vFQbXx3H4tmLi2zPchCEPw65YeO4qoEkorj21sLeQGooZg==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
  by PH0PR02MB7527.namprd02.prod.outlook.com (2603:10b6:510:4e::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.27; Sun, 30 Mar
- 2025 21:53:52 +0000
+ 2025 21:53:57 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%4]) with mapi id 15.20.8534.043; Sun, 30 Mar 2025
- 21:53:52 +0000
+ 21:53:57 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Nuno Das Neves <nunodasneves@linux.microsoft.com>, "kys@microsoft.com"
 	<kys@microsoft.com>, "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
@@ -70,72 +70,72 @@ CC: "x86@kernel.org" <x86@kernel.org>, "linux-hyperv@vger.kernel.org"
 	<linux-kernel@vger.kernel.org>, "linux-pci@vger.kernel.org"
 	<linux-pci@vger.kernel.org>, "linux-arch@vger.kernel.org"
 	<linux-arch@vger.kernel.org>
-Subject: RE: [PATCH v2 4/6] Drivers: hv: Use hv_hvcall_*() to set up hypercall
+Subject: RE: [PATCH v2 5/6] PCI: hv: Use hv_hvcall_*() to set up hypercall
  arguments
-Thread-Topic: [PATCH v2 4/6] Drivers: hv: Use hv_hvcall_*() to set up
- hypercall arguments
-Thread-Index: AQHbk+AV21q88EUTeE6kvPDNj7sy5bN+ExQAgAYmPaA=
-Date: Sun, 30 Mar 2025 21:53:52 +0000
+Thread-Topic: [PATCH v2 5/6] PCI: hv: Use hv_hvcall_*() to set up hypercall
+ arguments
+Thread-Index: AQHbk+AX3OvCv70ag0ykdq1muQMwqrN+FS2AgA48AzA=
+Date: Sun, 30 Mar 2025 21:53:57 +0000
 Message-ID:
- <SN6PR02MB4157007B9432826CAF0E42A8D4A22@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB415761B853808B7865125CD0D4A22@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20250313061911.2491-1-mhklinux@outlook.com>
- <20250313061911.2491-5-mhklinux@outlook.com>
- <bae5bb62-d480-46fd-837c-9267c0a30fae@linux.microsoft.com>
-In-Reply-To: <bae5bb62-d480-46fd-837c-9267c0a30fae@linux.microsoft.com>
+ <20250313061911.2491-6-mhklinux@outlook.com>
+ <34de36fe-f4f6-4ec3-848d-9191fd1e8b9f@linux.microsoft.com>
+In-Reply-To: <34de36fe-f4f6-4ec3-848d-9191fd1e8b9f@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|PH0PR02MB7527:EE_
-x-ms-office365-filtering-correlation-id: d3825a9b-8a9f-484f-ecc9-08dd6fd55c37
+x-ms-office365-filtering-correlation-id: d18ec04f-77e8-4c63-f769-08dd6fd55f58
 x-microsoft-antispam:
- BCL:0;ARA:14566002|15080799006|12121999004|461199028|19110799003|8062599003|8060799006|102099032|56899033|3412199025|440099028|12091999003|30101999003|41001999003;
+ BCL:0;ARA:14566002|15080799006|12121999004|461199028|19110799003|8062599003|8060799006|102099032|3412199025|440099028|12091999003|41001999003;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?jVTuxOjziXj8/hltyF7kL/TdUGIIKHMpakRotfsAQcAj5WP2hcxYSHedBfrQ?=
- =?us-ascii?Q?uo2Ff5bu23aXBahYGr89hDBNUdOzA2/QMU8W0cTt8H5KGzEUaMmEWlfWLuJa?=
- =?us-ascii?Q?nQp00zBjBogBuMCqKpMLJKk2VTWicALiLhUlEqeFk8VywucrihdKzPpY8FrJ?=
- =?us-ascii?Q?eLNTvpKwczloYrK5TleaGnJdCsNGyFEnRhX4mlfxo8gbTNxHd+N2Orx36LqX?=
- =?us-ascii?Q?SMBiNC5jSUgwNR8UPH9I5jMeFRaLd58cgRBbZSAZOzzsePouSOcfHuN4lWT6?=
- =?us-ascii?Q?u6JnZO814jivNZm82ZcNdX+dONDLyMFzM/z49DFQ0njdECMQKa1ivfufCh6d?=
- =?us-ascii?Q?0wlVtBVYhjnFnwRrka3CSNdIIlGYqsho3A4mgLDGBvtO3Xe8qz+dEe+HnDkz?=
- =?us-ascii?Q?N5i2nBbLvKpp7wS4PHnOscl5kWReAO8SuaTZ7BmHdDNFOSlT2TuYNTCy7Rwo?=
- =?us-ascii?Q?svdDDsZ7Wib7AOM26mJR36K2pIcBOHB+kU64stusoyOuu2hMWMWBMsPgF5Jc?=
- =?us-ascii?Q?N/9E8zK03TeFoGbiRgUrK9YjAIydKK/pW+30++C0gTzKot32hjwBhdD+mn5W?=
- =?us-ascii?Q?AOebsy2/wMvO1Ig+AYEL0GK9aePdCOtyHMJJcH9053rwqLM0T5x7B8kSwcsX?=
- =?us-ascii?Q?2WMwDhmhV8sdDNVTxPxbYuROGweDMWSXCzMOBnN0AmMJjGAV8LMtAk2IHBkd?=
- =?us-ascii?Q?WP7325+t3mxkmlEFs3r4k3EvHaKVBi67jrTSLsppV0iV+y8Myk6KxY0r9vsk?=
- =?us-ascii?Q?Ub2W8g9Ks0VnoK3THYXHA4qSOrOy60+RjAUAOjbrJLr4GOB/K3TWYH+eUm9b?=
- =?us-ascii?Q?LXGaewleQXHk7y3NlMiUyOipf4Fde1ujHi90eu+HSevYJRvvrocQyzNfpDq4?=
- =?us-ascii?Q?DqbKPnLnYu1+FJwxJLOsG53/esfc3dMVJTME+Xjg9ob0ygVpubBZYJwMlBlk?=
- =?us-ascii?Q?+h+FFs+DJOA0rOVo/FSi0WWFI8v5EJ+GZc5eAqqKwnmnBzZKe4JFsu6ypVuA?=
- =?us-ascii?Q?n4LdoUACa5TGs8dfDLP3+HcBShNmwX3IdC3m8Je6SJHEW1dP2E0yLxmzFHnX?=
- =?us-ascii?Q?j7Jk8G26JnqQrfhF4m4plHb7hFsALMKa/x+fme+8j2e0nYTQvzkTnjhU7Ov3?=
- =?us-ascii?Q?kMqFB80ZeuZn1aLNxwVWkCtDoE0YPUfFkkvZ27igfRAaKkGxSIS13Z1C+BNt?=
- =?us-ascii?Q?5erPZSlTn1tNTxl1Atu3Kj4dKEX6s45fNo352Q=3D=3D?=
+ =?us-ascii?Q?DxqEhSJM56/mWkViv79KF9H/dXUvUEDfPuJRTCXUtXTEyKqtsSNVR9SZgzk7?=
+ =?us-ascii?Q?xB/PwMeukkyWU5iHiIC2NhZcoJxjPvWc1v4hHJc7cuQCq+wLOanbNOhTLR9E?=
+ =?us-ascii?Q?hJwpHr1LozSy97bLBknPULn26gMx92lmRH6vg79GWTdWsQG8nAS0ZKIdLKoO?=
+ =?us-ascii?Q?GkX69sq7Ip5EFd0c4UQXijh1hglwl2z8h+1rmhylhKFSqls7d8/+TN2BisU3?=
+ =?us-ascii?Q?2Xpjw6Vnm5tzVYwV1px1/vGwfsU5XkDMLoKcBmNixxfSwVUcZJYhP088qqR4?=
+ =?us-ascii?Q?rm1N7v2TSuY850dN4dl4iZ86PkgqJYOO/KLUlYtsK3CM6iO691ZwcG4zqySp?=
+ =?us-ascii?Q?sdUPzTNkN93/yfEaQ0+ofZh7S3t+Q//aad9shvRj6sLfDQhFhov+2W3iBfxX?=
+ =?us-ascii?Q?jzHTLHbahEzBeJ8Spo6J41KpFBdfMu3k6nnRYpJNWpwDc1W1+6RYnX3PoJwl?=
+ =?us-ascii?Q?OTy2OSLS8erpjETtrD2yjRuRWtYjBa0bDNPLVFK0SkKPLRaNFA3VrmpESZAL?=
+ =?us-ascii?Q?ey9G7Bdhfey13/QCAT7iSsmGLgWdZzAJSFhHHdpg37TdMgiOHWwSmgJ90Coe?=
+ =?us-ascii?Q?lErckhFWr5V1PB3QEa9XkUVTO2JhIMNic40VB/YwuafEywTJj/AYh60ZG00c?=
+ =?us-ascii?Q?zPmckVgB20JJHbp6mbud9SQWOqh/KxuA7m/IzPAO1+KVAotURhlMI/97w/8+?=
+ =?us-ascii?Q?ujoLIZNKpNUDx7ar/dD7znrvj3uDtOO6WGInBwMVNa2LDT+xqlO5eIJn2Arp?=
+ =?us-ascii?Q?0VTzIvUFSWCc3QKoPnyN+TF5BHxxhD07AYvr1xFjlDIhXZuJt09ztGuLWrRz?=
+ =?us-ascii?Q?i2aDF1W/htiOMdqxRacOC4TtMWf9BnndmXUE/nu8XNugwXduK4bUj1NPmpY+?=
+ =?us-ascii?Q?J1n+LAiVzXdSjaHNr/tAHPbVJ0xfrBcRzdiOh9WTwEckqzTLKhlXnvxlEHqE?=
+ =?us-ascii?Q?283VtxuXl2ToBuzrQpMuocNYYOK6VrtSNtDW+07gOr3sq841UnnuuUK9kt+R?=
+ =?us-ascii?Q?y8rJ8i6Q5pVZySTUEYHd4ePcrW0p6UQNLN3gcw/8Pdg7Rcv+snQFM4m1fedw?=
+ =?us-ascii?Q?FbSiu6r5G4g33Fs41kBd3RsU0qsol00OLUzsjjMmz9E7q1zTe1RcNbEOx8DS?=
+ =?us-ascii?Q?lM8LM9SSFmMsHovEqje7sq74m7BESpTtRQOKHiilyVXTki/hL3OB4MYvK21l?=
+ =?us-ascii?Q?6jhVCyNhDwkdftZy?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?0HR1vulC3xb/jH0mizz04MOiNgz5VUMUNeMFnsm17GHHYs+/P2FL7ySdU9WR?=
- =?us-ascii?Q?TzZOayo0azSJ6mafH4XySQZutM8IStvoUVYamGvy6nTX0IrWoYEjZ/0uxxIr?=
- =?us-ascii?Q?D1bpZbXrayZDY2kKOFyKSUZUSynaizURfne+b59qbv8ZSH80gpeeIsuAIskq?=
- =?us-ascii?Q?autTGPGD2WinEeb6zHBGU7tEL4Tr1fe6BMmoGfbaMhjWAD9Hwx/phDNf32Km?=
- =?us-ascii?Q?zRbc9R2FsC7e91xzMsXUynhHYkdmvBbztBcDzcsDOYwgWcGY+tBQv66RjrwM?=
- =?us-ascii?Q?7aZXyr112fn3Wt9hZWwQcVONUDDwrq3dOEo37/XRZTKh94w++ZdhG/xdtrA4?=
- =?us-ascii?Q?iHphu65Er0cbx0hbDLnBW/hGt5hhIW/fg9QZvjQMC9UXXLT/E0AtmX0bubag?=
- =?us-ascii?Q?5tfyqGPb6QwGLfU04S851dLIRDy+Nk6nd5fFOEMVm/EAPYaiQZZVmO/sj522?=
- =?us-ascii?Q?DBR3r9v2IfMHZiVGpClsFMc7UVNk4vDEEwixYn7ocJrelbUoFSPnqQcvWavH?=
- =?us-ascii?Q?noI0ohJjEy3kXTYGwSHWhHPXfOA1jTIocCc79+DPuT4ZK0oZsjSFLDCC04bn?=
- =?us-ascii?Q?4lf4P8xqJJPZBt0sGStbySZZNmquUfZhWAqG+HQF+wZPxNzdrkD3BSgwO+Wa?=
- =?us-ascii?Q?M0p3SJxcoJCxBALnV+lZk13X0MFyI/vhsupP4H8DH/KIPs0kk3ndcm5AFnME?=
- =?us-ascii?Q?m2zEZSYABrn0aG9Aq1JAnv08E4bJU19IAF9FwxAkKZJ0k3/7i3KTn/3uLWL4?=
- =?us-ascii?Q?XLppjgHJQMIueLlJfHjPm5p8JWp/mi3ic5ZbmGpGPJ/LQQmy/vKlO/wIkXfa?=
- =?us-ascii?Q?VHlzPDQAyRxXYXitVisAi1diSso2yGo2jfG0jCIR2jowiFG+Tv2aCbPPbSI7?=
- =?us-ascii?Q?n9Rt+GbJEFk/LtilWEbw8NtSU8uQxWDqyQgJwcOO7Zgl8ZjxS+jSvX+JZFiU?=
- =?us-ascii?Q?5/LZmr+aavqb0NufdosS1mTJvNOmTUjrAr8ykzE38hhXvfw1RiOT742BdvW5?=
- =?us-ascii?Q?44Nhpq6sLj3QJn8RSejyUDE7AZrwzOLjsJHfvAZtv2OMVqN4Tu7zOWkhq8Se?=
- =?us-ascii?Q?wB9SJcuNYDrrhE0GFFzcIxt2cILpEobR4NM6wdSvJWOXPgS1CcQAjAjqcFdh?=
- =?us-ascii?Q?FM6l5si09+192nctVXeZooPYy87llNFuAcptXROZbs+ntQ8Wn+RFcVaICxhj?=
- =?us-ascii?Q?innYWhnOtOv+yJ1XGs/0eysMDzF63H+ujBWHlFxoFz/iSvWnE5eiqpH+Z7U?=
+ =?us-ascii?Q?XY4u4Q8R5nRbrVah2XAaIwNqKvHsWAIYyO9Gfd1io0lrtAgjNoJGsDhOY+Py?=
+ =?us-ascii?Q?myop88FeJtcNmGt60vlbynWBWf2KZ4cfjCC1xIHOyFLTnBB82iRpxPm5hsrc?=
+ =?us-ascii?Q?vH5WxiaHpU9HYDwTUF9bBu0+zKfDl142VGHqqSrR5Lz3vB9IvCqmvSWpxDvn?=
+ =?us-ascii?Q?bC+fQyXMnmBGlxrVZCUFXvBF8JD9RA798a6+i0QofMHJnozHKSVxweJpAb/k?=
+ =?us-ascii?Q?nDhXbOOUBaekfzu2dKLLbd3W+I/1fnMdyiSr3dGKRoph0GC4v44SW+/8ait3?=
+ =?us-ascii?Q?GH4+Hd5BMMcFThSg7a1xeBr/SmhWjvJZyBJMiR0k4/oiKNWy105Wv+cuxKab?=
+ =?us-ascii?Q?vK635fj9lZzJZKpbWJdIqkPG68q7Sqntc8M3q/WdVfq3aP73/2Zn9BHf0sMn?=
+ =?us-ascii?Q?UcX3X8Q742l4UzPQlXnkZSpzd/MpCrwMOz1wUVfGARKrw6YuaIIN6YSNyBir?=
+ =?us-ascii?Q?FwWsR6r8WioOZAC/lcBQ2OqGFRuLS0QVGize2tLRxj+2HR1eQlk/4uGNq4sq?=
+ =?us-ascii?Q?fB9I1NnUuaRxlc+/sCO6JuoSanZUCm+UW0zIrAzsOfzy0PKF+Mnpq4wKeFV3?=
+ =?us-ascii?Q?QSbROVOcZhDz1z3J+BMKDUPb8EXVObfvhD9ilLMFRhfBm2gGcdNS/beHixc6?=
+ =?us-ascii?Q?nT0fC9wcNr1TJF2ueMWrXhjbNhanYEmf8CdCfPO9pJWe6/jnP1lcmSeKlssf?=
+ =?us-ascii?Q?WOyP3L+1Efc2bPkC+XJWwtLoSbas3NvMUl+alrLILQ6u5bzkJ7W1uzFhKDCO?=
+ =?us-ascii?Q?Z3t9FdvW8Q4E0Q9GJKI+OpkLiaKkrySjJn1/heuEXJqZGxSi/LTaMhZRhwgA?=
+ =?us-ascii?Q?nHq228RTdW5RK4YKkPUe9G9GRRGgInCO/xBryLADJ+O2NSBRTYsHmg3Rafu7?=
+ =?us-ascii?Q?R8mC3kAao02fdC9ZEkN7OMijvlHszxEQVLQh7nymUUXsekc1Wrs1tu5L9dKu?=
+ =?us-ascii?Q?QYcnDNsOwMQSTRfdj1kM4fThFe5Uc10MBwn0d9ONtvsTl39MisN3OVpRAK+H?=
+ =?us-ascii?Q?nruka/9fu95Sglc4MPEqE+wb+IFkWOBlTsWyMT97LzgZvoNK2KcK9vPn8oIN?=
+ =?us-ascii?Q?FKc8p0dYlZ/Fl7HI7wXO8e7TDGovNnU/9xQA/jJRcTzAUKbWOuGtLh5y7C0d?=
+ =?us-ascii?Q?WVzjyN3wAT3D5LKi1/BmDCr0WI7jiDeL5HVBmOy93IKp7M6cLIZfQ2cfSa4g?=
+ =?us-ascii?Q?joOi8lyPEQKejhoKtF7yWMG5UO5H+VgD8tAW8auHCSp1ey1qZyZwnduyddo?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -149,8 +149,8 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3825a9b-8a9f-484f-ecc9-08dd6fd55c37
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2025 21:53:52.2289
+X-MS-Exchange-CrossTenant-Network-Message-Id: d18ec04f-77e8-4c63-f769-08dd6fd55f58
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Mar 2025 21:53:57.4737
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -158,193 +158,124 @@ X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-0000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7527
 
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, March=
- 21, 2025 1:11 PM
+ 21, 2025 1:19 PM
 >=20
 > On 3/12/2025 11:19 PM, mhkelley58@gmail.com wrote:
 > > From: Michael Kelley <mhklinux@outlook.com>
 > >
 > > Update hypercall call sites to use the new hv_hvcall_*() functions
 > > to set up hypercall arguments. Since these functions zero the
-> > fixed portion of input memory, remove now redundant zero'ing of
-> > input fields.
+> > fixed portion of input memory, remove now redundant calls to memset().
 > >
-> > hv_post_message() requires additional updates. The payload area is
-> > treated as an array to avoid wasting cycles on zero'ing it and
-> > then overwriting with memcpy(). To allow treatment as an array,
-> > the corresponding payload[] field is updated to have zero size.
-> >
-> I'd prefer to leave the payload field as a fixed-sized array.
-> Changing it to a flexible array makes it look like that input is
-> for a variable-sized or rep hypercall, and it makes the surrounding
-> code in hv_post_message() more complex and inscrutable as a result.
->=20
-> I suggest leaving hv_post_message() alone, except for changing
-> hyperv_pcpu_input_arg -> hyperv_pcpu_arg, and perhaps a comment
-> explaining why hv_hvcall_input() isn't used there.
->=20
 > > Signed-off-by: Michael Kelley <mhklinux@outlook.com>
+> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 > > ---
-> >  drivers/hv/hv.c           | 9 ++++++---
-> >  drivers/hv/hv_balloon.c   | 4 ++--
-> >  drivers/hv/hv_common.c    | 2 +-
-> >  drivers/hv/hv_proc.c      | 8 ++++----
-> >  drivers/hv/hyperv_vmbus.h | 2 +-
-> >  5 files changed, 14 insertions(+), 11 deletions(-)
 > >
-> > diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> > index a38f84548bc2..e2dcbc816fc5 100644
-> > --- a/drivers/hv/hv.c
-> > +++ b/drivers/hv/hv.c
-> > @@ -66,7 +66,8 @@ int hv_post_message(union hv_connection_id connection=
-_id,
-> >  	if (hv_isolation_type_tdx() && ms_hyperv.paravisor_present)
-> >  		aligned_msg =3D this_cpu_ptr(hv_context.cpu_context)->post_msg_page;
-> >  	else
-> > -		aligned_msg =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > +		hv_hvcall_in_array(&aligned_msg, sizeof(*aligned_msg),
-> > +				   sizeof(aligned_msg->payload[0]));
+> > Notes:
+> >     Changes in v2:
+> >     * In hv_arch_irq_unmask(), added check of the number of computed ba=
+nks
+> >       in the hv_vpset against the batch_size. Since an hv_vpset current=
+ly
+> >       represents a maximum of 4096 CPUs, the hv_vpset size does not exc=
+eed
+> >       512 bytes and there should always be sufficent space. But do the
+> >       check just in case something changes. [Nuno Das Neves]
 > >
-> >  	aligned_msg->connectionid =3D connection_id;
-> >  	aligned_msg->reserved =3D 0;
-> > @@ -80,8 +81,10 @@ int hv_post_message(union hv_connection_id connectio=
-n_id,
-> >  						  virt_to_phys(aligned_msg), 0);
-> >  		else if (hv_isolation_type_snp())
-> >  			status =3D hv_ghcb_hypercall(HVCALL_POST_MESSAGE,
-> > -						   aligned_msg, NULL,
-> > -						   sizeof(*aligned_msg));
-> > +						   aligned_msg,
-> > +						   NULL,
-> > +						   struct_size(aligned_msg, payload,
-> > +						   HV_MESSAGE_PAYLOAD_QWORD_COUNT));
->=20
-> See my comment above, I'd prefer to leave this function mostly
-> alone to maintain readability.
-
-Let me try again to introduce hv_hvcall_*() without changing struct
-hv_input_post_message. If that struct isn't changed, then the
-hv_ghcb_hypercall() arguments don't have to change.
-
-I'd like to reach a point where hyperv_input_arg isn't referenced in any
-open coding -- it should be referenced only internally in the hv_call_*()
-functions and where it is allocated and deallocated. The arguments to
-hv_hvcall_in_array() will be a slightly more complicated to prevent zero'in=
-g
-the entire payload area, but I don't think readability alone is justificati=
-on
-for open-coding the use of hyperv_input_arg.
-
-Other reviewers -- please chime in on whether the "no open coding" goal
-should be kept. I can drop that goal if that's the way folks prefer.
-
->=20
-> >  		else
-> >  			status =3D HV_STATUS_INVALID_PARAMETER;
-> >  	} else {
-> > diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-> > index fec2f18679e3..2def8b8794ee 100644
-> > --- a/drivers/hv/hv_balloon.c
-> > +++ b/drivers/hv/hv_balloon.c
-> > @@ -1582,14 +1582,14 @@ static int hv_free_page_report(struct page_repo=
-rting_dev_info *pr_dev_info,
-> >  	WARN_ON_ONCE(nents > HV_MEMORY_HINT_MAX_GPA_PAGE_RANGES);
-> >  	WARN_ON_ONCE(sgl->length < (HV_HYP_PAGE_SIZE << page_reporting_order)=
-);
-> >  	local_irq_save(flags);
-> > -	hint =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > +
-> > +	hv_hvcall_in_array(&hint, sizeof(*hint), sizeof(hint->ranges[0]));
->=20
-> We should ensure the returned batch size is large enough for
-> "nents".
-
-OK, right.  That test would replace the WARN_ON_ONCE() based on nents.
-
->=20
-> >  	if (!hint) {
-> >  		local_irq_restore(flags);
-> >  		return -ENOSPC;
-> >  	}
+> >  drivers/pci/controller/pci-hyperv.c | 18 ++++++++----------
+> >  include/hyperv/hvgdk_mini.h         |  2 +-
+> >  2 files changed, 9 insertions(+), 11 deletions(-)
 > >
-> >  	hint->heat_type =3D HV_EXTMEM_HEAT_HINT_COLD_DISCARD;
-> > -	hint->reserved =3D 0;
-> >  	for_each_sg(sgl, sg, nents, i) {
-> >  		union hv_gpa_page_range *range;
+> > diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controll=
+er/pci-hyperv.c
+> > index ac27bda5ba26..82ac0e09943b 100644
+> > --- a/drivers/pci/controller/pci-hyperv.c
+> > +++ b/drivers/pci/controller/pci-hyperv.c
+> > @@ -622,7 +622,7 @@ static void hv_arch_irq_unmask(struct irq_data *dat=
+a)
+> >  	struct pci_dev *pdev;
+> >  	unsigned long flags;
+> >  	u32 var_size =3D 0;
+> > -	int cpu, nr_bank;
+> > +	int cpu, nr_bank, batch_size;
+> >  	u64 res;
 > >
-> > diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> > index 9804adb4cc56..a6b1cdfbc8d4 100644
-> > --- a/drivers/hv/hv_common.c
-> > +++ b/drivers/hv/hv_common.c
-> > @@ -293,7 +293,7 @@ void __init hv_get_partition_id(void)
-> >  	u64 status, pt_id;
-> >
-> >  	local_irq_save(flags);
-> > -	output =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > +	hv_hvcall_inout(NULL, 0, &output, sizeof(*output));
-> >  	status =3D hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, &output);
-> >  	pt_id =3D output->partition_id;
-> >  	local_irq_restore(flags);
-> > diff --git a/drivers/hv/hv_proc.c b/drivers/hv/hv_proc.c
-> > index 2fae18e4f7d2..5c580ee1c23f 100644
-> > --- a/drivers/hv/hv_proc.c
-> > +++ b/drivers/hv/hv_proc.c
-> > @@ -73,7 +73,8 @@ int hv_call_deposit_pages(int node, u64 partition_id,=
- u32 num_pages)
+> >  	dest =3D irq_data_get_effective_affinity_mask(data);
+> > @@ -638,8 +638,8 @@ static void hv_arch_irq_unmask(struct irq_data *dat=
+a)
 > >
 > >  	local_irq_save(flags);
 > >
-> > -	input_page =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > +	hv_hvcall_in_array(&input_page, sizeof(*input_page),
-> > +			   sizeof(input_page->gpa_page_list[0]));
->=20
-> We should ensure the returned batch size is large enough.
-
-OK.
-
->=20
+> > -	params =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> > -	memset(params, 0, sizeof(*params));
+> > +	batch_size =3D hv_hvcall_in_array(&params, sizeof(*params),
+> > +					sizeof(params->int_target.vp_set.bank_contents[0]));
+> >  	params->partition_id =3D HV_PARTITION_ID_SELF;
+> >  	params->int_entry.source =3D HV_INTERRUPT_SOURCE_MSI;
+> >  	params->int_entry.msi_entry.address.as_uint32 =3D int_desc->address &=
+ 0xffffffff;
+> > @@ -671,7 +671,7 @@ static void hv_arch_irq_unmask(struct irq_data *dat=
+a)
+> >  		nr_bank =3D cpumask_to_vpset(&params->int_target.vp_set, tmp);
+> >  		free_cpumask_var(tmp);
 > >
-> >  	input_page->partition_id =3D partition_id;
+> > -		if (nr_bank <=3D 0) {
+> > +		if (nr_bank <=3D 0 || nr_bank > batch_size) {
+> >  			res =3D 1;
+> >  			goto out;
+> >  		}
+> > @@ -1034,11 +1034,9 @@ static void hv_pci_read_mmio(struct device *dev,=
+ phys_addr_t gpa, int size, u32
 > >
-> > @@ -124,9 +125,8 @@ int hv_call_add_logical_proc(int node, u32 lp_index=
-, u32 apic_id)
-> >  	do {
-> >  		local_irq_save(flags);
+> >  	/*
+> >  	 * Must be called with interrupts disabled so it is safe
+> > -	 * to use the per-cpu input argument page.  Use it for
+> > -	 * both input and output.
+> > +	 * to use the per-cpu argument page.
+> >  	 */
+> > -	in =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> > -	out =3D *this_cpu_ptr(hyperv_pcpu_input_arg) + sizeof(*in);
+> > +	hv_hvcall_inout(&in, sizeof(*in), &out, sizeof(*out));
+> >  	in->gpa =3D gpa;
+> >  	in->size =3D size;
 > >
-> > -		input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-> >  		/* We don't do anything with the output right now */
-> > -		output =3D *this_cpu_ptr(hyperv_pcpu_output_arg);
-> > +		hv_hvcall_inout(&input, sizeof(*input), &output, sizeof(*output));
+> > @@ -1067,9 +1065,9 @@ static void hv_pci_write_mmio(struct device *dev,=
+ phys_addr_t gpa, int size, u32
 > >
-> >  		input->lp_index =3D lp_index;
-> >  		input->apic_id =3D apic_id;
-> > @@ -167,7 +167,7 @@ int hv_call_create_vp(int node, u64 partition_id, u=
-32 vp_index, u32 flags)
-> >  	do {
-> >  		local_irq_save(irq_flags);
-> >
-> > -		input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > +		hv_hvcall_in(&input, sizeof(*input));
-> >
-> >  		input->partition_id =3D partition_id;
-> >  		input->vp_index =3D vp_index;
-> > diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-> > index 29780f3a7478..44b5e8330d9d 100644
-> > --- a/drivers/hv/hyperv_vmbus.h
-> > +++ b/drivers/hv/hyperv_vmbus.h
-> > @@ -101,7 +101,7 @@ struct hv_input_post_message {
+> >  	/*
+> >  	 * Must be called with interrupts disabled so it is safe
+> > -	 * to use the per-cpu input argument memory.
+> > +	 * to use the per-cpu argument page.
+> >  	 */
+> > -	in =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> > +	hv_hvcall_in_array(&in, sizeof(*in), sizeof(in->data[0]));
+> >  	in->gpa =3D gpa;
+> >  	in->size =3D size;
+> >  	switch (size) {
+> > diff --git a/include/hyperv/hvgdk_mini.h b/include/hyperv/hvgdk_mini.h
+> > index 70e5d7ee40c8..cb25ac1e3ac5 100644
+> > --- a/include/hyperv/hvgdk_mini.h
+> > +++ b/include/hyperv/hvgdk_mini.h
+> > @@ -1342,7 +1342,7 @@ struct hv_mmio_write_input {
+> >  	u64 gpa;
+> >  	u32 size;
 > >  	u32 reserved;
-> >  	u32 message_type;
-> >  	u32 payload_size;
-> > -	u64 payload[HV_MESSAGE_PAYLOAD_QWORD_COUNT];
-> > +	u64 payload[];
+> > -	u8 data[HV_HYPERCALL_MMIO_MAX_DATA_LENGTH];
+> > +	u8 data[];
 >=20
-> See my comment above, I'd prefer to keep this how it is.
+> As with the prior patch, I don't think this is worth changing. The
+> code in hv_pci_write_mmio() is more complicated as a result, and
+> changing the array means the struct no longer matches the Hyper-V
+> struct 1:1.
 >=20
-> >  };
-> >
-> >
->=20
-> Thanks
-> Nuno
 
+Given the goal of matching the Hyper-V structure definitions, I
+can see that changing the "data" field to be a flexible array is
+problematic. But what are the additional complications in
+hv_pci_write_mmio() are you referring to?  There's only a one
+line change. Again, I'd like to not leave cases where use of
+hyperv_input_arg is open coded. I think hv_hvcall_*() can still
+be used even if the "data" field is a fixed-size array.
+
+Michael
 
