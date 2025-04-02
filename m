@@ -1,91 +1,72 @@
-Return-Path: <linux-arch+bounces-11219-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11220-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94672A78917
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 09:46:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57FB5A78E13
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 14:19:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 884C27A10FD
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 07:45:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A0227A1BCC
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 12:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BBE8227B8E;
-	Wed,  2 Apr 2025 07:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27589238D2E;
+	Wed,  2 Apr 2025 12:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="K19W1GmQ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4C4HdGt+";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="t1CXcxl7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D9F1362;
-	Wed,  2 Apr 2025 07:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E7B1D7E57;
+	Wed,  2 Apr 2025 12:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743579963; cv=none; b=huiAg6AEoawfsESFx4CqSwNaq2AAeaMcigFS6Kskot+mVceWQnfITwXupgDfxJf1uW9e0QdQWSHT2cw++4d0bnyQPBCxJ6KCbaSUx9nBT12hmOIbssSSXUdacHeh9zuUf1n2+579KmWriPIRru/nXoXXMw4v77g/1QKS+ihIT9M=
+	t=1743596350; cv=none; b=McQRz++SFqABj8HbtqGy+6LtIhTTDlwbN8q/QUDbGCMn+qnzpy8rsH8Eulxspq2YUmtVWw2yfEmzvcST8OcwnT6/IU8Ks71DOecaNRIyFyZ+2YXoLio0Wx3wSEAdF5cYdxfe63YEj2iQoDgP29wDGXCP8Nhg7ATU6j5iYmpXBqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743579963; c=relaxed/simple;
-	bh=ebl2bB+TRFblGvdRbreoVEWpvVOOvApz34KbpVlc440=;
+	s=arc-20240116; t=1743596350; c=relaxed/simple;
+	bh=+YugTiA5uSlijtvOniAz233xfd9rjfYPP9SWxiLilz4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e52R3ZJxBh19De5hXX5G4L+ISzcRL1URx/4qDgdSNG5Pt3oioZe7uS9ggHn4tKLAGnW0Wi1HAIT8O+ov+bcgatHhnCw6Hjk31+eROB08ZVC6zwZGh/I8WFkOka/h46wc3V4uvXv7+azl0qQSdYoXyE71ZNc37L4513mL7+aoh+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=K19W1GmQ; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uIzWjvfJbyS7n54sJ+5shgly3p7L+Bq4hAOWNvm3+QQ=; b=K19W1GmQJKHEi4CglJlEuX8NWi
-	LthI2Z1LT4kdChvQwI3VZxL8k5hQ8dfV9NdzrOUMMX5Pj6OAhhEMS8GDkCXS2YpBQcPOH/Ls8WWAg
-	vt0plzI5MTrstT6vVlp7xwsZ0RSoiIMGP/bQXVfBeMRFvz9Ykq9JPtPXarpYwYT/LMNYgK0a0CjKi
-	kJJEWZJJLww9Gks/HsTl8JvWnlqFdUJ6xwagZ6hon/A/xb2B/diil2B0kL2IZ7+7EZgbibHMjzb7w
-	/qUr5UiptHJqHeN9jIzxomcDYiKG84dHAl9weULxWpIBCV33DZruujj7uy0w4xbjRcWo4+Gbycyy+
-	hIRGELoQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1tzsnH-00000006zJG-0AVp;
-	Wed, 02 Apr 2025 07:45:51 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 95EEB30049D; Wed,  2 Apr 2025 09:45:50 +0200 (CEST)
-Date: Wed, 2 Apr 2025 09:45:50 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Alessandro Carminati <acarmina@redhat.com>,
-	linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Alessandro Carminati <alessandro.carminati@gmail.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev, x86@kernel.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v4 06/14] x86: Add support for suppressing warning
- backtraces
-Message-ID: <20250402074550.GQ5880@noisy.programming.kicks-ass.net>
-References: <20250313114329.284104-1-acarmina@redhat.com>
- <20250313114329.284104-7-acarmina@redhat.com>
- <20250401170829.GO5880@noisy.programming.kicks-ass.net>
- <ddc7939f-fb98-43af-aed1-0bc0594ecc41@roeck-us.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dFVvvevE10ce9SxMctrL+V8/S2jSu2aJLtSzROjTk5C3bJrFKJExAfsRYL1qaY3YLVkQpkR6uGY96+CP0Nq+0MHyxruXWrVHFL1LJniiE41386e0iU86v4xjcILL/XotqC3vZ6sj4NFBZM6g5XIxvOAtF8dn0Kz9y0KdOjnPGFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4C4HdGt+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=t1CXcxl7; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 2 Apr 2025 14:19:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1743596346;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QPwuNcBCkbZ5awEPfs4/za9zsV6NBdgUfdxmq9Ar2zg=;
+	b=4C4HdGt+Eda2qns01kTkRT+qPk6Wn4tZQ5k8O1Gx7H6kUOU1PXVZWAQFtMS0r4AiH92Qy2
+	T19YMwiz9JFLLSHv54Dn9RITOldT/MtOzK49CNMWAuxNeEC+2Y6jm0UKbVEosmPzAfc5jj
+	9ZmhrVVrsxgekRU0tgRzk1+hD6Ij87xwwZ7agsbOUR5Gj8FET9ayzNQGwloZQFkrw1war7
+	RXDjG/MLKkGblGXOcKEt15IW1odXI5QbD6QWTMGTgmopNAe9NZ59ehpG3ncR54fm//ECjU
+	qSSL0ofXcq5UCmBbiP/BNaPIX9ZMUzNeOBxIdcNETXuRaJGbkcuNUw631Z8kYQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1743596346;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QPwuNcBCkbZ5awEPfs4/za9zsV6NBdgUfdxmq9Ar2zg=;
+	b=t1CXcxl7E7i5zDKv6ErJjLdNnAghpNhssI165DwRwHvZe5uvKbvjZ19neMAQXjnMrzKBSO
+	g9EkcgUMbGsLe6BA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Mike Rapoport <rppt@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "David S. Miller" <davem@davemloft.net>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org, 
+	Naresh Kamboju <naresh.kamboju@linaro.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: [PATCH v2 10/13] arch, mm: set high_memory in free_area_init()
+Message-ID: <20250402140521-bf9b3743-094e-4097-a189-10cdf1db9255@linutronix.de>
+References: <20250313135003.836600-1-rppt@kernel.org>
+ <20250313135003.836600-11-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -94,34 +75,84 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ddc7939f-fb98-43af-aed1-0bc0594ecc41@roeck-us.net>
+In-Reply-To: <20250313135003.836600-11-rppt@kernel.org>
 
-On Tue, Apr 01, 2025 at 10:53:46AM -0700, Guenter Roeck wrote:
+(drop all the non-x86 and non-mm recipients)
 
-> > >   #define _BUG_FLAGS(ins, flags, extra)					\
-> > >   do {									\
-> > >   	asm_inline volatile("1:\t" ins "\n"				\
-> > >   		     ".pushsection __bug_table,\"aw\"\n"		\
-> > >   		     "2:\t" __BUG_REL(1b) "\t# bug_entry::bug_addr\n"	\
-> > >   		     "\t"  __BUG_REL(%c0) "\t# bug_entry::file\n"	\
-> > > -		     "\t.word %c1"        "\t# bug_entry::line\n"	\
-> > > -		     "\t.word %c2"        "\t# bug_entry::flags\n"	\
-> > > -		     "\t.org 2b+%c3\n"					\
-> > > +		     "\t"  __BUG_FUNC_PTR "\t# bug_entry::function\n"	\
-> > > +		     "\t.word %c2"        "\t# bug_entry::line\n"	\
-> > > +		     "\t.word %c3"        "\t# bug_entry::flags\n"	\
-> > > +		     "\t.org 2b+%c4\n"					\
-> > >   		     ".popsection\n"					\
-> > >   		     extra						\
-> > > -		     : : "i" (__FILE__), "i" (__LINE__),		\
-> > > +		     : : "i" (__FILE__), "i" (__BUG_FUNC), "i" (__LINE__),\
-> > >   			 "i" (flags),					\
-> > >   			 "i" (sizeof(struct bug_entry)));		\
-> > >   } while (0)
+Hi,
 
-Also this, why do you need this extra function in the bug entry? Isn't
-that trivial from the trap site itself? symbol information should be
-able to get you the function from the trap ip.
+On Thu, Mar 13, 2025 at 03:50:00PM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> high_memory defines upper bound on the directly mapped memory.
+> This bound is defined by the beginning of ZONE_HIGHMEM when a system has
+> high memory and by the end of memory otherwise.
+> 
+> All this is known to generic memory management initialization code that
+> can set high_memory while initializing core mm structures.
+> 
+> Add a generic calculation of high_memory to free_area_init() and remove
+> per-architecture calculation except for the architectures that set and
+> use high_memory earlier than that.
 
-None of this makes any sense.
+This change (in mainline as commit e120d1bc12da ("arch, mm: set high_memory in free_area_init()")
+breaks booting i386 on QEMU for me (and others [0]).
+The boot just hangs without output.
+
+It's easily reproducible with kunit:
+./tools/testing/kunit/kunit.py run --arch i386
+
+See below for the specific problematic hunk.
+
+[0] https://lore.kernel.org/lkml/CA+G9fYtdXHVuirs3v6at3UoKNH5keuq0tpcvpz0tJFT4toLG4g@mail.gmail.com/
+
+> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>	# x86
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  arch/alpha/mm/init.c         |  1 -
+>  arch/arc/mm/init.c           |  2 --
+>  arch/arm64/mm/init.c         |  2 --
+>  arch/csky/mm/init.c          |  1 -
+>  arch/hexagon/mm/init.c       |  6 ------
+>  arch/loongarch/kernel/numa.c |  1 -
+>  arch/loongarch/mm/init.c     |  2 --
+>  arch/microblaze/mm/init.c    |  2 --
+>  arch/mips/mm/init.c          |  2 --
+>  arch/nios2/mm/init.c         |  6 ------
+>  arch/openrisc/mm/init.c      |  2 --
+>  arch/parisc/mm/init.c        |  1 -
+>  arch/riscv/mm/init.c         |  1 -
+>  arch/s390/mm/init.c          |  2 --
+>  arch/sh/mm/init.c            |  7 -------
+>  arch/sparc/mm/init_32.c      |  1 -
+>  arch/sparc/mm/init_64.c      |  2 --
+>  arch/um/kernel/um_arch.c     |  1 -
+>  arch/x86/kernel/setup.c      |  2 --
+>  arch/x86/mm/init_32.c        |  3 ---
+>  arch/x86/mm/numa_32.c        |  3 ---
+>  arch/xtensa/mm/init.c        |  2 --
+>  mm/memory.c                  |  8 --------
+>  mm/mm_init.c                 | 30 ++++++++++++++++++++++++++++++
+>  mm/nommu.c                   |  2 --
+>  25 files changed, 30 insertions(+), 62 deletions(-)
+
+<snip>
+
+> diff --git a/arch/x86/mm/init_32.c b/arch/x86/mm/init_32.c
+> index 6d2f8cb9451e..801b659ead0c 100644
+> --- a/arch/x86/mm/init_32.c
+> +++ b/arch/x86/mm/init_32.c
+> @@ -643,9 +643,6 @@ void __init initmem_init(void)
+>  		highstart_pfn = max_low_pfn;
+>  	printk(KERN_NOTICE "%ldMB HIGHMEM available.\n",
+>  		pages_to_mb(highend_pfn - highstart_pfn));
+> -	high_memory = (void *) __va(highstart_pfn * PAGE_SIZE - 1) + 1;
+> -#else
+> -	high_memory = (void *) __va(max_low_pfn * PAGE_SIZE - 1) + 1;
+>  #endif
+
+Reverting this hunk fixes the issue for me.
+
+>  
+>  	memblock_set_node(0, PHYS_ADDR_MAX, &memblock.memory, 0);
 
