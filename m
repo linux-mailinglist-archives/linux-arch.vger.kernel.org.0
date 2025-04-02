@@ -1,178 +1,207 @@
-Return-Path: <linux-arch+bounces-11239-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11240-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 995A9A79662
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 22:18:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7344AA79669
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 22:21:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 261F47A2785
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 20:17:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62CAE3B5C11
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 20:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3742F1EB18F;
-	Wed,  2 Apr 2025 20:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E84D21EFF8C;
+	Wed,  2 Apr 2025 20:19:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=frank.scheiner@web.de header.b="aeXuR7TP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TNsGv5RE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE58B674;
-	Wed,  2 Apr 2025 20:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6241925AB;
+	Wed,  2 Apr 2025 20:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743625104; cv=none; b=k4cF2ZdPzwg/zInsXLaz3tCsOO3k7/zNSn4DVoBodBjreLNQUD1+J1fZpE2YctcVug/OrfJwvFdQqJzhDhkNFrYt1c42HwsqzoIUumJ9PqbkuBX7xTieOa4yEgBuijDjwdt2D2eerB3VCqikTIms0WG5k5isEjW+ysnVJSBxcno=
+	t=1743625150; cv=none; b=lCo4UbHg2iwt5DnMJTWE8KrmNCkXYYuMMxZLNqJTDdpn+YhPgv0kI1Mvmi16hYF6d67V5aKOocxh0IRieSOrmwxbKypUbdfVa+Nxlr9nkDA4KCtmmQfmsO10/zU9UIa4blMN/A9RvMRtv/78lX11qGDMfSHpOTpaqveY4dsE7vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743625104; c=relaxed/simple;
-	bh=MpJVhRgZ7LUpR6onJCeLiTRp0b5MlWrOY5kpXQCMI6E=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=WsIjAAtQSfaAK0PgzVvcjus+iNBDBVqad+YP6fZwiPKqXoPoYKKDs0jtekQp1alZq6f5an2k8lpStzkzKjQmeJqO4SkQsHy/xozuDgTqIXd3Z4cmmYIMQSjmjsFT6PhRhU1JhOHepb9phVg22mLfGQEv7KJOBWxgD2F1fhVu9t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=frank.scheiner@web.de header.b=aeXuR7TP; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1743625082; x=1744229882; i=frank.scheiner@web.de;
-	bh=MpJVhRgZ7LUpR6onJCeLiTRp0b5MlWrOY5kpXQCMI6E=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=aeXuR7TPnwSGVB4U/f7Y7uFNws62V3DfUtBmR95q0IsesgzjcZSTu7XIwsvg7VXk
-	 ZvcKeai3Ody349fmfzpjrD/33ibD9nHfpMLNfpph4l8YyhxSBFZcNZgDHcn+bvmZl
-	 fyK/KxoxFBi8Hv4lpclPR6kRjc+Ku8CYmJw8ct9qgBYN0TahshpX5xVBe9Keteo+H
-	 0JhLbrls2eoU5ycIr5W49wziCBrBGNNVkoAKf6PjuMl2NCzi8Eo0l9YdHzDOWsKO7
-	 eTzN4NqcuZWXO/nxm+T2bagxPLjbwBx/uc7Hjk1jllpbgKwtc/imbMNkLTTvsw/Pv
-	 uoe2H6vrfgWTpfz4yQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.30] ([84.152.244.176]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1N4eGT-1szcNR1dgd-017Br7; Wed, 02
- Apr 2025 22:18:02 +0200
-Message-ID: <0855440c-8448-4e56-858c-49d0d2adca34@web.de>
-Date: Wed, 2 Apr 2025 22:18:01 +0200
+	s=arc-20240116; t=1743625150; c=relaxed/simple;
+	bh=PBAlCXXoeZYK4hLqIaAvGTjwa5glXZM1tJS6eSjSSww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fj+LJsDdHWGyBOc2IKv6FE29RfFdLPiGTJOZgRpNQPyEBAA7/1mNxBb2oH5bHFd+Tz9vnZCQmJMvCQ3TRqHfkzoVwSf/OrFO7iUkgoaL3kUd7i4UWnECPtkD1XJc2DNJrmbaSoju/aiwDSfn//DRO+nak/4yA8xPURyj1XGMySM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TNsGv5RE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5554BC4CEDD;
+	Wed,  2 Apr 2025 20:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743625150;
+	bh=PBAlCXXoeZYK4hLqIaAvGTjwa5glXZM1tJS6eSjSSww=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TNsGv5REBUv5cCT3Y6XQje0aF3DB0+YmNtT4Z8Guj8UnqP9RDvNkPh30jZCNJ6ym/
+	 ZYe5NowHojMJrVjp7O1ai7s2tjouVNUHS0RUE7OZayzmNTZNGUgq36PRUDhK0aZaFU
+	 ujflV2XCHpWTbN2b6vk/r5o9Ttku8oPuqsL8H1j410RsfZ4NlTatOVmbdm4guXXZqp
+	 bVKxgqmn5hngT7OjGOvj5fCLkUw0lcHgNdtXqygBbwQaJl+A9AwUNeCv70o9iFpba5
+	 4yoqbCjOIKhAZBP1SyDDZKiTsH2KyjMsLt9ILHAC85utAuq/POgnQVkBFhnZ21G4md
+	 h4MoLQ9RrqesQ==
+Date: Wed, 2 Apr 2025 23:18:55 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	lkft-triage@lists.linaro.org,
+	Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: [PATCH v2 10/13] arch, mm: set high_memory in free_area_init()
+Message-ID: <Z-2br1vk8lf9V40T@kernel.org>
+References: <20250313135003.836600-1-rppt@kernel.org>
+ <20250313135003.836600-11-rppt@kernel.org>
+ <20250402140521-bf9b3743-094e-4097-a189-10cdf1db9255@linutronix.de>
+ <Z-0xrWyff9-9bJRf@kernel.org>
+ <20250402145330-3ff21a6b-fb03-4bc8-8178-51a535582c6f@linutronix.de>
+ <20250402181842-f25872a1-00f7-4a8f-ae6d-3927899ee3a6@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: torvalds@linux-foundation.org
-Cc: =?UTF-8?B?VG9tw6HFoSBHbG96YXI=?= <tglozar@gmail.com>,
- Sergei Trofimovich <slyich@gmail.com>, linux-kernel@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-ia64@vger.kernel.org,
- t2@t2sde.org
-References: <CAHk-=wg7TO09Si5tTPyhdrLLvyYtVmCf+GGN4kVJ0=Xk=5TE3g@mail.gmail.com>
-Subject: Re: Linux 6.14
-Content-Language: en-US
-From: Frank Scheiner <frank.scheiner@web.de>
-In-Reply-To: <CAHk-=wg7TO09Si5tTPyhdrLLvyYtVmCf+GGN4kVJ0=Xk=5TE3g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:gLIE8kUPbJpq3dfTDSLsXMSKwPWNv9IhzTqgT+H3ShyfNcv1jv7
- vPajAoWwif0jKL5OEN0pnLgZkcfH4D0A887fmLBMKo3JBn6FvLHaSZWvstGKodDCwt9Y3p6
- nza8IEkbeHY+6SP2K6fTdQuI8efoYHMxMq0X6+cb2uAdU0pFb/rykHadFY7SUWQX3n2ycT0
- RHQrX/yQb8ntwutsyb9RA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:jQX54MUzdow=;x1DpACLCAXa5S8IbRzOz3O4PdyD
- pMxvsdTUJ/N+j64jtj7fhlVj/zSX3FCoayWsY5i0FEoGp7y1fAPGNq0Ezi9PLeQBKWWWRjHkk
- x+p1JSfyL0HPYKatY8BKQ6X7IIulSfsSnjL1GNgUlZy8aWHSznNqiUDD1sDdD19+WBXDa/dW3
- 32xphPqssFoQIWgsYcukZkKIkYQwnMiLn0nV03KycoFqXull9Efdx8uyNpElazDH+QpilGXy7
- cWODCfEHG2YV1vZHC08nSQBvORWrXsiulpG5yNcOCLK9B1o3Y6C2iYXuFnnnZXXt5oVyCJ1us
- 1+c37CVNM6QRmKY0Vc6kDcXUc+cjnCxX1JwmiohbCwj0u8ee4Hgd1cnZj7y59uU+5DisbP+Sn
- zjgS0BByjM/zhyF1CXp8KHHGmZBWw6bAlNYwO50rzlnt4q9pJ0Z94spAFeux71od3T3pXVLK1
- PAwzRIRKzwmPRs8uc1+NrHBW/whi5dnbScQI+Pa7CgvCDMGuzVy6QOl1lv5dkH7Lo3THja+q+
- IjlJT5gw8TyfmsOM/87uYkYl//jC27QKEymPGUc5RXnm5w3Bmg7x8uW1JD/nD3eiXxw04RJBo
- bMxScLX+RdYcWud+IZ1iZXvhUgB6OBtQUL3uuA+GIAxws1t/rkpaw7BkfgUOIA+h2VmFuA1Ny
- yVJV6lefuBkuKDpdWx0sj2B0ba6VxbOb6hfqecR9XYwsCGEY0zJwC8T42EKD0Isx1hgSK7K1U
- zX4DQSGG3y39yrdWX62QqsDwrOFkZm5t/AUDclzksu0F/C595WKMIphxQ0dZ8fX5C9vT8Tz04
- 8Ez+EYtksN0JnT7GdmLWn3m7durFjRIyEJt1qSkYiYa1aV9Yp087nB7cWef7p8lQbf4CxMx8s
- xs5Y+Lo3umXEAZe8KaNJV2IJdDuh0Dmz8Ls5uv9agas/sC+aRykXs2Etq4Z+sziK17ux1vYaq
- oQ3niUyQLkjPwzr2DKZPXVzuTtBz6iMcRyJgR6eX6FIM9Si8Ex7kSaaq9C2pDl4e5jgBNkndq
- Y9xsSM9PjoH1z/vgrgUd3lGITOcy258calokFf7XRXHc8v7yLyO5NEfumoOmartfbSo85uCXz
- +bekwBpQCh3LDAeib4BTTtkxhpZh18F/WCbfAEB6jGP9e5QtY+AXeo6GW9nj3RKeq+XyqSmej
- C2t5zLSK0gmRsthqeyVlGPxyRZC7wTeL9EtJFu+FqQWnSSHmJaxBdpYsBwiK/iEy4SyhjiS9q
- 8A6pIMjRmND+77l5T87vxbvf2b9TUOJb9lT0VNZh8BM1b0gnAaT7OAq3Ury1DE6hRtEgtaLCu
- RIyDaso/kV6TZxN9vHpgWLL6f9z7wJQd7380bJPOGWIKcHkd7RcfEJwbHBowl+Qmc3IFTWrto
- pQNILT62nDmf9jAeo3XSLvqb+A6N59mcx9WEIqYXMc+doiRiM6IVhA0i5jQ4gd25m/wHDIA4O
- Jq1Y09Jw5HN6FwTUywj2vf0nCLpQoNPETCphq4rJs+maH0+IZ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250402181842-f25872a1-00f7-4a8f-ae6d-3927899ee3a6@linutronix.de>
 
-Dear all,
+On Wed, Apr 02, 2025 at 06:31:02PM +0200, Thomas Weißschuh wrote:
+> On Wed, Apr 02, 2025 at 03:07:51PM +0200, Thomas Weißschuh wrote:
+> > On Wed, Apr 02, 2025 at 03:46:37PM +0300, Mike Rapoport wrote:
+> > > On Wed, Apr 02, 2025 at 02:19:01PM +0200, Thomas Weißschuh wrote:
+> > > > (drop all the non-x86 and non-mm recipients)
+> > > > 
+> > > > On Thu, Mar 13, 2025 at 03:50:00PM +0200, Mike Rapoport wrote:
+> > > > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > > > 
+> > > > > high_memory defines upper bound on the directly mapped memory.
+> > > > > This bound is defined by the beginning of ZONE_HIGHMEM when a system has
+> > > > > high memory and by the end of memory otherwise.
+> > > > > 
+> > > > > All this is known to generic memory management initialization code that
+> > > > > can set high_memory while initializing core mm structures.
+> > > > > 
+> > > > > Add a generic calculation of high_memory to free_area_init() and remove
+> > > > > per-architecture calculation except for the architectures that set and
+> > > > > use high_memory earlier than that.
+> > > > 
+> > > > This change (in mainline as commit e120d1bc12da ("arch, mm: set high_memory in free_area_init()")
+> > > > breaks booting i386 on QEMU for me (and others [0]).
+> > > > The boot just hangs without output.
+> > > > 
+> > > > It's easily reproducible with kunit:
+> > > > ./tools/testing/kunit/kunit.py run --arch i386
+> > > > 
+> > > > See below for the specific problematic hunk.
+> > > > 
+> > > > [0] https://lore.kernel.org/lkml/CA+G9fYtdXHVuirs3v6at3UoKNH5keuq0tpcvpz0tJFT4toLG4g@mail.gmail.com/
+> > > > 
+> > > > 
+> > > > > diff --git a/arch/x86/mm/init_32.c b/arch/x86/mm/init_32.c
+> > > > > index 6d2f8cb9451e..801b659ead0c 100644
+> > > > > --- a/arch/x86/mm/init_32.c
+> > > > > +++ b/arch/x86/mm/init_32.c
+> > > > > @@ -643,9 +643,6 @@ void __init initmem_init(void)
+> > > > >  		highstart_pfn = max_low_pfn;
+> > > > >  	printk(KERN_NOTICE "%ldMB HIGHMEM available.\n",
+> > > > >  		pages_to_mb(highend_pfn - highstart_pfn));
+> > > > > -	high_memory = (void *) __va(highstart_pfn * PAGE_SIZE - 1) + 1;
+> > > > > -#else
+> > > > > -	high_memory = (void *) __va(max_low_pfn * PAGE_SIZE - 1) + 1;
+> > > > >  #endif
+> > > > 
+> > > > Reverting this hunk fixes the issue for me.
+> > >  
+> > > This is already done by d893aca973c3 ("x86/mm: restore early initialization
+> > > of high_memory for 32-bits").
+> > 
+> > Thanks. Of course I only noticed this shortly after sending my mail.
+> > But this usecase is indeed broken on mainline.
+> > Some further bisecting lead to the mm merge commit being broken, while both its
+> > parents work. That lead the bisection astray.
+> > eb0ece16027f ("Merge tag 'mm-stable-2025-03-30-16-52' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm")
+> > 
+> > As unlikely as it sounds, it's reproducible. I'll investigate a bit.
+> 
+> The issue is fixed with the following diff:
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 284154445409..8cd95f60015d 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2165,7 +2165,8 @@ static unsigned long __init __free_memory_core(phys_addr_t start,
+>                                  phys_addr_t end)
+>  {
+>         unsigned long start_pfn = PFN_UP(start);
+> -       unsigned long end_pfn = PFN_DOWN(end);
+> +       unsigned long end_pfn = min_t(unsigned long,
+> +                                     PFN_DOWN(end), max_low_pfn);
 
-here comes the update on Linux/ia64, unfortunately a little later than
-usual. This one is for v6.14, but as we're already in the midst of the
-merge window for v6.15 I can report on the progress there, too.
+This will leave HIGHMEM completely unusable. The proper fix is
 
-So, IIRC the merge window for v6.14 required a really low effort, much
-less involvement than the one for v6.13. Still I didn't manage to extend
-testing also to on-disk installations during the v6.14 cycle. But a new
-hardware "target" could be made available for testing - a BL860c blade
-server. A description of the process still needs to be done so others
-can repeat it, it's not that hard to accomplish. So this makes six real
-machines and one simulated machine avilable for regular testing:
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 64ae678cd1d1..d7ff8dfe5f88 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -2166,6 +2166,9 @@ static unsigned long __init __free_memory_core(phys_addr_t start,
+ 	unsigned long start_pfn = PFN_UP(start);
+ 	unsigned long end_pfn = PFN_DOWN(end);
+ 
++	if (!IS_ENABLED(CONFIG_HIGHMEM) && end_pfn > max_low_pfn)
++		end_pfn = max_low_pfn;
++
+ 	if (start_pfn >= end_pfn)
+ 		return 0;
 
-* rx2620
-* rx4640
-* rx2660
-* BL860c
-* rx6600
-* rx2800 i2
-* Ski/hp-sim
+I've sent it along with the fix for x86 [1] (commit 7790c9c9265e
+("memblock: don't release high memory to page allocator when HIGHMEM is
+off") in mm-unstable), but for some reason it didn't make it to the Linus
+tree :/
 
-You'll find more details about these here (incl. boot logs):
+@Andrew, are you going to send it to Linus or you prefer if I take it via
+memblock tree? 
 
-http://epic-linux.org/#!/machines/
+[1] https://lore.kernel.org/all/20250325114928.1791109-3-rppt@kernel.org/
 
-But also other vendors once made ia64 machines. Some really cool ones
-were the Altixen from SGI and there has been a real progress in bringing
-Linux support closer to newer kernels for these just recently. To the
-best of my knowledge, this has never worked with anything newer than
-3.x.y in the past. Well, guess what, running a numalinked 32-processor
-Altix 3700 or a smaller numalinked Altix 350 is now possible with
-4.19.325. Later kernels still make problems, but 4.19.325 is a good
-resting point as CIP ([1]) still supports 4.19.x.
+>         if (start_pfn >= end_pfn)
+>                 return 0;
+> 
+> 
+> Background:
+> 
+> This reverts part of commit 6faea3422e3b ("arch, mm: streamline HIGHMEM freeing")
+> which is the direct child of the partially reverted 
+> commit e120d1bc12da ("arch, mm: set high_memory in free_area_init()").
+> The assumptions the former commit became invalid with the partial revert the latter.
+> 
+> This bug only triggers when CONFIG_HIGHMEM=n. When mm was branched from mainline
+> the i386 configuration generated by kunit ended up with CONFIG_HIGHMEM=y.
+> With some recent changes in mainline the kunit configuration switched to
+> CONFIG_HIGHMEM=n, triggering this specific reproducer only when mm got merged
+> into mainline again.
+> 
+> New kunit reproducer:
+> ./tools/testing/kunit/kunit.py run --arch i386 example --timeout 10 --kconfig_add CONFIG_HIGHMEM=n
+> 
+> Does this sound reasonable?  If so I'll send a patch tomorrow.
+> 
+> @Naresh, could you test this, too?
+> 
+> 
+> Thomas
 
-[1]: https://www.cip-project.org/
-
-****
-
-But as real hardware is still hard to get and quite expensive unless
-you're lucky, a focus has been put on Ski, the only ready-to-use closest
-thing to a real ia64 machine that's available for free right now. As it
-is still something not that well-known, an overview and outlook article
-has been created for it, partly the reason why this update is so late
-:-). If you're interested in working with ia64 "machines" w/o much
-investment, Ski is currently the way to go. Have a look here for a
-start:
-
-http://epic-linux.org/#!articles/ski-the-undiscovered-country.md
-
-****
-
-So the merge window for v6.15 looks good so far, despite being a more
-involved one, as can be seen by the number of failed runs for the Linux
-mainline autobuilder ([2]). First manual kernel builds were done based
-on [3] with binutils 2.42 and GCC 15-20250330 and have been
-boot-to-login tested on all available hardware. The HP Sim patch set
-will require an update though. More extensive testing was done on the
-rx2800 i2 with building new packages for EPIC Slack for a few hours,
-that also went well.
-
-[2]: https://github.com/johnny-mnemonic/linux-mainline-autobuilds/actions
-
-[3]: https://github.com/johnny-mnemonic/linux-ia64/commit/4e82c87058f45e79eeaa4d5bcc3b38dd3dce7209
-
-****
-
-Find the last Linux/ia64 update on [4].
-
-[4]: https://lore.kernel.org/all/53e3e309-4d66-40fe-9d47-dac6a61461d0@web.de/
-
-****
-
-Thank you all for your hard work on Linux!
-
-Cheers,
-Frank et al
-
+-- 
+Sincerely yours,
+Mike.
 
