@@ -1,318 +1,229 @@
-Return-Path: <linux-arch+bounces-11231-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11238-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C60AA794EF
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 20:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2302BA795AC
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 21:13:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F8BA3AE774
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 18:17:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 776B03B04FF
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Apr 2025 19:12:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDA791D86E8;
-	Wed,  2 Apr 2025 18:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F94B1E3DE5;
+	Wed,  2 Apr 2025 19:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gV1P+IhD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dSemILLf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD571C84AF
-	for <linux-arch@vger.kernel.org>; Wed,  2 Apr 2025 18:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0B91C84DE
+	for <linux-arch@vger.kernel.org>; Wed,  2 Apr 2025 19:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743617838; cv=none; b=kkZ4m7sm63gIl3ZzyNawuP+s+6FRUOeaj4xqcqBIZZ5gMJxPNXr4SLj2P+GYvLZWgUR5K4M8fpXG0YhtXZg8wt0vadguHBxf9ORBD2qw/JR+TRKlxCqZFSLCDR0LycbuciBBsoHeWO/1qxiYIehrBDSQWrP9MWk0Y8+eqvUUmJ4=
+	t=1743621168; cv=none; b=HHXglTUzrjHu7RljZZNb6zuS1aX84nWX1IWVRDYyv1ZKM6m51o3SFOVcL81Iz3aoyF4b/5YjjyUmWhxrRLucpYqCFYuw4pXeZtCvK4M79bJ7XafLTPkPhtsX8W4A0jcp0aJ1Z+dIl2gMwCZfls1K0t8CFQPoGEOVJGUvKghFQ6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743617838; c=relaxed/simple;
-	bh=8fISVc44GhvQRFNUdarY1lMJHlAGl4AoxaVy0GP2dZw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rrfVqHAfT+MfHTeE1UFOcA2ktC3fKlqlCP2IbGecJqE+wE8gaMEvmu51in3h+wvecYYb7KSI/Eo9TQ/5bigjz6Fcyer2D6xAfk3Lg6lHUkw+nABS4BHKHhQpa38xy2c6KeSQ0/XLuIuk3cq52HXqK3cubVueEtcxE3MmNKsPnE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gV1P+IhD; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description;
-	bh=fS2PMscCelr2p4rUSdgC+67eZkZlHh1lrlPj3wtKD4Y=; b=gV1P+IhD2igi0rHiwQrOnFJAlD
-	HQI7TMULlDe+cOeNwXlzjBIrYxSgl8Ahf4iVCacLjQtPUC+laBFiP99Uy1cGixasDU4yNFKwza+wh
-	1laD6OxYm2S0o6s3QTlUpKjyNptwqnWzbM3MeSzbyq9apucpNAjnVRb9lxDgncSpOe7eUvHMyeGGn
-	xAcMPm1wYCIFDXtQQ863eOwMnw9xXzYw8kyrxaOcIYf3cIodu+8Tj8MtVnqF5H9VdXBhIwiloIf/k
-	FNUEv2aywTqovWVVs+A92m/pTwBUe6nI5vGXc47EkjGJi0EnhodNE/T6qUZ2BMSOCDlkibczJkVBN
-	+OFiKRnw==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1u02eF-0000000A0iw-3wUe;
-	Wed, 02 Apr 2025 18:17:11 +0000
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	linux-mm@kvack.org,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v2 11/11] arch: Remove mk_pmd()
-Date: Wed,  2 Apr 2025 19:17:05 +0100
-Message-ID: <20250402181709.2386022-12-willy@infradead.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250402181709.2386022-1-willy@infradead.org>
-References: <20250402181709.2386022-1-willy@infradead.org>
+	s=arc-20240116; t=1743621168; c=relaxed/simple;
+	bh=aK3VBx6NA3jZwfdsrWRY2dRnu0FqhUszgGEOWyV+h3k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z/92qzto5WmEWUKfLcJAEZtAoAS66KRdgY2Ti0tif38C/2nUKsuzNuPUqI1AC8r8zdPIXQM1Mb+f9CGMokBDIwZe466siJYwY9oEUABMVO+bvZfboQy0x5fOvahnkW5u73D1CAinnwalmeTQeFpzn8Bnnu2H8+u68B+do5VOOAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dSemILLf; arc=none smtp.client-ip=209.85.221.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-525b44ec88aso84713e0c.3
+        for <linux-arch@vger.kernel.org>; Wed, 02 Apr 2025 12:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1743621164; x=1744225964; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ufQZbME7cCWTlfUFUJg7J87wZvmjwZWF7BNQvB4L4UM=;
+        b=dSemILLfNIW/FM82DNZXVSC3qICyNFkkE+6rNsHtXVXd7Dv3mTir70nsib4C+F5iwl
+         tvVpZyScNrY/axWTeHN4GWQEdPCfuPEyCFzVmzUQ9lig2MkdSZfOGXe+NbXjvPco1wOW
+         OVBmcNdVFZbOamSpYERZ4S+QoDacmOYj0cuvOGNXL5mJf7BfDXkL+Okw7Eaa6MyjMl2A
+         wWG06UyGve+FNyAoWwb0CW74YKLTZjuY5DvH7kVrr9C+Vi/tWnQ8jjdTinfxS+ufHaRG
+         FtozX7OOSZ2OOsnU/TU93s3riaDcJzo2b8Eaz4u62TTRUubWqUz9EWFvEah5ovkGM4Ke
+         JNBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743621164; x=1744225964;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ufQZbME7cCWTlfUFUJg7J87wZvmjwZWF7BNQvB4L4UM=;
+        b=L/BWtT+CfjkPp1oo+44rv4mKCPXxv8FoyhVA9gf5wszlJTwxT53iiuVnEYZ2MMuJp0
+         eB5goSnwF1T14cue5fLfe28FW73UYZOBiCL3lEjJX4kP8daRJ/XtWr/hAp/014pG537v
+         i5fh8V+5UTeaBBKtEt/bwWDAtVwnetKkeDo/isrsSyO/n7It8R6pYyuHYGTX2fPHA/Wl
+         47TOsEERLcCpHO/4SjapJL/EB/Du4yMk2JXtvk1iiKCYUzkrQ44PrrdxDyZ4Y5TWk/ai
+         cqMWOgANULC52YvrRyJ/UF/HL8A6xS5lEk0WjNUjRxXFqln+ZNgg455ILUSqdRBV8T7H
+         oomA==
+X-Forwarded-Encrypted: i=1; AJvYcCU68HJ75lTH0P7vm4Htp1i0A8lARg2xaHY+Fxq6oKxVEXcTvvrSuGKZto6Qxj77NTLpYTcHhs1Njepi@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBR0pceKgUqhDZUh0kPCri84v2z0THMCHHbaW0CNHUN01L+mgB
+	W3zImxqVV6zM3GY/o4YqrSTtEll08K5/jwsWMkdUgBTKMYt+IMms7Z7PMSKPKZvI9MyOCUAIqmv
+	671zBsd3yUOX6BFe1epg7lih7+aUTAgZWh1cLqA==
+X-Gm-Gg: ASbGnctUHxQoLYph/WHmfaJ3VBp7E4M2hf0B4Q3dgD5xflihZR70ZvytK+Zlmf+9peB
+	z6v3A78AVKM7+s8RMWIbsyVbCYpFu2ajQ4ri4goqluzgpiiumey7fFIcdB5GzkqWSuukO+VmAEH
+	Ei9bYw+af6ccTQwVPIHv3qS5dK178XvbBIMgmG9bdYhoJ+W7v1oBRVsWMMMQ4=
+X-Google-Smtp-Source: AGHT+IHwLcsi3BX8Jz57ZZBx4yNh0gsPGUL4LlIBXdD4VmESoE42IUlvk+9eP+LcFYoQddReWmd77wMhRr7Yoibb+IA=
+X-Received: by 2002:a05:6122:a07:b0:518:a261:adca with SMTP id
+ 71dfb90a1353d-5261d4759bcmr11728250e0c.8.1743621163716; Wed, 02 Apr 2025
+ 12:12:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250313135003.836600-1-rppt@kernel.org> <20250313135003.836600-11-rppt@kernel.org>
+ <20250402140521-bf9b3743-094e-4097-a189-10cdf1db9255@linutronix.de>
+ <Z-0xrWyff9-9bJRf@kernel.org> <20250402145330-3ff21a6b-fb03-4bc8-8178-51a535582c6f@linutronix.de>
+ <20250402181842-f25872a1-00f7-4a8f-ae6d-3927899ee3a6@linutronix.de>
+In-Reply-To: <20250402181842-f25872a1-00f7-4a8f-ae6d-3927899ee3a6@linutronix.de>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 3 Apr 2025 00:42:32 +0530
+X-Gm-Features: ATxdqUEPLfNJB2FSv1nTGKqf_ZE3BXsv2R3C6KxSgMELRNHzW7jhhAvjwROmbyc
+Message-ID: <CA+G9fYuM3XR3yMD9qwubGUYTFazpCAzK4kBw33Lagsw2HBQfhA@mail.gmail.com>
+Subject: Re: [PATCH v2 10/13] arch, mm: set high_memory in free_area_init()
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski <luto@kernel.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, 
+	"David S. Miller" <davem@davemloft.net>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org, 
+	lkft-triage@lists.linaro.org, Linux Regressions <regressions@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-There are now no callers of mk_huge_pmd() and mk_pmd().  Remove them.
+On Wed, 2 Apr 2025 at 22:01, Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
+>
+> On Wed, Apr 02, 2025 at 03:07:51PM +0200, Thomas Wei=C3=9Fschuh wrote:
+> > On Wed, Apr 02, 2025 at 03:46:37PM +0300, Mike Rapoport wrote:
+> > > On Wed, Apr 02, 2025 at 02:19:01PM +0200, Thomas Wei=C3=9Fschuh wrote=
+:
+> > > > (drop all the non-x86 and non-mm recipients)
+> > > >
+> > > > On Thu, Mar 13, 2025 at 03:50:00PM +0200, Mike Rapoport wrote:
+> > > > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > > >
+> > > > > high_memory defines upper bound on the directly mapped memory.
+> > > > > This bound is defined by the beginning of ZONE_HIGHMEM when a sys=
+tem has
+> > > > > high memory and by the end of memory otherwise.
+> > > > >
+> > > > > All this is known to generic memory management initialization cod=
+e that
+> > > > > can set high_memory while initializing core mm structures.
+> > > > >
+> > > > > Add a generic calculation of high_memory to free_area_init() and =
+remove
+> > > > > per-architecture calculation except for the architectures that se=
+t and
+> > > > > use high_memory earlier than that.
+> > > >
+> > > > This change (in mainline as commit e120d1bc12da ("arch, mm: set hig=
+h_memory in free_area_init()")
+> > > > breaks booting i386 on QEMU for me (and others [0]).
+> > > > The boot just hangs without output.
+> > > >
+> > > > It's easily reproducible with kunit:
+> > > > ./tools/testing/kunit/kunit.py run --arch i386
+> > > >
+> > > > See below for the specific problematic hunk.
+> > > >
+> > > > [0] https://lore.kernel.org/lkml/CA+G9fYtdXHVuirs3v6at3UoKNH5keuq0t=
+pcvpz0tJFT4toLG4g@mail.gmail.com/
+> > > >
+> > > >
+> > > > > diff --git a/arch/x86/mm/init_32.c b/arch/x86/mm/init_32.c
+> > > > > index 6d2f8cb9451e..801b659ead0c 100644
+> > > > > --- a/arch/x86/mm/init_32.c
+> > > > > +++ b/arch/x86/mm/init_32.c
+> > > > > @@ -643,9 +643,6 @@ void __init initmem_init(void)
+> > > > >                 highstart_pfn =3D max_low_pfn;
+> > > > >         printk(KERN_NOTICE "%ldMB HIGHMEM available.\n",
+> > > > >                 pages_to_mb(highend_pfn - highstart_pfn));
+> > > > > -       high_memory =3D (void *) __va(highstart_pfn * PAGE_SIZE -=
+ 1) + 1;
+> > > > > -#else
+> > > > > -       high_memory =3D (void *) __va(max_low_pfn * PAGE_SIZE - 1=
+) + 1;
+> > > > >  #endif
+> > > >
+> > > > Reverting this hunk fixes the issue for me.
+> > >
+> > > This is already done by d893aca973c3 ("x86/mm: restore early initiali=
+zation
+> > > of high_memory for 32-bits").
+> >
+> > Thanks. Of course I only noticed this shortly after sending my mail.
+> > But this usecase is indeed broken on mainline.
+> > Some further bisecting lead to the mm merge commit being broken, while =
+both its
+> > parents work. That lead the bisection astray.
+> > eb0ece16027f ("Merge tag 'mm-stable-2025-03-30-16-52' of git://git.kern=
+el.org/pub/scm/linux/kernel/git/akpm/mm")
+> >
+> > As unlikely as it sounds, it's reproducible. I'll investigate a bit.
+>
+> The issue is fixed with the following diff:
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- arch/arc/include/asm/hugepage.h              |  2 --
- arch/arc/include/asm/pgtable-levels.h        |  1 -
- arch/arm/include/asm/pgtable-3level.h        |  1 -
- arch/arm64/include/asm/pgtable.h             |  1 -
- arch/loongarch/include/asm/pgtable.h         |  1 -
- arch/loongarch/mm/pgtable.c                  |  9 ---------
- arch/mips/include/asm/pgtable.h              |  3 ---
- arch/mips/mm/pgtable-32.c                    | 10 ----------
- arch/mips/mm/pgtable-64.c                    |  9 ---------
- arch/powerpc/include/asm/book3s/64/pgtable.h |  1 -
- arch/powerpc/mm/book3s64/pgtable.c           |  5 -----
- arch/riscv/include/asm/pgtable-64.h          |  2 --
- arch/s390/include/asm/pgtable.h              |  1 -
- arch/sparc/include/asm/pgtable_64.h          |  1 -
- arch/x86/include/asm/pgtable.h               |  2 --
- include/linux/huge_mm.h                      |  2 --
- 16 files changed, 51 deletions(-)
+I have applied this patch,
 
-diff --git a/arch/arc/include/asm/hugepage.h b/arch/arc/include/asm/hugepage.h
-index 8a2441670a8f..7765dc105d54 100644
---- a/arch/arc/include/asm/hugepage.h
-+++ b/arch/arc/include/asm/hugepage.h
-@@ -40,8 +40,6 @@ static inline pmd_t pte_pmd(pte_t pte)
- #define pmd_young(pmd)		pte_young(pmd_pte(pmd))
- #define pmd_dirty(pmd)		pte_dirty(pmd_pte(pmd))
- 
--#define mk_pmd(page, prot)	pte_pmd(mk_pte(page, prot))
--
- #define pmd_trans_huge(pmd)	(pmd_val(pmd) & _PAGE_HW_SZ)
- 
- #define pfn_pmd(pfn, prot)	(__pmd(((pfn) << PAGE_SHIFT) | pgprot_val(prot)))
-diff --git a/arch/arc/include/asm/pgtable-levels.h b/arch/arc/include/asm/pgtable-levels.h
-index 55dbd2719e35..d1ce4b0f1071 100644
---- a/arch/arc/include/asm/pgtable-levels.h
-+++ b/arch/arc/include/asm/pgtable-levels.h
-@@ -142,7 +142,6 @@
- 
- #define pmd_pfn(pmd)		((pmd_val(pmd) & PMD_MASK) >> PAGE_SHIFT)
- #define pfn_pmd(pfn,prot)	__pmd(((pfn) << PAGE_SHIFT) | pgprot_val(prot))
--#define mk_pmd(page,prot)	pfn_pmd(page_to_pfn(page),prot)
- 
- #endif
- 
-diff --git a/arch/arm/include/asm/pgtable-3level.h b/arch/arm/include/asm/pgtable-3level.h
-index fa5939eb9864..7b71a3d414b7 100644
---- a/arch/arm/include/asm/pgtable-3level.h
-+++ b/arch/arm/include/asm/pgtable-3level.h
-@@ -209,7 +209,6 @@ PMD_BIT_FUNC(mkyoung,   |= PMD_SECT_AF);
- 
- #define pmd_pfn(pmd)		(((pmd_val(pmd) & PMD_MASK) & PHYS_MASK) >> PAGE_SHIFT)
- #define pfn_pmd(pfn,prot)	(__pmd(((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot)))
--#define mk_pmd(page,prot)	pfn_pmd(page_to_pfn(page),prot)
- 
- /* No hardware dirty/accessed bits -- generic_pmdp_establish() fits */
- #define pmdp_establish generic_pmdp_establish
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 53832ec0561f..379fcc6a1295 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -609,7 +609,6 @@ static inline pmd_t pmd_mkspecial(pmd_t pmd)
- #define __phys_to_pmd_val(phys)	__phys_to_pte_val(phys)
- #define pmd_pfn(pmd)		((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT)
- #define pfn_pmd(pfn,prot)	__pmd(__phys_to_pmd_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
--#define mk_pmd(page,prot)	pfn_pmd(page_to_pfn(page),prot)
- 
- #define pud_young(pud)		pte_young(pud_pte(pud))
- #define pud_mkyoung(pud)	pte_pud(pte_mkyoung(pud_pte(pud)))
-diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-index 9ba3a4ebcd98..a3f17914dbab 100644
---- a/arch/loongarch/include/asm/pgtable.h
-+++ b/arch/loongarch/include/asm/pgtable.h
-@@ -255,7 +255,6 @@ static inline void pmd_clear(pmd_t *pmdp)
- 
- #define pmd_page_vaddr(pmd)	pmd_val(pmd)
- 
--extern pmd_t mk_pmd(struct page *page, pgprot_t prot);
- extern void set_pmd_at(struct mm_struct *mm, unsigned long addr, pmd_t *pmdp, pmd_t pmd);
- 
- #define pte_page(x)		pfn_to_page(pte_pfn(x))
-diff --git a/arch/loongarch/mm/pgtable.c b/arch/loongarch/mm/pgtable.c
-index 22a94bb3e6e8..352d9b2e02ab 100644
---- a/arch/loongarch/mm/pgtable.c
-+++ b/arch/loongarch/mm/pgtable.c
-@@ -135,15 +135,6 @@ void kernel_pte_init(void *addr)
- 	} while (p != end);
- }
- 
--pmd_t mk_pmd(struct page *page, pgprot_t prot)
--{
--	pmd_t pmd;
--
--	pmd_val(pmd) = (page_to_pfn(page) << PFN_PTE_SHIFT) | pgprot_val(prot);
--
--	return pmd;
--}
--
- void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 		pmd_t *pmdp, pmd_t pmd)
- {
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index d69cfa5a8ac6..4852b005a72d 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -713,9 +713,6 @@ static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
- 
- #endif /* CONFIG_HAVE_ARCH_SOFT_DIRTY */
- 
--/* Extern to avoid header file madness */
--extern pmd_t mk_pmd(struct page *page, pgprot_t prot);
--
- static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- {
- 	pmd_val(pmd) = (pmd_val(pmd) & (_PAGE_CHG_MASK | _PAGE_HUGE)) |
-diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
-index 84dd5136d53a..e2cf2166d5cb 100644
---- a/arch/mips/mm/pgtable-32.c
-+++ b/arch/mips/mm/pgtable-32.c
-@@ -31,16 +31,6 @@ void pgd_init(void *addr)
- }
- 
- #if defined(CONFIG_TRANSPARENT_HUGEPAGE)
--pmd_t mk_pmd(struct page *page, pgprot_t prot)
--{
--	pmd_t pmd;
--
--	pmd_val(pmd) = (page_to_pfn(page) << PFN_PTE_SHIFT) | pgprot_val(prot);
--
--	return pmd;
--}
--
--
- void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 		pmd_t *pmdp, pmd_t pmd)
- {
-diff --git a/arch/mips/mm/pgtable-64.c b/arch/mips/mm/pgtable-64.c
-index 1e544827dea9..b24f865de357 100644
---- a/arch/mips/mm/pgtable-64.c
-+++ b/arch/mips/mm/pgtable-64.c
-@@ -90,15 +90,6 @@ void pud_init(void *addr)
- #endif
- 
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
--pmd_t mk_pmd(struct page *page, pgprot_t prot)
--{
--	pmd_t pmd;
--
--	pmd_val(pmd) = (page_to_pfn(page) << PFN_PTE_SHIFT) | pgprot_val(prot);
--
--	return pmd;
--}
--
- void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 		pmd_t *pmdp, pmd_t pmd)
- {
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/include/asm/book3s/64/pgtable.h
-index 6d98e6f08d4d..6ed93e290c2f 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
-@@ -1096,7 +1096,6 @@ static inline bool pmd_access_permitted(pmd_t pmd, bool write)
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- extern pmd_t pfn_pmd(unsigned long pfn, pgprot_t pgprot);
- extern pud_t pfn_pud(unsigned long pfn, pgprot_t pgprot);
--extern pmd_t mk_pmd(struct page *page, pgprot_t pgprot);
- extern pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot);
- extern pud_t pud_modify(pud_t pud, pgprot_t newprot);
- extern void set_pmd_at(struct mm_struct *mm, unsigned long addr,
-diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
-index c0c45d033cba..2c88532ed7fb 100644
---- a/arch/powerpc/mm/book3s64/pgtable.c
-+++ b/arch/powerpc/mm/book3s64/pgtable.c
-@@ -270,11 +270,6 @@ pud_t pfn_pud(unsigned long pfn, pgprot_t pgprot)
- 	return __pud_mkhuge(pud_set_protbits(__pud(pudv), pgprot));
- }
- 
--pmd_t mk_pmd(struct page *page, pgprot_t pgprot)
--{
--	return pfn_pmd(page_to_pfn(page), pgprot);
--}
--
- pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- {
- 	unsigned long pmdv;
-diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-index 0897dd99ab8d..188fadc1c21f 100644
---- a/arch/riscv/include/asm/pgtable-64.h
-+++ b/arch/riscv/include/asm/pgtable-64.h
-@@ -262,8 +262,6 @@ static inline unsigned long _pmd_pfn(pmd_t pmd)
- 	return __page_val_to_pfn(pmd_val(pmd));
- }
- 
--#define mk_pmd(page, prot)    pfn_pmd(page_to_pfn(page), prot)
--
- #define pmd_ERROR(e) \
- 	pr_err("%s:%d: bad pmd %016lx.\n", __FILE__, __LINE__, pmd_val(e))
- 
-diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-index 3ef5d2198480..1c661ac62ce8 100644
---- a/arch/s390/include/asm/pgtable.h
-+++ b/arch/s390/include/asm/pgtable.h
-@@ -1869,7 +1869,6 @@ static inline pmd_t pmdp_collapse_flush(struct vm_area_struct *vma,
- #define pmdp_collapse_flush pmdp_collapse_flush
- 
- #define pfn_pmd(pfn, pgprot)	mk_pmd_phys(((pfn) << PAGE_SHIFT), (pgprot))
--#define mk_pmd(page, pgprot)	pfn_pmd(page_to_pfn(page), (pgprot))
- 
- static inline int pmd_trans_huge(pmd_t pmd)
- {
-diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
-index d9c903576084..4af03e3c161b 100644
---- a/arch/sparc/include/asm/pgtable_64.h
-+++ b/arch/sparc/include/asm/pgtable_64.h
-@@ -233,7 +233,6 @@ static inline pmd_t pfn_pmd(unsigned long page_nr, pgprot_t pgprot)
- 
- 	return __pmd(pte_val(pte));
- }
--#define mk_pmd(page, pgprot)	pfn_pmd(page_to_pfn(page), (pgprot))
- #endif
- 
- /* This one can be done with two shifts.  */
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 2ce98b547a25..3f59d7a16010 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1347,8 +1347,6 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm,
- 
- #define flush_tlb_fix_spurious_fault(vma, address, ptep) do { } while (0)
- 
--#define mk_pmd(page, pgprot)   pfn_pmd(page_to_pfn(page), (pgprot))
--
- #define  __HAVE_ARCH_PMDP_SET_ACCESS_FLAGS
- extern int pmdp_set_access_flags(struct vm_area_struct *vma,
- 				 unsigned long address, pmd_t *pmdp,
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index e893d546a49f..f190998b2ebd 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -495,8 +495,6 @@ static inline bool is_huge_zero_pmd(pmd_t pmd)
- struct folio *mm_get_huge_zero_folio(struct mm_struct *mm);
- void mm_put_huge_zero_folio(struct mm_struct *mm);
- 
--#define mk_huge_pmd(page, prot) pmd_mkhuge(mk_pmd(page, prot))
--
- static inline bool thp_migration_supported(void)
- {
- 	return IS_ENABLED(CONFIG_ARCH_ENABLE_THP_MIGRATION);
--- 
-2.47.2
+>
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 284154445409..8cd95f60015d 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2165,7 +2165,8 @@ static unsigned long __init __free_memory_core(phys=
+_addr_t start,
+>                                  phys_addr_t end)
+>  {
+>         unsigned long start_pfn =3D PFN_UP(start);
+> -       unsigned long end_pfn =3D PFN_DOWN(end);
+> +       unsigned long end_pfn =3D min_t(unsigned long,
+> +                                     PFN_DOWN(end), max_low_pfn);
+>
+>         if (start_pfn >=3D end_pfn)
+>                 return 0;
+>
+>
+> Background:
+>
+> This reverts part of commit 6faea3422e3b ("arch, mm: streamline HIGHMEM f=
+reeing")
+> which is the direct child of the partially reverted
+> commit e120d1bc12da ("arch, mm: set high_memory in free_area_init()").
+> The assumptions the former commit became invalid with the partial revert =
+the latter.
+>
+> This bug only triggers when CONFIG_HIGHMEM=3Dn. When mm was branched from=
+ mainline
+> the i386 configuration generated by kunit ended up with CONFIG_HIGHMEM=3D=
+y.
+> With some recent changes in mainline the kunit configuration switched to
+> CONFIG_HIGHMEM=3Dn, triggering this specific reproducer only when mm got =
+merged
+> into mainline again.
+>
+> New kunit reproducer:
+> ./tools/testing/kunit/kunit.py run --arch i386 example --timeout 10 --kco=
+nfig_add CONFIG_HIGHMEM=3Dn
+>
+> Does this sound reasonable?  If so I'll send a patch tomorrow.
+>
+> @Naresh, could you test this, too?
 
+I have applied the proposed fix patch and tested.
+The boot test and LTP smoke test pass.
+
+Links:
+ - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/naresh/tests/2vBZg=
+uDGiZclS394TDRdwW61twC
+
+>
+>
+> Thomas
 
