@@ -1,116 +1,122 @@
-Return-Path: <linux-arch+bounces-11248-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11251-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0D33A7A84C
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Apr 2025 18:58:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 943D6A7B064
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Apr 2025 23:16:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C64E1894651
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Apr 2025 16:58:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93350179156
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Apr 2025 21:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AFF5253350;
-	Thu,  3 Apr 2025 16:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCC61FE45F;
+	Thu,  3 Apr 2025 20:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yvc3WPSL"
+	dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b="fipwsY+d"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94552253323
-	for <linux-arch@vger.kernel.org>; Thu,  3 Apr 2025 16:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8151FE46C
+	for <linux-arch@vger.kernel.org>; Thu,  3 Apr 2025 20:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743699442; cv=none; b=tyGmP0fS8SmdS2HJYF6D/uk08SyMdtIRPYk/PEvlYPnzKXpdWtN+wJxrERe93VnEhct+bmPBsyQyAiwQeUzQrCS45ZaOhuQE3whd0V583WqArcQw9ZJGPnbAosMAZUwOd6oYIhYQCPsXEbBqSO1cMW4lj+5TGz5TjfsMUd8Bjg4=
+	t=1743712494; cv=none; b=P9bXIA6IQR3eTYnbzGtW0DXSSpbToq3Mut04hxK5jLepg0OXjokzi+WucB/A4yDPjcUJ6qEFHqM5kjtqQDRg8XtNCfAHksbxGyKYPZVHxKq7yIbepfQQB4vaDRmnsEhGcmTGPfGXStS8Bn5r792eEegbGQaBzFM8IqfipHQMcNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743699442; c=relaxed/simple;
-	bh=1GBMY/blDMm/pZBEDDJ7pMxBepJY1ykTDsdud2Ofj2U=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=psDJrJXt8ZO64rax3V4OFogjmE6ST78i5WvDGzPWod3pt9cYd8dQyPNMFsw68qimTPL1V6Yr1GUfJvvNQYyrNHvUVptXl6RZ3JGhqmwbJylgDK3Qxg+bkf4NrVaGwCNNVGrQg+0TQXHbwiKdPaIIkqkhDUyEygjdCYca8ADU0a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yvc3WPSL; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ff798e8c3bso1085770a91.2
-        for <linux-arch@vger.kernel.org>; Thu, 03 Apr 2025 09:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743699438; x=1744304238; darn=vger.kernel.org;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mNHCeBq+kt/FIoDgbEk42F0HhswOr1VLdQ14FXQaWQs=;
-        b=yvc3WPSL11RWLmG4EvleEX73gnbfC5u/aeOF1Dz7frXMQqQ36cKW8UD8MMzJKUIkhS
-         7ydB4D28QJ+r6RgOlgHZelz5/KrEURSnpbjE5pPfomPBjHsQhGDMRI+qboaQJKlGohMo
-         tvEKgEUyEW1Y1fXbRRoDFHceYS7Tp5WTiK1mxfgB8TxE4dcZUTi9qBSQv6OLXh+VAztZ
-         medFK4CIz0QAAJgcfOs6ZkbaMQQtlGNQ0SMr2lMQ1SyCm/onySe7ifE07GRf6nSoujGL
-         fg5nJUbPhElSlcugRCl0jU+UendNjeU0SJzbE53czloue6w6RP/bDEH8QyoyQEwSJrIY
-         thQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743699438; x=1744304238;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mNHCeBq+kt/FIoDgbEk42F0HhswOr1VLdQ14FXQaWQs=;
-        b=QlgPoPOkXH5qEb6XHctTTL1NWN0DtX6E+/yVEFGJpwkMP58KKetFbt8tG+IGtHh4cd
-         iLdalXBSuUCZFh9V2zY3yLwmDALsbJZ3Q6XHeEKQMqAU4f+QuKQ0h1s33UWkpGMWprmN
-         PGQbPbVHvJm40+NksZAGksgGhQh/cIgbIBixKzmemLjQtR/l6IiiyXhINFlImbpZToKl
-         lKm9DildOsIVr4KymOBsWfw/xi5sCMUzjex3b3FJaCzMWL2ALw4Pptw0zdN4myvC2MJW
-         axsD7c6EtY1O5ujaI98yXwSOcGlCWd99mKgJDdgML4jmYf9ApotVoIMvdn3W6SVhvxPO
-         0ZOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZ0K5wBllFrSECcSgoll9SSSt6BT3vroQX2BnwNC856e34HcEEmLoPsjWVs7MXGWqXW6tpHlTkryTv@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3KZyLZxXmod2sYyzcQPOPKNN+TnPlt56CHc2PaEuamX4jbcXe
-	3ysrkHZaKJik6TMpw6DHkpuKmqt1nV7OLEj1kZZFyBQK+ZD7Wv8jiWbL1TCjtgiTK0zppOlqdis
-	pZpiCuQ==
-X-Google-Smtp-Source: AGHT+IHwAF9KgN3kBG96nyN/c70dCrvtSADqCvq2NC2KDP9UQWERHeR8jrgnBfjzks/VkiX6BY+HKFC/mvhS
-X-Received: from pjbpb6.prod.google.com ([2002:a17:90b:3c06:b0:2ff:5344:b54])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:574d:b0:2ef:67c2:4030
- with SMTP id 98e67ed59e1d1-306a4975c0cmr355393a91.27.1743699437820; Thu, 03
- Apr 2025 09:57:17 -0700 (PDT)
-Date: Thu,  3 Apr 2025 09:57:02 -0700
-In-Reply-To: <20250403165702.396388-1-irogers@google.com>
+	s=arc-20240116; t=1743712494; c=relaxed/simple;
+	bh=xB2C04uovpv4skICAYGaB52QAvjvmMm90YpbPc+QSWE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F/Y8JRtH2KK6VAXb2OQkuq92emUMoGNhbO74UPDM6SkPJH8qRU4P03TbmgwaFGiKH1hcz4hjfmEMsZTnLrHIK39RvChm/J5E/1d4x+uKSSh1zTl8c7J8HFp7SaDHVl/tWVbqIPRz8j6aUDqe5PW3BQdoo9dGyZ6EiH0NEJMaEDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com; spf=pass smtp.mailfrom=iencinas.com; dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b=fipwsY+d; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iencinas.com
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iencinas.com;
+	s=key1; t=1743712480;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UDfYL4ErdunlNmstrEsdYuv+0FhmfCu6RIMjgekzhfE=;
+	b=fipwsY+d+b6rrvO4vtfMK74We5DLTRxmJZCjFxcOm517hPj64VLEIduGp6NAUPREU89bjd
+	xZyKMR6nFCAMifx9XV1LmHzDsR58ZHEpgkfL4NkP+YcXqsECMzDYu5cQOnOEs/sUaH9WCw
+	ukcacLOEs519U2x8Xudi91EKa/cOBqF6WZ3YK8xvOjpS0qw7m1lnGoaB9bFBtJj7rfyaiJ
+	jdKLSDWnzKX12KL7x71yizY4dCcT3195iwvxltXgU7Q31Xyvw/0YkVQLNEmuAXzopXQl9u
+	hkfS8CjuyPo/Xascx/5iTJ2qdB8qF+NiTZrWIn+LWV/Zk2l8svIVyF5ej0JqTA==
+From: Ignacio Encinas <ignacio@iencinas.com>
+Subject: [PATCH v3 0/2] Implement endianess swap macros for RISC-V
+Date: Thu, 03 Apr 2025 22:34:16 +0200
+Message-Id: <20250403-riscv-swab-v3-0-3bf705d80e33@iencinas.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250403165702.396388-1-irogers@google.com>
-X-Mailer: git-send-email 2.49.0.504.g3bcea36a83-goog
-Message-ID: <20250403165702.396388-6-irogers@google.com>
-Subject: [PATCH v1 5/5] hash.h: Silence a clang -Wshorten-64-to-32 warning
-From: Ian Rogers <irogers@google.com>
-To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jakub Kicinski <kuba@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMjw7mcC/13MQQ7CIBCF4asY1mIYKCiuvIdxAXRqZyE1YFDT9
+ O7SxkV1+V7yfyPLmAgzO25GlrBQpiHWobYbFnoXr8iprZtJIbVQYs8T5VB4fjrP/QG8bZx1ATy
+ rwT1hR68FO1/q7ik/hvRe7ALz+2VArJkCHLhqjJbYAaI1J8IYKLq8C8ONzVKR69r+1JIL3mrlT
+ Wuct6D/6mmaPuSS1UflAAAA
+X-Change-ID: 20250307-riscv-swab-b81b94a9ac1b
+To: Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Arnd Bergmann <arnd@arndb.de>
+Cc: Eric Biggers <ebiggers@kernel.org>, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev, 
+ skhan@linuxfoundation.org, Zhihang Shao <zhihang.shao.iscas@gmail.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ linux-arch@vger.kernel.org, Ignacio Encinas <ignacio@iencinas.com>
+X-Migadu-Flow: FLOW_OUT
 
-The clang warning -Wshorten-64-to-32 can be useful to catch
-inadvertent truncation. In some instances this truncation can lead to
-changing the sign of a result, for example, truncation to return an
-int to fit a sort routine. Silence the warning by making the implicit
-truncation explicit.
+Motivated by [1]. A couple of things to note:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+RISC-V needs a default implementation to fall back on. There is one
+available in include/uapi/linux/swab.h but that header can't be included
+from arch/riscv/include/asm/swab.h. Therefore, the first patch in this
+series moves the default implementation into asm-generic.
+
+Tested with crc_kunit as pointed out here [2]. I can't provide
+performance numbers as I don't have RISC-V hardware yet.
+
+[1] https://lore.kernel.org/all/20250302220426.GC2079@quark.localdomain/
+[2] https://lore.kernel.org/all/20250216225530.306980-1-ebiggers@kernel.org/
+
+Signed-off-by: Ignacio Encinas <ignacio@iencinas.com>
 ---
- include/linux/hash.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v3:
 
-diff --git a/include/linux/hash.h b/include/linux/hash.h
-index 38edaa08f862..ecc8296cb397 100644
---- a/include/linux/hash.h
-+++ b/include/linux/hash.h
-@@ -75,7 +75,7 @@ static __always_inline u32 hash_64_generic(u64 val, unsigned int bits)
- {
- #if BITS_PER_LONG == 64
- 	/* 64x64-bit multiply is efficient on all 64-bit processors */
--	return val * GOLDEN_RATIO_64 >> (64 - bits);
-+	return (u32)(val * GOLDEN_RATIO_64 >> (64 - bits));
- #else
- 	/* Hash 64 bits using only 32x32-bit multiply. */
- 	return hash_32((u32)val ^ __hash_32(val >> 32), bits);
+PATCH 2:
+  Use if(riscv_has_extension_likely) instead of asm goto (Eric). It 
+  looks like both versions generate the same assembly. Perhaps we should 
+  do the same change in other places such as arch/riscv/include/asm/bitops.h
+
+- Link to v2: https://lore.kernel.org/r/20250319-riscv-swab-v2-0-d53b6d6ab915@iencinas.com
+
+Arnd, I tried your suggestion but couldn't make it work. Let me know if
+I missed something in my response.
+
+Changes in v2:
+- Introduce first patch factoring out the default implementation into
+  asm-generic
+- Remove blank line to make checkpatch happy
+- Link to v1: https://lore.kernel.org/r/20250310-riscv-swab-v1-1-34652ef1ee96@iencinas.com
+
+---
+Ignacio Encinas (2):
+      include/uapi/linux/swab.h: move default implementation for swab macros into asm-generic
+      riscv: introduce asm/swab.h
+
+ arch/riscv/include/asm/swab.h   | 43 +++++++++++++++++++++++++++++++++++++++++
+ include/uapi/asm-generic/swab.h | 32 ++++++++++++++++++++++++++++++
+ include/uapi/linux/swab.h       | 33 +------------------------------
+ 3 files changed, 76 insertions(+), 32 deletions(-)
+---
+base-commit: a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47
+change-id: 20250307-riscv-swab-b81b94a9ac1b
+
+Best regards,
 -- 
-2.49.0.504.g3bcea36a83-goog
+Ignacio Encinas <ignacio@iencinas.com>
 
 
