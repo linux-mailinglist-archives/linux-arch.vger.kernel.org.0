@@ -1,136 +1,117 @@
-Return-Path: <linux-arch+bounces-11280-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11281-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABEC7A7BBA4
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 13:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 17491A7C096
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 17:32:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78D00177DC1
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 11:36:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E173F179D09
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 15:32:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171481DDC37;
-	Fri,  4 Apr 2025 11:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D01F145B0B;
+	Fri,  4 Apr 2025 15:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FuFVzkfU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MDw2ypPf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0010146588
-	for <linux-arch@vger.kernel.org>; Fri,  4 Apr 2025 11:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637201DF962;
+	Fri,  4 Apr 2025 15:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743766564; cv=none; b=oOzYQAUoIHAPSp9OpBhOWYOpuPWuDMWdWzpsWJAt2+1iM+Wv6L0gbEtmMGtTlXcgXOaQZDk04VieX2Uh3Cdvss1YWINNFlglhyCWcek1HfiN5P9ICXjDIJIkM9JYbds76NOsiwp73wbMx+teZNz7mIWN+KRs+retgx9K6NTQBkg=
+	t=1743780761; cv=none; b=H0L61N/XF8/flNV3x/GkYZaDW3IWwz5I9D0uxz1pA3Xs40AUBHUa1twaaQLuRqxdcA907fk4JfRMDymmaTYuedxaX8fUDv7CPyd0CeXNdb6HzqyAXihy8LGyvBXCTc8qqfyW2FwcbC4fFnvaETCCeOMvUCpgeL7t83R0+5h68fI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743766564; c=relaxed/simple;
-	bh=VESalJP7ZL+nitnbDAWdGop/8vGDiwf3xv7DdkO+lzo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D2uEo2eqI3L1fhAAvgjp8lQDWQGmUSThF2dqXG8vhg1dec+JU+B9R17sKt9BqANlbTQjCafzJtU+rmlJMVa0j/7iR4cXRb3tby9rpZjfaqSgeMD3tCJvRDys7ISuyU2oZzdEVM09gQpPU3NggEEL+Qcl+GBd8OnHu9LbMxKQm9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FuFVzkfU; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2264c9d0295so170675ad.0
-        for <linux-arch@vger.kernel.org>; Fri, 04 Apr 2025 04:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1743766561; x=1744371361; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1eyajWB+7jjTPaaR8yZhZbdWh1p1RlxmUfHflZtAUUo=;
-        b=FuFVzkfU6eCjMIEy36mpxT8o9gZKNIbRrU6B9ocGx6NWQ2kyiSkK6jvwe4Sighe3Pd
-         6qRPtxhi4eMqttxm6KN4DpHKIVAfulME0zOHr8QpabRl+YAIzqBWFatOyXqoopuaBdZy
-         3riJpo0eCscZzooxmGV+gUshQYnSTaEb6RWTdQ6D7rqpozNIlSAaIR8E6GIRvmp5czD4
-         8grbupVpqsa8fInPzQwJUuN1BkeP5znju0zX82YyGFTDo2SVcn6N+T4KVav81ggMJrTz
-         COHiLea5vl1ai7D3HkSvXFus/nMW6FxbXc/L3ptgc/0XwCOFn3S6gt0M5ExVBBBiE7cR
-         BhXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743766561; x=1744371361;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1eyajWB+7jjTPaaR8yZhZbdWh1p1RlxmUfHflZtAUUo=;
-        b=PCRpnTJs6mbBCuSoyJlnuiQhEJ6GVUGTd3HkLpfbbOqzTpuKLWFl7PCx9LfSiEOWvM
-         1UtU7iFI8gDb+9o3j+8ap+IfI5STpXrWELsKvDCeDqQdcZ9ct99gSjzlX/JatjOEvhpg
-         wa0uJ30gzYU96p0MmI9QC3KDc6x75tNnHJMG/E53F+xGpaRexQBV23GY4hoD3eyyjIg+
-         zb3+G89AgR54ayPUoyH/F0zxvCqiutx/F6BFD9qBMI8OmOOwxA/JY/BrWeNe2tYIkGyb
-         pd3yetmlcOzl4RBI2mpCI0X+dNWFIpoUW0a8yKFP8JRjK4Nk0jYaviQCS1r1CRsjbReC
-         HHcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUOIh12wdJyIKdMWYBN8npseiB/nRUuTfHPZKpSs6e+jOg+GKOlX3wQJJZnOw6ZRPUTYqSAc07AIvOZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyejok/4Hr96fnAVooZM+YKIvNvK3WAC/nCIsz2vGhm4c5Q1TYT
-	uLIhkImhaaZxuJ9r6oVS3Hwe4NcC1w6yHSvy1h3Z7W2iyOyOmJBzo9igKFb+aT5ZonQmAe4pdBb
-	ISkqoL7LshwqkYmTmElp4NOLn0PbuICbEQFN0
-X-Gm-Gg: ASbGncvnMsKF8PMTPl9/biujdJpbi/yLsr9vdnW76+x+8+K/U1Oz4E/RrRPRHwXa6cb
-	urXkxQ2HnLx67n+WHrv/oTCDzp1UrJOmWR1GZM881OYEu/Igyt9pcEesNMWCLHf+ssodK4kUDd+
-	me8l6otBB+KOOpnpC75tdwbJuLdjo=
-X-Google-Smtp-Source: AGHT+IED3d7Nee0RkFeQ/TfMnvqofVxnmkzP6wrLXFrYkWR2UjtCec6EbIVzIf0i4xh5ml+5Sm4+57ZZZARaNgNjLIY=
-X-Received: by 2002:a17:903:1cb:b0:215:8723:42d1 with SMTP id
- d9443c01a7336-22a89eabbecmr2670415ad.10.1743766560729; Fri, 04 Apr 2025
- 04:36:00 -0700 (PDT)
+	s=arc-20240116; t=1743780761; c=relaxed/simple;
+	bh=l4NfQuaRg7vF8YLzLFVfCX0eGTmkIJQDbug+xp/8Ur0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CgMwHI3Mxf23J9KN8lPSlcWfAewT3jSbX9mxfZ9MOyTVo9MacaAeOLcEoXFMMGNauoo5Bz6DMZRfs6htYzop9OD3Euo5UoAFkWSiye850T7jQQRTpC49rTBudWC1rCgb27pd9gdSBy5LgU3y6WeCg5SehwzlcJU1ZRt/PkF32Lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MDw2ypPf; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743780758; x=1775316758;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l4NfQuaRg7vF8YLzLFVfCX0eGTmkIJQDbug+xp/8Ur0=;
+  b=MDw2ypPf38I3kIjEqPbEoaHVYkChGf5DpeCftS4YQ0BRauyuNb3qNH3B
+   7GeBzROBs4ZVFiFL7pODN6TtivYk0YvtXv2dlfFSaeQkjlZxro9bWSj2B
+   Flq+/RL8OFkmkHYCj/WEtp9aSv0fyfRjVKaO8/k1ow8jeC/EZcZlxudo2
+   wdfzzrD4K8WUqBb/kVWAP2iayiGzBgETnXnUJrgI9dK3d6ckodRlPqV8a
+   MAxVvAPp9HrJ4Ip2jGsJytHtb5veO57oVAig5Z16AYpTEItGMynBbjnxS
+   OFf3Y02W1JktgdyT38PLMY6q2QkdfFlQCqTyLDYk7Jn2a7B810sZmBGod
+   w==;
+X-CSE-ConnectionGUID: dxy+pEgMSNGoUgErKrxFgg==
+X-CSE-MsgGUID: N4AV3c7/RCi4yC6cgSXIOw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11394"; a="32827369"
+X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
+   d="scan'208";a="32827369"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2025 08:32:37 -0700
+X-CSE-ConnectionGUID: w6x4comGQQOj+pL4mRXMsQ==
+X-CSE-MsgGUID: uqelw8/ZSUC6OlaT1ChzUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,188,1739865600"; 
+   d="scan'208";a="132460543"
+Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 04 Apr 2025 08:32:34 -0700
+Received: from kbuild by b207828170a5 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1u0j20-0001Kz-1i;
+	Fri, 04 Apr 2025 15:32:32 +0000
+Date: Fri, 4 Apr 2025 23:31:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ignacio Encinas <ignacio@iencinas.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>
+Cc: oe-kbuild-all@lists.linux.dev, Eric Biggers <ebiggers@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org,
+	Zhihang Shao <zhihang.shao.iscas@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	linux-arch@vger.kernel.org, Ignacio Encinas <ignacio@iencinas.com>
+Subject: Re: [PATCH v3 1/2] include/uapi/linux/swab.h: move default
+ implementation for swab macros into asm-generic
+Message-ID: <202504042300.it9RcOSt-lkp@intel.com>
+References: <20250403-riscv-swab-v3-1-3bf705d80e33@iencinas.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403165702.396388-1-irogers@google.com> <20250403165702.396388-4-irogers@google.com>
- <48a734d3-0920-402c-afab-f4f205cd6b0d@app.fastmail.com>
-In-Reply-To: <48a734d3-0920-402c-afab-f4f205cd6b0d@app.fastmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 4 Apr 2025 04:35:49 -0700
-X-Gm-Features: AQ5f1JpD8IxezKIMQJr341eabN5TwcT9DjE5US16IXc1hwT1GroRon_SXxjDvaQ
-Message-ID: <CAP-5=fUB=UWcrX4JJg5skJ30_mQTy4TwWVU-=g99WSjTg67Eig@mail.gmail.com>
-Subject: Re: [PATCH v1 3/5] bitops: Silence a clang -Wshorten-64-to-32 warning
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jakub Kicinski <kuba@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>, 
-	Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250403-riscv-swab-v3-1-3bf705d80e33@iencinas.com>
 
-On Thu, Apr 3, 2025 at 10:43=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Thu, Apr 3, 2025, at 18:57, Ian Rogers wrote:
-> > The clang warning -Wshorten-64-to-32 can be useful to catch
-> > inadvertent truncation. In some instances this truncation can lead to
-> > changing the sign of a result, for example, truncation to return an
-> > int to fit a sort routine. Silence the warning by making the implicit
-> > truncation explicit.
->
-> The fls64() function only seems to deal with unsigned values, so
-> I don't see how it would change the sign.
+Hi Ignacio,
 
-You are right. I was trying to motivate in the message why building
-with -Wshorten-64-to-32 is a good thing, and in this case we're making
-an implicit cast explicit.
+kernel test robot noticed the following build warnings:
 
-> > diff --git a/include/asm-generic/bitops/fls64.h
-> > b/include/asm-generic/bitops/fls64.h
-> > index 866f2b2304ff..9ad3ff12f454 100644
-> > --- a/include/asm-generic/bitops/fls64.h
-> > +++ b/include/asm-generic/bitops/fls64.h
-> > @@ -21,7 +21,7 @@ static __always_inline int fls64(__u64 x)
-> >       __u32 h =3D x >> 32;
-> >       if (h)
-> >               return fls(h) + 32;
-> > -     return fls(x);
-> > +     return fls((__u32)x);
-> >  }
->
-> Maybe this would be clearer with an explicit upper_32_bits()/
-> lower_32_bits() instead of the cast and the shift?
+[auto build test WARNING on a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47]
 
-It feels a little overkill to me, but if others prefer it then it is a
-minor change.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ignacio-Encinas/include-uapi-linux-swab-h-move-default-implementation-for-swab-macros-into-asm-generic/20250404-051744
+base:   a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47
+patch link:    https://lore.kernel.org/r/20250403-riscv-swab-v3-1-3bf705d80e33%40iencinas.com
+patch subject: [PATCH v3 1/2] include/uapi/linux/swab.h: move default implementation for swab macros into asm-generic
+config: i386-buildonly-randconfig-004-20250404 (https://download.01.org/0day-ci/archive/20250404/202504042300.it9RcOSt-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250404/202504042300.it9RcOSt-lkp@intel.com/reproduce)
 
-Thanks,
-Ian
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202504042300.it9RcOSt-lkp@intel.com/
 
->       Arnd
+All warnings (new ones prefixed by >>):
+
+>> usr/include/asm-generic/swab.h:21: found __[us]{8,16,32,64} type without #include <linux/types.h>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
