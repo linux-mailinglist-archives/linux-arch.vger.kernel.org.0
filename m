@@ -1,66 +1,66 @@
-Return-Path: <linux-arch+bounces-11267-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11269-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0C5BA7B5D1
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 04:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F2608A7B5D3
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 04:23:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3746D178B66
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 02:22:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5D7716DA2B
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 02:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB50919F13B;
-	Fri,  4 Apr 2025 02:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDE5B13B58A;
+	Fri,  4 Apr 2025 02:20:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="g8/rtzC/"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="T0ycFXWg"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56C619D8A8;
-	Fri,  4 Apr 2025 02:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493C619EED2;
+	Fri,  4 Apr 2025 02:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743733213; cv=none; b=GbF7KU8nuEIJdeaXdOVUWKm/ZzCFy2EzK0AimzYrPWd8wf7NXiEIvkXKkpROi04MwNONzt9UgGLkX+jb7Jr2iQ/pDe0u0NOgIPfDs01w62RIiBEGzJIphYBFnRR6mpbSV+rRPmUBYXPXsB6Vu1OAs0PTN3UFvwr3CM1E0ZID1fM=
+	t=1743733214; cv=none; b=jF9Be9I9SMj9Nt+HsL07jA+QIpipLjrBOgN3Y6qYqxYE+LnJeepGYQSHrnMMQPFaCJ8y7oyvQOSzOoW/URvtbB0GuVK/YujgPNTXS+nCW1gAb9RYIpb+YJ2QkC0ukchJRe9zDUkrVTGBzymcjxPPaORj2IlSAN11scfWP0eshQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743733213; c=relaxed/simple;
-	bh=ZaoxEuAgeZ0ySsbMK/SUjVqylX3DmmyoM+i/5oRVkKA=;
+	s=arc-20240116; t=1743733214; c=relaxed/simple;
+	bh=2twzEc2VPgYbeQKHoHVmgKko7eeSFN0yLl3zdeiZ2gU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L/KC9qwO6SxQLzFy3oV4h/cO7bBbLbZOGfOHJxbEOB80ofPCq1TK73KV1XgPoi7ixS8/z/X9oloynN7iecXvgjfeHgyJ1sKFhNuqDAEzLqQIF8TY8qOhlqas1iHQRzTy3vw9C1RX+Fts4LzB9Ykw1CYDhsGS+gpCWjWr0t1udVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=g8/rtzC/; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=BsNVhajxUaObBuERy22xtojpmrkOBE3feW9ddKi/65G/68B3yDAhSqJOv9P9Zp257t1jShLfzkIdVt66hQDpFck3ZV7pNXVIqmGiRPR8ywSfIL0lIghFfcHkka0AYP4W86ENxl4DQZT3n6eNxiY0SLcQxyqseGmSfk2rU+PLUFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=T0ycFXWg; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5341O7Gg024208;
-	Fri, 4 Apr 2025 02:19:49 GMT
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5341NUVY014912;
+	Fri, 4 Apr 2025 02:19:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=qKETl
-	3boxGSqY1XHPbVbmfYTJqsfiqERPIv13nBPjsk=; b=g8/rtzC/YcIbSBczu3C+P
-	wkfNxw3vt28s1VNtVjUrMPbz6ydnxVpgi9ZqSQN+QIZ3OIF3weOFsoF90AmHF6QF
-	je+LmZn+1Nf1sogguuAS/OmcHFex4zdh0qcYUGJByl1tRXBcw72PKC/U1/o+zAW3
-	QtmmRb/Fq9VmX+V1ynnqTyTBWWrIULyI+KuLLzV/DWeSjP9x9FWz6m1sXEG0h8x+
-	LaIrrWJ6indGXgjZzeHXmPYNl4Szbnf1Xv1Qhi2q+pG8sm8l03CItwdpbQSuwhaS
-	7yXWXOcoK0nmuDxVr6DeFrR4e8reRFHoOdwcszXYLdmLs0twU7HRagaQ+krmyOtU
+	:mime-version:references:subject:to; s=corp-2023-11-20; bh=XVOpB
+	G1ATs5p2zVw52i4mZc77HmrRT8TPOxFoHoCrjM=; b=T0ycFXWglr4qG264tZ4Ua
+	MFwJwR8/2kxZcnXFrVn/sI6L1fLnrrw6eDHlDynQx8dF+z+9m3rsgdVC0h22DwM6
+	H6uYS4hBH+KoVpdkgRS2AEL4jAE/3/vLNOLww79LUl1q+dk6FH5Clcw6YhckMZjy
+	s5ISGg4LFT/eOAL1LikyzzKT0aGfd1vTIT7j+EZ3SXZYMitMd+u3CQpb+TE4HK9h
+	ncIUxelY8nsWUTAo6lvZW1y6l2b+z510lALMrb8gEIXTg+7ACvBTeahW5IC+Yp5w
+	ZcygkdkENPGmMv6QJx1fOtVv2F0yoWC5m8+mHaMr9DAJBCuBnHnnO7rDcfpHJFq+
 	g==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 45p8fsehf2-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 45p7n2efne-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 04 Apr 2025 02:19:49 +0000 (GMT)
+	Fri, 04 Apr 2025 02:19:51 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5340fRNl017354;
-	Fri, 4 Apr 2025 02:19:48 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5340gpBJ017418;
+	Fri, 4 Apr 2025 02:19:51 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 45t2pspjhj-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 45t2pspjj7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 04 Apr 2025 02:19:48 +0000
+	Fri, 04 Apr 2025 02:19:51 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5342H8hA030074;
-	Fri, 4 Apr 2025 02:19:48 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5342H8hC030074;
+	Fri, 4 Apr 2025 02:19:50 GMT
 Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 45t2pspj73-18;
-	Fri, 04 Apr 2025 02:19:47 +0000
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 45t2pspj73-19;
+	Fri, 04 Apr 2025 02:19:50 +0000
 From: Anthony Yznaga <anthony.yznaga@oracle.com>
 To: akpm@linux-foundation.org, willy@infradead.org, markhemm@googlemail.com,
         viro@zeniv.linux.org.uk, david@redhat.com, khalid@kernel.org
@@ -71,9 +71,9 @@ Cc: anthony.yznaga@oracle.com, andreyknvl@gmail.com, dave.hansen@intel.com,
         linux-mm@kvack.org, mhiramat@kernel.org, rostedt@goodmis.org,
         vasily.averin@linux.dev, xhao@linux.alibaba.com, pcc@google.com,
         neilb@suse.de, maz@kernel.org
-Subject: [PATCH v2 17/20] mm/mshare: Add an ioctl for unmapping objects in an mshare region
-Date: Thu,  3 Apr 2025 19:18:59 -0700
-Message-ID: <20250404021902.48863-18-anthony.yznaga@oracle.com>
+Subject: [PATCH v2 18/20] mm/mshare: provide a way to identify an mm as an mshare host mm
+Date: Thu,  3 Apr 2025 19:19:00 -0700
+Message-ID: <20250404021902.48863-19-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250404021902.48863-1-anthony.yznaga@oracle.com>
 References: <20250404021902.48863-1-anthony.yznaga@oracle.com>
@@ -91,105 +91,42 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulk
  spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502280000
  definitions=main-2504040014
-X-Proofpoint-ORIG-GUID: _v_EaYXFzgUP_UK3Jm0_mzqmEOIgUWb-
-X-Proofpoint-GUID: _v_EaYXFzgUP_UK3Jm0_mzqmEOIgUWb-
+X-Proofpoint-ORIG-GUID: EgU8HPZBLjq7O2rxK59i4iWFx0NytBa0
+X-Proofpoint-GUID: EgU8HPZBLjq7O2rxK59i4iWFx0NytBa0
 
-The arguments are the same as munmap() except that the start of the
-mapping is specified as an offset into the mshare region instead of
-as an address.
+Add new mm flag, MMF_MSHARE.
 
 Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 ---
- include/uapi/linux/msharefs.h |  7 ++++++
- mm/mshare.c                   | 40 +++++++++++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+ include/linux/mm_types.h | 2 ++
+ mm/mshare.c              | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/include/uapi/linux/msharefs.h b/include/uapi/linux/msharefs.h
-index ad129beeef62..fb0235d1e384 100644
---- a/include/uapi/linux/msharefs.h
-+++ b/include/uapi/linux/msharefs.h
-@@ -19,6 +19,7 @@
-  * msharefs specific ioctl commands
-  */
- #define MSHAREFS_CREATE_MAPPING	_IOW('x', 0,  struct mshare_create)
-+#define MSHAREFS_UNMAP		_IOW('x', 1,  struct mshare_unmap)
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 56d07edd01f9..392605b23c62 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -1741,6 +1741,8 @@ enum {
+ #define MMF_TOPDOWN		31	/* mm searches top down by default */
+ #define MMF_TOPDOWN_MASK	(1 << MMF_TOPDOWN)
  
- struct mshare_create {
- 	__u64 region_offset;
-@@ -28,4 +29,10 @@ struct mshare_create {
- 	__u32 flags;
- 	__u32 fd;
- };
++#define MMF_MSHARE		32	/* mm is an mshare host mm */
 +
-+struct mshare_unmap {
-+	__u64 region_offset;
-+	__u64 size;
-+};
-+
- #endif
+ #define MMF_INIT_MASK		(MMF_DUMPABLE_MASK | MMF_DUMP_FILTER_MASK |\
+ 				 MMF_DISABLE_THP_MASK | MMF_HAS_MDWE_MASK |\
+ 				 MMF_VM_MERGE_ANY_MASK | MMF_TOPDOWN_MASK)
 diff --git a/mm/mshare.c b/mm/mshare.c
-index be0aaa894963..a6106f6264cb 100644
+index a6106f6264cb..0a75bd3928fc 100644
 --- a/mm/mshare.c
 +++ b/mm/mshare.c
-@@ -281,11 +281,41 @@ msharefs_create_mapping(struct mshare_data *m_data, struct mshare_create *mcreat
- 	return error;
- }
- 
-+static long
-+msharefs_unmap(struct mshare_data *m_data, struct mshare_unmap *munmap)
-+{
-+	struct mm_struct *host_mm = m_data->mm;
-+	unsigned long mshare_start, mshare_end, mshare_size;
-+	unsigned long region_offset = munmap->region_offset;
-+	unsigned long size = munmap->size;
-+	unsigned long addr;
-+	int error;
-+
-+	mshare_start = m_data->start;
-+	mshare_size = m_data->size;
-+	mshare_end = mshare_start + mshare_size;
-+	addr = mshare_start + region_offset;
-+
-+	if ((size > mshare_size) || (region_offset >= mshare_size) ||
-+	    (addr + size > mshare_end))
-+		return -EINVAL;
-+
-+	if (mmap_write_lock_killable(host_mm))
-+		return -EINTR;
-+
-+	error = do_munmap(host_mm, addr, size, NULL);
-+
-+	mmap_write_unlock(host_mm);
-+
-+	return error;
-+}
-+
- static long
- msharefs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- {
- 	struct mshare_data *m_data = filp->private_data;
- 	struct mshare_create mcreate;
-+	struct mshare_unmap munmap;
- 
- 	switch (cmd) {
- 	case MSHAREFS_CREATE_MAPPING:
-@@ -298,6 +328,16 @@ msharefs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 
- 		return msharefs_create_mapping(m_data, &mcreate);
- 
-+	case MSHAREFS_UNMAP:
-+		if (copy_from_user(&munmap, (struct mshare_unmap __user *)arg,
-+			sizeof(munmap)))
-+			return -EFAULT;
-+
-+		if (!test_bit(MSHARE_INITIALIZED, &m_data->flags))
-+			return -EINVAL;
-+
-+		return msharefs_unmap(m_data, &munmap);
-+
- 	default:
- 		return -ENOTTY;
+@@ -415,6 +415,7 @@ msharefs_fill_mm(struct inode *inode)
+ 		goto err_free;
  	}
+ 
++	set_bit(MMF_MSHARE, &mm->flags);
+ 	mm->mmap_base = mshare_base;
+ 	mm->task_size = 0;
+ 
 -- 
 2.43.5
 
