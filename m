@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-11283-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11284-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5FC7A7C104
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 17:55:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D8CBA7C10D
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 17:56:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CE891896F71
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 15:55:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21A1B3A9DC6
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Apr 2025 15:56:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8435E1F9F5C;
-	Fri,  4 Apr 2025 15:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEBDC1FCD09;
+	Fri,  4 Apr 2025 15:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b="JY/5IPL4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b="MerP6PTL"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765E31E5B74;
-	Fri,  4 Apr 2025 15:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCD51FC7C7;
+	Fri,  4 Apr 2025 15:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.40.148.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743782134; cv=none; b=HV9x9HDPLAap80Ru82StLlX7RoeB5X0Qr708GHSl1X8AqrCQ0yAJH3umMviN54LrzCeUhEoeY1aKBJgMfB23bXkw2hW6aHRJvJGGBxp/1IfPGfXsh+zvPdxDFZ45tUGD764Kz/74lluBPTkSIQL4Ko9h93Iy7kw/y/405+IJRek=
+	t=1743782211; cv=none; b=aMIcr1AGxpsaFAz0AjDGHlX+SpV3ElPfZTy+55cz1qOCIqPDfYCToZFocf128un1OIsAllIuaFm6Iv+kvhPvab+3ohTDhFzbXejymgs7idG5SEYtENidHfFUkQl9unrazX6/9nqrAgGlfCffu4xZ3Q3KvSt3Y8A6x9DRF1+WMuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743782134; c=relaxed/simple;
-	bh=wbNKh+GG4KyPNqOJwVophT62W5B8u2ctwLCiSu+WSp4=;
+	s=arc-20240116; t=1743782211; c=relaxed/simple;
+	bh=ABpsVb0a/UQlWsessKYFH/LthH36DYFIjoPCIz9l3Gw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rjm4ERGVoz9ZhSR8fk1Qm3kdQf24NaVlqXXmr11pEfFrQG3Mj6hEj7PFvY3E8fQ0WVRb6ykyJ3KD/eQ70zzu6jVsmUG+0A/puIOiRFcUePXtkDePjObcyZF+SUNLMseMP+FxQfia4WQYtzNMs8DuN4btwANP5+H707ZDt8Xr0NQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk; spf=pass smtp.mailfrom=codethink.co.uk; dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b=JY/5IPL4; arc=none smtp.client-ip=78.40.148.171
+	 In-Reply-To:Content-Type; b=LIrGw+PF7QUZXKPMMijLshd7PnxKjnktLKlTOHLQovVi8E9Y7CIWA4V5RGHuNCZbQyq9/XF3sGcxhG+IYWT5/wnoXP6jaquv/xmgxzSbGz0hxEmQuse/XPBwEGziEc7cJ2GlSjRAlIsHa/iDWe3yjye6BVhf+DQxQsearzpGUNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk; spf=pass smtp.mailfrom=codethink.co.uk; dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b=MerP6PTL; arc=none smtp.client-ip=78.40.148.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codethink.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,17 +37,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Message-ID:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=yOe9uz//SMDxuWVRWMVPDE6QGOnTyqzIEZ+QkHAgOCY=; b=JY/5IPL4YxFlzlOAZyBv1j4gvD
-	caPYfIAA70Z4Q5WAnzFhgSjsLnLAjzLEIp34VTWCWGGAdeCWeHVgSq5RK/1QQNeC7iyhacimoNDRD
-	BPw5Oq6kabuNQRfdygLdCkQfXNaY4jLf+TPvadMfDZ5lSaOAZKSH7+h4CJNeDzamrCvY6TzwYNN6x
-	q3gnRJdpt7bJdil21IXtA0sJ/xtuOBwQ654633XpDuST+RlCrT3oGJqzEJLxjrkPd3ztXM+jBSJGq
-	fSwBIpzsElIyaHuk8hf3Uvu4PWW0NffhPfumKWktV0PyXc0Wf6odDqdRiE7Py76vCwd+QvhSO/d6v
-	TiTVtPVg==;
+	bh=1Xn/hH6/7ss6uP5i4wKjZNjVXjJNOK/mVv5dxW21kIE=; b=MerP6PTLL1xnXQ1BsDkbiOnTLj
+	UfWowf6P5MrqIueDuE2fsf/9BUYR7dM5myL3b4Re9VetvFakSaj8YDPcP4zThfrVeSdoak3TUHfVI
+	dKC6zkKKPqOWIHI0VbV3tYAJ4UWmkmmYa7RHKJ/x39o6ldZoX9P0WkgdPZYqz+psDRz0/UXaNVdxW
+	mu0p1FrnjtTOmm2OtdZYARGvV+nq3O9DnIuBsnI2xuRPkvZd96oGnuEdTloTLOuPqGg1TQC0TuWyc
+	zdFjwJFNz+I9INy9kmsjADBRZBoRPZeAfhffLnJRjsLlclRgx0QDxRuz/pMDmC4c5daXMD/639p5P
+	AZd8VS+Q==;
 Received: from [167.98.27.226] (helo=[10.35.6.194])
 	by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-	id 1u0jO3-00BgMS-1f; Fri, 04 Apr 2025 16:55:20 +0100
-Message-ID: <99b7b45a-4b18-4f0d-a197-4dccbb6c2352@codethink.co.uk>
-Date: Fri, 4 Apr 2025 16:55:19 +0100
+	id 1u0jPL-00BgSX-Ku; Fri, 04 Apr 2025 16:56:40 +0100
+Message-ID: <a92dad03-664b-46a6-9761-b788c47ff6f4@codethink.co.uk>
+Date: Fri, 4 Apr 2025 16:56:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] riscv: introduce asm/swab.h
+Subject: Re: [PATCH v3 0/2] Implement endianess swap macros for RISC-V
 To: Ignacio Encinas <ignacio@iencinas.com>,
  Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
  <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>,
@@ -66,80 +66,32 @@ Cc: Eric Biggers <ebiggers@kernel.org>, linux-riscv@lists.infradead.org,
  =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
  linux-arch@vger.kernel.org
 References: <20250403-riscv-swab-v3-0-3bf705d80e33@iencinas.com>
- <20250403-riscv-swab-v3-2-3bf705d80e33@iencinas.com>
 Content-Language: en-GB
 From: Ben Dooks <ben.dooks@codethink.co.uk>
 Organization: Codethink Limited.
-In-Reply-To: <20250403-riscv-swab-v3-2-3bf705d80e33@iencinas.com>
+In-Reply-To: <20250403-riscv-swab-v3-0-3bf705d80e33@iencinas.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Sender: ben.dooks@codethink.co.uk
 
 On 03/04/2025 21:34, Ignacio Encinas wrote:
-> Implement endianness swap macros for RISC-V.
+> Motivated by [1]. A couple of things to note:
 > 
-> Use the rev8 instruction when Zbb is available. Otherwise, rely on the
-> default mask-and-shift implementation.
+> RISC-V needs a default implementation to fall back on. There is one
+> available in include/uapi/linux/swab.h but that header can't be included
+> from arch/riscv/include/asm/swab.h. Therefore, the first patch in this
+> series moves the default implementation into asm-generic.
+> 
+> Tested with crc_kunit as pointed out here [2]. I can't provide
+> performance numbers as I don't have RISC-V hardware yet.
+> 
+> [1] https://lore.kernel.org/all/20250302220426.GC2079@quark.localdomain/
+> [2] https://lore.kernel.org/all/20250216225530.306980-1-ebiggers@kernel.org/
 > 
 > Signed-off-by: Ignacio Encinas <ignacio@iencinas.com>
-> ---
->   arch/riscv/include/asm/swab.h | 43 +++++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 43 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/swab.h b/arch/riscv/include/asm/swab.h
-> new file mode 100644
-> index 000000000000..7352e8405a99
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/swab.h
-> @@ -0,0 +1,43 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef _ASM_RISCV_SWAB_H
-> +#define _ASM_RISCV_SWAB_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/compiler.h>
-> +#include <asm/cpufeature-macros.h>
-> +#include <asm/hwcap.h>
-> +#include <asm-generic/swab.h>
-> +
-> +#if defined(CONFIG_RISCV_ISA_ZBB) && !defined(NO_ALTERNATIVE)
-> +
-> +#define ARCH_SWAB(size) \
-> +static __always_inline unsigned long __arch_swab##size(__u##size value) \
-> +{									\
-> +	unsigned long x = value;					\
-> +									\
-> +	if (riscv_has_extension_likely(RISCV_ISA_EXT_ZBB)) {            \
-> +		asm volatile (".option push\n"				\
-> +			      ".option arch,+zbb\n"			\
-> +			      "rev8 %0, %1\n"				\
-> +			      ".option pop\n"				\
-> +			      : "=r" (x) : "r" (x));			\
-> +		return x >> (BITS_PER_LONG - size);			\
-> +	}                                                               \
-> +	return  ___constant_swab##size(value);				\
-> +}
-> +
-> +#ifdef CONFIG_64BIT
-> +ARCH_SWAB(64)
-> +#define __arch_swab64 __arch_swab64
-> +#endif
 
-I suppose if we're 64bit we can't just rely on values being in one
-register so this'd need special casing here?
-
-> +ARCH_SWAB(32)
-> +#define __arch_swab32 __arch_swab32
-> +
-> +ARCH_SWAB(16)
-> +#define __arch_swab16 __arch_swab16
-> +
-> +#undef ARCH_SWAB
-> +
-> +#endif /* defined(CONFIG_RISCV_ISA_ZBB) && !defined(NO_ALTERNATIVE) */
-> +#endif /* _ASM_RISCV_SWAB_H */
-> 
-
+I'll try and get these tested with my big-endian riscv qemu and verify
+if they work there.
 
 -- 
 Ben Dooks				http://www.codethink.co.uk/
