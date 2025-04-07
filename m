@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-11297-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11298-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBA8DA7E549
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Apr 2025 17:55:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88426A7E545
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Apr 2025 17:54:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D3AA16D85E
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Apr 2025 15:45:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B431318898BD
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Apr 2025 15:49:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F483204583;
-	Mon,  7 Apr 2025 15:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C00B204F6C;
+	Mon,  7 Apr 2025 15:48:45 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56564203718;
-	Mon,  7 Apr 2025 15:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4872046BE;
+	Mon,  7 Apr 2025 15:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744040742; cv=none; b=D/5i+oIiviIvk7gwzZgVsiQSEP5/LsXg6T7glNgR6jEFGs/nk3qra9PMuTjraeWX1TgMZO24PfXFY8xnHC3YsVGWri+kpWZKr0z6396hf9nZrq6oB3TiZrjX0v7105a326OqG9pvSXIHSFWB3+UIr2/gwatDC92aQJyOrcvKpC4=
+	t=1744040925; cv=none; b=btOVmjAZwQfDFLRoCOiQOlNUM9n786vI2fsR2FFcjosLePk65v/jhN4fuqmXJBP12VlX+yuhm5Tombzjo4Iidl8UAieX6Fhh9Q68JsGucbnQDyt3O6kQLEobRjvNIz+I4jgXMLZG8twCCjur1u5bUAB+BSsDPKiNAT2580IrLuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744040742; c=relaxed/simple;
-	bh=zi9iY0G5Dbazg2U9eGztUFd8+hYK+LP/BqQ/QTap2CM=;
+	s=arc-20240116; t=1744040925; c=relaxed/simple;
+	bh=GyPgyzHA5L8IKTlTgHkfyXtKVYHVaIGZCOvC3tTIRk8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W0XHas/lNDkUl0TJ+Ujt4R0lg8Td+KfsniYY3fv22xq+12GSzNWWBV2grnrZkSXHvB6hmyEq7fZrYJtUdhTMrEw8WnaDJLGGHHuqjTR1CjiJSIqgyRutvyIvmYbXHlE84WLBN2d/b3It2kyrvbeZwxKt9E0HMadgEyJDCWulolE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:Content-Type; b=E5I4z437D0teXja8GnemTpdOS7XRuf7DG5fwPRIIXnUVPTzlPkx+aj8Gy5+5f0T/jFfncu6DmYnvojK/gJvHAkQ6GyHUCZofX83Lb8lE8wwbHC/1QXoO1LV9VrcGyqI5YJAAY0vEHvi8R1wizru4L4GcUExYrHLQdb5mEgX/vcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B8CF241E0D;
-	Mon,  7 Apr 2025 15:45:19 +0000 (UTC)
-Message-ID: <7b6d895a-d19e-4f2c-8e12-6fe933b26189@ghiti.fr>
-Date: Mon, 7 Apr 2025 17:45:13 +0200
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D79204328B;
+	Mon,  7 Apr 2025 15:48:27 +0000 (UTC)
+Message-ID: <cc314da6-8755-4037-846b-01a20b3c68e1@ghiti.fr>
+Date: Mon, 7 Apr 2025 17:48:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 01/28] mm: VM_SHADOW_STACK definition for riscv
+Subject: Re: [PATCH v12 03/28] riscv: zicfiss / zicfilp enumeration
 Content-Language: en-US
 To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
  Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -67,9 +67,9 @@ Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
  alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
  rick.p.edgecombe@intel.com, Zong Li <zong.li@sifive.com>
 References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-1-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-3-e51202b53138@rivosinc.com>
 From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20250314-v5_user_cfi_series-v12-1-e51202b53138@rivosinc.com>
+In-Reply-To: <20250314-v5_user_cfi_series-v12-3-e51202b53138@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-GND-State: clean
@@ -78,36 +78,121 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtheelucetufdoteggode
  gesiiihthhorhdrtghomhdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhg
 X-GND-Sasl: alex@ghiti.fr
 
-Hi Deepak,
 
 On 14/03/2025 22:39, Deepak Gupta wrote:
-> VM_HIGH_ARCH_5 is used for riscv
+> This patch adds support for detecting zicfiss and zicfilp. zicfiss and
+> zicfilp stands for unprivleged integer spec extension for shadow stack
+> and branch tracking on indirect branches, respectively.
+>
+> This patch looks for zicfiss and zicfilp in device tree and accordinlgy
+> lights up bit in cpu feature bitmap. Furthermore this patch adds detection
+> utility functions to return whether shadow stack or landing pads are
+> supported by cpu.
 >
 > Reviewed-by: Zong Li <zong.li@sifive.com>
 > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->   include/linux/mm.h | 7 +++++++
->   1 file changed, 7 insertions(+)
+>   arch/riscv/include/asm/cpufeature.h | 13 +++++++++++++
+>   arch/riscv/include/asm/hwcap.h      |  2 ++
+>   arch/riscv/include/asm/processor.h  |  1 +
+>   arch/riscv/kernel/cpufeature.c      | 13 +++++++++++++
+>   4 files changed, 29 insertions(+)
 >
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 7b1068ddcbb7..1ef231cbc8fe 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -378,6 +378,13 @@ extern unsigned int kobjsize(const void *objp);
->   # define VM_SHADOW_STACK	VM_HIGH_ARCH_6
->   #endif
+> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
+> index 569140d6e639..69007b8100ca 100644
+> --- a/arch/riscv/include/asm/cpufeature.h
+> +++ b/arch/riscv/include/asm/cpufeature.h
+> @@ -12,6 +12,7 @@
+>   #include <linux/kconfig.h>
+>   #include <linux/percpu-defs.h>
+>   #include <linux/threads.h>
+> +#include <linux/smp.h>
+>   #include <asm/hwcap.h>
+>   #include <asm/cpufeature-macros.h>
 >   
-> +#if defined(CONFIG_RISCV_USER_CFI)
-> +/*
-> + * Following x86 and picking up the same bitpos.
-> + */
-> +# define VM_SHADOW_STACK	VM_HIGH_ARCH_5
-> +#endif
+> @@ -137,4 +138,16 @@ static __always_inline bool riscv_cpu_has_extension_unlikely(int cpu, const unsi
+>   	return __riscv_isa_extension_available(hart_isa[cpu].isa, ext);
+>   }
+>   
+> +static inline bool cpu_supports_shadow_stack(void)
+> +{
+> +	return (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
+> +		riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICFISS));
+
+
+I would use riscv_has_extension_unlikely() instead of the cpu specific 
+variant, that would remove the need for #include <linux/smp.h>. Unless 
+you have a good reason to do that?
+
+
+> +}
 > +
->   #ifndef VM_SHADOW_STACK
->   # define VM_SHADOW_STACK	VM_NONE
+> +static inline bool cpu_supports_indirect_br_lp_instr(void)
+> +{
+> +	return (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
+> +		riscv_cpu_has_extension_unlikely(smp_processor_id(), RISCV_ISA_EXT_ZICFILP));
+> +}
+> +
 >   #endif
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index 869da082252a..2dc4232bdb3e 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -100,6 +100,8 @@
+>   #define RISCV_ISA_EXT_ZICCRSE		91
+>   #define RISCV_ISA_EXT_SVADE		92
+>   #define RISCV_ISA_EXT_SVADU		93
+> +#define RISCV_ISA_EXT_ZICFILP		94
+> +#define RISCV_ISA_EXT_ZICFISS		95
+>   
+>   #define RISCV_ISA_EXT_XLINUXENVCFG	127
+>   
+> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> index 5f56eb9d114a..e3aba3336e63 100644
+> --- a/arch/riscv/include/asm/processor.h
+> +++ b/arch/riscv/include/asm/processor.h
+> @@ -13,6 +13,7 @@
+>   #include <vdso/processor.h>
+>   
+>   #include <asm/ptrace.h>
+> +#include <asm/hwcap.h>
+>   
+>   #define arch_get_mmap_end(addr, len, flags)			\
+>   ({								\
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index c6ba750536c3..82065cc55822 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -150,6 +150,15 @@ static int riscv_ext_svadu_validate(const struct riscv_isa_ext_data *data,
+>   	return 0;
+>   }
+>   
+> +static int riscv_cfi_validate(const struct riscv_isa_ext_data *data,
+> +			      const unsigned long *isa_bitmap)
+> +{
+> +	if (!IS_ENABLED(CONFIG_RISCV_USER_CFI))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+>   static const unsigned int riscv_zk_bundled_exts[] = {
+>   	RISCV_ISA_EXT_ZBKB,
+>   	RISCV_ISA_EXT_ZBKC,
+> @@ -333,6 +342,10 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>   	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicboz, RISCV_ISA_EXT_ZICBOZ, riscv_xlinuxenvcfg_exts,
+>   					  riscv_ext_zicboz_validate),
+>   	__RISCV_ISA_EXT_DATA(ziccrse, RISCV_ISA_EXT_ZICCRSE),
+> +	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicfilp, RISCV_ISA_EXT_ZICFILP, riscv_xlinuxenvcfg_exts,
+> +					  riscv_cfi_validate),
+> +	__RISCV_ISA_EXT_SUPERSET_VALIDATE(zicfiss, RISCV_ISA_EXT_ZICFISS, riscv_xlinuxenvcfg_exts,
+> +					  riscv_cfi_validate),
+>   	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
+>   	__RISCV_ISA_EXT_DATA(zicond, RISCV_ISA_EXT_ZICOND),
+>   	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
 >
+
+With the above comment fixed, you can add:
 
 Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 
