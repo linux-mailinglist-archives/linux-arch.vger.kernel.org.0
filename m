@@ -1,44 +1,45 @@
-Return-Path: <linux-arch+bounces-11301-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11304-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0230A7EEB6
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Apr 2025 22:14:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10B30A7EF14
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Apr 2025 22:21:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E513D1884A0E
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Apr 2025 20:14:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EFFB4237B6
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Apr 2025 20:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B137221D8D;
-	Mon,  7 Apr 2025 20:13:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D10224238;
+	Mon,  7 Apr 2025 20:13:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="gCCEQSN0"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="qJvH3S01"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE8321ADC2;
-	Mon,  7 Apr 2025 20:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30DB322172E;
+	Mon,  7 Apr 2025 20:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744056826; cv=none; b=o9y0v7yak0hV8w2WLCk1wS2d2W9A7JEKmLlSBoQd2ti7x6Vh23ySW5eyxfncimypCuHOPHSWaZUINF/fT9Lsoy0BJ1bQCYkqVj4dYGZD7pISfDEC2+nS8tGXF2ibo4cgjZPSHvAf+rxIpQK6rdauFJDOWEFOca7MFUUSPy7b8iM=
+	t=1744056827; cv=none; b=TgfA2vwmFOVN2/rROXFMFOIpUwFs9cKKZNs8etwjK4GaE9cDSkfeJEdKdxfo4z+5/TQ3oacOslneb9mdvpvHf0So8hPe7Usy06IeWf32BgRaN91iGeTq+bSN9o2ZzncxgGf9w9jwVteOvfD6PfFXTAfKpze4t7DVyJASogLN2/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744056826; c=relaxed/simple;
-	bh=JRlM6/nALg5Lm2ZBXoQg0G8YiFQqAUJ2hCpLAKZYtEs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KcaPVPCTd+Mnfiz3nIT4kJQb6hw6/AVbJZSozd/EfCgKJNCvUT/+wRlgXsBI8EmTHxqG0JxSAFAxM6DJvv15atk++g4ZwJvcrA/RKd5Gc4X9Vbl9N+mMw3p6dMLS8qS62P9DjeCkx16UOloChYFPZ5wqXlFRVNS2lJcoq728nQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=gCCEQSN0; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1744056827; c=relaxed/simple;
+	bh=FzrLGiwWri8edJ1LbvHJN0k6Lo+IyIScxgHwuLaIkR0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cHIgKpKmpo1j05ukE0vDqPK3eHBZVRAh+pSwZIJnP1F0KrPfwb3rQHJAUeEyjjoMVleA/8SQ4GzKcd5QG3R/0wqzRqh20dJr3OqKqCGvQkYgEoniHe8PPRE3+i93DpkiHkYxDuhth1NROmYQa4zvnEd846rRSigbZ3HnsG32INQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=qJvH3S01; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 293E52027DE8;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 8E97D2113E7C;
 	Mon,  7 Apr 2025 13:13:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 293E52027DE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8E97D2113E7C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1744056818;
-	bh=yj9BIkacDDLGPpl6vwbg2gVO4jjNFHVjEs/ckpY8yuw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gCCEQSN0jIPjXpLawvyUN8ZcBjn+2CyLaHtPz7uNafmcxGUb2XC/LphaHqqk3D5QH
-	 hWZKpPwvMwnBg8l9ArrC9uzyLdSyldUy2JLgY3+Ei44tnDSjm8/tV1MaPGgjVCTZbg
-	 lj6OyBx5MSmpUUjihaR45wuNkjBun6WizDVilD2c=
+	bh=6oPKXneX3lx3mNQoH9P92OknOVr0220GCJudmawHQpc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=qJvH3S016ZCKrR/X/ZbAt8iHapsL9tnJgXBq7+05mFBGyrf1xCI8TdLBYpS9Pjsam
+	 THRifxj3W4lRljjG6476t4BdEJ/FrChtPVAUy0jolVODMvocY0ZafNiN/LuLK/182O
+	 Zj15Lhv+IaEpRQWftINWkVIoVdONiJivLcI/cjJE=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -84,238 +85,208 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v7 00/11] arm64: hyperv: Support Virtual Trust Level Boot
-Date: Mon,  7 Apr 2025 13:13:25 -0700
-Message-ID: <20250407201336.66913-1-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v7 01/11] arm64: kvm, smccc: Introduce and use API for getting hypervisor UUID
+Date: Mon,  7 Apr 2025 13:13:26 -0700
+Message-ID: <20250407201336.66913-2-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250407201336.66913-1-romank@linux.microsoft.com>
+References: <20250407201336.66913-1-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This patch set allows the Hyper-V code to boot on ARM64 inside a Virtual Trust
-Level. These levels are a part of the Virtual Secure Mode documented in the
-Top-Level Functional Specification available at
-https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm.
+The KVM/arm64 uses SMCCC to detect hypervisor presence. That code is
+private, and it follows the SMCCC specification. Other existing and
+emerging hypervisor guest implementations can and should use that
+standard approach as well.
 
-The OpenHCL paravisor https://github.com/microsoft/openvmm/tree/main/openhcl
-can serve as a practical application of these patches on ARM64.
+Factor out a common infrastructure that the guests can use, update KVM
+to employ the new API. The central notion of the SMCCC method is the
+UUID of the hypervisor, and the new API follows that.
 
-For validation, I built kernels for the {x86_64, ARM64} x {VTL0, VTL2} set with
-a small initrd embedded into the kernel and booted VMs managed by Hyper-V and
-OpenVMM off of that.
+No functional changes. Validated with a KVM/arm64 guest.
 
-Starting from V5, the patch series includes a non-functional change to KVM on
-arm64 which I tested as well.
+Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+---
+ arch/arm64/kvm/hypercalls.c        | 10 +++--
+ drivers/firmware/smccc/kvm_guest.c | 10 +----
+ drivers/firmware/smccc/smccc.c     | 17 ++++++++
+ include/linux/arm-smccc.h          | 64 ++++++++++++++++++++++++++++--
+ 4 files changed, 85 insertions(+), 16 deletions(-)
 
-[V7]
-    - Used another approach not to increase the number of warnings produced when
-      building with CHECK_ENDIAN.
-      ** Thank you, Arnd! **
-
-     - Adjusted the function parameter formatting to match the rest of the code.
-      ** Thank you, Bjorn! **
-
-    - Removed the now unused local variable.
-      ** Thank you, kernel robot! **
-
-    - Fixed the description in the VMBus DT binding patch.
-      ** Thank you, Krzysztof! **
-
-    - Adjusted the function names and comments to better reflect what they do,
-      used the suggested approach to handling UUIDs to make code more readable
-      and maintainable on big-endian.
-    - Replaced ifdeffery with a stub function to make the code more readable.
-      ** Thank you, Mark! **
-
-    - Fixed the Kconfig not to build the VTL mode code on 32-bit kernels.
-      ** Thank you, Michael! **
-
-    - Fixed the indentation and the comment style.
-      ** Thank you, Rafael! **
-
-[V6]
-    https://lore.kernel.org/linux-hyperv/20250315001931.631210-1-romank@linux.microsoft.com/
-    - Use more intuitive Kconfig update.
-    - Remove ifdef for getting IRQ number
-    ** Thank you, Arnd! **
-
-    - Simplify code for finding the parent IRQ domain.
-    ** Thank you, Bjorn! **
-
-    - Remove a superfluous check.
-    ** Thank you, Dan! **
-
-    - Make the commit title and descrtiption legible.
-    - Don't set additionalProperties to true.
-    ** Thank you, Krzysztof! **
-
-    - Fix spelling in the commit title and description.
-    - Trade-offs for options in Kconfig.
-    - Export the new symbol as hyperv-pci can be built as a module.
-    ** Thank you, Michael! **
-
-    - Simplify code for getting IRQ number.
-    ** Thank you, Rob! **
-
-    - Add comment to clarify when running in VTL mode is reported.
-    ** Thank you, Wei! **
-
-[V5]
-  https://lore.kernel.org/linux-hyperv/20250307220304.247725-1-romank@linux.microsoft.com/
-    - Provide and use a common SMCCC-based infra for the arm64 hypervisor guests
-      to detect hypervisor presence.
-    ** Thank you, Arnd! **
-
-    - Fix line wraps to follow the rest of the code.
-    - Open-code getting IRQ domain parent in the ACPI case to make the code
-      better.
-    ** Thank you, Bjorn! **
-
-    - Test the binding with the latest dtschema.
-    - Clean up the commit title and description.
-    - Use proper defines for known constants.
-    ** Thank you, Krzysztof! **
-
-    - Extend comment on why ACPI v6 is checked for.
-    - Reorder patches to make sure that even with partial series application
-      the compilation succeeds.
-    - Report VTL the kernel runs in.
-    - Use "X86_64" in Kconfig rather than "X86".
-    - Extract a non-functional change for hv_get_vmbus_root_device() into
-      a separate patch.
-    ** Thank you, Michael! **
-
-[V4]
-    https://lore.kernel.org/linux-hyperv/20250212014321.1108840-1-romank@linux.microsoft.com/
-    - Fixed wording to match acronyms defined in the "Terms and Abbreviations"
-      section of the SMCCC specification throughout the patch series.
-      **Thank you, Michael!**
-
-    - Replaced the hypervisor ID containing ASCII with an UUID as
-      required by the specification.
-      **Thank you, Michael!**
-
-    - Added an explicit check for `SMCCC_RET_NOT_SUPPORTED` when discovering the
-      hypervisor presence to make the backward compatibility obvious.
-      **Thank you, Saurabh!**
-
-    - Split the fix for `get_vtl(void)` out to make it easier to backport.
-    - Refactored the configuration options as requested to eliminate the risk
-      of building non-functional kernels with randomly selected options.
-      **Thank you, Michael!**
-
-    - Refactored the changes not to introduce an additional file with
-      a one-line function.
-      **Thank you, Wei!**
-
-    - Fixed change description for the VMBus DeviceTree changes, used
-      `scripts/get_maintainers.pl` on the latest kernel to get the up-to-date list
-      of maintainers as requested.
-      **Thank you, Krzysztof!**
-
-    - Removed the added (paranoidal+superfluous) checks for DMA coherence in the
-      VMBus driver and instead relied on the DMA and the OF subsystem code.
-      **Thank you, Arnd, Krzysztof, Michael!**
-
-    - Used another set of APIs for discovering the hardware interrupt number
-      in the VMBus driver to be able to build the driver as a module.
-      **Thank you, Michael, Saurabh!**
-
-    - Renamed the newly introduced `get_vmbus_root_device(void)` function to
-      `hv_get_vmbus_root_device(void)` as requested.
-      **Thank you, Wei!**
-
-    - Applied the suggested small-scale refactoring to simplify changes to the Hyper-V
-      PCI driver. Taking the offered liberty of doing the large scale refactoring
-      in another patch series.
-      **Thank you, Michael!**
-
-    - Added a fix for the issue discovered internally where the CPU would not
-      get the interrupt from a PCI device attached to VTL2 as the shared peripheral
-      interrupt number (SPI) was not offset by 32 (the first valid SPI number).
-      **Thank you, Brian!**
-
-[V3]
-    https://lore.kernel.org/lkml/20240726225910.1912537-1-romank@linux.microsoft.com/
-    - Employed the SMCCC function recently implemented in the Microsoft Hyper-V
-      hypervisor to detect running on Hyper-V/arm64. No dependence on ACPI/DT is
-      needed anymore although the source code still falls back to ACPI as the new
-      hypervisor might be available only in the Windows Insiders channel just
-      yet.
-    - As a part of the above, refactored detecting the hypervisor via ACPI FADT.
-    - There was a suggestion to explore whether it is feasible or not to express
-      that ACPI must be absent for the VTL mode and present for the regular guests
-      in the Hyper-V Kconfig file.
-      My current conclusion is that this will require refactoring in many places.
-      That becomes especially convoluted on x86_64 due to the MSI and APIC
-      dependencies. I'd ask to let us tackle that in another patch series (or chalk
-      up to nice-have's rather than fires to put out) to separate concerns and
-      decrease chances of breakage.
-    - While refactoring `get_vtl(void)` and the related code, fixed the hypercall
-      output address not to overlap with the input as the Hyper-V TLFS mandates:
-      "The input and output parameter lists cannot overlap or cross page boundaries."
-      See https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/hypercall-interface
-      for more.
-      Some might argue that should've been a topic for a separate patch series;
-      I'd counter that the change is well-contained (one line), has no dependencies,
-      and makes the code legal.
-    - Made the VTL boot code (c)leaner as was suggested.
-    - Set DMA cache coherency for the VMBus.
-    - Updated DT bindings in the VMBus documentation (separated out into a new patch).
-    - Fixed `vmbus_set_irq` to use the API that works both for the ACPI and OF.
-    - Reworked setting up the vPCI MSI IRQ domain in the non-ACPI case. The logic
-      looks a bit fiddly/ad-hoc as I couldn't find the API that would fit the bill.
-      Added comments to explain myself.
-
-[V2]
-    https://lore.kernel.org/all/20240514224508.212318-1-romank@linux.microsoft.com/
-    - Decreased number of #ifdef's
-    - Updated the wording in the commit messages to adhere to the guidlines
-    - Sending to the correct set of maintainers and mail lists
-
-[V1]
-    https://lore.kernel.org/all/20240510160602.1311352-1-romank@linux.microsoft.com/
-
-Roman Kisel (11):
-  arm64: kvm, smccc: Introduce and use API for getting hypervisor UUID
-  arm64: hyperv: Use SMCCC to detect hypervisor presence
-  Drivers: hv: Enable VTL mode for arm64
-  Drivers: hv: Provide arch-neutral implementation of get_vtl()
-  arm64: hyperv: Initialize the Virtual Trust Level field
-  arm64, x86: hyperv: Report the VTL the system boots in
-  dt-bindings: microsoft,vmbus: Add interrupt and DMA coherence
-    properties
-  Drivers: hv: vmbus: Get the IRQ number from DeviceTree
-  Drivers: hv: vmbus: Introduce hv_get_vmbus_root_device()
-  ACPI: irq: Introduce acpi_get_gsi_dispatcher()
-  PCI: hv: Get vPCI MSI IRQ domain from DeviceTree
-
- .../bindings/bus/microsoft,vmbus.yaml         | 16 ++++-
- arch/arm64/hyperv/mshyperv.c                  | 53 ++++++++++++--
- arch/arm64/kvm/hypercalls.c                   | 10 +--
- arch/x86/hyperv/hv_init.c                     | 34 ---------
- arch/x86/hyperv/hv_vtl.c                      |  7 +-
- drivers/acpi/irq.c                            | 16 ++++-
- drivers/firmware/smccc/kvm_guest.c            | 10 +--
- drivers/firmware/smccc/smccc.c                | 17 +++++
- drivers/hv/Kconfig                            |  6 +-
- drivers/hv/hv_common.c                        | 31 ++++++++
- drivers/hv/vmbus_drv.c                        | 53 +++++++++++---
- drivers/pci/controller/pci-hyperv.c           | 72 +++++++++++++++++--
- include/asm-generic/mshyperv.h                |  6 ++
- include/hyperv/hvgdk_mini.h                   |  2 +-
- include/linux/acpi.h                          |  5 +-
- include/linux/arm-smccc.h                     | 64 +++++++++++++++--
- include/linux/hyperv.h                        |  2 +
- 17 files changed, 325 insertions(+), 79 deletions(-)
-
-
-base-commit: 628cc040b3a2980df6032766e8ef0688e981ab95
+diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+index 27ce4cb44904..e641cb2b47d7 100644
+--- a/arch/arm64/kvm/hypercalls.c
++++ b/arch/arm64/kvm/hypercalls.c
+@@ -268,6 +268,7 @@ int kvm_smccc_call_handler(struct kvm_vcpu *vcpu)
+ 	u32 feature;
+ 	u8 action;
+ 	gpa_t gpa;
++	uuid_t uuid;
+ 
+ 	action = kvm_smccc_get_action(vcpu, func_id);
+ 	switch (action) {
+@@ -353,10 +354,11 @@ int kvm_smccc_call_handler(struct kvm_vcpu *vcpu)
+ 			val[0] = gpa;
+ 		break;
+ 	case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
+-		val[0] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0;
+-		val[1] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1;
+-		val[2] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2;
+-		val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
++		uuid = ARM_SMCCC_VENDOR_HYP_UID_KVM;
++		val[0] = smccc_uuid_to_reg(&uuid, 0);
++		val[1] = smccc_uuid_to_reg(&uuid, 1);
++		val[2] = smccc_uuid_to_reg(&uuid, 2);
++		val[3] = smccc_uuid_to_reg(&uuid, 3);
+ 		break;
+ 	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
+ 		val[0] = smccc_feat->vendor_hyp_bmap;
+diff --git a/drivers/firmware/smccc/kvm_guest.c b/drivers/firmware/smccc/kvm_guest.c
+index f3319be20b36..87f910887d61 100644
+--- a/drivers/firmware/smccc/kvm_guest.c
++++ b/drivers/firmware/smccc/kvm_guest.c
+@@ -14,17 +14,11 @@ static DECLARE_BITMAP(__kvm_arm_hyp_services, ARM_SMCCC_KVM_NUM_FUNCS) __ro_afte
+ 
+ void __init kvm_init_hyp_services(void)
+ {
++	uuid_t kvm_uuid = ARM_SMCCC_VENDOR_HYP_UID_KVM;
+ 	struct arm_smccc_res res;
+ 	u32 val[4];
+ 
+-	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
+-		return;
+-
+-	arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
+-	if (res.a0 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0 ||
+-	    res.a1 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1 ||
+-	    res.a2 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2 ||
+-	    res.a3 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3)
++	if (!arm_smccc_hypervisor_has_uuid(&kvm_uuid))
+ 		return;
+ 
+ 	memset(&res, 0, sizeof(res));
+diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
+index a74600d9f2d7..cd65b434dc6e 100644
+--- a/drivers/firmware/smccc/smccc.c
++++ b/drivers/firmware/smccc/smccc.c
+@@ -67,6 +67,23 @@ s32 arm_smccc_get_soc_id_revision(void)
+ }
+ EXPORT_SYMBOL_GPL(arm_smccc_get_soc_id_revision);
+ 
++bool arm_smccc_hypervisor_has_uuid(const uuid_t *hyp_uuid)
++{
++	struct arm_smccc_res res = {};
++	uuid_t uuid;
++
++	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
++		return false;
++
++	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
++	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
++		return false;
++
++	uuid = smccc_res_to_uuid(res.a0, res.a1, res.a2, res.a3);
++	return uuid_equal(&uuid, hyp_uuid);
++}
++EXPORT_SYMBOL_GPL(arm_smccc_hypervisor_has_uuid);
++
+ static int __init smccc_devices_init(void)
+ {
+ 	struct platform_device *pdev;
+diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
+index 67f6fdf2e7cd..4bb38f0e3fe2 100644
+--- a/include/linux/arm-smccc.h
++++ b/include/linux/arm-smccc.h
+@@ -7,6 +7,11 @@
+ 
+ #include <linux/args.h>
+ #include <linux/init.h>
++
++#ifndef __ASSEMBLER__
++#include <linux/uuid.h>
++#endif
++
+ #include <uapi/linux/const.h>
+ 
+ /*
+@@ -107,10 +112,10 @@
+ 			   ARM_SMCCC_FUNC_QUERY_CALL_UID)
+ 
+ /* KVM UID value: 28b46fb6-2ec5-11e9-a9ca-4b564d003a74 */
+-#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0	0xb66fb428U
+-#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1	0xe911c52eU
+-#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2	0x564bcaa9U
+-#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3	0x743a004dU
++#define ARM_SMCCC_VENDOR_HYP_UID_KVM UUID_INIT(\
++	0xb66fb428, 0xc52e, 0xe911, \
++	0xa9, 0xca, 0x4b, 0x56, \
++	0x4d, 0x00, 0x3a, 0x74)
+ 
+ /* KVM "vendor specific" services */
+ #define ARM_SMCCC_KVM_FUNC_FEATURES		0
+@@ -333,6 +338,57 @@ s32 arm_smccc_get_soc_id_version(void);
+  */
+ s32 arm_smccc_get_soc_id_revision(void);
+ 
++#ifndef __ASSEMBLER__
++
++/*
++ * Returns whether a specific hypervisor UUID is advertised for the
++ * Vendor Specific Hypervisor Service range.
++ */
++bool arm_smccc_hypervisor_has_uuid(const uuid_t *uuid);
++
++static inline uuid_t smccc_res_to_uuid(u32 r0, u32 r1, u32 r2, u32 r3)
++{
++	uuid_t uuid = {
++		.b = {
++			[0]  = (r0 >> 0)  & 0xff,
++			[1]  = (r0 >> 8)  & 0xff,
++			[2]  = (r0 >> 16) & 0xff,
++			[3]  = (r0 >> 24) & 0xff,
++
++			[4]  = (r1 >> 0)  & 0xff,
++			[5]  = (r1 >> 8)  & 0xff,
++			[6]  = (r1 >> 16) & 0xff,
++			[7]  = (r1 >> 24) & 0xff,
++
++			[8]  = (r2 >> 0)  & 0xff,
++			[9]  = (r2 >> 8)  & 0xff,
++			[10] = (r2 >> 16) & 0xff,
++			[11] = (r2 >> 24) & 0xff,
++
++			[12] = (r3 >> 0)  & 0xff,
++			[13] = (r3 >> 8)  & 0xff,
++			[14] = (r3 >> 16) & 0xff,
++			[15] = (r3 >> 24) & 0xff,
++		},
++	};
++
++	return uuid;
++}
++
++static inline u32 smccc_uuid_to_reg(const uuid_t *uuid, int reg)
++{
++	u32 val = 0;
++
++	val |= (u32)(uuid->b[4 * reg + 0] << 0);
++	val |= (u32)(uuid->b[4 * reg + 1] << 8);
++	val |= (u32)(uuid->b[4 * reg + 2] << 16);
++	val |= (u32)(uuid->b[4 * reg + 3] << 24);
++
++	return val;
++}
++
++#endif /* !__ASSEMBLER__ */
++
+ /**
+  * struct arm_smccc_res - Result from SMC/HVC call
+  * @a0-a3 result values from registers 0 to 3
 -- 
 2.43.0
 
