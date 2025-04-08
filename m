@@ -1,119 +1,109 @@
-Return-Path: <linux-arch+bounces-11336-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11337-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A7DEA81219
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Apr 2025 18:22:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81184A8128A
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Apr 2025 18:38:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B99B71893FE7
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Apr 2025 16:16:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDE227A52DF
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Apr 2025 16:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7676922CBE5;
-	Tue,  8 Apr 2025 16:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D1B188CDB;
+	Tue,  8 Apr 2025 16:38:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="j1ES0ym5"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="t9QSCPFK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04894218584;
-	Tue,  8 Apr 2025 16:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11151DE3A9;
+	Tue,  8 Apr 2025 16:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744128979; cv=none; b=iCaT02V3rLXJamBKeUPsyxSaOGfcPQcdH6Q8iBTHjxHMIcRccN1PvugTtzrJCgmiwW+gB+C5SbWwDKk8VC0sLzGzlU0kIjl5ca7/yB9Dg2c3aZoc2xR2iJI4aCcVI7eYDzuyRfdfuZFfpRz3kHFZj9nzHbbLdg/0xh6JQw88v4A=
+	t=1744130310; cv=none; b=VEbyMzpcA1kGoM0Tr8ry8Hn/yTf1Wu1U60ktuqnixNZAVsbJq8vAeAD/VajV1SxDh3Q4W096/PKGmAnJfxh/FfcO9Ow22kRyc/KZOsc6v/+KcKFuXCcPSyyKG26Mz8FO21LLOTKiD/f2KwHoMKLH1HLtvj3dxNIMrYYmX6sFlFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744128979; c=relaxed/simple;
-	bh=/eZ4b8l/VXJtWh+FH94pc5TZfV6mqG/4nYqWaQCWQ8o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mg+ddZfPOcWwRLJLrGnoUHA4MTgNkLKT/lthF7Y/hCXpH775OjKdEMR6s3Y71GQipcJxG4O6cg7vWYBiG0dVsrozRsBoYlHZfdMHF45j+FIwsXu8YQ63Vpgm4nxRCUWtAKhPLdP1WJIx8ZvBllrMgSThWolC7nLPFA4Rg3CV964=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=j1ES0ym5; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.184.60] (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 0A6912027DEF;
-	Tue,  8 Apr 2025 09:16:17 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0A6912027DEF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1744128977;
-	bh=QlxEL9VL5GBxv0J9u6K3DMLa5NYfTy2VRFDYnyudgvo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j1ES0ym5sbrgD3pdb0PoqBafFIEPGdc0EYOnjXVL+OYKUrGI2Q1Y40bDZZ+1kq+y8
-	 kTo/HsxUdggQ5dhmHYSDjbs/eS47iNdNi+LcisiFu2Bnp0CUSqsDg3kJrhJGChUqNv
-	 L7NnLJBQ7avTM3huC+oyN74Y7Q7XMlUJQFpTZvtw=
-Message-ID: <c9bea07c-3a0e-41bb-a8d8-12d9f8776e07@linux.microsoft.com>
-Date: Tue, 8 Apr 2025 09:16:16 -0700
+	s=arc-20240116; t=1744130310; c=relaxed/simple;
+	bh=+eU1l90ug4VLQCFWctk77ffIqdBjl5mOtKRYScVzcGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RnORTq08n62xVm8gZiIBfYq8gM5hoUmb/322x1y7Kmxn51e7mxQrcREB69bhYz/N5vCAwRFXzfitD4ejBtpUZKaO/sKqmvHTJ9qg/xQfe1+ZoLSIaOqUBDurSBWlw6WvR2bW0T8bKYlGsLEatfLU7W9EIN4nXUzeadsFzNnfTnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=t9QSCPFK; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=q8c5kGuEjzUrixCQz8SJfmiMTtSSZ6M/pup07QMbIZo=; b=t9QSCPFKWRX+IEXLLTG7nFPvtv
+	qDrwtyW8ndHz9ADtdBvDwK9R1/b7GawfLb9Ry+HoJokPfkHZsWEY8kmm+jpBlq6UtOttGJYiUw7RR
+	YQcU45qxxKziWZ2wo5RrV8K7L++OSyA0Pg6W4VCgKFlOrXroMKnLYbVxn6C0iXMlaNBqc55NZ+7ry
+	DAQLC5cv7ugIBp7R5NUNcrnkv6P4QXcnyZrwaQNIPaFmW3FgZted7FwYDS5UBdqKAJDVf5IQeUvr3
+	Gezyf9Lp+/2LMaVmh9DL4kYQDtD4GOp47bbpeRMV5gu/qNM87gpbm6R4yQ33Abl/XS2ElP+tzf6AO
+	XyawnGVw==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.1 #2 (Red Hat Linux))
+	id 1u2Bx2-0000000GpOB-0hye;
+	Tue, 08 Apr 2025 16:37:28 +0000
+Date: Tue, 8 Apr 2025 17:37:27 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Ryan Roberts <ryan.roberts@arm.com>, Will Deacon <will@kernel.org>,
+	Yang Shi <yang@os.amperecomputing.com>, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v2 02/12] x86: pgtable: Always use pte_free_kernel()
+Message-ID: <Z_VQxyqkU8DV7QGy@casper.infradead.org>
+References: <20250408095222.860601-1-kevin.brodsky@arm.com>
+ <20250408095222.860601-3-kevin.brodsky@arm.com>
+ <409d2019-a409-4e97-a16f-6b345b0f5a38@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v7 01/11] arm64: kvm, smccc: Introduce and use
- API for getting hypervisor UUID
-To: Marc Zyngier <maz@kernel.org>
-Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
- catalin.marinas@arm.com, conor+dt@kernel.org, dan.carpenter@linaro.org,
- dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com,
- hpa@zytor.com, joey.gouly@arm.com, krzk+dt@kernel.org, kw@linux.com,
- kys@microsoft.com, lenb@kernel.org, lpieralisi@kernel.org,
- manivannan.sadhasivam@linaro.org, mark.rutland@arm.com, mingo@redhat.com,
- oliver.upton@linux.dev, rafael@kernel.org, robh@kernel.org,
- rafael.j.wysocki@intel.com, ssengar@linux.microsoft.com,
- sudeep.holla@arm.com, suzuki.poulose@arm.com, tglx@linutronix.de,
- wei.liu@kernel.org, will@kernel.org, yuzenghui@huawei.com,
- devicetree@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org,
- apais@microsoft.com, benhill@microsoft.com, bperkins@microsoft.com,
- sunilmut@microsoft.com
-References: <20250407201336.66913-1-romank@linux.microsoft.com>
- <20250407201336.66913-2-romank@linux.microsoft.com>
- <86semjku7x.wl-maz@kernel.org>
-Content-Language: en-US
-From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <86semjku7x.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <409d2019-a409-4e97-a16f-6b345b0f5a38@intel.com>
 
+On Tue, Apr 08, 2025 at 08:22:47AM -0700, Dave Hansen wrote:
+> Are there any tests for folio_test_pgtable() at free_page() time? If we
+> had that, it would make it less likely that another free_page() user
+> could sneak in without calling the destructor.
 
+It's hidden, but yes:
 
-On 4/8/2025 12:06 AM, Marc Zyngier wrote:
-> On Mon, 07 Apr 2025 21:13:26 +0100,
-> Roman Kisel <romank@linux.microsoft.com> wrote:
+static inline bool page_expected_state(struct page *page,
+                                        unsigned long check_flags)
+{
+        if (unlikely(atomic_read(&page->_mapcount) != -1))
+                return false;
 
-[...]
+PageTable uses page_type which aliases with mapcount, so this check
+covers "PageTable is still set when the last refcount to it is put".
 
->>   
->>   #include <linux/args.h>
->>   #include <linux/init.h>
->> +
->> +#ifndef __ASSEMBLER__
->> +#include <linux/uuid.h>
->> +#endif
-> 
-> That's a pretty unusual guard in arm64 land. Looking at the current
-> state of the kernel:
-> 
-> $ git grep -w __ASSEMBLER__ arch/arm64/ | wc -l
-> 2
-> $ git grep -w __ASSEMBLY__ arch/arm64/ | wc -l
-> 122
-> 
-> I'd suggest the later rather than the former.
-
-Thanks for catching this! I'll be sure to change this to use the arm64
-coding conventions in the next version.
-
-> 
-> Thanks,
-> 
-> 	M.
-> 
-
--- 
-Thank you,
-Roman
-
+I don't think we really use the page refcount when allocating/freeing
+page tables.  Anyone want to try switching it over to using
+alloc_frozen_pages() / free_frozen_pages()?  Might need to move that API
+out of mm/internal.h ...
 
