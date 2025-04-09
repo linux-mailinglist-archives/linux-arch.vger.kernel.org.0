@@ -1,163 +1,103 @@
-Return-Path: <linux-arch+bounces-11360-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11361-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15746A82A55
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Apr 2025 17:29:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6326EA82A80
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Apr 2025 17:34:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 408D49A528C
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Apr 2025 15:16:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2503A189BCCA
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Apr 2025 15:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54EB266F05;
-	Wed,  9 Apr 2025 15:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3BA26739D;
+	Wed,  9 Apr 2025 15:27:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D77ojHRc"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="HiVZXeJW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D305A17C219;
-	Wed,  9 Apr 2025 15:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BEFF265CB5;
+	Wed,  9 Apr 2025 15:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744211761; cv=none; b=WjghopzTuEkZd6LZdocm3xp1cvqSU/lAzq9zZjdIjJEnYQUT9bzuIntfM1kFIJ6X3vpH0SnhQH7zk+UuzFFvZFl4MeivGuL8+wc/MpCAYGHJ6+I47/GQm5Fj3GPVW7KhgOQAZdW+XvH16wxK08Hw5F5SVZER6Kv+aFdVA4W6iYg=
+	t=1744212445; cv=none; b=NvDyPNo/8fnmvT3zfYye2iarSV530za+YXyHBe1gcjH3GU+33jw7DfIvfpr3A6kHaUeXlxx7vmXL2f171wJLHZJEMaugKcvEyfmCpGDAhz4/tC7+//GfYDGsfpse1y2EWRZRnWuESSLJfPK7jnVBYyCx82MhpBSE8oPF9BGG/b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744211761; c=relaxed/simple;
-	bh=JD3UCsEmPQ64i5dIKbrJePQ8znLynqiSwHlAm2gAgCc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U69+aWzguGwIvadfz38H1wkqw0gTeziYYdESvydP17yTf8xUeJHFzevRK1X2DsWfo86XefRGIEDsXcYLfbOmseYnFVU9DzbzUHM1P6BKlHByTVLbNG+AqGmW/UbPm3HVMPS7sfenoQYYeJ54wX7j71MiTTsuKuvJBHfZQMkDN1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D77ojHRc; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-30f30200b51so26823751fa.3;
-        Wed, 09 Apr 2025 08:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744211758; x=1744816558; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B0/uW4jPxHZ/GoeUPgM6M/7DEGndKYYoe9YilYwKUUw=;
-        b=D77ojHRcAPC/+VwuhJBDFcYByjy75HJ9AABXFZ6gWGYBjoVjijMdGbV664GfG7NBAV
-         OI0Ogi9rqj6/j7ieAHFkhkb3CmG2ErDfyhuzkQccMddOe8H5b/S0XWY2sQCxw+iqVutd
-         pLu0Zo/G70ImbMSMY6hc0oz9l2ZG6vyJdeRgOaO6kiamXxihBNGn7cMVvViPh1JW8v2m
-         xUd3FERpeI3GWtrUDMdxB/jKT6Ybcv+KNe15qy6LmBQPLIBPWQ/7AmlXONKRfnK+EhF8
-         daYK9mhU+rQLJVod8rDYqjhBL18IAfZTJw9C3eA7RmoWDElp/ibb69+b7PcIF9fdo5vm
-         KMFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744211758; x=1744816558;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B0/uW4jPxHZ/GoeUPgM6M/7DEGndKYYoe9YilYwKUUw=;
-        b=fF7zqbK9FQzJJFlSLk6I5JjTozJJHqTetcxe21fdcbOANlHuA5VN59yuGXL0H383ty
-         qh52AcOxL81tMVxOG8XAwaV2Ftw7F9B+1H0DGFNmGoHz+peyo+Y88rLVew91qP+kW2rM
-         qb9y20xhCxmtzlZXGa7MMApG+zhLg6DFHnPiD8VSCzzwoWbimSv9a4fBmaLryVhgXpzo
-         bv0A4ZONKriglJkG/Ics/aZzF2gk3fGAwO2gjTw6iqteNeyL8mNihU/A6+3nayeLq+mj
-         S8fumyUp4forkIN+02LQZvLyVEAEy5mHAs8aWsSRjHa/tadSTzELy72pYLwNNBRRtxNH
-         HE+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUTNOMwholhzz/+L39W8sSlCUTgLSFH4ej7DFMtyxaIMqQ+AqUXVWroIKTBvU75Py6fXdlmDjFc1kojoP93@vger.kernel.org, AJvYcCVnvmYSEyAonjENSANy8Xp6I3RdQQxk8e51GLMsQivBRrHDwVTxWx3MKGUdQB+ppJ8xmXAkmpzVMYkB@vger.kernel.org, AJvYcCWgaRgUNinHx8FDoSNUaxPdhnW3YiE9/6x6g0zXSAM6LziPzS0waEtxiA21QPYqtkeWNZeSHyWHUdQHi/vEcGI=@vger.kernel.org, AJvYcCX1zFFgpwFgzCbSWkKyDbAM79CX3K2bR3u2HbrDH8h6z3eEjTuaq4qGDz28jSICEawivlElOYX+@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxP4jmO2U0ybFTaIWrLk0eDQspuu04jjrWMlZAZMQA2GPYgtfp
-	+UUYeOJTCzTRJvvCsaaZRsu8xjdRUHwXTyqg8CliOY9w0hvjdG0RNuCQMDfQq0bxLv4XX5hfQeo
-	JShmwsblMg9QzirnqnKJLL/e3vcQ=
-X-Gm-Gg: ASbGncs4DhoibiclLIfL7PQIWVvLteWhgoWDM4hYA0GzL/El/sHESdOmFX9lGPI/2y+
-	KZZjLvKMvkMow0bN4zkfvmEzcNmHzD9ZdT1KlyVrl3XiZudD7e14li+o+anPXAeoKI13nf7z308
-	6xvkLqhMs6vDu8wKF577WmgA==
-X-Google-Smtp-Source: AGHT+IGNIwqxn5mFZL5/yjjNE/1+c0Q5XXczzTx4ISCw+fSAPDJR88uRUs5CfplseOFx7Y7BUJqkOOXlpJ/JHLnOpnI=
-X-Received: by 2002:a05:651c:1475:b0:308:e5e8:9d4c with SMTP id
- 38308e7fff4ca-30f43894d5cmr14376751fa.28.1744211757664; Wed, 09 Apr 2025
- 08:15:57 -0700 (PDT)
+	s=arc-20240116; t=1744212445; c=relaxed/simple;
+	bh=X3NxPrh/Dg6zmeDRgnBwY1KySOioOX8BKWZl/rmzgB4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CFMLnP+b4A9yvlRv5bbePu/bYATYdOjM5l5ano+QTK8W36yNAg19LQg2VUyCJ5FdV6L9A9H2SHbd+GtAKObF0+VyRhDVp/7aaQvejHQqtlIi+NKTn8dumGeSGncc5aWCflMT8nk2NfsvGnxTHnLOPNpTy9jv463lSdUfpkGmI/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=HiVZXeJW; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.184.60] (unknown [131.107.160.188])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 0A0262114D8A;
+	Wed,  9 Apr 2025 08:27:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0A0262114D8A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744212443;
+	bh=UjQX7nAQGu8VWkUrRyRpYAcZbBxisvkDjd3TARXNRv0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HiVZXeJWF7w0t2l/4IF8J5ryv6/ZPUKUQ5aYykBziIutp4bcub2znNWPE/Y1Dh/Ge
+	 wPcrUU54yJBi/OX2udWa8QfGVA5UwpUJ3rEDsQtkbu2LYD/m1xFmP6y1gt8crnOdXG
+	 kECFhb2Vi1RaczcV6Pkxw/I1DktSimbBtg4Gwcdg=
+Message-ID: <b56eef68-367d-4b7b-98c4-f5d1291d7993@linux.microsoft.com>
+Date: Wed, 9 Apr 2025 08:27:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250127160709.80604-1-ubizjak@gmail.com> <20250127160709.80604-7-ubizjak@gmail.com>
- <66e54eb9-58b3-4559-af32-66a77fe1ea01@kernel.org> <CAFULd4YiYRhqu7mGWMN9pAsV-Nc6a97+EgiTCR34iaYDvXjDwQ@mail.gmail.com>
- <77B3F3ED-102D-4759-98F1-622629EBF9AF@zytor.com>
-In-Reply-To: <77B3F3ED-102D-4759-98F1-622629EBF9AF@zytor.com>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Wed, 9 Apr 2025 17:15:45 +0200
-X-Gm-Features: ATxdqUFXaMouhTV-LvYcXiA_EezjmjAt_Olprrf1g0qki_J08Ltm70ceNO6A5E4
-Message-ID: <CAFULd4ahm3-r66eBJSHV4NfBpnFLUpK2hRak42whuJJeui+B+Q@mail.gmail.com>
-Subject: Re: [PATCH v4 6/6] percpu/x86: Enable strict percpu checks via named
- AS qualifiers
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Jiri Slaby <jirislaby@kernel.org>, x86@kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-bcachefs@vger.kernel.org, 
-	linux-arch@vger.kernel.org, netdev@vger.kernel.org, 
-	Nadav Amit <nadav.amit@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Andy Lutomirski <luto@kernel.org>, 
-	Brian Gerst <brgerst@gmail.com>, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH hyperv-next 5/6] arch, drivers: Add device struct bitfield
+ to not bounce-buffer
+To: Christoph Hellwig <hch@lst.de>
+Cc: aleksander.lobakin@intel.com, andriy.shevchenko@linux.intel.com,
+ arnd@arndb.de, bp@alien8.de, catalin.marinas@arm.com, corbet@lwn.net,
+ dakr@kernel.org, dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+ decui@microsoft.com, gregkh@linuxfoundation.org, haiyangz@microsoft.com,
+ hpa@zytor.com, James.Bottomley@HansenPartnership.com,
+ Jonathan.Cameron@huawei.com, kys@microsoft.com, leon@kernel.org,
+ lukas@wunner.de, luto@kernel.org, m.szyprowski@samsung.com,
+ martin.petersen@oracle.com, mingo@redhat.com, peterz@infradead.org,
+ quic_zijuhu@quicinc.com, robin.murphy@arm.com, tglx@linutronix.de,
+ wei.liu@kernel.org, will@kernel.org, iommu@lists.linux.dev,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, x86@kernel.org,
+ apais@microsoft.com, benhill@microsoft.com, bperkins@microsoft.com,
+ sunilmut@microsoft.com
+References: <20250409000835.285105-1-romank@linux.microsoft.com>
+ <20250409000835.285105-6-romank@linux.microsoft.com>
+ <20250409105229.GA5721@lst.de>
+Content-Language: en-US
+From: Roman Kisel <romank@linux.microsoft.com>
+In-Reply-To: <20250409105229.GA5721@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 9, 2025 at 5:09=E2=80=AFPM H. Peter Anvin <hpa@zytor.com> wrote=
-:
->
-> On April 9, 2025 4:43:27 AM PDT, Uros Bizjak <ubizjak@gmail.com> wrote:
-> >On Wed, Apr 9, 2025 at 1:07=E2=80=AFPM Jiri Slaby <jirislaby@kernel.org>=
- wrote:
-> >>
-> >> On 27. 01. 25, 17:05, Uros Bizjak wrote:
-> >> > This patch declares percpu variables in __seg_gs/__seg_fs named AS
-> >> > and keeps them named AS qualified until they are dereferenced with
-> >> > percpu accessor. This approach enables various compiler check
-> >> > for cross-namespace variable assignments.
-> >>
-> >> So this causes modpost to fail to version some symbols:
-> >>
-> >> > WARNING: modpost: EXPORT symbol "xen_vcpu_id" [vmlinux] version gene=
-ration failed, symbol will not be versioned.
-> >> > Is "xen_vcpu_id" prototyped in <asm/asm-prototypes.h>?
-> >> > WARNING: modpost: EXPORT symbol "irq_stat" [vmlinux] version generat=
-ion failed, symbol will not be versioned.
-> >> > Is "irq_stat" prototyped in <asm/asm-prototypes.h>?
-> >> > WARNING: modpost: EXPORT symbol "fred_rsp0" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-> >> > Is "fred_rsp0" prototyped in <asm/asm-prototypes.h>?
-> >> > WARNING: modpost: EXPORT symbol "cpu_dr7" [vmlinux] version generati=
-on failed, symbol will not be versioned.
-> >> > Is "cpu_dr7" prototyped in <asm/asm-prototypes.h>?
-> >> > WARNING: modpost: EXPORT symbol "cpu_tss_rw" [vmlinux] version gener=
-ation failed, symbol will not be versioned.
-> >> > Is "cpu_tss_rw" prototyped in <asm/asm-prototypes.h>?
-> >> > WARNING: modpost: EXPORT symbol "__tss_limit_invalid" [vmlinux] vers=
-ion generation failed, symbol will not be versioned.
-> >> > Is "__tss_limit_invalid" prototyped in <asm/asm-prototypes.h>?
-> >> > WARNING: modpost: EXPORT symbol "irq_fpu_usable" [vmlinux] version g=
-eneration failed, symbol will not be versioned.
-> >> > Is "irq_fpu_usable" prototyped in <asm/asm-prototypes.h>?
-> >> > WARNING: modpost: EXPORT symbol "cpu_info" [vmlinux] version generat=
-ion failed, symbol will not be versioned.
-> >> > Is "cpu_info" prototyped in <asm/asm-prototypes.h>?
-> >> > WARNING: modpost: EXPORT symbol "gdt_page" [vmlinux] version generat=
-ion failed, symbol will not be versioned.
-> >> > Is "gdt_page" prototyped in <asm/asm-prototypes.h>?
-> >>  > ...
-> >>
-> >> That happens both with 6.15-rc1 and today's -next. Ideas?
-> >
-> >https://lore.kernel.org/lkml/20250404102535.705090-1-ubizjak@gmail.com/
 
-> A lot of those seem to be things that definitely shouldn't be expected...
 
-These symbols are just declared with an extra __seg_gs that genksyms
-doesn't understand, e.g.:
+On 4/9/2025 3:52 AM, Christoph Hellwig wrote:
+> On Tue, Apr 08, 2025 at 05:08:34PM -0700, Roman Kisel wrote:
+>> Bounce-buffering makes the system spend more time copying
+>> I/O data. When the I/O transaction take place between
+>> a confidential and a non-confidential endpoints, there is
+>> no other way around.
+>>
+>> Introduce a device bitfield to indicate that the device
+>> doesn't need to perform bounce buffering. The capable
+>> device may employ it to save on copying data around.
+> 
+> I have no idea what this is supposed to mean, you need to explain it
+> much better.
 
-extern __seg_gs __attribute__((section(".data..percpu" "..hot.."
-"this_cpu_off"))) __typeof__(unsigned long) this_cpu_off;
+Thanks for reviewing! I'll fix the description.
 
-The workaround falls back when __GENKSYMS__ is defined to:
+> 
 
-extern __attribute__((section(".data..percpu" "..hot.."
-"this_cpu_off"))) __typeof__(unsigned long) this_cpu_off;
+-- 
+Thank you,
+Roman
 
-which is what genksyms processes without problems.
-
-Uros.
 
