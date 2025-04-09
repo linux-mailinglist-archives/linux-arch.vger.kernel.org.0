@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-11344-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11343-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED528A819B1
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Apr 2025 02:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B8BDA819AE
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Apr 2025 02:09:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 282D44A647C
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Apr 2025 00:09:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBEF24A5907
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Apr 2025 00:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E277F250EC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEBA81F956;
 	Wed,  9 Apr 2025 00:08:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="TjHciaQQ"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="iDjCyAcd"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C89AE3C30;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3FBB258A;
 	Wed,  9 Apr 2025 00:08:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744157327; cv=none; b=rZcsVW0D8hLtoMQfX6W7NoH4o3Pm4vuuEPXGFzCeaijXGnWKOPGJrjUrcekswVdbKJtqcxFHg/WZbpcyyjT4b+RYBI32Uxm7eDHSlnZ10M9hBarXm0IZ0LrarA6DueZ52yNCXmHyKhJ+Hv+maWL3ymNwzN8Dkh3ijXxd2VefNls=
+	t=1744157327; cv=none; b=r6kc5AJOI0ch2yIzU+k32+ZYBvf7V89nbpRmtmlJUyesGqj9kIufCgezKp8ILLB6Le3l6d7E9nTcsqec8JozvUpJ5VM6EKxToIK4xUuMRm3K0n1bQUw7Q3Jjfz1DiYL6jHbyWT69O6i0Xg8gW0bdgyaNXDwOYrIy520YPCsU0tA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744157327; c=relaxed/simple;
-	bh=XS8Jii9KcXAY6yCzvyMTM6JyTsWsfi45Pz+ikKb5NGc=;
+	bh=TzegTHBmX8xpxC1koWbRZZ7J4AlrlbwynYjvHGR+LTg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l3W6cN6afIvQapxmp4R8rn47u8nqiwvrp8OTn8b+8XsU9jq2cdbP95bYmgdm0VxICRsQc3M7lzunOMkXC4YHgGElekWqcnd99vmHb/uPwGNVszPqijud2aWGU4SmRVC4e6BcNlP6sb+Umtm9IxRcBRhaMPH6GZGt/qNWJeUh6sA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=TjHciaQQ; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=dEj6/BB6qOslQClsJJUtVmoza/JtSEe633DUNO1IYOkNAtCZp+keRIe6Rlyf/2RVCU2AxvudIaUwaJG+piZpjFj7CXMk/l/WWFCEDQtitV7Z3h1deWbnrjzx4WKUvCbAE2qGDg1zrEi2SS+b+MAvIADMhkdkQuRZe/KkJ2rI4SA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=iDjCyAcd; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 801DD2113E99;
+	by linux.microsoft.com (Postfix) with ESMTPSA id DB55B2113E9A;
 	Tue,  8 Apr 2025 17:08:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 801DD2113E99
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DB55B2113E9A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1744157318;
-	bh=KbV/vKXAiJOBIg+7IN7P0v6n1Jf6WS2233iGKx+AqoI=;
+	s=default; t=1744157319;
+	bh=Sg3mxreQaraq/1ciAx/jhCP/Bmu4VLiaIgfdf0GaDc8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TjHciaQQgFnL7ivTEJKVa5ioWc/2NYa6k8KseApdUdFiruJHfVoaR9jxdQ7E4MiYF
-	 IZ7YXCoETe3TAQmnUqpzuZqXLUajwo7FDuZ7bbr7jGbuCnPDf9fdHmbIE/9o1a+v7G
-	 tMzUn9l1huWibgOirhb4LYNGntlzZ2ukSc+KBPek=
+	b=iDjCyAcdNbtLj7uwkih4ucfZviBCOPhMRJni3A2gBEGdAzqiBG9+Z045qKKz4haZo
+	 M+wg8LJ1F/RcW9TIpph1TemnfMJKPAVhHFbRUPRWMeSznV+HOQqS5bCe10gHFqiNLq
+	 kWbG3kEoYK/oYBnSVN3185sYekG5BnB01Osmt+sg=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: aleksander.lobakin@intel.com,
 	andriy.shevchenko@linux.intel.com,
@@ -82,9 +82,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next 2/6] drivers: hyperv: VMBus protocol version 6.0
-Date: Tue,  8 Apr 2025 17:08:31 -0700
-Message-ID: <20250409000835.285105-3-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next 3/6] arch: hyperv: Get/set SynIC synth.registers via paravisor
+Date: Tue,  8 Apr 2025 17:08:32 -0700
+Message-ID: <20250409000835.285105-4-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250409000835.285105-1-romank@linux.microsoft.com>
 References: <20250409000835.285105-1-romank@linux.microsoft.com>
@@ -96,170 +96,114 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The confidential VMBus is supported starting from the protocol
-version 6.0 onwards.
+The confidential VMBus is built on the guest talking to the
+paravisor only.
 
-Update the relevant definitions, provide a function that returns
-whether VMBus is condifential or not.
+Provide functions that allow manipulating the SynIC registers
+via paravisor.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 ---
- drivers/hv/vmbus_drv.c         | 12 ++++++
- include/asm-generic/mshyperv.h |  1 +
- include/linux/hyperv.h         | 71 +++++++++++++++++++++++++---------
- 3 files changed, 65 insertions(+), 19 deletions(-)
+ arch/arm64/hyperv/mshyperv.c      | 19 +++++++++++++++++++
+ arch/arm64/include/asm/mshyperv.h |  3 +++
+ arch/x86/include/asm/mshyperv.h   |  3 +++
+ arch/x86/kernel/cpu/mshyperv.c    | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 53 insertions(+)
 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 22afebfc28ff..fa3ad6fe0bec 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -55,6 +55,18 @@ static long __percpu *vmbus_evt;
- int vmbus_irq;
- int vmbus_interrupt;
- 
-+/*
-+ * If the Confidential VMBus is used, the data on the "wire" is not
-+ * visible to either the host or the hypervisor.
-+ */
-+static bool is_confidential;
-+
-+bool vmbus_is_confidential(void)
-+{
-+	return is_confidential;
-+}
-+EXPORT_SYMBOL_GPL(vmbus_is_confidential);
-+
- /*
-  * The panic notifier below is responsible solely for unloading the
-  * vmbus connection, which is necessary in a panic event.
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index ccccb1cbf7df..23f707b5aeeb 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -377,5 +377,6 @@ static inline int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u3
- 	return -EOPNOTSUPP;
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index 4e27cc29c79e..1647a57a3379 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -91,3 +91,22 @@ bool hv_is_hyperv_initialized(void)
+ 	return hyperv_initialized;
  }
- #endif /* CONFIG_MSHV_ROOT */
-+bool vmbus_is_confidential(void);
- 
- #endif
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index 675959fb97ba..e66fd980789a 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -265,16 +265,19 @@ static inline u32 hv_get_avail_to_write_percent(
-  * Linux kernel.
-  */
- 
--#define VERSION_WS2008  ((0 << 16) | (13))
--#define VERSION_WIN7    ((1 << 16) | (1))
--#define VERSION_WIN8    ((2 << 16) | (4))
--#define VERSION_WIN8_1    ((3 << 16) | (0))
--#define VERSION_WIN10 ((4 << 16) | (0))
--#define VERSION_WIN10_V4_1 ((4 << 16) | (1))
--#define VERSION_WIN10_V5 ((5 << 16) | (0))
--#define VERSION_WIN10_V5_1 ((5 << 16) | (1))
--#define VERSION_WIN10_V5_2 ((5 << 16) | (2))
--#define VERSION_WIN10_V5_3 ((5 << 16) | (3))
-+#define VMBUS_MAKE_VERSION(MAJ, MIN)	((((u32)MAJ) << 16) | (MIN))
-+#define VERSION_WS2008					VMBUS_MAKE_VERSION(0, 13)
-+#define VERSION_WIN7					VMBUS_MAKE_VERSION(1, 1)
-+#define VERSION_WIN8					VMBUS_MAKE_VERSION(2, 4)
-+#define VERSION_WIN8_1					VMBUS_MAKE_VERSION(3, 0)
-+#define VERSION_WIN10					VMBUS_MAKE_VERSION(4, 0)
-+#define VERSION_WIN10_V4_1				VMBUS_MAKE_VERSION(4, 1)
-+#define VERSION_WIN10_V5				VMBUS_MAKE_VERSION(5, 0)
-+#define VERSION_WIN10_V5_1				VMBUS_MAKE_VERSION(5, 1)
-+#define VERSION_WIN10_V5_2				VMBUS_MAKE_VERSION(5, 2)
-+#define VERSION_WIN10_V5_3				VMBUS_MAKE_VERSION(5, 3)
-+#define VERSION_WIN_IRON				VERSION_WIN10_V5_3
-+#define VERSION_WIN_COPPER				VMBUS_MAKE_VERSION(6, 0)
- 
- /* Make maximum size of pipe payload of 16K */
- #define MAX_PIPE_DATA_PAYLOAD		(sizeof(u8) * 16384)
-@@ -335,14 +338,22 @@ struct vmbus_channel_offer {
- } __packed;
- 
- /* Server Flags */
--#define VMBUS_CHANNEL_ENUMERATE_DEVICE_INTERFACE	1
--#define VMBUS_CHANNEL_SERVER_SUPPORTS_TRANSFER_PAGES	2
--#define VMBUS_CHANNEL_SERVER_SUPPORTS_GPADLS		4
--#define VMBUS_CHANNEL_NAMED_PIPE_MODE			0x10
--#define VMBUS_CHANNEL_LOOPBACK_OFFER			0x100
--#define VMBUS_CHANNEL_PARENT_OFFER			0x200
--#define VMBUS_CHANNEL_REQUEST_MONITORED_NOTIFICATION	0x400
--#define VMBUS_CHANNEL_TLNPI_PROVIDER_OFFER		0x2000
-+#define VMBUS_CHANNEL_ENUMERATE_DEVICE_INTERFACE		0x0001
-+/*
-+ * This flag indicates that the channel is offered by the paravisor, and must
-+ * use encrypted memory for the channel ring buffer.
-+ */
-+#define VMBUS_CHANNEL_CONFIDENTIAL_RING_BUFFER			0x0002
-+/*
-+ * This flag indicates that the channel is offered by the paravisor, and must
-+ * use encrypted memory for GPA direct packets and additional GPADLs.
-+ */
-+#define VMBUS_CHANNEL_CONFIDENTIAL_EXTERNAL_MEMORY		0x0004
-+#define VMBUS_CHANNEL_NAMED_PIPE_MODE					0x0010
-+#define VMBUS_CHANNEL_LOOPBACK_OFFER					0x0100
-+#define VMBUS_CHANNEL_PARENT_OFFER						0x0200
-+#define VMBUS_CHANNEL_REQUEST_MONITORED_NOTIFICATION	0x0400
-+#define VMBUS_CHANNEL_TLNPI_PROVIDER_OFFER				0x2000
- 
- struct vmpacket_descriptor {
- 	u16 type;
-@@ -621,6 +632,12 @@ struct vmbus_channel_relid_released {
- 	u32 child_relid;
- } __packed;
- 
-+/*
-+ * Used by the paravisor only, means that the encrypted ring buffers and
-+ * the encrypted external memory are supported
-+ */
-+#define VMBUS_FEATURE_FLAG_CONFIDENTIAL_CHANNELS	0x10
+ EXPORT_SYMBOL_GPL(hv_is_hyperv_initialized);
 +
- struct vmbus_channel_initiate_contact {
- 	struct vmbus_channel_message_header header;
- 	u32 vmbus_version_requested;
-@@ -630,7 +647,8 @@ struct vmbus_channel_initiate_contact {
- 		struct {
- 			u8	msg_sint;
- 			u8	msg_vtl;
--			u8	reserved[6];
-+			u8	reserved[2];
-+			u32 feature_flags; /* VMBus version 6.0 */
- 		};
- 	};
- 	u64 monitor_page1;
-@@ -1002,6 +1020,11 @@ struct vmbus_channel {
- 
- 	/* The max size of a packet on this channel */
- 	u32 max_pkt_size;
-+
-+	/* The ring buffer is encrypted */
-+	bool confidential_ring_buffer;
-+	/* The external memory is encrypted */
-+	bool confidential_external_memory;
- };
- 
- #define lock_requestor(channel, flags)					\
-@@ -1026,6 +1049,16 @@ u64 vmbus_request_addr_match(struct vmbus_channel *channel, u64 trans_id,
- 			     u64 rqst_addr);
- u64 vmbus_request_addr(struct vmbus_channel *channel, u64 trans_id);
- 
-+static inline bool is_confidential_ring_buffer(const struct vmbus_channel_offer_channel *o)
++/*
++ * Not supported yet.
++ */
++u64 hv_pv_get_synic_register(unsigned int reg, int *err)
 +{
-+	return !!(o->offer.chn_flags & VMBUS_CHANNEL_CONFIDENTIAL_RING_BUFFER);
++	*err = -ENODEV;
++	return !0ULL;
 +}
++EXPORT_SYMBOL_GPL(hv_pv_get_synic_register);
 +
-+static inline bool is_confidential_external_memory(const struct vmbus_channel_offer_channel *o)
++/*
++ * Not supported yet.
++ */
++int hv_pv_set_synic_register(unsigned int reg, u64 val)
 +{
-+	return !!(o->offer.chn_flags & VMBUS_CHANNEL_CONFIDENTIAL_EXTERNAL_MEMORY);
++	return -ENODEV;
 +}
++EXPORT_SYMBOL_GPL(hv_pv_set_synic_register);
+diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
+index b721d3134ab6..bce37a58dff0 100644
+--- a/arch/arm64/include/asm/mshyperv.h
++++ b/arch/arm64/include/asm/mshyperv.h
+@@ -53,6 +53,9 @@ static inline u64 hv_get_non_nested_msr(unsigned int reg)
+ 	return hv_get_msr(reg);
+ }
+ 
++u64 hv_pv_get_synic_register(unsigned int reg, int *err);
++int hv_pv_set_synic_register(unsigned int reg, u64 val);
 +
- static inline bool is_hvsock_offer(const struct vmbus_channel_offer_channel *o)
+ /* SMCCC hypercall parameters */
+ #define HV_SMCCC_FUNC_NUMBER	1
+ #define HV_FUNC_ID	ARM_SMCCC_CALL_VAL(			\
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index 07aadf0e839f..5650a16cc5e8 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -307,6 +307,9 @@ static __always_inline u64 hv_raw_get_msr(unsigned int reg)
+ 	return __rdmsr(reg);
+ }
+ 
++u64 hv_pv_get_synic_register(unsigned int reg, int *err);
++int hv_pv_set_synic_register(unsigned int reg, u64 val);
++
+ #else /* CONFIG_HYPERV */
+ static inline void hyperv_init(void) {}
+ static inline void hyperv_setup_mmu_ops(void) {}
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 3e2533954675..4f6e3d02f730 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -89,6 +89,34 @@ void hv_set_non_nested_msr(unsigned int reg, u64 value)
+ }
+ EXPORT_SYMBOL_GPL(hv_set_non_nested_msr);
+ 
++/*
++ * Not every paravisor supports getting SynIC registers, and
++ * this function may fail. The caller has to make sure that this function
++ * runs on the CPU of interest.
++ */
++u64 hv_pv_get_synic_register(unsigned int reg, int *err)
++{
++	if (!hv_is_synic_msr(reg)) {
++		*err = -ENODEV;
++		return !0ULL;
++	}
++	return native_read_msr_safe(reg, err);
++}
++EXPORT_SYMBOL_GPL(hv_pv_get_synic_register);
++
++/*
++ * Not every paravisor supports setting SynIC registers, and
++ * this function may fail. The caller has to make sure that this function
++ * runs on the CPU of interest.
++ */
++int hv_pv_set_synic_register(unsigned int reg, u64 val)
++{
++	if (!hv_is_synic_msr(reg))
++		return -ENODEV;
++	return wrmsrl_safe(reg, val);
++}
++EXPORT_SYMBOL_GPL(hv_pv_set_synic_register);
++
+ u64 hv_get_msr(unsigned int reg)
  {
- 	return !!(o->offer.chn_flags & VMBUS_CHANNEL_TLNPI_PROVIDER_OFFER);
+ 	if (hv_nested)
 -- 
 2.43.0
 
