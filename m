@@ -1,185 +1,171 @@
-Return-Path: <linux-arch+bounces-11378-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11379-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 703B5A84167
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Apr 2025 13:04:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18E97A84413
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Apr 2025 15:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2C613BC604
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Apr 2025 11:04:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51DBC1B64FD4
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Apr 2025 13:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398D7281530;
-	Thu, 10 Apr 2025 11:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3391B2857EA;
+	Thu, 10 Apr 2025 13:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="pVFHYrgW"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="aJy//rsA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EBB26FA69
-	for <linux-arch@vger.kernel.org>; Thu, 10 Apr 2025 11:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2F728C5BB
+	for <linux-arch@vger.kernel.org>; Thu, 10 Apr 2025 13:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744283084; cv=none; b=Zv4L9+3KXWv5YCxUsLHPXQLbNkjuv8qjEc9U67AD+ZFEwK9iCaEM8RSOW4wKHWW34FADPJJF+kvJFgjsZcTVR/Jq6syGpRo2up3tFb1uQiFV980ycagvPX2FuaRgCApaPRCJoIhYmkFmQuMCnu09AsBJVaqTO5cpNmGGJacnYGY=
+	t=1744290336; cv=none; b=P0YVAZCD6O2I+g98pHKwTLvJqANIf2N/XYuZB/WphoZ85PQaP5UZ4abY9gPYJLiNElv/+hXQ5sBg/F5UwTJDz3qDeCjI6UydkCSgkCVAse+Q3594dd32yK+0ukzSQcu9o5LTFmp4rqUCaYDXTHnVRnTQYNeEUyxwTA4SrllrnZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744283084; c=relaxed/simple;
-	bh=kOlPkOa9RAWaHmxwXq9vXkGSssRFc7sUC8EQNbcnfPY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=tKW3atufKIRoFTJP7/u21PoMEDDoNGy9t2PN8k2UAxqD7StxZTJXDXOjsc6MzQFPEgvbgI6FpmgA+Fv+PS5LsVSwKOIY2+0ro++w1VCGU84i+alieos0Cu+YJdcCgdeZEwZrnt5lDHWZY4JMk4LBr6VLJbQ9pOsT/ay9xiMTBg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=pVFHYrgW; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-391295490c8so23865f8f.3
-        for <linux-arch@vger.kernel.org>; Thu, 10 Apr 2025 04:04:41 -0700 (PDT)
+	s=arc-20240116; t=1744290336; c=relaxed/simple;
+	bh=HMR9MCdcSh4ghNXN2PNjr8BtDW52Pk7L9AMhE1YOGEg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dnZdW8S85P2Slt0CD2ULBc648YalVqsASCeTN74wHTaorD5ha/yR3zRQsbTg2fTXhz4mhLnOLF7EcByF0n+O1B08LGaiK1vMbbs3ke0JpWiDMX2wojIJiWbpUR0ZyEv8TNH4fgWMAKjfudkWpc4x4RNX7uqaedFBU+553vVXvmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=aJy//rsA; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7c7913bab2cso81620485a.0
+        for <linux-arch@vger.kernel.org>; Thu, 10 Apr 2025 06:05:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1744283080; x=1744887880; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:from:to:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FwTqTcXuZVwmB1gK8gAQzMNft2dcqvTwt7yn+4sQNuo=;
-        b=pVFHYrgW6CsPBVfhDp8H0SHh07ORi0+k92JSM7WHod+l6GpALDm6Af/8R4cZodTjSI
-         tJhmQC0ISSnfE51tew20VXscex2ugzAatyW+gaNQVdqFVsPCNEtL0hzsectLv90gFFtt
-         oVuwwysWrn9jEcSsg7T6KkbCebzr4gntAQJheGXE5uqMjbzNUT2JWYiPhRLq9y69avjt
-         blLUmxwM5ibExPlEoUUbX0wnvPL/rJd7iUzELewMF/309FFzjGxOdZqxZeMaqwE83MP6
-         zgXi1m4nmEywod9fgORmfD+WzNDeuueMfkonfaKqfm00t7VTa2R1DFvAman71MpISxGx
-         m5fQ==
+        d=ziepe.ca; s=google; t=1744290331; x=1744895131; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZHIQ/++9W1bwFwjTR3scNHhBiiv2Oa9aNs8dRl0dl1I=;
+        b=aJy//rsAtoRy5775PerRLX3+D2+pCuJyxisg7ZyE9JJYLwFmuXzWh0uOWqiuh4ieIh
+         uF5/hijBp+w2Y69y4cKHvmmmNzsPrnf3ptfKescWhZy0OfRE4Mau09mf9U3DVcpknaBd
+         scqtSn3UUbhYu5NqdefT+UxoQa6wSdPB88sdqekGPVsVMFf5sbx/ZB89Q2bnHThaL6VV
+         meWCWqJJo1/EjSpF2Y3O3bQtNzBnbDoUz5Oe/PFWFf4974ejvqMaUWXFntUJsJ9wdVew
+         Xrw4/IXqVIYGBd1hzY6ahSYkD8Z4CI9AYBK1xEyXhR+ImVHL5+sJiNL9uUl6xy129ULv
+         jiQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744283080; x=1744887880;
-        h=in-reply-to:references:subject:from:to:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FwTqTcXuZVwmB1gK8gAQzMNft2dcqvTwt7yn+4sQNuo=;
-        b=fMr9R2AJk6kE8ufPuNkOjsQOFSC9oSmbpxCDEkiP0TMQzDl/Kjc4IYjteh6yIEGC7u
-         cCyjhn3HTGoNg/mEn6Ao0kB728KjArDFa4nftOUY40rwJiZ4qgkV/cgct/xzzYl5rPSQ
-         D/J2ePRcIRqOOkZTFapO5EhjxblUr+V7CeaHo51Q/O0Og3O/uncXV55Mab/McLlWy9m/
-         VyiOgGPg6qoa8eClTDpbQUSbrF/wtHLt7cn/6gWtcgwXCU1FEnm8GLWhf/YgF65s1kOL
-         pz8CSFKVv++OcsA2vzoAO4E2PogjAAaLnjvOC6gnvtMqo1zfWsvyXDSN7EAePnTLkM1W
-         h0tQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXxVY6NI1Yarc4xD9NozK4Qnt2OkWqekSqzM9KUp6ZqaaTjNDnHcFGbfOzuNVTQ0fSVLGwDmCxShuMQ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4cBUx5d5LcbDv6m1OlI3Wga8OvpVgipYJmZoBRBMIQFLIs/4s
-	fcZp1CpeePhxrvtHqpiVWDj3bkzASJK7Zs3ul0rTfO8cTSriLosfyImXYWD5LLY=
-X-Gm-Gg: ASbGncsmXR7kDJkNpvrhu7XaIJtDCOEJb8Wnt5ybLs9SBAqgK/cpMyweR74Z/fBDGqj
-	XJQXXdYaVxYJ1WXh/jqMutNE8PvQFHxX0kKB78jPWnXfA/k8mCjM9nS7GaJ2u3Lswza525Ujkdm
-	8qs4lyQ5Ug9IqT56taZMsIEW1B2ZAayRU4vqrNcqI806eg0IQ9VGnZFOvo6mZ6ZW8j2xtHqF8xG
-	OAXd4UQDbSa4APwD3IaGbSKl1RMzMG/V85tLIbr/KEd6qxPFrDqMkwNWMEWRw19UCSeGCO7sJOk
-	7Tk44jyC9k82vxX2tJb+6AFkKPGCNLxQsl45a4m16jMtUVkm
-X-Google-Smtp-Source: AGHT+IFTHVjvMm7SI9zG+YTo6xP+VuwjrIfNbL14H9cY5sGUQSewGH6hwjaZZsvjM4ZfhfO2SM4RNA==
-X-Received: by 2002:a05:6000:18ac:b0:39c:13fa:3e0 with SMTP id ffacd0b85a97d-39d87adcd02mr1983393f8f.9.1744283080239;
-        Thu, 10 Apr 2025 04:04:40 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:7d22:13bb:e539:15ee])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39d89361186sm4476526f8f.14.2025.04.10.04.04.39
+        d=1e100.net; s=20230601; t=1744290331; x=1744895131;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZHIQ/++9W1bwFwjTR3scNHhBiiv2Oa9aNs8dRl0dl1I=;
+        b=SZwwmIMJ+ZtYsNdW/FqfVTVvqpt3Q/pDzunDvVTLX0cKj02Jks3d7wMKF7NybORT32
+         XFsNV9JHQ3WAMwc0aBMn2FjDte5/ejXiqvK+mQEvCqXN50K71d1ZrgfNQMzhnDtcr0V7
+         XwlLqH/ZNKIfADqANGla8CXERi+pXM4PpZ6dL79hwBs5CysiwGZRWSUoOod1hkvsTgNg
+         BpXBYzxF8Q2nT2QVmOoKSWRq0bz3ljINtY+fJvTiMFrXZLYT6Q9RwHshGmcZhYvI42jy
+         vfUxPB1ggqAjE6DpsdP7oU/KwhNIvNuGykhSI1UgHDXkJsw893v6jRkQYLBC12ztaFvD
+         PEag==
+X-Forwarded-Encrypted: i=1; AJvYcCUQSoXnvNK3PSJGZdrvmLIQl5ObwlzI5o32EWBl5nydEShV7kJBCadGIlVGTI340HwcMmwD6aZHcUcp@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu9Pc1PxH+Qqkc3521/Z5JdX/tRFtupVO2bD9Yn/kqhelQH5lF
+	fEJysHa5v2Rd7JSH3iGxaVDhOgt24i/NkkQY6fWz5QHjaUfiQ7RQ9IyW5Eg0UtboKDSW5QXmqMK
+	j
+X-Gm-Gg: ASbGncvGg+WgmE9KNrfrZUIjhJ0AHQKTcR4E44slObrIVV5TSFALT9laT5JgdxE1OYH
+	5I6YpVgJqe9IMJvziVASOxzwFeKq4TtDdprHkCILji8uZxQx4EzVHGJBON1nDqhZlrwPufpQd2a
+	vfg02nWGIBKabM76Ahj2AkXxluXoUDcB18wZSdWc1kOKvFSjmumj+2JjMyXIfBk+6l3QHCGU+0u
+	9f3hhfi2gaKi0tOEDqb9UhPNWlEaPzS0EHAJeYuttGZXrV93BPz9hpiq9sBY1ZYDeFP5XAYkjNF
+	MoDpM0sPgN3UDHLg5g/vTynr2vowOrBbfOyn2We7Uxa1oVgiuw/839l9fBSKRz+x4uiOMkD0E/t
+	7/CPaEZg8stPo+VeDhJs=
+X-Google-Smtp-Source: AGHT+IG4IzEnrtMNm0AmTZUaqXGTX04b5UW6VZBKQK8VGv14pbPLZJgnECNrc0NUhMe5YZKTD9kaag==
+X-Received: by 2002:a05:620a:2445:b0:7c5:99f9:6ada with SMTP id af79cd13be357-7c7a76d3503mr365847885a.50.1744290330960;
+        Thu, 10 Apr 2025 06:05:30 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-167-219-86.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.219.86])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a8969f1asm82420785a.59.2025.04.10.06.05.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Apr 2025 04:04:39 -0700 (PDT)
+        Thu, 10 Apr 2025 06:05:29 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1u2raz-00000009aH7-1871;
+	Thu, 10 Apr 2025 10:05:29 -0300
+Date: Thu, 10 Apr 2025 10:05:29 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Alexey Kardashevskiy <aik@amd.com>
+Cc: x86@kernel.org, kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Ashish Kalra <ashish.kalra@amd.com>, Joerg Roedel <joro@8bytes.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Christoph Hellwig <hch@lst.de>, Nikunj A Dadhania <nikunj@amd.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Vasant Hegde <vasant.hegde@amd.com>,
+	Joao Martins <joao.m.martins@oracle.com>,
+	Nicolin Chen <nicolinc@nvidia.com>,
+	Lu Baolu <baolu.lu@linux.intel.com>,
+	Steve Sistare <steven.sistare@oracle.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Dionna Glaze <dionnaglaze@google.com>, Yi Liu <yi.l.liu@intel.com>,
+	iommu@lists.linux.dev, linux-coco@lists.linux.dev,
+	Zhi Wang <zhiw@nvidia.com>, AXu Yilun <yilun.xu@linux.intel.com>,
+	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>
+Subject: Re: [RFC PATCH v2 13/22] iommufd: amd-iommu: Add vdevice support
+Message-ID: <20250410130529.GE1727154@ziepe.ca>
+References: <20250218111017.491719-1-aik@amd.com>
+ <20250218111017.491719-14-aik@amd.com>
+ <20250401161138.GL186258@ziepe.ca>
+ <b051dcc8-58a5-4f24-8b06-e817e9762952@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 10 Apr 2025 13:04:39 +0200
-Message-Id: <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
-Cc: <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
- <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
- <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
- <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
- <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "Zong Li"
- <zong.li@sifive.com>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Deepak Gupta" <debug@rivosinc.com>, "Thomas Gleixner"
- <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov"
- <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
- <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>, "Lorenzo Stoakes"
- <lorenzo.stoakes@oracle.com>, "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Conor Dooley" <conor@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Arnd Bergmann"
- <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>, "Eric Biederman"
- <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>, "Jonathan Corbet"
- <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann Horn"
- <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and
- save/restore of CSR_SSP on trap entry/exit
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
-In-Reply-To: <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b051dcc8-58a5-4f24-8b06-e817e9762952@amd.com>
 
-2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
-> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/as=
-m/thread_info.h
-> @@ -62,6 +62,9 @@ struct thread_info {
->  	long			user_sp;	/* User stack pointer */
->  	int			cpu;
->  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
-> +#ifdef CONFIG_RISCV_USER_CFI
-> +	struct cfi_status	user_cfi_state;
-> +#endif
+On Thu, Apr 10, 2025 at 04:39:39PM +1000, Alexey Kardashevskiy wrote:
+> > > @@ -2549,12 +2561,15 @@ amd_iommu_domain_alloc_paging_flags(struct device *dev, u32 flags,
+> > >   {
+> > >   	struct amd_iommu *iommu = get_amd_iommu_from_dev(dev);
+> > >   	const u32 supported_flags = IOMMU_HWPT_ALLOC_DIRTY_TRACKING |
+> > > +						IOMMU_HWPT_ALLOC_PASID |
+> > > +						IOMMU_HWPT_ALLOC_NEST_PARENT;
+> > > +	const u32 supported_flags2 = IOMMU_HWPT_ALLOC_DIRTY_TRACKING |
+> > >   						IOMMU_HWPT_ALLOC_PASID;
+> > 
+> > Just ignore NEST_PARENT? That seems wrong, it should force a V1 page
+> > table??
+> 
+> 
+> Ahhh... This is because I still have troubles with what IOMMU_DOMAIN_NESTED
+> means (and iommufd.rst does not help me). There is one device, one IOMMU
+> table buuut 2 domains? Uh.
 
-I don't think it makes sense to put all the data in thread_info.
-kernel_ssp and user_ssp is more than enough and the rest can comfortably
-live elsewhere in task_struct.
+It means whatever you want it to mean, so long as it holds a reference
+to a NEST_PARENT :)
 
-thread_info is supposed to be as small as possible -- just spanning
-multiple cache-lines could be noticeable.
+> > You can get 1:1 domain objects linked to the viommu by creating the
+> > 'S1' type domains, maybe that is what you want here. A special domain
+> > type that is TSM that has a special DTE.
+> 
+> Should not IOMMU_DOMAIN_NESTED be that "S1" domain?
 
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> @@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
-> =20
->  	REG_L s0, TASK_TI_USER_SP(tp)
->  	csrrc s1, CSR_STATUS, t0
-> +	/*
-> +	 * If previous mode was U, capture shadow stack pointer and save it awa=
-y
-> +	 * Zero CSR_SSP at the same time for sanitization.
-> +	 */
-> +	ALTERNATIVE("nop; nop; nop; nop",
-> +				__stringify(			\
-> +				andi s2, s1, SR_SPP;	\
-> +				bnez s2, skip_ssp_save;	\
-> +				csrrw s2, CSR_SSP, x0;	\
-> +				REG_S s2, TASK_TI_USER_SSP(tp); \
-> +				skip_ssp_save:),
-> +				0,
-> +				RISCV_ISA_EXT_ZICFISS,
-> +				CONFIG_RISCV_USER_CFI)
+Yes that is how ARM is doing it.
 
-(I'd prefer this closer to the user_sp and kernel_sp swap, it's breaking
- the flow here.  We also already know if we've returned from userspace
- or not even without SR_SPP, but reusing the information might tangle
- the logic.)
+Minimally IOMMU_DOMAIN_NESTED on AMD should refere to a partial DTE
+fragment that sets the GCR3 information and other guest controlled
+bits from the vDTE. It should hold a reference to the viommu and the
+S2 NEST_PARENT.
 
->  	csrr s2, CSR_EPC
->  	csrr s3, CSR_TVAL
->  	csrr s4, CSR_CAUSE
-> @@ -236,6 +250,18 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
->  	csrw CSR_SCRATCH, tp
-> +
-> +	/*
-> +	 * Going back to U mode, restore shadow stack pointer
-> +	 */
+From that basis then you'd try to fit in the CC stuff.
 
-Are we?  I think we can be just as well returning back to kernel-space.
-Similar to how we can enter the exception handler from kernel-space.
+> > Though I'd really rather see the domain attach logic and DTE formation
+> > in the AMD driver be fixed up before we made it more complex :\
+> > 
+> > It would be nice to see normal nesting and viommu support first too :\
+> 
+> It is in the works too. Thanks,
 
-> +	ALTERNATIVE("nop; nop",
-> +				__stringify(					\
-> +				REG_L s3, TASK_TI_USER_SSP(tp); \
-> +				csrw CSR_SSP, s3),
-> +				0,
-> +				RISCV_ISA_EXT_ZICFISS,
-> +				CONFIG_RISCV_USER_CFI)
-> +
+I think your work will be easier to understand when viewed on top of
+working basic nesting support as it is just a special case of that
 
-Thanks.
+Jason
 
