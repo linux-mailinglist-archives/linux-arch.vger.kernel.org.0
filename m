@@ -1,201 +1,199 @@
-Return-Path: <linux-arch+bounces-11387-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11388-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCB90A8519F
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Apr 2025 04:34:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 666ABA85375
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Apr 2025 07:49:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF4757A935F
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Apr 2025 02:33:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 430454A7E19
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Apr 2025 05:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7494B20C001;
-	Fri, 11 Apr 2025 02:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97FAF293460;
+	Fri, 11 Apr 2025 05:42:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="eStsDcDy"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="H4yCcFx4";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ajrc4d8C"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF092AE72;
-	Fri, 11 Apr 2025 02:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8DE828EA52;
+	Fri, 11 Apr 2025 05:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744338879; cv=none; b=uE2jKPCDrz2ochOKkFMZp527RnDKLNvkvR/EKAdWbfzd5nGbJo5Xpq3LQtlnKza2SHDKOJ5kRwzX76xfPkPaA0oVzGNr9xe6w961uidcxspJ01zkulIP3bcVgMmj/2NvjQLj2UuEaCuTa85eMFOXzAL7YWwESWVjCHMkBgomtL8=
+	t=1744350121; cv=none; b=C8n3/ZbFYchP4n727YL3Af617QGP/JNsIs5wVdSmueO5yIblHHkhYqAiz8E4OMaBiYxL7jS7M3K276dck13wdBkQsOcvbpVL0a5CyR8bWMzT5oG6Dt0hIo7C2lnVUFTOQGbURoiqNsvTScFJ4OEGuIgq5mcmZukVSFGAV7IP9Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744338879; c=relaxed/simple;
-	bh=O4nLz7v5f2BsgqZL5bzUaWy0nkgqbnGDPuoPg9kIR7A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UMSzLJgLhe5g9DQgpnHmsIXRmFgu3cJaad+HlwBQ74bAQUfuuKpNDDxr0V9radxoSKud5kPv/t45pyC5LMrmwb/d4CWtR2QbVuqWbkIFnifRC7IJcDgJWG9HuEf5nZuKfc1n2KMg1ZXszVtEFv4ZgWPRqihLuVFoinbDukW3FtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=eStsDcDy; arc=none smtp.client-ip=54.206.16.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1744338865;
-	bh=lOEueMjEzcQH+7FTLLQIxv5mkIyaFq/uP1KvEW094o8=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=eStsDcDyvTdvqMTBkBGbBLOYPR1QaF6vYkxvBvxQqfgG1RJD0tCuj/n6i+ZkvcPDo
-	 QAquk4YA0kYS/y0VgPttR+xf9SrTbgXzrYDNaL4p5oTwZZQLhyYFfUnm91+7+LG9i+
-	 HEbLrZ7Y8bBgiOyprknxbH88tjLqit98lUpNDlwE=
-X-QQ-mid: bizesmtpip2t1744338855t90627c
-X-QQ-Originating-IP: VREOsRjt7J4ccSVoy0EUwQUzXam43CY8I2m/vm0gMqE=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 11 Apr 2025 10:34:12 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 1101699977250414760
-EX-QQ-RecipientCnt: 17
-From: Liu Runrun <liurunrun@uniontech.com>
-To: paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	liurunrun@uniontech.com,
-	mingo@kernel.org,
-	ryan.roberts@arm.com,
-	catalin.marinas@arm.com,
-	akpm@linux-foundation.org,
-	kirill.shutemov@linux.intel.com,
-	arnd@arndb.de
-Cc: linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	wangyuli@uniontech.com,
-	zhanjun@uniontech.com,
-	niecheng1@uniontech.com
-Subject: [PATCH] RISC-V: Fix PCI I/O port addressing for MMU-less configurations
-Date: Fri, 11 Apr 2025 10:34:08 +0800
-Message-Id: <20250411023408.185150-1-liurunrun@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1744350121; c=relaxed/simple;
+	bh=oIU8gLcDTV3kPLLjAuzQ7vOulpLh+Z/92xBdZfOAtCY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=RG/5cW6wU3cN2rdoKVvu+sRaSaa/j13t8vJYltDhFR4wnev5vz8m5X2uq7HIidAp1rBTde5Ts2yu1RPYFTnZGhYsGbayE16riQQQ7EiP6NdqRrJy4hUXWnsVdiduC9eCva2fPDi9ET8SW3pZeMas6+QLbutU2eMXRnS7b6BHGQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=H4yCcFx4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ajrc4d8C; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 8B4A51380211;
+	Fri, 11 Apr 2025 01:41:56 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-05.internal (MEProxy); Fri, 11 Apr 2025 01:41:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1744350116;
+	 x=1744436516; bh=u/lIgIq2sZs+QysnD13sol+n3mWytya/qtsWIP2cQK0=; b=
+	H4yCcFx46+xNBNbovJsA4EnGPX7VQi6FbyLloTokwffY6LCVXZ73b9aMGPNYmAOA
+	mc276oNGc03cg0bF8wLWt9mkS79TB8y2VS9Db464jL14bVJ30244YGOxf0voh7t2
+	briCCnx9OGSttXz8cH78kxAqZOEta3BYqeqH835Jp8DNCjD/DIwmOpHudEezECH2
+	MhEokfwLh9+gI1GOgzrVZRe8gBMQvTBo6X3T0lRjFch/msgDMlnYseLz1PXmG8dl
+	F48GC4S+PnmPWbYlLvzPdA9fRVs3M2rhCMvqdeEjU/MwY5e9yFOT8kTpSsHsDcXw
+	1mvL1O753odZpYh3ZQFQ6Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1744350116; x=
+	1744436516; bh=u/lIgIq2sZs+QysnD13sol+n3mWytya/qtsWIP2cQK0=; b=a
+	jrc4d8CxTcJHNpEaby4xm8bBVOO6OA62CjMnhotFub8IuQqYhgU+znSj2p9P5lt5
+	UL1T8ye1d1oPlejTfB88zXxoLqzQkIMcAEDYGqhObmRx9sX5HxFzBNXNw9er7uMo
+	6TghFuVEuIpI5cV39bpwyKUgvVgChm3aG0I0gYBu6PCb+8f7EClI9GdT9/Kgh2RQ
+	CITUD5/LS6wZH8gBRu/bK/fnwqXLikt2fB5Un8eIrHA57H7r2t5PhrtCkLn7E7pn
+	f9HzGxdy92dtRNIE1n+ZqZK/kToGqzTgiUJY9bJ+26ipCuq/vGqHTefuZxjO6ZWa
+	b4EZL5zwU+XZr07vGzuEQ==
+X-ME-Sender: <xms:o6v4Z6cw5nJ9I835vZu4Yt_fCNkbznE4mwp31Jo-SCOLkSfHbH5FCg>
+    <xme:o6v4Z0Pdoq93GCPXVZyobMmpsYf-8rVPjxdtXHHJw2_cDUSLZF2xDXgEJdEBqc7yT
+    EQsGU9_bx90Mi3MtLs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddutddtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    udeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrdhmrghrih
+    hnrghssegrrhhmrdgtohhmpdhrtghpthhtoheprhihrghnrdhrohgsvghrthhssegrrhhm
+    rdgtohhmpdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghpth
+    htoheprghouhesvggvtghsrdgsvghrkhgvlhgvhidrvgguuhdprhgtphhtthhopegrlhgv
+    giesghhhihhtihdrfhhrpdhrtghpthhtohepmhhinhhgoheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgt
+    phhtthhopehkihhrihhllhdrshhhuhhtvghmohhvsehlihhnuhigrdhinhhtvghlrdgtoh
+    hmpdhrtghpthhtoheplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggr
+    ugdrohhrgh
+X-ME-Proxy: <xmx:o6v4Z7i_RiYTvdPh5P_GA6Nc-L5RAvy1mklYjA8hlRAz_BoYC8TRQA>
+    <xmx:o6v4Z39d4m6ioLxH_V1Ij00ZvWdU1gcRkV7fdW6FhFh4hLsMaCjPKA>
+    <xmx:o6v4Z2utuSVyC8Qzu2SBjFaj0RTuO6h4CX5BylMq7mpC_TekykxFKQ>
+    <xmx:o6v4Z-GUZwvChgmYUtjAoohEJYF7TGmEg_3m4JrI2S36LG7rojbsEg>
+    <xmx:pKv4Z0OgV3ihPjKEN67-k2xz8gZBwn373gRilAZeXQq-1w0wvR0Wp8YS>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id EAF8B2220073; Fri, 11 Apr 2025 01:41:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-0
-X-QQ-XMAILINFO: MHAMmLg4tmnVmAxLBtaCh5q5EWHF54LkueHHxS6SKxqLY6dwt6gpq7g/
-	XUEHJ+3gwW5zWH2n9q15yuwzvOBIoMlxP423I2HPt3ijWTyp8GbNyrJ8dUOzp7Mpf556GME
-	GS1ajvrd2hnWLvUJecf233QJ/AfVliWeKQLoX1UcAXJQ9JHjWK5+klUmWy/87oPJA2ZPkkT
-	PUk20qh1g6AGCKniolX5e/8cF/B9HzaZzsS/hmVxOd7gn7KqWlzWKxkZTZ/Kpme0WNonyPI
-	xu1EhjIXfQ7jNR5q8s4QN9YMrgKK8lfI87XvP+3zChv/TKdBBhMIXcECD5mbp22bPTy9VrM
-	mUDsjzCwSr+qqgGiaT/4kXkDjrXNVg+3av3t91q2UL6KTfGGbxnhn86HPYbXJX1zxTs17La
-	NtwhUlhVC2GS38GPVUcoWl6u5gYzNMAIwezUWfOsDZVDC2DHRhYSuR98llDS4NDxyfPc8b3
-	WrW781Xtgq3IYqwaAcEzM5nhwqoWWypwXdzylzqMwFNRKV4Jlm19leML0KaRPav5L3h0pRY
-	B5JagS7R1TUhZts01Caere1es5tuMQeh1aaVIMqL47luf5RurBTD+DiZNDtpubjFnw77kXk
-	yqJBt9O7AjnbGaEpYqDM6WyuAQhTD1N9BZDOKese7x7WOYO+/kVx3fRDrNvnAbock8MECh9
-	4DmQiG8/Q3FZi9ihDImN34qu4vYg8HPNjozDgHeEv3M6YK1+PNF7VjbAiZLpsG4bKqtGdJ5
-	CNj0PpWIriNgIra/3TXk8OK8JtwCXEGrU3hUgjjynn7lRcLgLw7/FEqS1N3yQBg6P6j4Tlq
-	Rw+syoG0QZdPUA9MGPoB1kFI9o2BH6oP+xEqhCYLQJGkBQvIIbq8xgLNRZN8EEOK8HpYaC2
-	ZW9lEd5GvY5bFb3d7a8QHjxg++l4M6hyh9x+K4KfMk5ebfqupYKkhsLbASRaM+RtyW44cD3
-	x6eNxVyo5zXTQtBmcNKVQwPqWXJKoUDkZTNaeC15JFd78IxA4hAWUMBmg
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
-X-QQ-RECHKSPAM: 0
+X-ThreadId: T39ebf2d19aff607f
+Date: Fri, 11 Apr 2025 07:41:33 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Liu Runrun" <liurunrun@uniontech.com>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Alexandre Ghiti" <alex@ghiti.fr>, "Ingo Molnar" <mingo@kernel.org>,
+ "Ryan Roberts" <ryan.roberts@arm.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, WangYuli <wangyuli@uniontech.com>,
+ zhanjun@uniontech.com, niecheng1@uniontech.com
+Message-Id: <b2424c71-d076-4880-86cd-ccf74995f080@app.fastmail.com>
+In-Reply-To: <20250411023408.185150-1-liurunrun@uniontech.com>
+References: <20250411023408.185150-1-liurunrun@uniontech.com>
+Subject: Re: [PATCH] RISC-V: Fix PCI I/O port addressing for MMU-less configurations
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-This patch addresses the PCI I/O port address handling in RISC-V's
-port-mapped I/O emulation routines when the MMU is not enabled.
-The changes ensure that:
-1. For non-MMU systems, the PCI I/O port addresses are properly
-   calculated in marcos inX and outX when PCI_IOBASE is not
-   defined, this avoids the null pointer calculating warning
-   from the compiler.
-2. In asm-generic/io.h, function ioport_map(), casting PCI_IOPORT
-   to type "long" firstly makes it could compute with variable addr
-   directly, which avoids the null pointer calculating warning when
-   PCI_IOPORT is a null pointer in some case.
+On Fri, Apr 11, 2025, at 04:34, Liu Runrun wrote:
+> This patch addresses the PCI I/O port address handling in RISC-V's
+> port-mapped I/O emulation routines when the MMU is not enabled.
+> The changes ensure that:
 
-The original implementation used `PCI_IOBASE + (addr)` for MMU-enabled
-systems, but failed to handle non-MMU cases correctly. This change adds
-conditional compilation guards (#ifdef CONFIG_MMU) to differentiate
-between MMU and non-MMU environments, providing consistent behavior
-for both scenarios.
+Do you have a system that requires this? I sent a patch the other
+day to make PCI 'depends on MMU', based on how nothing today
+uses it. Having a NOMMU system with PCI wounds rather silly,
+so I hope we don't ever get that.
 
-Fixes: 9cc205e3c17d ("RISC-V: Make port I/O string accessors actually work")
-Reported-by: WangYuli <wangyuli@uniontech.com>
-Signed-off-by: Liu Runrun <liurunrun@uniontech.com>
----
- arch/riscv/include/asm/io.h | 22 +++++++++++++++++++++-
- include/asm-generic/io.h    |  3 ++-
- 2 files changed, 23 insertions(+), 2 deletions(-)
+> 1. For non-MMU systems, the PCI I/O port addresses are properly
+>    calculated in marcos inX and outX when PCI_IOBASE is not
+>    defined, this avoids the null pointer calculating warning
+>    from the compiler.
 
-diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
-index a0e51840b9db..d5181bb02c98 100644
---- a/arch/riscv/include/asm/io.h
-+++ b/arch/riscv/include/asm/io.h
-@@ -101,9 +101,15 @@ __io_reads_ins(reads, u32, l, __io_br(), __io_ar(addr))
- __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
- __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
- __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
-+#ifdef CONFIG_MMU
- #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
- #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
- #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-+#else
-+#define insb(addr, buffer, count) __insb((void __iomem *)(long)addr, buffer, count)
-+#define insw(addr, buffer, count) __insw((void __iomem *)(long)addr, buffer, count)
-+#define insl(addr, buffer, count) __insl((void __iomem *)(long)addr, buffer, count)
-+#endif /* CONFIG_MMU */
- 
- __io_writes_outs(writes,  u8, b, __io_bw(), __io_aw())
- __io_writes_outs(writes, u16, w, __io_bw(), __io_aw())
-@@ -115,23 +121,37 @@ __io_writes_outs(writes, u32, l, __io_bw(), __io_aw())
- __io_writes_outs(outs,  u8, b, __io_pbw(), __io_paw())
- __io_writes_outs(outs, u16, w, __io_pbw(), __io_paw())
- __io_writes_outs(outs, u32, l, __io_pbw(), __io_paw())
-+#ifdef CONFIG_MMU
- #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
- #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
- #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-+#else
-+#define outsb(addr, buffer, count) __outsb((void __iomem *)(long)addr, buffer, count)
-+#define outsw(addr, buffer, count) __outsw((void __iomem *)(long)addr, buffer, count)
-+#define outsl(addr, buffer, count) __outsl((void __iomem *)(long)addr, buffer, count)
-+#endif /* CONFIG_MMU */
- 
- #ifdef CONFIG_64BIT
- __io_reads_ins(reads, u64, q, __io_br(), __io_ar(addr))
- #define readsq(addr, buffer, count) __readsq(addr, buffer, count)
- 
- __io_reads_ins(ins, u64, q, __io_pbr(), __io_par(addr))
-+#ifdef CONFIG_MMU
- #define insq(addr, buffer, count) __insq(PCI_IOBASE + (addr), buffer, count)
-+#else
-+#define insq(addr, buffer, count) __insq((void __iomem *)(long)addr, buffer, count)
-+#endif /* CONFIG_MMU */
- 
- __io_writes_outs(writes, u64, q, __io_bw(), __io_aw())
- #define writesq(addr, buffer, count) __writesq(addr, buffer, count)
- 
- __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
-+#ifdef CONFIG_MMU
- #define outsq(addr, buffer, count) __outsq(PCI_IOBASE + (addr), buffer, count)
--#endif
-+#else
-+#define outsq(addr, buffer, count) __outsq((void __iomem *)(long)addr, buffer, count)
-+#endif /* CONFIG_MMU */
-+#endif /* CONFIG_64BIT */
- 
- #include <asm-generic/io.h>
- 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 11abad6c87e1..c0409188bb5e 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1172,7 +1172,8 @@ static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
- static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
- {
- 	port &= IO_SPACE_LIMIT;
--	return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-+	return (port > MMIO_UPPER_LIMIT) ?
-+				NULL : (void __iomem *)((unsigned long)PCI_IOBASE + port);
- }
- #define ARCH_HAS_GENERIC_IOPORT_MAP
- #endif
--- 
-2.49.0
+This is the wrong way around: the warning tells you that you
+have failed to configure PCI_IOBASE for the particular hardware,
+and that you actually get a NULL pointer dereference.
 
+The solution is not to shut up the warning but making it
+not a NULL pointer dereference!
 
+Part of the issue is that historically the asm-generic/io.h
+header includes an incorrect fallback of PCI_IOBASE when
+the architecture does not provide the correct one. I think only
+sparc still relies on that, so that fallback definition should
+be moved into arch/sparc/include/asm/io_{32,64}.h instead.
+
+> 2. In asm-generic/io.h, function ioport_map(), casting PCI_IOPORT
+>    to type "long" firstly makes it could compute with variable addr
+>    directly, which avoids the null pointer calculating warning when
+>    PCI_IOPORT is a null pointer in some case.
+
+I don't understand that sentence, please rephrase.
+
+> The original implementation used `PCI_IOBASE + (addr)` for MMU-enabled
+> systems, but failed to handle non-MMU cases correctly. This change adds
+> conditional compilation guards (#ifdef CONFIG_MMU) to differentiate
+> between MMU and non-MMU environments, providing consistent behavior
+> for both scenarios.
+
+This also looks wrong: what you are distinguishing here is systems
+with (potentially) I/O port support and those that never have I/O
+port support.
+
+> diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
+> index a0e51840b9db..d5181bb02c98 100644
+> --- a/arch/riscv/include/asm/io.h
+> +++ b/arch/riscv/include/asm/io.h
+> @@ -101,9 +101,15 @@ __io_reads_ins(reads, u32, l, __io_br(), 
+> __io_ar(addr))
+>  __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
+>  __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
+>  __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
+> +#ifdef CONFIG_MMU
+>  #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, 
+> count)
+>  #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, 
+> count)
+>  #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, 
+> count)
+
+I see that these are defined unconditionally here, which is probably
+the real mistake. What I think we need instead is to enclose
+them in "#ifdef CONFIG_HAS_IOPORT" with no "#else" block, and
+ensure that HAS_IOPORT is only set when building for targets that
+have a sensible definition of PCI_IOBASE and IO_SPACE_LIMIT.
+
+The same approach is used in asm-generic/io.h, we just haven't
+done it for all architectures yet, since it's not entirely
+clear which ones can support ISA bridges and legacy PCI devices
+with port I/O.
+
+Ideally we'd go through the individual PCI host driver
+implementations and only enable HAS_IOPORT for those that
+are can handle the I/O space window correctly, but leave
+it out if none of them are selected.
+
+      Arnd
 
