@@ -1,220 +1,328 @@
-Return-Path: <linux-arch+bounces-11390-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11391-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12BBBA88891
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Apr 2025 18:28:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76FD1A88F3C
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Apr 2025 00:47:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F9EF1679D3
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Apr 2025 16:28:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6ADE57A8E6C
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Apr 2025 22:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D8A27FD51;
-	Mon, 14 Apr 2025 16:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9731F428F;
+	Mon, 14 Apr 2025 22:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="P31sX87L"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="R00/mslx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B9227FD40
-	for <linux-arch@vger.kernel.org>; Mon, 14 Apr 2025 16:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D841B4227;
+	Mon, 14 Apr 2025 22:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744648121; cv=none; b=YPXscDFKq6XuNJ0kr9WlYx3skjFbl/eCDTA6jb5taqgct2AOg/sGq+1kotYk2ZsINqk8JNbSYat1D4M14CTcWFr2mryVKVuKnGWF9c1O3bYg4zUDENxHhrtTU/ny5ldAD16S4ippzKkyJzYXPgfVSCpFHp0fdRMEsQ06PGr56xI=
+	t=1744670837; cv=none; b=bw9iHJ7exk8tmsEWCk0lzTGeeakQYkP0NoEgX2TVzTRbhpA0rVv0yDhP1Nwjv/ycq0o9MNCFkJdSTY25UaAyO5u1sM/ceWwfYWJ9WyCoESdD+WMO/tDfQmi5jpyWVbEeJIExmw7oJeIPU2HP7lBCL6nyzuwUujL6ISWF03O+pSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744648121; c=relaxed/simple;
-	bh=EAvviy7NYDzPXrtTpDrit4MXQHLdNiBY+08kfb3anYo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FN+ZJY5nWrb924piMVNNydOpNJUb0CDOS49pd+SWdHAbzuLTQJprof2alnWkCIx081N1DnfdTYEz1VbZg5Wxm7LTDngFRgkQW7cq1fLoSuqSXK3xCC1fy/WU8ndwXsnem9c3YR/SYaL932Eib18PFuMpMr+t9LZfxCGp9r7TIhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=P31sX87L; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cf257158fso32675305e9.2
-        for <linux-arch@vger.kernel.org>; Mon, 14 Apr 2025 09:28:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744648118; x=1745252918; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qTKO9vAqmynoPPCZdzu4Se732LpKeln0OCtsTh96Cx8=;
-        b=P31sX87Lhoi8LdU+H8lkr14Ib1qIIlKAfsOFz6gdv8FmJg1IgsmPAfujxRCgK/hx4I
-         6N4ACyqyARY3Hf7jY0lvxyOuyJ9LPfeUTDAFsa2afFaBDsnqZSXhxhIRu7DHBfMQovM1
-         idLH/LN13q7DY3HjlHnX/pdMzzWdOFXTz8gd8bdKHz3GBwMY/Ng+J7/LdFGGzqcFcpTd
-         BI2rqUxrlGhaZk+tIz3WvGQpAgMYsUrveZg+rojaJLSXnP+G1HeuATIydxPcSXX37OlR
-         XoRUkhBzMJQCn/tMk5i6CsOCKPBmagdSJzNuHV0y+00zXb1KWNya3FFcpBVJb1a08i3g
-         t1tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744648118; x=1745252918;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qTKO9vAqmynoPPCZdzu4Se732LpKeln0OCtsTh96Cx8=;
-        b=LfK4DuCaPbqqF5UahwTmA94No5GjxaGJMjcZVAUvslQVNwccf7gOx6Mc7ennP/Jb5z
-         vhVyEl/J0E7hQ6RByZTH8jgsL6DUNYNApZvM6brZtt8Hl4gw4Tew5iDo6tGFBkOWANy8
-         hflpaU7SWO6aNnqVNj0wcLRwDy9KxL2b87AMJ1Wfwb9z2vOKnEXhx2DqfioZ57BcPLsE
-         DFaBfpqDyBm9b8po0Qsm34GlnIAdtWj+q2n7FDM3PH6LCIcsOYd1n3Vm7EsjtKnLf8wb
-         Euww4PJAUcI9Y6VWGDvcuMRxwhFZigl2zCwGQ3QDrQ24Ds0/vyCZmSQMiZFyqWi6Xo9Q
-         bXDg==
-X-Forwarded-Encrypted: i=1; AJvYcCXx5jYWhx5ymlxh5GtdSbyc7ljzwlRTJHVTP5kE9qllMdyYJ5QMH3F5La9TWFwyBX4oIjtvfuFVrT6T@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsSpGXh8ZE8L/eMKlxMO2YUjSqGYUVNQrymXAXTWX/MN8d0tOJ
-	1s0nmtYcpFhWnsVb4N2fPOPtvx0Vr4p85NVQZTgGJg9GtdkXTpKTXBEJVtse1ERxS1zGMkksgRx
-	h3vE=
-X-Gm-Gg: ASbGncvEkQAGATTjOJBOposCyp95gk+5Ygo2Uc4yfUJMZBI+UvlxLZ0vhG1Tf24mGRl
-	AVCYCpZ2WOHs9esZYDfomVw330xKFjGsClWk+ICvkeGw06oCxtXOVQdVUxgRIf64vCpyeo9Zok+
-	fzMtFu4IzaNb5lKkSrJnU2QmSbzWwOXxdblYZbppiDxT91FPmZwC1bYG9SrqOV0Yqyl38TLYGDU
-	UN8L0QibY12u8Tv8avrJ7aaDOdAHDMfAa0CZ+jFKsvEMntQ0dVJrGEtY5oH0/2UqO5gJKwkm214
-	GWL3YlrW7KDd/fenM/Exxz5VyaPHGuk+t7yXEpvzGaM=
-X-Google-Smtp-Source: AGHT+IHomYBkrfRArIbBujX/I3y2mxJugC6/rOr7PZ7x4MMpTarYPx/m2CKQvVHOZS3ocFeJW5iO+A==
-X-Received: by 2002:a05:600c:b90:b0:43d:fa58:8377 with SMTP id 5b1f17b1804b1-43f3a9afb11mr111404215e9.32.1744648117820;
-        Mon, 14 Apr 2025 09:28:37 -0700 (PDT)
-Received: from [192.168.1.3] ([77.81.75.81])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf43cdfdsm11702585f8f.61.2025.04.14.09.28.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Apr 2025 09:28:37 -0700 (PDT)
-Message-ID: <f950fe96-34d3-4631-b04d-4a1584f4c2f1@linaro.org>
-Date: Mon, 14 Apr 2025 17:28:36 +0100
+	s=arc-20240116; t=1744670837; c=relaxed/simple;
+	bh=RxryHdwOZ9kDfrKZbgcL/NGf38Ir7I11ysksXudtjY4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lf52i+XO9b+HBKVXfvrXmI9G4HhVyddVxC6pEk9XWRpdAHVg9P4WZdpxGaT9xw/kRQ8m7DejbKpymKLpr+HVaH14rZA07oLO+lSHBFjxCpiwNniO3hFpNodsCWgsYa8Ielps3h7k6xPTCJVagomOwqPfHsS7vR9r3wyHurdmwQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=R00/mslx; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from romank-3650.corp.microsoft.com (unknown [131.107.159.188])
+	by linux.microsoft.com (Postfix) with ESMTPSA id D5443210C425;
+	Mon, 14 Apr 2025 15:47:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D5443210C425
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744670835;
+	bh=HpAGsTBmcoskz1Q+42pgzCH4Q9YqUAeAFU1vo4KRGnA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=R00/mslxfADcAgZXcnXlJZyYB/t7y+r/KhalfhIlzFcP6z2tv7fFDp5tDmmcMmHMA
+	 uXSSkEkFOZYz5SDIbIKkeu83H8n7Jchzi1FaPM7/7aGt9U8v0Yp8Kjt+JhcxiruRN9
+	 8eokQb8oaWFUNQb7A4oQ3Dk/EVcl3kvkxOCud3fk=
+From: Roman Kisel <romank@linux.microsoft.com>
+To: arnd@arndb.de,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	catalin.marinas@arm.com,
+	conor+dt@kernel.org,
+	dan.carpenter@linaro.org,
+	dave.hansen@linux.intel.com,
+	decui@microsoft.com,
+	haiyangz@microsoft.com,
+	hpa@zytor.com,
+	joey.gouly@arm.com,
+	krzk+dt@kernel.org,
+	kw@linux.com,
+	kys@microsoft.com,
+	lenb@kernel.org,
+	lpieralisi@kernel.org,
+	manivannan.sadhasivam@linaro.org,
+	mark.rutland@arm.com,
+	maz@kernel.org,
+	mingo@redhat.com,
+	oliver.upton@linux.dev,
+	rafael@kernel.org,
+	robh@kernel.org,
+	rafael.j.wysocki@intel.com,
+	ssengar@linux.microsoft.com,
+	sudeep.holla@arm.com,
+	suzuki.poulose@arm.com,
+	tglx@linutronix.de,
+	wei.liu@kernel.org,
+	will@kernel.org,
+	yuzenghui@huawei.com,
+	devicetree@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-acpi@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	x86@kernel.org
+Cc: apais@microsoft.com,
+	benhill@microsoft.com,
+	bperkins@microsoft.com,
+	sunilmut@microsoft.com
+Subject: [PATCH hyperv-next v8 00/11] arm64: hyperv: Support Virtual Trust Level Boot
+Date: Mon, 14 Apr 2025 15:47:02 -0700
+Message-ID: <20250414224713.1866095-1-romank@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/10] tools headers: Update the syscall table with the
- kernel sources
-To: Namhyung Kim <namhyung@kernel.org>, Arnd Bergmann <arnd@linaro.org>
-Cc: Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org,
- linux-arch@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Ian Rogers <irogers@google.com>, Kan Liang <kan.liang@linux.intel.com>
-References: <20250410001125.391820-1-namhyung@kernel.org>
- <20250410001125.391820-6-namhyung@kernel.org>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20250410001125.391820-6-namhyung@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This patch set allows the Hyper-V code to boot on ARM64 inside a Virtual Trust
+Level. These levels are a part of the Virtual Secure Mode documented in the
+Top-Level Functional Specification available at
+https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm.
+
+The OpenHCL paravisor https://github.com/microsoft/openvmm/tree/main/openhcl
+can serve as a practical application of these patches on ARM64.
+
+For validation, I built kernels for the {x86_64, ARM64} x {VTL0, VTL2} set with
+a small initrd embedded into the kernel and booted VMs managed by Hyper-V and
+OpenVMM off of that.
+
+Starting from V5, the patch series includes a non-functional change to KVM on
+arm64 which I tested as well.
+
+[V8]
+    - Use the Linux derfined macro __ASSEMBLY__ instead of the gcc's pre-defined
+      macro __ASSEMBLER__ to follow the kernel coding style.
+      ** Thank you, Marc! **
+
+[V7]
+    https://lore.kernel.org/linux-hyperv/20250407201336.66913-1-romank@linux.microsoft.com/
+    - Used another approach not to increase the number of warnings produced when
+      building with CHECK_ENDIAN.
+      ** Thank you, Arnd! **
+
+     - Adjusted the function parameter formatting to match the rest of the code.
+      ** Thank you, Bjorn! **
+
+    - Removed the now unused local variable.
+      ** Thank you, kernel robot! **
+
+    - Fixed the description in the VMBus DT binding patch.
+      ** Thank you, Krzysztof! **
+
+    - Adjusted the function names and comments to better reflect what they do,
+      used the suggested approach to handling UUIDs to make code more readable
+      and maintainable on big-endian.
+    - Replaced ifdeffery with a stub function to make the code more readable.
+      ** Thank you, Mark! **
+
+    - Fixed the Kconfig not to build the VTL mode code on 32-bit kernels.
+      ** Thank you, Michael! **
+
+    - Fixed the indentation and the comment style.
+      ** Thank you, Rafael! **
+
+[V6]
+    https://lore.kernel.org/linux-hyperv/20250315001931.631210-1-romank@linux.microsoft.com/
+    - Use more intuitive Kconfig update.
+    - Remove ifdef for getting IRQ number
+    ** Thank you, Arnd! **
+
+    - Simplify code for finding the parent IRQ domain.
+    ** Thank you, Bjorn! **
+
+    - Remove a superfluous check.
+    ** Thank you, Dan! **
+
+    - Make the commit title and descrtiption legible.
+    - Don't set additionalProperties to true.
+    ** Thank you, Krzysztof! **
+
+    - Fix spelling in the commit title and description.
+    - Trade-offs for options in Kconfig.
+    - Export the new symbol as hyperv-pci can be built as a module.
+    ** Thank you, Michael! **
+
+    - Simplify code for getting IRQ number.
+    ** Thank you, Rob! **
+
+    - Add comment to clarify when running in VTL mode is reported.
+    ** Thank you, Wei! **
+
+[V5]
+  https://lore.kernel.org/linux-hyperv/20250307220304.247725-1-romank@linux.microsoft.com/
+    - Provide and use a common SMCCC-based infra for the arm64 hypervisor guests
+      to detect hypervisor presence.
+    ** Thank you, Arnd! **
+
+    - Fix line wraps to follow the rest of the code.
+    - Open-code getting IRQ domain parent in the ACPI case to make the code
+      better.
+    ** Thank you, Bjorn! **
+
+    - Test the binding with the latest dtschema.
+    - Clean up the commit title and description.
+    - Use proper defines for known constants.
+    ** Thank you, Krzysztof! **
+
+    - Extend comment on why ACPI v6 is checked for.
+    - Reorder patches to make sure that even with partial series application
+      the compilation succeeds.
+    - Report VTL the kernel runs in.
+    - Use "X86_64" in Kconfig rather than "X86".
+    - Extract a non-functional change for hv_get_vmbus_root_device() into
+      a separate patch.
+    ** Thank you, Michael! **
+
+[V4]
+    https://lore.kernel.org/linux-hyperv/20250212014321.1108840-1-romank@linux.microsoft.com/
+    - Fixed wording to match acronyms defined in the "Terms and Abbreviations"
+      section of the SMCCC specification throughout the patch series.
+      **Thank you, Michael!**
+
+    - Replaced the hypervisor ID containing ASCII with an UUID as
+      required by the specification.
+      **Thank you, Michael!**
+
+    - Added an explicit check for `SMCCC_RET_NOT_SUPPORTED` when discovering the
+      hypervisor presence to make the backward compatibility obvious.
+      **Thank you, Saurabh!**
+
+    - Split the fix for `get_vtl(void)` out to make it easier to backport.
+    - Refactored the configuration options as requested to eliminate the risk
+      of building non-functional kernels with randomly selected options.
+      **Thank you, Michael!**
+
+    - Refactored the changes not to introduce an additional file with
+      a one-line function.
+      **Thank you, Wei!**
+
+    - Fixed change description for the VMBus DeviceTree changes, used
+      `scripts/get_maintainers.pl` on the latest kernel to get the up-to-date list
+      of maintainers as requested.
+      **Thank you, Krzysztof!**
+
+    - Removed the added (paranoidal+superfluous) checks for DMA coherence in the
+      VMBus driver and instead relied on the DMA and the OF subsystem code.
+      **Thank you, Arnd, Krzysztof, Michael!**
+
+    - Used another set of APIs for discovering the hardware interrupt number
+      in the VMBus driver to be able to build the driver as a module.
+      **Thank you, Michael, Saurabh!**
+
+    - Renamed the newly introduced `get_vmbus_root_device(void)` function to
+      `hv_get_vmbus_root_device(void)` as requested.
+      **Thank you, Wei!**
+
+    - Applied the suggested small-scale refactoring to simplify changes to the Hyper-V
+      PCI driver. Taking the offered liberty of doing the large scale refactoring
+      in another patch series.
+      **Thank you, Michael!**
+
+    - Added a fix for the issue discovered internally where the CPU would not
+      get the interrupt from a PCI device attached to VTL2 as the shared peripheral
+      interrupt number (SPI) was not offset by 32 (the first valid SPI number).
+      **Thank you, Brian!**
+
+[V3]
+    https://lore.kernel.org/lkml/20240726225910.1912537-1-romank@linux.microsoft.com/
+    - Employed the SMCCC function recently implemented in the Microsoft Hyper-V
+      hypervisor to detect running on Hyper-V/arm64. No dependence on ACPI/DT is
+      needed anymore although the source code still falls back to ACPI as the new
+      hypervisor might be available only in the Windows Insiders channel just
+      yet.
+    - As a part of the above, refactored detecting the hypervisor via ACPI FADT.
+    - There was a suggestion to explore whether it is feasible or not to express
+      that ACPI must be absent for the VTL mode and present for the regular guests
+      in the Hyper-V Kconfig file.
+      My current conclusion is that this will require refactoring in many places.
+      That becomes especially convoluted on x86_64 due to the MSI and APIC
+      dependencies. I'd ask to let us tackle that in another patch series (or chalk
+      up to nice-have's rather than fires to put out) to separate concerns and
+      decrease chances of breakage.
+    - While refactoring `get_vtl(void)` and the related code, fixed the hypercall
+      output address not to overlap with the input as the Hyper-V TLFS mandates:
+      "The input and output parameter lists cannot overlap or cross page boundaries."
+      See https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/hypercall-interface
+      for more.
+      Some might argue that should've been a topic for a separate patch series;
+      I'd counter that the change is well-contained (one line), has no dependencies,
+      and makes the code legal.
+    - Made the VTL boot code (c)leaner as was suggested.
+    - Set DMA cache coherency for the VMBus.
+    - Updated DT bindings in the VMBus documentation (separated out into a new patch).
+    - Fixed `vmbus_set_irq` to use the API that works both for the ACPI and OF.
+    - Reworked setting up the vPCI MSI IRQ domain in the non-ACPI case. The logic
+      looks a bit fiddly/ad-hoc as I couldn't find the API that would fit the bill.
+      Added comments to explain myself.
+
+[V2]
+    https://lore.kernel.org/all/20240514224508.212318-1-romank@linux.microsoft.com/
+    - Decreased number of #ifdef's
+    - Updated the wording in the commit messages to adhere to the guidlines
+    - Sending to the correct set of maintainers and mail lists
+
+[V1]
+    https://lore.kernel.org/all/20240510160602.1311352-1-romank@linux.microsoft.com/
+
+Roman Kisel (11):
+  arm64: kvm, smccc: Introduce and use API for getting hypervisor UUID
+  arm64: hyperv: Use SMCCC to detect hypervisor presence
+  Drivers: hv: Enable VTL mode for arm64
+  Drivers: hv: Provide arch-neutral implementation of get_vtl()
+  arm64: hyperv: Initialize the Virtual Trust Level field
+  arm64, x86: hyperv: Report the VTL the system boots in
+  dt-bindings: microsoft,vmbus: Add interrupt and DMA coherence
+    properties
+  Drivers: hv: vmbus: Get the IRQ number from DeviceTree
+  Drivers: hv: vmbus: Introduce hv_get_vmbus_root_device()
+  ACPI: irq: Introduce acpi_get_gsi_dispatcher()
+  PCI: hv: Get vPCI MSI IRQ domain from DeviceTree
+
+ .../bindings/bus/microsoft,vmbus.yaml         | 16 ++++-
+ arch/arm64/hyperv/mshyperv.c                  | 53 ++++++++++++--
+ arch/arm64/kvm/hypercalls.c                   | 10 +--
+ arch/x86/hyperv/hv_init.c                     | 34 ---------
+ arch/x86/hyperv/hv_vtl.c                      |  7 +-
+ drivers/acpi/irq.c                            | 16 ++++-
+ drivers/firmware/smccc/kvm_guest.c            | 10 +--
+ drivers/firmware/smccc/smccc.c                | 17 +++++
+ drivers/hv/Kconfig                            |  6 +-
+ drivers/hv/hv_common.c                        | 31 ++++++++
+ drivers/hv/vmbus_drv.c                        | 53 +++++++++++---
+ drivers/pci/controller/pci-hyperv.c           | 72 +++++++++++++++++--
+ include/asm-generic/mshyperv.h                |  6 ++
+ include/hyperv/hvgdk_mini.h                   |  2 +-
+ include/linux/acpi.h                          |  5 +-
+ include/linux/arm-smccc.h                     | 64 +++++++++++++++--
+ include/linux/hyperv.h                        |  2 +
+ 17 files changed, 325 insertions(+), 79 deletions(-)
 
 
-
-On 10/04/2025 1:11 am, Namhyung Kim wrote:
-> To pick up the changes in:
-> 
->    c4a16820d9019940 fs: add open_tree_attr()
->    2df1ad0d25803399 x86/arch_prctl: Simplify sys_arch_prctl()
->    e632bca07c8eef1d arm64: generate 64-bit syscall.tbl
-> 
-> This is basically to support the new open_tree_attr syscall.  But it
-> also needs to update asm-generic unistd.h header to get the new syscall
-> number.  And arm64 unistd.h header was converted to use the generic
-> 64-bit header.
-> 
-> Addressing this perf tools build warning:
-> 
->    Warning: Kernel ABI header differences:
->      diff -u tools/scripts/syscall.tbl scripts/syscall.tbl
->      diff -u tools/perf/arch/x86/entry/syscalls/syscall_32.tbl arch/x86/entry/syscalls/syscall_32.tbl
->      diff -u tools/perf/arch/x86/entry/syscalls/syscall_64.tbl arch/x86/entry/syscalls/syscall_64.tbl
->      diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
->      diff -u tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
->      diff -u tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/kernel/syscalls/syscall_n64.tbl
->      diff -u tools/perf/arch/arm/entry/syscalls/syscall.tbl arch/arm/tools/syscall.tbl
->      diff -u tools/perf/arch/sh/entry/syscalls/syscall.tbl arch/sh/kernel/syscalls/syscall.tbl
->      diff -u tools/perf/arch/sparc/entry/syscalls/syscall.tbl arch/sparc/kernel/syscalls/syscall.tbl
->      diff -u tools/perf/arch/xtensa/entry/syscalls/syscall.tbl arch/xtensa/kernel/syscalls/syscall.tbl
->      diff -u tools/arch/arm64/include/uapi/asm/unistd.h arch/arm64/include/uapi/asm/unistd.h
->      diff -u tools/include/uapi/asm-generic/unistd.h include/uapi/asm-generic/unistd.h
-> 
-> Please see tools/include/uapi/README for further details.
-> 
-> Cc: linux-arch@vger.kernel.org
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->   tools/arch/arm64/include/uapi/asm/unistd.h    | 24 +------------------
->   tools/include/uapi/asm-generic/unistd.h       |  4 +++-
->   .../perf/arch/arm/entry/syscalls/syscall.tbl  |  1 +
->   .../arch/mips/entry/syscalls/syscall_n64.tbl  |  1 +
->   .../arch/powerpc/entry/syscalls/syscall.tbl   |  1 +
->   .../perf/arch/s390/entry/syscalls/syscall.tbl |  1 +
->   tools/perf/arch/sh/entry/syscalls/syscall.tbl |  1 +
->   .../arch/sparc/entry/syscalls/syscall.tbl     |  1 +
->   .../arch/x86/entry/syscalls/syscall_32.tbl    |  3 ++-
->   .../arch/x86/entry/syscalls/syscall_64.tbl    |  1 +
->   .../arch/xtensa/entry/syscalls/syscall.tbl    |  1 +
->   tools/scripts/syscall.tbl                     |  1 +
->   12 files changed, 15 insertions(+), 25 deletions(-)
-> 
-> diff --git a/tools/arch/arm64/include/uapi/asm/unistd.h b/tools/arch/arm64/include/uapi/asm/unistd.h
-> index 9306726337fe005e..df36f23876e863ff 100644
-> --- a/tools/arch/arm64/include/uapi/asm/unistd.h
-> +++ b/tools/arch/arm64/include/uapi/asm/unistd.h
-> @@ -1,24 +1,2 @@
->   /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> -/*
-> - * Copyright (C) 2012 ARM Ltd.
-> - *
-> - * This program is free software; you can redistribute it and/or modify
-> - * it under the terms of the GNU General Public License version 2 as
-> - * published by the Free Software Foundation.
-> - *
-> - * This program is distributed in the hope that it will be useful,
-> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> - * GNU General Public License for more details.
-> - *
-> - * You should have received a copy of the GNU General Public License
-> - * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-> - */
-> -
-> -#define __ARCH_WANT_RENAMEAT
-> -#define __ARCH_WANT_NEW_STAT
-> -#define __ARCH_WANT_SET_GET_RLIMIT
-> -#define __ARCH_WANT_TIME32_SYSCALLS
-> -#define __ARCH_WANT_MEMFD_SECRET
-> -
-> -#include <asm-generic/unistd.h>
-> +#include <asm/unistd_64.h>
-
-Hi Namhyung,
-
-Since we're not including the generic syscalls here anymore we now need 
-to generate the syscall header file for the Perf build to work (build 
-error pasted at the end for reference).
-
-I had a go at adding the rule for it, but I saw that we'd need to pull 
-in quite a bit from the kernel so it was blurring the lines about the 
-separation of the tools/ folder. For example this file has the arm64 defs:
-
-  arch/arm64/kernel/Makefile.syscalls
-
-To make this common part of the makefile work:
-
-  scripts/Makefile.asm-headers
-
-Maybe we can just copy or reimplement Makefile.syscalls, but I'm not 
-even sure if Makefile.asm-headers will work with the tools/ build 
-structure so maybe that has to be re-implemented too. Adding Arnd to see 
-what he thinks.
-
-As far as I can tell this is a separate issue to the work that Charlie 
-and Ian did recently to build all arch's syscall numbers into Perf to 
-use for reporting, as this is requires a single header for the build.
-
-Thanks
-James
-
----
-
-In file included from /usr/include/aarch64-linux-gnu/sys/syscall.h:24,
-                  from evsel.c:4:
-/home/jamcla02/workspace/linux/linux/tools/arch/arm64/include/uapi/asm/unistd.h:2:10: 
-fatal error: asm/unistd_64.h: No such file or directory
-     2 | #include <asm/unistd_64.h>
-       |          ^~~~~~~~~~~~~~~~~
-
-
+base-commit: 628cc040b3a2980df6032766e8ef0688e981ab95
+-- 
+2.43.0
 
 
