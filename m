@@ -1,76 +1,78 @@
-Return-Path: <linux-arch+bounces-11403-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11404-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E029A8A64F
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Apr 2025 20:07:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B00ADA8A652
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Apr 2025 20:08:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9DCE3AA545
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Apr 2025 18:07:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06F293B099B
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Apr 2025 18:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13499221D8E;
-	Tue, 15 Apr 2025 18:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69315224AFC;
+	Tue, 15 Apr 2025 18:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ln5wy08H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J5NXeHbe"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571A919CD17;
-	Tue, 15 Apr 2025 18:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94FDC220694;
+	Tue, 15 Apr 2025 18:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744740473; cv=none; b=DgvdhssEFDG3QLyNQqiIDHZq2FPrcaCP4obbS1Kro5rS62r/CV7Ecme7bHJ0hkSukTimZgTb7GkUJvmtj/HU4r0EzPSxRKumPDlIB0WDn3qB463rjIuTJuR7HvansUOgtmuZM8f+k7DakH+RV3Rj+fzkmgIhQAphSL3kywq8S2o=
+	t=1744740474; cv=none; b=j96YruBIlMkeIGwBqf8w6DFS2wCa08ai3ZH9Z2cqQgMyKJZrxCPohIn7DhF4kApTw1VW2hw9xJVYulMR/oUe0b9YagKYcGrLkOZv1yw4BG/MUa80Evn/XhXc0Jd0PotKsBsdLndp7tTu1pu+XlUbtIoi9XWmpyvRbGwIUiY0t4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744740473; c=relaxed/simple;
-	bh=E12Dv2lpYWaPvD1bJV2GxBmQo52NBjNVBWLixN31wCM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TZeCSgP9lkQwOy0bXPNdesoSHK7aXA5vrUPS+BzabDaOnM02T07/P0oEDQcI0k6y+AubRWRnllOXGQYoV4PcddGygH2o0Y9qHY6TK+DzU3PvXUY8WdYEp8L8wHf7kxCr7DXdPpmIhXPJ5JgUu70SJn/D36A9ZT4cG1GkBd9DJVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ln5wy08H; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1744740474; c=relaxed/simple;
+	bh=MIdo8wWB+nWkjRShAhT6PWpG1r+kClw3NkgN2Yk49h8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=P6jNr/o/zVga459xCuhKiTSQ2PHu1q7FNbTVzJjewl870d/SA50bigdqZqqL4lYTsHJYgpKTf1+320RhOWJ7ZY6kClhP+m1Wh6sh33d+TwaELr/Vdaznq3CIrTDvg8udQ/cA+hAX9GIu7cpFhgZqvsQGs+7DH20p2LVeNl1j0XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J5NXeHbe; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-224171d6826so82970295ad.3;
-        Tue, 15 Apr 2025 11:07:51 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-22548a28d0cso85250015ad.3;
+        Tue, 15 Apr 2025 11:07:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744740470; x=1745345270; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:reply-to:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xvDGS2NFZu3dmg8r6i71jHs8hnBaXJGkkCFNiMhz6fw=;
-        b=Ln5wy08HUE910xh6soNbi0ue434h3niivEj0LJ9rm5QJrUM68DzlIaNkopdbqdURme
-         eYxUXBBxtwI3pcmj57nBCmZM3FPnFCk5BYgUsqXRzAhh6ypoMaiir5j0SehzZGSl2ke9
-         5MUZSl5g80OplG9KU0I8h6qgvVYq/xXBrddPgntWiNgzArCegmvp6Uc6ewCxzZdb9sn6
-         z3SbrXaG0xYkMYd+ImmyQ0pkx0lRORZlARDmfob3CCHK/HR89YRk1/4MrNKTKdt2DvKf
-         q2kggr2g7l8MrDOuV6tsoCNfRsbkz8gb/rNhJp2dn5dQeFjTQzC8BJHAaI8wtUdn0p3R
-         0HxQ==
+        d=gmail.com; s=20230601; t=1744740472; x=1745345272; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:reply-to:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T2Uucqf74/AJpdwAAeV0TOpvsswe9NobdikB/z3wisY=;
+        b=J5NXeHbe+RJFpNZQ87l8Q7O1BEk5zTAo1UMQEUDjYIGibrJmAK5X69dRx8pfQYEGzH
+         7kNJ45eHu/D1kKyr8r/cmkGN1QVSks245Sfn/i0JSr62PrOUiIl0+CfYBeFuIvw9xl2a
+         g6lFRFBJnbBiK9ZEhZnyJ0jlQgtV62jH3se8FvAtEGDEmzUw9oMF1SCn/i3dD30mryve
+         wVugf9cv1/8Xl8bCEbKxgw2zshO1xEGjLyfHwf9g6cMu/EFIrTo9CcLXRzqQg0swrvr6
+         x4YyOyI9OgjNOK7Tt8viWu5xyRb8dQZjM/cwO3BO03+toU4aYkjRDHgFFHFlL1NbYwpf
+         OeWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744740470; x=1745345270;
-        h=content-transfer-encoding:mime-version:reply-to:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xvDGS2NFZu3dmg8r6i71jHs8hnBaXJGkkCFNiMhz6fw=;
-        b=U3WBWSrML+fJIxRm6wnHh8YD7fNDiYLb78/QUhW3kEHuDt9Z+NrgoiTp48aKbTOKWs
-         j9iihoZOYyg1hEpKqOzthQ9PLNhCJ3lpEZL3o2R4szEAVSzsTaar5XS/1w1rD62aoM1k
-         aPivnqvbeNnF6yhBR8KY2h2c8owgbeQ/LJCfkH5rSMjMH0Mru02dRLhFd3/FNfgIVdRb
-         MSMn2/sg+QIcN380Czg2WgJhSdZVc4+vVExUaE92P/RKHEBCi/J372Ra8c+Ah8fN8ljM
-         VHO+7yR5Ol3THA95GAH84JKh23v3o9FRXzVWPmwCN0WtM7T3PpchXW4hALZmtD17EZZh
-         eeFg==
-X-Forwarded-Encrypted: i=1; AJvYcCU34ocYWTIURn26H9jMev2d6WEJj+3nsDx+jV4A0nLYYhx6cZ2jxwXWn4H1u1QPoVeuCoLlUHNqo7IK2hIx@vger.kernel.org, AJvYcCUiIksMKYKwsQe38oIvPW6XLFKImwU22zZbj9Li4g8k0MiYtzBFFpFJOrCsEvA/j4AC/GcKNhOvwBoCssHn@vger.kernel.org, AJvYcCV75xawSujTw/SGoR9Mg7j01nuV2P2TzguGx42dysut+4/9+Tr8XM/VhzBa0Z7vIW27x02VR3+c1cHu@vger.kernel.org, AJvYcCVZ49RTzotQtqmWIdkqvRU7uvTr5Ct2cu6+bPSUuZOGKnV7EQ6CSpmdUT4fE0qr1ulGqeXaABUvqTmX@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKWTLd6oU+43+HchvGRqHzty9+FnE530hxEtDusefNIEHTf5dP
-	MRy8foaJKXdymTsQMEFY60bX9qLnZTDF3ODtuzu+Ll0B/EApSngD
-X-Gm-Gg: ASbGncswVZRt6dY+7/MxCFhI+B6CNBHsF220v3O6eDYBw5tG8lxXczY9JBPXfT76Bm7
-	23A9vDuLbUyFkTKclbKRA6Uo8K3XkQ/DeO4+ky9l0Yy+pTTEZzTZHdyoPJifX+ISJk1yZwHIMsm
-	2b0zGUc/wQvhdsMer1+OSZZhcQgE8Vpn/HgMBAUftl2sG++1tG6PPGF9HZqKCJ33tQHoyy2ucvy
-	ri/5FWhl5uTQBZvSGQ0gpEgjLNsh8vJxSEZigH0opgiStamA9mCnq1i/a/GYyashbYcJ8dKHYNz
-	Sc4Fe4NgroboQMOs4bzSDMGi4OhuxDjY3hrkYh0HE6EFQkRNZUDD5bx+4O9ampafHktJMPCwO3o
-	0iC2Tvup/riTZ69+0IdE=
-X-Google-Smtp-Source: AGHT+IG+TokD7i8vItk+7QmWwNiAFv1lxx9jEciK+l5SQy/NyBGc0DV4Ti8nxJG7cYXtOTbqVh66ow==
-X-Received: by 2002:a17:902:eb8a:b0:224:de2:7fd6 with SMTP id d9443c01a7336-22c319f641bmr2212275ad.25.1744740470302;
-        Tue, 15 Apr 2025 11:07:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744740472; x=1745345272;
+        h=content-transfer-encoding:mime-version:reply-to:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T2Uucqf74/AJpdwAAeV0TOpvsswe9NobdikB/z3wisY=;
+        b=HSg6UjWIVGQePqePTyHhJ+yOZsPtrthtNjDHoKvRBxD6K5nXJ1g1Jd48cG9eQzrNX1
+         5H8pQsAnjiIteqE7dwzL/7Cey/bGCcUWFiZZYXkzU31usC/Qnpb+BBWlFBzDJRuA/kWR
+         fm97VPnim9NcyptkcCzVb0n0XmQw8EXP3ISYx/dsaGE82YQBGwUOA0wSkMRC+r3s8uiI
+         eySB/hVPmdemvqkfJxl8EmkXXy4a1SzfUI4svyzKubiktbFUUCHPWIExANl0Rs2NqxJO
+         07VJmkNH0ZZNr3a8Cw0Y69Lv0ShFH6KM23Q6GDLwbhuNTBg34YgaI1ldcypOPSNP46dV
+         lRVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEEbXbswWNTjnCwriVNCQ9TQVe6TvtH2wpZgxY7fd5c2cC+NPAEKM+pPIIqJ4JgvAKgJpZPLPGEFR9@vger.kernel.org, AJvYcCUN9F6fOnk5Ovdtu1jZRKr+PY3QxNA5JN8Y+MzPeR5lnEe6BYizdkPgr4IoAejYGYH31boSn6sxvtVHzPKH@vger.kernel.org, AJvYcCWkR8XyHs5n020YGcz0KRwRQCYF1yfbF/0r55KbxUPpw8Xgsgmz+CHj7VgwNkl5D3IvxlVZ8+1+hFMZEndT@vger.kernel.org, AJvYcCXZgIp5VpjyIKU1+YyEnSJNzGbqspYDltW3nbtBKkt/OHBFDtDJ9e2/PrVWuHKXpGDkNF7oos+Ra3Tb@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOhQTdzBC2VwFuThDAPXFMTHEE67zBuGSWu6NUOaF5vAoNqe+V
+	9eh6uBx8UWUaxi0C3mqEfF/dlYTBUJQSleqHB1Ts97j21oSny3tX
+X-Gm-Gg: ASbGnctosq85L7fyNh7EDr+n7HaZUublB3ZHxBYIgRSbyDVimJ7oj/6QkI/zw6yXjkH
+	2Ma/I4qH+oOrKv5GBXVaepeY9G0FLJ+kKnvTPloZ5CaGjZ9Kl7oC9ArWqR31gZNO+j0Hb7yttjM
+	vyxlNcSpuyO0U9Ic2cNE39z+5FvzqKnNDWJ8KVE1JcFFC4pfKX3qazh9w2BiGzMXyWZQjA6gJgo
+	ClJhigY3V3RT+SmEmBYQ3JfWGPH5sF/G1vB2FhGGL5AddF2qXaSooOcHwoZ33QzCLkd3LEi2iEr
+	VAKUU7rA+lLZl7NtSOaN+zFn6hsjTD7Lmz+iTYEYaRLdmkyYPzdVQlSlCNchh1j+i/kuTepmgSQ
+	XNLGQFzAymn+n1fLNgh0=
+X-Google-Smtp-Source: AGHT+IF1/vheVTcuheGVrtTM6KH6ZS2IPTooMAcnPogcoQNfL/JE08+57t9/OXv09JX2K7B0vU7WTw==
+X-Received: by 2002:a17:903:2a8f:b0:21d:dfae:300c with SMTP id d9443c01a7336-22c318a9320mr1903625ad.3.1744740471578;
+        Tue, 15 Apr 2025 11:07:51 -0700 (PDT)
 Received: from localhost.localdomain (c-67-160-120-253.hsd1.wa.comcast.net. [67.160.120.253])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7cb52c2sm120168425ad.194.2025.04.15.11.07.48
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22ac7cb52c2sm120168425ad.194.2025.04.15.11.07.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 11:07:49 -0700 (PDT)
+        Tue, 15 Apr 2025 11:07:51 -0700 (PDT)
 From: mhkelley58@gmail.com
 X-Google-Original-From: mhklinux@outlook.com
 To: kys@microsoft.com,
@@ -93,10 +95,12 @@ Cc: x86@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pci@vger.kernel.org,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v3 0/7] hyperv: Introduce new way to manage hypercall args
-Date: Tue, 15 Apr 2025 11:07:21 -0700
-Message-Id: <20250415180728.1789-1-mhklinux@outlook.com>
+Subject: [PATCH v3 1/7] Drivers: hv: Introduce hv_hvcall_*() functions for hypercall arguments
+Date: Tue, 15 Apr 2025 11:07:22 -0700
+Message-Id: <20250415180728.1789-2-mhklinux@outlook.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250415180728.1789-1-mhklinux@outlook.com>
+References: <20250415180728.1789-1-mhklinux@outlook.com>
 Reply-To: mhklinux@outlook.com
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -108,44 +112,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Michael Kelley <mhklinux@outlook.com>
 
-This patch set introduces a new way to manage the use of the per-cpu
-memory that is usually the input and output arguments to Hyper-V
-hypercalls. Current code allocates the "hyperv_pcpu_input_arg", and in
+Current code allocates the "hyperv_pcpu_input_arg", and in
 some configurations, the "hyperv_pcpu_output_arg". Each is a 4 KiB
 page of memory allocated per-vCPU. A hypercall call site disables
 interrupts, then uses this memory to set up the input parameters for
 the hypercall, read the output results after hypercall execution, and
-re-enable interrupts. The open coding of these steps has led to
+re-enable interrupts. The open coding of these steps leads to
 inconsistencies, and in some cases, violation of the generic
 requirements for the hypercall input and output as described in the
-Hyper-V Top Level Functional Spec (TLFS)[1]. This patch set introduces
-a new family of inline functions to replace the open coding. The new
-functions encapsulate key aspects of the use of per-vCPU memory for
-hypercall input and output, and ensure that the TLFS requirements are
-met (max size of 1 page each for input and output, no overlap of input
-and output, aligned to 8 bytes, etc.).
+Hyper-V Top Level Functional Spec (TLFS)[1].
 
-With this change, hypercall call sites no longer directly access
-"hyperv_pcpu_input_arg" and "hyperv_pcpu_output_arg". Instead, one of
-a family of new functions provides the per-cpu memory that a hypercall
-call site uses to set up hypercall input and output areas.
-Conceptually, there is no longer a difference between the "per-vCPU
-input page" and "per-vCPU output page". Only a single per-vCPU page is
-allocated, and it is used to provide both hypercall input and output.
-All current hypercalls can fit their input and output within that single
-page, though the new code allows easy changing to two pages should a
-future hypercall require a full page for each of the input and output.
+To reduce these kinds of problems, introduce a family of inline
+functions to replace the open coding. The functions provide a new way
+to manage the use of this per-vCPU memory that is usually the input and
+output arguments to Hyper-V hypercalls. The functions encapsulate
+key aspects of the usage and ensure that the TLFS requirements are
+met (max size of 1 page each for input and output, no overlap of
+input and output, aligned to 8 bytes, etc.). Conceptually, there
+is no longer a difference between the "per-vCPU input page" and
+"per-vCPU output page". Only a single per-vCPU page is allocated, and
+it provides both hypercall input and output memory. All current
+hypercalls can fit their input and output within that single page,
+though the new code allows easy changing to two pages should a future
+hypercall require a full page for each of the input and output.
 
 The new functions always zero the fixed-size portion of the hypercall
-input area (but not any array portion -- see below) so that
-uninitialized memory isn't inadvertently passed to the hypercall.
-Current open-coded hypercall call sites are inconsistent on this point,
-and use of the new functions addresses that inconsistency. The output
-area is not zero'ed by the new code as it is Hyper-V's responsibility
-to provide legal output.
+input area so that uninitialized memory is not inadvertently passed
+to the hypercall. Current open-coded hypercall call sites are
+inconsistent on this point, and use of the new functions addresses
+that inconsistency. The output area is not zero'ed by the new code
+as it is Hyper-V's responsibility to provide legal output.
 
-When the input or output (or both) contain an array, the new code
-calculates and returns how many array entries fit within the per-cpu
+When the input or output (or both) contain an array, the new functions
+calculate and return how many array entries fit within the per-vCPU
 memory page, which is effectively the "batch size" for the hypercall
 processing multiple entries. This batch size can then be used in the
 hypercall control word to specify the repetition count. This
@@ -157,97 +156,156 @@ wasteful at runtime when it will all be overwritten. The hypercall
 call site is responsible for ensuring that no part of the array is
 left uninitialized (just as with current code).
 
-The new family of functions is realized as a single inline function
-that handles the most complex case, which is a hypercall with input
+The new functions are realized as a single inline function that
+handles the most complex case, which is a hypercall with input
 and output, both of which contain arrays. Simpler cases are mapped to
 this most complex case with #define wrappers that provide zero or NULL
 for some arguments. Several of the arguments to this new function
-must be compile-time constants generated by "sizeof()" expressions.
-As such, most of the code in the new function is evaluated by the
-compiler, with the result that the runtime code paths are no longer
-than with the current open coding. An exception is the new code
-generated to zero the fixed-size portion of the input area in cases
-where it was not previously done.
-
-Use of the new function typically (but not always) saves a few lines
-of code at each hypercall call site. This is traded off against the
-lines of code added for the new functions. With code currently
-upstream, the net is an add of about 20 lines of code and comments.
-
-A couple hypercall call sites have requirements that are not 100%
-handled by the new function. These still require some manual open-
-coded adjustment or open-coded batch size calculations -- see the
-individual patches in this series. Suggestions on how to do better
-are welcome.
-
-The patches in the series do the following:
-
-Patch 1: Introduce the new family of functions for assigning hypercall
-         input and output arguments.
-
-Patch 2 to 6: Change existing hypercall call sites to use one of the new
-         functions. In some cases, tweaks to the hypercall argument data
-         structures are necessary, but these tweaks are making the data
-         structures more consistent with the overall pattern. These
-         5 patches are independent of each other, and can go in any
-         order. The breakup into 5 patches is for ease of review.
-
-Patch 7: Update the name of the variable used to hold the per-vCPU memory
-         used for hypercall arguments. Remove code for managing the
-	 per-vCPU output page.
-
-Patch 6 is new in v3 of the patch set. It updates the new hypercall
-call sites added as part of the mshv code in the 6.15-rc1 kernel.
-
-The new code compiles and runs successfully on x86 and arm64. However,
-basic smoke tests cover only a limited number of hypercall call sites
-that have been modified. I don't have the hardware or Hyper-V
-configurations needed to test running in the Hyper-V root partition
-or running in a VTL other than VTL 0. The related hypercall call sites
-still need to be tested to make sure I didn't break anything. Hopefully
-someone with the necessary configurations and Hyper-V versions can
-help with that testing.
-
-For gcc 9.4.0, I've looked at the generated code for a couple of
-hypercall call sites on both x86 and arm64 to ensure that it boils
-down to the equivalent of the current open coding. I have not looked
-at the generated code for later gcc versions or for Clang/LLVM, but
-there's no reason to expect something worse as the code isn't doing
-anything tricky.
-
-This patch set is built against linux-next20250411.
+must be compile-time constants generated by "sizeof()"
+expressions. As such, most of the code in the new function can be
+evaluated by the compiler, with the result that the code paths are
+no longer than with the current open coding. The one exception is
+new code generated to zero the fixed-size portion of the input area
+in cases where it is not currently done.
 
 [1] https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/tlfs
 
-Michael Kelley (7):
-  Drivers: hv: Introduce hv_hvcall_*() functions for hypercall arguments
-  x86/hyperv: Use hv_hvcall_*() to set up hypercall arguments -- part 1
-  x86/hyperv: Use hv_hvcall_*() to set up hypercall arguments -- part 2
-  Drivers: hv: Use hv_hvcall_*() to set up hypercall arguments
-  PCI: hv: Use hv_hvcall_*() to set up hypercall arguments
-  Drivers: hv: Use hv_hvcall_*() to set up hypercall arguments for mshv
-    code
-  Drivers: hv: Replace hyperv_pcpu_input/output_arg with hyperv_pcpu_arg
+Signed-off-by: Michael Kelley <mhklinux@outlook.com>
+Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+---
 
- arch/x86/hyperv/hv_apic.c           |  10 +--
- arch/x86/hyperv/hv_init.c           |  12 ++-
- arch/x86/hyperv/hv_vtl.c            |   9 +--
- arch/x86/hyperv/irqdomain.c         |  17 ++--
- arch/x86/hyperv/ivm.c               |  18 ++---
- arch/x86/hyperv/mmu.c               |  19 ++---
- arch/x86/hyperv/nested.c            |  14 ++--
- drivers/hv/hv.c                     |   6 +-
- drivers/hv/hv_balloon.c             |   8 +-
- drivers/hv/hv_common.c              |  57 ++++---------
- drivers/hv/hv_proc.c                |  23 +++---
- drivers/hv/mshv_common.c            |  31 +++----
- drivers/hv/mshv_root_hv_call.c      | 121 +++++++++++-----------------
- drivers/hv/mshv_root_main.c         |   5 +-
- drivers/pci/controller/pci-hyperv.c |  18 ++---
- include/asm-generic/mshyperv.h      | 106 +++++++++++++++++++++++-
- include/hyperv/hvgdk_mini.h         |   4 +-
- 17 files changed, 250 insertions(+), 228 deletions(-)
+Notes:
+    Changes in v3:
+    * Added wrapper #define hv_hvcall_in_batch_size() to get the batch size
+      without setting up hypercall input/output parameters. This call can be
+      used when the batch size is needed for validation checks or memory
+      allocations prior to disabling interrupts.
+    
+    Changes in v2:
+    * Added comment that hv_hvcall_inout_array() should always be called with
+      interrupts disabled because it is returning pointers to per-cpu memory
+      [Nuno Das Neves]
 
+ include/asm-generic/mshyperv.h | 106 +++++++++++++++++++++++++++++++++
+ 1 file changed, 106 insertions(+)
+
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index ccccb1cbf7df..504c44b1ab9e 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -151,6 +151,112 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
+ 	return status;
+ }
+ 
++/*
++ * Hypercall input and output argument setup
++ */
++
++/* Temporary mapping to be removed at the end of the patch series */
++#define hyperv_pcpu_arg hyperv_pcpu_input_arg
++
++/*
++ * Allocate one page that is shared between input and output args, which is
++ * sufficient for all current hypercalls. If a future hypercall requires
++ * more space, change this value to "2" and everything will work.
++ */
++#define HV_HVCALL_ARG_PAGES 1
++
++/*
++ * Allocate space for hypercall input and output arguments from the
++ * pre-allocated per-cpu hyperv_pcpu_args page(s). A NULL value for the input
++ * or output indicates to allocate no space for that argument. For input and
++ * for output, specify the size of the fixed portion, and the size of an
++ * element in a variable size array. A zero value for entry_size indicates
++ * there is no array. The fixed size space for the input is zero'ed.
++ *
++ * When variable size arrays are present, the function returns the number of
++ * elements (i.e, the batch size) that fit in the available space.
++ *
++ * The four "size" arguments must be constants so the compiler can do most of
++ * the calculations. Then the generated inline code is no larger than if open
++ * coding the access to the hyperv_pcpu_arg and doing memset() on the input.
++ *
++ * This function must be called with interrupts disabled so the thread is not
++ * rescheduled onto another vCPU while accessing the per-cpu args page.
++ */
++static inline int hv_hvcall_inout_array(void *input, u32 in_size, u32 in_entry_size,
++					void *output, u32 out_size, u32 out_entry_size)
++{
++	u32 in_batch_count = 0, out_batch_count = 0, batch_count;
++	u32 in_total_size, out_total_size, offset;
++	u32 batch_space = HV_HYP_PAGE_SIZE * HV_HVCALL_ARG_PAGES;
++	void *space;
++
++	/*
++	 * If input and output have arrays, allocate half the space to input
++	 * and half to output. If only input has an array, the array can use
++	 * all the space except for the fixed size output (but not to exceed
++	 * one page), and vice versa.
++	 */
++	if (in_entry_size && out_entry_size)
++		batch_space = batch_space / 2;
++	else if (in_entry_size)
++		batch_space = min(HV_HYP_PAGE_SIZE, batch_space - out_size);
++	else if (out_entry_size)
++		batch_space = min(HV_HYP_PAGE_SIZE, batch_space - in_size);
++
++	if (in_entry_size)
++		in_batch_count = (batch_space - in_size) / in_entry_size;
++	if (out_entry_size)
++		out_batch_count = (batch_space - out_size) / out_entry_size;
++
++	/*
++	 * If input and output have arrays, use the smaller of the two batch
++	 * counts, in case they are different. If only one has an array, use
++	 * that batch count. batch_count will be zero if neither has an array.
++	 */
++	if (in_batch_count && out_batch_count)
++		batch_count = min(in_batch_count, out_batch_count);
++	else
++		batch_count = in_batch_count | out_batch_count;
++
++	in_total_size = ALIGN(in_size + (in_entry_size * batch_count), 8);
++	out_total_size = ALIGN(out_size + (out_entry_size * batch_count), 8);
++
++	space = *this_cpu_ptr(hyperv_pcpu_arg);
++	if (input) {
++		*(void **)input = space;
++		if (space)
++			/* Zero the fixed size portion, not any array portion */
++			memset(space, 0, ALIGN(in_size, 8));
++	}
++
++	if (output) {
++		if (in_total_size + out_total_size <= HV_HYP_PAGE_SIZE) {
++			offset = in_total_size;
++		} else {
++			offset = HV_HYP_PAGE_SIZE;
++			/* Need more than 1 page, but only 1 was allocated */
++			BUILD_BUG_ON(HV_HVCALL_ARG_PAGES == 1);
++		}
++		*(void **)output = space + offset;
++	}
++
++	return batch_count;
++}
++
++/* Wrappers for some of the simpler cases with only input, or with no arrays */
++#define hv_hvcall_in(input, in_size) \
++	hv_hvcall_inout_array(input, in_size, 0, NULL, 0, 0)
++
++#define hv_hvcall_inout(input, in_size, output, out_size) \
++	hv_hvcall_inout_array(input, in_size, 0, output, out_size, 0)
++
++#define hv_hvcall_in_array(input, in_size, in_entry_size) \
++	hv_hvcall_inout_array(input, in_size, in_entry_size, NULL, 0, 0)
++
++#define hv_hvcall_in_batch_size(in_size, in_entry_size) \
++	hv_hvcall_inout_array(NULL, in_size, in_entry_size, NULL, 0, 0)
++
+ /* Generate the guest OS identifier as described in the Hyper-V TLFS */
+ static inline u64 hv_generate_guest_id(u64 kernel_version)
+ {
 -- 
 2.25.1
 
