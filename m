@@ -1,249 +1,184 @@
-Return-Path: <linux-arch+bounces-11419-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11420-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0AC2A9044E
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Apr 2025 15:27:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF98AA9058A
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Apr 2025 16:09:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E4003B3FAD
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Apr 2025 13:26:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EB178A35EB
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Apr 2025 14:04:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FB819E999;
-	Wed, 16 Apr 2025 13:26:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C5D214A7C;
+	Wed, 16 Apr 2025 13:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e4nezjGD"
+	dkim=pass (1024-bit key) header.d=atlas.cz header.i=@atlas.cz header.b="RaHc1mWK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gmmr-2.centrum.cz (gmmr-2.centrum.cz [46.255.227.203])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1DD823774
-	for <linux-arch@vger.kernel.org>; Wed, 16 Apr 2025 13:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C302139B5;
+	Wed, 16 Apr 2025 13:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.227.203
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744810019; cv=none; b=W5taBhOf7FcP5XGfS1StcD0GI4PBr+CCUhuNWVX/F5XKsh6se/pOxnp21SRcNnjrEU0hWuVgVx9ZWAdTfZEw0WW9xc6Kifvhr7ORScovL6ctz53KC64rBCZkaNw/NJXClpMbKPRt8N3K/BAW3KlzexgeiW/P2ZKxA+1ICL8iVC8=
+	t=1744811683; cv=none; b=eUSCIWYZCDfQ3frQtYaqSXbH3cinlFTOnCfvQXKkBayQAAwliQXIj48Kq976xlb3g1uQlDl8rmhG12nROGrezUMU2/Q1bfyQdlIgJ0skgL7C6wKCmwj9t3UNx2owj23/l5s6Rdrzz/agFyO168zu4wxVIeKHvBy23BIhD2JDQaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744810019; c=relaxed/simple;
-	bh=u7tgQKyBQxDpDlv/eeh5XGW8bH99prkZaYli+k8oNIg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=gYOlNidQUMTZiEUtvAS4LYtbrnXqK9KOQ2VhQbM5yivzEEQXCZplYyTgTNmhVFztgosryeZSjOkza5OGCEzYbyCqscJT6+W9R8QS/Wh+//Tq0cCTA87rNl2ClzomKm3RgZsvpIz5mO4SsoBsnzYmdtzOy3ICzULGvW424IQOn3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e4nezjGD; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43cf034d4abso73166935e9.3
-        for <linux-arch@vger.kernel.org>; Wed, 16 Apr 2025 06:26:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744810015; x=1745414815; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LXUe0iANce6xhwP4QYlP8FMxu/z1y++/7cwAdg0G+Lw=;
-        b=e4nezjGDmWYu/ShAEf+fYUZguqWtnwaNw0FIlPpkvjgSOU/ZC/Qhfw3zKi/vge0HSC
-         5RqJVgGdVNRfvQiSVLuiAT40wwK2NY8TUL69rj+Q0mCCQ7XbTsloL1dwuEJWDJA37rvL
-         nBS+cq90KLbeJKIUliXlf2BEHCGG1uELLoaQnywvKq9epGTInY4OpUy1v3GUmL+oY8p5
-         uMt6t1aXg5sc6zAHZ9QNN5CNhl4/tDr1zwxtkdiRAEpumeK68K5AkmPsr5nbOEdHpkNx
-         DqLV9Bsi5GmSiy0XOGpUC0yKLto6oId3fCUF79Fl+3QUYfbt1pYucr8uLAps9RPlNCCH
-         eJRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744810015; x=1745414815;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LXUe0iANce6xhwP4QYlP8FMxu/z1y++/7cwAdg0G+Lw=;
-        b=gv/bfqMz5zWQPhKy6cDsUCtzgiBU1ZWtSOtzDnzI632FZm1ZK91pfe1qVQ6CM7bNC1
-         fEsRy0SnAZeeqN5REOtfHyE2kK70dDx+xIwD0sczAxfYu7ApN/ekPPdU+e44nYxkx8p5
-         MrfJeRgCnWaMWfZZyk1LCr5PN0bPOIaSyAaj5tA0wED5cgzEL33mwTFt+VgtBLpnxcW0
-         JgdM0ANziiIId5AHooI1DlSmNOvXr4ogKbOs7CwlN/OfAP4KQ9SflyWraYmSpa8fP8lQ
-         ONkwXbFrzdx8oro4wM2sdfCzsQmj13sCEHytf1F/UT616Q5IjStcXg6SKCP5Q9wxBO8l
-         L6AA==
-X-Forwarded-Encrypted: i=1; AJvYcCVLxwXM5G2BLE7KoQZOr/RPl7tDyC+s+IEIlLyJroXEFFcybfebPztZh7tkMVossEnclLaw9WT5oLcN@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWif3wDE7P6jLzEAp8MvZtE9AWLCw6TctFckjqkvaqRQ9/mUsH
-	55MNpbsHPj4PClbiwbXC+bph16i8TohPd8FFCzX3Lz0U559fAokSRPoFKA04fmg=
-X-Gm-Gg: ASbGncsaoalOQqBBuh6Un1T4eSu5rAgMHpo462bg/GD2etZRXB0IZXVmW23//6MG/Jh
-	IfI3otH+LmZ4x/AAN2gwZvnbRxMCqZmIQscpKW7RWOOjzYVdpcY2X1NFYhnZrx7ZUrsrFKOIukF
-	TT9C9DH9wuUm0vXN0uvaUjcuJVVZXvOJ1wqNlK8N8pLMZq8EM/rYe79Q2Z1bTuIunwFEis1w2gH
-	DvhXfzt0I4JP4kwU+zDJZGAQpJ5Ys0B4XQqQLH/b6lBtq4Yn+fTO5XtpGuj+fmm/i8lxvxDXSZ9
-	5OF0Ukxi04ib7ynmGcCjmKTpOCoRtk8+oDw/CboNWLk=
-X-Google-Smtp-Source: AGHT+IGw46NqRQ8rr3G65OgHPazkLo5CSU52gngWFd673YvxDsgGuzhMGHsuig9f8x6t5NauOdl0Mg==
-X-Received: by 2002:a05:600c:3b9c:b0:43d:412e:8a81 with SMTP id 5b1f17b1804b1-4405d6cce52mr14393385e9.28.1744810015079;
-        Wed, 16 Apr 2025 06:26:55 -0700 (PDT)
-Received: from [192.168.1.3] ([77.81.75.81])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4405b4c8216sm21577475e9.7.2025.04.16.06.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Apr 2025 06:26:54 -0700 (PDT)
-Message-ID: <95c9bd53-ccef-4a34-b6d2-7203df84db01@linaro.org>
-Date: Wed, 16 Apr 2025 14:26:53 +0100
+	s=arc-20240116; t=1744811683; c=relaxed/simple;
+	bh=8iPCyBnNECrvFDdWDc3xKa6kubWw6Oh2mtACz/I0iCo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OWXRrKXg+gxleH0fyTEiM0vHSI0c5CjtqggqrLPurh/tHiJV2JL/3EQ28ADw65Oc0iTBfcgx0nu6e4ZBL5EZMtXTM5KqBzl5Gj4vbkrtaLbVIckQnz1wtaGwq9mAXI7aEjmKHINCkKCDswVk29WulILpX4rXHFNiT4Rysu0BfTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=atlas.cz; spf=pass smtp.mailfrom=atlas.cz; dkim=pass (1024-bit key) header.d=atlas.cz header.i=@atlas.cz header.b=RaHc1mWK; arc=none smtp.client-ip=46.255.227.203
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=atlas.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atlas.cz
+Received: from gmmr-2.centrum.cz (localhost [127.0.0.1])
+	by gmmr-2.centrum.cz (Postfix) with ESMTP id 194BD2160D3C;
+	Wed, 16 Apr 2025 15:53:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=atlas.cz; s=mail;
+	t=1744811608; bh=mOJi3ULIs6S9O57TJ4KmwFOJWvhHrsVQiIfVdvf40wo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RaHc1mWKy7sjYT1nowppfylloj95wowcY3xUi1JChHr5bx04qhidWORWHHsFkKB1U
+	 0cJKHHuWcbiS//5UXr/keo+Wjhh6u+DlsKnaSb8zf0Z6zGz1bwkOawADRFYuAIA9Wa
+	 az6jEzrxs5I0r5Ye/kIE/SGhz7lZ6u7XYsbs0UFo=
+Received: from antispam39.centrum.cz (antispam39.cent [10.30.208.39])
+	by gmmr-2.centrum.cz (Postfix) with ESMTP id 167EC211FC88;
+	Wed, 16 Apr 2025 15:53:28 +0200 (CEST)
+X-CSE-ConnectionGUID: Mln02DEDTaycyQEoKV972g==
+X-CSE-MsgGUID: kN5ul4MZQEKiIS9TdEEyWw==
+X-ThreatScanner-Verdict: Negative
+X-IPAS-Result: =?us-ascii?q?A2EHAAAqtf9n/03h/y5aGgEBAQEBAQEBAQEDAQEBARIBA?=
+ =?us-ascii?q?QEBAgIBAQEBQAmBOAMBAQEBCwGJeZFxA4t2hjOGDoVbgX4PAQEBAQEBAQEBC?=
+ =?us-ascii?q?UQEAQGFBwKLLCc2Bw4BAgQBAQEBAwIDAQEBAQEBAQEBDQEBBgEBAQEBAQYGA?=
+ =?us-ascii?q?QKBHYU1U4JiAYN/AQEBAQIBIw8BRhALDQEKAgIfBwICVgaDFYIwAREjsVt6g?=
+ =?us-ascii?q?TIaAmXccAKBI2OBKoEaLgGITwGFbIR3QoINhD8+gQUBhxiCaQSCLYEXlBCNO?=
+ =?us-ascii?q?FJ7HANZLAFVExcLBwWBKUMDgQ8jTgUwHYF6g3OFNoIRgVwDAyIBgxV1HIRsh?=
+ =?us-ascii?q?FYtT4MzgWgdQAMLbT03FBsGnHwBWSInOIElFcc5gxyBCYROnRUzl3ADkmQuh?=
+ =?us-ascii?q?2WPcnmpM4FuAoINMyIwgyNRGY5HIctZgTICBwEKAQEDCYI7jWGBSwEB?=
+IronPort-PHdr: A9a23:rB4ocBeT2Fj2wyLStyGyCRB0lGM+5djLVj580XLHo4xHfqnrxZn+J
+ kuXvawr0ASTG92DoKge1beM+4nbGkU+or+5+EgYd5JNUxJXwe43pCcHROOjNwjQAcWuURYHG
+ t9fXkRu5XCxPBsdMs//Y1rPvi/6tmZKSV3wOgVvO+v6BJPZgdip2OCu4Z3TZBhDiCagbb9oI
+ xi7oxvdutMKjYd+Jao91AXFr3pIduhI2GhlOU+dkxHg68i/+5Ju7z5esO87+c5aVqX6caU4T
+ bhGAzkjLms4+s7luwTdQAWW/ncSXX0YnRVRDwXb4x/0Q4/9vSTmuOVz3imaJtD2QqsvWTu+9
+ adrSQTnhzkBOjUk7WzYkM1wjKZcoBK8uxxyxpPfbY+JOPZieK7WYMgXTnRdUMlPSyNBA5u8b
+ 4oRAOoHIeZYtJT2q18XoRejGQWgGObjxzlVjXH0wKI6yfwsHw/G0gI+Ad8ArXfarNv6O6gOT
+ O+7w6vHwC7fb/5Vwzrx9JTEfgwjrPyKQLl+cdDRyU4qFw7dlFuft5DlPymI3esCqWeb6fRlV
+ eGygGMgsQ5xuDuvyd0piobTnIIY0UrL9Tl9wIkvPt20UlJ0YN+9HZZWqiqVOJd4TNk4TGF0p
+ CY11KcGuZijcSUWx5kqyBHRZfKDfoWL4hzuWumfLSl4iX9qZL+zmgu+/0a+x+HiVsS50UhGo
+ jZFn9TOqnwByx/e59WHRPZg/kms3yuE2QPL6uxcLk05lLDXJ4Ahz7MwjJYfr1rPEy/slEj0j
+ qKablso9vWm5uj9fLnquIOQO5VqhgzxLqgigMiyDOU+PwMTRWaU4/6826fm/UDhRbVKieA5n
+ bfBvZDBIMQbura5AwhI0oY/8xq/Dymp0NAfnXQfI1JFfQuLj5PsO1HSOPD0EOuzj06wnzh1w
+ fDGIqfhAojILnTZjLjgfK5x609ayAUt0dBS/51ZB7AbLP7tWkL8tMbUAgEnPwG02erqCtdw2
+ psbWW2VA6+ZNK3SsUWP5uIqO+SDfpUVuDXnJPgg/fHul2Q0lkUBfamtx5QXc2q0EehnIkmBe
+ 3rjns8BEXsWvgo5VOHqi0ONUSBSZ3a0Ra4z/Ss7CIW7AofYRYCsgKeM0z2hHp1TfGxJFleME
+ XLwe4WeR/gMcD6SItNmkjEcW7mhSosh1RWutQLhyrpnKOTU+jcCup3+ytd6/fDcmQs19TxuA
+ MSRy3uNQH1snmMUWz8227hyoEN+x1qCyqV4gOJXFcZV5/xXVgc2L5ncz/Z1C9zqQALOYs+JS
+ Eq6QtWhGTwxStMxw9kTY0dyAtmiixXD0jGpA78LjbOEGJ80/rjb33jrKMZx02zG27U5j1k6X
+ stPMnWribR89wjLAo7EiEGZl6esdaQB0y/B7WmDzW2TvEFeTQF/S7nFXXEYZkvQt9j54VnCT
+ 7C2BbQ9LgRB0dKCKrdNatDxglRJWvHjNM3DbG2vhWe/GxKIy6iIbIrrYGUdwD7dBFILkg8N+
+ 3aGLRI+BiCjo23AEDNuCUjjY0T28elxsH+7VFM7zxmWb0190Lq44hwVhfOGS/MUxbIEozwsq
+ y5pHFamwd3aEcaPpw1kfKlEe9My/E9H1X7Ftwx6JpGgK6FihlgDcwV4pk/hzQ93BZlAkcUxs
+ nMqwxR9KbiC3FNCaTyYx5bwNaPTKmXo+xCvcaHWiRni14Oz87sT6Pkn42riuAquBgJ27HRj1
+ 8h90n2S/JzGAQMeF5XrXRBk2QJ9ouTibzUnr73d095vef29qDzL3tszLOI5zh+7OdxNZvDXX
+ DTuGtEXUpD9YNchnEKkO1ddZLg6yQ==
+IronPort-Data: A9a23:pAIPxq2XSE7AvH5IEPbD5Sxwkn2cJEfYwER7XKvMYLTBsI5bpzwOy
+ GpJD2nTO/qDMzH9LdlwYNy/8R4PscSAy4I3HQI63Hw8FHgiRegppDi6wuUcGwvIc6UvmWo+t
+ 512huHodZ1yEzmF4E/wb9ANlFEkvYmQXL3wFeXYDS54QA5gWU8JhAlq8wIDqtcAbeORXUXU5
+ Lsen+WFYAX4g2ItbDpOg06+gEoHUMra6W5wUmMWOqgjUG/2zxE9EJ8ZLKetGHr0KqE8NvK6X
+ evK0Iai9Wrf+Ro3Yvv9+losWhBirhb6ZGBiu1IOM0SQqkEqSh8ajs7XAMEhhXJ/0F1lqfgqk
+ YkQ6sbgIeseFvakdOw1C3G0GszlVEFM0OevzXOX6aR/w6BaGpdFLjoH4EweZOUlFuhL7W5m0
+ PgecGohQzy/jvO90YuWTcpS15t5I5y+VG8fkikIITDxAvNjWpXfW/ySo9RV2isqm8UIFuS2i
+ 8gxNWQpNkmdJUcVZxFIV/rSn8/x7pX7WzRCq1uQrLAf6nTXxRc326qF3N/9I4TVFJwIxRfGz
+ o7A12ffXwweaPmt8Bem81OX19PDsA7qZ51HQdVU8dYv2jV/3Fc7CxAIVF39q+O+hlW9SvpWM
+ UlS8S0rxYAt9UivX/H8WROiqXKJtxJaXMBfe8UquF+lyafO5QudQG8eQVZpbN0gqd9zQDkC1
+ UGAlNCvAiZg2JWcSmqY3rOVqy6ifCYSMGkObDMFSg1D5MPsyKkjgxSKQtt9HaqditzuBSq20
+ z2MtDI5hbgYkYgMzarT1VLImTW3vbDSUxU4oA7QWwqN6gJ/eZ7gbpaj6XDF4vtaaoWUVF+Mu
+ D4Dgcf2xOQPC4yd0S+AWuMAGJm36Pufdj7Rm1hiG98m7TvFxpK4VdwOpmsjeQEzaJtCJmCBj
+ FLvhD69LaR7ZBOCBZKbqarqYyj25cAMzejYa80=
+IronPort-HdrOrdr: A9a23:O5DWYajdvBx/8rMLyYk+pBXutXBQXtcji2hC6mlwRA09TyVXra
+ +TddAgpHrJYVEqKRUdcLG7Scu9qBznn6KdjbN9AV7mZniAhILKFvAA0WKB+Vzd8kTFn4Y36U
+ 4jSchD4bbLY2SS4/yX3DWF
+X-Talos-CUID: 9a23:fUGq6mCSgmxYPLH6Ewxj8hZONu0JTnTMx2bpDkibNzc2ErLAHA==
+X-Talos-MUID: 9a23:X4pqhQSXDz+mun8oRXTvomx/MJtN0Z2DK0EsqsQ6t+SpJBNvbmI=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.15,216,1739833200"; 
+   d="scan'208";a="107915396"
+Received: from unknown (HELO gm-smtp10.centrum.cz) ([46.255.225.77])
+  by antispam39.centrum.cz with ESMTP; 16 Apr 2025 15:53:27 +0200
+Received: from arkam (ip-213-220-240-96.bb.vodafone.cz [213.220.240.96])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by gm-smtp10.centrum.cz (Postfix) with ESMTPSA id 8550480911AC;
+	Wed, 16 Apr 2025 15:53:27 +0200 (CEST)
+Date: Wed, 16 Apr 2025 15:53:25 +0200
+From: Petr =?utf-8?B?VmFuxJtr?= <arkamar@atlas.cz>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+	Kevin Brodsky <kevin.brodsky@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+	x86@kernel.org, xen-devel@lists.xenproject.org,
+	linux-arch@vger.kernel.org
+Subject: Re: Regression from a9b3c355c2e6 ("asm-generic: pgalloc: provide
+ generic __pgd_{alloc,free}") with CONFIG_DEBUG_VM_PGFLAGS=y and Xen
+Message-ID: <2025416135325-Z_-2VTPsw81jMgCm-arkamar@atlas.cz>
+References: <202541612720-Z_-deOZTOztMXHBh-arkamar@atlas.cz>
+ <Z_-lj5kCg084MXRI@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/10] tools headers: Update the syscall table with the
- kernel sources
-From: James Clark <james.clark@linaro.org>
-To: Namhyung Kim <namhyung@kernel.org>, Arnd Bergmann <arnd@linaro.org>
-Cc: Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org,
- linux-arch@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Ian Rogers <irogers@google.com>, Kan Liang <kan.liang@linux.intel.com>
-References: <20250410001125.391820-1-namhyung@kernel.org>
- <20250410001125.391820-6-namhyung@kernel.org>
- <f950fe96-34d3-4631-b04d-4a1584f4c2f1@linaro.org>
-Content-Language: en-US
-In-Reply-To: <f950fe96-34d3-4631-b04d-4a1584f4c2f1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z_-lj5kCg084MXRI@casper.infradead.org>
 
+On Wed, Apr 16, 2025 at 01:41:51PM +0100, Matthew Wilcox wrote:
+> On Wed, Apr 16, 2025 at 02:07:20PM +0200, Petr Vaněk wrote:
+> > I have discovered a regression introduced in commit a9b3c355c2e6
+> > ("asm-generic: pgalloc: provide generic __pgd_{alloc,free}") [1,2] in
+> > kernel version 6.14. The problem occurs when the x86 kernel is
+> > configured with CONFIG_DEBUG_VM_PGFLAGS=y and is run as a PV Dom0 in Xen
+> > 4.19.1. During the startup, the kernel panics with the error log below.
+> 
+> You also have to have CONFIG_MITIGATION_PAGE_TABLE_ISOLATION enabled
+> to hit this problem, otherwise we allocate an order-0 page.
 
+Indeed, the issue disappears when I disable
+CONFIG_MITIGATION_PAGE_TABLE_ISOLATION.
 
-On 14/04/2025 5:28 pm, James Clark wrote:
+> > The commit changed PGD allocation path.  In the new implementation
+> > _pgd_alloc allocates memory with __pgd_alloc, which indirectly calls 
+> > 
+> >   alloc_pages_noprof(gfp | __GFP_COMP, order);
+> > 
+> > This is in contrast to the old behavior, where __get_free_pages was
+> > used, which indirectly called
+> > 
+> >   alloc_pages_noprof(gfp_mask & ~__GFP_HIGHMEM, order);
+> > 
+> > The key difference is that the new allocator can return a compound page.
+> > When xen_pin_page is later called on such a page, it call
+> > TestSetPagePinned function, which internally uses the PF_NO_COMPOUND
+> > macro. This macro enforces VM_BUG_ON_PGFLAGS if PageCompound is true,
+> > triggering the panic when CONFIG_DEBUG_VM_PGFLAGS is enabled.
 > 
+> I suspect the right thing to do here is to change the PF_NO_COMPOUND to
+> PF_HEAD.  Probably for all of these:
 > 
-> On 10/04/2025 1:11 am, Namhyung Kim wrote:
->> To pick up the changes in:
->>
->>    c4a16820d9019940 fs: add open_tree_attr()
->>    2df1ad0d25803399 x86/arch_prctl: Simplify sys_arch_prctl()
->>    e632bca07c8eef1d arm64: generate 64-bit syscall.tbl
->>
->> This is basically to support the new open_tree_attr syscall.  But it
->> also needs to update asm-generic unistd.h header to get the new syscall
->> number.  And arm64 unistd.h header was converted to use the generic
->> 64-bit header.
->>
->> Addressing this perf tools build warning:
->>
->>    Warning: Kernel ABI header differences:
->>      diff -u tools/scripts/syscall.tbl scripts/syscall.tbl
->>      diff -u tools/perf/arch/x86/entry/syscalls/syscall_32.tbl arch/ 
->> x86/entry/syscalls/syscall_32.tbl
->>      diff -u tools/perf/arch/x86/entry/syscalls/syscall_64.tbl arch/ 
->> x86/entry/syscalls/syscall_64.tbl
->>      diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/ 
->> powerpc/kernel/syscalls/syscall.tbl
->>      diff -u tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/ 
->> s390/kernel/syscalls/syscall.tbl
->>      diff -u tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/ 
->> mips/kernel/syscalls/syscall_n64.tbl
->>      diff -u tools/perf/arch/arm/entry/syscalls/syscall.tbl arch/arm/ 
->> tools/syscall.tbl
->>      diff -u tools/perf/arch/sh/entry/syscalls/syscall.tbl arch/sh/ 
->> kernel/syscalls/syscall.tbl
->>      diff -u tools/perf/arch/sparc/entry/syscalls/syscall.tbl arch/ 
->> sparc/kernel/syscalls/syscall.tbl
->>      diff -u tools/perf/arch/xtensa/entry/syscalls/syscall.tbl arch/ 
->> xtensa/kernel/syscalls/syscall.tbl
->>      diff -u tools/arch/arm64/include/uapi/asm/unistd.h arch/arm64/ 
->> include/uapi/asm/unistd.h
->>      diff -u tools/include/uapi/asm-generic/unistd.h include/uapi/asm- 
->> generic/unistd.h
->>
->> Please see tools/include/uapi/README for further details.
->>
->> Cc: linux-arch@vger.kernel.org
->> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
->> ---
->>   tools/arch/arm64/include/uapi/asm/unistd.h    | 24 +------------------
->>   tools/include/uapi/asm-generic/unistd.h       |  4 +++-
->>   .../perf/arch/arm/entry/syscalls/syscall.tbl  |  1 +
->>   .../arch/mips/entry/syscalls/syscall_n64.tbl  |  1 +
->>   .../arch/powerpc/entry/syscalls/syscall.tbl   |  1 +
->>   .../perf/arch/s390/entry/syscalls/syscall.tbl |  1 +
->>   tools/perf/arch/sh/entry/syscalls/syscall.tbl |  1 +
->>   .../arch/sparc/entry/syscalls/syscall.tbl     |  1 +
->>   .../arch/x86/entry/syscalls/syscall_32.tbl    |  3 ++-
->>   .../arch/x86/entry/syscalls/syscall_64.tbl    |  1 +
->>   .../arch/xtensa/entry/syscalls/syscall.tbl    |  1 +
->>   tools/scripts/syscall.tbl                     |  1 +
->>   12 files changed, 15 insertions(+), 25 deletions(-)
->>
->> diff --git a/tools/arch/arm64/include/uapi/asm/unistd.h b/tools/arch/ 
->> arm64/include/uapi/asm/unistd.h
->> index 9306726337fe005e..df36f23876e863ff 100644
->> --- a/tools/arch/arm64/include/uapi/asm/unistd.h
->> +++ b/tools/arch/arm64/include/uapi/asm/unistd.h
->> @@ -1,24 +1,2 @@
->>   /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->> -/*
->> - * Copyright (C) 2012 ARM Ltd.
->> - *
->> - * This program is free software; you can redistribute it and/or modify
->> - * it under the terms of the GNU General Public License version 2 as
->> - * published by the Free Software Foundation.
->> - *
->> - * This program is distributed in the hope that it will be useful,
->> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
->> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
->> - * GNU General Public License for more details.
->> - *
->> - * You should have received a copy of the GNU General Public License
->> - * along with this program.  If not, see <http://www.gnu.org/licenses/>.
->> - */
->> -
->> -#define __ARCH_WANT_RENAMEAT
->> -#define __ARCH_WANT_NEW_STAT
->> -#define __ARCH_WANT_SET_GET_RLIMIT
->> -#define __ARCH_WANT_TIME32_SYSCALLS
->> -#define __ARCH_WANT_MEMFD_SECRET
->> -
->> -#include <asm-generic/unistd.h>
->> +#include <asm/unistd_64.h>
+> /* Xen */
+> PAGEFLAG(Pinned, pinned, PF_NO_COMPOUND)
+>         TESTSCFLAG(Pinned, pinned, PF_NO_COMPOUND)
+> PAGEFLAG(SavePinned, savepinned, PF_NO_COMPOUND);
+> PAGEFLAG(Foreign, foreign, PF_NO_COMPOUND);
+> PAGEFLAG(XenRemapped, xen_remapped, PF_NO_COMPOUND)
+>         TESTCLEARFLAG(XenRemapped, xen_remapped, PF_NO_COMPOUND)
 > 
-> Hi Namhyung,
-> 
-> Since we're not including the generic syscalls here anymore we now need 
-> to generate the syscall header file for the Perf build to work (build 
-> error pasted at the end for reference).
-> 
-> I had a go at adding the rule for it, but I saw that we'd need to pull 
-> in quite a bit from the kernel so it was blurring the lines about the 
-> separation of the tools/ folder. For example this file has the arm64 defs:
-> 
->   arch/arm64/kernel/Makefile.syscalls
-> 
-> To make this common part of the makefile work:
-> 
->   scripts/Makefile.asm-headers
-> 
-> Maybe we can just copy or reimplement Makefile.syscalls, but I'm not 
-> even sure if Makefile.asm-headers will work with the tools/ build 
-> structure so maybe that has to be re-implemented too. Adding Arnd to see 
-> what he thinks.
-> 
-> As far as I can tell this is a separate issue to the work that Charlie 
-> and Ian did recently to build all arch's syscall numbers into Perf to 
-> use for reporting, as this is requires a single header for the build.
-> 
-> Thanks
-> James
-> 
-> ---
-> 
-> In file included from /usr/include/aarch64-linux-gnu/sys/syscall.h:24,
->                   from evsel.c:4:
-> /home/jamcla02/workspace/linux/linux/tools/arch/arm64/include/uapi/asm/ 
-> unistd.h:2:10: fatal error: asm/unistd_64.h: No such file or directory
->      2 | #include <asm/unistd_64.h>
->        |          ^~~~~~~~~~~~~~~~~
-> 
-> 
-> 
+> Could you give that a try?
 
-Hmmm I see this was also mentioned a while ago here [1]. Maybe I can 
-have another go at adding the makerule to generate the file. I'll 
-probably start by including as much as possible from the existing make 
-rules from the kernel side. I think something similar was already done 
-for generating the sysreg defs in commit 02e85f74668e ("tools: arm64: 
-Add a Makefile for generating sysreg-defs.h")
+Yes, I could. Changing PF_NO_COMPOUND to PF_HEAD in those lines resolves
+the issue for me.
 
-
-[1]: 
-https://lore.kernel.org/lkml/ZrO5HR9x2xyPKttx@google.com/T/#m269c1d3c64e3e0c96f45102d358d9583c69b722f
-
-
-
+Petr
 
