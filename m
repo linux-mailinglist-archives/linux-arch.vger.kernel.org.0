@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-11421-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11422-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA889A92177
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 17:27:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD67A9217B
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 17:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 341BA7B09A7
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 15:26:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7306F4643EF
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 15:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE1D25393E;
-	Thu, 17 Apr 2025 15:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13D9253B45;
+	Thu, 17 Apr 2025 15:27:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="CJZi2hd0"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="dI28o+tH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazolkn19012053.outbound.protection.outlook.com [52.103.20.53])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10olkn2020.outbound.protection.outlook.com [40.92.40.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F27252901;
-	Thu, 17 Apr 2025 15:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.20.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B4525393D;
+	Thu, 17 Apr 2025 15:27:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.40.20
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744903639; cv=fail; b=LXMKoxyaJppaaug++6TsnpAfkiSfjfOc3SjWNQ7Bo0ZiZMcPjyz5AU3rx00GFLhgIvAwq4tEmFwdJhONSdb3C5Q+7ouJT3XdzSkO49cglUPYOOJkzTvLOLSvdRxRVqb3qQaupTAH7HVRXSwtzwt3iDOWLWiUWwIDF1ki/WyyH/w=
+	t=1744903671; cv=fail; b=dv/7D7sDkyaZEMcdw0Tg98t1B23iN57ajPMefTPJ3e+m0/AW8unwARcfRYW8KwRLtB68PguhYOaN224p9BXX/Cx+EzrrmimDgTzUf6T00OypPthZjz6UStJRsfmRdWDZnhYzW8dOLc1UXoYVJPcUrK0bFboNl2YKjTBwf+KumNk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744903639; c=relaxed/simple;
-	bh=0+4IKkGcxOnhTXUR1vFIorz61OEaVVrjzMOl7QykGfc=;
+	s=arc-20240116; t=1744903671; c=relaxed/simple;
+	bh=RXFk/uMT9wb4FEt944LI6aI/F4c/Q2/QQLovq/i4V4s=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=M0W4w2hc8PKHJi84LqPZzWxYCYl66dVcadSnVxnbMFFjZh9qx6HPVoFSKBO0LCBdp080oyISPPoHZQJUZ9Rro6BgxF/onRJXdSVezhAwvrL73+npA8FebSiPymPN6l9ccfyIF4Wg3TtflcLyC3XzqXK7C7saNEw1ZSD9XBfZze8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=CJZi2hd0; arc=fail smtp.client-ip=52.103.20.53
+	 Content-Type:MIME-Version; b=dThnRpDV3JtrRxLwmYjsY1fJLSMl16Rt3/A2Nt2+IuXbZQLEqFRAZ6jB6hxD5bhfvbdvb1Ev7iiJ+uKhKfpdgvDARJhq3ZpbRkDP2rEZTx5HPeK0NePqlnFc0H5+D4cotwA0JTgDDCF4YlPdghtvUYKxXWPTvphl2wC6V8Akp+o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=dI28o+tH; arc=fail smtp.client-ip=40.92.40.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kpfRWzQ8O+rcUmXhH0XGU3bhrFVYFBw7W9Z8U+ezAPpGbFuhO12lm8UCpwWfXX45RXskLMVo6CG5kw+enFIIyZBX64ACtoNVrXj8JVhFc8ySdrD5OrEOsnakqB6PXfYcryQY9jjMWSom8g4eaBnoThcXuT+jAsshI2gVlzt2W61i+cjO948FHBq46Qp3Ly6JaH5HDVjN+4MXgvbprIV6oWYzVVTEzuGwz1c+fob9VRYjIZAbJ2tEH8krDx3WeLvEOirrMJOaWHG33cNMNRtVcuBuWaqsII5ZTnepYcdEgUHDASA9Oj56MEimB3CmCJaRKguESimKTrDy9Odwbz48wQ==
+ b=r/HKIGLn7vS0dKS4BrPFhJsbCtruP7N3rV0VwejrDd5Ru1NObGI+oVh/inwwol+0+1bbl2N9Xo/O/GP2jSPOg2L2m30Vw2davghxZvG1ol1NOTfg/fUQ4eJKiWQ2OxaCNdfCauLiSc6q5myFPvQDTkAeaZVJydVU3nSYps4oLuUTL5EhiAzV2spBFBfCoU7oIhC0vD4zCSWyMcdknafuMUMFrUnvuIwDtBzblZ4afRPeoa5P77ebt6wwH0N6Awcr6RfS1FOTtZoVDlqUm/0lStwToUE2r9NH3eiYmxdVV8CMuyYfetRW0Ex0NhXrgKCXN3zi/pOVGU5yIwBGP1YE6w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2bHLIVBCPY0YMH8B71mwnJJLoiNa2RLhW0FwbYoi9Fc=;
- b=TO+9KKj2FCoc1ybMXB4sQdWtxCzIYiMvL1GBtsfgZe5h4aaaDfDz7wZPLEep5sG9U95TaCzMLhaHJ3kA3fFCB918tLefDzsxGID7HI2PPDSlWNhFcDoOm+luH29VdmLy04UFbqEQMHDSz3V4Z32t34hSlwAI50OAXUm3LktZkcesaxXTzy8AomQdT+Ow4O9BLQgw6nIyZPw4VD419tz3+5yy2BF+MJhfdxODsELw+cC4JG9xFK/kqi89nxyMXve6w5UoqHpCGjBgFtjy4mQ05yIpO5j/7Gwd5nTPya0gAWpI0blqmpZ/GrHifR7MraAYYvG59/8bRh64Ggu+jBr4DQ==
+ bh=oxMOnbwRCh2T1ll8QnewFVqCjSgwR8Mfmw8Ia9ogiFg=;
+ b=tvmWBnm+HP2nw2dNvmjlA6+adP0TnpU7bAr1iSxVDbFZnJVbDnP4ZIxkXr7VuCqFiby9mOsFb50qu2N5M474EF4clzsm2pSWgff7NKTmlMEZlyy1HWZI9Jm8n2UKKPrvt7necO05ldUUaaKBmZtAuRnGrkk3P5jeTcq3FomQOBXCLSqWkyPM6wWjoTONA+SSF1xT9pdhG6VbM45a5dD7JYgg154beFPxvvztdrzOaOijlIZzO6RFnZM+MO0kjwYxg1C6ZJ4AxG8SSr+brClTjkgXm+miOrU1C2OB9ap5V3QlD3YSynLdWklHZHUkzN968qa9D1NzSKnblIOjlnuwgw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2bHLIVBCPY0YMH8B71mwnJJLoiNa2RLhW0FwbYoi9Fc=;
- b=CJZi2hd06dLIX6Co2Q9ce9FvQk/MPSJydh4yY3xIi9yrmfSYM7ezdWcSVLAygwPKvQgNaPzXnFCGw5TOMbyPCnckeDJv/QzJyOhqyMaVng98F+2jPkKssgGv60tFeaR1P+IIAxwpY9u9aOorru2fU0lnJlAtb+nmMled9xE/3Npm8LOZ9soNGIfwUUDYnXOQk5lizdGIveJdDdw2MKGT4nmvRZdiJbxltWhxIoDT2igbsI/LLVt0JUgpNF6l8v27joxK3hv0Dlou7iCg4HauOPhkuz5YH4+HcMWnKQCNObK/MjvkjOUnkIz0RA37Q6reJFaiQ+Pz+WlekiQGb+ay9A==
+ bh=oxMOnbwRCh2T1ll8QnewFVqCjSgwR8Mfmw8Ia9ogiFg=;
+ b=dI28o+tHcEWc0j8AuNLgEKlNDhml5TZSfmIzmOJCHEtcvRux1RFJeobgA5ObJ3OFmZrDj/E+ukETvt0lQ/gtsqf8IN0AvtA3RsJQGg7+TiAHpiPiUDlrDIpntPSsRIOZKoLTjlUslpd1Hytq+ZRT09f4P6qAJpPRyKgG3fjtAz6Nlp8YVEyjvF6As8bFMDbXgF+UnIw1zm1K9ZvpqbhF99I0SVx1649jZM92MgXTuDYQtJQaYQMmaFHm36GDSPlT91jRp5WyZhL/N4Nu9xyyoq3EVf9yrFEtRIN2GSdYAlV/wN6c0NwPAHLAI5VOJ3FVvVoDe97/Vs4Bl40LV/udgA==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by CH2PR02MB6919.namprd02.prod.outlook.com (2603:10b6:610:82::17) with
+ by CH0PR02MB8209.namprd02.prod.outlook.com (2603:10b6:610:f1::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.43; Thu, 17 Apr
- 2025 15:27:14 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.35; Thu, 17 Apr
+ 2025 15:27:47 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%5]) with mapi id 15.20.8655.022; Thu, 17 Apr 2025
- 15:27:14 +0000
+ 15:27:46 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 	"bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
@@ -89,69 +89,71 @@ To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 CC: "apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
 	<benhill@microsoft.com>, "bperkins@microsoft.com" <bperkins@microsoft.com>,
 	"sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Subject: RE: [PATCH hyperv-next v8 01/11] arm64: kvm, smccc: Introduce and use
- API for getting hypervisor UUID
-Thread-Topic: [PATCH hyperv-next v8 01/11] arm64: kvm, smccc: Introduce and
- use API for getting hypervisor UUID
-Thread-Index: AQHbrY9+kt/SfeyHgkimGtmc6aRAS7On8gyQ
-Date: Thu, 17 Apr 2025 15:27:14 +0000
+Subject: RE: [PATCH hyperv-next v8 02/11] arm64: hyperv: Use SMCCC to detect
+ hypervisor presence
+Thread-Topic: [PATCH hyperv-next v8 02/11] arm64: hyperv: Use SMCCC to detect
+ hypervisor presence
+Thread-Index: AQHbrY992QgEV9XRO0SPB3XqpfxE4rOn9Rpw
+Date: Thu, 17 Apr 2025 15:27:46 +0000
 Message-ID:
- <SN6PR02MB4157CAFEBDE5317F176F1FCAD4BC2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB41576A5C3C0F5911A308E804D4BC2@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20250414224713.1866095-1-romank@linux.microsoft.com>
- <20250414224713.1866095-2-romank@linux.microsoft.com>
-In-Reply-To: <20250414224713.1866095-2-romank@linux.microsoft.com>
+ <20250414224713.1866095-3-romank@linux.microsoft.com>
+In-Reply-To: <20250414224713.1866095-3-romank@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|CH2PR02MB6919:EE_
-x-ms-office365-filtering-correlation-id: 813d1c23-24e1-4d0e-711f-08dd7dc454da
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|CH0PR02MB8209:EE_
+x-ms-office365-filtering-correlation-id: ff7c090a-2e93-443c-22f1-08dd7dc46805
+x-ms-exchange-slblob-mailprops:
+ AZnQBsB9XmpI8tRyoOXaSUmOkLVCBKasj7DtSkVvvvmzzScxvz5+d+katGSkjZGcT94LN2/O40oBcWB3GqLjJk6puo0NUxnz9PLsQRIDK6aFvtKe50nFESrcs+n+A/QTRsmGwYiPIhxDq9cKH7FfbbKiHU3NK4fKcvyicxSoyOJ9ItSkvB8Wb8b3X2rpLXfSYNqoA9bQtQ78rUGjPXqGwJUFGdUAJNGS5nrqQMu+0wPdnQYU9tnahOdsetU78SwQoDCefuIhYrdlart1eZLT/nuo5G0tdsNYEdzt9lGHHb8KEXCmJ4bJooyWQdcuYxnS6NaVn8OjhAlpEX7lyDJlYTBDB54LQDPEEgMvaECjpLZRLFWlxkr5J11Oz3tDj4455/vfvM2tmotkG1HiW3drY00GQ5JQ2JNf8YxNmwWNzrb5CaQgH5POEcBmWYMIwUehX18u6N6LFjSg7Tdj3Zr1XyxMMxd1aFrKflYChhUFPXaOpqu+2+wMk+AfSrpVBu4fljwkNxl0yLNKS6Wo239z9gxBvW1R29k8JitQ17LJsQ3vIj+UVdu+1iqmImZiXLMEhsfLQQaM9ppAqhScWwP5QYjtpvMBYcqUXgoSQzhjcPfgT3rwFXw9k0YRjiVk82FXZhipx06DdnQRajiy7Mph8Kt58tJieB0YXAPjbT7lm7I7C6rHBIzQKQ+2M6zr3mWn3pECjg/f6EhJFIEasS0dDp5nHj96pGZTK2OyLsNF+p4NWSjJ1F/V5381G4dIdUOl8oBp6e9vabw=
 x-microsoft-antispam:
- BCL:0;ARA:14566002|8060799006|8062599003|461199028|15080799006|19110799003|102099032|3412199025|440099028;
+ BCL:0;ARA:14566002|8062599003|461199028|8060799006|19110799003|15080799006|3412199025|440099028|41001999003|102099032;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?opINBDO+eyD0OR1BfS1VfjES49a0PEm/cVC1oDb17F4B8FhwLiRndFHB+VZq?=
- =?us-ascii?Q?5WQUHAqjn1GSuLVOu/MnD/Q7s1teSuvMdg/+e7i4mOO3uvFyTHVNguOiqRJe?=
- =?us-ascii?Q?Shs67U9UB1O2tzpGXhlM+e6ModQyRMbkiD0IVlCAnv4Unwl9BS6COo2SxSm3?=
- =?us-ascii?Q?JA4/kK7L00U0iUPLHBgnTVc9IuQBUtiTpIY9/w2boXao9Fg/GlAuUpyEBcx5?=
- =?us-ascii?Q?udJh4rvO4Up2QBIX/s5bmqoBpaa5hIAVLec2GiDF9cyZsseezjSSZ/NwTmxw?=
- =?us-ascii?Q?V9qMhU3jXxW4wVmws3p4Uzn6/EmHXyEe+84jT4HmLD82ghqAUAlY82FHPuC9?=
- =?us-ascii?Q?4sTv8gXDUAPE8Vra2O5O07aUIEhDxR76142Xr67KAX8n0PCA52VaYe3U4CWX?=
- =?us-ascii?Q?L+Edmc0qgaIcVx4bNM/73nK+02oi6og8RtFcAxbBbDqR/g+/dwtxta+G1Cn1?=
- =?us-ascii?Q?Gwrc8zoaESRa7nf49oRQ5S0pFEHutRCuQZB6ZvcUJRm3v9PEtIM82T2aLtUj?=
- =?us-ascii?Q?fuyyCMzym/TGTkMbTnmvLlxR3jv1Z/5oJc2KrbIbVW0NNh6YuR+lTc2t7Hsf?=
- =?us-ascii?Q?O1WVXtpts/fnp2w5zqEPXmI+DU6rzXTrp+GBIbUKPXMSvaEqAm0C8jg+WOsj?=
- =?us-ascii?Q?Y+yd9BeDZwxKnW2TsZrKCDC3/Ur8D3ZFlGs897B8xMUamf7zpbtWsmAdwfBV?=
- =?us-ascii?Q?l88KhgCaKt9tla9a1at9KNo4hEMwQUvNygCTX7/8NslAyqnvukv/m24gqn1C?=
- =?us-ascii?Q?4gHRXwAiPEr5Hq3RErDFUw6V8o6ffJKtexhWXonuNRDNoACIOJL78/1SaPJd?=
- =?us-ascii?Q?u8qXkDsa+BLPz1EE04ohLk7zYMIvFM0+XH3DFAEleunk9VlpTeRdfopn6Fvd?=
- =?us-ascii?Q?vTZOIWY5arQaLHBVF4JWLhpUGg4tZ9gVpAFHsSdrxVh4JHlNK0LjCqjcM77X?=
- =?us-ascii?Q?nRoUf+5ZRlrk2i14FBYqDP0feim5zcdbaCZgylRgzJLhGTaemD4RarqyKfwq?=
- =?us-ascii?Q?1KtyuFL14gA2SKZ2DvpcUxtaha7nEiGVxAh2JlKxhT2Dlm35FMIZJpz/Xdk4?=
- =?us-ascii?Q?5Msr21lEKQj5GvDxCchYcC6rtdFGYw=3D=3D?=
+ =?us-ascii?Q?sPULcZmSzmzO0HmZ8Ob2fs9CpkDYlHb1zfnYz6AIj6qzXiyfP+hLqh1xIeP5?=
+ =?us-ascii?Q?i6YPQ/w3HVrJ5JcmnX+90qdV4VdKr/dl4lwynG0x5ID6c2psdURN+SuZ1odP?=
+ =?us-ascii?Q?N4K82yN8ut6/8QFwIEFJ3dYgqu9RR9E4bs9ZQpLW091fkMB1JnYaGvF8O6bO?=
+ =?us-ascii?Q?TIRiZZtGrnHHMXXLP9xHKXAZBa7t2yvdbW+zo+m5fxMG+MDyRqOqqzxbxl4T?=
+ =?us-ascii?Q?EPVW13W5aI83Mejum8BoqL9Dn/BVOzF5eHgHehm1BbdIgX9tsYiZsz6XFAV2?=
+ =?us-ascii?Q?XR4m0ROAlDX12tF1MH7cdrNcpTq9RhcDqMspg0OkHSb6S7OxBaSkfIFpSU9X?=
+ =?us-ascii?Q?b6UQKRxg8sScBldKUXgNhjKMKiXy7Lv285C0DrK8W49hq0l+zuqAE0TL53qg?=
+ =?us-ascii?Q?ZN4GdgehgP65XTU/a7Z2LiqRHLty29xnnu+7yc3JHN+w1p1XD+kxKpF+LNb6?=
+ =?us-ascii?Q?HIgAXtEWFauaHkkCiILZ3xNNphrwqOZMVVFjWWqwY7w82rmxZfPLhTt7ktkK?=
+ =?us-ascii?Q?gtUGSafwuyHzwbkOamk+t36nW3Te+MMeSDydwCrCvSHfuZ223ujcxb7RRWVb?=
+ =?us-ascii?Q?Rp2/ZPlwvWObyAnEpI/ARYTtiyu7fhmdBuqAFUiqtjRZ3JVf+YTk/EwAN8ET?=
+ =?us-ascii?Q?JUJX1kyr31EJbpBpfKi2JHxQwWAUOXrV0hbpCw0FgUhT4xWhme+IlIvnUlhM?=
+ =?us-ascii?Q?1Hw3FcsElwPzMtuQ/24W2bvfaWRQ1raDXY/S7ctq7N/Lhkf+3E3dpIykRrRa?=
+ =?us-ascii?Q?kbsMNyRUf9ohMd+8gWgQ/mD5VAzlt8e7aO+Wp9GjXREmxOWSZaah3FXgb8Zg?=
+ =?us-ascii?Q?D4Wi6ZkZ7jpk216OZL9DMKvOLB1a6ULfObr8/lYRVtXsFrNgR5bCY7QSZgy4?=
+ =?us-ascii?Q?cCKnROsg/VAMp+wkbXbanfMHa4MS0snxDXqHtbcFi4YwpexMF2urxhNvNK8t?=
+ =?us-ascii?Q?kcq28lV3DyYlTcHZRzXGnWxSGpfdt6cBEcUS1ioTCQPG9LGVSk8yDY4h4JGH?=
+ =?us-ascii?Q?qkVXlg9IohiCZa3fUCrqFpJULq423hMvZSbcdJNxcnghwd4VImUUHZsWDSVO?=
+ =?us-ascii?Q?9tRZ3u4Q4df54VQGfC5wnSejo1JLgnv21V84rXGeC6mdjWW5LKw=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?iC64XoBQR4PDN5+8wO+W+SdkoVd2VEzxYJeUgYe7kJhmLMTxq1lFHZgoqO+J?=
- =?us-ascii?Q?lqWJXci58+0jjMTgLF/if9X/pr2VkaoKGlV0JsnlXbAmy9jV0jcePE72oom6?=
- =?us-ascii?Q?H91aNu682Q1NPvTc+LvqEZUnJ5hW/sXop/PVixvDswmy1vreJoUZHluMI8s6?=
- =?us-ascii?Q?jvRau6SEvDrmV9CZQGY5nRhl45YpVWfpt1ZZn2J3t1hebVEp+vZ/jyhQ87wa?=
- =?us-ascii?Q?v5Hxq6H/VazUMoJTm43pGVL+4NlDycFifuGf7Py74BlRhnrfrT5bRcxGlp19?=
- =?us-ascii?Q?igDDRkwmNOwO2I5KMoaYDcmEdXxWNyTZgCd9jOjCHzqIZU/LZl3x8LkIBsHc?=
- =?us-ascii?Q?VV6O/KHIogLMxQ8mEWEL2dXSLuhat2fsatQ/pKdrOdyxGhp8TVvECR3KcFmW?=
- =?us-ascii?Q?rP4PRLyn1u/GC0etLMzUcIrDJHygFgU7SArDkAPQPx/XYLankXd8n5dZ9snu?=
- =?us-ascii?Q?dxWy4JJbkw2tR+RPHWxAj/oL9MR5EnFC9DZRrF4JvRYI7Mol2uiaGt3wFsKt?=
- =?us-ascii?Q?u1X3jsJ2aI9Os9sCvKOPvLxv+ammO4F58D73DrlWVpnkfIzEzZSqTsJ9mTtf?=
- =?us-ascii?Q?8R5VRCJJ8jj7hsrO9dilBlvamPE4D6c56M+7TH6a0USgrwWPVkJy+p5Zcek4?=
- =?us-ascii?Q?9tq2f7wwyx6YjDh5ku+Bue5K6scgD6803C8PbzowH68gJ1OeUlj2Up/HJAP2?=
- =?us-ascii?Q?fdEag1Nd1DWoUScni/kIjZqRv44FlzfCioFjmtBplC8wgMjGkvYQKSUupEnB?=
- =?us-ascii?Q?/ZyiFHonr0WEpU6AX/1X6J6fqwjSUWkG/T/zDoQQllq5Lvrvm9PsTTbIjjqV?=
- =?us-ascii?Q?H+TVBPNsFttrshhLMGkze+IEuWKlc8uEOr3KSanz7Galr+tFdL5PPFfs8AxA?=
- =?us-ascii?Q?sfYA7p2tqeLACCyAGRexLJ4dWUTKdYbhY40n0noPJmHFZfk7VCIooCeMpSGI?=
- =?us-ascii?Q?/vQqANltdoX1udpb+UIG9hjUGq+qyfoI63wa9UQbFtfOkcl58nmQmMB0Xctx?=
- =?us-ascii?Q?feVEBeYsN0V1hDGByru7k3hMGEn84cGOVEcGKlczrj/80N/28GvnpeYf5mBp?=
- =?us-ascii?Q?+neVZxkSF+bztD7bZyrag6Nr5dXXke+cdTtHsTX4sFrvIoCa5ww8ZdB4J3GO?=
- =?us-ascii?Q?0znNUaw1lBNSzT+ItmBG25QbG/EH46kTLhs7lJMMt0B2TrTIS3IUZDshDtw9?=
- =?us-ascii?Q?3I/I40Te7nm6BUEc2tr08Hy98T2p5w7WY6QgeoMQHR4pyywC4cyXOvl9HHA?=
+ =?us-ascii?Q?D0m824fIYiOAIJZWFoURKfxO9a9JdUNByGMUlQeJv5AFIbjoNxlVGjBOgUSZ?=
+ =?us-ascii?Q?exF0VjfxDmLqomPRRNmyFtU2iLYiS8UC41IlRq7BXSu9NGkNyE/r220zZBbf?=
+ =?us-ascii?Q?ex7lec9ugr2oCLE6UDFEWsIsUxPotbQ3EOaGgOFdZNxIRlvu6sEJxInnwl25?=
+ =?us-ascii?Q?aTFIB7hus9lY6nH+Sp/g/3Gm/bNinpAPX5AH6yEsZRk/mHxQwYq9ePPCWDyz?=
+ =?us-ascii?Q?ok4JkXyyPNI5dg8ibGZyT4w8DWaDmjTmUiqHfna9WyTkAtqZEt7S+qtMFw8u?=
+ =?us-ascii?Q?+Fqgkw9O7PGSNN2KB4dzYdMejE7Nf1S94HMgJMD+nHFvi3khdvoLJwvKsmlS?=
+ =?us-ascii?Q?SHDYDY8igZaO2YqGczLhRA2GgBGfW5E4aAEX6ktrYosNfq+QIV8uOXOjF+XM?=
+ =?us-ascii?Q?3omAuuc1K4rg0Lxt9dE7r6wwT5p5dQGyWFYPi2NrRUaat0emZqYytmqTCdTK?=
+ =?us-ascii?Q?Nvs2oNDrKBj4Tat8ilQbVkl+Mga6acjmPKViqOurYK3bAX/J1bUv+sGYW51F?=
+ =?us-ascii?Q?x6oZ1UlmM5PJ+fTeD1EVl+bC7qBS3pCQ0otb3J1wPq9cI7AOnGT1ezPycG5w?=
+ =?us-ascii?Q?85gH+Lwnnjiyv2vJ0F8qgb65KnQl5xTI1AnWeTBI5ahDW5OE4B5HSKHFGU38?=
+ =?us-ascii?Q?mROqX5jOR4kpb3rq55i9aIdv0ylQ9MkMGaY+sf5UmhpS7pBDsLSE7THcVDzB?=
+ =?us-ascii?Q?e9L7TYQdgpkXwHr+IKbXwZGUP1vgYnHtKDn5sXqFZqv4dO104gaFjsf9F/Af?=
+ =?us-ascii?Q?JJzqEyd7+73xZ9VeDlUZMRmdDOjU9sM1Sl59jvkDksObHyCqXmmQOoZclSt+?=
+ =?us-ascii?Q?G5aDZifW0iyxCGAttn0R91ElSudZC4ux/7ygG3ux6g3/RxKW3vXRpcn0BcQG?=
+ =?us-ascii?Q?p8ZTq86FWHBzn4FBuZclzZkxlSuvLI1PwLoH/jJcMxvCckMV9u/NlOTwKf5B?=
+ =?us-ascii?Q?f6qgaj4ojAxYCl4F3cWq23+dsOssFRtjbmO26QRrkMuHL2PLk4C56ZdZsaV+?=
+ =?us-ascii?Q?ixaFShrhSlygEEPOfe18yYaogc6W1aJX83GhYem0a05WORqNhN+9o4Giijfr?=
+ =?us-ascii?Q?abELc8OerpBHcVLbLQEPF29ZM+AfTXLeq0HUvWMsp1PckflKZ6hQugcyQx6N?=
+ =?us-ascii?Q?HboXYccMS8UOKT7aVasCxfnLjZfU2pnyyLXJDtjpkNWxyhxj+x7XCafDRiqC?=
+ =?us-ascii?Q?mrcZiC4PByUJNvK7h1yKXHEYrBrKI4FaR/FfujBXO4phYM+Bm9Zzky8fpSs?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -165,36 +167,119 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 813d1c23-24e1-4d0e-711f-08dd7dc454da
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Apr 2025 15:27:14.6742
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff7c090a-2e93-443c-22f1-08dd7dc46805
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Apr 2025 15:27:46.8273
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6919
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR02MB8209
 
 From: Roman Kisel <romank@linux.microsoft.com> Sent: Monday, April 14, 2025=
  3:47 PM
 >=20
-> The KVM/arm64 uses SMCCC to detect hypervisor presence. That code is
-> private, and it follows the SMCCC specification. Other existing and
-> emerging hypervisor guest implementations can and should use that
-> standard approach as well.
+> The arm64 Hyper-V startup path relies on ACPI to detect
+> running under a Hyper-V compatible hypervisor. That
+> doesn't work on non-ACPI systems.
 >=20
-> Factor out a common infrastructure that the guests can use, update KVM
-> to employ the new API. The central notion of the SMCCC method is the
-> UUID of the hypervisor, and the new API follows that.
->=20
-> No functional changes. Validated with a KVM/arm64 guest.
+> Hoist the ACPI detection logic into a separate function. Then
+> use the vendor-specific hypervisor service call (implemented
+> recently in Hyper-V) via SMCCC in the non-ACPI case.
 >=20
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  arch/arm64/kvm/hypercalls.c        | 10 +++--
->  drivers/firmware/smccc/kvm_guest.c | 10 +----
->  drivers/firmware/smccc/smccc.c     | 17 ++++++++
->  include/linux/arm-smccc.h          | 64 ++++++++++++++++++++++++++++--
->  4 files changed, 85 insertions(+), 16 deletions(-)
+>  arch/arm64/hyperv/mshyperv.c | 50 ++++++++++++++++++++++++++++++++----
+>  1 file changed, 45 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index 4e27cc29c79e..21458b6338aa 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -28,6 +28,48 @@ int hv_get_hypervisor_version(union
+> hv_hypervisor_version_info *info)
+>  }
+>  EXPORT_SYMBOL_GPL(hv_get_hypervisor_version);
+>=20
+> +#ifdef CONFIG_ACPI
+> +
+> +static bool __init hyperv_detect_via_acpi(void)
+> +{
+> +	if (acpi_disabled)
+> +		return false;
+> +	/*
+> +	 * Hypervisor ID is only available in ACPI v6+, and the
+> +	 * structure layout was extended in v6 to accommodate that
+> +	 * new field.
+> +	 *
+> +	 * At the very minimum, this check makes sure not to read
+> +	 * past the FADT structure.
+> +	 *
+> +	 * It is also needed to catch running in some unknown
+> +	 * non-Hyper-V environment that has ACPI 5.x or less.
+> +	 * In such a case, it can't be Hyper-V.
+> +	 */
+> +	if (acpi_gbl_FADT.header.revision < 6)
+> +		return false;
+> +	return strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8) =3D=
+=3D 0;
+> +}
+> +
+> +#else
+> +
+> +static bool __init hyperv_detect_via_acpi(void)
+> +{
+> +	return false;
+> +}
+> +
+> +#endif
+> +
+> +static bool __init hyperv_detect_via_smccc(void)
+> +{
+> +	uuid_t hyperv_uuid =3D UUID_INIT(
+> +		0x58ba324d, 0x6447, 0x24cd,
+> +		0x75, 0x6c, 0xef, 0x8e,
+> +		0x24, 0x70, 0x59, 0x16);
+
+I had previously given my Reviewed-by: on v5 of this patch. But
+looking at it again, it would be nice if this UUID were defined in
+include/linux/arm-smccc.h alongside the definition of
+ARM_SMCCC_VENDOR_HYP_UID_KVM. The UUID values are
+are independent of each other, but it's a bit asymmetric to have
+the KVM UUID defined centrally while the Hyper-V UUID is
+buried in Hyper-V specific code. But I'm OK with the current code
+if there's nothing else to respin for.
+
+> +
+> +	return arm_smccc_hypervisor_has_uuid(&hyperv_uuid);
+> +}
+> +
+>  static int __init hyperv_init(void)
+>  {
+>  	struct hv_get_vp_registers_output	result;
+> @@ -36,13 +78,11 @@ static int __init hyperv_init(void)
+>=20
+>  	/*
+>  	 * Allow for a kernel built with CONFIG_HYPERV to be running in
+> -	 * a non-Hyper-V environment, including on DT instead of ACPI.
+> +	 * a non-Hyper-V environment.
+> +	 *
+>  	 * In such cases, do nothing and return success.
+>  	 */
+> -	if (acpi_disabled)
+> -		return 0;
+> -
+> -	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
+> +	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smccc())
+>  		return 0;
+>=20
+>  	/* Setup the guest ID */
+> --
+> 2.43.0
 >=20
 
+My UUID comment notwithstanding,
+
 Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+
+
 
