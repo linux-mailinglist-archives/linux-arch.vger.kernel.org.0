@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-11434-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11435-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F25A9284E
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 20:33:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DA63A92852
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 20:33:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BB9418884E3
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 18:33:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58442189C9E3
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 18:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5ED2686B9;
-	Thu, 17 Apr 2025 18:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7036B268FE9;
+	Thu, 17 Apr 2025 18:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kEzKamQ7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TFRg94yt"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7D9268699;
-	Thu, 17 Apr 2025 18:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37CFD268C69;
+	Thu, 17 Apr 2025 18:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744914433; cv=none; b=Ct03/MvLqFLdWlD8i83ET51eKU3KvjZJPxCwegi4C8WZAr2wuOpgj8kBIB5WSqsmIsj72AhrbC2HlVBh6GePvcAfhNP5+IrEVdyoyX4Sxqhbe04+GfARBI+le8CkMUThFsmpxmLRfwHevyYuHTd/F5tcVg1apnWyXe0t0KFfQyM=
+	t=1744914434; cv=none; b=r9Lp+RCxFJ8ka4YHVJ6lTbAmgPW0IJGhz64beJ1B58QJ8ItvXm4KJ2oqAbTtCRP33zwKBlNNlYLczP6GXNohIemo9JdxBhS47H0/fo4kuQWIw5vknD4/O1ccxMEP5BIvzUkyTZy7CR8aO3B0WysB8XRW8NmB0qW3JoM0QmASk3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744914433; c=relaxed/simple;
-	bh=UX4WI8EDuBMolYsjuDM2U8XKg5QnChDBXSYKd39EvNs=;
+	s=arc-20240116; t=1744914434; c=relaxed/simple;
+	bh=obiaeiH3M3/PJ05fFDi3tJIZJm6vLPgHN3Yv3HcRMYQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uQKcABfPU0/WP3MbhJjT1i+2mA47ixLWPCdVGvxHMKne0cE8GCFiJPcXtu6zUDij494vszC81LOjK0qObrhGO17Nns8StUyQQvWi3KpmPkc8Q9SWeJMe1QrBXO0LckGKQbVkeGmlysWpATNDZGytt8b0w0RJz7R3ikTa8LCeSfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kEzKamQ7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7754CC4CEE4;
-	Thu, 17 Apr 2025 18:27:12 +0000 (UTC)
+	 MIME-Version; b=aNDDGSRvgTLjEA0K1rnf9+mMr8f0uzCuABpamzr/6XMg4w3+a55t6yQ8kYx/ErJIIHVtQ+DM3DDcuPB0A+tvkvsJ838TAqiqFs6vbrpVlWqLRfwgHbnrWYopgZTzju0TSjQWcZCATRYSRWRxM+TgifernXlfXuohW4z15maoV4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TFRg94yt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E381C4CEE7;
+	Thu, 17 Apr 2025 18:27:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744914433;
-	bh=UX4WI8EDuBMolYsjuDM2U8XKg5QnChDBXSYKd39EvNs=;
+	s=k20201202; t=1744914434;
+	bh=obiaeiH3M3/PJ05fFDi3tJIZJm6vLPgHN3Yv3HcRMYQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kEzKamQ77+ydJivcumu5A0EVk/kXXWFfSMds2u7k1YTk1H+rF/67bqU+j+jJWKdl+
-	 Q2n7E/dnU6nc5VZ8aq76mLC/hUu6qr1DUvojFRMnBTG+hbecrgjHXxpJDYNWm7g372
-	 mmod6G58GI206xhh4cwUi5gmbRp9pUV4UvcKffRJAd/SAd+OZL0MArn+XZe+a+lWse
-	 WraOSg0kbetPV1xAm5FmZOqOUclZDEor8z8B8fJwgV0wrK0yHCkvuFiYjwgVictUSB
-	 YND7Tu4UPgsbBXF3UxPOsP1otOEQDGQ0geJEuAFCBu/GYCNhtmvhRyLJmhJesven4e
-	 nLNW8wApG8jyw==
+	b=TFRg94ytvFwWb9eEX7DfMbWd/h6Y8idIO3Z1B3mXh/Djib/YaOtCh+29vjwVs79SA
+	 QM9c0oAyqr0FmMxLVQo0BJjGSeljXZv+0ige27EFJNNGFGIrjB8PFGGxLYh9gNSLjL
+	 OBJEI5gLRWvc/6c5B8jhHR1zHzlvZe5+dcUS3we+S5R+BYOZA0qjnPGO/f4gjySuGi
+	 9Xc7Ce01qxhIBBgjg4Do4jIs/J3qRFhT6eXBcCtyOmba9O27SK9Cs3evZHonw/v4sI
+	 CfLmw9KzH2g+HVO2hDtYFuLXnqYzsaGMf/n9P6mu//qnJKjcB6bDArCoeA6HE2U4Ts
+	 VvktptufPNesg==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: linux-arch@vger.kernel.org,
 	x86@kernel.org,
 	"Jason A . Donenfeld " <Jason@zx2c4.com>,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 08/15] crypto: riscv - remove CRYPTO dependency of library functions
-Date: Thu, 17 Apr 2025 11:26:16 -0700
-Message-ID: <20250417182623.67808-9-ebiggers@kernel.org>
+Subject: [PATCH 09/15] crypto: s390 - drop redundant dependencies on S390
+Date: Thu, 17 Apr 2025 11:26:17 -0700
+Message-ID: <20250417182623.67808-10-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250417182623.67808-1-ebiggers@kernel.org>
 References: <20250417182623.67808-1-ebiggers@kernel.org>
@@ -71,130 +71,127 @@ Content-Transfer-Encoding: 8bit
 
 From: Eric Biggers <ebiggers@google.com>
 
-Continue disentangling the crypto library functions from the generic
-crypto infrastructure by removing the unnecessary CRYPTO dependency of
-CRYPTO_CHACHA_RISCV64.  To do this, make arch/riscv/crypto/Kconfig be
-sourced regardless of CRYPTO, and explicitly list the CRYPTO dependency
-in the symbols that do need it.
+arch/s390/crypto/Kconfig is sourced only when CONFIG_S390=y, so there is
+no need for the symbols defined inside it to depend on S390.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/riscv/Kconfig        |  2 ++
- arch/riscv/crypto/Kconfig | 12 ++++++------
- crypto/Kconfig            |  3 ---
- 3 files changed, 8 insertions(+), 9 deletions(-)
+ arch/s390/crypto/Kconfig | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index bbec87b79309..baa7b8d98ed8 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -1349,8 +1349,10 @@ source "drivers/cpuidle/Kconfig"
+diff --git a/arch/s390/crypto/Kconfig b/arch/s390/crypto/Kconfig
+index 055b08f259ab..e88d9cd256ef 100644
+--- a/arch/s390/crypto/Kconfig
++++ b/arch/s390/crypto/Kconfig
+@@ -2,77 +2,70 @@
  
- source "drivers/cpufreq/Kconfig"
+ menu "Accelerated Cryptographic Algorithms for CPU (s390)"
  
- endmenu # "CPU Power Management"
+ config CRYPTO_SHA512_S390
+ 	tristate "Hash functions: SHA-384 and SHA-512"
+-	depends on S390
+ 	select CRYPTO_HASH
+ 	help
+ 	  SHA-384 and SHA-512 secure hash algorithms (FIPS 180)
  
-+source "arch/riscv/crypto/Kconfig"
-+
- source "arch/riscv/kvm/Kconfig"
+ 	  Architecture: s390
  
- source "drivers/acpi/Kconfig"
-diff --git a/arch/riscv/crypto/Kconfig b/arch/riscv/crypto/Kconfig
-index 27a1f26d41bd..08547694937c 100644
---- a/arch/riscv/crypto/Kconfig
-+++ b/arch/riscv/crypto/Kconfig
-@@ -2,11 +2,11 @@
+ 	  It is available as of z10.
  
- menu "Accelerated Cryptographic Algorithms for CPU (riscv)"
+ config CRYPTO_SHA1_S390
+ 	tristate "Hash functions: SHA-1"
+-	depends on S390
+ 	select CRYPTO_HASH
+ 	help
+ 	  SHA-1 secure hash algorithm (FIPS 180)
  
- config CRYPTO_AES_RISCV64
- 	tristate "Ciphers: AES, modes: ECB, CBC, CTS, CTR, XTS"
--	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
-+	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	  Architecture: s390
+ 
+ 	  It is available as of z990.
+ 
+ config CRYPTO_SHA256_S390
+ 	tristate "Hash functions: SHA-224 and SHA-256"
+-	depends on S390
+ 	select CRYPTO_HASH
+ 	help
+ 	  SHA-224 and SHA-256 secure hash algorithms (FIPS 180)
+ 
+ 	  Architecture: s390
+ 
+ 	  It is available as of z9.
+ 
+ config CRYPTO_SHA3_256_S390
+ 	tristate "Hash functions: SHA3-224 and SHA3-256"
+-	depends on S390
+ 	select CRYPTO_HASH
+ 	help
+ 	  SHA3-224 and SHA3-256 secure hash algorithms (FIPS 202)
+ 
+ 	  Architecture: s390
+ 
+ 	  It is available as of z14.
+ 
+ config CRYPTO_SHA3_512_S390
+ 	tristate "Hash functions: SHA3-384 and SHA3-512"
+-	depends on S390
+ 	select CRYPTO_HASH
+ 	help
+ 	  SHA3-384 and SHA3-512 secure hash algorithms (FIPS 202)
+ 
+ 	  Architecture: s390
+ 
+ 	  It is available as of z14.
+ 
+ config CRYPTO_GHASH_S390
+ 	tristate "Hash functions: GHASH"
+-	depends on S390
+ 	select CRYPTO_HASH
+ 	help
+ 	  GCM GHASH hash function (NIST SP800-38D)
+ 
+ 	  Architecture: s390
+ 
+ 	  It is available as of z196.
+ 
+ config CRYPTO_AES_S390
+ 	tristate "Ciphers: AES, modes: ECB, CBC, CTR, XTS, GCM"
+-	depends on S390
  	select CRYPTO_ALGAPI
- 	select CRYPTO_LIB_AES
  	select CRYPTO_SKCIPHER
  	help
- 	  Block cipher: AES cipher algorithms
-@@ -25,43 +25,43 @@ config CRYPTO_CHACHA_RISCV64
+ 	  Block cipher: AES cipher algorithms (FIPS 197)
+ 	  AEAD cipher: AES with GCM
+@@ -90,11 +83,10 @@ config CRYPTO_AES_S390
+ 	  key sizes and XTS mode is hardware accelerated for 256 and
+ 	  512 bit keys.
+ 
+ config CRYPTO_DES_S390
+ 	tristate "Ciphers: DES and Triple DES EDE, modes: ECB, CBC, CTR"
+-	depends on S390
+ 	select CRYPTO_ALGAPI
+ 	select CRYPTO_SKCIPHER
+ 	select CRYPTO_LIB_DES
+ 	help
+ 	  Block ciphers: DES (FIPS 46-2) cipher algorithm
+@@ -107,18 +99,16 @@ config CRYPTO_DES_S390
+ 	  As of z990 the ECB and CBC mode are hardware accelerated.
+ 	  As of z196 the CTR mode is hardware accelerated.
+ 
+ config CRYPTO_CHACHA_S390
+ 	tristate
+-	depends on S390
  	select CRYPTO_LIB_CHACHA_GENERIC
+ 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
  	default CRYPTO_LIB_CHACHA_INTERNAL
  
- config CRYPTO_GHASH_RISCV64
- 	tristate "Hash functions: GHASH"
--	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
-+	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
- 	select CRYPTO_GCM
- 	help
- 	  GCM GHASH function (NIST SP 800-38D)
- 
- 	  Architecture: riscv64 using:
- 	  - Zvkg vector crypto extension
- 
- config CRYPTO_SHA256_RISCV64
- 	tristate "Hash functions: SHA-224 and SHA-256"
--	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
-+	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
- 	select CRYPTO_SHA256
- 	help
- 	  SHA-224 and SHA-256 secure hash algorithm (FIPS 180)
- 
- 	  Architecture: riscv64 using:
- 	  - Zvknha or Zvknhb vector crypto extensions
- 	  - Zvkb vector crypto extension
- 
- config CRYPTO_SHA512_RISCV64
- 	tristate "Hash functions: SHA-384 and SHA-512"
--	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
-+	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
- 	select CRYPTO_SHA512
- 	help
- 	  SHA-384 and SHA-512 secure hash algorithm (FIPS 180)
- 
- 	  Architecture: riscv64 using:
- 	  - Zvknhb vector crypto extension
- 	  - Zvkb vector crypto extension
- 
- config CRYPTO_SM3_RISCV64
- 	tristate "Hash functions: SM3 (ShangMi 3)"
--	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
-+	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ config CRYPTO_HMAC_S390
+ 	tristate "Keyed-hash message authentication code: HMAC"
+-	depends on S390
  	select CRYPTO_HASH
- 	select CRYPTO_LIB_SM3
  	help
- 	  SM3 (ShangMi 3) secure hash function (OSCCA GM/T 0004-2012)
+ 	  s390 specific HMAC hardware support for SHA224, SHA256, SHA384 and
+ 	  SHA512.
  
-@@ -69,11 +69,11 @@ config CRYPTO_SM3_RISCV64
- 	  - Zvksh vector crypto extension
- 	  - Zvkb vector crypto extension
- 
- config CRYPTO_SM4_RISCV64
- 	tristate "Ciphers: SM4 (ShangMi 4)"
--	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
-+	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
- 	select CRYPTO_ALGAPI
- 	select CRYPTO_SM4
- 	help
- 	  SM4 block cipher algorithm (OSCCA GB/T 32907-2016,
- 	  ISO/IEC 18033-3:2010/Amd 1:2021)
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 2467dba73372..8c334c9f2081 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -1424,13 +1424,10 @@ endmenu
- 
- config CRYPTO_HASH_INFO
- 	bool
- 
- if !KMSAN # avoid false positives from assembly
--if RISCV
--source "arch/riscv/crypto/Kconfig"
--endif
- if S390
- source "arch/s390/crypto/Kconfig"
- endif
- if SPARC
- source "arch/sparc/crypto/Kconfig"
 -- 
 2.49.0
 
