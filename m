@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-11433-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11434-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCE99A92847
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 20:33:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41F25A9284E
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 20:33:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CAE3164D70
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 18:32:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BB9418884E3
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Apr 2025 18:33:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A7C267B91;
-	Thu, 17 Apr 2025 18:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5ED2686B9;
+	Thu, 17 Apr 2025 18:27:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rDsCxtn3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kEzKamQ7"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEDE267B16;
-	Thu, 17 Apr 2025 18:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7D9268699;
+	Thu, 17 Apr 2025 18:27:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744914432; cv=none; b=HMwxOsK9jj4bTesh6rP6/kDoWJUzm/4m6R5iN7g5arvz8etGiBzIJuRlwS2C3QGBTHYregKziabJRGaVXKrPqts0qR0oLDLT0NSzcoWN+5tZYSqlbnsSrqZ0RP642kC8HwLOIaAs9Ww37gcB7IzWZPTFYavfT3XVC9euwTumeiI=
+	t=1744914433; cv=none; b=Ct03/MvLqFLdWlD8i83ET51eKU3KvjZJPxCwegi4C8WZAr2wuOpgj8kBIB5WSqsmIsj72AhrbC2HlVBh6GePvcAfhNP5+IrEVdyoyX4Sxqhbe04+GfARBI+le8CkMUThFsmpxmLRfwHevyYuHTd/F5tcVg1apnWyXe0t0KFfQyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744914432; c=relaxed/simple;
-	bh=dsE7qfp3A3zmlcPG+tvm4sv24/L4ppO0aAJ6BZiEshE=;
+	s=arc-20240116; t=1744914433; c=relaxed/simple;
+	bh=UX4WI8EDuBMolYsjuDM2U8XKg5QnChDBXSYKd39EvNs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bmmTG08Z2RAdrtXWkDzbjADu+LZJuKb4ucBtoB3Vp4vZ1pLuVfdSgnpIkmR7bz0K6yPpVMhgtt7JfmCOdZDPzW4mvXaAguaQaMTSePGju6GeBJnvb/Iq3JA0NDlXRNn8bMu+W4ZXdaw8LXCNu4aLiJpa/A5pWLP9rOUTS0LMaEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rDsCxtn3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96532C4CEEA;
-	Thu, 17 Apr 2025 18:27:11 +0000 (UTC)
+	 MIME-Version; b=uQKcABfPU0/WP3MbhJjT1i+2mA47ixLWPCdVGvxHMKne0cE8GCFiJPcXtu6zUDij494vszC81LOjK0qObrhGO17Nns8StUyQQvWi3KpmPkc8Q9SWeJMe1QrBXO0LckGKQbVkeGmlysWpATNDZGytt8b0w0RJz7R3ikTa8LCeSfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kEzKamQ7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7754CC4CEE4;
+	Thu, 17 Apr 2025 18:27:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744914432;
-	bh=dsE7qfp3A3zmlcPG+tvm4sv24/L4ppO0aAJ6BZiEshE=;
+	s=k20201202; t=1744914433;
+	bh=UX4WI8EDuBMolYsjuDM2U8XKg5QnChDBXSYKd39EvNs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rDsCxtn3lebQV/DysLhlXFbm/jncgwomZE43WtxQP24LtFE9xOa6eiBclZTQg8gDA
-	 3i+j3v6r50KIUvO1d2f48AAFIoj4fUY/I6hS7t2+pB5aL99Y91V+Kzolg1S3dFzK1W
-	 YmIRVjS0t8vEJ6EiUPzxMajKFyxEWSlavCF2LEd6VhnTb/rYUhXfOqH5nXDNaDa8ni
-	 ar9klYXp61RWo3pSI30VW4AUilqd4McXNnCe0pDOHszpxAKhTden3pUGSby2brHFmP
-	 9x6UwlkgdIPBH9H34XsZtVKioNaIav0ZkUaIIrvvYZfYdw17pnWZSyakOtR5xQXcRz
-	 o04U7Rx5/k7vg==
+	b=kEzKamQ77+ydJivcumu5A0EVk/kXXWFfSMds2u7k1YTk1H+rF/67bqU+j+jJWKdl+
+	 Q2n7E/dnU6nc5VZ8aq76mLC/hUu6qr1DUvojFRMnBTG+hbecrgjHXxpJDYNWm7g372
+	 mmod6G58GI206xhh4cwUi5gmbRp9pUV4UvcKffRJAd/SAd+OZL0MArn+XZe+a+lWse
+	 WraOSg0kbetPV1xAm5FmZOqOUclZDEor8z8B8fJwgV0wrK0yHCkvuFiYjwgVictUSB
+	 YND7Tu4UPgsbBXF3UxPOsP1otOEQDGQ0geJEuAFCBu/GYCNhtmvhRyLJmhJesven4e
+	 nLNW8wApG8jyw==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: linux-arch@vger.kernel.org,
 	x86@kernel.org,
 	"Jason A . Donenfeld " <Jason@zx2c4.com>,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH 07/15] crypto: powerpc - remove CRYPTO dependency of library functions
-Date: Thu, 17 Apr 2025 11:26:15 -0700
-Message-ID: <20250417182623.67808-8-ebiggers@kernel.org>
+Subject: [PATCH 08/15] crypto: riscv - remove CRYPTO dependency of library functions
+Date: Thu, 17 Apr 2025 11:26:16 -0700
+Message-ID: <20250417182623.67808-9-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250417182623.67808-1-ebiggers@kernel.org>
 References: <20250417182623.67808-1-ebiggers@kernel.org>
@@ -73,136 +73,112 @@ From: Eric Biggers <ebiggers@google.com>
 
 Continue disentangling the crypto library functions from the generic
 crypto infrastructure by removing the unnecessary CRYPTO dependency of
-CRYPTO_CHACHA20_P10 and CRYPTO_POLY1305_P10.  To do this, make
-arch/powerpc/crypto/Kconfig be sourced regardless of CRYPTO, and
-explicitly list the CRYPTO dependency in the symbols that do need it.
+CRYPTO_CHACHA_RISCV64.  To do this, make arch/riscv/crypto/Kconfig be
+sourced regardless of CRYPTO, and explicitly list the CRYPTO dependency
+in the symbols that do need it.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/powerpc/Kconfig        |  2 ++
- arch/powerpc/crypto/Kconfig | 16 +++++++++-------
- crypto/Kconfig              |  3 ---
- 3 files changed, 11 insertions(+), 10 deletions(-)
+ arch/riscv/Kconfig        |  2 ++
+ arch/riscv/crypto/Kconfig | 12 ++++++------
+ crypto/Kconfig            |  3 ---
+ 3 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 6722625a406a..9ffd80880675 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -1346,8 +1346,10 @@ config PHYSICAL_START
- endif
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index bbec87b79309..baa7b8d98ed8 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -1349,8 +1349,10 @@ source "drivers/cpuidle/Kconfig"
  
- config PPC_LIB_RHEAP
- 	bool
+ source "drivers/cpufreq/Kconfig"
  
-+source "arch/powerpc/crypto/Kconfig"
+ endmenu # "CPU Power Management"
+ 
++source "arch/riscv/crypto/Kconfig"
 +
- source "arch/powerpc/kvm/Kconfig"
+ source "arch/riscv/kvm/Kconfig"
  
- source "kernel/livepatch/Kconfig"
-diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
-index 8bcc69013464..0f14bdf104d5 100644
---- a/arch/powerpc/crypto/Kconfig
-+++ b/arch/powerpc/crypto/Kconfig
+ source "drivers/acpi/Kconfig"
+diff --git a/arch/riscv/crypto/Kconfig b/arch/riscv/crypto/Kconfig
+index 27a1f26d41bd..08547694937c 100644
+--- a/arch/riscv/crypto/Kconfig
++++ b/arch/riscv/crypto/Kconfig
 @@ -2,11 +2,11 @@
  
- menu "Accelerated Cryptographic Algorithms for CPU (powerpc)"
+ menu "Accelerated Cryptographic Algorithms for CPU (riscv)"
  
- config CRYPTO_CURVE25519_PPC64
- 	tristate
--	depends on PPC64 && CPU_LITTLE_ENDIAN
-+	depends on CRYPTO && PPC64 && CPU_LITTLE_ENDIAN
- 	select CRYPTO_KPP
- 	select CRYPTO_LIB_CURVE25519_GENERIC
- 	select CRYPTO_ARCH_HAVE_LIB_CURVE25519
- 	default CRYPTO_LIB_CURVE25519_INTERNAL
- 	help
-@@ -15,46 +15,48 @@ config CRYPTO_CURVE25519_PPC64
- 	  Architecture: PowerPC64
- 	  - Little-endian
- 
- config CRYPTO_MD5_PPC
- 	tristate "Digests: MD5"
-+	depends on CRYPTO
- 	select CRYPTO_HASH
- 	help
- 	  MD5 message digest algorithm (RFC1321)
- 
- 	  Architecture: powerpc
- 
- config CRYPTO_SHA1_PPC
- 	tristate "Hash functions: SHA-1"
-+	depends on CRYPTO
- 	help
- 	  SHA-1 secure hash algorithm (FIPS 180)
- 
- 	  Architecture: powerpc
- 
- config CRYPTO_SHA1_PPC_SPE
- 	tristate "Hash functions: SHA-1 (SPE)"
--	depends on SPE
-+	depends on CRYPTO && SPE
- 	help
- 	  SHA-1 secure hash algorithm (FIPS 180)
- 
- 	  Architecture: powerpc using
- 	  - SPE (Signal Processing Engine) extensions
- 
- config CRYPTO_SHA256_PPC_SPE
- 	tristate "Hash functions: SHA-224 and SHA-256 (SPE)"
--	depends on SPE
-+	depends on CRYPTO && SPE
- 	select CRYPTO_SHA256
- 	select CRYPTO_HASH
- 	help
- 	  SHA-224 and SHA-256 secure hash algorithms (FIPS 180)
- 
- 	  Architecture: powerpc using
- 	  - SPE (Signal Processing Engine) extensions
- 
- config CRYPTO_AES_PPC_SPE
- 	tristate "Ciphers: AES, modes: ECB/CBC/CTR/XTS (SPE)"
--	depends on SPE
-+	depends on CRYPTO && SPE
- 	select CRYPTO_SKCIPHER
- 	help
- 	  Block ciphers: AES cipher algorithms (FIPS-197)
- 	  Length-preserving ciphers: AES with ECB, CBC, CTR, and XTS modes
- 
-@@ -72,11 +74,11 @@ config CRYPTO_AES_PPC_SPE
- 	  architecture specific assembler implementations that work on 1KB
- 	  tables or 256 bytes S-boxes.
- 
- config CRYPTO_AES_GCM_P10
- 	tristate "Stitched AES/GCM acceleration support on P10 or later CPU (PPC)"
--	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
-+	depends on CRYPTO && PPC64 && CPU_LITTLE_ENDIAN && VSX
- 	select CRYPTO_LIB_AES
+ config CRYPTO_AES_RISCV64
+ 	tristate "Ciphers: AES, modes: ECB, CBC, CTS, CTR, XTS"
+-	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
++	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
  	select CRYPTO_ALGAPI
- 	select CRYPTO_AEAD
+ 	select CRYPTO_LIB_AES
  	select CRYPTO_SKCIPHER
- 	select CRYPTO_SIMD
-@@ -104,17 +106,17 @@ config CRYPTO_POLY1305_P10
- 	select CRYPTO_LIB_POLY1305_GENERIC
- 	default CRYPTO_LIB_POLY1305_INTERNAL
+ 	help
+ 	  Block cipher: AES cipher algorithms
+@@ -25,43 +25,43 @@ config CRYPTO_CHACHA_RISCV64
+ 	select CRYPTO_LIB_CHACHA_GENERIC
+ 	default CRYPTO_LIB_CHACHA_INTERNAL
  
- config CRYPTO_DEV_VMX
-         bool "Support for VMX cryptographic acceleration instructions"
--        depends on PPC64 && VSX
-+        depends on CRYPTO && PPC64 && VSX
-         help
-           Support for VMX cryptographic acceleration instructions.
+ config CRYPTO_GHASH_RISCV64
+ 	tristate "Hash functions: GHASH"
+-	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
++	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	select CRYPTO_GCM
+ 	help
+ 	  GCM GHASH function (NIST SP 800-38D)
  
- config CRYPTO_DEV_VMX_ENCRYPT
- 	tristate "Encryption acceleration support on P8 CPU"
--	depends on CRYPTO_DEV_VMX
-+	depends on CRYPTO && CRYPTO_DEV_VMX
- 	select CRYPTO_AES
- 	select CRYPTO_CBC
- 	select CRYPTO_CTR
- 	select CRYPTO_GHASH
- 	select CRYPTO_XTS
+ 	  Architecture: riscv64 using:
+ 	  - Zvkg vector crypto extension
+ 
+ config CRYPTO_SHA256_RISCV64
+ 	tristate "Hash functions: SHA-224 and SHA-256"
+-	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
++	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	select CRYPTO_SHA256
+ 	help
+ 	  SHA-224 and SHA-256 secure hash algorithm (FIPS 180)
+ 
+ 	  Architecture: riscv64 using:
+ 	  - Zvknha or Zvknhb vector crypto extensions
+ 	  - Zvkb vector crypto extension
+ 
+ config CRYPTO_SHA512_RISCV64
+ 	tristate "Hash functions: SHA-384 and SHA-512"
+-	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
++	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	select CRYPTO_SHA512
+ 	help
+ 	  SHA-384 and SHA-512 secure hash algorithm (FIPS 180)
+ 
+ 	  Architecture: riscv64 using:
+ 	  - Zvknhb vector crypto extension
+ 	  - Zvkb vector crypto extension
+ 
+ config CRYPTO_SM3_RISCV64
+ 	tristate "Hash functions: SM3 (ShangMi 3)"
+-	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
++	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	select CRYPTO_HASH
+ 	select CRYPTO_LIB_SM3
+ 	help
+ 	  SM3 (ShangMi 3) secure hash function (OSCCA GM/T 0004-2012)
+ 
+@@ -69,11 +69,11 @@ config CRYPTO_SM3_RISCV64
+ 	  - Zvksh vector crypto extension
+ 	  - Zvkb vector crypto extension
+ 
+ config CRYPTO_SM4_RISCV64
+ 	tristate "Ciphers: SM4 (ShangMi 4)"
+-	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
++	depends on CRYPTO && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	select CRYPTO_ALGAPI
+ 	select CRYPTO_SM4
+ 	help
+ 	  SM4 block cipher algorithm (OSCCA GB/T 32907-2016,
+ 	  ISO/IEC 18033-3:2010/Amd 1:2021)
 diff --git a/crypto/Kconfig b/crypto/Kconfig
-index cfa426bea0c6..2467dba73372 100644
+index 2467dba73372..8c334c9f2081 100644
 --- a/crypto/Kconfig
 +++ b/crypto/Kconfig
 @@ -1424,13 +1424,10 @@ endmenu
@@ -211,14 +187,14 @@ index cfa426bea0c6..2467dba73372 100644
  	bool
  
  if !KMSAN # avoid false positives from assembly
--if PPC
--source "arch/powerpc/crypto/Kconfig"
+-if RISCV
+-source "arch/riscv/crypto/Kconfig"
 -endif
- if RISCV
- source "arch/riscv/crypto/Kconfig"
- endif
  if S390
  source "arch/s390/crypto/Kconfig"
+ endif
+ if SPARC
+ source "arch/sparc/crypto/Kconfig"
 -- 
 2.49.0
 
