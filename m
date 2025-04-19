@@ -1,61 +1,72 @@
-Return-Path: <linux-arch+bounces-11459-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11460-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97D6DA93EF2
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Apr 2025 22:31:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 391EDA9410B
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Apr 2025 04:41:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4450219E240C
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Apr 2025 20:31:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6304F8A4D68
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Apr 2025 02:40:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02D91DFD8F;
-	Fri, 18 Apr 2025 20:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0AB81C6B4;
+	Sat, 19 Apr 2025 02:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qb6LSmgg"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="rmQd0n5F"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A284115442A;
-	Fri, 18 Apr 2025 20:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A2E5CB8;
+	Sat, 19 Apr 2025 02:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745008288; cv=none; b=Z6qME4fExJqgbfZ/gNCepjdqssdyDJinGuM+F4NJT1VooSUQ9x7EmFDYOCtzghIP+haKub+9YAxS9NxbLEuf4GXOCY7GURawyrprH5k5YIlLeo0i19r1kU2I1CVRMT7A34/C7VPRYRPObuKvQFLPh8q6DTCdXlqTxBXtp1xUhXk=
+	t=1745030466; cv=none; b=V8SSRkrIFrOCw7E0jmJc0cd9RVGGjzj7Icw5pEm3AB16B+N4ASncYWY0spz+wpiT7eUEEN24b8o+WNVqIRMnz1nqwCsSLXwL/5Rgnp+Jm3sMJKvsJTW7wGxEHEuPf/bR9Q5CdcPat3b2quGfP9WuLDC6QtC/xS7u/i6Ssb31/1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745008288; c=relaxed/simple;
-	bh=wELnVyTVL2FqP9LKt5SM0oQf4e2o1QQDJ0QFtTDfFUM=;
+	s=arc-20240116; t=1745030466; c=relaxed/simple;
+	bh=zJ1i0szTujFfqZn7VlvO1q7cBVSlvqSyecXXOuogdHk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e9rH0lNOfsQvuO43AAyhTFIufjxn03vr97qHEJ0Np08loiuNRPmezjdAAUy86mUllYb5E1pX+J1GyTWWaEHeVRDLDu33oJk85Wxz0nQjWbXxdGiYSCUlq8XT3oto3ANUwGdsaYdvrh/pTVEx3G1Wi36PM3tdzCpkU2PD37NB8ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qb6LSmgg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79AEBC4CEE2;
-	Fri, 18 Apr 2025 20:31:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745008288;
-	bh=wELnVyTVL2FqP9LKt5SM0oQf4e2o1QQDJ0QFtTDfFUM=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=qb6LSmgguHO/yOqGONGIYCqvLAJN22BVVDDQbytDIaDtPyqrfqN40kKwTEORR88Or
-	 hxqiQBkO9t4mC+ylYRe6m7ndbtqdv9TYhYcmM8deJCCUGRjqx7XrSnFFiwepFziX8p
-	 4eDHbMa81YyKJajBQP0UT/ip0b9VMUAX7RuDNnQVNXxs5klU2E55p07m0IyIQFRZwc
-	 0if3Lm4sSBMqlTEZEssnr9YapbEn6p6Y4Tt2N+/ZelRXdcfyFTqr1GxI83NlXNxxtY
-	 UI3I1JFVbfKs2/DKBnexXrbODbM0iGU4eq7b1byILi6fdLKTOXGlcHs9XSyVySvE7W
-	 8w9urmYEE2/Ww==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 19EE5CE077B; Fri, 18 Apr 2025 13:31:28 -0700 (PDT)
-Date: Fri, 18 Apr 2025 13:31:28 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Andrea Parri <parri.andrea@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	lkmm@lists.linux.dev, kernel-team@meta.com, mingo@kernel.org,
-	stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
-	boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-	j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: [PATCH 0/4] LKMM documentation updates for v6.16
-Message-ID: <67aebf50-68a7-459d-819b-13b9721ec051@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <cd7fb2c4-1895-455c-84f8-8ed7252b93ff@paulmck-laptop>
- <aAKaAXQApP8JoQkL@andrea>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s9wakLmMMijnCydMuQKD7MjIfhyZ2AdQ8XOYRv9AUvxf//h9K6caETYHA1MKpbfUzFlNH/ehMvxudd/rod4vaK2j++rA1tYhuZ73tzebft3PS0jClgqBFL+nc5cmI7XJB7hUocJPGZEvbsiPGUjniCOOslQooWwgltSc9bBqRH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=rmQd0n5F; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=N71ulJFC7EzRy4IJC7JSkf+9aBSGBV5BXmKIuPUJx7U=; b=rmQd0n5Ffd7wgXc5CRfMsYvfej
+	vy0M0uiUROHxK3PxU1ELCUZ55bqRS7IKOzdkIx2x/h3kf6i7ueq2uF2iXk+esRyER676Vn8nn6HPl
+	/EUIRrt1qKRpgU7dPHA+0/rAdhZq8SqQqgwdPs18fXqmj5Vc6DfqBTMqCH2VeKeOqjtpsk1uVQdTB
+	7C97E7AWZ+VRMuouNeTm66I/v/5mhb++Kjp8acKAz23ZX1T1sTBZddTZjuWyEHiOyEpxbSEZiqzYd
+	8FLG2KSwbrYBgiH88lXTv2vFiWUXkF2HqN7hW+YAXzbLMgU3rYK+eiYH+SBvpg8M1ru6r24TM8ix6
+	GC1QefCQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1u5y8W-00Gtuw-1E;
+	Sat, 19 Apr 2025 10:40:57 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 19 Apr 2025 10:40:56 +0800
+Date: Sat, 19 Apr 2025 10:40:56 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-crypto@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+	x86@kernel.org, Jason@zx2c4.com, ardb@kernel.org
+Subject: Re: [PATCH 01/15] crypto: arm - remove CRYPTO dependency of library
+ functions
+Message-ID: <aAMNOJa-xcxLrmgX@gondor.apana.org.au>
+References: <20250417182623.67808-2-ebiggers@kernel.org>
+ <aAHDIRlSNLsYYZmW@gondor.apana.org.au>
+ <20250418033236.GB38960@quark.localdomain>
+ <aAHJRszwcQ4UyQ2e@gondor.apana.org.au>
+ <20250418040931.GD38960@quark.localdomain>
+ <aAIMhLD3UMM41JkT@gondor.apana.org.au>
+ <20250418150149.GB1890@quark.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,28 +75,17 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aAKaAXQApP8JoQkL@andrea>
+In-Reply-To: <20250418150149.GB1890@quark.localdomain>
 
-On Fri, Apr 18, 2025 at 08:30:42PM +0200, Andrea Parri wrote:
-> On Fri, Apr 18, 2025 at 10:29:53AM -0700, Paul E. McKenney wrote:
-> > Hello!
-> > 
-> > This series provides the following documentation updates, all courtesy
-> > of Akira Yokosawa:
-> > 
-> > 1.	docs/README: Update introduction of locking.txt.
-> > 
-> > 2.	docs/simple.txt: Fix trivial typos.
-> > 
-> > 3.	docs/ordering: Fix trivial typos.
-> > 
-> > 4.	docs/references: Remove broken link to imgtec.com.
-> 
-> Thanks for the updates; for this series,
-> 
-> Acked-by: Andrea Parri <parri.andrea@gmail.com>
+On Fri, Apr 18, 2025 at 08:01:49AM -0700, Eric Biggers wrote:
+>
+> Doing it as a follow-up when this series hasn't been merged yet would be kind of
+> silly, since it would undo a lot of this series.  I'll just send out a v2 of
+> this series.
 
-Thank you!  I will apply this on my next rebase.
-
-							Thanx, Paul
+OK that's fine too of course.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
