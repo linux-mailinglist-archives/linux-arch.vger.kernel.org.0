@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-11462-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11463-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0141CA9490A
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 21:27:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2F2FA94910
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 21:27:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A2FF7A720F
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 19:26:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1C4B170A7D
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 19:27:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53649214810;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C070D21480C;
 	Sun, 20 Apr 2025 19:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o9TI7aC0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E2xZ4KW5"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A46C2147E6;
-	Sun, 20 Apr 2025 19:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF1A214A7B;
+	Sun, 20 Apr 2025 19:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745177258; cv=none; b=chndl2t9DrSRKiQTn6aEDpLYa4trqBoxQmU0CDPKK8QtUMIqYYhDxt29aZgrdkLITy4NqUcWAzXPpfcWQjZNpiKGRokPMQGMNalb645MXKKSobt6GsHwAmLgjePdOqovm6OmsNH4pC2huChBB1OMMTxsAl/50Y8B3A1DFf1Je/k=
+	t=1745177258; cv=none; b=Rcx1/LcSYk9v02tTTCV5xfRSPh1Dcd/c52dtIADguwAGsIcc4GQK4RTEv3L3JNFtf/hqS5GEPQLpLQTzOsSJHuCMNuPvkZmvgGSFudJEOowWlxgepEQXRcGPDxWfPb8MWsKm7tQpO5FbwuTGjCs8ot9ZSEYTtS5P96cUWt5wolk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745177258; c=relaxed/simple;
-	bh=ySujzJwEjUZrj9er8XlrWX/11KoXjZIlZ2vhV5/jq10=;
+	bh=Wsz8KfnWpKz3RjYagwsQwuMx7mcDuZ3DmLJCHCvCnLk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Kg+jgBV+tGceGep+dv7oitBlvYGRmrCQDnGrPlIIB6Nlvwem8ki8gE1ehEMFk0jXP117ow+lXYVT0dDbWdwUcWmOKWyQNkQcEKMjHRsowPqHAUVERYZ5dlpqdP4HU31airJL/QlzExdCFNaVuenUjF6MgzQJsVXt66mml+xt6cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o9TI7aC0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A345C4CEF0;
+	 MIME-Version; b=igWFD4axyIqlU47IjYhvHzDVWdpNjAdPAP1DqNJI5vJRgCWdxtr2Ng2RVt2A+e16xnSoIIEeshdmsM/H3qy++YIynIrRYSWEXEFWWDr0C0/qAuaTbj0j1nGaU4Z0SSt9E472u8CxnPCdF0lpr1OyRE1a8PNFP0/IBE2EwzeXOE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E2xZ4KW5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88EFC4CEF2;
 	Sun, 20 Apr 2025 19:27:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745177257;
-	bh=ySujzJwEjUZrj9er8XlrWX/11KoXjZIlZ2vhV5/jq10=;
+	s=k20201202; t=1745177258;
+	bh=Wsz8KfnWpKz3RjYagwsQwuMx7mcDuZ3DmLJCHCvCnLk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=o9TI7aC0W6sDFYjdwFetT0Htr1lKbZ7CRIb92PqjTlyPCPRl834rlsPq4Upa7TwVU
-	 KUK3O17RKKGtV9jgwuXyKmuOVSZQqgsouS72xWZ2DXYXR2p3aaop7Z/twb1Pp2xNrh
-	 VSR8kglU79GjgMfqghQnbKAFMEFT6wrVHmrnbFNrAdKrNv8Ow9NZ1Wk+PQCHs+Ubwf
-	 05CeLhHFtz4u9QqW+2DLK5sXGu72F+lpuVxsqScpn5fKKuKiGEaQkcwCdA9aHHDDv0
-	 KmyWrMC+UAVURp3ysmv/Bn5eXgycy3Jqe2p8DBklv3xLuCGcbUhveQqhNiOlXVgRYj
-	 y//Xcbxc8AzVw==
+	b=E2xZ4KW5Pp6GY/TWizi6GAOOXMZzDb5wjHT++8poogg5/85P9lO38XFXkIkTyJidR
+	 94z2Ah7sF4UvG3kioylNC8LbE17K+iuEdbZ5tCXkenLerrhreO4+VGH2wXRdIPVynv
+	 OLo1yy3vEIgsLZZ44hNSqAv7xog5qZ6wshOeEjGEGI55ke8xourKat6MoUhaZ0vZI0
+	 AzDHJ5R7NXKhaunnB9eeyAiOHktkhimLjnL55dtZrAB0LWczGZu/OkRfXmJAbkmR/w
+	 XFxLJvu5AyYntgJSpWFP9Jdq6V2iJfF/7anZPtGfK9IvUGKNFzQ+UonFs0oZblHKBS
+	 U0U/IkR8RwExA==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-arch@vger.kernel.org,
 	x86@kernel.org,
 	"Jason A . Donenfeld" <Jason@zx2c4.com>,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v2 01/13] crypto: arm64 - drop redundant dependencies on ARM64
-Date: Sun, 20 Apr 2025 12:25:57 -0700
-Message-ID: <20250420192609.295075-2-ebiggers@kernel.org>
+Subject: [PATCH v2 02/13] crypto: powerpc - drop redundant dependencies on PPC
+Date: Sun, 20 Apr 2025 12:25:58 -0700
+Message-ID: <20250420192609.295075-3-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250420192609.295075-1-ebiggers@kernel.org>
 References: <20250420192609.295075-1-ebiggers@kernel.org>
@@ -69,45 +69,71 @@ Content-Transfer-Encoding: 8bit
 
 From: Eric Biggers <ebiggers@google.com>
 
-arch/arm64/crypto/Kconfig is sourced only when CONFIG_ARM64=y, so there
-is no need for the symbols defined inside it to depend on ARM64.
+arch/powerpc/crypto/Kconfig is sourced only when CONFIG_PPC=y, so there
+is no need for the symbols defined inside it to depend on PPC.
 
 Acked-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/arm64/crypto/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/powerpc/crypto/Kconfig | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
-index 7c2f63f2e3072..704d0b7e1d137 100644
---- a/arch/arm64/crypto/Kconfig
-+++ b/arch/arm64/crypto/Kconfig
-@@ -135,11 +135,11 @@ config CRYPTO_AES_ARM64
+diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
+index cbcf76953d835..8bcc690134644 100644
+--- a/arch/powerpc/crypto/Kconfig
++++ b/arch/powerpc/crypto/Kconfig
+@@ -15,48 +15,46 @@ config CRYPTO_CURVE25519_PPC64
+ 	  Architecture: PowerPC64
+ 	  - Little-endian
  
- 	  Architecture: arm64
+ config CRYPTO_MD5_PPC
+ 	tristate "Digests: MD5"
+-	depends on PPC
+ 	select CRYPTO_HASH
+ 	help
+ 	  MD5 message digest algorithm (RFC1321)
  
- config CRYPTO_AES_ARM64_CE
- 	tristate "Ciphers: AES (ARMv8 Crypto Extensions)"
--	depends on ARM64 && KERNEL_MODE_NEON
-+	depends on KERNEL_MODE_NEON
- 	select CRYPTO_ALGAPI
- 	select CRYPTO_LIB_AES
+ 	  Architecture: powerpc
+ 
+ config CRYPTO_SHA1_PPC
+ 	tristate "Hash functions: SHA-1"
+-	depends on PPC
+ 	help
+ 	  SHA-1 secure hash algorithm (FIPS 180)
+ 
+ 	  Architecture: powerpc
+ 
+ config CRYPTO_SHA1_PPC_SPE
+ 	tristate "Hash functions: SHA-1 (SPE)"
+-	depends on PPC && SPE
++	depends on SPE
+ 	help
+ 	  SHA-1 secure hash algorithm (FIPS 180)
+ 
+ 	  Architecture: powerpc using
+ 	  - SPE (Signal Processing Engine) extensions
+ 
+ config CRYPTO_SHA256_PPC_SPE
+ 	tristate "Hash functions: SHA-224 and SHA-256 (SPE)"
+-	depends on PPC && SPE
++	depends on SPE
+ 	select CRYPTO_SHA256
+ 	select CRYPTO_HASH
+ 	help
+ 	  SHA-224 and SHA-256 secure hash algorithms (FIPS 180)
+ 
+ 	  Architecture: powerpc using
+ 	  - SPE (Signal Processing Engine) extensions
+ 
+ config CRYPTO_AES_PPC_SPE
+ 	tristate "Ciphers: AES, modes: ECB/CBC/CTR/XTS (SPE)"
+-	depends on PPC && SPE
++	depends on SPE
+ 	select CRYPTO_SKCIPHER
  	help
  	  Block ciphers: AES cipher algorithms (FIPS-197)
+ 	  Length-preserving ciphers: AES with ECB, CBC, CTR, and XTS modes
  
-@@ -252,11 +252,11 @@ config CRYPTO_SM4_ARM64_NEON_BLK
- 	  Architecture: arm64 using:
- 	  - NEON (Advanced SIMD) extensions
- 
- config CRYPTO_AES_ARM64_CE_CCM
- 	tristate "AEAD cipher: AES in CCM mode (ARMv8 Crypto Extensions)"
--	depends on ARM64 && KERNEL_MODE_NEON
-+	depends on KERNEL_MODE_NEON
- 	select CRYPTO_ALGAPI
- 	select CRYPTO_AES_ARM64_CE
- 	select CRYPTO_AES_ARM64_CE_BLK
- 	select CRYPTO_AEAD
- 	select CRYPTO_LIB_AES
 -- 
 2.49.0
 
