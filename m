@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-11469-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11470-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1653A9493E
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 21:29:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F499A94941
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 21:29:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35CB03AF52F
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 19:28:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B39373AE11A
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 19:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3210C21A94F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2F721B18C;
 	Sun, 20 Apr 2025 19:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R8RoY7Xk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCkUDe2S"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF29219A9B;
-	Sun, 20 Apr 2025 19:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B93F2147E6;
+	Sun, 20 Apr 2025 19:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745177261; cv=none; b=i3VGgcJiKLLyyaIGQt9KVtMq6UtHUcBaUwVYbPDpwscEGufjJHIJWTaHcY3ZCCZsTUFyjMn1DEG1IpbFGVdsz/jGHecT/7pgN2KXrw2L8Kb8U+IN8s+u79b7g2oGj3gd9VIhvH09Lp/J+0l8vPpqss4m8tDvemhxRWvJqhTTkV0=
+	t=1745177261; cv=none; b=faJ/Oy7tZC6UxulyVtTW+n3ChDM2vCA14hq3syH1oI37cdUQpIctd5hmGtmBBQiCpSdFBkvZXBq4+BqxAbQvoBaMdNn8ELEnCN3EaZ1+9xSvINsMeEdwkW8WK3Fu7WtlkOSB9bwOkijf9gj+8TDTlCZ740PBNgvl+rcWPZg2MVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745177261; c=relaxed/simple;
-	bh=J8uCpavgYu/bq2A7Hf4ZA97H/cAunDf26vqUDG1MGLQ=;
+	bh=JceMeyvHZFS3hU3osMnM8DtDXrhU/UjeqoFMt/NCYhM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DIoXLyDJKv2f+8hTNUjcgaTDAUe0hLRIY2y/yivXsXUxdO2P3RBhYtVvpU0BuVoVFGdsdu2/wcaZpk4ApKVJrqGSH6kzu0Bk+CmCpm2oXM/bldBNOc30m4sih+JPSx+gGY2tIeUKpc/8NBWZi9xz0b4t8pn0omY3LblBuyFkVhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R8RoY7Xk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80162C4CEE9;
+	 MIME-Version; b=JZr1jFTTwq++N6CW0+xpsw02rfhgt/UguapcIctYX3YjGGb35Kc3o4Dgz/rPqpO8CKGpPHNqulWbK8HyltwqnmKtN8/ACM2mVa3Meum343U8ECi+VxMuQQDY3wOTptJAD5gDqEBTERzmvXdglgIX+qgmjRQLB+XEV3fgRCw8u2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZCkUDe2S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F183DC4CEED;
 	Sun, 20 Apr 2025 19:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745177260;
-	bh=J8uCpavgYu/bq2A7Hf4ZA97H/cAunDf26vqUDG1MGLQ=;
+	s=k20201202; t=1745177261;
+	bh=JceMeyvHZFS3hU3osMnM8DtDXrhU/UjeqoFMt/NCYhM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R8RoY7Xk2+HzXh2P2QjIH6yktKf9tZx4Ejn9TAliuEFKa5F0exi9scB4GGLALnRu0
-	 eQ/+oEJutbwcOIXF33IuZ7DJ+XYAw8Xd6M+D2NJWgfrdQLdwmH9iIuYieO5CDd7xso
-	 SMDVKYgDEBMo8Q63lZmhCQyrSyPzgNvPQKMzSoh/DEdYdwjj3kiDpAGHSRZVu3Cc2k
-	 XGRaxcvD5dUdB1pIBzYsWi91SjOEXakj39zXjJTHfCbO4T9B1U5kWm/HwfRrZuH8u9
-	 dGB4IeL8LC60qso9q9iPRiDH91gggajuaDGTrq7yVzQCpLLteklDVj4RlAskIk9jng
-	 Oo+4oz+SGLnVQ==
+	b=ZCkUDe2S72itq2OYuxxdcNB38pxf0twZvxcIytZW+K9b6WjYA0TAIwlMai/eahJAx
+	 w8hnWfFuUPwQIEWcmraLbu+8LuMqAmesx2H0tNclifUpqnw3RlSCtQJQXl7qosnV2B
+	 X9dfT634nEyucjsrsXXn2P/ZQhmdjtoJhC5zA8zcTDZzetaY0MekSgwZdqf1NxO2DG
+	 rGjDYkc5mRCzY0avNxgFZx69VsIWcl/xjeGBuZUOG9mWyOjDRjtgn9xGXhXEkHed9d
+	 0Qkk02QD/yLL5xsi23VAlR3hd1WRfL/GqaURyDQikpiyFjKT3o0P20ZHdJC6pdJW+2
+	 BorTK//xE0hgg==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-arch@vger.kernel.org,
 	x86@kernel.org,
 	"Jason A . Donenfeld" <Jason@zx2c4.com>,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v2 08/13] crypto: powerpc - move library functions to arch/powerpc/lib/crypto/
-Date: Sun, 20 Apr 2025 12:26:04 -0700
-Message-ID: <20250420192609.295075-9-ebiggers@kernel.org>
+Subject: [PATCH v2 09/13] crypto: riscv - move library functions to arch/riscv/lib/crypto/
+Date: Sun, 20 Apr 2025 12:26:05 -0700
+Message-ID: <20250420192609.295075-10-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250420192609.295075-1-ebiggers@kernel.org>
 References: <20250420192609.295075-1-ebiggers@kernel.org>
@@ -70,167 +70,122 @@ Content-Transfer-Encoding: 8bit
 From: Eric Biggers <ebiggers@google.com>
 
 Continue disentangling the crypto library functions from the generic
-crypto infrastructure by moving the powerpc ChaCha and Poly1305 library
-functions into a new directory arch/powerpc/lib/crypto/ that does not
-depend on CRYPTO.  This mirrors the distinction between crypto/ and
-lib/crypto/.
+crypto infrastructure by moving the riscv ChaCha library functions into
+a new directory arch/riscv/lib/crypto/ that does not depend on CRYPTO.
+This mirrors the distinction between crypto/ and lib/crypto/.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/powerpc/crypto/Kconfig                       | 14 --------------
- arch/powerpc/crypto/Makefile                      |  4 ----
- arch/powerpc/lib/Makefile                         |  2 ++
- arch/powerpc/lib/crypto/Kconfig                   | 15 +++++++++++++++
- arch/powerpc/lib/crypto/Makefile                  |  7 +++++++
- arch/powerpc/{ => lib}/crypto/chacha-p10-glue.c   |  0
- arch/powerpc/{ => lib}/crypto/chacha-p10le-8x.S   |  0
- arch/powerpc/{ => lib}/crypto/poly1305-p10-glue.c |  0
- arch/powerpc/{ => lib}/crypto/poly1305-p10le_64.S |  0
- lib/crypto/Kconfig                                |  3 +++
- 10 files changed, 27 insertions(+), 18 deletions(-)
- create mode 100644 arch/powerpc/lib/crypto/Kconfig
- create mode 100644 arch/powerpc/lib/crypto/Makefile
- rename arch/powerpc/{ => lib}/crypto/chacha-p10-glue.c (100%)
- rename arch/powerpc/{ => lib}/crypto/chacha-p10le-8x.S (100%)
- rename arch/powerpc/{ => lib}/crypto/poly1305-p10-glue.c (100%)
- rename arch/powerpc/{ => lib}/crypto/poly1305-p10le_64.S (100%)
+ arch/riscv/crypto/Kconfig                         | 7 -------
+ arch/riscv/crypto/Makefile                        | 3 ---
+ arch/riscv/lib/Makefile                           | 1 +
+ arch/riscv/lib/crypto/Kconfig                     | 8 ++++++++
+ arch/riscv/lib/crypto/Makefile                    | 4 ++++
+ arch/riscv/{ => lib}/crypto/chacha-riscv64-glue.c | 0
+ arch/riscv/{ => lib}/crypto/chacha-riscv64-zvkb.S | 0
+ lib/crypto/Kconfig                                | 3 +++
+ 8 files changed, 16 insertions(+), 10 deletions(-)
+ create mode 100644 arch/riscv/lib/crypto/Kconfig
+ create mode 100644 arch/riscv/lib/crypto/Makefile
+ rename arch/riscv/{ => lib}/crypto/chacha-riscv64-glue.c (100%)
+ rename arch/riscv/{ => lib}/crypto/chacha-riscv64-zvkb.S (100%)
 
-diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
-index 8bcc690134644..4bf7b01228e72 100644
---- a/arch/powerpc/crypto/Kconfig
-+++ b/arch/powerpc/crypto/Kconfig
-@@ -88,24 +88,10 @@ config CRYPTO_AES_GCM_P10
- 	    - Power10 or later features
+diff --git a/arch/riscv/crypto/Kconfig b/arch/riscv/crypto/Kconfig
+index 27a1f26d41bde..4863be2a4ec2f 100644
+--- a/arch/riscv/crypto/Kconfig
++++ b/arch/riscv/crypto/Kconfig
+@@ -16,17 +16,10 @@ config CRYPTO_AES_RISCV64
+ 	  - Zvkned vector crypto extension
+ 	  - Zvbb vector extension (XTS)
+ 	  - Zvkb vector crypto extension (CTR)
+ 	  - Zvkg vector crypto extension (XTS)
  
- 	  Support for cryptographic acceleration instructions on Power10 or
- 	  later CPU. This module supports stitched acceleration for AES/GCM.
- 
--config CRYPTO_CHACHA20_P10
+-config CRYPTO_CHACHA_RISCV64
 -	tristate
--	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
--	select CRYPTO_LIB_CHACHA_GENERIC
+-	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
 -	select CRYPTO_ARCH_HAVE_LIB_CHACHA
+-	select CRYPTO_LIB_CHACHA_GENERIC
 -	default CRYPTO_LIB_CHACHA_INTERNAL
 -
--config CRYPTO_POLY1305_P10
--	tristate
--	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
--	select CRYPTO_ARCH_HAVE_LIB_POLY1305
--	select CRYPTO_LIB_POLY1305_GENERIC
--	default CRYPTO_LIB_POLY1305_INTERNAL
+ config CRYPTO_GHASH_RISCV64
+ 	tristate "Hash functions: GHASH"
+ 	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	select CRYPTO_GCM
+ 	help
+diff --git a/arch/riscv/crypto/Makefile b/arch/riscv/crypto/Makefile
+index 247c7bc7288ce..4ae9bf762e907 100644
+--- a/arch/riscv/crypto/Makefile
++++ b/arch/riscv/crypto/Makefile
+@@ -2,13 +2,10 @@
+ 
+ obj-$(CONFIG_CRYPTO_AES_RISCV64) += aes-riscv64.o
+ aes-riscv64-y := aes-riscv64-glue.o aes-riscv64-zvkned.o \
+ 		 aes-riscv64-zvkned-zvbb-zvkg.o aes-riscv64-zvkned-zvkb.o
+ 
+-obj-$(CONFIG_CRYPTO_CHACHA_RISCV64) += chacha-riscv64.o
+-chacha-riscv64-y := chacha-riscv64-glue.o chacha-riscv64-zvkb.o
 -
- config CRYPTO_DEV_VMX
-         bool "Support for VMX cryptographic acceleration instructions"
-         depends on PPC64 && VSX
-         help
-           Support for VMX cryptographic acceleration instructions.
-diff --git a/arch/powerpc/crypto/Makefile b/arch/powerpc/crypto/Makefile
-index 2f00b22b0823e..f13aec8a18335 100644
---- a/arch/powerpc/crypto/Makefile
-+++ b/arch/powerpc/crypto/Makefile
-@@ -9,23 +9,19 @@ obj-$(CONFIG_CRYPTO_AES_PPC_SPE) += aes-ppc-spe.o
- obj-$(CONFIG_CRYPTO_MD5_PPC) += md5-ppc.o
- obj-$(CONFIG_CRYPTO_SHA1_PPC) += sha1-powerpc.o
- obj-$(CONFIG_CRYPTO_SHA1_PPC_SPE) += sha1-ppc-spe.o
- obj-$(CONFIG_CRYPTO_SHA256_PPC_SPE) += sha256-ppc-spe.o
- obj-$(CONFIG_CRYPTO_AES_GCM_P10) += aes-gcm-p10-crypto.o
--obj-$(CONFIG_CRYPTO_CHACHA20_P10) += chacha-p10-crypto.o
--obj-$(CONFIG_CRYPTO_POLY1305_P10) += poly1305-p10-crypto.o
- obj-$(CONFIG_CRYPTO_DEV_VMX_ENCRYPT) += vmx-crypto.o
- obj-$(CONFIG_CRYPTO_CURVE25519_PPC64) += curve25519-ppc64le.o
+ obj-$(CONFIG_CRYPTO_GHASH_RISCV64) += ghash-riscv64.o
+ ghash-riscv64-y := ghash-riscv64-glue.o ghash-riscv64-zvkg.o
  
- aes-ppc-spe-y := aes-spe-core.o aes-spe-keys.o aes-tab-4k.o aes-spe-modes.o aes-spe-glue.o
- md5-ppc-y := md5-asm.o md5-glue.o
- sha1-powerpc-y := sha1-powerpc-asm.o sha1.o
- sha1-ppc-spe-y := sha1-spe-asm.o sha1-spe-glue.o
- sha256-ppc-spe-y := sha256-spe-asm.o sha256-spe-glue.o
- aes-gcm-p10-crypto-y := aes-gcm-p10-glue.o aes-gcm-p10.o ghashp10-ppc.o aesp10-ppc.o
--chacha-p10-crypto-y := chacha-p10-glue.o chacha-p10le-8x.o
--poly1305-p10-crypto-y := poly1305-p10-glue.o poly1305-p10le_64.o
- vmx-crypto-objs := vmx.o aesp8-ppc.o ghashp8-ppc.o aes.o aes_cbc.o aes_ctr.o aes_xts.o ghash.o
- curve25519-ppc64le-y := curve25519-ppc64le-core.o curve25519-ppc64le_asm.o
- 
- ifeq ($(CONFIG_CPU_LITTLE_ENDIAN),y)
- override flavour := linux-ppc64le
-diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
-index dd8a4b52a0ccb..1cd74673cbf74 100644
---- a/arch/powerpc/lib/Makefile
-+++ b/arch/powerpc/lib/Makefile
-@@ -1,10 +1,12 @@
- # SPDX-License-Identifier: GPL-2.0
- #
- # Makefile for ppc-specific library files..
- #
- 
-+obj-y += crypto/
-+
- CFLAGS_code-patching.o += -fno-stack-protector
- CFLAGS_feature-fixups.o += -fno-stack-protector
- 
- CFLAGS_REMOVE_code-patching.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_feature-fixups.o = $(CC_FLAGS_FTRACE)
-diff --git a/arch/powerpc/lib/crypto/Kconfig b/arch/powerpc/lib/crypto/Kconfig
+ obj-$(CONFIG_CRYPTO_SHA256_RISCV64) += sha256-riscv64.o
+ sha256-riscv64-y := sha256-riscv64-glue.o sha256-riscv64-zvknha_or_zvknhb-zvkb.o
+diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
+index b1c46153606a6..0baec92d2f55b 100644
+--- a/arch/riscv/lib/Makefile
++++ b/arch/riscv/lib/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++obj-y			+= crypto/
+ lib-y			+= delay.o
+ lib-y			+= memcpy.o
+ lib-y			+= memset.o
+ lib-y			+= memmove.o
+ ifeq ($(CONFIG_KASAN_GENERIC)$(CONFIG_KASAN_SW_TAGS),)
+diff --git a/arch/riscv/lib/crypto/Kconfig b/arch/riscv/lib/crypto/Kconfig
 new file mode 100644
-index 0000000000000..3f52610e45eb4
+index 0000000000000..46ce2a7ac1f2c
 --- /dev/null
-+++ b/arch/powerpc/lib/crypto/Kconfig
-@@ -0,0 +1,15 @@
++++ b/arch/riscv/lib/crypto/Kconfig
+@@ -0,0 +1,8 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +
-+config CRYPTO_CHACHA20_P10
++config CRYPTO_CHACHA_RISCV64
 +	tristate
-+	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
++	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
 +	default CRYPTO_LIB_CHACHA_INTERNAL
-+	select CRYPTO_LIB_CHACHA_GENERIC
 +	select CRYPTO_ARCH_HAVE_LIB_CHACHA
-+
-+config CRYPTO_POLY1305_P10
-+	tristate
-+	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
-+	default CRYPTO_LIB_POLY1305_INTERNAL
-+	select CRYPTO_ARCH_HAVE_LIB_POLY1305
-+	select CRYPTO_LIB_POLY1305_GENERIC
-diff --git a/arch/powerpc/lib/crypto/Makefile b/arch/powerpc/lib/crypto/Makefile
++	select CRYPTO_LIB_CHACHA_GENERIC
+diff --git a/arch/riscv/lib/crypto/Makefile b/arch/riscv/lib/crypto/Makefile
 new file mode 100644
-index 0000000000000..5709ae14258a0
+index 0000000000000..e27b78f317fc8
 --- /dev/null
-+++ b/arch/powerpc/lib/crypto/Makefile
-@@ -0,0 +1,7 @@
++++ b/arch/riscv/lib/crypto/Makefile
+@@ -0,0 +1,4 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +
-+obj-$(CONFIG_CRYPTO_CHACHA20_P10) += chacha-p10-crypto.o
-+chacha-p10-crypto-y := chacha-p10-glue.o chacha-p10le-8x.o
-+
-+obj-$(CONFIG_CRYPTO_POLY1305_P10) += poly1305-p10-crypto.o
-+poly1305-p10-crypto-y := poly1305-p10-glue.o poly1305-p10le_64.o
-diff --git a/arch/powerpc/crypto/chacha-p10-glue.c b/arch/powerpc/lib/crypto/chacha-p10-glue.c
++obj-$(CONFIG_CRYPTO_CHACHA_RISCV64) += chacha-riscv64.o
++chacha-riscv64-y := chacha-riscv64-glue.o chacha-riscv64-zvkb.o
+diff --git a/arch/riscv/crypto/chacha-riscv64-glue.c b/arch/riscv/lib/crypto/chacha-riscv64-glue.c
 similarity index 100%
-rename from arch/powerpc/crypto/chacha-p10-glue.c
-rename to arch/powerpc/lib/crypto/chacha-p10-glue.c
-diff --git a/arch/powerpc/crypto/chacha-p10le-8x.S b/arch/powerpc/lib/crypto/chacha-p10le-8x.S
+rename from arch/riscv/crypto/chacha-riscv64-glue.c
+rename to arch/riscv/lib/crypto/chacha-riscv64-glue.c
+diff --git a/arch/riscv/crypto/chacha-riscv64-zvkb.S b/arch/riscv/lib/crypto/chacha-riscv64-zvkb.S
 similarity index 100%
-rename from arch/powerpc/crypto/chacha-p10le-8x.S
-rename to arch/powerpc/lib/crypto/chacha-p10le-8x.S
-diff --git a/arch/powerpc/crypto/poly1305-p10-glue.c b/arch/powerpc/lib/crypto/poly1305-p10-glue.c
-similarity index 100%
-rename from arch/powerpc/crypto/poly1305-p10-glue.c
-rename to arch/powerpc/lib/crypto/poly1305-p10-glue.c
-diff --git a/arch/powerpc/crypto/poly1305-p10le_64.S b/arch/powerpc/lib/crypto/poly1305-p10le_64.S
-similarity index 100%
-rename from arch/powerpc/crypto/poly1305-p10le_64.S
-rename to arch/powerpc/lib/crypto/poly1305-p10le_64.S
+rename from arch/riscv/crypto/chacha-riscv64-zvkb.S
+rename to arch/riscv/lib/crypto/chacha-riscv64-zvkb.S
 diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index c5c01bc3569d5..4b3e94ed84bb6 100644
+index 4b3e94ed84bb6..0b06c25eb38a5 100644
 --- a/lib/crypto/Kconfig
 +++ b/lib/crypto/Kconfig
-@@ -163,8 +163,11 @@ if ARM64
- source "arch/arm64/lib/crypto/Kconfig"
- endif
- if MIPS
+@@ -166,8 +166,11 @@ if MIPS
  source "arch/mips/lib/crypto/Kconfig"
  endif
-+if PPC
-+source "arch/powerpc/lib/crypto/Kconfig"
+ if PPC
+ source "arch/powerpc/lib/crypto/Kconfig"
+ endif
++if RISCV
++source "arch/riscv/lib/crypto/Kconfig"
 +endif
  endif
  
