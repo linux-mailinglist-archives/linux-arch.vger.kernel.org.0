@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-11470-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11471-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F499A94941
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 21:29:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E989FA9493C
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 21:29:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B39373AE11A
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 19:28:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D244E7A73E1
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Apr 2025 19:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2F721B18C;
-	Sun, 20 Apr 2025 19:27:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C80E21C16E;
+	Sun, 20 Apr 2025 19:27:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCkUDe2S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLQurH4m"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B93F2147E6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4814521B9FC;
 	Sun, 20 Apr 2025 19:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745177261; cv=none; b=faJ/Oy7tZC6UxulyVtTW+n3ChDM2vCA14hq3syH1oI37cdUQpIctd5hmGtmBBQiCpSdFBkvZXBq4+BqxAbQvoBaMdNn8ELEnCN3EaZ1+9xSvINsMeEdwkW8WK3Fu7WtlkOSB9bwOkijf9gj+8TDTlCZ740PBNgvl+rcWPZg2MVg=
+	t=1745177262; cv=none; b=jUeDewIU1zbw5aa3Z59y7wKoJ9iRRZasL1ey98RrNF5XQvUbuSa9+DuzZa+r21r6tsslPeBzkyEG1GBVqHpD18rE1fcLRvvfzfvlvOK/NBKW9eC/NTcS/PTqYOMMKssRgxJaO6TUyby/sVgvyU0lhpgVWOGMW44jztkGjLJPv28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745177261; c=relaxed/simple;
-	bh=JceMeyvHZFS3hU3osMnM8DtDXrhU/UjeqoFMt/NCYhM=;
+	s=arc-20240116; t=1745177262; c=relaxed/simple;
+	bh=u+OK7tFveVR0om3+lNaIeYM0HzeTeASq3YZREbliyFs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JZr1jFTTwq++N6CW0+xpsw02rfhgt/UguapcIctYX3YjGGb35Kc3o4Dgz/rPqpO8CKGpPHNqulWbK8HyltwqnmKtN8/ACM2mVa3Meum343U8ECi+VxMuQQDY3wOTptJAD5gDqEBTERzmvXdglgIX+qgmjRQLB+XEV3fgRCw8u2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZCkUDe2S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F183DC4CEED;
-	Sun, 20 Apr 2025 19:27:40 +0000 (UTC)
+	 MIME-Version; b=aj9r/GR/6CvFN3hvu4zaSuAOWlR23zhAozeZE2h0ZweKIqJwP77f7qJi7ELhkhg4hEekf3DHkLRZ3yGLYzYmEhiMJJj75ewII5cpZhw4iYiH6lt05e6nk7vn9cqvGjydND5TpCEKA3doLzxqFKBuo4ggpZU5cKrS3/gStp7Z978=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLQurH4m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CDADC4CEF0;
+	Sun, 20 Apr 2025 19:27:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1745177261;
-	bh=JceMeyvHZFS3hU3osMnM8DtDXrhU/UjeqoFMt/NCYhM=;
+	bh=u+OK7tFveVR0om3+lNaIeYM0HzeTeASq3YZREbliyFs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZCkUDe2S72itq2OYuxxdcNB38pxf0twZvxcIytZW+K9b6WjYA0TAIwlMai/eahJAx
-	 w8hnWfFuUPwQIEWcmraLbu+8LuMqAmesx2H0tNclifUpqnw3RlSCtQJQXl7qosnV2B
-	 X9dfT634nEyucjsrsXXn2P/ZQhmdjtoJhC5zA8zcTDZzetaY0MekSgwZdqf1NxO2DG
-	 rGjDYkc5mRCzY0avNxgFZx69VsIWcl/xjeGBuZUOG9mWyOjDRjtgn9xGXhXEkHed9d
-	 0Qkk02QD/yLL5xsi23VAlR3hd1WRfL/GqaURyDQikpiyFjKT3o0P20ZHdJC6pdJW+2
-	 BorTK//xE0hgg==
+	b=FLQurH4mvImNRkbdsejvvFmWVFmrkhdpmyEEO9MnBmWuy8/+SmxN9LYIlDW3djSE2
+	 /1xoV9sY7d/MZAwj5oFvWgyU6pQZbjgUyPxdVsKOsF54vbz1mutBkw4axN+VYwfYCn
+	 Ms3bMFuXRd+OFvsjAgJkn0F3MuNidZw7NM055c+XbPkkksj/I2/vpuQiUbZOXRbJ5V
+	 rxBJgpMYScXs1Mb3njNRNfY9LqY/zYKdhi1Jeb+PH0l97Xt5hRoviXNzmARfwnxeka
+	 cWUOZmm71r1VQuU7NOBG4ny/tFUv8B9hOAkPB6FqaDKziniWnoCqNa69YcrMoEtg7/
+	 cK2/icIun6j9w==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-arch@vger.kernel.org,
 	x86@kernel.org,
 	"Jason A . Donenfeld" <Jason@zx2c4.com>,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v2 09/13] crypto: riscv - move library functions to arch/riscv/lib/crypto/
-Date: Sun, 20 Apr 2025 12:26:05 -0700
-Message-ID: <20250420192609.295075-10-ebiggers@kernel.org>
+Subject: [PATCH v2 10/13] crypto: s390 - move library functions to arch/s390/lib/crypto/
+Date: Sun, 20 Apr 2025 12:26:06 -0700
+Message-ID: <20250420192609.295075-11-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250420192609.295075-1-ebiggers@kernel.org>
 References: <20250420192609.295075-1-ebiggers@kernel.org>
@@ -70,122 +70,129 @@ Content-Transfer-Encoding: 8bit
 From: Eric Biggers <ebiggers@google.com>
 
 Continue disentangling the crypto library functions from the generic
-crypto infrastructure by moving the riscv ChaCha library functions into
-a new directory arch/riscv/lib/crypto/ that does not depend on CRYPTO.
+crypto infrastructure by moving the s390 ChaCha library functions into a
+new directory arch/s390/lib/crypto/ that does not depend on CRYPTO.
 This mirrors the distinction between crypto/ and lib/crypto/.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/riscv/crypto/Kconfig                         | 7 -------
- arch/riscv/crypto/Makefile                        | 3 ---
- arch/riscv/lib/Makefile                           | 1 +
- arch/riscv/lib/crypto/Kconfig                     | 8 ++++++++
- arch/riscv/lib/crypto/Makefile                    | 4 ++++
- arch/riscv/{ => lib}/crypto/chacha-riscv64-glue.c | 0
- arch/riscv/{ => lib}/crypto/chacha-riscv64-zvkb.S | 0
- lib/crypto/Kconfig                                | 3 +++
- 8 files changed, 16 insertions(+), 10 deletions(-)
- create mode 100644 arch/riscv/lib/crypto/Kconfig
- create mode 100644 arch/riscv/lib/crypto/Makefile
- rename arch/riscv/{ => lib}/crypto/chacha-riscv64-glue.c (100%)
- rename arch/riscv/{ => lib}/crypto/chacha-riscv64-zvkb.S (100%)
+ arch/s390/crypto/Kconfig                 | 6 ------
+ arch/s390/crypto/Makefile                | 3 ---
+ arch/s390/lib/Makefile                   | 1 +
+ arch/s390/lib/crypto/Kconfig             | 7 +++++++
+ arch/s390/lib/crypto/Makefile            | 4 ++++
+ arch/s390/{ => lib}/crypto/chacha-glue.c | 0
+ arch/s390/{ => lib}/crypto/chacha-s390.S | 0
+ arch/s390/{ => lib}/crypto/chacha-s390.h | 0
+ lib/crypto/Kconfig                       | 3 +++
+ 9 files changed, 15 insertions(+), 9 deletions(-)
+ create mode 100644 arch/s390/lib/crypto/Kconfig
+ create mode 100644 arch/s390/lib/crypto/Makefile
+ rename arch/s390/{ => lib}/crypto/chacha-glue.c (100%)
+ rename arch/s390/{ => lib}/crypto/chacha-s390.S (100%)
+ rename arch/s390/{ => lib}/crypto/chacha-s390.h (100%)
 
-diff --git a/arch/riscv/crypto/Kconfig b/arch/riscv/crypto/Kconfig
-index 27a1f26d41bde..4863be2a4ec2f 100644
---- a/arch/riscv/crypto/Kconfig
-+++ b/arch/riscv/crypto/Kconfig
-@@ -16,17 +16,10 @@ config CRYPTO_AES_RISCV64
- 	  - Zvkned vector crypto extension
- 	  - Zvbb vector extension (XTS)
- 	  - Zvkb vector crypto extension (CTR)
- 	  - Zvkg vector crypto extension (XTS)
+diff --git a/arch/s390/crypto/Kconfig b/arch/s390/crypto/Kconfig
+index e88d9cd256ef5..a2bfd6eef0ca3 100644
+--- a/arch/s390/crypto/Kconfig
++++ b/arch/s390/crypto/Kconfig
+@@ -97,16 +97,10 @@ config CRYPTO_DES_S390
+ 	  Architecture: s390
  
--config CRYPTO_CHACHA_RISCV64
+ 	  As of z990 the ECB and CBC mode are hardware accelerated.
+ 	  As of z196 the CTR mode is hardware accelerated.
+ 
+-config CRYPTO_CHACHA_S390
 -	tristate
--	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
--	select CRYPTO_ARCH_HAVE_LIB_CHACHA
 -	select CRYPTO_LIB_CHACHA_GENERIC
+-	select CRYPTO_ARCH_HAVE_LIB_CHACHA
 -	default CRYPTO_LIB_CHACHA_INTERNAL
 -
- config CRYPTO_GHASH_RISCV64
- 	tristate "Hash functions: GHASH"
- 	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
- 	select CRYPTO_GCM
+ config CRYPTO_HMAC_S390
+ 	tristate "Keyed-hash message authentication code: HMAC"
+ 	select CRYPTO_HASH
  	help
-diff --git a/arch/riscv/crypto/Makefile b/arch/riscv/crypto/Makefile
-index 247c7bc7288ce..4ae9bf762e907 100644
---- a/arch/riscv/crypto/Makefile
-+++ b/arch/riscv/crypto/Makefile
-@@ -2,13 +2,10 @@
- 
- obj-$(CONFIG_CRYPTO_AES_RISCV64) += aes-riscv64.o
- aes-riscv64-y := aes-riscv64-glue.o aes-riscv64-zvkned.o \
- 		 aes-riscv64-zvkned-zvbb-zvkg.o aes-riscv64-zvkned-zvkb.o
- 
--obj-$(CONFIG_CRYPTO_CHACHA_RISCV64) += chacha-riscv64.o
--chacha-riscv64-y := chacha-riscv64-glue.o chacha-riscv64-zvkb.o
+ 	  s390 specific HMAC hardware support for SHA224, SHA256, SHA384 and
+diff --git a/arch/s390/crypto/Makefile b/arch/s390/crypto/Makefile
+index 14dafadbcbed4..e3853774e1a3a 100644
+--- a/arch/s390/crypto/Makefile
++++ b/arch/s390/crypto/Makefile
+@@ -9,12 +9,9 @@ obj-$(CONFIG_CRYPTO_SHA512_S390) += sha512_s390.o sha_common.o
+ obj-$(CONFIG_CRYPTO_SHA3_256_S390) += sha3_256_s390.o sha_common.o
+ obj-$(CONFIG_CRYPTO_SHA3_512_S390) += sha3_512_s390.o sha_common.o
+ obj-$(CONFIG_CRYPTO_DES_S390) += des_s390.o
+ obj-$(CONFIG_CRYPTO_AES_S390) += aes_s390.o
+ obj-$(CONFIG_CRYPTO_PAES_S390) += paes_s390.o
+-obj-$(CONFIG_CRYPTO_CHACHA_S390) += chacha_s390.o
+ obj-$(CONFIG_S390_PRNG) += prng.o
+ obj-$(CONFIG_CRYPTO_GHASH_S390) += ghash_s390.o
+ obj-$(CONFIG_CRYPTO_HMAC_S390) += hmac_s390.o
+ obj-y += arch_random.o
 -
- obj-$(CONFIG_CRYPTO_GHASH_RISCV64) += ghash-riscv64.o
- ghash-riscv64-y := ghash-riscv64-glue.o ghash-riscv64-zvkg.o
+-chacha_s390-y := chacha-glue.o chacha-s390.o
+diff --git a/arch/s390/lib/Makefile b/arch/s390/lib/Makefile
+index 14bbfe50033c7..fce4edbe8a078 100644
+--- a/arch/s390/lib/Makefile
++++ b/arch/s390/lib/Makefile
+@@ -1,10 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0
+ #
+ # Makefile for s390-specific library files..
+ #
  
- obj-$(CONFIG_CRYPTO_SHA256_RISCV64) += sha256-riscv64.o
- sha256-riscv64-y := sha256-riscv64-glue.o sha256-riscv64-zvknha_or_zvknhb-zvkb.o
-diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
-index b1c46153606a6..0baec92d2f55b 100644
---- a/arch/riscv/lib/Makefile
-+++ b/arch/riscv/lib/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+obj-y			+= crypto/
- lib-y			+= delay.o
- lib-y			+= memcpy.o
- lib-y			+= memset.o
- lib-y			+= memmove.o
- ifeq ($(CONFIG_KASAN_GENERIC)$(CONFIG_KASAN_SW_TAGS),)
-diff --git a/arch/riscv/lib/crypto/Kconfig b/arch/riscv/lib/crypto/Kconfig
++obj-y += crypto/
+ lib-y += delay.o string.o uaccess.o find.o spinlock.o tishift.o
+ lib-y += csum-partial.o
+ obj-y += mem.o xor.o
+ lib-$(CONFIG_KPROBES) += probes.o
+ lib-$(CONFIG_UPROBES) += probes.o
+diff --git a/arch/s390/lib/crypto/Kconfig b/arch/s390/lib/crypto/Kconfig
 new file mode 100644
-index 0000000000000..46ce2a7ac1f2c
+index 0000000000000..b79fd91af9fe1
 --- /dev/null
-+++ b/arch/riscv/lib/crypto/Kconfig
-@@ -0,0 +1,8 @@
++++ b/arch/s390/lib/crypto/Kconfig
+@@ -0,0 +1,7 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +
-+config CRYPTO_CHACHA_RISCV64
++config CRYPTO_CHACHA_S390
 +	tristate
-+	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
 +	default CRYPTO_LIB_CHACHA_INTERNAL
-+	select CRYPTO_ARCH_HAVE_LIB_CHACHA
 +	select CRYPTO_LIB_CHACHA_GENERIC
-diff --git a/arch/riscv/lib/crypto/Makefile b/arch/riscv/lib/crypto/Makefile
++	select CRYPTO_ARCH_HAVE_LIB_CHACHA
+diff --git a/arch/s390/lib/crypto/Makefile b/arch/s390/lib/crypto/Makefile
 new file mode 100644
-index 0000000000000..e27b78f317fc8
+index 0000000000000..06c2cf77178ef
 --- /dev/null
-+++ b/arch/riscv/lib/crypto/Makefile
++++ b/arch/s390/lib/crypto/Makefile
 @@ -0,0 +1,4 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +
-+obj-$(CONFIG_CRYPTO_CHACHA_RISCV64) += chacha-riscv64.o
-+chacha-riscv64-y := chacha-riscv64-glue.o chacha-riscv64-zvkb.o
-diff --git a/arch/riscv/crypto/chacha-riscv64-glue.c b/arch/riscv/lib/crypto/chacha-riscv64-glue.c
++obj-$(CONFIG_CRYPTO_CHACHA_S390) += chacha_s390.o
++chacha_s390-y := chacha-glue.o chacha-s390.o
+diff --git a/arch/s390/crypto/chacha-glue.c b/arch/s390/lib/crypto/chacha-glue.c
 similarity index 100%
-rename from arch/riscv/crypto/chacha-riscv64-glue.c
-rename to arch/riscv/lib/crypto/chacha-riscv64-glue.c
-diff --git a/arch/riscv/crypto/chacha-riscv64-zvkb.S b/arch/riscv/lib/crypto/chacha-riscv64-zvkb.S
+rename from arch/s390/crypto/chacha-glue.c
+rename to arch/s390/lib/crypto/chacha-glue.c
+diff --git a/arch/s390/crypto/chacha-s390.S b/arch/s390/lib/crypto/chacha-s390.S
 similarity index 100%
-rename from arch/riscv/crypto/chacha-riscv64-zvkb.S
-rename to arch/riscv/lib/crypto/chacha-riscv64-zvkb.S
+rename from arch/s390/crypto/chacha-s390.S
+rename to arch/s390/lib/crypto/chacha-s390.S
+diff --git a/arch/s390/crypto/chacha-s390.h b/arch/s390/lib/crypto/chacha-s390.h
+similarity index 100%
+rename from arch/s390/crypto/chacha-s390.h
+rename to arch/s390/lib/crypto/chacha-s390.h
 diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 4b3e94ed84bb6..0b06c25eb38a5 100644
+index 0b06c25eb38a5..db19a7acc2fbf 100644
 --- a/lib/crypto/Kconfig
 +++ b/lib/crypto/Kconfig
-@@ -166,8 +166,11 @@ if MIPS
- source "arch/mips/lib/crypto/Kconfig"
- endif
- if PPC
+@@ -169,8 +169,11 @@ if PPC
  source "arch/powerpc/lib/crypto/Kconfig"
  endif
-+if RISCV
-+source "arch/riscv/lib/crypto/Kconfig"
+ if RISCV
+ source "arch/riscv/lib/crypto/Kconfig"
+ endif
++if S390
++source "arch/s390/lib/crypto/Kconfig"
 +endif
  endif
  
