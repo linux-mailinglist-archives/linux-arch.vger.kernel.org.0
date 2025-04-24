@@ -1,187 +1,196 @@
-Return-Path: <linux-arch+bounces-11563-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11564-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA9C1A9B453
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 18:42:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E81E5A9B52D
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 19:27:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7EEB1B68325
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 16:42:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E76891BA43F4
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 17:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB943288C92;
-	Thu, 24 Apr 2025 16:41:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81B6288CA5;
+	Thu, 24 Apr 2025 17:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="vt7T0uzd"
+	dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b="kndgtCGk"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0D7197A76
-	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 16:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA07028B50F
+	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 17:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745512918; cv=none; b=M4KbkgvmWIKhpZ7TcDsfonFNrVDgxNRTzBB+UTx5ssYQhQkAFv6klDx+ekDL8axPeJ0a+XjaasBzgRgi9l35zy2DuRIHIGnxefk/DKnxavSv2SFY0b0Vji9mSY8b77iqfl/eJWQ0ieUAzsZtofeX184lYjdu2r6GIfL7romgWdg=
+	t=1745515646; cv=none; b=IAuXYol3J14AYmGyfmx8VuCGKq+r1Hf+sE6GN0MIP7bBdA9ByjwQrquKwY16/qISfCIDuKxDHt2C+vI5Pe60AWDdq83Df13c6NI+ywAnc4UyvNlCn2/foVFG7uV+zqk7qDDlmUxX3KVKd2M7gep89SwAWi+6hbbyn2m3eWq7oZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745512918; c=relaxed/simple;
-	bh=vye0Q+xd1G2Olnf5Qkr8nib/GWDRlQm+UGeZYjZUyDA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SWh9f1sLEWmVYofcoUrXNhEB3do+pJOY0+3BHNDdhsZZAASxcLS5l+1NEvt3om8+LYAlvwNq1tNBaKgTREcu5Rf8fzcKH7vWf5ugqhLwkggZYvJF7J0vL2TPaYkqBEKhE2bpEPmyfIVTEgEXfGtWat/MUvhhMX5m1C5inieDe1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=vt7T0uzd; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7376dd56f60so940792b3a.3
-        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 09:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745512916; x=1746117716; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k6m4QSCkOjvBeG8/Kperh6wZuRGbtha7PIChY6FuIlM=;
-        b=vt7T0uzd3xCze3Zzyzjt6oEBKu5b2AaMF+bEL0x1WfJmo4ncPEEJHxQG9zfcis/Kwx
-         xahjvt8L0fz/GsUWvTYMadKC40Y3zgw5Vj/Bg/B+E9IfGRpYntx5JPA6qXHyXJywlCbw
-         biLB7vMtyYOyIxwfNlsW2xGWIxIU7Mq8SCI1F/1SnDyWqTzKzLDLl3U6wnksQ8jZfj77
-         3YYI4PhAenG/mAaDMYSsi4PkpMu/k1Hi7XbYXadK3K3CXlDrvFtQjLVaFQ/APbqalqcZ
-         uGCMIyBp0jytuhdm4FN+sbkfo2YPgMosChYFZjXIJ7F2OiHQNGi0YRlu1TUMK5rxwd2g
-         fGkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745512916; x=1746117716;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k6m4QSCkOjvBeG8/Kperh6wZuRGbtha7PIChY6FuIlM=;
-        b=ljgGZrQn41iMemc9QJhlzqMp5j09O/orumy9xfbHO/uAL59fXqDcyNNOmrD8exaA+o
-         WBppxAlMsc708fwhF0UaCebKxbE8B7bL5j0VtamDuNt3mqErFnrITwlqttDfTveQtR02
-         R10NSBpgF3gIk1opFa4uSy2R9SoJJW2imBxabFMeKnGFIcFngdnEngX0SIfy4pvTmMqm
-         kRAHHAREyk8q0QBoLAgibZ6Bth3loJUS2DVJ2/Hw//MH1JVL/JAqqO6PaTgb+G7uSnkG
-         kklp2Qy74ALlhB8GHSm9ofg5XXjvsuTvgNtpxR5yHULY0rPbyvE9s7wSI2rUfdeu4+zq
-         lf5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWC27/61cJVax9D3OJoUvKICpjIkxlJkpsM1Kqzgtx9e7wbT8lN6HAfsVA9hkj+jsh6TfqXCf888vtx@vger.kernel.org
-X-Gm-Message-State: AOJu0YygRgm++gTalsE6c5n8xGzTDZbJr54BC/qSo5fqEP3Qs5Gd1GQ0
-	kYpQdO1tTBs2RCGoawc1Mp8xWCFLlVL0lu+GbD7Gg1FL3FjBFNWNtxzORTt+QBI=
-X-Gm-Gg: ASbGncu4bQvTlC5bo2JDfVXscQDC3K1IQAwiW/zMDYZuoDFYWoxPEmZsHQXhk32Umkh
-	5gVRoi51lf6e55sxI7MnwRh29hv5BEX9p2nBOe8lbwH5VhawNZmgUSIQiESor5Gr2xGr6EaBQuq
-	eqvv9dJx62ZBxo42hkQXqwGtKyd5rMT97utYw8iYr/WFFlidZPSD2sli0s129p0VVSH9TSJDqDZ
-	r91L6kGwUoxoYR5adcbyiDg/8O3wZIv+F99D1n1RXjhHH965T51S9yCwWGsiApvA7Kd9OIk2MxU
-	IsT3zumOIiCjt0RrF2pPm0lUuVacZgw93mmHB4DaBMSH+u8sqgA=
-X-Google-Smtp-Source: AGHT+IGxyp+KENwVEkLGrt7S8pn2vlKD8bBJVWEd1Iv8ULUIPojD/9R2kqNR1Mge6+txkrxVbJHCXA==
-X-Received: by 2002:a05:6a21:6d8e:b0:1f5:8072:d7f3 with SMTP id adf61e73a8af0-20444fc0e44mr4794400637.30.1745512916109;
-        Thu, 24 Apr 2025 09:41:56 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b15f76f48b2sm1462741a12.8.2025.04.24.09.41.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 09:41:55 -0700 (PDT)
-Date: Thu, 24 Apr 2025 09:41:51 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Miquel =?iso-8859-1?Q?Sabat=E9_Sol=E0?= <mikisabate@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
-	Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH v13 20/28] riscv/hwprobe: zicfilp / zicfiss enumeration
- in hwprobe
-Message-ID: <aAppz5o2i4SQKU2z@debug.ba.rivosinc.com>
-References: <20250424-v5_user_cfi_series-v13-0-971437de586a@rivosinc.com>
- <20250424-v5_user_cfi_series-v13-20-971437de586a@rivosinc.com>
- <680a0cd4.050a0220.296475.3867@mx.google.com>
+	s=arc-20240116; t=1745515646; c=relaxed/simple;
+	bh=pWlA5i0QwU5KSfSiQESYA+X0ALKKyDdQ6BF4SmpmQeI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ObV6UucEV9M+7ZwelRYNOwAWizO4Xe214SdTYMt66q667LdoUd5yVypD3tfSLCqtZvAUPcDd5P90enbxy9ipF8hPXZKdHOxln/VPJYVJnR9WQhpzKSh7u4WhRuDN6t+CQi7i4SoWvL2L4dcoLynqA0vMRPekupdfKaMcPLMYkHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com; spf=pass smtp.mailfrom=iencinas.com; dkim=pass (2048-bit key) header.d=iencinas.com header.i=@iencinas.com header.b=kndgtCGk; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=iencinas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iencinas.com
+Message-ID: <f5464e26-faa0-48f1-8585-9ce52c8c9f5f@iencinas.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iencinas.com;
+	s=key1; t=1745515637;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=gE3Ny+oVXXm4XaEkguFbKK9ma/30w0nfPWxX9kbduWE=;
+	b=kndgtCGkFmDA6AIZSKwk7aZ9bcFQjmka74EYzotDUPhQOhGmQdqfvcxhJOxbkPnjNGszk6
+	S5l10hZQKQQUrgUSJ2bwOeAb25zZDIbVkC45SIoK+EhpviV+6vaWtMiPuB483HZF9UPsva
+	a8sxlaHQu/ZqdgzcnnB7ok2bcH/qTI4+tOqX9sJPb//Xt31EH1MMMfGbNOM2sGy1V6K5g7
+	54My6MtEokc1ylIB/s1GXrR+echHNjIM89oWRUpFifmxJmaaL+c5NyGF5veS7BkPNuM/Te
+	fzPZDf+z4izbFJ6/EuquIZ7QeLmuc4LkjiR4dUzWcTj8yuPCt+kBdCkOucLkOg==
+Date: Thu, 24 Apr 2025 19:27:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <680a0cd4.050a0220.296475.3867@mx.google.com>
+Subject: Re: [PATCH v3 2/2] riscv: introduce asm/swab.h
+To: Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Eric Biggers <ebiggers@kernel.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Zhihang Shao <zhihang.shao.iscas@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>
+References: <20250403-riscv-swab-v3-0-3bf705d80e33@iencinas.com>
+ <20250403-riscv-swab-v3-2-3bf705d80e33@iencinas.com>
+ <c6efcdca-5739-42b6-8cb4-f4d8cc85b6af@app.fastmail.com>
+ <b3f8e641-9690-4792-974c-c895d2e4531a@iencinas.com>
+ <66a5aba9-2a32-4ef9-a839-a389b975757d@ghiti.fr>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ignacio Encinas Rubio <ignacio@iencinas.com>
+Autocrypt: addr=ignacio@iencinas.com; keydata=
+ xjMEZgaZEBYJKwYBBAHaRw8BAQdAYZxeXU5yoeLYkQpvN+eE3wmAF4V0JUzIlpm/DqiSeBnN
+ LElnbmFjaW8gRW5jaW5hcyBSdWJpbyA8aWduYWNpb0BpZW5jaW5hcy5jb20+wo8EExYIADcW
+ IQSXV5vKYfM26lUMmYnH3J3Ka8TsNgUCZgaZEAUJBaOagAIbAwQLCQgHBRUICQoLBRYCAwEA
+ AAoJEMfcncprxOw21F4BAJe+mYh3sIdSvydyDdDXLFqtVkzrFB8PVNSU9eZpvM0mAP9996LA
+ N0gyY7Obnc3y59r9jOElOn/5fz5mOEU3nE5lCc44BGYGmRESCisGAQQBl1UBBQEBB0CVC5o6
+ qnsTzmmtKY1UWa/GJE53dV/3UPJpZu42p/F0OAMBCAfCfgQYFggAJhYhBJdXm8ph8zbqVQyZ
+ icfcncprxOw2BQJmBpkRBQkFo5qAAhsMAAoJEMfcncprxOw2N8ABAPcrkHouJPn2N8HcsL4S
+ SVgqxNLVOpsMX9kAYgIMqM0WAQCA40v0iYH1q7QHa2IfgkrBzX2ZLdXdwoxfUr8EY5vtAg==
+In-Reply-To: <66a5aba9-2a32-4ef9-a839-a389b975757d@ghiti.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 24, 2025 at 12:05:04PM +0200, Miquel Sabaté Solà wrote:
->On dj., d’abr. 24 2025, Deepak Gupta wrote:
->
->Hello,
->
->> Adding enumeration of zicfilp and zicfiss extensions in hwprobe syscall.
+
+
+Hello!
+
+On 23/4/25 13:08, Alexandre Ghiti wrote:
+> Hi Ignacio,
+> 
+> On 04/04/2025 19:35, Ignacio Encinas wrote:
 >>
->> Reviewed-by: Zong Li <zong.li@sifive.com>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> ---
->>  arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
->>  arch/riscv/kernel/sys_hwprobe.c       | 2 ++
->>  2 files changed, 4 insertions(+)
+>> On 4/4/25 7:58, Arnd Bergmann wrote:
+>>> On Thu, Apr 3, 2025, at 22:34, Ignacio Encinas wrote:
+>>>> +#define ARCH_SWAB(size) \
+>>>> +static __always_inline unsigned long __arch_swab##size(__u##size value) \
+>>>> +{                                    \
+>>>> +    unsigned long x = value;                    \
+>>>> +                                    \
+>>>> +    if (riscv_has_extension_likely(RISCV_ISA_EXT_ZBB)) {            \
+>>>> +        asm volatile (".option push\n"                \
+>>>> +                  ".option arch,+zbb\n"            \
+>>>> +                  "rev8 %0, %1\n"                \
+>>>> +                  ".option pop\n"                \
+>>>> +                  : "=r" (x) : "r" (x));            \
+>>>> +        return x >> (BITS_PER_LONG - size);            \
+>>>> +    }                                                               \
+>>>> +    return  ___constant_swab##size(value);                \
+>>>> +}
+>> Hello Arnd!
 >>
->> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
->> index c3c1cc951cb9..c1b537b50158 100644
->> --- a/arch/riscv/include/uapi/asm/hwprobe.h
->> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
->> @@ -73,6 +73,8 @@ struct riscv_hwprobe {
->>  #define		RISCV_HWPROBE_EXT_ZCMOP		(1ULL << 47)
->>  #define		RISCV_HWPROBE_EXT_ZAWRS		(1ULL << 48)
->>  #define		RISCV_HWPROBE_EXT_SUPM		(1ULL << 49)
->> +#define		RISCV_HWPROBE_EXT_ZICFILP	(1ULL << 50)
->> +#define		RISCV_HWPROBE_EXT_ZICFISS	(1ULL << 51)
->
->Notice that, as it stands in Linux v6.15-rc, this will conflict with the
->values for Zicntr and Zihpm. See 4458b8f68dc7 ("riscv: hwprobe: export
->Zicntr and Zihpm extensions"). I'd say that you should update these
->values.
+>>> I think the fallback should really just use the __builtin_bswap
+>>> helpers instead of the ___constant_swab variants. The output
+>>> would be the same, but you can skip patch 1/2.
+>> I tried, but that change causes build errors:
+>>
+>> ```
+>> undefined reference to `__bswapsi2'
+>>
+>> [...]
+>>
+>> undefined reference to `__bswapdi2
+>> ```
+>>
+>> I tried working around those, but couldn't find a good solution. I'm a
+>> bit out of my depth here, but I "summarized" everything here [1]. Let me
+>> know if I'm missing something.
+>>
+>> [1] https://lore.kernel.org/linux-riscv/b3b59747-0484-4042-bdc4-c067688e3bfe@iencinas.com/
+> 
+> Note that I only encountered those issues in the purgatory.
+> 
+> So to me we have 3 solutions:
+> 
+> - either implementing both __bswapsi2 and __bswapdi2
 
-Got it. Noted for next version.
+Which would be fine but seems a bit pointless to me: these __bswapsi2
+and __bswapdi2 implementations will be ___constant_swab with a different
+name: same code or hardcoded (and equivalent) assembly
 
+> - or linking against libgcc
 >
->>  #define RISCV_HWPROBE_KEY_CPUPERF_0	5
->>  #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
->>  #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
->> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
->> index bcd3b816306c..d802ff707913 100644
->> --- a/arch/riscv/kernel/sys_hwprobe.c
->> +++ b/arch/riscv/kernel/sys_hwprobe.c
->> @@ -108,6 +108,8 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
->>  		EXT_KEY(ZCB);
->>  		EXT_KEY(ZCMOP);
->>  		EXT_KEY(ZICBOZ);
->> +		EXT_KEY(ZICFILP);
->> +		EXT_KEY(ZICFISS);
->>  		EXT_KEY(ZICOND);
->>  		EXT_KEY(ZIHINTNTL);
->>  		EXT_KEY(ZIHINTPAUSE);
+> - or merging patch 1.
 >
->Greetings,
->Miquel
+> Given the explanation in commit d67703a8a69e ("arm64: kill off the libgcc dependency"), I would not use libgcc.
+> 
+> The less intrusive solution (for us riscv) is merging patch 1.
 
+I also think this seems the best solution. I'll send a v4 taking the
+tips that were pointed during review (and fixing the issue pointed out
+by the kernel test robot) keeping patch 1.
+
+> But please let me know if I missed another solution or if I'm wrong.
+> 
+> Thanks,
+> 
+> Alex
+> 
+> 
+>>
+>>> I would also suggest dumbing down the macro a bit so you can
+>>> still find the definition with 'git grep __arch_swab64'. Ideally
+>>> just put the function body into a macro but leave the three
+>>> separate inline function definitions.
+>> Good point, thanks for bringing it up. Just to be sure, is this what you
+>> had in mind? (Give or take formatting + naming of variables)
+>>
+>> #define arch_swab(size, value)                         \
+>> ({                                              \
+>>     unsigned long x = value;                    \
+>>                                     \
+>>     if (riscv_has_extension_likely(RISCV_ISA_EXT_ZBB)) {            \
+>>         asm volatile (".option push\n"                \
+>>                   ".option arch,+zbb\n"            \
+>>                   "rev8 %0, %1\n"                \
+>>                   ".option pop\n"                \
+>>                   : "=r" (x) : "r" (x));            \
+>>         x = x >> (BITS_PER_LONG - size);            \
+>>     } else {                                                        \
+>>         x = ___constant_swab##size(value);                      \
+>>     }                                \
+>>     x;                                \
+>> })
+>>
+>> static __always_inline unsigned long __arch_swab64(__u64 value) {
+>>     return arch_swab(64, value);
+>> }
+>>
+>> Thanks!
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
 
