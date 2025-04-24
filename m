@@ -1,77 +1,77 @@
-Return-Path: <linux-arch+bounces-11559-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11560-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F862A9ADFB
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 14:52:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20493A9AF2F
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 15:37:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48D554A091E
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 12:52:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B18B9A3FB6
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 13:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FBC527CCCA;
-	Thu, 24 Apr 2025 12:51:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DF517A310;
+	Thu, 24 Apr 2025 13:37:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="AYhgthY5"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="STPhnhl3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F83E27CB18
-	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 12:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93921531E8
+	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 13:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745499104; cv=none; b=TshaHX/w9nREhPUh36gHSinNo8+xlLAejTgmRTY+Y2rS4tijbKQT9PiaRroXrYBv5xpqR6VyZqFKOLj4ENBifS4zE1k1qv+2MD2GAG5Wbo3s637VGxi4HwszNvfzFuipYEeQZXqcA9xqxJMDrw3Ggyh3p9BKyxginAcgy3CpWTE=
+	t=1745501820; cv=none; b=en2z2fmEF9NGAuXBWl+NTOLF6mBezoYd2KUGfBsI9q9PzBwJ9zRHs4bimS6UOP/gLmSpjd5rB371Ht1wzLFyqM5DX7Ty1kr6X9aPJKj9n/KI/oGJfB1Fxjj/vOBmeaymd50CHObdHhrhDzH8ZtiSuStiQci1gGacuAGSgl3sWAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745499104; c=relaxed/simple;
-	bh=YasCWAy3v55s89pMoa3ranL51jlpEy9fj4l4xNuEECQ=;
+	s=arc-20240116; t=1745501820; c=relaxed/simple;
+	bh=mJgp6Mchv4iv2by+fPTrmWpvDmstqIj/vVuuTYwKWrc=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=VCA1z3M1ip5BCKfekV2KshcPBtYfJittvN+q32zTRilKXkyY53+p3PluaejcmnbGxIyFqNLpAUweni7Yc/wO+xkuJ8TalOqB5HJ00y03xt/r9Sxy1k/kEw8t9YsGKA+fwMXM5n7PoRV6ZjFkkSRPuUUiCTasOhW25/U7AG0SKS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=AYhgthY5; arc=none smtp.client-ip=209.85.128.43
+	 References:In-Reply-To; b=SdOUKYmVsJAbV67s0IU6C5iKVuHQkkfelqBvx7hqsFYg3eHduGUstmynugHhlPEPrzvb5krrWUXT3xYM09yr4dDN4Vqw0+Epzb+cYFSdnxGQGWoN1VGXy6b04TUBVFbaJpRyCo7CyV23OT9GOhNVWOnTO6LXB+rblmP7hL9nzOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=STPhnhl3; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43cfe99f2a7so1520535e9.2
-        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 05:51:42 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3912a28e629so47764f8f.1
+        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 06:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745499101; x=1746103901; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1745501816; x=1746106616; darn=vger.kernel.org;
         h=in-reply-to:references:from:to:cc:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MLukpWT5NNOxSvsbTFh0JQPpU9SQzhdcC+2BWmCpzxc=;
-        b=AYhgthY5jad5RAK6lPwJjWxOTuABxtdCTU5adNG80frqMjhaPv++bPYW+Mo5dBlYty
-         rHWLQ7xmIaj/k/bMYj4dq1x0FlrNLSRD7dp3X0abKHAM/ut1XHJCuQfZjXPHDa7D2/uu
-         V0tBbW+2d/ScTBdSoNtId0mOGRP5x9P1dFS82PqPfOcjxLkylsWNUS+uzs452nsJpxYz
-         8ZlTU0TJpF/DD1/rw5e61zruX41sRlxN+FXwWxCPdFmGgo1b0LHVfpIai7bLJK+g1NNo
-         +R7xaWa9FyNJRli7ZnMHMKZzHLN4nWLY/9I7W81tGZk7uAZP09UWQiu7RcZ8z6zHlieo
-         4kUQ==
+        bh=u72nfMy9zYS5aW9xBcDq6LESieHcry02Dg/8XEt7OSw=;
+        b=STPhnhl3MTSastFv/OTSfSJnvslCvjVFt8jQhYjLvJcAvNTMw2P95yoTCq7JNMH3oB
+         ZiHZePSZTKb8HQPOF2FZj7lJcheeYAM9TZI4ywWPoJDKd+qnWzhYDa3b6brXchZ2gz1A
+         iOds1IBKHaBEtEMgAZHyp7VnSGreB1libYVDSk0VW24DaFN57lhhD4mNPToS/FGOySVe
+         OBCN8JXd+nYE3DmFRwi/qQAIjBWxS9rSeLtljz+7N0EWc5IgDelmDHVKWrdW+BDfo+fC
+         NEF2idC69hqasCOrs8POBpnilmFdiY2QJvnVbXouIESH4LHz2D50/QSNyQ8cimsa/YYW
+         tMmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745499101; x=1746103901;
+        d=1e100.net; s=20230601; t=1745501816; x=1746106616;
         h=in-reply-to:references:from:to:cc:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=MLukpWT5NNOxSvsbTFh0JQPpU9SQzhdcC+2BWmCpzxc=;
-        b=HeEzxNwpDkyWhD3EYQTwMJhkxDxVjIEiX12qTWn6N+QZ9dysLmcnu10xB7uv78trVA
-         lbdacqVJQaXpOeaK9nnYmbvjBmOa/OjNUdU3tQRmF98ABdk+JwHoj/N8nlnrEmQ8pTHX
-         aFhCjwQZePNwOAWcOIA24vF4wTQH505ucLfwD8A49iriYxwwZvlFGGdxfNZxqzA8wiL8
-         ckiu2hesxnl9ZGhoCMk9L1MEZGu3ALU3ZCBljUQ48xcvtfWeDE+aehGWgOAhoFS4ZQ9V
-         uoqEuQ/FJ6a/kNUyRJvcLnQR7jf08erMRg/C2RUo0y1G4RxqOsZI9socVqkrTKjMB7bS
-         epNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXr+Y9bDSbrEhhPZkZhgh7+dv0GY0w0Bz53cHUFIir3ITsnaq6cN0TFlG+MHYP5OE5QsWt2iVMhtzQ+@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaXEVO9sv+M2L/hC1MD+WZmsRjphgtrlT3OxGzSW11SYWerR9K
-	EJR5ujK+XRz9mQpr+UXF5T6Ro/vU/KhAMgs2XY6j76Lce9QY9ObK98t0RuYpMeo=
-X-Gm-Gg: ASbGncs1O21NXo0vYboLT8NPOkeW9h19jyJt+G8dHe9Da8WPP5JXbY1PO80whVuoeI/
-	SyEGQKnwDHTD2wAzR31fN6z0Ba0bNDrW2nLAusGxIYeAkqQCWUSg+WcpgMOVy9s1Qw0tPjRv/tN
-	4EIILe+l4g5CEbcBTtJWFMcgrBuDFPppr7lNbWvwBmnflbp98ZraIa267CHI6CeXu8HBmYwjf0g
-	a18JXEEdfp9lgfLvsfMN1S8VRfuZOsKU5vwROmwWxJhZjXQf0/bh+DmUDopViRlAR1xdTUTRIno
-	cNtJoV4r0HIp6wmb/mIEcCKpTBzMyJVVD6KedDNlW1mnf8E0
-X-Google-Smtp-Source: AGHT+IEM7f4Ug05qJLQixhJCwrNUQhZVnfUcKsq0i+OggaoW7x6aAvFNMmOAKB/VOVrygSxaqnTFQw==
-X-Received: by 2002:a05:600c:3d89:b0:439:8c80:6aee with SMTP id 5b1f17b1804b1-4409bd8d808mr9055605e9.4.1745499100564;
-        Thu, 24 Apr 2025 05:51:40 -0700 (PDT)
+        bh=u72nfMy9zYS5aW9xBcDq6LESieHcry02Dg/8XEt7OSw=;
+        b=Yr7rG5GcFmVBRQku1mhI6tJilfFRiXwk/gzuhV4E+enB7oF1THp9+dhcdBo9G5lr8q
+         X3h85z1RcXL542kEqSCJyPaDTahNdEJ5NKhP222ak9Cqmzl0W/rg8zmpRmBRc7hM9byJ
+         jYC6UiRsZgSkRm12CjSfwgJAT7f3ejWYlzJVRrMt3V+eVw34RJb0hzQVgkwEueYw43x5
+         J1m6yE7lrOy2uPNQI7U9kPg667U8Xj5CywPl7cCkDHnyUt/Y+n5bE0m8MwfuHuh2AYrF
+         Ov5APYUR0+VjzEQczCEfvEoZJ4bTzRWlcqpVQlyjgm8aBVHAepAUYPfCGKSCiwX0gn8R
+         82ng==
+X-Forwarded-Encrypted: i=1; AJvYcCX3KIKv+EOlUGgnZY3cG3DOmIsF4mkAAST9hNZb0b0GepOgUGgyRj4MEt1f31+OqfkPqcwYKuD1dF4z@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVbrWLGURkLbxvsEf/xx7UpNaNgKyc6IOw7b2pP8Za/4M6cdI7
+	wcIsKdJkLV1xuonDvn7wBVIbSohKJr/LvlxjYf9EA5vUJqeCF6kjDzFqH91119k=
+X-Gm-Gg: ASbGncvSxOJ5eT2BPiptxNJ17etzAtvbDuiTnnrrbdA7sNXcuH5ZjYdd5b68Vq8GYeA
+	jAkWh7iId4dn/KKVDxFeTiE+wsa7PmVf7Q6aV2yF82+qJsrYjENve/Oip9n+xsxqWy3sVjdIiUf
+	9bduwHQ26PUCOlKmpR9DWDRspSRzZ9DNEpdP/NWJ+LENQIOpHBNUQdZ8bhdTqfZrKrd2vNt7zxe
+	3fpBa7NvuVo0NJbN0xA1aIg449NWth5M01/zD9BSQE347IVArmWRFc0FKGybkMh8JSHhPJdwYOB
+	8/KdMmTdVBg8tTiaN7jkEav0PA/ebJqdNBIbitym/PXNddD3
+X-Google-Smtp-Source: AGHT+IEvTiSK1Lb+RPBdQ/DuDmeOaJEszTrN5CFCiZtbJdEyNkpwKicv/xW9sGpiPTRfU1AmU+RxSg==
+X-Received: by 2002:a05:6000:2483:b0:3a0:65ab:89d5 with SMTP id ffacd0b85a97d-3a06cfaf02fmr812129f8f.15.1745501815962;
+        Thu, 24 Apr 2025 06:36:55 -0700 (PDT)
 Received: from localhost ([2a02:8308:a00c:e200:b30c:ee4d:9e10:6a46])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4409d29b8efsm20710185e9.6.2025.04.24.05.51.40
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a06d4c30d7sm2135597f8f.44.2025.04.24.06.36.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 05:51:40 -0700 (PDT)
+        Thu, 24 Apr 2025 06:36:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -80,10 +80,10 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Apr 2025 14:51:39 +0200
-Message-Id: <D9EVSGGM0XDE.25R31NY7EQTJX@ventanamicro.com>
-Subject: Re: [PATCH v12 10/28] riscv/mm: Implement map_shadow_stack()
- syscall
+Date: Thu, 24 Apr 2025 15:36:54 +0200
+Message-Id: <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
+Subject: Re: [PATCH v12 12/28] riscv: Implements arch agnostic shadow stack
+ prctls
 Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
  <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
  <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
@@ -106,151 +106,152 @@ Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
  <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
  <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
  <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "Zong Li"
- <zong.li@sifive.com>, "linux-riscv"
+ <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "linux-riscv"
  <linux-riscv-bounces@lists.infradead.org>
 To: "Deepak Gupta" <debug@rivosinc.com>
 From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
 References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-10-e51202b53138@rivosinc.com>
- <D92VAWLM8AGD.3CF1VH6NYHCYV@ventanamicro.com>
- <aAmtKhlwKV7oz7RF@debug.ba.rivosinc.com>
-In-Reply-To: <aAmtKhlwKV7oz7RF@debug.ba.rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-12-e51202b53138@rivosinc.com>
+ <D92V2NPNZYV0.136MJ2HOK48HE@ventanamicro.com>
+ <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
+In-Reply-To: <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
 
-2025-04-23T20:16:58-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, Apr 10, 2025 at 11:56:44AM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
+2025-04-23T21:44:09-07:00, Deepak Gupta <debug@rivosinc.com>:
+> On Thu, Apr 10, 2025 at 11:45:58AM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
 te:
->>2025-03-14T14:39:29-07:00, Deepak Gupta <debug@rivosinc.com>:
->>> As discussed extensively in the changelog for the addition of this
->>> syscall on x86 ("x86/shstk: Introduce map_shadow_stack syscall") the
->>> existing mmap() and madvise() syscalls do not map entirely well onto th=
-e
->>> security requirements for shadow stack memory since they lead to window=
-s
->>> where memory is allocated but not yet protected or stacks which are not
->>> properly and safely initialised. Instead a new syscall map_shadow_stack=
-()
->>> has been defined which allocates and initialises a shadow stack page.
->>>
->>> This patch implements this syscall for riscv. riscv doesn't require tok=
-en
->>> to be setup by kernel because user mode can do that by itself. However =
-to
->>> provide compatibility and portability with other architectues, user mod=
-e
->>> can specify token set flag.
+>>2025-03-14T14:39:31-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>> diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/asm/=
+usercfi.h
+>>> @@ -14,7 +15,8 @@ struct kernel_clone_args;
+>>>  struct cfi_status {
+>>>  	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
+>>> -	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 1);
+>>> +	unsigned long ubcfi_locked : 1;
+>>> +	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);
 >>
->>RISC-V shadow stack could use mmap() and madvise() perfectly well.
+>>The rsvd field shouldn't be necessary as the container for the bitfield
+>>is 'unsigned long' sized.
+>>
+>>Why don't we use bools here, though?
+>>It might produce a better binary and we're not hurting for struct size.
 >
-> Deviating from what other arches are doing will create more thrash. I exp=
-ect
-> there will be merging of common logic between x86, arm64 and riscv. Infac=
-t I
-> did post one such RFC patch set last year (didn't follow up on it). Using
-> `mmap/madvise` defeats that purpose of creating common logic between arch=
-es.
->
-> There are pitfalls as mentioned with respect to mmap/madivse because of
-> unique nature of shadow stack. And thus it was accepted to create a new s=
-yscall
-> to create such mappings. RISC-V will stick to that.
+> If you remember one of the previous patch discussion, this goes into
+> `thread_info` Don't want to bloat it. Even if we end shoving into task_st=
+ruct,
+> don't want to bloat that either. I can just convert it into bitmask if
+> bitfields are an eyesore here.
 
-Ok.
+  "unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);"
 
->>> diff --git a/arch/riscv/kernel/usercfi.c b/arch/riscv/kernel/usercfi.c
->>> +static noinline unsigned long amo_user_shstk(unsigned long *addr, unsi=
-gned long val)
+is an eyesore that defines exactly the same as the two lines alone
+
+  unsigned long ubcfi_en : 1;
+  unsigned long ubcfi_locked : 1;
+
+That one should be removed.
+
+If we have only 4 bits in 4/8 bytes, then bitfields do generate worse
+code than 4 bools and a 0/4 byte hole.  The struct size stays the same.
+
+I don't care much about the switch to bools, though, because this code
+is not called often.
+
+>>> @@ -262,3 +292,83 @@ void shstk_release(struct task_struct *tsk)
+>>> +int arch_set_shadow_stack_status(struct task_struct *t, unsigned long =
+status)
 >>> +{
->>> +	/*
->>> +	 * Never expect -1 on shadow stack. Expect return addresses and zero
->>> +	 */
->>> +	unsigned long swap =3D -1;
->>> +	__enable_user_access();
->>> +	asm goto(
->>> +		".option push\n"
->>> +		".option arch, +zicfiss\n"
->>
->>Shouldn't compiler accept ssamoswap.d opcode even without zicfiss arch?
->
-> Its illegal instruction if shadow stack aren't available. Current toolcha=
-in
-> emits it only if zicfiss is specified in march.
-
-Oof, I'll look why arch is being used like that, thanks.
-
-(I thought arch is only for compiler generated code, so assembly
- mnemonics would always be defined if the compiler knows them.)
-
->>
->>> +		".option pop\n"
->>> +		: [swap] "=3Dr" (swap), [addr] "+A" (*addr)
->>> +		: [val] "r" (val)
->>> +		: "memory"
->>> +		: fault
->>> +		);
->>> +	__disable_user_access();
->>> +	return swap;
->>> +fault:
->>> +	__disable_user_access();
->>> +	return -1;
->>
->>I think we should return 0 and -EFAULT.
->>We can ignore the swapped value, or return it through a pointer.
->
-> Consumer of this detects -1 and then return -EFAULT.
-> We would eventually need this when creating shadow stack tokens for
-> kernel shadow stack. I believe `-1` is safe return value which can't
-> be construed as negative kernel address (-EFAULT will be)
-
-I believe it as well, but I don't see a reason why we need to risk it
-when we can return the stack value though a pointer and have simple
-success/failure return value.
-
->>> +}
+>>> +	/* Request is to enable shadow stack and shadow stack is not enabled =
+already */
+>>> +	if (enable_shstk && !is_shstk_enabled(t)) {
+>>> +		/* shadow stack was allocated and enable request again
+>>> +		 * no need to support such usecase and return EINVAL.
+>>> +		 */
+>>> +		if (is_shstk_allocated(t))
+>>> +			return -EINVAL;
 >>> +
->>> +static unsigned long allocate_shadow_stack(unsigned long addr, unsigne=
-d long size,
->>> +					   unsigned long token_offset, bool set_tok)
+>>> +		size =3D calc_shstk_size(0);
+>>> +		addr =3D allocate_shadow_stack(0, size, 0, false);
+>>
+>>Why don't we use the userspace-allocated stack?
+>>
+>>I'm completely missing the design idea here...  Userspace has absolute
+>>over the shadow stack pointer CSR, so we don't need to do much in Linux:
+>>
+>>1. interface to set up page tables with -W- PTE and
+>>2. interface to control senvcfg.SSE.
+>>
+>>Userspace can do the rest.
+>
+> Design is like following:
+>
+> When a user task wants to enable shadow stack for itself, it has to issue
+> a syscall to kernel (like this prctl). Now it can be done independently b=
+y
+> user task by first issuing `map_shadow_stack`, then asking kernel to ligh=
+t
+> up envcfg bit and eventually when return to usermode happens, it can writ=
+e
+> to CSR. It is no different from doing all of the above together in single
+> `prctl` call. They are equivalent in that nature.
+>
+> Background is that x86 followed this because x86 had workloads/binaries/
+> functions with (deep)recursive functions and thus by default were forced
+> to always allocate shadow stack to be of the same size as data stack. To
+> reduce burden on userspace for determining and then allocating same size
+> (size of data stack) shadow stack, prctl would do the job of calculating
+> default shadow stack size (and reduce programming error in usermode). arm=
+64
+> followed the suite. I don't want to find out what's the compatiblity issu=
+es
+> we will see and thus just following the suite (given that both approaches
+> are equivalent). Take a look at static `calc_shstk_size(unsigned long siz=
+e)`.
+>
+> Coming back to your question of why not allowing userspace to manage its
+> own shadow stack. Answer is that it can manage its own shadow stack. If i=
+t
+> does, it just have to be aware of size its allocating for shadow stack.
+
+It's just that userspace cannot prevent allocation of the default stack
+when enabling it, which is the weird part to me.
+The allocate and enable syscalls could have been nicely composable.
+
+> There is already a patch series going on to manage this using clone3.
+> https://lore.kernel.org/all/20250408-clone3-shadow-stack-v15-4-3fa245c6e3=
+be@kernel.org/
+
+A new ioctl does seem to solve most of the practical issues, thanks.
+
+> I fully expect green thread implementations in rust/go or swapcontext
+> based thread management doing this on their own.
+>
+> Current design is to ensure existing apps dont have to change a lot in
+> userspace and by default kernel gives compatibility. Anyone else wanting
+> to optimize the usage of shadow stack can do so with current design.
+
+Right, changing rlimit_stack around shadow stack allocation is not the
+most elegant way, but it does work.
+
+>>> +int arch_lock_shadow_stack_status(struct task_struct *task,
+>>> +				  unsigned long arg)
 >>> +{
->>> +	int flags =3D MAP_ANONYMOUS | MAP_PRIVATE;
+>>> +	/* If shtstk not supported or not enabled on task, nothing to lock he=
+re */
+>>> +	if (!cpu_supports_shadow_stack() ||
+>>> +	    !is_shstk_enabled(task) || arg !=3D 0)
+>>> +		return -EINVAL;
 >>
->>Is MAP_GROWSDOWN pointless?
+>>The task might want to prevent shadow stack from being enabled?
 >
-> Not sure. Didn't see that in x86 or arm64 shadow stack creation.
-> Let me know if its useful.
+> But Why would it want to do that? Task can simply not issue the prctl. Th=
+ere
+> are glibc tunables as well using which it can be disabled.
 
-It is for automated growing of the stack.  I think that the default
-stack is pointlessly large already, and if other arches don't do it, so
-we can probably follow their design here as well...
+The task might do it as some last resort to prevent a buggy code from
+enabling shadow stacks that would just crash.  Or whatever complicated
+reason userspace can think of.
 
->>> +	struct mm_struct *mm =3D current->mm;
->>> +	unsigned long populate, tok_loc =3D 0;
->>> +
->>> +	if (addr)
->>> +		flags |=3D MAP_FIXED_NOREPLACE;
->>> +
->>> +	mmap_write_lock(mm);
->>> +	addr =3D do_mmap(NULL, addr, size, PROT_READ, flags,
->>
->>PROT_READ implies VM_READ, so won't this select PAGE_COPY in the
->>protection_map instead of PAGE_SHADOWSTACK?
->
-> PROT_READ is pointless here and redundant. I haven't checked if I remove =
-it
-> what happens.
->
-> `VM_SHADOW_STACK` takes precedence (take a look at pte_mkwrite and pmd_mk=
-write.
-> Only way `VM_SHADOW_STACK` is possible in vmflags is via `map_shadow_stac=
-k` or
-> `fork/clone` on existing task with shadow stack enabled.
->
-> In a nutshell user can't specify `VM_SHADOW_STACK` directly (indirectly v=
-ia
-> map_shadow_stack syscall or fork/clone) . But if set in vmaflags then it'=
-ll
-> take precedence.
-
-Yeah, I don't like that ugly special case at all, so I was hoping we
-could somehow avoid it. :)
+It's more the other way around.  I wonder why we're removing this option
+when we don't really care what userspace does to itself.
+I think it's complicating the kernel without an obvious gain.
 
