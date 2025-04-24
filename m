@@ -1,257 +1,207 @@
-Return-Path: <linux-arch+bounces-11560-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11561-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20493A9AF2F
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 15:37:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91CABA9B036
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 16:10:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B18B9A3FB6
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 13:36:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A68F67ACDAE
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 14:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DF517A310;
-	Thu, 24 Apr 2025 13:37:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3571A17D346;
+	Thu, 24 Apr 2025 14:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="STPhnhl3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gqI10tR6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93921531E8
-	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 13:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9E118A959
+	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 14:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745501820; cv=none; b=en2z2fmEF9NGAuXBWl+NTOLF6mBezoYd2KUGfBsI9q9PzBwJ9zRHs4bimS6UOP/gLmSpjd5rB371Ht1wzLFyqM5DX7Ty1kr6X9aPJKj9n/KI/oGJfB1Fxjj/vOBmeaymd50CHObdHhrhDzH8ZtiSuStiQci1gGacuAGSgl3sWAA=
+	t=1745503792; cv=none; b=euIX4KlF0vCAUROeyt6bTFUryJ1YuXQP+uUPV1mucp7yxoNKxh0LZTkDlJwkYCRaq4JDLns2onqzRIKqw/OgxEUQpVE86KrHvaMoToC6nRLHbmuSWdczMlbeYhQ0VWmB19DZPTkVDgUfG15V8Xno5jF4JuJXWf9B2lOiybiRttk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745501820; c=relaxed/simple;
-	bh=mJgp6Mchv4iv2by+fPTrmWpvDmstqIj/vVuuTYwKWrc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=SdOUKYmVsJAbV67s0IU6C5iKVuHQkkfelqBvx7hqsFYg3eHduGUstmynugHhlPEPrzvb5krrWUXT3xYM09yr4dDN4Vqw0+Epzb+cYFSdnxGQGWoN1VGXy6b04TUBVFbaJpRyCo7CyV23OT9GOhNVWOnTO6LXB+rblmP7hL9nzOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=STPhnhl3; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3912a28e629so47764f8f.1
-        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 06:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745501816; x=1746106616; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u72nfMy9zYS5aW9xBcDq6LESieHcry02Dg/8XEt7OSw=;
-        b=STPhnhl3MTSastFv/OTSfSJnvslCvjVFt8jQhYjLvJcAvNTMw2P95yoTCq7JNMH3oB
-         ZiHZePSZTKb8HQPOF2FZj7lJcheeYAM9TZI4ywWPoJDKd+qnWzhYDa3b6brXchZ2gz1A
-         iOds1IBKHaBEtEMgAZHyp7VnSGreB1libYVDSk0VW24DaFN57lhhD4mNPToS/FGOySVe
-         OBCN8JXd+nYE3DmFRwi/qQAIjBWxS9rSeLtljz+7N0EWc5IgDelmDHVKWrdW+BDfo+fC
-         NEF2idC69hqasCOrs8POBpnilmFdiY2QJvnVbXouIESH4LHz2D50/QSNyQ8cimsa/YYW
-         tMmA==
+	s=arc-20240116; t=1745503792; c=relaxed/simple;
+	bh=Byl8wGqJTtnl74RJ2YKMT0DDlnonSferfdT8IKzK5+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J2ORUVERkJtojOR7FneF1c33zMdukrCu3UbkJgNTunW1rHmaScSA71WfTMpVh5OgB7QIeh0A023tEehCEGmB2zscygElawAYrtOYSaIR6noelj0pulnfZHCW4T9ab56wl5l3KoltegfjZ8sZ4wDlM1laATHEIZySPICwDLJHRfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gqI10tR6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745503789;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Kcd6o2tvUH9Wlq0TU9ZCul/Ej7huhlgPAxSc9bD4eg0=;
+	b=gqI10tR6664EVHaUzsi6pGv6tz0HdbE9geKp9ilsJrCv/IGdHdIl3F+t87ZV5iEWJ36BFT
+	90ww/K6AwKDagRwpzvjf85EZ5QIlj0H5iBbyf6dpvyMJHbcAUl6S24WnFsa6qAyHGrCAeF
+	PakxFVdr+Mlayu7wN0mHe39Alz4ycjw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-gJtlafXoMD-ndlX2r6WFmQ-1; Thu, 24 Apr 2025 10:09:47 -0400
+X-MC-Unique: gJtlafXoMD-ndlX2r6WFmQ-1
+X-Mimecast-MFC-AGG-ID: gJtlafXoMD-ndlX2r6WFmQ_1745503787
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-39d917b1455so340182f8f.3
+        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 07:09:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745501816; x=1746106616;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=u72nfMy9zYS5aW9xBcDq6LESieHcry02Dg/8XEt7OSw=;
-        b=Yr7rG5GcFmVBRQku1mhI6tJilfFRiXwk/gzuhV4E+enB7oF1THp9+dhcdBo9G5lr8q
-         X3h85z1RcXL542kEqSCJyPaDTahNdEJ5NKhP222ak9Cqmzl0W/rg8zmpRmBRc7hM9byJ
-         jYC6UiRsZgSkRm12CjSfwgJAT7f3ejWYlzJVRrMt3V+eVw34RJb0hzQVgkwEueYw43x5
-         J1m6yE7lrOy2uPNQI7U9kPg667U8Xj5CywPl7cCkDHnyUt/Y+n5bE0m8MwfuHuh2AYrF
-         Ov5APYUR0+VjzEQczCEfvEoZJ4bTzRWlcqpVQlyjgm8aBVHAepAUYPfCGKSCiwX0gn8R
-         82ng==
-X-Forwarded-Encrypted: i=1; AJvYcCX3KIKv+EOlUGgnZY3cG3DOmIsF4mkAAST9hNZb0b0GepOgUGgyRj4MEt1f31+OqfkPqcwYKuD1dF4z@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVbrWLGURkLbxvsEf/xx7UpNaNgKyc6IOw7b2pP8Za/4M6cdI7
-	wcIsKdJkLV1xuonDvn7wBVIbSohKJr/LvlxjYf9EA5vUJqeCF6kjDzFqH91119k=
-X-Gm-Gg: ASbGncvSxOJ5eT2BPiptxNJ17etzAtvbDuiTnnrrbdA7sNXcuH5ZjYdd5b68Vq8GYeA
-	jAkWh7iId4dn/KKVDxFeTiE+wsa7PmVf7Q6aV2yF82+qJsrYjENve/Oip9n+xsxqWy3sVjdIiUf
-	9bduwHQ26PUCOlKmpR9DWDRspSRzZ9DNEpdP/NWJ+LENQIOpHBNUQdZ8bhdTqfZrKrd2vNt7zxe
-	3fpBa7NvuVo0NJbN0xA1aIg449NWth5M01/zD9BSQE347IVArmWRFc0FKGybkMh8JSHhPJdwYOB
-	8/KdMmTdVBg8tTiaN7jkEav0PA/ebJqdNBIbitym/PXNddD3
-X-Google-Smtp-Source: AGHT+IEvTiSK1Lb+RPBdQ/DuDmeOaJEszTrN5CFCiZtbJdEyNkpwKicv/xW9sGpiPTRfU1AmU+RxSg==
-X-Received: by 2002:a05:6000:2483:b0:3a0:65ab:89d5 with SMTP id ffacd0b85a97d-3a06cfaf02fmr812129f8f.15.1745501815962;
-        Thu, 24 Apr 2025 06:36:55 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:b30c:ee4d:9e10:6a46])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a06d4c30d7sm2135597f8f.44.2025.04.24.06.36.55
+        d=1e100.net; s=20230601; t=1745503786; x=1746108586;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kcd6o2tvUH9Wlq0TU9ZCul/Ej7huhlgPAxSc9bD4eg0=;
+        b=P1nVuqyKU2FUnPTp62Jp2/AHWEXlNq5HSlQ/4AGRjI4IhvimMO8NMeyN8JuaNretLq
+         VLybxfr17orXiLE910Fbjrfas3+kjE2VEx+koBqGMC/W/MDb6QGgrWw12jbm+LVanAJE
+         ED3PatWIZQ7LzCQMAvId/X3P/MFNFthemkV/DdFgpRX5Sb9YZXMaOUcuXesEbhT3sGKB
+         x/w8ueXetSChIxT2sTyxn7auUMcmg44iyH2ncwhWkiExRTDD6jqAK9loSoehgHEkOWSc
+         3LeiLxeEgDodvXYbvTJ0ZTR+Fs7FoJBJAmEaAJLMu5AXLZfVASLi6vN++mF+IK0r5XWo
+         XVmg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnEkLuf/45UCNZi/CKIrWCjC8C5Yjiic2rHdpHgZ1soV5EVdKhT2Ix3CmQRyKZrhp6B9oErqiMzfFS@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoBbawC4OWenI/bpg4NHotuRBspdrFz/6NjAdVpNXkvYqzxfB7
+	lFV5I4IG6ofEcb0sY2XctGYO0DueI/4Qm/pnAxLbVTdML6rBqW862IR2CSHIUMVae8qPhFjr4CA
+	svVjjUQ/R+X4lYLuWn7Bpxws8trxRJ9LuNOWGAGu5Zs1esAxUhxXPSapF25A=
+X-Gm-Gg: ASbGncsLOoiIxn+YpNDjg9PwPhcQk099/n8g7SkzW7YOGRLaEMWa8N2bWgd5HjCHD1L
+	MuQhpUXzQuSbM1cRNX6/CqbFdE6r8ZVS8X71eZQiVU2NREhY2HGENNSkKZNmBswrvOqTpqCjW/C
+	Ssml8z+5iZPu5XpPeHTktvLH0hPU4SHp4+QJNCm9NtM5glIR0sz1PVj2uUvdfuItWzGN/79io9k
+	/XHiVaYSgbxpCidpA/NQfhfkKlT0Qe+ZgMCmpARihu1W814zwYM5eWuJyUkCwWmz3EgopVp6nXV
+	pAefIp3jgzEzO9BzSVFtisKSqw==
+X-Received: by 2002:a05:6000:40dd:b0:39c:2669:d786 with SMTP id ffacd0b85a97d-3a06cf564f6mr2030207f8f.19.1745503786432;
+        Thu, 24 Apr 2025 07:09:46 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHCLnvnPrTr2kA4EPsTX8eBJWla0qlNHBLrDC/aXaOPuzLScpVQ0iwMUi89EkItUdIH45LJew==
+X-Received: by 2002:a05:6000:40dd:b0:39c:2669:d786 with SMTP id ffacd0b85a97d-3a06cf564f6mr2030125f8f.19.1745503785858;
+        Thu, 24 Apr 2025 07:09:45 -0700 (PDT)
+Received: from t14ultra (109-81-82-22.rct.o2.cz. [109.81.82.22])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a06d4c4945sm2217236f8f.47.2025.04.24.07.09.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 06:36:55 -0700 (PDT)
+        Thu, 24 Apr 2025 07:09:44 -0700 (PDT)
+Date: Thu, 24 Apr 2025 16:10:04 +0200
+From: Jan Stancek <jstancek@redhat.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>,
+	jstancek@redhat.com
+Subject: Re: [PATCH 08/19] vdso/gettimeofday: Prepare do_hres_timens() for
+ introduction of struct vdso_clock
+Message-ID: <aApGPAoctq_eoE2g@t14ultra>
+References: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
+ <20250303-vdso-clock-v1-8-c1b5c69a166f@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Apr 2025 15:36:54 +0200
-Message-Id: <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
-Subject: Re: [PATCH v12 12/28] riscv: Implements arch agnostic shadow stack
- prctls
-Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
- <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Liam R.
- Howlett" <Liam.Howlett@oracle.com>, "Vlastimil Babka" <vbabka@suse.cz>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, "Paul Walmsley"
- <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, "Conor Dooley" <conor@kernel.org>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Arnd Bergmann" <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>,
- "Eric Biederman" <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>,
- "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann
- Horn" <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
- <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
- <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
- <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
- <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Deepak Gupta" <debug@rivosinc.com>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-12-e51202b53138@rivosinc.com>
- <D92V2NPNZYV0.136MJ2HOK48HE@ventanamicro.com>
- <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
-In-Reply-To: <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250303-vdso-clock-v1-8-c1b5c69a166f@linutronix.de>
 
-2025-04-23T21:44:09-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, Apr 10, 2025 at 11:45:58AM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
-te:
->>2025-03-14T14:39:31-07:00, Deepak Gupta <debug@rivosinc.com>:
->>> diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/asm/=
-usercfi.h
->>> @@ -14,7 +15,8 @@ struct kernel_clone_args;
->>>  struct cfi_status {
->>>  	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
->>> -	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 1);
->>> +	unsigned long ubcfi_locked : 1;
->>> +	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);
->>
->>The rsvd field shouldn't be necessary as the container for the bitfield
->>is 'unsigned long' sized.
->>
->>Why don't we use bools here, though?
->>It might produce a better binary and we're not hurting for struct size.
+On Mon, Mar 03, 2025 at 12:11:10PM +0100, Thomas Weiﬂschuh wrote:
+>From: Anna-Maria Behnsen <anna-maria@linutronix.de>
 >
-> If you remember one of the previous patch discussion, this goes into
-> `thread_info` Don't want to bloat it. Even if we end shoving into task_st=
-ruct,
-> don't want to bloat that either. I can just convert it into bitmask if
-> bitfields are an eyesore here.
-
-  "unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);"
-
-is an eyesore that defines exactly the same as the two lines alone
-
-  unsigned long ubcfi_en : 1;
-  unsigned long ubcfi_locked : 1;
-
-That one should be removed.
-
-If we have only 4 bits in 4/8 bytes, then bitfields do generate worse
-code than 4 bools and a 0/4 byte hole.  The struct size stays the same.
-
-I don't care much about the switch to bools, though, because this code
-is not called often.
-
->>> @@ -262,3 +292,83 @@ void shstk_release(struct task_struct *tsk)
->>> +int arch_set_shadow_stack_status(struct task_struct *t, unsigned long =
-status)
->>> +{
->>> +	/* Request is to enable shadow stack and shadow stack is not enabled =
-already */
->>> +	if (enable_shstk && !is_shstk_enabled(t)) {
->>> +		/* shadow stack was allocated and enable request again
->>> +		 * no need to support such usecase and return EINVAL.
->>> +		 */
->>> +		if (is_shstk_allocated(t))
->>> +			return -EINVAL;
->>> +
->>> +		size =3D calc_shstk_size(0);
->>> +		addr =3D allocate_shadow_stack(0, size, 0, false);
->>
->>Why don't we use the userspace-allocated stack?
->>
->>I'm completely missing the design idea here...  Userspace has absolute
->>over the shadow stack pointer CSR, so we don't need to do much in Linux:
->>
->>1. interface to set up page tables with -W- PTE and
->>2. interface to control senvcfg.SSE.
->>
->>Userspace can do the rest.
+>To support multiple PTP clocks, the VDSO data structure needs to be
+>reworked. All clock specific data will end up in struct vdso_clock and in
+>struct vdso_time_data there will be array of it. By now, vdso_clock is
+>simply a define which maps vdso_clock to vdso_time_data.
 >
-> Design is like following:
+>Prepare for the rework of these structures by adding struct vdso_clock
+>pointer argument to do_hres_timens(), and replace the struct vdso_time_data
+>pointer with the new pointer arugment whenever applicable.
 >
-> When a user task wants to enable shadow stack for itself, it has to issue
-> a syscall to kernel (like this prctl). Now it can be done independently b=
-y
-> user task by first issuing `map_shadow_stack`, then asking kernel to ligh=
-t
-> up envcfg bit and eventually when return to usermode happens, it can writ=
-e
-> to CSR. It is no different from doing all of the above together in single
-> `prctl` call. They are equivalent in that nature.
+>No functional change.
 >
-> Background is that x86 followed this because x86 had workloads/binaries/
-> functions with (deep)recursive functions and thus by default were forced
-> to always allocate shadow stack to be of the same size as data stack. To
-> reduce burden on userspace for determining and then allocating same size
-> (size of data stack) shadow stack, prctl would do the job of calculating
-> default shadow stack size (and reduce programming error in usermode). arm=
-64
-> followed the suite. I don't want to find out what's the compatiblity issu=
-es
-> we will see and thus just following the suite (given that both approaches
-> are equivalent). Take a look at static `calc_shstk_size(unsigned long siz=
-e)`.
+>Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+>Signed-off-by: Nam Cao <namcao@linutronix.de>
+>Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+>---
+> lib/vdso/gettimeofday.c | 35 ++++++++++++++++++-----------------
+> 1 file changed, 18 insertions(+), 17 deletions(-)
 >
-> Coming back to your question of why not allowing userspace to manage its
-> own shadow stack. Answer is that it can manage its own shadow stack. If i=
-t
-> does, it just have to be aware of size its allocating for shadow stack.
 
-It's just that userspace cannot prevent allocation of the default stack
-when enabling it, which is the weird part to me.
-The allocate and enable syscalls could have been nicely composable.
+Hi,
 
-> There is already a patch series going on to manage this using clone3.
-> https://lore.kernel.org/all/20250408-clone3-shadow-stack-v15-4-3fa245c6e3=
-be@kernel.org/
+starting with this patch, I'm seeing user-space crashes when using clock_gettime():
+   BAD  -> 83a2a6b8cfc5 vdso/gettimeofday: Prepare do_hres_timens() for introduction of struct vdso_clock
+   GOOD -> 64c3613ce31a vdso/gettimeofday: Prepare do_hres() for introduction of struct vdso_clock
 
-A new ioctl does seem to solve most of the practical issues, thanks.
+It appears to be unique to aarch64 with 64k pages, and can be reproduced with
+LTP clock_gettime03 [1]:
+   command: clock_gettime03 
+   tst_kconfig.c:88: TINFO: Parsing kernel config '/lib/modules/6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k/build/.config'
+   tst_test.c:1903: TINFO: LTP version: 20250130-231-gd02c2aea3
+   tst_test.c:1907: TINFO: Tested kernel: 6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k #1 SMP PREEMPT_DYNAMIC Wed Apr 23 23:23:54 UTC 2025 aarch64
+   tst_kconfig.c:88: TINFO: Parsing kernel config '/lib/modules/6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k/build/.config'
+   tst_test.c:1720: TINFO: Overall timeout per run is 0h 05m 24s
+   clock_gettime03.c:121: TINFO: Testing variant: vDSO or syscall with libc spec
+   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct 10000ms
+   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct 0ms
+   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct 10000ms
+   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0ms
+   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct -10000ms
+   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct 0ms
+   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct -10000ms
+   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0ms
+   tst_test.c:438: TBROK: Child (233649) killed by signal SIGSEGV
 
-> I fully expect green thread implementations in rust/go or swapcontext
-> based thread management doing this on their own.
->
-> Current design is to ensure existing apps dont have to change a lot in
-> userspace and by default kernel gives compatibility. Anyone else wanting
-> to optimize the usage of shadow stack can do so with current design.
+or with:
+--------------------- 8< ----------------------
+#define _GNU_SOURCE
+#include <sched.h>
+#include <time.h>
+#include <unistd.h>                                                                                                                                                                                                                          #include <sys/wait.h>
 
-Right, changing rlimit_stack around shadow stack allocation is not the
-most elegant way, but it does work.
+int main(void)
+{
+         struct timespec tp;
+         pid_t child;
+         int status;
 
->>> +int arch_lock_shadow_stack_status(struct task_struct *task,
->>> +				  unsigned long arg)
->>> +{
->>> +	/* If shtstk not supported or not enabled on task, nothing to lock he=
-re */
->>> +	if (!cpu_supports_shadow_stack() ||
->>> +	    !is_shstk_enabled(task) || arg !=3D 0)
->>> +		return -EINVAL;
->>
->>The task might want to prevent shadow stack from being enabled?
->
-> But Why would it want to do that? Task can simply not issue the prctl. Th=
-ere
-> are glibc tunables as well using which it can be disabled.
+         unshare(CLONE_NEWTIME);
 
-The task might do it as some last resort to prevent a buggy code from
-enabling shadow stacks that would just crash.  Or whatever complicated
-reason userspace can think of.
+         child = fork();
+         if (child == 0) {
+                 clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
+         }
 
-It's more the other way around.  I wonder why we're removing this option
-when we don't really care what userspace does to itself.
-I think it's complicating the kernel without an obvious gain.
+         wait(&status);
+         return status;
+}
+
+# ./a.out ; echo $?
+139
+--------------------- >8 ----------------------
+
+RPMs and configs can be found at Fedora koji, latest build is at [2] (look for kernel-64k).
+
+Regards,
+Jan
+
+[1] https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/clock_gettime/clock_gettime03.c
+[2] https://koji.fedoraproject.org/koji/buildinfo?buildID=2704401
+
 
