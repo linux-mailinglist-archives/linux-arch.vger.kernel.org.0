@@ -1,295 +1,217 @@
-Return-Path: <linux-arch+bounces-11551-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11552-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8692BA9A418
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 09:35:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03408A9A459
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 09:41:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECD12921F0D
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 07:35:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BDD47A9602
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 07:40:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E12216602;
-	Thu, 24 Apr 2025 07:25:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44E01FF1A0;
+	Thu, 24 Apr 2025 07:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="c5oHOKiO"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CQL0TCfC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2070.outbound.protection.outlook.com [40.107.223.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8289C1F4190
-	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 07:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745479542; cv=none; b=UCfBRE0a7jI+zkE49aXHKzeOzRBnq93edI3UWsRxA6+6+ybW/wLomOVO6KJi/hRgo+sewLJHVbWJYxKM2QUYzm0W0qmIMC4hTfPrAX34X5/YJktb1pX0Wiu2fPav5vbDxAroY6E2vUyxReF0XyEdTA+pQYjCChDUxgqjIBSrPwo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745479542; c=relaxed/simple;
-	bh=sdM7Lfbt0ugbQKamZrvJVP35QAMpRJf64N3YU80rJrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O0kL7fdzGdqlVFQlle5YbqgyJ6nf7cTKVKY3/nmhIO/8r8aQfJwDuhinhXP1JhyjzyAyE4zf1jzcpfbQZ8UY9rOtrp3ECVxoX3FJwXJ36iF9fyCOeOGYXwStHDNLNU2CL7hI129oXGalfIygpEnFML5FgoflH9npz0+Xesiptvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=c5oHOKiO; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-224341bbc1dso7739335ad.3
-        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 00:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745479539; x=1746084339; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZraI9Ovv6gpYhi0G8W3Cw0oZRXxTTj3IaFkdasgPTa8=;
-        b=c5oHOKiO2JcHXg01FrqxIOSkwypRDgq10RcjXPmL6sJW5SZtaRXVhcokdFdqPLgvWa
-         CFnMlSemcRQmSFNbyouosHBBR+0I9QmkaP/TVMGiQKYOdouJaxKMUoLYeeLy5gCl9dmr
-         yTpR6e9J7S63w34hdN9uhuoWxUFG7FV+pkKcJQQWANDCbldrG94GvnoFGTA56VpGHrwq
-         CmK//jjXKoPCHRkdoHugMu9ls02etO3jkiVbrTN67/E7FyIGS7279M8MTLCs3LNBbCwP
-         h8GSeQHhRPxvKeFdGpS/ccO2QaU8VCn3v+f+w3dTNKTlyPkmotruMpFlK6K83SVfrawf
-         X8hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745479539; x=1746084339;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZraI9Ovv6gpYhi0G8W3Cw0oZRXxTTj3IaFkdasgPTa8=;
-        b=Cl8AEGlGjS88iHnEoFd3pGxTiKax1wevrIRLAHYhENORR9DG4Tf3E+1R+zzCp6+FgV
-         RQmiXGURKqU9exI2YNla91a0OAF4/UjbtULUexvqfF5NgMLZ5MZYGcjLHVuaIA4Fuv20
-         LenZehIt2KnUmNwBzzd9M0nGeQFBkQjiNIo4TZillS/X0nPP7JioeYdO195g0to1B7h9
-         P0vmYHLLBY1P0n8tGIyQGGbMEQuYT+miU3tsDt/Ox/sXJHJRTbHzExtklhMxN2OhXuIK
-         6kXORpcpK5AYfv0qNR3t5UjQVuefgcobr3AhK1u1pNaaWSYg7cdyZWmzf/UcJU5fc8d4
-         EIvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXY9pbAwM117hmkQiWWF2QSxGhC6pPIrDsag445fvMWzEl6fser7hdQgKgmRNYGck95JA68Met/RLHn@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWMHngSUWDp/r4Xf1tlycDX8Av8VSNyOFtKNX1i4pdloSrsXWl
-	lwvCAzsbnrrYzH5eOUR0pcnEdZVbOSI/P9Lkw0aCRhyT1OsDlKbB15h3M/rRfoc=
-X-Gm-Gg: ASbGncsgiiPVKi0q1YBLEfBOp0dUPYDL0R5dETrSt4rtlSmf4bjU+V1s2vLWN2UDpqC
-	r4amv3NaHHBID4iZdo+Faujhmvqn5kB7Z4kcQb/fBAbQqGlwZQP3Lemex+56CYTxiH+vUlB0B5P
-	dMup+KUXoZDWKkWb0Pa8svgWdvTR7aCj/dO+W8xMj3QrFsHtbWliq8i05G6dlluuouXZQvSspNF
-	lNGYzO5bkmfGpk/zjnZGdEfbA8fLRwSFGEA6NpLKWWtdJOdVbSVt40EoZlZiChiyyEYuPUXkmMb
-	PEDLi0ZOYUwxU1/JV+nnr73Cq6YUFZM6TFftvBfbdXLkYfvdoSK7jPjx1mRe9A==
-X-Google-Smtp-Source: AGHT+IH7Pn7YrwNkVIPl7Y7iC7lJ60MGgO6KIgekfFqy8hhbQAHwjVQ+88ZLIatTihzxRFG2BgkJcw==
-X-Received: by 2002:a17:902:e5c8:b0:220:c813:dfd1 with SMTP id d9443c01a7336-22db3d777c4mr23449115ad.36.1745479538561;
-        Thu, 24 Apr 2025 00:25:38 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22db50ea91fsm6333385ad.126.2025.04.24.00.25.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 00:25:38 -0700 (PDT)
-Date: Thu, 24 Apr 2025 00:25:34 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
-	Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH v13 05/28] riscv: usercfi state for task and save/restore
- of CSR_SSP on trap entry/exit
-Message-ID: <aAnnbtABLTL81uEY@debug.ba.rivosinc.com>
-References: <20250424-v5_user_cfi_series-v13-0-971437de586a@rivosinc.com>
- <20250424-v5_user_cfi_series-v13-5-971437de586a@rivosinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD441FE470;
+	Thu, 24 Apr 2025 07:33:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745480011; cv=fail; b=UJXDDT0rELEec5f/ZSAFxzuiu/Q7p+oYGaqlelw36WV0QkE4naZeUXksriLUfNz4cFAxnOrbgbHu67FfpaGhQJmjPBJ4FD57k12wpAuNbL2V/yoYHR1sr7EsrLSc8uSBG0t6ARLN90hLf7OtbtEjEZBr8Xgm/hw8mpxDS4cWArA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745480011; c=relaxed/simple;
+	bh=hl4ljonU2SXiN7cO+qYdHKUvB369nrWIKiALa3MHtaU=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=BB7N58r5nMnT238Z4+U4wObw6bzCMuLxBJPI1p80AqfNjXsydLcj7wH3WXD9jBzs5tafeE5VVEQG2CfGpT4OhpRrMeclhZiwbIalFQ60pYxaE/3jzli9VPdkjJgAxe6Y+sogOw0ImLF3sEAb67CczWZKzateJghRZWAeHGenNtQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CQL0TCfC; arc=fail smtp.client-ip=40.107.223.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qg0+7gMzk3B+uavErOreDZFGJPp8XSKpjVjoxo7qqHn7WoSzPqgWm31KNEdiIVTki9yLN0Y/kCpOtWAHOmDRPB3L9VWi+e9jXZE5uX82MncodmT1pfOUX/1yFwc+p9/JVk52XkoMRlthgzS1Ka0hePZ+lPk07entawrqrxdEpXJfdDLhaC+mplgv757Q5uv5PTMjhZ0T790Q044wxFafrj+I1t8iFEZTtnXScQCdqYdthOfZ/Esi58hoSgcvhe+hRDdu3cXCl6mWODqm/iixsdRefKZZSihN7gHXC+0vbf21eLeXimkyFBWXCyp1Aj5upenLFVbeJ/x4AurYvQaaFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k+HCeKCsyBlHmTU8A3dmxms9/RArYomFOIqZjAhtYoc=;
+ b=kkIgwxhabP5adbouWXsJvKd5ZudLEhkt1lQeGD7ZI+maQwoSEjG9PEQTMeQiXL4s2/9mH0hj9+IAsqNvvcS7xJZfBm2uWMvsdaLhg3njv3sd/fXzbNWlB1C1gLSYNAvyrOLIJ6ejlTMWbIZaXNq+mhjUeD6RlxO+RFp7istEFaaddU7/PmrbEWaUNZvtsePVHflYXzuGBTtuiYRnn0qC3dNJyQtWYvYdXVRC4IdQbO9nvxNYJUBrsWmyzbr9T+0XEu4O923tBcNWzgntxPWZYzCCrz3EJ/kgWkC9WliEEZk/m/Ke9AOC5q9lLXAUeZmpASc9++RKjwmkgLlGOiwSxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k+HCeKCsyBlHmTU8A3dmxms9/RArYomFOIqZjAhtYoc=;
+ b=CQL0TCfCn3pO6wt0fkLJ8Dmj67BvEq9wg6GIwp6nj5QSQIE4xNUCzpDyoh4p+345ewdZ30DxX7zZktxHDGyjGA+gXwdxEgpzVda1/WTlGCXT8gEcOFyvMR65CeSTU0SjEM+oa+C4uHPlzkhQzydQDrIDV1sWPG6oRgNF3Dqn/Rhx+M2J174+sV8IXO4JJvrHZH16F4bdWFprkztWmxt2xGXOztGfz5Rt95qWVRM0YZRNWZP1cRhBhE/gdemyhW8rsfBoN9NdqmuGYWxCKbG5kak4k1ehqLC/ymf7aHoWMjkdyhr9sFahKfrfj9K9bT1/E5FBRqxfwxWj3DoCIhIrMQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
+ by MN0PR12MB6053.namprd12.prod.outlook.com (2603:10b6:208:3cf::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.23; Thu, 24 Apr
+ 2025 07:33:26 +0000
+Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
+ ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
+ ([fe80::1660:3173:eef6:6cd9%3]) with mapi id 15.20.8655.033; Thu, 24 Apr 2025
+ 07:33:26 +0000
+Message-ID: <96d56e78-68db-4294-ab97-423edc9c06d8@nvidia.com>
+Date: Thu, 24 Apr 2025 08:33:20 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 05/10] tools headers: Update the syscall table with the
+ kernel sources
+To: James Clark <james.clark@linaro.org>, Namhyung Kim <namhyung@kernel.org>,
+ Arnd Bergmann <arnd@linaro.org>
+Cc: Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org,
+ linux-arch@vger.kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Ian Rogers <irogers@google.com>, Kan Liang <kan.liang@linux.intel.com>,
+ "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20250410001125.391820-1-namhyung@kernel.org>
+ <20250410001125.391820-6-namhyung@kernel.org>
+ <f950fe96-34d3-4631-b04d-4a1584f4c2f1@linaro.org>
+ <95c9bd53-ccef-4a34-b6d2-7203df84db01@linaro.org>
+ <4c042dd9-50d6-401a-bce7-d22213b07bca@nvidia.com>
+ <b2a5cfc4-190f-4983-8d5e-3483a02be980@linaro.org>
+From: Jon Hunter <jonathanh@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <b2a5cfc4-190f-4983-8d5e-3483a02be980@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0270.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:194::23) To SJ2PR12MB8784.namprd12.prod.outlook.com
+ (2603:10b6:a03:4d0::11)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20250424-v5_user_cfi_series-v13-5-971437de586a@rivosinc.com>
-
-On Thu, Apr 24, 2025 at 12:20:20AM -0700, Deepak Gupta wrote:
->Carves out space in arch specific thread struct for cfi status and shadow
->stack in usermode on riscv.
->
->This patch does following
->- defines a new structure cfi_status with status bit for cfi feature
->- defines shadow stack pointer, base and size in cfi_status structure
->- defines offsets to new member fields in thread in asm-offsets.c
->- Saves and restore shadow stack pointer on trap entry (U --> S) and exit
->  (S --> U)
->
->Shadow stack save/restore is gated on feature availiblity and implemented
->using alternative. CSR can be context switched in `switch_to` as well but
->soon as kernel shadow stack support gets rolled in, shadow stack pointer
->will need to be switched at trap entry/exit point (much like `sp`). It can
->be argued that kernel using shadow stack deployment scenario may not be as
->prevalant as user mode using this feature. But even if there is some
->minimal deployment of kernel shadow stack, that means that it needs to be
->supported. And thus save/restore of shadow stack pointer in entry.S instead
->of in `switch_to.h`.
->
->Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
->Reviewed-by: Zong Li <zong.li@sifive.com>
->Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->---
-> arch/riscv/include/asm/processor.h   |  1 +
-> arch/riscv/include/asm/thread_info.h |  3 +++
-> arch/riscv/include/asm/usercfi.h     | 24 ++++++++++++++++++++++++
-> arch/riscv/kernel/asm-offsets.c      |  4 ++++
-> arch/riscv/kernel/entry.S            | 23 +++++++++++++++++++++++
-> 5 files changed, 55 insertions(+)
->
->diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
->index e3aba3336e63..d851bb5c6da0 100644
->--- a/arch/riscv/include/asm/processor.h
->+++ b/arch/riscv/include/asm/processor.h
->@@ -14,6 +14,7 @@
->
-> #include <asm/ptrace.h>
-> #include <asm/hwcap.h>
->+#include <asm/usercfi.h>
->
-> #define arch_get_mmap_end(addr, len, flags)			\
-> ({								\
->diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
->index f5916a70879a..a0cfe00c2ca6 100644
->--- a/arch/riscv/include/asm/thread_info.h
->+++ b/arch/riscv/include/asm/thread_info.h
->@@ -62,6 +62,9 @@ struct thread_info {
-> 	long			user_sp;	/* User stack pointer */
-> 	int			cpu;
-> 	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
->+#ifdef CONFIG_RISCV_USER_CFI
->+	struct cfi_status	user_cfi_state;
->+#endif
-> #ifdef CONFIG_SHADOW_CALL_STACK
-> 	void			*scs_base;
-> 	void			*scs_sp;
->diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/asm/usercfi.h
->new file mode 100644
->index 000000000000..5f2027c51917
->--- /dev/null
->+++ b/arch/riscv/include/asm/usercfi.h
->@@ -0,0 +1,24 @@
->+/* SPDX-License-Identifier: GPL-2.0
->+ * Copyright (C) 2024 Rivos, Inc.
->+ * Deepak Gupta <debug@rivosinc.com>
->+ */
->+#ifndef _ASM_RISCV_USERCFI_H
->+#define _ASM_RISCV_USERCFI_H
->+
->+#ifndef __ASSEMBLY__
->+#include <linux/types.h>
->+
->+#ifdef CONFIG_RISCV_USER_CFI
->+struct cfi_status {
->+	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
->+	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 1);
->+	unsigned long user_shdw_stk; /* Current user shadow stack pointer */
->+	unsigned long shdw_stk_base; /* Base address of shadow stack */
->+	unsigned long shdw_stk_size; /* size of shadow stack */
->+};
-
-I didn't change this part yet. There are two comments from Radim here
-
-1) Separate state of enabling/lock status from shadow stack pointer.
-    Same goes for landing pad in later patches. I am arguing that since
-    thread_info is already occupies two cachelines and there isn't any
-    effort to manage it within single cacheline, I am not sure if it's worth
-    the effort. Most likely comment is stale or doesn't have backed up data
-    behind it. Furthermore whenever state of enabling is accessed, most likely
-    shadow stack pointer, base pointer or size of shaodw stack will likely to
-    be accessed as well. Thus having all that in colocated cacheline would
-    actually be useful.
-
-2) Convert enabling/lock status from bitfield to bool or accessed via bitmasks.
-    I am agreeing to feedback here and will do that once we converge on point 1.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|MN0PR12MB6053:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2dcded1d-fc64-46ad-0167-08dd83024d21
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OW1HenErMUFreUtlODRHVitWOHVuaFIvYWJreFIwZXppb3FCSnVyUTJsZzdm?=
+ =?utf-8?B?d2huZ1hBc0FMekY1cVlJa1JUQUU2VS96ZGZqYkJZQTR3bXBSbFcvdDhnNUZY?=
+ =?utf-8?B?dGg2UWNiVGEycFVMVEZUeElBRHNmWXVoTkNkMGtpNTd4UUYvZlpOTWFqbThz?=
+ =?utf-8?B?NFZ2MUN2am5oYTh6WjBUSkIvQjBYUEVjZ2hXY3BoKzBZUTByQWt4MStwMTAv?=
+ =?utf-8?B?Y0JnTzlnZTBUcGpiWkZLSVpNbklOSWQ3SDJYRzhTTy8yREZDd2lLK2V1OGNj?=
+ =?utf-8?B?aUk5SC9yL3NWVEE3M1lma2xNbzk0TWk5dzY2a29xNkVHZWFrOC92VmovaHFK?=
+ =?utf-8?B?Z0NKdGU2T1lZZmdSZHlvNkFiek9pY3JiMEZ3dkF3OGhnZXFibFIwanJUZm5m?=
+ =?utf-8?B?TnZnV2tkYTdKa2dYTTNNdWZNTVdKeGRFSWwxUDVzZ0RlaXJ4V0hhbElGME5X?=
+ =?utf-8?B?UHBaNkh5cm5MbkhiVmdWdm56U0R5U0JFQ05keW1OWU14dDVxUmtySisrSlFC?=
+ =?utf-8?B?RUpNcWpSNmViRFZ0NUlWNzN6VmIzTFlFZDRTbVZ6VHRkV1RMWG1xdW10MFAw?=
+ =?utf-8?B?QkpITjR5Z1g2UXgvZk9DM3NhZzRmQU1xV0d6b3VtOUZBNlJLbXhNTXk2dlho?=
+ =?utf-8?B?U1hXT290TmpTVkljODh2b1lDMmlWUXNneXV5dGV5SGZha0l5dXBGTmJwckdi?=
+ =?utf-8?B?RURpQzdtVG1VSERuM2UwWkhLS3J1czlpNncxbXhtQ2tkcG4xTlNBRVZ5VVNy?=
+ =?utf-8?B?ZzE0Q0thbVB3L0VsNkk4UXFKd29aeFB2MWNQakZNTlpQcVo4Zk82dnBDVXJy?=
+ =?utf-8?B?R1d0K1NjK1lWRDdJMlJFeUhlL2UxVEJiVlFkSk5jcE9zeUdyOW9RWnd2UmV5?=
+ =?utf-8?B?WFBoS2hxU25EWGlKaWhoM0lOYW1KVTZXN0JrR0IrdW1lYmh6M0JjOTdNZmNO?=
+ =?utf-8?B?ZjBZUVVsR2xyNDIwblNEdUNaek80Ti9EWC9PTXVSM01lcno5WXRRQU1kUUNx?=
+ =?utf-8?B?dmlzYnVjV1NnUldYZlA4M0FVYkZjS3pqa0hPWWE3UGR0YXRWcTNjVGYxaTMv?=
+ =?utf-8?B?QStzMC9VR1p5VVluMWR0TjVhVVJZeFJMTGZMemhENkdCWm1pUGN0TytWd3Qv?=
+ =?utf-8?B?QmdYcHZqdm9EajZWWnhPdzk3cHhMTlVUTStqVFN6ZVhwQS9sbDFDU1pkY0Uy?=
+ =?utf-8?B?dUw0Yno4b0R6a2hHUGdVMmswZUd5Vm1JM2xwU3o1SG1VYkRoemFtVHNDMHZC?=
+ =?utf-8?B?eHJmT0QxSWVnenkwRUFpNlUwT3hMN3VQbFVpckZ3a0c5T0VMclhyMmhLU1pK?=
+ =?utf-8?B?QW9Zd09DVFlQVUUvb3pBZkVqejFONUxHRnp2LzBBZUZ5Tko4TGM5SFYyQXVS?=
+ =?utf-8?B?SVlVVXovREw3bVdIVXk3U3lQbW90RzdIRjFvN0U5ek1rTlpMaTVqTWlyelFq?=
+ =?utf-8?B?eUtiWHFSalllcHRkdUZWOWdNTk56eG5FUnhpUVBaZG9KNHFISFdKYUdzRGJT?=
+ =?utf-8?B?dzdTYzRIRXBLVXZFWWJwSmlvcWtLZ0RObS81RnlvT2JkOHh0QUxQVXNmWUZZ?=
+ =?utf-8?B?TVkrRm5na2w2NURLOXFGSXhid2MzYUxGd25PZk1neDFzVVJsdWVyM0hmKzVU?=
+ =?utf-8?B?cHR5cUl5WUNFbkNHc3BXYjg0SVAxMUp0d1FPZmwxY1d6NHpUTVVYZVBVUGtM?=
+ =?utf-8?B?UUYvWVp4Z1NpR0J5WGg4aFdGTjhkS2ViWjNraGk1QXd3M2pWMTFFZXlSTHVU?=
+ =?utf-8?B?NlZZUnBlQlErWURqK3lQa3lGcTIyeFg5VGFSWjEzM1JDbk9hbzdmRTBKTnRK?=
+ =?utf-8?B?ekRaU0hzTkZyU1NQS3VSNThNS3dlb1AwNVBVN2JVR0cxYjhBRVNVMVk5dmRp?=
+ =?utf-8?B?SUFjOS83M1FoM2U4NllJMitTRWovdVNHZkQ2VmdPaTBiR2VDY2pFUFlzWWpw?=
+ =?utf-8?Q?d/Blci9Qctk=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cU8xbkZmdTkxRlpVMXVrZmFidldZeE9BV1U2RFJ2Y1p6SkYyWEQyb01sRTg4?=
+ =?utf-8?B?YU5xUGFUL1FxUkVadVNOalpkaFBGTnVsdU0yVmRnTU51Q0ZLRlpFSXBSWTlY?=
+ =?utf-8?B?U214LzVJZTZaSzV3VDBCb0pZL2U1YmdpbjZySlcrV3VicGNWdm5zNk52SFlU?=
+ =?utf-8?B?aXFCNUdLWS9aVy9qNVBLM2ZUcnkxdUlqYWtRdlRNMy9HU1BmK0djVjlVQ2ox?=
+ =?utf-8?B?UFhhd3U5L2NrbnpITXIxcHN6OVdZMm5vaU8yUGpNZm5zVVV6MTZaa2RtQ0NN?=
+ =?utf-8?B?TFRZOFFSWG5wVUkzeGwxMk9wMGRvRG9tUnZ0aHZETkdCVDAyWTNnYzkvbFRX?=
+ =?utf-8?B?Sms1d0poOC9wYitVSlhtSUlOSGdnVVo3OTdIQjIyYmU2cVFlR2RsUVE1eTRy?=
+ =?utf-8?B?RndIY2NBSUQ0WUVTZU45RmFMdkhlSDJ5YXZCblJZR21keS9vU0tzVTZTVi9a?=
+ =?utf-8?B?VzhXMWY1Zkg1RDd2dDl4ZjF0Y0xjTU42eXJESzByOExvcXo4Uk4xRU90eUh0?=
+ =?utf-8?B?TkpVb0F6WHRCUC9Zd0NiTkpXUytBQ3Q3L0RpQjMyQXJQUzRlRkROWG52Z2t0?=
+ =?utf-8?B?S1ZPNno4S2hXL3A4SmtrQ25CSmVkbENHOExoL0pCenU4NmxHdFQ1aEhPeU9Q?=
+ =?utf-8?B?bnJHN1VZN2pmN1dIQzVocXFHQ0hmandoREdsVWIwa1Qxc2lBa3NDV1lJaWdn?=
+ =?utf-8?B?OWd2NmU0bEc2TmRiRUVRWUxsMjFIazZvUVRodHJ6Z0d3TXRJRWd0MzM4eFpQ?=
+ =?utf-8?B?UkxHdDRERWRYcGVCaEhBMlRPZ1JuS3drZTlpK2FNRklmdHpYME1rdjZQVkRN?=
+ =?utf-8?B?U3ZRSkUveWtJMlhtUW5kVW4wQTc2ekc0NzhjVGJtTXFkQnoyaEh3Snhxd3hr?=
+ =?utf-8?B?T2VXem5aUWZpbllmc2lhTTV2eDYvMEt0SlRPcGZRRUo3K3Y5bEhzbGx5V1ZM?=
+ =?utf-8?B?VXA1R2RseEdGcFRFY3RzOXU5ZjBsWUZDTzJWREZJakdKUUNhajRzS2taVXZ2?=
+ =?utf-8?B?L3hJTWlwb3RnZWlmaWJDNFduOGpReU9uZTh1TEtNaDhoUXhXK09PcGxSMTl3?=
+ =?utf-8?B?M3IxQThkMGlZc3hLZStOZ09iSUYybDdMRkNoTENNa0dyMFpCWUd3OGREcFIy?=
+ =?utf-8?B?eVdIY09ZUDVuQ0U4ZStkZ2I2bXovbDlGN0xvSjdGK3RqSVpZWGhtQ3hIbmhB?=
+ =?utf-8?B?VHdYUVlkL0hqZTZOU0h4STlJUDk3Z1l6SXZSWi9zdTVpbFg4SGgvVVFSWHp5?=
+ =?utf-8?B?bUZhcXpJd0ZTaEg4aEViS0cyZCtJZHBJbVBaSTY3eGRoTFhMT1pKYS9lOUZH?=
+ =?utf-8?B?Y0E4N2xkMzQ1ekFRYmZlN2g3bmVjY0FMWlF4ZVdvSTU1Skw5ZFhZbG5VUm5G?=
+ =?utf-8?B?eTNkNUtjRU9sUE13aUVSSzU1ZGhRMjJuVHlVZEorNEt3VVR3Y1k5TG1WRkZX?=
+ =?utf-8?B?MkpiT2pjcnI5VytwV3JLNkZLZUF1YUZEYUZ5UnJSTDQwb1hqK3JIeDRDMzFK?=
+ =?utf-8?B?RTBQODFXNlYwaytUM081dXdjUWhBMTNYMk8zdmlGdnRCRTVKcjdPTHI3TTJu?=
+ =?utf-8?B?TTZnZjlOYkgxUDFDZE5VRFV4SERnaHpQM2JnamZqeHl5aFNrUlRsZVJMYjY1?=
+ =?utf-8?B?QWI5Z3hmeERzbHlLQWRsUHdic05UZVdYU2taQXk1aU5ERTFnUjk5eXRsaGVK?=
+ =?utf-8?B?Y0dqWlJSK2dDcUxnVElOc1BwTDZEOW1NOE5mTFZvZEhKYWlnc3cvaElrczA4?=
+ =?utf-8?B?d01neDdYSnQ3V0hSRHJxbWxPUjI2bGtZOUM4eXZIeG9oRDlNbTRQUlFLcE5R?=
+ =?utf-8?B?QUl3b0Z6MGJXdFM5MkREdE10SVlJZEhyUmR5NXk1eGh4ODhqTEppb240OTNP?=
+ =?utf-8?B?MXNNc09MZVNTV2IxSEE1cndSdHAxZG12VldwOTFIcThRdTVRR1NDRzE1ek92?=
+ =?utf-8?B?Ulc5ZU1HNmcrQlREUktYcWVhUW5tY1l5cVlqZGtscDZGc21IUmVtR1I2SXBN?=
+ =?utf-8?B?VUpQcTJlUW55MmF3VHpEMC95RXpMbkVIMlJiRVhZVFBBKzRWeEVUQkpGTkRm?=
+ =?utf-8?B?T1ZiMUxYbEV1SkRkV2JiV0Q2SDhhU21MSy9RbFZHVGlpNVJQWnpIbWs4ZWpX?=
+ =?utf-8?B?clM5Qlo4bnExaUE1RFNzYUtHMUJNamxEQmUyQWdjR1YveDhCRmVqTlpRSUlj?=
+ =?utf-8?B?Q3c9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2dcded1d-fc64-46ad-0167-08dd83024d21
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 07:33:26.6431
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tW0C9UaMkQXIY3nhqaimeIyoACbCEAEaLpLOUy9vKAlPLL6IxDJNnE7Mv6SZ3As0ktxC8QleCLqtbz8Ch2xgGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6053
 
 
->+
->+#endif /* CONFIG_RISCV_USER_CFI */
->+
->+#endif /* __ASSEMBLY__ */
->+
->+#endif /* _ASM_RISCV_USERCFI_H */
->diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
->index e89455a6a0e5..0c188aaf3925 100644
->--- a/arch/riscv/kernel/asm-offsets.c
->+++ b/arch/riscv/kernel/asm-offsets.c
->@@ -50,6 +50,10 @@ void asm_offsets(void)
-> #endif
->
-> 	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
->+#ifdef CONFIG_RISCV_USER_CFI
->+	OFFSET(TASK_TI_CFI_STATUS, task_struct, thread_info.user_cfi_state);
->+	OFFSET(TASK_TI_USER_SSP, task_struct, thread_info.user_cfi_state.user_shdw_stk);
->+#endif
-> 	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
-> 	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
-> 	OFFSET(TASK_THREAD_F2,  task_struct, thread.fstate.f[2]);
->diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
->index 33a5a9f2a0d4..f5531d82f7e7 100644
->--- a/arch/riscv/kernel/entry.S
->+++ b/arch/riscv/kernel/entry.S
->@@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
->
-> 	REG_L s0, TASK_TI_USER_SP(tp)
-> 	csrrc s1, CSR_STATUS, t0
->+	/*
->+	 * If previous mode was U, capture shadow stack pointer and save it away
->+	 * Zero CSR_SSP at the same time for sanitization.
->+	 */
->+	ALTERNATIVE("nops(4)",
->+				__stringify(			\
->+				andi s2, s1, SR_SPP;		\
->+				bnez s2, skip_ssp_save;		\
->+				csrrw s2, CSR_SSP, x0;		\
->+				REG_S s2, TASK_TI_USER_SSP(tp); \
->+				skip_ssp_save:),
->+				0,
->+				RISCV_ISA_EXT_ZICFISS,
->+				CONFIG_RISCV_USER_CFI)
-> 	csrr s2, CSR_EPC
-> 	csrr s3, CSR_TVAL
-> 	csrr s4, CSR_CAUSE
->@@ -236,6 +250,15 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
-> 	 * structures again.
-> 	 */
-> 	csrw CSR_SCRATCH, tp
->+
->+	ALTERNATIVE("nops(2)",
->+				__stringify(			\
->+				REG_L s3, TASK_TI_USER_SSP(tp); \
->+				csrw CSR_SSP, s3),
->+				0,
->+				RISCV_ISA_EXT_ZICFISS,
->+				CONFIG_RISCV_USER_CFI)
->+
-> 1:
-> #ifdef CONFIG_RISCV_ISA_V_PREEMPTIVE
-> 	move a0, sp
->
->-- 
->2.43.0
->
+On 23/04/2025 15:57, James Clark wrote:
+
+...
+
+>> FWIW I am seeing this build issue too on ARM64 and these changes have 
+>> now landed in the mainline :-(
+>>
+>> So would be great to get this fixed or reverted.
+>>
+>> Jon
+>>
+> 
+> Hi Jon,
+> 
+> I probably should have updated this thread, but the fix is here:
+> 
+> https://lore.kernel.org/linux-perf-users/20250417-james-perf-fix-gen- 
+> syscall-v1-1-1d268c923901@linaro.org/
+
+Great!
+
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+
+Thanks for fixing and sharing!
+
+Jon
+
+-- 
+nvpublic
+
 
