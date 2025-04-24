@@ -1,259 +1,264 @@
-Return-Path: <linux-arch+bounces-11568-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11569-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72D52A9B610
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 20:16:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E48E5A9BA3C
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 23:57:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A5E67A3DF3
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 18:15:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F112920D4F
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 21:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D2AA28DF19;
-	Thu, 24 Apr 2025 18:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9444B1B040B;
+	Thu, 24 Apr 2025 21:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NOK+8qnl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uen+WLSx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2933D28DEEB
-	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 18:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21861EDA35
+	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 21:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745518587; cv=none; b=drBqRUMdHslHSDl76a3TfrCD+pFwHrmh36iTCqJLYmCyKfm2tSiT1gDzpzlkhSuIJzhx1mZbfzTGbCCTjqpbBM8bCZ1S3K8QJNQMQWVZ/FCdYf1Sfd6kjw06N0is2BK6y2HFe300ggtaJWyP04/+0VEOC97Cl4oNivT+MLA0qzk=
+	t=1745531846; cv=none; b=jAEtOzMcmiIaw+gLtb8FDVQyZQmjOBMg7BhllsOEwy7D6pykpSIMMMxVTtGYSlR2LRIEyCTm/6QkF3j0q1vWtrHkchtqDPQOlEN0xSv/XxPT+kWuWJRvbV1EnemY4UmVv8GWpCLagr7+xuUsdmgXAJkf8AbgqkUiO8sWgobkGnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745518587; c=relaxed/simple;
-	bh=xwIJYlS8Mxej9Ue36QIm4SREbYsNaNZe158F8eJvF30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O5M26V+uzJlOm4DiPvewrl7rf5J2oM8VFtUMqD79Ai9QhdAeOMadHxho/LZ8qxmF19J6fxdQxsr3cANsDZKVQNPq9kwkpVKaszKb8cxACfvaM+5+ajvAQEdU09nxTH1Meh3Fd37W77FuqnVRUPjjLP2YsF2LutSTD0KB80hMrts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NOK+8qnl; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7390d21bb1cso1398332b3a.2
-        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 11:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745518583; x=1746123383; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T9sHYezjUq6l/x/6C81DhRiO6Hkx3zNHx6RVEna5xiI=;
-        b=NOK+8qnltocl7IjsIDqxYetNVinHbSt9qBQwhXvmJSzZm/Uj/A+EmAwPtIXsueGmIj
-         m+XPDNBpYdajzutI+CSSyCjBf7HjgMqFV5tzTuvVtSkIK3eBz59mRmxbiO0UBJytArVJ
-         JwbIsuvj2ZoNoLvKSqPlotq7uiV3tqPJhkh+4datkYvfGhyOgDt7kMovCVzgiIpfstBk
-         S4v/2M/Ds4YsAEEEQlfryl2sv4S/tt+DeE3VGGSG3emgoJpBwato5wcWUETazw8nIdLn
-         z56G++pZ3eW8WcfzbpGHR4a8Rf5DIByZE1/v3D4yk7znJHeBdY590OLcMTSOC9jC4C69
-         3d9A==
+	s=arc-20240116; t=1745531846; c=relaxed/simple;
+	bh=F/cy9qGnJBDdoAEPSSERWZIHq7qLgf/M0k7Ldr6L/6k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MHHp7mP9Whp0wostMPu8aaw3/SCGgnymzM9FwoP6Sebad4AnoeW+j8FG8EWeOheuPLhCQC+3hCy/V/jpM3B+JpnTEzi9htGOlTQRiTzL/hSXZJnaFJmefJVmrDrJIsZzkDWF6RmivmZDtGIJXlD2XGkFHDuQvCo/01iazOwHDv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uen+WLSx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1745531843;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xpoZPfro0SHj9mPJ6mKU/fbkIbH6rl7Ujv7LCLlYPNY=;
+	b=Uen+WLSxRqBmCBACU6UgZoXbPsvjR3FdjdJsT/baxVHYhj7vXpR20psFyg5EwTGAz9Plt3
+	GdnozljDcmrlTAZLLXmBEPUMkeYkA0swareNLGOz+Fcxgtz445GHwsIhwsXT2PXaXvlBDy
+	c+t84BYoLsmfYEWD7z9Pqrp6UBz/O7M=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-460-TWpsHHwiN-iGoOyEJODd4A-1; Thu, 24 Apr 2025 17:57:21 -0400
+X-MC-Unique: TWpsHHwiN-iGoOyEJODd4A-1
+X-Mimecast-MFC-AGG-ID: TWpsHHwiN-iGoOyEJODd4A_1745531840
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-39ac9b0cb6aso675856f8f.2
+        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 14:57:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745518583; x=1746123383;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9sHYezjUq6l/x/6C81DhRiO6Hkx3zNHx6RVEna5xiI=;
-        b=oxv1QrhTt310HhbPBuqCgFknLR+CZ2ua4jOVSyqci1WMtawqkO33n9jgy8GRFhilK/
-         xW0MH78CLcsLApWqh4xF9sEFFMCpdQuw9NA6FEfQuXWzqy7zWpQqh0czvJIwGf3JVbzb
-         KjzCeFdyVRLdVChyI1uZ9cEQAQmARRrl4SKxcQ4WF/frLfw+WQbVCsBXbnDobqqMqkPq
-         Kv5f2PoPhr3Q+FHdlO4v83W0m3l9zswUO7X7TQZ0BteJuEkyDD1wA7vHs4utM0dE9zCj
-         HyKhgm2B/xaIYj47gpsnPIFF9/v54vZwB+0Pc+5KkTsXN5oQF5WS7+9ZGuC254qpPplj
-         /5Gw==
-X-Forwarded-Encrypted: i=1; AJvYcCWRNKMY/D9XDovohLx84EBkvDnKnjYMsh1LRoYYsGObY6V5vxN7AT5OoJquYNa+D39RjFGjNu1QGbA5@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxcwr+DZmU1tC+nb3hERiJvRiJdCSnqt3es7JhSHL7WSycHN5Zn
-	m+rpjHi0TRMJC+5mD6jp3myr8Nb/RavziPUSQChY/iamYJkSwffSiySycfODHv4=
-X-Gm-Gg: ASbGncuxa7KzA5k2htrJlx9Mdbspdvdk3H29BeVcJGMGJt6skBd1kQW8oQJn/AiVlP5
-	4oxeMRK+A6w9mcGGN+v6fQZxulrPflrNzy4zSq+feM9D6toTJTEa80oD+kr9F+7yfWsWB6zG3zl
-	gGSNT10xRlV1/S/IA/JWUHieUVtmJlkveg5qWTz7QdyP/HL/bhcNt7NT3lsXgxqgn0JN/olplJd
-	zAoRozhffKvcqbT4XvujYAM0mgbACyrSZHWzCG57qmfwdmO5Pr8VHGQbp5quC6YcPjwvdcqmgdV
-	ymwV9msuy94h2YiAbeVj5qhEAKb1y9jCbieC0pfOAqaxqvR94tg=
-X-Google-Smtp-Source: AGHT+IF0jVzUPU4VWGuVNQ17BhULhOztKBekv2BW5HkIJsQ1IRCAo1z8B5DG3h77AtgqUMysW+802Q==
-X-Received: by 2002:aa7:9315:0:b0:736:9e40:13b1 with SMTP id d2e1a72fcca58-73e24ae7b45mr5236452b3a.23.1745518583417;
-        Thu, 24 Apr 2025 11:16:23 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e259414c7sm1783697b3a.62.2025.04.24.11.16.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 11:16:23 -0700 (PDT)
-Date: Thu, 24 Apr 2025 11:16:19 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com,
-	linux-riscv <linux-riscv-bounces@lists.infradead.org>
-Subject: Re: [PATCH v12 12/28] riscv: Implements arch agnostic shadow stack
- prctls
-Message-ID: <aAp_87-Xr6gn_hD7@debug.ba.rivosinc.com>
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-12-e51202b53138@rivosinc.com>
- <D92V2NPNZYV0.136MJ2HOK48HE@ventanamicro.com>
- <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
- <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
+        d=1e100.net; s=20230601; t=1745531840; x=1746136640;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xpoZPfro0SHj9mPJ6mKU/fbkIbH6rl7Ujv7LCLlYPNY=;
+        b=Mlkb3eIGpujG+VRA4ebhB6Mz52KUXMFV8dZ05E4zJ+U9wUJGx9mrRvD637VJzrdGmG
+         rXug7xG6EtU5guHouCACqaaLKGcjvyaRoaLsaBl8jNBJpSOxRNnJznOhX8nvC5IpIkl1
+         Uerc/SxrfWEwIa7QEKrLcAphkSqur5UnKk86dyWm5ErdAvVTHXxELdq/b02K4Rqj4OPQ
+         53qcx4SoxfPbTgw0ldj4w3HZAdvuK+gsV9ZbII74XbKDEGAMlY8glmAfo/uA1j8kPL3/
+         GB1mdAy7BR7Vd4yZAflg7nrHgzTBSepTZzPK4DvffuJQWP2lCa3tcka7Y+resLdW+Wch
+         0seA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9/eAZ7rc2oHsZ/5evOI2pXg5hV7u+ljcll/AjvUEU2TA1rROirFGQeOGMcDbXyrR2qsG/LY2khkNO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3A4HPAN7Rwy5gtbQ/LEBrTt5/wSnbo7CVVgvuiCVaczqhJFRk
+	w7klCZFw48yB4nTYR9f/PuWuW+bIEHgDAQ7/73+s0andJh3E7iNrpZ88VdQB46y7Ombv9BDKc6q
+	LiFnQILIyBRusNN5oSrluv9p6KzrtjHDbnNnIoYSs1Xvtch72KzGs3azEH52P2h4rJ/RN8jR+7C
+	fYdWKsPLXjbJTzqIGB8HpCaJhf+FWSSxg48g==
+X-Gm-Gg: ASbGncskp2Tt09H5ezovf0cIZ3VMjAYIR+2CKN3DTTF32V++PQCZ7oUq2l/F35GVm3N
+	WzyGCHFxPdhor9KspW5wECuYvXKLkfzXwfODR+TXSqNUlgdGEiPYXKofWdLBEeQaJ/vQ=
+X-Received: by 2002:a05:6000:420f:b0:39f:b604:4691 with SMTP id ffacd0b85a97d-3a06cfad4demr3613311f8f.58.1745531840422;
+        Thu, 24 Apr 2025 14:57:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEeKzKsojxPFQjf2qyPC/jLCrBU0TIGuJgSXSwemHUuTZespuYvxujkus4uQUh01e60jmTuxs45QJiRsX3qQ8A=
+X-Received: by 2002:a05:6000:420f:b0:39f:b604:4691 with SMTP id
+ ffacd0b85a97d-3a06cfad4demr3613274f8f.58.1745531839898; Thu, 24 Apr 2025
+ 14:57:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
+References: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
+ <20250303-vdso-clock-v1-8-c1b5c69a166f@linutronix.de> <aApGPAoctq_eoE2g@t14ultra>
+ <20250424173908-ffca1ea2-e292-4df3-9391-24bfdaab33e7@linutronix.de>
+In-Reply-To: <20250424173908-ffca1ea2-e292-4df3-9391-24bfdaab33e7@linutronix.de>
+From: Jan Stancek <jstancek@redhat.com>
+Date: Thu, 24 Apr 2025 23:57:02 +0200
+X-Gm-Features: ATxdqUEI0uDThPwtIXkgDnYksB6HJCT6szRwp_ZXnbL9vPXmguxH9v8pzuTDM2Y
+Message-ID: <CAASaF6xsMOWkhPrzKQWNz5SXaROSpxzFVBz+MOA-MNiEBty7gQ@mail.gmail.com>
+Subject: Re: [PATCH 08/19] vdso/gettimeofday: Prepare do_hres_timens() for
+ introduction of struct vdso_clock
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Nam Cao <namcao@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 24, 2025 at 03:36:54PM +0200, Radim Krčmář wrote:
->2025-04-23T21:44:09-07:00, Deepak Gupta <debug@rivosinc.com>:
->> On Thu, Apr 10, 2025 at 11:45:58AM +0200, Radim Krčmář wrote:
->>>2025-03-14T14:39:31-07:00, Deepak Gupta <debug@rivosinc.com>:
->>>> diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/asm/usercfi.h
->>>> @@ -14,7 +15,8 @@ struct kernel_clone_args;
->>>>  struct cfi_status {
->>>>  	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
->>>> -	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 1);
->>>> +	unsigned long ubcfi_locked : 1;
->>>> +	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);
->>>
->>>The rsvd field shouldn't be necessary as the container for the bitfield
->>>is 'unsigned long' sized.
->>>
->>>Why don't we use bools here, though?
->>>It might produce a better binary and we're not hurting for struct size.
->>
->> If you remember one of the previous patch discussion, this goes into
->> `thread_info` Don't want to bloat it. Even if we end shoving into task_struct,
->> don't want to bloat that either. I can just convert it into bitmask if
->> bitfields are an eyesore here.
+On Thu, Apr 24, 2025 at 5:49=E2=80=AFPM Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
 >
->  "unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);"
+> On Thu, Apr 24, 2025 at 04:10:04PM +0200, Jan Stancek wrote:
+> > On Mon, Mar 03, 2025 at 12:11:10PM +0100, Thomas Wei=C3=9Fschuh wrote:
+> > > From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> > >
+> > > To support multiple PTP clocks, the VDSO data structure needs to be
+> > > reworked. All clock specific data will end up in struct vdso_clock an=
+d in
+> > > struct vdso_time_data there will be array of it. By now, vdso_clock i=
+s
+> > > simply a define which maps vdso_clock to vdso_time_data.
+> > >
+> > > Prepare for the rework of these structures by adding struct vdso_cloc=
+k
+> > > pointer argument to do_hres_timens(), and replace the struct vdso_tim=
+e_data
+> > > pointer with the new pointer arugment whenever applicable.
+> > >
+> > > No functional change.
+> > >
+> > > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> > > Signed-off-by: Nam Cao <namcao@linutronix.de>
+> > > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de=
 >
->is an eyesore that defines exactly the same as the two lines alone
+> > > ---
+> > > lib/vdso/gettimeofday.c | 35 ++++++++++++++++++-----------------
+> > > 1 file changed, 18 insertions(+), 17 deletions(-)
+> > >
+> >
+> > starting with this patch, I'm seeing user-space crashes when using cloc=
+k_gettime():
+> >   BAD  -> 83a2a6b8cfc5 vdso/gettimeofday: Prepare do_hres_timens() for =
+introduction of struct vdso_clock
+> >   GOOD -> 64c3613ce31a vdso/gettimeofday: Prepare do_hres() for introdu=
+ction of struct vdso_clock
+> >
+> > It appears to be unique to aarch64 with 64k pages, and can be reproduce=
+d with
+> > LTP clock_gettime03 [1]:
+> >   command: clock_gettime03   tst_kconfig.c:88: TINFO: Parsing kernel co=
+nfig '/lib/modules/6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+6=
+4k/build/.config'
+> >   tst_test.c:1903: TINFO: LTP version: 20250130-231-gd02c2aea3
+> >   tst_test.c:1907: TINFO: Tested kernel: 6.15.0-0.rc3.20250423gitbc3372=
+351d0c.30.eln147.aarch64+64k #1 SMP PREEMPT_DYNAMIC Wed Apr 23 23:23:54 UTC=
+ 2025 aarch64
+> >   tst_kconfig.c:88: TINFO: Parsing kernel config '/lib/modules/6.15.0-0=
+.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k/build/.config'
+> >   tst_test.c:1720: TINFO: Overall timeout per run is 0h 05m 24s
+> >   clock_gettime03.c:121: TINFO: Testing variant: vDSO or syscall with l=
+ibc spec
+> >   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct 1000=
+0ms
+> >   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct 0ms
+> >   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct 10000=
+ms
+> >   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0ms
+> >   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct -100=
+00ms
+> >   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct 0ms
+> >   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct -1000=
+0ms
+> >   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0ms
+> >   tst_test.c:438: TBROK: Child (233649) killed by signal SIGSEGV
+> >
+> > or with:
+> > --------------------- 8< ----------------------
+> > #define _GNU_SOURCE
+> > #include <sched.h>
+> > #include <time.h>
+> > #include <unistd.h>                                                    =
+                                                                           =
+                                                                           =
+                #include <sys/wait.h>
+> >
+> > int main(void)
+> > {
+> >         struct timespec tp;
+> >         pid_t child;
+> >         int status;
+> >
+> >         unshare(CLONE_NEWTIME);
+> >
+> >         child =3D fork();
+> >         if (child =3D=3D 0) {
+> >                 clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
+> >         }
+> >
+> >         wait(&status);
+> >         return status;
+> > }
+> >
+> > # ./a.out ; echo $?
+> > 139
+> > --------------------- >8 ----------------------
+> >
+> > RPMs and configs can be found at Fedora koji, latest build is at [2] (l=
+ook for kernel-64k).
 >
->  unsigned long ubcfi_en : 1;
->  unsigned long ubcfi_locked : 1;
+> Hi Jan,
 >
->That one should be removed.
+> Thanks for the great error report.
 >
->If we have only 4 bits in 4/8 bytes, then bitfields do generate worse
->code than 4 bools and a 0/4 byte hole.  The struct size stays the same.
+> Can you try the following change (on top of v6.15-rc1, should also work w=
+ith current master)?
 >
->I don't care much about the switch to bools, though, because this code
->is not called often.
+> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+> index 93ef801a97ef..867ce53cca94 100644
+> --- a/lib/vdso/gettimeofday.c
+> +++ b/lib/vdso/gettimeofday.c
+> @@ -85,14 +85,18 @@ static __always_inline
+>  int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_=
+clock *vcns,
+>                    clockid_t clk, struct __kernel_timespec *ts)
+>  {
+> -       const struct vdso_time_data *vd =3D __arch_get_vdso_u_timens_data=
+(vdns);
+>         const struct timens_offset *offs =3D &vcns->offset[clk];
+> -       const struct vdso_clock *vc =3D vd->clock_data;
+> +       const struct vdso_time_data *vd;
+> +       const struct vdso_clock *vc;
+>         const struct vdso_timestamp *vdso_ts;
+>         u64 cycles, ns;
+>         u32 seq;
+>         s64 sec;
+>
+> +       vd =3D vdns - (clk =3D=3D CLOCK_MONOTONIC_RAW ? CS_RAW : CS_HRES_=
+COARSE);
+> +       vd =3D __arch_get_vdso_u_timens_data(vd);
+> +       vc =3D vd->clock_data;
+> +
+>         if (clk !=3D CLOCK_MONOTONIC_RAW)
+>                 vc =3D &vc[CS_HRES_COARSE];
+>         else
+>
+>
+> I'll do some proper testing tomorrow.
 
-I'll remove the bitfields, have single `unsigned long cfi_control_state`
-And do `#define RISCV_UBCFI_EN 1` and so on.
->
->>>> @@ -262,3 +292,83 @@ void shstk_release(struct task_struct *tsk)
->>>> +int arch_set_shadow_stack_status(struct task_struct *t, unsigned long status)
->>>> +{
->>>> +	/* Request is to enable shadow stack and shadow stack is not enabled already */
->>>> +	if (enable_shstk && !is_shstk_enabled(t)) {
->>>> +		/* shadow stack was allocated and enable request again
->>>> +		 * no need to support such usecase and return EINVAL.
->>>> +		 */
->>>> +		if (is_shstk_allocated(t))
->>>> +			return -EINVAL;
->>>> +
->>>> +		size = calc_shstk_size(0);
->>>> +		addr = allocate_shadow_stack(0, size, 0, false);
->>>
->>>Why don't we use the userspace-allocated stack?
->>>
->>>I'm completely missing the design idea here...  Userspace has absolute
->>>over the shadow stack pointer CSR, so we don't need to do much in Linux:
->>>
->>>1. interface to set up page tables with -W- PTE and
->>>2. interface to control senvcfg.SSE.
->>>
->>>Userspace can do the rest.
->>
->> Design is like following:
->>
->> When a user task wants to enable shadow stack for itself, it has to issue
->> a syscall to kernel (like this prctl). Now it can be done independently by
->> user task by first issuing `map_shadow_stack`, then asking kernel to light
->> up envcfg bit and eventually when return to usermode happens, it can write
->> to CSR. It is no different from doing all of the above together in single
->> `prctl` call. They are equivalent in that nature.
->>
->> Background is that x86 followed this because x86 had workloads/binaries/
->> functions with (deep)recursive functions and thus by default were forced
->> to always allocate shadow stack to be of the same size as data stack. To
->> reduce burden on userspace for determining and then allocating same size
->> (size of data stack) shadow stack, prctl would do the job of calculating
->> default shadow stack size (and reduce programming error in usermode). arm64
->> followed the suite. I don't want to find out what's the compatiblity issues
->> we will see and thus just following the suite (given that both approaches
->> are equivalent). Take a look at static `calc_shstk_size(unsigned long size)`.
->>
->> Coming back to your question of why not allowing userspace to manage its
->> own shadow stack. Answer is that it can manage its own shadow stack. If it
->> does, it just have to be aware of size its allocating for shadow stack.
->
->It's just that userspace cannot prevent allocation of the default stack
->when enabling it, which is the weird part to me.
->The allocate and enable syscalls could have been nicely composable.
->
->> There is already a patch series going on to manage this using clone3.
->> https://lore.kernel.org/all/20250408-clone3-shadow-stack-v15-4-3fa245c6e3be@kernel.org/
->
->A new ioctl does seem to solve most of the practical issues, thanks.
->
->> I fully expect green thread implementations in rust/go or swapcontext
->> based thread management doing this on their own.
->>
->> Current design is to ensure existing apps dont have to change a lot in
->> userspace and by default kernel gives compatibility. Anyone else wanting
->> to optimize the usage of shadow stack can do so with current design.
->
->Right, changing rlimit_stack around shadow stack allocation is not the
->most elegant way, but it does work.
->
->>>> +int arch_lock_shadow_stack_status(struct task_struct *task,
->>>> +				  unsigned long arg)
->>>> +{
->>>> +	/* If shtstk not supported or not enabled on task, nothing to lock here */
->>>> +	if (!cpu_supports_shadow_stack() ||
->>>> +	    !is_shstk_enabled(task) || arg != 0)
->>>> +		return -EINVAL;
->>>
->>>The task might want to prevent shadow stack from being enabled?
->>
->> But Why would it want to do that? Task can simply not issue the prctl. There
->> are glibc tunables as well using which it can be disabled.
->
->The task might do it as some last resort to prevent a buggy code from
->enabling shadow stacks that would just crash.  Or whatever complicated
->reason userspace can think of.
->
->It's more the other way around.  I wonder why we're removing this option
->when we don't really care what userspace does to itself.
->I think it's complicating the kernel without an obvious gain.
+That does seem to work for the 2 reproducers I have.
+But why is this change needed? Isn't 'vdns' here equal to 'vdso_u_time_data=
+'?
 
-It just feels wierd. There isn't anything like this for other features lit-up
-via envcfg. Does hwprobe allow this on per-task basis? I'll look into it.
+>
+>
+> Thomas
+>
+> > [1] https://github.com/linux-test-project/ltp/blob/master/testcases/ker=
+nel/syscalls/clock_gettime/clock_gettime03.c
+> > [2] https://koji.fedoraproject.org/koji/buildinfo?buildID=3D2704401
+>
 
 
