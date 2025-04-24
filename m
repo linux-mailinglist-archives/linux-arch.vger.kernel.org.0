@@ -1,205 +1,187 @@
-Return-Path: <linux-arch+bounces-11562-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11563-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55E3CA9B2B0
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 17:43:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA9C1A9B453
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 18:42:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 917B44A8419
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 15:43:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7EEB1B68325
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 16:42:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 467BD22CBE9;
-	Thu, 24 Apr 2025 15:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB943288C92;
+	Thu, 24 Apr 2025 16:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lK/QryIi";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2M6vSdvp"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="vt7T0uzd"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A580223DF9;
-	Thu, 24 Apr 2025 15:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0D7197A76
+	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 16:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745509405; cv=none; b=JmQp+GxBJd8gRopnaEVR81FJbvPpTF8zedRJFWQfPbiB2agU3SZx0VHRoocAtq7TAKO/QKjC/hUt2aG/bbUGD42MMvpSAO4QTBpmdKqtNlzPaOdScd4HLaJT7q0xU+7u/y684U8NE6vSTK7dSLLT2z2UXucsusIqYzPEC+Hii3w=
+	t=1745512918; cv=none; b=M4KbkgvmWIKhpZ7TcDsfonFNrVDgxNRTzBB+UTx5ssYQhQkAFv6klDx+ekDL8axPeJ0a+XjaasBzgRgi9l35zy2DuRIHIGnxefk/DKnxavSv2SFY0b0Vji9mSY8b77iqfl/eJWQ0ieUAzsZtofeX184lYjdu2r6GIfL7romgWdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745509405; c=relaxed/simple;
-	bh=T3OMY9jrDvAQaIJkvH3xyQkyOZBkShFE0i3amndbQ0Y=;
+	s=arc-20240116; t=1745512918; c=relaxed/simple;
+	bh=vye0Q+xd1G2Olnf5Qkr8nib/GWDRlQm+UGeZYjZUyDA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UqFt19EQ5Dj+xW6Qqy3HzyIVhJT+5FLe0pU5vu28MkNS60KZKZBmPwcNiZDP6C2ymHj1r1RoM4JH8WNUogBVR8RESjg7sQSKCVYAS7sVHNDA7JEQcQ0c4scVd0DMU2ACYdCpc6lV1m4/TV82SATJgpCzq2f04qqoHs7eJIFKtcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lK/QryIi; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2M6vSdvp; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Thu, 24 Apr 2025 17:43:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1745509401;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nDo39tt+n8ATYguGedpesmJZxZJLtDSDAKicoCO2cI8=;
-	b=lK/QryIiV998Da/Rm919TzKOYxMOJx62tzbf+B+2e6sDZ6HfuEIr7nmMyICIJlvXLJGrSx
-	EJFEso6phLHBprXv1tluC3gRUAmPLUBwoEiSt1hYoXjVg38TTfXv9TANLhUfnZv/ISg6a1
-	Bn44d2bh/6y3Yn7pqBmkB+Ru9qpmiTtzE5h1UE8cjtRNtg63LPCOYNypxU2jIdTUxbAEG9
-	WUan0+TuDsYhyZ69GSqI3Wj4ekINOeGLpIcIiUeYKRuEO5VFVHS+iP4aediB64wTBHliqD
-	KG55Vr+C+5idEzISLVT8PzdA9d3RNjZnN3ZfcI5PWVLp9t/iVkc9RHRvMxuEtQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1745509401;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nDo39tt+n8ATYguGedpesmJZxZJLtDSDAKicoCO2cI8=;
-	b=2M6vSdvpglYLR21147amU66kDvqCzLdGxNK0wSXT0/szoFczg5Yrh111Vgpo7OOJT/82rR
-	K7u6DAGFSh65nTBw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Jan Stancek <jstancek@redhat.com>
-Cc: Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>
-Subject: Re: [PATCH 08/19] vdso/gettimeofday: Prepare do_hres_timens() for
- introduction of struct vdso_clock
-Message-ID: <20250424173908-ffca1ea2-e292-4df3-9391-24bfdaab33e7@linutronix.de>
-References: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
- <20250303-vdso-clock-v1-8-c1b5c69a166f@linutronix.de>
- <aApGPAoctq_eoE2g@t14ultra>
+	 Content-Type:Content-Disposition:In-Reply-To; b=SWh9f1sLEWmVYofcoUrXNhEB3do+pJOY0+3BHNDdhsZZAASxcLS5l+1NEvt3om8+LYAlvwNq1tNBaKgTREcu5Rf8fzcKH7vWf5ugqhLwkggZYvJF7J0vL2TPaYkqBEKhE2bpEPmyfIVTEgEXfGtWat/MUvhhMX5m1C5inieDe1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=vt7T0uzd; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7376dd56f60so940792b3a.3
+        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 09:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745512916; x=1746117716; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=k6m4QSCkOjvBeG8/Kperh6wZuRGbtha7PIChY6FuIlM=;
+        b=vt7T0uzd3xCze3Zzyzjt6oEBKu5b2AaMF+bEL0x1WfJmo4ncPEEJHxQG9zfcis/Kwx
+         xahjvt8L0fz/GsUWvTYMadKC40Y3zgw5Vj/Bg/B+E9IfGRpYntx5JPA6qXHyXJywlCbw
+         biLB7vMtyYOyIxwfNlsW2xGWIxIU7Mq8SCI1F/1SnDyWqTzKzLDLl3U6wnksQ8jZfj77
+         3YYI4PhAenG/mAaDMYSsi4PkpMu/k1Hi7XbYXadK3K3CXlDrvFtQjLVaFQ/APbqalqcZ
+         uGCMIyBp0jytuhdm4FN+sbkfo2YPgMosChYFZjXIJ7F2OiHQNGi0YRlu1TUMK5rxwd2g
+         fGkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745512916; x=1746117716;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k6m4QSCkOjvBeG8/Kperh6wZuRGbtha7PIChY6FuIlM=;
+        b=ljgGZrQn41iMemc9QJhlzqMp5j09O/orumy9xfbHO/uAL59fXqDcyNNOmrD8exaA+o
+         WBppxAlMsc708fwhF0UaCebKxbE8B7bL5j0VtamDuNt3mqErFnrITwlqttDfTveQtR02
+         R10NSBpgF3gIk1opFa4uSy2R9SoJJW2imBxabFMeKnGFIcFngdnEngX0SIfy4pvTmMqm
+         kRAHHAREyk8q0QBoLAgibZ6Bth3loJUS2DVJ2/Hw//MH1JVL/JAqqO6PaTgb+G7uSnkG
+         kklp2Qy74ALlhB8GHSm9ofg5XXjvsuTvgNtpxR5yHULY0rPbyvE9s7wSI2rUfdeu4+zq
+         lf5g==
+X-Forwarded-Encrypted: i=1; AJvYcCWC27/61cJVax9D3OJoUvKICpjIkxlJkpsM1Kqzgtx9e7wbT8lN6HAfsVA9hkj+jsh6TfqXCf888vtx@vger.kernel.org
+X-Gm-Message-State: AOJu0YygRgm++gTalsE6c5n8xGzTDZbJr54BC/qSo5fqEP3Qs5Gd1GQ0
+	kYpQdO1tTBs2RCGoawc1Mp8xWCFLlVL0lu+GbD7Gg1FL3FjBFNWNtxzORTt+QBI=
+X-Gm-Gg: ASbGncu4bQvTlC5bo2JDfVXscQDC3K1IQAwiW/zMDYZuoDFYWoxPEmZsHQXhk32Umkh
+	5gVRoi51lf6e55sxI7MnwRh29hv5BEX9p2nBOe8lbwH5VhawNZmgUSIQiESor5Gr2xGr6EaBQuq
+	eqvv9dJx62ZBxo42hkQXqwGtKyd5rMT97utYw8iYr/WFFlidZPSD2sli0s129p0VVSH9TSJDqDZ
+	r91L6kGwUoxoYR5adcbyiDg/8O3wZIv+F99D1n1RXjhHH965T51S9yCwWGsiApvA7Kd9OIk2MxU
+	IsT3zumOIiCjt0RrF2pPm0lUuVacZgw93mmHB4DaBMSH+u8sqgA=
+X-Google-Smtp-Source: AGHT+IGxyp+KENwVEkLGrt7S8pn2vlKD8bBJVWEd1Iv8ULUIPojD/9R2kqNR1Mge6+txkrxVbJHCXA==
+X-Received: by 2002:a05:6a21:6d8e:b0:1f5:8072:d7f3 with SMTP id adf61e73a8af0-20444fc0e44mr4794400637.30.1745512916109;
+        Thu, 24 Apr 2025 09:41:56 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b15f76f48b2sm1462741a12.8.2025.04.24.09.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Apr 2025 09:41:55 -0700 (PDT)
+Date: Thu, 24 Apr 2025 09:41:51 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Miquel =?iso-8859-1?Q?Sabat=E9_Sol=E0?= <mikisabate@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	Zong Li <zong.li@sifive.com>
+Subject: Re: [PATCH v13 20/28] riscv/hwprobe: zicfilp / zicfiss enumeration
+ in hwprobe
+Message-ID: <aAppz5o2i4SQKU2z@debug.ba.rivosinc.com>
+References: <20250424-v5_user_cfi_series-v13-0-971437de586a@rivosinc.com>
+ <20250424-v5_user_cfi_series-v13-20-971437de586a@rivosinc.com>
+ <680a0cd4.050a0220.296475.3867@mx.google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aApGPAoctq_eoE2g@t14ultra>
+In-Reply-To: <680a0cd4.050a0220.296475.3867@mx.google.com>
 
-On Thu, Apr 24, 2025 at 04:10:04PM +0200, Jan Stancek wrote:
-> On Mon, Mar 03, 2025 at 12:11:10PM +0100, Thomas Weiﬂschuh wrote:
-> > From: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > 
-> > To support multiple PTP clocks, the VDSO data structure needs to be
-> > reworked. All clock specific data will end up in struct vdso_clock and in
-> > struct vdso_time_data there will be array of it. By now, vdso_clock is
-> > simply a define which maps vdso_clock to vdso_time_data.
-> > 
-> > Prepare for the rework of these structures by adding struct vdso_clock
-> > pointer argument to do_hres_timens(), and replace the struct vdso_time_data
-> > pointer with the new pointer arugment whenever applicable.
-> > 
-> > No functional change.
-> > 
-> > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > Signed-off-by: Nam Cao <namcao@linutronix.de>
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > ---
-> > lib/vdso/gettimeofday.c | 35 ++++++++++++++++++-----------------
-> > 1 file changed, 18 insertions(+), 17 deletions(-)
-> > 
-> 
-> starting with this patch, I'm seeing user-space crashes when using clock_gettime():
->   BAD  -> 83a2a6b8cfc5 vdso/gettimeofday: Prepare do_hres_timens() for introduction of struct vdso_clock
->   GOOD -> 64c3613ce31a vdso/gettimeofday: Prepare do_hres() for introduction of struct vdso_clock
-> 
-> It appears to be unique to aarch64 with 64k pages, and can be reproduced with
-> LTP clock_gettime03 [1]:
->   command: clock_gettime03   tst_kconfig.c:88: TINFO: Parsing kernel config '/lib/modules/6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k/build/.config'
->   tst_test.c:1903: TINFO: LTP version: 20250130-231-gd02c2aea3
->   tst_test.c:1907: TINFO: Tested kernel: 6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k #1 SMP PREEMPT_DYNAMIC Wed Apr 23 23:23:54 UTC 2025 aarch64
->   tst_kconfig.c:88: TINFO: Parsing kernel config '/lib/modules/6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k/build/.config'
->   tst_test.c:1720: TINFO: Overall timeout per run is 0h 05m 24s
->   clock_gettime03.c:121: TINFO: Testing variant: vDSO or syscall with libc spec
->   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct 10000ms
->   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct 0ms
->   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct 10000ms
->   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0ms
->   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct -10000ms
->   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct 0ms
->   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct -10000ms
->   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0ms
->   tst_test.c:438: TBROK: Child (233649) killed by signal SIGSEGV
-> 
-> or with:
-> --------------------- 8< ----------------------
-> #define _GNU_SOURCE
-> #include <sched.h>
-> #include <time.h>
-> #include <unistd.h>                                                                                                                                                                                                                          #include <sys/wait.h>
-> 
-> int main(void)
-> {
->         struct timespec tp;
->         pid_t child;
->         int status;
-> 
->         unshare(CLONE_NEWTIME);
-> 
->         child = fork();
->         if (child == 0) {
->                 clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
->         }
-> 
->         wait(&status);
->         return status;
-> }
-> 
-> # ./a.out ; echo $?
-> 139
-> --------------------- >8 ----------------------
-> 
-> RPMs and configs can be found at Fedora koji, latest build is at [2] (look for kernel-64k).
+On Thu, Apr 24, 2025 at 12:05:04PM +0200, Miquel Sabat√© Sol√† wrote:
+>On dj., d‚Äôabr. 24 2025, Deepak Gupta wrote:
+>
+>Hello,
+>
+>> Adding enumeration of zicfilp and zicfiss extensions in hwprobe syscall.
+>>
+>> Reviewed-by: Zong Li <zong.li@sifive.com>
+>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> ---
+>>  arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
+>>  arch/riscv/kernel/sys_hwprobe.c       | 2 ++
+>>  2 files changed, 4 insertions(+)
+>>
+>> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
+>> index c3c1cc951cb9..c1b537b50158 100644
+>> --- a/arch/riscv/include/uapi/asm/hwprobe.h
+>> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
+>> @@ -73,6 +73,8 @@ struct riscv_hwprobe {
+>>  #define		RISCV_HWPROBE_EXT_ZCMOP		(1ULL << 47)
+>>  #define		RISCV_HWPROBE_EXT_ZAWRS		(1ULL << 48)
+>>  #define		RISCV_HWPROBE_EXT_SUPM		(1ULL << 49)
+>> +#define		RISCV_HWPROBE_EXT_ZICFILP	(1ULL << 50)
+>> +#define		RISCV_HWPROBE_EXT_ZICFISS	(1ULL << 51)
+>
+>Notice that, as it stands in Linux v6.15-rc, this will conflict with the
+>values for Zicntr and Zihpm. See 4458b8f68dc7 ("riscv: hwprobe: export
+>Zicntr and Zihpm extensions"). I'd say that you should update these
+>values.
 
-Hi Jan,
+Got it. Noted for next version.
 
-Thanks for the great error report.
-
-Can you try the following change (on top of v6.15-rc1, should also work with current master)?
-
-diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index 93ef801a97ef..867ce53cca94 100644
---- a/lib/vdso/gettimeofday.c
-+++ b/lib/vdso/gettimeofday.c
-@@ -85,14 +85,18 @@ static __always_inline
- int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
- 		   clockid_t clk, struct __kernel_timespec *ts)
- {
--	const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
- 	const struct timens_offset *offs = &vcns->offset[clk];
--	const struct vdso_clock *vc = vd->clock_data;
-+	const struct vdso_time_data *vd;
-+	const struct vdso_clock *vc;
- 	const struct vdso_timestamp *vdso_ts;
- 	u64 cycles, ns;
- 	u32 seq;
- 	s64 sec;
- 
-+	vd = vdns - (clk == CLOCK_MONOTONIC_RAW ? CS_RAW : CS_HRES_COARSE);
-+	vd = __arch_get_vdso_u_timens_data(vd);
-+	vc = vd->clock_data;
-+
- 	if (clk != CLOCK_MONOTONIC_RAW)
- 		vc = &vc[CS_HRES_COARSE];
- 	else
+>
+>>  #define RISCV_HWPROBE_KEY_CPUPERF_0	5
+>>  #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
+>>  #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
+>> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
+>> index bcd3b816306c..d802ff707913 100644
+>> --- a/arch/riscv/kernel/sys_hwprobe.c
+>> +++ b/arch/riscv/kernel/sys_hwprobe.c
+>> @@ -108,6 +108,8 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
+>>  		EXT_KEY(ZCB);
+>>  		EXT_KEY(ZCMOP);
+>>  		EXT_KEY(ZICBOZ);
+>> +		EXT_KEY(ZICFILP);
+>> +		EXT_KEY(ZICFISS);
+>>  		EXT_KEY(ZICOND);
+>>  		EXT_KEY(ZIHINTNTL);
+>>  		EXT_KEY(ZIHINTPAUSE);
+>
+>Greetings,
+>Miquel
 
 
-I'll do some proper testing tomorrow.
-
-
-Thomas
-
-> [1] https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/clock_gettime/clock_gettime03.c
-> [2] https://koji.fedoraproject.org/koji/buildinfo?buildID=2704401
 
