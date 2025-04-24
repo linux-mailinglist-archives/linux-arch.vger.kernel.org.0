@@ -1,78 +1,78 @@
-Return-Path: <linux-arch+bounces-11567-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11568-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3366EA9B5EA
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 20:04:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72D52A9B610
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 20:16:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B63033AE45E
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 18:03:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A5E67A3DF3
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Apr 2025 18:15:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F7B28DF19;
-	Thu, 24 Apr 2025 18:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D2AA28DF19;
+	Thu, 24 Apr 2025 18:16:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="BrzPX+ns"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NOK+8qnl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC02E1CB518
-	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 18:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2933D28DEEB
+	for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 18:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745517845; cv=none; b=kxp1Gr8CyQ3iwkR4I66eBAu4x9V5P3PEw17kLPXldhbonniMgTdXuF7PPLELCDhEeKZsJvfeToPYd8VhJq7Tfcm0RivIWVpcPUSS3+8+l/SB3gY1rSNvO2kOYWMW0qYsiWGqHbSNY08fxjTbG7H2NuBfbemsgJ80RuDfZ7HICoY=
+	t=1745518587; cv=none; b=drBqRUMdHslHSDl76a3TfrCD+pFwHrmh36iTCqJLYmCyKfm2tSiT1gDzpzlkhSuIJzhx1mZbfzTGbCCTjqpbBM8bCZ1S3K8QJNQMQWVZ/FCdYf1Sfd6kjw06N0is2BK6y2HFe300ggtaJWyP04/+0VEOC97Cl4oNivT+MLA0qzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745517845; c=relaxed/simple;
-	bh=uPn6plOz3AG5jrEfFpRZaDs6P0aP85UrPumlULvK+r8=;
+	s=arc-20240116; t=1745518587; c=relaxed/simple;
+	bh=xwIJYlS8Mxej9Ue36QIm4SREbYsNaNZe158F8eJvF30=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KEZfw+HGaD6SK2ap55QVjPFqMQt5gC2q3iNb8N1olRFl1Fsl8ILz9uAydTMQnLvnJYJ39ZmmQaGhtLnCRD9v3aVGwC5GK/j7LeKWcFxzYhTKGwUFzKxgdb6wvHAoO0hQSpRgcfOIqsau2YnVQP8M8we7uiJ7Z54ouhY2FryUIyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=BrzPX+ns; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=O5M26V+uzJlOm4DiPvewrl7rf5J2oM8VFtUMqD79Ai9QhdAeOMadHxho/LZ8qxmF19J6fxdQxsr3cANsDZKVQNPq9kwkpVKaszKb8cxACfvaM+5+ajvAQEdU09nxTH1Meh3Fd37W77FuqnVRUPjjLP2YsF2LutSTD0KB80hMrts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NOK+8qnl; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2295d78b433so16307225ad.2
-        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 11:04:03 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7390d21bb1cso1398332b3a.2
+        for <linux-arch@vger.kernel.org>; Thu, 24 Apr 2025 11:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745517843; x=1746122643; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745518583; x=1746123383; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=R+2ifGTP7Zuk1f3PGxpKoh8D1eRLE/ZHAefBGZIpiLo=;
-        b=BrzPX+nsbBbhPpijNsceUyyDomfenzy/7GbMN64AroqKTxoylv2ovD6hn0CRWqBlxs
-         ulrrWRaiMYzHEdGqjtf/3RqjjwY6kRG5bEvpPsloj2x6unflxrvd7OZeFcolPB3CVKBE
-         eupWPZWQUEaGbsD7rKhdEueNm0qf1/qtRRW05uUzXnvTB3AKt5nuHzXOrHtTr5XnD6Ri
-         jXZraAzv+36aPvl7LB8SMNA+JU/JJaS+pw30Qwz7cznpfAC76YlfziI4Qwx4v8iXAy2a
-         O6FSsZL5LpnN3TihyjvB5S0s3dnYShOd4bWtKX7O65OT7pbg3b2/Gk0NB+qX7HIv4Jmr
-         bHKg==
+        bh=T9sHYezjUq6l/x/6C81DhRiO6Hkx3zNHx6RVEna5xiI=;
+        b=NOK+8qnltocl7IjsIDqxYetNVinHbSt9qBQwhXvmJSzZm/Uj/A+EmAwPtIXsueGmIj
+         m+XPDNBpYdajzutI+CSSyCjBf7HjgMqFV5tzTuvVtSkIK3eBz59mRmxbiO0UBJytArVJ
+         JwbIsuvj2ZoNoLvKSqPlotq7uiV3tqPJhkh+4datkYvfGhyOgDt7kMovCVzgiIpfstBk
+         S4v/2M/Ds4YsAEEEQlfryl2sv4S/tt+DeE3VGGSG3emgoJpBwato5wcWUETazw8nIdLn
+         z56G++pZ3eW8WcfzbpGHR4a8Rf5DIByZE1/v3D4yk7znJHeBdY590OLcMTSOC9jC4C69
+         3d9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745517843; x=1746122643;
+        d=1e100.net; s=20230601; t=1745518583; x=1746123383;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+2ifGTP7Zuk1f3PGxpKoh8D1eRLE/ZHAefBGZIpiLo=;
-        b=Iit7b00mAKh2zw5NjrGhajW7wnqmrNveTgNUHh7WEdXX6nmdf1Se607miPthrO9Dh8
-         Cl3maV+eJCkx3eiSPvpmjcIvlrrmFQptCS8BzdF3rGCSdd+31BUi9Nj9eE+I/NpeRKpb
-         07x3MZ4aYcuGFbW6nlZV71TMznAnCbuj9OXMA3380xa7JnA4ZUZu5GPhvV2l3UDwdWsT
-         C/PFbEXiGGZCZxYJjh5HqvlABbh3joMc7DPXFvJRsaANvt1hq3Uj1WfdJ6BUXWzR2bFK
-         MNHyPvRRg4nXijuEHBQyVJghCNj11rr/EVuJPNQgYZsJuYhN7GyYdEQ+/ANJ61r3zs/h
-         Sb7w==
-X-Forwarded-Encrypted: i=1; AJvYcCVHRZBDg9eTVRqrUr1xO3+zRA8hezViEkFrY5dJ+YfeyfxJT5eUqSkh82kF4KXJFFXs/ypRdVvqI4po@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDh5iH04hZAXxI1rWbOwVef4wtBVWP2Hrlo08VSD6rYAdNKeaC
-	Axdex25t99AW67sKTI+QtEuCsmHPvcmuRiVp5PfQjyzmAnD/zmK8H3+8prHOQN8=
-X-Gm-Gg: ASbGnctNfmIX6qMRapImxc2vfi1ejea578mPjjq+plRK1xzjs3twiAmyYE1qfeI5L13
-	vjIEmR6D8ipXDrtC6bRqSGc1iNF+p3fYhhMQ6y3/3aSmMhoCPID0j0g/zdvNSTDBtVxCIDt04UB
-	qIKaWFardOE/jVoSNoJS9WJLLDOF255sKjIpLqad0EOD+f0GY7qz2z015T1D8w1eYSVzFq1CVbU
-	SduEkfmy4reKiPRuUk+HyXekARfaq/nxp9rcsjKZJU8ly4jyH1fvXzG41AZ8AW6CLbnFWvHQGi9
-	XKvtpe3tXpdMwhqXlgptK4Y0z1owNpfRJYXHZz6aUHjm5ZwpDGQ0yfanlUtElw==
-X-Google-Smtp-Source: AGHT+IEwApZFffChVQ3IgP8GwvBv+BNm7qJFv/s7tyP4mivow/7aAesEdu2H5hIh83xgouvcI3whKA==
-X-Received: by 2002:a17:902:cec8:b0:21f:4c8b:c514 with SMTP id d9443c01a7336-22dbd46edccmr5459035ad.45.1745517843026;
-        Thu, 24 Apr 2025 11:04:03 -0700 (PDT)
+        bh=T9sHYezjUq6l/x/6C81DhRiO6Hkx3zNHx6RVEna5xiI=;
+        b=oxv1QrhTt310HhbPBuqCgFknLR+CZ2ua4jOVSyqci1WMtawqkO33n9jgy8GRFhilK/
+         xW0MH78CLcsLApWqh4xF9sEFFMCpdQuw9NA6FEfQuXWzqy7zWpQqh0czvJIwGf3JVbzb
+         KjzCeFdyVRLdVChyI1uZ9cEQAQmARRrl4SKxcQ4WF/frLfw+WQbVCsBXbnDobqqMqkPq
+         Kv5f2PoPhr3Q+FHdlO4v83W0m3l9zswUO7X7TQZ0BteJuEkyDD1wA7vHs4utM0dE9zCj
+         HyKhgm2B/xaIYj47gpsnPIFF9/v54vZwB+0Pc+5KkTsXN5oQF5WS7+9ZGuC254qpPplj
+         /5Gw==
+X-Forwarded-Encrypted: i=1; AJvYcCWRNKMY/D9XDovohLx84EBkvDnKnjYMsh1LRoYYsGObY6V5vxN7AT5OoJquYNa+D39RjFGjNu1QGbA5@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxcwr+DZmU1tC+nb3hERiJvRiJdCSnqt3es7JhSHL7WSycHN5Zn
+	m+rpjHi0TRMJC+5mD6jp3myr8Nb/RavziPUSQChY/iamYJkSwffSiySycfODHv4=
+X-Gm-Gg: ASbGncuxa7KzA5k2htrJlx9Mdbspdvdk3H29BeVcJGMGJt6skBd1kQW8oQJn/AiVlP5
+	4oxeMRK+A6w9mcGGN+v6fQZxulrPflrNzy4zSq+feM9D6toTJTEa80oD+kr9F+7yfWsWB6zG3zl
+	gGSNT10xRlV1/S/IA/JWUHieUVtmJlkveg5qWTz7QdyP/HL/bhcNt7NT3lsXgxqgn0JN/olplJd
+	zAoRozhffKvcqbT4XvujYAM0mgbACyrSZHWzCG57qmfwdmO5Pr8VHGQbp5quC6YcPjwvdcqmgdV
+	ymwV9msuy94h2YiAbeVj5qhEAKb1y9jCbieC0pfOAqaxqvR94tg=
+X-Google-Smtp-Source: AGHT+IF0jVzUPU4VWGuVNQ17BhULhOztKBekv2BW5HkIJsQ1IRCAo1z8B5DG3h77AtgqUMysW+802Q==
+X-Received: by 2002:aa7:9315:0:b0:736:9e40:13b1 with SMTP id d2e1a72fcca58-73e24ae7b45mr5236452b3a.23.1745518583417;
+        Thu, 24 Apr 2025 11:16:23 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b15f7ec0bb2sm1513897a12.18.2025.04.24.11.04.00
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73e259414c7sm1783697b3a.62.2025.04.24.11.16.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 11:04:02 -0700 (PDT)
-Date: Thu, 24 Apr 2025 11:03:59 -0700
+        Thu, 24 Apr 2025 11:16:23 -0700 (PDT)
+Date: Thu, 24 Apr 2025 11:16:19 -0700
 From: Deepak Gupta <debug@rivosinc.com>
 To: Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
@@ -104,16 +104,16 @@ Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
 	cleger@rivosinc.com, alexghiti@rivosinc.com,
 	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, Zong Li <zong.li@sifive.com>,
+	rick.p.edgecombe@intel.com,
 	linux-riscv <linux-riscv-bounces@lists.infradead.org>
-Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and save/restore
- of CSR_SSP on trap entry/exit
-Message-ID: <aAp9D7txw8y9WL5m@debug.ba.rivosinc.com>
+Subject: Re: [PATCH v12 12/28] riscv: Implements arch agnostic shadow stack
+ prctls
+Message-ID: <aAp_87-Xr6gn_hD7@debug.ba.rivosinc.com>
 References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
- <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
- <aAmEnK0vSgZZOORL@debug.ba.rivosinc.com>
- <D9EV1K8ZQQJR.20CRTYLQBN9UE@ventanamicro.com>
+ <20250314-v5_user_cfi_series-v12-12-e51202b53138@rivosinc.com>
+ <D92V2NPNZYV0.136MJ2HOK48HE@ventanamicro.com>
+ <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
+ <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -123,84 +123,137 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <D9EV1K8ZQQJR.20CRTYLQBN9UE@ventanamicro.com>
+In-Reply-To: <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
 
-On Thu, Apr 24, 2025 at 02:16:32PM +0200, Radim Krčmář wrote:
->2025-04-23T17:23:56-07:00, Deepak Gupta <debug@rivosinc.com>:
->> On Thu, Apr 10, 2025 at 01:04:39PM +0200, Radim Krčmář wrote:
->>>2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
->>>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
->>>> @@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
->>>>
->>>>  	REG_L s0, TASK_TI_USER_SP(tp)
->>>>  	csrrc s1, CSR_STATUS, t0
->>>> +	/*
->>>> +	 * If previous mode was U, capture shadow stack pointer and save it away
->>>> +	 * Zero CSR_SSP at the same time for sanitization.
->>>> +	 */
->>>> +	ALTERNATIVE("nop; nop; nop; nop",
->>>> +				__stringify(			\
->>>> +				andi s2, s1, SR_SPP;	\
->>>> +				bnez s2, skip_ssp_save;	\
->>>> +				csrrw s2, CSR_SSP, x0;	\
->>>> +				REG_S s2, TASK_TI_USER_SSP(tp); \
->>>> +				skip_ssp_save:),
->>>> +				0,
->>>> +				RISCV_ISA_EXT_ZICFISS,
->>>> +				CONFIG_RISCV_USER_CFI)
+On Thu, Apr 24, 2025 at 03:36:54PM +0200, Radim Krčmář wrote:
+>2025-04-23T21:44:09-07:00, Deepak Gupta <debug@rivosinc.com>:
+>> On Thu, Apr 10, 2025 at 11:45:58AM +0200, Radim Krčmář wrote:
+>>>2025-03-14T14:39:31-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>>> diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/asm/usercfi.h
+>>>> @@ -14,7 +15,8 @@ struct kernel_clone_args;
+>>>>  struct cfi_status {
+>>>>  	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
+>>>> -	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 1);
+>>>> +	unsigned long ubcfi_locked : 1;
+>>>> +	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);
 >>>
->>>(I'd prefer this closer to the user_sp and kernel_sp swap, it's breaking
->>> the flow here.  We also already know if we've returned from userspace
->>> or not even without SR_SPP, but reusing the information might tangle
->>> the logic.)
+>>>The rsvd field shouldn't be necessary as the container for the bitfield
+>>>is 'unsigned long' sized.
+>>>
+>>>Why don't we use bools here, though?
+>>>It might produce a better binary and we're not hurting for struct size.
 >>
->> If CSR_SCRATCH was 0, then we would be coming from kernel else flow goes
->> to `.Lsave_context`. If we were coming from kernel mode, then eventually
->> flow merges to `.Lsave_context`.
+>> If you remember one of the previous patch discussion, this goes into
+>> `thread_info` Don't want to bloat it. Even if we end shoving into task_struct,
+>> don't want to bloat that either. I can just convert it into bitmask if
+>> bitfields are an eyesore here.
+>
+>  "unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);"
+>
+>is an eyesore that defines exactly the same as the two lines alone
+>
+>  unsigned long ubcfi_en : 1;
+>  unsigned long ubcfi_locked : 1;
+>
+>That one should be removed.
+>
+>If we have only 4 bits in 4/8 bytes, then bitfields do generate worse
+>code than 4 bools and a 0/4 byte hole.  The struct size stays the same.
+>
+>I don't care much about the switch to bools, though, because this code
+>is not called often.
+
+I'll remove the bitfields, have single `unsigned long cfi_control_state`
+And do `#define RISCV_UBCFI_EN 1` and so on.
+>
+>>>> @@ -262,3 +292,83 @@ void shstk_release(struct task_struct *tsk)
+>>>> +int arch_set_shadow_stack_status(struct task_struct *t, unsigned long status)
+>>>> +{
+>>>> +	/* Request is to enable shadow stack and shadow stack is not enabled already */
+>>>> +	if (enable_shstk && !is_shstk_enabled(t)) {
+>>>> +		/* shadow stack was allocated and enable request again
+>>>> +		 * no need to support such usecase and return EINVAL.
+>>>> +		 */
+>>>> +		if (is_shstk_allocated(t))
+>>>> +			return -EINVAL;
+>>>> +
+>>>> +		size = calc_shstk_size(0);
+>>>> +		addr = allocate_shadow_stack(0, size, 0, false);
+>>>
+>>>Why don't we use the userspace-allocated stack?
+>>>
+>>>I'm completely missing the design idea here...  Userspace has absolute
+>>>over the shadow stack pointer CSR, so we don't need to do much in Linux:
+>>>
+>>>1. interface to set up page tables with -W- PTE and
+>>>2. interface to control senvcfg.SSE.
+>>>
+>>>Userspace can do the rest.
 >>
->> So we will be saving CSR_SSP on all kernel -- > kernel trap handling. That
->> would be unnecessary. IIRC, this was one of the first review comments in
->> early RFC series of these patch series (to not touch CSR_SSP un-necessarily)
+>> Design is like following:
 >>
->> We can avoid that by ensuring when we branch by determining if we are coming
->> from user to something like `.Lsave_ssp` which eventually merges into
->> ".Lsave_context". And if we were coming from kernel then we would branch to
->> `.Lsave_context` and thus skipping ssp save logic. But # of branches it
->> introduces in early exception handling is equivalent to what current patches
->> do. So I don't see any value in doing that.
+>> When a user task wants to enable shadow stack for itself, it has to issue
+>> a syscall to kernel (like this prctl). Now it can be done independently by
+>> user task by first issuing `map_shadow_stack`, then asking kernel to light
+>> up envcfg bit and eventually when return to usermode happens, it can write
+>> to CSR. It is no different from doing all of the above together in single
+>> `prctl` call. They are equivalent in that nature.
 >>
->> Let me know if I am missing something.
+>> Background is that x86 followed this because x86 had workloads/binaries/
+>> functions with (deep)recursive functions and thus by default were forced
+>> to always allocate shadow stack to be of the same size as data stack. To
+>> reduce burden on userspace for determining and then allocating same size
+>> (size of data stack) shadow stack, prctl would do the job of calculating
+>> default shadow stack size (and reduce programming error in usermode). arm64
+>> followed the suite. I don't want to find out what's the compatiblity issues
+>> we will see and thus just following the suite (given that both approaches
+>> are equivalent). Take a look at static `calc_shstk_size(unsigned long size)`.
+>>
+>> Coming back to your question of why not allowing userspace to manage its
+>> own shadow stack. Answer is that it can manage its own shadow stack. If it
+>> does, it just have to be aware of size its allocating for shadow stack.
 >
->Right, it's hard to avoid the extra branches.
+>It's just that userspace cannot prevent allocation of the default stack
+>when enabling it, which is the weird part to me.
+>The allocate and enable syscalls could have been nicely composable.
 >
->I think we could modify the entry point (STVEC), so we start at
->different paths based on kernel/userspace trap and only jump once to the
->common code, like:
+>> There is already a patch series going on to manage this using clone3.
+>> https://lore.kernel.org/all/20250408-clone3-shadow-stack-v15-4-3fa245c6e3be@kernel.org/
 >
->  SYM_CODE_START(handle_exception_kernel)
->    /* kernel setup magic */
->    j handle_exception_common
->  SYM_CODE_START(handle_exception_user)
->    /* userspace setup magic */
->  handle_exception_common:
+>A new ioctl does seem to solve most of the practical issues, thanks.
+>
+>> I fully expect green thread implementations in rust/go or swapcontext
+>> based thread management doing this on their own.
+>>
+>> Current design is to ensure existing apps dont have to change a lot in
+>> userspace and by default kernel gives compatibility. Anyone else wanting
+>> to optimize the usage of shadow stack can do so with current design.
+>
+>Right, changing rlimit_stack around shadow stack allocation is not the
+>most elegant way, but it does work.
+>
+>>>> +int arch_lock_shadow_stack_status(struct task_struct *task,
+>>>> +				  unsigned long arg)
+>>>> +{
+>>>> +	/* If shtstk not supported or not enabled on task, nothing to lock here */
+>>>> +	if (!cpu_supports_shadow_stack() ||
+>>>> +	    !is_shstk_enabled(task) || arg != 0)
+>>>> +		return -EINVAL;
+>>>
+>>>The task might want to prevent shadow stack from being enabled?
+>>
+>> But Why would it want to do that? Task can simply not issue the prctl. There
+>> are glibc tunables as well using which it can be disabled.
+>
+>The task might do it as some last resort to prevent a buggy code from
+>enabling shadow stacks that would just crash.  Or whatever complicated
+>reason userspace can think of.
+>
+>It's more the other way around.  I wonder why we're removing this option
+>when we don't really care what userspace does to itself.
+>I think it's complicating the kernel without an obvious gain.
 
-Hmm... This can be done. But then it would require to constantly modify `stvec`
-When you're going back to user mode, you would have to write `stvec` with addr
-of `handle_exception_user`. But then you can easily get a NMI. It can become
-ugly. Needs much more thought and on first glance feels error prone.
+It just feels wierd. There isn't anything like this for other features lit-up
+via envcfg. Does hwprobe allow this on per-task basis? I'll look into it.
 
-Only if we have an extension that allows different trap address depending on
-mode you're coming from (arm does that, right?, I think x86 FRED also does
-that)
->
->This is not a suggestion for this series.  I would be perfectly happy
->with just a cleaner code.
->
->Would it be possible to hide the ALTERNATIVE ugliness behind a macro and
->move it outside the code block that saves pt_regs?
-
-Sure, I'll do something about it.
-
->
->Thanks.
 
