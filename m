@@ -1,334 +1,315 @@
-Return-Path: <linux-arch+bounces-11572-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11573-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C752A9C49A
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 12:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0375AA9C79C
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 13:29:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C8049C02E0
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 10:03:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 789F99E37A1
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 11:28:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAA7522AE4E;
-	Fri, 25 Apr 2025 10:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B320242D73;
+	Fri, 25 Apr 2025 11:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f6SWq6TU"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="BeKf1Jbv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C70231A57
-	for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 10:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B38023E32D
+	for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 11:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745575416; cv=none; b=GNjFI7aTUYLu0RJaDc0y87OKmXob0ZA6K3g8L76qfLaVhwbcoqwVoohOEchGiAlmWeRYGZHnEAoyxUtk1I44OHpidAMqL4Dnceoyt3oVYJK8QsEip9VORnv2UqeOGiDQEEMYPCi/H1HHgVdxn/ZhAy8aOtrYAg2QFXtBe/AwgDc=
+	t=1745580460; cv=none; b=ClxdMMpf18ym4hlrgIbkLspHSZ8Zj9ohY8DEp72QqRGeXPqdb3e8nQ4PrQY7CB+Ems38vwN7ANaT1RBWyZjGigAAK7N4ERt7R6r7yjdLqaxs4vszTRaISRNSdNDVKe5AP3cXWo6u1Az8YREdfzlYmNswjEjkiBAFxlaLyFG3C68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745575416; c=relaxed/simple;
-	bh=o/nSLVWz806VTnHD8gtVGrUdwMUgypfm/pnz5QKNUMw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HvVmrJZ0cGyHwf1Y41TfzuH3QmrP0ZPjlnBKgcpuug7+dwwR1FZJfPH0bnCdlUMgcUU6Mu2HYjf6WndEjrOXa/knuT9IwYKqIHqRMlTBR5n8ISZKxXHMp0rwqlhtpiQaLahwNfLTgigCsmv6LE/uQB5yjloieNSd/SQ3WW+jbEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f6SWq6TU; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745575413;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/pdAv3L1vajERKgxSPxyO88qfXI0bDg1bbg1iV/Cff8=;
-	b=f6SWq6TUTFNmOXYuveRc3vCnju3ueCsU5cX8gqyJZTOrqP1x8YakEa1uS+XErb0mDjQ6V3
-	2uvP5hfjcF8lkE5G9VVVxYgdar/L2Jn3fdhM1yu+rB+pJ4JjzNapNz0IygWkMvhHS6EG9T
-	TOHL6Ay8TTCODr7OSxbxYV3JcV4hdrs=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-626-iiOFtjwAOsyB5chuhvf0uA-1; Fri, 25 Apr 2025 06:03:32 -0400
-X-MC-Unique: iiOFtjwAOsyB5chuhvf0uA-1
-X-Mimecast-MFC-AGG-ID: iiOFtjwAOsyB5chuhvf0uA_1745575411
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3912d5f6689so1041635f8f.1
-        for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 03:03:32 -0700 (PDT)
+	s=arc-20240116; t=1745580460; c=relaxed/simple;
+	bh=L9I7eiN2f73J5dPVzszuLYpZejlZqjoUq0SaVPSprwE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=B0b0GkUVxHPUyQxme/BKnJUCHnDM1zaqKlUVMjfDYufUlPJnyGAbd+wxdza8CjpjOGPj+oplVS5dLWkTcnbk4vsAC2QwpIO5oKpCGNt+ieUbzTvf7Kubtrt/35/ijiQLiHu8ZDxUgKUxW0BxV0GmLb4A84tQKooZvkQZ04NIE24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=BeKf1Jbv; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39d73b97500so102371f8f.3
+        for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 04:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1745580456; x=1746185256; darn=vger.kernel.org;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9tdcxdU/uqiM5JHIE0ih8RzkRpPBvVsrQ+sQtZ+utPU=;
+        b=BeKf1JbvEe86laQNNzzsu38dwjJfOp2oJziFAnmoWqsMbkQX7rgfKSMJBcS5wn9lX/
+         le6OTfnKYIUDlr9y9es740hx/A9QyE25H/Yy+CuZFImgWB9RUme4Zk7a2clmaukJFFFF
+         //djvxQCG2JB89Vw4/pGrhGGowVfM6p8qj5ic2tcEPQ5D13mdFo3TQoIpozBKfyOlZNm
+         sprNbfWJ6nQNdxp2NXBN4IYtQk6d5oczduvV1ZJLHEB0gAgCUSl9EZmROHTItBH2ShDh
+         2+rVqlSze0iTzP8C2PHzqtFySPVO2sfoSKtGvY4RRXwUizBClW/EBnWfPWEMPnI8AZkM
+         ddhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745575411; x=1746180211;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/pdAv3L1vajERKgxSPxyO88qfXI0bDg1bbg1iV/Cff8=;
-        b=HFnNRu8H39mswhs9UkJkZWjaA/jGyHw0c09cnf4Ua0NwMhP3YiHQSwVIUzZFnsN8ss
-         kg20tK/IiQ/1Xse4HqGENGWS4nlUzicqhPQ3EfC5Ihm0D6I3OsFYVbnM9UY27oZPwrD3
-         mkHRVnYHxqL7qAABOqge8rzvyV3/rWqaqhRZPeujSmksn8d2Vdu30uDYRncLVQDQVhfG
-         A2unsO9HHKyXZWLrG46Y5Kpj8Tn0NsUDLvuPA9Xtw47yIjzxuYrgStGS9OiXOjUZOv2S
-         Y/Mqh9twxHsWaarA6E0QB5ZOZOti7Tppl8Xa2d4y6KLgW7Fw72SRspMZdhRVJ1cmQ2Rq
-         Aqig==
-X-Forwarded-Encrypted: i=1; AJvYcCU/FkHqGR9V1Rszc1mQKfNrwM5I9NzU9ZTnMDKixzp9reAzcuxhS5eq7VBvivnfKI2ZC4z0hn6UGdf1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9Jr7OVsk4WHPrUt2mnwKY4Lo6Ex6EByEhx7jD6QNuMQzg5axv
-	2HZgmKaCw68TR02WKZv0+nj3jWL5pg45oXtMFodUaVpVbegIumV58+HL24/8V1avCwleQzaMxpz
-	g7qJNZm/cYCeK+N4XItgekl4cd28ephMnMmKJVcqhgdTb76TmCLFwQf4qRLYeA9OqQ4FZ8oF3TW
-	ZjfuHp8IgTwvprlrs30dGDtfPiE23YFUcJqw==
-X-Gm-Gg: ASbGnctFHecjHu+NqVZPKTpxpIPUNOf7XT9Kv7LjJeDSD6IXdEpx3sThpoDm9YlMb2M
-	rb9pV9FbwkQWF6WueVPlGEpt9EGuKfgdane+n1rT9P1zTQ7esiAqTFqGHZzTWJmplv6U=
-X-Received: by 2002:a05:6000:40cd:b0:39c:1257:cd3f with SMTP id ffacd0b85a97d-3a074fafc33mr1187360f8f.57.1745575410917;
-        Fri, 25 Apr 2025 03:03:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFhvPrUk8HaqVlny6U2TcGIeGC3vNg2/8Nd1SlrTxEwzCGtEum+5nJ8qw6AJbvzVU3WUz1E5bSUYJ0Yi6UnZY4=
-X-Received: by 2002:a05:6000:40cd:b0:39c:1257:cd3f with SMTP id
- ffacd0b85a97d-3a074fafc33mr1187332f8f.57.1745575410491; Fri, 25 Apr 2025
- 03:03:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745580456; x=1746185256;
+        h=in-reply-to:references:from:to:cc:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9tdcxdU/uqiM5JHIE0ih8RzkRpPBvVsrQ+sQtZ+utPU=;
+        b=FkqFm7fI79axn0w15PzLYjb4vE6lfQE3idGOXSN7hsmNT5Z8DzgAKApXVcozSmnAC8
+         oFfPDS1I3iykXd8xfleYeUkHXVFddvWguAzxfc56+8f5xLDiZZITHoMjg4RJ+9WZLOHw
+         VOt+2vxGlM0bXOuOE4XjfV22IXgKWvtTc8zAesGT/C+CwpTvmtLXg9Mv2ZfgMqDwHyD8
+         kNilAUIzr2BUeGU3HSjUKTMTJoOAR+mOOPoxjdes7db8OIMwS6jPXZ74Cbxm+mzmrQ37
+         SXR6EXAYH69qn+1b/VMVhPikAqlD80X14+LFDmPAc8/I5RtF2k+xAUYaCjwShzOQNlwR
+         bx2A==
+X-Forwarded-Encrypted: i=1; AJvYcCXkf74o/7gt3E0T1ZSHRQMFCc5aFlioC5cn1XBzqoPkzAF7S1tmn9S82YJzmco7oEeS0yjAgzldq4ei@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5ceZPjsTrd2ZP5n34DbN9Ygl3eoz4axhqvc1KPEm9UX1G/L6u
+	7WzOpMv44WPFd9rMocbzVXEue3QZx8rEglwKcAqnKRMWiGPTqAKjurQyvFA+abM=
+X-Gm-Gg: ASbGncuXNf3M5QHjVRIbdZKwPGcYG2KQ53QhthCjsTMiaNSLWKnr6Ja/ytmbbkoTRo7
+	gb5CvGHOrQIZiQN3J3vST9oeBR4Or+zLcvGPTduLlrC9dApkqiAPAeeOFraO4wRfEliE6xEDdY/
+	lgzatDXL12585Xti0328CWW6KTfs7XDyZlKGOR3w0kCl3CmgROLSZ8nDMc0aTVU40HgSTdg6jw9
+	zeIhPQKj4P3w6YPM85B5fj+EddVMOhcm/Rcqwyvs7AVKR+XsD6rI1aN8weSh7t9wb5QOxP5vKWb
+	yNjdQ+WaPGFdT6z2DrbY8urt50IN7/IrF1PlXK9Fzi8f8YjT
+X-Google-Smtp-Source: AGHT+IEQ9pK+JKMDBMS71i2ytNl3g5Iz5jsYozyFh9v4Ot2oPm70zEuu2n9VUWJTfr8L27VdCIYOXQ==
+X-Received: by 2002:a05:6000:420e:b0:39c:1efc:44ed with SMTP id ffacd0b85a97d-3a074e42259mr527990f8f.7.1745580456083;
+        Fri, 25 Apr 2025 04:27:36 -0700 (PDT)
+Received: from localhost ([2a02:8308:a00c:e200:84a3:2b0a:bdb8:ce08])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-440a536a02csm22002045e9.27.2025.04.25.04.27.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Apr 2025 04:27:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
- <20250303-vdso-clock-v1-8-c1b5c69a166f@linutronix.de> <aApGPAoctq_eoE2g@t14ultra>
- <20250424173908-ffca1ea2-e292-4df3-9391-24bfdaab33e7@linutronix.de>
- <CAASaF6xsMOWkhPrzKQWNz5SXaROSpxzFVBz+MOA-MNiEBty7gQ@mail.gmail.com> <20250425104552-07539a73-8f56-44d2-97a2-e224c567a2fc@linutronix.de>
-In-Reply-To: <20250425104552-07539a73-8f56-44d2-97a2-e224c567a2fc@linutronix.de>
-From: Jan Stancek <jstancek@redhat.com>
-Date: Fri, 25 Apr 2025 12:03:14 +0200
-X-Gm-Features: ATxdqUHUJyFDwXWlLrx8Ahqii0-Ktlj3kT6KX6YhOgPcoK-aAeGj4gOn-pX1-9g
-Message-ID: <CAASaF6yxThX3HTHgY_AGqNr7LJ-erdG09WV5-HyfN1fYN9pStQ@mail.gmail.com>
-Subject: Re: [PATCH 08/19] vdso/gettimeofday: Prepare do_hres_timens() for
- introduction of struct vdso_clock
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Nam Cao <namcao@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 25 Apr 2025 13:27:34 +0200
+Message-Id: <D9FOMMGOGOZS.FN9LKYJAB9PD@ventanamicro.com>
+Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and
+ save/restore of CSR_SSP on trap entry/exit
+Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
+ <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Liam R.
+ Howlett" <Liam.Howlett@oracle.com>, "Vlastimil Babka" <vbabka@suse.cz>,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, "Paul Walmsley"
+ <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
+ Ou" <aou@eecs.berkeley.edu>, "Conor Dooley" <conor@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Arnd Bergmann" <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>,
+ "Eric Biederman" <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann
+ Horn" <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
+ <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
+ <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
+ <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
+ <cleger@rivosinc.com>, <broonie@kernel.org>, <rick.p.edgecombe@intel.com>,
+ "Zong Li" <zong.li@sifive.com>, "linux-riscv"
+ <linux-riscv-bounces@lists.infradead.org>
+To: "Deepak Gupta" <debug@rivosinc.com>
+From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
+References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
+ <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
+ <aAl_HRk49lnseiio@debug.ba.rivosinc.com>
+ <D9EUJBQ5OHN0.2KUJHGXK262TR@ventanamicro.com>
+ <aAp7Un415hNqtshd@debug.ba.rivosinc.com>
+In-Reply-To: <aAp7Un415hNqtshd@debug.ba.rivosinc.com>
 
-On Fri, Apr 25, 2025 at 10:58=E2=80=AFAM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> On Thu, Apr 24, 2025 at 11:57:02PM +0200, Jan Stancek wrote:
-> > On Thu, Apr 24, 2025 at 5:49=E2=80=AFPM Thomas Wei=C3=9Fschuh
-> > <thomas.weissschuh@linutronix.de> wrote:
-> > >
-> > > On Thu, Apr 24, 2025 at 04:10:04PM +0200, Jan Stancek wrote:
-> > > > On Mon, Mar 03, 2025 at 12:11:10PM +0100, Thomas Wei=C3=9Fschuh wro=
+2025-04-24T10:56:34-07:00, Deepak Gupta <debug@rivosinc.com>:
+> On Thu, Apr 24, 2025 at 01:52:43PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
 te:
-> > > > > From: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > > > >
-> > > > > To support multiple PTP clocks, the VDSO data structure needs to =
-be
-> > > > > reworked. All clock specific data will end up in struct vdso_cloc=
-k and in
-> > > > > struct vdso_time_data there will be array of it. By now, vdso_clo=
-ck is
-> > > > > simply a define which maps vdso_clock to vdso_time_data.
-> > > > >
-> > > > > Prepare for the rework of these structures by adding struct vdso_=
-clock
-> > > > > pointer argument to do_hres_timens(), and replace the struct vdso=
-_time_data
-> > > > > pointer with the new pointer arugment whenever applicable.
-> > > > >
-> > > > > No functional change.
-> > > > >
-> > > > > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > > > > Signed-off-by: Nam Cao <namcao@linutronix.de>
-> > > > > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutroni=
-x.de>
-> > > > > ---
-> > > > > lib/vdso/gettimeofday.c | 35 ++++++++++++++++++-----------------
-> > > > > 1 file changed, 18 insertions(+), 17 deletions(-)
-> > > > >
-> > > >
-> > > > starting with this patch, I'm seeing user-space crashes when using =
-clock_gettime():
-> > > >   BAD  -> 83a2a6b8cfc5 vdso/gettimeofday: Prepare do_hres_timens() =
-for introduction of struct vdso_clock
-> > > >   GOOD -> 64c3613ce31a vdso/gettimeofday: Prepare do_hres() for int=
-roduction of struct vdso_clock
-> > > >
-> > > > It appears to be unique to aarch64 with 64k pages, and can be repro=
-duced with
-> > > > LTP clock_gettime03 [1]:
-> > > >   command: clock_gettime03   tst_kconfig.c:88: TINFO: Parsing kerne=
-l config '/lib/modules/6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch=
-64+64k/build/.config'
-> > > >   tst_test.c:1903: TINFO: LTP version: 20250130-231-gd02c2aea3
-> > > >   tst_test.c:1907: TINFO: Tested kernel: 6.15.0-0.rc3.20250423gitbc=
-3372351d0c.30.eln147.aarch64+64k #1 SMP PREEMPT_DYNAMIC Wed Apr 23 23:23:54=
- UTC 2025 aarch64
-> > > >   tst_kconfig.c:88: TINFO: Parsing kernel config '/lib/modules/6.15=
-.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k/build/.config'
-> > > >   tst_test.c:1720: TINFO: Overall timeout per run is 0h 05m 24s
-> > > >   clock_gettime03.c:121: TINFO: Testing variant: vDSO or syscall wi=
-th libc spec
-> > > >   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct =
-10000ms
-> > > >   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct =
-0ms
-> > > >   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct 1=
-0000ms
-> > > >   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0=
-ms
-> > > >   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct =
--10000ms
-> > > >   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct =
-0ms
-> > > >   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct -=
-10000ms
-> > > >   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0=
-ms
-> > > >   tst_test.c:438: TBROK: Child (233649) killed by signal SIGSEGV
-> > > >
-> > > > or with:
-> > > > --------------------- 8< ----------------------
-> > > > #define _GNU_SOURCE
-> > > > #include <sched.h>
-> > > > #include <time.h>
-> > > > #include <unistd.h>                                                =
-                                                                           =
-                                                                           =
-                    #include <sys/wait.h>
-> > > >
-> > > > int main(void)
-> > > > {
-> > > >         struct timespec tp;
-> > > >         pid_t child;
-> > > >         int status;
-> > > >
-> > > >         unshare(CLONE_NEWTIME);
-> > > >
-> > > >         child =3D fork();
-> > > >         if (child =3D=3D 0) {
-> > > >                 clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
-> > > >         }
-> > > >
-> > > >         wait(&status);
-> > > >         return status;
-> > > > }
-> > > >
-> > > > # ./a.out ; echo $?
-> > > > 139
-> > > > --------------------- >8 ----------------------
-> > > >
-> > > > RPMs and configs can be found at Fedora koji, latest build is at [2=
-] (look for kernel-64k).
-> > >
-> > > Hi Jan,
-> > >
-> > > Thanks for the great error report.
-> > >
-> > > Can you try the following change (on top of v6.15-rc1, should also wo=
-rk with current master)?
-> > >
-> > > diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-> > > index 93ef801a97ef..867ce53cca94 100644
-> > > --- a/lib/vdso/gettimeofday.c
-> > > +++ b/lib/vdso/gettimeofday.c
-> > > @@ -85,14 +85,18 @@ static __always_inline
-> > >  int do_hres_timens(const struct vdso_time_data *vdns, const struct v=
-dso_clock *vcns,
-> > >                    clockid_t clk, struct __kernel_timespec *ts)
-> > >  {
-> > > -       const struct vdso_time_data *vd =3D __arch_get_vdso_u_timens_=
-data(vdns);
-> > >         const struct timens_offset *offs =3D &vcns->offset[clk];
-> > > -       const struct vdso_clock *vc =3D vd->clock_data;
-> > > +       const struct vdso_time_data *vd;
-> > > +       const struct vdso_clock *vc;
-> > >         const struct vdso_timestamp *vdso_ts;
-> > >         u64 cycles, ns;
-> > >         u32 seq;
-> > >         s64 sec;
-> > >
-> > > +       vd =3D vdns - (clk =3D=3D CLOCK_MONOTONIC_RAW ? CS_RAW : CS_H=
-RES_COARSE);
-> > > +       vd =3D __arch_get_vdso_u_timens_data(vd);
-> > > +       vc =3D vd->clock_data;
-> > > +
-> > >         if (clk !=3D CLOCK_MONOTONIC_RAW)
-> > >                 vc =3D &vc[CS_HRES_COARSE];
-> > >         else
-> > >
-> > >
-> > > I'll do some proper testing tomorrow.
-> >
-> > That does seem to work for the 2 reproducers I have.
+>>2025-04-23T17:00:29-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>> On Thu, Apr 10, 2025 at 01:04:39PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 w=
+rote:
+>>>>2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>>>> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/includ=
+e/asm/thread_info.h
+>>>>> @@ -62,6 +62,9 @@ struct thread_info {
+>>>>>  	long			user_sp;	/* User stack pointer */
+>>>>>  	int			cpu;
+>>>>>  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
+>>>>> +#ifdef CONFIG_RISCV_USER_CFI
+>>>>> +	struct cfi_status	user_cfi_state;
+>>>>> +#endif
+>>>>
+>>>>I don't think it makes sense to put all the data in thread_info.
+>>>>kernel_ssp and user_ssp is more than enough and the rest can comfortabl=
+y
+>>>>live elsewhere in task_struct.
+>>>>
+>>>>thread_info is supposed to be as small as possible -- just spanning
+>>>>multiple cache-lines could be noticeable.
+>>>
+>>> I can change it to only include only `user_ssp`, base and size.
+>>
+>>No need for base and size either -- we don't touch that in the common
+>>exception code.
 >
-> Thanks for testing.
+> got it.
 >
-> > But why is this change needed?
+>>
+>>> But before we go there, see below:
+>>>
+>>> $ pahole -C thread_info kbuild/vmlinux
+>>> struct thread_info {
+>>>          long unsigned int          flags;                /*     0     =
+8 */
+>>>          int                        preempt_count;        /*     8     =
+4 */
+>>>
+>>>          /* XXX 4 bytes hole, try to pack */
+>>>
+>>>          long int                   kernel_sp;            /*    16     =
+8 */
+>>>          long int                   user_sp;              /*    24     =
+8 */
+>>>          int                        cpu;                  /*    32     =
+4 */
+>>>
+>>>          /* XXX 4 bytes hole, try to pack */
+>>>
+>>>          long unsigned int          syscall_work;         /*    40     =
+8 */
+>>>          struct cfi_status          user_cfi_state;       /*    48    3=
+2 */
+>>>          /* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
+>>>          long unsigned int          a0;                   /*    80     =
+8 */
+>>>          long unsigned int          a1;                   /*    88     =
+8 */
+>>>          long unsigned int          a2;                   /*    96     =
+8 */
+>>>
+>>>          /* size: 104, cachelines: 2, members: 10 */
+>>>          /* sum members: 96, holes: 2, sum holes: 8 */
+>>>          /* last cacheline: 40 bytes */
+>>> };
+>>>
+>>> If we were to remove entire `cfi_status`, it would still be 72 bytes (8=
+8 bytes
+>>> if shadow call stack were enabled) and already spans across two cacheli=
+nes.
+>>
+>>It has only 64 bytes of data without shadow call stack, but it wasted 8
+>>bytes on the holes.
+>>a2 is somewhat an outlier that is not used most exception paths and
+>>excluding it makes everything fit nicely even now.
 >
-> So far the only thing that I can say is that this logic was there before =
-the
-> patch and was removed accidentally, so it should be restored.
-> Why the logic was there in the first place I'll have to investigate.
+> But we can't exclude shadow call stack. It'll lead to increased size if t=
+hat
+> config is selected. A solution has to work for all the cases and not half
+> hearted effort.
 
-I think it paired with "vd advancing" based on "clock" in original code:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib=
-/vdso/gettimeofday.c?h=3Dv6.14#n264
-and to get back to "base", you needed to subtract same value:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib=
-/vdso/gettimeofday.c?h=3Dv6.14#n82
+We could drop a0 or user_sp and place the two ints next to each other,
+saving at least 16 bytes.
 
-After this series, "vd" isn't manipulated this way, so the removal of
-that subtraction seemed deliberate to me.
+(user_sp, a0, a1, and a2 are just temporary storage.  I think would be
+ fine with just two temporaries + kernel_sp, to provide three registers
+ for new_vmalloc_check and we never need more.)
 
+>>> if shadow call stack were enabled) and already spans across two cacheli=
+nes. I
+>>> did see the comment above that it should fit inside a cacheline. Althou=
+gh I
+>>> assumed its stale comment given that it already spans across cacheline =
+and I
+>>> didn't see any special mention in commit messages of changes which grew=
+ this
+>>> structure above one cacheline. So I assumed this was a stale comment.
+>>>
+>>> On the other hand, whenever enable/lock bits are checked, there is a hi=
+gh
+>>> likelyhood that user_ssp and other fields are going to be accessed and
+>>> thus it actually might be helpful to have it all in one cacheline durin=
+g
+>>> runtime.
+>>
+>>Yes, although accessing enable/lock bits will be relatively rare.
+>>It seems better to have the overhead during thread setup, rather than on
+>>every trap.
+>>
+>>> So I am not sure if its helpful sticking to the comment which already i=
+s stale.
+>>
+>>We could fix the holes and also use sp instead of a0 in the
+>>new_vmalloc_check, so everything would fit better.
+>>
+>>We are really close to fitting into a single cache-line, so I'd prefer
+>>if shadow stack only filled thread_info with data that is used very
+>>often in the exception handling code.
 >
-> > Isn't 'vdns' here equal to 'vdso_u_time_data'?
->
-> That is true, but in a time namespace the namespaced time structure is ma=
-pped
-> in place of the normal structure and vice-versa.
-> So __arch_get_vdso_u_timens_data() will get the "real" time datastructure=
- based
-> on a namespaced one.
->
-> I can't explain the special logic for CLOCK_MONOTONIC_RAW yet.
-> To me it looks wrong to calculate on a 'struct vdso_time_data *' in terms=
- of
-> CS_RAW/CS_HRES_COARSE.
->
->
-> Another change that "fixes" the crash for me is:
->
-> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-> index 93ef801a97ef..cdc3988a0ace 100644
-> --- a/lib/vdso/gettimeofday.c
-> +++ b/lib/vdso/gettimeofday.c
-> @@ -93,6 +118,8 @@ int do_hres_timens(const struct vdso_time_data *vdns, =
-const struct vdso_clock *v
->         u32 seq;
->         s64 sec;
->
-> +       OPTIMIZER_HIDE_VAR(vc);
-> +
->         if (clk !=3D CLOCK_MONOTONIC_RAW)
->                 vc =3D &vc[CS_HRES_COARSE];
->         else
->
->
-> This is obviously not an actual fix but indicates that something weird is=
- going on.
-> Could you run this second change also through LTP to see if it would pass=
-?
+> I don't get what's the big deal if it results in two cachelines. We can
+> (re)organize data structure in a way the most frequently accessed members=
+ are
+> together in a single cacheline. We just need to find those members.
 
-Agreed, this does "fixes" it for me as well.
+Yes, and because this patch is reorganizing the structure, I thought it
+would be better to do the analysis now, rather than to incur additional
+debt.
 
->
->
-> Thomas
->
-> > > > [1] https://github.com/linux-test-project/ltp/blob/master/testcases=
-/kernel/syscalls/clock_gettime/clock_gettime03.c
-> > > > [2] https://koji.fedoraproject.org/koji/buildinfo?buildID=3D2704401
-> > >
->
+thread_info members are accessed during the first instructions after a
+trap.  We want to maximize the chance that the execution doesn't stall
+until uarch has time to engage its crystal ball.
 
+> In the hot path of exception handling, I see accesses to pt_regs on stack=
+ as
+> well. These are definitley different cacheline than thread_info.
+
+Right, and we also access cache-lines for the code.
+
+I don't know how well each uarch keeps the early trap data/code in
+caches, but it doesn't seem like a bad idea to minimize the amount of
+cache-lines that are accessed early after trap.
+
+> I understand the argument of one member field crossing into two cacheline=
+s can
+> have undesired perf effects. I do not understand reasoning that thread_in=
+fo
+> exactly has to fit inside one cacheline.
+
+I agree that we could probably lift the constraint for some values --
+it's a lot of performance modeling and convincing, though...
+
+In this series, I think it would be good to avoid splitting kernel_sp
+and a0/a1 into two cache-lines.  kernel_sp and a0/a1 are accessed within
+the first few instructions.
+
+> If this was always supposed to fit in a single cacheline, clearly this
+> invariant isn't/wasn't maintained as changes trickled in. I would like to=
+ see
+> what maintainers have to say or someone who did data analysis on this.
+
+I don't think it is necessary to fix the rest, just not making things
+worse is already great.
+
+>>I think we could do without user_sp in thread_info as well, so there are
+>>other packing options.
+>
+> Sure, probably somewhere in task_struct. But fact of the matter is that i=
+t has
+> to be saved/restore during exception entry/exit. But then load/store to
+> task_struct is essentially a different cachline. Not sure what we will ac=
+hieve
+> here?
+
+user_sp is only temporarily storage space in thread_info.
+The sp register is restored from pt_regs, so we could refactor the code
+to drop user_sp from thread_info.
+
+e.g. use a0, a1, or a2 for the temporary storage: user_sp is not even
+the userspace sp, it is sp of the previous sp "user", which might have
+been the kernel.
+
+>>Btw. could ssp be added to pt_regs?
+>
+> I had that earlier. It breaks user abi. And it was a no go.
+
+Thanks, I was afraid of that. :)
+
+We might want to eventually push ssp to the stack to follow the same
+design for trap nesting as sp has, but that can happen when implementing
+ssp for the kernel.  Squeezing into thread_info should work for now.
 
