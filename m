@@ -1,77 +1,77 @@
-Return-Path: <linux-arch+bounces-11574-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11575-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60A67A9C7AC
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 13:32:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36AE3A9C7F7
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 13:43:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6106E3ADD23
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 11:31:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7695A171EC6
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 11:43:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1250242D7B;
-	Fri, 25 Apr 2025 11:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 109E72451D7;
+	Fri, 25 Apr 2025 11:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="nC71upXE"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="nH89DDly"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF6E1E1C1A
-	for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 11:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09E72459D5
+	for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 11:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745580724; cv=none; b=soOHb8ZoKOP26WSrsRRxR21Tfq95EDVRTWCMJTZl32k/0+OFl3ho/g4H22o5bWqLk66qk7dEMOsEGjeyk8WuHJ4JckCO1SAPyaYSZiJ9WvsFAEOxMN8v251ujGoeq7t6Q/2maDXY2dpR/K4rmJdLJkkl9rP8T44CuuA0nmsQxGA=
+	t=1745581370; cv=none; b=SSb9D0loZucItldc9dSxeGhtdFzX58GRr7H2BC8pnjinRyNlFQFJMvzvaBqrWWGsGg5SDId4h82+52F5jno4J++rev1o90ADV7FvEyhmy+nMt6wQsroGgL4m5vclfVUgAz3MPTzQDeT2jntBYAnl3Z2kNaA6dXwGEesRVsMhyWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745580724; c=relaxed/simple;
-	bh=tbQyKo4jaOy1juoYPQAD0Q8i7LmRUVL3n5icrYDONY4=;
+	s=arc-20240116; t=1745581370; c=relaxed/simple;
+	bh=3Ji49cbT2gfSvIq8CYcUaaNLPtr+CzcaLLKg5QrQiT8=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=rFcDWO/s+kDX06zLT+W83WiI5krDUsxn85GdERTMoskvFoLw+e4SHQSsfJrhbtopJQambt6zSm/haFzmi+5pCNj1yt5nzIui/IiXjqh58OMFJNGeauibOsZf8qwDeMoijvcBb80V8JMDNRPXE3PK3mqO0OMi3WFSxrSxO3vm+wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=nC71upXE; arc=none smtp.client-ip=209.85.128.45
+	 References:In-Reply-To; b=Bw15Ga/fGkJbqTI01naFUxA7mAypCWbOcFMCtyGURgRTHKVdncpo3Ur1yOKDk3OGgdLUy0ucNaEo2qhxIzbjVyag09yH4fgFyw7+YUgm6W/WG+sRPh3kU032DT1uFz3bh+zznlKNWccEZCTlG1JKCLApgQlS0+bLpuxgsqZNfBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=nH89DDly; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cee550af2so1353965e9.1
-        for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 04:32:02 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43eeb4e09b5so2340465e9.1
+        for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 04:42:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745580721; x=1746185521; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1745581366; x=1746186166; darn=vger.kernel.org;
         h=in-reply-to:references:from:to:cc:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gDHnSfsfm8Pky45upkoSAPit3VP8lTu/pCNcAlnlmqU=;
-        b=nC71upXEFo0TOkILhACrGqNe9/cvRrSTUNbqpxdmdkJbfKElwlLSIKPgcZxHavm/Mz
-         vD2vA3cWo0YroCHgnGGAgxlawrmcihlRa1r64UAdvAx39EHDZyk1IiXgXOrj06S/LpfG
-         V7CCYpAZFYWumEp8LakcQy1UajLtfI4Us+6YEQ+W4roYWmC/OBJ6DeOcya/JEcnB4Y24
-         PynLKhAroyF8uxsuEyLom1pawAeB9/3FBk/x2tn3EaTaN5mDeDdzFPrb54CgSLc7cFOk
-         fKzHD+y6mIK35J+D0cT7kRDNOHRzLDfYufc+It7U3X6i1XGpyZTLjexOBMSVPBS4R+Ur
-         PjHg==
+        bh=RyVQraiD8choursJseiRmBXZoIZWNTeRkqd4Ai9q43w=;
+        b=nH89DDlyI9q4NUmPG6uPGSIMY5PE3mHWQaGnwuDjzhIpFtGqZltNEeVSOMeVa3SRM2
+         g7xOdBFxjtVrckTTvBVgyYJXhwJ7XkUHp0bliIaSFY0SEbKl33L40+Gx5gZyqll0Uj1k
+         W8reo0a4FE8SuyO746giZhk3U2tI6Ay2Pxo4hiF9gI0DFyu0jpwx8keDmtDboBcsNqxr
+         lGAbfEV/ym6CSFmy1ogXzThNGMSAbhCnMVcFU9918rAMWsxa5xB6pSR52vYxT7BrmXAv
+         yiguZdBGYAB3ll3wElZKKLKXP+sx59peEi1bnf1Nu0WTq43Q0tJl0R+s2n9MAM4rhMBZ
+         +UwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745580721; x=1746185521;
+        d=1e100.net; s=20230601; t=1745581366; x=1746186166;
         h=in-reply-to:references:from:to:cc:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=gDHnSfsfm8Pky45upkoSAPit3VP8lTu/pCNcAlnlmqU=;
-        b=w+W8T1/cuBQAHarLPZujlrr2yth/8Eb0NtFQ23Dq7p+9oXv3H6FNUzI70XONYTORu4
-         Gih6FH+Yx+PROvLNnNmrz571iPBYqAYw5sNuu6jQbPY7Qhvz83q4NcFaXja9ZfITtKGl
-         P/ieCoWAFDFtVIzoh4l0BvmdPwq8B77hgexeXFFLybC2fxgn313b64JAn84vypS9/1cw
-         AEa+9Mn3lJm2cUTJPDtZsSITC277y+TA/YT6cdr3gBwNKwHIn/BlsfP/cpYuzuDKeHJK
-         /Yc3U/f/lNWqh5vj8v71+coR/dDibWwTE00PLTRmhV0IBFW1qBgIAsHLEvfEqKqzA2KB
-         0MXw==
-X-Forwarded-Encrypted: i=1; AJvYcCV1reIN4mHSizk+hgNWyGNUT1b9j1pmgYJAoOEkzg3bKtzsa5HCiOmdWTOpWGR7ps4XLLMIihnGzDDn@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVAeYDV20AbNRhJhDOFNM2FKkxl49fzIY79OsiDBKoSgC8MFup
-	5sX/aKY6dGTX3hA40GlEJHapacnPQiup3zzd2XFMM0HNH722TVeDwkUBHyRu3Ho=
-X-Gm-Gg: ASbGnctnXOd0bormkSRAkicd9A8pp1MRHP4v9L0SjEXbjCtWuECPhp7WO11LCF7p7Cu
-	xoQ31l+FmSjjIsX1EtuMqONWJ5f3gVWZYC79uoLetdqamqQH9E5NXz0GD0dT76AK+l4j3q+ZQbE
-	h9xTDM/jPssQQwjQQd3qkU4w863PZnLLf8K5sv6OxcG3pcesWl0jmBKcloiXNTQI1L7IK7rDItz
-	8JDx/u5nWVYnMtDEAinwMqfYM9G6yrdMfjxefNaoQ8xun0xzRcF5XzGf9N49hoy9U/OHMQxMs6m
-	ScmRbVjKPp87pxJ44aAPad5Zp7zsOs3dfMTFXs73IbM9BiNC
-X-Google-Smtp-Source: AGHT+IHRqf93ViQDABDgGhAB9vrTQizaMXk/z0DioGF+r4Jf0pl8X7PBzUSEYnMZMSBPSRe+pddQCw==
-X-Received: by 2002:a05:6000:420a:b0:3a0:6bd0:a4b0 with SMTP id ffacd0b85a97d-3a074e0e122mr528393f8f.2.1745580720995;
-        Fri, 25 Apr 2025 04:32:00 -0700 (PDT)
+        bh=RyVQraiD8choursJseiRmBXZoIZWNTeRkqd4Ai9q43w=;
+        b=qQWvliSPzcya3exU2y3U8hEPb4R+qWhgcb47MuIoTGVJwi+NkuEYwFgWYIhTA4ySN3
+         VDIbCU4e1e28kn6qiv9J7clYaqt/ZDnHVmSTvZcUtYjrJofFnZY1rX1Jd03XIMEAZEDd
+         19Sp+oeTAAU5T/bT0UY3Iqk7lca2F9Qs9l2pTlyvhZHqw3LCw3XFdt1EXVPxJARVF56n
+         aDsgFesP5qMoLbTEuylMMTJHhhZy5hJ5NPv9enghAKoF1liI4sSTHJq37dMfJFcQYw37
+         hBU75S5I7Kk7AvF+U/rI5ovbH0FmKEaCrzpdUOYm7Fy+8FpxWqSPcgFjHgtnsewEkDDS
+         gGhg==
+X-Forwarded-Encrypted: i=1; AJvYcCXNGU//opapUbrDCyeXUAF/2FvuT2t7HpSv5SQRI2FL8/qkYkrWhb7iPfBVa6jCLUDXEat3gbwX5KFD@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa6giry8DR9HD+us1bBv7mdGqrUvxpiLxBZNEiHQPcQlbuWaV6
+	SFVuL/DOsbsqbX0YB0zRiBkCemElG0axXHeh7c9s+ycnx3KC2Q5vYXWWYVT6+6c=
+X-Gm-Gg: ASbGncvXf0Pxw3ecVDapqwIJlKmZWLNV6JcIBpfBlXzMEaKicJZeP+bdqeFKTiCWUT0
+	KCrzVgAzZC2fxrNogNevWG8zoMjWSmkT35E+AJoU2oMQoDg8lIaEMhmxcFaX07dPxgHTUl9NdpN
+	jt9KcZo+Wt9vc5Iz3hrBK6/PXxRk1xCLuMnzUrBlipdn3lABhrJczC2VQv2+08GdnQOPDSAzV7V
+	dysQBGL0Nk4ySBcv9hy/s1jNd6wOi9jcdJcUrzI36tVqwcVuIPOZ/JLmhT3NEBS5gBXdMd0X8oQ
+	09gMvGo752o3iYNfKgfMRK94v06eYc4pZevPZVzYj9giVqVx
+X-Google-Smtp-Source: AGHT+IHSwXKm2b0KR1kACN9BXrADFLHJi8d2f8OL0xZ1T0iAnfUkAWtBlFVbUnZ2xOUkCinbSJhTAg==
+X-Received: by 2002:a05:600c:1d01:b0:43d:fa5e:50e6 with SMTP id 5b1f17b1804b1-440a66c250dmr6293955e9.9.1745581365815;
+        Fri, 25 Apr 2025 04:42:45 -0700 (PDT)
 Received: from localhost ([2a02:8308:a00c:e200:84a3:2b0a:bdb8:ce08])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e5d479sm2137879f8f.92.2025.04.25.04.32.00
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e4698csm2104230f8f.62.2025.04.25.04.42.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 04:32:00 -0700 (PDT)
+        Fri, 25 Apr 2025 04:42:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -80,10 +80,10 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Apr 2025 13:32:00 +0200
-Message-Id: <D9FOQ0C9HMIR.17FERF6F7C8LR@ventanamicro.com>
-Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and
- save/restore of CSR_SSP on trap entry/exit
+Date: Fri, 25 Apr 2025 13:42:44 +0200
+Message-Id: <D9FOY8JACYTH.1FU7ZTEHFC5NI@ventanamicro.com>
+Subject: Re: [PATCH v12 12/28] riscv: Implements arch agnostic shadow stack
+ prctls
 Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
  <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
  <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
@@ -106,106 +106,103 @@ Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
  <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
  <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
  <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "Zong Li"
- <zong.li@sifive.com>, "linux-riscv"
+ <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "linux-riscv"
  <linux-riscv-bounces@lists.infradead.org>
 To: "Deepak Gupta" <debug@rivosinc.com>
 From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
 References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
- <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
- <aAmEnK0vSgZZOORL@debug.ba.rivosinc.com>
- <D9EV1K8ZQQJR.20CRTYLQBN9UE@ventanamicro.com>
- <aAp9D7txw8y9WL5m@debug.ba.rivosinc.com>
-In-Reply-To: <aAp9D7txw8y9WL5m@debug.ba.rivosinc.com>
+ <20250314-v5_user_cfi_series-v12-12-e51202b53138@rivosinc.com>
+ <D92V2NPNZYV0.136MJ2HOK48HE@ventanamicro.com>
+ <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
+ <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
+ <aAp_87-Xr6gn_hD7@debug.ba.rivosinc.com>
+In-Reply-To: <aAp_87-Xr6gn_hD7@debug.ba.rivosinc.com>
 
-2025-04-24T11:03:59-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, Apr 24, 2025 at 02:16:32PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
+2025-04-24T11:16:19-07:00, Deepak Gupta <debug@rivosinc.com>:
+> On Thu, Apr 24, 2025 at 03:36:54PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
 te:
->>2025-04-23T17:23:56-07:00, Deepak Gupta <debug@rivosinc.com>:
->>> On Thu, Apr 10, 2025 at 01:04:39PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 w=
+>>2025-04-23T21:44:09-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>> On Thu, Apr 10, 2025 at 11:45:58AM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 w=
 rote:
->>>>2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
->>>>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
->>>>> @@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
->>>>>
->>>>>  	REG_L s0, TASK_TI_USER_SP(tp)
->>>>>  	csrrc s1, CSR_STATUS, t0
->>>>> +	/*
->>>>> +	 * If previous mode was U, capture shadow stack pointer and save it=
- away
->>>>> +	 * Zero CSR_SSP at the same time for sanitization.
->>>>> +	 */
->>>>> +	ALTERNATIVE("nop; nop; nop; nop",
->>>>> +				__stringify(			\
->>>>> +				andi s2, s1, SR_SPP;	\
->>>>> +				bnez s2, skip_ssp_save;	\
->>>>> +				csrrw s2, CSR_SSP, x0;	\
->>>>> +				REG_S s2, TASK_TI_USER_SSP(tp); \
->>>>> +				skip_ssp_save:),
->>>>> +				0,
->>>>> +				RISCV_ISA_EXT_ZICFISS,
->>>>> +				CONFIG_RISCV_USER_CFI)
+>>>>2025-03-14T14:39:31-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>>>> diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/as=
+m/usercfi.h
+>>>>> @@ -14,7 +15,8 @@ struct kernel_clone_args;
+>>>>>  struct cfi_status {
+>>>>>  	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
+>>>>> -	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 1);
+>>>>> +	unsigned long ubcfi_locked : 1;
+>>>>> +	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);
 >>>>
->>>>(I'd prefer this closer to the user_sp and kernel_sp swap, it's breakin=
-g
->>>> the flow here.  We also already know if we've returned from userspace
->>>> or not even without SR_SPP, but reusing the information might tangle
->>>> the logic.)
+>>>>The rsvd field shouldn't be necessary as the container for the bitfield
+>>>>is 'unsigned long' sized.
+>>>>
+>>>>Why don't we use bools here, though?
+>>>>It might produce a better binary and we're not hurting for struct size.
 >>>
->>> If CSR_SCRATCH was 0, then we would be coming from kernel else flow goe=
-s
->>> to `.Lsave_context`. If we were coming from kernel mode, then eventuall=
-y
->>> flow merges to `.Lsave_context`.
->>>
->>> So we will be saving CSR_SSP on all kernel -- > kernel trap handling. T=
-hat
->>> would be unnecessary. IIRC, this was one of the first review comments i=
-n
->>> early RFC series of these patch series (to not touch CSR_SSP un-necessa=
-rily)
->>>
->>> We can avoid that by ensuring when we branch by determining if we are c=
-oming
->>> from user to something like `.Lsave_ssp` which eventually merges into
->>> ".Lsave_context". And if we were coming from kernel then we would branc=
-h to
->>> `.Lsave_context` and thus skipping ssp save logic. But # of branches it
->>> introduces in early exception handling is equivalent to what current pa=
-tches
->>> do. So I don't see any value in doing that.
->>>
->>> Let me know if I am missing something.
+>>> If you remember one of the previous patch discussion, this goes into
+>>> `thread_info` Don't want to bloat it. Even if we end shoving into task_=
+struct,
+>>> don't want to bloat that either. I can just convert it into bitmask if
+>>> bitfields are an eyesore here.
 >>
->>Right, it's hard to avoid the extra branches.
+>>  "unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);"
 >>
->>I think we could modify the entry point (STVEC), so we start at
->>different paths based on kernel/userspace trap and only jump once to the
->>common code, like:
+>>is an eyesore that defines exactly the same as the two lines alone
 >>
->>  SYM_CODE_START(handle_exception_kernel)
->>    /* kernel setup magic */
->>    j handle_exception_common
->>  SYM_CODE_START(handle_exception_user)
->>    /* userspace setup magic */
->>  handle_exception_common:
+>>  unsigned long ubcfi_en : 1;
+>>  unsigned long ubcfi_locked : 1;
+>>
+>>That one should be removed.
+>>
+>>If we have only 4 bits in 4/8 bytes, then bitfields do generate worse
+>>code than 4 bools and a 0/4 byte hole.  The struct size stays the same.
+>>
+>>I don't care much about the switch to bools, though, because this code
+>>is not called often.
 >
-> Hmm... This can be done. But then it would require to constantly modify `=
-stvec`
-> When you're going back to user mode, you would have to write `stvec` with=
- addr
-> of `handle_exception_user`.
+> I'll remove the bitfields, have single `unsigned long cfi_control_state`
+> And do `#define RISCV_UBCFI_EN 1` and so on.
 
-We'd just be writing STVEC instead of SSCRATCH, probably at the very
-same places.
-It's possible that some micro-architectures will be disturbed more by
-writing STVEC than SSCRATCH, though, so it's not an easy change to make.
+I might have seemed too much against the bitfieds, sorry.  I am against
+the rsvd fields, because it is a pointless cognitive overhead and even
+this series already had a bug in them.
 
->                             But then you can easily get a NMI. It can bec=
-ome
-> ugly. Needs much more thought and on first glance feels error prone.
+#defines should generate the same code as bitfields (worse than bools),
+so the source code is really a matter of personal preference.
+(I do prefer bitfields.)
 
-Yeah, the M-mode Linux adds a lot of fun.  I don't see support for the
-Smrnmi extension, so unlucky NMIs should be fatal even now.
+>>>>> @@ -262,3 +292,83 @@ void shstk_release(struct task_struct *tsk)
+>>>>> +int arch_lock_shadow_stack_status(struct task_struct *task,
+>>>>> +				  unsigned long arg)
+>>>>> +{
+>>>>> +	/* If shtstk not supported or not enabled on task, nothing to lock =
+here */
+>>>>> +	if (!cpu_supports_shadow_stack() ||
+>>>>> +	    !is_shstk_enabled(task) || arg !=3D 0)
+>>>>> +		return -EINVAL;
+>>>>
+>>>>The task might want to prevent shadow stack from being enabled?
+>>>
+>>> But Why would it want to do that? Task can simply not issue the prctl. =
+There
+>>> are glibc tunables as well using which it can be disabled.
+>>
+>>The task might do it as some last resort to prevent a buggy code from
+>>enabling shadow stacks that would just crash.  Or whatever complicated
+>>reason userspace can think of.
+>>
+>>It's more the other way around.  I wonder why we're removing this option
+>>when we don't really care what userspace does to itself.
+>>I think it's complicating the kernel without an obvious gain.
+>
+> It just feels wierd. There isn't anything like this for other features li=
+t-up
+> via envcfg. Does hwprobe allow this on per-task basis? I'll look into it.
+
+I think PMM doesn't allow to lock and the rest don't seem configurable
+from userspace.
+
+It's not that important and we hopefully won't be breaking any userspace
+if we decided to allow it later, so I'm fine with this version.
 
