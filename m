@@ -1,208 +1,292 @@
-Return-Path: <linux-arch+bounces-11575-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11576-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36AE3A9C7F7
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 13:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F0D4A9CAB3
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 15:42:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7695A171EC6
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 11:43:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1F884A14CA
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 13:41:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 109E72451D7;
-	Fri, 25 Apr 2025 11:42:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 656BE253338;
+	Fri, 25 Apr 2025 13:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="nH89DDly"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="n0BXU4AQ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aumYIEdW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09E72459D5
-	for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 11:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1671825228B;
+	Fri, 25 Apr 2025 13:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745581370; cv=none; b=SSb9D0loZucItldc9dSxeGhtdFzX58GRr7H2BC8pnjinRyNlFQFJMvzvaBqrWWGsGg5SDId4h82+52F5jno4J++rev1o90ADV7FvEyhmy+nMt6wQsroGgL4m5vclfVUgAz3MPTzQDeT2jntBYAnl3Z2kNaA6dXwGEesRVsMhyWk=
+	t=1745588461; cv=none; b=U4TO37x7BeN6LpQM2Xhgkn+fwp/akX8oVoYBlNXfJI6QKCZjlSKqEsbt7F98v291DIEf61jaRS7IFL6f3DPoLdprh4NTo13yFuOtLdTTHMRfj0QTHzTVP8u6iu2HZE0eeC7zFMZ/bMNM7S8//NyoZOUO4ug1EyzytB6a26fI0rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745581370; c=relaxed/simple;
-	bh=3Ji49cbT2gfSvIq8CYcUaaNLPtr+CzcaLLKg5QrQiT8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=Bw15Ga/fGkJbqTI01naFUxA7mAypCWbOcFMCtyGURgRTHKVdncpo3Ur1yOKDk3OGgdLUy0ucNaEo2qhxIzbjVyag09yH4fgFyw7+YUgm6W/WG+sRPh3kU032DT1uFz3bh+zznlKNWccEZCTlG1JKCLApgQlS0+bLpuxgsqZNfBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=nH89DDly; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43eeb4e09b5so2340465e9.1
-        for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 04:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745581366; x=1746186166; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RyVQraiD8choursJseiRmBXZoIZWNTeRkqd4Ai9q43w=;
-        b=nH89DDlyI9q4NUmPG6uPGSIMY5PE3mHWQaGnwuDjzhIpFtGqZltNEeVSOMeVa3SRM2
-         g7xOdBFxjtVrckTTvBVgyYJXhwJ7XkUHp0bliIaSFY0SEbKl33L40+Gx5gZyqll0Uj1k
-         W8reo0a4FE8SuyO746giZhk3U2tI6Ay2Pxo4hiF9gI0DFyu0jpwx8keDmtDboBcsNqxr
-         lGAbfEV/ym6CSFmy1ogXzThNGMSAbhCnMVcFU9918rAMWsxa5xB6pSR52vYxT7BrmXAv
-         yiguZdBGYAB3ll3wElZKKLKXP+sx59peEi1bnf1Nu0WTq43Q0tJl0R+s2n9MAM4rhMBZ
-         +UwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745581366; x=1746186166;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RyVQraiD8choursJseiRmBXZoIZWNTeRkqd4Ai9q43w=;
-        b=qQWvliSPzcya3exU2y3U8hEPb4R+qWhgcb47MuIoTGVJwi+NkuEYwFgWYIhTA4ySN3
-         VDIbCU4e1e28kn6qiv9J7clYaqt/ZDnHVmSTvZcUtYjrJofFnZY1rX1Jd03XIMEAZEDd
-         19Sp+oeTAAU5T/bT0UY3Iqk7lca2F9Qs9l2pTlyvhZHqw3LCw3XFdt1EXVPxJARVF56n
-         aDsgFesP5qMoLbTEuylMMTJHhhZy5hJ5NPv9enghAKoF1liI4sSTHJq37dMfJFcQYw37
-         hBU75S5I7Kk7AvF+U/rI5ovbH0FmKEaCrzpdUOYm7Fy+8FpxWqSPcgFjHgtnsewEkDDS
-         gGhg==
-X-Forwarded-Encrypted: i=1; AJvYcCXNGU//opapUbrDCyeXUAF/2FvuT2t7HpSv5SQRI2FL8/qkYkrWhb7iPfBVa6jCLUDXEat3gbwX5KFD@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa6giry8DR9HD+us1bBv7mdGqrUvxpiLxBZNEiHQPcQlbuWaV6
-	SFVuL/DOsbsqbX0YB0zRiBkCemElG0axXHeh7c9s+ycnx3KC2Q5vYXWWYVT6+6c=
-X-Gm-Gg: ASbGncvXf0Pxw3ecVDapqwIJlKmZWLNV6JcIBpfBlXzMEaKicJZeP+bdqeFKTiCWUT0
-	KCrzVgAzZC2fxrNogNevWG8zoMjWSmkT35E+AJoU2oMQoDg8lIaEMhmxcFaX07dPxgHTUl9NdpN
-	jt9KcZo+Wt9vc5Iz3hrBK6/PXxRk1xCLuMnzUrBlipdn3lABhrJczC2VQv2+08GdnQOPDSAzV7V
-	dysQBGL0Nk4ySBcv9hy/s1jNd6wOi9jcdJcUrzI36tVqwcVuIPOZ/JLmhT3NEBS5gBXdMd0X8oQ
-	09gMvGo752o3iYNfKgfMRK94v06eYc4pZevPZVzYj9giVqVx
-X-Google-Smtp-Source: AGHT+IHSwXKm2b0KR1kACN9BXrADFLHJi8d2f8OL0xZ1T0iAnfUkAWtBlFVbUnZ2xOUkCinbSJhTAg==
-X-Received: by 2002:a05:600c:1d01:b0:43d:fa5e:50e6 with SMTP id 5b1f17b1804b1-440a66c250dmr6293955e9.9.1745581365815;
-        Fri, 25 Apr 2025 04:42:45 -0700 (PDT)
-Received: from localhost ([2a02:8308:a00c:e200:84a3:2b0a:bdb8:ce08])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e4698csm2104230f8f.62.2025.04.25.04.42.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 04:42:45 -0700 (PDT)
+	s=arc-20240116; t=1745588461; c=relaxed/simple;
+	bh=PUhyQuqMGLYre7fLZ1LFsgfI6xIsDJ1XIAZEsEI7pOA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V4JNVnV1DkE5U+qdu/JyFrhVNEekWh6qcu68browpwbE0TZUfCmHkSb5Vo+ybhVMfPDyp2NwmFiWn0oz9JAAvxCxM7pOoAgpMnfHOWSDb0TbKLiNrWZpnCugi2YEZYjOTtchyyP8PZ7c+eVjHhF7JHXd08BtL0zRfbuUBk7eHoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=n0BXU4AQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aumYIEdW; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Fri, 25 Apr 2025 15:40:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1745588457;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tK9StlpDYAp08qW4tTKOct1Yb3+IgiVio9GxX2VqMMU=;
+	b=n0BXU4AQVKORmqE6oDe8REQpn+OId76jh34c1y2J85KvGy+0JgyXnbnNA8dbK/1Kwa1CDT
+	sbSEqwIvqW01LXg14hRV9fDwZ9Qts+4Qrjb7rGVqTvuvwk5tDmmtUyX7J4lnswSZNo4Pu8
+	4zE1j6HQwy0xBMNI2MOy/HYt9fUoDkrgGOvOnkfhkG58+KWqFQfOw9zNXKqBs39vUYfj1G
+	lRi3Kx+/aao3QyztH/HJpZsokym+ja3sX00jZx9jMe+jv+SBTkSLJKptf2yW5Anlw39F6T
+	i5mnW6JC1P9uZ4KNk5cUtfjfkmtXxfaHU1SyFcMZsEzlpGIzILof42ezhR64vg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1745588457;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tK9StlpDYAp08qW4tTKOct1Yb3+IgiVio9GxX2VqMMU=;
+	b=aumYIEdWhsA7beLGGtF+wZHthOSDwSHnVvccyzZ/yEYbkfNRCWQ9tbLDcmD1BpTu09y/1v
+	hGbzB7rnw72Yb4Dg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Jan Stancek <jstancek@redhat.com>
+Cc: Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>
+Subject: Re: [PATCH 08/19] vdso/gettimeofday: Prepare do_hres_timens() for
+ introduction of struct vdso_clock
+Message-ID: <20250425152733-0ff10421-b716-4a55-9b60-cb0a71769e56@linutronix.de>
+References: <20250303-vdso-clock-v1-0-c1b5c69a166f@linutronix.de>
+ <20250303-vdso-clock-v1-8-c1b5c69a166f@linutronix.de>
+ <aApGPAoctq_eoE2g@t14ultra>
+ <20250424173908-ffca1ea2-e292-4df3-9391-24bfdaab33e7@linutronix.de>
+ <CAASaF6xsMOWkhPrzKQWNz5SXaROSpxzFVBz+MOA-MNiEBty7gQ@mail.gmail.com>
+ <20250425104552-07539a73-8f56-44d2-97a2-e224c567a2fc@linutronix.de>
+ <CAASaF6yxThX3HTHgY_AGqNr7LJ-erdG09WV5-HyfN1fYN9pStQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Apr 2025 13:42:44 +0200
-Message-Id: <D9FOY8JACYTH.1FU7ZTEHFC5NI@ventanamicro.com>
-Subject: Re: [PATCH v12 12/28] riscv: Implements arch agnostic shadow stack
- prctls
-Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
- <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Liam R.
- Howlett" <Liam.Howlett@oracle.com>, "Vlastimil Babka" <vbabka@suse.cz>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, "Paul Walmsley"
- <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, "Conor Dooley" <conor@kernel.org>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Arnd Bergmann" <arnd@arndb.de>, "Christian Brauner" <brauner@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Oleg Nesterov" <oleg@redhat.com>,
- "Eric Biederman" <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>,
- "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>, "Jann
- Horn" <jannh@google.com>, "Conor Dooley" <conor+dt@kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
- <devicetree@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
- <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
- <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
- <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
- <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "linux-riscv"
- <linux-riscv-bounces@lists.infradead.org>
-To: "Deepak Gupta" <debug@rivosinc.com>
-From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
-References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
- <20250314-v5_user_cfi_series-v12-12-e51202b53138@rivosinc.com>
- <D92V2NPNZYV0.136MJ2HOK48HE@ventanamicro.com>
- <aAnBmexbL4XmVxQk@debug.ba.rivosinc.com>
- <D9EWR3RQK0FD.3GF55KNS53YSR@ventanamicro.com>
- <aAp_87-Xr6gn_hD7@debug.ba.rivosinc.com>
-In-Reply-To: <aAp_87-Xr6gn_hD7@debug.ba.rivosinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAASaF6yxThX3HTHgY_AGqNr7LJ-erdG09WV5-HyfN1fYN9pStQ@mail.gmail.com>
 
-2025-04-24T11:16:19-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, Apr 24, 2025 at 03:36:54PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
-te:
->>2025-04-23T21:44:09-07:00, Deepak Gupta <debug@rivosinc.com>:
->>> On Thu, Apr 10, 2025 at 11:45:58AM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 w=
-rote:
->>>>2025-03-14T14:39:31-07:00, Deepak Gupta <debug@rivosinc.com>:
->>>>> diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/as=
-m/usercfi.h
->>>>> @@ -14,7 +15,8 @@ struct kernel_clone_args;
->>>>>  struct cfi_status {
->>>>>  	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
->>>>> -	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 1);
->>>>> +	unsigned long ubcfi_locked : 1;
->>>>> +	unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);
->>>>
->>>>The rsvd field shouldn't be necessary as the container for the bitfield
->>>>is 'unsigned long' sized.
->>>>
->>>>Why don't we use bools here, though?
->>>>It might produce a better binary and we're not hurting for struct size.
->>>
->>> If you remember one of the previous patch discussion, this goes into
->>> `thread_info` Don't want to bloat it. Even if we end shoving into task_=
-struct,
->>> don't want to bloat that either. I can just convert it into bitmask if
->>> bitfields are an eyesore here.
->>
->>  "unsigned long rsvd : ((sizeof(unsigned long) * 8) - 2);"
->>
->>is an eyesore that defines exactly the same as the two lines alone
->>
->>  unsigned long ubcfi_en : 1;
->>  unsigned long ubcfi_locked : 1;
->>
->>That one should be removed.
->>
->>If we have only 4 bits in 4/8 bytes, then bitfields do generate worse
->>code than 4 bools and a 0/4 byte hole.  The struct size stays the same.
->>
->>I don't care much about the switch to bools, though, because this code
->>is not called often.
->
-> I'll remove the bitfields, have single `unsigned long cfi_control_state`
-> And do `#define RISCV_UBCFI_EN 1` and so on.
+On Fri, Apr 25, 2025 at 12:03:14PM +0200, Jan Stancek wrote:
+> On Fri, Apr 25, 2025 at 10:58 AM Thomas Weißschuh
+> <thomas.weissschuh@linutronix.de> wrote:
+> >
+> > On Thu, Apr 24, 2025 at 11:57:02PM +0200, Jan Stancek wrote:
+> > > On Thu, Apr 24, 2025 at 5:49 PM Thomas Weißschuh
+> > > <thomas.weissschuh@linutronix.de> wrote:
+> > > >
+> > > > On Thu, Apr 24, 2025 at 04:10:04PM +0200, Jan Stancek wrote:
+> > > > > On Mon, Mar 03, 2025 at 12:11:10PM +0100, Thomas Weißschuh wrote:
+> > > > > > From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> > > > > >
+> > > > > > To support multiple PTP clocks, the VDSO data structure needs to be
+> > > > > > reworked. All clock specific data will end up in struct vdso_clock and in
+> > > > > > struct vdso_time_data there will be array of it. By now, vdso_clock is
+> > > > > > simply a define which maps vdso_clock to vdso_time_data.
+> > > > > >
+> > > > > > Prepare for the rework of these structures by adding struct vdso_clock
+> > > > > > pointer argument to do_hres_timens(), and replace the struct vdso_time_data
+> > > > > > pointer with the new pointer arugment whenever applicable.
+> > > > > >
+> > > > > > No functional change.
+> > > > > >
+> > > > > > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> > > > > > Signed-off-by: Nam Cao <namcao@linutronix.de>
+> > > > > > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> > > > > > ---
+> > > > > > lib/vdso/gettimeofday.c | 35 ++++++++++++++++++-----------------
+> > > > > > 1 file changed, 18 insertions(+), 17 deletions(-)
+> > > > > >
+> > > > >
+> > > > > starting with this patch, I'm seeing user-space crashes when using clock_gettime():
+> > > > >   BAD  -> 83a2a6b8cfc5 vdso/gettimeofday: Prepare do_hres_timens() for introduction of struct vdso_clock
+> > > > >   GOOD -> 64c3613ce31a vdso/gettimeofday: Prepare do_hres() for introduction of struct vdso_clock
+> > > > >
+> > > > > It appears to be unique to aarch64 with 64k pages, and can be reproduced with
+> > > > > LTP clock_gettime03 [1]:
+> > > > >   command: clock_gettime03   tst_kconfig.c:88: TINFO: Parsing kernel config '/lib/modules/6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k/build/.config'
+> > > > >   tst_test.c:1903: TINFO: LTP version: 20250130-231-gd02c2aea3
+> > > > >   tst_test.c:1907: TINFO: Tested kernel: 6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k #1 SMP PREEMPT_DYNAMIC Wed Apr 23 23:23:54 UTC 2025 aarch64
+> > > > >   tst_kconfig.c:88: TINFO: Parsing kernel config '/lib/modules/6.15.0-0.rc3.20250423gitbc3372351d0c.30.eln147.aarch64+64k/build/.config'
+> > > > >   tst_test.c:1720: TINFO: Overall timeout per run is 0h 05m 24s
+> > > > >   clock_gettime03.c:121: TINFO: Testing variant: vDSO or syscall with libc spec
+> > > > >   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct 10000ms
+> > > > >   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct 0ms
+> > > > >   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct 10000ms
+> > > > >   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0ms
+> > > > >   clock_gettime03.c:76: TPASS: Offset (CLOCK_MONOTONIC) is correct -10000ms
+> > > > >   clock_gettime03.c:86: TPASS: Offset (CLOCK_MONOTONIC) is correct 0ms
+> > > > >   clock_gettime03.c:76: TPASS: Offset (CLOCK_BOOTTIME) is correct -10000ms
+> > > > >   clock_gettime03.c:86: TPASS: Offset (CLOCK_BOOTTIME) is correct 0ms
+> > > > >   tst_test.c:438: TBROK: Child (233649) killed by signal SIGSEGV
+> > > > >
+> > > > > or with:
+> > > > > --------------------- 8< ----------------------
+> > > > > #define _GNU_SOURCE
+> > > > > #include <sched.h>
+> > > > > #include <time.h>
+> > > > > #include <unistd.h>                                                                                                                                                                                                                          #include <sys/wait.h>
+> > > > >
+> > > > > int main(void)
+> > > > > {
+> > > > >         struct timespec tp;
+> > > > >         pid_t child;
+> > > > >         int status;
+> > > > >
+> > > > >         unshare(CLONE_NEWTIME);
+> > > > >
+> > > > >         child = fork();
+> > > > >         if (child == 0) {
+> > > > >                 clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
+> > > > >         }
+> > > > >
+> > > > >         wait(&status);
+> > > > >         return status;
+> > > > > }
+> > > > >
+> > > > > # ./a.out ; echo $?
+> > > > > 139
+> > > > > --------------------- >8 ----------------------
+> > > > >
+> > > > > RPMs and configs can be found at Fedora koji, latest build is at [2] (look for kernel-64k).
+> > > >
+> > > > Hi Jan,
+> > > >
+> > > > Thanks for the great error report.
+> > > >
+> > > > Can you try the following change (on top of v6.15-rc1, should also work with current master)?
+> > > >
+> > > > diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+> > > > index 93ef801a97ef..867ce53cca94 100644
+> > > > --- a/lib/vdso/gettimeofday.c
+> > > > +++ b/lib/vdso/gettimeofday.c
+> > > > @@ -85,14 +85,18 @@ static __always_inline
+> > > >  int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
+> > > >                    clockid_t clk, struct __kernel_timespec *ts)
+> > > >  {
+> > > > -       const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
+> > > >         const struct timens_offset *offs = &vcns->offset[clk];
+> > > > -       const struct vdso_clock *vc = vd->clock_data;
+> > > > +       const struct vdso_time_data *vd;
+> > > > +       const struct vdso_clock *vc;
+> > > >         const struct vdso_timestamp *vdso_ts;
+> > > >         u64 cycles, ns;
+> > > >         u32 seq;
+> > > >         s64 sec;
+> > > >
+> > > > +       vd = vdns - (clk == CLOCK_MONOTONIC_RAW ? CS_RAW : CS_HRES_COARSE);
+> > > > +       vd = __arch_get_vdso_u_timens_data(vd);
+> > > > +       vc = vd->clock_data;
+> > > > +
+> > > >         if (clk != CLOCK_MONOTONIC_RAW)
+> > > >                 vc = &vc[CS_HRES_COARSE];
+> > > >         else
+> > > >
+> > > >
+> > > > I'll do some proper testing tomorrow.
+> > >
+> > > That does seem to work for the 2 reproducers I have.
+> >
+> > Thanks for testing.
+> >
+> > > But why is this change needed?
+> >
+> > So far the only thing that I can say is that this logic was there before the
+> > patch and was removed accidentally, so it should be restored.
+> > Why the logic was there in the first place I'll have to investigate.
+> 
+> I think it paired with "vd advancing" based on "clock" in original code:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/vdso/gettimeofday.c?h=v6.14#n264
+> and to get back to "base", you needed to subtract same value:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/vdso/gettimeofday.c?h=v6.14#n82
+> 
+> After this series, "vd" isn't manipulated this way, so the removal of
+> that subtraction seemed deliberate to me.
 
-I might have seemed too much against the bitfieds, sorry.  I am against
-the rsvd fields, because it is a pointless cognitive overhead and even
-this series already had a bug in them.
+Indeed. This change "works" because vsdo_clocksource_ok() rejects the clock and
+instead falls backs to the syscall.
 
-#defines should generate the same code as bitfields (worse than bools),
-so the source code is really a matter of personal preference.
-(I do prefer bitfields.)
+> > > Isn't 'vdns' here equal to 'vdso_u_time_data'?
+> >
+> > That is true, but in a time namespace the namespaced time structure is mapped
+> > in place of the normal structure and vice-versa.
+> > So __arch_get_vdso_u_timens_data() will get the "real" time datastructure based
+> > on a namespaced one.
+> >
+> > I can't explain the special logic for CLOCK_MONOTONIC_RAW yet.
+> > To me it looks wrong to calculate on a 'struct vdso_time_data *' in terms of
+> > CS_RAW/CS_HRES_COARSE.
+> >
+> >
+> > Another change that "fixes" the crash for me is:
+> >
+> > diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+> > index 93ef801a97ef..cdc3988a0ace 100644
+> > --- a/lib/vdso/gettimeofday.c
+> > +++ b/lib/vdso/gettimeofday.c
+> > @@ -93,6 +118,8 @@ int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *v
+> >         u32 seq;
+> >         s64 sec;
+> >
+> > +       OPTIMIZER_HIDE_VAR(vc);
+> > +
+> >         if (clk != CLOCK_MONOTONIC_RAW)
+> >                 vc = &vc[CS_HRES_COARSE];
+> >         else
+> >
+> >
+> > This is obviously not an actual fix but indicates that something weird is going on.
+> > Could you run this second change also through LTP to see if it would pass?
+> 
+> Agreed, this does "fixes" it for me as well.
 
->>>>> @@ -262,3 +292,83 @@ void shstk_release(struct task_struct *tsk)
->>>>> +int arch_lock_shadow_stack_status(struct task_struct *task,
->>>>> +				  unsigned long arg)
->>>>> +{
->>>>> +	/* If shtstk not supported or not enabled on task, nothing to lock =
-here */
->>>>> +	if (!cpu_supports_shadow_stack() ||
->>>>> +	    !is_shstk_enabled(task) || arg !=3D 0)
->>>>> +		return -EINVAL;
->>>>
->>>>The task might want to prevent shadow stack from being enabled?
->>>
->>> But Why would it want to do that? Task can simply not issue the prctl. =
-There
->>> are glibc tunables as well using which it can be disabled.
->>
->>The task might do it as some last resort to prevent a buggy code from
->>enabling shadow stacks that would just crash.  Or whatever complicated
->>reason userspace can think of.
->>
->>It's more the other way around.  I wonder why we're removing this option
->>when we don't really care what userspace does to itself.
->>I think it's complicating the kernel without an obvious gain.
->
-> It just feels wierd. There isn't anything like this for other features li=
-t-up
-> via envcfg. Does hwprobe allow this on per-task basis? I'll look into it.
+Some more information:
 
-I think PMM doesn't allow to lock and the rest don't seem configurable
-from userspace.
+The crash comes from the address arithmetic in "vc = &vc[CS_RAW]" going wrong.
+This should just do "vc = vc + 1", advancing the pointer by sizeof(*vc).
+But I get these example values of "vc" before and after the arithmetic:
+0x00ffffbc060000 -> 0xfffffffffffd00e8
+Which is obviously wrong.
 
-It's not that important and we hopefully won't be breaking any userspace
-if we decided to allow it later, so I'm fine with this version.
+The arithmetic can be fixed with any one of the following changes:
+* OPTIMIZER_HIDE_VAR() as above
+* Replacement of -mcmodel=tiny with -mcmode=small in arch/arm64/kernel/vdso/Makefile
+  -mcmodel=tiny is supposed to cover 1MiB programs, the vDSO only needs 300KiB here
+* Removal of the (clk != CLOCK_MONOTONIC_RAW) case
+
+Shuffling code around, even without any impact on semantics, sometimes fixes
+the issue. Compiling the vDSO with UBSAN didn't show anything.
+
+
+Thomas
+
+> > > > > [1] https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/syscalls/clock_gettime/clock_gettime03.c
+> > > > > [2] https://koji.fedoraproject.org/koji/buildinfo?buildID=2704401
+> > > >
+> >
+> 
 
