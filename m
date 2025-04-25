@@ -1,77 +1,77 @@
-Return-Path: <linux-arch+bounces-11573-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11574-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0375AA9C79C
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 13:29:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60A67A9C7AC
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 13:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 789F99E37A1
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 11:28:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6106E3ADD23
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Apr 2025 11:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B320242D73;
-	Fri, 25 Apr 2025 11:27:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1250242D7B;
+	Fri, 25 Apr 2025 11:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="BeKf1Jbv"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="nC71upXE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B38023E32D
-	for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 11:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF6E1E1C1A
+	for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 11:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745580460; cv=none; b=ClxdMMpf18ym4hlrgIbkLspHSZ8Zj9ohY8DEp72QqRGeXPqdb3e8nQ4PrQY7CB+Ems38vwN7ANaT1RBWyZjGigAAK7N4ERt7R6r7yjdLqaxs4vszTRaISRNSdNDVKe5AP3cXWo6u1Az8YREdfzlYmNswjEjkiBAFxlaLyFG3C68=
+	t=1745580724; cv=none; b=soOHb8ZoKOP26WSrsRRxR21Tfq95EDVRTWCMJTZl32k/0+OFl3ho/g4H22o5bWqLk66qk7dEMOsEGjeyk8WuHJ4JckCO1SAPyaYSZiJ9WvsFAEOxMN8v251ujGoeq7t6Q/2maDXY2dpR/K4rmJdLJkkl9rP8T44CuuA0nmsQxGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745580460; c=relaxed/simple;
-	bh=L9I7eiN2f73J5dPVzszuLYpZejlZqjoUq0SaVPSprwE=;
+	s=arc-20240116; t=1745580724; c=relaxed/simple;
+	bh=tbQyKo4jaOy1juoYPQAD0Q8i7LmRUVL3n5icrYDONY4=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=B0b0GkUVxHPUyQxme/BKnJUCHnDM1zaqKlUVMjfDYufUlPJnyGAbd+wxdza8CjpjOGPj+oplVS5dLWkTcnbk4vsAC2QwpIO5oKpCGNt+ieUbzTvf7Kubtrt/35/ijiQLiHu8ZDxUgKUxW0BxV0GmLb4A84tQKooZvkQZ04NIE24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=BeKf1Jbv; arc=none smtp.client-ip=209.85.221.42
+	 References:In-Reply-To; b=rFcDWO/s+kDX06zLT+W83WiI5krDUsxn85GdERTMoskvFoLw+e4SHQSsfJrhbtopJQambt6zSm/haFzmi+5pCNj1yt5nzIui/IiXjqh58OMFJNGeauibOsZf8qwDeMoijvcBb80V8JMDNRPXE3PK3mqO0OMi3WFSxrSxO3vm+wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=nC71upXE; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39d73b97500so102371f8f.3
-        for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 04:27:37 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cee550af2so1353965e9.1
+        for <linux-arch@vger.kernel.org>; Fri, 25 Apr 2025 04:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1745580456; x=1746185256; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1745580721; x=1746185521; darn=vger.kernel.org;
         h=in-reply-to:references:from:to:cc:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9tdcxdU/uqiM5JHIE0ih8RzkRpPBvVsrQ+sQtZ+utPU=;
-        b=BeKf1JbvEe86laQNNzzsu38dwjJfOp2oJziFAnmoWqsMbkQX7rgfKSMJBcS5wn9lX/
-         le6OTfnKYIUDlr9y9es740hx/A9QyE25H/Yy+CuZFImgWB9RUme4Zk7a2clmaukJFFFF
-         //djvxQCG2JB89Vw4/pGrhGGowVfM6p8qj5ic2tcEPQ5D13mdFo3TQoIpozBKfyOlZNm
-         sprNbfWJ6nQNdxp2NXBN4IYtQk6d5oczduvV1ZJLHEB0gAgCUSl9EZmROHTItBH2ShDh
-         2+rVqlSze0iTzP8C2PHzqtFySPVO2sfoSKtGvY4RRXwUizBClW/EBnWfPWEMPnI8AZkM
-         ddhw==
+        bh=gDHnSfsfm8Pky45upkoSAPit3VP8lTu/pCNcAlnlmqU=;
+        b=nC71upXEFo0TOkILhACrGqNe9/cvRrSTUNbqpxdmdkJbfKElwlLSIKPgcZxHavm/Mz
+         vD2vA3cWo0YroCHgnGGAgxlawrmcihlRa1r64UAdvAx39EHDZyk1IiXgXOrj06S/LpfG
+         V7CCYpAZFYWumEp8LakcQy1UajLtfI4Us+6YEQ+W4roYWmC/OBJ6DeOcya/JEcnB4Y24
+         PynLKhAroyF8uxsuEyLom1pawAeB9/3FBk/x2tn3EaTaN5mDeDdzFPrb54CgSLc7cFOk
+         fKzHD+y6mIK35J+D0cT7kRDNOHRzLDfYufc+It7U3X6i1XGpyZTLjexOBMSVPBS4R+Ur
+         PjHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745580456; x=1746185256;
+        d=1e100.net; s=20230601; t=1745580721; x=1746185521;
         h=in-reply-to:references:from:to:cc:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=9tdcxdU/uqiM5JHIE0ih8RzkRpPBvVsrQ+sQtZ+utPU=;
-        b=FkqFm7fI79axn0w15PzLYjb4vE6lfQE3idGOXSN7hsmNT5Z8DzgAKApXVcozSmnAC8
-         oFfPDS1I3iykXd8xfleYeUkHXVFddvWguAzxfc56+8f5xLDiZZITHoMjg4RJ+9WZLOHw
-         VOt+2vxGlM0bXOuOE4XjfV22IXgKWvtTc8zAesGT/C+CwpTvmtLXg9Mv2ZfgMqDwHyD8
-         kNilAUIzr2BUeGU3HSjUKTMTJoOAR+mOOPoxjdes7db8OIMwS6jPXZ74Cbxm+mzmrQ37
-         SXR6EXAYH69qn+1b/VMVhPikAqlD80X14+LFDmPAc8/I5RtF2k+xAUYaCjwShzOQNlwR
-         bx2A==
-X-Forwarded-Encrypted: i=1; AJvYcCXkf74o/7gt3E0T1ZSHRQMFCc5aFlioC5cn1XBzqoPkzAF7S1tmn9S82YJzmco7oEeS0yjAgzldq4ei@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5ceZPjsTrd2ZP5n34DbN9Ygl3eoz4axhqvc1KPEm9UX1G/L6u
-	7WzOpMv44WPFd9rMocbzVXEue3QZx8rEglwKcAqnKRMWiGPTqAKjurQyvFA+abM=
-X-Gm-Gg: ASbGncuXNf3M5QHjVRIbdZKwPGcYG2KQ53QhthCjsTMiaNSLWKnr6Ja/ytmbbkoTRo7
-	gb5CvGHOrQIZiQN3J3vST9oeBR4Or+zLcvGPTduLlrC9dApkqiAPAeeOFraO4wRfEliE6xEDdY/
-	lgzatDXL12585Xti0328CWW6KTfs7XDyZlKGOR3w0kCl3CmgROLSZ8nDMc0aTVU40HgSTdg6jw9
-	zeIhPQKj4P3w6YPM85B5fj+EddVMOhcm/Rcqwyvs7AVKR+XsD6rI1aN8weSh7t9wb5QOxP5vKWb
-	yNjdQ+WaPGFdT6z2DrbY8urt50IN7/IrF1PlXK9Fzi8f8YjT
-X-Google-Smtp-Source: AGHT+IEQ9pK+JKMDBMS71i2ytNl3g5Iz5jsYozyFh9v4Ot2oPm70zEuu2n9VUWJTfr8L27VdCIYOXQ==
-X-Received: by 2002:a05:6000:420e:b0:39c:1efc:44ed with SMTP id ffacd0b85a97d-3a074e42259mr527990f8f.7.1745580456083;
-        Fri, 25 Apr 2025 04:27:36 -0700 (PDT)
+        bh=gDHnSfsfm8Pky45upkoSAPit3VP8lTu/pCNcAlnlmqU=;
+        b=w+W8T1/cuBQAHarLPZujlrr2yth/8Eb0NtFQ23Dq7p+9oXv3H6FNUzI70XONYTORu4
+         Gih6FH+Yx+PROvLNnNmrz571iPBYqAYw5sNuu6jQbPY7Qhvz83q4NcFaXja9ZfITtKGl
+         P/ieCoWAFDFtVIzoh4l0BvmdPwq8B77hgexeXFFLybC2fxgn313b64JAn84vypS9/1cw
+         AEa+9Mn3lJm2cUTJPDtZsSITC277y+TA/YT6cdr3gBwNKwHIn/BlsfP/cpYuzuDKeHJK
+         /Yc3U/f/lNWqh5vj8v71+coR/dDibWwTE00PLTRmhV0IBFW1qBgIAsHLEvfEqKqzA2KB
+         0MXw==
+X-Forwarded-Encrypted: i=1; AJvYcCV1reIN4mHSizk+hgNWyGNUT1b9j1pmgYJAoOEkzg3bKtzsa5HCiOmdWTOpWGR7ps4XLLMIihnGzDDn@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVAeYDV20AbNRhJhDOFNM2FKkxl49fzIY79OsiDBKoSgC8MFup
+	5sX/aKY6dGTX3hA40GlEJHapacnPQiup3zzd2XFMM0HNH722TVeDwkUBHyRu3Ho=
+X-Gm-Gg: ASbGnctnXOd0bormkSRAkicd9A8pp1MRHP4v9L0SjEXbjCtWuECPhp7WO11LCF7p7Cu
+	xoQ31l+FmSjjIsX1EtuMqONWJ5f3gVWZYC79uoLetdqamqQH9E5NXz0GD0dT76AK+l4j3q+ZQbE
+	h9xTDM/jPssQQwjQQd3qkU4w863PZnLLf8K5sv6OxcG3pcesWl0jmBKcloiXNTQI1L7IK7rDItz
+	8JDx/u5nWVYnMtDEAinwMqfYM9G6yrdMfjxefNaoQ8xun0xzRcF5XzGf9N49hoy9U/OHMQxMs6m
+	ScmRbVjKPp87pxJ44aAPad5Zp7zsOs3dfMTFXs73IbM9BiNC
+X-Google-Smtp-Source: AGHT+IHRqf93ViQDABDgGhAB9vrTQizaMXk/z0DioGF+r4Jf0pl8X7PBzUSEYnMZMSBPSRe+pddQCw==
+X-Received: by 2002:a05:6000:420a:b0:3a0:6bd0:a4b0 with SMTP id ffacd0b85a97d-3a074e0e122mr528393f8f.2.1745580720995;
+        Fri, 25 Apr 2025 04:32:00 -0700 (PDT)
 Received: from localhost ([2a02:8308:a00c:e200:84a3:2b0a:bdb8:ce08])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-440a536a02csm22002045e9.27.2025.04.25.04.27.35
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e5d479sm2137879f8f.92.2025.04.25.04.32.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 04:27:35 -0700 (PDT)
+        Fri, 25 Apr 2025 04:32:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -80,8 +80,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 25 Apr 2025 13:27:34 +0200
-Message-Id: <D9FOMMGOGOZS.FN9LKYJAB9PD@ventanamicro.com>
+Date: Fri, 25 Apr 2025 13:32:00 +0200
+Message-Id: <D9FOQ0C9HMIR.17FERF6F7C8LR@ventanamicro.com>
 Subject: Re: [PATCH v12 05/28] riscv: usercfi state for task and
  save/restore of CSR_SSP on trap entry/exit
 Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
@@ -105,211 +105,107 @@ Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar"
  <alistair.francis@wdc.com>, <richard.henderson@linaro.org>,
  <jim.shu@sifive.com>, <andybnac@gmail.com>, <kito.cheng@sifive.com>,
  <charlie@rivosinc.com>, <atishp@rivosinc.com>, <evan@rivosinc.com>,
- <cleger@rivosinc.com>, <broonie@kernel.org>, <rick.p.edgecombe@intel.com>,
- "Zong Li" <zong.li@sifive.com>, "linux-riscv"
+ <cleger@rivosinc.com>, <alexghiti@rivosinc.com>, <samitolvanen@google.com>,
+ <broonie@kernel.org>, <rick.p.edgecombe@intel.com>, "Zong Li"
+ <zong.li@sifive.com>, "linux-riscv"
  <linux-riscv-bounces@lists.infradead.org>
 To: "Deepak Gupta" <debug@rivosinc.com>
 From: =?utf-8?q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>
 References: <20250314-v5_user_cfi_series-v12-0-e51202b53138@rivosinc.com>
  <20250314-v5_user_cfi_series-v12-5-e51202b53138@rivosinc.com>
  <D92WQWAUQYY4.2ED8JAFBDHGRN@ventanamicro.com>
- <aAl_HRk49lnseiio@debug.ba.rivosinc.com>
- <D9EUJBQ5OHN0.2KUJHGXK262TR@ventanamicro.com>
- <aAp7Un415hNqtshd@debug.ba.rivosinc.com>
-In-Reply-To: <aAp7Un415hNqtshd@debug.ba.rivosinc.com>
+ <aAmEnK0vSgZZOORL@debug.ba.rivosinc.com>
+ <D9EV1K8ZQQJR.20CRTYLQBN9UE@ventanamicro.com>
+ <aAp9D7txw8y9WL5m@debug.ba.rivosinc.com>
+In-Reply-To: <aAp9D7txw8y9WL5m@debug.ba.rivosinc.com>
 
-2025-04-24T10:56:34-07:00, Deepak Gupta <debug@rivosinc.com>:
-> On Thu, Apr 24, 2025 at 01:52:43PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
+2025-04-24T11:03:59-07:00, Deepak Gupta <debug@rivosinc.com>:
+> On Thu, Apr 24, 2025 at 02:16:32PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 wro=
 te:
->>2025-04-23T17:00:29-07:00, Deepak Gupta <debug@rivosinc.com>:
+>>2025-04-23T17:23:56-07:00, Deepak Gupta <debug@rivosinc.com>:
 >>> On Thu, Apr 10, 2025 at 01:04:39PM +0200, Radim Kr=C4=8Dm=C3=A1=C5=99 w=
 rote:
 >>>>2025-03-14T14:39:24-07:00, Deepak Gupta <debug@rivosinc.com>:
->>>>> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/includ=
-e/asm/thread_info.h
->>>>> @@ -62,6 +62,9 @@ struct thread_info {
->>>>>  	long			user_sp;	/* User stack pointer */
->>>>>  	int			cpu;
->>>>>  	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
->>>>> +#ifdef CONFIG_RISCV_USER_CFI
->>>>> +	struct cfi_status	user_cfi_state;
->>>>> +#endif
+>>>>> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+>>>>> @@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
+>>>>>
+>>>>>  	REG_L s0, TASK_TI_USER_SP(tp)
+>>>>>  	csrrc s1, CSR_STATUS, t0
+>>>>> +	/*
+>>>>> +	 * If previous mode was U, capture shadow stack pointer and save it=
+ away
+>>>>> +	 * Zero CSR_SSP at the same time for sanitization.
+>>>>> +	 */
+>>>>> +	ALTERNATIVE("nop; nop; nop; nop",
+>>>>> +				__stringify(			\
+>>>>> +				andi s2, s1, SR_SPP;	\
+>>>>> +				bnez s2, skip_ssp_save;	\
+>>>>> +				csrrw s2, CSR_SSP, x0;	\
+>>>>> +				REG_S s2, TASK_TI_USER_SSP(tp); \
+>>>>> +				skip_ssp_save:),
+>>>>> +				0,
+>>>>> +				RISCV_ISA_EXT_ZICFISS,
+>>>>> +				CONFIG_RISCV_USER_CFI)
 >>>>
->>>>I don't think it makes sense to put all the data in thread_info.
->>>>kernel_ssp and user_ssp is more than enough and the rest can comfortabl=
-y
->>>>live elsewhere in task_struct.
->>>>
->>>>thread_info is supposed to be as small as possible -- just spanning
->>>>multiple cache-lines could be noticeable.
->>>
->>> I can change it to only include only `user_ssp`, base and size.
->>
->>No need for base and size either -- we don't touch that in the common
->>exception code.
->
-> got it.
->
->>
->>> But before we go there, see below:
->>>
->>> $ pahole -C thread_info kbuild/vmlinux
->>> struct thread_info {
->>>          long unsigned int          flags;                /*     0     =
-8 */
->>>          int                        preempt_count;        /*     8     =
-4 */
->>>
->>>          /* XXX 4 bytes hole, try to pack */
->>>
->>>          long int                   kernel_sp;            /*    16     =
-8 */
->>>          long int                   user_sp;              /*    24     =
-8 */
->>>          int                        cpu;                  /*    32     =
-4 */
->>>
->>>          /* XXX 4 bytes hole, try to pack */
->>>
->>>          long unsigned int          syscall_work;         /*    40     =
-8 */
->>>          struct cfi_status          user_cfi_state;       /*    48    3=
-2 */
->>>          /* --- cacheline 1 boundary (64 bytes) was 16 bytes ago --- */
->>>          long unsigned int          a0;                   /*    80     =
-8 */
->>>          long unsigned int          a1;                   /*    88     =
-8 */
->>>          long unsigned int          a2;                   /*    96     =
-8 */
->>>
->>>          /* size: 104, cachelines: 2, members: 10 */
->>>          /* sum members: 96, holes: 2, sum holes: 8 */
->>>          /* last cacheline: 40 bytes */
->>> };
->>>
->>> If we were to remove entire `cfi_status`, it would still be 72 bytes (8=
-8 bytes
->>> if shadow call stack were enabled) and already spans across two cacheli=
-nes.
->>
->>It has only 64 bytes of data without shadow call stack, but it wasted 8
->>bytes on the holes.
->>a2 is somewhat an outlier that is not used most exception paths and
->>excluding it makes everything fit nicely even now.
->
-> But we can't exclude shadow call stack. It'll lead to increased size if t=
-hat
-> config is selected. A solution has to work for all the cases and not half
-> hearted effort.
-
-We could drop a0 or user_sp and place the two ints next to each other,
-saving at least 16 bytes.
-
-(user_sp, a0, a1, and a2 are just temporary storage.  I think would be
- fine with just two temporaries + kernel_sp, to provide three registers
- for new_vmalloc_check and we never need more.)
-
->>> if shadow call stack were enabled) and already spans across two cacheli=
-nes. I
->>> did see the comment above that it should fit inside a cacheline. Althou=
-gh I
->>> assumed its stale comment given that it already spans across cacheline =
-and I
->>> didn't see any special mention in commit messages of changes which grew=
- this
->>> structure above one cacheline. So I assumed this was a stale comment.
->>>
->>> On the other hand, whenever enable/lock bits are checked, there is a hi=
-gh
->>> likelyhood that user_ssp and other fields are going to be accessed and
->>> thus it actually might be helpful to have it all in one cacheline durin=
+>>>>(I'd prefer this closer to the user_sp and kernel_sp swap, it's breakin=
 g
->>> runtime.
+>>>> the flow here.  We also already know if we've returned from userspace
+>>>> or not even without SR_SPP, but reusing the information might tangle
+>>>> the logic.)
+>>>
+>>> If CSR_SCRATCH was 0, then we would be coming from kernel else flow goe=
+s
+>>> to `.Lsave_context`. If we were coming from kernel mode, then eventuall=
+y
+>>> flow merges to `.Lsave_context`.
+>>>
+>>> So we will be saving CSR_SSP on all kernel -- > kernel trap handling. T=
+hat
+>>> would be unnecessary. IIRC, this was one of the first review comments i=
+n
+>>> early RFC series of these patch series (to not touch CSR_SSP un-necessa=
+rily)
+>>>
+>>> We can avoid that by ensuring when we branch by determining if we are c=
+oming
+>>> from user to something like `.Lsave_ssp` which eventually merges into
+>>> ".Lsave_context". And if we were coming from kernel then we would branc=
+h to
+>>> `.Lsave_context` and thus skipping ssp save logic. But # of branches it
+>>> introduces in early exception handling is equivalent to what current pa=
+tches
+>>> do. So I don't see any value in doing that.
+>>>
+>>> Let me know if I am missing something.
 >>
->>Yes, although accessing enable/lock bits will be relatively rare.
->>It seems better to have the overhead during thread setup, rather than on
->>every trap.
+>>Right, it's hard to avoid the extra branches.
 >>
->>> So I am not sure if its helpful sticking to the comment which already i=
-s stale.
+>>I think we could modify the entry point (STVEC), so we start at
+>>different paths based on kernel/userspace trap and only jump once to the
+>>common code, like:
 >>
->>We could fix the holes and also use sp instead of a0 in the
->>new_vmalloc_check, so everything would fit better.
->>
->>We are really close to fitting into a single cache-line, so I'd prefer
->>if shadow stack only filled thread_info with data that is used very
->>often in the exception handling code.
+>>  SYM_CODE_START(handle_exception_kernel)
+>>    /* kernel setup magic */
+>>    j handle_exception_common
+>>  SYM_CODE_START(handle_exception_user)
+>>    /* userspace setup magic */
+>>  handle_exception_common:
 >
-> I don't get what's the big deal if it results in two cachelines. We can
-> (re)organize data structure in a way the most frequently accessed members=
- are
-> together in a single cacheline. We just need to find those members.
+> Hmm... This can be done. But then it would require to constantly modify `=
+stvec`
+> When you're going back to user mode, you would have to write `stvec` with=
+ addr
+> of `handle_exception_user`.
 
-Yes, and because this patch is reorganizing the structure, I thought it
-would be better to do the analysis now, rather than to incur additional
-debt.
+We'd just be writing STVEC instead of SSCRATCH, probably at the very
+same places.
+It's possible that some micro-architectures will be disturbed more by
+writing STVEC than SSCRATCH, though, so it's not an easy change to make.
 
-thread_info members are accessed during the first instructions after a
-trap.  We want to maximize the chance that the execution doesn't stall
-until uarch has time to engage its crystal ball.
+>                             But then you can easily get a NMI. It can bec=
+ome
+> ugly. Needs much more thought and on first glance feels error prone.
 
-> In the hot path of exception handling, I see accesses to pt_regs on stack=
- as
-> well. These are definitley different cacheline than thread_info.
-
-Right, and we also access cache-lines for the code.
-
-I don't know how well each uarch keeps the early trap data/code in
-caches, but it doesn't seem like a bad idea to minimize the amount of
-cache-lines that are accessed early after trap.
-
-> I understand the argument of one member field crossing into two cacheline=
-s can
-> have undesired perf effects. I do not understand reasoning that thread_in=
-fo
-> exactly has to fit inside one cacheline.
-
-I agree that we could probably lift the constraint for some values --
-it's a lot of performance modeling and convincing, though...
-
-In this series, I think it would be good to avoid splitting kernel_sp
-and a0/a1 into two cache-lines.  kernel_sp and a0/a1 are accessed within
-the first few instructions.
-
-> If this was always supposed to fit in a single cacheline, clearly this
-> invariant isn't/wasn't maintained as changes trickled in. I would like to=
- see
-> what maintainers have to say or someone who did data analysis on this.
-
-I don't think it is necessary to fix the rest, just not making things
-worse is already great.
-
->>I think we could do without user_sp in thread_info as well, so there are
->>other packing options.
->
-> Sure, probably somewhere in task_struct. But fact of the matter is that i=
-t has
-> to be saved/restore during exception entry/exit. But then load/store to
-> task_struct is essentially a different cachline. Not sure what we will ac=
-hieve
-> here?
-
-user_sp is only temporarily storage space in thread_info.
-The sp register is restored from pt_regs, so we could refactor the code
-to drop user_sp from thread_info.
-
-e.g. use a0, a1, or a2 for the temporary storage: user_sp is not even
-the userspace sp, it is sp of the previous sp "user", which might have
-been the kernel.
-
->>Btw. could ssp be added to pt_regs?
->
-> I had that earlier. It breaks user abi. And it was a no go.
-
-Thanks, I was afraid of that. :)
-
-We might want to eventually push ssp to the stack to follow the same
-design for trap nesting as sp has, but that can happen when implementing
-ssp for the kernel.  Squeezing into thread_info should work for now.
+Yeah, the M-mode Linux adds a lot of fun.  I don't see support for the
+Smrnmi extension, so unlucky NMIs should be fatal even now.
 
