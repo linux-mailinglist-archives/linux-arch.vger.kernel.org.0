@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-11590-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11592-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F19CA9D8B9
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Apr 2025 08:53:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A7E6A9D8AD
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Apr 2025 08:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A4BD921AC9
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Apr 2025 06:52:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B71D11C008C7
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Apr 2025 06:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7255D1FA859;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8278F1FBE8C;
 	Sat, 26 Apr 2025 06:51:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jr5yTNSV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hYvVNJGT"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED361F8937;
-	Sat, 26 Apr 2025 06:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE641F8AC5;
+	Sat, 26 Apr 2025 06:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745650304; cv=none; b=Gr66yNrRy/bhRtbdGmCwxXZzEiUl8Pu+0p3k4HTauknIDncFkp9dnHyUhHTgTJMOiQ9ABs5pIAjXi/uCheImNInRhg+Ii7V1tEN4V5F4l9M+GuXPG86tM2ybpablHDaZMjoCk297apzAS5xoz21JnOXLrXu2pe6ulLzOnVy3KFQ=
+	t=1745650304; cv=none; b=XHSc9rQsW99EBrfiODiUwn2oCenALx/cdnPT/nvvNLr4XTV3vPjwp28noNsSqH/iGIlXNZTfCzEAvC6pcXivJKDdejwn7BfdCJznKzV+PEeTBtjUpPAHPrwUqyTozUiIGnAJ1Grl7fCyj1WeVV0/98gIOHXFKt1K8wnoUGohVQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745650304; c=relaxed/simple;
-	bh=FpGdYYKS+5eeu+/xFdA+pUY9D8N0ai38d5p/BVEJr1I=;
+	bh=UZ7gk36w4cLhvdSqxxmiIouNdLfsFUW3VDR+CsRAy7M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GOQvrt5EAJq4EEwCR911vhwhXSCjg07Z806+9MkYJlMt/SbqGSf7bMQ8+P1q73oxSTA4wr/FSRfnodzyyPDn2RaF0yb0/++kGKn6RMIAfGMl2dYZTawOnAd13Cz0LNgro1ZvRG6RazgihKPEye5nOuTew2lVlM1lgRe1mCgAlaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jr5yTNSV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 555CEC4CEEB;
+	 MIME-Version; b=u/+XiJEMdVP27QVSO2YNjSKwOVFikyjVytDEdEH9N+xr+j3y10le7ROMLY7qjbUq4gCry/Xar783EImih1knQbcS1nBKrf466OwthjO0sV8WsiT1NM6oc8GG2XFEYrYdci3SjUqy3ecp98+f7AvYX2mGnVce6oJ2gJDco7VgxN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hYvVNJGT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69C3C4AF09;
 	Sat, 26 Apr 2025 06:51:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745650302;
-	bh=FpGdYYKS+5eeu+/xFdA+pUY9D8N0ai38d5p/BVEJr1I=;
+	s=k20201202; t=1745650303;
+	bh=UZ7gk36w4cLhvdSqxxmiIouNdLfsFUW3VDR+CsRAy7M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jr5yTNSVUR36D86/zCuUCifjMjsvXYWjC9NSH2kvyZaq3bt4IAiJ8wLWGrhLiOuvV
-	 z+ZVl6pjnWgpJjH7AUdOk67LuzQsmVNlbqS3+jWLh5Z6nx8Zn/OPFzvv1l1SWHQPmn
-	 kh7XEPAH0Ve6vDkcfRuaUZuNjsmlye/VDCIXpVjabDe0YQIpWprGpIeMPMwVFtXZiu
-	 xl3CnrB6JlMEpqLbh/DpJJeWvbPkvwj8x32D3MVsphz9gpXGrm5zl4VteBcIdHqoCa
-	 8zPWXadBH8Ou0LVdH9XE+C5I3cdmZxyFVWagcBEAX92H3gAQuc8uJJfXkvyHGaOWPJ
-	 ElgDgXP/dsxGw==
+	b=hYvVNJGT8ujqsbv9iLRdhnRH2EVdLSfVMF3KylRGcYiRa0w67YFrmttBwnv8KDt3D
+	 suPcS2N0HLdcI36hvEKAsQVNMaN0lnG/5KmJxZ6jlp0swkA6YuP3OTMMFz0E3GFI7k
+	 BT9DtV3sbnu8iFXlo3so1zJleKv1xl9hlFSgQdWK1kPWj5je2qEcD4nduQvXU7L+Wr
+	 8KZm/xSs1i7+cDw+vxkVXmrbgidRN5S6HgcJcM/7iyziGjsTYaYPcDfeWpVuVYlrAw
+	 if2rzX78lx7tylhDLoorg9i5VOeDQZ9dsxoJqdt57G5T46OTjCjf7eD+ixFyteWKcj
+	 uwF6GhIpW3z6w==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>,
 	"Jason A . Donenfeld " <Jason@zx2c4.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 06/13] crypto: powerpc/sha256 - implement library instead of shash
-Date: Fri, 25 Apr 2025 23:50:32 -0700
-Message-ID: <20250426065041.1551914-7-ebiggers@kernel.org>
+Subject: [PATCH 07/13] crypto: riscv/sha256 - implement library instead of shash
+Date: Fri, 25 Apr 2025 23:50:33 -0700
+Message-ID: <20250426065041.1551914-8-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250426065041.1551914-1-ebiggers@kernel.org>
 References: <20250426065041.1551914-1-ebiggers@kernel.org>
@@ -78,314 +78,318 @@ it fixes the longstanding issue where the arch-optimized SHA-256 was
 disabled by default.  SHA-256 still remains available through
 crypto_shash, but individual architectures no longer need to handle it.
 
+To match sha256_blocks_arch(), change the type of the nblocks parameter
+of the assembly function from int to size_t.  The assembly function
+actually already treated it as size_t.
+
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/powerpc/crypto/Kconfig                   |  11 --
- arch/powerpc/crypto/Makefile                  |   2 -
- arch/powerpc/crypto/sha256-spe-glue.c         | 128 ------------------
- arch/powerpc/lib/crypto/Kconfig               |   6 +
- arch/powerpc/lib/crypto/Makefile              |   3 +
- .../powerpc/{ => lib}/crypto/sha256-spe-asm.S |   0
- arch/powerpc/lib/crypto/sha256.c              |  70 ++++++++++
- 7 files changed, 79 insertions(+), 141 deletions(-)
- delete mode 100644 arch/powerpc/crypto/sha256-spe-glue.c
- rename arch/powerpc/{ => lib}/crypto/sha256-spe-asm.S (100%)
- create mode 100644 arch/powerpc/lib/crypto/sha256.c
+ arch/riscv/crypto/Kconfig                     |  11 --
+ arch/riscv/crypto/Makefile                    |   3 -
+ arch/riscv/crypto/sha256-riscv64-glue.c       | 125 ------------------
+ arch/riscv/lib/crypto/Kconfig                 |   7 +
+ arch/riscv/lib/crypto/Makefile                |   3 +
+ .../sha256-riscv64-zvknha_or_zvknhb-zvkb.S    |   4 +-
+ arch/riscv/lib/crypto/sha256.c                |  62 +++++++++
+ 7 files changed, 74 insertions(+), 141 deletions(-)
+ delete mode 100644 arch/riscv/crypto/sha256-riscv64-glue.c
+ rename arch/riscv/{ => lib}/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S (98%)
+ create mode 100644 arch/riscv/lib/crypto/sha256.c
 
-diff --git a/arch/powerpc/crypto/Kconfig b/arch/powerpc/crypto/Kconfig
-index 4bf7b01228e72..caaa359f47420 100644
---- a/arch/powerpc/crypto/Kconfig
-+++ b/arch/powerpc/crypto/Kconfig
-@@ -37,21 +37,10 @@ config CRYPTO_SHA1_PPC_SPE
- 	  SHA-1 secure hash algorithm (FIPS 180)
+diff --git a/arch/riscv/crypto/Kconfig b/arch/riscv/crypto/Kconfig
+index 4863be2a4ec2f..cd9b776602f89 100644
+--- a/arch/riscv/crypto/Kconfig
++++ b/arch/riscv/crypto/Kconfig
+@@ -26,21 +26,10 @@ config CRYPTO_GHASH_RISCV64
+ 	  GCM GHASH function (NIST SP 800-38D)
  
- 	  Architecture: powerpc using
- 	  - SPE (Signal Processing Engine) extensions
+ 	  Architecture: riscv64 using:
+ 	  - Zvkg vector crypto extension
  
--config CRYPTO_SHA256_PPC_SPE
--	tristate "Hash functions: SHA-224 and SHA-256 (SPE)"
--	depends on SPE
+-config CRYPTO_SHA256_RISCV64
+-	tristate "Hash functions: SHA-224 and SHA-256"
+-	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
 -	select CRYPTO_SHA256
--	select CRYPTO_HASH
 -	help
--	  SHA-224 and SHA-256 secure hash algorithms (FIPS 180)
+-	  SHA-224 and SHA-256 secure hash algorithm (FIPS 180)
 -
--	  Architecture: powerpc using
--	  - SPE (Signal Processing Engine) extensions
+-	  Architecture: riscv64 using:
+-	  - Zvknha or Zvknhb vector crypto extensions
+-	  - Zvkb vector crypto extension
 -
- config CRYPTO_AES_PPC_SPE
- 	tristate "Ciphers: AES, modes: ECB/CBC/CTR/XTS (SPE)"
- 	depends on SPE
- 	select CRYPTO_SKCIPHER
+ config CRYPTO_SHA512_RISCV64
+ 	tristate "Hash functions: SHA-384 and SHA-512"
+ 	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	select CRYPTO_SHA512
  	help
-diff --git a/arch/powerpc/crypto/Makefile b/arch/powerpc/crypto/Makefile
-index f13aec8a18335..8c2936ae466fc 100644
---- a/arch/powerpc/crypto/Makefile
-+++ b/arch/powerpc/crypto/Makefile
-@@ -7,20 +7,18 @@
+diff --git a/arch/riscv/crypto/Makefile b/arch/riscv/crypto/Makefile
+index 4ae9bf762e907..e10e8257734e3 100644
+--- a/arch/riscv/crypto/Makefile
++++ b/arch/riscv/crypto/Makefile
+@@ -5,13 +5,10 @@ aes-riscv64-y := aes-riscv64-glue.o aes-riscv64-zvkned.o \
+ 		 aes-riscv64-zvkned-zvbb-zvkg.o aes-riscv64-zvkned-zvkb.o
  
- obj-$(CONFIG_CRYPTO_AES_PPC_SPE) += aes-ppc-spe.o
- obj-$(CONFIG_CRYPTO_MD5_PPC) += md5-ppc.o
- obj-$(CONFIG_CRYPTO_SHA1_PPC) += sha1-powerpc.o
- obj-$(CONFIG_CRYPTO_SHA1_PPC_SPE) += sha1-ppc-spe.o
--obj-$(CONFIG_CRYPTO_SHA256_PPC_SPE) += sha256-ppc-spe.o
- obj-$(CONFIG_CRYPTO_AES_GCM_P10) += aes-gcm-p10-crypto.o
- obj-$(CONFIG_CRYPTO_DEV_VMX_ENCRYPT) += vmx-crypto.o
- obj-$(CONFIG_CRYPTO_CURVE25519_PPC64) += curve25519-ppc64le.o
+ obj-$(CONFIG_CRYPTO_GHASH_RISCV64) += ghash-riscv64.o
+ ghash-riscv64-y := ghash-riscv64-glue.o ghash-riscv64-zvkg.o
  
- aes-ppc-spe-y := aes-spe-core.o aes-spe-keys.o aes-tab-4k.o aes-spe-modes.o aes-spe-glue.o
- md5-ppc-y := md5-asm.o md5-glue.o
- sha1-powerpc-y := sha1-powerpc-asm.o sha1.o
- sha1-ppc-spe-y := sha1-spe-asm.o sha1-spe-glue.o
--sha256-ppc-spe-y := sha256-spe-asm.o sha256-spe-glue.o
- aes-gcm-p10-crypto-y := aes-gcm-p10-glue.o aes-gcm-p10.o ghashp10-ppc.o aesp10-ppc.o
- vmx-crypto-objs := vmx.o aesp8-ppc.o ghashp8-ppc.o aes.o aes_cbc.o aes_ctr.o aes_xts.o ghash.o
- curve25519-ppc64le-y := curve25519-ppc64le-core.o curve25519-ppc64le_asm.o
+-obj-$(CONFIG_CRYPTO_SHA256_RISCV64) += sha256-riscv64.o
+-sha256-riscv64-y := sha256-riscv64-glue.o sha256-riscv64-zvknha_or_zvknhb-zvkb.o
+-
+ obj-$(CONFIG_CRYPTO_SHA512_RISCV64) += sha512-riscv64.o
+ sha512-riscv64-y := sha512-riscv64-glue.o sha512-riscv64-zvknhb-zvkb.o
  
- ifeq ($(CONFIG_CPU_LITTLE_ENDIAN),y)
-diff --git a/arch/powerpc/crypto/sha256-spe-glue.c b/arch/powerpc/crypto/sha256-spe-glue.c
+ obj-$(CONFIG_CRYPTO_SM3_RISCV64) += sm3-riscv64.o
+ sm3-riscv64-y := sm3-riscv64-glue.o sm3-riscv64-zvksh-zvkb.o
+diff --git a/arch/riscv/crypto/sha256-riscv64-glue.c b/arch/riscv/crypto/sha256-riscv64-glue.c
 deleted file mode 100644
-index 42c76bf8062dc..0000000000000
---- a/arch/powerpc/crypto/sha256-spe-glue.c
+index c998300ab8435..0000000000000
+--- a/arch/riscv/crypto/sha256-riscv64-glue.c
 +++ /dev/null
-@@ -1,128 +0,0 @@
+@@ -1,125 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * Glue code for SHA-256 implementation for SPE instructions (PPC)
+- * SHA-256 and SHA-224 using the RISC-V vector crypto extensions
 - *
-- * Based on generic implementation. The assembler module takes care 
-- * about the SPE registers so it can run from interrupt context.
+- * Copyright (C) 2022 VRULL GmbH
+- * Author: Heiko Stuebner <heiko.stuebner@vrull.eu>
 - *
-- * Copyright (c) 2015 Markus Stockhausen <stockhausen@collogia.de>
+- * Copyright (C) 2023 SiFive, Inc.
+- * Author: Jerry Shih <jerry.shih@sifive.com>
 - */
 -
--#include <asm/switch_to.h>
+-#include <asm/simd.h>
+-#include <asm/vector.h>
 -#include <crypto/internal/hash.h>
--#include <crypto/sha2.h>
+-#include <crypto/internal/simd.h>
 -#include <crypto/sha256_base.h>
 -#include <linux/kernel.h>
 -#include <linux/module.h>
--#include <linux/preempt.h>
 -
 -/*
-- * MAX_BYTES defines the number of bytes that are allowed to be processed
-- * between preempt_disable() and preempt_enable(). SHA256 takes ~2,000
-- * operations per 64 bytes. e500 cores can issue two arithmetic instructions
-- * per clock cycle using one 32/64 bit unit (SU1) and one 32 bit unit (SU2).
-- * Thus 1KB of input data will need an estimated maximum of 18,000 cycles.
-- * Headroom for cache misses included. Even with the low end model clocked
-- * at 667 MHz this equals to a critical time window of less than 27us.
-- *
+- * Note: the asm function only uses the 'state' field of struct sha256_state.
+- * It is assumed to be the first field.
 - */
--#define MAX_BYTES 1024
+-asmlinkage void sha256_transform_zvknha_or_zvknhb_zvkb(
+-	struct crypto_sha256_state *state, const u8 *data, int num_blocks);
 -
--extern void ppc_spe_sha256_transform(u32 *state, const u8 *src, u32 blocks);
--
--static void spe_begin(void)
+-static void sha256_block(struct crypto_sha256_state *state, const u8 *data,
+-			 int num_blocks)
 -{
--	/* We just start SPE operations and will save SPE registers later. */
--	preempt_disable();
--	enable_kernel_spe();
+-	/*
+-	 * Ensure struct crypto_sha256_state begins directly with the SHA-256
+-	 * 256-bit internal state, as this is what the asm function expects.
+-	 */
+-	BUILD_BUG_ON(offsetof(struct crypto_sha256_state, state) != 0);
+-
+-	if (crypto_simd_usable()) {
+-		kernel_vector_begin();
+-		sha256_transform_zvknha_or_zvknhb_zvkb(state, data, num_blocks);
+-		kernel_vector_end();
+-	} else
+-		sha256_transform_blocks(state, data, num_blocks);
 -}
 -
--static void spe_end(void)
+-static int riscv64_sha256_update(struct shash_desc *desc, const u8 *data,
+-				 unsigned int len)
 -{
--	disable_kernel_spe();
--	/* reenable preemption */
--	preempt_enable();
+-	return sha256_base_do_update_blocks(desc, data, len, sha256_block);
 -}
 -
--static void ppc_spe_sha256_block(struct crypto_sha256_state *sctx,
--				 const u8 *src, int blocks)
--{
--	do {
--		/* cut input data into smaller blocks */
--		int unit = min(blocks, MAX_BYTES / SHA256_BLOCK_SIZE);
--
--		spe_begin();
--		ppc_spe_sha256_transform(sctx->state, src, unit);
--		spe_end();
--
--		src += unit * SHA256_BLOCK_SIZE;
--		blocks -= unit;
--	} while (blocks);
--}
--
--static int ppc_spe_sha256_update(struct shash_desc *desc, const u8 *data,
--			unsigned int len)
--{
--	return sha256_base_do_update_blocks(desc, data, len,
--					    ppc_spe_sha256_block);
--}
--
--static int ppc_spe_sha256_finup(struct shash_desc *desc, const u8 *src,
+-static int riscv64_sha256_finup(struct shash_desc *desc, const u8 *data,
 -				unsigned int len, u8 *out)
 -{
--	sha256_base_do_finup(desc, src, len, ppc_spe_sha256_block);
+-	sha256_base_do_finup(desc, data, len, sha256_block);
 -	return sha256_base_finish(desc, out);
 -}
 -
--static struct shash_alg algs[2] = { {
--	.digestsize	=	SHA256_DIGEST_SIZE,
--	.init		=	sha256_base_init,
--	.update		=	ppc_spe_sha256_update,
--	.finup		=	ppc_spe_sha256_finup,
--	.descsize	=	sizeof(struct crypto_sha256_state),
--	.base		=	{
--		.cra_name	=	"sha256",
--		.cra_driver_name=	"sha256-ppc-spe",
--		.cra_priority	=	300,
--		.cra_flags	=	CRYPTO_AHASH_ALG_BLOCK_ONLY |
--					CRYPTO_AHASH_ALG_FINUP_MAX,
--		.cra_blocksize	=	SHA256_BLOCK_SIZE,
--		.cra_module	=	THIS_MODULE,
--	}
--}, {
--	.digestsize	=	SHA224_DIGEST_SIZE,
--	.init		=	sha224_base_init,
--	.update		=	ppc_spe_sha256_update,
--	.finup		=	ppc_spe_sha256_finup,
--	.descsize	=	sizeof(struct crypto_sha256_state),
--	.base		=	{
--		.cra_name	=	"sha224",
--		.cra_driver_name=	"sha224-ppc-spe",
--		.cra_priority	=	300,
--		.cra_flags	=	CRYPTO_AHASH_ALG_BLOCK_ONLY |
--					CRYPTO_AHASH_ALG_FINUP_MAX,
--		.cra_blocksize	=	SHA224_BLOCK_SIZE,
--		.cra_module	=	THIS_MODULE,
--	}
--} };
--
--static int __init ppc_spe_sha256_mod_init(void)
+-static int riscv64_sha256_digest(struct shash_desc *desc, const u8 *data,
+-				 unsigned int len, u8 *out)
 -{
--	return crypto_register_shashes(algs, ARRAY_SIZE(algs));
+-	return sha256_base_init(desc) ?:
+-	       riscv64_sha256_finup(desc, data, len, out);
 -}
 -
--static void __exit ppc_spe_sha256_mod_fini(void)
+-static struct shash_alg riscv64_sha256_algs[] = {
+-	{
+-		.init = sha256_base_init,
+-		.update = riscv64_sha256_update,
+-		.finup = riscv64_sha256_finup,
+-		.digest = riscv64_sha256_digest,
+-		.descsize = sizeof(struct crypto_sha256_state),
+-		.digestsize = SHA256_DIGEST_SIZE,
+-		.base = {
+-			.cra_blocksize = SHA256_BLOCK_SIZE,
+-			.cra_flags = CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-				     CRYPTO_AHASH_ALG_FINUP_MAX,
+-			.cra_priority = 300,
+-			.cra_name = "sha256",
+-			.cra_driver_name = "sha256-riscv64-zvknha_or_zvknhb-zvkb",
+-			.cra_module = THIS_MODULE,
+-		},
+-	}, {
+-		.init = sha224_base_init,
+-		.update = riscv64_sha256_update,
+-		.finup = riscv64_sha256_finup,
+-		.descsize = sizeof(struct crypto_sha256_state),
+-		.digestsize = SHA224_DIGEST_SIZE,
+-		.base = {
+-			.cra_blocksize = SHA224_BLOCK_SIZE,
+-			.cra_flags = CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-				     CRYPTO_AHASH_ALG_FINUP_MAX,
+-			.cra_priority = 300,
+-			.cra_name = "sha224",
+-			.cra_driver_name = "sha224-riscv64-zvknha_or_zvknhb-zvkb",
+-			.cra_module = THIS_MODULE,
+-		},
+-	},
+-};
+-
+-static int __init riscv64_sha256_mod_init(void)
 -{
--	crypto_unregister_shashes(algs, ARRAY_SIZE(algs));
+-	/* Both zvknha and zvknhb provide the SHA-256 instructions. */
+-	if ((riscv_isa_extension_available(NULL, ZVKNHA) ||
+-	     riscv_isa_extension_available(NULL, ZVKNHB)) &&
+-	    riscv_isa_extension_available(NULL, ZVKB) &&
+-	    riscv_vector_vlen() >= 128)
+-		return crypto_register_shashes(riscv64_sha256_algs,
+-					       ARRAY_SIZE(riscv64_sha256_algs));
+-
+-	return -ENODEV;
 -}
 -
--module_init(ppc_spe_sha256_mod_init);
--module_exit(ppc_spe_sha256_mod_fini);
+-static void __exit riscv64_sha256_mod_exit(void)
+-{
+-	crypto_unregister_shashes(riscv64_sha256_algs,
+-				  ARRAY_SIZE(riscv64_sha256_algs));
+-}
 -
+-module_init(riscv64_sha256_mod_init);
+-module_exit(riscv64_sha256_mod_exit);
+-
+-MODULE_DESCRIPTION("SHA-256 (RISC-V accelerated)");
+-MODULE_AUTHOR("Heiko Stuebner <heiko.stuebner@vrull.eu>");
 -MODULE_LICENSE("GPL");
--MODULE_DESCRIPTION("SHA-224 and SHA-256 Secure Hash Algorithm, SPE optimized");
--
--MODULE_ALIAS_CRYPTO("sha224");
--MODULE_ALIAS_CRYPTO("sha224-ppc-spe");
 -MODULE_ALIAS_CRYPTO("sha256");
--MODULE_ALIAS_CRYPTO("sha256-ppc-spe");
-diff --git a/arch/powerpc/lib/crypto/Kconfig b/arch/powerpc/lib/crypto/Kconfig
-index bf6d0ab22c27d..ffa541ad6d5da 100644
---- a/arch/powerpc/lib/crypto/Kconfig
-+++ b/arch/powerpc/lib/crypto/Kconfig
-@@ -11,5 +11,11 @@ config CRYPTO_POLY1305_P10
+-MODULE_ALIAS_CRYPTO("sha224");
+diff --git a/arch/riscv/lib/crypto/Kconfig b/arch/riscv/lib/crypto/Kconfig
+index bc7a43f33eb3a..c100571feb7e8 100644
+--- a/arch/riscv/lib/crypto/Kconfig
++++ b/arch/riscv/lib/crypto/Kconfig
+@@ -4,5 +4,12 @@ config CRYPTO_CHACHA_RISCV64
  	tristate
- 	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
- 	default CRYPTO_LIB_POLY1305
- 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	select CRYPTO_LIB_POLY1305_GENERIC
+ 	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
+ 	default CRYPTO_LIB_CHACHA
+ 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
+ 	select CRYPTO_LIB_CHACHA_GENERIC
 +
-+config CRYPTO_SHA256_PPC_SPE
++config CRYPTO_SHA256_RISCV64
 +	tristate
-+	depends on SPE
++	depends on 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
 +	default CRYPTO_LIB_SHA256
 +	select CRYPTO_ARCH_HAVE_LIB_SHA256
-diff --git a/arch/powerpc/lib/crypto/Makefile b/arch/powerpc/lib/crypto/Makefile
-index 5709ae14258a0..27f231f8e334a 100644
---- a/arch/powerpc/lib/crypto/Makefile
-+++ b/arch/powerpc/lib/crypto/Makefile
-@@ -3,5 +3,8 @@
- obj-$(CONFIG_CRYPTO_CHACHA20_P10) += chacha-p10-crypto.o
- chacha-p10-crypto-y := chacha-p10-glue.o chacha-p10le-8x.o
++	select CRYPTO_LIB_SHA256_GENERIC
+diff --git a/arch/riscv/lib/crypto/Makefile b/arch/riscv/lib/crypto/Makefile
+index e27b78f317fc8..b7cb877a2c07e 100644
+--- a/arch/riscv/lib/crypto/Makefile
++++ b/arch/riscv/lib/crypto/Makefile
+@@ -1,4 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
- obj-$(CONFIG_CRYPTO_POLY1305_P10) += poly1305-p10-crypto.o
- poly1305-p10-crypto-y := poly1305-p10-glue.o poly1305-p10le_64.o
+ obj-$(CONFIG_CRYPTO_CHACHA_RISCV64) += chacha-riscv64.o
+ chacha-riscv64-y := chacha-riscv64-glue.o chacha-riscv64-zvkb.o
 +
-+obj-$(CONFIG_CRYPTO_SHA256_PPC_SPE) += sha256-ppc-spe.o
-+sha256-ppc-spe-y := sha256.o sha256-spe-asm.o
-diff --git a/arch/powerpc/crypto/sha256-spe-asm.S b/arch/powerpc/lib/crypto/sha256-spe-asm.S
-similarity index 100%
-rename from arch/powerpc/crypto/sha256-spe-asm.S
-rename to arch/powerpc/lib/crypto/sha256-spe-asm.S
-diff --git a/arch/powerpc/lib/crypto/sha256.c b/arch/powerpc/lib/crypto/sha256.c
++obj-$(CONFIG_CRYPTO_SHA256_RISCV64) += sha256-riscv64.o
++sha256-riscv64-y := sha256.o sha256-riscv64-zvknha_or_zvknhb-zvkb.o
+diff --git a/arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S b/arch/riscv/lib/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S
+similarity index 98%
+rename from arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S
+rename to arch/riscv/lib/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S
+index f1f5779e47323..fad501ad06171 100644
+--- a/arch/riscv/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S
++++ b/arch/riscv/lib/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S
+@@ -104,12 +104,12 @@
+ 	sha256_4rounds	\last, \k1, W1, W2, W3, W0
+ 	sha256_4rounds	\last, \k2, W2, W3, W0, W1
+ 	sha256_4rounds	\last, \k3, W3, W0, W1, W2
+ .endm
+ 
+-// void sha256_transform_zvknha_or_zvknhb_zvkb(u32 state[8], const u8 *data,
+-//					       int num_blocks);
++// void sha256_transform_zvknha_or_zvknhb_zvkb(u32 state[SHA256_STATE_WORDS],
++//					       const u8 *data, size_t nblocks);
+ SYM_FUNC_START(sha256_transform_zvknha_or_zvknhb_zvkb)
+ 
+ 	// Load the round constants into K0-K15.
+ 	vsetivli	zero, 4, e32, m1, ta, ma
+ 	la		t0, K256
+diff --git a/arch/riscv/lib/crypto/sha256.c b/arch/riscv/lib/crypto/sha256.c
 new file mode 100644
-index 0000000000000..c05023c5acdd4
+index 0000000000000..18b84030f0b39
 --- /dev/null
-+++ b/arch/powerpc/lib/crypto/sha256.c
-@@ -0,0 +1,70 @@
++++ b/arch/riscv/lib/crypto/sha256.c
+@@ -0,0 +1,62 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * SHA-256 Secure Hash Algorithm, SPE optimized
++ * SHA-256 (RISC-V accelerated)
 + *
-+ * Based on generic implementation. The assembler module takes care
-+ * about the SPE registers so it can run from interrupt context.
++ * Copyright (C) 2022 VRULL GmbH
++ * Author: Heiko Stuebner <heiko.stuebner@vrull.eu>
 + *
-+ * Copyright (c) 2015 Markus Stockhausen <stockhausen@collogia.de>
++ * Copyright (C) 2023 SiFive, Inc.
++ * Author: Jerry Shih <jerry.shih@sifive.com>
 + */
 +
-+#include <asm/switch_to.h>
++#include <asm/simd.h>
++#include <asm/vector.h>
 +#include <crypto/internal/sha2.h>
++#include <crypto/internal/simd.h>
 +#include <linux/kernel.h>
 +#include <linux/module.h>
-+#include <linux/preempt.h>
 +
-+/*
-+ * MAX_BYTES defines the number of bytes that are allowed to be processed
-+ * between preempt_disable() and preempt_enable(). SHA256 takes ~2,000
-+ * operations per 64 bytes. e500 cores can issue two arithmetic instructions
-+ * per clock cycle using one 32/64 bit unit (SU1) and one 32 bit unit (SU2).
-+ * Thus 1KB of input data will need an estimated maximum of 18,000 cycles.
-+ * Headroom for cache misses included. Even with the low end model clocked
-+ * at 667 MHz this equals to a critical time window of less than 27us.
-+ *
-+ */
-+#define MAX_BYTES 1024
++asmlinkage void sha256_transform_zvknha_or_zvknhb_zvkb(
++	u32 state[SHA256_STATE_WORDS], const u8 *data, size_t nblocks);
 +
-+extern void ppc_spe_sha256_transform(u32 *state, const u8 *src, u32 blocks);
-+
-+static void spe_begin(void)
-+{
-+	/* We just start SPE operations and will save SPE registers later. */
-+	preempt_disable();
-+	enable_kernel_spe();
-+}
-+
-+static void spe_end(void)
-+{
-+	disable_kernel_spe();
-+	/* reenable preemption */
-+	preempt_enable();
-+}
++static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_extensions);
 +
 +void sha256_blocks_arch(u32 state[SHA256_STATE_WORDS],
 +			const u8 *data, size_t nblocks)
 +{
-+	do {
-+		/* cut input data into smaller blocks */
-+		u32 unit = min_t(size_t, nblocks,
-+				 MAX_BYTES / SHA256_BLOCK_SIZE);
-+
-+		spe_begin();
-+		ppc_spe_sha256_transform(state, data, unit);
-+		spe_end();
-+
-+		data += unit * SHA256_BLOCK_SIZE;
-+		nblocks -= unit;
-+	} while (nblocks);
++	if (static_branch_likely(&have_extensions) && crypto_simd_usable()) {
++		kernel_vector_begin();
++		sha256_transform_zvknha_or_zvknhb_zvkb(state, data, nblocks);
++		kernel_vector_end();
++	} else {
++		sha256_blocks_generic(state, data, nblocks);
++	}
 +}
 +EXPORT_SYMBOL(sha256_blocks_arch);
 +
 +bool sha256_is_arch_optimized(void)
 +{
-+	return true;
++	return static_key_enabled(&have_extensions);
 +}
 +EXPORT_SYMBOL(sha256_is_arch_optimized);
 +
++static int __init riscv64_sha256_mod_init(void)
++{
++	/* Both zvknha and zvknhb provide the SHA-256 instructions. */
++	if ((riscv_isa_extension_available(NULL, ZVKNHA) ||
++	     riscv_isa_extension_available(NULL, ZVKNHB)) &&
++	    riscv_isa_extension_available(NULL, ZVKB) &&
++	    riscv_vector_vlen() >= 128)
++		static_branch_enable(&have_extensions);
++	return 0;
++}
++arch_initcall(riscv64_sha256_mod_init);
++
++static void __exit riscv64_sha256_mod_exit(void)
++{
++}
++module_exit(riscv64_sha256_mod_exit);
++
++MODULE_DESCRIPTION("SHA-256 (RISC-V accelerated)");
++MODULE_AUTHOR("Heiko Stuebner <heiko.stuebner@vrull.eu>");
 +MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("SHA-256 Secure Hash Algorithm, SPE optimized");
 -- 
 2.49.0
 
