@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-11598-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11599-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF7E7A9D98B
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Apr 2025 11:07:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A04A1A9D995
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Apr 2025 11:07:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23D444A832C
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Apr 2025 09:07:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F5287AA11A
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Apr 2025 09:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F0724E00F;
-	Sat, 26 Apr 2025 09:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7414D21CA0C;
+	Sat, 26 Apr 2025 09:07:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYe4NFoq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BGvie6s6"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FF6224226;
-	Sat, 26 Apr 2025 09:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379BF224226;
+	Sat, 26 Apr 2025 09:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745658452; cv=none; b=khw+kr4wZc6h3esOO0whKDHDOy/t0Eifj+evLt/cNdT9GbuUhwDiccmPgvL8Q4p9nafsnp58qJc5DCZpM4bSR23Npy/cYbuziXdVl7W5rP571bptFfsIlOjz077QG+FQu+iG7Sgmli1J2E6xH68bVDeo+nJ2Is8D899noOrzMo0=
+	t=1745658468; cv=none; b=sBdnFYBQvQhoUp86aLOtKEUS8ZTT3cX5o+R1NCEL2nDct931UNUx56qu/AELvu5iWLFJud7ASnEWwLauSeddSvZ9SdOKomavs/sGDnz9FMu7pS1VpiYE8UHk2mgj27vVs+X/e5wdE2LNh2bJiol099Nv3KXuswW/myv3w3iI7lA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745658452; c=relaxed/simple;
-	bh=buxmpgDAU4rRbUrUPrakdwPyAA4SBheAoAn/RaFjaNY=;
+	s=arc-20240116; t=1745658468; c=relaxed/simple;
+	bh=tWnubF9yZCDGQjCpvAPwhcthzUF61M7My64owmsX1wE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p8ssCKRmnSTQDBNQ1EsvMR1n1VmdzHHFpFAWTtq8wPCP61n1Bg244F00o70OT98P83Fg3OO/67rLH+pHgZaJK+pBztLh/LlqfdITPc0le1Tmf7yXas6xjR8CHGuJm0+bq5Za5TTdbk/3kS0OZrvypzdNsRTx6JUtkHX+1QjVjUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYe4NFoq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D52ABC4CEE8;
-	Sat, 26 Apr 2025 09:07:31 +0000 (UTC)
+	 To:Cc:Content-Type; b=tQgSLtoVGwzgH1W4fC2u16TqL+OcJDdLHU24OcgNYFDIjc+/khBXTx4sIRiwSJYA1X6CCfDb78IyO77EauVM8Q5dhKFgPUmymgstSw0buhUZ+bIRIz2ANYQtiKkX1P7Do78VcWjA8qpjuC7eT4PYZ5iITue/SN8D32ZgSVrZzBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BGvie6s6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3438C4CEE8;
+	Sat, 26 Apr 2025 09:07:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745658451;
-	bh=buxmpgDAU4rRbUrUPrakdwPyAA4SBheAoAn/RaFjaNY=;
+	s=k20201202; t=1745658467;
+	bh=tWnubF9yZCDGQjCpvAPwhcthzUF61M7My64owmsX1wE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iYe4NFoqbzJakUpL2a1Z/LN3jzqaUq3m6wX0mgOsNE5ArZ4gofJSd8kuzzJT3onf0
-	 AMZpNsMuzVXzozYox/DJP43JL4hqOFx+ePjSNd3izsSNh1nZM2FRWCce5N6SJ6mB8q
-	 g7jWvIAsVsfdLVGGw3mtHpy2kkervKAITav/mDRs9sjA/BD31/hfiINg1qSF3yPh8H
-	 ggkYKUwDEZR/B3U6IXkxzVGkg5keeio1nepI5b33Wx12arJP1JxFTE8Ji+/Mw+Ixih
-	 YYPIbYNHWO2BtHIzeqkjvEn6Pn3QzfwLsMOL0L1MvDR7qPjgaPEak/fMXmQ8o+hqds
-	 ckFe2FpwoO/gQ==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-54e816aeca6so2617606e87.2;
-        Sat, 26 Apr 2025 02:07:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUe8m9L8XIQwllSaRrtKSoGj0fhLEyvT/g3ZR/wXwHqxvoqB+EeLrM5Z46YH/zIQ7UNqO3IF1qFBybiWA==@vger.kernel.org, AJvYcCWbUwCSUyR5rDP8pxn2C8S+iDO9AlkyV0FSU6znwJQE9guXUjBHwBy99o0i63OyKdgxxjdzB9hih712+A==@vger.kernel.org, AJvYcCWiNpNJJPUmS5b+28jAoTyCRyQdNpUqGU/Av44vBVJNJFXsRESyr48qB+D1V6RpEB2CDfmGtIesM6o9Gw==@vger.kernel.org, AJvYcCXD3CNZ+Xb4C5b6wWPPB8JOep9eib+2H+xofrZQ1SQPfP4adT7UigAELNIZwVyGBaiQMSriv7rIg/KqKNsc@vger.kernel.org, AJvYcCXHgfuaTW2BhD4CH6rXh4EnYrwz3oriVygcL73PJAWxwCB0duwmimrmlL+KYYvSAtZkhtjdwivx0x1S@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyojykAfYixZtKBOo8YqevBWjIebuNKxyx2Rog9Mkt0zcxr3kW
-	VlaTgJXv/hA2dyGMulnyP6PP88w9HCsjqc6vppThnOxyeI6LG49jaKAfO8lhESnl70ptRAp7EfO
-	c4Ny/g4llN7VaS8awEjPWtsOyAk8=
-X-Google-Smtp-Source: AGHT+IGJ8kVblFjzzc4iKrNwvB8Li0uKGxlh3w81ehqTxUdVSkCQSygCbDPyUqy8FGBbbYlDPRasDsnkAI7N2GRBzdk=
-X-Received: by 2002:a05:6512:308c:b0:54e:81ec:2c83 with SMTP id
- 2adb3069b0e04-54e8cbd5977mr1469007e87.18.1745658450215; Sat, 26 Apr 2025
- 02:07:30 -0700 (PDT)
+	b=BGvie6s6s+W7PK3hxSq8nPlG8ennMfM3lnISFEQrUyC4UzK78trdr7Q3N4PxZWKGm
+	 u3JYC0P0nu2po5zLfchiwxvN07nheJw1c8N3DJ0oYXgLh08sxsGZzR+BZhoCgqYD87
+	 kykCpg/vW//2i+YNodprO2sgjUXdo+RjDbir/vOJ6Aq1fSh2X3o5aharuwWiRNr/wQ
+	 HJB5V2cdNkHE2Yqtyhq9ZamuUFceakG8CT0ggdIczCuVeA0YaxctVXQcTQcrXHPZbe
+	 J0BHWNzQwvXFFybH2feeOqiJZWQXbxgWkrSLrYO/nUzaMAHa5G1KZNn7WjNo2k3f3o
+	 Wt/RAbFEwiipw==
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-30bfe0d2b6dso29853061fa.3;
+        Sat, 26 Apr 2025 02:07:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVSR9DbmCR86WQB3YMTkX+lZ4eolEumGk7AolNPjaEWT4SprFH0HQBzglCqVmEnJA/oLJHyAejp1gY74cVs@vger.kernel.org, AJvYcCVhrOirHO0HA1JLMELibq1kxXE5+B2pbxAXTfCj2u4qgQpgfiiHnAM5zFSXSYW9kKCeNGfw+jpTkKX+RQ==@vger.kernel.org, AJvYcCWS1GhMe/1cEd85xR+64z7tLu8RSXqsXIXaaFKHyNnvQoBfrLsn8YHwAGRvQa4BGKU/V5mAzs4Kw/MS@vger.kernel.org, AJvYcCWfMVKzvyr8ZJ9bWnxte36HQhPyj/0PlpTue4q0auTq09urvbgxpex5aH3Q/6QgXxZPXaaYMbZz891o+w==@vger.kernel.org, AJvYcCWxmv0UXNpcxxMnWkmHvCAuVKXAL2NfDJLnYZNXvOX4JCGMZAIGtcMMzdY0urk1VxSpQ4ct92raY7E4oA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuiKReGLeII1PZDaj6rann1cYjfjSS/OnRRN+un2KkV7o1OkZN
+	nQ9J7CrKOk7i5fTH7ESY13x384IhLjw2VbZOq7bipCGdS7A7ee+QOAM5zaVqUScRkfDnlF848tf
+	/R2DPnJURTZg9I2Ht7MejLokeP0c=
+X-Google-Smtp-Source: AGHT+IFQ6d5LkceuPYf/xl1qz8Cz4agL96VnxeacTrxQe8bWMsw0LVAsS8Ui3mFUbafLHpHr7zqezdjks0Oba2s2Raw=
+X-Received: by 2002:a2e:a9a8:0:b0:30c:1fc4:418e with SMTP id
+ 38308e7fff4ca-31907611d52mr17479061fa.26.1745658466100; Sat, 26 Apr 2025
+ 02:07:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250426065041.1551914-1-ebiggers@kernel.org> <20250426065041.1551914-5-ebiggers@kernel.org>
-In-Reply-To: <20250426065041.1551914-5-ebiggers@kernel.org>
+References: <20250426065041.1551914-1-ebiggers@kernel.org> <20250426065041.1551914-4-ebiggers@kernel.org>
+In-Reply-To: <20250426065041.1551914-4-ebiggers@kernel.org>
 From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sat, 26 Apr 2025 11:07:18 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXE1BKGspnSmqFJkqLCMMT+j=ZHEngKqcdOJsQ-LkyQdMg@mail.gmail.com>
-X-Gm-Features: ATxdqUGaw6rq_tP-WceTvDry4j7gdc2ygQ9IvUcCsDooEKyi9c3QpD_gnY-Uz9Q
-Message-ID: <CAMj1kXE1BKGspnSmqFJkqLCMMT+j=ZHEngKqcdOJsQ-LkyQdMg@mail.gmail.com>
-Subject: Re: [PATCH 04/13] crypto: arm64/sha256 - implement library instead of shash
+Date: Sat, 26 Apr 2025 11:07:35 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHd7zDfH3FzrEiEd07SHa9Kg_P0LYaKNZL-WFR1gYwxww@mail.gmail.com>
+X-Gm-Features: ATxdqUGuJmhadssxS6Ou5Vd5gSzDagv6eV7-J6URiZ1n5H0_6vtm3_ipq2KqSAM
+Message-ID: <CAMj1kXHd7zDfH3FzrEiEd07SHa9Kg_P0LYaKNZL-WFR1gYwxww@mail.gmail.com>
+Subject: Re: [PATCH 03/13] crypto: arm64/sha256 - remove obsolete chunking logic
 To: Eric Biggers <ebiggers@kernel.org>
 Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
@@ -78,57 +78,13 @@ On Sat, 26 Apr 2025 at 08:51, Eric Biggers <ebiggers@kernel.org> wrote:
 >
 > From: Eric Biggers <ebiggers@google.com>
 >
-> Instead of providing crypto_shash algorithms for the arch-optimized
-> SHA-256 code, instead implement the SHA-256 library.  This is much
-> simpler, it makes the SHA-256 library functions be arch-optimized, and
-> it fixes the longstanding issue where the arch-optimized SHA-256 was
-> disabled by default.  SHA-256 still remains available through
-> crypto_shash, but individual architectures no longer need to handle it.
+> Since kernel-mode NEON sections are now preemptible on arm64, there is
+> no longer any need to limit the length of them.
 >
-> Remove support for SHA-256 finalization from the ARMv8 CE assembly code,
-> since the library does not yet support architecture-specific overrides
-> of the finalization.  (Support for that has been omitted for now, for
-> simplicity and because usually it isn't performance-critical.)
->
-
-This is fine - when I added this, kernel mode neon on arm64 would
-eagerly preserve and restore the FP/SIMD state every time, but this is
-no longer the case.
-
-
-> To match sha256_blocks_arch(), change the type of the nblocks parameter
-> of the assembly functions from int or 'unsigned int' to size_t.  Update
-> the ARMv8 CE assembly function accordingly.  The scalar and NEON
-> assembly functions actually already treated it as size_t.
->
-> While renaming the assembly files, also fix the naming quirks where
-> "sha2" meant sha256, and "sha512" meant both sha256 and sha512.
->
-
-Good idea. Note that the ARM architecture's SHA2 extension only
-supports SHA256 not SHA512 (which is a separate extension), so this is
-where the confusion came from.
-
-
 > Signed-off-by: Eric Biggers <ebiggers@google.com>
 > ---
->  arch/arm64/configs/defconfig                  |   1 -
->  arch/arm64/crypto/Kconfig                     |  19 ---
->  arch/arm64/crypto/Makefile                    |  13 +-
->  arch/arm64/crypto/sha2-ce-glue.c              | 138 ----------------
->  arch/arm64/crypto/sha256-glue.c               | 156 ------------------
->  arch/arm64/lib/crypto/.gitignore              |   1 +
->  arch/arm64/lib/crypto/Kconfig                 |   5 +
->  arch/arm64/lib/crypto/Makefile                |   9 +-
->  .../crypto/sha2-armv8.pl}                     |   0
->  .../sha2-ce-core.S => lib/crypto/sha256-ce.S} |  36 +---
->  arch/arm64/lib/crypto/sha256.c                |  75 +++++++++
->  11 files changed, 98 insertions(+), 355 deletions(-)
->  delete mode 100644 arch/arm64/crypto/sha2-ce-glue.c
->  delete mode 100644 arch/arm64/crypto/sha256-glue.c
->  rename arch/arm64/{crypto/sha512-armv8.pl => lib/crypto/sha2-armv8.pl} (100%)
->  rename arch/arm64/{crypto/sha2-ce-core.S => lib/crypto/sha256-ce.S} (80%)
->  create mode 100644 arch/arm64/lib/crypto/sha256.c
+>  arch/arm64/crypto/sha256-glue.c | 19 ++-----------------
+>  1 file changed, 2 insertions(+), 17 deletions(-)
 >
 
 Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
