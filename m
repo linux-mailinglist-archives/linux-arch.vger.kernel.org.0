@@ -1,49 +1,56 @@
-Return-Path: <linux-arch+bounces-11631-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11632-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E464BA9E2F9
-	for <lists+linux-arch@lfdr.de>; Sun, 27 Apr 2025 14:35:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04FC1A9E307
+	for <lists+linux-arch@lfdr.de>; Sun, 27 Apr 2025 14:42:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43211174B2D
-	for <lists+linux-arch@lfdr.de>; Sun, 27 Apr 2025 12:35:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C9C85A29F7
+	for <lists+linux-arch@lfdr.de>; Sun, 27 Apr 2025 12:41:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 427903FFD;
-	Sun, 27 Apr 2025 12:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26D13FFD;
+	Sun, 27 Apr 2025 12:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/bC3K8g"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="LB/WZAlf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0405423DE;
-	Sun, 27 Apr 2025 12:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1E433EA;
+	Sun, 27 Apr 2025 12:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745757310; cv=none; b=to+7c8oAijA8FFlQno39SG8pNyLlRYhEVG7Kc5+ya1uTMXnMQymSu/Y7L4n+XGOoTecMQ/zlzDP6V8w13/2sergUc1XWiJQXKxqoIDYqNwoWNrc8wVusEMn/87NDjAHCD4OvBNWYaaUQ0abpn7vneNk2IcY60hKBzjjf4T4YkSE=
+	t=1745757716; cv=none; b=nXjhFm65rCTuvbs9lo+nBI35xbVdXcPeYsqqcg8edbxbXxEP2OP2rD9RNVYmKeDJ2wtSinwvkeWcMr7Cz0JW2rCOj1jLa3f+hdLnDRoqXuaF2R6s8dfsb+6RTje7P5+Y+aLV5k3dRq5g0fSh8vrIBUWzz6CAQHub2k4ajMevzWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745757310; c=relaxed/simple;
-	bh=+fG06d9jSSQdeLJWYT8qSWyP0TU2u5CifNzbFJ/XfgY=;
+	s=arc-20240116; t=1745757716; c=relaxed/simple;
+	bh=HlWSQte4tLw9PjoHfjPm7m9bE0tjBHVsK0uKDx2ObhI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JMsP+D1KsLlmNcg6p2UfyYxcj7cSnvBw5uCuck9lSNL0yzUdsrnemgagpc5rvMZ8mZZNGlOfErRgXuBxII1sIpcwCV+nRRjETpw3BZ9JTe6R1hqziNY23O2kuAqbDOI9LFg7QJ1MwdS5COn76FKs6KgbHqHEe45S3DxKxBuM5f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/bC3K8g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C871EC4CEE3;
-	Sun, 27 Apr 2025 12:35:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745757309;
-	bh=+fG06d9jSSQdeLJWYT8qSWyP0TU2u5CifNzbFJ/XfgY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z/bC3K8gVx5897sx0m9B41J6wHjyFDFZgASHs9iyreaRRk2MKpyYUHIChH0IMZ+YE
-	 CzZkzcFERGfABqvMeyokm38y2VZH1t5PXI3jqlNLj31O6QzfV4ZyHuWpQD5SufL8sh
-	 rMNwaM4baXS3hhq65SxgADqCkLMyuW5V/NMVsX9ArKa0gLMzlxZ3ipvrpf8J83tU+o
-	 uflwveBrQ+n/Bix3Mc+6fn73BsQynQkFCU+yjw5oweub/OLg/mgN4a2AvYIkGcsQxu
-	 WG/oK62LsN1zFPX/8VNMqn7nvg/p7bTy/cbZYyeFB1PCxyrBqaBIAWTWK+La5mkmHu
-	 OvCP4g5GpgVHQ==
-Date: Sun, 27 Apr 2025 05:35:14 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RvUaF4m2oTQpVGzrX+4W+l/Y4OC4+CW1ERjThOWr/pXA+Pd0rMvQpiwuQWivU6km76GsC0LjZMntPt6LyRfyqoUNyPanTBO1D92HBouLhxqM0p+/JYh8KREN8f/PoNbyd7Xwdnbw89311fOrCsaQ4WesozgztXhl+wxIqsJdY/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=LB/WZAlf; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=8B83JaeVQLHgFCWXWffwqUb0JmXK1uEo4GZHcdcva+Y=; b=LB/WZAlfGOzyKCTr/sq7hB3Rdp
+	87DGEL/SX99F82X/5S3CEt+KMPNil4eQ5XKn9HKMnUxA4cfDf2PrRlmreWsvqfNqxji0Ahm+IqUQd
+	wXdO33aEhGmFBOIXuWpE+8bZioYkuicGAN5B/jPJ2fK2P8K9cQiDFC/DlSxp1X3SHny4nVm15XAer
+	aSB48aWcfnwfs22dSqJc1WnuG99u9FTL86VXIeZNZAw4NPoARt7CX+u2bzA4RtU1Kraqbddk4uCU/
+	yAMqvxfq3a/ZkqN2tSwmIOwRD7TQsIjCpK6QaSzQIFGD7u7OUwRc33CrLVfbIPdhLP99OmnTsWDY/
+	Uek3AdhQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1u91KE-001OSo-2c;
+	Sun, 27 Apr 2025 20:41:39 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 27 Apr 2025 20:41:38 +0800
+Date: Sun, 27 Apr 2025 20:41:38 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Eric Biggers <ebiggers@kernel.org>
 Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
 	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
@@ -53,8 +60,9 @@ Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
 	"Jason A . Donenfeld " <Jason@zx2c4.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>
 Subject: Re: [v2 PATCH 00/13] Architecture-optimized SHA-256 library API
-Message-ID: <20250427123514.GA1161@quark>
+Message-ID: <aA4mAlozk3RvxvTe@gondor.apana.org.au>
 References: <cover.1745734678.git.herbert@gondor.apana.org.au>
+ <20250427123514.GA1161@quark>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -63,31 +71,27 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1745734678.git.herbert@gondor.apana.org.au>
+In-Reply-To: <20250427123514.GA1161@quark>
 
-On Sun, Apr 27, 2025 at 02:30:41PM +0800, Herbert Xu wrote:
-> Changes in v2:
-> - Rebase on top of lib partial block helper series.
-> - Restore the block-only shash implementation of sha256.
-> - Move the SIMD hardirq test out of the block functions so that
->   it is only done for the lib/crypto interface.
-> - Split the lib/crypto sha256 module to break cycle in allmod build.
-> 
-> This is based on
-> 
-> 	https://patchwork.kernel.org/project/linux-crypto/list/?series=957415
+On Sun, Apr 27, 2025 at 05:35:14AM -0700, Eric Biggers wrote:
+>
+> Well, barely a day and you've already ruined my patch series.  Now instead of a
+> clean design where the crypto_shash API is built on top of the normal library
+> API (sha256_update() etc.), there's now a special low-level API
+> "sha256_choose_blocks()" just for shash that it's built on top of instead, for
+> no good reason.  You're also still pushing your broken BLOCK_HASH_UPDATE_BLOCKS
+> macro that doesn't work with size_t, and putting my name on your broken code
+> that uses it.
 
-Well, barely a day and you've already ruined my patch series.  Now instead of a
-clean design where the crypto_shash API is built on top of the normal library
-API (sha256_update() etc.), there's now a special low-level API
-"sha256_choose_blocks()" just for shash that it's built on top of instead, for
-no good reason.  You're also still pushing your broken BLOCK_HASH_UPDATE_BLOCKS
-macro that doesn't work with size_t, and putting my name on your broken code
-that uses it.
+Your design is unacceptable because you're forcing the partial block
+handling on shash where it's not needed, just as you're forcing the
+hardirq support on everything.
 
-And yes, sorry about the allmodconfig build error.  It just means that the
-generic code needs to be split into its own module, like how curve25519 works.
-I'll post a new version with that fixed and your gratuitous changes undone.
+I'll take your point about size_t and update the BLOCK_HASH helper.
 
-- Eric
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
