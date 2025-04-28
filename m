@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-11669-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11671-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D28BA9FBA0
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 23:08:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E666A9FBA7
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 23:08:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38AF07AFCCB
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:07:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62ABF7B0064
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9BF520C00C;
-	Mon, 28 Apr 2025 21:07:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4032820F066;
+	Mon, 28 Apr 2025 21:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="UfH3SmNt"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="mSxULQWV"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E708E1F3BA9;
-	Mon, 28 Apr 2025 21:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E03A1FE457;
+	Mon, 28 Apr 2025 21:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745874466; cv=none; b=eu20hqDLug/447R/nuepzfQ/7598N29IVPbTei9f3pFV27kba3ZX3F8bzMecKB59qhgxP+WOBlqveZGAgopWRrjmpootvrjIivIMfkmAXSB1yrLrtYs/DejyNPPd0wkpGIMU0P4fZOePXmMFdH24dnfZVJ/PnNIsYVOaRCVB7ww=
+	t=1745874467; cv=none; b=Lu3xtJCq96GXZeK5S3JIGY/aeOccR0IPOQc8rzJjy/MhwGHHyf6GAeTJDp9aEWrsmCHwwT026GD7tkiLHiZjUsQaA0ZKomQINpkAqxj24ObPXyyrFEWPLSH8CHHHJkTMoqAQSWQCzUqC6XFiar7IItZJkwLo9JGum0Dgd8wFIrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745874466; c=relaxed/simple;
-	bh=8b1j4GyUqPu96FKtad2xZJrEuwU+g5/eYVLx8InT7K8=;
+	s=arc-20240116; t=1745874467; c=relaxed/simple;
+	bh=ElLO3nKrDtrQqJsYDen4MZDYKIWSq5DLCwjtU7z/5KA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sqeNCVnI1ZnMRQUtd5yFAEG+6lsK56Un8VKmJwmx/de778Ld1pkuGs6ySkW2iBxDFCSh7viVLqskk+Mdn6AYjaciKmQb6ROF8lBunTPV9KxASW/rnIfk4P3jUHdDkTeStxqv932TBUiHRRkcoJvNR1FSVkG7B7BYDyWeYFZJmHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=UfH3SmNt; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=S7b7f3ztM5l8wvT9ibYDy/zKlbhKuahVkE4M3ai4fzXZGxoyvONLLjGaX5UgObGj3l/pg5SJFtHBIt+82zX5LN+V7hn4/YmTMAVK9WvbAgbX0Vg6ta9S8whdOGGN9hNq/LKEv+vGex1nvK2yJOoxvJYZSXs21LtdOIh0nSvd8ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=mSxULQWV; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.1.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 43291211AD1D;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 9A237211AD20;
 	Mon, 28 Apr 2025 14:07:44 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 43291211AD1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9A237211AD20
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1745874464;
-	bh=+mIShGqCb4KmaZyQ3UOkWoGFmZpX84YmamhC0BZ3g/8=;
+	bh=qxTGFupUTWWf8lKbpdowC83cIFnBMsxvGwLF1y0eaf4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UfH3SmNtDSoX65xGXoHGpQc0ENxrD62FYVCBNJwnEVdcjqxdMrLUispHP90q0RC0P
-	 wxpFr7hgfVgO2u0Vla2yNzJ5Qf+DY2MoUNmOxpV7W+Qst1k3KVTi3cKvX8PbTCbimJ
-	 6qYSXfOZE5ApffVsaEpSKiKEpD0tELIx7hMQeXEk=
+	b=mSxULQWVXxsI4r1bJ5+/rBf9Ho1QDE8KfpowgKcHeteWysbIpkp6piQEkLmVhCSKg
+	 Uo9hPTkBznnLhHrEANL9antkcOaOeIpfGzQSZuwnYdk+aw8w5TPxeuU2kTlc/w2Fle
+	 qV1/2NBAJnrV8c0BDYkQVgi0a5AzzQkQspnlurG4=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -83,9 +83,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v9 01/11] arm64: kvm, smccc: Introduce and use API for getting hypervisor UUID
-Date: Mon, 28 Apr 2025 14:07:32 -0700
-Message-ID: <20250428210742.435282-2-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v9 02/11] arm64: hyperv: Use SMCCC to detect hypervisor presence
+Date: Mon, 28 Apr 2025 14:07:33 -0700
+Message-ID: <20250428210742.435282-3-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250428210742.435282-1-romank@linux.microsoft.com>
 References: <20250428210742.435282-1-romank@linux.microsoft.com>
@@ -97,196 +97,90 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The KVM/arm64 uses SMCCC to detect hypervisor presence. That code is
-private, and it follows the SMCCC specification. Other existing and
-emerging hypervisor guest implementations can and should use that
-standard approach as well.
+The arm64 Hyper-V startup path relies on ACPI to detect
+running under a Hyper-V compatible hypervisor. That
+doesn't work on non-ACPI systems.
 
-Factor out a common infrastructure that the guests can use, update KVM
-to employ the new API. The central notion of the SMCCC method is the
-UUID of the hypervisor, and the new API follows that.
-
-No functional changes. Validated with a KVM/arm64 guest.
+Hoist the ACPI detection logic into a separate function. Then
+use the vendor-specific hypervisor service call (implemented
+recently in Hyper-V) via SMCCC in the non-ACPI case.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
 Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 ---
- arch/arm64/kvm/hypercalls.c        | 10 +++--
- drivers/firmware/smccc/kvm_guest.c | 10 +----
- drivers/firmware/smccc/smccc.c     | 17 ++++++++
- include/linux/arm-smccc.h          | 64 ++++++++++++++++++++++++++++--
- 4 files changed, 85 insertions(+), 16 deletions(-)
+ arch/arm64/hyperv/mshyperv.c | 50 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 45 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-index 27ce4cb44904..e641cb2b47d7 100644
---- a/arch/arm64/kvm/hypercalls.c
-+++ b/arch/arm64/kvm/hypercalls.c
-@@ -268,6 +268,7 @@ int kvm_smccc_call_handler(struct kvm_vcpu *vcpu)
- 	u32 feature;
- 	u8 action;
- 	gpa_t gpa;
-+	uuid_t uuid;
- 
- 	action = kvm_smccc_get_action(vcpu, func_id);
- 	switch (action) {
-@@ -353,10 +354,11 @@ int kvm_smccc_call_handler(struct kvm_vcpu *vcpu)
- 			val[0] = gpa;
- 		break;
- 	case ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID:
--		val[0] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0;
--		val[1] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1;
--		val[2] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2;
--		val[3] = ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3;
-+		uuid = ARM_SMCCC_VENDOR_HYP_UID_KVM;
-+		val[0] = smccc_uuid_to_reg(&uuid, 0);
-+		val[1] = smccc_uuid_to_reg(&uuid, 1);
-+		val[2] = smccc_uuid_to_reg(&uuid, 2);
-+		val[3] = smccc_uuid_to_reg(&uuid, 3);
- 		break;
- 	case ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID:
- 		val[0] = smccc_feat->vendor_hyp_bmap;
-diff --git a/drivers/firmware/smccc/kvm_guest.c b/drivers/firmware/smccc/kvm_guest.c
-index f3319be20b36..87f910887d61 100644
---- a/drivers/firmware/smccc/kvm_guest.c
-+++ b/drivers/firmware/smccc/kvm_guest.c
-@@ -14,17 +14,11 @@ static DECLARE_BITMAP(__kvm_arm_hyp_services, ARM_SMCCC_KVM_NUM_FUNCS) __ro_afte
- 
- void __init kvm_init_hyp_services(void)
- {
-+	uuid_t kvm_uuid = ARM_SMCCC_VENDOR_HYP_UID_KVM;
- 	struct arm_smccc_res res;
- 	u32 val[4];
- 
--	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
--		return;
--
--	arm_smccc_1_1_invoke(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
--	if (res.a0 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0 ||
--	    res.a1 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1 ||
--	    res.a2 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2 ||
--	    res.a3 != ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3)
-+	if (!arm_smccc_hypervisor_has_uuid(&kvm_uuid))
- 		return;
- 
- 	memset(&res, 0, sizeof(res));
-diff --git a/drivers/firmware/smccc/smccc.c b/drivers/firmware/smccc/smccc.c
-index a74600d9f2d7..cd65b434dc6e 100644
---- a/drivers/firmware/smccc/smccc.c
-+++ b/drivers/firmware/smccc/smccc.c
-@@ -67,6 +67,23 @@ s32 arm_smccc_get_soc_id_revision(void)
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index 4e27cc29c79e..21458b6338aa 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -28,6 +28,48 @@ int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
  }
- EXPORT_SYMBOL_GPL(arm_smccc_get_soc_id_revision);
+ EXPORT_SYMBOL_GPL(hv_get_hypervisor_version);
  
-+bool arm_smccc_hypervisor_has_uuid(const uuid_t *hyp_uuid)
++#ifdef CONFIG_ACPI
++
++static bool __init hyperv_detect_via_acpi(void)
 +{
-+	struct arm_smccc_res res = {};
-+	uuid_t uuid;
-+
-+	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
++	if (acpi_disabled)
 +		return false;
-+
-+	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
-+	if (res.a0 == SMCCC_RET_NOT_SUPPORTED)
++	/*
++	 * Hypervisor ID is only available in ACPI v6+, and the
++	 * structure layout was extended in v6 to accommodate that
++	 * new field.
++	 *
++	 * At the very minimum, this check makes sure not to read
++	 * past the FADT structure.
++	 *
++	 * It is also needed to catch running in some unknown
++	 * non-Hyper-V environment that has ACPI 5.x or less.
++	 * In such a case, it can't be Hyper-V.
++	 */
++	if (acpi_gbl_FADT.header.revision < 6)
 +		return false;
-+
-+	uuid = smccc_res_to_uuid(res.a0, res.a1, res.a2, res.a3);
-+	return uuid_equal(&uuid, hyp_uuid);
++	return strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8) == 0;
 +}
-+EXPORT_SYMBOL_GPL(arm_smccc_hypervisor_has_uuid);
 +
- static int __init smccc_devices_init(void)
- {
- 	struct platform_device *pdev;
-diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
-index 67f6fdf2e7cd..d01fa54103a1 100644
---- a/include/linux/arm-smccc.h
-+++ b/include/linux/arm-smccc.h
-@@ -7,6 +7,11 @@
- 
- #include <linux/args.h>
- #include <linux/init.h>
++#else
 +
-+#ifndef __ASSEMBLY__
-+#include <linux/uuid.h>
++static bool __init hyperv_detect_via_acpi(void)
++{
++	return false;
++}
++
 +#endif
 +
- #include <uapi/linux/const.h>
- 
- /*
-@@ -107,10 +112,10 @@
- 			   ARM_SMCCC_FUNC_QUERY_CALL_UID)
- 
- /* KVM UID value: 28b46fb6-2ec5-11e9-a9ca-4b564d003a74 */
--#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_0	0xb66fb428U
--#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_1	0xe911c52eU
--#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_2	0x564bcaa9U
--#define ARM_SMCCC_VENDOR_HYP_UID_KVM_REG_3	0x743a004dU
-+#define ARM_SMCCC_VENDOR_HYP_UID_KVM UUID_INIT(\
-+	0xb66fb428, 0xc52e, 0xe911, \
-+	0xa9, 0xca, 0x4b, 0x56, \
-+	0x4d, 0x00, 0x3a, 0x74)
- 
- /* KVM "vendor specific" services */
- #define ARM_SMCCC_KVM_FUNC_FEATURES		0
-@@ -333,6 +338,57 @@ s32 arm_smccc_get_soc_id_version(void);
-  */
- s32 arm_smccc_get_soc_id_revision(void);
- 
-+#ifndef __ASSEMBLY__
-+
-+/*
-+ * Returns whether a specific hypervisor UUID is advertised for the
-+ * Vendor Specific Hypervisor Service range.
-+ */
-+bool arm_smccc_hypervisor_has_uuid(const uuid_t *uuid);
-+
-+static inline uuid_t smccc_res_to_uuid(u32 r0, u32 r1, u32 r2, u32 r3)
++static bool __init hyperv_detect_via_smccc(void)
 +{
-+	uuid_t uuid = {
-+		.b = {
-+			[0]  = (r0 >> 0)  & 0xff,
-+			[1]  = (r0 >> 8)  & 0xff,
-+			[2]  = (r0 >> 16) & 0xff,
-+			[3]  = (r0 >> 24) & 0xff,
++	uuid_t hyperv_uuid = UUID_INIT(
++		0x58ba324d, 0x6447, 0x24cd,
++		0x75, 0x6c, 0xef, 0x8e,
++		0x24, 0x70, 0x59, 0x16);
 +
-+			[4]  = (r1 >> 0)  & 0xff,
-+			[5]  = (r1 >> 8)  & 0xff,
-+			[6]  = (r1 >> 16) & 0xff,
-+			[7]  = (r1 >> 24) & 0xff,
-+
-+			[8]  = (r2 >> 0)  & 0xff,
-+			[9]  = (r2 >> 8)  & 0xff,
-+			[10] = (r2 >> 16) & 0xff,
-+			[11] = (r2 >> 24) & 0xff,
-+
-+			[12] = (r3 >> 0)  & 0xff,
-+			[13] = (r3 >> 8)  & 0xff,
-+			[14] = (r3 >> 16) & 0xff,
-+			[15] = (r3 >> 24) & 0xff,
-+		},
-+	};
-+
-+	return uuid;
++	return arm_smccc_hypervisor_has_uuid(&hyperv_uuid);
 +}
 +
-+static inline u32 smccc_uuid_to_reg(const uuid_t *uuid, int reg)
-+{
-+	u32 val = 0;
-+
-+	val |= (u32)(uuid->b[4 * reg + 0] << 0);
-+	val |= (u32)(uuid->b[4 * reg + 1] << 8);
-+	val |= (u32)(uuid->b[4 * reg + 2] << 16);
-+	val |= (u32)(uuid->b[4 * reg + 3] << 24);
-+
-+	return val;
-+}
-+
-+#endif /* !__ASSEMBLY__ */
-+
- /**
-  * struct arm_smccc_res - Result from SMC/HVC call
-  * @a0-a3 result values from registers 0 to 3
+ static int __init hyperv_init(void)
+ {
+ 	struct hv_get_vp_registers_output	result;
+@@ -36,13 +78,11 @@ static int __init hyperv_init(void)
+ 
+ 	/*
+ 	 * Allow for a kernel built with CONFIG_HYPERV to be running in
+-	 * a non-Hyper-V environment, including on DT instead of ACPI.
++	 * a non-Hyper-V environment.
++	 *
+ 	 * In such cases, do nothing and return success.
+ 	 */
+-	if (acpi_disabled)
+-		return 0;
+-
+-	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
++	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smccc())
+ 		return 0;
+ 
+ 	/* Setup the guest ID */
 -- 
 2.43.0
 
