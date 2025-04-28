@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-11666-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11667-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BAB8A9F95B
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:23:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7434BA9F966
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:24:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A51117730B
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 19:23:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85CFD3B1812
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 19:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53992957CB;
-	Mon, 28 Apr 2025 19:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D181B296D32;
+	Mon, 28 Apr 2025 19:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="fbo+7dHL"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="c5/deyEm"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D9618DB0A;
-	Mon, 28 Apr 2025 19:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 594282951B5;
+	Mon, 28 Apr 2025 19:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745868187; cv=none; b=oZ9tDkqDGFHw7rfIYWxX7GUOwkPnpJCWXE057Pvltv2kYme9dVpGG+1q+62bA0fONVwGj+9pqmlHpy5tXtKqvTmRqjdVZ1PRlXyZ3uLw7BqjQ3KbnjiYwWEzLK7lFwKpIp75jcEQ31vBp1DU7OGKbm6w8Pud0YCePOS42PiMvGk=
+	t=1745868273; cv=none; b=UPLO3T/0PtNivbcbPZ+aG15AOabmoSAUSa/PSJptLPgDWUNC2BQ1hmA3pF2bav5H352vQoFrwZCFSO8i19jYE45MfpF5lNHK3XLBs1yhaUEDtV09ik6AuFuxcA2VpOOXWI8ymiCTWNLFJUU5Bt1/AGBsZwYMOMVZ3aZhZGCaxe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745868187; c=relaxed/simple;
-	bh=ZvDoC81kFt4cDoyxtRck1vxVOGNhZRLiwTxrGEZGnvo=;
+	s=arc-20240116; t=1745868273; c=relaxed/simple;
+	bh=0R0wWZcT22Gz5EwOhZRf10HdVpYb17+fZ1v8MSKm+aA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UZjBUQdduy/LR9nOMvcW0JnoCBgfJtFRqtRMzXKQEFGW5MqLlDKVUTfCc042luLJHfQYFX681vC0C9Y+i8LGJCVSjVxojObE6V/vImGa0rC7Q78acOERynFE3dxAfWBSm8OvFJ0COUJEneUYoPo04OhjIecPcnI8mVLSGLS/zXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=fbo+7dHL; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=WAD0PIhZk9fX1fd9beJWNcyjbvHb29Ez1tOW8iYTSTa80xP+EptaBwrEESwWdE2av5r1NTomuZxTq1tjG5c2esv1w5sq6PclS02X0wYJS9WwwuMlZKK+tksFhD1yijoELLE4QGByJLdjaFujiCw0SgH3yAUp9jDeoyZbEDI+ctk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=c5/deyEm; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.137.184.60] (unknown [131.107.1.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 698AE211AD01;
-	Mon, 28 Apr 2025 12:23:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 698AE211AD01
+	by linux.microsoft.com (Postfix) with ESMTPSA id 864AA211AD01;
+	Mon, 28 Apr 2025 12:24:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 864AA211AD01
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1745868184;
-	bh=jGVkN1hybuqThviIpy5Yd0rlklDTmHHqQY1gOTTQ/aU=;
+	s=default; t=1745868271;
+	bh=fak+f+kHYzS1+ypKlrkk0dMyzj3faU9pGBD9R0QixDc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fbo+7dHLY2ZtqfyjtlaCC5jw3uqw6PD289mAPFW3y9leIqksoAj8pWNCIrbN3bTir
-	 t8IVF7ly+J9ECgXB/qJQ+LMth9i++CMUSEVRhbLOpC8MUWohTAzFbArmXIyjUraZ4l
-	 Qq5vCgAWx1+qCJmiI7PVXDfKUtWQvPmpyy6Pg9L8=
-Message-ID: <5cdb2703-2b94-4f38-a440-8f5c9a4c66be@linux.microsoft.com>
-Date: Mon, 28 Apr 2025 12:23:04 -0700
+	b=c5/deyEmjVX/7FlQ0FNHaDjnA6mqRGNSfHEiYzB4HTuBiubadDnAWmtlp7N1NP4g7
+	 1sWbdlpdDh385PrncF6gy/1MtXwt6smPEIrtWgLe0NiGQpkJ4v6/b0eX9stfd9pZpe
+	 TQe5YY7qT1JqkwkgPMaRBOVGpYcxkV5u5GyXdMNo=
+Message-ID: <cea3a58f-a251-4100-a614-1576876e5eca@linux.microsoft.com>
+Date: Mon, 28 Apr 2025 12:24:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,8 +49,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v8 02/11] arm64: hyperv: Use SMCCC to detect
- hypervisor presence
+Subject: Re: [PATCH hyperv-next v8 11/11] PCI: hv: Get vPCI MSI IRQ domain
+ from DeviceTree
 To: Michael Kelley <mhklinux@outlook.com>
 Cc: "apais@microsoft.com" <apais@microsoft.com>,
  "benhill@microsoft.com" <benhill@microsoft.com>,
@@ -92,70 +92,79 @@ Cc: "apais@microsoft.com" <apais@microsoft.com>,
  "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
  "x86@kernel.org" <x86@kernel.org>
 References: <20250414224713.1866095-1-romank@linux.microsoft.com>
- <20250414224713.1866095-3-romank@linux.microsoft.com>
- <SN6PR02MB41576A5C3C0F5911A308E804D4BC2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <20250414224713.1866095-12-romank@linux.microsoft.com>
+ <SN6PR02MB41572F24DCB9247E74876E41D4BC2@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Language: en-US
 From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB41576A5C3C0F5911A308E804D4BC2@SN6PR02MB4157.namprd02.prod.outlook.com>
+In-Reply-To: <SN6PR02MB41572F24DCB9247E74876E41D4BC2@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/17/2025 8:27 AM, Michael Kelley wrote:
+On 4/17/2025 8:28 AM, Michael Kelley wrote:
 > From: Roman Kisel <romank@linux.microsoft.com> Sent: Monday, April 14, 2025 3:47 PM
 [...]
-> I had previously given my Reviewed-by: on v5 of this patch. But
-> looking at it again, it would be nice if this UUID were defined in
-> include/linux/arm-smccc.h alongside the definition of
-> ARM_SMCCC_VENDOR_HYP_UID_KVM. The UUID values are
-> are independent of each other, but it's a bit asymmetric to have
-> the KVM UUID defined centrally while the Hyper-V UUID is
-> buried in Hyper-V specific code. But I'm OK with the current code
-> if there's nothing else to respin for.
+
+>> +	if (acpi_irq_model != ACPI_IRQ_MODEL_GIC)
+>> +		return NULL;
 > 
+> This causes a build error on arm64 if pci-hyperv.c is built as a
+> module because acpi_irq_model is not exported.
 
-As I saw that, KVM is special in the kernel as the kernel provides
-both the host side code and the kernel side code so the UUID has
-to be shared in the header file.
+Will fix that! Appreciate your reviews very much!
 
-In the Hyper-V case, we have only the guest side code so it seemed
-more economical to have that tucked into the function rather than
-adding to the arch-wide header and including the header.
-
-
->> +
->> +	return arm_smccc_hypervisor_has_uuid(&hyperv_uuid);
+> 
+> Michael
+> 
+>> +	gsi_domain_disp_fn = acpi_get_gsi_dispatcher();
+>> +	if (!gsi_domain_disp_fn)
+>> +		return NULL;
+>> +	return irq_find_matching_fwnode(gsi_domain_disp_fn(0),
+>> +				     DOMAIN_BUS_ANY);
 >> +}
 >> +
->>   static int __init hyperv_init(void)
+>> +#endif
+>> +
+>>   static int hv_pci_irqchip_init(void)
 >>   {
->>   	struct hv_get_vp_registers_output	result;
->> @@ -36,13 +78,11 @@ static int __init hyperv_init(void)
+>>   	static struct hv_pci_chip_data *chip_data;
+>>   	struct fwnode_handle *fn = NULL;
+>> +	struct irq_domain *irq_domain_parent = NULL;
+>>   	int ret = -ENOMEM;
 >>
->>   	/*
->>   	 * Allow for a kernel built with CONFIG_HYPERV to be running in
->> -	 * a non-Hyper-V environment, including on DT instead of ACPI.
->> +	 * a non-Hyper-V environment.
->> +	 *
->>   	 * In such cases, do nothing and return success.
+>>   	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
+>> @@ -907,9 +952,24 @@ static int hv_pci_irqchip_init(void)
+>>   	 * way to ensure that all the corresponding devices are also gone and
+>>   	 * no interrupts will be generated.
 >>   	 */
->> -	if (acpi_disabled)
->> -		return 0;
->> -
->> -	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
->> +	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smccc())
->>   		return 0;
+>> -	hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
+>> -							  fn, &hv_pci_domain_ops,
+>> -							  chip_data);
+>> +#ifdef CONFIG_ACPI
+>> +	if (!acpi_disabled)
+>> +		irq_domain_parent = hv_pci_acpi_irq_domain_parent();
+>> +#endif
+>> +#ifdef CONFIG_OF
+>> +	if (!irq_domain_parent)
+>> +		irq_domain_parent = hv_pci_of_irq_domain_parent();
+>> +#endif
+>> +	if (!irq_domain_parent) {
+>> +		WARN_ONCE(1, "Invalid firmware configuration for VMBus interrupts\n");
+>> +		ret = -EINVAL;
+>> +		goto free_chip;
+>> +	}
+>> +
+>> +	hv_msi_gic_irq_domain = irq_domain_create_hierarchy(irq_domain_parent, 0,
+>> +		HV_PCI_MSI_SPI_NR,
+>> +		fn, &hv_pci_domain_ops,
+>> +		chip_data);
 >>
->>   	/* Setup the guest ID */
+>>   	if (!hv_msi_gic_irq_domain) {
+>>   		pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
 >> --
 >> 2.43.0
 >>
-> 
-> My UUID comment notwithstanding,
-> 
-> Reviewed-by: Michael Kelley <mhklinux@outlook.com>
-> 
 > 
 
 -- 
