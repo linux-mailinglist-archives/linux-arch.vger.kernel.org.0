@@ -1,417 +1,342 @@
-Return-Path: <linux-arch+bounces-11668-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11670-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26934A9F9CC
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:41:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 784B6A9FBA1
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 23:08:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A0FC189F77C
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 19:41:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9DA94673C0
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C363D297A46;
-	Mon, 28 Apr 2025 19:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066A720D4F9;
+	Mon, 28 Apr 2025 21:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WjjYRwHC"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="M3xCB6nI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2C0297A45
-	for <linux-arch@vger.kernel.org>; Mon, 28 Apr 2025 19:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCEC41EE7BE;
+	Mon, 28 Apr 2025 21:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745869299; cv=none; b=M4K3O/m5FErIKuo4JrsaUjsXKVka6F1ljYYtdQGMiZl/FBp7oS42X9Gq5BBQ1/a8vaiukee77eockDEmR1wfdnp8Egf4ujAmlxSm/af0PpN3zzNZe6nthene6eh+CbhriW7fIioJKUWtpEaXMIVU7WZj/T+jwFktGMei/v1lbQ8=
+	t=1745874466; cv=none; b=dJhf1s8vp318S037a/jxgpdWmy0CXiDTXVAIYshRi16VFvbrNNF6gxkq+z2ztE4b7je83jRB3dowewaUwI9RwR6JgL0ymCwNgGkk0a16ks1KafUS2RrZavjU/XBx+4adLGkESc3N6uEKblJBoSeFi+UZCucDzmDQbAieiAm/Z4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745869299; c=relaxed/simple;
-	bh=3pvkFQ8g4boXkvIWB8jDh9QF4pYMLHjNV7YjF0sO8hk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qe9TAyTUdcD8Z/ntT7nWpSRY7dridOx4ebFkQfg1FNna/6zbJFTTJG3XrbkNhC5DrnBEZUXDzJ+6XG1Fu/dvFTg0FLTZgGMu7RovcVJWGg/AVlnQQcdWsws+YGmp2S20uhEjJYOAbyZKjRHKdMwbMZppHC30vQpuXwKelhXrufs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WjjYRwHC; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-47666573242so79521cf.0
-        for <linux-arch@vger.kernel.org>; Mon, 28 Apr 2025 12:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1745869296; x=1746474096; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wKWfssF+u5OUQugx4NcnkN6zDxuj94azMg1svC/t3H0=;
-        b=WjjYRwHC/qZSZVAactDgZXhFc0Xw8lCBYMygy9YzWvi4y4zUZkYGN/bFC+TuvyqmPw
-         ZHZckhskYZ0GDnqxcPsx9m2xxVxaTnM+7lYH8gvXC6L/x2jXHREZINXsypMKdejHoqUH
-         b2C/fkcMRB0aoEmyKIjB3ZJOa9SzgmT+CDPaz7/3FmwymiWU6zdFNBOGC0kjdPi/GOuT
-         AmNMjM96x2eeiHySUMgdVj2qKp3QfQyXG2GZ4C7JkpQ/nw/3tFEbDWL5p76EDzKEhCTb
-         qPtH2h1dWcmouVBOyIovm3SCiLytS5pt9yPcgYtsTFrSGVR9XesGZ+PTIgMamaM2E/zd
-         rvow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745869296; x=1746474096;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wKWfssF+u5OUQugx4NcnkN6zDxuj94azMg1svC/t3H0=;
-        b=PxCEXX8PqD1uScG2YbVRWFHIR+quHeZXLsOGhCtgEbHkajhCdyKNzGCEKwUD1dA4K5
-         vn4MdM5ILum4oGy05eMAyopG5pgqGwTHhEo/a5ZkZzwIamr8nc4nyji3wnNTYofC6epb
-         2wpBlXr7k7KOK1rHQaMTg5jFOFvVa1De6w9/JVelEomnFQRXAufwgZuuy8J2ND8KqJ1h
-         Zvokqcel23QQDqcq/5oC01M8qY4haGzkwx29JtScTN5WRcTE37VIB/VxdKYG2xmwnyCt
-         ccIrv89wDr17sN73oY/jrEEpmmdzMcJLPqezZyuteEUxHCtzK2Y5l8jGjGMsuJbvj5Yc
-         nifw==
-X-Gm-Message-State: AOJu0YyGGdfjYxoz8COfSz/iQuPIKFVC9M7z0kXWRRs1Hkgy6AegVtSW
-	t9bZ9ALhjkya0E7JrgJsfCLueKJe0qZupMPazoQdj03PqwxCc01riJ8lqQT17mHxFpoD+p/oDBY
-	2vtTIIfoha5IlkhFNMEeXWZ54rciHhmO5aC6p9SNmMV5i0wVnNQ==
-X-Gm-Gg: ASbGncvShU3IYV0cKsjH7/Sk9Uo0N6dewTiMD+c/VP+5TMAnoso8MxDFYpMZ0wEuUaJ
-	cJvS3fGOL9v0Vr2sOd1P/d/xr6Ol/kGXDvgQ7mr+42hE90Dt494KncpWnaLEfEUCyN+yZ0yq+kk
-	8oibGJxuKPSP09InNaoqns1Eb88gpOuAQ=
-X-Google-Smtp-Source: AGHT+IEAb9/CWKiFOrSPayRnBgtZa1u8k/Ptg2eV385V48qOG0DWCp5CYFLMT8RoDHirI5xvzEF77DD/lGFLx92h63g=
-X-Received: by 2002:ac8:5a8b:0:b0:477:2c12:9253 with SMTP id
- d75a77b69052e-4885b57a7e0mr788161cf.16.1745869296193; Mon, 28 Apr 2025
- 12:41:36 -0700 (PDT)
+	s=arc-20240116; t=1745874466; c=relaxed/simple;
+	bh=mAuZnXpIZXza2yqaFmmckcE6EI9/mgIYuU1UPpg+56Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UXmYSsyjpZg3ruJVawPnndopQ/Ouncja+9N+T1leK5iwrGdzAGpS7OTaVTQBywe25wY3DUmFplTnGYBjyQCZy0cjQN54PCm4LNuWLWgiC/CXhkU/T8Hq90ISB7LofJgtnJr8YvO66tH6H7VuhnMNGV2j9GQkMu0nCBYZmE4O8Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=M3xCB6nI; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from romank-3650.corp.microsoft.com (unknown [131.107.1.188])
+	by linux.microsoft.com (Postfix) with ESMTPSA id DB61E20BCAD1;
+	Mon, 28 Apr 2025 14:07:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DB61E20BCAD1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1745874464;
+	bh=QSRzi2tZPIvIrsfPgn9XnDgdRLZDtKC6Y9CQpDRifwU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=M3xCB6nI4T4edZdfuN4uLmiKdfs9Tkgkm2Xw1x/aOJOEqATA7M2R5w4ioXAc27Mjp
+	 lnQgmvPptLQOrU9ARFnraU78ZUBqWG4x0EhOdU96Gwac5vlCWPPK7igMKoyKXZCqUy
+	 80ZydzlLKDrOVkva2nuq25JUhTimm6FNSgxcOKns=
+From: Roman Kisel <romank@linux.microsoft.com>
+To: arnd@arndb.de,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	catalin.marinas@arm.com,
+	conor+dt@kernel.org,
+	dave.hansen@linux.intel.com,
+	decui@microsoft.com,
+	haiyangz@microsoft.com,
+	hpa@zytor.com,
+	joey.gouly@arm.com,
+	krzk+dt@kernel.org,
+	kw@linux.com,
+	kys@microsoft.com,
+	lenb@kernel.org,
+	lpieralisi@kernel.org,
+	manivannan.sadhasivam@linaro.org,
+	mark.rutland@arm.com,
+	maz@kernel.org,
+	mingo@redhat.com,
+	oliver.upton@linux.dev,
+	rafael@kernel.org,
+	robh@kernel.org,
+	ssengar@linux.microsoft.com,
+	sudeep.holla@arm.com,
+	suzuki.poulose@arm.com,
+	tglx@linutronix.de,
+	wei.liu@kernel.org,
+	will@kernel.org,
+	yuzenghui@huawei.com,
+	linux-hyperv@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-acpi@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	x86@kernel.org
+Cc: apais@microsoft.com,
+	benhill@microsoft.com,
+	bperkins@microsoft.com,
+	sunilmut@microsoft.com
+Subject: [PATCH hyperv-next v9 00/11] arm64: hyperv: Support Virtual Trust Level Boot
+Date: Mon, 28 Apr 2025 14:07:31 -0700
+Message-ID: <20250428210742.435282-1-romank@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250330164229.2174672-1-varadgautam@google.com> <CAOLDJO+=+hcz498KRc+95dF5y3hZdtm+3y35o2rBC9qAOF-vDg@mail.gmail.com>
-In-Reply-To: <CAOLDJO+=+hcz498KRc+95dF5y3hZdtm+3y35o2rBC9qAOF-vDg@mail.gmail.com>
-From: Varad Gautam <varadgautam@google.com>
-Date: Mon, 28 Apr 2025 21:41:24 +0200
-X-Gm-Features: ATxdqUFuTivxUUQ8V8ic_I5aXx6zoGkrsdP9Pi1LrRBFnss-Olz0Mr2pZPcUuEY
-Message-ID: <CAOLDJOKiEmde5Max0BnTBVpNmfpm-wwYLJ4Etv8D2KZKPHyFzw@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic/io.h: Skip trace helpers if rwmmio events are disabled
-To: linux-arch@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Sai Prakash Ranjan <quic_saipraka@quicinc.com>, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 7, 2025 at 6:13=E2=80=AFPM Varad Gautam <varadgautam@google.com=
-> wrote:
->
-> On Sun, Mar 30, 2025 at 6:42=E2=80=AFPM Varad Gautam <varadgautam@google.=
-com> wrote:
-> >
-> > With `CONFIG_TRACE_MMIO_ACCESS=3Dy`, the `{read,write}{b,w,l,q}{_relaxe=
-d}()`
-> > mmio accessors unconditionally call `log_{post_}{read,write}_mmio()`
-> > helpers, which in turn call the ftrace ops for `rwmmio` trace events
-> >
-> > This adds a performance penalty per mmio accessor call, even when
-> > `rwmmio` events are disabled at runtime (~80% overhead on local
-> > measurement).
-> >
-> > Guard these with `tracepoint_enabled()`.
-> >
-> > Signed-off-by: Varad Gautam <varadgautam@google.com>
-> > Fixes: 210031971cdd ("asm-generic/io: Add logging support for MMIO acce=
-ssors")
-> > Cc: <stable@vger.kernel.org>
->
-> Ping.
->
+This patch set allows the Hyper-V code to boot on ARM64 inside a Virtual Trust
+Level. These levels are a part of the Virtual Secure Mode documented in the
+Top-Level Functional Specification available at
+https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm.
 
-Ping.
+The OpenHCL paravisor https://github.com/microsoft/openvmm/tree/main/openhcl
+can serve as a practical application of these patches on ARM64.
 
-> > ---
-> >  include/asm-generic/io.h | 98 +++++++++++++++++++++++++++-------------
-> >  1 file changed, 66 insertions(+), 32 deletions(-)
-> >
-> > diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> > index 3c61c29ff6ab..a9b5da547523 100644
-> > --- a/include/asm-generic/io.h
-> > +++ b/include/asm-generic/io.h
-> > @@ -75,6 +75,7 @@
-> >  #if IS_ENABLED(CONFIG_TRACE_MMIO_ACCESS) && !(defined(__DISABLE_TRACE_=
-MMIO__))
-> >  #include <linux/tracepoint-defs.h>
-> >
-> > +#define rwmmio_tracepoint_enabled(tracepoint) tracepoint_enabled(trace=
-point)
-> >  DECLARE_TRACEPOINT(rwmmio_write);
-> >  DECLARE_TRACEPOINT(rwmmio_post_write);
-> >  DECLARE_TRACEPOINT(rwmmio_read);
-> > @@ -91,6 +92,7 @@ void log_post_read_mmio(u64 val, u8 width, const vola=
-tile void __iomem *addr,
-> >
-> >  #else
-> >
-> > +#define rwmmio_tracepoint_enabled(tracepoint) false
-> >  static inline void log_write_mmio(u64 val, u8 width, volatile void __i=
-omem *addr,
-> >                                   unsigned long caller_addr, unsigned l=
-ong caller_addr0) {}
-> >  static inline void log_post_write_mmio(u64 val, u8 width, volatile voi=
-d __iomem *addr,
-> > @@ -189,11 +191,13 @@ static inline u8 readb(const volatile void __iome=
-m *addr)
-> >  {
-> >         u8 val;
-> >
-> > -       log_read_mmio(8, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_read))
-> > +               log_read_mmio(8, addr, _THIS_IP_, _RET_IP_);
-> >         __io_br();
-> >         val =3D __raw_readb(addr);
-> >         __io_ar(val);
-> > -       log_post_read_mmio(val, 8, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_read))
-> > +               log_post_read_mmio(val, 8, addr, _THIS_IP_, _RET_IP_);
-> >         return val;
-> >  }
-> >  #endif
-> > @@ -204,11 +208,13 @@ static inline u16 readw(const volatile void __iom=
-em *addr)
-> >  {
-> >         u16 val;
-> >
-> > -       log_read_mmio(16, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_read))
-> > +               log_read_mmio(16, addr, _THIS_IP_, _RET_IP_);
-> >         __io_br();
-> >         val =3D __le16_to_cpu((__le16 __force)__raw_readw(addr));
-> >         __io_ar(val);
-> > -       log_post_read_mmio(val, 16, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_read))
-> > +               log_post_read_mmio(val, 16, addr, _THIS_IP_, _RET_IP_);
-> >         return val;
-> >  }
-> >  #endif
-> > @@ -219,11 +225,13 @@ static inline u32 readl(const volatile void __iom=
-em *addr)
-> >  {
-> >         u32 val;
-> >
-> > -       log_read_mmio(32, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_read))
-> > +               log_read_mmio(32, addr, _THIS_IP_, _RET_IP_);
-> >         __io_br();
-> >         val =3D __le32_to_cpu((__le32 __force)__raw_readl(addr));
-> >         __io_ar(val);
-> > -       log_post_read_mmio(val, 32, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_read))
-> > +               log_post_read_mmio(val, 32, addr, _THIS_IP_, _RET_IP_);
-> >         return val;
-> >  }
-> >  #endif
-> > @@ -235,11 +243,13 @@ static inline u64 readq(const volatile void __iom=
-em *addr)
-> >  {
-> >         u64 val;
-> >
-> > -       log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_read))
-> > +               log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
-> >         __io_br();
-> >         val =3D __le64_to_cpu((__le64 __force)__raw_readq(addr));
-> >         __io_ar(val);
-> > -       log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_read))
-> > +               log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
-> >         return val;
-> >  }
-> >  #endif
-> > @@ -249,11 +259,13 @@ static inline u64 readq(const volatile void __iom=
-em *addr)
-> >  #define writeb writeb
-> >  static inline void writeb(u8 value, volatile void __iomem *addr)
-> >  {
-> > -       log_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_write))
-> > +               log_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-> >         __io_bw();
-> >         __raw_writeb(value, addr);
-> >         __io_aw();
-> > -       log_post_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_write))
-> > +               log_post_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_=
-);
-> >  }
-> >  #endif
-> >
-> > @@ -261,11 +273,13 @@ static inline void writeb(u8 value, volatile void=
- __iomem *addr)
-> >  #define writew writew
-> >  static inline void writew(u16 value, volatile void __iomem *addr)
-> >  {
-> > -       log_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_write))
-> > +               log_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-> >         __io_bw();
-> >         __raw_writew((u16 __force)cpu_to_le16(value), addr);
-> >         __io_aw();
-> > -       log_post_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_write))
-> > +               log_post_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP=
-_);
-> >  }
-> >  #endif
-> >
-> > @@ -273,11 +287,13 @@ static inline void writew(u16 value, volatile voi=
-d __iomem *addr)
-> >  #define writel writel
-> >  static inline void writel(u32 value, volatile void __iomem *addr)
-> >  {
-> > -       log_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_write))
-> > +               log_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-> >         __io_bw();
-> >         __raw_writel((u32 __force)__cpu_to_le32(value), addr);
-> >         __io_aw();
-> > -       log_post_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_write))
-> > +               log_post_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP=
-_);
-> >  }
-> >  #endif
-> >
-> > @@ -286,11 +302,13 @@ static inline void writel(u32 value, volatile voi=
-d __iomem *addr)
-> >  #define writeq writeq
-> >  static inline void writeq(u64 value, volatile void __iomem *addr)
-> >  {
-> > -       log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_write))
-> > +               log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-> >         __io_bw();
-> >         __raw_writeq((u64 __force)__cpu_to_le64(value), addr);
-> >         __io_aw();
-> > -       log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_write))
-> > +               log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP=
-_);
-> >  }
-> >  #endif
-> >  #endif /* CONFIG_64BIT */
-> > @@ -306,9 +324,11 @@ static inline u8 readb_relaxed(const volatile void=
- __iomem *addr)
-> >  {
-> >         u8 val;
-> >
-> > -       log_read_mmio(8, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_read))
-> > +               log_read_mmio(8, addr, _THIS_IP_, _RET_IP_);
-> >         val =3D __raw_readb(addr);
-> > -       log_post_read_mmio(val, 8, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_read))
-> > +               log_post_read_mmio(val, 8, addr, _THIS_IP_, _RET_IP_);
-> >         return val;
-> >  }
-> >  #endif
-> > @@ -319,9 +339,11 @@ static inline u16 readw_relaxed(const volatile voi=
-d __iomem *addr)
-> >  {
-> >         u16 val;
-> >
-> > -       log_read_mmio(16, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_read))
-> > +               log_read_mmio(16, addr, _THIS_IP_, _RET_IP_);
-> >         val =3D __le16_to_cpu((__le16 __force)__raw_readw(addr));
-> > -       log_post_read_mmio(val, 16, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_read))
-> > +               log_post_read_mmio(val, 16, addr, _THIS_IP_, _RET_IP_);
-> >         return val;
-> >  }
-> >  #endif
-> > @@ -332,9 +354,11 @@ static inline u32 readl_relaxed(const volatile voi=
-d __iomem *addr)
-> >  {
-> >         u32 val;
-> >
-> > -       log_read_mmio(32, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_read))
-> > +               log_read_mmio(32, addr, _THIS_IP_, _RET_IP_);
-> >         val =3D __le32_to_cpu((__le32 __force)__raw_readl(addr));
-> > -       log_post_read_mmio(val, 32, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_read))
-> > +               log_post_read_mmio(val, 32, addr, _THIS_IP_, _RET_IP_);
-> >         return val;
-> >  }
-> >  #endif
-> > @@ -345,9 +369,11 @@ static inline u64 readq_relaxed(const volatile voi=
-d __iomem *addr)
-> >  {
-> >         u64 val;
-> >
-> > -       log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_read))
-> > +               log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
-> >         val =3D __le64_to_cpu((__le64 __force)__raw_readq(addr));
-> > -       log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_read))
-> > +               log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
-> >         return val;
-> >  }
-> >  #endif
-> > @@ -356,9 +382,11 @@ static inline u64 readq_relaxed(const volatile voi=
-d __iomem *addr)
-> >  #define writeb_relaxed writeb_relaxed
-> >  static inline void writeb_relaxed(u8 value, volatile void __iomem *add=
-r)
-> >  {
-> > -       log_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_write))
-> > +               log_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-> >         __raw_writeb(value, addr);
-> > -       log_post_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_write))
-> > +               log_post_write_mmio(value, 8, addr, _THIS_IP_, _RET_IP_=
-);
-> >  }
-> >  #endif
-> >
-> > @@ -366,9 +394,11 @@ static inline void writeb_relaxed(u8 value, volati=
-le void __iomem *addr)
-> >  #define writew_relaxed writew_relaxed
-> >  static inline void writew_relaxed(u16 value, volatile void __iomem *ad=
-dr)
-> >  {
-> > -       log_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_write))
-> > +               log_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-> >         __raw_writew((u16 __force)cpu_to_le16(value), addr);
-> > -       log_post_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_write))
-> > +               log_post_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP=
-_);
-> >  }
-> >  #endif
-> >
-> > @@ -376,9 +406,11 @@ static inline void writew_relaxed(u16 value, volat=
-ile void __iomem *addr)
-> >  #define writel_relaxed writel_relaxed
-> >  static inline void writel_relaxed(u32 value, volatile void __iomem *ad=
-dr)
-> >  {
-> > -       log_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_write))
-> > +               log_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-> >         __raw_writel((u32 __force)__cpu_to_le32(value), addr);
-> > -       log_post_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_write))
-> > +               log_post_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP=
-_);
-> >  }
-> >  #endif
-> >
-> > @@ -386,9 +418,11 @@ static inline void writel_relaxed(u32 value, volat=
-ile void __iomem *addr)
-> >  #define writeq_relaxed writeq_relaxed
-> >  static inline void writeq_relaxed(u64 value, volatile void __iomem *ad=
-dr)
-> >  {
-> > -       log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_write))
-> > +               log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-> >         __raw_writeq((u64 __force)__cpu_to_le64(value), addr);
-> > -       log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-> > +       if (rwmmio_tracepoint_enabled(rwmmio_post_write))
-> > +               log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP=
-_);
-> >  }
-> >  #endif
-> >
-> > --
-> > 2.49.0.472.ge94155a9ec-goog
-> >
+For validation, I built kernels for the {x86_64, ARM64} x {VTL0, VTL2} set with
+a small initrd embedded into the kernel and booted VMs managed by Hyper-V and
+OpenVMM off of that.
+
+Starting from V5, the patch series includes a non-functional change to KVM on
+arm64 which I tested as well.
+
+I've kept the Acked-by tags given by Arnd and Bjorn. These patches (1 and 11)
+have changed very slightly since then (V5 and V6), no functional changes:
+in patch 1, removed macro's in favour of functions as Marc suggested to get rid
+of "sparse" warnings, and in patch 11, fixed building as a module. Please let me
+know if I should have not kept the tags.
+
+[V9]
+    - Fix building the pci-hyperv driver as a module.
+      ** Thank you, Micheal! **
+  
+    - Removed an overzealous check for the ACPI IRQ model on arm64 running with
+      Hyper-V -- only GIC is supported. That check belongs to the lower layer
+      code, and I took it from the ACPI driver while open-coding getting the
+      parent IRQ domain.
+
+[V8]
+    https://lore.kernel.org/linux-hyperv/20250414224713.1866095-1-romank@linux.microsoft.com/
+    - Use the Linux derfined macro __ASSEMBLY__ instead of the gcc's pre-defined
+      macro __ASSEMBLER__ to follow the kernel coding style.
+      ** Thank you, Marc! **
+
+[V7]
+    https://lore.kernel.org/linux-hyperv/20250407201336.66913-1-romank@linux.microsoft.com/
+    - Used another approach not to increase the number of warnings produced when
+      building with CHECK_ENDIAN.
+      ** Thank you, Arnd! **
+
+     - Adjusted the function parameter formatting to match the rest of the code.
+      ** Thank you, Bjorn! **
+
+    - Removed the now unused local variable.
+      ** Thank you, kernel robot! **
+
+    - Fixed the description in the VMBus DT binding patch.
+      ** Thank you, Krzysztof! **
+
+    - Adjusted the function names and comments to better reflect what they do,
+      used the suggested approach to handling UUIDs to make code more readable
+      and maintainable on big-endian.
+    - Replaced ifdeffery with a stub function to make the code more readable.
+      ** Thank you, Mark! **
+
+    - Fixed the Kconfig not to build the VTL mode code on 32-bit kernels.
+      ** Thank you, Michael! **
+
+    - Fixed the indentation and the comment style.
+      ** Thank you, Rafael! **
+
+[V6]
+    https://lore.kernel.org/linux-hyperv/20250315001931.631210-1-romank@linux.microsoft.com/
+    - Use more intuitive Kconfig update.
+    - Remove ifdef for getting IRQ number
+    ** Thank you, Arnd! **
+
+    - Simplify code for finding the parent IRQ domain.
+    ** Thank you, Bjorn! **
+
+    - Remove a superfluous check.
+    ** Thank you, Dan! **
+
+    - Make the commit title and descrtiption legible.
+    - Don't set additionalProperties to true.
+    ** Thank you, Krzysztof! **
+
+    - Fix spelling in the commit title and description.
+    - Trade-offs for options in Kconfig.
+    - Export the new symbol as hyperv-pci can be built as a module.
+    ** Thank you, Michael! **
+
+    - Simplify code for getting IRQ number.
+    ** Thank you, Rob! **
+
+    - Add comment to clarify when running in VTL mode is reported.
+    ** Thank you, Wei! **
+
+[V5]
+  https://lore.kernel.org/linux-hyperv/20250307220304.247725-1-romank@linux.microsoft.com/
+    - Provide and use a common SMCCC-based infra for the arm64 hypervisor guests
+      to detect hypervisor presence.
+    ** Thank you, Arnd! **
+
+    - Fix line wraps to follow the rest of the code.
+    - Open-code getting IRQ domain parent in the ACPI case to make the code
+      better.
+    ** Thank you, Bjorn! **
+
+    - Test the binding with the latest dtschema.
+    - Clean up the commit title and description.
+    - Use proper defines for known constants.
+    ** Thank you, Krzysztof! **
+
+    - Extend comment on why ACPI v6 is checked for.
+    - Reorder patches to make sure that even with partial series application
+      the compilation succeeds.
+    - Report VTL the kernel runs in.
+    - Use "X86_64" in Kconfig rather than "X86".
+    - Extract a non-functional change for hv_get_vmbus_root_device() into
+      a separate patch.
+    ** Thank you, Michael! **
+
+[V4]
+    https://lore.kernel.org/linux-hyperv/20250212014321.1108840-1-romank@linux.microsoft.com/
+    - Fixed wording to match acronyms defined in the "Terms and Abbreviations"
+      section of the SMCCC specification throughout the patch series.
+      **Thank you, Michael!**
+
+    - Replaced the hypervisor ID containing ASCII with an UUID as
+      required by the specification.
+      **Thank you, Michael!**
+
+    - Added an explicit check for `SMCCC_RET_NOT_SUPPORTED` when discovering the
+      hypervisor presence to make the backward compatibility obvious.
+      **Thank you, Saurabh!**
+
+    - Split the fix for `get_vtl(void)` out to make it easier to backport.
+    - Refactored the configuration options as requested to eliminate the risk
+      of building non-functional kernels with randomly selected options.
+      **Thank you, Michael!**
+
+    - Refactored the changes not to introduce an additional file with
+      a one-line function.
+      **Thank you, Wei!**
+
+    - Fixed change description for the VMBus DeviceTree changes, used
+      `scripts/get_maintainers.pl` on the latest kernel to get the up-to-date list
+      of maintainers as requested.
+      **Thank you, Krzysztof!**
+
+    - Removed the added (paranoidal+superfluous) checks for DMA coherence in the
+      VMBus driver and instead relied on the DMA and the OF subsystem code.
+      **Thank you, Arnd, Krzysztof, Michael!**
+
+    - Used another set of APIs for discovering the hardware interrupt number
+      in the VMBus driver to be able to build the driver as a module.
+      **Thank you, Michael, Saurabh!**
+
+    - Renamed the newly introduced `get_vmbus_root_device(void)` function to
+      `hv_get_vmbus_root_device(void)` as requested.
+      **Thank you, Wei!**
+
+    - Applied the suggested small-scale refactoring to simplify changes to the Hyper-V
+      PCI driver. Taking the offered liberty of doing the large scale refactoring
+      in another patch series.
+      **Thank you, Michael!**
+
+    - Added a fix for the issue discovered internally where the CPU would not
+      get the interrupt from a PCI device attached to VTL2 as the shared peripheral
+      interrupt number (SPI) was not offset by 32 (the first valid SPI number).
+      **Thank you, Brian!**
+
+[V3]
+    https://lore.kernel.org/lkml/20240726225910.1912537-1-romank@linux.microsoft.com/
+    - Employed the SMCCC function recently implemented in the Microsoft Hyper-V
+      hypervisor to detect running on Hyper-V/arm64. No dependence on ACPI/DT is
+      needed anymore although the source code still falls back to ACPI as the new
+      hypervisor might be available only in the Windows Insiders channel just
+      yet.
+    - As a part of the above, refactored detecting the hypervisor via ACPI FADT.
+    - There was a suggestion to explore whether it is feasible or not to express
+      that ACPI must be absent for the VTL mode and present for the regular guests
+      in the Hyper-V Kconfig file.
+      My current conclusion is that this will require refactoring in many places.
+      That becomes especially convoluted on x86_64 due to the MSI and APIC
+      dependencies. I'd ask to let us tackle that in another patch series (or chalk
+      up to nice-have's rather than fires to put out) to separate concerns and
+      decrease chances of breakage.
+    - While refactoring `get_vtl(void)` and the related code, fixed the hypercall
+      output address not to overlap with the input as the Hyper-V TLFS mandates:
+      "The input and output parameter lists cannot overlap or cross page boundaries."
+      See https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/hypercall-interface
+      for more.
+      Some might argue that should've been a topic for a separate patch series;
+      I'd counter that the change is well-contained (one line), has no dependencies,
+      and makes the code legal.
+    - Made the VTL boot code (c)leaner as was suggested.
+    - Set DMA cache coherency for the VMBus.
+    - Updated DT bindings in the VMBus documentation (separated out into a new patch).
+    - Fixed `vmbus_set_irq` to use the API that works both for the ACPI and OF.
+    - Reworked setting up the vPCI MSI IRQ domain in the non-ACPI case. The logic
+      looks a bit fiddly/ad-hoc as I couldn't find the API that would fit the bill.
+      Added comments to explain myself.
+
+[V2]
+    https://lore.kernel.org/all/20240514224508.212318-1-romank@linux.microsoft.com/
+    - Decreased number of #ifdef's
+    - Updated the wording in the commit messages to adhere to the guidlines
+    - Sending to the correct set of maintainers and mail lists
+
+[V1]
+    https://lore.kernel.org/all/20240510160602.1311352-1-romank@linux.microsoft.com/
+
+Roman Kisel (11):
+  arm64: kvm, smccc: Introduce and use API for getting hypervisor UUID
+  arm64: hyperv: Use SMCCC to detect hypervisor presence
+  Drivers: hv: Enable VTL mode for arm64
+  Drivers: hv: Provide arch-neutral implementation of get_vtl()
+  arm64: hyperv: Initialize the Virtual Trust Level field
+  arm64, x86: hyperv: Report the VTL the system boots in
+  dt-bindings: microsoft,vmbus: Add interrupt and DMA coherence
+    properties
+  Drivers: hv: vmbus: Get the IRQ number from DeviceTree
+  Drivers: hv: vmbus: Introduce hv_get_vmbus_root_device()
+  ACPI: irq: Introduce acpi_get_gsi_dispatcher()
+  PCI: hv: Get vPCI MSI IRQ domain from DeviceTree
+
+ .../bindings/bus/microsoft,vmbus.yaml         | 16 ++++-
+ arch/arm64/hyperv/mshyperv.c                  | 53 ++++++++++++--
+ arch/arm64/kvm/hypercalls.c                   | 10 +--
+ arch/x86/hyperv/hv_init.c                     | 34 ---------
+ arch/x86/hyperv/hv_vtl.c                      |  7 +-
+ drivers/acpi/irq.c                            | 16 ++++-
+ drivers/firmware/smccc/kvm_guest.c            | 10 +--
+ drivers/firmware/smccc/smccc.c                | 17 +++++
+ drivers/hv/Kconfig                            |  6 +-
+ drivers/hv/hv_common.c                        | 31 ++++++++
+ drivers/hv/vmbus_drv.c                        | 53 +++++++++++---
+ drivers/pci/controller/pci-hyperv.c           | 70 +++++++++++++++++--
+ include/asm-generic/mshyperv.h                |  6 ++
+ include/hyperv/hvgdk_mini.h                   |  2 +-
+ include/linux/acpi.h                          |  5 +-
+ include/linux/arm-smccc.h                     | 64 +++++++++++++++--
+ include/linux/hyperv.h                        |  2 +
+ 17 files changed, 323 insertions(+), 79 deletions(-)
+
+
+base-commit: 628cc040b3a2980df6032766e8ef0688e981ab95
+-- 
+2.43.0
+
 
