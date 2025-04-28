@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-11676-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11677-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97205A9FBDE
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 23:10:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B03B8A9FBD6
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 23:10:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 403A83AA68E
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:09:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9872A1A87DD5
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:09:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4049121420F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 501BF21422F;
 	Mon, 28 Apr 2025 21:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Xrw8QVTf"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="P+KW5CaS"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30C0E7B3E1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 917BD20FA86;
 	Mon, 28 Apr 2025 21:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745874471; cv=none; b=Wptq4wx3HZHnWiYbHrGsmsjXBBaJrKf0CAbY6DP9ZaARmwC2fqzNPFewdpAym74uICP9TDmettr8nWlJhPcxwVaIt9oRPfJdh6jMXpa1JSPSCF70yC0Yc5ZB6VgDvq4XGkeutP3PtfkjtPg094gvmNm22N3Qs1HbT7Hmt8xER94=
+	t=1745874471; cv=none; b=lkL+NIyCY/hsntY10gc5r2PWY/8YnqtXdI05b8D9aoIxblvcyLlHiTMguOqewigF2yvEaweHxjLjIPm1Fp7ylUWIelWEeU94oRvHbVuyC465R22pF3Jf0+v0XAWeV9wyMV9ljkSt4EtzPMNxo/5KQetnsrb970zvKiwwsgaZDsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745874471; c=relaxed/simple;
-	bh=si2Bw5IJPROKqW+kfwLdvOeV0XJuRpoCT2Z9dvgX1pg=;
+	bh=yyeCOwTtD22c7lWwDL8rT+3NYpBmdivd0mRGeBs8v1M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VYy5jDBBSdTG+GUFlpVtfKfHMyx1kjZ8Z7VLEl5GTW8zOCKxJv7JNzXzygw4zCIl2icawogS48uLqVUPH6yBOG783Rq4+HFIlSxYpybxm4PTtq8awBj4yIEgJ6vwRXhY8HYk8hcFB5W4STZMehe57I6DakXv6XoklbZUACpdpC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Xrw8QVTf; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=E+MBOOyQYPVFiVYf3JVAv3HVScYbZdtcYtzYa8vI4+wKEBN7gcmX7JX58/tD+0A829aAYvV+cV7fwdBWlxXvqt3lnqjLvo/OnRfkbYweKU10xcURtpwnUqtBCNa1OIX7Sut44TWGAyQmb7b1hJseSHJI6pkgG9uilwv2bM5vKxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=P+KW5CaS; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.1.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 5C6B7211AD21;
+	by linux.microsoft.com (Postfix) with ESMTPSA id B20F3211AD29;
 	Mon, 28 Apr 2025 14:07:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5C6B7211AD21
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B20F3211AD29
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1745874466;
-	bh=GR2GmT7fACAPkitPj8eTbd2Bh3lgrZjljTTbjCNGmE4=;
+	s=default; t=1745874467;
+	bh=y7usvJbWdzao6Cpj0TdEPzfAZnIHMs9Jb/NJTFyO0qY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Xrw8QVTfiTdtUP3Y8XlV6NXORxmGnKRHs6fWUJthCc88pfIoxm/IszIEQ4yT7dF+J
-	 IRdTAY+Xw1gv2O6QZ4w+YGqJlEbcz4XZOTz7bjcQJb1wy+VDB9tqoau7RBV0LeNFr1
-	 ag/ISihJr8moPxOFn8Xf1tDPZgBBXcfdsNbWhxQI=
+	b=P+KW5CaSoCbQi9o6XB9zLTfpeiTdjUkzewMGSbKy8SFA3x63HsNmEARd3ZBJ73iT2
+	 SiSnT0PDfn+oJix6qZoOLKGPRwyPsYeUamEn4mFjMcQk7q6RERrhYi1tw+ze7L4NnH
+	 9RqubtAj8Coi16UOorjgYRL4eCiSAcPgyufzc7FA=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -83,9 +83,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v9 07/11] dt-bindings: microsoft,vmbus: Add interrupt and DMA coherence properties
-Date: Mon, 28 Apr 2025 14:07:38 -0700
-Message-ID: <20250428210742.435282-8-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v9 08/11] Drivers: hv: vmbus: Get the IRQ number from DeviceTree
+Date: Mon, 28 Apr 2025 14:07:39 -0700
+Message-ID: <20250428210742.435282-9-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250428210742.435282-1-romank@linux.microsoft.com>
 References: <20250428210742.435282-1-romank@linux.microsoft.com>
@@ -97,70 +97,67 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To boot in the VTL mode, VMBus on arm64 needs interrupt description
-which the binding documentation lacks. The transactions on the bus are
-DMA coherent which is not mentioned as well.
+The VMBus driver uses ACPI for interrupt assignment on
+arm64 hence it won't function in the VTL mode where only
+DeviceTree can be used.
 
-Add the interrupt property and the DMA coherence property to the VMBus
-binding. Update the example to match that. Fix typos.
+Update the VMBus driver to discover interrupt configuration
+from DT.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 ---
- .../devicetree/bindings/bus/microsoft,vmbus.yaml | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/hv/vmbus_drv.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml b/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
-index a8d40c766dcd..0bea4f5287ce 100644
---- a/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
-+++ b/Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
-@@ -10,8 +10,8 @@ maintainers:
-   - Saurabh Sengar <ssengar@linux.microsoft.com>
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 22afebfc28ff..e8f2c3e92d1f 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -2345,6 +2345,31 @@ static int vmbus_acpi_add(struct platform_device *pdev)
+ }
+ #endif
  
- description:
--  VMBus is a software bus that implement the protocols for communication
--  between the root or host OS and guest OSs (virtual machines).
-+  VMBus is a software bus that implements the protocols for communication
-+  between the root or host OS and guest OS'es (virtual machines).
- 
- properties:
-   compatible:
-@@ -25,9 +25,16 @@ properties:
-   '#size-cells':
-     const: 1
- 
-+  dma-coherent: true
++static int vmbus_set_irq(struct platform_device *pdev)
++{
++	struct irq_data *data;
++	int irq;
++	irq_hw_number_t hwirq;
 +
-+  interrupts:
-+    maxItems: 1
-+    description: Interrupt is used to report a message from the host.
++	irq = platform_get_irq(pdev, 0);
++	/* platform_get_irq() may not return 0. */
++	if (irq < 0)
++		return irq;
 +
- required:
-   - compatible
-   - ranges
-+  - interrupts
-   - '#address-cells'
-   - '#size-cells'
++	data = irq_get_irq_data(irq);
++	if (!data) {
++		pr_err("No interrupt data for VMBus virq %d\n", irq);
++		return -ENODEV;
++	}
++	hwirq = irqd_to_hwirq(data);
++
++	vmbus_irq = irq;
++	vmbus_interrupt = hwirq;
++	pr_debug("VMBus virq %d, hwirq %d\n", vmbus_irq, vmbus_interrupt);
++
++	return 0;
++}
++
+ static int vmbus_device_add(struct platform_device *pdev)
+ {
+ 	struct resource **cur_res = &hyperv_mmio;
+@@ -2359,6 +2384,11 @@ static int vmbus_device_add(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
-@@ -35,6 +42,8 @@ additionalProperties: false
++	if (!__is_defined(HYPERVISOR_CALLBACK_VECTOR))
++		ret = vmbus_set_irq(pdev);
++	if (ret)
++		return ret;
++
+ 	for_each_of_range(&parser, &range) {
+ 		struct resource *res;
  
- examples:
-   - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-     soc {
-         #address-cells = <2>;
-         #size-cells = <1>;
-@@ -49,6 +58,9 @@ examples:
-                 #address-cells = <2>;
-                 #size-cells = <1>;
-                 ranges = <0x0f 0xf0000000 0x0f 0xf0000000 0x10000000>;
-+                dma-coherent;
-+                interrupt-parent = <&gic>;
-+                interrupts = <GIC_PPI 2 IRQ_TYPE_EDGE_RISING>;
-             };
-         };
-     };
 -- 
 2.43.0
 
