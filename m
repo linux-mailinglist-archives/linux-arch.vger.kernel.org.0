@@ -1,161 +1,165 @@
-Return-Path: <linux-arch+bounces-11665-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11666-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08D6CA9F6C8
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 19:05:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BAB8A9F95B
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 21:23:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E88CC5A495E
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 17:04:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A51117730B
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 19:23:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238262951D8;
-	Mon, 28 Apr 2025 17:02:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53992957CB;
+	Mon, 28 Apr 2025 19:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nag0WVQ8"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="fbo+7dHL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35212951C0;
-	Mon, 28 Apr 2025 17:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D9618DB0A;
+	Mon, 28 Apr 2025 19:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745859727; cv=none; b=pLnpc70ZEOuQWPTCbp6ewj/p6TvfiMMCljVLpxDqm3Vd5julu4z48iPL/C2FlGoz63AcOZa/zRBRvWzk0pFt8ermlCuaqPrhMdrXhbxHx/2z4+DgG6TumpryGnRmwdvUMZF1x+ZdjZv5N6lY49WyIKtJSsGW9PM3WIRTDufmWPg=
+	t=1745868187; cv=none; b=oZ9tDkqDGFHw7rfIYWxX7GUOwkPnpJCWXE057Pvltv2kYme9dVpGG+1q+62bA0fONVwGj+9pqmlHpy5tXtKqvTmRqjdVZ1PRlXyZ3uLw7BqjQ3KbnjiYwWEzLK7lFwKpIp75jcEQ31vBp1DU7OGKbm6w8Pud0YCePOS42PiMvGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745859727; c=relaxed/simple;
-	bh=E4ZzeBfk2GgJquy2SDIZkSeNX8NfXIoZAmTNK3XNeXw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qk3uQOAuSB2+8kCiaeHMBAGvIrWYoOlAEirWS/shkcET1oyiCZfDu5CmNkLwFpIRIht9nHzNgnDuc3LaJfAHf+CdkZXuFSCpFdi94Au5//lLovV+FoKUP4n/CfUn14b5n6Mp6oeZhxEF1/AHYZRI2fqoaAIx8W2VzoRYQ5sAMpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nag0WVQ8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3F35C4CEEE;
-	Mon, 28 Apr 2025 17:02:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745859726;
-	bh=E4ZzeBfk2GgJquy2SDIZkSeNX8NfXIoZAmTNK3XNeXw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Nag0WVQ8E1TihrQTSEoFR0DZgEIeqxXwyV4+iqc41yTiRiDzs5/2T7qkhTZmHaBIe
-	 3NpNYnemnWcQOCXagA5m6zVEi7yUaK7qNITYrJvmQFRS87Igf4LlFVCkGoqoGOGCVG
-	 rsFgw3ex79z6SbNqm4v8+b5mBZMqZ9O4OXQBeaDADtRT7kk2/LXqD81qq3/EBLuNs4
-	 Xf+BQasDscoPMcUxBho7bRSlGZgBqQCEuwezVvdvBqukAt516lxDSngixk8QEtC60Q
-	 hSwIdPcr5osF5Xfc1HTMgM8PDAUDpsO71gwKURmbiK0loWyPcYwTVOaYNJujt2ACtq
-	 ABI2T4XgqEKSw==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	sparclinux@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	x86@kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH v4 13/13] crypto: lib/sha256 - improve function prototypes
-Date: Mon, 28 Apr 2025 10:00:38 -0700
-Message-ID: <20250428170040.423825-14-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250428170040.423825-1-ebiggers@kernel.org>
-References: <20250428170040.423825-1-ebiggers@kernel.org>
+	s=arc-20240116; t=1745868187; c=relaxed/simple;
+	bh=ZvDoC81kFt4cDoyxtRck1vxVOGNhZRLiwTxrGEZGnvo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UZjBUQdduy/LR9nOMvcW0JnoCBgfJtFRqtRMzXKQEFGW5MqLlDKVUTfCc042luLJHfQYFX681vC0C9Y+i8LGJCVSjVxojObE6V/vImGa0rC7Q78acOERynFE3dxAfWBSm8OvFJ0COUJEneUYoPo04OhjIecPcnI8mVLSGLS/zXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=fbo+7dHL; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.184.60] (unknown [131.107.1.188])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 698AE211AD01;
+	Mon, 28 Apr 2025 12:23:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 698AE211AD01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1745868184;
+	bh=jGVkN1hybuqThviIpy5Yd0rlklDTmHHqQY1gOTTQ/aU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fbo+7dHLY2ZtqfyjtlaCC5jw3uqw6PD289mAPFW3y9leIqksoAj8pWNCIrbN3bTir
+	 t8IVF7ly+J9ECgXB/qJQ+LMth9i++CMUSEVRhbLOpC8MUWohTAzFbArmXIyjUraZ4l
+	 Qq5vCgAWx1+qCJmiI7PVXDfKUtWQvPmpyy6Pg9L8=
+Message-ID: <5cdb2703-2b94-4f38-a440-8f5c9a4c66be@linux.microsoft.com>
+Date: Mon, 28 Apr 2025 12:23:04 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH hyperv-next v8 02/11] arm64: hyperv: Use SMCCC to detect
+ hypervisor presence
+To: Michael Kelley <mhklinux@outlook.com>
+Cc: "apais@microsoft.com" <apais@microsoft.com>,
+ "benhill@microsoft.com" <benhill@microsoft.com>,
+ "bperkins@microsoft.com" <bperkins@microsoft.com>,
+ "sunilmut@microsoft.com" <sunilmut@microsoft.com>,
+ "arnd@arndb.de" <arnd@arndb.de>, "bhelgaas@google.com"
+ <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "dan.carpenter@linaro.org" <dan.carpenter@linaro.org>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "hpa@zytor.com" <hpa@zytor.com>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+ "krzk+dt@kernel.org" <krzk+dt@kernel.org>, "kw@linux.com" <kw@linux.com>,
+ "kys@microsoft.com" <kys@microsoft.com>, "lenb@kernel.org"
+ <lenb@kernel.org>, "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+ "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
+ "mark.rutland@arm.com" <mark.rutland@arm.com>,
+ "maz@kernel.org" <maz@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
+ "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+ "rafael@kernel.org" <rafael@kernel.org>, "robh@kernel.org"
+ <robh@kernel.org>, "rafael.j.wysocki@intel.com"
+ <rafael.j.wysocki@intel.com>,
+ "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+ "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+ "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+ "tglx@linutronix.de" <tglx@linutronix.de>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>, "will@kernel.org"
+ <will@kernel.org>, "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+ "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>
+References: <20250414224713.1866095-1-romank@linux.microsoft.com>
+ <20250414224713.1866095-3-romank@linux.microsoft.com>
+ <SN6PR02MB41576A5C3C0F5911A308E804D4BC2@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Language: en-US
+From: Roman Kisel <romank@linux.microsoft.com>
+In-Reply-To: <SN6PR02MB41576A5C3C0F5911A308E804D4BC2@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Eric Biggers <ebiggers@google.com>
 
-Follow best practices by changing the length parameters to size_t and
-explicitly specifying the length of the output digest arrays.
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- include/crypto/sha2.h | 8 ++++----
- lib/crypto/sha256.c   | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+On 4/17/2025 8:27 AM, Michael Kelley wrote:
+> From: Roman Kisel <romank@linux.microsoft.com> Sent: Monday, April 14, 2025 3:47 PM
+[...]
+> I had previously given my Reviewed-by: on v5 of this patch. But
+> looking at it again, it would be nice if this UUID were defined in
+> include/linux/arm-smccc.h alongside the definition of
+> ARM_SMCCC_VENDOR_HYP_UID_KVM. The UUID values are
+> are independent of each other, but it's a bit asymmetric to have
+> the KVM UUID defined centrally while the Hyper-V UUID is
+> buried in Hyper-V specific code. But I'm OK with the current code
+> if there's nothing else to respin for.
+> 
 
-diff --git a/include/crypto/sha2.h b/include/crypto/sha2.h
-index 444484d1b1cfa..7dfc560daa2c7 100644
---- a/include/crypto/sha2.h
-+++ b/include/crypto/sha2.h
-@@ -93,13 +93,13 @@ static inline void sha256_init(struct sha256_state *sctx)
- 	sctx->state[5] = SHA256_H5;
- 	sctx->state[6] = SHA256_H6;
- 	sctx->state[7] = SHA256_H7;
- 	sctx->count = 0;
- }
--void sha256_update(struct sha256_state *sctx, const u8 *data, unsigned int len);
--void sha256_final(struct sha256_state *sctx, u8 *out);
--void sha256(const u8 *data, unsigned int len, u8 *out);
-+void sha256_update(struct sha256_state *sctx, const u8 *data, size_t len);
-+void sha256_final(struct sha256_state *sctx, u8 out[SHA256_DIGEST_SIZE]);
-+void sha256(const u8 *data, size_t len, u8 out[SHA256_DIGEST_SIZE]);
- 
- static inline void sha224_init(struct sha256_state *sctx)
- {
- 	sctx->state[0] = SHA224_H0;
- 	sctx->state[1] = SHA224_H1;
-@@ -110,8 +110,8 @@ static inline void sha224_init(struct sha256_state *sctx)
- 	sctx->state[6] = SHA224_H6;
- 	sctx->state[7] = SHA224_H7;
- 	sctx->count = 0;
- }
- /* Simply use sha256_update as it is equivalent to sha224_update. */
--void sha224_final(struct sha256_state *sctx, u8 *out);
-+void sha224_final(struct sha256_state *sctx, u8 out[SHA224_DIGEST_SIZE]);
- 
- #endif /* _CRYPTO_SHA2_H */
-diff --git a/lib/crypto/sha256.c b/lib/crypto/sha256.c
-index 4b19cf977ef1b..563f09c9f3815 100644
---- a/lib/crypto/sha256.c
-+++ b/lib/crypto/sha256.c
-@@ -68,11 +68,11 @@ static inline void __sha256_update(struct sha256_state *sctx, const u8 *data,
- 	}
- 	if (len)
- 		memcpy(&sctx->buf[partial], data, len);
- }
- 
--void sha256_update(struct sha256_state *sctx, const u8 *data, unsigned int len)
-+void sha256_update(struct sha256_state *sctx, const u8 *data, size_t len)
- {
- 	__sha256_update(sctx, data, len, false);
- }
- EXPORT_SYMBOL(sha256_update);
- 
-@@ -99,23 +99,23 @@ static inline void __sha256_final(struct sha256_state *sctx, u8 *out,
- 		put_unaligned_be32(sctx->state[i / 4], out + i);
- 
- 	memzero_explicit(sctx, sizeof(*sctx));
- }
- 
--void sha256_final(struct sha256_state *sctx, u8 *out)
-+void sha256_final(struct sha256_state *sctx, u8 out[SHA256_DIGEST_SIZE])
- {
- 	__sha256_final(sctx, out, SHA256_DIGEST_SIZE, false);
- }
- EXPORT_SYMBOL(sha256_final);
- 
--void sha224_final(struct sha256_state *sctx, u8 *out)
-+void sha224_final(struct sha256_state *sctx, u8 out[SHA224_DIGEST_SIZE])
- {
- 	__sha256_final(sctx, out, SHA224_DIGEST_SIZE, false);
- }
- EXPORT_SYMBOL(sha224_final);
- 
--void sha256(const u8 *data, unsigned int len, u8 *out)
-+void sha256(const u8 *data, size_t len, u8 out[SHA256_DIGEST_SIZE])
- {
- 	struct sha256_state sctx;
- 
- 	sha256_init(&sctx);
- 	sha256_update(&sctx, data, len);
+As I saw that, KVM is special in the kernel as the kernel provides
+both the host side code and the kernel side code so the UUID has
+to be shared in the header file.
+
+In the Hyper-V case, we have only the guest side code so it seemed
+more economical to have that tucked into the function rather than
+adding to the arch-wide header and including the header.
+
+
+>> +
+>> +	return arm_smccc_hypervisor_has_uuid(&hyperv_uuid);
+>> +}
+>> +
+>>   static int __init hyperv_init(void)
+>>   {
+>>   	struct hv_get_vp_registers_output	result;
+>> @@ -36,13 +78,11 @@ static int __init hyperv_init(void)
+>>
+>>   	/*
+>>   	 * Allow for a kernel built with CONFIG_HYPERV to be running in
+>> -	 * a non-Hyper-V environment, including on DT instead of ACPI.
+>> +	 * a non-Hyper-V environment.
+>> +	 *
+>>   	 * In such cases, do nothing and return success.
+>>   	 */
+>> -	if (acpi_disabled)
+>> -		return 0;
+>> -
+>> -	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
+>> +	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smccc())
+>>   		return 0;
+>>
+>>   	/* Setup the guest ID */
+>> --
+>> 2.43.0
+>>
+> 
+> My UUID comment notwithstanding,
+> 
+> Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+> 
+> 
+
 -- 
-2.49.0
+Thank you,
+Roman
 
 
