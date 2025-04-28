@@ -1,245 +1,256 @@
-Return-Path: <linux-arch+bounces-11651-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11652-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11745A9EFB2
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 13:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 678B1A9F669
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 19:02:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FAFA1710F3
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 11:53:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B796C17F363
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 17:02:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89519264FB0;
-	Mon, 28 Apr 2025 11:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88DD27A90B;
+	Mon, 28 Apr 2025 17:01:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="F9HnbTnW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VzAYmKSF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FF44A21;
-	Mon, 28 Apr 2025 11:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6BF2797AB;
+	Mon, 28 Apr 2025 17:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745841200; cv=none; b=gjulGnp/PPKy/bleFsxs9bES0rey55yBTf+yQn5omP0oDsEKPEkxZrGO6qQEoL7qdR2cnQsYG57EssmNqIJDf+ndslH3uPAMjX6+F9WlZokrcgzlEMTSvTe+toWeVRdR5nLjpJc+nRgizhew2rX8jOu/OrMNcXkyHLhgmcfY4C8=
+	t=1745859719; cv=none; b=LApsM4rWvsSCpI9JkkRRW6VFcmlLZCQfyPaR+aiElZ0EcFmRUwtk2SqoNRfREEsh1xJ0BRWlviDiWUapImWvGHH9u+8IgT9OCVjpMp76WTZWQKUtO5nXijg/zWk/QMKJfE86RZooEIdtE/6yqhfKDvRpUrQGrENVMKJzazXYs4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745841200; c=relaxed/simple;
-	bh=Sk7QTKYQHpO4MpyZjQ/Sv46Iq1zpM+5CWnp31Eg8Sy4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=GG/cGzPfJvKnsZMPy4sKm4X+sXIn2Xw0aGdRsqsplGX4aMXpqbfu3WO5HvhrvuzhPnlvfxapCULPrwKW7jhkHnXPmUP+/u4zxbpK2SijUkkSr5C9GqnDupxvoXQ205N397GJiSPj1uJthHjcAIbIkMFvRbeJMPF3zIHo+OvUTdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=F9HnbTnW; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:Message-ID:Subject:Cc:To:
-	From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=8T1VCs93WeCfIwMLTXrgNJ1jyLMDpCR3K8Uym9nsnV4=; b=F9HnbTnW/poPgQVr/cZWd+pwSz
-	2p1UYqYxeKKqwA8eoU4d9x1FUmWqDFUKj4m1rUYjb/NZ9L/ay2spOHSOBLPXjjOkgGBjoE2P9jaY0
-	SO6fLRcrPnA4AqqV6iTh6DthFMKWQ5y+2BNRYeq6kcb0mNigo2TQnP1X+8q2t4Cf/E71Dp+6Lc2iG
-	rTQFgMhEtDcoE4KDOvGEy2T8moHCtm+9KViSFwmLwa/1cvp4ub/24zEUUuztEGO5LleSISGHI99Tf
-	g1Z9Vys8EoAA69OOsZwOKwArWjMhPqhm7YMnEeA5etXfn6zfP8eJ1HnmeULhjUSmQB4vIUfCLIheP
-	SY6L1ryw==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1u9N2q-001bJS-2Z;
-	Mon, 28 Apr 2025 19:53:09 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 28 Apr 2025 19:53:08 +0800
-Date: Mon, 28 Apr 2025 19:53:08 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	x86@kernel.org, Jason@zx2c4.com, ardb@kernel.org
-Subject: Re: [PATCH v3 00/13] Finish disentangling ChaCha, Poly1305, and
- BLAKE2s from CRYPTO
-Message-ID: <aA9sJKUjfhRPMWSo@gondor.apana.org.au>
+	s=arc-20240116; t=1745859719; c=relaxed/simple;
+	bh=XK7q7Zz0y/YmoLpjlx1FJdc0BX2x3ByOt7hnXtJHIP0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KP8tP77cxPpoN1OtyEWzaKKXrd2z3h8hWAu/r3w+6dILG5B4/euZgUskaQhvBOqfPeEQ3J3YeUj31UcarFoMlQjHf9QWf3gm5lBh4Z27eYkvSnHBx/gDWFTkJYnr4hgqfXyfHhWvMHnIDBB88QeiSLRS8mnJ3cA7HtH6m5qKnVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VzAYmKSF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF47C4CEE4;
+	Mon, 28 Apr 2025 17:01:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745859719;
+	bh=XK7q7Zz0y/YmoLpjlx1FJdc0BX2x3ByOt7hnXtJHIP0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=VzAYmKSFPCv9LO+z3NyJNmE29HM97zw0w+cAAP5jOAtTL8J33qg/YU1iwxIu2heKa
+	 NgvfU9+nxqmhDlYra2/fB/lISwTYKj07gA7bZCE4uoCmaGoqzelQMfKCBDJy4W8M3H
+	 +uYG+DjdsY8Ac9dDs0Xf9VmjlOG2idw9zTLeLkbrYNF6Ug3VWcPmBnJX1d658fuCWM
+	 7+eA+rDBr7VUfxeFyJy0COScjZG6ut0wj+jOQOgXaSyjIcVSUi7nPW3IZxDdKYPNmQ
+	 RwkAjFjatxLfFkrNBfAJK0crnpy2Cgi4FEf8YsBDajiX4D4F58WKkkzjxPdeOEv0ZQ
+	 oqNV5J2CbRzjg==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	sparclinux@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	x86@kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v4 00/13] Architecture-optimized SHA-256 library API
+Date: Mon, 28 Apr 2025 10:00:25 -0700
+Message-ID: <20250428170040.423825-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250422152716.5923-1-ebiggers@kernel.org>
-X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.kernel
+Content-Transfer-Encoding: 8bit
 
-Eric Biggers <ebiggers@kernel.org> wrote:
-> This series removes the unnecessary dependency of the ChaCha, Poly1305,
-> and BLAKE2s library functions on the generic crypto infrastructure, i.e.
-> CONFIG_CRYPTO.  To do this, it moves the architecture-optimized
-> implementations of these functions into new directories
-> arch/*/lib/crypto/ which do not depend on CRYPTO.  This mirrors the
-> existing distinction between crypto/ and lib/crypto/.
-> 
-> The last two patches remove the selection of CRYPTO by CRYPTO_LIB_CHACHA
-> and CRYPTO_LIB_POLY1305, and they remove the corresponding *_INTERNAL
-> symbols which were needed only because of the entanglement with CRYPTO.
-> 
-> Note that Curve25519 is still entangled.  Later patches will fix that.
-> 
-> Changed in v3:
->   - Fixed build error on arm with CONFIG_CPU_THUMBONLY=y.
->   - Small whitespace and commit message fixes.
->   - Added Acked-by's.
-> 
-> Changed in v2:
->   - Introduced new directories arch/*/lib/crypto/ instead of keeping
->     the library functions in arch/*/crypto/.
-> 
-> Eric Biggers (13):
->  crypto: arm64 - drop redundant dependencies on ARM64
->  crypto: powerpc - drop redundant dependencies on PPC
->  crypto: s390 - drop redundant dependencies on S390
->  crypto: x86 - drop redundant dependencies on X86
->  crypto: arm - move library functions to arch/arm/lib/crypto/
->  crypto: arm64 - move library functions to arch/arm64/lib/crypto/
->  crypto: mips - move library functions to arch/mips/lib/crypto/
->  crypto: powerpc - move library functions to arch/powerpc/lib/crypto/
->  crypto: riscv - move library functions to arch/riscv/lib/crypto/
->  crypto: s390 - move library functions to arch/s390/lib/crypto/
->  crypto: x86 - move library functions to arch/x86/lib/crypto/
->  crypto: lib/chacha - remove INTERNAL symbol and selection of CRYPTO
->  crypto: lib/poly1305 - remove INTERNAL symbol and selection of CRYPTO
-> 
-> MAINTAINERS                                   |  1 +
-> arch/arm/crypto/Kconfig                       | 23 -----
-> arch/arm/crypto/Makefile                      | 14 +--
-> arch/arm/lib/Makefile                         |  2 +
-> arch/arm/lib/crypto/.gitignore                |  2 +
-> arch/arm/lib/crypto/Kconfig                   | 24 ++++++
-> arch/arm/lib/crypto/Makefile                  | 26 ++++++
-> arch/arm/{ => lib}/crypto/blake2s-core.S      |  0
-> arch/arm/{ => lib}/crypto/blake2s-glue.c      |  0
-> arch/arm/{ => lib}/crypto/chacha-glue.c       |  0
-> arch/arm/{ => lib}/crypto/chacha-neon-core.S  |  0
-> .../arm/{ => lib}/crypto/chacha-scalar-core.S |  0
-> arch/arm/{ => lib}/crypto/poly1305-armv4.pl   |  0
-> arch/arm/{ => lib}/crypto/poly1305-glue.c     |  0
-> arch/arm64/crypto/Kconfig                     | 17 +---
-> arch/arm64/crypto/Makefile                    |  9 +-
-> arch/arm64/lib/Makefile                       |  3 +
-> arch/arm64/lib/crypto/.gitignore              |  2 +
-> arch/arm64/lib/crypto/Kconfig                 | 14 +++
-> arch/arm64/lib/crypto/Makefile                | 16 ++++
-> .../arm64/{ => lib}/crypto/chacha-neon-core.S |  0
-> .../arm64/{ => lib}/crypto/chacha-neon-glue.c |  0
-> arch/arm64/{ => lib}/crypto/poly1305-armv8.pl |  0
-> arch/arm64/{ => lib}/crypto/poly1305-glue.c   |  0
-> arch/mips/crypto/Kconfig                      | 11 ---
-> arch/mips/crypto/Makefile                     | 17 ----
-> arch/mips/lib/Makefile                        |  2 +
-> arch/mips/lib/crypto/.gitignore               |  2 +
-> arch/mips/lib/crypto/Kconfig                  | 12 +++
-> arch/mips/lib/crypto/Makefile                 | 19 ++++
-> arch/mips/{ => lib}/crypto/chacha-core.S      |  0
-> arch/mips/{ => lib}/crypto/chacha-glue.c      |  0
-> arch/mips/{ => lib}/crypto/poly1305-glue.c    |  0
-> arch/mips/{ => lib}/crypto/poly1305-mips.pl   |  0
-> arch/powerpc/crypto/Kconfig                   | 22 +----
-> arch/powerpc/crypto/Makefile                  |  4 -
-> arch/powerpc/lib/Makefile                     |  2 +
-> arch/powerpc/lib/crypto/Kconfig               | 15 ++++
-> arch/powerpc/lib/crypto/Makefile              |  7 ++
-> .../{ => lib}/crypto/chacha-p10-glue.c        |  0
-> .../{ => lib}/crypto/chacha-p10le-8x.S        |  0
-> .../{ => lib}/crypto/poly1305-p10-glue.c      |  0
-> .../{ => lib}/crypto/poly1305-p10le_64.S      |  0
-> arch/riscv/crypto/Kconfig                     |  7 --
-> arch/riscv/crypto/Makefile                    |  3 -
-> arch/riscv/lib/Makefile                       |  1 +
-> arch/riscv/lib/crypto/Kconfig                 |  8 ++
-> arch/riscv/lib/crypto/Makefile                |  4 +
-> .../{ => lib}/crypto/chacha-riscv64-glue.c    |  0
-> .../{ => lib}/crypto/chacha-riscv64-zvkb.S    |  0
-> arch/s390/crypto/Kconfig                      | 16 ----
-> arch/s390/crypto/Makefile                     |  3 -
-> arch/s390/lib/Makefile                        |  1 +
-> arch/s390/lib/crypto/Kconfig                  |  7 ++
-> arch/s390/lib/crypto/Makefile                 |  4 +
-> arch/s390/{ => lib}/crypto/chacha-glue.c      |  0
-> arch/s390/{ => lib}/crypto/chacha-s390.S      |  0
-> arch/s390/{ => lib}/crypto/chacha-s390.h      |  0
-> arch/x86/crypto/Kconfig                       | 86 +++++++------------
-> arch/x86/crypto/Makefile                      | 15 ----
-> arch/x86/lib/Makefile                         |  2 +
-> arch/x86/lib/crypto/.gitignore                |  2 +
-> arch/x86/lib/crypto/Kconfig                   | 26 ++++++
-> arch/x86/lib/crypto/Makefile                  | 17 ++++
-> arch/x86/{ => lib}/crypto/blake2s-core.S      |  0
-> arch/x86/{ => lib}/crypto/blake2s-glue.c      |  0
-> .../x86/{ => lib}/crypto/chacha-avx2-x86_64.S |  0
-> .../{ => lib}/crypto/chacha-avx512vl-x86_64.S |  0
-> .../{ => lib}/crypto/chacha-ssse3-x86_64.S    |  0
-> arch/x86/{ => lib}/crypto/chacha_glue.c       |  0
-> .../crypto/poly1305-x86_64-cryptogams.pl      |  0
-> arch/x86/{ => lib}/crypto/poly1305_glue.c     |  0
-> crypto/Kconfig                                |  4 +-
-> lib/crypto/Kconfig                            | 56 +++++++-----
-> 74 files changed, 294 insertions(+), 234 deletions(-)
-> create mode 100644 arch/arm/lib/crypto/.gitignore
-> create mode 100644 arch/arm/lib/crypto/Kconfig
-> create mode 100644 arch/arm/lib/crypto/Makefile
-> rename arch/arm/{ => lib}/crypto/blake2s-core.S (100%)
-> rename arch/arm/{ => lib}/crypto/blake2s-glue.c (100%)
-> rename arch/arm/{ => lib}/crypto/chacha-glue.c (100%)
-> rename arch/arm/{ => lib}/crypto/chacha-neon-core.S (100%)
-> rename arch/arm/{ => lib}/crypto/chacha-scalar-core.S (100%)
-> rename arch/arm/{ => lib}/crypto/poly1305-armv4.pl (100%)
-> rename arch/arm/{ => lib}/crypto/poly1305-glue.c (100%)
-> create mode 100644 arch/arm64/lib/crypto/.gitignore
-> create mode 100644 arch/arm64/lib/crypto/Kconfig
-> create mode 100644 arch/arm64/lib/crypto/Makefile
-> rename arch/arm64/{ => lib}/crypto/chacha-neon-core.S (100%)
-> rename arch/arm64/{ => lib}/crypto/chacha-neon-glue.c (100%)
-> rename arch/arm64/{ => lib}/crypto/poly1305-armv8.pl (100%)
-> rename arch/arm64/{ => lib}/crypto/poly1305-glue.c (100%)
-> create mode 100644 arch/mips/lib/crypto/.gitignore
-> create mode 100644 arch/mips/lib/crypto/Kconfig
-> create mode 100644 arch/mips/lib/crypto/Makefile
-> rename arch/mips/{ => lib}/crypto/chacha-core.S (100%)
-> rename arch/mips/{ => lib}/crypto/chacha-glue.c (100%)
-> rename arch/mips/{ => lib}/crypto/poly1305-glue.c (100%)
-> rename arch/mips/{ => lib}/crypto/poly1305-mips.pl (100%)
-> create mode 100644 arch/powerpc/lib/crypto/Kconfig
-> create mode 100644 arch/powerpc/lib/crypto/Makefile
-> rename arch/powerpc/{ => lib}/crypto/chacha-p10-glue.c (100%)
-> rename arch/powerpc/{ => lib}/crypto/chacha-p10le-8x.S (100%)
-> rename arch/powerpc/{ => lib}/crypto/poly1305-p10-glue.c (100%)
-> rename arch/powerpc/{ => lib}/crypto/poly1305-p10le_64.S (100%)
-> create mode 100644 arch/riscv/lib/crypto/Kconfig
-> create mode 100644 arch/riscv/lib/crypto/Makefile
-> rename arch/riscv/{ => lib}/crypto/chacha-riscv64-glue.c (100%)
-> rename arch/riscv/{ => lib}/crypto/chacha-riscv64-zvkb.S (100%)
-> create mode 100644 arch/s390/lib/crypto/Kconfig
-> create mode 100644 arch/s390/lib/crypto/Makefile
-> rename arch/s390/{ => lib}/crypto/chacha-glue.c (100%)
-> rename arch/s390/{ => lib}/crypto/chacha-s390.S (100%)
-> rename arch/s390/{ => lib}/crypto/chacha-s390.h (100%)
-> create mode 100644 arch/x86/lib/crypto/.gitignore
-> create mode 100644 arch/x86/lib/crypto/Kconfig
-> create mode 100644 arch/x86/lib/crypto/Makefile
-> rename arch/x86/{ => lib}/crypto/blake2s-core.S (100%)
-> rename arch/x86/{ => lib}/crypto/blake2s-glue.c (100%)
-> rename arch/x86/{ => lib}/crypto/chacha-avx2-x86_64.S (100%)
-> rename arch/x86/{ => lib}/crypto/chacha-avx512vl-x86_64.S (100%)
-> rename arch/x86/{ => lib}/crypto/chacha-ssse3-x86_64.S (100%)
-> rename arch/x86/{ => lib}/crypto/chacha_glue.c (100%)
-> rename arch/x86/{ => lib}/crypto/poly1305-x86_64-cryptogams.pl (100%)
-> rename arch/x86/{ => lib}/crypto/poly1305_glue.c (100%)
-> 
-> 
-> base-commit: bb9c648b334be581a791c7669abaa594e4b5ebb7
+This is based on cryptodev commit 2dfc7cd74a5e062a.  It can also be
+retrieved from:
 
-All applied.  Thanks.
+    git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git sha256-lib-v4
+
+Following the example of several other algorithms (e.g. CRC32, ChaCha,
+Poly1305, BLAKE2s), this series refactors the kernel's existing
+architecture-optimized SHA-256 code to be available via the library API,
+instead of just via the crypto_shash API as it was before.  It also
+reimplements the SHA-256 crypto_shash API on top of the library API.
+
+This makes it possible to use the SHA-256 library in
+performance-critical cases.  The new design is also much simpler, with a
+negative diffstat of almost 1200 lines.  Finally, this also fixes the
+longstanding issue where the arch-optimized SHA-256 was disabled by
+default, so people often forgot to enable it.
+
+For now the SHA-256 library is well-covered by the crypto_shash
+self-tests, but I plan to add a test for the library directly later.
+I've fully tested this series on arm, arm64, riscv, and x86.  On mips,
+powerpc, s390, and sparc I've only been able to partially test it, since
+QEMU does not support the SHA-256 instructions on those platforms.  If
+anyone with access to a mips, powerpc, s390, or sparc system that has
+SHA-256 instructions can verify that the crypto self-tests still pass,
+
+Changed v1 => v4:
+    - Moved sha256_generic_blocks() into its own module to avoid a
+      circular module dependency.
+    - Added Ard's Reviewed-by tags.
+    - Rebased onto cryptodev.
+
+Eric Biggers (13):
+  crypto: sha256 - support arch-optimized lib and expose through shash
+  crypto: arm/sha256 - implement library instead of shash
+  crypto: arm64/sha256 - remove obsolete chunking logic
+  crypto: arm64/sha256 - implement library instead of shash
+  crypto: mips/sha256 - implement library instead of shash
+  crypto: powerpc/sha256 - implement library instead of shash
+  crypto: riscv/sha256 - implement library instead of shash
+  crypto: s390/sha256 - implement library instead of shash
+  crypto: sparc - move opcodes.h into asm directory
+  crypto: sparc/sha256 - implement library instead of shash
+  crypto: x86/sha256 - implement library instead of shash
+  crypto: sha256 - remove sha256_base.h
+  crypto: lib/sha256 - improve function prototypes
+
+ arch/arm/configs/exynos_defconfig             |   1 -
+ arch/arm/configs/milbeaut_m10v_defconfig      |   1 -
+ arch/arm/configs/multi_v7_defconfig           |   1 -
+ arch/arm/configs/omap2plus_defconfig          |   1 -
+ arch/arm/configs/pxa_defconfig                |   1 -
+ arch/arm/crypto/Kconfig                       |  21 -
+ arch/arm/crypto/Makefile                      |   8 +-
+ arch/arm/crypto/sha2-ce-glue.c                |  87 ----
+ arch/arm/crypto/sha256_glue.c                 | 107 -----
+ arch/arm/crypto/sha256_glue.h                 |   9 -
+ arch/arm/crypto/sha256_neon_glue.c            |  75 ---
+ arch/arm/lib/crypto/.gitignore                |   1 +
+ arch/arm/lib/crypto/Kconfig                   |   6 +
+ arch/arm/lib/crypto/Makefile                  |   8 +-
+ arch/arm/{ => lib}/crypto/sha256-armv4.pl     |   0
+ .../sha2-ce-core.S => lib/crypto/sha256-ce.S} |  10 +-
+ arch/arm/lib/crypto/sha256.c                  |  64 +++
+ arch/arm64/configs/defconfig                  |   1 -
+ arch/arm64/crypto/Kconfig                     |  19 -
+ arch/arm64/crypto/Makefile                    |  13 +-
+ arch/arm64/crypto/sha2-ce-glue.c              | 138 ------
+ arch/arm64/crypto/sha256-glue.c               | 171 -------
+ arch/arm64/lib/crypto/.gitignore              |   1 +
+ arch/arm64/lib/crypto/Kconfig                 |   5 +
+ arch/arm64/lib/crypto/Makefile                |   9 +-
+ .../crypto/sha2-armv8.pl}                     |   0
+ .../sha2-ce-core.S => lib/crypto/sha256-ce.S} |  36 +-
+ arch/arm64/lib/crypto/sha256.c                |  75 +++
+ arch/mips/cavium-octeon/Kconfig               |   6 +
+ .../mips/cavium-octeon/crypto/octeon-sha256.c | 135 ++----
+ arch/mips/configs/cavium_octeon_defconfig     |   1 -
+ arch/mips/crypto/Kconfig                      |  10 -
+ arch/powerpc/crypto/Kconfig                   |  11 -
+ arch/powerpc/crypto/Makefile                  |   2 -
+ arch/powerpc/crypto/sha256-spe-glue.c         | 128 ------
+ arch/powerpc/lib/crypto/Kconfig               |   6 +
+ arch/powerpc/lib/crypto/Makefile              |   3 +
+ .../powerpc/{ => lib}/crypto/sha256-spe-asm.S |   0
+ arch/powerpc/lib/crypto/sha256.c              |  70 +++
+ arch/riscv/crypto/Kconfig                     |  11 -
+ arch/riscv/crypto/Makefile                    |   3 -
+ arch/riscv/crypto/sha256-riscv64-glue.c       | 125 -----
+ arch/riscv/lib/crypto/Kconfig                 |   7 +
+ arch/riscv/lib/crypto/Makefile                |   3 +
+ .../sha256-riscv64-zvknha_or_zvknhb-zvkb.S    |   4 +-
+ arch/riscv/lib/crypto/sha256.c                |  62 +++
+ arch/s390/configs/debug_defconfig             |   1 -
+ arch/s390/configs/defconfig                   |   1 -
+ arch/s390/crypto/Kconfig                      |  10 -
+ arch/s390/crypto/Makefile                     |   1 -
+ arch/s390/crypto/sha256_s390.c                | 144 ------
+ arch/s390/lib/crypto/Kconfig                  |   6 +
+ arch/s390/lib/crypto/Makefile                 |   2 +
+ arch/s390/lib/crypto/sha256.c                 |  47 ++
+ arch/sparc/crypto/Kconfig                     |  10 -
+ arch/sparc/crypto/Makefile                    |   2 -
+ arch/sparc/crypto/aes_asm.S                   |   3 +-
+ arch/sparc/crypto/aes_glue.c                  |   3 +-
+ arch/sparc/crypto/camellia_asm.S              |   3 +-
+ arch/sparc/crypto/camellia_glue.c             |   3 +-
+ arch/sparc/crypto/des_asm.S                   |   3 +-
+ arch/sparc/crypto/des_glue.c                  |   3 +-
+ arch/sparc/crypto/md5_asm.S                   |   3 +-
+ arch/sparc/crypto/md5_glue.c                  |   3 +-
+ arch/sparc/crypto/sha1_asm.S                  |   3 +-
+ arch/sparc/crypto/sha1_glue.c                 |   3 +-
+ arch/sparc/crypto/sha256_glue.c               | 129 ------
+ arch/sparc/crypto/sha512_asm.S                |   3 +-
+ arch/sparc/crypto/sha512_glue.c               |   3 +-
+ arch/sparc/{crypto => include/asm}/opcodes.h  |   6 +-
+ arch/sparc/lib/Makefile                       |   1 +
+ arch/sparc/lib/crc32c_asm.S                   |   3 +-
+ arch/sparc/lib/crypto/Kconfig                 |   8 +
+ arch/sparc/lib/crypto/Makefile                |   4 +
+ arch/sparc/lib/crypto/sha256.c                |  64 +++
+ arch/sparc/{ => lib}/crypto/sha256_asm.S      |   5 +-
+ arch/x86/crypto/Kconfig                       |  14 -
+ arch/x86/crypto/Makefile                      |   3 -
+ arch/x86/crypto/sha256_ssse3_glue.c           | 432 ------------------
+ arch/x86/lib/crypto/Kconfig                   |   7 +
+ arch/x86/lib/crypto/Makefile                  |   3 +
+ arch/x86/{ => lib}/crypto/sha256-avx-asm.S    |  12 +-
+ arch/x86/{ => lib}/crypto/sha256-avx2-asm.S   |  12 +-
+ .../crypto/sha256-ni-asm.S}                   |  36 +-
+ arch/x86/{ => lib}/crypto/sha256-ssse3-asm.S  |  14 +-
+ arch/x86/lib/crypto/sha256.c                  |  74 +++
+ crypto/Kconfig                                |   1 +
+ crypto/Makefile                               |   3 +-
+ crypto/sha256.c                               | 201 ++++++++
+ crypto/sha256_generic.c                       | 102 -----
+ include/crypto/internal/sha2.h                |  28 ++
+ include/crypto/sha2.h                         |  23 +-
+ include/crypto/sha256_base.h                  | 180 --------
+ lib/crypto/Kconfig                            |  22 +
+ lib/crypto/Makefile                           |   3 +
+ lib/crypto/sha256-generic.c                   | 137 ++++++
+ lib/crypto/sha256.c                           | 204 ++++-----
+ 97 files changed, 1128 insertions(+), 2319 deletions(-)
+ delete mode 100644 arch/arm/crypto/sha2-ce-glue.c
+ delete mode 100644 arch/arm/crypto/sha256_glue.c
+ delete mode 100644 arch/arm/crypto/sha256_glue.h
+ delete mode 100644 arch/arm/crypto/sha256_neon_glue.c
+ rename arch/arm/{ => lib}/crypto/sha256-armv4.pl (100%)
+ rename arch/arm/{crypto/sha2-ce-core.S => lib/crypto/sha256-ce.S} (91%)
+ create mode 100644 arch/arm/lib/crypto/sha256.c
+ delete mode 100644 arch/arm64/crypto/sha2-ce-glue.c
+ delete mode 100644 arch/arm64/crypto/sha256-glue.c
+ rename arch/arm64/{crypto/sha512-armv8.pl => lib/crypto/sha2-armv8.pl} (100%)
+ rename arch/arm64/{crypto/sha2-ce-core.S => lib/crypto/sha256-ce.S} (80%)
+ create mode 100644 arch/arm64/lib/crypto/sha256.c
+ delete mode 100644 arch/powerpc/crypto/sha256-spe-glue.c
+ rename arch/powerpc/{ => lib}/crypto/sha256-spe-asm.S (100%)
+ create mode 100644 arch/powerpc/lib/crypto/sha256.c
+ delete mode 100644 arch/riscv/crypto/sha256-riscv64-glue.c
+ rename arch/riscv/{ => lib}/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S (98%)
+ create mode 100644 arch/riscv/lib/crypto/sha256.c
+ delete mode 100644 arch/s390/crypto/sha256_s390.c
+ create mode 100644 arch/s390/lib/crypto/sha256.c
+ delete mode 100644 arch/sparc/crypto/sha256_glue.c
+ rename arch/sparc/{crypto => include/asm}/opcodes.h (96%)
+ create mode 100644 arch/sparc/lib/crypto/Kconfig
+ create mode 100644 arch/sparc/lib/crypto/Makefile
+ create mode 100644 arch/sparc/lib/crypto/sha256.c
+ rename arch/sparc/{ => lib}/crypto/sha256_asm.S (95%)
+ delete mode 100644 arch/x86/crypto/sha256_ssse3_glue.c
+ rename arch/x86/{ => lib}/crypto/sha256-avx-asm.S (98%)
+ rename arch/x86/{ => lib}/crypto/sha256-avx2-asm.S (98%)
+ rename arch/x86/{crypto/sha256_ni_asm.S => lib/crypto/sha256-ni-asm.S} (85%)
+ rename arch/x86/{ => lib}/crypto/sha256-ssse3-asm.S (98%)
+ create mode 100644 arch/x86/lib/crypto/sha256.c
+ create mode 100644 crypto/sha256.c
+ delete mode 100644 crypto/sha256_generic.c
+ create mode 100644 include/crypto/internal/sha2.h
+ delete mode 100644 include/crypto/sha256_base.h
+ create mode 100644 lib/crypto/sha256-generic.c
+
+
+base-commit: 2dfc7cd74a5e062a5405560447517e7aab1c7341
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.49.0
+
 
