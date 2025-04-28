@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-11655-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11656-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B2ABA9F67B
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 19:02:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28079A9F685
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 19:02:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE33517F835
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 17:02:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56425189AB5C
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Apr 2025 17:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B95828D85A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9F8C28DF09;
 	Mon, 28 Apr 2025 17:02:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R4lo9OBt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ve3Iax4g"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F0F28CF71;
-	Mon, 28 Apr 2025 17:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEBD28D83D;
+	Mon, 28 Apr 2025 17:02:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745859721; cv=none; b=Cx3NqZ6y6dlnyR6MsL1nLxRbdIVj5HnMZLu/nNi5GrQE1BM/i324ruI46knF/xn0tyNEAKf0QgL2WNDh/tdpPMARHGpiddUm8OajAbcE0YQJYtC94KcqyhEUF2Cyh1A3UiOsE7m7iG8sPGoKWZ86gGGq/WP99HyfFACEhmw92n0=
+	t=1745859721; cv=none; b=cAtDbYYFdIvmFBGwfQWvofV8SDcz8E8uBt703pyKowqr3efivc1zr4U49fVc8Ifqn1R3fZF758rV7FdNVjtKBUuX2Hps3G5fGLqmGETIFA1+lo0JZBDNacudCYhH11Q3uH4hexpyUVp3CB61eYzkttOhTrwwhwegLBCYxLp/R2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745859721; c=relaxed/simple;
-	bh=WGUG3mTzhoDhli2YpBvT7Wh87yi92KthyKex4Ih+eYs=;
+	bh=gxoYkgMzuTC7pzU277vtPKPWzHsI633Pdu5YNc9llK4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XCGIhIJhngocIufTqzv/60eheAordjeVXtNpMjeTnGZIYNriGrZLJjQZfyx8DwpUip8nMA2U4tus1W5R8imwyHXSTXUsAC14zudczXCMs5xFOU7uWHaxaAFlZU9Mt6FLGM8xvUre8nSIPqe5ADL+pTZ52iWSOSiuB/EdTb39L38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R4lo9OBt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 737D5C4CEF2;
+	 MIME-Version; b=L5d78f7pAQ0mbCE4sy5IJpRERnZtoIfy5zgdKdAzBnyzEmrah8hdGrwOvgoOwQF1gT/bUKWkd+61JAo7a+WYne5gA2Fm8HcCI9yS3Yzrycijr3nJeKGQHp84SS3JxYcAAPsCShbIdAyhA1R3xXKAPy2ny2moFmJdObX+OepbRWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ve3Iax4g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02038C4CEE4;
 	Mon, 28 Apr 2025 17:02:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745859720;
-	bh=WGUG3mTzhoDhli2YpBvT7Wh87yi92KthyKex4Ih+eYs=;
+	s=k20201202; t=1745859721;
+	bh=gxoYkgMzuTC7pzU277vtPKPWzHsI633Pdu5YNc9llK4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R4lo9OBtV1cajdxreoVKsMWdUvS6ZbyO08N/F8VPM7gCjd4vR29sCJ6hr+gsAz5sV
-	 /PsXwkP+M3rZJ1TDwQNaE0aEMelACb4s9S+KbbNmpiYX8UiyOjoozEWfhD09JDOZu+
-	 x/SJkloWktFlYpZjkRJX9AIJbC1zJzJj+z2oCK+M9nZLvkVSf48G9lnXlrGrV0uQug
-	 1k03Xh4jH0fkYF41PZm+nkzeR8JhPi/OIZVa5O0ePLaxiWaCo8FJrhxJm5FvTZ2LBl
-	 rhTM8PIU0kCLWQEmTvEPDD6lPp5XrwrJn6ldRIfBEJVhhwso8J2oM3uHywynAvoKeb
-	 QkQs8cjXuMjsw==
+	b=Ve3Iax4guBJITJpSuViO/MQqEMVPLZINcHy+0CQ+x7TbSE744aKTOmKyWmjbUt/8n
+	 6xYEkXlUmigEn4AEOrLoFKJ14tGhh/WjNTa2isq5YTDBFR+gJTgKUrPVYgbU1twqVU
+	 lNArF0ILlBZ/hOjm7JrGKPo61FLvblZC3DVLRTEuugLDhKJqFvVb5S2wejeG6ZjVUb
+	 Trqt6Os907hz4sB83F6nBi2v+rH2JvkpFS38twfk0V8gPT7Ij9dagKVOz+Uke3Zr0a
+	 z5TL2KpJetGuoHXXNBZDEB6wmDv/N1XqZFSK/f3DpxI74d505RoH3xoezbK7V3gOGf
+	 mSnTjEB3LMpXw==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>,
 	"Jason A . Donenfeld" <Jason@zx2c4.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH v4 03/13] crypto: arm64/sha256 - remove obsolete chunking logic
-Date: Mon, 28 Apr 2025 10:00:28 -0700
-Message-ID: <20250428170040.423825-4-ebiggers@kernel.org>
+Subject: [PATCH v4 04/13] crypto: arm64/sha256 - implement library instead of shash
+Date: Mon, 28 Apr 2025 10:00:29 -0700
+Message-ID: <20250428170040.423825-5-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250428170040.423825-1-ebiggers@kernel.org>
 References: <20250428170040.423825-1-ebiggers@kernel.org>
@@ -71,49 +71,668 @@ Content-Transfer-Encoding: 8bit
 
 From: Eric Biggers <ebiggers@google.com>
 
-Since kernel-mode NEON sections are now preemptible on arm64, there is
-no longer any need to limit the length of them.
+Instead of providing crypto_shash algorithms for the arch-optimized
+SHA-256 code, instead implement the SHA-256 library.  This is much
+simpler, it makes the SHA-256 library functions be arch-optimized, and
+it fixes the longstanding issue where the arch-optimized SHA-256 was
+disabled by default.  SHA-256 still remains available through
+crypto_shash, but individual architectures no longer need to handle it.
+
+Remove support for SHA-256 finalization from the ARMv8 CE assembly code,
+since the library does not yet support architecture-specific overrides
+of the finalization.  (Support for that has been omitted for now, for
+simplicity and because usually it isn't performance-critical.)
+
+To match sha256_blocks_arch(), change the type of the nblocks parameter
+of the assembly functions from int or 'unsigned int' to size_t.  Update
+the ARMv8 CE assembly function accordingly.  The scalar and NEON
+assembly functions actually already treated it as size_t.
+
+While renaming the assembly files, also fix the naming quirks where
+"sha2" meant sha256, and "sha512" meant both sha256 and sha512.
 
 Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/arm64/crypto/sha256-glue.c | 19 ++-----------------
- 1 file changed, 2 insertions(+), 17 deletions(-)
+ arch/arm64/configs/defconfig                  |   1 -
+ arch/arm64/crypto/Kconfig                     |  19 ---
+ arch/arm64/crypto/Makefile                    |  13 +-
+ arch/arm64/crypto/sha2-ce-glue.c              | 138 ----------------
+ arch/arm64/crypto/sha256-glue.c               | 156 ------------------
+ arch/arm64/lib/crypto/.gitignore              |   1 +
+ arch/arm64/lib/crypto/Kconfig                 |   5 +
+ arch/arm64/lib/crypto/Makefile                |   9 +-
+ .../crypto/sha2-armv8.pl}                     |   0
+ .../sha2-ce-core.S => lib/crypto/sha256-ce.S} |  36 +---
+ arch/arm64/lib/crypto/sha256.c                |  75 +++++++++
+ 11 files changed, 98 insertions(+), 355 deletions(-)
+ delete mode 100644 arch/arm64/crypto/sha2-ce-glue.c
+ delete mode 100644 arch/arm64/crypto/sha256-glue.c
+ rename arch/arm64/{crypto/sha512-armv8.pl => lib/crypto/sha2-armv8.pl} (100%)
+ rename arch/arm64/{crypto/sha2-ce-core.S => lib/crypto/sha256-ce.S} (80%)
+ create mode 100644 arch/arm64/lib/crypto/sha256.c
 
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 5bb8f09422a22..b0d4c7d173ea7 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1735,11 +1735,10 @@ CONFIG_CRYPTO_MICHAEL_MIC=m
+ CONFIG_CRYPTO_ANSI_CPRNG=y
+ CONFIG_CRYPTO_USER_API_RNG=m
+ CONFIG_CRYPTO_CHACHA20_NEON=m
+ CONFIG_CRYPTO_GHASH_ARM64_CE=y
+ CONFIG_CRYPTO_SHA1_ARM64_CE=y
+-CONFIG_CRYPTO_SHA2_ARM64_CE=y
+ CONFIG_CRYPTO_SHA512_ARM64_CE=m
+ CONFIG_CRYPTO_SHA3_ARM64=m
+ CONFIG_CRYPTO_SM3_ARM64_CE=m
+ CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
+ CONFIG_CRYPTO_AES_ARM64_BS=m
+diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
+index 55a7d87a67690..c44b0f202a1f5 100644
+--- a/arch/arm64/crypto/Kconfig
++++ b/arch/arm64/crypto/Kconfig
+@@ -34,29 +34,10 @@ config CRYPTO_SHA1_ARM64_CE
+ 	  SHA-1 secure hash algorithm (FIPS 180)
+ 
+ 	  Architecture: arm64 using:
+ 	  - ARMv8 Crypto Extensions
+ 
+-config CRYPTO_SHA256_ARM64
+-	tristate "Hash functions: SHA-224 and SHA-256"
+-	select CRYPTO_HASH
+-	help
+-	  SHA-224 and SHA-256 secure hash algorithms (FIPS 180)
+-
+-	  Architecture: arm64
+-
+-config CRYPTO_SHA2_ARM64_CE
+-	tristate "Hash functions: SHA-224 and SHA-256 (ARMv8 Crypto Extensions)"
+-	depends on KERNEL_MODE_NEON
+-	select CRYPTO_HASH
+-	select CRYPTO_SHA256_ARM64
+-	help
+-	  SHA-224 and SHA-256 secure hash algorithms (FIPS 180)
+-
+-	  Architecture: arm64 using:
+-	  - ARMv8 Crypto Extensions
+-
+ config CRYPTO_SHA512_ARM64
+ 	tristate "Hash functions: SHA-384 and SHA-512"
+ 	select CRYPTO_HASH
+ 	help
+ 	  SHA-384 and SHA-512 secure hash algorithms (FIPS 180)
+diff --git a/arch/arm64/crypto/Makefile b/arch/arm64/crypto/Makefile
+index 089ae3ddde810..c231c980c5142 100644
+--- a/arch/arm64/crypto/Makefile
++++ b/arch/arm64/crypto/Makefile
+@@ -6,13 +6,10 @@
+ #
+ 
+ obj-$(CONFIG_CRYPTO_SHA1_ARM64_CE) += sha1-ce.o
+ sha1-ce-y := sha1-ce-glue.o sha1-ce-core.o
+ 
+-obj-$(CONFIG_CRYPTO_SHA2_ARM64_CE) += sha2-ce.o
+-sha2-ce-y := sha2-ce-glue.o sha2-ce-core.o
+-
+ obj-$(CONFIG_CRYPTO_SHA512_ARM64_CE) += sha512-ce.o
+ sha512-ce-y := sha512-ce-glue.o sha512-ce-core.o
+ 
+ obj-$(CONFIG_CRYPTO_SHA3_ARM64) += sha3-ce.o
+ sha3-ce-y := sha3-ce-glue.o sha3-ce-core.o
+@@ -54,13 +51,10 @@ obj-$(CONFIG_CRYPTO_AES_ARM64_CE_BLK) += aes-ce-blk.o
+ aes-ce-blk-y := aes-glue-ce.o aes-ce.o
+ 
+ obj-$(CONFIG_CRYPTO_AES_ARM64_NEON_BLK) += aes-neon-blk.o
+ aes-neon-blk-y := aes-glue-neon.o aes-neon.o
+ 
+-obj-$(CONFIG_CRYPTO_SHA256_ARM64) += sha256-arm64.o
+-sha256-arm64-y := sha256-glue.o sha256-core.o
+-
+ obj-$(CONFIG_CRYPTO_SHA512_ARM64) += sha512-arm64.o
+ sha512-arm64-y := sha512-glue.o sha512-core.o
+ 
+ obj-$(CONFIG_CRYPTO_NHPOLY1305_NEON) += nhpoly1305-neon.o
+ nhpoly1305-neon-y := nh-neon-core.o nhpoly1305-neon-glue.o
+@@ -72,12 +66,9 @@ obj-$(CONFIG_CRYPTO_AES_ARM64_BS) += aes-neon-bs.o
+ aes-neon-bs-y := aes-neonbs-core.o aes-neonbs-glue.o
+ 
+ quiet_cmd_perlasm = PERLASM $@
+       cmd_perlasm = $(PERL) $(<) void $(@)
+ 
+-$(obj)/%-core.S: $(src)/%-armv8.pl
+-	$(call cmd,perlasm)
+-
+-$(obj)/sha256-core.S: $(src)/sha512-armv8.pl
++$(obj)/sha512-core.S: $(src)/../lib/crypto/sha2-armv8.pl
+ 	$(call cmd,perlasm)
+ 
+-clean-files += sha256-core.S sha512-core.S
++clean-files += sha512-core.S
+diff --git a/arch/arm64/crypto/sha2-ce-glue.c b/arch/arm64/crypto/sha2-ce-glue.c
+deleted file mode 100644
+index 912c215101eb1..0000000000000
+--- a/arch/arm64/crypto/sha2-ce-glue.c
++++ /dev/null
+@@ -1,138 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * sha2-ce-glue.c - SHA-224/SHA-256 using ARMv8 Crypto Extensions
+- *
+- * Copyright (C) 2014 - 2017 Linaro Ltd <ard.biesheuvel@linaro.org>
+- */
+-
+-#include <asm/neon.h>
+-#include <crypto/internal/hash.h>
+-#include <crypto/sha2.h>
+-#include <crypto/sha256_base.h>
+-#include <linux/cpufeature.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/string.h>
+-
+-MODULE_DESCRIPTION("SHA-224/SHA-256 secure hash using ARMv8 Crypto Extensions");
+-MODULE_AUTHOR("Ard Biesheuvel <ard.biesheuvel@linaro.org>");
+-MODULE_LICENSE("GPL v2");
+-MODULE_ALIAS_CRYPTO("sha224");
+-MODULE_ALIAS_CRYPTO("sha256");
+-
+-struct sha256_ce_state {
+-	struct crypto_sha256_state sst;
+-	u32			finalize;
+-};
+-
+-extern const u32 sha256_ce_offsetof_count;
+-extern const u32 sha256_ce_offsetof_finalize;
+-
+-asmlinkage int __sha256_ce_transform(struct sha256_ce_state *sst, u8 const *src,
+-				     int blocks);
+-
+-static void sha256_ce_transform(struct crypto_sha256_state *sst, u8 const *src,
+-				int blocks)
+-{
+-	while (blocks) {
+-		int rem;
+-
+-		kernel_neon_begin();
+-		rem = __sha256_ce_transform(container_of(sst,
+-							 struct sha256_ce_state,
+-							 sst), src, blocks);
+-		kernel_neon_end();
+-		src += (blocks - rem) * SHA256_BLOCK_SIZE;
+-		blocks = rem;
+-	}
+-}
+-
+-const u32 sha256_ce_offsetof_count = offsetof(struct sha256_ce_state,
+-					      sst.count);
+-const u32 sha256_ce_offsetof_finalize = offsetof(struct sha256_ce_state,
+-						 finalize);
+-
+-static int sha256_ce_update(struct shash_desc *desc, const u8 *data,
+-			    unsigned int len)
+-{
+-	struct sha256_ce_state *sctx = shash_desc_ctx(desc);
+-
+-	sctx->finalize = 0;
+-	return sha256_base_do_update_blocks(desc, data, len,
+-					    sha256_ce_transform);
+-}
+-
+-static int sha256_ce_finup(struct shash_desc *desc, const u8 *data,
+-			   unsigned int len, u8 *out)
+-{
+-	struct sha256_ce_state *sctx = shash_desc_ctx(desc);
+-	bool finalize = !(len % SHA256_BLOCK_SIZE) && len;
+-
+-	/*
+-	 * Allow the asm code to perform the finalization if there is no
+-	 * partial data and the input is a round multiple of the block size.
+-	 */
+-	sctx->finalize = finalize;
+-
+-	if (finalize)
+-		sha256_base_do_update_blocks(desc, data, len,
+-					     sha256_ce_transform);
+-	else
+-		sha256_base_do_finup(desc, data, len, sha256_ce_transform);
+-	return sha256_base_finish(desc, out);
+-}
+-
+-static int sha256_ce_digest(struct shash_desc *desc, const u8 *data,
+-			    unsigned int len, u8 *out)
+-{
+-	sha256_base_init(desc);
+-	return sha256_ce_finup(desc, data, len, out);
+-}
+-
+-static struct shash_alg algs[] = { {
+-	.init			= sha224_base_init,
+-	.update			= sha256_ce_update,
+-	.finup			= sha256_ce_finup,
+-	.descsize		= sizeof(struct sha256_ce_state),
+-	.statesize		= sizeof(struct crypto_sha256_state),
+-	.digestsize		= SHA224_DIGEST_SIZE,
+-	.base			= {
+-		.cra_name		= "sha224",
+-		.cra_driver_name	= "sha224-ce",
+-		.cra_priority		= 200,
+-		.cra_flags		= CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-					  CRYPTO_AHASH_ALG_FINUP_MAX,
+-		.cra_blocksize		= SHA256_BLOCK_SIZE,
+-		.cra_module		= THIS_MODULE,
+-	}
+-}, {
+-	.init			= sha256_base_init,
+-	.update			= sha256_ce_update,
+-	.finup			= sha256_ce_finup,
+-	.digest			= sha256_ce_digest,
+-	.descsize		= sizeof(struct sha256_ce_state),
+-	.statesize		= sizeof(struct crypto_sha256_state),
+-	.digestsize		= SHA256_DIGEST_SIZE,
+-	.base			= {
+-		.cra_name		= "sha256",
+-		.cra_driver_name	= "sha256-ce",
+-		.cra_priority		= 200,
+-		.cra_flags		= CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-					  CRYPTO_AHASH_ALG_FINUP_MAX,
+-		.cra_blocksize		= SHA256_BLOCK_SIZE,
+-		.cra_module		= THIS_MODULE,
+-	}
+-} };
+-
+-static int __init sha2_ce_mod_init(void)
+-{
+-	return crypto_register_shashes(algs, ARRAY_SIZE(algs));
+-}
+-
+-static void __exit sha2_ce_mod_fini(void)
+-{
+-	crypto_unregister_shashes(algs, ARRAY_SIZE(algs));
+-}
+-
+-module_cpu_feature_match(SHA2, sha2_ce_mod_init);
+-module_exit(sha2_ce_mod_fini);
 diff --git a/arch/arm64/crypto/sha256-glue.c b/arch/arm64/crypto/sha256-glue.c
-index 26f9fdfae87bf..d63ea82e1374e 100644
+deleted file mode 100644
+index d63ea82e1374e..0000000000000
 --- a/arch/arm64/crypto/sha256-glue.c
-+++ b/arch/arm64/crypto/sha256-glue.c
-@@ -84,27 +84,12 @@ static struct shash_alg algs[] = { {
- } };
- 
- static int sha256_update_neon(struct shash_desc *desc, const u8 *data,
- 			      unsigned int len)
- {
--	do {
--		unsigned int chunk = len;
++++ /dev/null
+@@ -1,156 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Linux/arm64 port of the OpenSSL SHA256 implementation for AArch64
+- *
+- * Copyright (c) 2016 Linaro Ltd. <ard.biesheuvel@linaro.org>
+- */
 -
--		/*
--		 * Don't hog the CPU for the entire time it takes to process all
--		 * input when running on a preemptible kernel, but process the
--		 * data block by block instead.
--		 */
--		if (IS_ENABLED(CONFIG_PREEMPTION))
--			chunk = SHA256_BLOCK_SIZE;
+-#include <asm/neon.h>
+-#include <crypto/internal/hash.h>
+-#include <crypto/sha2.h>
+-#include <crypto/sha256_base.h>
+-#include <linux/cpufeature.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
 -
--		chunk -= sha256_base_do_update_blocks(desc, data, chunk,
--						      sha256_neon_transform);
--		data += chunk;
--		len -= chunk;
--	} while (len >= SHA256_BLOCK_SIZE);
--	return len;
-+	return sha256_base_do_update_blocks(desc, data, len,
-+					    sha256_neon_transform);
- }
+-MODULE_DESCRIPTION("SHA-224/SHA-256 secure hash for arm64");
+-MODULE_AUTHOR("Andy Polyakov <appro@openssl.org>");
+-MODULE_AUTHOR("Ard Biesheuvel <ard.biesheuvel@linaro.org>");
+-MODULE_LICENSE("GPL v2");
+-MODULE_ALIAS_CRYPTO("sha224");
+-MODULE_ALIAS_CRYPTO("sha256");
+-
+-asmlinkage void sha256_block_data_order(u32 *digest, const void *data,
+-					unsigned int num_blks);
+-EXPORT_SYMBOL(sha256_block_data_order);
+-
+-static void sha256_arm64_transform(struct crypto_sha256_state *sst,
+-				   u8 const *src, int blocks)
+-{
+-	sha256_block_data_order(sst->state, src, blocks);
+-}
+-
+-asmlinkage void sha256_block_neon(u32 *digest, const void *data,
+-				  unsigned int num_blks);
+-
+-static void sha256_neon_transform(struct crypto_sha256_state *sst,
+-				  u8 const *src, int blocks)
+-{
+-	kernel_neon_begin();
+-	sha256_block_neon(sst->state, src, blocks);
+-	kernel_neon_end();
+-}
+-
+-static int crypto_sha256_arm64_update(struct shash_desc *desc, const u8 *data,
+-				      unsigned int len)
+-{
+-	return sha256_base_do_update_blocks(desc, data, len,
+-					    sha256_arm64_transform);
+-}
+-
+-static int crypto_sha256_arm64_finup(struct shash_desc *desc, const u8 *data,
+-				     unsigned int len, u8 *out)
+-{
+-	sha256_base_do_finup(desc, data, len, sha256_arm64_transform);
+-	return sha256_base_finish(desc, out);
+-}
+-
+-static struct shash_alg algs[] = { {
+-	.digestsize		= SHA256_DIGEST_SIZE,
+-	.init			= sha256_base_init,
+-	.update			= crypto_sha256_arm64_update,
+-	.finup			= crypto_sha256_arm64_finup,
+-	.descsize		= sizeof(struct crypto_sha256_state),
+-	.base.cra_name		= "sha256",
+-	.base.cra_driver_name	= "sha256-arm64",
+-	.base.cra_priority	= 125,
+-	.base.cra_flags		= CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-				  CRYPTO_AHASH_ALG_FINUP_MAX,
+-	.base.cra_blocksize	= SHA256_BLOCK_SIZE,
+-	.base.cra_module	= THIS_MODULE,
+-}, {
+-	.digestsize		= SHA224_DIGEST_SIZE,
+-	.init			= sha224_base_init,
+-	.update			= crypto_sha256_arm64_update,
+-	.finup			= crypto_sha256_arm64_finup,
+-	.descsize		= sizeof(struct crypto_sha256_state),
+-	.base.cra_name		= "sha224",
+-	.base.cra_driver_name	= "sha224-arm64",
+-	.base.cra_priority	= 125,
+-	.base.cra_flags		= CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-				  CRYPTO_AHASH_ALG_FINUP_MAX,
+-	.base.cra_blocksize	= SHA224_BLOCK_SIZE,
+-	.base.cra_module	= THIS_MODULE,
+-} };
+-
+-static int sha256_update_neon(struct shash_desc *desc, const u8 *data,
+-			      unsigned int len)
+-{
+-	return sha256_base_do_update_blocks(desc, data, len,
+-					    sha256_neon_transform);
+-}
+-
+-static int sha256_finup_neon(struct shash_desc *desc, const u8 *data,
+-			     unsigned int len, u8 *out)
+-{
+-	if (len >= SHA256_BLOCK_SIZE) {
+-		int remain = sha256_update_neon(desc, data, len);
+-
+-		data += len - remain;
+-		len = remain;
+-	}
+-	sha256_base_do_finup(desc, data, len, sha256_neon_transform);
+-	return sha256_base_finish(desc, out);
+-}
+-
+-static struct shash_alg neon_algs[] = { {
+-	.digestsize		= SHA256_DIGEST_SIZE,
+-	.init			= sha256_base_init,
+-	.update			= sha256_update_neon,
+-	.finup			= sha256_finup_neon,
+-	.descsize		= sizeof(struct crypto_sha256_state),
+-	.base.cra_name		= "sha256",
+-	.base.cra_driver_name	= "sha256-arm64-neon",
+-	.base.cra_priority	= 150,
+-	.base.cra_flags		= CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-				  CRYPTO_AHASH_ALG_FINUP_MAX,
+-	.base.cra_blocksize	= SHA256_BLOCK_SIZE,
+-	.base.cra_module	= THIS_MODULE,
+-}, {
+-	.digestsize		= SHA224_DIGEST_SIZE,
+-	.init			= sha224_base_init,
+-	.update			= sha256_update_neon,
+-	.finup			= sha256_finup_neon,
+-	.descsize		= sizeof(struct crypto_sha256_state),
+-	.base.cra_name		= "sha224",
+-	.base.cra_driver_name	= "sha224-arm64-neon",
+-	.base.cra_priority	= 150,
+-	.base.cra_flags		= CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-				  CRYPTO_AHASH_ALG_FINUP_MAX,
+-	.base.cra_blocksize	= SHA224_BLOCK_SIZE,
+-	.base.cra_module	= THIS_MODULE,
+-} };
+-
+-static int __init sha256_mod_init(void)
+-{
+-	int ret = crypto_register_shashes(algs, ARRAY_SIZE(algs));
+-	if (ret)
+-		return ret;
+-
+-	if (cpu_have_named_feature(ASIMD)) {
+-		ret = crypto_register_shashes(neon_algs, ARRAY_SIZE(neon_algs));
+-		if (ret)
+-			crypto_unregister_shashes(algs, ARRAY_SIZE(algs));
+-	}
+-	return ret;
+-}
+-
+-static void __exit sha256_mod_fini(void)
+-{
+-	if (cpu_have_named_feature(ASIMD))
+-		crypto_unregister_shashes(neon_algs, ARRAY_SIZE(neon_algs));
+-	crypto_unregister_shashes(algs, ARRAY_SIZE(algs));
+-}
+-
+-module_init(sha256_mod_init);
+-module_exit(sha256_mod_fini);
+diff --git a/arch/arm64/lib/crypto/.gitignore b/arch/arm64/lib/crypto/.gitignore
+index 0d47d4f21c6de..12d74d8b03d0a 100644
+--- a/arch/arm64/lib/crypto/.gitignore
++++ b/arch/arm64/lib/crypto/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ poly1305-core.S
++sha256-core.S
+diff --git a/arch/arm64/lib/crypto/Kconfig b/arch/arm64/lib/crypto/Kconfig
+index 0b903ef524d85..49e57bfdb5b52 100644
+--- a/arch/arm64/lib/crypto/Kconfig
++++ b/arch/arm64/lib/crypto/Kconfig
+@@ -10,5 +10,10 @@ config CRYPTO_CHACHA20_NEON
+ config CRYPTO_POLY1305_NEON
+ 	tristate
+ 	depends on KERNEL_MODE_NEON
+ 	default CRYPTO_LIB_POLY1305
+ 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
++
++config CRYPTO_SHA256_ARM64
++	tristate
++	default CRYPTO_LIB_SHA256
++	select CRYPTO_ARCH_HAVE_LIB_SHA256
+diff --git a/arch/arm64/lib/crypto/Makefile b/arch/arm64/lib/crypto/Makefile
+index ac624c3effdaf..141efe07155c0 100644
+--- a/arch/arm64/lib/crypto/Makefile
++++ b/arch/arm64/lib/crypto/Makefile
+@@ -5,12 +5,19 @@ chacha-neon-y := chacha-neon-core.o chacha-neon-glue.o
  
- static int sha256_finup_neon(struct shash_desc *desc, const u8 *data,
- 			     unsigned int len, u8 *out)
- {
+ obj-$(CONFIG_CRYPTO_POLY1305_NEON) += poly1305-neon.o
+ poly1305-neon-y := poly1305-core.o poly1305-glue.o
+ AFLAGS_poly1305-core.o += -Dpoly1305_init=poly1305_init_arm64
+ 
++obj-$(CONFIG_CRYPTO_SHA256_ARM64) += sha256-arm64.o
++sha256-arm64-y := sha256.o sha256-core.o
++sha256-arm64-$(CONFIG_KERNEL_MODE_NEON) += sha256-ce.o
++
+ quiet_cmd_perlasm = PERLASM $@
+       cmd_perlasm = $(PERL) $(<) void $(@)
+ 
+ $(obj)/%-core.S: $(src)/%-armv8.pl
+ 	$(call cmd,perlasm)
+ 
+-clean-files += poly1305-core.S
++$(obj)/sha256-core.S: $(src)/sha2-armv8.pl
++	$(call cmd,perlasm)
++
++clean-files += poly1305-core.S sha256-core.S
+diff --git a/arch/arm64/crypto/sha512-armv8.pl b/arch/arm64/lib/crypto/sha2-armv8.pl
+similarity index 100%
+rename from arch/arm64/crypto/sha512-armv8.pl
+rename to arch/arm64/lib/crypto/sha2-armv8.pl
+diff --git a/arch/arm64/crypto/sha2-ce-core.S b/arch/arm64/lib/crypto/sha256-ce.S
+similarity index 80%
+rename from arch/arm64/crypto/sha2-ce-core.S
+rename to arch/arm64/lib/crypto/sha256-ce.S
+index fce84d88ddb2c..a8461d6dad634 100644
+--- a/arch/arm64/crypto/sha2-ce-core.S
++++ b/arch/arm64/lib/crypto/sha256-ce.S
+@@ -69,12 +69,12 @@
+ 	.word		0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3
+ 	.word		0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208
+ 	.word		0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+ 
+ 	/*
+-	 * int __sha256_ce_transform(struct sha256_ce_state *sst, u8 const *src,
+-	 *			     int blocks)
++	 * size_t __sha256_ce_transform(u32 state[SHA256_STATE_WORDS],
++	 *				const u8 *data, size_t nblocks);
+ 	 */
+ 	.text
+ SYM_FUNC_START(__sha256_ce_transform)
+ 	/* load round constants */
+ 	adr_l		x8, .Lsha2_rcon
+@@ -84,24 +84,20 @@ SYM_FUNC_START(__sha256_ce_transform)
+ 	ld1		{v12.4s-v15.4s}, [x8]
+ 
+ 	/* load state */
+ 	ld1		{dgav.4s, dgbv.4s}, [x0]
+ 
+-	/* load sha256_ce_state::finalize */
+-	ldr_l		w4, sha256_ce_offsetof_finalize, x4
+-	ldr		w4, [x0, x4]
+-
+ 	/* load input */
+ 0:	ld1		{v16.4s-v19.4s}, [x1], #64
+-	sub		w2, w2, #1
++	sub		x2, x2, #1
+ 
+ CPU_LE(	rev32		v16.16b, v16.16b	)
+ CPU_LE(	rev32		v17.16b, v17.16b	)
+ CPU_LE(	rev32		v18.16b, v18.16b	)
+ CPU_LE(	rev32		v19.16b, v19.16b	)
+ 
+-1:	add		t0.4s, v16.4s, v0.4s
++	add		t0.4s, v16.4s, v0.4s
+ 	mov		dg0v.16b, dgav.16b
+ 	mov		dg1v.16b, dgbv.16b
+ 
+ 	add_update	0,  v1, 16, 17, 18, 19
+ 	add_update	1,  v2, 17, 18, 19, 16
+@@ -126,32 +122,14 @@ CPU_LE(	rev32		v19.16b, v19.16b	)
+ 	/* update state */
+ 	add		dgav.4s, dgav.4s, dg0v.4s
+ 	add		dgbv.4s, dgbv.4s, dg1v.4s
+ 
+ 	/* handled all input blocks? */
+-	cbz		w2, 2f
++	cbz		x2, 1f
+ 	cond_yield	3f, x5, x6
+ 	b		0b
+ 
+-	/*
+-	 * Final block: add padding and total bit count.
+-	 * Skip if the input size was not a round multiple of the block size,
+-	 * the padding is handled by the C code in that case.
+-	 */
+-2:	cbz		x4, 3f
+-	ldr_l		w4, sha256_ce_offsetof_count, x4
+-	ldr		x4, [x0, x4]
+-	movi		v17.2d, #0
+-	mov		x8, #0x80000000
+-	movi		v18.2d, #0
+-	ror		x7, x4, #29		// ror(lsl(x4, 3), 32)
+-	fmov		d16, x8
+-	mov		x4, #0
+-	mov		v19.d[0], xzr
+-	mov		v19.d[1], x7
+-	b		1b
+-
+ 	/* store new state */
+-3:	st1		{dgav.4s, dgbv.4s}, [x0]
+-	mov		w0, w2
++1:	st1		{dgav.4s, dgbv.4s}, [x0]
++	mov		x0, x2
+ 	ret
+ SYM_FUNC_END(__sha256_ce_transform)
+diff --git a/arch/arm64/lib/crypto/sha256.c b/arch/arm64/lib/crypto/sha256.c
+new file mode 100644
+index 0000000000000..2bd413c586d27
+--- /dev/null
++++ b/arch/arm64/lib/crypto/sha256.c
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * SHA-256 optimized for ARM64
++ *
++ * Copyright 2025 Google LLC
++ */
++#include <asm/neon.h>
++#include <crypto/internal/sha2.h>
++#include <crypto/internal/simd.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++
++asmlinkage void sha256_block_data_order(u32 state[SHA256_STATE_WORDS],
++					const u8 *data, size_t nblocks);
++asmlinkage void sha256_block_neon(u32 state[SHA256_STATE_WORDS],
++				  const u8 *data, size_t nblocks);
++asmlinkage size_t __sha256_ce_transform(u32 state[SHA256_STATE_WORDS],
++					const u8 *data, size_t nblocks);
++
++static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_neon);
++static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_ce);
++
++void sha256_blocks_arch(u32 state[SHA256_STATE_WORDS],
++			const u8 *data, size_t nblocks)
++{
++	if (IS_ENABLED(CONFIG_KERNEL_MODE_NEON) &&
++	    static_branch_likely(&have_neon) && crypto_simd_usable()) {
++		if (static_branch_likely(&have_ce)) {
++			do {
++				size_t rem;
++
++				kernel_neon_begin();
++				rem = __sha256_ce_transform(state,
++							    data, nblocks);
++				kernel_neon_end();
++				data += (nblocks - rem) * SHA256_BLOCK_SIZE;
++				nblocks = rem;
++			} while (nblocks);
++		} else {
++			kernel_neon_begin();
++			sha256_block_neon(state, data, nblocks);
++			kernel_neon_end();
++		}
++	} else {
++		sha256_block_data_order(state, data, nblocks);
++	}
++}
++EXPORT_SYMBOL(sha256_blocks_arch);
++
++bool sha256_is_arch_optimized(void)
++{
++	/* We always can use at least the ARM64 scalar implementation. */
++	return true;
++}
++EXPORT_SYMBOL(sha256_is_arch_optimized);
++
++static int __init sha256_arm64_mod_init(void)
++{
++	if (IS_ENABLED(CONFIG_KERNEL_MODE_NEON) &&
++	    cpu_have_named_feature(ASIMD)) {
++		static_branch_enable(&have_neon);
++		if (cpu_have_named_feature(SHA2))
++			static_branch_enable(&have_ce);
++	}
++	return 0;
++}
++arch_initcall(sha256_arm64_mod_init);
++
++static void __exit sha256_arm64_mod_exit(void)
++{
++}
++module_exit(sha256_arm64_mod_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("SHA-256 optimized for ARM64");
 -- 
 2.49.0
 
