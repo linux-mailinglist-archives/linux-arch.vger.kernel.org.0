@@ -1,450 +1,184 @@
-Return-Path: <linux-arch+bounces-11707-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11713-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C542BAA0AB0
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:51:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7749EAA0CDB
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 15:06:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C78F5172948
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 11:51:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 989A13A5874
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A312D4B78;
-	Tue, 29 Apr 2025 11:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6D22D3237;
+	Tue, 29 Apr 2025 13:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f8uMWpbl"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IRRJNLk+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667AB2D4B6D
-	for <linux-arch@vger.kernel.org>; Tue, 29 Apr 2025 11:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218692D29B8;
+	Tue, 29 Apr 2025 13:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745927191; cv=none; b=iTj5rp5lM5u2jwIbXLHHfAOKwwoIEU3y4ZuNLOrqiMRuCmD1tvSVvlHTTevrnOwwYTf8XqJAICG9mGPIPoTupGp1w3XFNC9HgjSZWv3VLyeyxd610y2o8E4ONv8nzW/YUA9RIXp6OHO198Vu1igUzs35H5jXkbyL6h53+Z8juko=
+	t=1745931891; cv=none; b=dKo40atZJSIykaGCaoo+WhFwvw0EBCXPEAXg3LOb5cErAJk5Z+QdC3uPC3rGwS2kabaQ/F4rJ9pYuUTaTrD9cDIlQeYggIIdPHA0GCslOt67PS/vLCbjiso8Pyl5xRtjeBTgAEoUQJnMth0wIsaby2JhekwmwdYbIe27b3g6iwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745927191; c=relaxed/simple;
-	bh=//7Q4pa0cyHdD4P62SOM8iLoDYvBplXZ4+xR7j8wswY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mFW/3GUZGWFiUtRVvvC+gmT3lrEczb2d0tW10pWe+lh2kBHywnv8SZ1ZM3RbaiY8Y3TE3PxrwT0l0C4ILoTub2OBC9a0GFzhAmrUnDMGaZpGm87eVroMreOgNoY97NVBciWlJNAox6orQCUrMJz2WmpuM9YUng2YaqCjPVKwhr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f8uMWpbl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745927188;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UNP0/g1fsLvLBQS0mp5T4cvzk2DsJdERKWqgqviWFK4=;
-	b=f8uMWpblE1u6y5LStp5HsV59xZ/1VD/NeUyD0CJlVMcQJyzxAow5LtmIt6Rjti3RmWHkLo
-	9b2ZIRD4CKPIy/HgyPIMl7ylPrZSCPMRMcknrXvNB8jGdL9vvDwQkJP3k0Eono0mviS3dC
-	BbzgkYY4C2fPxiXtFQRijWW6hQ0C3WA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-155-r7bLT26sNc-abpjlyaV0Qg-1; Tue,
- 29 Apr 2025 07:46:25 -0400
-X-MC-Unique: r7bLT26sNc-abpjlyaV0Qg-1
-X-Mimecast-MFC-AGG-ID: r7bLT26sNc-abpjlyaV0Qg_1745927181
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BEDBC1800264;
-	Tue, 29 Apr 2025 11:46:21 +0000 (UTC)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.225.102])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4C51B19560A3;
-	Tue, 29 Apr 2025 11:45:52 +0000 (UTC)
-From: Valentin Schneider <vschneid@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	rcu@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Daniel Wagner <dwagner@suse.de>,
-	Petr Tesarik <ptesarik@suse.com>,
-	Nicolas Saenz Julienne <nsaenz@amazon.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jason Baron <jbaron@akamai.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rong Xu <xur@google.com>,
-	Rafael Aquini <aquini@redhat.com>,
-	Song Liu <song@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	John Stultz <jstultz@google.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v5 25/25] context_tracking,x86: Defer kernel text patching IPIs
-Date: Tue, 29 Apr 2025 13:32:42 +0200
-Message-ID: <20250429113242.998312-26-vschneid@redhat.com>
-In-Reply-To: <20250429113242.998312-1-vschneid@redhat.com>
-References: <20250429113242.998312-1-vschneid@redhat.com>
+	s=arc-20240116; t=1745931891; c=relaxed/simple;
+	bh=Y+xLjK61Kdyaf5qG4FimETVDBBB3izTwQkrP8AuirI4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q0qKgOfhrdVnz6OYLlgYLW1yXVhqYN+Bfh1EKN/dwsYY9xqIn22QF6vs3VYpPu82l/hpcAOdXlilAEt+vi291IRVDDWjEn32uP1x8bIeMMXLlmr3nGlaFowKz6tPvg5U9cmjpCnMQwhVDnVEk9b331AkT6USS8w8DuX8a+nadZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IRRJNLk+; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1745931874;
+	bh=Y+xLjK61Kdyaf5qG4FimETVDBBB3izTwQkrP8AuirI4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=IRRJNLk+e7inQgG0GdySHCzALbfOkLdvGf9nPAyO84CiqXQO1UO0uUl/tT200tV6h
+	 t9zLXBXeJ6gdAnQbVxAEgBRjbrPzmpUaaDXzdsTg/s3ZAvFTqsHtb66hBTk8xURkCa
+	 s3CiPKXGBG51UzVaWwtvmbgx9fG90CgWNMI1hDFk=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v3 0/9] module: Introduce hash-based integrity checking
+Date: Tue, 29 Apr 2025 15:04:27 +0200
+Message-Id: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+X-B4-Tracking: v=1; b=H4sIAFvOEGgC/3XMQQrCMBCF4auUrI1kpi0RV96juEiTqQloK5k2K
+ qV3Ny24UVz+D943C6YYiMWxmEWkFDgMfY5yVwjrTX8hGVxugQorQKzlbXDTlaQ37ImlNrUy2lo
+ 0pRL5c4/UhefmNefcPvA4xNfGJ1jXf1ICqaTToCxpU3YOTg8KzGz95Pc9jWLlEn6IWgGqbwIz0
+ RqAQ0WoW939EMuyvAGqrA4I8gAAAA==
+X-Change-ID: 20241225-module-hashes-7a50a7cc2a30
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, 
+ Nicolas Schier <nicolas.schier@linux.dev>
+Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+ Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
+ kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>, 
+ =?utf-8?q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745931873; l=4167;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=Y+xLjK61Kdyaf5qG4FimETVDBBB3izTwQkrP8AuirI4=;
+ b=EPx/fKWbgM9Vin3BDBMnBLPm+4MHXpOt4igmfsC24uEu/uUVs9r+4rDAXbDMhihK1CxXjLsGa
+ zLa8agdSfc0DAmg+2uNWPgMQwlyk4enmeazWuA4PLxnd5pszMLDhjHD
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-text_poke_bp_batch() sends IPIs to all online CPUs to synchronize
-them vs the newly patched instruction. CPUs that are executing in userspace
-do not need this synchronization to happen immediately, and this is
-actually harmful interference for NOHZ_FULL CPUs.
+The current signature-based module integrity checking has some drawbacks
+in combination with reproducible builds:
+Either the module signing key is generated at build time, which makes
+the build unreproducible, or a static key is used, which precludes
+rebuilds by third parties and makes the whole build and packaging
+process much more complicated.
+Introduce a new mechanism to ensure only well-known modules are loaded
+by embedding a list of hashes of all modules built as part of the full
+kernel build into vmlinux.
 
-As the synchronization IPIs are sent using a blocking call, returning from
-text_poke_bp_batch() implies all CPUs will observe the patched
-instruction(s), and this should be preserved even if the IPI is deferred.
-In other words, to safely defer this synchronization, any kernel
-instruction leading to the execution of the deferred instruction
-sync (ct_work_flush()) must *not* be mutable (patchable) at runtime.
+Interest has been proclaimed by NixOS, Arch Linux, Proxmox, SUSE and the
+general reproducible builds community.
 
-This means we must pay attention to mutable instructions in the early entry
-code:
-- alternatives
-- static keys
-- static calls
-- all sorts of probes (kprobes/ftrace/bpf/???)
+To properly test the reproducibility in combination with CONFIG_INFO_BTF
+another patch or pahole v1.29 is needed:
+"[PATCH bpf-next] kbuild, bpf: Enable reproducible BTF generation" [0]
 
-The early entry code leading to ct_work_flush() is noinstr, which gets rid
-of the probes.
+Questions for current patch:
+* Naming
+* Can the number of built-in modules be retrieved while building
+  kernel/module/hashes.o? This would remove the need for the
+  preallocation step in link-vmlinux.sh.
+* How should this interaction with IMA?
 
-Alternatives are safe, because it's boot-time patching (before SMP is
-even brought up) which is before any IPI deferral can happen.
+Further improvements:
+* Use a LSM/IMA Keyring to store and validate hashes
+* Use MODULE_SIG_HASH for configuration
+* UAPI for discovery?
+* Currently has a permanent memory overhead
 
-This leaves us with static keys and static calls.
+[0] https://lore.kernel.org/lkml/20241211-pahole-reproducible-v1-1-22feae19bad9@weissschuh.net/
 
-Any static key used in early entry code should be only forever-enabled at
-boot time, IOW __ro_after_init (pretty much like alternatives). Exceptions
-are explicitly marked as allowed in .noinstr and will always generate an
-IPI when flipped.
-
-The same applies to static calls - they should be only updated at boot
-time, or manually marked as an exception.
-
-Objtool is now able to point at static keys/calls that don't respect this,
-and all static keys/calls used in early entry code have now been verified
-as behaving appropriately.
-
-Leverage the new context_tracking infrastructure to defer sync_core() IPIs
-to a target CPU's next kernel entry.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- arch/x86/include/asm/context_tracking_work.h |  6 ++-
- arch/x86/include/asm/text-patching.h         |  1 +
- arch/x86/kernel/alternative.c                | 39 +++++++++++++++++---
- arch/x86/kernel/kprobes/core.c               |  4 +-
- arch/x86/kernel/kprobes/opt.c                |  4 +-
- arch/x86/kernel/module.c                     |  2 +-
- include/asm-generic/sections.h               | 15 ++++++++
- include/linux/context_tracking_work.h        |  4 +-
- 8 files changed, 60 insertions(+), 15 deletions(-)
+Changes in v3:
+- Rebase on v6.15-rc1
+- Use openssl to calculate hash
+- Avoid warning if no modules are built
+- Simplify module_integrity_check() a bit
+- Make incompatibility with INSTALL_MOD_STRIP explicit
+- Update docs
+- Add IMA cleanups
+- Link to v2: https://lore.kernel.org/r/20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net
 
-diff --git a/arch/x86/include/asm/context_tracking_work.h b/arch/x86/include/asm/context_tracking_work.h
-index 5f3b2d0977235..485b32881fde5 100644
---- a/arch/x86/include/asm/context_tracking_work.h
-+++ b/arch/x86/include/asm/context_tracking_work.h
-@@ -2,11 +2,13 @@
- #ifndef _ASM_X86_CONTEXT_TRACKING_WORK_H
- #define _ASM_X86_CONTEXT_TRACKING_WORK_H
- 
-+#include <asm/sync_core.h>
-+
- static __always_inline void arch_context_tracking_work(enum ct_work work)
- {
- 	switch (work) {
--	case CT_WORK_n:
--		// Do work...
-+	case CT_WORK_SYNC:
-+		sync_core();
- 		break;
- 	case CT_WORK_MAX:
- 		WARN_ON_ONCE(true);
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index ab9e143ec9fea..9dfa46f721c1d 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -33,6 +33,7 @@ extern void apply_relocation(u8 *buf, const u8 * const instr, size_t instrlen, u
-  */
- extern void *text_poke(void *addr, const void *opcode, size_t len);
- extern void text_poke_sync(void);
-+extern void text_poke_sync_deferrable(void);
- extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
- extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
- #define text_poke_copy text_poke_copy
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index bf82c6f7d6905..8c73ac6243809 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -18,6 +18,7 @@
- #include <linux/mmu_context.h>
- #include <linux/bsearch.h>
- #include <linux/sync_core.h>
-+#include <linux/context_tracking.h>
- #include <asm/text-patching.h>
- #include <asm/alternative.h>
- #include <asm/sections.h>
-@@ -2450,9 +2451,24 @@ static void do_sync_core(void *info)
- 	sync_core();
- }
- 
-+static bool do_sync_core_defer_cond(int cpu, void *info)
-+{
-+	return !ct_set_cpu_work(cpu, CT_WORK_SYNC);
-+}
-+
-+static void __text_poke_sync(smp_cond_func_t cond_func)
-+{
-+	on_each_cpu_cond(cond_func, do_sync_core, NULL, 1);
-+}
-+
- void text_poke_sync(void)
- {
--	on_each_cpu(do_sync_core, NULL, 1);
-+	__text_poke_sync(NULL);
-+}
-+
-+void text_poke_sync_deferrable(void)
-+{
-+	__text_poke_sync(do_sync_core_defer_cond);
- }
- 
- /*
-@@ -2623,6 +2639,7 @@ static int tp_vec_nr;
-  */
- static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
- {
-+	smp_cond_func_t cond = do_sync_core_defer_cond;
- 	unsigned char int3 = INT3_INSN_OPCODE;
- 	unsigned int i;
- 	int do_sync;
-@@ -2658,11 +2675,21 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	 * First step: add a int3 trap to the address that will be patched.
- 	 */
- 	for (i = 0; i < nr_entries; i++) {
--		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
--		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
-+		void *addr = text_poke_addr(&tp[i]);
-+
-+		/*
-+		 * There's no safe way to defer IPIs for patching text in
-+		 * .noinstr, record whether there is at least one such poke.
-+		 */
-+		if (is_kernel_noinstr_text((unsigned long)addr) ||
-+		    is_module_noinstr_text_address((unsigned long)addr))
-+			cond = NULL;
-+
-+		tp[i].old = *((u8 *)addr);
-+		text_poke(addr, &int3, INT3_INSN_SIZE);
- 	}
- 
--	text_poke_sync();
-+	__text_poke_sync(cond);
- 
- 	/*
- 	 * Second step: update all but the first byte of the patched range.
-@@ -2724,7 +2751,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 		 * not necessary and we'd be safe even without it. But
- 		 * better safe than sorry (plus there's not only Intel).
- 		 */
--		text_poke_sync();
-+		__text_poke_sync(cond);
- 	}
- 
- 	/*
-@@ -2745,7 +2772,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	}
- 
- 	if (do_sync)
--		text_poke_sync();
-+		__text_poke_sync(cond);
- 
- 	/*
- 	 * Remove and wait for refs to be zero.
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 09608fd936876..687e6805b7511 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -808,7 +808,7 @@ void arch_arm_kprobe(struct kprobe *p)
- 	u8 int3 = INT3_INSN_OPCODE;
- 
- 	text_poke(p->addr, &int3, 1);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 	perf_event_text_poke(p->addr, &p->opcode, 1, &int3, 1);
- }
- 
-@@ -818,7 +818,7 @@ void arch_disarm_kprobe(struct kprobe *p)
- 
- 	perf_event_text_poke(p->addr, &int3, 1, &p->opcode, 1);
- 	text_poke(p->addr, &p->opcode, 1);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- }
- 
- void arch_remove_kprobe(struct kprobe *p)
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 36d6809c6c9e1..b2ce4d9c3ba56 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -513,11 +513,11 @@ void arch_unoptimize_kprobe(struct optimized_kprobe *op)
- 	       JMP32_INSN_SIZE - INT3_INSN_SIZE);
- 
- 	text_poke(addr, new, INT3_INSN_SIZE);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 	text_poke(addr + INT3_INSN_SIZE,
- 		  new + INT3_INSN_SIZE,
- 		  JMP32_INSN_SIZE - INT3_INSN_SIZE);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 
- 	perf_event_text_poke(op->kp.addr, old, JMP32_INSN_SIZE, new, JMP32_INSN_SIZE);
- }
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index a7998f3517017..d89c9de0ca9f5 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -206,7 +206,7 @@ static int write_relocate_add(Elf64_Shdr *sechdrs,
- 				   write, apply);
- 
- 	if (!early) {
--		text_poke_sync();
-+		text_poke_sync_deferrable();
- 		mutex_unlock(&text_mutex);
- 	}
- 
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index 0755bc39b0d80..7d2403014010e 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -199,6 +199,21 @@ static inline bool is_kernel_inittext(unsigned long addr)
- 	       addr < (unsigned long)_einittext;
- }
- 
-+
-+/**
-+ * is_kernel_noinstr_text - checks if the pointer address is located in the
-+ *                    .noinstr section
-+ *
-+ * @addr: address to check
-+ *
-+ * Returns: true if the address is located in .noinstr, false otherwise.
-+ */
-+static inline bool is_kernel_noinstr_text(unsigned long addr)
-+{
-+	return addr >= (unsigned long)__noinstr_text_start &&
-+	       addr < (unsigned long)__noinstr_text_end;
-+}
-+
- /**
-  * __is_kernel_text - checks if the pointer address is located in the
-  *                    .text section
-diff --git a/include/linux/context_tracking_work.h b/include/linux/context_tracking_work.h
-index c68245f8d77c5..2facc621be067 100644
---- a/include/linux/context_tracking_work.h
-+++ b/include/linux/context_tracking_work.h
-@@ -5,12 +5,12 @@
- #include <linux/bitops.h>
- 
- enum {
--	CT_WORK_n_OFFSET,
-+	CT_WORK_SYNC_OFFSET,
- 	CT_WORK_MAX_OFFSET
- };
- 
- enum ct_work {
--	CT_WORK_n        = BIT(CT_WORK_n_OFFSET),
-+	CT_WORK_SYNC     = BIT(CT_WORK_SYNC_OFFSET),
- 	CT_WORK_MAX      = BIT(CT_WORK_MAX_OFFSET)
- };
- 
+Changes in v2:
+- Drop RFC state
+- Mention interested parties in cover letter
+- Expand Kconfig description
+- Add compatibility with CONFIG_MODULE_SIG
+- Parallelize module-hashes.sh
+- Update Documentation/kbuild/reproducible-builds.rst
+- Link to v1: https://lore.kernel.org/r/20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net
+
+---
+Thomas Weißschuh (9):
+      powerpc/ima: Drop unnecessary check for CONFIG_MODULE_SIG
+      ima: efi: Drop unnecessary check for CONFIG_MODULE_SIG/CONFIG_KEXEC_SIG
+      kbuild: add stamp file for vmlinux BTF data
+      kbuild: generate module BTF based on vmlinux.unstripped
+      module: Make module loading policy usable without MODULE_SIG
+      module: Move integrity checks into dedicated function
+      module: Move lockdown check into generic module loader
+      lockdown: Make the relationship to MODULE_SIG a dependency
+      module: Introduce hash-based integrity checking
+
+ .gitignore                                   |  1 +
+ Documentation/kbuild/reproducible-builds.rst |  5 ++-
+ Makefile                                     |  8 +++-
+ arch/powerpc/kernel/ima_arch.c               |  3 +-
+ include/asm-generic/vmlinux.lds.h            | 11 ++++++
+ include/linux/module.h                       |  8 ++--
+ include/linux/module_hashes.h                | 17 +++++++++
+ kernel/module/Kconfig                        | 21 ++++++++++-
+ kernel/module/Makefile                       |  1 +
+ kernel/module/hashes.c                       | 56 ++++++++++++++++++++++++++++
+ kernel/module/internal.h                     |  8 +---
+ kernel/module/main.c                         | 51 ++++++++++++++++++++++---
+ kernel/module/signing.c                      | 24 +-----------
+ scripts/Makefile.modfinal                    | 18 ++++++---
+ scripts/Makefile.modinst                     |  4 ++
+ scripts/Makefile.vmlinux                     |  5 +++
+ scripts/link-vmlinux.sh                      | 31 ++++++++++++++-
+ scripts/module-hashes.sh                     | 26 +++++++++++++
+ security/integrity/ima/ima_efi.c             |  6 +--
+ security/lockdown/Kconfig                    |  2 +-
+ 20 files changed, 250 insertions(+), 56 deletions(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20241225-module-hashes-7a50a7cc2a30
+
+Best regards,
 -- 
-2.49.0
+Thomas Weißschuh <linux@weissschuh.net>
 
 
