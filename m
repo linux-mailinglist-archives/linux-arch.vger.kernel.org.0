@@ -1,190 +1,127 @@
-Return-Path: <linux-arch+bounces-11719-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11720-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D1E6AA115B
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 18:12:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EC1DAA1312
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 19:02:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBEC6169288
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 16:12:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E97A1BA636D
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 16:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8603C243951;
-	Tue, 29 Apr 2025 16:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E43247291;
+	Tue, 29 Apr 2025 16:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mvk6iBAL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfHRE0Zf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC2B24290C;
-	Tue, 29 Apr 2025 16:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67D924A047;
+	Tue, 29 Apr 2025 16:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745943128; cv=none; b=FWkKn/Tx0n9HnB4KRWlORG3LV9EUrdq6XSrirp9W9oRMXuiEpQSuvoURSjnhZupivt/K0/wvnYmCGX5RFK2qN5xyme2HKgUCoGBxXZgLvpUQbbb36A/PCSh6FTBNTTdyVySESvmDWK9XR/A1nZzWxC0ei/1ZiZmrG5sxsvLOaj4=
+	t=1745945872; cv=none; b=u2/6ifII56JyZg3an4doJxwaOEBC5vAwYnzwEC/E2qQ00n7bivfCxkAY+IAzzFYwcF0MM9XPghG+S0KFA0UukzEz0IVCHYvFvGD1w3mBRItIIBKN1XgWN7kWPe18rIiGxiviheB8WGOaRMt8UvvM9F91bB4dTyqKJ4PBrvMg9W4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745943128; c=relaxed/simple;
-	bh=/RPzRSwGYU/TqtNWAxnjSN65OBBFBuTwX8sdhARd81w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k6bJrDJuaYTG+rMAVcT9uie9BSjz3QE7EwuzniKow1XpdFKsM1ZZuwEhPwb2jNxyeDy5B/LTFX7NYY4Olc4uo3nim8JGciiaUGWkb3brFid7j8fQa3yO7aX3c7BFrB3hDGWAbbzR684GW7sBhvxYQntLAPpTvg668vqAB70Pkgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mvk6iBAL; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745943127; x=1777479127;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/RPzRSwGYU/TqtNWAxnjSN65OBBFBuTwX8sdhARd81w=;
-  b=Mvk6iBALOLCZMosSJXieogMcnz9NHLIl+14RWfaCSZOIgGuJ+WCPKP7C
-   0wpEUVRn0GchdbJsWYGXz9hdPR32X+WM9K4yBu43Dw+gtMrHkt/Zby2k9
-   ohyLluqm2hZeXp9Yeoa/4fJTfwKSN3f//TUataX0eNNd4FefDHndunXjo
-   3GqIwhgrB7M1S8buFxCQ6CfK+/vivQrLIjcKH7z35bsX00ngqlaYJUh1E
-   sJhrptC46uH5sIFWCs5C7TIzmAcD4/wRl3RnR7DYmFQ/tpYW5rnKbedal
-   TwuJRQwx4QXCxObwXTq6bCFp/mQQi2vFlyAN5DOwxXEylE2MUCiY6qdzb
-   w==;
-X-CSE-ConnectionGUID: GM4nj81wQUSqlpCQh7Zx5A==
-X-CSE-MsgGUID: jIUOFBzgRu+PP0xpTB/5GQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11418"; a="51243422"
-X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
-   d="scan'208";a="51243422"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 09:12:06 -0700
-X-CSE-ConnectionGUID: b38aJ8qqSqC5eqNimrxdFQ==
-X-CSE-MsgGUID: 1d8Et1s7SmqzvGll9TJyYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,249,1739865600"; 
-   d="scan'208";a="134856497"
-Received: from sramkris-mobl1.amr.corp.intel.com (HELO [10.124.223.107]) ([10.124.223.107])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2025 09:12:00 -0700
-Message-ID: <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
-Date: Tue, 29 Apr 2025 09:11:57 -0700
+	s=arc-20240116; t=1745945872; c=relaxed/simple;
+	bh=Tg1ctzwo0ak0Lwu1YWKgH+RS3fovIZ1X+v294BjOsH8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E5eCeW9G/DNrxqMjMeS6kxib+gjQYz9CyZqnoldd0kEhlNgvIhtYcLWjQJq+9WiISZJbe+qFCxeGivQqm99xdgA6mmTEx18ceZLowYpXXm2ntArkAC2GRkoklRfWlzPeOGa9RSqWdP8nVRMQN68t7TLdLn0sT9rNvF8YC8jIK+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfHRE0Zf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA3CC4CEEA;
+	Tue, 29 Apr 2025 16:57:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745945871;
+	bh=Tg1ctzwo0ak0Lwu1YWKgH+RS3fovIZ1X+v294BjOsH8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VfHRE0ZfOmDAVECATIVhnIIEDv8InpF/NVtbUFhMnpUd0U4Y+5b0Ww4zgRVL1MNmR
+	 u8gCoUF2f9BknbD6Z34UXG4o4jeie06f9l37yhBS9hg7PyyZPh0t76hiNmFRLKGGi5
+	 iEyi9z3gFBB3tX3cQpD1giyD3J3AvQz31/yIHy3BsfSa938ZSffUIHVakH6CrbbrdF
+	 VDAjwRavumw/UONhO/E9zhOSkKcu9AG/KUZggezyKAUSbacO11GC7UHvJUwjFrcjyu
+	 f0RJmP3EuGwQ5b0kiClDl4KQSZySaB5MQps8Q90qLLDnvzKrTossosvNsmID5DJOBH
+	 TIWeglu12AohQ==
+Date: Tue, 29 Apr 2025 09:57:49 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	sparclinux@vger.kernel.org, linux-s390@vger.kernel.org,
+	x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld " <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [v3 PATCH 00/13] Architecture-optimized SHA-256 library API
+Message-ID: <20250429165749.GC1743@sol.localdomain>
+References: <cover.1745816372.git.herbert@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
- user->kernel transition
-To: Valentin Schneider <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, rcu@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org
-Cc: Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti
- <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Daniel Wagner <dwagner@suse.de>,
- Petr Tesarik <ptesarik@suse.com>, Nicolas Saenz Julienne
- <nsaenz@amazon.com>, Frederic Weisbecker <frederic@kernel.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Sean Christopherson <seanjc@google.com>, Juergen Gross <jgross@suse.com>,
- Ajay Kaher <ajay.kaher@broadcom.com>,
- Alexey Makhalov <alexey.amakhalov@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Russell King
- <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
- Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>,
- Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Naveen N Rao <naveen@kernel.org>,
- Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
- "David S. Miller" <davem@davemloft.net>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joel@joelfernandes.org>,
- Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, "Mike Rapoport (Microsoft)"
- <rppt@kernel.org>, Rong Xu <xur@google.com>,
- Rafael Aquini <aquini@redhat.com>, Song Liu <song@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
- <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- Benjamin Berg <benjamin.berg@intel.com>,
- Vishal Annapurve <vannapurve@google.com>,
- Randy Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>,
- Tiezhu Yang <yangtiezhu@loongson.cn>
-References: <20250429113242.998312-1-vschneid@redhat.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
- LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
- lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
- MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
- IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
- aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
- I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
- E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
- F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
- CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
- P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
- 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
- GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
- MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
- Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
- lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
- 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
- qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
- BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
- 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
- vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
- FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
- l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
- yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
- +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
- asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
- WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
- sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
- KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
- MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
- hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
- vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20250429113242.998312-1-vschneid@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1745816372.git.herbert@gondor.apana.org.au>
 
-I don't think we should do this series.
+On Mon, Apr 28, 2025 at 01:17:02PM +0800, Herbert Xu wrote:
+> Changes in v3:
+> - Add shash sha256-lib/sha224-lib to provide test coverage for libsha256.
+> 
+> This is based on
+> 
+> 	https://patchwork.kernel.org/project/linux-crypto/list/?series=957558
+> 
+> Original description:
+> 
+> Following the example of several other algorithms (e.g. CRC32, ChaCha,
+> Poly1305, BLAKE2s), this series refactors the kernel's existing
+> architecture-optimized SHA-256 code to be available via the library API,
+> instead of just via the crypto_shash API as it was before.  It also
+> reimplements the SHA-256 crypto_shash API on top of the library API.
+> 
+> This makes it possible to use the SHA-256 library in
+> performance-critical cases.  The new design is also much simpler, with a
+> negative diffstat of over 1200 lines.  Finally, this also fixes the
+> longstanding issue where the arch-optimized SHA-256 was disabled by
+> default, so people often forgot to enable it.
+> 
+> For now the SHA-256 library is well-covered by the crypto_shash
+> self-tests, but I plan to add a test for the library directly later.
+> I've fully tested this series on arm, arm64, riscv, and x86.  On mips,
+> powerpc, s390, and sparc I've only been able to partially test it, since
+> QEMU does not support the SHA-256 instructions on those platforms.  If
+> anyone with access to a mips, powerpc, s390, or sparc system that has
+> SHA-256 instructions can verify that the crypto self-tests still pass,
+> that would be appreciated.  But I don't expect any issues, especially
+> since the new code is more straightforward than the old code.
+> 
+> Eric Biggers (13):
+>   crypto: sha256 - support arch-optimized lib and expose through shash
+>   crypto: arm/sha256 - implement library instead of shash
+>   crypto: arm64/sha256 - remove obsolete chunking logic
+>   crypto: arm64/sha256 - implement library instead of shash
+>   crypto: mips/sha256 - implement library instead of shash
+>   crypto: powerpc/sha256 - implement library instead of shash
+>   crypto: riscv/sha256 - implement library instead of shash
+>   crypto: s390/sha256 - implement library instead of shash
+>   crypto: sparc - move opcodes.h into asm directory
+>   crypto: sparc/sha256 - implement library instead of shash
+>   crypto: x86/sha256 - implement library instead of shash
+>   crypto: sha256 - remove sha256_base.h
+>   crypto: lib/sha256 - improve function prototypes
 
-If folks want this functionality, they should get a new CPU that can
-flush the TLB without IPIs.
+To be clear, the objections I have on your v2 patchset still hold.  Your
+unsolicited changes to my patches add unnecessary complexity and redundancy,
+make the crypto_shash API even harder to use correctly, and also break the build
+for several architectures.  If you're going to again use your maintainer
+privileges to push these out anyway over my objections, I'd appreciate it if you
+at least made your dubious changes as incremental patches using your own
+authorship so that they can be properly reviewed/blamed.
+
+Please also note that I've sent a v4 which fixes the one real issue that my v1
+patchset had: https://lore.kernel.org/r/20250428170040.423825-1-ebiggers@kernel.org
+
+- Eric
 
