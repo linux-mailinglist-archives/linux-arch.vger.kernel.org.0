@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-11709-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11717-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28124AA0CAE
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 15:04:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AAD4AA0CE3
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 15:07:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8ABB73A752E
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:04:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F5707B3041
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:05:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919F2274670;
-	Tue, 29 Apr 2025 13:04:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381472D4B7A;
+	Tue, 29 Apr 2025 13:04:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IP1DdbS6"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WtCigX7B"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8859922AE76;
-	Tue, 29 Apr 2025 13:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8970B2D29C7;
+	Tue, 29 Apr 2025 13:04:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745931887; cv=none; b=FDFHRS193GJCHyJf1+H0DPL42ICBd2TGtmi55HvnmVjOhuFosZhSqeJccctXoFq+jzenusazl6wvY93OgX2AN4rZQvvnNLg8VAntJRrA6v+FEs0FAqpBtxxz2fMUvLnLxxjPeBLoM7ZM0aNiGyl2k2X7fCWKBQ9li7xWmb/CD1I=
+	t=1745931892; cv=none; b=F6mzS2a8/rxVzNosuGE2rRiaWjt9jznYf8y9Y+jFX4SF0+7iba5h78M313bXvM3Q7Yftn+4UEqjguWUZJ4uqynxUeQVtA6EO96kPcvw9cN1ks/mUTqDR7wjK5UhXcAOd2PFwi1XODqpvtMr0inCRh6hukyD0+EFzJydRpTp/i5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745931887; c=relaxed/simple;
-	bh=uAWB6PT9KWFnBAMA3cbexNOM6gBbMJ+pc0ZLJPh/nCk=;
+	s=arc-20240116; t=1745931892; c=relaxed/simple;
+	bh=kmQUIW+5wYPfShUIrOsErGdMJNnQUWIZ+BIWQSkTJR8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oSKtpvqqmgK4JSwp3YY1LiVldt+YC3bz4oDI4qKEAfZkh+HMVC+RsK4KY67HG5oowV/l2EHxsFIAT8sCf8Jb1FMI+mLQQg2WTI8jk/C2IuFiLuuQy+d30DlnrK9QWrpIeSMmRaFzdaUzXpRSykwORhuYzEitD+REfodYGeyVK+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IP1DdbS6; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=pfKHsZaSZwZpmPPv9xyzAsXAakQT1fK6cJOXBqozSPGeUoQMW/K1GEKDcWGqLmhGflzyR+GxpJFTBU673qCw5Uk2a1z5mmJwBjNXYP5hcF8X6qD/dc/sKCxhXISvz9b4tc0voWvl3JLemexvxrxx9uytLojfn4b1wsC1z4CNMes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WtCigX7B; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1745931874;
-	bh=uAWB6PT9KWFnBAMA3cbexNOM6gBbMJ+pc0ZLJPh/nCk=;
+	bh=kmQUIW+5wYPfShUIrOsErGdMJNnQUWIZ+BIWQSkTJR8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IP1DdbS6IzaBothHocjADf+qL4oAkLdiurq64F5MflZ0CZDa/lYpWrsml+742YHst
-	 iOyI0+5LcIsIS/W4HFdjoT/ntGDbtphulyydXha40XALs+kRmGLCiVLEfgRlEXd44i
-	 i3j7qFAN06WEqLbuj3qkp+iO8C4pKXai2Bd1HOA8=
+	b=WtCigX7BHHuvjnDxDfwmcSBeyBTCRfjxFnCfp2BR4OAm8h26gm2cA1/Y41MLSAFgt
+	 1Lui6JugA7ZpyRc/IZB1OjD42wB3i+36XOrIwAmkctFHApWN8n8eNQWTRbRgCPvph3
+	 brq4Vp0mkbXBZ/i62ncTuTb5J/ZgYF05LkJovw2Q=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 29 Apr 2025 15:04:33 +0200
-Subject: [PATCH v3 6/9] module: Move integrity checks into dedicated
- function
+Date: Tue, 29 Apr 2025 15:04:34 +0200
+Subject: [PATCH v3 7/9] module: Move lockdown check into generic module
+ loader
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250429-module-hashes-v3-6-00e9258def9e@weissschuh.net>
+Message-Id: <20250429-module-hashes-v3-7-00e9258def9e@weissschuh.net>
 References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
 In-Reply-To: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -78,89 +78,60 @@ Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
  linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745931873; l=2744;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745931873; l=1576;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=uAWB6PT9KWFnBAMA3cbexNOM6gBbMJ+pc0ZLJPh/nCk=;
- b=iRF9YHFRJ0F5rufwXzvY22fLGkR188SEbIQOvxK8Ykc40lMoYTbbn3dxF8M1U6Io0VBFSQnub
- DLlawF/4eSbCgHUqpSnuVTwGNU8WrJh6r3nnQCGoXmCtSCexZ7mG2aR
+ bh=kmQUIW+5wYPfShUIrOsErGdMJNnQUWIZ+BIWQSkTJR8=;
+ b=UeBVXcH7NmJEkR+38OyjzyfoU04GJpL9A/GpeD8/tUNbtYa0RNhFf/oUemhiWfy3i/HNqh5wb
+ 6448IhPkVJ2DZ12vw7Fz0/2aJ9GNQhLh065QNg6B4NkyTQK1vbDsDIR
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-With the addition of hash-based integrity checking, the configuration
-matrix is easier to represent in a dedicated function and with explicit
-usage of IS_ENABLED().
-
-Drop the now unnecessary stub for module_sig_check().
+The lockdown check buried in module_sig_check() will not compose well
+with the introduction of hash-based module validation.
+Move it into module_integrity_check() which will work better.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/module/internal.h |  7 -------
- kernel/module/main.c     | 18 ++++++++++++++----
- 2 files changed, 14 insertions(+), 11 deletions(-)
+ kernel/module/main.c    | 6 +++++-
+ kernel/module/signing.c | 3 +--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 626cf8668a7eb9202fce13d631f39429a4fe0ace..42fbc53c6af66a1b531fcad08997742d838eb481 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -325,14 +325,7 @@ int module_enable_text_rox(const struct module *mod);
- int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
- 				char *secstrings, struct module *mod);
- 
--#ifdef CONFIG_MODULE_SIG
- int module_sig_check(struct load_info *info, int flags);
--#else /* !CONFIG_MODULE_SIG */
--static inline int module_sig_check(struct load_info *info, int flags)
--{
--	return 0;
--}
--#endif /* !CONFIG_MODULE_SIG */
- 
- #ifdef CONFIG_DEBUG_KMEMLEAK
- void kmemleak_load_module(const struct module *mod, const struct load_info *info);
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 83c66205556fdde92152c131f1f58229c4f7f734..0c88d443a3bc894b18a7aa230cadf396e585c415 100644
+index 0c88d443a3bc894b18a7aa230cadf396e585c415..1c353ece05fd1d2d709204e4d5fa44ecb8832bfa 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -3247,6 +3247,16 @@ static int early_mod_check(struct load_info *info, int flags)
- 	return err;
+@@ -3254,7 +3254,11 @@ static int module_integrity_check(struct load_info *info, int flags)
+ 	if (IS_ENABLED(CONFIG_MODULE_SIG))
+ 		err = module_sig_check(info, flags);
+ 
+-	return err;
++	if (err)
++		return err;
++	if (info->sig_ok)
++		return 0;
++	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
  }
  
-+static int module_integrity_check(struct load_info *info, int flags)
-+{
-+	int err = 0;
-+
-+	if (IS_ENABLED(CONFIG_MODULE_SIG))
-+		err = module_sig_check(info, flags);
-+
-+	return err;
-+}
-+
  /*
-  * Allocate and load the module: note that size of section 0 is always
-  * zero, and we rely on this for optional sections.
-@@ -3260,18 +3270,18 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	char *after_dashes;
+diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+index e51920605da14771601327ea596dad2e12400518..029e1ef6f0e369fd48e8c81154b6c697ad7a6249 100644
+--- a/kernel/module/signing.c
++++ b/kernel/module/signing.c
+@@ -11,7 +11,6 @@
+ #include <linux/module_signature.h>
+ #include <linux/string.h>
+ #include <linux/verification.h>
+-#include <linux/security.h>
+ #include <crypto/public_key.h>
+ #include <uapi/linux/module.h>
+ #include "internal.h"
+@@ -100,5 +99,5 @@ int module_sig_check(struct load_info *info, int flags)
+ 		return -EKEYREJECTED;
+ 	}
  
- 	/*
--	 * Do the signature check (if any) first. All that
--	 * the signature check needs is info->len, it does
-+	 * Do the integrity checks (if any) first. All that
-+	 * they need is info->len, it does
- 	 * not need any of the section info. That can be
- 	 * set up later. This will minimize the chances
- 	 * of a corrupt module causing problems before
--	 * we even get to the signature check.
-+	 * we even get to the integrity check.
- 	 *
- 	 * The check will also adjust info->len by stripping
- 	 * off the sig length at the end of the module, making
- 	 * checks against info->len more correct.
- 	 */
--	err = module_sig_check(info, flags);
-+	err = module_integrity_check(info, flags);
- 	if (err)
- 		goto free_copy;
- 
+-	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
++	return 0;
+ }
 
 -- 
 2.49.0
