@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-11701-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11702-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD242AA0A7E
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:47:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 497E3AA0AA5
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:50:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489BC1B64E08
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 11:47:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 161117A5376
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 11:47:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79DC2C3757;
-	Tue, 29 Apr 2025 11:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0702D8DAF;
+	Tue, 29 Apr 2025 11:44:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FtDJZgmV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C3pf3IMF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0442C1E07
-	for <linux-arch@vger.kernel.org>; Tue, 29 Apr 2025 11:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1982D1930
+	for <linux-arch@vger.kernel.org>; Tue, 29 Apr 2025 11:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745927013; cv=none; b=AKyhTtj7FWT67W9GiQqSCsxegSTLcMFbnXUHhDZZGjRmzdCYzsW2qh8meFwC58JyLXscJyBZ8bDc8CZx82Kr2HRMuwJTR9FjUmLuF4gOPkyGXnlnEAJhXN17QjpsU1kKeiJct0bjuqW17m9su9K0Q8EGLb3fyD+fMqipYf+LpNA=
+	t=1745927048; cv=none; b=j7kjb+ZXgxMECMdxw+2tb97wMMQkG9s+uquoyopnG+7Me+4rZLDhva6QH0El7rCqgQEkKzyI5muFqVMLfoLTJ8zWmsJZeU2IqwNrVUihqr0/3zXoMnqziv/gbdaGnmXP4ahp2UEuC4PRaUO84P5g54xkDH9xe1qolCHW/2Fx6EI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745927013; c=relaxed/simple;
-	bh=WwEwZ59kGHtofDiyEkAAELW/rciNYGG37ZUjFMDen94=;
+	s=arc-20240116; t=1745927048; c=relaxed/simple;
+	bh=Le+2MAxpSdskBJZUoLKhGdUTtN35L5oYJlRcA6qBOgg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tpYW6r6db6brLn00fpXpd/62ZA2KkJsZejc8x1tFfSLpQ/3o0/x7gWCImgoVoIlG5V+OWv9KwE6RLCrpw9KHMIMAX9aC7jr/T8jEymCMk92tKeWv2d5TZsjJoAs3tR9QPFneVv+MCFWICB+v9d4FuDTiprBKulVOYHsZ9vxvKmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FtDJZgmV; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=bCkAHKejLUVWJpmkyZfvr8+eK60PjdDj8MZssmHh7UwL3seFeSxOuxq/07sZnPHjBdPeKj9Aq1xxKGM/ElIxCVJE4k7HxPhQEZDS/gBORP3dLAn0+VCqBNUXT1YIGrq/TB8rbCGJyCcdhZVUlETGfSg0FAO07lrDlA7QsgZ++Q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C3pf3IMF; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745927007;
+	s=mimecast20190719; t=1745927042;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sI1gyKg8PTf2LVdQbf0nqD17wcONskLzHJWxlVIqF2k=;
-	b=FtDJZgmVKpJrB9VpXz5ghQvV6podSgKJ61DtssMkR74fd6oikEzT2lcH1Cepv21kV1xx1Q
-	2kHUy++aaHuCJdo3PQZspqL4SicCPrZErgeZACKb4amAnsFRnNzjZ5OuUolJ5nxF/Tfszr
-	lJaDfsCwz9nao1WtVtUYEye5ZyXkynM=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=wqyFVTvCpvC9uY0zhPN+h7Ken6XvEWjKZ8iIMxjWz98=;
+	b=C3pf3IMFLciKqPKMhpuOa9sTnDu8iYW4xzQihGqY3FCmxm21Llb3IjhRjDZ1Pz0tlkLna+
+	wvcalxcMWy+gJiLfXb9Z4ftxZ6A8COzN6ewSXbTy7AQX5LD0l5Ve5ArwSV4wWJzo7S4Nxd
+	kZx6jwKwP3czkeUIAOS5tSsjwR8gnt8=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-557-v7g10NnMPXm9mZDM1fLPjw-1; Tue,
- 29 Apr 2025 07:43:26 -0400
-X-MC-Unique: v7g10NnMPXm9mZDM1fLPjw-1
-X-Mimecast-MFC-AGG-ID: v7g10NnMPXm9mZDM1fLPjw_1745927001
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-550-QarA7GnEPmC1tZynHFHkyA-1; Tue,
+ 29 Apr 2025 07:43:55 -0400
+X-MC-Unique: QarA7GnEPmC1tZynHFHkyA-1
+X-Mimecast-MFC-AGG-ID: QarA7GnEPmC1tZynHFHkyA_1745927031
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B51F219560B0;
-	Tue, 29 Apr 2025 11:43:21 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6ED81195608C;
+	Tue, 29 Apr 2025 11:43:51 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.225.102])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AB8CA19560A3;
-	Tue, 29 Apr 2025 11:42:52 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4857019560A3;
+	Tue, 29 Apr 2025 11:43:21 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	virtualization@lists.linux.dev,
@@ -154,9 +154,9 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	John Stultz <jstultz@google.com>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v5 19/25] KVM: VMX: Mark vmx_l1d_should flush and vmx_l1d_flush_cond keys as allowed in .noinstr
-Date: Tue, 29 Apr 2025 13:32:36 +0200
-Message-ID: <20250429113242.998312-20-vschneid@redhat.com>
+Subject: [PATCH v5 20/25] stackleack: Mark stack_erasing_bypass key as allowed in .noinstr
+Date: Tue, 29 Apr 2025 13:32:37 +0200
+Message-ID: <20250429113242.998312-21-vschneid@redhat.com>
 In-Reply-To: <20250429113242.998312-1-vschneid@redhat.com>
 References: <20250429113242.998312-1-vschneid@redhat.com>
 Precedence: bulk
@@ -172,41 +172,36 @@ Later commits will cause objtool to warn about static keys being used in
 .noinstr sections in order to safely defer instruction patching IPIs
 targeted at NOHZ_FULL CPUs.
 
-These keys are used in .noinstr code, and can be modified at runtime
-(/proc/kernel/vmx* write). However it is not expected that they will be
-flipped during latency-sensitive operations, and thus shouldn't be a source
-of interference wrt the text patching IPI.
+stack_erasing_bypass is used in .noinstr code, and can be modified at runtime
+(proc/sys/kernel/stack_erasing write). However it is not expected that it
+will be  flipped during latency-sensitive operations, and thus shouldn't be
+a source of interference wrt the text patching IPI.
 
 Mark it to let objtool know not to warn about it.
 
 Reported-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ kernel/stackleak.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 5c5766467a61d..00053458cd10c 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -225,8 +225,15 @@ module_param(pt_mode, int, S_IRUGO);
+diff --git a/kernel/stackleak.c b/kernel/stackleak.c
+index bb65321761b43..51b24d1e04ba2 100644
+--- a/kernel/stackleak.c
++++ b/kernel/stackleak.c
+@@ -19,7 +19,11 @@
+ #include <linux/sysctl.h>
+ #include <linux/init.h>
  
- struct x86_pmu_lbr __ro_after_init vmx_lbr_caps;
- 
--static DEFINE_STATIC_KEY_FALSE(vmx_l1d_should_flush);
--static DEFINE_STATIC_KEY_FALSE(vmx_l1d_flush_cond);
+-static DEFINE_STATIC_KEY_FALSE(stack_erasing_bypass);
 +/*
-+ * Both of these static keys end up being used in .noinstr sections, however
-+ * they are only modified:
-+ * - at init
-+ * - from a /proc/kernel/vmx* write
-+ * thus during latency-sensitive operations they should remain stable.
++ * This static key can only be modified via its sysctl interface. It is
++ * expected it will remain stable during latency-senstive operations.
 + */
-+static DEFINE_STATIC_KEY_FALSE_NOINSTR(vmx_l1d_should_flush);
-+static DEFINE_STATIC_KEY_FALSE_NOINSTR(vmx_l1d_flush_cond);
- static DEFINE_MUTEX(vmx_l1d_flush_mutex);
++static DEFINE_STATIC_KEY_FALSE_NOINSTR(stack_erasing_bypass);
  
- /* Storage for pre module init parameter parsing */
+ #ifdef CONFIG_SYSCTL
+ static int stack_erasing_sysctl(const struct ctl_table *table, int write,
 -- 
 2.49.0
 
