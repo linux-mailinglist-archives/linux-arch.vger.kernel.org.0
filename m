@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-11704-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11705-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3C32AA0A98
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:49:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C77AEAA0AA0
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:50:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C8373A8E32
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 11:49:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C08423AE114
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 11:49:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3954E2D92EF;
-	Tue, 29 Apr 2025 11:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122402D0260;
+	Tue, 29 Apr 2025 11:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AloDfmNW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ToO68QJg"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D102D1F64
-	for <linux-arch@vger.kernel.org>; Tue, 29 Apr 2025 11:45:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DE32C1080
+	for <linux-arch@vger.kernel.org>; Tue, 29 Apr 2025 11:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745927103; cv=none; b=o5NrcXevR8VncUDbuWHDzvvkdpgXCayIhJjs4aB+uSkLeW74/rDigZqR093TDZMrW6LD8v1uaLBpniiXJtX7wcq1jqQSFnRJIjiMdPXYQtiiZKDfludlY9ha00XbzsraiigsyqVBx+sR3Zj1T/+NiyHdOvmSyCV2n/uDm4kAxS8=
+	t=1745927131; cv=none; b=Lku2Mrn4114OX1BT10rPhsM6mND6eVGixoeo2Q7iN1R8h9gZk4PunioxvGJYjQpPMDWHR5dKgke6gefmMNXjrJxTP39i4k/kMiE+0S4MmhR5acB/KmBbdP+S7RVQu0lvgYd54ktXyDhreawzgu3Bcn9PGhvnKwnDsWhBMVmx+/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745927103; c=relaxed/simple;
-	bh=lEyDyUW/EgVmok40teVhVQB/qZodz1KS2gycTObHgFc=;
+	s=arc-20240116; t=1745927131; c=relaxed/simple;
+	bh=NJfpXMbwdIjKMcwhuZUnZrajNhJDS7nuZLz4u6h1L98=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZgD8NFbydblj1MS9sMT8/ui9Cg2PiRajl0cmfjKPsZKbCsu4wUAoNbpzUEQiPHbAFYHa5sTJp5Z2Pu2ltsAblC1gA+ts7PHUSy2fVSV4ljT4G2iRUP6X2Xqkl4ajSGkTvk0IL+N/w/mw8gkVV3g1Y9XaWV72NWpRuTlVYPAvkQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AloDfmNW; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=tmYDqenq5XDdMZz0esmi3MpN1TVNe/hQWXfsVUeDr+0OPJjr9g5nvga8yMZDRLcKnzZ2whkyXAGsgeIUKoH1UXF6qIhGyAiC64LE0TtSEZpctr4YzB1ZvEYYR6FB3yrmWmO3b3A9Nh6ItqlR/VPx7C+z1YUm985omuQ0fN0acFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ToO68QJg; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745927100;
+	s=mimecast20190719; t=1745927128;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=o3MWKB0E6r0DhQH09qIedKGJMSXQAuEZVGL4WDfC1H0=;
-	b=AloDfmNW+jp0qwrO1VrAPNSQh5qhHG3N3AOUlNe/AJMBa1ldqAkaiIrDvbMEtDst4iFgz6
-	bCeQDaClOeHT6b0rXrJXqhb3AvKJTnPd7TkSelUQyDn3iDZGRd7iVUiI2nbSxNlr21/7Gw
-	drmRKwCuOS/oC9bKwyqYiKk1/HoR9dQ=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=6eRqqbGq1uFGChwVCp3H62kpC0FqCEBM1hCsGgM03Z0=;
+	b=ToO68QJgyMU5T1ZtoV1wCLJG19X+h3zagehZtIS04mj642+rTD8Iki4W6yX+CX6zQlz/Ke
+	8CKCH0mWu7MU3qPQkKxJoI/70kAbQswQXajmd48ZQ3DRVzrTLl5GaQxeofE3Ho08d2Do0c
+	Wp4Race3mYREPRtnk2elauZiY3/hgy0=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-484-ayQLBPO2OPy26KvLe-FVSg-1; Tue,
- 29 Apr 2025 07:44:56 -0400
-X-MC-Unique: ayQLBPO2OPy26KvLe-FVSg-1
-X-Mimecast-MFC-AGG-ID: ayQLBPO2OPy26KvLe-FVSg_1745927091
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-422-Wh1l12g2O4OqWBygOwaAeg-1; Tue,
+ 29 Apr 2025 07:45:25 -0400
+X-MC-Unique: Wh1l12g2O4OqWBygOwaAeg-1
+X-Mimecast-MFC-AGG-ID: Wh1l12g2O4OqWBygOwaAeg_1745927120
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 97FC31956089;
-	Tue, 29 Apr 2025 11:44:51 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B668E1800984;
+	Tue, 29 Apr 2025 11:45:20 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.225.102])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F03619560A3;
-	Tue, 29 Apr 2025 11:44:21 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1DB8F19560A3;
+	Tue, 29 Apr 2025 11:44:51 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	virtualization@lists.linux.dev,
@@ -154,9 +154,9 @@ Cc: Juri Lelli <juri.lelli@redhat.com>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	John Stultz <jstultz@google.com>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v5 22/25] module: Remove outdated comment about text_size
-Date: Tue, 29 Apr 2025 13:32:39 +0200
-Message-ID: <20250429113242.998312-23-vschneid@redhat.com>
+Subject: [PATCH v5 23/25] module: Add MOD_NOINSTR_TEXT mem_type
+Date: Tue, 29 Apr 2025 13:32:40 +0200
+Message-ID: <20250429113242.998312-24-vschneid@redhat.com>
 In-Reply-To: <20250429113242.998312-1-vschneid@redhat.com>
 References: <20250429113242.998312-1-vschneid@redhat.com>
 Precedence: bulk
@@ -168,39 +168,233 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-The text_size bit referred to by the comment has been removed as of commit
+As pointed out by Sean [1], is_kernel_noinstr_text() will return false for
+an address contained within a module's .noinstr.text section. A later patch
+will require checking whether a text address is noinstr, and this can
+unfortunately be the case of modules - KVM is one such case.
 
-  ac3b43283923 ("module: replace module_layout with module_memory")
+A module's .noinstr.text section is already tracked as of commit
+  66e9b0717102 ("kprobes: Prevent probes in .noinstr.text section")
+for kprobe blacklisting purposes, but via an ad-hoc mechanism.
 
-and is thus no longer relevant. Remove it and comment about the contents of
-the masks array instead.
+Add a MOD_NOINSTR_TEXT mem_type, and reorganize __layout_sections() so that
+it maps all the sections in a single invocation.
 
+[1]: http://lore.kernel.org/r/Z4qQL89GZ_gk0vpu@google.com
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- kernel/module/main.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ include/linux/module.h |  6 ++--
+ kernel/kprobes.c       |  8 ++---
+ kernel/module/main.c   | 76 ++++++++++++++++++++++++++++++++----------
+ 3 files changed, 66 insertions(+), 24 deletions(-)
 
+diff --git a/include/linux/module.h b/include/linux/module.h
+index d94b196d5a34e..193d8d34eeee0 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -332,6 +332,7 @@ struct mod_tree_node {
+ 
+ enum mod_mem_type {
+ 	MOD_TEXT = 0,
++	MOD_NOINSTR_TEXT,
+ 	MOD_DATA,
+ 	MOD_RODATA,
+ 	MOD_RO_AFTER_INIT,
+@@ -502,8 +503,6 @@ struct module {
+ 	void __percpu *percpu;
+ 	unsigned int percpu_size;
+ #endif
+-	void *noinstr_text_start;
+-	unsigned int noinstr_text_size;
+ 
+ #ifdef CONFIG_TRACEPOINTS
+ 	unsigned int num_tracepoints;
+@@ -622,12 +621,13 @@ static inline bool module_is_coming(struct module *mod)
+         return mod->state == MODULE_STATE_COMING;
+ }
+ 
+-struct module *__module_text_address(unsigned long addr);
+ struct module *__module_address(unsigned long addr);
++struct module *__module_text_address(unsigned long addr);
+ bool is_module_address(unsigned long addr);
+ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr);
+ bool is_module_percpu_address(unsigned long addr);
+ bool is_module_text_address(unsigned long addr);
++bool is_module_noinstr_text_address(unsigned long addr);
+ 
+ static inline bool within_module_mem_type(unsigned long addr,
+ 					  const struct module *mod,
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index ffe0c3d523063..9a799faee68a1 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -2547,9 +2547,9 @@ static void add_module_kprobe_blacklist(struct module *mod)
+ 		kprobe_add_area_blacklist(start, end);
+ 	}
+ 
+-	start = (unsigned long)mod->noinstr_text_start;
++	start = (unsigned long)mod->mem[MOD_NOINSTR_TEXT].base;
+ 	if (start) {
+-		end = start + mod->noinstr_text_size;
++		end = start + mod->mem[MOD_NOINSTR_TEXT].size;
+ 		kprobe_add_area_blacklist(start, end);
+ 	}
+ }
+@@ -2570,9 +2570,9 @@ static void remove_module_kprobe_blacklist(struct module *mod)
+ 		kprobe_remove_area_blacklist(start, end);
+ 	}
+ 
+-	start = (unsigned long)mod->noinstr_text_start;
++	start = (unsigned long)mod->mem[MOD_NOINSTR_TEXT].base;
+ 	if (start) {
+-		end = start + mod->noinstr_text_size;
++		end = start + mod->mem[MOD_NOINSTR_TEXT].size;
+ 		kprobe_remove_area_blacklist(start, end);
+ 	}
+ }
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index a2859dc3eea66..b9f010daaa4c7 100644
+index b9f010daaa4c7..0126bae64b698 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1562,12 +1562,11 @@ static void __layout_sections(struct module *mod, struct load_info *info, bool i
+@@ -1558,7 +1558,17 @@ bool module_init_layout_section(const char *sname)
+ 	return module_init_section(sname);
+ }
+ 
+-static void __layout_sections(struct module *mod, struct load_info *info, bool is_init)
++static bool module_noinstr_layout_section(const char *sname)
++{
++	return strstarts(sname, ".noinstr");
++}
++
++static bool module_default_layout_section(const char *sname)
++{
++	return !module_init_layout_section(sname) && !module_noinstr_layout_section(sname);
++}
++
++static void __layout_sections(struct module *mod, struct load_info *info)
  {
  	unsigned int m, i;
  
-+	/*
-+	 * { Mask of required section header flags,
-+	 *   Mask of excluded section header flags }
-+	 */
+@@ -1567,20 +1577,44 @@ static void __layout_sections(struct module *mod, struct load_info *info, bool i
+ 	 *   Mask of excluded section header flags }
+ 	 */
  	static const unsigned long masks[][2] = {
--		/*
--		 * NOTE: all executable code must be the first section
--		 * in this array; otherwise modify the text_size
--		 * finder in the two loops below
--		 */
++		/* Core */
++		{ SHF_EXECINSTR | SHF_ALLOC, ARCH_SHF_SMALL },
++		{ SHF_EXECINSTR | SHF_ALLOC, ARCH_SHF_SMALL },
++		{ SHF_ALLOC, SHF_WRITE | ARCH_SHF_SMALL },
++		{ SHF_RO_AFTER_INIT | SHF_ALLOC, ARCH_SHF_SMALL },
++		{ SHF_WRITE | SHF_ALLOC, ARCH_SHF_SMALL },
++		{ ARCH_SHF_SMALL | SHF_ALLOC, 0 },
++		/* Init */
  		{ SHF_EXECINSTR | SHF_ALLOC, ARCH_SHF_SMALL },
  		{ SHF_ALLOC, SHF_WRITE | ARCH_SHF_SMALL },
  		{ SHF_RO_AFTER_INIT | SHF_ALLOC, ARCH_SHF_SMALL },
+ 		{ SHF_WRITE | SHF_ALLOC, ARCH_SHF_SMALL },
+-		{ ARCH_SHF_SMALL | SHF_ALLOC, 0 }
++		{ ARCH_SHF_SMALL | SHF_ALLOC, 0 },
+ 	};
+-	static const int core_m_to_mem_type[] = {
++	static bool (*const section_filter[])(const char *) = {
++		/* Core */
++		module_default_layout_section,
++		module_noinstr_layout_section,
++		module_default_layout_section,
++		module_default_layout_section,
++		module_default_layout_section,
++		module_default_layout_section,
++		/* Init */
++		module_init_layout_section,
++		module_init_layout_section,
++		module_init_layout_section,
++		module_init_layout_section,
++		module_init_layout_section,
++	};
++	static const int mem_type_map[] = {
++		/* Core */
+ 		MOD_TEXT,
++		MOD_NOINSTR_TEXT,
+ 		MOD_RODATA,
+ 		MOD_RO_AFTER_INIT,
+ 		MOD_DATA,
+ 		MOD_DATA,
+-	};
+-	static const int init_m_to_mem_type[] = {
++		/* Init */
+ 		MOD_INIT_TEXT,
+ 		MOD_INIT_RODATA,
+ 		MOD_INVALID,
+@@ -1589,16 +1623,16 @@ static void __layout_sections(struct module *mod, struct load_info *info, bool i
+ 	};
+ 
+ 	for (m = 0; m < ARRAY_SIZE(masks); ++m) {
+-		enum mod_mem_type type = is_init ? init_m_to_mem_type[m] : core_m_to_mem_type[m];
++		enum mod_mem_type type = mem_type_map[m];
+ 
+ 		for (i = 0; i < info->hdr->e_shnum; ++i) {
+ 			Elf_Shdr *s = &info->sechdrs[i];
+ 			const char *sname = info->secstrings + s->sh_name;
+ 
+-			if ((s->sh_flags & masks[m][0]) != masks[m][0]
+-			    || (s->sh_flags & masks[m][1])
+-			    || s->sh_entsize != ~0UL
+-			    || is_init != module_init_layout_section(sname))
++			if ((s->sh_flags & masks[m][0]) != masks[m][0] ||
++			    (s->sh_flags & masks[m][1])                ||
++			    s->sh_entsize != ~0UL                      ||
++			    !section_filter[m](sname))
+ 				continue;
+ 
+ 			if (WARN_ON_ONCE(type == MOD_INVALID))
+@@ -1638,10 +1672,7 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 		info->sechdrs[i].sh_entsize = ~0UL;
+ 
+ 	pr_debug("Core section allocation order for %s:\n", mod->name);
+-	__layout_sections(mod, info, false);
+-
+-	pr_debug("Init section allocation order for %s:\n", mod->name);
+-	__layout_sections(mod, info, true);
++	__layout_sections(mod, info);
+ }
+ 
+ static void module_license_taint_check(struct module *mod, const char *license)
+@@ -2515,9 +2546,6 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 	}
+ #endif
+ 
+-	mod->noinstr_text_start = section_objs(info, ".noinstr.text", 1,
+-						&mod->noinstr_text_size);
+-
+ #ifdef CONFIG_TRACEPOINTS
+ 	mod->tracepoints_ptrs = section_objs(info, "__tracepoints_ptrs",
+ 					     sizeof(*mod->tracepoints_ptrs),
+@@ -3769,12 +3797,26 @@ struct module *__module_text_address(unsigned long addr)
+ 	if (mod) {
+ 		/* Make sure it's within the text section. */
+ 		if (!within_module_mem_type(addr, mod, MOD_TEXT) &&
++		    !within_module_mem_type(addr, mod, MOD_NOINSTR_TEXT) &&
+ 		    !within_module_mem_type(addr, mod, MOD_INIT_TEXT))
+ 			mod = NULL;
+ 	}
+ 	return mod;
+ }
+ 
++bool is_module_noinstr_text_address(unsigned long addr)
++{
++	scoped_guard(preempt) {
++		struct module *mod = __module_address(addr);
++
++		/* Make sure it's within the .noinstr.text section. */
++		if (mod)
++			return within_module_mem_type(addr, mod, MOD_NOINSTR_TEXT);
++	}
++
++	return false;
++}
++
+ /* Don't grab lock, we're oopsing. */
+ void print_modules(void)
+ {
 -- 
 2.49.0
 
