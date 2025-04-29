@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-11698-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11699-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F593AA0A58
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:44:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DB07AA0A6F
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45877188E5B7
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 11:44:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84BDA3AA3A4
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 11:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 916AA2C2568;
-	Tue, 29 Apr 2025 11:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE50D2D4B58;
+	Tue, 29 Apr 2025 11:42:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VzqDFpvG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XeG655pU"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A590E2C256A
-	for <linux-arch@vger.kernel.org>; Tue, 29 Apr 2025 11:41:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F0D2D4B5A
+	for <linux-arch@vger.kernel.org>; Tue, 29 Apr 2025 11:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745926921; cv=none; b=gLK57jngM332NB8n5F0qmqqOl7Q6znjJ5FWZOLXswTelyQ5isdUy0Gk9i0VnrAk53zyAKY+bmjDH4d078mkcTmgeUPkq5ba7U6dLhUzChB+7Fws7dLDXtFY8FqVZBjprRO/boYvbeqmt8Xut0XgE8NH4eWjdpwoq/4tgTiuu4OU=
+	t=1745926952; cv=none; b=lpnzw5kVSveJ40MGk6vsdl0FLFbVqHQR42yk55h0OOvOlaMCE1NelwsurpWNpiQwSbcnWcNnX2v+NaeQasMexzjiHLKKlu2zoD2xtOJP3LbDWB6awk/ZSJPb+A64NZr99uHE5yTP0M0zRHRvBZNhOjx2b+MzgaROI8NylY3uNtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745926921; c=relaxed/simple;
-	bh=kxWC1t7/BhbfuL23Afr2KNhXz8vZgT9DHhKCYr4vZLU=;
+	s=arc-20240116; t=1745926952; c=relaxed/simple;
+	bh=c+zFQjpOvcrIFPQrBfK1AGlkndEEv8ZnYH49Bqu+yoA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tM68Xed6CZjgdMANEUP/1Zy/cPpOPnwBkz8h1lf42iFHYQeA7C+wO7X3sGUXMgliZHwHuHkTnKwstoSnUXYLPBQiNHHYsjw4mEzwZ1VKbbBhIZ9gG6L0t/ZU2YUE2gdO93i+U0uSJX58dGjBJY2eOWTMnSpjjddKfWI4jzL6NbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VzqDFpvG; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=medYd+rvugGmtfkPxeue8o2a4VZvt5ZNdRufBb/s2Ve37GKAnIqqfU3lvEVj7dPRMKgVLd6JPi5uw9AYlUbHnboBPQMfRa4+Pl2dLRNBkQBShfDQIlaEfduGqs9L82l7HsciPpQFkAN+5wFWiKYmCtVXmR6UzXQUxcATqe27ILM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XeG655pU; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745926918;
+	s=mimecast20190719; t=1745926950;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pOR+/fkeCQEE32OWhR0BqyOD5/ykiIz6VrqIxRu0TPQ=;
-	b=VzqDFpvGzyJDuKiBfrm6YHBa8iDKcnXHqooOYr4ug0r6IDQmAqhuhiMZC5ebpMJuZ368My
-	fXBy/sRDnlxvlPkki+7BTGNfr8aTuUfuLBzXvJibRcz0PXq3Xp15n4uiXxSG1iOHDWqOLv
-	O2enRcvlD9Bo48qdlHZ2U43gk3CDv9k=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=2ERC4iHAopj7w7n3GYQADioGeTv15E5tv5xtE/u14EI=;
+	b=XeG655pUdpwUJF10v3poGNh5HtSKe0GKfgCgA7IJf0/Lld/fVXJqq1N5nZFBUrKWmdrY4R
+	Z68pJkoQPPrnK0ESlDZ2NK4IYSn4q5QnqZxMlfQiqUo6C7wM70ejng3Nn79OaH2Gz8ECrW
+	u7IuW8WtB27syCcltKF1CxDwbZyIo8A=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-203-A84IH6JAPCeA7cHwNRTckw-1; Tue,
- 29 Apr 2025 07:41:57 -0400
-X-MC-Unique: A84IH6JAPCeA7cHwNRTckw-1
-X-Mimecast-MFC-AGG-ID: A84IH6JAPCeA7cHwNRTckw_1745926913
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-695-u7QFbanhM32YQonXELOb8w-1; Tue,
+ 29 Apr 2025 07:42:26 -0400
+X-MC-Unique: u7QFbanhM32YQonXELOb8w-1
+X-Mimecast-MFC-AGG-ID: u7QFbanhM32YQonXELOb8w_1745926942
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 219821800360;
-	Tue, 29 Apr 2025 11:41:53 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B2406195608C;
+	Tue, 29 Apr 2025 11:42:22 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.225.102])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 227BD19560A3;
-	Tue, 29 Apr 2025 11:41:23 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AEFB219560A3;
+	Tue, 29 Apr 2025 11:41:53 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	virtualization@lists.linux.dev,
@@ -72,8 +72,7 @@ To: linux-kernel@vger.kernel.org,
 	linux-hardening@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	bpf@vger.kernel.org
-Cc: Sean Christopherson <seanjc@google.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
+Cc: Juri Lelli <juri.lelli@redhat.com>,
 	Marcelo Tosatti <mtosatti@redhat.com>,
 	Yair Podemsky <ypodemsk@redhat.com>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
@@ -83,6 +82,7 @@ Cc: Sean Christopherson <seanjc@google.com>,
 	Frederic Weisbecker <frederic@kernel.org>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
 	Juergen Gross <jgross@suse.com>,
 	Ajay Kaher <ajay.kaher@broadcom.com>,
 	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
@@ -154,9 +154,9 @@ Cc: Sean Christopherson <seanjc@google.com>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	John Stultz <jstultz@google.com>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v5 16/25] KVM: VMX: Mark __kvm_is_using_evmcs static key as __ro_after_init
-Date: Tue, 29 Apr 2025 13:32:33 +0200
-Message-ID: <20250429113242.998312-17-vschneid@redhat.com>
+Subject: [PATCH v5 17/25] x86/speculation/mds: Mark mds_idle_clear key as allowed in .noinstr
+Date: Tue, 29 Apr 2025 13:32:34 +0200
+Message-ID: <20250429113242.998312-18-vschneid@redhat.com>
 In-Reply-To: <20250429113242.998312-1-vschneid@redhat.com>
 References: <20250429113242.998312-1-vschneid@redhat.com>
 Precedence: bulk
@@ -168,31 +168,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-The static key is only ever enabled in
+Later commits will cause objtool to warn about static keys being used in
+.noinstr sections in order to safely defer instruction patching IPIs
+targeted at NOHZ_FULL CPUs.
 
-  __init hv_init_evmcs()
+mds_idle_clear is used in .noinstr code, and can be modified at
+runtime (SMT hotplug). Suppressing the text_poke_sync() IPI has little
+benefits for this key, as hotplug implies eventually going through
+takedown_cpu() -> stop_machine_cpuslocked() which is going to cause
+interference on all online CPUs anyway.
 
-so mark it appropriately as __ro_after_init.
+Mark it to let objtool know not to warn about it.
 
-Reported-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/x86/kvm/vmx/vmx_onhyperv.c | 2 +-
+ arch/x86/kernel/cpu/bugs.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx_onhyperv.c b/arch/x86/kvm/vmx/vmx_onhyperv.c
-index b9a8b91166d02..ff3d80c9565bb 100644
---- a/arch/x86/kvm/vmx/vmx_onhyperv.c
-+++ b/arch/x86/kvm/vmx/vmx_onhyperv.c
-@@ -3,7 +3,7 @@
- #include "capabilities.h"
- #include "vmx_onhyperv.h"
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 362602b705cc4..59a77ca1bb14c 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -117,7 +117,7 @@ DEFINE_STATIC_KEY_FALSE(switch_vcpu_ibpb);
+ EXPORT_SYMBOL_GPL(switch_vcpu_ibpb);
  
--DEFINE_STATIC_KEY_FALSE(__kvm_is_using_evmcs);
-+DEFINE_STATIC_KEY_FALSE_RO(__kvm_is_using_evmcs);
+ /* Control MDS CPU buffer clear before idling (halt, mwait) */
+-DEFINE_STATIC_KEY_FALSE(mds_idle_clear);
++DEFINE_STATIC_KEY_FALSE_NOINSTR(mds_idle_clear);
+ EXPORT_SYMBOL_GPL(mds_idle_clear);
  
  /*
-  * KVM on Hyper-V always uses the latest known eVMCSv1 revision, the assumption
 -- 
 2.49.0
 
