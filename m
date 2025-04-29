@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-11710-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11709-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A2EAAA0CC1
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 15:05:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28124AA0CAE
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 15:04:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E31B2188C0CA
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:05:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8ABB73A752E
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Apr 2025 13:04:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D75912D029B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919F2274670;
 	Tue, 29 Apr 2025 13:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="InUYUEBx"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IP1DdbS6"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F642135DD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8859922AE76;
 	Tue, 29 Apr 2025 13:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745931887; cv=none; b=rYA8g/EZm/WR4lPU2dxw0n6K5r2ztK4xa2YDV6rzkxgIyi93gHk2BF3OdNSElRrAUlbf7/mPTRqL3Al4c+V/0PI8nsdvLTI/YuJIZC31lsGhGe1ugZTfT56q3sUMBk1/WqMDm2t61OXZWoydF6tfSECQrw9/7ZdjMdONbs6COcU=
+	t=1745931887; cv=none; b=FDFHRS193GJCHyJf1+H0DPL42ICBd2TGtmi55HvnmVjOhuFosZhSqeJccctXoFq+jzenusazl6wvY93OgX2AN4rZQvvnNLg8VAntJRrA6v+FEs0FAqpBtxxz2fMUvLnLxxjPeBLoM7ZM0aNiGyl2k2X7fCWKBQ9li7xWmb/CD1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1745931887; c=relaxed/simple;
-	bh=UCCJkeYdVSKNrm9L/l2LgArwTnkqToFIXrGQtz775hQ=;
+	bh=uAWB6PT9KWFnBAMA3cbexNOM6gBbMJ+pc0ZLJPh/nCk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HUcIedCs4Q08POc4qPbckL2tsk38MlLHlnKDEtqBUaxEKNuvrm3/LY3NYQ0S5azbIVZnV4zSnUJBoDrMqmsLdi01Z0VBhCkBAzxDR+8MMue6fDidC3Z880kM11sUJPxdKE/tiEGMvU5hMQXU9Z8jvmqaODELyXoctpbyKVqC4eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=InUYUEBx; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=oSKtpvqqmgK4JSwp3YY1LiVldt+YC3bz4oDI4qKEAfZkh+HMVC+RsK4KY67HG5oowV/l2EHxsFIAT8sCf8Jb1FMI+mLQQg2WTI8jk/C2IuFiLuuQy+d30DlnrK9QWrpIeSMmRaFzdaUzXpRSykwORhuYzEitD+REfodYGeyVK+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IP1DdbS6; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1745931874;
-	bh=UCCJkeYdVSKNrm9L/l2LgArwTnkqToFIXrGQtz775hQ=;
+	bh=uAWB6PT9KWFnBAMA3cbexNOM6gBbMJ+pc0ZLJPh/nCk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=InUYUEBxzcaSdnkfyWEYs5gnGMDG+ZrErjBcXwVYAokpi9GEx8U1OAq8QYl2tMjVP
-	 1ekrjrvh9Kq4zyyJzkto/U4Kn8QLoXereQhuqEhHhjjsu1IS7NMnfsLI/u0MH1f9jK
-	 qMLc+34JpYBUgNoLb0o6WFDZy5UfMXBeZPj/wmy4=
+	b=IP1DdbS6IzaBothHocjADf+qL4oAkLdiurq64F5MflZ0CZDa/lYpWrsml+742YHst
+	 iOyI0+5LcIsIS/W4HFdjoT/ntGDbtphulyydXha40XALs+kRmGLCiVLEfgRlEXd44i
+	 i3j7qFAN06WEqLbuj3qkp+iO8C4pKXai2Bd1HOA8=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 29 Apr 2025 15:04:32 +0200
-Subject: [PATCH v3 5/9] module: Make module loading policy usable without
- MODULE_SIG
+Date: Tue, 29 Apr 2025 15:04:33 +0200
+Subject: [PATCH v3 6/9] module: Move integrity checks into dedicated
+ function
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250429-module-hashes-v3-5-00e9258def9e@weissschuh.net>
+Message-Id: <20250429-module-hashes-v3-6-00e9258def9e@weissschuh.net>
 References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
 In-Reply-To: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -78,157 +78,89 @@ Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
  linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745931873; l=4529;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745931873; l=2744;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=UCCJkeYdVSKNrm9L/l2LgArwTnkqToFIXrGQtz775hQ=;
- b=FFTZUNwOflf9z+ryGT7IH9ClBV+Qgyns9jpZd219As5W1VpY2anGRlh//7RjRR1nc7E7upt8z
- nqLMla0XzUOAp/oDbt2x4NABjz1decy6MVywaUlDbU1LQpYgWKpemko
+ bh=uAWB6PT9KWFnBAMA3cbexNOM6gBbMJ+pc0ZLJPh/nCk=;
+ b=iRF9YHFRJ0F5rufwXzvY22fLGkR188SEbIQOvxK8Ykc40lMoYTbbn3dxF8M1U6Io0VBFSQnub
+ DLlawF/4eSbCgHUqpSnuVTwGNU8WrJh6r3nnQCGoXmCtSCexZ7mG2aR
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The loading policy functionality will also be used by the hash-based
-module validation. Split it out from CONFIG_MODULE_SIG so it is usable
-by both.
+With the addition of hash-based integrity checking, the configuration
+matrix is easier to represent in a dedicated function and with explicit
+usage of IS_ENABLED().
+
+Drop the now unnecessary stub for module_sig_check().
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- include/linux/module.h  |  8 ++++----
- kernel/module/Kconfig   |  6 +++++-
- kernel/module/main.c    | 26 +++++++++++++++++++++++++-
- kernel/module/signing.c | 21 ---------------------
- 4 files changed, 34 insertions(+), 27 deletions(-)
+ kernel/module/internal.h |  7 -------
+ kernel/module/main.c     | 18 ++++++++++++++----
+ 2 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index d94b196d5a34e104d81308df4b150452eb96cdc9..68aa8bbd33acc84e013dc575ee88bd4e3101f9f4 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -453,7 +453,7 @@ struct module {
- 	const u32 *gpl_crcs;
- 	bool using_gplonly_symbols;
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 626cf8668a7eb9202fce13d631f39429a4fe0ace..42fbc53c6af66a1b531fcad08997742d838eb481 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -325,14 +325,7 @@ int module_enable_text_rox(const struct module *mod);
+ int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ 				char *secstrings, struct module *mod);
  
 -#ifdef CONFIG_MODULE_SIG
-+#ifdef CONFIG_MODULE_SIG_POLICY
- 	/* Signature was verified. */
- 	bool sig_ok;
- #endif
-@@ -921,14 +921,14 @@ static inline bool retpoline_module_ok(bool has_retpoline)
- }
- #endif
+ int module_sig_check(struct load_info *info, int flags);
+-#else /* !CONFIG_MODULE_SIG */
+-static inline int module_sig_check(struct load_info *info, int flags)
+-{
+-	return 0;
+-}
+-#endif /* !CONFIG_MODULE_SIG */
  
--#ifdef CONFIG_MODULE_SIG
-+#ifdef CONFIG_MODULE_SIG_POLICY
- bool is_module_sig_enforced(void);
- 
- static inline bool module_sig_ok(struct module *module)
- {
- 	return module->sig_ok;
- }
--#else	/* !CONFIG_MODULE_SIG */
-+#else	/* !CONFIG_MODULE_SIG_POLICY */
- static inline bool is_module_sig_enforced(void)
- {
- 	return false;
-@@ -938,7 +938,7 @@ static inline bool module_sig_ok(struct module *module)
- {
- 	return true;
- }
--#endif	/* CONFIG_MODULE_SIG */
-+#endif	/* CONFIG_MODULE_SIG_POLICY */
- 
- #if defined(CONFIG_MODULES) && defined(CONFIG_KALLSYMS)
- int module_kallsyms_on_each_symbol(const char *modname,
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index c51f25538d0ea66e6486ad0be6684173cd0140b5..a3146e9378fcd3292a756a2a7ea5241524cbc408 100644
---- a/kernel/module/Kconfig
-+++ b/kernel/module/Kconfig
-@@ -265,9 +265,13 @@ config MODULE_SIG
- 	  debuginfo strip done by some packagers (such as rpmbuild) and
- 	  inclusion into an initramfs that wants the module size reduced.
- 
-+config MODULE_SIG_POLICY
-+	def_bool y
-+	depends on MODULE_SIG
-+
- config MODULE_SIG_FORCE
- 	bool "Require modules to be validly signed"
--	depends on MODULE_SIG
-+	depends on MODULE_SIG_POLICY
- 	help
- 	  Reject unsigned modules or signed modules for which we don't have a
- 	  key.  Without this, such modules will simply taint the kernel.
+ #ifdef CONFIG_DEBUG_KMEMLEAK
+ void kmemleak_load_module(const struct module *mod, const struct load_info *info);
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index a2859dc3eea66ec19991e7e4afb5bbcae2c2d167..83c66205556fdde92152c131f1f58229c4f7f734 100644
+index 83c66205556fdde92152c131f1f58229c4f7f734..0c88d443a3bc894b18a7aa230cadf396e585c415 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -2432,7 +2432,7 @@ static void module_augment_kernel_taints(struct module *mod, struct load_info *i
- 				mod->name);
- 		add_taint_module(mod, TAINT_TEST, LOCKDEP_STILL_OK);
- 	}
--#ifdef CONFIG_MODULE_SIG
-+#ifdef CONFIG_MODULE_SIG_POLICY
- 	mod->sig_ok = info->sig_ok;
- 	if (!mod->sig_ok) {
- 		pr_notice_once("%s: module verification failed: signature "
-@@ -3808,3 +3808,27 @@ static int module_debugfs_init(void)
+@@ -3247,6 +3247,16 @@ static int early_mod_check(struct load_info *info, int flags)
+ 	return err;
  }
- module_init(module_debugfs_init);
- #endif
-+
-+#ifdef CONFIG_MODULE_SIG_POLICY
-+
-+#undef MODULE_PARAM_PREFIX
-+#define MODULE_PARAM_PREFIX "module."
-+
-+static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
-+module_param(sig_enforce, bool_enable_only, 0644);
-+
-+/*
-+ * Export sig_enforce kernel cmdline parameter to allow other subsystems rely
-+ * on that instead of directly to CONFIG_MODULE_SIG_FORCE config.
-+ */
-+bool is_module_sig_enforced(void)
-+{
-+	return sig_enforce;
-+}
-+EXPORT_SYMBOL(is_module_sig_enforced);
-+
-+void set_module_sig_enforced(void)
-+{
-+	sig_enforce = true;
-+}
-+#endif
-diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-index a2ff4242e623d5d4e87d2f3d139d8620fb937579..e51920605da14771601327ea596dad2e12400518 100644
---- a/kernel/module/signing.c
-+++ b/kernel/module/signing.c
-@@ -16,27 +16,6 @@
- #include <uapi/linux/module.h>
- #include "internal.h"
  
--#undef MODULE_PARAM_PREFIX
--#define MODULE_PARAM_PREFIX "module."
--
--static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
--module_param(sig_enforce, bool_enable_only, 0644);
--
--/*
-- * Export sig_enforce kernel cmdline parameter to allow other subsystems rely
-- * on that instead of directly to CONFIG_MODULE_SIG_FORCE config.
-- */
--bool is_module_sig_enforced(void)
--{
--	return sig_enforce;
--}
--EXPORT_SYMBOL(is_module_sig_enforced);
--
--void set_module_sig_enforced(void)
--{
--	sig_enforce = true;
--}
--
++static int module_integrity_check(struct load_info *info, int flags)
++{
++	int err = 0;
++
++	if (IS_ENABLED(CONFIG_MODULE_SIG))
++		err = module_sig_check(info, flags);
++
++	return err;
++}
++
  /*
-  * Verify the signature on a module.
-  */
+  * Allocate and load the module: note that size of section 0 is always
+  * zero, and we rely on this for optional sections.
+@@ -3260,18 +3270,18 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	char *after_dashes;
+ 
+ 	/*
+-	 * Do the signature check (if any) first. All that
+-	 * the signature check needs is info->len, it does
++	 * Do the integrity checks (if any) first. All that
++	 * they need is info->len, it does
+ 	 * not need any of the section info. That can be
+ 	 * set up later. This will minimize the chances
+ 	 * of a corrupt module causing problems before
+-	 * we even get to the signature check.
++	 * we even get to the integrity check.
+ 	 *
+ 	 * The check will also adjust info->len by stripping
+ 	 * off the sig length at the end of the module, making
+ 	 * checks against info->len more correct.
+ 	 */
+-	err = module_sig_check(info, flags);
++	err = module_integrity_check(info, flags);
+ 	if (err)
+ 		goto free_copy;
+ 
 
 -- 
 2.49.0
