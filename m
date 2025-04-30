@@ -1,124 +1,148 @@
-Return-Path: <linux-arch+bounces-11760-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11761-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE7AFAA5286
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Apr 2025 19:21:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C667AA52D5
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Apr 2025 19:45:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B48D73AA8AC
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Apr 2025 17:20:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A41901BC8274
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Apr 2025 17:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0AAC263C7F;
-	Wed, 30 Apr 2025 17:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66442620CB;
+	Wed, 30 Apr 2025 17:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5Ki7Zeo"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86AB52609C5;
-	Wed, 30 Apr 2025 17:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8058B1AA1FF;
+	Wed, 30 Apr 2025 17:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746033655; cv=none; b=po5KW45EueBSa+Ip5hdMDNBwI+m/dcFETDy4mNNzAL5zQPGniKI5t5dSnTYnGtIMxVWyLEPRC68OsV2yY1CBMO5bxP9o0/bdaE7x9ObePsQe8RVA/UtFMO5ZyNcCk5REATmZ+3Pqc89Z2HiEn5cldt0jppzqKzJDEXObsKX10ps=
+	t=1746035146; cv=none; b=NI6FDDAfskkObhrABAJt6VStnT6u7oc01dSlckbR8/KKgsoV1NIoaInjcV89VdGvSoIVqwRA9QaO+5nawW66CtYQnDDYKIM7UrKexFcJRWRId+MVj+wJHwh520O/gAbnxNwOZkG9WLsd0vC1NzDMBZ7IPMaDwywyCg685ioXpHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746033655; c=relaxed/simple;
-	bh=39KWSZA/+5ZTjQd4vRuOPIK2i+N4nybWhXUJllaBu/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b5KntVeZGijtm27y0qoRBsKEEiFDMkIKwEvZM0FeCpVtTB54aV5+y+O5v2hyhZBSCsjWQVAw7nEzVvV5/Qmb0KAoEiU+o+OeCC8SjkJEB3be28rMTHxDNpWwUpG2iLO9pMjr2o4vb/8ZzBaKa5X2sLL0bWAcXuBH8s0RJTK3efY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD676C4CEEB;
-	Wed, 30 Apr 2025 17:20:43 +0000 (UTC)
-Date: Wed, 30 Apr 2025 13:20:47 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Valentin Schneider <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, rcu@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti
- <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Daniel Wagner <dwagner@suse.de>, Petr Tesarik
- <ptesarik@suse.com>, Nicolas Saenz Julienne <nsaenz@amazon.com>, Frederic
- Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>, Sean Christopherson
- <seanjc@google.com>, Juergen Gross <jgross@suse.com>, Ajay Kaher
- <ajay.kaher@broadcom.com>, Alexey Makhalov <alexey.amakhalov@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Russell King
- <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
- Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
- <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, "H.
- Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
- <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
- Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
- <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
- <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, Pawan
- Gupta <pawan.kumar.gupta@linux.intel.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>, Jason Baron
- <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
- <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, Naveen N
- Rao <naveen@kernel.org>, Anil S Keshavamurthy
- <anil.s.keshavamurthy@intel.com>, "David S. Miller" <davem@davemloft.net>,
- Masami Hiramatsu <mhiramat@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>, Josh
- Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang1211@gmail.com>, Vincent Guittot
- <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
- <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, Masahiro Yamada
- <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda
- <ojeda@kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, Rong Xu
- <xur@google.com>, Rafael Aquini <aquini@redhat.com>, Song Liu
- <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
- <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>, "Kirill A.
- Shutemov" <kirill.shutemov@linux.intel.com>, Benjamin Berg
- <benjamin.berg@intel.com>, Vishal Annapurve <vannapurve@google.com>, Randy
- Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>, Tiezhu
- Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
- user->kernel transition
-Message-ID: <20250430132047.01d48647@gandalf.local.home>
-In-Reply-To: <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
-References: <20250429113242.998312-1-vschneid@redhat.com>
-	<fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1746035146; c=relaxed/simple;
+	bh=KRq3ObS+7bPSh5npZvFvh2C1vvjoanHB8ALoJ0Lw5oY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Du3c3FSuKyvh5v1i/hqNTxLmgiXx5XNJofJh3p/+eBOfoF803zZcf+ngoQo4f9r+m+wIDc06uX6FjXKDiEXXWVa6OM077xH0qHm+rc1Ohk61RgHzjpf/trk6U6Rq7wGopJDC8rwuqTgOMoS26CkWzz/zKB1su5fLdsENKWsXA04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b5Ki7Zeo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7027EC4CEE7;
+	Wed, 30 Apr 2025 17:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746035146;
+	bh=KRq3ObS+7bPSh5npZvFvh2C1vvjoanHB8ALoJ0Lw5oY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b5Ki7ZeoUb9ZN4LPaDEoM1o1bvfVz7fD1oztts7rOpVhwqg4oS5OvcmfJCGu3gxUH
+	 fT26UoXeSWagXlFQb3TkXpFnlFx9pI6CdXses/373TH68nkQ5m1XnkeCZyjTB3pjL8
+	 hB2unDN1O+ZToSdOpBH6aVt6DnPXIiit23u0m97zhbqweH/oPbGvmEvxIZXP3/PGuI
+	 fXfOoMh+QT2xdYboklbx8EcmahcftGMdK+N5ysjtRDWRo5qH2CA9yak25NsdYdhKlS
+	 5Unk+mvpoO/hy1QMjlUYCjybEmTkDQ2xbgxYdXD5WmCQ7eiojk/2fQ1VOdLNWLhrd4
+	 FfCKW0EMC7VFg==
+Date: Wed, 30 Apr 2025 10:45:43 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	sparclinux@vger.kernel.org, linux-s390@vger.kernel.org,
+	x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 00/12] crypto: sha256 - Use partial block API
+Message-ID: <20250430174543.GB1958@sol.localdomain>
+References: <cover.1745992998.git.herbert@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1745992998.git.herbert@gondor.apana.org.au>
 
-On Tue, 29 Apr 2025 09:11:57 -0700
-Dave Hansen <dave.hansen@intel.com> wrote:
+[Added back Cc's that were dropped]
 
-> I don't think we should do this series.
+On Wed, Apr 30, 2025 at 02:06:15PM +0800, Herbert Xu wrote:
+> This is based on
+> 
+> 	https://patchwork.kernel.org/project/linux-crypto/list/?series=957785
 
-Could you provide more rationale for your decision.
+I'm assuming that you mean that with your diff
+https://lore.kernel.org/r/aBGdiv17ztQnhAps@gondor.apana.org.au folded into my
+first patch, since otherwise your patch series doesn't apply.  But even with
+that done, your patch series doesn't build:
 
->=20
-> If folks want this functionality, they should get a new CPU that can
-> flush the TLB without IPIs.
+    In file included from ./include/crypto/hash_info.h:12,
+                     from crypto/hash_info.c:9:
+    ./include/crypto/sha2.h: In function ‘sha256_init’:
+    ./include/crypto/sha2.h:101:32: error: ‘struct sha256_state’ has no member named ‘ctx’
+      101 |         sha256_block_init(&sctx->ctx);
+          |                                ^~
 
-That's a pretty heavy handed response. I'm not sure that's always a
-feasible solution.
+> Rather than going through the lib/sha256 partial block handling,
+> use the native shash partial block API.  Add two extra shash
+> algorithms to provide testing coverage for lib/sha256.
+> 
+> Herbert Xu (12):
+>   crypto: lib/sha256 - Restore lib_sha256 finup code
+>   crypto: sha256 - Use the partial block API for generic
+>   crypto: arm/sha256 - Add simd block function
+>   crypto: arm64/sha256 - Add simd block function
+>   crypto: mips/sha256 - Export block functions as GPL only
+>   crypto: powerpc/sha256 - Export block functions as GPL only
+>   crypto: riscv/sha256 - Add simd block function
+>   crypto: s390/sha256 - Export block functions as GPL only
+>   crypto: sparc/sha256 - Export block functions as GPL only
+>   crypto: x86/sha256 - Add simd block function
+>   crypto: lib/sha256 - Use generic block helper
+>   crypto: sha256 - Use the partial block API
+>
+>  arch/arm/lib/crypto/Kconfig                   |   1 +
+>  arch/arm/lib/crypto/sha256-armv4.pl           |  20 +--
+>  arch/arm/lib/crypto/sha256.c                  |  16 +--
+>  arch/arm64/crypto/sha512-glue.c               |   6 +-
+>  arch/arm64/lib/crypto/Kconfig                 |   1 +
+>  arch/arm64/lib/crypto/sha2-armv8.pl           |   2 +-
+>  arch/arm64/lib/crypto/sha256.c                |  16 +--
+>  .../mips/cavium-octeon/crypto/octeon-sha256.c |   4 +-
+>  arch/powerpc/lib/crypto/sha256.c              |   4 +-
+>  arch/riscv/lib/crypto/Kconfig                 |   1 +
+>  arch/riscv/lib/crypto/sha256.c                |  17 ++-
+>  arch/s390/lib/crypto/sha256.c                 |   4 +-
+>  arch/sparc/lib/crypto/sha256.c                |   4 +-
+>  arch/x86/lib/crypto/Kconfig                   |   1 +
+>  arch/x86/lib/crypto/sha256.c                  |  16 ++-
+>  crypto/sha256.c                               | 134 +++++++++++-------
+>  include/crypto/internal/sha2.h                |  46 ++++++
+>  include/crypto/sha2.h                         |  14 +-
+>  lib/crypto/Kconfig                            |   8 ++
+>  lib/crypto/sha256.c                           | 100 +++----------
+>  20 files changed, 232 insertions(+), 183 deletions(-)
 
-=46rom my experience in the world, software has always been around to fix the
-hardware, not the other way around ;-)
+The EXPORT_SYMBOL => EXPORT_SYMBOL_GPL changes are fine and should just be one
+patch.  I was just trying to be consistent with lib/crypto/sha256.c which uses
+EXPORT_SYMBOL, but EXPORT_SYMBOL_GPL is fine too.
 
--- Steve
+Everything else in this series is harmful, IMO.
 
+I already covered why crypto_shash should simply use the library and not do
+anything special.
+
+As for your sha256_finup "optimization", it's an interesting idea, but
+unfortunately it slightly slows down the common case which is count % 64 < 56,
+due to the unnecessary copy to the stack and the following zeroization.  In the
+uncommon case where count % 64 >= 56 you do get to pass nblocks=2 to
+sha256_blocks_*(), but ultimately SHA-256 is serialized block-by-block anyway,
+so it ends up being only slightly faster in that case, which again is the
+uncommon case.  So while it's an interesting idea, it doesn't seem to actually
+be better.  And the fact that that patch is also being used to submit unrelated,
+more dubious changes isn't very helpful, of course.
+
+- Eric
 
