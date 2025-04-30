@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-11758-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11759-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CF49AA5278
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Apr 2025 19:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFA1EAA527B
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Apr 2025 19:17:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 352C21B674A0
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Apr 2025 17:16:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D781189103D
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Apr 2025 17:16:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70495269CED;
-	Wed, 30 Apr 2025 17:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A77E626F47D;
+	Wed, 30 Apr 2025 17:15:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="x/1N4HOn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ppKhcx7S"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7E8266585
-	for <linux-arch@vger.kernel.org>; Wed, 30 Apr 2025 17:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287D426B2C0
+	for <linux-arch@vger.kernel.org>; Wed, 30 Apr 2025 17:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746033350; cv=none; b=HGoT6O8X0fWdCw6ysPD+bU4UpSc6Z0tX2LgxTYj7Wzz1UKvBcrA+cDcOBcdqCVYbtQlr2nwvhldBtCpn4S6/HVGtlo+bc+mSt4Raq7mo2/2m87pzscjqRGxGdCddgG932stz3OS4ogC2ZHe1kI/DFLZX2Hc+/yBU7l0J1xgGY1M=
+	t=1746033352; cv=none; b=KOIy7uPOCloz798LhGWCXBiZJLDq8pM1JyNtIw8YSqh8p/k3Nd8jJPQfIoqcK1JOHscPAtwtiCB25ABHNfYsVi4yKzRUxK/zQFCeqzpyu0t2MCMigwPS7MLFyrZeJS4fGvdhpfJhu2IZ+2sM6lAcsu8tz6iqc2/uUJiG9251Kfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746033350; c=relaxed/simple;
-	bh=0giGEwbxakAUv76u37w4z4HZNA3HR28IEwGrKloZfbQ=;
+	s=arc-20240116; t=1746033352; c=relaxed/simple;
+	bh=mAU7UddOSIuhHOgW0dcTHe2+YPpXYqGh56bzZQb4Iac=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=LPD+DOsNJ9b+1heeYOJs4vHbFBeBhfTCK50zTz/zE/RubC0Q//nXEBdDzZkMynfKVxAaEBbCNEpgau8kmACZ5uMrgNgmodFbLv5dF3DAAVWzlTBdBpLA3C9s3+Sz7gH726oAVF6wSaPh/iIrWbz0CM5C5ye5Vg+dZx40Q+LQiGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=x/1N4HOn; arc=none smtp.client-ip=209.85.216.73
+	 To:Content-Type; b=kUaaMb1+c82JZ+41RVGiai26jihkEVJ+s43kHtsddc9qanQQUkyxPmtpXXYUiUM7snfPqGYyk18MzLeQq69HcohKoAqYLlU3kUZkLvTwELS2/CtPbK73M6Vl07tbnno5Q5EmAJDA+yTu+S99bIPUO5xxeZLV0xWw08kZxnSw9mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ppKhcx7S; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3032ea03448so129522a91.2
-        for <linux-arch@vger.kernel.org>; Wed, 30 Apr 2025 10:15:48 -0700 (PDT)
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-225ab228a37so468255ad.2
+        for <linux-arch@vger.kernel.org>; Wed, 30 Apr 2025 10:15:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746033348; x=1746638148; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1746033350; x=1746638150; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fOjn9I/CPl6hOGWikVl+PEhxM6YNnhs+3iDFhqJ7e1Q=;
-        b=x/1N4HOnrjhrEuaC+/BduGHIgnd9t3WVz8bjvEjk5WlhqqB/SUKujBNRP82AaIoGh4
-         Ff7UaID+dL5ZEtcYQwTdhCtgL2upjme2iCZMjxTx6kaMSl+x3DxoYAphKIA5KBJt1lVM
-         PpcUX9ZRuxu0cK9yAH9f+L3GLwIjjaVMQae3ly9RoVz+A8K/OQkw31erSbj2MhLTBx3q
-         ySFOKrO9F4A0skALa85MX5nPUE1yNhPZCsySMZQlT3S5aM41jJ/jkf1Au9hX/KOrRGHp
-         TbrESs3eF1v/rWS0Jleuw32xBUsyKX4DG/Uw0p5Ff/c7arWfU3TSviZThsFnchfh24Dk
-         HXbw==
+        bh=WhBH53x+wqLHSip++JVbv92U64Pz0+iOyWwwIUecJ6E=;
+        b=ppKhcx7Sp+v1WszhWVuLL3r8QHFclpXg3wjKDy2t8Cyjd/0KJLtuNIKJl4bfLDyK1l
+         zUFXYO7YaxnuePFw6XuDR+83h0yBWVu3Ri4C78PqpZSI2MhOpP4xExeTQS0pCNTGydNp
+         IjakmkXsXRD+++uNyKHzEAnQXFMJUtBruatI567QUrDTBdP5tj7/W88n/u3Z5L7w2QRD
+         jDRUp4L7QEFSB5LE/NAtuLCGA7W68Qoytejy82A1exGfh4hOGPhYezqePKUJoX8CIR4B
+         H53apjFSViNVMUugUyTRBTUov8AJV/1hFaHFdKM0bKvfbKU/HSUiBALg8iz2+3vOCV/8
+         lzxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746033348; x=1746638148;
+        d=1e100.net; s=20230601; t=1746033350; x=1746638150;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fOjn9I/CPl6hOGWikVl+PEhxM6YNnhs+3iDFhqJ7e1Q=;
-        b=YPVotYpgW/ICMaoHA40ouq9cg7wy9I9CJScdkpCyDIo+V88pfndeaC+Ude06Z4DCD/
-         Mg00i5dW1G3IaXa5m5Azw/6w0Ysy29/ZnOyboifIsx+WYcMlVfO6auV8CoRciqSrmbKs
-         9lAsyQp6pUkMwbMWjo0QOfX8aWe/pFRwbnZWyxxGKZOTRYpop7NOExHqRxlQUPD/BXpp
-         3W2toYn5OBZVDY3N/SRWn4ssbLsiPLBc/mnM6ro06XHvMia+dmc6SY3/xxxay9ODnS5Y
-         zh8qgMnCEFCIbcg3SL5+grUojfo2iPVc+JU6MoT/mvsVl03X8XOVxV3rx5xQEibjzAuN
-         3R7A==
-X-Forwarded-Encrypted: i=1; AJvYcCV0nR7jBCPXtl1aT6r7APpFfEsYCxw8FY7Xi44g62UOVYPB3goaCC2zmwassK3PpxDF/aCZKKh2zlTS@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIHyA2bKNcSOVtCVnMHbXhiqQNEQY7ckZ9XQHfCRR1eO3vHebL
-	fmhE/4VN0KDKEEenJWfEv/N41uXxMuZ+3eP+Qhist2YQc5It2cT/HuP/QjrH/bXS4uGrj2VCIIT
-	+wvrCVQ==
-X-Google-Smtp-Source: AGHT+IHK97p3d4624e1GJoE8HKE9+msldMS/AyxZk3q0FqC3fhWjqcopfMGNBtO9wUuHcIl2vdgL7V5NAXJ3
-X-Received: from pjbsm11.prod.google.com ([2002:a17:90b:2e4b:b0:309:f831:28e0])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4984:b0:2ff:796b:4d05
- with SMTP id 98e67ed59e1d1-30a343ffdcbmr5747063a91.11.1746033348290; Wed, 30
- Apr 2025 10:15:48 -0700 (PDT)
-Date: Wed, 30 Apr 2025 10:15:33 -0700
+        bh=WhBH53x+wqLHSip++JVbv92U64Pz0+iOyWwwIUecJ6E=;
+        b=ZzE4cRvibvdZcavNIP6lWmQQs+HeG6mM+tVgIXSxQ9Vt7QqP3dMNFQgPDPlNe32mBL
+         X7TBU9yjzrenLWLTa0d/qFVEzjrhNfe8nhjCY4BqwK8+gt5QHUaTGJ27eqjnvZU0NrpO
+         5gUilfsy/X3U8KmJm8uGfyKSdszjC5IdGmLo75ccWqvY1tBTFdYn4OhZK77VA7WGrxKG
+         qrlvqTqkHC97UEpfp9waNMcKXgtfm+cttgpqg3m0jpO0+mCd4H9p6lKg2JfIG0hbsj0N
+         3gC51YOvE2WGeHcyEScX4Cc0Tt6VlbU4r5IFKHnvqLZ8b4Dy8uXcxSp/dIPeoCT/ehmN
+         OzIA==
+X-Forwarded-Encrypted: i=1; AJvYcCW5qea/9KScZindbFq57KbccgR5fVvXhrcy5lsrkfrb3PQRPib9LywNbA8YzDcuQznu3xZWaaVpz4Re@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAFX+o/9g5RheWOjfzPdpAV4cZKDVrxfSbYdpnPvluZhwBNJE7
+	JwYk01zy1ENGDOFUbHAmXHDtMtwyHbFnbAeKxYV9fw4Wdp+9y6JgtPz11UaV2sL/x9kTk9lM48F
+	u+YuDtw==
+X-Google-Smtp-Source: AGHT+IEaapOgmoVRsKolxvo/uh0+Fje0GanC2UTPR9ZO79czz3tAeLom6ayGJKwoq/mQfddsskfR6kPqjVdO
+X-Received: from pgmm35.prod.google.com ([2002:a05:6a02:5523:b0:af2:50f0:bc79])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2d0:b0:223:325c:89f6
+ with SMTP id d9443c01a7336-22df34aa393mr68396565ad.10.1746033350412; Wed, 30
+ Apr 2025 10:15:50 -0700 (PDT)
+Date: Wed, 30 Apr 2025 10:15:34 -0700
 In-Reply-To: <20250430171534.132774-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250430171534.132774-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430171534.132774-5-irogers@google.com>
-Subject: [PATCH v2 4/5] math64: Silence a clang -Wshorten-64-to-32 warning
+Message-ID: <20250430171534.132774-6-irogers@google.com>
+Subject: [PATCH v2 5/5] hash.h: Silence a clang -Wshorten-64-to-32 warning
 From: Ian Rogers <irogers@google.com>
 To: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
@@ -96,22 +96,22 @@ cases.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- include/linux/math64.h | 2 +-
+ include/linux/hash.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/math64.h b/include/linux/math64.h
-index 6aaccc1626ab..f32fcb2a2331 100644
---- a/include/linux/math64.h
-+++ b/include/linux/math64.h
-@@ -179,7 +179,7 @@ static __always_inline u64 mul_u64_u64_shr(u64 a, u64 mul, unsigned int shift)
- #ifndef mul_u64_u32_shr
- static __always_inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
+diff --git a/include/linux/hash.h b/include/linux/hash.h
+index 38edaa08f862..ecc8296cb397 100644
+--- a/include/linux/hash.h
++++ b/include/linux/hash.h
+@@ -75,7 +75,7 @@ static __always_inline u32 hash_64_generic(u64 val, unsigned int bits)
  {
--	u32 ah = a >> 32, al = a;
-+	u32 ah = a >> 32, al = (u32)a;
- 	u64 ret;
- 
- 	ret = mul_u32_u32(al, mul) >> shift;
+ #if BITS_PER_LONG == 64
+ 	/* 64x64-bit multiply is efficient on all 64-bit processors */
+-	return val * GOLDEN_RATIO_64 >> (64 - bits);
++	return (u32)(val * GOLDEN_RATIO_64 >> (64 - bits));
+ #else
+ 	/* Hash 64 bits using only 32x32-bit multiply. */
+ 	return hash_32((u32)val ^ __hash_32(val >> 32), bits);
 -- 
 2.49.0.906.g1f30a19c02-goog
 
