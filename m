@@ -1,149 +1,142 @@
-Return-Path: <linux-arch+bounces-11772-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11773-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C327AA6112
-	for <lists+linux-arch@lfdr.de>; Thu,  1 May 2025 17:59:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A75CAA6490
+	for <lists+linux-arch@lfdr.de>; Thu,  1 May 2025 22:07:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88340179CA9
-	for <lists+linux-arch@lfdr.de>; Thu,  1 May 2025 15:59:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B328A9A37E4
+	for <lists+linux-arch@lfdr.de>; Thu,  1 May 2025 20:07:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7508C204C00;
-	Thu,  1 May 2025 15:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0C924729A;
+	Thu,  1 May 2025 20:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="cBpesFUx";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kDYazz0g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nj+D09Ej"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED861BF37;
-	Thu,  1 May 2025 15:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7420724677E;
+	Thu,  1 May 2025 20:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746115152; cv=none; b=hPKrMBNB/GYNwxOyBrlkRJ0pBh6JKOhXtP2adfW0KQfQK0/UDMtjliRcqUYbhfav23Xr0ahiA+Oa/4Tb6MUdTXeZ32X7zM3OlUCkirhnTXx1qPCiADKqbaDVsCcSG6X/4xMTA9h48XyryO0UGbpXAZY3+v13DdPQfMDkb9e50UQ=
+	t=1746130055; cv=none; b=F6RgYDhGSSEdCow6qfxg7LVVI75rWBfezwq3I3XAJrWMQgTPGAmKRrVYq9IJSK6TkQeV3szjZXbYJamGF8Orydx2afJRi3TPJ/Z8i+HzULUNf/9W4rIr4h1oKuTZNRuueYXFF5hhFtuaQa7zMKyxsKptP/Cl4zafY9jpYL2bGG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746115152; c=relaxed/simple;
-	bh=VLD7XIoD5ReEFcrucrl4apHEsDnocbY1koqmkGjrqzI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ZGfC5uQyBfLbpb36r2E8QYglNNgidc69odi4z0TA5yMUf94nWFxiXN4IdvHlMUrkCw1gVfkiQAPnb16VvhHX0rGMb13XqQRGDtE759IZxDo2jRuPuMPvsaE+JOnxJj+WY/qIGBhqOgQU/cYQgHhiF4AT9jqzPOR0egoh5uDBai8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=cBpesFUx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kDYazz0g; arc=none smtp.client-ip=202.12.124.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfout.stl.internal (Postfix) with ESMTP id 4B80D1140211;
-	Thu,  1 May 2025 11:59:08 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-02.internal (MEProxy); Thu, 01 May 2025 11:59:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1746115148;
-	 x=1746201548; bh=P86Ohs1P8SRKraqsep0iM5Yj8o6Xx1WvCw4YHG9svg8=; b=
-	cBpesFUxaz35VLgm3m1KLq26nTfeI0q1EHxsP2VlI3m8DHgIN1iZTI8uAlI6Ay6g
-	FCXFhK/+FxI0xChhVi6/5gmlD6C0yfBUjxM00GOw6O39Q/27dSwLx9vYNsjj9bld
-	SyN6nnxb9yb0J6qqGHDIQ2hJeeKzopyNKz8cLoC1NkV8cIWRBDLNidO6xEKa0Bpj
-	R5EIIa3CaRCkKdi0/UsW9EXwSDOnRJ9+FgDn8OEFxQ5iMBKZHQ/Q/z8jEKmTQjuB
-	ICS2D6n1wLlj2REqwHAjY6FDi7QrvKzNTf0iJPRDpY2xosJ+RZVdpun1jUpp8wWC
-	J8f8oflTiYGSkk0dTmbVIw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746115148; x=
-	1746201548; bh=P86Ohs1P8SRKraqsep0iM5Yj8o6Xx1WvCw4YHG9svg8=; b=k
-	DYazz0g6aKRC/z8NfoPGU+KkdcC62v8J0u+xl6oTsY24t1Rsw+8E/IYhKcC5wJnO
-	Cji5EXYwamcTlYQI55jx2FKTgZD/YrfrRLqAr3lMjKjxsBAmLSEORM1bksvP29IM
-	BL/RRSTsp3eUHVjpMH3ZzAaCSmMHPR+RjNyNNwYNzvD9PVwrsCRvOF8iN+n5Exe4
-	WmGhUEH0Ns1Kc4Gb83rQqbWEUUYI8PcfDuP8Nh7XZ6LqxxK152jQf9+/H9FYQy/0
-	vCXFtp0/0N8YkdI13fp7gV+ErhyxgdTtOCMOM7bAlQ79vIT34eIDscSwyvCCIykD
-	Ssx+IXL6mon3wvGTBiOpQ==
-X-ME-Sender: <xms:S5oTaInsvDTIj9-N1IsiVcsYDWfVTa4aDt7LeNcoM3yJGB1OMok-rA>
-    <xme:S5oTaH3oNVWRY_wg_K1dhi84O1Ej7BkeH6GaNt0rJTMW1yTA4h73SQrSNlwHNPb-r
-    cDuwni6DJNiSUSZoQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvjedttddtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnegfrhhlucfvnfffucdlfeehmdenucfjughrpefoggffhffv
-    vefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdffrghnihgvlhcuighufdcuoe
-    gugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeegleeifffhudduueek
-    hfeifefgffegudelveejfeffueekgfdtledvvdeffeeiudenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhn
-    sggprhgtphhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghrnh
-    gusegrrhhnuggsrdguvgdprhgtphhtthhopehmhihkohhlrghlsehfsgdrtghomhdprhgt
-    phhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpthhtohepvgguugihiiekje
-    esghhmrghilhdrtghomhdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhm
-    rghilhdrtghomhdprhgtphhtthhopehhrgholhhuohesghhoohhglhgvrdgtohhmpdhrtg
-    hpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtoheplhhm
-    sgesihhsohhvrghlvghnthdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvg
-    hlrdhorhhg
-X-ME-Proxy: <xmx:S5oTaGqjcGfV9TrE7Kfky634s-JRoD6U6GoZpxcRb3ztJhj0dY89RQ>
-    <xmx:S5oTaEk8YhSeiDXcB1J2g0mhPoRjbK5vKjNsPXfzI7WOopDBbVZbHg>
-    <xmx:S5oTaG0FjQ16RRYs3xXu4uaYRht9-jYl9ferVGnyxrB32NcWcduBYQ>
-    <xmx:S5oTaLvZTX-3klhyGctryRehyXRO2A3wxJvNmVIJBp18WavEzcBKlA>
-    <xmx:TJoTaMuFENA3JfsvHkLNs8Gyi5He84zRZcEAHwzpet835-v-VST1daqA>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 54FA918A006B; Thu,  1 May 2025 11:59:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1746130055; c=relaxed/simple;
+	bh=BrxaEXoYWGKXg2PGmFg5c8S5Eq4HVZ4HIKaULdVdahc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ObsnO+PiYo7YKSLzhYq7Rk1nDzVV/zIS2zJq2yBWf0IpiIn0m4TXB7acdbOMUp/yXSyX6ZPCrJsgod9OxymfACcDRH13q3xXKhMl8/kWIHT9FRqce+fYGL1szei7nrfVMLZrlIOm9KrtoMuPzECdHO5voHa++j+an/N8e5w50iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nj+D09Ej; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3913b539aabso541324f8f.2;
+        Thu, 01 May 2025 13:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746130052; x=1746734852; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gOOEqm/pPCgs6BsMyD9s2dYK/FTS1v1KVmaovonx3qw=;
+        b=nj+D09EjgL3XumX/QW3E6wuY8AN/x3UUDmuH5n81AydZeK1FUC9wPUJIdHBVLSVLhm
+         ZuSy+Knf+TSZ9kms5if6871G4CjmCEn96O5/BHKzkmu0tLEaz8/brtUHSz6yEP27XP0q
+         e1XuxEW1NIzzjR5MXcrUXBpfDzFBR7BvCdQIvq9bD3T57cIWXXwyoxzVBLBtPvwODKlU
+         rUbOrG0lRSrZhq6G7xdvJblIshc1a+ZmfhE76z2NWd5LvQiOOPEcw6yi5hfO3MT3LRRi
+         Y6nh9zQAZ2ZXUH3QstiaSsov276Q9BSky7WZOP7v57XmTwo/p4MsFy+Kq8znwhFR/xsq
+         1Qcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746130052; x=1746734852;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gOOEqm/pPCgs6BsMyD9s2dYK/FTS1v1KVmaovonx3qw=;
+        b=BX+dGsfg2kIPMHo4NJdoaKpmvRYmAr33D2806+CDJ8VWezfacSfsZ8c7qmyev1sGCq
+         WpsGIla5WMBVJHbNBN1XMTMGJjv5vRy4IncViRuwtXuDoW6L2hFNVeVxIbjnLdx99O3+
+         NGGJOa1hojWUl6882eqGKQN5Uuox9dYFgEAsbxJ5W301Fkjmir4FJqpF4Kk9nXyfgLHv
+         4Cn1j3JAPOH2VhK4Y36UAGDpARxzYRvk4sMmEvReD9ZzHuxo+4M7fAUO984g5SWi8myI
+         pL/oMcKZtnln/yHjlhwC3aqLsMXmtUOfv/jS77MKLPiNJ2WKr8u6cEUajyDKpFQR3jr2
+         D33w==
+X-Forwarded-Encrypted: i=1; AJvYcCULMkmsBsyJkz0oh4FD2BUkzXTUNOKzgnGjHIjl7Gpl66KTsAtqXC9tagAOKGE9hLtshVZ5VJ3PJOyd@vger.kernel.org, AJvYcCVwUTdPDCz/UeSLQ/Peb9ZEn+BYQul+ddC6vohhMDti4Il4TPc+7ipi99rMGqUKww4QLj9RyGLdfeC68IE2@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYspcEFUCZYp+c4esl8vFxsNNBt7o8rWHiLgnvKKaJsYX+r/pt
+	v/LrQ8LEG6xZ+t8gXTZKz0Zxwb1OfzeJnWouN1fm9Bwq0h+SnZ2f
+X-Gm-Gg: ASbGncsJEIEGMAd9z+pcMun267A33sf5NBGX143j498ivu9PKfwQpklP0rf2o38jdgr
+	vBEzQIOjQh7fOV67eblqEMYRq8VO4lfz9czAE3UmmJ0MWWDEgexNj4nkeDoebseUFovIcWjffHL
+	Yw/f1C1IZnB4lHR/W7VB34+G16Hspw+kEQn4OrbddFe3azg/eOwWk+hOBra2n+xwWsthxOddVfl
+	8PMlDXJp3YpyTt95lku/a+fSIfLuEgJVynt3QZQV+99VW3+CC6LW6E/ZewYafn5p+h+2BXKMIgr
+	1jENuaje4V3CPMgrcQS7KAHBKnNCIHSIvYkitIMMt8nOCs9Iudzk4w85sR5Ui67AIuYLi95lkes
+	fmK8=
+X-Google-Smtp-Source: AGHT+IH8a1pUJQSeh3X4FAtelAZ88iDsLxyl67Hy088a9nJih1+Ck1krTw97wj9Uh1G2vDiZtUQVcg==
+X-Received: by 2002:a05:6000:4203:b0:3a0:7a8f:db22 with SMTP id ffacd0b85a97d-3a099ad7aebmr128136f8f.24.1746130051567;
+        Thu, 01 May 2025 13:07:31 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae7a35sm117740f8f.43.2025.05.01.13.07.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 May 2025 13:07:31 -0700 (PDT)
+Date: Thu, 1 May 2025 21:07:29 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Jakub Kicinski <kuba@kernel.org>,
+ Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Leo Yan
+ <leo.yan@arm.com>
+Subject: Re: [PATCH v2 4/5] math64: Silence a clang -Wshorten-64-to-32
+ warning
+Message-ID: <20250501210729.60558b33@pumpkin>
+In-Reply-To: <20250430171534.132774-5-irogers@google.com>
+References: <20250430171534.132774-1-irogers@google.com>
+	<20250430171534.132774-5-irogers@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T7116480ff90ddb52
-Date: Thu, 01 May 2025 08:58:46 -0700
-From: "Daniel Xu" <dxu@dxuuu.xyz>
-To: "Lorenz Bauer" <lmb@isovalent.com>, "Arnd Bergmann" <arnd@arndb.de>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>,
- "Shuah Khan" <shuah@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>, linux-kselftest@vger.kernel.org
-Message-Id: <ec03896b-feac-4fa5-a213-7e9f57e15f72@app.fastmail.com>
-In-Reply-To: <20250501-vmlinux-mmap-v1-0-aa2724572598@isovalent.com>
-References: <20250501-vmlinux-mmap-v1-0-aa2724572598@isovalent.com>
-Subject: Re: [PATCH bpf-next 0/2] Allow mmap of /sys/kernel/btf/vmlinux
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, May 1, 2025, at 7:28 AM, Lorenz Bauer wrote:
-> I'd like to cut down the memory usage of parsing vmlinux BTF in ebpf-go.
-> With some upcoming changes the library is sitting at 5MiB for a parse.
-> Most of that memory is simply copying the BTF blob into user space.
-> By allowing vmlinux BTF to be mmapped read-only into user space I can
-> cut memory usage by about 75%.
+On Wed, 30 Apr 2025 10:15:33 -0700
+Ian Rogers <irogers@google.com> wrote:
 
-Cool! Maybe teach libbpf to use this as well? So everyone else can pick up
-the win transparently.
+> The clang warning -Wshorten-64-to-32 can be useful to catch
+> inadvertent truncation. In some instances this truncation can lead to
+> changing the sign of a result, for example, truncation to return an
+> int to fit a sort routine. Silence the warning by making the implicit
+> truncation explicit. This isn't to say the code is currently incorrect
+> but without silencing the warning it is hard to spot the erroneous
+> cases.
 
->
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+Except that the extra casts make the reader think something 'extra'
+is going on.
+For readability you want as few casts as possible.
+
+	David
+
+
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
-> Lorenz Bauer (2):
->       btf: allow mmap of vmlinux btf
->       selftests: bpf: add a test for mmapable vmlinux BTF
->
->  include/asm-generic/vmlinux.lds.h                  |  3 +-
->  kernel/bpf/sysfs_btf.c                             | 25 ++++++-
->  tools/testing/selftests/bpf/prog_tests/btf_sysfs.c | 79 ++++++++++++++++++++++
->  3 files changed, 104 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 38d976c32d85ef12dcd2b8a231196f7049548477
-> change-id: 20250501-vmlinux-mmap-2ec5563c3ef1
->
-> Best regards,
-> -- 
-> Lorenz Bauer <lmb@isovalent.com>
+>  include/linux/math64.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/math64.h b/include/linux/math64.h
+> index 6aaccc1626ab..f32fcb2a2331 100644
+> --- a/include/linux/math64.h
+> +++ b/include/linux/math64.h
+> @@ -179,7 +179,7 @@ static __always_inline u64 mul_u64_u64_shr(u64 a, u64 mul, unsigned int shift)
+>  #ifndef mul_u64_u32_shr
+>  static __always_inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
+>  {
+> -	u32 ah = a >> 32, al = a;
+> +	u32 ah = a >> 32, al = (u32)a;
+>  	u64 ret;
+>  
+>  	ret = mul_u32_u32(al, mul) >> shift;
+
 
