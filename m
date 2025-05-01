@@ -1,142 +1,168 @@
-Return-Path: <linux-arch+bounces-11773-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11774-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A75CAA6490
-	for <lists+linux-arch@lfdr.de>; Thu,  1 May 2025 22:07:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B8AFAA64A0
+	for <lists+linux-arch@lfdr.de>; Thu,  1 May 2025 22:15:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B328A9A37E4
-	for <lists+linux-arch@lfdr.de>; Thu,  1 May 2025 20:07:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C1C41B65E0B
+	for <lists+linux-arch@lfdr.de>; Thu,  1 May 2025 20:16:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0C924729A;
-	Thu,  1 May 2025 20:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3542E251783;
+	Thu,  1 May 2025 20:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nj+D09Ej"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ivCLPNI9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7420724677E;
-	Thu,  1 May 2025 20:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F191BE871
+	for <linux-arch@vger.kernel.org>; Thu,  1 May 2025 20:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746130055; cv=none; b=F6RgYDhGSSEdCow6qfxg7LVVI75rWBfezwq3I3XAJrWMQgTPGAmKRrVYq9IJSK6TkQeV3szjZXbYJamGF8Orydx2afJRi3TPJ/Z8i+HzULUNf/9W4rIr4h1oKuTZNRuueYXFF5hhFtuaQa7zMKyxsKptP/Cl4zafY9jpYL2bGG0=
+	t=1746130545; cv=none; b=ahHCdKP3ACoWvJ6gv1uCpNtO7Z6fcqWkh7jZRs8GZLRU53BLOTYBoR/+9WkuMwa4Hq8hRZJn7SC7ojKKFhAKUD2ntgM3t0DYPzZNvhxIzuAj1x9MYTPvewVUP0x7qdsUfOVeuuzs/jFEqpo1OXOJwC1fO62f7rBLzzA44rUBj5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746130055; c=relaxed/simple;
-	bh=BrxaEXoYWGKXg2PGmFg5c8S5Eq4HVZ4HIKaULdVdahc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ObsnO+PiYo7YKSLzhYq7Rk1nDzVV/zIS2zJq2yBWf0IpiIn0m4TXB7acdbOMUp/yXSyX6ZPCrJsgod9OxymfACcDRH13q3xXKhMl8/kWIHT9FRqce+fYGL1szei7nrfVMLZrlIOm9KrtoMuPzECdHO5voHa++j+an/N8e5w50iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nj+D09Ej; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3913b539aabso541324f8f.2;
-        Thu, 01 May 2025 13:07:33 -0700 (PDT)
+	s=arc-20240116; t=1746130545; c=relaxed/simple;
+	bh=FEQPFMqC2aSqAO0+LCL7aLTH7lQASLanG1HCrQJCXiY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FxDAOxV9OyFQKT4wyLtljTn3yKL+zgkSOAUQ/UeCULIyTZW/B0fhVB4o/8FlV9GfQADiz1PW8J5LNJYLPKv7KkOL/BJ3z/LKGmMf3qbJA9OMb0iSRufi0NLYS94rlklXHTfC8cepw8pG4Fu1PioB/bdvNz9Ez7pSLfL7PNX5+Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ivCLPNI9; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3d8c4222fc9so33155ab.0
+        for <linux-arch@vger.kernel.org>; Thu, 01 May 2025 13:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746130052; x=1746734852; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1746130542; x=1746735342; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gOOEqm/pPCgs6BsMyD9s2dYK/FTS1v1KVmaovonx3qw=;
-        b=nj+D09EjgL3XumX/QW3E6wuY8AN/x3UUDmuH5n81AydZeK1FUC9wPUJIdHBVLSVLhm
-         ZuSy+Knf+TSZ9kms5if6871G4CjmCEn96O5/BHKzkmu0tLEaz8/brtUHSz6yEP27XP0q
-         e1XuxEW1NIzzjR5MXcrUXBpfDzFBR7BvCdQIvq9bD3T57cIWXXwyoxzVBLBtPvwODKlU
-         rUbOrG0lRSrZhq6G7xdvJblIshc1a+ZmfhE76z2NWd5LvQiOOPEcw6yi5hfO3MT3LRRi
-         Y6nh9zQAZ2ZXUH3QstiaSsov276Q9BSky7WZOP7v57XmTwo/p4MsFy+Kq8znwhFR/xsq
-         1Qcw==
+        bh=fsgFo/RejhPC8ntitgtfydngcD4MvQ2F4ZVpjB7CD0k=;
+        b=ivCLPNI975WK1UN1npB5I6kKC/DarhCPbGwI8uW6AhCBQ9Z6FcxSeXsYpCHBsN5uug
+         ys4CJ5LnQ/hFPosjv0B+wBH1nIcSYy+6IHxDWbyqMYFWs6TU4Id27QlkVkwyRb6O5LRI
+         NtJR2d51+tGe6NFrvrs3yDJVw/MonE4amprIgX9qBwq/e6kxyrdfOBKq8087pq85u5k0
+         GQs90qXfWrhrv8oNIxMFiJlqZE/xJejKbtr+dKvmE4NFq48qsLhgoixcwPKglEMw0W25
+         YT2UriMydwTrBvfZnm3Vp78XBXwY2BYVq9Kqvuityc+x+cvDE0ZDWmrp3WTZLVYwTY3f
+         scPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746130052; x=1746734852;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1746130542; x=1746735342;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gOOEqm/pPCgs6BsMyD9s2dYK/FTS1v1KVmaovonx3qw=;
-        b=BX+dGsfg2kIPMHo4NJdoaKpmvRYmAr33D2806+CDJ8VWezfacSfsZ8c7qmyev1sGCq
-         WpsGIla5WMBVJHbNBN1XMTMGJjv5vRy4IncViRuwtXuDoW6L2hFNVeVxIbjnLdx99O3+
-         NGGJOa1hojWUl6882eqGKQN5Uuox9dYFgEAsbxJ5W301Fkjmir4FJqpF4Kk9nXyfgLHv
-         4Cn1j3JAPOH2VhK4Y36UAGDpARxzYRvk4sMmEvReD9ZzHuxo+4M7fAUO984g5SWi8myI
-         pL/oMcKZtnln/yHjlhwC3aqLsMXmtUOfv/jS77MKLPiNJ2WKr8u6cEUajyDKpFQR3jr2
-         D33w==
-X-Forwarded-Encrypted: i=1; AJvYcCULMkmsBsyJkz0oh4FD2BUkzXTUNOKzgnGjHIjl7Gpl66KTsAtqXC9tagAOKGE9hLtshVZ5VJ3PJOyd@vger.kernel.org, AJvYcCVwUTdPDCz/UeSLQ/Peb9ZEn+BYQul+ddC6vohhMDti4Il4TPc+7ipi99rMGqUKww4QLj9RyGLdfeC68IE2@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYspcEFUCZYp+c4esl8vFxsNNBt7o8rWHiLgnvKKaJsYX+r/pt
-	v/LrQ8LEG6xZ+t8gXTZKz0Zxwb1OfzeJnWouN1fm9Bwq0h+SnZ2f
-X-Gm-Gg: ASbGncsJEIEGMAd9z+pcMun267A33sf5NBGX143j498ivu9PKfwQpklP0rf2o38jdgr
-	vBEzQIOjQh7fOV67eblqEMYRq8VO4lfz9czAE3UmmJ0MWWDEgexNj4nkeDoebseUFovIcWjffHL
-	Yw/f1C1IZnB4lHR/W7VB34+G16Hspw+kEQn4OrbddFe3azg/eOwWk+hOBra2n+xwWsthxOddVfl
-	8PMlDXJp3YpyTt95lku/a+fSIfLuEgJVynt3QZQV+99VW3+CC6LW6E/ZewYafn5p+h+2BXKMIgr
-	1jENuaje4V3CPMgrcQS7KAHBKnNCIHSIvYkitIMMt8nOCs9Iudzk4w85sR5Ui67AIuYLi95lkes
-	fmK8=
-X-Google-Smtp-Source: AGHT+IH8a1pUJQSeh3X4FAtelAZ88iDsLxyl67Hy088a9nJih1+Ck1krTw97wj9Uh1G2vDiZtUQVcg==
-X-Received: by 2002:a05:6000:4203:b0:3a0:7a8f:db22 with SMTP id ffacd0b85a97d-3a099ad7aebmr128136f8f.24.1746130051567;
-        Thu, 01 May 2025 13:07:31 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae7a35sm117740f8f.43.2025.05.01.13.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 May 2025 13:07:31 -0700 (PDT)
-Date: Thu, 1 May 2025 21:07:29 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
- <linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Thomas Gleixner <tglx@linutronix.de>, Jakub Kicinski <kuba@kernel.org>,
- Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Leo Yan
- <leo.yan@arm.com>
-Subject: Re: [PATCH v2 4/5] math64: Silence a clang -Wshorten-64-to-32
- warning
-Message-ID: <20250501210729.60558b33@pumpkin>
-In-Reply-To: <20250430171534.132774-5-irogers@google.com>
-References: <20250430171534.132774-1-irogers@google.com>
-	<20250430171534.132774-5-irogers@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        bh=fsgFo/RejhPC8ntitgtfydngcD4MvQ2F4ZVpjB7CD0k=;
+        b=k9/jAF79d10DlkGRiUQBZ6yD08dQ4CHXvPfuqX3n3KXIoZQoKKopMtdSqtzu9HfX2g
+         AHCqOQ/YpkzUC1owRu1D5kO0Rz3pFGgzrPwRmZISdun0zL4If7J0WCpwxyzbsM04drJG
+         29KqlxVHFmrEqFczzGG/dZ926cZJ4obbXChJu6LUnscx1WMH6HE8XE6SgWMDOIo6vwFl
+         IeyNRDf9HwIclnr/mNUvZe2AfFwjYTdMiZAA4QKHxlqciVWFtsgjGo8R52t6N6kRk42W
+         3PBcmTihrzg6n2rOAiceoRdRIwQQ2m04pZP/PBf0ybR/nAo3QjNeaN2zbEW4jEFRN9XL
+         rWDg==
+X-Forwarded-Encrypted: i=1; AJvYcCV1mcjwNP6I6uX4ZDez/8jRrxd6qzNValRkGHFNFDEf5X4Kdwz4fWM1HG094cDiakHxABEBArL6gncg@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCKznTeQDhWvztJOyANR5Fg7ReolWdOFDDVjJKrwRrKVtvMxX4
+	IAkviliYNp48v+KE4nlxlRTg37NWWHJ7kV9Yhrehz3YbkOvvOy2XHjkT5b3iWPA9SrxZIx+M5ax
+	GfUUoIyc47DzBdS65eKKyPvWiuVTN/MoV4mMD
+X-Gm-Gg: ASbGncswEJsvas/m6T6ImOjcphKqXaKHdlOHIi0C7GviBIh64n1U4Q6C+5OVplNLGsE
+	3OnQXG1DB4Yg6wMpfKkIWvSeV4dxBYS85IWO8xzSaIWgGOM56+R7KXCG4pkYEUYbBhIE36CLCCj
+	jm69CsbVdS9/rUxAbf/QGnEZ/D3a7VD857fqoKHezkid/pMQRt5Ds=
+X-Google-Smtp-Source: AGHT+IGexfc/fZhfpYElfZIWeUZ/mWRcKXSby/mukAKUwR/YGvuJbqqmXJrKBpRTecHo8TIfYhvpJv/OrpWwn+7OPV8=
+X-Received: by 2002:a05:6e02:749:b0:3d9:36bd:8c59 with SMTP id
+ e9e14a558f8ab-3d970168792mr3865215ab.9.1746130541633; Thu, 01 May 2025
+ 13:15:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20250430171534.132774-1-irogers@google.com> <20250430171534.132774-5-irogers@google.com>
+ <20250501210729.60558b33@pumpkin>
+In-Reply-To: <20250501210729.60558b33@pumpkin>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 1 May 2025 13:15:30 -0700
+X-Gm-Features: ATxdqUGiib1N4S2UorD2RWA-lOkt4hHY0zEinkBd0HTa1nh7ilOIujgC_soxr-I
+Message-ID: <CAP-5=fXrhsZYJwjJzqb-zMg+UoC-bKoYCjstq8yD9wHNCfbS5g@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] math64: Silence a clang -Wshorten-64-to-32 warning
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Jakub Kicinski <kuba@kernel.org>, 
+	Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Leo Yan <leo.yan@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 30 Apr 2025 10:15:33 -0700
-Ian Rogers <irogers@google.com> wrote:
+On Thu, May 1, 2025 at 1:07=E2=80=AFPM David Laight
+<david.laight.linux@gmail.com> wrote:
+>
+> On Wed, 30 Apr 2025 10:15:33 -0700
+> Ian Rogers <irogers@google.com> wrote:
+>
+> > The clang warning -Wshorten-64-to-32 can be useful to catch
+> > inadvertent truncation. In some instances this truncation can lead to
+> > changing the sign of a result, for example, truncation to return an
+> > int to fit a sort routine. Silence the warning by making the implicit
+> > truncation explicit. This isn't to say the code is currently incorrect
+> > but without silencing the warning it is hard to spot the erroneous
+> > cases.
+>
+> Except that the extra casts make the reader think something 'extra'
+> is going on.
+> For readability you want as few casts as possible.
 
-> The clang warning -Wshorten-64-to-32 can be useful to catch
-> inadvertent truncation. In some instances this truncation can lead to
-> changing the sign of a result, for example, truncation to return an
-> int to fit a sort routine. Silence the warning by making the implicit
-> truncation explicit. This isn't to say the code is currently incorrect
-> but without silencing the warning it is hard to spot the erroneous
-> cases.
+Agreed except when not having the cast can introduce bugs which is why
+the cast is always required in other languages. Consider in Java:
+```
+class a {
+  public static void main(String args[]) {
+     long x =3D args.length;
+     int y =3D x;
+ }
+}
+$ javac a.java
+a.java:4: error: incompatible types: possible lossy conversion from long to=
+ int
+     int y =3D x;
+             ^
+1 error
+```
+Having -Wshorten-64-to-32 enabled for building with clang would allow
+possible mistakes to be spotted, but that's not currently possible
+without wading through warnings that this series cleans up.
 
-Except that the extra casts make the reader think something 'extra'
-is going on.
-For readability you want as few casts as possible.
+I also don't really think anyone will be confused about the purpose of
+the cast in something like:
+```
+al =3D (u32)a;
+```
 
-	David
+Thanks,
+Ian
 
-
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  include/linux/math64.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/math64.h b/include/linux/math64.h
-> index 6aaccc1626ab..f32fcb2a2331 100644
-> --- a/include/linux/math64.h
-> +++ b/include/linux/math64.h
-> @@ -179,7 +179,7 @@ static __always_inline u64 mul_u64_u64_shr(u64 a, u64 mul, unsigned int shift)
->  #ifndef mul_u64_u32_shr
->  static __always_inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
->  {
-> -	u32 ah = a >> 32, al = a;
-> +	u32 ah = a >> 32, al = (u32)a;
->  	u64 ret;
->  
->  	ret = mul_u32_u32(al, mul) >> shift;
-
+>         David
+>
+>
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  include/linux/math64.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/math64.h b/include/linux/math64.h
+> > index 6aaccc1626ab..f32fcb2a2331 100644
+> > --- a/include/linux/math64.h
+> > +++ b/include/linux/math64.h
+> > @@ -179,7 +179,7 @@ static __always_inline u64 mul_u64_u64_shr(u64 a, u=
+64 mul, unsigned int shift)
+> >  #ifndef mul_u64_u32_shr
+> >  static __always_inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned in=
+t shift)
+> >  {
+> > -     u32 ah =3D a >> 32, al =3D a;
+> > +     u32 ah =3D a >> 32, al =3D (u32)a;
+> >       u64 ret;
+> >
+> >       ret =3D mul_u32_u32(al, mul) >> shift;
+>
 
