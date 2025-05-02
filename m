@@ -1,245 +1,224 @@
-Return-Path: <linux-arch+bounces-11808-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11809-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81FE3AA7887
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 19:17:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 983FAAA78EC
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 19:57:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E13B14C8104
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 17:17:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 042119A419B
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 17:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9630026AA8A;
-	Fri,  2 May 2025 17:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 500C8265CC0;
+	Fri,  2 May 2025 17:57:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OfPRW2Ty"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l8gK108l"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889E826981A;
-	Fri,  2 May 2025 17:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C43256C61;
+	Fri,  2 May 2025 17:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746206155; cv=none; b=AypKU73xcoRFPvx+caxUuyVWTXfl20pYflIuzJd7ckq1CNq1pH/uSAA2ErF+iXsAjYbf+1rUY6qnvz1b47uDVXz7eWaqU82U9Z21D890bKykXp+I7EWAd11culhTHwob0C09TT65qBIEKldkouJqfVf0uBi7Vf8G5du4ZcInsGw=
+	t=1746208631; cv=none; b=Wb3fFKBly+/TKcFbM21BEcST+s7JWxS7OBB4uvBbTbfGgwoqYD7ocqBer9YxylIwjrKl207Ag5S32dIEsCsTLVSRCy8Kx+xgU86Kl1VCZ2Xs3DJY/bU9wFRsvOLpUV2O8KOxz+c+aG3BSGygU8VDGm4fZlsCi29mqpvmCmGdg6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746206155; c=relaxed/simple;
-	bh=7oAJ1fr3d5y8tx00o9/V7vXmU30c4iDM4H6tfuWHMYU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kdTYqYjBg04U8EUdYdWA3sP7+mbekZXVsCvDIhCXTcTIgY725mv4EmChvW5cUx26CNjIKvKPh1X4QaCll1VGuY5YPuNTkSwuYU1Kg8vO9TOW3If6dXxl45QGnUfi49t8R7AQpf5rr2V+PhPcVLYwjSshobN8TaoGVrJFxQfCfRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OfPRW2Ty; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-39c1ef4ae3aso1342905f8f.1;
-        Fri, 02 May 2025 10:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746206152; x=1746810952; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BIXFmIK20RXAQ5Up1vrTlXd9d3r7rt4iqcjaj17VsmI=;
-        b=OfPRW2TyFeBLbntD7HET5kqJ8RQrYQ0vwLYhDSst1iVqxxSKYxyaEDZtitS04qXu3S
-         WmiFN+R3S50EFS6P4sDHXtMwvlsZC6DcHuEjicwdmwiNDqK5XkudlVBDX3PhtkXQW8Qc
-         9EVabltMqv4M57gtPxd/KMRIjmtE8XmM122/MwpCcg9YxLfkut6QMiezLzrXCMVz9RIo
-         NbG9xap+YlzafyhCHS8UG2BI9HtXgV+n5qFtXWoU65PbYaO0S1pnyj7tmT4NmB2Ctn4U
-         bNlzc/uCajTK6VuIyPuYoclITrh93oULEXtq+YI+C7SJAUhYPQ0c1ZUoXIF+P08xVjT7
-         lZig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746206152; x=1746810952;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BIXFmIK20RXAQ5Up1vrTlXd9d3r7rt4iqcjaj17VsmI=;
-        b=bZo9fBY8qBNpMM97OoVSpMWwwwaGoY1RxNviejjb5XjFwwlGG+EjJ1wrfe7bPr07za
-         6mSd61+IYZPF7Kzq5OSiaGrJ7aqetI2TDir78sN2KfOPOR5muRyYsfZWg8xrJ+cgi03A
-         +8tqkN6iQjJf3PL49QIgW0Pg33rp6AVzO8wNPqLJ+/TlBVumsDctxkm91pwZdb6sG1KM
-         9jnIPWe+eepMXslEE7OOC7UOoOCOKEIr1loyxC6h2u0bEBCAe1oItU5dMyB40p3+EKH8
-         8Za397Gj7xISIROl0PCAXf2hJvayzwUxsL/F4QK0TfoPNnSRlkwejZtNCiXIF8L8/oEp
-         t1Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4QspijuExdZQNfOI94b/QQBpBvYjNzMF5w8GjQns3f3+LF5iPViqmGQcJeFfTWXvJDnCZnGPP85XNciTmgMp5@vger.kernel.org, AJvYcCVHVBSEIZoIwlvZQ9gf6MkPdd4nBwS5Cac6xB/sqF+SkqtHFEdTO+pupQgpUZaJ9bCw/d8=@vger.kernel.org, AJvYcCWWNMYIlexqbVFIrSksxrdBkXAhcLkipAgkXTAAkprtB+MscAk8HoM5Z6u1r9Nv/eCrPyWhV9Rc/+g2HBhG@vger.kernel.org, AJvYcCXVNX5iOYPh03CXrtQUzEKsVtb1QhIZOMADFOHnP9nQUUi5+UOs9BewPmBQIzcouUlJmJy7VxdK0UWTQg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyr2+kDfnRQo42BCshKGV/QnV2c+QZSQFoYb7VttkGs9jfdTQiF
-	K2BQYtKpG3mc5f0IOWtBNpqdPJfLG223XtqxNLtM/q9fnCvD5tjiGqNmWDBnFwMe4sFZkbDel9d
-	zpnfmQl+dg4AOXYbL2vD/VA6RYv0=
-X-Gm-Gg: ASbGncsQRmtjfx+V0p9Y+eLYuTaLIDnGzYOJ1QdABX6EyCL5qUjMMezgqqI0kqeOYBq
-	iZh2I6lS6QB5basrO7IQ52pB1eyuSTElU6qv4d5vD46FjcPiLMMuXLNRNq1xWzmWcp+bodpKNH4
-	KmuG+e13iB6x/O0Umoa9A6Ku59vGakdQTdpf8tFQ==
-X-Google-Smtp-Source: AGHT+IHFaDoUkiLv6qrDRiLHOymcCa1QAfKNS9cOooOeYdmz0087AG0msj1NuyGZYt79ubuFELZFUB0DHOcV0IxMdew=
-X-Received: by 2002:a05:6000:4285:b0:38d:ae1e:2f3c with SMTP id
- ffacd0b85a97d-3a098469fb7mr3045104f8f.25.1746206151582; Fri, 02 May 2025
- 10:15:51 -0700 (PDT)
+	s=arc-20240116; t=1746208631; c=relaxed/simple;
+	bh=FPvdubOWtdtEW76tl7BSAT1G+Iw/Jzhgke+tpDRdvc4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sOmeHgy+jVD2iCs9Jo6KGnuibPu7EkBbbnJ/P3s7k9o6qCy2V/l8JbscTsS/81dVGUwS244AYjLfAARt0+JzbB5Tax+KTD4AvEFxL2VUN/GjkXY4kOcP4EvlFjBRJBVTDfu4udbXCA9JdA9h+lCBDPQGSmD32FDaWQZ7UNiKUzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l8gK108l; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746208629; x=1777744629;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FPvdubOWtdtEW76tl7BSAT1G+Iw/Jzhgke+tpDRdvc4=;
+  b=l8gK108lS4lLW/e+ABDLjWsPDkpNKo4K3+Tb4eA23CYOwxqkOxtFuU/C
+   1OsP5oO/cNL/46W22ci3/gXPZ1eXMEXySgqVx6L3Ul2cbAdj0W4qbnpUc
+   AjJBgKKFM7l8XO+3SApggo8avsX3F7I/uDP1YHDuBMNvjjkhW6B4YOQI7
+   VjvFccK2OkPzqkvm1L4aJSpwkL1dW5K13ejskIDuKMassGRuspKDSqfaD
+   bp6CWwhZolVRXAr6ohnwNX2XUWb3lGW87GC2qKRff3sf5UNaPyjOwMbXm
+   4j/XGrtwbAiR5lmZBIRbLf78oQepvdpeb9KmEb+yVXjdqtkQjqwmL7r3o
+   g==;
+X-CSE-ConnectionGUID: wUkLQb/KRVKy7VhgV05rkw==
+X-CSE-MsgGUID: 04BYltQiSlW8uyj9uSuQeA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11421"; a="48040286"
+X-IronPort-AV: E=Sophos;i="6.15,257,1739865600"; 
+   d="scan'208";a="48040286"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 10:57:07 -0700
+X-CSE-ConnectionGUID: 6Hv7z+i+RT+M1DlX4ZfpnA==
+X-CSE-MsgGUID: hA4mMTh5S5axSY7+RrKG1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,257,1739865600"; 
+   d="scan'208";a="157925740"
+Received: from bjrankin-mobl3.amr.corp.intel.com (HELO [10.124.220.153]) ([10.124.220.153])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2025 10:57:03 -0700
+Message-ID: <2c5d11cf-ad06-444c-b84a-42de7a10159d@intel.com>
+Date: Fri, 2 May 2025 10:57:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502-vmlinux-mmap-v2-0-95c271434519@isovalent.com> <20250502-vmlinux-mmap-v2-1-95c271434519@isovalent.com>
-In-Reply-To: <20250502-vmlinux-mmap-v2-1-95c271434519@isovalent.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 2 May 2025 10:15:40 -0700
-X-Gm-Features: ATxdqUHv70xDkjA1O8GM-6_W2bf266rBR3mODzmR7hfuUKQjRknKIt1rPiesetQ
-Message-ID: <CAADnVQ+dMwAFPO-ASojjYPxODpCKf_9FCLjUvn2HeHigL53JdQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] btf: allow mmap of vmlinux btf
-To: Lorenz Bauer <lmb@isovalent.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-arch <linux-arch@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+To: Valentin Schneider <vschneid@redhat.com>,
+ Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ rcu@vger.kernel.org, linux-hardening@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
+ Yair Podemsky <ypodemsk@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
+ Nicolas Saenz Julienne <nsaenz@amazon.com>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Sean Christopherson <seanjc@google.com>, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>,
+ Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Russell King
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+ WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+ Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Naveen N Rao <naveen@kernel.org>,
+ Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Masahiro Yamada <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>, "Mike Rapoport (Microsoft)"
+ <rppt@kernel.org>, Rong Xu <xur@google.com>,
+ Rafael Aquini <aquini@redhat.com>, Song Liu <song@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
+ <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ Benjamin Berg <benjamin.berg@intel.com>,
+ Vishal Annapurve <vannapurve@google.com>,
+ Randy Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <20250429113242.998312-1-vschneid@redhat.com>
+ <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
+ <20250430132047.01d48647@gandalf.local.home>
+ <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
+ <20250430154228.1d6306b4@gandalf.local.home>
+ <a6b3a331-1ff3-4490-b300-a62b3c21578d@intel.com>
+ <xhsmhr0179w1i.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <34535b8c-35c8-4a7f-8363-f5a9c5a69023@intel.com>
+ <xhsmho6wb9de3.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <xhsmho6wb9de3.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 2, 2025 at 3:20=E2=80=AFAM Lorenz Bauer <lmb@isovalent.com> wro=
-te:
->
-> User space needs access to kernel BTF for many modern features of BPF.
-> Right now each process needs to read the BTF blob either in pieces or
-> as a whole. Allow mmaping the sysfs file so that processes can directly
-> access the memory allocated for it in the kernel.
->
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-> ---
->  include/asm-generic/vmlinux.lds.h |  3 ++-
->  kernel/bpf/sysfs_btf.c            | 36 +++++++++++++++++++++++++++++++++=
-+--
->  2 files changed, 36 insertions(+), 3 deletions(-)
->
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
-nux.lds.h
-> index 58a635a6d5bdf0c53c267c2a3d21a5ed8678ce73..1750390735fac7637cc4d2fa0=
-5f96cb2a36aa448 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -667,10 +667,11 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PRO=
-PELLER_CLANG)
->   */
->  #ifdef CONFIG_DEBUG_INFO_BTF
->  #define BTF                                                            \
-> +       . =3D ALIGN(PAGE_SIZE);                                          =
- \
->         .BTF : AT(ADDR(.BTF) - LOAD_OFFSET) {                           \
->                 BOUNDED_SECTION_BY(.BTF, _BTF)                          \
->         }                                                               \
-> -       . =3D ALIGN(4);                                                  =
- \
-> +       . =3D ALIGN(PAGE_SIZE);                                          =
- \
->         .BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {                   \
->                 *(.BTF_ids)                                             \
->         }
-> diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
-> index 81d6cf90584a7157929c50f62a5c6862e7a3d081..f4b59b1c2e5b11ffffa80662a=
-d39334c730019ee 100644
-> --- a/kernel/bpf/sysfs_btf.c
-> +++ b/kernel/bpf/sysfs_btf.c
-> @@ -7,18 +7,50 @@
->  #include <linux/kobject.h>
->  #include <linux/init.h>
->  #include <linux/sysfs.h>
-> +#include <linux/mm.h>
-> +#include <linux/io.h>
->
->  /* See scripts/link-vmlinux.sh, gen_btf() func for details */
->  extern char __start_BTF[];
->  extern char __stop_BTF[];
->
-> +struct kobject *btf_kobj;
-> +
-> +static int btf_vmlinux_mmap(struct file *filp, struct kobject *kobj,
-> +                           const struct bin_attribute *attr,
-> +                           struct vm_area_struct *vma)
-> +{
-> +       phys_addr_t start =3D virt_to_phys(__start_BTF);
-> +       size_t btf_size =3D __stop_BTF - __start_BTF;
-> +       size_t vm_size =3D vma->vm_end - vma->vm_start;
-> +       unsigned long pfn =3D start >> PAGE_SHIFT;
-> +       unsigned long pages =3D PAGE_ALIGN(btf_size) >> PAGE_SHIFT;
-> +
-> +       if (kobj !=3D btf_kobj)
-> +               return -EINVAL;
-> +
-> +       if (vma->vm_pgoff)
-> +               return -EINVAL;
-> +
-> +       if (vma->vm_flags & (VM_WRITE|VM_EXEC|VM_MAYSHARE))
-> +               return -EACCES;
-> +
-> +       if (pfn + pages < pfn)
-> +               return -EINVAL;
-> +
-> +       if (vm_size >> PAGE_SHIFT > pages)
-> +               return -EINVAL;
-> +
-> +       vm_flags_mod(vma, VM_DONTDUMP, VM_MAYEXEC|VM_MAYWRITE);
-> +       return remap_pfn_range(vma, vma->vm_start, pfn, vm_size, vma->vm_=
-page_prot);
+gah, the cc list here is rotund...
 
-remap_pfn_range() should be avoided.
-See big comment in kernel/events/core.c in map_range().
+On 5/2/25 09:38, Valentin Schneider wrote:
+...
+>> All of the paths to enter the kernel from userspace have some
+>> SWITCH_TO_KERNEL_CR3 variant. If they didn't, the userspace that they
+>> entered from could have attacked the kernel with Meltdown.
+>>
+>> I'm theorizing that if this is _just_ about avoiding TLB flush IPIs that
+>> you can get away with a single mechanism.
+> 
+> So right now there would indeed be the TLB flush IPIs, but also the
+> text_poke() ones (sync_core() after patching text).
+> 
+> These are the two NOHZ-breaking IPIs that show up on my HP box, and that I
+> also got reports for from folks using NOHZ_FULL + CPU isolation in
+> production, mostly on SPR "edge enhanced" type of systems.
+...
+> While I don't expect the list to grow much, it's unfortunately not just the
+> TLB flush IPIs.
 
-The following seems to work:
-diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
-index f4b59b1c2e5b..7d0fd28070d8 100644
---- a/kernel/bpf/sysfs_btf.c
-+++ b/kernel/bpf/sysfs_btf.c
-@@ -20,13 +20,13 @@ static int btf_vmlinux_mmap(struct file *filp,
-struct kobject *kobj,
-                            const struct bin_attribute *attr,
-                            struct vm_area_struct *vma)
- {
--       phys_addr_t start =3D virt_to_phys(__start_BTF);
-+       unsigned long addr =3D (unsigned long)__start_BTF;
-        size_t btf_size =3D __stop_BTF - __start_BTF;
-        size_t vm_size =3D vma->vm_end - vma->vm_start;
--       unsigned long pfn =3D start >> PAGE_SHIFT;
-        unsigned long pages =3D PAGE_ALIGN(btf_size) >> PAGE_SHIFT;
-+       int i, err =3D 0;
+Isn't text patching way easier than TLB flushes? You just need *some*
+serialization. Heck, since TLB flushes are architecturally serializing,
+you could probably even reuse the exact same mechanism: implement
+deferred text patch serialization operations as a deferred TLB flush.
 
--       if (kobj !=3D btf_kobj)
-+       if (kobj !=3D btf_kobj || !pages)
-                return -EINVAL;
-
-        if (vma->vm_pgoff)
-@@ -35,14 +35,17 @@ static int btf_vmlinux_mmap(struct file *filp,
-struct kobject *kobj,
-        if (vma->vm_flags & (VM_WRITE|VM_EXEC|VM_MAYSHARE))
-                return -EACCES;
-
--       if (pfn + pages < pfn)
--               return -EINVAL;
--
-        if (vm_size >> PAGE_SHIFT > pages)
-                return -EINVAL;
-
-        vm_flags_mod(vma, VM_DONTDUMP, VM_MAYEXEC|VM_MAYWRITE);
--       return remap_pfn_range(vma, vma->vm_start, pfn, vm_size,
-vma->vm_page_prot);
-+
-+       for (i =3D 0; i < pages && !err; i++, addr +=3D PAGE_SIZE)
-+               err =3D vm_insert_page(vma, vma->vm_start + i * PAGE_SIZE,
-+                                    virt_to_page(addr));
-+       if (err)
-+               zap_page_range_single(vma, vma->vm_start, pages *
-PAGE_SIZE, NULL);
-+       return err;
- }
-
-
-Great that you added:
-        /* Check padding is zeroed */
-        for (int i =3D 0; i < trailing; i++) {
-                if (((__u8 *)raw_data)[btf_size + i] !=3D 0) {
-                        PRINT_FAIL("tail of BTF is not zero at page
-offset %d\n", i);
-                        goto cleanup;
-                }
-        }
-
-but this part is puzzling:
-        trailing =3D page_size - (btf_size % page_size) % page_size;
+The hardest part is figuring out which CPUs are in the state where they
+can be deferred or not. But you have to solve that in any case, and you
+already have an algorithm to do it.
 
