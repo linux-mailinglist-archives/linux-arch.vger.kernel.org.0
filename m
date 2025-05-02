@@ -1,252 +1,143 @@
-Return-Path: <linux-arch+bounces-11799-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11800-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 978EFAA75DF
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 17:22:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAEC0AA76A5
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 18:04:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 355143A7912
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 15:21:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9239F1896B28
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 16:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7834F2571D9;
-	Fri,  2 May 2025 15:22:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC4F25D1F4;
+	Fri,  2 May 2025 16:04:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VLicN+pt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qqvspjkj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396762566;
-	Fri,  2 May 2025 15:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F03C25CC4E;
+	Fri,  2 May 2025 16:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746199322; cv=none; b=X9xZpeusoa0aCSiLPhurPgppFxsx1mdX9zuYSXtC7eV/dyYYq2AVqjqt+h4Pkg15umM1HkM38soImhaKJxYU7C0BtES/VTGtlxli7bSC+7w/O4BEvm9i3F8PrW8/XgzVbDvFyCtrxK7pNP2qgJUPiCvygMJbI6uGoyjRZNA2HZk=
+	t=1746201840; cv=none; b=PKReUZ9/JtJwgmFW2g6c+wmPAl53QeTiCm11lyhdrYqQimAjOuLohXHust137/Urj3LLnRKDpd3lxmm5NZOY9pOkfHpgKuU8TumVbhhLUEFwP8MBO8jLHguN6qIpkcwtx069EHrStfbhcufKVMZ3UQNAYmUZu8liD3c2bl1J1VA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746199322; c=relaxed/simple;
-	bh=lOTz4fM30AMVEWlFBUzcvFWNPVkGYLhLbFmCBFLUSGQ=;
+	s=arc-20240116; t=1746201840; c=relaxed/simple;
+	bh=/Ir9RUZPJNowHtDjB8+O6p57Zsy6wW7vA4h0CW+yCQs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RSLFbDUsm6Aoee+RBbbCjs6j5/lSoHQ3/xWCh9YXBofe5En5yNDHepoqo43iHNkPWc5NC0EWQBPItyuTM/ep/g7skykxox6ubqN92XcXHDaInfK8KPHVp+6WFQOm7k9z3q0re9SoS9b4CV5trTlavzlzZTALo4WChjS4+Hm6NPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VLicN+pt; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=el7AZkw1ZRKHIxRciQGDkRJRuJhHBYcxb7Lx2vUA2VY=; b=VLicN+ptqmmrlGpkHyenbaJkO3
-	UKl1u4ZcqZ7oWPbRw6dMMUxn72FaEy0WJ3uleLDo46IZAmhsK1s6PzstYFLXVCoeTFAELrE5DCXZV
-	2a3xjeJXk3jd+MNSv440/ctFcN/2lRBE7zBjIvFKJhZ8qlHasISVIsAF7PhbVmOI9sTPnfKtBF/j0
-	T5ii54POjzNHVsJRtQ6Eurq9+2ni0YwiVd6GYbIqODtfs42ci2vCC2IhgLIcfyKRhIXKA+++xBeTX
-	7vzCcTdWbJuGqjLYTRZaDRmsGTt0uypAIK5VRc3biSMOf5Mo2j4U1WGyzwr0huO9Ilv8zAyVG14w8
-	3oLsV5eQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uAsBP-00000004E1V-1rsm;
-	Fri, 02 May 2025 15:20:16 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id D6C5B30057C; Fri,  2 May 2025 17:20:02 +0200 (CEST)
-Date: Fri, 2 May 2025 17:20:02 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
-	kvm@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	rcu@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
-	Nicolas Saenz Julienne <nsaenz@amazon.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=tbthRLVGZ6NT7xBlGSMDSLAd9QU8VbSuCDV8PA+oEz1M2S5nRx90ll/QWf+AvDfwZBgoJ1rQsn3Rp0T54phLmvVw7ORnuk7kewDHZzZDFY1tRUEbATbzf/ERrccj051MlaSh7zeAo0J0h4mQfvCnnZXDb8MRdr8NUQQM4389Iuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qqvspjkj; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-b1fb650bdf7so343703a12.1;
+        Fri, 02 May 2025 09:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746201838; x=1746806638; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gDaKrXtDcJswvbEwS8wGTnCooDFXgZ8JEIYZCAsVSDU=;
+        b=QqvspjkjRyYHX2YqBuxryHcDEDm3dL3foUPyF5iuuzrISkgrqeGxnMUglBDbZVIrQY
+         rh0v1PfjcVYIr3ngW+defvj8nKdDnHFiT08sPC48It0b/wdwLbnLHKpBqANwDzdnI2qy
+         7E5ZJda+h6kg2LJgLcF3u4JL5OOBqRtv3TiTkl4tRRITYECMANFhLXCV7dOudsOE+H93
+         VktwmPKvvgY6yYoapCVxTbT3pl9jLpZjAytqyj6M4G0m+lLtIBVFwNIm+wUoLHpodU3Z
+         ygD/0E/qfwkL26UbFii7fbMY+YdFcYDFEg84MNpH2jeL/PE4GXgc+Jk5XW66H14yEVIh
+         kmyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746201838; x=1746806638;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gDaKrXtDcJswvbEwS8wGTnCooDFXgZ8JEIYZCAsVSDU=;
+        b=lhCy25+ULzYs+4XzisMl6Hr66Jd6XBYb/M6UOT3jeNnwaxNM7XomU4Lnj+QXAICT0K
+         FawMy2ejusCmAxLeC75vFVdC2wvkpEC4x6NT8M8hnUgHxjyR5JxxgeP4yIq1wYoEhF+M
+         QuUgRl7zcNgOhr8O5a2c+4z/MOywC3DPdf2/LNPHLGpVXZULqaAr4WL0qEsZ2FSj15Rx
+         oIJ2wRMjTUVTLkKPdPQXMYhfWcp8237RHqvXHfgePMA0Ub3WOVD4G61zcUitEVR1+Fu5
+         +b39ivIbXsivbTS0BPZd04MtwHoARdPdeKfI7xcX8Ue61bPMZLadOqxnN2oRwklkxL/S
+         z2xg==
+X-Forwarded-Encrypted: i=1; AJvYcCUgLx+dlSMqpMG70qIidKHYxx/qeZbWUkamE5kmhWzkysd63Mx+pscV2mGRL4p3dQuv1oVana3AiCKg@vger.kernel.org, AJvYcCVv7gAOjY1qGu78v/1WnOcPFeLF/fk5VWxrWGjdGgZJ1vjgq3fqG5VIUOwfl8Pw+iyG7SoKhjWX2ZaOc7+f@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0f3AeBCtE0x2/fWnLwiNUFUhQynWhFJDUMktVGgYKAJuwcyz4
+	uMQCVZDSU2Zr31O5fMGyW2Qx/JfM0rFUG9J4UvbZz8NxjcL1KM3+
+X-Gm-Gg: ASbGncuwsFc8eGHRLOnnReBaRrzNDxwazx37IeRknILDPzwdd98NzC4/e2erRfIvQD1
+	A8nTo+6gD2YZI/LjUWv09zjthhbk9m+8mAIGLU6AGMEv2KsK1yqzDXI7/PClIx3kAxzS0mbSdxp
+	88mveY674qYbLSOf2FWCA5rSxEIj/FlJS21ELqc9RFfK09/ZHdXrZ+UCcsQmqPCgb9eCewDPWM0
+	EpAIubLcUxg4gpAOrmO6tt6+fAOXC6WvdmrUtWJrpMXBTAegK7f9pL36bHncpUCK3NiAtTt4qr1
+	JvKdgdCdUuq7OvM/3sL0+BYQTq9XGFDhjKHz/TT9
+X-Google-Smtp-Source: AGHT+IHjbc82WPFLFYJqUcclQhm+5J20tGWB4R4jo77r5H5Zl7NTJpo1SEIdn4FVH/XUTu4IGCJZHw==
+X-Received: by 2002:a17:90b:3c4e:b0:2ff:796b:4d05 with SMTP id 98e67ed59e1d1-30a4e5ae12amr5825968a91.11.1746201838224;
+        Fri, 02 May 2025 09:03:58 -0700 (PDT)
+Received: from localhost ([216.228.127.130])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a3471ef7asm5916080a91.9.2025.05.02.09.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 09:03:57 -0700 (PDT)
+Date: Fri, 2 May 2025 12:03:55 -0400
+From: Yury Norov <yury.norov@gmail.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
 	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rong Xu <xur@google.com>, Rafael Aquini <aquini@redhat.com>,
-	Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	John Stultz <jstultz@google.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
- user->kernel transition
-Message-ID: <20250502152002.GX4439@noisy.programming.kicks-ass.net>
-References: <20250429113242.998312-1-vschneid@redhat.com>
- <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
- <20250430132047.01d48647@gandalf.local.home>
- <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
- <20250502112216.GZ4198@noisy.programming.kicks-ass.net>
- <6c44fa0e-28ed-400e-aaf2-e0e0720d3811@intel.com>
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Leo Yan <leo.yan@arm.com>
+Subject: Re: [PATCH v2 2/5] bitmap: Silence a clang -Wshorten-64-to-32 warning
+Message-ID: <aBTs6yvKlCYYgU2O@yury>
+References: <20250430171534.132774-1-irogers@google.com>
+ <20250430171534.132774-3-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6c44fa0e-28ed-400e-aaf2-e0e0720d3811@intel.com>
+In-Reply-To: <20250430171534.132774-3-irogers@google.com>
 
-On Fri, May 02, 2025 at 07:33:55AM -0700, Dave Hansen wrote:
-> On 5/2/25 04:22, Peter Zijlstra wrote:
-> > On Wed, Apr 30, 2025 at 11:07:35AM -0700, Dave Hansen wrote:
-> > 
-> >> Both AMD and Intel have hardware to do it. ARM CPUs do it too, I think.
-> >> You can go buy the Intel hardware off the shelf today.
-> > To be fair, the Intel RAR thing is pretty horrific 🙁 Definitely
-> > sub-par compared to the AMD and ARM things.
-> > 
-> > Furthermore, the paper states it is a uarch feature for SPR with no
-> > guarantee future uarchs will get it (and to be fair, I'd prefer it if
-> > they didn't).
+Hi Ian,
+
+On Wed, Apr 30, 2025 at 10:15:31AM -0700, Ian Rogers wrote:
+> The clang warning -Wshorten-64-to-32 can be useful to catch
+> inadvertent truncation. In some instances this truncation can lead to
+> changing the sign of a result, for example, truncation to return an
+> int to fit a sort routine. Silence the warning by making the implicit
+> truncation explicit. This isn't to say the code is currently incorrect
+> but without silencing the warning it is hard to spot the erroneous
+> cases.
 > 
-> I don't think any of that is set in stone, fwiw. It should be entirely
-> possible to obtain a longer promise about its availability.
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  include/linux/bitmap.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Or ask that AMD and Intel put their heads together in their fancy new
-> x86 advisory group and figure out a single way forward. 
+> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+> index 595217b7a6e7..4395e0a618f4 100644
+> --- a/include/linux/bitmap.h
+> +++ b/include/linux/bitmap.h
+> @@ -442,7 +442,7 @@ static __always_inline
+>  unsigned int bitmap_weight(const unsigned long *src, unsigned int nbits)
+>  {
+>  	if (small_const_nbits(nbits))
+> -		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
+> +		return (int)hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
 
-This might be a good thing regardless.
+This should return unsigned int, I guess?
 
-> > Furthermore, I suspect it will actually be slower than IPIs for anything
-> > with more than 64 logical CPUs due to reduced parallelism.
-> 
-> Maybe my brain is crusty and I need to go back and read the spec, but I
-> remember RAR using the normal old APIC programming that normal old TLB
-> flush IPIs use. So they have similar restrictions. If it's inefficient
-> to program a wide IPI, it's also inefficient to program a RAR operation.
-> So the (theoretical) pro is that you program it like an IPI and it slots
-> into the IPI code fairly easily. But the con is that it has the same
-> limitations as IPIs.
+Also, most of the functions you touch here have their copies in tools.
+Can you please keep them synchronized?
 
-The problem is in the request structure. Sending an IPI is an async
-action. You do, done.
+Thanks,
+Yury
 
-OTOH RAR has a request buffer where pending requests are put and 'polled'
-for completion. This buffer does not have room for more than 64 CPUs.
-
-This means that if you want to invalidate across more, you need to do it
-in multiple batches.
-
-So where IPI is:
-
- - IPI all CPUs
- - local invalidate
- - wait for completion
-
-This then becomes:
-
- for ()
-   - RAR some CPUs
-   - wait for completion
-
-Or so I thought to have understood, the paper isn't the easiest to read.
-
-> I was actually concerned that INVLPGB won't be scalable. Since it
-> doesn't have the ability to target specific CPUs in the ISA, it
-> fundamentally need to either have a mechanism to reach all CPUs, or some
-> way to know which TLB entries each CPU might have.
-> 
-> Maybe AMD has something super duper clever to limit the broadcast scope.
-> But if they don't, then a small range flush on a small number of CPUs
-> might end up being pretty expensive, relatively.
-
-So the way I understand things:
-
-Sending IPIs is sending a message on the interconnect. Mostly this is a
-cacheline in size (because MESI). Sparc (v9?) has a fun feature where
-you can actually put data payload in an IPI.
-
-Now, we can target an IPI to a single CPU or to a (limited) set of CPU
-or broadcast to all CPUs. In fact, targeted IPIs might still be
-broadcast IPIs, except most CPUs will ignore it because it doesn't match
-them.
-
-TLBI broadcast is like sending IPIs to all CPUs, the message goes out,
-everybody sees it.
-
-Much like how snoop filters and the like function, a CPU can process
-these messages async -- your CPU doesn't stall for a cacheline
-invalidate message either (except ofcourse if it is actively using that
-line). Same for TLBI, if the local TLB does not have anything that
-matches, its done. Even if it does match, as long as nothing makes
-active use of it, it can just drop the TLB entry without disturbing the
-actual core.
-
-Only if the CPU has a matching TLB entry *and* it is active, then we
-have options. One option is to interrupt the core, another option is to
-wait for it to stop using it.
-
-IIUC the current AMD implementation does the 'interrupt' thing.
-
-One thing to consider in all this is that if we TLBI for an executable
-page, we should very much also wipe the u-ops cache and all such related
-structures -- ARM might have an 'issue' here.
-
-That is, I think the TLBI problem is very similar to the I in MESI --
-except possibly simpler, because E must not happen until all CPUs
-acknowledge I etc. TLBI does not have this, it has until the next
-TLBSYNC.
-
-Anyway, I'm not a hardware person, but this is how I understand these
-things to work.
+>  	return __bitmap_weight(src, nbits);
+>  }
+>  
+> -- 
+> 2.49.0.906.g1f30a19c02-goog
 
