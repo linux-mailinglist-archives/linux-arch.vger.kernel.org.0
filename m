@@ -1,159 +1,104 @@
-Return-Path: <linux-arch+bounces-11804-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11806-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC18AA778F
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 18:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C031AA77E8
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 18:59:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC6674686A4
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 16:43:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 963C2179544
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 16:59:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 663EA2609D0;
-	Fri,  2 May 2025 16:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A052571D5;
+	Fri,  2 May 2025 16:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W4jAsoWx"
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="Ov+YvTT7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70F317DFE7
-	for <linux-arch@vger.kernel.org>; Fri,  2 May 2025 16:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EF82550CD
+	for <linux-arch@vger.kernel.org>; Fri,  2 May 2025 16:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746204208; cv=none; b=RhcX8+6wD/cRRhN616PrFgNU56z2gEl9dGmHpoEoUHbG1+oAAomb4Vh/LZLeVi329GRvSkVukAouQ/Gy3+yd2rCQeAADo37EQiZkeITTJUvuAxC13pppPV8W7bVEj2CU8DDtLl3Ltn/H50OxIiPEiVXHRdxlDvB9bHJh1G19/RI=
+	t=1746205169; cv=none; b=fW6882+W2SfIcoL24nTedOwnkxCPxKvi/cTN41yBeozG9pAqH0qHNB46c97dqI9AmvhsQ4EGbLF7ghiNh5zQ1CCKJMCWv7x2cOaC7DXCmgsvnF+fb8SYZKZDX9xKJgWvM+QtT8bTcNkeQXYyzDqsjHAkthLt08ANglA5Kf7geWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746204208; c=relaxed/simple;
-	bh=HSWejsQUIC5AVkuX0S8B3IVpbNA6F4zhsZS0ah5X99o=;
+	s=arc-20240116; t=1746205169; c=relaxed/simple;
+	bh=BFtyWDFTN1QrKrJxpIvshxuClJ86Y3W8VsyPYHB3IwI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MeLByKIWX/sdlzn0b98srOLxGw09Kh2bUrF//UTEdXPECugK5xdjd4YopfifqFJ2UZkQrro4ej28iFhUNHBmqAfRijVlEXD8s3mSuCxgOKz+kuXNXTHmz6dO2dMPl8uiNX7xWr5L98grwpCxsxkizGiQ2Zj4e2xhcXKc+90iPp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W4jAsoWx; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3d91a45d148so295ab.1
-        for <linux-arch@vger.kernel.org>; Fri, 02 May 2025 09:43:25 -0700 (PDT)
+	 To:Cc:Content-Type; b=kTb67kDPPl6W1WM71eL0dtM/HCruaALVprqUtUrNBp7893URjS4NhBKgnN81WNvwF3nIwH7v6JYqXb7+Akalr6ZXRTkYsLw5wtk7dbr9w6oHZy+ZjRAiW1lEAI1S7mD4zxHJWRrkoJALGOfoQtX3nzFQi+kmf90kaKn94+DJsnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=Ov+YvTT7; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ac2dfdf3c38so410347966b.3
+        for <linux-arch@vger.kernel.org>; Fri, 02 May 2025 09:59:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746204205; x=1746809005; darn=vger.kernel.org;
+        d=isovalent.com; s=google; t=1746205166; x=1746809966; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tfhSF1OBdwUfsA1pakNcUwq7Cj4Gcs5LK2vK2irHdRY=;
-        b=W4jAsoWxAl2hQcwXwKhaxrR5OTdkXvIMnG65vu+uH9e4Uo74a/G0jAWzW6P19qaFyx
-         qk+u0KyQV9Id/WoB3zxf11uhqi56tHH2wHEpWP846hsOLXjBjCmdEBdcD6HK/OTnPS+y
-         uHBAYPTy5QyS04PNnK//ttWYwzwAeCmSfEp+KYuGr87yGzCpiraX63BFkvFr6yhMFAt7
-         eBJ54KhZFhv1aMaMW9T21BrDJR9DMBSvQ+ppluvftRF6hfqo5Q8Sy8Fajivp51V/hYgp
-         KFhKoda4OOP15zmSWGH4O36kpYPxk8KcqryX4vmNGxYsFrqKhmzKZMcMCVRH4cxvDvao
-         oYWQ==
+        bh=BFtyWDFTN1QrKrJxpIvshxuClJ86Y3W8VsyPYHB3IwI=;
+        b=Ov+YvTT7pZvmfTQ921cZ0uGxQDVxkLfFeo5YbcPwrgQB997dMJdMPobln9IDS+rsTC
+         YQjYi/RhbTJS44v9omjItplGkdEFsfVoWx3WrH3X1KxjZ7X+TMyb6iB/XB0Wfet0E0Yl
+         pcf88CRz6jnqL8d42BaKNObo+m+3OjEqDJS6atiIz1DxbVcSJd0EOiIoD+LzIQxFRPD1
+         x/5QTfapZihghutBY9VRDkdVDWgX1VB/wDH97BFoRm9Tzyrw+FD3mFUq+GlppWyxW2r3
+         A9SZpyWvoxOLmYqqDlLl3eAUmvrWPB4OBRLa5FS9sc8IQw7dDYEIHi7PtLgIXL5ec6me
+         DB7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746204205; x=1746809005;
+        d=1e100.net; s=20230601; t=1746205166; x=1746809966;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tfhSF1OBdwUfsA1pakNcUwq7Cj4Gcs5LK2vK2irHdRY=;
-        b=p/uq9mUFk5DCRXiQkA9RsYjxU3g9Wq/+DtNPMqvcsjt6Okz+Ne0IcME9Abq0A2SaVY
-         3CY+2VUCsKeT8YHxC3ogASL42If5+XqodSbz2VGTYm2dBqJDSaAuH4ZMHSRJXouT5DjW
-         RnTvnGQTKC/AENrrtnDeucGKhgsCXfsW8c4kbHd1g6ZnJpA9whKOfA820eW8/BvXvivW
-         Z9KQBQrOeiZMhz3CGmQtaCNnxuA9z+g9s2bSvqTdCwn4/zNlhBmtcDwMTktqzE34iLlF
-         +lS/lEIAWXM4ubcxXQdMPGS+OkJjoQ9wyy4aNR9MJAr0BZYIErW73Da/IIUiM1vxzDlE
-         yVvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXidBjxQGdefJHqxLMm21TP4ElXIPLQnAw72hELSNOgb8gradhQQ6q9krxny6zvQpDW+1GL+LsJ2TRm@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJpqj1jp29Dn9bTKVvPYtrR61IhVwh4AR9SKGwbLB1Iz6TociY
-	+b9BCJY3Nfgay1IVsz6iGtfwRMZYvxUsLSfCEkVKk+rmqlDeUcqqDg6Y4c170cdfdKZJIZLihZ9
-	FEezPSa40VfYPL5LieQmTqQ/rOY3O8uxR83bw
-X-Gm-Gg: ASbGncu1lKESJboH5kyhcWPA3nsi8wx67JJ0e4FKeE+3ohgQZXLQYTMMGIw4DvM7rkI
-	6l+WedjD3T/oWweAmT6Fq5U+ShEAztwP9VRaZrUP9gJNSayjZDnW/6N7YOz/RKr2W5c1Ssha04Y
-	/lGARP9NdG9Ou188TrpEnrTjp5x9zWXlrb1g==
-X-Google-Smtp-Source: AGHT+IGl8Ey1mD7g9HdYk+68mf77nPG69tteIpFx6Qvv3ot7wI3HcIw7QJ3SYNwPij9nPcd00LD5BKx8PJeqjrdMYP8=
-X-Received: by 2002:a05:6e02:b4c:b0:3d9:6463:a8cd with SMTP id
- e9e14a558f8ab-3d96f2523dcmr6638415ab.14.1746204204424; Fri, 02 May 2025
- 09:43:24 -0700 (PDT)
+        bh=BFtyWDFTN1QrKrJxpIvshxuClJ86Y3W8VsyPYHB3IwI=;
+        b=ITGrZb5CBXT96OKLFiFxGoJjftHbArip1fxwXm4IeEQyMfQQaZUIpj1HeYPoeCsUbq
+         j/Ed+MQlwbuE9LOPCJplyi8ubpT4Ihu0j1icfmhqLdMBpe+0dJeuY71LxEW/eydwfjkv
+         DQM6nP9VnKY9Ouprz7QAx4TaqJkuAj4/NiUxfY/Y9MX4jmW0ZSOEbiF6lbAnx/deOh4q
+         yqbqYsVzp41zQarJ6duR5XlTGksQUomoE8deekztRXrCscH7lULoIeL0DDxEqL+/JWUu
+         HD+rMLBObs61K6+3rlvs5iRW/ugmpC5mKD2zCf3lsYOeRb+QE6C65G5sOk1HHl/a2Uou
+         72yg==
+X-Gm-Message-State: AOJu0Yx1PqNXsFzM9Piq59uz/kAh/bGmGsPM7eNRetlu+Sq4D+Kd/G0c
+	q8cWKJAVN5sr28ZBDfMPqPOYxvnK6GA3aqgFQY8aEL9Y8I3h4YW62rDQdK33Y821hs3D3ExyqQk
+	JqdUsHJf2jJ9/gPB7yNN3dhfym9KNrdsxu/A8aQyYi98nVIKh
+X-Gm-Gg: ASbGnctjKYzCmY6bCHJ97UT5MLoC0fI0FJCm+1FPcvCQcE0fewAhH5vuw/T1OwrkKYG
+	6FwS4b0o6Csp4NySnTpAmiEN41KHSM2noyo/pgAwvZh8yf3m1c/ZToqnGQ30r4HnZrfyNcNfar9
+	n8ap2dOG+gKPjw9f6tDvA6IhzruLq44MysnqE=
+X-Google-Smtp-Source: AGHT+IFtImagR6Lqfgo7XIZ1wWl2+tLkZnQp/pTB1oR1k0UzDInmGHhqpcROEep6B+1QLhfQbASn6A2YAzPAFuoWbdA=
+X-Received: by 2002:a05:6000:402b:b0:39c:e0e:b27a with SMTP id
+ ffacd0b85a97d-3a099ad70dfmr2371455f8f.23.1746204815370; Fri, 02 May 2025
+ 09:53:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250430171534.132774-1-irogers@google.com> <20250430171534.132774-3-irogers@google.com>
- <aBTs6yvKlCYYgU2O@yury>
-In-Reply-To: <aBTs6yvKlCYYgU2O@yury>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 2 May 2025 09:43:12 -0700
-X-Gm-Features: ATxdqUEaNzyEBZLtUQ1jfImxKvfknBZnmDSgU_oST5gHw-xFYWsjcme0fXmFH_E
-Message-ID: <CAP-5=fXqLh7RdUok5oqVwyGOWCH3fktmVeECdi4ENBWnEHeJYQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] bitmap: Silence a clang -Wshorten-64-to-32 warning
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jakub Kicinski <kuba@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Leo Yan <leo.yan@arm.com>
+References: <20250502-vmlinux-mmap-v2-0-95c271434519@isovalent.com> <20250502-vmlinux-mmap-v2-1-95c271434519@isovalent.com>
+In-Reply-To: <20250502-vmlinux-mmap-v2-1-95c271434519@isovalent.com>
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Fri, 2 May 2025 17:53:24 +0100
+X-Gm-Features: ATxdqUEmdXYDqO_tQ1hPoaj8fCjwznGA5fXIlAwLRODgYtT6LMxPzFPPx9AIs8I
+Message-ID: <CAN+4W8i0CB+gYcBNyWUxAA+=89Q+nMFopxKUF3nt1+y5ATaNyg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] btf: allow mmap of vmlinux btf
+To: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 2, 2025 at 9:03=E2=80=AFAM Yury Norov <yury.norov@gmail.com> wr=
+On Fri, May 2, 2025 at 11:20=E2=80=AFAM Lorenz Bauer <lmb@isovalent.com> wr=
 ote:
 >
-> Hi Ian,
->
-> On Wed, Apr 30, 2025 at 10:15:31AM -0700, Ian Rogers wrote:
-> > The clang warning -Wshorten-64-to-32 can be useful to catch
-> > inadvertent truncation. In some instances this truncation can lead to
-> > changing the sign of a result, for example, truncation to return an
-> > int to fit a sort routine. Silence the warning by making the implicit
-> > truncation explicit. This isn't to say the code is currently incorrect
-> > but without silencing the warning it is hard to spot the erroneous
-> > cases.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  include/linux/bitmap.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-> > index 595217b7a6e7..4395e0a618f4 100644
-> > --- a/include/linux/bitmap.h
-> > +++ b/include/linux/bitmap.h
-> > @@ -442,7 +442,7 @@ static __always_inline
-> >  unsigned int bitmap_weight(const unsigned long *src, unsigned int nbit=
-s)
-> >  {
-> >       if (small_const_nbits(nbits))
-> > -             return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits));
-> > +             return (int)hweight_long(*src & BITMAP_LAST_WORD_MASK(nbi=
-ts));
->
-> This should return unsigned int, I guess?
+> User space needs access to kernel BTF for many modern features of BPF.
+> Right now each process needs to read the BTF blob either in pieces or
+> as a whole. Allow mmaping the sysfs file so that processes can directly
+> access the memory allocated for it in the kernel.
 
-Hi Yury, I don't disagree. The issue there is that this could break
-printf flags, etc. reliant on the return type. I've tried to keep the
-patch minimal in this regard.
-
-> Also, most of the functions you touch here have their copies in tools.
-> Can you please keep them synchronized?
-
-Yes, I do most of my work on the perf tool in the tools directory and
-these patches come from adding -Wshorten-64-to-32 there due to a bug
-found in ARM code that -Wshorten-64-to-32 would have caught:
-https://lore.kernel.org/lkml/20250331172759.115604-1-leo.yan@arm.com/
-The most recent patch series for tools is:
-https://lore.kernel.org/linux-perf-users/20250430175036.184610-1-irogers@go=
-ogle.com/
-However, I wanted to get the kernel versions of these headers agreed
-before syncing them into the tools directory.
-
-Thanks,
-Ian
-
-
-
-> Thanks,
-> Yury
->
-> >       return __bitmap_weight(src, nbits);
-> >  }
-> >
-> > --
-> > 2.49.0.906.g1f30a19c02-goog
+I just realised that there is also code which exposes module BTF via
+sysfs, which my code currently doesn't handle. I'll send a v3.
 
