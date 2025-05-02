@@ -1,340 +1,221 @@
-Return-Path: <linux-arch+bounces-11786-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11788-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A221AA6D1E
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 10:55:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2EC2AA6E87
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 11:55:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 192CF1B6197A
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 08:55:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AF601BC037E
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 09:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87CA7242D8B;
-	Fri,  2 May 2025 08:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C10623184A;
+	Fri,  2 May 2025 09:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="LWyv8FSG";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="dGyzhNI4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c/2SNfyP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE41C23A562;
-	Fri,  2 May 2025 08:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746175987; cv=fail; b=INSGzAar/vjt16Gaq4NsF99aw53pE3FiITJya9N26SHP5Lc47cSBk7TyrYjAiOoSHrX/+czPxhPEtY3fMbSc1A/l3ap8shjBvx0UllXWgUqSMb73S4VeYFPvOnSvEl7cxjq2g3jP7tJ+Js1+QH3qT1h868DypXCkEySiVuk1uaA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746175987; c=relaxed/simple;
-	bh=6f7XxHPwo8qC8olQC598YM2dpo0EcKoX0GyI6AoO4wk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=M87WY+PdaY4G5EXQiWrdLYfqd1Rwt0j/+wIvCa4OHLGfDkXzpnYTYeUkRdbLTATJxd5UXX9C8guX0YHxJyTqTO94xYAodY4vUMqPelVEJ5RPOONJ9VQXm1z9et9D/siVHHX1Vp+4Td/E8cIDAhD9fh/070FyEPMAyI0x/Rxge/0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=LWyv8FSG; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=dGyzhNI4; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5425WA7w015412;
-	Fri, 2 May 2025 08:52:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=6E5rBlA38D6p0Ne51JXF/YGQkc+d7k1SGACK20ORTFM=; b=
-	LWyv8FSGYyXBPhZXIZq9YChTTMR+zR+2bgwgVtewXvclmEAvXiY7uQ9NeXgmLdNb
-	MVIujsdVjAs39F5mmljBBUXOrBI7fl0XJvBE23+h8YBzjrAJfxjsIlze7t67q2Zy
-	rAV3biCAQObTL/FbZHVTw+WXfgaWwL5RmnFBUVd6tRZeu7PeQIhzdSa7DepvpvHh
-	KtTQKSV9HoisIZ91RKVIQRHuQsUSQSW8uy7oXhmeBgcSDHqKOtFvD0OGPP76QEHB
-	QpE5c7hzJ0zKqqCuYsi85qyvKK7hwpmusldglbECnc5B3rOZC6tR+nXnTg8e6FTQ
-	C5lcDqpMSaU9JQR7mh5v6A==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46b6ukmxgr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 02 May 2025 08:52:43 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5427CY6H023705;
-	Fri, 2 May 2025 08:52:42 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 468nxkt8tw-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 02 May 2025 08:52:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=i7ULeOJSbb6v3rfExUqMrXhz7oVftHMWkuXQm04v6twgcxwe1z4WXHh0wHp8TH+Kh0IJ2k71w8z5pKRQON4Bm/o7SdJTsRtxVUj59L60UUZU+gkuavfJi30vfV2TRP/gTxZq2p2aDsMko1QiaWJYG7WIK/Bls+fPI7pdDt0J/MNrdwiI66H8Vxq/zPgYIjQiN/ytaFWq0efnE2JXNJX3dNj3jNXy9Dzl0OqDL+M0BTmKXOD/D2Hmtxc7nbMTUX/rdd1hxeHJIg0OhrGb4UM5kVkhz3u/nyIVwc69rtqf/YT0A9mBAJAuRJcSYagHsQrLaxqcY0XRng/oqQ6PdnL9xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6E5rBlA38D6p0Ne51JXF/YGQkc+d7k1SGACK20ORTFM=;
- b=DjDGOkpWxBmNiKTlcPzoGKEa55rxE7N51C9lIq7oemYpCIVuF/dC7h4BgrlbU9+aD2GPj+KHlDzbg1sch0pnHi1TVlP/ZMnDv+uiR+waF4sms1V4C3M5CMqQ7yNlDP3Bmpxf41J93VTUW570NjQKNyRmdWcdMU4LwFRqfBzF0dJinjV1Oij3t/YL64hsvaU2zGwlp6dq+mkzd8AJqhpE6t/kjNuytiiodAG/p2e5w+uLBXL2xzK3TPjJuGX8BDtfaryO6Tu2Ddxh2O536sagiRtQQdJn41wpKNVbnNmZlyiBX0a6vvdYjLNlCzjj7qs9t3ErqoCjb27bjQU+OHzwsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6E5rBlA38D6p0Ne51JXF/YGQkc+d7k1SGACK20ORTFM=;
- b=dGyzhNI4NwcguwhGg0xgPVg8wZOWexLpOUhzF1eNSzgV9wmNoqe4e6nFoHoaIrsa/6a6cCSDC79x8aviQNHXrAB3ZmpmUR6k6YauCKoPxdZnRRrd5FpUClmMP0Uo6ebO8HXNQuS8Xc3464AYcwbobw9DooGIw4f/TVI5ppX2ywg=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by LV8PR10MB7726.namprd10.prod.outlook.com (2603:10b6:408:1e8::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.23; Fri, 2 May
- 2025 08:52:40 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::25a9:32c2:a7b0:de9e]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::25a9:32c2:a7b0:de9e%6]) with mapi id 15.20.8678.028; Fri, 2 May 2025
- 08:52:39 +0000
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Cc: arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org,
-        peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com,
-        harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, memxor@gmail.com,
-        zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
-        joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com
-Subject: [PATCH v2 7/7] bpf: rqspinlock: add rqspinlock policy handler for arm64
-Date: Fri,  2 May 2025 01:52:23 -0700
-Message-Id: <20250502085223.1316925-8-ankur.a.arora@oracle.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20250502085223.1316925-1-ankur.a.arora@oracle.com>
-References: <20250502085223.1316925-1-ankur.a.arora@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MW3PR05CA0010.namprd05.prod.outlook.com
- (2603:10b6:303:2b::15) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878D7233149
+	for <linux-arch@vger.kernel.org>; Fri,  2 May 2025 09:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746179731; cv=none; b=KbFnfe8JvKxVpccyWo1vKrnpMCTwRR05eaEHEDmYz5MnnWYOFxF69UWq65w5Im+MfiQxHf8qC8vOUiK6soiKr5BnVYgjC/RKMmpuYemwvVPsaMgMTbKpId6jxwqopMtvea4DPN3ibV+OmAQR5Gu1oWpKjDocND9/8ZdKy+RAnYc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746179731; c=relaxed/simple;
+	bh=DbOmruiDXqyCFuxtwBSQJBYz2MVx6spaIxjAgcz+Oj8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PSHzSn8CetyhlNluU20ca1N28O36vS8cfd0hbmC+pX4Uf4JQxdY8h5bE+L7Z+ksWB0cdAt/6G+d+xEbfTLZroF1JDt8NvDtJFHbFGnSKtydWpr0yP8yJi4cvzBhSF1AvQH+lJ3Fctq4wNdWvywlLSVsJv4laMLfL0cAKfAdwQ+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c/2SNfyP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746179728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Lg/z+bj6Vp6Uwot26MZjMyBdidDV8u4Eq/gx3z2pwHw=;
+	b=c/2SNfyPnj7Q9740GNXSjSEGfyVQvNzu1kfdfMKK8wnyBIbvhRbHp3RRvGxNKhur9XdPjf
+	NDwyDWSpxQFULU3QRWu9NWeR+N9O9AzjSw5ovLXlF7ih/C0yxFkdnAFJo+C44m7WQjSUzY
+	0rKen5oRNhg+LimqnoXiLxENKrWjTpg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-70-YhK6vhcxOImw2o4fPrjU2g-1; Fri, 02 May 2025 05:55:27 -0400
+X-MC-Unique: YhK6vhcxOImw2o4fPrjU2g-1
+X-Mimecast-MFC-AGG-ID: YhK6vhcxOImw2o4fPrjU2g_1746179726
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-39126c3469fso484459f8f.3
+        for <linux-arch@vger.kernel.org>; Fri, 02 May 2025 02:55:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746179726; x=1746784526;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lg/z+bj6Vp6Uwot26MZjMyBdidDV8u4Eq/gx3z2pwHw=;
+        b=hK9oGSU+jb7mlSkS1R0+vuX4rF6y7j+z4dAToRFD+KPWXSyk/NipYbqKPMbDEN+fX3
+         rdVeCKdyQB7HMkipRrn1cD7nOEurKohp5a3EX+YUkUwZJjesi82nJBh4vSmZliMdNe4L
+         B8U1M0T5sZiGUQYDFzEZoUNNf4wrFTdhrzLtILpJ0csk05uN+qeBKVdTJlRSOS1UkjxF
+         aIqX3Kg4gMZ3t9MVP2KIwupJ7b58tyQv7LsDFk9VwEEQrbyYZ4/nPIUHME8YU18qmT4i
+         S8L+NPEP633ZY5ajdyV/gGjbUtaVeBbZuqDScuK0elS9GoTdfWp/DLbvGoItCMYDDLZO
+         IOTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGvdbe2Orbg3+VprTgjRQW7Gul6fF19Un8FJEIkFi29U/BTDYGZhzLvHkyuEcSmtABpVg9h4gsYkNM@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGKvJKKwkypWwTx1PdyY/HioSjRyw6GxkuXP33YZCDKpifZ9DB
+	nf6ArmsgiauLYD4PfhKQwjmmxkUpGtZKVb8oRtTTFmD2RwwgAeZ+BeV3RnU31HrrcPYB0ZvnNJn
+	G90Y/Kh9At9vDB2YCiiNsJgMe6aGNlmc1yBnEL1Q1xR++T+hcHWJDVlaIIio=
+X-Gm-Gg: ASbGncvAVR76/M5JCq9s1JjvHnEIifMC12PEUCvYV+qnRgaB9yUFUsNiXABO+G9lm5Z
+	P2OuxCHFYJsMJGA+q9I7xIkz9yCJ1RAoh4p2PZG94HvkYH6eCt6m8EHf+PfmKdcUuzer6FvK8aA
+	ho5tpbf18wgKouaVK+5haWhzIhYTPEIirh6/2stH2Njwynp6baMjH+zs0TIzzumTwAvyOb7nhbv
+	UgUpDfYF1FFJ1E5/rQBDxWUXcPP3w77tGNT37Uwu3EnF+OZTDxkcmuSYjK0ROGHFbwXE+OCcyoC
+	ZOUUALF+DNJTA//xJKqAyERB732KBhcbO+oTSCOcMejz8CBN
+X-Received: by 2002:a05:6000:40cd:b0:391:4873:7940 with SMTP id ffacd0b85a97d-3a099aef847mr1613287f8f.54.1746179725815;
+        Fri, 02 May 2025 02:55:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGpWssSttWyCeyGY3CsU2VpUSZWAU4rNhFXcV+QIILeKOWgOhhc72G0KBYplClE77XLY5f7yg==
+X-Received: by 2002:a05:6000:40cd:b0:391:4873:7940 with SMTP id ffacd0b85a97d-3a099aef847mr1613170f8f.54.1746179725069;
+        Fri, 02 May 2025 02:55:25 -0700 (PDT)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb ([2001:861:43c1:5950:3e51:b684:9982:d4a2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae3ccdsm1693329f8f.38.2025.05.02.02.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 02:55:24 -0700 (PDT)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Dave Hansen <dave.hansen@intel.com>, Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ rcu@vger.kernel.org, linux-hardening@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, Juri Lelli
+ <juri.lelli@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>, Yair
+ Podemsky <ypodemsk@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>, Nicolas
+ Saenz Julienne <nsaenz@amazon.com>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Dave
+ Hansen <dave.hansen@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Juergen Gross <jgross@suse.com>, Ajay Kaher
+ <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Russell King
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, "H.
+ Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>, Jason Baron
+ <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, Naveen N
+ Rao <naveen@kernel.org>, Anil S Keshavamurthy
+ <anil.s.keshavamurthy@intel.com>, "David S. Miller" <davem@davemloft.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda
+ <ojeda@kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, Rong Xu
+ <xur@google.com>, Rafael Aquini <aquini@redhat.com>, Song Liu
+ <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
+ <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, Benjamin Berg
+ <benjamin.berg@intel.com>, Vishal Annapurve <vannapurve@google.com>, Randy
+ Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>, Tiezhu
+ Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+In-Reply-To: <a6b3a331-1ff3-4490-b300-a62b3c21578d@intel.com>
+References: <20250429113242.998312-1-vschneid@redhat.com>
+ <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
+ <20250430132047.01d48647@gandalf.local.home>
+ <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
+ <20250430154228.1d6306b4@gandalf.local.home>
+ <a6b3a331-1ff3-4490-b300-a62b3c21578d@intel.com>
+Date: Fri, 02 May 2025 11:55:21 +0200
+Message-ID: <xhsmhr0179w1i.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|LV8PR10MB7726:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3366705f-318f-4d19-d744-08dd8956b1b0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?EXj6DqWN55EALDmIYSfUiYlLfW41oqD1WR+fFHUS3OL/EbZCiehUN4Q+EdGJ?=
- =?us-ascii?Q?eANHkjsEPVLjchvkt2FKiD4/nf3rNc2HKBNPFoFNss4ELYFy5Uy8o8tNi6Tm?=
- =?us-ascii?Q?Q1J8N+YrmiIEhF3UrvYqDdNzu5ITwOdLbU4AKX4U8P2kaTvVlDPavQP5uryS?=
- =?us-ascii?Q?dIV4BotTTLi5+v2bgxolxTzA3pHlIZajs5bcfQnpzxYQzxWqYOBvLcqug9wx?=
- =?us-ascii?Q?roPDc0znpKGlHxVcn8Gr9gJKYXOQZTYLcymVDRqh+NuRUT1W/92HTlcFT1S8?=
- =?us-ascii?Q?/O87RbdEJNyul0hSihtM9FNAxR6bPP7vIN0fhi1pslIu+f6o8xgqMmZOQarj?=
- =?us-ascii?Q?qB1g2tMlrvj5117SRDAO1Mz/KEinPoo7Kc8LwBfOUGn1YqMs6vcV/p1jdfq9?=
- =?us-ascii?Q?El9g3voF+bDVuvmzM2u4gzs6jIUw6NAbGceFP7omx5BxUReml/4ifMyEwAMt?=
- =?us-ascii?Q?RxUWbSs/TfLPT03Bxz2kHvn6kDbJqj041cA8KDHIg3S4BzkwMHUzggLi5LTl?=
- =?us-ascii?Q?/6FtdAVCpWOUG11voblrWiYN+Sc1JJerG2VrT4c8DxguDOl1GDGFU5kUJN9f?=
- =?us-ascii?Q?I4VYFhWXiqWT6FTnaO/zD7pwydhAH7nNLpQ256rdA5pir0tES4m0F4FlLdth?=
- =?us-ascii?Q?o3jc/zmXGMM81pRgp5QDGXKOY2U6Ar1VLYCN2TJVDRBYJ2nzdaiJdmkY0VPT?=
- =?us-ascii?Q?e13/doyhkptep9MqM4CrRoBoL5fkbKBlbh3IRjluWXS1F0KQRX8pyNzBjlyD?=
- =?us-ascii?Q?7uzhgX71+Tel8mvmJ29CSHQib/1YL/snO7eCfoqrOvmS5KTiqImgEghKfJUd?=
- =?us-ascii?Q?cjczn0IgN8pKws1Lp3ke3dfFOPyYBkNu4rBIhc8Iy3eAj88oS96t6Mo6hz+t?=
- =?us-ascii?Q?V6nzJuZCYBF76NWhLQfbzS8Jy0kwIRPhg0Bzw0N8Ek1piiJqXQdQJtDocBU6?=
- =?us-ascii?Q?WCY9DBXIQpQYJJf15+0/N3XPaAs5qiaIO1tWLl9L1BVryfZdCdWETSC1GNBb?=
- =?us-ascii?Q?gxRfBjHTww0iGJQZgg5VMscGip5HdvkL9VlMgSIjCKJUmmn0Bw7h6ktZy8Ms?=
- =?us-ascii?Q?NzD56e58EYAjMHUS2wHgh99Zsc0bJGzotMtJtLhOlm7EGgezNr1LecZrmWtL?=
- =?us-ascii?Q?5xpnSgB0nDktHorXQ/00W+N96kuH9tEiUXqshxSXjPpNLFiuAsSPzcFLdACA?=
- =?us-ascii?Q?pBqvCe4giEv65p7bOqMoBreHZwdJNDTHqVVH2DkUaHrKyQOT2alqf62hBGKV?=
- =?us-ascii?Q?cpWOl1x5S1MFz7xjUzyO+fF2So3uGSCbECSjNvfe/d1yClyrn4kWT86LYXHZ?=
- =?us-ascii?Q?DNmwlOQsFe95evOfN1MTlfBLucBM14wIAguDZVZYPP4RsmszFq4IQ4itqvjw?=
- =?us-ascii?Q?ZCAmGcf8GU/PiVyte/sSSxq8HwG4FB1D9dvT+OpEB+Ziz7ozUpMJpzAOWRFN?=
- =?us-ascii?Q?xZM7VHmKk/c=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(13003099007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kTjq72UWYVbJFNyYwh3DDPPyBrLwEvwSb05tWVNbYQaCuLMgd5OIIi2WLfve?=
- =?us-ascii?Q?MvAGAcpZpGNJKBZz5DgMFAWpogACY0oTRN1lID7m+uLROg5UemfRP2dNza5y?=
- =?us-ascii?Q?Rg9H5itBNgcDoVj0QgBqC53LqVr0m0V5Qy0uxQWrKvdWWKVxr6o9/a7HocEa?=
- =?us-ascii?Q?3Rfm9BU8sLWr7okRdN3J84+k/aIQtmS2BG3DHDSZKrniXF+hRs5ay8MLTNAe?=
- =?us-ascii?Q?/6bYTyHOfz8pbCtjVWlLbBKYCNzmvFlfPw6Pzswh4z131KCaD0/RXxMZ/gTf?=
- =?us-ascii?Q?Z2IZ8xsDS5DOy4BAwgjTgM6x0/EbOWX8oiRWoSOPoOx0Nz0OBgFPTcxMlAxb?=
- =?us-ascii?Q?dTKyyzf3wNyPq4SyLush2Q0U9Tgt/m4eewcBlyK8fL1CTZCJ4KLcDvbVkF91?=
- =?us-ascii?Q?v4aCVmh7Icn7kpRfisiIBnrtfiQF5cN2R3ME+asbk9kQ0y1yfsjpQDd0ZLlS?=
- =?us-ascii?Q?zHpRcVMfw0b+DWnqV/RipOx/D61479t6ZAe8xbr3JwTtLLdDjDzxOkg9AXon?=
- =?us-ascii?Q?Q84ksSs8A8WZtKAMLJ28lO/CYS16ScAa0ZdP5pS6OLC1gKfVpSmzDo86RhyO?=
- =?us-ascii?Q?vtKnheLKXtQ+XssHz7B+fwotw9FWX1tYvAR37fYtwCRNvhtghs0KKN5Qmp7y?=
- =?us-ascii?Q?ouESfkwTgD43du/AcsyrZZHyNEX4ZiMSTaWxmrX2n0bd4NQTiD6IbUBeTh3N?=
- =?us-ascii?Q?Bou3KtaDrDOYdD9LmozjV8EUy8HhZd1B8Cg59vTS03m13BkyaL97ry2ZNhVb?=
- =?us-ascii?Q?C9rKGxoM45m/FZ1IQyAdl4VEspS4g3WPwdS7dzRVr9XQaatTQMjC6bn7/baK?=
- =?us-ascii?Q?An7z1IP84SDczh2ua80H7IitBoglYe3n4lCyaW7gEWaXbUT3VZWiwAlGFKCZ?=
- =?us-ascii?Q?F3AHZnBccPEr7VuyZuA9XPZfOlSReXHW0rge2Lv0tHDdxLDT6hH3eaj8Iied?=
- =?us-ascii?Q?7XZ6sGUtjMfbm1JrI1nIumdA6Clw8HycRat8rtkaPCDTKYh3P/vDqbvnR/xN?=
- =?us-ascii?Q?XOsde28ofcv61Cz0mA+y8EW6S+I6793Ig0lHlZBccPerCfPbrcA8bhJykZM6?=
- =?us-ascii?Q?3UmdIEK3DojwGpjt8kuX3S3vOuoSeVOjmolW7K0lCbtB2JM1bzLNvYQaJD2l?=
- =?us-ascii?Q?BNSCm7ucMvkiQFaWMyuwr2+iBvDNZ6XDITGfJQaSEmwYblpIXErn8iLPp03G?=
- =?us-ascii?Q?uOrerghjaar0ZRCQy2IZLEr41Ib+11njelb4KYFGEDhhGdDatqDa8jX6F9IH?=
- =?us-ascii?Q?JEPdGlJxPJ8atNmIsHXfWYyYtUtwI8p2MHYlsZbvxNIu/lr4Sh9u6TThKr4H?=
- =?us-ascii?Q?r1xJNPPKpEYFGJwH9w8fvZuitL2na4WqVYpnE5byBtdpa+iEo48QXBqUCgeR?=
- =?us-ascii?Q?pNGMYHyTK0Ab4bDoEAjx2lo0QDQElsejG/lXqOnxBXrl4cLvpkY5iMOFVUTd?=
- =?us-ascii?Q?/wM3TFaRWgt8fFk5ilIf1Ja0LtKfevPSjnmSTpzgf/tonzwwWVt4jkarCD0I?=
- =?us-ascii?Q?nM69gwyssvSxHS8xwQ3dHZDe4H7sSuocEiiovBF93B7McufB/KmfJ0l6dwOe?=
- =?us-ascii?Q?0aB0FEFyewTn/MSQ/CzkW3cp66L7dk4YI3yBq+FmROXVMj0zwZySx0ZAVBTu?=
- =?us-ascii?Q?eQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	9qEywf6Mk2tVVvJnA04b9ey+Zc/E794rcbEMCMwLaeetL60uqRolDUZ8odKW5GaoL22Oir90EDL67W5/j9sPqqMaShuQcfcJQmqqrbg9dRxp6dtnh5AImTULG3fUC2Ln85zppqJQZYItv2L6BgH3Q7Hrn12jzFPe/AhRumU4QdZrHri0v3HkbkP2w+Sps8TBz6rOOoN6PVTfzSTEnMYcemIJI+zGMrwpMc74c+wtI/Tl0zQAozOA52c4uiP9vFnRqE3duZN7AC3AMxCvoDke6uEqWiv+eIroux4c50XAoY37Hn3OG2NBQuFgtdEf8OqPJG7wJLDTbmXAmbEM/dTgvK8mciBHKp2WeBwLCp6cC0MErWVYDXoN1YIfJ2GHELgcV0EV2fvMeVbQytoOr95EvWWcwV7EbZTfbKIiK1Ve3hpcKXPUVcb1eyzjvXTdR0wCdu7PYQWe3/e3aBf6kX9Qy2LFKvY2FL+HvmFw5TiCczdsDcTn4mWIk3Hc7/S/XDlCrLOT6cUKlPcbJEE1By4en2piJEH8Mm+p7sHdfddFfgx9+Fohv2IOgzeoExUN8IXfBi/waJ+pgUCuZTsvIk58gs2Yv0u/VeOMTcNgWFxq/hI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3366705f-318f-4d19-d744-08dd8956b1b0
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2025 08:52:39.9090
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l26InHx/yr9k3y6xxy+uoOQxdidNxHzCwLKnTpDrG1BEHF8WgInNMDDIC2tLxYd90j4nVnYfV1HCdIy65OsFOM8IJGdV6UHcn2jIFcZLRSg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR10MB7726
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-01_06,2025-04-30_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2504070000 definitions=main-2505020068
-X-Authority-Analysis: v=2.4 cv=MIZgmNZl c=1 sm=1 tr=0 ts=681487db b=1 cx=c_pps a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
- a=xqWC_Br6kY4A:10 a=dt9VzEwgFbYA:10 a=GoEa3M9JfhUA:10 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=pGLkceISAAAA:8 a=wxXpT7fL2LLBmjscUt4A:9 cc=ntf awl=host:13130
-X-Proofpoint-GUID: f7QrIgJsNOY_mXyuBt53E927C0OUG7Wa
-X-Proofpoint-ORIG-GUID: f7QrIgJsNOY_mXyuBt53E927C0OUG7Wa
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTAyMDA2OSBTYWx0ZWRfX9znZxqauQxAF RPsy4DilD4GF9lnfHXq94hIF/A6jnD6EumHnNp//arHdpSCVMYi1htN+ZL0AudjUyv9jBwSNbKB 46aAcH2lsOGha70EKD2rNJGBps5ga+0HLPzQXPdvC275J7I/04QUmF/5yyyyqsPKD4r9272/54y
- B5crEYK62Uw98BaBKcaUQI6i5UdmCvFm3Jm+C2o4/t0SFYq3CfAUUhvPPqeP99+DBuhC821PArw 9u+4/UmjdVFnDugdTbHwBPHsxfsC8P+uLL0M7HhDqXgb5L0A34tNaNp1xKlrSOpcjV6aJX0lcHa GI+xcSzfqAP05wiUfIR7+OpZcgCFIDGSKEPQ2obvVuVH92vhgzNtKONh5OFkIgPeBur1zcaibiN
- VmY/0eDIlMw/rMVf3VyAszu02b6Q+Tkcuh6m7RkXORX+Ouzbf9BwM8BuNOecJYyBT+vhqT0A
+Content-Type: text/plain
 
-The local copy of smp_cond_load_acquire_timewait() (from [1]) is only
-usable for rqspinlock timeout and deadlock checking in a degenerate
-fashion by overloading the evaluation of the condvar.
+On 30/04/25 13:00, Dave Hansen wrote:
+> On 4/30/25 12:42, Steven Rostedt wrote:
+>>> Look at the syscall code for instance:
+>>>
+>>>> SYM_CODE_START(entry_SYSCALL_64)
+>>>>         swapgs
+>>>>         movq    %rsp, PER_CPU_VAR(cpu_tss_rw + TSS_sp2)
+>>>>         SWITCH_TO_KERNEL_CR3 scratch_reg=%rsp
+>>> You can _trivially_ audit this and know that swapgs doesn't touch memory
+>>> and that as long as PER_CPU_VAR()s and the process stack don't have
+>>> their mappings munged and flushes deferred that this would be correct.
+>> Hmm, so there is still a path for this?
+>>
+>> At least if it added more ways to debug it, and some other changes to make
+>> the locations where vmalloc is dangerous smaller?
+>
+> Being able to debug it would be a good start. But, more generally, what
+> we need is for more people to be able to run the code in the first
+> place. Would a _normal_ system (without setups that are trying to do
+> NOHZ_FULL) ever be able to defer TLB flush IPIs?
+>
+> If the answer is no, then, yeah, I'll settle for some debugging options.
+>
+> But if you shrink the window as small as I'm talking about, it would
+> look very different from this series.
+>
+> For instance, imagine when a CPU goes into the NOHZ mode. Could it just
+> unconditionally flush the TLB on the way back into the kernel (in the
+> same SWITCH_TO_KERNEL_CR3 spot)? Yeah, it'll make entry into the kernel
+> expensive for NOHZ tasks, but it's not *THAT* bad. And if the entire
+> point of a NOHZ_FULL task is to minimize the number of kernel entries
+> then a little extra overhead there doesn't sound too bad.
+>
 
-Update smp_cond_load_acquire_timewait(). Move the timeout and deadlock
-handlng (partially stubbed) to the wait policy handler.
+Right, so my thought per your previous comments was to special case the
+TLB flush, depend on kPTI and do it uncondtionally in SWITCH_TO_KERNEL_CR3
+just like you've described - but keep the context tracking mechanism for
+other deferrable operations.
 
-[1] https://lore.kernel.org/lkml/20250203214911.898276-1-ankur.a.arora@oracle.com
+My gripe with that was having two separate mechanisms
+- super early entry around SWITCH_TO_KERNEL_CR3)
+- later entry at context tracking
 
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
----
+Shifting everything to SWITCH_TO_KERNEL_CR3 means we lose the
+context_tracking infra to dynamically defer operations (atomically reading
+and writing to context_tracking.state), which means we unconditionally run
+all possible deferrable operations. This doesn't scream scalable, even
+though as you say NOHZ_FULL kernel entry is already a "you lose" situation.
 
-Note: This patch is missing all the important bits. Just wanted to check
-if the interface is workable before threshing plugging in the deadlock
-checking etc.
+Yet another option is to duplicate the context tracking state specifically
+for IPI deferral and have it driven in/by SWITCH_TO_KERNEL_CR3, which is
+also not super savoury.
 
- arch/arm64/include/asm/rqspinlock.h | 96 ++++++-----------------------
- 1 file changed, 19 insertions(+), 77 deletions(-)
+I suppose I can start poking around running deferred ops in that
+SWITCH_TO_KERNEL_CR3 region, and add state/infra on top. Let's see where
+this gets me :-)
 
-diff --git a/arch/arm64/include/asm/rqspinlock.h b/arch/arm64/include/asm/rqspinlock.h
-index 9ea0a74e5892..27138b591e31 100644
---- a/arch/arm64/include/asm/rqspinlock.h
-+++ b/arch/arm64/include/asm/rqspinlock.h
-@@ -4,89 +4,31 @@
- 
- #include <asm/barrier.h>
- 
--/*
-- * Hardcode res_smp_cond_load_acquire implementations for arm64 to a custom
-- * version based on [0]. In rqspinlock code, our conditional expression involves
-- * checking the value _and_ additionally a timeout. However, on arm64, the
-- * WFE-based implementation may never spin again if no stores occur to the
-- * locked byte in the lock word. As such, we may be stuck forever if
-- * event-stream based unblocking is not available on the platform for WFE spin
-- * loops (arch_timer_evtstrm_available).
-- *
-- * Once support for smp_cond_load_acquire_timewait [0] lands, we can drop this
-- * copy-paste.
-- *
-- * While we rely on the implementation to amortize the cost of sampling
-- * cond_expr for us, it will not happen when event stream support is
-- * unavailable, time_expr check is amortized. This is not the common case, and
-- * it would be difficult to fit our logic in the time_expr_ns >= time_limit_ns
-- * comparison, hence just let it be. In case of event-stream, the loop is woken
-- * up at microsecond granularity.
-- *
-- * [0]: https://lore.kernel.org/lkml/20250203214911.898276-1-ankur.a.arora@oracle.com
-- */
-+#define RES_DEF_SPIN_COUNT	(32 * 1024)
- 
--#ifndef smp_cond_load_acquire_timewait
--
--#define smp_cond_time_check_count	200
--
--#define __smp_cond_load_relaxed_spinwait(ptr, cond_expr, time_expr_ns,	\
--					 time_limit_ns) ({		\
--	typeof(ptr) __PTR = (ptr);					\
--	__unqual_scalar_typeof(*ptr) VAL;				\
--	unsigned int __count = 0;					\
--	for (;;) {							\
--		VAL = READ_ONCE(*__PTR);				\
--		if (cond_expr)						\
--			break;						\
--		cpu_relax();						\
--		if (__count++ < smp_cond_time_check_count)		\
--			continue;					\
--		if ((time_expr_ns) >= (time_limit_ns))			\
--			break;						\
--		__count = 0;						\
--	}								\
--	(typeof(*ptr))VAL;						\
--})
--
--#define __smp_cond_load_acquire_timewait(ptr, cond_expr,		\
--					 time_expr_ns, time_limit_ns)	\
--({									\
--	typeof(ptr) __PTR = (ptr);					\
--	__unqual_scalar_typeof(*ptr) VAL;				\
--	for (;;) {							\
--		VAL = smp_load_acquire(__PTR);				\
--		if (cond_expr)						\
--			break;						\
--		__cmpwait_relaxed(__PTR, VAL);				\
--		if ((time_expr_ns) >= (time_limit_ns))			\
--			break;						\
--	}								\
--	(typeof(*ptr))VAL;						\
--})
--
--#define smp_cond_load_acquire_timewait(ptr, cond_expr,			\
--				      time_expr_ns, time_limit_ns)	\
--({									\
--	__unqual_scalar_typeof(*ptr) _val;				\
--	int __wfe = arch_timer_evtstrm_available();			\
-+#define rqspinlock_cond_timewait(now, prev, end, spin, wait) ({		\
-+	bool __ev = arch_timer_evtstrm_available();			\
-+	bool __wfet = alternative_has_cap_unlikely(ARM64_HAS_WFXT);	\
-+	u64 __ret;							\
- 									\
--	if (likely(__wfe)) {						\
--		_val = __smp_cond_load_acquire_timewait(ptr, cond_expr,	\
--							time_expr_ns,	\
--							time_limit_ns);	\
-+	*wait = false;							\
-+	/* TODO Handle deadlock check. */				\
-+	if (end >= now) {						\
-+		__ret = 0;						\
- 	} else {							\
--		_val = __smp_cond_load_relaxed_spinwait(ptr, cond_expr,	\
--							time_expr_ns,	\
--							time_limit_ns);	\
--		smp_acquire__after_ctrl_dep();				\
-+		if (__ev || __wfet)					\
-+			*wait = true;					\
-+		else							\
-+			*spin = RES_DEF_SPIN_COUNT;			\
-+		__ret = now;						\
- 	}								\
--	(typeof(*ptr))_val;						\
-+									\
-+	__ret;								\
- })
- 
--#endif
--
--#define res_smp_cond_load_acquire(v, c) smp_cond_load_acquire_timewait(v, c, 0, 1)
-+#define res_smp_cond_load_acquire(v, c)					\
-+	smp_cond_load_acquire_timewait(v, c, rqspinlock_cond_timewait,	\
-+				       ktime_get_mono_fast_ns(), (u64)RES_DEF_TIMEOUT)
- 
- #include <asm-generic/rqspinlock.h>
- 
--- 
-2.43.5
+Again, thanks for the insight and the suggestions Dave!
+
+> Also, about the new hardware, I suspect there's some mystery customer
+> lurking in the shadows asking folks for this functionality. Could you at
+> least go _talk_ to the mystery customer(s) and see which hardware they
+> care about? They might already even have the magic CPUs they need for
+> this, or have them on the roadmap. If they've got Intel CPUs, I'd be
+> happy to help figure it out.
 
 
