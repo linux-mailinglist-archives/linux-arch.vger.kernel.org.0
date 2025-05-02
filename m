@@ -1,160 +1,143 @@
-Return-Path: <linux-arch+bounces-11794-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11795-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84F5DAA7091
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 13:23:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B15DAA7177
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 14:18:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AF549C0289
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 11:23:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B466464C04
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 12:17:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEE0245031;
-	Fri,  2 May 2025 11:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EFF2550AA;
+	Fri,  2 May 2025 12:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lmV94JNE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bJRevxLE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C881E5B62;
-	Fri,  2 May 2025 11:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E78C253B71;
+	Fri,  2 May 2025 12:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746185014; cv=none; b=osDXjMz7z3TvR5RrTV/Pr9VN+i+4UsqNkekmmHrcX8UD7kONHuXPO59sxibhAp05FwEE9AkRCpGa3Oz1MqB7oMnm9SIYUUKehsyyOi6aFqsZLNuzxKIfnatunEPPGzT8pxsbi4w9Opvd/JQGZEPx0lIN3hmjD7f9NK9FWnFEKno=
+	t=1746188243; cv=none; b=EQyrrgK3+Nzp9l9d8j7IxtrQKJZm7vnsNPnKhoox2PWSS+zONu/+CQLkX3LndiyydxDwxroc0j5jjGShr3U+iWmvYmhVkZoXzp7c0JGDsSqRBNgiKSW4H8JmxpicmVXHCc12sQzEOlUXj7y17zNdvdEximpGBOlP4hyxJKEJ06g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746185014; c=relaxed/simple;
-	bh=PRPW/uDt3qcKT5KOPbhmERJnNbucXaeqN2L1IjyyPX4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aUCWQpoSrcP0KEtS9ljATKEOt7WiXA5RQ2z+e0iHBPRJeKQCPi3tt0EeYalYNgp2ATSgIPh+L2QvHQlqOv9R+GpI/hsa+uZofrQvEZLA+bgRvMLfVVWYFA+fIWQ5+1a1mWqy87yKc5dwVNsHTfdkX6Kp7houkXPsPp4kxzVElJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lmV94JNE; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=PRPW/uDt3qcKT5KOPbhmERJnNbucXaeqN2L1IjyyPX4=; b=lmV94JNEzV4MsUJuxpPUrg3Bax
-	VPmVO1/zySgMAd5F2IJnFvPiwZNPECAQ1noECVKMioFjFmA+n5SOAzV+kGbk/f9S1iWtVP9rLg6cZ
-	hHF7SAR0m7IaJh5tCHy2qA/R/vkevPz7ZR3+xa+Zh5GSLdg0ezbI6iHsuifF9HE00+OjyODMdnQyb
-	JkPl44vhH6EmamOKaWacZeeUgT5U6RxA5F79Ex/83F13pJOquOWPbK7ely8gHy1uVeRQNWbA0aBQP
-	f+nYHty39Jk6K+NlHv/lPYoCn7B5BgUPqoEMb82IHPQShd8FJim54uJ17ucrfOJGKm432KMXzRw1R
-	RwhYSB9w==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uAoTJ-0000000FKnO-0XWf;
-	Fri, 02 May 2025 11:22:27 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 6C1A530057C; Fri,  2 May 2025 13:22:16 +0200 (CEST)
-Date: Fri, 2 May 2025 13:22:16 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Valentin Schneider <vschneid@redhat.com>,
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
-	kvm@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	rcu@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
-	Nicolas Saenz Julienne <nsaenz@amazon.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rong Xu <xur@google.com>, Rafael Aquini <aquini@redhat.com>,
-	Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	John Stultz <jstultz@google.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
- user->kernel transition
-Message-ID: <20250502112216.GZ4198@noisy.programming.kicks-ass.net>
-References: <20250429113242.998312-1-vschneid@redhat.com>
- <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
- <20250430132047.01d48647@gandalf.local.home>
- <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
+	s=arc-20240116; t=1746188243; c=relaxed/simple;
+	bh=4wbgRYNXz6Heu23u130WXz2Ie3l2+rM1ky9/GtEsM/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fO7l42YR4oio6/WM6ngbNOWq4ZkiBQ7dq2WRz8iVsD2AZyz3mr7AovupfUidivtGeNIvxa4lhyJUjnu6kF8Bwp0rEbljDYIpRvEo4LsQldVSEFy9xULfwInJn1bCNOIGALYCeg0gcZ+7C50ZaT/d5gwbkYSN9Ffq20qof1NSUuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bJRevxLE; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-39ee682e0ddso1175622f8f.1;
+        Fri, 02 May 2025 05:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746188239; x=1746793039; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=briwm5ooAxRyu9iD9OhCO5jhS4ZNlh92ZAJ4LiUJhxY=;
+        b=bJRevxLE61MK7D8CI3Yj7wd6ANWRuM67LqijACYjgQd7lq8WM+Wag9q21N21xJp1Jl
+         xoTIU0cRqlF2OxdzvvcnLJoz/NGBD6MPwkq3XSf4oa/nINce7sEoqdxjeFE1kcaW/DVO
+         FuIzHksLTK/iH2IrcSfpgT57fcFZ4bIigCZrOMousw1lgFT/XibAsRBJSaS4IEgLByG6
+         wxUplaGU/2oa7FvKb0d6LpD8StbPv3Er2snEGRNx1BI1TR/0FheuAXPU2gpfR6JtAW3V
+         nodzPNZH2x3gw9ZT0NB+mN50GlC0hcwMqx4Gqi3BBMSw0lfudw2dOgidIaDRt8K1FOtn
+         pb9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746188239; x=1746793039;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=briwm5ooAxRyu9iD9OhCO5jhS4ZNlh92ZAJ4LiUJhxY=;
+        b=XKXsspMhhSaXpldnk7mQB/5xhbr5A653CrMQier/XXPv881AVQ7ZyE8ibRlGn3mtEm
+         SIhVzok6cqejATteN1Xdpvwyg1lgwGUmh+xfiM6T2mMV7LjPdWzGDz0ZckiP1Zn7AWfJ
+         GiAlJyLBW5R5+H75OcxM4k3vIxt/Ye8DRkhU2H0sxBdIMTtk5qoyLQAVwaUGfYEusSj5
+         lQ1psD0Mq37ExO06FsH0o6nC5yQyiMjQhsHHN2rJOD6Y3CItywLlpdDRsJz3boi2DXZv
+         UxSBQahNA9MUbOi1LLtflZNW1gWsWJ7rLnvFK2L5Tc6CJgHJNSYrDYnw5Pgk9vUhgXte
+         3Ndg==
+X-Forwarded-Encrypted: i=1; AJvYcCVVZy3BtPrduvOJ9Sakk5rKxbTcydW9I3Jl+5iFH56YKXABb94fmSPM46pa6OabhPwwIBOe4DPmsger@vger.kernel.org, AJvYcCWlxfzRJ3Y6dqRlnT1hyEV2O6lP1I5cEcmQEy6fLA1ESXEZnTONROSKdgT5iCOejP2Mr8jfagFZxw5VWS6d@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIT8H+W6y9AwoPKKkvnOd8VWGUv5AT6r0N77iF9B02Y0UTOv9P
+	ENYtvXhHWYexFnS849YIC4+BdvfeA46v4Py1ql1RYrF6ANmctN6T
+X-Gm-Gg: ASbGncvReLObqABpph9PDSe7JDEKOMIXRwOdBOqVvkLqfdosWTql++GQ2oVm3jQ7XkB
+	W2wRiIG0ZNDnTfN+AewGlMaN0Q66HU7sCbuX8rF7b644wCvLQk3je5xZcZQcNvGgp5C5SygZLeD
+	qJFiEARX1HNpVPwPhEwtn56YwkCma50RsstJQob1NzTPk1T5ZF102q/gwtLrnxKNzEq0Z3BnJMg
+	FN9AizaUbAqcKC9cBYuz5GEpoPdTlOz9++ag/XC2iyLl5BlZaHE36A8ala0FsybRubDIDrN9kWu
+	oqCRlybpuMU4zI/bhemjnJ/GZitvYfpm2Hy8tBo2mYog/hD3EHMON0pYkQ/m2wPdc6PKLG5a6Wr
+	9QWE=
+X-Google-Smtp-Source: AGHT+IEIG3mjr93MsKdu6mTI7c0HzAfynRUUo2gBbYpI6a+TNHWHTrdGPuaGpbRxVWPG7gOzPGLOFA==
+X-Received: by 2002:a05:6000:178e:b0:397:8f09:5f6 with SMTP id ffacd0b85a97d-3a099ae96e3mr2270971f8f.47.1746188239357;
+        Fri, 02 May 2025 05:17:19 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099b0ffd5sm2001845f8f.70.2025.05.02.05.17.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 05:17:18 -0700 (PDT)
+Date: Fri, 2 May 2025 13:17:17 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Jakub Kicinski <kuba@kernel.org>,
+ Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Leo Yan
+ <leo.yan@arm.com>
+Subject: Re: [PATCH v2 4/5] math64: Silence a clang -Wshorten-64-to-32
+ warning
+Message-ID: <20250502131717.69af6fbe@pumpkin>
+In-Reply-To: <CAP-5=fVjAR0g=wN8sWetHoNWdoDVGNoKb8d8UdwxF_te=wmMLA@mail.gmail.com>
+References: <20250430171534.132774-1-irogers@google.com>
+	<20250430171534.132774-5-irogers@google.com>
+	<20250501210729.60558b33@pumpkin>
+	<CAP-5=fXrhsZYJwjJzqb-zMg+UoC-bKoYCjstq8yD9wHNCfbS5g@mail.gmail.com>
+	<20250501212659.7e642411@pumpkin>
+	<CAP-5=fVjAR0g=wN8sWetHoNWdoDVGNoKb8d8UdwxF_te=wmMLA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 30, 2025 at 11:07:35AM -0700, Dave Hansen wrote:
+On Thu, 1 May 2025 14:11:59 -0700
+Ian Rogers <irogers@google.com> wrote:
 
-> Both AMD and Intel have hardware to do it. ARM CPUs do it too, I think.
-> You can go buy the Intel hardware off the shelf today.
+....
+> Sorry I don't understand what you're saying. Java certainly has bugs
+> in this area which is why I've written checkers like:
+> https://errorprone.info/bugpattern/BadComparable
+> For code similar to:
+> ```
+> s32 compare(s64 a, s64 b) { return (s32)(a - b); }
+> ```
+> where the truncation is going to throw away the sign of the subtract
+> and is almost certainly a bug. This matches the bugs that are fixed in
+> this patch series for the perf code, in particular an issue on ARM
+> that Leo Yan originally provided the fix for:
+> https://lore.kernel.org/lkml/20250331172759.115604-1-leo.yan@arm.com/
 
-To be fair, the Intel RAR thing is pretty horrific :-( Definitely
-sub-par compared to the AMD and ARM things.
+That code is wrong with or without the (s32) cast.
+And the explicit cast will hide the compiler warning.
 
-Furthermore, the paper states it is a uarch feature for SPR with no
-guarantee future uarchs will get it (and to be fair, I'd prefer it if
-they didn't).
+If you want the compiler to find bugs you need to reduce the number
+of casts to an absolute minimum and disable/fix the compiler warning
+for false positives.
 
-Furthermore, I suspect it will actually be slower than IPIs for anything
-with more than 64 logical CPUs due to reduced parallelism.
+These type based (rather than value domain) warnings are all a PITA.
+
+Another example is the 'signed v unsigned compare' which bleats for:
+	int rval = read(... sizeof (foo));
+	if (rval < 0)
+		return -1;
+	if (rval != sizeof (foo))
+		// truncated
+Whereas a statically_true(rval >= 0) test will pass.
+
+	David
 
