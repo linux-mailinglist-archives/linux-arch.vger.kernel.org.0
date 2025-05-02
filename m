@@ -1,268 +1,160 @@
-Return-Path: <linux-arch+bounces-11793-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11794-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CACC6AA6F6C
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 12:21:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F5DAA7091
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 13:23:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F3CE3B55BF
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 10:20:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AF549C0289
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 11:23:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E693F242D68;
-	Fri,  2 May 2025 10:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEE0245031;
+	Fri,  2 May 2025 11:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="EePdy6mZ"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lmV94JNE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1C323E342
-	for <linux-arch@vger.kernel.org>; Fri,  2 May 2025 10:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C881E5B62;
+	Fri,  2 May 2025 11:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746181238; cv=none; b=ojHivUi/4V7b4PTRlcourWkazkvnjOc+Vt2bvG3OU8CQjHzIp3tk2cKCV3iMO98biASZF7EbeWpkoj87EB7kJE+85mXrQfFbIM6BeWyTN9Xhm4K54wWeF4Q4gDXdNTgm82CcuL3cMZlzgZG5RoGB+Gh3uEJ4GXAhLL+alNqWstI=
+	t=1746185014; cv=none; b=osDXjMz7z3TvR5RrTV/Pr9VN+i+4UsqNkekmmHrcX8UD7kONHuXPO59sxibhAp05FwEE9AkRCpGa3Oz1MqB7oMnm9SIYUUKehsyyOi6aFqsZLNuzxKIfnatunEPPGzT8pxsbi4w9Opvd/JQGZEPx0lIN3hmjD7f9NK9FWnFEKno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746181238; c=relaxed/simple;
-	bh=quzy+oiKmkH1XS0l8BQk76AhdQTzPi5yPvtAtts2b0c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DVTqLFuWUjKVcNGNaDceg2/xUAfHDgwDeIxO7Fwh/SiBH2t92vv6Vw+W8TZHwMKAk612fH9oBCWnqY/WPP+FcyGVOJAH+huEkR62yqhPYZrrqVffmfiP4esf/10AdWVxI/siA89LNp9xaK7hrIxvqbT6mggTBLVkUsJ5e8a+PQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=EePdy6mZ; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43cfba466b2so14161125e9.3
-        for <linux-arch@vger.kernel.org>; Fri, 02 May 2025 03:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1746181235; x=1746786035; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KEuFMWf+++nFaOCapqiFSZIUsmPtR0H6XhXwGHSkKg0=;
-        b=EePdy6mZKjV4SaoWSwREks0kfK5gQ5nXIFmT03La/tKgm8khaZcNcuBna9PmWSeTpm
-         /f4k8OXc/xWGPqI/Nlt7SL5vbluTWxs1LyDY8WFnYiTLC7YCORoEySHo2jMGc+AD3CA7
-         SQlDriVCPbDsTc0t9M51rK7vtZF6pf6y7cL4B1U0s+Rj/1DkYBLR7v5yoE6kMEWvKAtP
-         SkgvbebwP3bolE9oNGLJwT1T7B6JHKgPFEbM0y5h3jo4aSZl/MWhxn8nWaVCyz8ioF0D
-         MDrY7tAiKedPjwjwG+hmQPNz0Tpr8ghOkT21IJLQoI11yqVd3Kdk5ObtrJ+XAwHWqQCB
-         34+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746181235; x=1746786035;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KEuFMWf+++nFaOCapqiFSZIUsmPtR0H6XhXwGHSkKg0=;
-        b=UNVtkMz+eEApGmll+WTEXyu9aIpAQnebUYKX1c2WW7Mx3GM6sHEwzlnbNiLnGa9gf5
-         wvIE5cL23MilooBXlkN5qeFGCS+4RDj9pVMPsxwraU4tAdRc5cg8w4AYbxTcbvDNE5wU
-         R5HUX9XMv12kxiN88AM1u4mAhWZ3RD4eg/j/AhRfuQuDMSlVgtokir0BwJQT0/Qbx2iv
-         V7ceYj6evu/KElWiwt0s28FO+IggLH9bK2qKxBpfXOjNYbtvIG+vQ2lq5HZ8xt/PH/np
-         ZgH67t+LHjcyufreVp/OcKuFlPm9pBV/TBDwo7SnLKad2EVdcwQ5EhGj2LEwbkn6DvEN
-         IP9A==
-X-Gm-Message-State: AOJu0Yzj0oKkd0WaB/P31HRTOEuoj8VO172mWyqAx+rvQLSN4qmXW7Ge
-	1gETnQVa4b3GyAmbgVhKcyF+jgIPBZbmgN0ujyvvlGIiN9BHMpxNpsO10aeHmH0n2/QQ6dIobT0
-	B
-X-Gm-Gg: ASbGncvQ1RDGcQNyCDBpiSYh5c/jWtUO+KwNMjKFBAffX2VBsFkcOfnK4OI/kIfTziE
-	ReFYizNWfJBQaYC6IsZgQj+4XEFeYdS5RSpIgMAIWniGhyKNMlfoMl6kvnXu5Bw9azKHJgneKiZ
-	ohqTGH6TlBbNsLOZae3IDi6NytYCF4wlgAZWJ4ccaK6NWDL/XAC+ib/U7VoqWnnJiX/tGjTsqgF
-	RK0li96iTWpOHLihiQchl/ohcTGkIwBvP7wl1v/UjEx4CTzQc1OKSYVp/DRZXpvG1HKI27wdc7T
-	6meB1ezDkl06ijcPpg3ocota1l26QU+5qj4cxWv1jnWv32vM0a5/n/Mh4rlbHiwKkAYcQHdv2uY
-	tDTgk/jAykTnKIupF6fTjcy12Odk+M7PBrSfg
-X-Google-Smtp-Source: AGHT+IGn9fC3DpDvhs9DP+B0CN8coaybkrxuKY9DQr8oz0MG5WBeTGhKVHgO1SfA4CRoh5AC43jptQ==
-X-Received: by 2002:a05:600c:820d:b0:43c:fb95:c752 with SMTP id 5b1f17b1804b1-441bbe98af1mr21134315e9.3.1746181234906;
-        Fri, 02 May 2025 03:20:34 -0700 (PDT)
-Received: from [192.168.1.240] (0.0.6.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::600])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099b17017sm1742342f8f.92.2025.05.02.03.20.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 03:20:34 -0700 (PDT)
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Fri, 02 May 2025 11:20:07 +0100
-Subject: [PATCH bpf-next v2 3/3] libbpf: Use mmap to parse vmlinux BTF from
- sysfs
+	s=arc-20240116; t=1746185014; c=relaxed/simple;
+	bh=PRPW/uDt3qcKT5KOPbhmERJnNbucXaeqN2L1IjyyPX4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aUCWQpoSrcP0KEtS9ljATKEOt7WiXA5RQ2z+e0iHBPRJeKQCPi3tt0EeYalYNgp2ATSgIPh+L2QvHQlqOv9R+GpI/hsa+uZofrQvEZLA+bgRvMLfVVWYFA+fIWQ5+1a1mWqy87yKc5dwVNsHTfdkX6Kp7houkXPsPp4kxzVElJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lmV94JNE; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=PRPW/uDt3qcKT5KOPbhmERJnNbucXaeqN2L1IjyyPX4=; b=lmV94JNEzV4MsUJuxpPUrg3Bax
+	VPmVO1/zySgMAd5F2IJnFvPiwZNPECAQ1noECVKMioFjFmA+n5SOAzV+kGbk/f9S1iWtVP9rLg6cZ
+	hHF7SAR0m7IaJh5tCHy2qA/R/vkevPz7ZR3+xa+Zh5GSLdg0ezbI6iHsuifF9HE00+OjyODMdnQyb
+	JkPl44vhH6EmamOKaWacZeeUgT5U6RxA5F79Ex/83F13pJOquOWPbK7ely8gHy1uVeRQNWbA0aBQP
+	f+nYHty39Jk6K+NlHv/lPYoCn7B5BgUPqoEMb82IHPQShd8FJim54uJ17ucrfOJGKm432KMXzRw1R
+	RwhYSB9w==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uAoTJ-0000000FKnO-0XWf;
+	Fri, 02 May 2025 11:22:27 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 6C1A530057C; Fri,  2 May 2025 13:22:16 +0200 (CEST)
+Date: Fri, 2 May 2025 13:22:16 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+	kvm@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	rcu@vger.kernel.org, linux-hardening@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
+	Nicolas Saenz Julienne <nsaenz@amazon.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Rong Xu <xur@google.com>, Rafael Aquini <aquini@redhat.com>,
+	Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Benjamin Berg <benjamin.berg@intel.com>,
+	Vishal Annapurve <vannapurve@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	John Stultz <jstultz@google.com>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+Message-ID: <20250502112216.GZ4198@noisy.programming.kicks-ass.net>
+References: <20250429113242.998312-1-vschneid@redhat.com>
+ <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
+ <20250430132047.01d48647@gandalf.local.home>
+ <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250502-vmlinux-mmap-v2-3-95c271434519@isovalent.com>
-References: <20250502-vmlinux-mmap-v2-0-95c271434519@isovalent.com>
-In-Reply-To: <20250502-vmlinux-mmap-v2-0-95c271434519@isovalent.com>
-To: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Lorenz Bauer <lmb@isovalent.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
 
-Teach libbpf to use mmap when parsing vmlinux BTF from /sys. We don't
-apply this to fall-back paths on the regular file system because there
-is no way to ensure that modifications underlying the MAP_PRIVATE
-mapping are not visible to the process.
+On Wed, Apr 30, 2025 at 11:07:35AM -0700, Dave Hansen wrote:
 
-Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
----
- tools/lib/bpf/btf.c | 82 ++++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 71 insertions(+), 11 deletions(-)
+> Both AMD and Intel have hardware to do it. ARM CPUs do it too, I think.
+> You can go buy the Intel hardware off the shelf today.
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index b7513d4cce55b263310c341bc254df6364e829d9..7fec41a2dc617c9d388f9ab10d9850ef759c74d9 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -12,6 +12,7 @@
- #include <sys/utsname.h>
- #include <sys/param.h>
- #include <sys/stat.h>
-+#include <sys/mman.h>
- #include <linux/kernel.h>
- #include <linux/err.h>
- #include <linux/btf.h>
-@@ -120,6 +121,9 @@ struct btf {
- 	/* whether base_btf should be freed in btf_free for this instance */
- 	bool owns_base;
- 
-+	/* whether raw_data is a (read-only) mmap */
-+	bool raw_data_is_mmap;
-+
- 	/* BTF object FD, if loaded into kernel */
- 	int fd;
- 
-@@ -951,6 +955,17 @@ static bool btf_is_modifiable(const struct btf *btf)
- 	return (void *)btf->hdr != btf->raw_data;
- }
- 
-+static void btf_free_raw_data(struct btf *btf)
-+{
-+	if (btf->raw_data_is_mmap) {
-+		munmap(btf->raw_data, btf->raw_size);
-+		btf->raw_data_is_mmap = false;
-+	} else {
-+		free(btf->raw_data);
-+	}
-+	btf->raw_data = NULL;
-+}
-+
- void btf__free(struct btf *btf)
- {
- 	if (IS_ERR_OR_NULL(btf))
-@@ -970,7 +985,7 @@ void btf__free(struct btf *btf)
- 		free(btf->types_data);
- 		strset__free(btf->strs_set);
- 	}
--	free(btf->raw_data);
-+	btf_free_raw_data(btf);
- 	free(btf->raw_data_swapped);
- 	free(btf->type_offs);
- 	if (btf->owns_base)
-@@ -1030,7 +1045,7 @@ struct btf *btf__new_empty_split(struct btf *base_btf)
- 	return libbpf_ptr(btf_new_empty(base_btf));
- }
- 
--static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
-+static struct btf *btf_new_no_copy(void *data, __u32 size, struct btf *base_btf)
- {
- 	struct btf *btf;
- 	int err;
-@@ -1050,12 +1065,7 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
- 		btf->start_str_off = base_btf->hdr->str_len;
- 	}
- 
--	btf->raw_data = malloc(size);
--	if (!btf->raw_data) {
--		err = -ENOMEM;
--		goto done;
--	}
--	memcpy(btf->raw_data, data, size);
-+	btf->raw_data = data;
- 	btf->raw_size = size;
- 
- 	btf->hdr = btf->raw_data;
-@@ -1081,6 +1091,24 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
- 	return btf;
- }
- 
-+static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
-+{
-+	struct btf *btf;
-+	void *raw_data;
-+
-+	raw_data = malloc(size);
-+	if (!raw_data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	memcpy(raw_data, data, size);
-+
-+	btf = btf_new_no_copy(raw_data, size, base_btf);
-+	if (IS_ERR(btf))
-+		free(raw_data);
-+
-+	return btf;
-+}
-+
- struct btf *btf__new(const void *data, __u32 size)
- {
- 	return libbpf_ptr(btf_new(data, size, NULL));
-@@ -1659,8 +1687,7 @@ struct btf *btf__load_from_kernel_by_id(__u32 id)
- static void btf_invalidate_raw_data(struct btf *btf)
- {
- 	if (btf->raw_data) {
--		free(btf->raw_data);
--		btf->raw_data = NULL;
-+		btf_free_raw_data(btf);
- 	}
- 	if (btf->raw_data_swapped) {
- 		free(btf->raw_data_swapped);
-@@ -5290,7 +5317,40 @@ struct btf *btf__load_vmlinux_btf(void)
- 		pr_warn("kernel BTF is missing at '%s', was CONFIG_DEBUG_INFO_BTF enabled?\n",
- 			sysfs_btf_path);
- 	} else {
--		btf = btf__parse(sysfs_btf_path, NULL);
-+		struct stat st;
-+		void *data = NULL;
-+		int fd;
-+
-+		fd = open(sysfs_btf_path, O_RDONLY);
-+		if (fd < 0) {
-+			err = -errno;
-+			pr_warn("failed to open kernel BTF at '%s': %s\n",
-+				sysfs_btf_path, errstr(err));
-+			return libbpf_err_ptr(err);
-+		}
-+
-+		if (fstat(fd, &st) < 0) {
-+			err = -errno;
-+			pr_warn("failed to stat kernel BTF at '%s': %s\n",
-+				sysfs_btf_path, errstr(err));
-+			close(fd);
-+			return libbpf_err_ptr(err);
-+		}
-+
-+		data = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-+		close(fd);
-+
-+		if (data != MAP_FAILED) {
-+			btf = libbpf_ptr(btf_new_no_copy(data, st.st_size, NULL));
-+			if (!btf)
-+				munmap(data, st.st_size);
-+			else
-+				btf->raw_data_is_mmap = true;
-+		} else {
-+			pr_debug("reading kernel BTF via file-based fallback\n");
-+			btf = btf__parse(sysfs_btf_path, NULL);
-+		}
-+
- 		if (!btf) {
- 			err = -errno;
- 			pr_warn("failed to read kernel BTF from '%s': %s\n",
+To be fair, the Intel RAR thing is pretty horrific :-( Definitely
+sub-par compared to the AMD and ARM things.
 
--- 
-2.49.0
+Furthermore, the paper states it is a uarch feature for SPR with no
+guarantee future uarchs will get it (and to be fair, I'd prefer it if
+they didn't).
 
+Furthermore, I suspect it will actually be slower than IPIs for anything
+with more than 64 logical CPUs due to reduced parallelism.
 
