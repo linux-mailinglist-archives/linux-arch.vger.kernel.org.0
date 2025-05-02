@@ -1,189 +1,245 @@
-Return-Path: <linux-arch+bounces-11807-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11808-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CE90AA7862
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 19:14:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81FE3AA7887
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 19:17:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2E93189945A
-	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 17:14:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E13B14C8104
+	for <lists+linux-arch@lfdr.de>; Fri,  2 May 2025 17:17:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC3E257AE4;
-	Fri,  2 May 2025 17:14:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9630026AA8A;
+	Fri,  2 May 2025 17:15:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T5+d4s/P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OfPRW2Ty"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E5E1B4240
-	for <linux-arch@vger.kernel.org>; Fri,  2 May 2025 17:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889E826981A;
+	Fri,  2 May 2025 17:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746206049; cv=none; b=KeV4xYLrm7ONrO4BPr63p3f4uVH/vAHn9DnmQ5oQN2KjUXD8U+I+E1p6uAU13+l66UAN86l/nbhkLqUYBiV48a5eNI7BKzAC/tzK+K+XSkqAT0A4fkpasx/GgFkvmG0QvGcHsaxhy3DW5cNz/UZtjBJjK/tVzkUiYH1FtcNAczw=
+	t=1746206155; cv=none; b=AypKU73xcoRFPvx+caxUuyVWTXfl20pYflIuzJd7ckq1CNq1pH/uSAA2ErF+iXsAjYbf+1rUY6qnvz1b47uDVXz7eWaqU82U9Z21D890bKykXp+I7EWAd11culhTHwob0C09TT65qBIEKldkouJqfVf0uBi7Vf8G5du4ZcInsGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746206049; c=relaxed/simple;
-	bh=+tisnOclVQsYHBIjvjhwRd4abflWNX1BaIctjNGACVA=;
+	s=arc-20240116; t=1746206155; c=relaxed/simple;
+	bh=7oAJ1fr3d5y8tx00o9/V7vXmU30c4iDM4H6tfuWHMYU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gGwNlEQwe/d43kjn3j68A8kuG1B0EFe/yRth5YYvFN2UrpAoCwU2gNL6ok1lZ2obTpxco+4RZAkJY14Bgvist1YOH9e/1W0j1aOOEg8oaSsvCe9ij3+r66D0fVsD/Gtud0cRtVVaiinBOTbPqZkvyzO/N55AdujixO6hFgBzNdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T5+d4s/P; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3d44cb27ef4so3345ab.1
-        for <linux-arch@vger.kernel.org>; Fri, 02 May 2025 10:14:06 -0700 (PDT)
+	 To:Cc:Content-Type; b=kdTYqYjBg04U8EUdYdWA3sP7+mbekZXVsCvDIhCXTcTIgY725mv4EmChvW5cUx26CNjIKvKPh1X4QaCll1VGuY5YPuNTkSwuYU1Kg8vO9TOW3If6dXxl45QGnUfi49t8R7AQpf5rr2V+PhPcVLYwjSshobN8TaoGVrJFxQfCfRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OfPRW2Ty; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-39c1ef4ae3aso1342905f8f.1;
+        Fri, 02 May 2025 10:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746206046; x=1746810846; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746206152; x=1746810952; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yV5fuvy76SttlH7MdkhQWcs11FTnH359sbCYn+j7GwQ=;
-        b=T5+d4s/PSLG6uSFTrfuYmyT1obXWs+bhFtWGZfk5NKmpb+LP3ydyAP3r8yAGcTcNER
-         odF09y7VrqriGmV1ReQ8Js6/3ufgp9jtq6NVNmafkCwBF/+akhWn+uf0YKeqoXvFHgG7
-         VeK77siIxehyJobc6wj8EHuKyCsf4JmSFFzjVJ5j6/fz/Ja1vmJwddRDmcZ4bZaQyOpp
-         MJM6rIHc7oQv44bDRcWvg66NipNdP1Y8iIEtjWgfsTfZsaGfZOcxh2JqapdbO20ZMmSv
-         RB89QQZ9o5Jc4M41rQX/s5683XyPACKNqhs4zZNv6+n83kmC0TVjMTNhWaQ5F0E3ANQk
-         eiMA==
+        bh=BIXFmIK20RXAQ5Up1vrTlXd9d3r7rt4iqcjaj17VsmI=;
+        b=OfPRW2TyFeBLbntD7HET5kqJ8RQrYQ0vwLYhDSst1iVqxxSKYxyaEDZtitS04qXu3S
+         WmiFN+R3S50EFS6P4sDHXtMwvlsZC6DcHuEjicwdmwiNDqK5XkudlVBDX3PhtkXQW8Qc
+         9EVabltMqv4M57gtPxd/KMRIjmtE8XmM122/MwpCcg9YxLfkut6QMiezLzrXCMVz9RIo
+         NbG9xap+YlzafyhCHS8UG2BI9HtXgV+n5qFtXWoU65PbYaO0S1pnyj7tmT4NmB2Ctn4U
+         bNlzc/uCajTK6VuIyPuYoclITrh93oULEXtq+YI+C7SJAUhYPQ0c1ZUoXIF+P08xVjT7
+         lZig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746206046; x=1746810846;
+        d=1e100.net; s=20230601; t=1746206152; x=1746810952;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yV5fuvy76SttlH7MdkhQWcs11FTnH359sbCYn+j7GwQ=;
-        b=En5hb7V2wlpojXFXLH5K/Kd+FyVFZ1C3sJhp2Be/ipY25FgZcpxgIdVDyYoieB8xyN
-         KyZic1nIpCQ0ou7Ku+gxkrjACxKGf3bhAr2KR9q+RsHXZoFPK1SiJs5NIPmAYCPfN48W
-         gUY6HnQX9nbOw3lqukkmkmffaHmJCDoQqPxsIQuXV6dB92GiW4xzXfPYh74YFyKpm2S+
-         r2drGzsCoZQmhWs/W2rgIQtK16iMoFgJrqANrAqBmrN7sISExykTw3dXXkmqY+uQcbg9
-         SXs3l6ILPXCU2Gxcw5LmPzBmfAK/spWI08GBRBqIxE6Yc+g4xrEeHvtfxR7NQh+vlONh
-         Z6tA==
-X-Forwarded-Encrypted: i=1; AJvYcCUmRWJ9eYFNsn36F6awRLROH5vNp8Ob7ySkkS2EbgH2guZCB2VsuA/RGEGH7673mkB1gUZx31b1i0dE@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywy1VS23u7vrw2rQJ6ktfKwPQj3hI81v3b0bZe8AnJ7dvvf0vz4
-	RKxwqfyUBCm28fYTjL9A/CNjD3fy6SlKRNKICS3BxpvmRrZrRu2W2ZkBYXGGon8zIKFz6cuAXN3
-	BQP8o2xM95kul2wH30LlGBby/FPVWfvSg3cEL
-X-Gm-Gg: ASbGnct2zJrY+bKsAusF50irt83ps1DDPq9hdIS1VsGSn+sArgHRbHVz7aIMtE2+531
-	rMmbVzaZVmFVpBiR5lNAOu1bWFy7uAfNmi2t+upkColruQ1AcG/8b9bEpqvL6INebps1VMIRyFf
-	R7uf6nsdsr9nWCBfIfIv/9Jr4=
-X-Google-Smtp-Source: AGHT+IEub8QLzlaj65mxSGIeiFRXLJKydTOlpAm79ouvwbr5ORL/zUo+cncmiiwQVmkVHQM5sAir9AS3HVmLnAQCYEc=
-X-Received: by 2002:a05:6e02:18c5:b0:3d3:d806:c65a with SMTP id
- e9e14a558f8ab-3d96f2f5315mr7883055ab.28.1746206045626; Fri, 02 May 2025
- 10:14:05 -0700 (PDT)
+        bh=BIXFmIK20RXAQ5Up1vrTlXd9d3r7rt4iqcjaj17VsmI=;
+        b=bZo9fBY8qBNpMM97OoVSpMWwwwaGoY1RxNviejjb5XjFwwlGG+EjJ1wrfe7bPr07za
+         6mSd61+IYZPF7Kzq5OSiaGrJ7aqetI2TDir78sN2KfOPOR5muRyYsfZWg8xrJ+cgi03A
+         +8tqkN6iQjJf3PL49QIgW0Pg33rp6AVzO8wNPqLJ+/TlBVumsDctxkm91pwZdb6sG1KM
+         9jnIPWe+eepMXslEE7OOC7UOoOCOKEIr1loyxC6h2u0bEBCAe1oItU5dMyB40p3+EKH8
+         8Za397Gj7xISIROl0PCAXf2hJvayzwUxsL/F4QK0TfoPNnSRlkwejZtNCiXIF8L8/oEp
+         t1Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4QspijuExdZQNfOI94b/QQBpBvYjNzMF5w8GjQns3f3+LF5iPViqmGQcJeFfTWXvJDnCZnGPP85XNciTmgMp5@vger.kernel.org, AJvYcCVHVBSEIZoIwlvZQ9gf6MkPdd4nBwS5Cac6xB/sqF+SkqtHFEdTO+pupQgpUZaJ9bCw/d8=@vger.kernel.org, AJvYcCWWNMYIlexqbVFIrSksxrdBkXAhcLkipAgkXTAAkprtB+MscAk8HoM5Z6u1r9Nv/eCrPyWhV9Rc/+g2HBhG@vger.kernel.org, AJvYcCXVNX5iOYPh03CXrtQUzEKsVtb1QhIZOMADFOHnP9nQUUi5+UOs9BewPmBQIzcouUlJmJy7VxdK0UWTQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr2+kDfnRQo42BCshKGV/QnV2c+QZSQFoYb7VttkGs9jfdTQiF
+	K2BQYtKpG3mc5f0IOWtBNpqdPJfLG223XtqxNLtM/q9fnCvD5tjiGqNmWDBnFwMe4sFZkbDel9d
+	zpnfmQl+dg4AOXYbL2vD/VA6RYv0=
+X-Gm-Gg: ASbGncsQRmtjfx+V0p9Y+eLYuTaLIDnGzYOJ1QdABX6EyCL5qUjMMezgqqI0kqeOYBq
+	iZh2I6lS6QB5basrO7IQ52pB1eyuSTElU6qv4d5vD46FjcPiLMMuXLNRNq1xWzmWcp+bodpKNH4
+	KmuG+e13iB6x/O0Umoa9A6Ku59vGakdQTdpf8tFQ==
+X-Google-Smtp-Source: AGHT+IHFaDoUkiLv6qrDRiLHOymcCa1QAfKNS9cOooOeYdmz0087AG0msj1NuyGZYt79ubuFELZFUB0DHOcV0IxMdew=
+X-Received: by 2002:a05:6000:4285:b0:38d:ae1e:2f3c with SMTP id
+ ffacd0b85a97d-3a098469fb7mr3045104f8f.25.1746206151582; Fri, 02 May 2025
+ 10:15:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250430171534.132774-1-irogers@google.com> <20250430171534.132774-3-irogers@google.com>
- <aBTs6yvKlCYYgU2O@yury> <CAP-5=fXqLh7RdUok5oqVwyGOWCH3fktmVeECdi4ENBWnEHeJYQ@mail.gmail.com>
- <aBT5C81se-z-eQMe@yury>
-In-Reply-To: <aBT5C81se-z-eQMe@yury>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 2 May 2025 10:13:54 -0700
-X-Gm-Features: ATxdqUF9BCsiSEkGglaiG9Y2e76mPwgHhFaqnzzqxZ6ItKtUg0jsKsIok8y6QgQ
-Message-ID: <CAP-5=fUx2+NaoHiNEqQzNPc7ODKaAM0e2fcf=O9XBC_r2HuPEw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] bitmap: Silence a clang -Wshorten-64-to-32 warning
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jakub Kicinski <kuba@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Leo Yan <leo.yan@arm.com>
+References: <20250502-vmlinux-mmap-v2-0-95c271434519@isovalent.com> <20250502-vmlinux-mmap-v2-1-95c271434519@isovalent.com>
+In-Reply-To: <20250502-vmlinux-mmap-v2-1-95c271434519@isovalent.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 2 May 2025 10:15:40 -0700
+X-Gm-Features: ATxdqUHv70xDkjA1O8GM-6_W2bf266rBR3mODzmR7hfuUKQjRknKIt1rPiesetQ
+Message-ID: <CAADnVQ+dMwAFPO-ASojjYPxODpCKf_9FCLjUvn2HeHigL53JdQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] btf: allow mmap of vmlinux btf
+To: Lorenz Bauer <lmb@isovalent.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-arch <linux-arch@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 2, 2025 at 9:55=E2=80=AFAM Yury Norov <yury.norov@gmail.com> wr=
-ote:
+On Fri, May 2, 2025 at 3:20=E2=80=AFAM Lorenz Bauer <lmb@isovalent.com> wro=
+te:
 >
-> On Fri, May 02, 2025 at 09:43:12AM -0700, Ian Rogers wrote:
-> > On Fri, May 2, 2025 at 9:03=E2=80=AFAM Yury Norov <yury.norov@gmail.com=
-> wrote:
-> > >
-> > > Hi Ian,
-> > >
-> > > On Wed, Apr 30, 2025 at 10:15:31AM -0700, Ian Rogers wrote:
-> > > > The clang warning -Wshorten-64-to-32 can be useful to catch
-> > > > inadvertent truncation. In some instances this truncation can lead =
-to
-> > > > changing the sign of a result, for example, truncation to return an
-> > > > int to fit a sort routine. Silence the warning by making the implic=
-it
-> > > > truncation explicit. This isn't to say the code is currently incorr=
-ect
-> > > > but without silencing the warning it is hard to spot the erroneous
-> > > > cases.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  include/linux/bitmap.h | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-> > > > index 595217b7a6e7..4395e0a618f4 100644
-> > > > --- a/include/linux/bitmap.h
-> > > > +++ b/include/linux/bitmap.h
-> > > > @@ -442,7 +442,7 @@ static __always_inline
-> > > >  unsigned int bitmap_weight(const unsigned long *src, unsigned int =
-nbits)
-> > > >  {
-> > > >       if (small_const_nbits(nbits))
-> > > > -             return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbit=
-s));
-> > > > +             return (int)hweight_long(*src & BITMAP_LAST_WORD_MASK=
-(nbits));
-> > >
-> > > This should return unsigned int, I guess?
-> >
-> > Hi Yury, I don't disagree. The issue there is that this could break
-> > printf flags, etc. reliant on the return type. I've tried to keep the
-> > patch minimal in this regard.
+> User space needs access to kernel BTF for many modern features of BPF.
+> Right now each process needs to read the BTF blob either in pieces or
+> as a whole. Allow mmaping the sysfs file so that processes can directly
+> access the memory allocated for it in the kernel.
 >
-> Not sure I understand...
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h |  3 ++-
+>  kernel/bpf/sysfs_btf.c            | 36 +++++++++++++++++++++++++++++++++=
++--
+>  2 files changed, 36 insertions(+), 3 deletions(-)
 >
-> I mean just
->         return (unsigned int)hweight_long(...);
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
+nux.lds.h
+> index 58a635a6d5bdf0c53c267c2a3d21a5ed8678ce73..1750390735fac7637cc4d2fa0=
+5f96cb2a36aa448 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -667,10 +667,11 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PRO=
+PELLER_CLANG)
+>   */
+>  #ifdef CONFIG_DEBUG_INFO_BTF
+>  #define BTF                                                            \
+> +       . =3D ALIGN(PAGE_SIZE);                                          =
+ \
+>         .BTF : AT(ADDR(.BTF) - LOAD_OFFSET) {                           \
+>                 BOUNDED_SECTION_BY(.BTF, _BTF)                          \
+>         }                                                               \
+> -       . =3D ALIGN(4);                                                  =
+ \
+> +       . =3D ALIGN(PAGE_SIZE);                                          =
+ \
+>         .BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {                   \
+>                 *(.BTF_ids)                                             \
+>         }
+> diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
+> index 81d6cf90584a7157929c50f62a5c6862e7a3d081..f4b59b1c2e5b11ffffa80662a=
+d39334c730019ee 100644
+> --- a/kernel/bpf/sysfs_btf.c
+> +++ b/kernel/bpf/sysfs_btf.c
+> @@ -7,18 +7,50 @@
+>  #include <linux/kobject.h>
+>  #include <linux/init.h>
+>  #include <linux/sysfs.h>
+> +#include <linux/mm.h>
+> +#include <linux/io.h>
 >
-> because the bitmap_weight return type is unsigned int. Do I miss
-> something?
+>  /* See scripts/link-vmlinux.sh, gen_btf() func for details */
+>  extern char __start_BTF[];
+>  extern char __stop_BTF[];
+>
+> +struct kobject *btf_kobj;
+> +
+> +static int btf_vmlinux_mmap(struct file *filp, struct kobject *kobj,
+> +                           const struct bin_attribute *attr,
+> +                           struct vm_area_struct *vma)
+> +{
+> +       phys_addr_t start =3D virt_to_phys(__start_BTF);
+> +       size_t btf_size =3D __stop_BTF - __start_BTF;
+> +       size_t vm_size =3D vma->vm_end - vma->vm_start;
+> +       unsigned long pfn =3D start >> PAGE_SHIFT;
+> +       unsigned long pages =3D PAGE_ALIGN(btf_size) >> PAGE_SHIFT;
+> +
+> +       if (kobj !=3D btf_kobj)
+> +               return -EINVAL;
+> +
+> +       if (vma->vm_pgoff)
+> +               return -EINVAL;
+> +
+> +       if (vma->vm_flags & (VM_WRITE|VM_EXEC|VM_MAYSHARE))
+> +               return -EACCES;
+> +
+> +       if (pfn + pages < pfn)
+> +               return -EINVAL;
+> +
+> +       if (vm_size >> PAGE_SHIFT > pages)
+> +               return -EINVAL;
+> +
+> +       vm_flags_mod(vma, VM_DONTDUMP, VM_MAYEXEC|VM_MAYWRITE);
+> +       return remap_pfn_range(vma, vma->vm_start, pfn, vm_size, vma->vm_=
+page_prot);
 
-Oh sorry, my misunderstanding.
+remap_pfn_range() should be avoided.
+See big comment in kernel/events/core.c in map_range().
 
-> > > Also, most of the functions you touch here have their copies in tools=
-.
-> > > Can you please keep them synchronized?
-> >
-> > Yes, I do most of my work on the perf tool in the tools directory and
-> > these patches come from adding -Wshorten-64-to-32 there due to a bug
-> > found in ARM code that -Wshorten-64-to-32 would have caught:
-> > https://lore.kernel.org/lkml/20250331172759.115604-1-leo.yan@arm.com/
-> > The most recent patch series for tools is:
-> > https://lore.kernel.org/linux-perf-users/20250430175036.184610-1-iroger=
-s@google.com/
-> > However, I wanted to get the kernel versions of these headers agreed
-> > before syncing them into the tools directory.
->
-> Yes, I'm in CC for that series, but I didn't find the changes for
-> bitmap_weight(), fls64() and other functions you touch in this series.
-> Anyways, it would be logical to sync tools with the mother kernel in
-> the same series.
+The following seems to work:
+diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
+index f4b59b1c2e5b..7d0fd28070d8 100644
+--- a/kernel/bpf/sysfs_btf.c
++++ b/kernel/bpf/sysfs_btf.c
+@@ -20,13 +20,13 @@ static int btf_vmlinux_mmap(struct file *filp,
+struct kobject *kobj,
+                            const struct bin_attribute *attr,
+                            struct vm_area_struct *vma)
+ {
+-       phys_addr_t start =3D virt_to_phys(__start_BTF);
++       unsigned long addr =3D (unsigned long)__start_BTF;
+        size_t btf_size =3D __stop_BTF - __start_BTF;
+        size_t vm_size =3D vma->vm_end - vma->vm_start;
+-       unsigned long pfn =3D start >> PAGE_SHIFT;
+        unsigned long pages =3D PAGE_ALIGN(btf_size) >> PAGE_SHIFT;
++       int i, err =3D 0;
 
-Ok, I'll add it. Fwiw, I'm not particularly fond of syncing the files
-as it's not clear how to do it and keep the attribution/changes clear.
-I've patches to do things like make the tools/include more hermetic,
-but they've died a death on LKML:
-https://lore.kernel.org/lkml/20201015223119.1712121-1-irogers@google.com/
-Tbh, I want to completely change how tools/include works as perf and
-other things casually use -I into the tools/include and
-tools/include/uapi directories meaning strange things like the types.h
-in these things is usually the linux/types.h rather than
-uapi/linux/types.h. Amongst other things, the licenses on these files
-are not the same. I think we should be building the
-tools/include/linux and associated tools/lib files as if they were a
-library and installing their headers as is done for libbpf, libsubcmd,
-etc. The -I would then reflect the install_headers output path. I'm
-less clear on the value of doing this for uapi.
+-       if (kobj !=3D btf_kobj)
++       if (kobj !=3D btf_kobj || !pages)
+                return -EINVAL;
 
-Thanks,
-Ian
+        if (vma->vm_pgoff)
+@@ -35,14 +35,17 @@ static int btf_vmlinux_mmap(struct file *filp,
+struct kobject *kobj,
+        if (vma->vm_flags & (VM_WRITE|VM_EXEC|VM_MAYSHARE))
+                return -EACCES;
+
+-       if (pfn + pages < pfn)
+-               return -EINVAL;
+-
+        if (vm_size >> PAGE_SHIFT > pages)
+                return -EINVAL;
+
+        vm_flags_mod(vma, VM_DONTDUMP, VM_MAYEXEC|VM_MAYWRITE);
+-       return remap_pfn_range(vma, vma->vm_start, pfn, vm_size,
+vma->vm_page_prot);
++
++       for (i =3D 0; i < pages && !err; i++, addr +=3D PAGE_SIZE)
++               err =3D vm_insert_page(vma, vma->vm_start + i * PAGE_SIZE,
++                                    virt_to_page(addr));
++       if (err)
++               zap_page_range_single(vma, vma->vm_start, pages *
+PAGE_SIZE, NULL);
++       return err;
+ }
+
+
+Great that you added:
+        /* Check padding is zeroed */
+        for (int i =3D 0; i < trailing; i++) {
+                if (((__u8 *)raw_data)[btf_size + i] !=3D 0) {
+                        PRINT_FAIL("tail of BTF is not zero at page
+offset %d\n", i);
+                        goto cleanup;
+                }
+        }
+
+but this part is puzzling:
+        trailing =3D page_size - (btf_size % page_size) % page_size;
 
