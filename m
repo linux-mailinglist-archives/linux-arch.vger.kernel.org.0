@@ -1,219 +1,146 @@
-Return-Path: <linux-arch+bounces-11843-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11844-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 732FDAA890B
-	for <lists+linux-arch@lfdr.de>; Sun,  4 May 2025 20:54:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DAB6AA9064
+	for <lists+linux-arch@lfdr.de>; Mon,  5 May 2025 11:57:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B66E43B19F1
-	for <lists+linux-arch@lfdr.de>; Sun,  4 May 2025 18:53:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CC273B3C4F
+	for <lists+linux-arch@lfdr.de>; Mon,  5 May 2025 09:57:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DCC72475CE;
-	Sun,  4 May 2025 18:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162421DF254;
+	Mon,  5 May 2025 09:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="QD8Ek0px"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rSXq/GKo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF20815C158;
-	Sun,  4 May 2025 18:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E793EAE7;
+	Mon,  5 May 2025 09:57:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746384840; cv=none; b=V7IlzrljQ0XbupJppLFuzAdTLsWGfTLxtbZxOlRhvMMBAfQHBZCcIoXFFxdxkgWZe5tqBURpo5M4tyz20SHmbSaOrBdyBwqP9Xh/LmIfE9kw6bsGnPLVNZvnEDITrYrAswRw+o6aZRRAb1EMFgLhUD5hDEF2WAGbkasKT8JXH+Y=
+	t=1746439035; cv=none; b=IMm3Ll4lsmhNWsvWVmKWvFJ9Uk667MT4stxv1CjtW8Ab4RN4e3CNGzm3JqHqT8rlcRuI4krCce6bLUb+qyx4UHoOmVO79XWqDLGMfMxlnivKulKmqnWk41iKEliQPFDJ5r9COvzH2hWIWpWjNd84AnDY4Rb0ApQEUd/27EPjx74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746384840; c=relaxed/simple;
-	bh=2hIWaNmlaC37OtaVC5SI6mLrurBqLWEYrAaIZ5e7Zlw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SFA0QeZUguL7akGxEUoMjOdi44ORp4Hd6TwbGA3f442gr6oSKjOAc9rjlz2pn5uVECXWUM0LEcz/NAB1P0+gt7N9qtJtpkf3FHIRK16UMpBDSUG3Gv37mhAuL/MwGRBkySoGJ5eczh8uDbhcM2ph7r/7rlyEN+KYkdo3b1XB0ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=QD8Ek0px; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1746384833; x=1746989633; i=deller@gmx.de;
-	bh=lkhJexVslb7DfYZh51jAM1kkx3NkgOI6Ka37f26gAuc=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=QD8Ek0pxTNMJBJB+bR/q0muYt6TaHqhYH6JxOLdqco0X9U5GVg8EljchhQq/Y3j1
-	 yxrJcE9jOTqHLLWaUlovhy0tJ93RufhEhQBJlI1CTvgL3J9fftM4f0mxLn1ukpxG0
-	 65mD+tyhGOjvLhrEJi+XeOj2JJY0lbPaW2O3Mk4+e0lr/BEs3Y6u4v6HnEzxLHmxj
-	 Zd7OW+bCMZ9masXbiXn0FhTBzGgqaAibggjTh2iCKTdc6lvOjSczY0YlQnTqjYoYg
-	 /amDt2srMF2jN1JDnAN5QZNqWT3r8GiXy4LMDTg4Z9+t7SV41wV5lBX8B7wj+czas
-	 b3f52SpuqnX6DOZn/g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.173] ([109.250.63.181]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEUz4-1uHelX2nhS-006dqA; Sun, 04
- May 2025 20:53:53 +0200
-Message-ID: <4bf2981f-fbcd-46ff-8d35-9772b35263f3@gmx.de>
-Date: Sun, 4 May 2025 20:53:50 +0200
+	s=arc-20240116; t=1746439035; c=relaxed/simple;
+	bh=DdUUTkfnlA9fK+AY7ESBEJWr8GgX2XsTVOxe0gHjLFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bni5rZoUSa7tFjJcbVho9H6VjxNaHnp5onVjsW4EdAG839Kfgf2r0py2xR7SEu2y87+1C1L95tnccpp57MXAhEhBzuCXgRFyf/1jUiV/YTzTIiE0gMAbX3dsi/ZqSsHmxjASKS0y+ADy/CaDNhAGYP20oZybWPLW9dBv2L1K7Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rSXq/GKo; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 544L4Asp030724;
+	Mon, 5 May 2025 09:56:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=LhUGs6EEJ+/H8XoxFLa+sktR1zW0IF
+	WrMGyaiWI3uTk=; b=rSXq/GKoEvm8sjQA6bU+/dc88eodbGbZLyvF6AgQZiLo2S
+	WjYYCeP6GftDPgY2HF7yzJQ0soHbyonEaeaq0vCbvFQO27xFjCGQcwD20UvcQd8J
+	y7FYHmS5Etq8GRGK8567LQV2KvqmLWXE58p746hWMb37aoju6eS/msyOQAqioFwi
+	JNa5xxXgVSamEUyT8Ppr+1SUJWVXIrKcImFyV1ndvHyxVPAjhEvzarbQU+/EPnD+
+	x1sdwGR1biLXggbkXtamzJoKccuWA3lGV0++0oaIO2zXYLyBtV9sOe93euKLL4DC
+	ssebMectqwwdqBS3FABjSD26ee4qONHgpaGdNB9g==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46eftkjaxf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 May 2025 09:56:38 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 5459ou9E002673;
+	Mon, 5 May 2025 09:56:37 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46eftkjaxb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 May 2025 09:56:37 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54579DSq025969;
+	Mon, 5 May 2025 09:56:36 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46dwuynsg6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 05 May 2025 09:56:36 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5459uWsh59113944
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 5 May 2025 09:56:32 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2C39520043;
+	Mon,  5 May 2025 09:56:32 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id F009B20040;
+	Mon,  5 May 2025 09:56:30 +0000 (GMT)
+Received: from osiris (unknown [9.111.37.115])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon,  5 May 2025 09:56:30 +0000 (GMT)
+Date: Mon, 5 May 2025 11:56:29 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Lyude Paul <lyude@redhat.com>
+Cc: rust-for-linux@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Juergen Christ <jchrist@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:S390 ARCHITECTURE" <linux-s390@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v9 2/9] preempt: Introduce __preempt_count_{sub,
+ add}_return()
+Message-ID: <20250505095629.13658Aea-hca@linux.ibm.com>
+References: <20250227221924.265259-1-lyude@redhat.com>
+ <20250227221924.265259-3-lyude@redhat.com>
+ <20250228091509.8985B18-hca@linux.ibm.com>
+ <1491bedb15db7317d2af77345b2946c2529c70b1.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 25/41] parisc: Replace __ASSEMBLY__ with __ASSEMBLER__ in
- non-uapi headers
-To: Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- linux-parisc@vger.kernel.org
-References: <20250314071013.1575167-1-thuth@redhat.com>
- <20250314071013.1575167-26-thuth@redhat.com>
-Content-Language: en-US
-From: Helge Deller <deller@gmx.de>
-Autocrypt: addr=deller@gmx.de; keydata=
- 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
-In-Reply-To: <20250314071013.1575167-26-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:bdhbJqautSqLHbu+aJesTRxuyglGCjOnnMraEDXKiq+OLWfM0Ps
- 6D3nu4fcOufJGmNOOrUXWKFV9Ky97fYpcr6QNdChkVTnH+qTaAlMmaA2mc2GsrBXvwEEkoT
- g72HExB/10GS7HX78MEzwezeowN8pbGQLpflQDj/UOij2xvybCmkYTABRjjueSZw2q7nums
- oyS62+TayFbdWCjKVATKQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:36oS2efrMdk=;v8Yt0Rg23Ex8f29IaZn/0gkZlj5
- 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
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1491bedb15db7317d2af77345b2946c2529c70b1.camel@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA1MDA5MSBTYWx0ZWRfXwwP0h4V48zhW 0AVSEswbTvJIy33/TC7mPjmelx5mY/fBKGqOfZeO62vdclxmwgmEzdZ23P6nHJ79SHfb1/Cc8bM P5zZ/+4RgCWhqwoC0lFvAr4xBtyqTHVFIdavnZSF6vJ+Q+Ko+gZnR70DWEV+OnZUvab9wR1aU6l
+ /+T81fMYkazI5rIDrqnJwPRQQnPNbzT1rmL80QY1Y1gz7LWJfH/pD0WPURTfWAkA0XlhL6E2CDO e/Kug34Y7PRy9TbQV4W94TPYiVsFucZ+Xp8lFLWq73iK1sSNcSTFQjkPhM/WU2JoGLyh7aTkfz3 7oupbUF3uvbw8G5DwwczPeylex+rlypqmpZ2bTkyxxiq5CZIscj089xXeELVEjflCR3711/I7Xj
+ lB26F3+9oMDm+Jk3IU7C2kqArGZynSBmWL7vYs3vjcHt6f9oF4diQUrRNzZ5XBB07CGI5XEn
+X-Proofpoint-GUID: VP6z2O9dsYmZNNJdubnfxfxKgcPntrt1
+X-Authority-Analysis: v=2.4 cv=Q7vS452a c=1 sm=1 tr=0 ts=68188b56 cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=kj9zAlcOel0A:10 a=dt9VzEwgFbYA:10 a=1J5S7fVpQaFMGjp2_GYA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-ORIG-GUID: QgC67dW-fUJDkaoN9Kch0MBUP2vTEdIS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-05_04,2025-04-30_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 spamscore=0 impostorscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=833 clxscore=1015 adultscore=0
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505050091
 
-On 3/14/25 08:09, Thomas Huth wrote:
-> While the GCC and Clang compilers already define __ASSEMBLER__
-> automatically when compiling assembly code, __ASSEMBLY__ is a
-> macro that only gets defined by the Makefiles in the kernel.
-> This can be very confusing when switching between userspace
-> and kernelspace coding, or when dealing with uapi headers that
-> rather should use __ASSEMBLER__ instead. So let's standardize on
-> the __ASSEMBLER__ macro that is provided by the compilers now.
->=20
-> This is mostly a completely mechanical patch (done with a simple
-> "sed -i" statement), except for some manual tweaks in the files
-> arch/parisc/include/asm/smp.h, arch/parisc/include/asm/signal.h,
-> arch/parisc/include/asm/thread_info.h and arch/parisc/include/asm/vdso.h
-> that had the macro spelled in a wrong way.
->=20
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-parisc@vger.kernel.org
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->   arch/parisc/include/asm/alternative.h    | 4 ++--
->   arch/parisc/include/asm/assembly.h       | 4 ++--
->   arch/parisc/include/asm/barrier.h        | 4 ++--
->   arch/parisc/include/asm/cache.h          | 4 ++--
->   arch/parisc/include/asm/current.h        | 4 ++--
->   arch/parisc/include/asm/dwarf.h          | 4 ++--
->   arch/parisc/include/asm/fixmap.h         | 4 ++--
->   arch/parisc/include/asm/ftrace.h         | 4 ++--
->   arch/parisc/include/asm/jump_label.h     | 4 ++--
->   arch/parisc/include/asm/kexec.h          | 4 ++--
->   arch/parisc/include/asm/kgdb.h           | 2 +-
->   arch/parisc/include/asm/linkage.h        | 4 ++--
->   arch/parisc/include/asm/page.h           | 6 +++---
->   arch/parisc/include/asm/pdc.h            | 4 ++--
->   arch/parisc/include/asm/pdcpat.h         | 4 ++--
->   arch/parisc/include/asm/pgtable.h        | 8 ++++----
->   arch/parisc/include/asm/prefetch.h       | 4 ++--
->   arch/parisc/include/asm/processor.h      | 8 ++++----
->   arch/parisc/include/asm/psw.h            | 4 ++--
->   arch/parisc/include/asm/signal.h         | 4 ++--
->   arch/parisc/include/asm/smp.h            | 4 ++--
->   arch/parisc/include/asm/spinlock_types.h | 4 ++--
->   arch/parisc/include/asm/thread_info.h    | 4 ++--
->   arch/parisc/include/asm/traps.h          | 2 +-
->   arch/parisc/include/asm/unistd.h         | 4 ++--
->   arch/parisc/include/asm/vdso.h           | 4 ++--
->   26 files changed, 55 insertions(+), 55 deletions(-)
+On Wed, Apr 30, 2025 at 05:38:02PM -0400, Lyude Paul wrote:
+> On Fri, 2025-02-28 at 10:15 +0100, Heiko Carstens wrote:
+> > 
+> > Well.. at least it should not, but the way it is currently implemented it
+> > indeed does sometimes depending on config options - there is room for
+> > improvement. That's my fault - going to address that.
+> 
+> BTW - was this ever fixed? Going through and applying changes to the spinlock
+> series to get it ready for sending out again and I don't know if I should
+> leave this code as-is or not here.
 
-applied to the parisc git tree.
+Well, this fix was that the atomic primitives, like used in your code, would
+always fail to compile. That was address with commit 08d95a12cd28
+("s390/atomic_ops: Let __atomic_add_const() variants always return void").
 
-Thanks!
-Helge
+So yes, you need to change your code like I proposed.
 
