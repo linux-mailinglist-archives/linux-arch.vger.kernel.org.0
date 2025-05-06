@@ -1,53 +1,53 @@
-Return-Path: <linux-arch+bounces-11860-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11861-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DEC9AAC619
-	for <lists+linux-arch@lfdr.de>; Tue,  6 May 2025 15:31:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4C4DAAC61E
+	for <lists+linux-arch@lfdr.de>; Tue,  6 May 2025 15:31:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B566189E212
-	for <lists+linux-arch@lfdr.de>; Tue,  6 May 2025 13:29:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B83557BAB98
+	for <lists+linux-arch@lfdr.de>; Tue,  6 May 2025 13:29:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B34628003C;
-	Tue,  6 May 2025 13:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A719A280A5F;
+	Tue,  6 May 2025 13:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="XDBUIPng"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="kudIcstS"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE63279325;
-	Tue,  6 May 2025 13:21:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96044280A4C;
+	Tue,  6 May 2025 13:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746537714; cv=none; b=n2OlDGlUTeq64dF3MJOnbPla7Lnr0Vqbw2TcAJPcMJ3g5tGRPFywQFPjIJ+/Rk9C1+rnVEzSyHCAWFR+G9jt5T76vldXamTWH0H9U621k63FXOiK75FVkj3G5bv9NUqdqmQ35Qu9G1jL9TiVMyMMS/IBUizWx9uND7v6rFo9dYk=
+	t=1746537872; cv=none; b=hFq6SvA9mNXXDybalffJKmPN2iPcYd5f4wbDb877husqDFcNfyZv3j2ZG1zPdJ1vsUcb5dmRDYuUEesnRfr/hu5ky2s9lYfoAv1jYR7K0s9dYW5wS6x9mHJjh4Hh0rX+62aDQgB3mA+JaQBRf9h58cKRwXoD0AlML38rOVp7ovY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746537714; c=relaxed/simple;
-	bh=1sYQKHiNE9CT1/Q3y1wTdvnC/t57kpOOwXfbb4X2XuI=;
+	s=arc-20240116; t=1746537872; c=relaxed/simple;
+	bh=F7zOBD4JAh8eNkUq1aOu8T2CC42hIfJGwb4RjEXOjWE=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FW7ZwvftdfVtdbbH31/QtdXZ28lDUpZHlGSHTSwtJQnKDa17eS4Vj8meMqDi69a2CZRSeclmUc0VOgz+RcmcGoZRoU0IHxyarnE/mrK/tXbBPYnweYNKS/Wmm29FMmNII/MVBBTgkreObJmndDBWAlTOGzx+bPDj4OB8bR0fQaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=XDBUIPng; arc=none smtp.client-ip=198.37.111.173
+	 Content-Type:MIME-Version; b=qlxDulI+yk1za725yEyPUm6rXKMxvKrKzTxzUb43C702Krp5aoiJ3pMUoIwcYXP7gN56Xkc76Vw49rqD3ZMIVADuNE1+H2PUI4TI91bfn3HB+lMcr25jNA44kKFGiSp+MPZWB9wVmmAZsGt0ASIfI7NX6Yx/NEHBt4W6kGfWZuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=kudIcstS; arc=none smtp.client-ip=198.37.111.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1746537710;
-	bh=1sYQKHiNE9CT1/Q3y1wTdvnC/t57kpOOwXfbb4X2XuI=;
+	d=hansenpartnership.com; s=20151216; t=1746537868;
+	bh=F7zOBD4JAh8eNkUq1aOu8T2CC42hIfJGwb4RjEXOjWE=;
 	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=XDBUIPngN+dUUi9l8aP04UQ/xfCbyQ8WfuQE52LKrSOaXCAcB8NpncQMMYYdrm1QA
-	 Kcw/pMulSSq/If8BzHkGD1dCimS9XOxGYx9YPNwMcYlVRZ0tqVHN4WdEoGRis15xMo
-	 w/hcsRn0fVYJwLUqfxt0mRvwhztuDPLUCOtA+Ntg=
+	b=kudIcstShORppqVcWOgm2xMuqo86L3l191A+iiZoP0FH1mJF8lNXO3O/TSyOyzBrK
+	 QpOlI6wKJX7OdQYhwilMuzVSEaGljo5UHrNLFMhKtKn+cx2niRNWCTdQwh/UMzliIu
+	 An4D/+ZkXSqXFIDIuRxX2gWa3/jcvEhZmnx/0bgg=
 Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange x25519)
 	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 2C9071C031C;
-	Tue, 06 May 2025 09:21:49 -0400 (EDT)
-Message-ID: <e619a81c6e72f5e22fe0f8b267574036d7b7e43c.camel@HansenPartnership.com>
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id F0B8D1C0320;
+	Tue, 06 May 2025 09:24:27 -0400 (EDT)
+Message-ID: <2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
 Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: kpcyrd <kpcyrd@archlinux.org>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
+To: Arnout Engelen <arnout@bzzt.net>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
 	 <linux@weissschuh.net>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
  <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain
@@ -61,21 +61,21 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
  Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin
  <dmitry.kasatkin@gmail.com>,  Eric Snowberg <eric.snowberg@oracle.com>,
  Nicolas Schier <nicolas.schier@linux.dev>, Fabian
- =?ISO-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>, Arnout Engelen
- <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, Christian Heusel
+ =?ISO-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>, Mattia Rizzolo
+ <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, Christian Heusel
  <christian@heusel.eu>,  =?ISO-8859-1?Q?C=E2ju?= Mihai-Drosi
  <mcaju95@gmail.com>, linux-kbuild@vger.kernel.org,
  linux-kernel@vger.kernel.org,  linux-arch@vger.kernel.org,
  linux-modules@vger.kernel.org,  linux-security-module@vger.kernel.org,
  linux-doc@vger.kernel.org,  linuxppc-dev@lists.ozlabs.org,
  linux-integrity@vger.kernel.org
-Date: Tue, 06 May 2025 09:21:48 -0400
-In-Reply-To: <bf3f2f1c-1852-449f-993f-71848d190db6@archlinux.org>
+Date: Tue, 06 May 2025 09:24:26 -0400
+In-Reply-To: <072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
 References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
 	 <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
 	 <840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
 	 <b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
-	 <bf3f2f1c-1852-449f-993f-71848d190db6@archlinux.org>
+	 <072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
 Autocrypt: addr=James.Bottomley@HansenPartnership.com;
  prefer-encrypt=mutual;
  keydata=mQENBE58FlABCADPM714lRLxGmba4JFjkocqpj1/6/Cx+IXezcS22azZetzCXDpm2MfNElecY3qkFjfnoffQiw5rrOO0/oRSATOh8+2fmJ6el7naRbDuh+i8lVESfdlkoqX57H5R8h/UTIp6gn1mpNlxjQv6QSZbl551zQ1nmkSVRbA5TbEp4br5GZeJ58esmYDCBwxuFTsSsdzbOBNthLcudWpJZHURfMc0ew24By1nldL9F37AktNcCipKpC2U0NtGlJjYPNSVXrCd1izxKmO7te7BLP+7B4DNj1VRnaf8X9+VIApCi/l4Kdx+ZR3aLTqSuNsIMmXUJ3T8JRl+ag7kby/KBp+0OpotABEBAAG0N0phbWVzIEJvdHRvbWxleSA8SmFtZXMuQm90dG9tbGV5QEhhbnNlblBhcnRuZXJzaGlwLmNvbT6JAVgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAhkBFiEE1WBuc8i0YnG+rZrfgUrkfCFIVNYFAmBLmY0FCRs1hL0ACgkQgUrkfCFIVNaEiQgAg18F4G7PGWQ68xqnIrccke7Reh5thjUz6kQIii6Dh64BDW6/UvXn20UxK2uSs/0TBLO81k1mV4c6rNE+H8b7IEjieGR9frBsp/+Q01JpToJfzzMUY7ZTDV1IXQZ+AY9L7vRzyimnJHx0Ba4JTlAyHB+Ly5i4Ab2+uZcnNfBXquWrG3oPWz+qPK88LJLya5Jxse1m1QT6R/isDuPivBzntLOooxPk+Cwf5sFAAJND+idTAzWzslexr9j7rtQ1UW6FjO4CvK9yVNz7dgG6FvEZl6J/HOr1rivtGgpCZTBzKNF8jg034n49zGfKkkzWLuXbPUOp3/oGfsKv8pnEu1c2GbQpSmFtZXMgQm90dG9tbGV5IDxqZWpiQGxpbnV4LnZuZXQuaWJtLmNvbT6JAVYEEwEIAEACGwMHCwkIBwMCAQYVC
@@ -96,48 +96,80 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Sat, 2025-05-03 at 01:43 +0200, kpcyrd wrote:
-> On 5/2/25 3:30 PM, James Bottomley wrote:
-[...]
-> > Or you simply ship tools to remove the signature;
+On Sat, 2025-05-03 at 10:19 +0200, Arnout Engelen wrote:
+> On Fri, May 2, 2025, at 15:30, James Bottomley wrote:
+> > On Fri, 2025-05-02 at 08:53 +0200, Thomas Wei=C3=9Fschuh wrote:
+> > > Specifically the output of any party can recreate bit-by-bit
+> > > identical copies of all specified artifacta previous build (the
+> > > public key, module signatures) is not available during the
+> > > rebuild or verification.
 > >=20
-> > sbattach --remove <signed efi variable>
-> >=20
-> > already does this for you ...
+> > You just strip the signatures before verifying reproducibility.
 >=20
-> It reads like you assume somebody sits down and explicitly looks at
-> the linux package manually, but the reproducible builds tooling
-> considers the package content to be fully opaque and doesn't have any
-> special-casing of any package:
+> If the goal is: "verify the Linux Kernel is reproducible", that could
+> work. It gets increasingly cumbersome when you're trying to check the
+> reproducibility of some larger artifact that embeds the Linux kernel
+> (and lots of other stuff), like an ISO or disk image, though: you'd
+> have to unpack/mount it, check all its contents individually (perhaps
+> recursively), and strip signatures in 'just the right places'.
+
+Most GPL/LGPL software requires a build recipe anyway.  Realistically,
+you're just proving you can exercise that in reverse.
+
+> Writing such tooling is a chore, but of course feasible: diffoscope
+> already comes a long way (though checking large images may take some
+> resources). The problem is trusting such tooling: instead of 'simply'
+> checking the images are identical, suddenly I now have to convince
+> myself there's no shenanigans possible in the disk image
+> interpretation and other check tooling, which gets nontrivial fast.
+
+I'll repeat the key point again: all modern hermetic build systems come
+with provenance which is usually a signature.  Developing the tooling
+is already a requirement.
+
+Plus, you've got to remember that a signature is a cryptographic
+function of the hash over the build minus the signature.  You can't
+verify a signature unless you know how to get the build minus the
+signature.  So the process is required to be deterministic.
+
+> > All current secure build processes (hermetic builds, SLSA and the
+> > like) are requiring output provenance (i.e. signed artifacts).=C2=A0 If
+> > you try to stand like Canute against this tide saying "no signed
+> > builds", you're simply opposing progress for the sake of it
 >=20
-> https://github.com/archlinux/archlinux-repro
-> https://salsa.debian.org/debian/devscripts/-/blob/main/scripts/debrebuild=
-.pl?ref_type=3Dheads
+> I don't think anyone is saying 'no signed builds', but we'd enjoy
+> being able to keep the signatures as detached metadata instead of
+> having to embed them into the 'actual' artifacts.
 
-How something is packaged for consumers and what the outputs of a build
-are are two entirely different things.  But if you control packaging,
-you could actually strip the signatures and place them in an unchecked
-section as long as you make sure to combine them on installation.
+We had this debate about 15 years ago when Debian first started
+reproducible builds for the kernel.  Their initial approach was
+detached module signatures.  This was the original patch set:
 
-> I'd rather not deal with the consequences of weakening the comparison
-> and possibly introducing exploitable loop-holes in any of the layers
-> we wouldn't be able to bit-for-bit compare anymore (like e.g. tar).
+https://lore.kernel.org/linux-modules/20160405001611.GJ21187@decadent.org.u=
+k/
 
-To repeat the point: what everyone would like to do to make life easy
-is a bit different from what has to be done in the modern era of  build
-provenance requirements.
+And this is the reason why Debian abandoned it:
 
-> It would also break the concept of `f(source) -> binary`, "you can=20
-> deterministically derive the binary packages from the documented
-> build inputs", and instead you'd always need to fuzzy-match against
-> what somebody else built.
+https://lists.debian.org/debian-kernel/2016/05/msg00384.html
 
-I think you'll find
+The specific problem is why detached signatures are almost always a
+problem: after a period of time, particularly if the process for
+creating updated artifacts gets repeated often matching the output to
+the right signature becomes increasingly error prone.
 
-f -> strip signature =C2=B0 build
+Debian was, however, kind enough to attach what they currently do to
+get reproducible builds to the kernel documentation:
 
-Works in the above equation.  The point being it's deterministic, not
-fuzzy.
+https://docs.kernel.org/kbuild/reproducible-builds.html
+
+Although they went for deterministic signing, I will note that it is
+perfectly possible to follow their receipe with an ephemeral
+certificate as well.
+
+However, if you want to detach the module signatures for packaging, so
+the modules can go in a reproducible section and the signatures
+elsewhere, then I think we could accommodate that (the output of the
+build is actually unsigned modules, they just get signed on install).
 
 Regards,
 
