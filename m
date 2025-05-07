@@ -1,225 +1,294 @@
-Return-Path: <linux-arch+bounces-11865-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11866-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06948AAD8DF
-	for <lists+linux-arch@lfdr.de>; Wed,  7 May 2025 09:50:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD547AADA56
+	for <lists+linux-arch@lfdr.de>; Wed,  7 May 2025 10:39:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60EED4C59BD
-	for <lists+linux-arch@lfdr.de>; Wed,  7 May 2025 07:50:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5B0B9859C4
+	for <lists+linux-arch@lfdr.de>; Wed,  7 May 2025 08:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A8D22126C;
-	Wed,  7 May 2025 07:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0F4221D88;
+	Wed,  7 May 2025 08:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b="m6ixM4t0";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kZA4fxjI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O6P0hepD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05A22139DB;
-	Wed,  7 May 2025 07:49:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017D3212F89;
+	Wed,  7 May 2025 08:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746604163; cv=none; b=ehNqNoT8lM9MfOtmfpeUMaF7cYfT/GsBXjxpFd5GqtER3PokFry5OR5wFymXzBUMV0jorUIQayvSlKJKpOPBC9euGZawPA2KBPLyBQpKD/IfCXq2omiv7QtLKBXyjT4VAXMVZ4uY4xeP30e7ICVLwJDSvuVkX5TKIXpEE1rY1QM=
+	t=1746607140; cv=none; b=XqRcWvpULv1YzBA6OrELiRObM3pWBTCOLypJFZMqpp+nHlO2/Oeu/gyl0scKdcIr9LXRKyx8z6jnWE8A92imrCtUtfVzYXwKYX7RDoODZKD0u1rxcaasLxYXOCBQLD+UOxbb5TcJ/dJmrO9jMb5RFlSSBwtdP3s4Va7nYH4oWKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746604163; c=relaxed/simple;
-	bh=cokU17empCsgLXMx0CVbpVm5/GG0ANMWp2T8HsVJzNA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=uMzku4tzDet+uh9aFEl9S1kuVf81Yab5fAEl27im+55h3o6Dc6TT1aWClr6eqlmiuztHAuOxExZlkxb3ewoO4UfJIoOaTpixaBYS+EPqf5z3edRkaLoUWtuZcPy0ZL+Jfokb2zP1zri563MsmQNcSsQVvozJ9j63CFu+tpmFYYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net; spf=pass smtp.mailfrom=bzzt.net; dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b=m6ixM4t0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kZA4fxjI; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bzzt.net
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id B39121140120;
-	Wed,  7 May 2025 03:49:18 -0400 (EDT)
-Received: from phl-imap-01 ([10.202.2.91])
-  by phl-compute-12.internal (MEProxy); Wed, 07 May 2025 03:49:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bzzt.net; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1746604158;
-	 x=1746690558; bh=JcQmMXNVSlii7PXek34Y/lx8uJAyMcBAejqngOH419Y=; b=
-	m6ixM4t0Bd5/+Uss2nIYQ1/8T+lGP87Kg95DJvDFeb7DqFU29pVjw++3Li/Ley4k
-	ZrzM0BTeOpxvwh0sxNtp1QLtmfEYacvZlaBLB36B/w5i+GcjjskXQ0NzqZ/J8mTP
-	0YaZMKdN2faVUFAATg5ZwGTmea9qyr9RUA6YVKZsk0Ynsui8h881co/aN0ZXJuwi
-	5Sj7qnbnfM/R3UdL8fSmn+rvlyKNZHlus1rZIwTZiL7RBtLT9PzGjn64VYzcfQcL
-	K31sNpaJp+rsMDYUDKWzrVzvYvr+Orkj6MVMJBYkLw1cNBnaMgMmUWIW90Mo1Pz8
-	Th8btXk/wU2H3HrP1aEw3A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746604158; x=
-	1746690558; bh=JcQmMXNVSlii7PXek34Y/lx8uJAyMcBAejqngOH419Y=; b=k
-	ZA4fxjIvrDac2vbflfR/MW94tnMJZme863HxGuBbuLxnJnRgxnFSpP9pmL1bJ6Hn
-	GwrmAA0bCs013xnar98UKcdvEKlDyOMViA6Ll+6K0qq4GehsaoV25FXc095wkrfm
-	ARJbKlcWT+oSnf3JFc/90YW82bEOsZ6Q05NtJirhJsI2n6diyAXIfLOztBgceqlv
-	zMCw/UOhobb+tlAbOVIkP5KjU91f+R/jwFvELLUZ2kIUna7Kr57xbbWw1Lc+YFNc
-	9GdUEF5rtofNpvc0UeGxakfKT3O5BroTxokSKGbhNBCPSe8rxTVj1ZDoNivbyC0a
-	E10rzrUGPhBZWCiPGqFFA==
-X-ME-Sender: <xms:ehAbaFqS2VNSdrrCBKfKPArS0Gqyyqv5CLshf_qm6RWOqC7P6yzTdQ>
-    <xme:ehAbaHpIDmwdOxMLOentJK9Nd5ZQ-GbYT2KYBTe9j5pBuLP1Z84rJCkZnNpuwkFU1
-    MvZkTrEA8H9ukbh2wc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeeifedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhhouhhtucfgnhhgvghlvghnfdcuoegrrhhnohhuthessg
-    iiiihtrdhnvghtqeenucggtffrrghtthgvrhhnpeefgefgfeektdefkeeludetteefkeef
-    ffdvkeeujeegveethfdthfffjedvgedtueenucffohhmrghinhepkhgvrhhnvghlrdhorh
-    hgpdguvggsihgrnhdrohhrghdpvghnghgvlhgvnhdrvghunecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhhouhhtsegsiiiithdrnhgvth
-    dpnhgspghrtghpthhtohepfeeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehk
-    phgthihrugesrghrtghhlhhinhhugidrohhrghdprhgtphhtthhopegrrhhnugesrghrnh
-    gusgdruggvpdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhho
-    uhhprdgvuhdprhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdprhgtph
-    htthhopegumhhithhrhidrkhgrshgrthhkihhnsehgmhgrihhlrdgtohhmpdhrtghpthht
-    ohepmhgtrghjuhelheesghhmrghilhdrtghomhdprhgtphhtthhopehnphhighhgihhnse
-    hgmhgrihhlrdgtohhmpdhrtghpthhtohepshgrmhhithholhhvrghnvghnsehgohhoghhl
-    vgdrtghomhdprhgtphhtthhopehsvghrghgvsehhrghllhihnhdrtghomh
-X-ME-Proxy: <xmx:ehAbaCPQCmtU0_XRz8-vmJUTunODN6LJ5XAJdUQXl8MZC_JaCjxFOg>
-    <xmx:ehAbaA59wckYPtLYhTZVffPcvxO_BZijemUeXnd5cHTnWqBB3GWO6g>
-    <xmx:ehAbaE6X6GZm-X-h7CHtIj_tqXHUMbSzEVEZwOfDgLuZu2J5RbipmQ>
-    <xmx:ehAbaIgcx2n28RoC1hGQYgUotGxNuE0nTYRb07t4aUhf_rREVRpkqQ>
-    <xmx:fhAbaPRdhTA1xuKM3DUYaFI8sfLgbhVSaXODaU-UBjVBXGPdpqtaF29z>
-Feedback-ID: i8a1146c4:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 74285336007C; Wed,  7 May 2025 03:49:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1746607140; c=relaxed/simple;
+	bh=sfIRBWz57bESN0N5rP5vLWqllCJK87/7X7U2QAb9P2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ys1D4VJB1GeZH/OT+3JJ14nWfMe+rGC/QXfX7wykzLldp1oM59KFPfVzH0rHLUeTMtVAk21W8jamFiHa5A/qqQrqQXAd+15hwfqCXrYF3N/ZizgfHjW5a+3hYJaO0b6T/lvrlqZHl9lmwcDvXyZs5DzqR8QxoQoGgOMa0gIeqXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O6P0hepD; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746607139; x=1778143139;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sfIRBWz57bESN0N5rP5vLWqllCJK87/7X7U2QAb9P2Y=;
+  b=O6P0hepD8bjcxmcnAfpF+qktukv3FvlmlOTTdHrUyrchG85ueFj0Bqbu
+   EAN/+VfEG2lmjrs+Qp52e4ZHzLQovVWQFBdkNzuijnxKY5z4yl3s64+jp
+   WJcOrk8HVC7vmj/dc+Fm3X2DZFPdlzYY5v1FWzaxLOlufEj5NXDSaj1lb
+   k6JnAhGYpM3VOUDBksJ7ZqVBJCWm2GnGC57F0egT+Huuomd4H8DpdeDPv
+   7kto4LJ/XyTUUzPP/VCALpF/s4v/RtpAnt/2iGgqQ8Q1Kvif29XRnEJ2Y
+   HzUXhKq9wQZTEqoQArYIab34R84PuvMzqbSh8Z3rd4+bnlvNWAZRqvnXg
+   w==;
+X-CSE-ConnectionGUID: t/h16DumTe6trDu52E6gkw==
+X-CSE-MsgGUID: uVlm0qcnSa2xcos7dCpYvA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11425"; a="48195747"
+X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
+   d="scan'208";a="48195747"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 01:38:58 -0700
+X-CSE-ConnectionGUID: u15cOkStSwm3lq+agpMLpw==
+X-CSE-MsgGUID: REPlWn1oT96BVJFOJC63Vw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,268,1739865600"; 
+   d="scan'208";a="136410621"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 07 May 2025 01:38:53 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uCaIl-0007QF-04;
+	Wed, 07 May 2025 08:38:51 +0000
+Date: Wed, 7 May 2025 16:38:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ian Rogers <irogers@google.com>, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jacob Keller <jacob.e.keller@intel.com>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Leo Yan <leo.yan@arm.com>
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 1/5] bitfield: Silence a clang -Wshorten-64-to-32
+ warning
+Message-ID: <202505071638.ZLhUrspy-lkp@intel.com>
+References: <20250430171534.132774-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T5f9a5891fefab612
-Date: Wed, 07 May 2025 09:47:23 +0200
-From: "Arnout Engelen" <arnout@bzzt.net>
-To: "James Bottomley" <James.Bottomley@hansenpartnership.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
- "Luis Chamberlain" <mcgrof@kernel.org>,
- "Petr Pavlu" <petr.pavlu@suse.com>,
- "Sami Tolvanen" <samitolvanen@google.com>,
- "Daniel Gomez" <da.gomez@samsung.com>,
- "Paul Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>, "Mimi Zohar" <zohar@linux.ibm.com>,
- "Roberto Sassu" <roberto.sassu@huawei.com>,
- "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>,
- "Nicolas Schier" <nicolas.schier@linux.dev>,
- =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
- "Mattia Rizzolo" <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
- "Christian Heusel" <christian@heusel.eu>,
- =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Message-Id: <6615efdc-3a84-4f1c-8a93-d7333bee0711@app.fastmail.com>
-In-Reply-To: 
- <2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
- <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
- <840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
- <b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
- <072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
- <2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
-Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250430171534.132774-2-irogers@google.com>
 
-On Tue, May 6, 2025, at 15:24, James Bottomley wrote:
-> I'll repeat the key point again: all modern hermetic build systems come
-> with provenance which is usually a signature.
+Hi Ian,
 
-I'm not sure the 'hermetic build' parallel is so applicable here: typically a
-hermetic build will produce an artifact and a signature, and when you embed
-that result in a larger aggregate, you only embed the artifact (not the
-signature) and sign the aggregate. With module signatures, the module *and*
-their signatures are embedded in the aggregate (e.g. ISO, disk image), which is
-where (at least in my case) the friction comes from.
+kernel test robot noticed the following build warnings:
 
-> Plus, you've got to remember that a signature is a cryptographic
-> function of the hash over the build minus the signature.  You can't
-> verify a signature unless you know how to get the build minus the
-> signature.  So the process is required to be deterministic.
+[auto build test WARNING on arnd-asm-generic/master]
+[also build test WARNING on soc/for-next linus/master v6.15-rc5 next-20250506]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Right: there is no friction validating the module signatures, that is fine.
-There is friction validating the aggregate artifact (e.g. ISO, disk image),
-though, because of those signatures embedded into it.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ian-Rogers/bitfield-Silence-a-clang-Wshorten-64-to-32-warning/20250501-011830
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+patch link:    https://lore.kernel.org/r/20250430171534.132774-2-irogers%40google.com
+patch subject: [PATCH v2 1/5] bitfield: Silence a clang -Wshorten-64-to-32 warning
+config: mips-randconfig-r111-20250501 (https://download.01.org/0day-ci/archive/20250507/202505071638.ZLhUrspy-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+reproduce: (https://download.01.org/0day-ci/archive/20250507/202505071638.ZLhUrspy-lkp@intel.com/reproduce)
 
-As you mentioned earlier, of course this is *possible* to do (for example by
-adding the signatures as inputs to the second 'independent' build or by
-creating a hard-to-validate 'check recipe' running the build in reverse).
-Still, checking modules at run time by hash instead of by signature would be a
-much simpler option for such scenario's.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505071638.ZLhUrspy-lkp@intel.com/
 
-> > > All current secure build processes (hermetic builds, SLSA and the
-> > > like) are requiring output provenance (i.e. signed artifacts).  If
-> > > you try to stand like Canute against this tide saying "no signed
-> > > builds", you're simply opposing progress for the sake of it
-> > 
-> > I don't think anyone is saying 'no signed builds', but we'd enjoy
-> > being able to keep the signatures as detached metadata instead of
-> > having to embed them into the 'actual' artifacts.
-> 
-> We had this debate about 15 years ago when Debian first started
-> reproducible builds for the kernel.  Their initial approach was
-> detached module signatures.  This was the original patch set:
-> 
-> https://lore.kernel.org/linux-modules/20160405001611.GJ21187@decadent.org.uk/
-> 
-> And this is the reason why Debian abandoned it:
-> 
-> https://lists.debian.org/debian-kernel/2016/05/msg00384.html
+sparse warnings: (new ones prefixed by >>)
+   lib/bitfield_kunit.c: note: in included file (through include/linux/fortify-string.h, include/linux/string.h, include/linux/bitmap.h, ...):
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __le16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast to restricted __be16
+>> include/linux/bitfield.h:200:1: sparse: sparse: cast from restricted __be16
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __le32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast to restricted __be32
+>> include/linux/bitfield.h:201:1: sparse: sparse: cast from restricted __be32
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __le64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast to restricted __be64
+>> include/linux/bitfield.h:202:1: sparse: sparse: cast from restricted __be64
+   lib/bitfield_kunit.c: note: in included file (through include/linux/thread_info.h, include/asm-generic/preempt.h, arch/mips/include/generated/asm/preempt.h, ...):
+   include/linux/bitops.h:274:19: sparse: sparse: cast truncates bits from constant value (8000000000000000 becomes 0)
+   include/linux/bitops.h:279:37: sparse: sparse: cast truncates bits from constant value (8000000000000000 becomes 0)
+   include/linux/bitops.h:274:19: sparse: sparse: cast truncates bits from constant value (7f00000000000000 becomes 0)
+   include/linux/bitops.h:279:37: sparse: sparse: cast truncates bits from constant value (7f00000000000000 becomes 0)
+   include/linux/bitops.h:274:19: sparse: sparse: cast truncates bits from constant value (1800000000000 becomes 0)
+   include/linux/bitops.h:279:37: sparse: sparse: cast truncates bits from constant value (1800000000000 becomes 0)
+   include/linux/bitops.h:274:19: sparse: sparse: cast truncates bits from constant value (1f8000000 becomes f8000000)
+   include/linux/bitops.h:279:37: sparse: sparse: cast truncates bits from constant value (1f8000000 becomes f8000000)
 
-That is interesting history, thanks for digging that up. Of the 2 problems Ben
-mentions running into there, '1' does not seem universal (I think this feature
-is indeed mainly interesting for systems where you don't _want_ anyone to be
-able to load locally-built modules), and '2' is a problem that detached
-signatures have but module hashes don't have.
+vim +200 include/linux/bitfield.h
 
-> The specific problem is why detached signatures are almost always a
-> problem: after a period of time, particularly if the process for
-> creating updated artifacts gets repeated often matching the output to
-> the right signature becomes increasingly error prone.
-
-I haven't experienced that issue with the module hashes yet.
-
-> Debian was, however, kind enough to attach what they currently do to
-> get reproducible builds to the kernel documentation:
-> 
-> https://docs.kernel.org/kbuild/reproducible-builds.html
-
-Cool, I was aware of that page but didn't know it was initially contributed by
-Debian.
-
-> However, if you want to detach the module signatures for packaging, so
-> the modules can go in a reproducible section and the signatures
-> elsewhere, then I think we could accommodate that (the output of the
-> build is actually unsigned modules, they just get signed on install).
-
-At least I don't really come to this from the packaging perspective, but from
-the "building an independently verifiable ISO/disk image" perspective.
-Separating the modules and the signatures into separate packages doesn't help
-me there, since they'd still both need to be present on the image.
-
-
-Kind regards,
+e2192de59e457a Johannes Berg   2023-01-18  120  
+e2192de59e457a Johannes Berg   2023-01-18  121  /**
+e2192de59e457a Johannes Berg   2023-01-18  122   * FIELD_PREP_CONST() - prepare a constant bitfield element
+e2192de59e457a Johannes Berg   2023-01-18  123   * @_mask: shifted mask defining the field's length and position
+e2192de59e457a Johannes Berg   2023-01-18  124   * @_val:  value to put in the field
+e2192de59e457a Johannes Berg   2023-01-18  125   *
+e2192de59e457a Johannes Berg   2023-01-18  126   * FIELD_PREP_CONST() masks and shifts up the value.  The result should
+e2192de59e457a Johannes Berg   2023-01-18  127   * be combined with other fields of the bitfield using logical OR.
+e2192de59e457a Johannes Berg   2023-01-18  128   *
+e2192de59e457a Johannes Berg   2023-01-18  129   * Unlike FIELD_PREP() this is a constant expression and can therefore
+e2192de59e457a Johannes Berg   2023-01-18  130   * be used in initializers. Error checking is less comfortable for this
+e2192de59e457a Johannes Berg   2023-01-18  131   * version, and non-constant masks cannot be used.
+e2192de59e457a Johannes Berg   2023-01-18  132   */
+e2192de59e457a Johannes Berg   2023-01-18  133  #define FIELD_PREP_CONST(_mask, _val)					\
+e2192de59e457a Johannes Berg   2023-01-18  134  	(								\
+e2192de59e457a Johannes Berg   2023-01-18  135  		/* mask must be non-zero */				\
+e2192de59e457a Johannes Berg   2023-01-18  136  		BUILD_BUG_ON_ZERO((_mask) == 0) +			\
+e2192de59e457a Johannes Berg   2023-01-18  137  		/* check if value fits */				\
+e2192de59e457a Johannes Berg   2023-01-18  138  		BUILD_BUG_ON_ZERO(~((_mask) >> __bf_shf(_mask)) & (_val)) + \
+e2192de59e457a Johannes Berg   2023-01-18  139  		/* check if mask is contiguous */			\
+e2192de59e457a Johannes Berg   2023-01-18  140  		__BF_CHECK_POW2((_mask) + (1ULL << __bf_shf(_mask))) +	\
+e2192de59e457a Johannes Berg   2023-01-18  141  		/* and create the value */				\
+e2192de59e457a Johannes Berg   2023-01-18  142  		(((typeof(_mask))(_val) << __bf_shf(_mask)) & (_mask))	\
+e2192de59e457a Johannes Berg   2023-01-18  143  	)
+e2192de59e457a Johannes Berg   2023-01-18  144  
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  145  /**
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  146   * FIELD_GET() - extract a bitfield element
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  147   * @_mask: shifted mask defining the field's length and position
+7240767450d6d8 Masahiro Yamada 2017-10-03  148   * @_reg:  value of entire bitfield
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  149   *
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  150   * FIELD_GET() extracts the field specified by @_mask from the
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  151   * bitfield passed in as @_reg by masking and shifting it down.
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  152   */
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  153  #define FIELD_GET(_mask, _reg)						\
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  154  	({								\
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  155  		__BF_FIELD_CHECK(_mask, _reg, 0U, "FIELD_GET: ");	\
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  156  		(typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask));	\
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  157  	})
+3e9b3112ec74f1 Jakub Kicinski  2016-08-31  158  
+e7d4a95da86e0b Johannes Berg   2018-06-20  159  extern void __compiletime_error("value doesn't fit into mask")
+00b0c9b82663ac Al Viro         2017-12-14  160  __field_overflow(void);
+00b0c9b82663ac Al Viro         2017-12-14  161  extern void __compiletime_error("bad bitfield mask")
+00b0c9b82663ac Al Viro         2017-12-14  162  __bad_mask(void);
+00b0c9b82663ac Al Viro         2017-12-14  163  static __always_inline u64 field_multiplier(u64 field)
+00b0c9b82663ac Al Viro         2017-12-14  164  {
+00b0c9b82663ac Al Viro         2017-12-14  165  	if ((field | (field - 1)) & ((field | (field - 1)) + 1))
+00b0c9b82663ac Al Viro         2017-12-14  166  		__bad_mask();
+00b0c9b82663ac Al Viro         2017-12-14  167  	return field & -field;
+00b0c9b82663ac Al Viro         2017-12-14  168  }
+00b0c9b82663ac Al Viro         2017-12-14  169  static __always_inline u64 field_mask(u64 field)
+00b0c9b82663ac Al Viro         2017-12-14  170  {
+00b0c9b82663ac Al Viro         2017-12-14  171  	return field / field_multiplier(field);
+00b0c9b82663ac Al Viro         2017-12-14  172  }
+e31a50162feb35 Alex Elder      2020-03-12  173  #define field_max(field)	((typeof(field))field_mask(field))
+00b0c9b82663ac Al Viro         2017-12-14  174  #define ____MAKE_OP(type,base,to,from)					\
+00b0c9b82663ac Al Viro         2017-12-14  175  static __always_inline __##type type##_encode_bits(base v, base field)	\
+00b0c9b82663ac Al Viro         2017-12-14  176  {									\
+e7d4a95da86e0b Johannes Berg   2018-06-20  177  	if (__builtin_constant_p(v) && (v & ~field_mask(field)))	\
+00b0c9b82663ac Al Viro         2017-12-14  178  		__field_overflow();					\
+38e224b77cde3b Ian Rogers      2025-04-30  179  	return to((__##type)((v & field_mask(field)) * field_multiplier(field))); \
+00b0c9b82663ac Al Viro         2017-12-14  180  }									\
+00b0c9b82663ac Al Viro         2017-12-14  181  static __always_inline __##type type##_replace_bits(__##type old,	\
+00b0c9b82663ac Al Viro         2017-12-14  182  					base val, base field)		\
+00b0c9b82663ac Al Viro         2017-12-14  183  {									\
+00b0c9b82663ac Al Viro         2017-12-14  184  	return (old & ~to(field)) | type##_encode_bits(val, field);	\
+00b0c9b82663ac Al Viro         2017-12-14  185  }									\
+00b0c9b82663ac Al Viro         2017-12-14  186  static __always_inline void type##p_replace_bits(__##type *p,		\
+00b0c9b82663ac Al Viro         2017-12-14  187  					base val, base field)		\
+00b0c9b82663ac Al Viro         2017-12-14  188  {									\
+00b0c9b82663ac Al Viro         2017-12-14  189  	*p = (*p & ~to(field)) | type##_encode_bits(val, field);	\
+00b0c9b82663ac Al Viro         2017-12-14  190  }									\
+00b0c9b82663ac Al Viro         2017-12-14  191  static __always_inline base type##_get_bits(__##type v, base field)	\
+00b0c9b82663ac Al Viro         2017-12-14  192  {									\
+00b0c9b82663ac Al Viro         2017-12-14  193  	return (from(v) & field)/field_multiplier(field);		\
+00b0c9b82663ac Al Viro         2017-12-14  194  }
+00b0c9b82663ac Al Viro         2017-12-14  195  #define __MAKE_OP(size)							\
+00b0c9b82663ac Al Viro         2017-12-14  196  	____MAKE_OP(le##size,u##size,cpu_to_le##size,le##size##_to_cpu)	\
+00b0c9b82663ac Al Viro         2017-12-14  197  	____MAKE_OP(be##size,u##size,cpu_to_be##size,be##size##_to_cpu)	\
+00b0c9b82663ac Al Viro         2017-12-14  198  	____MAKE_OP(u##size,u##size,,)
+37a3862e123826 Johannes Berg   2018-06-20  199  ____MAKE_OP(u8,u8,,)
+00b0c9b82663ac Al Viro         2017-12-14 @200  __MAKE_OP(16)
+00b0c9b82663ac Al Viro         2017-12-14 @201  __MAKE_OP(32)
+00b0c9b82663ac Al Viro         2017-12-14 @202  __MAKE_OP(64)
+00b0c9b82663ac Al Viro         2017-12-14  203  #undef __MAKE_OP
+00b0c9b82663ac Al Viro         2017-12-14  204  #undef ____MAKE_OP
+00b0c9b82663ac Al Viro         2017-12-14  205  
 
 -- 
-Arnout Engelen
-Engelen Open Source
-https://engelen.eu
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
