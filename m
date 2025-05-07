@@ -1,224 +1,225 @@
-Return-Path: <linux-arch+bounces-11864-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11865-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1211AAAD063
-	for <lists+linux-arch@lfdr.de>; Tue,  6 May 2025 23:55:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06948AAD8DF
+	for <lists+linux-arch@lfdr.de>; Wed,  7 May 2025 09:50:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA6F43ACDC7
-	for <lists+linux-arch@lfdr.de>; Tue,  6 May 2025 21:51:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60EED4C59BD
+	for <lists+linux-arch@lfdr.de>; Wed,  7 May 2025 07:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51639221FA0;
-	Tue,  6 May 2025 21:39:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A8D22126C;
+	Wed,  7 May 2025 07:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hCrmcGub"
+	dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b="m6ixM4t0";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kZA4fxjI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C5C221F32;
-	Tue,  6 May 2025 21:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05A22139DB;
+	Wed,  7 May 2025 07:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746567576; cv=none; b=py7SxVw4X5RRcxRjqmlJeP924GCTrA2FXvmpLcDo8ltWjF62LvPVvYe5cO5lF7qw4bTUv4dEY1LOONbIJCnlTkYCj3WA2ndvhIQoj/9+0ggzlGBI2NStjhtefJ40Xj0TgJW5IJd+qK1cTr4ljeLLxcMdahd6j3ubpnlShhReaw0=
+	t=1746604163; cv=none; b=ehNqNoT8lM9MfOtmfpeUMaF7cYfT/GsBXjxpFd5GqtER3PokFry5OR5wFymXzBUMV0jorUIQayvSlKJKpOPBC9euGZawPA2KBPLyBQpKD/IfCXq2omiv7QtLKBXyjT4VAXMVZ4uY4xeP30e7ICVLwJDSvuVkX5TKIXpEE1rY1QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746567576; c=relaxed/simple;
-	bh=aj6Wa/BxvisBUyM6z+CuE8LXB/JkGU/LICdWFH6Yz7Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y5oYCVCVLHlhaeYcyoClR9xLzIeuSZudsP+TGGc+Vj7/YQbiJLHE5Gwnu98M7I0a+th4iC4qRyt78EFGS1mCUmfy99bbVYhbjaKAX7oRiRtadi0l64q7OWpMARFJ3FCawxPXUJqxyfKnc+fespB+KFoLN4GayRa8qLIKD573N2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hCrmcGub; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-74019695377so5110336b3a.3;
-        Tue, 06 May 2025 14:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746567574; x=1747172374; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ArM5dlMoYg2RFoYEdOLIGATcWwbGLoqA/9nIToevMcw=;
-        b=hCrmcGub/esiDZ44Ryo33X9GCVex+vcD7Cd5d1YvOH2HGwIcgB6vU6Bzgo3fpeDVLs
-         iE+p+K4EQ5T9EW5b6Di2acai8HEAMdeZQRYhpT65LF9WmpfQhBIPT58LKqfXe06FKD5+
-         e8XAFkKB5pHyZeInma+mha9umBaNgCTrtsbqr7eUg+mkgxgN+STkxNnZM+S9RPWLbPJX
-         LdrevbKdLwvxkAq5H5WGNGPw6e54k6i+fF71vcwejHUh5H/6X5mm1+A13144626h16Jc
-         7yj2M4NlsXkwXhlrub5iigtK1lpHu9q5kMTg5bTy8WgWUBcZTeSBRV4TDyCTvs7p4xH3
-         mJOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746567574; x=1747172374;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ArM5dlMoYg2RFoYEdOLIGATcWwbGLoqA/9nIToevMcw=;
-        b=K9BcOZKuDkSYKwgFgUZFp+O7Jf0wfM9xagWV3Fwn68BdeSCfUQQZnaADNhxaOCwjzV
-         MLVNyy6YQovjtOW6c5vHMFTopja+3O4euMuZICHbTGIKCQkF6zLNdd94AsXmw+qjpwIq
-         8XoG65zu3xoZpXGIoMD1uNCaHKBJYXY5h+6+jVp1WB36UAP+uKx0y5iEKtHRHCJVoRxj
-         LzhNTBH+dyN/0hb0e2kDdLyTbFa+owPapmZeiDALtCs5My5AN99viceuFKuYPHMKANd9
-         +pQ1ZVT3ijjOInwDTtBAozBGtMIiTe+Rt5UQERQJilIRPGT3pQLoQLUeNB1hoxUCsB1+
-         26MQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHC/96f/7YbSnWZvw7jGveJmnJ1ksWEBqJy2BQcfFIcj6gUKCliVU+J1cs7wW6DTfjjBdNjoLxMWCBojGa3Uc/@vger.kernel.org, AJvYcCUtenbkZW/5IMiM6yuLubOgRtpxOBtlvkM3kJzs2707c1ocq5SMULlB+36Ah30pEdX/DIT/RJjsjrOuQ0WX@vger.kernel.org, AJvYcCV9nYpRQAORETpIDdlM4VUYUZY9BPj/ArhfuGJb7aE6D7eUGNvtDYLPpBlOHMkz3dewwHU=@vger.kernel.org, AJvYcCVV53R0FfT2uO4cunFakFQ55JJRa7tQPWA7B1iuNJk+UdwiPucb4JTjvdyTUdlykxXR+jRDyM37pqPHyA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4SLvc3/EX5yQPPPr6APC02Xnrx4WQlQDFnDBTSAs3pNfvxw2t
-	JC6hrDiu2kCTFES5rDF13UYuYRI11gEnxATC4rvq/pvaRQxiKu/YrXVP/U/QiumResE2qc8/dN4
-	tkW8E0ZeonmuYiYNSz+bN26aLjhg=
-X-Gm-Gg: ASbGncuzwEOaxje8oAAqMPy4Pd/2DTIcKhKhTX9JEZu2V5cyGvUkdbWiQBdLNDN7hjm
-	UHXXeLAaCxWqCHfc+nMH3KEEGGLx15tC4q+qbOrvfG4+RFONnTaRZ0qG3YnJI+jnRbxzm+hQcz8
-	/p7xd+bRE1IM7aV54z+N8ITgOhGbNs0LWenj5q3+IWYAW1L712
-X-Google-Smtp-Source: AGHT+IF6+tZWso5Z6kOClTOh8AzWjUjHLEGhrWPv/n2ZbHBh8cm9FwumNME/x4Y2ZzuB76UxDM1V4gC2/XSVI6MsQUg=
-X-Received: by 2002:a05:6a00:32cb:b0:740:6fa3:d323 with SMTP id
- d2e1a72fcca58-7409cf47359mr898812b3a.11.1746567573782; Tue, 06 May 2025
- 14:39:33 -0700 (PDT)
+	s=arc-20240116; t=1746604163; c=relaxed/simple;
+	bh=cokU17empCsgLXMx0CVbpVm5/GG0ANMWp2T8HsVJzNA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=uMzku4tzDet+uh9aFEl9S1kuVf81Yab5fAEl27im+55h3o6Dc6TT1aWClr6eqlmiuztHAuOxExZlkxb3ewoO4UfJIoOaTpixaBYS+EPqf5z3edRkaLoUWtuZcPy0ZL+Jfokb2zP1zri563MsmQNcSsQVvozJ9j63CFu+tpmFYYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net; spf=pass smtp.mailfrom=bzzt.net; dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b=m6ixM4t0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kZA4fxjI; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bzzt.net
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id B39121140120;
+	Wed,  7 May 2025 03:49:18 -0400 (EDT)
+Received: from phl-imap-01 ([10.202.2.91])
+  by phl-compute-12.internal (MEProxy); Wed, 07 May 2025 03:49:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bzzt.net; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1746604158;
+	 x=1746690558; bh=JcQmMXNVSlii7PXek34Y/lx8uJAyMcBAejqngOH419Y=; b=
+	m6ixM4t0Bd5/+Uss2nIYQ1/8T+lGP87Kg95DJvDFeb7DqFU29pVjw++3Li/Ley4k
+	ZrzM0BTeOpxvwh0sxNtp1QLtmfEYacvZlaBLB36B/w5i+GcjjskXQ0NzqZ/J8mTP
+	0YaZMKdN2faVUFAATg5ZwGTmea9qyr9RUA6YVKZsk0Ynsui8h881co/aN0ZXJuwi
+	5Sj7qnbnfM/R3UdL8fSmn+rvlyKNZHlus1rZIwTZiL7RBtLT9PzGjn64VYzcfQcL
+	K31sNpaJp+rsMDYUDKWzrVzvYvr+Orkj6MVMJBYkLw1cNBnaMgMmUWIW90Mo1Pz8
+	Th8btXk/wU2H3HrP1aEw3A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746604158; x=
+	1746690558; bh=JcQmMXNVSlii7PXek34Y/lx8uJAyMcBAejqngOH419Y=; b=k
+	ZA4fxjIvrDac2vbflfR/MW94tnMJZme863HxGuBbuLxnJnRgxnFSpP9pmL1bJ6Hn
+	GwrmAA0bCs013xnar98UKcdvEKlDyOMViA6Ll+6K0qq4GehsaoV25FXc095wkrfm
+	ARJbKlcWT+oSnf3JFc/90YW82bEOsZ6Q05NtJirhJsI2n6diyAXIfLOztBgceqlv
+	zMCw/UOhobb+tlAbOVIkP5KjU91f+R/jwFvELLUZ2kIUna7Kr57xbbWw1Lc+YFNc
+	9GdUEF5rtofNpvc0UeGxakfKT3O5BroTxokSKGbhNBCPSe8rxTVj1ZDoNivbyC0a
+	E10rzrUGPhBZWCiPGqFFA==
+X-ME-Sender: <xms:ehAbaFqS2VNSdrrCBKfKPArS0Gqyyqv5CLshf_qm6RWOqC7P6yzTdQ>
+    <xme:ehAbaHpIDmwdOxMLOentJK9Nd5ZQ-GbYT2KYBTe9j5pBuLP1Z84rJCkZnNpuwkFU1
+    MvZkTrEA8H9ukbh2wc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeeifedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhhouhhtucfgnhhgvghlvghnfdcuoegrrhhnohhuthessg
+    iiiihtrdhnvghtqeenucggtffrrghtthgvrhhnpeefgefgfeektdefkeeludetteefkeef
+    ffdvkeeujeegveethfdthfffjedvgedtueenucffohhmrghinhepkhgvrhhnvghlrdhorh
+    hgpdguvggsihgrnhdrohhrghdpvghnghgvlhgvnhdrvghunecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhhouhhtsegsiiiithdrnhgvth
+    dpnhgspghrtghpthhtohepfeeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehk
+    phgthihrugesrghrtghhlhhinhhugidrohhrghdprhgtphhtthhopegrrhhnugesrghrnh
+    gusgdruggvpdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhho
+    uhhprdgvuhdprhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdprhgtph
+    htthhopegumhhithhrhidrkhgrshgrthhkihhnsehgmhgrihhlrdgtohhmpdhrtghpthht
+    ohepmhgtrghjuhelheesghhmrghilhdrtghomhdprhgtphhtthhopehnphhighhgihhnse
+    hgmhgrihhlrdgtohhmpdhrtghpthhtohepshgrmhhithholhhvrghnvghnsehgohhoghhl
+    vgdrtghomhdprhgtphhtthhopehsvghrghgvsehhrghllhihnhdrtghomh
+X-ME-Proxy: <xmx:ehAbaCPQCmtU0_XRz8-vmJUTunODN6LJ5XAJdUQXl8MZC_JaCjxFOg>
+    <xmx:ehAbaA59wckYPtLYhTZVffPcvxO_BZijemUeXnd5cHTnWqBB3GWO6g>
+    <xmx:ehAbaE6X6GZm-X-h7CHtIj_tqXHUMbSzEVEZwOfDgLuZu2J5RbipmQ>
+    <xmx:ehAbaIgcx2n28RoC1hGQYgUotGxNuE0nTYRb07t4aUhf_rREVRpkqQ>
+    <xmx:fhAbaPRdhTA1xuKM3DUYaFI8sfLgbhVSaXODaU-UBjVBXGPdpqtaF29z>
+Feedback-ID: i8a1146c4:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 74285336007C; Wed,  7 May 2025 03:49:14 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250505-vmlinux-mmap-v3-0-5d53afa060e8@isovalent.com> <20250505-vmlinux-mmap-v3-2-5d53afa060e8@isovalent.com>
-In-Reply-To: <20250505-vmlinux-mmap-v3-2-5d53afa060e8@isovalent.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 6 May 2025 14:39:18 -0700
-X-Gm-Features: ATxdqUEvLG3gTRtRTgXjmcSZoDP2TBHJQ2z5q36B5aPjJrR1X7DuAOfId_WtX1E
-Message-ID: <CAEf4BzboH-au2bNCWYk1nYbQ61kGbUXuvTxftDPAEGF1Pc=TLw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/3] selftests: bpf: add a test for mmapable
- vmlinux BTF
-To: Lorenz Bauer <lmb@isovalent.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: T5f9a5891fefab612
+Date: Wed, 07 May 2025 09:47:23 +0200
+From: "Arnout Engelen" <arnout@bzzt.net>
+To: "James Bottomley" <James.Bottomley@hansenpartnership.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
+ "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Petr Pavlu" <petr.pavlu@suse.com>,
+ "Sami Tolvanen" <samitolvanen@google.com>,
+ "Daniel Gomez" <da.gomez@samsung.com>,
+ "Paul Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Madhavan Srinivasan" <maddy@linux.ibm.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Naveen N Rao" <naveen@kernel.org>, "Mimi Zohar" <zohar@linux.ibm.com>,
+ "Roberto Sassu" <roberto.sassu@huawei.com>,
+ "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
+ "Eric Snowberg" <eric.snowberg@oracle.com>,
+ "Nicolas Schier" <nicolas.schier@linux.dev>,
+ =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
+ "Mattia Rizzolo" <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+ "Christian Heusel" <christian@heusel.eu>,
+ =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Message-Id: <6615efdc-3a84-4f1c-8a93-d7333bee0711@app.fastmail.com>
+In-Reply-To: 
+ <2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
+References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
+ <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
+ <840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
+ <b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
+ <072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
+ <2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
+Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 5, 2025 at 11:39=E2=80=AFAM Lorenz Bauer <lmb@isovalent.com> wr=
-ote:
->
-> Add a basic test for the ability to mmap /sys/kernel/btf/vmlinux. Since
-> libbpf doesn't have an API to parse BTF from memory we do some basic
-> sanity checks ourselves.
->
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/btf_sysfs.c | 83 ++++++++++++++++=
-++++++
->  1 file changed, 83 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c b/tools/t=
-esting/selftests/bpf/prog_tests/btf_sysfs.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..3319cf758897d46cefa8ca25e=
-16acb162f4e9889
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
-> @@ -0,0 +1,83 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> +/* Copyright (c) 2025 Isovalent */
-> +
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-> +#include <sys/stat.h>
-> +#include <sys/mman.h>
-> +#include <fcntl.h>
-> +#include <unistd.h>
-> +
-> +static void test_btf_mmap_sysfs(const char *path, struct btf *base)
-> +{
-> +       struct stat st;
-> +       __u64 btf_size, end;
-> +       void *raw_data =3D NULL;
-> +       int fd =3D -1;
-> +       long page_size;
-> +       struct btf *btf =3D NULL;
-> +
-> +       page_size =3D sysconf(_SC_PAGESIZE);
-> +       if (!ASSERT_GE(page_size, 0, "get_page_size"))
-> +               goto cleanup;
-> +
-> +       if (!ASSERT_OK(stat(path, &st), "stat_btf"))
-> +               goto cleanup;
-> +
-> +       btf_size =3D st.st_size;
-> +       end =3D (btf_size + page_size - 1) / page_size * page_size;
-> +
-> +       fd =3D open(path, O_RDONLY);
-> +       if (!ASSERT_GE(fd, 0, "open_btf"))
-> +               goto cleanup;
-> +
-> +       raw_data =3D mmap(NULL, btf_size, PROT_READ | PROT_WRITE, MAP_PRI=
-VATE, fd, 0);
-> +       if (!ASSERT_EQ(raw_data, MAP_FAILED, "mmap_btf_writable"))
-> +               goto cleanup;
-> +
-> +       raw_data =3D mmap(NULL, btf_size, PROT_READ, MAP_SHARED, fd, 0);
-> +       if (!ASSERT_EQ(raw_data, MAP_FAILED, "mmap_btf_shared"))
-> +               goto cleanup;
-> +
-> +       raw_data =3D mmap(NULL, end + 1, PROT_READ, MAP_PRIVATE, fd, 0);
-> +       if (!ASSERT_EQ(raw_data, MAP_FAILED, "mmap_btf_invalid_size"))
-> +               goto cleanup;
-> +
-> +       raw_data =3D mmap(NULL, end, PROT_READ, MAP_PRIVATE, fd, 0);
-> +       if (!ASSERT_NEQ(raw_data, MAP_FAILED, "mmap_btf"))
+On Tue, May 6, 2025, at 15:24, James Bottomley wrote:
+> I'll repeat the key point again: all modern hermetic build systems come
+> with provenance which is usually a signature.
 
-ASSERT_OK_PTR()?
+I'm not sure the 'hermetic build' parallel is so applicable here: typically a
+hermetic build will produce an artifact and a signature, and when you embed
+that result in a larger aggregate, you only embed the artifact (not the
+signature) and sign the aggregate. With module signatures, the module *and*
+their signatures are embedded in the aggregate (e.g. ISO, disk image), which is
+where (at least in my case) the friction comes from.
 
-> +               goto cleanup;
-> +
-> +       if (!ASSERT_EQ(mprotect(raw_data, btf_size, PROT_READ | PROT_WRIT=
-E), -1,
-> +           "mprotect_writable"))
-> +               goto cleanup;
-> +
-> +       if (!ASSERT_EQ(mprotect(raw_data, btf_size, PROT_READ | PROT_EXEC=
-), -1,
-> +           "mprotect_executable"))
-> +               goto cleanup;
-> +
-> +       /* Check padding is zeroed */
-> +       for (int i =3D btf_size; i < end; i++) {
-> +               if (((__u8 *)raw_data)[i] !=3D 0) {
-> +                       PRINT_FAIL("tail of BTF is not zero at page offse=
-t %d\n", i);
-> +                       goto cleanup;
-> +               }
-> +       }
-> +
-> +       btf =3D btf__new_split(raw_data, btf_size, base);
-> +       if (!ASSERT_NEQ(btf, NULL, "parse_btf"))
+> Plus, you've got to remember that a signature is a cryptographic
+> function of the hash over the build minus the signature.  You can't
+> verify a signature unless you know how to get the build minus the
+> signature.  So the process is required to be deterministic.
 
-ASSERT_OK_PTR()
+Right: there is no friction validating the module signatures, that is fine.
+There is friction validating the aggregate artifact (e.g. ISO, disk image),
+though, because of those signatures embedded into it.
 
-> +               goto cleanup;
-> +
-> +cleanup:
-> +       if (raw_data && raw_data !=3D MAP_FAILED)
-> +               munmap(raw_data, btf_size);
-> +       if (btf)
+As you mentioned earlier, of course this is *possible* to do (for example by
+adding the signatures as inputs to the second 'independent' build or by
+creating a hard-to-validate 'check recipe' running the build in reverse).
+Still, checking modules at run time by hash instead of by signature would be a
+much simpler option for such scenario's.
 
-no need to check this, all libbpf destructor APIs deal with NULL
-correctly (ignoring them)
+> > > All current secure build processes (hermetic builds, SLSA and the
+> > > like) are requiring output provenance (i.e. signed artifacts).  If
+> > > you try to stand like Canute against this tide saying "no signed
+> > > builds", you're simply opposing progress for the sake of it
+> > 
+> > I don't think anyone is saying 'no signed builds', but we'd enjoy
+> > being able to keep the signatures as detached metadata instead of
+> > having to embed them into the 'actual' artifacts.
+> 
+> We had this debate about 15 years ago when Debian first started
+> reproducible builds for the kernel.  Their initial approach was
+> detached module signatures.  This was the original patch set:
+> 
+> https://lore.kernel.org/linux-modules/20160405001611.GJ21187@decadent.org.uk/
+> 
+> And this is the reason why Debian abandoned it:
+> 
+> https://lists.debian.org/debian-kernel/2016/05/msg00384.html
 
-> +               btf__free(btf);
-> +       if (fd >=3D 0)
-> +               close(fd);
-> +}
-> +
-> +void test_btf_sysfs(void)
-> +{
-> +       if (test__start_subtest("vmlinux"))
-> +               test_btf_mmap_sysfs("/sys/kernel/btf/vmlinux", NULL);
+That is interesting history, thanks for digging that up. Of the 2 problems Ben
+mentions running into there, '1' does not seem universal (I think this feature
+is indeed mainly interesting for systems where you don't _want_ anyone to be
+able to load locally-built modules), and '2' is a problem that detached
+signatures have but module hashes don't have.
 
-Do you intend to add more subtests? if not, why even using a subtest struct=
-ure
+> The specific problem is why detached signatures are almost always a
+> problem: after a period of time, particularly if the process for
+> creating updated artifacts gets repeated often matching the output to
+> the right signature becomes increasingly error prone.
 
-> +}
+I haven't experienced that issue with the module hashes yet.
 
->
-> --
-> 2.49.0
->
+> Debian was, however, kind enough to attach what they currently do to
+> get reproducible builds to the kernel documentation:
+> 
+> https://docs.kernel.org/kbuild/reproducible-builds.html
+
+Cool, I was aware of that page but didn't know it was initially contributed by
+Debian.
+
+> However, if you want to detach the module signatures for packaging, so
+> the modules can go in a reproducible section and the signatures
+> elsewhere, then I think we could accommodate that (the output of the
+> build is actually unsigned modules, they just get signed on install).
+
+At least I don't really come to this from the packaging perspective, but from
+the "building an independently verifiable ISO/disk image" perspective.
+Separating the modules and the signatures into separate packages doesn't help
+me there, since they'd still both need to be present on the image.
+
+
+Kind regards,
+
+-- 
+Arnout Engelen
+Engelen Open Source
+https://engelen.eu
 
