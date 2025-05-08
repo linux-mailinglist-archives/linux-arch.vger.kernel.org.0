@@ -1,592 +1,310 @@
-Return-Path: <linux-arch+bounces-11871-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11872-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28E3DAAF169
-	for <lists+linux-arch@lfdr.de>; Thu,  8 May 2025 05:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A04C2AAF50B
+	for <lists+linux-arch@lfdr.de>; Thu,  8 May 2025 09:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EDFC4E3FCF
-	for <lists+linux-arch@lfdr.de>; Thu,  8 May 2025 03:08:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 043F84E5516
+	for <lists+linux-arch@lfdr.de>; Thu,  8 May 2025 07:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 352934B1E5E;
-	Thu,  8 May 2025 03:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e1FHYEzG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9013621D3D1;
+	Thu,  8 May 2025 07:57:47 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9414F13AD38
-	for <linux-arch@vger.kernel.org>; Thu,  8 May 2025 03:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A768F205E3E;
+	Thu,  8 May 2025 07:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746673702; cv=none; b=qux2ziC/cNvt2TGnw1oj5pVcw/h44sIQIQKvCWJf3NGLD+fqogOmyNOSmeiEGZ8XT7tJyWD0TJxVto1h5RjNNepzPFJ1czmaCTGZDqt7VzpcI086vkMk05In+R1dVBV2SNIThBlYnUbu//YGhuLaUnY6948C/qciNhPNbm07yAs=
+	t=1746691067; cv=none; b=VhtrXPFQppWBGfwteGytr0oPSP07QvD0phjFpxlVEibRJKWHxFZQf51A70NGmDgUz9yLfOBkI1HIQV6lL3uzSRvsl+JluBg7p2Fciye93K+FVxS2Sp02LcKVOiu5z482urxEESRW7oK1r4zxXJs4Yvw8J3lm8h0FeQCzTEHt698=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746673702; c=relaxed/simple;
-	bh=qK1p8skDgfCg1JHPoe7AciYgz0lzB8M/MeCJSHatNVQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=FqimJWWmBEieAGZVy0OJW1sBd3foqfw6iUx7g6huSi/4emzKrjTy5mmUDhuvkPPQTDYT/Ldtoil4RBuKrgnDGU6+147tjHHXCCG2kxBq+KD/i4QoUgMGBPDaC2k0ZrxAkbWJYFBpFLPgSHk+VTte+GXL0TGOwWh+APn4DiqO7hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e1FHYEzG; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746673700; x=1778209700;
-  h=date:from:to:cc:subject:message-id;
-  bh=qK1p8skDgfCg1JHPoe7AciYgz0lzB8M/MeCJSHatNVQ=;
-  b=e1FHYEzGD6fgiyy89a8rzRxYvGbf5Ox8kyooHKidTHXTQBIsprlZS3GG
-   1/02mmJ9IDDjSYAgHMr2iS4cQZHmskD05vIMWyEv34kb39bLWAph2IFUI
-   4YJ+LzvChI39tvXMM/MqBaeSyHzuDBNxPx2gMBzrFbhPo/PSUkiYdRhAO
-   VUnNGdnddjqGYsTwZxUEvxFbjcqSFQ/gv4MNe24zO+CBrbR9FOQwVg08s
-   UpDm/rmzE/Va8DznXSzFWi3YGDKIRyTq3czEaRjSJubxh4JcHhMPFuZcl
-   XUzUu/EBFMznWaL3Nhcb0QvRHteqpAEdSd3oLGGjd+Y/dIpqlnBUlWytT
-   A==;
-X-CSE-ConnectionGUID: 1WjbeTfSSJ2W885QdgpDyg==
-X-CSE-MsgGUID: LSgRoRLFTdKNT7z7LoghtA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="36065905"
-X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
-   d="scan'208";a="36065905"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 20:08:18 -0700
-X-CSE-ConnectionGUID: fnVuxsZzRFSaydwZ8Y6v7g==
-X-CSE-MsgGUID: iMvgzunmTYGu7g8DnMaP/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
-   d="scan'208";a="141110930"
-Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 07 May 2025 20:08:16 -0700
-Received: from kbuild by 1992f890471c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uCrcM-0009dA-08;
-	Thu, 08 May 2025 03:08:14 +0000
-Date: Thu, 08 May 2025 11:08:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 852faf805539484968aa8cc93866008b7a6d0d52
-Message-ID: <202505081157.l41gjkf9-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1746691067; c=relaxed/simple;
+	bh=vHvfFeQoNuO3261AXhQ0ELQU+4a4g0bhmooGcXbPOXw=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:MIME-Version:
+	 Message-Id:Content-Type; b=Hh/Wh7L1iz8ARmSC6yJvUd2tsIH0XCQPR4ZihiihEqlijn7zGq2qEKoO/7Dq4WBBqUoq8wBf2A4+N+vyScdqRK3eATvFntbicPCJKmpQTRGbLJpq9O2+uphbE4aGkeJhfBPymsrHl6wVsKIuetPGv58qkXJs30z/AoLokPoG4iA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=pass smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 3421842BEA;
+	Thu,  8 May 2025 09:57:36 +0200 (CEST)
+Date: Thu, 08 May 2025 09:57:31 +0200
+From: Fabian =?iso-8859-1?q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>
+Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
+To: Arnout Engelen <arnout@bzzt.net>, James Bottomley
+	<James.Bottomley@HansenPartnership.com>, Thomas =?iso-8859-1?q?Wei=DFschuh?=
+	<linux@weissschuh.net>
+Cc: Arnd Bergmann <arnd@arndb.de>, Christian Heusel <christian@heusel.eu>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Jonathan Corbet
+	<corbet@lwn.net>, Daniel Gomez <da.gomez@samsung.com>, Dmitry Kasatkin
+	<dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>,
+	James Morris <jmorris@namei.org>, kpcyrd <kpcyrd@archlinux.org>,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-security-module@vger.kernel.org,
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Masahiro Yamada
+	<masahiroy@kernel.org>, Mattia Rizzolo <mattia@mapreri.org>,
+	=?iso-8859-1?b?Q+JqdQ==?= Mihai-Drosi <mcaju95@gmail.com>, Luis Chamberlain
+	<mcgrof@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Nathan Chancellor
+	<nathan@kernel.org>, Naveen N Rao <naveen@kernel.org>, Nicolas Schier
+	<nicolas.schier@linux.dev>, =?iso-8859-1?q?Nicholas=0A?= Piggin
+	<npiggin@gmail.com>, Paul Moore <paul@paul-moore.com>, Petr Pavlu
+	<petr.pavlu@suse.com>, =?iso-8859-1?q?Roberto=0A?= Sassu
+	<roberto.sassu@huawei.com>, Sami Tolvanen <samitolvanen@google.com>,
+	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>
+References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
+	<f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
+	<840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
+	<b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
+	<072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
+	<2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
+	<6615efdc-3a84-4f1c-8a93-d7333bee0711@app.fastmail.com>
+	<7e2d25f9abb13468e5b8bb8207149999de318725.camel@HansenPartnership.com>
+In-Reply-To: <7e2d25f9abb13468e5b8bb8207149999de318725.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: astroid/0.16.0 (https://github.com/astroidmail/astroid)
+Message-Id: <1746688246.p9f7lm4alu.astroid@yuna.none>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 852faf805539484968aa8cc93866008b7a6d0d52  gcc-plugins: remove SANCOV gcc plugin
+On May 7, 2025 6:41 pm, James Bottomley wrote:
+> On Wed, 2025-05-07 at 09:47 +0200, Arnout Engelen wrote:
+>> On Tue, May 6, 2025, at 15:24, James Bottomley wrote:
+>> > I'll repeat the key point again: all modern hermetic build systems
+>> > come with provenance which is usually a signature.
+>>=20
+>> I'm not sure the 'hermetic build' parallel is so applicable here:
+>> typically a hermetic build will produce an artifact and a signature,
+>> and when you embed that result in a larger aggregate, you only embed
+>> the artifact (not the signature) and sign the aggregate.
+>=20
+> That depends whether you want to demonstrate the provenance of the
+> result to someone consuming your aggregate or not; Some people are OK
+> with the trust my signature approach, others want tracing to point of
+> origin.
 
-elapsed time: 10486m
+Debian (and derivaties) handle it that way - build results are signed
+but the aggregate (repository) has its own signature, and only that is
+used as trust anchor by apt. source packages have indiviual signatures
+by whoever uploaded them, so you can verify that if you (want to)
+rebuild.
 
-configs tested: 499
-configs skipped: 21
+>>  With module signatures, the module *and* their signatures are
+>> embedded in the aggregate (e.g. ISO, disk image), which is
+>> where (at least in my case) the friction comes from.
+>=20
+> For Linux in particular, most people won't be booting any image unless
+> the binary is secure boot signed, so this problem doesn't go away if
+> you strip module signatures.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+it is reduced in complexity though, see below.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    clang-19
-alpha                            allyesconfig    gcc-14.2.0
-alpha                               defconfig    gcc-14.2.0
-arc                              allmodconfig    clang-19
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    clang-19
-arc                      axs103_smp_defconfig    gcc-14.2.0
-arc                                 defconfig    gcc-14.2.0
-arc                 nsimosci_hs_smp_defconfig    clang-21
-arc                   randconfig-001-20250501    clang-21
-arc                   randconfig-001-20250501    gcc-13.3.0
-arc                   randconfig-001-20250502    gcc-8.5.0
-arc                   randconfig-002-20250501    clang-21
-arc                   randconfig-002-20250501    gcc-14.2.0
-arc                   randconfig-002-20250502    gcc-8.5.0
-arm                              allmodconfig    clang-19
-arm                               allnoconfig    clang-21
-arm                               allnoconfig    gcc-14.2.0
-arm                              allyesconfig    clang-19
-arm                       aspeed_g5_defconfig    clang-21
-arm                         assabet_defconfig    gcc-14.2.0
-arm                     davinci_all_defconfig    clang-21
-arm                                 defconfig    gcc-14.2.0
-arm                          ep93xx_defconfig    clang-21
-arm                          exynos_defconfig    gcc-14.2.0
-arm                            hisi_defconfig    gcc-14.2.0
-arm                       imx_v4_v5_defconfig    gcc-14.2.0
-arm                       imx_v6_v7_defconfig    gcc-14.2.0
-arm                      integrator_defconfig    clang-21
-arm                        keystone_defconfig    gcc-14.2.0
-arm                          moxart_defconfig    clang-21
-arm                        multi_v5_defconfig    gcc-14.2.0
-arm                       netwinder_defconfig    gcc-14.2.0
-arm                           omap1_defconfig    gcc-14.2.0
-arm                          pxa168_defconfig    gcc-14.2.0
-arm                          pxa910_defconfig    clang-21
-arm                            qcom_defconfig    clang-21
-arm                   randconfig-001-20250501    clang-21
-arm                   randconfig-001-20250501    gcc-10.5.0
-arm                   randconfig-001-20250502    gcc-8.5.0
-arm                   randconfig-002-20250501    clang-21
-arm                   randconfig-002-20250501    gcc-8.5.0
-arm                   randconfig-002-20250502    gcc-8.5.0
-arm                   randconfig-003-20250501    clang-21
-arm                   randconfig-003-20250501    gcc-8.5.0
-arm                   randconfig-003-20250502    gcc-8.5.0
-arm                   randconfig-004-20250501    clang-21
-arm                   randconfig-004-20250501    gcc-8.5.0
-arm                   randconfig-004-20250502    gcc-8.5.0
-arm                         s5pv210_defconfig    clang-21
-arm                        spear6xx_defconfig    gcc-14.2.0
-arm                           spitz_defconfig    gcc-14.2.0
-arm                         vf610m4_defconfig    clang-21
-arm64                            allmodconfig    clang-19
-arm64                             allnoconfig    gcc-14.2.0
-arm64                            allyesconfig    gcc-14.2.0
-arm64                               defconfig    gcc-14.2.0
-arm64                 randconfig-001-20250501    clang-21
-arm64                 randconfig-001-20250501    gcc-9.5.0
-arm64                 randconfig-001-20250502    gcc-8.5.0
-arm64                 randconfig-002-20250501    clang-21
-arm64                 randconfig-002-20250501    gcc-8.5.0
-arm64                 randconfig-002-20250502    gcc-8.5.0
-arm64                 randconfig-003-20250501    clang-21
-arm64                 randconfig-003-20250502    gcc-8.5.0
-arm64                 randconfig-004-20250501    clang-21
-arm64                 randconfig-004-20250501    gcc-9.5.0
-arm64                 randconfig-004-20250502    gcc-8.5.0
-csky                             alldefconfig    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                                defconfig    gcc-14.2.0
-csky                  randconfig-001-20250501    gcc-13.3.0
-csky                  randconfig-001-20250501    gcc-8.5.0
-csky                  randconfig-001-20250502    gcc-8.5.0
-csky                  randconfig-001-20250503    gcc-8.5.0
-csky                  randconfig-002-20250501    gcc-13.3.0
-csky                  randconfig-002-20250501    gcc-8.5.0
-csky                  randconfig-002-20250502    gcc-8.5.0
-csky                  randconfig-002-20250503    gcc-8.5.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    clang-19
-hexagon                           allnoconfig    clang-21
-hexagon                           allnoconfig    gcc-14.2.0
-hexagon                          allyesconfig    clang-19
-hexagon                          allyesconfig    clang-21
-hexagon                             defconfig    gcc-14.2.0
-hexagon               randconfig-001-20250501    clang-21
-hexagon               randconfig-001-20250501    gcc-8.5.0
-hexagon               randconfig-001-20250502    gcc-8.5.0
-hexagon               randconfig-001-20250503    gcc-8.5.0
-hexagon               randconfig-002-20250501    clang-21
-hexagon               randconfig-002-20250501    gcc-8.5.0
-hexagon               randconfig-002-20250502    gcc-8.5.0
-hexagon               randconfig-002-20250503    gcc-8.5.0
-i386                             alldefconfig    gcc-14.2.0
-i386                             allmodconfig    clang-20
-i386                              allnoconfig    clang-20
-i386                             allyesconfig    clang-20
-i386        buildonly-randconfig-001-20250501    clang-20
-i386        buildonly-randconfig-001-20250501    gcc-12
-i386        buildonly-randconfig-001-20250502    clang-20
-i386        buildonly-randconfig-001-20250503    clang-20
-i386        buildonly-randconfig-001-20250506    gcc-12
-i386        buildonly-randconfig-002-20250501    clang-20
-i386        buildonly-randconfig-002-20250501    gcc-12
-i386        buildonly-randconfig-002-20250502    clang-20
-i386        buildonly-randconfig-002-20250503    clang-20
-i386        buildonly-randconfig-002-20250506    gcc-12
-i386        buildonly-randconfig-003-20250501    clang-20
-i386        buildonly-randconfig-003-20250502    clang-20
-i386        buildonly-randconfig-003-20250503    clang-20
-i386        buildonly-randconfig-003-20250506    gcc-12
-i386        buildonly-randconfig-004-20250501    clang-20
-i386        buildonly-randconfig-004-20250502    clang-20
-i386        buildonly-randconfig-004-20250503    clang-20
-i386        buildonly-randconfig-004-20250506    gcc-12
-i386        buildonly-randconfig-005-20250501    clang-20
-i386        buildonly-randconfig-005-20250502    clang-20
-i386        buildonly-randconfig-005-20250503    clang-20
-i386        buildonly-randconfig-005-20250506    gcc-12
-i386        buildonly-randconfig-006-20250501    clang-20
-i386        buildonly-randconfig-006-20250502    clang-20
-i386        buildonly-randconfig-006-20250503    clang-20
-i386        buildonly-randconfig-006-20250506    gcc-12
-i386                                defconfig    clang-20
-i386                  randconfig-001-20250501    gcc-12
-i386                  randconfig-001-20250502    clang-20
-i386                  randconfig-001-20250503    clang-20
-i386                  randconfig-001-20250506    gcc-12
-i386                  randconfig-002-20250501    gcc-12
-i386                  randconfig-002-20250502    clang-20
-i386                  randconfig-002-20250503    clang-20
-i386                  randconfig-002-20250506    gcc-12
-i386                  randconfig-003-20250501    gcc-12
-i386                  randconfig-003-20250502    clang-20
-i386                  randconfig-003-20250503    clang-20
-i386                  randconfig-003-20250506    gcc-12
-i386                  randconfig-004-20250501    gcc-12
-i386                  randconfig-004-20250502    clang-20
-i386                  randconfig-004-20250503    clang-20
-i386                  randconfig-004-20250506    gcc-12
-i386                  randconfig-005-20250501    gcc-12
-i386                  randconfig-005-20250502    clang-20
-i386                  randconfig-005-20250503    clang-20
-i386                  randconfig-005-20250506    gcc-12
-i386                  randconfig-006-20250501    gcc-12
-i386                  randconfig-006-20250502    clang-20
-i386                  randconfig-006-20250503    clang-20
-i386                  randconfig-006-20250506    gcc-12
-i386                  randconfig-007-20250501    gcc-12
-i386                  randconfig-007-20250502    clang-20
-i386                  randconfig-007-20250503    clang-20
-i386                  randconfig-007-20250506    gcc-12
-i386                  randconfig-011-20250501    clang-20
-i386                  randconfig-011-20250502    gcc-12
-i386                  randconfig-011-20250503    clang-20
-i386                  randconfig-011-20250505    clang-20
-i386                  randconfig-011-20250506    gcc-12
-i386                  randconfig-012-20250501    clang-20
-i386                  randconfig-012-20250502    gcc-12
-i386                  randconfig-012-20250503    clang-20
-i386                  randconfig-012-20250505    clang-20
-i386                  randconfig-012-20250506    gcc-12
-i386                  randconfig-013-20250501    clang-20
-i386                  randconfig-013-20250502    gcc-12
-i386                  randconfig-013-20250503    clang-20
-i386                  randconfig-013-20250505    clang-20
-i386                  randconfig-013-20250506    gcc-12
-i386                  randconfig-014-20250501    clang-20
-i386                  randconfig-014-20250502    gcc-12
-i386                  randconfig-014-20250503    clang-20
-i386                  randconfig-014-20250505    clang-20
-i386                  randconfig-014-20250506    gcc-12
-i386                  randconfig-015-20250501    clang-20
-i386                  randconfig-015-20250502    gcc-12
-i386                  randconfig-015-20250503    clang-20
-i386                  randconfig-015-20250505    clang-20
-i386                  randconfig-015-20250506    gcc-12
-i386                  randconfig-016-20250501    clang-20
-i386                  randconfig-016-20250502    gcc-12
-i386                  randconfig-016-20250503    clang-20
-i386                  randconfig-016-20250505    clang-20
-i386                  randconfig-016-20250506    gcc-12
-i386                  randconfig-017-20250501    clang-20
-i386                  randconfig-017-20250502    gcc-12
-i386                  randconfig-017-20250503    clang-20
-i386                  randconfig-017-20250505    clang-20
-i386                  randconfig-017-20250506    gcc-12
-loongarch                        alldefconfig    gcc-14.2.0
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch                        allyesconfig    gcc-14.2.0
-loongarch                           defconfig    gcc-14.2.0
-loongarch             randconfig-001-20250501    gcc-14.2.0
-loongarch             randconfig-001-20250501    gcc-8.5.0
-loongarch             randconfig-001-20250502    gcc-8.5.0
-loongarch             randconfig-001-20250503    gcc-8.5.0
-loongarch             randconfig-002-20250501    gcc-14.2.0
-loongarch             randconfig-002-20250501    gcc-8.5.0
-loongarch             randconfig-002-20250502    gcc-8.5.0
-loongarch             randconfig-002-20250503    gcc-8.5.0
-m68k                             alldefconfig    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                                defconfig    gcc-14.2.0
-m68k                       m5208evb_defconfig    gcc-14.2.0
-m68k                        m5272c3_defconfig    gcc-14.2.0
-m68k                            mac_defconfig    gcc-14.2.0
-m68k                           virt_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-microblaze                          defconfig    gcc-14.2.0
-microblaze                      mmu_defconfig    gcc-14.2.0
-mips                             allmodconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                             allyesconfig    gcc-14.2.0
-mips                        bcm63xx_defconfig    gcc-14.2.0
-mips                       bmips_be_defconfig    gcc-14.2.0
-mips                      bmips_stb_defconfig    clang-21
-mips                  cavium_octeon_defconfig    clang-21
-mips                          eyeq6_defconfig    clang-21
-mips                           ip28_defconfig    gcc-14.2.0
-mips                           ip30_defconfig    clang-21
-mips                      maltaaprp_defconfig    clang-21
-mips                         rt305x_defconfig    clang-21
-mips                         rt305x_defconfig    gcc-14.2.0
-mips                        vocore2_defconfig    clang-21
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20250501    gcc-8.5.0
-nios2                 randconfig-001-20250502    gcc-8.5.0
-nios2                 randconfig-001-20250503    gcc-8.5.0
-nios2                 randconfig-002-20250501    gcc-8.5.0
-nios2                 randconfig-002-20250502    gcc-8.5.0
-nios2                 randconfig-002-20250503    gcc-8.5.0
-openrisc                          allnoconfig    clang-21
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-12
-parisc                           alldefconfig    clang-21
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    clang-21
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-12
-parisc                randconfig-001-20250501    gcc-14.2.0
-parisc                randconfig-001-20250501    gcc-8.5.0
-parisc                randconfig-001-20250502    gcc-8.5.0
-parisc                randconfig-001-20250503    gcc-8.5.0
-parisc                randconfig-002-20250501    gcc-8.5.0
-parisc                randconfig-002-20250502    gcc-8.5.0
-parisc                randconfig-002-20250503    gcc-8.5.0
-parisc64                         alldefconfig    gcc-14.2.0
-parisc64                            defconfig    gcc-14.2.0
-powerpc                     akebono_defconfig    clang-21
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    clang-21
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    gcc-14.2.0
-powerpc                 canyonlands_defconfig    clang-21
-powerpc                       ebony_defconfig    gcc-14.2.0
-powerpc                          g5_defconfig    gcc-14.2.0
-powerpc                       holly_defconfig    gcc-14.2.0
-powerpc                      mgcoge_defconfig    clang-21
-powerpc                      mgcoge_defconfig    gcc-14.2.0
-powerpc                 mpc8313_rdb_defconfig    gcc-14.2.0
-powerpc                 mpc836x_rdk_defconfig    gcc-14.2.0
-powerpc                 mpc837x_rdb_defconfig    clang-21
-powerpc                 mpc837x_rdb_defconfig    gcc-14.2.0
-powerpc                     mpc83xx_defconfig    clang-21
-powerpc                  mpc885_ads_defconfig    clang-21
-powerpc                      pasemi_defconfig    clang-21
-powerpc                      pcm030_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250501    clang-21
-powerpc               randconfig-001-20250501    gcc-8.5.0
-powerpc               randconfig-001-20250502    gcc-8.5.0
-powerpc               randconfig-001-20250503    gcc-8.5.0
-powerpc               randconfig-002-20250501    gcc-8.5.0
-powerpc               randconfig-002-20250502    gcc-8.5.0
-powerpc               randconfig-002-20250503    gcc-8.5.0
-powerpc               randconfig-003-20250501    clang-21
-powerpc               randconfig-003-20250501    gcc-8.5.0
-powerpc               randconfig-003-20250502    gcc-8.5.0
-powerpc               randconfig-003-20250503    gcc-8.5.0
-powerpc                     sequoia_defconfig    gcc-14.2.0
-powerpc                    socrates_defconfig    clang-21
-powerpc                  storcenter_defconfig    gcc-14.2.0
-powerpc                     taishan_defconfig    clang-21
-powerpc                 xes_mpc85xx_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250501    clang-21
-powerpc64             randconfig-001-20250501    gcc-8.5.0
-powerpc64             randconfig-001-20250502    gcc-8.5.0
-powerpc64             randconfig-001-20250503    gcc-8.5.0
-powerpc64             randconfig-002-20250501    gcc-10.5.0
-powerpc64             randconfig-002-20250501    gcc-8.5.0
-powerpc64             randconfig-002-20250502    gcc-8.5.0
-powerpc64             randconfig-002-20250503    gcc-8.5.0
-powerpc64             randconfig-003-20250501    gcc-8.5.0
-powerpc64             randconfig-003-20250502    gcc-8.5.0
-powerpc64             randconfig-003-20250503    gcc-8.5.0
-riscv                            allmodconfig    gcc-14.2.0
-riscv                             allnoconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    gcc-14.2.0
-riscv                               defconfig    gcc-12
-riscv                    nommu_virt_defconfig    clang-21
-riscv                 randconfig-001-20250501    clang-21
-riscv                 randconfig-001-20250501    gcc-14.2.0
-riscv                 randconfig-001-20250502    gcc-13.3.0
-riscv                 randconfig-001-20250503    gcc-10.5.0
-riscv                 randconfig-002-20250501    gcc-14.2.0
-riscv                 randconfig-002-20250501    gcc-8.5.0
-riscv                 randconfig-002-20250502    gcc-13.3.0
-riscv                 randconfig-002-20250503    gcc-10.5.0
-s390                             allmodconfig    clang-18
-s390                             allmodconfig    gcc-14.2.0
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    gcc-12
-s390                  randconfig-001-20250501    clang-21
-s390                  randconfig-001-20250501    gcc-14.2.0
-s390                  randconfig-001-20250502    gcc-13.3.0
-s390                  randconfig-001-20250503    gcc-10.5.0
-s390                  randconfig-002-20250501    clang-21
-s390                  randconfig-002-20250501    gcc-14.2.0
-s390                  randconfig-002-20250502    gcc-13.3.0
-s390                  randconfig-002-20250503    gcc-10.5.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-12
-sh                        edosk7760_defconfig    gcc-14.2.0
-sh                             espt_defconfig    clang-21
-sh                 kfr2r09-romimage_defconfig    clang-21
-sh                 kfr2r09-romimage_defconfig    gcc-14.2.0
-sh                          lboxre2_defconfig    gcc-14.2.0
-sh                          polaris_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250501    gcc-14.2.0
-sh                    randconfig-001-20250501    gcc-9.3.0
-sh                    randconfig-001-20250502    gcc-13.3.0
-sh                    randconfig-001-20250503    gcc-10.5.0
-sh                    randconfig-002-20250501    gcc-14.2.0
-sh                    randconfig-002-20250502    gcc-13.3.0
-sh                    randconfig-002-20250503    gcc-10.5.0
-sh                          rsk7201_defconfig    gcc-14.2.0
-sh                          rsk7264_defconfig    gcc-14.2.0
-sh                          rsk7269_defconfig    clang-21
-sh                          sdk7780_defconfig    gcc-14.2.0
-sh                          sdk7786_defconfig    gcc-14.2.0
-sh                           se7705_defconfig    gcc-14.2.0
-sh                           se7721_defconfig    clang-21
-sh                           se7780_defconfig    clang-21
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                            allyesconfig    gcc-14.2.0
-sparc                 randconfig-001-20250501    gcc-10.3.0
-sparc                 randconfig-001-20250501    gcc-14.2.0
-sparc                 randconfig-001-20250502    gcc-13.3.0
-sparc                 randconfig-001-20250503    gcc-10.5.0
-sparc                 randconfig-002-20250501    gcc-14.2.0
-sparc                 randconfig-002-20250501    gcc-8.5.0
-sparc                 randconfig-002-20250502    gcc-13.3.0
-sparc                 randconfig-002-20250503    gcc-10.5.0
-sparc64                          allmodconfig    gcc-14.2.0
-sparc64                          allyesconfig    gcc-14.2.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20250501    gcc-14.2.0
-sparc64               randconfig-001-20250502    gcc-13.3.0
-sparc64               randconfig-001-20250503    gcc-10.5.0
-sparc64               randconfig-002-20250501    gcc-14.2.0
-sparc64               randconfig-002-20250501    gcc-8.5.0
-sparc64               randconfig-002-20250502    gcc-13.3.0
-sparc64               randconfig-002-20250503    gcc-10.5.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-21
-um                               allyesconfig    clang-19
-um                               allyesconfig    gcc-12
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250501    gcc-11
-um                    randconfig-001-20250501    gcc-14.2.0
-um                    randconfig-001-20250502    gcc-13.3.0
-um                    randconfig-001-20250503    gcc-10.5.0
-um                    randconfig-002-20250501    gcc-12
-um                    randconfig-002-20250501    gcc-14.2.0
-um                    randconfig-002-20250502    gcc-13.3.0
-um                    randconfig-002-20250503    gcc-10.5.0
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20250501    clang-20
-x86_64      buildonly-randconfig-001-20250501    gcc-12
-x86_64      buildonly-randconfig-001-20250502    clang-20
-x86_64      buildonly-randconfig-001-20250503    gcc-12
-x86_64      buildonly-randconfig-002-20250501    gcc-12
-x86_64      buildonly-randconfig-002-20250502    clang-20
-x86_64      buildonly-randconfig-002-20250503    gcc-12
-x86_64      buildonly-randconfig-003-20250501    gcc-11
-x86_64      buildonly-randconfig-003-20250501    gcc-12
-x86_64      buildonly-randconfig-003-20250502    clang-20
-x86_64      buildonly-randconfig-003-20250503    gcc-12
-x86_64      buildonly-randconfig-004-20250501    clang-20
-x86_64      buildonly-randconfig-004-20250501    gcc-12
-x86_64      buildonly-randconfig-004-20250502    clang-20
-x86_64      buildonly-randconfig-004-20250503    gcc-12
-x86_64      buildonly-randconfig-005-20250501    gcc-12
-x86_64      buildonly-randconfig-005-20250502    clang-20
-x86_64      buildonly-randconfig-005-20250503    gcc-12
-x86_64      buildonly-randconfig-006-20250501    gcc-12
-x86_64      buildonly-randconfig-006-20250502    clang-20
-x86_64      buildonly-randconfig-006-20250503    gcc-12
-x86_64                              defconfig    clang-20
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20250501    clang-20
-x86_64                randconfig-001-20250502    clang-20
-x86_64                randconfig-001-20250503    clang-20
-x86_64                randconfig-001-20250506    clang-20
-x86_64                randconfig-002-20250501    clang-20
-x86_64                randconfig-002-20250502    clang-20
-x86_64                randconfig-002-20250503    clang-20
-x86_64                randconfig-002-20250506    clang-20
-x86_64                randconfig-003-20250501    clang-20
-x86_64                randconfig-003-20250502    clang-20
-x86_64                randconfig-003-20250503    clang-20
-x86_64                randconfig-003-20250506    clang-20
-x86_64                randconfig-004-20250501    clang-20
-x86_64                randconfig-004-20250502    clang-20
-x86_64                randconfig-004-20250503    clang-20
-x86_64                randconfig-004-20250506    clang-20
-x86_64                randconfig-005-20250501    clang-20
-x86_64                randconfig-005-20250502    clang-20
-x86_64                randconfig-005-20250503    clang-20
-x86_64                randconfig-005-20250506    clang-20
-x86_64                randconfig-006-20250501    clang-20
-x86_64                randconfig-006-20250502    clang-20
-x86_64                randconfig-006-20250503    clang-20
-x86_64                randconfig-006-20250506    clang-20
-x86_64                randconfig-007-20250501    clang-20
-x86_64                randconfig-007-20250502    clang-20
-x86_64                randconfig-007-20250503    clang-20
-x86_64                randconfig-007-20250506    clang-20
-x86_64                randconfig-008-20250501    clang-20
-x86_64                randconfig-008-20250502    clang-20
-x86_64                randconfig-008-20250503    clang-20
-x86_64                randconfig-008-20250506    clang-20
-x86_64                randconfig-071-20250501    gcc-12
-x86_64                randconfig-071-20250502    clang-20
-x86_64                randconfig-071-20250503    clang-20
-x86_64                randconfig-071-20250506    clang-20
-x86_64                randconfig-072-20250501    gcc-12
-x86_64                randconfig-072-20250502    clang-20
-x86_64                randconfig-072-20250503    clang-20
-x86_64                randconfig-072-20250506    clang-20
-x86_64                randconfig-073-20250501    gcc-12
-x86_64                randconfig-073-20250502    clang-20
-x86_64                randconfig-073-20250503    clang-20
-x86_64                randconfig-073-20250506    clang-20
-x86_64                randconfig-074-20250501    gcc-12
-x86_64                randconfig-074-20250502    clang-20
-x86_64                randconfig-074-20250503    clang-20
-x86_64                randconfig-074-20250506    clang-20
-x86_64                randconfig-075-20250501    gcc-12
-x86_64                randconfig-075-20250502    clang-20
-x86_64                randconfig-075-20250503    clang-20
-x86_64                randconfig-075-20250506    clang-20
-x86_64                randconfig-076-20250501    gcc-12
-x86_64                randconfig-076-20250502    clang-20
-x86_64                randconfig-076-20250503    clang-20
-x86_64                randconfig-076-20250506    clang-20
-x86_64                randconfig-077-20250501    gcc-12
-x86_64                randconfig-077-20250502    clang-20
-x86_64                randconfig-077-20250503    clang-20
-x86_64                randconfig-077-20250506    clang-20
-x86_64                randconfig-078-20250501    gcc-12
-x86_64                randconfig-078-20250502    clang-20
-x86_64                randconfig-078-20250503    clang-20
-x86_64                randconfig-078-20250506    clang-20
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    clang-18
-x86_64                          rhel-9.4-func    clang-20
-x86_64                         rhel-9.4-kunit    clang-18
-x86_64                           rhel-9.4-ltp    clang-18
-x86_64                          rhel-9.4-rust    clang-18
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                           allyesconfig    gcc-14.2.0
-xtensa                  cadence_csp_defconfig    clang-21
-xtensa                generic_kc705_defconfig    gcc-14.2.0
-xtensa                randconfig-001-20250501    gcc-14.2.0
-xtensa                randconfig-001-20250502    gcc-13.3.0
-xtensa                randconfig-001-20250503    gcc-10.5.0
-xtensa                randconfig-002-20250501    gcc-12.4.0
-xtensa                randconfig-002-20250501    gcc-14.2.0
-xtensa                randconfig-002-20250502    gcc-13.3.0
-xtensa                randconfig-002-20250503    gcc-10.5.0
-xtensa                         virt_defconfig    clang-21
-xtensa                    xip_kc705_defconfig    clang-21
+>> > Plus, you've got to remember that a signature is a cryptographic
+>> > function of the hash over the build minus the signature.=C2=A0 You can=
+'t
+>> > verify a signature unless you know how to get the build minus the
+>> > signature.=C2=A0 So the process is required to be deterministic.
+>>=20
+>> Right: there is no friction validating the module signatures, that is
+>> fine. There is friction validating the aggregate artifact (e.g. ISO,
+>> disk image), though, because of those signatures embedded into it.
+>=20
+> I think we understand the problem with signatures (particularly the
+> ones which add entropy and can thus change every time the same object
+> is signed).  However, I don't think we can accept that no signatures
+> can be on the ISO ... we'll have to have at least secure boot
+> signatures and if there's a way of doing that then there should be a
+> way of doing other signatures.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+secure boot signatures (other than for kernel modules) are added as a
+separate step at least in Debian(-based distros). this means that for
+every -signed package you have an unsigned counter part that is
+(hopefully) reproducible, and the difference is only the signature(s)
+(which might be detached or attached, depending on the package).
+
+building such a package boils down to:
+- build the unsigned package(s) + a helper package instructing the signing
+  machinery which files to sign with which key
+- pass the helper package to the signing infrastructure
+- signing infrastructure calculates digest and generates signature
+  value, and puts that into another source package for the -signed
+  variant
+- "build" that source package (e.g., [0]), which might mean attaching
+  the signature to the corresponding binary artifact, or just storing
+  the signature somewhere to be handled later
+
+this way, the part of infrastructure that handles signing (and thus
+access to the corresponding secret key material) is decoupled from the
+regular build infrastructure and can have a vastly reduced attack
+surface. it has the additional side-effect that the actual "build" steps
+are each reproducible (modulo bugs affecting that, of course). the
+signing step obviously isn't, but that isn't really a problem..
+
+>> As you mentioned earlier, of course this is *possible* to do (for
+>> example by adding the signatures as inputs to the second
+>> 'independent' build or by creating a hard-to-validate 'check recipe'
+>> running the build in reverse). Still, checking modules at run time by
+>> hash instead of by signature would be a much simpler option for such
+>> scenario's.
+>=20
+> Well, my objection was merely to the description saying verifying
+> reproducibility with signatures was not possible (it is).
+
+verifying reproducibility of the *unsigned* kernel package doesn't
+require any special hacks or mangling if the modules themselves are not
+signed using an ephemeral key. (there are currently still other issues
+affecting reproducibility, but that would be the goal!)
+
+> However, the problem with distros adopting an immutable hash list for
+> module loading would be DKMS, but I think the distributions that go
+> that route have all solved the reproducibility issues with signatures
+> anyway, so perhaps that's not an issue.
+
+DKMS usually uses MOK as trust anchor, and that key is not
+provided/managed by the distro, all the signing happens on the user
+side, DKMS packages just ship the module source code + build scripts.
+
+so this is orthogonal - yes, if you want to support DKMS (or other
+out-of-tree modules), those modules cannot be included in an in-tree
+hash list and would still need to be signed somehow by a trusted key.
+
+basically, both current solutions have downsides:
+
+- signing modules after the build, similar to the kernel image itself,
+  is rather impractical with the number of modules shipped by the usual
+  distro packages, and relies on other safeguards/invariants not being
+  broken to prevent downgrade attacks
+- signing modules during the build using an ephemeral key requires
+  stripping the signatures when verifying reproducibility (this
+  discussion ;)), but also requires enough entropy and not even
+  read-only access to the build environment by a potential attacker,
+  since if they can read/leak the ephemeral key, they can later attack
+  all systems running this particular kernel build
+
+in practice many distros combine both approaches - ephemeral keys for
+modules shipped as part of the kernel build, other trusted keys for
+out-of-tree modules like DKMS, proprietary drivers, livepatching, ..
+
+the module hash approach (provided it has an opt-in escape hatch for
+trusted out-of-tree modules like DKMS) solves all those downsides, as
+far as I can tell. you still need all the safeguards/invariants if you
+use signed out-of-tree modules of course, if that is part of your use
+case. but e.g. AFAIK for Debian (and us as downstream), the only modules
+not built as part of the kernel build are built by DKMS on user systems,
+and those are signed by the MOK managed by the user/admin.
+
+>> > > > All current secure build processes (hermetic builds, SLSA and
+>> > > > the like) are requiring output provenance (i.e. signed
+>> > > > artifacts).=C2=A0 If you try to stand like Canute against this tid=
+e
+>> > > > saying "no signed builds", you're simply opposing progress for
+>> > > > the sake of it
+>> > >=20
+>> > > I don't think anyone is saying 'no signed builds', but we'd enjoy
+>> > > being able to keep the signatures as detached metadata instead of
+>> > > having to embed them into the 'actual' artifacts.
+>> >=20
+>> > We had this debate about 15 years ago when Debian first started
+>> > reproducible builds for the kernel.=C2=A0 Their initial approach was
+>> > detached module signatures.=C2=A0 This was the original patch set:
+>> >=20
+>> > https://lore.kernel.org/linux-modules/20160405001611.GJ21187@decadent.=
+org.uk/
+>> >=20
+>> > And this is the reason why Debian abandoned it:
+>> >=20
+>> > https://lists.debian.org/debian-kernel/2016/05/msg00384.html
+>>=20
+>> That is interesting history, thanks for digging that up. Of the 2
+>> problems Ben mentions running into there, '1' does not seem universal
+>> (I think this feature is indeed mainly interesting for systems where
+>> you don't _want_ anyone to be able to load locally-built modules),
+>> and '2' is a problem that detached signatures have but module hashes
+>> don't have.
+>=20
+> I think Debian ended up going with 2, but since they also provide DKMS
+> infrastructure, hash module lists won't work for them anyway.
+
+Debian switched to using an ephemeral key 1.5 years ago for the modules
+shipped with the kernel package itself (the dkms package ships MOK
+integration to streamline that usecase)[1].
+
+build artifacts in Debian are signed in a way that makes reproducing
+them straightforward - the (provenance) signatures are not embedded into
+the packages. it's basically just secure boot where Debian generates the
+signature and *has* to store it inside a package, and there the actual
+build and the signature handling are decoupled to minimize the fallout.
+
+>> > The specific problem is why detached signatures are almost always a
+>> > problem: after a period of time, particularly if the process for
+>> > creating updated artifacts gets repeated often matching the output
+>> > to the right signature becomes increasingly error prone.
+>>=20
+>> I haven't experienced that issue with the module hashes yet.
+>=20
+> Heh, I'll repeat this question after you've done umpteen builds of the
+> same kernel for debugging purposes. The problem that will bite me is
+> that I often just rebuild a single module and reinsert to try to chase
+> a bug down.  With this scheme I can't simply reinsert, I'd have to
+> rebuild the hash list and reboot the entire vmlinux.
+
+or you could sign the module with a MOK - supporting that in combination
+with the hash list is a requirement for pretty much every distro out
+there anyway to support DKMS?
+
+>> > Debian was, however, kind enough to attach what they currently do
+>> > to get reproducible builds to the kernel documentation:
+>> >=20
+>> > https://docs.kernel.org/kbuild/reproducible-builds.html
+>>=20
+>> Cool, I was aware of that page but didn't know it was initially
+>> contributed by Debian.
+>>=20
+>> > However, if you want to detach the module signatures for packaging,
+>> > so the modules can go in a reproducible section and the signatures
+>> > elsewhere, then I think we could accommodate that (the output of
+>> > the build is actually unsigned modules, they just get signed on
+>> > install).
+>>=20
+>> At least I don't really come to this from the packaging perspective,
+>> but from the "building an independently verifiable ISO/disk image"
+>> perspective. Separating the modules and the signatures into separate
+>> packages doesn't help me there, since they'd still both need to be
+>> present on the image.
+>=20
+> So how do you cope with secure boot?  I mean if the object is to
+> produce an ISO that is demonstrably reproducible but otherwise
+> unusable, we can certainly script a way to excise all the signatures
+> including the secure boot one.
+
+although I am not the one you directed this question at, I'd still like
+to give an answer from my PoV:
+
+by simply treating both the -unsigned and -signed source packages as
+separate input for determining reproducibility, you can work around this
+issue. the signature is part of the "source" of the latter, and as long
+as the unsigned package is reproducible, the signed counterpart is as
+well, even if you haven't "reproduced" the signature creation.
+
+this is exactly the reason why ephemeral keys used for signing are
+breaking reproducible builds, it's no longer possible to reproduce the
+"partially-signed"[2] kernel package in the usual fashion (without
+mangling).
+
+0: https://buildd.debian.org/status/fetch.php?pkg=3Dfwupd-amd64-signed&arch=
+=3Damd64&ver=3D1%3A1.7%2B1&stamp=3D1726899394&raw=3D0
+1: https://tracker.debian.org/news/1482751/accepted-linux-663-1exp1-source-=
+into-experimental/
+2: i.e., with just the modules signed, but the image itself not
+
 
