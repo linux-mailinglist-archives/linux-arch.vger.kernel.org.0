@@ -1,310 +1,160 @@
-Return-Path: <linux-arch+bounces-11872-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11873-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A04C2AAF50B
-	for <lists+linux-arch@lfdr.de>; Thu,  8 May 2025 09:57:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1374DAB017F
+	for <lists+linux-arch@lfdr.de>; Thu,  8 May 2025 19:32:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 043F84E5516
-	for <lists+linux-arch@lfdr.de>; Thu,  8 May 2025 07:57:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBC953BB430
+	for <lists+linux-arch@lfdr.de>; Thu,  8 May 2025 17:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9013621D3D1;
-	Thu,  8 May 2025 07:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 169F92135A4;
+	Thu,  8 May 2025 17:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="NmrWcQOn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A768F205E3E;
-	Thu,  8 May 2025 07:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2C920F066
+	for <linux-arch@vger.kernel.org>; Thu,  8 May 2025 17:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746691067; cv=none; b=VhtrXPFQppWBGfwteGytr0oPSP07QvD0phjFpxlVEibRJKWHxFZQf51A70NGmDgUz9yLfOBkI1HIQV6lL3uzSRvsl+JluBg7p2Fciye93K+FVxS2Sp02LcKVOiu5z482urxEESRW7oK1r4zxXJs4Yvw8J3lm8h0FeQCzTEHt698=
+	t=1746725539; cv=none; b=TiJHMOlv4wd+/PkHvYVLsUpI7ZJTdfLaKAtKYjf0iyJUH1IZzKtKSpMUHnh1tacI8P9rrlcICXmVCZsFHft7IOt8z/WhQLY7Ig/EleHGkt+MPYU4BtUY2M3JOJkEr29SZHalpM3Hhi7U5xBk3JX8RBnznKxx4SXA9Pb+9J8Fl/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746691067; c=relaxed/simple;
-	bh=vHvfFeQoNuO3261AXhQ0ELQU+4a4g0bhmooGcXbPOXw=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:MIME-Version:
-	 Message-Id:Content-Type; b=Hh/Wh7L1iz8ARmSC6yJvUd2tsIH0XCQPR4ZihiihEqlijn7zGq2qEKoO/7Dq4WBBqUoq8wBf2A4+N+vyScdqRK3eATvFntbicPCJKmpQTRGbLJpq9O2+uphbE4aGkeJhfBPymsrHl6wVsKIuetPGv58qkXJs30z/AoLokPoG4iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=pass smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 3421842BEA;
-	Thu,  8 May 2025 09:57:36 +0200 (CEST)
-Date: Thu, 08 May 2025 09:57:31 +0200
-From: Fabian =?iso-8859-1?q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>
-Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
-To: Arnout Engelen <arnout@bzzt.net>, James Bottomley
-	<James.Bottomley@HansenPartnership.com>, Thomas =?iso-8859-1?q?Wei=DFschuh?=
-	<linux@weissschuh.net>
-Cc: Arnd Bergmann <arnd@arndb.de>, Christian Heusel <christian@heusel.eu>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Jonathan Corbet
-	<corbet@lwn.net>, Daniel Gomez <da.gomez@samsung.com>, Dmitry Kasatkin
-	<dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>,
-	James Morris <jmorris@namei.org>, kpcyrd <kpcyrd@archlinux.org>,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-security-module@vger.kernel.org,
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Masahiro Yamada
-	<masahiroy@kernel.org>, Mattia Rizzolo <mattia@mapreri.org>,
-	=?iso-8859-1?b?Q+JqdQ==?= Mihai-Drosi <mcaju95@gmail.com>, Luis Chamberlain
-	<mcgrof@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Nathan Chancellor
-	<nathan@kernel.org>, Naveen N Rao <naveen@kernel.org>, Nicolas Schier
-	<nicolas.schier@linux.dev>, =?iso-8859-1?q?Nicholas=0A?= Piggin
-	<npiggin@gmail.com>, Paul Moore <paul@paul-moore.com>, Petr Pavlu
-	<petr.pavlu@suse.com>, =?iso-8859-1?q?Roberto=0A?= Sassu
-	<roberto.sassu@huawei.com>, Sami Tolvanen <samitolvanen@google.com>,
-	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
-	<f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
-	<840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
-	<b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
-	<072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
-	<2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
-	<6615efdc-3a84-4f1c-8a93-d7333bee0711@app.fastmail.com>
-	<7e2d25f9abb13468e5b8bb8207149999de318725.camel@HansenPartnership.com>
-In-Reply-To: <7e2d25f9abb13468e5b8bb8207149999de318725.camel@HansenPartnership.com>
+	s=arc-20240116; t=1746725539; c=relaxed/simple;
+	bh=Czoa04WdZHAxDxPaTXnsEJ/wALLQLIdenMBRznAZXqs=;
+	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
+	 Content-Type; b=W7pRnxNNmS8jG8b46g6hZNAYSiABDUCGH6Yo/mz0ySiYNWYfkPqc7vHlI3d2J5bJOTldTmS28Rp+90wqZxN6YkRg0eEcv3bBV0MXB+hC/hXyVbALtTwbShbFJlEj749WdYSuI1D2CyjhV3km+RTQbZvApFBFIbpx0l9g/nGdcrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=NmrWcQOn; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-227b828de00so13853965ad.1
+        for <linux-arch@vger.kernel.org>; Thu, 08 May 2025 10:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1746725535; x=1747330335; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IPMbNxc43AcR45VhaO0+Mz0+fFeHkW9XaM5DPtDrlDo=;
+        b=NmrWcQOnrtLr3g3nQhX++vcFyXlVGVwSJ+YCF8etoVJIStbDOpNABHSQlvQzyuFkAe
+         N4EHPGL18J44/FXxysimKh6WJIV8xlGK8ADqf9eaMwqMoneqzL0wTc/KczQyBDSN6ZwU
+         2HWrPhKAjJXObTcpBB9xF/BtPbuEPGagtnzlbDtewiCvhyv+Wl2Vts7GRg52eQ/TnHqN
+         QHiCLFEfGyPc/rFRLGvyMW2K5C9R4e2cuFOD97mZs4BZ3s3+dj6f+oDXWhcJiSC8UUsq
+         VfxZlmiELLTHf//UsjF81QGP/B+v/2QoInFlu6d/ckuDP4mM4o3ZYclkd2NOyuU6MCRK
+         AEgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746725535; x=1747330335;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IPMbNxc43AcR45VhaO0+Mz0+fFeHkW9XaM5DPtDrlDo=;
+        b=BrJ8iBAFr+UuSrfCam98peElOkNYFsEMo9Bci+S0qGpaciWP4gLZl+l9KNa/7YLr7k
+         kH0/XF6Xpggzn16FjXPEnFuX65HUAX2M43/3NL9vHLmZZMytxxzEtBbXl6KwT2hFvK6J
+         sOck3OxW5ej0YFLOGxZpFILSp/WA+6cwya8Ql967R2VyXV+KBWjRoSltRi4PLyqGiN8i
+         5JZP+6YJPpvCl4m9avC0yB5VDmr0C3z3yEDftsL6EAXYqsR88liqLCoKusZ5NgJmkEeT
+         ai4d489FYLpAYbR3VbXURMTYlk+q8peX/iZkt1E6A21FwL6aidCQoMW2WZqafsRUWXT0
+         ZHug==
+X-Forwarded-Encrypted: i=1; AJvYcCUqH4Au+G5TDXRqqpNdupOMo2PUptWh+J9i6FMDiPPNFgw0XCtwOFgMRM7hqU9MK8ni3mTf32xRLMKx@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywps9LWEUGOT99pHv/EiTrNt7TMY7GlCirQ9cgZgwg+zqCiyfV0
+	oUM+VPTJ8CIH1/624Aaez+d8CieKk4Xz/5nzvSHUuL9uR+CHC1DOuf3K9rhZNhk=
+X-Gm-Gg: ASbGncvzLiyAvLKHl89UjTpkg2wsfoqeqxS88j3HvuR9i0wlsdrKlJ0vV98KwJGen8s
+	OlZOBw6cdWPG/1AZCFavhN6lTsvLBvYT4GqJGUBg0+WrNE0gqYq1/Xym0wQk2Ks+LBx0VxNRR07
+	qASvGEJ+jNvvRaEu8S5HnK4CcvDehnZpMJvdWRnpFhNZIonj5cbUbYuUXMrReQE6uGSAhwkxYQ7
+	UanskTtOeZ7apqyuU0weaWEMQjyyhr2zlMEG275w4t5i7pWuUhD29YnuCDqQgFswhroCJLvq7Gg
+	3dxbaKJgRV7NcxfqAi5jkwzTGQSWh7PU9w==
+X-Google-Smtp-Source: AGHT+IE9VgVPP9dUNk5nU36GZVaBczxNclok26A18Dg0EZaOSiwRtsNDoM6n6nUdbHkW7QysWWdeDA==
+X-Received: by 2002:a17:902:dacd:b0:22e:566f:bca7 with SMTP id d9443c01a7336-22fc8b5192fmr2750915ad.17.1746725535067;
+        Thu, 08 May 2025 10:32:15 -0700 (PDT)
+Received: from localhost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22fc82c3063sm1796455ad.244.2025.05.08.10.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 May 2025 10:32:14 -0700 (PDT)
+Date: Thu, 08 May 2025 10:32:14 -0700 (PDT)
+X-Google-Original-Date: Thu, 08 May 2025 10:32:12 PDT (-0700)
+Subject:     Re: [PATCH v4 0/2] Implement endianess swap macros for RISC-V
+In-Reply-To: <20250426-riscv-swab-v4-0-64201404a68c@iencinas.com>
+CC: Paul Walmsley <paul.walmsley@sifive.com>, alex@ghiti.fr, ebiggers@kernel.org,
+  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
+  skhan@linuxfoundation.org, zhihang.shao.iscas@gmail.com, bjorn@kernel.org, linux-arch@vger.kernel.org,
+  ignacio@iencinas.com
+From: Palmer Dabbelt <palmer@dabbelt.com>
+To: ignacio@iencinas.com, Arnd Bergmann <arnd@arndb.de>
+Message-ID: <mhng-3695679f-b501-42f4-95e0-69457773b787@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: astroid/0.16.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1746688246.p9f7lm4alu.astroid@yuna.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On May 7, 2025 6:41 pm, James Bottomley wrote:
-> On Wed, 2025-05-07 at 09:47 +0200, Arnout Engelen wrote:
->> On Tue, May 6, 2025, at 15:24, James Bottomley wrote:
->> > I'll repeat the key point again: all modern hermetic build systems
->> > come with provenance which is usually a signature.
->>=20
->> I'm not sure the 'hermetic build' parallel is so applicable here:
->> typically a hermetic build will produce an artifact and a signature,
->> and when you embed that result in a larger aggregate, you only embed
->> the artifact (not the signature) and sign the aggregate.
->=20
-> That depends whether you want to demonstrate the provenance of the
-> result to someone consuming your aggregate or not; Some people are OK
-> with the trust my signature approach, others want tracing to point of
-> origin.
+On Sat, 26 Apr 2025 07:56:17 PDT (-0700), ignacio@iencinas.com wrote:
+> Motivated by [1]. A couple of things to note:
+>
+> RISC-V needs a default implementation to fall back on. There is one
+> available in include/uapi/linux/swab.h but that header can't be included
+> from arch/riscv/include/asm/swab.h. Therefore, the first patch in this
+> series moves the default implementation into asm-generic.
 
-Debian (and derivaties) handle it that way - build results are signed
-but the aggregate (repository) has its own signature, and only that is
-used as trust anchor by apt. source packages have indiviual signatures
-by whoever uploaded them, so you can verify that if you (want to)
-rebuild.
+This seems fine to me, so 
 
->>  With module signatures, the module *and* their signatures are
->> embedded in the aggregate (e.g. ISO, disk image), which is
->> where (at least in my case) the friction comes from.
->=20
-> For Linux in particular, most people won't be booting any image unless
-> the binary is secure boot signed, so this problem doesn't go away if
-> you strip module signatures.
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-it is reduced in complexity though, see below.
+It's asm-generic, though, so I usually try to wait for a review from 
+Arnd for those.
 
->> > Plus, you've got to remember that a signature is a cryptographic
->> > function of the hash over the build minus the signature.=C2=A0 You can=
-'t
->> > verify a signature unless you know how to get the build minus the
->> > signature.=C2=A0 So the process is required to be deterministic.
->>=20
->> Right: there is no friction validating the module signatures, that is
->> fine. There is friction validating the aggregate artifact (e.g. ISO,
->> disk image), though, because of those signatures embedded into it.
->=20
-> I think we understand the problem with signatures (particularly the
-> ones which add entropy and can thus change every time the same object
-> is signed).  However, I don't think we can accept that no signatures
-> can be on the ISO ... we'll have to have at least secure boot
-> signatures and if there's a way of doing that then there should be a
-> way of doing other signatures.
-
-secure boot signatures (other than for kernel modules) are added as a
-separate step at least in Debian(-based distros). this means that for
-every -signed package you have an unsigned counter part that is
-(hopefully) reproducible, and the difference is only the signature(s)
-(which might be detached or attached, depending on the package).
-
-building such a package boils down to:
-- build the unsigned package(s) + a helper package instructing the signing
-  machinery which files to sign with which key
-- pass the helper package to the signing infrastructure
-- signing infrastructure calculates digest and generates signature
-  value, and puts that into another source package for the -signed
-  variant
-- "build" that source package (e.g., [0]), which might mean attaching
-  the signature to the corresponding binary artifact, or just storing
-  the signature somewhere to be handled later
-
-this way, the part of infrastructure that handles signing (and thus
-access to the corresponding secret key material) is decoupled from the
-regular build infrastructure and can have a vastly reduced attack
-surface. it has the additional side-effect that the actual "build" steps
-are each reproducible (modulo bugs affecting that, of course). the
-signing step obviously isn't, but that isn't really a problem..
-
->> As you mentioned earlier, of course this is *possible* to do (for
->> example by adding the signatures as inputs to the second
->> 'independent' build or by creating a hard-to-validate 'check recipe'
->> running the build in reverse). Still, checking modules at run time by
->> hash instead of by signature would be a much simpler option for such
->> scenario's.
->=20
-> Well, my objection was merely to the description saying verifying
-> reproducibility with signatures was not possible (it is).
-
-verifying reproducibility of the *unsigned* kernel package doesn't
-require any special hacks or mangling if the modules themselves are not
-signed using an ephemeral key. (there are currently still other issues
-affecting reproducibility, but that would be the goal!)
-
-> However, the problem with distros adopting an immutable hash list for
-> module loading would be DKMS, but I think the distributions that go
-> that route have all solved the reproducibility issues with signatures
-> anyway, so perhaps that's not an issue.
-
-DKMS usually uses MOK as trust anchor, and that key is not
-provided/managed by the distro, all the signing happens on the user
-side, DKMS packages just ship the module source code + build scripts.
-
-so this is orthogonal - yes, if you want to support DKMS (or other
-out-of-tree modules), those modules cannot be included in an in-tree
-hash list and would still need to be signed somehow by a trusted key.
-
-basically, both current solutions have downsides:
-
-- signing modules after the build, similar to the kernel image itself,
-  is rather impractical with the number of modules shipped by the usual
-  distro packages, and relies on other safeguards/invariants not being
-  broken to prevent downgrade attacks
-- signing modules during the build using an ephemeral key requires
-  stripping the signatures when verifying reproducibility (this
-  discussion ;)), but also requires enough entropy and not even
-  read-only access to the build environment by a potential attacker,
-  since if they can read/leak the ephemeral key, they can later attack
-  all systems running this particular kernel build
-
-in practice many distros combine both approaches - ephemeral keys for
-modules shipped as part of the kernel build, other trusted keys for
-out-of-tree modules like DKMS, proprietary drivers, livepatching, ..
-
-the module hash approach (provided it has an opt-in escape hatch for
-trusted out-of-tree modules like DKMS) solves all those downsides, as
-far as I can tell. you still need all the safeguards/invariants if you
-use signed out-of-tree modules of course, if that is part of your use
-case. but e.g. AFAIK for Debian (and us as downstream), the only modules
-not built as part of the kernel build are built by DKMS on user systems,
-and those are signed by the MOK managed by the user/admin.
-
->> > > > All current secure build processes (hermetic builds, SLSA and
->> > > > the like) are requiring output provenance (i.e. signed
->> > > > artifacts).=C2=A0 If you try to stand like Canute against this tid=
-e
->> > > > saying "no signed builds", you're simply opposing progress for
->> > > > the sake of it
->> > >=20
->> > > I don't think anyone is saying 'no signed builds', but we'd enjoy
->> > > being able to keep the signatures as detached metadata instead of
->> > > having to embed them into the 'actual' artifacts.
->> >=20
->> > We had this debate about 15 years ago when Debian first started
->> > reproducible builds for the kernel.=C2=A0 Their initial approach was
->> > detached module signatures.=C2=A0 This was the original patch set:
->> >=20
->> > https://lore.kernel.org/linux-modules/20160405001611.GJ21187@decadent.=
-org.uk/
->> >=20
->> > And this is the reason why Debian abandoned it:
->> >=20
->> > https://lists.debian.org/debian-kernel/2016/05/msg00384.html
->>=20
->> That is interesting history, thanks for digging that up. Of the 2
->> problems Ben mentions running into there, '1' does not seem universal
->> (I think this feature is indeed mainly interesting for systems where
->> you don't _want_ anyone to be able to load locally-built modules),
->> and '2' is a problem that detached signatures have but module hashes
->> don't have.
->=20
-> I think Debian ended up going with 2, but since they also provide DKMS
-> infrastructure, hash module lists won't work for them anyway.
-
-Debian switched to using an ephemeral key 1.5 years ago for the modules
-shipped with the kernel package itself (the dkms package ships MOK
-integration to streamline that usecase)[1].
-
-build artifacts in Debian are signed in a way that makes reproducing
-them straightforward - the (provenance) signatures are not embedded into
-the packages. it's basically just secure boot where Debian generates the
-signature and *has* to store it inside a package, and there the actual
-build and the signature handling are decoupled to minimize the fallout.
-
->> > The specific problem is why detached signatures are almost always a
->> > problem: after a period of time, particularly if the process for
->> > creating updated artifacts gets repeated often matching the output
->> > to the right signature becomes increasingly error prone.
->>=20
->> I haven't experienced that issue with the module hashes yet.
->=20
-> Heh, I'll repeat this question after you've done umpteen builds of the
-> same kernel for debugging purposes. The problem that will bite me is
-> that I often just rebuild a single module and reinsert to try to chase
-> a bug down.  With this scheme I can't simply reinsert, I'd have to
-> rebuild the hash list and reboot the entire vmlinux.
-
-or you could sign the module with a MOK - supporting that in combination
-with the hash list is a requirement for pretty much every distro out
-there anyway to support DKMS?
-
->> > Debian was, however, kind enough to attach what they currently do
->> > to get reproducible builds to the kernel documentation:
->> >=20
->> > https://docs.kernel.org/kbuild/reproducible-builds.html
->>=20
->> Cool, I was aware of that page but didn't know it was initially
->> contributed by Debian.
->>=20
->> > However, if you want to detach the module signatures for packaging,
->> > so the modules can go in a reproducible section and the signatures
->> > elsewhere, then I think we could accommodate that (the output of
->> > the build is actually unsigned modules, they just get signed on
->> > install).
->>=20
->> At least I don't really come to this from the packaging perspective,
->> but from the "building an independently verifiable ISO/disk image"
->> perspective. Separating the modules and the signatures into separate
->> packages doesn't help me there, since they'd still both need to be
->> present on the image.
->=20
-> So how do you cope with secure boot?  I mean if the object is to
-> produce an ISO that is demonstrably reproducible but otherwise
-> unusable, we can certainly script a way to excise all the signatures
-> including the secure boot one.
-
-although I am not the one you directed this question at, I'd still like
-to give an answer from my PoV:
-
-by simply treating both the -unsigned and -signed source packages as
-separate input for determining reproducibility, you can work around this
-issue. the signature is part of the "source" of the latter, and as long
-as the unsigned package is reproducible, the signed counterpart is as
-well, even if you haven't "reproduced" the signature creation.
-
-this is exactly the reason why ephemeral keys used for signing are
-breaking reproducible builds, it's no longer possible to reproduce the
-"partially-signed"[2] kernel package in the usual fashion (without
-mangling).
-
-0: https://buildd.debian.org/status/fetch.php?pkg=3Dfwupd-amd64-signed&arch=
-=3Damd64&ver=3D1%3A1.7%2B1&stamp=3D1726899394&raw=3D0
-1: https://tracker.debian.org/news/1482751/accepted-linux-663-1exp1-source-=
-into-experimental/
-2: i.e., with just the modules signed, but the image itself not
-
+> Tested with crc_kunit as pointed out here [2]. I can't provide
+> performance numbers as I don't have RISC-V hardware yet.
+>
+> [1] https://lore.kernel.org/all/20250302220426.GC2079@quark.localdomain/
+> [2] https://lore.kernel.org/all/20250216225530.306980-1-ebiggers@kernel.org/
+>
+> Signed-off-by: Ignacio Encinas <ignacio@iencinas.com>
+> ---
+> Changes in v4:
+>
+> - Add missing include in the 1st patch, reported by
+>   https://lore.kernel.org/all/202504042300.it9RcOSt-lkp@intel.com/
+> - Rewrite the ARCH_SWAB macro as suggested by Arnd
+> - Define __arch_swab64 for CONFIG_32BIT (Ben)
+> - Link to v3: https://lore.kernel.org/r/20250403-riscv-swab-v3-0-3bf705d80e33@iencinas.com
+>
+> Arnd, I know you don't like Patch 1 but I tried your suggestions and
+> couldn't make them work. Please let me know if I missed anything [3] [4]
+>
+> [3] https://lore.kernel.org/linux-riscv/f5464e26-faa0-48f1-8585-9ce52c8c9f5f@iencinas.com/
+> [4] https://lore.kernel.org/linux-riscv/b3b59747-0484-4042-bdc4-c067688e3bfe@iencinas.com/
+>
+> Changes in v3:
+>
+> PATCH 2:
+>   Use if(riscv_has_extension_likely) instead of asm goto (Eric). It
+>   looks like both versions generate the same assembly. Perhaps we should
+>   do the same change in other places such as arch/riscv/include/asm/bitops.h
+> - Link to v2: https://lore.kernel.org/r/20250319-riscv-swab-v2-0-d53b6d6ab915@iencinas.com
+>
+> Changes in v2:
+> - Introduce first patch factoring out the default implementation into
+>   asm-generic
+> - Remove blank line to make checkpatch happy
+> - Link to v1: https://lore.kernel.org/r/20250310-riscv-swab-v1-1-34652ef1ee96@iencinas.com
+>
+> ---
+> Ignacio Encinas (2):
+>       include/uapi/linux/swab.h: move default implementation for swab macros into asm-generic
+>       riscv: introduce asm/swab.h
+>
+>  arch/riscv/include/asm/swab.h   | 62 +++++++++++++++++++++++++++++++++++++++++
+>  include/uapi/asm-generic/swab.h | 33 ++++++++++++++++++++++
+>  include/uapi/linux/swab.h       | 33 +---------------------
+>  3 files changed, 96 insertions(+), 32 deletions(-)
+> ---
+> base-commit: a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47
+> change-id: 20250307-riscv-swab-b81b94a9ac1b
+>
+> Best regards,
 
