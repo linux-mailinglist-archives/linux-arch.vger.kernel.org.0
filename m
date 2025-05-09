@@ -1,73 +1,100 @@
-Return-Path: <linux-arch+bounces-11877-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11878-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06075AB16F2
-	for <lists+linux-arch@lfdr.de>; Fri,  9 May 2025 16:14:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D1A5AB1B8D
+	for <lists+linux-arch@lfdr.de>; Fri,  9 May 2025 19:30:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B43913B21A6
-	for <lists+linux-arch@lfdr.de>; Fri,  9 May 2025 14:12:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCE0217965E
+	for <lists+linux-arch@lfdr.de>; Fri,  9 May 2025 17:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F7A296151;
-	Fri,  9 May 2025 14:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8950A23C517;
+	Fri,  9 May 2025 17:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastemail60.com header.i=@fastemail60.com header.b="cCpzI6Ed"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1Vzq6pk"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.fastemail60.com (mail.fastemail60.com [102.222.20.253])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1099E295DA0
-	for <linux-arch@vger.kernel.org>; Fri,  9 May 2025 14:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=102.222.20.253
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574E223C4FD;
+	Fri,  9 May 2025 17:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746799943; cv=none; b=W1KmgE9/8bZ+/m+6G5SR8EsNXpLJLuW5/Lh9SFENXn5efshJFJGAbYtn4bolVUBfQGiMrwxjHxxLbU8uOgtd5O6EU8Kg3OKPgp+U1xuheUhYgHn1o8MR4ZORkLD0pfUZ06x+9katQ1wfExWB8aQNzhlMlcC4Og7/Pf2lfGTVbXM=
+	t=1746811800; cv=none; b=ixVCT2PcESVuWiDyvH/kIDcoZDZBzNxCwxpVKKN2sXl4Aqj0qvLT/HuefIkfq7SJqQCZrSUvroJ1Eu6FOQZF3tEwmww8nN5mMVDWJ42uv2JfRKgkY0MrDGhR/4391VE+VXmwo5i3C2qV2CdCIdhMrZfwluqVVeS9NhZb3e10mvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746799943; c=relaxed/simple;
-	bh=0kM12Ki2v7eI61I1WvQrX7nQw+DKE1uiGUA45uahRZc=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ROa3k0x8CsJ+V5qokHKhH/eriCQcbaj4XNG2MnaZYPzqiNWTZTmzxqbgqqOW3ON7LvgKyvitynUtKpb0wI7Z05xMAZeRaJXwbVnXKNcCvufW2Xsixk+KQ39MpsnmbgYCHyzrN3dia6L9cO6gXtT1tWGDKORSGsCvQ1xXElWEA78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fastemail60.com; spf=none smtp.mailfrom=fastemail60.com; dkim=pass (2048-bit key) header.d=fastemail60.com header.i=@fastemail60.com header.b=cCpzI6Ed; arc=none smtp.client-ip=102.222.20.253
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fastemail60.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=fastemail60.com
-Received: from fastemail60.com (unknown [194.156.79.202])
-	by mail.fastemail60.com (Postfix) with ESMTPA id C2E1A87C09B
-	for <linux-arch@vger.kernel.org>; Fri,  9 May 2025 15:55:49 +0200 (SAST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.fastemail60.com C2E1A87C09B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastemail60.com;
-	s=202501; t=1746798951;
-	bh=0kM12Ki2v7eI61I1WvQrX7nQw+DKE1uiGUA45uahRZc=;
-	h=Reply-To:From:To:Subject:Date:From;
-	b=cCpzI6Eddeiimvx3G7Su6DjNCvgUJo6gDGaSP9aF6ohk2lgczXviu/LzJLHfy5lX6
-	 mb7Ch+UGh8g2dy5rG9H0ckbNtZ5MsKIeA5NZ9yRN8PYkoo74VLnlsbJnP7Z67AVYpx
-	 H2SXlRNjtRiGDT2NU1aWLWs6QtYz8pQrjql9bf1jH82BKEBWN9xYfbHPkxrWhBpLd+
-	 WMYaRjl0FNPH04bNi3zH+KcPvX2407pjpBMRz5tnws3lKWfvHNNDGC4mwfQaiumBEi
-	 h4bXGqQBOM2oaINsdva78b6B5ebmHbp8fVS/WLnBUlF3JNJKKkyllebvYc+8hus59G
-	 gO1leqf6kAO4Q==
-Reply-To: import@herragontradegroup.cz
-From: Philip Burchett<info@fastemail60.com>
-To: linux-arch@vger.kernel.org
-Subject: Inquiry
-Date: 09 May 2025 09:55:49 -0400
-Message-ID: <20250509095547.B3FD145159CAE975@fastemail60.com>
+	s=arc-20240116; t=1746811800; c=relaxed/simple;
+	bh=cPhjasTwI2UlEzhggO3BfP5IeHfjz55rUCtySA1MPZs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=KpeRlmGyS+qFkEKXcv2YLGF0Df8J5TV0vkca1MQIdfTC2fifZd+S9nDeDL43cwNRdHJJdw+Kpa0m+2mncmnxeA+nLpsqqeV11qlwYbumQWtPrSGc310voICfZ6xiyp9mEoS8zZMcxmHrvbxwruKKqYrW8WFCQCuUUE6UlzzDk6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1Vzq6pk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B86C4CEE9;
+	Fri,  9 May 2025 17:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746811799;
+	bh=cPhjasTwI2UlEzhggO3BfP5IeHfjz55rUCtySA1MPZs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=S1Vzq6pkJKMtybevOYaVo+IXvGH9iHyt73kURGEzn0tBT7dMlc+WGknIq8ZFywpB/
+	 qXYXmoq0TCaXPzQq6itNVVd3AYUhdZ6RcydeNgRW8raQp/uH/ImxtqUEThp3T6OZPF
+	 3y7ixjn93OgRSmT+QpjQ+pqm9PUFm9evikv6r+mv7q/PXaXOaWYY/n8OqfXWUOvCSO
+	 BRu/6hQTYrWgPOFizXnYvp4jceTcFUn7uVqOZISdsMcKbaIi/b9clf5uH7Eg4O/I8D
+	 RakzsEDIsD7jxW8jgm3Pa7u9Pnb25q19Sfs0Bi4DK/0cgElUkTRjXgeAERyfw+D9M2
+	 MEdKkuCHPBnOw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E4D380DBCB;
+	Fri,  9 May 2025 17:30:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (mail.fastemail60.com [0.0.0.0]); Fri, 09 May 2025 15:55:51 +0200 (SAST)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/3] Drop explicit --hash-style= setting for new
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <174681183698.3697320.7074504502229425253.git-patchwork-notify@kernel.org>
+Date: Fri, 09 May 2025 17:30:36 +0000
+References: <20250224112042.60282-1-xry111@xry111.site>
+In-Reply-To: <20250224112042.60282-1-xry111@xry111.site>
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: linux-riscv@lists.infradead.org, guoren@kernel.org, chenhuacai@kernel.org,
+ kernel@xen0n.name, palmer@dabbelt.com, i@maskray.me, yangtiezhu@loongson.cn,
+ linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Greetings, Supplier.
+Hello:
 
-Please give us your most recent catalog; we would want to order=20
-from you.
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-I look forward to your feedback.
+On Mon, 24 Feb 2025 19:20:39 +0800 you wrote:
+> For riscv, csky, and LoongArch, GNU hash had already become the de-facto
+> standard when they borned, so there's no Glibc/Musl releases for them
+> without GNU hash support, and the traditional SysV hash is just wasting
+> space for them.
+> 
+> Remove those settings and follow the distro toolchain default, which is
+> likely --hash-style=gnu.  In the past it could break vDSO self tests,
+> but now the issue has been addressed by commit
+> e0746bde6f82 ("selftests/vDSO: support DT_GNU_HASH").
+> 
+> [...]
+
+Here is the summary with links:
+  - [1/3] riscv: vDSO: Remove --hash-style=both
+    https://git.kernel.org/riscv/c/2940954c1ac5
+  - [2/3] csky: vDSO: Remove --hash-style=both
+    (no matching commit)
+  - [3/3] LoongArch: vDSO: Remove --hash-style=sysv
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Philip Burchett
 
