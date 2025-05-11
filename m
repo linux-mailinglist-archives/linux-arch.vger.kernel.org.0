@@ -1,310 +1,234 @@
-Return-Path: <linux-arch+bounces-11883-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11884-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C47ABAB23CF
-	for <lists+linux-arch@lfdr.de>; Sat, 10 May 2025 14:35:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A47DAB27F1
+	for <lists+linux-arch@lfdr.de>; Sun, 11 May 2025 13:23:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C410BA05FBB
-	for <lists+linux-arch@lfdr.de>; Sat, 10 May 2025 12:35:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B2F71895CA0
+	for <lists+linux-arch@lfdr.de>; Sun, 11 May 2025 11:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111CB259C94;
-	Sat, 10 May 2025 12:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1F81C84D9;
+	Sun, 11 May 2025 11:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="Af5PcXQo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iVY4u+9B"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136B9258CCD
-	for <linux-arch@vger.kernel.org>; Sat, 10 May 2025 12:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A372219E4;
+	Sun, 11 May 2025 11:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746880518; cv=none; b=qgaOfQcEb66/+biG73wCcxgZ8DqCiE1/VzPzaldMA/+8kBS8DRg/H2mPZV49M2+flvXZRdJUNfXfLrQ0plbc3y0+52vX7/yC/RRaRO9kXo3bG+ZFEwsLtDzGzRrGJqNrD/t8DrHWdMcTSYSzS8d4gITZTppyohPzmVjK+3FedjI=
+	t=1746962619; cv=none; b=aXjKEUG/vQGtH9RcpdmbNs38I0CILGwOTN0bMQc9k7pjzIIBjknG+SEQJOze7LS83qyw9speFnasP87BbXO+NzD/ZORoj0gno4WtgLMsiOIu2gk54CrxdN3JRH32VUhfKC0DEcjVlUYe6ozkpZubMCNF3PvnkKUVw+A19+RjKOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746880518; c=relaxed/simple;
-	bh=oDyB2BUsLqAJP5HgFvyGwrlv4qRfzOc4gjp/9GN5QSc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KORpI1pHIaTAcdSi0Xj5T08wICuvswO9vjDLfMinfc2ti9qCo8uWQqcpYBrHb5y17DAmKZNuCuuw0TfhP2JEO2HWqY7GzNk6WAqqw5TOvtzNPbNxEShiQ+pRPKabR02DT7VnFs1EbhbnzipyZqKa8R2qVMEgQ8SHtyMtB6ZDalI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=Af5PcXQo; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6f535b11824so30083286d6.2
-        for <linux-arch@vger.kernel.org>; Sat, 10 May 2025 05:35:15 -0700 (PDT)
+	s=arc-20240116; t=1746962619; c=relaxed/simple;
+	bh=/Gbhq9OEP7Q5EqNR6lXTOPYylSQbyvdVHSXkwAmjPTE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MfFhskivnxKpFHO0SItKmRCo227Clke6EvONkXtsMG+R4SOAWQKtGJsr5f2LZSE/uOONQweE/bNa76HDQPBG9012N+rf9AeZ9laSTV3xByw73lVgbihTu2N+0lA8sDef8HOSX9bvz5zCQR+Muizp5+RF4QktuStyidQgqYWG/iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iVY4u+9B; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3a1d8c0966fso1938952f8f.1;
+        Sun, 11 May 2025 04:23:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1746880515; x=1747485315; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rg4vIfXW8Fwu2I8MXWgJuQ7fFCwLHFdlnoSee3cSxL0=;
-        b=Af5PcXQoAi5o8YfZ1BlEE8E5wUqYa1+IgEYCfj6/jGOPG7UaKT81o396IFix5tN8/Q
-         MojELO5IFj2ylxaon4M9R4wkFFcqKbV9+wlLMjvBzAGSBSpFhDj2CH77p+2h6L5Q0oLn
-         8e6hEK0r0SHbHYhN+Llfv+MB23M9E5yK6NKxDNhzfwWoGocdaTCaei0qAsSiDcWoexoD
-         Mu/ZfltXsdzcKJI5usa3uQ7JXY8KUye3DALpWxBYDDbfdTTGEofniLpWgvcUxEmFL1Y4
-         pGBYJT7qycrSUwd/wFA4p44Q594S4S+5y1jUm57yR/aRv2uqiu53R32LrcokozHNd84b
-         DswA==
+        d=gmail.com; s=20230601; t=1746962616; x=1747567416; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rr62AM3KoGEBAH10wBbEzrU82okG3T/6xZVPR3kGFKE=;
+        b=iVY4u+9BE9miIUAGEkM3Ycz7zgL0/PaBVi5N46O5HQAQBNx7vhdkBRQHCRS3jEOb9C
+         PA9JPUqHZj6F5tO4fkC51fEt9GVxaTqfLTa0AGHt7JD6XBZwP4FsXSEx7vgj6vAC4Aon
+         hRXopnQPNCsacYnDFu7IcdCwsJENgnoP8bQ7YbTU4ztPNTBdSSuDSybli5WIojolDGdi
+         uteZkdIUCGhAYLTibCPZYBt90FD8xeVM9DTg4lv7H8Vq1+C5dpYPrbWchKUl7BP7THi0
+         Q9rUSUSdwS3IYoeMzgoHdRU3Xqr3VNZHnUoDVPZjfDftfR7zKmL0FF3tmqgFqA6rPc1g
+         Rr6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746880515; x=1747485315;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1746962616; x=1747567416;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Rg4vIfXW8Fwu2I8MXWgJuQ7fFCwLHFdlnoSee3cSxL0=;
-        b=FMyfkWPJP5Uzj24TtVvaNLrusQuyKA97nHeYdXKCWe8bkx2zQCW3kNuVNrEdF1AzQ+
-         uX6+hAIVCxOWvuqKeU+GKR3Wz4CAiaYwlA+WCubUJ/CRLTeWFJNMSYUC75ut5DWlgEAG
-         UP9MM6fTTXbtpnGTNPHxEI9wmeDv+RFnGZeOWDeH4EeA6ecYvDpTL/jRtbKhH/eYfKgy
-         phChENacJdew/Yqtr/yfAkdY8nlNfh7jrqvIQr/v3oDdq7HBuNUf2sqJ3RCAwZLS17Ei
-         hi85V2zt7ui/yXVpXdcnSJMZvjIaWDE/qqttuLzTqx2qhPwpjear/TGI5ETb2XJJYzWW
-         B24Q==
-X-Gm-Message-State: AOJu0YzNKt32JXq2dg1ehvpHCyAe+ba+Zket1oiJK/QBpQbjp/1BAcGi
-	M+ZChOgBDIsI7u2NFC2af4NPgMTuqCvZRL3RwrRrdCWmbJloj864KJqfHVym3jI=
-X-Gm-Gg: ASbGncsIZ7TthdcIb2KslqOwejtJLoBzUyHo7afOW1NjS8y583M315gKaDayU3K23Jz
-	9VKZKxbfa9N4hT50fKOioRykTMYFEmmPyB6mtmEWBx4CeuYJC/3HzJ8qq+wRR25KfFa287U8LcZ
-	jaD6CXheReLDSn2TCGzQ/SxgoYXngvZZ4COEOKGah0OT3NnmbazKn/IU3H+6A4bSJw4STSHpaEU
-	Y5NJE/AoiZ3iMQHg+eLRQYvvsQ733LB5tZsxiDiTZUnfZI+fCU3NQA2yCzDbeET4qigg4OyquZb
-	anIamz01J4JVPr1D2JNInihY6xbEQh7CLjM459l2PT17XzagoNAEejFyorDx9aOuleq2SaXbtB5
-	5jJnczKw=
-X-Google-Smtp-Source: AGHT+IFiIjqbpUXKtb2X4q6JeET5+pL2HSZy76d54EdCIui+IrxqY7tmfZwMFCmtX6SCx2GZhb09KQ==
-X-Received: by 2002:a05:6214:e49:b0:6e8:9866:7398 with SMTP id 6a1803df08f44-6f6e47ec7b6mr97257006d6.22.1746880514884;
-        Sat, 10 May 2025 05:35:14 -0700 (PDT)
-Received: from [192.168.1.45] (ool-182edad1.dyn.optonline.net. [24.46.218.209])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f6e39f588asm25725556d6.49.2025.05.10.05.35.13
+        bh=Rr62AM3KoGEBAH10wBbEzrU82okG3T/6xZVPR3kGFKE=;
+        b=Tmv4FrUnqQN7PJBeGIlk+bEKcXOEgn6Zdo+NUNY2NG/zOLEqwEpKVv5oKZeZeonrzW
+         GR6LPxbeuaz8MOg/jegEqC6YciAFU2c7jqo1AcRPx4O+XoySJsr8MM3ViO3kILkGcQ4a
+         jcRo0P7VCb/iWJldldczXEbg3iUL0ju/rUqnaBX2JJxeJe7uMXKEPcDSWPXALuNiv0A+
+         +UykenZlXVG3f+YSgOdUlD1qCSYnDMQam27bz/qkSFcGggu/gg8vp8vPwzKNSmMIRqef
+         1yfn0blBv6OecsmoZxUKM07X0/V790OWF/jS8q2J7zkNwbZ/DM0EowMfc78m7idl0794
+         KniA==
+X-Forwarded-Encrypted: i=1; AJvYcCUYxuAKx1DaTIgTGVuXfj+zJK3JJr3VIe0ZQ6Hwh42e/t+NMaLPu/z9D9IIn0TmM+FXBAMCBuxiskwK7e+g@vger.kernel.org, AJvYcCVt9+7XhPkmrcPuAP3uU6Q8y9kQ9iZNempkIsysv052wNkC+aotxZba9jeseSQRnz3z4Yr3aQAjFUz1@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGtV4/KpcMQbCGTx7Jj3rgamtpXaXUOEVDDWWAgvKOVE0lYqzc
+	50Lr7oCVW37ENBx3oY8fNlkRpAva3JaWtPT5YJBMQMN90Gd+BTEI
+X-Gm-Gg: ASbGnctxRNPAPB6b7A2loRsPdW408PG7+2YxIUQJ+cb9jZ8SXq6zmFgzIa0QpOrdhhy
+	/OsuIUrN2oGbU/em/eEsIqcL+aPB5CgGRRgJMqpJUD9PfK13uyiqYnYQkQ1iP2+HwhfCzXDPgfZ
+	5rQgHKWKErlnCI/VT8gghx3S20ikakEW1jOq2d6Q8M4iGB0RGeELXD3E6a+6JlUF6tJ3g9VCeQS
+	Vg8Ubwb+RoJx7B2S5hRl5SRmLLmE/xnaMdP1DB2H+xFe1LQBKf+KwZBsj2y2j/8LOaO10xhXaSe
+	96FYhFueSu6pJnNUYaUE0m5uL2OV3H01vM0b9oLw2zfSunh/fsNvLgBt+GAUyMLyXR/OjU6+N4j
+	2x5XDVQeHspl49woFGRxVIxLK
+X-Google-Smtp-Source: AGHT+IGqYzj25cJHQkUXe9+tpC/pNhXG07X1IG93ZPDwcMrzYGRzVt+SJJU2Lolx8RxeBWOFjdnGRQ==
+X-Received: by 2002:a05:6000:2dc7:b0:3a0:b84f:46de with SMTP id ffacd0b85a97d-3a0b9941bd0mr11326589f8f.21.1746962616029;
+        Sun, 11 May 2025 04:23:36 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f5a2cf38sm8956991f8f.77.2025.05.11.04.23.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 May 2025 05:35:14 -0700 (PDT)
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Sat, 10 May 2025 08:34:56 -0400
-Subject: [PATCH bpf-next v4 3/3] libbpf: Use mmap to parse vmlinux BTF from
- sysfs
+        Sun, 11 May 2025 04:23:35 -0700 (PDT)
+Date: Sun, 11 May 2025 12:23:28 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Ignacio Encinas <ignacio@iencinas.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann
+ <arnd@arndb.de>, Eric Biggers <ebiggers@kernel.org>,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kernel-mentees@lists.linux.dev, skhan@linuxfoundation.org, Zhihang
+ Shao <zhihang.shao.iscas@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] include/uapi/linux/swab.h: move default
+ implementation for swab macros into asm-generic
+Message-ID: <20250511122328.79e9a2d4@pumpkin>
+In-Reply-To: <20250426-riscv-swab-v4-1-64201404a68c@iencinas.com>
+References: <20250426-riscv-swab-v4-0-64201404a68c@iencinas.com>
+	<20250426-riscv-swab-v4-1-64201404a68c@iencinas.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250510-vmlinux-mmap-v4-3-69e424b2a672@isovalent.com>
-References: <20250510-vmlinux-mmap-v4-0-69e424b2a672@isovalent.com>
-In-Reply-To: <20250510-vmlinux-mmap-v4-0-69e424b2a672@isovalent.com>
-To: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Lorenz Bauer <lmb@isovalent.com>
-X-Mailer: b4 0.14.2
 
-Teach libbpf to use mmap when parsing vmlinux BTF from /sys. We don't
-apply this to fall-back paths on the regular file system because there
-is no way to ensure that modifications underlying the MAP_PRIVATE
-mapping are not visible to the process.
+On Sat, 26 Apr 2025 16:56:18 +0200
+Ignacio Encinas <ignacio@iencinas.com> wrote:
 
-Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
----
- tools/lib/bpf/btf.c | 85 +++++++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 69 insertions(+), 16 deletions(-)
+> Move the default byteswap implementation into asm-generic so that it can
+> be included from arch code.
+> 
+> This is required by RISC-V in order to have a fallback implementation
+> without duplicating it.
+> 
+> Signed-off-by: Ignacio Encinas <ignacio@iencinas.com>
+> ---
+>  include/uapi/asm-generic/swab.h | 33 +++++++++++++++++++++++++++++++++
+>  include/uapi/linux/swab.h       | 33 +--------------------------------
+>  2 files changed, 34 insertions(+), 32 deletions(-)
+> 
+> diff --git a/include/uapi/asm-generic/swab.h b/include/uapi/asm-generic/swab.h
+> index f2da4e4fd4d1..232e81661dc5 100644
+> --- a/include/uapi/asm-generic/swab.h
+> +++ b/include/uapi/asm-generic/swab.h
+> @@ -3,6 +3,7 @@
+>  #define _ASM_GENERIC_SWAB_H
+>  
+>  #include <asm/bitsperlong.h>
+> +#include <linux/types.h>
+>  
+>  /*
+>   * 32 bit architectures typically (but not always) want to
+> @@ -16,4 +17,36 @@
+>  #endif
+>  #endif
+>  
+> +/*
+> + * casts are necessary for constants, because we never know how for sure
+> + * how U/UL/ULL map to __u16, __u32, __u64. At least not in a portable way.
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index f18d7e6a453cd9e5c384487659df04f7efafdf5a..42815a29c0a52a1a7eed2c6b22b9b1754ae01c9a 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -12,6 +12,7 @@
- #include <sys/utsname.h>
- #include <sys/param.h>
- #include <sys/stat.h>
-+#include <sys/mman.h>
- #include <linux/kernel.h>
- #include <linux/err.h>
- #include <linux/btf.h>
-@@ -120,6 +121,9 @@ struct btf {
- 	/* whether base_btf should be freed in btf_free for this instance */
- 	bool owns_base;
- 
-+	/* whether raw_data is a (read-only) mmap */
-+	bool raw_data_is_mmap;
-+
- 	/* BTF object FD, if loaded into kernel */
- 	int fd;
- 
-@@ -951,6 +955,17 @@ static bool btf_is_modifiable(const struct btf *btf)
- 	return (void *)btf->hdr != btf->raw_data;
- }
- 
-+static void btf_free_raw_data(struct btf *btf)
-+{
-+	if (btf->raw_data_is_mmap) {
-+		munmap(btf->raw_data, btf->raw_size);
-+		btf->raw_data_is_mmap = false;
-+	} else {
-+		free(btf->raw_data);
-+	}
-+	btf->raw_data = NULL;
-+}
-+
- void btf__free(struct btf *btf)
- {
- 	if (IS_ERR_OR_NULL(btf))
-@@ -970,7 +985,7 @@ void btf__free(struct btf *btf)
- 		free(btf->types_data);
- 		strset__free(btf->strs_set);
- 	}
--	free(btf->raw_data);
-+	btf_free_raw_data(btf);
- 	free(btf->raw_data_swapped);
- 	free(btf->type_offs);
- 	if (btf->owns_base)
-@@ -1030,7 +1045,7 @@ struct btf *btf__new_empty_split(struct btf *base_btf)
- 	return libbpf_ptr(btf_new_empty(base_btf));
- }
- 
--static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
-+static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf, bool is_mmap)
- {
- 	struct btf *btf;
- 	int err;
-@@ -1050,12 +1065,18 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
- 		btf->start_str_off = base_btf->hdr->str_len;
- 	}
- 
--	btf->raw_data = malloc(size);
--	if (!btf->raw_data) {
--		err = -ENOMEM;
--		goto done;
-+	if (is_mmap) {
-+		btf->raw_data = (void *)data;
-+		btf->raw_data_is_mmap = true;
-+	} else {
-+		btf->raw_data = malloc(size);
-+		if (!btf->raw_data) {
-+			err = -ENOMEM;
-+			goto done;
-+		}
-+		memcpy(btf->raw_data, data, size);
- 	}
--	memcpy(btf->raw_data, data, size);
-+
- 	btf->raw_size = size;
- 
- 	btf->hdr = btf->raw_data;
-@@ -1083,12 +1104,12 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
- 
- struct btf *btf__new(const void *data, __u32 size)
- {
--	return libbpf_ptr(btf_new(data, size, NULL));
-+	return libbpf_ptr(btf_new(data, size, NULL, false));
- }
- 
- struct btf *btf__new_split(const void *data, __u32 size, struct btf *base_btf)
- {
--	return libbpf_ptr(btf_new(data, size, base_btf));
-+	return libbpf_ptr(btf_new(data, size, base_btf, false));
- }
- 
- struct btf_elf_secs {
-@@ -1209,7 +1230,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
- 
- 	if (secs.btf_base_data) {
- 		dist_base_btf = btf_new(secs.btf_base_data->d_buf, secs.btf_base_data->d_size,
--					NULL);
-+					NULL, false);
- 		if (IS_ERR(dist_base_btf)) {
- 			err = PTR_ERR(dist_base_btf);
- 			dist_base_btf = NULL;
-@@ -1218,7 +1239,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
- 	}
- 
- 	btf = btf_new(secs.btf_data->d_buf, secs.btf_data->d_size,
--		      dist_base_btf ?: base_btf);
-+		      dist_base_btf ?: base_btf, false);
- 	if (IS_ERR(btf)) {
- 		err = PTR_ERR(btf);
- 		goto done;
-@@ -1335,7 +1356,7 @@ static struct btf *btf_parse_raw(const char *path, struct btf *base_btf)
- 	}
- 
- 	/* finally parse BTF data */
--	btf = btf_new(data, sz, base_btf);
-+	btf = btf_new(data, sz, base_btf, false);
- 
- err_out:
- 	free(data);
-@@ -1354,6 +1375,36 @@ struct btf *btf__parse_raw_split(const char *path, struct btf *base_btf)
- 	return libbpf_ptr(btf_parse_raw(path, base_btf));
- }
- 
-+static struct btf *btf_parse_raw_mmap(const char *path, struct btf *base_btf)
-+{
-+	struct stat st;
-+	void *data;
-+	struct btf *btf;
-+	int fd, err;
-+
-+	fd = open(path, O_RDONLY);
-+	if (fd < 0)
-+		return libbpf_err_ptr(-errno);
-+
-+	if (fstat(fd, &st) < 0) {
-+		err = -errno;
-+		close(fd);
-+		return libbpf_err_ptr(err);
-+	}
-+
-+	data = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-+	close(fd);
-+
-+	if (data == MAP_FAILED)
-+		return NULL;
-+
-+	btf = btf_new(data, st.st_size, base_btf, true);
-+	if (IS_ERR(btf))
-+		munmap(data, st.st_size);
-+
-+	return btf;
-+}
-+
- static struct btf *btf_parse(const char *path, struct btf *base_btf, struct btf_ext **btf_ext)
- {
- 	struct btf *btf;
-@@ -1618,7 +1669,7 @@ struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf)
- 		goto exit_free;
- 	}
- 
--	btf = btf_new(ptr, btf_info.btf_size, base_btf);
-+	btf = btf_new(ptr, btf_info.btf_size, base_btf, false);
- 
- exit_free:
- 	free(ptr);
-@@ -1659,8 +1710,7 @@ struct btf *btf__load_from_kernel_by_id(__u32 id)
- static void btf_invalidate_raw_data(struct btf *btf)
- {
- 	if (btf->raw_data) {
--		free(btf->raw_data);
--		btf->raw_data = NULL;
-+		btf_free_raw_data(btf);
- 	}
- 	if (btf->raw_data_swapped) {
- 		free(btf->raw_data_swapped);
-@@ -5331,7 +5381,10 @@ struct btf *btf__load_vmlinux_btf(void)
- 		pr_warn("kernel BTF is missing at '%s', was CONFIG_DEBUG_INFO_BTF enabled?\n",
- 			sysfs_btf_path);
- 	} else {
--		btf = btf__parse(sysfs_btf_path, NULL);
-+		btf = btf_parse_raw_mmap(sysfs_btf_path, NULL);
-+		if (IS_ERR_OR_NULL(btf))
-+			btf = btf__parse(sysfs_btf_path, NULL);
-+
- 		if (!btf) {
- 			err = -errno;
- 			pr_warn("failed to read kernel BTF from '%s': %s\n",
+I know you are just moving the code, but that comment just isn't right.
+Linux pretty much assumes that ULL is 64bit and U 32bit (UL varies).
 
--- 
-2.49.0
+So the UL constants should just be U ones (int isn't going to be 16 bits).
+
+Not only that, but the code requires that the (__unn) casts don't
+truncate the values. Performing the maths on a larger type isn't
+going to change the value of the result.
+
+Then we get to the integer promotion that does an implicit conversion
+of the return of all the (__u16) casts back to signed integer.
+So it may be better to leave/make the result of swap16() unsigned int
+rather than casting it to __u16 and getting it promoted to int.
+
+The only plausibly necessary cast is a (__u32) one in the result
+of (except swap64()) to stop the compiler doing 64bit maths with the
+result when the constant has a 64bit type (and all the other casts are
+removed).
+
+	David
+
+> + */
+> +#define ___constant_swab16(x) ((__u16)(				\
+> +	(((__u16)(x) & (__u16)0x00ffU) << 8) |			\
+> +	(((__u16)(x) & (__u16)0xff00U) >> 8)))
+> +
+> +#define ___constant_swab32(x) ((__u32)(				\
+> +	(((__u32)(x) & (__u32)0x000000ffUL) << 24) |		\
+> +	(((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |		\
+> +	(((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |		\
+> +	(((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+> +
+> +#define ___constant_swab64(x) ((__u64)(				\
+> +	(((__u64)(x) & (__u64)0x00000000000000ffULL) << 56) |	\
+> +	(((__u64)(x) & (__u64)0x000000000000ff00ULL) << 40) |	\
+> +	(((__u64)(x) & (__u64)0x0000000000ff0000ULL) << 24) |	\
+> +	(((__u64)(x) & (__u64)0x00000000ff000000ULL) <<  8) |	\
+> +	(((__u64)(x) & (__u64)0x000000ff00000000ULL) >>  8) |	\
+> +	(((__u64)(x) & (__u64)0x0000ff0000000000ULL) >> 24) |	\
+> +	(((__u64)(x) & (__u64)0x00ff000000000000ULL) >> 40) |	\
+> +	(((__u64)(x) & (__u64)0xff00000000000000ULL) >> 56)))
+> +
+> +#define ___constant_swahw32(x) ((__u32)(			\
+> +	(((__u32)(x) & (__u32)0x0000ffffUL) << 16) |		\
+> +	(((__u32)(x) & (__u32)0xffff0000UL) >> 16)))
+> +
+> +#define ___constant_swahb32(x) ((__u32)(			\
+> +	(((__u32)(x) & (__u32)0x00ff00ffUL) << 8) |		\
+> +	(((__u32)(x) & (__u32)0xff00ff00UL) >> 8)))
+> +
+>  #endif /* _ASM_GENERIC_SWAB_H */
+> diff --git a/include/uapi/linux/swab.h b/include/uapi/linux/swab.h
+> index 01717181339e..ca808c492996 100644
+> --- a/include/uapi/linux/swab.h
+> +++ b/include/uapi/linux/swab.h
+> @@ -6,38 +6,7 @@
+>  #include <linux/stddef.h>
+>  #include <asm/bitsperlong.h>
+>  #include <asm/swab.h>
+> -
+> -/*
+> - * casts are necessary for constants, because we never know how for sure
+> - * how U/UL/ULL map to __u16, __u32, __u64. At least not in a portable way.
+> - */
+> -#define ___constant_swab16(x) ((__u16)(				\
+> -	(((__u16)(x) & (__u16)0x00ffU) << 8) |			\
+> -	(((__u16)(x) & (__u16)0xff00U) >> 8)))
+> -
+> -#define ___constant_swab32(x) ((__u32)(				\
+> -	(((__u32)(x) & (__u32)0x000000ffUL) << 24) |		\
+> -	(((__u32)(x) & (__u32)0x0000ff00UL) <<  8) |		\
+> -	(((__u32)(x) & (__u32)0x00ff0000UL) >>  8) |		\
+> -	(((__u32)(x) & (__u32)0xff000000UL) >> 24)))
+> -
+> -#define ___constant_swab64(x) ((__u64)(				\
+> -	(((__u64)(x) & (__u64)0x00000000000000ffULL) << 56) |	\
+> -	(((__u64)(x) & (__u64)0x000000000000ff00ULL) << 40) |	\
+> -	(((__u64)(x) & (__u64)0x0000000000ff0000ULL) << 24) |	\
+> -	(((__u64)(x) & (__u64)0x00000000ff000000ULL) <<  8) |	\
+> -	(((__u64)(x) & (__u64)0x000000ff00000000ULL) >>  8) |	\
+> -	(((__u64)(x) & (__u64)0x0000ff0000000000ULL) >> 24) |	\
+> -	(((__u64)(x) & (__u64)0x00ff000000000000ULL) >> 40) |	\
+> -	(((__u64)(x) & (__u64)0xff00000000000000ULL) >> 56)))
+> -
+> -#define ___constant_swahw32(x) ((__u32)(			\
+> -	(((__u32)(x) & (__u32)0x0000ffffUL) << 16) |		\
+> -	(((__u32)(x) & (__u32)0xffff0000UL) >> 16)))
+> -
+> -#define ___constant_swahb32(x) ((__u32)(			\
+> -	(((__u32)(x) & (__u32)0x00ff00ffUL) << 8) |		\
+> -	(((__u32)(x) & (__u32)0xff00ff00UL) >> 8)))
+> +#include <asm-generic/swab.h>
+>  
+>  /*
+>   * Implement the following as inlines, but define the interface using
+> 
 
 
