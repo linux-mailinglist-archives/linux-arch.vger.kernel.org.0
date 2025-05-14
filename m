@@ -1,149 +1,201 @@
-Return-Path: <linux-arch+bounces-11926-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11928-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36438AB6FC9
-	for <lists+linux-arch@lfdr.de>; Wed, 14 May 2025 17:29:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E830CAB72FF
+	for <lists+linux-arch@lfdr.de>; Wed, 14 May 2025 19:39:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EB693AD8AF
-	for <lists+linux-arch@lfdr.de>; Wed, 14 May 2025 15:21:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 559E7173EB1
+	for <lists+linux-arch@lfdr.de>; Wed, 14 May 2025 17:39:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A23928031A;
-	Wed, 14 May 2025 15:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B302820D1;
+	Wed, 14 May 2025 17:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="djZFgxiA"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="a3sLf5q9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E113D1C6FF9;
-	Wed, 14 May 2025 15:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4FE28151A;
+	Wed, 14 May 2025 17:39:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747235965; cv=none; b=Qx3BFUgIVgkaZ5If0QV3XsoS/saEl4R+eqvJLuTJwtDA4FkRMssREWgwUz3INlDeqjW2mSIJtFW/YQF+W2NGFKCsEh5uEOKU5ZA6Ocl1jtAbVotth0W9enRy5xkgWHc5t3fB2P9Jo+yrm0umwXMjr/KjWEBRsmiOwUF1ZGFs2ZA=
+	t=1747244375; cv=none; b=fjQOSag6l1GKXsJdM2GfHQ3++soUCY2XnyKq4ldVBrcyhX4M0wrBxkywBxFDgO9o5ZYYbijEGsk3MVvLN1ung8cben/S/8VkW0dkDBX53a9e52T/qx5zPoYYc9aSPB5+VZfuVZW5/cfO16GhfVfhtv4p6lzKcqc//CKO2SE9NR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747235965; c=relaxed/simple;
-	bh=fbDxkuzpwYjrGZLFi5VIbeGvuh+o5LtR/w6gApnTSJQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=PBbTx9Xys+AZ94m1F3tzBRKbIbtL7Ym3EcA5WHTc9GgRWCe4onHEXII/pIuvuwwezilFekuO5M6WdtIhTV9hfS72jrHG6RK4LYu4jZqLqJoliaxK7lpDewsYJXXdrVsIdKMCVm6AR1KMywBBFzdUUJa9gVcpQHaXEtsb9Rj7JOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=djZFgxiA; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 54EFAEbT3012887
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Wed, 14 May 2025 08:10:15 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 54EFAEbT3012887
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025042001; t=1747235422;
-	bh=yapZ2s67BLNwus6ibHABzXGBCoZzVlVupFJe/q2qy/U=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=djZFgxiAUJE7iFHA0Wd/yFppU4TGqi4fxmoBT1mvTgxRmRiu+8QH1zl3CND+QbbP4
-	 97UVxN+J8QD8iz78UlxzP16emoOIxJpWaoO9qxu1Ec5we80T+FOOb4RfHy40YAODf4
-	 27XX25rvc06YcNMTsxppaOiXgVXhowu2DQa6R8gC1Tcuq8Oq9GVQp3swa9CciK5Vg/
-	 jv/tWyK4JR8CJyAVAYMpVNTUaE0Ax5AVAQfxExqancQ8ZpUjlh9FBEWFvjm5PCVbut
-	 6qwwqWO9GyDweGO8bFsU0TsmuX3ejxdQaqkTWk3Ymh6Yue7onjRsMrCGmrkfplN9Ef
-	 P/Ifsp+Ororjw==
-Date: Wed, 14 May 2025 08:10:12 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Arnd Bergmann <arnd@arndb.de>, Andrey Albershteyn <aalbersh@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
+	s=arc-20240116; t=1747244375; c=relaxed/simple;
+	bh=cSLxshIeNr+V/+u5rK75CUAgh5kaX3jKR2fw3mz1P70=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cE+ypBouNpEhThlsb/SrVCASfAxbLcZXDDDaNO95a1iXFSHmYfQqyQU1dkvayBZoKqISAPNcDoqgRnh8Hcdh0M6xIXDGBkPHtdf+xp6a1928ZiFWe9WAeqkmdUAE82xgxIIcQj6CdiT14LcWEwMglxQ1Gaa+t4cmqH35NcCS8jU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=a3sLf5q9; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54EGNoGp017016;
+	Wed, 14 May 2025 17:37:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=OhYFTK
+	3Y8z/4xazu3XKdTqh8g1BwjMNXvG+8F5JF5lY=; b=a3sLf5q95rLq+ogvCQJGZX
+	V2yY+OSkcxJPwWlGLm5m+YbRqDyBCHDuKaJVszSbyc6wBgriio9qhcS8jZL2kmpm
+	Wt4GZx+6jyOB5ckxK023vjDNAOCrH9Qi1jhunvuv1GZoIrmF8NkPqaIvsKPNtKt6
+	4hgT1Iv7BiUX4NQbm2Gd9ZUtJ6/alASi/l3hSrJm8hGMWRzCT58Ss5nfVjHM8Kb8
+	Aq+p5zH55xzrkCg7OLiv6NLv6BxdnZLp6mjSsBqNtkqxVdTmfyAGiN3UmAdMbp6K
+	DM/3Caw67cLgGwwlDPxkdaL+pvtp/ntrzw506jlQg3dF0R5Xe+sq5+5xXnYcX5Lg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46mbq8nxys-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 May 2025 17:37:55 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54EHbtLg031046;
+	Wed, 14 May 2025 17:37:55 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46mbq8nxyp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 May 2025 17:37:55 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54EGaGqc019883;
+	Wed, 14 May 2025 17:37:53 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 46mbfrnhv8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 May 2025 17:37:53 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54EHbrIw26608194
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 14 May 2025 17:37:53 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 716EB58055;
+	Wed, 14 May 2025 17:37:53 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C906C58043;
+	Wed, 14 May 2025 17:37:51 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 14 May 2025 17:37:51 +0000 (GMT)
+Message-ID: <edeb23e7884e94006d560898b7f9d2dd257a275e.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/9] ima: efi: Drop unnecessary check for
+ CONFIG_MODULE_SIG/CONFIG_KEXEC_SIG
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Masahiro
+ Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, Arnd
+ Bergmann <arnd@arndb.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Petr Pavlu
+ <petr.pavlu@suse.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Daniel
+ Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
+        James
+ Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jonathan
+ Corbet <corbet@lwn.net>,
         Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael
+ Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.osdn.me>, Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        =?ISO-8859-1?Q?G=FCnther_Noack?= <gnoack@google.com>,
-        =?ISO-8859-1?Q?Pali_Roh=E1r?= <pali@kernel.org>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>, Tyler Hicks <code@tyhicks.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Amir Goldstein <amir73il@gmail.com>
-CC: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
-        selinux@vger.kernel.org, ecryptfs@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        Andrey Albershteyn <aalbersh@kernel.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_0/7=5D_fs=3A_introduce_fi?=
- =?US-ASCII?Q?le=5Fgetattr_and_file=5Fsetattr_syscalls?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com>
-References: <20250513-xattrat-syscall-v5-0-22bb9c6c767f@kernel.org> <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com>
-Message-ID: <B17E8366-DB80-45E6-90D6-294824C40FD9@zytor.com>
+        Naveen N Rao
+ <naveen@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry
+ Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg
+ <eric.snowberg@oracle.com>,
+        Nicolas Schier <nicolas.schier@linux.dev>
+Cc: Fabian =?ISO-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
+        Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
+        kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>,
+        =?ISO-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Date: Wed, 14 May 2025 13:37:51 -0400
+In-Reply-To: <10ca077d6d51fac10e56c94db4205a482946d15f.camel@linux.ibm.com>
+References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
+	 <20250429-module-hashes-v3-2-00e9258def9e@weissschuh.net>
+	 <10ca077d6d51fac10e56c94db4205a482946d15f.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RPOjhr87gRyfajPTapmF9ThaYjREaKWR
+X-Authority-Analysis: v=2.4 cv=GrRC+l1C c=1 sm=1 tr=0 ts=6824d4f4 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VTue-mJiAAAA:8 a=VnNF1IyMAAAA:8 a=cvE8ob5KMqMXAi4NVQcA:9 a=QEXdDO2ut3YA:10
+ a=S9YjYK_EKPFYWS37g-LV:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE0MDE1OSBTYWx0ZWRfXw38stgEBAl0t 92v/U+3cUWiDo2+zByc4gM0wk3jePfyswMAaKF8sD4OxddTZs4UE+NB2VcDeYErV+mi7iXDLJvh jytWmpJowyB3HAFvoC/P87zqtuhU4ohvwApvR4JcscvN5E9rFDkFyfB3MP21mi3Zb3l+g+pWZQ5
+ /zisZSh5IrT0P2FTctMhkdbGJ+vk/ngQWR21ZkgpICCF4flVjz33Zf7h1seH2KutvMUEHN3jFoN qHhzfy21Le9jr+tImfrJxzgiHGbORUqwHkT3WM+yq8fA3vvdM8IpHWRhsKpfgfdpjELXgFLQIs6 IT8J9qyUx1t9E14ZCdCK7Cxb9XNiDRPETyybcLAf7J3irr/+jfvhA770zoy0OcXw3arFlBdT6iP
+ uQgkQZKJLprO24T3AJbCT8A8FRFqOLmv6LIX4yNw5rmj3w8Rk4AvjRlvWa145C4lQPlIu3+5
+X-Proofpoint-GUID: DzVVxD_mhRAfjC9jgp_93CXh0t-Hz9hv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-14_04,2025-05-14_03,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 lowpriorityscore=0 phishscore=0 mlxscore=0 clxscore=1015
+ mlxlogscore=999 spamscore=0 priorityscore=1501 adultscore=0 bulkscore=0
+ suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
+ definitions=main-2505140159
 
-On May 13, 2025 2:53:23 AM PDT, Arnd Bergmann <arnd@arndb=2Ede> wrote:
->On Tue, May 13, 2025, at 11:17, Andrey Albershteyn wrote:
->
->>
->> 	long syscall(SYS_file_getattr, int dirfd, const char *pathname,
->> 		struct fsxattr *fsx, size_t size, unsigned int at_flags);
->> 	long syscall(SYS_file_setattr, int dirfd, const char *pathname,
->> 		struct fsxattr *fsx, size_t size, unsigned int at_flags);
->
->I don't think we can have both the "struct fsxattr" from the uapi
->headers, and a variable size as an additional argument=2E I would
->still prefer not having the extensible structure at all and just
->use fsxattr, but if you want to make it extensible in this way,
->it should use a different structure (name)=2E Otherwise adding
->fields after fsx_pad[] would break the ioctl interface=2E
->
->I also find the bit confusing where the argument contains both
->"ignored but assumed zero" flags, and "required to be zero"
->flags depending on whether it's in the fsx_pad[] field or
->after it=2E This would be fine if it was better documented=2E
->
->
->> 		fsx=2Efsx_xflags |=3D FS_XFLAG_NODUMP;
->> 		error =3D syscall(468, dfd, "=2E/foo", &fsx, 0);
->
->The example still uses the calling conventions from a previous
->version=2E
->
->       Arnd
+On Wed, 2025-05-14 at 11:09 -0400, Mimi Zohar wrote:
+> On Tue, 2025-04-29 at 15:04 +0200, Thomas Wei=C3=9Fschuh wrote:
+> > When configuration settings are disabled the guarded functions are
+> > defined as empty stubs, so the check is unnecessary.
+> > The specific configuration option for set_module_sig_enforced() is
+> > about to change and removing the checks avoids some later churn.
+> >=20
+> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> >=20
+> > ---
+> > This patch is not strictly necessary right now, but makes looking for
+> > usages of CONFIG_MODULE_SIG easier.
+> > ---
+> > =C2=A0security/integrity/ima/ima_efi.c | 6 ++----
+> > =C2=A01 file changed, 2 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/=
+ima_efi.c
+> > index
+> > 138029bfcce1e40ef37700c15e30909f6e9b4f2d..a35dd166ad47beb4a7d46cc3e8fc6=
+04f57e03ecb
+> > 100644
+> > --- a/security/integrity/ima/ima_efi.c
+> > +++ b/security/integrity/ima/ima_efi.c
+> > @@ -68,10 +68,8 @@ static const char * const sb_arch_rules[] =3D {
+> > =C2=A0const char * const *arch_get_ima_policy(void)
+> > =C2=A0{
+> > =C2=A0	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboo=
+t()) {
+> > -		if (IS_ENABLED(CONFIG_MODULE_SIG))
+> > -			set_module_sig_enforced();
+> > -		if (IS_ENABLED(CONFIG_KEXEC_SIG))
+> > -			set_kexec_sig_enforced();
+> > +		set_module_sig_enforced();
+> > +		set_kexec_sig_enforced();
+> > =C2=A0		return sb_arch_rules;
+>=20
+> Hi Thomas,
+>=20
+> I'm just getting to looking at this patch set.=C2=A0 Sorry for the delay.
+>=20
+> Testing whether CONFIG_MODULE_SIG and CONFIG_KEXEC_SIG are configured giv=
+es priority
+> to them, rather than to the IMA support.=C2=A0 Without any other changes,=
+ both signature
+> verifications would be enforced.=C2=A0 Is that the intention?
 
-Well, ioctls carry the structure size in the ioctl number, so changing the=
- structure size would change the ioctl number with it=2E
+Never mind, got it.
+
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
