@@ -1,73 +1,82 @@
-Return-Path: <linux-arch+bounces-11964-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11965-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CF77AB90CC
-	for <lists+linux-arch@lfdr.de>; Thu, 15 May 2025 22:26:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8092EAB91BA
+	for <lists+linux-arch@lfdr.de>; Thu, 15 May 2025 23:23:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56DCA3BC14B
-	for <lists+linux-arch@lfdr.de>; Thu, 15 May 2025 20:26:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5A6C1889405
+	for <lists+linux-arch@lfdr.de>; Thu, 15 May 2025 21:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7706829B215;
-	Thu, 15 May 2025 20:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C2325A2C4;
+	Thu, 15 May 2025 21:20:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OHqLerH8"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="MxLafy8E"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C33C29B78B
-	for <linux-arch@vger.kernel.org>; Thu, 15 May 2025 20:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C78F225A50
+	for <linux-arch@vger.kernel.org>; Thu, 15 May 2025 21:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747340778; cv=none; b=NmnpXapz98q7n8l5mQW+w1jNfsqKY71CF2TgQL/pbsvD8amXKzcvj7sxXLO0Abhnc/8jEUUKjwawjpvd1qdksjgqIaD7da2hhsDo3pjucXhpd2X2qT7c2vxP6Oi0KttYGZ9xxKocW9TmTTC5vn2+zGPvxzNjHkmxSu/BBla7KTc=
+	t=1747344050; cv=none; b=VvzNwWc7eKhoGw+iqDi/iHHH7e2kz611HculnImZUkoqNXssXf/UgOUKCE4YHVRoDg+5XV+Z7Qu0SWLL4Hh/Tm/FuYCzt0Kz0hh7ZsTsapw3A5v3LIO5d3JRK5uvUsBqupNk6AEUugGQpkl82iRxlU4RTbnCe3xwm8aj8Gcaf/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747340778; c=relaxed/simple;
-	bh=brvaCNelc7YXahd2uSS/BOsPi6t29ydKF9hIF5TbmrA=;
+	s=arc-20240116; t=1747344050; c=relaxed/simple;
+	bh=QOm3m/r0dyEo2Mfa7umeu+ruloxr/DK67GsqoXNotWc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OeWiOwtWJPWyJ0/FM37/qJPA5Y8t7XxScMi7VGHj6YLtbcBWZFIQ5q2oCzq3EN+pNXKBZLQpWvMGwNA0q5xQeoMF5I970iHFhxKlPnrywFTt8gvDcE/0+alOhwD/3J2SbYLXFE1+kcI40Y7LFyHA+FgO27Fvzjx05qpBbmwZ2qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OHqLerH8; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-604f0d27c24so928779eaf.2
-        for <linux-arch@vger.kernel.org>; Thu, 15 May 2025 13:26:16 -0700 (PDT)
+	 To:Cc:Content-Type; b=QRK+jq8p390SoAqXMo57WC9QAI5Uuyr8kP8AUSdezlJOjd5BbILM7DqKslKv79d80zJnHzDOsBSuLGfheTfFEqNB7o62kF9cx/ILBEkK5OTcRGqesss6iRmfFIl1pEMRAelI3xretzWuge7iEkF/HhCzzmeoHpmkSM0rKBz/2mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=MxLafy8E; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5fd0d383b32so2353908a12.3
+        for <linux-arch@vger.kernel.org>; Thu, 15 May 2025 14:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747340775; x=1747945575; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=74h5E53rBfGQx17SrKrpULSjitWvVTH9Q5HQnQfV+Vw=;
-        b=OHqLerH8TE+d0L3uw0G7gDrquH1ZygYe21U1wPLMJioP9Gv+b7uqyjDc8bHj5JTv+J
-         uRnLldfd4tgDzDFYmFPq6t+kzMVS2EU4Bwl6TXoo1r25I2nsLHWc381MCaQ6ZyND+1CH
-         V2lZwoxnrdHti7/8Uatp5FwsO8Wg6Vk2LStE1CmvdgWTxB0vtaO7qLZi0E4yfZa+V7V6
-         nRgPPvavsP/ieR8ctQsVhC+NfqPHBOHCMudPCCc797gUJvn2LqSlTtZ4xC8V0Ij2fJgK
-         RrpltTY7GXvvpApP9QezF5x7az0evUtkuhip4cqHkbe+mjJ5Mbof9Z0Qza4C432JUXWX
-         oy/w==
+        d=linux-foundation.org; s=google; t=1747344046; x=1747948846; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BBR1eDOR9aCst/oayM8CR1mluYptr7n0p9+2J85ynlw=;
+        b=MxLafy8E8iqQ5lgWlpYcoGzbiZPRAexp0uA9BJZ/N3ylYtyyZsMxITSSXWApTBv0dP
+         GOPzzLyH4/Dm0OiyRJLjOrvLeci3X2UJZsQNI5FQG8mbJywQBTighY19678rCPPDOTWh
+         cCjmK9/JUbOoPb74X5vfD/YNRVksUgzZH55xI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747340775; x=1747945575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=74h5E53rBfGQx17SrKrpULSjitWvVTH9Q5HQnQfV+Vw=;
-        b=W7VyJkfkn9lFlKaD9LMGlonsDZyjWpQoKOTWYLg89DFiztaLz/EncIHKN8XvtJIa/3
-         nfT86bXPXDh1b1x/wIuwOXyepFPsc/uZNvLdq94RVN6fXUIlJypEL965fxwQ7l4YjWss
-         mcX5cVUP04QlljCAGk60AJIHenl5w0c8J04LYSkTF5pIIT340a4q7IHjKA+diCK9pMV4
-         WGzsENyRwr81kYtCzWUTagEkkx1OF3uZBJfhRqZRHGH4eSkh3TfDrdI8lWao1Etvx27z
-         kEc0QJDF9IoUWMRsD07ewO6ZLKZG5d8lmVK1hkZule0VBbvna+PqLKo3jWPD437UzgAP
-         mpSA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCCdmHmRS+ekI0TZ38Cfyt6BT/Tgz6rhCwiiK72fcfaNtARQdC4gjjwp3zgtZnx/sgRC2tDk5GxDRQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyT8F7xA+/vpxmqxSp5lDvHCyQuY2s0I2DIwB4r3E2FMwQlNLLD
-	UHXXRBUtELTXBGomOvybu8HC4W/pIZkA6iVoCNGtUElyzh8boXP6gV0f5cErXBbDIQZccQmB8Np
-	pT4bMq9Y8OioNIJ7QzhSxmQdgKW5JBj7VOiGKdy0GyjC4O9EKv8Ypj+XXCxM=
-X-Gm-Gg: ASbGncvfOl7e3pONWgAx7g8bz8O6YYzVk5Q9DGQSi7PuZftj2ShBzOfQvIiiU3YfsMV
-	STE7UUhkv2wuWlH4cLEl4zjWDST9C//O+iID2jLE4Y1fnOR53zgC8X1tuM2zM7V0t+NFFLs8bQy
-	VnsHrTuJg9C0rOv0GbuHIM7Ecf95EX/A==
-X-Google-Smtp-Source: AGHT+IEXPw1mbv5VbhoW1N6a196J92okdrerz4TsjkTsSkgfX0OvSJbP932k7D95OQvz7RPVN3rTJT+yoz8vRfxb1H0=
-X-Received: by 2002:a4a:ec49:0:b0:607:dd61:9c33 with SMTP id
- 006d021491bc7-609f48646b0mr78587eaf.1.1747340775360; Thu, 15 May 2025
- 13:26:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747344046; x=1747948846;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BBR1eDOR9aCst/oayM8CR1mluYptr7n0p9+2J85ynlw=;
+        b=iJtyZUDpgNJXDSaUpPq64zpiLxYcl9VmfPPEVJFn330BvITb5mmBAr6HEqyNk7n+Ek
+         d4WEaRUM7YGCs1C39hi2CUHNu7LZR7rdkpa8wW/RUvFgeL77LyPjBRjr/rjBgCEjMBnN
+         LH1kRgYkR7kPNh1V0YcbqPQkJS6IssfH6Cit3QHOH8Pp0THABXpJPLISka0cPOrzsSxv
+         MTnXxBcL+yGeKMnNcRmUdFC8phX175r25XPOFAKBU0/C4yHBBWJaBf52MoNr2zrPqJDX
+         7lpiNmB3askXPYdqpOV+4zCRV0bQLDVqaVpg6p87xUCEcIrvZkPDwUe8JnCnwbOUfqnm
+         qhbA==
+X-Forwarded-Encrypted: i=1; AJvYcCVsiob/paVMMD6l9He9ppIKQ0ny3kBW88Qf0QW26LrrBy15DxHBWoFEU8UiGsI6k+B4vRrSpoWs+mPe@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqzX1lbaJxbLPG7533Npz0/4AaxJBSyVySKlhNLvc1dRNbyEx4
+	ahlrLYj9ifEGJx/7AkFCoEedke0dvTEdx0WFFjoARYbsLJ+G2676gXjOcvW5eVTRV2gP9pxPkI3
+	7C/L0
+X-Gm-Gg: ASbGncsJTnPIdQliwwrzDI3HXAXo/WZBe5hFoKaR57zD1BbwEn8JXJSslkHth1JN9S4
+	JL7Vvh3RjZPn23B5nv+2pLF7J60NpBwD/X+ffTpklss2fQETBQJ1Baq2xJqvg0wo4gvRMe6Zj/1
+	bHFylpPZIE5gDRxXXzYBBZrt4tXZCO+9PqO3A44KbU9xBIpq+NBuNN1GQ7PVNyb8cgLdryuyyCe
+	Z+E58raZdgWrqZe28Wz590vJYuHH9bgQmhh7NDJ1zlE4HYAxXElubt3/ak8AtVG8iUF5oZt/VAY
+	krTKfZkHetn2inRHJKHa7KhHZdvoFkBKmtpqyNWyqlQa3JxtkfIo1nQUmFc1lLhDxRzTJ5WcXqR
+	c259T2IF6JS+LYgbOX4Jf9Q38mw==
+X-Google-Smtp-Source: AGHT+IEOeZItPFAmCFm1uB4cD7ZTEALn8MaEm1EDXIUViLfLHJYAk96FGqC3h/PlM4w5OwudxhB8ew==
+X-Received: by 2002:a05:6402:1e94:b0:5fe:8643:2c9d with SMTP id 4fb4d7f45d1cf-600991bc778mr743812a12.33.1747344046226;
+        Thu, 15 May 2025 14:20:46 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6004d4f280asm327329a12.1.2025.05.15.14.20.45
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 May 2025 14:20:45 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5fd0d383b32so2353877a12.3
+        for <linux-arch@vger.kernel.org>; Thu, 15 May 2025 14:20:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV9fYuXYwPMcGlfTJAbbkeMlTPo3dTzuTRYhCkdlvatc6KkwdsLxB5EcHJLqVmqKMXeleS+UdxVGL9O@vger.kernel.org
+X-Received: by 2002:a05:6402:34d3:b0:5fb:e868:4d47 with SMTP id
+ 4fb4d7f45d1cf-600900a54a2mr778653a12.7.1747344044885; Thu, 15 May 2025
+ 14:20:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,24 +85,18 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <feb98a0f-8d17-495c-b556-b4fe19446d5d@zytor.com>
 In-Reply-To: <feb98a0f-8d17-495c-b556-b4fe19446d5d@zytor.com>
-From: enh <enh@google.com>
-Date: Thu, 15 May 2025 16:26:03 -0400
-X-Gm-Features: AX0GCFv-17pi2etCtr5en1wkSiXnNCapI8QapZ85yDA5wtpFlMHL3Xz2XtopVrs
-Message-ID: <CAJgzZoqUV6gSfgCWbfe6oSH5k9qt30gpJ0epa+w78WQUgTCqNQ@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 15 May 2025 14:20:28 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi7sLm+zHUkyFO8V6QNghLQn0yiWsHfm8WU=V15K7K07Q@mail.gmail.com>
+X-Gm-Features: AX0GCFvQzChipAAsH_IbAZosPG5_B84g3tcv-qhuY1vOrrfycyiz9i-JpJtmDoM
+Message-ID: <CAHk-=wi7sLm+zHUkyFO8V6QNghLQn0yiWsHfm8WU=V15K7K07Q@mail.gmail.com>
 Subject: Re: Metalanguage for the Linux UAPI
 To: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Arnd Bergmann <arnd@arndb.de>, LKML <linux-kernel@vger.kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, libc-alpha@sourceware.org, 
-	linux-arch@vger.kernel.org
+	libc-alpha@sourceware.org, linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 15, 2025 at 4:05=E2=80=AFPM H. Peter Anvin <hpa@zytor.com> wrot=
-e:
->
-> OK, so this is something I have been thinking about for quite a while.
-> It would be a quite large project, so I would like to hear people's
-> opinions on it before even starting.
+On Thu, 15 May 2025 at 13:05, H. Peter Anvin <hpa@zytor.com> wrote:
 >
 > We have finally succeeded in divorcing the Linux UAPI from the general
 > kernel headers, but even so, there are a lot of things in the UAPI that
@@ -103,104 +106,37 @@ e:
 > changed as well, and so on. However, other libcs want to use the struct
 > termios as defined in the kernel, or, more likely, struct termios2.
 
-bionic is a ("the only"?) libc that tries to not duplicate _anything_
-and always defer to the uapi headers. we have quite an extensive list
-of hacks we need to apply to rewrite the uapi headers into something
-directly usable (and a lot of awful python to apply those hacks):
+Honestly, I *really* don't want to go down that rat-hole.
 
-https://cs.android.com/android/platform/superproject/main/+/main:bionic/lib=
-c/kernel/tools/defaults.py
+It's going to be full of random project-specific issues, and the
+bigger projects - like glibc - wouldn't use the kernel headers anyway,
+even with some generic language, because they have their own history,
+they deal with lots of other non-Linux platforms, and it's just all
+downside for them.
 
-a lot are just name collisions ("you say 'class', my c++ compiler says
-wtf?!"), but there are a few "posix and linux disagree"s too. (other
-libcs that weren't linux-only from day one might have more conflicts,
-such as a comically large sigset_t, say :-) )
+In fact, it's all downside for the kernel too. I do *not* want kernel
+headers to be used by other projects, because I simply don't want to
+hear about "we do Xyz, so the innocuous uapi header change breaks
+Abc". It's all pain, for no gain.
 
-but i think most if not all of that could be fixed upstream, given the will=
-?
+So as far as I'm concerned, the uapi header split has been very
+successful - but not because other projects can then use our uapi
+headers. No, purely because it helped *kernel* people be more careful
+about a certain class of changes, and was a big read flag in that it
+made people go "Oh, I can't just change that structure, because it's
+exported as an API to user space".
 
-(though some c programmers do still get upset if told they shouldn't
-use c++ keywords as identifiers, i note that the uapi headers _were_
-recently fixed to avoid a c extension that's invalid c++. thanks,
-anyone involved in that who's reading this!)
+If you _really_ want to do a Metalanguage for these things, and want
+to support lots of different namespace issues, several different
+languages etc, I have a very practical suggestion: make that
+metalanguage have a very strict and traditional syntax. Make it look
+like C with the C pre-processor.
 
-> Furthermore, I was looking further into how C++ templates could be used
-> to make user pointers inherently safe and probably more efficient, but
-> ran into the problem that you really want to be able to convert a
-> user-tagged structure to a structure with "safe-user-tagged" members
-> (after access_ok), which turned out not to be trivially supportable even
-> after the latest C++ modernizations (without which I don't consider C++
-> viable at all; I would not consider versions of C++ before C++17 worthy
-> of even looking at; C++20 preferred.)
+There are lots of libraries and tools to parse C, and turn it into
+other forms. Making up a new language when we already *have* a good
+language is all kinds of silly. Just use the language it already is
+in, and take advantage of the fact that there's lots of infrastructure
+for that language.
 
-(/me assumes you're just trolling linus with this.)
-
-> And it is not just generation of in-kernel versus out-of-kernel headers
-> that is an issue (which we have managed to deal with pretty well.) There
-> generally isn't enough information in C headers alone to do well at
-> creating bindings for other languages, *especially* given how many
-> constants are defined in terms of macros.
-
-(yeah, while i think the _c_ [and c++] problems could be solved much
-more easily, solving the swift/rust/golang duplication of all that
-stuff is a whole other thing. i'd try to sign up one of those
-languages' library's maintainers before investing too much in having
-another representation of the uapi though...)
-
-> The use of C also makes it hard to mangle the headers for user space.
-> For example, glibc has to add __extension__ before anonymous struct or
-> union members in order to be able to compile in strict C90 mode.
-
-(again, that one seems easily fixable upstream.)
-
-> I have been considering if it would make sense to create more of a
-> metalanguage for the Linux UAPI. This would be run through a more
-> advanced preprocessor than cpp written in C and yacc/bison. (It could
-> also be done via a gcc plugin or a DWARF parser, but I do not like tying
-> this to compiler internals, and DWARF parsing is probably more complex
-> and less versatile.)
->
-> It could thus provide things like "true" constants (constexpr for C++11
-> or C23, or enums), bitfield macro explosions and so on, depending on
-> what the backend user would like: namespacing, distributed enumerations,
-> and assembly offset constants, and even possibly syscall stubs.
-
-(given a clean slate that wouldn't be terrible, but you get a lot of
-#if nonsense. though the `#define foo foo` trick lets you have the
-best of both worlds [at some cost to compile time].)
-
-> There is of course no reason such a generator couldn't be used for
-> kernel-only headers at some point, but I am concentrating on the
->
-> Another major motivation is to be able to include one named struct
-> anonymously inside another, without having to repeat the definition.
-> (This is not supported in standard C or GNU C; MS C supports it as an
-> extension, and I have requested that it be added into GNU C which would
-> also allow it to be used with __extension__, and perhaps get folded into
-> a future C standard since it would now fit the criterion of more than
-> one implementation; however, the runway for being able to use that in
-> UAPI headers is quite long.)
->
-> I obviously want to keep a C-like syntax for this, which is a major
-> reason for using a parser like yacc/bison.
->
-> I have done such a project in the past, with some good success. That
-> being said, the requirements for the Linux UAPI language are obviously
-> much more complex. A few things I have considered are wanting to be able
-> to namespace constants or, more or less equivalently, create
-> enumerations in bits and pieces (consider ioctl constants, for example)
-> and have them coalesce into a single definition if appropriate for the
-> target language.
->
-> Speaking of ioctl constants: one of the current problems is that a fair
-> number of ioctl constants do not have the size/type annotations, and
-> perhaps worse, it is impossible to tell from just the numeric value
-> (since _IOC_NONE expands to 0, an _IO() ioctl ends up having no type
-> information at all.) This is something that *definitely* ought to be
-> added, even if a certain backend cannot preserve that information
->
-> Thoughts?
->
->         -hpa
->
+                    Linus
 
