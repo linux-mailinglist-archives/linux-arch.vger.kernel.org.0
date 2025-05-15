@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-11949-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11950-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22FAEAB86E6
-	for <lists+linux-arch@lfdr.de>; Thu, 15 May 2025 14:51:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEF07AB86E9
+	for <lists+linux-arch@lfdr.de>; Thu, 15 May 2025 14:52:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9D2F1BA576C
-	for <lists+linux-arch@lfdr.de>; Thu, 15 May 2025 12:50:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67A46A02029
+	for <lists+linux-arch@lfdr.de>; Thu, 15 May 2025 12:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B30D29DB8B;
-	Thu, 15 May 2025 12:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01F729E04E;
+	Thu, 15 May 2025 12:47:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s3GN9FSW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdcZpvpm"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0552129DB86;
-	Thu, 15 May 2025 12:47:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C865B29DB86;
+	Thu, 15 May 2025 12:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747313227; cv=none; b=AY9M9iQ9/8Nd8xiyHrFWgDkWElW4K77++b/2/55UqpkgWJv7xRytfrXpOJfja09MxuuNfrk41rqSpIII5eOaSZX2ar3LS/9J+KUgJnvYR6xm9T5CdvGY42hbGpqNNNd5mnyxMkKuTbFIdc+F1JG4mCcxWUqZiehdJpsFtAJi2Ic=
+	t=1747313230; cv=none; b=kk9Bhnf9LgGN8gJ23cCqbuGcYOPIqtoleGOipd8ggPQgk1iIC/brG9B2F75uZdbOJfjQovVkl97KeFdmO8BZUPsaJuyPDHqVNPhOi5qNylJZlxINWaVCW6MITM61dLB/It4jpo/ZUThqPJBk1W/K/xnJB8uypk2erEfdQm5cZuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747313227; c=relaxed/simple;
-	bh=AwKLO6MlaTLedN7k+hdE1I2gJG0P/wVaqml4h5jIdvM=;
+	s=arc-20240116; t=1747313230; c=relaxed/simple;
+	bh=LeJR/zvlqj5Asj/nQfg1x5VrUEA2v3eAMcSq5/MpbRw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ly+Wy/19Wo4hcm4FDjn+uZBjEg/zKrlGoMOzKYrkfiCBzkL1ciXq1Cv34u6JkLLAsECiDCfIHdDRozmmkPBM5Uaf+ru/NToXKTGt18pdsajZGFfMf/KNiO1KS5TFex0WGkMmZtDvknGAOs2Eb3FAuoCbD4lMPBqwUMZ+uyF2f24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s3GN9FSW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFDB8C4CEEB;
-	Thu, 15 May 2025 12:47:04 +0000 (UTC)
+	 MIME-Version; b=NjQ7R+4FTGSUnJ5gw1Bn/yW0mqVPBErZy6vI8o1hth1ZM5EG/+t/CvMOidRtOtIGN5zvjJtQw7CBc21gT9dfHpiobt3FfVUmxnI37TQrOWoSfx7MCUVBXjD4xUzacPqYEKq8dsdZ/3ncwgTRYyQrW3Lue6817e3lz3E5FgK9GLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdcZpvpm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B54AC4CEE7;
+	Thu, 15 May 2025 12:47:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747313226;
-	bh=AwKLO6MlaTLedN7k+hdE1I2gJG0P/wVaqml4h5jIdvM=;
+	s=k20201202; t=1747313229;
+	bh=LeJR/zvlqj5Asj/nQfg1x5VrUEA2v3eAMcSq5/MpbRw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=s3GN9FSWT5BU+aUhkcJEq3h0a46WFComiGq7+G9OywxjtQzPC0jbVOal0OAaMe4xP
-	 9uoa3lo5isjl/5VP5g0xm47HBYYFMlF52TvWn2oC/jUZvyGmwGrorsqx7d3Dr1o339
-	 0L0imSC0xIJAWBOg9Nm+/Px3WpD1mtFsPaGCQF4QvMv2+mmJMrpTUZ/OrDPkky16BV
-	 7wUGJvi5FwfbiL4XPNBbqPwtBRy2PwRHSUB45f8diPmO/QhON+QYh+rjhoz8S/hU38
-	 uY75fPQM8FdVpm9R8Jz7DI/zb14Ks1kmRrPOYXTrEQzOREX0DecZIiW++d0jl33WId
-	 oXVPIN3A+dCow==
+	b=gdcZpvpmOGhPzvmOFOQWvJ63XmLv2pUBNt3ajACDolPLQWBEkwtHpx1hxEPFWBo4P
+	 htIbJ2GjdbMWquhYSeDK6bLqf5sJqFyuCdCTPch1xbGxJcE86eesZd8ptvoKiC2MuB
+	 G70YFdeRns32sbyezhV+P6GxmtINs6cgvscTBJYNR8A/lUxZ4Sf3dOha+xcKAxRbyT
+	 TgI43IriwRJatGqS1O9giwXunijyF38O2BG9h0G1fT3MGT5wm6JkG4ddo6impOc2Tp
+	 PKWXAXVRBkaY/rcAUoErSBxwVrmHl7pkqfpC9H7MSTdKTG2ZeopiVP5ulO+0KOfmkK
+	 L4kGbHK2RlPsw==
 From: Ingo Molnar <mingo@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Ingo Molnar <mingo@kernel.org>,
@@ -50,9 +50,9 @@ Cc: Ingo Molnar <mingo@kernel.org>,
 	Huacai Chen <chenhuacai@kernel.org>,
 	WANG Xuerui <kernel@xen0n.name>,
 	Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: [PATCH 08/15] bugs/LoongArch: Pass in 'cond_str' to __BUG_ENTRY()
-Date: Thu, 15 May 2025 14:46:37 +0200
-Message-ID: <20250515124644.2958810-9-mingo@kernel.org>
+Subject: [PATCH 09/15] bugs/LoongArch: Concatenate 'cond_str' with '__FILE__' in __BUG_ENTRY(), to extend WARN_ON/BUG_ON output
+Date: Thu, 15 May 2025 14:46:38 +0200
+Message-ID: <20250515124644.2958810-10-mingo@kernel.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250515124644.2958810-1-mingo@kernel.org>
 References: <20250515124644.2958810-1-mingo@kernel.org>
@@ -64,7 +64,15 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Pass in the condition string from __WARN_FLAGS(), but don't use it yet.
+Extend WARN_ON and BUG_ON style output from:
+
+  WARNING: CPU: 0 PID: 0 at kernel/sched/core.c:8511 sched_init+0x20/0x410
+
+to:
+
+  WARNING: CPU: 0 PID: 0 at [idx < 0 && ptr] kernel/sched/core.c:8511 sched_init+0x20/0x410
+
+Note that the output will be further reorganized later in this series.
 
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Cc: Huacai Chen <chenhuacai@kernel.org>
@@ -73,63 +81,22 @@ Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: <linux-arch@vger.kernel.org>
 ---
- arch/loongarch/include/asm/bug.h | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ arch/loongarch/include/asm/bug.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/loongarch/include/asm/bug.h b/arch/loongarch/include/asm/bug.h
-index 51c2cb98d728..3c377984457d 100644
+index 3c377984457d..cad807b100ad 100644
 --- a/arch/loongarch/include/asm/bug.h
 +++ b/arch/loongarch/include/asm/bug.h
-@@ -20,39 +20,38 @@
- #endif
- 
- #ifndef CONFIG_GENERIC_BUG
--#define __BUG_ENTRY(flags)
-+#define __BUG_ENTRY(cond_str, flags)
- #else
--#define __BUG_ENTRY(flags) 					\
-+#define __BUG_ENTRY(cond_str, flags)				\
+@@ -26,7 +26,7 @@
  		.pushsection __bug_table, "aw";			\
  		.align 2;					\
  	10000:	.long 10001f - .;				\
- 		_BUGVERBOSE_LOCATION(__FILE__, __LINE__)	\
--		.short flags; 					\
-+		.short flags;					\
+-		_BUGVERBOSE_LOCATION(__FILE__, __LINE__)	\
++		_BUGVERBOSE_LOCATION(WARN_CONDITION_STR(cond_str) __FILE__, __LINE__) \
+ 		.short flags;					\
  		.popsection;					\
  	10001:
- #endif
- 
--#define ASM_BUG_FLAGS(flags)					\
--	__BUG_ENTRY(flags)					\
-+#define ASM_BUG_FLAGS(cond_str, flags)				\
-+	__BUG_ENTRY(cond_str, flags)				\
- 	break		BRK_BUG;
- 
--#define ASM_BUG()	ASM_BUG_FLAGS(0)
-+#define ASM_BUG()	ASM_BUG_FLAGS("", 0)
- 
--#define __BUG_FLAGS(flags, extra)					\
--	asm_inline volatile (__stringify(ASM_BUG_FLAGS(flags))		\
--			     extra);
-+#define __BUG_FLAGS(cond_str, flags, extra)			\
-+	asm_inline volatile (__stringify(ASM_BUG_FLAGS(cond_str, flags)) extra);
- 
- #define __WARN_FLAGS(cond_str, flags)				\
- do {								\
- 	instrumentation_begin();				\
--	__BUG_FLAGS(BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
-+	__BUG_FLAGS(cond_str, BUGFLAG_WARNING|(flags), ANNOTATE_REACHABLE(10001b));\
- 	instrumentation_end();					\
- } while (0)
- 
- #define BUG()							\
- do {								\
- 	instrumentation_begin();				\
--	__BUG_FLAGS(0, "");					\
-+	__BUG_FLAGS("", 0, "");					\
- 	unreachable();						\
- } while (0)
- 
 -- 
 2.45.2
 
