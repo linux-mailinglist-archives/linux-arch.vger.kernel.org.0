@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-11985-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-11986-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C28CAABB1A4
-	for <lists+linux-arch@lfdr.de>; Sun, 18 May 2025 23:15:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47208ABB1A6
+	for <lists+linux-arch@lfdr.de>; Sun, 18 May 2025 23:15:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62A657A81D1
-	for <lists+linux-arch@lfdr.de>; Sun, 18 May 2025 21:14:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 324911890519
+	for <lists+linux-arch@lfdr.de>; Sun, 18 May 2025 21:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2709818DB02;
-	Sun, 18 May 2025 21:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA3E1D5AB7;
+	Sun, 18 May 2025 21:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="ZQLhvNX9"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="pDMstHOJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02olkn2092.outbound.protection.outlook.com [40.92.15.92])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02olkn2022.outbound.protection.outlook.com [40.92.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD90E2A1D8;
-	Sun, 18 May 2025 21:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.15.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 497A02A1D8;
+	Sun, 18 May 2025 21:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.43.22
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747602923; cv=fail; b=sEtMyk35hZaPj9vqS6oSfUrNoE42/jDi+KmO4Fs8/DP6UJbCZ5Po/cP7zoiJqvboS/zTmsiqM7XWLWbQVitd/yDk6yksLWhRg/p1alr+z4CbrYyw+RhFFv7hlc3Ng1U7acXhJRkeRsta6b1XeIqPsTbOvA1Ww1Hw50HMcOFVWc8=
+	t=1747602949; cv=fail; b=hFGBpiTgw0jKJ00BFJswGgEdbSoJWV+HkDOMfAaKRaZ8RIZy2qHreY55kEa6jyq5OXwcfPJojdSIXmRb9QBEF9+LdXihu24PbdIwf/vmbN5aiGAL1n5jJLvmajfQPa4dmCQApCCn3+0h8AW4ADyO8j+psU6VzpOtlpszU0ppg0Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747602923; c=relaxed/simple;
-	bh=VrMAQ1WCDcJPYw7Hv6tSnm80iVxivgMAM4Ts86G+CMw=;
+	s=arc-20240116; t=1747602949; c=relaxed/simple;
+	bh=E4fTPTvY3h9RDGGQkxy6i6LRBC0zunxeuUBdIlK69g0=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=VvMoyjiJum17w0jNpKTMtEctQJA3Kgr6nvulo+07z+qqjidXKp2xV8ReR9ay/64S9N8R6TyU+S8PVojKkKuuZbNiypQBdO1VBlDWyxb21lp4CzB0Gn0InL1LIQ//gpRC58/TS/Xtc1QD1YGNQAqCf1yBTIKSnYPgOsKbGyInT30=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=ZQLhvNX9; arc=fail smtp.client-ip=40.92.15.92
+	 Content-Type:MIME-Version; b=HypFCuZOlEEW7U2lYoXVHXXzgcpkFoOSBY411P4tBOKKcu8nzHHmelZqudNthzJgbjjgSZXnbWA3JTQyls4zbq10L9uc5+3LUDcv+decOdBlAEZMwkh65g3XekHq4MBL1GJkAvEd9vgL3K74R7NT7zXSyMqqm0mj+HwYV9dSWAY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=pDMstHOJ; arc=fail smtp.client-ip=40.92.43.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oSiNFdp3UGHV/3jifledL7y7i+la0cTxeowminJdYAwM8v5OxzgDiTevT/hPOYq/nWPRPGGanJZQHHpyJiOE1ChstMawwKdiqvzA9jtBP0mlty5wM9zxgCuXoUmv+srgjClZiqSd3Tf/W1UI5cVzR6QuHWbbXho2crsNHxLgOoYuiBk//pJ2XHCV5A7h8hvblzRIVHKSKO2J4ZDq9/VsrcU9GTKJfCwA/aKIBY3bE+SRc4hWkotDEaT6ZGby/X0Qn+OEGhWIl4Q+tAvi2j5vRRdZF4OeYWX+buYca/9RdVl6cPf41c/cqTVp+4UYAaRQ55fPsMEv8RG6z5Nj5cuqiw==
+ b=b6DPwUlq15w4ELVw9kbZ/uvpowxYqhHftrx7UIJUwqDWsW7+2F4ut1dstNokDT+oRi67wSAIhjn9Ucf8aVA33vg5UvysRxvNAabIYe+4socPjvv+6QmXmA6j3LJhED7vC52G5VM17tKhZW8OUvAPgTjzE17gLM+higO9bHSY62Pqial0jmiRXYiF5ACh5ciaICpv81+rYcKvHM4KB0+xzDV4tPJyQP2JLRgUMWqvxcaf+9SFk1T4GmtpGtC02ZcwV471B9AqQ+xMH1NeHjh1MADs3ha3E0gUVDgqA0qPAPS2xDEfojO/9loS+sgiIufAJPqJCglc0j5nKm79cLRSuA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=udgXnSKLywvUmwFbj/J3I6jFxu9FHjzKBpKBhA7l5x0=;
- b=DI0XUwvzlpKV5O6MJW3aHbWNWhE+qRYy8BSnwlMstO1gtXppdtmwlRflhSgvXRdJfyW7YcWYfQI2nBi0TSVTAjDRYE/j511c0mSw7koo0ZrGczJhcuoJYduIi3fmfR1gsn6LM6i2BGUp3TeLt+g2ZbN8wgMs0QUWvfztiZymyB6KCSG77A6HvEJb8y6gloVkRJviKC/QLKUPwTdScGX4KElJNtDLdWewB0Hz4i290BdPp8zwEwx2Gy8v/DmsIZYeyAsGMCWO3QesrqriZ3Mrw7v079fj5BWFK1cl9lL2GbgFMOD9gCys0Zo+LduX7MglA2OsePF/PBUPoQVmo05TeQ==
+ bh=t/iPXtK2r2w4CWh9ZVCh6g8Ai2YvbAV4U00m5cVnNNk=;
+ b=uTZE7hQNlO7ON/QcuA3GhbtUWAP1eS+KIW3lwe7AYBwfzt7xAypnsTz8TaHljfRXX4SCQrheA8L0OJHDnchNq5yMnXRtybM2ZUsGfuTPl+fMy49QNJcqoLcqQl+SdseFWFe7vqHTRynZsjaV9U4s3QxrYSqnvSjThzFFY//RXWQW7YVMo2xR1mpjGhVZsQGPePnBKXYg6vXOMqA1Lrcfyr+N1aCe2FxAvXTfuwvotAySVnN6UQVNtczUeYEv+slv2JWZii66EgDPIRyGxqPzhF2bxRB4djf6wYRblAQPa8uoXOYgLecVAoJQxJ6IXV9TOqCvyLqNKCjZYDn1D4AWHQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=udgXnSKLywvUmwFbj/J3I6jFxu9FHjzKBpKBhA7l5x0=;
- b=ZQLhvNX91xTanFKEfjxoxZy7737TbsSU91CDghegGCMb6w6BRnqCeJYKBYdoYnl3ETxOjIa+f1ZcR6s0HfeEda05XY7NZGZ5yYu69HdRtRHi2G6lYmlLDQ3RC7Hf4L5h0AdzvUt/B8apU/p3ff9O+uhtvgMpFDO5NyP6kqg+5c4/XOdfEhuefGiTZei8iu+MMr4GfsIRNYpq4kfADgrPPlfrl6+tbhZsnUKRLL9Ez7v4zES74mbL0RT88OvqAtv7DM+A5BfegxjxkvIfAOppDM+YcvIO48RH1Ye7Q2aCTcaHEekmBUcp4wV6F0BXBiXuLkdV8P6egTepI3iyowdV9A==
+ bh=t/iPXtK2r2w4CWh9ZVCh6g8Ai2YvbAV4U00m5cVnNNk=;
+ b=pDMstHOJT3KViM0FxV9HbDZceI8P+TxzKu1+VjEboukLFbrbWP5cHI/z07mEv3rN8gVN9rM6UmOFs5q2YMnJp0rC++mbBuzcY4WifruqOg7/sOUezdTQ1z0YrXkvtcspKvaFzM+T+Wj6FWQgW6IkFJCHjdnnEeijIQ+6NQkYcD7JO4ABm5L8UQx5CPcboSVOwgnBBHxx8Lgmbwg6Oqudw8TahyZxT0z5xjBas70jx1fjJeuTDeWO/9P8DxikjCKEcdwP12nRLRMLuo3ylW1G+7KmMGzlWu2xNbZY6dPkgf8m+rmHh+xnPorpz/a42Ojd0+F5IU20//up9ihCAOa5eg==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
  by DM4PR02MB9189.namprd02.prod.outlook.com (2603:10b6:8:10b::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8769.16; Sun, 18 May
- 2025 21:15:17 +0000
+ 2025 21:15:44 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.8722.027; Sun, 18 May 2025
- 21:15:17 +0000
+ 21:15:44 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 	"bp@alien8.de" <bp@alien8.de>, "catalin.marinas@arm.com"
@@ -74,71 +74,72 @@ To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 CC: "apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
 	<benhill@microsoft.com>, "bperkins@microsoft.com" <bperkins@microsoft.com>,
 	"sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Subject: RE: [PATCH hyperv-next v2 1/4] Documentation: hyperv: Confidential
- VMBus
-Thread-Topic: [PATCH hyperv-next v2 1/4] Documentation: hyperv: Confidential
- VMBus
-Thread-Index: AQHbwsmqSLUA2AuTG0u4fWBiv1HBa7PTwvJw
-Date: Sun, 18 May 2025 21:15:17 +0000
+Subject: RE: [PATCH hyperv-next v2 2/4] drivers: hyperv: VMBus protocol
+ version 6.0
+Thread-Topic: [PATCH hyperv-next v2 2/4] drivers: hyperv: VMBus protocol
+ version 6.0
+Thread-Index: AQHbwsmsdQ+TvazRlkucbSBndz90/7PTw7fA
+Date: Sun, 18 May 2025 21:15:44 +0000
 Message-ID:
- <SN6PR02MB4157DC69BA25D889CD838D04D49DA@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB4157507E1E57B52A32DDF0B5D49DA@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20250511230758.160674-1-romank@linux.microsoft.com>
- <20250511230758.160674-2-romank@linux.microsoft.com>
-In-Reply-To: <20250511230758.160674-2-romank@linux.microsoft.com>
+ <20250511230758.160674-3-romank@linux.microsoft.com>
+In-Reply-To: <20250511230758.160674-3-romank@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|DM4PR02MB9189:EE_
-x-ms-office365-filtering-correlation-id: 3c5cbd75-808d-4136-d4a8-08dd965116fb
+x-ms-office365-filtering-correlation-id: ebf9606f-9249-4a01-6e11-08dd965126a8
 x-ms-exchange-slblob-mailprops:
- 70qbaZjg4mt4rOODFaDgc+BZl13aFtIX+cgmWX797IqczNZt093LAkz2+CN2og4qDFG9lcnBsD9FGB5tBjcqnOCKjZKaIH1JA4qZL34riVuaJjJSeVpCdhowG15z6GZ77HwxdrdY1wxMYauA61v1fuBZZNhUR7ycSaSzAO/ZpJh1G8a71xFw8XzvBSlXi3XKFMANDWDJpo8AhcZvCa0M3i4wSZ8vpjBHmoceA3u6P2V4ll5Skb+3+DCRgy0S++88sLeqqNbTHdPSqAgBGl5xHVq5K3gNNcbcUGTiws0P8vDAkdluiOjmIgadF4hdNwx/Qyc4qRkUAM7rteFbmsETsRv5fP6+X0RJUT4lv1ws11hxThA/L1Y+0BXmJsdSdnPmMAmhzTyrmBvznSf87qSIJhcDii4HKhenyPZ9TRw3vUV6ib4sk7nR4xZsdYfen9CQ6FQGOawBjdAaQDfpcgPu5X90k2y+oXGFT/bREHIUn5VAeaa/5cKqaGcki7Ikl3umgYaYVaAqzWEdciKdRE8cDfnPru83ERNCqIFeu+tdZlLyloBGmsOPQzGkPABIZ0xsvTTIsllrH9rVSLX1bh1uD7+SkGBniKjTbHVR6TioV3EjJRGNQV8Q9AoU1BoV6tnvgiPPqrcOo6UZO/OODA/Ql1OxuG4qaJc1lA0pIRpI0X5z4VJ1f8yIfpnEq9e2zzdoik+AP5gbmSVo0/wDHkgYYIb/rHnMBDbceVTFAEi5sDjhrzHGjcy1qQ==
+ EgT5Wr3QDKyPkYWRuRja31U+70CKwIFkuOLo54lOdj3ib1bvE/4B8aDyFjQzaCE3uYOT4mJmpJ0+P8CFHYMWCvy+MiM9RXx+m2i/7O326MQzqTRQLHbJYIRruDjKsjaiDxGpJhaFb4wRPaLFB8sDKf39WnidXrPegBZxguqBgKE+bpJ7eYZbK4N+T6IIN1leMb0Z0j90kMdpeEaTrk2kGfGYHdrYCSbkOa9ANgRhMBKkOEy+Vxt9Ucpu8Yt/zjfHVisTe0BIhYdglPsJujYhKSQBDbiMvH5udSAfDQfwgSx6VIIbbtTM04MRBJhMnX+xKLr+09k9UTaowVVPEllx23o6un2AYiwr3VXtGyOd3VvxQLmxxpwrfjgAlZInF/4KGc28d8VV2LHTrBYDEy4G2v0uYNNjPEzkJDY+0N8m16TUd48FV/AEtdn4eWviN2XaDrUACGnXFNa2JW0bm38QhuRMLKoVCmk6K1AK/0NfBBdbKeCJS+xZwW5LjED2U0yVzL82AR4N28UU+3AWVklcgcRk+UmTAeHxR0Y8NNtPFzHjON9C4wtZ3lvKvHb4jxlbI795vr6x6amjPeOf6kJs8tsqWmG7QEkZkEuTexFuA03tAKD9QEgMkXtDduoI9bWudhjuJIZqWqGaQBf0NsjCMcVRmz0/s37HPDxE2AfUwVO2+0ta3b4nEoXAFYa4OgymPH9OuBRl23vUGVYEt8Tms34VxyL0ecS9E+1Uz/k9n4A=
 x-microsoft-antispam:
- BCL:0;ARA:14566002|461199028|19110799006|8062599006|8060799009|15080799009|3412199025|440099028|12091999003|56899033|102099032;
+ BCL:0;ARA:14566002|41001999006|461199028|19110799006|12121999007|8062599006|8060799009|15080799009|3412199025|440099028|12091999003|56899033|102099032;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?JZA8Gyn731HAbdQng97ZgHAuB5hpNacrsPHKP/mZlTAxgXzzcDcJp59hY5in?=
- =?us-ascii?Q?FRbR5JWEouV2Iqo0oy6tnB9uVthe2NkOFiJ5df707cVkz4XT4gmTMeCkgM0z?=
- =?us-ascii?Q?LTm+iOKL8bYtKelXNfG4kDtf3Olt434jGlW/s5QHduhFn7hCIP+h34/Sb6Vv?=
- =?us-ascii?Q?ygFWPWHQpMQjlN8p7aglJ30c78GXWXJYCt19DIt3cv5YoPR3umSvCXNaPqGZ?=
- =?us-ascii?Q?0SoES6a95M2vYeZnuUTyzw6Fl1Xy76T6t9+URFO/Wmbf0SBQ0sKqbugh9kEU?=
- =?us-ascii?Q?aMkV0tXDmG9GpuieCOqjdDiVDS1W8A5nKqREXOEX7eS58i7IL9BKcb5rE6z6?=
- =?us-ascii?Q?jCPcbfalV25SYX+LeMdbkpdWpME4chZrSqgfyl/kGUA75QnMwRzdv0+eve0l?=
- =?us-ascii?Q?k5AoSLfuH4ZK9aY1F08EYcaa4Kq20/eFaftitcvs34yOhKCyf9FR7x1PkDDz?=
- =?us-ascii?Q?Q8TBiOPLRy3PIXVsp+ftQWewqh2RhlcXRKZsnVnTv3Avs1rfbKzaMFTMk+gB?=
- =?us-ascii?Q?VnYCHSgi9bXMaJ+ub4xzqcOW01SwL8PmZbgEltMCo3CBTb8Eu7corh0gWVij?=
- =?us-ascii?Q?HX0H2zamiu1N14wXw7/BIkzX7H88GgM//JJIA/2fSv5Ta+20RedIPX+I16O0?=
- =?us-ascii?Q?3V08xviTP/vq1Jw9SKSe7NtJONhEIrJbMedT3S3M7o7BIEiJEPiCPOVJckGP?=
- =?us-ascii?Q?lfbRTPHNvtxmo1B1jODy95A+jZ43SIZgjCx96piq0w6DYf087h+3Tdc6WQev?=
- =?us-ascii?Q?RtzuEwLc0nb1nC22R+24KSQSxZGbdbUZ3HhN5REDjjj16hrsY/a6KUwU6M6v?=
- =?us-ascii?Q?TVgnaOzrTZX3sFhIMEQaTk4O1Nu9iLB8Dn4ahXjlrFDUWnd/Pg60xTTyQdio?=
- =?us-ascii?Q?3C5FmBKrFb/DdnWwPTk5j9H40qogLrpkNKHga9mYET1fDR6SPfSptwyhCBsp?=
- =?us-ascii?Q?p30qG6e0STSK0DvNY0KmeSa9fQfnDcl2MvbjY9gUAe+eyxiBNW6WwA2exXKh?=
- =?us-ascii?Q?1HBlEpL6VFcqxeu2AiwAfc6L63QUF4qj+KgxIL7fx8F+4HS2RGkL1GJJ8iiL?=
- =?us-ascii?Q?SPoc6hIuy8QYJJFLdi5aY49iMlaR/M9FXZ7/Wu+e4Xafzy78Izg=3D?=
+ =?us-ascii?Q?wFhjetbTeOAbz3TN4+lLfH0tm5wUaYEPweABP0e6mJMG8Rj9110RkNS2MYvJ?=
+ =?us-ascii?Q?y7aMgRnr0ZZskPIu8UWuOI5ICqhDbFWGkQYDFUGS/9dNDpXideEAs/a2+tCj?=
+ =?us-ascii?Q?TOdL7zkMA0CYkqCTH+be5XkyNqHhynxDQaSmABX4DwZzgP6OsKxzWFeaioGW?=
+ =?us-ascii?Q?W0tavan4+KG6phB5Weli+Zbekxam2hiba7Vi2njgHlJldPB2az3h3jagmNVt?=
+ =?us-ascii?Q?QQMevA2fOcGBLmtH9U+n/fMv/L6w4m3AqpB3wHhuTgEdYOZKAbG4OXoCOkBE?=
+ =?us-ascii?Q?J264M4mmOyLHYez0Qw6jts/VhlO3BKuIoidfssDZ5SsW4IAhAjPPIgjhxEbk?=
+ =?us-ascii?Q?AaG8aq6tXlXZEmgeMO/UYKCZsOU6Uwxv2TUz0p6La797WCF/vFcucACu032l?=
+ =?us-ascii?Q?eLZvDVZk5IaWGvEYN3YyWV191Ym7jKQJ56t7Fjb+dMOhQ76NA4XHiPjVqln2?=
+ =?us-ascii?Q?x9/oRZv6xcmmq7hoaDunlDLqnKet/VQtw9y9n8zOX/bi2sDMJFDxGsjMh0/f?=
+ =?us-ascii?Q?MOuvpRoIJrdc60xKsAG+gazT22DipMOZswtn0gKem8odenZCmwRbrFjQqILz?=
+ =?us-ascii?Q?Wya7ut4WmLODgx56zsDOpL+lZxu5hnAZAiWKvEflqcDqnEQBMZAM/Pg0GDPZ?=
+ =?us-ascii?Q?Jxxh+soKDJoX+jwKKkOLvQQYhMEQyjA4ZpBgygD97mpGkN3t5Er0HyL18xQG?=
+ =?us-ascii?Q?pLlSOvPHWkddSLu03SomDP9udrE0NBbp6W1f0vc3hRhUwshHYArKmetLANNL?=
+ =?us-ascii?Q?AJBoUy0pgVyT1ovkfHEnMdlyPdeJQ3bWAw+/NOVFgyLJ/hSAMpHad3Ck0vIw?=
+ =?us-ascii?Q?fQ9wAHZFcYvoDl83j2KwVTgVMI1Gme/o1qefHmZQDt6Elj7Z7AsGgjZGHlvg?=
+ =?us-ascii?Q?j86Y85lJoo8e9LPtaAEraObKn/P4Bs68fHjSQKd1H2SBzNJOD+3WES56JK1U?=
+ =?us-ascii?Q?dVslS8Xl+4m321CPr7UFb6NmREfxLSzkAOKPh0MaAh0xf7tSqsz4Yn60/Jx4?=
+ =?us-ascii?Q?S7CvhjijCyGk0xREU7xXX845kEBpqMxRTb6yUPScfcZZgbxgqjWgVtrVPSY1?=
+ =?us-ascii?Q?RtNaFR9ZGjw/K/JZd8eH760B0Me2JElDQmdikhkGA6FngS3kLr6fTI3If3Up?=
+ =?us-ascii?Q?rjqfCvu3jPyV141qUxzh7qnVSV0qIB7h4j/1/G+EIcuw5MNZfWlBs3A=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?E8pkLCf432UDGm9Z8CGPgN/Nss+ITS2pnG1sbS7W4rXc4jkVy46Q0MiDoIRv?=
- =?us-ascii?Q?P7tOFMEAVUiKP0INgESU6f5Xltf5rv/X3eK89CIu13QPAHS4cL+IvxcDazAm?=
- =?us-ascii?Q?YRNvGkhGoxnk6+AyxnHm/eVndjpKS8JUx/1+N7DbjPEzZcKidc6ad3tz2yIX?=
- =?us-ascii?Q?lWMEoU3nYvmQWtEn4pyQaGbeLWWER39iYLqpKVLeMXoA7XAsmGk+l2sqdPXG?=
- =?us-ascii?Q?vyWSAVTB+WdRm68aKz9S7Ch0x0+KL2HfpWUk8Pn13OdIdbq8YA1pBi8DAkvt?=
- =?us-ascii?Q?PubgoWNHWAyQx26AvZAR10H2PKVEqP1AjfwLqI0fJZh3T2lYz7NbLsnrAcYo?=
- =?us-ascii?Q?hyiaCsoQ41nyFwgO7e8O1fhcMYjnCOAKv1sAbgYuXc6loMagiMzAqez64k1R?=
- =?us-ascii?Q?Ajzu8kx0w7xkLfKbheYHFkq4GYzVJHRf9emZPBDbsDmwtlhqA3FJZR8Clvjq?=
- =?us-ascii?Q?rLVPHpxZSeGSB8bsWc2ELv9OpQUrWERAmbf01PcmFfkzbOOkGtvBfzagYTuo?=
- =?us-ascii?Q?jXdSmvlMZ/9tnJgMyBy2rBDs6NdVOl9JLJOnhdpn5XT67NXUy2VMJYylH6au?=
- =?us-ascii?Q?KqNFkFafYNVDzqT1NaJkQPOM/8WM3flqovE4cdn5rspLSXiHhnN164eycb9I?=
- =?us-ascii?Q?/cJTqNWATzWYrT9n9gWng3jiXL1sbBtp56hk98Qsr0HM8Du8RjQgtv3jAVxK?=
- =?us-ascii?Q?kNIeeEPYWlg0kjwrtWfspCEUJmXo1GZxSZC9XeiIGDJg1w/Puf3kfV5defcC?=
- =?us-ascii?Q?XC7NJ2/VSW2lr4jIHuqcKv/gAvottj1ujhZ5MnERBWN8zgG3Q8tKjgRSzZlS?=
- =?us-ascii?Q?IZpiXy3roJ8yzzOnJSNtFQk+EDBfjJ87h21FbHfXYZ8lzzAR4jy4DQ9IKjlE?=
- =?us-ascii?Q?w2lShiGDolUkCHSSA873RdftiXEijvbIAjt63p3BBf+Lxwp/KcO3iK8U/j19?=
- =?us-ascii?Q?cEdaj5MH6uZLgufnnuD8fxnDGP99LynYwJTVYNtGMJ0KZv5vUZm6fuC2ioaE?=
- =?us-ascii?Q?OySPaccXAECPDuyvtCq+bn6Sg/go0pFlSoTlKAvknfHUrSgdN3kOiWWwdx1h?=
- =?us-ascii?Q?KKnJW+Nn6+MBFYzddkxlyCYtn/ugjF7ISzTGnSuMAgwPORZEG5uTsLqizSZo?=
- =?us-ascii?Q?5RzwEEiE3BZfEkw6g3aU6q73KRUzk39XByBpnrx/aQFpNLOBIxb+wgB9AuTZ?=
- =?us-ascii?Q?IaDUj2Yz2wXvCJJZPkDB4NOwTqI7ZhjuoN+4juerNkU0SONXkUzTXz3XU5s?=
+ =?us-ascii?Q?Dj9zdei9a2mMlHmHe0iPHlo8uy1YWNuGEOKbt1dENzuu3B49kw+LrYaq0/zU?=
+ =?us-ascii?Q?8Uq9e6z7Le8E0CVMIdYT1OTf/RFzeIJIJjCKq/du5FG80ipeNeVQHdeKBhKX?=
+ =?us-ascii?Q?v1QCIzVbwLwUqdyH+hn+b0lYbKMgLD31ZXjl68y2a99GyDU6D6Eg9R7Liv3V?=
+ =?us-ascii?Q?t43CrfgzmWPoRif8gYyJ4u/3yzHSwxX07MvyY5yNCXm0ISQDHu0usUE/ADqU?=
+ =?us-ascii?Q?d0jKTdTC5uMat5mivhwRynOBqnbv0TrwVF8QIMmhWxoe+TOID1L7wOpDwbbw?=
+ =?us-ascii?Q?z+2yTyHKZc2KeVVH3gKUkC+6o+ajTPW+NTmYCkZoDKeuUphTm9s+FSoGneWR?=
+ =?us-ascii?Q?6lo19M81pQn6RkZmDXPXLMTuY82ZHC+Bjw2vb3LO/qc4pG/N/giYYdkUSVL0?=
+ =?us-ascii?Q?rA+ktNtOGM7BrgCWicuolbshrh0vmqh9A83FS2/Q9rLIM+d8OtseLdl9Njq1?=
+ =?us-ascii?Q?7MG2JWPS8r08XfQDVIgNz7Si4woGcG8uzfBfMCD6+TXSF1SK8l2WxwCdevit?=
+ =?us-ascii?Q?rbVh0bwyu49Pj0kZcTWry4SlTawuDjm0nJfQk2epr6NDazc8YQCfoQAEtsTs?=
+ =?us-ascii?Q?nAjIUnM/IG2oPna4qut7CDOmh659qDuGRrBiYb2ItGPngGf8Xqkm6xoeqX18?=
+ =?us-ascii?Q?H7QwVSke62QxlAEC77nglEVM1c2lGh3yB9slK+nc7Aij5IGFvE7+RyTM/DQw?=
+ =?us-ascii?Q?mQPPmZi1HSvcvgn1QfaUxltTer5y8oD4+UH0mtfz65VeEsxCdjLSCcpK0OfD?=
+ =?us-ascii?Q?ZHR+GnauKSaZP9fR467fLRrexq6rqmdFdjch2s1EsR2ulZ27KXEin9zABjFs?=
+ =?us-ascii?Q?OlhVYRB7En+hH+5i4oWuSJaAZc3DIe4GiXwhpejXA1rIaK1OpWzHV5AvCc+K?=
+ =?us-ascii?Q?99jTaZTiKfeCKLXU11/dlgAxVql3zJtmzTAYMlOCu/VDjj3+/+3hR8zRAXPp?=
+ =?us-ascii?Q?etj2oyW0sr8/3afeM4Av9xZQ0cfDtTP0Sb+9YrAPFaEij17+zv/ivq9OwnPM?=
+ =?us-ascii?Q?USVftqBDFcfMwmjfhEYrNWSFsxnVeaEQUHsS+ZW8NfNliGNvnwozTrb5ayG4?=
+ =?us-ascii?Q?/sDLhSZR2rv2v440UB7QrLx+OENaGHNaXT/orF3nGsbowv2A9vL9UdImxkx6?=
+ =?us-ascii?Q?iNDfqH0+PlCZaERWoTV4KdBgWGUyJ2/fIfqIrKkYL2QrzifI8zP3ulRWSFo1?=
+ =?us-ascii?Q?x3R+zXCyKy7jm3EQKcRlyegKbS5w2zOkYWZbezhRSsD0ul0lYQ2kyZDELCc?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -152,8 +153,8 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c5cbd75-808d-4136-d4a8-08dd965116fb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2025 21:15:17.8098
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebf9606f-9249-4a01-6e11-08dd965126a8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2025 21:15:44.1072
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -163,147 +164,203 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR02MB9189
 From: Roman Kisel <romank@linux.microsoft.com> Sent: Sunday, May 11, 2025 4=
 :08 PM
 >=20
-> Define what the confidential VMBus is and describe what advantages
-> it offers on the capable hardware.
+
+For the Subject line, use the prefix "Drivers: hv:". =20
+
+> The confidential VMBus is supported starting from the protocol
+> version 6.0 onwards.
+>=20
+> Update the relevant definitions, provide a function that returns
+
+s/definitions, provide/definitions, and provide/
+
+> whether VMBus is condifential or not.
 >=20
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  Documentation/virt/hyperv/vmbus.rst | 41 +++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
+>  drivers/hv/vmbus_drv.c         | 12 ++++++
+>  include/asm-generic/mshyperv.h |  1 +
+>  include/linux/hyperv.h         | 71 +++++++++++++++++++++++++---------
+>  3 files changed, 65 insertions(+), 19 deletions(-)
 >=20
-> diff --git a/Documentation/virt/hyperv/vmbus.rst
-> b/Documentation/virt/hyperv/vmbus.rst
-> index 1dcef6a7fda3..ca2b948e5070 100644
-> --- a/Documentation/virt/hyperv/vmbus.rst
-> +++ b/Documentation/virt/hyperv/vmbus.rst
-> @@ -324,3 +324,44 @@ rescinded, neither Hyper-V nor Linux retains any sta=
-te about
->  its previous existence. Such a device might be re-added later,
->  in which case it is treated as an entirely new device. See
->  vmbus_onoffer_rescind().
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index 1d5c9dcf712e..e431978fa408 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -56,6 +56,18 @@ static long __percpu *vmbus_evt;
+>  int vmbus_irq;
+>  int vmbus_interrupt;
+>=20
+> +/*
+> + * If the Confidential VMBus is used, the data on the "wire" is not
+> + * visible to either the host or the hypervisor.
+> + */
+> +static bool is_confidential;
 > +
-> +Confidential VMBus
-> +------------------
-> +
-> +The confidential VMBus provides the control and data planes where
-> +the guest doesn't talk to either the hypervisor or the host. Instead,
-> +it relies on the trusted paravisor. The hardware (SNP or TDX) encrypts
-> +the guest memory and the register state also measuring the paravisor
-> +image via using the platform security processor to ensure trusted and
-> +confidential computing.
-> +
-> +To support confidential communication with the paravisor, a VMBus client
-> +will first attempt to use regular, non-isolated mechanisms for communica=
-tion.
-> +To do this, it must:
-> +
-> +* Configure the paravisor SIMP with an encrypted page. The paravisor SIM=
-P is
-> +  configured by setting the relevant MSR directly, without using GHCB or=
- tdcall.
-> +
-> +* Enable SINT 2 on both the paravisor and hypervisor, without setting th=
-e proxy
-> +  flag on the paravisor SINT. Enable interrupts on the paravisor SynIC.
-> +
-> +* Configure both the paravisor and hypervisor event flags page.
-> +  Both pages will need to be scanned when VMBus receives a channel inter=
-rupt.
-> +
-> +* Send messages to the paravisor by calling HvPostMessage directly, with=
-out using
-> +  GHCB or tdcall.
-> +
-> +* Set the EOM MSR directly in the paravisor, without using GHCB or tdcal=
-l.
-> +
-> +If sending the InitiateContact message using non-isolated HvPostMessage =
-fails,
-> +the client must fall back to using the hypervisor synic, by using the GH=
-CB/tdcall
-> +as appropriate.
-> +
-> +To fall back, the client will have to reconfigure the following:
-> +
-> +* Configure the hypervisor SIMP with a host-visible page.
-> +  Since the hypervisor SIMP is not used when in confidential mode,
-> +  this can be done up front, or only when needed, whichever makes sense =
-for
-> +  the particular implementation.
-> +
-> +* Set the proxy flag on SINT 2 for the paravisor.
+> +bool vmbus_is_confidential(void)
+> +{
+> +	return is_confidential;
+> +}
+> +EXPORT_SYMBOL_GPL(vmbus_is_confidential);
 
-I'm assuming there's no public documentation available for how Confidential
-VMBus works. If so, then this documentation needs to take a higher-level
-approach and explain the basic concepts. You've provided some nitty-gritty
-details about how to detect and enable Confidential VMBus, but I think that
-level of detail would be better as comments in the code.
+Spelling out "confidential" here, and throughout this patch series,
+makes for really long symbol names. Have you thought about any
+shorter names to use?  The 12 characters in "confidential" makes
+the code somewhat "heavy" to read. What about "covmbus",
+which is 7 characters instead of 12? That also aligns somewhat
+with how "coco" refers to Confidential Computing VMs. There may
+be other suggestions as well.
 
-Here's an example of what I envision, with several embedded questions that
-need further explanation. Confidential VMBus is completely new to me, so
-I don't know the answers to the questions. I also think this documentation
-would be better added to the CoCo VM topic instead of the VMBus topic, as
-Confidential VMBus is an extension/enhancement to CoCo VMs that doesn't
-apply to normal VMs.
+> +
+>  /*
+>   * The panic notifier below is responsible solely for unloading the
+>   * vmbus connection, which is necessary in a panic event.
+> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
+v.h
+> index 6c51a25ed7b5..96e0723d0720 100644
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -377,6 +377,7 @@ static inline int hv_call_create_vp(int node, u64 par=
+tition_id,
+> u32 vp_index, u3
+>  	return -EOPNOTSUPP;
+>  }
+>  #endif /* CONFIG_MSHV_ROOT */
+> +bool vmbus_is_confidential(void);
+>=20
+>  #if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
+>  u8 __init get_vtl(void);
+> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+> index 1f310fbbc4f9..3cf48f29e6b4 100644
+> --- a/include/linux/hyperv.h
+> +++ b/include/linux/hyperv.h
+> @@ -265,16 +265,19 @@ static inline u32 hv_get_avail_to_write_percent(
+>   * Linux kernel.
+>   */
+>=20
+> -#define VERSION_WS2008  ((0 << 16) | (13))
+> -#define VERSION_WIN7    ((1 << 16) | (1))
+> -#define VERSION_WIN8    ((2 << 16) | (4))
+> -#define VERSION_WIN8_1    ((3 << 16) | (0))
+> -#define VERSION_WIN10 ((4 << 16) | (0))
+> -#define VERSION_WIN10_V4_1 ((4 << 16) | (1))
+> -#define VERSION_WIN10_V5 ((5 << 16) | (0))
+> -#define VERSION_WIN10_V5_1 ((5 << 16) | (1))
+> -#define VERSION_WIN10_V5_2 ((5 << 16) | (2))
+> -#define VERSION_WIN10_V5_3 ((5 << 16) | (3))
+> +#define VMBUS_MAKE_VERSION(MAJ, MIN)	((((u32)MAJ) << 16) | (MIN))
+> +#define VERSION_WS2008 			VMBUS_MAKE_VERSION(0, 13)
+> +#define VERSION_WIN7 			VMBUS_MAKE_VERSION(1, 1)
+> +#define VERSION_WIN8 			VMBUS_MAKE_VERSION(2, 4)
+> +#define VERSION_WIN8_1 			VMBUS_MAKE_VERSION(3, 0)
+> +#define VERSION_WIN10 			VMBUS_MAKE_VERSION(4, 0)
+> +#define VERSION_WIN10_V4_1 		VMBUS_MAKE_VERSION(4, 1)
+> +#define VERSION_WIN10_V5			VMBUS_MAKE_VERSION(5, 0)
+> +#define VERSION_WIN10_V5_1 		VMBUS_MAKE_VERSION(5, 1)
+> +#define VERSION_WIN10_V5_2 		VMBUS_MAKE_VERSION(5, 2)
+> +#define VERSION_WIN10_V5_3 		VMBUS_MAKE_VERSION(5, 3)
+> +#define VERSION_WIN_IRON			VERSION_WIN10_V5_3
+> +#define VERSION_WIN_COPPER 		VMBUS_MAKE_VERSION(6, 0)
 
-------------------------------------------
+The internal code names IRON and COPPER should be avoided as
+they have no meaning outside of Microsoft. I think IRON is WS2022,
+and COPPER is 23H1, though maybe that was never released.
 
-Confidential VMBus is an extension of Confidential Computing (CoCo) VMs
-(a.k.a. "Isolated" VMs in Hyper-V terminology). Without Confidential VMBus,
-guest VMBus device drivers (the "VSC"s in VMBus terminology) communicate
-with VMBus servers (the VSPs) running on the Hyper-V host. The
-communication must be through memory that has been decrypted so the
-host can access it. With Confidential VMBus, one or more of the VSPs reside
-in the trusted paravisor layer in the guest VM. Since the paravisor layer a=
-lso
-operates in encrypted memory, the memory used for communication with
-such VSPs does not need to be decrypted and thereby exposed to the
-Hyper-V host. The paravisor is responsible for communicating securely
-with the Hyper-V host as necessary.  [Does the paravisor do this in a way
-that is better than what the guest can do? This question seems to be core t=
-o
-the value prop for Confidential VMBus. I'm not really clear on the value
-prop.]
+>=20
+>  /* Make maximum size of pipe payload of 16K */
+>  #define MAX_PIPE_DATA_PAYLOAD		(sizeof(u8) * 16384)
+> @@ -335,14 +338,22 @@ struct vmbus_channel_offer {
+>  } __packed;
+>=20
+>  /* Server Flags */
+> -#define VMBUS_CHANNEL_ENUMERATE_DEVICE_INTERFACE	1
+> -#define VMBUS_CHANNEL_SERVER_SUPPORTS_TRANSFER_PAGES	2
+> -#define VMBUS_CHANNEL_SERVER_SUPPORTS_GPADLS		4
+> -#define VMBUS_CHANNEL_NAMED_PIPE_MODE			0x10
+> -#define VMBUS_CHANNEL_LOOPBACK_OFFER			0x100
+> -#define VMBUS_CHANNEL_PARENT_OFFER			0x200
+> -#define VMBUS_CHANNEL_REQUEST_MONITORED_NOTIFICATION	0x400
+> -#define VMBUS_CHANNEL_TLNPI_PROVIDER_OFFER		0x2000
+> +#define VMBUS_CHANNEL_ENUMERATE_DEVICE_INTERFACE		0x0001
+> +/*
+> + * This flag indicates that the channel is offered by the paravisor, and=
+ must
+> + * use encrypted memory for the channel ring buffer.
+> + */
+> +#define VMBUS_CHANNEL_CONFIDENTIAL_RING_BUFFER		0x0002
+> +/*
+> + * This flag indicates that the channel is offered by the paravisor, and=
+ must
+> + * use encrypted memory for GPA direct packets and additional GPADLs.
+> + */
+> +#define VMBUS_CHANNEL_CONFIDENTIAL_EXTERNAL_MEMORY	0x0004
+> +#define VMBUS_CHANNEL_NAMED_PIPE_MODE			0x0010
+> +#define VMBUS_CHANNEL_LOOPBACK_OFFER			0x0100
+> +#define VMBUS_CHANNEL_PARENT_OFFER				0x0200
+> +#define VMBUS_CHANNEL_REQUEST_MONITORED_NOTIFICATION	0x0400
+> +#define VMBUS_CHANNEL_TLNPI_PROVIDER_OFFER			0x2000
+>=20
+>  struct vmpacket_descriptor {
+>  	u16 type;
+> @@ -621,6 +632,12 @@ struct vmbus_channel_relid_released {
+>  	u32 child_relid;
+>  } __packed;
+>=20
+> +/*
+> + * Used by the paravisor only, means that the encrypted ring buffers and
+> + * the encrypted external memory are supported
+> + */
+> +#define VMBUS_FEATURE_FLAG_CONFIDENTIAL_CHANNELS	0x10
+> +
+>  struct vmbus_channel_initiate_contact {
+>  	struct vmbus_channel_message_header header;
+>  	u32 vmbus_version_requested;
+> @@ -630,7 +647,8 @@ struct vmbus_channel_initiate_contact {
+>  		struct {
+>  			u8	msg_sint;
+>  			u8	msg_vtl;
+> -			u8	reserved[6];
+> +			u8	reserved[2];
+> +			u32 feature_flags; /* VMBus version 6.0 */
+>  		};
+>  	};
+>  	u64 monitor_page1;
+> @@ -1002,6 +1020,11 @@ struct vmbus_channel {
+>=20
+>  	/* The max size of a packet on this channel */
+>  	u32 max_pkt_size;
+> +
+> +	/* The ring buffer is encrypted */
+> +	bool confidential_ring_buffer;
+> +	/* The external memory is encrypted */
+> +	bool confidential_external_memory;
+>  };
+>=20
+>  #define lock_requestor(channel, flags)					\
+> @@ -1026,6 +1049,16 @@ u64 vmbus_request_addr_match(struct vmbus_channel =
+*channel, u64 trans_id,
+>  			     u64 rqst_addr);
+>  u64 vmbus_request_addr(struct vmbus_channel *channel, u64 trans_id);
+>=20
+> +static inline bool is_confidential_ring_buffer(const struct vmbus_channe=
+l_offer_channel *o)
+> +{
+> +	return !!(o->offer.chn_flags & VMBUS_CHANNEL_CONFIDENTIAL_RING_BUFFER);
+> +}
+> +
+> +static inline bool is_confidential_external_memory(const struct vmbus_ch=
+annel_offer_channel *o)
+> +{
+> +	return !!(o->offer.chn_flags & VMBUS_CHANNEL_CONFIDENTIAL_EXTERNAL_MEMO=
+RY);
+> +}
+> +
+>  static inline bool is_hvsock_offer(const struct vmbus_channel_offer_chan=
+nel *o)
+>  {
+>  	return !!(o->offer.chn_flags & VMBUS_CHANNEL_TLNPI_PROVIDER_OFFER);
+> --
+> 2.43.0
+>=20
 
-A guest that is running with a paravisor must determine at runtime if
-Confidential VMBus is supported by the current paravisor. It does so by fir=
-st
-trying to establish a Confidential VMBus connection with the paravisor usin=
-g
-standard mechanisms where the memory remains encrypted. If this succeeds,
-then the guest can proceed to use Confidential VMBus. If it fails, then the
-guest must fallback to establishing a non-Confidential VMBus connection wit=
-h
-the Hyper-V host.
-
-Confidential VMBus is a characteristic of the VMBus connection as a whole,
-and of each VMBus channel that is created. When a Confidential VMBus
-connection is established, the paravisor provides the guest the message-pas=
-sing
-path that is used for VMBus device creation and deletion, and it provides a
-per-CPU synthetic interrupt controller (SynIC) just like the SyncIC that is
-offered by the Hyper-V host. Each VMBus device that is offered to the guest
-indicates the degree to which it participates in Confidential VMBus. The of=
-fer
-indicates if the device uses encrypted ring buffers, and if the device uses
-encrypted memory for DMA that is done outside the ring buffer. [Are these
-two settings independent? Could there be a device that has one set, and the
-other cleared? I'm having trouble understanding what such a mixed state
-would mean.] These settings may be different for different devices using
-the same Confidential VMBus connection.
-
-Because some devices on a Confidential VMBus may require decrypted ring
-buffers and DMA transfers, the guest must interact with two SynICs -- the
-one provided by the paravisor and the one provided by the Hyper-V host
-when Confidential VMBus is not offered. Interrupts are always signaled by
-the paravisor SynIC, but the guest must check for messages and for channel
-interrupts on both SynICs.  [This requires some further explanation that I
-don't understand. What governs when a message arrives via the paravisor
-SynIC vs. the hypervisor SynIC, and when a VMBus channel indicates an
-interrupt in the paravisor SynIC event page vs. the hypervisor SynIC event
-page? And from looking at the code, it appears that the RelIDs assigned
-to channels are guaranteed to be unique within the guest VM, and not
-per-SynIC, but it would be good to confirm that.]
-
-[There are probably a few other topics to add a well.]
 
