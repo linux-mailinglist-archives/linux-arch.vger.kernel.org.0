@@ -1,175 +1,175 @@
-Return-Path: <linux-arch+bounces-12030-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12031-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C51EABE296
-	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 20:25:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5AA0ABE297
+	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 20:25:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B37B7ABB9F
-	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 18:22:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37B4F7A28AE
+	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 18:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73FDB27E1AB;
-	Tue, 20 May 2025 18:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A12D262815;
+	Tue, 20 May 2025 18:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YshlzDFY"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ec/TqoO7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2EC262815;
-	Tue, 20 May 2025 18:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B023B242D95
+	for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 18:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747765449; cv=none; b=qPe8mUg/XQ2THXqqeAsxtdlaMfzpymWXpoU4uJ/6fU7JPb1iHnVskM42Sk4X1kq0sAtLLI2+SzifLwI/YkAPBCfwkxeypRM5edpYdnbPBG2n+xLIhaucgtUDRDCpqs8bzdKI6lVD7HR+4uigmDcgn3sMsHW1DrAAquzXX0XZZs0=
+	t=1747765533; cv=none; b=FVvi/9Qm/IZp6Lyn4TgBBqJ4LnTCU379/gx3YTJuPdHohSgdDpAeHRHSuCiWSsLLaobYQ4TeLobWSq37u8XA3oIiQ6SSQubbMJlAPmliP8+OhXs9W3fuCKx1VhbkPb0kKn/v/CHQXPEJenr567ZGUzglC22HzyGUolDq9O7TegI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747765449; c=relaxed/simple;
-	bh=ZmnsqxfQ/jk4uY36O0+7yWCTD6YuJ+6QFNdCQ1zwa4Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iCmd64mCDMq2Q5kQVz9h8hKYJ9Jetb5sJurkcB3gJi1LOq6df5aLjDzEluLL36J0JDHij6ruumud24LSIBLzEUwkyPPDDarncnKvkXdjaSYbssTcUcaHdZeeSZtdVApKLhsGSTDMktPTNDIe2h6QOeNCvh/IPkWvl0FaGpG4Oq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YshlzDFY; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-601d10de7e1so4281752a12.1;
-        Tue, 20 May 2025 11:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747765446; x=1748370246; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nffkF+u3gxWSeDAE8Itf37lA75RK6Rf3vh9YRGkMt4g=;
-        b=YshlzDFYd5zEKXnBRxZa3Lrnm+esUCVeqkl8A95FXlSGXA+iHk3ug5mSYEAeQJTQU4
-         6ERC84WM8WbQFY/T7YGLlTqY/M3QwzwjgCNuslyw4brpFkolNhYHdLFOVAhl882AaPv/
-         p7WIQZQiLORjx6Rmny4p3gF2Tbuv/UZO3EsGJZVRbm7CkcdFPqButMwkE/aeiTp+wVlJ
-         C0BBN/WmLtyp7lOvji4mH63B4inswBKwcanydq01lGhhXQtD6rSXN9XFS8SiaEYE6s7m
-         P6bsPMwyr/8GbwwwS45veYzcKrQ4/U80jYuqLbTWqWNyLTAQ4SwPplo6Qaa/N9IQUOMq
-         PWGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747765446; x=1748370246;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nffkF+u3gxWSeDAE8Itf37lA75RK6Rf3vh9YRGkMt4g=;
-        b=A1M0lRja9/agwePzXQ0K4hcnG+Fp5HOSFNiB9VkfK6oLuXxQa0W4eRaCVP18e2YqJl
-         /BPzCzMkmPyIt8xv9C7HCGvIKKpPstHqx9j9jd08nZGdSQlMepO/K4w3z4quQxgJpi91
-         mZMWY0XPjCQuv3zlLmKNIyWez7J89R2Ofm+D6eyT3ge69KDGC1ld3ELRYmr6GmgmB58B
-         DYwIyMPx1VQUZgbIvRTuKpborsk2BAzPIBw1V3zPledAH4/apwN6jqlMTaX2Ep542kCw
-         JZAEtQ/GeUWfVour1pTRu2x64mARc/mQ2iH04jnpOG7SPNZE3piRLQDmaF9QN1B9ctzv
-         Oz9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXaikNgBLKEmJ06YGg87qj+1/8CzgZnTCS5osKnORnX0r42nql/2JD79mZ6eXv1Xyn3ljGJtYpkZbHCKAxH@vger.kernel.org, AJvYcCXp/MXsLJZvjdaOvXftSMf3uEZrhboOVVKGi/CVNx96v/n9RwfdrnYLckAAkqqf/ljM0WN0qf6h2Kyb@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaZKzoxaO0rWO218FdEBNMXNdEh35D0753BIcbvxjYrYW4lBV6
-	p7RBwX6VrLqiY9vK/dfWdCSGE0WrSN8BVQJU04+pQMWhHmNWqVSo3Y8I
-X-Gm-Gg: ASbGncuKCYPtL1jfHM7kTF3F9LOJ7Ux2UfHrdvu07mtZrHS5fdy0eE1xr6YzxSewcT7
-	+ZvI1dS16Q6aPRrTPhyk4KJaKQKLFg1m98zzkRm2N7V4g78Q7T0iTAbXvkPPNoZs1YVrd//eHpa
-	srph/kqhaDZGJ3t3Ya6qr/WUkk0/R/jpPMdkuNOSHJ+fVaFWoB7ufb3wkrH+QED0FpDsB+cIYFZ
-	pxtoINlU1H+tWHqGPH2HsCcrDVawg3yPKpVCilz9tsoxVLxjqrBIwG7VtSVzK5GM3NSnoi6+XS9
-	xmDw/MO23WMdO8QrnOexeKyvvKOo7tVEIVnxpd3z78B0fA0E6c1QLFFWtR/7mh0Wshrff/y/88t
-	ASWf0MYhNUAKTVSjGLk9L3oVZYELmiw75ouU=
-X-Google-Smtp-Source: AGHT+IFTobyzwp/Ssql6CtGjBJbbB1JEAC6BoxecpIJmcboc9SYnQ2a6Sjk18KiBZWcMeWJN4+yURQ==
-X-Received: by 2002:a17:907:2d1f:b0:ad2:40ee:5e29 with SMTP id a640c23a62f3a-ad536b56f88mr1563874466b.10.1747765445523;
-        Tue, 20 May 2025 11:24:05 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:1c0a:f3ac:4087:51c8? ([2620:10d:c092:500::7:66a9])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d4ca5c5sm764129766b.162.2025.05.20.11.24.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 May 2025 11:24:05 -0700 (PDT)
-Message-ID: <ae53fa82-d8de-4c02-95f7-7650a03ea8e7@gmail.com>
-Date: Tue, 20 May 2025 19:24:04 +0100
+	s=arc-20240116; t=1747765533; c=relaxed/simple;
+	bh=P0zT0zftKrL/Y88RMq4ovSO9bbq9UeJRdyMwbx8a6D8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W71e1y+JWWwrlk6FNaEcY0opvKsYbTiqpJVIaHkrn0Pm0xx6/j6a3bqnYPz5omPDPA/sX7APIcKB1K/Z99jqwuxPwP8y5r6PVhbe2s33uQavb3LcrCnI+bGkHL5CBWl/Y319OKokvVt3S99jBED/wMGT3WEDoBI5nDrnDU5b4Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ec/TqoO7; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 20 May 2025 11:25:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1747765527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2NplcsNYy8UsAypyXRLRttNfePHUJ7ZhLsg1OFHB/1Q=;
+	b=Ec/TqoO75jX1OT9KrUOwWuMr8iofzbL5wfGPk1S5goPxoON98WVwfBs4x3PSBWepaGiklT
+	t3IDtPPwuth5il4uzg3459jOlTU5bSkAro97+s48XdTfB+8XLNMYHn6Ob4jMF/5aNGZP4Y
+	zFLirgjZ8F9BUT349sQdC/oyyVynb/g=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, David Hildenbrand <david@redhat.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>, 
+	Usama Arif <usamaarif642@gmail.com>
+Subject: Re: [RFC PATCH 0/5] add process_madvise() flags to modify behaviour
+Message-ID: <7tzfy4mmbo2utodqr5clk24mcawef5l2gwrgmnp5jmqxmhkpav@jpzaaoys6jro>
+References: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/5] add process_madvise() flags to modify behaviour
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- David Hildenbrand <david@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
- Arnd Bergmann <arnd@arndb.de>, Christian Brauner <brauner@kernel.org>,
- linux-mm@kvack.org, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Shakeel Butt <shakeel.butt@linux.dev>,
- Zi Yan <ziy@nvidia.com>
-References: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
- <dd062c92-faa9-46a6-99a8-bcc46209e102@redhat.com>
- <c54d2c5b-e061-4e77-ac10-3c29d5ccf419@lucifer.local>
-Content-Language: en-US
-From: Usama Arif <usamaarif642@gmail.com>
-In-Reply-To: <c54d2c5b-e061-4e77-ac10-3c29d5ccf419@lucifer.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
+X-Migadu-Flow: FLOW_OUT
 
-
-
-On 20/05/2025 18:47, Lorenzo Stoakes wrote:
-> On Tue, May 20, 2025 at 05:28:35PM +0200, David Hildenbrand wrote:
->> On 19.05.25 22:52, Lorenzo Stoakes wrote:
->>> REVIEWERS NOTES:
->>> ================
->>>
->>> This is a VERY EARLY version of the idea, it's relatively untested, and I'm
->>> 'putting it out there' for feedback. Any serious version of this will add a
->>> bunch of self-tests to assert correct behaviour and I will more carefully
->>> confirm everything's working.
->>>
->>> This is based on discussion arising from Usama's series [0], SJ's input on
->>> the thread around process_madvise() behaviour [1] (and a subsequent
->>> response by me [2]) and prior discussion about a new madvise() interface
->>> [3].
->>>
->>> [0]: https://lore.kernel.org/linux-mm/20250515133519.2779639-1-usamaarif642@gmail.com/
->>> [1]: https://lore.kernel.org/linux-mm/20250517162048.36347-1-sj@kernel.org/
->>> [2]: https://lore.kernel.org/linux-mm/e3ba284c-3cb1-42c1-a0ba-9c59374d0541@lucifer.local/
->>> [3]: https://lore.kernel.org/linux-mm/c390dd7e-0770-4d29-bb0e-f410ff6678e3@lucifer.local/
->>>
->>> ================
->>>
->>> Currently, we are rather restricted in how madvise() operations
->>> proceed. While effort has been put in to expanding what process_madvise()
->>> can do (that is - unrestricted application of advice to the local process
->>> alongside recent improvements on the efficiency of TLB operations over
->>> these batvches), we are still constrained by existing madvise() limitations
->>> and default behaviours.
->>>
->>> This series makes use of the currently unused flags field in
->>> process_madvise() to provide more flexiblity.
->>>
->>
->> In general, sounds like an interesting approach.
+On Mon, May 19, 2025 at 09:52:37PM +0100, Lorenzo Stoakes wrote:
+> REVIEWERS NOTES:
+> ================
 > 
-> Thanks!
+> This is a VERY EARLY version of the idea, it's relatively untested, and I'm
+> 'putting it out there' for feedback. Any serious version of this will add a
+> bunch of self-tests to assert correct behaviour and I will more carefully
+> confirm everything's working.
 > 
-> If you agree this is workable, then I'll go ahead and put some more effort
-> into writing tests etc. on the next respin.
+> This is based on discussion arising from Usama's series [0], SJ's input on
+> the thread around process_madvise() behaviour [1] (and a subsequent
+> response by me [2]) and prior discussion about a new madvise() interface
+> [3].
+> 
+> [0]: https://lore.kernel.org/linux-mm/20250515133519.2779639-1-usamaarif642@gmail.com/
+> [1]: https://lore.kernel.org/linux-mm/20250517162048.36347-1-sj@kernel.org/
+> [2]: https://lore.kernel.org/linux-mm/e3ba284c-3cb1-42c1-a0ba-9c59374d0541@lucifer.local/
+> [3]: https://lore.kernel.org/linux-mm/c390dd7e-0770-4d29-bb0e-f410ff6678e3@lucifer.local/
+> 
+> ================
+> 
+> Currently, we are rather restricted in how madvise() operations
+> proceed. While effort has been put in to expanding what process_madvise()
+> can do (that is - unrestricted application of advice to the local process
+> alongside recent improvements on the efficiency of TLB operations over
+> these batvches), we are still constrained by existing madvise() limitations
+> and default behaviours.
+> 
+> This series makes use of the currently unused flags field in
+> process_madvise() to provide more flexiblity.
+> 
+> It introduces four flags:
+> 
+> 1. PMADV_SKIP_ERRORS
+> 
+> Currently, when an error arises applying advice in any individual VMA
+> (keeping in mind that a range specified to madvise() or as part of the
+> iovec passed to process_madvise()), the operation stops where it is and
+> returns an error.
+> 
+> This might not be the desired behaviour of the user, who may wish instead
+> for the operation to be 'best effort'. By setting this flag, that behaviour
+> is obtained.
+> 
+> Since process_madvise() would trivially, if skipping errors, simply return
+> the input vector size, we instead return the number of entries in the
+> vector which completed successfully without error.
+> 
+> The PMADV_SKIP_ERRORS flag implicitly implies PMADV_NO_ERROR_ON_UNMAPPED.
+> 
+> 2. PMADV_NO_ERROR_ON_UNMAPPED
+> 
+> Currently madvise() has the peculiar behaviour of, if the range specified
+> to it contains unmapped range(s), completing the full operation, but
+> ultimately returning -ENOMEM.
+> 
+> In the case of process_madvise(), this is fatal, as the operation will stop
+> immediately upon this occurring.
+> 
+> By setting PMADV_NO_ERROR_ON_UNMAPPED, the user can indicate that it wishes
+> unmapped areas to simply be entirely ignored.
+
+Why do we need PMADV_NO_ERROR_ON_UNMAPPED explicitly and why
+PMADV_SKIP_ERRORS is not enough? I don't see a need for
+PMADV_NO_ERROR_ON_UNMAPPED. Do you envision a use-case where
+PMADV_NO_ERROR_ON_UNMAPPED makes more sense than PMADV_SKIP_ERRORS?
+
+> 
+> 3. PMADV_SET_FORK_EXEC_DEFAULT
+> 
+> It may be desirable for a user to specify that all VMAs mapped in a process
+> address space default to having an madvise() behaviour established by
+> default, in such a fashion as that this persists across fork/exec.
+> 
+> Since this is a very powerful option that would make no sense for many
+> advice modes, we explicitly only permit known-safe flags here (currently
+> MADV_HUGEPAGE and MADV_NOHUGEPAGE only).
+
+Other flags seems general enough but this one is just weird. This is
+exactly the scenario for prctl() like interface. You are trying to make
+process_madvise() like prctl() and I can see process_madvise() would be
+included in all the hate that prctl() receives. 
+
+Let me ask in a different way. Eventually we want to be in a state where
+hugepages works out of the box for all workloads. In that state what
+would the need for this flag unless you have use-cases other than
+hugepages. To me, there is a general consensus that prctl is a hacky
+interface, so having some intermediate solution through prctl until
+hugepages are good out of the box seems more reasonable.
+
+> 
+> 4. PMADV_ENTIRE_ADDRESS_SPACE
+> 
+> It can be annoying, should a user wish to apply madvise() to all VMAs in an
+> address space, to have to add a singular large entry to the input iovec.
+> 
+> So provide sugar to permit this - PMADV_ENTIRE_ADDRESS_SPACE. If specified,
+> we expect the user to pass NULL and -1 to the vec and vlen parameters
+> respectively so they explicitly acknowledge that these will be ignored,
+> e.g.:
+> 
+> 	process_madvise(PIDFD_SELF, NULL, -1, MADV_HUGEPAGE,
+> 			PMADV_ENTIRE_ADDRESS_SPACE | PMADV_SKIP_ERRORS);
 > 
 
-So the prctl and process_madvise patches both are trying to accomplish a
-similar end goal.
+I still don't see a need for this flag. Why not the following?
 
-Would it make sense to discuss what would be the best way forward before we
-continue developing the solutions? If we are not at that stage and a clear
-picture has not formed yet, happy to continue refining the solutions.
-But just thought I would check. 
-
-I feel like changing process_madvise which was designed to work on an array
-of iovec structures to have flags to skip errors and ignore the iovec
-makes it function similar to a prctl call is not the right approach.
-IMHO, prctl is a more direct solution to this.
-
-I know that Lonenzo doesn't like prctl and wants to unify this in process_madvise.
-But if in the end, we want to have a THP auto way which is truly transparent,
-would it not be better to just have this as prctl and not change the madvise
-structure? Maybe in a few years we wont need any of this, and it will be lost
-in prctl and madvise wouldn't have changed for this?
-
-Again, this is just to have a discussion (and not an aggressive argument :)),
-and would love to get feedback from everyone in the community.
-If its too early to have this discussion, its completely fine and we can
-still keep developing the RFCs :)
-
-Thanks!
-Usama
+process_madvise(PIDFD_SELF, NULL, -1, advise, PMADV_SKIP_ERRORS)?
 
