@@ -1,89 +1,88 @@
-Return-Path: <linux-arch+bounces-12022-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12023-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ADAFABDE5D
-	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 17:09:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDA62ABDF35
+	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 17:35:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57D2418865C1
-	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 15:09:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09EA24C5770
+	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 15:28:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9D322D7A8;
-	Tue, 20 May 2025 15:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB3919F10A;
+	Tue, 20 May 2025 15:28:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Hitf9Jk8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CqsOUaV3"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701C519E968
-	for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 15:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A8819EEBF
+	for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 15:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747753740; cv=none; b=iiHNoeLYopQH1LaLlgFIM9oeYat6DAFiCkSTx8TE9Ko1rpI9OrUa/fuWDrE1iBWphBY+hud02WHi0w4gKeaKR2KjoynJNWCS1YIiJ/ALBVryzMwdKzvuqgtErbk11ZnuUvHYYvL6gENE1L8n0M1yNtoYuSjnJP7ipjkCdjwnr3s=
+	t=1747754926; cv=none; b=LN+8zWfVW3KRIElG1XYObImoZP8uHV6fk5IOutxLFg8SlkTTjnbbRTB4NPSz67ONun+7fyNQ2FzWpUkGIdPyvfSAt4sAa/x9v3xta8h9j/fS0dFm1QqhwtLUPESERoFLL0wBKNp0n0Ew2Mc3V8JQ1ZZpZCuZKjlSKzVA9GFvV/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747753740; c=relaxed/simple;
-	bh=xpvDoUvXtvvoVcinPcn6XkpZY9URU3K1MNKi0C+0AJA=;
+	s=arc-20240116; t=1747754926; c=relaxed/simple;
+	bh=BnDobGEcRmQ8EgfMlva/f1BL82VcYQywu6JTEayvEvU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pdf0hD6AHz7effK4EFEYBgzHx7SKQr0JoKBRWXY37kOSiSSvHu2a67BOrMwM7yMo2gPIxwvxhu61T3uostXj1eKBjVZrPfhs3P1Xcfzlo6pE2wuUT5KNI0DXH76GlTCnEIQv6mrXYbk5NwuWkZOI/jqH4zuzwlKUInGr58cCICs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Hitf9Jk8; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=dk6OBLN7cnCqt/R9Ac/cL0TLM7vlLP+XVCmk/iG2ovwfcmyHaZ9payBu/kEkB2l5NMTGzQIQLfzZB0arYyskRP+yL4OeKysZ/iUCTekTPL5Xu8ti3R7LT36Pl3KbeIazfuXyujX5hmE3Z7Y0ceVLbPNWpeVwVjQezRTjDhCfJmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CqsOUaV3; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747753737;
+	s=mimecast20190719; t=1747754922;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=epaO6bNKyNsoX0IWpCM87KgUPBgTouaLxd4ArWgJdpw=;
-	b=Hitf9Jk8DOE64DpR6Vx+abk2dEgggOHwt+rpYcaJUlLUmjImheZXMj5wOr0TFlnBoCnvNI
-	Dgpabm+6KfW1uTaIfnhJhPg4FEhZFDmDioEMs2WoeLEgYPGgh2qpSxMMV02cwroLpD1UUy
-	afGCSaensStpX9uqoKhFPOeVqYEZfiI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=byrAFI+fttkzvGOx8TlNVRJimGElnWzOfywL7N/Lvpc=;
+	b=CqsOUaV3cu8m4FN2siDBGgP5zeXuP2yatpG/PQIWKw/JZNyIXcO4ijgm5aP/G08VL3iw7c
+	+kUZwjSMPO92hPXHfN7JoZm6wVzzOf7PCoDPY01jXZQJkbTi1yy79OKTamcDdR1gf2J+25
+	Vn4XgIoCfthmG3phDI8YhGUAfyGkiaE=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-392-cqNEsCkFMK2NFdF2vNp_fw-1; Tue, 20 May 2025 11:08:56 -0400
-X-MC-Unique: cqNEsCkFMK2NFdF2vNp_fw-1
-X-Mimecast-MFC-AGG-ID: cqNEsCkFMK2NFdF2vNp_fw_1747753735
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-441c96c1977so39432085e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 08:08:55 -0700 (PDT)
+ us-mta-600-kNjZBh7CO6iwmR74OM4yKw-1; Tue, 20 May 2025 11:28:38 -0400
+X-MC-Unique: kNjZBh7CO6iwmR74OM4yKw-1
+X-Mimecast-MFC-AGG-ID: kNjZBh7CO6iwmR74OM4yKw_1747754917
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3a35ec8845cso2318799f8f.2
+        for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 08:28:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747753735; x=1748358535;
+        d=1e100.net; s=20230601; t=1747754917; x=1748359717;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=epaO6bNKyNsoX0IWpCM87KgUPBgTouaLxd4ArWgJdpw=;
-        b=EQ6/b0qDObbuaycQuaptxEhH0AeBm7KcgPtzXsnE5JOXzNz1+twESQ3X68HLm9pZyl
-         WBH7ELsiNQy8/UCvevAFXCIbdnkZGqP2+DEieGSpJ0mJKrmX+2q0zsuTo/bRvz31J0fy
-         WuCedCTOzzWbLL4F0ATO4SlDVR9UDWJcbAigWwfxsyH4nUtpailfLxqkfP6ACZHNt5DH
-         d1eR2TGQzOdgasvavSidsVUj7z7j+mhMU5SaJ0/VPlj5UTCucwRWE9nTe9memlml63Rg
-         M7LC0Dg6/EC/2YZqeXqPqP4VtdAngtDHEtXEx2Xd+lq31zcbB6i0ZMDzSsAB1QjWrRL6
-         pDxw==
-X-Forwarded-Encrypted: i=1; AJvYcCVv2bOsL+/Zmmxf89YUaMswdsu7bKgyxi/b0XKlqSZUcIFL0GwTX7NwZkxHxDVcJVOXR78hUHgWNP7Q@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEmpyBiPQ6P5hA9a6eFYdvvBslYh8Bicgsxf/qe5OQWLRK5Rko
-	+tf3a22pvA0AQgnYCyyJ4ORtmbF0Dut8EU0cXjKXMuQOiBPPmocWURBAf8fkj3OEyGOCuoPCc4T
-	01r0Ef5rOGdBlAzbAEJ0PbCsY9Rv9gOG9hnWroGfw1rD/qUtNE/fn2mvNvOty8omqRXauPgLpQg
-	==
-X-Gm-Gg: ASbGnct6RIfB6YsgSGIYjkPMYfsj7ttjH6/5g5xSA1KVj2UszGOV9u9ojpIO73oVtaf
-	YewA4nGRFRUukDpL2yiai2X6Z1bdACdn/04TOQa/pCTtbgI0ALu/nrPSGIfaxCpp11VfO7dcbIq
-	7pbkKPxS1kqKe9HCeH3IYDkYYIxW7Zu54NWcwchuvtZ8pJBA3M9ZXeJUdX7KdNfLKcQZ81B7+m8
-	ea9u8zwXI26tvNQPR/LOvv+/BBU5UcHPhAY/rf6/gc7bl/24FK/THiz2V+OvBS6AWpKOMFC1A+1
-	EyLrJ2FVaqqlkyQAczpknucGPq4Jjbrvn3wgjcz1RbF80Pc9MP9uQGbnyQyGHondvUqbglKMWCk
-	QE3TWOhvg9LkNtSsd8oC7MzURxDr3tdZZJydGuXw=
-X-Received: by 2002:a05:600c:1c12:b0:43c:fa52:7d2d with SMTP id 5b1f17b1804b1-442ff0316bamr103545005e9.20.1747753734783;
-        Tue, 20 May 2025 08:08:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFoGrGo5grh6eX5e2f6SQpDqZFQSnOqc4BjwHoXSs42N+BkoVHjIFFwv9PMXS3/isdmwsmA6w==
-X-Received: by 2002:a05:600c:1c12:b0:43c:fa52:7d2d with SMTP id 5b1f17b1804b1-442ff0316bamr103544605e9.20.1747753734270;
-        Tue, 20 May 2025 08:08:54 -0700 (PDT)
+        bh=byrAFI+fttkzvGOx8TlNVRJimGElnWzOfywL7N/Lvpc=;
+        b=m2L6/dAk4aCifRdPnFNrKqJnDxFrWN+1OHyUNervzy7QW6NxHONyY6+pkC/wdYTOr8
+         8fklnc9gbKNptm6kWVkgOtWVefomKoB6YGBiQ309mnw7//AaukoahHG7HEGgWalEH7Ws
+         edcIfr0qPETjsXdSKacrnmBa9v+idpHcKfcgftY7pNvrNUKAuzWjAvEprpwgQq4Kv0C4
+         1kPXOXN8Nv5r12/Lu1OvGg8ZEhOFmcEC4+8Wv3LAeziVSzR79YuFQaFzutoH5EBN8Nax
+         7tSo384X2zOsipTRQCRh+h3SHnJf7HtXV0cgZg6j/AonIl5E1sLeb+1K15uYvdGSNqpA
+         Fstg==
+X-Forwarded-Encrypted: i=1; AJvYcCVeY0ydgXiO8xBr9dHxK3dJG89x//Uprk7sC0MDrclowArtRTuoDMSBni2xYMn1je7HmBbtHYGGyukS@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9wrv6P+Y/qLFKd1PL9KjFyx/ntwL+FEcBXdXRQM0JIBtRD0B0
+	36u+uTby9WAAxyBavsW6K2TONn+VRIeLFmn+GeZzAqZmzdW4U0bqciy4CNPzLuqf62OLeHtD/Jf
+	M2bLgnZyQcxdB6yFuLY79aSqLfq2mobM/4QjSIzmvk9GmmhZyP95xpWxQ6kWOkcg=
+X-Gm-Gg: ASbGncuNtHRAqTdj4bSgrmicfrqPWwpjmEiYKEyQYStmPRoZgLCj70y6eIxkBxaoFpU
+	/ZYhUwlPIE353FD4djXd485KN4iHEyrIxkN2tYowDwGlUERSG2ByKJmUw8p0EWvt45TH6c9gAwC
+	ihowW45Gk6htRBj2HkTPRi93Cpuqvt//i4gKuq+nwzScCBdkQWe5ji6ovImvNutHk7B1dCiCsFC
+	uwvMWNRNhjEivfyN4T8k0C3Kbi7kBencCUK1yYnLdCDRKY4xlpBCRtcs5aio1yxpl9mgtche7nt
+	vccf4rVGF/PyzWeYwoENyzj6QcM8myNkpVrsVzDzhL/Rud91t7vCmBJx9JjlgItgTrLPfrBvAwo
+	qRa3sXLOHgcpH7y0ZGVTetv1N+tAQgFMknHGKR0I=
+X-Received: by 2002:a05:6000:a8e:b0:3a3:67bb:8f3f with SMTP id ffacd0b85a97d-3a367bb9065mr8080798f8f.53.1747754917217;
+        Tue, 20 May 2025 08:28:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHLsOEhsg8h1nrTdRgjk/8RLDndqMdRcLLHCqsI59w6NB/PhJyjBEvxNPDXk4C1Blkmv+7FZA==
+X-Received: by 2002:a05:6000:a8e:b0:3a3:67bb:8f3f with SMTP id ffacd0b85a97d-3a367bb9065mr8080775f8f.53.1747754916768;
+        Tue, 20 May 2025 08:28:36 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f28:7c00:a95e:ac49:f2ad:ab84? (p200300d82f287c00a95eac49f2adab84.dip0.t-ipconnect.de. [2003:d8:2f28:7c00:a95e:ac49:f2ad:ab84])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-447f73d4a3csm35883445e9.22.2025.05.20.08.08.52
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a365bc0b5esm13048900f8f.9.2025.05.20.08.28.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 May 2025 08:08:53 -0700 (PDT)
-Message-ID: <ff6c9ac0-dce2-4d3f-b5f7-15f8fff3379b@redhat.com>
-Date: Tue, 20 May 2025 17:08:52 +0200
+        Tue, 20 May 2025 08:28:36 -0700 (PDT)
+Message-ID: <dd062c92-faa9-46a6-99a8-bcc46209e102@redhat.com>
+Date: Tue, 20 May 2025 17:28:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -91,17 +90,16 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/cma: make detection of highmem_start more robust
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Oscar Salvador <osalvador@suse.de>,
- Andrew Morton <akpm@linux-foundation.org>,
- Alexandre Ghiti <alexghiti@rivosinc.com>, Pratyush Yadav
- <ptyadav@amazon.de>, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20250519171805.1288393-1-rppt@kernel.org>
- <aCw9mpmhx9SrL8Oy@localhost.localdomain>
- <d2751191-fc32-418a-8b62-dedab41d0615@redhat.com>
- <aCyaiXO7nmjC3wWj@kernel.org>
+Subject: Re: [RFC PATCH 0/5] add process_madvise() flags to modify behaviour
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+ Arnd Bergmann <arnd@arndb.de>, Christian Brauner <brauner@kernel.org>,
+ linux-mm@kvack.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>,
+ Usama Arif <usamaarif642@gmail.com>
+References: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -149,110 +147,100 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <aCyaiXO7nmjC3wWj@kernel.org>
+In-Reply-To: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 20.05.25 17:06, Mike Rapoport wrote:
-> On Tue, May 20, 2025 at 11:14:28AM +0200, David Hildenbrand wrote:
->> On 20.05.25 10:30, Oscar Salvador wrote:
->>> On Mon, May 19, 2025 at 08:18:05PM +0300, Mike Rapoport wrote:
->>>> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->>>>
->>>> Pratyush Yadav reports the following crash:
->>>>
->>>>       ------------[ cut here ]------------
->>>>       kernel BUG at arch/x86/mm/physaddr.c:23!
->>>>       ception 0x06 IP 10:ffffffff812ebbf8 error 0 cr2 0xffff88903ffff000
->>>>       CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.15.0-rc6+ #231 PREEMPT(undef)
->>>>       Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.16.3-1-1 04/01/2014
->>>>       RIP: 0010:__phys_addr+0x58/0x60
->>>>       Code: 01 48 89 c2 48 d3 ea 48 85 d2 75 05 e9 91 52 cf 00 0f 0b 48 3d ff ff ff 1f 77 0f 48 8b 05 20 54 55 01 48 01 d0 e9 78 52 cf 00 <0f> 0b 90 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90
->>>>       RSP: 0000:ffffffff82803dd8 EFLAGS: 00010006 ORIG_RAX: 0000000000000000
->>>>       RAX: 000000007fffffff RBX: 00000000ffffffff RCX: 0000000000000000
->>>>       RDX: 000000007fffffff RSI: 0000000280000000 RDI: ffffffffffffffff
->>>>       RBP: ffffffff82803e68 R08: 0000000000000000 R09: 0000000000000000
->>>>       R10: ffffffff83153180 R11: ffffffff82803e48 R12: ffffffff83c9aed0
->>>>       R13: 0000000000000000 R14: 0000001040000000 R15: 0000000000000000
->>>>       FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
->>>>       CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>       CR2: ffff88903ffff000 CR3: 0000000002838000 CR4: 00000000000000b0
->>>>       Call Trace:
->>>>        <TASK>
->>>>        ? __cma_declare_contiguous_nid+0x6e/0x340
->>>>        ? cma_declare_contiguous_nid+0x33/0x70
->>>>        ? dma_contiguous_reserve_area+0x2f/0x70
->>>>        ? setup_arch+0x6f1/0x870
->>>>        ? start_kernel+0x52/0x4b0
->>>>        ? x86_64_start_reservations+0x29/0x30
->>>>        ? x86_64_start_kernel+0x7c/0x80
->>>>        ? common_startup_64+0x13e/0x141
->>>>
->>>>     The reason is that __cma_declare_contiguous_nid() does:
->>>>
->>>>             highmem_start = __pa(high_memory - 1) + 1;
->>>>
->>>>     If dma_contiguous_reserve_area() (or any other CMA declaration) is
->>>>     called before free_area_init(), high_memory is uninitialized. Without
->>>>     CONFIG_DEBUG_VIRTUAL, it will likely work but use the wrong value for
->>>>     highmem_start.
->>>>
->>>> The issue occurs because commit e120d1bc12da ("arch, mm: set high_memory in
->>>> free_area_init()") moved initialization of high_memory after the call to
->>>> dma_contiguous_reserve() -> __cma_declare_contiguous_nid() on several
->>>> architectures.
->>>>
->>>> In the case CONFIG_HIGHMEM is enabled, some architectures that actually
->>>> support HIGHMEM (arm, powerpc and x86) have initialization of high_memory
->>>> before a possible call to __cma_declare_contiguous_nid() and some
->>>> initialized high_memory late anyway (arc, csky, microblase, mips, sparc,
->>>> xtensa) even before the commit e120d1bc12da so they are fine with using
->>>> uninitialized value of high_memory.
->>>>
->>>> And in the case CONFIG_HIGHMEM is disabled high_memory essentially becomes
->>>> the first address after memory end, so instead of relying on high_memory to
->>>> calculate highmem_start use memblock_end_of_DRAM() and eliminate the
->>>> dependency of CMA area creation on high_memory in majority of
->>>> configurations.
->>>>
->>>> Reported-by: Pratyush Yadav <ptyadav@amazon.de>
->>>> Tested-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->>>> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
->>>
->>> Reviewed-by: Oscar Salvador <osalvador@suse.de>
->>>
->>> I will note though that it is a bit akward to have highmem involved here
->>> when we might not have CONFIG_HIGHMEM enabled.
->>> I get that for !CONFIG_HIGHMEM it is a no-op situation, but still I
->>> wonder whether we could abstract that from this function.
+On 19.05.25 22:52, Lorenzo Stoakes wrote:
+> REVIEWERS NOTES:
+> ================
 > 
-> Highmem is there for some time now (see f7426b983a6a ("mm: cma: adjust
-> address limit to avoid hitting low/high memory boundary"))
-> We might try abstracting it from that function but I'd prefer not doing it
-> that late in the release cycle.
-
-Agreed, assuming this will still make it into this release.
-
->   
->> Same thought here.
->>
->> Can't we do some IS_ENABLED(CONFIG_HIGHMEM) magic or similar to not even use
->> that variable without CONFIG_HIGHMEM?
+> This is a VERY EARLY version of the idea, it's relatively untested, and I'm
+> 'putting it out there' for feedback. Any serious version of this will add a
+> bunch of self-tests to assert correct behaviour and I will more carefully
+> confirm everything's working.
 > 
-> You mean highmem_start or high_memory?
+> This is based on discussion arising from Usama's series [0], SJ's input on
+> the thread around process_madvise() behaviour [1] (and a subsequent
+> response by me [2]) and prior discussion about a new madvise() interface
+> [3].
+> 
+> [0]: https://lore.kernel.org/linux-mm/20250515133519.2779639-1-usamaarif642@gmail.com/
+> [1]: https://lore.kernel.org/linux-mm/20250517162048.36347-1-sj@kernel.org/
+> [2]: https://lore.kernel.org/linux-mm/e3ba284c-3cb1-42c1-a0ba-9c59374d0541@lucifer.local/
+> [3]: https://lore.kernel.org/linux-mm/c390dd7e-0770-4d29-bb0e-f410ff6678e3@lucifer.local/
+> 
+> ================
+> 
+> Currently, we are rather restricted in how madvise() operations
+> proceed. While effort has been put in to expanding what process_madvise()
+> can do (that is - unrestricted application of advice to the local process
+> alongside recent improvements on the efficiency of TLB operations over
+> these batvches), we are still constrained by existing madvise() limitations
+> and default behaviours.
+> 
+> This series makes use of the currently unused flags field in
+> process_madvise() to provide more flexiblity.
+> 
 
-highmem_start in this function.
+In general, sounds like an interesting approach.
+
+> It introduces four flags:
+> 
+> 1. PMADV_SKIP_ERRORS
+> 
+> Currently, when an error arises applying advice in any individual VMA
+> (keeping in mind that a range specified to madvise() or as part of the
+> iovec passed to process_madvise()), the operation stops where it is and
+> returns an error.
+> 
+> This might not be the desired behaviour of the user, who may wish instead
+> for the operation to be 'best effort'. By setting this flag, that behaviour
+> is obtained.
+> 
+> Since process_madvise() would trivially, if skipping errors, simply return
+> the input vector size, we instead return the number of entries in the
+> vector which completed successfully without error.
+
+I would focus only on adding flags that we absolutely need to make the 
+use case we have in mind work. We can always add other flags as we see 
+fit for them (IOW, when really required ;) ).
+
+Regarding MADV_HUGEPAGE / MADV_NOHUGEPAGE, this would not be required, 
+right?
 
 > 
-> high_memory is one of the ways to say "end of directly/linearly addressable
-> memory" and some other places in the kernel (outside arch) still use it
-> regardless of CONFIG_HIGHMEM.
+> The PMADV_SKIP_ERRORS flag implicitly implies PMADV_NO_ERROR_ON_UNMAPPED.
 > 
-> And I don't think we have another way to say where directly addressable
-> memory ends, and this IMHO is something that should replace high_memory.
+> 2. PMADV_NO_ERROR_ON_UNMAPPED
+> 
+> Currently madvise() has the peculiar behaviour of, if the range specified
+> to it contains unmapped range(s), completing the full operation, but
+> ultimately returning -ENOMEM.
+> 
+> In the case of process_madvise(), this is fatal, as the operation will stop
+> immediately upon this occurring.
+> 
+> By setting PMADV_NO_ERROR_ON_UNMAPPED, the user can indicate that it wishes
+> unmapped areas to simply be entirely ignored.
 
-Agreed.
+Again, is this really required? Couldn't we glue that to 
+PMADV_ENTIRE_ADDRESS_SPACE for our use case? After all, I don't expect 
+anybody to have something mapped into *the entire address space*.
 
+Well, okay, maybe on 32bit, but still ... :)
+
+> 
+> 3. PMADV_SET_FORK_EXEC_DEFAULT
+> 
+> It may be desirable for a user to specify that all VMAs mapped in a process
+> address space default to having an madvise() behaviour established by
+> default, in such a fashion as that this persists across fork/exec.
+
+This is very specific for MADV_HUGEPAGE only, so I wonder how we could 
+either avoid that flag or just make it clear that it shall stick around ...
+
+Having that sad, PMADV_SET_FORK_EXEC_DEFAULT is rather a suboptimal name :(
 
 -- 
 Cheers,
