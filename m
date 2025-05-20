@@ -1,73 +1,73 @@
-Return-Path: <linux-arch+bounces-12024-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12025-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDC82ABDFEF
-	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 18:05:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 975C8ABE061
+	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 18:18:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 704144C0124
-	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 16:05:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69C6C1BC2FD7
+	for <lists+linux-arch@lfdr.de>; Tue, 20 May 2025 16:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2547825FA3B;
-	Tue, 20 May 2025 16:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7937627FB2E;
+	Tue, 20 May 2025 16:12:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kqW2yWV3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L2n9gtF5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF9A1A83FB
-	for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 16:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB04927FB08
+	for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 16:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747757128; cv=none; b=HKT1dwvjyVngPeiKjhK/2FEUIwClyWA4/UHNbcbkXfRwrl4Be8W8lh9V/Mb70XYUmZfmYiIpQf1/A4Ex3TjH6FvnPJ96VgGa4+jRZcpME6TSAh7o+dH0lTWuJK7PU/JdKkkvGZizQEFCB0KvxXuPIKzSiPqzZzciUH5afb3t5PE=
+	t=1747757549; cv=none; b=vA5tjTxbdVapIxE+C33LNcuHujDrtSxjrDvepS6cTx66u45YHSOupfkSM1uaNCnbUTlO8AKHxDnYQbMVcBHf+PD3+bfW40JyBNiWOeqgdLM9BtzALD0XVazovQe/PkvMmLLVGPID2CShkmkhrfBgWcFm0VSKclt22+oCTei1ujg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747757128; c=relaxed/simple;
-	bh=0rfntWFazho4mK9F9eshENfRLYtOEx0ULfCoFJCPcTU=;
+	s=arc-20240116; t=1747757549; c=relaxed/simple;
+	bh=dCA79GdEf2BJmDDrmeRq5F+pP47GMPjElfXfXEKb4SM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bC7qC8Wwbjy2NCFyHWvWBQDsTahS6ZTzz9W4LJ/9CjcGF6EfgELCJtLHTmzMVFFOL69tD/xnfsin0i7BbyUxOImcBmK8ADYAWR7TSScX9i8ZPe0GjSv3sBDn4Z6r0qIH5RRuyIOTGGtLEzReCaIjFxMVmshSoiDXzmoNeYUzaIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kqW2yWV3; arc=none smtp.client-ip=209.85.208.47
+	 To:Cc:Content-Type; b=OUmVQAeZizuTd9NANZAXGIBF2Xl7QHpmb0TEzYCPwI1dfvf6R3QYX7PBOHEwKJ7lX1SPx24ZMkFpr+LRU0Yk249w+sZd0UcVrMIy83vCQ3ayrj7JJTcPY6tUJpVMKkn65ijsEj5wUH+lEAg0GOh9cG1oVXX5Gnu1YLu0MmL46mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L2n9gtF5; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5fab85c582fso26388a12.0
-        for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 09:05:26 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5f438523d6fso23248a12.1
+        for <linux-arch@vger.kernel.org>; Tue, 20 May 2025 09:12:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747757125; x=1748361925; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1747757546; x=1748362346; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0rfntWFazho4mK9F9eshENfRLYtOEx0ULfCoFJCPcTU=;
-        b=kqW2yWV3/des5oSs+TsccmywePxPMs85qL4X11mUSfxkOCeOUGQxSGaGZwAYPVLAEk
-         enZCuOxKX9gHsBNqnxbho+ZK32XuDKYwk+hrqRlR7Ry0etACraWmY9bvR1P7Vb7TKO8B
-         VvJHj7M+4K53hMreXlO8K7BHHcdeUzY2W2dejDnN2slM3CA6UQTKv9aa+KR5sI7xIKyE
-         OjUE1yzf/j00KGeZaxdoqJ/Y93p5mdV+qzFzlPdV6HRTHn+HDD6F6tWxFGKigx9RCk0m
-         zqJEXP2c0P4N+qlqGJJyjpIRQNQDQQEnyDlBCCjSfLH9ceibFMOFJPyBiT5Z+zcYMYUr
-         PVbQ==
+        bh=dCA79GdEf2BJmDDrmeRq5F+pP47GMPjElfXfXEKb4SM=;
+        b=L2n9gtF5X+IajN4zBd//uPdZxYtan77Bm+jgY2mVuPVY1c3hwH1gX1/le1HcGCdqv5
+         OEI3Pn9aOhZEfKrXuVuAxr42RrWNtMUM2d4rcI+1WyNgFhhSJDeQ5kBE0Ba2JP+6JXKb
+         u/NOUEtNIj844iuFuseXF1VllmvOECR3vq/Ptai3sceAoA0jBFh5+ks4PIQ065EMocRw
+         lfliL9j4Tl/UIOE/OvewB1WO+2nmyozTrtKu3HvnHdCOsUDcdBzrZkscZwjSZrPNhAlc
+         rAYsTyioY0t5qYo9JqCYdRYUlDMqiGpNm2dO2FexqKM80k22Qa1FI5q5P5/eAeuNxkEJ
+         uRkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747757125; x=1748361925;
+        d=1e100.net; s=20230601; t=1747757546; x=1748362346;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0rfntWFazho4mK9F9eshENfRLYtOEx0ULfCoFJCPcTU=;
-        b=oXIi/f/0KAkZXI/PZ9soa9med2KdIqTtX/x8Ao4fLmiEzysSCAqPo0LSLlXrn6Q8h7
-         ts0AZ7cvVZdHSCHhcCRmoYxeo4Bvvwc8iRfnnk3jRBzDR2UWHcFTYLBF2KEZgZg8Px++
-         z/ze2t4IOcNdz21MDeA356ABiJzhC3Rn/ThRcon0qTIKML0qvBAibB5jeK7pdcYSZn6t
-         sKFW+GqBtRZ/pI3Xf/9FFNPUqO+R7jb+hfdaBkhl/rtnF11KRDMU5B8Py8gopcIDxHiG
-         Y69viPo74+EXx/qFFEl4d+KWg6QEZzMUTHgGjJIOFxR3MDJGsg49ov/EQK+11jFgZ3gU
-         s8/A==
-X-Forwarded-Encrypted: i=1; AJvYcCVm03fcmJvcFKi0LKZX8lxnmAglAM3fmOp3GSQOd5yYbv2AHHuDujKmjK3doHhjQ8BEhWk3g1PAlrqw@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3h5ehKqye5F8gCyuyATH1L0MgzdHK1ipQq3WxovLI5s9CJdj0
-	iIX7wsKkmgUUxdAShdv+EIp0MUKt23Gv2WAvg9krr6+fNTR/YR4qYlf0j9wdKesuZ1suuTCgwLe
-	yR1uT0aON433zgs/2xfMPy61YcrowRliIIw0UmmE9
-X-Gm-Gg: ASbGncvOhb7QrtEDZ4LkYQkDHzMJD9MIAKwNCLT4XGIIfxGMMwJJgUzcNdG2Plai3CP
-	By081NRXLgj+iu9KWjEOPVivvtMAg5DilpLhzt2gjNICdWLXOckSOr68Z6hg0WL1zJ81K1O9bJu
-	Amlud7zif8ThGyr0QmJHf6piihWgbi6m9zBc/Ix2k8gSQK+rxVjM7EIYXz4XIYD8VRBUKn2A==
-X-Google-Smtp-Source: AGHT+IEOQ2vFE3jecYWUn3oKnGtTWjIT++RWO5aGS6gOAXZFLqR0bXLZnvv/yrhnUofHKsIUGByrvi7YUdoaE5rGLCU=
-X-Received: by 2002:aa7:dd08:0:b0:600:9008:4a40 with SMTP id
- 4fb4d7f45d1cf-6019c88648dmr301495a12.4.1747757124254; Tue, 20 May 2025
- 09:05:24 -0700 (PDT)
+        bh=dCA79GdEf2BJmDDrmeRq5F+pP47GMPjElfXfXEKb4SM=;
+        b=vVrwF9EuJFpRAIdAtj9kD6+5q8Xvl6kRpxP659hU8jNBTMdCN62OIXS4l2JinSEniI
+         olDNIXytySYaqcPcIHWsV/KcaH1e+xL5WZ5/SqfoSgXtiXzUVMsyn6xLDXm2y75zI36p
+         pAYgu9+eaow7MtCnav9aUErH5lAJ9ivySIqGiNPooacj/7pc0sOdScLH03dtbCGKXWf4
+         TP2q4qc6pDGHkKHF8SrLfnXu4lfln+gfu8n6o35tObECcmN2LWbDdiUmxM7rxA68UOZy
+         PCxWnSEcQ6VOOREqwjZPLlaBqFaKc5QgnzNG70yu6DB88O1RbQjI87gire/Se0X63fZB
+         oCxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWmYbD41/xsxnxxbMdFSSfEtb2BuG6IwvbbFy7CC+A60qLX0T1C7UXw3fsfMKa3cM0+UvF05QS8+k9c@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL0LXTK0gi+Ytblibk4P49djQ4ggACb7nNAb3BClt2Eay8SAIz
+	3TfqPvhDAs0V+0xLJWm2OszP5nyh08VYJQumIuUu6JBFu2VNHE0Krdh99ooovsM6cMccV3/Rwo+
+	Mew5Jpv9JzEBFAXBE4J93xcbWcPIAAxjl1s22cR3e
+X-Gm-Gg: ASbGncvF2IdcBd6mZnp7CoRvhP39OCF1UF2pFpD+qPIUdHo/LqJgi8uyUYjQLIzIz39
+	C6X11eR7YqkVGiTYmuLS7kw70Ox1OWH6On7fnb7nlVOkGoOxIXNyYeSQnGc95+wZDSwNLyKAGTp
+	ccG5rRddCI56bjI3FEMFmmvnc0TXG9oS0roLjRrkrDVcehgHeWf5blZZhnFPK7OzhNxHzRhQ==
+X-Google-Smtp-Source: AGHT+IGc42rApFWcTa/Db9urC+6de9XjVpoRSlYKv1EzaBRtUg91wVs9QiTfOv/mUWDqbtnUY0o4c3XpLCRdQZVMfdI=
+X-Received: by 2002:a05:6402:368:b0:5fc:e6a6:6a34 with SMTP id
+ 4fb4d7f45d1cf-6019c7917b7mr298024a12.6.1747757545583; Tue, 20 May 2025
+ 09:12:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -75,54 +75,36 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
- <CAG48ez3-7EnBVEjpdoW7z5K0hX41nLQN5Wb65Vg-1p8DdXRnjg@mail.gmail.com> <368b0ca0-605e-4d2b-b12e-c24b1734d1c2@lucifer.local>
-In-Reply-To: <368b0ca0-605e-4d2b-b12e-c24b1734d1c2@lucifer.local>
+ <617413860ff194dfb1afedb175b2d84a457e449d.1747686021.git.lorenzo.stoakes@oracle.com>
+ <czd62f2vzwv6fow4ikvzlkjdj5odhc3nhtc72onwip52baobg5@yc5pjiqoqnh4>
+In-Reply-To: <czd62f2vzwv6fow4ikvzlkjdj5odhc3nhtc72onwip52baobg5@yc5pjiqoqnh4>
 From: Jann Horn <jannh@google.com>
-Date: Tue, 20 May 2025 18:04:47 +0200
-X-Gm-Features: AX0GCFsPdY0pLyAGHK-EG0PUc1QDFfH1ipfBEhtjta5dZf6rJFGtFMXyimrWtdo
-Message-ID: <CAG48ez0RKgQwpE07tZ8WcfH5XCeZ26wVOZa26HdYjADzVbHbgw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/5] add process_madvise() flags to modify behaviour
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	David Hildenbrand <david@redhat.com>, Vlastimil Babka <vbabka@suse.cz>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>, 
-	Usama Arif <usamaarif642@gmail.com>
+Date: Tue, 20 May 2025 18:11:49 +0200
+X-Gm-Features: AX0GCFsQa4Bq0ym39Zq1y67kysJIT5gWTvNiOCDRl00jzzxRfRwLOK8_Q-b-SDI
+Message-ID: <CAG48ez2+UEifqF=GRat0dStPfDNXzzewHU=zxj0+FbOXL=mKVQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/5] mm/madvise: add PMADV_SET_FORK_EXEC_DEFAULT
+ process_madvise() flag
+To: Pedro Falcato <pfalcato@suse.de>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, David Hildenbrand <david@redhat.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Arnd Bergmann <arnd@arndb.de>, Christian Brauner <brauner@kernel.org>, 
+	linux-mm@kvack.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	SeongJae Park <sj@kernel.org>, Usama Arif <usamaarif642@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 20, 2025 at 7:36=E2=80=AFAM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
-> On Mon, May 19, 2025 at 11:53:43PM +0200, Jann Horn wrote:
-> > For comparison, personality flags are explicitly supposed to persist
-> > across execve, but they can be dangerous (stuff like READ_IMPLIES_EXEC
-> > and ADDR_NO_RANDOMIZE), so we have PER_CLEAR_ON_SETID which gets
-> > cleared only if the execution is privileged. (Annoyingly, the
-> > PER_CLEAR_ON_SETID handling is currently implemented separately for
-> > each type of privileged execution we can have
-> > [setuid/setgid/fscaps/selinux transition/apparmor transition/smack
-> > transition], but I guess you could probably gate it on
-> > bprm->secureexec instead...).
-> >
-> > It would be nice if you could either make this a property of the
-> > mm_struct that does not persist across exec, or if that would break
-> > your intended usecase, alternatively wipe it on privileged execution.
->
-> The use case specifically requires persistence, unfortunately (we are sti=
-ll
-> determining whether this makes sense however - it is by no means a 'done
-> deal' that we're accepting this as a thing).
->
-> I suppose wiping on privileged execution could be achieved by storing a
-> mask of these permitted flags and clearing that mask in mm->def_flags at
-> this point?
+On Tue, May 20, 2025 at 10:38=E2=80=AFAM Pedro Falcato <pfalcato@suse.de> w=
+rote:
+> - PMADV_INHERIT_FORK. This makes it so the flag is propagated to child pr=
+ocesses (does not imply PMADV_FUTURE)
 
-Oh, I see, we're already inheriting VM_NOHUGEPAGE on execve through
-mm->def_flags, with the bitmask VM_INIT_DEF_MASK controlling what is
-inheritable? Hmmmm... I guess turning hugepages _off_ should be
-fine...
+Do we think there will be flags settable through this API that we
+explicitly _don't_ want to inherit on fork()? My understanding is that
+sort of the default for fork() is to inherit everything, and things
+that don't get inherited are weird special cases (like mlock() state).
+(While the default for execve() is to inherit nothing about the MM.)
 
-Yeah I guess I'd do this by adding another bitmask
-VM_INIT_DEF_MASK_SECUREEXEC or something like that, and then applying
-that bitmask on setuid execution.
+(I guess you could make a case that in a fork+exec sequence, the child
+might not want to create hugepage between fork and exec... but this is
+probably not the right place to control that?)
 
