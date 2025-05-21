@@ -1,335 +1,255 @@
-Return-Path: <linux-arch+bounces-12053-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12054-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5274ABF1F5
-	for <lists+linux-arch@lfdr.de>; Wed, 21 May 2025 12:45:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82DAEABF8B7
+	for <lists+linux-arch@lfdr.de>; Wed, 21 May 2025 17:04:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1978C1BC29A5
-	for <lists+linux-arch@lfdr.de>; Wed, 21 May 2025 10:45:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 221AB1628BA
+	for <lists+linux-arch@lfdr.de>; Wed, 21 May 2025 15:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3AC125FA1B;
-	Wed, 21 May 2025 10:44:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD941EE010;
+	Wed, 21 May 2025 15:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fxr+lJOM"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ZrpPLZ5X";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="eb1Y9ZDz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C65725FA07;
-	Wed, 21 May 2025 10:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747824287; cv=none; b=stYi1LKk2hl1ZaB1qX+iJVUVBxDYmaj2fEVACF2uotquJEsJOjU/9iY1lr4yjr2NGFIVi6B7+PZoHdG+ZPZ1NpxbaD7o9+Rppf8QzwlpxKjvBm3wLmTaVHcJWWG82FJRy4MMM7rElA7supSDAZNEO5ltkuhY06ZTWK857MniLkw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747824287; c=relaxed/simple;
-	bh=wdYyMOldSs5J7ZV607pnOvS2tgtojBPdZ8GgMIEtaqw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hGsbBqOCjxDDnfJZ2KR91axELJpA1fNP/wMuNe9LNz2pzV4iE3jmheIwQ0r+sRzs7QEaUtCZ3f7H6bhXb+KdX+8hND2GpoxT4EH/yW9Tw4q/RuRrYBhAyPoHhbjd3CdQNpJyYoG8fE3sdQFJ0DApv/caT8jTB1lbwPjyvBpzSss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fxr+lJOM; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ad5533c468cso610946766b.0;
-        Wed, 21 May 2025 03:44:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D801DB548;
+	Wed, 21 May 2025 15:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747839660; cv=fail; b=dhwI/m0jO4OzKaiMiy8oU8y08UXkPEy41bHeKUxVFEwq/R1Jn1W8jmfIr8WOD/GWm0X0iIgRvAtTKHmmDVWRwn2Z+hpF5fKEW5VQRIeqeD519xJYFybC0vVOSczfB/l66Oh+UEqy9DR2pYykdZvFm6T3N4Qw7Gclf6ajbkyO8LU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747839660; c=relaxed/simple;
+	bh=yq3HwgCUCGrJ2PBYqb0avnvZuSmpLOKYeZVnqXtODqk=;
+	h=Message-ID:Date:To:Cc:References:Subject:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Mz8Rfot13O448bVMzQYSWic82FS8RDMtnoR9ayaRH7BbpDpFEwa45jGTwIFzrgQDBWvHCZiTpY5L85PA6ihl6TcfUgpKKuo++lRTApN+0C8jwNjqTXnxvznF20j0LczU3k/UYJ07lfP8rWHLfqch9wRXGCaZntFuaI9XvlG4uNo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ZrpPLZ5X; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=eb1Y9ZDz; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54LEv9Ds025379;
+	Wed, 21 May 2025 15:00:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=05p63RToOUuyJDcBC8+OyjejWVf7Ri+Gh7n1l/5Y3ik=; b=
+	ZrpPLZ5X5DKmoaPVbohZxoLIXZA9n8yZpCKExb2u6SnIiVxKg3rObZjpqHdHfijG
+	e4/dUl3VvmkZdABPR9w7kfdfGDXcvezudl++wbenSjSJuy9qVv+GKNtI8RNgqlKW
+	Dzpg5bD6waaW1AyYdHKR7OTzZT9O/JL4hfXM2NX0R9/6sGmXy7chSv/luqcgCG6F
+	hKCT5F5kgejQV5ChcAFwvUWR8pjmM5L5yczP3VjgI19OlxHegTH5l3D4S+4tY4GP
+	BZ06fkEZOUzMeYGbPRULr1P+v+0+7hxyhidt6bIq7geHSbgSsVtk6NcxrM/lCOjv
+	K6O99B8EkaulgmI/TyXJjw==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46sh1sr0af-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 21 May 2025 15:00:29 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 54LDO7FH011317;
+	Wed, 21 May 2025 15:00:29 GMT
+Received: from sa9pr02cu001.outbound.protection.outlook.com (mail-southcentralusazon11011046.outbound.protection.outlook.com [40.93.194.46])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 46rwen7rbx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 21 May 2025 15:00:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=N2Nsd5uqUTi/IKgWqAFRdYX0IswTVwga1rXrLEXyfqoY1tz/pn5VcsoUDeaA3fDSi0aLcl2cHOCuVLjJdoPUz2Szlbqdqk2H2tmwF+Rdf9mArVym6KaM69TxIMU/VSzvEUQe5/pUKe2LuzSTk7MuypRtItTa+60A7MDUz0BgN6e3ABI4W4NRXfy2jNr4Cp9eFRbNHyHlIr2YBdzcraRWPQ9o+ASPZcVjdZky428ccKeUUsX5eTqskCD8/iwdjCmTnOnzJtHjvfrWnR28K1Rvuz3WD2DBHZBbNdf3GTg/NmnaAd2g/5K0wHT9Uq2HgsCogp+YcJxbPdikJpuDyf3DFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=05p63RToOUuyJDcBC8+OyjejWVf7Ri+Gh7n1l/5Y3ik=;
+ b=jbE7fOIRwiSqEyrqFTUVxGc2INykUeOMp59A+pq6iivRQK93sMNA9aR+XHE0rkmSj+BjgnirfccMoT9zWLCWV9wH7FNSN/KuK41oAu5dBBPEbkxoJ8R1PUzJbG00OOCB8kO4ZyzdKBk8jrtkhOT6z7KB9Z2qhrYZw6VzDHfcRqrxrVbv2fbVGxb2X20ZUgah9J7U40YAeVIeUL9Wm7fnZxBpupurm/7Cr/MlVc/7AjXubhO2uhJCwvl0AeK2wMoi34Kpb/uRl4yySTZlWjdEpsP8jjjg4WJAbs1u/1gCde+cBRqZmo11ypNjm23x0xSFABZEF5E0PAZd7ZDgG5LzRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747824284; x=1748429084; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U7s86C99en4rKIGw3tj+5ymWyZfNfw27U2XEo8biwfc=;
-        b=Fxr+lJOMM2Dj/pu+FcHG2Snsq569dNIu5kfWdhVPrdZdJNwYlt4xtdenN5+TQ62299
-         jwoigc+cJnnO4qg6MZlZSl0MJODfh1cV+S8ccJIl++safjsjCX40siAHRmb9Hnnv8bdY
-         ma16oUfTiq3AOu8qVGPV60YmJIMT88BoNR/lC1C0rD9A3QJVmhl43qTeckROAPpC/zFE
-         ltpg5rtgOXg7OBoqltR0QjGtI3EGRdiRjtIIO0pEE4x/HdvfkgdaTF4kQ7n5DgUvd6jh
-         GkIIGgadHH+tslKze77rybI7BDQTzLh7z0oDvw8eJftjHIr4mdsoipc9laKvr7YMjPfi
-         o3Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747824284; x=1748429084;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U7s86C99en4rKIGw3tj+5ymWyZfNfw27U2XEo8biwfc=;
-        b=DX/l/wj5zcxuUCp7iEenK9AQXCZ3VGAQ9uamV9JGywliYQa6hqTLPMbvJQWnJ9J/2j
-         SBbz1YHB42GufOlOc35uFaeupK2MVj3v9OPew50FfB63dfti/jaHLklW3vniGoEqksrK
-         AK/0aLvTIY7ByMWTh+S3sho+kzYDtz/Js7sFS7CtR6wNgmtKPXBdKMSGXsNab3qO5XdT
-         KHXF682bdcb8HOzhEUbxDUDc5//pL+q5ZiBHOrYK5QkBxoe3ewQNUMiaTZKlcFssDJ7p
-         dzbK/qaJSFzc9h4OUIsKdVF8Y4DV+d6XWZWnxo1B/a0iOt1RZUKXwAYUJJJvHu06RDmS
-         4BRg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0+7jXcjs2H1E/XHhSTuwT2NqZiijO/uxHa1UPliW49hyQME2jHX1aTRFd/7VPTQapS/rbuuVBh/+vlw==@vger.kernel.org, AJvYcCU0FKD6LkY6oBPJLDVfYSoDObq5cMy3q8M4kyOg2JWmDgDMaJuYHEGkr99bi7MVTlEPmLMYzN2ROBJFethLAw==@vger.kernel.org, AJvYcCUXPUAzOn4sjQ+LIBgUgBblkW57jGU+iWABTCYRa5/5Q7td6bWvC600VeJoeSaqcpYXJA6ciR3HQBbmVInC@vger.kernel.org, AJvYcCUfSHrsyy9j1lWm0lnAEP6UxdjEnOFrseaxu37C6OflTmxLKZXY8xdZgL7i5xd0bqtKSPYj+08gOA==@vger.kernel.org, AJvYcCUgJQfS6rBm2s1cpofPbw4ravhgVmYh2gJBGxEGQPBbDnXaboo9yLnDphgG1VXZWIh8DTCRbR7rL2n+@vger.kernel.org, AJvYcCV8I2dkht/kFEkzhCg+vvUiEmLV7O6dt76Y7DMoP1y4e+KGxZb+eLvjJLMIFzhtzvBKTL/CUUN5hGIVyhKW@vger.kernel.org, AJvYcCVdiqVGO1ZB4aGxHyfgaCiOFZX1FgP6bXzkJJCpkSl9nN8uCa20I6mFfA68/x3/Q81/nNOKYLt7x7EgIg==@vger.kernel.org, AJvYcCVrFsm3DWnTZKw6eFtrOeUL/mWY9XIIfidMaUypXsHN/YUSU3kus+liMco+gFgqapSrgrlBalVvZLU8Xw==@vger.kernel.org, AJvYcCWLfwcrim/ew4rr3PkSW8STxkVJ1lEOXKXqgKDdpQswV1DLY9Jzk2hnUSigCIehskN8Ayvuz4KNCF0EVi5qpg==@vger.kernel.org, AJvYcCWkld2qZp2B
- 7uEOIYZQocLNXVafeGZHjfty89xAq3emLBtwopAj1wBxbPs+n5SaDiQY86fXe4J4nJFa@vger.kernel.org, AJvYcCWndX0BfQ670sixJpRei6Zw8NWzjdIqXjyPWdX2K7WFPd6MHmH6HRE2zRKHhzGbhHcl/xWG6jBrwCN5WIM=@vger.kernel.org, AJvYcCXRIi/ElYSmLckD8Qxd6hbKkhsiSgQrXHDo8MrZIJ6lDlg/HGRSiuG0wLNP7ANVUHBlAopJFZF5FhFj6w==@vger.kernel.org, AJvYcCXW+hg1lvlMf2W0bWuzwDFIc7NOl6ZeYqXS7SneA94cZv3gCLjYnb/gDFhdWyyPtEGGW9+jQ281cwK4vRXKf/ybxa1z/DGp@vger.kernel.org, AJvYcCXcJpHYDW94fVnOa+VxAu5Tg9r3s+V3v55odxXgLwuB7WcLRaGI9WfJLMxeBH5Qu3DYbO5OVOpiKQo=@vger.kernel.org, AJvYcCXjSJmQb59MExu3C+RHra9wKni8Gd9SmYbLW1A+tNIGv7tm3lPD3oSOXQn+VmycJbIuziyA5XVD0w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4qYKRT5xb+WuCfdYzdysMAi3klDPsZnRUd6sCmEK2OtEB2fYQ
-	2mJcJvPNpVtz4E0G4E4Vq2RU/FzleXEZo2IcRb+fiDYkOX++G10x7qUgLBqeh18UClRbE5YPUkO
-	lBHtG9BPVeEtL+d46dh0CvnSM/gGfL8M=
-X-Gm-Gg: ASbGnct3SUalzdgTVriCGobDctZJ1azNRdnEs32RNrlIq6M13T1hGxbB0szMIV1gyX5
-	XH/I1kF+/lYNqcnwmO1skh3SXOjxEpkUNtaT2urUTsGAAJM185PSpY7ApJy08S4w1DhD7XopFj5
-	g5GyqcK+1QlGZCU24V5yk3zlicknBtqv+G
-X-Google-Smtp-Source: AGHT+IHjdKaldjnagUYeAkZaxVv0PKTrOg3dvgceCo3K5CfAqPJX4ttSEQJcVm5rFWRa63l5bGpXFWyRh6DbM0BJP0M=
-X-Received: by 2002:a17:906:8f8a:b0:ad2:1a66:a1ad with SMTP id
- a640c23a62f3a-ad536b7de17mr1674734766b.6.1747824283278; Wed, 21 May 2025
- 03:44:43 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=05p63RToOUuyJDcBC8+OyjejWVf7Ri+Gh7n1l/5Y3ik=;
+ b=eb1Y9ZDzNa45qx7V//vwL2bnJzn9pa1DRw3bvEn8JhJRJ8bYoTYzjxtgob+n5miHI/omTIDs7OEM9rHOFPZUM7qre/52Kxst2w04qgpOyIIc+CZMXUZk/+iXjiqeoEfUmZ7Pz8rzLdrAzX2y9Xz4rfDzKMXqBQU59OORYJD4Aw0=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by DM6PR10MB4281.namprd10.prod.outlook.com (2603:10b6:5:216::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.31; Wed, 21 May
+ 2025 15:00:25 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f%4]) with mapi id 15.20.8746.030; Wed, 21 May 2025
+ 15:00:25 +0000
+Message-ID: <ace72324-6395-4e9b-8406-7d99d57018dd@oracle.com>
+Date: Wed, 21 May 2025 16:00:19 +0100
+User-Agent: Mozilla Thunderbird
+To: tony.ambardar@gmail.com
+Cc: alan.maguire@oracle.com, andrii@kernel.org, arnd@arndb.de, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        lmb@isovalent.com, martin.lau@linux.dev, mykolal@fb.com,
+        sdf@fomichev.me, shuah@kernel.org, song@kernel.org,
+        yonghong.song@linux.dev
+References: <aC0OpCZCEziDXhwh@kodidev-ubuntu>
+Subject: vmlinux BTF as a module (was Re: [PATCH bpf-next v4 0/3] Allow mmap
+ of /sys/kernel/btf/vmlinux)
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <aC0OpCZCEziDXhwh@kodidev-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0185.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:311::14) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250513-xattrat-syscall-v5-0-22bb9c6c767f@kernel.org>
- <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com> <20250515-bedarf-absagen-464773be3e72@brauner>
- <CAOQ4uxicuEkOas2UR4mqfus9Q2RAeKKYTwbE2XrkcE_zp8oScQ@mail.gmail.com>
- <aCsX4LTpAnGfFjHg@dread.disaster.area> <sfmrojifgnrpeilqxtixyqrdjj5uvvpbvirxmlju5yce7z72vi@ondnx7qbie4y>
- <CAOQ4uxiM+BBNODHfxu=v3XN2ezA-0k54qC5R4qdELbZW+W-xkg@mail.gmail.com> <mw2d36mqwzqoveguw5vlggrnw2wirsbhdxkox33z3fg7k6huz6@hj4ntgg3oj7p>
-In-Reply-To: <mw2d36mqwzqoveguw5vlggrnw2wirsbhdxkox33z3fg7k6huz6@hj4ntgg3oj7p>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Wed, 21 May 2025 12:44:30 +0200
-X-Gm-Features: AX0GCFtzhzw8HQOfKpcxXaUXYfRoIUIi0dE2W9yfpQHIc06WbddDr0-sckzPkGU
-Message-ID: <CAOQ4uxiOaYusURMrjozD_s24Swih2g0x5_nTTYXO=+=EPCYtjw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] fs: introduce file_getattr and file_setattr syscalls
-To: Andrey Albershteyn <aalbersh@redhat.com>
-Cc: pali@kernel.org, Dave Chinner <david@fromorbit.com>, 
-	Christian Brauner <brauner@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S . Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Tyler Hicks <code@tyhicks.com>, 
-	Miklos Szeredi <miklos@szeredi.hu>, linux-alpha@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
-	Linux-Arch <linux-arch@vger.kernel.org>, selinux@vger.kernel.org, 
-	ecryptfs@vger.kernel.org, linux-unionfs@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, Andrey Albershteyn <aalbersh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|DM6PR10MB4281:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37b4e2a9-bbaf-4a9d-b69d-08dd987837a5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OWFnbXlHTmk1eXNyM3BIbFE0eXkwZksrQ0gvZTZjUnhSd0ZRTTN6cTNOb1FX?=
+ =?utf-8?B?YldZdzYzS0NNUTdLcXR1a2ZkUkZQRGhuaDE3VDg0Zlc2RmRBVllYbnM5bmw1?=
+ =?utf-8?B?Z1M5cGRxeTh6SXJtZW8raHI5ZitaYTl3OFRpVEJXbnNldnBIaEIxdlVnVk9h?=
+ =?utf-8?B?RCtlZ3lBQmNLaUg5UC9qMU9nY3hmN0duT0NEM3RkRVNvTnhlU05RclBPZ1kv?=
+ =?utf-8?B?cjFmcXVvQ0VVbjZqTXlqd2U1MklmZmh4OGxnQUFma0JpUlh3UitnOFVzZk1t?=
+ =?utf-8?B?c0FjbnpjRjI5ZUdkQmVSVFg2cjU5WkZYTFBRWnEzeFp3Z0tyV05QcHpjUDF1?=
+ =?utf-8?B?NW54ZjBmUFhLWmJLL2xhMVk0Z3MwbDVKaFVtNDRqRkZVei9lWXpRcktPeFdX?=
+ =?utf-8?B?VVJFR3pWY09scDRVUEhtaWhCd3lKRnNKR0RpamFMdk44ZFRpbGxRVm5GUlJ1?=
+ =?utf-8?B?c1pQRWkybE9qQW9vY0xvZTRiRmdlRXBhVkk2UU9ZelpPWi9LVlBFMTFmd3M2?=
+ =?utf-8?B?OGFBN2JwbmNCNURVcDNlMFVtUjNKYnNIVGRtb3o5aVNLU1dpUGprdkhJWHI5?=
+ =?utf-8?B?bzVPbmR4ZDloWVRtYVYrSjUxeUJOUzZmZmRzT245NVJpYnJRZTF6dUVNOVkv?=
+ =?utf-8?B?UE5PM0JlN3VqWFpGcjFxUDJLUmt6VWJRWUF0bm1jNnRCRUI3ZDdKTU1RdmFF?=
+ =?utf-8?B?UTR3OTRWVVhXS0g2U2FGSUpLdUlCN1ErbFdvaEEzMEdzeStlQXg4TnZrZFQz?=
+ =?utf-8?B?SnphN1FUYTZQMGJOZ1JkeGw5c0tKc1owTTIzNXEza3RrK0tWVnRwRWZUVmNj?=
+ =?utf-8?B?cHhsY0U1WTZEelZUdmFUTnNrSm41Nk5PYmxZZlQvUUdSajkrQVJLQWpYWDRx?=
+ =?utf-8?B?YkNFa3BETjFEK3dzZnpHd0lvQmxJUEp1ZVRDM25VUzBOeUh5QThSYkl6b3VV?=
+ =?utf-8?B?WFJBdk9uNXZLNjBVQm5yb3lTWCtBa3J6emxzY2hlZmJHbjJNZ2xlS0kvZnJL?=
+ =?utf-8?B?QVEwWllxYjdTeFZCMVl6NUpZZWNTeTBNeUFFejFpVkJxR05lY2svb2wzaG0z?=
+ =?utf-8?B?b3pVZ0xzeGozSTI2SDJEbFRCZzlMQXBDdmNCU2FsdnFwQkp3NEV4VFpYVHVx?=
+ =?utf-8?B?VmtIMWpYdUtiaDY0ZDRXbUczNUc5dlFnOVdaY0tid29BdkJQeXFGSEFTeXlI?=
+ =?utf-8?B?blA2ZzZxN0J3TzNzU2d2ZVZleFpQS3UvZHB5TXloRkdHdW9MZ2pjRkhSZGp5?=
+ =?utf-8?B?R0pBVGNnRWRSNllhdDlOZXRscWxmNmE1dS8xSG8zT2w3Zm12WUVtaFg0dkdw?=
+ =?utf-8?B?SDFrdHZpNUQ4czdYNXRoZ2ZZS29IMTI0RzZkKzByTS9PMFlIQU1sTElRU2lm?=
+ =?utf-8?B?Q2UyWHVXOUd4bGdOQ0hpVDFrZjVkN3FPcTA5cGlubEhCMFNpVDkrN1pVNU9Q?=
+ =?utf-8?B?ZkhUZ0xYSHRBN09tSUQxK1BqajQ0NCt1cGo4Mmk1U013anZHWEJFRDNFM1lQ?=
+ =?utf-8?B?NnlQTW9ab1ZvYmRVZXhDWWNPNnpQSlROcGNtRzV0dEdsS0YrQ2xlUDJFMjdx?=
+ =?utf-8?B?SGc5aG51eVpUR0VxMkNRY1lVZXVYNFQ3eG9mK3N2N0lZT3VGWDFNNDNXMnQr?=
+ =?utf-8?B?cDlUY0dOR1ZkeVBIOU9XbWE5dFF6SDJPQnBXUFJiSWdUTTQwOG1RMGlCdkpk?=
+ =?utf-8?B?ZjMwZU84Z0ZTaE9tcW51Sk4rNGVsRGZLdlpUOWljOGNxVVFIeHNteG91TXNh?=
+ =?utf-8?B?RXUzMHhuZ3UzU0ZqMDZMdGxiL0t3c0lCa1hDV3hSM1RkOXRZQ1orOSt3RDFO?=
+ =?utf-8?B?bDArOEkrUFlGODhNVUhpWng2UkV0N2Z5MEF4cHU4M1JGYS9FTHptMi9iSXg0?=
+ =?utf-8?B?a282SUxPQllmbkl1dkJCNUN6UkNacTA3N1lRc1NsOXE0VFlyb0YwUzgydllN?=
+ =?utf-8?Q?jh2uDDgsudk=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RmMyWFRpai82c2p1bGJGSVZZYzJnVllNOE9LRXFVSnNKTnRCeDRXcWZkUk9t?=
+ =?utf-8?B?ejFJNjZ1MDZZY0FzZzBOd01iRmNaUFdtRVdWcDJzVzg5Nkp4WDJnUFZNNUQ2?=
+ =?utf-8?B?Yks0RjNCZmtlcGJiRURqR0NjNTZwYzVTS1l1OXpsVEljQTNBUzlKU1loaWNN?=
+ =?utf-8?B?U2IvNk9qbzVHNUY2bldlM0tBN0U1WFdQWmhIMVhaVnJQNUwyNnBNTzVhUU5X?=
+ =?utf-8?B?ck9ILy9heXg2ZEFCYkdwOEd3WUhBcGQvRTRkL1YrVUFBcmxpUTBjL0lLSHNE?=
+ =?utf-8?B?SHdOWkVFNGFQZkEyKzVQalIvQnBmNlY5NFB3TEtmWE1FRXZpQUl5NFllck1s?=
+ =?utf-8?B?bGdpRFlNZ0NoTnNXR2FjM3dRaldUVkF5cXNrenQ5Vll1YW02NVJqSTRzY1ZR?=
+ =?utf-8?B?Si94U2lkZ3daTGdtc0RoSzVlL3RIcjh2UzBzZ0hnV1R4WVJXK2NYRUVlQW9t?=
+ =?utf-8?B?RW5TQXpKMnBjTm91eWVselhURUNTWFlHdG12aDM3OHdCS29VaTgxTUkvN0J1?=
+ =?utf-8?B?SThoOWxSeGtRU0dBUTlYNzJlUldSbW9KYVBybHROUU4vcDU1WmdtTEZiOUk3?=
+ =?utf-8?B?bjQrUkZ3R0EyMDE2ZkFCQTdOYnpERVdpY0JSOEZpbjdiZUxyU01HalIyVytw?=
+ =?utf-8?B?bWpqMzVKNENIZkFGUEhkalpzY0g3QmhLK0xwY2ZLYXQxNEdHbWhGYUg1azZ0?=
+ =?utf-8?B?ZGYyWG5UVmJJMHBId3lvSmltTUNNbjlpaFExVzhsRHpKeXVKSWZ2YzcxN1J1?=
+ =?utf-8?B?djM1bVM2SHIreDg5MDVvdEVJQ05WQTBFZVZScTM3UmdvUGppaW04dTIwZDdw?=
+ =?utf-8?B?d3JBRFFOYzRPQWF3M2xyTmxtemYySVdoMmJhTmcxbGNBQ1dpQ010SUI4L3hM?=
+ =?utf-8?B?amVmWXJsMlR3cmU2UW03OTdRWC9aeUFVbFJhMEh1YW1UaG5NSnB6Zk5LSnZJ?=
+ =?utf-8?B?QnVzUDhwUEdoeWlGYmZtWkJ4QlJZbkFFczI4V2VIRkd4cUlFaG80RlBZQjAz?=
+ =?utf-8?B?R05sUXoyT2F6RURYUWpsMlBCUmZocExhNUcxcExJWWtqTGYwbjZOQnRocGx0?=
+ =?utf-8?B?ZzluYjdNd0s0Q0xTUDZ6MjE4aFVjVHBQbDZ0L2lzRU02SDRKamZxTEJwbjcx?=
+ =?utf-8?B?M3RrVUZzV0RBYnpsR1dGZ3RlSDlkYVVCQy9PY2Y4MDVGaGZKNk5wQ2o3M0pL?=
+ =?utf-8?B?M3oyb2MxZUtwRTRRYVIrSU4yVDZXZnFGajVPYm5vbzhkRXpCOEVKQWQrRUV0?=
+ =?utf-8?B?L3YxY3dZaGtPRnN5VWU5RXZjVjY1VE4zTWNYMHhaVzFxVUdvcXhGa0xBeXNG?=
+ =?utf-8?B?WjhQN2ZZSitaQjRBQ0NIU010eDNQeVNzTmhISGFuU2x0Mm9RUzNkNlR4bzYy?=
+ =?utf-8?B?enQzdlZzVnZFZW5adGhWMUlUYXE1T2FPYnh6eWJ1Q1JLYjVLUWtqN0lIWko1?=
+ =?utf-8?B?WjcyenFQTy9JTlRZZ2ZKb3ZnTHIzZGE2NFQ0N3BJLzQwbDVHeDVHbmF4dkVQ?=
+ =?utf-8?B?Tml2SWJsWkxMVkl2QndDaGtJRXNjMnJRckcwZnF1a0xGQzNSWjI0MklReXpN?=
+ =?utf-8?B?VmowcFBmcVNqbVdMQ0F3VGVJbWtKOWhVMTZ6RWMwNnQweTR6QXZMd0JKWHQ3?=
+ =?utf-8?B?Zm81VHBxZmE2TXl4Yko3R0hyQ3ZKZHE2cjFmWTNvdDB5ME1oUFo5emthejNk?=
+ =?utf-8?B?Yi94UDZEcnpERmNuNXg3TGJhOFE1YitxYnZsMXFic1EvSXBUa01yUEsySExa?=
+ =?utf-8?B?bG1RTGtyU2lZMVlMSmFyTS9lOVNQWGtuWTMxT0xwUUd6VVdDU01xNDdYeEcy?=
+ =?utf-8?B?UEN1VWVHYTRPVE0waHA4eHdpdDA1WVlZYjdGa3FIM1R2aFFIOWVXR2dpMHlp?=
+ =?utf-8?B?dlBzNmhOWHJQUEdWeTZQbUZlMkg2d1RMbkFRamo3S3pmendyeHl2U0NONXBp?=
+ =?utf-8?B?d2xLNzRFYTNtZlpKOCswamdiaFJSeThZMTNGU3JxMWdFVmpWaFVNZXoxM29P?=
+ =?utf-8?B?WG5SWjNSVitQcitLV2tFNXRXeGtneDFqNGxFU1pQckpRWDM3R1kzazBnSElS?=
+ =?utf-8?B?L0U0aTZqU3JsblgzcnVtN0RVcjZaU3lLWlBiTlZFOUVLQjBUN3l0UmkxaWQx?=
+ =?utf-8?B?ZHh1OXNxUmRUOU0vWmdDYXJpY01oQjFqaEx0bDlUcGEzRkx3UWJoYkJJVGhN?=
+ =?utf-8?B?NEE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	QKox3ydyDZNl4HWDhZKhRIyhrGOIPdgCFGAGwYCkSRig5vPOoAQ/ygfWJZbcb01hNUImsizSihibMJtm2O1cWKTzhhEr1Rjd9552a3hI5fCmHBugwocfsPaguQn0nbGwyz5G6g/geh7mmeYotz1XR8BeFpoLyhguZc57VjWZEs7sIr2D+0hAyJbrHR922c4ALWXbPbT56B4OwIbYeQNzVLqjbQR8TU31OIDb9LbZf0zTkC9NNkqEMPGlCjpvqBboDaMs78GKg5zBkVbPShbyH5IdBjHO3IwuLqXFUqvhxHdUx8yLCE6PfEYxT05BlUAfvTy5mnilUzHy4SqZKpF/SRXXUVBp8q98sgM1pHoIyTlDgXDHO4z7wcG267klZi3i3RzHV+YswwkYQiw2CHmo/BPe735aLS5CbKQqZmtsg/3INZj4sDGUNauats31V7q5a+2Fad/RMiKM0NLJRcOx1Moh3/awwgQThKnaKHWTkF9E+tJAgXY057+cNKFrO3tz+U+wpXa4brOh96kOyq5TAXOzotUTrv+fe+rdfNPI4HPp/Z/IM5Yq3f4DwnWISey9LO6REoTEgBcv2l2HaGwYKXKWIjnTl4utbssLCYEIA7A=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37b4e2a9-bbaf-4a9d-b69d-08dd987837a5
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2025 15:00:25.7631
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Rmy8butnViCilQUAxu52Av7xn6NnRilzrIwWdaK+kauXaYEvSquOeeBUYwsyZsL6Fvj55TNoT8QWgEPQ76W3/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4281
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-21_04,2025-05-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=838 spamscore=0
+ suspectscore=0 adultscore=0 phishscore=0 malwarescore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2505160000 definitions=main-2505210146
+X-Authority-Analysis: v=2.4 cv=cYHSrmDM c=1 sm=1 tr=0 ts=682dea8d b=1 cx=c_pps a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
+ a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=GoEa3M9JfhUA:10 a=MQ8o0d4i2MpUEuQBFeUA:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:14714
+X-Proofpoint-GUID: NmSkuRNg5xqFPge9RJG4RAZ8ctlI9Z4M
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIxMDE0NiBTYWx0ZWRfX9FG6i6vGwwPC WYOJX1wh+SE6qtzjLKSie2VvJla62I57ZUUynqsprJMhS1exq/BrCRUpKUizKyVsW6xneaARcgi vqRgKVT81wf45fiRdo3KqII6g4OtVxMC0YHY5mWirSxwGRFsw+0GI6k+haWb4GTM0JA9JktBAnk
+ hp2Wz48qgjOIt40fDGOtMfVKPJpMi4tXjN1Lc2l2POgv68oSEv83VIDpXtAdLF0KkVcYTIyv1gg 3i85ZnMoEqVyCi7gBUpJOjUxEsQGW3IYJM2UjfD1Fhs/Q3jWAgrUN+ZkBaluwFHl1cFQlMhsXQ7 LfmYgJglUZYNKg/2pXoMqUWD1qvx5lsE9Dv9NxlCYL6OGTzSwPSV1a77Dz6qA7kHTJ56jmuoPUr
+ fa8OVG6nrA0QW5MQYT93LbIDaUxu0ozyVUljQV7tWgCUvw4oZuRbhirmQ4QqjBjDj4Uhb5Id
+X-Proofpoint-ORIG-GUID: NmSkuRNg5xqFPge9RJG4RAZ8ctlI9Z4M
 
-On Wed, May 21, 2025 at 12:06=E2=80=AFPM Andrey Albershteyn <aalbersh@redha=
-t.com> wrote:
->
-> On 2025-05-21 11:36:31, Amir Goldstein wrote:
-> > On Wed, May 21, 2025 at 10:48=E2=80=AFAM Andrey Albershteyn <aalbersh@r=
-edhat.com> wrote:
-> > >
-> > > On 2025-05-19 21:37:04, Dave Chinner wrote:
-> > > > On Thu, May 15, 2025 at 12:33:31PM +0200, Amir Goldstein wrote:
-> > > > > On Thu, May 15, 2025 at 11:02=E2=80=AFAM Christian Brauner <braun=
-er@kernel.org> wrote:
-> > > > > >
-> > > > > > On Tue, May 13, 2025 at 11:53:23AM +0200, Arnd Bergmann wrote:
-> > > > > > > On Tue, May 13, 2025, at 11:17, Andrey Albershteyn wrote:
-> > > > > > >
-> > > > > > > >
-> > > > > > > >     long syscall(SYS_file_getattr, int dirfd, const char *p=
-athname,
-> > > > > > > >             struct fsxattr *fsx, size_t size, unsigned int =
-at_flags);
-> > > > > > > >     long syscall(SYS_file_setattr, int dirfd, const char *p=
-athname,
-> > > > > > > >             struct fsxattr *fsx, size_t size, unsigned int =
-at_flags);
-> > > > > > >
-> > > > > > > I don't think we can have both the "struct fsxattr" from the =
-uapi
-> > > > > > > headers, and a variable size as an additional argument. I wou=
-ld
-> > > > > > > still prefer not having the extensible structure at all and j=
-ust
-> > > > > >
-> > > > > > We're not going to add new interfaces that are fixed size unles=
-s for the
-> > > > > > very basic cases. I don't care if we're doing that somewhere el=
-se in the
-> > > > > > kernel but we're not doing that for vfs apis.
-> > > > > >
-> > > > > > > use fsxattr, but if you want to make it extensible in this wa=
-y,
-> > > > > > > it should use a different structure (name). Otherwise adding
-> > > > > > > fields after fsx_pad[] would break the ioctl interface.
-> > > > > >
-> > > > > > Would that really be a problem? Just along the syscall simply a=
-dd
-> > > > > > something like:
-> > > > > >
-> > > > > > diff --git a/fs/ioctl.c b/fs/ioctl.c
-> > > > > > index c91fd2b46a77..d3943805c4be 100644
-> > > > > > --- a/fs/ioctl.c
-> > > > > > +++ b/fs/ioctl.c
-> > > > > > @@ -868,12 +868,6 @@ static int do_vfs_ioctl(struct file *filp,=
- unsigned int fd,
-> > > > > >         case FS_IOC_SETFLAGS:
-> > > > > >                 return ioctl_setflags(filp, argp);
-> > > > > >
-> > > > > > -       case FS_IOC_FSGETXATTR:
-> > > > > > -               return ioctl_fsgetxattr(filp, argp);
-> > > > > > -
-> > > > > > -       case FS_IOC_FSSETXATTR:
-> > > > > > -               return ioctl_fssetxattr(filp, argp);
-> > > > > > -
-> > > > > >         case FS_IOC_GETFSUUID:
-> > > > > >                 return ioctl_getfsuuid(filp, argp);
-> > > > > >
-> > > > > > @@ -886,6 +880,20 @@ static int do_vfs_ioctl(struct file *filp,=
- unsigned int fd,
-> > > > > >                 break;
-> > > > > >         }
-> > > > > >
-> > > > > > +       switch (_IOC_NR(cmd)) {
-> > > > > > +       case _IOC_NR(FS_IOC_FSGETXATTR):
-> > > > > > +               if (WARN_ON_ONCE(_IOC_TYPE(cmd) !=3D _IOC_TYPE(=
-FS_IOC_FSGETXATTR)))
-> > > > > > +                       return SOMETHING_SOMETHING;
-> > > > > > +               /* Only handle original size. */
-> > > > > > +               return ioctl_fsgetxattr(filp, argp);
-> > > > > > +
-> > > > > > +       case _IOC_NR(FFS_IOC_FSSETXATTR):
-> > > > > > +               if (WARN_ON_ONCE(_IOC_TYPE(cmd) !=3D _IOC_TYPE(=
-FFS_IOC_FSSETXATTR)))
-> > > > > > +                       return SOMETHING_SOMETHING;
-> > > > > > +               /* Only handle original size. */
-> > > > > > +               return ioctl_fssetxattr(filp, argp);
-> > > > > > +       }
-> > > > > > +
-> > > > >
-> > > > > I think what Arnd means is that we will not be able to change str=
-uct
-> > > > > sfxattr in uapi
-> > > > > going forward, because we are not going to deprecate the ioctls a=
-nd
-> > > >
-> > > > There's no need to deprecate anything to rev an ioctl API.  We have
-> > > > had to solve this "changing struct size" problem previously in XFS
-> > > > ioctls. See XFS_IOC_FSGEOMETRY and the older XFS_IOC_FSGEOMETRY_V4
-> > > > and XFS_IOC_FSGEOMETRY_V1 versions of the API/ABI.
-> > > >
-> > > > If we need to increase the structure size, we can rename the existi=
-ng
-> > > > ioctl and struct to fix the version in the API, then use the
-> > > > original name for the new ioctl and structure definition.
-> > > >
-> > > > The only thing we have to make sure of is that the old and new
-> > > > structures have exactly the same overlapping structure. i.e.
-> > > > extension must always be done by appending new varibles, they can't
-> > > > be put in the middle of the structure.
-> > > >
-> > > > This way applications being rebuild will pick up the new definition
-> > > > automatically when the system asserts that it is suppored, whilst
-> > > > existing binaries will always still be supported by the kernel.
-> > > >
-> > > > If the application wants/needs to support all possible kernels, the=
-n
-> > > > if XFS_IOC_FSGEOMETRY is not supported, call XFS_IOC_FSGEOMETRY_V4,
-> > > > and if that fails (only on really old irix!) or you only need
-> > > > something in that original subset, call XFS_IOC_FSGEOMETRY_V1 which
-> > > > will always succeed....
-> > > >
-> > > > > Should we will need to depart from this struct definition and we =
-might
-> > > > > as well do it for the initial release of the syscall rather than =
-later on, e.g.:
-> > > > >
-> > > > > --- a/include/uapi/linux/fs.h
-> > > > > +++ b/include/uapi/linux/fs.h
-> > > > > @@ -148,6 +148,17 @@ struct fsxattr {
-> > > > >         unsigned char   fsx_pad[8];
-> > > > >  };
-> > > > >
-> > > > > +/*
-> > > > > + * Variable size structure for file_[sg]et_attr().
-> > > > > + */
-> > > > > +struct fsx_fileattr {
-> > > > > +       __u32           fsx_xflags;     /* xflags field value (ge=
-t/set) */
-> > > > > +       __u32           fsx_extsize;    /* extsize field value (g=
-et/set)*/
-> > > > > +       __u32           fsx_nextents;   /* nextents field value (=
-get)   */
-> > > > > +       __u32           fsx_projid;     /* project identifier (ge=
-t/set) */
-> > > > > +       __u32           fsx_cowextsize; /* CoW extsize field valu=
-e (get/set)*/
-> > > > > +};
-> > > > > +
-> > > > > +#define FSXATTR_SIZE_VER0 20
-> > > > > +#define FSXATTR_SIZE_LATEST FSXATTR_SIZE_VER0
-> > > >
-> > > > If all the structures overlap the same, all that is needed in the
-> > > > code is to define the structure size that should be copied in and
-> > > > parsed. i.e:
-> > > >
-> > > >       case FSXATTR..._V1:
-> > > >               return ioctl_fsxattr...(args, sizeof(fsx_fileattr_v1)=
-);
-> > > >       case FSXATTR..._V2:
-> > > >               return ioctl_fsxattr...(args, sizeof(fsx_fileattr_v2)=
-);
-> > > >       case FSXATTR...:
-> > > >               return ioctl_fsxattr...(args, sizeof(fsx_fileattr));
-> > > >
-> > > > -Dave.
-> > > > --
-> > > > Dave Chinner
-> > > > david@fromorbit.com
-> > > >
-> > >
-> > > So, looks like there's at least two solutions to this concern.
-> > > Considering also that we have a bit of space in fsxattr,
-> > > 'fsx_pad[8]', I think it's fine to stick with the current fsxattr
-> > > for now.
-> >
-> > Not sure which two solutions you are referring to.
->
-> Suggested by Christian and Dave
->
+> Hi Alan,
+> 
+> Thanks for taking a look at this. I've been following your related effort
+> to allow /sys/kernel/btf/vmlinux as a module in support of small systems
+> with kernel-size constraints, and wondered how this series might affect
+> that work? Such support would be well-received in the embedded space when
+> it happens, so am keen to understand.
+> 
+> Thanks,
+> Tony
 
-IIUC, those are suggestions of how we could cope with changing
-struct fsxattr in the future, but it is easier not to have to do that.
+hi Tony
 
-> >
-> > I proposed fsx_fileattr as what I think is the path of least resistance=
-.
-> > There are opinions that we may be able to avoid defining
-> > this struct, but I don't think there was any objection to adding it.
-> >
-> > So unless I am missing an objection that I did not understand
-> > define it and get over this hurdle?
->
-> I see, sure, I misinterpreted the communication :) no problems, I
-> will create 'struct fsx_fileattr' then.
->
-> Pali, ah sorry, I forgot that you will extend fsxattr right away
->
+I had something nearly working a few months back but there are a bunch
+of complications that made it a bit trickier than I'd first anticipated.
+One challenge for example is that we want /sys/kernel/btf to behave just
+as it would if vmlinux BTF was not a module. My original hope was to
+just have the vmlinux BTF module forceload early, but the request module
+approach won't work since the vmlinux_btf.ko module would have to be
+part of the initrd image. A question for you on this - I presume that's
+what you want to avoid, right? So I'm assuming that we need to extract
+the .BTF section out of the vmlinu[xz] binary and out of initrd into a
+later-loading vmlinux_btf.ko module for small-footprint systems. Is that
+correct?
 
-Much less problems could be caused if fsxattr remain frozen in
-time along with the ioctls as we continue to extend the syscalls.
+The reason I ask is having a later-loading vmlinux_btf.ko is a bit of a
+pain since we need to walk the set of kernel modules and load their BTF,
+relocate it and do kfunc registration. If we can simplify things via a
+shared module dependency on vmlinux_btf.ko that would be great, but I'd
+like to better understand the constraints from the small system
+perspective first. Thanks!
 
-Thanks,
-Amir.
-
-P.S. your CC list is a bit much.
-I wouldn't trust get_maintainer.pl output when it provides such a huge list
-it has some emails that bounce - not nice.
-
-When you are at v5 you should be able to have figured out who is
-participating in the review and for the rest, the public lists
-linux-fsdevel, linux-api and linux-xfs should be enough.
+Alan
 
