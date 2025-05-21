@@ -1,283 +1,276 @@
-Return-Path: <linux-arch+bounces-12047-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12048-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D8AEABEAEF
-	for <lists+linux-arch@lfdr.de>; Wed, 21 May 2025 06:21:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D2F2ABEE7E
+	for <lists+linux-arch@lfdr.de>; Wed, 21 May 2025 10:48:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7B934A7082
-	for <lists+linux-arch@lfdr.de>; Wed, 21 May 2025 04:21:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2117A17BC65
+	for <lists+linux-arch@lfdr.de>; Wed, 21 May 2025 08:48:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80AA422B8A7;
-	Wed, 21 May 2025 04:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A652238178;
+	Wed, 21 May 2025 08:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="IcAUEO5b";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="PhZadbwf"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RI8mkj+S"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DC2223330;
-	Wed, 21 May 2025 04:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747801306; cv=fail; b=dQp1jOLMgRjQ8gbuC3K+W2/MmqdCGucrZtek6Bh6shh5X46faS5jrTwXUm4CHw9ooeNE9CUsRvujPvD0BkfXtvII3DnL0VCk4PIQz9/pSHkipv9Y5xrIblJZvw2FeRJOoHvACdIHD6/643p1OOjDoFkfQmNbkiMLnAXpECiL9D8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747801306; c=relaxed/simple;
-	bh=vo+4LggsD55U+eSjpapGilWEqGly/E994ffF0GWZP+E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=QDUYEinlTPA62eB/aU0L/y4oezRXpd8gD8pFXZXUPscZUgz3zN1sJv9Mz7S9CnbOWVeo7tUqgxEO6j55P2V0yJhrWhuuVYjNpHSy7j/qAJ/IJj+i5T4lo9GprF+l3GkZGXYnAHoHOBPAAc//lOuW9Fzja71B0Aa7NKKDQbQ9DO4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=IcAUEO5b; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=PhZadbwf; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54L49qqA025483;
-	Wed, 21 May 2025 04:21:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=vo+4LggsD55U+eSjpa
-	pGilWEqGly/E994ffF0GWZP+E=; b=IcAUEO5bQi5jVTfWvbxhyQZ1UctBf8Pfif
-	oA8AR7svN3Rp7yF+lTgGVMvFmHQwuCPzIGLLKLGZbAdRWRzRUmpgLIskjnlQ89zx
-	f0v+pFUTsQLx7SQ+a7TOlCQ6Uh1mtCzsggcTOyO4/SiXS++0WxnGj7+m0cUJqU/c
-	zmXTWttFqVknCMhyOwkgf+epmnwyOc4yvwxfzm40QR8t2bLuSxcysa0vKv1Y9FfC
-	c1Ayuqmo03CxckkklxnP422znJFkK0WhsEuQflXEpTmlkUIK1SPe9CKrlg4GbvBi
-	tnE/kbgoqZS9liGk+QMIg2hueC+lbsVAiUyxo9oip07ROZfDdp9w==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46s5yxg2w7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 21 May 2025 04:21:29 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 54L2DmDA020313;
-	Wed, 21 May 2025 04:21:28 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11on2046.outbound.protection.outlook.com [40.107.220.46])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 46rwetbjh0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 21 May 2025 04:21:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GW+ql9eWC6rxveIqoRrPA4QCD1Gl20bfcJ1/Z4IuUzdWJCuyUINosA762TQrbLIcyaEDKzpdh/OGG20dVabu33w4zGdJl7YjTaqeMT3vVCjjmcrWA33jRq0gvUCg4liVNT0dW/Z5ZBEMnzpr/gz/RntYEQysreC3/SsX0nm0EInkwK2s4D6Q16pTDpECPyhKGV3jQe25ai1P4cSZMTOiyCL1/TObyfOXqsag4zirnkz8x02vOcA13vDaBbaTlqVaV0i32Fr5KbmXzX4GibKJnKZPBRYaWD1SPmFF+CR99v9Qag3WmXweT33WRj90f19O1ZVjklRy8iOf4AoZZNFnfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vo+4LggsD55U+eSjpapGilWEqGly/E994ffF0GWZP+E=;
- b=fLf5byJgmHLOV6YnvkXZ9X/zLFmyh6Zvv4dZ9DN68EVMpnZYpjHhgWS4RWdrmBaZuD8FtuWtvu4c/aIuN7GJ/qlznjLvlc/g0gc/aXm7daUuR52JYofiDHIwPAk8EUm7L6K9Oqo+iASHiU5fjCUpeOTR3lVuYJ1L6hmnZiQTCXF/Oan5Hfw8lp7Jc8MzGCjBSGE2Rf//ikoCdKq6wqv0/WFb2Hc2PYrQercM+p/jbArhG6aGC5Kam4yNTDvxSp4lgn/sqexxMPtwqd+BZfLI75LVd6Dw94jvcI5eKmK2EP0+qrOJOCP34jz+/dHIzsx/IT7Ithv37WQiEKK705aShw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vo+4LggsD55U+eSjpapGilWEqGly/E994ffF0GWZP+E=;
- b=PhZadbwfjWugO/24MniG5Gqh1yB0M6TgFAwZRhrRZ/kSPQV4StsK79540TWkMVBdmo7VWorT6Kd5m5ErlqGgOI5rHTw5yfenCVQsU3ttfNhZYC+3NTRxKXRYBkMpw+oCGadXumSSz3kPUqsimWa59R0DFZVbE/KhVbNBo4qr5fQ=
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
- by SJ0PR10MB5834.namprd10.prod.outlook.com (2603:10b6:a03:3ee::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8746.32; Wed, 21 May
- 2025 04:21:24 +0000
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2%5]) with mapi id 15.20.8746.030; Wed, 21 May 2025
- 04:21:24 +0000
-Date: Wed, 21 May 2025 05:21:19 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        David Hildenbrand <david@redhat.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Jann Horn <jannh@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sj@kernel.org>, Usama Arif <usamaarif642@gmail.com>
-Subject: Re: [RFC PATCH 0/5] add process_madvise() flags to modify behaviour
-Message-ID: <7a214bee-d184-460f-88d6-2249b9d513ba@lucifer.local>
-References: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
- <7tzfy4mmbo2utodqr5clk24mcawef5l2gwrgmnp5jmqxmhkpav@jpzaaoys6jro>
- <5604190c-3309-4cb8-b746-2301615d933c@lucifer.local>
- <uxhvhja5igs5cau7tomk56wit65lh7ooq7i5xsdzyqsv5ikavm@kiwe26ioxl3t>
- <e8c459cb-c8b8-4c34-8f94-c8918bef582f@lucifer.local>
- <226owobtknee4iirb7sdm3hs26u4nvytdugxgxtz23kcrx6tzg@nryescaj266u>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <226owobtknee4iirb7sdm3hs26u4nvytdugxgxtz23kcrx6tzg@nryescaj266u>
-X-ClientProxiedBy: LO2P123CA0072.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1::36) To DM4PR10MB8218.namprd10.prod.outlook.com
- (2603:10b6:8:1cc::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BD4237A3B
+	for <linux-arch@vger.kernel.org>; Wed, 21 May 2025 08:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1747817325; cv=none; b=Sv7DJj+Lw0hvSnJAkUZ5gBCJHY2EdZf7FHMD0T7M4zVRANx0ScSsBXreIJvUlk7INp2FHiYL/1nxPDqe4858giGbOD78yEmA+l570qaiZlcTDC4kKmfDMzEi7+ai3+iwOzDjZeMgrl4ExgX0MLM6nPns7QpMqpZa1zC8W0jy/NY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1747817325; c=relaxed/simple;
+	bh=oks16V55Al3cIwa3tzMhKIQg+6JISq/7X+SJWpAWNGk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iyGu0iFMkUy3Jtg9ZrlEwsJby0o2eNOcIzgvZi3iBzV2OuzgkJlDiUTVYwRjeiLPOZwTqW/aKieMYG+/hiYxMohp8qEDyfGm5NLu7ZCqXHnRdwu+cczxNjS0zKprNgvoHQCVjDsSOT1QVgHUgJP4ERD3dXbLUGvQE7DFfBZcUrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RI8mkj+S; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747817322;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UBrTKYMZkRkR/+obIFDmt3FxVCfGaAspFXfSUz2lNvE=;
+	b=RI8mkj+SS49vSOxzhHWQYBoO/VxdWCxWEPhFW/3bhoW9IakoXkLPED7RqN4XXJcRItZzon
+	W7uWh+7UeK4dfVAVORk9uPWvfTeVRvEAeqNCuDm3lwk3M4UzPqWLfRkQkM0yEbWaXVwQpi
+	BsyoCNqpmMGlXHZWoo8GUDN6IfafTkk=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-298--WRdEmUMMGW2QPEB1URYeQ-1; Wed, 21 May 2025 04:48:41 -0400
+X-MC-Unique: -WRdEmUMMGW2QPEB1URYeQ-1
+X-Mimecast-MFC-AGG-ID: -WRdEmUMMGW2QPEB1URYeQ_1747817320
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-ad56437a03eso273422366b.0
+        for <linux-arch@vger.kernel.org>; Wed, 21 May 2025 01:48:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747817320; x=1748422120;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UBrTKYMZkRkR/+obIFDmt3FxVCfGaAspFXfSUz2lNvE=;
+        b=OybSbfo7amboXK9n3LscgPBi/EuO0rhIzys6N6o0dYwmCWyfyCD8Y/Rl5iImLERheK
+         yps1lYN7oE7R2f4ZLZiP87Vw387D08wlZFn8DWHddVcj/FVXEGxkVThpYH0DVr+OEz8c
+         uihPKSszYIjP8Kd3MT1SxWW0dqO24Emel4qGKwPCAXXP6AcNetBb4D0l1VFZjx3paUmq
+         r0AknsWzZ5TyLfAq/mP08iPuwSpukpa+psyKEHAllI4mPlNcmYCUM01CBtE7jTYQm6O8
+         KgjW2PqEEZ/VEO8xZmEi7TnlTsjaoUFwr4wychXqBzG5HVqS4LqzVElsp8ZFD6Wr/gYY
+         bq5w==
+X-Forwarded-Encrypted: i=1; AJvYcCXrnUltfWl2ShJV99OPXu/Qda8tkiYawtGeRy8m1dTcnuHSLFlkEu2onQxUhlNAJVpxnZDhlNwzqj9H@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpDjsWZeFP6lStXzwOLKjkfg0DZZjwXSJbd+nwi/4bNkyEwBW+
+	GnOUpEByaoTpP2Ieq4hvB+ZBOos/LV1F6duk59ot6V2l8SVfYKQxDoHAIjGnX9iVkuSXCnVUXzq
+	0aNOiD0qXSNu7WdfsMt9JkPp0FMFe67h64cWzHoUJpUAKc8IxQszWO34yAIIPsg==
+X-Gm-Gg: ASbGncsiTY/u6N84lIFaTFuc9V+nIV3/QYE6bZPF3EIQgrK+jL9cpZrVGMRcRW6tiYL
+	IyUs9vjHIhevplN12E+n0P99gyGUSCTlqhSkRDIGhtS+/P8lJJNhV1cxCoEwJxjP6bLLvOC55oU
+	fCWVHsOHs25sGB4ju9+pasGMBrVOBmiO6Mo1p7r9OjZiXQZuxqkikv4QaWKetig4fCGXanJ08Qb
+	f4vtbws/QA1SdzdJojOWq+EJVJNU7LRowcU4DjyFzWtsbAW9FX6H0jZSUzvj6oc165YqfH7+I8w
+	Zg==
+X-Received: by 2002:a17:907:96a1:b0:ad4:cfbd:efd0 with SMTP id a640c23a62f3a-ad536c1a813mr1851020366b.36.1747817319668;
+        Wed, 21 May 2025 01:48:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG4Uad4LLY/qbicMx/bjSP1amiyVw6y5+cI+R+l9yVSKq3rctv7sT91m06PC9V35nY4DdIi0w==
+X-Received: by 2002:a17:907:96a1:b0:ad4:cfbd:efd0 with SMTP id a640c23a62f3a-ad536c1a813mr1851012766b.36.1747817319102;
+        Wed, 21 May 2025 01:48:39 -0700 (PDT)
+Received: from thinky ([2a0e:fd87:a051:1:d224:1f1f:6cfc:763a])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad5505131f7sm659880666b.67.2025.05.21.01.48.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 May 2025 01:48:38 -0700 (PDT)
+Date: Wed, 21 May 2025 10:48:26 +0200
+From: Andrey Albershteyn <aalbersh@redhat.com>
+To: Dave Chinner <david@fromorbit.com>
+Cc: Amir Goldstein <amir73il@gmail.com>, 
+	Christian Brauner <brauner@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S . Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Tyler Hicks <code@tyhicks.com>, Miklos Szeredi <miklos@szeredi.hu>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	Linux-Arch <linux-arch@vger.kernel.org>, selinux@vger.kernel.org, ecryptfs@vger.kernel.org, 
+	linux-unionfs@vger.kernel.org, linux-xfs@vger.kernel.org, 
+	Andrey Albershteyn <aalbersh@kernel.org>
+Subject: Re: [PATCH v5 0/7] fs: introduce file_getattr and file_setattr
+ syscalls
+Message-ID: <sfmrojifgnrpeilqxtixyqrdjj5uvvpbvirxmlju5yce7z72vi@ondnx7qbie4y>
+References: <20250513-xattrat-syscall-v5-0-22bb9c6c767f@kernel.org>
+ <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com>
+ <20250515-bedarf-absagen-464773be3e72@brauner>
+ <CAOQ4uxicuEkOas2UR4mqfus9Q2RAeKKYTwbE2XrkcE_zp8oScQ@mail.gmail.com>
+ <aCsX4LTpAnGfFjHg@dread.disaster.area>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|SJ0PR10MB5834:EE_
-X-MS-Office365-Filtering-Correlation-Id: 14b0faca-6d97-49ed-8802-08dd981ef2b9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vzOVAvD5bSxZkL+OeNxnj0et7BUTfej+LQe7Ng214Xt1WNI+RlFqn1RE9Bn7?=
- =?us-ascii?Q?cr+KOjWUJPFNi742w6BKNPZ0/ld2IkrqAAB0Mhr7uxTeBQ/P39EuchEYw4WA?=
- =?us-ascii?Q?I492XmY9iOsh2YjaqGbDx0KYTSQ11ZK93lfXSFGTbSmWah/deZUzOmqg4gFE?=
- =?us-ascii?Q?Fc7wLHD1HQGw7c4BqwPurdzfE77Dd82HP7ZYc2wn8LsU16EDvimMFfaKgG29?=
- =?us-ascii?Q?yQwocpuzsGVl8PG5rm8pyHNi6a/3yqfAYiYAYyTqY+9Z6c/DXHt+lnrj6dT8?=
- =?us-ascii?Q?nG48ScP3wcFE2xqmeTrxdN7TEiR4jRaCs3rvB5lLPHaFIAjs37TEvWd8NM3B?=
- =?us-ascii?Q?02NIvHhWqhTQ87PK3M0xeDs0dZYBQgzqsJNsg8IQRWX7KUyc3lOqBhputDfN?=
- =?us-ascii?Q?TC0oS01cs7PIY6ThoQROvaHS91dUZKJG29lHGdM6TmJ8BZZrH/7JQe8DMNiU?=
- =?us-ascii?Q?afe39mmNkLiWbAoOKtHI88n5chfqXHq24Ka8QiY+L7C8nrvU6s3HPrkqPT6e?=
- =?us-ascii?Q?HZkuFk2FbUjlthm4oavujOpd7BWY+QeT/psAie9oTCkOlZV+LiUW++lpq6T2?=
- =?us-ascii?Q?H7Ehaf2xvz3K5XsykVvRRx/aVE5jcALxIkhrnwMbRb0FiBYAeGrWFtQe14aE?=
- =?us-ascii?Q?M191187MJIsx/CDlcPxk1HDNtPTe8Hp/7wMaunqOVRz51nVW8z0TSwpzJsnz?=
- =?us-ascii?Q?SZ4mS31eeRM8yV8i2fo/3VoFIh7QfXe24L3OaIHXjuhjLXNElYxX6zRqIugM?=
- =?us-ascii?Q?H0OJbtfXHUaN87JInEOaDqHWrJnMoWdL5rynqAYo7auaqpfvdMTCD97gUqvM?=
- =?us-ascii?Q?9Wy53By8HQs7elsaW6xySfkdcfaHcC4HUC+53W4ZoPeezM7TVX1rZfok+lFw?=
- =?us-ascii?Q?V/H92lc4lhZRJGaejZBk+xqvuuTYMmo6RlFJqFklUw7n9cdX4FOW0tbiVeGy?=
- =?us-ascii?Q?N7IGu4wbz4YKn1mDG2fKihUJYkXwwdrpbGOgxa53sH3tclsKcKre1ZYKgxAa?=
- =?us-ascii?Q?cdEDJbtyJgHJJnOLnndWUn5P+ap6zgAtkOGpEqLMbMF7+RDPzxfhlsPcCYia?=
- =?us-ascii?Q?Gw9RDFkVwwXLIcT9ijUskKAKnzS8StF5kkH/pQGFoWY2rG4bWXoE3BwY3hkz?=
- =?us-ascii?Q?h+OUPoM/h6UOM2UQLvK1FnxiggMea52WraNJgxoN8T7f2Zm33ogb2rNq2+Eo?=
- =?us-ascii?Q?+RUaxe/40WEjty3xVzAK4TNYTVVFUTnzvCoodtnP5kCCoLjoo/4RJKOkfHHG?=
- =?us-ascii?Q?gYWlDzJKfHLruFIAwagPjVWDJ3B6e3LPUxUb8ceYgKl9XuTwXFls3VM1T0ch?=
- =?us-ascii?Q?M69i5B4wHNykS4o5TjOesXVGDVrZyKtqUTxLom+Ye1FXt4HWU110PISCv/BS?=
- =?us-ascii?Q?xeZKc0YfNfh0xBluwzWoOs9/2U9hQFkXMAqpWQPmi3cAP5AzeLDIvudg4DXz?=
- =?us-ascii?Q?NMhz8ECq7cA=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IzaNxukGaltScC7HoAWkOxzCSr0sg9/ibucOOkf59vDKEoZlf7H5as3Zck36?=
- =?us-ascii?Q?NoDFehkKkwH1o5sya7KBJEPlgyvsuLJilYGlS0DD0hDugrVH2ReLBt9POLAh?=
- =?us-ascii?Q?1NwBPrMyPBJ4nFmTxETw7QHub996o4MwmjmSA06TryFg7LDGQYoRhERlJh+9?=
- =?us-ascii?Q?PbjFixY86YzDA8eGgfXuRfU5AZpD1xsL2OGJy6K1r/RJaXTYR/53kG+VFHPm?=
- =?us-ascii?Q?1P7rctIDslJp8s1YyIFvpSnBBDMXIqAVS9sYNv+qILTY3dt+rJvMKSq0gj+A?=
- =?us-ascii?Q?+VYtAUVbvvY3GBqtg2BncbITg4q4YAyT1ifDYO1FxYK+L/aEKRqMUwhwfq3P?=
- =?us-ascii?Q?aF+jltY8ekJ/xuj0FvxAtyRaG5AvaMF2LvGsYc/pbNlX2WI73AIGHZwwys1A?=
- =?us-ascii?Q?QJMZ0YCKV7caidUuV2Gs8R6pECGJPAUs67xYWZXzU233B2D9PPR5Q3KPP8bq?=
- =?us-ascii?Q?20sv2q2iAGVwerNi+Ik5FDrRoUJg4Yjztgsidsqrf5Zw+4x6sWsMU/bjW+HT?=
- =?us-ascii?Q?DiFG5l4ZQL7W3CLTAOgNv0GmSN4+cyrk2MxDiVfimvKddXFCz2KOE5wo4JzJ?=
- =?us-ascii?Q?K3hYZQ4qiYJtPV1wwqksZmtQD4aN3uAoD/Tz+Z9t9tKHXwGiIy7oxdLO2dwk?=
- =?us-ascii?Q?YVbWeVfvwS9wz8i7qf8x3Fdw+fqLQX4QnJJK+hCfldtrJ7fL3wXkx7hDykVs?=
- =?us-ascii?Q?FRbPgi7U7Bk91B1LBVAH3HS778kNxdonddMFwZPqCsx4i6fZHWfVlGbFVRrx?=
- =?us-ascii?Q?MctILDB6U5+liRT9zty2RQdoF1722LxTt4mmY78NrT3oI9WBwXr7M2ztHd9r?=
- =?us-ascii?Q?4ubyctq5izdNnmEGtuFOtcbI5/1RK+8j/59boIdDVDFgvbIiaPAsRsHtjr+G?=
- =?us-ascii?Q?XQlWk4kVC/HzkBsG6LKm4/54uEWV64rI7vK8tQtXtJp+Z+XdkzSTrWNfZc1K?=
- =?us-ascii?Q?Lm4LyPGohuW18UM/P4gsO7OOzBxcP/5z6T1VcJ5O86b6BXmp4BgO5en+wk5i?=
- =?us-ascii?Q?k56foNRlaWJK9l9JW3zdVNgbARTeT2CDBHlCaJbnRbSGSTnUfHzVUu87rvDO?=
- =?us-ascii?Q?toZ8dVqEitXN1P0WBhRuYT4v1Lr+hfAJ6KNNasXoy/R0i0w9jYglKSrvx6lw?=
- =?us-ascii?Q?L2tYVYzMPID81Jme077RUbFf6wbwnaHm9XE9YkdtzTxbumvZq9w/ls/zb712?=
- =?us-ascii?Q?HxvIH72GLOoRuLlbL5AVK7kUwBVhrBzFc11evTGLKVtBGUA9rxpt+N3G1OHq?=
- =?us-ascii?Q?KTR15EGftgCS+Llcs3ZTknaoPl8m+Ep2ihhrzHdPGcvEc+w2GLxgW5IlKpFe?=
- =?us-ascii?Q?Dr/fQr1zwblv+wqUStgY1B1bbcknKSMxjToKUmxQUUMi6NaqN0sUW9zxkR0c?=
- =?us-ascii?Q?uN20btJlfdsjeG84oYKA7vHfIKDYO7FyTPcHOrh6F8pKOV5r2gTiMGdqQfTu?=
- =?us-ascii?Q?z2mBL68V7FAhnv2X5N3CKdMNqh1vM070rLAXhwG/o4FMhaPjP+zO4NkvwD2E?=
- =?us-ascii?Q?HQ3I6I60H68MM2IqUb4BReB/d1YaNhamTBH/7/5jSgaqFVZ03L1biVm8YmRS?=
- =?us-ascii?Q?1a3zh2iOhn9E3NrQIZkFE8NpG0GvyFAa5hwPktxhVQoPdi0zPvc86eA8p1Rv?=
- =?us-ascii?Q?4g=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	XgVJi5AZTA7ZAgE8AJqzF3An7aKlST+xFGcN2Cbk9aRvq7Or4gJbXTgBEx0vVudtEiZZg1dEm1y94UxxN1DD3of/smauobSFYC3E4z2vZK1EfkQHctg4OpbhPhcP0Z3+lz6JJuZLJxiNYRt13pksN+Y5BAYRz0X9V25/2QCABa6C73ABQQ8zQ8GtM8i4xwhM20WlCdxLZN8FmL0mAW8fKKJiTmsLszAjCj7+mpVlBugONJ9IzYEXHmU1SSCxzghmJ3hgAaCMubNxK6gUJr9vLOqbN2rg2iuSZVm7RCumAF/DnXDycTggD+aCLQYEdov7mnsHtsiU/TZicyuHXguoRWMsabvz3ayu8M2Px3Fx+zLnrsYfaQMxYeJLXxyQ45ru9bgvtEqhbsnBYb7VLrsubV4vChvTgw48ZEAJEoIralnXH4QZpW7BGwNx4Av2VMyFHu2Ki94H3gmipd6QuxWK7VPp2Hwyb2PMAY2T6QhidaA5pFz1+q4bDFc4hp2+zswhdaLRlC2dEYUf/p5Kj5OcieEH70Ehql2go3M4PK3fZFKcXWpkMWQ7ExkfqZLzJaATgz79I50N9Pkr6o8vpdgzk7L6GIXX0KY+KSrwHo7NGMg=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14b0faca-6d97-49ed-8802-08dd981ef2b9
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2025 04:21:24.5992
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gKl5wUg8R33D3qXrI6Cnu5NhtKcokF/8e3RkpX0ZZXwziyAFzz7OL36lGO2gUfMJAfI4X6KSjk0X5e07CjCRZYiN1YsiGyZmzShW4EKidb8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5834
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-21_01,2025-05-20_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- phishscore=0 spamscore=0 bulkscore=0 suspectscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2505160000 definitions=main-2505210039
-X-Authority-Analysis: v=2.4 cv=H8Xbw/Yi c=1 sm=1 tr=0 ts=682d54c9 b=1 cx=c_pps a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
- a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=dt9VzEwgFbYA:10 a=GoEa3M9JfhUA:10 a=qj4OTiu_qPtHdlvaBRQA:9 a=CjuIK1q_8ugA:10 cc=ntf awl=host:13189
-X-Proofpoint-ORIG-GUID: toOZvK0ra_zJu-lGLLjTOz0xLg1mhj3K
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIxMDAzOSBTYWx0ZWRfXwnFMdXgIKngC EUsz2QmekcKqvUyCXPfbA7ulpJnhNVhOSVfPIW2kn1pLTYO3Qw13yadkcGLDIKtkN9ShkYBWz2o Wd2YTDzFnuBGNkIqhlimGwb3anGuQUSi7laIn5ejvjj+k4DYI16j0kfO0+B1CKmPWY3qi09bZhv
- j+H8Wy/kg/LpKfRLtO3FvqjzXWgaxHFxPiif6s8k+NjPP/5IniDMEhFt6Ull2O1z8MuCvWC1gaq NPRiZwGdHFDytZ6TUhrAOcx0p5LBonctsxi81SWNe84gw8uAtym5ZuolZZtas3Fsmixu4ieT55h 7x0uxS6NcQG796t4s4drAdG43wRQCwKeJD1UJ0CKimvWTz62acfGcB764hp+fedHC31BxpEPxCL
- bsrKW9qkjUOIivkbraCxZIxZCEk73Ovp8B+34wzvtrBfuDvDKgWpX+864aycOs8TFniKJNyF
-X-Proofpoint-GUID: toOZvK0ra_zJu-lGLLjTOz0xLg1mhj3K
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aCsX4LTpAnGfFjHg@dread.disaster.area>
 
-On Tue, May 20, 2025 at 03:02:09PM -0700, Shakeel Butt wrote:
+On 2025-05-19 21:37:04, Dave Chinner wrote:
+> On Thu, May 15, 2025 at 12:33:31PM +0200, Amir Goldstein wrote:
+> > On Thu, May 15, 2025 at 11:02 AM Christian Brauner <brauner@kernel.org> wrote:
+> > >
+> > > On Tue, May 13, 2025 at 11:53:23AM +0200, Arnd Bergmann wrote:
+> > > > On Tue, May 13, 2025, at 11:17, Andrey Albershteyn wrote:
+> > > >
+> > > > >
+> > > > >     long syscall(SYS_file_getattr, int dirfd, const char *pathname,
+> > > > >             struct fsxattr *fsx, size_t size, unsigned int at_flags);
+> > > > >     long syscall(SYS_file_setattr, int dirfd, const char *pathname,
+> > > > >             struct fsxattr *fsx, size_t size, unsigned int at_flags);
+> > > >
+> > > > I don't think we can have both the "struct fsxattr" from the uapi
+> > > > headers, and a variable size as an additional argument. I would
+> > > > still prefer not having the extensible structure at all and just
+> > >
+> > > We're not going to add new interfaces that are fixed size unless for the
+> > > very basic cases. I don't care if we're doing that somewhere else in the
+> > > kernel but we're not doing that for vfs apis.
+> > >
+> > > > use fsxattr, but if you want to make it extensible in this way,
+> > > > it should use a different structure (name). Otherwise adding
+> > > > fields after fsx_pad[] would break the ioctl interface.
+> > >
+> > > Would that really be a problem? Just along the syscall simply add
+> > > something like:
+> > >
+> > > diff --git a/fs/ioctl.c b/fs/ioctl.c
+> > > index c91fd2b46a77..d3943805c4be 100644
+> > > --- a/fs/ioctl.c
+> > > +++ b/fs/ioctl.c
+> > > @@ -868,12 +868,6 @@ static int do_vfs_ioctl(struct file *filp, unsigned int fd,
+> > >         case FS_IOC_SETFLAGS:
+> > >                 return ioctl_setflags(filp, argp);
+> > >
+> > > -       case FS_IOC_FSGETXATTR:
+> > > -               return ioctl_fsgetxattr(filp, argp);
+> > > -
+> > > -       case FS_IOC_FSSETXATTR:
+> > > -               return ioctl_fssetxattr(filp, argp);
+> > > -
+> > >         case FS_IOC_GETFSUUID:
+> > >                 return ioctl_getfsuuid(filp, argp);
+> > >
+> > > @@ -886,6 +880,20 @@ static int do_vfs_ioctl(struct file *filp, unsigned int fd,
+> > >                 break;
+> > >         }
+> > >
+> > > +       switch (_IOC_NR(cmd)) {
+> > > +       case _IOC_NR(FS_IOC_FSGETXATTR):
+> > > +               if (WARN_ON_ONCE(_IOC_TYPE(cmd) != _IOC_TYPE(FS_IOC_FSGETXATTR)))
+> > > +                       return SOMETHING_SOMETHING;
+> > > +               /* Only handle original size. */
+> > > +               return ioctl_fsgetxattr(filp, argp);
+> > > +
+> > > +       case _IOC_NR(FFS_IOC_FSSETXATTR):
+> > > +               if (WARN_ON_ONCE(_IOC_TYPE(cmd) != _IOC_TYPE(FFS_IOC_FSSETXATTR)))
+> > > +                       return SOMETHING_SOMETHING;
+> > > +               /* Only handle original size. */
+> > > +               return ioctl_fssetxattr(filp, argp);
+> > > +       }
+> > > +
+> > 
+> > I think what Arnd means is that we will not be able to change struct
+> > sfxattr in uapi
+> > going forward, because we are not going to deprecate the ioctls and
+> 
+> There's no need to deprecate anything to rev an ioctl API.  We have
+> had to solve this "changing struct size" problem previously in XFS
+> ioctls. See XFS_IOC_FSGEOMETRY and the older XFS_IOC_FSGEOMETRY_V4
+> and XFS_IOC_FSGEOMETRY_V1 versions of the API/ABI.
+> 
+> If we need to increase the structure size, we can rename the existing
+> ioctl and struct to fix the version in the API, then use the
+> original name for the new ioctl and structure definition.
+> 
+> The only thing we have to make sure of is that the old and new
+> structures have exactly the same overlapping structure. i.e.
+> extension must always be done by appending new varibles, they can't
+> be put in the middle of the structure.
+> 
+> This way applications being rebuild will pick up the new definition
+> automatically when the system asserts that it is suppored, whilst
+> existing binaries will always still be supported by the kernel.
+> 
+> If the application wants/needs to support all possible kernels, then
+> if XFS_IOC_FSGEOMETRY is not supported, call XFS_IOC_FSGEOMETRY_V4,
+> and if that fails (only on really old irix!) or you only need
+> something in that original subset, call XFS_IOC_FSGEOMETRY_V1 which
+> will always succeed....
+> 
+> > Should we will need to depart from this struct definition and we might
+> > as well do it for the initial release of the syscall rather than later on, e.g.:
+> > 
+> > --- a/include/uapi/linux/fs.h
+> > +++ b/include/uapi/linux/fs.h
+> > @@ -148,6 +148,17 @@ struct fsxattr {
+> >         unsigned char   fsx_pad[8];
+> >  };
+> > 
+> > +/*
+> > + * Variable size structure for file_[sg]et_attr().
+> > + */
+> > +struct fsx_fileattr {
+> > +       __u32           fsx_xflags;     /* xflags field value (get/set) */
+> > +       __u32           fsx_extsize;    /* extsize field value (get/set)*/
+> > +       __u32           fsx_nextents;   /* nextents field value (get)   */
+> > +       __u32           fsx_projid;     /* project identifier (get/set) */
+> > +       __u32           fsx_cowextsize; /* CoW extsize field value (get/set)*/
+> > +};
+> > +
+> > +#define FSXATTR_SIZE_VER0 20
+> > +#define FSXATTR_SIZE_LATEST FSXATTR_SIZE_VER0
+> 
+> If all the structures overlap the same, all that is needed in the
+> code is to define the structure size that should be copied in and
+> parsed. i.e:
+> 
+> 	case FSXATTR..._V1:
+> 		return ioctl_fsxattr...(args, sizeof(fsx_fileattr_v1));
+> 	case FSXATTR..._V2:
+> 		return ioctl_fsxattr...(args, sizeof(fsx_fileattr_v2));
+> 	case FSXATTR...:
+> 		return ioctl_fsxattr...(args, sizeof(fsx_fileattr));
+> 
+> -Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com
+> 
 
-[snip for clarity]
+So, looks like there's at least two solutions to this concern.
+Considering also that we have a bit of space in fsxattr,
+'fsx_pad[8]', I think it's fine to stick with the current fsxattr
+for now.
 
-> I think we are talking past each other (and I blame myself for that). Let
-> me try again. (Please keep aside prctl or process_madvise). We need a
-> way to change the policy of a process (job) and at the moment we are
-> aligned that the job loader (like systemd) will set that policy and load
-> the target (fork/exec), so the policy persist across fork/exec. (If
-> someone has a better way to set the policy without race, please let us
-> know).
+-- 
+- Andrey
 
-Ack, totally agree the kernel currently lacks a cohesive story for this
-'adjust POLICY of a process and descendents', we have cgroups, but they're
-more general than a process, we have namespaces, but that's for restricting
-resources...
-
-I think we all want the same thing here, ultimately.
-
->
-> My argument is that process_madvise() is not a good interface to set
-> that policy because of its address range like interface. So, if not
-> process_madvise() then what? Should we add a new syscall? (BTW we had
-> very similar discussion on process_madvise(DONTNEED) on a remote process
-> vs a new syscall i.e. process_mrelease()).
-
-Sure, and generally both proposed interfaces are at least _awkward_, for me
-prctl() is a no-go unless we have no other choice, I won't go over my
-objections to it yet again (and Liam has also raised his of course).
-
->
-> Adding a new syscall requires that it should be generally useful and
-> hopefully have more use-cases. Now going back to the current specific
-> use-case where we want to override the hugepage related policy of a job,
-> do we expect to use this override forever? I believe this is temporary
-> because the only reason we need this is because hugepages are not yet
-> ready for prime time (many applications do not handle them well). In
-> future when hugepages will be awesome, do we still need this "override
-> the hugepage policy" syscall?
-
-As argued previously, I am not so sure it'll be temporary, given the
-proposed future 'auto' mode will be a _mode_ and we will need to support
-VM_[NO]HUGEPAGE scenarios forever (deep, deep sigh).
-
-Also if you add it into systemd it definitely won't be right? There's no
-'throwaway' here, and scouring through prctl() (what is actually documented
-:), I am not sure anything ever is, frankly.
-
-So the idea is to try to make this as generic as possible and to have it
-sit with code it makes sense to sit with.
-
->
-> Now if we can show that this specific functionality is useful more than
-> hugepages then I think new syscall seems like the best way forward.
-> However if we think this functionality is only needed temporarily then
-> shoving it in prctl() seems reasonable to me. If we really don't want
-> prctl() based solution, I would recommend to discuss the new syscall
-> approach and see if we can comeup with a more general solution.
->
-
-So, something Liam mentioned off-list was the beautifully named
-'mmadvise()'. Idea being that we have a system call _explicitly for_
-mm-wide modifications.
-
-With Barry's series doing a prctl() for something similar, and a whole host
-of mm->flags existing for modifying behaviour, it would seem a natural fit.
-
-I could do a respin that does something like this instead.
-
-What's a pity to me re: going away from process_madvise() is losing the
-opportunity to be able to modify the, frankly broken, gaps handling and
-also being able to do 'best effort' madvise ranges.
-
-But I suppose those can always be separate series... :)
-
-I guess let me work that up so we can see how that looks?
-
-Cheers, Lorenzo
 
