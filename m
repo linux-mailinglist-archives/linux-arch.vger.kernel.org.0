@@ -1,125 +1,139 @@
-Return-Path: <linux-arch+bounces-12079-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12080-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A3E9AC12F4
-	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 20:02:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0ACCAC1598
+	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 22:39:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89FCF16E162
-	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 18:01:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EA88502B13
+	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 20:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4482F18E050;
-	Thu, 22 May 2025 18:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F14924167A;
+	Thu, 22 May 2025 20:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RfM/oqgp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qz+tznIS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E76C15F306
-	for <linux-arch@vger.kernel.org>; Thu, 22 May 2025 18:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF84F188713;
+	Thu, 22 May 2025 20:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747936894; cv=none; b=jhqpDGiwVDoI7/PgQUpir7sRb76p6PVa8Xy458in/7lvw8HtG4lBA7GcKsdQzBnia8cOymD7Ifep2cjSQU2ZhiJKeOwJS/j6ypWRQ0LEplCItgewXhU0VR5mBZbHglRON6GFZjCACmdu/zj27bT94l4Ki1Ppgv1mY7qBdcWAqgU=
+	t=1747946389; cv=none; b=se0qq5qJmiqBmsdIa2pRVEa3bZuMpzG2mOcUuvQsn/rsQ6lrbICOs1ZjiUXQjP4JLhueg7Ixx6tMW0NhsA+fXKZfUNJ5FKFr7EHt1gUWRqHqhy28cCD39BQr6kvJvx770O0lrYGYNeMiWGijDrA9EV0IF87UgXurh+TM2bgYgTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747936894; c=relaxed/simple;
-	bh=zSrbOWuHQ1Z5sVIesfrhCLH21IIccGRYbToiYGXm2ZY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nk6gF/YaUKSFnNvIuDzfuq22ggfeikYeHlWXfSkXGqRQdtzXx9QSDRmf6ilB5Ww7nCHmm5WAFwzG+VxoVN58upHIzPW70jcSXmtXqIQibRzIKrLJ9qrsG9mYOCcBRdla2RUscYGf63U+kMpOCNAUFKKmXKMx+Yp5zpDTZ1sMRno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RfM/oqgp; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-601a67c6e61so1366a12.0
-        for <linux-arch@vger.kernel.org>; Thu, 22 May 2025 11:01:32 -0700 (PDT)
+	s=arc-20240116; t=1747946389; c=relaxed/simple;
+	bh=cMzwioh17gENmm2R6XQJtayjD6KpeVsQzAG0gP6JKzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UJCubsFJ2eCiEJPSeXl9nyMDp5bz2cYoCdr77ebgYQIDqv+rtG1hjeW/QsMV4O5nGCDoxSkJbcAGRnRfCPinSkc6LfmsDuWrhIMqEiKMAyzPKqwTXgTpvrkaiuhQFUpavnXXGhBOnmFGgLlYeZITop1FLPcbvXhBEoLiQIzb2Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qz+tznIS; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a37a243388so3396353f8f.1;
+        Thu, 22 May 2025 13:39:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1747936891; x=1748541691; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1747946386; x=1748551186; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zSrbOWuHQ1Z5sVIesfrhCLH21IIccGRYbToiYGXm2ZY=;
-        b=RfM/oqgpgpo2BtQ8Hydjx6/l9ufY9xv4wAaJOqjruHsFFkRFPO+6wCY4ez1Ye8wucs
-         mGfFe8PJxJMsiTjzx0X00xzWYrqzDEszkCcRrSBOGgppUme+aIpMR9ocj7sEjF6iklkX
-         qaychnd5CS5VSeLT4skrXoqrOaIV6eBr9PQW6h4bZE9oBdK6II19NujshnoWClpC7XFF
-         DzI1N2insLehKcDiC0zkWKpqW6CNF1I4YlplfSdmgwr5HpRJDxa2uTiBHfaZKceCloF9
-         /DcHP/Cqs69AKDa6bg8xXzHYYzQHb1b8pqXJBOYOc+gg7uC2HeoAg43EP5c+uR7mZL7v
-         QcXg==
+        bh=iY91vjGYq1YGLlhS2Op+EncNJMVLvjFIbtv4AV1m54M=;
+        b=Qz+tznISWBpd6P35dyE8B2vslk02Lzd4gMMntKRojgx/scK9Ize1LueGXzjEYTcBXK
+         cDhJXHbkj8BCgpW8H+hyOtn9kvGg/YNztmS6AtXcwA1JEAvh/xPXnQDAYDQgfKS91jcK
+         +TS0JSYoqpcg0muLbqGOqK7TMx8sT7PTe7W4/8O/TvBzQqidUwRgwCg3y/2iGkQBr+il
+         ds5vr7oCb1E1GhfRK4TiTZKXLwF5YfG3LWRiFua12g0QkKZOyClOEbFAlexNSKX2nq4l
+         HyUvFaQl17k/5Cb7mkff3HCptf0Luam6WMOXGga/J/lJTabwjY375fyZcEENyy74vX3p
+         cbsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747936891; x=1748541691;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1747946386; x=1748551186;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zSrbOWuHQ1Z5sVIesfrhCLH21IIccGRYbToiYGXm2ZY=;
-        b=k7PfQrmTLhHebn74EZmnmrhWjFJBUFQ7Xrx0LHLqAKhzQNx1BcXrs8WbDr1Af0Qx73
-         Z8tH5tf95IVeUuSmVKQTmGrXgb89KwrFkbgMC/7aJNPSZIutTsIL8KI19gqav11IE0FG
-         52beXpFIw576W+qqnjW1KcFq19L4dD/4wP1hq6F87mfXrowZNenW+CTxhLFyRhx3L5Jo
-         MdTL9xRNmdT2K/z2c9manfTMnHu709eTqNkmFsnigM/YzBBXQ4jUPVbjxCcIigiXVYHt
-         Uj4Z9NW57EKoG5lNVE/xmDWdZVVJZ5gj6Se4w+mDxVdiiqFtWvhd7ORoZs5QCcJVo1wk
-         u7Xw==
-X-Forwarded-Encrypted: i=1; AJvYcCXoR0YRyiw0zvEyGK/Wb7bVMlagUbeIii7rAkIUN7ulsbH/KQlcHcm72sDq44y8/SlytoMVxTSoVvW9@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEz9qj1nXMonVYdsAQJ7Shw+magVBrz14od0VQWrVKSObH4Wbw
-	xM3m2eNtwPuPVCD9xydostUERaFD5fL+Mn6BeqIXgmM0AYqmyDSyKa6FTX61Ea2YxcdNfKCUosT
-	7d8Asr1kD4uh/rFu85SCxvFKpDhG9X7ULrNEsvZLg6Ost38Tq/zttY/OM
-X-Gm-Gg: ASbGncteh1M0weT9SvQnVebK950/mrUzcSXrpRlkDYwxMTEFkkpnt3BA6OpxlNZvP2w
-	3EvnBtzRVESK1jmyr9SLCBzW4rxjwuH5g1VZLl/0kIeDDVxah0hNk7SUovb/bHoWf+OoVN+VB2K
-	sDFk7TtC5Kr8QEN/luWvDXMvTY3vo7kRj4/vyoPR+HLlTwAnD0oD+HjFl21uzqzSeEkXxMB9aOX
-	8kdh4P40A==
-X-Google-Smtp-Source: AGHT+IFxJE445XHoSMx5+PG2/5xKb63gk3NMgNuLdGQr4KqW7SDg77Lnmqsxp9mSej5j68Z9BUaqOffGqtQwskjYt88=
-X-Received: by 2002:aa7:d905:0:b0:601:8e4f:2eb3 with SMTP id
- 4fb4d7f45d1cf-6028fbe2b59mr9108a12.0.1747936890338; Thu, 22 May 2025 11:01:30
- -0700 (PDT)
+        bh=iY91vjGYq1YGLlhS2Op+EncNJMVLvjFIbtv4AV1m54M=;
+        b=umQ6EUqqyJXde4TP4ekB9Ntog621oYfngBluO4RwSFsT4WDACjFURIa6rwdcuMJhzu
+         xnH99wyHRsvK2bnKGNg5GwV3j+JcfbqqHSv3DoQNUpJWhSzYd6iJH9P39ouqXgHbzUHL
+         1tfMwd8BIGs4SkxYwvYelUlajMwQ4yTPHX/EC9i2HTIDnqCq6/F9FbYI+9TZ0rwsCNSr
+         MomDMc5YslRhE6ImNC7HjLinqzCzkPShZB3PwTnXv9Q5tXOq1nDdHoOz0tHWFCYJ0nTp
+         TGhEf6ZSONoCoExEbIskrId3GLseLgZtSVATaIUWHLYziLPLDv0F6H42Atbmw+w8VN4A
+         yJ0g==
+X-Forwarded-Encrypted: i=1; AJvYcCULT1YXKuulT7VqjjmobtHuvVBRDDE3TucgAawFl54tsoRENyerCPgy+cBECZahZ75Qhjm00e7HsntZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxnr/XhQJ9VbdykpK3uEKOCq6iky65JkiC2DEfkHapeu2pVu7Lr
+	d2oXZtqNFe0Ok6a5Rnk2hMMD3Dq2g1ZeYpR3FL0RzDYEmLji1TCihaHo
+X-Gm-Gg: ASbGncuQ3vodydsSpLSP+QfMZWOY190l36Re3LKou7SaxSnVyeTDh+11vXQrRUSh2Yq
+	35vjbLcY3mlQPh4EsLN5Q4Xi8bjBDwlMDMGjpiio74VO3iQWpbsFC9FhVqOwMpgOqn03v8w5yp+
+	5btW+11DqfEFKOzsavTQdh1YueW7+fTlMtqZ6DWIwn51MzFxoIc8Izl/WIeHHm+8fkvHWxV95HC
+	vQb2EgNCGvQnPE4psXkkt9v9SN2YifpD0czVFoex72vdPwt7x1ooEgO6Ap7aluB6xYSZ6tAwwne
+	asagRyU3VXHU0aqiIA61nvPyS1f7Kj1Tq6FDOkIdzh0f4Onr3FcsY/U4m/eDk9sv/U0CFgaPFdv
+	31y3ysU9Mq6afIQ==
+X-Google-Smtp-Source: AGHT+IHZKykx5QpTbOJ39X2Y8rlRcInjFkmlVDDOcIVZ9NAz79zmTmz0NgNUWcgHnZ4KBbSgnmrrAg==
+X-Received: by 2002:a05:6000:3111:b0:3a3:75fa:a0f6 with SMTP id ffacd0b85a97d-3a375faa340mr14824005f8f.50.1747946385913;
+        Thu, 22 May 2025 13:39:45 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a3622b8a3esm23506026f8f.14.2025.05.22.13.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 May 2025 13:39:45 -0700 (PDT)
+Date: Thu, 22 May 2025 21:39:44 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Linus Torvalds
+ <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>,
+ linux-arch@vger.kernel.org
+Subject: Re: [PATCH 00/15] Implement CONFIG_DEBUG_BUGVERBOSE_DETAILED=y, to
+ improve WARN_ON_ONCE() output by adding the condition string
+Message-ID: <20250522213944.5ba1eabc@pumpkin>
+In-Reply-To: <20250515124644.2958810-1-mingo@kernel.org>
+References: <20250515124644.2958810-1-mingo@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250522012838.163876-1-roman.gushchin@linux.dev>
-In-Reply-To: <20250522012838.163876-1-roman.gushchin@linux.dev>
-From: Jann Horn <jannh@google.com>
-Date: Thu, 22 May 2025 20:00:54 +0200
-X-Gm-Features: AX0GCFsRGhGmDXFm5yb_HSIAhFgPKv3Mqm8Lu7C30sJ_pCqFSfVgLnVDarBenOE
-Message-ID: <CAG48ez303kEZ8rWrP9AvsWGddcptAxuk6C56eBQ1Z6RJW-a_mw@mail.gmail.com>
-Subject: Re: [PATCH v6] mmu_gather: move tlb flush for VM_PFNMAP/VM_MIXEDMAP
- vmas into free_pgtables()
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
-	Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
-	Nick Piggin <npiggin@gmail.com>, Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 22, 2025 at 3:28=E2=80=AFAM Roman Gushchin <roman.gushchin@linu=
-x.dev> wrote:
-> Commit b67fbebd4cf9 ("mmu_gather: Force tlb-flush VM_PFNMAP vmas")
-> added a forced tlbflush to tlb_vma_end(), which is required to avoid a
-> race between munmap() and unmap_mapping_range(). However it added some
-> overhead to other paths where tlb_vma_end() is used, but vmas are not
-> removed, e.g. madvise(MADV_DONTNEED).
->
-> Fix this by moving the tlb flush out of tlb_end_vma() into new
-> tlb_flush_vmas() called from free_pgtables(), somewhat similar to the
-> stable version of the original commit:
-> commit 895428ee124a ("mm: Force TLB flush for PFNMAP mappings before
-> unlink_file_vma()").
->
-> Note, that if tlb->fullmm is set, no flush is required, as the whole
-> mm is about to be destroyed.
->
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Nick Piggin <npiggin@gmail.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-mm@kvack.org
+On Thu, 15 May 2025 14:46:29 +0200
+Ingo Molnar <mingo@kernel.org> wrote:
 
-Thanks, this looks better.
+> Changes in -v2:
+> 
+>  - Incorporated review feedback:
+> 
+>     - Make the expanded strings conditional on the new
+>       CONFIG_DEBUG_BUGVERBOSE_DETAILED=y switch, to address concerns
+>       about the +100K kernel size increase, disabled by default.
+> 
+>     - Expanded the Cc: fields
+> 
+>  - Rebased to v6.15-rc6
+> 
+> This tree can also be found at:
+> 
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git WIP.core/bugs
+> 
+> Thanks,
+> 
+> 	Ingo
+> 
+> =========================>  
+> Original -v1 announcement:
+> 
+> This series improves the current WARN_ON_ONCE() output, if
+> the new CONFIG_DEBUG_BUGVERBOSE_DETAILED=y option is enabled,
+> from:
+> 
+>   WARN_ON_ONCE(idx < 0 && ptr);
+>   ...
+> 
+>   WARNING: CPU: 0 PID: 0 at kernel/sched/core.c:8511 sched_init+0x20/0x410
 
-Reviewed-by: Jann Horn <jannh@google.com>
+What happens if the condition contains #defines?
+Does it output what is in the source file, or the (bloated) expanded text?
+For instance:
+	WARN_ON_ONCE(min(foo, bar) < baz);
+doesn't really want to show the expansion of min().
+
+	David
 
