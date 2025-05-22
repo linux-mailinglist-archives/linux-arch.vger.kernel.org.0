@@ -1,128 +1,142 @@
-Return-Path: <linux-arch+bounces-12081-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12083-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98996AC15B6
-	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 22:54:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60242AC16BB
+	for <lists+linux-arch@lfdr.de>; Fri, 23 May 2025 00:26:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDA643A94D1
-	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 20:54:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19E233A248A
+	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 22:26:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92EDD19995D;
-	Thu, 22 May 2025 20:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99AB82741B2;
+	Thu, 22 May 2025 22:26:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h1YSWwGd"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PE8bp2bC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53FCA1F76C2
-	for <linux-arch@vger.kernel.org>; Thu, 22 May 2025 20:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC7B270EAF
+	for <linux-arch@vger.kernel.org>; Thu, 22 May 2025 22:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747947256; cv=none; b=PaEGzdAXsWKATGGXlHrakRBsDIcr7RFeDcAB45XuQGxHguxfcrTWnU1CXfkSxbd8eUxTBiUz4IglqehC3eI7RDFV/H8iX+GbHmB3WGg0ZtbnHrf9nG9t07oVVXEJKWsSQiMDKjtodoIqBvNcbxxd2S8X+j1HyIqPN0ObiC8qUlo=
+	t=1747952772; cv=none; b=pcvfAX7w2GF6owtaRQhNClwIXRXBaK4vt5yulgMn6whKYD9ISsKA36LD56h1puX2Sg9V61uJQ/NrCrh+fuDSuhCC8aJCKfA4KFtcZdl1tni1U+PX8ghpOaGGDhy6R5qnHPY3dgM0Lr4Wh3Uiha5Ab2rw+FGFkPX33qtqBEzXd5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747947256; c=relaxed/simple;
-	bh=19yQodn4iaDI9boqRbWRZtNZmzvDMbTFtSez4CbJtrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BkbeoFgHFMx9o4DkbWdAjwSEXeWPPYCdiIJmFlDF+5WT68W7orq+qQu/p7hDHpbwz/0AJDdFjXhsfyzMDf1Stis1VMo8wWrsHjBENnil5K1z+mJUUkeoAifwTiHDAE44UXaG6ifDRSoWp9QvoMrN7i5c1gVo4R2HuD50+i/v6XM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h1YSWwGd; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 22 May 2025 13:53:51 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1747947242;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1/jOsasnD7/8FvY3TuCm8IbQDBYnKBvwXkRBxlVl1tk=;
-	b=h1YSWwGdktd+9jrot8ivB1HH/4tagr/1MSzzWk9RJfwfhjNNDb7J7ixbXutQZSXc2J1rgu
-	XYAHAK4qqLuNoPh9tf8Zh0VPT+KKLJvkGpa33UD8bl6fu/+pNAAXH2vMQRy0MxOKW19j2f
-	Dx0PJDKE79+tN16wChdBGKFxdZK9IhA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: David Hildenbrand <david@redhat.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>, 
-	Usama Arif <usamaarif642@gmail.com>
-Subject: Re: [RFC PATCH 0/5] add process_madvise() flags to modify behaviour
-Message-ID: <uhla5o5xqshcrihc5gpkqqyoplj7hxrbptp6prmwd2mh3ikw4m@m6apbkyfny6c>
-References: <7tzfy4mmbo2utodqr5clk24mcawef5l2gwrgmnp5jmqxmhkpav@jpzaaoys6jro>
- <5604190c-3309-4cb8-b746-2301615d933c@lucifer.local>
- <uxhvhja5igs5cau7tomk56wit65lh7ooq7i5xsdzyqsv5ikavm@kiwe26ioxl3t>
- <e8c459cb-c8b8-4c34-8f94-c8918bef582f@lucifer.local>
- <226owobtknee4iirb7sdm3hs26u4nvytdugxgxtz23kcrx6tzg@nryescaj266u>
- <7a214bee-d184-460f-88d6-2249b9d513ba@lucifer.local>
- <djdcvn3flljlbl7pwyurpdplqxikxy6j2obj6cwcjd4znr6hwj@w3lzlvdibi2i>
- <e4d9dd63-5000-4939-b09c-c322d41a9d70@lucifer.local>
- <x6uzxhwrgamet2ftqtgzxcg7osnw62rcv4eym52nr4l6awsqgt@qivrdfpguaop>
- <9433c2d6-200c-4320-80f3-840ca5e66f64@redhat.com>
+	s=arc-20240116; t=1747952772; c=relaxed/simple;
+	bh=yXfmq+fsOH2ydhYAaJ/O8G8cyrnfKS0KGUVUMAH0MGk=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=E0gE8tFdEkLx92qrRnNfjAxb7jjO2Z5F1Zyv6ZPuTMTSGubSpWFy/zOwAZfutWDCQNf1tDFyadp9vHB2OQVmnmsqqbRj/vlRkoLlMYSkvwsQqGpTJQjtNxGASkec5dEqDrNO8iJ63Gfl4RSLaKBmluq+HjPWar0JmPtBaEgOXyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PE8bp2bC; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6f8ce89468cso55845136d6.3
+        for <linux-arch@vger.kernel.org>; Thu, 22 May 2025 15:26:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1747952767; x=1748557567; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jmptf5RMBQqSn8lkxlWoyMCjmS+Mv7H8iKTTl/Kwouo=;
+        b=PE8bp2bC2u+7hVMWFXDxIhgHhKxulbXWcGxnUpIhrgzangQno0wz8wTj2SBpQlx+RH
+         HWbPzJONY/k5V5KhKxFzRg0mqcSuevNUob7nbBRkNe4zNv5ta0ZZRbKuMkupvRu1j4H/
+         L5g61hkwn3G2TrJtCWpQppB/pCl9f/CPqdvv0wvc5m0YvonN/44WK2eHjcRrBNO9b+Bz
+         rMI5Soc4po1JoBDybn3lJlA6EaENodtYQjDPfzlCn/d0jltsqZogc7KaymbExTqk6b2E
+         5S0ojIzkilaxs5NcdiEorb9gq51ZYUhzmmerYI6Csq70Rwqskc1RTDHHPC4a/b2ToWTE
+         +pXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747952767; x=1748557567;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Jmptf5RMBQqSn8lkxlWoyMCjmS+Mv7H8iKTTl/Kwouo=;
+        b=EYUkK5GHzHZiT8NYQlZNzMiWuQllDPrImKWoG5qCy+/E9ELLhTytuHfcBQT36HAwMN
+         jm4Nz3p17LsbevYGB2iMD8f0+iVbDLGLlZCl1PJTAyNewEik9B4oR7tSLYaCpK0UAWtt
+         PXRS3E+YR6NPXqEV8GU8jV995GRYfNtfUqd4Kcte3xhX/0+N31X+kO1OAWsYjRjdb4Rk
+         V2Kpmwz7ASMDwoGRlXkQ2d1+1TmbPYSkKjKKljNEbcIuT94DxLp8KEmecyO14tT+nKdC
+         Bi5BZ6Pvvc5tQXiB8C1BnlhaMUvJ9yT7bYoAnJOKWplVj2/Duv24v+cTOQu0wNOxBOj1
+         FN2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUqmIvzty7rf+e2WL5LxXRYh5gMEYbP99prkVaiuJ5lKbnG1j6mdArARtS3NQe0u3hedJnh+/6WS2EC@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrID3ced45icS7b0dj/XNklrqssnkvptFm/V6zOGhxF4ZOQ9rM
+	qZBMLa2C2g2sVgKvyn6/sAHcDkBObkdVkpIAYMewhxfOPlOCYfUMdZbebswv/1Mmpg==
+X-Gm-Gg: ASbGncukib40C1o9sxVduUYGoB0/FWiEn4G7Btp2MjL8QDrS3QNpU+7AmuVdcahZMwu
+	p8YDWalkcayY8t5sM6GL89rvNX7VHqd31nGizeqU3nhj6U5YRKM2540IzKPAs9Msog1AQzkmcuC
+	FzWhuFd+s/eWaPYVbjmeQbHSZ3pQrUaF6lxswJPePphPtOfFPl61imu8C9DoYMPrqZbrgNpjCjT
+	BBj69uJFybRBc393JWqjl+YHEDqbL2THjm9h+zP2lk86db5TNFq//xEvzbMGlDeq/AImMOAeIJp
+	FqlhLNJIjvgMr/6XQ2NWgry8Res5p6w2W2PtHrYS4p2UwCMDrzk3ZJg6hR9ItKplmlkvukcHz9A
+	wgwuwEqMLI/VVAqldt3WK
+X-Google-Smtp-Source: AGHT+IE2zN7SH+0SaGrs2tzepSFkLMKNXBgIbbn8M9DQcRbDJBs1dDzlx85ZuSxbIPErdUE31K4qXg==
+X-Received: by 2002:a05:6214:1947:b0:6f2:b094:430e with SMTP id 6a1803df08f44-6f8b0829131mr503375636d6.25.1747952766984;
+        Thu, 22 May 2025 15:26:06 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-6f8b0987259sm105076766d6.120.2025.05.22.15.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 May 2025 15:26:06 -0700 (PDT)
+Date: Thu, 22 May 2025 18:26:05 -0400
+Message-ID: <0bb73a49ccbc93e90ea87c0dbb4097ae@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9433c2d6-200c-4320-80f3-840ca5e66f64@redhat.com>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20250522_1740/pstg-lib:20250522_1730/pstg-pwork:20250522_1740
+From: Paul Moore <paul@paul-moore.com>
+To: Andrey Albershteyn <aalbersh@redhat.com>, Richard Henderson <richard.henderson@linaro.org>, 
+	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Tyler Hicks <code@tyhicks.com>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Amir Goldstein <amir73il@gmail.com>
+Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, selinux@vger.kernel.org, ecryptfs@vger.kernel.org, linux-unionfs@vger.kernel.org, linux-xfs@vger.kernel.org, Andrey Albershteyn <aalbersh@kernel.org>
+Subject: Re: [PATCH v5 2/7] lsm: introduce new hooks for setting/getting inode  fsxattr
+References: <20250513-xattrat-syscall-v5-2-22bb9c6c767f@kernel.org>
+In-Reply-To: <20250513-xattrat-syscall-v5-2-22bb9c6c767f@kernel.org>
 
-On Thu, May 22, 2025 at 03:05:30PM +0200, David Hildenbrand wrote:
-> On 21.05.25 19:39, Shakeel Butt wrote:
-> > On Wed, May 21, 2025 at 05:49:15PM +0100, Lorenzo Stoakes wrote:
-> > [...]
-> > > > 
-> > > > Please let's first get consensus on this before starting the work.
-> > > 
-> > > With respect Shakeel, I'll work on whatever I want, whenever I want.
-> > 
-> > I fail to understand why you would respond like that.
+On May 13, 2025 Andrey Albershteyn <aalbersh@redhat.com> wrote:
 > 
-> Relax guys ... :) Really nothing to be fighting about.
-
-Agreed.
-
-[...]
-
+> Introduce new hooks for setting and getting filesystem extended
+> attributes on inode (FS_IOC_FSGETXATTR).
 > 
+> Cc: selinux@vger.kernel.org
+> Cc: Paul Moore <paul@paul-moore.com>
 > 
-> To summarize my current view:
-> 
-> 1) ebpf: most people are are not a fan of that, and I agree, at least
->    for this purpose. If we were talking about making better *placement*
->    decisions using epbf, it would be a different story.
+> Signed-off-by: Andrey Albershteyn <aalbersh@kernel.org>
+> ---
+>  fs/file_attr.c                | 19 ++++++++++++++++---
+>  include/linux/lsm_hook_defs.h |  2 ++
+>  include/linux/security.h      | 16 ++++++++++++++++
+>  security/security.c           | 30 ++++++++++++++++++++++++++++++
+>  4 files changed, 64 insertions(+), 3 deletions(-)
 
-From placement decisions, do you mean placement between memory
-tiers/nodes or something else?
+The only thing that gives me a slight pause is that on a set operation
+we are going to hit both the get and set LSM hooks, but since the code
+does call into the getter on a set operation this is arguably the right
+thing.
 
-> 
-> 2) prctl(): the unloved child, and I can understand why. Maybe now is
->    the right time to stop adding new MM things that feel weird in there.
->    Maybe we should already have done that with the KSM toggle (guess who
->    was involved in that ;) ).
+Acked-by: Paul Moore <paul@paul-moore.com>
 
-At the moment systemd is the user I know of and I think it would very
-easy to migrate it to whatever new thing we decide here.
-
-> 
-> 3) process_madvise(): I think it's an interesting extension, but
->    probably we should just have something that applies to the whole
->    address space naturally. At least my take for now.
-> 
-> 4) new syscall: worth exploring how it would look. I'm especially
->    interested in flag options (e.g., SET_DEFAULT_EXEC) and how we could
->    make them only apply to selected controls.
-
-Were there any previous discussion on SET_DEFAULT_EXEC? First time I am
-hearing about it.
-
-Overall I agree with your assessment and thus I was requesting to at
-least discuss the new syscall option as well.
-
+--
+paul-moore.com
 
