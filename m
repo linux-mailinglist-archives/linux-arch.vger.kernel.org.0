@@ -1,61 +1,64 @@
-Return-Path: <linux-arch+bounces-12069-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12070-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F18FAC0B66
-	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 14:12:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06BF1AC0B9F
+	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 14:32:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76D047B3668
-	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 12:11:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCC8C17DD27
+	for <lists+linux-arch@lfdr.de>; Thu, 22 May 2025 12:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25125289E35;
-	Thu, 22 May 2025 12:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 976A628A40A;
+	Thu, 22 May 2025 12:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ebuxk8DE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERBds/35"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E817423771C;
-	Thu, 22 May 2025 12:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B662381BA;
+	Thu, 22 May 2025 12:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747915934; cv=none; b=UW0vUcw61nO4jAiIGia48/S2XsZNOY5QTwMqdP89z7cox3OIkJ6F6/SsYMW09ljdq2XmIgFoegSOvveq6hbgVfjjvYwi5NIWbGWrEDeYvTXxrpbxur/VanwH6ilanLtDFV5v3s8NlIdRAU+pobrmohjQS1/e/d9HFbc0Y0yInvM=
+	t=1747917164; cv=none; b=p2sggFLaXYSEpJ+g2qmoWQ2EdyiJi9TUnrUS07gq6j4MjHavUJRavOc0O9GPqkjlTwS3vBTBzVm4NOgE10KQdFizLNcF+p/FObVGEX445LPMDjm03LvcmIXBMWcF6TNQmnZB41cogR8YsL41Tlil2EwJ157dbxchnc3GAwQeRjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747915934; c=relaxed/simple;
-	bh=StgdFeaMD6HJ9Me6GTfwzhiv4ow8/NpvUc+y4NUni2E=;
+	s=arc-20240116; t=1747917164; c=relaxed/simple;
+	bh=r4cYLZUDYQDfzfjRP5THCg2REgGtHgRwFNQ7nd54qMc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pfmFtGhT908SmHbjXIjk2kwhobkSmEm+UsPSijFEIV+cxLH/GtftxvuPy1tJxwjfjwB19AaCTOZUNjDfoPok5K1zOb/GnGPrOgeQYqJiuCcAriDZkOzlLe9kwoNH5z1HyrOdkzh6tUS/P5tDOUhYlw7uRoeZcxEynpJn8JFCGys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ebuxk8DE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20577C4CEE4;
-	Thu, 22 May 2025 12:12:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=SQi9KSvFOQyAaYJaQ4+19xd7CkjIwrUHjvp3wmWwTN7o98cx+FF4sIN/4VADB6DRHgHuhsl1pPkuFDxN7x7CHNPG1xGaWEGZEw9dpQFhi00f+fXOQivm9ursy7T/GDvw/l4C616y7mFjqtzZg1Ru94oPWVHBCk3lXUvvdQPLnzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERBds/35; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93155C4CEE4;
+	Thu, 22 May 2025 12:32:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747915933;
-	bh=StgdFeaMD6HJ9Me6GTfwzhiv4ow8/NpvUc+y4NUni2E=;
+	s=k20201202; t=1747917163;
+	bh=r4cYLZUDYQDfzfjRP5THCg2REgGtHgRwFNQ7nd54qMc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ebuxk8DElK2tjp5ZvQk37kLGix2yfChyW3I8J7FaPYbTLnjfLorYdKkX+7JjgSqgl
-	 LY5N5YuC/VI1iHjtA8x39j2I5hf52LIGXT+m6csvpWdIx/AuCTHq5Md2yu1gfQcfoH
-	 YQnRPECrpFToWi9CiW2CUoy1kaCr5lcz9r0UNC+ql9WEcasfbFweM5E/h5jhl1C23y
-	 zUYk/oiHGTD2iNYap4ZuSBn7FBR7jllob9uHds31/Q4MKcCGD5K2SHdX8Vt5oShScH
-	 61P8SWTu0oAQ3/REBM85O1ghJY686cDchWGnVILgvEbFYcTF6BiEDn7lOAe3Q2h4qr
-	 mnnenoduIsqMA==
-Date: Thu, 22 May 2025 15:12:05 +0300
+	b=ERBds/35Smq1+0+h43mlQ02p5HXfQQqlX2clTAQLhyKzR6NvWTyBdRzW5CGAYieJK
+	 BOlnP6uxtfR114DLKpwYkJewkqFFYRc9F7c6EUjbDee6Xue1i0hS88l2AOdEZGdB3j
+	 UxcOflPldjgPQwzgCrYw7e4vlq8HLUG82qT1LhB07+EDjYXg3oclTJO4Y9VI0b0P50
+	 aM5jMhwdk/u3mph9iJmbcNceRmoFa/NsHQLOcZo8XNsC0nH0cnqpvOSg6I4h07AfM/
+	 y3b7MA30fWsUMs6AmRVuemMrWzBH0qWKzm1I9V0ncBDZQ2QuJCBJZ56PGXLbGjKUnz
+	 /TrvL6a1NPpjg==
+Date: Thu, 22 May 2025 15:32:35 +0300
 From: Mike Rapoport <rppt@kernel.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
+To: David Hildenbrand <david@redhat.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	David Hildenbrand <david@redhat.com>,
 	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Christian Brauner <brauner@kernel.org>, linux-mm@kvack.org,
 	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	SeongJae Park <sj@kernel.org>, Usama Arif <usamaarif642@gmail.com>,
-	linux-api@vger.kernel.org
-Subject: Re: [RFC PATCH 0/5] add process_madvise() flags to modify behaviour
-Message-ID: <aC8UlSupN7_YXfma@kernel.org>
+	SeongJae Park <sj@kernel.org>, Usama Arif <usamaarif642@gmail.com>
+Subject: Re: [RFC PATCH 1/5] mm: madvise: refactor madvise_populate()
+Message-ID: <aC8ZY_B7RKc9RMzw@kernel.org>
 References: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
+ <96503fba082709bc4894ba4134f9fac1d179ba93.1747686021.git.lorenzo.stoakes@oracle.com>
+ <becb11bd-e10c-4f59-9ff1-1f7acd2e1ee0@redhat.com>
+ <ea17a0a6-fe19-4f0b-9899-56d39b9fbac3@lucifer.local>
+ <d9456551-a3ea-454c-8832-c0530f702ce0@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,116 +67,99 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1747686021.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <d9456551-a3ea-454c-8832-c0530f702ce0@redhat.com>
 
-(cc'ing linux-api)
+On Tue, May 20, 2025 at 12:42:33PM +0200, David Hildenbrand wrote:
+> On 20.05.25 12:36, Lorenzo Stoakes wrote:
+> > On Tue, May 20, 2025 at 12:30:24PM +0200, David Hildenbrand wrote:
+> > > On 19.05.25 22:52, Lorenzo Stoakes wrote:
+> > > > Use a for-loop rather than a while with the update of the start argument at
+> > > > the end of the while-loop.
+> > > > 
+> > > > This is in preparation for a subsequent commit which modifies this
+> > > > function, we therefore separate the refactoring from the actual change
+> > > > cleanly by separating the two.
+> > > > 
+> > > > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> > > > ---
+> > > >    mm/madvise.c | 39 ++++++++++++++++++++-------------------
+> > > >    1 file changed, 20 insertions(+), 19 deletions(-)
+> > > > 
+> > > > diff --git a/mm/madvise.c b/mm/madvise.c
+> > > > index 8433ac9b27e0..63cc69daa4c7 100644
+> > > > --- a/mm/madvise.c
+> > > > +++ b/mm/madvise.c
+> > > > @@ -967,32 +967,33 @@ static long madvise_populate(struct mm_struct *mm, unsigned long start,
+> > > >    	int locked = 1;
+> > > >    	long pages;
+> > > > -	while (start < end) {
+> > > > +	for (; start < end; start += pages * PAGE_SIZE) {
+> > > >    		/* Populate (prefault) page tables readable/writable. */
+> > > >    		pages = faultin_page_range(mm, start, end, write, &locked);
+> > > >    		if (!locked) {
+> > > >    			mmap_read_lock(mm);
+> > > >    			locked = 1;
+> > > >    		}
+> > > > -		if (pages < 0) {
+> > > > -			switch (pages) {
+> > > > -			case -EINTR:
+> > > > -				return -EINTR;
+> > > > -			case -EINVAL: /* Incompatible mappings / permissions. */
+> > > > -				return -EINVAL;
+> > > > -			case -EHWPOISON:
+> > > > -				return -EHWPOISON;
+> > > > -			case -EFAULT: /* VM_FAULT_SIGBUS or VM_FAULT_SIGSEGV */
+> > > > -				return -EFAULT;
+> > > > -			default:
+> > > > -				pr_warn_once("%s: unhandled return value: %ld\n",
+> > > > -					     __func__, pages);
+> > > > -				fallthrough;
+> > > > -			case -ENOMEM: /* No VMA or out of memory. */
+> > > > -				return -ENOMEM;
+> > > > -			}
+> > > > +
+> > > > +		if (pages >= 0)
+> > > > +			continue;
+> > > > +
+> > > > +		switch (pages) {
+> > > > +		case -EINTR:
+> > > > +			return -EINTR;
+> > > > +		case -EINVAL: /* Incompatible mappings / permissions. */
+> > > > +			return -EINVAL;
+> > > > +		case -EHWPOISON:
+> > > > +			return -EHWPOISON;
+> > > > +		case -EFAULT: /* VM_FAULT_SIGBUS or VM_FAULT_SIGSEGV */
+> > > > +			return -EFAULT;
+> > > > +		default:
+> > > > +			pr_warn_once("%s: unhandled return value: %ld\n",
+> > > > +				     __func__, pages);
+> > > > +			fallthrough;
+> > > > +		case -ENOMEM: /* No VMA or out of memory. */
+> > > > +			return -ENOMEM;
+> > > 
+> > > Can we limit it to what the patch description says? "Use a for-loop rather
+> > > than a while", or will that be a problem for the follow-up patch?
+> > 
+> > Well, kind of the point is that we can remove a level of indentation also, which
+> > then makes life easier in subsequent patch.
+> > 
+> > Happy to change description or break into two (but that seems a bit over the top
+> > maybe? :>)
+> 
+> Probably just mention it, otherwise it looks a bit like unrelated churn :)
 
-On Mon, May 19, 2025 at 09:52:37PM +0100, Lorenzo Stoakes wrote:
-> REVIEWERS NOTES:
-> ================
+And for refactoring patches it's always useful to mention "no functional
+change" ;-)
+
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+ 
+> Acked-by: David Hildenbrand <david@redhat.com>
 > 
-> This is a VERY EARLY version of the idea, it's relatively untested, and I'm
-> 'putting it out there' for feedback. Any serious version of this will add a
-> bunch of self-tests to assert correct behaviour and I will more carefully
-> confirm everything's working.
+> -- 
+> Cheers,
 > 
-> This is based on discussion arising from Usama's series [0], SJ's input on
-> the thread around process_madvise() behaviour [1] (and a subsequent
-> response by me [2]) and prior discussion about a new madvise() interface
-> [3].
+> David / dhildenb
 > 
-> [0]: https://lore.kernel.org/linux-mm/20250515133519.2779639-1-usamaarif642@gmail.com/
-> [1]: https://lore.kernel.org/linux-mm/20250517162048.36347-1-sj@kernel.org/
-> [2]: https://lore.kernel.org/linux-mm/e3ba284c-3cb1-42c1-a0ba-9c59374d0541@lucifer.local/
-> [3]: https://lore.kernel.org/linux-mm/c390dd7e-0770-4d29-bb0e-f410ff6678e3@lucifer.local/
-> 
-> ================
-> 
-> Currently, we are rather restricted in how madvise() operations
-> proceed. While effort has been put in to expanding what process_madvise()
-> can do (that is - unrestricted application of advice to the local process
-> alongside recent improvements on the efficiency of TLB operations over
-> these batvches), we are still constrained by existing madvise() limitations
-> and default behaviours.
-> 
-> This series makes use of the currently unused flags field in
-> process_madvise() to provide more flexiblity.
-> 
-> It introduces four flags:
-> 
-> 1. PMADV_SKIP_ERRORS
-> 
-> Currently, when an error arises applying advice in any individual VMA
-> (keeping in mind that a range specified to madvise() or as part of the
-> iovec passed to process_madvise()), the operation stops where it is and
-> returns an error.
-> 
-> This might not be the desired behaviour of the user, who may wish instead
-> for the operation to be 'best effort'. By setting this flag, that behaviour
-> is obtained.
-> 
-> Since process_madvise() would trivially, if skipping errors, simply return
-> the input vector size, we instead return the number of entries in the
-> vector which completed successfully without error.
-> 
-> The PMADV_SKIP_ERRORS flag implicitly implies PMADV_NO_ERROR_ON_UNMAPPED.
-> 
-> 2. PMADV_NO_ERROR_ON_UNMAPPED
-> 
-> Currently madvise() has the peculiar behaviour of, if the range specified
-> to it contains unmapped range(s), completing the full operation, but
-> ultimately returning -ENOMEM.
-> 
-> In the case of process_madvise(), this is fatal, as the operation will stop
-> immediately upon this occurring.
-> 
-> By setting PMADV_NO_ERROR_ON_UNMAPPED, the user can indicate that it wishes
-> unmapped areas to simply be entirely ignored.
-> 
-> 3. PMADV_SET_FORK_EXEC_DEFAULT
-> 
-> It may be desirable for a user to specify that all VMAs mapped in a process
-> address space default to having an madvise() behaviour established by
-> default, in such a fashion as that this persists across fork/exec.
-> 
-> Since this is a very powerful option that would make no sense for many
-> advice modes, we explicitly only permit known-safe flags here (currently
-> MADV_HUGEPAGE and MADV_NOHUGEPAGE only).
-> 
-> 4. PMADV_ENTIRE_ADDRESS_SPACE
-> 
-> It can be annoying, should a user wish to apply madvise() to all VMAs in an
-> address space, to have to add a singular large entry to the input iovec.
-> 
-> So provide sugar to permit this - PMADV_ENTIRE_ADDRESS_SPACE. If specified,
-> we expect the user to pass NULL and -1 to the vec and vlen parameters
-> respectively so they explicitly acknowledge that these will be ignored,
-> e.g.:
-> 
-> 	process_madvise(PIDFD_SELF, NULL, -1, MADV_HUGEPAGE,
-> 			PMADV_ENTIRE_ADDRESS_SPACE | PMADV_SKIP_ERRORS);
-> 
-> Usually a user ought to prefer setting PMADV_SKIP_ERRORS here as it may
-> well be the case that incompatible VMAs will be encountered that ought to
-> be skipped.
-> 
-> If this is not set, the PMADV_NO_ERROR_ON_UNMAPPED (which was otherwise
-> implicitly implied by PMADV_SKIP_ERRORS) ought to be set as of course, the
-> entire address space spans at least some gaps.
-> 
-> Lorenzo Stoakes (5):
->   mm: madvise: refactor madvise_populate()
->   mm/madvise: add PMADV_SKIP_ERRORS process_madvise() flag
->   mm/madvise: add PMADV_NO_ERROR_ON_UNMAPPED process_madvise() flag
->   mm/madvise: add PMADV_SET_FORK_EXEC_DEFAULT process_madvise() flag
->   mm/madvise: add PMADV_ENTIRE_ADDRESS_SPACE process_madvise() flag
-> 
->  include/uapi/asm-generic/mman-common.h |   6 +
->  mm/madvise.c                           | 206 +++++++++++++++++++------
->  2 files changed, 168 insertions(+), 44 deletions(-)
-> 
-> --
-> 2.49.0
 > 
 
 -- 
