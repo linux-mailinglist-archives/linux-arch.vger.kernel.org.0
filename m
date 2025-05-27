@@ -1,77 +1,92 @@
-Return-Path: <linux-arch+bounces-12124-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12125-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EA8FAC42C0
-	for <lists+linux-arch@lfdr.de>; Mon, 26 May 2025 18:02:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64E5EAC5CF2
+	for <lists+linux-arch@lfdr.de>; Wed, 28 May 2025 00:23:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3D7C1887AA2
-	for <lists+linux-arch@lfdr.de>; Mon, 26 May 2025 16:02:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3028E16F669
+	for <lists+linux-arch@lfdr.de>; Tue, 27 May 2025 22:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BB84212D67;
-	Mon, 26 May 2025 16:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB352165E4;
+	Tue, 27 May 2025 22:23:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VQcTQFFF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OHaajtPn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC98211A0C;
-	Mon, 26 May 2025 16:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC53E215F48
+	for <linux-arch@vger.kernel.org>; Tue, 27 May 2025 22:23:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748275330; cv=none; b=fG071xaBuDWC8srlBwMZio7+5QQh3NukjRVCLz7vJRJfw8YfPuDX3ZgbP8qFbWoAdzm0XzbybYnOoiOZLTDH1d06HrbBnCeMZuobUxjSfP0yT6kXbUfjD6UVGw7Ssq7SWWQVwp9kFLW9RdwunQRdc/WgCWcTUymru/0RCVPErsg=
+	t=1748384602; cv=none; b=Gi+tlUsahFghjEPb+3XK26eyrJsYa5eNuXoUAB/lhk0QOa/rAcAO85Ac9dX8WoE8NRO/4N3gqrvH++K6AJr7D19wivrZh89Fz+0OAN9U88Rx4mAHxZyW1CEo3574s1jEuEXqG6hrQ9dXCXYfTH5pTSb+ADwT4mTtTCAo5vlgGvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748275330; c=relaxed/simple;
-	bh=eV1epbg80l6Ne/TEKOgw8HRG8mB4eIwJFkbx2Y9b4n4=;
+	s=arc-20240116; t=1748384602; c=relaxed/simple;
+	bh=9cTdol3MMnOjJH1jz5ap+/NwOMEbIz134B2Qe0qHmwo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RGoCcEjDxugkznaqLO556iOvbLAdFd52J6u2u/2G0teRD6GtEklnOr7KaQoYD0O+S8k7wJRm8RycxzNEcVUIMH37UqD5l2n7EXwAY0Y2PL4GaYI+NtZdNlCpS/NGFuklI369VcfOQsEqjA/9yCy4mzUrQ3Wrc0wxjxV5aT/SSJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VQcTQFFF; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id C86E42068336;
-	Mon, 26 May 2025 09:02:02 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C86E42068336
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1748275323;
-	bh=xbVnkPRVpMtVn5Z4ZBr7rm8h5rSjIm70f4DaBrWVIqs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VQcTQFFFHvc4iuNUgmNMyC6xui2eGdu15QhEiNHf2/v1oaOuK59MkaUzqoMHl0NsA
-	 l+kQojT+RkIdLTERp5TMFTTcXS02VU1NFRqKvpdrnTHvh02Z/4eGtJu7dT5HZMSNCS
-	 fVkdhIj8m1XE5j0GwcxLq7OpaiSuGWePJ51f2cdg=
-From: Roman Kisel <romank@linux.microsoft.com>
-To: mhklinux@outlook.com
-Cc: apais@microsoft.com,
-	arnd@arndb.de,
-	benhill@microsoft.com,
-	bp@alien8.de,
-	bperkins@microsoft.com,
-	catalin.marinas@arm.com,
-	corbet@lwn.net,
-	dave.hansen@linux.intel.com,
-	decui@microsoft.com,
-	haiyangz@microsoft.com,
-	hpa@zytor.com,
-	kys@microsoft.com,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
+	 MIME-Version; b=cZr5oDfnzYC406OkOFm3V45TLqBqqdl3c2P7EwuOaOKGVDP90hm+2SkrnJVuuD09B27FUP4ymWROnA+NJfS8LqIdwWMauWznmz1RIoXafWXFFi38U63G/qYDkZiwaT+OeCzhuQnQm7+6uFyoj0NkNu2uouuv8j4G6vafccsyH6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OHaajtPn; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748384599;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dwjzi5fBBrhf+4k/JvlyIlug6jfDDxsGNSd2rZoY3lk=;
+	b=OHaajtPnXN/duyjv/r/2dFUEFTCq2hFf0V0bzeMDjnNQXoHiqDDrSw+3uIy29J5vAWe5L7
+	GMP4BUy35jYyqp0ft68zxZAUJZQ9QiDTTX4Lvrc4mFjtS2ugMRmROws+WKb9Cl3/kkQfV0
+	Biyv/ta3jfWXuPfCeIN9zen43sRK9Qg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-117-UhWP4Y6OP0qj4sF1Ku4IlA-1; Tue,
+ 27 May 2025 18:23:18 -0400
+X-MC-Unique: UhWP4Y6OP0qj4sF1Ku4IlA-1
+X-Mimecast-MFC-AGG-ID: UhWP4Y6OP0qj4sF1Ku4IlA_1748384596
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 695BB1800447;
+	Tue, 27 May 2025 22:23:15 +0000 (UTC)
+Received: from chopper.redhat.com (unknown [10.22.88.105])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 844E819560AF;
+	Tue, 27 May 2025 22:23:08 +0000 (UTC)
+From: Lyude Paul <lyude@redhat.com>
+To: rust-for-linux@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>,
 	linux-kernel@vger.kernel.org,
-	mingo@redhat.com,
-	romank@linux.microsoft.com,
-	sunilmut@microsoft.com,
-	tglx@linutronix.de,
-	wei.liu@kernel.org,
-	will@kernel.org,
-	x86@kernel.org
-Subject: RE: [PATCH hyperv-next v2 1/4] Documentation: hyperv: Confidential VMBus
-Date: Mon, 26 May 2025 09:02:01 -0700
-Message-ID: <20250526160201.2535-1-romank@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <SN6PR02MB4157DC69BA25D889CD838D04D49DA@SN6PR02MB4157.namprd02.prod.outlook.com>
-References: <SN6PR02MB4157DC69BA25D889CD838D04D49DA@SN6PR02MB4157.namprd02.prod.outlook.com>
+	Daniel Almeida <daniel.almeida@collabora.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Juergen Christ <jchrist@linux.ibm.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Brian Gerst <brgerst@gmail.com>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)),
+	linux-s390@vger.kernel.org (open list:S390 ARCHITECTURE),
+	linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
+Subject: [RFC RESEND v10 02/14] preempt: Introduce __preempt_count_{sub, add}_return()
+Date: Tue, 27 May 2025 18:21:43 -0400
+Message-ID: <20250527222254.565881-3-lyude@redhat.com>
+In-Reply-To: <20250527222254.565881-1-lyude@redhat.com>
+References: <20250527222254.565881-1-lyude@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -79,141 +94,150 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-> From: Roman Kisel <romank@linux.microsoft.com> Sent: Sunday, May 11, 2025 4:08 PM
->> 
->> Define what the confidential VMBus is and describe what advantages
->> it offers on the capable hardware.
->> 
->> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
->> ---
->>  Documentation/virt/hyperv/vmbus.rst | 41 +++++++++++++++++++++++++++++
->>  1 file changed, 41 insertions(+)
->> 
->> diff --git a/Documentation/virt/hyperv/vmbus.rst
->> b/Documentation/virt/hyperv/vmbus.rst
->> index 1dcef6a7fda3..ca2b948e5070 100644
->> --- a/Documentation/virt/hyperv/vmbus.rst
->> +++ b/Documentation/virt/hyperv/vmbus.rst
->> @@ -324,3 +324,44 @@ rescinded, neither Hyper-V nor Linux retains any state about
->>  its previous existence. Such a device might be re-added later,
->>  in which case it is treated as an entirely new device. See
->>  vmbus_onoffer_rescind().
->> +
->> +Confidential VMBus
->> +------------------
->> +
->> +The confidential VMBus provides the control and data planes where
->> +the guest doesn't talk to either the hypervisor or the host. Instead,
->> +it relies on the trusted paravisor. The hardware (SNP or TDX) encrypts
->> +the guest memory and the register state also measuring the paravisor
->> +image via using the platform security processor to ensure trusted and
->> +confidential computing.
->> +
->> +To support confidential communication with the paravisor, a VMBus client
->> +will first attempt to use regular, non-isolated mechanisms for communication.
->> +To do this, it must:
->> +
->> +* Configure the paravisor SIMP with an encrypted page. The paravisor SIMP is
->> +  configured by setting the relevant MSR directly, without using GHCB or tdcall.
->> +
->> +* Enable SINT 2 on both the paravisor and hypervisor, without setting the proxy
->> +  flag on the paravisor SINT. Enable interrupts on the paravisor SynIC.
->> +
->> +* Configure both the paravisor and hypervisor event flags page.
->> +  Both pages will need to be scanned when VMBus receives a channel interrupt.
->> +
->> +* Send messages to the paravisor by calling HvPostMessage directly, without using
->> +  GHCB or tdcall.
->> +
->> +* Set the EOM MSR directly in the paravisor, without using GHCB or tdcall.
->> +
->> +If sending the InitiateContact message using non-isolated HvPostMessage fails,
->> +the client must fall back to using the hypervisor synic, by using the GHCB/tdcall
->> +as appropriate.
->> +
->> +To fall back, the client will have to reconfigure the following:
->> +
->> +* Configure the hypervisor SIMP with a host-visible page.
->> +  Since the hypervisor SIMP is not used when in confidential mode,
->> +  this can be done up front, or only when needed, whichever makes sense for
->> +  the particular implementation.
->> +
->> +* Set the proxy flag on SINT 2 for the paravisor.
->
->I'm assuming there's no public documentation available for how Confidential
->VMBus works. If so, then this documentation needs to take a higher-level
->approach and explain the basic concepts. You've provided some nitty-gritty
->details about how to detect and enable Confidential VMBus, but I think that
->level of detail would be better as comments in the code.
->
->Here's an example of what I envision, with several embedded questions that
->need further explanation. Confidential VMBus is completely new to me, so
->I don't know the answers to the questions. I also think this documentation
->would be better added to the CoCo VM topic instead of the VMBus topic, as
->Confidential VMBus is an extension/enhancement to CoCo VMs that doesn't
->apply to normal VMs.
->
->------------------------------------------
->
->Confidential VMBus is an extension of Confidential Computing (CoCo) VMs
->(a.k.a. "Isolated" VMs in Hyper-V terminology). Without Confidential VMBus,
->guest VMBus device drivers (the "VSC"s in VMBus terminology) communicate
->with VMBus servers (the VSPs) running on the Hyper-V host. The
->communication must be through memory that has been decrypted so the
->host can access it. With Confidential VMBus, one or more of the VSPs reside
->in the trusted paravisor layer in the guest VM. Since the paravisor layer also
->operates in encrypted memory, the memory used for communication with
->such VSPs does not need to be decrypted and thereby exposed to the
->Hyper-V host. The paravisor is responsible for communicating securely
->with the Hyper-V host as necessary.  [Does the paravisor do this in a way
->that is better than what the guest can do? This question seems to be core to
->the value prop for Confidential VMBus. I'm not really clear on the value
->prop.]
->
->A guest that is running with a paravisor must determine at runtime if
->Confidential VMBus is supported by the current paravisor. It does so by first
->trying to establish a Confidential VMBus connection with the paravisor using
->standard mechanisms where the memory remains encrypted. If this succeeds,
->then the guest can proceed to use Confidential VMBus. If it fails, then the
->guest must fallback to establishing a non-Confidential VMBus connection with
->the Hyper-V host.
->
->Confidential VMBus is a characteristic of the VMBus connection as a whole,
->and of each VMBus channel that is created. When a Confidential VMBus
->connection is established, the paravisor provides the guest the message-passing
->path that is used for VMBus device creation and deletion, and it provides a
->per-CPU synthetic interrupt controller (SynIC) just like the SyncIC that is
->offered by the Hyper-V host. Each VMBus device that is offered to the guest
->indicates the degree to which it participates in Confidential VMBus. The offer
->indicates if the device uses encrypted ring buffers, and if the device uses
->encrypted memory for DMA that is done outside the ring buffer. [Are these
->two settings independent? Could there be a device that has one set, and the
->other cleared? I'm having trouble understanding what such a mixed state
->would mean.] These settings may be different for different devices using
->the same Confidential VMBus connection.
->
->Because some devices on a Confidential VMBus may require decrypted ring
->buffers and DMA transfers, the guest must interact with two SynICs -- the
->one provided by the paravisor and the one provided by the Hyper-V host
->when Confidential VMBus is not offered. Interrupts are always signaled by
->the paravisor SynIC, but the guest must check for messages and for channel
->interrupts on both SynICs.  [This requires some further explanation that I
->don't understand. What governs when a message arrives via the paravisor
->SynIC vs. the hypervisor SynIC, and when a VMBus channel indicates an
->interrupt in the paravisor SynIC event page vs. the hypervisor SynIC event
->page? And from looking at the code, it appears that the RelIDs assigned
->to channels are guaranteed to be unique within the guest VM, and not
->per-SynIC, but it would be good to confirm that.]
->
->[There are probably a few other topics to add a well.]
+From: Boqun Feng <boqun.feng@gmail.com>
 
-Michael,
+In order to use preempt_count() to tracking the interrupt disable
+nesting level, __preempt_count_{add,sub}_return() are introduced, as
+their name suggest, these primitives return the new value of the
+preempt_count() after changing it. The following example shows the usage
+of it in local_interrupt_disable():
 
-Appreciate your help very much! I'll fill the gaps you've pointed out in
-this patch and other ones.
+	// increase the HARDIRQ_DISABLE bit
+	new_count = __preempt_count_add_return(HARDIRQ_DISABLE_OFFSET);
 
---
-Thank you,
-Roman
+	// if it's the first-time increment, then disable the interrupt
+	// at hardware level.
+	if (new_count & HARDIRQ_DISABLE_MASK == HARDIRQ_DISABLE_OFFSET) {
+		local_irq_save(flags);
+		raw_cpu_write(local_interrupt_disable_state.flags, flags);
+	}
+
+Having these primitives will avoid a read of preempt_count() after
+changing preempt_count() on certain architectures.
+
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+
+---
+V10:
+* Add commit message I forgot
+* Rebase against latest pcpu_hot changes
+
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+---
+ arch/arm64/include/asm/preempt.h | 18 ++++++++++++++++++
+ arch/s390/include/asm/preempt.h  | 19 +++++++++++++++++++
+ arch/x86/include/asm/preempt.h   | 10 ++++++++++
+ include/asm-generic/preempt.h    | 14 ++++++++++++++
+ 4 files changed, 61 insertions(+)
+
+diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/preempt.h
+index 0159b625cc7f0..49cb886c8e1dd 100644
+--- a/arch/arm64/include/asm/preempt.h
++++ b/arch/arm64/include/asm/preempt.h
+@@ -56,6 +56,24 @@ static inline void __preempt_count_sub(int val)
+ 	WRITE_ONCE(current_thread_info()->preempt.count, pc);
+ }
+ 
++static inline int __preempt_count_add_return(int val)
++{
++	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
++	pc += val;
++	WRITE_ONCE(current_thread_info()->preempt.count, pc);
++
++	return pc;
++}
++
++static inline int __preempt_count_sub_return(int val)
++{
++	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
++	pc -= val;
++	WRITE_ONCE(current_thread_info()->preempt.count, pc);
++
++	return pc;
++}
++
+ static inline bool __preempt_count_dec_and_test(void)
+ {
+ 	struct thread_info *ti = current_thread_info();
+diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
+index 6ccd033acfe52..67a6e265e9fff 100644
+--- a/arch/s390/include/asm/preempt.h
++++ b/arch/s390/include/asm/preempt.h
+@@ -98,6 +98,25 @@ static __always_inline bool should_resched(int preempt_offset)
+ 	return unlikely(READ_ONCE(get_lowcore()->preempt_count) == preempt_offset);
+ }
+ 
++static __always_inline int __preempt_count_add_return(int val)
++{
++	/*
++	 * With some obscure config options and CONFIG_PROFILE_ALL_BRANCHES
++	 * enabled, gcc 12 fails to handle __builtin_constant_p().
++	 */
++	if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES)) {
++		if (__builtin_constant_p(val) && (val >= -128) && (val <= 127)) {
++			return val + __atomic_add_const(val, &get_lowcore()->preempt_count);
++		}
++	}
++	return val + __atomic_add(val, &get_lowcore()->preempt_count);
++}
++
++static __always_inline int __preempt_count_sub_return(int val)
++{
++	return __preempt_count_add_return(-val);
++}
++
+ #define init_task_preempt_count(p)	do { } while (0)
+ /* Deferred to CPU bringup time */
+ #define init_idle_preempt_count(p, cpu)	do { } while (0)
+diff --git a/arch/x86/include/asm/preempt.h b/arch/x86/include/asm/preempt.h
+index 578441db09f0b..1220656f3370b 100644
+--- a/arch/x86/include/asm/preempt.h
++++ b/arch/x86/include/asm/preempt.h
+@@ -85,6 +85,16 @@ static __always_inline void __preempt_count_sub(int val)
+ 	raw_cpu_add_4(__preempt_count, -val);
+ }
+ 
++static __always_inline int __preempt_count_add_return(int val)
++{
++	return raw_cpu_add_return_4(__preempt_count, val);
++}
++
++static __always_inline int __preempt_count_sub_return(int val)
++{
++	return raw_cpu_add_return_4(__preempt_count, -val);
++}
++
+ /*
+  * Because we keep PREEMPT_NEED_RESCHED set when we do _not_ need to reschedule
+  * a decrement which hits zero means we have no preempt_count and should
+diff --git a/include/asm-generic/preempt.h b/include/asm-generic/preempt.h
+index 51f8f3881523a..c8683c046615d 100644
+--- a/include/asm-generic/preempt.h
++++ b/include/asm-generic/preempt.h
+@@ -59,6 +59,20 @@ static __always_inline void __preempt_count_sub(int val)
+ 	*preempt_count_ptr() -= val;
+ }
+ 
++static __always_inline int __preempt_count_add_return(int val)
++{
++	*preempt_count_ptr() += val;
++
++	return *preempt_count_ptr();
++}
++
++static __always_inline int __preempt_count_sub_return(int val)
++{
++	*preempt_count_ptr() -= val;
++
++	return *preempt_count_ptr();
++}
++
+ static __always_inline bool __preempt_count_dec_and_test(void)
+ {
+ 	/*
+-- 
+2.49.0
+
 
