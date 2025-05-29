@@ -1,99 +1,152 @@
-Return-Path: <linux-arch+bounces-12132-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12133-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D079AC804B
-	for <lists+linux-arch@lfdr.de>; Thu, 29 May 2025 17:29:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8CDEAC816F
+	for <lists+linux-arch@lfdr.de>; Thu, 29 May 2025 19:05:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03DE8188D4EF
-	for <lists+linux-arch@lfdr.de>; Thu, 29 May 2025 15:29:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAEF84E39E0
+	for <lists+linux-arch@lfdr.de>; Thu, 29 May 2025 17:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F53A22CBEE;
-	Thu, 29 May 2025 15:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B04A1F0E56;
+	Thu, 29 May 2025 17:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="J/Ewa8cH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H/IgN+7I"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18262222CB;
-	Thu, 29 May 2025 15:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4E422ACCE
+	for <linux-arch@vger.kernel.org>; Thu, 29 May 2025 17:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748532548; cv=none; b=XQtg0tc/4sl8fHmiVppxVmGFpivj5FdKE062EWUDZejJMe3M6J8ZQQkQ4mF23E5uJnBEsv8WXD0Zkf6yDDCw4egRHyfq8wp+vDM31PrQwZyRBC2JFkfiJo27TghOmzotZ/lBxeqB82MjTifg+wdbydP+3hSAayTi4iMw2NXAef0=
+	t=1748538335; cv=none; b=a5ce4muZRRh/oADzMGW5mTq3n0nQ/Zm8eSQ9xANDcCAWVLZ2UTY+6cho0IlQO2rh6k7l+mXBgcOAkLQgoaYMEakA+Y700gDUy9VYKuUpBpuRLj+KfMz/qExKNubd0k7hmxy9Ci2+B3mBjUOdP4XWixwkLZcdVOqIr80lKjNvVaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748532548; c=relaxed/simple;
-	bh=T3kf1bylpivmvvNZAoeowa/ONY5r0UXNar+dX11WCQw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nrMHjF/PIV/dbP7G/8fXhFCGOxq9VJzrx0XpfBQh+j3jX6XwlurcPXnt0bunzpyHb08C4gSc7Q2XI32ifdJTmcC2ZCduJ3LVFSXf2OYSvIIs/QmdZQhODl96jr9ukN8ZAdVCyWJVQ8KeUxq0kfJznKEgQJ5tgU8RU0oJDP4GzN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=J/Ewa8cH; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=wJZLfn4ZaURESqFeVB+O8o84gVldERzJFI4UXR2X8FE=; b=J/Ewa8cHz3ojyuCXZY3B0cH6k6
-	OQytojKqmoTlAVSIwnRF5HkInw/RCdeII+NcbMEIpG9al1SfaLTVy24914xVsA2NZGhu9QdhrirfB
-	GKc/o5bqQRxYrsJ27ed+JgDab6jbhzjmKUJMoko/EuYgVYql+0YAYoHAoR9BFfnInFhK/HUJ9QGEl
-	0uSfzFmehqagP3urQKcSLIoKLcmDaMEW8Mzui+I5IfonjHsVi6J6JD1+vnqRcw8wZicD54FcurzVx
-	67ErSZTY9xOMM1GxUJWLVVMxJYf4+CijjF7gZPJfFgJBskMX/F+gZgAz3O3V1cl4AcKPFUuLV2kQz
-	dZWZT7gw==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uKfBW-0000000EsXB-3Mi0;
-	Thu, 29 May 2025 15:28:46 +0000
-Date: Thu, 29 May 2025 16:28:46 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	David Hildenbrand <david@redhat.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	SeongJae Park <sj@kernel.org>, Usama Arif <usamaarif642@gmail.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Barry Song <21cnbao@gmail.com>, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org, Pedro Falcato <pfalcato@suse.de>
-Subject: Re: [DISCUSSION] proposed mctl() API
-Message-ID: <aDh9LtSLCiTLjg2X@casper.infradead.org>
-References: <85778a76-7dc8-4ea8-8827-acb45f74ee05@lucifer.local>
+	s=arc-20240116; t=1748538335; c=relaxed/simple;
+	bh=/cujPmecUjAGwaUlj4yjPwoinlTozZS+pNkkXc0ZRlI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OkVQMkfZMVM19vX/zUqHDLBhHcnbyN/STb8XxLJbqgvarxpceI3D9LAf/DrfzFEjhvUamftUVjkdIYWxXCAwhEAFjB8owIpy2RJ10IP8mCs1LTGHrwhgg3a5lF8X30xgXpMYqDPOaMTRZmFVYrCM1Y/0JQusMz2zestTPUE/EC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H/IgN+7I; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748538333;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YVXYcQRv3WLSWQAfJBtkuGRCwO3gzeCu1+3GwyAE/8U=;
+	b=H/IgN+7IErOyxASPwZp4v4eGCi4f8p3TdIz3jh1sIqLNQlXcCuiZEjK6xMN+8XKlhURcax
+	R16J5pvknyMsMYS441ytJxpTQHWAApsf9spJko2EcppRYtz0MbOFPjvhHHN4FHVUVaBykV
+	JeREiDnN8DKRDZOnl4eZD5WcoIAy1/c=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-55-RAubZy2EPsmfLub1Zk_-5w-1; Thu, 29 May 2025 13:05:30 -0400
+X-MC-Unique: RAubZy2EPsmfLub1Zk_-5w-1
+X-Mimecast-MFC-AGG-ID: RAubZy2EPsmfLub1Zk_-5w_1748538330
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3dc772d43ccso1307005ab.3
+        for <linux-arch@vger.kernel.org>; Thu, 29 May 2025 10:05:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748538330; x=1749143130;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YVXYcQRv3WLSWQAfJBtkuGRCwO3gzeCu1+3GwyAE/8U=;
+        b=K2SGk3duiVcJ7NRD6grxWZwSho2NfUUfUa0XI/T/X2X2tRsIg4dHt3xtX0tQ/pB9Bh
+         rI98KEAh2NZv6dRHie0Rt8OFhvB93PMWpLKu4rGx4wAkEvBRBROu6Sc42K27cVrcBcGf
+         vgZ8HbsfBU92sTfbboih9vwwWNk4wufYeZyaLi11tOheNQsUm8Q3R0qhhCoVj+nXa2SE
+         NN2HgJx7EAFyDMyiYvqG4sVabx1W4buPt85iY5pvmIuJJMTKBluCit5NdasRv3JGnO1f
+         g1iYRoIJi7S0RhVta3m0GIecu65FfPDEYE/iSaoAHyklHMp81KG0jSph4fyUbzs2zoh4
+         wscg==
+X-Forwarded-Encrypted: i=1; AJvYcCW2YVM0BB6zC98VJFn7+6QDwd3RvJG8dCazoQ7hM6jkJAdZGzTCcl79lSWwzBrYsNEhgsTtWV5JmW7V@vger.kernel.org
+X-Gm-Message-State: AOJu0YxH9FlIcf0JxhNvkU/O4IyBF52u3yaIKUtPSzpIRS++PJ1zaoa/
+	7nXSSE489UJRa0umLlryM6okJO6uLFRqVKwshc1yXlP5LpxOxCmzhKOIW2UfQkrkASQj0YgEtTu
+	YttmpOS66/7zkmCOh1pClNRFPHvbSkCvPWJTp/b1YWKGEJaENEqz+nWivsFRwCwQ=
+X-Gm-Gg: ASbGnctm5enJXxZOi51r+ynpeILWWsMb/VyP/ZY6VXGFj9fUOWsxN6enMc1pb3wP3du
+	QXqGnNzM92cf0GpxBurzTAA1jhqRIp4nimREXKnn7OxuULf1wpXJo8yiRm/KqQ7QBcZauGofWpc
+	BEMzavuMUJ83g3ZwPgR/QmwcAn37IgISxQG++hv/yii7ij5siAsGXwzw2Pmn8WJtUQr82L8lugB
+	RHCRndFD8ZAQxY15j6VduB8xOZ0sMeg4ASuZwANyzWAcMa36HuB1dokND8GjwcZ3vWKOmlQv6D6
+	1Ok1kKgZnQDRWZo=
+X-Received: by 2002:a05:6e02:2789:b0:3dc:7cd7:688 with SMTP id e9e14a558f8ab-3dd99bd0681mr1264895ab.1.1748538329893;
+        Thu, 29 May 2025 10:05:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFfF2IypLjTHDTvX90AOSKarc6ttkVaDkLoPGB0d3lYBRme4WFH0Ya+stqq3YBkEYUuHUQECg==
+X-Received: by 2002:a05:6e02:2789:b0:3dc:7cd7:688 with SMTP id e9e14a558f8ab-3dd99bd0681mr1264795ab.1.1748538329510;
+        Thu, 29 May 2025 10:05:29 -0700 (PDT)
+Received: from redhat.com ([38.15.36.11])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dd935462c8sm3928805ab.36.2025.05.29.10.05.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 May 2025 10:05:28 -0700 (PDT)
+Date: Thu, 29 May 2025 11:05:26 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+ linux-s390@vger.kernel.org, x86@kernel.org, Ard Biesheuvel
+ <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>, Linus Torvalds
+ <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v4 08/13] crypto: s390/sha256 - implement library
+ instead of shash
+Message-ID: <20250529110526.6d2959a9.alex.williamson@redhat.com>
+In-Reply-To: <20250428170040.423825-9-ebiggers@kernel.org>
+References: <20250428170040.423825-1-ebiggers@kernel.org>
+	<20250428170040.423825-9-ebiggers@kernel.org>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <85778a76-7dc8-4ea8-8827-acb45f74ee05@lucifer.local>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 29, 2025 at 03:43:26PM +0100, Lorenzo Stoakes wrote:
-> After discussions in various threads (Usama's series adding a new prctl()
-> in [0], and a proposal to adapt process_madvise() to do the same -
-> conception in [1] and RFC in [2]), it seems fairly clear that it would make
-> sense to explore a dedicated API to explicitly allow for actions which
-> affect the virtual address space as a whole.
+On Mon, 28 Apr 2025 10:00:33 -0700
+Eric Biggers <ebiggers@kernel.org> wrote:
+
+> From: Eric Biggers <ebiggers@google.com>
 > 
-> Also, Barry is implementing a feature (currently under RFC) which could
-> additionally make use of this API (see [3]).
+> Instead of providing crypto_shash algorithms for the arch-optimized
+> SHA-256 code, instead implement the SHA-256 library.  This is much
+> simpler, it makes the SHA-256 library functions be arch-optimized, and
+> it fixes the longstanding issue where the arch-optimized SHA-256 was
+> disabled by default.  SHA-256 still remains available through
+> crypto_shash, but individual architectures no longer need to handle it.
 
-I think the reason that you're having trouble coming up with a good
-place to put these ideas is because they are all bad ideas.  Do none of
-them.  Problem solved.
+I can get to the following error after this patch, now merged as commit
+b9eac03edcf8 ("crypto: s390/sha256 - implement library instead of shash"):
 
-People should put more effort into allocating THPs automatically and
-monitoring where they're helping performance and where they're hurting
-performance, instead of coming up with these baroque reasons to blame
-the sysadmin for not having tweaked some magic knob.
+error: the following would cause module name conflict:
+  crypto/sha256.ko
+  arch/s390/lib/crypto/sha256.ko
 
-Barry's problem is that we're all nervous about possibly regressing
-performance on some unknown workloads.  Just try Barry's proposal, see
-if anyone actually compains or if we're just afraid of our own shadows.
+Base config file is generated from:
+
+$ CONFIG=$(mktemp)
+$ cat << EOF > $CONFIG
+CONFIG_MODULES=y
+CONFIG_CRYPTO=y
+CONFIG_CRYPTO_SHA256=m
+EOF
+
+Base config applied to allnoconfig:
+
+$ KCONFIG_ALLCONFIG=$CONFIG make ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- allnoconfig
+
+Resulting in:
+
+$ grep SHA256 .config
+CONFIG_CRYPTO_SHA256=m
+CONFIG_CRYPTO_LIB_SHA256=m
+CONFIG_CRYPTO_ARCH_HAVE_LIB_SHA256=y
+CONFIG_CRYPTO_LIB_SHA256_GENERIC=m
+CONFIG_CRYPTO_SHA256_S390=m
+
+Thanks,
+Alex
 
 
