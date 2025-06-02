@@ -1,112 +1,142 @@
-Return-Path: <linux-arch+bounces-12179-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12181-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62B6ACA10D
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Jun 2025 01:00:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45266ACB8CA
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Jun 2025 17:46:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EBA5171168
-	for <lists+linux-arch@lfdr.de>; Sun,  1 Jun 2025 23:00:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CB129E0882
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Jun 2025 15:21:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC922356BA;
-	Sun,  1 Jun 2025 23:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63246227BB9;
+	Mon,  2 Jun 2025 15:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vHFxc2VE"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ILApTVGk"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261EE190696;
-	Sun,  1 Jun 2025 23:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB2D227BA4;
+	Mon,  2 Jun 2025 15:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748818836; cv=none; b=Hzi7BbTPXekyFGIG3Y/Hsh85Tlitt3JZN9bO2ffT/k1J/ZAszndm+26nK3jLyGUERuwxyx75nXGJJ4ZeVO+K2Ihzs2gPadu3cFznmq4bTASn8SXYdneJjgKUi5Hi80nfVWTCjZnf18ciFOG02g1C4Ya6evA2h3h309I8BMuG3qE=
+	t=1748877447; cv=none; b=D5wVfJa+6t0VTOngOHDC/FnKeeJI8IWF8rY6vT8UbFl+iwOkpiNqpcN9CnpY1uudJIG/XnNfqBfaSiS+BkDqbTLss9tHQQ/qizloWqn04LG7yLI5JTMhnewCta3AscswQ33LQRnvS2H6nUNvqAE/0btrhNRBhfF+HywsTgEVQwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748818836; c=relaxed/simple;
-	bh=9iuAqFgWuAM8zbaClmJE1PWkDiz9aDszJI49BnUralg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GkV/L9mOeKnECfMVYjcgH2DpCnOQ/iOCbx1SwZHNmPRFVwPfHP0JoJwQ2OmWOUYs6xEMP/BRxXaM5GBKHtFw7MelaX/tgp5ylhkA0yBSTEVHXVSH7TlT8JHQ/JMRonxJTsAtePzc3XSyuznFmz4ThijOhrriVXwoXf3ELvdM4WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vHFxc2VE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14CC5C4CEE7;
-	Sun,  1 Jun 2025 23:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748818833;
-	bh=9iuAqFgWuAM8zbaClmJE1PWkDiz9aDszJI49BnUralg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vHFxc2VElAHlFA2+p6pUxtFWEe5J4xv+o56KAxPCmT8t7sop9JD+tvRSV5M6+149b
-	 3yslurmUrK9306e+AjqkjU66ZE4+J12qO4pfC9GKOwcLYIKirbFU/Rg2oRbbVA43ns
-	 5uDfSlrlHs9e9hvwYN9GazeDaNtZ3XeMSpkJHQHb3lkfbDihKnyqOzItzJyKZ/V5SA
-	 kll91RZkjqNe9evwrPUGhmeKBh/iuKFMYirrTrajg0Qa5HWH48c/p5D7scSRNhf3bP
-	 g9JW0K0QMuooWlvxhFXufeAQiYS/ENsn141k7rnLZBFnOMguZuObdXNfv/1/r4saJT
-	 S2ckVl3S2NSgA==
-Date: Sun, 1 Jun 2025 16:00:14 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Alex Williamson <alex.williamson@redhat.com>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-	linux-s390@vger.kernel.org, x86@kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v4 08/13] crypto: s390/sha256 - implement library instead
- of shash
-Message-ID: <20250601230014.GB1228@sol>
-References: <20250428170040.423825-1-ebiggers@kernel.org>
- <20250428170040.423825-9-ebiggers@kernel.org>
- <20250529110526.6d2959a9.alex.williamson@redhat.com>
- <20250529173702.GA3840196@google.com>
- <CAHk-=whCp-nMWyLxAot4e6yVMCGANTUCWErGfvmwqNkEfTQ=Sw@mail.gmail.com>
- <20250529211639.GD23614@sol>
- <CAHk-=wh+H-9649NHK5cayNKn0pmReH41rvG6hWee+oposb3EUg@mail.gmail.com>
- <20250530001858.GD3840196@google.com>
+	s=arc-20240116; t=1748877447; c=relaxed/simple;
+	bh=FErq8caRDsGalfNF0DYdA9CIP38xryHF2uZADafN/2A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jPcrRtn/ElzNzEXVW+iWOnUAkp5b//kU5llkokAgv1cpILn4v6Ntxbr2E61//5qdSh0u6AT3sTYOwh8uHJ+xVt5P8VHNL6eejYptitvXtYYjx/IlUynMXKeAvtlhyGUS5Sg4vWaND5DYQfIUJi0kx0R0lKB59T8OlXKUabxgyZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ILApTVGk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79912C4CEEB;
+	Mon,  2 Jun 2025 15:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1748877447;
+	bh=FErq8caRDsGalfNF0DYdA9CIP38xryHF2uZADafN/2A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ILApTVGkAiZN6TM/wQcKBxT5abitoepqMTZmyrBRSRSX8zSbfOzPgIb+NXg0FmJwF
+	 MMtFGC+aUCh+ABg+8wlL+DOLshDggQtA06qvOtD9Q4EZiJrA+1IFz2X4QhX4N2tIGz
+	 ouTSREd71pJQ3M5g8cojt2TaKpS0VdH/c5yusCLQ=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Kees Cook <keescook@chromium.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Lennart Poettering <mzxreary@0pointer.de>,
+	Luca Boccassi <bluca@debian.org>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+	Lee Jones <lee@kernel.org>
+Subject: [PATCH 6.1 281/325] af_unix: Kconfig: make CONFIG_UNIX bool
+Date: Mon,  2 Jun 2025 15:49:17 +0200
+Message-ID: <20250602134331.179674198@linuxfoundation.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250602134319.723650984@linuxfoundation.org>
+References: <20250602134319.723650984@linuxfoundation.org>
+User-Agent: quilt/0.68
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250530001858.GD3840196@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 30, 2025 at 12:18:58AM +0000, Eric Biggers wrote:
-> On Thu, May 29, 2025 at 04:54:34PM -0700, Linus Torvalds wrote:
-> > On Thu, 29 May 2025 at 14:16, Eric Biggers <ebiggers@kernel.org> wrote:
-> > >
-> > > So using crc32c() + ext4 + x86 as an example (but SHA-256 would be very
-> > > similar), the current behavior is that ext4.ko depends on the crc32c_arch()
-> > > symbol.
-> > 
-> > Yes, I think that's a good example.
-> > 
-> > I think it's an example of something that "works", but it certainly is
-> > a bit hacky.
-> > 
-> > Wouldn't it be nicer if just plain "crc32c()" did the right thing,
-> > instead of users having to do strange hacks just to get the optimized
-> > version that they are looking for?
-> 
-> For crc32c() that's exactly how it works (since v6.14, when I implemented it).
-> The users call crc32c() which is an inline function, which then calls
-> crc32c_arch() or crc32c_base() depending on the kconfig.  So that's why I said
-> the symbol dependency is currently on crc32c_arch.  Sorry if I wasn't clear.
-> The SHA-256, ChaCha, and Poly1305 library code now has a similar design too.
-> 
-> If we merged the arch and generic modules together, then the symbol would become
-> crc32c.  But in either case crc32c() is the API that all the users call.
-> 
-> - Eric
-> 
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
-I implemented my proposal, for lib/crc first, in
-https://lore.kernel.org/lkml/20250601224441.778374-1-ebiggers@kernel.org.
-I think it's strictly better than the status quo, and once applied to lib/crypto
-it will solve some of the problems we've been having there too.  But let me know
-if you still have misgivings.
+------------------
 
-- Eric
+From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+
+commit 97154bcf4d1b7cabefec8a72cff5fbb91d5afb7b upstream.
+
+Let's make CONFIG_UNIX a bool instead of a tristate.
+We've decided to do that during discussion about SCM_PIDFD patchset [1].
+
+[1] https://lore.kernel.org/lkml/20230524081933.44dc8bea@kernel.org/
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Lennart Poettering <mzxreary@0pointer.de>
+Cc: Luca Boccassi <bluca@debian.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Acked-by: Christian Brauner <brauner@kernel.org>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ net/unix/Kconfig |    6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+--- a/net/unix/Kconfig
++++ b/net/unix/Kconfig
+@@ -4,7 +4,7 @@
+ #
+ 
+ config UNIX
+-	tristate "Unix domain sockets"
++	bool "Unix domain sockets"
+ 	help
+ 	  If you say Y here, you will include support for Unix domain sockets;
+ 	  sockets are the standard Unix mechanism for establishing and
+@@ -14,10 +14,6 @@ config UNIX
+ 	  an embedded system or something similar, you therefore definitely
+ 	  want to say Y here.
+ 
+-	  To compile this driver as a module, choose M here: the module will be
+-	  called unix.  Note that several important services won't work
+-	  correctly if you say M here and then neglect to load the module.
+-
+ 	  Say Y unless you know what you are doing.
+ 
+ config UNIX_SCM
+
+
 
