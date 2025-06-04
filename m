@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-12198-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12200-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7130AACD0E0
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Jun 2025 02:44:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8901FACD0E6
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Jun 2025 02:44:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 166E03A7278
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Jun 2025 00:44:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58AEB1756A9
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Jun 2025 00:45:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB361146A72;
-	Wed,  4 Jun 2025 00:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F40154423;
+	Wed,  4 Jun 2025 00:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="hfJuS4OM"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="YCvebn2+"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C40E03595E;
-	Wed,  4 Jun 2025 00:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5610B4AEE0;
+	Wed,  4 Jun 2025 00:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748997829; cv=none; b=EssO8pNxZnylOZJAWqAmYgBiGjY3zYzkChZSueJvUmvBicsb6ZlueQv17BFwOaGhfr/DFWaJZEcq2eq5xMGGCDCzszpN/MVPYT0/McDtbOTZ5NaOhZu86/BE+L7/mxE8JllgZrVn1BjIymmeGSN6ZYqNSgncccOpJj3PEarVMr8=
+	t=1748997830; cv=none; b=AzuMVBu7r0doRSntLXw/rAk+9YaOZXltT2chwuSh+gFN37uwJFY0KNOX4KoTzZ69fn6fZgsNeXJcUPxi/Lu580uVHdB6qijHL4SFAyPaORf/Ypae9lughzMuXFkjDtGqNS9VeiWvRGN79nAisisl1lX4+DAxZGwdaOVHaSK0LOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748997829; c=relaxed/simple;
-	bh=icRtk77BzzKKOoll5KWJ9DqBS6Nr3J49vHfAt0yO4hQ=;
+	s=arc-20240116; t=1748997830; c=relaxed/simple;
+	bh=afyzY3pm5CQTRuBJaTL/7fnXbhgafdMaXJITAblpCbo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p+0auvEFtBIp5pS3+5TZ1JbIcfxh2YJecTex7YXlLGngD16HCOJ/hQahxMy1LdyqrQAseWDM0PDy88Jdj8fyyYr2WPyQoWSUh/e/UrCi0+yv/QXeS1MUG75SREaKCgTVBAfGxv54wVSzr3A/b4kE/4Pk3NF3G85g2107z9IKZ2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=hfJuS4OM; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=LOff4A/QBwccINZfmnBeFjTOVCQH7oTR3FdEAgVGOtWLCy2GihGDevK1H3XyLUkXZHu75VCD7e7tr502gSmk6mIxW4s2TzrbdZIFxLKEAU05+y6Wi0A+L+nV3WDf2oYZCDVSyB0Tecd7QErEI0cnhxiCl1ZFujlvf13Vr+XtmMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=YCvebn2+; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 653B42117448;
+	by linux.microsoft.com (Postfix) with ESMTPSA id A31802117449;
 	Tue,  3 Jun 2025 17:43:47 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 653B42117448
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A31802117449
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1748997827;
-	bh=LAms2U6ddYyXTCzFfIbLw3Ykqrp3qhPKBffWKvGeuMQ=;
+	bh=tG251cKgdNqMSYQOyf9na8PTYaITUoZaTg9nS4Q7t4U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hfJuS4OMPYK8UsTI1JH3rCYLxlsPredTImbcfqjD3o+D08CPrmRq8p89nRJ5QcJk5
-	 l9eYP3gRSWXrd+2/Wl7CIckJCpaBOEFpFI9SHsMle0cqRCTZVtROalnWhbs3gGFFzv
-	 ytuL39SY3+5+DavPxCg4+bfPVGrO6kJczygFsgnQ=
+	b=YCvebn2+o2bF1eUZEODy7ZVCLjjj4zIw+FwIVwNP2JRyhKOwLAGGuufjDfWJ/VTGi
+	 fXyhSrNnEDFPu1yAWkswaJcD3hImJMK8mGh5f2/gIprNQkkDwzLil67hEzaIsqtI4b
+	 mxdIDmBTOnqgdm3r0BcW7JrTrgNYxgI3khpF6oBI=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: alok.a.tiwari@oracle.com,
 	arnd@arndb.de,
@@ -63,9 +63,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v3 12/15] Drivers: hv: Allocate encrypted buffers when requested
-Date: Tue,  3 Jun 2025 17:43:38 -0700
-Message-ID: <20250604004341.7194-13-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v3 13/15] Drivers: hv: Support confidential VMBus channels
+Date: Tue,  3 Jun 2025 17:43:39 -0700
+Message-ID: <20250604004341.7194-14-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250604004341.7194-1-romank@linux.microsoft.com>
 References: <20250604004341.7194-1-romank@linux.microsoft.com>
@@ -77,127 +77,77 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Confidential VMBus is built around using buffers not shared with
-the host.
+To run a confidential VMBus channels, one has to initialize the
+co_ring_buffers and co_external_memory fields of the channel
+structure.
 
-Support allocating encrypted buffers when requested.
+Advertise support upon negoatiating the version and compute
+values for those fields and initialize them.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 ---
- drivers/hv/channel.c      | 43 +++++++++++++++++++++++----------------
- drivers/hv/hyperv_vmbus.h |  3 ++-
- drivers/hv/ring_buffer.c  |  5 +++--
- 3 files changed, 30 insertions(+), 21 deletions(-)
+ drivers/hv/channel_mgmt.c | 19 +++++++++++++++++++
+ drivers/hv/connection.c   |  3 +++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/drivers/hv/channel.c b/drivers/hv/channel.c
-index fb8cd8469328..3e2891c4b800 100644
---- a/drivers/hv/channel.c
-+++ b/drivers/hv/channel.c
-@@ -443,20 +443,23 @@ static int __vmbus_establish_gpadl(struct vmbus_channel *channel,
- 		return ret;
+diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
+index ca2fe10c110a..33bc29e826bd 100644
+--- a/drivers/hv/channel_mgmt.c
++++ b/drivers/hv/channel_mgmt.c
+@@ -1021,6 +1021,7 @@ static void vmbus_onoffer(struct vmbus_channel_message_header *hdr)
+ 	struct vmbus_channel_offer_channel *offer;
+ 	struct vmbus_channel *oldchannel, *newchannel;
+ 	size_t offer_sz;
++	bool co_ring_buffer, co_external_memory;
+ 
+ 	offer = (struct vmbus_channel_offer_channel *)hdr;
+ 
+@@ -1033,6 +1034,22 @@ static void vmbus_onoffer(struct vmbus_channel_message_header *hdr)
+ 		return;
  	}
  
--	/*
--	 * Set the "decrypted" flag to true for the set_memory_decrypted()
--	 * success case. In the failure case, the encryption state of the
--	 * memory is unknown. Leave "decrypted" as true to ensure the
--	 * memory will be leaked instead of going back on the free list.
--	 */
--	gpadl->decrypted = true;
--	ret = set_memory_decrypted((unsigned long)kbuffer,
--				   PFN_UP(size));
--	if (ret) {
--		dev_warn(&channel->device_obj->device,
--			 "Failed to set host visibility for new GPADL %d.\n",
--			 ret);
--		return ret;
-+	gpadl->decrypted = !((channel->co_external_memory && type == HV_GPADL_BUFFER) ||
-+		(channel->co_ring_buffer && type == HV_GPADL_RING));
-+	if (gpadl->decrypted) {
-+		/*
-+		 * Set the "decrypted" flag to true for the set_memory_decrypted()
-+		 * success case. In the failure case, the encryption state of the
-+		 * memory is unknown. Leave "decrypted" as true to ensure the
-+		 * memory will be leaked instead of going back on the free list.
-+		 */
-+		ret = set_memory_decrypted((unsigned long)kbuffer,
-+					PFN_UP(size));
-+		if (ret) {
-+			dev_warn(&channel->device_obj->device,
-+				"Failed to set host visibility for new GPADL %d.\n",
-+				ret);
-+			return ret;
++	co_ring_buffer = is_co_ring_buffer(offer);
++	if (co_ring_buffer) {
++		if (vmbus_proto_version < VERSION_WIN10_V6_0 || !vmbus_is_confidential()) {
++			atomic_dec(&vmbus_connection.offer_in_progress);
++			return;
 +		}
++	}
++
++	co_external_memory = is_co_external_memory(offer);
++	if (is_co_external_memory(offer)) {
++		if (vmbus_proto_version < VERSION_WIN10_V6_0 || !vmbus_is_confidential()) {
++			atomic_dec(&vmbus_connection.offer_in_progress);
++			return;
++		}
++	}
++
+ 	oldchannel = find_primary_channel_by_offer(offer);
+ 
+ 	if (oldchannel != NULL) {
+@@ -1111,6 +1128,8 @@ static void vmbus_onoffer(struct vmbus_channel_message_header *hdr)
+ 		pr_err("Unable to allocate channel object\n");
+ 		return;
+ 	}
++	newchannel->co_ring_buffer = co_ring_buffer;
++	newchannel->co_external_memory = co_external_memory;
+ 
+ 	vmbus_setup_channel_state(newchannel, offer);
+ 
+diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
+index be490c598785..eeb472019d69 100644
+--- a/drivers/hv/connection.c
++++ b/drivers/hv/connection.c
+@@ -105,6 +105,9 @@ int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo, u32 version)
+ 		vmbus_connection.msg_conn_id = VMBUS_MESSAGE_CONNECTION_ID;
  	}
  
- 	init_completion(&msginfo->waitevent);
-@@ -676,12 +679,13 @@ static int __vmbus_open(struct vmbus_channel *newchannel,
- 		goto error_clean_ring;
- 
- 	err = hv_ringbuffer_init(&newchannel->outbound,
--				 page, send_pages, 0);
-+				 page, send_pages, 0, newchannel->co_ring_buffer);
- 	if (err)
- 		goto error_free_gpadl;
- 
- 	err = hv_ringbuffer_init(&newchannel->inbound, &page[send_pages],
--				 recv_pages, newchannel->max_pkt_size);
-+				 recv_pages, newchannel->max_pkt_size,
-+				 newchannel->co_ring_buffer);
- 	if (err)
- 		goto error_free_gpadl;
- 
-@@ -862,8 +866,11 @@ int vmbus_teardown_gpadl(struct vmbus_channel *channel, struct vmbus_gpadl *gpad
- 
- 	kfree(info);
- 
--	ret = set_memory_encrypted((unsigned long)gpadl->buffer,
--				   PFN_UP(gpadl->size));
-+	if (gpadl->decrypted)
-+		ret = set_memory_encrypted((unsigned long)gpadl->buffer,
-+					PFN_UP(gpadl->size));
-+	else
-+		ret = 0;
- 	if (ret)
- 		pr_warn("Fail to set mem host visibility in GPADL teardown %d.\n", ret);
- 
-diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-index c1df611d1eb2..0f02e163b0a0 100644
---- a/drivers/hv/hyperv_vmbus.h
-+++ b/drivers/hv/hyperv_vmbus.h
-@@ -199,7 +199,8 @@ extern int hv_synic_cleanup(unsigned int cpu);
- void hv_ringbuffer_pre_init(struct vmbus_channel *channel);
- 
- int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
--		       struct page *pages, u32 pagecnt, u32 max_pkt_size);
-+		       struct page *pages, u32 pagecnt, u32 max_pkt_size,
-+			   bool confidential);
- 
- void hv_ringbuffer_cleanup(struct hv_ring_buffer_info *ring_info);
- 
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 3c9b02471760..05c2cd42fc75 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -183,7 +183,8 @@ void hv_ringbuffer_pre_init(struct vmbus_channel *channel)
- 
- /* Initialize the ring buffer. */
- int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
--		       struct page *pages, u32 page_cnt, u32 max_pkt_size)
-+		       struct page *pages, u32 page_cnt, u32 max_pkt_size,
-+			   bool confidential)
- {
- 	struct page **pages_wraparound;
- 	int i;
-@@ -207,7 +208,7 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
- 
- 	ring_info->ring_buffer = (struct hv_ring_buffer *)
- 		vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
--			pgprot_decrypted(PAGE_KERNEL));
-+			confidential ? PAGE_KERNEL : pgprot_decrypted(PAGE_KERNEL));
- 
- 	kfree(pages_wraparound);
- 	if (!ring_info->ring_buffer)
++	if (vmbus_is_confidential() && version >= VERSION_WIN10_V6_0)
++		msg->feature_flags = VMBUS_FEATURE_FLAG_CONFIDENTIAL_CHANNELS;
++
+ 	/*
+ 	 * shared_gpa_boundary is zero in non-SNP VMs, so it's safe to always
+ 	 * bitwise OR it
 -- 
 2.43.0
 
