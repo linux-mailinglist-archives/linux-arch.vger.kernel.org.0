@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-12197-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12192-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF39EACD0DC
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Jun 2025 02:44:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A79EACD0D6
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Jun 2025 02:44:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AA013A759E
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Jun 2025 00:44:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00AE4188A2F5
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Jun 2025 00:44:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04FB13B58C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1C57261F;
 	Wed,  4 Jun 2025 00:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="O7fBzkqF"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JQ0hHu5l"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55D871E519;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55DB41E52D;
 	Wed,  4 Jun 2025 00:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748997829; cv=none; b=Ppd8witQf0dPZTUTuFNDdDIf4IkzqILN0WJt/Nf41EzzKoOpzDG6O4fhOdTMWK6YhDd8rk0qadQuonNcDP3rtYTcEBZo6kR/h+wRdm6uXaZO8e2nsyi85zWH3WApz/MfI5h5toWH9JcZtXBdM5ug8VqD9JSyk0uTXaaTFppy6sA=
+	t=1748997828; cv=none; b=DERX+w8V6ViKkKUzAJsdrKISz3qDqnJwi7uRWfQZQzQG09tGPTJ3AgEBu2gD35E+YJ7GsWhvBs5h9MnKHwSzE0zvgNNpznphbh/8I49/znw2IYLKdK8xgWAT1tf1v5iPeugC8LzHCM+YKy8euGs82xlTyMtZbnq7xS3J6jlHzOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748997829; c=relaxed/simple;
-	bh=Z2a9TzfIsBx6WMfuQqjTzSaUgD3Resw90i86KAVIP6o=;
+	s=arc-20240116; t=1748997828; c=relaxed/simple;
+	bh=I99ATGrgD7XawikCaVwkKDyfblPK065Jd+ZqTiEtwDQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nTML19VUOEjSkeitv45Yv7ivzrb76Cr9Wnst0eiBCddJbSCZrN8ap8k6BY0edSHMPEIZV0/V/6v5SYdZ4OZxmLvd7VJMgnvjvZvvli38HCymdjBwxbppwTV+Osl7C1y+F568hUhPCuuTBuNZY8qobgslgVLT40MVlbzcdxDlNsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=O7fBzkqF; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=EjZTEPoaZ0LckWc+SjdT7ffqvrvshjaO1mveQaWp+lBBtAMRGVdNSLhu8n+k5d5NN9W7kDWpYKbtAzu0vU9UxEPiXMnl6b7fs0tm/fgwzOnnxinNeOLAV5cN+NgQLRP4SWsqq1HYqH5As2z9hCkWW3NTANJ9brPqe+fAiJMTuv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JQ0hHu5l; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 30C2E2117441;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 6BA9B2117446;
 	Tue,  3 Jun 2025 17:43:46 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 30C2E2117441
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6BA9B2117446
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1748997826;
-	bh=njYzXPLBXWszHfRNWp7EuYdZXKPASUgohOyGSK4pdFg=;
+	bh=ZShplV4bAYCDbYEU2Ei1HtNkAps8t8DA995FmRQAChw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=O7fBzkqF6w2hGSpwMWVGZPljeDJ5BKyANglSzBkU2Nyd6MU/YG/51DnwPoI8vx72P
-	 dWqWRqMUXwYRyKpwIP93KKCgqcHzBuVi2Yrkq0y+FZUEO7+0rrBTQF/1CVsSXBeZjE
-	 Whn0O+aI0aOm76mtNNH1BgZ9NtQ3H/6n3B/pkvyQ=
+	b=JQ0hHu5lana2ZWgWM5ePpoMdQotzLuBlV7k6nfsaH2IHCgFIUIFLZdocLG077GfPu
+	 oV1l6OWXIIU4sdjx76AQWlnZvysfC6IxBXtcbJOBJtLsJQbCqKR9inuIZXUvL5/aLf
+	 jM2lxkusnxehzasnAaw0A3LIS6bt+2V1MLP9ijF8=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: alok.a.tiwari@oracle.com,
 	arnd@arndb.de,
@@ -63,9 +63,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v3 07/15] Drivers: hv: Post messages via the confidential VMBus if available
-Date: Tue,  3 Jun 2025 17:43:33 -0700
-Message-ID: <20250604004341.7194-8-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v3 08/15] Drivers: hv: remove stale comment
+Date: Tue,  3 Jun 2025 17:43:34 -0700
+Message-ID: <20250604004341.7194-9-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250604004341.7194-1-romank@linux.microsoft.com>
 References: <20250604004341.7194-1-romank@linux.microsoft.com>
@@ -77,30 +77,32 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When the confidential VMBus is available, the guest should post
-messages via the paravisor.
+The comment about the x2v shim is ancient and long since incorrect.
 
-Update hv_post_message() to request posting messages from the paravisor
-rather than through GHCB or TD calls.
+Remove the incorrect comment.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 ---
- drivers/hv/hv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hv/hv.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-index e25c91eb6af5..1f7cf1244509 100644
+index 1f7cf1244509..6a4857def82d 100644
 --- a/drivers/hv/hv.c
 +++ b/drivers/hv/hv.c
-@@ -74,7 +74,7 @@ int hv_post_message(union hv_connection_id connection_id,
- 	aligned_msg->payload_size = payload_size;
- 	memcpy((void *)aligned_msg->payload, payload, payload_size);
+@@ -257,11 +257,7 @@ void hv_synic_free(void)
+ }
  
--	if (ms_hyperv.paravisor_present) {
-+	if (ms_hyperv.paravisor_present && !vmbus_is_confidential()) {
- 		if (hv_isolation_type_tdx())
- 			status = hv_tdx_hypercall(HVCALL_POST_MESSAGE,
- 						  virt_to_phys(aligned_msg), 0);
+ /*
+- * hv_synic_init - Initialize the Synthetic Interrupt Controller.
+- *
+- * If it is already initialized by another entity (ie x2v shim), we need to
+- * retrieve the initialized message and event pages.  Otherwise, we create and
+- * initialize the message and event pages.
++ * hv_synic_enable_regs - Initialize the Synthetic Interrupt Controller.
+  */
+ void hv_synic_enable_regs(unsigned int cpu)
+ {
 -- 
 2.43.0
 
