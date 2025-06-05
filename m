@@ -1,159 +1,200 @@
-Return-Path: <linux-arch+bounces-12245-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12246-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3A98ACEF40
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Jun 2025 14:32:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB7A2ACF1F7
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Jun 2025 16:31:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20A503AA831
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Jun 2025 12:31:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD4FA189DE2E
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Jun 2025 14:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CAFD19BBA;
-	Thu,  5 Jun 2025 12:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 123BC18C031;
+	Thu,  5 Jun 2025 14:27:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="FvRth3X9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NBSUi9TZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517EB1853
-	for <linux-arch@vger.kernel.org>; Thu,  5 Jun 2025 12:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3427149E17;
+	Thu,  5 Jun 2025 14:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749126726; cv=none; b=HG+KHKw+3vbNf2mznBEO/gDw8RT1SCEAIPDkIVHtLU9HEW4hVcCXeftCS3prKeuoGbPERlj6fevmQjqXiGvOYFmb8G58LLyDA4CZ/xMRZi3c9ghhga1QCT0rquQzKtUT1gdpPO+IIAVz460KwwRhk1/nWa945+RcoYz2K062gxc=
+	t=1749133631; cv=none; b=mmvoYhfAYc6ynfmQaMgmEXemXgjXDx1AkR0u3VSu09cacH6rfNBk/IbHVK/9eat546WMMtGCURcK5SzuWXinPkbU8puFjEUOR2Nq+dWQDG828lorlqIRVXk23/XZJ02lzS81cwjT5JzLIqaVC+WMP6O1kZCl3xQ/ZRKqp8eRHYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749126726; c=relaxed/simple;
-	bh=K+nUlpfXwR5cIEWXrqVroexFbFR95tK5TbTH6vTS2tQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kiDA5l6+4p+MPunJ/1AkmIdvKZ6Kbpv7fLW42jdw4ccxnjsEtOBLYXlbxfaUJRO8BPqwpgY/OEgOwyQK6fW9IlyGpxeu408DxXR9gZG/VRHwgcvWaIPknxxoIOI/QKTN9A7KZhmM3HTfofrEWze6BCxtBk9rEAXNv1cf7Xen4XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b=FvRth3X9; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a507e88b0aso885800f8f.1
-        for <linux-arch@vger.kernel.org>; Thu, 05 Jun 2025 05:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1749126722; x=1749731522; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dbLVCYoHw89K1sMrvh2/XLW0a7eFbrKEsFO9EoIT/p8=;
-        b=FvRth3X9fdO01R7E4w8wiU499nMkrvaHCYRNMA/GdukO9ffXAOdpUbCFEKmyWOUPlE
-         2egALm2jXrO6zK56yICXrSXCxmbUC4axjP+hKwtB3SW7TM/E5LSmP9oOFFgsJranX/Ib
-         giDTO/21drRfPM/IMcABkuzRpVNarYO4nKGmm6Lto4ERhGtEWgWigQWTz6rZg4YI+JfA
-         qrSMlcuAOp1m7vgP1zeWL5LNz0RRJRqOJ6Ct0uQCiHAA73WiqC5fXVPEbUELbbhIhCnt
-         TcPmtALy5ZYQvJUPUHfLg2JxO77Q6laoj7Znn6sOETGCavCAW5xdZaVLaHWSTHMozuFN
-         4tmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749126722; x=1749731522;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dbLVCYoHw89K1sMrvh2/XLW0a7eFbrKEsFO9EoIT/p8=;
-        b=AC+K6216vxrNhLGRKhPRZousfdDDsto6zDQ6wHhEBlfZ4VwR8RXS3kIK8HlNu7us3Q
-         BRlUW1cCBHy9JFNAGI/HnFqmJHd38O3L8lmJ4Hr+2BPm1Ig0kH6SQsuE8fKr4EMnRJjc
-         C2Qg/ut/vGuX0nJGEvxc3mAx9MlJVS+9Zyyf+4rhcMKTBZtgTYL1+dumYho06CrMAlI8
-         arDw2Z4gjkajy/70lrHAzA77DqPEFI6QhlLdNW6ALAF9PdGy9fb6JNV46P/q1U1VbPmo
-         da31z5IZNRo/RQi3zKe6epyiXlMQjd7w0cLQUfUQ7uwBvypF8Lva+Xtt0iPwKSWJPnAJ
-         bEUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtQoiVCO6zN6wP9oUiZV/HR5gh5m6XmsmkfuvENpUqoEEtMF3hK5wLj2OAhbKZdN/YTe6PPBMl2qnI@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGqZxsX7csAmBxtRF0bzcoFj5MgC52wHSDzXRNKvENWhsz/5FQ
-	+SrcHQ+F7Wt1ZlKk/T1+wHi6P52oE7QAMR6fUR1hEUvRyi7Pt9RCB7Tw1FynDAspBHw=
-X-Gm-Gg: ASbGncvFoIUCFwOdpMPdMCnqJv9X4IR7WGY7ecBaFMhnV5cbDOg6hl892o6Vf9iTFr8
-	gYa4XFPjskhsn5c/9IjTK/SznOkxuTzfsaZhQMmXrcD5sooLn1C54zwQ77y7iCZ5JPgiFsvrGa/
-	lu0JN3k6t/9PXn1AQHAdIZGVmotVmTHCGbFrgP2Z8vQ3gzo9HlLqIjVcMacELinK1ZP1a+bcScR
-	70T4b/jzKYVTw4h13uUhPQlih1AcT2xlk2UuqXrapwjlbVGus5tXc4sckAj8bE/SYtpi5pm/WaC
-	3+uQVVwg3E/q50fZKd2qzzeu9lIzruvdnUPsyG0MB7GiaVwk
-X-Google-Smtp-Source: AGHT+IFXHPkHPf2uCdDe9+EQcmvwifuUNGAljP9j70NUml2wxh1XWMThBMmV1XTwFDvkJEfjag4DDQ==
-X-Received: by 2002:a05:6000:290d:b0:3a4:dfa9:ce28 with SMTP id ffacd0b85a97d-3a51d8f5959mr6009327f8f.5.1749126722211;
-        Thu, 05 Jun 2025 05:32:02 -0700 (PDT)
-Received: from localhost ([2a02:8071:6401:180:da11:6260:39d6:12c])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a4f00a0a96sm24730734f8f.96.2025.06.05.05.32.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jun 2025 05:32:01 -0700 (PDT)
-Date: Thu, 5 Jun 2025 08:31:56 -0400
-From: Johannes Weiner <hannes@cmpxchg.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Matthew Wilcox <willy@infradead.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	David Hildenbrand <david@redhat.com>, Jann Horn <jannh@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	SeongJae Park <sj@kernel.org>, Usama Arif <usamaarif642@gmail.com>,
-	Mike Rapoport <rppt@kernel.org>, Barry Song <21cnbao@gmail.com>,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-	Pedro Falcato <pfalcato@suse.de>, Tejun Heo <tj@kernel.org>
-Subject: Re: [DISCUSSION] proposed mctl() API
-Message-ID: <20250605123156.GA2812@cmpxchg.org>
-References: <85778a76-7dc8-4ea8-8827-acb45f74ee05@lucifer.local>
- <aDh9LtSLCiTLjg2X@casper.infradead.org>
- <20250529211423.GA1271329@cmpxchg.org>
- <0aeb6d8b-2abb-43a7-b47d-448f37f8a3bf@suse.cz>
- <20250604121923.GB1431@cmpxchg.org>
+	s=arc-20240116; t=1749133631; c=relaxed/simple;
+	bh=OqihrxSS4GkRLJ/+zmwRzLqFFD7y9+7mna+63hB3CtI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KV1odIEVwo/Ai8ey00Xg1jLn6xV4BGSe0CGY/GgykUFr4+g2YIoKOEITlAYDjPZosynWUNmepSmu3h3oDE3VnlanslZqCKu2V9PUr6DPjnSKi3HW7NF+oEOWA6qxpWwDE9jMASiZCNJdbA5G6D3Qn7ZxbviP3N3L5n1vOtiuOfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NBSUi9TZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EBCC4CEE7;
+	Thu,  5 Jun 2025 14:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749133629;
+	bh=OqihrxSS4GkRLJ/+zmwRzLqFFD7y9+7mna+63hB3CtI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NBSUi9TZN2up+vkvBNbcTWzcHjsUiDsqAPf2AouOJIZP+TIWpHsGVpWs+Ux+7sM8T
+	 vyp4wfOBr9jMRoh8Oh78l/+o+1DqDPhRHaEMUblKdlmX/bZL5nB2BapOJcfdCvOVXR
+	 PhZCzYOcx4OsEEFlH7SYYq1quLd+wBosFyyjMfjc03x75eLUr61TIX65cn6MDa/uGU
+	 bc/z1heVwFAz9LM2UcIZatvxZZkcsgcqUee8eb5twVhBWJDwlaItoVkkkyOSKjNnYT
+	 Y4H5mJFdPaEK482do+KagBqulvRUPKAVy8++hYtTlBWczHvBrIiydDvkIjjbPGLTAZ
+	 rhU7a2aoHtkww==
+Message-ID: <02c00acd-9518-4371-be2c-eb63e5d11d9c@kernel.org>
+Date: Thu, 5 Jun 2025 16:27:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250604121923.GB1431@cmpxchg.org>
+User-Agent: Mozilla Thunderbird
+Subject: Large modules with 6.15 [was: [PATCH v4 6/6] percpu/x86: Enable
+ strict percpu checks via named AS qualifiers]
+To: Uros Bizjak <ubizjak@gmail.com>, x86@kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+ linux-arch@vger.kernel.org, netdev@vger.kernel.org
+Cc: Nadav Amit <nadav.amit@gmail.com>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andy Lutomirski <luto@kernel.org>, Brian Gerst <brgerst@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>
+References: <20250127160709.80604-1-ubizjak@gmail.com>
+ <20250127160709.80604-7-ubizjak@gmail.com>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+In-Reply-To: <20250127160709.80604-7-ubizjak@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-CCing Tejun - with the right mutt alias this time.
+On 27. 01. 25, 17:05, Uros Bizjak wrote:
+> This patch declares percpu variables in __seg_gs/__seg_fs named AS
+> and keeps them named AS qualified until they are dereferenced with
+> percpu accessor. This approach enables various compiler check
+> for cross-namespace variable assignments.
+> 
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> Acked-by: Nadav Amit <nadav.amit@gmail.com>
+> Cc: Dennis Zhou <dennis@kernel.org>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Christoph Lameter <cl@linux.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Brian Gerst <brgerst@gmail.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> ---
+>   arch/x86/include/asm/percpu.h | 15 ++++++++++++---
+>   1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
+> index 27f668660abe..474d648bca9a 100644
+> --- a/arch/x86/include/asm/percpu.h
+> +++ b/arch/x86/include/asm/percpu.h
+> @@ -95,9 +95,18 @@
+>   
+>   #endif /* CONFIG_SMP */
+>   
+> -#define __my_cpu_type(var)	typeof(var) __percpu_seg_override
+> -#define __my_cpu_ptr(ptr)	(__my_cpu_type(*(ptr))*)(__force uintptr_t)(ptr)
+> -#define __my_cpu_var(var)	(*__my_cpu_ptr(&(var)))
+> +#if defined(CONFIG_USE_X86_SEG_SUPPORT) && defined(USE_TYPEOF_UNQUAL)
+> +# define __my_cpu_type(var)	typeof(var)
+> +# define __my_cpu_ptr(ptr)	(ptr)
+> +# define __my_cpu_var(var)	(var)
+> +
+> +# define __percpu_qual		__percpu_seg_override
+> +#else
+> +# define __my_cpu_type(var)	typeof(var) __percpu_seg_override
+> +# define __my_cpu_ptr(ptr)	(__my_cpu_type(*(ptr))*)(__force uintptr_t)(ptr)
+> +# define __my_cpu_var(var)	(*__my_cpu_ptr(&(var)))
+> +#endif
+> +
 
-On Wed, Jun 04, 2025 at 08:19:28AM -0400, Johannes Weiner wrote:
-> On Fri, May 30, 2025 at 12:31:35PM +0200, Vlastimil Babka wrote:
-> > On 5/29/25 23:14, Johannes Weiner wrote:
-> > > On Thu, May 29, 2025 at 04:28:46PM +0100, Matthew Wilcox wrote:
-> > >> Barry's problem is that we're all nervous about possibly regressing
-> > >> performance on some unknown workloads.  Just try Barry's proposal, see
-> > >> if anyone actually compains or if we're just afraid of our own shadows.
-> > > 
-> > > I actually explained why I think this is a terrible idea. But okay, I
-> > > tried the patch anyway.
-> > > 
-> > > This is 'git log' on a hot kernel repo after a large IO stream:
-> > > 
-> > >                                      VANILLA                      BARRY
-> > > Real time                 49.93 (    +0.00%)         60.36 (   +20.48%)
-> > > User time                 32.10 (    +0.00%)         32.09 (    -0.04%)
-> > > System time               14.41 (    +0.00%)         14.64 (    +1.50%)
-> > > pgmajfault              9227.00 (    +0.00%)      18390.00 (   +99.30%)
-> > > workingset_refault_file  184.00 (    +0.00%)    236899.00 (+127954.05%)
-> > > 
-> > > Clearly we can't generally ignore page cache hits just because the
-> > > mmaps() are intermittent.
-> > > 
-> > > The whole point is to cache across processes and their various
-> > > apertures into a common, long-lived filesystem space.
-> > > 
-> > > Barry knows something about the relationship between certain processes
-> > > and certain files that he could exploit with MADV_COLD-on-exit
-> > > semantics. But that's not something the kernel can safely assume. Not
-> > > without defeating the page cache for an entire class of file accesses.
-> > 
-> > I've just read the previous threads about Barry's proposal and if doing this
-> > always isn't feasible, I'm wondering if memcg would be a better interface to
-> > opt-in for this kind of behavior than both prctl or mctl. I think at least
-> > conceptually it fits what memcg is doing? The question is if the
-> > implementation would be feasible, and if android puts apps in separate memcgs...
-> 
-> CCing Tejun.
-> 
-> Cgroups has been trying to resist flag settings like these. The cgroup
-> tree is a nested hierarchical structure designed for dividing up
-> system resources. But flag properties don't have natural inheritance
-> rules. What does it mean if the parent group says one thing and the
-> child says another? Which one has precedence?
-> 
-> Hence the proposal to make it a per-process property that propagates
-> through fork() and exec(). This also enables the container usecase (by
-> setting the flag in the container launching process), without there
-> being any confusion what the *effective* setting for any given process
-> in the system is.
+Another issue with this is this causes all modules in 6.15 are 2-4 times 
+(compressed size) bigger:
+$ ll /usr/lib/modules/*-[0-9]-default/kernel/drivers/atm/atmtcp.ko.zst
+ > -rw-r--r--. 1 root root 10325 May 13 11:49 
+/usr/lib/modules/6.14.6-2-default/kernel/drivers/atm/atmtcp.ko.zst
+ > -rw-r--r--. 1 root root 39677 Jun  2 09:13 
+/usr/lib/modules/6.15.0-1-default/kernel/drivers/atm/atmtcp.ko.zst
+
+It's due to larger .BTF section:
+.BTF              PROGBITS         0000000000000000  [-00003080-]
+[-       00000000000011a8-]  {+00003100+}
+{+       0000000000012cf8+}  0000000000000000           0     0     1
+
+There are a lot of new BTF types defined in each module like:
++attribute_group STRUCT
++backing_dev_info STRUCT
++bdi_writeback STRUCT
++bin_attribute STRUCT
++bio_end_io_t TYPEDEF
++bio_list STRUCT
++bio_set STRUCT
++bio STRUCT
++bio_vec STRUCT
+
+Reverting this gives me back to normal sizes.
+
+Any ideas?
+
+FTR downstream report:
+https://bugzilla.suse.com/show_bug.cgi?id=1244135
+
+thanks,
+-- 
+js
+suse labs
+
 
