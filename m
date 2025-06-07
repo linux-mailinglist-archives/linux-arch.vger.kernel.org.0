@@ -1,581 +1,171 @@
-Return-Path: <linux-arch+bounces-12262-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12263-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09568AD0D99
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 15:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1751AD0DCF
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 16:12:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37CDC3A8E47
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 13:11:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0F013A8F32
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 14:11:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08122221FC1;
-	Sat,  7 Jun 2025 13:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459F31A704B;
+	Sat,  7 Jun 2025 14:12:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="b248/oQa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KpeVND0H"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400351C1F05;
-	Sat,  7 Jun 2025 13:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974FD288DB;
+	Sat,  7 Jun 2025 14:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749301920; cv=none; b=OxTJiNdRHlGhkEXrOw//5IQ72/MAqyjGdyJvbwVmFdtY26Gc8xKa/lrC3m5ucNB05qcfNKtPpZIp8lwvMK8K89H+EFQxc6zZ6b7bqArfGpxzrvf8OCH/MOK3fjKyOX7f+8AL1F8i3Aq0tRAum844+xbF33XxE8IlrMrIgLUmfOU=
+	t=1749305527; cv=none; b=ZhK7LiRoT+BM6bdvwxRkAz/1Q2yJg86bTzoJO5VF5On60IKcu2mt/7ncAaTU0JEeahkL+krb4Uk+0oROmRQczYAIi0WChuWaWMXwVGg/UR4RLwLllhfNoO6ypX2nzN3w/S8Txrpkfhxw5RhVdBWqbTdbmfEswEANYqg0AiGIpVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749301920; c=relaxed/simple;
-	bh=Ai7NAnv5K+kMHZxpoFbINR2CBhqG0P+RKU4aX2dYOxw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PhkLatoo+rA+wmB6AJ0g1AO3CmuDZvLBzzCDQPHv36fjnpDg3CC1ahlO9Ar6rIbH7AdhbnOLkR3v3D0NW+677XeGwTnPow/UB34k/IDt43xhQaKJ6mnqVdHxnkwmH3IZUph8KotWTbl0VtbVXzHV2EtDTHfelm3H68Fs1qEhwqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=b248/oQa; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=jrVwKzGPjckLkzNJjHBIKlpaV73c0aS3LTClbKsc998=; t=1749301918; x=1749906718; 
-	b=b248/oQa/+LrZua1EKuv8AqRbYirupf0D2tv3+UMhk3+HOBxWGOYLywz8nbXCRdtvqQv/1eLJ8r
-	JoHj2DvtzJQ2keC+W94B9176CHF0EJ8NsQMkqWMPtpm8kOEdXjLptYtZF4OyU3cLLVLN87OQX9DiL
-	NltO6M7SYdfDLc2cBIOv91Bi3vJJXmoTsjK12A7/Wmdinuvpgv8ZUtdXiSm3jFpQQbZvsau/RgOvA
-	IGiicKakccEJTpXgRzFpz/ECZTmOC0eSWTHKhB3rVWb2xXInHUUmPmCYkQU5yU12uMy9xnPwyXpFA
-	eFyMgQxdfqON3TiCDWobzgzdFEYcbQ05Gt1g==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.98)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1uNtL2-00000001oUO-0wWd; Sat, 07 Jun 2025 15:11:56 +0200
-Received: from p5b13afe4.dip0.t-ipconnect.de ([91.19.175.228] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.98)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1uNtL1-00000003P5x-3y0E; Sat, 07 Jun 2025 15:11:56 +0200
-Message-ID: <28e5dd815b7169da93c43245e1b362bca0968a41.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 32/41] sh: Replace __ASSEMBLY__ with __ASSEMBLER__ in
- the SuperH headers
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, Yoshinori
- Sato	 <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	linux-sh@vger.kernel.org
-Date: Sat, 07 Jun 2025 15:11:54 +0200
-In-Reply-To: <20250314071013.1575167-33-thuth@redhat.com>
-References: <20250314071013.1575167-1-thuth@redhat.com>
-	 <20250314071013.1575167-33-thuth@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 
+	s=arc-20240116; t=1749305527; c=relaxed/simple;
+	bh=tOsURfwpu5JIYYGzjKsueBWYxy8LFs6ja4Urw/zMLwY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N6/VT96qd4sDPvdVJk/kgDHYUM23yI2iyTR7esEJLmaSINR1g9JGoqFVh5P8nCqpQMgh2zyt+7XSmKS2a1zCCceNEXfiy3boO8rczwKimvr/EoW2pSdWb3ZM6a5M2Bri3ULp78+jR9lyL42OHitvYVElUp9MjxpTJsJwVmKZOV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KpeVND0H; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749305526; x=1780841526;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tOsURfwpu5JIYYGzjKsueBWYxy8LFs6ja4Urw/zMLwY=;
+  b=KpeVND0HpNdRdUWOOYhGagscfYV6c8q4anW6d0ispW3IIV7fRWKSszZ+
+   DD+5hNl/0L0xnplEKRQ/M407Ax9I6Ljawvc943FCziMJSV6tMzRLCBWTK
+   bPxIHT3RENY0wntHeNgWLYJvW3o//m6Egewr/rCU0BBtB5ajCt7GvpXVp
+   BRG9dzElXeuEToftc3s8UmGFsta38fjRFJwz9hOEU/pCo/BqVassX3tMt
+   +l+GPkndw415gLG2O/ai+pl2371B92beWyy2hLMDI0e/oM1sPWvGIVsD0
+   a0ASzR4w+GiaDsdt8m/7HEWWB4Qkmu5Rn1YAb7yCSn0SVy84QTwHOhYq6
+   w==;
+X-CSE-ConnectionGUID: J46COigUTqKLvFlqxTQSAA==
+X-CSE-MsgGUID: rO7rDcMkSHiJA61/bGG2Tg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11457"; a="55231460"
+X-IronPort-AV: E=Sophos;i="6.16,218,1744095600"; 
+   d="scan'208";a="55231460"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2025 07:12:05 -0700
+X-CSE-ConnectionGUID: tBMhaICIR3CN1VGkDijZZw==
+X-CSE-MsgGUID: QIrKOpfMQBC9VEoVh73s9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,218,1744095600"; 
+   d="scan'208";a="169264059"
+Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.111.75]) ([10.125.111.75])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2025 07:12:03 -0700
+Message-ID: <34a2bfa5-30e1-4ba0-ac36-bf07a0d60d97@intel.com>
+Date: Sat, 7 Jun 2025 07:12:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+User-Agent: Mozilla Thunderbird
+Subject: Re: Large modules with 6.15 [was: [PATCH v4 6/6] percpu/x86: Enable
+ strict percpu checks via named AS qualifiers]
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: Jiri Slaby <jirislaby@kernel.org>, x86@kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+ linux-arch@vger.kernel.org, netdev@vger.kernel.org,
+ Nadav Amit <nadav.amit@gmail.com>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andy Lutomirski <luto@kernel.org>, Brian Gerst <brgerst@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+References: <20250127160709.80604-1-ubizjak@gmail.com>
+ <20250127160709.80604-7-ubizjak@gmail.com>
+ <02c00acd-9518-4371-be2c-eb63e5d11d9c@kernel.org>
+ <b27d96fc-b234-4406-8d6e-885cd97a87f3@intel.com>
+ <CAFULd4Ygz8p8rD1=c-S2MjJniP6vjVNMsWG_B=OjCVpthk0fBg@mail.gmail.com>
+ <9767d411-81dc-491b-b6da-419240065ffe@kernel.org>
+ <6412d84a-edc3-4723-89f1-b2017fb0d1ea@intel.com>
+ <CAFULd4asiDaj1OTrqWNMr5coyPeqM1NT6v2uEqKvJicRUhekSQ@mail.gmail.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <CAFULd4asiDaj1OTrqWNMr5coyPeqM1NT6v2uEqKvJicRUhekSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Thomas,
+On 6/7/25 01:52, Uros Bizjak wrote:
+> Let me reiterate what the patch brings to the table. It prevents
+> invalid references of per cpu variables to non-percpu locations.
 
-On Fri, 2025-03-14 at 08:10 +0100, Thomas Huth wrote:
-> While the GCC and Clang compilers already define __ASSEMBLER__
-> automatically when compiling assembly code, __ASSEMBLY__ is a
-> macro that only gets defined by the Makefiles in the kernel.
-> This can be very confusing when switching between userspace
-> and kernelspace coding, or when dealing with uapi headers that
-> rather should use __ASSEMBLER__ instead. So let's standardize on
-> the __ASSEMBLER__ macro that is provided by the compilers now.
->=20
-> This is a completely mechanical patch (done with a simple "sed -i"
-> statement).
->=20
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: linux-sh@vger.kernel.org
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  arch/sh/include/asm/cache.h                   |  4 ++--
->  arch/sh/include/asm/dwarf.h                   |  6 +++---
->  arch/sh/include/asm/fpu.h                     |  4 ++--
->  arch/sh/include/asm/ftrace.h                  |  8 ++++----
->  arch/sh/include/asm/mmu.h                     |  4 ++--
->  arch/sh/include/asm/page.h                    |  8 ++++----
->  arch/sh/include/asm/pgtable.h                 |  4 ++--
->  arch/sh/include/asm/pgtable_32.h              |  8 ++++----
->  arch/sh/include/asm/processor.h               |  4 ++--
->  arch/sh/include/asm/smc37c93x.h               |  4 ++--
->  arch/sh/include/asm/suspend.h                 |  2 +-
->  arch/sh/include/asm/thread_info.h             | 10 +++++-----
->  arch/sh/include/asm/tlb.h                     |  4 ++--
->  arch/sh/include/asm/types.h                   |  4 ++--
->  arch/sh/include/mach-common/mach/romimage.h   |  6 +++---
->  arch/sh/include/mach-ecovec24/mach/romimage.h |  6 +++---
->  arch/sh/include/mach-kfr2r09/mach/romimage.h  |  6 +++---
->  17 files changed, 46 insertions(+), 46 deletions(-)
->=20
-> diff --git a/arch/sh/include/asm/cache.h b/arch/sh/include/asm/cache.h
-> index b38dbc9755811..e7ac9c9502751 100644
-> --- a/arch/sh/include/asm/cache.h
-> +++ b/arch/sh/include/asm/cache.h
-> @@ -22,7 +22,7 @@
-> =20
->  #define __read_mostly __section(".data..read_mostly")
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  struct cache_info {
->  	unsigned int ways;		/* Number of cache ways */
->  	unsigned int sets;		/* Number of cache sets */
-> @@ -48,5 +48,5 @@ struct cache_info {
-> =20
->  	unsigned long flags;
->  };
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  #endif /* __ASM_SH_CACHE_H */
-> diff --git a/arch/sh/include/asm/dwarf.h b/arch/sh/include/asm/dwarf.h
-> index 5719544741221..f46d18b84833f 100644
-> --- a/arch/sh/include/asm/dwarf.h
-> +++ b/arch/sh/include/asm/dwarf.h
-> @@ -189,7 +189,7 @@
->   */
->  #define DWARF_ARCH_RA_REG	17
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
-> =20
->  #include <linux/compiler.h>
->  #include <linux/bug.h>
-> @@ -379,7 +379,7 @@ extern int module_dwarf_finalize(const Elf_Ehdr *, co=
-nst Elf_Shdr *,
->  				 struct module *);
->  extern void module_dwarf_cleanup(struct module *);
-> =20
-> -#endif /* !__ASSEMBLY__ */
-> +#endif /* !__ASSEMBLER__ */
-> =20
->  #define CFI_STARTPROC	.cfi_startproc
->  #define CFI_ENDPROC	.cfi_endproc
-> @@ -402,7 +402,7 @@ extern void module_dwarf_cleanup(struct module *);
->  #define CFI_REL_OFFSET	CFI_IGNORE
->  #define CFI_UNDEFINED	CFI_IGNORE
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  static inline void dwarf_unwinder_init(void)
->  {
->  }
-> diff --git a/arch/sh/include/asm/fpu.h b/arch/sh/include/asm/fpu.h
-> index 0379f4cce5ed2..a086e38b70eef 100644
-> --- a/arch/sh/include/asm/fpu.h
-> +++ b/arch/sh/include/asm/fpu.h
-> @@ -2,7 +2,7 @@
->  #ifndef __ASM_SH_FPU_H
->  #define __ASM_SH_FPU_H
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
-> =20
->  #include <asm/ptrace.h>
-> =20
-> @@ -67,6 +67,6 @@ static inline void clear_fpu(struct task_struct *tsk, s=
-truct pt_regs *regs)
->  void float_raise(unsigned int flags);
->  int float_rounding_mode(void);
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
-> =20
->  #endif /* __ASM_SH_FPU_H */
-> diff --git a/arch/sh/include/asm/ftrace.h b/arch/sh/include/asm/ftrace.h
-> index 1c10e10663909..d35781ab716ef 100644
-> --- a/arch/sh/include/asm/ftrace.h
-> +++ b/arch/sh/include/asm/ftrace.h
-> @@ -7,7 +7,7 @@
->  #define MCOUNT_INSN_SIZE	4 /* sizeof mcount call */
->  #define FTRACE_SYSCALL_MAX	NR_syscalls
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  extern void mcount(void);
-> =20
->  #define MCOUNT_ADDR		((unsigned long)(mcount))
-> @@ -35,10 +35,10 @@ static inline unsigned long ftrace_call_adjust(unsign=
-ed long addr)
-> =20
->  void prepare_ftrace_return(unsigned long *parent, unsigned long self_add=
-r);
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  #endif /* CONFIG_FUNCTION_TRACER */
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
-> =20
->  /* arch/sh/kernel/return_address.c */
->  extern void *return_address(unsigned int);
-> @@ -53,6 +53,6 @@ static inline void arch_ftrace_nmi_enter(void) { }
->  static inline void arch_ftrace_nmi_exit(void) { }
->  #endif
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
-> =20
->  #endif /* __ASM_SH_FTRACE_H */
-> diff --git a/arch/sh/include/asm/mmu.h b/arch/sh/include/asm/mmu.h
-> index 172e329fd92d0..b9c9f91e66165 100644
-> --- a/arch/sh/include/asm/mmu.h
-> +++ b/arch/sh/include/asm/mmu.h
-> @@ -33,7 +33,7 @@
-> =20
->  #define PMB_NO_ENTRY		(-1)
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #include <linux/errno.h>
->  #include <linux/threads.h>
->  #include <asm/page.h>
-> @@ -102,6 +102,6 @@ pmb_remap(phys_addr_t phys, unsigned long size, pgpro=
-t_t prot)
->  	return pmb_remap_caller(phys, size, prot, __builtin_return_address(0));
->  }
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
-> =20
->  #endif /* __MMU_H */
-> diff --git a/arch/sh/include/asm/page.h b/arch/sh/include/asm/page.h
-> index 3990cbd9aa044..def4205491ec9 100644
-> --- a/arch/sh/include/asm/page.h
-> +++ b/arch/sh/include/asm/page.h
-> @@ -30,7 +30,7 @@
->  #define HUGETLB_PAGE_ORDER	(HPAGE_SHIFT-PAGE_SHIFT)
->  #endif
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #include <asm/uncached.h>
-> =20
->  extern unsigned long shm_align_mask;
-> @@ -85,7 +85,7 @@ typedef struct page *pgtable_t;
-> =20
->  #define pte_pgprot(x) __pgprot(pte_val(x) & PTE_FLAGS_MASK)
-> =20
-> -#endif /* !__ASSEMBLY__ */
-> +#endif /* !__ASSEMBLER__ */
-> =20
->  /*
->   * __MEMORY_START and SIZE are the physical addresses and size of RAM.
-> @@ -126,10 +126,10 @@ typedef struct page *pgtable_t;
->  #define ___va(x)	((x)+PAGE_OFFSET)
->  #endif
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #define __pa(x)		___pa((unsigned long)x)
->  #define __va(x)		(void *)___va((unsigned long)x)
-> -#endif /* !__ASSEMBLY__ */
-> +#endif /* !__ASSEMBLER__ */
-> =20
->  #ifdef CONFIG_UNCACHED_MAPPING
->  #if defined(CONFIG_29BIT)
-> diff --git a/arch/sh/include/asm/pgtable.h b/arch/sh/include/asm/pgtable.=
-h
-> index 729f5c6225fbb..10fa8f2bb8d1f 100644
-> --- a/arch/sh/include/asm/pgtable.h
-> +++ b/arch/sh/include/asm/pgtable.h
-> @@ -17,7 +17,7 @@
->  #include <asm/page.h>
->  #include <asm/mmu.h>
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #include <asm/addrspace.h>
->  #include <asm/fixmap.h>
-> =20
-> @@ -28,7 +28,7 @@
->  extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
->  #define ZERO_PAGE(vaddr) (virt_to_page(empty_zero_page))
-> =20
-> -#endif /* !__ASSEMBLY__ */
-> +#endif /* !__ASSEMBLER__ */
-> =20
->  /*
->   * Effective and physical address definitions, to aid with sign
-> diff --git a/arch/sh/include/asm/pgtable_32.h b/arch/sh/include/asm/pgtab=
-le_32.h
-> index f939f1215232c..bb9f9a2fc85c0 100644
-> --- a/arch/sh/include/asm/pgtable_32.h
-> +++ b/arch/sh/include/asm/pgtable_32.h
-> @@ -170,7 +170,7 @@ static inline unsigned long copy_ptea_attributes(unsi=
-gned long x)
->  	(PTE_MASK | _PAGE_ACCESSED | _PAGE_CACHABLE | \
->  	 _PAGE_DIRTY | _PAGE_SPECIAL)
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
-> =20
->  #if defined(CONFIG_X2TLB) /* SH-X2 TLB */
->  #define PAGE_NONE	__pgprot(_PAGE_PROTNONE | _PAGE_CACHABLE | \
-> @@ -287,9 +287,9 @@ static inline unsigned long copy_ptea_attributes(unsi=
-gned long x)
->  				__pgprot(0)
->  #endif
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
-> =20
->  /*
->   * Certain architectures need to do special things when PTEs
-> @@ -486,5 +486,5 @@ static inline int pte_swp_exclusive(pte_t pte)
->  PTE_BIT_FUNC(low, swp_mkexclusive, |=3D _PAGE_SWP_EXCLUSIVE);
->  PTE_BIT_FUNC(low, swp_clear_exclusive, &=3D ~_PAGE_SWP_EXCLUSIVE);
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  #endif /* __ASM_SH_PGTABLE_32_H */
-> diff --git a/arch/sh/include/asm/processor.h b/arch/sh/include/asm/proces=
-sor.h
-> index 73fba7c922f92..2a0b5713ab80e 100644
-> --- a/arch/sh/include/asm/processor.h
-> +++ b/arch/sh/include/asm/processor.h
-> @@ -5,7 +5,7 @@
->  #include <asm/cpu-features.h>
->  #include <asm/cache.h>
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  /*
->   *  CPU type and hardware bug flags. Kept separately for each CPU.
->   *
-> @@ -168,7 +168,7 @@ extern unsigned int instruction_size(unsigned int ins=
-n);
-> =20
->  void select_idle_routine(void);
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
-> =20
->  #include <asm/processor_32.h>
-> =20
-> diff --git a/arch/sh/include/asm/smc37c93x.h b/arch/sh/include/asm/smc37c=
-93x.h
-> index 891f2f8f2fd03..caf4cd8dd2411 100644
-> --- a/arch/sh/include/asm/smc37c93x.h
-> +++ b/arch/sh/include/asm/smc37c93x.h
-> @@ -67,7 +67,7 @@
->  #define UART_DLL	0x0	/* Divisor Latch (LS) */
->  #define UART_DLM	0x2	/* Divisor Latch (MS) */
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  typedef struct uart_reg {
->  	volatile __u16 rbr;
->  	volatile __u16 ier;
-> @@ -78,7 +78,7 @@ typedef struct uart_reg {
->  	volatile __u16 msr;
->  	volatile __u16 scr;
->  } uart_reg;
-> -#endif /* ! __ASSEMBLY__ */
-> +#endif /* ! __ASSEMBLER__ */
-> =20
->  /* Alias for Write Only Register */
-> =20
-> diff --git a/arch/sh/include/asm/suspend.h b/arch/sh/include/asm/suspend.=
-h
-> index 47db17520261e..0f991babc5597 100644
-> --- a/arch/sh/include/asm/suspend.h
-> +++ b/arch/sh/include/asm/suspend.h
-> @@ -2,7 +2,7 @@
->  #ifndef _ASM_SH_SUSPEND_H
->  #define _ASM_SH_SUSPEND_H
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #include <linux/notifier.h>
-> =20
->  #include <asm/ptrace.h>
-> diff --git a/arch/sh/include/asm/thread_info.h b/arch/sh/include/asm/thre=
-ad_info.h
-> index 9f19a682d315f..471db51730361 100644
-> --- a/arch/sh/include/asm/thread_info.h
-> +++ b/arch/sh/include/asm/thread_info.h
-> @@ -21,7 +21,7 @@
->  #define FAULT_CODE_PROT		(1 << 3)	/* protection fault */
->  #define FAULT_CODE_USER		(1 << 4)	/* user-mode access */
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #include <asm/processor.h>
-> =20
->  struct thread_info {
-> @@ -49,7 +49,7 @@ struct thread_info {
->  /*
->   * macros/functions for gaining access to the thread information structu=
-re
->   */
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #define INIT_THREAD_INFO(tsk)			\
->  {						\
->  	.task		=3D &tsk,			\
-> @@ -86,7 +86,7 @@ static inline struct thread_info *current_thread_info(v=
-oid)
-> =20
->  extern void init_thread_xstate(void);
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
-> =20
->  /*
->   * Thread information flags
-> @@ -144,7 +144,7 @@ extern void init_thread_xstate(void);
->   */
->  #define TS_USEDFPU		0x0002	/* FPU used by this task this quantum */
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
-> =20
->  #define TI_FLAG_FAULT_CODE_SHIFT	24
-> =20
-> @@ -164,5 +164,5 @@ static inline unsigned int get_thread_fault_code(void=
-)
->  	return ti->flags >> TI_FLAG_FAULT_CODE_SHIFT;
->  }
-> =20
-> -#endif	/* !__ASSEMBLY__ */
-> +#endif	/* !__ASSEMBLER__ */
->  #endif /* __ASM_SH_THREAD_INFO_H */
-> diff --git a/arch/sh/include/asm/tlb.h b/arch/sh/include/asm/tlb.h
-> index ddf324bfb9a09..39df40d0ebc29 100644
-> --- a/arch/sh/include/asm/tlb.h
-> +++ b/arch/sh/include/asm/tlb.h
-> @@ -2,7 +2,7 @@
->  #ifndef __ASM_SH_TLB_H
->  #define __ASM_SH_TLB_H
-> =20
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #include <linux/pagemap.h>
->  #include <asm-generic/tlb.h>
-> =20
-> @@ -29,5 +29,5 @@ asmlinkage int handle_tlbmiss(struct pt_regs *regs, uns=
-igned long error_code,
->  			      unsigned long address);
-> =20
->  #endif /* CONFIG_MMU */
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  #endif /* __ASM_SH_TLB_H */
-> diff --git a/arch/sh/include/asm/types.h b/arch/sh/include/asm/types.h
-> index 9b3fc923ee287..fec3e89df0b10 100644
-> --- a/arch/sh/include/asm/types.h
-> +++ b/arch/sh/include/asm/types.h
-> @@ -7,10 +7,10 @@
->  /*
->   * These aren't exported outside the kernel to avoid name space clashes
->   */
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
-> =20
->  typedef u16 insn_size_t;
->  typedef u32 reg_size_t;
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  #endif /* __ASM_SH_TYPES_H */
-> diff --git a/arch/sh/include/mach-common/mach/romimage.h b/arch/sh/includ=
-e/mach-common/mach/romimage.h
-> index 1915714263aab..22fb47ec9b152 100644
-> --- a/arch/sh/include/mach-common/mach/romimage.h
-> +++ b/arch/sh/include/mach-common/mach/romimage.h
-> @@ -1,12 +1,12 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -#ifdef __ASSEMBLY__
-> +#ifdef __ASSEMBLER__
-> =20
->  /* do nothing here by default */
-> =20
-> -#else /* __ASSEMBLY__ */
-> +#else /* __ASSEMBLER__ */
-> =20
->  static inline void mmcif_update_progress(int nr)
->  {
->  }
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
-> diff --git a/arch/sh/include/mach-ecovec24/mach/romimage.h b/arch/sh/incl=
-ude/mach-ecovec24/mach/romimage.h
-> index 2da6ff326cbd0..f93d494736c3d 100644
-> --- a/arch/sh/include/mach-ecovec24/mach/romimage.h
-> +++ b/arch/sh/include/mach-ecovec24/mach/romimage.h
-> @@ -1,5 +1,5 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -#ifdef __ASSEMBLY__
-> +#ifdef __ASSEMBLER__
-> =20
->  /* EcoVec board specific boot code:
->   * converts the "partner-jet-script.txt" script into assembly
-> @@ -22,7 +22,7 @@
->  1 :	.long 0xa8000000
->  2 :
-> =20
-> -#else /* __ASSEMBLY__ */
-> +#else /* __ASSEMBLER__ */
-> =20
->  /* Ecovec board specific information:
->   *
-> @@ -45,4 +45,4 @@ static inline void mmcif_update_progress(int nr)
->  	__raw_writeb(1 << (nr - 1), PGDR);
->  }
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
-> diff --git a/arch/sh/include/mach-kfr2r09/mach/romimage.h b/arch/sh/inclu=
-de/mach-kfr2r09/mach/romimage.h
-> index 209275872ff06..f68bb480d3784 100644
-> --- a/arch/sh/include/mach-kfr2r09/mach/romimage.h
-> +++ b/arch/sh/include/mach-kfr2r09/mach/romimage.h
-> @@ -1,5 +1,5 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -#ifdef __ASSEMBLY__
-> +#ifdef __ASSEMBLER__
-> =20
->  /* kfr2r09 board specific boot code:
->   * converts the "partner-jet-script.txt" script into assembly
-> @@ -22,10 +22,10 @@
->  1:	.long 0xa8000000
->  2:
-> =20
-> -#else /* __ASSEMBLY__ */
-> +#else /* __ASSEMBLER__ */
-> =20
->  static inline void mmcif_update_progress(int nr)
->  {
->  }
-> =20
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
+Yes, it's a very useful mechanism. That's exactly why I want to preserve
+it for developers or things like 0day that do build tests and don't care
+about modules quadrupling in size.
 
-I agree with this. Changes look good to me.
+> Hiding these checks behind the CONFIG_EXPERT option breaks the
+> intention of the patch. IMO, it should be always enabled to avoid
+> errors, mentioned in the previous paragraph, already during the
+> development time.
 
-Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+I agree, it should always be enabled ... eventually. But now now. That's
+why we're having this conversation: it's breaking too many things and
+needs to be disabled.
 
-Adrian
+> I'm much more inclined to James' proposal. Maybe we can disable these
+> checks in v6.15 stable series, but leave them in v6.16? This would
+> leave a couple of months for distributions to update libbpf.
 
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+I'd be worried that it will hit a whole bunch of folks doing 6.16 work.
+I was expecting to revert it _everywhere_ for now, if we go the revert
+route.
+
+James, by partial revert, did you mean to revert in stable but not
+mainline? I assumed you meant to just revert patch 6/6 of the series
+(stable and mainline) but leave 1-5 in place so turning it back on later
+was easier.
 
