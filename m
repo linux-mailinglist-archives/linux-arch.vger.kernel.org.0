@@ -1,171 +1,171 @@
-Return-Path: <linux-arch+bounces-12263-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12264-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1751AD0DCF
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 16:12:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92C42AD0DE2
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 16:16:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0F013A8F32
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 14:11:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52A9F172096
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 14:16:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 459F31A704B;
-	Sat,  7 Jun 2025 14:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KpeVND0H"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F351A4F3C;
+	Sat,  7 Jun 2025 14:16:48 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974FD288DB;
-	Sat,  7 Jun 2025 14:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F3DCA5A;
+	Sat,  7 Jun 2025 14:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749305527; cv=none; b=ZhK7LiRoT+BM6bdvwxRkAz/1Q2yJg86bTzoJO5VF5On60IKcu2mt/7ncAaTU0JEeahkL+krb4Uk+0oROmRQczYAIi0WChuWaWMXwVGg/UR4RLwLllhfNoO6ypX2nzN3w/S8Txrpkfhxw5RhVdBWqbTdbmfEswEANYqg0AiGIpVg=
+	t=1749305808; cv=none; b=bsgsOtseXT8YUDZ+WbcWmevGK/s3SL469C/IvtVAIdfCKkkBiyyf8UHlzGeeSMDQA/ypsiLNHuaN4eBdhv8i03c96QdFgdRu/J6aHwicXZtgPcKCi7vKYwsVNPrHK/B/+kkGyLT951mmhc4EMv2TzdS7d/6/YpHj22uJiBcKApo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749305527; c=relaxed/simple;
-	bh=tOsURfwpu5JIYYGzjKsueBWYxy8LFs6ja4Urw/zMLwY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N6/VT96qd4sDPvdVJk/kgDHYUM23yI2iyTR7esEJLmaSINR1g9JGoqFVh5P8nCqpQMgh2zyt+7XSmKS2a1zCCceNEXfiy3boO8rczwKimvr/EoW2pSdWb3ZM6a5M2Bri3ULp78+jR9lyL42OHitvYVElUp9MjxpTJsJwVmKZOV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KpeVND0H; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749305526; x=1780841526;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tOsURfwpu5JIYYGzjKsueBWYxy8LFs6ja4Urw/zMLwY=;
-  b=KpeVND0HpNdRdUWOOYhGagscfYV6c8q4anW6d0ispW3IIV7fRWKSszZ+
-   DD+5hNl/0L0xnplEKRQ/M407Ax9I6Ljawvc943FCziMJSV6tMzRLCBWTK
-   bPxIHT3RENY0wntHeNgWLYJvW3o//m6Egewr/rCU0BBtB5ajCt7GvpXVp
-   BRG9dzElXeuEToftc3s8UmGFsta38fjRFJwz9hOEU/pCo/BqVassX3tMt
-   +l+GPkndw415gLG2O/ai+pl2371B92beWyy2hLMDI0e/oM1sPWvGIVsD0
-   a0ASzR4w+GiaDsdt8m/7HEWWB4Qkmu5Rn1YAb7yCSn0SVy84QTwHOhYq6
-   w==;
-X-CSE-ConnectionGUID: J46COigUTqKLvFlqxTQSAA==
-X-CSE-MsgGUID: rO7rDcMkSHiJA61/bGG2Tg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11457"; a="55231460"
-X-IronPort-AV: E=Sophos;i="6.16,218,1744095600"; 
-   d="scan'208";a="55231460"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2025 07:12:05 -0700
-X-CSE-ConnectionGUID: tBMhaICIR3CN1VGkDijZZw==
-X-CSE-MsgGUID: QIrKOpfMQBC9VEoVh73s9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,218,1744095600"; 
-   d="scan'208";a="169264059"
-Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.111.75]) ([10.125.111.75])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2025 07:12:03 -0700
-Message-ID: <34a2bfa5-30e1-4ba0-ac36-bf07a0d60d97@intel.com>
-Date: Sat, 7 Jun 2025 07:12:02 -0700
+	s=arc-20240116; t=1749305808; c=relaxed/simple;
+	bh=BRmj87RP767+F/IPH8y7XcECquUBMp7SSKsaQmg/+Ak=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RSiFz8Onzs3w8WnompEDzNgKsHk0FwmLhVBSXXqs9PKjJMvRDb4kzK6/ppdRke0mkecw5wUvax22uA+o+KPVuykPYyxRIIFIZHdwZxq2G2NXopur7oduxIHXIZKiQEaNJFyVwcU/0BBkXrNl/X4stXq4GTWaUHtmp1CNu+yqMuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [223.64.69.3])
+	by gateway (Coremail) with SMTP id _____8DxC3LISURoXnIPAQ--.40961S3;
+	Sat, 07 Jun 2025 22:16:40 +0800 (CST)
+Received: from localhost.localdomain (unknown [223.64.69.3])
+	by front1 (Coremail) with SMTP id qMiowMDxDce+SURoShMPAQ--.4187S2;
+	Sat, 07 Jun 2025 22:16:37 +0800 (CST)
+From: Huacai Chen <chenhuacai@loongson.cn>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guo Ren <guoren@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch changes for v6.16
+Date: Sat,  7 Jun 2025 22:16:18 +0800
+Message-ID: <20250607141619.3616592-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Large modules with 6.15 [was: [PATCH v4 6/6] percpu/x86: Enable
- strict percpu checks via named AS qualifiers]
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: Jiri Slaby <jirislaby@kernel.org>, x86@kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
- linux-arch@vger.kernel.org, netdev@vger.kernel.org,
- Nadav Amit <nadav.amit@gmail.com>, Dennis Zhou <dennis@kernel.org>,
- Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Andy Lutomirski <luto@kernel.org>, Brian Gerst <brgerst@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <20250127160709.80604-1-ubizjak@gmail.com>
- <20250127160709.80604-7-ubizjak@gmail.com>
- <02c00acd-9518-4371-be2c-eb63e5d11d9c@kernel.org>
- <b27d96fc-b234-4406-8d6e-885cd97a87f3@intel.com>
- <CAFULd4Ygz8p8rD1=c-S2MjJniP6vjVNMsWG_B=OjCVpthk0fBg@mail.gmail.com>
- <9767d411-81dc-491b-b6da-419240065ffe@kernel.org>
- <6412d84a-edc3-4723-89f1-b2017fb0d1ea@intel.com>
- <CAFULd4asiDaj1OTrqWNMr5coyPeqM1NT6v2uEqKvJicRUhekSQ@mail.gmail.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <CAFULd4asiDaj1OTrqWNMr5coyPeqM1NT6v2uEqKvJicRUhekSQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMDxDce+SURoShMPAQ--.4187S2
+X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxAF4kuF4kZrW7uF1fXFWxXwc_yoWrXrWkpF
+	ZxurnrGF48Grn3Arnxt34Uur1DJr4xGry2qa1ak348Ar13Zw1UZr18XF95XFyUJ3yrJry0
+	qr1rGw1aqF4UJ3XCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
+	Jw1lYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+	AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU2l1vDUUUU
 
-On 6/7/25 01:52, Uros Bizjak wrote:
-> Let me reiterate what the patch brings to the table. It prevents
-> invalid references of per cpu variables to non-percpu locations.
+The following changes since commit 0ff41df1cb268fc69e703a08a57ee14ae967d0ca:
 
-Yes, it's a very useful mechanism. That's exactly why I want to preserve
-it for developers or things like 0day that do build tests and don't care
-about modules quadrupling in size.
+  Linux 6.15 (2025-05-25 16:09:23 -0700)
 
-> Hiding these checks behind the CONFIG_EXPERT option breaks the
-> intention of the patch. IMO, it should be always enabled to avoid
-> errors, mentioned in the previous paragraph, already during the
-> development time.
+are available in the Git repository at:
 
-I agree, it should always be enabled ... eventually. But now now. That's
-why we're having this conversation: it's breaking too many things and
-needs to be disabled.
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.16
 
-> I'm much more inclined to James' proposal. Maybe we can disable these
-> checks in v6.15 stable series, but leave them in v6.16? This would
-> leave a couple of months for distributions to update libbpf.
+for you to fetch changes up to f78fb2576f22b0ba5297412a9aa7691920666c41:
 
-I'd be worried that it will hit a whole bunch of folks doing 6.16 work.
-I was expecting to revert it _everywhere_ for now, if we go the revert
-route.
+  platform/loongarch: laptop: Unregister generic_sub_drivers on exit (2025-06-07 11:37:15 +0800)
 
-James, by partial revert, did you mean to revert in stable but not
-mainline? I assumed you meant to just revert patch 6/6 of the series
-(stable and mainline) but leave 1-5 in place so turning it back on later
-was easier.
+----------------------------------------------------------------
+LoongArch changes for v6.16
+
+1, Adjust the 'make install' operation;
+2, Support SCHED_MC (Multi-core scheduler);
+3, Enable ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS;
+4, Enable HAVE_ARCH_STACKLEAK;
+5, Increase max supported CPUs up to 2048;
+6, Introduce the numa_memblks conversion;
+7, Add PWM controller nodes in dts;
+8, Some bug fixes and other small changes.
+
+----------------------------------------------------------------
+Binbin Zhou (3):
+      LoongArch: dts: Add PWM support to Loongson-2K0500
+      LoongArch: dts: Add PWM support to Loongson-2K1000
+      LoongArch: dts: Add PWM support to Loongson-2K2000
+
+Huacai Chen (5):
+      Merge commit 'core-entry-2025-05-25' into loongarch-next
+      LoongArch: Increase max supported CPUs up to 2048
+      LoongArch: Introduce the numa_memblks conversion
+      LoongArch: Avoid using $r0/$r1 as "mask" for csrxchg
+      LoongArch: Preserve firmware configuration when desired
+
+Thomas Weißschuh (1):
+      LoongArch: vDSO: Correctly use asm parameters in syscall wrappers
+
+Tianyang Zhang (2):
+      LoongArch: Add SCHED_MC (Multi-core scheduler) support
+      LoongArch: Fix panic caused by NULL-PMD in huge_pte_offset()
+
+Yao Zi (3):
+      platform/loongarch: laptop: Get brightness setting from EC on probe
+      platform/loongarch: laptop: Add backlight power control support
+      platform/loongarch: laptop: Unregister generic_sub_drivers on exit
+
+Youling Tang (4):
+      LoongArch: Add a default install.sh
+      LoongArch: Using generic scripts/install.sh in `make install`
+      LoongArch: Add some annotations in archhelp
+      LoongArch: Enable HAVE_ARCH_STACKLEAK
+
+Yuli Wang (1):
+      LoongArch: Enable ARCH_SUPPORTS_MSEAL_SYSTEM_MAPPINGS
+
+ .../core/mseal_sys_mappings/arch-support.txt       |   2 +-
+ Documentation/userspace-api/mseal.rst              |   2 +-
+ arch/loongarch/Kconfig                             |  18 ++-
+ arch/loongarch/Makefile                            |  11 +-
+ arch/loongarch/boot/dts/loongson-2k0500.dtsi       | 160 +++++++++++++++++++++
+ arch/loongarch/boot/dts/loongson-2k1000-ref.dts    |  24 ++++
+ arch/loongarch/boot/dts/loongson-2k1000.dtsi       |  42 +++++-
+ arch/loongarch/boot/dts/loongson-2k2000.dtsi       |  60 ++++++++
+ arch/loongarch/boot/install.sh                     |  56 ++++++++
+ arch/loongarch/include/asm/acpi.h                  |   2 +-
+ arch/loongarch/include/asm/entry-common.h          |   8 +-
+ arch/loongarch/include/asm/irqflags.h              |  16 ++-
+ arch/loongarch/include/asm/loongarch.h             |   4 +-
+ arch/loongarch/include/asm/numa.h                  |  14 --
+ arch/loongarch/include/asm/smp.h                   |   1 +
+ arch/loongarch/include/asm/sparsemem.h             |   5 -
+ arch/loongarch/include/asm/stackframe.h            |   6 +
+ arch/loongarch/include/asm/stacktrace.h            |   5 +
+ arch/loongarch/include/asm/topology.h              |  15 +-
+ arch/loongarch/include/asm/vdso/getrandom.h        |   2 +-
+ arch/loongarch/include/asm/vdso/gettimeofday.h     |   6 +-
+ arch/loongarch/kernel/acpi.c                       |  52 ++++---
+ arch/loongarch/kernel/entry.S                      |   3 +
+ arch/loongarch/kernel/numa.c                       | 108 ++------------
+ arch/loongarch/kernel/smp.c                        |  38 +++++
+ arch/loongarch/kernel/vdso.c                       |   4 +-
+ arch/loongarch/mm/hugetlbpage.c                    |   3 +-
+ arch/loongarch/mm/init.c                           |   8 --
+ arch/loongarch/pci/acpi.c                          |  14 +-
+ drivers/firmware/efi/libstub/Makefile              |   2 +-
+ drivers/platform/loongarch/loongson-laptop.c       |  87 +++++------
+ mm/Kconfig                                         |   1 +
+ 32 files changed, 561 insertions(+), 218 deletions(-)
+ create mode 100755 arch/loongarch/boot/install.sh
+
 
