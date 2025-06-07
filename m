@@ -1,298 +1,179 @@
-Return-Path: <linux-arch+bounces-12259-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12260-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFF64AD0B4E
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 07:54:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEE68AD0C06
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 10:53:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3272D188B36F
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 05:54:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1ABB43AEE31
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 08:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 735E7258CCC;
-	Sat,  7 Jun 2025 05:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827B71F582E;
+	Sat,  7 Jun 2025 08:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LiD7hV6o"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EgcbhFwG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7325BEC4;
-	Sat,  7 Jun 2025 05:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A612284039;
+	Sat,  7 Jun 2025 08:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749275643; cv=none; b=BKaFaovX3Xd45JOPGvOy7RbXyyzJt0wHGDkLa2ygFjLhAscc7XpcHANLPEsMnGxMfCQiDTjvdE2cTKot4FFLawDNbqN1cxHlanpLOlB2BY3np8YL+RKMDJdl43Cz50KS7q9NFxRau5Lbemn1rVwDf9CmZMDrIp3RwpLkklESEog=
+	t=1749286378; cv=none; b=mY8oHPdcmp8azKvqu4xxTAKX7/2diQbCh+6MiTjhfl42kNvfL70dBBlsQ18YfYod3mIf/xfXKRxO/XsDLt9VBxrIguhjI/LZtQsOG6k2BJt7BuQM4Bdlml7037yUjVGA/MoPV3Q0MhZ+ZUunmkFzosXlussnkZfsBNHXFC96ZJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749275643; c=relaxed/simple;
-	bh=NP4EOS5NyTyz8u4io2V10MTCuX9FmsWjgiY+gthNb3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jcqDOHEeqvrJCtlff2C16gHoUqoRSzJiscfRqRSL4fowOLoKRNysgEGSCw9UY8tkNEmUds4PcpslAESi9ZJhLCG+gowMIpUsZPDhLINejUA61k2+zTDtHpqx554S/CnZ2QyDs6giCBt3u0/WLHAp/4n1B10g1+e7oas7zDDZrm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LiD7hV6o; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1749286378; c=relaxed/simple;
+	bh=vyutQaTYXrN4bm09V9PWZFQHSh8YZLIkVVALBR7R7AQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NPjt3CF4UTejV6J416skxB6Gd4wL73niYYTd+JH8jN8eVcbwr257GXjfuK7FfRUXPTqsJhJanaxQah5EPmvM/fB+Rf2ofL8PabhCcyBk4WnbyxB1RsMiTtH3JtrfAeEbfl+ecTWufP1YK4oJbWRRBcaLjB/J1A9+KGfYg1u/alk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EgcbhFwG; arc=none smtp.client-ip=209.85.208.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a4fb9c2436so1408531f8f.1;
-        Fri, 06 Jun 2025 22:54:01 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3105ef2a06cso23333501fa.2;
+        Sat, 07 Jun 2025 01:52:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749275640; x=1749880440; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QU48uw1hkwy8nOYgKJq/pVDJATL50b3W2YOv6VUcTJA=;
-        b=LiD7hV6omdxfMxJe9fAvcvvVqzpvyGzXhNq+egDpNlf+CKczU3l8ebgwz3hFYnkk1M
-         lXTC0Qpbt8v/ABJEECTAIBI8GN7ueR7YE9Yn7YtLgwRHz/05n9jTHG7u43TthASeBhzf
-         p+7OjYZy51Rx3AlmXl5oSz4yKLj4IF8vfVYz453SqA6LG/vpFx3XHfWZjkgMzdtBjCcH
-         MeJCpm8lf6LNu2s94S8feCXkUZ7kSYoHQ6WeqfObJY9bCtTLXheBX/nd5fgSLmyWABxE
-         liN/RZul4XyGJJLlZJvq38wPYhxRdlZR6KZZ10S8ZqkGmVGMaNcAqqQsedw+idOEUBMp
-         HxKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749275640; x=1749880440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1749286375; x=1749891175; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QU48uw1hkwy8nOYgKJq/pVDJATL50b3W2YOv6VUcTJA=;
-        b=sCqZXVe+EjHSHijVqTBsr3YdpG84X306v+cfi9qbU2Iq1pcqy130whua8k2TXmIvlI
-         Ua0jNeY9v4EC9cy+GYqB/0UIqyiyfchG9dbny380BSRkwQyH56yT1P5C2vJr+vzNdHAc
-         fkL15rbwQuUhJmvWlTZAU1b1BPysK0FlEG2PvjEtaO02gQZTfAA9JtUWV42T2ARVWSyn
-         tTkrTJRWXTxTWS4HFAOpm0NjhQLMzaSgbj48zn7IJ25dAqdtrCPALTvhH5OAYxdBiyJp
-         edWqi5K+pp8Lb8Ddddfza8irBPeFbqlqGX6F3fhmxFngp2egouwXCtyUmgyEkfCoje56
-         20qg==
-X-Forwarded-Encrypted: i=1; AJvYcCUB7nSGGkA9SKhCrPhPA5CsTVWxxY/upWY2EotMTNMJNzxmMQrvwI0XxZ5c5Oc2CidLt9XLCikSHtjY@vger.kernel.org, AJvYcCW7KfE7KxrtSwYbqlCSAo92Cg9Cy4SHRpTSA6L0l6JENtDUJQ/c+peFrEy5kV6AIrn3h5YOb2Mr8WBdokiK1lE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI3C4QVdgdyw0HIGdLmymY74U+fe7CP8ZSG0I+IMzK6bF9W97Q
-	yUcljtDJjIocPshtWx6+V1UmImgHji3jWDNfxeqN8M0ZTkQwJ3xd6hxb
-X-Gm-Gg: ASbGncvhLQNfTBP5BAI998zGRwmiPzvjoLsxrOIk2KeqW/Im5ZaTfD5cyrsI++6Ze6F
-	kV/rijVYFg+MrrJw49Ta0vEym+1EAIEBduxsauDzDZoEc8vSBvxMee7gIvqWZR6kdPjMYJjTBV4
-	qnNqDBXEnaOta/Ts2vKdWJ2tO/yozSFcUMlJBgs9DLTX67EBSatUfcqzn3v6NnYpbLsPbBZxkcW
-	Pl5CSWiIDMY/x73F+0kZGn4QsTJfZ1VLuJP/l1B6aGAKGUj9yShrPQycLn9dSJFfAXD8KbBvRCa
-	S+8p4KG3P/v9wZu3HN/TurgDLFdJwVZ4XMjgE90SJ5O/jXbL4GsCm9XKfPStA16AZtmIFK698oS
-	UQGNMCewcL7mb0sK93/bBlpFySw==
-X-Google-Smtp-Source: AGHT+IGQj91T18RvkaQmwHDv2aDfFpJ7eAu2BIp4YrOyTmDl3qQExiamDanKxvoZFyGPSrNSYD3b6Q==
-X-Received: by 2002:a05:6000:4283:b0:3a5:1241:ce99 with SMTP id ffacd0b85a97d-3a53188d3famr4577440f8f.24.1749275639593;
-        Fri, 06 Jun 2025 22:53:59 -0700 (PDT)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a532435f94sm3759690f8f.60.2025.06.06.22.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jun 2025 22:53:58 -0700 (PDT)
-Date: Sat, 7 Jun 2025 06:53:56 +0100
-From: Stafford Horne <shorne@gmail.com>
-To: Thomas Huth <thuth@redhat.com>
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	linux-openrisc@vger.kernel.org
-Subject: Re: [PATCH 23/41] openrisc: Replace __ASSEMBLY__ with __ASSEMBLER__
- in non-uapi headers
-Message-ID: <aEPT9DeL2nfxG_L9@antec>
-References: <20250314071013.1575167-1-thuth@redhat.com>
- <20250314071013.1575167-24-thuth@redhat.com>
+        bh=KFyeqit6vTlbw/r6iPxMrJhoHvnvByEOju0HOOfl2RQ=;
+        b=EgcbhFwG/Ev5vVX8ivr1hzdlo/7aJjpd3c/3JwqrptFbkXBoJQNy3PW/KUfL7fo72v
+         0PnghCzCGuWitC3teMgimhvRWYW+BK1aqoE1Qc+CUVoQ03+urOBPNRKaTFtCDG9+tJS9
+         ItYVQGO0ymULQ6ch/Ui2hlwkazplVB8+s5Pcivz/+vJuYfha7zsiNbZaiOnanPaEg7l+
+         z6Y+Ewkel/e5qHrelmgWRDISd2lEy2Z/ADBUDXTTsEDEXCfPGWD9JxnTeoLA0zCenq0P
+         1xyMFQHnpLTta/pafLXcTAyZAPNr4YilMnuMqGBvXz5c+M/MmHX+Vb/4XKcug2ofhL1r
+         WOxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749286375; x=1749891175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KFyeqit6vTlbw/r6iPxMrJhoHvnvByEOju0HOOfl2RQ=;
+        b=jHPIN2wrIHlfJWYWQ/87n8YuEPhAsHLYzV5sodePoemwGY8ng+fQrmEZ6dcBROv0D6
+         kwPxjzQsU9LTR4zcP76Z9aHpfksOMlVgTPgTBXXRREWwQHow2BWdJXbRkmn0rAIkhBHo
+         TSkSTuoA8VJKcKJwfk3gAjqsEsZkZSTLPtBZfYhJ+bDfTn4UwQ72lhdAtjVJMuF+ePal
+         9tB8RFFDJVX7ai5j0wcfKqT8JXTvRSqzYSu1r4PSUOtZlb0EMzFrRMRtmVE6ZPSN42tN
+         OJ1Q979hTXWKuk3uuh1gZ+IvY9ILNab/jUvDtJLJ7JfVSaQoIbBBxdQh14E7+KYj9Jqy
+         3OvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3mTTT8vQceBFIhqm9GzSWzOw+KWNbm6b9cxeDZXnxVTJ/Fambfg4y9/deaPXW3j+iUD8FylUS@vger.kernel.org, AJvYcCV5RuNMsRPbjz56nPWAdOpzsrZ1MPbRsaHJA3SnLPQ8ZTi/3376qa2+LpHlhHamlgtxjtZ/7HZOgH1g@vger.kernel.org, AJvYcCW0xFUhTy2wXWBb0V0Strfrs3+HDNAQyAOcfMP3qwRW+zMulqoA13NqroN6aYvM1M1y9iYonZN66IjLPRZj+T0=@vger.kernel.org, AJvYcCWbJcdOn7HvA4ktNGmhw5rPA0d/6LBblgqkZeMkYIwM1PR6DZZrzchFaRrxKq6mk+xfEuJCiDoHOND8LF1l@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDApWV1FRoSMcGNHN1j30h8YKbkOdPazdFEaSTvEFWE8SeOJOo
+	Pp3PpkpvG8mx1t/qX3V6uAO+nfib+hvNcoPTZ9ES50KgVBNj6ADHWupSWAeUQMPDSNLs3pEjhvZ
+	gHklUJluDHUnLqkuT3BO3NrxpQVr19LM=
+X-Gm-Gg: ASbGncuEKYXNBbzWst5l76qI5/rwUghPBpGCi5BGSCvPnAc2vyO8N3Ym99MvmBAr6au
+	EmdjrRJedidbvJwYu8YSu6UfmvQHh4qV1Hvl1JByQqDvRDff/kSbsN6LPx7CH8jxuI00kdfiDGI
+	JpVrGybFCNfIhSmyfiwB8Gl396ui7d2wvj
+X-Google-Smtp-Source: AGHT+IEv37WjEi+vaAOMeA5SgqO5lvoauaHOHnb329J/YwAGAVcoSaaoQm5IHeU+YLfaL/u+ZCEwVl2jWuJ6emEkASk=
+X-Received: by 2002:a05:651c:2125:b0:32a:613b:270e with SMTP id
+ 38308e7fff4ca-32adfbd6680mr15634651fa.31.1749286374353; Sat, 07 Jun 2025
+ 01:52:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250314071013.1575167-24-thuth@redhat.com>
+References: <20250127160709.80604-1-ubizjak@gmail.com> <20250127160709.80604-7-ubizjak@gmail.com>
+ <02c00acd-9518-4371-be2c-eb63e5d11d9c@kernel.org> <b27d96fc-b234-4406-8d6e-885cd97a87f3@intel.com>
+ <CAFULd4Ygz8p8rD1=c-S2MjJniP6vjVNMsWG_B=OjCVpthk0fBg@mail.gmail.com>
+ <9767d411-81dc-491b-b6da-419240065ffe@kernel.org> <6412d84a-edc3-4723-89f1-b2017fb0d1ea@intel.com>
+In-Reply-To: <6412d84a-edc3-4723-89f1-b2017fb0d1ea@intel.com>
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Sat, 7 Jun 2025 10:52:51 +0200
+X-Gm-Features: AX0GCFvfdq2FOXmAZPfE7zBP4TMsOLROw_40PNuCe1ZfMVOzlSJ4vDSOaP8ertQ
+Message-ID: <CAFULd4asiDaj1OTrqWNMr5coyPeqM1NT6v2uEqKvJicRUhekSQ@mail.gmail.com>
+Subject: Re: Large modules with 6.15 [was: [PATCH v4 6/6] percpu/x86: Enable
+ strict percpu checks via named AS qualifiers]
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Jiri Slaby <jirislaby@kernel.org>, x86@kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-bcachefs@vger.kernel.org, 
+	linux-arch@vger.kernel.org, netdev@vger.kernel.org, 
+	Nadav Amit <nadav.amit@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Andy Lutomirski <luto@kernel.org>, Brian Gerst <brgerst@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 14, 2025 at 08:09:54AM +0100, Thomas Huth wrote:
-> While the GCC and Clang compilers already define __ASSEMBLER__
-> automatically when compiling assembly code, __ASSEMBLY__ is a
-> macro that only gets defined by the Makefiles in the kernel.
-> This can be very confusing when switching between userspace
-> and kernelspace coding, or when dealing with uapi headers that
-> rather should use __ASSEMBLER__ instead. So let's standardize on
-> the __ASSEMBLER__ macro that is provided by the compilers now.
-> 
-> This is a completely mechanical patch (done with a simple "sed -i"
-> statement).
+On Fri, Jun 6, 2025 at 5:44=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
+wrote:
+>
+> On 6/6/25 02:17, Jiri Slaby wrote:
+> > Given this is the second time I hit a bug with this, perhaps introduce
+> > an EXPERIMENTAL CONFIG option, so that random users can simply disable
+> > it if an issue occurs? Without the need of patching random userspace an=
+d
+> > changing random kernel headers?
+>
+> What about something like the attached (untested) patch? That should at
+> least get folks back to the old, universal working behavior even when
+> using new compilers.
 
-Hi Thomas,
+IMO the commit message is unnecessarily overly dramatic. The "nasty
+bugs" were in fact:
 
-I have applied this to the OpenRISC queue, as discussed on 22.
+- unfortunate mix of clang < 19 and new gcc-14 [1], fixed by
+robustifying the  detection of typeof_unqual
+
+[1] https://lore.kernel.org/lkml/CA+G9fYuP2bHnDvJwfMm6+8Y8UYk74qCw-2HsFyRzJ=
+DFiQ5dbpQ@mail.gmail.com/
+
+- sparse doesn't understand new keyword, patch at [2], but sparse is
+effectively unmaintained so a workaround is in place
+
+[2] https://lore.kernel.org/linux-sparse/5b8d0dee-8fb6-45af-ba6c-7f74aff9a4=
+b8@stanley.mountain/
+
+- genksyms didn't understand the new keyword, fixed by [3].
+
+[3] https://lore.kernel.org/lkml/174461594538.31282.5752735096854392083.tip=
+-bot2@tip-bot2/
+
+- a performance regression, again due to the unfortunate usage of old
+gcc-13 [4]. The new gcc-14 would break compilation due to the missing
+__percpu qualifier. This is one of the examples, where new checks
+would prevent the issue during the development. Fixed with the help of
+gcc-14.
+
+[4] https://lore.kernel.org/all/CAADnVQ+iFBxauKq99=3D-Xk+BdG+Lv=3DXgvwi1dC4=
+fpG0utmXJiiA@mail.gmail.com/
+
+- the issue in this thread, already fixed/worked around. Looking at
+the fix, I don't think gcc is at fault, but I speculate that there
+could be some invalid assumption about dwarf representation of
+variables in non-default address space at play. I'll look at this one
+in some more detail.
+
+Please also note that besides the above issues, the GCC type system
+and related checks around named address spaces was rock solid; there
+were *zero* bugs regarding __percpu variables, and the referred patch
+moves *all of them* to __seg_gs named address space. The patch builds
+off an equally stable and now well proven GCC named address space
+support, so in my opinion, it *is* ready for prime time. As
+demonstrated in the above list of issues, it was *never* the compiler
+at fault.
+
+Let me reiterate what the patch brings to the table. It prevents
+invalid references of per cpu variables to non-percpu locations. One
+missing percpu dereference can have disastrous consequences (all CPUs
+will access data in the shared space). Currently, the safety builds on
+checking sparse logs, but sparse errors don't break the build. With
+new checks in place, *every* invalid access is detected and breaks the
+build with some 50 lines of errors.
+
+Hiding these checks behind the CONFIG_EXPERT option breaks the
+intention of the patch. IMO, it should be always enabled to avoid
+errors, mentioned in the previous paragraph, already during the
+development time.
+
+I'm much more inclined to James' proposal. Maybe we can disable these
+checks in v6.15 stable series, but leave them in v6.16? This would
+leave a couple of months for distributions to update libbpf.
 
 Thanks,
-
--Stafford
-
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: linux-openrisc@vger.kernel.org
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  arch/openrisc/include/asm/mmu.h         | 2 +-
->  arch/openrisc/include/asm/page.h        | 8 ++++----
->  arch/openrisc/include/asm/pgtable.h     | 4 ++--
->  arch/openrisc/include/asm/processor.h   | 4 ++--
->  arch/openrisc/include/asm/ptrace.h      | 4 ++--
->  arch/openrisc/include/asm/setup.h       | 2 +-
->  arch/openrisc/include/asm/thread_info.h | 8 ++++----
->  7 files changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/openrisc/include/asm/mmu.h b/arch/openrisc/include/asm/mmu.h
-> index eb720110f3a20..e7826a681bc4a 100644
-> --- a/arch/openrisc/include/asm/mmu.h
-> +++ b/arch/openrisc/include/asm/mmu.h
-> @@ -15,7 +15,7 @@
->  #ifndef __ASM_OPENRISC_MMU_H
->  #define __ASM_OPENRISC_MMU_H
->  
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  typedef unsigned long mm_context_t;
->  #endif
->  
-> diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm/page.h
-> index c589e96035e15..85797f94d1d74 100644
-> --- a/arch/openrisc/include/asm/page.h
-> +++ b/arch/openrisc/include/asm/page.h
-> @@ -25,7 +25,7 @@
->   */
->  #include <asm/setup.h>
->  
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  
->  #define clear_page(page)	memset((page), 0, PAGE_SIZE)
->  #define copy_page(to, from)	memcpy((to), (from), PAGE_SIZE)
-> @@ -55,10 +55,10 @@ typedef struct page *pgtable_t;
->  #define __pgd(x)	((pgd_t) { (x) })
->  #define __pgprot(x)	((pgprot_t) { (x) })
->  
-> -#endif /* !__ASSEMBLY__ */
-> +#endif /* !__ASSEMBLER__ */
->  
->  
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  
->  #define __va(x) ((void *)((unsigned long)(x) + PAGE_OFFSET))
->  #define __pa(x) ((unsigned long) (x) - PAGE_OFFSET)
-> @@ -73,7 +73,7 @@ static inline unsigned long virt_to_pfn(const void *kaddr)
->  
->  #define virt_addr_valid(kaddr)	(pfn_valid(virt_to_pfn(kaddr)))
->  
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  
->  #include <asm-generic/memory_model.h>
->  #include <asm-generic/getorder.h>
-> diff --git a/arch/openrisc/include/asm/pgtable.h b/arch/openrisc/include/asm/pgtable.h
-> index 60c6ce7ff2dcf..cd979bd28ab3b 100644
-> --- a/arch/openrisc/include/asm/pgtable.h
-> +++ b/arch/openrisc/include/asm/pgtable.h
-> @@ -23,7 +23,7 @@
->  
->  #include <asm-generic/pgtable-nopmd.h>
->  
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #include <asm/mmu.h>
->  #include <asm/fixmap.h>
->  
-> @@ -432,5 +432,5 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
->  
->  typedef pte_t *pte_addr_t;
->  
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  #endif /* __ASM_OPENRISC_PGTABLE_H */
-> diff --git a/arch/openrisc/include/asm/processor.h b/arch/openrisc/include/asm/processor.h
-> index e05d1b59e24e1..3ff893a67c13b 100644
-> --- a/arch/openrisc/include/asm/processor.h
-> +++ b/arch/openrisc/include/asm/processor.h
-> @@ -39,7 +39,7 @@
->   */
->  #define TASK_UNMAPPED_BASE      (TASK_SIZE / 8 * 3)
->  
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  
->  struct task_struct;
->  
-> @@ -78,5 +78,5 @@ void show_registers(struct pt_regs *regs);
->  
->  #define cpu_relax()     barrier()
->  
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  #endif /* __ASM_OPENRISC_PROCESSOR_H */
-> diff --git a/arch/openrisc/include/asm/ptrace.h b/arch/openrisc/include/asm/ptrace.h
-> index e5a282b670757..28facf2f3e00c 100644
-> --- a/arch/openrisc/include/asm/ptrace.h
-> +++ b/arch/openrisc/include/asm/ptrace.h
-> @@ -27,7 +27,7 @@
->   * they share a cacheline (not done yet, though... future optimization).
->   */
->  
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  /*
->   * This struct describes how the registers are laid out on the kernel stack
->   * during a syscall or other kernel entry.
-> @@ -147,7 +147,7 @@ static inline unsigned long regs_get_register(struct pt_regs *regs,
->  	return *(unsigned long *)((unsigned long)regs + offset);
->  }
->  
-> -#endif /* __ASSEMBLY__ */
-> +#endif /* __ASSEMBLER__ */
->  
->  /*
->   * Offsets used by 'ptrace' system call interface.
-> diff --git a/arch/openrisc/include/asm/setup.h b/arch/openrisc/include/asm/setup.h
-> index 9acbc5deda691..dce9f4d3b378f 100644
-> --- a/arch/openrisc/include/asm/setup.h
-> +++ b/arch/openrisc/include/asm/setup.h
-> @@ -8,7 +8,7 @@
->  #include <linux/init.h>
->  #include <asm-generic/setup.h>
->  
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  void __init or1k_early_setup(void *fdt);
->  #endif
->  
-> diff --git a/arch/openrisc/include/asm/thread_info.h b/arch/openrisc/include/asm/thread_info.h
-> index 4af3049c34c21..e338fff7efb0e 100644
-> --- a/arch/openrisc/include/asm/thread_info.h
-> +++ b/arch/openrisc/include/asm/thread_info.h
-> @@ -17,7 +17,7 @@
->  
->  #ifdef __KERNEL__
->  
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #include <asm/types.h>
->  #include <asm/processor.h>
->  #endif
-> @@ -38,7 +38,7 @@
->   * - if the contents of this structure are changed, the assembly constants
->   *   must also be changed
->   */
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  
->  struct thread_info {
->  	struct task_struct	*task;		/* main task structure */
-> @@ -58,7 +58,7 @@ struct thread_info {
->   *
->   * preempt_count needs to be 1 initially, until the scheduler is functional.
->   */
-> -#ifndef __ASSEMBLY__
-> +#ifndef __ASSEMBLER__
->  #define INIT_THREAD_INFO(tsk)				\
->  {							\
->  	.task		= &tsk,				\
-> @@ -75,7 +75,7 @@ register struct thread_info *current_thread_info_reg asm("r10");
->  #define get_thread_info(ti) get_task_struct((ti)->task)
->  #define put_thread_info(ti) put_task_struct((ti)->task)
->  
-> -#endif /* !__ASSEMBLY__ */
-> +#endif /* !__ASSEMBLER__ */
->  
->  /*
->   * thread information flags
-> -- 
-> 2.48.1
-> 
+Uros.
 
