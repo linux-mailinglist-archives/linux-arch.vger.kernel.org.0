@@ -1,179 +1,481 @@
-Return-Path: <linux-arch+bounces-12260-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12261-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEE68AD0C06
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 10:53:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1D60AD0D47
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 14:09:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1ABB43AEE31
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 08:52:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE9883B1051
+	for <lists+linux-arch@lfdr.de>; Sat,  7 Jun 2025 12:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827B71F582E;
-	Sat,  7 Jun 2025 08:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461A622173F;
+	Sat,  7 Jun 2025 12:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EgcbhFwG"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="Z9msa4X7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A612284039;
-	Sat,  7 Jun 2025 08:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A54821FF37;
+	Sat,  7 Jun 2025 12:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749286378; cv=none; b=mY8oHPdcmp8azKvqu4xxTAKX7/2diQbCh+6MiTjhfl42kNvfL70dBBlsQ18YfYod3mIf/xfXKRxO/XsDLt9VBxrIguhjI/LZtQsOG6k2BJt7BuQM4Bdlml7037yUjVGA/MoPV3Q0MhZ+ZUunmkFzosXlussnkZfsBNHXFC96ZJg=
+	t=1749298118; cv=none; b=ELq7ZlF3x8BWE5u0Ah26um+LqSb6ZzL3ohLVVSsYqdt/ip2Z54JEezQEjgBk7kpYyCxTZBZAGftd1EvUJd0GlqUOaYG1nbvJSJE7+MBDryBzWPSk/JI4yPuMaNEcHCKNdRmklyop2mqkWXnZMfW2TI1KppgdJR/k8iDaORPpxa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749286378; c=relaxed/simple;
-	bh=vyutQaTYXrN4bm09V9PWZFQHSh8YZLIkVVALBR7R7AQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NPjt3CF4UTejV6J416skxB6Gd4wL73niYYTd+JH8jN8eVcbwr257GXjfuK7FfRUXPTqsJhJanaxQah5EPmvM/fB+Rf2ofL8PabhCcyBk4WnbyxB1RsMiTtH3JtrfAeEbfl+ecTWufP1YK4oJbWRRBcaLjB/J1A9+KGfYg1u/alk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EgcbhFwG; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3105ef2a06cso23333501fa.2;
-        Sat, 07 Jun 2025 01:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749286375; x=1749891175; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KFyeqit6vTlbw/r6iPxMrJhoHvnvByEOju0HOOfl2RQ=;
-        b=EgcbhFwG/Ev5vVX8ivr1hzdlo/7aJjpd3c/3JwqrptFbkXBoJQNy3PW/KUfL7fo72v
-         0PnghCzCGuWitC3teMgimhvRWYW+BK1aqoE1Qc+CUVoQ03+urOBPNRKaTFtCDG9+tJS9
-         ItYVQGO0ymULQ6ch/Ui2hlwkazplVB8+s5Pcivz/+vJuYfha7zsiNbZaiOnanPaEg7l+
-         z6Y+Ewkel/e5qHrelmgWRDISd2lEy2Z/ADBUDXTTsEDEXCfPGWD9JxnTeoLA0zCenq0P
-         1xyMFQHnpLTta/pafLXcTAyZAPNr4YilMnuMqGBvXz5c+M/MmHX+Vb/4XKcug2ofhL1r
-         WOxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749286375; x=1749891175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KFyeqit6vTlbw/r6iPxMrJhoHvnvByEOju0HOOfl2RQ=;
-        b=jHPIN2wrIHlfJWYWQ/87n8YuEPhAsHLYzV5sodePoemwGY8ng+fQrmEZ6dcBROv0D6
-         kwPxjzQsU9LTR4zcP76Z9aHpfksOMlVgTPgTBXXRREWwQHow2BWdJXbRkmn0rAIkhBHo
-         TSkSTuoA8VJKcKJwfk3gAjqsEsZkZSTLPtBZfYhJ+bDfTn4UwQ72lhdAtjVJMuF+ePal
-         9tB8RFFDJVX7ai5j0wcfKqT8JXTvRSqzYSu1r4PSUOtZlb0EMzFrRMRtmVE6ZPSN42tN
-         OJ1Q979hTXWKuk3uuh1gZ+IvY9ILNab/jUvDtJLJ7JfVSaQoIbBBxdQh14E7+KYj9Jqy
-         3OvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU3mTTT8vQceBFIhqm9GzSWzOw+KWNbm6b9cxeDZXnxVTJ/Fambfg4y9/deaPXW3j+iUD8FylUS@vger.kernel.org, AJvYcCV5RuNMsRPbjz56nPWAdOpzsrZ1MPbRsaHJA3SnLPQ8ZTi/3376qa2+LpHlhHamlgtxjtZ/7HZOgH1g@vger.kernel.org, AJvYcCW0xFUhTy2wXWBb0V0Strfrs3+HDNAQyAOcfMP3qwRW+zMulqoA13NqroN6aYvM1M1y9iYonZN66IjLPRZj+T0=@vger.kernel.org, AJvYcCWbJcdOn7HvA4ktNGmhw5rPA0d/6LBblgqkZeMkYIwM1PR6DZZrzchFaRrxKq6mk+xfEuJCiDoHOND8LF1l@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDApWV1FRoSMcGNHN1j30h8YKbkOdPazdFEaSTvEFWE8SeOJOo
-	Pp3PpkpvG8mx1t/qX3V6uAO+nfib+hvNcoPTZ9ES50KgVBNj6ADHWupSWAeUQMPDSNLs3pEjhvZ
-	gHklUJluDHUnLqkuT3BO3NrxpQVr19LM=
-X-Gm-Gg: ASbGncuEKYXNBbzWst5l76qI5/rwUghPBpGCi5BGSCvPnAc2vyO8N3Ym99MvmBAr6au
-	EmdjrRJedidbvJwYu8YSu6UfmvQHh4qV1Hvl1JByQqDvRDff/kSbsN6LPx7CH8jxuI00kdfiDGI
-	JpVrGybFCNfIhSmyfiwB8Gl396ui7d2wvj
-X-Google-Smtp-Source: AGHT+IEv37WjEi+vaAOMeA5SgqO5lvoauaHOHnb329J/YwAGAVcoSaaoQm5IHeU+YLfaL/u+ZCEwVl2jWuJ6emEkASk=
-X-Received: by 2002:a05:651c:2125:b0:32a:613b:270e with SMTP id
- 38308e7fff4ca-32adfbd6680mr15634651fa.31.1749286374353; Sat, 07 Jun 2025
- 01:52:54 -0700 (PDT)
+	s=arc-20240116; t=1749298118; c=relaxed/simple;
+	bh=iaef8qmXNAq5l/9As63qndXfRVPmWNwMOYaxinGhHS8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WlVvuprmTNTzZ7WKtiYwogqTrhEGxUK0Esm5dquCatfczMNsg/3SLKU+8UhWUvE1Jb65MAXl2qglrRDz2ujQuIN4c1/xvB60xOPI2rpkSi+sXDhzOOUGWoWXq1UxzcpHSpLUnCD0ZIq5YE2LY+B/gyfwlJUByN2u1U+k+bgu36c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=Z9msa4X7; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=FwM4OXMNxwD5om0/o3Aytg0dRVg/tzG+D8QfcuPysvA=; t=1749298114; x=1749902914; 
+	b=Z9msa4X7Y0nywltDrIQ3GIsTB8mZKkxvf0fl4IZLo/wb5FbGGHHftNtYJG/kB5vJ8bb5Cod3e+5
+	KPDn1S/Lzz12Z2VsXOt1WxmKEh7bMkMevfUPGdYB/1jMvycQqMcRYV8K68FoIAquUQSeMOvMiheGD
+	AEjXUFtTCN7WNgfpN2/OiQDWHTKrnJfob+v/+/sSkftKMFKzMr04d2xH1cD1BdJXvd29sVw9pmGFy
+	2eQkngIt7VDHuxa9qwsVWj1z7I8pmJKFDwz7s+0zpAbz8fzRW5xR6FG9R4BdRMTkrZ4CG38OGNNko
+	3to80Wg17JkVqQB0WEuls5+Ihvstb3KJwMJw==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1uNsLc-00000001cxo-1xRw; Sat, 07 Jun 2025 14:08:28 +0200
+Received: from p5b13afe4.dip0.t-ipconnect.de ([91.19.175.228] helo=[192.168.178.61])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1uNsLc-00000003H4l-0SRQ; Sat, 07 Jun 2025 14:08:28 +0200
+Message-ID: <6c7770dd1c216410fcff3bf0758a45d5afcb5444.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 2/6] sh: remove duplicate ioread/iowrite helpers
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Richard Henderson	
+ <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, Geert
+ Uytterhoeven <geert@linux-m68k.org>, Greg Ungerer <gerg@linux-m68k.org>,
+ Thomas Bogendoerfer	 <tsbogend@alpha.franken.de>, "James E.J. Bottomley"	
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+ Madhavan Srinivasan	 <maddy@linux.ibm.com>, Michael Ellerman
+ <mpe@ellerman.id.au>, Nicholas Piggin	 <npiggin@gmail.com>, Christophe
+ Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker	
+ <dalias@libc.org>, Julian Vetter <julian@outer-limits.org>, Bjorn Helgaas	
+ <bhelgaas@google.com>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org
+Date: Sat, 07 Jun 2025 14:08:26 +0200
+In-Reply-To: <20250315105907.1275012-3-arnd@kernel.org>
+References: <20250315105907.1275012-1-arnd@kernel.org>
+	 <20250315105907.1275012-3-arnd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250127160709.80604-1-ubizjak@gmail.com> <20250127160709.80604-7-ubizjak@gmail.com>
- <02c00acd-9518-4371-be2c-eb63e5d11d9c@kernel.org> <b27d96fc-b234-4406-8d6e-885cd97a87f3@intel.com>
- <CAFULd4Ygz8p8rD1=c-S2MjJniP6vjVNMsWG_B=OjCVpthk0fBg@mail.gmail.com>
- <9767d411-81dc-491b-b6da-419240065ffe@kernel.org> <6412d84a-edc3-4723-89f1-b2017fb0d1ea@intel.com>
-In-Reply-To: <6412d84a-edc3-4723-89f1-b2017fb0d1ea@intel.com>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Sat, 7 Jun 2025 10:52:51 +0200
-X-Gm-Features: AX0GCFvfdq2FOXmAZPfE7zBP4TMsOLROw_40PNuCe1ZfMVOzlSJ4vDSOaP8ertQ
-Message-ID: <CAFULd4asiDaj1OTrqWNMr5coyPeqM1NT6v2uEqKvJicRUhekSQ@mail.gmail.com>
-Subject: Re: Large modules with 6.15 [was: [PATCH v4 6/6] percpu/x86: Enable
- strict percpu checks via named AS qualifiers]
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Jiri Slaby <jirislaby@kernel.org>, x86@kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-bcachefs@vger.kernel.org, 
-	linux-arch@vger.kernel.org, netdev@vger.kernel.org, 
-	Nadav Amit <nadav.amit@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Andy Lutomirski <luto@kernel.org>, Brian Gerst <brgerst@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-On Fri, Jun 6, 2025 at 5:44=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
-wrote:
->
-> On 6/6/25 02:17, Jiri Slaby wrote:
-> > Given this is the second time I hit a bug with this, perhaps introduce
-> > an EXPERIMENTAL CONFIG option, so that random users can simply disable
-> > it if an issue occurs? Without the need of patching random userspace an=
-d
-> > changing random kernel headers?
->
-> What about something like the attached (untested) patch? That should at
-> least get folks back to the old, universal working behavior even when
-> using new compilers.
+Hi Arnd,
 
-IMO the commit message is unnecessarily overly dramatic. The "nasty
-bugs" were in fact:
+On Sat, 2025-03-15 at 11:59 +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The ioread/iowrite functions on sh only do memory mapped I/O like the
+> generic verion, and never map onto non-MMIO inb/outb variants, so they
+> just add complexity. In particular, the use of asm-generic/iomap.h
+> ties the declaration to the x86 implementation.
+>=20
+> Remove the custom versions and use the architecture-independent fallback
+> code instead. Some of the calling conventions on sh are different here,
+> so fix that by adding 'volatile' keywords where required by the generic
+> implementation and change the cpg clock driver to no longer depend on
+> the interesting choice of return types for ioread8/ioread16/ioread32.
+>=20
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/sh/include/asm/io.h |  30 ++------
+>  arch/sh/kernel/Makefile  |   3 -
+>  arch/sh/kernel/iomap.c   | 162 ---------------------------------------
+>  arch/sh/kernel/ioport.c  |   5 --
+>  arch/sh/lib/io.c         |   4 +-
+>  drivers/sh/clk/cpg.c     |  25 +++---
+>  6 files changed, 21 insertions(+), 208 deletions(-)
+>  delete mode 100644 arch/sh/kernel/iomap.c
+>=20
+> diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
+> index cf5eab840d57..0f663ebec700 100644
+> --- a/arch/sh/include/asm/io.h
+> +++ b/arch/sh/include/asm/io.h
+> @@ -19,7 +19,6 @@
+>  #include <asm/machvec.h>
+>  #include <asm/page.h>
+>  #include <linux/pgtable.h>
+> -#include <asm-generic/iomap.h>
+> =20
+>  #define __IO_PREFIX     generic
+>  #include <asm/io_generic.h>
+> @@ -100,7 +99,7 @@ pfx##writes##bwlq(volatile void __iomem *mem, const vo=
+id *addr,		\
+>  	}								\
+>  }									\
+>  									\
+> -static inline void pfx##reads##bwlq(volatile void __iomem *mem,		\
+> +static inline void pfx##reads##bwlq(const volatile void __iomem *mem,	\
+>  				    void *addr, unsigned int count)	\
+>  {									\
+>  	volatile type *__addr =3D addr;					\
+> @@ -114,37 +113,18 @@ static inline void pfx##reads##bwlq(volatile void _=
+_iomem *mem,		\
+>  __BUILD_MEMORY_STRING(__raw_, b, u8)
+>  __BUILD_MEMORY_STRING(__raw_, w, u16)
+> =20
+> -void __raw_writesl(void __iomem *addr, const void *data, int longlen);
+> -void __raw_readsl(const void __iomem *addr, void *data, int longlen);
+> +void __raw_writesl(void volatile __iomem *addr, const void *data, int lo=
+nglen);
+> +void __raw_readsl(const volatile void __iomem *addr, void *data, int lon=
+glen);
+> =20
+>  __BUILD_MEMORY_STRING(__raw_, q, u64)
+> =20
+>  #define ioport_map ioport_map
+> -#define ioport_unmap ioport_unmap
+>  #define pci_iounmap pci_iounmap
+> =20
+> -#define ioread8 ioread8
+> -#define ioread16 ioread16
+> -#define ioread16be ioread16be
+> -#define ioread32 ioread32
+> -#define ioread32be ioread32be
+> -
+> -#define iowrite8 iowrite8
+> -#define iowrite16 iowrite16
+> -#define iowrite16be iowrite16be
+> -#define iowrite32 iowrite32
+> -#define iowrite32be iowrite32be
+> -
+> -#define ioread8_rep ioread8_rep
+> -#define ioread16_rep ioread16_rep
+> -#define ioread32_rep ioread32_rep
+> -
+> -#define iowrite8_rep iowrite8_rep
+> -#define iowrite16_rep iowrite16_rep
+> -#define iowrite32_rep iowrite32_rep
+> -
+>  #ifdef CONFIG_HAS_IOPORT_MAP
+> =20
+> +extern void __iomem *ioport_map(unsigned long port, unsigned int nr);
+> +
+>  /*
+>   * Slowdown I/O port space accesses for antique hardware.
+>   */
+> diff --git a/arch/sh/kernel/Makefile b/arch/sh/kernel/Makefile
+> index ba917008d63e..7b453592adaf 100644
+> --- a/arch/sh/kernel/Makefile
+> +++ b/arch/sh/kernel/Makefile
+> @@ -21,10 +21,7 @@ obj-y	:=3D head_32.o debugtraps.o dumpstack.o				\
+>  	   syscalls_32.o time.o topology.o traps.o			\
+>  	   traps_32.o unwinder.o
+> =20
+> -ifndef CONFIG_GENERIC_IOMAP
+> -obj-y				+=3D iomap.o
+>  obj-$(CONFIG_HAS_IOPORT_MAP)	+=3D ioport.o
+> -endif
+> =20
+>  obj-y				+=3D sys_sh32.o
+>  obj-y				+=3D cpu/
+> diff --git a/arch/sh/kernel/iomap.c b/arch/sh/kernel/iomap.c
+> deleted file mode 100644
+> index 0a0dff4e66de..000000000000
+> --- a/arch/sh/kernel/iomap.c
+> +++ /dev/null
+> @@ -1,162 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/*
+> - * arch/sh/kernel/iomap.c
+> - *
+> - * Copyright (C) 2000  Niibe Yutaka
+> - * Copyright (C) 2005 - 2007 Paul Mundt
+> - */
+> -#include <linux/module.h>
+> -#include <linux/io.h>
+> -
+> -unsigned int ioread8(const void __iomem *addr)
+> -{
+> -	return readb(addr);
+> -}
+> -EXPORT_SYMBOL(ioread8);
+> -
+> -unsigned int ioread16(const void __iomem *addr)
+> -{
+> -	return readw(addr);
+> -}
+> -EXPORT_SYMBOL(ioread16);
+> -
+> -unsigned int ioread16be(const void __iomem *addr)
+> -{
+> -	return be16_to_cpu(__raw_readw(addr));
+> -}
+> -EXPORT_SYMBOL(ioread16be);
+> -
+> -unsigned int ioread32(const void __iomem *addr)
+> -{
+> -	return readl(addr);
+> -}
+> -EXPORT_SYMBOL(ioread32);
+> -
+> -unsigned int ioread32be(const void __iomem *addr)
+> -{
+> -	return be32_to_cpu(__raw_readl(addr));
+> -}
+> -EXPORT_SYMBOL(ioread32be);
+> -
+> -void iowrite8(u8 val, void __iomem *addr)
+> -{
+> -	writeb(val, addr);
+> -}
+> -EXPORT_SYMBOL(iowrite8);
+> -
+> -void iowrite16(u16 val, void __iomem *addr)
+> -{
+> -	writew(val, addr);
+> -}
+> -EXPORT_SYMBOL(iowrite16);
+> -
+> -void iowrite16be(u16 val, void __iomem *addr)
+> -{
+> -	__raw_writew(cpu_to_be16(val), addr);
+> -}
+> -EXPORT_SYMBOL(iowrite16be);
+> -
+> -void iowrite32(u32 val, void __iomem *addr)
+> -{
+> -	writel(val, addr);
+> -}
+> -EXPORT_SYMBOL(iowrite32);
+> -
+> -void iowrite32be(u32 val, void __iomem *addr)
+> -{
+> -	__raw_writel(cpu_to_be32(val), addr);
+> -}
+> -EXPORT_SYMBOL(iowrite32be);
+> -
+> -/*
+> - * These are the "repeat MMIO read/write" functions.
+> - * Note the "__raw" accesses, since we don't want to
+> - * convert to CPU byte order. We write in "IO byte
+> - * order" (we also don't have IO barriers).
+> - */
+> -static inline void mmio_insb(const void __iomem *addr, u8 *dst, int coun=
+t)
+> -{
+> -	while (--count >=3D 0) {
+> -		u8 data =3D __raw_readb(addr);
+> -		*dst =3D data;
+> -		dst++;
+> -	}
+> -}
+> -
+> -static inline void mmio_insw(const void __iomem *addr, u16 *dst, int cou=
+nt)
+> -{
+> -	while (--count >=3D 0) {
+> -		u16 data =3D __raw_readw(addr);
+> -		*dst =3D data;
+> -		dst++;
+> -	}
+> -}
+> -
+> -static inline void mmio_insl(const void __iomem *addr, u32 *dst, int cou=
+nt)
+> -{
+> -	while (--count >=3D 0) {
+> -		u32 data =3D __raw_readl(addr);
+> -		*dst =3D data;
+> -		dst++;
+> -	}
+> -}
+> -
+> -static inline void mmio_outsb(void __iomem *addr, const u8 *src, int cou=
+nt)
+> -{
+> -	while (--count >=3D 0) {
+> -		__raw_writeb(*src, addr);
+> -		src++;
+> -	}
+> -}
+> -
+> -static inline void mmio_outsw(void __iomem *addr, const u16 *src, int co=
+unt)
+> -{
+> -	while (--count >=3D 0) {
+> -		__raw_writew(*src, addr);
+> -		src++;
+> -	}
+> -}
+> -
+> -static inline void mmio_outsl(void __iomem *addr, const u32 *src, int co=
+unt)
+> -{
+> -	while (--count >=3D 0) {
+> -		__raw_writel(*src, addr);
+> -		src++;
+> -	}
+> -}
+> -
+> -void ioread8_rep(const void __iomem *addr, void *dst, unsigned long coun=
+t)
+> -{
+> -	mmio_insb(addr, dst, count);
+> -}
+> -EXPORT_SYMBOL(ioread8_rep);
+> -
+> -void ioread16_rep(const void __iomem *addr, void *dst, unsigned long cou=
+nt)
+> -{
+> -	mmio_insw(addr, dst, count);
+> -}
+> -EXPORT_SYMBOL(ioread16_rep);
+> -
+> -void ioread32_rep(const void __iomem *addr, void *dst, unsigned long cou=
+nt)
+> -{
+> -	mmio_insl(addr, dst, count);
+> -}
+> -EXPORT_SYMBOL(ioread32_rep);
+> -
+> -void iowrite8_rep(void __iomem *addr, const void *src, unsigned long cou=
+nt)
+> -{
+> -	mmio_outsb(addr, src, count);
+> -}
+> -EXPORT_SYMBOL(iowrite8_rep);
+> -
+> -void iowrite16_rep(void __iomem *addr, const void *src, unsigned long co=
+unt)
+> -{
+> -	mmio_outsw(addr, src, count);
+> -}
+> -EXPORT_SYMBOL(iowrite16_rep);
+> -
+> -void iowrite32_rep(void __iomem *addr, const void *src, unsigned long co=
+unt)
+> -{
+> -	mmio_outsl(addr, src, count);
+> -}
+> -EXPORT_SYMBOL(iowrite32_rep);
+> diff --git a/arch/sh/kernel/ioport.c b/arch/sh/kernel/ioport.c
+> index c8aff8a20164..915a3dfd9f02 100644
+> --- a/arch/sh/kernel/ioport.c
+> +++ b/arch/sh/kernel/ioport.c
+> @@ -23,8 +23,3 @@ void __iomem *ioport_map(unsigned long port, unsigned i=
+nt nr)
+>  	return (void __iomem *)(port + sh_io_port_base);
+>  }
+>  EXPORT_SYMBOL(ioport_map);
+> -
+> -void ioport_unmap(void __iomem *addr)
+> -{
+> -}
+> -EXPORT_SYMBOL(ioport_unmap);
+> diff --git a/arch/sh/lib/io.c b/arch/sh/lib/io.c
+> index ebcf7c0a7335..dc6345e4c53b 100644
+> --- a/arch/sh/lib/io.c
+> +++ b/arch/sh/lib/io.c
+> @@ -11,7 +11,7 @@
+>  #include <linux/module.h>
+>  #include <linux/io.h>
+> =20
+> -void __raw_readsl(const void __iomem *addr, void *datap, int len)
+> +void __raw_readsl(const volatile void __iomem *addr, void *datap, int le=
+n)
+>  {
+>  	u32 *data;
+> =20
+> @@ -60,7 +60,7 @@ void __raw_readsl(const void __iomem *addr, void *datap=
+, int len)
+>  }
+>  EXPORT_SYMBOL(__raw_readsl);
+> =20
+> -void __raw_writesl(void __iomem *addr, const void *data, int len)
+> +void __raw_writesl(volatile void __iomem *addr, const void *data, int le=
+n)
+>  {
+>  	if (likely(len !=3D 0)) {
+>  		int tmp1;
+> diff --git a/drivers/sh/clk/cpg.c b/drivers/sh/clk/cpg.c
+> index fd72d9088bdc..64ed7d64458a 100644
+> --- a/drivers/sh/clk/cpg.c
+> +++ b/drivers/sh/clk/cpg.c
+> @@ -26,6 +26,19 @@ static unsigned int sh_clk_read(struct clk *clk)
+>  	return ioread32(clk->mapped_reg);
+>  }
+> =20
+> +static unsigned int sh_clk_read_status(struct clk *clk)
+> +{
+> +	void __iomem *mapped_status =3D (phys_addr_t)clk->status_reg -
+> +		(phys_addr_t)clk->enable_reg + clk->mapped_reg;
+> +
+> +	if (clk->flags & CLK_ENABLE_REG_8BIT)
+> +		return ioread8(mapped_status);
+> +	else if (clk->flags & CLK_ENABLE_REG_16BIT)
+> +		return ioread16(mapped_status);
+> +
+> +	return ioread32(mapped_status);
+> +}
+> +
+>  static void sh_clk_write(int value, struct clk *clk)
+>  {
+>  	if (clk->flags & CLK_ENABLE_REG_8BIT)
+> @@ -40,20 +53,10 @@ static int sh_clk_mstp_enable(struct clk *clk)
+>  {
+>  	sh_clk_write(sh_clk_read(clk) & ~(1 << clk->enable_bit), clk);
+>  	if (clk->status_reg) {
+> -		unsigned int (*read)(const void __iomem *addr);
+>  		int i;
+> -		void __iomem *mapped_status =3D (phys_addr_t)clk->status_reg -
+> -			(phys_addr_t)clk->enable_reg + clk->mapped_reg;
+> -
+> -		if (clk->flags & CLK_ENABLE_REG_8BIT)
+> -			read =3D ioread8;
+> -		else if (clk->flags & CLK_ENABLE_REG_16BIT)
+> -			read =3D ioread16;
+> -		else
+> -			read =3D ioread32;
+> =20
+>  		for (i =3D 1000;
+> -		     (read(mapped_status) & (1 << clk->enable_bit)) && i;
+> +		     (sh_clk_read_status(clk) & (1 << clk->enable_bit)) && i;
+>  		     i--)
+>  			cpu_relax();
+>  		if (!i) {
 
-- unfortunate mix of clang < 19 and new gcc-14 [1], fixed by
-robustifying the  detection of typeof_unqual
+Those are quite a number of changes that I would like to test on real hardw=
+are
+first before merging them into the kernel.
 
-[1] https://lore.kernel.org/lkml/CA+G9fYuP2bHnDvJwfMm6+8Y8UYk74qCw-2HsFyRzJ=
-DFiQ5dbpQ@mail.gmail.com/
-
-- sparse doesn't understand new keyword, patch at [2], but sparse is
-effectively unmaintained so a workaround is in place
-
-[2] https://lore.kernel.org/linux-sparse/5b8d0dee-8fb6-45af-ba6c-7f74aff9a4=
-b8@stanley.mountain/
-
-- genksyms didn't understand the new keyword, fixed by [3].
-
-[3] https://lore.kernel.org/lkml/174461594538.31282.5752735096854392083.tip=
--bot2@tip-bot2/
-
-- a performance regression, again due to the unfortunate usage of old
-gcc-13 [4]. The new gcc-14 would break compilation due to the missing
-__percpu qualifier. This is one of the examples, where new checks
-would prevent the issue during the development. Fixed with the help of
-gcc-14.
-
-[4] https://lore.kernel.org/all/CAADnVQ+iFBxauKq99=3D-Xk+BdG+Lv=3DXgvwi1dC4=
-fpG0utmXJiiA@mail.gmail.com/
-
-- the issue in this thread, already fixed/worked around. Looking at
-the fix, I don't think gcc is at fault, but I speculate that there
-could be some invalid assumption about dwarf representation of
-variables in non-default address space at play. I'll look at this one
-in some more detail.
-
-Please also note that besides the above issues, the GCC type system
-and related checks around named address spaces was rock solid; there
-were *zero* bugs regarding __percpu variables, and the referred patch
-moves *all of them* to __seg_gs named address space. The patch builds
-off an equally stable and now well proven GCC named address space
-support, so in my opinion, it *is* ready for prime time. As
-demonstrated in the above list of issues, it was *never* the compiler
-at fault.
-
-Let me reiterate what the patch brings to the table. It prevents
-invalid references of per cpu variables to non-percpu locations. One
-missing percpu dereference can have disastrous consequences (all CPUs
-will access data in the shared space). Currently, the safety builds on
-checking sparse logs, but sparse errors don't break the build. With
-new checks in place, *every* invalid access is detected and breaks the
-build with some 50 lines of errors.
-
-Hiding these checks behind the CONFIG_EXPERT option breaks the
-intention of the patch. IMO, it should be always enabled to avoid
-errors, mentioned in the previous paragraph, already during the
-development time.
-
-I'm much more inclined to James' proposal. Maybe we can disable these
-checks in v6.15 stable series, but leave them in v6.16? This would
-leave a couple of months for distributions to update libbpf.
+@Geert: Could you test it on your SH-7751 LANDISK board as well?
 
 Thanks,
-Uros.
+Adrian
+
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
