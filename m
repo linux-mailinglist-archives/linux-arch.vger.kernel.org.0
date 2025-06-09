@@ -1,70 +1,62 @@
-Return-Path: <linux-arch+bounces-12291-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12292-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CA2AAD2490
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 19:03:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69106AD2631
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 20:55:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0608A18841FC
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 17:03:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5005F3A316F
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 18:55:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FDB3212D97;
-	Mon,  9 Jun 2025 17:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C539221FF2B;
+	Mon,  9 Jun 2025 18:55:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CIh5Y5+d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cOGXtZ0b"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1282D3FC2;
-	Mon,  9 Jun 2025 17:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F2521FF2C;
+	Mon,  9 Jun 2025 18:55:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749488588; cv=none; b=Uyjvs2zVLyFvLGGqwZyH87uGZEREx7AzehJCsEsYnbbAfHfCmojs6nVv1snbvNvkHfipfm5INck29EuC/00Z6GZlKD4SVswp717dzJQjYvpbkbt4bcmbdGJrgNv46uVy92Qdw+iSxXmkQDXxX2EQz2T82148HnNE8eKNRw3Wo2U=
+	t=1749495302; cv=none; b=TYSBvpaRkeZvfaLDlifvyZPrXWvlCdLCR0COJaJwOebG3wWMlFM7UPPDrainYfQJWYWOIUSnVFC76SQAcA1vbC9P4LD5KyZoluOz73NavNztY01qvmR+Izo0j8HAMAX1A0TKrTBXnO+y18x1iWvd2buP8x7zjUtWQgY76t9BKJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749488588; c=relaxed/simple;
-	bh=VkV6JQ2FgHrRghDrC224nNPTDQSS5mIgKE9tQeHSFms=;
+	s=arc-20240116; t=1749495302; c=relaxed/simple;
+	bh=i03d00nCfUWfOdFAfB3hz6pL/gDpm+GCWlrY8GYnNSU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fKhaJF34dmY9x3/i+BJEeGtVXxbQ7OdYqfHj305XnkJzkag3RLCv2twDPn4vGb3HmlDvT1pYTP8gEl97lCGYHVJ+YmB9+ECHnaO2Yos7u7reaLbYdAcNtZ0PpRXQiAOj4Ni7N7ncdVy5+1GPyqo0lx6E69npxJ8d4/nhawBYQGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CIh5Y5+d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F812C4CEEF;
-	Mon,  9 Jun 2025 17:03:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VN5y8XXwDjhllHSlqqyHftpN63TvX77qFjKEm5u2cauGQEloYnwdDkidQNPRu2W+434hvIIs5Zj6yUU1OpRyLZnwWFeV52Oj6v6vokQFK59lTYXXnMu7MH4bgcNqsurt2M6N47WAbkCdpMFPrXtyeRsTTlElS+gsUiN3YPDSdDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cOGXtZ0b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDEAC4CEEF;
+	Mon,  9 Jun 2025 18:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749488587;
-	bh=VkV6JQ2FgHrRghDrC224nNPTDQSS5mIgKE9tQeHSFms=;
+	s=k20201202; t=1749495302;
+	bh=i03d00nCfUWfOdFAfB3hz6pL/gDpm+GCWlrY8GYnNSU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CIh5Y5+dVVuggziHsrY1euQW4YM6CCJ6DFFV/pTkc1q+JgeIoKw7nmm5WSYCephi8
-	 VvlOELS97KNeFSJBXCQEhco7k6T1y6yf9D7GRgAZe8Y5HVMVXcVO2cFV2hkWMLN3n6
-	 gV3PTNLjOy+avX2ube/P/tMzEpLPAJw2R96tcwL5eQnEMGttICYytrgWWxyuF9Kg7J
-	 zJunmPkmo3xQF2XEm+weySG24pGepoONvjDwUKQjXuD7xhNrb4xNZl5MOcRsvPDTAs
-	 UAlr7rBGlp5iojWTzXyHVi50cq3DEFh8i6N7fJWb1YVip8MJmagzRV5LLwWfQ9fi7U
-	 1f/qV93uJuX7A==
-Date: Mon, 9 Jun 2025 07:03:06 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Matthew Wilcox <willy@infradead.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	David Hildenbrand <david@redhat.com>, Jann Horn <jannh@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	SeongJae Park <sj@kernel.org>, Usama Arif <usamaarif642@gmail.com>,
-	Mike Rapoport <rppt@kernel.org>, Barry Song <21cnbao@gmail.com>,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-	Pedro Falcato <pfalcato@suse.de>
-Subject: Re: [DISCUSSION] proposed mctl() API
-Message-ID: <aEcTykJBgyyYYVAR@slm.duckdns.org>
-References: <85778a76-7dc8-4ea8-8827-acb45f74ee05@lucifer.local>
- <aDh9LtSLCiTLjg2X@casper.infradead.org>
- <20250529211423.GA1271329@cmpxchg.org>
- <0aeb6d8b-2abb-43a7-b47d-448f37f8a3bf@suse.cz>
- <20250604121923.GB1431@cmpxchg.org>
- <20250605123156.GA2812@cmpxchg.org>
+	b=cOGXtZ0bxE5c/cKVjIahkTcrKCRAsE2Gfxn3UIhlFlFiZLaC+zKdF7VWxfKm8/ETS
+	 6AhGs0umiRMCJ5JgdBhNOOkRxSsFWAtxF3SJIcO4BKZGFJs1ZQtGYfS9ZJ9KjnFtXu
+	 CoUuDzdDeoQNA3IJviIlNiJi7ydg2ehdcQ5OXBzI0xl+XsUGv/gmofveqW1cZVJlxj
+	 7S5NNv/e7xF0C/H29trUyZ+4svuZFkbjIOhn5nXwrlL711gYmP+gm6Ewk+tz2CReoY
+	 NFWzzRmLR5sYfJufJHFK1j4djDnBCF+UiHFg8rnM/mFlrhQ4MNaEJcQxnaEuTEhFf3
+	 PK9kqt1NEZKGw==
+Date: Mon, 9 Jun 2025 11:54:39 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org, x86@kernel.org,
+	linux-arch@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is
+ integrated
+Message-ID: <20250609185439.GB1255@sol>
+References: <20250607200454.73587-1-ebiggers@kernel.org>
+ <aEaP-A21IB4ufbZT@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -73,42 +65,95 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250605123156.GA2812@cmpxchg.org>
+In-Reply-To: <aEaP-A21IB4ufbZT@gmail.com>
 
-Hello,
-
-On Thu, Jun 05, 2025 at 08:31:56AM -0400, Johannes Weiner wrote:
-> On Wed, Jun 04, 2025 at 08:19:28AM -0400, Johannes Weiner wrote:
-> > On Fri, May 30, 2025 at 12:31:35PM +0200, Vlastimil Babka wrote:
-...
-> > > I've just read the previous threads about Barry's proposal and if doing this
-> > > always isn't feasible, I'm wondering if memcg would be a better interface to
-> > > opt-in for this kind of behavior than both prctl or mctl. I think at least
-> > > conceptually it fits what memcg is doing? The question is if the
-> > > implementation would be feasible, and if android puts apps in separate memcgs...
+On Mon, Jun 09, 2025 at 09:40:40AM +0200, Ingo Molnar wrote:
+> 
+> * Eric Biggers <ebiggers@kernel.org> wrote:
+> 
+> > This series is also available at:
 > > 
-> > CCing Tejun.
+> >     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git lib-crc-arch-v2
 > > 
-> > Cgroups has been trying to resist flag settings like these. The cgroup
-> > tree is a nested hierarchical structure designed for dividing up
-> > system resources. But flag properties don't have natural inheritance
-> > rules. What does it mean if the parent group says one thing and the
-> > child says another? Which one has precedence?
+> > This series improves how lib/crc supports arch-optimized code.  First,
+> > instead of the arch-optimized CRC code being in arch/$(SRCARCH)/lib/, it
+> > will now be in lib/crc/$(SRCARCH)/.  Second, the API functions (e.g.
+> > crc32c()), arch-optimized functions (e.g. crc32c_arch()), and generic
+> > functions (e.g. crc32c_base()) will now be part of a single module for
+> > each CRC type, allowing better inlining and dead code elimination.  The
+> > second change is made possible by the first.
 > > 
-> > Hence the proposal to make it a per-process property that propagates
-> > through fork() and exec(). This also enables the container usecase (by
-> > setting the flag in the container launching process), without there
-> > being any confusion what the *effective* setting for any given process
-> > in the system is.
+> > As an example, consider CONFIG_CRC32=m on x86.  We'll now have just
+> > crc32.ko instead of both crc32-x86.ko and crc32.ko.  The two modules
+> > were already coupled together and always both got loaded together via
+> > direct symbol dependency, so the separation provided no benefit.
+> > 
+> > Note: later I'd like to apply the same design to lib/crypto/ too, where
+> > often the API functions are out-of-line so this will work even better.
+> > In those cases, for each algorithm we currently have 3 modules all
+> > coupled together, e.g. libsha256.ko, libsha256-generic.ko, and
+> > sha256-x86.ko.  We should have just one, inline things properly, and
+> > rely on the compiler's dead code elimination to decide the inclusion of
+> > the generic code instead of manually setting it via kconfig.
+> > 
+> > Having arch-specific code outside arch/ was somewhat controversial when
+> > Zinc proposed it back in 2018.  But I don't think the concerns are
+> > warranted.  It's better from a technical perspective, as it enables the
+> > improvements mentioned above.  This model is already successfully used
+> > in other places in the kernel such as lib/raid6/.  The community of each
+> > architecture still remains free to work on the code, even if it's not in
+> > arch/.  At the time there was also a desire to put the library code in
+> > the same files as the old-school crypto API, but that was a mistake; now
+> > that the library is separate, that's no longer a constraint either.
+> > 
+> > Changed in v2:
+> >    - Fixed build warning on architectures without any optimized CRC code
+> >    - Fixed build warning in sparc/crc32.h by removing pr_fmt
+> >    - Moved fallback definitions of crc32*_arch back into arch files
+> >    - Remove ARCH_HAS_CRC* symbols at end of series instead of beginning,
+> >      so that they're not removed until they're no longer being selected
+> >    - Slightly improved some commit messages
+> >    - Rebased onto other pending lib/crc changes
+> > 
+> > Eric Biggers (12):
+> >   lib/crc: move files into lib/crc/
+> >   lib/crc: prepare for arch-optimized code in subdirs of lib/crc/
+> >   lib/crc/arm: migrate arm-optimized CRC code into lib/crc/
+> >   lib/crc/arm64: migrate arm64-optimized CRC code into lib/crc/
+> >   lib/crc/loongarch: migrate loongarch-optimized CRC code into lib/crc/
+> >   lib/crc/mips: migrate mips-optimized CRC code into lib/crc/
+> >   lib/crc/powerpc: migrate powerpc-optimized CRC code into lib/crc/
+> >   lib/crc/riscv: migrate riscv-optimized CRC code into lib/crc/
+> >   lib/crc/s390: migrate s390-optimized CRC code into lib/crc/
+> >   lib/crc/sparc: migrate sparc-optimized CRC code into lib/crc/
+> >   lib/crc/x86: migrate x86-optimized CRC code into lib/crc/
+> >   lib/crc: remove ARCH_HAS_* kconfig symbols
+> 
+> For the movement of the x86 bits:
+> 
+>   Acked-by: Ingo Molnar <mingo@kernel.org>
+> 
+> >  rename {arch/s390/lib => lib/crc/s390}/crc32be-vx.c (100%)
+> >  rename {arch/s390/lib => lib/crc/s390}/crc32le-vx.c (100%)
+> >  rename arch/sparc/lib/crc32.c => lib/crc/sparc/crc32.h (60%)
+> >  rename {arch/sparc/lib => lib/crc/sparc}/crc32c_asm.S (100%)
+> >  create mode 100644 lib/crc/tests/Makefile
+> >  rename lib/{ => crc}/tests/crc_kunit.c (100%)
+> >  rename {arch/x86/lib => lib/crc/x86}/crc-pclmul-consts.h (100%)
+> >  rename {arch/x86/lib => lib/crc/x86}/crc-pclmul-template.S (100%)
+> >  rename {arch/x86/lib => lib/crc/x86}/crc-pclmul-template.h (100%)
+> >  rename arch/x86/lib/crc-t10dif.c => lib/crc/x86/crc-t10dif.h (56%)
+> >  rename {arch/x86/lib => lib/crc/x86}/crc16-msb-pclmul.S (100%)
+> >  rename {arch/x86/lib => lib/crc/x86}/crc32-pclmul.S (100%)
+> 
+> One small namespace suggestion: wouldn't it be better to move the arch 
+> support code to lib/crc/arch/, instead of lib/crc/? That way any 
+> generic code will stand out better and architecture directories don't 
+> crowd out what is supposed to be generic code.
 
-+1. If something can work as something which gets inherited through the
-process hierarchy, that's usually the better choice than making it a cgroup
-property. There isn't much to be gained by making them cgroup properties
-especially given that cgroup hierarchy, in most systems at this point, is a
-degenerated process hierarchy.
+I don't think that yet another level of directories would provide much value
+here.  The only non-arch subdirectory of lib/crc/ is "tests", so it's not like
+there are a lot of subdirectories that could be confused with arch names.
 
-Thanks.
-
--- 
-tejun
+- Eric
 
