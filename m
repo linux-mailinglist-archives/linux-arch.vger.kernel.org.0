@@ -1,155 +1,195 @@
-Return-Path: <linux-arch+bounces-12287-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12288-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74C3DAD19A8
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 10:15:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21AA8AD19C0
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 10:27:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31113169D42
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 08:15:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDA831669FB
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 08:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63FE01AE877;
-	Mon,  9 Jun 2025 08:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25A881E8323;
+	Mon,  9 Jun 2025 08:27:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHlmWMB5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3tPh7Dj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4166A92E;
-	Mon,  9 Jun 2025 08:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECBC8BFF;
+	Mon,  9 Jun 2025 08:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749456940; cv=none; b=p9celhQr/liaZglIEavVwDbjDCFcXM4z6D8CdtkXj2lA95QqyP8airjEuZ7mdB4mYc9MFecYCo9Vv4PmDh2GYFOkM561cpbuoc5WSZbdbs/lnpCZt1J7COLiSqzPVz5ErUVdMnANnZ6ShwQXfecUD9NTUgGXCeF3+JF+HhQa2F4=
+	t=1749457669; cv=none; b=qlJuSazGmuC0Y2VWGRFn/NYYfzBqVIoGxsMKXBQTqlH6/3Cd8KVjkoIswH5JksGvzehZXVDde6hoRK96h+Jp55Hj+zImikpnErouNVO2xl9iSoaHA159nB1H8eWOdh6kafxcegbie5UzDbsTQbem8LK+AnFG6NW3pze5Nn/4OoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749456940; c=relaxed/simple;
-	bh=6biSLqDt8gO7ruJmOh16RBlP1yDZqTM/WuIwSMjWngY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=icLlWp7cOsH+UWSdINsg5mjHMqCUxjrUx+uY3DdqXEMqgv+chPiacG1E02xx1E9R0ANM5kWwtTE7ZT9I9eVvAfnSLAG77FTpG1+lvC5iZPi8GMUwBPX75gqb9Z55yglRbehhteH4uqe4FqBK5ZAoUaQVNovesIgB390wFV/Fxcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHlmWMB5; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6fad4e6d949so22011896d6.0;
-        Mon, 09 Jun 2025 01:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749456937; x=1750061737; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=avUZtz3QyLzrtWeLJ2NgcAc7qvPmPgbfgTpeZiYZBXg=;
-        b=hHlmWMB586pA6FEK49ecKFQuFv6PzQwW0yW8LiKY2HMR71k21x3x8rYhTf41XKHRgd
-         QX8oZQYCt+EozPJt2XAwWWxQ+kNnWI8j4pOflgu4Ob9DnGGQSLLPLpwaWJ7rCu9l37Fb
-         KeUlxKlxzyAu+i4hMt1/2s6NdSKSx9S2bDfMC7bi7ga14m1+AXf077JhTRSEihtdSveY
-         q0xMMQXHOiqs7N/3xy8WMpIHqqwgk4ftN9A2FpXqD3mFd7L8y4+C5P/P5o8OPOtPAumv
-         /wRP768R/EH7hX/XQCx3c8c711kbD0XUDFDGaa4gRmrQ1obcEyIlJXoQuVdKUUbcjf1I
-         bUkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749456937; x=1750061737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=avUZtz3QyLzrtWeLJ2NgcAc7qvPmPgbfgTpeZiYZBXg=;
-        b=ltV7dscYfE7jLb24k+w9Efd8bm/ifqYrByOS0YDt2kuvOl1C6gXlZ0J2xlHvwEQyjt
-         IFtks+3M0nz8EUiIIhy34WhEw83tE/mK6i5rF3DFgao2dmH7w158aJDDcT1Hf+7sVuhC
-         Rtd1EY8ZDvs/UYVpyCigjFawK9i9aJfpgYeytVyx0VznWhmOiPkvEjRHO4e/5qmeEwS2
-         /M4rJRPW9JKYnJo5JKf/0dw8VfjszZBzGBWFbPyrBQvmGp2xNuHPxWXYma+nmnSYIMc+
-         1ibV361EEvDfnN2C/GbfoNpzVwDpiFq9vcKrY9uxr84uf2SGfw8fUALYwDO8DFjVKRnZ
-         Pk8A==
-X-Forwarded-Encrypted: i=1; AJvYcCUEgzQMxH4uOhPIUAil7YQBr3+meygxfCDuqPVMxPn+HYbQOmnnGAXvRfIWQsbOwD9tm97FDszLxFjIHw==@vger.kernel.org, AJvYcCULo1lUmTl6den+CD1LB8fzoGyslPz5H/YosbszilReC7y2Tm7qT9fHFFI0ItKtYbiGjHrgV+/tdCGQ@vger.kernel.org, AJvYcCWCAgB7uCKQRu7uUbUHuh6cWCntvijnXvepINYXtKGJ0UvLmRQ7hUkK1r70cJUkBkruy6kbpishY/OZ3w==@vger.kernel.org, AJvYcCWs7q19+s31WAKC74xdjW70GV0VtmSndwHVol+NV+afrDDszzeeMJvVOpCwq0ksbeGHGO8jcdgHmWmzyG04@vger.kernel.org, AJvYcCXAo6eXv5f3iFtR2GNteyGJ6beV20yITtiwzB5eDSD1cLeWmeh3SCR3PHX93LzXe6N542qLs7Mg2MUKmQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyfo8mhpV0Z9dwNHpW7+9Ox2gbfZ+BaWhpnd444pPhkwCh1ykSd
-	R39Vot3nCy3OH8Rox7EVXS0AIE7QPQuSbmuCRFf98OMedcOgo0jQFIKt0V5H+cDb8X3FzxOpG9n
-	WwGgeqTneOaMONdxTHojK3vnK4E5cnNrX/Q==
-X-Gm-Gg: ASbGnctUDNg2ikWerb31Cwn6LxNeCKNEsqy/tanU0YvHce7WK/sKKjVS9Om5VR7pc7l
-	DsYCiRLC45/4MU+7pVHubgvlonC3vOKy0PWTaVnwwkj+4mSu6ifAstMIFyy7hvVUUpU1GL7VIjK
-	pDYOiFnOU1jaPXxk3q0KitdTFi4Rom8tvQ
-X-Google-Smtp-Source: AGHT+IH9me4CEdVFtIOCuIg1XAKf5VF3TkyjvnvcV85fkEmF6RBw78F2p/ZOsZjFija3GtR5SXP0ijToaYQxk0VMGhA=
-X-Received: by 2002:ad4:5f09:0:b0:6fa:c81a:6204 with SMTP id
- 6a1803df08f44-6fb08f50942mr228433326d6.10.1749456937558; Mon, 09 Jun 2025
- 01:15:37 -0700 (PDT)
+	s=arc-20240116; t=1749457669; c=relaxed/simple;
+	bh=4sH/XwtN6/zyhtM9A103j8Ru62ZnMr73mTEUim9z6dI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PH+WrJuZ06UP7/kN9MZplCOsdUhe6VhrYO6oDfbSBVQzSp35C7zU9RqtDovEjLN60XR6QZhOrIeLs1y0hq6h6YteiXVbSik3nFsKD9U78+GLHwS+bhwnKRfKyCjG3kanhv1HvjZKqHeOBbPXOrMO93e+ReV2qhLMB+IyMl+RiaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3tPh7Dj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9984AC4CEEB;
+	Mon,  9 Jun 2025 08:27:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749457668;
+	bh=4sH/XwtN6/zyhtM9A103j8Ru62ZnMr73mTEUim9z6dI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T3tPh7DjASMZscBcYz4H0Lo96hbRJ6mqF6+RNvufiWIhZpMYHOFvA4Pt/wJGsmWcq
+	 xqFTu4AHz+6jrjtrYVJBz+kZpDRyNUeefpyg2ptq8ltNILiO0ZEijWRJpabk7zGkso
+	 gSvNZM0Ng2mdGcNMmO94Wfxa275qZDAUzoDionR/902lFFga6Pxr2qa5J1cE+Cvp/I
+	 lourn3ffAxnLYhjx+n4F8FvRyk/tN8myutkBveTQC8KzZOtVLGHRZoHBXfDIBcj7Xi
+	 wrDnAQG4pkoEn37ITsMqzAN1tkSS/gs7zC3vFLJHtZeEM8J7qdHMGw4zzmWPd9H0WG
+	 ZJixSbJlAbHIQ==
+Date: Mon, 9 Jun 2025 10:27:44 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: linux-kernel@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Peter Zijlstra <peterz@infradead.org>, linux-arch@vger.kernel.org,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: [PATCH 16/15] bugs/s390: Use in 'cond_str' to __EMIT_BUG()
+Message-ID: <aEabAPB5Y9EbSPkt@gmail.com>
+References: <20250515124644.2958810-1-mingo@kernel.org>
+ <20250515124644.2958810-11-mingo@kernel.org>
+ <20250520133927.7932C19-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250607200454.73587-1-ebiggers@kernel.org>
-In-Reply-To: <20250607200454.73587-1-ebiggers@kernel.org>
-From: Julian Calaby <julian.calaby@gmail.com>
-Date: Mon, 9 Jun 2025 18:15:24 +1000
-X-Gm-Features: AX0GCFtpUUxU8yEaZey6YSh4XuBhQlOITIBZOiB21tfxDGQbnIThjp-0HFxjxHQ
-Message-ID: <CAGRGNgV_4X3O-qo3XFGexi9_JqJXK9Mf82=p8CQ4BoD3o-Hypw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is integrated
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	sparclinux@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org, 
-	Ard Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250520133927.7932C19-hca@linux.ibm.com>
 
-Hi Eric,
 
-On Sun, Jun 8, 2025 at 6:07=E2=80=AFAM Eric Biggers <ebiggers@kernel.org> w=
-rote:
->
-> This series is also available at:
->
->     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/li=
-nux.git lib-crc-arch-v2
->
-> This series improves how lib/crc supports arch-optimized code.  First,
-> instead of the arch-optimized CRC code being in arch/$(SRCARCH)/lib/, it
-> will now be in lib/crc/$(SRCARCH)/.  Second, the API functions (e.g.
-> crc32c()), arch-optimized functions (e.g. crc32c_arch()), and generic
-> functions (e.g. crc32c_base()) will now be part of a single module for
-> each CRC type, allowing better inlining and dead code elimination.  The
-> second change is made possible by the first.
->
-> As an example, consider CONFIG_CRC32=3Dm on x86.  We'll now have just
-> crc32.ko instead of both crc32-x86.ko and crc32.ko.  The two modules
-> were already coupled together and always both got loaded together via
-> direct symbol dependency, so the separation provided no benefit.
->
-> Note: later I'd like to apply the same design to lib/crypto/ too, where
-> often the API functions are out-of-line so this will work even better.
-> In those cases, for each algorithm we currently have 3 modules all
-> coupled together, e.g. libsha256.ko, libsha256-generic.ko, and
-> sha256-x86.ko.  We should have just one, inline things properly, and
-> rely on the compiler's dead code elimination to decide the inclusion of
-> the generic code instead of manually setting it via kconfig.
->
-> Having arch-specific code outside arch/ was somewhat controversial when
-> Zinc proposed it back in 2018.  But I don't think the concerns are
-> warranted.  It's better from a technical perspective, as it enables the
-> improvements mentioned above.  This model is already successfully used
-> in other places in the kernel such as lib/raid6/.  The community of each
-> architecture still remains free to work on the code, even if it's not in
-> arch/.  At the time there was also a desire to put the library code in
-> the same files as the old-school crypto API, but that was a mistake; now
-> that the library is separate, that's no longer a constraint either.
+* Heiko Carstens <hca@linux.ibm.com> wrote:
 
-Quick question, and apologies if this has been covered elsewhere.
+> On Thu, May 15, 2025 at 02:46:39PM +0200, Ingo Molnar wrote:
+> > Pass in the condition string from __WARN_FLAGS(), but do not
+> > concatenate it with __FILE__, because the __bug_table is
+> > apparently indexed by 16 bits and increasing string size
+> > overflows it on defconfig builds.
+> 
+> Could you provide your change which didn't work?
+> 
+> I cannot see how anything would overflow. Trying the below on top of
+> your series seems to work like expected.
+> 
+> In order to keep things easy this drops the mergeable section trick
+> and results in a small increase of the rodata section, but I doubt
+> that would explain what you have seen.
+> 
+> Also allyesconfig builds without errors.
+> 
+> diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
+> index 30f8785a01f5..837bfbde0c51 100644
+> --- a/arch/s390/include/asm/bug.h
+> +++ b/arch/s390/include/asm/bug.h
+> @@ -11,16 +11,14 @@
+>  #define __EMIT_BUG(cond_str, x) do {				\
+>  	asm_inline volatile(					\
+>  		"0:	mc	0,0\n"				\
+> -		".section .rodata.str,\"aMS\",@progbits,1\n"	\
+> -		"1:	.asciz	\""__FILE__"\"\n"		\
+> -		".previous\n"					\
+>  		".section __bug_table,\"aw\"\n"			\
+> -		"2:	.long	0b-.\n"				\
+> -		"	.long	1b-.\n"				\
+> -		"	.short	%0,%1\n"			\
+> -		"	.org	2b+%2\n"			\
+> +		"1:	.long	0b-.\n"				\
+> +		"	.long	%0-.\n"				\
+> +		"	.short	%1,%2\n"			\
+> +		"	.org	1b+%3\n"			\
+>  		".previous\n"					\
+> -		: : "i" (__LINE__),				\
+> +		: : "i" (WARN_CONDITION_STR(cond_str) __FILE__),\
+> +		    "i" (__LINE__),				\
+>  		    "i" (x),					\
+>  		    "i" (sizeof(struct bug_entry)));		\
+>  } while (0)
 
-Why not just use choice blocks in Kconfig to choose the compiled-in
-crc32 variant instead of this somewhat indirect scheme?
+So I'm not sure what happened: I tried to reproduce what I did 
+originally, but my naive patch ran into assembler build errors when a 
+WARN_ON() macro tried to use the '%' C operator, such as 
+fs/crypto/crypto.c:123:
 
-This would keep the dependencies grouped by arch and provide a single
-place to choose whether the generic or arch-specific method is used.
+ include/linux/compiler_types.h:497:20: error: invalid 'asm': invalid %-code
+ arch/s390/include/asm/bug.h:12:2: note: in expansion of macro 'asm_inline'
+ arch/s390/include/asm/bug.h:50:2: note: in expansion of macro '__EMIT_BUG'
+ include/asm-generic/bug.h:119:3: note: in expansion of macro '__WARN_FLAGS'
+ fs/crypto/crypto.c:123:6: note: in expansion of macro 'WARN_ON_ONCE'
 
-It would also allow for alternatives if that ever becomes a thing and
-compile testing of the arch-specific variants if that even offers any
-actual value.
+Which corresponds to:
+
+        if (WARN_ON_ONCE(len % FSCRYPT_CONTENTS_ALIGNMENT != 0))
+                return -EINVAL;
+
+I'm quite sure I never saw these build errors - I saw linker errors 
+related to the u16 overflow I documented in the changelog. (Note to 
+self: copy & paste more of the build error context next time around.)
+
+Your version doesn't have that build problem, so I picked it up with 
+the changelog below and your Signed-off-by. Does that look good to you?
 
 Thanks,
 
---=20
-Julian Calaby
+	Ingo
 
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
+===================================>
+From 7128294ca8b997efb1d85c7405c8c6e9af1a170d Mon Sep 17 00:00:00 2001
+From: Heiko Carstens <hca@linux.ibm.com>
+Date: Tue, 20 May 2025 15:39:27 +0200
+Subject: [PATCH] bugs/s390: Use 'cond_str' in __EMIT_BUG()
+
+In order to keep things easy this drops the mergeable section trick
+and results in a small increase of the rodata section.
+
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-arch@vger.kernel.org
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: linux-s390@vger.kernel.org
+Link: https://lore.kernel.org/r/20250520133927.7932C19-hca@linux.ibm.com
+---
+ arch/s390/include/asm/bug.h | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/arch/s390/include/asm/bug.h b/arch/s390/include/asm/bug.h
+index 30f8785a01f5..837bfbde0c51 100644
+--- a/arch/s390/include/asm/bug.h
++++ b/arch/s390/include/asm/bug.h
+@@ -11,16 +11,14 @@
+ #define __EMIT_BUG(cond_str, x) do {				\
+ 	asm_inline volatile(					\
+ 		"0:	mc	0,0\n"				\
+-		".section .rodata.str,\"aMS\",@progbits,1\n"	\
+-		"1:	.asciz	\""__FILE__"\"\n"		\
+-		".previous\n"					\
+ 		".section __bug_table,\"aw\"\n"			\
+-		"2:	.long	0b-.\n"				\
+-		"	.long	1b-.\n"				\
+-		"	.short	%0,%1\n"			\
+-		"	.org	2b+%2\n"			\
++		"1:	.long	0b-.\n"				\
++		"	.long	%0-.\n"				\
++		"	.short	%1,%2\n"			\
++		"	.org	1b+%3\n"			\
+ 		".previous\n"					\
+-		: : "i" (__LINE__),				\
++		: : "i" (WARN_CONDITION_STR(cond_str) __FILE__),\
++		    "i" (__LINE__),				\
+ 		    "i" (x),					\
+ 		    "i" (sizeof(struct bug_entry)));		\
+ } while (0)
 
