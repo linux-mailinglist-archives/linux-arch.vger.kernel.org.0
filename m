@@ -1,231 +1,245 @@
-Return-Path: <linux-arch+bounces-12295-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12296-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25415AD2969
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 00:36:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8AA6AD298B
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 00:46:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0A017A7CAA
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 22:35:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83F7616FCB2
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 22:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F238223DC9;
-	Mon,  9 Jun 2025 22:36:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0DA0223DC5;
+	Mon,  9 Jun 2025 22:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gi2/HbR6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EnMMdYtQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784503597B;
-	Mon,  9 Jun 2025 22:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E674454652;
+	Mon,  9 Jun 2025 22:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749508613; cv=none; b=DDXzXlQvI+zc8psKYA/f4U0dAtyhXNeicFvV47+kh2wKYJsmNLgiHfPKbfH68sXMLdSkb20mgLi6XyJZx+N1WT83i5G+rOgZSRyUXC5a3kdVNL6nT4xT7xWnT1VP1sSqzHYN8lWJ5tKnD1WBgB1tTqVH7HEU8u62/ZoRHBNXJmg=
+	t=1749509195; cv=none; b=XxZZMq4Msn7LaMbSasmyJzYe2V3Fzi3ZfSRrFYzuj3B5ek3BeWuI8lh3PVqGoe/pOvDXbNW7NWt1n8I+GbROX9MFbd5MV4q6hsEQuA4ih5gb39E4HzXVuArwP3wQ5rPQwa1keUs9kXzeQ0gbE8AdRhmhoA1knk2Qtongam5cS8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749508613; c=relaxed/simple;
-	bh=zDKYNbdF0rH3+FimkZczocsoz+9nXxDjaYj98TTwVZc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xi7LItcGrdh5Q+bd9ERJdyjW4Aw0QigJZyl1BAn9N0U2/PUBYKWf/ekzgQauwQ5Om2twOcwSsXnaxdvbx0BB83Hr1PsforDTetqzdIN3vZSEGoAp/XNNU/ahdJbznTrBD+dzctbvYjFX4Rm4wvUM8ERCc5G5XYJb3MKYNIPL+2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gi2/HbR6; arc=none smtp.client-ip=209.85.160.172
+	s=arc-20240116; t=1749509195; c=relaxed/simple;
+	bh=IEqm1JdCJmQGuOAMdzOGJLauECy2w663mdnt4zkoHAQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RlbhkyJB7tpdjgEM8M2Ya2HTCSDo8J/2B3Xae9WlcUpX1iwbg5RB4ybtcfBIhxHKLjLnwim3yC7N/vPfAHLIV9WLogHHfRuxSkF8DD2ckRKbu5g3lZUje0k+aCd5Q+p2EHQUZ72T18WzgnarUxmMx4C4gwqv3sm4fZDutwESnQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EnMMdYtQ; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4a43cbc1ab0so58952611cf.0;
-        Mon, 09 Jun 2025 15:36:51 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7d098f7bd77so549518285a.0;
+        Mon, 09 Jun 2025 15:46:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749508610; x=1750113410; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/hq0btBK5TQK/jQfASAZ7ArH/Py2u4qhWqQQYIBxtEI=;
-        b=Gi2/HbR6MYHWkFxwVMBbDFwZMjBT+aygp8CDf4Ur9uSyIGGJQZ/+mJTcP1V43cnXE5
-         QCW9fPrTvKxKXEHjkoXlHrsRraUcSB2qOkkiaATh6DtzUSR2HhA5w43YQUDpPOCUj7f7
-         yr8BtRncOVR1Oz0IZZv50J86+AfA/lgPGc6XCl2oU4gs+HhdcA3c0sqPlHKS1fQRZ/b/
-         yufAdKbPlVEtXk8hhTXv1BqphryIEtW5PoNOKd4lEstzHVuGCiP6XfRmMbVABW+1lMym
-         XOb1g1KVjin6yAPj3RM3x1Oi8zQQMyoCXpNMNWPiILCWw1EQTreCcFuFk7Z7+p05KEt2
-         soZQ==
+        d=gmail.com; s=20230601; t=1749509193; x=1750113993; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=V5UGBtq13GxPtnNntFLWLuUNWSuRazB9K2mUu5fyq/A=;
+        b=EnMMdYtQzyrGIkXfAjksPNVV58qWUhO/HQH33C+ukjy79/M/Ibu8ieDNix8OIO/bmP
+         1jC83hij98FekEJ3hNiTdZuht5iNKgSgQVKRTyiPTJ6F9CRUOoI1tGPh3cLtoWqwQkbj
+         V7rMf7eJ6xJW0a5zopMZusgB3ad38igPBmh5BASveYUDWVKKWfvji6TB6JCD8mHNw98M
+         A2BJw5RfFgjBXZOqhhWimO0ekaQygaP0KzcOrFA4Z5L8rn1juEXRcV86MgUP8pvn6q5G
+         xnoPXiMX4yyKlXtkY1hke5+1ZZmpfibngBCMeuS9+EaJxoqkgEeszmV3gK804yKvEte1
+         S9xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749508610; x=1750113410;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/hq0btBK5TQK/jQfASAZ7ArH/Py2u4qhWqQQYIBxtEI=;
-        b=G0yYnEx6R/XsM9DoXvWk9oJXOVwZFWmgy/gguMTPtDGHEMw1KX78hxTak1cqS8qrW3
-         rLEYeyBxqd1mg5Ij2mxHasIRgZ8wmTstBcgXHwTU0TRFFIDtmUNEEhTwLw8yO9MqmOHf
-         bct9BH8NSw/sssM9e5sGuoncrqODQFWKLCE+VUS81ePbNXNYmncjtTlx4GOLiBSHzu6B
-         i1rTW4f/1PYno7rcNCpHVw4nDnnLzIqnvorkpXq4NJBi7F5WVYSKElzyMNj/vkG0tuFB
-         kzAUW/pa2BIqVmZ3qeVJN6OCZgvtWNf7HmzMsbTPJ7w9vEtV1Wju2bBpFuf4UTukxvms
-         RpvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUmvWixXkaScPS75uRAuzOIJri9oLOWbO1hA/OvZvH9vOgmUkxdObruRtvfp5VxSG2R1OszG5exgUPuCw==@vger.kernel.org, AJvYcCVPp7Ixdr3SPSKeXN5DmnyGywp0NFr5gbHpYrFE8kDfGUHoprhl2Vlcg4XK1DakDEndmVY9W+0rP9CcOA==@vger.kernel.org, AJvYcCXJ1Bx7HTAaoUoIxuADKSr62ZW3xGxGBA/Cc/cyHukk86B4Pm2sqiphYoZOR9DA9gBu2KzltPwuYK9bfz+l@vger.kernel.org, AJvYcCXgeAHGQ2K5cldJ7bM2jCiXEDmwKxHJnGl5R/2NpADGyrzPpafMU6g8tDjm1Z1nbuD0OIRkZ4BBPZVG@vger.kernel.org, AJvYcCXkbaSfIGMjq0iEoPGzYGB4QzV6PbH7KgtYDyne0DXuIVJ98SQdOtcqSZCJK+Q17JjV/U8Z+zz8LfUooQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmbxwS+kGEt9OC8/zsAQcCU/ifqWD6BfgsbkKsgXC/QuKq17Fn
-	34yX63eGSHr1bcnrIOE7ry0kAJBdY5fZsFEkHo3t7PylsoPshAVZ9KLmsfqQwtCnj1eUWFG8nju
-	TEZisg5ex189ZFiK1CP4v2PEwMpZMe8ioZEpV+eU=
-X-Gm-Gg: ASbGnct0UJ3xn2+D0JZuSB6PHv9VwghU/+k5nail+IPIVCKoylVRrorK57eabAU+TdG
-	zVCZjllE3N9a5sQjROEsitWJEqBbn2VvftdGX7QJLuoB3eDUadJYWSBf0UBFQV6Sqgsn55Z8+6g
-	foPc4ZYEiXONNiZWL6gH9z9iDAku3gVAZUXFonUnHuxSM=
-X-Google-Smtp-Source: AGHT+IEs8tHro3Bqg7q8bk+joLEpnvyUJ+PSWmsKZZ858+7uklxqykPVE6FCaw1PpU8qCZAfdipBs10XMfJUvah5VmA=
-X-Received: by 2002:a05:6214:f2a:b0:6fa:f94e:6e75 with SMTP id
- 6a1803df08f44-6fb08f5f7c4mr277251346d6.25.1749508610272; Mon, 09 Jun 2025
- 15:36:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749509193; x=1750113993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V5UGBtq13GxPtnNntFLWLuUNWSuRazB9K2mUu5fyq/A=;
+        b=r+Ai3Y5527IcrqSIzvGYqVzNqMbsfL1cOMa7w2UCiQiD+0Vef0RUpqeWQYbsA2TTif
+         8/2GN/R6Cq98pwsl+iUEeqj/YojV71b8WXoGli/lkqmmUwa6TOj63rV1FP5ZthqqlSh9
+         y2jQGnRgpNLwjWz4540wnFu6iADrl7qSvBvTZss1e3PreBW8O19YNY80r/AgptcaJSgg
+         bT/kjTf3obLPgTYvaRJDvw4Y1GiqXAXN1x8gGS2+TqWXRITJjFyBB9NrrCLxa8bLB5N7
+         Ef50qsmEkGxR8Upe/ll/s3tDZZ1OcQtv27lNost3dndX6jqcY6A2dVG0GAj2wGnstNW3
+         qVWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUE1KlHjE7sjcNlZ5SVO2v/bkgFQwcRc6LFJNdgMQp6Ju4zE9EEguVZyEQqCDWnZ04fBgtAC4EpeHV+@vger.kernel.org, AJvYcCWE/cPPoUPwNq30Wodp700dOHU+ynuUc/VSMKo0xRS+6Gnz8JUw6h/6c8aZCqIub3b3mhEfpTspnqckzsXgcME=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqiACz5JreikEulMJ5RxbK/2JoSP5/BvMpNPqfK+WXX310nFFg
+	gGnzwe3KFErWCy7ThY9n89nRXTEFJszfCMEaBK6HecuVkisA4IZYHP9D
+X-Gm-Gg: ASbGncu5xGVv1WfS6VI4J6ucxfqeRgL3wv7cFFak6E7PlNzloAy7GvRyK8ur2m75S+1
+	HStqYd/xHh6+KBFjXfJuYu6EcgWT3T4lLRKva50sLMQ+ikGZmwxRcJsJjLxGN7nYCQJfuUujal8
+	8i/w/lX3V2mA239xv3xg1NclyNR1e9jZRqcAa7SzmVwXpSfK8osc0djaw9X0m0PA+qB9VwxhKVt
+	fcnO9qN7P5k6FWdorlm1ufdDacP5/0pho5bn3S/v7kEZkvX9bZ3OZP+BMtkJgvazPw7HEROAjlE
+	1I1JgREv+ZVzIK/satqPEfKC7oLuL/XkxZSMWVsU4FhP+2rQ519W2fcn2C9detxr0SCAFXax8Tu
+	f85RAOUJBMGknfIGFbt84mqIQ4f7din1XPMYzfa2cNMGTB1Voyw96
+X-Google-Smtp-Source: AGHT+IENOpjPB1yljzfiMwwSApPRUkLli1+qtSLEn+wxBrXU5IyRAiAyOKuFF67UnXoHNcSDCEwJLg==
+X-Received: by 2002:a05:620a:4405:b0:7ce:ed0e:423c with SMTP id af79cd13be357-7d39d8a98c1mr206503185a.9.1749509192780;
+        Mon, 09 Jun 2025 15:46:32 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d250f64b80sm600930285a.23.2025.06.09.15.46.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 15:46:32 -0700 (PDT)
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 9CB111200043;
+	Mon,  9 Jun 2025 18:46:31 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Mon, 09 Jun 2025 18:46:31 -0400
+X-ME-Sender: <xms:R2RHaDFX-ayTKY_XEAtPlRZLaUJcmcTzMNqXxYt5tMIOMw2ZbL2Qhw>
+    <xme:R2RHaAVCotEba3hJ6wiE7eELRHOlN9cNpkq0idcja6IhRYZ5l-G79l5j5_Y7grJlA
+    AmDgu-D6WnfWHcCSA>
+X-ME-Received: <xmr:R2RHaFLyYjOrAK9AajBPQlvBK38jrTtlHgECn4abbmDU9j_ozl9mBvgLZI8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdelleduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfh
+    rhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeeggeeukeeghfevudektdevjeehhfekffevueefudei
+    vdelteeltdekheejgfeiveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgv
+    shhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehhe
+    ehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+    pdhnsggprhgtphhtthhopedviedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplh
+    hinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    rhhushhtqdhfohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheplhhkmhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhu
+    gidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurg
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghi
+    lhdrtghomhdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdrtghomhdprh
+    gtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhopegsjhhorhhn
+    fegpghhhsehprhhothhonhhmrghilhdrtghomh
+X-ME-Proxy: <xmx:R2RHaBFFUoumlD9FVwR97VsnRb_VGE5ZjMU2O_H7o1alcLDtmh6-Tw>
+    <xmx:R2RHaJVyBOKURSgIPW_MM4HpqdtbuOrjj2f8vRhRXqQz_Bz6n5bsfQ>
+    <xmx:R2RHaMNDGZOUKtvkKEOaibtuuXJlhTBJb_R3RMYe2Rna5oYj4Dvm_A>
+    <xmx:R2RHaI2dBFkwHzWUnlTwZ93d9ieuVEvXRJI2eOsDr0qkFL8cJraYOA>
+    <xmx:R2RHaOWPMJkRRQo2mlVml8cuv0Ggdgy91zrVbjFfdtJApm9qDyX-HE-k>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 9 Jun 2025 18:46:31 -0400 (EDT)
+From: Boqun Feng <boqun.feng@gmail.com>
+To: linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	lkmm@lists.linux.dev,
+	linux-arch@vger.kernel.org
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Lyude Paul <lyude@redhat.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	"Thomas Gleixner" <tglx@linutronix.de>
+Subject: [PATCH v4 00/10] LKMM generic atomics in Rust 
+Date: Mon,  9 Jun 2025 15:46:05 -0700
+Message-Id: <20250609224615.27061-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250607200454.73587-1-ebiggers@kernel.org> <CAGRGNgV_4X3O-qo3XFGexi9_JqJXK9Mf82=p8CQ4BoD3o-Hypw@mail.gmail.com>
- <20250609194845.GC1255@sol>
-In-Reply-To: <20250609194845.GC1255@sol>
-From: Julian Calaby <julian.calaby@gmail.com>
-Date: Tue, 10 Jun 2025 08:36:39 +1000
-X-Gm-Features: AX0GCFuUtzPWjE_fUMffnG3t-eGyXruP1OclUqP-Gat86eROO8R2ly8lc5p3jN0
-Message-ID: <CAGRGNgXw5LcykjiRS3yteb0K8FmYtb9wp1CJPM+GCKAw7j4ktQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is integrated
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	sparclinux@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org, 
-	Ard Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Eric,
+Hi,
 
-On Tue, Jun 10, 2025 at 5:49=E2=80=AFAM Eric Biggers <ebiggers@kernel.org> =
-wrote:
->
-> On Mon, Jun 09, 2025 at 06:15:24PM +1000, Julian Calaby wrote:
-> > Hi Eric,
-> >
-> > On Sun, Jun 8, 2025 at 6:07=E2=80=AFAM Eric Biggers <ebiggers@kernel.or=
-g> wrote:
-> > >
-> > > This series is also available at:
-> > >
-> > >     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebigger=
-s/linux.git lib-crc-arch-v2
-> > >
-> > > This series improves how lib/crc supports arch-optimized code.  First=
-,
-> > > instead of the arch-optimized CRC code being in arch/$(SRCARCH)/lib/,=
- it
-> > > will now be in lib/crc/$(SRCARCH)/.  Second, the API functions (e.g.
-> > > crc32c()), arch-optimized functions (e.g. crc32c_arch()), and generic
-> > > functions (e.g. crc32c_base()) will now be part of a single module fo=
-r
-> > > each CRC type, allowing better inlining and dead code elimination.  T=
-he
-> > > second change is made possible by the first.
-> > >
-> > > As an example, consider CONFIG_CRC32=3Dm on x86.  We'll now have just
-> > > crc32.ko instead of both crc32-x86.ko and crc32.ko.  The two modules
-> > > were already coupled together and always both got loaded together via
-> > > direct symbol dependency, so the separation provided no benefit.
-> > >
-> > > Note: later I'd like to apply the same design to lib/crypto/ too, whe=
-re
-> > > often the API functions are out-of-line so this will work even better=
-.
-> > > In those cases, for each algorithm we currently have 3 modules all
-> > > coupled together, e.g. libsha256.ko, libsha256-generic.ko, and
-> > > sha256-x86.ko.  We should have just one, inline things properly, and
-> > > rely on the compiler's dead code elimination to decide the inclusion =
-of
-> > > the generic code instead of manually setting it via kconfig.
-> > >
-> > > Having arch-specific code outside arch/ was somewhat controversial wh=
-en
-> > > Zinc proposed it back in 2018.  But I don't think the concerns are
-> > > warranted.  It's better from a technical perspective, as it enables t=
-he
-> > > improvements mentioned above.  This model is already successfully use=
-d
-> > > in other places in the kernel such as lib/raid6/.  The community of e=
-ach
-> > > architecture still remains free to work on the code, even if it's not=
- in
-> > > arch/.  At the time there was also a desire to put the library code i=
-n
-> > > the same files as the old-school crypto API, but that was a mistake; =
-now
-> > > that the library is separate, that's no longer a constraint either.
-> >
-> > Quick question, and apologies if this has been covered elsewhere.
-> >
-> > Why not just use choice blocks in Kconfig to choose the compiled-in
-> > crc32 variant instead of this somewhat indirect scheme?
-> >
-> > This would keep the dependencies grouped by arch and provide a single p=
-lace to
-> > choose whether the generic or arch-specific method is used.
->
-> It's not clear exactly what you're suggesting, but it sounds like you're
-> complaining about this:
->
->     config CRC32_ARCH
->             bool
->             depends on CRC32 && CRC_OPTIMIZATIONS
->             default y if ARM && KERNEL_MODE_NEON
->             default y if ARM64
->             default y if LOONGARCH
->             default y if MIPS && CPU_MIPSR6
->             default y if PPC64 && ALTIVEC
->             default y if RISCV && RISCV_ISA_ZBC
->             default y if S390
->             default y if SPARC64
->             default y if X86
+v4 for LKMM atomics in Rust, you can find the previous versions:
 
-I was suggesting something roughly like:
+v3: https://lore.kernel.org/rust-for-linux/20250421164221.1121805-1-boqun.feng@gmail.com/
+v2: https://lore.kernel.org/rust-for-linux/20241101060237.1185533-1-boqun.feng@gmail.com/
+v1: https://lore.kernel.org/rust-for-linux/20240612223025.1158537-1-boqun.feng@gmail.com/
+wip: https://lore.kernel.org/rust-for-linux/20240322233838.868874-1-boqun.feng@gmail.com/
 
-choice
-    prompt "CRC32 Variant"
-    depends on CRC32 && CRC_OPTIMIZATIONS
+The reason of providing our own LKMM atomics is because memory model
+wise Rust native memory model is not guaranteed to work with LKMM and
+having only one memory model throughout the kernel is always better for
+reasoning.
 
-config CRC32_ARCH_ARM_NEON
-    bool "ARM NEON"
-    default y
-    depends ARM && KERNEL_MODE_NEON
 
-...
+I haven't gotten any review from last version but I got a few feedbacks
+during Rust-for-Linux weekly meeting. I trimmed two more patches to make
+the current series easier to review, the current version includes:
 
-config CRC32_GENERIC
-    bool "Generic"
+* Generic atomic support of i32, i64, u32, u64, isize and usize on:
+  * load() and store()
+  * xchg() and cmpxchg()
+  * add() and fetch_add()
 
-endchoice
+* Atomic pointer support on:
+  * load() and store()
+  * xchg() and cmpxchg()
 
-> This patchset strikes a balance where the vast majority of the arch-speci=
-fic CRC
-> code is isolated in lib/crc/$(SRCARCH), and the exceptions are just
-> lib/crc/Makefile and lib/crc/Kconfig.  I think these exceptions make sens=
-e,
-> given that we're building a single module per CRC variant.  We'd have to =
-go
-> through some hoops to isolate the arch-specific Kconfig and Makefile snip=
-pets
-> into per-arch files, which don't seem worth it here IMO.
+* Barrier and ordering support.
 
-I was only really concerned with the Kconfig structure, I was
-expecting Kbuild to look roughly like this: (filenames are wrong)
+Any missing functionality can of course be added in a later patch. There
+are some use cases based on these API can be found at:
 
-crc32-y +=3D crc32-base.o
-crc32-$(CRC32_ARCH_ARM_NEON) +=3D arch/arm/crc32-neon.o
-...
-crc32-$(CRC32_GENERIC) +=3D crc32-generic.o
+	git://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git rust-atomic-dev
 
-but yeah, your proposal here has grown on me now that I think about it
-and the only real "benefit" mine has is that architectures can display
-choices for variants that have Kconfig-visible requirements, which
-probably isn't that many so it wouldn't be useful in practice.
+for example, RCU protected pointers and AtomicFlag.
 
-Thanks for answering my question,
+I think the current version is ready to merge (modulo some documentation
+improvement), and I would like to postpone small implementation
+improvement because we are seeing growing usages of atomics in Rust
+side. It's better to merge the API first so that we can clean up and
+help new users.
 
---=20
-Julian Calaby
+But I do have one question about how to route the patch, basically I
+have three options:
 
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
+* via tip, I can send a pull request to Ingo at -rc4 or -rc5.
+
+* via rust-next, I can send a pull request to Miguel at -rc4 or -rc5.
+
+* via my own tree or atomic (Peter if you remember, we do have an atomic
+  group in kernel.org and I can create a shared tree under that group),
+  I can send a pull request to Linus for 6.17 merge window.
+
+Please advise.
+
+Regards,
+Boqun
+
+Boqun Feng (10):
+  rust: Introduce atomic API helpers
+  rust: sync: Add basic atomic operation mapping framework
+  rust: sync: atomic: Add ordering annotation types
+  rust: sync: atomic: Add generic atomics
+  rust: sync: atomic: Add atomic {cmp,}xchg operations
+  rust: sync: atomic: Add the framework of arithmetic operations
+  rust: sync: atomic: Add Atomic<u{32,64}>
+  rust: sync: atomic: Add Atomic<{usize,isize}>
+  rust: sync: atomic: Add Atomic<*mut T>
+  rust: sync: Add memory barriers
+
+ MAINTAINERS                               |    4 +-
+ rust/helpers/atomic.c                     | 1038 +++++++++++++++++++++
+ rust/helpers/barrier.c                    |   18 +
+ rust/helpers/helpers.c                    |    2 +
+ rust/kernel/sync.rs                       |    2 +
+ rust/kernel/sync/atomic.rs                |  176 ++++
+ rust/kernel/sync/atomic/generic.rs        |  524 +++++++++++
+ rust/kernel/sync/atomic/ops.rs            |  199 ++++
+ rust/kernel/sync/atomic/ordering.rs       |   94 ++
+ rust/kernel/sync/barrier.rs               |   67 ++
+ scripts/atomic/gen-atomics.sh             |    1 +
+ scripts/atomic/gen-rust-atomic-helpers.sh |   65 ++
+ 12 files changed, 2189 insertions(+), 1 deletion(-)
+ create mode 100644 rust/helpers/atomic.c
+ create mode 100644 rust/helpers/barrier.c
+ create mode 100644 rust/kernel/sync/atomic.rs
+ create mode 100644 rust/kernel/sync/atomic/generic.rs
+ create mode 100644 rust/kernel/sync/atomic/ops.rs
+ create mode 100644 rust/kernel/sync/atomic/ordering.rs
+ create mode 100644 rust/kernel/sync/barrier.rs
+ create mode 100755 scripts/atomic/gen-rust-atomic-helpers.sh
+
+-- 
+2.39.5 (Apple Git-154)
+
 
