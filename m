@@ -1,189 +1,577 @@
-Return-Path: <linux-arch+bounces-12307-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12308-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E495AD2A2A
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 00:59:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A7FCAD2E9E
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 09:26:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 448281631C6
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jun 2025 22:59:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF49C1892547
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 07:26:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1ED225401;
-	Mon,  9 Jun 2025 22:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD6327F170;
+	Tue, 10 Jun 2025 07:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bZ2q/LWi"
+	dkim=pass (2048-bit key) header.d=monstr-eu.20230601.gappssmtp.com header.i=@monstr-eu.20230601.gappssmtp.com header.b="0XyqZRGa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f68.google.com (mail-ej1-f68.google.com [209.85.218.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA061519BA;
-	Mon,  9 Jun 2025 22:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58FF22B8CB
+	for <linux-arch@vger.kernel.org>; Tue, 10 Jun 2025 07:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749509989; cv=none; b=ZOPa2M06NoGk7s06kB8cZCvRq33J7SjKW4zuJ8o0BhVWQAx2ehJpfhfxd+6A7gokJvoOafdP9IWgYgDU+3gpXv55Ns99+nIfuKq/j1vhdOVJ2zRyVNuaKhuvrEZD6CmzuSZx6M4z7teVKtI7BuOfTtRTQu+z6qIMpeOw9vCWNEc=
+	t=1749540391; cv=none; b=sLVklN+BZxBK1Z2xGk1iWa+KAlY4jiFmv3BWedIdNmPFeJ3wBByVQacQkC2IiQ7zb6Uqo1Wl9nXCC3Rr041wxF99zzfeGh049o7wdm/DoBHVxaCbqqJCSamb3+0VN0aQ6HR/xDj39sCh5PvjRb4uLG3Jt+KDEDRKZ6cAyh60cl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749509989; c=relaxed/simple;
-	bh=U4vhsJXM46e+0Mfc4PBs3bseTa3h9UosBlHtozqeIf8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B7JCme5vD0DNL+6n75FdM5qPiHxCgzKtZ/4pNt3j8hjwHqc1d2wsL3PoGSMdDsvfU0BFtxyQErKVNE9RQC2jNUkf54etvqASNiM+/Upd7+7TlZvYS57oDemdCNiCQLmE5vdGx7pVbf9ZV1qhUVIYc+YmYxu7Vc8u9U1z59GgC3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bZ2q/LWi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A46C4CEEB;
-	Mon,  9 Jun 2025 22:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749509988;
-	bh=U4vhsJXM46e+0Mfc4PBs3bseTa3h9UosBlHtozqeIf8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bZ2q/LWijEpaEq00igAvU15ZFA2btFmPEoPv0oTqawn+MjrxKEc4/OqXy2N38kxpV
-	 AFvy2lrAzn2djDaUY1swfzB9EZ627MitJD6/avaXEMt58zpc+17thB5+o+L/NCFmXx
-	 Bbahqr8beEaE9JLR92svUSP/oo9HcH3K/MV2jUx5drdibhmczFNStuOfZD9lCWMysz
-	 P11+Cs72P7BkkpWfSW0Wc/UiWNcR1xk5ksNxTizKDn6BSr0mEtJF/ezlntceoWJxAz
-	 yys2b1O4D36HQh8H0QW/vQ0doPIIwaleXhHsMUSvkGTKjPZAQluFZIrFMruyPgxt0i
-	 IRxGum7RmzoYw==
-Date: Mon, 9 Jun 2025 15:59:26 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Julian Calaby <julian.calaby@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, x86@kernel.org,
-	linux-arch@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is
- integrated
-Message-ID: <20250609225926.GE1255@sol>
-References: <20250607200454.73587-1-ebiggers@kernel.org>
- <CAGRGNgV_4X3O-qo3XFGexi9_JqJXK9Mf82=p8CQ4BoD3o-Hypw@mail.gmail.com>
- <20250609194845.GC1255@sol>
- <CAGRGNgXw5LcykjiRS3yteb0K8FmYtb9wp1CJPM+GCKAw7j4ktQ@mail.gmail.com>
+	s=arc-20240116; t=1749540391; c=relaxed/simple;
+	bh=T+CjI/BtZil+fcwt4iAfiqj+VeXBzHaVbluTjLSffJ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uJegldVVWn5EI1HdWehzEdekM/y9kkvzihwvtTEa0buPzLtqWgZarthlvmvixkbnqLrz8epcrXVe5OIwUf4iHUCL3eg2aX9t219yNDoP7mjmLNxmeT+el8Cn+hlkCLn48B6S8i8OIGbSsLnFDxNgc2cFZsHnFzJodXrrThn2oug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu; spf=none smtp.mailfrom=monstr.eu; dkim=pass (2048-bit key) header.d=monstr-eu.20230601.gappssmtp.com header.i=@monstr-eu.20230601.gappssmtp.com header.b=0XyqZRGa; arc=none smtp.client-ip=209.85.218.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=monstr.eu
+Received: by mail-ej1-f68.google.com with SMTP id a640c23a62f3a-addcea380eeso713598266b.0
+        for <linux-arch@vger.kernel.org>; Tue, 10 Jun 2025 00:26:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20230601.gappssmtp.com; s=20230601; t=1749540386; x=1750145186; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cVjK0599UkeAIvQVZ6e3BYBbqIwF7FaraC94wRTpRos=;
+        b=0XyqZRGa7+IncYk+xGRPqMfh6Kg+EOsdAYV7bJ67RkUYPDXaW2LdqGCJGOSabA5PbI
+         fo7Kwh6elYZ2LY6sZwc2fyV9EF5/bZL/YRYkXK74iuPej9h3QEsO7/ueo2tJLba8puGU
+         Hx9C0x3FvhR2o/5LrYiTwSskd9yyUkNqDdSWk46HpQVBqLTunhxA8sFiKLI9xn6d+E/s
+         dEZ7SyNEHQYJWkWF3nM+UNwGiOvfgN6e8rqiefHQYwnYPDsD2jyE3iJssyaE2rehu1d+
+         uRvL+b1f1T3qPK2tA1DKHFryfXyHY1MgFxfaB1gArR0MMkbTibpASJjvrrZQUBdfqW9L
+         r4jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749540386; x=1750145186;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cVjK0599UkeAIvQVZ6e3BYBbqIwF7FaraC94wRTpRos=;
+        b=kiVWx7lVbLS6r1Vtwm1vqkCUZYDn7k6tzU2N0iAAnH0y+5wF9Pa8KcaR1F/9OqEPPD
+         KXq437uanU9etziq6PM1qRCFLQibcaMXaPdNs30A8TwgDMER2IbQmPRzp71ob+Mihezz
+         bsICrUdrihWWvnY8mjhQ5iAb5/8b71upLkKr7W/o8kEMrnorDo6HlOAbR/QWl4XW3qiJ
+         BVcrUCUfcFPxY6m1ddD45yN4y4jQs5p2uGS+JYWrcvDBHE2Itgv4NWx26Cb49vkjGQkX
+         yTkEONjGcFGJfC3IE2qm+VnK2PXkOfq15lpQr0s7rWKdll2dXlvkmKs7glOtGApyOVZF
+         EXgA==
+X-Forwarded-Encrypted: i=1; AJvYcCUNg5xCQxuTafHB17MaAzr91WgB241ByJKloRBFHHIRKJDFIm1skAZW+T6rIZmtMNXJbNvmSLbJ8sLa@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMPqYChJoC6vH7dLBkOx7fca15vqyZYMj2v7bNoBNEuLHpd4An
+	2SOWgisYtf7bcz0vcCsRacHoodVFYgw+MQOZNlpgHHDEjaV33JqKOBoiFNRmyclTFw==
+X-Gm-Gg: ASbGncv+31CygQfzeZhf/eQQGglukGtNxPUBxHFc7tMqr0kE4usnrfC2dHoKPvwrq7z
+	vQNldQXRn/U1+CF7aRrsMzUX/90k44qBdXhsaDJpdLBcDZDmofAWr/HciiJrnpsIW6YnWQTjdRI
+	LHYqXujxUdOb1ZOYGUx5RIW1w0CwPbDveuMUxhJN12yvRL5yRbOM8Sz9pwD19ILCEtKLybknFYO
+	fA/xBg5h3ovFH3r5E3+Gw8KAxFrvuL66qlCCNMr1P/sqU/vRYCXKZlOAYONUsOoPdZU7sgYAqkl
+	za8OQTa9ESPUKnjZb49Nr92qHlM06eJ527eg6YiBCzcT8Q8d9W7iwQILlVPnKiX0RoZuuxX6SeG
+	JAVPsW8wIM8zB
+X-Google-Smtp-Source: AGHT+IEBvQxRMDVoP2AITAODVdA+VN6fP/bXnF8ZVcuQpzrtSJTxLVJCPNRwSZsc99F+/j1teDbelw==
+X-Received: by 2002:a17:907:c27:b0:ade:8a6:b877 with SMTP id a640c23a62f3a-ade1a916cd9mr1427519866b.5.1749540385452;
+        Tue, 10 Jun 2025 00:26:25 -0700 (PDT)
+Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ade1dc7c724sm680989366b.175.2025.06.10.00.26.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jun 2025 00:26:25 -0700 (PDT)
+Message-ID: <546019cd-32db-4374-b73c-4cb37943a6cb@monstr.eu>
+Date: Tue, 10 Jun 2025 09:26:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGRGNgXw5LcykjiRS3yteb0K8FmYtb9wp1CJPM+GCKAw7j4ktQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 18/41] microblaze: Replace __ASSEMBLY__ with __ASSEMBLER__
+ in non-uapi headers
+To: Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+References: <20250314071013.1575167-1-thuth@redhat.com>
+ <20250314071013.1575167-19-thuth@redhat.com>
+Content-Language: en-US
+From: Michal Simek <monstr@monstr.eu>
+In-Reply-To: <20250314071013.1575167-19-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 10, 2025 at 08:36:39AM +1000, Julian Calaby wrote:
-> Hi Eric,
-> 
-> On Tue, Jun 10, 2025 at 5:49 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> >
-> > On Mon, Jun 09, 2025 at 06:15:24PM +1000, Julian Calaby wrote:
-> > > Hi Eric,
-> > >
-> > > On Sun, Jun 8, 2025 at 6:07 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> > > >
-> > > > This series is also available at:
-> > > >
-> > > >     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git lib-crc-arch-v2
-> > > >
-> > > > This series improves how lib/crc supports arch-optimized code.  First,
-> > > > instead of the arch-optimized CRC code being in arch/$(SRCARCH)/lib/, it
-> > > > will now be in lib/crc/$(SRCARCH)/.  Second, the API functions (e.g.
-> > > > crc32c()), arch-optimized functions (e.g. crc32c_arch()), and generic
-> > > > functions (e.g. crc32c_base()) will now be part of a single module for
-> > > > each CRC type, allowing better inlining and dead code elimination.  The
-> > > > second change is made possible by the first.
-> > > >
-> > > > As an example, consider CONFIG_CRC32=m on x86.  We'll now have just
-> > > > crc32.ko instead of both crc32-x86.ko and crc32.ko.  The two modules
-> > > > were already coupled together and always both got loaded together via
-> > > > direct symbol dependency, so the separation provided no benefit.
-> > > >
-> > > > Note: later I'd like to apply the same design to lib/crypto/ too, where
-> > > > often the API functions are out-of-line so this will work even better.
-> > > > In those cases, for each algorithm we currently have 3 modules all
-> > > > coupled together, e.g. libsha256.ko, libsha256-generic.ko, and
-> > > > sha256-x86.ko.  We should have just one, inline things properly, and
-> > > > rely on the compiler's dead code elimination to decide the inclusion of
-> > > > the generic code instead of manually setting it via kconfig.
-> > > >
-> > > > Having arch-specific code outside arch/ was somewhat controversial when
-> > > > Zinc proposed it back in 2018.  But I don't think the concerns are
-> > > > warranted.  It's better from a technical perspective, as it enables the
-> > > > improvements mentioned above.  This model is already successfully used
-> > > > in other places in the kernel such as lib/raid6/.  The community of each
-> > > > architecture still remains free to work on the code, even if it's not in
-> > > > arch/.  At the time there was also a desire to put the library code in
-> > > > the same files as the old-school crypto API, but that was a mistake; now
-> > > > that the library is separate, that's no longer a constraint either.
-> > >
-> > > Quick question, and apologies if this has been covered elsewhere.
-> > >
-> > > Why not just use choice blocks in Kconfig to choose the compiled-in
-> > > crc32 variant instead of this somewhat indirect scheme?
-> > >
-> > > This would keep the dependencies grouped by arch and provide a single place to
-> > > choose whether the generic or arch-specific method is used.
-> >
-> > It's not clear exactly what you're suggesting, but it sounds like you're
-> > complaining about this:
-> >
-> >     config CRC32_ARCH
-> >             bool
-> >             depends on CRC32 && CRC_OPTIMIZATIONS
-> >             default y if ARM && KERNEL_MODE_NEON
-> >             default y if ARM64
-> >             default y if LOONGARCH
-> >             default y if MIPS && CPU_MIPSR6
-> >             default y if PPC64 && ALTIVEC
-> >             default y if RISCV && RISCV_ISA_ZBC
-> >             default y if S390
-> >             default y if SPARC64
-> >             default y if X86
-> 
-> I was suggesting something roughly like:
-> 
-> choice
->     prompt "CRC32 Variant"
->     depends on CRC32 && CRC_OPTIMIZATIONS
-> 
-> config CRC32_ARCH_ARM_NEON
->     bool "ARM NEON"
->     default y
->     depends ARM && KERNEL_MODE_NEON
-> 
-> ...
-> 
-> config CRC32_GENERIC
->     bool "Generic"
-> 
-> endchoice
-> 
-> > This patchset strikes a balance where the vast majority of the arch-specific CRC
-> > code is isolated in lib/crc/$(SRCARCH), and the exceptions are just
-> > lib/crc/Makefile and lib/crc/Kconfig.  I think these exceptions make sense,
-> > given that we're building a single module per CRC variant.  We'd have to go
-> > through some hoops to isolate the arch-specific Kconfig and Makefile snippets
-> > into per-arch files, which don't seem worth it here IMO.
-> 
-> I was only really concerned with the Kconfig structure, I was
-> expecting Kbuild to look roughly like this: (filenames are wrong)
-> 
-> crc32-y += crc32-base.o
-> crc32-$(CRC32_ARCH_ARM_NEON) += arch/arm/crc32-neon.o
-> ...
-> crc32-$(CRC32_GENERIC) += crc32-generic.o
-> 
-> but yeah, your proposal here has grown on me now that I think about it
-> and the only real "benefit" mine has is that architectures can display
-> choices for variants that have Kconfig-visible requirements, which
-> probably isn't that many so it wouldn't be useful in practice.
-> 
-> Thanks for answering my question,
 
-The CRC32 implementation did used to be user-selectable, but that was already
-removed in v6.14 (except for the coarse-grained knob CONFIG_CRC_OPTIMIZATIONS
-that remains and can be disabled only when CONFIG_EXPERT=y) since the vast
-majority of users simply want the optimized CRC32 code enabled.  The fact that
-it wasn't just enabled by default was a longstanding bug.
 
-- Eric
+On 3/14/25 08:09, Thomas Huth wrote:
+> While the GCC and Clang compilers already define __ASSEMBLER__
+> automatically when compiling assembly code, __ASSEMBLY__ is a
+> macro that only gets defined by the Makefiles in the kernel.
+> This can be very confusing when switching between userspace
+> and kernelspace coding, or when dealing with uapi headers that
+> rather should use __ASSEMBLER__ instead. So let's standardize on
+> the __ASSEMBLER__ macro that is provided by the compilers now.
+> 
+> This is a completely mechanical patch (done with a simple "sed -i"
+> statement).
+> 
+> Cc: Michal Simek <monstr@monstr.eu>
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>   arch/microblaze/include/asm/asm-compat.h       |  2 +-
+>   arch/microblaze/include/asm/current.h          |  4 ++--
+>   arch/microblaze/include/asm/entry.h            |  4 ++--
+>   arch/microblaze/include/asm/exceptions.h       |  4 ++--
+>   arch/microblaze/include/asm/fixmap.h           |  4 ++--
+>   arch/microblaze/include/asm/ftrace.h           |  2 +-
+>   arch/microblaze/include/asm/kgdb.h             |  4 ++--
+>   arch/microblaze/include/asm/mmu.h              |  4 ++--
+>   arch/microblaze/include/asm/page.h             |  8 ++++----
+>   arch/microblaze/include/asm/pgtable.h          | 18 +++++++++---------
+>   arch/microblaze/include/asm/processor.h        |  8 ++++----
+>   arch/microblaze/include/asm/ptrace.h           |  4 ++--
+>   arch/microblaze/include/asm/sections.h         |  4 ++--
+>   arch/microblaze/include/asm/setup.h            |  4 ++--
+>   arch/microblaze/include/asm/thread_info.h      |  4 ++--
+>   arch/microblaze/include/asm/unistd.h           |  4 ++--
+>   .../microblaze/include/asm/xilinx_mb_manager.h |  4 ++--
+>   17 files changed, 43 insertions(+), 43 deletions(-)
+> 
+> diff --git a/arch/microblaze/include/asm/asm-compat.h b/arch/microblaze/include/asm/asm-compat.h
+> index c05259ce2d2c2..9f04614762319 100644
+> --- a/arch/microblaze/include/asm/asm-compat.h
+> +++ b/arch/microblaze/include/asm/asm-compat.h
+> @@ -4,7 +4,7 @@
+>   
+>   #include <asm/types.h>
+>   
+> -#ifdef __ASSEMBLY__
+> +#ifdef __ASSEMBLER__
+>   #  define stringify_in_c(...)	__VA_ARGS__
+>   #  define ASM_CONST(x)		x
+>   #else
+> diff --git a/arch/microblaze/include/asm/current.h b/arch/microblaze/include/asm/current.h
+> index a4bb45be30e69..099e69f32bf97 100644
+> --- a/arch/microblaze/include/asm/current.h
+> +++ b/arch/microblaze/include/asm/current.h
+> @@ -14,13 +14,13 @@
+>    * but check asm/microblaze/kernel/entry.S to be sure.
+>    */
+>   #define CURRENT_TASK	r31
+> -# ifndef __ASSEMBLY__
+> +# ifndef __ASSEMBLER__
+>   /*
+>    * Dedicate r31 to keeping the current task pointer
+>    */
+>   register struct task_struct *current asm("r31");
+>   
+>   # define get_current()	current
+> -# endif /* __ASSEMBLY__ */
+> +# endif /* __ASSEMBLER__ */
+>   
+>   #endif /* _ASM_MICROBLAZE_CURRENT_H */
+> diff --git a/arch/microblaze/include/asm/entry.h b/arch/microblaze/include/asm/entry.h
+> index 6c42bed411662..9efadf12397ca 100644
+> --- a/arch/microblaze/include/asm/entry.h
+> +++ b/arch/microblaze/include/asm/entry.h
+> @@ -21,7 +21,7 @@
+>   
+>   #define PER_CPU(var) var
+>   
+> -# ifndef __ASSEMBLY__
+> +# ifndef __ASSEMBLER__
+>   DECLARE_PER_CPU(unsigned int, KSP); /* Saved kernel stack pointer */
+>   DECLARE_PER_CPU(unsigned int, KM); /* Kernel/user mode */
+>   DECLARE_PER_CPU(unsigned int, ENTRY_SP); /* Saved SP on kernel entry */
+> @@ -29,6 +29,6 @@ DECLARE_PER_CPU(unsigned int, R11_SAVE); /* Temp variable for entry */
+>   DECLARE_PER_CPU(unsigned int, CURRENT_SAVE); /* Saved current pointer */
+>   
+>   extern asmlinkage void do_notify_resume(struct pt_regs *regs, int in_syscall);
+> -# endif /* __ASSEMBLY__ */
+> +# endif /* __ASSEMBLER__ */
+>   
+>   #endif /* _ASM_MICROBLAZE_ENTRY_H */
+> diff --git a/arch/microblaze/include/asm/exceptions.h b/arch/microblaze/include/asm/exceptions.h
+> index 967f175173e14..c4591e4f7175b 100644
+> --- a/arch/microblaze/include/asm/exceptions.h
+> +++ b/arch/microblaze/include/asm/exceptions.h
+> @@ -11,7 +11,7 @@
+>   #define _ASM_MICROBLAZE_EXCEPTIONS_H
+>   
+>   #ifdef __KERNEL__
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   
+>   /* Macros to enable and disable HW exceptions in the MSR */
+>   /* Define MSR enable bit for HW exceptions */
+> @@ -64,6 +64,6 @@ void bad_page_fault(struct pt_regs *regs, unsigned long address, int sig);
+>   void die(const char *str, struct pt_regs *fp, long err);
+>   void _exception(int signr, struct pt_regs *regs, int code, unsigned long addr);
+>   
+> -#endif /*__ASSEMBLY__ */
+> +#endif /*__ASSEMBLER__ */
+>   #endif /* __KERNEL__ */
+>   #endif /* _ASM_MICROBLAZE_EXCEPTIONS_H */
+> diff --git a/arch/microblaze/include/asm/fixmap.h b/arch/microblaze/include/asm/fixmap.h
+> index e6e9288bff761..f9797849e4d43 100644
+> --- a/arch/microblaze/include/asm/fixmap.h
+> +++ b/arch/microblaze/include/asm/fixmap.h
+> @@ -15,7 +15,7 @@
+>   #ifndef _ASM_FIXMAP_H
+>   #define _ASM_FIXMAP_H
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   #include <linux/kernel.h>
+>   #include <asm/page.h>
+>   #ifdef CONFIG_HIGHMEM
+> @@ -62,5 +62,5 @@ extern void __set_fixmap(enum fixed_addresses idx,
+>   
+>   #include <asm-generic/fixmap.h>
+>   
+> -#endif /* !__ASSEMBLY__ */
+> +#endif /* !__ASSEMBLER__ */
+>   #endif
+> diff --git a/arch/microblaze/include/asm/ftrace.h b/arch/microblaze/include/asm/ftrace.h
+> index 4ca38b92a3a20..27c1bafb669c3 100644
+> --- a/arch/microblaze/include/asm/ftrace.h
+> +++ b/arch/microblaze/include/asm/ftrace.h
+> @@ -7,7 +7,7 @@
+>   #define MCOUNT_ADDR		((unsigned long)(_mcount))
+>   #define MCOUNT_INSN_SIZE	8 /* sizeof mcount call */
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   extern void _mcount(void);
+>   extern void ftrace_call_graph(void);
+>   void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr);
+> diff --git a/arch/microblaze/include/asm/kgdb.h b/arch/microblaze/include/asm/kgdb.h
+> index 8dc5ebb07fd5a..321c3c8bfcf27 100644
+> --- a/arch/microblaze/include/asm/kgdb.h
+> +++ b/arch/microblaze/include/asm/kgdb.h
+> @@ -3,7 +3,7 @@
+>   #ifndef __MICROBLAZE_KGDB_H__
+>   #define __MICROBLAZE_KGDB_H__
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   
+>   #define CACHE_FLUSH_IS_SAFE	1
+>   #define BUFMAX			2048
+> @@ -27,6 +27,6 @@ static inline void arch_kgdb_breakpoint(void)
+>   struct pt_regs;
+>   asmlinkage void microblaze_kgdb_break(struct pt_regs *regs);
+>   
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   #endif /* __MICROBLAZE_KGDB_H__ */
+>   #endif /* __KERNEL__ */
+> diff --git a/arch/microblaze/include/asm/mmu.h b/arch/microblaze/include/asm/mmu.h
+> index b928a87c00766..7262dc4da3385 100644
+> --- a/arch/microblaze/include/asm/mmu.h
+> +++ b/arch/microblaze/include/asm/mmu.h
+> @@ -9,7 +9,7 @@
+>   #define _ASM_MICROBLAZE_MMU_H
+>   
+>   #  ifdef __KERNEL__
+> -#   ifndef __ASSEMBLY__
+> +#   ifndef __ASSEMBLER__
+>   
+>   /* Default "unsigned long" context */
+>   typedef unsigned long mm_context_t;
+> @@ -56,7 +56,7 @@ extern void _tlbia(void);		/* invalidate all TLB entries */
+>    * mapping has to increase tlb_skip size.
+>    */
+>   extern u32 tlb_skip;
+> -#   endif /* __ASSEMBLY__ */
+> +#   endif /* __ASSEMBLER__ */
+>   
+>   /*
+>    * The MicroBlaze processor has a TLB architecture identical to PPC-40x. The
+> diff --git a/arch/microblaze/include/asm/page.h b/arch/microblaze/include/asm/page.h
+> index 90fc9c81debda..90ac9f34b4b49 100644
+> --- a/arch/microblaze/include/asm/page.h
+> +++ b/arch/microblaze/include/asm/page.h
+> @@ -25,7 +25,7 @@
+>   
+>   #define PTE_SHIFT	(PAGE_SHIFT - 2)	/* 1024 ptes per page */
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   
+>   /*
+>    * PAGE_OFFSET -- the first address of the first page of memory. With MMU
+> @@ -100,7 +100,7 @@ extern int page_is_ram(unsigned long pfn);
+>   #  define page_to_virt(page)   __va(page_to_pfn(page) << PAGE_SHIFT)
+>   
+>   #  define ARCH_PFN_OFFSET	(memory_start >> PAGE_SHIFT)
+> -# endif /* __ASSEMBLY__ */
+> +# endif /* __ASSEMBLER__ */
+>   
+>   /* Convert between virtual and physical address for MMU. */
+>   /* Handle MicroBlaze processor with virtual memory. */
+> @@ -113,7 +113,7 @@ extern int page_is_ram(unsigned long pfn);
+>   #define tovirt(rd, rs) \
+>   	addik rd, rs, (CONFIG_KERNEL_START - CONFIG_KERNEL_BASE_ADDR)
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   
+>   # define __pa(x)	__virt_to_phys((unsigned long)(x))
+>   # define __va(x)	((void *)__phys_to_virt((unsigned long)(x)))
+> @@ -130,7 +130,7 @@ static inline const void *pfn_to_virt(unsigned long pfn)
+>   
+>   #define	virt_addr_valid(vaddr)	(pfn_valid(virt_to_pfn(vaddr)))
+>   
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   
+>   #define TOPHYS(addr)  __virt_to_phys(addr)
+>   
+> diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
+> index e4ea2ec3642f0..eadc73d22dda6 100644
+> --- a/arch/microblaze/include/asm/pgtable.h
+> +++ b/arch/microblaze/include/asm/pgtable.h
+> @@ -10,14 +10,14 @@
+>   
+>   #include <asm/setup.h>
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   extern int mem_init_done;
+>   #endif
+>   
+>   #include <asm-generic/pgtable-nopmd.h>
+>   
+>   #ifdef __KERNEL__
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   
+>   #include <linux/sched.h>
+>   #include <linux/threads.h>
+> @@ -39,7 +39,7 @@ extern pte_t *va_to_pte(unsigned long address);
+>   #define VMALLOC_START	(CONFIG_KERNEL_START + CONFIG_LOWMEM_SIZE)
+>   #define VMALLOC_END	ioremap_bot
+>   
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   
+>   /*
+>    * Macro to mark a page protection value as "uncacheable".
+> @@ -208,7 +208,7 @@ extern pte_t *va_to_pte(unsigned long address);
+>    * Also, write permissions imply read permissions.
+>    */
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   /*
+>    * ZERO_PAGE is a global shared page that is always zero: used
+>    * for zero-mapped memory areas etc..
+> @@ -216,7 +216,7 @@ extern pte_t *va_to_pte(unsigned long address);
+>   extern unsigned long empty_zero_page[1024];
+>   #define ZERO_PAGE(vaddr) (virt_to_page(empty_zero_page))
+>   
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   
+>   #define pte_none(pte)		((pte_val(pte) & ~_PTE_NONE_MASK) == 0)
+>   #define pte_present(pte)	(pte_val(pte) & _PAGE_PRESENT)
+> @@ -237,7 +237,7 @@ extern unsigned long empty_zero_page[1024];
+>   #define pfn_pte(pfn, prot) \
+>   	__pte(((pte_basic_t)(pfn) << PFN_PTE_SHIFT) | pgprot_val(prot))
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   /*
+>    * The following only work if pte_present() is true.
+>    * Undefined behaviour if not..
+> @@ -444,13 +444,13 @@ extern int mem_init_done;
+>   
+>   asmlinkage void __init mmu_init(void);
+>   
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   #endif /* __KERNEL__ */
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   extern unsigned long ioremap_bot, ioremap_base;
+>   
+>   void setup_memory(void);
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   
+>   #endif /* _ASM_MICROBLAZE_PGTABLE_H */
+> diff --git a/arch/microblaze/include/asm/processor.h b/arch/microblaze/include/asm/processor.h
+> index 4e193c7550dfa..d59bdfffca7cc 100644
+> --- a/arch/microblaze/include/asm/processor.h
+> +++ b/arch/microblaze/include/asm/processor.h
+> @@ -14,7 +14,7 @@
+>   #include <asm/entry.h>
+>   #include <asm/current.h>
+>   
+> -# ifndef __ASSEMBLY__
+> +# ifndef __ASSEMBLER__
+>   /* from kernel/cpu/mb.c */
+>   extern const struct seq_operations cpuinfo_op;
+>   
+> @@ -29,7 +29,7 @@ void start_thread(struct pt_regs *regs, unsigned long pc, unsigned long usp);
+>   extern void ret_from_fork(void);
+>   extern void ret_from_kernel_thread(void);
+>   
+> -# endif /* __ASSEMBLY__ */
+> +# endif /* __ASSEMBLER__ */
+>   
+>   /*
+>    * This is used to define STACK_TOP, and with MMU it must be below
+> @@ -45,7 +45,7 @@ extern void ret_from_kernel_thread(void);
+>   
+>   # define THREAD_KSP	0
+>   
+> -#  ifndef __ASSEMBLY__
+> +#  ifndef __ASSEMBLER__
+>   
+>   /* If you change this, you must change the associated assembly-languages
+>    * constants defined below, THREAD_*.
+> @@ -88,5 +88,5 @@ unsigned long __get_wchan(struct task_struct *p);
+>   extern struct dentry *of_debugfs_root;
+>   #endif
+>   
+> -#  endif /* __ASSEMBLY__ */
+> +#  endif /* __ASSEMBLER__ */
+>   #endif /* _ASM_MICROBLAZE_PROCESSOR_H */
+> diff --git a/arch/microblaze/include/asm/ptrace.h b/arch/microblaze/include/asm/ptrace.h
+> index bfcb89df5e26f..17982292a64fd 100644
+> --- a/arch/microblaze/include/asm/ptrace.h
+> +++ b/arch/microblaze/include/asm/ptrace.h
+> @@ -7,7 +7,7 @@
+>   
+>   #include <uapi/asm/ptrace.h>
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   #define kernel_mode(regs)		((regs)->pt_mode)
+>   #define user_mode(regs)			(!kernel_mode(regs))
+>   
+> @@ -20,5 +20,5 @@ static inline long regs_return_value(struct pt_regs *regs)
+>   	return regs->r3;
+>   }
+>   
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   #endif /* _ASM_MICROBLAZE_PTRACE_H */
+> diff --git a/arch/microblaze/include/asm/sections.h b/arch/microblaze/include/asm/sections.h
+> index a9311ad84a67f..f5008f5e7a5c1 100644
+> --- a/arch/microblaze/include/asm/sections.h
+> +++ b/arch/microblaze/include/asm/sections.h
+> @@ -10,11 +10,11 @@
+>   
+>   #include <asm-generic/sections.h>
+>   
+> -# ifndef __ASSEMBLY__
+> +# ifndef __ASSEMBLER__
+>   extern char _ssbss[], _esbss[];
+>   extern unsigned long __ivt_start[], __ivt_end[];
+>   
+>   extern u32 _fdt_start[], _fdt_end[];
+>   
+> -# endif /* !__ASSEMBLY__ */
+> +# endif /* !__ASSEMBLER__ */
+>   #endif /* _ASM_MICROBLAZE_SECTIONS_H */
+> diff --git a/arch/microblaze/include/asm/setup.h b/arch/microblaze/include/asm/setup.h
+> index bf2600f759593..837ed0bbae4b5 100644
+> --- a/arch/microblaze/include/asm/setup.h
+> +++ b/arch/microblaze/include/asm/setup.h
+> @@ -9,7 +9,7 @@
+>   
+>   #include <uapi/asm/setup.h>
+>   
+> -# ifndef __ASSEMBLY__
+> +# ifndef __ASSEMBLER__
+>   extern char cmd_line[COMMAND_LINE_SIZE];
+>   
+>   extern char *klimit;
+> @@ -25,5 +25,5 @@ void machine_shutdown(void);
+>   void machine_halt(void);
+>   void machine_power_off(void);
+>   
+> -# endif /* __ASSEMBLY__ */
+> +# endif /* __ASSEMBLER__ */
+>   #endif /* _ASM_MICROBLAZE_SETUP_H */
+> diff --git a/arch/microblaze/include/asm/thread_info.h b/arch/microblaze/include/asm/thread_info.h
+> index a0ddd2a36fb94..0153f7c2717c9 100644
+> --- a/arch/microblaze/include/asm/thread_info.h
+> +++ b/arch/microblaze/include/asm/thread_info.h
+> @@ -13,7 +13,7 @@
+>   #define THREAD_SIZE		(1 << THREAD_SHIFT)
+>   #define THREAD_SIZE_ORDER	1
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   # include <linux/types.h>
+>   # include <asm/processor.h>
+>   
+> @@ -86,7 +86,7 @@ static inline struct thread_info *current_thread_info(void)
+>   }
+>   
+>   /* thread information allocation */
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   
+>   /*
+>    * thread information flags
+> diff --git a/arch/microblaze/include/asm/unistd.h b/arch/microblaze/include/asm/unistd.h
+> index cfe3f888b432b..fedda9908aa94 100644
+> --- a/arch/microblaze/include/asm/unistd.h
+> +++ b/arch/microblaze/include/asm/unistd.h
+> @@ -8,7 +8,7 @@
+>   
+>   #include <uapi/asm/unistd.h>
+>   
+> -#ifndef __ASSEMBLY__
+> +#ifndef __ASSEMBLER__
+>   
+>   /* #define __ARCH_WANT_OLD_READDIR */
+>   /* #define __ARCH_WANT_OLD_STAT */
+> @@ -33,6 +33,6 @@
+>   #define __ARCH_WANT_SYS_VFORK
+>   #define __ARCH_WANT_SYS_FORK
+>   
+> -#endif /* __ASSEMBLY__ */
+> +#endif /* __ASSEMBLER__ */
+>   
+>   #endif /* _ASM_MICROBLAZE_UNISTD_H */
+> diff --git a/arch/microblaze/include/asm/xilinx_mb_manager.h b/arch/microblaze/include/asm/xilinx_mb_manager.h
+> index 7b6995722b0c0..121a3224882b2 100644
+> --- a/arch/microblaze/include/asm/xilinx_mb_manager.h
+> +++ b/arch/microblaze/include/asm/xilinx_mb_manager.h
+> @@ -5,7 +5,7 @@
+>   #ifndef _XILINX_MB_MANAGER_H
+>   #define _XILINX_MB_MANAGER_H
+>   
+> -# ifndef __ASSEMBLY__
+> +# ifndef __ASSEMBLER__
+>   
+>   #include <linux/of_address.h>
+>   
+> @@ -21,7 +21,7 @@ void xmb_manager_register(uintptr_t phys_baseaddr, u32 cr_val,
+>   			  void *priv, void (*reset_callback)(void *data));
+>   asmlinkage void xmb_inject_err(void);
+>   
+> -# endif /* __ASSEMBLY__ */
+> +# endif /* __ASSEMBLER__ */
+>   
+>   /* Error injection offset */
+>   #define XMB_INJECT_ERR_OFFSET	0x200
+
+$ git grep ASSEMBLY arch/microblaze/
+arch/microblaze/include/uapi/asm/ptrace.h:13:#ifndef __ASSEMBLY__
+arch/microblaze/include/uapi/asm/ptrace.h:71:#endif /* __ASSEMBLY__ */
+
+This should be fixed too.
+
+Thanks,
+Michal
+
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP/Versal ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal/Versal NET SoCs
+TF-A maintainer - Xilinx ZynqMP/Versal/Versal NET SoCs
+
 
