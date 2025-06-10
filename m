@@ -1,162 +1,114 @@
-Return-Path: <linux-arch+bounces-12319-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12320-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9DDDAD3EBD
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 18:24:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1CDCAD3ECC
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 18:26:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41A3717C318
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 16:23:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75661189E6D3
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 16:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6E4E241105;
-	Tue, 10 Jun 2025 16:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A88E23A987;
+	Tue, 10 Jun 2025 16:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="cfGWd+OD"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hjqq1Sfu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0266319B3CB
-	for <linux-arch@vger.kernel.org>; Tue, 10 Jun 2025 16:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC1A235BE5;
+	Tue, 10 Jun 2025 16:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749572594; cv=none; b=FijnbUEAAUGKOQN2DTvUas6joBFDodnAyq8YoqDT3frHC36hzOV2KU/qQHKt+f483Hk6Rw3GkFgBVUuFlltRiNNNAOf2I5iiGRaQozr0w5AUUa25LRFy2PvKOL1CScxOxNNNORhKioTmBQKu6rIlXcGCDEQcr323HD9cM9LJ3cc=
+	t=1749572802; cv=none; b=eLzo/tw/WpJuYgkOUuIQ012H/Vn12U/7KJmZ+ZKqe3bt8fhn9XrndQ72HnsE3Bqq89QMsQ6uIsacz67yd8G/WVabi7cmuMrwMmNKLEFPnqF+7PWaDk3IQXaUUywFprUQfIiwv5bquJGNShpoDVbPP3A+kSxIB0AtIEhNy/8n0pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749572594; c=relaxed/simple;
-	bh=pSarTRCzQuRL/R7ATW6/ZUy90+VuBzjUwmj0wBd4rF4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oX8xy+PS/29d0jOoG/F+zUM3szbn6U4ChkN3NMQuu3yB8n/JO7uUjlGl+FYsIVLi6+Cq6AWISM0RYv1+0JKvrYmK0ziZJ/9wK6CQisXbLrEW4pZ3XLzxMgsQX9Nt0s6yv0toU9FYpihCYjKCSYC1ZitZCaez0ujYTBUWRa91vRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=cfGWd+OD; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-234b122f2feso4245635ad.0
-        for <linux-arch@vger.kernel.org>; Tue, 10 Jun 2025 09:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1749572592; x=1750177392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Duyi2eYfEOWURmM5RwkHbBgHFP1RL7l3Jtl3iemhVW0=;
-        b=cfGWd+ODd8qHlJ+BRwzQe3sqboRtM6FnENCpdWYK/eGxcjLLdw6Zpcl8FhibUZiHds
-         qNnYzh9A9g6lK4rEMWOiNx2owJxwiiL6Of+FN2wf2EWzzZQuC0Vi6Ho10ntZ1n8Hju4R
-         qbMUFu7qKbJTHng+tWPpz0w6u1G2x78oLlx20iI7TJR5p5Phagf3XOgFxW7LlaOpCLHT
-         zv9Op7f8+QsH62ZlbXy3DGh7OhuwV+yFvKHmKvJ9UM9os8ZdNG4h/24V/D/2Om/jjGV7
-         KlRAusGeDZamr1HjUnA4nkKdoQ63FLsb5D5JmDkX70WezzHmsbwkxCN0dFOavi9USVY0
-         uJnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749572592; x=1750177392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Duyi2eYfEOWURmM5RwkHbBgHFP1RL7l3Jtl3iemhVW0=;
-        b=W4FhdEi72hcBDvvP74Z0UCJy6b2tF/DxEPcpuc4P5zbkk8oqJSv40yedlg/tOLIwZe
-         CxSRaVIFwHiGiKjBKU5RFbl7lnE5leK65lqXT+9up8NR5NUCT8soIBC5yrBFQXDs1RMs
-         znzMT+6Vo3y/Gvt5/8psytAPtogSaRb658sfz0UsR6PPK4Z8MleuRii9ALP4+INigh6Q
-         i809iBpDQlewe1J7cRi3WxoGXXNk3Wa6aUhXbuH1n6fF47S+2snRapQnxoMwNd3we/XC
-         DJFvyM+yEF3f3KQA21jlN29h0jw4b54F0t5uVoLFRG76vr85WOG7qFiOfVw6WZjvHEsN
-         7Iyg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxmiYFJRreCcDeLs82v1W26G9Kn7oN1CJUJ94cALmQmty8ZFmHohgny7YNaA0xUjxAUu1g0YmWohdg@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyXkpbs8PVbsqH68Pl+sNnG/CyzUr6DPz17h6O+PB4oENz79mY
-	2tX53ul1wrsECkDV1EltDYpdLKDpZDzHBGR6rCZca1aILVH6A1gPF1uvpToTCDawy4A=
-X-Gm-Gg: ASbGnctDrOmff9oog+XexXOKDE3pUQd9bEn5MzVbnHfqG6L54RNlf3sekYbblLKWGOp
-	30JbHgJhUFhab3SrAZXF51HWgUTlS7l3OhD1up9FakIc1mRs7OdBMRJOjO3MkhzNiyJzpMUXgss
-	lrbHazJVl9sSwC8Yasfpc8+NzqLPCZfXLmwURdDxFutiM53H1RgxSJXF/wF45AF/GZfOgX32a4A
-	XHtiJsgFzjt6mfRd7m+pFRmGUMONgXuapJThWvrrs0Iy5N7cHiwC6YGKsOcae/zh5oO24rWC2zB
-	BvpriRIZVpRw3Cjc6AZ2nzLP704x4wVeFVw2YPsVVJ+UW8yCI0/s5RP10W8LoaSQEi9rfgeENWu
-	s9go0UxTam7GRxtPH
-X-Google-Smtp-Source: AGHT+IFzRZ/2ilv/TWo2BZioT8NNZBq3mXBKm6pZaGbBq5g4DcH/rH2061k7qbX3Bt49Qj9jZ8ssgQ==
-X-Received: by 2002:a17:902:e80e:b0:234:c549:da0c with SMTP id d9443c01a7336-23603f4afa2mr100700265ad.0.1749572592309;
-        Tue, 10 Jun 2025 09:23:12 -0700 (PDT)
-Received: from dev-cachen2.dev.purestorage.com ([208.88.159.129])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-236032ff2f7sm73294405ad.92.2025.06.10.09.23.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 09:23:11 -0700 (PDT)
-From: Casey Chen <cachen@purestorage.com>
-To: akpm@linux-foundation.org
-Cc: linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	surenb@google.com,
-	kent.overstreet@linux.dev,
-	arnd@arndb.de,
-	mcgrof@kernel.org,
-	pasha.tatashin@soleen.com,
-	yzhong@purestorage.com,
-	Casey Chen <cachen@purestorage.com>
-Subject: [PATCH] alloc_tag: remove empty module tag section
-Date: Tue, 10 Jun 2025 10:22:58 -0600
-Message-Id: <20250610162258.324645-1-cachen@purestorage.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1749572802; c=relaxed/simple;
+	bh=AfFdkGVaf25Yp8u5asLPt3erUUDF3wGXqaZaCp3COnM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YcCemeFegGi/1/wA+b7U+Ed+l3zvtzyZ0JT7z62h/snB4YPqpZAHTOAugzq6VQI9ML+WcXvBCvLGcbzWDAZtfG05vTdSBGCnTh+9ot9Xyue30cr0UH+bYGaz+wBmVlB7GR6mP5iaqwNs2blibW7WQfPUMTwkUBjuAzHXZKUbf60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hjqq1Sfu; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=aZS0PHXMGrZsbS++29v/OH/QUiFXlNb84S4FGKau4VY=; b=hjqq1SfuKB3WqCGlM2fdFVECKO
+	uew6eTYGRKiuBhCJt4oP8uy0sq5H68Fg88CU0zip740GuXzpJCl+MKpV+qQw2q+ENpByLzn91O4Pu
+	RUMmtAL/TVQJBX/MOo+qVKgac5BR30SJFN0KnnJ7LvSTJWVVrURX6ZYZ8RLJnYekuLOblk9S81GmQ
+	rNnY8Iwu4lLy6VugEIIyUyc8rWhgUzLzw+VPL0bP8sePIBkfUUlGoWpYztP7B9epR+I6IFdGKK/oh
+	TPpR58IqzFzU2a6JW+0AgHIZcNZY9wcnLjaX6F9pkTcFI9dxLqjjWQlvLMthSOKgud7fAX2wQoWRP
+	pmMukF7Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uP1nz-00000009cfG-2gFU;
+	Tue, 10 Jun 2025 16:26:31 +0000
+Date: Tue, 10 Jun 2025 17:26:31 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Usama Arif <usamaarif642@gmail.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	David Hildenbrand <david@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	SeongJae Park <sj@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Barry Song <21cnbao@gmail.com>, linux-mm@kvack.org,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org, Pedro Falcato <pfalcato@suse.de>
+Subject: Re: [DISCUSSION] proposed mctl() API
+Message-ID: <aEhct_dQxGAazoiY@casper.infradead.org>
+References: <85778a76-7dc8-4ea8-8827-acb45f74ee05@lucifer.local>
+ <e166592f-aeb3-4573-bb73-270a2eb90be3@gmail.com>
+ <d7ccb47b-7124-45e9-ace0-b0fa49f881ef@lucifer.local>
+ <f8db6b39-f11a-4378-8976-4169f4674e85@gmail.com>
+ <fcaa7ce6-3f03-4e3d-aa9f-1b1b53ed88f5@lucifer.local>
+ <2fd7f80c-2b13-4478-900a-d65547586db3@gmail.com>
+ <aEhTYkzsTsaBua40@casper.infradead.org>
+ <8c762435-f5d8-4366-84de-308c8280ff3d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c762435-f5d8-4366-84de-308c8280ff3d@gmail.com>
 
-The empty MOD_CODETAG_SECTIONS() macro added an incomplete .data
-section in module linker script, which caused symbol lookup tools
-like gdb to misinterpret symbol addresses e.g., __ib_process_cq
-incorrectly mapping to unrelated functions like below.
+On Tue, Jun 10, 2025 at 05:00:47PM +0100, Usama Arif wrote:
+> On 10/06/2025 16:46, Matthew Wilcox wrote:
+> > On Tue, Jun 10, 2025 at 04:30:43PM +0100, Usama Arif wrote:
+> >> If we have 2 workloads on the same server, For e.g. one is database where THPs 
+> >> just dont do well, but the other one is AI where THPs do really well. How
+> >> will the kernel monitor that the database workload is performing worse
+> >> and the AI one isnt?
+> > 
+> > It can monitor the allocation/access patterns and see who's getting
+> > the benefit.  The two workloads are in competition for memory, and
+> > we can tell which pages are hot and which cold.
+> > 
+> > And I don't believe it's a binary anyway.  I bet there are some
+> > allocations where the database benefits from having THPs (I mean, I know
+> > a database which invented the entire hugetlbfs subsystem so it could
+> > use PMD entries and avoid one layer of TLB misses!)
+> > 
+> 
+> Sure, but this is just an example. Workload owners are not going to spend time
+> trying to see how each allocation works and if its hot, they put it in hugetlbfs.
 
-  (gdb) disas __ib_process_cq
-  Dump of assembler code for function trace_event_fields_cq_schedule:
+No, they're not.  It should be automatic.  There are many deficiencies
+in the kernel; this is one of them.
 
-Removing the empty section restores proper symbol resolution and
-layout, ensuring .data placement behaves as expected.
+> Ofcourse hugetlbfs has its own drawbacks of reserving pages.
 
-Fixes: 0db6f8d7820a ("alloc_tag: load module tags into separate contiguous memory")
-       22d407b164ff ("lib: add allocation tagging support for memory allocation profiling")
-Signed-off-by: Casey Chen <cachen@purestorage.com>
-Reviewed-by: Yuanyuan Zhong <yzhong@purestorage.com>
-Acked-by: Suren Baghdasaryan <surenb@google.com>
----
- include/asm-generic/codetag.lds.h | 6 ------
- scripts/module.lds.S              | 5 -----
- 2 files changed, 11 deletions(-)
-
-diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
-index 372c320c5043..a45fe3d141a1 100644
---- a/include/asm-generic/codetag.lds.h
-+++ b/include/asm-generic/codetag.lds.h
-@@ -11,12 +11,6 @@
- #define CODETAG_SECTIONS()		\
- 	SECTION_WITH_BOUNDARIES(alloc_tags)
- 
--/*
-- * Module codetags which aren't used after module unload, therefore have the
-- * same lifespan as the module and can be safely unloaded with the module.
-- */
--#define MOD_CODETAG_SECTIONS()
--
- #define MOD_SEPARATE_CODETAG_SECTION(_name)	\
- 	.codetag.##_name : {			\
- 		SECTION_WITH_BOUNDARIES(_name)	\
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index 711c6e029936..c071ca4beedd 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -50,17 +50,12 @@ SECTIONS {
- 	.data : {
- 		*(.data .data.[0-9a-zA-Z_]*)
- 		*(.data..L*)
--		MOD_CODETAG_SECTIONS()
- 	}
- 
- 	.rodata : {
- 		*(.rodata .rodata.[0-9a-zA-Z_]*)
- 		*(.rodata..L*)
- 	}
--#else
--	.data : {
--		MOD_CODETAG_SECTIONS()
--	}
- #endif
- 	MOD_SEPARATE_CODETAG_SECTIONS()
- }
--- 
-2.34.1
+Drawback or advantage?  It's a feature.  You're being very strange about
+this.  First you want to reserve THPs for some workloads only, then when
+given a way to do that you complain that ... you have to reserve hugetlb
+pages.  You can't possibly mean both of these things sincerely.
 
 
