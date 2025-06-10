@@ -1,141 +1,61 @@
-Return-Path: <linux-arch+bounces-12324-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12325-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5781AD415F
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 19:59:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D1ABAD4230
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 20:48:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B9403A1C9A
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 17:59:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79D0A189FBC6
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 18:48:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B02424729A;
-	Tue, 10 Jun 2025 17:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AEF82472B9;
+	Tue, 10 Jun 2025 18:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aLp5WiJV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N2rR2VQ8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B9A244693;
-	Tue, 10 Jun 2025 17:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4098D242D90;
+	Tue, 10 Jun 2025 18:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749578317; cv=none; b=sSop+0WgtyjVar5YUBV4INfNsbkutfBG7X9onkr6C5ZFuSm12Hmfezhs84kxtFk6SCInpeYj+mZHq5xW3wKRx4C3GWovjgkcjlWbsWWw1OLS29HbOFyckM9NzozbQazT3W1Wwf/2wGHOF3YcAetzgTLzgNHBOiIKQOJrq5nNdfs=
+	t=1749581300; cv=none; b=K1s24Dcqy0tWM3KiE6Cw9bKlpgP+zhIuuZc128Bc9gRE44Y+YU1sHwVWA6UTRiqehC/76DQhAzaEZrMD2aF9RAQAHh6HJAwD4rVCGrV5nAjU6kfpQLXiUU8J4B+IszntYw4HuXWyJ/UbDvzEeCY0qaqd9hC2XmM4xKMnsqN+4RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749578317; c=relaxed/simple;
-	bh=WFSJOtGCy5DLWDZOUk7n++u9oB7z1T3ZkJpFtiZCWDY=;
+	s=arc-20240116; t=1749581300; c=relaxed/simple;
+	bh=fW4WUlLPzTcOGUmKEUJPh5AreVUZepIXG7py1Yrxjzw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZSxnT713gduBs/y7RerXG1TY/HoVnUaAfmvgh4228pPIg6+rYhemNhIx5mAYtfvzrSqIb0mKNQ3/aUhmqJPwgPOspTm2yzwT7LLE00moZxzcSgzQZMm/6Pd8yPpkKbzcnJDxrxd/kqyYvp9NECGt9jFmhryR4suAVMBNgPc76lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aLp5WiJV; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6facacf521eso61204516d6.3;
-        Tue, 10 Jun 2025 10:58:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749578314; x=1750183114; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RFKC/VZAsPOtc+J1pi0LsDxSLSLhC1cMgwlK+mG2rRo=;
-        b=aLp5WiJVVZA4fAEhrJJTblPVRK3aAK/Gzv/V2Xo2XCLAr+wNVfaHxNFUuW+FRC621Q
-         P+opv3ieolhaAEnLS8QQuutzV2Etz8i6pOnwMkjF3XyvJBZPJjSA3M4bKD4VSU9veP6r
-         eNzMPGeWLpw+jLw16NHxAVLytTTFMRln+0c4Ub3rjrssPuU8/opI83QP/lKZjH4JpEM0
-         kbOz0qmbCnH4CORTIexpwh0sHDw5tqqNLyEPqqqSnbp3cJpG8ABkkyLxdLfa5wfPQz0t
-         fr8J5WBKBF1P9yAj/xtLA/x8j4t/PSK7w9pd+krFRhcxqV1+icIJkkuR5bGD2JXIl/Ro
-         OluA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749578314; x=1750183114;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RFKC/VZAsPOtc+J1pi0LsDxSLSLhC1cMgwlK+mG2rRo=;
-        b=ZNLFJNhC5UrV+vFNTUXDPo7zlnP3XPQcoN4CD/8yCghJiuoZhTLENiQ4XPPMT9k19L
-         g2eQEtrCK4aKP1wOEcR4nAuL5HdgyDmvIeqqSMKgh/io+q0oRKedoKLa0SVb7cIGT3cB
-         bpg8q8wMX048amXNhXTuNzILBXFy3RPZKC97OAjiu2eQHuIHpDxKKVSZRDt9dt5n2dPT
-         10zbUmWiIFnaC3/pCO7iLcxtHyC07YbiB2zedcgcAYwn8xpg6uqUWxFCpKrJtq5O7QLN
-         N4Oix2FHsMQKtSgk/9hVcfAOreYG/a8tv/BmtGUCWV3UjsOLDrULRazo6g/JSa9U+ml5
-         nhkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUQg71USRtV7P0EK8cReWqyd3ZeVl4HgfIgv1GmCCzFM0+2RJNn/xunkVKBddSbxlXH31E2MYSQLOkC@vger.kernel.org, AJvYcCVLPpXKNIt4exQn7C//SwXbA80qJSxfi0PdUe3QlZUxaug4ZGYdjqrP1NhnAthhz6g7ffGmWyEGHPQV//yAuxc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqciNXTIOSxUomKH7HznvxfY3PDA7nRBfuBmzhMn72ak7VLorF
-	ufVW059K7eXjiU1tVfOznHi2vHlcHmkloV+577m4MbwfgLqRLIhsvoSk
-X-Gm-Gg: ASbGncstxlxYdhBhnOTvXnfYELeBQry5YE84vlCZa3zqZk8gtzErWyxaUfTIqxMjGrn
-	EAFzsuRewzLZsq1UB5VeT1L6H5h4Ow9P1zpPD9wayPNQpmEVP7f7KTxfsq7PojMrIdRZzw4+n66
-	Fz1slaUvYiTtYKoFtBllMT6uCGL5RcB3HGUemxmGNn9YH/4badXriPvD62zjqIa8/zetMJE4ICK
-	KzKPhhf8uvEIY2EMw4r1o4v/PJCbL7uxvUNkPCFI3y5iLzBLYcd7a/Qq2CjcpUAhKWeWt/1JAQD
-	hIlJigVj/WI5YrddVPS4jyTTesx8+yNGkIIe+jDDWVCHcOQmOmaQbpmpTdPvBcoeTJZ98M+lVsp
-	DVn81+cGpMiZinpfr+YPuB1nmAlZGwfBvwmHPDAIMAam55v33oedabG/xxq3jwSw=
-X-Google-Smtp-Source: AGHT+IE1ZgmFQqI16FjmhRw0PUqrqN2GZWUt9lHT730+lp5RjXgeKiNOIijStPhoRxTKPLxmV0rguA==
-X-Received: by 2002:a05:6214:da5:b0:6ed:df6:cdcd with SMTP id 6a1803df08f44-6fb2c36a381mr5736416d6.21.1749578314169;
-        Tue, 10 Jun 2025 10:58:34 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d250f64bacsm732339885a.17.2025.06.10.10.58.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 10:58:33 -0700 (PDT)
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id B85001200043;
-	Tue, 10 Jun 2025 13:58:32 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Tue, 10 Jun 2025 13:58:32 -0400
-X-ME-Sender: <xms:SHJIaPQQI9zvh93RJUdRYS_Vf2bTAbjq8qZNXTFDgJuRD98uJs_Z_g>
-    <xme:SHJIaAyMD7098r8q6arLE7prWGPuyg3o8JwOsiZ-ldU3t1kHDonPDfY_cfVHoVFBn
-    _fsDOzL1cs0jWFvKA>
-X-ME-Received: <xmr:SHJIaE3B4fHOZePCc-g2Yrw7-QiDHFNbBGvv-I-bGQUCDsd6iQq0fMzCgTzkOA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdduuddtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
-    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
-    drtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleel
-    ieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
-    ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
-    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopedviedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtoheplhhoshhsihhnsehkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehruhhsthdqfhhorhdqlhhinhhugiesvhhgvghrrdhkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehlkhhmmheslhhishhtshdrlhhinhhugidruggvvhdprhgt
-    phhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtph
-    htthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhgvgidrghgr
-    hihnohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepghgrrhihsehgrghrhihguhhord
-    hnvghtpdhrtghpthhtohepsghjohhrnhefpghghhesphhrohhtohhnmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:SHJIaPDnqQ5S_PkjW9IUVx-6hgS8ecikaaPuOyyIVBlZI1yxDd31Uw>
-    <xmx:SHJIaIglPRK0z-iPm-tuomEHtOTTYTAcu5T1BJgYD12YWeYHA8K60w>
-    <xmx:SHJIaDrHB74s9SNhoHtO1eb10T6C-QceOugS7UP6HkfZVgW9vwkU9Q>
-    <xmx:SHJIaDiBY046MUqKFF91MjbxinoZTrvFbF3VAKDI_0emvKgG4lR3gQ>
-    <xmx:SHJIaLQhx354PsPkGJRoPwWfFegPMSQOF7CI-MfwHtBk8_OM1w94oe35>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 Jun 2025 13:58:30 -0400 (EDT)
-Date: Tue, 10 Jun 2025 10:58:30 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Benno Lossin <lossin@kernel.org>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v4 03/10] rust: sync: atomic: Add ordering annotation
- types
-Message-ID: <aEhyRhb71dIXzqSu@tardis.local>
-References: <20250609224615.27061-1-boqun.feng@gmail.com>
- <20250609224615.27061-4-boqun.feng@gmail.com>
- <DAIQG9ALK4QC.2P2C2MC4U9YVX@kernel.org>
- <aEhrzxltkdnub_bR@tardis.local>
+	 Content-Type:Content-Disposition:In-Reply-To; b=J5fdeL4tAz0i77qjv2ivPrif6dpY94K3J/TuAVDuXMIo33I2TwfarApBIzMzg1cMDflinlFfnpJITUF41rdS+hndXpjtCfrJA5sMnRti5QLgOEdIotnS1wu/ciWMPTz1oSujgnqS3wSLeqabqq2BVyc+jQdxYQ4bnC4UDU6AY40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N2rR2VQ8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B537C4CEED;
+	Tue, 10 Jun 2025 18:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749581299;
+	bh=fW4WUlLPzTcOGUmKEUJPh5AreVUZepIXG7py1Yrxjzw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=N2rR2VQ8Oq9Cmc6H9eooraC/6WL6LWGn/CyQscdSYoBnxrd6j556t8Yr4T5TQT33Y
+	 KjAddPGzxn/a1xZsEPhM/wtGddhOqKWPsMgUketQdpHVnfaf6YaA4v61Gwh2iKlc4q
+	 XkImdNQGb8y/Dgab6Udgq58Wxqco3rHtvNJ/qMnxwy9JcEIqHgZDQeAJCWUxC+A3oV
+	 OL2cGfo+A5I1Vic3XRH5dNQh8oPwI4lU72wrwqRIvmCAJJGgAq2b9hXkSx0B0RmSDD
+	 yJDpesZCL8iTxUJpJJvTqXeUEjtLqkz9iTejv45bhW3iFAmqRSy59HNfkPBVXi01hH
+	 mICO2Doj48fpw==
+Date: Tue, 10 Jun 2025 11:47:55 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+	x86@kernel.org, linux-arch@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is
+ integrated
+Message-ID: <20250610184755.GC1649@sol>
+References: <20250607200454.73587-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -144,85 +64,68 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aEhrzxltkdnub_bR@tardis.local>
+In-Reply-To: <20250607200454.73587-1-ebiggers@kernel.org>
 
-On Tue, Jun 10, 2025 at 10:30:55AM -0700, Boqun Feng wrote:
-[...]
-> > > +/// Describes the exact memory ordering of an `impl` [`All`].
-> > > +pub enum OrderingDesc {
-> > 
-> > Why not name this `Ordering`?
-> > 
+On Sat, Jun 07, 2025 at 01:04:42PM -0700, Eric Biggers wrote:
+> This series is also available at:
 > 
-> I was trying to avoid having an `Ordering` enum in a `ordering` mod.
-> Also I want to save the name "Ordering" for the generic type parameter
-> of an atomic operation, e.g.
+>     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git lib-crc-arch-v2
 > 
->     pub fn xchg<Ordering: ALL>(..)
+> This series improves how lib/crc supports arch-optimized code.  First,
+> instead of the arch-optimized CRC code being in arch/$(SRCARCH)/lib/, it
+> will now be in lib/crc/$(SRCARCH)/.  Second, the API functions (e.g.
+> crc32c()), arch-optimized functions (e.g. crc32c_arch()), and generic
+> functions (e.g. crc32c_base()) will now be part of a single module for
+> each CRC type, allowing better inlining and dead code elimination.  The
+> second change is made possible by the first.
 > 
-> this enum is more of an internal implementation detail, and users should
-> not use this enum directly, so I would like to avoid potential
-> confusion.
+> As an example, consider CONFIG_CRC32=m on x86.  We'll now have just
+> crc32.ko instead of both crc32-x86.ko and crc32.ko.  The two modules
+> were already coupled together and always both got loaded together via
+> direct symbol dependency, so the separation provided no benefit.
 > 
-> I have played a few sealed trait tricks on my end, but seems I cannot
-> achieve:
+> Note: later I'd like to apply the same design to lib/crypto/ too, where
+> often the API functions are out-of-line so this will work even better.
+> In those cases, for each algorithm we currently have 3 modules all
+> coupled together, e.g. libsha256.ko, libsha256-generic.ko, and
+> sha256-x86.ko.  We should have just one, inline things properly, and
+> rely on the compiler's dead code elimination to decide the inclusion of
+> the generic code instead of manually setting it via kconfig.
 > 
-> 1) `OrderingDesc` is only accessible in the atomic mod.
-> 2) `All` is only impl-able in the atomic mod, while it can be used as a
-> trait bound outside kernel crate.
+> Having arch-specific code outside arch/ was somewhat controversial when
+> Zinc proposed it back in 2018.  But I don't think the concerns are
+> warranted.  It's better from a technical perspective, as it enables the
+> improvements mentioned above.  This model is already successfully used
+> in other places in the kernel such as lib/raid6/.  The community of each
+> architecture still remains free to work on the code, even if it's not in
+> arch/.  At the time there was also a desire to put the library code in
+> the same files as the old-school crypto API, but that was a mistake; now
+> that the library is separate, that's no longer a constraint either.
 > 
-> Maybe there is a trick I'm missing?
+> Changed in v2:
+>    - Fixed build warning on architectures without any optimized CRC code
+>    - Fixed build warning in sparc/crc32.h by removing pr_fmt
+>    - Moved fallback definitions of crc32*_arch back into arch files
+>    - Remove ARCH_HAS_CRC* symbols at end of series instead of beginning,
+>      so that they're not removed until they're no longer being selected
+>    - Slightly improved some commit messages
+>    - Rebased onto other pending lib/crc changes
 > 
+> Eric Biggers (12):
+>   lib/crc: move files into lib/crc/
+>   lib/crc: prepare for arch-optimized code in subdirs of lib/crc/
+>   lib/crc/arm: migrate arm-optimized CRC code into lib/crc/
+>   lib/crc/arm64: migrate arm64-optimized CRC code into lib/crc/
+>   lib/crc/loongarch: migrate loongarch-optimized CRC code into lib/crc/
+>   lib/crc/mips: migrate mips-optimized CRC code into lib/crc/
+>   lib/crc/powerpc: migrate powerpc-optimized CRC code into lib/crc/
+>   lib/crc/riscv: migrate riscv-optimized CRC code into lib/crc/
+>   lib/crc/s390: migrate s390-optimized CRC code into lib/crc/
+>   lib/crc/sparc: migrate sparc-optimized CRC code into lib/crc/
+>   lib/crc/x86: migrate x86-optimized CRC code into lib/crc/
+>   lib/crc: remove ARCH_HAS_* kconfig symbols
 
-Something like this seems to work:
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=crc-next
 
-    pub(super) mod private {
-        /// Describes the exact memory ordering of an `impl` [`All`].
-        pub enum Ordering {
-            /// Relaxed ordering.
-            Relaxed,
-            /// Acquire ordering.
-            Acquire,
-            /// Release ordering.
-            Release,
-            /// Fully-ordered.
-            Full,
-        }
-    
-        pub trait HasOrderingDesc {
-            /// Describes the exact memory ordering.
-            const ORDERING: Ordering;
-        }
-    }
-
-    /// The trait bound for annotating operations that should support all orderings.
-    pub trait All: private::HasOrderingDesc { }
-
-    impl private::HasOrderingDesc for Relaxed {
-        const ORDERING: private::Ordering = private::Ordering::Relaxed;
-    }
-
-the trick is to seal the enum and the trait together.
-
-Regards,
-Boqun
-
-> > > +    /// Relaxed ordering.
-> > > +    Relaxed,
-> > > +    /// Acquire ordering.
-> > > +    Acquire,
-> > > +    /// Release ordering.
-> > > +    Release,
-> > > +    /// Fully-ordered.
-> > > +    Full,
-> > > +}
-> > > +
-> > > +/// The trait bound for annotating operations that should support all orderings.
-> > > +pub trait All {
-> > > +    /// Describes the exact memory ordering.
-> > > +    const ORDER: OrderingDesc;
-> > 
-> > And then here: `ORDERING`.
-> 
-[..]
+- Eric
 
