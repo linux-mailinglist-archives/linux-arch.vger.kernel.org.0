@@ -1,142 +1,249 @@
-Return-Path: <linux-arch+bounces-12327-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12328-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15660AD42AB
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 21:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8D8AAD4BED
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Jun 2025 08:40:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB1E6189F7AD
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jun 2025 19:12:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07E3E189CF27
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Jun 2025 06:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2248C261575;
-	Tue, 10 Jun 2025 19:12:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C9BE22A7E1;
+	Wed, 11 Jun 2025 06:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VaI2+LQh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILRmI8cM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D602D218E9F;
-	Tue, 10 Jun 2025 19:12:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED582576;
+	Wed, 11 Jun 2025 06:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749582753; cv=none; b=Y9d2AOnjpwkR3Ix4TRd7fzgyUqliv2eVB1Y8TNcPiCMjO9ngEfGGkRHPqyQoVrLSSK0JyXMZoK4Qeewr7RWMxr9O6VJ9U6ZLDZ86qSsbnauB++WCR7OYEpMA0Rn0spbbrBl3y4Orh5RbMBDdsJ15Uf61XNx9wkug5x7S/Fs55Hg=
+	t=1749624025; cv=none; b=eQ+QP8sQ8Jy/Gcbw2VQY9LwMWscs5B67wFjxVxsw/bKN6HsOYQYIlw+I1OxiQVtxv7EwMHH7iMXxtZckRoh+JD+W/Bdm6/+IcN44+mBolv27gt07RSv3jG/l7gTuPACXwNx+RSmcATDW5vI9wjS+1TtL9r1vtuFNoom1bSCwy1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749582753; c=relaxed/simple;
-	bh=eJzXTcGjqeHES133w/mCLelMBBcBENx890a5ygHX1H0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GHaF+aoyjaDEUgviO+ViaLFYIjW1ccVLgCGid33HWm5HPCE1FdWYH/8fpGEE1roEol8pE42FfmCznR76nWwWbh0BL6mTU/effjRQ7BcyKUEc/Yt1Zn7k/PmnExZHo9YDcAb4M5zMq1oDIn9TSvsQ4dSkDlf5KMR7NzIF/pZNuEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VaI2+LQh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18FAEC4CEED;
-	Tue, 10 Jun 2025 19:12:32 +0000 (UTC)
+	s=arc-20240116; t=1749624025; c=relaxed/simple;
+	bh=hTZ4O1f+yyRThvIWYmjjaVb+T8UQ4NQFi4XinDUzJbE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hM+oI00exH6WFJY0wl/mjiv5P04/U2Sdqjp+Qxp0DlulIj3Ah26GM7vBbv+S4xsKsBxRp6mIWCHFlHdXbuE8zXRJ5BxiMKJDILNRcXCZLFLLQ7b+QYXo2i0nAbDTC+L7TeNvnq73ZqpBGVPUHoX66l1ZjmMblPc4zR1O95sojms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILRmI8cM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223ADC4CEEE;
+	Wed, 11 Jun 2025 06:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749582752;
-	bh=eJzXTcGjqeHES133w/mCLelMBBcBENx890a5ygHX1H0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VaI2+LQhuUUCHinnXIKNJGDX1SFqmIEkgM49ZG9mFtgdSJtyidxE5kSPaTUdtIRoe
-	 x8gwG8h5JFpcv2x49bFujV90PS+vJ0dv/ZdkpuflWTUErcb97YgGQv2W6l9qVPbl16
-	 v8SyhbEe0m3HO6534SqykjGShxll+Ne/4t8f1iJYheRExnhSX55A4hNPQKnkRcYq5L
-	 hc0Tmlxcb6hRLqfqF7Unr6UlRwwPll4NW5PiZ7zHf35KF4TOdiyOcT86XrweAAiuH8
-	 NHMgbbCpwoQbMy2vS7ZoKum77mLaoScoDb3mUTDNNDNTl+qp1ZRyBmI7CkispOKzd9
-	 LnPbDInTrzhvw==
-Date: Tue, 10 Jun 2025 12:12:08 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, x86@kernel.org,
-	linux-arch@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is
- integrated
-Message-ID: <20250610191208.GD1649@sol>
-References: <20250607200454.73587-1-ebiggers@kernel.org>
- <aETPdvg8qXv18MDu@zx2c4.com>
- <20250608234817.GG1259@sol>
- <aEhtyvBajGE80_2Z@zx2c4.com>
+	s=k20201202; t=1749624024;
+	bh=hTZ4O1f+yyRThvIWYmjjaVb+T8UQ4NQFi4XinDUzJbE=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=ILRmI8cMjGf65AqQkb3cOeaQJ7RKZL/N58pNF2ZLJJX+3Ax3r4awDigxs0hghD5r3
+	 uhkNhoF2vij4mRRPvmBqo0thNPUCRenZoMxm81rUCWX5xbYAPU7o61mfX1m/hsbiaz
+	 x1AMORfgUJhPeIKMhjnOaKDS790UZbgpyZLkzKHGQJ4Qqi7d7IDNOjQ3saC3l8tluf
+	 M1+kfWW2fYl57d/dl5uuYjLCSmLa0YZ07XuDbV1AD4YCNCkUUFT81R/bT8O29u6TSc
+	 GDiw69DmrR00OA0VdCZWDPWR2s6uswoRoI+b361lmsObuyKBBwyExO5BPOsa9CyBHk
+	 TB1mD0UZs2OfA==
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aEhtyvBajGE80_2Z@zx2c4.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 11 Jun 2025 08:40:12 +0200
+Message-Id: <DAJHY74JP27K.3VV3U3W0A9PCN@kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <lkmm@lists.linux.dev>, <linux-arch@vger.kernel.org>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>, "Will Deacon" <will@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Mark Rutland"
+ <mark.rutland@arm.com>, "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+ "Viresh Kumar" <viresh.kumar@linaro.org>, "Lyude Paul" <lyude@redhat.com>,
+ "Ingo Molnar" <mingo@kernel.org>, "Mitchell Levy"
+ <levymitchell0@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
+ <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>
+Subject: Re: [PATCH v4 03/10] rust: sync: atomic: Add ordering annotation
+ types
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Boqun Feng" <boqun.feng@gmail.com>
+X-Mailer: aerc 0.20.1
+References: <20250609224615.27061-1-boqun.feng@gmail.com>
+ <20250609224615.27061-4-boqun.feng@gmail.com>
+ <DAIQG9ALK4QC.2P2C2MC4U9YVX@kernel.org> <aEhrzxltkdnub_bR@tardis.local>
+ <aEhyRhb71dIXzqSu@tardis.local> <aEh_HEwSh2w0Ajkq@tardis.local>
+In-Reply-To: <aEh_HEwSh2w0Ajkq@tardis.local>
 
-On Tue, Jun 10, 2025 at 11:39:22AM -0600, Jason A. Donenfeld wrote:
-> On Sun, Jun 08, 2025 at 04:48:17PM -0700, Eric Biggers wrote:
-> > On Sat, Jun 07, 2025 at 05:47:02PM -0600, Jason A. Donenfeld wrote:
-> > > On Sat, Jun 07, 2025 at 01:04:42PM -0700, Eric Biggers wrote:
-> > > > Having arch-specific code outside arch/ was somewhat controversial when
-> > > > Zinc proposed it back in 2018.  But I don't think the concerns are
-> > > > warranted.  It's better from a technical perspective, as it enables the
-> > > > improvements mentioned above.  This model is already successfully used
-> > > > in other places in the kernel such as lib/raid6/.  The community of each
-> > > > architecture still remains free to work on the code, even if it's not in
-> > > > arch/.  At the time there was also a desire to put the library code in
-> > > > the same files as the old-school crypto API, but that was a mistake; now
-> > > > that the library is separate, that's no longer a constraint either.
-> > > 
-> > > I can't express how happy I am to see this revived. It's clearly the
-> > > right way forward and makes it a lot simpler for us to dispatch to
-> > > various arch implementations and also is organizationally simpler.
-> > > 
-> > > Jason
-> > 
-> > Thanks!  Can I turn that into an Acked-by?
-> 
-> Took me a little while longer to fully review it. Sure,
-> 
->     Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> 
-> Side note: I wonder about eventually turning some of the static branches
-> into static calls.
+On Tue Jun 10, 2025 at 8:53 PM CEST, Boqun Feng wrote:
+> On Tue, Jun 10, 2025 at 10:58:30AM -0700, Boqun Feng wrote:
+>> On Tue, Jun 10, 2025 at 10:30:55AM -0700, Boqun Feng wrote:
+>> [...]
+>> > > > +/// Describes the exact memory ordering of an `impl` [`All`].
+>> > > > +pub enum OrderingDesc {
+>> > >=20
+>> > > Why not name this `Ordering`?
+>> > >=20
+>> >=20
+>> > I was trying to avoid having an `Ordering` enum in a `ordering` mod.
+>> > Also I want to save the name "Ordering" for the generic type parameter
+>> > of an atomic operation, e.g.
+>> >=20
+>> >     pub fn xchg<Ordering: ALL>(..)
+>> >=20
+>> > this enum is more of an internal implementation detail, and users shou=
+ld
+>> > not use this enum directly, so I would like to avoid potential
+>> > confusion.
+>> >=20
+>> > I have played a few sealed trait tricks on my end, but seems I cannot
+>> > achieve:
+>> >=20
+>> > 1) `OrderingDesc` is only accessible in the atomic mod.
+>> > 2) `All` is only impl-able in the atomic mod, while it can be used as =
+a
+>> > trait bound outside kernel crate.
+>> >=20
+>> > Maybe there is a trick I'm missing?
+>> >=20
+>>=20
+>> Something like this seems to work:
+>>=20
+>>     pub(super) mod private {
+>>         /// Describes the exact memory ordering of an `impl` [`All`].
+>>         pub enum Ordering {
+>>             /// Relaxed ordering.
+>>             Relaxed,
+>>             /// Acquire ordering.
+>>             Acquire,
+>>             /// Release ordering.
+>>             Release,
+>>             /// Fully-ordered.
+>>             Full,
+>>         }
+>>    =20
+>>         pub trait HasOrderingDesc {
+>>             /// Describes the exact memory ordering.
+>>             const ORDERING: Ordering;
+>>         }
+>>     }
+>>=20
+>>     /// The trait bound for annotating operations that should support al=
+l orderings.
+>>     pub trait All: private::HasOrderingDesc { }
+>>=20
+>>     impl private::HasOrderingDesc for Relaxed {
+>>         const ORDERING: private::Ordering =3D private::Ordering::Relaxed=
+;
+>>     }
+>>=20
+>> the trick is to seal the enum and the trait together.
+>>=20
+>> Regards,
+>> Boqun
+>>=20
+>> > > > +    /// Relaxed ordering.
+>> > > > +    Relaxed,
+>> > > > +    /// Acquire ordering.
+>> > > > +    Acquire,
+>> > > > +    /// Release ordering.
+>> > > > +    Release,
+>> > > > +    /// Fully-ordered.
+>> > > > +    Full,
+>> > > > +}
+>> > > > +
+>> > > > +/// The trait bound for annotating operations that should support=
+ all orderings.
+>> > > > +pub trait All {
+>> > > > +    /// Describes the exact memory ordering.
+>> > > > +    const ORDER: OrderingDesc;
+>> > >=20
+>> > > And then here: `ORDERING`.
+>> >=20
+>
+> After a second thought, the following is probably what I will go for:
+>
+>     /// The annotation type for relaxed memory ordering.
+>     pub struct Relaxed;
+>    =20
+>     /// The annotation type for acquire memory ordering.
+>     pub struct Acquire;
+>    =20
+>     /// The annotation type for release memory ordering.
+>     pub struct Release;
+>    =20
+>     /// The annotation type for fully-order memory ordering.
+>     pub struct Full;
+>
+>     /// Describes the exact memory ordering.
+>     pub enum OrderingType {
+>         /// Relaxed ordering.
+>         Relaxed,
+>         /// Acquire ordering.
+>         Acquire,
+>         /// Release ordering.
+>         Release,
+>         /// Fully-ordered.
+>         Full,
+>     }
+>    =20
+>     mod internal {
+>         /// Unit types for ordering annotation.
+>         ///
+>         /// Sealed trait, can be only implemented inside atomic mod.
+>         pub trait OrderingUnit {
+>             /// Describes the exact memory ordering.
+>             const TYPE: super::OrderingType;
+>         }
+>     }
+>    =20
+>     impl internal::OrderingUnit for Relaxed {
+>         const TYPE: OrderingType =3D OrderingType::Relaxed;
+>     }
+>    =20
+>     impl internal::OrderingUnit for Acquire {
+>         const TYPE: OrderingType =3D OrderingType::Acquire;
+>     }
+>    =20
+>     impl internal::OrderingUnit for Release {
+>         const TYPE: OrderingType =3D OrderingType::Release;
+>     }
+>    =20
+>     impl internal::OrderingUnit for Full {
+>         const TYPE: OrderingType =3D OrderingType::Full;
+>     }
+>
+> That is:
+>
+> 1) Rename "OrderingDesc" into "OrderingType", and make it public.
+> 2) Provide a sealed trait (`OrderingUnit`) for all the unit types
+>    that describe ordering.
+> 3) Instead of "ORDER" or "ORDERING", name the enum constant "TYPE".
+>
+>
+> An example shows why is probably an xchg() implementation, if I was to
+> follow the previous naming suggestion, it will be:
+>
+>     match Ordering::ORDERING {
+>         <some mode path>::Ordering::Relaxed =3D> atomic_xchg_relaxed(...)=
+,
+> 	...
+>     }
+>
+> with the current one, it will be:
+>
+>     match Ordering::TYPE {
+>         // assume we "use ordering::OrderingType"
+>         OrderingType::Relaxed =3D> atomic_xchg_relaxed(...),
+> 	...
+>     }
+>
+> I think this version is much better.
 
-Yes, Linus was wondering the same thing earlier.  It does run into a couple
-issues.  First, only x86 and powerpc implement static_call properly; everywhere
-else it's just an indirect call.  Second, there's often some code shared above
-the level at which we'd like to do the dispatch.  For example, consider crc32_le
-on x86.  If we expand the CRC_PCLMUL macro and inline crc32_le_arch and
-crc32_le_base as the compiler does, crc32_le ends up as:
+Agreed :)
 
-    u32 crc32_le(u32 crc, const u8 *p, size_t len)
-    {
-            if (len >= 16 && static_branch_likely(&have_pclmulqdq) &&
-                crypto_simd_usable()) {
-                    const void *consts_ptr;
-
-                    consts_ptr = crc32_lsb_0xedb88320_consts.fold_across_128_bits_consts;
-                    kernel_fpu_begin();
-                    crc = static_call(crc32_lsb_pclmul)(crc, p, len, consts_ptr);
-                    kernel_fpu_end();
-                    return crc;
-            }
-            while (len--)
-                    crc = (crc >> 8) ^ crc32table_le[(crc & 255) ^ *p++];
-            return crc;
-    }
-
-The existing static_call selects between 3 different assembly functions, all of
-which require a kernel-mode FPU section and only support len >= 16.
-
-We could instead unconditionally do a static_call upon entry to the function,
-with 4 possible targets.  But then we'd have to duplicate the kernel FPU
-begin/end sequence in 3 different functions.  Also, it would add an extra
-function call for the case where 'len < 16', which is a common case and is
-exactly the case where per-call overhead matters the most.
-
-However, if we could actually inline the static call into the *callers* of
-crc32_le(), that would make it more worthwhile.  I'm not sure that's possible,
-though, especially considering that this code is tristate.
-
-Anyway, this is tangential to this patchset.  Though the new way the code is
-organized does make it more feasible to have e.g. a centralized static_call in
-the future if we choose to go in that direction.
-
-- Eric
+---
+Cheers,
+Benno
 
