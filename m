@@ -1,302 +1,139 @@
-Return-Path: <linux-arch+bounces-12329-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12330-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B36AAD7540
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Jun 2025 17:08:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC83DAD7F47
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 02:02:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 854883B832E
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Jun 2025 15:04:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 518D43AD354
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 00:01:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1019C24A07A;
-	Thu, 12 Jun 2025 15:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tu-bs.de header.i=@tu-bs.de header.b="tyyE0jJs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6EE8748F;
+	Fri, 13 Jun 2025 00:01:58 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pmxout2.rz.tu-bs.de (pmxout2.rz.tu-bs.de [134.169.4.152])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AA726E717;
-	Thu, 12 Jun 2025 15:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.169.4.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBC310E9;
+	Fri, 13 Jun 2025 00:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749740672; cv=none; b=MoAvK02sbobyISrcHbk/pvzVUPVxRpaj8Amo8U1i97yRs1xg9SSVQrCj7WMymh2Vy5XSudFMkETysFUAlkAHZWZssaU8PQ/uwwN81nHx9bkY9fHaRaytde+cy34phFAywTXsfPFaG6jGsLJHytCvxwG5mfn8la0YZimNgKSW/ro=
+	t=1749772918; cv=none; b=mSx/FNr6ixppdtZoL6wLIb7zHNBSSMqJiDzD66cJp8WAdpz7qzRX+7gTuzVQ/xGiJr92KFG8cf0cDQDNbblrPTrHhAHB9JOqYs55DEMoylYj+CsuHDq/QtVODcJ2EPLH2qNDG3qcTN0jMiO4MEPi4Ggi9v5EVOWlZ81xvl3xuDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749740672; c=relaxed/simple;
-	bh=M7psreqtd7qDN8w7ZaJtjjjh4GKXKbz1dQhsMZmx/og=;
-	h=Message-ID:Date:MIME-Version:To:CC:From:Subject:Content-Type; b=QcuiCwBRWTkrrEZUD1F1eTNRWE0ZxpnOwSgnUdK1sBAtbPkKNOIojO1QFz9nV0u3UVcXoUBqb/VkdJ4MtYbpxta9aU6zfwt4mlhm3mkQZTMGmy2yU/NOSm9Tf/d1gzhCz0KeeD9bbc7D/X0pok8br9FiRWkv1Tv0FLlaPPBsH0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-bs.de; spf=pass smtp.mailfrom=tu-braunschweig.de; dkim=pass (2048-bit key) header.d=tu-bs.de header.i=@tu-bs.de header.b=tyyE0jJs; arc=none smtp.client-ip=134.169.4.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-bs.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-braunschweig.de
-Received: from Hermes02.ad.tu-bs.de (hermes02.rz.tu-bs.de [134.169.4.130])
-	by pmxout2.rz.tu-bs.de (Postfix) with ESMTPS id F34534E05E6;
-	Thu, 12 Jun 2025 16:55:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-bs.de;
-	s=exchange_neu; t=1749740130;
-	bh=M7psreqtd7qDN8w7ZaJtjjjh4GKXKbz1dQhsMZmx/og=;
-	h=Date:To:CC:From:Subject:From;
-	b=tyyE0jJs1A8u58jMiVSNqeCpSVDjFl8CRZag/xvAwHfg+CJuZ/WwaJdz6YiZqCFZk
-	 F//1n1T0H5JrpbUwn4L1rwVDO6GH9MwG0YyBwFyROHL4QdximACap6HYWbIWTD9i9q
-	 KEwkiU92QtLs8dIuMojO+IPmRWANncU2YUkI3n2whuy7YAn6doQ13v3JPo3Iumpl8c
-	 m20Q5xjjUiQZtA//C8yF3H+6P2NvtNcyn2yXn+GQAshDfxLz7wPbDJDFfAd4OkKJ91
-	 27iO3VxYd+LnDO7m3d8uCU70kRXuOe6+9bpvz9loJU6WKqBYCzhQcL9sUYmnvmQ5mQ
-	 xdCu4b92Vmz3w==
-Received: from [192.168.178.25] (134.169.9.110) by Hermes02.ad.tu-bs.de
- (134.169.4.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 12 Jun
- 2025 16:55:29 +0200
-Message-ID: <cb83e3e4-9e22-4457-bf61-5614cc4396ad@tu-bs.de>
-Date: Thu, 12 Jun 2025 16:55:28 +0200
+	s=arc-20240116; t=1749772918; c=relaxed/simple;
+	bh=ktLPqBfb0Q9UxATLFPtgXeKEniYTjDCEq9jWqEe1HU0=;
+	h=Message-ID:Date:From:To:Cc:Subject; b=UnZ1+0i8PHVxXx7JW41cmpxIuyBcx7BoaXdkJeBZmhYPXUrzOpxwdruWuFmmVGbkv4/4/RrTzYvfT/b7arppNjvkPhPAFRhEjIwjvFR/yzJ9m2OWCpA51o1SQBj83pYGCVlYMeRjznxEtjlF+wapuPwblp3qANP6dRvx5MCPPUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay07.hostedemail.com (Postfix) with ESMTP id 9650C16043F;
+	Fri, 13 Jun 2025 00:01:54 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 7E7F120015;
+	Fri, 13 Jun 2025 00:01:52 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.98.2)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1uPrtI-00000001wlB-2Tte;
+	Thu, 12 Jun 2025 20:03:28 -0400
+Message-ID: <20250612235827.011358765@goodmis.org>
+User-Agent: quilt/0.68
+Date: Thu, 12 Jun 2025 19:58:27 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org,
+ llvm@lists.linux.dev
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas.schier@linux.dev>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v2 0/5] tracepoints: Add warnings for unused tracepoints and trace events 
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 7E7F120015
+X-Stat-Signature: 1hjfmzb9uz4og3i9x4ep86qwjn79b7f4
+X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/pAn2UOPxaz5xG82OV8z0NLZQWSBC58Po=
+X-HE-Tag: 1749772912-383725
+X-HE-Meta: U2FsdGVkX1/usBTNqgaNMTPmWO+XHlewon1Trn7MTqxnsGgYTr2MChhFRJWDvGAt7yumw4WJZYMccY04asDKq/4yik+/hNkVN6P2QstIr8JBmPbLs5ixxAeyfxZ19ISBA/hY7C38fCCl1HChV1xWaA0l0Er7IyBDS8H9L65iXhMxJjnXo5wa5SPQV68QOn/vtvWi4giPLdaclkIGuW8t8f9eAijA7THt5MrH6VWGQQlIwMT0LToYgmEALVBHx550wuNovbDA8XEhf2MyQzSi67h64jfurBR7Pr90svjpPaAqSCXTg6VLYVviDLu9kuH0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Alan Stern <stern@rowland.harvard.edu>, Andrea Parri
-	<parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin
-	<npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave
-	<j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E.
- McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel
- Lustig <dlustig@nvidia.com>, Joel Fernandes <joelagnelf@nvidia.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<lkmm@lists.linux.dev>
-CC: <hernan.poncedeleon@huaweicloud.com>, <jonas.oberhauser@huaweicloud.com>,
-	"r.maseli@tu-bs.de" <r.maseli@tu-bs.de>
-From: Thomas Haas <t.haas@tu-bs.de>
-Subject: [RFC] Potential problem in qspinlock due to mixed-size accesses
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: Hermes02.ad.tu-bs.de (134.169.4.130) To
- Hermes02.ad.tu-bs.de (134.169.4.130)
-
-We have been taking a look if mixed-size accesses (MSA) can affect the 
-correctness of qspinlock.
-We are focusing on aarch64 which is the only memory model with MSA 
-support [1].
-For this we extended the dartagnan [2] tool to support MSA and now it 
-reports liveness, synchronization, and mutex issues.
-Notice that we did something similar in the past for LKMM, but we were 
-ignoring MSA [3].
-
-The culprit of all these issues is that atomicity of single load 
-instructions is not guaranteed in the presence of smaller-sized stores 
-(observed on real hardware according to [1] and Fig. 21/22)
-Consider the following pseudo code:
-
-     int16 old = xchg16_rlx(&lock, 42);
-     int32 l = load32_acq(&lock);
-
-Then the hardware can treat the code as (likely due to store-forwarding)
-
-     int16 old = xchg16_rlx(&lock, 42);
-     int16 l1 = load16_acq(&lock);
-     int16 l2 = load16_acq(&lock + 2); // Assuming byte-precise pointer 
-arithmetic
-
-and reorder it to
-
-     int16 l2 = load16_acq(&lock + 2);
-     int16 old = xchg16_rlx(&lock, 42);
-     int16 l1 = load16_acq(&lock);
-
-Now another thread can overwrite "lock" in between the first two 
-accesses so that the original l (l1 and l2) ends up containing
-parts of a lock value that is older than what the xchg observed.
-
-Let us now explain how this can break qspinlock.
-We need 3 threads going the slowpath, T1, T2, and T3.
-T1 is a setup-thread that takes the lock just so that T2 and T3 observe 
-contention and try to enqueue themselves.
-So consider a situation where
-     - T3's node is the only enqueued node (due to previous contention 
-with T1).
-     - T2 is about to enqueue its node.
-     - T3 is about to take the lock because it sees no contention (lock 
-is free, no pending bits are set, it has the only node in the queue).
-     - the lock is released (T1 is already done)
-
-We focus on the following lines of code in qspinlock.c:
-
-         // <- T2 is here, but executes part of line 328 first.
-         277: old = xchg_tail(lock, tail);    // ~ xchg_rlx(&lock->tail, 
-tail)
-         // ...
-         328: val = atomic_cond_read_acquire(&lock->val, !(VAL & 
-_Q_LOCKED_PENDING_MASK));
-         // ...
-         // <- T3 is here
-         352: if ((val & _Q_TAIL_MASK) == tail) {
-                     if (atomic_try_cmpxchg_relaxed(&lock->val, &val, 
-_Q_LOCKED_VAL))
-                         goto release; /* No contention */
-         355: }
 
 
-Then the following sequence of operations is problematic:
+Every trace event can take up to 5K of memory in text and meta data regardless
+if they are used or not. Trace events should not be created if they are not
+used.  Currently there's over a hundred events in the kernel that are defined
+but unused, either because their callers were removed without removing the
+trace event with it, or a config hides the trace event caller but not the
+trace event itself. And in some cases, trace events were simply added but were
+never called for whatever reason. The number of unused trace events continues
+to grow.
 
-(1) T2 reads half of the lock (the half that is not lock->tail, i.e., it 
-"only" reads lock->lock_pending)
+This patch series aims to fix this.
 
-         328: val = atomic_cond_read_acquire(&lock->val, !(VAL & 
-_Q_LOCKED_PENDING_MASK)); // P1
-         // Roughly: val_lock_pending = load_acquire(&lock->lock_pending);
+The first patch creates a new section called __tracepoint_check, where all
+callers of a tracepoint creates a variable that is placed in this section with
+a pointer to the tracepoint they use. Then on boot up, it iterates this
+section and will modify the tracepoint's "func" field to a value of 1 (all
+tracepoints "func" fields are initialized to NULL and is only set when they
+are registered). This takes place before any tracepoint can be registered.
 
-      T2 observes a free lock and no pending bits set.
+Then each tracepoint is iterated on and if any tracepoint does not have its
+"func" field set to 1 a warning is triggerd and every tracepoint that doesn't
+have that field set is printed. The "func" field is then reset back to NULL.
 
-(2) T3 takes the lock because it does not observe contention
+The second patch modifies scripts/sorttable.c to read the __tracepoint_check
+section. It sorts it, and then reads the __tracepoint_ptr section that has all
+compiled in tracepoints. It makes sure that every tracepoint is found in the
+check section and if not, it prints a warning message about it. This lists the
+missing tracepoints at build time.
 
-         352: if ((val & _Q_TAIL_MASK) == tail) {  // Satisfied because 
-only T3's node is enqueued and lock is free
-                     if (atomic_try_cmpxchg_relaxed(&lock->val, &val, 
-_Q_LOCKED_VAL))
-                         goto release; /* No contention */
-         355: }
+The third patch updates sorttable to work for arm64 when compiled with gcc. As
+gcc's arm64 build doesn't put addresses in their section but saves them off in
+the RELA sections. This mostly takes the work done that was needed to do the
+mcount sorting at boot up on arm64.
 
-     T3 clears the tail and claims the lock. The queue is empty now.
+The forth patch adds EXPORT_TRACEPOINT() to the __tracepoint_check section as
+well. There was several locations that adds tracepoints in the kernel proper
+that are only used in modules. It was getting quite complex trying to move
+things around that I just decided to make any tracepoint in a
+EXPORT_TRACEPOINT "used". I'm using the analogy of static and global
+functions. An unused static function gets a warning but an unused global one
+does not.
 
-(3) T2 enqueues itself
+The last patch updates the trace_ftrace_test_filter boot up self test. That
+selftest creates a trace event to run a bunch of filter tests on it without
+actually calling the tracepoint. To quiet the warning, the selftest tracepoint
+is called within a if (!trace_<event>_enabled()) section, where it will not be
+optimized out, nor will it be called.
 
-         277: old = xchg_tail(lock, tail);
+This is v2 from: https://lore.kernel.org/linux-trace-kernel/20250529130138.544ffec4@gandalf.local.home/
+which was simply the first patch. This version adds the other patches.
 
-     T2 sees an empty queue (old == 0) because T3 just cleared it, and 
-enqueues its node.
+Steven Rostedt (5):
+      tracepoints: Add verifier that makes sure all defined tracepoints are used
+      tracing: sorttable: Add a tracepoint verification check at build time
+      tracing: sorttable: Find unused tracepoints for arm64 that uses reloc for address
+      tracepoint: Do not warn for unused event that is exported
+      tracing: Call trace_ftrace_test_filter() for the event
 
-(4) T2 reads the remaining half of the lock from (1), reading the tail 
-(lock->tail) it just inserted.
-
-         328: val = atomic_cond_read_acquire(&lock->val, !(VAL & 
-_Q_LOCKED_PENDING_MASK)); // P2
-         // Roughly: val_tail = load_acquire(&lock->tail);
-
-     T2 observes its own tail + lock is free and no pending bits are set 
-(from (1))
-
-
-Now there are two continuations, one leading to broken synchronisation, 
-another leading to non-termination or failure of mutual exclusion.
-We first consider the synchronisation issue.
-
-
-(5a) T3 finishes its critical section and releases the lock
-
-
-(6a) T2 takes the lock with the same code as in point (2):
-
-          352: if ((val & _Q_TAIL_MASK) == tail) {     // Satisfied 
-because only T2's node is enqueued and lock is free
-                     if (atomic_try_cmpxchg_relaxed(&lock->val, &val, 
-_Q_LOCKED_VAL))
-                         goto release; /* No contention */
-          355: }
-
-       Notice that the "atomic_try_cmpxchg_relaxed" would fail if the 
-lock was still taken by T3, because "val" has no lock bits set (as T2 
-observed the lock to be free).
-       Although T2 now properly enters the CS after T3 has finished, the 
-synchronisation is broken since T2 did not perform an acquire operation 
-to synchronise with the lock release.
-       Indeed, dartagnan reports no safety violations (with 3 threads) 
-if the CAS is made an acquire or the CS itself contains an acquire 
-barrier (smb_rmb or smb_mb).
-
-
-Now, let's consider the alternative continuation that leads to 
-non-termination or failure of mutual exclusion.
-
-
-(5b) T2 tries to take the lock as above in (6a) but the CAS fails 
-because the lock is still taken by T3.
-
-
-(6b) Due to the failing CAS, T2 observes contention (at least it thinks 
-so). It sets the lock (although T3 might still have it!) and waits until 
-the (non-existent) "contending thread" enqueues its node:
-
-         /*
-          * Either somebody is queued behind us or _Q_PENDING_VAL got set
-          * which will then detect the remaining tail and queue behind us
-          * ensuring we'll see a @next.
-          */
-         362: set_locked(lock);
-
-         /*
-          * contended path; wait for next if not observed yet, release.
-          */
-         367: if (!next)
-         368:    next = smp_cond_load_relaxed(&node->next, (VAL));
-
-
-   The first comment suggests that the assumed situation is that either 
-another thread enqueued a node or the pending bits got set. But neither is
-   true in the current execution: we got here because the lock was taken.
-   Now there are two outcomes:
-     - Non-termination: the "smp_cond_load_relaxed" waits forever, 
-because there is no other thread that enqueues another node.
-     - Broken mutex: another thread (T4) enqueues a node and therefore 
-releases T2 from its loop. Now T2 enters the CS while T3 still executes 
-its CS.
-        Indeed, dartagnan reports this safety violation only with 4+ 
-threads.
-
-
-NOTE: For the above examples we forced all threads to take the slowpath 
-of qspinlock by removing the fastpath. With the fastpath present, 
-another thread (T0) is needed to force the other threads into the 
-slowpath, i.e., we need 4-5 threads to witness the issues.
-
-### Solutions
-
-The problematic executions rely on the fact that T2 can move half of its 
-load operation (1) to before the xchg_tail (3).
-Preventing this reordering solves all issues. Possible solutions are:
-     - make the xchg_tail full-sized (i.e, also touch lock/pending bits).
-       Note that if the kernel is configured with >= 16k cpus, then the 
-tail becomes larger than 16 bits and needs to be encoded in parts of the 
-pending byte as well.
-       In this case, the kernel makes a full-sized (32-bit) access for 
-the xchg. So the above bugs are only present in the < 16k cpus setting.
-     - make the xchg_tail an acquire operation.
-     - make the xchg_tail a release operation (this is an odd solution 
-by itself but works for aarch64 because it preserves REL->ACQ ordering). 
-In this case, maybe the preceding "smp_wmb()" can be removed.
-     - put some other read-read barrier between the xchg_tail and the load.
-
-
-### Implications for qspinlock executed on non-ARM architectures.
-
-Unfortunately, there are no MSA extensions for other hardware memory 
-models, so we have to speculate based on whether the problematic 
-reordering is permitted if the problematic load was treated as two 
-individual instructions.
-It seems Power and RISCV would have no problem reordering the 
-instructions, so qspinlock might also break on those architectures.
-TSO, on the other hand, does not permit such reordering. Also, the 
-xchg_tail is a rmw operation which acts like a full memory barrier under 
-TSO, so even if load-load reordering was permitted, the rmw would 
-prevent this.
-
-
-[1] https://dl.acm.org/doi/10.1145/3458926
-[2] https://github.com/hernanponcedeleon/Dat3M
-[3] https://lkml.org/lkml/2022/8/26/597
-
--- 
-=====================================
-
-Thomas Haas
-
-Technische Universität Braunschweig
-Institut für Theoretische Informatik
-Mühlenpfordtstr. 23, Raum IZ 343
-38106 Braunschweig | Germany
-
-t.haas@tu-braunschweig.de
-https://www.tu-braunschweig.de/tcs/team/thomas-haas
-
+----
+ include/asm-generic/vmlinux.lds.h  |   1 +
+ include/linux/tracepoint.h         |  13 ++
+ kernel/trace/Kconfig               |  31 +++
+ kernel/trace/trace_events_filter.c |   4 +
+ kernel/tracepoint.c                |  26 +++
+ scripts/Makefile                   |   4 +
+ scripts/sorttable.c                | 444 ++++++++++++++++++++++++++++++-------
+ 7 files changed, 437 insertions(+), 86 deletions(-)
 
