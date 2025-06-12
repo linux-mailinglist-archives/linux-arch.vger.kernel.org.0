@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-12333-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12335-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3F95AD7F55
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 02:02:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C853AD7F52
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 02:02:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24E623B1C0C
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 00:01:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB868189807F
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 00:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01FE2AD21;
-	Fri, 13 Jun 2025 00:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61B897DA6C;
+	Fri, 13 Jun 2025 00:02:00 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168A6139D;
-	Fri, 13 Jun 2025 00:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851672F32;
+	Fri, 13 Jun 2025 00:01:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749772919; cv=none; b=ZyFovpBo88W+mNpyJVrwnd05VsH1WkkmkaZrOqk2/lnUetwmkI4+pLtZqtP5ViV2SFmfSTD5kV+hF3Y2YYkmWBet2dRbMytNbX5ng2ld/+GABECZcpJjQ5M+BG/8b6fmG9auD9pW9Wx9+D109vx5/MktSjNGX6Ej1sMGAXwVHUg=
+	t=1749772920; cv=none; b=YhyW7pp54MUvvhD7aEs1MdoXYwiASALiqzxvCGahdik6zwLjfrix0wvA1VWfOSSvYi6mqyPF/E85iKuuKDt1DJAO5naH6f3RuiZuKENNBN1m4v8ZqnlwPmUxWrDO9eyxwtpcK4TD1n8uPE/YDp/iWd9BLfOZVKSg3xq9I52D7uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749772919; c=relaxed/simple;
-	bh=6X6YyF+WmEpHgmZwhbhrlTroU5ZhUwoXBgY6pNP9Id0=;
+	s=arc-20240116; t=1749772920; c=relaxed/simple;
+	bh=1Wi9qsaoZ7r24PsCIiOD/iqfyYPhK4+xa9EZGFFJa4M=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=ucDaVkVwWVcd+qyUs0gsPPElUL6XMjFKRnVqulkTYJVaCR9iWiXC8USf5qr2b3Ukh0GHmkmfyttRhcAVbFL12JEO/ELmBlVSVlEgi5APAUA1gUdjaDAoDaq1nwG3oGhF/fR6bH5y4qtUuymS0hvt4IyMnz6PjwtB7phD/n1BaDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+	 Content-Type; b=bjj40iWPRtfnJXPxn+rxFLdJaoUS+7nkQ2KH6SsZO5q37EONjRgjfk83VwLXSBSl6SgGHzWO0oWT2bZu2WNXRm+WZDK0Lti4ZpRQ5/EHKmjn5zCjhJQxEVCB/CVkPOtmS5dmUAhXmaoPyydIguSCCoYSvD00C8PPmA9iow217L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id DAFD31D3744;
+Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id E15F9803ED;
 	Fri, 13 Jun 2025 00:01:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id 7CDC520031;
+Received: from [HIDDEN] (Authenticated sender: nevets@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id 7F95220015;
 	Fri, 13 Jun 2025 00:01:52 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98.2)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1uPrtI-00000001wlg-3EO1;
+	id 1uPrtI-00000001wm9-3vfQ;
 	Thu, 12 Jun 2025 20:03:28 -0400
-Message-ID: <20250613000328.620789081@goodmis.org>
+Message-ID: <20250613000328.791312828@goodmis.org>
 User-Agent: quilt/0.68
-Date: Thu, 12 Jun 2025 19:58:28 -0400
+Date: Thu, 12 Jun 2025 19:58:29 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-arch@vger.kernel.org,
  linux-kernel@vger.kernel.org,
@@ -56,8 +56,7 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
  Catalin Marinas <catalin.marinas@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2 1/5] tracepoints: Add verifier that makes sure all defined tracepoints are
- used
+Subject: [PATCH v2 2/5] tracing: sorttable: Add a tracepoint verification check at build time
 References: <20250612235827.011358765@goodmis.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -66,226 +65,427 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Rspamd-Queue-Id: 7CDC520031
-X-Stat-Signature: gif8eonr5am6qscjy8j3h13p95g4kpmt
-X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 7F95220015
+X-Stat-Signature: sxgz9x5g6f1cm6dcjexxbymqjm63cmzj
+X-Rspamd-Server: rspamout07
 X-Session-Marker: 6E657665747340676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19gNSZmr1/AtJ7GQ18jz1v4oZktpuJFyhM=
-X-HE-Tag: 1749772912-528732
-X-HE-Meta: U2FsdGVkX1/x9WX7wj7C22IPbglr2v5XvUGWuBvVNt5ScvxZ4ZaOQX/Uvlk60zw03VDOFNqxisbkC7iySs815i8MAXhSDkUtX2nfquuNfptMVOqWfAcgmP2J/GvzEAaVaV5VMNX5aAMrEkufrLqhvaVkAbDDSu2MVR7PPrv0MrsePeFdy4UCiAcn7EOTxKsaHzojKe7+6rntio/+0usQnPjtLtNj0fwbaN7vsD8BP3a58NO+nmuWArzvWfRJXbvD7q9HCbBCp2vGl92NFtA1zuOVXFwXfmBB0tSPxFBVQ6uBnXLZwGlHyV9iTMy8mO8RfAI+8tvfLn66UYf71EtQWuwKd7QIy2AppZNheVMFci/QVj3fet4v/UrMEwiXknQ3P202jHwxyWXpGoyNaO9HUh5vCPpuWT1d03GvFgmNySM=
+X-Session-ID: U2FsdGVkX18kGkDH3+IFv6sDugiAQU0LksiTCnTzpO8=
+X-HE-Tag: 1749772912-916592
+X-HE-Meta: U2FsdGVkX190KiQD5thmSaOLS8ParT9bX55XnJIDqlp7gELTcyqwWw6cd4pdN/PaPppbBFZMBY/1E9SAvYNhQFyWk2VG7zJVluIV2Rgfk84s1QzrDHQ5lXY2mTnGyC+f3PUdsZE/sg3ponRFZB5EC7rtOQCPTPAQV7deENgyolbyqDWk9RmWydc9e2iiYpHAEq4HIpQIX0JQwwsSJD1w9Ga3iMXUqw/u8h1zojAbbBNrSOZeXf/pkdv6ZGsa1WhgZr9EDT1f1k/UL12Ly4NeCposGOyCjv7pHKbqom9MWEIO+leAJtpa4nhV1LNHr908ZFG0M6oUS6ZlWVRUgWmNZKmMHfshtNDAIQ1MH/v2rlJV/0dcMY9MOxbOq6DAURZ/u/XzUmuWZaPbfD4wDKDCHA==
 
 From: Steven Rostedt <rostedt@goodmis.org>
 
-If a tracepoint is defined via DECLARE_TRACE() or TRACE_EVENT() but never
-called (via the trace_<tracepoint>() function), its meta data is still
-around in memory and not discarded.
+Update the sorttable code to check the tracepoint_check and tracepoint_ptr
+sections to see what trace events have been created but not used. Trace
+events can take up approximately 5K of memory each regardless if they are
+called or not.
 
-When created via TRACE_EVENT() the situation is worse because the
-TRACE_EVENT() creates meta data that can be around 5k per trace event.
-Having unused trace events causes several thousand of wasted bytes.
-
-Add a verifier that injects a pointer to the tracepoint structure in the
-functions that are used and added to a section called __tracepoint_check.
-Then on boot up, iterate over this section and for every tracepoint
-descriptor that is pointed to, update its ".funcs" field to (void *)1, as
-the .funcs field is only set when a tracepoint is registered. At this
-time, no tracepoints should be registered.
-
-Then iterate all tracepoints and if any tracepoints doesn't have its
-.funcs field set to (void*)1, trigger a warning, and list all tracepoints
-that are not found.
-
-Enabling this currently with a given config produces:
-
- Tracepoint x86_fpu_before_restore unused
- Tracepoint x86_fpu_after_restore unused
- Tracepoint x86_fpu_init_state unused
- Tracepoint pelt_hw_tp unused
- Tracepoint pelt_irq_tp unused
- Tracepoint ipi_raise unused
- Tracepoint ipi_entry unused
- Tracepoint ipi_exit unused
- Tracepoint irq_matrix_alloc_reserved unused
- Tracepoint psci_domain_idle_enter unused
- Tracepoint psci_domain_idle_exit unused
- Tracepoint powernv_throttle unused
- Tracepoint clock_enable unused
- Tracepoint clock_disable unused
- Tracepoint clock_set_rate unused
- Tracepoint power_domain_target unused
- Tracepoint xdp_bulk_tx unused
- Tracepoint xdp_redirect_map unused
- Tracepoint xdp_redirect_map_err unused
- Tracepoint mem_return_failed unused
- Tracepoint vma_mas_szero unused
- Tracepoint vma_store unused
- Tracepoint hugepage_set_pmd unused
- Tracepoint hugepage_set_pud unused
- Tracepoint hugepage_update_pmd unused
- Tracepoint hugepage_update_pud unused
- Tracepoint dax_pmd_insert_mapping unused
- Tracepoint dax_insert_mapping unused
- Tracepoint block_rq_remap unused
- Tracepoint xhci_dbc_handle_event unused
- Tracepoint xhci_dbc_handle_transfer unused
- Tracepoint xhci_dbc_gadget_ep_queue unused
- Tracepoint xhci_dbc_alloc_request unused
- Tracepoint xhci_dbc_free_request unused
- Tracepoint xhci_dbc_queue_request unused
- Tracepoint xhci_dbc_giveback_request unused
- Tracepoint tcp_ao_wrong_maclen unused
- Tracepoint tcp_ao_mismatch unused
- Tracepoint tcp_ao_key_not_found unused
- Tracepoint tcp_ao_rnext_request unused
- Tracepoint tcp_ao_synack_no_key unused
- Tracepoint tcp_ao_snd_sne_update unused
- Tracepoint tcp_ao_rcv_sne_update unused
-
-Some of the above is totally unused but others are not used due to their
-"trace_" functions being inside configs, in which case, the defined
-tracepoints should also be inside those same configs. Others are
-architecture specific but defined in generic code, where they should
-either be moved to the architecture or be surrounded by #ifdef for the
-architectures they are for.
-
-Note, currently this only handles tracepoints that are builtin. This can
-easily be extended to verify tracepoints used by modules, but it requires a
-slightly different approach as it needs updates to the module code.
-
-Link: https://lore.kernel.org/all/20250528114549.4d8a5e03@gandalf.local.home/
+List the tracepoints that are not used at build time. Note, this currently
+only handles tracepoints that are builtin and not in modules.
 
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
-Changes since v1: https://lore.kernel.org/20250529130138.544ffec4@gandalf.local.home
+ kernel/trace/Kconfig |  12 ++
+ scripts/Makefile     |   4 +
+ scripts/sorttable.c  | 268 +++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 261 insertions(+), 23 deletions(-)
 
-- Separate the config that does the runtime warning from the
-  sections added to the calls to tracepoints so that it can
-  be used for build time warnings.
-
- include/asm-generic/vmlinux.lds.h |  1 +
- include/linux/tracepoint.h        | 10 ++++++++++
- kernel/trace/Kconfig              | 19 +++++++++++++++++++
- kernel/tracepoint.c               | 26 ++++++++++++++++++++++++++
- 4 files changed, 56 insertions(+)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index fa5f19b8d53a..600d8b51e315 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -708,6 +708,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
- 	MCOUNT_REC()							\
- 	*(.init.rodata .init.rodata.*)					\
- 	FTRACE_EVENTS()							\
-+	BOUNDED_SECTION_BY(__tracepoint_check, ___tracepoint_check)	\
- 	TRACE_SYSCALLS()						\
- 	KPROBE_BLACKLIST()						\
- 	ERROR_INJECT_WHITELIST()					\
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 826ce3f8e1f8..2b96c7e94c52 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -221,6 +221,14 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 		__do_trace_##name(args);				\
- 	}
- 
-+#ifdef CONFIG_TRACEPOINT_VERIFY_USED
-+# define TRACEPOINT_CHECK(name)						\
-+	static void __used __section("__tracepoint_check") *__trace_check = \
-+		&__tracepoint_##name;
-+#else
-+# define TRACEPOINT_CHECK(name)
-+#endif
-+
- /*
-  * Make sure the alignment of the structure in the __tracepoints section will
-  * not add unwanted padding between the beginning of the section and the
-@@ -270,6 +278,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 	__DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
- 	static inline void __do_trace_##name(proto)			\
- 	{								\
-+		TRACEPOINT_CHECK(name)					\
- 		if (cond) {						\
- 			guard(preempt_notrace)();			\
- 			__DO_TRACE_CALL(name, TP_ARGS(args));		\
-@@ -289,6 +298,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 	__DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
- 	static inline void __do_trace_##name(proto)			\
- 	{								\
-+		TRACEPOINT_CHECK(name)					\
- 		guard(rcu_tasks_trace)();				\
- 		__DO_TRACE_CALL(name, TP_ARGS(args));			\
- 	}								\
 diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index a3f35c7d83b6..e676b802b721 100644
+index e676b802b721..6c28b06c9231 100644
 --- a/kernel/trace/Kconfig
 +++ b/kernel/trace/Kconfig
-@@ -1044,6 +1044,25 @@ config GCOV_PROFILE_FTRACE
- 	  Note that on a kernel compiled with this config, ftrace will
- 	  run significantly slower.
+@@ -1063,6 +1063,18 @@ config TRACEPOINT_WARN_ON_UNUSED
+ 	  A warning will be triggered if a tracepoint is found and
+ 	  not used at bootup.
  
-+config TRACEPOINT_VERIFY_USED
-+	bool
-+	help
-+          This option creates a section when tracepoints are used
-+	  that hold a pointer to the tracepoint that is used.
-+	  This can be used to test if a defined tracepoint is
-+	  used or not.
-+
-+config TRACEPOINT_WARN_ON_UNUSED
-+	bool "Warn if any tracepoint is defined but not used"
++config TRACEPOINT_WARN_ON_UNUSED_BUILD
++	bool "Warn on build if a tracepoint is defined but not used"
 +	depends on TRACEPOINTS
 +	select TRACEPOINT_VERIFY_USED
++	default y
 +	help
 +	  This option checks if every builtin defined tracepoint is
 +	  used in the code. If a tracepoint is defined but not used,
 +	  it will waste memory as its meta data is still created.
-+	  A warning will be triggered if a tracepoint is found and
-+	  not used at bootup.
++	  This will cause a warning at build time if the architecture
++	  supports it.
 +
  config FTRACE_SELFTEST
  	bool
  
-diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-index 62719d2941c9..7701a6fed310 100644
---- a/kernel/tracepoint.c
-+++ b/kernel/tracepoint.c
-@@ -677,10 +677,36 @@ static struct notifier_block tracepoint_module_nb = {
- 	.priority = 0,
- };
+diff --git a/scripts/Makefile b/scripts/Makefile
+index 46f860529df5..f81947ec9486 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -42,6 +42,10 @@ HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/$(SRCARCH)/include
+ HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
+ endif
  
-+#ifdef CONFIG_TRACEPOINT_WARN_ON_UNUSED
-+extern void * __start___tracepoint_check[];
-+extern void * __stop___tracepoint_check[];
++ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
++HOSTCFLAGS_sorttable.o += -DPREL32_RELOCATIONS
++endif
 +
-+#define VERIFIED_TRACEPOINT	((void *)1)
+ ifdef CONFIG_BUILDTIME_MCOUNT_SORT
+ HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
+ endif
+diff --git a/scripts/sorttable.c b/scripts/sorttable.c
+index deed676bfe38..ddcbec22ca96 100644
+--- a/scripts/sorttable.c
++++ b/scripts/sorttable.c
+@@ -92,6 +92,12 @@ static void (*w)(uint32_t, uint32_t *);
+ static void (*w8)(uint64_t, uint64_t *);
+ typedef void (*table_sort_t)(char *, int);
+ 
++static Elf_Shdr *init_data_sec;
++static Elf_Shdr *ro_data_sec;
++static Elf_Shdr *data_data_sec;
 +
-+static void check_tracepoint(struct tracepoint *tp, void *priv)
-+{
-+	if (WARN_ONCE(tp->funcs != VERIFIED_TRACEPOINT, "Unused tracepoints found"))
-+		pr_warn("Tracepoint %s unused\n", tp->name);
++static void *file_map_end;
 +
-+	tp->funcs = NULL;
-+}
-+#endif
-+
- static __init int init_tracepoints(void)
+ static struct elf_funcs {
+ 	int (*compare_extable)(const void *a, const void *b);
+ 	uint64_t (*ehdr_shoff)(Elf_Ehdr *ehdr);
+@@ -550,8 +556,6 @@ static void *sort_orctable(void *arg)
+ }
+ #endif
+ 
+-#ifdef MCOUNT_SORT_ENABLED
+-
+ static int compare_values_64(const void *a, const void *b)
  {
- 	int ret;
+ 	uint64_t av = *(uint64_t *)a;
+@@ -574,6 +578,22 @@ static int compare_values_32(const void *a, const void *b)
  
-+#ifdef CONFIG_TRACEPOINT_WARN_ON_UNUSED
-+	for (void **ptr = __start___tracepoint_check;
-+	     ptr < __stop___tracepoint_check; ptr++) {
-+		struct tracepoint *tp = *ptr;
+ static int (*compare_values)(const void *a, const void *b);
+ 
++static int fill_addrs(void *ptr, uint64_t size, void *addrs)
++{
++	void *end = ptr + size;
++	int count = 0;
 +
-+		tp->funcs = VERIFIED_TRACEPOINT;
++	for (; ptr < end; ptr += long_size, addrs += long_size, count++) {
++		if (long_size == 4)
++			*(uint32_t *)ptr = r(addrs);
++		else
++			*(uint64_t *)ptr = r8(addrs);
++	}
++	return count;
++}
++
++#ifdef MCOUNT_SORT_ENABLED
++
+ /* Only used for sorting mcount table */
+ static void rela_write_addend(Elf_Rela *rela, uint64_t val)
+ {
+@@ -684,7 +704,6 @@ static char m_err[ERRSTR_MAXSZ];
+ 
+ struct elf_mcount_loc {
+ 	Elf_Ehdr *ehdr;
+-	Elf_Shdr *init_data_sec;
+ 	uint64_t start_mcount_loc;
+ 	uint64_t stop_mcount_loc;
+ };
+@@ -785,20 +804,6 @@ static void replace_relocs(void *ptr, uint64_t size, Elf_Ehdr *ehdr, uint64_t st
+ 	}
+ }
+ 
+-static int fill_addrs(void *ptr, uint64_t size, void *addrs)
+-{
+-	void *end = ptr + size;
+-	int count = 0;
+-
+-	for (; ptr < end; ptr += long_size, addrs += long_size, count++) {
+-		if (long_size == 4)
+-			*(uint32_t *)ptr = r(addrs);
+-		else
+-			*(uint64_t *)ptr = r8(addrs);
+-	}
+-	return count;
+-}
+-
+ static void replace_addrs(void *ptr, uint64_t size, void *addrs)
+ {
+ 	void *end = ptr + size;
+@@ -815,8 +820,8 @@ static void replace_addrs(void *ptr, uint64_t size, void *addrs)
+ static void *sort_mcount_loc(void *arg)
+ {
+ 	struct elf_mcount_loc *emloc = (struct elf_mcount_loc *)arg;
+-	uint64_t offset = emloc->start_mcount_loc - shdr_addr(emloc->init_data_sec)
+-					+ shdr_offset(emloc->init_data_sec);
++	uint64_t offset = emloc->start_mcount_loc - shdr_addr(init_data_sec)
++					+ shdr_offset(init_data_sec);
+ 	uint64_t size = emloc->stop_mcount_loc - emloc->start_mcount_loc;
+ 	unsigned char *start_loc = (void *)emloc->ehdr + offset;
+ 	Elf_Ehdr *ehdr = emloc->ehdr;
+@@ -920,6 +925,211 @@ static void get_mcount_loc(struct elf_mcount_loc *emloc, Elf_Shdr *symtab_sec,
+ static inline int parse_symbols(const char *fname) { return 0; }
+ #endif
+ 
++struct elf_tracepoint {
++	Elf_Ehdr *ehdr;
++	uint64_t start_tracepoint_check;
++	uint64_t stop_tracepoint_check;
++	uint64_t start_tracepoint;
++	uint64_t stop_tracepoint;
++	uint64_t *array;
++	int count;
++};
++
++static void make_trace_array(struct elf_tracepoint *etrace)
++{
++	uint64_t offset = etrace->start_tracepoint_check - shdr_addr(init_data_sec)
++					+ shdr_offset(init_data_sec);
++	uint64_t size = etrace->stop_tracepoint_check - etrace->start_tracepoint_check;
++	Elf_Ehdr *ehdr = etrace->ehdr;
++	void *start = (void *)ehdr + offset;
++	int count = 0;
++	void *vals;
++
++	etrace->array = NULL;
++
++	/* If CONFIG_TRACEPOINT_VERIFY_USED is not set, there's nothing to do */
++	if (!size)
++		return;
++
++	vals = malloc(long_size * size);
++	if (!vals) {
++		fprintf(stderr, "Failed to allocate tracepoint check array");
++		return;
 +	}
 +
-+	for_each_kernel_tracepoint(check_tracepoint, NULL);
++	count = fill_addrs(vals, size, start);
++
++	compare_values = long_size == 4 ? compare_values_32 : compare_values_64;
++	qsort(vals, count, long_size, compare_values);
++
++	etrace->array = vals;
++	etrace->count = count;
++}
++
++static int cmp_addr_64(const void *K, const void *A)
++{
++	uint64_t key = *(const uint64_t *)K;
++	const uint64_t *a = A;
++
++	if (key < *a)
++		return -1;
++	return key > *a;
++}
++
++static int cmp_addr_32(const void *K, const void *A)
++{
++	uint32_t key = *(const uint32_t *)K;
++	const uint32_t *a = A;
++
++	if (key < *a)
++		return -1;
++	return key > *a;
++}
++
++static int find_event(void *array, size_t size, uint64_t key)
++{
++	uint32_t val_32;
++	uint64_t val_64;
++	void *val;
++	int (*cmp_func)(const void *A, const void *B);
++
++	if (long_size == 4) {
++		val_32 = key;
++		val = &val_32;
++		cmp_func = cmp_addr_32;
++	} else {
++		val_64 = key;
++		val = &val_64;
++		cmp_func = cmp_addr_64;
++	}
++	return bsearch(val, array, size, long_size, cmp_func) != NULL;
++}
++
++static int failed_event(struct elf_tracepoint *etrace, uint64_t addr)
++{
++	uint64_t sec_addr = shdr_addr(data_data_sec);
++	uint64_t sec_offset = shdr_offset(data_data_sec);
++	uint64_t offset = addr - sec_addr + sec_offset;
++	Elf_Ehdr *ehdr = etrace->ehdr;
++	void *name_ptr = (void *)ehdr + offset;
++	char *name;
++
++	if (name_ptr > file_map_end)
++		goto bad_addr;
++
++	if (long_size == 4)
++		addr = r(name_ptr);
++	else
++		addr = r8(name_ptr);
++
++	sec_addr = shdr_addr(ro_data_sec);
++	sec_offset = shdr_offset(ro_data_sec);
++	offset = addr - sec_addr + sec_offset;
++	name = (char *)ehdr + offset;
++	if ((void *)name > file_map_end)
++		goto bad_addr;
++
++	fprintf(stderr, "warning: tracepoint '%s' is unused.\n", name);
++	return 0;
++bad_addr:
++	fprintf(stderr, "warning: Failed to verify unused trace events.\n");
++	return -1;
++}
++
++static void check_tracepoints(struct elf_tracepoint *etrace)
++{
++	uint64_t sec_addr = shdr_addr(ro_data_sec);
++	uint64_t sec_offset = shdr_offset(ro_data_sec);
++	uint64_t offset = etrace->start_tracepoint - sec_addr + sec_offset;
++	uint64_t size = etrace->stop_tracepoint - etrace->start_tracepoint;
++	Elf_Ehdr *ehdr = etrace->ehdr;
++	void *start = (void *)ehdr + offset;
++	void *end = start + size;
++	void *addrs;
++	int inc = long_size;
++
++	if (!etrace->array)
++		return;
++
++	if (!size)
++		return;
++
++#ifdef PREL32_RELOCATIONS
++	inc = 4;
 +#endif
 +
- 	ret = register_module_notifier(&tracepoint_module_nb);
- 	if (ret)
- 		pr_warn("Failed to register tracepoint module enter notifier\n");
++	sec_offset = sec_offset + (uint64_t)ehdr;
++	for (addrs = start; addrs < end; addrs += inc) {
++		uint64_t val;
++
++#ifdef PREL32_RELOCATIONS
++		val = r(addrs);
++		val += sec_addr + ((uint64_t)addrs - sec_offset);
++#else
++		val = long_size == 4 ? r(addrs) : r8(addrs);
++#endif
++		if (!find_event(etrace->array, etrace->count, val)) {
++			if (failed_event(etrace, val))
++				return;
++		}
++	}
++	free(etrace->array);
++}
++
++static void *tracepoint_check(struct elf_tracepoint *etrace, Elf_Shdr *symtab_sec,
++			      const char *strtab)
++{
++	Elf_Sym *sym, *end_sym;
++	int symentsize = shdr_entsize(symtab_sec);
++	int found = 0;
++
++	sym = (void *)etrace->ehdr + shdr_offset(symtab_sec);
++	end_sym = (void *)sym + shdr_size(symtab_sec);
++
++	while (sym < end_sym) {
++		if (!strcmp(strtab + sym_name(sym), "__start___tracepoint_check")) {
++			etrace->start_tracepoint_check = sym_value(sym);
++			if (++found == 4)
++				break;
++		} else if (!strcmp(strtab + sym_name(sym), "__stop___tracepoint_check")) {
++			etrace->stop_tracepoint_check = sym_value(sym);
++			if (++found == 4)
++				break;
++		} else if (!strcmp(strtab + sym_name(sym), "__start___tracepoints_ptrs")) {
++			etrace->start_tracepoint = sym_value(sym);
++			if (++found == 4)
++				break;
++		} else if (!strcmp(strtab + sym_name(sym), "__stop___tracepoints_ptrs")) {
++			etrace->stop_tracepoint = sym_value(sym);
++			if (++found == 4)
++				break;
++		}
++		sym = (void *)sym + symentsize;
++	}
++
++	if (!etrace->start_tracepoint_check) {
++		fprintf(stderr, "warning: get start_tracepoint_check error!\n");
++		return NULL;
++	}
++	if (!etrace->stop_tracepoint_check) {
++		fprintf(stderr, "warning: get stop_tracepoint_check error!\n");
++		return NULL;
++	}
++	if (!etrace->start_tracepoint) {
++		fprintf(stderr, "warning: get start_tracepoint error!\n");
++		return NULL;
++	}
++	if (!etrace->stop_tracepoint) {
++		fprintf(stderr, "warning: get start_tracepoint error!\n");
++		return NULL;
++	}
++
++	make_trace_array(etrace);
++	check_tracepoints(etrace);
++
++	return NULL;
++}
++
+ static int do_sort(Elf_Ehdr *ehdr,
+ 		   char const *const fname,
+ 		   table_sort_t custom_sort)
+@@ -948,6 +1158,7 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 	int i;
+ 	unsigned int shnum;
+ 	unsigned int shstrndx;
++	struct elf_tracepoint tstruct = {0};
+ #ifdef MCOUNT_SORT_ENABLED
+ 	struct elf_mcount_loc mstruct = {0};
+ #endif
+@@ -985,11 +1196,17 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 			symtab_shndx = (Elf32_Word *)((const char *)ehdr +
+ 						      shdr_offset(shdr));
+ 
+-#ifdef MCOUNT_SORT_ENABLED
+ 		/* locate the .init.data section in vmlinux */
+ 		if (!strcmp(secstrings + idx, ".init.data"))
+-			mstruct.init_data_sec = shdr;
+-#endif
++			init_data_sec = shdr;
++
++		/* locate the .ro.data section in vmlinux */
++		if (!strcmp(secstrings + idx, ".rodata"))
++			ro_data_sec = shdr;
++
++		/* locate the .data section in vmlinux */
++		if (!strcmp(secstrings + idx, ".data"))
++			data_data_sec = shdr;
+ 
+ #ifdef UNWINDER_ORC_ENABLED
+ 		/* locate the ORC unwind tables */
+@@ -1055,7 +1272,7 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 	mstruct.ehdr = ehdr;
+ 	get_mcount_loc(&mstruct, symtab_sec, strtab);
+ 
+-	if (!mstruct.init_data_sec || !mstruct.start_mcount_loc || !mstruct.stop_mcount_loc) {
++	if (!init_data_sec || !mstruct.start_mcount_loc || !mstruct.stop_mcount_loc) {
+ 		fprintf(stderr,
+ 			"incomplete mcount's sort in file: %s\n",
+ 			fname);
+@@ -1071,6 +1288,9 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 	}
+ #endif
+ 
++	tstruct.ehdr = ehdr;
++	tracepoint_check(&tstruct, symtab_sec, strtab);
++
+ 	if (custom_sort) {
+ 		custom_sort(extab_image, shdr_size(extab_sec));
+ 	} else {
+@@ -1404,6 +1624,8 @@ int main(int argc, char *argv[])
+ 			continue;
+ 		}
+ 
++		file_map_end = addr + size;
++
+ 		if (do_file(argv[i], addr))
+ 			++n_error;
+ 
 -- 
 2.47.2
 
