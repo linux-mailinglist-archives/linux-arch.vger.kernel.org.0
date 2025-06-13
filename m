@@ -1,414 +1,132 @@
-Return-Path: <linux-arch+bounces-12342-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12343-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD89CAD8FD9
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 16:43:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA333AD926C
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 18:05:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 137D73B3322
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 14:42:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 045433A619A
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jun 2025 16:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84A7A1AA1D8;
-	Fri, 13 Jun 2025 14:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ECEE1E3762;
+	Fri, 13 Jun 2025 16:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Zhfihg3Q"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53FAC1A76AE;
-	Fri, 13 Jun 2025 14:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8603E1F4628;
+	Fri, 13 Jun 2025 16:02:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749825774; cv=none; b=JMl4OyKtpL3iI6pslp17eYRVQ6H1U9ZzemFNTcmepBwfi07gfdyYFBVYWV6A3UesNQHNy75ZzTKHn8Hq4In5UFaK7MjykhHL82t1Jm35JRuutt0iABfc6eK4yx+CQBiqjBe52btbeHQP4f3Ql5hd9w0ARKkiHWu9vQbM2eojJas=
+	t=1749830525; cv=none; b=pIGV8tWduKnOaPKhvVMpMd2undb3g1DMbNiqAU/LgvoidqVj8krF6m/tZhS4L5YRvevTzPnfT6zjvRgdfbNBVi6HV5cJEXA/rRCB1ctrZoyTa+10WT2k3grMyPlRR817xIbv2I5gIN9zMBWkaUAWL+32oVOdM4mRQISxvFJ7YEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749825774; c=relaxed/simple;
-	bh=zNSItPiMcI4v/nvELFQJ9buQognVR0LRfdwUYdA7JTw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kdBbhFmz9QmjJeO0n/YjD/isNILwyO4vL2bQP87Awvt0P1IyERre7P99zgBtaerjZs7qGaUNyaDmDUHqi62AqPx6BClFLbkRmH6r29QnWjOA6GCMiRxB1nWvIVzkxVr/19jC+9j0wzlO/Upas4lgzrNYtIr6PtyBa3XnQ9AKMrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 4AD61BB03F;
-	Fri, 13 Jun 2025 14:42:44 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id 630861C;
-	Fri, 13 Jun 2025 14:42:41 +0000 (UTC)
-Date: Fri, 13 Jun 2025 10:42:40 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas.schier@linux.dev>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 0/5] tracepoints: Add warnings for unused tracepoints
- and trace events
-Message-ID: <20250613104240.509ff13c@batman.local.home>
-In-Reply-To: <20250613102834.539bd849@batman.local.home>
-References: <20250612235827.011358765@goodmis.org>
-	<20250613102834.539bd849@batman.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1749830525; c=relaxed/simple;
+	bh=sP+WTByBn7c1i+cE70EYSmAqeZL2rfsXlCl547H8JHo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ew1ZCXNIAwp9XvWPA5m8NmJqH4OYu6M/mAj6rr1l5iXQwN8gJeYAc/INNk3D8duOers/n0rnrZgLYxhouqjvzrxxuZK8b2yX/0c23akbhFTdEW5Vs1htu+adpdkE2PY0fdr19daMiq35qhJoBdHxPTiSuuXJinVaj79wnbFMndA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Zhfihg3Q; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55DATE0P029060;
+	Fri, 13 Jun 2025 16:01:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=dxMSfWlJLSP1Q2CznlmbgSk8Q0tBnI
+	ErVGASW4hTcD0=; b=Zhfihg3QYV80iCtJFIZNXzwNsO28/CBzBPA1NW4+cP5VWr
+	k5l0f/92cmSa5uH4HyGSN7MW6sSZu3gD2JREmvkY9IWiDksFl/haBc28Yev1eh2p
+	fR3cqw2RD+tVrXIr7ijzmVyteuDmhjWOR5YkS2N2qTSLKs3rs5KGToPoP9lOHn28
+	Zc0+P608Mn4Oofwq9OObNNP0q5WFKuFHs7VgiBgMYGALGpI5XLkpWYhrNGGVAIJg
+	CsvXGDatoWJVdD4D+XIN/bR1Z2kVnng6dv251wWZwQ5XqU8LCwiGj9YrhbE5Yqqs
+	c0WIsVuRjG1it6BmiiXjCc1Dtc3+1matXW8Zfx8g==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 474dv8225n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Jun 2025 16:01:47 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55DFim5F019573;
+	Fri, 13 Jun 2025 16:01:46 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4752f2tec9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Jun 2025 16:01:45 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55DG1irx33227464
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 13 Jun 2025 16:01:44 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3311620040;
+	Fri, 13 Jun 2025 16:01:44 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4533A20043;
+	Fri, 13 Jun 2025 16:01:43 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.111.81.121])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 13 Jun 2025 16:01:43 +0000 (GMT)
+Date: Fri, 13 Jun 2025 18:01:41 +0200
+From: Alexander Gordeev <agordeev@linux.ibm.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 09/12] lib/crc/s390: migrate s390-optimized CRC code
+ into lib/crc/
+Message-ID: <aExLZaoBCg55rZWJ@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <20250607200454.73587-1-ebiggers@kernel.org>
+ <20250607200454.73587-10-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="MP_/xB7r9y84J_G.DlS_P53lw5b"
-X-Rspamd-Queue-Id: 630861C
-X-Stat-Signature: omq3hajmpzo3ob4drj5o4h13adurdfe6
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19doMhSzneEzGuG6B8X7pg0zB3jxon5srI=
-X-HE-Tag: 1749825761-133021
-X-HE-Meta: U2FsdGVkX1+xSdW4RT4iCL3xaAa4KmDyXuBqJMj3ZV6NY1gosoLvuIj4UG51QLMtlTI/gwH4pOn0Nuq2rt+7m1GWGgmUFhz/dohTzI4b1RNUWYXq7Hl+ppWhmkCv4TKDdnhRAr6moOjtlgIG8UcL0BmNq/y5nAqE/ezK/2snNCIw/NsN1vilgo8HhxN0D0TME1eFsgXeKvtneZzDk2qWQNGTxbBP58CT4zTkgyhTrx9gB4IA4N9j6+quoko7j9oBAoto302Ys1yfRRsnr/X4A10L1Iz/3sv0dqWnTcYxx5I0z6zo92kjwA87H8p+dD0VM3/VGINtYoki6uEwCoLy78aP2ezGRfB0d+HSgBX7okQFTZE36isYl6t8aJlmHzX5EXnoVkHaOoY=
-
---MP_/xB7r9y84J_G.DlS_P53lw5b
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250607200454.73587-10-ebiggers@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: oqxWeEseK0qommY-tA52lM8_yDgYBZ8b
+X-Proofpoint-GUID: oqxWeEseK0qommY-tA52lM8_yDgYBZ8b
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEzMDExNSBTYWx0ZWRfX2SFXW8bIydO8 QijS4XnzPyWGv7hUAVPhEsrOB00xE8g+gtnZ5TKc3xm/6m22RAo7pWDdkAUOPF1K6LO6qJEf193 PxiDvBNjb2KojolH7uIG4xIF5aoOVAuWCvsnLPUnzUljRW/4dT+d6yR8TGdRxod4wQd7u9oXLyt
+ 960X1pKDQBdkA9i2fSfl/dxiyGZuXG6X5RlU4ZS8JXRnJlDwSVv11Yh0NZ3so0jxjPrI/YVMcT2 6jW8eHHK29fMPvF4SWZi3ZgmFX9oL1/VYz01noMZpHwwtcEMmmSVoqdhzy0/dmzN0+Go88V0p57 Weg2+fyKZ+PNLuJB+wyFM7SDDMfP0OJ1UZqOon8sp39ETo2dKYj4MRErDeC122oOtE8J8jykSry
+ lFdOt02pLQfhwmo1MyS48Be/xFyI96QJGhA1Fc1zghsJy38d3Mb+b7BSNKN7KQSA+ld6RejI
+X-Authority-Analysis: v=2.4 cv=CfMI5Krl c=1 sm=1 tr=0 ts=684c4b6b cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=1XWaLZrsAAAA:8 a=DtkNC_JpMhehFE-g-C8A:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-13_01,2025-06-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 clxscore=1011 impostorscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=403 adultscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506130115
 
-On Fri, 13 Jun 2025 10:28:34 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Sat, Jun 07, 2025 at 01:04:51PM -0700, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> Move the s390-optimized CRC code from arch/s390/lib/crc* into its new
+> location in lib/crc/s390/, and wire it up in the new way.  This new way
+> of organizing the CRC code eliminates the need to artificially split the
+> code for each CRC variant into separate arch and generic modules,
+> enabling better inlining and dead code elimination.  For more details,
+> see "lib/crc: prepare for arch-optimized code in subdirs of lib/crc/".
+> 
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+...
 
-> And each DEFINE_EVENT() is approximately 1296 bytes.
->   ((19559 - 2069) - 5819) / 9
+Hi Eric,
 
-Interesting enough, just raw tracepoints are not much better. I updated
-the header file (attached) to have 10 of these, and compiled that.
+With this series I am getting on s390:
 
-DECLARE_TRACE(size_event_1,
-        TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-        TP_ARGS(A, B));
+alg: hash: skipping comparison tests for crc32c-s390 because crc32c-generic is unavailable
 
-The result is:
-
-   text    data     bss     dec     hex filename
-    629    1440       0    2069     815 no-events.ko
-  44837   15424       0   60261    eb65 trace-events.ko
-  11495    8064       0   19559    4c67 define-events.ko
-  10865    4408       0   15273    3ba9 declare-trace.ko
-
-Where each DECLARE_TRACE() ends up being 1320 bytes.
-  (15273 - 2069) / 10
-
-This is slightly bigger than a DEFINE_EVENT(), but that's also because
-the DEFINE_EVENT() shares some of the tracepoint creation in the
-DECLARE_EVENT_CLASS(), where as that work is done fully in the
-DECLARE_TRACE().
-
--- Steve
-
---MP_/xB7r9y84J_G.DlS_P53lw5b
-Content-Type: text/x-chdr
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename=size_events.h
-
-
-/* SPDX-License-Identifier: GPL-2.0 */
-#undef TRACE_SYSTEM
-#define TRACE_SYSTEM event-sizes 
-
-#undef TRACE_SYSTEM_VAR
-#define TRACE_SYSTEM_VAR event_sizes
-
-#if !defined(_SIZE_EVENT_H) || defined(TRACE_HEADER_MULTI_READ)
-#define _SIZE_EVENT_H
-
-#include <linux/tracepoint.h>
-
-#ifndef SIZE_EVENT_DEFINED
-#define SIZE_EVENT_DEFINED
-struct size_event_struct {
-	unsigned long a;
-	unsigned long b;
-};
-#endif
-
-#define DEFINE_EVENT_SIZES 0
-#define DEFINE_FULL_EVENTS 0
-#define DEFINE_JUST_TRACEPOINTS 1
-
-#if DEFINE_EVENT_SIZES
-
-TRACE_EVENT(size_event_1,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-
-#if DEFINE_FULL_EVENTS
-TRACE_EVENT(size_event_2,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-TRACE_EVENT(size_event_3,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-TRACE_EVENT(size_event_4,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-TRACE_EVENT(size_event_5,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-TRACE_EVENT(size_event_6,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-TRACE_EVENT(size_event_7,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-TRACE_EVENT(size_event_8,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-TRACE_EVENT(size_event_9,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-TRACE_EVENT(size_event_10,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B),
-	TP_STRUCT__entry(
-		__field(	unsigned long,	Aa)
-		__field(	unsigned long,	Ab)
-		__field(	unsigned long,	Ba)
-		__field(	unsigned long,	Bb)
-	),
-	TP_fast_assign(
-		__entry->Aa = A->a;
-		__entry->Ab = A->b;
-		__entry->Ba = B->a;
-		__entry->Bb = B->b;
-	),
-	TP_printk("Aa=%ld Ab=%ld Ba=%ld Bb=%ld",
-		__entry->Aa, __entry->Ab, __entry->Ba, __entry->Bb)
-);
-#else /* !DEFINE_FULL_EVENTS */
-DEFINE_EVENT(size_event_1, size_event_2,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DEFINE_EVENT(size_event_1, size_event_3,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DEFINE_EVENT(size_event_1, size_event_4,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DEFINE_EVENT(size_event_1, size_event_5,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DEFINE_EVENT(size_event_1, size_event_6,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DEFINE_EVENT(size_event_1, size_event_7,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DEFINE_EVENT(size_event_1, size_event_8,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DEFINE_EVENT(size_event_1, size_event_9,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DEFINE_EVENT(size_event_1, size_event_10,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-#endif /* !DEFINE_FULL_EVENTS */
-
-#elif DEFINE_JUST_TRACEPOINTS
-
-DECLARE_TRACE(size_event_1,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_2,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_3,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_4,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_5,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_6,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_7,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_8,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_9,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-
-DECLARE_TRACE(size_event_10,
-	TP_PROTO(struct size_event_struct *A, struct size_event_struct *B),
-	TP_ARGS(A, B));
-#endif /* DEFINE_EVENT_SIZES && DEFINE_JUST_TRACEPOINTS */
-
-#endif
-
-/***** NOTICE! The #if protection ends here. *****/
-
-
-#undef TRACE_INCLUDE_PATH
-#undef TRACE_INCLUDE_FILE
-#define TRACE_INCLUDE_PATH .
-#define TRACE_INCLUDE_FILE size_events 
-#include <trace/define_trace.h>
-
---MP_/xB7r9y84J_G.DlS_P53lw5b--
+Thanks!
 
