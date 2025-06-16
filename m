@@ -1,309 +1,142 @@
-Return-Path: <linux-arch+bounces-12350-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12351-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 904D7ADA97C
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Jun 2025 09:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62D7FADB32C
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Jun 2025 16:11:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC5616CD95
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Jun 2025 07:31:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03540167E38
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Jun 2025 14:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1EBC1F3BB5;
-	Mon, 16 Jun 2025 07:31:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238A01D6193;
+	Mon, 16 Jun 2025 14:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="DC1i+2um"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="i6yGYI5m"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF5928DB3
-	for <linux-arch@vger.kernel.org>; Mon, 16 Jun 2025 07:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C852BF007
+	for <linux-arch@vger.kernel.org>; Mon, 16 Jun 2025 14:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750059106; cv=none; b=qHSzX14bsFp/bQ0Us/3UK9xJU5GrOgVDL4Gz/Bga6qti7+HEE6g1hqTZYl0uXGpXbIS+NTXd7RSd5aSRo7JxGAoW54p56q7mmZag3oxhv4urgI79o06qTZVLKPxlSMUJGpT3H+CU5Ii2ydBFvPhECa+lPKa92lpkweHSY7GBVy0=
+	t=1750083076; cv=none; b=Tye2oYuc5AzqP3Kh60FQd9E4q9Mp007dlxUcRIlKPYaIwQ7ww250U27mnom4lX34g+3hj4h1bDoTLiFEtE/N1YwXp0ABOi3iGwRXRFGQJXBvUI0iayr4zMc9q3khE8mzcCwWGom6UOoNOHt97eG0QvSFOiXpBIQ6nMCWVKOlLXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750059106; c=relaxed/simple;
-	bh=ee5HiIoIsa3WDFCUyUGDDZltzjB7Oew/byuJhXXlAlI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nSfrxKtpBdsBKChkNVn40UrCAYC+m3lHZ5hMcqnwEU3rSC0UqkxVoCxLZsh96esZSlMH4mY4ip5GoR9d3h4dgicDyJphJwSHFB4L1h/xSUAqWDpVJXQ+gRb0LXqlqZTBJZz5ytryhMVNlI0sU/G6Qg9Js20wTqqPpTeV+wi+MgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=DC1i+2um; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3ddff24fdc4so47573415ab.2
-        for <linux-arch@vger.kernel.org>; Mon, 16 Jun 2025 00:31:43 -0700 (PDT)
+	s=arc-20240116; t=1750083076; c=relaxed/simple;
+	bh=zoPlTkoZZmJtHvxgje6uQdW9GgwchQlmybNP8yjwaN8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KWYZZ83qmnWWnaYRdNy7dIVKAEbDj7a1dJNneCxYTtn3SWZ8SNgA2QDUSdCtPtRggZgmIjf9Tjr2F2S9INEs4J2Hq4YZpnUElGagThtdJqTmx8YKZffS6GUL1sFmZhocD4H7KGfeWwcOdps74qO/gfr1EoGrMnPVpifpwsYBiow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=i6yGYI5m; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7d09a17d2f7so421605085a.1
+        for <linux-arch@vger.kernel.org>; Mon, 16 Jun 2025 07:11:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1750059103; x=1750663903; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EQxXH/0dmAKUHVoHoL5MncVmJUg8FbHf/SfAogCBA2o=;
-        b=DC1i+2umUVfKRl3dV5GPu22ngrs1sm0QAx+hY6GxzRuTxJz2aEVXBVY21zCsxxxAb3
-         xQ7OnZYKqww37y7xbgOG9IasDUprZUWYFUg0EZ4MElZo6BmPrlMHfFMz5ewViqQiXtWr
-         /+kx131zxEmT0q/ZfGhXZmZzXXUWLkGa88xBOnl1w1EhoTa9j0IhgDRIKQKB+e2cHZaE
-         +dJ//AYrH56dqdU2azxMFshlEHAKGit9qUbhCcCEVP/Tbj5P5zE1/M4AtQ7TENXxPDBt
-         Wsj+Oref7Aunzg2G6havYh6dekCCPT/Diu8Z8ZalOmwWyhPA2KJHD+yvV/aEF/B2yHpy
-         yAcA==
+        d=rowland.harvard.edu; s=google; t=1750083073; x=1750687873; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OOggq/KPowkbkENDJnGOHpXXvgQx4F56FAixym3bp2M=;
+        b=i6yGYI5mS8tlXa57baShPSH1cg7VlSZA/FnWjgWXRGRVWm1L2qVZxRNeMHEv9TafUr
+         h6WqqYDQXfXcLvzvvScx3JA9m9yQlwDFa5rUdSR2eJxlFGV+mZmJ2nrZpUxcEFQa6WZ8
+         P+MhRH3J4Di0h0uAwi4BZP4+ekovjxaHDEcSqLOUswi1rnJLWbadESAmUjYOz1HcI4ed
+         JfnSzqDk+WmtX3iCcfk+rUtXTpJOMxpMarD53llGdlCaIJ54AtL/GjIQdBV3MLitglW5
+         zGAwbNhf/U20Ca1ck/GrRJTzN5j4Stf3n+pasQT7ackjJYXk9mGzdOopT5sVLFT6CSDm
+         H1jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750059103; x=1750663903;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EQxXH/0dmAKUHVoHoL5MncVmJUg8FbHf/SfAogCBA2o=;
-        b=AFLLDnYJqZ6kSHfcgxU964v3WM/yBAcMeDWkibMj210e31aKjVjvyZV2PyZuj+IgMM
-         7PfM+RIxDNj+AeUFUtjZBcZHfb1m25vR0OEsgUPX9q0/j5pVbkT9Zla7+XoVYBQhlB4i
-         J7Hx2c0WmYjzXPY2TCxmZXB9SlDJFxussUIanW91zCLKrebL6+O8JW2aNOuIqqRjC7EW
-         jpV4ZN8E7UybJeZqP90O5KvJh4mPOI2MeU6r//JnIZg8siZYb1IbQ72BSPYYgks1ZeJS
-         b9tLYrDaZlGlYDxFObjCfX1ZEp48vj7QbX9anu3r9DqwplFIIkB0QJ9jgZF3HAay69wa
-         QtJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXlJIx3n4RTZ4QzTwwD7iN0CcwVF2YnlHm9o+wCLzwGt2wenYYjX9cvy77GPHIsyBRqVYcLTgqfT9/B@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW4c6tnDGTbkD24IwJda3ze5szOuSfNiQXWrooxwqM1r+ki/uN
-	WyszYuHY0fnglI4CVGAaxRI75/HRV2LVSrOGQPOqwM7hXks3rqU92CXNd60pIjZOxAng1q9mJ5y
-	tTQuMAU8S1IyqB9I1fP6RHFIDPnwQjsGU1sY65Mf9Cg==
-X-Gm-Gg: ASbGncsxYxxu0Zhcad8SanRE5vHYlEFZ3bH69EUG5dJq3sraOWW4f8IULf91qAHA4a7
-	/vfgvV+iz+9c8gKkem1DcQMREi9wKLcpaTV8sNX99As5c91Z+LehtC0na1Way+AxBYXni91EYyX
-	eFPmR17KUONpCofxKOw2KV0/b7ejPmSDwT1PWm38qIzZcVhw==
-X-Google-Smtp-Source: AGHT+IEjHI16GxKyLasfzKkpzXfv5K8fdxEJHSmO2c+vsZ5EW3jLub+wreQ1LSFrfqb50SzP3xXNNY/tkYcEG9qkkXQ=
-X-Received: by 2002:a05:6e02:1445:b0:3dc:87c7:a5b5 with SMTP id
- e9e14a558f8ab-3de07c2710fmr92538565ab.3.1750059102855; Mon, 16 Jun 2025
- 00:31:42 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750083073; x=1750687873;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OOggq/KPowkbkENDJnGOHpXXvgQx4F56FAixym3bp2M=;
+        b=cjkPdtLRx3hx8WfBkBSDitnTiRAtPYf8bylnIuxRuHPouJlop43p4NtD6OzOIR7rXj
+         S0sSGwrPWywD8zm+rsrf/V8B4vm4XsGo65hsxltWmIsaCeIrItPX0etTn8Q4xwZUXNAQ
+         suVfHkx2i+t5fH+LIth+GR+szjpuSaG582B4xLffb4EaAKZIMrN383Dlx7MBUIqDP67V
+         wDYLUmD6t3vEDewMjLq+8VtflXUHXJkft3s+ymBXuSYu8LIL71d9x53stuyyuv4g0+y4
+         5o5YSII9uHJpJtClxH2xi7l6Rq7ThjPRxr9MyUeu8isj/zKZSTkkJ/w2eCwOCrJqcGlg
+         e+bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXuAoZE54KYWRu1oEko9LbKNaR3Q6eK4ueRLNwyHQJUqJgaNhNRFVD0s4m4reGOd0g/a6dWJKmeDZKb@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9nETeF2uFaLQMCc2C4MtmxdTgm5e1ByMZJWKpzBhmNmb5kInj
+	vn5pKEqKJjs2NammCDKxJpBn4NGAkYj6uPJcyy+AlnVl1VnaMHCUPKIcQwtQqD6t1Z13AW5+FZg
+	kHX4=
+X-Gm-Gg: ASbGncvzqUhuH463BlxfbguuswKsL/6FtBwy/xyyll4ZXEDkUiPKziV2xrSsnFx3AWF
+	/Jc77Aj9LBA4blGB1bsCiN/2rz4LS4s6s77dhvQa6PM9GMNw67waDa/KI8kLEKm/EjC68BntNcg
+	nUXQxzg7Bsc+ORAXqQYHFQffm69wW/h+ERauZCE269170ae4ggcxGgKVXvrz3eMUpVSbMmGAzCq
+	0C2f3+/VS4s9SnNJiQ/EckiYjCBqUwL7xYZymZ/m1SRWF78+Ce9DMeov93JE9pouX7H2t0m43EE
+	VyZfS5euRwNsG0Hc+/+uCzGzrFGSgcuDjzvgxN+tD9udIjRSaCB3zA2fqE65zq3+hx2yUF6kjht
+	XKOg6
+X-Google-Smtp-Source: AGHT+IG/Q8oqK3NAs6JYHlzNOnNjSakbP4l5bRaZECFc8nTtdEfQzpzqsQ4tpcjcD5JM5xcRL5wrXQ==
+X-Received: by 2002:a05:620a:390a:b0:7d2:2822:3f79 with SMTP id af79cd13be357-7d3c6c18fcdmr1653377685a.13.1750083073152;
+        Mon, 16 Jun 2025 07:11:13 -0700 (PDT)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8dfe347sm530784885a.36.2025.06.16.07.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jun 2025 07:11:12 -0700 (PDT)
+Date: Mon, 16 Jun 2025 10:11:10 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: Thomas Haas <t.haas@tu-bs.de>, Peter Zijlstra <peterz@infradead.org>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev, hernan.poncedeleon@huaweicloud.com,
+	jonas.oberhauser@huaweicloud.com,
+	"r.maseli@tu-bs.de" <r.maseli@tu-bs.de>
+Subject: Re: [RFC] Potential problem in qspinlock due to mixed-size accesses
+Message-ID: <357b3147-22e0-4081-a9ac-524b65251d62@rowland.harvard.edu>
+References: <cb83e3e4-9e22-4457-bf61-5614cc4396ad@tu-bs.de>
+ <20250613075501.GI2273038@noisy.programming.kicks-ass.net>
+ <aEwHufdehlQnBX7g@andrea>
+ <9264df13-36db-4b25-b2c4-7a9701df2f4d@tu-bs.de>
+ <aE-3_mJPjea62anv@andrea>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250604-v5_user_cfi_series-v17-0-4565c2cf869f@rivosinc.com> <20250604-v5_user_cfi_series-v17-15-4565c2cf869f@rivosinc.com>
-In-Reply-To: <20250604-v5_user_cfi_series-v17-15-4565c2cf869f@rivosinc.com>
-From: Zong Li <zong.li@sifive.com>
-Date: Mon, 16 Jun 2025 15:31:31 +0800
-X-Gm-Features: AX0GCFv07zIy78CxiGqhmmuXUJ1bc3WRbaeMC8WS8lGUU29aYh3F-BEq_8IQZZA
-Message-ID: <CANXhq0pRXX_OMW2g2ui-k7Z_ZT+5a8Sra8oE28nBh5B9K2L5bQ@mail.gmail.com>
-Subject: Re: [PATCH v17 15/27] riscv/traps: Introduce software check exception
- and uprobe handling
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
-	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
-	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
-	rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aE-3_mJPjea62anv@andrea>
 
-On Thu, Jun 5, 2025 at 1:17=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> wr=
-ote:
->
-> zicfiss / zicfilp introduces a new exception to priv isa `software check
-> exception` with cause code =3D 18. This patch implements software check
-> exception.
->
-> Additionally it implements a cfi violation handler which checks for code
-> in xtval. If xtval=3D2, it means that sw check exception happened because=
- of
-> an indirect branch not landing on 4 byte aligned PC or not landing on
-> `lpad` instruction or label value embedded in `lpad` not matching label
-> value setup in `x7`. If xtval=3D3, it means that sw check exception happe=
-ned
-> because of mismatch between link register (x1 or x5) and top of shadow
-> stack (on execution of `sspopchk`).
->
-> In case of cfi violation, SIGSEGV is raised with code=3DSEGV_CPERR.
-> SEGV_CPERR was introduced by x86 shadow stack patches.
->
-> To keep uprobes working, handle the uprobe event first before reporting
-> the CFI violation in software-check exception handler. Because when the
-> landing pad is activated, if the uprobe point is set at the lpad
-> instruction at the beginning of a function, the system triggers a softwar=
-e
-> -check exception instead of an ebreak exception due to the exception
-> priority, then uprobe can't work successfully.
->
-> Co-developed-by: Zong Li <zong.li@sifive.com>
-> Reviewed-by: Zong Li <zong.li@sifive.com>
-> Signed-off-by: Zong Li <zong.li@sifive.com>
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->  arch/riscv/include/asm/asm-prototypes.h |  1 +
->  arch/riscv/include/asm/entry-common.h   |  2 ++
->  arch/riscv/kernel/entry.S               |  3 ++
->  arch/riscv/kernel/traps.c               | 51 +++++++++++++++++++++++++++=
-++++++
->  4 files changed, 57 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include=
-/asm/asm-prototypes.h
-> index cd627ec289f1..5a27cefd7805 100644
-> --- a/arch/riscv/include/asm/asm-prototypes.h
-> +++ b/arch/riscv/include/asm/asm-prototypes.h
-> @@ -51,6 +51,7 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_u);
->  DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
->  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
->  DECLARE_DO_ERROR_INFO(do_trap_break);
-> +DECLARE_DO_ERROR_INFO(do_trap_software_check);
->
->  asmlinkage void handle_bad_stack(struct pt_regs *regs);
->  asmlinkage void do_page_fault(struct pt_regs *regs);
-> diff --git a/arch/riscv/include/asm/entry-common.h b/arch/riscv/include/a=
-sm/entry-common.h
-> index b28ccc6cdeea..34ed149af5d1 100644
-> --- a/arch/riscv/include/asm/entry-common.h
-> +++ b/arch/riscv/include/asm/entry-common.h
-> @@ -40,4 +40,6 @@ static inline int handle_misaligned_store(struct pt_reg=
-s *regs)
->  }
->  #endif
->
-> +bool handle_user_cfi_violation(struct pt_regs *regs);
-> +
->  #endif /* _ASM_RISCV_ENTRY_COMMON_H */
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 978115567bca..8d25837a9384 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -474,6 +474,9 @@ SYM_DATA_START_LOCAL(excp_vect_table)
->         RISCV_PTR do_page_fault   /* load page fault */
->         RISCV_PTR do_trap_unknown
->         RISCV_PTR do_page_fault   /* store page fault */
-> +       RISCV_PTR do_trap_unknown /* cause=3D16 */
-> +       RISCV_PTR do_trap_unknown /* cause=3D17 */
-> +       RISCV_PTR do_trap_software_check /* cause=3D18 is sw check except=
-ion */
->  SYM_DATA_END_LABEL(excp_vect_table, SYM_L_LOCAL, excp_vect_table_end)
->
->  #ifndef CONFIG_MMU
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index 8ff8e8b36524..64388370e1ad 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -354,6 +354,57 @@ void do_trap_ecall_u(struct pt_regs *regs)
->
->  }
->
-> +#define CFI_TVAL_FCFI_CODE     2
-> +#define CFI_TVAL_BCFI_CODE     3
-> +/* handle cfi violations */
-> +bool handle_user_cfi_violation(struct pt_regs *regs)
-> +{
-> +       unsigned long tval =3D csr_read(CSR_TVAL);
-> +       bool is_fcfi =3D (tval =3D=3D CFI_TVAL_FCFI_CODE && cpu_supports_=
-indirect_br_lp_instr());
-> +       bool is_bcfi =3D (tval =3D=3D CFI_TVAL_BCFI_CODE && cpu_supports_=
-shadow_stack());
-> +
-> +       /*
-> +        * Handle uprobe event first. The probe point can be a valid targ=
-et
-> +        * of indirect jumps or calls, in this case, forward cfi violatio=
-n
-> +        * will be triggered instead of breakpoint exception.
-> +        */
-> +       if (is_fcfi && probe_breakpoint_handler(regs))
-> +               return true;
+On Mon, Jun 16, 2025 at 08:21:50AM +0200, Andrea Parri wrote:
+> > Thanks for the praise. I expected more questioning/discussion and less
+> > immediate acceptance :)
+> 
+> Well, the discussion isn't closed yet.  ;-)
+> 
+> 
+> > Maybe one should also take into consideration a hypothetical extension of
+> > LKMM to MSA.
+> > I think LKMM (and also C11) do not preserve REL->ACQ ordering because this
+> > would disallow their implementation as simple stores/loads on TSO.
+> > That being said, maybe preserving  "rmw;[REL];po;[ACQ]" on the
+> > language-level would be fine and sufficient for qspinlock.
+> 
+> On PPC say, the expression can translate to a sequence "lwsync ; lwarx ;
+> stwcx. ; ... ; lwz ; lwsync", in which the order of the two loads is not
+> necessarily preserved.
+> 
+> MSAs have been on the LKMM TODO list for quite some time.  I'm confident
+> this thread will help to make some progress or at least to reinforce the
+> interest in the topic.
 
-Hi  Deepak,
-Sorry for missing something earlier. I think we would like to clear
-sstatus.SPELP in the uprobe handling case. For example:
+Indeed.  I was surprised to learn that CPUs can sometimes change a 
+32-bit load into two 16-bit loads.
 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index c2ea999c1167..e8492bb57e09 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -349,8 +349,10 @@ bool handle_user_cfi_violation(struct pt_regs *regs)
-        bool is_fcfi =3D (tval =3D=3D CFI_TVAL_FCFI_CODE &&
-cpu_supports_indirect_br_lp_instr());
-        bool is_bcfi =3D (tval =3D=3D CFI_TVAL_BCFI_CODE &&
-cpu_supports_shadow_stack());
+My question is: Do we have enough general knowledge at this point about 
+how the various types of hardware handle mixed-size accesses to come up 
+with a memory model everyone can agree one?
 
--       if (is_fcfi && probe_breakpoint_handler(regs))
-+       if (is_fcfi && probe_breakpoint_handler(regs)) {
-+               regs->status =3D regs->status & ~SR_ELP;
-                return true;
-+       }
-
-        if (is_fcfi || is_bcfi) {
-                do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
-
-
-When a user mode CFI violation occurs, the ELP state should be 1, and
-the system traps into supervisor mode. During this trap, sstatus.SPELP
-is set to 1, and the ELP state is reset to 0. If we don=E2=80=99t clear
-sstatus.SPELP, the ELP state will become 1 again after executing the
-sret instruction. As a result, the system might trigger another
-forward CFI violation upon executing the next instruction in the user
-program, unless it happens to be a lpad instruction.
-
-The previous patch was tested on QEMU, but QEMU does not set the
-sstatus.SPELP bit to 1 when a forward CFI violation occurs. Therefore,
-I suspect that QEMU might also require some fixes.
-
-Thanks
-
-> +
-> +       if (is_fcfi || is_bcfi) {
-> +               do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
-> +                             "Oops - control flow violation");
-> +               return true;
-> +       }
-> +
-> +       return false;
-> +}
-> +
-> +/*
-> + * software check exception is defined with risc-v cfi spec. Software ch=
-eck
-> + * exception is raised when:-
-> + * a) An indirect branch doesn't land on 4 byte aligned PC or `lpad`
-> + *    instruction or `label` value programmed in `lpad` instr doesn't
-> + *    match with value setup in `x7`. reported code in `xtval` is 2.
-> + * b) `sspopchk` instruction finds a mismatch between top of shadow stac=
-k (ssp)
-> + *    and x1/x5. reported code in `xtval` is 3.
-> + */
-> +asmlinkage __visible __trap_section void do_trap_software_check(struct p=
-t_regs *regs)
-> +{
-> +       if (user_mode(regs)) {
-> +               irqentry_enter_from_user_mode(regs);
-> +
-> +               /* not a cfi violation, then merge into flow of unknown t=
-rap handler */
-> +               if (!handle_user_cfi_violation(regs))
-> +                       do_trap_unknown(regs);
-> +
-> +               irqentry_exit_to_user_mode(regs);
-> +       } else {
-> +               /* sw check exception coming from kernel is a bug in kern=
-el */
-> +               die(regs, "Kernel BUG");
-> +       }
-> +}
-> +
->  #ifdef CONFIG_MMU
->  asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs)
->  {
->
-> --
-> 2.43.0
->
+Alan
 
