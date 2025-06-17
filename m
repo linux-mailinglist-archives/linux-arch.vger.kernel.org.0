@@ -1,124 +1,155 @@
-Return-Path: <linux-arch+bounces-12355-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12356-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68339ADC656
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Jun 2025 11:28:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5B83ADCF88
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Jun 2025 16:23:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3242A17996B
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Jun 2025 09:28:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F5233BD1CE
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Jun 2025 14:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF5E293C62;
-	Tue, 17 Jun 2025 09:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876422EBDDE;
+	Tue, 17 Jun 2025 14:10:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HfaFhXWh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XsXpbUsT"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4901293B7E
-	for <linux-arch@vger.kernel.org>; Tue, 17 Jun 2025 09:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88182EF655;
+	Tue, 17 Jun 2025 14:10:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750152464; cv=none; b=tHNmQDjNOrUSd9+6JfUVsW017RxD+J+2zQby8xFBZq+IrizpNA3vmuOW2DSNknSRPqny747JgHMivn+1jaqrRQpDuJr0qGuNMO9r3BhyxfXKsHSuyluVbX7FQJGW2BZM4NDOaxEYllDp/MTCyxVXalWONAjyo2j1x96TU1YZx+k=
+	t=1750169410; cv=none; b=b3tbUYpzKg0OLQ6ENVPmoE/qCGcjbg/xF09gZq6GM4HXE6AmEFnC1Ia7URhrCmv8j8RzuPsOTjSSM7GsvpjFK7dha4dgnQQGUUIVaIIeCIyF+Kr1FibPDQcEPQBIZ7kut4sKzqm4rM6twz6gf39+LvwGIefmnqGqc7ZUQ/Q4yeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750152464; c=relaxed/simple;
-	bh=f3FXbCp1zJT2e/y37zile6+NsyCTyyggM8rYqlTqvGc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dRkDxHvOI2e+gNIVljQxMFL0sMiPAYmc+halKXadEdH5xLAcEXoch9ySlTzdUIqyNw5Mba4Z9gXyRne3hVCucTCMzdI6+SloaSPH9zmO20voZ308p5jtcSv5k9v1cbJWRe4cOJ54aER+ly+J0vBVMWsFvbPhoa5nsjOwXv4VtQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HfaFhXWh; arc=none smtp.client-ip=209.85.221.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-3a365a6804eso3971756f8f.3
-        for <linux-arch@vger.kernel.org>; Tue, 17 Jun 2025 02:27:41 -0700 (PDT)
+	s=arc-20240116; t=1750169410; c=relaxed/simple;
+	bh=iyMKWm3mSC0FkjcF0R3622r5I8u9Cp5VpdkuiRTVNH4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iQHG+4X0A78y/BGHAEiH2MoNY4cWzSMp7ZM54ejlvtAE+TALjffpMzXeK0eIdLm5p7vqAk//0xYCfapEu1yQgtZnuwVQ1ny1m2aK1+j0ZvJ35w7Rd8r7qk3gW/r5x/j9L94uEKTyPf4DqL2nT8R3NrPcGcFuavKemKlT1E9RRYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XsXpbUsT; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a54836cb7fso4013762f8f.2;
+        Tue, 17 Jun 2025 07:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1750152460; x=1750757260; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=boN3t4QQQ5CJaq9F2B9aIVemxFll5K0ZGpv67UpOwpI=;
-        b=HfaFhXWhDA6c/ysVVOaYkIshY6amQ6jMyyRlRTgXilO33yD0L5Gwt70j+8+S5hy7f9
-         FCKkZrirayOh2DCyT5oll6krNLYGAIBPl5gpc7bSxOdkIYntMGrmw2ioqWPswjXk2kRB
-         LpfJv/Cn1f4Uk8SNPEok7e3hzUVmeND3FP5mawsihpE9f3GiwOAw22ENxnCWtWoZGS/8
-         of/6VYb+E8tKheFtFsy0XOXrvHLfuusuv7+we0mqDAPMtekgoAaUVUNuGNDzHGR4rMHt
-         CKC9mMRca3gsL1G88cpDB9JHJxl1v6ve/WpzGqDFruJVLqUlg7OqrnnK9R5S0L5P4SU7
-         FXzg==
+        d=gmail.com; s=20230601; t=1750169407; x=1750774207; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4yIBACmWgX7l966LbMVSZorYkOqXPTghDqN6AWOfmEo=;
+        b=XsXpbUsTDddmGAqedEmbTnx/o+neePRmjVujiRvNSf+MVnjsaBDrjWEkGaJnYNLIXK
+         1E85tXEOncucEtLZ792tMUeqZRTihz6URxB3TPmAQQxmiZYpQKcexXCW7ouzvw4AM98a
+         EfMqH0OJJ6JvrUnpcEQPP85g+OXIi7R/cCZrKzCCrYPSDCyZrDKLMxLH//j2fZxOgH5x
+         yki9hWN3gvb0aHy9NYuhBM0a+zSH4pnbSsYK5Pu2zMSQrV1HMOhKjmj0tkK5h7K1HkQR
+         GyKqvjjp3GQlI6Om6Zr/UIWgDg5Hf1LRx969/8DQZl5HLJpjBNAdx3csu7ob8KMI6sDY
+         zy6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750152460; x=1750757260;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=boN3t4QQQ5CJaq9F2B9aIVemxFll5K0ZGpv67UpOwpI=;
-        b=E3q+FU2WfLBVkB29b4bwLCjIC40YxfgxNF25SbSFjhsnk4fnfrcBDeYtXh1a2qjyNi
-         mVQtl8Jj7plcElQGU6ZTeJrb7Gcx7i0QD5TGaAmDabFN+KR40vyOt6eLn5/xk9sdaCy5
-         tPlz0lZXIPae1UsUqST/C69OB53wbJXMwpo85yB1u8Ceeu8z+nEtdtVAj0NRESX4hsFC
-         UF67VMR04V3SpRvA40RnmVc5RE3ioV1DoRroYYH9/jf4tp6tikpwXW3RgiTIeCG5bKZJ
-         vI1DmRK+2OPGea3X0r1JdP9+IbCwgtsZGEGbCuhgZGXBfES7qprqzfxiZDBHhKZOhdt3
-         uu0A==
-X-Forwarded-Encrypted: i=1; AJvYcCWV9FYNFI2ZB8Eh+Ji7u4hTv3DebVdvuZvCG1B+RC6wwRegFud84vW6dare0+oK8lqq4giK/2JyL8Zu@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCqfk4wROlFbS2CdY3enhpD8O1Ax3KHbTuarDHFwpPZVesfwqy
-	9bhOue6oC7n2Qw1vfe1IvWbTy7RctA3pnV8QuiHswA2PnraEad+v1uBvr3Q5/gdOYL4=
-X-Gm-Gg: ASbGnctFZ+x2IwbwXx1V0de0k/wX5h12ax6freoDti+gctDE/PVSTkwWEKJKwV4NNpy
-	DsFGDcL+7L2+7Cpk4rJGxViy7jbXql193bZoQlkwF9qSR0qMBjEMaZHjdDnetba+O4aGA3gzgRk
-	0OOuYrtWu52eOMfCu5ofrlWKIMkPDvmawIvbkd2T3pn3hBOLjxm3xJRVdsorLbw8MJ3nlOZ9KWd
-	UHoJXD85JPE6MdojDAwP0FfNwxXMNHyhF5kyrSDtHimithcmGGt00+TFXVSKsRxLmjWBSQDsmhf
-	1SkUJjdHOUNOwhI6WdmDp+dXjtYrww6WIh0lw2Dg9EZ7utUt5fxnw8Y3qLEoY0xyBg==
-X-Google-Smtp-Source: AGHT+IFM9Lj5qJWTtP6+l5n+/04TRA1i4YBOucx2CbKedvvZJIa35JF0Mqa14giJEb7sodnjrvIhwA==
-X-Received: by 2002:a05:6000:708:b0:3a5:5278:e635 with SMTP id ffacd0b85a97d-3a572367577mr9469207f8f.3.1750152460099;
-        Tue, 17 Jun 2025 02:27:40 -0700 (PDT)
-Received: from [10.100.51.209] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568b18f96sm13555006f8f.66.2025.06.17.02.27.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jun 2025 02:27:39 -0700 (PDT)
-Message-ID: <2cd3947a-63d9-4a79-a24a-eb1ae8164169@suse.com>
-Date: Tue, 17 Jun 2025 11:27:39 +0200
+        d=1e100.net; s=20230601; t=1750169407; x=1750774207;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4yIBACmWgX7l966LbMVSZorYkOqXPTghDqN6AWOfmEo=;
+        b=RtmtHtZez5NSHp7PLK5OB7DnLaLy6KstSc/yl9dNdoD95q/CxB3N6gADkWQnHm/Dp9
+         N5b4c6AxivPGDQw+aids9tiBuMRumRSldQNLg2ymXFNfNxehrkHSZ2hpuJU8nAO0bEYe
+         JmeUxeAGFdbtfANfFE3POLIeKH1+8RlRF+WXkzPdH8GMmhCJpfT0QV2DblSWoFuHODTu
+         01DEJFuF+AQZB4sqV4iQgi/8giNsgcrWYZNtjNoan3YSyQ85TQYVxDnwYOD31oj8GCZw
+         Yf983x294r8a1Wmsj+oky7nnNLWwN/rKkhMWHiBqbhxTfkADWkKkVGZL9V5GYwPc2V0B
+         2nxw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5Lq+5/86MQJMdjIu1we7vZtH6JIkJFP66fhhIsEsOuU2vWLXuOwO6DAakpSWuhJrjS63jxXc8ShkC@vger.kernel.org, AJvYcCUp8eQ2hUGfU4v4nCohHR5mCm2/ZJvh29aHE4QJovr8qIeEj9AICuxC4wPil46YhQIvD2aI2OdMzOxVR7C3@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrLAsVElBfbT65a6VmN80dDq6de5Nhg8l3x21nOsp/MO/hrhfC
+	EjFlMqiTPEFgyQ9m3gtauaIPHY1A5fMJa4uPl3/Ngrb9NqOMpxaRG2xd
+X-Gm-Gg: ASbGnct6t2xrrYKZAcU+pXehMonuHg6fN0wJhzsULnGM5wb6nMe0O/6IRonvBa6kMfi
+	irD505v2LvxoN6qiHc3GXasPRfYhwSsxQLJO+1pJ7ozL3sUNIymapqNIYraPeD5XOQyE6uanVsv
+	r/w0kiQ5CEPDnGpOzqJqE95grQdeVT+8PX2SNzJcpXQuSg7TfEY1utH5ijQ6mHe+OWURa7lEQQt
+	meEZP7LBgF4muZBuxCNmz4+jpnXdJGeU06H8PYZOiF/JBdB+fMUnGKZ537a6D6RmW3CchJ9l0b7
+	KO0n5yvJCIz42EugtxvA5x9/w26duwWT9wRcVCD76/2x2D53tDVy0+AyeZXd
+X-Google-Smtp-Source: AGHT+IHhV6aPwQ3z4bGt2UdYrL2Uo5IQ2qap/P3r5HVqRrVdq5gQPZ8PvS+O0eqHB3HO/uSvbblRDA==
+X-Received: by 2002:a05:6000:4024:b0:3a4:edf5:b942 with SMTP id ffacd0b85a97d-3a572e586f1mr11172093f8f.57.1750169406549;
+        Tue, 17 Jun 2025 07:10:06 -0700 (PDT)
+Received: from andrea ([217.201.252.229])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a577e928f7sm10557923f8f.64.2025.06.17.07.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jun 2025 07:10:05 -0700 (PDT)
+Date: Tue, 17 Jun 2025 16:09:57 +0200
+From: Andrea Parri <parri.andrea@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Thomas Haas <t.haas@tu-bs.de>, Peter Zijlstra <peterz@infradead.org>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev, hernan.poncedeleon@huaweicloud.com,
+	jonas.oberhauser@huaweicloud.com,
+	"r.maseli@tu-bs.de" <r.maseli@tu-bs.de>
+Subject: Re: [RFC] Potential problem in qspinlock due to mixed-size accesses
+Message-ID: <aFF3NSJD6PBMAYGY@andrea>
+References: <cb83e3e4-9e22-4457-bf61-5614cc4396ad@tu-bs.de>
+ <20250613075501.GI2273038@noisy.programming.kicks-ass.net>
+ <aEwHufdehlQnBX7g@andrea>
+ <9264df13-36db-4b25-b2c4-7a9701df2f4d@tu-bs.de>
+ <aE-3_mJPjea62anv@andrea>
+ <357b3147-22e0-4081-a9ac-524b65251d62@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] alloc_tag: remove empty module tag section
-To: Casey Chen <cachen@purestorage.com>
-Cc: akpm@linux-foundation.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-arch@vger.kernel.org, surenb@google.com, kent.overstreet@linux.dev,
- arnd@arndb.de, mcgrof@kernel.org, pasha.tatashin@soleen.com,
- yzhong@purestorage.com
-References: <20250610162258.324645-1-cachen@purestorage.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250610162258.324645-1-cachen@purestorage.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <357b3147-22e0-4081-a9ac-524b65251d62@rowland.harvard.edu>
 
-On 6/10/25 6:22 PM, Casey Chen wrote:
-> The empty MOD_CODETAG_SECTIONS() macro added an incomplete .data
-> section in module linker script, which caused symbol lookup tools
-> like gdb to misinterpret symbol addresses e.g., __ib_process_cq
-> incorrectly mapping to unrelated functions like below.
-> 
->   (gdb) disas __ib_process_cq
->   Dump of assembler code for function trace_event_fields_cq_schedule:
-> 
-> Removing the empty section restores proper symbol resolution and
-> layout, ensuring .data placement behaves as expected.
+> My question is: Do we have enough general knowledge at this point about 
+> how the various types of hardware handle mixed-size accesses to come up 
+> with a memory model everyone can agree one?
 
-The patch looks ok me, but I'm somewhat confused about the problem.
-I think a linker should not add an empty output section if it doesn't
-contain anything, or if .data actually contains something then the extra
-dummy definition should be also harmless?
+You know, I can imagine a conversation along the following line if I
+were to turn this question to certain "hardware people":
 
-This also reminds me of my previous related fix "codetag: Avoid unused
-alloc_tags sections/symbols" [1] which fell through the cracks. I can
-rebase it on top of this patch.
+  [Me/LKMM] People, how do you order such and those MSAs?
+   [RTL/DV] What are Linux's uses and requirements?
 
-[1] https://lore.kernel.org/all/20250313143002.9118-1-petr.pavlu@suse.com/
+that is to say that the work mentioned is probably more "interactive"
+and more dynamic than how your question may suggest.  ;)
 
--- 
-Thanks,
-Petr
+Said this, I do like to think that we (LKMM supporters and followers)
+have enough knowledge to approach that effort.  It would require some
+changes to herd7 (and klitmus7), starting from teaching the tools the
+new MSAs syntax and how to generate rf, co and other basic relations
+(while monitoring potential non-MSA regressions).  Non-trivial maybe,
+but seems doable.  Suffice it to say that herd7 can't currently parse
+the following C test, but it can run its "lowerings"/assembly against
+a bunch of hardware models and implementations, including arm64, x86,
+powerpc and riscv!  Any volunteers with ocaml expertise interested in
+contributing to the LKMM?  ;)
+
+C C-thomas-haas
+
+{
+u32 x;
+u16 *x_lh = x; // herd7 dialect for "... = &x;"
+}
+
+P0(u32 *x)
+{
+	WRITE_ONCE(*x, 0x10001);
+}
+
+P1(u16 **x_lh, u32 *x)
+{
+	u16 r0;
+	u32 r1;
+
+	r0 = xchg_relaxed(*x_lh, 0x2);
+	r1 = smp_load_acquire(x);
+}
+
+exists (1:r0=0x1 /\ 1:r1=0x2)
 
