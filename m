@@ -1,129 +1,170 @@
-Return-Path: <linux-arch+bounces-12359-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12360-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1865ADD0E2
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Jun 2025 17:05:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 419A0ADDBF3
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Jun 2025 21:01:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3FD71644C3
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Jun 2025 15:05:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E806A7AC034
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Jun 2025 19:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7B92E889D;
-	Tue, 17 Jun 2025 15:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gyl2XYtY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9247B2EBB82;
+	Tue, 17 Jun 2025 19:00:55 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164D120C001
-	for <linux-arch@vger.kernel.org>; Tue, 17 Jun 2025 15:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC3923C8B3;
+	Tue, 17 Jun 2025 19:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750172733; cv=none; b=kKd9LPvUlvAlTSHoIREMbHCzQ5Xtjvo/NJanxDrGDJksvSidI5PK2Gz6pZBgXBwBZuZNyqB4wzQVfGjNYf2GMpaTUVxmOhonPi3Qb57upbOtbBAhDIpzEKsYZTwcBzK7x9NFOwK583zNv5K1jGikzLCa85UB5sBlmmB8Vs9yAGs=
+	t=1750186855; cv=none; b=o2XXWcpdAsJSlTbrOVwP4QPHYuacX7RbhehboVs4bt7iBcfXR+7JlaTO8AT753EDeOkUXyYNoXLz06yaxMhgxYvXIDt7nFlkZRzeT8ElM+K8AiniuZbp1D7u+SVnKzMCnyiTxz40R6G/w8IfSz2AVonxPYeLpcwv18cS7q96Ws4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750172733; c=relaxed/simple;
-	bh=GbeqsHHd1vL8W4r3bOtXBX0HxgW5+uwomab9h1t1d8E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q7Gn6TMapB3vXrwwBEMgPiU1eIeNzc0fl9vDj2Ul+9OOZhHeDQNF2ou9GcK5XWVRFgv6dP3tKaj0Iuhfij8AWMuw01+JoOXUGSk8CsxOfix11ncTaQyWqGCCmIJPzAy8LPNTM1YYMlIS8skCyALNKeautZ42K/4RBz4rBMSdR/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Gyl2XYtY; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-609b169834cso5177a12.0
-        for <linux-arch@vger.kernel.org>; Tue, 17 Jun 2025 08:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750172730; x=1750777530; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xdDBWUy9j2pqUSBQx3kBN47BSA5JF5clYU2Pq1utjBw=;
-        b=Gyl2XYtYAM9whj7zekxDf3mSDC/qTL5iL+O1/QxxCZqmS4f7HZO0gdVRtbMyDWssrd
-         OvtyJDlbd0f0xKivWVSBzGMrAn/R8IKKJxmCwcfvnuJ/7taJqX8jKTZwXNbL/YOtLLe5
-         QlvEzpG/de+KSovIct14jdZQD2mcCnPDjWM1F4X2TY7l7SRmG7th8Wk8fFoUzCjMlmaU
-         Iw8sBiz/CeytgfUzZgaXpxawH1tRxzE/UnMRFvUuJePFgjVzyNvt2hmwKB8ApOZGCe5/
-         lc5PiQhvQta/MY58KzBxxWiEiCrPYqZeJPh/Ne34ZaHyMZ4pSNE0j5swdHej3O7AyNwN
-         eO9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750172730; x=1750777530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xdDBWUy9j2pqUSBQx3kBN47BSA5JF5clYU2Pq1utjBw=;
-        b=IZEV6ocU+vufN2j/1Wo2t5YCjYY4ENjK2V9wWvkZGppizcMHaH12vA9yMmwnlSJsNi
-         1hX9XMe5zDo3pjOwYpI9gv3Z5mrvH/CRNEvkWd2W5weK57H39TAdEKMXndVAPyDu2AbZ
-         v5ccC6qfRb6G1aEn0zxfrDo0O6/2qmqNIDwGnwUuT9OiKPvltxXez8TKwvTGkzzuErWd
-         mV8a+TAz7mMW2TNN6uM1HRzY7eYizF9ygjDUc+H2A/aFhcgVH+dJVr4TCqIrXtV8G68H
-         9TW1DVSR0dOxRAmkw7Xctv4MlSFDfEVLBDvB/MiLaI+qcGlJHJI3DfBTSKKLdlj3qTGe
-         WB1w==
-X-Forwarded-Encrypted: i=1; AJvYcCWgZ1z0iVPzO5pio9MX1lSD2vciUdqeVbL/45N5D5zKgBEMC7ppumar0wkkxA0QlTDYuEO/F9kSYYxY@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZanTz875FyLQ2Aaf/1wHeUq/USgr+1j0r/aG+4o0dXbCcmkYZ
-	xh1A4sTO9vZc/aSrL8qDZyKfo8R+gwwF19FBrtF87hLqgA4NhBAv1Ha/Qs/jGfQr1AL81neND/u
-	KAFrFUaQWHIG8jnosHQxZTKDJ86V60xx38ZRFTdnq
-X-Gm-Gg: ASbGncsk4MnaFS9qb/igZ652SppSSCMqHvHHVTtMIFEpjXgUIgVwDntlMo2aVIU1BWx
-	1P2UexxvzTmSbWxnp1BZ4m0dhb1CrZ6dsryq0sd7mMMYH1wZmDtK/VXmn4ZeAF1gu5szFsjpQtB
-	LX7Vnd8aTnSIaLtZnVOAry+h2RIb3dpvGxKjMx9Wamsy3ayY5BEPITZeBuPXDySWDq/X1QhE4uv
-	A==
-X-Google-Smtp-Source: AGHT+IGRa+ebswKWFvguxlBNnkaQydcOCTcdUc1tpDY2GOdw3o8/6AoW8HLi2nmZXoRCM54Zx9JT9odQlOQ7f8488xU=
-X-Received: by 2002:a05:6402:1298:b0:608:fb55:bf12 with SMTP id
- 4fb4d7f45d1cf-608fb55cf20mr248560a12.4.1750172730198; Tue, 17 Jun 2025
- 08:05:30 -0700 (PDT)
+	s=arc-20240116; t=1750186855; c=relaxed/simple;
+	bh=WUqBtBN4algVDh0/7LhKoZcj1pnT1CAk4lKolOpeYck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gsX+dK+zUOrnJ16bLktWSKLeJ9Spux9p5Bh4erKTnd9TNX9tQp9njxd9jVt8EB7n5c9oS6U0jvQzFhTLIXHcqrd7qOreM5QBc6n9AtKCdtJD4jFKsSlnPV58s55mDrJISWwW7N1pkQL6qjk8U0MJLYioTh3OfgcSiKlueCOtmMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4bMGPy2SYNzsS0S;
+	Wed, 18 Jun 2025 02:59:34 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 52C451403D5;
+	Wed, 18 Jun 2025 03:00:45 +0800 (CST)
+Received: from [10.48.210.222] (unknown [10.48.210.222])
+	by APP2 (Coremail) with SMTP id GxC2BwCnEONQu1FouD7hCQ--.7597S2;
+	Tue, 17 Jun 2025 20:00:44 +0100 (CET)
+Message-ID: <218abf15-b4ed-4d13-9541-aab975bd3835@huaweicloud.com>
+Date: Tue, 17 Jun 2025 21:00:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250610162258.324645-1-cachen@purestorage.com> <2cd3947a-63d9-4a79-a24a-eb1ae8164169@suse.com>
-In-Reply-To: <2cd3947a-63d9-4a79-a24a-eb1ae8164169@suse.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 17 Jun 2025 08:05:16 -0700
-X-Gm-Features: AX0GCFtqkKIf4xqb1bUZ_2PHwjODhV30fsR1AexyTYrzdWW3sQdis91nCJ5F--0
-Message-ID: <CAJuCfpGxEYZ_7Ff-vpBThfM98ZbUu9pSPeoumkkKuLZiqLpORg@mail.gmail.com>
-Subject: Re: [PATCH] alloc_tag: remove empty module tag section
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Casey Chen <cachen@purestorage.com>, akpm@linux-foundation.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-arch@vger.kernel.org, kent.overstreet@linux.dev, arnd@arndb.de, 
-	mcgrof@kernel.org, pasha.tatashin@soleen.com, yzhong@purestorage.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] Potential problem in qspinlock due to mixed-size accesses
+To: Thomas Haas <t.haas@tu-bs.de>, Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Andrea Parri
+ <parri.andrea@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
+ Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>,
+ Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joelagnelf@nvidia.com>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ lkmm@lists.linux.dev, jonas.oberhauser@huaweicloud.com,
+ "r.maseli@tu-bs.de" <r.maseli@tu-bs.de>
+References: <cb83e3e4-9e22-4457-bf61-5614cc4396ad@tu-bs.de>
+ <20250613075501.GI2273038@noisy.programming.kicks-ass.net>
+ <20250616142347.GA17781@willie-the-truck>
+ <d66d0351-b523-40da-ae47-8b06f37bf3b6@tu-bs.de>
+ <2b11f09d-b938-4a8e-8c3a-c39b6fea2b21@huaweicloud.com>
+ <20250617141704.GB19021@willie-the-truck>
+ <7a20b873-3c26-4a52-b118-c816ede7298d@tu-bs.de>
+Content-Language: en-US
+From: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+In-Reply-To: <7a20b873-3c26-4a52-b118-c816ede7298d@tu-bs.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwCnEONQu1FouD7hCQ--.7597S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw47KFy3Aw18ArWrZFWkWFg_yoW5Cr1DpF
+	WrKan8KF4DJF1rGr17tw48XFy5tF1rtFs0qrn8Jr1xAwn09F1Ivr4avF4j9FyUZrs2g34j
+	vryjqa43uFyqya7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
+	0PDUUUU
+X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
 
-On Tue, Jun 17, 2025 at 2:27=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> On 6/10/25 6:22 PM, Casey Chen wrote:
-> > The empty MOD_CODETAG_SECTIONS() macro added an incomplete .data
-> > section in module linker script, which caused symbol lookup tools
-> > like gdb to misinterpret symbol addresses e.g., __ib_process_cq
-> > incorrectly mapping to unrelated functions like below.
-> >
-> >   (gdb) disas __ib_process_cq
-> >   Dump of assembler code for function trace_event_fields_cq_schedule:
-> >
-> > Removing the empty section restores proper symbol resolution and
-> > layout, ensuring .data placement behaves as expected.
->
-> The patch looks ok me, but I'm somewhat confused about the problem.
-> I think a linker should not add an empty output section if it doesn't
-> contain anything, or if .data actually contains something then the extra
-> dummy definition should be also harmless?
+On 6/17/2025 4:23 PM, Thomas Haas wrote:
+> 
+> 
+> On 17.06.25 16:17, Will Deacon wrote:
+>> On Tue, Jun 17, 2025 at 10:42:04AM +0200, Hernan Ponce de Leon wrote:
+>>> On 6/17/2025 8:19 AM, Thomas Haas wrote:
+>>>> On 16.06.25 16:23, Will Deacon wrote:
+>>>>> I'm half inclined to think that the Arm memory model should be 
+>>>>> tightened
+>>>>> here; I can raise that with Arm and see what they say.
+>>>>>
+>>>>> Although the cited paper does give examples of store-forwarding from a
+>>>>> narrow store to a wider load, the case in qspinlock is further
+>>>>> constrained by having the store come from an atomic rmw and the load
+>>>>> having acquire semantics. Setting aside the MSA part, that specific 
+>>>>> case
+>>>>> _is_ ordered in the Arm memory model (and C++ release sequences 
+>>>>> rely on
+>>>>> it iirc), so it's fair to say that Arm CPUs don't permit forwarding 
+>>>>> from
+>>>>> an atomic rmw to an acquire load.
+>>>>>
+>>>>> Given that, I don't see how this is going to occur in practice.
+>>>>
+>>>> You are probably right. The ARM model's atomic-ordered-before relation
+>>>>
+>>>>        let aob = rmw | [range(rmw)]; lrs; [A | Q]
+>>>>
+>>>> clearly orders the rmw-store with subsequent acquire loads (lrs = 
+>>>> local-
+>>>> read-successor, A = acquire).
+>>>> If we treat this relation (at least the second part) as a "global
+>>>> ordering" and extend it by "si" (same-instruction), then the 
+>>>> problematic
+>>>> reordering under MSA should be gone.
+>>>> I quickly ran Dartagnan on the MSA litmus tests with this change to the
+>>>> ARM model and all the tests still pass.
+>>>
+>>> Even with this change I still get violations (both safety and 
+>>> termination)
+>>> for qspinlock with dartagnan.
+>>
+>> Please can you be more specific about the problems you see?
+> 
+> I talked to Hernán personally and it turned out that he used the generic 
+> implementation of smp_cond_acquire (not sure if the name is correct) 
+> which uses a relaxed load followed by a barrier. In that case, replacing 
+> aob by aob;si does not change anything.
+> Indeed, even in the reported problem we used the generic implementation 
+> (I was unaware of this), though it is easy to check that changing the 
+> relaxed load to acquire does not give sufficient orderings.
 
-I also assumed so but apparently this is not entirely harmless.
+Yes, my bad. I was using the generic header rather than the aarch64 
+specific one and then the changes to the model were having not effect 
+(as they should).
 
->
-> This also reminds me of my previous related fix "codetag: Avoid unused
-> alloc_tags sections/symbols" [1] which fell through the cracks. I can
-> rebase it on top of this patch.
->
-> [1] https://lore.kernel.org/all/20250313143002.9118-1-petr.pavlu@suse.com=
-/
+Now I am using the aarch64 specific ones and I can confirm dartagnan 
+still reports the violations with the current model and making the 
+change proposed by Thomas (adding ;si just to the second part seems to 
+be enough) indeed removes all violations.
 
-Yes please.
+Hernan
 
->
-> --
-> Thanks,
-> Petr
+> 
+>>
+>>> I think the problem is actually with the Internal visibility axiom, 
+>>> because
+>>> only making that one stronger seems to remove the violations.
+>>
+>> That sounds surprising to me, as there's nothing particularly weird about
+>> Arm's coherence requirements when compared to other architectures, as far
+>> as I'm aware.
+>>
+> 
+> I agree. The internal visibility axiom is not the issue I think.
+> 
+
 
