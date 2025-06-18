@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-12379-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12380-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D5EDADF27B
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Jun 2025 18:21:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 400D4ADF272
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Jun 2025 18:20:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAB671BC3CC8
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Jun 2025 16:20:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DEBA7A2515
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Jun 2025 16:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DC32F236A;
-	Wed, 18 Jun 2025 16:19:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588952F2713;
+	Wed, 18 Jun 2025 16:19:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="Cn8VpsKM"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="rcTkh2kU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10olkn2045.outbound.protection.outlook.com [40.92.40.45])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazolkn19012009.outbound.protection.outlook.com [52.103.14.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297FB2F19BD;
-	Wed, 18 Jun 2025 16:19:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.40.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218212F0054;
+	Wed, 18 Jun 2025 16:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.14.9
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750263577; cv=fail; b=t5Eb6PjX9uXs2128R01CmpLmQtR1sXMUE25TKTRO3wRhLlyp12rLi/mpJDH1afWZFoKAJCCMoLvsBSp0lekDbDsAWmL3Fmcsq1mV4uOmHJm+hroVLde0OyEMKupu2CvSYAbjFeAEAbgbkwCHSDwtnAFt1qMETFFbZ+4Zv/YfiP0=
+	t=1750263585; cv=fail; b=K9EtuefleVNGN0QsQRoaB+Qf7Pcqta2HQLcUDamG8fVwQOaOOnl2qzG01kmnMBJlYMZR/+FqHtw0MVznjyN2lHbniLrrKCfAWfqOktqsKWQjmB1aXnHDEZmJFNNGJNCu/H/VBRAEvlt3le3UtEPFkWq8hU/R5DO+6qdXokFbFLc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750263577; c=relaxed/simple;
-	bh=1+pOc1gpNYeRajvM7GmwAtDSL1rIudQEwSWloUJcBD4=;
+	s=arc-20240116; t=1750263585; c=relaxed/simple;
+	bh=F1Wmhjf4K7HBaiMyt391yq4krX9yjMpHy3OADXj/kJg=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ALxyRPcD1rbaLI9x8o98EpRhWPDocTOIPqO2NsyouhJNHgpSZbY5zo1MXaOf8DPxo1zQFLSEMVqNm3QSZsTXJChq9HBChDdiJLwWXPjwW+BI88u5zHaMsrV0e0IEq1ustGsHDS/xptppWpj9yVFRaFYktlV+WLXb9keB1eCHtZs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=Cn8VpsKM; arc=fail smtp.client-ip=40.92.40.45
+	 Content-Type:MIME-Version; b=ef1Aa4yORYoJTno2w9CYoS+qVdWZbQTLQRNOoZ3FHZg7M5JQcWpE7UOMmO36UgrD7sKsiqBstcHnnAAFetuJrqbR4VfUZHMkdP0wG7Aov17DFzJnncu2sTDfsX0QMBAy84WadoIOO/f3gErrt/rGs47GeS2r/itk7GBvkNUdu64=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=rcTkh2kU; arc=fail smtp.client-ip=52.103.14.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GJzay6wdt8x5qQ5VEpVe9dqnGVomHmX0x61ji7ROyBWdsMRJquhZg0A5iSYdltu7Jfvk/dzAvsFnl9lFVQdsqQTf5ghJHeF6ywYZqw0/mnmVfKbdc+90pB1foBxqI8CYTjLCF9I9/G+TqqlR7Ptp+uoWrAiAas1z+ZI+k49bjAwZyXS4YAL1Blund7CiduWVe3LQ9enTEGBT8KeFKj6vPOYuUY8beHsjeBn9s0vLUbaALpYbF8LKw451Ty9UcorQyHkNMIKvZ4zE5UsDzk3gaTfecGwJoNqsTidsgHyWWQFGceEg5xXF7pnIxAFvIecilf7h5g4ju0qfbCEHlvxC+w==
+ b=R4YW2zYsikQwggwAORmy2SlobW/50Mq5IL7ENsOcZqZjEagfJxiXphJHvYw20SlGkkcjF/rTNsa1HlHyE6Rl3K7v7wHNyiWj82jHxpEJp27HOqqapsJJZfndGdvurNuYuqJ/jSetTQJVQj0KUgDRnluKU50uTA+MaW5qjPg8bJwmacIxtJeoYkVgAF+84JaYRggA7IxY0lFd6e6jamUbtZgDgCF3ULEnLdsVnTijxk+58Mir5b6AeXqyvf6ly5ahSF+1lp6qyib0ZcAvQBMnctVwZG8U/ObzbJ0kGpyVLmHHtEdMCBmPazQuMWZBQNMMinK2gjqFO8dyhdKkMnQGeg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oUFg2bbHOiNKmZxOcc1zxw3IIfpdFQmqKpY6wsP6RWA=;
- b=erhcZd2nj8C90KHROXdBkZz4hV9jQ0mSyARPsAT/zLoiRF+EP4ubAXGfeILkrK4V/j2ZGxQ4VmVjHRTqIurPpNrPekwF/SUzKbVmffAa53GQzqBhyyJ+efNS9ex+vzLZUULGzRpYApKrxiUfK7yUS7RLlD/RZ38rLzX/toKsZZIrg96iBU5n7TrmiV92yXnBa5EeDMRc+ucSLCTsmxwWoj+HsoVLpsqPVZo5wZ/RlwOt5MtcF7y9Z/IZKbpUVIr6U6jrXl0izV6hg9t+OQLX9BKm9mwvvimObE7vTrCppHStnZiV+PabpmTXFw8tqDd1ACGYBWnFfyrnSZ8xQ51Whw==
+ bh=5HO6EVCVMj+uHBuBl+0jX1KUmxucQZq3w0EismD4654=;
+ b=WAHzXRpgdfZVTfV93bkUgT6Aqz+XAo8ejt0M6a9J9N1Au6/4u+IuePYQeltsJtj8HvXEZTnFg4C9WV6NCMjgs+fn5auazNSpj+o/L1vvH3XfLKXvMFKX2CMUSVjh6zyZgrLLct1I3YtBibMKJXNqkhGW8p1igEYjhWSxIHYZXNGxD5DMU51/X+e4H+NNv3krdGfX2qdKTj3/HcV82p36+FlbdSxlPQzpIbqGJAGqUzOSBYginZnd6rAZIc1jJJOOOY29/YW43et80eLndi9uZx8LxR8b3Zozd92E0hxWXKDmmIMcq1v/UJ3TBF5CJqcM+PyLhs97QroKqIMEBpGX5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oUFg2bbHOiNKmZxOcc1zxw3IIfpdFQmqKpY6wsP6RWA=;
- b=Cn8VpsKMOuAgGr0XYaGn45WGyHv5xYVdwE+FswmFWJjhjHYnm59A8Eu1kdapZ5X4H2HQPDsXptKPHNQ54+gQjzyS8A414npfelou3inxWgu4y4Zu+vz6yVJvOblJYa2rg14DGJcRX181tK33B6Aws4ggb4ffYAlHLIaixJt+f0bE7s0ehet99IBqVL2F4wIX9wg5qII0RlMf53JilKVnGZIzBdPlluoelNbHqdCJLxZw/NCfha113xycu8QUZWtsLhMNHP0W3gaW74r6E4+y3QH3X6gIECTZxtWKuK0JAE6sEkKP33Rlrqd2APXJABUFU3dvSbINHuIA21zxfjWWCw==
+ bh=5HO6EVCVMj+uHBuBl+0jX1KUmxucQZq3w0EismD4654=;
+ b=rcTkh2kUr6fzp6dX+9ot4ENT0vb3TrVmKMHtE8c24qxWJGuLTDRlZTYwIW4nKF5TCbL8lHM3x2xtPUuXMnbQVWjO8+oN5w9JxtUfkhyFo8Un4jZaPPszOjyfklRYAdsmDu/HuyZqVuZ4KBruxReusw+eV4BBZHJHDM8hEeYx723hH5Vc7shkFoRCMFUlBUAs3q/jIzxGqNRatpsZYfN2Sppk6XdPfExdJdy8/ua820suDL5Z1uRBATK5udlBgro5dzfVw4teVZgkWwEXJx7AMpd9ne+JmRgc/4Ufb4bt2Nel5dvPudMhvwgk7QxFo7na6Y2c/g/lQqXCzGUiwsGK/Q==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by SA1PR02MB8462.namprd02.prod.outlook.com (2603:10b6:806:1f6::17) with
+ by SA6PR02MB10429.namprd02.prod.outlook.com (2603:10b6:806:405::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.30; Wed, 18 Jun
- 2025 16:19:32 +0000
+ 2025 16:19:39 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%4]) with mapi id 15.20.8835.027; Wed, 18 Jun 2025
- 16:19:32 +0000
+ 16:19:39 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Roman Kisel <romank@linux.microsoft.com>, "alok.a.tiwari@oracle.com"
 	<alok.a.tiwari@oracle.com>, "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de"
@@ -71,72 +71,70 @@ To: Roman Kisel <romank@linux.microsoft.com>, "alok.a.tiwari@oracle.com"
 CC: "apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
 	<benhill@microsoft.com>, "bperkins@microsoft.com" <bperkins@microsoft.com>,
 	"sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Subject: RE: [PATCH hyperv-next v3 13/15] Drivers: hv: Support confidential
- VMBus channels
-Thread-Topic: [PATCH hyperv-next v3 13/15] Drivers: hv: Support confidential
- VMBus channels
-Thread-Index: AQHb1Om9mlpZjzDg30Gbl3KESiV2jLQGxH4A
-Date: Wed, 18 Jun 2025 16:19:32 +0000
+Subject: RE: [PATCH hyperv-next v3 14/15] Drivers: hv: Support establishing
+ the confidential VMBus connection
+Thread-Topic: [PATCH hyperv-next v3 14/15] Drivers: hv: Support establishing
+ the confidential VMBus connection
+Thread-Index: AQHb1Om9BhiLCGJpSUq3QReI4goGebQGzGnQ
+Date: Wed, 18 Jun 2025 16:19:39 +0000
 Message-ID:
- <SN6PR02MB4157BC99328C8B043749FC90D472A@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB415749A79FD265F2CF8F4D77D472A@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20250604004341.7194-1-romank@linux.microsoft.com>
- <20250604004341.7194-14-romank@linux.microsoft.com>
-In-Reply-To: <20250604004341.7194-14-romank@linux.microsoft.com>
+ <20250604004341.7194-15-romank@linux.microsoft.com>
+In-Reply-To: <20250604004341.7194-15-romank@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SA1PR02MB8462:EE_
-x-ms-office365-filtering-correlation-id: 89137fcc-0cc7-471a-b52a-08ddae83e8a7
-x-ms-exchange-slblob-mailprops:
- EgT5Wr3QDKyLtlCs+NimovH+2L5LUdRJarrShVGqDJIZnS8bCfXcJybBg3Bn1fHwg66R3Gh/KrSwQG543e6fWxQBzVulfNmDm9CZlIOUjEeyWVv4U13owRjuETvdWU3sQFezF50yOUnheY+6btzXWG5UxtQ8CaswxUmu8HqOkrgUuxlO7bb/egtun6/1MUU4nbDx6kLLLCr9Zm+Zu9N2tQtD0XZeYqc8gBcBGbLizr7JOAaEIKHOwZaAV3Sx8nUgd7oGFpYvtm/KW/kFuj0JN/x7hD9Quyo5f/T/Vv+OCI1zXlChjC2glzeHZ4YPOvXQf2H7RIZhSawYg+mErltV52PwbJPzfdcm6FZD7ONGQnIYiKzMIisitKsJELHMqTuTmkhPlQdH7eixIx6Aghs4DUVtZtInAs8dSJz/71RKPw7Iow/7RpxtY8lgpHNauGD4ueFQTRvb8dJWLwCush5HPO2lkExx9zCZgiJPYngjKPP6cj1+GywPU+vreOiotMPL8g/bczq3yAbfQrME1F0dMpSbJkr49wM+fUzVfN4TWOhsno4BiRggoZ+m/XMeKWklGIgA/hVEbgr7GluqCaIb8jdApgTIrp+l2mJgApVEPwR/92XjRVZlw9gkxTjHZPEXY0uxO+FEufWFuzbl4MYWR+tg7f9+GUQ3YFww/h0YwWpqbPyAXZC+/rlYxCsY5T2eJCPaOaLM4yPej76EJ+0j9g8Ef71CLPn2hG07gZ8OYd0=
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SA6PR02MB10429:EE_
+x-ms-office365-filtering-correlation-id: 345d3e80-c6b6-4e78-9124-08ddae83eccc
 x-microsoft-antispam:
- BCL:0;ARA:14566002|461199028|19110799006|8062599006|15080799009|8060799009|41001999006|3412199025|440099028|40105399003|12091999003|102099032|56899033;
+ BCL:0;ARA:14566002|19110799006|41001999006|15080799009|8060799009|8062599006|461199028|440099028|3412199025|40105399003|12091999003|102099032;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?NKhkm51fjouJxORa9ZtzZ3kX7EbjuovxSrD9SwuPdaRb5eMIR7GD7qy73UUX?=
- =?us-ascii?Q?FDj7vQjQgRQBSgeKxB7n93j4DqI2/VhxFInvTzLeJOttFmfN9IWbTvePQG5i?=
- =?us-ascii?Q?hzO9Do4qm1ZGfv1du877epXpw59lGt6FjJcTaQjYYJBaDEVUom/nIWQgH0Qs?=
- =?us-ascii?Q?u+axKHIgmzQ8i6kFdz6vzY64wQwTj2xNPzkXNS4U75q1y9NDh36rZ+9YN8YM?=
- =?us-ascii?Q?8L3aGsckgtYYhBpdj2oG7mNNAGB1zuLrOgJ96b35clUKIrDRIsValpTN2Elo?=
- =?us-ascii?Q?AyXvnUQXhWmhJolBuaiPBIum+0BUZtqHEQcR4peE88C7GWznqNzbjGMnQvsr?=
- =?us-ascii?Q?X2mPii3qr0GemTQA2FO/sdGl6Whw6lhScxaM2smoy/5S02vN9/EGcb0+EV20?=
- =?us-ascii?Q?AjAkZe1/PuU+BTxOavQdCcBU05SiSaGHCgrxQJn/5BXB+bj7IT9RBto2E/nj?=
- =?us-ascii?Q?6+e4vmzankZAmvhqpjmyBbfU4T5tiDr/GPjA9WlCwfTHV9P09f1o6tlcnyVl?=
- =?us-ascii?Q?+YQ75iw0hPvABftv5ur6MkeFst3ydKm3ria4aX/COksigDAH8lq17Yoe90wP?=
- =?us-ascii?Q?MbhZXP0kp86QkPFgalITeHhAb9jsJ/G72HAwRBoUUJrRF+AlIqQXf6LFN3sT?=
- =?us-ascii?Q?CirjDzyMwUG/X7aLl8gPWiE0kzUbRbF0JF/+NhHZ8wuDF7NX9q+W8IBWW5d4?=
- =?us-ascii?Q?okhByZuV2/87d3lUw4uJg4qH1oym8nNdR42IfcYSYJN5hMZ76914DBnOL31t?=
- =?us-ascii?Q?IawUlmRn2L3dl6bdG2ntomvJ7e95ZOuAe/rGheYUmJUTDPxYzzgjUzuMAmcN?=
- =?us-ascii?Q?pCCfTfpWalR+4t5x39lkme6++XUMlGQdqAOaFv1KUvgRkcJFi9TPcYqltE0J?=
- =?us-ascii?Q?CHuW5N7xro4zY66UwBWTbdu7WzG7n22liEdvGS+qVA6sudjAaLmtkJJ5vmfe?=
- =?us-ascii?Q?bQF9fDPywnbI63bk/W0ElHbn1QMSYcyYvlUEYUavr0H1slxFcViTzUKg/lvI?=
- =?us-ascii?Q?7jiZCQhtIs7jGvUg5aIx2lUAs6vGvTUYq9kaXKsc5YROCQZxWasBCIGUHhlt?=
- =?us-ascii?Q?Ij69XSJunERi4UJcoPwaogZkmg3srE6DKRdAkoQp+y01gCGOKP+AOs3xpeYu?=
- =?us-ascii?Q?aglVbkFObN+8AYw+WXTBjV3sPisPaOnl7pc2EMor7dCecscUj0/NUFQ=3D?=
+ =?us-ascii?Q?zst54JUCZJbwXw3BPV2UXwQL9Xwt6lMaCAFVWdj2LA7mch7FhSIyQOEy14Wy?=
+ =?us-ascii?Q?vhSO+QsFU5DND7tf+gMCdnFTljaz3iAZd9pC7n7oJIvHuYdjK8V1uQsvBha9?=
+ =?us-ascii?Q?ku6Dsd6PP87qFOxf6alO+lGKyXp4S7w83taPIMSaWzVMhtyk7Lr1sQ59duLI?=
+ =?us-ascii?Q?BSC/anRvVR9XoTN9kaKfDy8jahnh8UFbaX88C7FgkGkf2Cn2jtzfs2feymZR?=
+ =?us-ascii?Q?wiLw8TfmLivUO7QnoXQrH88A38zJmemwUsGj7Iwc+zBiSPLVq62ZcfcZiQTq?=
+ =?us-ascii?Q?Tt6a8SCPWG3/5q912BvJO336WP4syM8GfJz/d3f79r9j2vy4mabuyDaTxn5g?=
+ =?us-ascii?Q?1CFkl/JuO7YT3pUPSAYyTi8iroa4yIrTyn2+IHYFEbA7rH5qQb680XWYmNWu?=
+ =?us-ascii?Q?HURx5lEtm/jX7tzxaIl5ZP+heXla/1HIuVWmy3HpksMLS8eSpPDtZQlbx3QO?=
+ =?us-ascii?Q?/EQv+iS6kGeOoDadn349cteBodABQWIIqgyCaZxoBiPMt80HxAmA4ZOv+FCY?=
+ =?us-ascii?Q?hBLnFJ0PfyN1fcjO4shTS6AT0znQNdlWCd2Fqk8sqzI8sd/JjDjJiKDlvEWU?=
+ =?us-ascii?Q?5ecUx2c9t7wTJsuY5RtZyLWS8p1JZRF2QI4J3JTpJzq2bwLTztZ33kkEFeQi?=
+ =?us-ascii?Q?lTzHfKGHJddFCckJtaPy76oUd9spqQaDNcIN5tOsIXABvSfA4twj0a4720e3?=
+ =?us-ascii?Q?cbw3MNINeyEeunFHs5kpB4BqCBVvabtTMamiQ5OQN9bgpXQ7TOniYPniNuxM?=
+ =?us-ascii?Q?AR4JvpTiiLd3dbWPvEs7ESJgmllNrvRBVFCxMJF6wB4N8GwZ+k7FZo31J35V?=
+ =?us-ascii?Q?8Ts4KaSO+0Yv/EklYopbp+CeabAg5kNzbeCFqnD8qMilx9//WynPjpEKPGqq?=
+ =?us-ascii?Q?5k4BfhV22ydsoG5k8rcqO3VPMCUtdxEaImiT4YleEHWumonLaLP2ksDGPisB?=
+ =?us-ascii?Q?0dwbtNx2V+vzYcNV2c19bRnSeVdMZFuUByXFrHSu5NDSSPVJwxdZXMu/oWcC?=
+ =?us-ascii?Q?slhFiDEzleAaC58iwqvDVhwQvX/So9N0J6zbklWavBFeamj40sflmhCZEND1?=
+ =?us-ascii?Q?qc6PD6HrX+/B/ZXfEIc+vIxVx3prZW8TJbnY2QPlLMWyKEvMIEwArK66MnYZ?=
+ =?us-ascii?Q?YDGZgZ6U9Mpu96F6wExrFHHQLAgn7mlIZmP+TWZkxK134XuYKZW0E+o=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?zwlo0jclsnLNcZ8Oxg1oIjq4xgaH1TK0Nr0hrbVhGHJAeb/m2EIwG6hAXdWV?=
- =?us-ascii?Q?2GP38yjobDcxMsa+RCnK63qWDAzgy8Bi5UpMV5bskwD5sA8advBfCgpi4RbM?=
- =?us-ascii?Q?/FWQnp23EbBuigByLubNWrjbmXtZbPIOBIkUb3u/T1YGLhp/gqvNvRN+IOak?=
- =?us-ascii?Q?g4f/dG9ovo5Ro/WDIxn/PkMQw4woqegj5M27jM4Qm/6Wdd+1n4sUlw8vfms4?=
- =?us-ascii?Q?0VYKeZQ1zLJ2xRUEgLYCg7bzYQxYeJD5h3mr6Y4+efs41ns27GhdrYsv8wXl?=
- =?us-ascii?Q?DqyBswkhwhv2cgvV3xzFwtBPE2iv+dY1k/a7Fwvh8MluOBkKWDjOrMBh3P4d?=
- =?us-ascii?Q?Q/6i1GNRY45iCIcIj3I3A+9mhTFra02DMZW5RrBjQkyqqRe7AvW8ILr1aABa?=
- =?us-ascii?Q?zjXmugFYCkWSkArqlo26VqYmEI7XB3WY2z1t/6MGgrRBES7QH/CuTwT15pNa?=
- =?us-ascii?Q?lQ2ymOFEMQdOczBjjKott/qihD+siKi0ilKhvgTvPIqrVhHIfoB7+DzM/yJu?=
- =?us-ascii?Q?vAFuqlLfQcPpXtk7/WLeVOBFnSBNl/1j8p85sdwFhSRZTCDaCR5eEOfLujGE?=
- =?us-ascii?Q?TavF/CUZEOEQPiKjFrVVJPHVmyeSnWeDAMp25QaSIbI+SJxOTPpC4UoqtukX?=
- =?us-ascii?Q?Bjk0pFf2fHU2c+QNWpTeFwwz0KvPgImZ7g9qigCj6+qGZ+DK8odW7f/8yYwr?=
- =?us-ascii?Q?jfUPTPDOskJT/fhjhUldXkBY5YtlXlgvyrdiF2Elf9y5vw3l2bBVHtvX3nBY?=
- =?us-ascii?Q?2teDmEP9dHR9dNLqnV5KmIAjV2V4i+QIY3Dfw5N8EVEUQJIszNWnfWgPd6+U?=
- =?us-ascii?Q?h4IiRVouzTKRillpwbzr7saPqA2kDHz8oDwCVrbhN97zUgdU7xL2FJC+dT3f?=
- =?us-ascii?Q?uSEsYUseajmHZYL4QomWINJ2yuTnLDgnnyUArZN5Zoar9V4OjQSjfw0956UT?=
- =?us-ascii?Q?X9GMF0kObG0lztN38yxRBpMBb00X30+vGDarU/RxdbLz0yeO9t5/kOM+/9xZ?=
- =?us-ascii?Q?vr50L4ugRWlzsiiPK1FrTNH19SQIz+cukySWDc+bToylelMj6vIryhmKm6uj?=
- =?us-ascii?Q?tlHPjxfqYlrV/GXPJxywDtJbfxypSpoGak4yh57bzi6C/0GYhftDGqa3gaVI?=
- =?us-ascii?Q?MktGXMdPDBSbJdzFJ94vGhvXmX4inxtHZjB2V/238sT8pnhTzafWaRlK2mT5?=
- =?us-ascii?Q?7w+CucQ5QPOc5PewFrmSAVq1igSj8hW8bO5X6d+RV1yb5+xavlFFzn7pAHY?=
+ =?us-ascii?Q?msB8qzockT16pbZFyIYPc6ebm77YNVkgyxE5s+S9T4Q4YHUw8RoLXoFpicNX?=
+ =?us-ascii?Q?VwBGSSQc6wYaMecKmZAx7D66qJywnDVflgz2gl2x8cuphM8odOWiNbNBjWAN?=
+ =?us-ascii?Q?kfqzqQ9HeWhx9Mq6fHRIVJR8h0illJ9xNUAW8bWSG+KTx9s2gYu+iSQucGHg?=
+ =?us-ascii?Q?AuO/89fzPaSm5y4n8RcTfQaypYQG3GrCP1P6NN07TtMAYMpTzFHMO2ONwByR?=
+ =?us-ascii?Q?YyOQ1rR9hcgWeOAakcnwiPADMUMEwkYoDUDG7LxXCdZsMpcbZUCUOb2HSrbL?=
+ =?us-ascii?Q?skWX//1bWkVroiVcE17SN3UKGrxVGzw1AjEYHQpaVFNAF6fdmCSuOO73/miX?=
+ =?us-ascii?Q?FiD0T5Q/2I6u3Cyndv1nP0Mm2oU4VhV0LUQTfSXgy9Woww45jOWjhyrsMlkw?=
+ =?us-ascii?Q?0CN6a4iHEmFJjPAlDMIyTCj0YRk1o5HTMwMduMMfQbXPpmOFonus/iT0AB0Y?=
+ =?us-ascii?Q?HeWaK/HgaH2Qu1tTLjWyeh3zCt3dC9BppVTLxsDlXj5S0O0Bza5olJ11SDgL?=
+ =?us-ascii?Q?MUegXAYqfgOE3xdLohj9+3+U6JaXZM7MBxOP44NCMM9qWdb+RNC9kPACED/g?=
+ =?us-ascii?Q?kLoSDS/rB4x5t9HZcCMr4p9DdpsjSmF6ZsaSFeuI3rPqz3bxclW7UWMvyqEj?=
+ =?us-ascii?Q?TrN2L1bJ/e1c7gPzkFjoFFAhf2F4goVc5xnepvVeyjx7iB2XIZHozNiGyyJi?=
+ =?us-ascii?Q?pbLa9n3YMyqa0iky93sEY6o2lWla5xjmLjH1U5wxHkA8n9sFGKffvyQ21bip?=
+ =?us-ascii?Q?q4ykwmDEpcny2K4ptkITpGTF13aZW9MTh2hwtop072GNgNJ2dY2IOWZZC9/a?=
+ =?us-ascii?Q?cbiZnf4noA3K5LxZJiD4b0yQK6ijmO2JNcRiogCMybNfWC/amaP5nfc0cHUW?=
+ =?us-ascii?Q?GCBflFGRvP1n7xec7QhYJVBrzRIIyZLAwq/ojaWYT5EVNGkqt5dVa/6Lbd9T?=
+ =?us-ascii?Q?YqxIKSnMcXEXe7hQZypw6eYVnkcikZnVJXg08HrDAtWSMdsaN5dt8ClmesVX?=
+ =?us-ascii?Q?gLW2U4xtjzxslR8o2Z320895qFAE+U6ZWnIr3BlPcn0GkwfNx8TwxoZvgS5U?=
+ =?us-ascii?Q?+s6LWvKnAhIJaZqzPHGqZJy8+PXH06wYQxk6g/nXvjiW83TzzqsEawW3nWXw?=
+ =?us-ascii?Q?KY4u0bXVla1YwYAKhw8G5r4xZl0l6n1xpEeygvgdMfTyl0blHUzukpTTN+0J?=
+ =?us-ascii?Q?ImHUdOR1p69FFDmW0omecO1o6lfMmIim2gSPBFTxRh/VG4t9h2/C7/K6H3c?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -150,127 +148,373 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89137fcc-0cc7-471a-b52a-08ddae83e8a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2025 16:19:32.3371
+X-MS-Exchange-CrossTenant-Network-Message-Id: 345d3e80-c6b6-4e78-9124-08ddae83eccc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2025 16:19:39.2688
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR02MB8462
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR02MB10429
 
 From: Roman Kisel <romank@linux.microsoft.com> Sent: Tuesday, June 3, 2025 =
 5:44 PM
 >=20
-> To run a confidential VMBus channels, one has to initialize the
-
-How about:
-
-To make use of Confidential VMBus channels, initialize the
-
-> co_ring_buffers and co_external_memory fields of the channel
-> structure.
+> To establish the confidential VMBus connection the CoCo VM guest
+> first attempts to connect to the VMBus server run by the paravisor.
+> If that fails, the guest falls back to the non-confidential VMBus.
 >=20
-> Advertise support upon negoatiating the version and compute
-
-s/negoatiating/negotiating/
-
-> values for those fields and initialize them.
+> Implement that in the VMBus driver initialization.
 >=20
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  drivers/hv/channel_mgmt.c | 19 +++++++++++++++++++
->  drivers/hv/connection.c   |  3 +++
->  2 files changed, 22 insertions(+)
+>  drivers/hv/vmbus_drv.c | 169 +++++++++++++++++++++++++++--------------
+>  1 file changed, 110 insertions(+), 59 deletions(-)
 >=20
-> diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-> index ca2fe10c110a..33bc29e826bd 100644
-> --- a/drivers/hv/channel_mgmt.c
-> +++ b/drivers/hv/channel_mgmt.c
-> @@ -1021,6 +1021,7 @@ static void vmbus_onoffer(struct vmbus_channel_mess=
-age_header *hdr)
->  	struct vmbus_channel_offer_channel *offer;
->  	struct vmbus_channel *oldchannel, *newchannel;
->  	size_t offer_sz;
-> +	bool co_ring_buffer, co_external_memory;
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index f7e82a4fe133..88701c3ad999 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -1057,12 +1057,9 @@ static void vmbus_onmessage_work(struct work_struc=
+t *work)
+>  	kfree(ctx);
+>  }
 >=20
->  	offer =3D (struct vmbus_channel_offer_channel *)hdr;
+> -void vmbus_on_msg_dpc(unsigned long data)
+> +static void __vmbus_on_msg_dpc(void *message_page_addr)
+>  {
+> -	struct hv_per_cpu_context *hv_cpu =3D (void *)data;
+> -	void *page_addr =3D hv_cpu->hyp_synic_message_page;
+> -	struct hv_message msg_copy, *msg =3D (struct hv_message *)page_addr +
+> -				  VMBUS_MESSAGE_SINT;
+> +	struct hv_message msg_copy, *msg;
+>  	struct vmbus_channel_message_header *hdr;
+>  	enum vmbus_channel_message_type msgtype;
+>  	const struct vmbus_channel_message_table_entry *entry;
+> @@ -1070,6 +1067,10 @@ void vmbus_on_msg_dpc(unsigned long data)
+>  	__u8 payload_size;
+>  	u32 message_type;
 >=20
-> @@ -1033,6 +1034,22 @@ static void vmbus_onoffer(struct vmbus_channel_mes=
-sage_header *hdr)
->  		return;
->  	}
->=20
-> +	co_ring_buffer =3D is_co_ring_buffer(offer);
-> +	if (co_ring_buffer) {
-> +		if (vmbus_proto_version < VERSION_WIN10_V6_0 || !vmbus_is_confidential=
-()) {
-> +			atomic_dec(&vmbus_connection.offer_in_progress);
-> +			return;
-> +		}
-> +	}
-> +
-> +	co_external_memory =3D is_co_external_memory(offer);
-> +	if (is_co_external_memory(offer)) {
-
-Use the local variable co_external_memory instead of the function, like wit=
-h co_ring_buffer?
-Consistency .... :-)
-
-
-> +		if (vmbus_proto_version < VERSION_WIN10_V6_0 || !vmbus_is_confidential=
-()) {
-> +			atomic_dec(&vmbus_connection.offer_in_progress);
-> +			return;
-> +		}
-
-The test for valid vmbus_proto_version and VMBus being confidential is dupl=
-icated. You
-could do:
-
-	if (co_ring_buffer || co_external_memory)
-
-and have just one copy of the tests. Also I'd suggest adding an error messa=
-ge like
-with the "vmbus_is_valid_offer()" test at the start of vmbus_onoffer(). Tha=
-t way
-incoming offers aren't silently ignored. Something is wrong on the paraviso=
-r or
-host side if the tests fail.
-
-Also, since the combination where co_external_memory =3D true and
-co_ring_buffer =3D false is not allowed, perhaps a check for that invalid
-combination should be made here as well.
-
-> +	}
-> +
->  	oldchannel =3D find_primary_channel_by_offer(offer);
->=20
->  	if (oldchannel !=3D NULL) {
-> @@ -1111,6 +1128,8 @@ static void vmbus_onoffer(struct vmbus_channel_mess=
-age_header *hdr)
->  		pr_err("Unable to allocate channel object\n");
->  		return;
->  	}
-> +	newchannel->co_ring_buffer =3D co_ring_buffer;
-> +	newchannel->co_external_memory =3D co_external_memory;
->=20
->  	vmbus_setup_channel_state(newchannel, offer);
->=20
-> diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-> index be490c598785..eeb472019d69 100644
-> --- a/drivers/hv/connection.c
-> +++ b/drivers/hv/connection.c
-> @@ -105,6 +105,9 @@ int vmbus_negotiate_version(struct vmbus_channel_msgi=
-nfo *msginfo, u32 version)
->  		vmbus_connection.msg_conn_id =3D VMBUS_MESSAGE_CONNECTION_ID;
->  	}
->=20
-> +	if (vmbus_is_confidential() && version >=3D VERSION_WIN10_V6_0)
-> +		msg->feature_flags =3D VMBUS_FEATURE_FLAG_CONFIDENTIAL_CHANNELS;
+> +	if (!message_page_addr)
+> +		return;
+> +	msg =3D (struct hv_message *)message_page_addr + VMBUS_MESSAGE_SINT;
 > +
 >  	/*
->  	 * shared_gpa_boundary is zero in non-SNP VMs, so it's safe to always
->  	 * bitwise OR it
+>  	 * 'enum vmbus_channel_message_type' is supposed to always be 'u32' as
+>  	 * it is being used in 'struct vmbus_channel_message_header' definition
+> @@ -1195,6 +1196,14 @@ void vmbus_on_msg_dpc(unsigned long data)
+>  	vmbus_signal_eom(msg, message_type);
+>  }
+>=20
+> +void vmbus_on_msg_dpc(unsigned long data)
+> +{
+> +	struct hv_per_cpu_context *hv_cpu =3D (void *)data;
+> +
+> +	__vmbus_on_msg_dpc(hv_cpu->hyp_synic_message_page);
+> +	__vmbus_on_msg_dpc(hv_cpu->para_synic_message_page);
+> +}
+> +
+>  #ifdef CONFIG_PM_SLEEP
+>  /*
+>   * Fake RESCIND_CHANNEL messages to clean up hv_sock channels by force f=
+or
+> @@ -1233,21 +1242,19 @@ static void vmbus_force_channel_rescinded(struct
+> vmbus_channel *channel)
+>  #endif /* CONFIG_PM_SLEEP */
+>=20
+>  /*
+> - * Schedule all channels with events pending
+> + * Schedule all channels with events pending.
+> + * The event page can be directly checked to get the id of
+> + * the channel that has the interrupt pending.
+>   */
+> -static void vmbus_chan_sched(struct hv_per_cpu_context *hv_cpu)
+> +static void vmbus_chan_sched(struct hv_per_cpu_context *hv_cpu, void *ev=
+ent_page_addr)
+
+The hv_cpu parameter to this function isn't used.  Couldn't it be removed? =
+Perhaps there's a
+case for making the function API more parallel to vmbus_message_sched(), bu=
+t in my judgment
+that's not enough value to warrant passing an unneeded parameter.
+
+>  {
+>  	unsigned long *recv_int_page;
+>  	u32 maxbits, relid;
+> +	union hv_synic_event_flags *event;
+>=20
+> -	/*
+> -	 * The event page can be directly checked to get the id of
+> -	 * the channel that has the interrupt pending.
+> -	 */
+> -	void *page_addr =3D hv_cpu->hyp_synic_event_page;
+> -	union hv_synic_event_flags *event
+> -		=3D (union hv_synic_event_flags *)page_addr +
+> -					 VMBUS_MESSAGE_SINT;
+> +	if (!event_page_addr)
+> +		return;
+> +	event =3D (union hv_synic_event_flags *)event_page_addr + VMBUS_MESSAGE=
+_SINT;
+>=20
+>  	maxbits =3D HV_EVENT_FLAGS_COUNT;
+>  	recv_int_page =3D event->flags;
+> @@ -1318,26 +1325,40 @@ static void vmbus_chan_sched(struct hv_per_cpu_co=
+ntext *hv_cpu)
+>  	}
+>  }
+>=20
+> -static void vmbus_isr(void)
+> +static void vmbus_message_sched(struct hv_per_cpu_context *hv_cpu, void =
+*message_page_addr)
+>  {
+> -	struct hv_per_cpu_context *hv_cpu
+> -		=3D this_cpu_ptr(hv_context.cpu_context);
+> -	void *page_addr;
+>  	struct hv_message *msg;
+>=20
+> -	vmbus_chan_sched(hv_cpu);
+> -
+> -	page_addr =3D hv_cpu->hyp_synic_message_page;
+> -	msg =3D (struct hv_message *)page_addr + VMBUS_MESSAGE_SINT;
+> +	if (!message_page_addr)
+> +		return;
+> +	msg =3D (struct hv_message *)message_page_addr + VMBUS_MESSAGE_SINT;
+>=20
+>  	/* Check if there are actual msgs to be processed */
+>  	if (msg->header.message_type !=3D HVMSG_NONE) {
+>  		if (msg->header.message_type =3D=3D HVMSG_TIMER_EXPIRED) {
+>  			hv_stimer0_isr();
+>  			vmbus_signal_eom(msg, HVMSG_TIMER_EXPIRED);
+> -		} else
+> +		} else {
+>  			tasklet_schedule(&hv_cpu->msg_dpc);
+> +		}
+>  	}
+> +}
+> +
+> +static void vmbus_isr(void)
+> +{
+> +	struct hv_per_cpu_context *hv_cpu
+> +		=3D this_cpu_ptr(hv_context.cpu_context);
+> +
+> +	/*
+> +	 * Suggested-by: Michael Kelley <mhklinux@outlook.com>
+> +	 * One possible optimization would be to keep track of the largest relI=
+D that's in use,
+> +	 * and only scan up to that relID.
+> +	 */
+
+I'd put this comment in vmbus_chan_sched() just before the "for_each_set_bi=
+t()"
+loop. That's the loop that is doing the scanning.
+
+> +	vmbus_chan_sched(hv_cpu, hv_cpu->hyp_synic_event_page);
+> +	vmbus_chan_sched(hv_cpu, hv_cpu->para_synic_event_page);
+> +
+> +	vmbus_message_sched(hv_cpu, hv_cpu->hyp_synic_message_page);
+> +	vmbus_message_sched(hv_cpu, hv_cpu->para_synic_message_page);
+>=20
+>  	add_interrupt_randomness(vmbus_interrupt);
+>  }
+> @@ -1355,6 +1376,60 @@ static void vmbus_percpu_work(struct work_struct *=
+work)
+>  	hv_synic_init(cpu);
+>  }
+>=20
+> +static int vmbus_alloc_synic_and_connect(void)
+> +{
+> +	int ret, cpu;
+> +	struct work_struct __percpu *works;
+> +	int hyperv_cpuhp_online;
+> +
+> +	ret =3D hv_synic_alloc();
+> +	if (ret < 0)
+> +		goto err_alloc;
+> +
+
+Extra blank line here.
+
+> +
+> +	works =3D alloc_percpu(struct work_struct);
+> +	if (!works) {
+> +		ret =3D -ENOMEM;
+> +		goto err_alloc;
+> +	}
+> +
+> +	/*
+> +	 * Initialize the per-cpu interrupt state and stimer state.
+> +	 * Then connect to the host.
+> +	 */
+> +	cpus_read_lock();
+> +	for_each_online_cpu(cpu) {
+> +		struct work_struct *work =3D per_cpu_ptr(works, cpu);
+> +
+> +		INIT_WORK(work, vmbus_percpu_work);
+> +		schedule_work_on(cpu, work);
+> +	}
+> +
+> +	for_each_online_cpu(cpu)
+> +		flush_work(per_cpu_ptr(works, cpu));
+> +
+> +	/* Register the callbacks for possible CPU online/offline'ing */
+> +	ret =3D cpuhp_setup_state_nocalls_cpuslocked(CPUHP_AP_ONLINE_DYN, "hype=
+rv/vmbus:online",
+> +						   hv_synic_init, hv_synic_cleanup);
+> +	cpus_read_unlock();
+
+There's a subtle problem here. As soon as the lock is released, there could=
+ be
+vCPUs that start coming online (started by the udev daemon), and running
+hv_synic_init(). My assumption is that hv_synic_init() might fail if this i=
+nvocation
+of vmbus_alloc_synic_and_connect() is trying to determine if Confidential V=
+MBus
+is supported. A failure will abort the new CPU coming online. That suggests=
+ that
+hv_synic_init() should not return an error in the case where initializing t=
+he paravisor
+SynIC doesn't work.
+
+> +	free_percpu(works);
+> +	if (ret < 0)
+> +		goto err_alloc;
+> +	hyperv_cpuhp_online =3D ret;
+> +
+> +	ret =3D vmbus_connect();
+
+When doing vmbus_alloc_synic_and_connect() the first time with "is_confiden=
+tial"
+set to "true", where exactly does the failure occur if the paravisor doesn'=
+t support
+Confidential VMBus? Since your patches add machinery to detect MSR accesses
+against the paravisor that fail, I'm presuming hv_synic_init() will fail fo=
+r all vCPUs.
+But the error return from hv_synic_init() isn't checked (except as I mentio=
+ned above
+for cpuhp_setup_state). So evidently the failure is detected in vmbus_conne=
+ct() when
+vmbus_negotiate_version() sends the INITIATE_CONTACT message. And presumabl=
+y
+sending the message fails because there's no way to wait for a failure resp=
+onse since
+the SynICs didn't initialized. So is it the HV_POST_MESSAGE hypercall that =
+is the
+exact point of failure, and if so, what error status is returned? It looks =
+like
+vmbus_post_msg() would output an error message. Or is there some other fail=
+ure
+point that I'm missing?
+
+I ask because there's a lot of work done before the failure is detected. Ea=
+ch
+vCPU must try to initialize their paravisor SynIC and fail. Then each CPU d=
+oes
+hv_synic_cleanup() as part of cpuhp_remove_state(). Workqueues are created
+in vmbus_connect(), and memory is allocated, all of which must be cleaned
+up. Then everything is retried with "is_confidential" set to "false". Do yo=
+u have
+any sense of how much elapsed time it takes to get the initial failure and =
+then
+cleanup? Consider the case with a large number of vCPUs, all of which must
+run hv_synic_init() and then hv_synic_cleanup(). See commit 87c9741a38c4
+where this elapsed time was a concern in large VMs.
+
+Can the failure be detected earlier by doing a simple MSR read against
+the paravisor for an MSR that's only available if Confidential VMBus is
+implemented? Then "is _confidential" could be set correctly before
+all the work is done, and the work would only be done once even
+if Confidential VMBus isn't supported.
+
+> +	if (ret)
+> +		goto err_connect;
+> +	return 0;
+> +
+> +err_connect:
+> +	cpuhp_remove_state(hyperv_cpuhp_online);
+> +	return -ENODEV;
+> +err_alloc:
+> +	hv_synic_free();
+> +	return -ENOMEM;
+> +}
+> +
+>  /*
+>   * vmbus_bus_init -Main vmbus driver initialization routine.
+>   *
+> @@ -1365,8 +1440,7 @@ static void vmbus_percpu_work(struct work_struct *w=
+ork)
+>   */
+>  static int vmbus_bus_init(void)
+>  {
+> -	int ret, cpu;
+> -	struct work_struct __percpu *works;
+> +	int ret;
+>=20
+>  	ret =3D hv_init();
+>  	if (ret !=3D 0) {
+> @@ -1401,41 +1475,21 @@ static int vmbus_bus_init(void)
+>  		}
+>  	}
+>=20
+> -	ret =3D hv_synic_alloc();
+> -	if (ret)
+> -		goto err_alloc;
+> -
+> -	works =3D alloc_percpu(struct work_struct);
+> -	if (!works) {
+> -		ret =3D -ENOMEM;
+> -		goto err_alloc;
+> -	}
+> -
+>  	/*
+> -	 * Initialize the per-cpu interrupt state and stimer state.
+> -	 * Then connect to the host.
+> +	 * Attempt to establish the confidential VMBus connection first if this=
+ VM is
+> +	 * a hardware confidential VM, and the paravisor is present.
+>  	 */
+> -	cpus_read_lock();
+> -	for_each_online_cpu(cpu) {
+> -		struct work_struct *work =3D per_cpu_ptr(works, cpu);
+> +	ret =3D -ENODEV;
+> +	if (ms_hyperv.paravisor_present && (hv_isolation_type_tdx() || hv_isola=
+tion_type_snp())) {
+> +		is_confidential =3D true;
+> +		ret =3D vmbus_alloc_synic_and_connect();
+> +		is_confidential =3D !ret;
+>=20
+> -		INIT_WORK(work, vmbus_percpu_work);
+> -		schedule_work_on(cpu, work);
+> +		pr_info("VMBus is confidential: %d\n", is_confidential);
+>  	}
+>=20
+> -	for_each_online_cpu(cpu)
+> -		flush_work(per_cpu_ptr(works, cpu));
+> -
+> -	/* Register the callbacks for possible CPU online/offline'ing */
+> -	ret =3D cpuhp_setup_state_nocalls_cpuslocked(CPUHP_AP_ONLINE_DYN, "hype=
+rv/vmbus:online",
+> -						   hv_synic_init, hv_synic_cleanup);
+> -	cpus_read_unlock();
+> -	free_percpu(works);
+> -	if (ret < 0)
+> -		goto err_alloc;
+> -	hyperv_cpuhp_online =3D ret;
+> -
+> -	ret =3D vmbus_connect();
+> +	if (!is_confidential)
+> +		ret =3D vmbus_alloc_synic_and_connect();
+>  	if (ret)
+>  		goto err_connect;
+>=20
+> @@ -1451,9 +1505,6 @@ static int vmbus_bus_init(void)
+>  	return 0;
+>=20
+>  err_connect:
+> -	cpuhp_remove_state(hyperv_cpuhp_online);
+> -err_alloc:
+> -	hv_synic_free();
+>  	if (vmbus_irq =3D=3D -1) {
+>  		hv_remove_vmbus_handler();
+>  	} else {
 > --
 > 2.43.0
 
