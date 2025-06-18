@@ -1,145 +1,96 @@
-Return-Path: <linux-arch+bounces-12364-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12365-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0244ADE8D9
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Jun 2025 12:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C9F6ADEB80
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Jun 2025 14:14:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 152433B5991
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Jun 2025 10:24:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A0B03AD7CD
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Jun 2025 12:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58FF2283137;
-	Wed, 18 Jun 2025 10:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50302DBF45;
+	Wed, 18 Jun 2025 12:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="KrwKCEtF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mam5EdNC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CF127FB16;
-	Wed, 18 Jun 2025 10:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A578A2BD022
+	for <linux-arch@vger.kernel.org>; Wed, 18 Jun 2025 12:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750242078; cv=none; b=Hop1btReYr79onsNUDs94EmqmpPLNBSlFkBUxw4czIMrokIWKGNmIF7Nye8oGMkxhOtwEebjgZbO95QmVPX3BFBeUys98B0lzVCiOlI002VaaRuHetqRQ1d9sNw8JLA9EMdoNlttSSHXqV6N0cWDht+cIeYupn07I2yhCUZ6sEs=
+	t=1750248626; cv=none; b=hK7ud46wQVuPkqgYsDGlL5vT2pI/G6y/v9CdKg0dy9PFeXDvw9o6102jiWDf5WtKq3tF+nsjvH5ItQkLH0/eLk32Cn44Tj205DYLDfEO333fygCUju/0ASAvcYD/oImBLJswNY1iMAX3sZJeKP+EpiBtGqUhN1JvlK7i1pZGI2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750242078; c=relaxed/simple;
-	bh=Ro329G7e6bLXxjcm0ncpB4tvjdXFieVigZAwXeLjE/g=;
-	h=Date:From:To:Cc:Message-ID:Subject:MIME-Version:Content-Type; b=gMHop0TCUvfOakOjpG/kA86r2EYnE7H9knJQMfgUUl5kYGO3H7W+hBfdIWQCcsRn49G3R8VbpnqdduCPoL0myhZ12+F58W91tC2vr/kmaXBXZS8ISH0Qd8+jtldSZaOrnWDuTBFXpexqrrRSYSB389I2VErtJFvg3pPaoWKzreY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=KrwKCEtF; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4bMfsN1fTbz9t9P;
-	Wed, 18 Jun 2025 12:21:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1750242072;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lT6i+pbNHdJMMvp/mp0MakBah9wX4+JxXhdBuviIlyM=;
-	b=KrwKCEtFvAN+VBa7X22Xk0JlI3P8RyAPLy8FQDaEiWIH3lDrLPI9CO62TdV2kxVNhS6f5Y
-	dSinq5vA+pZShA6qqSi7xDFa5ysleiSeH39khZur18pt/w06CJvNtl42rbxNvzDqZVlB5e
-	NAd+kVoSdKJhiGNq1fITWtHd1b6aDLx/4yaV7hAaLdNsUPVmDbY5icQYBKNKrg0Zm2AHcY
-	tt/M1aqqk1uXhTov8+c8aV2X9m76pcrP3SGL3e8/u5s/d87NzhNtCS8wDM8fkc2Str4V9W
-	3PrBBB7T9dcgU6L+M7KOid2sShijvjCxWtce775GtirlSLX8Fiy0ygp6NrIMeQ==
-Date: Wed, 18 Jun 2025 12:21:07 +0200 (CEST)
-From: Jakub Wartak <jakub.wartak@mailbox.org>
-To: "anthony.yznaga@oracle.com" <anthony.yznaga@oracle.com>
-Cc: "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-	"arnd@arndb.de" <arnd@arndb.de>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"dave.hansen@intel.com" <dave.hansen@intel.com>,
-	"david@redhat.com" <david@redhat.com>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"khalid@kernel.org" <khalid@kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"markhemm@googlemail.com" <markhemm@googlemail.com>,
-	"maz@kernel.org" <maz@kernel.org>,
-	"mhiramat@kernel.org" <mhiramat@kernel.org>,
-	"neilb@suse.de" <neilb@suse.de>, "pcc@google.com" <pcc@google.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-	"viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-	"willy@infradead.org" <willy@infradead.org>,
-	"xhao@linux.alibaba.com" <xhao@linux.alibaba.com>
-Message-ID: <1968222200.618999.1750242067613@office-sso.mailbox.org>
-Subject: Re: [PATCH v2 00/20] Add support for shared PTEs across processes
+	s=arc-20240116; t=1750248626; c=relaxed/simple;
+	bh=f3GIbyVHrxISNrimyhIFZSo9QvqnBsjZXMzvJuU6h4M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mWGtnQ8vOot++wwerUPq1AHNK4kEImmzsbc4SDZKXltrdEbYcGKsaKR5bOw5BM2jvXUXnqmcqwM4Unzvi2ze+0fePbHnmr2XWzFUAKlUeEylzlsJUe8UiWIP4v3oL/Ks9+IyaohXap5zZ3tC9wEWORtiDJX5u7/HYhnfCWFCkM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mam5EdNC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14EF3C4CEE7;
+	Wed, 18 Jun 2025 12:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750248626;
+	bh=f3GIbyVHrxISNrimyhIFZSo9QvqnBsjZXMzvJuU6h4M=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=Mam5EdNCmTGtbVUk5ZadbMmPcvKMhmy6c7uiIovu1ER837ZYVwNhxsCMDTmqXJteY
+	 53t4Jn4aqLtYlFz79x921Pz7QEQSIC1L5Q6mP6s9GUbRQ2Ov4osQbDXZRYJCeFgr8T
+	 Vogpvstik8wTMhgtVBfEtpG9AT64+x2XmTIkDTM5yUu6xJZK+DxuDTcAwQ7Lqz4CgJ
+	 d3+ePwWYzyRMXKuiVjnaASYGsAIRAsS7pLISN+zZcqQbu/z7jHECKofR/+2bw25b2x
+	 YTWiRzEHhzm2Ws9snneFp/QnJvkQyhdUkrDtGMaEF0OPdeXYKJydPg4HdwKgzwV5aR
+	 JhvVa1o6Mc3HA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 3D447CE0C98; Wed, 18 Jun 2025 05:10:23 -0700 (PDT)
+Date: Wed, 18 Jun 2025 05:10:23 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>,
+	Russell King <linux@armlinux.org.uk>
+Subject: Re: [Not urgent] Systems unable to do 16-bit stores?
+Message-ID: <872b6d94-b6ea-4ad2-b443-5b63780c9994@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <e8134255-806e-424a-bb86-68d3d6671536@paulmck-laptop>
+ <3b92adce-2fdb-4845-8cf1-a3378ca12217@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-MBO-RS-META: t8iza63jxqhrn5fkefnmh6rdkxx9a7zh
-X-MBO-RS-ID: afb4a33d23cd47279ad
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b92adce-2fdb-4845-8cf1-a3378ca12217@app.fastmail.com>
 
-Hi all,
+On Wed, Jun 18, 2025 at 10:49:34AM +0200, Arnd Bergmann wrote:
+> On Wed, Jun 18, 2025, at 09:16, Paul E. McKenney wrote:
+> > Hello, Arnd,
+> >
+> > It has been about a year since the one-byte cmpxchg emulation hit
+> > mainline, so I figured that I should check up on two-byte cmpxchg
+> > emulation.  The issue that kicked it out of last year's patch series
+> > was that there were systems that run Linux that lack 16-bit stores.
+> >
+> > Not at all urgent, just figured I should ask.  ;-)
+> 
+> Hi Paul,
+> 
+> The RiscPC machine is still there, my plan was to remove that
+> and some other platforms around this time. I sent a series[1]
+> last December, but we never merged the patches.
+> 
+> I need to send a rebased version. 
+> 
+>       Arnd
+> 
+> [1] https://lore.kernel.org/all/20241204102904.1863796-1-arnd@kernel.org/
 
-I wanted to share some results. I modified PostgreSQL (master) to use the proposed here msharefs patchset (v2) on top of linux-6.14.7 kernel as I suspected sharing PTEs might be helpful in some cases, especially with high process counts. Traditionally in PostgreSQL having process counts is an anti-pattern and it's not recommended (for various reasons) to have that many backends (process) running, but I was researching for the exact reasons why (there are plenty others too), but in short that's how I suspected dTLB misses, followed up on PTEs and finally arrived here: msharefs.
+Thank you!
 
-I've tried it on a couple scenarios and it always helps (+5% .. 40%) in artificial pgbench readonly measurements on any machine, but here I'm posting results:
-a. from some properly isolated legacy SMP box in homelab (4s32c64/4xNUMA nodes, Xeon 46xx, 128GB RAM)
-b. PostgreSQL's pgbench OLTP-like benchmark was used with -c $c -j 64 -S -T 60 -P 1
-c. PostgreSQLs shared_buffers(shared_memory)=32GB
-d. pgbench -i -s 2000 (~31GB, all used data was in shared memory, not in VFS cache, to avoid syscalls),
-e. no hugepages were used as msharefs seems to not support it yet (but Anthony already told me he's on it) 
-f. I've used cpupower with perf governor, D0 and no_turbo as well and data was prewarmed.
+Not that it will carry any weight, but please feel free to add:
 
-Again, having PostgreSQL with 8k or 16k processes is not the way to go, but it illustrates well that fork() model (1 client = 1 process) can really benefit from msharefs:
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-shared_memory_type=mmap (default on Linux is mmap(MAP_SHARED)+fork())
- c=8000 tps  = 143-150k (~4s to init all conns)
- c=16000 tps = 130-140k (~50s-70s! to init all conns! had to extend benchmark, lots of fork()!)
-
-shared_memory_type=msharefs (literally same as above, open()/fallocate()/ioctl()/mmap()+fork()):
- c=8000 tps  = ~189k (3s to init all conns)
- c=16000 tps = ~189k (6s to init all conns)
-
-That's 1.35x - 1.45x.
-
-Illustrative sample of 1 second of `perf stat -a -e ...` during those run with 16k processes:
-
-# mmap:
-#           time             counts unit events
-   190.223101118        15257144598      cycles
-   190.223101118        10485389437      instructions                     #    0.69  insn per cycle
-   190.223101118              34413      context-switches
-   190.223101118                703      cpu-migrations
-   190.223101118                  0      major-faults
-   190.223101118             256302      minor-faults
-   190.223101118         3922621887      dTLB-loads
-   190.223101118           12520660      dTLB-load-misses                 #    0.32% of all dTLB cache accesses
-   
-# msharefs:
-#           time             counts unit events
-   105.122916131        15256454170      cycles
-   105.122916131        10732582790      instructions                     #    0.70  insn per cycle
-   105.122916131              38420      context-switches
-   105.122916131               1125      cpu-migrations
-   105.122916131                  0      major-faults
-   105.122916131              34304      minor-faults
-   105.122916131         4143569524      dTLB-loads
-   105.122916131           12179260      dTLB-load-misses                 #    0.29% of all dTLB cache accesses 
-
-On smaller hardware and single socket there are also such gains even on the lower process counts, but the more process are running concurrently and accessing shared memory the bigger the performance boost. I hope this feedback is useful (so it's not only lowering memory use for PTEs, but also quite a nice perf. boost). I would like too to thank Anthony and Khalid for answering some initial questions outside mailing list.
-
-BTW I have not yet posted it to PostgreSQL main hacking mailing list, well... because there's no kernel in the first place to support that ;)
-
--J.
-
-p.s. I'm not subscribed to linux-mm, so please CC me.
+							Thanx, Paul
 
