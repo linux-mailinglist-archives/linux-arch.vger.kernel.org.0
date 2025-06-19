@@ -1,144 +1,150 @@
-Return-Path: <linux-arch+bounces-12408-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12409-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FF90AE0CBF
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 20:22:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56B96AE0CE7
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 20:27:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18C021C234FA
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 18:20:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD7D816A271
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 18:26:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5682F5491;
-	Thu, 19 Jun 2025 18:05:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B1A241C89;
+	Thu, 19 Jun 2025 18:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="GYUwGMt+"
+	dkim=pass (2048-bit key) header.d=tu-bs.de header.i=@tu-bs.de header.b="o/xAKfJ/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pmxout1.rz.tu-bs.de (pmxout1.rz.tu-bs.de [134.169.4.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC972F4A16
-	for <linux-arch@vger.kernel.org>; Thu, 19 Jun 2025 18:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3957030E85E;
+	Thu, 19 Jun 2025 18:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.169.4.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750356301; cv=none; b=lB7I+nnOg4qMQ8CkZTyqIlGjA/rsZ2ZyW5+rx3mPqPTWn4/zQZ2PVjw2+qK0da3t8LefZp7CtY2WGaCnOXzO7ng6bpQNwClrAoAV/+rMyPYYin/fUJoe/U4MXItuylcFtNCzjiedtFJE6kO3xF+7utV2mwY2ah53YVRBjsOlxKk=
+	t=1750357321; cv=none; b=kLW0fElX96Cykqy7Q5y1cr4whOBeFkjIOIo4XWT8/DRpvnvTWeItri8C/Rn+/OHkoPjcF1q8aSeYht6Cq0gxjAGpeqVY0AtXY62zYV75tZlqiLHJS/D0vt93tmrr168nC8ftwqtMwe2qtZ0o2mpJo6Ap/p5U5rx40zbG5hRgmig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750356301; c=relaxed/simple;
-	bh=1dJVx9uawlA9hJYDvC4nybtTSvTD1cO2bZ9M1c+EVuk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MvFzTLM670UkX0+A/SF0GGPsjdrukoI/wXIJKBE+lW4zTihzjKk/8DOA/Bbyu2AeBmMtAtAd8BaNY+TOtGsQZ+N/+cfolN1cfox62G/oDwHEIvtbyvxBqEMCdKDfpgLYFdPC8PyuwNNDD7JUMCQ+tzQnGPG4RUdg/8CWpHaO1JE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=GYUwGMt+; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6fad3400ea3so9976946d6.0
-        for <linux-arch@vger.kernel.org>; Thu, 19 Jun 2025 11:04:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1750356297; x=1750961097; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ju0rK1YrXezG8RMPatgIQGMIY6rdX0cs7akdNztgfu4=;
-        b=GYUwGMt+Me/R2P1+TrGCqwGFsiJmYOM240kgzncIKaBqh85tQJh2KwK4INZBUlLM0v
-         GYf/DgQMZEaSpBRhzk6jUIdvahCLK9PZOfI9xOl4VaAnHMeK7mrmEblsTAwrghk72j0k
-         HP8ZqQM8llTy9iTBykYLa5csHFj/3AJLaIDL+QsXRrWAuRMYdDVGcejlmWryKy3OoRoS
-         x+sbMxdpNrdgxxgwXbbcpbD01xyQfqMYSnV9z2TC+/ZnLkLEmqMMTC2T73wklHCNdKAr
-         9PlY1bDWrtaJBWum/87pmoK9ivqYCMgXLwfOb7H+jD30LFc7Mw1TVCyhEkdwET9x5bNq
-         RdTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750356297; x=1750961097;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ju0rK1YrXezG8RMPatgIQGMIY6rdX0cs7akdNztgfu4=;
-        b=B04yqqCo8t/a/L7jqLHqVcs+GktmGeU9KFKkroNWBHgiOG64x8zGn57zKK121FhjRI
-         qTsxr1RsUDig2J7nwvsDjFKfx+lkUnQoH8DxU8nlGPwhv1/bKjClCwTxMbNdWKTSqZUZ
-         I+d7jgAnAeViX2wwSLLAwvb6krXS8u3/ObrU1sDcnx3UCQmQelkRTvv+BEXR2JRGPZca
-         DDovisH6LEeUQ2P5AXigcH6PmB1YyFiEXLJ2XjH95+xSF3zANXihQXx200oRcIq+qs51
-         SWn03cL5ZijsoOaYTnsg+VJg6xaLO+HZ4NfRT40JzH2RRjG4HZI50kv0I0vyjSO4TlFk
-         AHpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVqnOsFlgvxG/tjSJagsPnPvUaWd0h8CbkcEgmsAmDJpHkmbzZStVz72CR8YJ5FS6pVms7ocTsy1vo8@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqsNqiGmjPgYZukgczX4XfyH4rEcDQ8oSklWawz/JNMpO18T1w
-	r0pyLC18JlUi2psqYgzOrU8T0YUVtB7/SaZ/xzo4bfd0Xsiu9vvp0td/bUUzab6q1w==
-X-Gm-Gg: ASbGncvgRNEUXoWLKUGZ8ObesiapLPwnJoezeA7+P0xOsFm2F1tsoKBIeDH07iBeflU
-	NKtzgrtEuj9LaRd+D8JfvJ0lod3rc60ax+5c2SgUo3ziWlJPfaqqrVrRXZEmgeiLZ+oZRkhhL2W
-	qYX/1xa0DdBz6X5RDaVL6hkywy8fOYmI6qDPC9/IJwBrcG2uLKSahbgWCuERU/xo4D37csoaNxi
-	WVKE2YRBhjHAEV2vilh4qibm6Yqbj3t679cp6Z39HCuD+tGrh0oQvcj368yT8MDKcqAQA3mUtJK
-	qWElpFHdWWubzuC/wcBL27Bp1+Bq/15WdZEi8ytkxyMw1zh8JYB34iL9uaLQtBk=
-X-Google-Smtp-Source: AGHT+IHYQPCClOz6CKzGdC08frCU41q/Xam4KfyuktRr18N70eT9mCmlX3M2z1ua5tmNIo2PbaShTw==
-X-Received: by 2002:a05:6214:4598:b0:6f8:a978:d46 with SMTP id 6a1803df08f44-6fd0a49c0e7mr3871256d6.19.1750356297608;
-        Thu, 19 Jun 2025 11:04:57 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::9ca8])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd09544e75sm2440186d6.70.2025.06.19.11.04.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jun 2025 11:04:57 -0700 (PDT)
-Date: Thu, 19 Jun 2025 14:04:52 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, lkmm@lists.linux.dev,
-	linux-arch@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v5 03/10] rust: sync: atomic: Add ordering annotation
- types
-Message-ID: <d84ae4de-3fde-4097-a42b-9dec0902f27d@rowland.harvard.edu>
-References: <20250618164934.19817-1-boqun.feng@gmail.com>
- <20250618164934.19817-4-boqun.feng@gmail.com>
- <20250619103155.GD1613376@noisy.programming.kicks-ass.net>
- <aFQQuf44uovVNFCV@Mac.home>
- <20250619143214.GJ1613376@noisy.programming.kicks-ass.net>
- <aFQmDoRSEmUuPIQG@Mac.home>
+	s=arc-20240116; t=1750357321; c=relaxed/simple;
+	bh=CkNoFT5ffgvUGTHoy9QzeulxFQ+RkKqe2v/CRKEUFy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=uHikV9IDKu++jNEDsk60ER2XzwLJ/QW9b7bv6jKTjIjUJ/UxZ3UjC0MU0KOCshKp+jPBxm+8C1zUxVLPVPox7GN/0Zi0bd3tjvWS0HFJo3Zv3JCnX0t43Z2mW//ne5rSc1Q7SPy6MdGTFrKPY2EyR/bUg34KsmTyEP3Y3qLCffo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-bs.de; spf=pass smtp.mailfrom=tu-braunschweig.de; dkim=pass (2048-bit key) header.d=tu-bs.de header.i=@tu-bs.de header.b=o/xAKfJ/; arc=none smtp.client-ip=134.169.4.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-bs.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-braunschweig.de
+Received: from Hermes02.ad.tu-bs.de (hermes02.rz.tu-bs.de [134.169.4.130])
+	by pmxout1.rz.tu-bs.de (Postfix) with ESMTPS id 24C294E07C4;
+	Thu, 19 Jun 2025 20:21:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-bs.de;
+	s=exchange_neu; t=1750357317;
+	bh=CkNoFT5ffgvUGTHoy9QzeulxFQ+RkKqe2v/CRKEUFy8=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+	b=o/xAKfJ//VE0Fr/dnumBKDrb5x/N7ISP9f0OUQksx3Fq4OE5mq6Bls0HhCJ3b2K+2
+	 4soMApCbSt620DL+ovmwg2j0ugPwJ5ydQkVqWK5lXPr+LbHzAukjbFbnTV3jb34jXR
+	 O8Z5+ZY20SGNHsQg9DIxyMULa92S4fC6SaPo12dnOZFTQgqtk41V/UiNzaFVm1WLoR
+	 iQu5LRztBuJzkEf9c9u8mh1y2cbVJAI3Lzz/fgSElUB1YbMSw26oecT04HkJeguUx0
+	 BYuf0hzz6oIlNadh289J72+G01VjXHmrjoXQp5wy1JAU/x48vgYm5A7yBKNMqJfKVj
+	 TUlrQ72xQDoAw==
+Received: from [192.168.178.23] (134.169.9.110) by Hermes02.ad.tu-bs.de
+ (134.169.4.130) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 19 Jun
+ 2025 20:21:56 +0200
+Message-ID: <7097cd74-45b5-4092-b96e-b16769fa68f4@tu-bs.de>
+Date: Thu, 19 Jun 2025 20:21:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aFQmDoRSEmUuPIQG@Mac.home>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] Potential problem in qspinlock due to mixed-size accesses
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Andrea Parri <parri.andrea@gmail.com>, Peter Zijlstra
+	<peterz@infradead.org>, Will Deacon <will@kernel.org>, Boqun Feng
+	<boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>, David Howells
+	<dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget
+	<luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira
+ Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel
+ Fernandes <joelagnelf@nvidia.com>, <linux-kernel@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <lkmm@lists.linux.dev>,
+	<hernan.poncedeleon@huaweicloud.com>, <jonas.oberhauser@huaweicloud.com>,
+	"r.maseli@tu-bs.de" <r.maseli@tu-bs.de>
+References: <cb83e3e4-9e22-4457-bf61-5614cc4396ad@tu-bs.de>
+ <20250613075501.GI2273038@noisy.programming.kicks-ass.net>
+ <aEwHufdehlQnBX7g@andrea> <9264df13-36db-4b25-b2c4-7a9701df2f4d@tu-bs.de>
+ <aE-3_mJPjea62anv@andrea>
+ <357b3147-22e0-4081-a9ac-524b65251d62@rowland.harvard.edu>
+ <aFF3NSJD6PBMAYGY@andrea> <595209ed-2074-46da-8f57-be276c2e383b@tu-bs.de>
+ <6ac81900-873e-415e-b5b2-96e9f7689468@rowland.harvard.edu>
+ <c97665c6-2d8b-49ae-acc5-be5be04f0093@tu-bs.de>
+ <a0887a91-468c-43ff-872e-c4c4e23b26dd@rowland.harvard.edu>
+Content-Language: en-US
+From: Thomas Haas <t.haas@tu-bs.de>
+In-Reply-To: <a0887a91-468c-43ff-872e-c4c4e23b26dd@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: Hermes11.ad.tu-bs.de (134.169.4.139) To
+ Hermes02.ad.tu-bs.de (134.169.4.130)
 
-On Thu, Jun 19, 2025 at 08:00:30AM -0700, Boqun Feng wrote:
-> Make sense, so something like this in the model should work:
-> 
-> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-> index d7e7bf13c831..90cb6db6e335 100644
-> --- a/tools/memory-model/linux-kernel.cat
-> +++ b/tools/memory-model/linux-kernel.cat
-> @@ -27,7 +27,7 @@ include "lock.cat"
->  (* Release Acquire *)
->  let acq-po = [Acquire] ; po ; [M]
->  let po-rel = [M] ; po ; [Release]
-> -let po-unlock-lock-po = po ; [UL] ; (po|rf) ; [LKR] ; po
-> +let po-unlock-lock-po = po ; (([UL] ; (po|rf) ; [LKR]) | ([Release]; (po;rf); [Acquire & RMW])) ; po
-> 
->  (* Fences *)
->  let R4rmb = R \ Noreturn       (* Reads for which rmb works *)
-> 
-> 
-> although I'm not sure whether there will be actual users that use this
-> ordering.
 
-If we do end up making a change like this then we should also start 
-keeping careful track of the parts of the LKMM that are not justified by 
-the operational model (and vice versa), perhaps putting something about 
-them into the documentation.  As far as I can remember, 
-po-unlock-lock-po is the only current example, but my memory isn't 
-always the greatest -- just one reason why it would be good to have 
-these things written down in an organized manner.
 
-Alan
+On 19.06.25 19:56, Alan Stern wrote:
+> On Thu, Jun 19, 2025 at 04:59:38PM +0200, Thomas Haas wrote:
+>>
+>>
+>> On 19.06.25 16:32, Alan Stern wrote:
+>>> On Thu, Jun 19, 2025 at 04:27:56PM +0200, Thomas Haas wrote:
+>>>> I support this endeavor, but from the Dartagnan side :).
+>>>> We already support MSA in real C/Linux code and so extending our supported
+>>>> Litmus fragment to MSA does not sound too hard to me.
+>>>> We are just missing a LKMM cat model that supports MSA.
+>>>
+>>> To me, it doesn't feel all that easy.  I'm not even sure where to start
+>>> changing the LKMM.\
+>>>
+>>> Probably the best way to keep things organized would be to begin with
+>>> changes to the informal operational model and then figure out how to
+>>> formalize them.  But what changes are needed to the operational model?
+>>>
+>>> Alan
+>>
+>> Of course, the difficult part is to get the model right. Maybe I shouldn't
+>> have said that we are "just" missing the model :).
+>> I'm only saying that we already have some tooling to validate changes to the
+>> formal model.
+>>
+>> I think it makes sense to first play around with the tooling and changes to
+>> the formal model to just get a feeling of what can go wrong and what needs
+>> to go right. Then it might become more clear on how the informal operational
+>> model needs to change.
+>>
+>> A good starting point might be to lift the existing ARM8 MSA litmus tests to
+>> corresponding C/LKMM litmus tests and go from there.
+>> If the informal operational model fails to explain them, then it needs to
+>> change. This goes only one way though: if ARM permits a behavior then so
+>> should LKMM. If ARM does not, then it is not so clear if LKMM should or not.
+> 
+> Okay, that seems reasonable.
+> 
+> BTW, I don't want to disagree with what you wrote ... but doesn't your
+> last paragraph contradict the paragraph before it?  Is starting with the
+> various MSA litmus tests and seeing how the operational model fails to
+> explain them not the opposite of first playing around with the tooling
+> and changes to the formal model?
+> 
+> Alan
+
+I would rather see the approaches as complementary.
+If you lift ARM tests to LKMM tests, you can use them to reason about 
+both the informal operational model and the formal axiomatic model.
+I mean, there are going to be litmus tests that show behavior that 
+should reasonably be forbidden on all platforms, and trying to adapt the 
+formal LKMM to also forbid them seems like a good exercise.
+Even if it turns out that the changes are unsound, I think you will end 
+up with better understanding, no?
+
+Either way, I'm just suggesting possible ways to start but I myself 
+don't have the time (right now) to get this project going.
+
+Thomas
 
