@@ -1,80 +1,104 @@
-Return-Path: <linux-arch+bounces-12399-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12400-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A09C1AE08CC
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 16:32:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB6D2AE08CE
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 16:32:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 484653B04E5
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 14:32:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96A1E168E31
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 14:32:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526831DB92C;
-	Thu, 19 Jun 2025 14:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3455B1EE7D5;
+	Thu, 19 Jun 2025 14:32:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ssaMiAxK"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="GvXQchXE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7277B2248AB;
-	Thu, 19 Jun 2025 14:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC4618E02A
+	for <linux-arch@vger.kernel.org>; Thu, 19 Jun 2025 14:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750343544; cv=none; b=fI7Osx/DD0ITvlQsjrb0c4s+RoLw7kSvcDdya87doDSaL7tte4m74swEC8gLIbDyS/IbexxBZvhIT8Gl54aLTdXKie2lpNYn2H1Cj9RKgMmElrxH+uPyjYZw15pAIArx0SO+sd8ekeZMMdBf5orRfVBwy3KeKLoZ1KRRHQwR/hs=
+	t=1750343574; cv=none; b=B5IvEz8xZ9AjIUmkPGwtLA2OhO2X3AqnnSOi+45dI+9bi+62cEPXftPl1tvQqXfVhH62Kxm54Tg0vTrTqmOYtPmu8dTlHVGRF39kxEl56/USoaGp0/LSG7XlRL4bICWL8wjM2cRGxr6/PtlnA7L2NY+oLDT/2o+O+ePnkaWpRu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750343544; c=relaxed/simple;
-	bh=+lGGauceAgecoodgkOWaPseFJ5G5VSZiH3HBHzKffqs=;
+	s=arc-20240116; t=1750343574; c=relaxed/simple;
+	bh=f9InoU/zIyvqU5XW8HXwiQiJTHhL6rglkSPoRNyO+GQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DHKopyth0qd3VLoeU3n+n4Jlq+81/H6KWr8UY6YyhrYdRyjglG103QrRyL8rfBXpg3S5BHYXNpil8M/VM1XJ33lTSt4ib5cF2SXcRMwWZUqqrPXS5fSd0ne9pqMYRyk1VPkaoT0ubx/tdKJAhQvXlbA2MCm7fx6ZzW+ilntIw+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ssaMiAxK; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=FxYqUBO/i9JK9DafKPTMkfssky1LNkMmgnzIrT+GOPc=; b=ssaMiAxKNfkamTbRQCOoy6KJpJ
-	HG9kLWD8ejmLYMWlz8h3FSOED33y9V5p7RdZJdiggUEORapwHvJ6lnYZA+qnb74QMoAZKJQ/+xixW
-	bvddgrrO+A8zgN7p/d/fkjNi8sYM0UrEVcq0DzvOx1f4BIaUBafYgzsdt7VO4Tt4B8PrKiMPgnYrU
-	3fxE2eVsdC3VOCuacQGMIscIoSgS/571vW4MkdVLTg0/pOL4RJ/Pl3Gnp9TzxC115J8J0cvt/hGlU
-	FH7TvAoWwwkOWvXduJ4OY889nriBJpvDe0uBR4EOKygrkr4SnC6DVsY3OVGaP+jIfJt6vqrpQKa14
-	CB/YZQuQ==;
-Received: from 2001-1c00-8d82-d000-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d82:d000:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uSGJM-000000095gu-0evK;
-	Thu, 19 Jun 2025 14:32:16 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0902D30890E; Thu, 19 Jun 2025 16:32:15 +0200 (CEST)
-Date: Thu, 19 Jun 2025 16:32:14 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-	Mitchell Levy <levymitchell0@gmail.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=X9HakoLgDp+i6rvwq5vTkdXuP9V/MvUA1SbZbW83189o98xFJPsqTemYXKUGvteYVsPmFIxPG/FEttru2sAtrOxgJa9w5opImzkJVdrD22xSWvQHxRh0zmy0UfGR3BREYaugRpCDOE4uiV1/qf5NrqC14iwE5U9BUVpXcccTadM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=GvXQchXE; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6facc3b9559so13571286d6.0
+        for <linux-arch@vger.kernel.org>; Thu, 19 Jun 2025 07:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1750343571; x=1750948371; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FOkFLnrJzZMHzNUSh+Y/TNE7FFzC3Os6Y5olMIbxKDs=;
+        b=GvXQchXEl3AWSvPRrw9kXJ5LSbai5gl1iJhKUTYSPDFknEu6VwyoY8h95pL20AuqNf
+         q48Rh2R3Wd2qq+OL5Gr4ePzvQzygkDd2piJ2NygAy0j5gNDXULMQSEYYrZn2t+hzTtVA
+         jJSaW184dqfUvXzz0nQzQAjsySZ3fKDwskAxD2Sq16E/Za5iTDrx4ZiILwOGoVtkub6g
+         2flxoGZnIcwVBXSkafstycMYf2P9A05Ah4a5ESeBE9wsXWC1MAGsDnPK10GwchPtKVwu
+         fADkoVMcCZUdrpCoZYwilXSXTawvFh6MnqnFRwFkTsj9t6fR/uk2cYRlQZD4jIhtJuhK
+         gG+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750343571; x=1750948371;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FOkFLnrJzZMHzNUSh+Y/TNE7FFzC3Os6Y5olMIbxKDs=;
+        b=mBvTiONZfpsSe30NUi2GKtlUyk21qpf0f1IQRAH5GEtfxhptmsWaT2m/4WwL+xw0g7
+         zNSEy5EIro49J3Umr/Ph9jSP26p8n7yB1nvxoDzblMoK18uLqtWS7Vm1IHl8IiGA+8gK
+         xdD5s0ERGVDILusritiXZeZdL2Y87zbk4LvuQ2Rrk3Le9kQAPODnE8lFGiaBcRBjF0ex
+         gPG+/9AyHxrz/4658ZXlggAPMPETuicsYz8GvqZYJpm+t/a3XUIo6aiF4IP7NfZQFKgY
+         cQ8tKy9z4+/Vwg7trCyCUrTxDV4w+K6UZfrC0ftlzM0+6y9s20nuTw8q0QZ6BZQYXdOJ
+         6BHA==
+X-Forwarded-Encrypted: i=1; AJvYcCWET3wv+r2M71S043U2qpAD3PouwRS9XXyAL20tN48Yt8xFarydeQ59UdjJHzARQkLtK1rHXu9xmLen@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMaRf7f+cHuBIa77Zf8eLXl6tSi0JHwDDLuz0iw28quN4QiiXX
+	qTa7hy76SfRbV6mZ1Dpmfww98HenA6yEAz7azgwMNY8HK+kjKnhsllWi2D9XuArLWw==
+X-Gm-Gg: ASbGncu6T1zP3I+OCogKvffQKe6eree7uzTE+MtFwpcNrAly2AndyJNRcnBxcQOV6sH
+	t2U4WY5KzibkOXKZNe0AsuG6FSxYkg36/yaxiAyk/T4JVXFqDlyDGF8eNuK+ZSi1PjA/WYsggUu
+	KGcYScdNXvWoOG7VRm9SjUgLO4Brif9ifvlwtof3I2MCR5qQqXnZHYOwZmFlkKzsS6IsLLKclL+
+	MueQ8MlZr4VwnSc0eTVA4hrAGg9KnYFpCB2XXgqT1SRnmRlqQemnma3NQkaEOuyUvESIxcusJaO
+	3z4/nEmJnSHQ2wLgbGoddoz//sTLoM0+M++zMgBGPCIwpEi38WyzjV5UKAVmOW4=
+X-Google-Smtp-Source: AGHT+IHxQnCf/LYNTmc/z8v+E308ymSUGqUyJ6EPuGPk72H+rJoxyGsRQCNrsDtAHmaoQiC2Ino8aA==
+X-Received: by 2002:a05:6214:19c2:b0:6e8:98a1:3694 with SMTP id 6a1803df08f44-6fb47772defmr361361336d6.8.1750343571359;
+        Thu, 19 Jun 2025 07:32:51 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::9ca8])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd095ca02bsm243696d6.125.2025.06.19.07.32.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 07:32:50 -0700 (PDT)
+Date: Thu, 19 Jun 2025 10:32:47 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Thomas Haas <t.haas@tu-bs.de>
+Cc: Andrea Parri <parri.andrea@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v5 03/10] rust: sync: atomic: Add ordering annotation
- types
-Message-ID: <20250619143214.GJ1613376@noisy.programming.kicks-ass.net>
-References: <20250618164934.19817-1-boqun.feng@gmail.com>
- <20250618164934.19817-4-boqun.feng@gmail.com>
- <20250619103155.GD1613376@noisy.programming.kicks-ass.net>
- <aFQQuf44uovVNFCV@Mac.home>
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev, hernan.poncedeleon@huaweicloud.com,
+	jonas.oberhauser@huaweicloud.com,
+	"r.maseli@tu-bs.de" <r.maseli@tu-bs.de>
+Subject: Re: [RFC] Potential problem in qspinlock due to mixed-size accesses
+Message-ID: <6ac81900-873e-415e-b5b2-96e9f7689468@rowland.harvard.edu>
+References: <cb83e3e4-9e22-4457-bf61-5614cc4396ad@tu-bs.de>
+ <20250613075501.GI2273038@noisy.programming.kicks-ass.net>
+ <aEwHufdehlQnBX7g@andrea>
+ <9264df13-36db-4b25-b2c4-7a9701df2f4d@tu-bs.de>
+ <aE-3_mJPjea62anv@andrea>
+ <357b3147-22e0-4081-a9ac-524b65251d62@rowland.harvard.edu>
+ <aFF3NSJD6PBMAYGY@andrea>
+ <595209ed-2074-46da-8f57-be276c2e383b@tu-bs.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,49 +107,20 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aFQQuf44uovVNFCV@Mac.home>
+In-Reply-To: <595209ed-2074-46da-8f57-be276c2e383b@tu-bs.de>
 
-On Thu, Jun 19, 2025 at 06:29:29AM -0700, Boqun Feng wrote:
-> On Thu, Jun 19, 2025 at 12:31:55PM +0200, Peter Zijlstra wrote:
-> > On Wed, Jun 18, 2025 at 09:49:27AM -0700, Boqun Feng wrote:
-> > 
-> > > +//! Memory orderings.
-> > > +//!
-> > > +//! The semantics of these orderings follows the [`LKMM`] definitions and rules.
-> > > +//!
-> > > +//! - [`Acquire`] and [`Release`] are similar to their counterpart in Rust memory model.
-> > 
-> > So I've no clue what the Rust memory model states, and I'm assuming
-> > it is very similar to the C11 model. I have also forgotten what LKMM
-> > states :/
-> > 
-> > Do they all agree on what RELEASE+ACQUIRE makes?
-> > 
-> 
-> I think the question is irrelevant here, because we are implementing
-> LKMM atomics in Rust using primitives from C, so no C11/Rust memory
-> model in the picture for kernel Rust.
+On Thu, Jun 19, 2025 at 04:27:56PM +0200, Thomas Haas wrote:
+> I support this endeavor, but from the Dartagnan side :).
+> We already support MSA in real C/Linux code and so extending our supported
+> Litmus fragment to MSA does not sound too hard to me.
+> We are just missing a LKMM cat model that supports MSA.
 
-The question is relevant in so far that the comment refers to them; and
-if their behaviour is different in any way, this is confusing.
+To me, it doesn't feel all that easy.  I'm not even sure where to start 
+changing the LKMM.\
 
-> But I think they do. I assume you mostly ask whether RELEASE(a) +
-> ACQUIRE(b) (i.e. release and acquire on different variables) makes a TSO
-> barrier [1]? We don't make it a TSO barrier in LKMM either (only
-> unlock(a)+lock(b) is a TSO barrier) and neither does C11/Rust memory
-> model.
-> 
-> [1]: https://lore.kernel.org/lkml/20211202005053.3131071-1-paulmck@kernel.org/
+Probably the best way to keep things organized would be to begin with 
+changes to the informal operational model and then figure out how to 
+formalize them.  But what changes are needed to the operational model?
 
-Right, that!
-
-So given we build locks from atomics, this has to come from somewhere.
-
-The simplest lock -- TAS -- is: rmw.acquire + store.release.
-
-So while plain store.release + load.acquire might not make TSO (although
-IIRC ARM added variants that do just that in an effort to aid x86
-emulation); store.release + rmw.acquire must, otherwise we cannot
-satisfy that unlock+lock.
-
+Alan
 
