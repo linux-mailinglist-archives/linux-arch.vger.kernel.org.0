@@ -1,155 +1,198 @@
-Return-Path: <linux-arch+bounces-12395-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12396-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 315D5AE05DA
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 14:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 34003AE074A
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 15:32:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E22FF16836F
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 12:30:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D17204A546A
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 13:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E1F23D2A5;
-	Thu, 19 Jun 2025 12:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F2A26A095;
+	Thu, 19 Jun 2025 13:29:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="swYDkP7J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FJKZWhlq"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A91F22C35D;
-	Thu, 19 Jun 2025 12:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA046264602;
+	Thu, 19 Jun 2025 13:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750336209; cv=none; b=XxHVrAMQbXQ/THVSQA/CIbr+Q3OakkLvQnjzd0MyN25mSDmHs6D+4TSheB4XkcUSE2ie1hpwNAWWmX+hxQZMux2ZCJjvX8fscpWbmlArLwKw4myKbQDgF5F8G3d9QOpJ9aFAdnPmUHTP0SnyfSlXPRqmYK86fwyZBKVfka7Ni48=
+	t=1750339775; cv=none; b=MDCo1JVDBWzTL12S5GAGhGvlh0k+mF+5GboAJiT31qpJrtqw+DzF1VERUF350Mhdo8W1AQWarzon9C5QkxexIEGT8GBBdPGczLlDngMVZfb82XOot+sc8KobZD8DBFfEsA1G7SgZfa7TvFREK3zsu6OlC5rFMhKZV9/IbyyAi8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750336209; c=relaxed/simple;
-	bh=+tfprZLkDpyF3dYneGjV6I0yjtC8Y9weI88akNDjiLA=;
+	s=arc-20240116; t=1750339775; c=relaxed/simple;
+	bh=k1rycoin016Y5oOCyiCPALghuj+7+2zI7ETOOd/al+c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D/E+ktufNkfMPyUJUG0vGjiutXC3iDAQarSrD3RnWb3cmYg9Q2mUNTHG/Kr3sQfpyLkvRB7V8Yiq+NZ4Z4p33zvORK55Upl5i/+rDTeQxSMGGhutledxTqHVbI62eGN8aik8AJgxRG4ElU1pnTb24OcrcWGE4ZpiIDnHUQ7k/s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=swYDkP7J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E416C4CEEA;
-	Thu, 19 Jun 2025 12:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750336209;
-	bh=+tfprZLkDpyF3dYneGjV6I0yjtC8Y9weI88akNDjiLA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=swYDkP7J++md93+X4jTkf568pg2I0xO/GqQE5qbjypL0+uysWbsp4M6uZkxKqXqXF
-	 eEIMnRTIDt95jmJsUBjvWm21wjqK+KlgBMq5vG+6mpgPH//9LSgx4EUPr3LZKZLzb+
-	 jgdhCQEXXLtmudxUWgZi03+w3Z6GuGfgfSlZvmoOB+SN3DEveXwUZNYs1Zs95RlqqE
-	 pK/00CoEt/112GBH0NijKXUNsp/RKAQzr1B0gh4uofJhe61sJ4k7temJ85GI69NDKf
-	 RcTQ44R/zvnBjOdywSiZ2baXULQj7Qi+oZvD+moSGMI6mypzfWwMvW44YSu9/OuLNU
-	 Yr/6zb1KFiovg==
-Date: Thu, 19 Jun 2025 13:30:02 +0100
-From: Will Deacon <will@kernel.org>
-To: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-Cc: Thomas Haas <t.haas@tu-bs.de>, Peter Zijlstra <peterz@infradead.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=UN6CzcVFZbhwsjJNhorFFGFTQoiCAMalJ07IQ6uPNCj7NsT9jAx/tk0YUGFuVzEkwO6gPLXh9lXx+upfDhPLbBSLTTeZwTL2XtahnKxZsxA+8qdFSMGuZot88X5zjhpcAsG0eAsDq1dgPDuKNP64xLYozMdGtV0HpmhcbByidhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FJKZWhlq; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7d21f21baf7so97237085a.0;
+        Thu, 19 Jun 2025 06:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750339773; x=1750944573; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OE6+E3mACThLS+PEtrJkYrlgdi95WFIgFRjgenTQrJQ=;
+        b=FJKZWhlqfgmbrPkfxAp4k1X1yBPhp0mkfee7jQY6FfBT+ZgUw2/25LKlIKwVG+5Rij
+         /7idYX3D39MtwPhToYdn6zQWnwA++boo/sUtACd5D41zvC4calfcgmW3zfemcLxPbBuL
+         gRe23Ph5+ZsFMDWdmRLktAmKdChIC8HofxkmkBqHjJ1Wj94TwD+XKybxkOHPrhPZHsp4
+         /5gpR4eoGfB+0BQ74NENngrmGT8N/46yO+utmnFdAT8r6NkTS/ADXupPS2aeNF+Psz1O
+         qqmZmgxd6h3YGrXzZeweHyqntjzgjoMTt6KhPhXHNVrZdccUWUOfGL6PG3yPh7bCzLLF
+         Op6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750339773; x=1750944573;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OE6+E3mACThLS+PEtrJkYrlgdi95WFIgFRjgenTQrJQ=;
+        b=XiDyrKOU+lKVGygPetwi2i1zaZKsd16m+ki4+C1N+y5B9wwC+9i4JFuhyMPR5AD15Z
+         NSs/Zt3GyxIul6sHIl8SiGAOK6p26nDUccV4ql5yplObLyAOHT6liOLuaoWU07TqazSJ
+         OhOrWg4XJpVA545+TWtQw+4y8Yma0aLPtXbWHr+CvsQF5cFeBHvgXV+YSlswlnifswTb
+         uK94Hpqy1PbFMyHMoPAZKZUccDsSooMtMwMgsuwhRIcDMglIuk/aUukXkHXQBhFW5Hg7
+         2trBHL8UEhNKfhsNT0LJr8xuGFiIoqqTFPGD3+sfSLK8yH9EroePuB1fpJhM8sbJ7U/3
+         FkOw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1/1+oqBLLa7AjkQXGFaFkLPE1KaUjJWAHNunuQsRXQNXFpU+x7NyJK7bhQOnJZw8Uboom5zBWhdkw@vger.kernel.org, AJvYcCVQDFgJoRI6HdnPaznOlWUyUKcbsEOrwsKcKwP830BxbeAIvblTeRyJfduhFxYRPXdyCCprsf9psQocxTu9CX8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuDLfcYgNZj9edLzdO9M+9Vygu0C2akV+aIcwBCZY7KmRvGZ8n
+	JDngzdc4ghEqgnysKlSOwbUS5+JTGXEuehu8LYjLbkPEg1hpGL8Nadfg
+X-Gm-Gg: ASbGncvboxXFPzGAruDvb82LVjL4yWSGKDFvqmLsefCb1WY9kfVomyFrAnQzzE7NFX7
+	wX8HUEuaWGH1QBWe6YQE/+WzIGwA0DscVWu8k+9GVUu0yD5DRVx/pMsc7mxwH1b2LPlRR7eXhCe
+	+e6ZhwwDuQwF7x+YNfqNGHx1L0lz1AGa56Hcha9C2VYjpTl2clxmphVSey9GHTKUxP851VIvvzS
+	amKjaJK8pSaMWZQwg6qRUtM2M0XhP7hZAyx3dpw7r3RBLbj1t1/9KkZ4dyOc2JshKpgMxrbeL8K
+	2kevAfK7u8DcecxJONWXslZ0rhFMfArK1y5xwVl8drPxdKRKFuuza6NBvXGSuJvmFqYYTqSVKjm
+	xWoKfw++dhL2JPbRxakoe8QgJg7Kk94y4tfvm/bIsr8RN3pSoaKCm
+X-Google-Smtp-Source: AGHT+IG0jYJUV5aviMjD5HPm1vyOkmeugKyt/Y/JLGwulOYBKRujCGnV7nb/0X/gOg3ydiOk3qM+4w==
+X-Received: by 2002:a05:620a:25d4:b0:7c5:49b7:237c with SMTP id af79cd13be357-7d3c6cdc704mr3070557685a.27.1750339772721;
+        Thu, 19 Jun 2025 06:29:32 -0700 (PDT)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8eaca67sm878292685a.59.2025.06.19.06.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jun 2025 06:29:32 -0700 (PDT)
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 8C48E1200043;
+	Thu, 19 Jun 2025 09:29:31 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-11.internal (MEProxy); Thu, 19 Jun 2025 09:29:31 -0400
+X-ME-Sender: <xms:uxBUaEqPUZEiRlASJATU1Thqs6yZzEn6bBgVZVqb8R7RM8Va89_nbg>
+    <xme:uxBUaKqapLLmIlE2DtBf1RV3k19__mwd5LakfACLIaHc3sho5E-3eDQhjKqIibwoH
+    w3tj7xk4SpQydfqtA>
+X-ME-Received: <xmr:uxBUaJPuIusecdbUoejcPLwLV3Z46HjV2tfDgmJdBl2-kKEV7NqS3HnjkA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdehieegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgv
+    nhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrh
+    hnpefhtedvgfdtueekvdekieetieetjeeihedvteehuddujedvkedtkeefgedvvdehtden
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhs
+    ohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnh
+    hgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopedv
+    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgrug
+    gvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhfohhrqdhlihhnuhigsehvghgvrh
+    drkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhkmhhmsehlihhsthhsrdhlihhnuhig
+    rdguvghvpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrd
+    horhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    rghlvgigrdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopehgrghrhiesgh
+    grrhihghhuohdrnhgvthdprhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothhonhhm
+    rghilhdrtghomh
+X-ME-Proxy: <xmx:uxBUaL4Sny6CKfAJbw3TXbpu_xWIczu0NcHpy51Pk3tLtVfw0N4gmQ>
+    <xmx:uxBUaD5z_QuETSR3iz-WSduY2Km4GIBr8L7BeOXkyhPGTWrBK2zC1g>
+    <xmx:uxBUaLhhglI3TRF6mDD2QS_Xt9n7uSTxJ4QWl6cqXGw2z_jZfPsSkg>
+    <xmx:uxBUaN58jF1LvA8Y1S-5vlU9PAus-2S7YH2ForbAzjZ4hx5GdawtuQ>
+    <xmx:uxBUaGJrWbYNrwuBbR4-Wo_Um4vBAqtx5rtzP1ZeXRjmQ4Sw0O5kA95q>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 Jun 2025 09:29:31 -0400 (EDT)
+Date: Thu, 19 Jun 2025 06:29:29 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+	Mitchell Levy <levymitchell0@gmail.com>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	lkmm@lists.linux.dev, jonas.oberhauser@huaweicloud.com,
-	"r.maseli@tu-bs.de" <r.maseli@tu-bs.de>
-Subject: Re: [RFC] Potential problem in qspinlock due to mixed-size accesses
-Message-ID: <20250619123002.GC21372@willie-the-truck>
-References: <cb83e3e4-9e22-4457-bf61-5614cc4396ad@tu-bs.de>
- <20250613075501.GI2273038@noisy.programming.kicks-ass.net>
- <20250616142347.GA17781@willie-the-truck>
- <d66d0351-b523-40da-ae47-8b06f37bf3b6@tu-bs.de>
- <2b11f09d-b938-4a8e-8c3a-c39b6fea2b21@huaweicloud.com>
- <20250617141704.GB19021@willie-the-truck>
- <7a20b873-3c26-4a52-b118-c816ede7298d@tu-bs.de>
- <218abf15-b4ed-4d13-9541-aab975bd3835@huaweicloud.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v5 03/10] rust: sync: atomic: Add ordering annotation
+ types
+Message-ID: <aFQQuf44uovVNFCV@Mac.home>
+References: <20250618164934.19817-1-boqun.feng@gmail.com>
+ <20250618164934.19817-4-boqun.feng@gmail.com>
+ <20250619103155.GD1613376@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <218abf15-b4ed-4d13-9541-aab975bd3835@huaweicloud.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20250619103155.GD1613376@noisy.programming.kicks-ass.net>
 
-On Tue, Jun 17, 2025 at 09:00:30PM +0200, Hernan Ponce de Leon wrote:
-> On 6/17/2025 4:23 PM, Thomas Haas wrote:
-> > 
-> > 
-> > On 17.06.25 16:17, Will Deacon wrote:
-> > > On Tue, Jun 17, 2025 at 10:42:04AM +0200, Hernan Ponce de Leon wrote:
-> > > > On 6/17/2025 8:19 AM, Thomas Haas wrote:
-> > > > > On 16.06.25 16:23, Will Deacon wrote:
-> > > > > > I'm half inclined to think that the Arm memory model
-> > > > > > should be tightened
-> > > > > > here; I can raise that with Arm and see what they say.
-> > > > > > 
-> > > > > > Although the cited paper does give examples of store-forwarding from a
-> > > > > > narrow store to a wider load, the case in qspinlock is further
-> > > > > > constrained by having the store come from an atomic rmw and the load
-> > > > > > having acquire semantics. Setting aside the MSA part,
-> > > > > > that specific case
-> > > > > > _is_ ordered in the Arm memory model (and C++ release
-> > > > > > sequences rely on
-> > > > > > it iirc), so it's fair to say that Arm CPUs don't permit
-> > > > > > forwarding from
-> > > > > > an atomic rmw to an acquire load.
-> > > > > > 
-> > > > > > Given that, I don't see how this is going to occur in practice.
-> > > > > 
-> > > > > You are probably right. The ARM model's atomic-ordered-before relation
-> > > > > 
-> > > > >        let aob = rmw | [range(rmw)]; lrs; [A | Q]
-> > > > > 
-> > > > > clearly orders the rmw-store with subsequent acquire loads
-> > > > > (lrs = local-
-> > > > > read-successor, A = acquire).
-> > > > > If we treat this relation (at least the second part) as a "global
-> > > > > ordering" and extend it by "si" (same-instruction), then the
-> > > > > problematic
-> > > > > reordering under MSA should be gone.
-> > > > > I quickly ran Dartagnan on the MSA litmus tests with this change to the
-> > > > > ARM model and all the tests still pass.
-> > > > 
-> > > > Even with this change I still get violations (both safety and
-> > > > termination)
-> > > > for qspinlock with dartagnan.
-> > > 
-> > > Please can you be more specific about the problems you see?
-> > 
-> > I talked to Hernán personally and it turned out that he used the generic
-> > implementation of smp_cond_acquire (not sure if the name is correct)
-> > which uses a relaxed load followed by a barrier. In that case, replacing
-> > aob by aob;si does not change anything.
-> > Indeed, even in the reported problem we used the generic implementation
-> > (I was unaware of this), though it is easy to check that changing the
-> > relaxed load to acquire does not give sufficient orderings.
+On Thu, Jun 19, 2025 at 12:31:55PM +0200, Peter Zijlstra wrote:
+> On Wed, Jun 18, 2025 at 09:49:27AM -0700, Boqun Feng wrote:
 > 
-> Yes, my bad. I was using the generic header rather than the aarch64 specific
-> one and then the changes to the model were having not effect (as they
-> should).
+> > +//! Memory orderings.
+> > +//!
+> > +//! The semantics of these orderings follows the [`LKMM`] definitions and rules.
+> > +//!
+> > +//! - [`Acquire`] and [`Release`] are similar to their counterpart in Rust memory model.
 > 
-> Now I am using the aarch64 specific ones and I can confirm dartagnan still
-> reports the violations with the current model and making the change proposed
-> by Thomas (adding ;si just to the second part seems to be enough) indeed
-> removes all violations.
+> So I've no clue what the Rust memory model states, and I'm assuming
+> it is very similar to the C11 model. I have also forgotten what LKMM
+> states :/
+> 
+> Do they all agree on what RELEASE+ACQUIRE makes?
+> 
 
-That's great! Thanks for working together to get to the bottom of it. I
-was worried that this was the tip of the iceberg.
+I think the question is irrelevant here, because we are implementing
+LKMM atomics in Rust using primitives from C, so no C11/Rust memory
+model in the picture for kernel Rust.
 
-I'll try to follow-up with Arm to see if that ';si' addition is an
-acceptable to atomic-ordered before. If not, we'll absorb the smp_wmb()
-into xchg_release() with a fat comment about RCsc and mixed-size
-accesses.
+But I think they do. I assume you mostly ask whether RELEASE(a) +
+ACQUIRE(b) (i.e. release and acquire on different variables) makes a TSO
+barrier [1]? We don't make it a TSO barrier in LKMM either (only
+unlock(a)+lock(b) is a TSO barrier) and neither does C11/Rust memory
+model.
 
-Will
+[1]: https://lore.kernel.org/lkml/20211202005053.3131071-1-paulmck@kernel.org/
+
+> > +//! - [`Full`] means "fully-ordered", that is:
+> > +//!   - It provides ordering between all the preceding memory accesses and the annotated operation.
+> > +//!   - It provides ordering between the annotated operation and all the following memory accesses.
+> > +//!   - It provides ordering between all the preceding memory accesses and all the fllowing memory
+> > +//!     accesses.
+> > +//!   - All the orderings are the same strong as a full memory barrier (i.e. `smp_mb()`).
+> 
+> s/strong/strength/ ?
+> 
+
+Fixed locally.
+
+Regards,
+Boqun
+
+> > +//! - [`Relaxed`] is similar to the counterpart in Rust memory model, except that dependency
+> > +//!   orderings are also honored in [`LKMM`]. Dependency orderings are described in "DEPENDENCY
+> > +//!   RELATIONS" in [`LKMM`]'s [`explanation`].
+> > +//!
+> > +//! [`LKMM`]: srctree/tools/memory-model/
+> > +//! [`explanation`]: srctree/tools/memory-model/Documentation/explanation.txt
 
