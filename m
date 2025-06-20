@@ -1,150 +1,130 @@
-Return-Path: <linux-arch+bounces-12409-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12410-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56B96AE0CE7
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 20:27:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A56A5AE10C4
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Jun 2025 03:35:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD7D816A271
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jun 2025 18:26:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 439DF3BCF3D
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Jun 2025 01:34:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B1A241C89;
-	Thu, 19 Jun 2025 18:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D14482F2;
+	Fri, 20 Jun 2025 01:35:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tu-bs.de header.i=@tu-bs.de header.b="o/xAKfJ/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jM7li+nU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pmxout1.rz.tu-bs.de (pmxout1.rz.tu-bs.de [134.169.4.151])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3957030E85E;
-	Thu, 19 Jun 2025 18:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.169.4.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28D822339;
+	Fri, 20 Jun 2025 01:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750357321; cv=none; b=kLW0fElX96Cykqy7Q5y1cr4whOBeFkjIOIo4XWT8/DRpvnvTWeItri8C/Rn+/OHkoPjcF1q8aSeYht6Cq0gxjAGpeqVY0AtXY62zYV75tZlqiLHJS/D0vt93tmrr168nC8ftwqtMwe2qtZ0o2mpJo6Ap/p5U5rx40zbG5hRgmig=
+	t=1750383316; cv=none; b=R98PgGTdel6enioluMAYbvvSSvZ+wIiyUKbrXk4gJZ1TrMP/429A+S/Ogbp1y3l7D1DVdd06eLe/KrlMNIG6m36zfgzljIRaBCZze1ERE+lsVRNyEYLbzXP0/2QqT06QeZSa1q1whX+sYAtJF2/38Tdb2oAnNEbMVyOh7YOkTJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750357321; c=relaxed/simple;
-	bh=CkNoFT5ffgvUGTHoy9QzeulxFQ+RkKqe2v/CRKEUFy8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=uHikV9IDKu++jNEDsk60ER2XzwLJ/QW9b7bv6jKTjIjUJ/UxZ3UjC0MU0KOCshKp+jPBxm+8C1zUxVLPVPox7GN/0Zi0bd3tjvWS0HFJo3Zv3JCnX0t43Z2mW//ne5rSc1Q7SPy6MdGTFrKPY2EyR/bUg34KsmTyEP3Y3qLCffo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-bs.de; spf=pass smtp.mailfrom=tu-braunschweig.de; dkim=pass (2048-bit key) header.d=tu-bs.de header.i=@tu-bs.de header.b=o/xAKfJ/; arc=none smtp.client-ip=134.169.4.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-bs.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-braunschweig.de
-Received: from Hermes02.ad.tu-bs.de (hermes02.rz.tu-bs.de [134.169.4.130])
-	by pmxout1.rz.tu-bs.de (Postfix) with ESMTPS id 24C294E07C4;
-	Thu, 19 Jun 2025 20:21:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tu-bs.de;
-	s=exchange_neu; t=1750357317;
-	bh=CkNoFT5ffgvUGTHoy9QzeulxFQ+RkKqe2v/CRKEUFy8=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To:From;
-	b=o/xAKfJ//VE0Fr/dnumBKDrb5x/N7ISP9f0OUQksx3Fq4OE5mq6Bls0HhCJ3b2K+2
-	 4soMApCbSt620DL+ovmwg2j0ugPwJ5ydQkVqWK5lXPr+LbHzAukjbFbnTV3jb34jXR
-	 O8Z5+ZY20SGNHsQg9DIxyMULa92S4fC6SaPo12dnOZFTQgqtk41V/UiNzaFVm1WLoR
-	 iQu5LRztBuJzkEf9c9u8mh1y2cbVJAI3Lzz/fgSElUB1YbMSw26oecT04HkJeguUx0
-	 BYuf0hzz6oIlNadh289J72+G01VjXHmrjoXQp5wy1JAU/x48vgYm5A7yBKNMqJfKVj
-	 TUlrQ72xQDoAw==
-Received: from [192.168.178.23] (134.169.9.110) by Hermes02.ad.tu-bs.de
- (134.169.4.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 19 Jun
- 2025 20:21:56 +0200
-Message-ID: <7097cd74-45b5-4092-b96e-b16769fa68f4@tu-bs.de>
-Date: Thu, 19 Jun 2025 20:21:50 +0200
+	s=arc-20240116; t=1750383316; c=relaxed/simple;
+	bh=Ygb8D3DFDD//bZSNlotR+GYu4xbc8GQmhXzfNgEY/lU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Evf2vWN7P57iJcRB49CQ5Ogp+kbgW4Sm9KOkroJqIqdH4XQ+S7dj0YfBy9nMniTk7nKA41fgMYRyvgEvlm7KflPPr8QY1DytRNZDkS6/h+cm6zEl+Yc75COmz/1HIVn6BfB9M7dJmnbr2SSpejb2rVOlzE55d+OAT8hOQCucN8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jM7li+nU; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750383315; x=1781919315;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ygb8D3DFDD//bZSNlotR+GYu4xbc8GQmhXzfNgEY/lU=;
+  b=jM7li+nUUt/Qidl+PterMewp2En2Kw4LOW04OYx4WnCmn2JmlmZjJPul
+   0lux5JQuGuOpiEm1F1URoZmaP7dWSd1EaM1CjX1levRGHazxzhb/G0xOd
+   S7YXONf5s9wi/f3Xtfew7VeEhnVedk/X4lWvA8WX0k0vpahTklUZQ9ZHH
+   HjYqvtYKxRYNtF0E3M71YO/kFDj3ePqQ3mUI+byNoG72cjnMG2tEuT+k8
+   uxgbWDOikNSN/fOUI3iLUqaTk5sedHpgRpxGD69vuzzVP4mIiow2LDOMe
+   2AS3uwffdnmqKsTVB4ba/9vOyEGPo3mk5UOgxxdxprGN4hcE4bamhKuyU
+   Q==;
+X-CSE-ConnectionGUID: q4cPJS7RTK+ev3X1XN6JWQ==
+X-CSE-MsgGUID: XgOcd5gVQWOJLU80xbstpA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11469"; a="51750452"
+X-IronPort-AV: E=Sophos;i="6.16,250,1744095600"; 
+   d="scan'208";a="51750452"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2025 18:35:14 -0700
+X-CSE-ConnectionGUID: CPgJMUJiRxiT9t4/7rcsJg==
+X-CSE-MsgGUID: kbMFDARYTOqnqEggcyM+9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,250,1744095600"; 
+   d="scan'208";a="188001454"
+Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 19 Jun 2025 18:35:09 -0700
+Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uSQep-000LGA-0S;
+	Fri, 20 Jun 2025 01:35:07 +0000
+Date: Fri, 20 Jun 2025 09:34:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alice Ryhl <aliceryhl@google.com>, Arnd Bergmann <arnd@arndb.de>,
+	Miguel Ojeda <ojeda@kernel.org>, Kees Cook <kees@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-hardening@vger.kernel.org, Alice Ryhl <aliceryhl@google.com>
+Subject: Re: [PATCH] panic: improve panic output from Rust panics
+Message-ID: <202506200907.0hDFXWmf-lkp@intel.com>
+References: <20250619-rust-panic-v1-1-ad1a803962e5@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC] Potential problem in qspinlock due to mixed-size accesses
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: Andrea Parri <parri.andrea@gmail.com>, Peter Zijlstra
-	<peterz@infradead.org>, Will Deacon <will@kernel.org>, Boqun Feng
-	<boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>, David Howells
-	<dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget
-	<luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira
- Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel
- Fernandes <joelagnelf@nvidia.com>, <linux-kernel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <lkmm@lists.linux.dev>,
-	<hernan.poncedeleon@huaweicloud.com>, <jonas.oberhauser@huaweicloud.com>,
-	"r.maseli@tu-bs.de" <r.maseli@tu-bs.de>
-References: <cb83e3e4-9e22-4457-bf61-5614cc4396ad@tu-bs.de>
- <20250613075501.GI2273038@noisy.programming.kicks-ass.net>
- <aEwHufdehlQnBX7g@andrea> <9264df13-36db-4b25-b2c4-7a9701df2f4d@tu-bs.de>
- <aE-3_mJPjea62anv@andrea>
- <357b3147-22e0-4081-a9ac-524b65251d62@rowland.harvard.edu>
- <aFF3NSJD6PBMAYGY@andrea> <595209ed-2074-46da-8f57-be276c2e383b@tu-bs.de>
- <6ac81900-873e-415e-b5b2-96e9f7689468@rowland.harvard.edu>
- <c97665c6-2d8b-49ae-acc5-be5be04f0093@tu-bs.de>
- <a0887a91-468c-43ff-872e-c4c4e23b26dd@rowland.harvard.edu>
-Content-Language: en-US
-From: Thomas Haas <t.haas@tu-bs.de>
-In-Reply-To: <a0887a91-468c-43ff-872e-c4c4e23b26dd@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: Hermes11.ad.tu-bs.de (134.169.4.139) To
- Hermes02.ad.tu-bs.de (134.169.4.130)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250619-rust-panic-v1-1-ad1a803962e5@google.com>
 
+Hi Alice,
 
+kernel test robot noticed the following build errors:
 
-On 19.06.25 19:56, Alan Stern wrote:
-> On Thu, Jun 19, 2025 at 04:59:38PM +0200, Thomas Haas wrote:
->>
->>
->> On 19.06.25 16:32, Alan Stern wrote:
->>> On Thu, Jun 19, 2025 at 04:27:56PM +0200, Thomas Haas wrote:
->>>> I support this endeavor, but from the Dartagnan side :).
->>>> We already support MSA in real C/Linux code and so extending our supported
->>>> Litmus fragment to MSA does not sound too hard to me.
->>>> We are just missing a LKMM cat model that supports MSA.
->>>
->>> To me, it doesn't feel all that easy.  I'm not even sure where to start
->>> changing the LKMM.\
->>>
->>> Probably the best way to keep things organized would be to begin with
->>> changes to the informal operational model and then figure out how to
->>> formalize them.  But what changes are needed to the operational model?
->>>
->>> Alan
->>
->> Of course, the difficult part is to get the model right. Maybe I shouldn't
->> have said that we are "just" missing the model :).
->> I'm only saying that we already have some tooling to validate changes to the
->> formal model.
->>
->> I think it makes sense to first play around with the tooling and changes to
->> the formal model to just get a feeling of what can go wrong and what needs
->> to go right. Then it might become more clear on how the informal operational
->> model needs to change.
->>
->> A good starting point might be to lift the existing ARM8 MSA litmus tests to
->> corresponding C/LKMM litmus tests and go from there.
->> If the informal operational model fails to explain them, then it needs to
->> change. This goes only one way though: if ARM permits a behavior then so
->> should LKMM. If ARM does not, then it is not so clear if LKMM should or not.
-> 
-> Okay, that seems reasonable.
-> 
-> BTW, I don't want to disagree with what you wrote ... but doesn't your
-> last paragraph contradict the paragraph before it?  Is starting with the
-> various MSA litmus tests and seeing how the operational model fails to
-> explain them not the opposite of first playing around with the tooling
-> and changes to the formal model?
-> 
-> Alan
+[auto build test ERROR on 19272b37aa4f83ca52bdf9c16d5d81bdd1354494]
 
-I would rather see the approaches as complementary.
-If you lift ARM tests to LKMM tests, you can use them to reason about 
-both the informal operational model and the formal axiomatic model.
-I mean, there are going to be litmus tests that show behavior that 
-should reasonably be forbidden on all platforms, and trying to adapt the 
-formal LKMM to also forbid them seems like a good exercise.
-Even if it turns out that the changes are unsound, I think you will end 
-up with better understanding, no?
+url:    https://github.com/intel-lab-lkp/linux/commits/Alice-Ryhl/panic-improve-panic-output-from-Rust-panics/20250619-231923
+base:   19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+patch link:    https://lore.kernel.org/r/20250619-rust-panic-v1-1-ad1a803962e5%40google.com
+patch subject: [PATCH] panic: improve panic output from Rust panics
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20250620/202506200907.0hDFXWmf-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+rustc: rustc 1.78.0 (9b00956e5 2024-04-29)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250620/202506200907.0hDFXWmf-lkp@intel.com/reproduce)
 
-Either way, I'm just suggesting possible ways to start but I myself 
-don't have the time (right now) to get this project going.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202506200907.0hDFXWmf-lkp@intel.com/
 
-Thomas
+All errors (new ones prefixed by >>):
+
+>> error[E0277]: `core::option::Option<&core::fmt::Arguments<'_>>` doesn't implement `core::fmt::Display`
+   --> rust/kernel/lib.rs:210:36
+   |
+   210 |     match core::format_args!("{}", info.message()) {
+   |                                    ^^^^^^^^^^^^^^ `core::option::Option<&core::fmt::Arguments<'_>>` cannot be formatted with the default formatter
+   |
+   = help: the trait `core::fmt::Display` is not implemented for `core::option::Option<&core::fmt::Arguments<'_>>`
+   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+   = note: this error originates in the macro `core::format_args` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
