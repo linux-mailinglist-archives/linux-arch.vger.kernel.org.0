@@ -1,284 +1,163 @@
-Return-Path: <linux-arch+bounces-12416-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12417-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 411B2AE19DC
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Jun 2025 13:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 839E4AE1EE8
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Jun 2025 17:40:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFDF63AA8ED
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Jun 2025 11:16:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4B736A50A8
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Jun 2025 15:34:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6E4028A713;
-	Fri, 20 Jun 2025 11:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12C6E8F5B;
+	Fri, 20 Jun 2025 15:34:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="fVUuJUo9"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="R6X5fgou";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HJNMfWAG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B3128A1D0;
-	Fri, 20 Jun 2025 11:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1A82C0313
+	for <linux-arch@vger.kernel.org>; Fri, 20 Jun 2025 15:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750418217; cv=none; b=tsUn33PcKbJVxHsipyp8YZHw+gpZf/hA72qVlU9zqRNL50KsF6pydgjRhotYRYgQvV30w8Fh6NJcdV6XNUaxF0+xzvF35ADbI/FSnyFCi8hnDDoZHyWofiMzbgb1nNnPyw6+xbifzQpEQ7ByvCgz/YsRiZ5StIEVxefBSxxSeEU=
+	t=1750433678; cv=none; b=D6mPyyKERioGduB3uBXDSHEcmYUO/Ud2NSEEqXUt12l/qETYYHLUvehsbFA2lLTMBMwiwOdiRPek2kd/KThFYfQ05WS1nJ+IDThcmns2PUp3GpYHOwwzlCd/zOjBfgHfguC3qMHxeHkxZIgmGSYDyQc/V7lw5CJ9nD/aJhTo6vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750418217; c=relaxed/simple;
-	bh=sskRXO+L7/j0s902K25TvnhEU38zDf6vBYWCLbDE66c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zm6RxeFr0dtQfbUJ4PU8Be+kNKLZOXXWBMX8afvoRz82/M+DN0hFJ1A+FGcXVfD+ksT0W80hGn7iasVem6FOkbgvys8g4Rd63p9I+uXbSKQIGhGHKjBjiuIKbQYpWI4kn4WRYJzjYHpb7AbEVHJDTMlk8K67zvFNwgJyu6YRcPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=fVUuJUo9; arc=none smtp.client-ip=115.124.30.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1750418213; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=i6Itj8EUP34Ecukcbx4LZV19FLhT/XveeyJP7HjJzps=;
-	b=fVUuJUo9wBTIvP37w6+Mxi1uoEe92OEytcLwTUJL7P2J0le26G2jeAQKce8KavbsLNDh8eWizH6U1ERZrn5erzjxmnSAQKjGm817nIdEugr82DJ4ln0WO2ddVpazggIvuoW93+oPhr9BSXY/uwkIR530aX/GoDiLTpblx+myRTs=
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0WeKdQMr_1750418210 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 20 Jun 2025 19:16:52 +0800
-From: cp0613@linux.alibaba.com
-To: yury.norov@gmail.com,
-	linux@rasmusvillemoes.dk,
-	arnd@arndb.de,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr
-Cc: linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chen Pei <cp0613@linux.alibaba.com>
-Subject: [PATCH 2/2] bitops: rotate: Add riscv implementation using Zbb extension
-Date: Fri, 20 Jun 2025 19:16:10 +0800
-Message-ID: <20250620111610.52750-3-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250620111610.52750-1-cp0613@linux.alibaba.com>
-References: <20250620111610.52750-1-cp0613@linux.alibaba.com>
+	s=arc-20240116; t=1750433678; c=relaxed/simple;
+	bh=jrPzLCECzHzj1WtciASTK7VNYPCQuih237z80jsEcXQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=FGx1AtPTVus5+NENrBlJlXCUpS9JkCgAWP6vmnswHyd5YQfLtIye3t7VwVxn/32UlcQGY0pdc68V7dAFBf2r9LwDTB8vF/YxB6tBRPNQTendlOFWhP0CVjLHd3CsUASD8lNLwpo0DbpX64VOj26sEgatwRkclz5e8q9QhL/Y4H4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=R6X5fgou; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HJNMfWAG; arc=none smtp.client-ip=202.12.124.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 386232540276;
+	Fri, 20 Jun 2025 11:34:31 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-06.internal (MEProxy); Fri, 20 Jun 2025 11:34:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1750433671;
+	 x=1750520071; bh=F3HFxAKJVWrN5DaDhfcB8BCz5W0xV2aHq+tqLMfXuEg=; b=
+	R6X5fgouTSPzszwIuxM6BvG2gMCY4eaGCJdSiht4I23URwDC8eM4/32dNRcwlCCs
+	mMhNcyjxMx/QyWcxIIYdZpCeIzpWH31TOqKYf4ZRsXcmHWStteLlAJeI03L6V7ee
+	Sk5qxwT//S9HOuYgUgeNerPDVPlM3/6Sv2KAscRLEVDrjpYQp7aZR5FUebwjasgy
+	lkpYnYceqZEZw1eQHOpqDucLR35jiD/g0jImUQENcWxqzUjKuxrr217UjLm4WON0
+	ANgE2/P4DIZ2tsHebKwoaONYe/H+Y6WlfL90R9SVqhH/uJnsHccLMRggFwzg9ksr
+	ROGJs+sALsbbn/CMvpkgyA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750433671; x=
+	1750520071; bh=F3HFxAKJVWrN5DaDhfcB8BCz5W0xV2aHq+tqLMfXuEg=; b=H
+	JNMfWAG0abj+xfgvY5JZQLRvy32Ks+JTw3iUIAnEIicSWz+2sYpODwd4aRw6uWve
+	ueWvzYiYeDTFzU0ulyMmzY04CGZ81AKWtxPWo1841cfTqd7MUwIO9HJaRMHd8qsC
+	hTK+cTSt16qQyc4ptIUDRlHPk78cHp62TB7ELg9RuUFUsgshlM4vfyaPBOij5aD4
+	YsLNzYvT9KXD+/vaxFW+a9AjHyiZEm295yE/imrz5REK+EArxeeIOvf+/yzYib8o
+	hwjHZr4Uy7lS0zOYMDZzrC7zNxw9troQHfNZenKrR1rCwTrCEyKOayCil167xUiK
+	Q8tubU21lePw/BRtxs40A==
+X-ME-Sender: <xms:hn9VaOTALfMia7nwOd3lQpS0mlv1QGzuUtf9jKug8Y5fuC6VZQX1pw>
+    <xme:hn9VaEjIbZYLl0TA5ZwOP6mwaVPHzuS7q7sPQk0Nj4ss24-92pEZrXujsreNdJfds
+    YBJbqlIJDUAKzhGQZo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdekjeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhguuceu
+    vghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnh
+    ephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdeinecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhguse
+    grrhhnuggsrdguvgdpnhgspghrtghpthhtohepfedpmhhouggvpehsmhhtphhouhhtpdhr
+    tghpthhtohepthhorhhvrghlughssehlihhnuhigqdhfohhunhgurghtihhonhdrohhrgh
+    dprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehvihhrohesiigvnhhivhdrlhhinhhugidrohhrghdruhhk
+X-ME-Proxy: <xmx:hn9VaH8VP1BRZsmqyHoihIWWD3-OY5eh-1QO4E98bmYXgxUoU0wLMw>
+    <xmx:hn9VaLG3SNnvVMOVmTCsLeluajAGYflZdlTHDP89EvOeh8cwJMwwyg>
+    <xmx:hn9VaKlA-aw1BRNg_A9bgjaLtxdK_0D9yd7gj8Uj4rq57_hPAoeeHw>
+    <xmx:hn9VaPY5SKs_yajKQenOSrhgw42_US23maAkXwC94BkVEKMykCVGzQ>
+    <xmx:h39VaLFmE86WUeHC2mb_7VGLWzt0dZSD8rxDAxfdZlkRFbEzfTs29Usa>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9B721700063; Fri, 20 Jun 2025 11:34:30 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: T5175ccf11ae6abd1
+Date: Fri, 20 Jun 2025 17:33:26 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ Linux-Arch <linux-arch@vger.kernel.org>
+Cc: "Linus Torvalds" <torvalds@linux-foundation.org>
+Message-Id: <d2f2d26c-f856-454b-8afa-5373a062a327@app.fastmail.com>
+In-Reply-To: <20241202040316.GB933328@ZenIV>
+References: <20241202040207.GM3387508@ZenIV> <20241202040316.GB933328@ZenIV>
+Subject: Re: [PATCH 2/3] alpha: regularize the situation with asm/param.h
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Chen Pei <cp0613@linux.alibaba.com>
+On Mon, Dec 2, 2024, at 05:03, Al Viro wrote:
+> The only reason why alpha can't do what sparc et.al. are doing
+> is that include/asm-generic/param.h relies upon the value of HZ
+> set for userland header in uapi/asm/param.h being 100.
+>
+> We need that value to define USER_HZ and we need that definition
+> to outlive the redefinition of HZ kernel-side.  And alpha needs
+> it to be 1024, not 100 like everybody else.
+>
+> So let's add __USER_HZ to uapi/asm-generic/param.h, defaulting to
+> 100 and used to define HZ.  That way include/asm-generic/param.h
+> can use that thing instead of open-coding it - it won't be affected
+> by undefining and redefining HZ.
+>
+> That done, alpha asm/param.h can be removed and uapi/asm/param.h
+> switched to defining __USER_HZ and EXEC_PAGESIZE and then including
+> <asm-generic/param.h> - asm/param.h will resolve to uapi/asm/param.h,
+> which pulls <asm-generic/param.h>, which will do the right thing
+> both in the kernel and userland contexts.
+>
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-The RISC-V Zbb extension[1] defines bitwise rotation instructions,
-which can be used to implement rotate related functions.
+Looks correct to me, though after looking at it for a bit
+I think I came up with a way to simplify it further:
 
-[1] https://github.com/riscv/riscv-bitmanip/
+> index 49c7119934e2..e4e410f9bf85 100644
+> --- a/arch/alpha/include/uapi/asm/param.h
+> +++ b/arch/alpha/include/uapi/asm/param.h
+> @@ -2,14 +2,9 @@
+>  #ifndef _UAPI_ASM_ALPHA_PARAM_H
+>  #define _UAPI_ASM_ALPHA_PARAM_H
+> 
+> -#define HZ		1024
+> -
+> +#define __USER_HZ	1024
+>  #define EXEC_PAGESIZE	8192
+> 
+> -#ifndef NOGROUP
+> -#define NOGROUP		(-1)
+> -#endif
+> -
+> -#define MAXHOSTNAMELEN	64	/* max length of hostname */
+> +#include <asm-generic/param.h>
 
-Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
----
- arch/riscv/include/asm/bitops.h | 172 ++++++++++++++++++++++++++++++++
- 1 file changed, 172 insertions(+)
+If you make this one
 
-diff --git a/arch/riscv/include/asm/bitops.h b/arch/riscv/include/asm/bitops.h
-index d59310f74c2b..be247ef9e686 100644
---- a/arch/riscv/include/asm/bitops.h
-+++ b/arch/riscv/include/asm/bitops.h
-@@ -20,17 +20,20 @@
- #include <asm-generic/bitops/__fls.h>
- #include <asm-generic/bitops/ffs.h>
- #include <asm-generic/bitops/fls.h>
-+#include <asm-generic/bitops/rotate.h>
- 
- #else
- #define __HAVE_ARCH___FFS
- #define __HAVE_ARCH___FLS
- #define __HAVE_ARCH_FFS
- #define __HAVE_ARCH_FLS
-+#define __HAVE_ARCH_ROTATE
- 
- #include <asm-generic/bitops/__ffs.h>
- #include <asm-generic/bitops/__fls.h>
- #include <asm-generic/bitops/ffs.h>
- #include <asm-generic/bitops/fls.h>
-+#include <asm-generic/bitops/rotate.h>
- 
- #include <asm/alternative-macros.h>
- #include <asm/hwcap.h>
-@@ -175,6 +178,175 @@ static __always_inline int variable_fls(unsigned int x)
- 	 variable_fls(x_);					\
- })
- 
-+static __always_inline u64 variable_rol64(u64 word, unsigned int shift)
-+{
-+	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
-+				      RISCV_ISA_EXT_ZBB, 1)
-+			  : : : : legacy);
-+
-+	asm volatile(
-+		".option push\n"
-+		".option arch,+zbb\n"
-+		"rol %0, %1, %2\n"
-+		".option pop\n"
-+		: "=r" (word) : "r" (word), "r" (shift) :);
-+
-+	return word;
-+
-+legacy:
-+	return generic_rol64(word, shift);
-+}
-+
-+static inline u64 variable_ror64(u64 word, unsigned int shift)
-+{
-+	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
-+				      RISCV_ISA_EXT_ZBB, 1)
-+			  : : : : legacy);
-+
-+	asm volatile(
-+		".option push\n"
-+		".option arch,+zbb\n"
-+		"ror %0, %1, %2\n"
-+		".option pop\n"
-+		: "=r" (word) : "r" (word), "r" (shift) :);
-+
-+	return word;
-+
-+legacy:
-+	return generic_ror64(word, shift);
-+}
-+
-+static inline u32 variable_rol32(u32 word, unsigned int shift)
-+{
-+	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
-+				      RISCV_ISA_EXT_ZBB, 1)
-+			  : : : : legacy);
-+
-+	asm volatile(
-+		".option push\n"
-+		".option arch,+zbb\n"
-+		"rolw %0, %1, %2\n"
-+		".option pop\n"
-+		: "=r" (word) : "r" (word), "r" (shift) :);
-+
-+	return word;
-+
-+legacy:
-+	return generic_rol32(word, shift);
-+}
-+
-+static inline u32 variable_ror32(u32 word, unsigned int shift)
-+{
-+	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
-+				      RISCV_ISA_EXT_ZBB, 1)
-+			  : : : : legacy);
-+
-+	asm volatile(
-+		".option push\n"
-+		".option arch,+zbb\n"
-+		"rorw %0, %1, %2\n"
-+		".option pop\n"
-+		: "=r" (word) : "r" (word), "r" (shift) :);
-+
-+	return word;
-+
-+legacy:
-+	return generic_ror32(word, shift);
-+}
-+
-+static inline u16 variable_rol16(u16 word, unsigned int shift)
-+{
-+	u32 word32 = ((u32)word << 16) | word;
-+
-+	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
-+				      RISCV_ISA_EXT_ZBB, 1)
-+			  : : : : legacy);
-+
-+	asm volatile(
-+		".option push\n"
-+		".option arch,+zbb\n"
-+		"rolw %0, %1, %2\n"
-+		".option pop\n"
-+		: "=r" (word32) : "r" (word32), "r" (shift) :);
-+
-+	return (u16)word32;
-+
-+legacy:
-+	return generic_rol16(word, shift);
-+}
-+
-+static inline u16 variable_ror16(u16 word, unsigned int shift)
-+{
-+	u32 word32 = ((u32)word << 16) | word;
-+
-+	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
-+				      RISCV_ISA_EXT_ZBB, 1)
-+			  : : : : legacy);
-+
-+	asm volatile(
-+		".option push\n"
-+		".option arch,+zbb\n"
-+		"rorw %0, %1, %2\n"
-+		".option pop\n"
-+		: "=r" (word32) : "r" (word32), "r" (shift) :);
-+
-+	return (u16)word32;
-+
-+legacy:
-+	return generic_ror16(word, shift);
-+}
-+
-+static inline u8 variable_rol8(u8 word, unsigned int shift)
-+{
-+	u32 word32 = ((u32)word << 24) | ((u32)word << 16) | ((u32)word << 8) | word;
-+
-+	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
-+				      RISCV_ISA_EXT_ZBB, 1)
-+			  : : : : legacy);
-+
-+	asm volatile(
-+		".option push\n"
-+		".option arch,+zbb\n"
-+		"rolw %0, %1, %2\n"
-+		".option pop\n"
-+		: "=r" (word32) : "r" (word32), "r" (shift) :);
-+
-+	return (u8)word32;
-+
-+legacy:
-+	return generic_rol8(word, shift);
-+}
-+
-+static inline u8 variable_ror8(u8 word, unsigned int shift)
-+{
-+	u32 word32 = ((u32)word << 24) | ((u32)word << 16) | ((u32)word << 8) | word;
-+
-+	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
-+				      RISCV_ISA_EXT_ZBB, 1)
-+			  : : : : legacy);
-+
-+	asm volatile(
-+		".option push\n"
-+		".option arch,+zbb\n"
-+		"rorw %0, %1, %2\n"
-+		".option pop\n"
-+		: "=r" (word32) : "r" (word32), "r" (shift) :);
-+
-+	return (u8)word32;
-+
-+legacy:
-+	return generic_ror8(word, shift);
-+}
-+
-+#define rol64(word, shift) variable_rol64(word, shift)
-+#define ror64(word, shift) variable_ror64(word, shift)
-+#define rol32(word, shift) variable_rol32(word, shift)
-+#define ror32(word, shift) variable_ror32(word, shift)
-+#define rol16(word, shift) variable_rol16(word, shift)
-+#define ror16(word, shift) variable_ror16(word, shift)
-+#define rol8(word, shift)  variable_rol8(word, shift)
-+#define ror8(word, shift)  variable_ror8(word, shift)
-+
- #endif /* !(defined(CONFIG_RISCV_ISA_ZBB) && defined(CONFIG_TOOLCHAIN_HAS_ZBB)) || defined(NO_ALTERNATIVE) */
- 
- #include <asm-generic/bitops/ffz.h>
--- 
-2.49.0
+#ifdef __KERNEL__
+#define USER_HZ	1024
+#endif
 
+and rely on 'make headers_install' to drop the USER_HZ
+macro again, you can avoid the additional __USER_HZ macro
+and just guard against redefining it in asm-generic/param.h.
+
+With or without that change,
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
