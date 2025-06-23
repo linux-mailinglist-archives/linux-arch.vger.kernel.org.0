@@ -1,280 +1,250 @@
-Return-Path: <linux-arch+bounces-12426-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12427-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7EAAAE28E1
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Jun 2025 13:41:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B96C9AE33C1
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Jun 2025 04:48:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DD643A8C03
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Jun 2025 11:41:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57D9A188F746
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Jun 2025 02:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3892036ED;
-	Sat, 21 Jun 2025 11:41:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B334019F121;
+	Mon, 23 Jun 2025 02:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="leAih+20"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RmVYrbrD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CWXP265CU008.outbound.protection.outlook.com (mail-ukwestazon11020091.outbound.protection.outlook.com [52.101.195.91])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA9C18B0F;
-	Sat, 21 Jun 2025 11:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.195.91
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750506098; cv=fail; b=gi5C2MhfsUKxysiGGxn2j/M/Kzik9Ocyy8WqpHUTPApqN9ZLjBYPhlaeFO/tGSPMhhWoOVkecZl+Oa6A+6j/9YogC6dezBjL3nNHLud42XTyOdDnukYvl9nKnO5gbWNPBSMv3T3ESO6l+FEbhmjB6rlHNsVo8zItpw9kMEIgYOU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750506098; c=relaxed/simple;
-	bh=00nxWPiLPi7Lplk85jZ/RNfebuNWHnTgDtEVTek+CR4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ny4EzmOpPc8zZ8RVoCKUzy7DUQZ6adB/ZkCh5shFerp2vosif4gz/FvAKL8jPOKdb9SzTWS+65kqCpeFX/IzlfU5pFkCMnoOfOPfVpG44yJnfVaasBxplQYUQX5iW9pMjOoHlhZCxAOejj6mpYx3KmjKexoQCIWCcV/n8y9aS0E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=leAih+20; arc=fail smtp.client-ip=52.101.195.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WDMTx+ZoiRmC3wiH2f2RTJmDeWSGc+dcz1TtCiEeJVYmrH2+SpINRqTHysb/y0/LstPAQoiFHUi7jVK8Npg2RHKB8WhzHXX5gql0wyoa7nSgo7ntBHkeuPVOLaioovEfGb8dJg32k9UhVEY7h8fd6VhvDZcc4bhyNVJvdtLSMsShgJh+op0O/eciyWT6VNM+9MTOU1t+KT5LeZo1yxn/phsgTL1/IFmG1+xkyKhnYAVp5Fq/xmOeTttuDN4IY2uAkRy2BDdVESkVoT+Yo+kr5Mur1kLfNy5tQEWxSAWPcIjsLtd0dDx9aiyQJthP3b3pYp+jbiyUF4P8ADWM9TtFsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/DrYCyXbtdaqUFZtMwGuiFWJZx1b2COO+Z/esr7y9dQ=;
- b=kVpXBvbOeaJpZMz/gj2IINct6D5F4A+e0076tQ1KxL0sTc7l/pvGxlJSxtWrudflaTNt7x+lMJBehAJTPGlp//f9/D++a8qBxuJFWEbhbeWfueO4Q1Y9W5VSDnlSrHsf1+ZFbxQmJhBldOvSzdHUuU/Mm5nB2EekVizeHUHqVC64fYxuizCuTR6hMyny9w2c8egPuab1rDObxSnsJDjTdN70EVH3BBvDU/6gecx4dRJsfjLQ0m1ROZGz2E1KxE/i03tDGyxk6jVy/R7Yy2H4InZUhIqp/Nuxhj40IvMenru6kDZu/LD1DSazkBga2vk+dFP7q9A136EjcnytO5JNJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/DrYCyXbtdaqUFZtMwGuiFWJZx1b2COO+Z/esr7y9dQ=;
- b=leAih+20gA0hexMNfdCw4+TqXEQQ7ELCCNQqeRbLff/C1kAZC2q9BFniONj4apIItSUz+wC+piN1J9ygWh+MBn3kTpHyoH3xUFlPa2rXRJNtwf2AZR7v+ZyUvXnUEyKAw8llkwSvAzti/Mo8tBF2PGJhjArfgVbQVu0nWqY+1Ts=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CW1P265MB7532.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:216::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.26; Sat, 21 Jun
- 2025 11:41:31 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7%6]) with mapi id 15.20.8857.026; Sat, 21 Jun 2025
- 11:41:31 +0000
-Date: Sat, 21 Jun 2025 12:41:29 +0100
-From: Gary Guo <gary@garyguo.net>
-To: Boqun Feng <boqun.feng@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F7D184524;
+	Mon, 23 Jun 2025 02:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750646895; cv=none; b=jePLLaUk07PAkPcFdmFMsYfh2qgD/UvJkHamtOEqpd63iZrfJHxUXGJWX+QRkC77rrMqNNU+HBXTaexreeteRxtU12ULC1oglR5WnyTG9FYKodghlP23sVJZaJY1Nmth6RM6GZgar8biLIiySJQJluo24xyF6ffXuTT3YRComZg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750646895; c=relaxed/simple;
+	bh=9yVcyJBRJnRpt1iF81CbrRUu+UUHjwSxXynZSJdXxrw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KKbpSCJcQ9BA3toSEuk+rnL1WKMqU4bT6z3qMkK/R3OapK3dhNQYvDjxE+7q4AGUqTpFGoS2yZwIo2kVtQBcG8LH9TNphzREl5zsTjDvuA0SrL2RXHOYeD0hSuQ5muViORyN0B5efSgo4YOeuLmf/cFHOyAm11e6pj2vHYPztFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RmVYrbrD; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7d09ab17244so394049185a.0;
+        Sun, 22 Jun 2025 19:48:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750646893; x=1751251693; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CJHmf9BuChhjoB+0hgGrMkj7NgDeDPSjjYZiYpn+uMQ=;
+        b=RmVYrbrDNQDa2+mqfXnk4jHRdfk2wShXCFFSXW0MaVfKVtCdlAy5vsYSzLnDEdDCkl
+         M7LuSgVShlhrm5TzrrEynL5PBSx4K4V0PjSMAjGE+U6SiTrzLnCO+0LRPz/pGsPXDSLc
+         WdbKy8y/huWvbzPHri2+AFmrSoQ3Ivwq0PikQMKO5WqCtfd0nMQBNxZjzAHRnJsaM01h
+         8E47GuOeDIpGCFnfbgCh98HZeOiKd48naJoTrRCcwpF/at6hp24i+nQofYWLBkIpsJ83
+         O+WSEizL9RSJPpj49CLiiX824t7gWfY2luQ2FNuSMmcQ7Z4AxWQRRz1fIdhik0veyXCs
+         1WGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750646893; x=1751251693;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CJHmf9BuChhjoB+0hgGrMkj7NgDeDPSjjYZiYpn+uMQ=;
+        b=t986vWnRA/8+n5L/mJRxyE4evoq0MIOpJA9gu/hlDSQAZM6hkPdRzm25Qg/49tv49R
+         mtzSwbK4CVLJeW8zcOBiQFKXMaO1aYVdTe3fLj4P2f3EQGHM7MpdhFh+6BlrBp9TjG4h
+         dVVLIrtKrqXI1wArahDd4RCjKOnU6o/ualCm6R/IoS2vu8+CDjxuB8lGwMXABpd9zgAS
+         NBva+AO6Il8mEApkzH1VOsQ5uNHU+9xgfs148a4fidTv+2IkWvLjkQgtK6YnmKwEmKid
+         IN6Yt2XzmZgMmsA2CeLS87R4z9l+0U75GOy0FjWhUaeNqrCUwg/YdOX6SQkxVIRNMzLs
+         KXQA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrtmDq7FP3AM2OYTRjkdKJC+xqwcxDYDmn2+P66wXvBdRRTXo3MLE6/gMDj4GsXfAI8V4hLvWFUWTN@vger.kernel.org, AJvYcCW2hIW002sltrnDJwUQN6qiosstdjX7AFAcFWNVEfWdAFpj5qPSSic8IirXttY5OL4CdAoVG5SEDzzqk8eXGlU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiM/+X/PLjSbDX/mK4kNWlywDu9Ou3yEn53bsKE9PnB8yzTfvl
+	Ey4GaKixDs2/gF6WVzYzW6/A+Vc20i7Tpdbo7C8zDEFVrj70P3ZYwociEksKwg==
+X-Gm-Gg: ASbGncsotl8af6G6OKV3wXD0y1KarXcH3VKZMgPLBXVHg3Xe4H467Hm0aytjuFSFtf/
+	hUtJ2G7WBPIFvFUk+GMaX1rtDgbm/VDHZ7yQAlygxzB30cq7wGwVKWQmyg3T5vKkKY7U0fZkw/0
+	9XrhV9zgaSNQxfTgUXWKzD9byhOYNnCNQ3WPa3KjtwYN7Gbiq+s5zr+66YyQX3xaQh7N42kiCPJ
+	AootMnDEvGHd2/RhXdQL5rfaPSqBr+9MvCpAAsW7gamHNtSMovQQ6BVYA9n3JqFsKLStP3tMZOV
+	uQNCwmput1KNim6X1BpYOcAyw+zJFzM0oelzwpvFYkD49u+638Hy7uI8NPUpTx6N09KB7HPG5aN
+	pLAQqrBQVLbloIUV8zHR15Cv60jS+MeNiDhnOU63OLOc7VCx78Omx
+X-Google-Smtp-Source: AGHT+IEgIIA1mAlgzss/AbRlW6vBFk50Ygy+OJLrrlVrrDryQW9ibya3VqZUGjDidzFElD3ARz9mVg==
+X-Received: by 2002:a05:620a:4727:b0:7d3:dccd:4048 with SMTP id af79cd13be357-7d3f99540aamr1889476685a.55.1750646892658;
+        Sun, 22 Jun 2025 19:48:12 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a779d9db4bsm34012431cf.35.2025.06.22.19.48.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jun 2025 19:48:12 -0700 (PDT)
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 634281200043;
+	Sun, 22 Jun 2025 22:48:11 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Sun, 22 Jun 2025 22:48:11 -0400
+X-ME-Sender: <xms:a8BYaBlh_9fB2I80ppJGMq8DKx65H_YaYgIQycySnRkvnCGkIbTb_A>
+    <xme:a8BYaM3p-uHvF5RzYpOu0SopxYPyJVOmKFbJfzJu2ScgdpIeCop-DZIuQ878X6nPy
+    VZfMNC1lnUAtfyK6A>
+X-ME-Received: <xmr:a8BYaHoSQOyQEx6ic5HUKRr4J4xH5QMbFHtnNFUekCU26I7Sbmzg0UVnQw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdduheekiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudffiedv
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
+    hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
+    jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
+    drnhgrmhgvpdhnsggprhgtphhtthhopedviedpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhrtghpthhtoheplhhinhhugidqkh
+    gvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhf
+    ohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhkmh
+    hmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqrghrtghh
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilhdrtghomhdp
+    rhgtphhtthhopegsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomhdprhgtph
+    htthhopehlohhsshhinheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:a8BYaBnmPEFJ4d8QKvi-WMEHfFqEuO2FHAvh3xzmaEkcsqYNlGqgEg>
+    <xmx:a8BYaP0y-IaM7xqPn_0XfF4xLex-_D_ND-YIHOzDh9m2sQUf7MxvVg>
+    <xmx:a8BYaAugn12AZrGcyaRiMgYkQFmjEVoNq_DSkx1kyCdo5ydSnsq4LA>
+    <xmx:a8BYaDWYgs1GqJ0VGwXURuyTeV6QE5scxNx6bIbsr9OX2NJlqrJbpg>
+    <xmx:a8BYaG055yTWM9iLKHGd0Vj6deBdyhKVufpRtwATfwBRZOaxwvojcxZf>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 22 Jun 2025 22:48:10 -0400 (EDT)
+Date: Sun, 22 Jun 2025 19:48:10 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Gary Guo <gary@garyguo.net>
 Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- lkmm@lists.linux.dev, linux-arch@vger.kernel.org, Miguel Ojeda
- <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, =?UTF-8?B?Qmo=?=
- =?UTF-8?B?w7Zybg==?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
- <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
- <dakr@kernel.org>, Will Deacon <will@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, Wedson Almeida
- Filho <wedsonaf@gmail.com>, Viresh Kumar <viresh.kumar@linaro.org>, Lyude
- Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>, Mitchell Levy
- <levymitchell0@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, Linus Torvalds
- <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH v5 06/10] rust: sync: atomic: Add the framework of
- arithmetic operations
-Message-ID: <20250621124129.6e879463.gary@garyguo.net>
-In-Reply-To: <20250618164934.19817-7-boqun.feng@gmail.com>
+	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v5 03/10] rust: sync: atomic: Add ordering annotation
+ types
+Message-ID: <aFjAarXzLPnv2kHO@Mac.home>
 References: <20250618164934.19817-1-boqun.feng@gmail.com>
-	<20250618164934.19817-7-boqun.feng@gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0386.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:f::14) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+ <20250618164934.19817-4-boqun.feng@gmail.com>
+ <20250621121842.0c3ca452.gary@garyguo.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CW1P265MB7532:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f36e618-e51d-4570-b348-08ddb0b89163
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|10070799003|7416014|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?V2dRFo/jivl2nCiih67VJafDV0UpzHVKBiHTV27h9q9YKvKpilY3ZhYie/dC?=
- =?us-ascii?Q?E5ZXCy32KRFtSVZyVPAHGwu5nJj6D2xe0oOKhgeWqTC9oVZ6wa+n1VhzHgAA?=
- =?us-ascii?Q?TCgY6IXfPVchpzAyhhmxO4fasK9m2w/rruXJv0Syumtoo7/fKbQpIVV/6oR1?=
- =?us-ascii?Q?cNO+BT5vYGIPZlyCu+oChdAdrZ2+44SqsIKlCRous0gCHXYc5gKQJBMejmBC?=
- =?us-ascii?Q?BjzMigT3jqxBUn3ZOH2dccbJsr9jwGy3P5rNYyvRzdhr7Ghsmhoz6UetvkLc?=
- =?us-ascii?Q?PI1bx5TH91SyRnU4hDr8gZuQSBUvdUdjYns+rBgPl5uNl/g7pAS4Thh3R4b9?=
- =?us-ascii?Q?KDgRco5WKJvingV+y8ZKSH7S6U/wLLn4/dUBhSQ/69yqqQXXppVGqU6fc5J7?=
- =?us-ascii?Q?LC27iZSpx2Hv0Am/UEabNaDzG3q10tIUtWFHZ23BHrzDuNCLpzI6y/gb0+x0?=
- =?us-ascii?Q?K2En02pBRNdzaj4ajQOL6iFLDWyCKmbuD1GjkUXGlWewTjKK5HO7ftdt/IUn?=
- =?us-ascii?Q?9ACEsz67DIO9PtL5Pb2fImRbYzLggO+NgkJBrKAikSUkcJIgf/3/8zNTwy3d?=
- =?us-ascii?Q?HIfy9OnxBEPGJCAOs8Bsi2m43eJDptDkUHhbvxyBwXslX9FiQJdgTVJsN9Sz?=
- =?us-ascii?Q?mF12+dq1k0H307xl3nqeSh6+MPCTGnmCinxL3g2xO10yk8xAcUAmfAUOPZFD?=
- =?us-ascii?Q?QxiwwX8R0oRtqiYiAgBsmpXLfXGfqWFP3sPEmECl3e/x7L2Xuo2tvxcgAMsf?=
- =?us-ascii?Q?kzD9V/icPKaBsR4diJtGve6Z3WzModCi9KsuOzSRJ0oKwAMzOnwpvDbCsxnZ?=
- =?us-ascii?Q?5fd/yj3L0vAXN8Gp/Cx6GjOzwStHF0rMV5H/ifhKascOaN4fBrShBis/h7Oq?=
- =?us-ascii?Q?Xo3vNOO/CMZYb0zDNTx/CW4Fz1sE5j/I4U48xrrbuyBya8+1lhrv8wa9fqwr?=
- =?us-ascii?Q?o0Nqh6zgsLJVPZyWHFT3pqJD/S3Vx8cNcEUL6EmCGOPBKFU2YN1ri8Yxw9h3?=
- =?us-ascii?Q?oRxd0bH8TG2+im9Wjg00p00aItks2x6N48SalpmYaZCdCWFsEbga/YKui9uj?=
- =?us-ascii?Q?2cHN4kcNENTOGfh99++xWdN7OuGtDgloS8LhODb/t+Y4vUtBrElJeenUna6E?=
- =?us-ascii?Q?Xui/b/1Rp5mDbLHMfdGifj1r1F7x94D5N/B6c/grHDkHw57A/a7XWjv00ioS?=
- =?us-ascii?Q?jSEsH4Be0DGiDjRGrYUuJO/bgJCR9ZpMkl0PDrzYpCXkqx7KYZA/8QO4Bat+?=
- =?us-ascii?Q?fCMAFIA6mIyKqQFAwrbDjM8nXKkLJ+3IAClvfATd/4cYfGhgXWpZvsGPrJFz?=
- =?us-ascii?Q?wdhXL7APU8L3ThZ0P0YYyhmQDiRsn83rQbILTzBw9Xs7S7V4ir1TeRxh+7Sl?=
- =?us-ascii?Q?J3u+X+Qr6B6rrK3ovHURYnG9gWDi9mYnE/gqCSbUg/ODjdeIeI6yTvOZRY9K?=
- =?us-ascii?Q?8WYtH4BapbM=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(10070799003)(7416014)(376014)(7053199007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IbEfm0wOJIcErhlOh97NHfCTuV8dhK7iiarXlTMr5XmXsY+rQtpj5NT70Ouh?=
- =?us-ascii?Q?VOPm3ElJxQWuW52Gk0w9vqw85ueoSC7Xm8Iey6r09rraqj1qqcnlRwyPtnlL?=
- =?us-ascii?Q?53xf/e6sFiCmcggTDjeFy0WHFr2pL5T4voRPSyFZpON3E0q53jbC+qpQVBoF?=
- =?us-ascii?Q?yUq8WEHAGVJ71KfOeLPXrHI4CAIeUA28wFLlJZgoOd8sybltv64Y86C3j9xM?=
- =?us-ascii?Q?duXX8w+1+jMW6wEAOYkLFgL0k6MwLXohkDoVCqbF4gdmy3z6MdCOK+X5JVrI?=
- =?us-ascii?Q?pv/lUhqsp9uIkx19zS3u/RhJjz5NdUIaOJkLV81k0AGpb3bxZHPXuprh2Zbe?=
- =?us-ascii?Q?yyXI8uN2HdbMzP338HajZGDWyUehYeZVP4O4LYfXUfa0fxBCv2aK+rjgmZ5U?=
- =?us-ascii?Q?ulAEHDIRaoZGGVxGrE92Tp1Wkp3ztw3gr2oa/LmPJ6FLH3fqNcqpZ7MDQrNy?=
- =?us-ascii?Q?eDwbNAZCenxRuUaYeqKkNdlcMXvMzILLc0c3/vQo9ZdiFyyHW2V+MvdG3z6S?=
- =?us-ascii?Q?SjVc35XQy0PCcIHwFtnxQlFJPtjCJQvugjarFfAn9VCyYaoZcmIt2t+llolX?=
- =?us-ascii?Q?ZVFU/4/UIEcjw6LaVoy2TUw8eM1cINYOfCR1fePfYUohkkK+/Xq/oQLcigBx?=
- =?us-ascii?Q?6Wtxj4sueFeTkgd1XVEfGo2tWjLm1dizAGrZAbo2lyD2U8chK0pNf39MAwtz?=
- =?us-ascii?Q?tyf9Wf7pBdZvPnoHIfhFJFYo912Yu7FRf+MmJDSTXG1EQ+qF655x2ayCHJLn?=
- =?us-ascii?Q?NxHCa6ByCPAwgpshgkEW06B1Wgh0JCtu5gEFpRTea63f4cxxLJvIwbUY+Sxm?=
- =?us-ascii?Q?X5g9PlgItuYJ8m1RcQBopW+Kddpj6M76EoB9OkoPTT9fkb0ZyKzL7pgQzvu5?=
- =?us-ascii?Q?NjZ3hlb/og7IjOkctWIyQNCgeFJZEJNWdq/VNnw9jxvfnE4vNSSvXacEFoKz?=
- =?us-ascii?Q?B0JjdkExC2kB5eqbmScLDrRaeikeBH2zV3qj+2KbHaKHm85lf6gSXH7xxcmk?=
- =?us-ascii?Q?MO3vv8bSfmhGNf81oHVZHhQFHEMFLTOF5wIQ8wuR3msrlmijMrBPGZ8db/Na?=
- =?us-ascii?Q?Jv3kPBC7m9kLoVPWVF4l/X52IMj6Gqksn8ADvUx2jJPpdSoMUz2yGIJUOHMk?=
- =?us-ascii?Q?YLLR8pKkwTKLw0sUk67yLVII2C57qYlFkz4lz+03XllnAMR0yjtvoqTnukuw?=
- =?us-ascii?Q?QoGDK1nhjcOYwofLCIcQ3PObWZokP0XVlGj//5Oj3Y0FSGgudedAyXan6FE7?=
- =?us-ascii?Q?ZAjKsWa7nQjBHO+cSuLRRa69nRje58Giuj9EpCx8IBNQxHJCKZm6GhN1ReiC?=
- =?us-ascii?Q?m6U0yhqPlR/mga5geAohdxBbAj4Ud2lsS6BTjEf61Ax90QQl31lfyYYW0lzp?=
- =?us-ascii?Q?klduPmwmzVccUvj7Kr7wR619Yz6yObTF9BbbVefLz6u1NP2GVQtkp7f0O3HE?=
- =?us-ascii?Q?lVa+0HcDWVyN2CikrWgKGKGs31KF1jmcZK55zwYdsBr5DTxowC0juQqQg1wl?=
- =?us-ascii?Q?FGkuyV2A0hbYasxUju1XqBmsmh71sFVI5uENNziLB2kGLLAAfqKmluVHoqT0?=
- =?us-ascii?Q?X5KVQx7du1Bu+kxR1lXBsVTR1VhVNUzrDRdxVvfJ/En7CPqvOn4ZTGy/mg2E?=
- =?us-ascii?Q?og=3D=3D?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f36e618-e51d-4570-b348-08ddb0b89163
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2025 11:41:31.7432
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m8/Vq16ceD3KFlefcJ0F61PWwd7doflfrvnZSXRMu3+ULNyaGlD5zZluSHrPGRhkG+YVXJLJaY3YjT1PgNcz1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P265MB7532
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250621121842.0c3ca452.gary@garyguo.net>
 
-On Wed, 18 Jun 2025 09:49:30 -0700
-Boqun Feng <boqun.feng@gmail.com> wrote:
+On Sat, Jun 21, 2025 at 12:18:42PM +0100, Gary Guo wrote:
+[...]
+> > +
+> > +/// The annotation type for relaxed memory ordering.
+> > +pub struct Relaxed;
+> > +
+> > +/// The annotation type for acquire memory ordering.
+> > +pub struct Acquire;
+> > +
+> > +/// The annotation type for release memory ordering.
+> > +pub struct Release;
+> > +
+> > +/// The annotation type for fully-order memory ordering.
+> > +pub struct Full;
+> > +
+> > +/// Describes the exact memory ordering.
+> > +pub enum OrderingType {
+> > +    /// Relaxed ordering.
+> > +    Relaxed,
+> > +    /// Acquire ordering.
+> > +    Acquire,
+> > +    /// Release ordering.
+> > +    Release,
+> > +    /// Fully-ordered.
+> > +    Full,
+> > +}
+> 
+> Does this need to be public? I think this can cause a confusion on what
+> this is in the rendered documentation.
+> 
 
-> One important set of atomic operations is the arithmetic operations,
-> i.e. add(), sub(), fetch_add(), add_return(), etc. However it may not
-> make senses for all the types that `AllowAtomic` to have arithmetic
-> operations, for example a `Foo(u32)` may not have a reasonable add() or
-> sub(), plus subword types (`u8` and `u16`) currently don't have
-> atomic arithmetic operations even on C side and might not have them in
-> the future in Rust (because they are usually suboptimal on a few
-> architecures). Therefore add a subtrait of `AllowAtomic` describing
-> which types have and can do atomic arithemtic operations.
-> 
-> A few things about this `AllowAtomicArithmetic` trait:
-> 
-> * It has an associate type `Delta` instead of using
->   `AllowAllowAtomic::Repr` because, a `Bar(u32)` (whose `Repr` is `i32`)
->   may not wants an `add(&self, i32)`, but an `add(&self, u32)`.
-> 
-> * `AtomicImpl` types already implement an `AtomicHasArithmeticOps`
->   trait, so add blanket implementation for them. In the future, `i8` and
->   `i16` may impl `AtomicImpl` but not `AtomicHasArithmeticOps` if
->   arithemtic operations are not available.
-> 
-> Only add() and fetch_add() are added. The rest will be added in the
-> future.
-> 
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  rust/kernel/sync/atomic/generic.rs | 101 +++++++++++++++++++++++++++++
->  1 file changed, 101 insertions(+)
-> 
-> diff --git a/rust/kernel/sync/atomic/generic.rs b/rust/kernel/sync/atomic/generic.rs
-> index bcdbeea45dd8..8c5bd90b2619 100644
-> --- a/rust/kernel/sync/atomic/generic.rs
-> +++ b/rust/kernel/sync/atomic/generic.rs
-> @@ -57,6 +57,23 @@ fn from_repr(repr: Self::Repr) -> Self {
->      }
->  }
->  
-> +/// Atomics that allows arithmetic operations with an integer type.
-> +pub trait AllowAtomicArithmetic: AllowAtomic {
-> +    /// The delta types for arithmetic operations.
-> +    type Delta;
-> +
-> +    /// Converts [`Self::Delta`] into the representation of the atomic type.
-> +    fn delta_into_repr(d: Self::Delta) -> Self::Repr;
-> +}
-> +
-> +impl<T: AtomicImpl + AtomicHasArithmeticOps> AllowAtomicArithmetic for T {
-> +    type Delta = Self;
-> +
-> +    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-> +        d
-> +    }
-> +}
-> +
->  impl<T: AllowAtomic> Atomic<T> {
->      /// Creates a new atomic.
->      pub const fn new(v: T) -> Self {
-> @@ -410,3 +427,87 @@ fn try_cmpxchg<Ordering: All>(&self, old: &mut T, new: T, _: Ordering) -> bool {
->          }
->      }
->  }
-> +
-> +impl<T: AllowAtomicArithmetic> Atomic<T>
-> +where
-> +    T::Repr: AtomicHasArithmeticOps,
-> +{
-> +    /// Atomic add.
-> +    ///
-> +    /// The addition is a wrapping addition.
-> +    ///
-> +    /// # Examples
-> +    ///
-> +    /// ```rust
-> +    /// use kernel::sync::atomic::{Atomic, Relaxed};
-> +    ///
-> +    /// let x = Atomic::new(42);
-> +    ///
-> +    /// assert_eq!(42, x.load(Relaxed));
-> +    ///
-> +    /// x.add(12, Relaxed);
-> +    ///
-> +    /// assert_eq!(54, x.load(Relaxed));
-> +    /// ```
-> +    #[inline(always)]
-> +    pub fn add<Ordering: RelaxedOnly>(&self, v: T::Delta, _: Ordering) {
+I would like to make it public so that users can define their own method
+with ordering out of atomic mod (even out of kernel crate):
 
-This can be just
+    pub fn my_ordering_func<Ordering: All>(..., o: Ordering) {
+        match Ordering::TYPE {
 
-pub fn add(&self, v: T::Delta, _: Relaxed)
+	}
+    }
 
-> +        let v = T::delta_into_repr(v);
-> +        let a = self.as_ptr().cast::<T::Repr>();
-> +
-> +        // SAFETY:
-> +        // - For calling the atomic_add() function:
-> +        //   - `self.as_ptr()` is a valid pointer, and per the safety requirement of `AllocAtomic`,
-> +        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` is a valid pointer,
-> +        //   - per the type invariants, the following atomic operation won't cause data races.
-> +        // - For extra safety requirement of usage on pointers returned by `self.as_ptr():
-> +        //   - atomic operations are used here.
-> +        unsafe {
-> +            T::Repr::atomic_add(a, v);
-> +        }
-> +    }
-> +
+I just realized to do so I need to make OrderingUnit pub too (with a
+sealed supertrait of course).
 
+> IIUC this is for internal atomic impl only
+> and this is not useful otherwise. This can be moved into `internal` and
+> then `pub(super) use internal::OrderingType` to stop exposing it.
+> 
+> (Or, just `#[doc(hidden)]` so it doesn't show in the docs).
+> 
+
+Seem reasonable.
+
+> > +
+> > +mod internal {
+> > +    /// Unit types for ordering annotation.
+> > +    ///
+> > +    /// Sealed trait, can be only implemented inside atomic mod.
+> > +    pub trait OrderingUnit {
+> > +        /// Describes the exact memory ordering.
+> > +        const TYPE: super::OrderingType;
+> > +    }
+> > +}
+> > +
+> > +impl internal::OrderingUnit for Relaxed {
+> > +    const TYPE: OrderingType = OrderingType::Relaxed;
+> > +}
+[...]
+> > +
+> > +/// The trait bound for operations that only support acquire or relaxed ordering.
+> > +pub trait AcquireOrRelaxed: All {
+> > +    /// Describes whether an ordering is relaxed or not.
+> > +    const IS_RELAXED: bool = false;
+> 
+> This should not be needed. I'd prefer to the use site to just match on
+> `TYPE`.
+> 
+
+Right, I somehow missed how monomorphization works. I can drop this.
+Thanks!
+
+> > +}
+> > +
+[...]
+> > +/// The trait bound for operations that only support relaxed ordering.
+> > +pub trait RelaxedOnly: AcquireOrRelaxed + ReleaseOrRelaxed + All {}
+> > +
+> > +impl RelaxedOnly for Relaxed {}
+> 
+> Any reason that this is needed at all? Should just be a non-generic
+
+Mostly for documentation purpose, i.e. users can figure out the ordering
+from the trait bounds of the function. I will say we can probably drop
+it when we find a Release-only or Acquire-only function, but even then
+the current definition won't affect users, so I lean torwards keeping
+it.
+
+Regards,
+Boqun
+
+> function that takes a `Relaxed` directly?
+> 
 
