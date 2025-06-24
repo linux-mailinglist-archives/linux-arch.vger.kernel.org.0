@@ -1,97 +1,148 @@
-Return-Path: <linux-arch+bounces-12445-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12446-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6226AAE6BCF
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Jun 2025 17:52:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FB74AE6C4F
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Jun 2025 18:17:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 897353A810E
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Jun 2025 15:52:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CA411885B4E
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Jun 2025 16:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C89274B37;
-	Tue, 24 Jun 2025 15:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D6C192598;
+	Tue, 24 Jun 2025 16:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="qW+iT8/r"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359B4145355;
-	Tue, 24 Jun 2025 15:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A082DDC5;
+	Tue, 24 Jun 2025 16:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750780341; cv=none; b=FYb2Oe2T812MoXiNvUZRaH4lAbf+OkLeBiT52Wyrbcfwh7k6E3C3G6+HlDQ2sRhNVf1NIJqJ2RGrWQV0zZVBTtIX6jGn2XG45nlXD0y4qaXmIhpfKTu6ZX1Obt5AAbLeabyyP4cRSAzCMlCQLRHkwKwlU0wUX3Sv1c0rr8kHbro=
+	t=1750781813; cv=none; b=I9cb4nNUo4V497nifNhre7hXIqoO2yxrK4+uu1bwaRskNUAwdeP3cvx+dZiY37RYfsqZmt8YXKAe65ISt9L7k+0qb49OLGA24dt1lM77FcsrhYHoPUlNk2H5kthOUm9A35516FTlW+6FFe172+iOjIlgttZ+decO12ZvMH5eRyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750780341; c=relaxed/simple;
-	bh=Q9Pi1LJZoJIyH4rNb50nbJrtCZbYFD9cd+yIHpffavU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aXcW4g4LcJV/sXgJL8AoJz8mhyq+2dUV4FPSXUBCvwbLjqwd8FoGp+KxH4dB3s1ePXrXYbkkFTd8QhGVKVlYrAo4NSh+9/1EnFAYeC5hQ6ozhiGw3SibCYmtOZQRk/pompf/vTDy4XMZiBm8Gk078Sfq+UAieis/sgLERRLsNwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bRTpt48Ksz6J6l2;
-	Tue, 24 Jun 2025 23:47:18 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 52AE21402C3;
-	Tue, 24 Jun 2025 23:52:18 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.19.247) by
- frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 24 Jun 2025 17:52:17 +0200
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Catalin Marinas <catalin.marinas@arm.com>, <james.morse@arm.com>,
-	<linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-mm@kvack.org>, <gregkh@linuxfoundation.org>, Will Deacon
-	<will@kernel.org>, Dan Williams <dan.j.williams@intel.com>, Davidlohr Bueso
-	<dave@stgolabs.net>
-CC: Yicong Yang <yangyicong@huawei.com>, <linuxarm@huawei.com>, Yushan Wang
-	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
- Rutland <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, H Peter Anvin
-	<hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>
-Subject: [PATCH v2 8/8] Hack: Pretend we have PSCI 1.2
-Date: Tue, 24 Jun 2025 16:48:04 +0100
-Message-ID: <20250624154805.66985-9-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250624154805.66985-1-Jonathan.Cameron@huawei.com>
+	s=arc-20240116; t=1750781813; c=relaxed/simple;
+	bh=8gl1rLZNofAk2fof2YGBHaM5ebdXQZzyZfIQBIqfrGI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fp2bFpwBNEEfRtMPrenisBzGQ0PYB5K/63zVaBHX+5lDdGUaPyhJo2HdhEcSgdRifmaC9gsF7VKElkSK9g0UQdkf3wpkq/MhW511tkVIIvHwBKRzLXBI574t7e6yVX8a02m1IPuk83NkHU7LuFPMfDygcZ9B6oA/oJLOS9HzSkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=qW+iT8/r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7092CC4CEE3;
+	Tue, 24 Jun 2025 16:16:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750781812;
+	bh=8gl1rLZNofAk2fof2YGBHaM5ebdXQZzyZfIQBIqfrGI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qW+iT8/rsJkuyydGDGHb8KNzu5Fem+I5+k86517u6RHxYUMT3QX+o7hLK8Qaf+v5P
+	 Ucpo6f9iuC5p59VlLBER+lJwCjJ+0excGOnQEkIhR4PdLsSdZSLdxvtsIR8ERIGYJk
+	 PdyGDvUBZLGO5mE2WaXTxs/YYp+Tz7zl2Mc5LjeM=
+Date: Tue, 24 Jun 2025 17:16:50 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
+	linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, Will Deacon <will@kernel.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Yicong Yang <yangyicong@huawei.com>, linuxarm@huawei.com,
+	Yushan Wang <wangyushan12@huawei.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org, H Peter Anvin <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 2/8] generic: Support
+ ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+Message-ID: <2025062439-submitter-affection-324b@gregkh>
 References: <20250624154805.66985-1-Jonathan.Cameron@huawei.com>
+ <20250624154805.66985-3-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250624154805.66985-3-Jonathan.Cameron@huawei.com>
 
-Need to update QEMU to PSCI 1.2. In meantime lie.
-This is just here to aid testing, not for review!
+On Tue, Jun 24, 2025 at 04:47:58PM +0100, Jonathan Cameron wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION provides the mechanism for
+> invalidate certain memory regions in a cache-incoherent manner.
+> Currently is used by NVIDMM adn CXL memory. This is mainly done
+> by the system component and is implementation define per spec.
+> Provides a method for the platforms register their own invalidate
+> method and implement ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION.
+> 
+> Architectures can opt in for this support via
+> CONFIG_GENERIC_CPU_CACHE_INVALIDATE_MEMREGION.
+> 
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>  drivers/base/Kconfig             |  3 +++
+>  drivers/base/Makefile            |  1 +
+>  drivers/base/cache.c             | 46 ++++++++++++++++++++++++++++++++
+>  include/asm-generic/cacheflush.h | 12 +++++++++
+>  4 files changed, 62 insertions(+)
+> 
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index 064eb52ff7e2..cc6df87a0a96 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -181,6 +181,9 @@ config SYS_HYPERVISOR
+>  	bool
+>  	default n
+>  
+> +config GENERIC_CPU_CACHE_INVALIDATE_MEMREGION
+> +	bool
+> +
+>  config GENERIC_CPU_DEVICES
+>  	bool
+>  	default n
+> diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+> index 8074a10183dc..0fbfa4300b98 100644
+> --- a/drivers/base/Makefile
+> +++ b/drivers/base/Makefile
+> @@ -26,6 +26,7 @@ obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ) += platform-msi.o
+>  obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
+>  obj-$(CONFIG_GENERIC_ARCH_NUMA) += arch_numa.o
+> +obj-$(CONFIG_GENERIC_CPU_CACHE_INVALIDATE_MEMREGION) += cache.o
+>  obj-$(CONFIG_ACPI) += physical_location.o
+>  
+>  obj-y			+= test/
+> diff --git a/drivers/base/cache.c b/drivers/base/cache.c
+> new file mode 100644
+> index 000000000000..8d351657bbef
+> --- /dev/null
+> +++ b/drivers/base/cache.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Generic support for CPU Cache Invalidate Memregion
+> + */
+> +
+> +#include <linux/spinlock.h>
+> +#include <linux/export.h>
+> +#include <asm/cacheflush.h>
+> +
+> +
+> +static const struct system_cache_flush_method *scfm_data;
+> +DEFINE_SPINLOCK(scfm_lock);
 
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- drivers/firmware/psci/psci.c | 2 ++
- 1 file changed, 2 insertions(+)
+Shouldn't this lock be static?  I don't see it being used outside of
+this file, and it's not exported.
 
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index 38ca190d4a22..804b0d7cda4b 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -646,6 +646,8 @@ static void __init psci_init_smccc(void)
- 		}
- 	}
- 
-+	/* Hack until qemu version stuff updated */
-+	arm_smccc_version_init(ARM_SMCCC_VERSION_1_2, psci_conduit);
- 	/*
- 	 * Conveniently, the SMCCC and PSCI versions are encoded the
- 	 * same way. No, this isn't accidental.
--- 
-2.48.1
+thanks,
 
+greg k-h
 
