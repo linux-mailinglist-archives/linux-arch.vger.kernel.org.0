@@ -1,65 +1,66 @@
-Return-Path: <linux-arch+bounces-12458-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12459-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0DA5AE8AE3
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Jun 2025 19:00:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1F2DAE8B4E
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Jun 2025 19:13:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9940C4A1B50
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Jun 2025 16:59:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2785518874BF
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Jun 2025 17:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14820273D74;
-	Wed, 25 Jun 2025 16:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9FE32DCC08;
+	Wed, 25 Jun 2025 17:03:52 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0D52E610B;
-	Wed, 25 Jun 2025 16:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D272DE1FE;
+	Wed, 25 Jun 2025 17:03:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750870005; cv=none; b=D4QmXPoMrBRaFUj85dcauXB7qJ1gTTUiJlqZiSFZTCUNOUE/vOjPCykagwNwPhPWldWJCh5+YsQ8Dd1NWdQrsDxNQM8AW3W8pZQ3bjsF9CAnmwsKCcKWvh4ZfzA7Icb393DurnOLuTb1u9pY7npvCL/zg9v7RHM5iOEYWxDm9o8=
+	t=1750871032; cv=none; b=TAulrDLtGmT4IPM+B30W8Du3bt5EUwJafeN03hU7NnH+hURCF/P/r07fCd6kKEN1XNYz8Vil5JugTPT7qB8AK0aNP7FImvsqs8vuHsQAoUsaF2XbqnHT0p8gOdAZWy2JjlAV29lX0TaFKKugt6+sTB6QmRHYmRmQfPg2g2mB98M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750870005; c=relaxed/simple;
-	bh=ko+3Y1n1A4cWcIARuacFagXbEWucMOHF+AFJwwiTTP4=;
+	s=arc-20240116; t=1750871032; c=relaxed/simple;
+	bh=qHpJQgFbSnWLpLMIEMXz/hPE0rhwCApGoNHwZnNsbBM=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Wx6THB6IGZU+/SbNJ+wdiqLvm1Zf+PLtsC0dPzef3lhA/g1TR3gcSl0M+AZaOSU/nltFwioJV+ecavQLOGNKU6Umubpfw6pWu07P2GCkMB1EGMC5ZUISnPWhpvuVFyyX5Tlx0fV9FgAMZxsvO1OOvokI7MUrfPoESutaNtKsnO0=
+	 MIME-Version:Content-Type; b=nAU8od0KuUeTGp9yJynIbp2vL1f88M5hkDwS1Xg6C0bhpnyeJzjKxIiHXYqFAMtnEFIuR7XXs+O4o/72GqtzzJf3LSn9IQN8Z2RfIyzHJY21A6oXJTWxuGDM4DXm2Z68OAdVeV8vkd9FYShnG1xUzjwAIxbEmu0SLva/mhxiU8c=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bS74s1KL9z67M9n;
-	Thu, 26 Jun 2025 00:46:37 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bS7Pk1vB4z6K9B9;
+	Thu, 26 Jun 2025 01:01:14 +0800 (CST)
 Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id D74631402EC;
-	Thu, 26 Jun 2025 00:46:40 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 7DA671402EC;
+	Thu, 26 Jun 2025 01:03:47 +0800 (CST)
 Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
  (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 25 Jun
- 2025 18:46:39 +0200
-Date: Wed, 25 Jun 2025 17:46:37 +0100
+ 2025 19:03:46 +0200
+Date: Wed, 25 Jun 2025 18:03:43 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Catalin Marinas <catalin.marinas@arm.com>, <james.morse@arm.com>,
+To: Peter Zijlstra <peterz@infradead.org>
+CC: "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas
+	<catalin.marinas@arm.com>, <james.morse@arm.com>,
 	<linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
 	<linux-mm@kvack.org>, <gregkh@linuxfoundation.org>, Will Deacon
 	<will@kernel.org>, Dan Williams <dan.j.williams@intel.com>, Davidlohr Bueso
-	<dave@stgolabs.net>, <linuxarm@huawei.com>
-CC: Yicong Yang <yangyicong@huawei.com>, Yushan Wang
-	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, "Mark
- Rutland" <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, H Peter Anvin
-	<hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>
-Subject: Re: [PATCH v2 2/8] generic: Support
- ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-Message-ID: <20250625174637.0000732b@huawei.com>
-In-Reply-To: <20250624154805.66985-3-Jonathan.Cameron@huawei.com>
+	<dave@stgolabs.net>, Yicong Yang <yangyicong@huawei.com>,
+	<linuxarm@huawei.com>, Yushan Wang <wangyushan12@huawei.com>, "Lorenzo
+ Pieralisi" <lpieralisi@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Dave
+ Hansen <dave.hansen@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	<x86@kernel.org>, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v2 0/8] Cache coherency management subsystem
+Message-ID: <20250625180343.000020de@huawei.com>
+In-Reply-To: <20250625093152.GZ1613376@noisy.programming.kicks-ass.net>
 References: <20250624154805.66985-1-Jonathan.Cameron@huawei.com>
-	<20250624154805.66985-3-Jonathan.Cameron@huawei.com>
+	<20250625085204.GC1613200@noisy.programming.kicks-ass.net>
+	<FB7122A4-BF5E-4C05-805A-2EE3240286A1@zytor.com>
+	<20250625093152.GZ1613376@noisy.programming.kicks-ass.net>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -69,64 +70,81 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
  frapeml500008.china.huawei.com (7.182.85.71)
 
-On Tue, 24 Jun 2025 16:47:58 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+On Wed, 25 Jun 2025 11:31:52 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-> From: Yicong Yang <yangyicong@hisilicon.com>
+> On Wed, Jun 25, 2025 at 02:12:39AM -0700, H. Peter Anvin wrote:
+> > On June 25, 2025 1:52:04 AM PDT, Peter Zijlstra <peterz@infradead.org> wrote:  
+> > >On Tue, Jun 24, 2025 at 04:47:56PM +0100, Jonathan Cameron wrote:
+> > >  
+> > >> On x86 there is the much loved WBINVD instruction that causes a write back
+> > >> and invalidate of all caches in the system. It is expensive but it is  
+> > >
+> > >Expensive is not the only problem. It actively interferes with things
+> > >like Cache-Allocation-Technology (RDT-CAT for the intel folks). Doing
+> > >WBINVD utterly destroys the cache subsystem for everybody on the
+> > >machine.
+> > >  
+> > >> necessary in a few corner cases.   
+> > >
+> > >Don't we have things like CLFLUSH/CLFLUSHOPT/CLWB exactly so that we can
+> > >avoid doing dumb things like WBINVD ?!?
+> > >  
+> > >> These are cases where the contents of
+> > >> Physical Memory may change without any writes from the host. Whilst there
+> > >> are a few reasons this might happen, the one I care about here is when
+> > >> we are adding or removing mappings on CXL. So typically going from
+> > >> there being actual memory at a host Physical Address to nothing there
+> > >> (reads as zero, writes dropped) or visa-versa.   
+> > >  
+> > >> The
+> > >> thing that makes it very hard to handle with CPU flushes is that the
+> > >> instructions are normally VA based and not guaranteed to reach beyond
+> > >> the Point of Coherence or similar. You might be able to (ab)use
+> > >> various flush operations intended to ensure persistence memory but
+> > >> in general they don't work either.  
+> > >
+> > >Urgh so this. Dan, Dave, are we getting new instructions to deal with
+> > >this? I'm really not keen on having WBINVD in active use.
+> > >  
+> > 
+> > WBINVD is the nuclear weapon to use when you have lost all notion of
+> > where the problematic data can be, and amounts to a full reset of the
+> > cache system. 
+> > 
+> > WBINVD can block interrupts for many *milliseconds*, system wide, and
+> > so is really only useful for once-per-boot type events, like MTRR
+> > initialization.  
 > 
-> ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION provides the mechanism for
-> invalidate certain memory regions in a cache-incoherent manner.
-> Currently is used by NVIDMM adn CXL memory. This is mainly done
-> by the system component and is implementation define per spec.
-> Provides a method for the platforms register their own invalidate
-> method and implement ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION.
-> 
-> Architectures can opt in for this support via
-> CONFIG_GENERIC_CPU_CACHE_INVALIDATE_MEMREGION.
-> 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> diff --git a/drivers/base/cache.c b/drivers/base/cache.c
-> new file mode 100644
-> index 000000000000..8d351657bbef
-> --- /dev/null
-> +++ b/drivers/base/cache.c
-> @@ -0,0 +1,46 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Generic support for CPU Cache Invalidate Memregion
-> + */
-> +
-> +#include <linux/spinlock.h>
+> Right this... But that CXL thing sounds like that's semi 'regular' to
+> the point that providing some infrastructure around it makes sense. This
+> should not be.
 
-I got carried away dropping some unused headers. This needs
+I'm fully on board with the WBINVD issues (and hope for something new for
+the X86 world). However, this particular infrastructure (for those systems
+that can do so) is about pushing the problem and information to where it
+can be handled in a lot less disruptive fashion. It can take 'a while' but
+we are flushing only cache entries in the requested PA range. Other than
+some potential excess snoop traffic if the coherency tracking isn't precise,
+there should be limited affect on the rest of the system.
 
-linux/memregion.h
+So, for the systems I particularly care about, the CXL case isn't that bad.
 
+Just for giggles, if you want some horror stories the (dropped) ARM PSCI
+spec provides for approaches that require synchronization of calls across
+all CPUs.
 
-> +#include <linux/export.h>
-> +#include <asm/cacheflush.h>
-> +
+"CPU Rendezvous" in the attributes of CLEAN_INV_MEMREGION requires all
+CPUs to make a call within an impdef (discoverable) timeout.
+https://developer.arm.com/documentation/den0022/falp1/?lang=en
 
-So that the following have 'previous' prototypes.
+I gather no one actually needs that on 'real' systems - that is systems
+where we actually need to do these flushes! The ACPI 'RFC' doesn't support
+that delight.
 
-> +int cpu_cache_invalidate_memregion(int res_desc, phys_addr_t start, size_t len)
-> +{
-> +	guard(spinlock_irqsave)(&scfm_lock);
-> +	if (!scfm_data)
-> +		return -EOPNOTSUPP;
-> +
-> +	return scfm_data->invalidate_memregion(res_desc, start, len);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cpu_cache_invalidate_memregion, "DEVMEM");
-> +
-> +bool cpu_cache_has_invalidate_memregion(void)
-> +{
-> +	guard(spinlock_irqsave)(&scfm_lock);
-> +	return !!scfm_data;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cpu_cache_has_invalidate_memregion, "DEVMEM");
+Jonathan
+
 
