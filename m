@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-12467-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12468-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95D04AE9DC7
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 14:48:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 085F8AE9DCE
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 14:49:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AAC83A447C
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 12:47:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4446B169353
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 12:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E402E1C55;
-	Thu, 26 Jun 2025 12:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C0C2E11BF;
+	Thu, 26 Jun 2025 12:49:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BCYAn8rg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oxkmt1d+"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E932E1729;
-	Thu, 26 Jun 2025 12:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FAF2E06DC;
+	Thu, 26 Jun 2025 12:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750942072; cv=none; b=DBh5Ygcybs8Mqvh6Oh3JrCInQd9AUWWJRtoMy8JkNhkHQiVVijT0GhdkzBYSvP7BbyE9GyFCqeqNZn0w2gElfT8uHIZ4Cys83AS9W12wto/rgFGiEKAkukoVvwQYF5tAcTtqH9MO+FEzUt3/TynhswRjud4V6ywJHrNGB/p8O9U=
+	t=1750942189; cv=none; b=FuXPaYMYgEuPAEEfrBGHaVs+TMsGgsffhkUGE0rgqMl6ZG8Gnid1SR6MBAHxR7pD5n24qFxNTMXU38hWlXuIxlFy+AJRJh80iV6jwKA9jZGn7r6bc6poLSQPocQNIkABo6rPjHNFZZSSQZdgv9LuT8E8HoPk61EM1Pdn24ZZn20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750942072; c=relaxed/simple;
-	bh=XL7Aux9kgahrJU3dpfYeGvcKLSpUw6RBF4v4g6HOzzc=;
+	s=arc-20240116; t=1750942189; c=relaxed/simple;
+	bh=kL4J8BTLyYzlWo6RRBwU61vvtNNhnrQbzVS7EarMxic=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=TI8fMzI8I517P2tFiWRb9/HcTHvDNk/bF6kaIwis9VA7e/iCxnNfqQLOUqEq5rvA950rw80pcnJuTPXHJd9TFgA/XsySPWvEOZPrLaCYd2l3nk5A4LJ0ixbKaWQyTJHsT3c90UzPQugCOemUx0b5WHk9jBRpftlfUwh/fNg1reE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BCYAn8rg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F4A3C4CEEB;
-	Thu, 26 Jun 2025 12:47:47 +0000 (UTC)
+	 MIME-Version:Content-Type; b=YGLxHJ0gcVotAeJii8DYrJVGmzt+n7wuWfgrVGMYCrJrGT9Uq6JMd8h/n9y8OVDM64waION3O/Dtry+I6fi7Y3GjoQD7ak4dYEdcqAxKm7kPsl4cS5OqO6di78CsNYVtgqrlILWCZ8LkWK2NitV3faIuxaeUXnTflSgjON6g4fA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oxkmt1d+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6706C4CEEB;
+	Thu, 26 Jun 2025 12:49:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750942072;
-	bh=XL7Aux9kgahrJU3dpfYeGvcKLSpUw6RBF4v4g6HOzzc=;
+	s=k20201202; t=1750942189;
+	bh=kL4J8BTLyYzlWo6RRBwU61vvtNNhnrQbzVS7EarMxic=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=BCYAn8rgXzQ2N7HFq15gTuZqkSQabKj/Feu1oeOTCYB2rvyiBM9/w5vt/0dGpK/rn
-	 MOF4E175qyYKeFWMnL6lMaoFwD/AIckF6BSpB9pAeESjf/p70YtIZfWe1g8XFZ/2Ik
-	 c+YdjXewkM3RYfh7yPLj97VWw84IRAFMjhFMEOVPOVIR6wgKk/QuwXaXOi0js+xRn9
-	 ASku/mGanEgy0+F3M2pz3XkzD60r8cS5AgFcY6pPL8ICFd3LtAcHAh8JRSFQDmSIhH
-	 bKp19DShxczCvoiFfeCXiGbEIW5zA1QCBgckGIYmdPd2eDq4LKih2eH2AC4pHH+/z5
-	 7TZKKdwktQG9A==
+	b=oxkmt1d+FqxkPZCKCgFovSEQWDOheBvQC7RFTrKLNcQR1zOXU4wZuezSDWM/fD6Vm
+	 ZwS5ac6UPUXG/UGMoaPdLAnzTV8NJwFYxki8rhs/AO/k/SWHR5KWlyazHRrzM5L+kG
+	 U66spCZqvQlxHBL8j+j4lsUwUeE5GDo/D3V3t+JnhhDpI312ft/dCFBhklOu0nNzcn
+	 NWRN9vap2WtP36RNIxD2UagGPpob0VG2lBe1r1WQxHF/nVhiHwUU7eg2gmWQx92ytS
+	 SZJkQ7xlmc3tJmIaF1k4maNZGLr7kb1czE6663fthbJKByt98WjQHH36/NgvSwDyhj
+	 YHb311YfXL1lg==
 From: Andreas Hindborg <a.hindborg@kernel.org>
 To: "Boqun Feng" <boqun.feng@gmail.com>
 Cc: <linux-kernel@vger.kernel.org>,  <rust-for-linux@vger.kernel.org>,
@@ -58,15 +58,15 @@ Cc: <linux-kernel@vger.kernel.org>,  <rust-for-linux@vger.kernel.org>,
   "Paul E. McKenney" <paulmck@kernel.org>,  "Greg Kroah-Hartman"
  <gregkh@linuxfoundation.org>,  "Linus Torvalds"
  <torvalds@linux-foundation.org>,  "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH v5 07/10] rust: sync: atomic: Add Atomic<u{32,64}>
-In-Reply-To: <20250618164934.19817-8-boqun.feng@gmail.com> (Boqun Feng's
-	message of "Wed, 18 Jun 2025 09:49:31 -0700")
+Subject: Re: [PATCH v5 08/10] rust: sync: atomic: Add Atomic<{usize,isize}>
+In-Reply-To: <20250618164934.19817-9-boqun.feng@gmail.com> (Boqun Feng's
+	message of "Wed, 18 Jun 2025 09:49:32 -0700")
 References: <20250618164934.19817-1-boqun.feng@gmail.com>
-	<NipooAeL4iGcyj1mFm4IgmsOxRMn1dmQSeyQhU5piJonKEvKbj_tFKnDuN0I2NV3V_sfoOb3iLfVWaa2q7qYXA==@protonmail.internalid>
-	<20250618164934.19817-8-boqun.feng@gmail.com>
+	<ltC0BkXC4k2mWM8ivSmhZxpTx7Nivj7YBJGffVg8XahVfEdyUa04pCWPY9r8s7L5j8e9QkmioBhT3oFIs7cL1w==@protonmail.internalid>
+	<20250618164934.19817-9-boqun.feng@gmail.com>
 User-Agent: mu4e 1.12.9; emacs 30.1
-Date: Thu, 26 Jun 2025 14:47:39 +0200
-Message-ID: <87ldpezn2s.fsf@kernel.org>
+Date: Thu, 26 Jun 2025 14:49:39 +0200
+Message-ID: <87frfmzmzg.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -77,19 +77,20 @@ Content-Type: text/plain
 
 "Boqun Feng" <boqun.feng@gmail.com> writes:
 
-> Add generic atomic support for basic unsigned types that have an
-> `AtomicImpl` with the same size and alignment.
->
-> Unit tests are added including Atomic<i32> and Atomic<i64>.
+> Add generic atomic support for `usize` and `isize`. Note that instead of
+> mapping directly to `atomic_long_t`, the represention type
+> (`AllowAtomic::Repr`) is selected based on CONFIG_64BIT. This reduces
+> the necessarity of creating `atomic_long_*` helpers, which could save
+> the binary size of kernel if inline helpers are not available.
 >
 > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-
 
 Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
 
 
 Best regards,
 Andreas Hindborg
+
 
 
 
