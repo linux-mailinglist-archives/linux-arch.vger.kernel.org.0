@@ -1,252 +1,179 @@
-Return-Path: <linux-arch+bounces-12470-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12471-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 603BFAE9EF2
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 15:36:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7238AE9F71
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 15:54:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92C7D1C4392F
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 13:36:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FCDD166E02
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 13:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894C72E610C;
-	Thu, 26 Jun 2025 13:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341C72E1C7E;
+	Thu, 26 Jun 2025 13:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mkx7OzxB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZVtjbxY"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583922E54AF;
-	Thu, 26 Jun 2025 13:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036611922F6;
+	Thu, 26 Jun 2025 13:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750944996; cv=none; b=kkIUvWWV8P4qWYAIAiHbr+c8W6GtIGe578EFtdD6/gWxgLcI3gVz+16d3gdRWqzNWRe7/uYOWGcOPGtxJ/UjEtCl6+NVmcv96WginyoNQIPwLNO9+r0/r5isfBza4FDkuGM7VbsuWbqwgN0/4cWWtGjaZHNFX2BvgApyego8O98=
+	t=1750946073; cv=none; b=VmssgL4lRIj04Jfo8UB2Do2TAPnx4vQeLeON838heUZxpqTQRscCmvym9eiiKhKdYuTFY87wfrFTNUP/1fZ0MScjPcoRdFgpyfM4VHFCRSlTbYJqKXCFymsqWMfgThKI/eUa1/1X3lx1F7jiMsBXtE4YrkYJTI//D+pFKtKdH5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750944996; c=relaxed/simple;
-	bh=S0Ln0L0FITmTu64+cEXbgyorFVfjS69CFW5Phe8pQhU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=RKL+UzEjbUIm1bsR1Qd5Pr9QWv7CCCWpWz2pee5Q6us50P1MaGCdiNWdYh+eeoi+WSqR+GYLbhpRYbNjcSBmQKFH1b6yGhirCtadrCGawkVJqHvRnda7fNrx50XFHpFIyYtn4Pckirsx3uvAhWWPRbe/JkWnJeykuMulZtUxiPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mkx7OzxB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D44C4CEEE;
-	Thu, 26 Jun 2025 13:36:31 +0000 (UTC)
+	s=arc-20240116; t=1750946073; c=relaxed/simple;
+	bh=vGdG2KgJYgg71pcFHeAXtJsfxhvB+yb6bY/1UFHNcP0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=up1QpF//ceIvJRmv5CQHBdGQFmUkujMLCsLih9aplS0rERV+iP6Mqni625YfTKSahzZCBPJaHIJUsyP95k4jW3fHi1Izp93T9AkvE+MCsc8+6tArM4jyPsF3Bt8fICkxpjuxxzyagKUqE+cTqSHSS/ol0SwbyvRMP6pzea2A4XU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZVtjbxY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5A5DC4CEEB;
+	Thu, 26 Jun 2025 13:54:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750944995;
-	bh=S0Ln0L0FITmTu64+cEXbgyorFVfjS69CFW5Phe8pQhU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Mkx7OzxBYzdEqyovK2Sgoog/b6QMRYK1PrfreB2+9b01L34L2mROUWnkSLX7fckKQ
-	 NeNjq/KQsJ8RTkASVTQhzMvt42Q7PfdyEATb9bEf1tTT5C+DbYnYpLukhtfyOyNnYp
-	 exJ3w1A7dhlbyWFhA4f7dt4sEsyqLGkuKBnVVdhlBzaz0FNGUAwkxywdmFg5yyzUqb
-	 QIik8B2NzcpJZPI0xpkOpJM/uK2FCKOd6aQuD3cseuiI7+62nI3SYUJv4G3275dWoR
-	 wVJzM49uNSqzPRnuNmeuVP3xsIKk1YF/Jr7IUxuUUp+By+qTJABtOeF8njJccZZFMu
-	 uIw8dvMcG6+HA==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: "Boqun Feng" <boqun.feng@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>,  <rust-for-linux@vger.kernel.org>,
-  <lkmm@lists.linux.dev>,  <linux-arch@vger.kernel.org>,  "Miguel Ojeda"
- <ojeda@kernel.org>,  "Alex Gaynor" <alex.gaynor@gmail.com>,  "Gary Guo"
- <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  "Benno
- Lossin" <lossin@kernel.org>,  "Alice Ryhl" <aliceryhl@google.com>,
-  "Trevor Gross" <tmgross@umich.edu>,  "Danilo Krummrich"
- <dakr@kernel.org>,  "Will Deacon" <will@kernel.org>,  "Peter Zijlstra"
- <peterz@infradead.org>,  "Mark Rutland" <mark.rutland@arm.com>,  "Wedson
- Almeida Filho" <wedsonaf@gmail.com>,  "Viresh Kumar"
- <viresh.kumar@linaro.org>,  "Lyude Paul" <lyude@redhat.com>,  "Ingo
- Molnar" <mingo@kernel.org>,  "Mitchell Levy" <levymitchell0@gmail.com>,
-  "Paul E. McKenney" <paulmck@kernel.org>,  "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>,  "Linus Torvalds"
- <torvalds@linux-foundation.org>,  "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH v5 10/10] rust: sync: Add memory barriers
-In-Reply-To: <20250618164934.19817-11-boqun.feng@gmail.com> (Boqun Feng's
-	message of "Wed, 18 Jun 2025 09:49:34 -0700")
-References: <20250618164934.19817-1-boqun.feng@gmail.com>
-	<A-SZkzm2EzwbPsG5Vm5qfT1BIGijzoQ7zQI6ExgXZbSXf8ZfIMw6fe-Z7xWgvKnr0BPylikGRuhEfiKfXx5xTw==@protonmail.internalid>
-	<20250618164934.19817-11-boqun.feng@gmail.com>
-User-Agent: mu4e 1.12.9; emacs 30.1
-Date: Thu, 26 Jun 2025 15:36:25 +0200
-Message-ID: <874iw2zkti.fsf@kernel.org>
+	s=k20201202; t=1750946071;
+	bh=vGdG2KgJYgg71pcFHeAXtJsfxhvB+yb6bY/1UFHNcP0=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=aZVtjbxYUppazWi1Kl594qJXtIKAnKuxBWJ2ttOrO9rnEChu7QJl6OOOn8JbpISGD
+	 Pe4wkh6UlZLXWeXcgC7EaUdmZR5JMcWiUqCS9gjqPn6QhqD0uRcH3IjKXuZvu68rUx
+	 EF3gyLORB9Guw5UGEBBymx/sOZ7IAYOTgncWrNey7SLvhGSxFalRWdfukConx1xeva
+	 Slnhow1Tq5YGBV7Mj3Q6GyL2c8T0Za1V6wvifA3V9yx+v4fAWHR1+luRN3LRosukVx
+	 YX5q/7xRK2LWSbnmNbl947p94BnyPxEtPWm17y11aQIPHWKDaA/TDthtD4LjlXLhf6
+	 MMWENojMgUqhg==
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 26 Jun 2025 15:54:24 +0200
+Message-Id: <DAWIKTODZ3FT.2LGX1H8ZFDONN@kernel.org>
+Cc: "Gary Guo" <gary@garyguo.net>, <linux-kernel@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <lkmm@lists.linux.dev>,
+ <linux-arch@vger.kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex
+ Gaynor" <alex.gaynor@gmail.com>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>, "Will Deacon" <will@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Mark Rutland"
+ <mark.rutland@arm.com>, "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+ "Viresh Kumar" <viresh.kumar@linaro.org>, "Lyude Paul" <lyude@redhat.com>,
+ "Ingo Molnar" <mingo@kernel.org>, "Mitchell Levy"
+ <levymitchell0@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
+ <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>
+Subject: Re: [PATCH v5 04/10] rust: sync: atomic: Add generic atomics
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Boqun Feng" <boqun.feng@gmail.com>
+X-Mailer: aerc 0.20.1
+References: <20250618164934.19817-1-boqun.feng@gmail.com>
+ <20250618164934.19817-5-boqun.feng@gmail.com>
+ <20250621123212.66fb016b.gary@garyguo.net> <aFjj8AV668pl9jLN@Mac.home>
+ <20250623193019.6c425467.gary@garyguo.net> <aFmmYSAyvxotYfo7@tardis.local>
+ <DAUAW2Y0HYLY.3CDC9ZW0BUKI4@kernel.org> <aFrTyXcFVOjWa2o-@Mac.home>
+In-Reply-To: <aFrTyXcFVOjWa2o-@Mac.home>
 
-"Boqun Feng" <boqun.feng@gmail.com> writes:
-
-> Memory barriers are building blocks for concurrent code, hence provide
-> a minimal set of them.
+On Tue Jun 24, 2025 at 6:35 PM CEST, Boqun Feng wrote:
+> On Tue, Jun 24, 2025 at 01:27:38AM +0200, Benno Lossin wrote:
+>> On Mon Jun 23, 2025 at 9:09 PM CEST, Boqun Feng wrote:
+>> > On Mon, Jun 23, 2025 at 07:30:19PM +0100, Gary Guo wrote:
+>> >> cannot just transmute between from pointers to usize (which is its
+>> >> Repr):
+>> >> * Transmuting from pointer to usize discards provenance
+>> >> * Transmuting from usize to pointer gives invalid provenance
+>> >>=20
+>> >> We want neither behaviour, so we must store `usize` directly and
+>> >> always call into repr functions.
+>> >>=20
+>> >
+>> > If we store `usize`, how can we support the `get_mut()` then? E.g.
+>> >
+>> >     static V: i32 =3D 32;
+>> >
+>> >     let mut x =3D Atomic::new(&V as *const i32 as *mut i32);
+>> >     // ^ assume we expose_provenance() in new().
+>> >
+>> >     let ptr: &mut *mut i32 =3D x.get_mut(); // which is `&mut self.0.g=
+et()`.
+>> >
+>> >     let ptr_val =3D *ptr; // Does `ptr_val` have the proper provenance=
+?
+>>=20
+>> If `get_mut` transmutes the integer into a pointer, then it will have
+>> the wrong provenance (it will just have plain invalid provenance).
+>>=20
 >
-> The compiler barrier, barrier(), is implemented in inline asm instead of
-> using core::sync::atomic::compiler_fence() because memory models are
-> different: kernel's atomics are implemented in inline asm therefore the
-> compiler barrier should be implemented in inline asm as well. Also it's
-> currently only public to the kernel crate until there's a reasonable
-> driver usage.
+> The key topic Gary and I have been discussing is whether we should
+> define Atomic<T> as:
 >
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  rust/helpers/barrier.c      | 18 ++++++++++
->  rust/helpers/helpers.c      |  1 +
->  rust/kernel/sync.rs         |  1 +
->  rust/kernel/sync/barrier.rs | 67 +++++++++++++++++++++++++++++++++++++
->  4 files changed, 87 insertions(+)
->  create mode 100644 rust/helpers/barrier.c
->  create mode 100644 rust/kernel/sync/barrier.rs
+> (my current implementation)
 >
-> diff --git a/rust/helpers/barrier.c b/rust/helpers/barrier.c
-> new file mode 100644
-> index 000000000000..cdf28ce8e511
-> --- /dev/null
-> +++ b/rust/helpers/barrier.c
-> @@ -0,0 +1,18 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <asm/barrier.h>
-> +
-> +void rust_helper_smp_mb(void)
-> +{
-> +	smp_mb();
-> +}
-> +
-> +void rust_helper_smp_wmb(void)
-> +{
-> +	smp_wmb();
-> +}
-> +
-> +void rust_helper_smp_rmb(void)
-> +{
-> +	smp_rmb();
-> +}
-> diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
-> index 83e89f6a68fb..8ddfc8f84e87 100644
-> --- a/rust/helpers/helpers.c
-> +++ b/rust/helpers/helpers.c
-> @@ -9,6 +9,7 @@
+>     pub struct Atomic<T: AllowAtomic>(Opaque<T>);
 >
->  #include "atomic.c"
->  #include "auxiliary.c"
-> +#include "barrier.c"
->  #include "blk.c"
->  #include "bug.c"
->  #include "build_assert.c"
-> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> index b620027e0641..c7c0e552bafe 100644
-> --- a/rust/kernel/sync.rs
-> +++ b/rust/kernel/sync.rs
-> @@ -11,6 +11,7 @@
+> or
 >
->  mod arc;
->  pub mod atomic;
-> +pub mod barrier;
->  mod condvar;
->  pub mod lock;
->  mod locked_by;
-> diff --git a/rust/kernel/sync/barrier.rs b/rust/kernel/sync/barrier.rs
-> new file mode 100644
-> index 000000000000..36a5c70e6716
-> --- /dev/null
-> +++ b/rust/kernel/sync/barrier.rs
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Memory barriers.
-> +//!
-> +//! These primitives have the same semantics as their C counterparts: and the precise definitions of
-> +//! semantics can be found at [`LKMM`].
-> +//!
-> +//! [`LKMM`]: srctree/tools/memory-mode/
+> (Gary's suggestion)
+>
+>     pub struct Atomic<T: AllowAtomic>(Opaque<T::Repr>);
+>
+> `T::Repr` is guaranteed to be the same size and alignment of `T`, and
+> per our discussion, it makes sense to further require that `transmute<T,
+> T::Repr>()` should also be safe (as the safety requirement of
+> `AllowAtomic`), or we can say `T` bit validity can be preserved by
+> `T::Repr`: a valid bit combination `T` can be transumated to `T::Repr`,
+> and if transumated back, it's the same bit combination.
+>
+> Now as I pointed out, if we use `Opaque<T::Repr>`, then `.get_mut()`
+> would be unsound for `Atomic<*mut T>`. And Gary's concern is that in
+> the current implementation, we directly cast a `*mut T` (from
+> `Opaque::get()`) into a `*mut T::Repr`, and pass it directly into C/asm
+> atomic primitives. However, I think with the additional safety
+> requirement above, this shouldn't be a problem: because the C/asm atomic
+> primitives would just pass the address to an asm block, and that'll be
+> out of Rust abstract machine, and as long as the C/primitives atomic
+> primitives are implemented correctly, the bit representation of `T`
+> remains valid after asm blocks.
+>
+> So I think the current implementation still works and is better.
 
-Typo in link target.
+I don't think there is a big difference between=C2=A0`Opaque<T>`=C2=A0and
+`Opaque<T::Repr>`=C2=A0if we have the transmute equivalence between the two=
+.
+From a safety perspective, you don't gain or lose anything by using the
+first over the second one. They both require the invariant that they are
+valid (as=C2=A0`Opaque`=C2=A0removes that... we should really be using
+`UnsafeCell`=C2=A0here instead... why aren't we doing that?).
 
-> +
-> +/// A compiler barrier.
-> +///
-> +/// An explicic compiler barrier function that prevents the compiler from moving the memory
-> +/// accesses either side of it to the other side.
+Where their differences do play a role is in the implementation of the
+various operations on the atomic. If you need to pass=C2=A0`*mut T::Repr`=
+=C2=A0to
+the C side, it's better if you store=C2=A0`Opaque<T::Repr>`=C2=A0and if you=
+ want
+to give=C2=A0`&mut T`=C2=A0back to the user, then it's better to
+store=C2=A0`Opaque<T>`.
 
-Typo in "explicit".
+I would choose the one that results in overall less code. It's probably
+going to be=C2=A0`Opaque<T::Repr>`, since we will have more operations that
+need=C2=A0`*mut T::Repr`=C2=A0than=C2=A0`*mut T`.
 
-How about:
+Now I don't understand why you value=C2=A0`Opaque<T>`=C2=A0over=C2=A0`Opaqu=
+e<T::Repr>`,
+they are (up to transmute-equivalence) the same.
 
-  A compiler barrier. Prevents the compiler from reordering
-  memory access instructions across the barrier.
+I think that you said at one point that=C2=A0`Opaque<T>`=C2=A0makes more se=
+nse
+from a conceptual view, since we're building=C2=A0`Atomic<T>`. I think that
+doesn't really matter, since it's implementation detail. The same
+argument could be made about casing=C2=A0`u64`=C2=A0to=C2=A0`i64`=C2=A0for =
+implementing the
+atomics: just implement atomics in C also for=C2=A0`u64`=C2=A0and then use =
+that
+instead...
 
-
-> +pub(crate) fn barrier() {
-> +    // By default, Rust inline asms are treated as being able to access any memory or flags, hence
-> +    // it suffices as a compiler barrier.
-> +    //
-> +    // SAFETY: An empty asm block should be safe.
-> +    unsafe {
-> +        core::arch::asm!("");
-> +    }
-> +}
-> +
-> +/// A full memory barrier.
-> +///
-> +/// A barrier function that prevents both the compiler and the CPU from moving the memory accesses
-> +/// either side of it to the other side.
-
-
-  A barrier that prevents compiler and CPU from reordering memory access
-  instructions across the barrier.
-
-> +pub fn smp_mb() {
-> +    if cfg!(CONFIG_SMP) {
-> +        // SAFETY: `smp_mb()` is safe to call.
-> +        unsafe {
-> +            bindings::smp_mb();
-> +        }
-> +    } else {
-> +        barrier();
-> +    }
-> +}
-> +
-> +/// A write-write memory barrier.
-> +///
-> +/// A barrier function that prevents both the compiler and the CPU from moving the memory write
-> +/// accesses either side of it to the other side.
-
-  A barrier that prevents compiler and CPU from reordering memory write
-  instructions across the barrier.
-
-> +pub fn smp_wmb() {
-> +    if cfg!(CONFIG_SMP) {
-> +        // SAFETY: `smp_wmb()` is safe to call.
-> +        unsafe {
-> +            bindings::smp_wmb();
-> +        }
-> +    } else {
-> +        barrier();
-> +    }
-> +}
-> +
-> +/// A read-read memory barrier.
-> +///
-> +/// A barrier function that prevents both the compiler and the CPU from moving the memory read
-> +/// accesses either side of it to the other side.
-
-  A barrier that prevents compiler and CPU from reordering memory read
-  instructions across the barrier.
-
-> +pub fn smp_rmb() {
-> +    if cfg!(CONFIG_SMP) {
-> +        // SAFETY: `smp_rmb()` is safe to call.
-> +        unsafe {
-> +            bindings::smp_rmb();
-> +        }
-> +    } else {
-> +        barrier();
-> +    }
-> +}
-
-
-Best regards,
-Andreas Hindborg
-
-
+---
+Cheers,
+Benno
 
