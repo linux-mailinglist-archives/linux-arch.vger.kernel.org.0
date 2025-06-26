@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-12466-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12467-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EA66AE9DAF
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 14:40:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D04AE9DC7
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 14:48:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C2AC1621C5
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 12:40:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AAC83A447C
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jun 2025 12:47:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC3702E06DC;
-	Thu, 26 Jun 2025 12:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E402E1C55;
+	Thu, 26 Jun 2025 12:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rh4yoX5M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BCYAn8rg"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF461D5CD7;
-	Thu, 26 Jun 2025 12:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E932E1729;
+	Thu, 26 Jun 2025 12:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750941601; cv=none; b=uWHcK3lHzUXZL5g+5zkQTr8y4+mAzdpaZA/u60sHnUofeCzYmfY47iWE0bXxt5FbCGHg3tUzvbZEnxXdmt30kTdvN0tEcmYJnvLjNKP1iIg9wKnT+x1wrrr2lWcrTptzzMXe14pfNRKQJxQp2VOIA2cTrlLIGcP/vYeleIi57Ds=
+	t=1750942072; cv=none; b=DBh5Ygcybs8Mqvh6Oh3JrCInQd9AUWWJRtoMy8JkNhkHQiVVijT0GhdkzBYSvP7BbyE9GyFCqeqNZn0w2gElfT8uHIZ4Cys83AS9W12wto/rgFGiEKAkukoVvwQYF5tAcTtqH9MO+FEzUt3/TynhswRjud4V6ywJHrNGB/p8O9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750941601; c=relaxed/simple;
-	bh=USMsqMX6dnj+Tvvqhu5ElX8Y7rynf5Ee7mCTcpzB3sY=;
+	s=arc-20240116; t=1750942072; c=relaxed/simple;
+	bh=XL7Aux9kgahrJU3dpfYeGvcKLSpUw6RBF4v4g6HOzzc=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BFWVZO/4HwgkmtEELcfAGDVYFGw9rXVYvR30IbvHPSn8Hhp6+yqhUCx/GitOrTI0aSzJPBPtCuwhcsC6LWYym1uip7Ngg/VqZATN4sxh4PLS7nl8Gxcq4yQVyNbI5mjIrLftpO7a7KhJ+YG7lR6b/2QooRvxs+D8I83h6nj3rOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rh4yoX5M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B62C4CEEB;
-	Thu, 26 Jun 2025 12:39:56 +0000 (UTC)
+	 MIME-Version:Content-Type; b=TI8fMzI8I517P2tFiWRb9/HcTHvDNk/bF6kaIwis9VA7e/iCxnNfqQLOUqEq5rvA950rw80pcnJuTPXHJd9TFgA/XsySPWvEOZPrLaCYd2l3nk5A4LJ0ixbKaWQyTJHsT3c90UzPQugCOemUx0b5WHk9jBRpftlfUwh/fNg1reE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BCYAn8rg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F4A3C4CEEB;
+	Thu, 26 Jun 2025 12:47:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750941601;
-	bh=USMsqMX6dnj+Tvvqhu5ElX8Y7rynf5Ee7mCTcpzB3sY=;
+	s=k20201202; t=1750942072;
+	bh=XL7Aux9kgahrJU3dpfYeGvcKLSpUw6RBF4v4g6HOzzc=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Rh4yoX5Me8TxmIa6HsZFIdb91uQTVO3kl0B4KkKGlXGkdSuF8hqIz7GVygs90YEjX
-	 lFF01evhXy3/8dPgroA5jDsZiZTdgkqMIIm4FZTOTPK2MEWb5V8xWrk857QwiJgSMZ
-	 Ahbgd4YIJvMqds8jSWNkBzoHO+E8YmJA4De8BzwK15BxddkH1hmMN7vszjkrdCltRl
-	 53ADK9GlO0M5BYp2bEfAP/7g8wukdjQvY5vS4a2ieUZCcG7FauImfCCewtOzBMU9PU
-	 pCqQP1q7g8I6IQ0TK3oppFBFvhrxafbePxBi1cz8xjVfAMb3qSZEKTpg1SwkAeEdNB
-	 IUSHortFXMc1A==
+	b=BCYAn8rgXzQ2N7HFq15gTuZqkSQabKj/Feu1oeOTCYB2rvyiBM9/w5vt/0dGpK/rn
+	 MOF4E175qyYKeFWMnL6lMaoFwD/AIckF6BSpB9pAeESjf/p70YtIZfWe1g8XFZ/2Ik
+	 c+YdjXewkM3RYfh7yPLj97VWw84IRAFMjhFMEOVPOVIR6wgKk/QuwXaXOi0js+xRn9
+	 ASku/mGanEgy0+F3M2pz3XkzD60r8cS5AgFcY6pPL8ICFd3LtAcHAh8JRSFQDmSIhH
+	 bKp19DShxczCvoiFfeCXiGbEIW5zA1QCBgckGIYmdPd2eDq4LKih2eH2AC4pHH+/z5
+	 7TZKKdwktQG9A==
 From: Andreas Hindborg <a.hindborg@kernel.org>
 To: "Boqun Feng" <boqun.feng@gmail.com>
 Cc: <linux-kernel@vger.kernel.org>,  <rust-for-linux@vger.kernel.org>,
@@ -58,16 +58,15 @@ Cc: <linux-kernel@vger.kernel.org>,  <rust-for-linux@vger.kernel.org>,
   "Paul E. McKenney" <paulmck@kernel.org>,  "Greg Kroah-Hartman"
  <gregkh@linuxfoundation.org>,  "Linus Torvalds"
  <torvalds@linux-foundation.org>,  "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH v5 06/10] rust: sync: atomic: Add the framework of
- arithmetic operations
-In-Reply-To: <20250618164934.19817-7-boqun.feng@gmail.com> (Boqun Feng's
-	message of "Wed, 18 Jun 2025 09:49:30 -0700")
+Subject: Re: [PATCH v5 07/10] rust: sync: atomic: Add Atomic<u{32,64}>
+In-Reply-To: <20250618164934.19817-8-boqun.feng@gmail.com> (Boqun Feng's
+	message of "Wed, 18 Jun 2025 09:49:31 -0700")
 References: <20250618164934.19817-1-boqun.feng@gmail.com>
-	<ZpemRgknqWbwYAShU6PA8VNVPU7cQv8WMNwyb9hlZzfkfXKJ_fyN8xfM2Ca75tXcE6Cv6pGHcNJgrp-p8fm6hQ==@protonmail.internalid>
-	<20250618164934.19817-7-boqun.feng@gmail.com>
+	<NipooAeL4iGcyj1mFm4IgmsOxRMn1dmQSeyQhU5piJonKEvKbj_tFKnDuN0I2NV3V_sfoOb3iLfVWaa2q7qYXA==@protonmail.internalid>
+	<20250618164934.19817-8-boqun.feng@gmail.com>
 User-Agent: mu4e 1.12.9; emacs 30.1
-Date: Thu, 26 Jun 2025 14:39:49 +0200
-Message-ID: <87qzz6znfu.fsf@kernel.org>
+Date: Thu, 26 Jun 2025 14:47:39 +0200
+Message-ID: <87ldpezn2s.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -78,140 +77,15 @@ Content-Type: text/plain
 
 "Boqun Feng" <boqun.feng@gmail.com> writes:
 
-> One important set of atomic operations is the arithmetic operations,
-> i.e. add(), sub(), fetch_add(), add_return(), etc. However it may not
-> make senses for all the types that `AllowAtomic` to have arithmetic
-> operations, for example a `Foo(u32)` may not have a reasonable add() or
-> sub(), plus subword types (`u8` and `u16`) currently don't have
-> atomic arithmetic operations even on C side and might not have them in
-> the future in Rust (because they are usually suboptimal on a few
-> architecures). Therefore add a subtrait of `AllowAtomic` describing
-> which types have and can do atomic arithemtic operations.
+> Add generic atomic support for basic unsigned types that have an
+> `AtomicImpl` with the same size and alignment.
 >
-> A few things about this `AllowAtomicArithmetic` trait:
->
-> * It has an associate type `Delta` instead of using
->   `AllowAllowAtomic::Repr` because, a `Bar(u32)` (whose `Repr` is `i32`)
->   may not wants an `add(&self, i32)`, but an `add(&self, u32)`.
->
-> * `AtomicImpl` types already implement an `AtomicHasArithmeticOps`
->   trait, so add blanket implementation for them. In the future, `i8` and
->   `i16` may impl `AtomicImpl` but not `AtomicHasArithmeticOps` if
->   arithemtic operations are not available.
->
-> Only add() and fetch_add() are added. The rest will be added in the
-> future.
+> Unit tests are added including Atomic<i32> and Atomic<i64>.
 >
 > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  rust/kernel/sync/atomic/generic.rs | 101 +++++++++++++++++++++++++++++
->  1 file changed, 101 insertions(+)
->
-> diff --git a/rust/kernel/sync/atomic/generic.rs b/rust/kernel/sync/atomic/generic.rs
-> index bcdbeea45dd8..8c5bd90b2619 100644
-> --- a/rust/kernel/sync/atomic/generic.rs
-> +++ b/rust/kernel/sync/atomic/generic.rs
-> @@ -57,6 +57,23 @@ fn from_repr(repr: Self::Repr) -> Self {
->      }
->  }
->
-> +/// Atomics that allows arithmetic operations with an integer type.
-> +pub trait AllowAtomicArithmetic: AllowAtomic {
-> +    /// The delta types for arithmetic operations.
-> +    type Delta;
-> +
-> +    /// Converts [`Self::Delta`] into the representation of the atomic type.
-> +    fn delta_into_repr(d: Self::Delta) -> Self::Repr;
-> +}
-> +
-> +impl<T: AtomicImpl + AtomicHasArithmeticOps> AllowAtomicArithmetic for T {
-> +    type Delta = Self;
-> +
-> +    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-> +        d
-> +    }
-> +}
-> +
->  impl<T: AllowAtomic> Atomic<T> {
->      /// Creates a new atomic.
->      pub const fn new(v: T) -> Self {
-> @@ -410,3 +427,87 @@ fn try_cmpxchg<Ordering: All>(&self, old: &mut T, new: T, _: Ordering) -> bool {
->          }
->      }
->  }
-> +
-> +impl<T: AllowAtomicArithmetic> Atomic<T>
-> +where
-> +    T::Repr: AtomicHasArithmeticOps,
-> +{
-> +    /// Atomic add.
-> +    ///
-> +    /// The addition is a wrapping addition.
-> +    ///
-> +    /// # Examples
-> +    ///
-> +    /// ```rust
-> +    /// use kernel::sync::atomic::{Atomic, Relaxed};
-> +    ///
-> +    /// let x = Atomic::new(42);
-> +    ///
-> +    /// assert_eq!(42, x.load(Relaxed));
-> +    ///
-> +    /// x.add(12, Relaxed);
-> +    ///
-> +    /// assert_eq!(54, x.load(Relaxed));
-> +    /// ```
-> +    #[inline(always)]
-> +    pub fn add<Ordering: RelaxedOnly>(&self, v: T::Delta, _: Ordering) {
-> +        let v = T::delta_into_repr(v);
-> +        let a = self.as_ptr().cast::<T::Repr>();
-> +
-> +        // SAFETY:
-> +        // - For calling the atomic_add() function:
-> +        //   - `self.as_ptr()` is a valid pointer, and per the safety requirement of `AllocAtomic`,
 
-Typo, should be `AllowAtomic`.
 
-> +        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` is a valid pointer,
-> +        //   - per the type invariants, the following atomic operation won't cause data races.
-> +        // - For extra safety requirement of usage on pointers returned by `self.as_ptr():
-> +        //   - atomic operations are used here.
-> +        unsafe {
-> +            T::Repr::atomic_add(a, v);
-> +        }
-> +    }
-> +
-> +    /// Atomic fetch and add.
-> +    ///
-> +    /// The addition is a wrapping addition.
-> +    ///
-> +    /// # Examples
-> +    ///
-> +    /// ```rust
-> +    /// use kernel::sync::atomic::{Atomic, Acquire, Full, Relaxed};
-> +    ///
-> +    /// let x = Atomic::new(42);
-> +    ///
-> +    /// assert_eq!(42, x.load(Relaxed));
-> +    ///
-> +    /// assert_eq!(54, { x.fetch_add(12, Acquire); x.load(Relaxed) });
-> +    ///
-> +    /// let x = Atomic::new(42);
-> +    ///
-> +    /// assert_eq!(42, x.load(Relaxed));
-> +    ///
-> +    /// assert_eq!(54, { x.fetch_add(12, Full); x.load(Relaxed) } );
-> +    /// ```
-> +    #[inline(always)]
-> +    pub fn fetch_add<Ordering: All>(&self, v: T::Delta, _: Ordering) -> T {
-> +        let v = T::delta_into_repr(v);
-> +        let a = self.as_ptr().cast::<T::Repr>();
-> +
-> +        // SAFETY:
-> +        // - For calling the atomic_fetch_add*() function:
-> +        //   - `self.as_ptr()` is a valid pointer, and per the safety requirement of `AllocAtomic`,
-
-Typo, should be `AllowAtomic`.
+Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
 
 
 Best regards,
