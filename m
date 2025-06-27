@@ -1,88 +1,88 @@
-Return-Path: <linux-arch+bounces-12488-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12489-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20F3DAEBA32
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 16:45:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31561AEBAEC
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 17:02:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F1565647E1
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 14:45:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A6FE7B6148
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 15:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC43E2E8897;
-	Fri, 27 Jun 2025 14:44:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01FFD2E8DFE;
+	Fri, 27 Jun 2025 15:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CiPqq0Bg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RX65Pkg9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3167F2E7644;
-	Fri, 27 Jun 2025 14:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707472E8E01;
+	Fri, 27 Jun 2025 15:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751035497; cv=none; b=TaxpQ/4GKi4hOAjXDxWPqatfcrp82hDvm66BpqETxcWeUQe7UHDfOnov5SjfO1dFJ2WATBG5eZiWiHkx5C7uGe5lWeN5ZdKP3JSdIxqOJxsIw/gS+lxIbbsMX4UxKV05kRo7gAalRTQ4FpzleXujE0n+VdKIrZq78axtFrSMk1I=
+	t=1751036503; cv=none; b=DNsd5xmtEVDvHvQU1/ztQ9US9AflVhPwh+CRonpdi2Nq+7mlpUh5+AyAEUtZ4VITq7nqCAwhIQzyS1JyDR+rJL7tMF7pUalZ5lW9hKqxUHDsNdhqZhnGEaoofxYTEGZNxXt6CLfbGnqdFqqUqGfTL3OIp9RjCcheGojp+MAAhAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751035497; c=relaxed/simple;
-	bh=wB2dQL35c8imjz8aUYEkv+Kk0qxUmqHONiTsdy+0DVQ=;
+	s=arc-20240116; t=1751036503; c=relaxed/simple;
+	bh=p75jCws13IGmQ6ZLZbCyysYEERhZf3DLpYFQXnDaFNI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=anCiWA5x5/ogKkma1SWul/8W7iit5IXeLUUAaezuFoa2Gtycj+24qfeyyQpTJno4B6lTlm5yYpYLwhFDvRAtxvLdDaf3im3B7Dymboh2h/Q4ilgD3/M8Lzm24kCSeeuLubR6FKDm5f6C698v2djKwo5ncLBnM/2DWLD8XPu87Qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CiPqq0Bg; arc=none smtp.client-ip=209.85.219.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=VLpraj+6GvwqfbI5eY7fXCimalUK1wODByRj1BwsfiU6mwj10gZdgKSO4j3qBq9+y1mCGylPMc6BOvF6VYY+ECo5Z3EVhJFnR1rvYH/T591dxYx1Nb5/46KUjwoYtGVLzzvLkjGJuMY9xd96Rxr60miPFjX+jPlSys1VAuF4gJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RX65Pkg9; arc=none smtp.client-ip=209.85.161.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6facf4d8e9eso24144226d6.1;
-        Fri, 27 Jun 2025 07:44:55 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-611a7c617a7so548156eaf.1;
+        Fri, 27 Jun 2025 08:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751035495; x=1751640295; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751036501; x=1751641301; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WuWs3j1x7+EnEWhudL7zxC8HxyHZbbIVHszRV1zTF6s=;
-        b=CiPqq0Bg41fA+gtRBVNoy9OynHMKX6Kubeb77PzfJT+ITZ9v4YiLUpQ5zPvPFmDrzC
-         Ulka3opPhn4Wo3/yvwtwr6Y6zrlBZQFNKXmcbaVbDCGRqll4PJsqvoDlmZQkajGIQhO0
-         Gg1kVD+IiDDULzP5b55ZN3ZvphtxUn9HTWgxPk8xLvJ7CfllDjkgcO+W5aO2TgAUWK0/
-         9z8wKQ+8wccLVPy2O0xOrNKCNnYSdJ4MX65wmU3sZwMTaAWKOMkl0IGBldgKhCD/rXW+
-         0DTMrbXERcsUQKeqy5h9bvr9wlU2aXrfeEYhLKXmn0/TO3krY0nIJcEssc5ymtYCSCF2
-         rDWQ==
+        bh=M+itwb+jz4GHBi4f8W4jzXfLWeu4y9P+oNAveTQMsuw=;
+        b=RX65Pkg9VP+l7xL0MMTdqyo22F3MIGwMCVa0/sWJZlpmFA8C0NRjiauMlTRJSJafcX
+         NyTGIwmzEC5J9QaPs65i+qnWm8gwg8n530fy1lgvr11CaUAINKK0BhZpzoGdL9WktT0X
+         7Q1e3Ulzd4x/GaPwz8dEpNh6heO+K7mYvGiLaWEmr0ddDjiuTJL6XNL7sQQw4LNkZ3/1
+         +mXeBAGJLd1UIVHY+5cB7avMrwihdvm3uOzGkrH8RofaBWKT8jU9xKrKFIE3r0fqqKOe
+         kZfwnoRr1Swulu1h7l6sN6ltnSDsOE09TqOOwSi0qc8+N2QC6QWt+pPY3xrnOkFAqVSm
+         /Igw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751035495; x=1751640295;
+        d=1e100.net; s=20230601; t=1751036501; x=1751641301;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WuWs3j1x7+EnEWhudL7zxC8HxyHZbbIVHszRV1zTF6s=;
-        b=Xem64bg2/Oj7xOkPkfHlL2VM1DpQHpaYH7fb+dKOsXSKniis5nTqGH2edxIOMaAwB3
-         3p8uf64ZVpVfTFj/hg1SpHeOjwQtSwwiIHv2vjPqapM0o3Q+21F/EMXH/hNz28SYDMUV
-         cvb1is1PX1EbUEE4C1DZTigaskenhFLk3dVu7MEnl4okLml2ihsH3dl7UTiNm+FwczGI
-         V+HwP38AQn+xzbFR6c3HN2lw8elxzJbcy5SudTmwse3SxcXAZhwTOlDPIxeT9d/Ktlg3
-         lDbvM0SgD98NC7bG95g/x86WGJJuAKiCBhArA892aiYjkp2gA1ZnyRprkwTyi1ceGSx1
-         qzfw==
-X-Forwarded-Encrypted: i=1; AJvYcCU7JUIseCILH1PLVeNamHo+7tnnYFJ3bNgUCgxrF89mywrhvrqb+XqhMEeVs9dzJP/WMtW/Vl2aJqrQLEuPl+g=@vger.kernel.org, AJvYcCXUIrsYtoGyz9SalRyWkRhPuXIjazCg3FF6OIh6ZehYLed5FQqsz2yUXQDB2blqS+yqUkJYu8uKnTsA@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz38MPC/m5vXjyTZ2MendQ/2l8TSbfR+ux4g15Rv/TBgnFFv6kx
-	e2rJtwBjg22S7zeB88C39ynfqCRaeYtxjteb27g6KUtI3lXlv9+CT7Xh
-X-Gm-Gg: ASbGncvE/6L9yDZRT5+uH9oJnASypStrSO9Oe58ceDCGgv/hx0PLjEMH8uGPHdiab7e
-	7t9rmJNnl1vL4eVCoTaUvFJwNinXRzyCOQdgd1xHtQskPgAHbMRz5Fhh0XB849/pb/nLU7Q2xrG
-	x0x5SeUOaiC83x5hZOFfKvkBGsVpN8qTFS8Z9kWR0Nmt/D4FYre4AltPJsSbeCS8D/peI36xvE5
-	MyHc8wf+6s/6tCzT7HzX1TRrWh+ngXEb4DYHxdNTYshBbSandlJDLiUjc3Hu8zWBZUUTINuGIm5
-	Am6NFo+IQX2DN7qhfusCko10Msv5EnWkuaGUtoHCIiHUFwsO9Wyf7qunbH1m/ofymwRjr3fagN1
-	L7qovuvwqDgLg4eHZEQvcJrJILk3NuAE64y9/iZCAFsQ7JMWl8Jx3
-X-Google-Smtp-Source: AGHT+IEUuwUXgo2OeUL457R+n35acysC8d/++BJCeB5mNVOencHsLALChCWLXr3tQwUpPpTD/emPDg==
-X-Received: by 2002:ad4:576c:0:b0:6e8:f4d3:e8a5 with SMTP id 6a1803df08f44-6ffffd79be6mr64502026d6.15.1751035495022;
-        Fri, 27 Jun 2025 07:44:55 -0700 (PDT)
+        bh=M+itwb+jz4GHBi4f8W4jzXfLWeu4y9P+oNAveTQMsuw=;
+        b=ugQw+2sO8zQNsTrqm3C0L3/ZRNS002kJbXVLRta99b0/8D/PkagG/NvFKQpdUX0/BE
+         I9oSuvbQxiIkN2i1cNWMN85/WUOHKrnOp5YumSPIbpkhU8qB4GRNdOB4OiYGEpyGIFz8
+         7ZF3DAHvOS3tuDmsmDbX2LKitm9h2T0/u0NgGEdlERGQARTgYNZjlFnVbDIm5W52qKcT
+         Z29dpm/Lo1LRsHgsoKI4bbMkpEsqDo5edZwUT18oq4914QlOGVDhyDVKWPc4x8er5wNE
+         mzTWVUiredWUxq7mW6wZgYe8koBbs+iu8KVaXLXUqtC3k/ELZ69SC+YnprB8ehvLEE0v
+         xWIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVW53ns3h6KwexqS8aDqHcMsHoZlmXn35DU1SGxxL0qU2UG+cdmdd4bZIspyW3p6pE0zdJSdtY3daskAQ7AwC8=@vger.kernel.org, AJvYcCVqu90GA0dnLMHvSduN9Z3XQaaDAvKyJG8LXRqg5ZOSybXilAVRjoCJwURBrbtLegYoa686Vy4JazNs@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkG8HpdZ72AR4c08ygqzzmcEfZDd2CS3UJf8DkbemboOQcX1ij
+	MJ/j5luqLyg4Q08XN/HzEf6co7f8bUZX78lzrNaxqh5KDQFX0+UCKlP8fJ4Fpw==
+X-Gm-Gg: ASbGnctWA1BWJZUnas/sY2zceT+XtXsIIwY5NN5rEIBGEMjV1YmwdlSoPDMcvYRslDU
+	8GUKGOxEewZkqkwv5ywHUS8pCjE0+dOL+88NABsxcirPl1lK/A6hmq9oeo/2AfdslIyu2wmR/0R
+	FEYJdf5weC8NDh4WCXMVbcmBUryc2ecR/cFiSzwIveP2ICwJLo1NXVbodCzQ4OJnBe18X/24dcX
+	Py9UU0XxQCEKYR1lAP4CqnsYhEw38UO7pTK3Wx+oov/PbL5BmqK+adauAxlkoXHmgpIbgueDWOJ
+	NKmtfzqfrNubwhtkkA+HAb+kPP6tkKQMCN2m0kHTnEHHf48lRyokVovhwCEuEm+nhf2ydS09PZr
+	91RD349HbJ8L8FxmCKz2h4pPr/z8rQr5B+bMribfWq1Y8n1SG2/kf
+X-Google-Smtp-Source: AGHT+IGa3fuiJGQBl5VvroGyrKE8v3sCrCIlfqBFJQ6TSXAveKNBl+VvLq+HhGmZIn6hke0MEq+U5w==
+X-Received: by 2002:a05:6214:5c04:b0:6fa:c054:1628 with SMTP id 6a1803df08f44-7000214ff6amr66337656d6.23.1751036487005;
+        Fri, 27 Jun 2025 08:01:27 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd771acfe6sm21357226d6.31.2025.06.27.07.44.54
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd7730ec10sm21489666d6.117.2025.06.27.08.01.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 07:44:54 -0700 (PDT)
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id C03ECF40066;
-	Fri, 27 Jun 2025 10:44:53 -0400 (EDT)
+        Fri, 27 Jun 2025 08:01:26 -0700 (PDT)
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id CAEA2F40066;
+	Fri, 27 Jun 2025 11:01:25 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Fri, 27 Jun 2025 10:44:53 -0400
-X-ME-Sender: <xms:Za5eaAVF4SuboNZjcMJ9rdBGSPX_5cHdfbiSeicrA3wqcG_W8L2IAw>
-    <xme:Za5eaEn9flFN2ZT8DQEQqF1C53qbDpuaABIgKYNSE5mgtcrnsB9vEeoZlEhW8cq8q
-    eidtsjfn5p5_nX9ng>
-X-ME-Received: <xmr:Za5eaEbGTY-KHkU-PX2sPFB734tKCambWcvaUzeYKrINnfuiTR94fG8Zwg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdeffeegucetufdoteggodetrfdotf
+  by phl-compute-04.internal (MEProxy); Fri, 27 Jun 2025 11:01:25 -0400
+X-ME-Sender: <xms:RbJeaJL7GLR_6GaGD9LqY6iVPJ9hK_zpcFJYfZvOc3bHy0Mw8cASlQ>
+    <xme:RbJeaFJlNu-advgqNUMGNpURKmNqp2wZtQFswZSgnfaC-MVXr9NJcXHb69tvJXprV
+    rXuE49zQGGH8m0hsw>
+X-ME-Received: <xmr:RbJeaBsoKTQJ4OadiIv3qNTHQ3G-8rLe_MYWvUSWWqoZUuBFnJQzSH0c3A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdeffeeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
     lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
     epfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgv
@@ -100,15 +100,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdeffeegucetufdoteggod
     gvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilhdr
     tghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhope
     gsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomh
-X-ME-Proxy: <xmx:Za5eaPW7q6Vm8vQlEADyJOfkpYnVLCxMpNksemrPxOzEGJE7uM8k9w>
-    <xmx:Za5eaKnpHM2jAJxSluf5PfN1C7hDNUk8A5i_tdNqVLgC8JFW7gZ_Gg>
-    <xmx:Za5eaEfv78VoW3DYO3PFYqvODKwkYh3DRXA0sLBdtlnUrlaFln7CKg>
-    <xmx:Za5eaME8NHJKzekGkjLzGCIinLX4t9iLWofJN-_c_ZSS35kE1zIzmg>
-    <xmx:Za5eaAkRcPceVK611x3G6DFFFJs7q4BQ7s4NZYWOlLOqe9Lg3JK1QeRH>
+X-ME-Proxy: <xmx:RbJeaKbBVdecEkq3jKP29OjcOlccAzw3ADhUrNnJw25xmf0xAMy9bg>
+    <xmx:RbJeaAZcynBeMGlLkLCRvCdqfdvLUnbHY0VyGndJ7WUI-8-OKaQWTQ>
+    <xmx:RbJeaOAuRV913rJhyaZGEncNgDuigTf8232IKDCNv7bOmK9K-TetTw>
+    <xmx:RbJeaObGr6FR1WXX2CKgVXhImWtAuEDujxGdBPmQraaMoElGajXJxw>
+    <xmx:RbJeaMogQ51XFzRQqk6cKj67223_FRKTCIO1WVF0juchaFJ1tvfuT6cz>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Jun 2025 10:44:53 -0400 (EDT)
-Date: Fri, 27 Jun 2025 07:44:52 -0700
+ 27 Jun 2025 11:01:25 -0400 (EDT)
+Date: Fri, 27 Jun 2025 08:01:24 -0700
 From: Boqun Feng <boqun.feng@gmail.com>
 To: Andreas Hindborg <a.hindborg@kernel.org>
 Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
@@ -129,14 +129,12 @@ Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Linus Torvalds <torvalds@linux-foundation.org>,
 	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v5 03/10] rust: sync: atomic: Add ordering annotation
- types
-Message-ID: <aF6uZLX1zr2MP6Ne@Mac.home>
+Subject: Re: [PATCH v5 04/10] rust: sync: atomic: Add generic atomics
+Message-ID: <aF6yRIixTPx5YZbA@Mac.home>
 References: <20250618164934.19817-1-boqun.feng@gmail.com>
- <W3facY85E7FjV5y6_67OMqPUz1-Vubr8TpYgFCgXNl8GMh1oM6_bF9V94Kl_oZsdyCQSrxm5WExUmztE3pJ_BQ==@protonmail.internalid>
- <20250618164934.19817-4-boqun.feng@gmail.com>
- <87wm8yznkt.fsf@kernel.org>
- <aF6sBmgTmdM5ZoB3@Mac.home>
+ <8ISRnKRw28Na4so9GDfdv0gd40nmTGOwD7hFx507xGgJ64p9s8qECsOkboryQH02IQJ4ObvqAwcLUZCKt1QwZQ==@protonmail.internalid>
+ <20250618164934.19817-5-boqun.feng@gmail.com>
+ <8734bm1yxk.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -145,58 +143,91 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aF6sBmgTmdM5ZoB3@Mac.home>
+In-Reply-To: <8734bm1yxk.fsf@kernel.org>
 
-On Fri, Jun 27, 2025 at 07:34:46AM -0700, Boqun Feng wrote:
-> On Thu, Jun 26, 2025 at 02:36:50PM +0200, Andreas Hindborg wrote:
+On Thu, Jun 26, 2025 at 02:15:35PM +0200, Andreas Hindborg wrote:
+> "Boqun Feng" <boqun.feng@gmail.com> writes:
+> 
 > [...]
-> > > +/// The trait bound for annotating operations that should support all orderings.
-> > > +pub trait All: internal::OrderingUnit {}
-> > 
-> > I think I would prefer `Any` rather than `All` here. Because it is "any
-> > of", not "all of them at once".
-> > 
 > 
-> Good idea! Changed. Thanks!
+> > +
+> > +impl<T: AllowAtomic> Atomic<T> {
+> > +    /// Creates a new atomic.
+> > +    pub const fn new(v: T) -> Self {
+> > +        Self(Opaque::new(v))
+> > +    }
+> > +
+> > +    /// Creates a reference to [`Self`] from a pointer.
+> > +    ///
+> > +    /// # Safety
+> > +    ///
+> > +    /// - `ptr` has to be a valid pointer.
+> > +    /// - `ptr` has to be valid for both reads and writes for the whole lifetime `'a`.
+> > +    /// - For the whole lifetime of '`a`, other accesses to the object cannot cause data races
+> > +    ///   (defined by [`LKMM`]) against atomic operations on the returned reference.
+> 
+> I feel the wording is a bit tangled here. How about something along the
+> lines of
+> 
+>   For the duration of `'a`, all accesses to the object must be atomic.
 > 
 
-And I realized I can unify `Any` with `OrderingUnit`, here is the what I
-have now:
+Well, a non-atomic read vs an atomic read is not a data race (for both
+Rust memory model and LKMM), so your proposal is overly restricted.
 
-mod internal {
-    /// Sealed trait, can be only implemented inside atomic mod.
-    pub trait Sealed {}
+I can s/the whole lifetime/the duration.
 
-    impl Sealed for super::Relaxed {}
-    impl Sealed for super::Acquire {}
-    impl Sealed for super::Release {}
-    impl Sealed for super::Full {}
-}
+> > +    ///
+> > +    /// [`LKMM`]: srctree/tools/memory-model
+> > +    ///
+> > +    /// # Examples
+> > +    ///
+> > +    /// Using [`Atomic::from_ptr()`] combined with [`Atomic::load()`] or [`Atomic::store()`] can
+> > +    /// achieve the same functionality as `READ_ONCE()`/`smp_load_acquire()` or
+> > +    /// `WRITE_ONCE()`/`smp_store_release()` in C side:
+> > +    ///
+> > +    /// ```rust
+> > +    /// # use kernel::types::Opaque;
+> > +    /// use kernel::sync::atomic::{Atomic, Relaxed, Release};
+> > +    ///
+> > +    /// // Assume there is a C struct `Foo`.
+> > +    /// mod cbindings {
+> > +    ///     #[repr(C)]
+> > +    ///     pub(crate) struct foo { pub(crate) a: i32, pub(crate) b: i32 }
+> > +    /// }
+> > +    ///
+> > +    /// let tmp = Opaque::new(cbindings::foo { a: 1, b: 2});
+> > +    ///
+> > +    /// // struct foo *foo_ptr = ..;
+> > +    /// let foo_ptr = tmp.get();
+> > +    ///
+> > +    /// // SAFETY: `foo_ptr` is a valid pointer, and `.a` is inbound.
+> 
+> Did you mean to say "in bounds"? Or what is "inbound"?
+> 
 
-/// The trait bound for annotating operations that support any ordering.
-pub trait Any: internal::Sealed {
-    /// Describes the exact memory ordering.
-    const TYPE: OrderingType;
-}
+I think I meant to say "inbounds", fixed.
 
-impl Any for Relaxed {
-    const TYPE: OrderingType = OrderingType::Relaxed;
-}
+> > +    /// let foo_a_ptr = unsafe { core::ptr::addr_of_mut!((*foo_ptr).a) };
+> 
+> This should be `&raw mut` by now, right?
+> 
 
-impl Any for Acquire {
-    const TYPE: OrderingType = OrderingType::Acquire;
-}
+Right.
 
-impl Any for Release {
-    const TYPE: OrderingType = OrderingType::Release;
-}
+[...]
+> 
+> Typo `AllocAtomic`.
+> 
 
-impl Any for Full {
-    const TYPE: OrderingType = OrderingType::Full;
-}
-
-Better than what I had before, thanks!
+All fixed! Thanks!
 
 Regards,
 Boqun
+
+> 
+> Best regards,
+> Andreas Hindborg
+> 
+> 
 
