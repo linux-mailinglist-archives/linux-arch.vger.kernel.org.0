@@ -1,133 +1,155 @@
-Return-Path: <linux-arch+bounces-12482-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12483-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47142AEB564
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 12:51:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7FE8AEB90A
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 15:34:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 762271BC62E6
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 10:51:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 194233A7E3A
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 13:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FDC2951A0;
-	Fri, 27 Jun 2025 10:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE3492C3745;
+	Fri, 27 Jun 2025 13:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="pksJWTHU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dGV9S0Du"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4BB29615D;
-	Fri, 27 Jun 2025 10:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2B2294A11;
+	Fri, 27 Jun 2025 13:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751021460; cv=none; b=mcLJdd/J5iSe8OKNe2qu/4DAt3ERpD4Hukx1H+qZjY6JDqLYugw2g2OGMsTfzPIERMNlxtnBYq8qZCXa50Yp5HHZj+D7VVbkHHQYDyfrowM6oij+FbGb/HBu+4yXr5wr556dTaBIzX5nTrRDjU8entjouuJRpa1QSk6DKPJFtnY=
+	t=1751031272; cv=none; b=gNxoOmHHXVRcHT0qWAx1YH4UfCbYOniTLg8c8VXJzkDVaK4p+dvAYILbyggNqMmxWIGiX+zWw1RlYbK+dYgk/F+A2BlLsqDtgVnsOuVFQnqiyf7YI6zhiG68dOy6kGFuGCaG9zhL8Qv2YY36k7XNtZRIX2PUMAm0Z8wJJF4mqHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751021460; c=relaxed/simple;
-	bh=iyRgdZz62kfHtWgProqZ9GBCRWbW6BTlAC0PWj8nzus=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JVMfqqYRygVy3RZ33xS/3fJNUuNMTPl2QoNC2WcfCS7mdDq4+kZ5QWZ+jTukg6/K4SaRdKFx6LTn4bTBeonqQRYK5tuzF2SCILRypEqAhA40byr0tTu0RDYYrehVqOSqK+DBOJ/JIm620dG7zjEmoUogt4TFpoDp5pDcf2fWG58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=pksJWTHU; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55RAbJZv012822;
-	Fri, 27 Jun 2025 10:50:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=corp-2025-04-25; bh=Xo6dHGRpyyJ5stGO
-	yGIAPRrHVhhNbeVBOkIc5fi1KhM=; b=pksJWTHUSjb1dR7FEIdM6KMxYRIOI+WW
-	OWJshPa5FOP3b+zC6FyF5w76syHRip+H0+RZFl4lvo80+5g+mHz4bwPjyHq2haRC
-	YEJhRlS9J6knjrrngizAyI8rn/wtCcMvpBBnbEQ4W9X1H59E3WnygtfYreB+5X91
-	MGCHo95FGbdrdi9Lg6kUu4ISk7KTgrQ+UFP0C8p/S0wqF7Fe4/SLL2nCluK7UPUE
-	RF99i5HZd6vAmcI2kDZpj6tV/4A1pCwgLduMjuflS6XKEu3xNpbm+D2Bpmw3axuu
-	b5SflnJd6B/0zWZxcOMGbtbGzgn44pkvLMLAwV9D/frI+N8nRPghjg==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47egt5tmqc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 27 Jun 2025 10:50:39 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55RAWS7B018085;
-	Fri, 27 Jun 2025 10:50:39 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 47ehw16w1e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 27 Jun 2025 10:50:39 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55RAocV9011478;
-	Fri, 27 Jun 2025 10:50:38 GMT
-Received: from lab61.no.oracle.com (lab61.no.oracle.com [10.172.144.82])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 47ehw16vyg-1;
-	Fri, 27 Jun 2025 10:50:38 +0000
-From: =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
-To: Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joelagnelf@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc: =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        lkmm@lists.linux.dev, linux-doc@vger.kernel.org
-Subject: [PATCH v2 1/1] docs/memory-barriers.txt: Add wait_event_cmd() and wait_event_exclusive_cmd()
-Date: Fri, 27 Jun 2025 12:50:33 +0200
-Message-ID: <20250627105034.1612947-1-haakon.bugge@oracle.com>
-X-Mailer: git-send-email 2.43.5
+	s=arc-20240116; t=1751031272; c=relaxed/simple;
+	bh=IdTDvFP8y9HaGTCvvR1/VaHuRyW7QodsgF7bM8TCSI0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HaS+wc5JkZOe2me+Z7LcxIIMGnf4Jv+0umGTRNzsyrNRgCFZPrWXkJJPcVz50Qck1Zi/SFrdmdE+VDfxCFk1D8qBB94MjLKLgm3/gaZJrGYUoIxDJWbC1sYnCBp6iCMQ2jyX0JzT1P/Ze5sdeGDJESG3XUAqpD8UfUeIKoRGNW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dGV9S0Du; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E84C4AF09;
+	Fri, 27 Jun 2025 13:34:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751031272;
+	bh=IdTDvFP8y9HaGTCvvR1/VaHuRyW7QodsgF7bM8TCSI0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=dGV9S0DuN0PMGbTcSCHn0V2FGwVDGdhEXR3I4FUJ9/YySKuhAQSzKWPC5ArWakjbs
+	 XMCzbvUTLK5/R4eWuNHhnTwGYwtNaTvcvZbW+yOcOodJ7GCu0IPv3sjktwFI61jyAF
+	 lTQ1sTzZOWVnU/Z1TE+0I0WhZAqmS/cmZhnI+E1OFdwbY3JnZ6CdPRijk0ixaTUovH
+	 d2cDv6ytpRwCYMhPVUxh4+5zaK2odYUEDjwzn6Bh8ltMFRnKzp9MEgNZioFt8bh2tY
+	 KYP7clxaiDJN2XrmKDUc/aMiPoebM6CREcwsnP0YOgS3Ous7gPnpoqOUXsZni2JYii
+	 AFtzOAC3SJMJQ==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60768f080d8so3820707a12.1;
+        Fri, 27 Jun 2025 06:34:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUsM2TJeCdXlaU1Fnb+0wmEG9C8FPSwvJGpc7CY5F0SiKUEIptFpF4e/Sf9HI807m/9qKSA4eNSc1F9@vger.kernel.org, AJvYcCVxPllmP9ne0g6s/6Lsc97a2zjxQsW1WkZgfqVECjxinFBuargabvaQoRPqMKjN7irD/TgE7CWtm6pBWywi@vger.kernel.org, AJvYcCXMOZYFfQjZ6suYXUsaoW8mMkUXqWXOksJ4GvYbTawE2IBSRRYIAwbZ3Otyn6qFCeSm0JTWwPRHqtSYLA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZapbGPiLWC0AQ46P38+p6fD00hRsS/sspYkPJ/BZxRKUT1KED
+	HQA9IXwhiHFQnngKmBwxLKFyB14KWfbr5EAuQ+DT81HP4qI1StdolYALycc0+YGf6GOM+D4WmIt
+	VOhP705aXn+aFFEbqcyyHpC5Fquwu1w==
+X-Google-Smtp-Source: AGHT+IEVRFNBFlTP6R9fUrxtJFc+ywLiUb4Q+PsDVjgttF7BLiyvAKx8hYh9X9Oqt+d5yA8ADVKHtkuR4NjvhsGbj6E=
+X-Received: by 2002:a17:907:7f14:b0:ae0:c561:b806 with SMTP id
+ a640c23a62f3a-ae3500f276fmr296866566b.37.1751031270546; Fri, 27 Jun 2025
+ 06:34:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-27_04,2025-06-26_05,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
- phishscore=0 adultscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
- definitions=main-2506270088
-X-Proofpoint-GUID: 8FpXteLgEXlpSTDqPX7G2_fm-vPer4yz
-X-Authority-Analysis: v=2.4 cv=PMYP+eqC c=1 sm=1 tr=0 ts=685e777f b=1 cx=c_pps a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=M51BFTxLslgA:10 a=yPCof4ZbAAAA:8 a=lPgn3NRR9fYW2pfQ3SIA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 cc=ntf awl=host:14723
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI3MDA4OCBTYWx0ZWRfX7ohwrFESJfrD aINzfDGzLbT2VX4HNPF8gP01tA+7rr/zKLEyGoQi08RLkZGhQW44I3CymIPuKuxiDrUYX8frqve PAxlV6Sso+UsiWg1xZX0CyeL+yixnYz8UWDscdHIGA6TyfTVDbod3dUFlQpqe45gyXTPTjTE2Vt
- wi16bsrfgVbyZ2MjzEshAXY4QkbQ7vAqr2FKOSU1ieKj2B83FCEPBMSwH8c2IARROMxan8HC959 JmfKFo4dSn7YHBtTPpCSEiFbgZszJlUhVzMa17JOEFtlt6ip/blReRtz8Q9WV/PM44cjVHDP0kY pkYMqCaP5j4Y4PUvBuH55WRKgGiLh+9/5+MvOzcWcHoOz7j03zsnxa0H7tQyLljRFqMtfn5KxNS
- ujvnYemC+DXFE8nmUgGWz7PQ/bS/Abf2PY6438eP+Ot31NXSkg5bmQyyV2jCViZ8TybLxWkL
-X-Proofpoint-ORIG-GUID: 8FpXteLgEXlpSTDqPX7G2_fm-vPer4yz
+References: <20250625085715.889837-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20250625085715.889837-1-daniel.lezcano@linaro.org>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 27 Jun 2025 08:34:18 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLNQ729cwSEUnk5bNMjhJR7WTqcPPh1uL4suN1GhNhRMw@mail.gmail.com>
+X-Gm-Features: Ac12FXxw2NuGvxwtqORXKtaK75DRC2OKF-_MV83Pl275d2zGx8F2rQx8EOkHjI8
+Message-ID: <CAL_JsqLNQ729cwSEUnk5bNMjhJR7WTqcPPh1uL4suN1GhNhRMw@mail.gmail.com>
+Subject: Re: [PATCH RFC] timer: of: Create a platform_device before the
+ framework is initialized
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	lorenzo.pieralisi@linaro.org, Hans de Goede <hansg@kernel.org>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Arnd Bergmann <arnd@arndb.de>, John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, 
+	"open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add said functions to Documentation/memory-barriers.txt.
+On Wed, Jun 25, 2025 at 3:57=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> In the context of the time keeping and the timers, some platforms have
+> timers which need to be initialized very early. It is the case of the
+> ARM platform which do not have the architected timers.
+>
+> The macro TIMER_OF_DECLARE adds an entry in the timer init functions
+> array at compile time and the function timer_probe is called from the
+> timer_init() function in kernel/time.c
+>
+> This array contains a t-uple with the init function and the compatible
+> string.
+>
+> The init function has a device node pointer parameter.
+>
+> The timer_probe() function browses the of nodes and find the ones
+> matching the compatible string given when using the TIMER_OF_DECLARE
+> macro. It then calls the init function with the device node as a
+> pointer.
+>
+> But there are some platforms where there are multiple timers like the
+> ARM64 with the architected timers. Those are always initialized very
+> early and the other timers can be initialized later.
+>
+> For this reason we find timer drivers with the platform_driver
+> incarnation. Consequently their init functions are different, they
+> have a platform_device pointer parameter and rely on the devm_
+> function for rollbacking.
+>
+> To summarize, we have:
+>  - TIMER_OF_DECLARE with init function prototype:
+>    int (*init)(struct device_node *np);
+>
+>  - module_platform_driver (and variant) with the probe function
+>    prototype:
+>    int (*init)(struct platform_device *pdev);
+>
+> The current situation with the timers is the following:
+>
+>  - Two platforms can have the same timer hardware, hence the same
+>    driver but one without alternate timers and the other with multiple
+>    timers. For example, the Exynos platform has only the Exynos MCT on
+>    ARM but has the architeched timers in addition on the ARM64.
+>
+>  - The timer drivers can be modules now which was not the case until
+>    recently. TIMER_OF_DECLARE do not allow the build as a module.
+>
+> It results in duplicate init functions (one with rollback and one with
+> devm_) and different way to declare the driver (TIMER_OF_DECLARE and
+> module_platform_driver).
+>
+> This proposed change is to unify the prototyping of the init functions
+> to receive a platform_device pointer as parameter. Consequently, it
+> will allow a smoother and nicer module conversion and a huge cleanup
+> of the init functions by removing all the rollback code from all the
+> timer drivers. It introduces a TIMER_OF_DECLARE_PDEV macro.
+>
+> If the macro is used a platform_device is manually allocated and
+> initialized with the needed information for the probe
+> function. Otherwise module_platform_driver can be use instead with the
+> same probe function without the timer_probe() initialization.
+>
+> I don't have an expert knowledge of the platform_device internal
+> subtilitie so I'm not sure if this approach is valid. However, it has
+> been tested on a Rockchip board with the "rockchip,rk3288-timer" and
+> verified the macro and the devm_ rollback work correctly.
 
-Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
+Have you looked at the SH "early_platform_driver"? How does this
+compare? IIRC, that used to be generally available, but has been
+pushed into SH since that was the only arch using it and no one likes
+it.
 
---
-
-v1 -> v2:
-      * Changed the prosaic part to kernel-doc style and moved it to
-        include/linux/wait.h in another commit
----
- Documentation/memory-barriers.txt | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-index 93d58d9a428b8..1d164e0057769 100644
---- a/Documentation/memory-barriers.txt
-+++ b/Documentation/memory-barriers.txt
-@@ -2192,6 +2192,8 @@ interpolate the memory barrier in the right place:
- 	wait_event_timeout();
- 	wait_on_bit();
- 	wait_on_bit_lock();
-+	wait_event_cmd();
-+	wait_event_exclusive_cmd();
- 
- 
- Secondly, code that performs a wake up normally follows something like this:
--- 
-2.43.5
-
+Rob
 
