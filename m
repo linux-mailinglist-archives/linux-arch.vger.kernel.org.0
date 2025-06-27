@@ -1,310 +1,133 @@
-Return-Path: <linux-arch+bounces-12481-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12482-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 820CEAEB1D5
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 10:59:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47142AEB564
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 12:51:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46B374A4D68
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 08:58:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 762271BC62E6
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 10:51:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF9727F002;
-	Fri, 27 Jun 2025 08:58:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FDC2951A0;
+	Fri, 27 Jun 2025 10:51:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KZ1uBfMr"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="pksJWTHU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF96229B15;
-	Fri, 27 Jun 2025 08:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4BB29615D;
+	Fri, 27 Jun 2025 10:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751014730; cv=none; b=J33f3BgNDFQKl/u3vE1zGOyHZ9F4t5kROuxx1Oxo7LIPzbOnMBpItLFBgPQI7ZIeNezv5WwpIkYEBPYQiDM4ug5IoqwWLjEM2Zg5JqdMGSTAjX8X+yJ87uw3xnztisZrh9RDUOV95g2/tLI/y3ZNX3KapaBq8hsXPw3Iy30BsM0=
+	t=1751021460; cv=none; b=mcLJdd/J5iSe8OKNe2qu/4DAt3ERpD4Hukx1H+qZjY6JDqLYugw2g2OGMsTfzPIERMNlxtnBYq8qZCXa50Yp5HHZj+D7VVbkHHQYDyfrowM6oij+FbGb/HBu+4yXr5wr556dTaBIzX5nTrRDjU8entjouuJRpa1QSk6DKPJFtnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751014730; c=relaxed/simple;
-	bh=7Q0EJNGfoLDItxk7UkA5TTYdcSirFMepdH0/ItIQbdY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=JSTux3G4EmE5UWMHX3fsgsNh7P0Mtlv++onlJY1c5fAjC3DF6CdVOPrCoEe+FOt+djDhtKtqePvmX9OiWnORBn/i8x/chtnz/YlIkuwEGIq1US1wBV4m6y/+QV+tPXb4yPK7TUqyOmVgcQ4EC6yQcOcLGXX2XqWTiCI3GBOgEf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KZ1uBfMr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED55C4CEED;
-	Fri, 27 Jun 2025 08:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751014730;
-	bh=7Q0EJNGfoLDItxk7UkA5TTYdcSirFMepdH0/ItIQbdY=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=KZ1uBfMrQUHPPAz+Nq7hNbEKd+DazgJ4hhbGGNZtF9sYEAlWqDk2hUkgp7CKHbPZA
-	 PO/Z9Cliyx8yWpvUSSEujEPB1WvTpUjeI1WDsbW4IFZFM+1AHCqcwgmxGtdFfxbgQA
-	 jfkCYhDr/6x73ihykZhMxtylSWREa8Xi2d5+JXzvIKNB6cjyVeRl5lpkIVh/hSFAuU
-	 RdDgcJM09g7WpkXSL4Ql/h3MBBWjipOU/ep4M0Omk8e8+JzYDSEy2nqzC6JwEzlBXh
-	 xzFkJ6yUCLBTg5s4xlDLtk5mqiS1gdWDZER9SHXYxBjCzfjORcsL3+MFb95ngw4LFn
-	 SyMyA004Wxi1w==
+	s=arc-20240116; t=1751021460; c=relaxed/simple;
+	bh=iyRgdZz62kfHtWgProqZ9GBCRWbW6BTlAC0PWj8nzus=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JVMfqqYRygVy3RZ33xS/3fJNUuNMTPl2QoNC2WcfCS7mdDq4+kZ5QWZ+jTukg6/K4SaRdKFx6LTn4bTBeonqQRYK5tuzF2SCILRypEqAhA40byr0tTu0RDYYrehVqOSqK+DBOJ/JIm620dG7zjEmoUogt4TFpoDp5pDcf2fWG58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=pksJWTHU; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55RAbJZv012822;
+	Fri, 27 Jun 2025 10:50:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=Xo6dHGRpyyJ5stGO
+	yGIAPRrHVhhNbeVBOkIc5fi1KhM=; b=pksJWTHUSjb1dR7FEIdM6KMxYRIOI+WW
+	OWJshPa5FOP3b+zC6FyF5w76syHRip+H0+RZFl4lvo80+5g+mHz4bwPjyHq2haRC
+	YEJhRlS9J6knjrrngizAyI8rn/wtCcMvpBBnbEQ4W9X1H59E3WnygtfYreB+5X91
+	MGCHo95FGbdrdi9Lg6kUu4ISk7KTgrQ+UFP0C8p/S0wqF7Fe4/SLL2nCluK7UPUE
+	RF99i5HZd6vAmcI2kDZpj6tV/4A1pCwgLduMjuflS6XKEu3xNpbm+D2Bpmw3axuu
+	b5SflnJd6B/0zWZxcOMGbtbGzgn44pkvLMLAwV9D/frI+N8nRPghjg==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47egt5tmqc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 27 Jun 2025 10:50:39 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55RAWS7B018085;
+	Fri, 27 Jun 2025 10:50:39 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 47ehw16w1e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 27 Jun 2025 10:50:39 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55RAocV9011478;
+	Fri, 27 Jun 2025 10:50:38 GMT
+Received: from lab61.no.oracle.com (lab61.no.oracle.com [10.172.144.82])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 47ehw16vyg-1;
+	Fri, 27 Jun 2025 10:50:38 +0000
+From: =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
+To: Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joelagnelf@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc: =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        lkmm@lists.linux.dev, linux-doc@vger.kernel.org
+Subject: [PATCH v2 1/1] docs/memory-barriers.txt: Add wait_event_cmd() and wait_event_exclusive_cmd()
+Date: Fri, 27 Jun 2025 12:50:33 +0200
+Message-ID: <20250627105034.1612947-1-haakon.bugge@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 27 Jun 2025 10:58:43 +0200
-Message-Id: <DAX6WZ87S99G.1CMIN6IQXJYPL@kernel.org>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
- <alex.gaynor@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
- "Will Deacon" <will@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
- "Mark Rutland" <mark.rutland@arm.com>, "Wedson Almeida Filho"
- <wedsonaf@gmail.com>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Lyude
- Paul" <lyude@redhat.com>, "Ingo Molnar" <mingo@kernel.org>, "Mitchell Levy"
- <levymitchell0@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
- <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH v5 05/10] rust: sync: atomic: Add atomic {cmp,}xchg
- operations
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Boqun Feng" <boqun.feng@gmail.com>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <lkmm@lists.linux.dev>,
- <linux-arch@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250618164934.19817-1-boqun.feng@gmail.com>
- <20250618164934.19817-6-boqun.feng@gmail.com>
-In-Reply-To: <20250618164934.19817-6-boqun.feng@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-27_04,2025-06-26_05,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 spamscore=0
+ phishscore=0 adultscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2506270088
+X-Proofpoint-GUID: 8FpXteLgEXlpSTDqPX7G2_fm-vPer4yz
+X-Authority-Analysis: v=2.4 cv=PMYP+eqC c=1 sm=1 tr=0 ts=685e777f b=1 cx=c_pps a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=M51BFTxLslgA:10 a=yPCof4ZbAAAA:8 a=lPgn3NRR9fYW2pfQ3SIA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 cc=ntf awl=host:14723
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI3MDA4OCBTYWx0ZWRfX7ohwrFESJfrD aINzfDGzLbT2VX4HNPF8gP01tA+7rr/zKLEyGoQi08RLkZGhQW44I3CymIPuKuxiDrUYX8frqve PAxlV6Sso+UsiWg1xZX0CyeL+yixnYz8UWDscdHIGA6TyfTVDbod3dUFlQpqe45gyXTPTjTE2Vt
+ wi16bsrfgVbyZ2MjzEshAXY4QkbQ7vAqr2FKOSU1ieKj2B83FCEPBMSwH8c2IARROMxan8HC959 JmfKFo4dSn7YHBtTPpCSEiFbgZszJlUhVzMa17JOEFtlt6ip/blReRtz8Q9WV/PM44cjVHDP0kY pkYMqCaP5j4Y4PUvBuH55WRKgGiLh+9/5+MvOzcWcHoOz7j03zsnxa0H7tQyLljRFqMtfn5KxNS
+ ujvnYemC+DXFE8nmUgGWz7PQ/bS/Abf2PY6438eP+Ot31NXSkg5bmQyyV2jCViZ8TybLxWkL
+X-Proofpoint-ORIG-GUID: 8FpXteLgEXlpSTDqPX7G2_fm-vPer4yz
 
-On Wed Jun 18, 2025 at 6:49 PM CEST, Boqun Feng wrote:
-> +impl<T: AllowAtomic> Atomic<T>
-> +where
-> +    T::Repr: AtomicHasXchgOps,
-> +{
-> +    /// Atomic exchange.
-> +    ///
-> +    /// # Examples
-> +    ///
-> +    /// ```rust
-> +    /// use kernel::sync::atomic::{Atomic, Acquire, Relaxed};
-> +    ///
-> +    /// let x =3D Atomic::new(42);
-> +    ///
-> +    /// assert_eq!(42, x.xchg(52, Acquire));
-> +    /// assert_eq!(52, x.load(Relaxed));
-> +    /// ```
-> +    #[doc(alias("atomic_xchg", "atomic64_xchg"))]
-> +    #[inline(always)]
-> +    pub fn xchg<Ordering: All>(&self, v: T, _: Ordering) -> T {
+Add said functions to Documentation/memory-barriers.txt.
 
-Can we name this `exchange`?
+Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
 
-> +        let v =3D T::into_repr(v);
-> +        let a =3D self.as_ptr().cast::<T::Repr>();
-> +
-> +        // SAFETY:
-> +        // - For calling the atomic_xchg*() function:
-> +        //   - `self.as_ptr()` is a valid pointer, and per the safety re=
-quirement of `AllocAtomic`,
-> +        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` is a=
- valid pointer,
-> +        //   - per the type invariants, the following atomic operation w=
-on't cause data races.
-> +        // - For extra safety requirement of usage on pointers returned =
-by `self.as_ptr():
-> +        //   - atomic operations are used here.
-> +        let ret =3D unsafe {
-> +            match Ordering::TYPE {
-> +                OrderingType::Full =3D> T::Repr::atomic_xchg(a, v),
-> +                OrderingType::Acquire =3D> T::Repr::atomic_xchg_acquire(=
-a, v),
-> +                OrderingType::Release =3D> T::Repr::atomic_xchg_release(=
-a, v),
-> +                OrderingType::Relaxed =3D> T::Repr::atomic_xchg_relaxed(=
-a, v),
-> +            }
-> +        };
-> +
-> +        T::from_repr(ret)
-> +    }
-> +
-> +    /// Atomic compare and exchange.
-> +    ///
-> +    /// Compare: The comparison is done via the byte level comparison be=
-tween the atomic variables
-> +    /// with the `old` value.
-> +    ///
-> +    /// Ordering: When succeeds, provides the corresponding ordering as =
-the `Ordering` type
-> +    /// parameter indicates, and a failed one doesn't provide any orderi=
-ng, the read part of a
-> +    /// failed cmpxchg should be treated as a relaxed read.
+--
 
-This is a bit confusing to me. The operation has a store and a load
-operation and both can have different orderings (at least in Rust
-userland) depending on the success/failure of the operation. In
-userland, I can supply `AcqRel` and `Acquire` to ensure that I always
-have Acquire semantics on any read and `Release` semantics on any write
-(which I would think is a common case). How do I do this using your API?
-
-Don't I need `Acquire` semantics on the read in order for
-`compare_exchange` to give me the correct behavior in this example:
-
-    pub struct Foo {
-        data: Atomic<u64>,
-        new: Atomic<bool>,
-        ready: Atomic<bool>,
-    }
-
-    impl Foo {
-        pub fn new() -> Self {
-            Self {
-                data: Atomic::new(0),
-                new: Atomic::new(false),
-                ready: Atomic::new(false),
-            }
-        }
-
-        pub fn get(&self) -> Option<u64> {
-            if self.new.compare_exchange(true, false, Release).is_ok() {
-                let val =3D self.data.load(Acquire);
-                self.ready.store(false, Release);
-                Some(val)
-            } else {
-                None
-            }
-        }
-
-        pub fn set(&self, val: u64) -> Result<(), u64> {
-            if self.ready.compare_exchange(false, true, Release).is_ok() {
-                self.data.store(val, Release);
-                self.new.store(true, Release);
-            } else {
-                Err(val)
-            }
-        }
-    }
-
-IIUC, you need `Acquire` ordering on both `compare_exchange` operations'
-reads for this to work, right? Because if they are relaxed, this could
-happen:
-
-                    Thread 0                    |                    Thread=
- 1
-------------------------------------------------|--------------------------=
-----------------------
- get() {                                        | set(42) {
-                                                |   if ready.cmpxchg(false,=
- true, Rel).is_ok() {
-                                                |     data.store(42, Rel)
-                                                |     new.store(true, Rel)
-   if new.cmpxchg(true, false, Rel).is_ok() {   |
-     let val =3D self.data.load(Acq); // reads 0  |
-     ready.store(false, Rel);                   |
-     Some(val)                                  |
-   }                                            |   }
- }                                              | }
-=20
-So essentially, the `data.store` operation is not synchronized, because
-the read on `new` is not `Acquire`.
-
-> +    ///
-> +    /// Returns `Ok(value)` if cmpxchg succeeds, and `value` is guarante=
-ed to be equal to `old`,
-> +    /// otherwise returns `Err(value)`, and `value` is the value of the =
-atomic variable when
-> +    /// cmpxchg was happening.
-> +    ///
-> +    /// # Examples
-> +    ///
-> +    /// ```rust
-> +    /// use kernel::sync::atomic::{Atomic, Full, Relaxed};
-> +    ///
-> +    /// let x =3D Atomic::new(42);
-> +    ///
-> +    /// // Checks whether cmpxchg succeeded.
-> +    /// let success =3D x.cmpxchg(52, 64, Relaxed).is_ok();
-> +    /// # assert!(!success);
-> +    ///
-> +    /// // Checks whether cmpxchg failed.
-> +    /// let failure =3D x.cmpxchg(52, 64, Relaxed).is_err();
-> +    /// # assert!(failure);
-> +    ///
-> +    /// // Uses the old value if failed, probably re-try cmpxchg.
-> +    /// match x.cmpxchg(52, 64, Relaxed) {
-> +    ///     Ok(_) =3D> { },
-> +    ///     Err(old) =3D> {
-> +    ///         // do something with `old`.
-> +    ///         # assert_eq!(old, 42);
-> +    ///     }
-> +    /// }
-> +    ///
-> +    /// // Uses the latest value regardlessly, same as atomic_cmpxchg() =
-in C.
-> +    /// let latest =3D x.cmpxchg(42, 64, Full).unwrap_or_else(|old| old)=
-;
-> +    /// # assert_eq!(42, latest);
-> +    /// assert_eq!(64, x.load(Relaxed));
-> +    /// ```
-> +    #[doc(alias(
-> +        "atomic_cmpxchg",
-> +        "atomic64_cmpxchg",
-> +        "atomic_try_cmpxchg",
-> +        "atomic64_try_cmpxchg"
-> +    ))]
-> +    #[inline(always)]
-> +    pub fn cmpxchg<Ordering: All>(&self, mut old: T, new: T, o: Ordering=
-) -> Result<T, T> {
-
-`compare_exchange`?
-
-> +    /// Atomic compare and exchange and returns whether the operation su=
-cceeds.
-> +    ///
-> +    /// "Compare" and "Ordering" part are the same as [`Atomic::cmpxchg(=
-)`].
-> +    ///
-> +    /// Returns `true` means the cmpxchg succeeds otherwise returns `fal=
-se` with `old` updated to
-> +    /// the value of the atomic variable when cmpxchg was happening.
-> +    #[inline(always)]
-> +    fn try_cmpxchg<Ordering: All>(&self, old: &mut T, new: T, _: Orderin=
-g) -> bool {
-
-`try_compare_exchange`?
-
+v1 -> v2:
+      * Changed the prosaic part to kernel-doc style and moved it to
+        include/linux/wait.h in another commit
 ---
-Cheers,
-Benno
+ Documentation/memory-barriers.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +        let old =3D (old as *mut T).cast::<T::Repr>();
-> +        let new =3D T::into_repr(new);
-> +        let a =3D self.0.get().cast::<T::Repr>();
-> +
-> +        // SAFETY:
-> +        // - For calling the atomic_try_cmpchg*() function:
-> +        //   - `self.as_ptr()` is a valid pointer, and per the safety re=
-quirement of `AllowAtomic`,
-> +        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` is a=
- valid pointer,
-> +        //   - per the type invariants, the following atomic operation w=
-on't cause data races.
-> +        //   - `old` is a valid pointer to write because it comes from a=
- mutable reference.
-> +        // - For extra safety requirement of usage on pointers returned =
-by `self.as_ptr():
-> +        //   - atomic operations are used here.
-> +        unsafe {
-> +            match Ordering::TYPE {
-> +                OrderingType::Full =3D> T::Repr::atomic_try_cmpxchg(a, o=
-ld, new),
-> +                OrderingType::Acquire =3D> T::Repr::atomic_try_cmpxchg_a=
-cquire(a, old, new),
-> +                OrderingType::Release =3D> T::Repr::atomic_try_cmpxchg_r=
-elease(a, old, new),
-> +                OrderingType::Relaxed =3D> T::Repr::atomic_try_cmpxchg_r=
-elaxed(a, old, new),
-> +            }
-> +        }
-> +    }
-> +}
+diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+index 93d58d9a428b8..1d164e0057769 100644
+--- a/Documentation/memory-barriers.txt
++++ b/Documentation/memory-barriers.txt
+@@ -2192,6 +2192,8 @@ interpolate the memory barrier in the right place:
+ 	wait_event_timeout();
+ 	wait_on_bit();
+ 	wait_on_bit_lock();
++	wait_event_cmd();
++	wait_event_exclusive_cmd();
+ 
+ 
+ Secondly, code that performs a wake up normally follows something like this:
+-- 
+2.43.5
 
 
