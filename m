@@ -1,155 +1,303 @@
-Return-Path: <linux-arch+bounces-12483-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12484-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7FE8AEB90A
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 15:34:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82B21AEB94D
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 15:54:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 194233A7E3A
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 13:34:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD7DC561ED3
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jun 2025 13:54:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE3492C3745;
-	Fri, 27 Jun 2025 13:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EC6E2DCC1A;
+	Fri, 27 Jun 2025 13:53:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dGV9S0Du"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJUytmS8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2B2294A11;
-	Fri, 27 Jun 2025 13:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D772DD5F7;
+	Fri, 27 Jun 2025 13:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751031272; cv=none; b=gNxoOmHHXVRcHT0qWAx1YH4UfCbYOniTLg8c8VXJzkDVaK4p+dvAYILbyggNqMmxWIGiX+zWw1RlYbK+dYgk/F+A2BlLsqDtgVnsOuVFQnqiyf7YI6zhiG68dOy6kGFuGCaG9zhL8Qv2YY36k7XNtZRIX2PUMAm0Z8wJJF4mqHc=
+	t=1751032420; cv=none; b=F2cI94wYxYszbKKT414IU1EpDZnjvkg6L+xp1u/7GCDVpW/yyNd3lIkx5O1KT+iNRwbTgO1S4N5WTHtPBuhuemRrX3aSLDHGo0Jpl3snrWLawcxOGGdvu2C/7tprojl8pdniH0fYufBXU7n25wj6Y6gZ67Ntidwv6ZLe9McXEpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751031272; c=relaxed/simple;
-	bh=IdTDvFP8y9HaGTCvvR1/VaHuRyW7QodsgF7bM8TCSI0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HaS+wc5JkZOe2me+Z7LcxIIMGnf4Jv+0umGTRNzsyrNRgCFZPrWXkJJPcVz50Qck1Zi/SFrdmdE+VDfxCFk1D8qBB94MjLKLgm3/gaZJrGYUoIxDJWbC1sYnCBp6iCMQ2jyX0JzT1P/Ze5sdeGDJESG3XUAqpD8UfUeIKoRGNW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dGV9S0Du; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E84C4AF09;
-	Fri, 27 Jun 2025 13:34:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751031272;
-	bh=IdTDvFP8y9HaGTCvvR1/VaHuRyW7QodsgF7bM8TCSI0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dGV9S0DuN0PMGbTcSCHn0V2FGwVDGdhEXR3I4FUJ9/YySKuhAQSzKWPC5ArWakjbs
-	 XMCzbvUTLK5/R4eWuNHhnTwGYwtNaTvcvZbW+yOcOodJ7GCu0IPv3sjktwFI61jyAF
-	 lTQ1sTzZOWVnU/Z1TE+0I0WhZAqmS/cmZhnI+E1OFdwbY3JnZ6CdPRijk0ixaTUovH
-	 d2cDv6ytpRwCYMhPVUxh4+5zaK2odYUEDjwzn6Bh8ltMFRnKzp9MEgNZioFt8bh2tY
-	 KYP7clxaiDJN2XrmKDUc/aMiPoebM6CREcwsnP0YOgS3Ous7gPnpoqOUXsZni2JYii
-	 AFtzOAC3SJMJQ==
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60768f080d8so3820707a12.1;
-        Fri, 27 Jun 2025 06:34:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUsM2TJeCdXlaU1Fnb+0wmEG9C8FPSwvJGpc7CY5F0SiKUEIptFpF4e/Sf9HI807m/9qKSA4eNSc1F9@vger.kernel.org, AJvYcCVxPllmP9ne0g6s/6Lsc97a2zjxQsW1WkZgfqVECjxinFBuargabvaQoRPqMKjN7irD/TgE7CWtm6pBWywi@vger.kernel.org, AJvYcCXMOZYFfQjZ6suYXUsaoW8mMkUXqWXOksJ4GvYbTawE2IBSRRYIAwbZ3Otyn6qFCeSm0JTWwPRHqtSYLA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZapbGPiLWC0AQ46P38+p6fD00hRsS/sspYkPJ/BZxRKUT1KED
-	HQA9IXwhiHFQnngKmBwxLKFyB14KWfbr5EAuQ+DT81HP4qI1StdolYALycc0+YGf6GOM+D4WmIt
-	VOhP705aXn+aFFEbqcyyHpC5Fquwu1w==
-X-Google-Smtp-Source: AGHT+IEVRFNBFlTP6R9fUrxtJFc+ywLiUb4Q+PsDVjgttF7BLiyvAKx8hYh9X9Oqt+d5yA8ADVKHtkuR4NjvhsGbj6E=
-X-Received: by 2002:a17:907:7f14:b0:ae0:c561:b806 with SMTP id
- a640c23a62f3a-ae3500f276fmr296866566b.37.1751031270546; Fri, 27 Jun 2025
- 06:34:30 -0700 (PDT)
+	s=arc-20240116; t=1751032420; c=relaxed/simple;
+	bh=8tB5Tt+SddCBUKuuMhYJNECWuks405uefcI+g9Gv/+o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sXrgwyg7BiWv1ipdCfu6uBWJ6fLbcpyrPSnG5b0W0Ir/+JxZOZJXNigsgV4kBgKXGOhDDPYIjpiQeZ4mcJfw8ehp5RkD57mooMMw5d7MNq4sMqSp5PLmF2+sP7tSllyZjgpBQr5KKNiJS47kgmBmNmw03WZ8F4iTZfIqTPof7FA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJUytmS8; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4a76ea97cefso24112831cf.2;
+        Fri, 27 Jun 2025 06:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751032417; x=1751637217; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uouMimeWn3ZYuKBw0rjlLhYpQtgnBhD5z9a/AZnhU0Q=;
+        b=hJUytmS8RG5HU4jLr+V9Y/FBIpppIEGYfL90K0eKuFTlbqIYpCCoI6UqHPF7YuL0OF
+         X/VzxBTgq6JHhOB4QYOXPm3aXD2fqvca9Ku14ulpPnf3z+PlJt4JghGUPA3F5ETzbrPU
+         C4UUQvrF8rN2nKtX9LBC4TNu7bf2vANy1ImLjGDRiw1Owc5OsZeWle+KZkY7csUfu9Xy
+         yWMLEplnT3JwpaVpPf5vjpVAt0hOY7xMWgUVv9/LF3qyPGI5vY7d5UbUtjuekw5M7RW0
+         Q6hNqG4ew176eMZj47jVx32Egmvb8N70bj/Fla6/LMzS2UeA3VpfBC5gPfHaRglYMv09
+         4m0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751032417; x=1751637217;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uouMimeWn3ZYuKBw0rjlLhYpQtgnBhD5z9a/AZnhU0Q=;
+        b=NBT75TMsJo6eSiWD+MqXMS9H5dfUXG+UElM6upcuSGvYvf5y6U1mqINy0YjpMGU148
+         Lrf8e+KhJ+hO7j33aN29xXs55SvCiQZzwFQI6Q/KC+cW7PPcqMyWXH9JMHqpm3Jfa069
+         6ACO+dKDibx8GEIfp1y/0ls/EBt/ei/JHurSSgReobPSBRh9XIYzFJvtDde/00nmRdiI
+         3oivkIfACqV930HoH9yu0USjULnPL4ghZcelmgHaEclDKzBGrUxKvMzMR3QOx5kY/lc8
+         7lx6lw0Gz+29+1s4XvpbJ2Xc6ZCWmxu7QJuuXe6KGiXEsqbDmyUf17Khpr8KMwreaNa7
+         MWhg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8UIMBL7ziryTqXcYH6IkPmq5iKWyeu7hFEevThJAmKpcEHgUVBM+nvy/Tg4qpkIvVhsv9T+1qiXPU@vger.kernel.org, AJvYcCXbzCvjRtpoMcPPSID3M0WaBVfqNwqcSNC/FiyY407z1RpZdQFCkNL1T889P6cT6Ft/UMoyAEgWEiudhBOuh4g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYxV6eJW7+GIMT9ScgIamr7eLWsadHXpVSWQw4gPOugmjv7mmj
+	f7+z03DP3o1EqJj8Q9CVQPWjXKxNV723aW0hYf+vAMBmypsvdcn40PBR
+X-Gm-Gg: ASbGncv/12Kr6ev8qssMVTA4o477utbWqT2AaUokAd7yvLmGf291UALhwrvMD8dxWYW
+	zoKGFADJmBoDO/4ccSpep7fksgWNRVDDTvkWomse1Hq/3RBMXv/I6+vKiIkunV6/Z4sG0JBQVc0
+	+p14qZqD5VL97oHfhcJi2lb3iYK9dLiUIDHL63j4cpGp/c3b+9zl8Mjmmmgu6y5q1QlQQ9spPGS
+	t7WknSU+GCEssViub4qW4CoG3PG5Ug91Qs6aoRxe3KKdN7J3nlQJXVCNabdLOjmjf/ZiRE4vKEv
+	ZXDhoyF2TyGwlRBw+X6uzGMoQ0Nm8NIYQPiB/QCKYTwRfwPTBqL1YCvTWUeVVUPRAmVG5vK2cjM
+	EHOEqwiKJohLpmd63ualwJdglHvN1e7uV0wizRocQUehlGSFWk0t1
+X-Google-Smtp-Source: AGHT+IFB5RPz7AavPYxnvUdQV0GTPoXzInj8vBq+TaGKAoDyNUISq/13GFMrDrtRPxv8yQgsf/UAoA==
+X-Received: by 2002:a05:622a:1b8f:b0:4a7:f683:9749 with SMTP id d75a77b69052e-4a7fcacff9emr61351051cf.30.1751032416813;
+        Fri, 27 Jun 2025 06:53:36 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a7fc1061d3sm12664251cf.15.2025.06.27.06.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jun 2025 06:53:36 -0700 (PDT)
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 52B84F40066;
+	Fri, 27 Jun 2025 09:53:35 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Fri, 27 Jun 2025 09:53:35 -0400
+X-ME-Sender: <xms:X6JeaHTxoa3I_5haNUJuCuDhdqS0gqX5rNd4xGZpITPIHCtjcBRtKA>
+    <xme:X6JeaIwiyONgnklVtgQedSe3iBmF3fqDjqOueL8G0BFIab4uYk3T4maCJfEIouMNO
+    C4oZEolDkepnmhjcg>
+X-ME-Received: <xmr:X6JeaM3VsANY7ZPYU55fdYt_hWX_c9bQf_ONd9Vvh3yi_1RzOxZXPhC9Ig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
+    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
+    epfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgv
+    nhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrh
+    hnpedugeetueejudegieffvdevffektefgvdfhgfekvdduffeuieduueekkeetleevleen
+    ucffohhmrghinheprhgvrgguhidrshhtohhrvgdprhgvrgguhidrtghomhhprghrvgenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhn
+    odhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejje
+    ekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhn
+    rghmvgdpnhgspghrtghpthhtohepvdeipdhmohguvgepshhmthhpohhuthdprhgtphhtth
+    hopehlohhsshhinheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgv
+    rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhfoh
+    hrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhkmhhm
+    sehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqrghrtghhse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilhdrtghomhdprh
+    gtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhopegsjhhorhhn
+    fegpghhhsehprhhothhonhhmrghilhdrtghomh
+X-ME-Proxy: <xmx:X6JeaHCiQJZ8SxvfLpk-O1IjpqLksqfNI4FqnICIg2jQe0D_yPtFfg>
+    <xmx:X6JeaAiO-SZ71Rf7y5-ZPjT8akWg9wCztqk7_qxN6iFSFQ3Xr6BIBA>
+    <xmx:X6JeaLpFIy4Lsu2G4UjMEKuCBp1oauPq7GdJzkD-czkOtbtQ2hJNMw>
+    <xmx:X6JeaLhdv1stuY4KcDbGvhX3Hqy50z03qVyk_fGc5PK94i7qTXjtcA>
+    <xmx:X6JeaDQE__zOJyV2HLRV7dRbmDuQyG6DOvQLyoicHMV1M2zUdFvrCMIu>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 27 Jun 2025 09:53:33 -0400 (EDT)
+Date: Fri, 27 Jun 2025 06:53:32 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Benno Lossin <lossin@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v5 05/10] rust: sync: atomic: Add atomic {cmp,}xchg
+ operations
+Message-ID: <aF6iXB6wiHcpAKIU@Mac.home>
+References: <20250618164934.19817-1-boqun.feng@gmail.com>
+ <20250618164934.19817-6-boqun.feng@gmail.com>
+ <DAX6WZ87S99G.1CMIN6IQXJYPL@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250625085715.889837-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20250625085715.889837-1-daniel.lezcano@linaro.org>
-From: Rob Herring <robh@kernel.org>
-Date: Fri, 27 Jun 2025 08:34:18 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLNQ729cwSEUnk5bNMjhJR7WTqcPPh1uL4suN1GhNhRMw@mail.gmail.com>
-X-Gm-Features: Ac12FXxw2NuGvxwtqORXKtaK75DRC2OKF-_MV83Pl275d2zGx8F2rQx8EOkHjI8
-Message-ID: <CAL_JsqLNQ729cwSEUnk5bNMjhJR7WTqcPPh1uL4suN1GhNhRMw@mail.gmail.com>
-Subject: Re: [PATCH RFC] timer: of: Create a platform_device before the
- framework is initialized
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	lorenzo.pieralisi@linaro.org, Hans de Goede <hansg@kernel.org>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Arnd Bergmann <arnd@arndb.de>, John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, 
-	"open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DAX6WZ87S99G.1CMIN6IQXJYPL@kernel.org>
 
-On Wed, Jun 25, 2025 at 3:57=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> In the context of the time keeping and the timers, some platforms have
-> timers which need to be initialized very early. It is the case of the
-> ARM platform which do not have the architected timers.
->
-> The macro TIMER_OF_DECLARE adds an entry in the timer init functions
-> array at compile time and the function timer_probe is called from the
-> timer_init() function in kernel/time.c
->
-> This array contains a t-uple with the init function and the compatible
-> string.
->
-> The init function has a device node pointer parameter.
->
-> The timer_probe() function browses the of nodes and find the ones
-> matching the compatible string given when using the TIMER_OF_DECLARE
-> macro. It then calls the init function with the device node as a
-> pointer.
->
-> But there are some platforms where there are multiple timers like the
-> ARM64 with the architected timers. Those are always initialized very
-> early and the other timers can be initialized later.
->
-> For this reason we find timer drivers with the platform_driver
-> incarnation. Consequently their init functions are different, they
-> have a platform_device pointer parameter and rely on the devm_
-> function for rollbacking.
->
-> To summarize, we have:
->  - TIMER_OF_DECLARE with init function prototype:
->    int (*init)(struct device_node *np);
->
->  - module_platform_driver (and variant) with the probe function
->    prototype:
->    int (*init)(struct platform_device *pdev);
->
-> The current situation with the timers is the following:
->
->  - Two platforms can have the same timer hardware, hence the same
->    driver but one without alternate timers and the other with multiple
->    timers. For example, the Exynos platform has only the Exynos MCT on
->    ARM but has the architeched timers in addition on the ARM64.
->
->  - The timer drivers can be modules now which was not the case until
->    recently. TIMER_OF_DECLARE do not allow the build as a module.
->
-> It results in duplicate init functions (one with rollback and one with
-> devm_) and different way to declare the driver (TIMER_OF_DECLARE and
-> module_platform_driver).
->
-> This proposed change is to unify the prototyping of the init functions
-> to receive a platform_device pointer as parameter. Consequently, it
-> will allow a smoother and nicer module conversion and a huge cleanup
-> of the init functions by removing all the rollback code from all the
-> timer drivers. It introduces a TIMER_OF_DECLARE_PDEV macro.
->
-> If the macro is used a platform_device is manually allocated and
-> initialized with the needed information for the probe
-> function. Otherwise module_platform_driver can be use instead with the
-> same probe function without the timer_probe() initialization.
->
-> I don't have an expert knowledge of the platform_device internal
-> subtilitie so I'm not sure if this approach is valid. However, it has
-> been tested on a Rockchip board with the "rockchip,rk3288-timer" and
-> verified the macro and the devm_ rollback work correctly.
+On Fri, Jun 27, 2025 at 10:58:43AM +0200, Benno Lossin wrote:
+> On Wed Jun 18, 2025 at 6:49 PM CEST, Boqun Feng wrote:
+> > +impl<T: AllowAtomic> Atomic<T>
+> > +where
+> > +    T::Repr: AtomicHasXchgOps,
+> > +{
+> > +    /// Atomic exchange.
+> > +    ///
+> > +    /// # Examples
+> > +    ///
+> > +    /// ```rust
+> > +    /// use kernel::sync::atomic::{Atomic, Acquire, Relaxed};
+> > +    ///
+> > +    /// let x = Atomic::new(42);
+> > +    ///
+> > +    /// assert_eq!(42, x.xchg(52, Acquire));
+> > +    /// assert_eq!(52, x.load(Relaxed));
+> > +    /// ```
+> > +    #[doc(alias("atomic_xchg", "atomic64_xchg"))]
+> > +    #[inline(always)]
+> > +    pub fn xchg<Ordering: All>(&self, v: T, _: Ordering) -> T {
+> 
+> Can we name this `exchange`?
+> 
 
-Have you looked at the SH "early_platform_driver"? How does this
-compare? IIRC, that used to be generally available, but has been
-pushed into SH since that was the only arch using it and no one likes
-it.
+FYI, in Rust std, this operation is called `swap()`, what's the reason
+of using a name that is neither the Rust convention nor Linux kernel
+convention?
 
-Rob
+As for naming, the reason I choose xchg() and cmpxchg() is because they
+are the name LKMM uses for a long time, to use another name, we have to
+have a very good reason to do so and I don't see a good reason
+that the other names are better, especially, in our memory model, we use
+xchg() and cmpxchg() a lot, and they are different than Rust version
+where you can specify orderings separately. Naming LKMM xchg()/cmpxchg()
+would cause more confusion I believe.
+
+Same answer for compare_exchange() vs cmpxchg().
+
+> > +        let v = T::into_repr(v);
+> > +        let a = self.as_ptr().cast::<T::Repr>();
+> > +
+> > +        // SAFETY:
+> > +        // - For calling the atomic_xchg*() function:
+> > +        //   - `self.as_ptr()` is a valid pointer, and per the safety requirement of `AllocAtomic`,
+> > +        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` is a valid pointer,
+> > +        //   - per the type invariants, the following atomic operation won't cause data races.
+> > +        // - For extra safety requirement of usage on pointers returned by `self.as_ptr():
+> > +        //   - atomic operations are used here.
+> > +        let ret = unsafe {
+> > +            match Ordering::TYPE {
+> > +                OrderingType::Full => T::Repr::atomic_xchg(a, v),
+> > +                OrderingType::Acquire => T::Repr::atomic_xchg_acquire(a, v),
+> > +                OrderingType::Release => T::Repr::atomic_xchg_release(a, v),
+> > +                OrderingType::Relaxed => T::Repr::atomic_xchg_relaxed(a, v),
+> > +            }
+> > +        };
+> > +
+> > +        T::from_repr(ret)
+> > +    }
+> > +
+> > +    /// Atomic compare and exchange.
+> > +    ///
+> > +    /// Compare: The comparison is done via the byte level comparison between the atomic variables
+> > +    /// with the `old` value.
+> > +    ///
+> > +    /// Ordering: When succeeds, provides the corresponding ordering as the `Ordering` type
+> > +    /// parameter indicates, and a failed one doesn't provide any ordering, the read part of a
+> > +    /// failed cmpxchg should be treated as a relaxed read.
+> 
+> This is a bit confusing to me. The operation has a store and a load
+> operation and both can have different orderings (at least in Rust
+> userland) depending on the success/failure of the operation. In
+> userland, I can supply `AcqRel` and `Acquire` to ensure that I always
+> have Acquire semantics on any read and `Release` semantics on any write
+> (which I would think is a common case). How do I do this using your API?
+> 
+
+Usually in kernel that means in a failure case you need to use a barrier
+afterwards, for example:
+
+	if (old != cmpxchg(v, old, new)) {
+		smp_mb();
+		// ^ following memory operations are ordered against.
+	}
+
+> Don't I need `Acquire` semantics on the read in order for
+> `compare_exchange` to give me the correct behavior in this example:
+> 
+>     pub struct Foo {
+>         data: Atomic<u64>,
+>         new: Atomic<bool>,
+>         ready: Atomic<bool>,
+>     }
+> 
+>     impl Foo {
+>         pub fn new() -> Self {
+>             Self {
+>                 data: Atomic::new(0),
+>                 new: Atomic::new(false),
+>                 ready: Atomic::new(false),
+>             }
+>         }
+> 
+>         pub fn get(&self) -> Option<u64> {
+>             if self.new.compare_exchange(true, false, Release).is_ok() {
+
+You should use `Full` if you want AcqRel-like behavior when succeed.
+
+>                 let val = self.data.load(Acquire);
+>                 self.ready.store(false, Release);
+>                 Some(val)
+>             } else {
+>                 None
+>             }
+>         }
+> 
+>         pub fn set(&self, val: u64) -> Result<(), u64> {
+>             if self.ready.compare_exchange(false, true, Release).is_ok() {
+
+Same.
+
+Regards,
+Boqun
+
+>                 self.data.store(val, Release);
+>                 self.new.store(true, Release);
+>             } else {
+>                 Err(val)
+>             }
+>         }
+>     }
+> 
+> IIUC, you need `Acquire` ordering on both `compare_exchange` operations'
+> reads for this to work, right? Because if they are relaxed, this could
+> happen:
+> 
+>                     Thread 0                    |                    Thread 1
+> ------------------------------------------------|------------------------------------------------
+>  get() {                                        | set(42) {
+>                                                 |   if ready.cmpxchg(false, true, Rel).is_ok() {
+>                                                 |     data.store(42, Rel)
+>                                                 |     new.store(true, Rel)
+>    if new.cmpxchg(true, false, Rel).is_ok() {   |
+>      let val = self.data.load(Acq); // reads 0  |
+>      ready.store(false, Rel);                   |
+>      Some(val)                                  |
+>    }                                            |   }
+>  }                                              | }
+>  
+> So essentially, the `data.store` operation is not synchronized, because
+> the read on `new` is not `Acquire`.
+> 
+[...]
 
