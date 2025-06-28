@@ -1,276 +1,215 @@
-Return-Path: <linux-arch+bounces-12492-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12493-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BD73AEC4B2
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Jun 2025 05:42:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB26CAEC552
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Jun 2025 08:12:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE87E7B23C5
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Jun 2025 03:41:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E176D1BC27DB
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Jun 2025 06:13:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C66421C165;
-	Sat, 28 Jun 2025 03:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0CD21E094;
+	Sat, 28 Jun 2025 06:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yu0x4q8a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FXSBWnaI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75737201004;
-	Sat, 28 Jun 2025 03:42:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A351A23B5;
+	Sat, 28 Jun 2025 06:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751082162; cv=none; b=Sl2r2mLCDjn7ZyCE0h7Uz3QWNkKpcYC6VAg1eegJXlT9K8rxcKKxeqUuUOO3DCwsbTa2c6mDCSWiz87UAC0Pn7e4ZtpZ0oUQvf1N9UaA0KS0rKa7l/yga2JVKJurjNvD7CAITl529da7L5URwzj9MhVHwpd2ZYtzoh8ynJMY9UY=
+	t=1751091169; cv=none; b=IegK7UXJHXMgN5Grbcp5xjSEY5eYwsuTnQlWnsnxIJlNdRI56na/j8XWyMSGzg8FT2RfS5fGauzmxHuKLGGpc6E9S9qo5Y80fyuAZgUYEzEa1SlRl+M9wB/tUdVcKGESS3yWtBQykzfb2xgVT8mxX7snFXVlXSXlgkud9K7vMOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751082162; c=relaxed/simple;
-	bh=nhER8ZfvdtY3YByIjG+YMSgQUrFdl2UkZ/cmvNb3MAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tVQVE65ylZWSa4RMOEjLIMN8ell1SAGbm7p1nincm6jHSYzftKM/JXU86WgWq5lU5ysFkf9YBviChxy2M1LyyA75kwkESckfDrl2bAlWeKIOHx1LVbtRV4j/mTO8nWQjgJUkeMENHShifWuGlGopBbuh7VTPnN/Tb1xYCnbo1Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yu0x4q8a; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6fb0eb0f0fbso30185686d6.1;
-        Fri, 27 Jun 2025 20:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751082159; x=1751686959; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1VEbBp8YdQcFMU69IN4b0pwYAz5X1X8v0Kfm5rjL0u8=;
-        b=Yu0x4q8aBbCkaI4WFHfShsoKOE6GWku1HYtoRZXb6efTOqksD/IH+5pH76Brsw9DRV
-         Phiz+5XB1+aCgS4v9wAdQO9L3RiB36NnLueTIGr/hvFFmLBSfZNHpExl32X4ebapXHLh
-         CA0LIUtD7rr9mtP6wDGLcFy1lNPv0Ij1Zztm9dHfBdwu8Qyu+WQ+Y82BDTbqtE3vUXOl
-         M9Mxwr8fAh2ttfzfJZDua1xcxTctlJSyxV1BkPNBoXKnqY7/7BelJHUMU1AKyKLL40kJ
-         O01XFj+N01LPFXcHy5J1PHpBzqqaE3gubwW/GEJg+ynTfQTWY8Z55bFENxx+xAXsDs0H
-         ZC3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751082159; x=1751686959;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1VEbBp8YdQcFMU69IN4b0pwYAz5X1X8v0Kfm5rjL0u8=;
-        b=LrOYr5OfFytWEqyfVO/G+ZkJuSdEespcnhsgn5QVCsj11PneC6aymvjWFa08FhERNV
-         6Yz98/08QaoMuU0u6/OCDyp+NwxWKHS2Kjv0Qb6O5D1736nhLffVZU27gy0IUxNU02+o
-         JvnVnl5dS0zASQICJtjD4o/m8K62guRhXegwthXvUCwBe/GpFPGRLvPueSUspICJ2CvU
-         b4A5hGOE7xLF9ossbRXfcXZ0SxXNegPHpN8QziDZ2ic9b2HvGgz2+kqD+mqxCgys0VL0
-         53roIDHCuSMWSmaIUHm44awlVlyxVzMeYB1Zyp578+fd5ZQjc1z2KY086fELWbgFFwIs
-         xXJA==
-X-Forwarded-Encrypted: i=1; AJvYcCVK6B4RCw3LL9Ftt9heyMoEP3yv6shngCagaQuQKuRjq5S7hur/351SvVZqOT/yF+ZubhtERZncQpUY5JoyjLo=@vger.kernel.org, AJvYcCXN+QL2Fif1eY5wxsjv77A9MKtiYMt9ws/h9CcOw1LLHC+2bN9goyLddvRCXT0F8FtcOF6Ox3NBGKum@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzc3k4K8Jd6chUU323kbwErIl/MCQskEsZTBhRhagpyzdx6fFfr
-	iJF83SS26u4uvTTXBWmRU3Ao5b2tYvbYLQKnzsDB4FijV9Ysrc50b5Yf
-X-Gm-Gg: ASbGnctoYYG4oi9i8OQaNdKEfuW20ZH2sPwSv87NPD+My5KFpLHThlsy0cXh1Lh7xmU
-	ZYtnuVT1Z23DXraymGlEObXwmvHmRDqYxnm2iYTvyqwBekEGnen9AaqGIYBN7jLwkaGDyP88nPU
-	OVay5/2NsPIlelVqwxRkqK8+qmb4aCfMCxzmXJSVNAUHGGsVlnLY566EvLqTGI2rx3n14gutoM4
-	dUTKq4OJ+edsvBW7/run40j4vS6xeeL5T4WGQ5Iqznu875iYCtNe6OLspU3/71hJTIck7CZ9Ces
-	x10D44t+zDz80FWTpazbW5K3A/HfAbfszGVIs2PNtnXYVRKBi1G6cv+Sbhv4DGC2hrh+WWzAEgE
-	7df61XZSKSMbrdHoUXrQZVPvZalUZ5nc6fCb9y3AtefPaQVu9NjwG
-X-Google-Smtp-Source: AGHT+IGedbmHDaqU9GUha1odWRJbVBRQf8bnjo4m+/kurV/RO3ST+RbsJJXnW2tWoSkKHZdD52LSbA==
-X-Received: by 2002:a05:6214:224a:b0:6fa:ae40:3023 with SMTP id 6a1803df08f44-7009214990cmr83567916d6.7.1751082159322;
-        Fri, 27 Jun 2025 20:42:39 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd771b50e1sm31074116d6.34.2025.06.27.20.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 20:42:38 -0700 (PDT)
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 22882F40068;
-	Fri, 27 Jun 2025 23:42:38 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Fri, 27 Jun 2025 23:42:38 -0400
-X-ME-Sender: <xms:rmRfaGAnsA9ZcFPvQvGW7kVxBmDIVwhSAWAqJ5pCQacQTWq2iDaR6A>
-    <xme:rmRfaAgg18U4xIY1DXpBc04zVu23doqBBddPj1S_y4FD-20PcSDUk764kysF3KO4e
-    djHi9O0CohrthY9fw>
-X-ME-Received: <xmr:rmRfaJkrIPIm2UoztFGciaxrH7RB0gyxoqpDdWHe1pi4a7p34aRp1tKOQg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdegkeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    epfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgv
-    nhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrh
-    hnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueevieduffeivden
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquh
-    hnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudej
-    jeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrd
-    hnrghmvgdpnhgspghrtghpthhtohepvdeipdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopegrrdhhihhnuggsohhrgheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
-    hugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhu
-    shhtqdhfohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    eplhhkmhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidq
-    rghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilhdr
-    tghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhope
-    gsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomh
-X-ME-Proxy: <xmx:rmRfaExyzSKlE6o4bZZiZnfTo3QpT8W0UBqMrwFQdntBYBO21p76IQ>
-    <xmx:rmRfaLS2fegfgQ9M_iBXC6iNBcDCoC2pEYqPlYWe155j7GZrKFz9zw>
-    <xmx:rmRfaPYeg_auaZ-A-TzBsWTnKeF74UzdFxxkjGWPICI0CsFeY_LV0g>
-    <xmx:rmRfaETEChVCo8tiClrKe5pygw-8sdQRhtMLRMPUjG34dyv8F7NdkA>
-    <xmx:rmRfaNB1S5EfWisrzswXOrsWiG3ZtIGTj6u7398Uz9EOAloXHofjQSEQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Jun 2025 23:42:37 -0400 (EDT)
-Date: Fri, 27 Jun 2025 20:42:36 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v5 10/10] rust: sync: Add memory barriers
-Message-ID: <aF9krO0nVjN0yoEC@Mac.home>
-References: <20250618164934.19817-1-boqun.feng@gmail.com>
- <A-SZkzm2EzwbPsG5Vm5qfT1BIGijzoQ7zQI6ExgXZbSXf8ZfIMw6fe-Z7xWgvKnr0BPylikGRuhEfiKfXx5xTw==@protonmail.internalid>
- <20250618164934.19817-11-boqun.feng@gmail.com>
- <874iw2zkti.fsf@kernel.org>
+	s=arc-20240116; t=1751091169; c=relaxed/simple;
+	bh=lISQXDWIEw2gFD8C2DEkkUCDzWcx14RFk492z9Yzofg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=MBIC9SvEchWAD866JOk6Yp/NX8NCsTtUb7rxy156zRxFv/+xLYt+BpKCWI5kMxRL2BUCFSv7r0clLmwrqktKbilg9Wh30x4T0gLFqXSNEWAHnJ7SI5zRGu40WMDAcEIuDy//ohDRnCWNArLZcD0bjgZyMsS2/oEmu1JFwdDWiTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FXSBWnaI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E61C8C4CEEA;
+	Sat, 28 Jun 2025 06:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751091168;
+	bh=lISQXDWIEw2gFD8C2DEkkUCDzWcx14RFk492z9Yzofg=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=FXSBWnaIYW5MZgS2KyU58VoAmcvfIBLngBYZjqFqDm/89rda0VI6+yC1rQr6ajLXh
+	 VJwVavPIwvQA3Zmux3gI1oJRRolp4n6qEUdfVoviqJLGK7UY8LN7H43PxUm6e7yfX2
+	 EbYJgf2lUSC1VGFOGJeiedrWdIBh26+gcN+cwb9KzJHtHUHLlJLVgNgBLTbczSZAxy
+	 nFmXtOvwtlqij4rgQkNvrlGuQoGRqsnyCc9ybzRhU/QArRaWSHcE547bUEl2F0YVXq
+	 sibg5akYE5/THI1KyUoz5/rEBo2BAq6j9v1lpd2++BGtAv2vtXTKJIREDhMjeWs85f
+	 FImQwi209L8Jg==
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874iw2zkti.fsf@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 28 Jun 2025 08:12:42 +0200
+Message-Id: <DAXY0EJHHDWM.1KRSSJLOTCZ8F@kernel.org>
+Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <lkmm@lists.linux.dev>, <linux-arch@vger.kernel.org>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>, "Will Deacon" <will@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Mark Rutland"
+ <mark.rutland@arm.com>, "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+ "Viresh Kumar" <viresh.kumar@linaro.org>, "Lyude Paul" <lyude@redhat.com>,
+ "Ingo Molnar" <mingo@kernel.org>, "Mitchell Levy"
+ <levymitchell0@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
+ <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>
+Subject: Re: [PATCH v5 05/10] rust: sync: atomic: Add atomic {cmp,}xchg
+ operations
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Boqun Feng" <boqun.feng@gmail.com>
+X-Mailer: aerc 0.20.1
+References: <20250618164934.19817-1-boqun.feng@gmail.com>
+ <20250618164934.19817-6-boqun.feng@gmail.com>
+ <DAX6WZ87S99G.1CMIN6IQXJYPL@kernel.org> <aF6iXB6wiHcpAKIU@Mac.home>
+In-Reply-To: <aF6iXB6wiHcpAKIU@Mac.home>
 
-On Thu, Jun 26, 2025 at 03:36:25PM +0200, Andreas Hindborg wrote:
-> "Boqun Feng" <boqun.feng@gmail.com> writes:
-[...]
-> > +//! [`LKMM`]: srctree/tools/memory-mode/
-> 
-> Typo in link target.
-> 
-> > +
-> > +/// A compiler barrier.
-> > +///
-> > +/// An explicic compiler barrier function that prevents the compiler from moving the memory
-> > +/// accesses either side of it to the other side.
-> 
-> Typo in "explicit".
-> 
+On Fri Jun 27, 2025 at 3:53 PM CEST, Boqun Feng wrote:
+> On Fri, Jun 27, 2025 at 10:58:43AM +0200, Benno Lossin wrote:
+>> On Wed Jun 18, 2025 at 6:49 PM CEST, Boqun Feng wrote:
+>> > +impl<T: AllowAtomic> Atomic<T>
+>> > +where
+>> > +    T::Repr: AtomicHasXchgOps,
+>> > +{
+>> > +    /// Atomic exchange.
+>> > +    ///
+>> > +    /// # Examples
+>> > +    ///
+>> > +    /// ```rust
+>> > +    /// use kernel::sync::atomic::{Atomic, Acquire, Relaxed};
+>> > +    ///
+>> > +    /// let x =3D Atomic::new(42);
+>> > +    ///
+>> > +    /// assert_eq!(42, x.xchg(52, Acquire));
+>> > +    /// assert_eq!(52, x.load(Relaxed));
+>> > +    /// ```
+>> > +    #[doc(alias("atomic_xchg", "atomic64_xchg"))]
+>> > +    #[inline(always)]
+>> > +    pub fn xchg<Ordering: All>(&self, v: T, _: Ordering) -> T {
+>>=20
+>> Can we name this `exchange`?
+>>=20
+>
+> FYI, in Rust std, this operation is called `swap()`, what's the reason
+> of using a name that is neither the Rust convention nor Linux kernel
+> convention?
 
-Fixed.
+Ah, well then my suggestion would be `swap()` instead :)
 
-> How about:
-> 
->   A compiler barrier. Prevents the compiler from reordering
->   memory access instructions across the barrier.
-> 
-> 
-> > +pub(crate) fn barrier() {
-> > +    // By default, Rust inline asms are treated as being able to access any memory or flags, hence
-> > +    // it suffices as a compiler barrier.
-> > +    //
-> > +    // SAFETY: An empty asm block should be safe.
-> > +    unsafe {
-> > +        core::arch::asm!("");
-> > +    }
-> > +}
-> > +
-> > +/// A full memory barrier.
-> > +///
-> > +/// A barrier function that prevents both the compiler and the CPU from moving the memory accesses
-> > +/// either side of it to the other side.
-> 
-> 
->   A barrier that prevents compiler and CPU from reordering memory access
->   instructions across the barrier.
-> 
-> > +pub fn smp_mb() {
-> > +    if cfg!(CONFIG_SMP) {
-> > +        // SAFETY: `smp_mb()` is safe to call.
-> > +        unsafe {
-> > +            bindings::smp_mb();
-> > +        }
-> > +    } else {
-> > +        barrier();
-> > +    }
-> > +}
-> > +
-> > +/// A write-write memory barrier.
-> > +///
-> > +/// A barrier function that prevents both the compiler and the CPU from moving the memory write
-> > +/// accesses either side of it to the other side.
-> 
->   A barrier that prevents compiler and CPU from reordering memory write
->   instructions across the barrier.
-> 
-> > +pub fn smp_wmb() {
-> > +    if cfg!(CONFIG_SMP) {
-> > +        // SAFETY: `smp_wmb()` is safe to call.
-> > +        unsafe {
-> > +            bindings::smp_wmb();
-> > +        }
-> > +    } else {
-> > +        barrier();
-> > +    }
-> > +}
-> > +
-> > +/// A read-read memory barrier.
-> > +///
-> > +/// A barrier function that prevents both the compiler and the CPU from moving the memory read
-> > +/// accesses either side of it to the other side.
-> 
->   A barrier that prevents compiler and CPU from reordering memory read
->   instructions across the barrier.
-> 
+> As for naming, the reason I choose xchg() and cmpxchg() is because they
+> are the name LKMM uses for a long time, to use another name, we have to
+> have a very good reason to do so and I don't see a good reason
+> that the other names are better, especially, in our memory model, we use
+> xchg() and cmpxchg() a lot, and they are different than Rust version
+> where you can specify orderings separately. Naming LKMM xchg()/cmpxchg()
+> would cause more confusion I believe.
 
-These are good wording, except that I will use "memory (read/write)
-accesses" instead of "memory (read/write) instructions" because:
+I'm just not used to the name shortening from the kernel... I think it's
+fine to use them especially since the ordering parameters differ from
+std's atomics.
 
-1) "instructions" are at lower level than the language, and memory
-   barriers function are provided as synchonization primitives, so I
-   feel we should describe memory barrier effects at language level,
-   i.e. mention how it would interact with objects and accesses to them.
+Can you add aliases for the Rust names?
 
-2) There are instructions can do read and write in one instruction, it
-   might be unclear when we say "prevents reordering an instruction"
-   whether both parts are included, for example:
+> Same answer for compare_exchange() vs cmpxchg().
+>
+>> > +        let v =3D T::into_repr(v);
+>> > +        let a =3D self.as_ptr().cast::<T::Repr>();
+>> > +
+>> > +        // SAFETY:
+>> > +        // - For calling the atomic_xchg*() function:
+>> > +        //   - `self.as_ptr()` is a valid pointer, and per the safety=
+ requirement of `AllocAtomic`,
+>> > +        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` i=
+s a valid pointer,
+>> > +        //   - per the type invariants, the following atomic operatio=
+n won't cause data races.
+>> > +        // - For extra safety requirement of usage on pointers return=
+ed by `self.as_ptr():
+>> > +        //   - atomic operations are used here.
+>> > +        let ret =3D unsafe {
+>> > +            match Ordering::TYPE {
+>> > +                OrderingType::Full =3D> T::Repr::atomic_xchg(a, v),
+>> > +                OrderingType::Acquire =3D> T::Repr::atomic_xchg_acqui=
+re(a, v),
+>> > +                OrderingType::Release =3D> T::Repr::atomic_xchg_relea=
+se(a, v),
+>> > +                OrderingType::Relaxed =3D> T::Repr::atomic_xchg_relax=
+ed(a, v),
+>> > +            }
+>> > +        };
+>> > +
+>> > +        T::from_repr(ret)
+>> > +    }
+>> > +
+>> > +    /// Atomic compare and exchange.
+>> > +    ///
+>> > +    /// Compare: The comparison is done via the byte level comparison=
+ between the atomic variables
+>> > +    /// with the `old` value.
+>> > +    ///
+>> > +    /// Ordering: When succeeds, provides the corresponding ordering =
+as the `Ordering` type
+>> > +    /// parameter indicates, and a failed one doesn't provide any ord=
+ering, the read part of a
+>> > +    /// failed cmpxchg should be treated as a relaxed read.
+>>=20
+>> This is a bit confusing to me. The operation has a store and a load
+>> operation and both can have different orderings (at least in Rust
+>> userland) depending on the success/failure of the operation. In
+>> userland, I can supply `AcqRel` and `Acquire` to ensure that I always
+>> have Acquire semantics on any read and `Release` semantics on any write
+>> (which I would think is a common case). How do I do this using your API?
+>>=20
+>
+> Usually in kernel that means in a failure case you need to use a barrier
+> afterwards, for example:
+>
+> 	if (old !=3D cmpxchg(v, old, new)) {
+> 		smp_mb();
+> 		// ^ following memory operations are ordered against.
+> 	}
 
-   r1 = atomic_add(x, 1); // <- this can be one instruction.
-   smp_rmb();
-   r2 = atomic_read(y);
+Do we already have abstractions for those?
 
-   people may think because the smp_rmb() prevents read instructions
-   reordering, and atomic_add() is one instruction in this case,
-   smp_rmb() can prevents the write part of that instruction from
-   reordering, but that's not the case.
+>> Don't I need `Acquire` semantics on the read in order for
+>> `compare_exchange` to give me the correct behavior in this example:
+>>=20
+>>     pub struct Foo {
+>>         data: Atomic<u64>,
+>>         new: Atomic<bool>,
+>>         ready: Atomic<bool>,
+>>     }
+>>=20
+>>     impl Foo {
+>>         pub fn new() -> Self {
+>>             Self {
+>>                 data: Atomic::new(0),
+>>                 new: Atomic::new(false),
+>>                 ready: Atomic::new(false),
+>>             }
+>>         }
+>>=20
+>>         pub fn get(&self) -> Option<u64> {
+>>             if self.new.compare_exchange(true, false, Release).is_ok() {
+>
+> You should use `Full` if you want AcqRel-like behavior when succeed.
 
+I think it would be pretty valuable to document this. Also any other
+"direct" translations from the Rust memory model are useful. For example
+is `SeqCst` "equivalent" to `Full`?
 
-So I will do:
-
-   A barrier that prevents compiler and CPU from reordering memory read
-   accesses across the barrier.
-
-Regards,
-Boqun
-
-> > +pub fn smp_rmb() {
-> > +    if cfg!(CONFIG_SMP) {
-> > +        // SAFETY: `smp_rmb()` is safe to call.
-> > +        unsafe {
-> > +            bindings::smp_rmb();
-> > +        }
-> > +    } else {
-> > +        barrier();
-> > +    }
-> > +}
-> 
-> 
-> Best regards,
-> Andreas Hindborg
-> 
-> 
+---
+Cheers,
+Benno
 
