@@ -1,262 +1,342 @@
-Return-Path: <linux-arch+bounces-12522-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12523-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EDBBAEE951
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Jun 2025 23:06:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FF27AEEB0E
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 01:53:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 442023A7B2C
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Jun 2025 21:06:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 512F41BC3737
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Jun 2025 23:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8742246781;
-	Mon, 30 Jun 2025 21:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966C82459F3;
+	Mon, 30 Jun 2025 23:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Il7fqQgC";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="HLBOruJW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iqGeJorB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3318D1EB5B;
-	Mon, 30 Jun 2025 21:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751317594; cv=fail; b=N3Yl8zW3WnCLzkP2jS0iY0I4HqSSt72Mq96Ouxsi6DYGgAcbe4CsEpzgGpOq2/i+RnNNAeaq+U2hFjHZnFtq85JUGta92sdMyLKchDNpZh2Byd6cMzoMyfXiB1sdxMgB71cbb728Btn4iWhFLIeXRmYxXKqG6FFjkQ4sPT8Fx3g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751317594; c=relaxed/simple;
-	bh=ZyxXibjQDSMafHck9h3fb/Ib9W7f+O5LC9nwkKJgsrQ=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 Content-Type:MIME-Version; b=pdI8uLpti8jZ2W3NhEjErsRNT/K50TCKU26BsKzORRVovcAtCt0XeHxc8rFOPzRON2d862usovLA2IyuqneRFGkeMGVp2eNIo8YYBn+uS4NQW6rcbXXFy53tnDLHtDBDIlBcE7U10Zn/yoGv7p6cUnbYC+SUNu4a1sfHTya3X6I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Il7fqQgC; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=HLBOruJW; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55UIBgF1004659;
-	Mon, 30 Jun 2025 21:05:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=jF2XJJ7QV59/oYC2iX
-	J2RoQOCqon/YFJvrws8F8VLig=; b=Il7fqQgCqRMKyd2avw/mzM/inEgtQhu8dG
-	4UwvqZ2ccqPnSe6LeSfQ5ZvdWKGXTrzlRFA/2AH4VFO54n8CNOYntCiK91hFQ9M/
-	tlOETfDZwTwItWkVIaN3aOrZGVwAp8eQprsp1iMJJejsyssOxDNIDmd1bUFfGQD9
-	oe/wMOPVJJKURSs4r0kc2Gnah32GnRzuVogm/cZR90PzEAC8mfTF2+xoNsBiYuIA
-	iHn+k5L0exPMPcYMWb38pGXYTdf+yYPmVSdokX1LBKut8epxQR0NjxNmCxs4wBcg
-	uC8Bq2tc9EE9u8zxEy8OEZ+OkHico3g2QW8VeA/X9x2OufO2c8vw==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47jum7tq22-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 30 Jun 2025 21:05:58 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55UKRXVh005828;
-	Mon, 30 Jun 2025 21:05:56 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 47j6ug4mbv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 30 Jun 2025 21:05:56 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gRK0Ecr6Y+xLZb7Jb0gMVVbiIyRTupeCJ97JlekC0ec2ueUr7S321LERR8ead6aYh6eCLPBO+8gUKEOJa7npBISu7sc/uxmqWluNSuk/t4Jbn4LWvfMOA16y11A7pnJUFdMDDokusObrEf1NFUp/9G51Xc4ZPUK9Vf8hub8QAujhqHvJv8SbcZj21vB/il6I1p78RYYZoMU9+/sHYv54NdxxtActyGSz7PxpDTxIuoo7PxWTp/3kgD79qvgqzadSmuCHSBozG6PJkLy9o2bgeHE1p/S2OlVbVIrhzly1I6xHECrNEX5UF80nlCGw5uHYN2qKk/iPHJOlOt7NSLBFrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jF2XJJ7QV59/oYC2iXJ2RoQOCqon/YFJvrws8F8VLig=;
- b=aUHbwBqrOsEK/r929tiOuTLkCOO/jjZCjKp1RKx3HDLY1Ff6F8kF8z0tAWuBQ+JwasG7CyOqXk++C748F5WH1w+q2NZQMIQD5ylpYV6Wlc395cWQ6+Nl5u8H1OfUzORdv23UJC2S2BLLTsTs1qqvW6rcZdc6V7oqNTI7xRF7dxPuVhAZj3wtLrK7LQ4MkjsrLOrgCOjJ4xlWRMfvb/2bJJx7zSjEbsKn6dvGHLpN2r5EBQVG7ffNUzg0ZFxrNbFz7pEZxvkfHzxpxeG0kdzT0ScVdMynEX2kKCTb54WhQTd+46dF4+YqnoYwCvm1Z5hx/mOPG7Mgct/TghezL5VORQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F921C2324
+	for <linux-arch@vger.kernel.org>; Mon, 30 Jun 2025 23:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751327622; cv=none; b=f2H0A8bysspNCvSf+hyo39LUQCohzVbiJYY6K8ugzh9Fjj5AEcUSjKCV+RiEbt/KgT7V/Z53yfHtExZ1c5MJMXMYfa9gJqMzyD6yp6IZP70gq7mwZceBgiT5l6ZA8/BHDYIlvhkG6PZxQ2RtRRtDcuJcnWm7ij7jQgePBnYc3nk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751327622; c=relaxed/simple;
+	bh=TS7vEuQWBJcxDghDWCxq1ngFn6a9nIZCWEH/+8tlAGM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EkIVcOFPowgTVpmPief6idMq+2KgXRRsRH1SsWAkxQw6f1JM5ZXNvbWQX4+0J0ICV6Zn5Es4X/gITFYYQB/NPXE65ufUzUj7kR5r68okmqsZnFzVseq/6pBPqg07GXfW0mCOtcNcwt7UFYjUwniGPa4HJ5QBsTDw3509OrQ8skI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iqGeJorB; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-739b3fe7ce8so5671881b3a.0
+        for <linux-arch@vger.kernel.org>; Mon, 30 Jun 2025 16:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jF2XJJ7QV59/oYC2iXJ2RoQOCqon/YFJvrws8F8VLig=;
- b=HLBOruJWKV1klfQcpi3Gu+BK4g+7M4kGtnq13MZF4ZT80b+U1XDkrEti8Gz1rkiqJhWyVFNySG7Zy0VtNWo9scoD1U+V49Vi45p45QQPxV6InbR7WgZVwAB9GayM4ixhp1GgIrO+DFWov6hy5ky6xcFhUbJqTCY/DWpJ9aBgdMk=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by SA2PR10MB4812.namprd10.prod.outlook.com (2603:10b6:806:115::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.28; Mon, 30 Jun
- 2025 21:05:55 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574%4]) with mapi id 15.20.8880.015; Mon, 30 Jun 2025
- 21:05:54 +0000
-References: <20250627044805.945491-1-ankur.a.arora@oracle.com>
- <20250627044805.945491-6-ankur.a.arora@oracle.com>
- <e2e8788d-86b4-092a-37f5-286b776cc061@gentwo.org>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-        will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
-        mark.rutland@arm.com, harisokn@amazon.com, ast@kernel.org,
-        memxor@gmail.com, zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
-        joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v3 5/5] arm64: barrier: Handle waiting in
- smp_cond_load_relaxed_timewait()
-In-reply-to: <e2e8788d-86b4-092a-37f5-286b776cc061@gentwo.org>
-Date: Mon, 30 Jun 2025 14:05:53 -0700
-Message-ID: <87h5zxrlce.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0345.namprd04.prod.outlook.com
- (2603:10b6:303:8a::20) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+        d=google.com; s=20230601; t=1751327620; x=1751932420; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nLmrsb9MSa00XeFqXiUpnd2esuyL+q8kuURuOkPtn/Q=;
+        b=iqGeJorBB1eT8rHVm2T722M0jsXsOARtkUj5xwe3JsDf0G24J921UQp6ANti2W9Ggy
+         oEGmgmuVnNvcMrx0D6p0xvcR7Z/pRjiaoRff4maEm/jZ/CUTCJgcyOqnU3hcnNSRRhAX
+         XVA1WAXiebTFZ258RFQCUobKBR581VA5Z9nzZg4H4YbkoUgqPCB24B2UzPcUUaZ71+/T
+         GXHJQ1hfWglNP+zgCnTrPft4OuwN1ldQus0A69eiWJgp7kA2PmK0hGb7ntDkPwYvqgG7
+         /LQGrmPhwBrgveua2H5R4YVcrf2rmIYe/iAUZnmk8gYWNzAmBHVxYVsjR/8VVT4XFzPr
+         +QLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751327620; x=1751932420;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nLmrsb9MSa00XeFqXiUpnd2esuyL+q8kuURuOkPtn/Q=;
+        b=aaQCy+e5d8zmIOqOBSY2Tl2AdxIhW8zNkp9fujqLX0fKucWwcGmAYubykcPKfkIWh4
+         snTn5mS1/pZSOZ5Sp36iT2V1CplK5dAl6YUVSbsfb8LooLWHk7z/Y68qOik5XlZbACDw
+         fh4dRc/aqMimVVGcj7gxMe+ecqun1UoozaH6qjyBjha9PpeQwTKAz4q9Ogb66924PeOn
+         9nXddYf4tQTck85R8yvwNYtiEadOxb6aR+H90T+cLoqQXzoSi7qksMp7CQGMMk06U5Z2
+         xecKFCHymwAO/gu38vJPqE2v2vAZ9d0K8eZwxYjmtbcoE6Kpt8mjBnQp6sY2JIGiicHp
+         IQqA==
+X-Forwarded-Encrypted: i=1; AJvYcCXkKAdTilvm7YNM+hb6lOXmNepjSEtajuUYoW3ltKZTyeZiAax2qhSpmWpWWREtVIsIh1DcpQdzVfba@vger.kernel.org
+X-Gm-Message-State: AOJu0YyufLvNsc3U5JNZ6kgbqoR5gUGYyuWY2osDX/9jPs9TaWmz9C2P
+	AJHk6Kof2HGwJklHUlkTwqR1WlQg4HxH1P+GPb2imEyuemQNJHGbqOv22nMQhdWRvA==
+X-Gm-Gg: ASbGncsG+X5tdmz72NLBDz8+XX+V90N/SSL0JLgjAYXC2AW9wrihlevtQOD1DAV7PCi
+	FIXHqy8yOLTmR7BVMyjPYbqMdzbOkHVUpV/ivggTG7RWeGylSOUJ+0hwmoGj0DuJNuQIdxH3R91
+	IcQLqfHeCmenmUMQx/8nKkocP0X3A0eY9c6xPuIDBPgwVtNaQ2+g+wox8NE4hRGCVioEbd/yGtJ
+	nPubgVUENuBWqRP+NiDJnnncjus63LyKikkZd8iVcSPYI6dcL2coWUGEtuChyVR7Rd3rgZIernZ
+	OfV+DeimX5gWjARUoW2ci47kj5tA/t2buSGmwY1YZSa9lAC2iECg1MNdPYx9nvmJ4nCd2rb6BLk
+	9sJKPeQHPDv91GtSDupp52sRL6Rk=
+X-Google-Smtp-Source: AGHT+IHFfA0RW6W3l7ApHpmaY/sI86v37ObPRx8yz/wJIGFT6rhIyaVTwsyxBA5pGyd0PknPIZnd/Q==
+X-Received: by 2002:a05:6a00:1ac7:b0:748:e1e4:71ec with SMTP id d2e1a72fcca58-74af6f57628mr20519016b3a.12.1751327619831;
+        Mon, 30 Jun 2025 16:53:39 -0700 (PDT)
+Received: from google.com (96.41.145.34.bc.googleusercontent.com. [34.145.41.96])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af557b5c8sm10098279b3a.83.2025.06.30.16.53.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 16:53:39 -0700 (PDT)
+Date: Mon, 30 Jun 2025 16:53:35 -0700
+From: William McVicker <willmcvicker@google.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	lorenzo.pieralisi@linaro.org, Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Rob Herring <robh@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>, John Stultz <jstultz@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	"open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH RFC] timer: of: Create a platform_device before the
+ framework is initialized
+Message-ID: <aGMjfxIvbCkyR5rw@google.com>
+References: <20250625085715.889837-1-daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|SA2PR10MB4812:EE_
-X-MS-Office365-Filtering-Correlation-Id: da0de146-a177-4b9f-2511-08ddb819e717
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Qxv44U+SyfdZ8O+Xmv9N2UBwPuFbeHbJcElMNAGhSxf9DkeQLcbhv4L7krbL?=
- =?us-ascii?Q?H2moWbJLRj+BFUJWl/iRBVxQ/DxPBWTyD43ccsFrgjUfVSaFgZ9fSGK7IN/a?=
- =?us-ascii?Q?6vziGDVtOrew27HwViQyjvLZPsgQLsFJWUfnUG+ymMbIGhjTKOG+1bg41MSM?=
- =?us-ascii?Q?NEOZq2PJHzTTluJmaiLRr85yqrpXljK+1TD6SygFd6CoVGj85vaqAno7jYJ2?=
- =?us-ascii?Q?unoVNug+hyRPoILsCCVumDN4aaa8bZyDHRCWAM3l9aduxv56lxhnr9YFbd53?=
- =?us-ascii?Q?c/yFwkDGeoNT+s16Jm6KMtIhh+bj6VTLyWZ9dEmibwLMXjkZXuf4jB/0uKy8?=
- =?us-ascii?Q?ac9vHKktblXne/6V0HwhbPpkIp24KZXwjXGvPBOvICJ/gfAvv4ehIAHvu6u0?=
- =?us-ascii?Q?i7R4gLZPCOFYMgYn1m1tmDKbO0QbFd5dlMralEZH2AkaqGJJqz4at928ksaG?=
- =?us-ascii?Q?sZElEgHPb8b2h9z1hNsbD1M/yxA1jHZE0Nm/uEPhK42WdQZwRMQjLKVMIWKV?=
- =?us-ascii?Q?TE6p66m4voFIhDBfZIQCTmyINlJjrz1j7rxhQyANlXAYqVn46FLKtoTFUbH/?=
- =?us-ascii?Q?FH+xWoWQflDobrYEIdZ7Bif9cPhepPhtiZZhXN9TxyEIwTbKoEUk8qXXjMy7?=
- =?us-ascii?Q?m+dPbzTRQ7MPu+2G5UDMyXsy8dhe/slh8BVhMoPV+wgqAi/tZixAI+wAmXHy?=
- =?us-ascii?Q?6lsxU3JRCX7rl/p1DYyszJHZofzuCLHpEyobYOq9K7pelW5c8kIw//AdS1GJ?=
- =?us-ascii?Q?jNmEQQKmsNVe2qFf1mbZhrnqS41rMPtsw9RE9/kYtoWjOXnbnNh7ixIrsR8X?=
- =?us-ascii?Q?/kYV9ptNVE4CGA1dFAm59BGRWNyNg2CrSWvPr/eF9Awc3L6qQU22IcrihinV?=
- =?us-ascii?Q?j8j9kTiO3HnROBV1FWU6G0VIOcaWFqwvYiGruHAfd+jaTlzu/eDSCRTOAuk8?=
- =?us-ascii?Q?nQvBMHxuVhSM23zZ9Ziot2Yj16z48cnhuNj38zgirKegMcEOfv1PruywAFLR?=
- =?us-ascii?Q?+5YeItXeilGGJIBFl4IyvD/3q53Y3kTnQv+gkSCiOmi46szewewUCMtEk/oz?=
- =?us-ascii?Q?mmNRjYSZ3Dy4Mx2VoJ1QUeR1Jn8jLhSmLJ6KsIXQ9mYle1UACwx2N4PethN8?=
- =?us-ascii?Q?0mrTUmJV/A/mOqEJm7D2L0LyStQkBjr6vpqHqNY02UDgZnQGtVAroSEAsiQt?=
- =?us-ascii?Q?C9bK9CRTRQy7eqQ31V03FJ9ySY3B2VjZAGIVXba8wipG4nzw/E6cuS3Qxh2S?=
- =?us-ascii?Q?ZX4Lfdgw6awzo1XwPJ4Yz6qK/7zuwmKHcioc2zvzrC6AiOc2itiu1g/RtrF9?=
- =?us-ascii?Q?DgzZF3pEniKGQm/+sVqSqJ3njF5mWniaX+auvvZXDBvW98zgJQ4MguzLMJ8n?=
- =?us-ascii?Q?i0Z6fyvWKkU1B6jSShn2dl7PNHayT91HqemlOaKLJf1f93+rjQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Py7oDZa+egQIS8VSWZ7+vEMaE6h9QT9fsB61b7+PiHVj3eSFxZdXqypNdnfd?=
- =?us-ascii?Q?10GMAny1AdVs6mqzrj8Tz/2AIh03OVj9utehrMenWqCLwCbJ/5E+EJ8zH4e5?=
- =?us-ascii?Q?ufhYdRHJbnI/x8UtEbvIMwsZKn6XTYfLShvkew5ARus5k3XedDWOsxHnlA30?=
- =?us-ascii?Q?+cyJdQyxYcTkZe4HcOJS9oGI5Scx696iiYctUbaXKTJ+THj9bR9+Os/183QZ?=
- =?us-ascii?Q?Zw34snDFPXqzOKy3xGEX4tbXvUnbYnx/TWyONOKNI+hyBKsXCIjsMNj0ym+f?=
- =?us-ascii?Q?XJoqcxr67idIwzgZit0Iyx8GqnT4RNfAh0VzaARZP+NQ5uoeEPhviiOf8bRK?=
- =?us-ascii?Q?DOe4WHXAy/IKGaOQ0muiSxMngSLeUTx3GI7hfRRKLiLTUXBEEqtMPb7MHG7y?=
- =?us-ascii?Q?pg+91V8fY0Q0+TS/Zt811IT53KJuOStBUc3akhRCYVQOSyNhbUY8/8JVL2em?=
- =?us-ascii?Q?of0G+HrKg2dgrLXmVuWxT5+bB+HkInVL/ExWOX82yLK3QeWzO5XaJAJ1zVMG?=
- =?us-ascii?Q?Gc07LoY1i2rpFG6e9YaNVpxKEeFt6JGIFdepsF1I/K29U37fy6KPhmpXfPLS?=
- =?us-ascii?Q?U0eEou9ljyGbrPPGFOxFaLrNYCn+VE0XA1HrimS072612+D2Z+s4ceAr57FG?=
- =?us-ascii?Q?VgeTiq/ZTje9PuX2LGtJhFRSIWDICQ9BTOgLmbYQT2zAH+3Ll9r1GIfNCDAo?=
- =?us-ascii?Q?Kl01hrRnwBQBhaNmjGjs4U0//LTvDzTUp1YsOJO6j6hcCaeyi7WCP6IXDn0y?=
- =?us-ascii?Q?5vXcOqjU0KLnsBvxBC5LEQH5sj/Ftoa5fRy3sHG/PGhFFsFIzP5DUsVxvd3J?=
- =?us-ascii?Q?bvDD1GNj3JK//wV0a9DsRUvQ+z5EuITWcqqrkgJ7Hdn5YUnku85xHHRL9T5a?=
- =?us-ascii?Q?RR/y+9VuDiC2SK2826yQAXzh3wVm3FfV6812ef7hDH3ouh083WvKTkcsp0AT?=
- =?us-ascii?Q?wm0H8o+rCHaEHDNvb/3dt1fAfDNJUQgWRvAovRRldWZoB/ad3C2t4/7OooYE?=
- =?us-ascii?Q?9m9HD8qZo4lDgnboGOQZGKly5hVzSTAWMLw1q4EYwA726B7OYCaoQ04JPZEb?=
- =?us-ascii?Q?SFYa/G2okJfg0i0+e+J34alC5fVsszkERIgMYObzK6K/3RklRMWlEVgDZWL+?=
- =?us-ascii?Q?GiaRMiTJd7Q4wFjW9rF/RPviMUZTMPUEllYsZTNDfDQFwi2cAxsyMlI1xDID?=
- =?us-ascii?Q?09FJFdeSjmROphtDJdfjrcjYDBjrJxwX8TXLhCUU1XHL0daY+WhE16LAysM7?=
- =?us-ascii?Q?IqEIe6sVFnD2lSpVzd1dE52R0+VsiqHnWp9metzeANOx0w9D8DWkn4GXiZxO?=
- =?us-ascii?Q?gKZ8JBzExfZPTAcqA0x4+zlHEndYvOLN6+AB6UFc3vLiC0tsHFQrZH/WJY/q?=
- =?us-ascii?Q?C53+Cw4JaREBKFW2qPDhDi9fd22oJ8DEJ0BBWzoQXqmB4asuccbDXZfe6giG?=
- =?us-ascii?Q?VazXKjbEOzJu/5VpMDI/BwCpZ7WSjfC3Igld3ZKgpta7hhz9mgUyDyaTdMo3?=
- =?us-ascii?Q?P3QA+6pLe3plFGZPcYJjy3M3ub8TDKcK8Cfxzmxc81I6fFlNddBYV4BC85v2?=
- =?us-ascii?Q?/lOpY9QzbMHD/x7TYXrJFyfT3MnRbXGgadTt9lkvyuFz3af8WyGDZjvIOZY6?=
- =?us-ascii?Q?cQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	a8mzHAwoHb2sWL5jEm1UMgWo/KA48hZA+QdNYZbkYuDZlRKQxLh7gzNGtc4Go6EpNwyODqwc6ZlTgrOb6L6W1oNcRmwvtBWhCoOILLRlZ26YwmzsI6ywtrmf92K1EF8l9HqZGkcOCL+UJL3PeyAiwBLjD/0mt0xGjKrYqQalxBPS8vYn417fP/e7w6BJDH80kRIkYOVQMj0Y63BZEeo6jEEsEl1relntQ3wJYgDxaLuKvMSUny3hPfy5Ze5wRGcd+T7luluU+Rf6vfFs4Ct+d2pkucTKa9ZE3S/EbdfLHiYbyHUOcX+uIYBqWsqOVxaolXlxMYodzL6/P8o0q1CZp0RRnej1GR9JuwAhjBdciKCPXPLF6W1k1YOUPdGyT876LcUJfpw79LJbnRSMyhY7CgtyVi9Hjp/+6yJqSvMaHrPu99USWMCgyQYJOY16GSENUjUc4dUkbZyRSZDgb0W+JahDsvHV8agHWQPD0v68XRT1XCUv1nFCTruG0uCWqxTZRKcT6vFyGzu5tSNl9ICpKgysI/ch9Ct0vgvs4UxcA+bIdSdMACXvEwaQZ53i62aVRmmC5LU0brW+S4wJAGwsQ7zgRcCrzvzrHDMuUC0I9fI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da0de146-a177-4b9f-2511-08ddb819e717
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 21:05:54.8741
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MTDIkE67Zj1nHSgsKFH7warzveBs5ZjA6zRqHnGTuwDbtdO2yj/kIm2+oWmIxwKnsUJ0BqWOCt5Tv66IBIU15E1KHpOUdLqJSbE/toY9wBY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4812
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-30_04,2025-06-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=864 adultscore=0
- bulkscore=0 malwarescore=0 spamscore=0 phishscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2505160000 definitions=main-2506300172
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjMwMDE3MiBTYWx0ZWRfX/gkp7TG88DZU 23Vz7rjXx+6Rsl8/CKlaZPk/yDN0tr4EpK4fl+ngeFHQfxihQBnnh9VjrKDzUb6ySdla6t8Uhln hZJ91ZCUFJb/bkTCuWwt3Z8T1E3Peqg7htI+45Ha2B1V1kdOfqkuy9L1bZP+gjWuX7exOQ6PtBT
- QgY6AVVxuxNGwoC4EGRRQIMuH23eJSPY3spcK5bYsKB+PyNNx1095HeVbuEA+92aumvxWC6Mm12 vLlYNCPgrun+G/9DPRw0MMG9zWQ3uaxjxBm+lEUDsYBnPvswrnPv4rIxjfq6qtNz81UYGguIBV/ uq8AFwVf8A+8ssrB5jhCOutr6hI05mxA97e3PVSjYrsykIq4mLAaBE+TYo5eV+hCrPLf5qZDWYu
- Ee2MqnYqZIVA4v+RnezAtk8Fy2pmtpid6IHGvWtNxzZTeMcvWCg8lH1RAe36AYuOiZzye0zp
-X-Authority-Analysis: v=2.4 cv=MvBS63ae c=1 sm=1 tr=0 ts=6862fc36 b=1 cx=c_pps a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=6IFa9wvqVegA:10 a=GoEa3M9JfhUA:10 a=PuvxfXWCAAAA:8 a=xrmwW8_VouWvE-3chaQA:9 a=uAr15Ul7AJ1q7o2wzYQp:22 cc=ntf awl=host:13215
-X-Proofpoint-ORIG-GUID: 8cibHSSUtW3Y4OHE1ulIs8VRlCFIE0ld
-X-Proofpoint-GUID: 8cibHSSUtW3Y4OHE1ulIs8VRlCFIE0ld
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250625085715.889837-1-daniel.lezcano@linaro.org>
 
+Hi Daniel,
 
-Christoph Lameter (Ampere) <cl@gentwo.org> writes:
+On 06/25/2025, Daniel Lezcano wrote:
+> In the context of the time keeping and the timers, some platforms have
+> timers which need to be initialized very early. It is the case of the
+> ARM platform which do not have the architected timers.
+> 
+> The macro TIMER_OF_DECLARE adds an entry in the timer init functions
+> array at compile time and the function timer_probe is called from the
+> timer_init() function in kernel/time.c
+> 
+> This array contains a t-uple with the init function and the compatible
+> string.
+> 
+> The init function has a device node pointer parameter.
+> 
+> The timer_probe() function browses the of nodes and find the ones
+> matching the compatible string given when using the TIMER_OF_DECLARE
+> macro. It then calls the init function with the device node as a
+> pointer.
+> 
+> But there are some platforms where there are multiple timers like the
+> ARM64 with the architected timers. Those are always initialized very
+> early and the other timers can be initialized later.
+> 
+> For this reason we find timer drivers with the platform_driver
+> incarnation. Consequently their init functions are different, they
+> have a platform_device pointer parameter and rely on the devm_
+> function for rollbacking.
+> 
+> To summarize, we have:
+>  - TIMER_OF_DECLARE with init function prototype:
+>    int (*init)(struct device_node *np);
+> 
+>  - module_platform_driver (and variant) with the probe function
+>    prototype:
+>    int (*init)(struct platform_device *pdev);
+> 
+> The current situation with the timers is the following:
+> 
+>  - Two platforms can have the same timer hardware, hence the same
+>    driver but one without alternate timers and the other with multiple
+>    timers. For example, the Exynos platform has only the Exynos MCT on
+>    ARM but has the architeched timers in addition on the ARM64.
+> 
+>  - The timer drivers can be modules now which was not the case until
+>    recently. TIMER_OF_DECLARE do not allow the build as a module.
+> 
+> It results in duplicate init functions (one with rollback and one with
+> devm_) and different way to declare the driver (TIMER_OF_DECLARE and
+> module_platform_driver).
+> 
+> This proposed change is to unify the prototyping of the init functions
+> to receive a platform_device pointer as parameter. Consequently, it
+> will allow a smoother and nicer module conversion and a huge cleanup
+> of the init functions by removing all the rollback code from all the
+> timer drivers. It introduces a TIMER_OF_DECLARE_PDEV macro.
+> 
+> If the macro is used a platform_device is manually allocated and
+> initialized with the needed information for the probe
+> function. Otherwise module_platform_driver can be use instead with the
+> same probe function without the timer_probe() initialization.
+> 
+> I don't have an expert knowledge of the platform_device internal
+> subtilitie so I'm not sure if this approach is valid. However, it has
+> been tested on a Rockchip board with the "rockchip,rk3288-timer" and
+> verified the macro and the devm_ rollback work correctly.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Hans de Goede <hansg@kernel.org>
+> Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/clocksource/timer-probe.c | 61 ++++++++++++++++++++++++++++++-
+>  include/asm-generic/vmlinux.lds.h |  2 +
+>  include/linux/clocksource.h       |  3 ++
+>  include/linux/of.h                |  5 +++
+>  4 files changed, 70 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clocksource/timer-probe.c b/drivers/clocksource/timer-probe.c
+> index b7860bc0db4b..6b2b341b8c95 100644
+> --- a/drivers/clocksource/timer-probe.c
+> +++ b/drivers/clocksource/timer-probe.c
+> @@ -7,13 +7,18 @@
+>  #include <linux/init.h>
+>  #include <linux/of.h>
+>  #include <linux/clocksource.h>
+> +#include <linux/platform_device.h>
+>  
+>  extern struct of_device_id __timer_of_table[];
+> +extern struct of_device_id __timer_pdev_of_table[];
+>  
+>  static const struct of_device_id __timer_of_table_sentinel
+>  	__used __section("__timer_of_table_end");
+>  
+> -void __init timer_probe(void)
+> +static const struct of_device_id __timer_pdev_of_table_sentinel
+> +	__used __section("__timer_pdev_of_table_end");
+> +
+> +static int __init timer_of_probe(void)
+>  {
+>  	struct device_node *np;
+>  	const struct of_device_id *match;
+> @@ -38,6 +43,60 @@ void __init timer_probe(void)
+>  		timers++;
+>  	}
+>  
+> +	return timers;
+> +}
+> +
+> +static int __init timer_pdev_of_probe(void)
+> +{
+> +	struct device_node *np;
+> +	struct platform_device *pdev;
+> +	const struct of_device_id *match;
+> +	of_init_fn_pdev init_func;
+> +	unsigned int timers = 0;
+> +	int ret;
+> +
+> +	for_each_matching_node_and_match(np, __timer_pdev_of_table, &match) {
+> +		if (!of_device_is_available(np))
+> +			continue;
+> +
+> +		init_func = match->data;
+> +
+> +		pdev = platform_device_alloc(of_node_full_name(np), -1);
+> +		if (!pdev)
+> +			continue;
+> +
+> +		ret = device_add_of_node(&pdev->dev, np);
+> +		if (ret) {
+> +			platform_device_put(pdev);
+> +			continue;
+> +		}
+> +
+> +		dev_set_name(&pdev->dev, pdev->name);
+> +
+> +		ret = init_func(pdev);
+> +		if (!ret) {
+> +			timers++;
+> +			continue;
+> +		}
+> +
+> +		if (ret != -EPROBE_DEFER)
+> +			pr_err("Failed to initialize '%pOF': %d\n", np,
+> +			       ret);
+> +
+> +		device_remove_of_node(&pdev->dev);
+> +
+> +		platform_device_put(pdev);
+> +	}
+> +
+> +	return timers;
+> +}
+> +
+> +void __init timer_probe(void)
+> +{
+> +	unsigned timers = 0;
+> +
+> +	timers += timer_of_probe();
+> +	timers += timer_pdev_of_probe();
+>  	timers += acpi_probe_device_table(timer);
+>  
+>  	if (!timers)
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index fa5f19b8d53a..97606499c8d7 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -318,6 +318,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+>  	KEEP(*(__##name##_of_table_end))
+>  
+>  #define TIMER_OF_TABLES()	OF_TABLE(CONFIG_TIMER_OF, timer)
+> +#define TIMER_PDEV_OF_TABLES()	OF_TABLE(CONFIG_TIMER_OF, timer_pdev)
+>  #define IRQCHIP_OF_MATCH_TABLE() OF_TABLE(CONFIG_IRQCHIP, irqchip)
+>  #define CLK_OF_TABLES()		OF_TABLE(CONFIG_COMMON_CLK, clk)
+>  #define RESERVEDMEM_OF_TABLES()	OF_TABLE(CONFIG_OF_RESERVED_MEM, reservedmem)
+> @@ -714,6 +715,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+>  	CLK_OF_TABLES()							\
+>  	RESERVEDMEM_OF_TABLES()						\
+>  	TIMER_OF_TABLES()						\
+> +	TIMER_PDEV_OF_TABLES()						\
+>  	CPU_METHOD_OF_TABLES()						\
+>  	CPUIDLE_METHOD_OF_TABLES()					\
+>  	KERNEL_DTB()							\
+> diff --git a/include/linux/clocksource.h b/include/linux/clocksource.h
+> index 65b7c41471c3..0eeabd207040 100644
+> --- a/include/linux/clocksource.h
+> +++ b/include/linux/clocksource.h
+> @@ -289,6 +289,9 @@ extern int clocksource_i8253_init(void);
+>  #define TIMER_OF_DECLARE(name, compat, fn) \
+>  	OF_DECLARE_1_RET(timer, name, compat, fn)
+>  
+> +#define TIMER_OF_DECLARE_PDEV(name, compat, fn) \
+> +	OF_DECLARE_PDEV(timer_pdev, name, compat, fn)
+> +
+>  #ifdef CONFIG_TIMER_PROBE
+>  extern void timer_probe(void);
+>  #else
+> diff --git a/include/linux/of.h b/include/linux/of.h
+> index a62154aeda1b..a312a6f5ecc1 100644
+> --- a/include/linux/of.h
+> +++ b/include/linux/of.h
+> @@ -1540,9 +1540,12 @@ static inline int of_get_available_child_count(const struct device_node *np)
+>  	_OF_DECLARE_STUB(table, name, compat, fn, fn_type)
+>  #endif
+>  
+> +struct platform_device;
+> +
+>  typedef int (*of_init_fn_2)(struct device_node *, struct device_node *);
+>  typedef int (*of_init_fn_1_ret)(struct device_node *);
+>  typedef void (*of_init_fn_1)(struct device_node *);
+> +typedef int (*of_init_fn_pdev)(struct platform_device *);
+>  
+>  #define OF_DECLARE_1(table, name, compat, fn) \
+>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_1)
+> @@ -1550,6 +1553,8 @@ typedef void (*of_init_fn_1)(struct device_node *);
+>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_1_ret)
+>  #define OF_DECLARE_2(table, name, compat, fn) \
+>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_2)
+> +#define OF_DECLARE_PDEV(table, name, compat, fn) \
+> +		_OF_DECLARE(table, name, compat, fn, of_init_fn_pdev)
 
-> On Thu, 26 Jun 2025, Ankur Arora wrote:
->
->> @@ -222,6 +223,53 @@ do {									\
->>  #define __smp_timewait_store(ptr, val)					\
->>  		__cmpwait_relaxed(ptr, val)
->>
->> +/*
->> + * Redefine ARCH_TIMER_EVT_STREAM_PERIOD_US locally to avoid include hell.
->> + */
->> +#define __ARCH_TIMER_EVT_STREAM_PERIOD_US 100UL
->> +extern bool arch_timer_evtstrm_available(void);
->> +
->> +static inline u64 ___smp_cond_spinwait(u64 now, u64 prev, u64 end,
->> +				       u32 *spin, bool *wait, u64 slack);
->> +/*
->> + * To minimize time spent spinning, we want to allow a large overshoot.
->> + * So, choose a default slack value of the event-stream period.
->> + */
->> +#define SMP_TIMEWAIT_DEFAULT_US __ARCH_TIMER_EVT_STREAM_PERIOD_US
->> +
->> +static inline u64 ___smp_cond_timewait(u64 now, u64 prev, u64 end,
->> +				       u32 *spin, bool *wait, u64 slack)
->> +{
->> +	bool wfet = alternative_has_cap_unlikely(ARM64_HAS_WFXT);
->> +	bool wfe, ev = arch_timer_evtstrm_available();
->
-> An unitialized and initialized variable on the same line. Maybe separate
-> that. Looks confusing and unusual to me.
+To support auto-module loading you'll need to also define the
+MODULE_DEVICE_TABLE() as part of TIMER_OF_DECLARE_PDEV().
 
-Yeah, that makes sense. Will fix.
+I haven't tested the patch yet, but aside from my comment above it LGTM.
 
->> +	u64 evt_period = __ARCH_TIMER_EVT_STREAM_PERIOD_US;
->> +	u64 remaining = end - now;
->> +
->> +	if (now >= end)
->> +		return 0;
->> +	/*
->> +	 * Use WFE if there's enough slack to get an event-stream wakeup even
->> +	 * if we don't come out of the WFE due to natural causes.
->> +	 */
->> +	wfe = ev && ((remaining + slack) > evt_period);
->
-> The line above does not matter for the wfet case and the calculation is
-> ignored. We hope that in the future wfet will be the default case.
+Thanks,
+Will
 
-My assumption was that the compiler would only evaluate the evt_period
-comparison if the wfet check evaluates false and it does need to check
-if wfe is true or not.
-
-But let me look at the generated code.
-
-Thanks for the comments.
-
---
-ankur
+>  
+>  /**
+>   * struct of_changeset_entry	- Holds a changeset entry
+> -- 
+> 2.43.0
+> 
 
