@@ -1,209 +1,116 @@
-Return-Path: <linux-arch+bounces-12507-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12508-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65D18AED98D
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Jun 2025 12:17:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BA3BAEDA37
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Jun 2025 12:45:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76AC5175879
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Jun 2025 10:17:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 564B57A1BFE
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Jun 2025 10:44:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26C424EA90;
-	Mon, 30 Jun 2025 10:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69F420E032;
+	Mon, 30 Jun 2025 10:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lK+Qs1me"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="c7zuP1pY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E40824466E;
-	Mon, 30 Jun 2025 10:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4BA84A2B;
+	Mon, 30 Jun 2025 10:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751278616; cv=none; b=gKygM2+pGDNqVtBR2lUtw48PawZ/i9fkNfhW6ETQpo0157RsqU0bGqFHPpLRSN3CNfRL9JMJkJBP+0zOVqFmA55mPRlFmJrqzaPuKqWtbFr5eY/gfrEncuiGuAK/kyeg0xfLj8nBjcvXhPivEInOCKiOdcsFdxCzRID1ilGy12E=
+	t=1751280350; cv=none; b=HV2Mu6/KZGtLMBMxef13KnhjaYQQhR2juKSzfZtly3C+gbaeAlufR2ZU0jSFu3WFjkWcNR+p+VIjEXr5lKpTsAWMpekisNPbGkMMhzaoynx59zXMRorCqe+0pZFieHFqAW37XnBp9c7Gl6G7hgbMXBitvHdhlN+ZclvN8QoEr5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751278616; c=relaxed/simple;
-	bh=jyY7VefVj/pRCib4aQ/EAxfV4IOvZHmPLQGlbEVLfrA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=fE12EDwfR9btKMuGhIXwrvkgmoIa6bq4qBorYFlX0mQJN3IkrxVCx5IwAXkRs6/RwMIrvySF8qEOc6E8veCBLMRdx++pzRS8deqiKEvdUtLxmJZ5JBak4BX3GPPikvucbme0vA6sOXbzMPqKAuD/4ZGH6wymDsoYS95biHY/clU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lK+Qs1me; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5B8FC4CEEF;
-	Mon, 30 Jun 2025 10:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751278616;
-	bh=jyY7VefVj/pRCib4aQ/EAxfV4IOvZHmPLQGlbEVLfrA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=lK+Qs1meId433F4nC7m2zLarI/XsKLyZs/NfXqSW08FevT7XSPlMrHPvkMzFEU5ej
-	 IvT3UDjLnfVoSZvhzu0eM6dvMa/FoFOAlrrF7fEdu9o2SbHuaSWfPYm4iTy0Jyg9aD
-	 kNrflsFLt+mvouLIkVjJC+naTdwm3VHchi/gBnA1RYic2R5CotM73QSCLyWi2FVxoe
-	 bn0BMrrfefesjQ6M29xvJfOTvoWm9LinFL8DjMKems0c5OgqtCn6XgDqvUkzlZSmoF
-	 eJ3AI5Pj/RokTFGvBmOAoSN7T5q8gN8uPKsV2On28I21lzlyfwsM1qFDRln/r7+KTZ
-	 OOjVIlzPoI+tg==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: "Boqun Feng" <boqun.feng@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>,  <rust-for-linux@vger.kernel.org>,
-  <lkmm@lists.linux.dev>,  <linux-arch@vger.kernel.org>,  "Miguel Ojeda"
- <ojeda@kernel.org>,  "Alex Gaynor" <alex.gaynor@gmail.com>,  "Gary Guo"
- <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  "Benno
- Lossin" <lossin@kernel.org>,  "Alice Ryhl" <aliceryhl@google.com>,
-  "Trevor Gross" <tmgross@umich.edu>,  "Danilo Krummrich"
- <dakr@kernel.org>,  "Will Deacon" <will@kernel.org>,  "Peter Zijlstra"
- <peterz@infradead.org>,  "Mark Rutland" <mark.rutland@arm.com>,  "Wedson
- Almeida Filho" <wedsonaf@gmail.com>,  "Viresh Kumar"
- <viresh.kumar@linaro.org>,  "Lyude Paul" <lyude@redhat.com>,  "Ingo
- Molnar" <mingo@kernel.org>,  "Mitchell Levy" <levymitchell0@gmail.com>,
-  "Paul E. McKenney" <paulmck@kernel.org>,  "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>,  "Linus Torvalds"
- <torvalds@linux-foundation.org>,  "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH v5 05/10] rust: sync: atomic: Add atomic {cmp,}xchg
- operations
-In-Reply-To: <aF9bmpX-i6HVMlaj@Mac.home> (Boqun Feng's message of "Fri, 27 Jun
-	2025 20:03:54 -0700")
-References: <20250618164934.19817-1-boqun.feng@gmail.com>
-	<jBAtISwM9LKkR7KuCHEnym75NfGOM4z408pMuDfk4U8VzN8PQuk9JJfBc33Usre3YSjbgtFRj8c0ZNeeQMpZsA==@protonmail.internalid>
-	<20250618164934.19817-6-boqun.feng@gmail.com> <87a55uzlxv.fsf@kernel.org>
-	<_pLa3zqu-AHBOnxkEz7l13l9W-OsKBtuXIkjRsIJJy6EnYTrM99E8Yr24pzjqwCAj1_qs_PI-cVxRsBsbgiFdA==@protonmail.internalid>
-	<aF9bmpX-i6HVMlaj@Mac.home>
-User-Agent: mu4e 1.12.9; emacs 30.1
-Date: Mon, 30 Jun 2025 12:16:27 +0200
-Message-ID: <878ql9zg90.fsf@kernel.org>
+	s=arc-20240116; t=1751280350; c=relaxed/simple;
+	bh=1qYyqEbzXKw1kYwIHnancyXtFBiFkWq5bCUGJRFKZSs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ttk2h/F+/vBYSI4JkDLwtKFI1Y2mhFPRjjpmW9LkUjS/2ZSSXJoX9yXkV1gGr9LqfiQ/Iov/lMExxttH6gti2BXujih77Ug4fdGI1WLsGQ3s4jP/E04xvKsccfE305TlfxCRoy2mGiFvDMqzd1wc+IBz3HXWwhQxk+VKH0ShudI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=c7zuP1pY; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=RG0EfRjcxYEAjzaFRWe/5+PpKyJWNxUyLp33WTrxNYY=; t=1751280347; x=1751885147; 
+	b=c7zuP1pYpl/7jClrcP5vmlVuvuwAvu3bMz6IDSGKlYuz3IKZnnR+MFxJy0kR++jxaHNhf9PVGER
+	izaLXvEVjPjTgb9k32l9fqx111sjz0mBEM7lqohKVShLm5+4UAzcArVuF+7SvY5tJMusW5sxM3s62
+	V/DYAs8qhBb5KUrbPNiL4MH54pr0DBGNsiTBCF2ChtSCmBjYVVpqoY14KbXdXZINix8g85aCsoqEf
+	VzIr9IfsHPeCrc/yXFk/BRt7XSbwfTrjcS5Hmeo8ccwLuF2Qhaqm+TZ1k0bPRS+fE/XUr+vPJV8tm
+	o3HqJGQf8lTqCh4rAEe1KKrGNFuRIAamHrNw==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1uWC1A-0000000499Z-2hFo; Mon, 30 Jun 2025 12:45:44 +0200
+Received: from p57bd96d0.dip0.t-ipconnect.de ([87.189.150.208] helo=[192.168.178.61])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1uWC1A-00000001qO8-1tjy; Mon, 30 Jun 2025 12:45:44 +0200
+Message-ID: <5375b5bb7221cf878d1f93e60e72807f66e26154.camel@physik.fu-berlin.de>
+Subject: Re: kernel/fork.c:3088:2: warning: clone3() entry point is missing,
+ please fix
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-sh@vger.kernel.org, Dinh Nguyen
+	 <dinguyen@kernel.org>, Simon Schuster
+	 <schuster.simon+binutils@siemens-energy.com>, Linux-Arch
+	 <linux-arch@vger.kernel.org>, Christian Brauner <brauner@kernel.org>
+Date: Mon, 30 Jun 2025 12:45:43 +0200
+In-Reply-To: <46c6b0f6-6155-4366-9cbf-9fbbfb95ce30@app.fastmail.com>
+References: <202506282120.6vRwodm3-lkp@intel.com>
+	 <2ef5bc91-f56d-4c76-b12e-2797999cba72@app.fastmail.com>
+	 <57101e901013a8e6ff44e10c93d1689490c714bf.camel@physik.fu-berlin.de>
+	 <46c6b0f6-6155-4366-9cbf-9fbbfb95ce30@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-"Boqun Feng" <boqun.feng@gmail.com> writes:
+Hi Arnd,
 
-> On Thu, Jun 26, 2025 at 03:12:12PM +0200, Andreas Hindborg wrote:
->> "Boqun Feng" <boqun.feng@gmail.com> writes:
->>
->> > xchg() and cmpxchg() are basic operations on atomic. Provide these based
->> > on C APIs.
->> >
->> > Note that cmpxchg() use the similar function signature as
->> > compare_exchange() in Rust std: returning a `Result`, `Ok(old)` means
->> > the operation succeeds and `Err(old)` means the operation fails.
->> >
->> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
->> > ---
->> >  rust/kernel/sync/atomic/generic.rs | 154 +++++++++++++++++++++++++++++
->> >  1 file changed, 154 insertions(+)
->> >
->> > diff --git a/rust/kernel/sync/atomic/generic.rs b/rust/kernel/sync/atomic/generic.rs
->> > index 73c26f9cf6b8..bcdbeea45dd8 100644
->> > --- a/rust/kernel/sync/atomic/generic.rs
->> > +++ b/rust/kernel/sync/atomic/generic.rs
->> > @@ -256,3 +256,157 @@ pub fn store<Ordering: ReleaseOrRelaxed>(&self, v: T, _: Ordering) {
->> >          };
->> >      }
->> >  }
->> > +
->> > +impl<T: AllowAtomic> Atomic<T>
->> > +where
->> > +    T::Repr: AtomicHasXchgOps,
->> > +{
->> > +    /// Atomic exchange.
->> > +    ///
->> > +    /// # Examples
->> > +    ///
->> > +    /// ```rust
->> > +    /// use kernel::sync::atomic::{Atomic, Acquire, Relaxed};
->> > +    ///
->> > +    /// let x = Atomic::new(42);
->> > +    ///
->> > +    /// assert_eq!(42, x.xchg(52, Acquire));
->> > +    /// assert_eq!(52, x.load(Relaxed));
->> > +    /// ```
->> > +    #[doc(alias("atomic_xchg", "atomic64_xchg"))]
->> > +    #[inline(always)]
->> > +    pub fn xchg<Ordering: All>(&self, v: T, _: Ordering) -> T {
->> > +        let v = T::into_repr(v);
->> > +        let a = self.as_ptr().cast::<T::Repr>();
->> > +
->> > +        // SAFETY:
->> > +        // - For calling the atomic_xchg*() function:
->> > +        //   - `self.as_ptr()` is a valid pointer, and per the safety requirement of `AllocAtomic`,
->>
->> Typo: `AllowAtomic`.
->>
->
-> Fixed.
->
->> > +        //      a `*mut T` is a valid `*mut T::Repr`. Therefore `a` is a valid pointer,
->> > +        //   - per the type invariants, the following atomic operation won't cause data races.
->> > +        // - For extra safety requirement of usage on pointers returned by `self.as_ptr():
->> > +        //   - atomic operations are used here.
->> > +        let ret = unsafe {
->> > +            match Ordering::TYPE {
->> > +                OrderingType::Full => T::Repr::atomic_xchg(a, v),
->> > +                OrderingType::Acquire => T::Repr::atomic_xchg_acquire(a, v),
->> > +                OrderingType::Release => T::Repr::atomic_xchg_release(a, v),
->> > +                OrderingType::Relaxed => T::Repr::atomic_xchg_relaxed(a, v),
->> > +            }
->> > +        };
->> > +
->> > +        T::from_repr(ret)
->> > +    }
->> > +
->> > +    /// Atomic compare and exchange.
->> > +    ///
->> > +    /// Compare: The comparison is done via the byte level comparison between the atomic variables
->> > +    /// with the `old` value.
->> > +    ///
->> > +    /// Ordering: When succeeds, provides the corresponding ordering as the `Ordering` type
->> > +    /// parameter indicates, and a failed one doesn't provide any ordering, the read part of a
->> > +    /// failed cmpxchg should be treated as a relaxed read.
->>
->> Rust `core::ptr` functions have this sentence on success ordering for
->> compare_exchange:
->>
->>   Using Acquire as success ordering makes the store part of this
->>   operation Relaxed, and using Release makes the successful load
->>   Relaxed.
->>
->> Does this translate to LKMM cmpxchg operations? If so, I think we should
->> include this sentence. This also applies to `Atomic::xchg`.
->>
->
-> I see this as a different style of documenting, so in my next version,
-> I have the following:
->
-> //! - [`Acquire`] provides ordering between the load part of the annotated operation and all the
-> //!   following memory accesses.
-> //! - [`Release`] provides ordering between all the preceding memory accesses and the store part of
-> //!   the annotated operation.
->
-> in atomic/ordering.rs, I think I can extend it to:
->
-> //! - [`Acquire`] provides ordering between the load part of the annotated operation and all the
-> //!   following memory accesses, and if there is a store part, it has Relaxed ordering.
-> //! - [`Release`] provides ordering between all the preceding memory accesses and the store part of
-> //!   the annotated operation, and if there is load part, it has Relaxed ordering
->
-> This aligns with what we usually describe things in tool/memory-model/.
+On Mon, 2025-06-30 at 12:02 +0200, Arnd Bergmann wrote:
+> Some architectures have custom calling conventions for the
+> fork/vfork/clone/clone3 syscalls, e.g. to handle copying all the
+> registers correctly when the normal syscall entry doesn't do that,
+> or to handle the changing stack correctly.
+>=20
+> I see that both sparc and hexagon have a custom clone() syscall,
+> so they likely need a custom clone3() as well, while sh and
+> nios2 probably don't.
+>=20
+> All four would need a custom assembler implementation in userspace
+> for each libc, in order to test the userspace calling the clone3()
+> function. For testing the kernel entry point itself, see Christian's
+> original test case[1].
 
-Cool. When you start to go into details of ordering concepts, I feel
-like something is missing though. For example for this sentence:
+Thanks for the explanation. So, I guess as long as a proposed implementatio=
+n
+of clone3() on sh would pass Arnd's test program, it should be good for mer=
+ging?
 
-  [`Release`] provides ordering between all the preceding memory
-  accesses and the store part of the annotated operation.
+Adrian
 
-I guess this provided ordering is only guaranteed to be observable for
-threads that read the same location with `Acquire` or stronger ordering?
-
-If we start expanding on the orderings, rather than deferring to LKMM,
-we should include this info.
-
-
-Best regards,
-Andreas Hindborg
-
-
-
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
