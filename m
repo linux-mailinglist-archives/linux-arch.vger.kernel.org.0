@@ -1,62 +1,61 @@
-Return-Path: <linux-arch+bounces-12534-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12535-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45762AEF232
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 11:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1592DAEF233
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 11:01:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 999F7445071
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 08:59:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E74644512C
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 09:00:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38D36271453;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754ED271476;
 	Tue,  1 Jul 2025 08:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JOuClH5z";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JUWHL11Y"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hCdg9J/c";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SODPMp3s"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FD526D4D5;
-	Tue,  1 Jul 2025 08:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E91F26D4EB;
+	Tue,  1 Jul 2025 08:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751360293; cv=none; b=R/CQf1z4wvm/rAIDVzDdm7Qbj3gK1z3uDs6EYz8ThC/hxI8/K/+MP7X2EMebRXuMybt20jK2wiNNQ1TS/5YGjqV3LK5CT9r4TVaYhYhuhRQPMnIDJkz4v9M9EQwLOucpxlnw1MwqD9KIgczGUowSrRQA3ki61NW9mFXgNYsIS8Y=
+	t=1751360293; cv=none; b=poE1eVnr5ffYxd+fwJJfvLYTuFsiiAQNPeHaOUSN8varjZH975h0HtfheqNyhSloRCTpEW0TsIW+3qug2aMGgWMSZe2YO7iefHVo5mxjH+Q10AJk+7/sywEo7MV0Ky/j5PyYL718Thchk347JmA2ty99hcQGwC4dsgecQV9yBZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751360293; c=relaxed/simple;
-	bh=hXHsnYDcoK6vZrSu6iAfWgcpr0RtJi0oTjs+lySQy+A=;
+	bh=dRtOLc0Ah0kuXXHJncEp4KlW6Rn2+hYOmoEn9rpo9FQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IDHFGaV6UUGKjh2SeavuWeUFPe7sL4Jdvhj9NaJHn5eR81m2MQxGqauF9CX4Ap0PsD/wgRa5BCV2+7ZzT2xSkhOrzwy5xanVmgVABjZD7DqCM9mmd9h9KEFkpYp+6OSIoIQ3gA5ZdGZb7+wzIBQrdPIGLXkRLXisHptB8YWpPfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JOuClH5z; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JUWHL11Y; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=N85NzJoW2HRLmO2bG32DywmK9GUKQj6XRmf8EGmPIf3qgLIYRuhu2FqrgvOWyov4X4j/XuPUYAPnDMPOu6ePnkECE37SzeARZl2JgyBhi/8lqB2EP98G6tF+O2PXUtuYMf2BULCSCtUqHD7NoUHqOMY0TBUTwiwUmNes0sysOQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hCdg9J/c; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SODPMp3s; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1751360288;
+	s=2020; t=1751360289;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cikZxWQJUp10v41R0BNtsJYkeVVYRn1u1TYcRTLvcoQ=;
-	b=JOuClH5zQfirMyVQzHci+YfWykFkJQAT07wxXn8bnSfP4v2Mtf+khZO8PSEMtF5vyKm2kz
-	r9Sikskh2A//wDpioSHNcdhBU907OkSp6RxyCqpFzG8qB/Y0Gnpyju4ax0/BBFlQIn7iV9
-	azZNnRv7uHbwqAQ/uzD8ey9XSnndaMTkvoPtMwxEJxmxnYJLXsfA5gLdbVNMaUJSdPldIZ
-	wjjgeBdVsnfqK8THDT6DDv0sBNshupWmWDV+pchmGkAbCgjGLE4tDXdD1N5OYnFQEg4btp
-	+DHxqtWX5GHGrBp6V60Y/Pdj4EitHMpYXPS1TM0+AuTM0vn2bZf2nTS/ZDR/9Q==
+	bh=xLGlXBLoHCl8iTZFGkpWl+4cLC4fbRbFQ1Cna6OA294=;
+	b=hCdg9J/c9E6RT0wp6/DhGRc8l2ths+F2e0C3PVLM5LyMtcRgzSnaJkHkcQPPghkg/XeIpd
+	LWGQ7lX3WJUFxu3ek2BvL8C6SIKdZZCnnfAazdnoDGestgjVmLWS7pp8l9vtfnfLKRJCbr
+	XJXluEsSZP/mJ3JhmR2CxKsF1IugmZxvxhTTY235Ij3lq6ld4ULlPsfC9olhKlyxHYgWTC
+	NEb5IBp538bTUXHNDpo7FJPd/m1D4oK/x4gPmt5lejA0NpMusHSEhEYSIkfUR9IhQqKnXh
+	/5nUYmD7mc2ugRKGfjNgNfpa0roYwNLQgrs/CeQU6Hcca6RY3aKTm6HfPSUclw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1751360288;
+	s=2020e; t=1751360289;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cikZxWQJUp10v41R0BNtsJYkeVVYRn1u1TYcRTLvcoQ=;
-	b=JUWHL11Y6dNQ7/wHtW7b8xlh7JM5awfSucplCUe0MFlcjzaQ9+fKPqu+fLeoBv4h/ZcJVx
-	+HsBDFUhjK1wERAA==
-Date: Tue, 01 Jul 2025 10:58:00 +0200
-Subject: [PATCH 06/14] vdso/gettimeofday: Return bool from clock_gettime()
- helpers
+	bh=xLGlXBLoHCl8iTZFGkpWl+4cLC4fbRbFQ1Cna6OA294=;
+	b=SODPMp3s/oAwW35AK1TnWm29pKng8GpRaNdGr9v2vbfuSLyfCFSWsbW6EBxgbSwh5NqAtV
+	LeWbBp4VXN/84xCw==
+Date: Tue, 01 Jul 2025 10:58:01 +0200
+Subject: [PATCH 07/14] vdso/gettimeofday: Introduce vdso_clockid_valid()
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -65,7 +64,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
+Message-Id: <20250701-vdso-auxclock-v1-7-df7d9f87b9b8@linutronix.de>
 References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
 In-Reply-To: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -87,196 +86,60 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Kurt Kanzenbach <kurt@linutronix.de>, Nam Cao <namcao@linutronix.de>, 
  Antoine Tenart <atenart@kernel.org>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751360285; l=6489;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751360285; l=1538;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=hXHsnYDcoK6vZrSu6iAfWgcpr0RtJi0oTjs+lySQy+A=;
- b=HQ6guH4xKYzDLrGcPir6sQ0D8ksrjbFgWflXvOxV/zrvFpJHB21lBA59Vudl9gKnpFZ5XRa3n
- qIsPlaEK4LvA65HlAXaFwZAVlN+fBWsOzWip/2yX8Py+WUG7TeVh+S7
+ bh=dRtOLc0Ah0kuXXHJncEp4KlW6Rn2+hYOmoEn9rpo9FQ=;
+ b=HTm3jtAk7vagm4p603uxzJ6EQojuf/6O5qSR9JWQUCAE793nMRMynN0XVRWXyboEG1fCIAwoE
+ 4hpXQVIhcWLCO71c9GbNNfwf5IiU8zNqmXABKY3tM0pBQK7mnBSSfn1
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The internal helpers are effectively using boolean results,
-while pretending to use error numbers.
-
-Switch the return type to bool for more clarity.
+With the upcoming addition of auxiliary clocks the clockid validation will
+become more complicated. Split it into a dedicated function to keep the
+code readable.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- lib/vdso/gettimeofday.c | 58 +++++++++++++++++++++++++------------------------
- 1 file changed, 30 insertions(+), 28 deletions(-)
+ lib/vdso/gettimeofday.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index 9b77f23566f6a35887d4c9aaefc61a971131b499..c5266532a097c06f33d12e345c695357d75abf42 100644
+index c5266532a097c06f33d12e345c695357d75abf42..215151bd5a1320ee6edda8f334d47c739577f696 100644
 --- a/lib/vdso/gettimeofday.c
 +++ b/lib/vdso/gettimeofday.c
-@@ -82,8 +82,8 @@ const struct vdso_time_data *__arch_get_vdso_u_timens_data(const struct vdso_tim
- #endif /* CONFIG_GENERIC_VDSO_DATA_STORE */
- 
- static __always_inline
--int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
--		   clockid_t clk, struct __kernel_timespec *ts)
-+bool do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-+		    clockid_t clk, struct __kernel_timespec *ts)
- {
- 	const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
- 	const struct timens_offset *offs = &vcns->offset[clk];
-@@ -103,11 +103,11 @@ int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *v
- 		seq = vdso_read_begin(vc);
- 
- 		if (unlikely(!vdso_clocksource_ok(vc)))
--			return -1;
-+			return false;
- 
- 		cycles = __arch_get_hw_counter(vc->clock_mode, vd);
- 		if (unlikely(!vdso_cycles_ok(cycles)))
--			return -1;
-+			return false;
- 		ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
- 		sec = vdso_ts->sec;
- 	} while (unlikely(vdso_read_retry(vc, seq)));
-@@ -123,7 +123,7 @@ int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *v
- 	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
- 	ts->tv_nsec = ns;
- 
--	return 0;
-+	return true;
- }
- #else
- static __always_inline
-@@ -133,16 +133,16 @@ const struct vdso_time_data *__arch_get_vdso_u_timens_data(const struct vdso_tim
- }
- 
- static __always_inline
--int do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
--		   clockid_t clk, struct __kernel_timespec *ts)
-+bool do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-+		    clockid_t clk, struct __kernel_timespec *ts)
- {
--	return -EINVAL;
-+	return false;
+@@ -71,6 +71,12 @@ static inline bool vdso_cycles_ok(u64 cycles)
  }
  #endif
  
- static __always_inline
--int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
--	    clockid_t clk, struct __kernel_timespec *ts)
-+bool do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
-+	     clockid_t clk, struct __kernel_timespec *ts)
- {
- 	const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
- 	u64 cycles, sec, ns;
-@@ -150,7 +150,7 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
- 
- 	/* Allows to compile the high resolution parts out */
- 	if (!__arch_vdso_hres_capable())
--		return -1;
-+		return false;
- 
- 	do {
- 		/*
-@@ -173,11 +173,11 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
- 		smp_rmb();
- 
- 		if (unlikely(!vdso_clocksource_ok(vc)))
--			return -1;
-+			return false;
- 
- 		cycles = __arch_get_hw_counter(vc->clock_mode, vd);
- 		if (unlikely(!vdso_cycles_ok(cycles)))
--			return -1;
-+			return false;
- 		ns = vdso_calc_ns(vc, cycles, vdso_ts->nsec);
- 		sec = vdso_ts->sec;
- 	} while (unlikely(vdso_read_retry(vc, seq)));
-@@ -189,13 +189,13 @@ int do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
- 	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
- 	ts->tv_nsec = ns;
- 
--	return 0;
-+	return true;
- }
- 
++static __always_inline bool vdso_clockid_valid(clockid_t clock)
++{
++	/* Check for negative values or invalid clocks */
++	return likely((u32) clock < MAX_CLOCKS);
++}
++
  #ifdef CONFIG_TIME_NS
- static __always_inline
--int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
--		     clockid_t clk, struct __kernel_timespec *ts)
-+bool do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-+		      clockid_t clk, struct __kernel_timespec *ts)
- {
- 	const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
- 	const struct timens_offset *offs = &vcns->offset[clk];
-@@ -223,20 +223,20 @@ int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock
- 	 */
- 	ts->tv_sec = sec + __iter_div_u64_rem(nsec, NSEC_PER_SEC, &nsec);
- 	ts->tv_nsec = nsec;
--	return 0;
-+	return true;
- }
- #else
- static __always_inline
--int do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
--		     clockid_t clk, struct __kernel_timespec *ts)
-+bool do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock *vcns,
-+		      clockid_t clk, struct __kernel_timespec *ts)
- {
--	return -1;
-+	return false;
- }
- #endif
  
- static __always_inline
--int do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
--	      clockid_t clk, struct __kernel_timespec *ts)
-+bool do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
-+	       clockid_t clk, struct __kernel_timespec *ts)
- {
- 	const struct vdso_timestamp *vdso_ts = &vc->basetime[clk];
- 	u32 seq;
-@@ -258,10 +258,10 @@ int do_coarse(const struct vdso_time_data *vd, const struct vdso_clock *vc,
- 		ts->tv_nsec = vdso_ts->nsec;
- 	} while (unlikely(vdso_read_retry(vc, seq)));
+ #ifdef CONFIG_GENERIC_VDSO_DATA_STORE
+@@ -268,8 +274,7 @@ __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
+ 	const struct vdso_clock *vc = vd->clock_data;
+ 	u32 msk;
  
--	return 0;
-+	return true;
- }
- 
--static __always_inline int
-+static __always_inline bool
- __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
- 			     struct __kernel_timespec *ts)
- {
-@@ -270,7 +270,7 @@ __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
- 
- 	/* Check for negative values or invalid clocks */
- 	if (unlikely((u32) clock >= MAX_CLOCKS))
--		return -1;
-+		return false;
+-	/* Check for negative values or invalid clocks */
+-	if (unlikely((u32) clock >= MAX_CLOCKS))
++	if (!vdso_clockid_valid(clock))
+ 		return false;
  
  	/*
- 	 * Convert the clockid to a bitmask and use it to check which
-@@ -284,7 +284,7 @@ __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
- 	else if (msk & VDSO_RAW)
- 		vc = &vc[CS_RAW];
- 	else
--		return -1;
-+		return false;
+@@ -405,8 +410,7 @@ bool __cvdso_clock_getres_common(const struct vdso_time_data *vd, clockid_t cloc
+ 	u32 msk;
+ 	u64 ns;
  
- 	return do_hres(vd, vc, clock, ts);
- }
-@@ -293,9 +293,11 @@ static __maybe_unused int
- __cvdso_clock_gettime_data(const struct vdso_time_data *vd, clockid_t clock,
- 			   struct __kernel_timespec *ts)
- {
--	int ret = __cvdso_clock_gettime_common(vd, clock, ts);
-+	bool ok;
+-	/* Check for negative values or invalid clocks */
+-	if (unlikely((u32) clock >= MAX_CLOCKS))
++	if (!vdso_clockid_valid(clock))
+ 		return false;
  
--	if (unlikely(ret))
-+	ok = __cvdso_clock_gettime_common(vd, clock, ts);
-+
-+	if (unlikely(!ok))
- 		return clock_gettime_fallback(clock, ts);
- 	return 0;
- }
+ 	if (IS_ENABLED(CONFIG_TIME_NS) &&
 
 -- 
 2.50.0
