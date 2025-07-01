@@ -1,35 +1,35 @@
-Return-Path: <linux-arch+bounces-12535-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12536-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1592DAEF233
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 11:01:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26E00AEF227
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 11:00:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E74644512C
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 09:00:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D55BD1BC542F
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 09:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754ED271476;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A918B271A7C;
 	Tue,  1 Jul 2025 08:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hCdg9J/c";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SODPMp3s"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wB37phIU";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZgZmCR6h"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E91F26D4EB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B529D26B09A;
 	Tue,  1 Jul 2025 08:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751360293; cv=none; b=poE1eVnr5ffYxd+fwJJfvLYTuFsiiAQNPeHaOUSN8varjZH975h0HtfheqNyhSloRCTpEW0TsIW+3qug2aMGgWMSZe2YO7iefHVo5mxjH+Q10AJk+7/sywEo7MV0Ky/j5PyYL718Thchk347JmA2ty99hcQGwC4dsgecQV9yBZs=
+	t=1751360293; cv=none; b=K1tlUSGldgTxZpSYQezJmH9ImcUO8tQ569ZJz+CUuEY12heee+R71EgBu8kcnKT6yUDSZOVpFcdX0jXO2edXi0Q8OK3QUbTxyyCbgEFlLj0gnICxmMkXzwQ+oKq8SpbOwcUKLyWH9THNqPtg6z4AvJzi04Kqn1SzK/swSqJ697Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751360293; c=relaxed/simple;
-	bh=dRtOLc0Ah0kuXXHJncEp4KlW6Rn2+hYOmoEn9rpo9FQ=;
+	bh=CC5cQSfSGmKdKkeZa7p5tvupyfG2CLNGehREDf1mFcc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=N85NzJoW2HRLmO2bG32DywmK9GUKQj6XRmf8EGmPIf3qgLIYRuhu2FqrgvOWyov4X4j/XuPUYAPnDMPOu6ePnkECE37SzeARZl2JgyBhi/8lqB2EP98G6tF+O2PXUtuYMf2BULCSCtUqHD7NoUHqOMY0TBUTwiwUmNes0sysOQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hCdg9J/c; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SODPMp3s; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=OHTF7f41mTwowO9YT0QktMOdR1R4Qc2iEd+ZugYFMeDh6hPSm13WDoyOOBtYuWA2mNa0pNCxhEHeT/Ysbp1rZKMv7qQtWEmnu2b5GBCqH0OCkYB/D/WGXX9Fci1idZXLsYGagL7XHgfVGeNWuzOYqs8KXAz+iFbTDrN15gNij5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wB37phIU; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZgZmCR6h; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,23 +39,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xLGlXBLoHCl8iTZFGkpWl+4cLC4fbRbFQ1Cna6OA294=;
-	b=hCdg9J/c9E6RT0wp6/DhGRc8l2ths+F2e0C3PVLM5LyMtcRgzSnaJkHkcQPPghkg/XeIpd
-	LWGQ7lX3WJUFxu3ek2BvL8C6SIKdZZCnnfAazdnoDGestgjVmLWS7pp8l9vtfnfLKRJCbr
-	XJXluEsSZP/mJ3JhmR2CxKsF1IugmZxvxhTTY235Ij3lq6ld4ULlPsfC9olhKlyxHYgWTC
-	NEb5IBp538bTUXHNDpo7FJPd/m1D4oK/x4gPmt5lejA0NpMusHSEhEYSIkfUR9IhQqKnXh
-	/5nUYmD7mc2ugRKGfjNgNfpa0roYwNLQgrs/CeQU6Hcca6RY3aKTm6HfPSUclw==
+	bh=VUv1tHn4Gb15SCtBOdwANRio4D/S8/QmhpZlRN18zW8=;
+	b=wB37phIU1cgHL9oe4WYfMGliy5jbaoTzF0DhUFJs/rOu6Z9k1d3vYlAoN9EKggIwQUdu7l
+	+TljAEBva1iFEhXtwj719UDDhlB7E7ALl8cwsgv8F+HUkIarv/qpDzLbPy7v4o/GeFoOFd
+	2R4a1ZFq2m8qwljdwSfFlnkniHuUtcqgGxU+sUvfvGw1lpcFjL8gkz81eCl3e1b7Pk8VKb
+	10dcpeqesAIzny9jyLb46PnxK5K9QIJu7XVW1XaC7Hw+NAvENeYfSx+DUhGLnd9jyQJXPU
+	ot0rpxGS270Y+z4vxiKynztpNbEmcLdOyJkwgdvYSvWmLEQ/LGbCnC4ntsmYTA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1751360289;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xLGlXBLoHCl8iTZFGkpWl+4cLC4fbRbFQ1Cna6OA294=;
-	b=SODPMp3s/oAwW35AK1TnWm29pKng8GpRaNdGr9v2vbfuSLyfCFSWsbW6EBxgbSwh5NqAtV
-	LeWbBp4VXN/84xCw==
-Date: Tue, 01 Jul 2025 10:58:01 +0200
-Subject: [PATCH 07/14] vdso/gettimeofday: Introduce vdso_clockid_valid()
+	bh=VUv1tHn4Gb15SCtBOdwANRio4D/S8/QmhpZlRN18zW8=;
+	b=ZgZmCR6hsNO6h+aAy42Sjmgm6zIioVVD4G5orMl9SniBw8do+p9kwhp5Mrhd+6o7spFRYw
+	zppOqtmG7rk7GaCA==
+Date: Tue, 01 Jul 2025 10:58:02 +0200
+Subject: [PATCH 08/14] vdso/gettimeofday: Introduce vdso_set_timespec()
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250701-vdso-auxclock-v1-7-df7d9f87b9b8@linutronix.de>
+Message-Id: <20250701-vdso-auxclock-v1-8-df7d9f87b9b8@linutronix.de>
 References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
 In-Reply-To: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -86,60 +86,88 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Kurt Kanzenbach <kurt@linutronix.de>, Nam Cao <namcao@linutronix.de>, 
  Antoine Tenart <atenart@kernel.org>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751360285; l=1538;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751360285; l=2428;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=dRtOLc0Ah0kuXXHJncEp4KlW6Rn2+hYOmoEn9rpo9FQ=;
- b=HTm3jtAk7vagm4p603uxzJ6EQojuf/6O5qSR9JWQUCAE793nMRMynN0XVRWXyboEG1fCIAwoE
- 4hpXQVIhcWLCO71c9GbNNfwf5IiU8zNqmXABKY3tM0pBQK7mnBSSfn1
+ bh=CC5cQSfSGmKdKkeZa7p5tvupyfG2CLNGehREDf1mFcc=;
+ b=7doTRp//wkLzPlGHPeeVXsRB2rVPSQaX9szW5pOx13TUBMCDQh6Ba5Lm0uy/yEitK/NoNivtP
+ C/e1SD9At+pB4f04mSGvpQui1WuaofZ+BHAxek5oRzMozDtD+tqbaLD
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-With the upcoming addition of auxiliary clocks the clockid validation will
-become more complicated. Split it into a dedicated function to keep the
-code readable.
+This code is duplicated and with the introduction of auxiliary clocks will
+be duplicated even more.
+
+Introduce a helper.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- lib/vdso/gettimeofday.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ lib/vdso/gettimeofday.c | 32 ++++++++++++++------------------
+ 1 file changed, 14 insertions(+), 18 deletions(-)
 
 diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index c5266532a097c06f33d12e345c695357d75abf42..215151bd5a1320ee6edda8f334d47c739577f696 100644
+index 215151bd5a1320ee6edda8f334d47c739577f696..50611ba28abfcfc7841616e8787101ea1ffcb7d8 100644
 --- a/lib/vdso/gettimeofday.c
 +++ b/lib/vdso/gettimeofday.c
-@@ -71,6 +71,12 @@ static inline bool vdso_cycles_ok(u64 cycles)
+@@ -77,6 +77,16 @@ static __always_inline bool vdso_clockid_valid(clockid_t clock)
+ 	return likely((u32) clock < MAX_CLOCKS);
  }
- #endif
  
-+static __always_inline bool vdso_clockid_valid(clockid_t clock)
++/*
++ * Must not be invoked within the sequence read section as a race inside
++ * that loop could result in __iter_div_u64_rem() being extremely slow.
++ */
++static __always_inline void vdso_set_timespec(struct __kernel_timespec *ts, u64 sec, u64 ns)
 +{
-+	/* Check for negative values or invalid clocks */
-+	return likely((u32) clock < MAX_CLOCKS);
++	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
++	ts->tv_nsec = ns;
 +}
 +
  #ifdef CONFIG_TIME_NS
  
  #ifdef CONFIG_GENERIC_VDSO_DATA_STORE
-@@ -268,8 +274,7 @@ __cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
- 	const struct vdso_clock *vc = vd->clock_data;
- 	u32 msk;
+@@ -122,12 +132,7 @@ bool do_hres_timens(const struct vdso_time_data *vdns, const struct vdso_clock *
+ 	sec += offs->sec;
+ 	ns += offs->nsec;
  
--	/* Check for negative values or invalid clocks */
--	if (unlikely((u32) clock >= MAX_CLOCKS))
-+	if (!vdso_clockid_valid(clock))
- 		return false;
+-	/*
+-	 * Do this outside the loop: a race inside the loop could result
+-	 * in __iter_div_u64_rem() being extremely slow.
+-	 */
+-	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+-	ts->tv_nsec = ns;
++	vdso_set_timespec(ts, sec, ns);
  
- 	/*
-@@ -405,8 +410,7 @@ bool __cvdso_clock_getres_common(const struct vdso_time_data *vd, clockid_t cloc
- 	u32 msk;
- 	u64 ns;
+ 	return true;
+ }
+@@ -188,12 +193,7 @@ bool do_hres(const struct vdso_time_data *vd, const struct vdso_clock *vc,
+ 		sec = vdso_ts->sec;
+ 	} while (unlikely(vdso_read_retry(vc, seq)));
  
--	/* Check for negative values or invalid clocks */
--	if (unlikely((u32) clock >= MAX_CLOCKS))
-+	if (!vdso_clockid_valid(clock))
- 		return false;
+-	/*
+-	 * Do this outside the loop: a race inside the loop could result
+-	 * in __iter_div_u64_rem() being extremely slow.
+-	 */
+-	ts->tv_sec = sec + __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+-	ts->tv_nsec = ns;
++	vdso_set_timespec(ts, sec, ns);
  
- 	if (IS_ENABLED(CONFIG_TIME_NS) &&
+ 	return true;
+ }
+@@ -223,12 +223,8 @@ bool do_coarse_timens(const struct vdso_time_data *vdns, const struct vdso_clock
+ 	sec += offs->sec;
+ 	nsec += offs->nsec;
+ 
+-	/*
+-	 * Do this outside the loop: a race inside the loop could result
+-	 * in __iter_div_u64_rem() being extremely slow.
+-	 */
+-	ts->tv_sec = sec + __iter_div_u64_rem(nsec, NSEC_PER_SEC, &nsec);
+-	ts->tv_nsec = nsec;
++	vdso_set_timespec(ts, sec, nsec);
++
+ 	return true;
+ }
+ #else
 
 -- 
 2.50.0
