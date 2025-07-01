@@ -1,133 +1,244 @@
-Return-Path: <linux-arch+bounces-12547-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12548-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 673FEAF02BF
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 20:21:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93202AF02D1
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 20:32:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FC9C3A8903
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 18:21:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EA7B3BFE72
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 18:31:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A56280303;
-	Tue,  1 Jul 2025 18:21:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C3923B618;
+	Tue,  1 Jul 2025 18:32:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mE9+G5p1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HPDuZfxz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0933527AC44
-	for <linux-arch@vger.kernel.org>; Tue,  1 Jul 2025 18:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF191386B4;
+	Tue,  1 Jul 2025 18:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751394111; cv=none; b=C7LMCg0vKRVrbRuNBXkr3oI6uMePONWwH61hVIAUJrLeUhIcQ4DNQWd3GfAxpBKKMIc8ks16Gi3+uf8uG2jYjTHEfKH8CE7sjC0ljif4pqe1mhFKNZqR5hRo0Hnv29hTWrSGFF4AbL9mWl/0qgDfWkpRdntQZP4DH+KX3xLnrug=
+	t=1751394740; cv=none; b=smmxfB0q2/ZMseKHsCIJmoU5SYEOhHMt2Pjdsn32ilrnmveeiIaKOiRL+OMzdyBDIWxvfs0vunLbpYOASnEvmjkpbKGdIkb0vTOuE1QJHumwS0Y0Dhiamn02iphnOMsUwfozsz8PYuHDNPeIyvBDDC16SVqfCLtRvohqObtOzC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751394111; c=relaxed/simple;
-	bh=/0iJBVR02jp37VuAafJ7AuWu4zYV4ay0z9SBj/41vLo=;
+	s=arc-20240116; t=1751394740; c=relaxed/simple;
+	bh=xOvQ4YveMJnngVcge4VPkxr/0JPaZcGRhNhGnGOPfxQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MTsL9A4dOLkiy55QBduJlN1xLPt+iuIZVrGPfqQSEoGiA0gevnEEeSdkScsqItsyr+zkF3vRaMK6azUab49zRwiAguJatkI0nXcgyUdKAOso9OxfISYL8lOBRGjRfI3VE/JSO/IC9d4QkNTBUNxYztHC6HO4mrh4OaJRbZ8xRUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mE9+G5p1; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7490702fc7cso4376201b3a.1
-        for <linux-arch@vger.kernel.org>; Tue, 01 Jul 2025 11:21:49 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BosOrC16T4bRBPGgG4uOyuf1wT2nzizMKneW0OvgvozZcEdIxWZT9EL5+5AcIMG7FpTF8WtLZPeIBM3Rm0+QDikwIu1/UaypT9XPMCrkJ9N62gX4PT8BFz3iwAunw7onTIaM0Z90g2Qf2+W9prHfiS9qkaIBelWxyRZpNJoNQ2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HPDuZfxz; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-747fc7506d4so3317455b3a.0;
+        Tue, 01 Jul 2025 11:32:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751394109; x=1751998909; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5QHb5QMnCyf1ixMGPEq1YYVlFE4mdK/TuEdnUZ7pL8k=;
-        b=mE9+G5p1V3qKpkKKo/MkHwQmLdwW5CbUu0EwpgarGgURXhTUBGiQ7QTNW4a6AkfFdl
-         /zsaLq+aG1182QuFEAVOCVgpVKfq1g/yDce2HlfZ+CQT/0CxGtvEh+HbPTSxxWFY2vyy
-         OO8hWkOUxKBp0pfsKYn0IQF6ZKFLcHHSGPx8XkC2qgFT95Ty4ZgkLEnyj1tOAliCIJDm
-         yGWa7PHiLnD4jT1zohGoIuvCFs6SbwPR5k+YYfAeo8yetwxG4Zy59JoZkadLteOT1bO8
-         NiToHN77IVQu+P2wz/MQCVCdB6I41lN3CPTniQbZuZ4nvay42Ml5HseMb77R4ZyoatkB
-         AZAQ==
+        d=gmail.com; s=20230601; t=1751394738; x=1751999538; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gY6mQVMmIl68dFLJH/SnrEytnvbgKUD06sOpURKt7zw=;
+        b=HPDuZfxzyl67Xlx1HYXvBLRyldjxv7+c9rbstyD0k/XAdNyyFNz3j4pNNf4LvHL6n+
+         u+MSaAAk8wEXisTC5t0P83v9OzXihxkNMD3L2XEG0yOvbWw+dZ+h4DUfg6wDad8I96nw
+         1S4X3uD8vUxkG4BthwHhr49wzEajY4COAmtkIiASflcCko42owU3BHLwfbe7eVTjpRCc
+         12l07JD+CE/wagYJOm2Rh/CTZd2LiH2g2Ambskeei3dmXARpiPefeCSYWSofsGLiBW17
+         FcBthPu0rxDBuisN4ETSMU432vfNIo7mzPKWCym3cg7Cu5xt0UvDy10ifcGqGpXa4dSV
+         oCyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751394109; x=1751998909;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5QHb5QMnCyf1ixMGPEq1YYVlFE4mdK/TuEdnUZ7pL8k=;
-        b=WOx2Qtn6/Hq/cyUufyra+5bhL3yYgkydBxTS+RYSRFAJS3GS+7eKhXbU4nkXFX8SX6
-         /jaJIPgIVlMgGUOWiUy6guAc5Zc7iqBky48V3krGLaDEkpjpsZJAmGSs0gYggE+8oAAq
-         PXTbhgFdexuFvu9Uk/s2fBmm38leGyXc8pgTVKvqXUA1MS2o9mGiU6+hASbDmXkJ2ZVx
-         qFAQwjOywijyULMANDVfv9ispMzKi4HGRSnKpY1xMWMExSRra7Uv70Z6KfGuz8Q2wtnf
-         1rZuzU3nKV8WaWZl36Pdp8cdnoSAch74QWmwmVzfAXz262M46F3uR1l7WCsOBKY/Fz4J
-         YW4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUBTwsygWp85WXi7p8EnwKWOL4v81ZfHb/jTQGljXNPy6St91E05Y3nvYwJh58+acvEj2vQ5/4HBcli@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwV8NCwSPrqHIkOVgmqketPGYodo7qC3ZEUAFr9H2982uZ0dKD
-	sB9vWymWOBO4KGBifipcSw1Vxa1UKk1l6zznxzOtwvaSpKwU1Qh+Y+nXc09V6mCEyQ==
-X-Gm-Gg: ASbGncuxVf/yb2zew8vxoRVm/BZJNOsMpkoi8CY+iWygQYTgcVIC9zssyEtY8b4i0zz
-	RElibA6Nzuo22zCdfCpKX3Zonh6NEFNRa+7/USRvixFxFxJoZJgiEtaxDiDPud7YEhDurY+B1lU
-	lbhIEBmtgxls9/3rVG4FJlhw258G2ETvoEVkAiS4PzdUCcUxkSLhiEZcnEw4bv1k6RDwByxeRYm
-	M50WQijKnd1h/+jNxLIzOWIPE9h/gRYX4Iztf9uc693WVBf2jaViVH72N2W5IvQN4y4H15kYz0b
-	pLgmC+9mLu08cSLI6aMDZDab5BGtN2ZKSW5ZMlM9hKMRrrTHHYsOPmRRnxvMUyB7yag4QZflKbj
-	3gJwX2yxUx+jWBD1H9jBnaNYNslw=
-X-Google-Smtp-Source: AGHT+IFT0hH3Zk3DfXjOeWqqGBpHUpAxwE5lOf7WjFh0UeT7y+ZsuOyfA7fRcSglkCBF0+s+7klyww==
-X-Received: by 2002:a05:6a00:464f:b0:740:b394:3ebd with SMTP id d2e1a72fcca58-74af6e791dfmr26589635b3a.7.1751394108946;
-        Tue, 01 Jul 2025 11:21:48 -0700 (PDT)
-Received: from google.com (96.41.145.34.bc.googleusercontent.com. [34.145.41.96])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af557460fsm13133161b3a.93.2025.07.01.11.21.48
+        d=1e100.net; s=20230601; t=1751394738; x=1751999538;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gY6mQVMmIl68dFLJH/SnrEytnvbgKUD06sOpURKt7zw=;
+        b=X0MOXh7DFdOEB34ohnTsJVkuFCRZtt/++yHC8h0hY7cDHlof5r+egEum5ZLirTFmn8
+         eL4jT7RKuxho9vAyGqyXL+Wn6lusl/zCky73MpVOdG6nMhKcnS+0wAIIfBd1r3Or4GNF
+         SWQxpSbfGZQmsBuNniwzuhTeLoBY+ocejGbNDTAsRFwIYuhbkmmVIHkljMI4o0Q8uujw
+         U5Kck1sk4QxhGqMqHlW/8216MApYknNkKDA9mqk5NQU5Solm0VlHYSlNUF9TVZ4JljL4
+         g1PoEXIpYzyDNxwzKW5d7Td9K49prJdZ4Frgc+Bge5r1Mi9dTnr7xNYkZIpt0leHGJdo
+         LmFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOuPyeYfJ+QssMi5gFB4gl99h6AW8XxRovHJCdYqCrxJZanzqwT7iSnpMhUED3NTl2RIXLt7XOWgwW@vger.kernel.org, AJvYcCXAgphjytQUcZd12Zo69JycbDcS7eqgbwyeADe0IYdycK5YUFICyoNQZGncgQ6VxASaO1WDH7YUEGNsQI0n@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhQ708wqseiN3YFAMkIO+1jT8/GOF1QOFGS8s2gysSDobUbGmE
+	33TsCy8prp7XBUHGQI79gTg98C/iurcRSKNlBv/ijGJnwjWycgnxV7lk
+X-Gm-Gg: ASbGncv5ZFyGhaw3gjFyxoEUyQsg1SZHTGVbPKjrWlvWAPpqZ1ak8IX+j1dP21D7Ur1
+	MVDVxiEvSFmj6xjYEBRqQfJcsNXfI/lJeRYwK1+B7qQisbTPivjN4PIWE/D5iHONFtRBtTVTFer
+	AggV78KP7CvtEeUrsPSYSPjOuvKy0B0s23PYltto3YGGBN3AmZWTJUYGxT6CT4jUl8QLtKZC3Vy
+	xL45d5toBn9DyDzuYOIaML6xjQ4XasfZaLLzZal4QKhD2CCXcm6IAemQ2pURFFGazQtUD+bPXTO
+	s7XrJLakFvuFLn3+1+gsxQ0iMiQCNfPrci32yYzbyVIRHkGYUUKZoNiQuVVk5Q==
+X-Google-Smtp-Source: AGHT+IFHLL7P1lYF9UPZci0RSTG7Y6C/qYNbKwFfO//TmNisiNGsH7HgHOhmAuCFzDwIfvPTkGQc5Q==
+X-Received: by 2002:a05:6a00:2e15:b0:732:2923:b70f with SMTP id d2e1a72fcca58-74af6f73b0emr24350576b3a.11.1751394737753;
+        Tue, 01 Jul 2025 11:32:17 -0700 (PDT)
+Received: from localhost ([216.228.127.130])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af55c6d49sm12327550b3a.119.2025.07.01.11.32.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jul 2025 11:21:48 -0700 (PDT)
-Date: Tue, 1 Jul 2025 11:21:44 -0700
-From: William McVicker <willmcvicker@google.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	Lorenzo Pieralisi <lorenzo.pieralisi@linaro.org>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Rob Herring <robh@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH RFC] timer: of: Create a platform_device before the
- framework is initialized
-Message-ID: <aGQnOMDyBckks78k@google.com>
-References: <20250625085715.889837-1-daniel.lezcano@linaro.org>
- <aGMjfxIvbCkyR5rw@google.com>
- <27644998-b089-44ae-ae5f-95f4d7cbe756@app.fastmail.com>
+        Tue, 01 Jul 2025 11:32:16 -0700 (PDT)
+Date: Tue, 1 Jul 2025 14:32:14 -0400
+From: Yury Norov <yury.norov@gmail.com>
+To: cp0613@linux.alibaba.com
+Cc: alex@ghiti.fr, aou@eecs.berkeley.edu, arnd@arndb.de,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux@rasmusvillemoes.dk,
+	palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH 2/2] bitops: rotate: Add riscv implementation using Zbb
+ extension
+Message-ID: <aGQprv3HTplw9r-q@yury>
+References: <aGLA78usaJOnpols@yury>
+ <20250701124737.687-1-cp0613@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <27644998-b089-44ae-ae5f-95f4d7cbe756@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250701124737.687-1-cp0613@linux.alibaba.com>
 
-On 07/01/2025, Arnd Bergmann wrote:
-> On Tue, Jul 1, 2025, at 01:53, William McVicker wrote:
-> >> @@ -1550,6 +1553,8 @@ typedef void (*of_init_fn_1)(struct device_node *);
-> >>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_1_ret)
-> >>  #define OF_DECLARE_2(table, name, compat, fn) \
-> >>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_2)
-> >> +#define OF_DECLARE_PDEV(table, name, compat, fn) \
-> >> +		_OF_DECLARE(table, name, compat, fn, of_init_fn_pdev)
-> >
-> > To support auto-module loading you'll need to also define the
-> > MODULE_DEVICE_TABLE() as part of TIMER_OF_DECLARE_PDEV().
-> >
-> > I haven't tested the patch yet, but aside from my comment above it LGTM.
+On Tue, Jul 01, 2025 at 08:47:01PM +0800, cp0613@linux.alibaba.com wrote:
+> On Mon, 30 Jun 2025 12:53:03 -0400, yury.norov@gmail.com wrote:
 > 
-> The patch doesn't actually have a module_platform_driver_probe()
-> yet either, so loading the module wouldn't actually do anything.
+> > > > 1. The most trivial compile-case is actually evaluated at compile time; and
+> > > > 2. Any arch-specific code is well explained; and
+> > > > 3. legacy case optimized just as well as non-legacy.
+> > > 
+> > > 1. As in the above reply, use the generic implementation when compile-time evaluation
+> > >    is possible。
+> > > 2. I will improve the comments later.
+> > 
+> > I'm particularly interested in ror8/rol8 case:
+> > 
+> >         u32 word32 = ((u32)word << 24) | ((u32)word << 16) | ((u32)word << 8) | word;
+> > 
+> > When you expand it to 32-bit word, and want to rotate, you obviously
+> > need to copy lower quarterword to the higher one:
+> > 
+> >         0xab >> 0xab0000ab
+> > 
+> > That way generic (u8)ror32(0xab, shift) would work. But I don't understand
+> > why you copy the lower 8 bits to inner quarterwords. Is that a hardware
+> > requirement? Can you point to any arch documentation 
+> > 
+> > > 3. As mentioned before, only 8-bit rotation should have no optimization effect, and
+> > >    16-bit and above will have significant optimization.
+> > 
+> > I asked you about the asm goto ("legacy") thing: you calculate that
+> > complex word32 _before_ evaluating the goto. So this word32 may get
+> > unused, and you waste cycles. I want to make sure this isn't the case.
+> 
+> Thank you for your suggestion and reminder. This is not a hardware requirement, but it
 
-Probing with TIMER_OF_DECLARE() just consists of running the match table's data
-function pointer. So that is covered by Daniel's patch AFAICT. However, it's
-not clear if this implementation allows you to load the kernel module after the
-device boots? For example, will the Exynos MCT timer probe if I load the
-exynos_mct driver after the device boots? My guess is you'd need to register
-the device as a platform device with a dedicated probe function to handle that.
+Sure. Please add
 
---Will
+Suggested-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
 
-<snip>
+> is somewhat related because the zbb instruction only supports word-sized rotate [1].
+> Considering the case where the shift is greater than 8, if the modulus of the shift is
+> not taken, it is required to continuously concatenate 8-bit data into 32 bits.
+> 
+> So, I considered the case of taking the remainder of shift and found that this
+> implementation would have one less instruction, so the final implementation is as follows:
+> ```
+> static inline u8 variable_rol8(u8 word, unsigned int shift)
+
+Now that it has assembler inlines, would it help to add the __pure
+qualifier?
+
+> {
+> 	u32 word32;
+> 
+> 	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+> 				      RISCV_ISA_EXT_ZBB, 1)
+> 			  : : : : legacy);
+> 
+> 	word32 = ((u32)word << 24) | word;
+> 	shift = shift % 8;
+
+        shift %= 8;
+
+> 
+> 	asm volatile(
+> 		".option push\n"
+> 		".option arch,+zbb\n"
+> 		"rolw %0, %1, %2\n"
+> 		".option pop\n"
+> 		: "=r" (word32) : "r" (word32), "r" (shift) :);
+> 
+> 	return (u8)word32;
+> 
+> legacy:
+> 	return generic_rol8(word, shift);
+> }
+> 
+> static inline u8 variable_ror8(u8 word, unsigned int shift)
+> {
+> 	u32 word32;
+> 
+> 	asm goto(ALTERNATIVE("j %l[legacy]", "nop", 0,
+> 				      RISCV_ISA_EXT_ZBB, 1)
+> 			  : : : : legacy);
+> 
+> 	word32 = ((u32)word << 8) | word;
+> 	shift = shift % 8;
+> 
+> 	asm volatile(
+> 		".option push\n"
+> 		".option arch,+zbb\n"
+> 		"rorw %0, %1, %2\n"
+> 		".option pop\n"
+> 		: "=r" (word32) : "r" (word32), "r" (shift) :);
+> 
+> 	return (u8)word32;
+> 
+> legacy:
+> 	return generic_ror8(word, shift);
+> }
+> ```
+
+OK, this looks better.
+
+> I compared the performance of ror8 (zbb optimized) and generic_ror8 on the XUANTIE C908
+> by looping them. ror8 is better, and the advantage of ror8 becomes more obvious as the
+> number of iterations increases. The test code is as follows:
+> ```
+> 	u8 word = 0x5a;
+> 	u32 shift = 9;
+> 	u32 i, loop = 100;
+> 	u8 ret1, ret2;
+> 
+> 	u64 t1 = ktime_get_ns();
+> 	for (i = 0; i < loop; i++) {
+> 		ret2 = generic_ror8(word, shift);
+> 	}
+> 	u64 t2 = ktime_get_ns();
+> 	for (i = 0; i < loop; i++) {
+> 		ret1 = ror8(word, shift);
+> 	}
+> 	u64 t3 = ktime_get_ns();
+> 
+> 	pr_info("t2-t1=%lld t3-t2=%lld\n", t2 - t1, t3 - t2);
+> ```
+
+Please do the following:
+
+1. Drop the generic_ror8() and keep only ror/l8()
+2. Add ror/l16, 34 and 64 tests.
+3. Adjust the 'loop' so that each subtest will take 1-10 ms on your hw.
+4. Name the function like test_rorl(), and put it next to the test_fns()
+   in lib/test_bitops.c. Refer the 0a2c6664e56f0 for implementation.
+5. Prepend the series with the benchmark patch, just as with const-eval
+   one, and report before/after for your series. 
+
+> > Please find attached a test for compile-time ror/rol evaluation.
+> > Please consider prepending your series with it.
+> 
+> Okay, I'll bring it to the next series.
+
+Still waiting for bloat-o-meter results.
+
+Thanks,
+Yury
+
+> 
+> [1] https://github.com/riscv/riscv-bitmanip
 
