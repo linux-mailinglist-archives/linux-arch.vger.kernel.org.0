@@ -1,151 +1,109 @@
-Return-Path: <linux-arch+bounces-12525-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12526-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C112BAEF02E
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 09:54:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77F19AEF1C2
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 10:49:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA5CB189EBCF
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 07:54:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39B0A3B9004
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 08:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A26B1F428F;
-	Tue,  1 Jul 2025 07:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9631E26B773;
+	Tue,  1 Jul 2025 08:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fQvKWJVy";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VSKx4sNM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8GrpRus"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E51263F30;
-	Tue,  1 Jul 2025 07:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F8825E822;
+	Tue,  1 Jul 2025 08:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751356455; cv=none; b=orfvOII40x1UR6j4Fos2ilJl5Kev/yRYKBCOprquT+jpRQgxQmCHVrxiRN2cbVGI+i1X3A1wDEjbCemC1r7uK9AO7FSBWPk7dIVMn81uUDUkTEfF3UZ2DTBZOPvdSgGJMzcKIpHGroOph/zSi0idGyNu4GJfw6PjwcJea63S6Zw=
+	t=1751359773; cv=none; b=YuHpZ5A3U3F8VE1WBtx1HdZ1eH/bpV8wzD0qtKE1HPNUoKP9yHtpzIc9uxYI1Zk+SspIXExnnuXdt8ZshvIAv/rSo8cYtwnm7aWDkveiirZDKTB2tPFmnIIy+89lAz8KZHjSw9O7zKvcYWz1LFcv3ECJ6XZzV6X+EGSm4RR4fOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751356455; c=relaxed/simple;
-	bh=h+G1tTJ0bFf9zk0gY6dlDAUz1LYkXgQlPfSzWe/IUJg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=G2frK6YnRuIBl+9wthC6HWbrh3tvFuvcUi769AGFjiFZjdYKB2r82FbjxJ7lihj1j/851nASUEwF15OwgW187+9p1zknSL3oUB1l6GqR6W6zYc6N3J7sIkXt4O9qeNR7nqx/N/ZxTb2hCQD6VxC/qx49nCfNHRKtr1qtVH7jh6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fQvKWJVy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VSKx4sNM; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 4BB3CEC04B8;
-	Tue,  1 Jul 2025 03:54:11 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Tue, 01 Jul 2025 03:54:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1751356451;
-	 x=1751442851; bh=zYIM/y5KUb8LuLsTwnFRYfBitpCmTyytEVjI+bZcC+M=; b=
-	fQvKWJVy2F3XL9mrW/NsX/znHcPnnTFslnWBNBlOamy2LW4SuQaEyFVZxZP0TPGL
-	h24EJEbr2R0HrUPO6hUYxeDCUpwbWANk3gaCg3BndYUyUY3fPMm/kt3lyQQbsY5B
-	Qgffs2amWH6K5UtF9OGJo8DsHytlaLgajonYKqzKvEYBzr5MKTy2/d1fS1Rv1hjN
-	Tqrlxr8Pjl/EYxhzvJ6LY64woUgvSJlZmckvcn7146lOs3CA/otzxs/21jlY6Knr
-	nFjmawuOv9oNUD28wJFbb2zGfCayZDb8lUWzo0pXx/kjfYnTb7ySCL5x+TgnZcvE
-	oFuGYjWsu0/XCzgXZfhXrg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751356451; x=
-	1751442851; bh=zYIM/y5KUb8LuLsTwnFRYfBitpCmTyytEVjI+bZcC+M=; b=V
-	SKx4sNM2UGFbEnljcl6Y58fity3E1hqrLS2cdYU50g5m1XH+4Gy2iI0xOiyY64Pm
-	l37XCLysJd9arB8gs9uTuZrDirMv+maPlHY4Q7hOrHvDhRUJjHmLcPE0kY7/vniy
-	4Cgbh6PwaCafaGgMKkjIXRPbi1NreRcRoQ7JkJqVt6bW06luGBghN0V8K3F9v8p1
-	b5CNYMY6UKasWTV+D8qEyjvgmPVHpKZJo6YAH6rQLa1CqxwF6T8tM+hLv27Jhhmc
-	ZI23FoaPD8LEUFm8/AW8NydgIgKjIkbZDvIzY34cyVZvN+tyCoL72tXbFrUV5FqV
-	mpolCCIdrGzm8RbS64b9g==
-X-ME-Sender: <xms:I5RjaE9borZee998x-h_5WVKHMNTHkps3VnUh9PTj4kTa4i1KK1TWA>
-    <xme:I5RjaMv285eOopSFmrNL2zt94807nqhXbs6RCRnSBPqIQpdxGpCQlqnQfCgLVRlIe
-    sn4BocR7nYIyWkiZHU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugedtvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeduhedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepjhhsthhulhhtiiesghhoohhglhgvrdgtohhmpdhrtghpthhtohepsh
-    grrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepfihilhhlmhgtvhhi
-    tghkvghrsehgohhoghhlvgdrtghomhdprhgtphhtthhopehhrghnshhgsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    shgsohihugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghrhigrnhdrohguohhnoh
-    hghhhuvgeslhhinhgrrhhordhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggr
-    nhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlohhrvghniihordhpihgvrhgrlh
-    hishhisehlihhnrghrohdrohhrgh
-X-ME-Proxy: <xmx:I5RjaKDOHmfxwDXqz6reR74Lp2qNwZ0tnhwyINVohVBmr3SxDc0-Qw>
-    <xmx:I5RjaEcmJRYHeoPYaMv99I6yPTutVSAhzTydwxd7tM6iGaMNlBxwlQ>
-    <xmx:I5RjaJPa7OXiI8J-zZyOCzVZIr5DGUEDP2FNQM4KzV01AWhDT6QhKA>
-    <xmx:I5RjaOm-oywwV26M2wEaJUVCX7K6ffXR310n0WndyUn81ud1BsCbDw>
-    <xmx:I5RjaFXfvouvH1YOkUeI79muLG8uoWNYvYRRg5Uvn_zAB9nuADwzfmRR>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 05E2B700063; Tue,  1 Jul 2025 03:54:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1751359773; c=relaxed/simple;
+	bh=DTtwMeNSk7OR8vbqD2nzw+mY8T/ya1c5lm8S+YPkjKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d+LgFCKQ4yet0SUYwDPEZ/KMCSM4gUQlADZfa5WthwT2PVxEmcAFfcfYiG/jL7SYek52Bj4zZhdcFdUwjhuOD75AYd+ArmVXEtnRJa8cYK8cR9/hZVRhaRh+RtNo9Th3ubpgcxPlNdjsMFUga358/ORaxgxe8rGDzpqVOxg/md4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H8GrpRus; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2174BC4CEEE;
+	Tue,  1 Jul 2025 08:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751359773;
+	bh=DTtwMeNSk7OR8vbqD2nzw+mY8T/ya1c5lm8S+YPkjKo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H8GrpRushY1OUKMgqTnLNTmT4RQ56pC9/ESJuqTHilLlFReoQzDzLcYiZotEOWx2p
+	 nZuM81/AbA4802SnyFb6dgt7wn7goa7z3Lv6faHrIN23/g6CCQ/9t2PWO1awd/Lb8p
+	 QQY1Q2hxI/XKIPgMXVWl8rnmoq0f9/TyNWEb1+zf+ACL3X4TM/9Qf2NrsmHQfOLOQ/
+	 qPgvtnid+rOnITv0umSFn2FxE4+vDOstmuouUUNoLd3UwQoxuIDQ9RFbrDYZii1zr0
+	 x+qbWJL4evGlCddzO2n2Xdfa1OVedhAQRaez0iadUajIpn5cDdn65TNLX3WJFABCTd
+	 /nQgQVBfCWMfQ==
+Date: Tue, 1 Jul 2025 10:49:27 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-sh@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>, 
+	Simon Schuster <schuster.simon+binutils@siemens-energy.com>, Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: kernel/fork.c:3088:2: warning: clone3() entry point is missing,
+ please fix
+Message-ID: <20250701-packung-zweifach-49a0189a1dea@brauner>
+References: <202506282120.6vRwodm3-lkp@intel.com>
+ <2ef5bc91-f56d-4c76-b12e-2797999cba72@app.fastmail.com>
+ <57101e901013a8e6ff44e10c93d1689490c714bf.camel@physik.fu-berlin.de>
+ <46c6b0f6-6155-4366-9cbf-9fbbfb95ce30@app.fastmail.com>
+ <5375b5bb7221cf878d1f93e60e72807f66e26154.camel@physik.fu-berlin.de>
+ <ccf937cb-a139-4a07-aa47-4006b880b025@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T1067a3d3a42d0b8a
-Date: Tue, 01 Jul 2025 09:52:45 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "William McVicker" <willmcvicker@google.com>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org,
- "Lorenzo Pieralisi" <lorenzo.pieralisi@linaro.org>,
- "Hans de Goede" <hansg@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
- "Rob Herring" <robh@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
- "John Stultz" <jstultz@google.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "Saravana Kannan" <saravanak@google.com>,
- Linux-Arch <linux-arch@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" <devicetree@vger.kernel.org>
-Message-Id: <27644998-b089-44ae-ae5f-95f4d7cbe756@app.fastmail.com>
-In-Reply-To: <aGMjfxIvbCkyR5rw@google.com>
-References: <20250625085715.889837-1-daniel.lezcano@linaro.org>
- <aGMjfxIvbCkyR5rw@google.com>
-Subject: Re: [PATCH RFC] timer: of: Create a platform_device before the framework is
- initialized
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ccf937cb-a139-4a07-aa47-4006b880b025@app.fastmail.com>
 
-On Tue, Jul 1, 2025, at 01:53, William McVicker wrote:
->> @@ -1550,6 +1553,8 @@ typedef void (*of_init_fn_1)(struct device_node *);
->>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_1_ret)
->>  #define OF_DECLARE_2(table, name, compat, fn) \
->>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_2)
->> +#define OF_DECLARE_PDEV(table, name, compat, fn) \
->> +		_OF_DECLARE(table, name, compat, fn, of_init_fn_pdev)
->
-> To support auto-module loading you'll need to also define the
-> MODULE_DEVICE_TABLE() as part of TIMER_OF_DECLARE_PDEV().
->
-> I haven't tested the patch yet, but aside from my comment above it LGTM.
+On Mon, Jun 30, 2025 at 02:07:58PM +0200, Arnd Bergmann wrote:
+> On Mon, Jun 30, 2025, at 12:45, John Paul Adrian Glaubitz wrote:
+> > On Mon, 2025-06-30 at 12:02 +0200, Arnd Bergmann wrote:
+> >> Some architectures have custom calling conventions for the
+> >> fork/vfork/clone/clone3 syscalls, e.g. to handle copying all the
+> >> registers correctly when the normal syscall entry doesn't do that,
+> >> or to handle the changing stack correctly.
+> >> 
+> >> I see that both sparc and hexagon have a custom clone() syscall,
+> >> so they likely need a custom clone3() as well, while sh and
+> >> nios2 probably don't.
+> >> 
+> >> All four would need a custom assembler implementation in userspace
+> >> for each libc, in order to test the userspace calling the clone3()
+> >> function. For testing the kernel entry point itself, see Christian's
+> >> original test case[1].
+> >
+> > Thanks for the explanation. So, I guess as long as a proposed implementation
+> > of clone3() on sh would pass Arnd's test program, it should be good for merging?
+> 
+> Yes, Christian's test program should be enough for merging into
+> the kernel, though I would recommend also coming up with the matching
+> glibc patch, in order to ensure it can actually be regression tested
+> automatically, and to use the new features provided by glibc clone3().
 
-The patch doesn't actually have a module_platform_driver_probe()
-yet either, so loading the module wouldn't actually do anything.
+Note that we do have clone3() selftests in the kernel:
 
-I feel that this RFC by itself a good step in the direction we want, 
-so Daniel should go ahead with prototyping the next two steps:
-adding the platform_driver registration into OF_DECLARE_PDEV,
-and converting a driver so it can be used either with the _OF_DECLARE()
-or the platform_driver case.
-
-Regarding the sh_early_platform_driver code that Rob mentioned,
-I think this one is already better since it doesn't duplicate
-parts of the platform_driver framework and it interfaces with
-device tree based probing.
-
-     Arnd
+> ls -al tools/testing/selftests/clone3/
+total 48
+drwxrwxr-x   2 brauner brauner   175 Jun  4 22:45 .
+drwxrwxr-x 118 brauner brauner  4096 Jun 16 10:10 ..
+-rw-rw-r--   1 brauner brauner  7377 Apr 15 10:47 clone3.c
+-rw-rw-r--   1 brauner brauner  3939 May 13 12:23 clone3_cap_checkpoint_restore.c
+-rw-rw-r--   1 brauner brauner  2512 Apr 15 10:47 clone3_clear_sighand.c
+-rw-rw-r--   1 brauner brauner  1437 Jun  4 22:45 clone3_selftests.h
+-rw-rw-r--   1 brauner brauner 10738 Apr 15 10:47 clone3_set_tid.c
+-rw-rw-r--   1 brauner brauner   113 Apr 11 15:36 .gitignore
+-rw-rw-r--   1 brauner brauner   206 Apr 15 10:47 Makefile
 
