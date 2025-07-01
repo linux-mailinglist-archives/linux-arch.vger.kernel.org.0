@@ -1,35 +1,35 @@
-Return-Path: <linux-arch+bounces-12529-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12530-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 935F4AEF213
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 10:59:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA8CCAEF218
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 10:59:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7DB917947F
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 08:59:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED2D418935DE
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 08:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB40426B2D8;
-	Tue,  1 Jul 2025 08:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B75526C395;
+	Tue,  1 Jul 2025 08:58:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Cvfq+ShZ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sgmfuKLl"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yHKwD2Q5";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="AuFZMdoz"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3364E269CE5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9695D26A08C;
 	Tue,  1 Jul 2025 08:58:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751360289; cv=none; b=pqhchpC/Hnuidc9FTle4bCGgLiAJUyurHy6A3oRzIceBxh+x27RzGu5A7LhcxEZzs3waesG2ujtxClzSsUF80fKa67pD0KTl897yIJZ9bOJLXN9siaWyvvhyw6wyDgDdjDvqNK46st8+IJBFVgkqW/gcK+X0lJrabKcjZ1ADpdg=
+	t=1751360290; cv=none; b=sCFkIyBzxNLRIcY7Sq3hxu3ix5ydQGpm0Ujw5S7CREXUqpUMbHgl/h2Uqv8Ru5znGQmfdbl1J1IgEjfQrfO5LwIIxuOU/eoQxQs3aNgbiSoXYqUVLr9qerdVXG0Zl3CJWnDZgq2/ruDgyw9JIdLhpPkdVgLlZyAKpIGWJsPKfAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751360289; c=relaxed/simple;
-	bh=O+pdqhovJ5sCWr6cbVQYxtHMRmPHnT/rOYl0Ec66rdg=;
+	s=arc-20240116; t=1751360290; c=relaxed/simple;
+	bh=7aTgq0KSjM6EGaXtNhSs9nQlKXik5A0X/dUKdIChsT0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ag5fVhsu+aVFOHA1oYpyLDuoIEkgFpDSwOLYflO8N2HN0OROgn09BYkYbibARkODwCUktEbHX703HPc6zBf2wNBlsLKprlAOvr1wH9XOggt9GWFST6CoxJkrcVwC5xz5KS3MuRkeuM2YhOqs8Og70ve++rpXMe3Rxy9wIXGvyyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Cvfq+ShZ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sgmfuKLl; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=qBpcUNKvwP8mZFbiUFMOfqrNjJPJm6Q1H9tfDLj5+lp5LojLWq/JTzBeHZqvTkPi3MusiBNh1vQeplwIGrkkS+SEbJCl+GFHd0wGJBFjeECHpxEeYVutqBe0GQVBBN/Ra1Qk1Kd0dFHE1vJGhYHD6V8D35mwG1Dz6bDq0hVFZnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yHKwD2Q5; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=AuFZMdoz; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,24 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6zypL7Z/iJT9pt/jkPKsLbW/urAL7A4U3k+sv3E7jTg=;
-	b=Cvfq+ShZBlRpqLEBOnn8FpMD0gK9w7CyXjIFIZyjrEoM5IoNGvRbep0gq3pyn8BIui/Kxk
-	A2ViNmKpkZH3NAdGzCMMSnEmMhFfJ7Duypk+z7Ll3zCgk+TAscf2ipjjyetPBEQXzSBbC+
-	080IcZD8bWfUkplxeUn94zbQD8NxbmiybQ5LND26COt6UwpdzUostFo8qh30YjPMwhRgKz
-	5V3+YoJ5WGXZnEhhocJjZ7gokZtoaqaU9m0iwvEHUGkqKJ2qY99XWY0Wdjb+Bhml8q+g9J
-	GhWElpAyu+wNRJ40rjxUxuo2hMiFJ4JDrZ8bg7wScZFxRqtQnamLnOpobO9X0g==
+	bh=z+04s1T3yXqZrrf3aK3nXtq7h92lG6xtvLkzD/OirFg=;
+	b=yHKwD2Q5pHM3DAgZXj244Xh5OLAiiOnolD2S6MvXgxek2cL49J3kEGXFMBeYnVwMjx2sqS
+	33DUSS9tBcITt0bjfFYgqmKnhlNrnwH1m5oQAtDE9JLICsHFsRdJXnsAhzaLXdUVA9e7ho
+	/Af4JFo4ZfqQBpfnBjBdXJk5CzetI9Mi9rJomFbdbBjucV5OObAQC3DGQJMI8YoMr6xKRs
+	6gV71fi7QVahC5ZFwPhf8vhMooaJMDfhBdG2V2rAPLurOX6x0VqAeOUbe68V6YqifvzBom
+	irSv4Rt84flYLCHMQWsQc0ZKkVOJrcfFZ/GjVfNqcaDe/X2/Vj6NdNtrarukqQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1751360286;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6zypL7Z/iJT9pt/jkPKsLbW/urAL7A4U3k+sv3E7jTg=;
-	b=sgmfuKLl97WFPgJQ2Cl1kAqQzhUmEQJC6TCmpkh3zY+DwrRRPYl9zbjgCqmJcyT/Wiqf4S
-	jPoLsppETFf6eeBg==
-Date: Tue, 01 Jul 2025 10:57:56 +0200
-Subject: [PATCH 02/14] vdso/vsyscall: Introduce a helper to fill clock
- configurations
+	bh=z+04s1T3yXqZrrf3aK3nXtq7h92lG6xtvLkzD/OirFg=;
+	b=AuFZMdozwhxxl4czhHsrAJjfJ6FrL8qsqQQWXGRVIwh1aHSCVfgD9N2IxH9pBDeor0f1os
+	H3cU/qtRD96lhRAQ==
+Date: Tue, 01 Jul 2025 10:57:57 +0200
+Subject: [PATCH 03/14] vdso/vsyscall: Split up __arch_update_vsyscall()
+ into __arch_update_vdso_clock()
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250701-vdso-auxclock-v1-2-df7d9f87b9b8@linutronix.de>
+Message-Id: <20250701-vdso-auxclock-v1-3-df7d9f87b9b8@linutronix.de>
 References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
 In-Reply-To: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -87,68 +87,80 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Kurt Kanzenbach <kurt@linutronix.de>, Nam Cao <namcao@linutronix.de>, 
  Antoine Tenart <atenart@kernel.org>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751360285; l=2069;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751360285; l=2862;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=O+pdqhovJ5sCWr6cbVQYxtHMRmPHnT/rOYl0Ec66rdg=;
- b=p8vqvlzZbfPJuNB7hzPJj8dga3B+cwPmwh+UN2KNgYAAY1i/FYSqtwEPROhvYlPu5RH0FZzN+
- FzVHcGeNczjCyKAn7W8w6ERqHRSTH7MY5nl/wpUomcMyoG9AGWRKpyy
+ bh=7aTgq0KSjM6EGaXtNhSs9nQlKXik5A0X/dUKdIChsT0=;
+ b=5+hqp1gTVgnk3Y+ZA8yf+WT55NlfCoI2CtKaCxxJB92agsCM4gnSJpWL0J1ICnFCSb6eFEGuc
+ CTULiQ+9dTBBGkm84WQcYFGeX83ew8QQHoSPXfu1uq4UoUqki8d8Peh
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The logic to configure a 'struct vdso_clock' from a
-'struct tk_read_base' is copied two times.
-Split it into a shared function to reduce the duplication,
-especially as another user will be added for auxiliary clocks.
+The upcoming auxiliary clocks need this hook, too.
+To separate the architecture hooks from the timekeeper internals, refactor
+the hook to only operate on a single vDSO clock.
+
+While at it, use a more robust #define for the hook override.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- kernel/time/vsyscall.c | 27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+ arch/arm64/include/asm/vdso/vsyscall.h | 7 +++----
+ include/asm-generic/vdso/vsyscall.h    | 6 +++---
+ kernel/time/vsyscall.c                 | 3 ++-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
+diff --git a/arch/arm64/include/asm/vdso/vsyscall.h b/arch/arm64/include/asm/vdso/vsyscall.h
+index de58951b8df6a4bb9afd411878793c79c30adbf2..417aae5763a86f39acffe1e6f96cb0e57212d04b 100644
+--- a/arch/arm64/include/asm/vdso/vsyscall.h
++++ b/arch/arm64/include/asm/vdso/vsyscall.h
+@@ -13,12 +13,11 @@
+  * Update the vDSO data page to keep in sync with kernel timekeeping.
+  */
+ static __always_inline
+-void __arm64_update_vsyscall(struct vdso_time_data *vdata)
++void __arch_update_vdso_clock(struct vdso_clock *vc)
+ {
+-	vdata->clock_data[CS_HRES_COARSE].mask	= VDSO_PRECISION_MASK;
+-	vdata->clock_data[CS_RAW].mask		= VDSO_PRECISION_MASK;
++	vc->mask	= VDSO_PRECISION_MASK;
+ }
+-#define __arch_update_vsyscall __arm64_update_vsyscall
++#define __arch_update_vdso_clock __arch_update_vdso_clock
+ 
+ /* The asm-generic header needs to be included after the definitions above */
+ #include <asm-generic/vdso/vsyscall.h>
+diff --git a/include/asm-generic/vdso/vsyscall.h b/include/asm-generic/vdso/vsyscall.h
+index b550afa15ecd101d821f51ce9105903978dced40..7fc0b560007dd8f09a2f24ace76ce68579ad17c1 100644
+--- a/include/asm-generic/vdso/vsyscall.h
++++ b/include/asm-generic/vdso/vsyscall.h
+@@ -22,11 +22,11 @@ static __always_inline const struct vdso_rng_data *__arch_get_vdso_u_rng_data(vo
+ 
+ #endif /* CONFIG_GENERIC_VDSO_DATA_STORE */
+ 
+-#ifndef __arch_update_vsyscall
+-static __always_inline void __arch_update_vsyscall(struct vdso_time_data *vdata)
++#ifndef __arch_update_vdso_clock
++static __always_inline void __arch_update_vdso_clock(struct vdso_clock *vc)
+ {
+ }
+-#endif /* __arch_update_vsyscall */
++#endif /* __arch_update_vdso_clock */
+ 
+ #ifndef __arch_sync_vdso_time_data
+ static __always_inline void __arch_sync_vdso_time_data(struct vdso_time_data *vdata)
 diff --git a/kernel/time/vsyscall.c b/kernel/time/vsyscall.c
-index 32ef27c71b57aaa4ed898c0dbfdefcb73b8ff56a..d655df2597336f7305bfc74e2a87c651f314267b 100644
+index d655df2597336f7305bfc74e2a87c651f314267b..df6bada2d58ed9a03e5dd3cb4b218983089a2877 100644
 --- a/kernel/time/vsyscall.c
 +++ b/kernel/time/vsyscall.c
-@@ -15,26 +15,25 @@
+@@ -118,7 +118,8 @@ void update_vsyscall(struct timekeeper *tk)
+ 	if (clock_mode != VDSO_CLOCKMODE_NONE)
+ 		update_vdso_time_data(vdata, tk);
  
- #include "timekeeping_internal.h"
+-	__arch_update_vsyscall(vdata);
++	__arch_update_vdso_clock(&vc[CS_HRES_COARSE]);
++	__arch_update_vdso_clock(&vc[CS_RAW]);
  
-+static inline void fill_clock_configuration(struct vdso_clock *vc, const struct tk_read_base *base)
-+{
-+	vc->cycle_last	= base->cycle_last;
-+#ifdef CONFIG_GENERIC_VDSO_OVERFLOW_PROTECT
-+	vc->max_cycles	= base->clock->max_cycles;
-+#endif
-+	vc->mask	= base->mask;
-+	vc->mult	= base->mult;
-+	vc->shift	= base->shift;
-+}
-+
- static inline void update_vdso_time_data(struct vdso_time_data *vdata, struct timekeeper *tk)
- {
- 	struct vdso_clock *vc = vdata->clock_data;
- 	struct vdso_timestamp *vdso_ts;
- 	u64 nsec, sec;
+ 	vdso_write_end(vdata);
  
--	vc[CS_HRES_COARSE].cycle_last	= tk->tkr_mono.cycle_last;
--#ifdef CONFIG_GENERIC_VDSO_OVERFLOW_PROTECT
--	vc[CS_HRES_COARSE].max_cycles	= tk->tkr_mono.clock->max_cycles;
--#endif
--	vc[CS_HRES_COARSE].mask		= tk->tkr_mono.mask;
--	vc[CS_HRES_COARSE].mult		= tk->tkr_mono.mult;
--	vc[CS_HRES_COARSE].shift	= tk->tkr_mono.shift;
--	vc[CS_RAW].cycle_last		= tk->tkr_raw.cycle_last;
--#ifdef CONFIG_GENERIC_VDSO_OVERFLOW_PROTECT
--	vc[CS_RAW].max_cycles		= tk->tkr_raw.clock->max_cycles;
--#endif
--	vc[CS_RAW].mask			= tk->tkr_raw.mask;
--	vc[CS_RAW].mult			= tk->tkr_raw.mult;
--	vc[CS_RAW].shift		= tk->tkr_raw.shift;
-+	fill_clock_configuration(&vc[CS_HRES_COARSE],	&tk->tkr_mono);
-+	fill_clock_configuration(&vc[CS_RAW],		&tk->tkr_raw);
- 
- 	/* CLOCK_MONOTONIC */
- 	vdso_ts		= &vc[CS_HRES_COARSE].basetime[CLOCK_MONOTONIC];
 
 -- 
 2.50.0
