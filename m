@@ -1,63 +1,107 @@
-Return-Path: <linux-arch+bounces-12544-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12545-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 021DFAEF99D
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 15:04:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4647AEFB4B
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 15:56:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 058A34466FB
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 13:02:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD5327A630C
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Jul 2025 13:55:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC752749E1;
-	Tue,  1 Jul 2025 13:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="LsziNonm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EACC2275B1E;
+	Tue,  1 Jul 2025 13:56:36 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0340D14A60C;
-	Tue,  1 Jul 2025 13:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A017275B15;
+	Tue,  1 Jul 2025 13:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751374936; cv=none; b=Y/FZqAEnH5RsXGx5HifknNSYlNcRC4Iaj8qNuiQquBKuQ08BJWzRUtg2J1B73xevADruzJ8AX+sZQmz5Oc/mNqVeM27iLun//eDs3zb2SUy5LIJWERKK3mnlaxB/Kb8+oYxXvUzoPLdMqzsKNAqtzKyorKUPECBYcmKEq8CpA5A=
+	t=1751378196; cv=none; b=rbbe1W1yp4U1FG980YMDJI4llXN5Mfx+Ay7WfQVF7eK5vewN+oJ2hfidjF8FU0C+fDLHH4j3/ekssClsQzTpvxBWqybtTYdge259i7lfKgoUUWmExkP4L+Q4Pd6TSfb+goyDUgI2EbwgU9Kt3q7uOX8XOM+45BCSpk6b9T8Hvn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751374936; c=relaxed/simple;
-	bh=/MElPujMYO4YKGVegoRk4j5UOBm6/EvudL5Mm9Ww77I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S3GBS2a8N5Uur/F6mQS0CvRotVZ6vyVyduBkmwwku6vM751OJnlrdUGa9J87OPQ7t/77WBr98YXDYIyiyAWYviXkuR2meEY8R7Q1S+SjkyCBZ8NN4nUSt8kiYW6XfqqbIY+bvulaAtV1f7XLVXkkI7zBGzJHxIhNQL8F026Zq90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=LsziNonm; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1751374925; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=wQkIck5POixK9EE+T2WkLOuw56coDGeHxNs8KT6qVBc=;
-	b=LsziNonmopB9V0ipGXDBk9S2/y5wp7AdSPnI27qf7gIHoZuhmmnbjyAVQbzPNQCL0m1iuClvS5BVcCbYJqIFCl5Bj7uaXmiKEYrgJtVVEIf8Mw/mdHD+wpvn629TMoGtPoixhhDTFHXrJaFtUNG2t2Ip9mS+y54XtAVlK6GHSm4=
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0WgR.XGA_1751374918 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 01 Jul 2025 21:02:04 +0800
-From: cp0613@linux.alibaba.com
-To: david.laight.linux@gmail.com
-Cc: alex@ghiti.fr,
-	aou@eecs.berkeley.edu,
-	arnd@arndb.de,
-	cp0613@linux.alibaba.com,
+	s=arc-20240116; t=1751378196; c=relaxed/simple;
+	bh=OjzN30GIiPcplOAaeYUjDuVVavt00lwj5wf5fyxHSgE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hCjUhNlpOp+5G4Rpsg+7XNo5V/3hT+jckl75ilm5IAE0bnRT5YWFbJ3aDM/DZbtgoz9PX6H7l9qLde/feC2Vn+Gs0eWh9yxVvbIhA8qj2e4sRPzMg3vqqxkJH7Zxucpd29VXOA3QRgZEkKtDG3QyhM/wwtudzCIfr7u80kcaHIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E7141713;
+	Tue,  1 Jul 2025 06:56:18 -0700 (PDT)
+Received: from e133380.cambridge.arm.com (e133380.arm.com [10.1.197.52])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE12C3F58B;
+	Tue,  1 Jul 2025 06:56:23 -0700 (PDT)
+From: Dave Martin <Dave.Martin@arm.com>
+To: linux-kernel@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Akihiko Odaki <akihiko.odaki@daynix.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Chris Zankel <chris@zankel.net>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonas Bonn <jonas@southpole.se>,
+	Kees Cook <kees@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Rich Felker <dalias@libc.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Stafford Horne <shorne@gmail.com>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Will Deacon <will@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
 	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
-	linux@rasmusvillemoes.dk,
-	palmer@dabbelt.com,
-	paul.walmsley@sifive.com,
-	yury.norov@gmail.com
-Subject: Re: [PATCH 2/2] bitops: rotate: Add riscv implementation using Zbb extension
-Date: Tue,  1 Jul 2025 21:01:49 +0800
-Message-ID: <20250701130149.968-1-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250630183534.160b9823@pumpkin>
-References: <20250630183534.160b9823@pumpkin>
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH 00/23] binfmt_elf,arch/*: Use elf.h for coredump note names
+Date: Tue,  1 Jul 2025 14:55:53 +0100
+Message-Id: <20250701135616.29630-1-Dave.Martin@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -66,125 +110,144 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Mon, 30 Jun 2025 18:35:34 +0100, david.laight.linux@gmail.com wrote:
+This series aims to clean up an aspect of coredump generation:
 
-> > On Sun, 29 Jun 2025 11:38:40 +0100, david.laight.linux@gmail.com wrote:
-> > 
-> > > > It can be found that the zbb optimized implementation uses fewer instructions,
-> > > > even for 16-bit and 8-bit data.  
-> > > 
-> > > Far too many register spills to stack.
-> > > I think you've forgotten to specify -O2  
-> > 
-> > Yes, I extracted it from the vmlinux disassembly, without compiling with -O2, and
-> > I used the web tool you provided as follows:
-> > ```
-> > unsigned int generic_ror32(unsigned int word, unsigned int shift)
-> > {
-> > 	return (word >> (shift & 31)) | (word << ((-shift) & 31));
-> > }
-> > 
-> > unsigned int zbb_opt_ror32(unsigned int word, unsigned int shift)
-> > {
-> > #ifdef __riscv
-> > 	__asm__ volatile("nop"); // ALTERNATIVE(nop)
-> > 
-> > 	__asm__ volatile(
-> > 		".option push\n"
-> > 		".option arch,+zbb\n"
-> > 		"rorw %0, %1, %2\n"
-> > 		".option pop\n"
-> > 		: "=r" (word) : "r" (word), "r" (shift) :);
-> > #endif
-> > 	return word;
-> > }
-> > 
-> > unsigned short generic_ror16(unsigned short word, unsigned int shift)
-> > {
-> > 	return (word >> (shift & 15)) | (word << ((-shift) & 15));
-> > }
-> > 
-> > unsigned short zbb_opt_ror16(unsigned short word, unsigned int shift)
-> > {
-> > 	unsigned int word32 = ((unsigned int)word << 16) | word;
-> > #ifdef __riscv
-> > 	__asm__ volatile("nop"); // ALTERNATIVE(nop)
-> > 
-> > 	__asm__ volatile(
-> > 		".option push\n"
-> > 		".option arch,+zbb\n"
-> > 		"rorw %0, %1, %2\n"
-> > 		".option pop\n"
-> > 		: "=r" (word32) : "r" (word32), "r" (shift) :);
-> > #endif
-> > 	return (unsigned short)word;
-> > }
-> > ```
-> > The disassembly obtained is:
-> > ```
-> > generic_ror32:
-> >     andi    a1,a1,31
-> 
-> The compiler shouldn't be generating that mask.
-> After all it knows the negated value doesn't need the same mask.
-> (I'd guess the cpu just ignores the high bits of the shift - most do.)
-> 
-> >     negw    a5,a1
-> >     sllw    a5,a0,a5
-> >     srlw    a0,a0,a1
-> >     or      a0,a5,a0
-> >     ret
-> > 
-> > zbb_opt_ror32:
-> >     nop
-> >     rorw a0, a0, a1
-> >     sext.w  a0,a0
-> 
-> Is that a sign extend?
-> Why is it there?
-> If it is related to the (broken) 'feature' of riscv-64 that 32bit results
-> are sign extended, why isn't there one in the example above.
-> 
-> You also need to consider the code for non-zbb cpu.
-> 
-> >     ret
-> > 
-> > generic_ror16:
-> >     andi    a1,a1,15
-> >     negw    a5,a1
-> >     andi    a5,a5,15
-> >     sllw    a5,a0,a5
-> >     srlw    a0,a0,a1
-> >     or      a0,a0,a5
-> >     slli    a0,a0,48
-> >     srli    a0,a0,48
-> 
-> The last two instructions mask the result with 0xffff.
-> If that is necessary it is missing from the zbb version below.
-> 
-> >     ret
-> > 
-> > zbb_opt_ror16:
-> >     slliw   a5,a0,16
-> >     addw    a5,a5,a0
-> 
-> At this point you can just do a 'shift right' on all cpu.
-> For rol16 you can do a variable shift left and a 16 bit
-> shift right on all cpu.
-> If the zbb version ends up with a nop (as below) then it is
-> likely to be much the same speed.
-> 
-> 	David
-> 
-> >     nop
-> >     rorw a5, a5, a1
-> >     ret
-> > ```
+ELF coredumps contain a set of notes describing the state of machine
+registers and other information about the dumped process.
 
-Sorry, please allow me to reply in a unified way. I did not check the rationality
-of the above assembly, but only used the web tool you provided before to generate
-it. In fact, I think it is more in line with the actual situation to disassemble
-it from vmlinux. In addition, the code is simplified here, and the complete
-implementation takes into account the processor that does not support or has not
-enabled zbb.
+Notes are identified by a numeric identifier n_type and a "name"
+string, although this terminology is somewhat misleading.  Officially,
+the "name" of a note is really an "originator" or namespace identifier
+that indicates how to interpret n_type [1], although in practice it is
+often used more loosely.
+
+Either way, each kind of note needs _both_ a specific "name" string and
+a specific n_type to identify it robustly.
+
+To centralise this knowledge in one place and avoid the need for ad-hoc
+code to guess the correct name for a given note, commit 7da8e4ad4df0
+("elf: Define note name macros") [2] added an explicit NN_<foo> #define
+in elf.h to give the name corresponding to each named note type
+NT_<foo>.
+
+Now that the note name for each note is specified explicitly, the
+remaining guesswork for determining the note name for common and
+arch-specific regsets in ELF core dumps can be eliminated.
+
+This series aims to do just that:
+
+ * Patch 2 adds a user_regset field to specify the note name, and a
+   helper macro to populate it correctly alongside the note type.
+
+ * Patch 3 ports away the ad-hoc note names in the common coredump
+   code.
+
+ * Patches 4-22 make the arch-specific changes.  (This is pretty
+   mechanical for most arches.)
+
+ * The final patch adds a WARN() when no note name is specified,
+   and simplifies the fallback guess.  This should only be applied
+   when all arches have ported across.
+
+See the individual patches for details.
+
+
+Testing:
+
+ * x86, arm64: Booted in a VM and triggered a core dump with no WARN(),
+   and verified that the dumped notes are the same.
+
+ * arm: Build-tested only (for now).
+
+ * Other arches: not tested yet
+
+Any help with testing is appreciated.  If the following generates the
+same notes (as dumped by readelf -n core) and doesn't trigger a WARN,
+then we are probably good.
+
+$ sleep 60 &
+$ kill -QUIT $!
+
+(Register content might differ between runs, but it should be safe to
+ignore that -- this series only deals with the note names and types.)
+
+Cheers
+---Dave
+
+
+[1] System V Application Binary Interface, Edition 4.1,
+Section 5 (Program Loading and Dynamic Linking) -> "Note Section"
+
+https://refspecs.linuxfoundation.org/elf/gabi41.pdf
+
+[2] elf: Define note name macros
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/uapi/linux/elf.h?id=7da8e4ad4df0dd12f37357af62ce1b63e75ae2e6
+
+
+Dave Martin (23):
+  regset: Fix kerneldoc for struct regset_get() in user_regset
+  regset: Add explicit core note name in struct user_regset
+  binfmt_elf: Dump non-arch notes with strictly matching name and type
+  ARC: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  ARM: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  arm64: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  csky: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  hexagon: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  LoongArch: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  m68k: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  MIPS: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  nios2: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  openrisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  parisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  powerpc/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  riscv: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  s390/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  sh: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  sparc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  x86/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  um: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+  xtensa: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+    names
+  binfmt_elf: Warn on missing or suspicious regset note names
+
+ arch/arc/kernel/ptrace.c                 |  4 +-
+ arch/arm/kernel/ptrace.c                 |  6 +-
+ arch/arm64/kernel/ptrace.c               | 52 ++++++++---------
+ arch/csky/kernel/ptrace.c                |  4 +-
+ arch/hexagon/kernel/ptrace.c             |  2 +-
+ arch/loongarch/kernel/ptrace.c           | 16 ++---
+ arch/m68k/kernel/ptrace.c                |  4 +-
+ arch/mips/kernel/ptrace.c                | 20 +++----
+ arch/nios2/kernel/ptrace.c               |  2 +-
+ arch/openrisc/kernel/ptrace.c            |  4 +-
+ arch/parisc/kernel/ptrace.c              |  8 +--
+ arch/powerpc/kernel/ptrace/ptrace-view.c | 74 ++++++++++++------------
+ arch/riscv/kernel/ptrace.c               | 12 ++--
+ arch/s390/kernel/ptrace.c                | 42 +++++++-------
+ arch/sh/kernel/ptrace_32.c               |  4 +-
+ arch/sparc/kernel/ptrace_32.c            |  4 +-
+ arch/sparc/kernel/ptrace_64.c            |  8 +--
+ arch/x86/kernel/ptrace.c                 | 22 +++----
+ arch/x86/um/ptrace.c                     | 10 ++--
+ arch/xtensa/kernel/ptrace.c              |  4 +-
+ fs/binfmt_elf.c                          | 36 +++++++-----
+ fs/binfmt_elf_fdpic.c                    | 17 +++---
+ include/linux/regset.h                   | 12 +++-
+ 23 files changed, 194 insertions(+), 173 deletions(-)
+
+
+base-commit: 86731a2a651e58953fc949573895f2fa6d456841
+-- 
+2.34.1
+
 
