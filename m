@@ -1,216 +1,130 @@
-Return-Path: <linux-arch+bounces-12578-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12579-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C97FAFA220
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Jul 2025 23:43:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48F24AFA774
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jul 2025 21:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5FC07B4C8B
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Jul 2025 21:42:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C1EC189A148
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jul 2025 19:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9B425B680;
-	Sat,  5 Jul 2025 21:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 409221B4236;
+	Sun,  6 Jul 2025 19:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCAKay3Z"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ouRlHTa4";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="08w8b11H"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD19E217709;
-	Sat,  5 Jul 2025 21:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DC8186A;
+	Sun,  6 Jul 2025 19:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751751805; cv=none; b=BBFGL4RGDhq2pm4CrlySY6DJnO2UayEDlo+lm+o4zs3aPFHwAwSPCNprINDeL/oZUeoUvnnrQ8NvBHycBz7trisQ+aEBU58RLXFSMtgX791qpfYNOJVODzoz9vQfdpMc+NZ0Z0YFEcVfJ1ii1rLY2UtfLEZov6v9msnCNEovGvc=
+	t=1751830274; cv=none; b=Qnh2BwXXAOcGSUdy5YcGfdV3DQQ85AhyPNT8884VBMN7X901jzBiJIWt53vlQCfqwRuXKUPSynWuEL7cFtj1WC2RaP92U72N4fdrkyUKkinisWanyBTNBTFRTAcMmzOIk8/g+OTG2RdUnVuy4RijsNIcmOnA3Xo7uhKPUWZZZsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751751805; c=relaxed/simple;
-	bh=8JEvEGM9sNm9zynsk/02xiiJGM43gFUDp52vEHIyfyo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=K5s8HG9fHgal+FHxOCDWGwgw/Sa4N4/YJtpnEMaqWAsWkwdJlbFIcumbcdAKm63pU4E5HJyAdF/JN82aSxN4d8T8YA6vDAZ31LNgqxK4qTZbZ4iq5N3dyWDWjSLaM4eRvm3UAPbuEKuDw/z2Hc4G78dWnh2tKT1ScCL9QN5cuQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZCAKay3Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30AEAC4CEE7;
-	Sat,  5 Jul 2025 21:43:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751751805;
-	bh=8JEvEGM9sNm9zynsk/02xiiJGM43gFUDp52vEHIyfyo=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=ZCAKay3ZSzt2NQCOhXdlOV5I+U5DxCLFKGodf/OXmgCuZAZioawqIau4IXWSAlLji
-	 amgn1Pr7KDHCA4+PTCpF8wmYGD57Be0vsHYViKLAzZ0oAeaOCIj7vt4ZQllomBy84/
-	 46Igzn8mg8VF6dMxxF/HyWYX6NBnzT0Y6dBGxXHjr4Wvx+DUyEgZrjTUxq4DSAh0Ld
-	 VVbKr7/eqfYBpcnt04K5aAgKeAok8u6lwgF6mf0WTuFxrOR2T7hN041mn4mbUWREgh
-	 WsqmhiPXipA+nmaW0LaK93107Ivoj16UafqLv+ApbQhf3OJwRSSN1wBQKO4+UVHAdH
-	 lUp+PNAs9mBxg==
+	s=arc-20240116; t=1751830274; c=relaxed/simple;
+	bh=ErheLBjJIY7xX2xLi0jBWMKRz0Lq6hTX/02109y1ikU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=X8aW4gG3v0Ymxk+uyWmw61e/cAJ2vrq8GgB2rs7aTdEdidHo+AmwmRp/Be6UrKlNYpJEHO1ceyhofBdP4VZPSCkRsmEHOAcQ+UwH5AdiH3DZihTlTEGmDHqUFjC9zCPG8m3MkkMbm8Tx21H6WpheJP2fzCDyQ5McDrhTwdyCMps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ouRlHTa4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=08w8b11H; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1751830270;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HQ2ofv+1+bTJIyO4X+Dd0vlpx4YzhCJIFQaCUQm3+2M=;
+	b=ouRlHTa4haX1qT8sDx76BltC3KKVZP/ZFOMqYyWAYBv7odCxFXjSDNln0ScqPB0rG9e4FW
+	ZhfoT5HmVDdWSMIdcjTm9FwWuliyu3d8VZ915+f4fTyhtpV1Ifn4NlOIQhjBk4IiObEenT
+	mfx6N4liAmA8qS/Vc/xnGHoRhgfir2eQilEeiu6HShp+odVWfUTUBBOOQvce3jcWfTPzcq
+	njz37X9XuDwuN7t55pDqviLFR9CarXeJPmZNxMvt/+MZRx+EE0Xyl24dv1hYiW5T1wX6Fy
+	o45l4IxDCAGJ1WVWTNqWqNZkb3gUIdHdwOZcixtvSmuXXBAyR5WuSoQHZeHmyg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1751830270;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HQ2ofv+1+bTJIyO4X+Dd0vlpx4YzhCJIFQaCUQm3+2M=;
+	b=08w8b11HUPEFVAPYIV20BJr7Gnft2w4D17JIHk7NQkX3TBpuwvcO7FDNcCx/mp9lpAMhsG
+	2fx7UuR/2nzikNAw==
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Andy Lutomirski
+ <luto@kernel.org>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah
+ Khan <shuah@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>, John Stultz
+ <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, Richard
+ Cochran <richardcochran@gmail.com>, Christopher Hall
+ <christopher.s.hall@intel.com>, Frederic Weisbecker <frederic@kernel.org>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Miroslav Lichvar
+ <mlichvar@redhat.com>, Werner Abt <werner.abt@meinberg-usa.com>, David
+ Woodhouse <dwmw2@infradead.org>, Stephen Boyd <sboyd@kernel.org>, Kurt
+ Kanzenbach <kurt@linutronix.de>, Nam Cao <namcao@linutronix.de>, Antoine
+ Tenart <atenart@kernel.org>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
+ <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH 12/14] vdso/gettimeofday: Add support for auxiliary clocks
+In-Reply-To: <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
+References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
+ <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
+Date: Sun, 06 Jul 2025 21:31:08 +0200
+Message-ID: <87frf9ru9v.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Jul 2025 23:43:18 +0200
-Message-Id: <DB4G6QHBZIQ2.BFT3RFRRHYB0@kernel.org>
-Subject: Re: [PATCH v5 04/10] rust: sync: atomic: Add generic atomics
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Boqun Feng" <boqun.feng@gmail.com>
-Cc: "Gary Guo" <gary@garyguo.net>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <lkmm@lists.linux.dev>,
- <linux-arch@vger.kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex
- Gaynor" <alex.gaynor@gmail.com>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Danilo Krummrich" <dakr@kernel.org>, "Will Deacon" <will@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Mark Rutland"
- <mark.rutland@arm.com>, "Wedson Almeida Filho" <wedsonaf@gmail.com>,
- "Viresh Kumar" <viresh.kumar@linaro.org>, "Lyude Paul" <lyude@redhat.com>,
- "Ingo Molnar" <mingo@kernel.org>, "Mitchell Levy"
- <levymitchell0@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
- <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>
-X-Mailer: aerc 0.20.1
-References: <20250621123212.66fb016b.gary@garyguo.net>
- <aFjj8AV668pl9jLN@Mac.home> <20250623193019.6c425467.gary@garyguo.net>
- <aFmmYSAyvxotYfo7@tardis.local> <aGg4sIORQiG02IoD@Mac.home>
- <DB3KC64NSYK7.31KZXSNO1XOGM@kernel.org> <aGhFAlpOZJaLNekS@Mac.home>
- <DB3MQ54N1FLA.3RTNYKTJFDNYY@kernel.org> <aGhiEZ4uNzEs4nah@Mac.home>
- <DB3YRHR9RN8Z.29926G08T7KZ0@kernel.org> <aGlHBqoqTA2PCXbJ@Mac.home>
-In-Reply-To: <aGlHBqoqTA2PCXbJ@Mac.home>
 
-On Sat Jul 5, 2025 at 5:38 PM CEST, Boqun Feng wrote:
-> On Sat, Jul 05, 2025 at 10:04:04AM +0200, Benno Lossin wrote:
-> [...]
->> >> >
->> >> > Basically, what I'm trying to prove is that we can have a provenanc=
-e-
->> >> > preserved Atomic<*mut T> implementation based on the C atomics. Eit=
-her
->> >> > that is true, or we should write our own atomic pointer implementat=
-ion.
->> >>=20
->> >> That much I remembered :) But since you were going into the specifics
->> >> above, I think we should try to be correct. But maybe natural languag=
-e
->> >> is the wrong medium for that, just write the rust code and we'll see.=
-..
->> >>=20
->> >
->> > I don't thinking writing rust code can help us here other than duplica=
-te
->> > my reasoning above, so like:
->> >
->> >     ipml *mut() {
->> >         pub fn xchg(ptr: *mut *mut (), new: *mut ()) -> *mut () {
->> > 	    // SAFTEY: ..
->
-> Note: provenance preserving is not about the safety of Atomic<*mut T>
-> implementation, even if we don't preserve the provenance, calling
-> `Atomic<*mut T>` function won't cause UB, it's just that any pointer you
-> get from `Atomic<*mut T>` is a pointer without provenance.
->
-> So what I meant in this example is all the safey comment is above and=20
-> the rest is not a safe comment.
+On Tue, Jul 01 2025 at 10:58, Thomas Wei=C3=9Fschuh wrote:
+> +static __always_inline
+> +bool do_aux(const struct vdso_time_data *vd, clockid_t clock, struct __k=
+ernel_timespec *ts)
+> +{
+> +	const struct vdso_clock *vc;
+> +	u64 sec, ns;
+> +	u32 seq;
+> +	u8 idx;
+> +
+> +	if (!IS_ENABLED(CONFIG_POSIX_AUX_CLOCKS))
+> +		return false;
+> +
+> +	idx =3D clock - CLOCK_AUX;
+> +	vc =3D &vd->aux_clock_data[idx];
+> +
+> +	do {
+> +		/*
+> +		 * Open coded function vdso_read_begin() to handle
+> +		 * VDSO_CLOCK_TIMENS. See comment in do_hres().
+> +		 */
+> +		while ((seq =3D READ_ONCE(vc->seq)) & 1) {
+> +			if (IS_ENABLED(CONFIG_TIME_NS) && vc->clock_mode =3D=3D VDSO_CLOCKMOD=
+E_TIMENS) {
+> +				vd =3D __arch_get_vdso_u_timens_data(vd);
+> +				vc =3D &vd->aux_clock_data[idx];
+> +				break;
 
-Yeah it's not a safety requirement, but a guarantee.
+This actually wants to be a continue because otherwise @seq contains the
+stale value from the initial read of the TIMENS page, which is
+0x1. That's a pointless extra round through the below.
 
-> Hope it's clear.
->
->> > 	    // `atomic_long_xchg()` is implemented as asm(), so it can
->> > 	    // be treated as a normal pointer swap() hence preserve the
->> > 	    // provenance.
->>=20
->> Oh I think Gary was talking specifically about Rust's `asm!`. I don't
->> know if C asm is going to play the same way... (inside LLVM they
->> probably are the same thing, but in the abstract machine?)
->>=20
->
-> You need to understand why Rust abstract machine model `asm!()` in
-> that way: Rust abstract machine cannot see through `asm!()`, so it has
-> to assume that `asm!() block can do anything that some equivalent Rust
-> code does. Further more, this "can do anything that some equivalent Rust
-> code does" is only one way to reason, the core part about this is Rust
-> will be very conservative when using the `asm!()` result for
-> optimization.
+With continue it re-reads, but this time the actual value from the time
+data page and also takes an eventual odd value into account properly.
 
-Yes that makes sense.
+I fixed it up locally already.
 
-> It should apply to C asm!() as well because LLVM cannot know see through
-> the asm block either. And based on the spirit, it might apply to any C
-> code as well, because it's outside Rust abstract machine. But if you
-> don't agree the reasoning, then we just cannot implement Atomic<*mut T>
-> with the existing C API.
+Thanks,
 
-We probably should run this by t-opsem on the Rust zulip or ask about
-this in the next Meeting with the Rust folks.
-
->> > 	    unsafe { atomic_long_xchg(ptr.cast::<atomic_long_t>(), new as ffi=
-:c_long) }
->> > 	}
->> >
->> >         pub fn cmpxchg(ptr: *mut *mut (), old: *mut (), new: *mut ()) =
--> *mut () {
->> > 	    // SAFTEY: ..
->> > 	    // `atomic_long_xchg()` is implemented as asm(), so it can
->> > 	    // be treated as a normal pointer compare_exchange() hence preser=
-ve the
->> > 	    // provenance.
->> > 	    unsafe { atomic_long_cmpxchg(ptr.cast::<atomic_long_t>(), old as =
-ffi::c_long, new as ffi:c_long) }
->> > 	}
->> >
->> > 	<do it for a lot of functions>
->> >     }
->> >
->> > So I don't think that approach is worth doing. Again the provenance
->> > preserving is a global property, either we have it as whole or we don'=
-t
->> > have it, and adding precise comment of each function call won't change
->> > the result. I don't see much difference between reasoning about a set =
-of
->> > functions vs. reasoning one function by one function with the same
->> > reasoning.
->> >
->> > If we have a reason to believe that C atomic doesn't support this we
->> > just need to move to our own implementation. I know you (and probably
->> > Gary) may feel the reasoning about provenance preserving a bit handwav=
-y,
->>=20
->> YES :)
->>=20
->> > but this is probably the best we can get, and it's technically better
->>=20
->> I think we can at improve the safety docs situation.
->>=20
->
-> Once again, it's not about the safety of Atomic<*mut T> implementation.
-
-"Safety docs" to me means all of these:
-* `SAFETY` comments & `# Safety` sections,
-* `INVARIANT` comments & `# Invariants` sections,
-* `GUARANTEE` comments & `# Guarantees` sections.
-
-Maybe there is a better name...
-
->> > than using Rust native atomics, because that's just UB and no one woul=
-d
->> > help you.
->>=20
->> I'm not arguing using those :)
->>=20
->> > (I made a copy-pasta on purpose above, just to make another point why
->> > writing each function out is not worth)
->>=20
->> Yeah that's true, but at the moment that safety comment is on the `impl`
->> block? I don't think that's the right place...
->>=20
->
-> Feel free to send any patch that improves this in your opinion ;-)
-
-I'd prefer we do it right away. But we should just have one big comment
-explaining it on the impl and then in the functions refer to it from a
-`GUARANTEE` comment?
-
----
-Cheers,
-Benno
+        tglx
 
