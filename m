@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-12579-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12580-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48F24AFA774
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jul 2025 21:31:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 753D9AFA7A8
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jul 2025 22:26:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C1EC189A148
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Jul 2025 19:31:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8282176795
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Jul 2025 20:26:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 409221B4236;
-	Sun,  6 Jul 2025 19:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F1972882A5;
+	Sun,  6 Jul 2025 20:26:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ouRlHTa4";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="08w8b11H"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="coIZzHni";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nqs0sa/L"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DC8186A;
-	Sun,  6 Jul 2025 19:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860E02E36FE;
+	Sun,  6 Jul 2025 20:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751830274; cv=none; b=Qnh2BwXXAOcGSUdy5YcGfdV3DQQ85AhyPNT8884VBMN7X901jzBiJIWt53vlQCfqwRuXKUPSynWuEL7cFtj1WC2RaP92U72N4fdrkyUKkinisWanyBTNBTFRTAcMmzOIk8/g+OTG2RdUnVuy4RijsNIcmOnA3Xo7uhKPUWZZZsA=
+	t=1751833596; cv=none; b=ViPQahluYdoVnJT/E5m8s02+t36TjtHLOuWutqhjqB4fdIATSzME1M4oL5GCGO8RFBU2ayFqiRfTApe74FZM4qSN92U7WWQ0qqD85BKMN7XD9z73DsvsP2NRAx04yMLK4ApxH+CTABfOa154CYqBdtglizfhZ5xAO18NOz/41y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751830274; c=relaxed/simple;
-	bh=ErheLBjJIY7xX2xLi0jBWMKRz0Lq6hTX/02109y1ikU=;
+	s=arc-20240116; t=1751833596; c=relaxed/simple;
+	bh=usgtwnYV2zSW+LtzIHeU7+mGrxPq/yKmMHF6FWzP6z4=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=X8aW4gG3v0Ymxk+uyWmw61e/cAJ2vrq8GgB2rs7aTdEdidHo+AmwmRp/Be6UrKlNYpJEHO1ceyhofBdP4VZPSCkRsmEHOAcQ+UwH5AdiH3DZihTlTEGmDHqUFjC9zCPG8m3MkkMbm8Tx21H6WpheJP2fzCDyQ5McDrhTwdyCMps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ouRlHTa4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=08w8b11H; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version:Content-Type; b=uEdXV1aBbOk6U5zS0FFY9gdMdMxi/UwiDRU7ask4JQAzOBgzByX4mJ0kQCnJwHQ/6vuyZFsQ499mMFTl4pQbv8DWoRn2SPMf+y+nEmlluDmT2fGDn+VJCCmMc866K6U4TuJzppy6jRxjU1fySh9V7DMAi+NK6mM0vui5UyIjnec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=coIZzHni; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nqs0sa/L; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1751830270;
+	s=2020; t=1751833592;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HQ2ofv+1+bTJIyO4X+Dd0vlpx4YzhCJIFQaCUQm3+2M=;
-	b=ouRlHTa4haX1qT8sDx76BltC3KKVZP/ZFOMqYyWAYBv7odCxFXjSDNln0ScqPB0rG9e4FW
-	ZhfoT5HmVDdWSMIdcjTm9FwWuliyu3d8VZ915+f4fTyhtpV1Ifn4NlOIQhjBk4IiObEenT
-	mfx6N4liAmA8qS/Vc/xnGHoRhgfir2eQilEeiu6HShp+odVWfUTUBBOOQvce3jcWfTPzcq
-	njz37X9XuDwuN7t55pDqviLFR9CarXeJPmZNxMvt/+MZRx+EE0Xyl24dv1hYiW5T1wX6Fy
-	o45l4IxDCAGJ1WVWTNqWqNZkb3gUIdHdwOZcixtvSmuXXBAyR5WuSoQHZeHmyg==
+	bh=e1Im/IBNO0y7hI7V+On66xP1EYDvFOgnxomSyh9iREE=;
+	b=coIZzHniJqa9x3uqEcYBcBh6IFco8ufa3Rl6nK5J9/1KHfeE7wh567Qg69/3tQHX56t8MT
+	rpQlAQS1vES6w2KZEBsJF5cZ6RVFJ3WXR4Y00ANrrHS8vQ3aDNsb74eNTEaWUpqM1iHBLr
+	f5NtH/m+mC8gc6TeplIESxle85pjHdN0RVin/bzNQJIyZ4e1zFh4YUSvxM6H7siJbcGCk8
+	S8DGx3qKzLCdQUsKnDlX8VOqwSEMnTeVaEmRl2jngSPDbK+54tF6MLYI8SdbwzPIoI0Dro
+	NDLTjxROwWEyKK0OSr0/HEjuIYjuLmFu0ioF9PpUB25x5dFbJFZDsjcr37Ev8w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1751830270;
+	s=2020e; t=1751833592;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HQ2ofv+1+bTJIyO4X+Dd0vlpx4YzhCJIFQaCUQm3+2M=;
-	b=08w8b11HUPEFVAPYIV20BJr7Gnft2w4D17JIHk7NQkX3TBpuwvcO7FDNcCx/mp9lpAMhsG
-	2fx7UuR/2nzikNAw==
+	bh=e1Im/IBNO0y7hI7V+On66xP1EYDvFOgnxomSyh9iREE=;
+	b=nqs0sa/Ls300GE1wwnRZMFCNZwbj0GF4RFOMIXnc+Z+pDrx+DuU63uVOI7JLmO9jQsVnGS
+	wXipWqz9uLDpyRCw==
 To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  Andy Lutomirski
  <luto@kernel.org>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah
@@ -72,12 +72,12 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Kanzenbach <kurt@linutronix.de>, Nam Cao <namcao@linutronix.de>, Antoine
  Tenart <atenart@kernel.org>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
  <thomas.weissschuh@linutronix.de>
-Subject: Re: [PATCH 12/14] vdso/gettimeofday: Add support for auxiliary clocks
-In-Reply-To: <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
+Subject: Re: [PATCH 14/14] selftests/timers/auxclock: Test vDSO functionality
+In-Reply-To: <20250701-vdso-auxclock-v1-14-df7d9f87b9b8@linutronix.de>
 References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
- <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
-Date: Sun, 06 Jul 2025 21:31:08 +0200
-Message-ID: <87frf9ru9v.ffs@tglx>
+ <20250701-vdso-auxclock-v1-14-df7d9f87b9b8@linutronix.de>
+Date: Sun, 06 Jul 2025 22:26:31 +0200
+Message-ID: <87cyadrrpk.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -88,41 +88,17 @@ Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 On Tue, Jul 01 2025 at 10:58, Thomas Wei=C3=9Fschuh wrote:
-> +static __always_inline
-> +bool do_aux(const struct vdso_time_data *vd, clockid_t clock, struct __k=
-ernel_timespec *ts)
-> +{
-> +	const struct vdso_clock *vc;
-> +	u64 sec, ns;
-> +	u32 seq;
-> +	u8 idx;
-> +
-> +	if (!IS_ENABLED(CONFIG_POSIX_AUX_CLOCKS))
-> +		return false;
-> +
-> +	idx =3D clock - CLOCK_AUX;
-> +	vc =3D &vd->aux_clock_data[idx];
-> +
-> +	do {
-> +		/*
-> +		 * Open coded function vdso_read_begin() to handle
-> +		 * VDSO_CLOCK_TIMENS. See comment in do_hres().
-> +		 */
-> +		while ((seq =3D READ_ONCE(vc->seq)) & 1) {
-> +			if (IS_ENABLED(CONFIG_TIME_NS) && vc->clock_mode =3D=3D VDSO_CLOCKMOD=
-E_TIMENS) {
-> +				vd =3D __arch_get_vdso_u_timens_data(vd);
-> +				vc =3D &vd->aux_clock_data[idx];
-> +				break;
 
-This actually wants to be a continue because otherwise @seq contains the
-stale value from the initial read of the TIMENS page, which is
-0x1. That's a pointless extra round through the below.
+> Extend the auxclock test to also cover the vDSO.
 
-With continue it re-reads, but this time the actual value from the time
-data page and also takes an eventual odd value into account properly.
+I'm not really convinved, that this is the right thing to do. Why can't
+this just extend selftests/vDSO instead of creating these
 
-I fixed it up locally already.
+> +#include "../vDSO/parse_vdso.c"
+> +#include "../vDSO/vdso_config.h"
+> +#include "../vDSO/vdso_call.h"
+
+cross directory oddities? Confused.
 
 Thanks,
 
