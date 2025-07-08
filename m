@@ -1,82 +1,82 @@
-Return-Path: <linux-arch+bounces-12589-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12590-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98804AFB6B9
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jul 2025 17:02:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19548AFC767
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Jul 2025 11:50:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51C643B7E5C
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Jul 2025 15:02:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BDDE1652C6
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Jul 2025 09:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A572E1C7C;
-	Mon,  7 Jul 2025 15:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24CFF266B56;
+	Tue,  8 Jul 2025 09:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J9t1rKcu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FTm54VJu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D482E11D9
-	for <linux-arch@vger.kernel.org>; Mon,  7 Jul 2025 15:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CF6265CC2
+	for <linux-arch@vger.kernel.org>; Tue,  8 Jul 2025 09:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751900559; cv=none; b=BjvXynfWCEqojuTxJhypLEsPHN0d5iGxZmrcWGkNzLfTGdkazdD2ysm/HZFkA9xoXkZ5sIG262SThL6xnnhN9P6isM12fFQ0B58K4MAalPSWCvFZVKOmPJMzdbTKvxwj/I5zavxIh62G+VTj+vL8bj1Zz9UuYHGQMkbFRKabDqo=
+	t=1751968236; cv=none; b=b09rmahYpUr+7mymUDSWCajWBwv83u3Ee6BrBO646zsyanbE0jruH4eCB+maEZlbr+NxDNC5wCRGQiigKbjzYNDw7qBX6LPky64moETRFPT/NlBFX/4jmOHi8mgwaa/pXW/ZIMcefzFaFfsmLLlAwDEz4k36H97FjTew202zIyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751900559; c=relaxed/simple;
-	bh=i7sfTjCF/E/d1O9h/ifiO3nu9T3lIoOxDIwxNqiTT+k=;
+	s=arc-20240116; t=1751968236; c=relaxed/simple;
+	bh=t89Yf7+DerPlaKJU1hIyceP0lU68DrU0bFoPmD6e0bg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WpRVg+0nxdjxrmNNrK3r8RZqATLAWijvIZYzdAupJzBMiQQLRTe/HagBjlxysZAy/9CUKMdwGCvcV/fjC7uWm3WR/qBAy4d1xAeJ0tBeppj6k33NUV1ZZrjb/kb4M+DvL82dAr80JZkVIyI6DaiNZpbgCY3wdvrFyOywZxKriuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J9t1rKcu; arc=none smtp.client-ip=209.85.221.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=AjWIYVF6mnp2ZqF8AQueOpEGFdKhJoXujF5D2BdzaIdOMprGxH4WyeoezFX7QViOdWzfnc3x16Gl6YkKj9hOxBGfLqkDh/IYERndl/jmVHRVCQ1LqqewzBiGHS3KcObX8iprPrU83BMrnbam0x3Ew5QfEOIeb+r1T92ASf2PKG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FTm54VJu; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a6cd1a6fecso3188387f8f.3
-        for <linux-arch@vger.kernel.org>; Mon, 07 Jul 2025 08:02:35 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3a4fb9c2436so2252700f8f.1
+        for <linux-arch@vger.kernel.org>; Tue, 08 Jul 2025 02:50:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751900554; x=1752505354; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1751968232; x=1752573032; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=fl/J0VEiX3HHsALj1wh9p6wJy+RRju7SSWQFr2CSlj8=;
-        b=J9t1rKcuumXHh3RwlHIcBxko2s38vYv+1mxqpBN1hWD6jrq+oPd8zsOxJ+VrBO4JOZ
-         ethj7Va+QDYm2nz/BQbp+dGBK0nV1W5BcizGCbQwwG7pGDArkg85uuQv2j3UHPAErxmh
-         XLx0sJqeYWc26EeSDbyhHVJaYQ0eSzxscmjeA0IkWOOjNSrUbYusX9Gu/wIAGjl0HY7E
-         p9t2gwfGX/UcLQTSSATCeCMW0cx3j9z8zIlj4SigZnGO3VzEHs56jw/Y+ewI82LV+K8d
-         kxRbFmn0urW+j5xLTO9F3lyfvhXteM2s1g/iVYfrAzQxzlPOiYPNDCY0gmYsLYJKm8/J
-         ul7w==
+        bh=pSJ4xbdE5FzpQMbGAihlry1r8QLUQSOrBPNupb4bNqM=;
+        b=FTm54VJuSiQiNbzwd3kzxy8AOLOtSCDQbWAHHrBtaIiUche2GQIjGBHsb+ABIaZcnN
+         eAdqxtgY5t/q+QAY4OrrvjR7kneuAg7l89nNg+T1iIWMaWd3XTa48oMFj4UUQIyg8bKT
+         wWAVsMJSWtQhNDhdxI/EBIQXLTHQpsNMuuf+FpaBBNwxQd53uun18DvuMG035eLi0ws1
+         8WClX1vWWqrXkv2kYNSg7GqNcznB/DSxnzRrJWcWB4/ivqfv3rsfYhMFNYnK6oToJdpe
+         VEb9+STRqOWvkaDhIVOD0npOo81PrsonMphPc0KQPkHlNlnZTRPSyZvSL0iGpBBTg2E2
+         SfUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751900554; x=1752505354;
+        d=1e100.net; s=20230601; t=1751968232; x=1752573032;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fl/J0VEiX3HHsALj1wh9p6wJy+RRju7SSWQFr2CSlj8=;
-        b=Qor+J+OtjcC8R+32Q9MtlqEvzS0glpm1Q8Q4i1p/fS8mlw9N4tABWEobS8y8pJo++8
-         N3js/xeAWeRi/dvQqRhnOi3buaXStZPl5vc+lWYdvWgy/ShETIaxZ+u2RwmHunJtzB0b
-         CSMPg9RR+GKjTskisyzFpzCumyJOFLqoJNBglvnClpPDcNK8cZWWlVaIcJ8cfRynceNK
-         8oSp+xFhaghJCcf5ahf2FsfjecNINbW4MyRnu1kXxevLkJdffWPH/tvixHmkaaN6wKLC
-         34D+InFa4JdxalQMk1DWIRYpntS1k7ex9C0qEkZ9K2LEiXo4w0JcnYMUwfumRthqtLFz
-         MsYA==
-X-Forwarded-Encrypted: i=1; AJvYcCWli6SxwQxh3B7TgmqFTsihwh8EV2Yo8gsa9UQHZ/J6KttwX5CB8cz0pbgLRuZ+q60RkW5mrp7fmrm7@vger.kernel.org
-X-Gm-Message-State: AOJu0YwScATrV2dUwzN6qidtUQjbYdmakfmuEmHWrtM3HWKTIp0/0Cwi
-	gfUYwGg925EC7hV7Ss0yXsHgBb20G5+ubJwQFdjhGLh4tAaslc6jDHEED0dhiJhfZP8=
-X-Gm-Gg: ASbGncvWeAaCEhL3mTgdfVliMxzkwTh9tTCf7r/2cP3eQ3Mev3XO4Gxtuj6ogs3bD7L
-	ocYAlOafUmIIiz7eydxmAYSyBMPfbqoEawdPtgFVDAky4rXKV77cJDKbI+uabD0E4JCJSvxoA9M
-	y5SZuL7yabHweUF57PomJ95s8RcQaQAFHsnJagZhnjuVjtRyViH/804B5uTOEa2PMMu2zgVUEfb
-	/+jTEE/ECum/O+qmbqsVnA4IuRxU7boKnPy+jXmNfoWSDT1yPqpimzNQ/FnigeeuYb3YFjAt01l
-	xiiadkSsxfxj/bPjwfiwPp8YZARFPtKEtZFtiFgQHfz0W/ykekPPA/jRU2/znAbkgHG8ujyHr4Z
-	k/36IiMXyoq6xF5aho0h1Jewv
-X-Google-Smtp-Source: AGHT+IFD1Qu0LW6oYZ+Lwxtvfg4kO82KZunY4+lyRPiPRJMlKuQa4HwFYYu7m5svgNaruht1xrRyug==
-X-Received: by 2002:a05:6000:2f8a:b0:3a6:d2ae:1503 with SMTP id ffacd0b85a97d-3b49aa74223mr6787123f8f.34.1751900551836;
-        Mon, 07 Jul 2025 08:02:31 -0700 (PDT)
+        bh=pSJ4xbdE5FzpQMbGAihlry1r8QLUQSOrBPNupb4bNqM=;
+        b=YzaQ8myUKivmQwZmgxsOBTRrbDQKumRBBEyOL+GBhyAAXuKRDQfRbwjTz1iM+TLChf
+         XBJRrHJmWQ6RBHtntZW/CDOGXctLYkFymNZ2YlREM8JOXGZzh940pTtqs7RevN0VnZZB
+         ddGuTeoVViezRfY+l6l3W6gktKHKDKxtkFuJomMfGU+fyik4eEZXaVIrSGRl07f8QR/V
+         YttkiHk6OHuADY53vtVcGERX8Vy1AOjGTH75GklaiG8PYLmka3NTSwLChpOuszTB35IG
+         E5ATWnyAAPVAoeENvr1w8yCGEyju8B88KS6BjLKjf4bqV1+saQxeNgb/TQwL1rJeiyrK
+         e2RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUaw9VImwbFECCUIWhv00dIoSFhO8w7Z3zzxgjentMIZjLcpivkr97R1P8An0e6bYF+2Q22Vb24dIWR@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzs+6kWYoU7OzhnrKHHJKUn7mXKgvkY7mVIMaj/o1Bi9PjWiEb4
+	KQkkbZlloVcFv/IyOeSdt3TiKOASljTz4W4sH4jL3/8mfiPNQgrOA54K1H6GW9VrJFw=
+X-Gm-Gg: ASbGncsMvwTr5IBWQ032O+7Wwur98nHx+caSrbH5buOhxj/5mCJ6QJ+Wn4lSN2JOwyI
+	v47UM1UWA47eHmE81LMgomyH1awnEd91GsN7tuzOiPktCEWj2cN1ppZH5IZkWpmQAjmCmCbaYjX
+	Fn3jPeQphMR9q3ccfy9J52jw/RuwkEUUeEb92EMhxqVOSU52eSjTXQY4IFplTnk/fDnOLFnmrNJ
+	/uJfaaDB+ifch1R4g5b9tMzf0s7fAAdoOABEVCgp1Sp37f2q44sePsHZ4+zMmrIqgw7X+zCemC2
+	9MxurRkLCgXvCe2dSmdvDvZDoUZBvIb2GrjRbFV4yia7nvnTCM7DPQGFsUvcAc0y/8VuRrkRF5a
+	rtfGSccTcFhG2vbaIdU3pL1Q/Q12baO4yY1E=
+X-Google-Smtp-Source: AGHT+IHxZjUwhr7/XtNanwJKqQGkEPOWNVunJNfj6Cx7RTxPaIJicvhyp1mjjFMNb1tJ1wQb1OvA/Q==
+X-Received: by 2002:a05:6000:2b03:b0:3b3:e3f6:4a9b with SMTP id ffacd0b85a97d-3b5ddedc46emr1157400f8f.41.1751968232398;
+        Tue, 08 Jul 2025 02:50:32 -0700 (PDT)
 Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b471b966c0sm10636203f8f.52.2025.07.07.08.02.30
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-454cd38f092sm17559575e9.1.2025.07.08.02.50.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jul 2025 08:02:31 -0700 (PDT)
-Date: Mon, 7 Jul 2025 17:02:29 +0200
+        Tue, 08 Jul 2025 02:50:31 -0700 (PDT)
+Date: Tue, 8 Jul 2025 11:50:29 +0200
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: William McVicker <willmcvicker@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: William McVicker <willmcvicker@google.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-kernel@vger.kernel.org,
 	Lorenzo Pieralisi <lorenzo.pieralisi@linaro.org>,
@@ -90,13 +90,10 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" <devicetree@vger.kernel.org>
 Subject: Re: [PATCH RFC] timer: of: Create a platform_device before the
  framework is initialized
-Message-ID: <aGvhhcCd2rIuY4Zd@mai.linaro.org>
+Message-ID: <aGzp5esx1SpR9aL5@mai.linaro.org>
 References: <20250625085715.889837-1-daniel.lezcano@linaro.org>
  <aGMjfxIvbCkyR5rw@google.com>
  <27644998-b089-44ae-ae5f-95f4d7cbe756@app.fastmail.com>
- <aGQnOMDyBckks78k@google.com>
- <92daf35f-9240-450f-a05f-b7869fafeb6b@app.fastmail.com>
- <aGRhIrZq1tMR8yGO@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -106,84 +103,103 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aGRhIrZq1tMR8yGO@google.com>
+In-Reply-To: <27644998-b089-44ae-ae5f-95f4d7cbe756@app.fastmail.com>
 
-On Tue, Jul 01, 2025 at 03:28:50PM -0700, Will McVicker wrote:
-> On 07/01/2025, Arnd Bergmann wrote:
-> > On Tue, Jul 1, 2025, at 20:21, William McVicker wrote:
-> > > On 07/01/2025, Arnd Bergmann wrote:
-> > >> On Tue, Jul 1, 2025, at 01:53, William McVicker wrote:
-> > >> >> @@ -1550,6 +1553,8 @@ typedef void (*of_init_fn_1)(struct device_node *);
-> > >> >>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_1_ret)
-> > >> >>  #define OF_DECLARE_2(table, name, compat, fn) \
-> > >> >>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_2)
-> > >> >> +#define OF_DECLARE_PDEV(table, name, compat, fn) \
-> > >> >> +		_OF_DECLARE(table, name, compat, fn, of_init_fn_pdev)
-> > >> >
-> > >> > To support auto-module loading you'll need to also define the
-> > >> > MODULE_DEVICE_TABLE() as part of TIMER_OF_DECLARE_PDEV().
-> > >> >
-> > >> > I haven't tested the patch yet, but aside from my comment above it LGTM.
-> > >> 
-> > >> The patch doesn't actually have a module_platform_driver_probe()
-> > >> yet either, so loading the module wouldn't actually do anything.
-> > >
-> > > Probing with TIMER_OF_DECLARE() just consists of running the match table's data
-> > > function pointer. So that is covered by Daniel's patch AFAICT. However, it's
-> > > not clear if this implementation allows you to load the kernel module after the
-> > > device boots? For example, will the Exynos MCT timer probe if I load the
-> > > exynos_mct driver after the device boots? My guess is you'd need to register
-> > > the device as a platform device with a dedicated probe function to handle that.
-> > 
-> > Yes, that's what I meant: the loadable module needs a module_init()
-> > function that registers the actual platform driver in order for the
-> > probe function to be called. module_platform_driver_probe()
-> > is the way I would suggest to arrange it, though that is just a
-> > convenience helper around the registration.
-> > 
-> > The platform device at that point is created by the normal DT scan,
-> > so there is no need to create an extra one. On the contrary, in case
-> > we successfully call the probe function from timer_init(), we end
-> > up with two separate 'struct platform_device' instances 
-> > 
-> >      Arnd
+On Tue, Jul 01, 2025 at 09:52:45AM +0200, Arnd Bergmann wrote:
+> On Tue, Jul 1, 2025, at 01:53, William McVicker wrote:
+> >> @@ -1550,6 +1553,8 @@ typedef void (*of_init_fn_1)(struct device_node *);
+> >>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_1_ret)
+> >>  #define OF_DECLARE_2(table, name, compat, fn) \
+> >>  		_OF_DECLARE(table, name, compat, fn, of_init_fn_2)
+> >> +#define OF_DECLARE_PDEV(table, name, compat, fn) \
+> >> +		_OF_DECLARE(table, name, compat, fn, of_init_fn_pdev)
+> >
+> > To support auto-module loading you'll need to also define the
+> > MODULE_DEVICE_TABLE() as part of TIMER_OF_DECLARE_PDEV().
+> >
+> > I haven't tested the patch yet, but aside from my comment above it LGTM.
 > 
-> So then does it even make sense to have `timer_pdev_of_probe()` if it's very
-> unlikely that the module will even be loaded by the time `timer_probe()` runs?
-> Would it make sense for TIMER_OF_DECLARE_PDEV() to just have a special else case
-> with the module boiler plate stuff for when the driver is built as a module?
-> Something like:
+> The patch doesn't actually have a module_platform_driver_probe()
+> yet either, so loading the module wouldn't actually do anything.
 > 
-> --->o---
-> 
-> #if !defined(MODULE)
-> #define TIMER_OF_DECLARE_PDEV(...) TIMER_OF_DECLARE(...)
-> #else
-> static int timer_pdev_probe(struct platform_device *pdev)
-> {
-> 	struct device *dev = &pdev->dev;
-> 	int (*timer_init)(struct device_node *np);
-> 
-> 	timer_init = of_device_get_match_data(dev);
-> 	if (!timer_init)
-> 		return -EINVAL;
-> 
-> 	return timer_init(dev->of_node);
-> }
-> 
-> #define TIMER_OF_DECLARE_PDEV(...) \
-> 	OF_DECLARE_PDEV(timer_pdev, name, compat, fn) \ # make this define MODULE_DEVICE_TABLE() as well
-> 	<create struct platform_driver instance> \
-> 	<call module_platform_driver_probe(..., timer_pdev_probe)
-> #endif
-> 
-> --->o---
+> I feel that this RFC by itself a good step in the direction we want, 
+> so Daniel should go ahead with prototyping the next two steps:
+> adding the platform_driver registration into OF_DECLARE_PDEV,
+> and converting a driver so it can be used either with the _OF_DECLARE()
+> or the platform_driver case.
 
-Yes, that is exactly the goal :)
+I'm questioning the relevance of adding the macro when the driver is
+not compiled as a module.
 
-The RFC was just for the timer-probe function, I was unsure about its
-validity. Let me resend with all the changes for the [no ] module
-support.
+The first step of this macro is to allow the existing init functions
+to be converted to the same signature as the module probe functions in
+order to share the same code and take benefit of the devm_ variants
+function which will considerably reduce the code size of the drivers.
+
+Then we have the following situations:
+
+ 1. The driver has to be loaded very early TIMER_OF_DECLARE_PDEV
+ (MODULE=no) the function timer-probe() is used
+
+ 2. The driver is a module_platform_driver() and MODULE=no, then it is
+ built as a builtin_platform_driver(), we do not care about having it
+ loaded by timer-probe()
+
+ 3. The driver is a module_platform_driver() and MODULE=yes
+
+If we do the change to have the TIMER_OF_DECLARE_PDEV() adding the
+platform_driver registration when MODULE=yes but using timer-probe
+when MODULE=no, we change the initialization and we will have issues
+with timers needing resources like SCMI clocks and where the
+mechanisms rely on EPROBE_DEFER.
+
+IMO, module_platform_driver and timer_probe must be separated.
+
+Let's assume the one possible future use case with the VF PIT. This
+timer is only used on ARM but now it is also supported for the ARM64
+s32g2. For the first platform we need it very early and in the second
+case, we need it later because the architected timers are there.
+
+We should endup with:
+
+static const struct of_device_id pit_timer_of_match[] = {
+	{ .compatible = "nxp,s32g2-pit", .data = &s32g2_data },
+	{ .compatible = "nxp,s32g3-pit", .data = &s32g3_data },
+	{ }
+};
+MODULE_DEVICE_TABLE(of, pit_timer_of_match);
+
+static struct platform_driver nxp_pit_driver = {
+	.driver = {
+		.name = "nxp-pit",
+		.of_match_table = pit_timer_of_match,
+	},
+	.probe = pit_timer_probe,
+};
+module_platform_driver(nxp_pit_driver);
+
+TIMER_OF_DECLARE_PDEV(vf610, "fsl,vf610-pit", pit_timer_probe);
+
+If we change the TIMER_OF_DECLARE_PDEV to a macro which relies on
+timer_probe when MODULE=no, then the "nxp-pit" on the s32gX will fail
+to initialize because of the SCMI clocks not ready and the routine
+won't reprobe the function. This issue won't happen with
+builtin_platform_driver
+
+What about something like:
+
+TIMER_OF_DECLARE_PLATFORM_DRIVER(__name, __driver) \
+  TIMER_OF_DECLARE_PDEV(__name, __driver->probe); \
+#ifdef MODULE
+  module_platform_driver(__driver);
+#endif
+
+Then in the timer_probe() we browse the of_match_table compatibles and
+if the probe function succeed then we do of_node_set_flag(np,
+OF_POPULATED) which is supposed to prevent calling the probe function
+later.
+
+Thoughts ?
 
 --
 
