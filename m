@@ -1,539 +1,318 @@
-Return-Path: <linux-arch+bounces-12598-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12599-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF689AFE292
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Jul 2025 10:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A0BAFE9E7
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Jul 2025 15:18:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47A41189732E
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Jul 2025 08:29:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3AB5188BE93
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Jul 2025 13:18:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD4F273D9D;
-	Wed,  9 Jul 2025 08:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DFA21CC74;
+	Wed,  9 Jul 2025 13:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cKk0/Pov"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ZAkodD1+";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="kyvVAS7x"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D298D2741BC;
-	Wed,  9 Jul 2025 08:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752049760; cv=none; b=T+Kx3p8iEaDUpfopV7sH6NpAx1bVxbmOE3tcU9Fq47az9K9NBXGr6WxXxi229I+PxxIL7p4qWBxxYQIg7Hyg1dPJMYGZDK7Z1cLhT7/a1ep1jHdyzkKSSv2z1WK/rid+y1zraTJOAPPZgWaMw+xkdI9sCIbQ9F2XhJQpNSzMsQ4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752049760; c=relaxed/simple;
-	bh=haNODZWMyCOVGzhyyomPE8OSX9fncV1D0JZRv1zBfWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kSnT1O1GJYOx1HmNC9jJYK16ol8320NkGwVGj4c6VYb8Y88/eWp2Tq6dyDXaTTwluprDuxJsvvmJrKXIkEQ5P7oZMulawGI2AILlt9IltWwd3l+sMxiQ71ecVR7vLxqBlSvE1ki4W+HgxpQcKzlFIIOcN4ZeC4AtXl+2hmIwykk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cKk0/Pov; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5237C4CEEF;
-	Wed,  9 Jul 2025 08:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752049760;
-	bh=haNODZWMyCOVGzhyyomPE8OSX9fncV1D0JZRv1zBfWw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cKk0/PovFNWjoitwee81tCcXv3dX38aYYI6XsZYqFMyiabERzUy8nWpJxMhvr7TOp
-	 CSbWP5fsjKIwQ6NJxx+ZEx3WyGH7mUO3PKrwaOAcvdlqSDYRw7gs2Y7ztiEFImVBCX
-	 iTUF7V8lPomDSu42VlLdxCkaLSjLSmfOSVb4WQvB4msxx+Wy25zWuIlBXSMaf3ov4/
-	 XEJNJxyG1uLCGnXB3DME1TqOZZLuLG8NmetXAqxMIDW0+HcZMCr3Y+GBXecatwJ1Pe
-	 FGX+j0TfuXirzE0/lzqfR4n7fkldxqwd49qx6/4nhmf6J127srosUJEunRbi6l82Yh
-	 19rQl2a1iKfmw==
-Date: Wed, 9 Jul 2025 09:29:17 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>,
-	Christopher Hall <christopher.s.hall@intel.com>,
-	Miroslav Lichvar <mlichvar@redhat.com>,
-	Werner Abt <werner.abt@meinberg-usa.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Kurt Kanzenbach <kurt@linutronix.de>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
- clock_gettime() helpers
-Message-ID: <aG4oXcA3U8qa3H86@finisterre.sirena.org.uk>
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
- <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A3E149C4D;
+	Wed,  9 Jul 2025 13:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752067111; cv=fail; b=njgeT45itbMzAAhH7rX1+O2h7CXdpAIfadEzhTxjq6eR+kZe0CAQPId8pvZmglVrstlGS8WGLDtwLS6FgnUYA4oPPV4l1PJ5VXsBKwGx7xx8tCVpc3C2E/pPQ2DimXXbmuFwOGFQsjaBm0U9yatnaiWFbxxwgIn7+bry9nafY2I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752067111; c=relaxed/simple;
+	bh=AtWvIxH5NIUMF4B8Qfm7eHKCQvbPcK+w6BgyQlZ/jJo=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ej7ggc4ajp5XP1n0FRqJxVSTCxAkdfHxn0Lq2mGKr50a0BmVCM+ttHof1mQaJHdAg19o1TjAiML0tWA1bm8oi8fTFMQeCsDI+oJmtEs+sm6Jt/4WdDm7HWxbpl2/MVag0bibcDUODfAWYKbxbc5iaHkmBQYywkOisWDEzQ9Y400=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ZAkodD1+; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=kyvVAS7x; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5699jULP027207;
+	Wed, 9 Jul 2025 13:17:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=wNKnvunkDqROstJL
+	+8Y2ThvLCZqsrxwOV2DK9R25mAs=; b=ZAkodD1+G1emAisngU6iqUdPl+hARyFn
+	5BzW6cQibTKAuziaM6ANt+dRthdF0bbEC74TFkHyoqN9kDBwmoZ1m1OdWDHdtFDK
+	hty1eDg7PQGYpaaWkotyH8J4Ra6E+SpUnYU5NbEDL5HCeTWWkJOjyXn4o9QCr8xg
+	XIIfzmtqhlp7xMEUmBM4Ao7GeoBFuJkNmA/KudB5j8KlhLER/bxACvphSVfaGAsO
+	z3BhwctguX2Siqel3k7gdFbnbxXwv4wwVPauocX1CljcBUx5W1ufw5F/bikieXW8
+	MmbSFhGynfBcL7oXgE1cqVbmshO6YFdQ7y8cJg5zz6wG7SCnMJV+Kg==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47sp2rgbsq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 09 Jul 2025 13:17:30 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 569D4Ren021505;
+	Wed, 9 Jul 2025 13:17:29 GMT
+Received: from cy4pr05cu001.outbound.protection.outlook.com (mail-westcentralusazon11010036.outbound.protection.outlook.com [40.93.198.36])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 47ptgaxtar-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 09 Jul 2025 13:17:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=S5msny2F/uYMckqN5iVphuk+b3RXc69eKi7s87tGbrF9Wz5l8LvDkNpBYSu+VVKRjh9p86hA47syiWji8NMqeypy4RnnpER+kxQ5Race4WPlNtBZWNgr9uVgO4Cmoi8xJDHgtCTyCYbaVLE9da7CZPAXX6ZwqjPx9j813nzq4opr8G686WXF/mLcsx+KxiAGbJs18q3iWvE1LPh2OAolcWKv9RcqU3Wf15p0x2aO+umglzDm3+JMJZnb6JPXnP6t51W0NrjFjOztzMAdNTs2a2uVZTznoEQ40w0dlDDyNuCZVRvEl3VOZmzJ+izIr2xWeBj5fCit+eMqTL1tUX+s0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wNKnvunkDqROstJL+8Y2ThvLCZqsrxwOV2DK9R25mAs=;
+ b=cs+dOhhoFDSrsSM2X51/Op2WS3gBL7t1dhl4vNUPtuUNoLasHrjigI3wPkdWoI/2QlLSImrMNRoSy4DZTm9n8IymJhQcn7QoSPjASGwTXYbN+TQcV4binVt6vbVFFdSZw6RcIijrpxlkZqNtxwkHP3vW0T/yD6kwKeQzQrveXhjfNQt85w8athsHyv4gYPlNzDcM1bQ1kBo5VtiQpoTl6nByj9i4fTvSrAIFEN1+oLuM/gGwfwMYY+xuN3gvoRxLHoL2n2IlYYmEu0aBbGtcblE1d920dvl9Nwp1Lr2Rm4WhGRe92eEkpRap1ESKuS2KD78ulYi/RwuCESkiux7uuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wNKnvunkDqROstJL+8Y2ThvLCZqsrxwOV2DK9R25mAs=;
+ b=kyvVAS7xtwfFSz+RNtQWqZtFrq3/gq1KB2jlRwVEkJ4WzTd1Hq2wg5jFpSNU+Zf9ulbkLZu9c9FZU6Uxj7F5nMQ887MWEtLiI5TRuRYNiQ+Gy1GwQp6xGlz4BRya5XZT509aXnZ7iC+GsTQcxddU/H+M/p2H2t6bagqbP/W7ihU=
+Received: from CH3PR10MB7329.namprd10.prod.outlook.com (2603:10b6:610:12c::16)
+ by BLAPR10MB4914.namprd10.prod.outlook.com (2603:10b6:208:30d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.21; Wed, 9 Jul
+ 2025 13:17:24 +0000
+Received: from CH3PR10MB7329.namprd10.prod.outlook.com
+ ([fe80::c2a4:fdda:f0c2:6f71]) by CH3PR10MB7329.namprd10.prod.outlook.com
+ ([fe80::c2a4:fdda:f0c2:6f71%4]) with mapi id 15.20.8901.028; Wed, 9 Jul 2025
+ 13:17:24 +0000
+From: Harry Yoo <harry.yoo@oracle.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@gentwo.org>
+Cc: "H . Peter Anvin" <hpa@zytor.com>, Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Juergen Gross <jgross@suse.com>, Kevin Brodsky <kevin.brodsky@arm.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Oscar Salvador <osalvador@suse.de>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Jane Chu <jane.chu@oracle.com>, Alistair Popple <apopple@nvidia.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Harry Yoo <harry.yoo@oracle.com>
+Subject: [RFC V1 PATCH mm-hotfixes 0/3] mm, arch: A more robust approach to sync top level kernel page tables
+Date: Wed,  9 Jul 2025 22:16:54 +0900
+Message-ID: <20250709131657.5660-1-harry.yoo@oracle.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SEWP216CA0055.KORP216.PROD.OUTLOOK.COM
+ (2603:1096:101:2bd::6) To CH3PR10MB7329.namprd10.prod.outlook.com
+ (2603:10b6:610:12c::16)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8p2AxLcgYrx+Az4a"
-Content-Disposition: inline
-In-Reply-To: <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
-X-Cookie: Absence makes the heart go wander.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR10MB7329:EE_|BLAPR10MB4914:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5991f853-b6b5-45a3-e5ed-08ddbeeaf1a9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?cGoF9gj+rRflM5bLK2qiNCGd1FmQPJ9M9gtI48ShZ59+7TcZVkVFbWJ9cw2j?=
+ =?us-ascii?Q?UJ3qX+AWMaTnzP41A2p01Ivdntz+knir1gyxzCWE7ga/E0P6MBgUa8KlL0Rv?=
+ =?us-ascii?Q?IOhLJittW/rx+w4e5yjsv/hyaT6FfTNMhl+7NZWBvxHKjisiH+SKAUbnVye5?=
+ =?us-ascii?Q?Mz1xCacv6qDGuaiq8gzvsIQBtS2fJvKli2fEcPyqQzEByjx1o8sCFh7FPdH9?=
+ =?us-ascii?Q?eGkLQfwfIuPDB/7T25BDFKsWhuyRw3yC5aeS7Xnleos10HRv6m6VZDSqoZnd?=
+ =?us-ascii?Q?PutMuLYETJphcIYYGfbYhR98yKT/0/RT++8E9ilobKoSWbqanca7VGSpbh3C?=
+ =?us-ascii?Q?9KWYjImwYQNtMSLD+B2o2fD76Bb2/c5eHq2a2FOr3z+62pHPVVegogCyif5u?=
+ =?us-ascii?Q?Mhq5UpKW5M8J+26dk8v5rtsAoutmSeZNTKaSbZdQC5r+/wTbdbov083qwW7b?=
+ =?us-ascii?Q?kB+/FUAAqO400eeYf9ESEpX2UXQ9LixfV2lZg64WmpLx+BYim0Ys/1+L9HuM?=
+ =?us-ascii?Q?JP8k5sZ/dDhh+051fAOVUZ4J574SSyxU766afB1RaJVq8p7UFZDkFbJzxZdN?=
+ =?us-ascii?Q?57pf67qmQBUXg0s+Sb3UafKKqekGpcacbWvwAE1i6bqviWvqvtp2p7oBEFg5?=
+ =?us-ascii?Q?Lb6B7I+whi42TMbcnE9gyWRNgcG5I23RbE3B7F3/fCTHkNd8P6N/KzIRhBzB?=
+ =?us-ascii?Q?7UkUSvMYJU9ivhnZy72NLcabkHIMP/7n4ijvwXZ6Th67PWpx4fImQgFU1saM?=
+ =?us-ascii?Q?+U4YCoW7e+/ORodR1c2f0v8GmSMuTI0/xNxoIR2RI8owx0JGflEUt/8LmVPf?=
+ =?us-ascii?Q?eAKCLxrXG3o0j4XJAoZovgKgWpzP/AS/7LR6Q3VedF/kumkubjd3iZYTJ6R3?=
+ =?us-ascii?Q?zjFlImwoD7JkoKhmfXob+Q6RJL5253pSh/iaXd6Qm8KEUzOtZuO3K5rkKBVa?=
+ =?us-ascii?Q?DSyli7UPpSggJOHYCySWQeTJInhJa1UQIW1SiN+Lnu73AS/+OZBhtj9F03+m?=
+ =?us-ascii?Q?umKObt+sxjwv4dbG8+23Lff6YVk4CVaSRGDKloJihpLW7DjzKKeHZTCld6Q5?=
+ =?us-ascii?Q?IaweL/s83MZmtu5uwfSJmBPogw7e2g9Dna8TXPYeHisg0wNxP94v7nhBfk7n?=
+ =?us-ascii?Q?gcoNbgUBVhauZGPtnG/4NJLfvzBdGML4AgSAhkwn38+Amd+5aLdiiD3Oy18T?=
+ =?us-ascii?Q?nLYoVyKScD2BHgLqXBlm6nCKAL28Y7iSTSjjClEoJA967HkSHVnHCsx/Nz76?=
+ =?us-ascii?Q?YejapbNx91KpP5JHL0wSu19RkXx8sTzL8C/+BLZlt9RDoZFjoFfdBoZJhmli?=
+ =?us-ascii?Q?PDYoi9BkUJQFfGWaMZr9OmDlPKrTetyzJ+ajDnmrZ0YYU0N/uruIeB8LaCAy?=
+ =?us-ascii?Q?r29q5ghGh6g6fb4CPoIYH4ROyLGswDAmyzdxPsF37pLNnzpU++5NfLRxwTNv?=
+ =?us-ascii?Q?3of2Ri6ORuQ3T+mZc6PBRV+vmQTOpnemiXxNmcAPp1zQzIbqw+FvuTAOzFpg?=
+ =?us-ascii?Q?NI+g6Ki4AlC2hZw=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR10MB7329.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?KaicH7y2xC+//GLVEZH8grOvsqCNSPHaksSLBaGaw7Iuff0x0I5w0slL5ydb?=
+ =?us-ascii?Q?UmcT6sD6VmvmJOLcnHRxEb2oGSnyEfpFT2IRj2nlZtUD0FTd9pnS2be/6kvj?=
+ =?us-ascii?Q?rKXUe9v9GuKTPmjJ/qCrDspedFTNrjdPzL6+S2WMvkRTYSZCV1TVdFbfs0Io?=
+ =?us-ascii?Q?8GFykXovI4FQait1V0nYfGQ4z6Lym/iASpDBlHY7LoNXQ/XQ/HgK5l5hiuPs?=
+ =?us-ascii?Q?7qBYtkscNH+GelwxMZNTycOcUbnO58uhrXOwoSk6C5dpAa4b1szDMoQLNMui?=
+ =?us-ascii?Q?QLO5997ixNytC/zzvUHb52PanKw5QpOYM6Lbfu+I2+v7tSR0Gh789EPaI3Ov?=
+ =?us-ascii?Q?Yp7wtgIMTgSOJSbe5qrL2oHl35Zle5Ja4Pqed2avi0TymTsRf5BxrZBQShmS?=
+ =?us-ascii?Q?Ax9TS6k+hRt06VK7kGFIljWEI5TE7I7KNhzJa7YChmsJFa0G9itGX6Cmvl04?=
+ =?us-ascii?Q?42w4RR0DKAP6tr2c/DTrDgyiqEGzLHeI7P5SOwcLXinHYeRj47l96C/kgwJa?=
+ =?us-ascii?Q?hcCYd40M9UR47wnn7GzTf4kWpZ9nmcpotTRajxhaTMD/o5dzInI4dlKPwT3T?=
+ =?us-ascii?Q?J7nGEQt7tDCsHZRksj/PjX37H/7xtUEg8fUkgTbDvFsvMLUzosGl9U/yR8T3?=
+ =?us-ascii?Q?uXG05DFu2G3Ib2OFPmA9rXPbBJmJ0qnMSaJcUqgmlxpOJ6c0y0H1t+JSd/sZ?=
+ =?us-ascii?Q?6uz2cIP6PamtuoE4oTMXlWEjlPx7ux8PyH4wWsBX4hAGZreEMsy33haTg6Ey?=
+ =?us-ascii?Q?zUBa/v+UsUEVvUepBp74SHQU7DFgLevqJ+2q9Hn0+zV1vyU3TIuoLb44rHrF?=
+ =?us-ascii?Q?V4UBEy47zDLWE+T6/JEcxnYElayEsr1KIcNbvoI1xKPAaU8oGudeJZNtPbd+?=
+ =?us-ascii?Q?zTeACFr7c867R79mpKVJxkOpPP6AKYFHvU9ZadbzumaEsKPQYvvBy3T4N0MH?=
+ =?us-ascii?Q?xGN+2K1HijhNpGpUxRAziuBPAgxtbZiQOU11lH7nJ3pYkXiYnelLlKwZgXCB?=
+ =?us-ascii?Q?x8bqXjDfIAyIz06QiMWP224DVvVVmA4jvCw/+7pz197u70UyklX45E3/ReOz?=
+ =?us-ascii?Q?9gU3CjrJSzhRHfrZPrU3co35V3V7lyyCw68E0xSoIySBBxOUcq0zlyOL+Ni2?=
+ =?us-ascii?Q?+MI3ty7/CNSHGPWCxNrUb0J6qfnys1ssOLKSVOYBvBgpxvmQohtF8KdSrE3X?=
+ =?us-ascii?Q?wntrJls/o2hER8viQp2volSCRUyCKNYddzLcFfDYtfGqowzJWcZwGLKCNcTS?=
+ =?us-ascii?Q?tBhCFNji5pw3RvMZtQfUZHPYJBzfBqFmU2lBQyH0tk5NfTwmD+R5OYLE30Nv?=
+ =?us-ascii?Q?/c4EB06Wok+uBhC12JHd+b6Yie7SlaUaq6po4F4Pvctd2Rv8OI+gW3/BT6IX?=
+ =?us-ascii?Q?FT/7BPn45Qkqqh7sui04oIzP95b9mTUJXQ6M+7IRiq/aFAHtPGWq+cospf0A?=
+ =?us-ascii?Q?WIsVSilW8vGDeMcXLA+mFhFXalZG5yBw6VkeDIheviKpXZCLVtvLRWLesbF2?=
+ =?us-ascii?Q?NbWx5hMWtemJYQukrg09O0AwR5iZCaqI2/Jjihe3F0tWKl8s5mFWXeqiQV9J?=
+ =?us-ascii?Q?yugR/Vxu5GzeubDmTDxzR600O6u36vT4lLU3Peu+?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	l4U4AmKeRqyMqdJ4vtgV9RWTaon6E23OTW+/LI6yhKTtDtn3ZRsgmSxUK1Lqm+FrAZcCUhhKs5VvEmIkW4mQDQ73xJCSwO/9/fLghHk0IRSiruMvMSCTbpznTkAOW9c3Ks5FGDSJJMuM2S0cRjQylzBIr9P6kr+6Pq4416wstemQY74CjkIsI0SJ6w0KGHbsHww+oSQB4cgWhauPgWPCoz9m15beFZN/9d+qVmv2XziajL1NbiS8IkDUMQksvGnE3rSSGqB3UPfi9N9mhSS08FS0n/KT6FU4zBTe67Iwwegt1fPL7qsinnwAgkkrHzqEA95oqzoexBWq3cV7jIMXZItiwmiQPFXGZHcuVnjvH6c+oXsd1efJQkoPr/apwUF8lIrvPn4cZ9AbUU1BJfDizwugaXH6tAJRY956H0UnHnmDIX3/wXSaaqgFC9zWaqYl2Q5UyHwCJGMEvgbrRRasESqDl9D9xs2+J9FjO7+liiWsRNOnJt5REbD7WEXn2iI1515ujm+6GTGIzS25FddTTfzBeEdOuLjU+YPWRKTwoAOz1XXSpQLIZ2lDDSeg7iOJc2wqBW5/+VufoO9HFD1iddm070XneQ9bwgHXQ2Gf/s8=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5991f853-b6b5-45a3-e5ed-08ddbeeaf1a9
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR10MB7329.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2025 13:17:24.4603
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UuzuIZxmwKB/Zzx7Iq6c+3nlGY9thu8GC50Vxsty/L9QQCDf8XX1YYepkAprJjwP7APuGgJx4DoUNpRLGdrGxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4914
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-07-09_02,2025-07-08_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 malwarescore=0 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2507090119
+X-Authority-Analysis: v=2.4 cv=e4EGSbp/ c=1 sm=1 tr=0 ts=686e6bea cx=c_pps a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=Wb1JkmetP80A:10 a=GoEa3M9JfhUA:10 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8 a=XaHTuPSUgyWGxnsc4b8A:9
+X-Proofpoint-GUID: Tvv6auSB7fXBD1BKlplbeAli7wXgsQgP
+X-Proofpoint-ORIG-GUID: Tvv6auSB7fXBD1BKlplbeAli7wXgsQgP
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA5MDExOSBTYWx0ZWRfX1qGFpmeKRLtj QDTFXlWUu1KA9cqZTHW1gSM+EbEnHFxaR1mTUVWnudYSfnyeHBZUiyHYPwfBeqeSIMYD4n5Dv+R RZAH/jsMkXeQzB5hgmt38ZecwNVryD5jsrNAZP6YePnySklKEl1xwBDNsa4skHfvtH69L5pk+FT
+ 3Le0HGmWcQxQ8JpATSOkIORGMgqCQkPgpKXqorbqtpJfieJ4VqtsorR7tvcbG72Y+fKZgdMvzjY dJsvLah5vWAnVfwwK3tv3YzOmzW9kwDAMhMkUgFTO0gOK3zgSUlyxcZVYTJ2jr8zKp4U6SjOV9w z8dKlFjSM8TE9PFD+3IwWF1C9OSDIxzAdmzynb9jm7XVRw1dwOxsVCRYt4A9+8AsZzUfi6d3m0U
+ XfJBuu5L7+GhhsM0e1+wcDECVXfJddENMx/X+7GmAZRPkrDsgGahjyYAkc5PN6MPz5g4mALy
 
+Hi all,
 
---8p2AxLcgYrx+Az4a
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+During our internal testing, we started observing intermittent boot
+failures when the machine uses 4-level paging and has a large amount
+of persistent memory:
 
-On Tue, Jul 01, 2025 at 10:58:00AM +0200, Thomas Wei=DFschuh wrote:
-> The internal helpers are effectively using boolean results,
-> while pretending to use error numbers.
->=20
-> Switch the return type to bool for more clarity.
+  BUG: unable to handle page fault for address: ffffe70000000034
+  #PF: supervisor write access in kernel mode
+  #PF: error_code(0x0002) - not-present page
+  PGD 0 P4D 0 
+  Oops: 0002 [#1] SMP NOPTI
+  RIP: 0010:__init_single_page+0x9/0x6d
+  Call Trace:
+   <TASK>
+   __init_zone_device_page+0x17/0x5d
+   memmap_init_zone_device+0x154/0x1bb
+   pagemap_range+0x2e0/0x40f
+   memremap_pages+0x10b/0x2f0
+   devm_memremap_pages+0x1e/0x60
+   dev_dax_probe+0xce/0x2ec [device_dax]
+   dax_bus_probe+0x6d/0xc9
+   [... snip ...]
+   </TASK>
 
-Marek already reported and analysed a hwclock issue with this but I'm
-also seeing issues with the vDSO selftest's vdso_test_correcteness on
-pine64plus (an arm64 board) which bisect down to this patch:
+It turns out that the kernel panics while initializing vmemmap
+(struct page array) when the vmemmap region spans two PGD entries,
+because the new PGD entry is only installed in init_mm.pgd,
+but not in the page tables of other tasks.
 
-# [RUN]	Testing gettimeofday...
-# 	1752000653.829103 0.000000 1752000653.829106
-# [FAIL]	Times are out of sequence
+And looking at __populate_section_memmap():
+  if (vmemmap_can_optimize(altmap, pgmap))                                
+          // does not sync top level page tables
+          r = vmemmap_populate_compound_pages(pfn, start, end, nid, pgmap);
+  else                                                                    
+          // sync top level page tables in x86
+          r = vmemmap_populate(start, end, nid, altmap);
 
-   https://lava.sirena.org.uk/scheduler/job/1550140#L9170
+In the normal path, vmemmap_populate() in arch/x86/mm/init_64.c
+synchronizes the top level page table (See commit 9b861528a801
+("x86-64, mem: Update all PGDs for direct mapping and vmemmap mapping
+changes")) so that all tasks in the system can see the new vmemmap area.
 
-and it causes infrastructure issues due to time on x15 (a 32 bit arm
-platform):
+However, when vmemmap_can_optimize() returns true, the optimized path
+skips synchronization of top-level page tables. This is because
+vmemmap_populate_compound_pages() is implemented in core MM code, which
+does not handle synchronization of the top-level page tables. Instead,
+the core MM has historically relied on each architecture to perform this
+synchronization manually.
 
-| INFO: Generating a skipfile based on /lava-4163764/1/tests/5_kselftest-si=
-gnal/automated/linux/kselftest/skipfile-lkft.yaml
-| fatal error: nanotime returning zero
-| goroutine 1 [running, locked to thread]:
-| runtime.throw(0x132d83, 0x17)
-| 	/usr/lib/golang/src/runtime/panic.go:774 +0x5c fp=3D0x42c7a4 sp=3D0x42c7=
-90 pc=3D0x3b740
-| runtime.main()
-|	/usr/lib/golang/src/runtime/proc.go:152 +0x350 fp=3D0x42c7e4 sp=3D0x42c7a=
-4 pc=3D0x3d308
-| runtime.goexit()
-|	/usr/lib/golang/src/runtime/asm_arm.s:868 +0x4 fp=3D0x42c7e4 sp=3D0x42c7e=
-4 pc=3D0x645dc
-| ERROR: skipgen failed to generate a skipfile: 2
+We're not the first party to encounter a crash caused by not-sync'd
+top level page tables: earlier this year, Gwan-gyeong Mun attempted to
+address the issue [1] [2] after hitting a kernel panic when x86 code
+accessed the vmemmap area before the corresponding top-level entries
+were synced. At that time, the issue was believed to be triggered
+only when struct page was enlarged for debugging purposes, and the patch
+did not get further updates.
 
-   https://validation.linaro.org/scheduler/job/4163764#L2162
+It turns out that current approach of relying on each arch to handle
+the page table sync manually is fragile because 1) it's easy to forget
+to sync the top level page table, and 2) it's also easy to overlook that
+the kernel should not access vmemmap / direct mapping area before the sync.
 
-for mystifying reasons which bisect similarly.  I'll try to test Marek's
-fix but I'm at a conference this week so no guarantees.
+To address this, Dave Hansen suggested [3] [4] introducing
+{pgd,p4d}_populate_kernel() for updating kernel portion
+of the page tables and allow each architecture to explicitly perform
+synchronization when installing top-level entries. With this approach,
+we no longer need to worry about missing the sync step, reducing the risk
+of future regressions.
+ 
+This patch series implements Dave Hansen's suggestion and hence added
+Suggested-by: Dave Hansen.
 
-bisect for pine64plus:
+This is an RFC primarily because this involves non-trivial change and
+I would like to fix it in a way that aligns with community consensus.
 
-# bad: [58ba80c4740212c29a1cf9b48f588e60a7612209] Add linux-next specific f=
-iles for 20250708
-# good: [3a92879a3786d4f28bb3a91a07fd58359b29ca13] Merge branch 'for-linux-=
-next-fixes' of https://gitlab.freedesktop.org/drm/misc/kernel.git
-# good: [08dc0f5cc26a203e8008c38d9b436c079e7dbb45] ASoC: soc-dapm: add pref=
-ix on soc_dapm_dev_attrs
-# good: [571defe0dff3f1e4180bd0db79283d3d5bf74a71] ASoC: codec: rockchip_sa=
-i: Remove including of_gpio.h
-# good: [2fca750160f29015ab1109bb478537a4e415f7cd] spi: Remove redundant pm=
-_runtime_mark_last_busy() calls
-# good: [2bd9648d5a8d329ca734ca2c273a80934867471e] ASoC: SOF: Remove redund=
-ant pm_runtime_mark_last_busy() calls
-# good: [c61e94e5e4e6bc50064119e6a779564d1d2ac0e7] regulator: stm32-vrefbuf=
-: Remove redundant pm_runtime_mark_last_busy() calls
-# good: [bc163baef57002c08b3afe64cdd2f55f55a765eb] ASoC: Use of_reserved_me=
-m_region_to_resource() for "memory-region"
-# good: [9f711c9321cffe3e03709176873c277fa911c366] regmap: get rid of redun=
-dant debugfs_file_{get,put}()
-# good: [baee26a9d6cd3d3c6c3c03c56270aa647a67e4bd] ASoC: fsl_mqs: rename sy=
-stem manager indices for i.MX95
-# good: [7105fdd54a14bee49371b39374a61b3c967d74cb] spi: dt-bindings: Conver=
-t marvell,orion-spi to DT schema
-# good: [913bf8d50cbd144c87e9660b591781179182ff59] spi: spi-qpic-snand: add=
- support for 8 bits ECC strength
-# good: [34d340d48e595f8dfd4e72fe4100d2579dbe4a1a] ASoC: qcom: sc8280xp: Ad=
-d support for QCS8275
-# good: [0c0ef1d90967717b91cded41b00dbae05d8e521c] ASoC: amd: acp: Enable a=
-cp7.2 platform based DMIC support in machine driver
-# good: [3fcd3d2fe44dc9dfca20b6aed117f314a50ba0ff] spi: offload trigger: ad=
-d ADI Util Sigma-Delta SPI driver
-# good: [244bc18e5f1875401a4af87d2eae3f9376d9d720] spi: stm32: delete stray=
- tabs in stm32h7_spi_data_idleness()
-# good: [7e1c28fbf235791cb5046fafdac5bc16fe8e788d] spi: spi-pci1xxxx: enabl=
-e concurrent DMA read/write across SPI transfers
-# good: [c4f2c05ab02952c9a56067aeb700ded95b183570] spi: stm32: fix pointer-=
-to-pointer variables usage
-# good: [b9ab3b61824190b1c6b2c59e7ba4de591f24eb92] ASoC: SDCA: Add some ini=
-tial IRQ handlers
-# good: [427ceac823e58813b510e585011488f603f0d891] regulator: tps6286x-regu=
-lator: Enable REGCACHE_MAPLE
-# good: [29ddce17e909779633f856ad1c2f111fbf71c0df] ASoC: codecs: Add calibr=
-ation function to aw88399 chip
-# good: [ac4c064f67d3cdf9118b9b09c1e3b28b6c10a7ea] spi: dt-bindings: add nx=
-p,lpc3220-spi.yaml
-# good: [08bf1663c21a3e815eda28fa242d84c945ca3b94] dmaengine: Add devm_dma_=
-request_chan()
-# good: [ce57bc9771411d6d27f2ca7b40396cbd7d684ba9] regulator: core: Don't u=
-se "proxy" headers
-# good: [2555691165a0285a4617230fed859f20dcc51608] spi: atmel-quadspi: Use =
-`devm_dma_request_chan()`
-# good: [0f60ecffbfe35e12eb56c99640ba2360244b5bb3] ASoC: sdw_utils: generat=
-e combined spk components string
-# good: [9a944494c299fabf3cc781798eb7c02a0bece364] spi: dt-bindings: stm32:=
- deprecate `st,spi-midi-ns` property
-# good: [3e36c822506d924894ff7de549b9377d3114c2d7] spi: spi-pci1xxxx: Add s=
-upport for per-instance DMA interrupt vectors
-# good: [68fbc70ece40139380380dce74059afa592846b3] ASoC: hisilicon: Standar=
-dize ASoC menu
-# good: [8f9cf02c8852837923f1cdacfcc92e138513325c] spi: microchip-core-qspi=
-: Add regular transfers
-# good: [17cc308b183308bf5ada36e164284fff7eb064ba] ASoC: wm8524: enable con=
-straints when sysclk is configured.
-# good: [59566923d955b69bfb1e1163f07dff437dde8c9c] ASoC: SOF: amd: add alte=
-rnate machines for ACP7.0 and ACP7.1 platforms
-# good: [024f39fff6d222cedde361f7fe34d9ba4e6afb92] regulator: mtk-dvfsrc: A=
-dd support for MediaTek MT8196 DVFSRC
-# good: [19cbc930c209d59a2c9828de4c7b767e9f14667e] regulator: pca9450: Supp=
-ort PWM mode also for pca9451a
-# good: [c4ca928a6db1593802cd945f075a7e21dd0430c1] ASoC: hdac_hdmi: Rate li=
-mit logging on connection and disconnection
-# good: [a48352921f0b15b1f7eff83f5b5613d6ae2350d3] ASoC: codecs: wcd939x: A=
-dd defines for major/minor version decoding
-# good: [3421d46440ebe0865bec71dbd2330b4e17a425ab] HID: core: Add bus defin=
-e for SoundWire bus
-# good: [a1d203d390e04798ccc1c3c06019cd4411885d6d] ASoC: SOF: ipc4-pcm: Ena=
-ble delay reporting for ChainDMA streams
-# good: [bb48117b79ebc39485f7306d09dc602981fe540f] ASoC: Intel: sof_sdw: Im=
-plement add_dai_link to filter HDMI PCMs
-# good: [ace9b3daf2b4778358573d3698e34cb1c0fa7e14] ASoC: SOF: ipc4/Intel: A=
-dd support for library restore firmware functionality
-# good: [2756b7f08ff6ca7c68c8c7dd61c8dc6895c9de34] ASoC: SOF: ipc4-pcm: Har=
-monize sof_ipc4_set_pipeline_state() dbg print
-# good: [5fc2c383125c2b4b6037e02ad8796b776b25e6d0] spi: falcon: mark falcon=
-_sflash_xfer() as static
-# good: [cd4da713f99651e99fbce8ed6b6ec8f686c029a8] Documentation: PM: *_aut=
-osuspend() functions update last busy time
-# good: [7f8924e8785b68c998bc1906e049bf5595865e60] ASoC: dt-bindings: cirru=
-s,cs42xx8: add 'port' property
-# good: [3e1c01d06e1f52f78fe00ef26a9cf80dbb0a3115] regulator: rpi-panel-v2:=
- Add shutdown hook
-# good: [d9f38d9824bfb1b046d2e720349d2f45959ab184] ASoC: tegra: AHUB: Remov=
-e unneeded semicolon
-# good: [dce4bc30f42d313b4dc5832316196411b7f07ad0] spi: spi-fsl-dspi: Rever=
-t unintended dependency change in config SPI_FSL_DSPI
-# good: [47972c1c3315672352f25c68f91dd88543541947] ASoC: Intel: Replace dep=
-recated strcpy() with strscpy()
-# good: [5eb8a0d7733d4cd32a776acf1d1aa1c7c01c8a14] ASoC: hdmi-codec: use SN=
-D_JACK_AVOUT as jack status
-# good: [bb8d8ba4715cb8f997d63d90ba935f6073595df5] ASoC: mediatek: mt8183-a=
-fe-pcm: use local `dev` pointer in driver callbacks
-# good: [8a5a5cecb79058b608e5562d8998123a3adb313c] ASoC: tas2781: Move the =
-"include linux/debugfs.h" into tas2781.h
-# good: [a4eb71ff98c4792f441f108910bd829da7a04092] regulator: rpi-panel-v2:=
- Fix missing OF dependency
-# good: [6cafcc53eb5fffd9b9bdfde700bb9bad21e98ed3] spi: spi-mt65xx: Add sup=
-port for MT6991 Dimensity 9400 SPI IPM
-# good: [7e10d7242ea8a5947878880b912ffa5806520705] ASoC: ops: dynamically a=
-llocate struct snd_ctl_elem_value
-# good: [d6fa0ca959db8efd4462d7beef4bdc5568640fd0] regulator: rpi-panel-v2:=
- Add missing GPIOLIB dependency
-# good: [6ba68e5aa9d5d15c8877a655db279fcfc0b38b04] ASoC: renesas: msiof: Co=
-nvert to <linux/spi/sh_msiof.h>
-# good: [1f5cdb6ab45e1c06ae0953609acbb52f8946b3e8] ASoC: codecs: Add suppor=
-t for Richtek RTQ9124
-# good: [d49305862fdc4d9ff1b1093b4ed7d8e0cb9971b4] regulator: rpi-panel-v2:=
- Add regulator for 7" Raspberry Pi 720x1280
-# good: [03b778d1994827ea5cc971dbdfbb457bbb7bfa5d] ASOC: rockchip: Use help=
-er function devm_clk_get_enabled()
-# good: [c459262159f39e6e6336797feb975799344b749b] spi: spi-pci1xxxx: Add s=
-upport for 25MHz Clock frequency in C0
-# good: [267be32b0a7b70cc777f8a46f0904c92c0521d89] ASoC: remove component->=
-id
-# good: [548d770c330cd1027549947a6ea899c56b5bc4e4] regulator: pca9450: Add =
-support for mode operations
-# good: [111a2c8ab462d77d1519b71b46f13ae1b46920b4] ASoC: imx-card: Use help=
-er function for_each_child_of_node_scoped()
-# good: [f6f914893d478b7ba08e5c375de1ced16deb5e92] ASoC: dt-bindings: tas57=
-xx: add tas5753 compatibility
-# good: [9a30e332c36c52e92e5316b4a012d45284dedeb5] spi: spi-fsl-dspi: Enabl=
-e support for S32G platforms
-# good: [c95e925daa434ee1a40a86aec6476ce588e4bd77] ASoC: Intel: avs: Add rt=
-5640 machine board
-# good: [ac209bde018fd320b79976657a44c23113181af6] ASoC: tas2781: Drop the =
-unnecessary symbol imply
-# good: [ece5d881004f041c2e1493436409dbcbea3ad5f8] ASoC: codecs: wcd939x: D=
-rop unused 'struct wcd939x_priv' fields
-# good: [b9ecde0bcf6a99a3ff08496d4ba90a385ebbfd68] ASoC: codecs: wcd939x: A=
-dd VDD_PX supply
-# good: [c8c4694ede7ed42d8d4db0e8927dea9839a3e248] regmap: kunit: Constify =
-regmap_range_cfg array
-# good: [e6e8897995a9e6028563ce36c27877e5478c8571] ASoC: qcom: sm8250: Add =
-Fairphone 5 soundcard compatible
-git bisect start '58ba80c4740212c29a1cf9b48f588e60a7612209' '3a92879a3786d4=
-f28bb3a91a07fd58359b29ca13' '08dc0f5cc26a203e8008c38d9b436c079e7dbb45' '571=
-defe0dff3f1e4180bd0db79283d3d5bf74a71' '2fca750160f29015ab1109bb478537a4e41=
-5f7cd' '2bd9648d5a8d329ca734ca2c273a80934867471e' 'c61e94e5e4e6bc50064119e6=
-a779564d1d2ac0e7' 'bc163baef57002c08b3afe64cdd2f55f55a765eb' '9f711c9321cff=
-e3e03709176873c277fa911c366' 'baee26a9d6cd3d3c6c3c03c56270aa647a67e4bd' '71=
-05fdd54a14bee49371b39374a61b3c967d74cb' '913bf8d50cbd144c87e9660b5917811791=
-82ff59' '34d340d48e595f8dfd4e72fe4100d2579dbe4a1a' '0c0ef1d90967717b91cded4=
-1b00dbae05d8e521c' '3fcd3d2fe44dc9dfca20b6aed117f314a50ba0ff' '244bc18e5f18=
-75401a4af87d2eae3f9376d9d720' '7e1c28fbf235791cb5046fafdac5bc16fe8e788d' 'c=
-4f2c05ab02952c9a56067aeb700ded95b183570' 'b9ab3b61824190b1c6b2c59e7ba4de591=
-f24eb92' '427ceac823e58813b510e585011488f603f0d891' '29ddce17e909779633f856=
-ad1c2f111fbf71c0df' 'ac4c064f67d3cdf9118b9b09c1e3b28b6c10a7ea' '08bf1663c21=
-a3e815eda28fa242d84c945ca3b94' 'ce57bc9771411d6d27f2ca7b40396cbd7d684ba9' '=
-2555691165a0285a4617230fed859f20dcc51608' '0f60ecffbfe35e12eb56c99640ba2360=
-244b5bb3' '9a944494c299fabf3cc781798eb7c02a0bece364' '3e36c822506d924894ff7=
-de549b9377d3114c2d7' '68fbc70ece40139380380dce74059afa592846b3' '8f9cf02c88=
-52837923f1cdacfcc92e138513325c' '17cc308b183308bf5ada36e164284fff7eb064ba' =
-'59566923d955b69bfb1e1163f07dff437dde8c9c' '024f39fff6d222cedde361f7fe34d9b=
-a4e6afb92' '19cbc930c209d59a2c9828de4c7b767e9f14667e' 'c4ca928a6db1593802cd=
-945f075a7e21dd0430c1' 'a48352921f0b15b1f7eff83f5b5613d6ae2350d3' '3421d4644=
-0ebe0865bec71dbd2330b4e17a425ab' 'a1d203d390e04798ccc1c3c06019cd4411885d6d'=
- 'bb48117b79ebc39485f7306d09dc602981fe540f' 'ace9b3daf2b4778358573d3698e34c=
-b1c0fa7e14' '2756b7f08ff6ca7c68c8c7dd61c8dc6895c9de34' '5fc2c383125c2b4b603=
-7e02ad8796b776b25e6d0' 'cd4da713f99651e99fbce8ed6b6ec8f686c029a8' '7f8924e8=
-785b68c998bc1906e049bf5595865e60' '3e1c01d06e1f52f78fe00ef26a9cf80dbb0a3115=
-' 'd9f38d9824bfb1b046d2e720349d2f45959ab184' 'dce4bc30f42d313b4dc5832316196=
-411b7f07ad0' '47972c1c3315672352f25c68f91dd88543541947' '5eb8a0d7733d4cd32a=
-776acf1d1aa1c7c01c8a14' 'bb8d8ba4715cb8f997d63d90ba935f6073595df5' '8a5a5ce=
-cb79058b608e5562d8998123a3adb313c' 'a4eb71ff98c4792f441f108910bd829da7a0409=
-2' '6cafcc53eb5fffd9b9bdfde700bb9bad21e98ed3' '7e10d7242ea8a5947878880b912f=
-fa5806520705' 'd6fa0ca959db8efd4462d7beef4bdc5568640fd0' '6ba68e5aa9d5d15c8=
-877a655db279fcfc0b38b04' '1f5cdb6ab45e1c06ae0953609acbb52f8946b3e8' 'd49305=
-862fdc4d9ff1b1093b4ed7d8e0cb9971b4' '03b778d1994827ea5cc971dbdfbb457bbb7bfa=
-5d' 'c459262159f39e6e6336797feb975799344b749b' '267be32b0a7b70cc777f8a46f09=
-04c92c0521d89' '548d770c330cd1027549947a6ea899c56b5bc4e4' '111a2c8ab462d77d=
-1519b71b46f13ae1b46920b4' 'f6f914893d478b7ba08e5c375de1ced16deb5e92' '9a30e=
-332c36c52e92e5316b4a012d45284dedeb5' 'c95e925daa434ee1a40a86aec6476ce588e4b=
-d77' 'ac209bde018fd320b79976657a44c23113181af6' 'ece5d881004f041c2e14934364=
-09dbcbea3ad5f8' 'b9ecde0bcf6a99a3ff08496d4ba90a385ebbfd68' 'c8c4694ede7ed42=
-d8d4db0e8927dea9839a3e248' 'e6e8897995a9e6028563ce36c27877e5478c8571'
-# test job: [08dc0f5cc26a203e8008c38d9b436c079e7dbb45] https://lava.sirena.=
-org.uk/scheduler/job/1546279
-# test job: [571defe0dff3f1e4180bd0db79283d3d5bf74a71] https://lava.sirena.=
-org.uk/scheduler/job/1539758
-# test job: [2fca750160f29015ab1109bb478537a4e415f7cd] https://lava.sirena.=
-org.uk/scheduler/job/1540294
-# test job: [2bd9648d5a8d329ca734ca2c273a80934867471e] https://lava.sirena.=
-org.uk/scheduler/job/1539587
-# test job: [c61e94e5e4e6bc50064119e6a779564d1d2ac0e7] https://lava.sirena.=
-org.uk/scheduler/job/1538605
-# test job: [bc163baef57002c08b3afe64cdd2f55f55a765eb] https://lava.sirena.=
-org.uk/scheduler/job/1538760
-# test job: [9f711c9321cffe3e03709176873c277fa911c366] https://lava.sirena.=
-org.uk/scheduler/job/1538695
-# test job: [baee26a9d6cd3d3c6c3c03c56270aa647a67e4bd] https://lava.sirena.=
-org.uk/scheduler/job/1533838
-# test job: [7105fdd54a14bee49371b39374a61b3c967d74cb] https://lava.sirena.=
-org.uk/scheduler/job/1533505
-# test job: [913bf8d50cbd144c87e9660b591781179182ff59] https://lava.sirena.=
-org.uk/scheduler/job/1531279
-# test job: [34d340d48e595f8dfd4e72fe4100d2579dbe4a1a] https://lava.sirena.=
-org.uk/scheduler/job/1530316
-# test job: [0c0ef1d90967717b91cded41b00dbae05d8e521c] https://lava.sirena.=
-org.uk/scheduler/job/1530377
-# test job: [3fcd3d2fe44dc9dfca20b6aed117f314a50ba0ff] https://lava.sirena.=
-org.uk/scheduler/job/1528995
-# test job: [244bc18e5f1875401a4af87d2eae3f9376d9d720] https://lava.sirena.=
-org.uk/scheduler/job/1528294
-# test job: [7e1c28fbf235791cb5046fafdac5bc16fe8e788d] https://lava.sirena.=
-org.uk/scheduler/job/1525609
-# test job: [c4f2c05ab02952c9a56067aeb700ded95b183570] https://lava.sirena.=
-org.uk/scheduler/job/1526240
-# test job: [b9ab3b61824190b1c6b2c59e7ba4de591f24eb92] https://lava.sirena.=
-org.uk/scheduler/job/1526368
-# test job: [427ceac823e58813b510e585011488f603f0d891] https://lava.sirena.=
-org.uk/scheduler/job/1525674
-# test job: [29ddce17e909779633f856ad1c2f111fbf71c0df] https://lava.sirena.=
-org.uk/scheduler/job/1523960
-# test job: [ac4c064f67d3cdf9118b9b09c1e3b28b6c10a7ea] https://lava.sirena.=
-org.uk/scheduler/job/1515936
-# test job: [08bf1663c21a3e815eda28fa242d84c945ca3b94] https://lava.sirena.=
-org.uk/scheduler/job/1517680
-# test job: [ce57bc9771411d6d27f2ca7b40396cbd7d684ba9] https://lava.sirena.=
-org.uk/scheduler/job/1515829
-# test job: [2555691165a0285a4617230fed859f20dcc51608] https://lava.sirena.=
-org.uk/scheduler/job/1515774
-# test job: [0f60ecffbfe35e12eb56c99640ba2360244b5bb3] https://lava.sirena.=
-org.uk/scheduler/job/1511599
-# test job: [9a944494c299fabf3cc781798eb7c02a0bece364] https://lava.sirena.=
-org.uk/scheduler/job/1507913
-# test job: [3e36c822506d924894ff7de549b9377d3114c2d7] https://lava.sirena.=
-org.uk/scheduler/job/1506345
-# test job: [68fbc70ece40139380380dce74059afa592846b3] https://lava.sirena.=
-org.uk/scheduler/job/1504169
-# test job: [8f9cf02c8852837923f1cdacfcc92e138513325c] https://lava.sirena.=
-org.uk/scheduler/job/1502871
-# test job: [17cc308b183308bf5ada36e164284fff7eb064ba] https://lava.sirena.=
-org.uk/scheduler/job/1501545
-# test job: [59566923d955b69bfb1e1163f07dff437dde8c9c] https://lava.sirena.=
-org.uk/scheduler/job/1499651
-# test job: [024f39fff6d222cedde361f7fe34d9ba4e6afb92] https://lava.sirena.=
-org.uk/scheduler/job/1499702
-# test job: [19cbc930c209d59a2c9828de4c7b767e9f14667e] https://lava.sirena.=
-org.uk/scheduler/job/1497288
-# test job: [c4ca928a6db1593802cd945f075a7e21dd0430c1] https://lava.sirena.=
-org.uk/scheduler/job/1496256
-# test job: [a48352921f0b15b1f7eff83f5b5613d6ae2350d3] https://lava.sirena.=
-org.uk/scheduler/job/1497361
-# test job: [3421d46440ebe0865bec71dbd2330b4e17a425ab] https://lava.sirena.=
-org.uk/scheduler/job/1493081
-# test job: [a1d203d390e04798ccc1c3c06019cd4411885d6d] https://lava.sirena.=
-org.uk/scheduler/job/1491513
-# test job: [bb48117b79ebc39485f7306d09dc602981fe540f] https://lava.sirena.=
-org.uk/scheduler/job/1489350
-# test job: [ace9b3daf2b4778358573d3698e34cb1c0fa7e14] https://lava.sirena.=
-org.uk/scheduler/job/1489286
-# test job: [2756b7f08ff6ca7c68c8c7dd61c8dc6895c9de34] https://lava.sirena.=
-org.uk/scheduler/job/1489210
-# test job: [5fc2c383125c2b4b6037e02ad8796b776b25e6d0] https://lava.sirena.=
-org.uk/scheduler/job/1486896
-# test job: [cd4da713f99651e99fbce8ed6b6ec8f686c029a8] https://lava.sirena.=
-org.uk/scheduler/job/1538863
-# test job: [7f8924e8785b68c998bc1906e049bf5595865e60] https://lava.sirena.=
-org.uk/scheduler/job/1486908
-# test job: [3e1c01d06e1f52f78fe00ef26a9cf80dbb0a3115] https://lava.sirena.=
-org.uk/scheduler/job/1481717
-# test job: [d9f38d9824bfb1b046d2e720349d2f45959ab184] https://lava.sirena.=
-org.uk/scheduler/job/1481619
-# test job: [dce4bc30f42d313b4dc5832316196411b7f07ad0] https://lava.sirena.=
-org.uk/scheduler/job/1479449
-# test job: [47972c1c3315672352f25c68f91dd88543541947] https://lava.sirena.=
-org.uk/scheduler/job/1479571
-# test job: [5eb8a0d7733d4cd32a776acf1d1aa1c7c01c8a14] https://lava.sirena.=
-org.uk/scheduler/job/1474490
-# test job: [bb8d8ba4715cb8f997d63d90ba935f6073595df5] https://lava.sirena.=
-org.uk/scheduler/job/1472035
-# test job: [8a5a5cecb79058b608e5562d8998123a3adb313c] https://lava.sirena.=
-org.uk/scheduler/job/1471848
-# test job: [a4eb71ff98c4792f441f108910bd829da7a04092] https://lava.sirena.=
-org.uk/scheduler/job/1468995
-# test job: [6cafcc53eb5fffd9b9bdfde700bb9bad21e98ed3] https://lava.sirena.=
-org.uk/scheduler/job/1468942
-# test job: [7e10d7242ea8a5947878880b912ffa5806520705] https://lava.sirena.=
-org.uk/scheduler/job/1466042
-# test job: [d6fa0ca959db8efd4462d7beef4bdc5568640fd0] https://lava.sirena.=
-org.uk/scheduler/job/1464679
-# test job: [6ba68e5aa9d5d15c8877a655db279fcfc0b38b04] https://lava.sirena.=
-org.uk/scheduler/job/1463330
-# test job: [1f5cdb6ab45e1c06ae0953609acbb52f8946b3e8] https://lava.sirena.=
-org.uk/scheduler/job/1462967
-# test job: [d49305862fdc4d9ff1b1093b4ed7d8e0cb9971b4] https://lava.sirena.=
-org.uk/scheduler/job/1463039
-# test job: [03b778d1994827ea5cc971dbdfbb457bbb7bfa5d] https://lava.sirena.=
-org.uk/scheduler/job/1461893
-# test job: [c459262159f39e6e6336797feb975799344b749b] https://lava.sirena.=
-org.uk/scheduler/job/1461009
-# test job: [267be32b0a7b70cc777f8a46f0904c92c0521d89] https://lava.sirena.=
-org.uk/scheduler/job/1460419
-# test job: [548d770c330cd1027549947a6ea899c56b5bc4e4] https://lava.sirena.=
-org.uk/scheduler/job/1460085
-# test job: [111a2c8ab462d77d1519b71b46f13ae1b46920b4] https://lava.sirena.=
-org.uk/scheduler/job/1460877
-# test job: [f6f914893d478b7ba08e5c375de1ced16deb5e92] https://lava.sirena.=
-org.uk/scheduler/job/1461476
-# test job: [9a30e332c36c52e92e5316b4a012d45284dedeb5] https://lava.sirena.=
-org.uk/scheduler/job/1460560
-# test job: [c95e925daa434ee1a40a86aec6476ce588e4bd77] https://lava.sirena.=
-org.uk/scheduler/job/1460134
-# test job: [ac209bde018fd320b79976657a44c23113181af6] https://lava.sirena.=
-org.uk/scheduler/job/1461916
-# test job: [ece5d881004f041c2e1493436409dbcbea3ad5f8] https://lava.sirena.=
-org.uk/scheduler/job/1461683
-# test job: [b9ecde0bcf6a99a3ff08496d4ba90a385ebbfd68] https://lava.sirena.=
-org.uk/scheduler/job/1461078
-# test job: [c8c4694ede7ed42d8d4db0e8927dea9839a3e248] https://lava.sirena.=
-org.uk/scheduler/job/1461314
-# test job: [e6e8897995a9e6028563ce36c27877e5478c8571] https://lava.sirena.=
-org.uk/scheduler/job/1461772
-# test job: [58ba80c4740212c29a1cf9b48f588e60a7612209] https://lava.sirena.=
-org.uk/scheduler/job/1548198
-# bad: [58ba80c4740212c29a1cf9b48f588e60a7612209] Add linux-next specific f=
-iles for 20250708
-git bisect bad 58ba80c4740212c29a1cf9b48f588e60a7612209
-# test job: [ddadac3880bcacd8ae5ef9c8a975ab0f29365279] https://lava.sirena.=
-org.uk/scheduler/job/1548466
-# good: [ddadac3880bcacd8ae5ef9c8a975ab0f29365279] Merge branch 'for-next' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-git bisect good ddadac3880bcacd8ae5ef9c8a975ab0f29365279
-# test job: [e3b47c2bac46fc506ecef42040afa3a91776f722] https://lava.sirena.=
-org.uk/scheduler/job/1548653
-# good: [e3b47c2bac46fc506ecef42040afa3a91776f722] Merge branch 'for-next' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git
-git bisect good e3b47c2bac46fc506ecef42040afa3a91776f722
-# test job: [eab3a69ec865243607c349518c09fe39ecc0d936] https://lava.sirena.=
-org.uk/scheduler/job/1548704
-# bad: [eab3a69ec865243607c349518c09fe39ecc0d936] Merge branch 'for-next' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/fpga/linux-fpga.git
-git bisect bad eab3a69ec865243607c349518c09fe39ecc0d936
-# test job: [022880fb3d8f45e408bb117e634edbe9fb1528b2] https://lava.sirena.=
-org.uk/scheduler/job/1548782
-# bad: [022880fb3d8f45e408bb117e634edbe9fb1528b2] Merge branch 'next' of gi=
-t://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm.git
-git bisect bad 022880fb3d8f45e408bb117e634edbe9fb1528b2
-# test job: [a00a9a8b710f09cc6d05a0189e3cd5e41ff8f467] https://lava.sirena.=
-org.uk/scheduler/job/1548826
-# bad: [a00a9a8b710f09cc6d05a0189e3cd5e41ff8f467] Merge branch into tip/mas=
-ter: 'x86/kconfig'
-git bisect bad a00a9a8b710f09cc6d05a0189e3cd5e41ff8f467
-# test job: [05f88a899228a24c1beba9291f63895746351a86] https://lava.sirena.=
-org.uk/scheduler/job/1549063
-# good: [05f88a899228a24c1beba9291f63895746351a86] Merge branch into tip/ma=
-ster: 'irq/drivers'
-git bisect good 05f88a899228a24c1beba9291f63895746351a86
-# test job: [7893ea1006fcbb876ddf53ad4ebba4a054add4b2] https://lava.sirena.=
-org.uk/scheduler/job/1549165
-# bad: [7893ea1006fcbb876ddf53ad4ebba4a054add4b2] vdso/gettimeofday: Add su=
-pport for auxiliary clocks
-git bisect bad 7893ea1006fcbb876ddf53ad4ebba4a054add4b2
-# test job: [60ecc26ec5af567a55f362ad92c0cac8b894541c] https://lava.sirena.=
-org.uk/scheduler/job/1549250
-# good: [60ecc26ec5af567a55f362ad92c0cac8b894541c] timekeeping: Provide tim=
-e setter for auxiliary clocks
-git bisect good 60ecc26ec5af567a55f362ad92c0cac8b894541c
-# test job: [d878e2960cb638faf3cc9f1409c6a2a3f9283ec1] https://lava.sirena.=
-org.uk/scheduler/job/1549360
-# good: [d878e2960cb638faf3cc9f1409c6a2a3f9283ec1] vdso/vsyscall: Introduce=
- a helper to fill clock configurations
-git bisect good d878e2960cb638faf3cc9f1409c6a2a3f9283ec1
-# test job: [b5df72706b044b30b17f5d623fe040b83e98be36] https://lava.sirena.=
-org.uk/scheduler/job/1549506
-# bad: [b5df72706b044b30b17f5d623fe040b83e98be36] vdso/gettimeofday: Introd=
-uce vdso_clockid_valid()
-git bisect bad b5df72706b044b30b17f5d623fe040b83e98be36
-# test job: [9916785ef2ce464edd83fce80eaa11fab7792547] https://lava.sirena.=
-org.uk/scheduler/job/1549963
-# good: [9916785ef2ce464edd83fce80eaa11fab7792547] vdso/helpers: Add helper=
-s for seqlocks of single vdso_clock
-git bisect good 9916785ef2ce464edd83fce80eaa11fab7792547
-# test job: [fcc8e46f768ff508dab0e3cfc2001e96dcb388e2] https://lava.sirena.=
-org.uk/scheduler/job/1550140
-# bad: [fcc8e46f768ff508dab0e3cfc2001e96dcb388e2] vdso/gettimeofday: Return=
- bool from clock_gettime() helpers
-git bisect bad fcc8e46f768ff508dab0e3cfc2001e96dcb388e2
-# test job: [7413d7c640aa1d9620aa467922cfe3b8df51272e] https://lava.sirena.=
-org.uk/scheduler/job/1550370
-# good: [7413d7c640aa1d9620aa467922cfe3b8df51272e] vdso/gettimeofday: Retur=
-n bool from clock_getres() helpers
-git bisect good 7413d7c640aa1d9620aa467922cfe3b8df51272e
-# first bad commit: [fcc8e46f768ff508dab0e3cfc2001e96dcb388e2] vdso/gettime=
-ofday: Return bool from clock_gettime() helpers
+Cc stable because lack of this series opens the door to intermittent
+boot failures.
 
---8p2AxLcgYrx+Az4a
-Content-Type: application/pgp-signature; name="signature.asc"
+[1] https://lore.kernel.org/linux-mm/20250220064105.808339-1-gwan-gyeong.mun@intel.com
+[2] https://lore.kernel.org/linux-mm/20250311114420.240341-1-gwan-gyeong.mun@intel.com
+[3] https://lore.kernel.org/linux-mm/d1da214c-53d3-45ac-a8b6-51821c5416e4@intel.com
+[4] https://lore.kernel.org/linux-mm/4d800744-7b88-41aa-9979-b245e8bf794b@intel.com 
 
------BEGIN PGP SIGNATURE-----
+Harry Yoo (3):
+  mm: introduce and use {pgd,p4d}_populate_kernel()
+  x86/mm: define p*d_populate_kernel() and top level page table sync
+  x86/mm: convert {pgd,p4d}_populate{,_init} to _kernel variant
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhuKFwACgkQJNaLcl1U
-h9A8Hgf/eQnWBd0thkQmYSomYPcOxeGXekwCKKMUwRubHkWI1GDfLMIJjs54KZ7b
-BWq+w+VURZSr0+pfHIk9UNyC4k+e5n950jaY4bZx7nMwuTKMxC5nF7Rnmkgr5R2q
-CLGCrr0IepDrhQiwtVCvR0rujQRAXvB52xfaKDv+kf5K9vgU8+E+rzkg2O4CnBYX
-vEeN7T0WqQwk4hmpszqq8QaFgCBSzvZADjzzp/7TrJPR/Yq+ToyDcwbdWQNsMe43
-fpDz+RnzLz3nj7tNQRp0phJw2pkf0m3u69VUHwDLds61Jub3RXKHYKfkQDogAyPj
-jmdqP5Fi5NLS6geYAFGhfkRmdO+BGg==
-=mUjh
------END PGP SIGNATURE-----
+ arch/x86/include/asm/pgalloc.h |  41 +++++++++
+ arch/x86/mm/init_64.c          | 147 ++++++++++++++++-----------------
+ arch/x86/mm/kasan_init_64.c    |   8 +-
+ include/asm-generic/pgalloc.h  |   4 +
+ include/linux/pgalloc.h        |   0
+ mm/kasan/init.c                |  10 +--
+ mm/percpu.c                    |   4 +-
+ mm/sparse-vmemmap.c            |   4 +-
+ 8 files changed, 130 insertions(+), 88 deletions(-)
+ create mode 100644 include/linux/pgalloc.h
 
---8p2AxLcgYrx+Az4a--
+-- 
+2.43.0
+
 
