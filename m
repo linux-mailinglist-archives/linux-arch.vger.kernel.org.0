@@ -1,263 +1,252 @@
-Return-Path: <linux-arch+bounces-12622-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12623-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA3A5AFF93B
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 08:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B33C3AFF940
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 08:11:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0217A5A2D40
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 06:09:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C883171A8E
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 06:10:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C79A22D3A70;
-	Thu, 10 Jul 2025 06:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F4428725D;
+	Thu, 10 Jul 2025 06:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvTivo36"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="cOydII2K"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F89C2D1F69;
-	Thu, 10 Jul 2025 06:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBE822068D;
+	Thu, 10 Jul 2025 06:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752127274; cv=none; b=gHLWkxYBX6J5hhS/8Pi7jKYawhZ+ldRDO8/5/7prxHdh/b12luIkY+UusyjMiKqgUNE8GMjtgldop5GJ/FkXXt4JTSTkzcppQoD6mb37U62ZT7qVYBH66qbwLcGiov8tkxIdfbxaXDSibzsFYqQuJW5b0XuYQH7xnfNfGb0Wc7I=
+	t=1752127369; cv=none; b=uPgyQ/1zj/aSee4JFmtnlaev9Y1D8VTA1Q2xqitQzDzBMfhdBadfp1GkL+G6z76Em0xnqPi2SuCHnklXggTwWbyY2/1EkW1xHFzMeRbvl2remVqWEkbGwM74N7tz28A3u+s65OorHIrcIB3MfDvvrkAPrcYACDqe+iyWk2XyW0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752127274; c=relaxed/simple;
-	bh=I5bn5qP7xSOtXY8A079H4Bc+7+COegZ1IBZqWTzUO1A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=B1byekw8DgQGIFkoZCWjBkvc6czs+LzegkmJBPIFReZqpYzVg9RYIMnUYimyZBknFXaVyv81JW8SW/UXfPDsU44s4L31rgV7QhKaLTGqkzDDDIBc/CD9Dra7FD/FJjhhu18J1K+8xXCUdlEtTg/5GcVZ+gcDtHQwMPLhzN5VJf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvTivo36; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6fafdd322d3so6995876d6.3;
-        Wed, 09 Jul 2025 23:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752127271; x=1752732071; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2Ob5dAYv6h4uYB8Uy4Mcs5XI6WfB0FBUZ85NYAMmg8E=;
-        b=mvTivo36bMZ975kSB4VdEgvJ9U5VAHcGjBk9IaIpHSRkDP7mfIjnFB0KYk9B4MOBjm
-         MPz1FtEZSkBK/bTN5v9q46adGiJWCIoYQFsFsHVwN7yoW5+c2OtzBL00NhkCbJD4votd
-         4clIaC1eI+Bj6Z8Q3MyeRmYfEZfIS1uFukuqeVIq61B7d7H1LOp7W98xt5m3CP5OLVP9
-         ReQBkw8gJzG90snPzHBUYxEo6st1pDASWMhq6eyfSPhXERO1sapaaSclpE+CF6r/Inz9
-         0T1yymnGpsbY8Ia1ATcWQK64jXGg8uvU+Boh82zHauFLQdSxGI08dNgExiip+HYmGrhb
-         v06A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752127271; x=1752732071;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Ob5dAYv6h4uYB8Uy4Mcs5XI6WfB0FBUZ85NYAMmg8E=;
-        b=gfjk1UTClGMP/CJI9V1obo2Fp4Brik1joPy1/oYhMRbh/eS9N9n9acZopfJ2juLpIY
-         UR3otCupNNaCXY4/oGihrlpon439xK/tn0gnvNymWOxYGHTRhgg0VBl9j53fDHhml64D
-         qG+eSXE3PlXeE5n3JFD05MPGKZG3hALSzjIoyMpXUBpCyqyWoirI1NJVoMZ6Q9XM0Yj5
-         87yAK5MJ57Sa+j255iq8V8PtuhNsHdQhLXYamivJj8q4E+pYr88Cctr2kM8oIl8qPaW/
-         OhENshDy1+YuW+egPTiQGNlF/VnSohQil4xriTqn02gaykHMBWjMJpwEzbtGAlxapNpd
-         ygHg==
-X-Forwarded-Encrypted: i=1; AJvYcCX3GDEkm2o6+v9UZDOBGDbFSA8y9CcbxwYZHGE4cmrwbcJztNauTWq1si0AT3/4UfgnvulksDK/8vgyQ3lrz3Y=@vger.kernel.org, AJvYcCXdLiN143lqoWlhl/qzTdwYLkuZGPFzn8WwTrGIkpc+JjY0FIvL3d9twK7q+d8ZgVeDVkIOkRKuZyxn@vger.kernel.org
-X-Gm-Message-State: AOJu0YybEGO33EEaxnKeQIMCMtwkZEgJXs/g59bNUFjBX2UL7WemkfuI
-	LsKyPNz8cPhi5fMX00zR2Zg7KwQ4jJO+O3WfxU7omVBaLFIgOMgZ1Mw1
-X-Gm-Gg: ASbGncsoFknMKn3R7mwiivlj3sdJaWJ7Xg7602gSil+X/R/AAOqi34PBvCrBuwqCgp9
-	RMqiuNoyw+pZUzWzFrsRNRaMXPa1f7tXB6wppNmRwk3WvDvzwCxtEn+4wjv4byGvVnJJ4hCt9zB
-	+iaMSqikZy6JYd7viXXM5n02XRFHQFRe6rhhRDC+h9Up4I3bYFZxNbYZpsAqb0lpAu34gFHPxaX
-	jLhmhuKn1Baz4mddxco/B4tPEsKIPaQ8OmOWdlfk8KSR43Dt9byA3aR3lrhnRiVhIqxwtu1WLTE
-	dk09CZY+zU2c1lYutl4V/qyow2XSKw/sEdvAtyHlb0JG9eTdw08LI4BXsqt6rUyyfKv9qadHaC9
-	ceO7tHAWYT4j5DD/+wxzWNmvoYd3i7nIIEJwJubnin+RicdtPHw9m
-X-Google-Smtp-Source: AGHT+IE9w/ELvtmgq0Wl+HmrVt63xyjSLjpZHrqKDNbh9jcyRRGILMKadm6VJspuHyORAx4nst+m1g==
-X-Received: by 2002:a05:6214:401c:b0:702:ca9e:dba6 with SMTP id 6a1803df08f44-70498081a37mr17837936d6.16.1752127271002;
-        Wed, 09 Jul 2025 23:01:11 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-704979e3146sm5190806d6.41.2025.07.09.23.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 23:01:10 -0700 (PDT)
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 0CF3AF4006C;
-	Thu, 10 Jul 2025 02:01:10 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Thu, 10 Jul 2025 02:01:10 -0400
-X-ME-Sender: <xms:JVdvaHzE3eLtNFnqqgOSyR-_0HVX0FVY6uq89FPeATIXhD4vC9on1A>
-    <xme:JVdvaAx6Fcs3jOH9PKJRmYRGeRP8zX6YAQNuuWap2uazKLdYbVQE5vlMnc3OEZcrg
-    VobVbYaf698pNDnjA>
-X-ME-Received: <xmr:JVdvaF4e6_JbdrHHWFChsrpK712IrAYw8u34bsXZpvKwYG7NwvPKF2pchw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefleeijecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhnucfh
-    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
-    hrnhepgeeljeeitdehvdehgefgjeevfeejjeekgfevffeiueejhfeuiefggeeuheeggefg
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
-    hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
-    jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
-    drnhgrmhgvpdhnsggprhgtphhtthhopedvjedpmhhouggvpehsmhhtphhouhhtpdhrtghp
-    thhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheprhhushhtqdhfohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtoheplhhkmhhmsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoh
-    eplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    ohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdhgrgihnhhorh
-    esghhmrghilhdrtghomhdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdr
-    tghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhope
-    gsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomh
-X-ME-Proxy: <xmx:JVdvaBAM_tHkV936ixg8oN27pN0tRU3_u74tU3zrPl-dcaCpDmuRsA>
-    <xmx:JVdvaHDauF5v9-7JUHWbi1fXRdyhwRP31PbLaidrPGEqOYyPNNA4eQ>
-    <xmx:JVdvaCq42XE7sd_WlVUh2CgFMoa0Ju0As5lgI24r-pli7ubIbLG_Jw>
-    <xmx:JVdvaJ0vkpfj0aWuJutAIkL1j8h3wt2G3z3xCEhK2HlHUCTu5rA1Nw>
-    <xmx:JldvaBU1b-j_Aw8lvArK5Y5r_bh-4dk_3pNgEDJAYnT94DUHYKp0gQ6P>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Jul 2025 02:01:09 -0400 (EDT)
-From: Boqun Feng <boqun.feng@gmail.com>
-To: linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	lkmm@lists.linux.dev,
-	linux-arch@vger.kernel.org
-Cc: "Miguel Ojeda" <ojeda@kernel.org>,
-	"Alex Gaynor" <alex.gaynor@gmail.com>,
-	"Boqun Feng" <boqun.feng@gmail.com>,
-	"Gary Guo" <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	"Benno Lossin" <lossin@kernel.org>,
-	"Andreas Hindborg" <a.hindborg@kernel.org>,
-	"Alice Ryhl" <aliceryhl@google.com>,
-	"Trevor Gross" <tmgross@umich.edu>,
-	"Danilo Krummrich" <dakr@kernel.org>,
-	"Will Deacon" <will@kernel.org>,
-	"Peter Zijlstra" <peterz@infradead.org>,
-	"Mark Rutland" <mark.rutland@arm.com>,
-	"Wedson Almeida Filho" <wedsonaf@gmail.com>,
-	"Viresh Kumar" <viresh.kumar@linaro.org>,
-	"Lyude Paul" <lyude@redhat.com>,
-	"Ingo Molnar" <mingo@kernel.org>,
-	"Mitchell Levy" <levymitchell0@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	"Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-	"Linus Torvalds" <torvalds@linux-foundation.org>,
-	"Thomas Gleixner" <tglx@linutronix.de>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v6 9/9] rust: sync: atomic: Add Atomic<{usize,isize}>
-Date: Wed,  9 Jul 2025 23:00:52 -0700
-Message-Id: <20250710060052.11955-10-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250710060052.11955-1-boqun.feng@gmail.com>
-References: <20250710060052.11955-1-boqun.feng@gmail.com>
+	s=arc-20240116; t=1752127369; c=relaxed/simple;
+	bh=/nOlbeOrrvvxw+M9MKGzMMtoH7vcH9X0upcHMnOWn5Q=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=foGyrzOO76jG0yxaI1sm2CY9wInhRexOEvf7OXrFITq214Ze9vSxrJ1+IGwzrDoHmbhWNYD52cS6gLij0hDtR8Dz7KbB4uadCxV4gFNI/Lp4hbMotqABVbdiIfUlC4CFwBHdF9EwbxgnmckqaWnBYWGivCDZHtIsegrKVco23mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=cOydII2K; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [127.0.0.1] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56A61oVv420818
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 9 Jul 2025 23:01:51 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56A61oVv420818
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025062101; t=1752127312;
+	bh=FwvuqdG3hYjFpKWdCMq6tprnniSoRmedFOTBUf2WREU=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=cOydII2KcDOQTmWFVW0q5/KLzpEOqFpnyHLLxS1JoRZ9+vwP74kNGSFenusS+FFcP
+	 AEfl38tkTa9xogtA+khkrfI6ZWbQzsmHE0ZPh+WeUwrDPxEI/R/Coyn8N2zABaBbtD
+	 M6xldWlsVv1wyMc8O1oSS9m8xb0YYaolroX+DZWm1m1XY368ArgAvAcDGe6lKada1G
+	 ae563v8hzpdM5IpThABUh4dEge45JPjPxbFEu1oU1ASebBU41KVM9H7Vm+u9vRV7zM
+	 42f9PNFNaiuU6dalJAnxPIEb3r1r4zxs4wAdA+dIKxB405GoBTdW4/BJMwzT6Vkmpk
+	 qpTCeEG5Byz5A==
+Date: Wed, 09 Jul 2025 23:01:50 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: dan.j.williams@intel.com, Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
+        linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, gregkh@linuxfoundation.org,
+        Will Deacon <will@kernel.org>, Dan Williams <dan.j.williams@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+CC: Yicong Yang <yangyicong@huawei.com>, linuxarm@huawei.com,
+        Yushan Wang <wangyushan12@huawei.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_2/8=5D_generic=3A_Support_A?=
+ =?US-ASCII?Q?RCH=5FHAS=5FCPU=5FCACHE=5FINVALIDATE=5FMEMREGION?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <686f565121ea5_1d3d100ee@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20250624154805.66985-1-Jonathan.Cameron@huawei.com> <20250624154805.66985-3-Jonathan.Cameron@huawei.com> <686f565121ea5_1d3d100ee@dwillia2-xfh.jf.intel.com.notmuch>
+Message-ID: <C8F33767-6C7F-4CDA-8B78-6857AA771AD3@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Add generic atomic support for `usize` and `isize`. Note that instead of
-mapping directly to `atomic_long_t`, the represention type
-(`AllowAtomic::Repr`) is selected based on CONFIG_64BIT. This reduces
-the necessity of creating `atomic_long_*` helpers, which could save
-the binary size of kernel if inline helpers are not available.
+On July 9, 2025 10:57:37 PM PDT, dan=2Ej=2Ewilliams@intel=2Ecom wrote:
+>Jonathan Cameron wrote:
+>> From: Yicong Yang <yangyicong@hisilicon=2Ecom>
+>>=20
+>> ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION provides the mechanism for
+>> invalidate certain memory regions in a cache-incoherent manner=2E
+>> Currently is used by NVIDMM adn CXL memory=2E This is mainly done
+>> by the system component and is implementation define per spec=2E
+>> Provides a method for the platforms register their own invalidate
+>> method and implement ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION=2E
+>
+>Please run spell-check on changelogs=2E
+>
+>>=20
+>> Architectures can opt in for this support via
+>> CONFIG_GENERIC_CPU_CACHE_INVALIDATE_MEMREGION=2E
+>>=20
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon=2Ecom>
+>> Signed-off-by: Jonathan Cameron <Jonathan=2ECameron@huawei=2Ecom>
+>> ---
+>>  drivers/base/Kconfig             |  3 +++
+>>  drivers/base/Makefile            |  1 +
+>>  drivers/base/cache=2Ec             | 46 ++++++++++++++++++++++++++++++=
+++
+>
+>I do not understand what any of this has to do with drivers/base/=2E
+>
+>See existing cache management memcpy infrastructure in lib/Kconfig=2E
+>
+>>  include/asm-generic/cacheflush=2Eh | 12 +++++++++
+>>  4 files changed, 62 insertions(+)
+>>=20
+>> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+>> index 064eb52ff7e2=2E=2Ecc6df87a0a96 100644
+>> --- a/drivers/base/Kconfig
+>> +++ b/drivers/base/Kconfig
+>> @@ -181,6 +181,9 @@ config SYS_HYPERVISOR
+>>  	bool
+>>  	default n
+>> =20
+>> +config GENERIC_CPU_CACHE_INVALIDATE_MEMREGION
+>> +	bool
+>> +
+>>  config GENERIC_CPU_DEVICES
+>>  	bool
+>>  	default n
+>> diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+>> index 8074a10183dc=2E=2E0fbfa4300b98 100644
+>> --- a/drivers/base/Makefile
+>> +++ b/drivers/base/Makefile
+>> @@ -26,6 +26,7 @@ obj-$(CONFIG_DEV_COREDUMP) +=3D devcoredump=2Eo
+>>  obj-$(CONFIG_GENERIC_MSI_IRQ) +=3D platform-msi=2Eo
+>>  obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) +=3D arch_topology=2Eo
+>>  obj-$(CONFIG_GENERIC_ARCH_NUMA) +=3D arch_numa=2Eo
+>> +obj-$(CONFIG_GENERIC_CPU_CACHE_INVALIDATE_MEMREGION) +=3D cache=2Eo
+>>  obj-$(CONFIG_ACPI) +=3D physical_location=2Eo
+>> =20
+>>  obj-y			+=3D test/
+>> diff --git a/drivers/base/cache=2Ec b/drivers/base/cache=2Ec
+>> new file mode 100644
+>> index 000000000000=2E=2E8d351657bbef
+>> --- /dev/null
+>> +++ b/drivers/base/cache=2Ec
+>> @@ -0,0 +1,46 @@
+>> +// SPDX-License-Identifier: GPL-2=2E0
+>> +/*
+>> + * Generic support for CPU Cache Invalidate Memregion
+>> + */
+>> +
+>> +#include <linux/spinlock=2Eh>
+>> +#include <linux/export=2Eh>
+>> +#include <asm/cacheflush=2Eh>
+>> +
+>> +
+>> +static const struct system_cache_flush_method *scfm_data;
+>> +DEFINE_SPINLOCK(scfm_lock);
+>> +
+>> +void generic_set_sys_cache_flush_method(const struct system_cache_flus=
+h_method *method)
+>> +{
+>> +	guard(spinlock_irqsave)(&scfm_lock);
+>> +	if (scfm_data || !method || !method->invalidate_memregion)
+>> +		return;
+>> +
+>> +	scfm_data =3D method;
+>
+>The lock looks unnecessary here, this is just atomic_cmpxchg()=2E
+>
+>> +}
+>> +EXPORT_SYMBOL_GPL(generic_set_sys_cache_flush_method);
+>> +
+>> +void generic_clr_sys_cache_flush_method(const struct system_cache_flus=
+h_method *method)
+>> +{
+>> +	guard(spinlock_irqsave)(&scfm_lock);
+>> +	if (scfm_data && scfm_data =3D=3D method)
+>> +		scfm_data =3D NULL;
+>
+>Same here, but really what is missing is a description of the locking
+>requirements of cpu_cache_invalidate_memregion()=2E
+>
+>
+>> +}
+>> +
+>> +int cpu_cache_invalidate_memregion(int res_desc, phys_addr_t start, si=
+ze_t len)
+>> +{
+>> +	guard(spinlock_irqsave)(&scfm_lock);
+>> +	if (!scfm_data)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	return scfm_data->invalidate_memregion(res_desc, start, len);
+>
+>Is it really the case that you need to disable interrupts during cache
+>operations? For potentially flushing 10s to 100s of gigabytes, is it
+>really the case that all archs can support holding interrupts off for
+>that event?
+>
+>A read lock (rcu or rwsem) seems sufficient to maintain registration
+>until the invalidate operation completes=2E
+>
+>If an arch does need to disable interrupts while it manages caches that
+>does not feel like something that should be enforced for everyone at
+>this top-level entry point=2E
+>
+>> +}
+>> +EXPORT_SYMBOL_NS_GPL(cpu_cache_invalidate_memregion, "DEVMEM");
+>> +
+>> +bool cpu_cache_has_invalidate_memregion(void)
+>> +{
+>> +	guard(spinlock_irqsave)(&scfm_lock);
+>> +	return !!scfm_data;
+>
+>Lock seems pointless here=2E
+>
+>More concerning is this diverges from the original intent of this
+>function which was to disable physical address space manipulation from
+>virtual environments=2E
+>
+>Now, different archs may have reason to diverge here but the fact that
+>the API requirements are non-obvious points at a minimum to missing
+>documentation if not missing cross-arch consensus=2E
+>
+>> +}
+>> +EXPORT_SYMBOL_NS_GPL(cpu_cache_has_invalidate_memregion, "DEVMEM");
+>> diff --git a/include/asm-generic/cacheflush=2Eh b/include/asm-generic/c=
+acheflush=2Eh
+>> index 7ee8a179d103=2E=2E87e64295561e 100644
+>> --- a/include/asm-generic/cacheflush=2Eh
+>> +++ b/include/asm-generic/cacheflush=2Eh
+>> @@ -124,4 +124,16 @@ static inline void flush_cache_vunmap(unsigned lon=
+g start, unsigned long end)
+>>  	} while (0)
+>>  #endif
+>> =20
+>> +#ifdef CONFIG_GENERIC_CPU_CACHE_INVALIDATE_MEMREGION
+>> +
+>> +struct system_cache_flush_method {
+>> +	int (*invalidate_memregion)(int res_desc,
+>> +				    phys_addr_t start, size_t len);
+>> +};
+>
+>The whole point of ARCH_HAS facilities is to resolve symbols like this
+>at compile time=2E Why does this need a indirect function call at all?
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
- rust/kernel/sync/atomic.rs | 48 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 44 insertions(+), 4 deletions(-)
+Yes, blocking interrupts is much like the problem with WBINVD=2E
 
-diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
-index e676bc7d9275..e1e40757d7b5 100644
---- a/rust/kernel/sync/atomic.rs
-+++ b/rust/kernel/sync/atomic.rs
-@@ -53,6 +53,26 @@ fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-     }
- }
- 
-+// SAFETY: For 32bit kernel, `isize` has the same size and alignment with `i32` and is round-trip
-+// transmutable to it, for 64bit kernel `isize` has the same size and alignment with `i64` and is
-+// round-trip transmutable to it.
-+unsafe impl generic::AllowAtomic for isize {
-+    #[cfg(not(CONFIG_64BIT))]
-+    type Repr = i32;
-+    #[cfg(CONFIG_64BIT)]
-+    type Repr = i64;
-+}
-+
-+// SAFETY: `isize` is always sound to transmute back from `i32` or `i64` when their sizes are the
-+// same.
-+unsafe impl generic::AllowAtomicArithmetic for isize {
-+    type Delta = Self;
-+
-+    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-+        d as Self::Repr
-+    }
-+}
-+
- // SAFETY: `u32` and `i32` has the same size and alignment, and `u32` is round-trip transmutable to
- // `i32`.
- unsafe impl generic::AllowAtomic for u32 {
-@@ -83,6 +103,26 @@ fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-     }
- }
- 
-+// SAFETY: For 32bit kernel, `usize` has the same size and alignment with `i32` and is round-trip
-+// transmutable to it, for 64bit kernel `usize` has the same size and alignment with `i64` and is
-+// round-trip transmutable to it.
-+unsafe impl generic::AllowAtomic for usize {
-+    #[cfg(not(CONFIG_64BIT))]
-+    type Repr = i32;
-+    #[cfg(CONFIG_64BIT)]
-+    type Repr = i64;
-+}
-+
-+// SAFETY: `usize` is always sound to transmute back from `i32` or `i64` when their sizes are the
-+// same.
-+unsafe impl generic::AllowAtomicArithmetic for usize {
-+    type Delta = Self;
-+
-+    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-+        d as Self::Repr
-+    }
-+}
-+
- use crate::macros::kunit_tests;
- 
- #[kunit_tests(rust_atomics)]
-@@ -102,7 +142,7 @@ macro_rules! for_each_type {
- 
-     #[test]
-     fn atomic_basic_tests() {
--        for_each_type!(42 in [i32, i64, u32, u64] |v| {
-+        for_each_type!(42 in [i32, i64, u32, u64, isize, usize] |v| {
-             let x = Atomic::new(v);
- 
-             assert_eq!(v, x.load(Relaxed));
-@@ -111,7 +151,7 @@ fn atomic_basic_tests() {
- 
-     #[test]
-     fn atomic_xchg_tests() {
--        for_each_type!(42 in [i32, i64, u32, u64] |v| {
-+        for_each_type!(42 in [i32, i64, u32, u64, isize, usize] |v| {
-             let x = Atomic::new(v);
- 
-             let old = v;
-@@ -124,7 +164,7 @@ fn atomic_xchg_tests() {
- 
-     #[test]
-     fn atomic_cmpxchg_tests() {
--        for_each_type!(42 in [i32, i64, u32, u64] |v| {
-+        for_each_type!(42 in [i32, i64, u32, u64, isize, usize] |v| {
-             let x = Atomic::new(v);
- 
-             let old = v;
-@@ -139,7 +179,7 @@ fn atomic_cmpxchg_tests() {
- 
-     #[test]
-     fn atomic_arithmetic_tests() {
--        for_each_type!(42 in [i32, i64, u32, u64] |v| {
-+        for_each_type!(42 in [i32, i64, u32, u64, isize, usize] |v| {
-             let x = Atomic::new(v);
- 
-             assert_eq!(v, x.fetch_add(12, Full));
--- 
-2.39.5 (Apple Git-154)
-
+More or less, once user space is running, this isn't acceptable=2E
 
