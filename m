@@ -1,94 +1,94 @@
-Return-Path: <linux-arch+bounces-12618-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12620-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB1C5AFF930
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 08:08:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF826AFF935
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 08:09:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBF1B3B4AEA
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 06:07:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34CFD16E3C8
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 06:08:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAC82C2ACE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 872732C327C;
 	Thu, 10 Jul 2025 06:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IEXy79CR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UGTTnFKS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC56A2BF00E;
-	Thu, 10 Jul 2025 06:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5839E2C15A6;
+	Thu, 10 Jul 2025 06:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752127270; cv=none; b=Wo4OYX0x6s9CT0+LiVzhsDQy1OAp/pp4ZLEZROOcHqFvbbJgKZEW7sbcbvmOQINuQsAdBcx3OMcKzzCRwMXrmsTBFDgYKrmFQ2k+gljjf9gV0Xcbr7oQNe7r2NETerCsv8ETByW2BVjoNvlC/1h9krGhHoqlDkwce7AjgfsCRg4=
+	t=1752127271; cv=none; b=DZK4+/oq+y3Q7AMWJSrz/qghxU/H6S8KOGZMlw7o9/Tz5tcSabRTuLT5RicEPYB72pyaInu3kidmpGqds6b4cD5cEbyMRFqCxp8iaqgiOD/8pGInVt6vWZZqO54eQ5qTwftLBXzL8oizNKX6gbq7rnXk/p23jAjhd0cWmJC/Rsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752127270; c=relaxed/simple;
-	bh=3aDT8xc/mZaqD3R6xW0byPl+1OOqZB7b2MyrXdrjcFU=;
+	s=arc-20240116; t=1752127271; c=relaxed/simple;
+	bh=Hfyk+YB11j3QGic3cuIdSw0oHyEEnTvIKxG+qiLIAyk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mhVOWEt9mx28zeDseFe/3vKZ92yRoz+PQcClC3YMAefnMnzxYSetiDDr/0x7diH5HOfMTfq8PTkOD/NNOGNahB0yG3y3DflzME5HlZR5u8WYha+x57SSc2hxZfUpdP5qsSCSbnrOd8jgK4wBbXLVEd0zGKH4w4syVJQuxDP9KIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IEXy79CR; arc=none smtp.client-ip=209.85.219.54
+	 MIME-Version; b=AnhLMiw3Pvv0isytA9oFlLnXeVh7GhM00nwxW6ZQgZto4VvFp986bIDUg7zKLZ/kReWjvLAuYB2ZmmP65kFjMaku7jD6i3PwUf7eXXgMWgkjPJ5vreinuDcrpSZE+vq2JS6lEpn9BsO4bFCq2LzNKNgPa+A3aqRYHPdaoa4ApPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UGTTnFKS; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-702b5559bbdso3287716d6.3;
-        Wed, 09 Jul 2025 23:01:07 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4a43972dcd7so7190671cf.3;
+        Wed, 09 Jul 2025 23:01:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752127267; x=1752732067; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752127268; x=1752732068; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=NVWTVCvJevxqd+qs8pw1lqVsFxJYqEuOxZQt2VZuh4s=;
-        b=IEXy79CRZBwE5iubAeB5tjqO6GZVf1l3JahjzhHzSDyzrZMewg8+dbrhG+QvpkdF7Z
-         MbVP3MR5S8SuWDlAEGa2owSCGF4dzVL4Wat5uMBAjPk19zOO+dIZoWKCRHJ8z2xC9MXI
-         0E2iqGXVlOwIL1lu+XK+lo9ntT8788WU1/HqIQ+j8EM4Q/j3tqrwJPYPKZEcZwyzvA8Z
-         af5b6vvmwDdJVL9SkzthUinEecgcSWeG6G0rDIgxRZWv3J5+Ef9/Quyd1RVoEvoVPAYG
-         68QPu1tV6w2U+Dg/E5+A/Ak+ycXTwk6T7cPIKOEuyfIT4WWhiMWdAEPlRTwTQ5b88d03
-         +oFA==
+        bh=qCTul36LoYeO61iHyu+jO7qVkK0zfTJ8jaG4JYpY7YY=;
+        b=UGTTnFKSlmd0tx3Q+yWX7KNtMpE29ZW8xrQxHokMyiEkub6eo5fSiatEiezBmCx5Jx
+         4+RbN8TbnN2Xx4cBg56bCwTyqbgsnZAFRzbqhZ+Y1IGq+ck2Q50wcc73+ZdFIzFbNjEy
+         vx0Lno2NDiCiDfGje1wigEafBfxS06rTRs2u1s37cBYc2P66JJQve56eR20TIp9+Npq+
+         F10FE7I0VYDtu3QGrYG9bS7V2/WTfAPdNpHAIwIxlXjvGTvsSQB48Rz+/wcZ+yOW4mby
+         RbLOkcYAuyW8fQcYwNPbwyVwBsk2I8qaY5gbzWfE3duK/4TmzBc+spV/orNPH3joeVQB
+         HdGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752127267; x=1752732067;
+        d=1e100.net; s=20230601; t=1752127268; x=1752732068;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NVWTVCvJevxqd+qs8pw1lqVsFxJYqEuOxZQt2VZuh4s=;
-        b=fSknNXgv1glJBhzlyPLZxobQWoFd7plCQ33TavSn/VDOAg4XEo1+dBACNAcT5a7PVb
-         j6arAC/FnWMsVhxNJO2koqcsSz/h2fub5PRNO0sNRjJt5zTrLpDqarxg9yFU0n6F+aBJ
-         5cXWoarxitt+YYuhATwpl3E+hTmgkD4icwnn2fmrQ+3UXVBQutCJUHM2/DFUZlNsQelr
-         7y+VR1bzU8a+j1SzyxHI422f8LLbIrhPObd9O22/wHLXWMrgGj+TwdXf+jyyl3WDB5hQ
-         AZJbTE4b4fxpgGdwxLYwkY4gwbbfEdjnREC5I7uU6WE4/W0IbKUlzb97UjEBj67o+gIn
-         hf5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUsyQ7Nua+JIVPfXX/XoJbBvHkBje5tFLpZzV9NW2Hl1DjujnZ4AvofM2BHMwtIzUzuBthJgMk5jMum@vger.kernel.org, AJvYcCWhEgqpGTgBcGTSc/GnhV1JzdoLnHMkZs6YXLW2ahDh1D24iDizFysgw8J1wP1LJmC3M5b2mua0oorzg3UBhnw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzREHf6X/RD3CXCR4dZmaBNhlTexDnsU6dunVV57XRb90VMJqjs
-	ihhQDVkMTPNdP7Kk4CkUsD8JcsMRGJ+wfX35wKwAzPYbw+OiclbACOGS
-X-Gm-Gg: ASbGncsvAYLn8ffw8/s9CjIl1duBs2FVGD0ivXPMf+wcme+6p/R16Afk4gTwGdhmRvV
-	Bxo5qLXwjJu3YQ0EMG8A2r0pxm7LJBqmw+tX164SHc2Rk/j0cTuw4674gH0ew8MSZwNCHI3yCQq
-	Kl45pmuTc/YIexXbcbXCwfNYWlMCEhpklCFk5014tjeIjYqlbJQxac+CZvOurE8vuLMUPJSOZkb
-	jr98RRf43SDQAA6tSd7D2AEaVrW1yPR5dKLJ9Pf2+khxo+wJ2U8oJqrqHUVdHqhY8RA2+ALz5Fl
-	FwgL4mjqL8OcBAW9e3S0/HXBh+UrgQYj3CY+VxEYJpzh9HNKiDUt6YGrFVpmNIGf8TINvNKKPW/
-	M5M/qE7cOPLFni4DRyDvARlBCKGpALp5dz3Nh1GXgoudovHl//gVp
-X-Google-Smtp-Source: AGHT+IF7AxMRMuyHEY/+wMkbbSv8WJlfegxN+AvN/57DcubPXOhYQzZaON2scCs7KvKMKjAZwGo6Wg==
-X-Received: by 2002:a05:6214:29e3:b0:702:bd47:c83b with SMTP id 6a1803df08f44-704982503ffmr15889926d6.45.1752127266602;
-        Wed, 09 Jul 2025 23:01:06 -0700 (PDT)
+        bh=qCTul36LoYeO61iHyu+jO7qVkK0zfTJ8jaG4JYpY7YY=;
+        b=eeJ9UqgQe7pbwqgVhnSJnBUeWzZdfFGicJ8V3aJf3JoRSybAqh5CbRWjfS+aPZkrx5
+         ppL3rK6WqMPW9kK0bCqEMrcpxhJ5fK0+QNQiLVAUYTnod0HuXPY8d/M3aUbN2cwy/wK2
+         azHcSWThbBfDNQ4sXl+dfWfNxwNCnRyw8ZODqxRbhEf1OXTugXmJY/ueoN+XxwOBBf+/
+         nN2FF0uN2+sgKP7eCp53I9wcWgd3nvWJZEPgDrkuRXCAO53XKuJwpzsEnurAwOPoTsox
+         OfG/0eeC7uVi5zRTduykMVYo0V/8d3VNKdb8dyMqxHcAXF5nILUTG6qWeleOJWN7UsQl
+         yJQw==
+X-Forwarded-Encrypted: i=1; AJvYcCX86TY+u47i4YYIAVpHdbfMfi2j51C79aLgy3uuUFwwdh0rlIDu47duRA5DOZkqOWxK7BZC0mqE/VSI@vger.kernel.org, AJvYcCXQMJ4EuRoxkC8h5ePycC4vbeUVKJWOKkpGJPXL98blTEL0vuJ4rIs2gLmdwHZ7GAglWbhN3Jukl7TJO7AAb94=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUTReTGKhP2Ad0cDqp+wHDw4a0vDV6XD+RMSrF2G65zwgC9hKP
+	joi2uwWSz8M+8gw1rNJDVBF4wKRkmx7t5Mqc9SZkV/8FRqPH2BqMo2Gd5DG3OA==
+X-Gm-Gg: ASbGnctwQD4ZFZVSc2i0MIgW+wUhmR7WQSmOELp/daDWnuWMJtwvV/epvATIgFm4NCd
+	Ig5p3cnLEWvE8a0LUdI3jyhiQnayJJs/Rk0T3AVFHpp+JY0cSK+IiNoRsISeaFdKJDspXWk4hhf
+	72ndzgEDmenNz2P3wfjPpInYDjDQRntUMwwCJI6v7CkbSvGJAc7o7Yp1Zh1UamHHllbXbkKlp/k
+	gu/dKaKolYzPtee+IX4qLWH9QdBp75/sQ3Xs5l7hMyp2vurLRUoajfZO1V2hxGTldPbr/3QB5k7
+	ZZ582KGfhrKXeXN7iYIfWzTAdlyqcYnvev4fjsh2RAD0ZoQGvw1Rvy+eK4BJfzcirwAqCBaLYxq
+	6lXePo81/F/t3OhyY1DxCMOJNl7u8NyXeTr68IEC2JV9uPyzlwGM2
+X-Google-Smtp-Source: AGHT+IHdAf4ekh0wIYWPLlJGBcN1jwPbal29cw38Chcz4Tlb7KgoYWolNrVn3J5kyGDUbF7TWRRYFw==
+X-Received: by 2002:a05:622a:992:b0:4a3:4d46:c2a6 with SMTP id d75a77b69052e-4a9ec719caemr18734411cf.7.1752127268127;
+        Wed, 09 Jul 2025 23:01:08 -0700 (PDT)
 Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70497d3940asm5051006d6.73.2025.07.09.23.01.05
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a9edc5b4bdsm5620471cf.25.2025.07.09.23.01.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jul 2025 23:01:06 -0700 (PDT)
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 90EF4F4006C;
-	Thu, 10 Jul 2025 02:01:05 -0400 (EDT)
+        Wed, 09 Jul 2025 23:01:07 -0700 (PDT)
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 0E303F4006C;
+	Thu, 10 Jul 2025 02:01:07 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Thu, 10 Jul 2025 02:01:05 -0400
-X-ME-Sender: <xms:IVdvaGij1Fj8tPCa9hGmGpNGbp2wdKj7WKCc-djv0JZlfFAXS4bpaA>
-    <xme:IVdvaIpiSPUxGpTkDggFEqYhaNln1s1In5s3gSb69wiUPw4DN5K6EWDRT-8jnrRSG
-    yFPjKPJz8HJwOZxJA>
-X-ME-Received: <xmr:IVdvaMyag58jHxjysE5i7iP0t8RX04L1MaFOmdA5zymNcUCoJ5eb0VPVbQ>
+  by phl-compute-04.internal (MEProxy); Thu, 10 Jul 2025 02:01:07 -0400
+X-ME-Sender: <xms:IldvaFu7MugQ73StMcjwvD60JveFkiZNTCPfFSjL-8bSXuQgs_9LTw>
+    <xme:IldvaP_wol0HaZ-BcOnRnawuedKq9sPCf4w20rHrep7kUSqh4CRWh_BTuvH8TAlis
+    2htvyCXgENOc48-Eg>
+X-ME-Received: <xmr:IldvaNUVCdTdwAukqBG0xh-i460GwUCul7CM-W_6eFXUQBYJJtIju7Vhtw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefleeijecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
     ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
     hrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhnucfh
     vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
     hrnhepgeeljeeitdehvdehgefgjeevfeejjeekgfevffeiueejhfeuiefggeeuheeggefg
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
+    necuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
     hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
     jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
     drnhgrmhgvpdhnsggprhgtphhtthhopedvjedpmhhouggvpehsmhhtphhouhhtpdhrtghp
@@ -100,14 +100,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefleeijecutefuodetgg
     esghhmrghilhdrtghomhdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdr
     tghomhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhope
     gsjhhorhhnfegpghhhsehprhhothhonhhmrghilhdrtghomh
-X-ME-Proxy: <xmx:IVdvaHyII3wAj6vMipXysvd9Hljyq5KD7oJt-e_R8EeZiDNCfSAY3w>
-    <xmx:IVdvaEabtKvhojTR0DoDYzHFqYWN_H75usL87egsTEt685cL8q3-Pw>
-    <xmx:IVdvaIkKoIciytdSc4KvOdTTUuUyK2LbLP_KIfEb92slokP843zpeg>
-    <xmx:IVdvaJFzlQqjSDZj2c9Iyjc7-szx4n0s-vSCbP3oK70v2OrGhLLhQg>
-    <xmx:IVdvaPjNRUxfR9oTLCdt_jrtcB_8T-wfb7PDK2nh5NX4Q6sM29CDpAwJ>
+X-ME-Proxy: <xmx:IldvaLtTyeuTujEOtvRArZ7LDwc82Y9K9ms0IaOpXhL9kJ865Z4tPA>
+    <xmx:IldvaD8ATli688QEl01RCZjbMeuCe6F-2DLLTHmrjP1S-wMXUso20A>
+    <xmx:IldvaE3LJhPtkNBupYGSJmzS4oTtjnfCec4pbqnDcmGAAtZS-MpOsA>
+    <xmx:IldvaITH2IIBu9wh3C-gu8Q_eIJ2wI1NvXIpd8SaT9zPOkWSKVJJDw>
+    <xmx:I1dvaHBs69z86RoaY3j1GNV_3RBQjGZ0JHDJ_L_BmKsW_PCZj2WKwfU1>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Jul 2025 02:01:04 -0400 (EDT)
+ 10 Jul 2025 02:01:06 -0400 (EDT)
 From: Boqun Feng <boqun.feng@gmail.com>
 To: linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
@@ -136,9 +136,9 @@ Cc: "Miguel Ojeda" <ojeda@kernel.org>,
 	"Linus Torvalds" <torvalds@linux-foundation.org>,
 	"Thomas Gleixner" <tglx@linutronix.de>,
 	Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v6 6/9] rust: sync: atomic: Add the framework of arithmetic operations
-Date: Wed,  9 Jul 2025 23:00:49 -0700
-Message-Id: <20250710060052.11955-7-boqun.feng@gmail.com>
+Subject: [PATCH v6 7/9] rust: sync: atomic: Add Atomic<u{32,64}>
+Date: Wed,  9 Jul 2025 23:00:50 -0700
+Message-Id: <20250710060052.11955-8-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20250710060052.11955-1-boqun.feng@gmail.com>
 References: <20250710060052.11955-1-boqun.feng@gmail.com>
@@ -150,182 +150,123 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-One important set of atomic operations is the arithmetic operations,
-i.e. add(), sub(), fetch_add(), add_return(), etc. However it may not
-make senses for all the types that `AllowAtomic` to have arithmetic
-operations, for example a `Foo(u32)` may not have a reasonable add() or
-sub(), plus subword types (`u8` and `u16`) currently don't have
-atomic arithmetic operations even on C side and might not have them in
-the future in Rust (because they are usually suboptimal on a few
-architecures). Therefore add a subtrait of `AllowAtomic` describing
-which types have and can do atomic arithemtic operations.
+Add generic atomic support for basic unsigned types that have an
+`AtomicImpl` with the same size and alignment.
 
-Trait `AllowAtomicArithmetic` has an associate type `Delta` instead of
-using `AllowAllowAtomic::Repr` because, a `Bar(u32)` (whose `Repr` is
-`i32`) may not wants an `add(&self, i32)`, but an `add(&self, u32)`.
-
-Only add() and fetch_add() are added. The rest will be added in the
-future.
+Unit tests are added including Atomic<i32> and Atomic<i64>.
 
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- rust/kernel/sync/atomic.rs         |  18 +++++
- rust/kernel/sync/atomic/generic.rs | 108 +++++++++++++++++++++++++++++
- 2 files changed, 126 insertions(+)
+ rust/kernel/sync/atomic.rs | 99 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
 diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
-index c5193c1c90fe..26f66cccd4e0 100644
+index 26f66cccd4e0..e676bc7d9275 100644
 --- a/rust/kernel/sync/atomic.rs
 +++ b/rust/kernel/sync/atomic.rs
-@@ -29,8 +29,26 @@ unsafe impl generic::AllowAtomic for i32 {
-     type Repr = i32;
- }
- 
-+// SAFETY: `i32` is always sound to transmute back to itself.
-+unsafe impl generic::AllowAtomicArithmetic for i32 {
-+    type Delta = i32;
-+
-+    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-+        d
-+    }
-+}
-+
- // SAFETY: `i64` has the same size and alignment with itself, and is round-trip transmutable to
- // itself.
- unsafe impl generic::AllowAtomic for i64 {
-     type Repr = i64;
- }
-+
-+// SAFETY: `i64` is always sound to transmute back to itself.
-+unsafe impl generic::AllowAtomicArithmetic for i64 {
-+    type Delta = i64;
-+
-+    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
-+        d
-+    }
-+}
-diff --git a/rust/kernel/sync/atomic/generic.rs b/rust/kernel/sync/atomic/generic.rs
-index 1beb802843ee..412a2c811c3d 100644
---- a/rust/kernel/sync/atomic/generic.rs
-+++ b/rust/kernel/sync/atomic/generic.rs
-@@ -111,6 +111,20 @@ const fn into_repr<T: AllowAtomic>(v: T) -> T::Repr {
-     unsafe { core::mem::transmute_copy(&r) }
- }
- 
-+/// Atomics that allows arithmetic operations with an integer type.
-+///
-+/// # Safety
-+///
-+/// Implementers must guarantee [`Self::Repr`] can always soundly [`transmute()`] to [`Self`] after
-+/// arithmetic operations.
-+pub unsafe trait AllowAtomicArithmetic: AllowAtomic {
-+    /// The delta types for arithmetic operations.
-+    type Delta;
-+
-+    /// Converts [`Self::Delta`] into the representation of the atomic type.
-+    fn delta_into_repr(d: Self::Delta) -> Self::Repr;
-+}
-+
- impl<T: AllowAtomic> Atomic<T> {
-     /// Creates a new atomic.
-     pub const fn new(v: T) -> Self {
-@@ -457,3 +471,97 @@ fn try_cmpxchg<Ordering: Any>(&self, old: &mut T, new: T, _: Ordering) -> bool {
-         ret
+@@ -52,3 +52,102 @@ fn delta_into_repr(d: Self::Delta) -> Self::Repr {
+         d
      }
  }
 +
-+impl<T: AllowAtomicArithmetic> Atomic<T>
-+where
-+    T::Repr: AtomicHasArithmeticOps,
-+{
-+    /// Atomic add.
-+    ///
-+    /// The addition is a wrapping addition.
-+    ///
-+    /// # Examples
-+    ///
-+    /// ```rust
-+    /// use kernel::sync::atomic::{Atomic, Relaxed};
-+    ///
-+    /// let x = Atomic::new(42);
-+    ///
-+    /// assert_eq!(42, x.load(Relaxed));
-+    ///
-+    /// x.add(12, Relaxed);
-+    ///
-+    /// assert_eq!(54, x.load(Relaxed));
-+    /// ```
-+    #[inline(always)]
-+    pub fn add<Ordering: RelaxedOnly>(&self, v: T::Delta, _: Ordering) {
-+        let v = T::delta_into_repr(v);
-+        // CAST: Per the safety requirement of `AllowAtomic`, a valid pointer of `T` is also a
-+        // valid pointer of `T::Repr`.
-+        let a = self.as_ptr().cast::<T::Repr>();
++// SAFETY: `u32` and `i32` has the same size and alignment, and `u32` is round-trip transmutable to
++// `i32`.
++unsafe impl generic::AllowAtomic for u32 {
++    type Repr = i32;
++}
 +
-+        // SAFETY:
-+        // - For calling the atomic_add() function:
-+        //   - `a` is a valid pointer for the function per the CAST justification above.
-+        //   - Per the type guarantees, the following atomic operation won't cause data races.
-+        // - For extra safety requirement of usage on pointers returned by `self.as_ptr()`:
-+        //   - Atomic operations are used here.
-+        // - For the bit validity of `Atomic<T>`:
-+        //   - `T: AllowAtomicArithmetic` guarantees the arithmetic operation result is sound to
-+        //     stored in an `Atomic<T>`.
-+        unsafe {
-+            T::Repr::atomic_add(a, v);
++// SAFETY: `i32` is always sound to transmute back to `u32`.
++unsafe impl generic::AllowAtomicArithmetic for u32 {
++    type Delta = u32;
++
++    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
++        d as Self::Repr
++    }
++}
++
++// SAFETY: `u64` and `i64` has the same size and alignment, and `u64` is round-trip transmutable to
++// `i64`.
++unsafe impl generic::AllowAtomic for u64 {
++    type Repr = i64;
++}
++
++// SAFETY: `i64` is always sound to transmute back to `u64`.
++unsafe impl generic::AllowAtomicArithmetic for u64 {
++    type Delta = u64;
++
++    fn delta_into_repr(d: Self::Delta) -> Self::Repr {
++        d as Self::Repr
++    }
++}
++
++use crate::macros::kunit_tests;
++
++#[kunit_tests(rust_atomics)]
++mod tests {
++    use super::*;
++
++    // Call $fn($val) with each $type of $val.
++    macro_rules! for_each_type {
++        ($val:literal in [$($type:ty),*] $fn:expr) => {
++            $({
++                let v: $type = $val;
++
++                $fn(v);
++            })*
 +        }
 +    }
 +
-+    /// Atomic fetch and add.
-+    ///
-+    /// The addition is a wrapping addition.
-+    ///
-+    /// # Examples
-+    ///
-+    /// ```rust
-+    /// use kernel::sync::atomic::{Atomic, Acquire, Full, Relaxed};
-+    ///
-+    /// let x = Atomic::new(42);
-+    ///
-+    /// assert_eq!(42, x.load(Relaxed));
-+    ///
-+    /// assert_eq!(54, { x.fetch_add(12, Acquire); x.load(Relaxed) });
-+    ///
-+    /// let x = Atomic::new(42);
-+    ///
-+    /// assert_eq!(42, x.load(Relaxed));
-+    ///
-+    /// assert_eq!(54, { x.fetch_add(12, Full); x.load(Relaxed) } );
-+    /// ```
-+    #[inline(always)]
-+    pub fn fetch_add<Ordering: Any>(&self, v: T::Delta, _: Ordering) -> T {
-+        let v = T::delta_into_repr(v);
-+        // CAST: Per the safety requirement of `AllowAtomic`, a valid pointer of `T` is also a
-+        // valid pointer of `T::Repr`.
-+        let a = self.as_ptr().cast::<T::Repr>();
++    #[test]
++    fn atomic_basic_tests() {
++        for_each_type!(42 in [i32, i64, u32, u64] |v| {
++            let x = Atomic::new(v);
 +
-+        // SAFETY:
-+        // - For calling the atomic_fetch_add*() function:
-+        //   - `a` is a valid pointer for the function per the CAST justification above.
-+        //   - Per the type guarantees, the following atomic operation won't cause data races.
-+        // - For extra safety requirement of usage on pointers returned by `self.as_ptr()`:
-+        //   - Atomic operations are used here.
-+        // - For the bit validity of `Atomic<T>`:
-+        //   - `T: AllowAtomicArithmetic` guarantees the arithmetic operation result is sound to
-+        //     stored in an `Atomic<T>`.
-+        let ret = unsafe {
-+            match Ordering::TYPE {
-+                OrderingType::Full => T::Repr::atomic_fetch_add(a, v),
-+                OrderingType::Acquire => T::Repr::atomic_fetch_add_acquire(a, v),
-+                OrderingType::Release => T::Repr::atomic_fetch_add_release(a, v),
-+                OrderingType::Relaxed => T::Repr::atomic_fetch_add_relaxed(a, v),
-+            }
-+        };
++            assert_eq!(v, x.load(Relaxed));
++        });
++    }
 +
-+        // SAFETY: Per safety requirement of `AllowAtomicArithmetic`, `ret` is a valid bit pattern
-+        // of `T`.
-+        unsafe { from_repr(ret) }
++    #[test]
++    fn atomic_xchg_tests() {
++        for_each_type!(42 in [i32, i64, u32, u64] |v| {
++            let x = Atomic::new(v);
++
++            let old = v;
++            let new = v + 1;
++
++            assert_eq!(old, x.xchg(new, Full));
++            assert_eq!(new, x.load(Relaxed));
++        });
++    }
++
++    #[test]
++    fn atomic_cmpxchg_tests() {
++        for_each_type!(42 in [i32, i64, u32, u64] |v| {
++            let x = Atomic::new(v);
++
++            let old = v;
++            let new = v + 1;
++
++            assert_eq!(Err(old), x.cmpxchg(new, new, Full));
++            assert_eq!(old, x.load(Relaxed));
++            assert_eq!(Ok(old), x.cmpxchg(old, new, Relaxed));
++            assert_eq!(new, x.load(Relaxed));
++        });
++    }
++
++    #[test]
++    fn atomic_arithmetic_tests() {
++        for_each_type!(42 in [i32, i64, u32, u64] |v| {
++            let x = Atomic::new(v);
++
++            assert_eq!(v, x.fetch_add(12, Full));
++            assert_eq!(v + 12, x.load(Relaxed));
++
++            x.add(13, Relaxed);
++
++            assert_eq!(v + 25, x.load(Relaxed));
++        });
 +    }
 +}
 -- 
