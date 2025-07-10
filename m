@@ -1,149 +1,114 @@
-Return-Path: <linux-arch+bounces-12643-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12644-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 110AEB00BBC
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 20:56:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C9DFB00BD5
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 21:06:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6349D7ABF1F
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 18:55:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 660791C88711
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Jul 2025 19:07:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805F72264D7;
-	Thu, 10 Jul 2025 18:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C9242FCFE0;
+	Thu, 10 Jul 2025 19:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="frt+T+Za"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SknbUc2L"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518A31547CC;
-	Thu, 10 Jul 2025 18:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D95125760;
+	Thu, 10 Jul 2025 19:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752173793; cv=none; b=vF6FkXdBm42csnNK8C6jS+MsZSfhAFgo5ZVvWeIuzqSGtv4t6LX29uS18Yv835sD67XrIpICh4pmemDZ71FWcjmMXDT+j9upX0Usz0gwn5W6CZtFLw9l8rQTf09XG2monrZO5osGQO6fQxOuWZ3APH73zoGmKWIXUUvgMowXPlM=
+	t=1752174409; cv=none; b=AtkSo39rj6rW2TXtJXl0wdwpVFZ9wpJjci8QupvcnWakCe+vUEk6cdp2Gp70URDi56lygERtqVElbNDcY5A5pU5iyTIHx4/72CMs+AUS1FPob9dqnf9DFPDGQEVbd8ijcWN645FtIJcxSk1FyOYllBofJl7Blpb9REQR1RNbVDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752173793; c=relaxed/simple;
-	bh=VHHMCaeqa3ItN0IdhB57c8hhMJMuVoReCsE7UCNIal4=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=Fzbu+YhVCf/hl3uy9qfTE9gKUU5PEEmsUJvnL1SSW3BN8rGyAiw6a94pVRUoXZwsv3HiP/8hfZvc5VzDfiutNFNVNxyoAtiiiyYhBj2nGGRuvsZeydhQCHQtIU6jMxW6E0rYtn0yNzp3Lectk1NLLQ1RDLs5JKdpaucqTB4ViRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=frt+T+Za; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [127.0.0.1] (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56AItXe4768856
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 10 Jul 2025 11:55:34 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56AItXe4768856
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025062101; t=1752173735;
-	bh=VHHMCaeqa3ItN0IdhB57c8hhMJMuVoReCsE7UCNIal4=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=frt+T+ZaeHOU5+grV1JCbpKos7M5bBqjph3654o1y7phYKwQfJ56+GDy8KNryK8B9
-	 XF2XuNuAABlhHhXW6fYJQLupzUof4nSKjKrhEjsEL35qhyfZVmkeQZVTH89pnSOq+U
-	 kBtp64m7He32K7XBQnvn/+b2ktp+IKWKSyCA0ity2XZp1oE453fLiVLHeHJcG4u0q4
-	 0G//nuisw6F0H9abazQkXmJZxXo+Sa2Lnk8gPh0vCepk2mHF2Uw2+NhXZh3+A/cCO6
-	 uFIYPUSkQ8VouPb6FPWHZ2tDFL2g//rbNfp9FYNLkTeM5fCaiDsWlNrZNlmTJ0g1D0
-	 XYwyrqszcEIDg==
-Date: Thu, 10 Jul 2025 11:55:33 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: dan.j.williams@intel.com, Peter Zijlstra <peterz@infradead.org>
-CC: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
-        linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, gregkh@linuxfoundation.org,
-        Will Deacon <will@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
-        Yicong Yang <yangyicong@huawei.com>, linuxarm@huawei.com,
-        Yushan Wang <wangyushan12@huawei.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH v2 0/8] Cache coherency management subsystem
-User-Agent: K-9 Mail for Android
-In-Reply-To: <68700a5428a2f_1d3d1008b@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20250624154805.66985-1-Jonathan.Cameron@huawei.com> <20250625085204.GC1613200@noisy.programming.kicks-ass.net> <FB7122A4-BF5E-4C05-805A-2EE3240286A1@zytor.com> <20250625093152.GZ1613376@noisy.programming.kicks-ass.net> <686f4e20c57cd_1d3d100b7@dwillia2-xfh.jf.intel.com.notmuch> <20250710105622.GA542000@noisy.programming.kicks-ass.net> <68700a5428a2f_1d3d1008b@dwillia2-xfh.jf.intel.com.notmuch>
-Message-ID: <575B5DF2-AE1D-43E9-9A4B-09FB78EFFC43@zytor.com>
+	s=arc-20240116; t=1752174409; c=relaxed/simple;
+	bh=d1TgekxlM1F6cmtjM39Ek7NrGs4UiAhKYGCORsJeMDg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DQjT8WjznQvMrTr+W9nC0+6N5U+JPcmJPiBO04hCw0zXV9Wi1iKIbwda8VkcqXMKXzHAIVwrHr0caU7y9fVQd9OJFfsCZvK4JjMhrU9iLJZJheP7ud/QXqahgubCKdAdkI7ljfuLy0WL/aiO1fgEiUB+UNa3trWoligC4969eQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SknbUc2L; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-234d3103237so2708645ad.0;
+        Thu, 10 Jul 2025 12:06:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752174407; x=1752779207; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d1TgekxlM1F6cmtjM39Ek7NrGs4UiAhKYGCORsJeMDg=;
+        b=SknbUc2L480v4Hh0Fpwx+xkwcd7m5dqZWrGwWgknXc5VcNeCGnXxryAfWPOYdZiSS0
+         PMv4johbNmqUJURFt5uLzPTn9Ac/6UXEe15p1ejo2GeCve2ZUJnmx2pN28VxU6uw+zVU
+         qldHhuFCyYBiUJ1SdQZNBz6B3MC2NXtfxze+yuaVdS3H9FJHwC+g7PTL3Vg2Yxiht61w
+         nV4dF5pIjCsdoZxx2o/S39Ewx43ahe+Dx8ohA8N3IVQsyxAxCYeBctWp8lnFR6360nwn
+         Pjk3XcEiZqBft/M9o0fglra6kqg2SxNIH0Jd5ox6D16Bu7fCH/aBpzrvxjl/UNBJsmq+
+         uGpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752174407; x=1752779207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d1TgekxlM1F6cmtjM39Ek7NrGs4UiAhKYGCORsJeMDg=;
+        b=gy6fH9QkJhJ6E/OqGD0f1zlPOpJ2ANNur3UQp5pQKqU8T8EAbwOr5SMYEwVHfh/Fmf
+         vuExdm1wF7LQ5lrqSCZSQg9hRGbD26KZfxGtjnke3tmiU/p7cgxTAg9J7f1GVPrRLai9
+         dqF9bwdYjkUzhr0q4ApAZ6hkHybkT+oBBumTgLBQNBRwOuhcwv3Jh7giia+/tsP5Wxuk
+         mDQdDqhWdseKuvIlql7OtU4eVVwPmxYgaaThM9fzMSopNOXBnH0SbmgLtQg9pet3TSeH
+         Te6YWhTxalBgnVpNWa9PlvVKQXZWitvjRju9GwKVYkjowZtIqZKhmE7fkYGh6bNJ6F41
+         d8oA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2p6vKI7UFo9q/xxMRxftievuV4LVTMBx8tDq8TtNWKXTrQt7/tHKrBRMdQsaGj2sT22vT1cLGrOayFMhd@vger.kernel.org, AJvYcCUHBvZi1CVbiMzT8F/zVY8tUAjW0SFNXu1fUEMD5v2cd5V6uGtJoCf0h4gn0oqdE9JKxeG/8QSOShin2Lhzf/g=@vger.kernel.org, AJvYcCXLCaYc9iMYAVC2eY7vo0bUsL3txNiCSOqCeez7MIhkQxmWYh1aOEbwTFx/FLU4Uqlq+R4724Luq+SQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQoGROlpYZXMnvbBk3ob5PissnJf6dd8fBjSti8GWgW8GZ2vNe
+	OsCsDxjc2jMNup99mgVIzXs+3kBjdrsyJOtsaOjP9MzDQLo1Z2iEngJWg64DRZAMbVTKnOK+6QO
+	h1sqlXlStHobieIvA+pmcOPs4ekIk6bk=
+X-Gm-Gg: ASbGncsBi47AR0iI6JLGwycI+h6QjEkKg7mlTV2HDhQkKVTydS38ZGFH5J18Ku8LL51
+	YUBdZHhUaGx8EL71N18EmfWUEFifEaX5MsAZs+VgFkd4pQ1avqXVGkYqxU4qcGTptSR9bCzxiGW
+	qK5pjrIYqUFMf0aRHbfFTaAegV5EWYM4AKkK/R5F4i
+X-Google-Smtp-Source: AGHT+IHkEFYCa3ATI/QIEvvVfoRX0qcKn6U4rLVncaPPUJONzR3iCGpU45qxH8NuVBQIRr9ulvGNtoRqwfRpZl1JiFI=
+X-Received: by 2002:a17:903:1245:b0:236:71f1:d347 with SMTP id
+ d9443c01a7336-23dede76501mr2207985ad.10.1752174407365; Thu, 10 Jul 2025
+ 12:06:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20250710060052.11955-1-boqun.feng@gmail.com> <20250710060052.11955-4-boqun.feng@gmail.com>
+ <4Ql5DIvfmXBHoUA428q2PelaaLNBI5Mi0jE3y3YPObJLRgY73zNZzQ8Pdl2qq25VWsMQFKUpYRHHQ1e7wFaGUw==@protonmail.internalid>
+ <DB8BTA477Z2V.1J7XFLDXHMN2S@kernel.org> <87v7o0i7b8.fsf@kernel.org>
+ <aG_RcB0tcdnkE_v4@Mac.home> <DB8GUTJA9QU1.X112WTV7ABZN@kernel.org> <CANiq72=Oq-JHkBuTAZPVYO5omuXswgGfLXu+nAGwEdRdgkU-0w@mail.gmail.com>
+In-Reply-To: <CANiq72=Oq-JHkBuTAZPVYO5omuXswgGfLXu+nAGwEdRdgkU-0w@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 10 Jul 2025 21:06:35 +0200
+X-Gm-Features: Ac12FXw1CiwqDgqRLKnAYlHxWPBCV-YdBB3D1UT2TjwRBmWnZYqiMVSnF3Wqfxk
+Message-ID: <CANiq72=K8+Rx_3yDXPxsTMftg6Kabg=_O3voMKNoQ647wznGpw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/9] rust: sync: atomic: Add ordering annotation types
+To: Benno Lossin <lossin@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	lkmm@lists.linux.dev, linux-arch@vger.kernel.org, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Lyude Paul <lyude@redhat.com>, 
+	Ingo Molnar <mingo@kernel.org>, Mitchell Levy <levymitchell0@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On July 10, 2025 11:45:40 AM PDT, dan=2Ej=2Ewilliams@intel=2Ecom wrote:
->Peter Zijlstra wrote:
->> On Wed, Jul 09, 2025 at 10:22:40PM -0700, dan=2Ej=2Ewilliams@intel=2Eco=
-m wrote:
->>=20
->> > "Regular?", no=2E Something is wrong if you are doing this regularly=
-=2E In
->> > current CXL systems the expectation is to suffer a WBINVD event once =
-per
->> > server provisioning event=2E
->>=20
->> Ok, so how about we strictly track this once, and when it happens more
->> than this once, we error out hard?
->>=20
->> > Now, there is a nascent capability called "Dynamic Capacity Devices"
->> > (DCD) where the CXL configuration is able to change at runtime with
->> > multiple hosts sharing a pool of memory=2E Each time the physical mem=
-ory
->> > capacity changes, cache management is needed=2E
->> >=20
->> > For DCD, I think the negative effects of WBINVD are a *useful* stick =
-to
->> > move device vendors to stop relying on software to solve this problem=
-=2E
->> > They can implement an existing CXL protocol where the device tells CP=
-Us
->> > and other CXL=2Ecache agents to invalidate the physical address range=
-s
->> > that the device owns=2E
->> >=20
->> > In other words, if WBINVD makes DCD inviable that is a useful outcome
->> > because it motivates unburdening Linux long term with this problem=2E
->>=20
->> Per the above, I suggest we not support this feature *AT*ALL* until an
->> alternative to WBINVD is provided=2E
->>=20
->> > In the near term though, current CXL platforms that do not support
->> > device-initiated-invalidate still need coarse cache management for th=
-at
->> > original infrequent provisioning events=2E Folks that want to go furt=
-her
->> > and attempt frequent DCD events with WBINVD get to keep all the piece=
-s=2E
->>=20
->> I would strongly prefer those pieces to include WARNs and or worse=2E
+On Thu, Jul 10, 2025 at 8:32=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
->That is fair=2E It is not productive for the CXL subsystem to sit back an=
-d
->hope that people notice the destructive side-effects of wbinvd and hope
->that leads to device changes=2E
->
->This discussion has me reconsidering that yes, it would indeed be better
->to clflushopt loop over potentially terabytes on all CPUs=2E That should
->only be suffered rarely for the provisioning case, and for the DCD case
->the potential add/remove events should be more manageable=2E
->
->drm already has drm_clflush_pages() for bulk cache management, CXL
->should just align on that approach=2E
+> I guess there could be a lint that detects a given item being `use`d
+> which we could use in some cases like this.
 
-Let's not be flippant; looping over terabytes could take *hours*=2E But th=
-ose are hours during which the system is alive, and only one CPU needs to b=
-e looping=2E
+Filled: https://github.com/rust-lang/rust-clippy/issues/15244.
 
-The other question is: what happens if memory is unplugged and then a cach=
-e line evicted? I'm guessing that existing memory hotplug solutions simply =
-drop the writeback, since the OS knows there is no valid memory there, and =
-so any cached data is inherently worthless=2E
+Cheers,
+Miguel
 
