@@ -1,143 +1,199 @@
-Return-Path: <linux-arch+bounces-12661-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12662-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6916DB01B35
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jul 2025 13:54:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1382FB01D49
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jul 2025 15:23:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DC3D1C8386C
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jul 2025 11:55:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9ACD57A8B70
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jul 2025 13:21:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F19DC28BAB9;
-	Fri, 11 Jul 2025 11:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBD92D0C6B;
+	Fri, 11 Jul 2025 13:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cGubWbc6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A05175D47;
-	Fri, 11 Jul 2025 11:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C538370810;
+	Fri, 11 Jul 2025 13:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752234881; cv=none; b=qfr2SljVrn9uI71XZHWbzR8nZMGWiFqgELvXZru09UPWwn6oir7VEUZQV0Hl8L15CkO+Pqt+0pOlx6Y/Okur9KPfJAdbaXINKKnKoQity3B+m21s/Qzu1gBGxxowkUtDf/ehzwLNkqP7+t06r84Ij9pzcXxXNXzBfHanAklGSLU=
+	t=1752240174; cv=none; b=IitN+ehx1VdiAv2G6aoIcVuDrVcKRg8zuOeJ2I5ZnrkVWkF9aAabkeU6RUofglDf/8ZKmsp7Vq+hCQkIoENk9e3midoZsRVInOovSYhaWSh8WrgBSHGD9/LattpbE7A2Evp1tR3iT+fioJO4j2KoYMFSf8z0EkeEmhKucC8XvO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752234881; c=relaxed/simple;
-	bh=MmmoynlAW2R7u926XTC2KMukop+KN1gGZGE8iwpHwqk=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eX2Hokk+O0R+P3aZ98PuyPsoWvrn0yXZja8KaRztj/ZPjFzNAcWic+ns5qlK73hLrUKBKMtGdnrKdikD7qQuDoh+MUjvNyIz7khldg6X7HG6ng63fp2xx6RkGpgdewCzpOkdJ/buOod+lRy+D8V3hVegQ6qOp7ug7p6Y6jUFRsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bdqml1fHPz6L52V;
-	Fri, 11 Jul 2025 19:51:19 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3542B1402EF;
-	Fri, 11 Jul 2025 19:54:37 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 11 Jul
- 2025 13:54:36 +0200
-Date: Fri, 11 Jul 2025 12:54:34 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: <dan.j.williams@intel.com>
-CC: Catalin Marinas <catalin.marinas@arm.com>, <james.morse@arm.com>,
-	<linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-mm@kvack.org>, <gregkh@linuxfoundation.org>, Will Deacon
-	<will@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, Yicong Yang
-	<yangyicong@huawei.com>, <linuxarm@huawei.com>, Yushan Wang
-	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, "Mark
- Rutland" <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, H Peter Anvin
-	<hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>
-Subject: Re: [PATCH v2 1/8] memregion: Support fine grained invalidate by
- cpu_cache_invalidate_memregion()
-Message-ID: <20250711125434.000050f3@huawei.com>
-In-Reply-To: <686eedb25ed02_24471002e@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20250624154805.66985-1-Jonathan.Cameron@huawei.com>
-	<20250624154805.66985-2-Jonathan.Cameron@huawei.com>
-	<686eedb25ed02_24471002e@dwillia2-xfh.jf.intel.com.notmuch>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1752240174; c=relaxed/simple;
+	bh=Z8xQn+iT3A5r4r5jVPej3tH0r1ytgXiZ3ITRDRty50c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YojsqugFBv5Qlb0lx75zaTcMwKfenmiiLmBga4SjDU4aSs/7OVauEla+8bgu+Pifh76NB2AutLndjsOCMl6mkgbrgX6lNlb2fVKMmZdtttKWhOVjvZyaMNSwrwUN7IMW6Q5e0Mv72ATDTIYZmgE0n2gDLgBmZVj9orD+q3QToN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cGubWbc6; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4a76ea97cefso21639361cf.2;
+        Fri, 11 Jul 2025 06:22:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752240171; x=1752844971; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sYtOPsEZ+CQsVOIfnHqDEBe70N1WUVtu0akdEwqTHbE=;
+        b=cGubWbc6CYl7O6Qeo3KH7lOWQHRqKX2+Aq8HT2m8nrugAdWdDKWhbVWLYvs77uiy5B
+         bKG+Ab89I/nZcizvUnIU4BkTlDBquqb8/GSHx5rKenf8OSEuGdJgFXL78GK/T+FlHRF+
+         F0kkzYK/4nOPsSClMu5adMI9MECDuXERqoU3HMOx40WwebAZQ26hdML80ZxNkgD5afCF
+         ghyamKfVChZp/FwE434uyp77+gZE9Vn1zsjSxlP8TmxCcEWjvnMHWGrq/9QG2uiFSQmR
+         bJgIbYCeSiDDaRnFD/9iSGdvrFVXEIXjKLZOK8KxlP1qEdCPLvPD6youNFjwN2Y075LX
+         PBFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752240171; x=1752844971;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sYtOPsEZ+CQsVOIfnHqDEBe70N1WUVtu0akdEwqTHbE=;
+        b=nMODfdKj1JRZybMYM06SeQpi+VOKx3RBixnzmc1xteyVumXqkHAz7lsNezc1ugmCwB
+         Wv+kuSvTqnEsmrz2i1aoDsYJr7qnfh7v267AwuxKiON0Nv2ZvBgcYW12sdmF5iTzMjTf
+         GfGo68wuL/9BChjuOcoHrk5EM6L6WFK8SUqi3nrUHMG7ouU2Gpoc+An81RjRUJZcYEbE
+         vfJoB33qDhEjeBtN4/pEcPRml5/yDt4V5hqUX00Jv+NmRSdizPa5OU1O73L+HqJ9yhqk
+         UF2VCVDRpQoMabSXYGif8sfnWxbdFIMNvmw9dTIR1wwuUg8plNF6HA8HR6P7zzbzym3a
+         gj4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUmJtbSSQYegij3bFAaNoGsgbaLJ41f4wesePZbPRpRIrG/urBHYf3e0u4A4WuAqXDK4f3TP375N7Ij@vger.kernel.org, AJvYcCV1/PcTeVTTqHg3f6kXXy35NcFi39hfQhNmY9FYowwuh0WuN80ZYrRsZ/074ySSw6wyRf0av52ZUMFtdKYIt+A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+kDFKftNy1HhPyPNrcyvZuZNCV9SM7YGbH9UZYiiCyBPw/sFS
+	mvtxHqfp6cwDwYrLSRVU/RlfloNGf/22AYTBf2PBrsdCa0ZYMVmEsTgj
+X-Gm-Gg: ASbGnctWcxiDPnhb69544G58kWH1e/5TFW8CRGE2vg0PtN4NMic3tdW39YmGHcLqvaG
+	un5Fus1gReT1POgDBUjk2uWn/pjiUuKJnOsJ/F3/FaHN0JLFk1Giw2ccOVJ+jyZZtGvCfQQIZ6+
+	ACzl779cc0CzOtc26EL8uIQ1v27Cbo/085kVMrNcXheICThp5EcmPhVZDOnxPFUMWHAW+FRvny1
+	k6GXvaf9Rek+uJAE4vnpBPm1YXXMNND13wWHmsvldVSybw+n803tC04JbqBWP2trE0KVHFPUqTK
+	A3PVnX7CxXqVy0Hg91e5sSx6UqTXsHW4hUAqcZYX8cRoQ94RySqBigjhFjZmapJrYL/2DBHCI4R
+	Sqgt+GscrOjgjEGTr+qIcHk6lSWhN/5cTO03cmqSYrm1lhDz1FC8/MMZsoH3Q/MYpVcJAvXLtkY
+	mnMOf2WP9/fSH8
+X-Google-Smtp-Source: AGHT+IGmUHLQtt4/Ao6E8L4tLE0MefjpXF7XEULDetINGFZ/Jy/Bf0GiAFzHKLdLVH4nwoSXYOFI1w==
+X-Received: by 2002:ac8:5d47:0:b0:4a7:6215:37f5 with SMTP id d75a77b69052e-4aa4158b43cmr37499891cf.48.1752240171472;
+        Fri, 11 Jul 2025 06:22:51 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a9edea8e66sm21040151cf.54.2025.07.11.06.22.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jul 2025 06:22:50 -0700 (PDT)
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 2C2E8F40066;
+	Fri, 11 Jul 2025 09:22:50 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Fri, 11 Jul 2025 09:22:50 -0400
+X-ME-Sender: <xms:KhBxaMQbn9roFh1stN7y4wNzPoAgB95S-EdDhrqKjYKglgHvAlMd_Q>
+    <xme:KhBxaLRTMuOkOdpunXWir1nZHZsn1A5_oOIr2DoFDAoMQsOP_j8PdIXrnzUFjiUyn
+    12tmFklFsttZ8rdDw>
+X-ME-Received: <xmr:KhBxaOa6oHlf5rEjRYt0nrvYKuR5mtCpa0sNhbfyyfzF8ZeJzY1GJzKZLg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdegfeegfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhepjeeihfdtuedvgedvtddufffggeefhefgtdeivdevveelvefhkeehffdtkeeihedv
+    necuffhomhgrihhnpehruhhsthdqlhgrnhhgrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
+    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
+    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphht
+    thhopedvjedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplhhoshhsihhnsehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehruhhsthdqfhhorhdqlhhinhhugiesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlkhhmmheslhhishhtshdrlhhinhhu
+    gidruggvvhdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pegrlhgvgidrghgrhihnohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepghgrrhihse
+    hgrghrhihguhhordhnvghtpdhrtghpthhtohepsghjohhrnhefpghghhesphhrohhtohhn
+    mhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:KhBxaPjhU5V0uxs42b41h0X8L75Gg_ZolvNTIBBShC26NW4v-xGHgg>
+    <xmx:KhBxaDheUwpn0JHcg24jSRJwCN0JgA2-PGMr4y76DqB_FOe35e0w3Q>
+    <xmx:KhBxaFKEaUG4yGuG6kPbY8dPU534TRt6meUhVxf7sNuvyERonwi_fA>
+    <xmx:KhBxaKUMGA7aQBjZp8woKmSUqsC8ZKPDCJMqrVPZ_ebGh114O4pgLw>
+    <xmx:KhBxaH2BY1eZZSH11TvWrxvNYITjGxmmvqOF7Lb2l40y42pf5aIJVXms>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 11 Jul 2025 09:22:49 -0400 (EDT)
+Date: Fri, 11 Jul 2025 06:22:48 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Benno Lossin <lossin@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v6 4/9] rust: sync: atomic: Add generic atomics
+Message-ID: <aHEQKBT68xvqIIjW@Mac.home>
+References: <20250710060052.11955-1-boqun.feng@gmail.com>
+ <20250710060052.11955-5-boqun.feng@gmail.com>
+ <DB92I10114UN.33MAFJVWIX4AB@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB92I10114UN.33MAFJVWIX4AB@kernel.org>
 
-On Wed, 9 Jul 2025 15:31:14 -0700
-<dan.j.williams@intel.com> wrote:
-
-> Jonathan Cameron wrote:
-> > From: Yicong Yang <yangyicong@hisilicon.com>
-> > 
-> > Extend cpu_cache_invalidate_memregion() to support invalidate certain
-> > range of memory. Control of types of invlidation is left for when  
+On Fri, Jul 11, 2025 at 10:03:07AM +0200, Benno Lossin wrote:
+[...]
+> > +
+> > +    /// Returns a pointer to the underlying atomic variable.
+> > +    ///
+> > +    /// Extra safety requirement on using the return pointer: the operations done via the pointer
+> > +    /// cannot cause data races defined by [`LKMM`].
 > 
-> s/invlidation/invalidation/
-> 
-> > usecases turn up. For now everything is Clean and Invalidate.
-> > 
-> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> > Signed-off-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> > ---
-> >  arch/x86/mm/pat/set_memory.c | 2 +-
-> >  drivers/cxl/core/region.c    | 6 +++++-
-> >  drivers/nvdimm/region.c      | 3 ++-
-> >  drivers/nvdimm/region_devs.c | 3 ++-
-> >  include/linux/memregion.h    | 8 ++++++--
-> >  5 files changed, 16 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> > index 46edc11726b7..8b39aad22458 100644
-> > --- a/arch/x86/mm/pat/set_memory.c
-> > +++ b/arch/x86/mm/pat/set_memory.c
-> > @@ -368,7 +368,7 @@ bool cpu_cache_has_invalidate_memregion(void)
-> >  }
-> >  EXPORT_SYMBOL_NS_GPL(cpu_cache_has_invalidate_memregion, "DEVMEM");
-> >  
-> > -int cpu_cache_invalidate_memregion(int res_desc)
-> > +int cpu_cache_invalidate_memregion(int res_desc, phys_addr_t start, size_t len)
-> >  {
-> >  	if (WARN_ON_ONCE(!cpu_cache_has_invalidate_memregion()))
-> >  		return -ENXIO;
-> > diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> > index 6e5e1460068d..6e6e8ace0897 100644
-> > --- a/drivers/cxl/core/region.c
-> > +++ b/drivers/cxl/core/region.c
-> > @@ -237,7 +237,11 @@ static int cxl_region_invalidate_memregion(struct cxl_region *cxlr)
-> >  		return -ENXIO;
-> >  	}
-> >  
-> > -	cpu_cache_invalidate_memregion(IORES_DESC_CXL);
-> > +	if (!cxlr->params.res)
-> > +		return -ENXIO;
-> > +	cpu_cache_invalidate_memregion(IORES_DESC_CXL,
-> > +				       cxlr->params.res->start,
-> > +				       resource_size(cxlr->params.res));  
-> 
-> So lets abandon the never used @res_desc argument. It was originally
-> there for documentation and the idea that with HDM-DB CXL invalidation
-> could be triggered from the device. However, that never came to pass,
-> and the continued existence of the option is confusing especially if
-> the range may not be a strict subset of the res_desc.
-> 
-> Alternatively, keep the @res_desc parameter and have the backend lookup
-> the ranges to flush from the descriptor, but I like that option less.
+> I don't think this is correct. I could create an atomic and then share
+> it with the C side via this function, since I have exclusive access, the
+> writes to this pointer don't need to be atomic.
 > 
 
-I'll do that as a precursor so we can keep the discussion of that
-vs the range being added separate.
+that's why it says "the operations done via the pointer cannot cause
+data races .." instead of saying "it must be atomic".
 
-Jonathan
+> We also don't document additional postconditions like this... If you
 
+Please see how Rust std document their `as_ptr()`:
 
+	https://doc.rust-lang.org/std/sync/atomic/struct.AtomicI32.html#method.as_ptr
+
+It mentions that "Doing non-atomic reads and writes on the resulting
+integer can be a data race." (although the document is a bit out of
+date, since non-atomic read and atomic read are no longer data race now,
+see [1])
+
+I think we can use the similar document structure here: providing more
+safety requirement on the returning pointers, and...
+
+> really would have to do it like this (which you shouldn't given the
+> example above), you would have to make this function `unsafe`, otherwise
+> there is no way to ensure that people adhere to it (since it isn't part
+> of the safety docs).
+> 
+
+...since dereferencing pointers is always `unsafe`, users need to avoid
+data races anyway, hence this is just additional information that helps
+reasoning.
+
+Regards,
+Boqun
+
+> > +    ///
+> > +    /// [`LKMM`]: srctree/tools/memory-model
+> > +    pub const fn as_ptr(&self) -> *mut T {
+> > +        self.0.get()
+> > +    }
+[...]
 
