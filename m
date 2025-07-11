@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-12656-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12657-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF77B016EE
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jul 2025 10:54:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C25AB01707
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jul 2025 10:58:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 740121C25028
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Jul 2025 08:54:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3B7D16CA55
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Jul 2025 08:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D228D212FB7;
-	Fri, 11 Jul 2025 08:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9DC2147E5;
+	Fri, 11 Jul 2025 08:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qk76w/4g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kNP1SDdb"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C678207E1D;
-	Fri, 11 Jul 2025 08:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A421F239B;
+	Fri, 11 Jul 2025 08:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752224062; cv=none; b=JASAAruP0XUWlIRe2qH0y/37zCyaFaWfrioJkcYMRnaXbQAFtJQ951q+Dz9KcboCwCQhzHZRcac4PcoeSyaUUbUbwKHB+DLue1kXv11kN3FiR2N77O9bzhpCWwo1hQCVrZLQ87nG52W9Cjbk8KVx4UqKwYv4n5kXHg5x8xzn1KM=
+	t=1752224275; cv=none; b=LyA/C74nwDQJ5bwWw+0mSi4Cv2SgXHXcRH8meioNNPqhGxEg79TrzDqMIOCNVdnfqS7sRDOYNUewXigLxDQP0sfUXmpgQWUnNejdGzUdQ59dzwPb5yduLpNFwZpET1JS4mzyey3AsjEjsGP8hOOitFNXTf5nJU+ezFlEzsfbQ4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752224062; c=relaxed/simple;
-	bh=/k6+wLUuPqTjP0+hmtrbzsCRJXJNpPB1TwR4XXmCSv8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=Ip8JzIJ4WeRbSgG2bCmiD6bP206aW7MO5t+QeFnSaLYcxZjX4SHhq+qqerVmJXL6nfMwbtxocPaYbH1aMrbVQQWrSsXQjvd6Qm2U4yyADZ8BLAePzScVitNPg+afxjAvTjyJtPqKQyW4RbWpqePBt4UJg8JvwMoIepPMkqpY+8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qk76w/4g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F56DC4CEED;
-	Fri, 11 Jul 2025 08:54:17 +0000 (UTC)
+	s=arc-20240116; t=1752224275; c=relaxed/simple;
+	bh=SQ+I/i9GcZZDdw9+DjGuncMztUIAcG5mYGhR3c0KWlA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=oiH4Zoh2MTmdY3Oh2xJ7H0+Qz8aLja3fSskwrW7MyKtYE3Jt3rG/p5z0apWbKAK2wfty4AXYLcSlB524L/9y7KinvYDtK5WN6LcqMUpB6KC30hQaRIahFp5bavj2iFFcwXyGVZG2z94sbZY6X6sWOi6kgT9Bfp6PIsTMiwUMxss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kNP1SDdb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7F1C4CEF5;
+	Fri, 11 Jul 2025 08:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752224062;
-	bh=/k6+wLUuPqTjP0+hmtrbzsCRJXJNpPB1TwR4XXmCSv8=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=qk76w/4gmLGpaL2Q1cm7V5bo+Ua0WkS54sW+Ua2Awlrz75KtWvMZftYJ9IkM083rV
-	 8/KSIv36HYKhTjBJ11rjcHXpbK0Eo7R3putiw799QwweBe673N2Cnyh6Jk6v/9cfRn
-	 A+LpKoErqcShJXDAocXvIwSpboalnXSgBRzb3WrNDeRSMmvSG80Yr7w1+JRmm/sD1D
-	 9ppLTxapVHclpUb93FoK3mbRooA1/K/3SIwj/9sanEXpNp5ikGQSgmcv+O9fbcJMqH
-	 XJ2BxhfJ3Bx03DWd2mPEr7vdPIJtvAORZEOiVcCU+Pc+XWE4K8ypl0kZPCoSCqIG86
-	 LcNpKaZwUfKCw==
+	s=k20201202; t=1752224274;
+	bh=SQ+I/i9GcZZDdw9+DjGuncMztUIAcG5mYGhR3c0KWlA=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=kNP1SDdbKprbnfNDIrcSNJYvDFEnmn67uWnRLInGGupetmpDuoBKd3HpdznmV43+g
+	 qJgl3QnG88BM74wyFcJhOEgncQSx1R9RPBVqzXXjdkaq2FsFYcQMZmvxA3fUUcRdaM
+	 lm2wH4mqhgboHw4DZt7OkBAPLkftZ1P800Q0DsbimFXGVKbzuQyYPrFHBNFMacBsf6
+	 dCipUAG2wkpSwiBSfl3mqJbtO7T0IvCZKt1I3m82tf4FaGqScCVkfjWPjaKgIbxacX
+	 4y+sGo+ze9pwrULvo+kOyrTyUgaJYbKuZ/DQmLbViVWV+lq1NEkeFe4/oauBT200KO
+	 mlgu2xnpklY6A==
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,11 +49,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 11 Jul 2025 10:54:15 +0200
-Message-Id: <DB93L6OL9RER.1Y0KH8A0ZFNBC@kernel.org>
-To: "Boqun Feng" <boqun.feng@gmail.com>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, <lkmm@lists.linux.dev>,
- <linux-arch@vger.kernel.org>
+Date: Fri, 11 Jul 2025 10:57:48 +0200
+Message-Id: <DB93NWEAK46D.2YW5P9MSAWVCN@kernel.org>
 Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
  <alex.gaynor@gmail.com>, "Gary Guo" <gary@garyguo.net>,
  =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
@@ -67,30 +64,78 @@ Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
  Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
  <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>,
  "Alan Stern" <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v6 7/9] rust: sync: atomic: Add Atomic<u{32,64}>
+Subject: Re: [PATCH v6 8/9] rust: sync: Add memory barriers
 From: "Benno Lossin" <lossin@kernel.org>
+To: "Boqun Feng" <boqun.feng@gmail.com>, <linux-kernel@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>, <lkmm@lists.linux.dev>,
+ <linux-arch@vger.kernel.org>
 X-Mailer: aerc 0.20.1
 References: <20250710060052.11955-1-boqun.feng@gmail.com>
- <20250710060052.11955-8-boqun.feng@gmail.com>
-In-Reply-To: <20250710060052.11955-8-boqun.feng@gmail.com>
+ <20250710060052.11955-9-boqun.feng@gmail.com>
+In-Reply-To: <20250710060052.11955-9-boqun.feng@gmail.com>
 
 On Thu Jul 10, 2025 at 8:00 AM CEST, Boqun Feng wrote:
-> Add generic atomic support for basic unsigned types that have an
-> `AtomicImpl` with the same size and alignment.
->
-> Unit tests are added including Atomic<i32> and Atomic<i64>.
->
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> diff --git a/rust/kernel/sync/barrier.rs b/rust/kernel/sync/barrier.rs
+> new file mode 100644
+> index 000000000000..df4015221503
+> --- /dev/null
+> +++ b/rust/kernel/sync/barrier.rs
+> @@ -0,0 +1,65 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Memory barriers.
+> +//!
+> +//! These primitives have the same semantics as their C counterparts: an=
+d the precise definitions
+> +//! of semantics can be found at [`LKMM`].
+> +//!
+> +//! [`LKMM`]: srctree/tools/memory-model/
+> +
+> +/// A compiler barrier.
+> +///
+> +/// A barrier that prevents compiler from reordering memory accesses acr=
+oss the barrier.
+> +pub(crate) fn barrier() {
+> +    // By default, Rust inline asms are treated as being able to access =
+any memory or flags, hence
+> +    // it suffices as a compiler barrier.
 
-Reviewed-by: Benno Lossin <lossin@kernel.org>
+I don't know about this, but it also isn't my area of expertise... I
+think I heard Ralf talk about this at Rust Week, but I don't remember...
+
+> +    //
+> +    // SAFETY: An empty asm block should be safe.
+
+    // SAFETY: An empty asm block.
+
+> +    unsafe {
+> +        core::arch::asm!("");
+> +    }
+
+    unsafe { core::arch::asm!("") };
+
+> +}
+> +
+> +/// A full memory barrier.
+> +///
+> +/// A barrier that prevents compiler and CPU from reordering memory acce=
+sses across the barrier.
+> +pub fn smp_mb() {
+> +    if cfg!(CONFIG_SMP) {
+> +        // SAFETY: `smp_mb()` is safe to call.
+> +        unsafe {
+> +            bindings::smp_mb();
+
+Does this really work? How does the Rust compiler know this is a memory
+barrier?
 
 ---
 Cheers,
 Benno
 
-> ---
->  rust/kernel/sync/atomic.rs | 99 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 99 insertions(+)
+> +        }
+> +    } else {
+> +        barrier();
+> +    }
+> +}
 
