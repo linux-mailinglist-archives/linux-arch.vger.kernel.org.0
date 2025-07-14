@@ -1,234 +1,307 @@
-Return-Path: <linux-arch+bounces-12754-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12755-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B33BB049C5
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 23:55:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7CC1B04A20
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 00:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8326917CB1E
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 21:55:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE0963AFAA8
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 22:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D1DA26A08D;
-	Mon, 14 Jul 2025 21:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C66927603C;
+	Mon, 14 Jul 2025 22:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Twx2WOUC"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="evGUWFQ/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2061.outbound.protection.outlook.com [40.107.244.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A7725DAFF;
-	Mon, 14 Jul 2025 21:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752530110; cv=fail; b=M4KnGRoEV/N9FhORTtwpK5pd1vEuzCLCRD0sBlO8pqFwy3EqNCgPcVEhYCMwEGjJOHSvfmqMzc9Af3qWCIalW3ow/aiIty7a8lZqWrYSnZ6cUXPDiMGKBl7v9Hx0YFgb0BCRc/tWfWKlhg0u+1Ti3T8mTDSYNizpDZCupUiEHoo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752530110; c=relaxed/simple;
-	bh=DyKgyqwlnuYNpOIRbp4MdZJk/JmhDsVz+QMdb6MAmgw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Xt6yM4kFGcUMPiz/FLowG1YxLIdnGV+tImLir3/sjk5e1Epwqjws26JnVLPysncgCJXLhv7Q7gdeeanK2pOaGWPxkuF7SMdokvmPyQo2zz8bOuBNheAHfmxhWwR9fuzrKQgX7m4f6J0onF1Cr2gIny4iBgKZBHxRWCEYIdXOBfs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Twx2WOUC; arc=fail smtp.client-ip=40.107.244.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BPxWe2QuIhqrZ9uYnBmDoa6hfwK4o/Y5YMoPUzYRBlc+9OTNDgt8K3uOpmLyzMNNg4Z6/bbjxYdMQ/vBD+3OnbIxBwhb/715KfV7ezTlDFMbV2vfkxdF3vLRAZ0IbmKQzSJqManwD9Y5OjWuIUFEjGCAGH5rWwk7osS05RrnGt3EmtuCNDtjpmNEf/KISHSUfcSgFqJh0a1bceGIA3XUqWFytenjlLAW6K1tOi3ktodE1ziuqK+X9gAfISubw/ZpgtWARZtglBgdUOy8aa8DhGtgpi7y4wB1UUf9OAdvnkSSv7PysuNHT0hLvgNY5zbCeZIwG4OOyW1Qq/FkV8NBoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MHmXGO4AkzZpC9hJ9+n0pSuChs/w2fSqZxudNrG26pA=;
- b=h3cQhKTsvETzN2gQcOqL8kdQfryeHDTMsFDnV1N95Sxdb/zEp53s8fZdWta28KiRB6TNuc/EGlKvXIm62LINz6R+v7X9GjyQC9wnlEMKbKvzVKW4Vud8hQj2E+BX63RbEdA1EiQ0tzx+kiLuU3XsC0DDlUMVyQi5iYgoyp6WT5blTZv/G8ICWTR5zsEbZ6UplJtnCGK5BptUCV784jxMSfMlnAIOwyRKr8GCKkbiwkNW6XGZLNOyUfMfyg7El7iMoMJ9EC/APpEJwk2jAbxyOGYPGOyTcPBbd0ALq95BRMbBCRz8/0kpZEbmAFYefbSInl8ns6Wve3dAKPJyuX2gHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MHmXGO4AkzZpC9hJ9+n0pSuChs/w2fSqZxudNrG26pA=;
- b=Twx2WOUCdSmu+seubQSv50Z/qLepAHrY1xnkhs9tcLbhyTsrAeFjY9L6ddIrV+NpYwGR62HcE6ME9fQkusCcxiNdPbBFXQUOGKn0ddWF50UUFCgkQtQwM9FXC8XLfFl+E1GNoEmkEfqVqZ6bTh/tSpIQLpGsDn7u+UnrqDQXw5pUq0P81Zbw79ZiNHgaIgOfdMZPRM2yDGQyvczoCNiLrJgBNinN9559h1msWeg4bqpEy3RYIOibkyHcw0gDmgCyEmqN+TTOF45fF/c3bEQdJBVN8A4PIRC9a0aL1TIHSRzk0bWPCbpek/TH8bFbXerSfhkaQQsi9yOQTAGMCLxOvA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by SJ2PR12MB8181.namprd12.prod.outlook.com (2603:10b6:a03:4f6::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.27; Mon, 14 Jul
- 2025 21:55:06 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8901.033; Mon, 14 Jul 2025
- 21:55:05 +0000
-Date: Mon, 14 Jul 2025 18:55:04 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-	linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Leon Romanovsky <leonro@mellanox.com>,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Jijie Shao <shaojijie@huawei.com>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v3 6/6] IB/mlx5: Use __iowrite64_copy() for write
- combining stores
-Message-ID: <20250714215504.GA2083014@nvidia.com>
-References: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
- <6-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
-X-ClientProxiedBy: MN2PR17CA0017.namprd17.prod.outlook.com
- (2603:10b6:208:15e::30) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9264A28E0F;
+	Mon, 14 Jul 2025 22:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752531349; cv=none; b=nPhICNFLKF7MfOOyVyzXXupPfR6v6XbJAXeTeyxVrxMZNygucHtYdHs5ARmVbSeRy+exhPUGMrcWomiTMuglQKCSrVXQ6Fgf77mBHt+4mpAp9u7nt2utAtW32Qvt1DrGF+zYIsa/w4peoQ1WI4tPu+0XeSlJ8McP7UHEKkYz8aw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752531349; c=relaxed/simple;
+	bh=4c8PIoyakP5mc/gyqw2m+tmo0L644W7YRUKA/j5oXBk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M0o5uHUMN93mEHnT9En04rSVH/KPXJm+NfZCGN41FFypK+QGt/DdGbFe1yqgZ+cpL6xf4advCWP08czRjUo8bAOPLYV+eEQX1aDH4rBv4BG2FRsP8z4h44xl238b5kZiMf9XU5AETfprNMI8mlVGE8pD4DKfzAFbgovKFVqbcaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=evGUWFQ/; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
+	by linux.microsoft.com (Postfix) with ESMTPSA id EBBE2201656A;
+	Mon, 14 Jul 2025 15:15:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EBBE2201656A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1752531347;
+	bh=g3W5Z6fHqZ1GJ4+S7QpdX7fufdyW6dgPO2OAgJyhkgk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=evGUWFQ//K3bKgSbvp7WZ22M7OSawCT25ENded6r4tlKsPe50OwgLt9HdEW2RjUm9
+	 OIRTr1Bsx6apGtQ9KfFX7LThRZZOhQXKRXn8B31DTMFWpRFSprJKiKvl9m/i8iYHZG
+	 1PSqNRluShwgfIIoeTGxDfeifeT/QjW5kuMc3x8o=
+From: Roman Kisel <romank@linux.microsoft.com>
+To: alok.a.tiwari@oracle.com,
+	arnd@arndb.de,
+	bp@alien8.de,
+	corbet@lwn.net,
+	dave.hansen@linux.intel.com,
+	decui@microsoft.com,
+	haiyangz@microsoft.com,
+	hpa@zytor.com,
+	kys@microsoft.com,
+	mhklinux@outlook.com,
+	mingo@redhat.com,
+	rdunlap@infradead.org,
+	tglx@linutronix.de,
+	Tianyu.Lan@microsoft.com,
+	wei.liu@kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-coco@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Cc: apais@microsoft.com,
+	benhill@microsoft.com,
+	bperkins@microsoft.com,
+	sunilmut@microsoft.com
+Subject: [PATCH hyperv-next v4 00/16] Confidential VMBus
+Date: Mon, 14 Jul 2025 15:15:29 -0700
+Message-ID: <20250714221545.5615-1-romank@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SJ2PR12MB8181:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3c33d465-7a45-47bb-6e8d-08ddc32117bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7LsO+zD5MNy6KwoqCBEpMZ1rptmlISB3Tj5R4L4TaYs5W6tal9nCzLYo7LR1?=
- =?us-ascii?Q?uadIBS6yz0/UDv3DLoV//JURe8uzYq1qPqycfjNaO4eJOJ+W0JL/lo9s3NMl?=
- =?us-ascii?Q?awkrIbUPpumcjKrrN4Dwr1xYWIJEpWzwM/mK6KyxJwWivZg78xIWS9k2LTjw?=
- =?us-ascii?Q?Vq1IpKIr4H4iQxonz+R8tXu2wRL1BBtEo8fx3paUAr1X8G2JDJlX/d98EFo7?=
- =?us-ascii?Q?W1mbCxbplZOV+FXpp3oid9qotDhGPFuaEPqP9yLQ8un4nWNEMrJVIikHdNOL?=
- =?us-ascii?Q?6z2A2mz7mBydDIKmslKwdnoKxWQAG/LW3eX0oOlLaPJreZNCREvUXtmWRxgv?=
- =?us-ascii?Q?5QyD8TYsDhuzcT7jPcSml5Oxs9b3HQhI/sDcdo7jAU4BxAJo/hyMdzGcOnqG?=
- =?us-ascii?Q?4LEMsvxppmSqo3zNXolXD9nP1PS9lOKiw3m9xlFKjnXHakEoKiOrMOIw0t+t?=
- =?us-ascii?Q?UW/B2Mct6VJYv5nBmTf0I9rqgW2Fe5ucK2hQJYCCvYVUWxgcmKLYdD7Ld4H0?=
- =?us-ascii?Q?m0V9cf4Kd3M6oIP2ap9NKB8JUAhlWqenOB83lF9kX5Ux+Fxg3K0N5RQGGEZa?=
- =?us-ascii?Q?DcM52gd2nm7h+TVivAevOAZou11NKDqSf9vJIvmTmsmft83DWNnJytd/NaD3?=
- =?us-ascii?Q?fHxLN8mCDnKojUCPB5oXaC/nqDconyBQFpF8T+NmIT6eeFM7f4Vm7kM7IEUa?=
- =?us-ascii?Q?PzKZagN2m1N1tm/8xNnux++loonNUod84EtRdeYhfiihRetV5FPX7pQhdOAi?=
- =?us-ascii?Q?LgbPmAoYM6MoKbhyX1VOWSPs7L3ELKgR+pco13bCrN0jUFcwOtcyAE33M1Cw?=
- =?us-ascii?Q?0of2MkqCScqzoKDatEByxXZZY7yZCY8b1WxOnInLJqjnYJy3PQXY3crJ0FJb?=
- =?us-ascii?Q?z6AH8d27duwa93u3r2AcmEOy0RV0OJhr4luZ3f418Q3njVxlWP1SbVUS2XBJ?=
- =?us-ascii?Q?p75D9tRaEgPpw7es2OiKR4TxDci191rzj13VLsEXopwjqUc7fwvZNkYA377D?=
- =?us-ascii?Q?IkyRxJr2aocmEQ6ltU7W8gCWHztjDZED21xTsF+AfXGanVnKEqtGdBZTWs19?=
- =?us-ascii?Q?LAl176K8w4aOCpKkE7puzdjA3ALs/nNgIyXpc+Whi24T1VVvK19xymKSjqXI?=
- =?us-ascii?Q?X1byE2w35an1rFAPEdWNAxYuPiFY3RV6X/owuyEhgi/eWmUjHO1EdGX/qMpS?=
- =?us-ascii?Q?MK7NDPnGLdHw6acIcB6JQXc7NnRw99a8tPYJuQd25ZuTedvVRNjGvVSJVEU/?=
- =?us-ascii?Q?0uSTNY+Cw36+K6QV2oFmMnLtmbaFGVxde+6N9Czju1A7CYjsd57M2ayKXjWS?=
- =?us-ascii?Q?IljgepHVOCElf0K2AaK8QyRXNEKN9Pu0vb2nUDAvW77hYaDPFVsHEt7Zl0Gd?=
- =?us-ascii?Q?dqqFS7KJPBEa0qYRrpqtMcRWnH/cHqQx1igYQduMr68kGrSUWhQg5Y/i0BFc?=
- =?us-ascii?Q?ijkOivx7Q/8E7GCSpLzfvS9jZ1ujX7ORVxA2fRJ2m6unEz83l6BmfQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?3XQYzwcpioWKwStu8AD6pl58tXEvLICCPzFqVfv2D4H8V3R80aiEbLuv2e6m?=
- =?us-ascii?Q?IJpc8yfmM/Bhi9oXC6/BDnSLIAhCYiM/WDqlAIouCtBLhwteUQKh5dcyznhK?=
- =?us-ascii?Q?JGDI2T17vTCByMDcdSWACHaIgidv31Y7vtfjKUFyy5vqGvFRW56aeqZigzNP?=
- =?us-ascii?Q?4noOvDMVlz2tX3uypHsjIub++hDQxtvtf5TGd9qtaGH75ZAIctR4oF33bxPq?=
- =?us-ascii?Q?tWfVy7o3k//MZ7NLqFVoMCb1RIwVdR352QdenMJ0rQZ52JDINJOKF2meiufB?=
- =?us-ascii?Q?a/kPQvGmQa/wQob+jUbey0JbfgvUSZDpioGDi5BB+8sx7jSrueOs4xaiTsZ3?=
- =?us-ascii?Q?9yDZGPx25Oriwm/yp+y1M6jUmYjaqpqUtg6vqs24QuVz8GdueBokvYlCto6a?=
- =?us-ascii?Q?66DYua4vDew8z4pzsH9LbxEuoud1H/AjiNwl645KPaVS/GZaoaZbamYl1GXW?=
- =?us-ascii?Q?t67VqZugz2cAZ/eX+PPXTsUW+FKDQpZhtVV2D5ivFoNks6ivfDQQh0qJKzuG?=
- =?us-ascii?Q?qfutnkI2RsrkBMWTPBUrVR/2Sdq1RWjjFyfy6RTd8rCmTZwDxmVqGnKakH1y?=
- =?us-ascii?Q?697Zu9oRRK1blZKgJSax2K00C2v3Mp+KWdMI0S5PS1O6FxUKSyIzwjtJpFuf?=
- =?us-ascii?Q?zVa7FecWHVApqY8g4aY63RZOsr2klzPqw3wg9gOkdAyWyhHzXoSH6gnxdhGw?=
- =?us-ascii?Q?ejk3CroiTVmIl+/1N++1QsDT6j84sXQ09e0PYeNf40R1WYym1K7dqZ+Vepdb?=
- =?us-ascii?Q?FQ48dYnQxJ2sEA53ADXNBwJoI0zjWYi64v54P8ttf2W/rTCKrPEj8s2B1AFq?=
- =?us-ascii?Q?XfKuLGmxQ3SVRLjqj328yAE62P3UTRSSZXGHtCF7n561e9UL3FMWwejKXPVh?=
- =?us-ascii?Q?PdAmu8DzXHTTfp+9DjBGyJiMCrRW7VWXfHUAj9a7M4ZQWqg5oL3oDx3aa4G8?=
- =?us-ascii?Q?66Ap8Pbi8nGhkghjL6CuwF8aAmHzMXThsqPXpe5HtInM58WwJWog4Vkxgbli?=
- =?us-ascii?Q?wpVrZNzRekwzPvxYc5bU5GSsvKwd/PuJZEJ6CBlzHePVY4d5izs3XHpqVCgS?=
- =?us-ascii?Q?HvqXUrGnn0UQxkWTSZcTTzHJxc5BHI2wRVkYJs4TbtwgqUUK3Bk3h6+m+4Lt?=
- =?us-ascii?Q?nSatZPuXL6sOv1LMHeIX5x7qTPYhlrxLVDmHxnbXgFgQTdyYKKyrHKPPx//p?=
- =?us-ascii?Q?DCoto6NDklUQiwe1nGN8BJbuFZBWeVgvYu9EsMdvVbXFJ+bKgx2svCoyI1Wy?=
- =?us-ascii?Q?7NobSI7fjbWoQDDeDiaNWoSD+sGS4hqFeadyqIcagdT6QLG1/NKx+ok0Ki6v?=
- =?us-ascii?Q?DDKIQgpvCbIhr1bIOBo5Y+mVCOJ7qcmNUvKeJrb/CwRY2mZq9iLB2mFCKz+f?=
- =?us-ascii?Q?uIkXye29UYOq2CKqXoUK2x62bqNLVgKOenUKTZqZdRQFyAQeP104GZxBm4YW?=
- =?us-ascii?Q?Ib4H975Fb0CzjN2BJ2RxceEOPANg66y+aFq/4telu4R4ERFt/6XUQNyIvLIi?=
- =?us-ascii?Q?uB8Bpn9/fTaXQILwaN3MRZJP+h95+H45ZUI4cB2/ob5JjYSxVkOaDd3j+JND?=
- =?us-ascii?Q?K2qEE9aCo3TLBxVNK9x56HOlLsjmckn7yDD7KNlZ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c33d465-7a45-47bb-6e8d-08ddc32117bd
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2025 21:55:05.8489
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m7ZFZEtFzogdBiyDJEajePGcPt6csMMJadpbiMuvzZF0o4tetIkvr1xBR1kUmof9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8181
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 11, 2024 at 01:46:19PM -0300, Jason Gunthorpe wrote:
-> mlx5 has a built in self-test at driver startup to evaluate if the
-> platform supports write combining to generate a 64 byte PCIe TLP or
-> not. This has proven necessary because a lot of common scenarios end up
-> with broken write combining (especially inside virtual machines) and there
-> is other way to learn this information.
-> 
-> This self test has been consistently failing on new ARM64 CPU
-> designs (specifically with NVIDIA Grace's implementation of Neoverse
-> V2). The C loop around writeq() generates some pretty terrible ARM64
-> assembly, but historically this has worked on a lot of existing ARM64 CPUs
-> till now.
-> 
-> We see it succeed about 1 time in 10,000 on the worst effected
-> systems. The CPU architects speculate that the load instructions
-> interspersed with the stores makes the WC buffers statistically flush too
-> often and thus the generation of large TLPs becomes infrequent. This makes
-> the boot up test unreliable in that it indicates no write-combining,
-> however userspace would be fine since it uses a ST4 instruction.
+Hello all,
 
-Hi Catalin,
+This is the 4th version of the patch series, and the full changelog
+is at the end of the cover letter. At the top, I'd like to express my
+gratitude and appreciation to Alok, Jon, Michael and Randy for
+their tremendous help with this version. This is also my first time
+adding to Documentation, and thanks to folks' kind advice, I actually
+built the Documentation after fixing the issues they pointed out, and
+that was a true joy reading the rendered book having added something
+to the knowledge treasure trove that the Documentation is.
 
-After a year of testing this in real systems it turns out that still
-some systems are not good enough with the unrolled 8 byte store loop.
-In my view the CPUs are quite bad here and this WC performance
-optimization is not working very well.
+This version also includes a fix for an existing issue that Michael
+noticed. Most of the issues found in the 3rd version were rather 
+straightforward to fix. I added comments for the rest in the code
+to justify the trade-offs. I fixed my spellchecker setup, and hoping
+not to let spelling errors get through as much as before.
 
-There are only two more options to work around this issue, use the
-unrolled 16 byte STP or the single Neon instruction 64 byte store.
+TLDR; is that these patches are for the Hyper-V guests, and the patches
+allow to keep data flowing from physical devices into the guests encrypted
+at the CPU level so that neither the root/host partition nor the hypervisor
+can access the data being processed (they only "see" the encrypted/garbled
+data). The changes are backward compatible with older systems, and their
+full potential is realized on hardware that supports memory encryption.
 
-Since STP was rejected alread we've only tested the Neon version. It
-does make a huge improvement, but it still somehow fails to combine
-rarely sometimes. The CPU is really bad at this :(
+These features also require running a paravisor, such as
+OpenVMM (https://github.com/microsoft/openvmm) used in Azure. Another
+implementation of the functionality available in this patch set is
+available in the Hyper-V UEFI: https://github.com/microsoft/mu_msvm.
 
-So we want to make mlx5 use the single 64 byte neon store instruction
-like userspace has been using for a long time for this testing
-algorithm.
+Once folks approve the changes, distro's might want to pick these up to
+provide the users running workloads in Azure with these features.
 
-It is simple enough, but the question has come up where to put the
-code.  Do you want to somehow see the neon option to be in the
-arch/arm64 code or should we stick it in the driver under a #ifdef?
+A more detailed description of the patches follows.
 
-The entry/exit from neon is slow enough I don't think any driver doing
-performance work would want to use neon instead of __iowrite64_copy(),
-so I do not think it should be hidden inside __iowrite64_copy(). Nor
-have I thought of a name for an arch generic function..
+The guests running on Hyper-V can be confidential where the memory and the
+register content are encrypted, provided that the hardware supports that
+(currently support AMD SEV-SNP and Intel TDX is implemented) and the guest
+is capable of using these features. The confidential guests cannot be
+introspected by the host nor the hypervisor without the guest sharing the
+memory contents upon doing which the memory is decrypted.
 
-Thanks,
-Jason
+In the confidential guests, neither the host nor the hypervisor need to be
+trusted, and the guests processing sensitive data can take advantage of that.
+
+Not trusting the host and the hypervisor (removing them from the Trusted
+Computing Base aka TCB) necessitates that the method of communication
+between the host and the guest be changed. Here is the data flow for a
+conventional and the confidential VMBus connections (`C` stands for the
+client or VSC, `S` for the server or VSP, the `DEVICE` is a physical one,
+might be with multiple virtual functions):
+
+1. Without the paravisor the devices are connected to the host, and the
+host provides the device emulation or translation to the guest:
+
+  +---- GUEST ----+       +----- DEVICE ----+        +----- HOST -----+
+  |               |       |                 |        |                |
+  |               |       |                 |        |                |
+  |               |       |                 ==========                |
+  |               |       |                 |        |                |
+  |               |       |                 |        |                |
+  |               |       |                 |        |                |
+  +----- C -------+       +-----------------+        +------- S ------+
+         ||                                                   ||
+         ||                                                   ||
+  +------||------------------ VMBus --------------------------||------+
+  |                     Interrupts, MMIO                              |
+  +-------------------------------------------------------------------+
+
+2. With the paravisor, the devices are connected to the paravisor, and
+the paravisor provides the device emulation or translation to the guest.
+The guest doesn't communicate with the host directly, and the guest
+communicates with the paravisor via the VMBus. The host is not trusted
+in this model, and the paravisor is trusted:
+
+  +---- GUEST --------------- VTL0 ------+               +-- DEVICE --+
+  |                                      |               |            |
+  | +- PARAVISOR --------- VTL2 -----+   |               |            |
+  | |     +-- VMBus Relay ------+    ====+================            |
+  | |     |   Interrupts, MMIO  |    |   |               |            |
+  | |     +-------- S ----------+    |   |               +------------+
+  | |               ||               |   |
+  | +---------+     ||               |   |
+  | |  Linux  |     ||    OpenHCL    |   |
+  | |  kernel |     ||               |   |
+  | +---- C --+-----||---------------+   |
+  |       ||        ||                   |
+  +-------++------- C -------------------+               +------------+
+          ||                                             |    HOST    |
+          ||                                             +---- S -----+
+  +-------||----------------- VMBus ---------------------------||-----+
+  |                     Interrupts, MMIO                              |
+  +-------------------------------------------------------------------+
+
+Note that in the second case the guest doesn't need to share the memory
+with the host as it communicates only with the paravisor within their
+partition boundary. That is precisely the raison d'etre and the value
+proposition of this patch series: equip the confidential guest to use
+private (encrypted) memory and rely on the paravisor when this is
+available to be more secure.
+
+An implementation of the VMBus relay that offers the Confidential VMBus
+channels is available in the OpenVMM project as a part of the OpenHCL
+paravisor. Please refer to
+
+  * https://openvmm.dev/, and
+  * https://github.com/microsoft/openvmm
+
+for more information about the OpenHCL paravisor. A VMBus client
+that can work with the Confidential VMBus is available in the
+open-source Hyper-V UEFI: https://github.com/microsoft/mu_msvm.
+
+I'd like to thank the following people for their help with this
+patch series:
+
+* Dexuan for help with validation and the fruitful discussions,
+* Easwar for reviewing the refactoring of the page allocating and
+  freeing in `hv.c`,
+* John and Sven for the design,
+* Mike for helping to avoid pitfalls when dealing with the GFP flags,
+* Sven for blazing the trail and implementing the design in few
+  codebases.
+
+I made sure to validate the patch series on
+
+    {TrustedLaunch(x86_64), OpenHCL} x
+    {SNP(x86_64), TDX(x86_64), No hardware isolation, No paravisor} x
+    {VMBus 5.0, VMBus 6.0} x
+    {arm64, x86_64}.
+
+[V4]
+    - Rebased the patch series on top of the latest hyperv-next branch,
+      applying changes as needed.
+
+    - Fixed typos and clarifications all around the patch series.
+    - Added clarifications in the patch 7 for `ms_hyperv.paravisor_present && !vmbus_is_confidential()`
+      and using hypercalls vs SNP or TDX specific protocols.
+      **Thank you, Alok!**
+
+    - Trim the Documentation changes to 80 columns.
+      **Thank you, Randy!**
+
+    - Make sure adhere to the RST format, actually built the PDF docs
+      and made sure the layout was correct.
+    **Thank you, Jon!**
+
+    - Better section order in Documentation.
+    - Fixed the commit descriptions where suggested.
+    - Moved EOI/EOM signaling for the confidential VMBus to the specialized function.
+    - Removed the unused `cpu` parameters.
+    - Clarified comments in the `hv_per_cpu_context` struct
+    - Explicitly test for NULL and only call `iounmap()` if non-NULL instead of
+      using `munmap()`.
+    - Don't deallocate SynIC pages in the CPU online and offline paths.
+    - Made sure the post page needs to be allocated for the future.
+    - Added comments to describe trade-offs.
+    **Thank you, Michael!**
+
+[V3] https://lore.kernel.org/linux-hyperv/20250604004341.7194-1-romank@linux.microsoft.com/
+    - The patch series is rebased on top of the latest hyperv-next branch.
+    - Reworked the "wiring" diagram in the cover letter, added links to the
+      OpenVMM project and the OpenHCL paravisor.
+
+    - More precise wording in the comments and clearer code.
+    **Thank you, Alok!**
+
+    - Reworked the documentation patch.
+    - Split the patchset into much more granular patches.
+    - Various fixes and improvements throughout the patch series.
+    **Thank you, Michael!**
+
+[V2] https://lore.kernel.org/linux-hyperv/20250511230758.160674-1-romank@linux.microsoft.com/
+    - The patch series is rebased on top of the latest hyperv-next branch.
+  
+    - Better wording in the commit messages and the Documentation.
+    **Thank you, Alok and Wei!**
+
+    - Removed the patches 5 and 6 concerning turning bounce buffering off from
+      the previous version of the patch series as they were found to be
+      architecturally unsound. The value proposition of the patch series is not
+      diminished by this removal: these patches were an optimization and only for
+      the storage (for the simplicity sake) but not for the network. These changes
+      might be proposed in the future again after revolving the issues.
+    ** Thanks you, Christoph, Dexuan, Dan, Michael, James, Robin! **
+
+[V1] https://lore.kernel.org/linux-hyperv/20250409000835.285105-1-romank@linux.microsoft.com/
+
+Roman Kisel (16):
+  Documentation: hyperv: Confidential VMBus
+  drivers: hv: VMBus protocol version 6.0
+  arch: hyperv: Get/set SynIC synth.registers via paravisor
+  arch/x86: mshyperv: Trap on access for some synthetic MSRs
+  Drivers: hv: Rename fields for SynIC message and event pages
+  Drivers: hv: Allocate the paravisor SynIC pages when required
+  Drivers: hv: Post messages through the confidential VMBus if available
+  Drivers: hv: remove stale comment
+  Drivers: hv: Check message and event pages for non-NULL before
+    iounmap()
+  Drivers: hv: Rename the SynIC enable and disable routines
+  Drivers: hv: Functions for setting up and tearing down the paravisor
+    SynIC
+  Drivers: hv: Allocate encrypted buffers when requested
+  Drivers: hv: Free msginfo when the buffer fails to decrypt
+  Drivers: hv: Support confidential VMBus channels
+  Drivers: hv: Support establishing the confidential VMBus connection
+  Drivers: hv: Set the default VMBus version to 6.0
+
+ Documentation/virt/hyperv/coco.rst | 140 +++++++++-
+ arch/x86/kernel/cpu/mshyperv.c     |  56 +++-
+ drivers/hv/channel.c               |  81 ++++--
+ drivers/hv/channel_mgmt.c          |  27 +-
+ drivers/hv/connection.c            |   6 +-
+ drivers/hv/hv.c                    | 431 +++++++++++++++++++++--------
+ drivers/hv/hv_common.c             |  13 +
+ drivers/hv/hyperv_vmbus.h          |  29 +-
+ drivers/hv/mshv_root.h             |   2 +-
+ drivers/hv/mshv_synic.c            |   6 +-
+ drivers/hv/ring_buffer.c           |   5 +-
+ drivers/hv/vmbus_drv.c             | 207 +++++++++-----
+ include/asm-generic/mshyperv.h     |  76 ++---
+ include/linux/hyperv.h             |  69 +++--
+ 14 files changed, 859 insertions(+), 289 deletions(-)
+
+
+base-commit: d9016a249be5316ec2476f9947356711e70a16ec
+-- 
+2.43.0
+
 
