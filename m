@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-12747-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12748-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8930B0428C
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 17:06:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E999B04369
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 17:20:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22E9D188D77E
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 15:06:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52111164CD6
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 15:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4F8259CB3;
-	Mon, 14 Jul 2025 15:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A59FF25CC6C;
+	Mon, 14 Jul 2025 15:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/HjJTwg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VD4R/XRb"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2EF32594B4;
-	Mon, 14 Jul 2025 15:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A73725C82E;
+	Mon, 14 Jul 2025 15:16:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752505547; cv=none; b=ZwtG4nmYUChg3Y4oYjCjckPLmVCLCd+uxBF9fJDTq0IUgL+kdoFzBPZ5kfjCT9eyvb4PtysDbYo0KiTUxoYOyFUGRqOIUUsujiyOQ9qhzKQKt2GQsRWRs2KSSyF/SemSDPT+WnW3hgivTsVnPRxkfFsPf2U3lYYEBizOGj3MjPw=
+	t=1752506181; cv=none; b=Xdga1xbJoMvwbQDfDqpn1cLIT09D+xshkUusFK7RleaVJqXzfkcjMJicP3rZMZng1MQxewUaeEGc6IHtjE0JX5KPi5LzfCFu3ok0WX6yPzF9A1PbrS1rrIBEfj5JJGBeSjYyjQLAs2Lsm73rYqFwhPjsvlJdTJfCD3/OqxhiM1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752505547; c=relaxed/simple;
-	bh=8JHF2oaX32pB33OO8iIS6R4334am5Qgv2ejcIuPp9o0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=NrAvd5SjniD3fe0b6WuLLJMMrtRxTv3chWJnRULgt9CHwuwaueaGpVkZQYhWIJ2nvINFY1NyhPNTLGupbYt6phUbK1nlNjhWWUiDNAcas4lUsfhSJcFF8VgKXyMDy+KzzI53V5kQfoMRp0drap7rYxpuHHCp9g41R5gPhhGO4OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/HjJTwg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A804C4CEF6;
-	Mon, 14 Jul 2025 15:05:42 +0000 (UTC)
+	s=arc-20240116; t=1752506181; c=relaxed/simple;
+	bh=DYIpBX8VnAuNwWjILAB9UIK/+bNLzgpqHG3tl9P8+1k=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=dpc4ONBzzZIvyvxq4TBIjZhemLsxKVbqaxS8Ibv8S2VmPjCYwCBCeWY7eCmm8bcbyW1CNPGib6xCLly3OB4iiOBrH/e+6U//4eTKvBotHH0YJIGFYoVW7cjZ56ZzeRYwi+C8b63wasFfL12EWecBEnA1+TLTeqyH4pZmDf/Bjc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VD4R/XRb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2706AC4CEED;
+	Mon, 14 Jul 2025 15:16:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752505547;
-	bh=8JHF2oaX32pB33OO8iIS6R4334am5Qgv2ejcIuPp9o0=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=J/HjJTwg/JgRiWr8w9WBD8IyNRroWC6BjFDwFoNFoBLaIRBmMtiZWsd8+ayvrRXQA
-	 RSYcfZ3dK4UbbyDormP5SPFa1+OC1QNV6/paCERfTD/onVtxorxcS9spSTEU2pWdsH
-	 GccNObc6Xrm6CwEu4+1ruB1dV8UxQ8t6yWi5Rp8xSJpEUuosOf95Kw3Js4PZHZkkSO
-	 qc5OSt4oGhpskf1Re83u3YwTOzqx56SBDvwVxsnPkO2a7xJPWMERw63/wSyOjWaY6p
-	 +fhr8XnC7CnM+LTTXDhH4HfcjseChxnv7FGFEKYX8rW9TAnsK0DNB3+7eh/+GjIOA3
-	 WE6nOi4iwt6ng==
+	s=k20201202; t=1752506181;
+	bh=DYIpBX8VnAuNwWjILAB9UIK/+bNLzgpqHG3tl9P8+1k=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=VD4R/XRbF/rTA1yEsFj7eJ3McbSzO0rpmbVdXcnktjIk23plNXE4IRcKcsdxbLhqg
+	 lfM6DZeKHJYRu31zdvKN8X4ISOZbaYKNmRnkNcjRMbOYcFXXtfaEqyWDIRqRuKsr6C
+	 sOe7kaJvui72ctvHkdGV/v7n4NQLmBCs8oYXfbJtmQEGWxbKsgFzE4n5U4nRGlNG6h
+	 UXrNpQOuQB3nQ/kGMQJS1+ORO5N/NRH72uq3pBV8O2YsPQH/7xCOiTSpxBpaXK3EAV
+	 rHC9EmOKIuhy5wuPZB3j6BtsYVza0LmKA09nXRbOpL8ZlmQYvUEGIz67Qj2pOm917i
+	 8l03mb/6wBJQA==
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,10 +49,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 14 Jul 2025 17:05:40 +0200
-Message-Id: <DBBVD70MASPW.2LUTJ51Y6SGMI@kernel.org>
-Subject: Re: [PATCH v7 4/9] rust: sync: atomic: Add generic atomics
-From: "Benno Lossin" <lossin@kernel.org>
+Date: Mon, 14 Jul 2025 17:16:14 +0200
+Message-Id: <DBBVL9ZPDU9P.3M2L8OB6SHBUE@kernel.org>
 To: "Boqun Feng" <boqun.feng@gmail.com>
 Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
  <lkmm@lists.linux.dev>, <linux-arch@vger.kernel.org>, "Miguel Ojeda"
@@ -69,120 +67,99 @@ Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
  Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
  <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>,
  "Alan Stern" <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v7 3/9] rust: sync: atomic: Add ordering annotation
+ types
+From: "Benno Lossin" <lossin@kernel.org>
 X-Mailer: aerc 0.20.1
 References: <20250714053656.66712-1-boqun.feng@gmail.com>
- <20250714053656.66712-5-boqun.feng@gmail.com>
- <DBBPI9ZJVO64.3A83G118BMVLI@kernel.org> <aHUSgXW9A6LzjBIS@Mac.home>
-In-Reply-To: <aHUSgXW9A6LzjBIS@Mac.home>
+ <20250714053656.66712-4-boqun.feng@gmail.com>
+ <DBBP3E8PZ81U.2O0QHK1GQXKX2@kernel.org> <aHUbUZZ-8Z9kspds@Mac.home>
+In-Reply-To: <aHUbUZZ-8Z9kspds@Mac.home>
 
-On Mon Jul 14, 2025 at 4:21 PM CEST, Boqun Feng wrote:
-> On Mon, Jul 14, 2025 at 12:30:12PM +0200, Benno Lossin wrote:
+On Mon Jul 14, 2025 at 4:59 PM CEST, Boqun Feng wrote:
+> On Mon, Jul 14, 2025 at 12:10:46PM +0200, Benno Lossin wrote:
 >> On Mon Jul 14, 2025 at 7:36 AM CEST, Boqun Feng wrote:
->> > To provide using LKMM atomics for Rust code, a generic `Atomic<T>` is
->> > added, currently `T` needs to be Send + Copy because these are the
->> > straightforward usages and all basic types support this.
+>> > Preparation for atomic primitives. Instead of a suffix like _acquire, =
+a
+>> > method parameter along with the corresponding generic parameter will b=
+e
+>> > used to specify the ordering of an atomic operations. For example,
+>> > atomic load() can be defined as:
 >> >
->> > Implement `AllowAtomic` for `i32` and `i64`, and so far only basic
->> > operations load() and store() are introduced.
+>> > 	impl<T: ...> Atomic<T> {
+>> > 	    pub fn load<O: AcquireOrRelaxed>(&self, _o: O) -> T { ... }
+>> > 	}
+>> >
+>> > and acquire users would do:
+>> >
+>> > 	let r =3D x.load(Acquire);
+>> >
+>> > relaxed users:
+>> >
+>> > 	let r =3D x.load(Relaxed);
+>> >
+>> > doing the following:
+>> >
+>> > 	let r =3D x.load(Release);
+>> >
+>> > will cause a compiler error.
+>> >
+>> > Compared to suffixes, it's easier to tell what ordering variants an
+>> > operation has, and it also make it easier to unify the implementation =
+of
+>> > all ordering variants in one method via generic. The `TYPE` associate
+>> > const is for generic function to pick up the particular implementation
+>> > specified by an ordering annotation.
 >> >
 >> > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 >> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 >> > ---
->> >  rust/kernel/sync/atomic.rs         |  14 ++
->> >  rust/kernel/sync/atomic/generic.rs | 285 ++++++++++++++++++++++++++++=
-+
->> >  2 files changed, 299 insertions(+)
->> >  create mode 100644 rust/kernel/sync/atomic/generic.rs
+>> > Benno, please take a good and if you want to provide your Reviewed-by
+>> > for this one. I didn't apply your Reviewed-by because I used
+>> > `ordering::Any` instead of `AnyOrdering`, I think you're Ok with it [1=
+],
+>> > but I could be wrong. Thanks!
 >> >
->> > diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
->> > index e80ac049f36b..c5193c1c90fe 100644
->> > --- a/rust/kernel/sync/atomic.rs
->> > +++ b/rust/kernel/sync/atomic.rs
->> > @@ -16,7 +16,21 @@
->> >  //!
->> >  //! [`LKMM`]: srctree/tools/memory-model/
->> > =20
->> > +pub mod generic;
+>> > [1]: https://lore.kernel.org/rust-for-linux/DB8M91D7KIT4.14W69YK7108ND=
+@kernel.org/
 >>=20
->> Hmm, maybe just re-export the stuff? I don't think there's an advantage
->> to having the generic module be public.
+>> > +/// The trait bound for annotating operations that support any orderi=
+ng.
+>> > +pub trait Any: internal::Sealed {
+>>=20
+>> How about we just name this `Ordering`? Because that's what it is :)
 >>=20
 >
-> If `generic` is not public, then in the kernel::sync::atomic page, it
-> won't should up, and there is no mentioning of struct `Atomic` either.
+> Seems OK to me, I then also followed Gary's suggestion:
 >
-> If I made it public and also re-export the `Atomic`, there would be a
-> "Re-export" section mentioning all the re-exports, so I will keep
-> `generic` unless you have some tricks that I don't know.
-
-Just use `#[doc(inline)]` :)
-
-    https://doc.rust-lang.org/rustdoc/write-documentation/the-doc-attribute=
-.html#inline-and-no_inline
-
-> Also I feel it's a bit naturally that `AllowAtomic` and `AllowAtomicAdd`
-> stay under `generic` (instead of re-export them at `atomic` mod level)
-> because they are about the generic part of `Atomic`, right?
-
-Why is that more natural? It only adds an extra path layer in any import
-for atomics.
-
-Unless you at some point want to add `concrete::Atomic<T>` etc, I would
-just re-export them.
-
->> > +/// The atomic operations are implemented in a way that is fully comp=
-atible with the [Linux Kernel
->> > +/// Memory (Consistency) Model][LKMM], hence they should be modeled a=
-s the corresponding
->> > +/// [`LKMM`][LKMM] atomic primitives. With the help of [`Atomic::from=
-_ptr()`] and
->> > +/// [`Atomic::as_ptr()`], this provides a way to interact with [C-sid=
-e atomic operations]
->> > +/// (including those without the `atomic` prefix, e.g. `READ_ONCE()`,=
- `WRITE_ONCE()`,
->> > +/// `smp_load_acquire()` and `smp_store_release()`).
->> > +///
->> > +/// [LKMM]: srctree/tools/memory-model/
->> > +/// [C-side atomic operations]: srctree/Documentation/atomic_t.txt
->>=20
->> Did you check that these links looks good in rustdoc?
->>=20
+> 	https://lore.kernel.org/rust-for-linux/20250621121842.0c3ca452.gary@gary=
+guo.net/
 >
-> Yep.
+> and dropped `RelaxedOnly` trait.
 
-Nice :)
+Sounds good.
 
->> > +/// over unit-only enums, see [Examples].
->> > +///
->> > +/// # Limitations
->> > +///
->> > +/// Because C primitives are used to implement the atomic operations,=
- and a C function requires a
->> > +/// valid object of a type to operate on (i.e. no `MaybeUninit<_>`), =
-hence at the Rust <-> C
->> > +/// surface, only types with no uninitialized bits can be passed. As =
-a result, types like `(u8,
+>> That sadly means you can't do
 >>=20
->> s/no uninitialized/initialized/
+>>     fn foo<Ordering: Ordering>() {}
+>>            --------  ^^^^^^^^ not a trait
+>>            |
+>>            found this type parameter
 >>=20
+>> But you can still do
+>>=20
+>>     fn foo<O: Ordering>(_: O) {}
+>>=20
+>> If we don't have the ordering module public and instead re-export from
 >
-> hmm.. "with initialized bits" seems to me saying "it's OK as long as
-> some bits are initialized", how about "with all the bits initialized"?
+> Keeping ordering mod public helps rustdoc readers to find the module and
+> read the module documentation (where is the best place to explain each
+> ordering), and also I made `Relaxed`, `Acquire`, `Release` and `Full`
+> refer to the module documentation in their doc, making `ordering` mod
+> private would cause rustdoc issues.
 
-Sounds good. The double negation sounded a bit weird to me.
-
->> > +    /// However, this should be only used when communicating with C s=
-ide or manipulating a C
->> > +    /// struct.
->>=20
->> This sentence should be above the `Safety` section.
->>=20
->
-> Hmm.. why? This is the further information about what the above
-> "Examples" section just mentioned?
-
-I thought "this" is referring to "this function", if not then please be
-more concrete :)
+You could move those docs to the `Ordering` trait :) But I think having
+an ordering module is fine.
 
 ---
 Cheers,
