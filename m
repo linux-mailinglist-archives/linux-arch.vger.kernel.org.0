@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-12760-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12761-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77988B04A34
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 00:16:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED626B04A33
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 00:16:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 707DE4A41EB
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 22:15:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46D864A18DC
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 22:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF85327C162;
-	Mon, 14 Jul 2025 22:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1809A27F183;
+	Mon, 14 Jul 2025 22:15:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Gc0UX85E"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Ht0M3ss7"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9AF278143;
-	Mon, 14 Jul 2025 22:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C705278753;
+	Mon, 14 Jul 2025 22:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752531352; cv=none; b=q7zd2VSNeHtzSIwEi1g+LC03zy0Rm1igfUFaipSMADg9ykcZozjMhcA5yjLReH/mmqC+37Lx/o0PqxSIZOhaADs+M2CP8FYZ4xnPAJlvV4KPZrrDZLQ4ppx1EzjAzVJaW0cfucuDMi2Jw96w/DfsfT/T74cP8niaN+34S8eKWSQ=
+	t=1752531352; cv=none; b=P8yLkTPKy3jKIfnhPoigziTP1dnwKxdZJEdRjcRAfNk/CjF2lVxiqyc0oKntojhjMgS1XgFSzHiy9uthz57bTUpM63RlasZW1sxpNoVzka1SpNjaKDw5VdEpgl7C4lr2/B+vA88H/RQ8YYbZqCNf2SDbnVCE7pIWR91NFioAELs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752531352; c=relaxed/simple;
-	bh=hN0bzn33b7/bcvBUrIoUS+YL0Fauw5ocCHmmJJZGNOo=;
+	bh=u/KPsb1h5AglUAwekqho240DEYtuoNvGBF+U/5Ha9bE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JKWlkt7GiZbrXwZ/BezwGZZzrmLHluwG3i2GSIl8DlQCRz+IHfX0AAjuqey3sz0QMcRFIrq+XI6Znw4XEbi1LpreJAY1k5bPAS+YlNL4BdbgMYgSzjAsooSdi6tszlAZktvZGCfBjuKxViRjMsI8CByaUERxrmaG0oQCCHUglIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Gc0UX85E; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=I7vlCZ+q+39UyTaLAQ36b240ZNb25LoMnI7PuDCy9C1M6XXwOQ6jHR/qFws1EUfCQGHTLc4UmWTijvL4z1BrdHHZGn+kS8cPN4vGqAi7XExHB2v5cI4mzkuWWiQHjNovXvfU0rQS3bqKd9SVC5JFv8MICuQeF1wJFr14mPmRwSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Ht0M3ss7; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 20B8A2016594;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 620B22016596;
 	Mon, 14 Jul 2025 15:15:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 20B8A2016594
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 620B22016596
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1752531349;
-	bh=G1piMKMIQwdOuzoLPvU+WPXOuTN4hKPH7hsZm96BaHU=;
+	bh=ANaSeCLcuOpQTrlS/gomE+iBc3WLPtbEx8zr3r2sN/c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Gc0UX85ErGQszX3lQ+KML5u23xXLREkBCdgWmk1SpZilJVAdj7SDtcWFRes+ralIf
-	 EZzDgm3fCETCop3FP5+QaE0xoi1AQGjjVWu3rGiwxDEGzlcBxLhP2/fKMAvHl6UnDb
-	 AKlTnpIcvSkV75CW8pQdx3Rr8xXp/mitaivNOoM0=
+	b=Ht0M3ss7YtAqN2f0e54wCb9XuZKJB5oYA780tB1InvLZ+ROTELDad1U6UroSEFbCW
+	 s8b619rf8GbIQtE13F8E1mRCqcB3no5FK/5xrw7u/BIWSqQRihq4ZnUY1rfOkeC90C
+	 LobQVx2g5Qyr1I2c+HhWYLm8edvAG3/F5Re163vA=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: alok.a.tiwari@oracle.com,
 	arnd@arndb.de,
@@ -66,9 +66,9 @@ Cc: apais@microsoft.com,
 	benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com
-Subject: [PATCH hyperv-next v4 08/16] Drivers: hv: remove stale comment
-Date: Mon, 14 Jul 2025 15:15:37 -0700
-Message-ID: <20250714221545.5615-9-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v4 09/16] Drivers: hv: Check message and event pages for non-NULL before iounmap()
+Date: Mon, 14 Jul 2025 15:15:38 -0700
+Message-ID: <20250714221545.5615-10-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250714221545.5615-1-romank@linux.microsoft.com>
 References: <20250714221545.5615-1-romank@linux.microsoft.com>
@@ -80,32 +80,45 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The comment about the x2v shim is ancient and long since incorrect.
+It might happen that some hyp SynIC pages aren't allocated.
 
-Remove the incorrect comment.
+Check for that and only then call iounmap().
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 ---
- drivers/hv/hv.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/hv/hv.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-index 816f8a14ff63..820711e954d1 100644
+index 820711e954d1..a8669843c56e 100644
 --- a/drivers/hv/hv.c
 +++ b/drivers/hv/hv.c
-@@ -266,11 +266,7 @@ void hv_synic_free(void)
- }
+@@ -367,8 +367,10 @@ void hv_synic_disable_regs(unsigned int cpu)
+ 	 */
+ 	simp.simp_enabled = 0;
+ 	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+-		iounmap(hv_cpu->hyp_synic_message_page);
+-		hv_cpu->hyp_synic_message_page = NULL;
++		if (hv_cpu->hyp_synic_message_page) {
++			iounmap(hv_cpu->hyp_synic_message_page);
++			hv_cpu->hyp_synic_message_page = NULL;
++		}
+ 	} else {
+ 		simp.base_simp_gpa = 0;
+ 	}
+@@ -379,8 +381,10 @@ void hv_synic_disable_regs(unsigned int cpu)
+ 	siefp.siefp_enabled = 0;
  
- /*
-- * hv_synic_init - Initialize the Synthetic Interrupt Controller.
-- *
-- * If it is already initialized by another entity (ie x2v shim), we need to
-- * retrieve the initialized message and event pages.  Otherwise, we create and
-- * initialize the message and event pages.
-+ * hv_synic_enable_regs - Initialize the Synthetic Interrupt Controller.
-  */
- void hv_synic_enable_regs(unsigned int cpu)
- {
+ 	if (ms_hyperv.paravisor_present || hv_root_partition()) {
+-		iounmap(hv_cpu->hyp_synic_event_page);
+-		hv_cpu->hyp_synic_event_page = NULL;
++		if (hv_cpu->hyp_synic_event_page) {
++			iounmap(hv_cpu->hyp_synic_event_page);
++			hv_cpu->hyp_synic_event_page = NULL;
++		}
+ 	} else {
+ 		siefp.base_siefp_gpa = 0;
+ 	}
 -- 
 2.43.0
 
