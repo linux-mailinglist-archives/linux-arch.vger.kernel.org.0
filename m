@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-12734-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12735-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F2B7B03B93
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 12:03:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D7A4B03BA6
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 12:10:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3167116C36D
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 10:03:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85D451897E6E
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Jul 2025 10:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 974162417DE;
-	Mon, 14 Jul 2025 10:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162C524291A;
+	Mon, 14 Jul 2025 10:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVEDxYkD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVboV4gP"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695BC239E69;
-	Mon, 14 Jul 2025 10:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFCA1E5018;
+	Mon, 14 Jul 2025 10:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752487398; cv=none; b=qac/Ly176DtSLjFPpXC3n75JVqd7KJDXON/5IZAAxz6Zg2THyUAL5eCOmaHMYKcYU0eh+sXNY7WvHn2vb9U8LKjXI6zoC2JTfRQ/M3AaxyYbdxORyncwsk+xFweJ0utmz9BmG2hRNQCGQ9SY3JVRpkSQ4KCeHQf7QUEU/D4KhSk=
+	t=1752487854; cv=none; b=ZFaeCpi86Pt2O3JJYlh58WwtkIqyzDSUNl6eiw5DJ/QTL3McKyrwuBi5VtV4nOvzAJvJG2oyTIS4dRqp29zSkO2Jqw+GsRW8FX6vcDi7odQEXWA43F+sNEvyQFBC1d0uY5dhu3z8anqSWagTWbCEual7si2I8TXh/ol2wlW2JsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752487398; c=relaxed/simple;
-	bh=HNeMqdWKNrq8boA6qHmSu+sqnpTFb+5Ta06mGhvf3ME=;
+	s=arc-20240116; t=1752487854; c=relaxed/simple;
+	bh=2FjgHRwrJ1gHWTE/gLdl+Fgz/qFZmAvlrqMcxusjD2I=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=WXkGicA5fP6cnSSPqHDEfxAzuRnSfp/6JyrpNUar2872CWah2S7zdHSS6Sr/8PJ75UT0wF2NBG0nzATjqtEICDWcQ+v7SoeI43t+yYtMzyGCZ9X1ayiS9CBdfsSWWc4hexHKbZcy1X0JhEmMkBW0VP47a2H0vKbiSk2TNaGU+w0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVEDxYkD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B444C4CEF4;
-	Mon, 14 Jul 2025 10:03:13 +0000 (UTC)
+	 References:In-Reply-To; b=Y5T/VF9PzYLSPgNfjnkayMSOWQv62QaQ156v1haoODE+Cst60wxGruvNprmzMWyuUjOjPlBw5YdIBXNQMhZKsYlPdFqe+T/QgIY7TI8UdAqZFIJc6MxueVmhSTwRWvb3WaLiMnJw6K2uFIB07UbjkzAsDlmw8RZUc69yxNATaOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVboV4gP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B21C4CEED;
+	Mon, 14 Jul 2025 10:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752487398;
-	bh=HNeMqdWKNrq8boA6qHmSu+sqnpTFb+5Ta06mGhvf3ME=;
+	s=k20201202; t=1752487853;
+	bh=2FjgHRwrJ1gHWTE/gLdl+Fgz/qFZmAvlrqMcxusjD2I=;
 	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=aVEDxYkD1y1qhi699n0cRjmrQF+1SC+eaZWmdDV28WCMBjNFHO0vs0P9vIwlxHUv0
-	 DkTRJERN0BvR/hgFa/iGKGfeKM7+VdDQhXaZXwJ3Q+Oao+xaumPQm2b7SqWfqJTuar
-	 bQFYLjGCT/7s7ZbTlbEpEFbdisypu12He+8Eq/rQes08PWsQpry6c5X/DY6E8QpxZY
-	 BUvyH5MMWvu4Xyul+AJj5cfeH2zJ9e2j8E8IlVp/nRH8kdNvZEbl/DrYgcynBgv6yq
-	 Bq1WJyhzFFPCiqRwQXo+APimnJC83YP87o9y5+5eQTmZ3nfKm4WWs1tEVzlM6cOC5m
-	 ESCsmJ8+uyXDA==
+	b=mVboV4gPob7vdLun6cFtTTjGkfDajuNl+B6Xf+FtDdgm+fsiFi79OdSCpvF8cVkzA
+	 m7AIRQVDYwmbRVRXxytFqBXhlLDCyCkDvGdyd36GMtHEIrH7JhGS4HmVSbCC7Y1rAF
+	 D9Je7IiK1/Rr9N1CuxUApd9966P7T8FaEjyYYG64bjX7URlP9vLeXa1x727eqgh3x/
+	 PGA3vY/E81eHtsitRG2g9vAVCJ3WOcZN1f0ajwlqL5iYPvZcmYly8Js6QWQsXQXGDr
+	 yPUGv4JrjspmY+zbWx+DArmxfgQFft8lGHlFsU7m0qvBciSCyRzTITsIQa6oy25RwZ
+	 uhCGXMTJUKB6g==
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,8 +49,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 14 Jul 2025 12:03:11 +0200
-Message-Id: <DBBOXLF23VVA.2T3U6GBOZ3Y20@kernel.org>
+Date: Mon, 14 Jul 2025 12:10:46 +0200
+Message-Id: <DBBP3E8PZ81U.2O0QHK1GQXKX2@kernel.org>
 Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
  <alex.gaynor@gmail.com>, "Gary Guo" <gary@garyguo.net>,
  =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Andreas
@@ -64,172 +64,86 @@ Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
  Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
  <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>,
  "Alan Stern" <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v7 2/9] rust: sync: Add basic atomic operation mapping
- framework
+Subject: Re: [PATCH v7 3/9] rust: sync: atomic: Add ordering annotation
+ types
 From: "Benno Lossin" <lossin@kernel.org>
 To: "Boqun Feng" <boqun.feng@gmail.com>, <linux-kernel@vger.kernel.org>,
  <rust-for-linux@vger.kernel.org>, <lkmm@lists.linux.dev>,
  <linux-arch@vger.kernel.org>
 X-Mailer: aerc 0.20.1
 References: <20250714053656.66712-1-boqun.feng@gmail.com>
- <20250714053656.66712-3-boqun.feng@gmail.com>
-In-Reply-To: <20250714053656.66712-3-boqun.feng@gmail.com>
+ <20250714053656.66712-4-boqun.feng@gmail.com>
+In-Reply-To: <20250714053656.66712-4-boqun.feng@gmail.com>
 
 On Mon Jul 14, 2025 at 7:36 AM CEST, Boqun Feng wrote:
-> Preparation for generic atomic implementation. To unify the
-> implementation of a generic method over `i32` and `i64`, the C side
-> atomic methods need to be grouped so that in a generic method, they can
-> be referred as <type>::<method>, otherwise their parameters and return
-> value are different between `i32` and `i64`, which would require using
-> `transmute()` to unify the type into a `T`.
+> Preparation for atomic primitives. Instead of a suffix like _acquire, a
+> method parameter along with the corresponding generic parameter will be
+> used to specify the ordering of an atomic operations. For example,
+> atomic load() can be defined as:
 >
-> Introduce `AtomicImpl` to represent a basic type in Rust that has the
-> direct mapping to an atomic implementation from C. This trait is sealed,
-> and currently only `i32` and `i64` impl this.
+> 	impl<T: ...> Atomic<T> {
+> 	    pub fn load<O: AcquireOrRelaxed>(&self, _o: O) -> T { ... }
+> 	}
 >
-> Further, different methods are put into different `*Ops` trait groups,
-> and this is for the future when smaller types like `i8`/`i16` are
-> supported but only with a limited set of API (e.g. only set(), load(),
-> xchg() and cmpxchg(), no add() or sub() etc).
+> and acquire users would do:
 >
-> While the atomic mod is introduced, documentation is also added for
-> memory models and data races.
+> 	let r =3D x.load(Acquire);
 >
-> Also bump my role to the maintainer of ATOMIC INFRASTRUCTURE to reflect
-> my responsiblity on the Rust atomic mod.
+> relaxed users:
+>
+> 	let r =3D x.load(Relaxed);
+>
+> doing the following:
+>
+> 	let r =3D x.load(Release);
+>
+> will cause a compiler error.
+>
+> Compared to suffixes, it's easier to tell what ordering variants an
+> operation has, and it also make it easier to unify the implementation of
+> all ordering variants in one method via generic. The `TYPE` associate
+> const is for generic function to pick up the particular implementation
+> specified by an ordering annotation.
 >
 > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Benno Lossin <lossin@kernel.org>
 > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 > ---
-> Benno, I actually followed your suggestion and put the safety
-> requirement inline, and also I realized I don't need to mention about
-> data race, because no data race is an implied safety requirement.
+> Benno, please take a good and if you want to provide your Reviewed-by
+> for this one. I didn't apply your Reviewed-by because I used
+> `ordering::Any` instead of `AnyOrdering`, I think you're Ok with it [1],
+> but I could be wrong. Thanks!
+>
+> [1]: https://lore.kernel.org/rust-for-linux/DB8M91D7KIT4.14W69YK7108ND@ke=
+rnel.org/
 
-Thanks! I think it looks much better :)
+> +/// The trait bound for annotating operations that support any ordering.
+> +pub trait Any: internal::Sealed {
 
-> Note that macro-wise, I forced only #[doc] attributes can be put
-> before `unsafe fn ..` because this is the only usage, and I don't
-> think it's likely we want to support other attributes. We can always
-> add them later.
+How about we just name this `Ordering`? Because that's what it is :)
 
-Sounds good.
+That sadly means you can't do
 
-> +declare_and_impl_atomic_methods!(
-> +    /// Basic atomic operations
-> +    pub trait AtomicHasBasicOps {
+    fn foo<Ordering: Ordering>() {}
+           --------  ^^^^^^^^ not a trait
+           |
+           found this type parameter
 
-I think we should drop the `Has` from the names. So this one can just be
-`AtomicBasicOps`. Or how about `BasicAtomic`, or `AtomicBase`?
+But you can still do
 
-> +        /// Atomic read (load).
-> +        ///
-> +        /// # Safety
-> +        /// - `ptr` is aligned to [`align_of::<Self>()`].
-> +        /// - `ptr` is valid for reads.
-> +        ///
-> +        /// [`align_of::<Self>()`]: core::mem::align_of
-> +        unsafe fn read[acquire](ptr: *mut Self) -> Self {
-> +            bindings::#call(ptr.cast())
-> +        }
-> +
-> +        /// Atomic set (store).
-> +        ///
-> +        /// # Safety
-> +        /// - `ptr` is aligned to [`align_of::<Self>()`].
-> +        /// - `ptr` is valid for writes.
-> +        ///
-> +        /// [`align_of::<Self>()`]: core::mem::align_of
-> +        unsafe fn set[release](ptr: *mut Self, v: Self) {
-> +            bindings::#call(ptr.cast(), v)
-> +        }
-> +    }
-> +);
-> +
-> +declare_and_impl_atomic_methods!(
-> +    /// Exchange and compare-and-exchange atomic operations
-> +    pub trait AtomicHasXchgOps {
+    fn foo<O: Ordering>(_: O) {}
 
-Same here `AtomicXchgOps` or `AtomicExchangeOps` or `AtomicExchange`?
-(I would prefer to not abbreviate it to `Xchg`)
+If we don't have the ordering module public and instead re-export from
+atomic, you could also write:
 
-> +        /// Atomic exchange.
-> +        ///
-> +        /// Atomically updates `*ptr` to `v` and returns the old value.
-> +        ///
-> +        /// # Safety
-> +        /// - `ptr` is aligned to [`align_of::<Self>()`].
-> +        /// - `ptr` is valid for reads and writes.
-> +        ///
-> +        /// [`align_of::<Self>()`]: core::mem::align_of
-> +        unsafe fn xchg[acquire, release, relaxed](ptr: *mut Self, v: Sel=
-f) -> Self {
-> +            bindings::#call(ptr.cast(), v)
-> +        }
-> +
-> +        /// Atomic compare and exchange.
-> +        ///
-> +        /// If `*ptr` =3D=3D `*old`, atomically updates `*ptr` to `new`.=
- Otherwise, `*ptr` is not
-> +        /// modified, `*old` is updated to the current value of `*ptr`.
-> +        ///
-> +        /// Return `true` if the update of `*ptr` occured, `false` other=
-wise.
-> +        ///
-> +        /// # Safety
-> +        /// - `ptr` is aligned to [`align_of::<Self>()`].
-> +        /// - `ptr` is valid for reads and writes.
-> +        /// - `old` is aligned to [`align_of::<Self>()`].
-> +        /// - `old` is valid for reads and writes.
-> +        ///
-> +        /// [`align_of::<Self>()`]: core::mem::align_of
-> +        unsafe fn try_cmpxchg[acquire, release, relaxed](ptr: *mut Self,=
- old: *mut Self, new: Self) -> bool {
-> +            bindings::#call(ptr.cast(), old, new)
-> +        )}
-> +    }
-> +);
-> +
-> +declare_and_impl_atomic_methods!(
-> +    /// Atomic arithmetic operations
-> +    pub trait AtomicHasArithmeticOps {
+    fn foo<Ordering: atomic::Ordering>(_: Ordering) {}
 
-Forgot to rename this one to `Add`? I think `AtomicAdd` sounds best for
-this one.
+If you want it to be extra clear. What do you think?
 
 ---
 Cheers,
 Benno
 
-> +        /// Atomic add (wrapping).
-> +        ///
-> +        /// Atomically updates `*ptr` to `(*ptr).wrapping_add(v)`.
-> +        ///
-> +        /// # Safety
-> +        /// - `ptr` is aligned to `align_of::<Self>()`.
-> +        /// - `ptr` is valid for reads and writes.
-> +        ///
-> +        /// [`align_of::<Self>()`]: core::mem::align_of
-> +        unsafe fn add[](ptr: *mut Self, v: Self::Delta) {
-> +            bindings::#call(v, ptr.cast())
-> +        }
-> +
-> +        /// Atomic fetch and add (wrapping).
-> +        ///
-> +        /// Atomically updates `*ptr` to `(*ptr).wrapping_add(v)`, and r=
-eturns the value of `*ptr`
-> +        /// before the update.
-> +        ///
-> +        /// # Safety
-> +        /// - `ptr` is aligned to `align_of::<Self>()`.
-> +        /// - `ptr` is valid for reads and writes.
-> +        ///
-> +        /// [`align_of::<Self>()`]: core::mem::align_of
-> +        unsafe fn fetch_add[acquire, release, relaxed](ptr: *mut Self, v=
-: Self::Delta) -> Self {
-> +            bindings::#call(v, ptr.cast())
-> +        }
-> +    }
-> +);
-
+> +    /// Describes the exact memory ordering.
+> +    const TYPE: OrderingType;
+> +}
 
