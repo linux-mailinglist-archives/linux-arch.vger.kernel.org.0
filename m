@@ -1,85 +1,146 @@
-Return-Path: <linux-arch+bounces-12779-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12780-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51AD3B05A85
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 14:47:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C2AEB05AF9
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 15:14:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 860E31746AD
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 12:47:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0551D188DAC6
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 13:15:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB091EF09D;
-	Tue, 15 Jul 2025 12:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE3626CE31;
+	Tue, 15 Jul 2025 13:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BTIY5PH5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="chUIkvnJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773EB199223;
-	Tue, 15 Jul 2025 12:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B35B2E1C54;
+	Tue, 15 Jul 2025 13:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752583640; cv=none; b=X+JFjriBfV+/33raexkZY0x+A2RzjnvY/dFICfJXQpoTT0Ymx79dbp/og62JPNyf87Ss99lsZJgoOcrFi4k8LhOwXlvSB2yuSt2C4h8lvEm1hB6qAJuyk7j+XpEGylq36JlPh98LtNJUtNzk+fWVc1rTWNcbbFIEuwt7T+97lFQ=
+	t=1752585281; cv=none; b=llxC4tMSBBdCbZKoYLE9kNflM7BQpCGh/XaTde3VZIg0AjEzw5BXK+L2g2MpjB1H7ZlDliIf7cejpe7BmbHGxgu9aJ+6E9mAwcvuzrkp4LKcq2JVYddYMLGelbGUSpOaJRtIwf2OCY4LktZUXpr/ytjckzQPXsENj1sB7NkNWwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752583640; c=relaxed/simple;
-	bh=hBc8ff8HOQ5UtD+3Cw+/ByuYTKjMsXhHB0AAQYZuPe4=;
+	s=arc-20240116; t=1752585281; c=relaxed/simple;
+	bh=JSYN4ycsig9LZivmXVfWGvMoxfcpvAh4wdr8Ygxo/AM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R3PDOpX9SyJyL5KQovNBpsj2Wri1q0UdThiRAe8Kj+WlX3aJmJ4Id/uO1tJ75MyJhZB02V24ihMuwBuI8ohnkwqj5LgThDw4slfNf/7Qh/Q6JV7qPxdMhnEJ4+vEaDqilEOOwHiJMth1XJuIIqBsYhhMdPJOjhBXn0GrVNpbG/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BTIY5PH5; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752583639; x=1784119639;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hBc8ff8HOQ5UtD+3Cw+/ByuYTKjMsXhHB0AAQYZuPe4=;
-  b=BTIY5PH5f3IHWc0s7G8Rx4jHEO9iom0o9JWCusf1tXhrbXpUCeo7vR6a
-   PV4qtxy3LTaSG4d0Xkbpzl/QnNMMt7BjqlfXGxodEHGeSf6ksdbfiE6Ky
-   2yiH5JDP8U8+uV3eEkXjC6E50pwu31dEgpJx3iNvfKhQ5NDW5FwykI3gC
-   l69H0qtUVynbR9XTzx1leYTRjVmvorSxJIz/L2nr4X/ytf+VFV/S9yqcZ
-   FqjT3Gy18wBPg5zOiBHSvzibNtxK/xlufXujGjHI/QCgy40PyWBP2iCuj
-   /8+UTKv/BNWnpbr9O7bHJcpxkaeeHcXnXk+RMazqbLNTP+VHMCWr3g7ag
-   w==;
-X-CSE-ConnectionGUID: JoswtDgYSeyH2CqKYFtqng==
-X-CSE-MsgGUID: BYPF9+TxQY6q2eFwS/mpuA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="72377307"
-X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="72377307"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 05:47:18 -0700
-X-CSE-ConnectionGUID: bTOmUedsQVaNXje9djikHw==
-X-CSE-MsgGUID: 2WRmLjLCTWe8cqpsnxua1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="157721361"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 15 Jul 2025 05:47:10 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubf3s-000A49-0j;
-	Tue, 15 Jul 2025 12:47:08 +0000
-Date: Tue, 15 Jul 2025 20:46:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roman Kisel <romank@linux.microsoft.com>, alok.a.tiwari@oracle.com,
-	arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-	dave.hansen@linux.intel.com, decui@microsoft.com,
-	haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
-	mhklinux@outlook.com, mingo@redhat.com, rdunlap@infradead.org,
-	tglx@linutronix.de, Tianyu.Lan@microsoft.com, wei.liu@kernel.org,
-	linux-arch@vger.kernel.org, linux-coco@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	apais@microsoft.com, benhill@microsoft.com, bperkins@microsoft.com,
-	sunilmut@microsoft.com
-Subject: Re: [PATCH hyperv-next v4 03/16] arch: hyperv: Get/set SynIC
- synth.registers via paravisor
-Message-ID: <202507152017.8UNXIbRJ-lkp@intel.com>
-References: <20250714221545.5615-4-romank@linux.microsoft.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sp8V0T3oVIBIOTs1jDgaBun5FNxRJs+puComjSMP+CNMNf4aUVlcPof8yHu12z0z56OyoGe+TM9Whl18Zeis8C+DSjPlHZXsig4sznIBT/MsRRs8dawWYyilD5oqe55Oh/QU8WE5NZzfgzD/8FCnmF8YQODqEzF4zR76mMcBf6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=chUIkvnJ; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4ab5953f5dcso26324361cf.0;
+        Tue, 15 Jul 2025 06:14:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752585279; x=1753190079; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S68UebDyVH4yE1aPLvT0iYbS3AgRqZmN5s1wid2jJYo=;
+        b=chUIkvnJwjO8FCXNmQ7xaqUBvQq5A0OSespK+thY0wR6eziw6yxzXvJVrIZQ5XxOlv
+         OG17ANJBvtgzWGx5hfNpJdrpkWKSB1eGFdGmsDnoNUioZmNciEhALSozYloLWwFWFrEi
+         RH0aM6ArBLUWLMVUrDZRCPQi6Hj3jU0tji3I0LYM9oRh4D6wa0ngYxUJTubIHKVLP6tb
+         pcfwN8li/WV+AXP2GP+5XIqOAMkVqgjb5T+6m+V1Uich5TuxdF16MAr+wrgln4ZtTjih
+         igq8dm+pAymZ/heXzQF9XGZbyLyE6fdZV5QG61WbyySuw3k0Bb5Bqd51L4nvm2grNGAj
+         EdRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752585279; x=1753190079;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S68UebDyVH4yE1aPLvT0iYbS3AgRqZmN5s1wid2jJYo=;
+        b=g0pq6XVlbij6aAnELkUzl0L+bZrQWlnpVprhmn0iR7/Mz5aF2lYeQzsG7R7ocOMqS3
+         uIfWIegqY4wM2HJHtH5zKyCIJDOz66ynpI43g2mxXHXDTwpzV5kXSRwSC0ghWU9LLwbv
+         LQ2fl5VNqZLAxeB5aq/uBMLmQsgirgDJls5mEJoyERPNAKgLMj0o2rFc4JCFVJ3v3Ixy
+         LRZTz/ZtgwAL9jOKoRQWEHd2PQANGbsZuEBIVxffec1B3hAdWm7RVuYyiVc0tX5fI1Rf
+         07EqGMkUTxlpvVpFeg7E3X7LzTgkvTBFs2W9OKmwI91EJHwVjTTcl3gXwM+1yda+GMk2
+         pA1w==
+X-Forwarded-Encrypted: i=1; AJvYcCUuZNrKRRsRg3vVC5u7sj4sF6RaT1rGa4NMHkXrAjdibEXRPmN2wPAY6/a1xZpjfy17wAnGt9V778zG@vger.kernel.org, AJvYcCXM6mBA345O5+fxbLy6KLwI5E4INHxXIVl004comzBBQmLSEY10h7lp6mobP+w3g/QGL+HweQ7NIfKUloFrjJw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yydn90dga8maIGEYXDIM2KEElMVgihF7Y0oS1/fCQ+3ZW8na5jt
+	Clo4ZlwwnVdhFdjh5N6K/nUqJw/po6h+75aYg0ZgC61mCplI9QqwNsrd
+X-Gm-Gg: ASbGncuBsoTjhfnX0qzxHaWRPjd4ZzpmMk1cUT/fH7F6RWADV/98D66SU1OtsRrfFuQ
+	uLQQ+quGs/bnyD1bwHPqT9D+ynui7Ekz3Zq++MR1sjQZrJAOdt55qYXJ0juH02m8VhAQIWheYpO
+	y7d9PxRZ8YG8WIS0G59rCqBZVVIwO7ZYVHj8GNRUwjm/tN2Mk1+xnJma+DJLb4TLuFlJavnslOi
+	uVnJhUoMvq88x+AsIwdAG+pFJe8NlEB3rPTSpgifAnwXkjbPsqYShtEwoW/BUJfvWXLh7qf18W7
+	YjyrRYJXcYdB87qnaPbTmcZhGfuRFvcQadudyQr/nGIgZR3nCX3mikP52+o1y9S24X4v1Pv/wVz
+	fRy0m6qzL48TsCAyp7zmTQH7SS0lncl0gWscUA7zQwofVBee9GiKYp2QA+N5K98YP2GIilb3nXt
+	Tw4rHg9a+yr3TP
+X-Google-Smtp-Source: AGHT+IHaP3XKGWTcZQS+qEIbRFFCyc1LSl3VeqAfWuxEd35LiJVIw2wW0os2Ca4eE+HV+lsnnnL/lw==
+X-Received: by 2002:a05:622a:646:b0:4ab:5fde:fb86 with SMTP id d75a77b69052e-4ab5fdf012emr142744101cf.48.1752585278813;
+        Tue, 15 Jul 2025 06:14:38 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a9edcaf939sm59682111cf.33.2025.07.15.06.14.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jul 2025 06:14:38 -0700 (PDT)
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 43FECF40067;
+	Tue, 15 Jul 2025 09:14:37 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-09.internal (MEProxy); Tue, 15 Jul 2025 09:14:37 -0400
+X-ME-Sender: <xms:PVR2aNLiU7K7sxfWhcmA7iYKN6y-LO2pTfQt0ylzdpXsP3lTymLKIw>
+    <xme:PVR2aKqo6cr1Ps7xWht2ISl2jz3-2RKj3UscPaS1Mt-nlixL6GIukWVzzRWx1SVdD
+    Oea_R_vPEc7jvJlCg>
+X-ME-Received: <xmr:PVR2aKTrzH-5KPNLlcx3LkpDW2Y2NilZHTV_XsWBbqUN2Ir2X6pRqSfbzw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehgeelvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhepjeeihfdtuedvgedvtddufffggeefhefgtdeivdevveelvefhkeehffdtkeeihedv
+    necuffhomhgrihhnpehruhhsthdqlhgrnhhgrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
+    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
+    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphht
+    thhopedvjedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplhhoshhsihhnsehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehruhhsthdqfhhorhdqlhhinhhugiesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlkhhmmheslhhishhtshdrlhhinhhu
+    gidruggvvhdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pegrlhgvgidrghgrhihnohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepghgrrhihse
+    hgrghrhihguhhordhnvghtpdhrtghpthhtohepsghjohhrnhefpghghhesphhrohhtohhn
+    mhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:PVR2aN5WF52i8brHqvF3hn0daqOolm6dmEDyD-j_CwaEXyys_eVtCw>
+    <xmx:PVR2aCbImitqL7xcqjJ8w2FcybdAvho6K3HkXt7mXm2bB0AzS20EjA>
+    <xmx:PVR2aKhyZaG1YRTF9vA26VXSX_-YOBneVDADb9WLlBS18mdGprZWtw>
+    <xmx:PVR2aEPLxY9XdrtN-3YhZDBc7tGvrEf-pVI5jiknz3w66wvkzQoqTw>
+    <xmx:PVR2aMOeR2UC1SmeWK6q-zGZ82MfkoNUMrtsAhmyFJqPmfrBly9R7GO4>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Jul 2025 09:14:36 -0400 (EDT)
+Date: Tue, 15 Jul 2025 06:14:35 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Benno Lossin <lossin@kernel.org>
+Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v7 4/9] rust: sync: atomic: Add generic atomics
+Message-ID: <aHZUO4NwMlw-FsnZ@Mac.home>
+References: <20250714053656.66712-1-boqun.feng@gmail.com>
+ <20250714053656.66712-5-boqun.feng@gmail.com>
+ <DBBPI9ZJVO64.3A83G118BMVLI@kernel.org>
+ <aHUSgXW9A6LzjBIS@Mac.home>
+ <DBBVD70MASPW.2LUTJ51Y6SGMI@kernel.org>
+ <aHUjIQlqphtgVP2g@Mac.home>
+ <DBCIZY29JWTD.1G6AKZ08ZWBQG@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -88,188 +149,76 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250714221545.5615-4-romank@linux.microsoft.com>
+In-Reply-To: <DBCIZY29JWTD.1G6AKZ08ZWBQG@kernel.org>
 
-Hi Roman,
+On Tue, Jul 15, 2025 at 11:36:49AM +0200, Benno Lossin wrote:
+> On Mon Jul 14, 2025 at 5:32 PM CEST, Boqun Feng wrote:
+> > On Mon, Jul 14, 2025 at 05:05:40PM +0200, Benno Lossin wrote:
+> > [...]
+> >> >> >  //!
+> >> >> >  //! [`LKMM`]: srctree/tools/memory-model/
+> >> >> >  
+> >> >> > +pub mod generic;
+> >> >> 
+> >> >> Hmm, maybe just re-export the stuff? I don't think there's an advantage
+> >> >> to having the generic module be public.
+> >> >> 
+> >> >
+> >> > If `generic` is not public, then in the kernel::sync::atomic page, it
+> >> > won't should up, and there is no mentioning of struct `Atomic` either.
+> >> >
+> >> > If I made it public and also re-export the `Atomic`, there would be a
+> >> > "Re-export" section mentioning all the re-exports, so I will keep
+> >> > `generic` unless you have some tricks that I don't know.
+> >> 
+> >> Just use `#[doc(inline)]` :)
+> >> 
+> >>     https://doc.rust-lang.org/rustdoc/write-documentation/the-doc-attribute.html#inline-and-no_inline
+> >> 
+> >> > Also I feel it's a bit naturally that `AllowAtomic` and `AllowAtomicAdd`
+> >> > stay under `generic` (instead of re-export them at `atomic` mod level)
+> >> > because they are about the generic part of `Atomic`, right?
+> >> 
+> >> Why is that more natural? It only adds an extra path layer in any import
+> >> for atomics.
+> >> 
+> >
+> > Exactly, users need to go through extra steps if they want to use the
+> > "generic" part of the atomic, and I think that makes user more aware of
+> > what they are essentially doing:
+> >
+> > - If you want to use the predefined types for atomic, just
+> >
+> >   use kernel::sync::atomic::Atomic;
+> >
+> >   and just operate on an `Atomic<_>`.
+> >
+> > - If you want to bring your own type for atomic operations, you need to
+> >
+> >   use kernel::sync::atomic::generic::AllowAtomic;
+> >
+> >   (essentially you go into the "generic" part of the atomic)
+> >
+> >   and provide your own implementation for `AllowAtomic` and then you
+> >   could use it for your own type.
+> >
+> > I feel it's natural because for extra features you fetch more modules
+> > in.
+> 
+> The same would apply if you had to import `AllowAtomic` from atomic
+> directly? I don't really see the value in this.
+> 
 
-kernel test robot noticed the following build errors:
+Because generic::AllowAtomic is more clear that the user is using the
+generic part of the API, or the user is extending the Atomic type with
+the generic ability. Grouping functionality with a namespace is
+basically what I want to achieve here. It's similar to why do we put
+`atomic` (and `lock`) under `sync`.
 
-[auto build test ERROR on d9016a249be5316ec2476f9947356711e70a16ec]
+Regards,
+Boqun
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/Documentation-hyperv-Confidential-VMBus/20250715-062125
-base:   d9016a249be5316ec2476f9947356711e70a16ec
-patch link:    https://lore.kernel.org/r/20250714221545.5615-4-romank%40linux.microsoft.com
-patch subject: [PATCH hyperv-next v4 03/16] arch: hyperv: Get/set SynIC synth.registers via paravisor
-config: i386-buildonly-randconfig-005-20250715 (https://download.01.org/0day-ci/archive/20250715/202507152017.8UNXIbRJ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250715/202507152017.8UNXIbRJ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507152017.8UNXIbRJ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kvm/vmx/main.c:5:
-   In file included from arch/x86/kvm/vmx/vmx.h:16:
-   In file included from arch/x86/kvm/vmx/vmx_ops.h:9:
-   In file included from arch/x86/kvm/vmx/vmx_onhyperv.h:7:
-   In file included from arch/x86/include/asm/mshyperv.h:345:
->> include/asm-generic/mshyperv.h:377:4: error: call to undeclared function 'hv_para_set_synic_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     377 |                         hv_para_set_synic_register(HV_MSR_EOM, 0);
-         |                         ^
-   1 error generated.
---
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:9:
-   In file included from arch/x86/include/asm/mshyperv.h:345:
->> include/asm-generic/mshyperv.h:377:4: error: call to undeclared function 'hv_para_set_synic_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     377 |                         hv_para_set_synic_register(HV_MSR_EOM, 0);
-         |                         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                                      ^      ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kvm/svm/hyperv.c:7:
-   In file included from arch/x86/kvm/svm/hyperv.h:11:
-   In file included from arch/x86/kvm/svm/../hyperv.h:24:
-   In file included from include/linux/kvm_host.h:11:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
-     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
-         |                      ^      ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-
-
-vim +/hv_para_set_synic_register +377 include/asm-generic/mshyperv.h
-
-   344	
-   345	/* Free the message slot and signal end-of-message if required */
-   346	static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
-   347	{
-   348		/*
-   349		 * On crash we're reading some other CPU's message page and we need
-   350		 * to be careful: this other CPU may already had cleared the header
-   351		 * and the host may already had delivered some other message there.
-   352		 * In case we blindly write msg->header.message_type we're going
-   353		 * to lose it. We can still lose a message of the same type but
-   354		 * we count on the fact that there can only be one
-   355		 * CHANNELMSG_UNLOAD_RESPONSE and we don't care about other messages
-   356		 * on crash.
-   357		 */
-   358		if (cmpxchg(&msg->header.message_type, old_msg_type,
-   359			    HVMSG_NONE) != old_msg_type)
-   360			return;
-   361	
-   362		/*
-   363		 * The cmxchg() above does an implicit memory barrier to
-   364		 * ensure the write to MessageType (ie set to
-   365		 * HVMSG_NONE) happens before we read the
-   366		 * MessagePending and EOMing. Otherwise, the EOMing
-   367		 * will not deliver any more messages since there is
-   368		 * no empty slot
-   369		 */
-   370		if (msg->header.message_flags.msg_pending) {
-   371			/*
-   372			 * This will cause message queue rescan to
-   373			 * possibly deliver another msg from the
-   374			 * hypervisor
-   375			 */
-   376			if (vmbus_is_confidential())
- > 377				hv_para_set_synic_register(HV_MSR_EOM, 0);
-   378			else
-   379				hv_set_msr(HV_MSR_EOM, 0);
-   380		}
-   381	}
-   382	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> Cheers,
+> Benno
 
