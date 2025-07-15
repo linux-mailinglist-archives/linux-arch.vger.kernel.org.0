@@ -1,238 +1,208 @@
-Return-Path: <linux-arch+bounces-12790-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12791-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69AF4B06797
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 22:14:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A73B06899
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 23:34:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8A14563B13
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 20:14:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8C93188A1D8
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 21:34:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F3329B796;
-	Tue, 15 Jul 2025 20:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2BC2C158C;
+	Tue, 15 Jul 2025 21:34:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BxQGQwt3"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="12f7H4tG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F8326E70F;
-	Tue, 15 Jul 2025 20:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08E02C08A0
+	for <linux-arch@vger.kernel.org>; Tue, 15 Jul 2025 21:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752610443; cv=none; b=ZsNbD08vhsLZKeVuhBgTEwKAZt/1d3ozkXZV+TFiEIzSMm5l8xuSwkNU0HpvRsR0m6AvmAgfpe5cAMBrRnDgiio2A43psezwIL/72OxE18Wfr/szXKUu7hvMm+UAYNl0nG27U9+gOFcke2CE0/D/qZH/kENmTIG48PsuDnxzNRE=
+	t=1752615242; cv=none; b=Ivur8Aq+klAmTgCzwg9fr08j6o1MCN1yGlJBri//cMYacLHvMSokg8ZLPcflbuouk2WaP5tYD8pOzeYShZ74V4Yzc2S3Ev3SG9SeiqB8RUQjZQni+pSN9vEisj0q3O/ME4G02aGfz8abm6amC0L8+Nb7QSff8VR3738IT4DAXzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752610443; c=relaxed/simple;
-	bh=tUKIxIa3CaOakXSITwT1h1ZlJa811sXdettoWNZ629U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DuaHhCCEYYuKxGsV/PtdhMPuehtLBUqikGDpk53qNlIC9GF7eifw5uammK5PxumH2/tthT/I2b3ZhJFBb7sVmrqh9pcy3TwvY5lxv1A8+w/5teS18kAr5ch91M7gtzj0mJRihbyJMOb3ir9VC1vCdm1u0u3HJrvGs2Npfv9fiX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BxQGQwt3; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-700c7e4c048so96556946d6.3;
-        Tue, 15 Jul 2025 13:14:01 -0700 (PDT)
+	s=arc-20240116; t=1752615242; c=relaxed/simple;
+	bh=RQkuw+2OLc9J+WTcYerziGNr+/GSLP5a3H8wgWR3l6A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A6QV/5+3W+w1nRD8uR+/FyppTLM261sfyt2syY6e16AyJGqUjl0n+mp43p62I3cXuF49ryItYGHiNdCl4+PJ7UxUTXD75L2MZxgFHhklkNr0/Nigr3wD8dbmNiZX0X9NPLJz+gv+x4BsJJHLg+wEhP9KyoUhpXlHdVY221TlGjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=12f7H4tG; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e8986a25cbfso4255377276.0
+        for <linux-arch@vger.kernel.org>; Tue, 15 Jul 2025 14:34:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752610440; x=1753215240; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1752615239; x=1753220039; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W7xFafhakUM1HbJhSYPMWQX2H9PQ7AUwvEZGQtQZ7k0=;
-        b=BxQGQwt3Lvgnz0itbNEh7Z4Gsuf95KuW8k/9IuYYs7QCBfZ7xDtKV0t2KTUWqGolwc
-         vwpJO2/6Enf7ZsX1/Xdg8RjkbRwerV/RWxitG87qDzxC1Du2OJp2D9v/CmWi27Cx4CI5
-         32EVKsTBPtniEyO+c6r9RQmRfJBOxbFrqJBd9BpuNWMvKiSYf2L59QMqO0/ICGn+xcG5
-         6oli9trFrx2tBLic3wCBcNqH3U940ic+Pzk9VXVkuIJnedVZMwa3fQDrUoF9F5qbRCNG
-         R0KFeuB+CFjgPrufkGIZ2XEe//FCCucIpjOjaDVlSDF4tGANNiFGqgga7EKw6m83uW4l
-         qp0A==
+        bh=rrtJ2tPWtnyQlcXjVKipZJ0PUZK8lOTycW08ecfRLFU=;
+        b=12f7H4tGvMszfB6P6/AublkfuAt3VdHmU33W2Q1NwvPnzvsVRlneb8HIbrXmuhCUKh
+         RPnG1jrkmzaEf5edsrP/5v/xDIXT1I0XiyIYzRsGf+AzEKD4dYOep0mhroeRubv7yNmc
+         TJys8HwQY4hfcPEMpdnNkjXzvfxZI9tEsb2kKTdiZdRDCFupeVXO7xqCG15IXzMQLfuk
+         rHZYc9/ZNAqlp0i7E2A3xZ+jXesHlIhexpXDad5N4T8GOcRI0lWMs2r+gNyHDiW+6PBR
+         FG2Rg5lKYou1oNaqgUjphMDdztOsbofJmhIkwhOJmRviJ6CYgRvasJcakzsd85EkYA4c
+         huog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752610440; x=1753215240;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1752615239; x=1753220039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W7xFafhakUM1HbJhSYPMWQX2H9PQ7AUwvEZGQtQZ7k0=;
-        b=BeR1NxlGSoUu7e7jwDVfshbf4ekMthvr/ozFTGM4KmlswgZ8v4bsCrYWh9+G+UAZjh
-         2TfyPbqa0Wbc8+E07p+yDA3+GL1qdUKW3rne6J2SRvIIPpkN2dpA3BFPfvpMAHpHGIVg
-         sUSMvD6LZQwyUyzt4pftCu+ii9sGG6OvSPr3sBI46Psb8YhwyFWJcNKnf/7amQ8pq31j
-         vyV/yYLc96hf2unVppGQ0zbFHdEA+tPxZgNi/9df3NTx7KTJXuKAJUoqaKEKujjcRCNu
-         7sMUMa8ym8G9VPcrh1POI99DGWVBk/VcR3u/gXPM2ZQHV85cM/9FnNam64o8EkRd2Hkr
-         4m7A==
-X-Forwarded-Encrypted: i=1; AJvYcCVGLPi50w+GNsB5K1nPShM3KMR5Ecc+pf/aS47NtR5pQlsnfK9CWkiZJrKkZVQNTq8gk7WIi6RoY4YM@vger.kernel.org, AJvYcCXr3sd+HbFxllSMBLrbofUFcUDBYX1GnrVfx7OkH4UWJ+58Ai/hJ+NXZ+nba3zoep23T4P8nuNcmlDErsLCaVE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBhUwFvDRwqfy3Q66q4YS8txQ65coaMxBQD7T4ps1uodEHy5YD
-	sbg8QdPYztz5ga37W40WN6xVMDNzLOfMlLCKVy4jqYqetLuv+1OpDYnB
-X-Gm-Gg: ASbGnctUaSloGfs801V41NotY1xblNGuFXUx/RW9LX9lBwSJsHEK6MiyCzAWGECvm5O
-	yw7JHln9pyCUdj1lz4WCXWLkm3sGcbJAUg/keEERLhNYgmJ36HaFy9qhq0z5WThID2UWxnsVGaZ
-	M337QkDyAG+wATjQFGVHmWeafP4U89TX5BDaJpBxwAzeP8V053MuOMJ31g3ab2Ha0iuToq/pR72
-	o7adnBKeALtFKJiUa2hm0TU/V5M9pl6gTQKY1oKTI93whFHxdD5eBnBK7TLz7kIXQ/hjPW5Wr1C
-	AaTIlUeWlwkp4sjKVkriFLt7ZMi8TIsfbIoQWRXhNMyLGuTgqM9hLb5UEeQUC4oNE8WtkpbzuNM
-	Tp9FO2TrFpt2ezr4GSBbcsP4V/FFhGu+M26Vy9sSzQEYH+z59I8uSmSP5ujKsIaYV1+krvotnU0
-	QdO8VRk11CXsmB83wsvwE6ZoI=
-X-Google-Smtp-Source: AGHT+IHrRn1XRiDw/2DyKdGpKsc5IOMs7BMfn8mm3TPOI8x/zXqt8VKyWJgjpZf3JENfhaBRucNqDQ==
-X-Received: by 2002:a05:6214:3108:b0:6f5:38a2:52dd with SMTP id 6a1803df08f44-704f4ae09b3mr14680306d6.31.1752610440141;
-        Tue, 15 Jul 2025 13:14:00 -0700 (PDT)
-Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70497d5bb30sm61431486d6.81.2025.07.15.13.13.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jul 2025 13:13:59 -0700 (PDT)
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id DE456F4006A;
-	Tue, 15 Jul 2025 16:13:58 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Tue, 15 Jul 2025 16:13:58 -0400
-X-ME-Sender: <xms:hrZ2aOQguYBXCYizaoVh_Mdfktc64JY-qla5uQzihAIcsmn4VJuo4g>
-    <xme:hrZ2aFRCYXZF_m5gyZBUzl32IIprvgIHmZOKsvsJS07eMn4NG_1kBOHPpfrpqawyK
-    r-bQz9oT5e12j35cg>
-X-ME-Received: <xmr:hrZ2aAYVgAoIF8GfhOOgZ1tIlsNhzL7Q5PTPwzqhKpVxgvO9q12jqzu7>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehheejiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
-    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
-    hrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudffiedv
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
-    hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
-    jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
-    drnhgrmhgvpdhnsggprhgtphhtthhopedvjedpmhhouggvpehsmhhtphhouhhtpdhrtghp
-    thhtoheplhhoshhsihhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqd
-    hkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhsthdq
-    fhhorhdqlhhinhhugiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlkh
-    hmmheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdgrrhgt
-    hhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopegrlhgvgidrghgrhihnohhrsehgmhgrihhlrdgtohhm
-    pdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhrtghpthhtohepsghjoh
-    hrnhefpghghhesphhrohhtohhnmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:hrZ2aJgB5sSi041ryIYq-gU1d_POGyWNLM_6wC6wHezuv96sf4OD-Q>
-    <xmx:hrZ2aFiVdHs4FKDuQO2lB7M6xJnVVjWgfcDUKUiyL67hbnrQDrfDKw>
-    <xmx:hrZ2aPK8lNUOlcQNfk6yu80aGvui298V_azJ5IUmFGxRjDnWFpagIQ>
-    <xmx:hrZ2aMXo3uwPapl6ZtLUT263SCHYrwnRdSMK-aYwOdXEMLJTGX2BoA>
-    <xmx:hrZ2aB37U4kCta5eSQqRGpgMmr28HUYMGgU0WMHea8rCWctUAMCGcXld>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 15 Jul 2025 16:13:58 -0400 (EDT)
-Date: Tue, 15 Jul 2025 13:13:57 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Benno Lossin <lossin@kernel.org>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v7 6/9] rust: sync: atomic: Add the framework of
- arithmetic operations
-Message-ID: <aHa2he81nBDgvA5u@tardis-2.local>
-References: <20250714053656.66712-1-boqun.feng@gmail.com>
- <20250714053656.66712-7-boqun.feng@gmail.com>
- <DBCL7YUSRMXR.22SMO1P7D5G60@kernel.org>
- <aHZYt3Csy29GF2HM@Mac.home>
- <DBCQUAA42DHH.23BNUVOKS38UI@kernel.org>
- <aHZ-HP1ErzlERfpI@Mac.home>
- <DBCUJ4RNRNHP.W4QH5QM3TBHU@kernel.org>
+        bh=rrtJ2tPWtnyQlcXjVKipZJ0PUZK8lOTycW08ecfRLFU=;
+        b=EIFtVy5dOYcSRL3AIIP+59meTzZ6XYZAkx2pH1fCesxvKexf7I23lrjCa3el3B3VJB
+         r+dGdhreq/q5xLF8JffDArmE42Xok8Ry6a2ui2qxhFh9aJC1gixmlFK+UotSGg+Z9rmR
+         Hem/LQ2oPjafPeaYpSQRiA2Z7IH71Y2z3v/Q2JBuyxAN5qX/lIAk0GroC5P7+i+Hrkhr
+         A9x1LE/FcLOH23JalAsBJs+JQtuaVLIH4FwCyFgd23k4n6OnYsGWL1AL1/JgS7r/vkxL
+         7CgdQjL2GMTMpnoIUJS5riqjDptF11EuLyGv7PD/vipGblOE6NbACAjUxLP5fLuH2V1y
+         plFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXKLjVrfegSLoMMtJ/r/hysx8HMJeb+JTdmnqQZkCCQK8DEoRLdJS+xHkncPUShXLWISX0lndLgdhnU@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEnwYLcRWtGlTakL7rb6f/zH8YHt8WMiLfzmSskZtqdkKKUVWL
+	Ktw397ar0TMfnr1INDEyOCNk6nc6+rFzW46tY+nzUtooEnmRV/M4EatBTGL+rGZws/xbZW8t2dL
+	oWgQnIkFsuYSMdNcFfIraaSEI0T30/szKJoSdfH1a6A==
+X-Gm-Gg: ASbGncvADmQffPBkn1wGSPquaFX8MdJD13Atsd6Rc5vdrc9ogc2WZrXyBsU8B1x+kDy
+	ugPKRa9sjLtBIk7ZyrNKNblUe1L1jVc6e4YRQlbYggZ9SD4xsLVcxkzR7T7Pi4J3Zz/jcXPpJaP
+	F16xPWSPY6kzFC/RfFFOmyjVzNQsc+pO3Ul3iJ7ohcWbCxUnOIJ4eCcN2sJvN7SunI68E+3DnaG
+	VR+xZtd
+X-Google-Smtp-Source: AGHT+IEsY/f+Tj3u2hxiQCd69XmHGIDqZZR/UYSpflr/g5ySMTGOn/8ny5hxzQ44lrvSZqgfPjGQAPQXva81ZPiNP2c=
+X-Received: by 2002:a05:690c:4884:b0:70f:9fcd:2075 with SMTP id
+ 00721157ae682-71836c27373mr5257327b3.3.1752615239506; Tue, 15 Jul 2025
+ 14:33:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DBCUJ4RNRNHP.W4QH5QM3TBHU@kernel.org>
+References: <20250604-v5_user_cfi_series-v17-0-4565c2cf869f@rivosinc.com>
+ <20250604-v5_user_cfi_series-v17-15-4565c2cf869f@rivosinc.com>
+ <CANXhq0pRXX_OMW2g2ui-k7Z_ZT+5a8Sra8oE28nBh5B9K2L5bQ@mail.gmail.com> <CANXhq0p3MVLMsr_r0RWMti476pT0EMx61PQArjo2fUauTdpXaQ@mail.gmail.com>
+In-Reply-To: <CANXhq0p3MVLMsr_r0RWMti476pT0EMx61PQArjo2fUauTdpXaQ@mail.gmail.com>
+From: Deepak Gupta <debug@rivosinc.com>
+Date: Tue, 15 Jul 2025 14:33:47 -0700
+X-Gm-Features: Ac12FXzRTF7Dfs5zrF9r6Tx3chJ4aSIUc73QZXj0R8v3aOAPdwPOPGlfEeN5Jbw
+Message-ID: <CAKC1njRNkSfb_0pUQoH0RwJQhWTsz9sdg_3o08w-NuSO5WypcA@mail.gmail.com>
+Subject: Re: [PATCH v17 15/27] riscv/traps: Introduce software check exception
+ and uprobe handling
+To: Zong Li <zong.li@sifive.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 15, 2025 at 08:39:04PM +0200, Benno Lossin wrote:
-[...]
-> >> > Hmm.. the CAST comment should explain why a pointer of `T` can be a
-> >> > valid pointer of `T::Repr` because the atomic_add() below is going to
-> >> > read through the pointer and write value back. The comment starting with
-> >> > "`*self`" explains the value written is a valid `T`, therefore
-> >> > conceptually atomic_add() below writes a valid `T` in form of `T::Repr`
-> >> > into `a`.
-> >> 
-> >> I see, my interpretation was that if we put it on the cast, then the
-> >> operation that `atomic_add` does also is valid.
-> >> 
-> >> But I think this comment should either be part of the `CAST` or the
-> >> `SAFETY` comment. Going by your interpretation, it would make more sense
-> >> in the SAFETY one, since there you justify that you're actually writing
-> >> a value of type `T`.
-> >> 
+Hi Zong,
+
+
+On Thu, Jun 19, 2025 at 7:16=E2=80=AFPM Zong Li <zong.li@sifive.com> wrote:
+>
+> On Mon, Jun 16, 2025 at 3:31=E2=80=AFPM Zong Li <zong.li@sifive.com> wrot=
+e:
 > >
-> > Hmm.. you're probably right. There are two safety things about
-> > atomic_add():
+> > On Thu, Jun 5, 2025 at 1:17=E2=80=AFAM Deepak Gupta <debug@rivosinc.com=
+> wrote:
+> > >
+> > > zicfiss / zicfilp introduces a new exception to priv isa `software ch=
+eck
+> > > exception` with cause code =3D 18. This patch implements software che=
+ck
+> > > exception.
+> > >
+.....
+
+> > When a user mode CFI violation occurs, the ELP state should be 1, and
+> > the system traps into supervisor mode. During this trap, sstatus.SPELP
+> > is set to 1, and the ELP state is reset to 0. If we don=E2=80=99t clear
+> > sstatus.SPELP, the ELP state will become 1 again after executing the
+> > sret instruction. As a result, the system might trigger another
+> > forward CFI violation upon executing the next instruction in the user
+> > program, unless it happens to be a lpad instruction.
 > >
-> > - Whether calling it is safe
-> > - Whether the operation on `a` (a pointer to `T` essentially) is safe.
-> 
-> Well part of calling `T::Repr::atomic_add` is that the pointer is valid.
+> > The previous patch was tested on QEMU, but QEMU does not set the
+> > sstatus.SPELP bit to 1 when a forward CFI violation occurs. Therefore,
+> > I suspect that QEMU might also require some fixes.
+>
+> Hi Deepak,
+> The issue with QEMU was that the sw-check exception bit in medeleg
+> couldn't be set. This has been fixed in the latest QEMU mainline. I
+> have re-tested the latest QEMU version, and it works.
 
-Here by saying "calling `T::Repr::atomic_add`", I think you mean the
-whole operation, so yeah, we have to consider the validy for `T` of the
-result. But what I'm trying to do is reasoning this in 2 steps:
+What was this issue, can you point me to the patch in mainline?
 
-First, let's treat it as an `atomic_add(*mut i32, i32)`, then as long as
-we provide a valid `*mut i32`, it's safe to call. 
-
-And second assume we call it with a valid pointer to `T::Repr`, and a
-delta from `rhs_into_delta()`, then per the safety guarantee of
-`AllowAtomicAdd`, the value written at the pointer is a valid `T`.
-
-Based on these, we can prove the whole operation is safe for the given
-input.
-
-> But it actually isn't valid for all operations, only for the specific
-> one you have here. If we want to be 100% correct, we actually need to
-> change the safety comment of `atomic_add` to say that it only requires
-> the result of `*a + v` to be writable... But that is most likely very
-> annoying... (note that we also have this issue for `store`)
-> 
-> I'm not too sure on what the right way to do this is. The formal answer
-> is to "just do it right", but then safety comments really just devolve
-> into formally proving the correctness of the program. I think -- for now
-> at least :) -- that we shouldn't do this here & now (since we also have
-> a lot of other code that isn't using normal good safety comments, let
-> alone formally correct ones).
-> 
-> > How about the following:
+>
 > >
-> >         let v = T::rhs_into_delta(v);
-> >         // CAST: Per the safety requirement of `AllowAtomic`, a valid pointer of `T` is a valid
-> >         // pointer of `T::Repr` for reads and valid for writes of values transmutable to `T`.
-> >         let a = self.as_ptr().cast::<T::Repr>();
+> > Thanks
 > >
-> >         // `*self` remains valid after `atomic_add()` because of the safety requirement of
-> >         // `AllowAtomicAdd`.
-> >         //
-> >         // SAFETY:
-> >         // - For calling `atomic_add()`:
-> >         //   - `a` is aligned to `align_of::<T::Repr>()` because of the safety requirement of
-> >         //   `AllowAtomic` and the guarantee of `Atomic::as_ptr()`.
-> >         //   - `a` is a valid pointer per the CAST justification above.
-> >         // - For accessing `*a`: the value written is transmutable to `T`
-> >         //   due to the safety requirement of `AllowAtomicAdd`.
-> >         unsafe { T::Repr::atomic_add(a, v) };
-> 
-> That looks fine for now. But isn't this duplicating the sentence
-> starting with `*self`?
-
-Oh sorry, I meant to remove the sentence starting with `*self`. :(
-
-Regards,
-Boqun
-
-> 
-> ---
-> Cheers,
-> Benno
+> > > +
+> > > +       if (is_fcfi || is_bcfi) {
+> > > +               do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
+> > > +                             "Oops - control flow violation");
+> > > +               return true;
+> > > +       }
+> > > +
+> > > +       return false;
+> > > +}
+> > > +
+> > > +/*
+> > > + * software check exception is defined with risc-v cfi spec. Softwar=
+e check
+> > > + * exception is raised when:-
+> > > + * a) An indirect branch doesn't land on 4 byte aligned PC or `lpad`
+> > > + *    instruction or `label` value programmed in `lpad` instr doesn'=
+t
+> > > + *    match with value setup in `x7`. reported code in `xtval` is 2.
+> > > + * b) `sspopchk` instruction finds a mismatch between top of shadow =
+stack (ssp)
+> > > + *    and x1/x5. reported code in `xtval` is 3.
+> > > + */
+> > > +asmlinkage __visible __trap_section void do_trap_software_check(stru=
+ct pt_regs *regs)
+> > > +{
+> > > +       if (user_mode(regs)) {
+> > > +               irqentry_enter_from_user_mode(regs);
+> > > +
+> > > +               /* not a cfi violation, then merge into flow of unkno=
+wn trap handler */
+> > > +               if (!handle_user_cfi_violation(regs))
+> > > +                       do_trap_unknown(regs);
+> > > +
+> > > +               irqentry_exit_to_user_mode(regs);
+> > > +       } else {
+> > > +               /* sw check exception coming from kernel is a bug in =
+kernel */
+> > > +               die(regs, "Kernel BUG");
+> > > +       }
+> > > +}
+> > > +
+> > >  #ifdef CONFIG_MMU
+> > >  asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs=
+)
+> > >  {
+> > >
+> > > --
+> > > 2.43.0
+> > >
 
