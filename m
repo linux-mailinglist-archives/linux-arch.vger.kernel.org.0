@@ -1,208 +1,184 @@
-Return-Path: <linux-arch+bounces-12791-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12792-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14A73B06899
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 23:34:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D510B068CD
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 23:47:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8C93188A1D8
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 21:34:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F9D9503B36
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 21:46:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2BC2C158C;
-	Tue, 15 Jul 2025 21:34:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE05D2BEC53;
+	Tue, 15 Jul 2025 21:46:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="12f7H4tG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RRBQJFp4"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08E02C08A0
-	for <linux-arch@vger.kernel.org>; Tue, 15 Jul 2025 21:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E38B84039;
+	Tue, 15 Jul 2025 21:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752615242; cv=none; b=Ivur8Aq+klAmTgCzwg9fr08j6o1MCN1yGlJBri//cMYacLHvMSokg8ZLPcflbuouk2WaP5tYD8pOzeYShZ74V4Yzc2S3Ev3SG9SeiqB8RUQjZQni+pSN9vEisj0q3O/ME4G02aGfz8abm6amC0L8+Nb7QSff8VR3738IT4DAXzk=
+	t=1752616013; cv=none; b=sOtKErHTar9Movltt9LpGnAES2Dn+XmnM33BpVzjtWn2Zf+hBhZyIBQANacceyHWdNvAN6+WTdV3R19gH+fmZ+6G4ChYf9R/OS81sfbR5VE0AHn5xqw9NkB6uT7axrqDH3+cWY+p5oNquTv07JAsAA0xvSx7v3e7bJ4QmHUAi9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752615242; c=relaxed/simple;
-	bh=RQkuw+2OLc9J+WTcYerziGNr+/GSLP5a3H8wgWR3l6A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A6QV/5+3W+w1nRD8uR+/FyppTLM261sfyt2syY6e16AyJGqUjl0n+mp43p62I3cXuF49ryItYGHiNdCl4+PJ7UxUTXD75L2MZxgFHhklkNr0/Nigr3wD8dbmNiZX0X9NPLJz+gv+x4BsJJHLg+wEhP9KyoUhpXlHdVY221TlGjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=12f7H4tG; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e8986a25cbfso4255377276.0
-        for <linux-arch@vger.kernel.org>; Tue, 15 Jul 2025 14:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1752615239; x=1753220039; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rrtJ2tPWtnyQlcXjVKipZJ0PUZK8lOTycW08ecfRLFU=;
-        b=12f7H4tGvMszfB6P6/AublkfuAt3VdHmU33W2Q1NwvPnzvsVRlneb8HIbrXmuhCUKh
-         RPnG1jrkmzaEf5edsrP/5v/xDIXT1I0XiyIYzRsGf+AzEKD4dYOep0mhroeRubv7yNmc
-         TJys8HwQY4hfcPEMpdnNkjXzvfxZI9tEsb2kKTdiZdRDCFupeVXO7xqCG15IXzMQLfuk
-         rHZYc9/ZNAqlp0i7E2A3xZ+jXesHlIhexpXDad5N4T8GOcRI0lWMs2r+gNyHDiW+6PBR
-         FG2Rg5lKYou1oNaqgUjphMDdztOsbofJmhIkwhOJmRviJ6CYgRvasJcakzsd85EkYA4c
-         huog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752615239; x=1753220039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rrtJ2tPWtnyQlcXjVKipZJ0PUZK8lOTycW08ecfRLFU=;
-        b=EIFtVy5dOYcSRL3AIIP+59meTzZ6XYZAkx2pH1fCesxvKexf7I23lrjCa3el3B3VJB
-         r+dGdhreq/q5xLF8JffDArmE42Xok8Ry6a2ui2qxhFh9aJC1gixmlFK+UotSGg+Z9rmR
-         Hem/LQ2oPjafPeaYpSQRiA2Z7IH71Y2z3v/Q2JBuyxAN5qX/lIAk0GroC5P7+i+Hrkhr
-         A9x1LE/FcLOH23JalAsBJs+JQtuaVLIH4FwCyFgd23k4n6OnYsGWL1AL1/JgS7r/vkxL
-         7CgdQjL2GMTMpnoIUJS5riqjDptF11EuLyGv7PD/vipGblOE6NbACAjUxLP5fLuH2V1y
-         plFA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKLjVrfegSLoMMtJ/r/hysx8HMJeb+JTdmnqQZkCCQK8DEoRLdJS+xHkncPUShXLWISX0lndLgdhnU@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEnwYLcRWtGlTakL7rb6f/zH8YHt8WMiLfzmSskZtqdkKKUVWL
-	Ktw397ar0TMfnr1INDEyOCNk6nc6+rFzW46tY+nzUtooEnmRV/M4EatBTGL+rGZws/xbZW8t2dL
-	oWgQnIkFsuYSMdNcFfIraaSEI0T30/szKJoSdfH1a6A==
-X-Gm-Gg: ASbGncvADmQffPBkn1wGSPquaFX8MdJD13Atsd6Rc5vdrc9ogc2WZrXyBsU8B1x+kDy
-	ugPKRa9sjLtBIk7ZyrNKNblUe1L1jVc6e4YRQlbYggZ9SD4xsLVcxkzR7T7Pi4J3Zz/jcXPpJaP
-	F16xPWSPY6kzFC/RfFFOmyjVzNQsc+pO3Ul3iJ7ohcWbCxUnOIJ4eCcN2sJvN7SunI68E+3DnaG
-	VR+xZtd
-X-Google-Smtp-Source: AGHT+IEsY/f+Tj3u2hxiQCd69XmHGIDqZZR/UYSpflr/g5ySMTGOn/8ny5hxzQ44lrvSZqgfPjGQAPQXva81ZPiNP2c=
-X-Received: by 2002:a05:690c:4884:b0:70f:9fcd:2075 with SMTP id
- 00721157ae682-71836c27373mr5257327b3.3.1752615239506; Tue, 15 Jul 2025
- 14:33:59 -0700 (PDT)
+	s=arc-20240116; t=1752616013; c=relaxed/simple;
+	bh=/fbCXxYG9LmNT4xAvtTpUg70myuhYb1fO1TUkt6+IOw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O+iMmGee40EYSrmsK8Ao2CtLH2MefdJsxlASrPOdqmEQhnxFZmV3FYRO+lOFlEfwBvlW3wMCTNesecXKMbI44D8YMw05qNoFqHLvXicZud+nepFlf0IIY5TRVc5/iOdH5KeQbHAYdsQHsViaP5StTfVzt4LnAzp5SJxfBuJprJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RRBQJFp4; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752616011; x=1784152011;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/fbCXxYG9LmNT4xAvtTpUg70myuhYb1fO1TUkt6+IOw=;
+  b=RRBQJFp4QtvpYckGmQkXWMbN0waoqqkJGX9G/2E4+zq13xO/2wKZXwTJ
+   61i1eRRR3yICfyoyhzrV0Qpl2WjiPkQDfrd2I7+3iwd+gY4iJI72DVtYv
+   CXw8WRqUHC89UTy63459ebfIfHU6tbb9KEVg5Kst3Co+bExuS6KIt3WlW
+   EIEnM655pYweVWSGIRGEsK0uMQF8DOZJruRynazpNmAz79AiklTKOzwMo
+   2QDF804mlDie4uIFAsTbPRtAld8Z0F+xgaWpDRAB5GM3bVJjn2ryr+LDV
+   EVTCYQfsf3dCnGxOKNfFEnirwud04ZlrlPgYm4w4Rgka11yZhCDFDJfa+
+   Q==;
+X-CSE-ConnectionGUID: WTY8K1dZS0mEIDeg5U8suw==
+X-CSE-MsgGUID: EGS1IiWATuSjb1gRiWVeWw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="58505084"
+X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
+   d="scan'208";a="58505084"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 14:46:50 -0700
+X-CSE-ConnectionGUID: G7AsTZjkRAOl3IiMQnNgVg==
+X-CSE-MsgGUID: 85Y0TFLdSmSHhlAnOFaMBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
+   d="scan'208";a="161876101"
+Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 15 Jul 2025 14:46:45 -0700
+Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ubnU2-000BaB-0T;
+	Tue, 15 Jul 2025 21:46:42 +0000
+Date: Wed, 16 Jul 2025 05:46:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Roman Kisel <romank@linux.microsoft.com>, alok.a.tiwari@oracle.com,
+	arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+	dave.hansen@linux.intel.com, decui@microsoft.com,
+	haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
+	mhklinux@outlook.com, mingo@redhat.com, rdunlap@infradead.org,
+	tglx@linutronix.de, Tianyu.Lan@microsoft.com, wei.liu@kernel.org,
+	linux-arch@vger.kernel.org, linux-coco@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, apais@microsoft.com,
+	benhill@microsoft.com, bperkins@microsoft.com,
+	sunilmut@microsoft.com
+Subject: Re: [PATCH hyperv-next v4 05/16] Drivers: hv: Rename fields for
+ SynIC message and event pages
+Message-ID: <202507160553.amoW6Ty0-lkp@intel.com>
+References: <20250714221545.5615-6-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250604-v5_user_cfi_series-v17-0-4565c2cf869f@rivosinc.com>
- <20250604-v5_user_cfi_series-v17-15-4565c2cf869f@rivosinc.com>
- <CANXhq0pRXX_OMW2g2ui-k7Z_ZT+5a8Sra8oE28nBh5B9K2L5bQ@mail.gmail.com> <CANXhq0p3MVLMsr_r0RWMti476pT0EMx61PQArjo2fUauTdpXaQ@mail.gmail.com>
-In-Reply-To: <CANXhq0p3MVLMsr_r0RWMti476pT0EMx61PQArjo2fUauTdpXaQ@mail.gmail.com>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Tue, 15 Jul 2025 14:33:47 -0700
-X-Gm-Features: Ac12FXzRTF7Dfs5zrF9r6Tx3chJ4aSIUc73QZXj0R8v3aOAPdwPOPGlfEeN5Jbw
-Message-ID: <CAKC1njRNkSfb_0pUQoH0RwJQhWTsz9sdg_3o08w-NuSO5WypcA@mail.gmail.com>
-Subject: Re: [PATCH v17 15/27] riscv/traps: Introduce software check exception
- and uprobe handling
-To: Zong Li <zong.li@sifive.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
-	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
-	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
-	rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250714221545.5615-6-romank@linux.microsoft.com>
 
-Hi Zong,
+Hi Roman,
 
+kernel test robot noticed the following build warnings:
 
-On Thu, Jun 19, 2025 at 7:16=E2=80=AFPM Zong Li <zong.li@sifive.com> wrote:
->
-> On Mon, Jun 16, 2025 at 3:31=E2=80=AFPM Zong Li <zong.li@sifive.com> wrot=
-e:
-> >
-> > On Thu, Jun 5, 2025 at 1:17=E2=80=AFAM Deepak Gupta <debug@rivosinc.com=
-> wrote:
-> > >
-> > > zicfiss / zicfilp introduces a new exception to priv isa `software ch=
-eck
-> > > exception` with cause code =3D 18. This patch implements software che=
-ck
-> > > exception.
-> > >
-.....
+[auto build test WARNING on d9016a249be5316ec2476f9947356711e70a16ec]
 
-> > When a user mode CFI violation occurs, the ELP state should be 1, and
-> > the system traps into supervisor mode. During this trap, sstatus.SPELP
-> > is set to 1, and the ELP state is reset to 0. If we don=E2=80=99t clear
-> > sstatus.SPELP, the ELP state will become 1 again after executing the
-> > sret instruction. As a result, the system might trigger another
-> > forward CFI violation upon executing the next instruction in the user
-> > program, unless it happens to be a lpad instruction.
-> >
-> > The previous patch was tested on QEMU, but QEMU does not set the
-> > sstatus.SPELP bit to 1 when a forward CFI violation occurs. Therefore,
-> > I suspect that QEMU might also require some fixes.
->
-> Hi Deepak,
-> The issue with QEMU was that the sw-check exception bit in medeleg
-> couldn't be set. This has been fixed in the latest QEMU mainline. I
-> have re-tested the latest QEMU version, and it works.
+url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/Documentation-hyperv-Confidential-VMBus/20250715-062125
+base:   d9016a249be5316ec2476f9947356711e70a16ec
+patch link:    https://lore.kernel.org/r/20250714221545.5615-6-romank%40linux.microsoft.com
+patch subject: [PATCH hyperv-next v4 05/16] Drivers: hv: Rename fields for SynIC message and event pages
+config: i386-randconfig-061-20250715 (https://download.01.org/0day-ci/archive/20250716/202507160553.amoW6Ty0-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160553.amoW6Ty0-lkp@intel.com/reproduce)
 
-What was this issue, can you point me to the patch in mainline?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202507160553.amoW6Ty0-lkp@intel.com/
 
->
-> >
-> > Thanks
-> >
-> > > +
-> > > +       if (is_fcfi || is_bcfi) {
-> > > +               do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
-> > > +                             "Oops - control flow violation");
-> > > +               return true;
-> > > +       }
-> > > +
-> > > +       return false;
-> > > +}
-> > > +
-> > > +/*
-> > > + * software check exception is defined with risc-v cfi spec. Softwar=
-e check
-> > > + * exception is raised when:-
-> > > + * a) An indirect branch doesn't land on 4 byte aligned PC or `lpad`
-> > > + *    instruction or `label` value programmed in `lpad` instr doesn'=
-t
-> > > + *    match with value setup in `x7`. reported code in `xtval` is 2.
-> > > + * b) `sspopchk` instruction finds a mismatch between top of shadow =
-stack (ssp)
-> > > + *    and x1/x5. reported code in `xtval` is 3.
-> > > + */
-> > > +asmlinkage __visible __trap_section void do_trap_software_check(stru=
-ct pt_regs *regs)
-> > > +{
-> > > +       if (user_mode(regs)) {
-> > > +               irqentry_enter_from_user_mode(regs);
-> > > +
-> > > +               /* not a cfi violation, then merge into flow of unkno=
-wn trap handler */
-> > > +               if (!handle_user_cfi_violation(regs))
-> > > +                       do_trap_unknown(regs);
-> > > +
-> > > +               irqentry_exit_to_user_mode(regs);
-> > > +       } else {
-> > > +               /* sw check exception coming from kernel is a bug in =
-kernel */
-> > > +               die(regs, "Kernel BUG");
-> > > +       }
-> > > +}
-> > > +
-> > >  #ifdef CONFIG_MMU
-> > >  asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs=
-)
-> > >  {
-> > >
-> > > --
-> > > 2.43.0
-> > >
+sparse warnings: (new ones prefixed by >>)
+   drivers/hv/hv.c:280:26: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/hv/hv.c:299:26: sparse: sparse: cast removes address space '__iomem' of expression
+>> drivers/hv/hv.c:361:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *hyp_synic_message_page @@
+   drivers/hv/hv.c:361:31: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/hv/hv.c:361:31: sparse:     got void *hyp_synic_message_page
+>> drivers/hv/hv.c:373:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *hyp_synic_event_page @@
+   drivers/hv/hv.c:373:31: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/hv/hv.c:373:31: sparse:     got void *hyp_synic_event_page
+
+vim +361 drivers/hv/hv.c
+
+   334	
+   335	void hv_synic_disable_regs(unsigned int cpu)
+   336	{
+   337		struct hv_per_cpu_context *hv_cpu =
+   338			per_cpu_ptr(hv_context.cpu_context, cpu);
+   339		union hv_synic_sint shared_sint;
+   340		union hv_synic_simp simp;
+   341		union hv_synic_siefp siefp;
+   342		union hv_synic_scontrol sctrl;
+   343	
+   344		shared_sint.as_uint64 = hv_get_msr(HV_MSR_SINT0 + VMBUS_MESSAGE_SINT);
+   345	
+   346		shared_sint.masked = 1;
+   347	
+   348		/* Need to correctly cleanup in the case of SMP!!! */
+   349		/* Disable the interrupt */
+   350		hv_set_msr(HV_MSR_SINT0 + VMBUS_MESSAGE_SINT, shared_sint.as_uint64);
+   351	
+   352		simp.as_uint64 = hv_get_msr(HV_MSR_SIMP);
+   353		/*
+   354		 * In Isolation VM, sim and sief pages are allocated by
+   355		 * paravisor. These pages also will be used by kdump
+   356		 * kernel. So just reset enable bit here and keep page
+   357		 * addresses.
+   358		 */
+   359		simp.simp_enabled = 0;
+   360		if (ms_hyperv.paravisor_present || hv_root_partition()) {
+ > 361			iounmap(hv_cpu->hyp_synic_message_page);
+   362			hv_cpu->hyp_synic_message_page = NULL;
+   363		} else {
+   364			simp.base_simp_gpa = 0;
+   365		}
+   366	
+   367		hv_set_msr(HV_MSR_SIMP, simp.as_uint64);
+   368	
+   369		siefp.as_uint64 = hv_get_msr(HV_MSR_SIEFP);
+   370		siefp.siefp_enabled = 0;
+   371	
+   372		if (ms_hyperv.paravisor_present || hv_root_partition()) {
+ > 373			iounmap(hv_cpu->hyp_synic_event_page);
+   374			hv_cpu->hyp_synic_event_page = NULL;
+   375		} else {
+   376			siefp.base_siefp_gpa = 0;
+   377		}
+   378	
+   379		hv_set_msr(HV_MSR_SIEFP, siefp.as_uint64);
+   380	
+   381		/* Disable the global synic bit */
+   382		sctrl.as_uint64 = hv_get_msr(HV_MSR_SCONTROL);
+   383		sctrl.enable = 0;
+   384		hv_set_msr(HV_MSR_SCONTROL, sctrl.as_uint64);
+   385	
+   386		if (vmbus_irq != -1)
+   387			disable_percpu_irq(vmbus_irq);
+   388	}
+   389	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
