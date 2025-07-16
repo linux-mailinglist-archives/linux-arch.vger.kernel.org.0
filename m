@@ -1,184 +1,117 @@
-Return-Path: <linux-arch+bounces-12792-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12793-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D510B068CD
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 23:47:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28C7DB06B17
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 03:26:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F9D9503B36
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Jul 2025 21:46:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BE824A7F81
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 01:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE05D2BEC53;
-	Tue, 15 Jul 2025 21:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55698231A4D;
+	Wed, 16 Jul 2025 01:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RRBQJFp4"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HhrqCbzi"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E38B84039;
-	Tue, 15 Jul 2025 21:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8BA7261D;
+	Wed, 16 Jul 2025 01:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752616013; cv=none; b=sOtKErHTar9Movltt9LpGnAES2Dn+XmnM33BpVzjtWn2Zf+hBhZyIBQANacceyHWdNvAN6+WTdV3R19gH+fmZ+6G4ChYf9R/OS81sfbR5VE0AHn5xqw9NkB6uT7axrqDH3+cWY+p5oNquTv07JAsAA0xvSx7v3e7bJ4QmHUAi9Q=
+	t=1752629213; cv=none; b=ubuu8gNWz58zw0XqjCX8pFV0vU1zMmw0HVuGki9H7toRD/iu+EpVxE/SssVTh8hx+4OMLqWhlsKmipkKdAcB6C3R7A52U35JvxHYK72VItxXudmN3N+ATPj0f5JMyJeJgXxTvOY4TBVY9bHfQYswCe7xKqRG5PioAfz5t+alPiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752616013; c=relaxed/simple;
-	bh=/fbCXxYG9LmNT4xAvtTpUg70myuhYb1fO1TUkt6+IOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O+iMmGee40EYSrmsK8Ao2CtLH2MefdJsxlASrPOdqmEQhnxFZmV3FYRO+lOFlEfwBvlW3wMCTNesecXKMbI44D8YMw05qNoFqHLvXicZud+nepFlf0IIY5TRVc5/iOdH5KeQbHAYdsQHsViaP5StTfVzt4LnAzp5SJxfBuJprJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RRBQJFp4; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752616011; x=1784152011;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/fbCXxYG9LmNT4xAvtTpUg70myuhYb1fO1TUkt6+IOw=;
-  b=RRBQJFp4QtvpYckGmQkXWMbN0waoqqkJGX9G/2E4+zq13xO/2wKZXwTJ
-   61i1eRRR3yICfyoyhzrV0Qpl2WjiPkQDfrd2I7+3iwd+gY4iJI72DVtYv
-   CXw8WRqUHC89UTy63459ebfIfHU6tbb9KEVg5Kst3Co+bExuS6KIt3WlW
-   EIEnM655pYweVWSGIRGEsK0uMQF8DOZJruRynazpNmAz79AiklTKOzwMo
-   2QDF804mlDie4uIFAsTbPRtAld8Z0F+xgaWpDRAB5GM3bVJjn2ryr+LDV
-   EVTCYQfsf3dCnGxOKNfFEnirwud04ZlrlPgYm4w4Rgka11yZhCDFDJfa+
-   Q==;
-X-CSE-ConnectionGUID: WTY8K1dZS0mEIDeg5U8suw==
-X-CSE-MsgGUID: EGS1IiWATuSjb1gRiWVeWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="58505084"
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="58505084"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 14:46:50 -0700
-X-CSE-ConnectionGUID: G7AsTZjkRAOl3IiMQnNgVg==
-X-CSE-MsgGUID: 85Y0TFLdSmSHhlAnOFaMBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,314,1744095600"; 
-   d="scan'208";a="161876101"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 15 Jul 2025 14:46:45 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ubnU2-000BaB-0T;
-	Tue, 15 Jul 2025 21:46:42 +0000
-Date: Wed, 16 Jul 2025 05:46:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roman Kisel <romank@linux.microsoft.com>, alok.a.tiwari@oracle.com,
-	arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-	dave.hansen@linux.intel.com, decui@microsoft.com,
-	haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
-	mhklinux@outlook.com, mingo@redhat.com, rdunlap@infradead.org,
-	tglx@linutronix.de, Tianyu.Lan@microsoft.com, wei.liu@kernel.org,
-	linux-arch@vger.kernel.org, linux-coco@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, apais@microsoft.com,
-	benhill@microsoft.com, bperkins@microsoft.com,
-	sunilmut@microsoft.com
-Subject: Re: [PATCH hyperv-next v4 05/16] Drivers: hv: Rename fields for
- SynIC message and event pages
-Message-ID: <202507160553.amoW6Ty0-lkp@intel.com>
-References: <20250714221545.5615-6-romank@linux.microsoft.com>
+	s=arc-20240116; t=1752629213; c=relaxed/simple;
+	bh=mBgmho3C2yXj6FS/G2R+iJ65IiJNl0BzIAppXDQywEg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ORMeezEPIeEqfemd9oP9Tdg3geZtahgCFyS2L6d+AqlEZubvvv1W9gnj4MjlxptF5nltTbD9jGbBbjrlsueK4VMju6cE8stByUc02qhQn1lO2M3H5wLQZaOnb3Wj0NFXgFcSKyktuCS2wFbk3Wr7yhg2Fn/SeEvSNKfryzdSebk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HhrqCbzi; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56G0fmm9009551;
+	Wed, 16 Jul 2025 01:26:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=bcigRjTgahlSRPeaFgWTsxblRFuu/
+	c5qOL5V4/SaNf4=; b=HhrqCbzi9Q8nmXj7fj8n+Hh//Bf00l25OJn/AL5+Hfc11
+	C8Kp5BWP4XuUiSjrkPSVZ7GCzPxFEYKl8KCQ2kiQ3ZzonovyuyZSU11lwk/txiCH
+	8cxQ0MJYxC6HCzm52mmV/54SqlMazN0TGyZPwRDILtm7DQ7+T/7vFOiyFdqrrE6T
+	O/3nHBaAjYPORT+jME79fO1GZUmmmYnH/i2+p830WFE++yyYL5VmIDSFIXegvUyX
+	N03MIEiZgq6n79xkTOcIIKXKW5ahT0GSMCqkPvwoArIFy+fXp8Oa62JLsC2w+XHl
+	tfKiHQmdj2jzBMqI9a0kRWDdI5lGNI9CT/GVgd6+g==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47ujy4qvyj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 16 Jul 2025 01:26:15 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56G0qhSW028912;
+	Wed, 16 Jul 2025 01:26:13 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 47ue5afdq7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 16 Jul 2025 01:26:13 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 56G1QCRY036586;
+	Wed, 16 Jul 2025 01:26:12 GMT
+Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 47ue5afdph-1;
+	Wed, 16 Jul 2025 01:26:12 +0000
+From: Anthony Yznaga <anthony.yznaga@oracle.com>
+To: davem@davemloft.net, andreas@gaisler.com, arnd@arndb.de,
+        muchun.song@linux.dev, osalvador@suse.de, akpm@linux-foundation.org,
+        david@redhat.com, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+        vbabka@suse.cz, rppt@kernel.org, surenb@google.com, mhocko@suse.com
+Cc: linux-mm@kvack.org, sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alexghiti@rivosinc.com,
+        agordeev@linux.ibm.com, anshuman.khandual@arm.com,
+        christophe.leroy@csgroup.eu, ryan.roberts@arm.com, will@kernel.org
+Subject: [PATCH 0/3] drop hugetlb_free_pgd_range()
+Date: Tue, 15 Jul 2025 18:26:08 -0700
+Message-ID: <20250716012611.10369-1-anthony.yznaga@oracle.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250714221545.5615-6-romank@linux.microsoft.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-15_05,2025-07-15_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=622 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
+ definitions=main-2507160010
+X-Proofpoint-ORIG-GUID: AgBKPn9m3_qL6HAiOrMxXGHg9kVDPIOQ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE2MDAxMSBTYWx0ZWRfXxwAXUBBzM8WE 8bN6iMhvq8VQNcmeYpy7n1hD5x1yRml/PeprWv2oY998EvJW9BaqZpqmDB3OYFgQjUpbNjIeSeb WG8iLxKK77u7K5KJgC90w0dSsy2WZQp3fBKI7F/UsJVccM/aiVmTc0R8dANTZHjtDMfL+3i2KPL
+ Nipym8Bk7nkTTJgX6wlUhpbMuVtJKR0nrN6SSBcp2qo6H2UQuva7Or2yQggdBqPao2vMufeJkAc 6Fzy7auvRVgFpSbvRzXzsCKJ0jG6Sg5O1/HJqkYCAW6e/XUMima2QlJc1t8qlb7guYfDt+fGz02 RPjqsL+LCj+n2BhTdZHSEG1oLC/lXN2TZfv6MHWyHFpSC29HwGec4A3zWNxgSNK1CxvojKDiknP
+ Q21N8ezSB8Rphz7SNn4vlbBTdtTfXAWrAMb+w2+HIkvT5LGZTt6bRarkitxCzKPkmrqf9MeZ
+X-Authority-Analysis: v=2.4 cv=Xtr6OUF9 c=1 sm=1 tr=0 ts=6876ffb7 cx=c_pps a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17 a=Wb1JkmetP80A:10 a=OqWGQR8W8kVsT6dWFhgA:9
+X-Proofpoint-GUID: AgBKPn9m3_qL6HAiOrMxXGHg9kVDPIOQ
 
-Hi Roman,
+For all architectures that support hugetlb except for sparc,
+hugetlb_free_pgd_range() just calls free_pgd_range(). It turns out
+the sparc implementation is essentially identical to free_pgd_range()
+and can be removed. Remove it and update free_pgtables() to treat
+hugetlb VMAs the same as others.
 
-kernel test robot noticed the following build warnings:
+Anthony Yznaga (3):
+  sparc64: remove hugetlb_free_pgd_range()
+  mm: remove call to hugetlb_free_pgd_range()
+  mm: drop hugetlb_free_pgd_range()
 
-[auto build test WARNING on d9016a249be5316ec2476f9947356711e70a16ec]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/Documentation-hyperv-Confidential-VMBus/20250715-062125
-base:   d9016a249be5316ec2476f9947356711e70a16ec
-patch link:    https://lore.kernel.org/r/20250714221545.5615-6-romank%40linux.microsoft.com
-patch subject: [PATCH hyperv-next v4 05/16] Drivers: hv: Rename fields for SynIC message and event pages
-config: i386-randconfig-061-20250715 (https://download.01.org/0day-ci/archive/20250716/202507160553.amoW6Ty0-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250716/202507160553.amoW6Ty0-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507160553.amoW6Ty0-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
-   drivers/hv/hv.c:280:26: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/hv/hv.c:299:26: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/hv/hv.c:361:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *hyp_synic_message_page @@
-   drivers/hv/hv.c:361:31: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/hv/hv.c:361:31: sparse:     got void *hyp_synic_message_page
->> drivers/hv/hv.c:373:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *hyp_synic_event_page @@
-   drivers/hv/hv.c:373:31: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/hv/hv.c:373:31: sparse:     got void *hyp_synic_event_page
-
-vim +361 drivers/hv/hv.c
-
-   334	
-   335	void hv_synic_disable_regs(unsigned int cpu)
-   336	{
-   337		struct hv_per_cpu_context *hv_cpu =
-   338			per_cpu_ptr(hv_context.cpu_context, cpu);
-   339		union hv_synic_sint shared_sint;
-   340		union hv_synic_simp simp;
-   341		union hv_synic_siefp siefp;
-   342		union hv_synic_scontrol sctrl;
-   343	
-   344		shared_sint.as_uint64 = hv_get_msr(HV_MSR_SINT0 + VMBUS_MESSAGE_SINT);
-   345	
-   346		shared_sint.masked = 1;
-   347	
-   348		/* Need to correctly cleanup in the case of SMP!!! */
-   349		/* Disable the interrupt */
-   350		hv_set_msr(HV_MSR_SINT0 + VMBUS_MESSAGE_SINT, shared_sint.as_uint64);
-   351	
-   352		simp.as_uint64 = hv_get_msr(HV_MSR_SIMP);
-   353		/*
-   354		 * In Isolation VM, sim and sief pages are allocated by
-   355		 * paravisor. These pages also will be used by kdump
-   356		 * kernel. So just reset enable bit here and keep page
-   357		 * addresses.
-   358		 */
-   359		simp.simp_enabled = 0;
-   360		if (ms_hyperv.paravisor_present || hv_root_partition()) {
- > 361			iounmap(hv_cpu->hyp_synic_message_page);
-   362			hv_cpu->hyp_synic_message_page = NULL;
-   363		} else {
-   364			simp.base_simp_gpa = 0;
-   365		}
-   366	
-   367		hv_set_msr(HV_MSR_SIMP, simp.as_uint64);
-   368	
-   369		siefp.as_uint64 = hv_get_msr(HV_MSR_SIEFP);
-   370		siefp.siefp_enabled = 0;
-   371	
-   372		if (ms_hyperv.paravisor_present || hv_root_partition()) {
- > 373			iounmap(hv_cpu->hyp_synic_event_page);
-   374			hv_cpu->hyp_synic_event_page = NULL;
-   375		} else {
-   376			siefp.base_siefp_gpa = 0;
-   377		}
-   378	
-   379		hv_set_msr(HV_MSR_SIEFP, siefp.as_uint64);
-   380	
-   381		/* Disable the global synic bit */
-   382		sctrl.as_uint64 = hv_get_msr(HV_MSR_SCONTROL);
-   383		sctrl.enable = 0;
-   384		hv_set_msr(HV_MSR_SCONTROL, sctrl.as_uint64);
-   385	
-   386		if (vmbus_irq != -1)
-   387			disable_percpu_irq(vmbus_irq);
-   388	}
-   389	
+ arch/sparc/include/asm/hugetlb.h |   5 --
+ arch/sparc/mm/hugetlbpage.c      | 119 -------------------------------
+ include/asm-generic/hugetlb.h    |   9 ---
+ include/linux/hugetlb.h          |   7 --
+ mm/memory.c                      |  42 +++++------
+ 5 files changed, 18 insertions(+), 164 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
 
