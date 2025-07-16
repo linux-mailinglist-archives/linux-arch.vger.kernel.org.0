@@ -1,156 +1,245 @@
-Return-Path: <linux-arch+bounces-12817-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12818-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C886B07839
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 16:35:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60E43B07A13
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 17:39:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BCDA5839D9
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 14:35:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09ABD1886B31
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 15:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E8A253F00;
-	Wed, 16 Jul 2025 14:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7472356BD;
+	Wed, 16 Jul 2025 15:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dt45FC45"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2a5CYWK"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9747519AD5C;
-	Wed, 16 Jul 2025 14:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB7C19F40A;
+	Wed, 16 Jul 2025 15:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752676519; cv=none; b=Rk2qAOQ1++My9bdSUwtSMbgA3YqUQkn8KQhAi8XtQPWGl8sN2xDDYCrNiyV1mcwtGjaj9U80f01GEuWiMrE+w2CEOwkGicpQB44Fls/u+xzX7zs05zHq+zF9Z5zr2ZGDQgR9hmP2hDMHwXXHZyJdpbujut7bbBbT2h64FF9KGkY=
+	t=1752680173; cv=none; b=POBfXiYjc5I5o7J/ECZmkFiv6yoAUCDHswHGCtI6gSQlyPJKCgEL1bySF4a9s1skoQY0eYax2g38gH6H00Ic9LdhhsFQYnM+dULUAwHuD4C6Nb0C9oHtp5Zee5Ks7NxPht1m4yknw+I4ykYpSMHO0xLe01vuXX0cLXAf8hI0Vxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752676519; c=relaxed/simple;
-	bh=m6dMr4mmc+ehuhuOcxxv5TIdC9hKtCvMg4Uo67cqnrQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OtLv/tuR3GVYoidNhCQ9NJXcWbr0aTNne08Hg9JUVxYkQN6oMNfg35Ceh3layWK1DYTku2lsmHTlWB94oKfBi63xwb5KYLHAf/huAUpeHPm/yLEJWGDt0gfmKSZNeBk5e/YwEPyteI5C7wCK9JEtkpbUJCRJYq0HF7fFsYxARrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dt45FC45; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14A3C4CEEB;
-	Wed, 16 Jul 2025 14:35:12 +0000 (UTC)
+	s=arc-20240116; t=1752680173; c=relaxed/simple;
+	bh=iDuNDBH8DmskIjB6QZW3VDr54ybRnZOA1Zod2ETR3ho=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=roVHTfmOFGxkZuqVSECWzc7jZFKc4PXq3KMIA9VOPSvu7xIgxTKUbzZP20P5PDdQO9mttsYuBoS2nS0FAhCEqAyvvuetTlabEhtDkKE4F1urStn8QdroatH9AtQB2td52za86exHpwZlbVdavDE/D5yCBspv9gQTKhXFb/gfJWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2a5CYWK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B63C3C4CEE7;
+	Wed, 16 Jul 2025 15:36:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752676517;
-	bh=m6dMr4mmc+ehuhuOcxxv5TIdC9hKtCvMg4Uo67cqnrQ=;
+	s=k20201202; t=1752680173;
+	bh=iDuNDBH8DmskIjB6QZW3VDr54ybRnZOA1Zod2ETR3ho=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dt45FC45lr4Y5Yj3uPvtIZIp6ciObQ9O2GVHJqBWqI/DLPZcpWsBg+1utqSq+YDw+
-	 TTJ19/zC3kTV+soJUz1OQg6F20EoxtqkYFznrlG07TYT9OwefLF+uUOoxgh73ZfBBh
-	 8SLneOMyK6P6c1iwB2WDkSzSjY245qEG5+H7F2QqcQx2Mh9mjqPlZFwKhRcF5+24Ct
-	 cNsz5f+KIF7vHtSZJm9SAA2iNaGsi09yJS4bgJ5Rq9l9ZvQpLb37Tq3YiEMeKhwgUF
-	 3O9gxF1imLn9OunEnp/rcY/rLf2AqX97EG5ibd/BdzyrfVM1RgO08vlXbJqogYNczt
-	 9YD87lNN0ufMw==
-Date: Wed, 16 Jul 2025 15:35:09 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andy Lutomirski <luto@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>,
-	Christopher Hall <christopher.s.hall@intel.com>,
-	Miroslav Lichvar <mlichvar@redhat.com>,
-	Werner Abt <werner.abt@meinberg-usa.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Kurt Kanzenbach <kurt@linutronix.de>,
-	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
- clock_gettime() helpers
-Message-ID: <69499cb9-b13b-4eec-a7c4-c219a77c6260@sirena.org.uk>
-References: <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
- <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
- <CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
- <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
- <20250709092958-37148883-ed89-40fe-8cd5-ded5dd60957e@linutronix.de>
- <eb5feef3-0a7d-438c-9dbb-00d1d72fad66@samsung.com>
- <6bee5ae0-2a9e-4793-a5bd-9e6c72b03f27@sirena.org.uk>
- <20250716142933-41089f40-0628-4821-83a3-fddbd4c4f9bf@linutronix.de>
- <3a9504d1-2c6a-459a-a98e-3010d34b546c@sirena.org.uk>
- <20250716152041-189100b1-7f5e-4388-8ada-b79ec09d18f5@linutronix.de>
+	b=D2a5CYWKcye/Sn1lYE0QXO2n7hgxKixDFWFGjhQljZo7FnGaoXZW7GwVAa3fGJCV/
+	 4d9TgSa2xoW0ZmGPMQFNrhmOfQ601+e1x7zvMRAVKzXMJNZvwougubW/Mjb7wFwnNo
+	 9zUTCiG2g02zVP0V6RH0CV7m2CVB/Q+1xciIyCJ4Ydf6PS/OscH3sajHOaxZeSU+dP
+	 kBqG61AHMxGMXQ295JYtO65+jSqrg9J7nT0fXiMbA1HoMytimyLhgmrfFRfJktdXVV
+	 myZjKcQQLI+3XPq0dbiwoCTtN6pAMnQ3OJIP0qRnaljgAyfbUzSVklJwmEG/jQJ6gz
+	 IgvyHzW0R7eEw==
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BuIqEQ3Xb0IJOloe"
-Content-Disposition: inline
-In-Reply-To: <20250716152041-189100b1-7f5e-4388-8ada-b79ec09d18f5@linutronix.de>
-X-Cookie: osteopornosis:
-
-
---BuIqEQ3Xb0IJOloe
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Jul 2025 17:36:05 +0200
+Message-Id: <DBDL9KI7VNO2.1QZBWS222KQGP@kernel.org>
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Boqun Feng" <boqun.feng@gmail.com>
+Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <lkmm@lists.linux.dev>, <linux-arch@vger.kernel.org>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>, "Will Deacon" <will@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Mark Rutland"
+ <mark.rutland@arm.com>, "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+ "Viresh Kumar" <viresh.kumar@linaro.org>, "Lyude Paul" <lyude@redhat.com>,
+ "Ingo Molnar" <mingo@kernel.org>, "Mitchell Levy"
+ <levymitchell0@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
+ <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>,
+ "Alan Stern" <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v7 6/9] rust: sync: atomic: Add the framework of
+ arithmetic operations
+X-Mailer: aerc 0.20.1
+References: <20250714053656.66712-1-boqun.feng@gmail.com>
+ <20250714053656.66712-7-boqun.feng@gmail.com>
+ <DBCL7YUSRMXR.22SMO1P7D5G60@kernel.org> <aHZYt3Csy29GF2HM@Mac.home>
+ <DBCQUAA42DHH.23BNUVOKS38UI@kernel.org> <aHZ-HP1ErzlERfpI@Mac.home>
+ <DBCUJ4RNRNHP.W4QH5QM3TBHU@kernel.org> <aHa2he81nBDgvA5u@tardis-2.local>
+ <DBDENRP6Z2L7.1BU1I3ZTJ21ZY@kernel.org> <aHezbbzk0FyBW9jS@Mac.home>
+In-Reply-To: <aHezbbzk0FyBW9jS@Mac.home>
 
-On Wed, Jul 16, 2025 at 03:23:24PM +0200, Thomas Wei=DFschuh wrote:
+On Wed Jul 16, 2025 at 4:13 PM CEST, Boqun Feng wrote:
+> On Wed, Jul 16, 2025 at 12:25:30PM +0200, Benno Lossin wrote:
+>> On Tue Jul 15, 2025 at 10:13 PM CEST, Boqun Feng wrote:
+>> > On Tue, Jul 15, 2025 at 08:39:04PM +0200, Benno Lossin wrote:
+>> > [...]
+>> >> >> > Hmm.. the CAST comment should explain why a pointer of `T` can b=
+e a
+>> >> >> > valid pointer of `T::Repr` because the atomic_add() below is goi=
+ng to
+>> >> >> > read through the pointer and write value back. The comment start=
+ing with
+>> >> >> > "`*self`" explains the value written is a valid `T`, therefore
+>> >> >> > conceptually atomic_add() below writes a valid `T` in form of `T=
+::Repr`
+>> >> >> > into `a`.
+>> >> >>=20
+>> >> >> I see, my interpretation was that if we put it on the cast, then t=
+he
+>> >> >> operation that `atomic_add` does also is valid.
+>> >> >>=20
+>> >> >> But I think this comment should either be part of the `CAST` or th=
+e
+>> >> >> `SAFETY` comment. Going by your interpretation, it would make more=
+ sense
+>> >> >> in the SAFETY one, since there you justify that you're actually wr=
+iting
+>> >> >> a value of type `T`.
+>> >> >>=20
+>> >> >
+>> >> > Hmm.. you're probably right. There are two safety things about
+>> >> > atomic_add():
+>> >> >
+>> >> > - Whether calling it is safe
+>> >> > - Whether the operation on `a` (a pointer to `T` essentially) is sa=
+fe.
+>> >>=20
+>> >> Well part of calling `T::Repr::atomic_add` is that the pointer is val=
+id.
+>> >
+>> > Here by saying "calling `T::Repr::atomic_add`", I think you mean the
+>> > whole operation, so yeah, we have to consider the validy for `T` of th=
+e
+>> > result.
+>>=20
+>> I meant just the call to `atomic_add`.
+>>=20
+>> > But what I'm trying to do is reasoning this in 2 steps:
+>> >
+>> > First, let's treat it as an `atomic_add(*mut i32, i32)`, then as long =
+as
+>> > we provide a valid `*mut i32`, it's safe to call.=20
+>>=20
+>> But the thing is, we're not supplying a valid `*mut i32`. Because the
+>> pointer points to a value that is not actually an `i32`. You're only
+>> allowed to write certain values and so you basically have to treat it as
+>> a transmute + write. And so you need to include a justification for this
+>> transmute in the write itself.=20
+>>=20
+>> For example, if we had `bool: AllowAtomic`, then writing a `2` in store
+>> would be insta-UB, since we then have a `&UnsafeCell<bool>` pointing at
+>> `2`.
+>>=20
+>> This is part of library vs language UB, writing `2` into a bool and
+>> having a reference is language-UB (ie instant UB) and writing a `2` into
+>> a variable of type `i32` that is somewhere cast to `bool` is library-UB
+>> (since it will lead to language-UB later).=20
+>>=20
+>
+> But we are not writing `2` in this case, right?=20
+>
+> A) we have a pointer `*mut i32`, and the memory location is valid for
+>    writing an `i32`, so we can pass it to a function that may write
+>    an `i32` to it.
+>
+> B) and at the same time, we prove that the value written was a valid
+>    `bool`.
+>
+> There is no `2` written in the whole process, the proof contains two
+> parts, that is it. There is no language-UB or library-UB in the whole
+> process, and you're missing it.
 
-> Can you try the following?
-> I missed this despite the double-checking after the last reported issue.
+There is no UB here and the public API surface is sound.
 
-I needed to fix that up a bit, it was missing an update of the final ret
-in the function and didn't apply directly to -next for some reason so I
-had to manually apply but it seems to do the trick, thanks!
+The problem is the internal safe <-> unsafe code interaction & the
+safety documentation.
 
-Tested-by: Mark Brown <broonie@kernel.org>
+> It's like if you want to prove 3 < x < 5, you first prove that x > 3
+> and then x < 5. It's just that you don't prove it in one go.
 
-with this against -next:
+That's true, but not analogous to this case. This is a better analogy:
 
-diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index 97aa9059a5c97..487e3458e536e 100644
---- a/lib/vdso/gettimeofday.c
-+++ b/lib/vdso/gettimeofday.c
-@@ -365,18 +365,18 @@ __cvdso_clock_gettime32_data(const struct vdso_time_d=
-ata *vd, clockid_t clock,
- 			     struct old_timespec32 *res)
- {
- 	struct __kernel_timespec ts;
--	int ret;
-+	bool ok;
-=20
--	ret =3D __cvdso_clock_gettime_common(vd, clock, &ts);
-+	ok =3D __cvdso_clock_gettime_common(vd, clock, &ts);
-=20
--	if (unlikely(ret))
-+	if (unlikely(!ok))
- 		return clock_gettime32_fallback(clock, res);
-=20
--	/* For ret =3D=3D 0 */
-+	/* For ok =3D=3D true */
- 	res->tv_sec =3D ts.tv_sec;
- 	res->tv_nsec =3D ts.tv_nsec;
-=20
--	return ret;
-+	return 0;
- }
-=20
- static __maybe_unused int
+You have a lemma that proves P given that x =3D=3D 10. Now you want to use
+this lemma, but you are only able to prove that x >=3D 10. You argue that
+this is fine, because the proof of the lemma only uses the fact that
+x >=3D 10.
+    But in this situation you're not following the exact rules of the
+formal system. To do that you would have to reformulate the lemma to
+only ask for x >=3D 10.
 
---BuIqEQ3Xb0IJOloe
-Content-Type: application/pgp-signature; name="signature.asc"
+The last part is what relaxing the safety requirements would be
+(approach (2) given below).
 
------BEGIN PGP SIGNATURE-----
+>> The safety comments become simpler when you use `UnsafeCell<T::Repr>`
+>> instead :) since that changes this language-UB into library-UB. (the
+>> only safety comment that is more complex then is `get_mut`, but that's
+>> only a single one)
+>>=20
+>> If you don't want that, then we can solve this in two ways:
+>>=20
+>> (1) add a guarantee on `atomic_add` (and all other operations) that it
+>>     will write `*a + v` to `a` and nothing else.
+>> (2) make the safety requirement only require writes of the addition to
+>>     be valid.
+>>=20
+>> My preference precedence is: use `T::Repr`, (2) and finally (1). (2)
+>> will be very wordy on all operations & the safety comments in this file,
+>> but it's clean from a formal perspective. (1) works by saying "what
+>> we're supplying is actually not a valid `*mut i32`, but since the
+>> guarantee of the function ensures that only specific things are written,
+>> it's fine" which isn't very clean. And the `T::Repr` approach avoids all
+>> this by just storing value of `T::Repr` circumventing the whole issue.
+>> Then we only need to justify why we can point a `&mut T` at it and that
+>> we can do by having an invariant that should be simple to keep.
+>>=20
+>> We probably should talk about this in our meeting :)
+>>=20
+>
+> I have a better solution:
+>
+> in ops.rs
+>
+>     pub struct AtomicRepr<T: AtomicImpl>(UnsafeCell<T>)
+>
+>     impl AtomicArithmeticOps for i32 {
+>         // a *safe* function
+>         fn atomic_add(a: &AtomicRepr, v: i32) {
+> 	    ...
+> 	}
+>     }
+>
+> in generic.rs
+>
+>     pub struct Atomic<T>(AtoimcRepr<T::Repr>);
+>
+>     impl<T: AtomicAdd> Atomic<T> {
+>         fn add(&self, v: .., ...) {
+> 	    T::Repr::atomic_add(&self.0, ...);
+> 	}
+>     }
+>
+> see:
+>
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git/log/?h=
+=3Drust-atomic-impl
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmh3uJ0ACgkQJNaLcl1U
-h9CA4Af/Tjt27XD+sH0XsHGiqrvVkfVxva7ofqhkGScEh/mKgfSbmkbXHANzMMcN
-i0cqh+YA1JvkdO9PRMQKygFdjOmHF6f8fLJ89tv362PI4fWlABSmiorpUwrX/J76
-1DnAJBk3+BI/Ea4E5KVldzfU+figgDJeX1YWeicBcnGCnMrdHPub+24Wgclm4MIs
-mxPCfZnczo7mLioF3QxjetxtWIFrsPNxoRJp7kJN0Kyz6lGJQBmZc+dY1UzEVtyR
-GBCX/hWkjFxJzX9EBQ3d7C/LgP6AuvykylzYC2M5AZC9TOzvRpEhjp6WGJHCRrwa
-K72ju7AAJ/9Vit9ykmOIMbQUpAZUYA==
-=rAsr
------END PGP SIGNATURE-----
+Hmm what does the additional indirection give you?
 
---BuIqEQ3Xb0IJOloe--
+Otherwise this looks like the `T::Repr` approach that I detailed above,
+so I like it :)
+
+---
+Cheers,
+Benno
 
