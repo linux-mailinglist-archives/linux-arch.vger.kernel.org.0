@@ -1,570 +1,126 @@
-Return-Path: <linux-arch+bounces-12821-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12822-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66225B07B9C
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 18:59:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC310B07BDB
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 19:16:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 600684E2174
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 16:59:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C1247A85F2
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 17:14:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17B02F5C2A;
-	Wed, 16 Jul 2025 16:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8B2E2F547C;
+	Wed, 16 Jul 2025 17:16:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="iVMrVZ7w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IA/Ii8Gr"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04F62F5C20;
-	Wed, 16 Jul 2025 16:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94ACB2798EA;
+	Wed, 16 Jul 2025 17:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752685168; cv=none; b=fWJl3U9y09ohrEXI/xic8bp4wtB2MNgmB5Gg7UJP0U4SdvV9N6lEa2VK2UJZ6/AaABQ6kun6fRVc2/zegeJEQtCGRQG7Xf/RZhr5Fhw2Df03to1H0GL1+cfaEbxatYYZEvjJjxFAgiMvJy4EdBYMyGXNKiwR/1xj44jI2PxZau8=
+	t=1752686169; cv=none; b=Mf3NKJbbRxO6WQ/bpzqtjqvgwCmPUa3jIFKM1HaQ9FSW38/0yAJ0N2mZsvEFO1D7McfWKC3Q4BvmOw1Boh65sxK/tKWIYviv9AM/pAH2L/ScvAFSA4JB7G9CId7jnsGbnZkaI2GJ1JGjvbtee+CE0hlvMc8yaqvAV8jBfuwbq8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752685168; c=relaxed/simple;
-	bh=8tKAW3ILK63tvFgopBEPcTxEPxSi4i6zqnD0dg4NOrE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ijk/c2YyIyGmvaY1Ve1sCRJOulquwote2e+WXDQ6cs+5o2ure/hCGnvUiwNtYi4VvwAlRA1ZMHYx5ZiXF1Z+l0JSrRwlcaajSm9htqagw8P29jPRs70i1iapo/cW5DVWA0WeaWyY8gnfCPsNSnqIOWARdIVGOnTnBxb6xKDOJxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=fail (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=iVMrVZ7w reason="signature verification failed"; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from mail.zytor.com ([IPv6:2601:646:8081:9482:6dc:b955:47cb:dcbb])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56GGlgcB1606025
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-	Wed, 16 Jul 2025 09:47:44 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56GGlgcB1606025
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025062101; t=1752684483;
-	bh=Pi512eHi9UqcH1NIe21hPNH34+JTvpPZpIBQ9bkTpeo=;
-	h=From:To:Subject:Date:From;
-	b=iVMrVZ7wCY+XR+v+/5lGaQK0wtkobCborN8fAcNbqMDyZci7UAzAbz6/wkfvH8sml
-	 yQuQrqcZYdI4rVp7Cb4tmJF3SAB/7/Bnn45T+6/vLbmdVlw/iKcjNzcjDQZsRNADMU
-	 2uGk2Q4+1McKUub7sk1zw8j0WQNs9JUdbWdZHTymZ9oCzx42BRH9Opvt0sRdKFTnjE
-	 r5Pxq+Te1DUEUkR3blNMxL6s9Ty/LyXU/8mCYaLcEMp4eCRa6T8/O9vlNQQJ7xkwq3
-	 bWubqVadZ0JXsRMKm4thdvRgAW4s9CUjgaqkkPit8nThtZY7X+pDf6dfxDrcHy407k
-	 pQSnTF2Ke3B0A==
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.osdn.me>, Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org
-Subject: [PATCH 1/1] uapi/termios: remove struct ktermios from uapi headers
-Date: Wed, 16 Jul 2025 09:47:32 -0700
-Message-ID: <20250716164735.170713-1-hpa@zytor.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1752686169; c=relaxed/simple;
+	bh=WjN4ZftabKpQLXbiJ4dykt/E4neOL6d8HDXxD+KsYsg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=gz89g86y6qeZ0WGWR5atkn1xMcAU0/zTqBNNfEmD4nVBEU4gFKrIz+wrL5avAvG0cgM5OxSX0abojQf2ZoOTRZ120IH7umiuu1j1qYRGN5yjvU120pHkLcVSf6Bd0PoqPQ/+Vc2qFW8WsEDJBGbxj4e/P6AsEN7b9bGNeP/YOqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IA/Ii8Gr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51355C4CEE7;
+	Wed, 16 Jul 2025 17:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752686169;
+	bh=WjN4ZftabKpQLXbiJ4dykt/E4neOL6d8HDXxD+KsYsg=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=IA/Ii8Gr1Za8zAw0xmiaujSA2tjTH3ppWsobaRIC5xDJ4lz7/LrX4Z/YNh6SuUInl
+	 PMK4HGV001yLzrsg2LbYEhx9By4cRSW+CzwnX91J7W3NENGjWiRfqTaL/ohM7opau7
+	 jWxomSpQgWYJvxuWslffSJNpagRcv8Z2zgIQ7HgBWJaqnYyKHICkrih+m3reZPVlQF
+	 Q6ZuEnAtWuShSi9+SRKHv7M1Dq+4VcA8IFTAE04YpsK5gFXu7Xr0uOO4MM/wdH1BZY
+	 q7y+vcAjXZ+usJdExDd5IE80beP7X6xVLW8Skoknj8UAHGek0ZL9YrFIqOMBf8v9XS
+	 2WPgTnoMYEImg==
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Jul 2025 19:16:02 +0200
+Message-Id: <DBDNE3CNUOZP.1H168Z8BD6ZKK@kernel.org>
+To: "Boqun Feng" <boqun.feng@gmail.com>
+Cc: <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <lkmm@lists.linux.dev>, <linux-arch@vger.kernel.org>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>, "Will Deacon" <will@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Mark Rutland"
+ <mark.rutland@arm.com>, "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+ "Viresh Kumar" <viresh.kumar@linaro.org>, "Lyude Paul" <lyude@redhat.com>,
+ "Ingo Molnar" <mingo@kernel.org>, "Mitchell Levy"
+ <levymitchell0@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Linus Torvalds"
+ <torvalds@linux-foundation.org>, "Thomas Gleixner" <tglx@linutronix.de>,
+ "Alan Stern" <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v7 6/9] rust: sync: atomic: Add the framework of
+ arithmetic operations
+From: "Benno Lossin" <lossin@kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20250714053656.66712-7-boqun.feng@gmail.com>
+ <DBCL7YUSRMXR.22SMO1P7D5G60@kernel.org> <aHZYt3Csy29GF2HM@Mac.home>
+ <DBCQUAA42DHH.23BNUVOKS38UI@kernel.org> <aHZ-HP1ErzlERfpI@Mac.home>
+ <DBCUJ4RNRNHP.W4QH5QM3TBHU@kernel.org> <aHa2he81nBDgvA5u@tardis-2.local>
+ <DBDENRP6Z2L7.1BU1I3ZTJ21ZY@kernel.org> <aHezbbzk0FyBW9jS@Mac.home>
+ <DBDL9KI7VNO2.1QZBWS222KQGP@kernel.org> <aHfJx5_kMcULUd7t@Mac.home>
+In-Reply-To: <aHfJx5_kMcULUd7t@Mac.home>
 
-struct ktermios is not, nor has it ever been, a UAPI.  Remove it from
-the UAPI headers.
+On Wed Jul 16, 2025 at 5:48 PM CEST, Boqun Feng wrote:
+> On Wed, Jul 16, 2025 at 05:36:05PM +0200, Benno Lossin wrote:
+> [..]
+>> >
+>> > I have a better solution:
+>> >
+>> > in ops.rs
+>> >
+>> >     pub struct AtomicRepr<T: AtomicImpl>(UnsafeCell<T>)
+>> >
+>> >     impl AtomicArithmeticOps for i32 {
+>> >         // a *safe* function
+>> >         fn atomic_add(a: &AtomicRepr, v: i32) {
+>> > 	    ...
+>> > 	}
+>> >     }
+>> >
+>> > in generic.rs
+>> >
+>> >     pub struct Atomic<T>(AtoimcRepr<T::Repr>);
+>> >
+>> >     impl<T: AtomicAdd> Atomic<T> {
+>> >         fn add(&self, v: .., ...) {
+>> > 	    T::Repr::atomic_add(&self.0, ...);
+>> > 	}
+>> >     }
+>> >
+>> > see:
+>> >
+>> > 	https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git/log/?=
+h=3Drust-atomic-impl
+>>=20
+>> Hmm what does the additional indirection give you?
+>>=20
+>
+> What additional indirection you mean? You cannot make atomic_add() safe
+> with only `UnsafeCell<T::Repr>`.
 
-Normally we have shadowed kernel-only headers that include the uapi
-ones; in this case this would be <asm/termbits.h>, however, I was
-unable to find a way by which *some* paths would still somehow pick up
-the UAPI header only (presumably due to the mix of arch-specific and
-asm-generic headers), so I separated out the kernel-specific parts
-into a new header <asm/ktermios.h>.
+What is the advantage of making it safe? It just moves the safety
+comments into `ops.rs` which makes it harder to read due to the macros.
 
-<linux/termios.h> now has a kernel version, which only differs by
-including <asm/ktermios.h>.
-
-Signed-off-by: H. Peter Anvin <hpa@zytor.com>
 ---
- arch/alpha/include/asm/ktermios.h        |  2 ++
- arch/alpha/include/uapi/asm/termbits.h   | 17 ++--------------
- arch/arc/include/asm/ktermios.h          |  1 +
- arch/arm/include/asm/ktermios.h          |  1 +
- arch/arm64/include/asm/ktermios.h        |  1 +
- arch/csky/include/asm/ktermios.h         |  1 +
- arch/hexagon/include/asm/ktermios.h      |  1 +
- arch/loongarch/include/asm/ktermios.h    |  1 +
- arch/m68k/include/asm/ktermios.h         |  1 +
- arch/microblaze/include/asm/ktermios.h   |  1 +
- arch/mips/include/asm/ktermios.h         |  1 +
- arch/mips/include/uapi/asm/termbits.h    | 15 ++------------
- arch/nios2/include/asm/ktermios.h        |  1 +
- arch/openrisc/include/asm/ktermios.h     |  1 +
- arch/parisc/include/asm/ktermios.h       |  1 +
- arch/parisc/include/uapi/asm/termbits.h  | 15 ++------------
- arch/powerpc/include/asm/ktermios.h      |  2 ++
- arch/powerpc/include/uapi/asm/termbits.h | 13 ------------
- arch/riscv/include/asm/ktermios.h        |  1 +
- arch/s390/include/asm/ktermios.h         |  1 +
- arch/sh/include/asm/ktermios.h           |  1 +
- arch/sparc/include/asm/ktermios.h        | 11 ++++++++++
- arch/sparc/include/asm/termbits.h        |  9 --------
- arch/um/include/asm/ktermios.h           |  1 +
- arch/x86/include/asm/ktermios.h          |  1 +
- arch/xtensa/include/asm/ktermios.h       |  1 +
- include/asm-generic/ktermios.h           | 26 ++++++++++++++++++++++++
- include/linux/termios.h                  |  7 +++++++
- include/uapi/asm-generic/termbits.h      | 15 ++------------
- include/uapi/linux/termios.h             |  4 ++--
- 30 files changed, 76 insertions(+), 78 deletions(-)
- create mode 100644 arch/alpha/include/asm/ktermios.h
- create mode 100644 arch/arc/include/asm/ktermios.h
- create mode 100644 arch/arm/include/asm/ktermios.h
- create mode 100644 arch/arm64/include/asm/ktermios.h
- create mode 100644 arch/csky/include/asm/ktermios.h
- create mode 100644 arch/hexagon/include/asm/ktermios.h
- create mode 100644 arch/loongarch/include/asm/ktermios.h
- create mode 100644 arch/m68k/include/asm/ktermios.h
- create mode 100644 arch/microblaze/include/asm/ktermios.h
- create mode 100644 arch/mips/include/asm/ktermios.h
- create mode 100644 arch/nios2/include/asm/ktermios.h
- create mode 100644 arch/openrisc/include/asm/ktermios.h
- create mode 100644 arch/parisc/include/asm/ktermios.h
- create mode 100644 arch/powerpc/include/asm/ktermios.h
- create mode 100644 arch/riscv/include/asm/ktermios.h
- create mode 100644 arch/s390/include/asm/ktermios.h
- create mode 100644 arch/sh/include/asm/ktermios.h
- create mode 100644 arch/sparc/include/asm/ktermios.h
- delete mode 100644 arch/sparc/include/asm/termbits.h
- create mode 100644 arch/um/include/asm/ktermios.h
- create mode 100644 arch/x86/include/asm/ktermios.h
- create mode 100644 arch/xtensa/include/asm/ktermios.h
- create mode 100644 include/asm-generic/ktermios.h
- create mode 100644 include/linux/termios.h
-
-diff --git a/arch/alpha/include/asm/ktermios.h b/arch/alpha/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..f1e3d24b8e61
---- /dev/null
-+++ b/arch/alpha/include/asm/ktermios.h
-@@ -0,0 +1,2 @@
-+#define KTERMIOS_C_CC_BEFORE_C_LINE 1
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
-index f1290b22072b..50a1b468b81c 100644
---- a/arch/alpha/include/uapi/asm/termbits.h
-+++ b/arch/alpha/include/uapi/asm/termbits.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _ALPHA_TERMBITS_H
--#define _ALPHA_TERMBITS_H
-+#ifndef _UAPI_ALPHA_TERMBITS_H
-+#define _UAPI_ALPHA_TERMBITS_H
- 
- #include <asm-generic/termbits-common.h>
- 
-@@ -37,19 +37,6 @@ struct termios2 {
- 	speed_t c_ospeed;		/* output speed */
- };
- 
--/* Alpha has matching termios and ktermios */
--
--struct ktermios {
--	tcflag_t c_iflag;		/* input mode flags */
--	tcflag_t c_oflag;		/* output mode flags */
--	tcflag_t c_cflag;		/* control mode flags */
--	tcflag_t c_lflag;		/* local mode flags */
--	cc_t c_cc[NCCS];		/* control characters */
--	cc_t c_line;			/* line discipline (== c_cc[19]) */
--	speed_t c_ispeed;		/* input speed */
--	speed_t c_ospeed;		/* output speed */
--};
--
- /* c_cc characters */
- #define VEOF		 0
- #define VEOL		 1
-diff --git a/arch/arc/include/asm/ktermios.h b/arch/arc/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/arc/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/arm/include/asm/ktermios.h b/arch/arm/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/arm/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/arm64/include/asm/ktermios.h b/arch/arm64/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/arm64/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/csky/include/asm/ktermios.h b/arch/csky/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/csky/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/hexagon/include/asm/ktermios.h b/arch/hexagon/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/hexagon/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/loongarch/include/asm/ktermios.h b/arch/loongarch/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/loongarch/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/m68k/include/asm/ktermios.h b/arch/m68k/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/m68k/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/microblaze/include/asm/ktermios.h b/arch/microblaze/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/microblaze/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/mips/include/asm/ktermios.h b/arch/mips/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/mips/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
-index 1eb60903d6f0..dacefee984d6 100644
---- a/arch/mips/include/uapi/asm/termbits.h
-+++ b/arch/mips/include/uapi/asm/termbits.h
-@@ -8,8 +8,8 @@
-  * Copyright (C) 1999 Silicon Graphics, Inc.
-  * Copyright (C) 2001 MIPS Technologies, Inc.
-  */
--#ifndef _ASM_TERMBITS_H
--#define _ASM_TERMBITS_H
-+#ifndef _UAPI_ASM_TERMBITS_H
-+#define _UAPI_ASM_TERMBITS_H
- 
- #include <asm-generic/termbits-common.h>
- 
-@@ -40,17 +40,6 @@ struct termios2 {
- 	speed_t c_ospeed;		/* output speed */
- };
- 
--struct ktermios {
--	tcflag_t c_iflag;		/* input mode flags */
--	tcflag_t c_oflag;		/* output mode flags */
--	tcflag_t c_cflag;		/* control mode flags */
--	tcflag_t c_lflag;		/* local mode flags */
--	cc_t c_line;			/* line discipline */
--	cc_t c_cc[NCCS];		/* control characters */
--	speed_t c_ispeed;		/* input speed */
--	speed_t c_ospeed;		/* output speed */
--};
--
- /* c_cc characters */
- #define VINTR		 0		/* Interrupt character [ISIG] */
- #define VQUIT		 1		/* Quit character [ISIG] */
-diff --git a/arch/nios2/include/asm/ktermios.h b/arch/nios2/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/nios2/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/openrisc/include/asm/ktermios.h b/arch/openrisc/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/openrisc/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/parisc/include/asm/ktermios.h b/arch/parisc/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/parisc/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
-index 3a8938d26fb4..d8818b887680 100644
---- a/arch/parisc/include/uapi/asm/termbits.h
-+++ b/arch/parisc/include/uapi/asm/termbits.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ARCH_PARISC_TERMBITS_H__
--#define __ARCH_PARISC_TERMBITS_H__
-+#ifndef _UAPI_PARISC_TERMBITS_H
-+#define _UAPI_PARISC_TERMBITS_H
- 
- #include <asm-generic/termbits-common.h>
- 
-@@ -27,17 +27,6 @@ struct termios2 {
- 	speed_t c_ospeed;		/* output speed */
- };
- 
--struct ktermios {
--	tcflag_t c_iflag;		/* input mode flags */
--	tcflag_t c_oflag;		/* output mode flags */
--	tcflag_t c_cflag;		/* control mode flags */
--	tcflag_t c_lflag;		/* local mode flags */
--	cc_t c_line;			/* line discipline */
--	cc_t c_cc[NCCS];		/* control characters */
--	speed_t c_ispeed;		/* input speed */
--	speed_t c_ospeed;		/* output speed */
--};
--
- /* c_cc characters */
- #define VINTR		 0
- #define VQUIT		 1
-diff --git a/arch/powerpc/include/asm/ktermios.h b/arch/powerpc/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..f1e3d24b8e61
---- /dev/null
-+++ b/arch/powerpc/include/asm/ktermios.h
-@@ -0,0 +1,2 @@
-+#define KTERMIOS_C_CC_BEFORE_C_LINE 1
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
-index 21dc86dcb2f1..f4e4d8270c8e 100644
---- a/arch/powerpc/include/uapi/asm/termbits.h
-+++ b/arch/powerpc/include/uapi/asm/termbits.h
-@@ -31,19 +31,6 @@ struct termios {
- 	speed_t c_ospeed;		/* output speed */
- };
- 
--/* For PowerPC the termios and ktermios are the same */
--
--struct ktermios {
--	tcflag_t c_iflag;		/* input mode flags */
--	tcflag_t c_oflag;		/* output mode flags */
--	tcflag_t c_cflag;		/* control mode flags */
--	tcflag_t c_lflag;		/* local mode flags */
--	cc_t c_cc[NCCS];		/* control characters */
--	cc_t c_line;			/* line discipline (== c_cc[19]) */
--	speed_t c_ispeed;		/* input speed */
--	speed_t c_ospeed;		/* output speed */
--};
--
- /* c_cc characters */
- #define VINTR 	         0
- #define VQUIT 	         1
-diff --git a/arch/riscv/include/asm/ktermios.h b/arch/riscv/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/riscv/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/s390/include/asm/ktermios.h b/arch/s390/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/s390/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/sh/include/asm/ktermios.h b/arch/sh/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/sh/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/sparc/include/asm/ktermios.h b/arch/sparc/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..bdd3682eecef
---- /dev/null
-+++ b/arch/sparc/include/asm/ktermios.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _SPARC_KTERMIOS_H
-+#define _SPARC_KTERMIOS_H
-+
-+#define VMIN     16
-+#define VTIME    17
-+#define KNCCS	 (NCCS+2)
-+
-+#include <asm-generic/ktermios.h>
-+
-+#endif /* !(_SPARC_KTERMIOS_H) */
-diff --git a/arch/sparc/include/asm/termbits.h b/arch/sparc/include/asm/termbits.h
-deleted file mode 100644
-index fa9de4a46d36..000000000000
---- a/arch/sparc/include/asm/termbits.h
-+++ /dev/null
-@@ -1,9 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _SPARC_TERMBITS_H
--#define _SPARC_TERMBITS_H
--
--#include <uapi/asm/termbits.h>
--
--#define VMIN     16
--#define VTIME    17
--#endif /* !(_SPARC_TERMBITS_H) */
-diff --git a/arch/um/include/asm/ktermios.h b/arch/um/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/um/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/x86/include/asm/ktermios.h b/arch/x86/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/x86/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/arch/xtensa/include/asm/ktermios.h b/arch/xtensa/include/asm/ktermios.h
-new file mode 100644
-index 000000000000..4320921a82a9
---- /dev/null
-+++ b/arch/xtensa/include/asm/ktermios.h
-@@ -0,0 +1 @@
-+#include <asm-generic/ktermios.h>
-diff --git a/include/asm-generic/ktermios.h b/include/asm-generic/ktermios.h
-new file mode 100644
-index 000000000000..bf22e22d8130
---- /dev/null
-+++ b/include/asm-generic/ktermios.h
-@@ -0,0 +1,26 @@
-+#ifndef _ASM_GENERIC_KTERMIOS_H
-+#define _ASM_GENERIC_KTERMIOS_H
-+
-+#ifndef KNCCS
-+# define KNCCS NCCS
-+#endif
-+
-+struct ktermios {
-+	tcflag_t c_iflag;		/* input mode flags */
-+	tcflag_t c_oflag;		/* output mode flags */
-+	tcflag_t c_cflag;		/* control mode flags */
-+	tcflag_t c_lflag;		/* local mode flags */
-+#ifndef KTERMIOS_C_CC_BEFORE_C_LINE
-+	/* Most architectures */
-+	cc_t c_line;			/* line discipline */
-+	cc_t c_cc[KNCCS];		/* control characters */
-+#else
-+	/* Alpha and PowerPC */
-+	cc_t c_cc[KNCCS];		/* control characters */
-+	cc_t c_line;			/* line discipline */
-+#endif
-+	speed_t c_ispeed;		/* input speed */
-+	speed_t c_ospeed;		/* output speed */
-+};
-+
-+#endif /* _ASM_GENERIC_KTERMIOS_H */
-diff --git a/include/linux/termios.h b/include/linux/termios.h
-new file mode 100644
-index 000000000000..9d37d24cae02
---- /dev/null
-+++ b/include/linux/termios.h
-@@ -0,0 +1,7 @@
-+#ifndef _LINUX_TERMIOS_H
-+#define _LINUX_TERMIOS_H
-+
-+#include <uapi/linux/termios.h>
-+#include <asm/ktermios.h>
-+
-+#endif
-diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
-index 890ef29053e2..df60b006657f 100644
---- a/include/uapi/asm-generic/termbits.h
-+++ b/include/uapi/asm-generic/termbits.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef __ASM_GENERIC_TERMBITS_H
--#define __ASM_GENERIC_TERMBITS_H
-+#ifndef _UAPI_ASM_GENERIC_TERMBITS_H
-+#define _UAPI_ASM_GENERIC_TERMBITS_H
- 
- #include <asm-generic/termbits-common.h>
- 
-@@ -27,17 +27,6 @@ struct termios2 {
- 	speed_t c_ospeed;		/* output speed */
- };
- 
--struct ktermios {
--	tcflag_t c_iflag;		/* input mode flags */
--	tcflag_t c_oflag;		/* output mode flags */
--	tcflag_t c_cflag;		/* control mode flags */
--	tcflag_t c_lflag;		/* local mode flags */
--	cc_t c_line;			/* line discipline */
--	cc_t c_cc[NCCS];		/* control characters */
--	speed_t c_ispeed;		/* input speed */
--	speed_t c_ospeed;		/* output speed */
--};
--
- /* c_cc characters */
- #define VINTR		 0
- #define VQUIT		 1
-diff --git a/include/uapi/linux/termios.h b/include/uapi/linux/termios.h
-index e6da9d4433d1..32ff18b0dfbc 100644
---- a/include/uapi/linux/termios.h
-+++ b/include/uapi/linux/termios.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _LINUX_TERMIOS_H
--#define _LINUX_TERMIOS_H
-+#ifndef _UAPI_LINUX_TERMIOS_H
-+#define _UAPI_LINUX_TERMIOS_H
- 
- #include <linux/types.h>
- #include <asm/termios.h>
--- 
-2.50.1
-
+Cheers,
+Benno
 
