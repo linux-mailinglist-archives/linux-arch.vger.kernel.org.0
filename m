@@ -1,171 +1,155 @@
-Return-Path: <linux-arch+bounces-12814-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12815-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16EE6B0769F
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 15:09:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9BD9B076CE
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 15:23:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3DF03BD899
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 13:09:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A97D1AA1731
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 13:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD812F4A16;
-	Wed, 16 Jul 2025 13:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472911A5BA2;
+	Wed, 16 Jul 2025 13:23:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uDYmdz3x";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JbbGSXV0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from relay16.mail.gandi.net (relay16.mail.gandi.net [217.70.178.236])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1829A2F3C30;
-	Wed, 16 Jul 2025 13:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA0135972;
+	Wed, 16 Jul 2025 13:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752671381; cv=none; b=Mz+ikL1Eo5MGN2Hd7IM8r4TBHANwTBPzYMcEORBXcFirROo1DlCGsUHP8NUAl5fZq3WBRMKSmRtQP10S3OxxvnqwyzbuQ0lxAnYIIY2U85DqPZhh1oA3xLgA45Xb5Ont9ffRTXE9OcyEwXdPWS0U7cbnsdkweJ7A+j/YKcRV3VA=
+	t=1752672208; cv=none; b=dHwbUqOE8QOtQS9ZalwaGL2CS/0zngp1YcjKEESZ/mBrbFclaVPJlr3EGazdrULe8DJ2bdm3MusntjiIiktOcpmICjQXNiWjAfLpo/zmtPv8d80eyqXa2MkCD8AZI8q0Vd8kYBYBOG8YnBP2wj2PJ2oZ+pWU32MWvFchbyvX47g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752671381; c=relaxed/simple;
-	bh=Tq/2KaStJzxYgXZpFCj99+W63ZyDYDMzJd+F8/Ad+5w=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=g7EqlrT3SHgQhVQIOzLl0rADRdQwo6qYRk9+X1Ymycd0Fw4MDIO7jFThEJGNa2Dljb8r+IA3dq0ujxwYkAxZbdnNTaH5ExK48sui/iWePvNw0Zns6+d1mA5FmZlUW3I/umUhJuv8eSYv3Z2kurFF8EUyVE6ArklKTtdIKI0DHvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.178.236
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D141244984;
-	Wed, 16 Jul 2025 13:09:30 +0000 (UTC)
-Message-ID: <7e22a448-3cee-4475-b69b-3dd45b57f168@ghiti.fr>
-Date: Wed, 16 Jul 2025 15:09:30 +0200
+	s=arc-20240116; t=1752672208; c=relaxed/simple;
+	bh=agoDhpTHHL7HDDO0SSBqzE+Bq/vsN2KR3cVVfaEDCP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nARnZCh9LIVEmakgoFgG1asWkRQw9qf4ZKCuybFRbtBZxel8N/qKMrBetxH+NXsiKODyfcE8S4P5O0IrZt+Lbx4IBcFTnxAjc/IGmKaDeEr6fJpO0MM+bzdaHMExhYHPOdR3D+QC6dNN3CYKbgVp7WsqyG+3K5kJukvlto4LpyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uDYmdz3x; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JbbGSXV0; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 16 Jul 2025 15:23:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1752672204;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3X1gOZP+goNDIuh3AgJjOXNlqikB6fvLUSRY30PSEnM=;
+	b=uDYmdz3xJBu77jfXv2NJHZokL7soAtCFcstMwIVdJwh/xQGph1nuhSs9J1nU2fiOMN8zMf
+	esXWDddlzCNlG7bkDdzVNT+IGO7xEDiQcgnwJqBIvUKr0izZslxzFhxv3Sv/JCjVLB9gG9
+	vzcPEfXqWmh9Ra6fGMdAKjpxjZ6AZ1S4yeJUnAJCWGzvZu8qrHCp4CIWI+hyGHsinFmqms
+	CUBFukY0V6dKPaP3oRN/G1cZDzlfJUhHw7mVkd0FWXrCKQXFHCxBcegpaCpDi67DsQdeMK
+	lxq1G5AOKdpa6HUtMhdpWSxIndSLR2RGTYM2fqWRWf2y8TjPFw9yzWSzMqT0OA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1752672204;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3X1gOZP+goNDIuh3AgJjOXNlqikB6fvLUSRY30PSEnM=;
+	b=JbbGSXV0n1YRvysHljC1CPzDU5AjFc60+H3pSSxq0PzWMJughRLCOcj+nWQAFJyAHP/ymb
+	ByWtOGBZkMUCEMDA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Andy Lutomirski <luto@kernel.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan <shuah@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, 
+	Richard Cochran <richardcochran@gmail.com>, Christopher Hall <christopher.s.hall@intel.com>, 
+	Miroslav Lichvar <mlichvar@redhat.com>, Werner Abt <werner.abt@meinberg-usa.com>, 
+	David Woodhouse <dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, 
+	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
+Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
+ clock_gettime() helpers
+Message-ID: <20250716152041-189100b1-7f5e-4388-8ada-b79ec09d18f5@linutronix.de>
+References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
+ <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
+ <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
+ <CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
+ <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
+ <20250709092958-37148883-ed89-40fe-8cd5-ded5dd60957e@linutronix.de>
+ <eb5feef3-0a7d-438c-9dbb-00d1d72fad66@samsung.com>
+ <6bee5ae0-2a9e-4793-a5bd-9e6c72b03f27@sirena.org.uk>
+ <20250716142933-41089f40-0628-4821-83a3-fddbd4c4f9bf@linutronix.de>
+ <3a9504d1-2c6a-459a-a98e-3010d34b546c@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/2] Implement endianess swap macros for RISC-V
-From: Alexandre Ghiti <alex@ghiti.fr>
-To: Ignacio Encinas <ignacio@iencinas.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: Eric Biggers <ebiggers@kernel.org>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
- skhan@linuxfoundation.org, Zhihang Shao <zhihang.shao.iscas@gmail.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- linux-arch@vger.kernel.org
-References: <20250426-riscv-swab-v4-0-64201404a68c@iencinas.com>
- <57352cc0-420b-42e6-a493-2764794a5206@ghiti.fr>
- <aae8559c-88d2-4882-92cd-7e906eb8b7d6@ghiti.fr>
-Content-Language: en-US
-In-Reply-To: <aae8559c-88d2-4882-92cd-7e906eb8b7d6@ghiti.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehjeejlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffhvfevfhgjtgfgsehtkeertddtvdejnecuhfhrohhmpeetlhgvgigrnhgurhgvucfihhhithhiuceorghlvgigsehghhhithhirdhfrheqnecuggftrfgrthhtvghrnhepfeelheeluddtheekudfhveduiefgueefueffvdduvdejvdekueegueetleefveegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpihhnfhhrrgguvggrugdrohhrghenucfkphepvddttddumeekiedumeeffeekvdemvghfledtmeelhedtugemfhgtgeeimeejjeelvgemvdhfvgefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddttddumeekiedumeeffeekvdemvghfledtmeelhedtugemfhgtgeeimeejjeelvgemvdhfvgefpdhhvghloheplgfkrfggieemvddttddumeekiedumeeffeekvdemvghfledtmeelhedtugemfhgtgeeimeejjeelvgemvdhfvgefngdpmhgrihhlfhhrohhmpegrlhgvgiesghhhihhtihdrfhhrpdhnsggprhgtphhtthhopeduvddprhgtphhtthhopehighhnrggtihhosehivghntghinhgrshdrtghomhdprhgtphhtthhopehprghulhdrfigrlhhmshhlvgihsehsihhfi
- hhvvgdrtghomhdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomhdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtohepvggsihhgghgvrhhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrihhstghvsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlqdhmvghnthgvvghssehlihhsthhsrdhlihhnuhigrdguvghv
+In-Reply-To: <3a9504d1-2c6a-459a-a98e-3010d34b546c@sirena.org.uk>
 
-Hi Ignacio,
+On Wed, Jul 16, 2025 at 01:50:22PM +0100, Mark Brown wrote:
+> On Wed, Jul 16, 2025 at 02:34:52PM +0200, Thomas Wei�schuh wrote:
+> > On Wed, Jul 16, 2025 at 01:25:06PM +0100, Mark Brown wrote:
+> 
+> > > This issue has been present in -next for a week and is causing a bunch
+> > > of disruption to tests that end up relying on the vDSO - do we have any
+> > > news on getting a fix merged?  Perhaps it makes sense for Marek to just
+> > > send his patch so that it's there if needed?
+> 
+> > That fix has been in -next since next-20250710.
+> > If you still have issues, I'll take a look.
+> 
+> Ah, sorry - I'd not seen followup mails in the thread and was still
+> seeing issues that appeared at the same time that had previously
+> bisected here.  One is:
+> 
+> | INFO: Generating a skipfile based on /lava-4170058/1/tests/6_kselftest-dev-errlogs/automated/linux/kselftest/skipfile-lkft.yaml
+> | fatal error: nanotime returning zero
+> | goroutine 1 [running, locked to thread]:
+> | runtime.throw(0x132d83, 0x17)
+> | 	/usr/lib/golang/src/runtime/panic.go:774 +0x5c fp=0x42c7a4 sp=0x42c790 pc=0x3b740
+> | runtime.main()
+> | 	/usr/lib/golang/src/runtime/proc.go:152 +0x350 fp=0x42c7e4 sp=0x42c7a4 pc=0x3d308
+> |A runtime.goexit()
+> | 	/usr/lib/golang/src/runtime/asm_arm.s:868 +0x4 fp=0x42c7e4 sp=0x42c7e4 pc=0x645dc
+> | ERROR: skipgen failed to generate a skipfile: 2
+> 
+> I'll just kick of a clean bisect for that and see what it comes up with.
 
-Can you come up with a new version that only touches the riscv tree so 
-that we can merge this in 6.17? Not ideal but I guess we can live with 
-code duplication for now.
+Can you try the following?
+I missed this despite the double-checking after the last reported issue.
 
-Thanks,
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index 97aa9059a5c9..5e0106130e07 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -365,14 +365,14 @@ __cvdso_clock_gettime32_data(const struct vdso_time_data *vd, clockid_t clock,
+                             struct old_timespec32 *res)
+ {
+        struct __kernel_timespec ts;
+-       int ret;
++       bool ok;
+ 
+-       ret = __cvdso_clock_gettime_common(vd, clock, &ts);
++       ok = __cvdso_clock_gettime_common(vd, clock, &ts);
+ 
+-       if (unlikely(ret))
++       if (unlikely(!ok))
+                return clock_gettime32_fallback(clock, res);
+ 
+-       /* For ret == 0 */
++       /* For ok == true */
+        res->tv_sec = ts.tv_sec;
+        res->tv_nsec = ts.tv_nsec;
 
-Alex
 
-On 7/9/25 17:12, Alexandre Ghiti wrote:
-> Hi Arnd,
->
-> Gentle ping as we would like to merge this in the riscv tree but we 
-> need your ack (or nack).
->
-> Thanks,
->
-> Alex
->
-> On 5/16/25 16:37, Alexandre Ghiti wrote:
->> Hi Arnd,
->>
->> Do you think we can merge that for 6.16? It is nice improvement for us.
->>
->> Thanks,
->>
->> Alex
->>
->> On 26/04/2025 16:56, Ignacio Encinas wrote:
->>> Motivated by [1]. A couple of things to note:
->>>
->>> RISC-V needs a default implementation to fall back on. There is one
->>> available in include/uapi/linux/swab.h but that header can't be 
->>> included
->>> from arch/riscv/include/asm/swab.h. Therefore, the first patch in this
->>> series moves the default implementation into asm-generic.
->>>
->>> Tested with crc_kunit as pointed out here [2]. I can't provide
->>> performance numbers as I don't have RISC-V hardware yet.
->>>
->>> [1] 
->>> https://lore.kernel.org/all/20250302220426.GC2079@quark.localdomain/
->>> [2] 
->>> https://lore.kernel.org/all/20250216225530.306980-1-ebiggers@kernel.org/ 
->>>
->>>
->>> Signed-off-by: Ignacio Encinas <ignacio@iencinas.com>
->>> ---
->>> Changes in v4:
->>>
->>> - Add missing include in the 1st patch, reported by
->>> https://lore.kernel.org/all/202504042300.it9RcOSt-lkp@intel.com/
->>> - Rewrite the ARCH_SWAB macro as suggested by Arnd
->>> - Define __arch_swab64 for CONFIG_32BIT (Ben)
->>> - Link to v3: 
->>> https://lore.kernel.org/r/20250403-riscv-swab-v3-0-3bf705d80e33@iencinas.com
->>>
->>> Arnd, I know you don't like Patch 1 but I tried your suggestions and
->>> couldn't make them work. Please let me know if I missed anything [3] 
->>> [4]
->>>
->>> [3] 
->>> https://lore.kernel.org/linux-riscv/f5464e26-faa0-48f1-8585-9ce52c8c9f5f@iencinas.com/
->>> [4] 
->>> https://lore.kernel.org/linux-riscv/b3b59747-0484-4042-bdc4-c067688e3bfe@iencinas.com/
->>>
->>> Changes in v3:
->>>
->>> PATCH 2:
->>>    Use if(riscv_has_extension_likely) instead of asm goto (Eric). It
->>>    looks like both versions generate the same assembly. Perhaps we 
->>> should
->>>    do the same change in other places such as 
->>> arch/riscv/include/asm/bitops.h
->>> - Link to v2: 
->>> https://lore.kernel.org/r/20250319-riscv-swab-v2-0-d53b6d6ab915@iencinas.com
->>>
->>> Changes in v2:
->>> - Introduce first patch factoring out the default implementation into
->>>    asm-generic
->>> - Remove blank line to make checkpatch happy
->>> - Link to v1: 
->>> https://lore.kernel.org/r/20250310-riscv-swab-v1-1-34652ef1ee96@iencinas.com
->>>
->>> ---
->>> Ignacio Encinas (2):
->>>        include/uapi/linux/swab.h: move default implementation for 
->>> swab macros into asm-generic
->>>        riscv: introduce asm/swab.h
->>>
->>>   arch/riscv/include/asm/swab.h   | 62 
->>> +++++++++++++++++++++++++++++++++++++++++
->>>   include/uapi/asm-generic/swab.h | 33 ++++++++++++++++++++++
->>>   include/uapi/linux/swab.h       | 33 +---------------------
->>>   3 files changed, 96 insertions(+), 32 deletions(-)
->>> ---
->>> base-commit: a7f2e10ecd8f18b83951b0bab47ddaf48f93bf47
->>> change-id: 20250307-riscv-swab-b81b94a9ac1b
->>>
->>> Best regards,
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Sorry for all the breakage.
+
+
+Thomas
 
