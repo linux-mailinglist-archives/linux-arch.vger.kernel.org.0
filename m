@@ -1,148 +1,132 @@
-Return-Path: <linux-arch+bounces-12809-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12810-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE2F8B07632
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 14:51:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D43AB0764F
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 14:54:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9C517BC280
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 12:49:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 868BB3B03CD
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Jul 2025 12:54:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB88B1891AB;
-	Wed, 16 Jul 2025 12:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0D62F3C30;
+	Wed, 16 Jul 2025 12:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Es7KLKRN"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yuST/vnW"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8216C170826;
-	Wed, 16 Jul 2025 12:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682E6290D95;
+	Wed, 16 Jul 2025 12:54:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752670230; cv=none; b=lqAqUkBhX04uQRpCfSImCTLTWP9dRbHdgA07TTWRS7RTd64o19Kj0Bx41k+DyjJpVIRr3B7pgyIRav7eYMP7lGG400wLtCOsm5P3qqJY4LaXwTsQBawE7xLxR/41FVP91CLvCGHt7gSMtv0fHMX9npbzB5Jzk//QZ8GjYJqLx4I=
+	t=1752670478; cv=none; b=uAeQT6k3ZBoqtKkGSuRqRjYKTi8MVTUUzFiqFmqAv4TjnhdEsod8CSj55IJjE4nDFIR15uARrXmp21Blk2WaiViP+tuSKQm/wwnIDcKj0xQWE7F40uG8NB8h4W5YbK5D+PvSk0CpmVhUC8O4/kgM2WKrwXJaKHMS5jdBm5GPUKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752670230; c=relaxed/simple;
-	bh=PbBIYKj8a/DhaiHCqQ0+OmhTdUwsQip8rGJvIcX1TpI=;
+	s=arc-20240116; t=1752670478; c=relaxed/simple;
+	bh=r5UPxskNEe9Y3A94+Em5aoR9OWJAFR8DTBxMP2ylNbk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bJ92pM2gbqr9zjh2Cy772WP0Y43hg80AADIZi5p2bjbw5niUMhjPPbQiEk044IpG07ZT3Ixz9c600uEJSWO3aDTF9ljQFaEU0QTi0hKjW9Bn9VF9dvyv0iCxaNfhRxn+YAZvy/4oshkcSBhSXVEcvx2PAt2BTm4a5iogu83J+gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Es7KLKRN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03F0C4CEF0;
-	Wed, 16 Jul 2025 12:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752670230;
-	bh=PbBIYKj8a/DhaiHCqQ0+OmhTdUwsQip8rGJvIcX1TpI=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=PvvjGodq7sU5NLJbpyLhv/WT+J7xU3Z0RV0D1egRZx9v3ekjJP1SLbzmVOdAHWxoFE8QNIal2AmoYfAVPL3drrbxbdipm+VNO3LpTa2HlP5kgGnIW40QA5llIstOmQ68tp9z+kOWjuUfMHssccZPmJYSyOAhIIhp0eHnpcoPdgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yuST/vnW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A81FC4CEF0;
+	Wed, 16 Jul 2025 12:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1752670476;
+	bh=r5UPxskNEe9Y3A94+Em5aoR9OWJAFR8DTBxMP2ylNbk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Es7KLKRNP2SKOx0Ri4M994NG+tynvzW1d+7SwEfzYzSZoq+V4OAy/+oX15BBNlZ5d
-	 yJz/vbVxZLi+w99DAPZUX6NuLfnsvR3x4l8E3zKn2Sa5tYaoHJddimLDs1L03UXfg/
-	 7J5HofYlNMtND7M296kuLs/Bze4OKA3ogXD7dqGf/vise6f++any8r5UhGVXsNY53L
-	 Y2+RW5vf18zXVlzpogliFFent0DVWcz5MLU8n+vUdE1tyklFDOKGXY74S5TKaPdqRd
-	 nic2gUlE2k5dzLq/JQNfMP+SueV0cbfmydFOlQfwl02Dg4Y1DyRr1c3dgAXFy42JV+
-	 o8d+4HMT5feTw==
-Date: Wed, 16 Jul 2025 13:50:22 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
+	b=yuST/vnWBrTC04sbx5B1Nu7B0H/4rEQR4WhiBlJU7cQi36YAKZkbY6h5Wyuh5pK/q
+	 eFi7jxhf+8DJ1i+jGBOuP0DPc50eo0YIOKKibK3F7vUYjrwYSylNBaSFY4VuNMe59t
+	 loDznVe7fSe4o/0VPVBFA9k6ib4QUYgIxA3PVUyI=
+Date: Wed, 16 Jul 2025 14:54:34 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, lkmm@lists.linux.dev,
+	linux-arch@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+	Mitchell Levy <levymitchell0@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Andy Lutomirski <luto@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-	Richard Cochran <richardcochran@gmail.com>,
-	Christopher Hall <christopher.s.hall@intel.com>,
-	Miroslav Lichvar <mlichvar@redhat.com>,
-	Werner Abt <werner.abt@meinberg-usa.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Kurt Kanzenbach <kurt@linutronix.de>,
-	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH 06/14] vdso/gettimeofday: Return bool from
- clock_gettime() helpers
-Message-ID: <3a9504d1-2c6a-459a-a98e-3010d34b546c@sirena.org.uk>
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
- <20250701-vdso-auxclock-v1-6-df7d9f87b9b8@linutronix.de>
- <02bcd954-5323-4663-a766-f53c67c5a18f@samsung.com>
- <CGME20250708154921eucas1p1fd8fa4374610a991ca5c67bd612ca0c2@eucas1p1.samsung.com>
- <e8c6b9a7-eaa6-4947-98e1-9d6fecc958d4@samsung.com>
- <20250709092958-37148883-ed89-40fe-8cd5-ded5dd60957e@linutronix.de>
- <eb5feef3-0a7d-438c-9dbb-00d1d72fad66@samsung.com>
- <6bee5ae0-2a9e-4793-a5bd-9e6c72b03f27@sirena.org.uk>
- <20250716142933-41089f40-0628-4821-83a3-fddbd4c4f9bf@linutronix.de>
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v7 1/9] rust: Introduce atomic API helpers
+Message-ID: <2025071651-daylong-brunette-ed9e@gregkh>
+References: <20250714053656.66712-1-boqun.feng@gmail.com>
+ <20250714053656.66712-2-boqun.feng@gmail.com>
+ <2025071611-factsheet-sitter-93b6@gregkh>
+ <20250716124713.GW905792@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="x0KSMljrFH4DixiE"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250716142933-41089f40-0628-4821-83a3-fddbd4c4f9bf@linutronix.de>
-X-Cookie: osteopornosis:
+In-Reply-To: <20250716124713.GW905792@noisy.programming.kicks-ass.net>
 
+On Wed, Jul 16, 2025 at 02:47:13PM +0200, Peter Zijlstra wrote:
+> On Wed, Jul 16, 2025 at 11:23:09AM +0200, Greg Kroah-Hartman wrote:
+> > On Sun, Jul 13, 2025 at 10:36:48PM -0700, Boqun Feng wrote:
+> > > In order to support LKMM atomics in Rust, add rust_helper_* for atomic
+> > > APIs. These helpers ensure the implementation of LKMM atomics in Rust is
+> > > the same as in C. This could save the maintenance burden of having two
+> > > similar atomic implementations in asm.
+> > > 
+> > > Originally-by: Mark Rutland <mark.rutland@arm.com>
+> > > Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > > ---
+> > >  rust/helpers/atomic.c                     | 1040 +++++++++++++++++++++
+> > >  rust/helpers/helpers.c                    |    1 +
+> > >  scripts/atomic/gen-atomics.sh             |    1 +
+> > >  scripts/atomic/gen-rust-atomic-helpers.sh |   67 ++
+> > >  4 files changed, 1109 insertions(+)
+> > >  create mode 100644 rust/helpers/atomic.c
+> > >  create mode 100755 scripts/atomic/gen-rust-atomic-helpers.sh
+> > > 
+> > > diff --git a/rust/helpers/atomic.c b/rust/helpers/atomic.c
+> > > new file mode 100644
+> > > index 000000000000..cf06b7ef9a1c
+> > > --- /dev/null
+> > > +++ b/rust/helpers/atomic.c
+> > > @@ -0,0 +1,1040 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +// Generated by scripts/atomic/gen-rust-atomic-helpers.sh
+> > > +// DO NOT MODIFY THIS FILE DIRECTLY
+> > 
+> > As this is auto-generated, how do we know when to auto-generate it
+> > again?  What files does it depend on?  And why can't we just
+> > auto-generate it at build time instead of having a static file in the
+> > tree that no one knows when to regenerate it?  :)
+> 
+> It depends on the scripts/atomic/* bits. They hardly if ever change. We
+> do it this way because:
+> 
+>  - generating these files every build is 'slow'-ish;
+>  - code navigation suffers;
+>  - Linus asked for this.
+> 
+> Specifically, pretty much the entire atomic_*() namespace would
+> disappear from ctags / code-browsing-tool-of-choice if we would not
+> check in these files.
 
---x0KSMljrFH4DixiE
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ah, ok, that makes sense in a sad way.  As long as someone knows to
+regenerate these files when needed, hopefully when the C files change
+someone knows to update these rust ones...
 
-On Wed, Jul 16, 2025 at 02:34:52PM +0200, Thomas Wei=DFschuh wrote:
-> On Wed, Jul 16, 2025 at 01:25:06PM +0100, Mark Brown wrote:
+thanks,
 
-> > This issue has been present in -next for a week and is causing a bunch
-> > of disruption to tests that end up relying on the vDSO - do we have any
-> > news on getting a fix merged?  Perhaps it makes sense for Marek to just
-> > send his patch so that it's there if needed?
-
-> That fix has been in -next since next-20250710.
-> If you still have issues, I'll take a look.
-
-Ah, sorry - I'd not seen followup mails in the thread and was still
-seeing issues that appeared at the same time that had previously
-bisected here.  One is:
-
-| INFO: Generating a skipfile based on /lava-4170058/1/tests/6_kselftest-de=
-v-errlogs/automated/linux/kselftest/skipfile-lkft.yaml
-| fatal error: nanotime returning zero
-| goroutine 1 [running, locked to thread]:
-| runtime.throw(0x132d83, 0x17)
-| 	/usr/lib/golang/src/runtime/panic.go:774 +0x5c fp=3D0x42c7a4 sp=3D0x42c7=
-90 pc=3D0x3b740
-| runtime.main()
-| 	/usr/lib/golang/src/runtime/proc.go:152 +0x350 fp=3D0x42c7e4 sp=3D0x42c7=
-a4 pc=3D0x3d308
-|A runtime.goexit()
-| 	/usr/lib/golang/src/runtime/asm_arm.s:868 +0x4 fp=3D0x42c7e4 sp=3D0x42c7=
-e4 pc=3D0x645dc
-| ERROR: skipgen failed to generate a skipfile: 2
-
-I'll just kick of a clean bisect for that and see what it comes up with.
-
-Full log:
-
-  https://validation.linaro.org/scheduler/job/4170058#L2215
-
---x0KSMljrFH4DixiE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmh3oA4ACgkQJNaLcl1U
-h9DwZwf9E3TvH0p7biRSX/IC0rBSEc74B1Z8w9/tFm7w3pkwqx9Bi9cbfN7bl95N
-XOCtYoDsnXINhVSynYuPURgHY6hKbntS4r4UaS1e3+3Z+TTgjfbvvDp/3s3Aj0tO
-bdu/c6Ip8Zy22FmmcZJKm1PoPwDG0OZrl0dgCBy1xCKCj0jkxRsiu+0q+oAxDHl9
-8K0V7oUITUtblhOVc4ADk3ESHRXuNBhPqRBGFS4E0CgVunCpOdND1T1jg2AqLDad
-3hVOXuoe1FcKXPd9+6Cvq5bQYEZtALZDoWl/Re4gVc0c2N4CVyzPei/29w00gBO8
-3TKIiTL2tMB/0gkgpIGv2gqsHILS4A==
-=NGo9
------END PGP SIGNATURE-----
-
---x0KSMljrFH4DixiE--
+greg k-h
 
