@@ -1,112 +1,142 @@
-Return-Path: <linux-arch+bounces-12835-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12836-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F312DB08CEE
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Jul 2025 14:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE9CB08D2D
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Jul 2025 14:40:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 519AB1C25890
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Jul 2025 12:33:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B5EC18954B0
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Jul 2025 12:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF1529B239;
-	Thu, 17 Jul 2025 12:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198E52C17A3;
+	Thu, 17 Jul 2025 12:39:30 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41061F3FED;
-	Thu, 17 Jul 2025 12:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4E829ACF3;
+	Thu, 17 Jul 2025 12:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752755559; cv=none; b=BnhMponQMPzbo8PyHc5Bz1bGOcRk6ZCN/mjkaKigM0H+Xm6J7pC8palNtvZlnLtcagtAqhS9gZ21MczTkG+RDEsPM0mqW17gl2iE2N0fgZjHu78H/PunedQcpzmz1JbPBIk5iZYptccIJX8mYB77xSWP2ELWYxHajEv6cWUovwM=
+	t=1752755970; cv=none; b=AMEc2cJQRlRStBs+ay4X9H0+p4IQSctzta4YJusPleP04hH7KB1HKsOJL7jPbh4ahMJ7Q22MxYa6PFlOWkb4lC7FS8XQRjLnRBFvFppgc+83or+aT9BzY982ViPU7N38Iwjj3Mon9Ngjrdxwu7QJtgl4hWU1j6apT/vDdHWCGCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752755559; c=relaxed/simple;
-	bh=rX9JCEg2df6Y1wPL64VzIsvYcWQA6WjXvIl7M/SMcD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YwZFjCOUcGvZsYl2ExNSa5lex537LxSZbnH7147JZogqVIkYg0KNVrxpWHJYGr45OyV2c/KZQZzhhW+tStY2p8boFJC3/F1N43ZY9ouJxcAd9paxc/okJU2X4o3s9sS92zRS2fW/TPi0Y8csyz2ht4OLkBAuXVeqzDeGSXxSjwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 9F33EBAF59;
-	Thu, 17 Jul 2025 12:32:32 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id D71BC20030;
-	Thu, 17 Jul 2025 12:32:21 +0000 (UTC)
-Date: Thu, 17 Jul 2025 08:32:42 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Documentation
- <linux-doc@vger.kernel.org>, Linux RCU <rcu@vger.kernel.org>, Linux CPU
- Architectures Development <linux-arch@vger.kernel.org>, Linux LKMM
- <lkmm@lists.linux.dev>, Linux KVM <kvm@vger.kernel.org>, "Paul E. McKenney"
- <paulmck@kernel.org>, Frederic Weisbecker <frederic@kernel.org>, Neeraj
- Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
- <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, Boqun Feng
- <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
- <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, Jonathan Corbet
- <corbet@lwn.net>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri
- <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Nicholas Piggin
- <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave
- <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, Akira Yokosawa
- <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Mark Rutland
- <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>, Waiman Long
- <longman@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>, Andrew Morton
- <akpm@linux-foundation.org>, Tejun Heo <tj@kernel.org>, "Mike Rapoport
- (Microsoft)" <rppt@kernel.org>, Changyuan Lyu <changyuanl@google.com>, Dan
- Williams <dan.j.williams@intel.com>, Xavier <xavier_qy@163.com>, Randy
- Dunlap <rdunlap@infradead.org>, Maarten Lankhorst <dev@lankhorst.se>,
- Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH 0/4] Convert atomic_*.txt and memory-barriers.txt to
- reST
-Message-ID: <20250717083242.40df5ad6@gandalf.local.home>
-In-Reply-To: <20250717105554.GA1479557@noisy.programming.kicks-ass.net>
-References: <20250717080617.35577-1-bagasdotme@gmail.com>
-	<20250717105554.GA1479557@noisy.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1752755970; c=relaxed/simple;
+	bh=YH2pOK4vBUjN8aM5VaclvCspIE9DyGdEoB1Ya5XTqD8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QvRJdK4oCH9GetZtb6LFxhbHvbatH4jpanvtDr26vXJIC7yE0BYSUTp2aeEL8Gi/8UxfODlhDInzolyH2OYCXWXdfbd76UFNvyJPGNwXxQ/fuAznNoY6ek7DhdDbJgDK455G4CI9dm2jHCVpUI+cly/KnLReVqUCe/nIht88bdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ae3a604b43bso158962866b.0;
+        Thu, 17 Jul 2025 05:39:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752755966; x=1753360766;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8FbVsGYaq0NyKNgSaxcwvLjtec9H1rtMkyXCq5d8Dfs=;
+        b=wl7vbN3cIgWuNXv62L9cvvyhZRLu+e2XWQkbrC2X881oUbS5EL0ss1Xfvh9Kq15g62
+         H5ikdOp0Cdp0IOSLKFjNIqzoES05pkHn6aqScK1xBGfABwLSjqcSEM9D9XPeaEXbyx4+
+         Q/9yDkyYlQvf6HK+bD/uf7j+Fhsu6kfypuyNx1wmMnxRTyZFmOBy5oUay9mvE6X7xJgW
+         QUdQbVt1+to7bZXA8iSJWU6FbiAWrnnhemAzEnfS+UQJTjIlFqMa5bM2s8dDyXzJFfzk
+         9hqonI/zpkQyd0xKUQB98GX06ol02OufZMWzGzZtJt71iYkLJRwCFH2H3A8/H9LFEtNQ
+         rn1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUawH1+uOq8gbL5gCHKgBFGf/eryY4Tuo/BNYAwxaMxrQ4KG2x6RnRoAIcvQU9wF4CvC8EZFL8cn6de+A==@vger.kernel.org, AJvYcCUl0O8T5JH1VgS4K1FEr+kw9Wv1fQE8aWZFkin10FL2d/ao9BUjf7RuG5GL09J8IvNFqEE=@vger.kernel.org, AJvYcCXcNGV+8K9nxAXcliUnZUQIuE/bE1HTqnWuhaAbr6fW8A4Ft4/7s/roEHRJk96EJo5UTHaKdHg0GCY53Skt@vger.kernel.org, AJvYcCXe5KUdHzCr9HJy3j3faAa7bnvBqphtKOuvPF7OMle/l4KbjLqFiLjjw/6SsoJEzGIedIIMrp68FcPYmf7JvPZ1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7mB4MVWxDGdewprmK00HPfhLmPcOlLyJ/xMF4AFkcXNI00SbU
+	8CvW05Dac48VlffML6Rd1Mfmyo6KTPk/iLu+fFDgYjJsbRh0YqRYCrpG
+X-Gm-Gg: ASbGncs3uPzzQv40tqChYwix8VhPreRUz7LuFotji0ywbQwnAJJSH9TyBOM3lRi8W0X
+	wcOFpk+kOLGns6mSUti52sju4fAd+IqNr0ddR630CN9k7R3UZrHRe0GEKBEbOu+BvYcJisHWOXU
+	Cspuys8O4Siv55kQvJgKhUwoksUAtgR6/qeHOa9MothV9prDw9BE4rR0fI/IwVsFi5M/B7ekfVY
+	XuhV2AeB5fWh8TtOoQcfE6pjUpkb+UCKMukqWtBHVQZG8fadcfwKVt8kYDuMv/P8YxXH9hkx1+V
+	CnhZaujFwksC4u8dG9ifNJ97Pu2mKDVlawevZQv9cRDKu3nU8dMEcCPNrOf3VZ6Cv5W19ZGXyTG
+	Eiuwx7JwkUYpWhTx4m/q3sbM=
+X-Google-Smtp-Source: AGHT+IFGMudLSa+MO2VRzIbQxkbKfo9sFMUMYLFenyZfvGkLpQS2jb+5lrL6tqgUkH/mp49v4K+DYQ==
+X-Received: by 2002:a17:907:80b:b0:aec:55c0:6d5e with SMTP id a640c23a62f3a-aec55c0765dmr171272166b.30.1752755965867;
+        Thu, 17 Jul 2025 05:39:25 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae6e7ee471asm1374427366b.54.2025.07.17.05.39.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Jul 2025 05:39:25 -0700 (PDT)
+Date: Thu, 17 Jul 2025 05:39:22 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Lorenz Bauer <lmb@isovalent.com>, linux-arm-kernel@lists.infradead.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: [PATCH bpf-next v5 1/3] btf: allow mmap of vmlinux btf
+Message-ID: <g2gqhkunbu43awrofzqb4cs4sxkxg2i4eud6p4qziwrdh67q4g@mtw3d3aqfgmb>
+References: <20250520-vmlinux-mmap-v5-0-e8c941acc414@isovalent.com>
+ <20250520-vmlinux-mmap-v5-1-e8c941acc414@isovalent.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 7u763mm1ctzngdaryswszahnyy8y871i
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: D71BC20030
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/YLoExnDFum8tu+2MnhikZQqR7InCKRAs=
-X-HE-Tag: 1752755541-699290
-X-HE-Meta: U2FsdGVkX18xlzwPkAba7/TysdbayY7PydE5DXeYoq5OJORdEoU0hKlFMZttv4UWKUFIpt6mFNcEbXhvnxXmv8On61UzOSV+8jeJtLXFftvkWYxmPHZX4s+NACcJSlO/JfG78ZFIPboSRWJ/CpoJ353SiREHX8xeGJ3fPoEna1I/Ro9tJ+MXOJjGe6Q027FoniM5n4iV+yWccqoAUW5N+ajxnZ14sYqVLWO2Gfkh1LK8kt28PunqsSrRny6G8njeDUPq0ws2cefBl4qpvYc5zHFEqQIOezpjqKSwCL40khje7RvDhOdtVldZB5v4NaD2oKC/nfGFRGMAqH23VnfBsU4AcU/4xVVVoBvRvviG9nlHcGmSJQcgk1r/d/u9UclZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250520-vmlinux-mmap-v5-1-e8c941acc414@isovalent.com>
 
-On Thu, 17 Jul 2025 12:55:54 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+Hello Lorenz,
 
-> On Thu, Jul 17, 2025 at 03:06:13PM +0700, Bagas Sanjaya wrote:
-> > Atomic types, atomic bitops, and memory barriers docs are included in kernel
-> > docs build since commit e40573a43d163a ("docs: put atomic*.txt and
-> > memory-barriers.txt into the core-api book") as a wrapper stub for
-> > corresponding uncoverted txt docs. Let's turn them into full-fledged reST docs. 
-> > 
-> > Bagas Sanjaya (4):
-> >   Documentation: memory-barriers: Convert to reST format
-> >   Documentation: atomic_bitops: Convert to reST format
-> >   Documentation: atomic_t: Convert to reST format
-> >   Documentation: atomic_bitops, atomic_t, memory-barriers: Link to
-> >     newly-converted docs  
-> 
-> NAK
-> 
-> If these are merged I will no longer touch / update these files.
+On Tue, May 20, 2025 at 02:01:17PM +0100, Lorenz Bauer wrote:
+> diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
+> index 81d6cf90584a7157929c50f62a5c6862e7a3d081..941d0d2427e3a2d27e8f1cff7b6424d0d41817c1 100644
+> --- a/kernel/bpf/sysfs_btf.c
+> +++ b/kernel/bpf/sysfs_btf.c
 
-One way a human discovers why something is the way it is, is to change it,
-and see what the fallout is for that change.
+>  extern char __start_BTF[];
+>  extern char __stop_BTF[];
 
-  ;-)
+> +static int btf_sysfs_vmlinux_mmap(struct file *filp, struct kobject *kobj,
+> +				  const struct bin_attribute *attr,
+> +				  struct vm_area_struct *vma)
+> +{
+> +	unsigned long pages = PAGE_ALIGN(attr->size) >> PAGE_SHIFT;
+> +	size_t vm_size = vma->vm_end - vma->vm_start;
+> +	phys_addr_t addr = virt_to_phys(__start_BTF);
 
--- Steve
+I am getting the following warning on arm64 which seems related to this
+code here. lines are based on cd031354087d8ae ("Merge branch
+'net-mlx5e-add-support-for-pcie-congestion-events') net-next branch
+
+	[   58.896157] virt_to_phys used for non-linear address: 000000009fea9737 (__start_BTF+0x0/0x685530)
+	[   23.988669] WARNING: CPU: 25 PID: 1442 at arch/arm64/mm/physaddr.c:15 __virt_to_phys (arch/arm64/mm/physaddr.c:?)
+	[   24.018136] Modules linked in: nvidia_cspmu(E) mlx5_ib(E) ipmi_ssif(E) arm_smmuv3_pmu(E) arm_cspmu_module(E) coresight_trbe(E) ib_uverbs(E) ipmi_devintf(E) ipmi_msghandler(E) coresight_stm(E) coresight_etm4x(E) coresight_tmc(E) coresight_funnel(E) stm_core(E) coresight(E) cppc_cpufreq(E) sch_fq_codel(E) drm(E) backlight(E) drm_panel_orientation_quirks(E) xhci_pci(E) xhci_hcd(E) sm3_ce(E) sha3_ce(E) sha512_ce(E) spi_tegra210_quad(E) acpi_power_meter(E) loop(E) efivarfs(E) autofs4(E)
+	[   24.075371] Tainted: [E]=UNSIGNED_MODULE, [N]=TEST
+	[   24.080276] Hardware name: Quanta S7GM 20S7GCU0010/S7G MB (CG1), BIOS 3D22 07/03/2024
+	[   24.088295] pstate: 63400009 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+	[   24.098440] pc : __virt_to_phys (arch/arm64/mm/physaddr.c:?)
+	[   24.105398] lr : __virt_to_phys (arch/arm64/mm/physaddr.c:?)
+	[   24.112227] sp : ffff8000ba00f8e0
+	[   24.115620] x29: ffff8000ba00f8e0 x28: ffff8000ba00faf0 x27: ffff8000ba00fa88
+	[   24.122919] x26: ffff8000ba00fa40 x25: ffff800082772000 x24: 0000fffd6db70000
+	[   24.130226] x23: 0000000000685530 x22: 0000fffd6e200000 x21: ffff800081cc0000
+	[   24.140540] x20: ffff800081be02d8 x19: ffff800081cc0000 x18: 5f5f282037333739
+	[   24.150708] x17: 6165663930303030 x16: 0000000000000fc4 x15: 0000000000000003
+	[   24.160737] x14: ffff800082923398 x13: 0000000000000003 x12: 0000000000000003
+	[   24.168042] x11: 00000000fffeffff x10: ffff800082663784 x9 : cc38fcac5cdabe00
+	[   24.175348] x8 : 0001000000000000 x7 : ffff8000813dd878 x6 : 0000000000000000
+	[   24.182653] x5 : 0000000000000001 x4 : 0000000000000001 x3 : 0000000000000000
+	[   24.189959] x2 : 0000000000000000 x1 : ffff800081a3a6d0 x0 : 0000000000000055
+	[   24.197257] Call trace:
+	[   24.199761] __virt_to_phys (arch/arm64/mm/physaddr.c:?) (P)
+	[   24.206883] btf_sysfs_vmlinux_mmap (kernel/bpf/sysfs_btf.c:27)
+	[   24.214264] sysfs_kf_bin_mmap (fs/sysfs/file.c:179)
+	[   24.218536] kernfs_fop_mmap (fs/kernfs/file.c:462)
+	[   24.222461] mmap_region (./include/linux/fs.h:? mm/internal.h:167 mm/vma.c:2405 mm/vma.c:2467 mm/vma.c:2622 mm/vma.c:2692)
+
+
+Should __pa_symbol() be used instead of virt_to_phys()?
+
+Thanks
+--breno
 
