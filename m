@@ -1,237 +1,112 @@
-Return-Path: <linux-arch+bounces-12844-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12845-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C503EB094C7
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Jul 2025 21:18:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C5CAB09592
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Jul 2025 22:15:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 235B21C46EAF
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Jul 2025 19:18:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C21967A5257
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Jul 2025 20:14:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A0F92FE38F;
-	Thu, 17 Jul 2025 19:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B608B1EF091;
+	Thu, 17 Jul 2025 20:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JGqIpWc7"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="qYCc5Pq8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857F32EBDD0
-	for <linux-arch@vger.kernel.org>; Thu, 17 Jul 2025 19:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B6520FAB6;
+	Thu, 17 Jul 2025 20:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752779870; cv=none; b=odM/BItxmSWphsvCoBabzUDqTLPfYJkChtK7oeCMziWEW0NXMzRAa6u3hJEeUAz1izitMehLA+8YA92OEwSGppj5RbNm2R4evEXsqvy81FYWnqT9WhEFHiElEBNEBi55yx8rWxcAuycA7Za+xr7HzbEyEjWCY20kUxWdh+3lb/0=
+	t=1752783321; cv=none; b=X/V1ksPzHcUjUOHrMfCPtvtPUquqN6Gk4nPJua3AV0qlbuL+BIIIgffJ0ZNfg4VnTk9HHacNDZKgHkP1iefyNcO3iKEBMFwjl3wRxDJguftAk5ouWyhhQvPTAOLJks7jgE2neARHvSrYQTJI7eP77JTNE0dwCACg/rosfV4aMW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752779870; c=relaxed/simple;
-	bh=ZTCj3HNplmaLIWYytLOyVyFhD7xFJzDj/yA79stFljE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p/gNwWr3GeClTzwkR2rpWTZWRVRXD7iiMr5iwUNIVZsqyFsH85wzUWOUD+lzkSYjzDtLzITIDU/y0DztLXZOTj/MephI90faFfkhXcmO8geXHYwEjzpQPN1nv3ROi/wqyjmeaAd+qZHFQS+p9Q40FQF5yPM4i1r4rBh5QGn8f2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JGqIpWc7; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752779867;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pgbqc2byaduB6oA4fQByf+JaGcP0jYWqwMPFb3GyxXA=;
-	b=JGqIpWc7gaTtetA5YqujYy/Arf0XJojRxQLu6SXhHBMEhnn5Ja5SjGMlXMMy13WIaxs4VC
-	naRggYb86q829D07WVnzZBth0MoGblrDOP8ecNI8MVm7vKAwvwMZOTMgcw0Dfh5uZ5j6iP
-	3AclywHLo64Az9iooUxl6J6IxQlAIVc=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-505-UGXMtMRgN5qBHs7wokkJvw-1; Thu,
- 17 Jul 2025 15:17:43 -0400
-X-MC-Unique: UGXMtMRgN5qBHs7wokkJvw-1
-X-Mimecast-MFC-AGG-ID: UGXMtMRgN5qBHs7wokkJvw_1752779860
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	s=arc-20240116; t=1752783321; c=relaxed/simple;
+	bh=orGo+e6PmYRc0yhWBvx1j4JissPIl+skfAa2q8N5kA0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=lwSJuI0uAhR+b6PT/HeVK5cilLlii/+FzBe/dF0qaMvIewnrp5VL7wCdmk8gxZ0LH8UsuTWJNi9TzdjkzvgtDJpeRRAz9/cMBPMpHci4V6l9iPnsHZyXBnaIxk9rksvMOo3ZYYNE1o2WBAAa+/aOfFJBHadTWP6sVJEumn9Qz1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=qYCc5Pq8; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net EAA3C403E1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1752783319; bh=JyCg4buwTgeSf92B/ckI/zvTVv0LR8OvvXEMHW9FLS0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=qYCc5Pq80L6NNEBj2nIkMRSfXwRNZVFA142TIKS71oO93QeMrUiwUaGDZ/y7nfxfx
+	 +90gEWFUHF12P+VtJRq1VQ2M0/Oja9691zPeOzeF231p7EhN9jqjSl4ngmWxWAP1+3
+	 FMGh3GIAtNSGzQDpkZEo0p88oolcTwiDszuxwRW8R0di9EOWUDPd7h7I0Z9oYPMY7n
+	 VK0T1VmZQCfIsfH2pQfbU1E19FiXStyvhtDqMYJlM9RjxTy/B6Lz8EUkgWe6xsMiHm
+	 Io5WHV/mpecywRV8aiQDXNeywsfh6aSr6nDggpO3XQMZBkz3k7UIl9q81huOsI+AxG
+	 E8tNUWD+HFvxQ==
+Received: from localhost (unknown [IPv6:2601:280:4600:2da9::1fe])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E99CE1800D82;
-	Thu, 17 Jul 2025 19:17:39 +0000 (UTC)
-Received: from chopper.redhat.com (unknown [10.22.66.69])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B834C30001B1;
-	Thu, 17 Jul 2025 19:17:33 +0000 (UTC)
-From: Lyude Paul <lyude@redhat.com>
-To: rust-for-linux@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Juergen Christ <jchrist@linux.ibm.com>,
-	Brian Gerst <brgerst@gmail.com>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)),
-	linux-s390@vger.kernel.org (open list:S390 ARCHITECTURE),
-	linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
-Subject: [PATCH v12 02/15] preempt: Introduce __preempt_count_{sub, add}_return()
-Date: Thu, 17 Jul 2025 15:15:41 -0400
-Message-ID: <20250717191719.2076270-3-lyude@redhat.com>
-In-Reply-To: <20250717191719.2076270-1-lyude@redhat.com>
-References: <20250717191719.2076270-1-lyude@redhat.com>
+	by ms.lwn.net (Postfix) with ESMTPSA id EAA3C403E1;
+	Thu, 17 Jul 2025 20:15:18 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Documentation
+ <linux-doc@vger.kernel.org>, Linux RCU <rcu@vger.kernel.org>, Linux CPU
+ Architectures Development <linux-arch@vger.kernel.org>, Linux LKMM
+ <lkmm@lists.linux.dev>, Linux KVM <kvm@vger.kernel.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Frederic Weisbecker
+ <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel
+ Fernandes <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang@linux.dev>, Alan Stern <stern@rowland.harvard.edu>,
+ Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin
+ <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave
+ <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, Akira
+ Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Mark
+ Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>, Waiman
+ Long <longman@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>, Bagas
+ Sanjaya <bagasdotme@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Tejun Heo <tj@kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Changyuan Lyu <changyuanl@google.com>, Dan Williams
+ <dan.j.williams@intel.com>, Xavier <xavier_qy@163.com>, Randy Dunlap
+ <rdunlap@infradead.org>, Maarten Lankhorst <dev@lankhorst.se>, Christian
+ Brauner <brauner@kernel.org>
+Subject: Re: [PATCH 0/4] Convert atomic_*.txt and memory-barriers.txt to reST
+In-Reply-To: <878qknc56f.fsf@trenco.lwn.net>
+References: <20250717080617.35577-1-bagasdotme@gmail.com>
+ <878qknc56f.fsf@trenco.lwn.net>
+Date: Thu, 17 Jul 2025 14:15:18 -0600
+Message-ID: <87freua815.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain
 
-From: Boqun Feng <boqun.feng@gmail.com>
+Jonathan Corbet <corbet@lwn.net> writes:
 
-In order to use preempt_count() to tracking the interrupt disable
-nesting level, __preempt_count_{add,sub}_return() are introduced, as
-their name suggest, these primitives return the new value of the
-preempt_count() after changing it. The following example shows the usage
-of it in local_interrupt_disable():
+> Bagas Sanjaya <bagasdotme@gmail.com> writes:
+>
+>> Atomic types, atomic bitops, and memory barriers docs are included in kernel
+>> docs build since commit e40573a43d163a ("docs: put atomic*.txt and
+>> memory-barriers.txt into the core-api book") as a wrapper stub for
+>> corresponding uncoverted txt docs. Let's turn them into full-fledged reST docs. 
+>
+> Did it occur to you to look at the changelog for the commit you cite,
+> which explains why those documents are handled the way they are...?
 
-	// increase the HARDIRQ_DISABLE bit
-	new_count = __preempt_count_add_return(HARDIRQ_DISABLE_OFFSET);
+I'm sorry, that caught me at the wrong time, and I was rather more harsh
+than I should have been.  I should not have responded that way.
 
-	// if it's the first-time increment, then disable the interrupt
-	// at hardware level.
-	if (new_count & HARDIRQ_DISABLE_MASK == HARDIRQ_DISABLE_OFFSET) {
-		local_irq_save(flags);
-		raw_cpu_write(local_interrupt_disable_state.flags, flags);
-	}
+For future reference, though, when somebody has gone out of their way to
+accomplish a task in a specific way, there usually *is* a reason for it.
+If you can't find that reason, the best thing to do is usually to ask.
 
-Having these primitives will avoid a read of preempt_count() after
-changing preempt_count() on certain architectures.
+Thanks,
 
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-
----
-V10:
-* Add commit message I forgot
-* Rebase against latest pcpu_hot changes
-V11:
-* Remove CONFIG_PROFILE_ALL_BRANCHES workaround from
-  __preempt_count_add_return()
-
-Signed-off-by: Lyude Paul <lyude@redhat.com>
----
- arch/arm64/include/asm/preempt.h | 18 ++++++++++++++++++
- arch/s390/include/asm/preempt.h  | 10 ++++++++++
- arch/x86/include/asm/preempt.h   | 10 ++++++++++
- include/asm-generic/preempt.h    | 14 ++++++++++++++
- 4 files changed, 52 insertions(+)
-
-diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/preempt.h
-index 0159b625cc7f0..49cb886c8e1dd 100644
---- a/arch/arm64/include/asm/preempt.h
-+++ b/arch/arm64/include/asm/preempt.h
-@@ -56,6 +56,24 @@ static inline void __preempt_count_sub(int val)
- 	WRITE_ONCE(current_thread_info()->preempt.count, pc);
- }
- 
-+static inline int __preempt_count_add_return(int val)
-+{
-+	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
-+	pc += val;
-+	WRITE_ONCE(current_thread_info()->preempt.count, pc);
-+
-+	return pc;
-+}
-+
-+static inline int __preempt_count_sub_return(int val)
-+{
-+	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
-+	pc -= val;
-+	WRITE_ONCE(current_thread_info()->preempt.count, pc);
-+
-+	return pc;
-+}
-+
- static inline bool __preempt_count_dec_and_test(void)
- {
- 	struct thread_info *ti = current_thread_info();
-diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
-index 6ccd033acfe52..5ae366e26c57d 100644
---- a/arch/s390/include/asm/preempt.h
-+++ b/arch/s390/include/asm/preempt.h
-@@ -98,6 +98,16 @@ static __always_inline bool should_resched(int preempt_offset)
- 	return unlikely(READ_ONCE(get_lowcore()->preempt_count) == preempt_offset);
- }
- 
-+static __always_inline int __preempt_count_add_return(int val)
-+{
-+	return val + __atomic_add(val, &get_lowcore()->preempt_count);
-+}
-+
-+static __always_inline int __preempt_count_sub_return(int val)
-+{
-+	return __preempt_count_add_return(-val);
-+}
-+
- #define init_task_preempt_count(p)	do { } while (0)
- /* Deferred to CPU bringup time */
- #define init_idle_preempt_count(p, cpu)	do { } while (0)
-diff --git a/arch/x86/include/asm/preempt.h b/arch/x86/include/asm/preempt.h
-index 578441db09f0b..1220656f3370b 100644
---- a/arch/x86/include/asm/preempt.h
-+++ b/arch/x86/include/asm/preempt.h
-@@ -85,6 +85,16 @@ static __always_inline void __preempt_count_sub(int val)
- 	raw_cpu_add_4(__preempt_count, -val);
- }
- 
-+static __always_inline int __preempt_count_add_return(int val)
-+{
-+	return raw_cpu_add_return_4(__preempt_count, val);
-+}
-+
-+static __always_inline int __preempt_count_sub_return(int val)
-+{
-+	return raw_cpu_add_return_4(__preempt_count, -val);
-+}
-+
- /*
-  * Because we keep PREEMPT_NEED_RESCHED set when we do _not_ need to reschedule
-  * a decrement which hits zero means we have no preempt_count and should
-diff --git a/include/asm-generic/preempt.h b/include/asm-generic/preempt.h
-index 51f8f3881523a..c8683c046615d 100644
---- a/include/asm-generic/preempt.h
-+++ b/include/asm-generic/preempt.h
-@@ -59,6 +59,20 @@ static __always_inline void __preempt_count_sub(int val)
- 	*preempt_count_ptr() -= val;
- }
- 
-+static __always_inline int __preempt_count_add_return(int val)
-+{
-+	*preempt_count_ptr() += val;
-+
-+	return *preempt_count_ptr();
-+}
-+
-+static __always_inline int __preempt_count_sub_return(int val)
-+{
-+	*preempt_count_ptr() -= val;
-+
-+	return *preempt_count_ptr();
-+}
-+
- static __always_inline bool __preempt_count_dec_and_test(void)
- {
- 	/*
--- 
-2.50.0
-
+jon
 
