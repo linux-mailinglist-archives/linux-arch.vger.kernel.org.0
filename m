@@ -1,79 +1,79 @@
-Return-Path: <linux-arch+bounces-12852-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12853-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5058B09AC2
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Jul 2025 06:57:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35CD2B09AC9
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Jul 2025 06:58:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD1455A6AFF
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Jul 2025 04:57:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E5927B7530
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Jul 2025 04:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ADD120E718;
-	Fri, 18 Jul 2025 04:56:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0E6D217719;
+	Fri, 18 Jul 2025 04:56:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dco5QqMh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MAD+mSg2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684A51FDA8C;
-	Fri, 18 Jul 2025 04:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92F220B7FE;
+	Fri, 18 Jul 2025 04:56:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752814567; cv=none; b=bICDGcrrAkNAwVW8i1Az2znfRxlHcliBQ4VufaRUOHS6E8c451+FpSKMa5cH9XP/WJ22CthMmCAjqvAsYC9bq5tiqBoGvn/+2S1jSVkOMHK9dCRitwE7lywM309WieroXbAVhm+W5N0CmqjgXzPV0nVmAeieBdxxRt+l5iwWQ7E=
+	t=1752814568; cv=none; b=lLDi36uChCUbsvoZA0us8ymCkdrtnoKJg3O3KMmLZh4juJAY4zpIZOjiWqFXNrsAj8qGFy7srMRBS6SKKJN7UQQ+hAJ6RRTnrrFvRQ6rqYqn/aaRmsdAd0HhZSKkIF3sj5X0DoKn6z2YfpQ1HqyS3IajILPrphFl4PH34QsIRCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752814567; c=relaxed/simple;
-	bh=2FW3b9hlDy2QfBlyM6L0eddthNqwJjvInvNdiM1fCpk=;
+	s=arc-20240116; t=1752814568; c=relaxed/simple;
+	bh=qWNTk3s5NMApXRRxOjCX+WO/fKr3OFV7Wg0UAiRzQiU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=C3upSorpd7gn8kRxAUP0ktS62cBKmtva8fwOsG50E+Ki0KasYy79cra18lHVeJOxzPk3A8d7k11K1MK2+SR8Ye7e9PlBsR8gDUaaSk0eUTRnBBT5x5DbUxscbmOq3yVSMjMwyHUW2tSj/o3KYHWvlC5AQCOtvolOFWTsUBoo7Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dco5QqMh; arc=none smtp.client-ip=209.85.214.176
+	 MIME-Version; b=TijvBLiyoaGSeqhXJnX4ks7MxSIV2KygQ9mbqsUOoNQoiPEPBaxrbY7FTLsMtkAJp9EQebaypr+WS4zHqfRTqsh1jhtpnKHJrEXYzU66ftalbyTqE5oatlNRUfg3FsxfZuR8jrP5H22mQuEWLxQy0YzYRqYdryudrWvF7eVqHzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MAD+mSg2; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-23c703c471dso30174575ad.0;
-        Thu, 17 Jul 2025 21:56:05 -0700 (PDT)
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b3be5c0eb99so1326313a12.1;
+        Thu, 17 Jul 2025 21:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752814565; x=1753419365; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1752814566; x=1753419366; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=um63o3hQyH8ovYbmWh8CYFrfthG6rWsgdULfDJ9kl7o=;
-        b=Dco5QqMhoHOB0e4cuLLqzd7gtqm4PH7OpuCrCFxGcoMEdMbH48kPFcgDvJIvb3ctM9
-         GchRl2fYP7GSJiK5WuPA7KpzkteZOCrWwyUipP7yUupp+BJ9NXW0iwH9eCEd2RdinEMM
-         myC9KN6y7aMO5DiV9dW/NN0AizrvOQdCT6Odx5OYX1ZPsBhzgdkBnk57NqHLpcJZCL9Y
-         uww4c1vR59U21D0dMkTkFnJkfIYlrB4xOwACML7iFA7SgPuH4xg5EMGJ47F6GT4vzh9Q
-         bg9sxWh9ISvquyZW/i/lrZIBHjk+IEGhc0nkXWUckNIR0UGwT+lRzW2/lSYg12/HruiW
-         fG0Q==
+        bh=aiqelOOvokSP2vkZ7DaRUC0h4xNTtXyC0hk2XiiiVRw=;
+        b=MAD+mSg2VvMCII/xudgNR6JWR843jI3mrEswkr4fKeKlCzTBO2oqaF5Zonti+y3kiY
+         j1Xv/drxuxV3Ro0xhgd8CXwzQgWApJWRkaRNkll7iXl6Kvl70eY+6PdXzazGKFOs3Ey0
+         9Tu5cxamq4KHD8SDKnGh7dUME50St60fKRjRQbfiRggv5WXZmFtp1DAglh9N3UjTkiYM
+         /VqAZJQdkHYHakllpFB5GCg5Eb+ciAuIyhgHixMdSg8YN440zNLa72cEvIKSxEJ5u68e
+         C1/bW6YL15a6V8Bi89CYIGyyBYGl/QWCGEb6uegIDAMZKr1r1NUiwizWFr2x8aPP8DsG
+         YsyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752814565; x=1753419365;
+        d=1e100.net; s=20230601; t=1752814566; x=1753419366;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=um63o3hQyH8ovYbmWh8CYFrfthG6rWsgdULfDJ9kl7o=;
-        b=fZX6sPDJ6VSJAx6RdpwQcFAx1UMnBaCfHxoEvypZcC0hnytp1hlozhn+fl8ZE3Ugfv
-         uVxDmhzC1Y0v3o1y3cSqxMCBDWHUKJCOOcRhaNnN0drgAQDz8+WYxOBBpSpYW1ETMc4K
-         RnQoYRMYv9Un5bFuKaBaXo8RCG0duec9kqVSCbtUnugBB1/77MJVtzeRwLl2gadMgOUR
-         PxBayn9gR0H5khxJuAlpWRbVACAADKaY0qm98jbvD9dOJ7vVYsoyoEdkgL5zU7TYsisf
-         jvGvk/v8RZbgwxPAuox1Xdi8VarLILuUrbDIEfODvzCk0XI4tzWswtvRxk6CIoBpEqzj
-         zRhw==
-X-Forwarded-Encrypted: i=1; AJvYcCUwIQOg5emexfG8TP8QtVe5K5+oBfHJ38ZP0LBct7sXLoCcK+jTjPuWrKttnw29lGxXtbnt8+YDBBWch5/R@vger.kernel.org, AJvYcCVWt0TnJgMJMeanCDMdMDZJmLdqesBe5zvk1XZONDcpy/3zJRz9BZ8zhzzhMh/AqXqsXoEghlDO/fOe@vger.kernel.org, AJvYcCW0USi/cWcWDj7REQfvVSjpoamnARAUUUl2uuTG+ahBGSedG6nZCKHel3PTPXrdytTlIAvv91ul6nNHG5jk@vger.kernel.org, AJvYcCXOyRqX2ncuxHIyfrpYw+WBVLqbVsxPbOLDsIReZ4Lr6Ymk6r6AV59lRqv7lwswoZcB7qgsxnvQdLFU@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa1QE7cFZMp0pl52/+drgDXEAtGzmVYmCPc3Q2LBbF0qtU6ar/
-	vi+sEevPPjCFve5rnnfsUne2m33vibBB/3ZUp2VvIqOA2XxBpQPeJDpc
-X-Gm-Gg: ASbGncuwdUOR8tzgmEl1sgGU0rSgoeoUkUWLYHQh6uHx0l3WcYpaJjdMsMF/OOqx6hc
-	HpzW/GEr2ov5wL1dYd4B112nqhce4rOC5r24xQFFgYFFDn1+2ykgDtxUbywQ98Yy6Bm0LaETAFE
-	gQG+u17CSxmmCPAesfdeOjN1Sd4v0jJyN2rRQ0IsY6HCtiyWSKWvU545wCacZ2Osu5mLrcuoCMx
-	ULQ7lNDHHpDB2kQlzU6zY30BWwdBAZBwNx7OgfzI70SuIQMFbMbSxDWFhn4K4Pvp/ql/84oeDEC
-	9/afJfnzUFZdI3Nx4+1gYGxRZecYjaWMfOANW/gFaYH+3/kXv9GYAMwHrtyFGZGVzSsjtZ7m7Kt
-	8q8Qmcc8Ol+bIyLa5qf7eGemS/5Th+XxEX38T/XUX42wOlY3DzqWje022tIJnO43jRxnD0VH/OA
-	R3fw==
-X-Google-Smtp-Source: AGHT+IEv8vxyq+Vqm9GE2JQvjGRhBxcA9Y9DKTDvqZ5aTZDDy0mu7oqw7p73s43/a/E/vIvAkVt9bw==
-X-Received: by 2002:a17:902:d4c1:b0:234:595d:a58e with SMTP id d9443c01a7336-23e38fb11efmr35671815ad.25.1752814564606;
-        Thu, 17 Jul 2025 21:56:04 -0700 (PDT)
+        bh=aiqelOOvokSP2vkZ7DaRUC0h4xNTtXyC0hk2XiiiVRw=;
+        b=R93ZyAbwI7ApNDSiouC9hIhnDgH039V5ojHCfWyfJFRWMmXouLxFmPldx4JwWHoQCA
+         KyFl6gTAb/ZeEKCo5hhyTFIxr81YViHsrI9kYLGNgJGsJsxDTmkNrPyudU6rp1ZGlcbE
+         dlpRYBFPaXf9Ce1zoBfrlas/soZiVqNA3J/kI73AfqVRurdIXoeBCTq5HQ6b0Vs2JqO2
+         Bc0VpNp50U7vvTxE5ni9aDuwh+cGXkSZe4WJLkeJwrQUga9bqWtey8LIt3w0QCcpE1xZ
+         S2ijgZtcVIcEmC1LBVoZQRrCgQlM7iVsjkQ+gZdqHKU/hrc+BpHjlO2Klvxblgcjkc46
+         xauQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5s91JZou9XBQZZWNb/RBOZnP34/qnqkmJjXdHs01b/lmRdPxBWeVOpcdLqTjpk91PVGByTmq+RcDfhngU@vger.kernel.org, AJvYcCUkpNH5zlLk8BoLE+F1k5fjAa3PAADBzEt0+N9NOgTTQy8tGhlK5W96YCe4khp/q2BT6CmHT8NMtXBG@vger.kernel.org, AJvYcCWPYyGkgxOfNaWGz2STsV6fq/++BZhrdXEov3qFs73lgDsph5sgBz4M2VxGRWXkq9K2FmHqHJOGAftQ@vger.kernel.org, AJvYcCXwPxzvD6m4AanXXsDtsCnPr5MzrMfHabiiiwktDsHYKn76rAZRP9gZ24JBlP0KYbyBym84H76SFhcle0hE@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnQZfiGZ/SszFY2aab+2XKNzAmz1uegYFEtde8enHbcGAYtQQR
+	37W9h5s0IljjafJ/lg8cVCvNa3+Erh5vad/UKLxCLsWgvw8lmBho3eQU
+X-Gm-Gg: ASbGncuLAggrKN/Wr4I67IX0CURDOpVgZ23nLVst3znuxfsp4bj7ECOPbfKdvnVgVyi
+	6LCVjG1Cw52dXYPpYLu2CAM715CCauFy045kLtJ1L+59IIoi1msdrwa5axJLcLy0epMnJSmZsGV
+	Vr8plqYqnBmkcwrojdcHcyRmV+2U4LJ30p5nM3iKbm9HNAXbRT41tQrVB1Z8L82Wsb3whWpbQP7
+	TkfPdOxL4hlgQ3v9sP4JFcc06AO47cL0cAMwUfmC/8u3DGCr3+hjsQbXoiREKbgGX8LgnWP7X9u
+	eilirqMimr+7iq6GGYJ42G0u0NnoiUVLGV8DlZa8MT0cVc5NWCKHAOi95e3ikU0kDzMn91pclXa
+	UER2U+ykLKtRRehraICAV/nMwD6ZwnBHoKdWk/Qq7DguZkU7BLikNZATXfW21I47fhTGdAuGjrN
+	CSUQ==
+X-Google-Smtp-Source: AGHT+IGDjq2DhqSuXgN/POALmXPVtNVWI+Et+6g2VTK4Goj/AQzWa3UeW+fqHh7e9/h5vhGmctCDVQ==
+X-Received: by 2002:a17:90b:1c04:b0:312:e9bd:5d37 with SMTP id 98e67ed59e1d1-31cc2515a29mr2420920a91.6.1752814565898;
+        Thu, 17 Jul 2025 21:56:05 -0700 (PDT)
 Received: from localhost.localdomain (c-67-160-120-253.hsd1.wa.comcast.net. [67.160.120.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31cc33715b2sm476907a91.24.2025.07.17.21.56.03
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31cc33715b2sm476907a91.24.2025.07.17.21.56.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jul 2025 21:56:04 -0700 (PDT)
+        Thu, 17 Jul 2025 21:56:05 -0700 (PDT)
 From: mhkelley58@gmail.com
 X-Google-Original-From: mhklinux@outlook.com
 To: kys@microsoft.com,
@@ -96,9 +96,9 @@ Cc: x86@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pci@vger.kernel.org,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v4 6/7] Drivers: hv: Use hv_setup_*() to set up hypercall arguments for mshv code
-Date: Thu, 17 Jul 2025 21:55:44 -0700
-Message-Id: <20250718045545.517620-7-mhklinux@outlook.com>
+Subject: [PATCH v4 7/7] Drivers: hv: Replace hyperv_pcpu_input/output_arg with hyperv_pcpu_arg
+Date: Thu, 17 Jul 2025 21:55:45 -0700
+Message-Id: <20250718045545.517620-8-mhklinux@outlook.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250718045545.517620-1-mhklinux@outlook.com>
 References: <20250718045545.517620-1-mhklinux@outlook.com>
@@ -113,412 +113,224 @@ Content-Transfer-Encoding: 8bit
 
 From: Michael Kelley <mhklinux@outlook.com>
 
-Update hypercall call sites to use the new hv_setup_*() functions
-to set up hypercall arguments. Since these functions zero the
-fixed portion of input memory, remove now redundant calls to memset()
-and explicit zero'ing of input fields. Where feasible use batch size
-returned by hv_setup_inout_array() instead of separate #define value.
+All open coded uses of hyperv_pcpu_input_arg and hyperv_pcpu_ouput_arg
+have been replaced by hv_setup_*() functions. So combine
+hyperv_pcpu_input_arg and hyperv_pcpu_output_arg in a single
+hyperv_pcpu_arg. Remove logic for managing a separate output arg. Fixup
+comment references to the old variable names.
 
 Signed-off-by: Michael Kelley <mhklinux@outlook.com>
 ---
+ arch/x86/hyperv/hv_init.c      |  6 ++--
+ drivers/hv/hv.c                |  2 +-
+ drivers/hv/hv_common.c         | 55 ++++++++++------------------------
+ drivers/hv/hyperv_vmbus.h      |  2 +-
+ include/asm-generic/mshyperv.h |  6 +---
+ 5 files changed, 22 insertions(+), 49 deletions(-)
 
-Notes:
-    Changes in v4:
-    * Rename hv_hvcall_*() functions to hv_setup_*() [Easwar Hariharan]
-    * Rename hv_hvcall_in_batch_size() to hv_get_input_batch_size()
-      [Easwar Hariharan]
-    
-    Changes in v3:
-    * This patch is new in v3 due to rebasing on 6.15-rc1, which has new
-      mshv-related hypercalls.
-
- drivers/hv/mshv_common.c       |  31 +++------
- drivers/hv/mshv_root_hv_call.c | 121 +++++++++++++--------------------
- drivers/hv/mshv_root_main.c    |   5 +-
- 3 files changed, 60 insertions(+), 97 deletions(-)
-
-diff --git a/drivers/hv/mshv_common.c b/drivers/hv/mshv_common.c
-index 6f227a8a5af7..94f8de66c096 100644
---- a/drivers/hv/mshv_common.c
-+++ b/drivers/hv/mshv_common.c
-@@ -17,12 +17,6 @@
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index b7a2877c2a92..2979d15223cf 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -453,16 +453,16 @@ void __init hyperv_init(void)
+ 	 * A TDX VM with no paravisor only uses TDX GHCI rather than hv_hypercall_pg:
+ 	 * when the hypercall input is a page, such a VM must pass a decrypted
+ 	 * page to Hyper-V, e.g. hv_post_message() uses the per-CPU page
+-	 * hyperv_pcpu_input_arg, which is decrypted if no paravisor is present.
++	 * hyperv_pcpu_arg, which is decrypted if no paravisor is present.
+ 	 *
+ 	 * A TDX VM with the paravisor uses hv_hypercall_pg for most hypercalls,
+ 	 * which are handled by the paravisor and the VM must use an encrypted
+-	 * input page: in such a VM, the hyperv_pcpu_input_arg is encrypted and
++	 * input page: in such a VM, the hyperv_pcpu_arg is encrypted and
+ 	 * used in the hypercalls, e.g. see hv_mark_gpa_visibility() and
+ 	 * hv_arch_irq_unmask(). Such a VM uses TDX GHCI for two hypercalls:
+ 	 * 1. HVCALL_SIGNAL_EVENT: see vmbus_set_event() and _hv_do_fast_hypercall8().
+ 	 * 2. HVCALL_POST_MESSAGE: the input page must be a decrypted page, i.e.
+-	 * hv_post_message() in such a VM can't use the encrypted hyperv_pcpu_input_arg;
++	 * hv_post_message() in such a VM can't use the encrypted hyperv_pcpu_arg;
+ 	 * instead, hv_post_message() uses the post_msg_page, which is decrypted
+ 	 * in such a VM and is only used in such a VM.
+ 	 */
+diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+index ad063f535f95..3b5dfdecdfe7 100644
+--- a/drivers/hv/hv.c
++++ b/drivers/hv/hv.c
+@@ -60,7 +60,7 @@ int hv_post_message(union hv_connection_id connection_id,
+ 	/*
+ 	 * A TDX VM with the paravisor must use the decrypted post_msg_page: see
+ 	 * the comment in struct hv_per_cpu_context. A SNP VM with the paravisor
+-	 * can use the encrypted hyperv_pcpu_input_arg because it copies the
++	 * can use the encrypted hyperv_pcpu_arg because it copies the
+ 	 * input into the GHCB page, which has been decrypted by the paravisor.
+ 	 */
+ 	if (hv_isolation_type_tdx() && ms_hyperv.paravisor_present)
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index ae56397af1ed..cbe4a954ad46 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -58,11 +58,8 @@ EXPORT_SYMBOL_GPL(hv_vp_index);
+ u32 hv_max_vp_index;
+ EXPORT_SYMBOL_GPL(hv_max_vp_index);
  
- #include "mshv.h"
- 
--#define HV_GET_REGISTER_BATCH_SIZE	\
--	(HV_HYP_PAGE_SIZE / sizeof(union hv_register_value))
--#define HV_SET_REGISTER_BATCH_SIZE	\
--	((HV_HYP_PAGE_SIZE - sizeof(struct hv_input_set_vp_registers)) \
--		/ sizeof(struct hv_register_assoc))
+-void * __percpu *hyperv_pcpu_input_arg;
+-EXPORT_SYMBOL_GPL(hyperv_pcpu_input_arg);
 -
- int hv_call_get_vp_registers(u32 vp_index, u64 partition_id, u16 count,
- 			     union hv_input_vtl input_vtl,
- 			     struct hv_register_assoc *registers)
-@@ -30,24 +24,23 @@ int hv_call_get_vp_registers(u32 vp_index, u64 partition_id, u16 count,
- 	struct hv_input_get_vp_registers *input_page;
- 	union hv_register_value *output_page;
- 	u16 completed = 0;
--	unsigned long remaining = count;
-+	unsigned long batch_size, remaining = count;
- 	int rep_count, i;
- 	u64 status = HV_STATUS_SUCCESS;
- 	unsigned long flags;
+-void * __percpu *hyperv_pcpu_output_arg;
+-EXPORT_SYMBOL_GPL(hyperv_pcpu_output_arg);
++void * __percpu *hyperv_pcpu_arg;
++EXPORT_SYMBOL_GPL(hyperv_pcpu_arg);
  
- 	local_irq_save(flags);
+ static void hv_kmsg_dump_unregister(void);
  
--	input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
--	output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
-+	batch_size = hv_setup_inout_array(&input_page, sizeof(*input_page),
-+			      sizeof(input_page->names[0]),
-+			      &output_page, 0, sizeof(*output_page));
+@@ -95,11 +92,8 @@ void __init hv_common_free(void)
+ 	kfree(hv_vp_index);
+ 	hv_vp_index = NULL;
  
- 	input_page->partition_id = partition_id;
- 	input_page->vp_index = vp_index;
- 	input_page->input_vtl.as_uint8 = input_vtl.as_uint8;
--	input_page->rsvd_z8 = 0;
--	input_page->rsvd_z16 = 0;
- 
- 	while (remaining) {
--		rep_count = min(remaining, HV_GET_REGISTER_BATCH_SIZE);
-+		rep_count = min(remaining, batch_size);
- 		for (i = 0; i < rep_count; ++i)
- 			input_page->names[i] = registers[i].name;
- 
-@@ -76,21 +69,19 @@ int hv_call_set_vp_registers(u32 vp_index, u64 partition_id, u16 count,
- 	struct hv_input_set_vp_registers *input_page;
- 	u16 completed = 0;
- 	unsigned long remaining = count;
--	int rep_count;
-+	unsigned long rep_count, batch_size;
- 	u64 status = HV_STATUS_SUCCESS;
- 	unsigned long flags;
- 
- 	local_irq_save(flags);
--	input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
+-	free_percpu(hyperv_pcpu_output_arg);
+-	hyperv_pcpu_output_arg = NULL;
 -
-+	batch_size = hv_setup_in_array(&input_page, sizeof(*input_page),
-+			sizeof(input_page->elements[0]));
- 	input_page->partition_id = partition_id;
- 	input_page->vp_index = vp_index;
- 	input_page->input_vtl.as_uint8 = input_vtl.as_uint8;
--	input_page->rsvd_z8 = 0;
--	input_page->rsvd_z16 = 0;
+-	free_percpu(hyperv_pcpu_input_arg);
+-	hyperv_pcpu_input_arg = NULL;
++	free_percpu(hyperv_pcpu_arg);
++	hyperv_pcpu_arg = NULL;
  
- 	while (remaining) {
--		rep_count = min(remaining, HV_SET_REGISTER_BATCH_SIZE);
-+		rep_count = min(remaining, batch_size);
- 		memcpy(input_page->elements, registers,
- 		       sizeof(struct hv_register_assoc) * rep_count);
- 
-@@ -120,9 +111,7 @@ int hv_call_get_partition_property(u64 partition_id,
- 	struct hv_output_get_partition_property *output;
- 
- 	local_irq_save(flags);
--	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--	output = *this_cpu_ptr(hyperv_pcpu_output_arg);
--	memset(input, 0, sizeof(*input));
-+	hv_setup_inout(&input, sizeof(*input), &output, sizeof(*output));
- 	input->partition_id = partition_id;
- 	input->property_code = property_code;
- 	status = hv_do_hypercall(HVCALL_GET_PARTITION_PROPERTY, input, output);
-diff --git a/drivers/hv/mshv_root_hv_call.c b/drivers/hv/mshv_root_hv_call.c
-index c9c274f29c3c..7217310b8fc3 100644
---- a/drivers/hv/mshv_root_hv_call.c
-+++ b/drivers/hv/mshv_root_hv_call.c
-@@ -22,22 +22,6 @@
- #define HV_PAGE_COUNT_2M_ALIGNED(pg_count) (!((pg_count) & (0x200 - 1)))
- 
- #define HV_WITHDRAW_BATCH_SIZE	(HV_HYP_PAGE_SIZE / sizeof(u64))
--#define HV_MAP_GPA_BATCH_SIZE	\
--	((HV_HYP_PAGE_SIZE - sizeof(struct hv_input_map_gpa_pages)) \
--		/ sizeof(u64))
--#define HV_GET_VP_STATE_BATCH_SIZE	\
--	((HV_HYP_PAGE_SIZE - sizeof(struct hv_input_get_vp_state)) \
--		/ sizeof(u64))
--#define HV_SET_VP_STATE_BATCH_SIZE	\
--	((HV_HYP_PAGE_SIZE - sizeof(struct hv_input_set_vp_state)) \
--		/ sizeof(u64))
--#define HV_GET_GPA_ACCESS_STATES_BATCH_SIZE	\
--	((HV_HYP_PAGE_SIZE - sizeof(union hv_gpa_page_access_state)) \
--		/ sizeof(union hv_gpa_page_access_state))
--#define HV_MODIFY_SPARSE_SPA_PAGE_HOST_ACCESS_MAX_PAGE_COUNT		       \
--	((HV_HYP_PAGE_SIZE -						       \
--	  sizeof(struct hv_input_modify_sparse_spa_page_host_access)) /        \
--	 sizeof(u64))
- 
- int hv_call_withdraw_memory(u64 count, int node, u64 partition_id)
- {
-@@ -58,9 +42,7 @@ int hv_call_withdraw_memory(u64 count, int node, u64 partition_id)
- 	while (remaining) {
- 		local_irq_save(flags);
- 
--		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
--
--		memset(input_page, 0, sizeof(*input_page));
-+		hv_setup_in(&input_page, sizeof(*input_page));
- 		input_page->partition_id = partition_id;
- 		status = hv_do_rep_hypercall(HVCALL_WITHDRAW_MEMORY,
- 					     min(remaining, HV_WITHDRAW_BATCH_SIZE),
-@@ -99,10 +81,7 @@ int hv_call_create_partition(u64 flags,
- 
- 	do {
- 		local_irq_save(irq_flags);
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--		output = *this_cpu_ptr(hyperv_pcpu_output_arg);
--
--		memset(input, 0, sizeof(*input));
-+		hv_setup_inout(&input, sizeof(*input), &output, sizeof(*output));
- 		input->flags = flags;
- 		input->compatibility_version = HV_COMPATIBILITY_21_H2;
- 
-@@ -206,11 +185,12 @@ static int hv_do_map_gpa_hcall(u64 partition_id, u64 gfn, u64 page_struct_count,
- 
- 	while (done < page_count) {
- 		ulong i, completed, remain = page_count - done;
--		int rep_count = min(remain, HV_MAP_GPA_BATCH_SIZE);
-+		ulong rep_count, batch_size;
- 
- 		local_irq_save(irq_flags);
--		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
--
-+		batch_size = hv_setup_in_array(&input_page, sizeof(*input_page),
-+				   sizeof(input_page->source_gpa_page_list[0]));
-+		rep_count = min(remain, batch_size);
- 		input_page->target_partition_id = partition_id;
- 		input_page->target_gpa_base = gfn + (done << large_shift);
- 		input_page->map_flags = flags;
-@@ -311,7 +291,7 @@ int hv_call_unmap_gpa_pages(u64 partition_id, u64 gfn, u64 page_count_4k,
- 		int rep_count = min(remain, HV_UMAP_GPA_PAGES);
- 
- 		local_irq_save(irq_flags);
--		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+		hv_setup_in(&input_page, sizeof(*input_page));
- 
- 		input_page->target_partition_id = partition_id;
- 		input_page->target_gpa_base = gfn + (done << large_shift);
-@@ -340,7 +320,7 @@ int hv_call_get_gpa_access_states(u64 partition_id, u32 count, u64 gpa_base_pfn,
- 	struct hv_input_get_gpa_pages_access_state *input_page;
- 	union hv_gpa_page_access_state *output_page;
- 	int completed = 0;
--	unsigned long remaining = count;
-+	unsigned long batch_size, remaining = count;
- 	int rep_count, i;
- 	u64 status = 0;
- 	unsigned long flags;
-@@ -348,13 +328,13 @@ int hv_call_get_gpa_access_states(u64 partition_id, u32 count, u64 gpa_base_pfn,
- 	*written_total = 0;
- 	while (remaining) {
- 		local_irq_save(flags);
--		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
--		output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
-+		batch_size = hv_setup_inout_array(&input_page, sizeof(*input_page),
-+					0, &output_page, 0, sizeof(*output_page));
- 
- 		input_page->partition_id = partition_id;
- 		input_page->hv_gpa_page_number = gpa_base_pfn + *written_total;
- 		input_page->flags = state_flags;
--		rep_count = min(remaining, HV_GET_GPA_ACCESS_STATES_BATCH_SIZE);
-+		rep_count = min(remaining, batch_size);
- 
- 		status = hv_do_rep_hypercall(HVCALL_GET_GPA_PAGES_ACCESS_STATES, rep_count,
- 					     0, input_page, output_page);
-@@ -384,8 +364,7 @@ int hv_call_assert_virtual_interrupt(u64 partition_id, u32 vector,
- 	u64 status;
- 
- 	local_irq_save(flags);
--	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--	memset(input, 0, sizeof(*input));
-+	hv_setup_in(&input, sizeof(*input));
- 	input->partition_id = partition_id;
- 	input->vector = vector;
- 	input->dest_addr = dest_addr;
-@@ -422,21 +401,21 @@ int hv_call_get_vp_state(u32 vp_index, u64 partition_id,
- 	u64 status;
- 	int i;
- 	u64 control;
--	unsigned long flags;
-+	unsigned long flags, batch_size;
- 	int ret = 0;
- 
--	if (page_count > HV_GET_VP_STATE_BATCH_SIZE)
--		return -EINVAL;
--
- 	if (!page_count && !ret_output)
- 		return -EINVAL;
- 
- 	do {
- 		local_irq_save(flags);
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--		output = *this_cpu_ptr(hyperv_pcpu_output_arg);
--		memset(input, 0, sizeof(*input));
--		memset(output, 0, sizeof(*output));
-+		batch_size = hv_setup_inout_array(&input, sizeof(*input),
-+				sizeof(input->output_data_pfns[0]),
-+				&output, sizeof(*output), 0);
-+		if (page_count > batch_size) {
-+			local_irq_restore(flags);
-+			return -EINVAL;
-+		}
- 
- 		input->partition_id = partition_id;
- 		input->vp_index = vp_index;
-@@ -478,11 +457,7 @@ int hv_call_set_vp_state(u32 vp_index, u64 partition_id,
- 	unsigned long flags;
- 	int ret = 0;
- 	u16 varhead_sz;
--
--	if (page_count > HV_SET_VP_STATE_BATCH_SIZE)
--		return -EINVAL;
--	if (sizeof(*input) + num_bytes > HV_HYP_PAGE_SIZE)
--		return -EINVAL;
-+	u64 batch_size;
- 
- 	if (num_bytes)
- 		/* round up to 8 and divide by 8 */
-@@ -494,18 +469,26 @@ int hv_call_set_vp_state(u32 vp_index, u64 partition_id,
- 
- 	do {
- 		local_irq_save(flags);
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--		memset(input, 0, sizeof(*input));
- 
--		input->partition_id = partition_id;
--		input->vp_index = vp_index;
--		input->state_data = state_data;
- 		if (num_bytes) {
-+			batch_size = hv_setup_in_array(&input, sizeof(*input),
-+						sizeof(input->data[0].bytes));
-+			if (num_bytes > batch_size)
-+				goto size_error;
-+
- 			memcpy((u8 *)input->data, bytes, num_bytes);
- 		} else {
-+			batch_size = hv_setup_in_array(&input, sizeof(*input),
-+						sizeof(input->data[0].pfns));
-+			if (page_count > batch_size)
-+				goto size_error;
-+
- 			for (i = 0; i < page_count; i++)
- 				input->data[i].pfns = page_to_pfn(pages[i]);
- 		}
-+		input->partition_id = partition_id;
-+		input->vp_index = vp_index;
-+		input->state_data = state_data;
- 
- 		control = (HVCALL_SET_VP_STATE) |
- 			  (varhead_sz << HV_HYPERCALL_VARHEAD_OFFSET);
-@@ -524,6 +507,10 @@ int hv_call_set_vp_state(u32 vp_index, u64 partition_id,
- 	} while (!ret);
- 
- 	return ret;
-+
-+size_error:
-+	local_irq_restore(flags);
-+	return -EINVAL;
+ 	free_percpu(hv_synic_eventring_tail);
+ 	hv_synic_eventring_tail = NULL;
+@@ -255,11 +249,6 @@ static void hv_kmsg_dump_register(void)
+ 	}
  }
  
- int hv_call_map_vp_state_page(u64 partition_id, u32 vp_index, u32 type,
-@@ -539,8 +526,7 @@ int hv_call_map_vp_state_page(u64 partition_id, u32 vp_index, u32 type,
- 	do {
- 		local_irq_save(flags);
- 
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--		output = *this_cpu_ptr(hyperv_pcpu_output_arg);
-+		hv_setup_inout(&input, sizeof(*input), &output, sizeof(*output));
- 
- 		input->partition_id = partition_id;
- 		input->vp_index = vp_index;
-@@ -574,9 +560,7 @@ int hv_call_unmap_vp_state_page(u64 partition_id, u32 vp_index, u32 type,
- 
- 	local_irq_save(flags);
- 
--	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+-static inline bool hv_output_page_exists(void)
+-{
+-	return hv_root_partition() || IS_ENABLED(CONFIG_HYPERV_VTL_MODE);
+-}
 -
--	memset(input, 0, sizeof(*input));
-+	hv_setup_in(&input, sizeof(*input));
- 
- 	input->partition_id = partition_id;
- 	input->vp_index = vp_index;
-@@ -614,8 +598,7 @@ hv_call_create_port(u64 port_partition_id, union hv_port_id port_id,
- 
- 	do {
- 		local_irq_save(flags);
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--		memset(input, 0, sizeof(*input));
-+		hv_setup_in(&input, sizeof(*input));
- 
- 		input->port_partition_id = port_partition_id;
- 		input->port_id = port_id;
-@@ -668,8 +651,7 @@ hv_call_connect_port(u64 port_partition_id, union hv_port_id port_id,
- 
- 	do {
- 		local_irq_save(flags);
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--		memset(input, 0, sizeof(*input));
-+		hv_setup_in(&input, sizeof(*input));
- 		input->port_partition_id = port_partition_id;
- 		input->port_id = port_id;
- 		input->connection_partition_id = connection_partition_id;
-@@ -736,10 +718,7 @@ int hv_call_map_stat_page(enum hv_stats_object_type type,
- 
- 	do {
- 		local_irq_save(flags);
--		input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--		output = *this_cpu_ptr(hyperv_pcpu_output_arg);
+ void __init hv_get_partition_id(void)
+ {
+ 	struct hv_output_get_partition_id *output;
+@@ -365,14 +354,8 @@ int __init hv_common_init(void)
+ 	 * (per-CPU) hypercall input page and thus this failure is
+ 	 * fatal on Hyper-V.
+ 	 */
+-	hyperv_pcpu_input_arg = alloc_percpu(void  *);
+-	BUG_ON(!hyperv_pcpu_input_arg);
 -
--		memset(input, 0, sizeof(*input));
-+		hv_setup_inout(&input, sizeof(*input), &output, sizeof(*output));
- 		input->type = type;
- 		input->identity = *identity;
+-	/* Allocate the per-CPU state for output arg for root */
+-	if (hv_output_page_exists()) {
+-		hyperv_pcpu_output_arg = alloc_percpu(void *);
+-		BUG_ON(!hyperv_pcpu_output_arg);
+-	}
++	hyperv_pcpu_arg = alloc_percpu(void  *);
++	BUG_ON(!hyperv_pcpu_arg);
  
-@@ -773,9 +752,7 @@ int hv_call_unmap_stat_page(enum hv_stats_object_type type,
- 	u64 status;
+ 	if (hv_root_partition()) {
+ 		hv_synic_eventring_tail = alloc_percpu(u8 *);
+@@ -466,33 +449,28 @@ void __init ms_hyperv_late_init(void)
  
- 	local_irq_save(flags);
--	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+ int hv_common_cpu_init(unsigned int cpu)
+ {
+-	void **inputarg, **outputarg;
++	void **inputarg;
+ 	u8 **synic_eventring_tail;
+ 	u64 msr_vp_index;
+ 	gfp_t flags;
+-	const int pgcount = hv_output_page_exists() ? 2 : 1;
++	const int pgcount = HV_HVCALL_ARG_PAGES;
+ 	void *mem;
+ 	int ret = 0;
+ 
+ 	/* hv_cpu_init() can be called with IRQs disabled from hv_resume() */
+ 	flags = irqs_disabled() ? GFP_ATOMIC : GFP_KERNEL;
+ 
+-	inputarg = (void **)this_cpu_ptr(hyperv_pcpu_input_arg);
++	inputarg = (void **)this_cpu_ptr(hyperv_pcpu_arg);
+ 
+ 	/*
+-	 * The per-cpu memory is already allocated if this CPU was previously
+-	 * online and then taken offline
++	 * hyperv_pcpu_arg memory is already allocated if this CPU was
++	 * previously online and then taken offline
+ 	 */
+ 	if (!*inputarg) {
+ 		mem = kmalloc(pgcount * HV_HYP_PAGE_SIZE, flags);
+ 		if (!mem)
+ 			return -ENOMEM;
+ 
+-		if (hv_output_page_exists()) {
+-			outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+-			*outputarg = (char *)mem + HV_HYP_PAGE_SIZE;
+-		}
 -
--	memset(input, 0, sizeof(*input));
-+	hv_setup_in(&input, sizeof(*input));
- 	input->type = type;
- 	input->identity = *identity;
+ 		if (!ms_hyperv.paravisor_present &&
+ 		    (hv_isolation_type_snp() || hv_isolation_type_tdx())) {
+ 			ret = set_memory_decrypted((unsigned long)mem, pgcount);
+@@ -506,13 +484,13 @@ int hv_common_cpu_init(unsigned int cpu)
  
-@@ -808,14 +785,14 @@ int hv_call_modify_spa_host_access(u64 partition_id, struct page **pages,
- 	}
+ 		/*
+ 		 * In a fully enlightened TDX/SNP VM with more than 64 VPs, if
+-		 * hyperv_pcpu_input_arg is not NULL, set_memory_decrypted() ->
++		 * hyperv_pcpu_arg is not NULL, set_memory_decrypted() ->
+ 		 * ... -> cpa_flush()-> ... -> __send_ipi_mask_ex() tries to
+-		 * use hyperv_pcpu_input_arg as the hypercall input page, which
++		 * use hyperv_pcpu_arg as the hypercall input page, which
+ 		 * must be a decrypted page in such a VM, but the page is still
+ 		 * encrypted before set_memory_decrypted() returns. Fix this by
+ 		 * setting *inputarg after the above set_memory_decrypted(): if
+-		 * hyperv_pcpu_input_arg is NULL, __send_ipi_mask_ex() returns
++		 * hyperv_pcpu_arg is NULL, __send_ipi_mask_ex() returns
+ 		 * HV_STATUS_INVALID_PARAMETER immediately, and the function
+ 		 * hv_send_ipi_mask() falls back to orig_apic.send_IPI_mask(),
+ 		 * which may be slightly slower than the hypercall, but still
+@@ -544,9 +522,8 @@ int hv_common_cpu_die(unsigned int cpu)
+ {
+ 	u8 **synic_eventring_tail;
+ 	/*
+-	 * The hyperv_pcpu_input_arg and hyperv_pcpu_output_arg memory
+-	 * is not freed when the CPU goes offline as the hyperv_pcpu_input_arg
+-	 * may be used by the Hyper-V vPCI driver in reassigning interrupts
++	 * The hyperv_pcpu_arg memory is not freed when the CPU goes offline as
++	 * it may be used by the Hyper-V vPCI driver in reassigning interrupts
+ 	 * as part of the offlining process.  The interrupt reassignment
+ 	 * happens *after* the CPUHP_AP_HYPERV_ONLINE state has run and
+ 	 * called this function.
+diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
+index 0b450e53161e..bef8a57100ec 100644
+--- a/drivers/hv/hyperv_vmbus.h
++++ b/drivers/hv/hyperv_vmbus.h
+@@ -126,7 +126,7 @@ struct hv_per_cpu_context {
+ 	/*
+ 	 * The page is only used in hv_post_message() for a TDX VM (with the
+ 	 * paravisor) to post a messages to Hyper-V: when such a VM calls
+-	 * HVCALL_POST_MESSAGE, it can't use the hyperv_pcpu_input_arg (which
++	 * HVCALL_POST_MESSAGE, it can't use the hyperv_pcpu_arg (which
+ 	 * is encrypted in such a VM) as the hypercall input page, because
+ 	 * the input page for HVCALL_POST_MESSAGE must be decrypted in such a
+ 	 * VM, so post_msg_page (which is decrypted in hv_synic_alloc()) is
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 040c4650f411..3ce5b94ad41e 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -67,8 +67,7 @@ extern bool hv_nested;
+ extern u64 hv_current_partition_id;
+ extern enum hv_partition_type hv_curr_partition_type;
  
- 	while (done < page_count) {
--		ulong i, completed, remain = page_count - done;
--		int rep_count = min(remain,
--				    HV_MODIFY_SPARSE_SPA_PAGE_HOST_ACCESS_MAX_PAGE_COUNT);
-+		ulong i, batch_size, completed, remain = page_count - done;
-+		ulong rep_count;
+-extern void * __percpu *hyperv_pcpu_input_arg;
+-extern void * __percpu *hyperv_pcpu_output_arg;
++extern void * __percpu *hyperv_pcpu_arg;
  
- 		local_irq_save(irq_flags);
--		input_page = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+		batch_size = hv_setup_in_array(&input_page, sizeof(*input_page),
-+						sizeof(input_page->spa_page_list[0]));
-+		rep_count = min(remain, batch_size);
+ u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
+ u64 hv_do_fast_hypercall8(u16 control, u64 input8);
+@@ -155,9 +154,6 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
+  * Hypercall input and output argument setup
+  */
  
--		memset(input_page, 0, sizeof(*input_page));
- 		/* Only set the partition id if you are making the pages
- 		 * exclusive
- 		 */
-diff --git a/drivers/hv/mshv_root_main.c b/drivers/hv/mshv_root_main.c
-index 72df774e410a..aca3331ad516 100644
---- a/drivers/hv/mshv_root_main.c
-+++ b/drivers/hv/mshv_root_main.c
-@@ -2051,11 +2051,8 @@ static int __init hv_retrieve_scheduler_type(enum hv_scheduler_type *out)
- 	u64 status;
- 
- 	local_irq_save(flags);
--	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--	output = *this_cpu_ptr(hyperv_pcpu_output_arg);
- 
--	memset(input, 0, sizeof(*input));
--	memset(output, 0, sizeof(*output));
-+	hv_setup_inout(&input, sizeof(*input), &output, sizeof(*output));
- 	input->property_id = HV_SYSTEM_PROPERTY_SCHEDULER_TYPE;
- 
- 	status = hv_do_hypercall(HVCALL_GET_SYSTEM_PROPERTY, input, output);
+-/* Temporary mapping to be removed at the end of the patch series */
+-#define hyperv_pcpu_arg hyperv_pcpu_input_arg
+-
+ /*
+  * Allocate one page that is shared between input and output args, which is
+  * sufficient for all current hypercalls. If a future hypercall requires
 -- 
 2.25.1
 
