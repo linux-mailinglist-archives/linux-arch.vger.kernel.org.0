@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-12889-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12890-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77CA7B0E2D2
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Jul 2025 19:45:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C828B0E2D6
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Jul 2025 19:45:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7863E3BCBE9
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Jul 2025 17:44:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93314164E38
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Jul 2025 17:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93E39281352;
-	Tue, 22 Jul 2025 17:44:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4BE1281376;
+	Tue, 22 Jul 2025 17:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="G4e4Tn6y"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="tC3Xrhuo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2085.outbound.protection.outlook.com [40.92.20.85])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2054.outbound.protection.outlook.com [40.92.20.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E45E2820BA;
-	Tue, 22 Jul 2025 17:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.20.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E062820BA;
+	Tue, 22 Jul 2025 17:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.20.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753206256; cv=fail; b=EW7a607haBSuFDP3B9/kzr/i6rk7zwHMg3/LoO6/zStqzJ2AmNrh7sW7xsKiQDyAkckuUV3VZiuzMna/kqeczmDG7+pnCukdVW5UjQDBbf03EsNRUUhN+xeC0xiixvMszwu6032mvm6pB4rSItxrAdVgcYa4TOgVhhGGOryZmqo=
+	t=1753206265; cv=fail; b=duu+jgir20qsbaNKPDAAuhxyIlgRaL0MYYUqacUlxwqhY3cqKqbeiolQpq3763Xbw7LNclKn53CaUJzNy/tWVqeS1waNOMBCXLd9TbJwdAY8JCzvh/lphaFQ0LghNpSDJHbJagwED9N0g1HggwFlJUybW37xFgh/MEAZ9HPvgkY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753206256; c=relaxed/simple;
-	bh=2xN8ezX0gzXB5n9EGG19lvdVitk019JKwiPqomluwk4=;
+	s=arc-20240116; t=1753206265; c=relaxed/simple;
+	bh=rDKSYzLt4lm8acc0GKz9A/7VgkaWzrgkMMGstdT7JW8=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=fGb3PybcBZuDw4V0tVArxuBvqHbot1gW9l6BDt47if4ZPuzDUiquF3cXPSeENTlKmbH89o0kf7obBPUnUpdGc/7tnDcD0FlNoGotpwf7QWFrCsiTH9PCpHD6AoXdc/7igjgNN73Y2wrqUYMI29YmokK0x0ZA7FQpFTC7L30Rk9I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=G4e4Tn6y; arc=fail smtp.client-ip=40.92.20.85
+	 Content-Type:MIME-Version; b=fOJ2eqzFPGyPK2eEWb5aeeCyXCKJeSEMNbJg/GBgNr8RJbZgvnCf1cczuQK/yf1psaR3X5hk9uiCpQRQORijgLanZ5zxO80yQhLfC3+BgVOqv+l49kAaDPuw31VEco7HPRrUrkHlpezejxe2wPx1sZ+A6Dovr5Ida9XX4VJcRC8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=tC3Xrhuo; arc=fail smtp.client-ip=40.92.20.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DVfT7gm0AZm8PzhKK3Gcj0CAXCZfAFD7cfxDwggxWUpqP6SwJ26VuafvmhII3NhuoeKyhdkYKzLj/lxt6VCVoRN5Vx4NJqjr46nHoNHvqUDImLpMR8f/YlAOJG6V7hmz4OJ4JyEOea/NDXTGj3ryikYk4SBaGUlRX1EtrXv40mfnGQ3Yao45rJqllgfU+jgFrAOCabq5hVEO2WU3PgNCqJU6dpP+Kj5LbABFiw6q4OqNUkf4ED97aPQWzU5ivhOxBCDZVSjeIRyq97ii3GDYUU4QjZC5D2Y4gUuBKRndFWnDsRi8nGsBJjXlFnHoazAYDDfOzotZvrrLeUSoMAcdBg==
+ b=EVeZuxu0lJJsF+O/jwplLI+e5k+YmpstLUypEBNPJqPqkzRMaMMGm2PpobLZRQmoD8Y3U0h1aQpqpGnOYZPw6bzOTlxxwI+oA8ZcsYv9AKnSpyY4dl8t8Rq8dSr9J3s+pclZJyyjY0X9Vhe9o2HXrr9pXFfHkz+BmEQs0PkKaOIOaQOTcspeJyXyN/MUYQdpdQfS5A1tuiuW6CQAYjYt02gYyyjuasCsBgpsDbzl97PqLJywmhIDr8Ftiqa6uBECR8f5ZBSPuqPBd1D/NMk0Fa7nvSqcWnZ8Ez5yJLXH/1JFXq3SMJZ3dYcGFvPeX4B2YXf3RN75gfxR+foVSTv/Mw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HZX5v2WAxzLUL986YWuDY3p3GqGKVwBPcBEMknbo3Tk=;
- b=IVkBluEQUOpIopB2YGIgsIFIklKEFbYwuhr36GYfdEcyih6GCLxnHCFI64FgDH88IknRytD2cYA1ZnPB9Q3+Ucv3ZeD2FCmw38ZCME5v5A48nYmSKIY0cMXa1DWyc/bKuC6xwxKk4P+BuhggefX8/3VSy7dLjE13LvU1haLDKtc0wzxw2oVXG1UA/dlPBEPR6yDrFgYVz8r5iGvp54wu9+KTwJyLtVCc9A4oK31M9Rv3qwzl519Pw9K2bmRhgoKzytZUdRoRT0hYYg65K0JJJeo/GyExPPQwT757OuJAHblrSEeOw+IX2GMFBRZO4BTdI5fFZHWXTSwVaD4O33lAyQ==
+ bh=Jxf7osS1/Zed5namm+d2OmQCe8dMshMg1/YBM059+cg=;
+ b=wl0MX/+5skmsNoQIwnXVfqRwrgSq7E/sw5A1s0npf0HtReE/q1TG716CGflRj541TX3/+JfsetXLyCMOf47hy6JDn1YzCxPEElFNy8O8AUASrvw/nupnT1sc5YGPykvpEyeYIdnpl6NcP5ypA0m8gGnEPdfsE+BEASifME2GNQdF9yI9IB9Xs3PCSK0twnHW0YkjRF3BQi8C/XJ/ccf5tASqjkXSIDTQCltfzEZWteXge08+nfY5hIYOJtiuuOqW+Mg9P/4mMIfGHdjKjJaD0fZvz9v0OaGNfbO9ilWEaaFYKGJr+mTmvs8U2ymL2LeODRchcdsFVxGnY+bFDrUT6g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HZX5v2WAxzLUL986YWuDY3p3GqGKVwBPcBEMknbo3Tk=;
- b=G4e4Tn6yPg0RyINu9spyZNEaEPkzECi8VWtC6jWg6N7+BO9Yo2p6/GnkGzw4uc+WQwVe4P7iFZmbb+78e3RuDkHX8aemubT2vNpR0d7QER2rtOim6ceP22V47T46Pd2hR548kO6KKH8Ml3oRHDXqCfUfDK1O481TRzTkODJklE65sCV/WFYy6bbmT8CtoCcto2MkG9Py0uJ3AZ9Wsb7xJPdTagisxNN+8GE3OUmJWFnNLrIuLemxUWN8B4664h2/icsP+ZySK74RSP02ziUD4EEG2lNbWzhd/0myxLQViTRwtbwXduwrHdh2/Xm0Pqzk/u/NKoOxLhU/f6A2wB0CdQ==
+ bh=Jxf7osS1/Zed5namm+d2OmQCe8dMshMg1/YBM059+cg=;
+ b=tC3Xrhuodf5fdCHxDfrH02M5EjYRaDGlhaG0Dt8ak+OXqg37A/ELARFxFvsSGtB5xlAIwcKd5mBzAATT/VRYg29Irz2vaHdde+DoEn2cgnt6WEIHOu7UBXBdnLIQph5l9UtAXliXuqO3SVBmtk1wgunEgEpZuZYiZzxdjwga2/YkQzOz7MzrKjWz9HUFe0dQX39hgANbXnMzn3C18XK92EGw+LrYhZOH8jN5Lng6TjNLDB4mhGeH+zs/GiQ0ewF1mpVQJuljRP/wATmjjUzKCHOJ4hHGI6Wd/sJHjFsj9qjmb/y7HSbtwcyIKQn94XB9gt5yXUjBxQ2rZg8va3/GUw==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
  by CY8PR02MB9201.namprd02.prod.outlook.com (2603:10b6:930:9c::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.28; Tue, 22 Jul
- 2025 17:44:11 +0000
+ 2025 17:44:20 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%4]) with mapi id 15.20.8943.029; Tue, 22 Jul 2025
- 17:44:11 +0000
+ 17:44:20 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Roman Kisel <romank@linux.microsoft.com>, "alok.a.tiwari@oracle.com"
 	<alok.a.tiwari@oracle.com>, "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de"
@@ -74,69 +74,68 @@ To: Roman Kisel <romank@linux.microsoft.com>, "alok.a.tiwari@oracle.com"
 CC: "apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
 	<benhill@microsoft.com>, "bperkins@microsoft.com" <bperkins@microsoft.com>,
 	"sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Subject: RE: [PATCH hyperv-next v4 06/16] Drivers: hv: Allocate the paravisor
- SynIC pages when required
-Thread-Topic: [PATCH hyperv-next v4 06/16] Drivers: hv: Allocate the paravisor
- SynIC pages when required
-Thread-Index: AQHb9Qzb3iIe3KBNsEGVEcqxpxVs6LQ4k+wg
-Date: Tue, 22 Jul 2025 17:44:11 +0000
+Subject: RE: [PATCH hyperv-next v4 07/16] Drivers: hv: Post messages through
+ the confidential VMBus if available
+Thread-Topic: [PATCH hyperv-next v4 07/16] Drivers: hv: Post messages through
+ the confidential VMBus if available
+Thread-Index: AQHb9QzbP385w3Op9kiG/2yu3wV7xLQ4mL1Q
+Date: Tue, 22 Jul 2025 17:44:20 +0000
 Message-ID:
- <SN6PR02MB4157BB7BD371A1144E184EB9D45CA@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB415784965C57E09973A80241D45CA@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20250714221545.5615-1-romank@linux.microsoft.com>
- <20250714221545.5615-7-romank@linux.microsoft.com>
-In-Reply-To: <20250714221545.5615-7-romank@linux.microsoft.com>
+ <20250714221545.5615-8-romank@linux.microsoft.com>
+In-Reply-To: <20250714221545.5615-8-romank@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|CY8PR02MB9201:EE_
-x-ms-office365-filtering-correlation-id: 3b14338a-ef31-4250-0ef9-08ddc9475e22
+x-ms-office365-filtering-correlation-id: 9cb6b9fb-8672-412c-f779-08ddc947634a
 x-microsoft-antispam:
- BCL:0;ARA:14566002|15080799012|461199028|41001999006|56899033|40105399003|3412199025|440099028|12091999003|102099032;
+ BCL:0;ARA:14566002|15080799012|461199028|40105399003|3412199025|440099028|102099032;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?17G8BEYHO/LEyK+fh+0Hwj2dT5t7GV0wiVul2b0dpu4WOPL2BhOLlVU/buTj?=
- =?us-ascii?Q?zCv4VkrH+A5ZZYcHqQCc+w0MYiinBbzJ8j2vk0mBfIk5eZYBQUAyAlyGQxvE?=
- =?us-ascii?Q?qLqeSGArWp0ZSX7OMwWFKWCTZvuA9rMftrTDKlZo9lqW+ZV5mZrqPq+yX4vP?=
- =?us-ascii?Q?VXsr3jIxZygWU6H5BY6gpON6bYUwC6tgajNoPGn82+Ak37uCB15v0OWOUJ8F?=
- =?us-ascii?Q?7moiqPIqeALl54zogj9EkFXb2AuY8HgJ98KGHp0cnBpe44FpnDTGczxuT9bx?=
- =?us-ascii?Q?sLe8XKBfdJtroUpCsf6UetdJmtETuz1ks07VIqjiFP3BOQKochRSyzRXuDWL?=
- =?us-ascii?Q?AKp1NiF/6D+UixpCpYxpkdZUhMncwOi5l8i2Sa3xNM/Gi82dANIeSg3SxcL0?=
- =?us-ascii?Q?cDzYYSf/GLxwhp7FOrjQ9jXwr/z+sTtHg4bW9ro9Xgx/t9S3s4Gd2msVE/Gp?=
- =?us-ascii?Q?hdPAogKVkx2ie6Fnehu/QTocfXjFQoHLVfw3Jw5Yi1hGrdaSAitR11Xp6jrt?=
- =?us-ascii?Q?0nupG5BHgVzSufVxVqw7WH4sYClDBfkqSzdt0qKVbZa37KXHsHeLNNbpTJvN?=
- =?us-ascii?Q?NtadkdBfpGxtqkOQh970XDpTjzbSuLdBgKDmhUDkvTpiQkcUd0CdzStPjwn2?=
- =?us-ascii?Q?D8Tzf17snU/S8eoi+8EzFL2Q44bLaO6bSAAcC8h0D4i16kFj/sipeUyjQfnT?=
- =?us-ascii?Q?oKadV97YBngOCiDHa0QOidJ+LSIavxIYvBbxFLXTCePPCJjvC5Qb82cQPN6q?=
- =?us-ascii?Q?sRJI0f4Wfs16H/qy08QJhfjtzdARDbEvxgfBCp8Q6n2ZdjSyIXMHcTJyQasW?=
- =?us-ascii?Q?3rNcd7WkBAI/aoEULzN9nRLeUB5nweHpOHe8OuUwEGPvOrwba2DvH61re9yP?=
- =?us-ascii?Q?mNP7SM9i2Zt5wgw3vOe+SdWNbo/b1N2LGZErtc/c+j0IpZD3Ud1qcBlZlUSn?=
- =?us-ascii?Q?QsfLipvGYJz0L7ZXeIAiVP+k/HQno4gOUf5NztPW6HSxncGysRV+7/KsA+O8?=
- =?us-ascii?Q?8gISKy1oILkIQGtrJBTKVRp4PdgyC40bs0NjuqrAZY2P77faQg0mzZ9R4r6g?=
- =?us-ascii?Q?Pms8J+JjXPRB1nGQ2isYjxgqQDfD4Q=3D=3D?=
+ =?us-ascii?Q?nnkAMLQZzDN6pf9XevfqgHfr3AGTD+f21MR+Da368ZZguDqDY8kSxCzrgdzl?=
+ =?us-ascii?Q?FB56b5NXmhcyk5rWE78+/+O3cdAdf5k9v5Dot/vLB4ojQw/7+Qeyhu6558ez?=
+ =?us-ascii?Q?42/4ZKEUMAJDSjbd+5Sf5HpqKeccO9aw2TabQM1Pos6uOxLt00cb2TuJX+qi?=
+ =?us-ascii?Q?HZBB/2Jky+cdXuRTR2yRGEcPvu6s3i9wq2CYtRPwBSguKIGpke9wVZFHwHRF?=
+ =?us-ascii?Q?DsTqPmmUST+TJb3IPG08XF+AJKgYCBPYUS1MRAO2fV5Io4/oaZeTgBgoY/q1?=
+ =?us-ascii?Q?8WQKD/t8JYoHTQdgoKL4gf1tg96ZcAqQ+EWxFY032UAx65pbRF/K7v+Hut3n?=
+ =?us-ascii?Q?jsygvF3JK5peuQBaWmtMX4blcMmO31bw7yELmH+SUgYJbgeVMrjQ2f6BV+tF?=
+ =?us-ascii?Q?RNVe4mVFEAk0HVDHMq+my6kFqgK+qjG2Z/VLHXEdpgohWq3wt3oeZKf8e5F9?=
+ =?us-ascii?Q?IiUNnng1glrqJzVXfao8+2fGiLaUbiLs7lEg0x9Uczz4AMwYXVkmHeMMLQf3?=
+ =?us-ascii?Q?KYFEh+4xqdu202dtpAMA6wrVBvbQIDeiYr176MK6B9cXgIdaF2+tgEiGxZ6J?=
+ =?us-ascii?Q?h2w7DTw7Vc9YYoSOvKaKw3Bp/ub7GiROJllVhCVN5LOehU261uKX/Cx7g2Zs?=
+ =?us-ascii?Q?ZF9gETvQPoSOHuHeubrNqOWpK3idUa8FadrkF1pux8SM9eTfLJLmJVRspByo?=
+ =?us-ascii?Q?L0zIZ8gg9xWiGNfFtEwwbkDDn5oHqBLC7dXaTEedoOmE7T/8NdRG0F+XQmJG?=
+ =?us-ascii?Q?NyG5Wy5e/SfYVCb6yPiROpv+TCHqRzBEW3jODF6Q18T792g0SwxyrPzCXWVV?=
+ =?us-ascii?Q?pXdRjQkWQU/r0vA0PiG0NjWuOEnqppMciKlFvcfVZ/DRiJPeF2CD5iu08C/J?=
+ =?us-ascii?Q?tfbJEhshGfkef2VxSxCeW1IPIRwwrNiAPiSVw+ad/mHzbNFx6gPsHinnH8jI?=
+ =?us-ascii?Q?PCHkKAQPFuJgxxO52QI91uHt/1eInDrcfHb8Wid3EDDs1qkjF9sfz7zla3Tc?=
+ =?us-ascii?Q?LY9XFkHkImVeZPsQBsBQy/jqNg=3D=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?YMzrHqa9BUiMaLiwLDjgh3hupaIRqfC9KrVx88N1b5pIATn4ot3Ut710s2dH?=
- =?us-ascii?Q?Ws0PHaYzH9Il3UzZv3HRZnfEzYMpcb5U+lwvtdPYo5HAX7+dS31kSzhRxXYk?=
- =?us-ascii?Q?aDM962QtwRV62E1c8OSPNKn+T/EgpxKHRap9YwSGddeDCaTtIUrBfH8tU84/?=
- =?us-ascii?Q?uRiLouVIp8ZP1KDTyAFQiUueLC0dwp0ZT+cSxRWBfoFqObL0oZMN+amdkdqv?=
- =?us-ascii?Q?yfePPrmAkBljMrWI/5ts/2mWRcMKdoqVGLzkUJHe4HoauVIMIvFaj0H2qyZR?=
- =?us-ascii?Q?WK6hoCd70Kdg/oxJRm92D1p19CqDwMRzTnlWN1UWOQ8ixdX8RAUEJ8hqdg2A?=
- =?us-ascii?Q?MSaWOtH+quowDIFKiLmEhmO/XFZcbumVsPud6I/66lrEOOT8mXExkmKR769y?=
- =?us-ascii?Q?mT5RH6pR84jApa55ZpgAhJQ7JHqejjOWSB8AX+hgg0F8HwIk39cLb5Sivunk?=
- =?us-ascii?Q?mC4jRi3+IjkchDa8+slwxh9UP/NIkyTxFBMCRaJucJH0C4R0lHJExwO2rfTR?=
- =?us-ascii?Q?H9mXVr+mNDl2e7DYRhENm+f9D5nfLXmdUQLvPUdVothGusw4fWmDwsSHb33F?=
- =?us-ascii?Q?7hQvbE8v4ui9swwa/7TSa2YZjKfMICigCIDUTd6nmktbLhe+dxhjyoWJR2dO?=
- =?us-ascii?Q?StglJ5o4yPyKGjW5CjM+T4RMQCkr7ws1hFrbi8sjzPBT8av7lUHXKRmyi9J/?=
- =?us-ascii?Q?m70mdE6c6SFeXmvWmPcgbwTHPFJZNpLBDBlFyWqpF6vbAvtILMDNDaIrDWO4?=
- =?us-ascii?Q?cENSDjgfpYJneDJnnbeEkd5tL3eOt22TkVAw6CR6Me1pkNRJu7eiJsLh0Ia2?=
- =?us-ascii?Q?84ztq/4pSxtyJFS84JdQGPA7yZMNxnfQmREcXICSX2h1fKQRKmKL+hB5SACX?=
- =?us-ascii?Q?Q8Zq8vrB2DvKzZZaO60/BAQRbBua/7FqXKKjf07kIWsnwfT5UbnYKy2of3Sf?=
- =?us-ascii?Q?flpKBSintsu2/dh0qD9/shShpkZVzY1zWfZeNKqBLP6A3BsB3kLpgEv1ud/b?=
- =?us-ascii?Q?guw/wb+SOBhWHO/wrfTLnSaiEeFpB277mF+dWT3NX+nNJk0qlhHzAzZk6stu?=
- =?us-ascii?Q?c1eBzaQlXAdg0zFP5opuIodGtvtziWKqalCgfobew5qGkod5VWcdKpKAnunf?=
- =?us-ascii?Q?kErB40lBmlLlVnIM0mma3czsKVxRt+HSomvpvSMYtMBfj5Z25BWv/1Lh0mAo?=
- =?us-ascii?Q?QKkuiTukODPRQdZcq0MCwVrrn+15kYPIUBcLPatzIKDZ5L0RbLlG9065p2o?=
+ =?us-ascii?Q?E6fW738royCHU3pWo6t8rXemnSj31TT0oA2knrSZ4a+PuQ6o+C8riTSk+kYH?=
+ =?us-ascii?Q?i9V6nCKHlHIrA0G7GtrrCT73Kcua8RiGIoUQanBTeSmuevHo1PpU0Xw0G9HJ?=
+ =?us-ascii?Q?NzQOmbXq1HIWXjDehjNud3cmo/SNt/fS3imtM2DVW1eDRe1ckLmtq1/mzO7b?=
+ =?us-ascii?Q?b0h8Qh1tYIDw7cv+iNbSmsRj4fzhnevsn2j4v5hlSMCoeNJl256t8MDCMwWw?=
+ =?us-ascii?Q?2oQ7PdW70B+JEoq/50p0+dOPYaU9yet+MAdCbBbNsNfASqQL/oO1aLOSoSgu?=
+ =?us-ascii?Q?EjfE6QozBHJXi0dHKPUs7ziqxGHN1girQnoblVKcFcrtHGR449bs/4lqcmAW?=
+ =?us-ascii?Q?tLqPAniUVgrlcMRDx09pAAuQl3TAUUhMFJN4zzkK9yxtIN1nFpH1PYg3Xzzd?=
+ =?us-ascii?Q?RXwKnfj9uk8TDaI/pRBRyoiI7OfLGudOe8HBSuzwB79sB0/gs8egJinuM34M?=
+ =?us-ascii?Q?/a2CctmI++C1zKLzpARrTWeKGRAfTmcLnYOGv2giv+GjWzZ6IZNzQw4IujHP?=
+ =?us-ascii?Q?eDXjHvyrhxRqDUmlVqCXkxR+Tju1sYldmR+RrBjU/JMkCQkwToBirp42pisT?=
+ =?us-ascii?Q?aV5QGssaDA3dUNSH/ls0EYwNRWRL1dbschwhfGPeUD9mGYAJO419pq2SIn1v?=
+ =?us-ascii?Q?UVQIUZ3psplLbyarQk2kiUZSufVk3leKjmxxCuO94zj5mNhVHI8zohRBcUdP?=
+ =?us-ascii?Q?rim352OcU03bfNDMLItqiGvLaoxEDa6MuAWF6gibdRvd2XERI2pHtyQEnSAl?=
+ =?us-ascii?Q?xZpTj7vwSS6fPPoHZCTf2QxMG+sxlLeHhnCb3lXupfdLVo7lz08ZkCyi/GqT?=
+ =?us-ascii?Q?wpetU2ZT1BffAgoehuPhL2mKFmG/LSDhDV16GpLGSGemYA4nWLdcCXDJRG/E?=
+ =?us-ascii?Q?pPt7IaTlOjk+cj4YW2dbC3A6sfDvXz+8q3lB3P/4dHkk/0aTh+R7OB62JK5n?=
+ =?us-ascii?Q?AureSmbn8JZyImwtNkeCKY1yxkD2diFvZj+bvC5o2fD20xuoPBINaFal7gLp?=
+ =?us-ascii?Q?LABeI7V0z1wBcRz83aK7yjzkl/6Rtl2RSgiefDbgGY9pJ1htE1YzuUlYu2Ey?=
+ =?us-ascii?Q?zE1Lk3inwY6efZr9A7Czzej7jp+j4gKxSCIOkDti8TasIx0pR8tSMPpL7Vtv?=
+ =?us-ascii?Q?GCcKdFAScyhJMF0UzFDTsg434DMVN+/Qay6cFco/Qcps7zoyBxKDrLWVZa3B?=
+ =?us-ascii?Q?4bqo0pUxMhg5+vUCfFkdThle9/wBbWCQQLpz0Tp1N63OhKtWKhdB0YaXFvY?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -150,8 +149,8 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b14338a-ef31-4250-0ef9-08ddc9475e22
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2025 17:44:11.5606
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cb6b9fb-8672-412c-f779-08ddc947634a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2025 17:44:20.1665
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -161,293 +160,51 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR02MB9201
 From: Roman Kisel <romank@linux.microsoft.com> Sent: Monday, July 14, 2025 =
 3:16 PM
 >=20
-> Confidential VMBus requires interacting with two SynICs -- one
-> provided by the host hypervisor, and one provided by the paravisor.
-> Each SynIC requires its own message and event pages.
+> When the confidential VMBus is available, the guest should post
+> messages to the paravisor.
 >=20
-> Refactor and extend the existing code to add allocating and freeing
-> the message and event pages for the paravisor SynIC when it is
-> present.
+> Update hv_post_message() to post messages to the paravisor rather than
+> through GHCB or TD calls.
 >=20
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 
-Modulo a nit called out below,
 Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 
 > ---
->  drivers/hv/hv.c           | 184 +++++++++++++++++++-------------------
->  drivers/hv/hyperv_vmbus.h |  18 ++++
->  2 files changed, 112 insertions(+), 90 deletions(-)
+>  drivers/hv/hv.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 >=20
 > diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 964b9102477d..e9ee0177d765 100644
+> index e9ee0177d765..816f8a14ff63 100644
 > --- a/drivers/hv/hv.c
 > +++ b/drivers/hv/hv.c
-> @@ -94,10 +94,70 @@ int hv_post_message(union hv_connection_id connection=
-_id,
->  	return hv_result(status);
->  }
+> @@ -74,7 +74,11 @@ int hv_post_message(union hv_connection_id connection_=
+id,
+>  	aligned_msg->payload_size =3D payload_size;
+>  	memcpy((void *)aligned_msg->payload, payload, payload_size);
 >=20
-> +static int hv_alloc_page(void **page, bool decrypt, const char *note)
-> +{
-> +	int ret =3D 0;
-> +
-> +	/*
-> +	 * After the page changes its encryption status, its contents might
-> +	 * appear scrambled on some hardware. Thus `get_zeroed_page` would
-> +	 * zero the page out in vain, so do that explicitly exactly once.
-> +	 *
-> +	 * By default, the page is allocated encrypted in a CoCo VM.
-> +	 */
-> +	*page =3D (void *)__get_free_page(GFP_KERNEL);
-> +	if (!*page)
-> +		return -ENOMEM;
-> +
-> +	if (decrypt)
-> +		ret =3D set_memory_decrypted((unsigned long)*page, 1);
-> +	if (ret)
-> +		goto failed;
-> +
-> +	memset(*page, 0, PAGE_SIZE);
-> +	return 0;
-> +
-> +failed:
-> +	/*
-> +	 * Report the failure but don't put the page back on the free list as
-> +	 * its encryption status is unknown.
-> +	 */
-> +	pr_err("allocation failed for %s page, error %d, decrypted %d\n",
-> +		note, ret, decrypt);
-> +	*page =3D NULL;
-> +	return ret;
-> +}
-> +
-> +static int hv_free_page(void **page, bool encrypt, const char *note)
-> +{
-> +	int ret =3D 0;
-> +
-> +	if (!*page)
-> +		return 0;
-> +
-> +	if (encrypt)
-> +		ret =3D set_memory_encrypted((unsigned long)*page, 1);
-> +
-> +	/*
-> +	 * In the case of the failure, the page is leaked. Something is wrong,
-> +	 * prefer to lose the page with the unknown encryption status and stay =
-afloat.
-> +	 */
-> +	if (ret) {
-> +		pr_err("deallocation failed for %s page, error %d, encrypt %d\n",
-> +			note, ret, encrypt);
-> +	} else
-
-Nit: The braces here are unnecessary.
-
-> +		free_page((unsigned long)*page);
-> +
-> +	*page =3D NULL;
-> +
-> +	return ret;
-> +}
-> +
->  int hv_synic_alloc(void)
->  {
->  	int cpu, ret =3D -ENOMEM;
->  	struct hv_per_cpu_context *hv_cpu;
-> +	const bool decrypt =3D !vmbus_is_confidential();
->=20
->  	/*
->  	 * First, zero all per-cpu memory areas so hv_synic_free() can
-> @@ -123,73 +183,37 @@ int hv_synic_alloc(void)
->  			     vmbus_on_msg_dpc, (unsigned long)hv_cpu);
->=20
->  		if (ms_hyperv.paravisor_present && hv_isolation_type_tdx()) {
-> -			hv_cpu->post_msg_page =3D (void *)get_zeroed_page(GFP_ATOMIC);
-> -			if (!hv_cpu->post_msg_page) {
-> -				pr_err("Unable to allocate post msg page\n");
-> +			ret =3D hv_alloc_page(&hv_cpu->post_msg_page,
-> +				decrypt, "post msg");
-> +			if (ret)
->  				goto err;
-> -			}
-> -
-> -			ret =3D set_memory_decrypted((unsigned long)hv_cpu->post_msg_page, 1)=
-;
-> -			if (ret) {
-> -				pr_err("Failed to decrypt post msg page: %d\n", ret);
-> -				/* Just leak the page, as it's unsafe to free the page. */
-> -				hv_cpu->post_msg_page =3D NULL;
-> -				goto err;
-> -			}
-> -
-> -			memset(hv_cpu->post_msg_page, 0, PAGE_SIZE);
->  		}
->=20
->  		/*
-> -		 * Synic message and event pages are allocated by paravisor.
-> -		 * Skip these pages allocation here.
-> +		 * If these SynIC pages are not allocated, SIEF and SIM pages
-> +		 * are configured using what the root partition or the paravisor
-> +		 * provides upon reading the SIEFP and SIMP registers.
->  		 */
->  		if (!ms_hyperv.paravisor_present && !hv_root_partition()) {
-> -			hv_cpu->hyp_synic_message_page =3D
-> -				(void *)get_zeroed_page(GFP_ATOMIC);
-> -			if (!hv_cpu->hyp_synic_message_page) {
-> -				pr_err("Unable to allocate SYNIC message page\n");
-> +			ret =3D hv_alloc_page(&hv_cpu->hyp_synic_message_page,
-> +				decrypt, "hypervisor SynIC msg");
-> +			if (ret)
->  				goto err;
-> -			}
-> -
-> -			hv_cpu->hyp_synic_event_page =3D
-> -				(void *)get_zeroed_page(GFP_ATOMIC);
-> -			if (!hv_cpu->hyp_synic_event_page) {
-> -				pr_err("Unable to allocate SYNIC event page\n");
-> -
-> -				free_page((unsigned long)hv_cpu->hyp_synic_message_page);
-> -				hv_cpu->hyp_synic_message_page =3D NULL;
-> +			ret =3D hv_alloc_page(&hv_cpu->hyp_synic_event_page,
-> +				decrypt, "hypervisor SynIC event");
-> +			if (ret)
->  				goto err;
-> -			}
->  		}
->=20
-> -		if (!ms_hyperv.paravisor_present &&
-> -		    (hv_isolation_type_snp() || hv_isolation_type_tdx())) {
-> -			ret =3D set_memory_decrypted((unsigned long)
-> -				hv_cpu->hyp_synic_message_page, 1);
-> -			if (ret) {
-> -				pr_err("Failed to decrypt SYNIC msg page: %d\n", ret);
-> -				hv_cpu->hyp_synic_message_page =3D NULL;
-> -
-> -				/*
-> -				 * Free the event page here so that hv_synic_free()
-> -				 * won't later try to re-encrypt it.
-> -				 */
-> -				free_page((unsigned long)hv_cpu->hyp_synic_event_page);
-> -				hv_cpu->hyp_synic_event_page =3D NULL;
-> +		if (vmbus_is_confidential()) {
-> +			ret =3D hv_alloc_page(&hv_cpu->para_synic_message_page,
-> +				false, "paravisor SynIC msg");
-> +			if (ret)
->  				goto err;
-> -			}
-> -
-> -			ret =3D set_memory_decrypted((unsigned long)
-> -				hv_cpu->hyp_synic_event_page, 1);
-> -			if (ret) {
-> -				pr_err("Failed to decrypt SYNIC event page: %d\n", ret);
-> -				hv_cpu->hyp_synic_event_page =3D NULL;
-> +			ret =3D hv_alloc_page(&hv_cpu->para_synic_event_page,
-> +				false, "paravisor SynIC event");
-> +			if (ret)
->  				goto err;
-> -			}
-> -
-> -			memset(hv_cpu->hyp_synic_message_page, 0, PAGE_SIZE);
-> -			memset(hv_cpu->hyp_synic_event_page, 0, PAGE_SIZE);
->  		}
+> -	if (ms_hyperv.paravisor_present) {
+> +	if (ms_hyperv.paravisor_present && !vmbus_is_confidential()) {
+> +		/*
+> +		 * If the VMBus isn't confidential, use the CoCo-specific
+> +		 * mechanism to communicate with the hypervisor.
+> +		 */
+>  		if (hv_isolation_type_tdx())
+>  			status =3D hv_tdx_hypercall(HVCALL_POST_MESSAGE,
+>  						  virt_to_phys(aligned_msg), 0);
+> @@ -85,6 +89,11 @@ int hv_post_message(union hv_connection_id connection_=
+id,
+>  		else
+>  			status =3D HV_STATUS_INVALID_PARAMETER;
+>  	} else {
+> +		/*
+> +		 * If there is no paravisor, this will go to the hypervisor.
+> +		 * In the Confidential VMBus case, there is the paravisor
+> +		 * to which this will trap.
+> +		 */
+>  		status =3D hv_do_hypercall(HVCALL_POST_MESSAGE,
+>  					 aligned_msg, NULL);
 >  	}
->=20
-> @@ -205,48 +229,28 @@ int hv_synic_alloc(void)
->=20
->  void hv_synic_free(void)
->  {
-> -	int cpu, ret;
-> +	int cpu;
-> +	const bool encrypt =3D !vmbus_is_confidential();
->=20
->  	for_each_present_cpu(cpu) {
->  		struct hv_per_cpu_context *hv_cpu =3D
->  			per_cpu_ptr(hv_context.cpu_context, cpu);
->=20
-> -		/* It's better to leak the page if the encryption fails. */
-> -		if (ms_hyperv.paravisor_present && hv_isolation_type_tdx()) {
-> -			if (hv_cpu->post_msg_page) {
-> -				ret =3D set_memory_encrypted((unsigned long)
-> -					hv_cpu->post_msg_page, 1);
-> -				if (ret) {
-> -					pr_err("Failed to encrypt post msg page: %d\n", ret);
-> -					hv_cpu->post_msg_page =3D NULL;
-> -				}
-> -			}
-> +		if (ms_hyperv.paravisor_present && hv_isolation_type_tdx())
-> +			hv_free_page(&hv_cpu->post_msg_page,
-> +				encrypt, "post msg");
-> +		if (!ms_hyperv.paravisor_present && !hv_root_partition()) {
-> +			hv_free_page(&hv_cpu->hyp_synic_event_page,
-> +				encrypt, "hypervisor SynIC event");
-> +			hv_free_page(&hv_cpu->hyp_synic_message_page,
-> +				encrypt, "hypervisor SynIC msg");
->  		}
-> -
-> -		if (!ms_hyperv.paravisor_present &&
-> -		    (hv_isolation_type_snp() || hv_isolation_type_tdx())) {
-> -			if (hv_cpu->hyp_synic_message_page) {
-> -				ret =3D set_memory_encrypted((unsigned long)
-> -					hv_cpu->hyp_synic_message_page, 1);
-> -				if (ret) {
-> -					pr_err("Failed to encrypt SYNIC msg page: %d\n", ret);
-> -					hv_cpu->hyp_synic_message_page =3D NULL;
-> -				}
-> -			}
-> -
-> -			if (hv_cpu->hyp_synic_event_page) {
-> -				ret =3D set_memory_encrypted((unsigned long)
-> -					hv_cpu->hyp_synic_event_page, 1);
-> -				if (ret) {
-> -					pr_err("Failed to encrypt SYNIC event page: %d\n", ret);
-> -					hv_cpu->hyp_synic_event_page =3D NULL;
-> -				}
-> -			}
-> +		if (vmbus_is_confidential()) {
-> +			hv_free_page(&hv_cpu->para_synic_event_page,
-> +				false, "paravisor SynIC event");
-> +			hv_free_page(&hv_cpu->para_synic_message_page,
-> +				false, "paravisor SynIC msg");
->  		}
-> -
-> -		free_page((unsigned long)hv_cpu->post_msg_page);
-> -		free_page((unsigned long)hv_cpu->hyp_synic_event_page);
-> -		free_page((unsigned long)hv_cpu->hyp_synic_message_page);
->  	}
->=20
->  	kfree(hv_context.hv_numa_map);
-> diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-> index fc3cdb26ff1a..16b5cf1bca19 100644
-> --- a/drivers/hv/hyperv_vmbus.h
-> +++ b/drivers/hv/hyperv_vmbus.h
-> @@ -120,8 +120,26 @@ enum {
->   * Per cpu state for channel handling
->   */
->  struct hv_per_cpu_context {
-> +	/*
-> +	 * SynIC pages for communicating with the host.
-> +	 *
-> +	 * These pages are accessible to the host partition and the hypervisor.
-> +	 * They may be used for exchanging data with the host partition and the
-> +	 * hypervisor even when they aren't trusted yet the guest partition
-> +	 * must be prepared to handle the malicious behavior.
-> +	 */
->  	void *hyp_synic_message_page;
->  	void *hyp_synic_event_page;
-> +	/*
-> +	 * SynIC pages for communicating with the paravisor.
-> +	 *
-> +	 * These pages may be accessed from within the guest partition only in
-> +	 * CoCo VMs. Neither the host partition nor the hypervisor can access
-> +	 * these pages in that case; they are used for exchanging data with the
-> +	 * paravisor.
-> +	 */
-> +	void *para_synic_message_page;
-> +	void *para_synic_event_page;
->=20
->  	/*
->  	 * The page is only used in hv_post_message() for a TDX VM (with the
 > --
 > 2.43.0
 
