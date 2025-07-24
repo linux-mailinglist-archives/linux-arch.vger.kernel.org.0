@@ -1,79 +1,79 @@
-Return-Path: <linux-arch+bounces-12933-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12932-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEE6DB10C8C
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Jul 2025 16:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC64FB10C8A
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Jul 2025 16:02:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A30BA189932B
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Jul 2025 14:01:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60CB51D00087
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Jul 2025 14:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A88C2ECD1B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 018A02ECD04;
 	Thu, 24 Jul 2025 13:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N0iRzo/H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jwFZiSQV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300292E92DC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6A22EA72A
 	for <linux-arch@vger.kernel.org>; Thu, 24 Jul 2025 13:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753365412; cv=none; b=gGidRz9TGvon00hfqRwHrerPzVQsOejyL4tVJPX78sDn13Y1CnjDQHTh6dBBqasEQkBnXh0kjYewd0mGw+0NjBXHzPUo+1HBNHUeyoA9lkhijK3nU1PFYv7/CU5+zA0XB5WW53uz650QkGPRpEYkxsQiXcSsCq2FxZawfcFrTjk=
+	t=1753365411; cv=none; b=nXrk59l7CxCJ1Ra0yK6QgKNU/a+0OCaWdI5W2e4DNpf3uiEfj2o6isemI5Qx4d7Es7AkB6BWJqdcxMsj01CXmrcwz98u30/3f2SU4KXrX06oGus6h3ZfLw8pTuSdwAChFBXSIY1LsXp+QLvyzTVTXu0T/ZfpGeFARK2GNS8P84s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753365412; c=relaxed/simple;
-	bh=wEuXEElSEoeDjBLwM+2PEoqxG10Mf5YuozE9z8W97nQ=;
+	s=arc-20240116; t=1753365411; c=relaxed/simple;
+	bh=yDgqovov3P+BgQJIgQIcPJeeBOVhAaLQJOWmJvGhnm0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E4R0QEYCrinvSyK2QMyTyV+8YlgY8uQqdFSTmankDaoUdOtNkCmaEEsU62v8XALnPDtzVmRUNF4Pje6lCuxWwIT4eS21GUcsm3SHS7QS+Phx2V9m/a2N6IHj1oDc7OExsYZltdevAtpD5ieaYBeUY2AN2W68Y+3hR4EnVhBd/OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=N0iRzo/H; arc=none smtp.client-ip=209.85.128.51
+	 MIME-Version; b=ST4W3xJ4zaknQg9TLAFVcwwTtPGs5Ro7/JQMm6Df+IwITC3qcXqtcuSQhQ2OWbc74GIa8Oz8CrJhPpuOWgnjpe4lAba0kmQY1Pf/IDFQjTk6E4Bv1B4YEerXJ7Q7EH4MDxDYCsEOczbBDUJ/qFlgAouKc2LLVOaDV3wjjcDUTm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jwFZiSQV; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45611a6a706so4975455e9.1
-        for <linux-arch@vger.kernel.org>; Thu, 24 Jul 2025 06:56:47 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45617887276so6901435e9.2
+        for <linux-arch@vger.kernel.org>; Thu, 24 Jul 2025 06:56:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753365406; x=1753970206; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1753365407; x=1753970207; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mrjIGy29vhQmG8TWG3X2445EHE3hkTtQk53xAku5ZzY=;
-        b=N0iRzo/HSw4GpGt17bXx6b6/O6ZuRBfug9PwLPcIbNX++v94NlSmli3aFPaEPK7H5r
-         iaY+TKWGEB5SfGBTAh7kaxb3R4rulLXH1c/u705kGj2fk5OEnziJZSORD+5Su9Df9h77
-         SLXNpM5LJtstYeKvG/AH0aSMHepM9tbTUo5eL/B4hyAAksFCeDY9CAq9DFQlQEHRxTmV
-         frlisfgdDdcs9lsDMmzS2iHl0vq2a6XGezRMSPMqVjbHSEIx3xFWhpPwCvrtRI10jRXY
-         fC4BJZt4VUx3H60OGMoh0qoSCptGcgPQlwoEEPuFQKolRFeRV/gh7d0hfkHSSyOK/4y6
-         sl+g==
+        bh=la6fP9HkJphfM0jMf+9F231C5ZYtMe+0kHUA15eBYp8=;
+        b=jwFZiSQVJYWsamCDFeiyWQiJ3l/lmU7kS3tELReNf7RPsOKXGDXYGlWUMofbznWnLw
+         8ZnZ1porHZcgssDi+CbL/Nm4MVmuNi2l0vKRD7VTDAoimUJoblalg2o+NqLFQgq6YvSJ
+         phfuCAjdAtTiLT/9XNloAnkBqNCM0xkC6j+phLm04TSGt8Fq+yFcCh3Uy5EFmcCdnOR6
+         cPIKZdFJos5wrXSPtaaeGbXhStNFIWhGew6+hUqzuDMNoMCgOyv7hMD+aIFhRM1QbNaw
+         T0mAS/mSYMrXQf/WBLp34BXnb39XN4U3ImwgOQAqkZ2UQWp5Exo2pQmuK5X9xRzfG5Jt
+         WZbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753365406; x=1753970206;
+        d=1e100.net; s=20230601; t=1753365407; x=1753970207;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mrjIGy29vhQmG8TWG3X2445EHE3hkTtQk53xAku5ZzY=;
-        b=GwyvNsPRvF3UhlykU0u27NyFBNxsFfYa7yI2Dt8NUL5e43D3DXHgQV0G642S9YQCQ4
-         D0ltFhF4wjzvzKK9NNxetgtrLIx3uZvUs08EGkMrCh8AwIWwZBl4+rvQkr1HIhLtxX1U
-         Nr2/LAIL/iyX/GcohAOWWcs/3X9xme2L2n8xkuuANtmY6BuL1rqv0YTksiX2a+bZPMPL
-         UqIb4yBYa6W3vcJoiRWXKBtB3+TIj5Wl3QjviiYuG9vBr9OV6+IGEWXk/O1L3aplyyMH
-         6QLhGq/CenzJURWahQLIz9cgwKaWmIfCcwStsyDGnuh6E6VykN0QC0tjazdT+I6PZPGd
-         MtYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX/amyiYDVN4mJDwhDJPFy334BG1NDQmaPh2jXj98V3HJuZVKXpU9vX2+ydP5Xv//WSWA/Gxaq4nLd3@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyFauiIMTO25dEAo2owc38f8Gc9jNqyzCToFoNHTADaN893cUa
-	X8iKJABINmsDLIJqWLOAOqYhLp8qvU4BnWLU/24VYEa4GK8HbqhsOlgG/iRyQW89Xfk=
-X-Gm-Gg: ASbGncvBVX/z1p4kBjiSuBA2VtVpZ0uP9eydOamtxk1VSgehPTzZWObEsJV2/I0O4vK
-	MzcAKdJy9L6uegh1khJOxQ0DGzqThXX1KC9l/qA1h81ZSBvOtAzmS7VTyZQvKLCDldgF/sze4ug
-	xMUGz1hK7WP/QeCujffoml9D3mdjx3+Y9wuMSwgSb2kTp7+rmyBu0ieKkFoHxRg1z2z9idB0sqk
-	hTxIaMsyX3nmyycQbo9j/qPT1NTerT4Avd/O7I23NoDHBAkhRjXkHf3SPjji+dqvnFU6hf8poYY
-	7QaOg/ZWGN6tDmYTYH25y1+xxgmPNq8sOpUnbk5awZ9jmIkQ22y1gA/0PcOo6mibmwQN0mg6Bi3
-	PrVdU+Eg5Qmx2EtsMUQSKAKFmVQLctzzpHFPJ99OYoZ1dSs4roWnv+OUQks5GeTYRZ9g53CRYfj
-	p/TkT2QkTjB/Le
-X-Google-Smtp-Source: AGHT+IEVcqWnuyhtVrHKBupbieg0QvSQq5CXC89YW4ucbe/Xkxqrak9r8AlJ1/jdx+SIbeQvU+walA==
-X-Received: by 2002:a05:600c:8b70:b0:456:2b4d:d752 with SMTP id 5b1f17b1804b1-45868d2c4cfmr54619365e9.20.1753365405757;
-        Thu, 24 Jul 2025 06:56:45 -0700 (PDT)
+        bh=la6fP9HkJphfM0jMf+9F231C5ZYtMe+0kHUA15eBYp8=;
+        b=rhlXkEnBq1BMnKG0iJAGNeoxrhoSMx3sccsu/0QxrzOXkmmsl5lFlaR2YrArB3lMY/
+         VnQ9AykFssSyFxpCrCYWqsVunPxVG1KMc5ZmRth1p5MAitOgfXtVt2csL/ucX3+rHYUc
+         lIqoP8B5TroPzQsMdkWvZ6ev5d++539IoaNF4CJuGk9mT+LlI7fkyengp5ufVodCk5gH
+         mDHI3myaWRb02MEvkgOrqb5KIiiClRqco2sQo37Kr5SNNjd0g4efTpBA14QGXFsyUjIC
+         ca4MWncpWkSKopMXSQPiuWRFjWGNKzOqVdhxSjjspRMLL6u4+KQAXCqXnfC/1BfedML1
+         hznw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuqJ2GD44gpUxn7UI9mkyXk0N4w0HDYJy5NCUMW/Wbu33HSuC+8C0nvWNHPPIByeYmmhc8s7sh+TXg@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRRLnHgE9nEX7oCOr7JOFNMSTZPihVWDJSMrYudj5qOkPS4RpW
+	gu3b0bmvJZoR2GAbj4SzQPAXSR4HQGt2H7RLeYnlNE5o/BZoVtiXRVnFgar1N5IIfcM=
+X-Gm-Gg: ASbGncuuMVOfd7fet3Kkh6PSYlti4JxlrAlLYOM/TNVS8Xr64vO7UuJ9J7PchIviTfS
+	kvq1hCLu+GQzI2OI/TDSIdEk9GI/XvBv0/Xk8AUY23JQjf6B5MiOGkys7LbQtmUosnexekkr0BO
+	Lc4++j4Og/pJr2x6mnUD3c7w0qA7ApyuGE04hlvdCAbQY9gPNTODC51LPhCSyIP4qGGf9oPdSmk
+	4hVj8WQfeF3l0Yb/8FzzeCtJUY9fJmn+a2+2nL4h1/jwLyHyHX3MR9qWBOJ6YbDrWXB0z61mapS
+	73Ubk2FYSzBnf7pmYGueG+guPPjhCTKm7qDQ4h0InB/d6F+G2NRkH7kt50Bpj3iYHVo/CLGgf9f
+	XNsyisnjB2FFyhrauT4/jiw0L/VcL3bUYS2qfjwKB/KCeTuP8Om17tcWZTteb7YwDdkGIWvCJAS
+	ilZGJBB24yxs1f
+X-Google-Smtp-Source: AGHT+IHN52iDsRUI3MC45fB2NHZ78a+PI04sVz+MJmf9Pj70BNaVdCA6rPCjq4NJ6xqIYAMwjrcKOA==
+X-Received: by 2002:a05:600c:4693:b0:456:19be:5e8 with SMTP id 5b1f17b1804b1-45868cff3ddmr60788825e9.20.1753365406597;
+        Thu, 24 Jul 2025 06:56:46 -0700 (PDT)
 Received: from eugen-station.. (cpc148880-bexl9-2-0-cust354.2-3.cable.virginm.net. [82.11.253.99])
         by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4587054e37dsm20889375e9.14.2025.07.24.06.56.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jul 2025 06:56:45 -0700 (PDT)
+        Thu, 24 Jul 2025 06:56:46 -0700 (PDT)
 From: Eugen Hristev <eugen.hristev@linaro.org>
 To: linux-kernel@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org,
@@ -90,9 +90,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	rostedt@goodmis.org,
 	jonechou@google.com,
 	tudor.ambarus@linaro.org
-Subject: [RFC][PATCH v2 26/29] init/version: Annotate init uts name separately into Kmemdump
-Date: Thu, 24 Jul 2025 16:55:09 +0300
-Message-ID: <20250724135512.518487-27-eugen.hristev@linaro.org>
+Subject: [RFC][PATCH v2 27/29] kallsyms: Annotate static information into Kmemdump
+Date: Thu, 24 Jul 2025 16:55:10 +0300
+Message-ID: <20250724135512.518487-28-eugen.hristev@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250724135512.518487-1-eugen.hristev@linaro.org>
 References: <20250724135512.518487-1-eugen.hristev@linaro.org>
@@ -104,28 +104,47 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some specific firmware is looking for the init uts name region.
-In consequence this has to be registered as a dedicated region into
-kmemdump.
+Annotate vital static information into kmemdump:
+ - kallsysms_num_syms
+ - kallsyms_relative_base
+ - kallsysms_offsets
+ - kallsysms_names
+ - kallsyms_token_table
+ - kallsyms_token_index
+ - kallsyms_markers
+ - kallsyms_seqs_of_names
+
+Information on these variables is stored into dedicated kmemdump section.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@linaro.org>
 ---
- init/version.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/kallsyms.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/init/version.c b/init/version.c
-index f5910c027948..364e7768da68 100644
---- a/init/version.c
-+++ b/init/version.c
-@@ -53,6 +53,8 @@ const char linux_banner[] __weak;
- #include "version-timestamp.c"
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 1e7635864124..442dc13d00cf 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -31,9 +31,19 @@
+ #include <linux/kernel.h>
+ #include <linux/bsearch.h>
+ #include <linux/btf_ids.h>
++#include <linux/kmemdump.h>
  
- KMEMDUMP_VAR_CORE(init_uts_ns, sizeof(init_uts_ns));
-+KMEMDUMP_VAR_CORE_NAMED(init_uts_ns_name, init_uts_ns.name,
-+			sizeof(init_uts_ns.name));
- KMEMDUMP_VAR_CORE(linux_banner, sizeof(linux_banner));
+ #include "kallsyms_internal.h"
  
- EXPORT_SYMBOL_GPL(init_uts_ns);
++KMEMDUMP_VAR_CORE(kallsyms_num_syms, sizeof(kallsyms_num_syms));
++KMEMDUMP_VAR_CORE(kallsyms_relative_base, sizeof(kallsyms_relative_base));
++KMEMDUMP_VAR_CORE(kallsyms_offsets, sizeof(&kallsyms_offsets));
++KMEMDUMP_VAR_CORE(kallsyms_names, sizeof(&kallsyms_names));
++KMEMDUMP_VAR_CORE(kallsyms_token_table, sizeof(&kallsyms_token_table));
++KMEMDUMP_VAR_CORE(kallsyms_token_index, sizeof(&kallsyms_token_index));
++KMEMDUMP_VAR_CORE(kallsyms_markers, sizeof(&kallsyms_markers));
++KMEMDUMP_VAR_CORE(kallsyms_seqs_of_names, sizeof(&kallsyms_seqs_of_names));
++
+ /*
+  * Expand a compressed symbol data into the resulting uncompressed string,
+  * if uncompressed string is too long (>= maxlen), it will be truncated,
 -- 
 2.43.0
 
