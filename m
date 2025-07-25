@@ -1,88 +1,87 @@
-Return-Path: <linux-arch+bounces-12951-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12952-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B17CB11D25
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 13:08:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4599B11D2F
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 13:09:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAFE116EE5C
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 11:08:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A85BAE3793
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 11:08:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C692E4271;
-	Fri, 25 Jul 2025 11:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E8A2E6112;
+	Fri, 25 Jul 2025 11:09:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TFqFrKcQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RwNxI0XQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD89217F33;
-	Fri, 25 Jul 2025 11:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B812D9EE3;
+	Fri, 25 Jul 2025 11:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753441702; cv=none; b=A/EAqH166nOinZgdt7hIMFhitG1LRQOAqpR/t3ytK975q4CxjQqaE+6v+cRXcPDvgmOuGovarcDr48VEsy5p03fOUF6WDlxRE2jU7KFinLGrAa+4rrvvBO5wLV+moLGlOI7D6DDXXf+RE11TLO08hvODIhk3KNSbsXwxKG5TmuM=
+	t=1753441756; cv=none; b=B8BbC8J6ja9IQTDaojOtqPcozWN3leJKoWRz+nxIGIiJl7AT3dl5InARX2QfCCjQRbk9YU5bU6/atPWfM/SS5DscCwsD3zsnnMgyEAEKEj9tOya3mkfhLAXtfefjFjfU1ws0Nvx4gZxcl55M5vjL7UO8X4ZFazj+5WoduTgX5kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753441702; c=relaxed/simple;
-	bh=dLVIv41rWSo97X2xoetUsogBS0HyvRd6CcH34BoydPw=;
+	s=arc-20240116; t=1753441756; c=relaxed/simple;
+	bh=r6TFW6LEnDFDgljm7T9nclsKj7smdp/z2thlL3Bp7MQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UAizVOvfk33vn8iZMyIHAz5/UOSQ05ezZGTCc2hJfVHkR2NJE8KehBONpdXRnRnt5mha3mZcR/r8Lbr3KfQM/60i/ztFBBc3yRKeClssOC3pKiTtaU0qF1/CK9HpuAbjJvnpAoIYDMpqOTnU/XphJlq4yAwvbCF3wDWcAoMOKu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TFqFrKcQ; arc=none smtp.client-ip=209.85.214.180
+	 To:Cc:Content-Type; b=km27GBAp9M12+gVvCVV978gQRmORYYjE40Y4FQcI6PWlNQ2EB2sT1sDTu+QE0KsrtOGaCU1p/yvWX24GHK5/rrI4pyJDbfX7zQtcpWRHfm3tgg1BQhb4QMrggGzauknVlkWcXj1rl7Zg1hCiPdx5/B4uiG+XZ6qzbQPW1opNO0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RwNxI0XQ; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2350fc2591dso24170185ad.1;
-        Fri, 25 Jul 2025 04:08:21 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-313910f392dso1500508a91.2;
+        Fri, 25 Jul 2025 04:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753441701; x=1754046501; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753441754; x=1754046554; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dLVIv41rWSo97X2xoetUsogBS0HyvRd6CcH34BoydPw=;
-        b=TFqFrKcQE+t7AXBbdo+xYzYZRBpAj/Yt2P6vWXCoIoRHGZtAbGq++3PS7bk3Y4iKJm
-         7Alo7nKYwHrNcG8JA83Id1wn5gAEr5mdNVwhsDXZAEOXfWhGePeFsfZPYosNHnt3Azcx
-         XYKgXZDm6bcOzupWi/QRIf/DGNTnStEiIGBbmSxzqMgHFxNd21+OwigTV8cD4OFedeeQ
-         EiSc4Rc63sI+71BV6RwR+kNXXP/5biX9sDh0gTTRhHUvXwK6vd8jhgj3xkW2Dq9Y54ie
-         aNbdhZFFXQyxRFMdfuSE6ofIxH6/9k61xvFyXrki2Pn6ffmovQ1EH7lwfGfuHrCmS3hI
-         mOlg==
+        bh=G4dcsgHJsiFuB5DH2cQD4a717boBYqK/NeHn/u7KI9k=;
+        b=RwNxI0XQAEQIiS6E1e253nyKMK2uTvj04eFBT3NZkGmF9e0huW1toU+1D3BDPEM4eh
+         Str5whAgWMIo4Y9X6C8Q96JwLoj5Liw01k/G03jgce8r6L/zTMdkwB9e+WSFpapEXpol
+         gO4PKvt3wlFZMORGYj9hZbbiw8FG8mriCizhpDnWB7C8PCKLYBitHsODTeWRbTWWJPVs
+         2H/kw5SI+ChRB6wMx43/ktNmX59i3X25c1U5eaWawE/2gkIiywWuZZ3gJX58To/k09Ic
+         aRwMthLXrg+GIkFuEHwR0mZIsHnaMzGPUm+8Sl57vr/lveQvRZlm4X5Q7PGdLcSMJXUE
+         /pxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753441701; x=1754046501;
+        d=1e100.net; s=20230601; t=1753441754; x=1754046554;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dLVIv41rWSo97X2xoetUsogBS0HyvRd6CcH34BoydPw=;
-        b=ZbOOpflRldGV72XnTMQ+lVbNIxpaSKiurHTQtPG9GpSj375v741PWIZvrbhapqwW8e
-         9dwWk2fGc1psThla2rivu9B+jiYRCe4uQJKGFIBS28fg0c9rxBcIMFxvKVPH+ZQcV84A
-         TmQ1NMnb+HGFqvX7siJg5+Tg7o64ZViXdWeCULhRUMsg8U5hTZi+Rz+Xlf6TjKqlFvY4
-         YLgiGi59USOcmUxVFmVDmKgwTLeYnFYDQmlxZgRmFYgH2rKDa1l5qyvvYYUAS4K1ajp/
-         8At9QzI7/bcsKeoiPdkTwnCBtVzLccwjcynx5JB9+kPYxUnXolgEk+wEZZKUvTz/0q2Q
-         +VJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCyEPRy3dB97As0ntwm5rhdg+eDkJX2SfRlexalb5YedpVBeC68Gmiodk3TU6CbQZZLX5xW3Pieu7gIB52@vger.kernel.org, AJvYcCWb3ODh1plUORXjnwHUKK2LmsM4C5oZGAaMMq/KBs47Br7OdbHRQr6jH414K4gNsmP4zMZVxYRRxbEb@vger.kernel.org, AJvYcCWjRqbyYEKH4GxmZTI4utC45/g1MCEGq5Q3TIEXng6BexpHYSp8cXy+x4E0bo+J4PNVPogjSTPBJdzrpF/j@vger.kernel.org, AJvYcCX13adP/vXiu+G5GhlCcjmJzxBbV3bdLo3UWYFZbyTM9agJAyc+lGa61vJ/+p6dZqNme0nEftk0iFgY@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywp/xDSOu8sKgAF9rpBDpWI4b//qwi3EVCt2MOecM13Yk3L8wPN
-	h2cDSX5g6dn8BprGWzQSCEas6z7MdKRljUsCW0cUBZcxWcARPkZSVsMFMuT60BbuthGKOC9RoTe
-	BLWX/BeHq0CqJn9xl179jInf/d4n9T18=
-X-Gm-Gg: ASbGncuuu8tXZhsDGXKRP4ACjtMQjJspobLUKZUbp5iTvSaTHKhBEzErQfuew/Q2zTn
-	mNSu4vhhRXvNnKS32EYxIp5KwybHVew9ic9+oqr5RHyva9iVaViqRJLBHxamQmKto8/19GV78Jr
-	OL7g5ihXPyNJu2WWilYa5yREScOPp4plpaO5TVGa1JpXZSBwoK5Rf4Dnw47ukDr+j6HenpM6+Fe
-	EkJ
-X-Google-Smtp-Source: AGHT+IHfE0O//VX0wStE+T7I/MutBAXm3En5t6OVKcspLL/SoC/4kpBYMFjZMvwN49zLxcbne+cHozngWwP0Vh/P0xQ=
-X-Received: by 2002:a17:902:ce82:b0:231:d0da:5e1f with SMTP id
- d9443c01a7336-23fb2bc6c70mr28718045ad.21.1753441700537; Fri, 25 Jul 2025
- 04:08:20 -0700 (PDT)
+        bh=G4dcsgHJsiFuB5DH2cQD4a717boBYqK/NeHn/u7KI9k=;
+        b=CWpDKsANCEtzPuoBjLUgLlfkKPvlzIQC3TZzxrzBY4RcxNpBeTvb2gOqeVadAoQH/I
+         +keGYh0eGo7vDBuB6h7qTfcxfWYRLUDU8XH0aFYvE6bD6PFbADoqfKGOJbP9BfOKcJQr
+         51q6VB+g8jWb/9F8UY6ZKXMnC8fncw4+VtvqKnZLEcsChuah5Qa3mTvHcOUbOvuvCbOA
+         VxRN8YgGJ0ORKSFLp8XZIRoDqaQK7PV5uZEf1Hp0T8cDsVOGJc6KC+hfP/8Xi19t7gyN
+         LCbX8jLFhBBYqLu6AJqWljRsfvUTw7ENIypsZXtLbU7F6RN04Cf2hhsrIfq2+0UANbVz
+         ozPw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTQFHZRs51VWmmh9bzdo2SKcGaKlyjwXS0khxfprM3u8pRBmSXHp+660zJYi3PeIGxpd5P7uXcyH2ia27Q@vger.kernel.org, AJvYcCWGQ2QK/dmY2L2i2juUJp3HyD9ncAcwbdT4465Ki1S4t/nkYqbFLkdTOLqCPdl+F1gN8vH52d/0SymZ@vger.kernel.org, AJvYcCWmp2yT2H/AifgMtNABFmL5W3/5IsoRhdvxMLQhS6cypXcey5TfIWzxYKSDUH6DggOeZzrRZSeIngHE@vger.kernel.org, AJvYcCXEXAg8TrfgXZknSw1vfzqpr+JtV25WLbbKSPHq60xVU0+76rBdITj/v/1BC6I+2hAxLPUslCwKIesmFxmx@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4eSLUM5WppKHPa96aHSrBLO5d4LxjVALvKjWxOQxxVzbueTNp
+	N5NfASY045Pl2zK5uK104DnBO6HyPo//aTt7QWwcMdmPkqxVV1SfgeT73XoWJcvN3rJM6ZAzDIR
+	XUR+PatF10wkysZhd4SCcncCUc5p/iEA=
+X-Gm-Gg: ASbGncvS8sI0oWVcHR2vPuXhOG9rn+YUOE2BIdZV7AD7GUQTb8vXwSHAIFh6Ifntolm
+	EjNXEWPDpJYeHruwo6u7khCW8tJG8ZwVcbCebvuo54/P155a3y7BEMSo2lFr/FlXPKq/IVUEG32
+	z+muO+rqRjJeGlTdosf9xU4UXUtU9VtPfGQJqtI2GyslfT+wmvjC9h+0bTE9ksO4DA/GMio2RKR
+	1Xj
+X-Google-Smtp-Source: AGHT+IHzc69ul6W9dr1PZNQjrkdeeaQAbz/elxAykodnDXCU37bqxvv59Sf0g3PkwZUP1bQTMcpl5i4V0RAyNvW6vGY=
+X-Received: by 2002:a17:90a:d40e:b0:313:1e9d:404b with SMTP id
+ 98e67ed59e1d1-31e7783b3c0mr2460183a91.2.1753441754040; Fri, 25 Jul 2025
+ 04:09:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250714221545.5615-1-romank@linux.microsoft.com> <20250714221545.5615-8-romank@linux.microsoft.com>
-In-Reply-To: <20250714221545.5615-8-romank@linux.microsoft.com>
+References: <20250714221545.5615-1-romank@linux.microsoft.com> <20250714221545.5615-9-romank@linux.microsoft.com>
+In-Reply-To: <20250714221545.5615-9-romank@linux.microsoft.com>
 From: Tianyu Lan <ltykernel@gmail.com>
-Date: Fri, 25 Jul 2025 19:07:44 +0800
-X-Gm-Features: Ac12FXzQu8VeJjXldh1azHy1zVkvNFhCSGqwqvAy7CtaMelN_ZcDpAZXus1a6Cc
-Message-ID: <CAMvTesBriJcLdxyrBbGjj0Gh1aoE84uPbnZ2DMKnmPaTtRjWqg@mail.gmail.com>
-Subject: Re: [PATCH hyperv-next v4 07/16] Drivers: hv: Post messages through
- the confidential VMBus if available
+Date: Fri, 25 Jul 2025 19:08:37 +0800
+X-Gm-Features: Ac12FXzPuW-X6w99YdkxRL9JtBmW1hyu8BbtCuoFQLmf7Mp6jVRHMfrBCkYMIAg
+Message-ID: <CAMvTesDEqDKXdFZ6+k6nrvEx-9+HQuC_dOdmoN5SqXmoCEKNXg@mail.gmail.com>
+Subject: Re: [PATCH hyperv-next v4 08/16] Drivers: hv: remove stale comment
 To: Roman Kisel <romank@linux.microsoft.com>
 Cc: alok.a.tiwari@oracle.com, arnd@arndb.de, bp@alien8.de, corbet@lwn.net, 
 	dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com, 
@@ -98,14 +97,38 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jul 15, 2025 at 6:16=E2=80=AFAM Roman Kisel <romank@linux.microsoft=
 .com> wrote:
 >
-> When the confidential VMBus is available, the guest should post
-> messages to the paravisor.
+> The comment about the x2v shim is ancient and long since incorrect.
 >
-> Update hv_post_message() to post messages to the paravisor rather than
-> through GHCB or TD calls.
+> Remove the incorrect comment.
 >
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
+>  drivers/hv/hv.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+>
+> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+> index 816f8a14ff63..820711e954d1 100644
+> --- a/drivers/hv/hv.c
+> +++ b/drivers/hv/hv.c
+> @@ -266,11 +266,7 @@ void hv_synic_free(void)
+>  }
+>
+>  /*
+> - * hv_synic_init - Initialize the Synthetic Interrupt Controller.
+> - *
+> - * If it is already initialized by another entity (ie x2v shim), we need=
+ to
+> - * retrieve the initialized message and event pages.  Otherwise, we crea=
+te and
+> - * initialize the message and event pages.
+> + * hv_synic_enable_regs - Initialize the Synthetic Interrupt Controller.
+>   */
+>  void hv_synic_enable_regs(unsigned int cpu)
+>  {
+> --
+> 2.43.0
+>
+>
 
 Reviewed-by: Tianyu Lan <tiala@microsoft.com>
 --=20
