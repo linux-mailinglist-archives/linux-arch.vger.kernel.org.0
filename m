@@ -1,87 +1,88 @@
-Return-Path: <linux-arch+bounces-12952-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12953-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4599B11D2F
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 13:09:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DD4FB11D53
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 13:14:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A85BAE3793
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 11:08:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FD225A2F26
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 11:14:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E8A2E6112;
-	Fri, 25 Jul 2025 11:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDEE02E5B14;
+	Fri, 25 Jul 2025 11:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RwNxI0XQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="REO6xqKh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B812D9EE3;
-	Fri, 25 Jul 2025 11:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E5F2E54CA;
+	Fri, 25 Jul 2025 11:14:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753441756; cv=none; b=B8BbC8J6ja9IQTDaojOtqPcozWN3leJKoWRz+nxIGIiJl7AT3dl5InARX2QfCCjQRbk9YU5bU6/atPWfM/SS5DscCwsD3zsnnMgyEAEKEj9tOya3mkfhLAXtfefjFjfU1ws0Nvx4gZxcl55M5vjL7UO8X4ZFazj+5WoduTgX5kE=
+	t=1753442085; cv=none; b=oxBz6n1By7bNlP0iPYNcBK+IjENozxKTW5I62fgK4IWlNnnXRlrgIeS8TP76I+Yi5XrTMErwn8CeT8fVy7SYnnIODLIiaL9SxnO3l6Z8pP72ACvCLcTKFFCV04M85qAFoG/q0QC89hF0UffX/ITdcxo/H7KTH69m+nVB1wAfLmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753441756; c=relaxed/simple;
-	bh=r6TFW6LEnDFDgljm7T9nclsKj7smdp/z2thlL3Bp7MQ=;
+	s=arc-20240116; t=1753442085; c=relaxed/simple;
+	bh=ShnHV7JNrTopJF7AM7OfGbO3XWiG23k6eeCn8GuXIpw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=km27GBAp9M12+gVvCVV978gQRmORYYjE40Y4FQcI6PWlNQ2EB2sT1sDTu+QE0KsrtOGaCU1p/yvWX24GHK5/rrI4pyJDbfX7zQtcpWRHfm3tgg1BQhb4QMrggGzauknVlkWcXj1rl7Zg1hCiPdx5/B4uiG+XZ6qzbQPW1opNO0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RwNxI0XQ; arc=none smtp.client-ip=209.85.216.52
+	 To:Cc:Content-Type; b=soUI5+EDksDlXczwwGTZcNdd4gFMzz6PFYj2geHC28v4sT4gYjbcpLQ4KlNAT0hIVxocaoQZszm5mS232zU1vLO6InqSdtefaFSZa1Qd6v5w6160temb8PZhEWXFwolcbU6YrUHhPrgW+a+ec8O6LrP1Qm8IfvY1MWAEY7cRyVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=REO6xqKh; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-313910f392dso1500508a91.2;
-        Fri, 25 Jul 2025 04:09:14 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-234f17910d8so17242745ad.3;
+        Fri, 25 Jul 2025 04:14:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753441754; x=1754046554; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753442083; x=1754046883; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G4dcsgHJsiFuB5DH2cQD4a717boBYqK/NeHn/u7KI9k=;
-        b=RwNxI0XQAEQIiS6E1e253nyKMK2uTvj04eFBT3NZkGmF9e0huW1toU+1D3BDPEM4eh
-         Str5whAgWMIo4Y9X6C8Q96JwLoj5Liw01k/G03jgce8r6L/zTMdkwB9e+WSFpapEXpol
-         gO4PKvt3wlFZMORGYj9hZbbiw8FG8mriCizhpDnWB7C8PCKLYBitHsODTeWRbTWWJPVs
-         2H/kw5SI+ChRB6wMx43/ktNmX59i3X25c1U5eaWawE/2gkIiywWuZZ3gJX58To/k09Ic
-         aRwMthLXrg+GIkFuEHwR0mZIsHnaMzGPUm+8Sl57vr/lveQvRZlm4X5Q7PGdLcSMJXUE
-         /pxQ==
+        bh=AaiH/38WONPy8fzRyhRHdFQdB6YbrzolydS9CtzX8Do=;
+        b=REO6xqKhPMwWEVr9/eoOWF1Dbogb6ALuraK5RBTK6Ez9s8WnCDarj+CTFzm9TJIVeU
+         BsU6pP2AQg37DCTdTXniCbXaDaUw48guZUwwPkq9XDmbBzYPnGvsyLajHs+vmnP0N35n
+         xRcjCRnioLf1K0klm/mX77JLubwwln6V74XxJKFr30HEulbTZafRf/jOE3mjl1/5Debh
+         xmd9uaw4uQ2UM+xab9gcLfBrFmf4TDAtabCTixDCizRxEXHxzpevc2hW/M3kAePRku+R
+         7QJ8fTKFgSTs9H5JPrrMAYaoAMZr7s7rh1q1Z85mK8zoF16K6eLnn3mdqOXACivnlPP4
+         +MCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753441754; x=1754046554;
+        d=1e100.net; s=20230601; t=1753442083; x=1754046883;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G4dcsgHJsiFuB5DH2cQD4a717boBYqK/NeHn/u7KI9k=;
-        b=CWpDKsANCEtzPuoBjLUgLlfkKPvlzIQC3TZzxrzBY4RcxNpBeTvb2gOqeVadAoQH/I
-         +keGYh0eGo7vDBuB6h7qTfcxfWYRLUDU8XH0aFYvE6bD6PFbADoqfKGOJbP9BfOKcJQr
-         51q6VB+g8jWb/9F8UY6ZKXMnC8fncw4+VtvqKnZLEcsChuah5Qa3mTvHcOUbOvuvCbOA
-         VxRN8YgGJ0ORKSFLp8XZIRoDqaQK7PV5uZEf1Hp0T8cDsVOGJc6KC+hfP/8Xi19t7gyN
-         LCbX8jLFhBBYqLu6AJqWljRsfvUTw7ENIypsZXtLbU7F6RN04Cf2hhsrIfq2+0UANbVz
-         ozPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVTQFHZRs51VWmmh9bzdo2SKcGaKlyjwXS0khxfprM3u8pRBmSXHp+660zJYi3PeIGxpd5P7uXcyH2ia27Q@vger.kernel.org, AJvYcCWGQ2QK/dmY2L2i2juUJp3HyD9ncAcwbdT4465Ki1S4t/nkYqbFLkdTOLqCPdl+F1gN8vH52d/0SymZ@vger.kernel.org, AJvYcCWmp2yT2H/AifgMtNABFmL5W3/5IsoRhdvxMLQhS6cypXcey5TfIWzxYKSDUH6DggOeZzrRZSeIngHE@vger.kernel.org, AJvYcCXEXAg8TrfgXZknSw1vfzqpr+JtV25WLbbKSPHq60xVU0+76rBdITj/v/1BC6I+2hAxLPUslCwKIesmFxmx@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4eSLUM5WppKHPa96aHSrBLO5d4LxjVALvKjWxOQxxVzbueTNp
-	N5NfASY045Pl2zK5uK104DnBO6HyPo//aTt7QWwcMdmPkqxVV1SfgeT73XoWJcvN3rJM6ZAzDIR
-	XUR+PatF10wkysZhd4SCcncCUc5p/iEA=
-X-Gm-Gg: ASbGncvS8sI0oWVcHR2vPuXhOG9rn+YUOE2BIdZV7AD7GUQTb8vXwSHAIFh6Ifntolm
-	EjNXEWPDpJYeHruwo6u7khCW8tJG8ZwVcbCebvuo54/P155a3y7BEMSo2lFr/FlXPKq/IVUEG32
-	z+muO+rqRjJeGlTdosf9xU4UXUtU9VtPfGQJqtI2GyslfT+wmvjC9h+0bTE9ksO4DA/GMio2RKR
-	1Xj
-X-Google-Smtp-Source: AGHT+IHzc69ul6W9dr1PZNQjrkdeeaQAbz/elxAykodnDXCU37bqxvv59Sf0g3PkwZUP1bQTMcpl5i4V0RAyNvW6vGY=
-X-Received: by 2002:a17:90a:d40e:b0:313:1e9d:404b with SMTP id
- 98e67ed59e1d1-31e7783b3c0mr2460183a91.2.1753441754040; Fri, 25 Jul 2025
- 04:09:14 -0700 (PDT)
+        bh=AaiH/38WONPy8fzRyhRHdFQdB6YbrzolydS9CtzX8Do=;
+        b=jYIut+RtFXuTkE3xHMuh0c48vRQzHWd8JkxCceK7/nHPEdVE3piYvil7f2sTatHisM
+         in7wCa3S6xqWXigT5bELREmCJwbEM6oxqGEx3utIEQvG0iRy5f1nRQ7X/v5GnKBrnc7y
+         25heDHW8uAS1UOztcEaEWvXro2oXx6D3mddlk6+Fh6yu4EWEEJbBOAQluX/p76OXR73J
+         qv3z5LqNbaWDLxHo8qswSb7K4GK61uo3n+8PHvf9K73fw21z4IDBoTsrxtoAgOJ0A9Ty
+         JNH5C/fJGsnkRwxcldbFjz5K0k53e/LInnt9mbF5VD2ewinCQ+rbEgZkTn0P7QJSnlex
+         cVXA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0ilLWR2GX3Su0BoiHW5xa8gAm6R4nLppkaLbMqoF6+ywAiKBsyPkD3Z6nq2vJokgKwhxufwhHy0lT4wJl@vger.kernel.org, AJvYcCWR1i3rhicngvoi8EwOPmCIjLb2QvMfEEZrFchT82sC6UTFwOR4r+anRBSXZRavk2Plu1Q3FPdw2Gf0BnwB@vger.kernel.org, AJvYcCWyjDVXWjUl/ZmniD3s0uN28riUf/Hs8VGwoVdb+frfFUT92DkSETpZBlL9BUFS886JKpXnfyqufb31@vger.kernel.org, AJvYcCX30s6iEEZyOO99gQZ1Pd7Ze4QaoE+kPOx52fF5tLbnr2x08dIOyOfjomIWWohh9a/6R1Ooeq1dGTGt@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1wKS3Ow35a07GMxI+0BBGNqpQyFTryG27sAwh0opR76FwTtpG
+	ZcyjA5FhGcNeaPCTCfnBhL4OsNopb78fx5JjR1xi7rgFD8pYZWJZ868x2m8+9tDY+QA5Kpe1NI6
+	3DSlFi2gfPSp+AGUYBMA3lFRwBp/Pov0=
+X-Gm-Gg: ASbGncuD4fbjM6Q97af0RC+fv+QmOUJMW8SyhOGKciU4damHubCSsUrvoftbF/Zv7Nd
+	HWT3a/WXZwPfNiDUCjd3wFhCBduQFCvlysBZ6I8kF7dur7LzbvpQNSz6tLZ/GMDrpVTp4gI9e+M
+	RBcwuB6zlLxnNODagiHFKkplLdJnb+XiBoG5mivn95+mu2X+ot/2bCtSPDdi0BDOeIn119alSPV
+	73E
+X-Google-Smtp-Source: AGHT+IFVx1ZwuhzWu29nMel9dpd38C5+YSpTw1UCZrJubHtDeVnxnQB0fu/r5r4nXrA8TmFpU3Uh7Qk/EellC8klWWQ=
+X-Received: by 2002:a17:902:e948:b0:23f:b09f:52c7 with SMTP id
+ d9443c01a7336-23fb3043a03mr26463905ad.23.1753442082654; Fri, 25 Jul 2025
+ 04:14:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250714221545.5615-1-romank@linux.microsoft.com> <20250714221545.5615-9-romank@linux.microsoft.com>
-In-Reply-To: <20250714221545.5615-9-romank@linux.microsoft.com>
+References: <20250714221545.5615-1-romank@linux.microsoft.com> <20250714221545.5615-10-romank@linux.microsoft.com>
+In-Reply-To: <20250714221545.5615-10-romank@linux.microsoft.com>
 From: Tianyu Lan <ltykernel@gmail.com>
-Date: Fri, 25 Jul 2025 19:08:37 +0800
-X-Gm-Features: Ac12FXzPuW-X6w99YdkxRL9JtBmW1hyu8BbtCuoFQLmf7Mp6jVRHMfrBCkYMIAg
-Message-ID: <CAMvTesDEqDKXdFZ6+k6nrvEx-9+HQuC_dOdmoN5SqXmoCEKNXg@mail.gmail.com>
-Subject: Re: [PATCH hyperv-next v4 08/16] Drivers: hv: remove stale comment
+Date: Fri, 25 Jul 2025 19:14:06 +0800
+X-Gm-Features: Ac12FXwWTPyxekGMep4sx35p32LI3MXjz9EYbsvnC9mgbg1lm2slnKe57OCBYTs
+Message-ID: <CAMvTesCWTcXLxjOVyNF4pTqaQkXQsgKBXn1TQdK+n-9TfWfndA@mail.gmail.com>
+Subject: Re: [PATCH hyperv-next v4 09/16] Drivers: hv: Check message and event
+ pages for non-NULL before iounmap()
 To: Roman Kisel <romank@linux.microsoft.com>
 Cc: alok.a.tiwari@oracle.com, arnd@arndb.de, bp@alien8.de, corbet@lwn.net, 
 	dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com, 
@@ -97,34 +98,45 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jul 15, 2025 at 6:16=E2=80=AFAM Roman Kisel <romank@linux.microsoft=
 .com> wrote:
 >
-> The comment about the x2v shim is ancient and long since incorrect.
+> It might happen that some hyp SynIC pages aren't allocated.
 >
-> Remove the incorrect comment.
+> Check for that and only then call iounmap().
 >
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  drivers/hv/hv.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+>  drivers/hv/hv.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 >
 > diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 816f8a14ff63..820711e954d1 100644
+> index 820711e954d1..a8669843c56e 100644
 > --- a/drivers/hv/hv.c
 > +++ b/drivers/hv/hv.c
-> @@ -266,11 +266,7 @@ void hv_synic_free(void)
->  }
+> @@ -367,8 +367,10 @@ void hv_synic_disable_regs(unsigned int cpu)
+>          */
+>         simp.simp_enabled =3D 0;
+>         if (ms_hyperv.paravisor_present || hv_root_partition()) {
+> -               iounmap(hv_cpu->hyp_synic_message_page);
+> -               hv_cpu->hyp_synic_message_page =3D NULL;
+> +               if (hv_cpu->hyp_synic_message_page) {
+> +                       iounmap(hv_cpu->hyp_synic_message_page);
+> +                       hv_cpu->hyp_synic_message_page =3D NULL;
+> +               }
+>         } else {
+>                 simp.base_simp_gpa =3D 0;
+>         }
+> @@ -379,8 +381,10 @@ void hv_synic_disable_regs(unsigned int cpu)
+>         siefp.siefp_enabled =3D 0;
 >
->  /*
-> - * hv_synic_init - Initialize the Synthetic Interrupt Controller.
-> - *
-> - * If it is already initialized by another entity (ie x2v shim), we need=
- to
-> - * retrieve the initialized message and event pages.  Otherwise, we crea=
-te and
-> - * initialize the message and event pages.
-> + * hv_synic_enable_regs - Initialize the Synthetic Interrupt Controller.
->   */
->  void hv_synic_enable_regs(unsigned int cpu)
->  {
+>         if (ms_hyperv.paravisor_present || hv_root_partition()) {
+> -               iounmap(hv_cpu->hyp_synic_event_page);
+> -               hv_cpu->hyp_synic_event_page =3D NULL;
+> +               if (hv_cpu->hyp_synic_event_page) {
+> +                       iounmap(hv_cpu->hyp_synic_event_page);
+> +                       hv_cpu->hyp_synic_event_page =3D NULL;
+> +               }
+>         } else {
+>                 siefp.base_siefp_gpa =3D 0;
+>         }
 > --
 > 2.43.0
 >
