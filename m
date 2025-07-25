@@ -1,88 +1,88 @@
-Return-Path: <linux-arch+bounces-12953-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12954-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DD4FB11D53
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 13:14:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E43CFB11D63
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 13:22:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FD225A2F26
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 11:14:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD1994E350E
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 11:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDEE02E5B14;
-	Fri, 25 Jul 2025 11:14:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604482E5417;
+	Fri, 25 Jul 2025 11:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="REO6xqKh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jx1lljtM"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E5F2E54CA;
-	Fri, 25 Jul 2025 11:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C938E2114;
+	Fri, 25 Jul 2025 11:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753442085; cv=none; b=oxBz6n1By7bNlP0iPYNcBK+IjENozxKTW5I62fgK4IWlNnnXRlrgIeS8TP76I+Yi5XrTMErwn8CeT8fVy7SYnnIODLIiaL9SxnO3l6Z8pP72ACvCLcTKFFCV04M85qAFoG/q0QC89hF0UffX/ITdcxo/H7KTH69m+nVB1wAfLmg=
+	t=1753442540; cv=none; b=W7/bC1wUB1O3vK8WtXziosiqzTkMfetAZeTGLWCrIpjQnqYxk/Nlc2oj4cPgOh3FEMqrK/46bHeWjg3D4hxQFRinGpIIneQJ6HF7dClD+lot4hputBegRW6b7/H5te4hbv/39JjvmhGX0Syi+MYK7KzdbScNQzeZ6dvyXhX1MzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753442085; c=relaxed/simple;
-	bh=ShnHV7JNrTopJF7AM7OfGbO3XWiG23k6eeCn8GuXIpw=;
+	s=arc-20240116; t=1753442540; c=relaxed/simple;
+	bh=fZuK3vdmjJWaBTc7PamARiPpTkZpxcdOqQIZTB73QlM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=soUI5+EDksDlXczwwGTZcNdd4gFMzz6PFYj2geHC28v4sT4gYjbcpLQ4KlNAT0hIVxocaoQZszm5mS232zU1vLO6InqSdtefaFSZa1Qd6v5w6160temb8PZhEWXFwolcbU6YrUHhPrgW+a+ec8O6LrP1Qm8IfvY1MWAEY7cRyVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=REO6xqKh; arc=none smtp.client-ip=209.85.214.174
+	 To:Cc:Content-Type; b=ohoYG5rEjNoeVjOb+fX70c6JwW5p140lnnxArtyQD240o4vOGfwnHBDAxAl2IlAIz7M0BDk5oVpg0vYRLVKLKcRIyy44Vnv4+oykfISMF6xdXRsPxlvYRO2QeqH2QagJ2hFYBvD1z3IsHsJ1HqvsRzh96p7V7mifI+suWgJ7SDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jx1lljtM; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-234f17910d8so17242745ad.3;
-        Fri, 25 Jul 2025 04:14:43 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-23dc5bcf49eso26044465ad.2;
+        Fri, 25 Jul 2025 04:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753442083; x=1754046883; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753442538; x=1754047338; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AaiH/38WONPy8fzRyhRHdFQdB6YbrzolydS9CtzX8Do=;
-        b=REO6xqKhPMwWEVr9/eoOWF1Dbogb6ALuraK5RBTK6Ez9s8WnCDarj+CTFzm9TJIVeU
-         BsU6pP2AQg37DCTdTXniCbXaDaUw48guZUwwPkq9XDmbBzYPnGvsyLajHs+vmnP0N35n
-         xRcjCRnioLf1K0klm/mX77JLubwwln6V74XxJKFr30HEulbTZafRf/jOE3mjl1/5Debh
-         xmd9uaw4uQ2UM+xab9gcLfBrFmf4TDAtabCTixDCizRxEXHxzpevc2hW/M3kAePRku+R
-         7QJ8fTKFgSTs9H5JPrrMAYaoAMZr7s7rh1q1Z85mK8zoF16K6eLnn3mdqOXACivnlPP4
-         +MCA==
+        bh=ADeETAaHqfwPNv47VY+2a6NqZqg/PEaiSFoloJQbRjk=;
+        b=Jx1lljtMzuT0m5VpNoGhEp4micnltFkmKTk/VTuLNa/8WgLVgEPBhPL9hVNJnUzzAh
+         HySa4ktHNfJKEAxqX+z7Fk8MxnpcbKh9wi0KDAOtMMxc80e0ZkHXrh6I5dDCwcKxCDIj
+         /Fvp0pvEr9BFAPVJrzamgXfwyYlwPQgsH1RaLsGuJUToLNOrHu6LlDltGbAkEOQItBnA
+         LP4Kxrk9WdPnh2LKNgmZeYdlSu2xYo5o4+0oKSTxVU6Pi36fSjPuLEcAzjL019yceEY2
+         nb5Yio0DqJs7lwGhJ4t6IR0PmJ2FmcRcdaf4EKHd1BIQCGJIJL4yKSZaeSrvYVI8sI2i
+         slNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753442083; x=1754046883;
+        d=1e100.net; s=20230601; t=1753442538; x=1754047338;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AaiH/38WONPy8fzRyhRHdFQdB6YbrzolydS9CtzX8Do=;
-        b=jYIut+RtFXuTkE3xHMuh0c48vRQzHWd8JkxCceK7/nHPEdVE3piYvil7f2sTatHisM
-         in7wCa3S6xqWXigT5bELREmCJwbEM6oxqGEx3utIEQvG0iRy5f1nRQ7X/v5GnKBrnc7y
-         25heDHW8uAS1UOztcEaEWvXro2oXx6D3mddlk6+Fh6yu4EWEEJbBOAQluX/p76OXR73J
-         qv3z5LqNbaWDLxHo8qswSb7K4GK61uo3n+8PHvf9K73fw21z4IDBoTsrxtoAgOJ0A9Ty
-         JNH5C/fJGsnkRwxcldbFjz5K0k53e/LInnt9mbF5VD2ewinCQ+rbEgZkTn0P7QJSnlex
-         cVXA==
-X-Forwarded-Encrypted: i=1; AJvYcCV0ilLWR2GX3Su0BoiHW5xa8gAm6R4nLppkaLbMqoF6+ywAiKBsyPkD3Z6nq2vJokgKwhxufwhHy0lT4wJl@vger.kernel.org, AJvYcCWR1i3rhicngvoi8EwOPmCIjLb2QvMfEEZrFchT82sC6UTFwOR4r+anRBSXZRavk2Plu1Q3FPdw2Gf0BnwB@vger.kernel.org, AJvYcCWyjDVXWjUl/ZmniD3s0uN28riUf/Hs8VGwoVdb+frfFUT92DkSETpZBlL9BUFS886JKpXnfyqufb31@vger.kernel.org, AJvYcCX30s6iEEZyOO99gQZ1Pd7Ze4QaoE+kPOx52fF5tLbnr2x08dIOyOfjomIWWohh9a/6R1Ooeq1dGTGt@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1wKS3Ow35a07GMxI+0BBGNqpQyFTryG27sAwh0opR76FwTtpG
-	ZcyjA5FhGcNeaPCTCfnBhL4OsNopb78fx5JjR1xi7rgFD8pYZWJZ868x2m8+9tDY+QA5Kpe1NI6
-	3DSlFi2gfPSp+AGUYBMA3lFRwBp/Pov0=
-X-Gm-Gg: ASbGncuD4fbjM6Q97af0RC+fv+QmOUJMW8SyhOGKciU4damHubCSsUrvoftbF/Zv7Nd
-	HWT3a/WXZwPfNiDUCjd3wFhCBduQFCvlysBZ6I8kF7dur7LzbvpQNSz6tLZ/GMDrpVTp4gI9e+M
-	RBcwuB6zlLxnNODagiHFKkplLdJnb+XiBoG5mivn95+mu2X+ot/2bCtSPDdi0BDOeIn119alSPV
-	73E
-X-Google-Smtp-Source: AGHT+IFVx1ZwuhzWu29nMel9dpd38C5+YSpTw1UCZrJubHtDeVnxnQB0fu/r5r4nXrA8TmFpU3Uh7Qk/EellC8klWWQ=
-X-Received: by 2002:a17:902:e948:b0:23f:b09f:52c7 with SMTP id
- d9443c01a7336-23fb3043a03mr26463905ad.23.1753442082654; Fri, 25 Jul 2025
- 04:14:42 -0700 (PDT)
+        bh=ADeETAaHqfwPNv47VY+2a6NqZqg/PEaiSFoloJQbRjk=;
+        b=orrKmC1eJOwCMyN2MZVyTBrSFmfLJR9SQc+D1NG/dYGLilHdwgdZhwVcMU7D/Go8YC
+         oxoR+9rmHgOKxPeNe4ge6+mR9erSaSEAPS6Mum3I2CVBRG+B6oqMGSHTuLzvTuXYJRZn
+         8DC6vlVqlZxCOFPWtNnk5mACWMF1msHqcw/RAKIYt/bcl1wJede3s1TNDzuTuZ66C58x
+         epiySbPj92YMazpCeQR7CQ0NWhCRzxxsat0TcBXaXLS5bLvLZXTbLPz3GHns1jb0etLi
+         iyoYvyJgv5oK7kAUgn0/2LxdE9A3Kq9lwB+KqN3Zk3k+irHYGa2JOSkzGCRkTuNa1jMp
+         wh/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUh0LGni5EGKN83Fe2qUJdfC/2VFr12IEzXccdhcgK63hV4gF/NsN/5FvTSMWgf00Fdf+0+Lo4XNhlN@vger.kernel.org, AJvYcCVuScbPNv7XFA2y8FfQYFcafj86GGcK+TNP72ZvdNQp06ziZmed/jPb+OBsOpsQkCwdONOLVSxZnT2a+TbA@vger.kernel.org, AJvYcCVwDJy7nuDXeuk/eX4YaSxBC9afu0uTsefJldMa6tCSwuuLzDlS154SQB+D0EgVFeDoTnRy542HjUyG@vger.kernel.org, AJvYcCWjiaV1L5hczHVpSvdr3GnxBuQBzgHYqof87VEgyX8NKoyusd/xpV6L2M/9iPgqa/iKNI+5AwqtYIPS5rwP@vger.kernel.org
+X-Gm-Message-State: AOJu0YwC7tR1mB6vJ349B22C3/hM610lt01pxO3DO9Fn0P2f3sy4zStz
+	QMzEoAyeIpJ4F5suLGuy9kTUSiXvQfkGf2wW2Nuop09I1dSvY+AzEdeeNZJ8nd1qpihqnZ3V26z
+	8+unT8O+m/5M8j3dmz9jWpYHPhHRE2ec=
+X-Gm-Gg: ASbGnctD+TqCDLolje63K70nMPhoBh0qZvMNhRBLffgh9mTNDRraoJIQIAgeejASr9d
+	ISgcXcL0dP0zhMVtr9Vo0GATmx9hB2on0fTvbbAE5MSG3/KNx0Ws0zPxYI/RnVkBJCFkbDhlU1d
+	KoJhzvtWiOap3v+Tl3oKFln5mYUHaOFtcaJggrJc3DW22Yh4ddw+IcR1QufVFvuI238jNaPztwr
+	odw
+X-Google-Smtp-Source: AGHT+IFm+YK+Y2hJQQ1hmtCwNSUBVL0UvD5jayHigUFo6GG8rs5V2CGFs8VME+5GxbAPEVs93coICnPBamAwKQyY/yk=
+X-Received: by 2002:a17:902:ccc4:b0:234:e8db:432d with SMTP id
+ d9443c01a7336-23fb3166c33mr22847705ad.39.1753442538032; Fri, 25 Jul 2025
+ 04:22:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250714221545.5615-1-romank@linux.microsoft.com> <20250714221545.5615-10-romank@linux.microsoft.com>
-In-Reply-To: <20250714221545.5615-10-romank@linux.microsoft.com>
+References: <20250714221545.5615-1-romank@linux.microsoft.com> <20250714221545.5615-11-romank@linux.microsoft.com>
+In-Reply-To: <20250714221545.5615-11-romank@linux.microsoft.com>
 From: Tianyu Lan <ltykernel@gmail.com>
-Date: Fri, 25 Jul 2025 19:14:06 +0800
-X-Gm-Features: Ac12FXwWTPyxekGMep4sx35p32LI3MXjz9EYbsvnC9mgbg1lm2slnKe57OCBYTs
-Message-ID: <CAMvTesCWTcXLxjOVyNF4pTqaQkXQsgKBXn1TQdK+n-9TfWfndA@mail.gmail.com>
-Subject: Re: [PATCH hyperv-next v4 09/16] Drivers: hv: Check message and event
- pages for non-NULL before iounmap()
+Date: Fri, 25 Jul 2025 19:21:42 +0800
+X-Gm-Features: Ac12FXyz3bssr1OLL9BFtYmc0Edy0F9YKk5P-0fTYGoeZUcLahAw8xTcKbOlq4Q
+Message-ID: <CAMvTesADrxV4vwU_mqYygm1bE39PKLZaaL-wLPT8snATRVkwNg@mail.gmail.com>
+Subject: Re: [PATCH hyperv-next v4 10/16] Drivers: hv: Rename the SynIC enable
+ and disable routines
 To: Roman Kisel <romank@linux.microsoft.com>
 Cc: alok.a.tiwari@oracle.com, arnd@arndb.de, bp@alien8.de, corbet@lwn.net, 
 	dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com, 
@@ -98,45 +98,131 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jul 15, 2025 at 6:16=E2=80=AFAM Roman Kisel <romank@linux.microsoft=
 .com> wrote:
 >
-> It might happen that some hyp SynIC pages aren't allocated.
+> The confidential VMBus requires support for the both hypervisor
+> facing SynIC and the paravisor one.
 >
-> Check for that and only then call iounmap().
+> Rename the functions that enable and disable SynIC with the
+> hypervisor. No functional changes.
 >
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  drivers/hv/hv.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+>  drivers/hv/channel_mgmt.c |  2 +-
+>  drivers/hv/hv.c           | 11 ++++++-----
+>  drivers/hv/hyperv_vmbus.h |  4 ++--
+>  drivers/hv/vmbus_drv.c    |  6 +++---
+>  4 files changed, 12 insertions(+), 11 deletions(-)
 >
+> diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
+> index 6f87220e2ca3..ca2fe10c110a 100644
+> --- a/drivers/hv/channel_mgmt.c
+> +++ b/drivers/hv/channel_mgmt.c
+> @@ -845,7 +845,7 @@ static void vmbus_wait_for_unload(void)
+>                         /*
+>                          * In a CoCo VM the hyp_synic_message_page is not=
+ allocated
+>                          * in hv_synic_alloc(). Instead it is set/cleared=
+ in
+> -                        * hv_synic_enable_regs() and hv_synic_disable_re=
+gs()
+> +                        * hv_hyp_synic_enable_regs() and hv_hyp_synic_di=
+sable_regs()
+>                          * such that it is set only when the CPU is onlin=
+e. If
+>                          * not all present CPUs are online, the message p=
+age
+>                          * might be NULL, so skip such CPUs.
 > diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 820711e954d1..a8669843c56e 100644
+> index a8669843c56e..94a81bb3c8c7 100644
 > --- a/drivers/hv/hv.c
 > +++ b/drivers/hv/hv.c
-> @@ -367,8 +367,10 @@ void hv_synic_disable_regs(unsigned int cpu)
->          */
->         simp.simp_enabled =3D 0;
->         if (ms_hyperv.paravisor_present || hv_root_partition()) {
-> -               iounmap(hv_cpu->hyp_synic_message_page);
-> -               hv_cpu->hyp_synic_message_page =3D NULL;
-> +               if (hv_cpu->hyp_synic_message_page) {
-> +                       iounmap(hv_cpu->hyp_synic_message_page);
-> +                       hv_cpu->hyp_synic_message_page =3D NULL;
-> +               }
->         } else {
->                 simp.base_simp_gpa =3D 0;
->         }
-> @@ -379,8 +381,10 @@ void hv_synic_disable_regs(unsigned int cpu)
->         siefp.siefp_enabled =3D 0;
+> @@ -266,9 +266,10 @@ void hv_synic_free(void)
+>  }
 >
->         if (ms_hyperv.paravisor_present || hv_root_partition()) {
-> -               iounmap(hv_cpu->hyp_synic_event_page);
-> -               hv_cpu->hyp_synic_event_page =3D NULL;
-> +               if (hv_cpu->hyp_synic_event_page) {
-> +                       iounmap(hv_cpu->hyp_synic_event_page);
-> +                       hv_cpu->hyp_synic_event_page =3D NULL;
-> +               }
->         } else {
->                 siefp.base_siefp_gpa =3D 0;
->         }
+>  /*
+> - * hv_synic_enable_regs - Initialize the Synthetic Interrupt Controller.
+> + * hv_hyp_synic_enable_regs - Initialize the Synthetic Interrupt Control=
+ler
+> + * with the hypervisor.
+>   */
+> -void hv_synic_enable_regs(unsigned int cpu)
+> +void hv_hyp_synic_enable_regs(unsigned int cpu)
+>  {
+>         struct hv_per_cpu_context *hv_cpu =3D
+>                 per_cpu_ptr(hv_context.cpu_context, cpu);
+> @@ -334,14 +335,14 @@ void hv_synic_enable_regs(unsigned int cpu)
+>
+>  int hv_synic_init(unsigned int cpu)
+>  {
+> -       hv_synic_enable_regs(cpu);
+> +       hv_hyp_synic_enable_regs(cpu);
+>
+>         hv_stimer_legacy_init(cpu, VMBUS_MESSAGE_SINT);
+>
+>         return 0;
+>  }
+>
+> -void hv_synic_disable_regs(unsigned int cpu)
+> +void hv_hyp_synic_disable_regs(unsigned int cpu)
+>  {
+>         struct hv_per_cpu_context *hv_cpu =3D
+>                 per_cpu_ptr(hv_context.cpu_context, cpu);
+> @@ -528,7 +529,7 @@ int hv_synic_cleanup(unsigned int cpu)
+>  always_cleanup:
+>         hv_stimer_legacy_cleanup(cpu);
+>
+> -       hv_synic_disable_regs(cpu);
+> +       hv_hyp_synic_disable_regs(cpu);
+>
+>         return ret;
+>  }
+> diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
+> index 16b5cf1bca19..2873703d08a9 100644
+> --- a/drivers/hv/hyperv_vmbus.h
+> +++ b/drivers/hv/hyperv_vmbus.h
+> @@ -189,10 +189,10 @@ extern int hv_synic_alloc(void);
+>
+>  extern void hv_synic_free(void);
+>
+> -extern void hv_synic_enable_regs(unsigned int cpu);
+> +extern void hv_hyp_synic_enable_regs(unsigned int cpu);
+>  extern int hv_synic_init(unsigned int cpu);
+>
+> -extern void hv_synic_disable_regs(unsigned int cpu);
+> +extern void hv_hyp_synic_disable_regs(unsigned int cpu);
+>  extern int hv_synic_cleanup(unsigned int cpu);
+>
+>  /* Interface */
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index 72940a64b0b6..13aca5abc7d8 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -2809,7 +2809,7 @@ static void hv_crash_handler(struct pt_regs *regs)
+>          */
+>         cpu =3D smp_processor_id();
+>         hv_stimer_cleanup(cpu);
+> -       hv_synic_disable_regs(cpu);
+> +       hv_hyp_synic_disable_regs(cpu);
+>  };
+>
+>  static int hv_synic_suspend(void)
+> @@ -2834,14 +2834,14 @@ static int hv_synic_suspend(void)
+>          * interrupts-disabled context.
+>          */
+>
+> -       hv_synic_disable_regs(0);
+> +       hv_hyp_synic_disable_regs(0);
+>
+>         return 0;
+>  }
+>
+>  static void hv_synic_resume(void)
+>  {
+> -       hv_synic_enable_regs(0);
+> +       hv_hyp_synic_enable_regs(0);
+>
+>         /*
+>          * Note: we don't need to call hv_stimer_init(0), because the tim=
+er
 > --
 > 2.43.0
 >
