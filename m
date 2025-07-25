@@ -1,88 +1,88 @@
-Return-Path: <linux-arch+bounces-12954-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12955-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E43CFB11D63
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 13:22:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A701FB12041
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 16:41:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD1994E350E
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 11:21:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D857D566A50
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Jul 2025 14:41:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604482E5417;
-	Fri, 25 Jul 2025 11:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFE7274FC8;
+	Fri, 25 Jul 2025 14:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jx1lljtM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gdPKwstE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C938E2114;
-	Fri, 25 Jul 2025 11:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83BD2459F9;
+	Fri, 25 Jul 2025 14:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753442540; cv=none; b=W7/bC1wUB1O3vK8WtXziosiqzTkMfetAZeTGLWCrIpjQnqYxk/Nlc2oj4cPgOh3FEMqrK/46bHeWjg3D4hxQFRinGpIIneQJ6HF7dClD+lot4hputBegRW6b7/H5te4hbv/39JjvmhGX0Syi+MYK7KzdbScNQzeZ6dvyXhX1MzI=
+	t=1753454467; cv=none; b=gAGiZ09O5sZkjmSZiKw2uahXfXjfMIqC1H1yF/Xj4HBzoxfAm445AjIQJE7aapxUhzp31Yxii8tH7+esb8X+q9aXXU5isj0XfltK5Io8sGLIr69o1QeY4XfWlYpaKvPpU6L9O78r7g58xJ6OYC+5Gt+TefrflFpvbq0byQvku0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753442540; c=relaxed/simple;
-	bh=fZuK3vdmjJWaBTc7PamARiPpTkZpxcdOqQIZTB73QlM=;
+	s=arc-20240116; t=1753454467; c=relaxed/simple;
+	bh=sGTl1eo91jSnILZM8TuIOEpIUOHHIl79Ky9Pwbzq9nY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ohoYG5rEjNoeVjOb+fX70c6JwW5p140lnnxArtyQD240o4vOGfwnHBDAxAl2IlAIz7M0BDk5oVpg0vYRLVKLKcRIyy44Vnv4+oykfISMF6xdXRsPxlvYRO2QeqH2QagJ2hFYBvD1z3IsHsJ1HqvsRzh96p7V7mifI+suWgJ7SDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jx1lljtM; arc=none smtp.client-ip=209.85.214.178
+	 To:Cc:Content-Type; b=rObG0m9abPzgrzteDEAGsbwUOBrHP/py1UJhvqTBy0DXf/CIGyw1YK6rsmOKIwMCBtslt3yw0CPwwXLKBmzJ6wwaUQhf/EQsWB/kAUkuk3WPUqMtN5sEhZKzzno17Vg2V5ctebEe/Se0jDFmHem6p6vlGlhoD0Y+juO7f85XWIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gdPKwstE; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-23dc5bcf49eso26044465ad.2;
-        Fri, 25 Jul 2025 04:22:18 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-23f8bcce78dso25893455ad.3;
+        Fri, 25 Jul 2025 07:41:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753442538; x=1754047338; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753454465; x=1754059265; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ADeETAaHqfwPNv47VY+2a6NqZqg/PEaiSFoloJQbRjk=;
-        b=Jx1lljtMzuT0m5VpNoGhEp4micnltFkmKTk/VTuLNa/8WgLVgEPBhPL9hVNJnUzzAh
-         HySa4ktHNfJKEAxqX+z7Fk8MxnpcbKh9wi0KDAOtMMxc80e0ZkHXrh6I5dDCwcKxCDIj
-         /Fvp0pvEr9BFAPVJrzamgXfwyYlwPQgsH1RaLsGuJUToLNOrHu6LlDltGbAkEOQItBnA
-         LP4Kxrk9WdPnh2LKNgmZeYdlSu2xYo5o4+0oKSTxVU6Pi36fSjPuLEcAzjL019yceEY2
-         nb5Yio0DqJs7lwGhJ4t6IR0PmJ2FmcRcdaf4EKHd1BIQCGJIJL4yKSZaeSrvYVI8sI2i
-         slNA==
+        bh=nKgsPP4zPK7SJVV2IQKnHzdNSGAtC3gfZtrlCNS6aF4=;
+        b=gdPKwstEgeM9pyTh/0lxmg0T2DJI9Zvhzvh87LuMm44ao2R8B4cU6MTnk1jPTxaulZ
+         5mVbCeY/kRfY6dx6kcVuIG2s+kD2TfKDmhHPPBGi7tP5f0PRWlUhlkczW9auh9UOfr6i
+         Vmej1/Irck9tHecjrx8lTe3XE/vH+zedwlFQ255cXywbuXsI9tJiCSCzutkfKqpfQy8v
+         fqvwYfo2e/m0BoiX9asJE/iTJ6GZKSm/cH7z3CJDYPkowl6G/hFu6CfQdQ+bHTGxwFQ0
+         OW2yPOMGS24mlIC9tx7XRb186aMoe7x6i281Y4IMoWa/l+4tFXhCKBnKAs68ZzHXrFD1
+         OtDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753442538; x=1754047338;
+        d=1e100.net; s=20230601; t=1753454465; x=1754059265;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ADeETAaHqfwPNv47VY+2a6NqZqg/PEaiSFoloJQbRjk=;
-        b=orrKmC1eJOwCMyN2MZVyTBrSFmfLJR9SQc+D1NG/dYGLilHdwgdZhwVcMU7D/Go8YC
-         oxoR+9rmHgOKxPeNe4ge6+mR9erSaSEAPS6Mum3I2CVBRG+B6oqMGSHTuLzvTuXYJRZn
-         8DC6vlVqlZxCOFPWtNnk5mACWMF1msHqcw/RAKIYt/bcl1wJede3s1TNDzuTuZ66C58x
-         epiySbPj92YMazpCeQR7CQ0NWhCRzxxsat0TcBXaXLS5bLvLZXTbLPz3GHns1jb0etLi
-         iyoYvyJgv5oK7kAUgn0/2LxdE9A3Kq9lwB+KqN3Zk3k+irHYGa2JOSkzGCRkTuNa1jMp
-         wh/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUh0LGni5EGKN83Fe2qUJdfC/2VFr12IEzXccdhcgK63hV4gF/NsN/5FvTSMWgf00Fdf+0+Lo4XNhlN@vger.kernel.org, AJvYcCVuScbPNv7XFA2y8FfQYFcafj86GGcK+TNP72ZvdNQp06ziZmed/jPb+OBsOpsQkCwdONOLVSxZnT2a+TbA@vger.kernel.org, AJvYcCVwDJy7nuDXeuk/eX4YaSxBC9afu0uTsefJldMa6tCSwuuLzDlS154SQB+D0EgVFeDoTnRy542HjUyG@vger.kernel.org, AJvYcCWjiaV1L5hczHVpSvdr3GnxBuQBzgHYqof87VEgyX8NKoyusd/xpV6L2M/9iPgqa/iKNI+5AwqtYIPS5rwP@vger.kernel.org
-X-Gm-Message-State: AOJu0YwC7tR1mB6vJ349B22C3/hM610lt01pxO3DO9Fn0P2f3sy4zStz
-	QMzEoAyeIpJ4F5suLGuy9kTUSiXvQfkGf2wW2Nuop09I1dSvY+AzEdeeNZJ8nd1qpihqnZ3V26z
-	8+unT8O+m/5M8j3dmz9jWpYHPhHRE2ec=
-X-Gm-Gg: ASbGnctD+TqCDLolje63K70nMPhoBh0qZvMNhRBLffgh9mTNDRraoJIQIAgeejASr9d
-	ISgcXcL0dP0zhMVtr9Vo0GATmx9hB2on0fTvbbAE5MSG3/KNx0Ws0zPxYI/RnVkBJCFkbDhlU1d
-	KoJhzvtWiOap3v+Tl3oKFln5mYUHaOFtcaJggrJc3DW22Yh4ddw+IcR1QufVFvuI238jNaPztwr
-	odw
-X-Google-Smtp-Source: AGHT+IFm+YK+Y2hJQQ1hmtCwNSUBVL0UvD5jayHigUFo6GG8rs5V2CGFs8VME+5GxbAPEVs93coICnPBamAwKQyY/yk=
-X-Received: by 2002:a17:902:ccc4:b0:234:e8db:432d with SMTP id
- d9443c01a7336-23fb3166c33mr22847705ad.39.1753442538032; Fri, 25 Jul 2025
- 04:22:18 -0700 (PDT)
+        bh=nKgsPP4zPK7SJVV2IQKnHzdNSGAtC3gfZtrlCNS6aF4=;
+        b=nuMEUi6nlwCBoiHp17oNSSnM61D2SNaHhqSxArpUOaBjb5ZyUtTW3bNXHdsFK+U3+V
+         gzfeCNJ8sVWm6X4SymHq2USsKs+j7vAS+IPk4aD6k3qb+DJwH5REnzwegdoc+hL771tW
+         qVEAiYUfdWQ1P3OGP4iry0/BsBCRHkJhLId67LKb+EyyWN1O5oMDMnbkPX2Ru3RDARj5
+         890D41vWqHGyZOYn6HINmoGZGXPC5vOpMs4YNs4dJ7Zf7WnGenR8vkHEVKTqnmXitKjz
+         H6WqjNzlfNe8qT4//63sSQ9FC/Qr3DCD1tdpAzPyCVAx3rxJqowe0YE4TOwiCQP2fZss
+         Ov7w==
+X-Forwarded-Encrypted: i=1; AJvYcCUAaw8ZZIv/WK47HLgGMzzD8uySthhoZhpGx4yaFEQwUQjSiIoXKg8yNMh7x1TyC+EyDykKxAfPrn+PW1FO@vger.kernel.org, AJvYcCVm5a9++GO1l5jpom5IWR4faQd1qO58/eaON4W/F9JvnleRpmVq1XGGBbNFLKeTI1x8UTaBBt7nSjskmtAI@vger.kernel.org, AJvYcCWC0UClaNSD4AaHebXCQ+d8rSuVUa+Aa40l9sIH7ecmM7/hRUDj9ymMkLAFmW7SveYPb/2015oHaX55@vger.kernel.org, AJvYcCWFKHSOlZiBG/9MgH1M79BceBCQGOT6vp6NbZmornVkX31K7ML1WRGEU4+OR3hMcOV2vb4vPjDb6mK9@vger.kernel.org
+X-Gm-Message-State: AOJu0YyesOr8msMF4habjoyOMdRXf1zZCTgRgp9ZXYboP2B4YSU4pNM8
+	CCcYOFxOGfPrduip+eTc9rhrdU2hHp9SWYYL1ZqJ36LzP/FbkyP9Kf+5/MBA1uuZu5H80l1q87I
+	N/9Qb3UrHq6VTXHc9hymoov5yzZ68jY3M9Qim
+X-Gm-Gg: ASbGncua5ZftMoUxfhrCa0SCSNpEoLRp3bKTj53l0Tv5Rbm0moKsKUFZyftJzS8is+V
+	XEGZiThEAm5a0GkPwq3dCikN+h+R+UThI0//YGYpMlcUzB4zLci+7PodarjNHu3gANf7/OzFK/M
+	wwJXAHeNtw8KGqtWlTJ9vMrYaSYJsq1ZLRjy0lchU+di2TpqbUD1AN35a2k8bsMffpoptpHKePX
+	qTbSxv0CfrBLks=
+X-Google-Smtp-Source: AGHT+IFePPdNf5mTv+w/Kxg+8bWSXr5Vh2E5/lMd3Me7vurN8JkxVvIEE7J6nQMlYnnWtLKMSDKRAdRJQJFR2RNXDDE=
+X-Received: by 2002:a17:902:c751:b0:234:ed31:fc99 with SMTP id
+ d9443c01a7336-23fb309b836mr26836565ad.21.1753454465068; Fri, 25 Jul 2025
+ 07:41:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250714221545.5615-1-romank@linux.microsoft.com> <20250714221545.5615-11-romank@linux.microsoft.com>
-In-Reply-To: <20250714221545.5615-11-romank@linux.microsoft.com>
+References: <20250714221545.5615-1-romank@linux.microsoft.com> <20250714221545.5615-13-romank@linux.microsoft.com>
+In-Reply-To: <20250714221545.5615-13-romank@linux.microsoft.com>
 From: Tianyu Lan <ltykernel@gmail.com>
-Date: Fri, 25 Jul 2025 19:21:42 +0800
-X-Gm-Features: Ac12FXyz3bssr1OLL9BFtYmc0Edy0F9YKk5P-0fTYGoeZUcLahAw8xTcKbOlq4Q
-Message-ID: <CAMvTesADrxV4vwU_mqYygm1bE39PKLZaaL-wLPT8snATRVkwNg@mail.gmail.com>
-Subject: Re: [PATCH hyperv-next v4 10/16] Drivers: hv: Rename the SynIC enable
- and disable routines
+Date: Fri, 25 Jul 2025 22:40:29 +0800
+X-Gm-Features: Ac12FXxEB_FL3_rT6cHSVkdJsOhCBETxNq543NIYn_bXKIfHCNGG5wd0r0RZbmw
+Message-ID: <CAMvTesBiSOsxywS+JxAB+oAh9i1UEbngAXeZJdi7SWqm9pAd9A@mail.gmail.com>
+Subject: Re: [PATCH hyperv-next v4 12/16] Drivers: hv: Allocate encrypted
+ buffers when requested
 To: Roman Kisel <romank@linux.microsoft.com>
 Cc: alok.a.tiwari@oracle.com, arnd@arndb.de, bp@alien8.de, corbet@lwn.net, 
 	dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com, 
@@ -95,140 +95,175 @@ Cc: alok.a.tiwari@oracle.com, arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 15, 2025 at 6:16=E2=80=AFAM Roman Kisel <romank@linux.microsoft=
+On Tue, Jul 15, 2025 at 6:28=E2=80=AFAM Roman Kisel <romank@linux.microsoft=
 .com> wrote:
 >
-> The confidential VMBus requires support for the both hypervisor
-> facing SynIC and the paravisor one.
+> Confidential VMBus is built around using buffers not shared with
+> the host.
 >
-> Rename the functions that enable and disable SynIC with the
-> hypervisor. No functional changes.
+> Support allocating encrypted buffers when requested.
 >
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  drivers/hv/channel_mgmt.c |  2 +-
->  drivers/hv/hv.c           | 11 ++++++-----
->  drivers/hv/hyperv_vmbus.h |  4 ++--
->  drivers/hv/vmbus_drv.c    |  6 +++---
->  4 files changed, 12 insertions(+), 11 deletions(-)
+
+Reviewed-by: Tianyu Lan <tiala@microsoft.com>
+
+>  drivers/hv/channel.c      | 49 +++++++++++++++++++++++----------------
+>  drivers/hv/hyperv_vmbus.h |  3 ++-
+>  drivers/hv/ring_buffer.c  |  5 ++--
+>  3 files changed, 34 insertions(+), 23 deletions(-)
 >
-> diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-> index 6f87220e2ca3..ca2fe10c110a 100644
-> --- a/drivers/hv/channel_mgmt.c
-> +++ b/drivers/hv/channel_mgmt.c
-> @@ -845,7 +845,7 @@ static void vmbus_wait_for_unload(void)
->                         /*
->                          * In a CoCo VM the hyp_synic_message_page is not=
- allocated
->                          * in hv_synic_alloc(). Instead it is set/cleared=
- in
-> -                        * hv_synic_enable_regs() and hv_synic_disable_re=
-gs()
-> +                        * hv_hyp_synic_enable_regs() and hv_hyp_synic_di=
-sable_regs()
->                          * such that it is set only when the CPU is onlin=
-e. If
->                          * not all present CPUs are online, the message p=
-age
->                          * might be NULL, so skip such CPUs.
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index a8669843c56e..94a81bb3c8c7 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -266,9 +266,10 @@ void hv_synic_free(void)
->  }
+> diff --git a/drivers/hv/channel.c b/drivers/hv/channel.c
+> index 35f26fa1ffe7..051eeba800f2 100644
+> --- a/drivers/hv/channel.c
+> +++ b/drivers/hv/channel.c
+> @@ -443,20 +443,23 @@ static int __vmbus_establish_gpadl(struct vmbus_cha=
+nnel *channel,
+>                 return ret;
+>         }
 >
->  /*
-> - * hv_synic_enable_regs - Initialize the Synthetic Interrupt Controller.
-> + * hv_hyp_synic_enable_regs - Initialize the Synthetic Interrupt Control=
-ler
-> + * with the hypervisor.
->   */
-> -void hv_synic_enable_regs(unsigned int cpu)
-> +void hv_hyp_synic_enable_regs(unsigned int cpu)
->  {
->         struct hv_per_cpu_context *hv_cpu =3D
->                 per_cpu_ptr(hv_context.cpu_context, cpu);
-> @@ -334,14 +335,14 @@ void hv_synic_enable_regs(unsigned int cpu)
+> -       /*
+> -        * Set the "decrypted" flag to true for the set_memory_decrypted(=
+)
+> -        * success case. In the failure case, the encryption state of the
+> -        * memory is unknown. Leave "decrypted" as true to ensure the
+> -        * memory will be leaked instead of going back on the free list.
+> -        */
+> -       gpadl->decrypted =3D true;
+> -       ret =3D set_memory_decrypted((unsigned long)kbuffer,
+> -                                  PFN_UP(size));
+> -       if (ret) {
+> -               dev_warn(&channel->device_obj->device,
+> -                        "Failed to set host visibility for new GPADL %d.=
+\n",
+> -                        ret);
+> -               return ret;
+> +       gpadl->decrypted =3D !((channel->co_external_memory && type =3D=
+=3D HV_GPADL_BUFFER) ||
+> +               (channel->co_ring_buffer && type =3D=3D HV_GPADL_RING));
+> +       if (gpadl->decrypted) {
+> +               /*
+> +                * The "decrypted" flag being true assumes that set_memor=
+y_decrypted() succeeds.
+> +                * But if it fails, the encryption state of the memory is=
+ unknown. In that case,
+> +                * leave "decrypted" as true to ensure the memory is leak=
+ed instead of going back
+> +                * on the free list.
+> +                */
+> +               ret =3D set_memory_decrypted((unsigned long)kbuffer,
+> +                                       PFN_UP(size));
+> +               if (ret) {
+> +                       dev_warn(&channel->device_obj->device,
+> +                               "Failed to set host visibility for new GP=
+ADL %d.\n",
+> +                               ret);
+> +                       return ret;
+> +               }
+>         }
 >
->  int hv_synic_init(unsigned int cpu)
->  {
-> -       hv_synic_enable_regs(cpu);
-> +       hv_hyp_synic_enable_regs(cpu);
->
->         hv_stimer_legacy_init(cpu, VMBUS_MESSAGE_SINT);
->
->         return 0;
->  }
->
-> -void hv_synic_disable_regs(unsigned int cpu)
-> +void hv_hyp_synic_disable_regs(unsigned int cpu)
->  {
->         struct hv_per_cpu_context *hv_cpu =3D
->                 per_cpu_ptr(hv_context.cpu_context, cpu);
-> @@ -528,7 +529,7 @@ int hv_synic_cleanup(unsigned int cpu)
->  always_cleanup:
->         hv_stimer_legacy_cleanup(cpu);
->
-> -       hv_synic_disable_regs(cpu);
-> +       hv_hyp_synic_disable_regs(cpu);
+>         init_completion(&msginfo->waitevent);
+> @@ -544,8 +547,10 @@ static int __vmbus_establish_gpadl(struct vmbus_chan=
+nel *channel,
+>                  * left as true so the memory is leaked instead of being
+>                  * put back on the free list.
+>                  */
+> -               if (!set_memory_encrypted((unsigned long)kbuffer, PFN_UP(=
+size)))
+> -                       gpadl->decrypted =3D false;
+> +               if (gpadl->decrypted) {
+> +                       if (!set_memory_encrypted((unsigned long)kbuffer,=
+ PFN_UP(size)))
+> +                               gpadl->decrypted =3D false;
+> +               }
+>         }
 >
 >         return ret;
->  }
+> @@ -676,12 +681,13 @@ static int __vmbus_open(struct vmbus_channel *newch=
+annel,
+>                 goto error_clean_ring;
+>
+>         err =3D hv_ringbuffer_init(&newchannel->outbound,
+> -                                page, send_pages, 0);
+> +                                page, send_pages, 0, newchannel->co_ring=
+_buffer);
+>         if (err)
+>                 goto error_free_gpadl;
+>
+>         err =3D hv_ringbuffer_init(&newchannel->inbound, &page[send_pages=
+],
+> -                                recv_pages, newchannel->max_pkt_size);
+> +                                recv_pages, newchannel->max_pkt_size,
+> +                                newchannel->co_ring_buffer);
+>         if (err)
+>                 goto error_free_gpadl;
+>
+> @@ -862,8 +868,11 @@ int vmbus_teardown_gpadl(struct vmbus_channel *chann=
+el, struct vmbus_gpadl *gpad
+>
+>         kfree(info);
+>
+> -       ret =3D set_memory_encrypted((unsigned long)gpadl->buffer,
+> -                                  PFN_UP(gpadl->size));
+> +       if (gpadl->decrypted)
+> +               ret =3D set_memory_encrypted((unsigned long)gpadl->buffer=
+,
+> +                                       PFN_UP(gpadl->size));
+> +       else
+> +               ret =3D 0;
+>         if (ret)
+>                 pr_warn("Fail to set mem host visibility in GPADL teardow=
+n %d.\n", ret);
+>
 > diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
-> index 16b5cf1bca19..2873703d08a9 100644
+> index 2873703d08a9..beae68a70939 100644
 > --- a/drivers/hv/hyperv_vmbus.h
 > +++ b/drivers/hv/hyperv_vmbus.h
-> @@ -189,10 +189,10 @@ extern int hv_synic_alloc(void);
+> @@ -200,7 +200,8 @@ extern int hv_synic_cleanup(unsigned int cpu);
+>  void hv_ringbuffer_pre_init(struct vmbus_channel *channel);
 >
->  extern void hv_synic_free(void);
+>  int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
+> -                      struct page *pages, u32 pagecnt, u32 max_pkt_size)=
+;
+> +                      struct page *pages, u32 pagecnt, u32 max_pkt_size,
+> +                          bool confidential);
 >
-> -extern void hv_synic_enable_regs(unsigned int cpu);
-> +extern void hv_hyp_synic_enable_regs(unsigned int cpu);
->  extern int hv_synic_init(unsigned int cpu);
+>  void hv_ringbuffer_cleanup(struct hv_ring_buffer_info *ring_info);
 >
-> -extern void hv_synic_disable_regs(unsigned int cpu);
-> +extern void hv_hyp_synic_disable_regs(unsigned int cpu);
->  extern int hv_synic_cleanup(unsigned int cpu);
+> diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
+> index 3c9b02471760..05c2cd42fc75 100644
+> --- a/drivers/hv/ring_buffer.c
+> +++ b/drivers/hv/ring_buffer.c
+> @@ -183,7 +183,8 @@ void hv_ringbuffer_pre_init(struct vmbus_channel *cha=
+nnel)
 >
->  /* Interface */
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 72940a64b0b6..13aca5abc7d8 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -2809,7 +2809,7 @@ static void hv_crash_handler(struct pt_regs *regs)
->          */
->         cpu =3D smp_processor_id();
->         hv_stimer_cleanup(cpu);
-> -       hv_synic_disable_regs(cpu);
-> +       hv_hyp_synic_disable_regs(cpu);
->  };
->
->  static int hv_synic_suspend(void)
-> @@ -2834,14 +2834,14 @@ static int hv_synic_suspend(void)
->          * interrupts-disabled context.
->          */
->
-> -       hv_synic_disable_regs(0);
-> +       hv_hyp_synic_disable_regs(0);
->
->         return 0;
->  }
->
->  static void hv_synic_resume(void)
+>  /* Initialize the ring buffer. */
+>  int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
+> -                      struct page *pages, u32 page_cnt, u32 max_pkt_size=
+)
+> +                      struct page *pages, u32 page_cnt, u32 max_pkt_size=
+,
+> +                          bool confidential)
 >  {
-> -       hv_synic_enable_regs(0);
-> +       hv_hyp_synic_enable_regs(0);
+>         struct page **pages_wraparound;
+>         int i;
+> @@ -207,7 +208,7 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info *ri=
+ng_info,
 >
->         /*
->          * Note: we don't need to call hv_stimer_init(0), because the tim=
-er
+>         ring_info->ring_buffer =3D (struct hv_ring_buffer *)
+>                 vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
+> -                       pgprot_decrypted(PAGE_KERNEL));
+> +                       confidential ? PAGE_KERNEL : pgprot_decrypted(PAG=
+E_KERNEL));
+>
+>         kfree(pages_wraparound);
+>         if (!ring_info->ring_buffer)
 > --
 > 2.43.0
 >
 >
 
-Reviewed-by: Tianyu Lan <tiala@microsoft.com>
+
 --=20
 Thanks
 Tianyu Lan
