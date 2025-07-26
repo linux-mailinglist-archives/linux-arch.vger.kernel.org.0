@@ -1,78 +1,78 @@
-Return-Path: <linux-arch+bounces-12966-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12967-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1EC0B12AC6
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Jul 2025 15:43:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4064B12AC9
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Jul 2025 15:43:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 064921C2647F
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Jul 2025 13:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D8433BD702
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Jul 2025 13:43:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8401028724A;
-	Sat, 26 Jul 2025 13:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765B128751D;
+	Sat, 26 Jul 2025 13:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bt+lST7C"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RhDBAQ1t"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1134428642E;
-	Sat, 26 Jul 2025 13:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60AE286D46;
+	Sat, 26 Jul 2025 13:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753537377; cv=none; b=oUMN9geVy33FzHCACBfNntFvxBTm/z5ayW7h0YqPcv94td6ZB9KjxMHDOexzpgr1IwDYiOPFlrSHYwvBgb91YGi6eDcaZCxk6nH0LRhuMtm6TSaxbrsDE33Y3kHHnJbi/+EEJpFZ6whbU+dy2Q+6fRv2AZo7BsmwOioL+0s3Fq8=
+	t=1753537378; cv=none; b=WXrwrVaB+yCjMDqO3fQY+S6feUalAw83/t5v2cE2oXuaiIrDCYb8ei+Jg64Wi2fHxk8EaS6kJnuIFUCTO1fr2ECfM3EKQSVa1qDbbmrUit7LygwgdXd6DtIu8mOH2Enl9wrkA9x7PjFA2/hLBkfMUqwaSyEpOP9kXQ2EjORDh4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753537377; c=relaxed/simple;
-	bh=UuNsBdvtxup7jW9SkePiNmAzpgXCmgudIpQSmDwe/cA=;
+	s=arc-20240116; t=1753537378; c=relaxed/simple;
+	bh=ma/BQawGYoy7ITtIcGnWLTuLrZMFRrj4k7am8UwuYVU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mHUeB4kkhMfj2mTAhYJpETeRG0TVwszop82y3gzmNfdekDbihCYOrgx3zp4idpjWZKTb5qGeyrFG/mBKnFkKhYFyLK0gznFTLzbdlhzKqqAGRsE3lJeor9rHBN7XGy6pjil7k7tk0KzJA6/VtImF42NTveLQ7rrC+xzjyg5X090=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bt+lST7C; arc=none smtp.client-ip=209.85.214.178
+	 MIME-Version; b=SUkO/YFkkWQ73tqliR2wvG0qCQXj/F1/8brAwoLbl6nNJTyHi9GcqBkgHdvhOOVhPiAONe9/L5dZQtTAc9UEwIbRYvzOW/Yv4AbEjI5e+Rfc/S+OG2wqVNnFAUXxz+appcqsdvhdinVVCLYeRs2OzyFHee2KuEjgRdiIZ3e/QmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RhDBAQ1t; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-234f17910d8so26356015ad.3;
-        Sat, 26 Jul 2025 06:42:55 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b2c4331c50eso2755971a12.3;
+        Sat, 26 Jul 2025 06:42:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753537375; x=1754142175; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753537376; x=1754142176; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UJlrufef8Bsvwmu4OcR0axH9qFlPYK2uzAQ9Wh+0EEA=;
-        b=bt+lST7CyGXrT2DKXfpUc2hxsqgvLUOl0x8PZD29EK6mqhlpZUSSLl1QxywhDAYBBf
-         V53vLEWda5g02REAySJ90/dmAP183SARe6J8AhxY2feWuKTsmFGN4ZziFXaon0VCLkns
-         f0anUKUllJr5EXF5M2YNaWdXVDRrYHmiltPrH4FuYJpOjtiSJ6Wdp8n7vsPlTRQw4vf0
-         Uq4WUhw0SQaf8xkbGoLtqHQeSw4aqhkKd7t6+Uo4mcfNmYVZ99/Bxg76gziW92jgZiAB
-         8uND8MT2JY4xA9NwB9OBV9oGaQqh+OFD2sBmcD0qZ8hHZQN+1JMY0NhtYvGQ3ZGFTT+f
-         2FbA==
+        bh=k7igQM7Vyn71nhVvSbp2kQ44aAuz9LFYWyrsCyPIgIw=;
+        b=RhDBAQ1tY5JPysUvfQlhNFeMEczXXmY3pvzCMemxM34hd8OpXyf+1fy23F8uE5md6m
+         Zf/sCBO9+GeZ1rTDuoOheAnZ5wQk1yLwkiyexmnDjm9UYaSxmVdxJF6uTZgJqT5NTglu
+         8dDmxifx3y0wrm8iSyCfNcXUM111Of+YZ27+5+XDRLq4JU6NvKs0AD+VJ9rTf31zVeQx
+         AEO4tB4GIpYRB6jgb2eGkq2DxJkrG7YVgGOy0/lQ2SjdVw14DjurWt1K6HUNQNBMvpsq
+         M9H4cYT85iFjDNLALKTLKbjg8RKVJQv180aRYDalt8tNHG8C10i56O/Hy7dWOQK+sQmi
+         5Ypw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753537375; x=1754142175;
+        d=1e100.net; s=20230601; t=1753537376; x=1754142176;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UJlrufef8Bsvwmu4OcR0axH9qFlPYK2uzAQ9Wh+0EEA=;
-        b=qB6SksJ/9VX+Jj9SMxZ0Nr1F7aIoqSWi9kW/r7DZCR11oFgblPhG8uIUNCsli25fSU
-         +KPKhTjuWfpWZ6hucR7jhxQXFlCGV/lAsbklgtvaNYsx2pSMn3AFMVN4LJWwDVMtqFkr
-         4BIfXPvNxTgi15Jm8qRyFacKrETUWzf8RpAvV/OL1yEQUZLArTiOWrW0e/mWVCALgCbt
-         TdTWzgjPRJFipNwGcD9Kk+g+MT5ql+ubDUyfpllMRM4ui2U9vfmsoZGmcW874QUlHJuw
-         mCKog4CaKFcgdB1hfXcXd0cM9sF4UyLHvW0N04eAGIkYhmcRqXAPAJw/HZjstBkHg+E8
-         /95g==
-X-Forwarded-Encrypted: i=1; AJvYcCUFQpGyoW3srYmbCdarqHQDAFYTTxt8X+u39h3vYo8NO00aJyUIHAMrOReLOWfzLfyT89sSge/zCBLZ@vger.kernel.org, AJvYcCVIF8qTYSq0jFC3t5GxIXPBtnq1OiexkB0izkFPeDb+d2CSX7RjMCYy717g8IFObCGvUZR/JNucUcuFuDc1@vger.kernel.org, AJvYcCVQ3+ufTY+2JXMmuNXZQmSeJ0s0Qb61mRjzBZbTQaoZMrL4W4x2LMqlxkGqRkF2Y8eBclJctReM/dHFb4m7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt5a7z4VX54nmEy/EI6+bTFw3M/1wiAQNDu1CQvm56ZNxGd3J1
-	2CF8VqolqXjxaSgcR+/oTVu6VKXcV15KAByVBSyd/nhekCxPSV6IMzyf
-X-Gm-Gg: ASbGncsv9/HLbmPdBCqjxbUkxTw/YpbGGFv/ftrXktr9ndCdz3SpLMbT8/DcmRJiSsj
-	CNU+ZVa6w7GfosvJ6+PpSgyWtS4gw2kQzi0wBHmRZlC+JcS5qK7xZVt5q7ndlQh44Q/3cvOEVU1
-	xbXp6cdcmNRuJi4au2c93Q4Dq5LfAyArwCcV4WHyFrobJZIEEr6yHLhkOEqaeAeU9oBV4WecA4k
-	wbjunJS1Mnm7VTCpWV3D82is/hgOQGkf9g9nixa9cYBNiIOHUXb2q/SdIlN8GCFbYe1TFG5rn/I
-	OIyN7vq5AzrW6yA9GN8B+WOe/5lLL2IfI8gwJO55S8kvjekU3KI2g1Y5hEHr30nvL4oGCi/wcuE
-	0X5XfB5Au5XoMN+t9D4ZFKpElUCC6eMvI/x4YtQFxqI3TUABThvqPK2S39dCi/A==
-X-Google-Smtp-Source: AGHT+IHe1qlZXAW9PZ96f1RjX/uLEzPFjAXVMf0q30Hpwrlk3uzY12aMbuj+6Tqo1M4z6vlAvOGg5Q==
-X-Received: by 2002:a17:903:2347:b0:234:8a4a:adb4 with SMTP id d9443c01a7336-23fb30364f2mr99505735ad.21.1753537375318;
-        Sat, 26 Jul 2025 06:42:55 -0700 (PDT)
+        bh=k7igQM7Vyn71nhVvSbp2kQ44aAuz9LFYWyrsCyPIgIw=;
+        b=qrYSvXUzcXYTrmMOD03gD5dmBWg7h6J8pTxk/pdBc7WznGApdHlP0kw5HOuIDgEGIa
+         Kdw1hv4xz9VF1fbXyHsPDQTGjrFugpybWL8rvFnqzfIbgUNppmDo640+wRiRfUTyKuNK
+         lRxHZSeukatTq/bZ8IQ0fQP/tuDlGXUfrRsnzZ2iYxGl+2huNQbiTrBONbOoHPnr9JoS
+         VU2EFqQ2SoovM9omlY/YOCPQfO/4BYlV/KTwKp2Q9T1IexoBghW1JgEkjDN6voYyzRD5
+         ZN39y2752vvaDu1FpxVMuql/XCWVYy9kolV8J5Bo/Uu9dNOuhCrSlsSvUIkD9y8eAFp1
+         ERQA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtU/Mwq0+yndUMBk8RsASdcZaH2uhq4XMN/NV4aYikmCGV6k+/xXN6zDkkbhAYEZkL67J5ABXn/V0CT7W+@vger.kernel.org, AJvYcCVvTXFlMNauhoznvKB/BQXvll1D2teSiXsJj/D/hBkC/tMlmknFEL0As/oV+WMJXOimlI5rOriRj5sF@vger.kernel.org, AJvYcCXqjWrpIrMAqRxi0l9UBYH3aNj7lAuq8NPfxDPLLmtcG0J/3nH5hpCVAw4FLrlpj+MbU85v4Uzli/oX3Mi4@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCnyA83g8D9NIOHALmxNgX1pz0AUmXsdz2SFiwpa7j9BToYdGW
+	c5THpKg3lG+Vve6QOl4Rc50slMKCqEk8lrles/gSIG5YcJyuenQQ6TBm
+X-Gm-Gg: ASbGncvmeONGqEEvr9odQtJr/GuiJwgN9dToTqBz6vK7+LbMe2iejnUAGNDSJ5UOrHl
+	qDPF2Tot9BD1ufFKehw132am3PfSVFkpBnXlVisNBwC3uR/rprmIPuyXKnlsZnUdREUerlMI5Fl
+	aI77BFeMa/gDHxydERfd+0FUsAKbNJqTWs2rHza1fhveqgjzPB1H77bmS722ayPz/xncJQpl6Eg
+	Tq43HTZrG8PU0Dn34Vc8QHVhI8WVNOvPRZcRihv4UvoFU1v6deVcNXvv7PmcjUxvhr8llk5bhOl
+	7TtkPaIw/rxhbmmkd1kkDXORsT/LqNpUl943fnvilGyeyotnBLUye8YVQoGyrhXmAyeLK8d40s+
+	ps3z+rJmEjZdldsHQjewasoDebYS8bKqgr/oslDIlr6SDB4YiO+xQNWGBL8qtGA==
+X-Google-Smtp-Source: AGHT+IGykL3x0uCuxja/bgPqhGoOyWm/WxysnfAYTbQkxQLZoEShTNhvEthuDBcdTIEqtQJLd7SBjQ==
+X-Received: by 2002:a17:90b:5804:b0:311:f99e:7f4e with SMTP id 98e67ed59e1d1-31e779fa061mr7768141a91.16.1753537376282;
+        Sat, 26 Jul 2025 06:42:56 -0700 (PDT)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:77:9619:11b0:a73:e5a6])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e83508500sm1869190a91.22.2025.07.26.06.42.54
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e83508500sm1869190a91.22.2025.07.26.06.42.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Jul 2025 06:42:54 -0700 (PDT)
+        Sat, 26 Jul 2025 06:42:55 -0700 (PDT)
 From: Tianyu Lan <ltykernel@gmail.com>
 To: kys@microsoft.com,
 	haiyangz@microsoft.com,
@@ -90,10 +90,11 @@ To: kys@microsoft.com,
 Cc: Tianyu Lan <tiala@microsoft.com>,
 	linux-arch@vger.kernel.org,
 	linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH V4 3/4] x86/hyperv: Don't use auto-eoi when Secure AVIC is available
-Date: Sat, 26 Jul 2025 09:42:49 -0400
-Message-Id: <20250726134250.4414-4-ltykernel@gmail.com>
+	linux-kernel@vger.kernel.org,
+	Michael Kelley <mhklinux@outlook.com>
+Subject: [RFC PATCH V4 4/4] x86/hyperv: Allow Hyper-V to inject STIMER0 interrupts
+Date: Sat, 26 Jul 2025 09:42:50 -0400
+Message-Id: <20250726134250.4414-5-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250726134250.4414-1-ltykernel@gmail.com>
 References: <20250726134250.4414-1-ltykernel@gmail.com>
@@ -107,32 +108,40 @@ Content-Transfer-Encoding: 8bit
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-Hyper-V doesn't support auto-eoi with Secure AVIC.
-So set the HV_DEPRECATING_AEOI_RECOMMENDED flag
-to force writing the EOI register after handling
-an interrupt.
+When Secure AVIC is enabled, call Secure AVIC
+function to allow Hyper-V to inject STIMER0 interrupt.
 
+Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
-Change since RFC V3:
-       - Update title prefix from "x86/Hyper-V" to "x86/hyperv"
----
- arch/x86/kernel/cpu/mshyperv.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/hyperv/hv_init.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index c78f860419d6..8f029650f16c 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -463,6 +463,8 @@ static void __init ms_hyperv_init_platform(void)
- 		 ms_hyperv.max_vp_index, ms_hyperv.max_lp_index);
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 3d1d3547095a..591338162420 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -132,6 +132,10 @@ static int hv_cpu_init(unsigned int cpu)
+ 		wrmsrq(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+ 	}
  
- 	hv_identify_partition_type();
-+	if (cc_platform_has(CC_ATTR_SNP_SECURE_AVIC))
-+		ms_hyperv.hints |= HV_DEPRECATING_AEOI_RECOMMENDED;
++	/* Allow Hyper-V stimer vector to be injected from Hypervisor. */
++	if (ms_hyperv.misc_features & HV_STIMER_DIRECT_MODE_AVAILABLE)
++		apic_update_vector(cpu, HYPERV_STIMER0_VECTOR, true);
++
+ 	return hyperv_init_ghcb();
+ }
  
- 	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
- 		hv_nested = true;
+@@ -239,6 +243,9 @@ static int hv_cpu_die(unsigned int cpu)
+ 		*ghcb_va = NULL;
+ 	}
+ 
++	if (ms_hyperv.misc_features & HV_STIMER_DIRECT_MODE_AVAILABLE)
++		apic_update_vector(cpu, HYPERV_STIMER0_VECTOR, false);
++
+ 	hv_common_cpu_die(cpu);
+ 
+ 	if (hv_vp_assist_page && hv_vp_assist_page[cpu]) {
 -- 
 2.25.1
 
