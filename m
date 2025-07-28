@@ -1,162 +1,191 @@
-Return-Path: <linux-arch+bounces-12969-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12970-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0223CB13932
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jul 2025 12:47:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED4C1B13D89
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Jul 2025 16:44:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E6953B8EE9
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Jul 2025 10:47:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2DBC3BACF8
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Jul 2025 14:43:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D078202983;
-	Mon, 28 Jul 2025 10:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4666B2222A1;
+	Mon, 28 Jul 2025 14:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="jstPWDA0"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="pSOQweSI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azolkn19011095.outbound.protection.outlook.com [52.103.23.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B1010A1E
-	for <linux-arch@vger.kernel.org>; Mon, 28 Jul 2025 10:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753699647; cv=none; b=rExJ8iu8at++wga0Y1TF+hjGxDssDNxAwYPrlygpFN1csweGeF42axEIaxufqgI/OuzPpBKETzEsH4LpYxfHoVwshg28aUMCs0Kc4J9yZGX/GXvX5m/SI/d9MsP0+moo+WVakypwRyWtdyUJaBaznjAQgRgdYLFloDFVrGFeb3Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753699647; c=relaxed/simple;
-	bh=0jakwL5B2hBwM+xMjS2ZNHlPEiJ9kLDxkxVhoXtJktM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jOXYHak2iO3p2fYvbBO21tsLdcVAW66JKUVxaPtiArAVq/GTPtQacdk+UXAYVGq+m6qjWaOfEDjly9NlqByC8OUg9t4PxXoriaxWMNtX4bWbR+Cpj7kfmAEpatFmt4AZYxCn6Avd53bDgiRShH6iOZ4cegwwZFWzqJ0FSdxSgL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=jstPWDA0; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=P78DUA8gdUh/DnTSJLNoinyom7BKeyDXzzR0VnFVu0I=;
-	t=1753699645; x=1754909245; b=jstPWDA0K2otfMDtmSNgZmJl/CaGSHzbQktFZZ5/8OHqxzy
-	t8VnkmvlIeyzIx5XCBhSKxY+7CWMHPIRrhF60ac+4m3LpjXs6f5ujy4w0Pbm/CUIjBswfqjrzAwl+
-	yecP2172ObfQzSf4rSeeZwLo4GGCtTvzJf6VW5Cv/DAokXM8rRkFVBLGfuMbyWTbY6WlmZIwjfkFV
-	5ei6QpLglXG29mjYe9oFJOkfNIV9txrOupS55Pz/wUUNeNNNVUdIO2rv2E73BP8+6iRYebCe9NwB4
-	SspqCXEklEe2oo3Ahn15TuthLPtTkO3VQGMBIOYcTLw/QfDz0V3G12WCPJu3DU/Q==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1ugLNt-0000000Cfcm-21ak;
-	Mon, 28 Jul 2025 12:47:09 +0200
-Message-ID: <233c916a5c598ca246b3138d13aaad44fdde68b2.camel@sipsolutions.net>
-Subject: Re: [PATCH 9/9] um: Add initial SMP support
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Tiwei Bie <tiwei.bie@linux.dev>, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com
-Cc: linux-um@lists.infradead.org, tiwei.btw@antgroup.com, 
-	linux-arch@vger.kernel.org
-Date: Mon, 28 Jul 2025 12:47:08 +0200
-In-Reply-To: <20250727062937.1369050-10-tiwei.bie@linux.dev> (sfid-20250727_083200_844163_0A31491B)
-References: <20250727062937.1369050-1-tiwei.bie@linux.dev>
-	 <20250727062937.1369050-10-tiwei.bie@linux.dev>
-	 (sfid-20250727_083200_844163_0A31491B)
-Content-Type: text/plain; charset="UTF-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E94841C69;
+	Mon, 28 Jul 2025 14:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.23.95
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753713844; cv=fail; b=U+wU9V6u4nKbp3lEUpM4WltEH8Zq4sE1HyKVwJNxq0w6zF/rdcoK7TM9kDMsKe4tVYS97Hzf4NfGE6kVtLe2rG0mFcJ/LKMkYQlxfufYdCvruWrmRrzYNOGR4ydyhstC80J41nQUYFveXdO8MU3YlNrQVpeya3+sE38AzouiyQw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753713844; c=relaxed/simple;
+	bh=J300bdOxYQVgf02LenM0Y+cfV3EONCzRIbn6gZiv03s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=tfazj82KTs22AGDa0NCwxFsHyM27ha+t9j5loS8SASGgYcp7Y/mVsIYKUNNNiSLOeY+yq/cYLcfUJwYLcFvVwhjinsUfjfzrrdNvRG1SUxYBE60qBAw/uAPwF2txTtLp7fGwpySJg66fmqv4Cv2cMIJo1SJIytI3RuToVhmgEzU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=pSOQweSI; arc=fail smtp.client-ip=52.103.23.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XbAf5DS0CB/IUpig/C3pHUKtzRFUYhfqFHrYjldD9UJkUHGQsmaAP78ibK7z10rrg14avZg7vwiC4c+Z2fyzs6XanKFMikdpMYFGM8D3ZVGXYppRAzLIrU7DR+5lYXqdSv1U95dMDNEZ5DUqm8b6/LfXn4vYwWfGfIY5fGk387n8IGkcejrk9shKnBKITFziRiIeD+2Df52GcKgrvzUiU8Q/dO93cTdFI+vzDlqqCJGETZ1zWa1+1PpzzAe4IpIfW4EZBNXsZH4SAshT7O5bkj2WRl7Lsaei+vWWsx8ZmOd3dRgJLEPXGglD0CBH+gFeUlpcrmWdxrkzjDFCjZ/KHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y29crNM7ZP+Yj3KrWAUt6YpaZWy9tte13WcDAwe5lyE=;
+ b=aWJDeLCqICtxvUXqDifXMV4HMgec8piKGB96+O6tOYYXd2PX8GKp8osdOwl/toOppe/c20cWbopLa/EuCdBBjW8BF0SJxSTCu+H3u6hWvrZooJKTHeTcxMp/8sNpHw8YL/pb97rRid5yHnHF2QjJsZykaLyjF+3xJ04AhkEP6ePT4/NW4Pi8yJqrQzlrAtUxL1SWTU/CLsgoz0rzrciNKulU9zPQExScmchFKthzsuORBRCIRsg4HqtpvCQb3sGMR0ChVHEqZ+wvrdJHmrmcMeL5EaT2yiJtgoVipB+nmWpOL17nsP+KMhjnhyg39+5M1REyjK8xnCL2Im7cfIK/1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y29crNM7ZP+Yj3KrWAUt6YpaZWy9tte13WcDAwe5lyE=;
+ b=pSOQweSIcIEggZsY6r8hmPmA4klaUeGcjpGeY9signMKMPufjlrnbdWEV0dEmAL6UQ3fU+JThckkIvJeGss1FUb+mqsBTlIHKfpzpYxnQTrHQ3TY3Q5iPPWlhHDTtwg6dz+ZLkCngDZZHVcVmt35SKH4NliPqdWXJNnRYYsHszzyhfDzBCyNVtjA5K/AICtFBCutZOIC6IVUhROqkOK9sctxQnhEVHS3U/ctom6zmR5qksmvCrpeKljMtgLhkNllMKpTB/UlmrzlXUp5uGwlxAXxEjt3+UDcnIgX0+WvO/z3Pmgv0YG8rk6xNLhNQUC9/HCRWN3iqMIOMn+sP7/1wA==
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
+ by PH0PR02MB7783.namprd02.prod.outlook.com (2603:10b6:510:59::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8964.27; Mon, 28 Jul
+ 2025 14:43:54 +0000
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df%4]) with mapi id 15.20.8964.023; Mon, 28 Jul 2025
+ 14:43:54 +0000
+From: Michael Kelley <mhklinux@outlook.com>
+To: Tianyu Lan <ltykernel@gmail.com>, "kys@microsoft.com" <kys@microsoft.com>,
+	"haiyangz@microsoft.com" <haiyangz@microsoft.com>, "wei.liu@kernel.org"
+	<wei.liu@kernel.org>, "decui@microsoft.com" <decui@microsoft.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
+	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
+	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de"
+	<arnd@arndb.de>, "Neeraj.Upadhyay@amd.com" <Neeraj.Upadhyay@amd.com>,
+	"kvijayab@amd.com" <kvijayab@amd.com>
+CC: Tianyu Lan <tiala@microsoft.com>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH V4 1/4] x86/hyperv: Don't use hv apic driver when
+ Secure AVIC is available
+Thread-Topic: [RFC PATCH V4 1/4] x86/hyperv: Don't use hv apic driver when
+ Secure AVIC is available
+Thread-Index: AQHb/jNI52muzV4f+EC67zPjNfYTPLRHmTXQ
+Date: Mon, 28 Jul 2025 14:43:54 +0000
+Message-ID:
+ <SN6PR02MB41576BB2286F0B05F7912868D45AA@SN6PR02MB4157.namprd02.prod.outlook.com>
+References: <20250726134250.4414-1-ltykernel@gmail.com>
+ <20250726134250.4414-2-ltykernel@gmail.com>
+In-Reply-To: <20250726134250.4414-2-ltykernel@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|PH0PR02MB7783:EE_
+x-ms-office365-filtering-correlation-id: d2cd3da9-f771-422d-5422-08ddcde52d4c
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|41001999006|15080799012|8062599012|19110799012|8060799015|461199028|440099028|40105399003|3412199025|102099032;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?qpRZ8bokf0GhndQZptutO29P36k3ZAx6xsLxEzqOLdvEWy8+q9CKi42knrHX?=
+ =?us-ascii?Q?reTmNMEoJO+7y+6MVnQOGTQC41A3LAaBDDZj+28DBkaAAUt16Q2L+p6NtCvq?=
+ =?us-ascii?Q?3kkQaLz++o+tnG1koWXHMJKjNBnpF/4qa0WpAGSn1FACahc1SDUnURGok5xe?=
+ =?us-ascii?Q?tvQQwbajsLt0ngIeiL3mBnHq+FSvmCzVZaSvO3QsQhE5MG1HFpKaNkpza/W1?=
+ =?us-ascii?Q?IeVHJRDBnwMihifVZLKoKTvlvUz/CMs8cm3RpZjFTET+XBUCUkqbn4nYA/Bu?=
+ =?us-ascii?Q?DYWDj6BPyU5husRqBuO8/5hjJZmfjqZLCpqhDvRPNMktK5z1REeGood7xhnv?=
+ =?us-ascii?Q?mMcLu2pQ7nxPxzkybgn8cujIOFQk+XNtZJZZA4zqlirLmt/pMjgCHXuxJHtC?=
+ =?us-ascii?Q?pUTLQOo+3YPlzAW9zaSqTfK+Hu/WdVaomA+O22JP/7m2r+K/ivezO/3LBquh?=
+ =?us-ascii?Q?kyWpm5YBYVNP+09TF5pqfuwz2jVzNuecqOi92PEVCoGmG62NEvukxqhtRGks?=
+ =?us-ascii?Q?bIvgXE/FdsewDQ76b3bTaSWp8G+g9EstGQ6O9i/lbTQpL871DRFXfJpcFtZ3?=
+ =?us-ascii?Q?To+FNjuQMlkJQYYVpmQ3s2tM5+aApm2FcZjlog1xTI8KuOkKs5EZm3BJFt14?=
+ =?us-ascii?Q?0kMjgYOYWahf6VasE5FnoLZbIP6ZsnUjwQP3vrluAGBw/DIhrzdYpB3flsm/?=
+ =?us-ascii?Q?ZPy12FGnAcj0l9K2mfx8OIjJlQImP/p4WDuvQQEHpnEinxc6Q53DE/nKGFVt?=
+ =?us-ascii?Q?jJBzVBr46Xx/+BDGPMD+cINYVw+d2ZLpciRfTJsn8WwaYOMxaXltf/Xi5nMV?=
+ =?us-ascii?Q?IyHgcEOH/hXU0OBUgzyMH6/1eNaDXuwal+6RlSbI1ZQFBgxx2iKdkM699pYG?=
+ =?us-ascii?Q?N15R0i+q4NUskmBo59ZTJb7FK19UXF7s8d7YsOetWnwLjFYYyzKlvI3tyNvT?=
+ =?us-ascii?Q?ypHvbShE4hEwFXCiU2VB0zsxMVTt6cAcXjq0+mMJKpNsy9Ohof1DJCPe1XSc?=
+ =?us-ascii?Q?WL1RFZFyDdpGMbBzw1HcOMJr9aTqG6VfRaNHUeJSYczSNglUiemR3tJ6QBpw?=
+ =?us-ascii?Q?LGK1nSe1AUhfc4+zkT9yFAn7XVULaEnriFvO4QRVNDOcOr9jTxZWqIUQTwu3?=
+ =?us-ascii?Q?dO5VcKq3VPHA7q16etGBanstvmXQFcyqrA=3D=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?uW2gwbCNRrWrRrvxt7jXwrmWiSmuHXSv9tgQ8k/MtJoOcidtWOSPtu23A6Ys?=
+ =?us-ascii?Q?Jfc/9Xe4RVKDOkNCGDymypQTkGify5EYuXK9k6wqfXbtlivm0ZMdBQYIV1jh?=
+ =?us-ascii?Q?udFMUUzfHB66aG94G9080Fkj3LHpcHVd3p+iCoyGvbNZ9ZHPnhXM4L0Y1Cj6?=
+ =?us-ascii?Q?S73m/uyQmtpxsFhaCwNxxw06bDHPWxiHkSVRZsGh0pH9FUcwOeoSI/EWalD6?=
+ =?us-ascii?Q?ZEYN0ecfXnFow78/U2UCwOz3QbZ3Y1dVMRjCX6MjZIVtVdM/cldOqf5qC5ZN?=
+ =?us-ascii?Q?ZfasPB9LUw/+f2O3VNem03is+55ad6HAgeTaEWLKubPjAC4KGZnc5syyI+vp?=
+ =?us-ascii?Q?tiIO6WMfgeEVG0PelA9/ObB/0eIgVFHgieHZyJHjd4z9hIMq6yTuNylFbXtS?=
+ =?us-ascii?Q?Vxs0rqcSfJBUbwm84YnVidh0L+rG+ws/Doyn7ddtyJNT0S+GL0KuLyoOZxF2?=
+ =?us-ascii?Q?kb10nvvzVor3xix+4rK6WlFzG0Xm50GA6rFHRjXySQkFFGFEwGB5VCLAb90S?=
+ =?us-ascii?Q?n7r3PhkDO9JUcVx8u4MlljO9l0BnhoC472keocWAtFW3z49l7syoA9cW+kFN?=
+ =?us-ascii?Q?yO/h2Iu2EJZK8IEX6/WHCGbYEUly8Ad04uHkyyajxsG41hzzM0iL0DWU3zb1?=
+ =?us-ascii?Q?iwDgPD0G4wjfcigoHuUT6CP0mEvJ1doP+GEJeh/gbvFVYHZQcMBtMpMDUx39?=
+ =?us-ascii?Q?QHwJuO8tAeaQk+X6MpGjjfYBmNXCJ1Qu32sYncvUsXKuY/naNcKWS0wu7PA/?=
+ =?us-ascii?Q?nlN/5Zb2Wn9EJ9isFHHJFo1IQmL54VmuNOS+M06eEW4z8ltoZ/4xLPpLTjGS?=
+ =?us-ascii?Q?gc6sATfkDiuL8iCSKoZUdIH0L6ckzzE4NMNVoidYnVbY5Ia67G09Yry8cePA?=
+ =?us-ascii?Q?FmHS3anz1RFGsCeRqJSQh26G9pGZyIYhl1xQK41ShqNy7x+EqkLlEtGnJC6N?=
+ =?us-ascii?Q?N5+KlKFYjAcpZeikgo2uX42MPTgjPlaTkl6HQqqndgntqz63ka7jShpxdXSa?=
+ =?us-ascii?Q?7PpfFbu5HvKKg2MAS3IsWdPivBRlly72oOX5nqe7EFaooLS26Knsckzref0f?=
+ =?us-ascii?Q?E0oMtDBy5R5FfT0Kq4F9PqqDAQPT8yAfNq+vSJtOr/wCHYxrq5J4pPJdeKp6?=
+ =?us-ascii?Q?V3PEXIlOmseczFuuadOg+IYokP2wsQZTQIYumNHXEuAy8quoqkpiWZR6r4I3?=
+ =?us-ascii?Q?iFriLgIKkbxanikp+ctnjWRm/LS/t7q+3Dte2+0fegZM0wot6SqkRWKJ5Qs?=
+ =?us-ascii?Q?=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2cd3da9-f771-422d-5422-08ddcde52d4c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jul 2025 14:43:54.7049
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7783
 
-On Sun, 2025-07-27 at 14:29 +0800, Tiwei Bie wrote:
+From: Tianyu Lan <ltykernel@gmail.com> Sent: Saturday, July 26, 2025 6:43 A=
+M
 >=20
-> +++ b/arch/um/include/asm/smp.h
-> @@ -2,6 +2,27 @@
->  #ifndef __UM_SMP_H
->  #define __UM_SMP_H
-> =20
-> -#define hard_smp_processor_id()		0
-> +#if IS_ENABLED(CONFIG_SMP)
+> When Secure AVIC is available, the AMD x2apic Secure
+> AVIC driver will be selected. In that case, have hv_apic_init()
+> return immediately without doing anything.
+>=20
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> ---
+> Change since RFC V3:
+>        - Update Change log and fix coding style issue.
+> ---
+>  arch/x86/hyperv/hv_apic.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/arch/x86/hyperv/hv_apic.c b/arch/x86/hyperv/hv_apic.c
+> index bfde0a3498b9..e669053b637d 100644
+> --- a/arch/x86/hyperv/hv_apic.c
+> +++ b/arch/x86/hyperv/hv_apic.c
+> @@ -293,6 +293,9 @@ static void hv_send_ipi_self(int vector)
+>=20
+>  void __init hv_apic_init(void)
+>  {
+> +	if (cc_platform_has(CC_ATTR_SNP_SECURE_AVIC))
+> +		return;
 > +
-> +#include <linux/bitops.h>
-> +#include <asm/current.h>
-> +#include <linux/cpumask.h>
-> +#include <shared/smp.h>
-> +
-> +#define raw_smp_processor_id() uml_curr_cpu()
-> +
-> +void arch_smp_send_reschedule(int cpu);
-> +
-> +void arch_send_call_function_single_ipi(int cpu);
-> +
-> +void arch_send_call_function_ipi_mask(const struct cpumask *mask);
-> +
-> +static inline void smp_cpus_done(unsigned int maxcpus) { }
-> +
-> +#else /* !CONFIG_SMP */
-> +
-> +#define raw_smp_processor_id() 0
+>  	if (ms_hyperv.hints & HV_X64_CLUSTER_IPI_RECOMMENDED) {
+>  		pr_info("Hyper-V: Using IPI hypercalls\n");
+>  		/*
+> --
+> 2.25.1
+>=20
 
-This seems a bit odd to me, linux/smp.h also defines
-raw_smp_processor_id() to 0 the same way, unconditionally.
+Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 
-It almost seems to me we should define raw_smp_processor_id() only for
-SMP? But then also __smp_processor_id()? Maybe not?
-
-linux-arch folks, do you have any comments?
-
-> --- /dev/null
-> +++ b/arch/um/include/asm/spinlock.h
-> @@ -0,0 +1,8 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_UM_SPINLOCK_H
-> +#define __ASM_UM_SPINLOCK_H
-> +
-> +#include <asm/processor.h>
-> +#include <asm-generic/spinlock.h>
-> +
-> +#endif /* __ASM_UM_SPINLOCK_H */
-
-Do we need this file? Maybe asm-generic should be including the right
-things it needs?
-
-> +void enter_turnstile(struct mm_id *mm_id);
-> +void exit_turnstile(struct mm_id *mm_id);
-
-We could add __acquires(turnstile) and __releases(turnstile) or
-something, to have sparse check that it's locked/unlocked correctly, but
-not sure it's worth it.
-
-> +int disable_kmalloc[NR_CPUS] =3D { 0 };
-
-nit: you can remove the "0".
-
-> +int smp_sigio_handler(struct uml_pt_regs *regs)
-> +{
-> +	int cpu =3D raw_smp_processor_id();
-> +
-> +	IPI_handler(cpu, regs);
-> +	if (cpu !=3D 0)
-> +		return 1;
-> +	return 0;
-
-nit: "return cpu !=3D 0;" perhaps
-
-> +__uml_setup("ncpus=3D", uml_ncpus_setup,
-> +"ncpus=3D<# of desired CPUs>\n"
-> +"    This tells UML how many virtual processors to start. The maximum\n"
-> +"    number of supported virtual processors can be obtained by querying\=
-n"
-> +"    the CONFIG_NR_CPUS option using --showconfig.\n\n"
-
-
-I feel like probably this should at least for now be mutually exclusive
-with time-travel=3D parameters, at least if it's not 1? Or perhaps only
-with time-travel=3Dext?
-
-The timer code is in another patch, will look at that also. I guess
-until then it's more of a gut feeling on "how would this work" :)
-
-johannes
 
