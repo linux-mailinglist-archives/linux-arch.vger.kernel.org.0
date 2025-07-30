@@ -1,87 +1,87 @@
-Return-Path: <linux-arch+bounces-12984-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-12985-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36981B161E2
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Jul 2025 15:53:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 651EBB161FF
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Jul 2025 15:55:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64F8E565A68
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Jul 2025 13:53:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B49CB1899D0C
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Jul 2025 13:56:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A541E2D948A;
-	Wed, 30 Jul 2025 13:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB2E12D9780;
+	Wed, 30 Jul 2025 13:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a3sbqBzb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U4D8eQXA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF7F2D839E
-	for <linux-arch@vger.kernel.org>; Wed, 30 Jul 2025 13:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76112D8DD0
+	for <linux-arch@vger.kernel.org>; Wed, 30 Jul 2025 13:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753883573; cv=none; b=t2r3vgsrW/QWKmiEKqNxTZX6x6faU6lrEMAcjuKxu+qrArZuWR6UxhK1KWYQsOMGFoQxx7XgZ1GGtILW02c6bMf28i8WG5DNH6k7C996exPVxnrp89cTSSJXwBFkwrAlhkjZeIWdZCSoCGzrPup7UjsfoUSFqSRogSQb8BBx7nM=
+	t=1753883730; cv=none; b=KzI5Ecv01A9VpzmiQK9pV+Ec0MeBQQKYsQpL/iIa8OzMbPC3suKhFxyAUNGBbm9WGWbTJ0YmSw1mY0KJ5NN1mwqtfHQYpP4urupJ4NGgL0bki6SoiuCqw/bmFriU4+rFWuG3j2HgC6gxkTXDcmPyMJjsCOoM3AoqG7ZZvb/TTo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753883573; c=relaxed/simple;
-	bh=+fhqt74zbGwFmAVFYzLM/I7yTITHbGkLqM+wqDzwR5o=;
+	s=arc-20240116; t=1753883730; c=relaxed/simple;
+	bh=03dvLXzJnjJL/BzSORv5mrGgeHu9RiQtwL9YnjAKfQw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CBf5sPTdVc4/lxCvoqkaR0a328GzMGtN2yLlSGDJZ1JO6AK0UfhzkpxhnB3WaPnU10mjgA1HVLAuf7iIf/X8f/zXyAlKo1V1jJjoEk9kJDtwwhPas9VrRVt6fgyGzz93E6MoFxKJhtHQSbT302BUtxRfYRpY5lxpEscwwRpIlgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a3sbqBzb; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=tesI5+agdNcH4FEqCrwXtYSYdI73jUi5hGJss5r8MNtJa+36YqiaoLBcThd3n5iXV7Obc6O/u9PqxTE3RBYbT3q/norE3KZaOaKCrwfRmlM4QOINm18sigFtmg6K9qpmfxQhskv6aBTbVfosLb0wNNryPR3BkOCQTOC2UN46Skw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U4D8eQXA; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1753883571;
+	s=mimecast20190719; t=1753883727;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=INvhw9PaQlqHnlfqMb8yKpdneujvD9kPiqSCHTmOp+c=;
-	b=a3sbqBzbE5T5QvDDYrA/MqigLJ5S4bqkyN2SsagB0qmfScXhLIVnmL9tNJ6vnGwMZ0Ei0E
-	QSsNSFpbsmUStyKSZREAPwG+1bIkUO9UJxmMMvRDTnpjZlBizy+wC8H31k/BYucBXdo4HO
-	RzIqPzh+7R/sNC8h5mpTxcGKcHu5018=
+	bh=3VcFQqoev4ndFVh1DgWdnNI6LwW73kLIz7RUlLHtApU=;
+	b=U4D8eQXA+5wuPHvqhTS/DElTxJb5SXU6AfRUn+4VEWgSUlULNE0DNEbTLXvDGBlLex0u2A
+	vLlZ4YGleS7WkEKJD6ERsdKOUIXqM2ALqE+DL0lWroyURD9blrIRlXIG52lYYh+AZWrJKd
+	agq4jY8v8Ve2jUrRzByL9YpwHrEPYAI=
 Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
  [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-199-aQKXpcjcM5uishzHChtk0A-1; Wed, 30 Jul 2025 09:52:49 -0400
-X-MC-Unique: aQKXpcjcM5uishzHChtk0A-1
-X-Mimecast-MFC-AGG-ID: aQKXpcjcM5uishzHChtk0A_1753883568
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-ae6d551ef64so79227566b.2
-        for <linux-arch@vger.kernel.org>; Wed, 30 Jul 2025 06:52:48 -0700 (PDT)
+ us-mta-414-ZjOajLvsPDmLKtrSyzvQUA-1; Wed, 30 Jul 2025 09:55:26 -0400
+X-MC-Unique: ZjOajLvsPDmLKtrSyzvQUA-1
+X-Mimecast-MFC-AGG-ID: ZjOajLvsPDmLKtrSyzvQUA_1753883725
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-af8fe47fb7eso87674766b.2
+        for <linux-arch@vger.kernel.org>; Wed, 30 Jul 2025 06:55:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753883568; x=1754488368;
+        d=1e100.net; s=20230601; t=1753883725; x=1754488525;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=INvhw9PaQlqHnlfqMb8yKpdneujvD9kPiqSCHTmOp+c=;
-        b=iFki4oz5MaQSgADD2OMG6fCklSPs1qCCt8SexjOLUipK+wiYefer9zCn+KHIXyJGAj
-         iaznRnXn3d+9Pif/HGzQTTpgItE/r81ejMDgUjClWU92j8KuU2C7DTQJtnVGCoU0xDJ3
-         EoJcJBzWB9Jto8nAK5x20dhlaHRc6iSetGwQXCmFUS9zc0fryWJsmVOYOpjxCLXutwrJ
-         2EdjEJCwyG7OPq3DF1Ha83aOifCDs6o7XzupnEf6Wyo4iLxY+SX7bQCRgFigCLx9jMD7
-         dPUc8W1TMicFL4rrOBYDG+FMO5Wjesm7AQJmnUY6GigD3EsXBMtOLYtukRGxSKtAWrNV
-         aHDw==
-X-Forwarded-Encrypted: i=1; AJvYcCWutdQbvQiifBavlYxY5Cg7eRknoN/GW+Cr+3wqyXLddlJ8shir+dIgA2Q2Ur7OScELIvNW64l2DbjB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDBqj95emuaywO4ytjJEDwtiupnRXGJB4rXzmt/pgj542ZvF0p
-	mSvx4V53me6MBYy4AiePjLY+yKyZYkcPFtbfpzdK+N6Ao0TgkINBLon2ekMDs5Bi2nu711VrQcW
-	0UgZ70SGcM/WCyPvmmIryziBgZXLuB+QOyOSUXFeKbCo47Zg1v1/iiq7L2ZxUsf4=
-X-Gm-Gg: ASbGncuhIb2+irrkTV3hVpAJIGfWJCoCBvsaNAFzzeIyYMDtM33759YuIn31RDUGzzK
-	jt+ChPMc2AmrzPH1wZCly7xInS/Jbdf5i3fw5vPXshVHJLZiTZTORxvOGqRbPYD1t7kT3EtiP3F
-	wEJ6Wx0KgD3L6Q0bnFc5DcyqzrfhFFfDtT41jIlbahKCQNCCq4QPCZ9l19FYxuWgkCB/2w0N8n1
-	f+rodsojfBaDa4vJL1aeMxJBiDgio++LrrLcCv/35joFIJoOnFtEpoGaylWdT0aVolGWdZvPhdI
-	lQx/R9tKkK1Q7iFz7fxq41sqJrRcPCrQp+DYLVqK2zodgoWL+Kv+N0V30zalug==
-X-Received: by 2002:a17:907:7252:b0:ae6:e25b:2413 with SMTP id a640c23a62f3a-af8fda42a6emr459884966b.44.1753883567606;
-        Wed, 30 Jul 2025 06:52:47 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE2KhtHgQZ228r5yO4JfetEAu342+CZE6Zr5/g2fkWHPp7n9P5vjQqg7A7lY87sHfovdnuCuA==
-X-Received: by 2002:a17:907:7252:b0:ae6:e25b:2413 with SMTP id a640c23a62f3a-af8fda42a6emr459879766b.44.1753883567129;
-        Wed, 30 Jul 2025 06:52:47 -0700 (PDT)
+        bh=3VcFQqoev4ndFVh1DgWdnNI6LwW73kLIz7RUlLHtApU=;
+        b=t1HCoz5VD33dHD6JBGhknWdgefKUAN1oKOL3Qs/KRU90DOMjn37Ld7oVsAmJI4iMft
+         3YkPbvGkocSJe8N357hl97GGFiJAaDXBmCGWVJo5SfEJ/zBQDiU2i/uUAz8j1Edm8Orh
+         Qv6n1vI9d8h2GXo7RFLuGZBJEPvnJq9ijdZgo1udSMMeeK7H2f4WZ6bW0as2BFBeNRhv
+         901bGQSfco1dzNteu+fhSol3pBN19c/BaiUeRtLKIQ7mLox9cgRXPixZiQ0U9PVUw6mf
+         M1PMD1MsKtIsS2eOF3JZGw5zpOx6VxT8Pjg81XjX7cNMWs8KQUI4/jdM1hr+K+tftNh8
+         8rHg==
+X-Forwarded-Encrypted: i=1; AJvYcCVb2zixwbJetRORcrSWEzrFEtLJsUZyUSQrI1wQj4nAUKmtoLVQ71bbH5xEUsYPMF2XTc0I5fVb7Ry8@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPwR481mjh8BP70rfXa130s4C/zYa+haXlH71VFhe7rnQUIZCS
+	BuCbp6RnUX9um2vvY+5TE+vTZ8dstv/eIiZd6WcxkiZpoQYx20twdJT17paYmRDLCx5YNzlCiKp
+	vXy/+r+OoX0ikW0Vu6iJmYNWJ0gkhu4mxRSW4yMmjUuiu+4kM3YZiigObHU9fpjA=
+X-Gm-Gg: ASbGncuDYX1wlxRBo+OU3bL3SrJx5hG31XlN9InrEWV8KfGQzcBEIc1FJuEiYTm1pmW
+	LSdso7gVAOaAzKKDQMaVTriVHh4Hcn3GS5+nQ5qUTcaE/sNH9hF81gub30LrhKiv3gcSNaMyzEu
+	9PFDX2t6SDSvGg+tXohB8z5nYtDkQGuHAV2Aa8TiUEfvHjZaDHZl+HfknYLf2F7j5QymU7DUsbI
+	QHkKLDrYXCfW/f7Pz3dH6W9v0mXitoKz0mZH/deDKW5DhkvpSGUjN+4xWF1cPaRtd4d8ughonfQ
+	nwzI0nzL86c8L++aKnZ7pYpRM8hnXkp9/qNvB88azP45btt3BPnor1icPw7uvA==
+X-Received: by 2002:a17:907:3f16:b0:ada:4b3c:ea81 with SMTP id a640c23a62f3a-af8fd957532mr381802466b.39.1753883724938;
+        Wed, 30 Jul 2025 06:55:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGnFvdC4+f6/eJenyOa18wsoa3h5I67gwGBhJ32KqQ2TAENVXY/DrKoXNbTnHSurkHrTJi8SA==
+X-Received: by 2002:a17:907:3f16:b0:ada:4b3c:ea81 with SMTP id a640c23a62f3a-af8fd957532mr381798266b.39.1753883724471;
+        Wed, 30 Jul 2025 06:55:24 -0700 (PDT)
 Received: from [10.32.64.156] (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af8f1b172f2sm210258566b.80.2025.07.30.06.52.46
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af63585fff3sm750425466b.21.2025.07.30.06.55.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Jul 2025 06:52:46 -0700 (PDT)
-Message-ID: <ffc43855-2263-408d-831c-33f518249f96@redhat.com>
-Date: Wed, 30 Jul 2025 15:52:45 +0200
+        Wed, 30 Jul 2025 06:55:23 -0700 (PDT)
+Message-ID: <7ecaae9e-a088-4c1b-9caf-6a006a756544@redhat.com>
+Date: Wed, 30 Jul 2025 15:55:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -89,7 +89,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v2 22/29] mm/numa: Register information into Kmemdump
+Subject: Re: [RFC][PATCH v2 16/29] mm/show_mem: Annotate static information
+ into Kmemdump
 To: Eugen Hristev <eugen.hristev@linaro.org>, linux-kernel@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, linux-arch@vger.kernel.org,
  linux-mm@kvack.org, tglx@linutronix.de, andersson@kernel.org,
@@ -98,7 +99,7 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
  corbet@lwn.net, mojha@qti.qualcomm.com, rostedt@goodmis.org,
  jonechou@google.com, tudor.ambarus@linaro.org
 References: <20250724135512.518487-1-eugen.hristev@linaro.org>
- <20250724135512.518487-23-eugen.hristev@linaro.org>
+ <20250724135512.518487-17-eugen.hristev@linaro.org>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -146,58 +147,44 @@ Autocrypt: addr=david@redhat.com; keydata=
  WBe5lqcozu9LpNDH/brVSzHCSb7vjNGvvSVESDuoiHK8gNlf0v+epy5WYd7CGAgODPvDShGN
  g3eXuA==
 Organization: Red Hat
-In-Reply-To: <20250724135512.518487-23-eugen.hristev@linaro.org>
+In-Reply-To: <20250724135512.518487-17-eugen.hristev@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 24.07.25 15:55, Eugen Hristev wrote:
+On 24.07.25 15:54, Eugen Hristev wrote:
 > Annotate vital static information into kmemdump:
->   - node_data
+>   - _totalram_pages
 > 
 > Information on these variables is stored into dedicated kmemdump section.
 > 
-> Register dynamic information into kmemdump:
->   - dynamic node data for each node
-> 
-> This information is being allocated for each node, as physical address,
-> so call kmemdump_phys_alloc_size that will allocate an unique kmemdump
-> uid, and register the virtual address.
-> 
 > Signed-off-by: Eugen Hristev <eugen.hristev@linaro.org>
 > ---
->   mm/numa.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
+>   mm/show_mem.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/mm/numa.c b/mm/numa.c
-> index 7d5e06fe5bd4..88cada571171 100644
-> --- a/mm/numa.c
-> +++ b/mm/numa.c
-> @@ -4,9 +4,11 @@
->   #include <linux/printk.h>
->   #include <linux/numa.h>
->   #include <linux/numa_memblks.h>
+> diff --git a/mm/show_mem.c b/mm/show_mem.c
+> index 41999e94a56d..93a5dc041ae1 100644
+> --- a/mm/show_mem.c
+> +++ b/mm/show_mem.c
+> @@ -14,12 +14,14 @@
+>   #include <linux/mmzone.h>
+>   #include <linux/swap.h>
+>   #include <linux/vmstat.h>
 > +#include <linux/kmemdump.h>
 >   
->   struct pglist_data *node_data[MAX_NUMNODES];
->   EXPORT_SYMBOL(node_data);
-> +KMEMDUMP_VAR_CORE(node_data, MAX_NUMNODES * sizeof(struct pglist_data));
+>   #include "internal.h"
+>   #include "swap.h"
 >   
->   /* Allocate NODE_DATA for a node on the local memory */
->   void __init alloc_node_data(int nid)
-> @@ -16,7 +18,8 @@ void __init alloc_node_data(int nid)
->   	int tnid;
->   
->   	/* Allocate node data.  Try node-local memory and then any node. */
-> -	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, nid);
-> +	nd_pa = kmemdump_phys_alloc_size(nd_size, memblock_phys_alloc_try_nid,
-> +					 nd_size, SMP_CACHE_BYTES, nid);
+>   atomic_long_t _totalram_pages __read_mostly;
+>   EXPORT_SYMBOL(_totalram_pages);
+> +KMEMDUMP_VAR_CORE(_totalram_pages, sizeof(_totalram_pages));
 
-Do we really want to wrap memblock allocations in such a way? :/
+Tagging these variables that way is really rather ... controversial.
 
-Gah, no, no no.
+As these are exported globals, isn't there a way to have a list of what 
+to include and what not somewhere else?
 
-Can't we pass that as some magical flag, or just ... register *after* 
-allocating?
+Not sure if any of that would win a beauty price, though.
 
 -- 
 Cheers,
