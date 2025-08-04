@@ -1,88 +1,88 @@
-Return-Path: <linux-arch+bounces-13031-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13032-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2103BB1A114
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Aug 2025 14:17:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58818B1A134
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Aug 2025 14:20:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC70C7AD2A8
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Aug 2025 12:15:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BC3F17F4B7
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Aug 2025 12:19:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D5F1401B;
-	Mon,  4 Aug 2025 12:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E132B25A2CC;
+	Mon,  4 Aug 2025 12:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="caDKqOnI"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CFg0Oh2Y"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4DB2566F5
-	for <linux-arch@vger.kernel.org>; Mon,  4 Aug 2025 12:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C9225A2C9
+	for <linux-arch@vger.kernel.org>; Mon,  4 Aug 2025 12:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754309811; cv=none; b=YqOBxQ+hQJkanb8ty7bgC1Lslw4XIIh7bh4KQVqC2bn7SX6iuwkK0aH08eGC0UBEPnOoXXpPdFYwfiNwrqWNDgpZ/IN3ea5UCOCBbmOgwwjVP+bBgZFuZoCgQ6tc8nPJ8vJbfGyQJJzBSZArXTB/pJ8A5qtuyAyQ62tYarlUgYU=
+	t=1754309903; cv=none; b=ICj81QMXRYnPgX1sbCB/m7TtzVN4rnMr6z/ztiTbBnXt55GzEx961yR+9vkvlcXPgSh7NRH5f5xYT9zjgxcyYJceEHbcYlQiS7lj2LUqqq2/BtI9dUTCDoFzK1pS+5Ywz/kBPfHO5yg57qcMrlFygV6Nq8hMG2JTVNS/7WLORjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754309811; c=relaxed/simple;
-	bh=awU+T6Ftp2Kkneag8TpAZKgxjvoOPHpg4vGF0gRImD4=;
+	s=arc-20240116; t=1754309903; c=relaxed/simple;
+	bh=tev8ZZD2uIs9rabhdyEBYn7rJGYpPc57fVH69YPMGv0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H2L/K+VyjsUJ/RwvFbG0syhSHi+ga+GqLjXne3DYor0K+OZwky0frh6Lj18uBEaZQuN/b8vDf7NbTEloOmoWGAQ9vwmDUmVqkUYdB1KlABRBu/MnkD/z25BqfKrVRPrSq/8/7vs+HVIwqNg1DlxAsLzjr0Vldx0eP3oCSWo4tOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=caDKqOnI; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=fyW956z4Ot8NkSGaNRYyhS8ZTMr2N8on3OqWxvcQIu1UXLNZjJnoFcRxWW/hG7l1DFqv2JucX61zcA8QXDZ8A8R+akLXFeK45xMeE1squJlRZSXuoG+t1WloIedT0NZkTt5l6csMa5kAN7ZgQxfSH+OIq+3KyEBcEBadKj9JQP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CFg0Oh2Y; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754309808;
+	s=mimecast20190719; t=1754309901;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=smTivLN7vGpmKkbSDiw2L8Umpu8NAfTaDV1GiCt7zpg=;
-	b=caDKqOnINCuAL9VB0TVayrDbNDUsmypnICVNtXsrVwinRWB3N3Brj6EH34VmTxDh02H0XX
-	uz9rPy22lUzDd7+sIp0W8C/JyKX7MIUy2bwFPdWwfMSEloCC93lKmrRtRmdmbZUR38ji4r
-	eZ9z0w8miC/jdCbImLy7z0+YMDaGmTE=
+	bh=aP1j/ubQX+lP/A8PXryWthbp18R/7thL54KlRxdc41c=;
+	b=CFg0Oh2YUEyNM24/deSss07Em3DSa834zSvwg9xV7vTiNwwXa6++PdUZy6fbgIZwGMCi7i
+	u6eiHHV2p14okwi4DGSIsCd+K821PZV5foJmM1kfOm2AyLdfcaUwT+jP0kPhcUlrQMqSS6
+	9u7N8g5lHB3GJ5gOkhY3BYE1uFVIsIU=
 Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
  [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-267-1jHs8DwNOsu1ZI0_117w-Q-1; Mon, 04 Aug 2025 08:16:45 -0400
-X-MC-Unique: 1jHs8DwNOsu1ZI0_117w-Q-1
-X-Mimecast-MFC-AGG-ID: 1jHs8DwNOsu1ZI0_117w-Q_1754309804
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3b78329f180so3251928f8f.3
-        for <linux-arch@vger.kernel.org>; Mon, 04 Aug 2025 05:16:45 -0700 (PDT)
+ us-mta-536-B2y0LafeM8WVmvmK04nv9w-1; Mon, 04 Aug 2025 08:18:20 -0400
+X-MC-Unique: B2y0LafeM8WVmvmK04nv9w-1
+X-Mimecast-MFC-AGG-ID: B2y0LafeM8WVmvmK04nv9w_1754309899
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a54a8a0122so1812165f8f.2
+        for <linux-arch@vger.kernel.org>; Mon, 04 Aug 2025 05:18:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754309804; x=1754914604;
+        d=1e100.net; s=20230601; t=1754309899; x=1754914699;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=smTivLN7vGpmKkbSDiw2L8Umpu8NAfTaDV1GiCt7zpg=;
-        b=NgKuRAsBMtQB3A3m/3cjPLZX50PXqzvOREY7LVY+mMrNX+IcLWt89bR9z6sWMCIgxY
-         yWSiEvfvkMvag6Tq1LwuLXCnlsVpqDs7Kpro0Ku/sCIEAgXGCPop/y+IaqcfYcR+wQOz
-         51eA+nLn6psCkgl/op0lOvEM+deEU53dckCdvAZw6m2rrJwb1EYr1T5+2wIZAyBDZsZR
-         i/p+luQbXU9ME24U/tcZj4g3y9/KjwuCbgK02op7B4B9TQLOAfpuPYj0G+ncJaCoyhvq
-         mE6vxC60nIo/1mEjGS/0cMfPlHlB0LxcOffacE7Bx4zgpzeAqkf97nii7QctG7nmu6UP
-         CfnA==
-X-Forwarded-Encrypted: i=1; AJvYcCV3m91vIB8sxV4nJKVcV+REaYBbFO8u/V8AtVaG+XMKNU5Q6kiqO/KEh7BayHfhWJ2M3UIAuvUpOXgO@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyf1oVek/BWaMyq0xFuh215tTbg+724VeqUJdSUsFMXU0J2vuKd
-	bEBBvMpnsxrPqYIsiHA8Y0i4M1Ai1Zt3gz4FbFxTDsprsrwHvxDcQgWrs+42tF4jFL64h5U0qd3
-	THY9NRhj6HvwsfuVrNgr9zOc7/G6E5uc+0RGYkpuxjy9th7pzTFjmkKnm2xzkh6E=
-X-Gm-Gg: ASbGnct8FUZDJ+JWDfsVEp3VKxatPsIwW1b4NZwe16LuRQbGpyx8qMhhVCTXXqqrfuk
-	iaReCA1iUB8dqt/rcr8g5DkU6sCSCaP4IGwnXSeVcZ+NSSxD3ofSFIePDdGWhbzrR+UyBTncmpt
-	YGt4GNdM2z2qdUzv0yMtclAUmJJ7vvj97r4jFEmKKncr+e4D7JFeDosQGvyXO4dZJ183T3eoVdF
-	p7Ln1GZ3XjZYwEA2tTzrNlWJXyaYBeHo7Dup7dJOZVXNoBZfC4GEn+/z2aB5FgEDJOS2gIrtUUk
-	EncVVUGyYyjdwrsqHItvWM/QKbl+X0rpTuq/+OD5ekueEaUwnxHcsFUHboySR7XGTVyWrdpVtAv
-	R8Cp6MrPvX337clXWmuYThqoo5WEULTBBXT23QT9CqhxLDt3yOPsYCZe+2mLmMs+AFzw=
-X-Received: by 2002:a05:6000:4312:b0:3b8:d081:3240 with SMTP id ffacd0b85a97d-3b8d9469b94mr7277496f8f.1.1754309804040;
-        Mon, 04 Aug 2025 05:16:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF62zIj5iO+0NeyVqAEhpgd+//vlpeQVUkWLMm00GOI4VdqPyH3d/dI3sWmYI2aRdRjphW97w==
-X-Received: by 2002:a05:6000:4312:b0:3b8:d081:3240 with SMTP id ffacd0b85a97d-3b8d9469b94mr7277455f8f.1.1754309803502;
-        Mon, 04 Aug 2025 05:16:43 -0700 (PDT)
+        bh=aP1j/ubQX+lP/A8PXryWthbp18R/7thL54KlRxdc41c=;
+        b=aVePDLMlm6+AxinwH1X7ZWKQJvbS+bQzeNwpU1M82AsIAto8IV1RHGhHyQM9pDV+Ul
+         3un9gb5aFSbrOhQfuuzIdoC74m2Y/PaM+nBh51v7LHJeCZZ6+qWjnKAkErQdKm1rhbUo
+         wGX9X+QCWKIZh3WN7H7AedChV8RKmsA409DqT2qrT39pOla+amsMXOvKThnKr9Z1F7oY
+         FAmA/4U7JMZjqixQ4xo2h2u3QWy9E5M6Wuio3n4PR4I5yxMviqjinjSSToGUbXONCFLD
+         WjfP0rGp/1MYeGCW6K9oau1qMDSx2VzLUCw0iAakr0ckfp3hFz89gGW4YscIu4/SybXL
+         cNvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXix9PWPvEkNMBsEvh+X+TUjUFM64payfgVRTvecSnLvZ44oZNAm+q3YWQ5xjmyufHinlXYZFUglxXr@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoDGqWRHhnpNS2fTWDTtJAqduG1Tj4785yRdEAEH/VDxydExMp
+	Ds/7V1YZL9QId76wZ6/CqCQIctuBC3FgFqtKq8EFtl2h0GRD/iQopBoHCIxsvMbY/8GNQHKjknx
+	LAebBib3g9M6Ag7UbVOtvAgKCh2B4CAlkFGN6h8tPNQOowSqciC7epOTFPIm9hyA=
+X-Gm-Gg: ASbGncvWgNB6XTo2LoAiLHaWE5vzv/ILtvFzc3UwO1KWh0x10NrtDZacneTgUNaK3YH
+	XFg6MKF0LDXC04XSoEybSkVSbLf59uuaeNXa5B3t/nSvKRxPqKjoIH+MdBAhCG5frlxdHXn8gKz
+	fbAXZxNuC0b3x0OKWJskeE4l56hEHf1i0N11l2iFiyWxnRHiTqp9xjeBLmZzzGEafz900E1gEFo
+	e/ELtmZQTY+nQN6LuV1RWHNIgL5AfoTz4chhXApREK9Z4q4CRksFRmmVRjs186oUJm5OdUmTtPw
+	SE9vqua8cKAd3gaKn/UupvalvcLMyCNRfL3Mibu2DbKHbRwg85fZMDEcHS1Zbx4kiv9jtY/11Hy
+	eszHYgIpFB4tsWPZtlgdLeDQAKt3T+dxVbjR0X9SU+5BoY9GYX0uLx9n6Db/D/OvoFLc=
+X-Received: by 2002:a05:600c:1c16:b0:459:d9a2:e92d with SMTP id 5b1f17b1804b1-459d9a2eccfmr32262155e9.5.1754309898622;
+        Mon, 04 Aug 2025 05:18:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG+2bCGV2C6/ebzafcm9l4NbmkmomX5W4derdkR7sRtPpZ9SM3xwRcTp42bRjUUnf42oqlN8w==
+X-Received: by 2002:a05:600c:1c16:b0:459:d9a2:e92d with SMTP id 5b1f17b1804b1-459d9a2eccfmr32261825e9.5.1754309898198;
+        Mon, 04 Aug 2025 05:18:18 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f0e:2c00:d6bb:8859:fbbc:b8a9? (p200300d82f0e2c00d6bb8859fbbcb8a9.dip0.t-ipconnect.de. [2003:d8:2f0e:2c00:d6bb:8859:fbbc:b8a9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4589edfd983sm166628015e9.13.2025.08.04.05.16.42
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-459dc2647f6sm15009255e9.2.2025.08.04.05.18.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Aug 2025 05:16:42 -0700 (PDT)
-Message-ID: <dd27cf00-b9b8-4231-a6d1-9ad6562d0074@redhat.com>
-Date: Mon, 4 Aug 2025 14:16:41 +0200
+        Mon, 04 Aug 2025 05:18:17 -0700 (PDT)
+Message-ID: <23e7ec80-622e-4d33-a766-312c1213e56b@redhat.com>
+Date: Mon, 4 Aug 2025 14:18:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -91,19 +91,20 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC][PATCH v2 22/29] mm/numa: Register information into Kmemdump
-To: Michal Hocko <mhocko@suse.com>
-Cc: Eugen Hristev <eugen.hristev@linaro.org>, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, tglx@linutronix.de, andersson@kernel.org,
- pmladek@suse.com, linux-arm-kernel@lists.infradead.org,
- linux-hardening@vger.kernel.org, corbet@lwn.net, mojha@qti.qualcomm.com,
- rostedt@goodmis.org, jonechou@google.com, tudor.ambarus@linaro.org
+To: Eugen Hristev <eugen.hristev@linaro.org>, Michal Hocko <mhocko@suse.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org, tglx@linutronix.de,
+ andersson@kernel.org, pmladek@suse.com,
+ linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
+ corbet@lwn.net, mojha@qti.qualcomm.com, rostedt@goodmis.org,
+ jonechou@google.com, tudor.ambarus@linaro.org
 References: <20250724135512.518487-1-eugen.hristev@linaro.org>
  <20250724135512.518487-23-eugen.hristev@linaro.org>
  <ffc43855-2263-408d-831c-33f518249f96@redhat.com>
  <e66f29c2-9f9f-4b04-b029-23383ed4aed4@linaro.org>
  <751514db-9e03-4cf3-bd3e-124b201bdb94@redhat.com>
  <aJCRgXYIjbJ01RsK@tiehlicka>
+ <e2c031e8-43bd-41e5-9074-c8b1f89e04e6@linaro.org>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -151,42 +152,59 @@ Autocrypt: addr=david@redhat.com; keydata=
  WBe5lqcozu9LpNDH/brVSzHCSb7vjNGvvSVESDuoiHK8gNlf0v+epy5WYd7CGAgODPvDShGN
  g3eXuA==
 Organization: Red Hat
-In-Reply-To: <aJCRgXYIjbJ01RsK@tiehlicka>
+In-Reply-To: <e2c031e8-43bd-41e5-9074-c8b1f89e04e6@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 04.08.25 12:54, Michal Hocko wrote:
-> On Wed 30-07-25 16:04:28, David Hildenbrand wrote:
->> On 30.07.25 15:57, Eugen Hristev wrote:
-> [...]
->>> Yes, registering after is also an option. Initially this is how I
->>> designed the kmemdump API, I also had in mind to add a flag, but, after
->>> discussing with Thomas Gleixner, he came up with the macro wrapper idea
->>> here:
->>> https://lore.kernel.org/lkml/87ikkzpcup.ffs@tglx/
->>> Do you think we can continue that discussion , or maybe start it here ?
->>
->> Yeah, I don't like that, but I can see how we ended up here.
->>
->> I also don't quite like the idea that we must encode here what to include in
->> a dump and what not ...
->>
->> For the vmcore we construct it at runtime in crash_save_vmcoreinfo_init(),
->> where we e.g., have
->>
->> VMCOREINFO_STRUCT_SIZE(pglist_data);
->>
->> Could we similar have some place where we construct what to dump similarly,
->> just not using the current values, but the memory ranges?
+On 04.08.25 13:06, Eugen Hristev wrote:
 > 
-> All those symbols are part of kallsyms, right? Can we just use kallsyms
-> infrastructure and a list of symbols to get what we need from there?
 > 
-> In other words the list of symbols to be completely external to the code
-> that is defining them?
+> On 8/4/25 13:54, Michal Hocko wrote:
+>> On Wed 30-07-25 16:04:28, David Hildenbrand wrote:
+>>> On 30.07.25 15:57, Eugen Hristev wrote:
+>> [...]
+>>>> Yes, registering after is also an option. Initially this is how I
+>>>> designed the kmemdump API, I also had in mind to add a flag, but, after
+>>>> discussing with Thomas Gleixner, he came up with the macro wrapper idea
+>>>> here:
+>>>> https://lore.kernel.org/lkml/87ikkzpcup.ffs@tglx/
+>>>> Do you think we can continue that discussion , or maybe start it here ?
+>>>
+>>> Yeah, I don't like that, but I can see how we ended up here.
+>>>
+>>> I also don't quite like the idea that we must encode here what to include in
+>>> a dump and what not ...
+>>>
+>>> For the vmcore we construct it at runtime in crash_save_vmcoreinfo_init(),
+>>> where we e.g., have
+>>>
+>>> VMCOREINFO_STRUCT_SIZE(pglist_data);
+>>>
+>>> Could we similar have some place where we construct what to dump similarly,
+>>> just not using the current values, but the memory ranges?
+>>
+>> All those symbols are part of kallsyms, right? Can we just use kallsyms
+>> infrastructure and a list of symbols to get what we need from there?
+>>
+>> In other words the list of symbols to be completely external to the code
+>> that is defining them?
+> 
+> Some static symbols are indeed part of kallsyms. But some symbols are
+> not exported, for example patch 20/29, where printk related symbols are
+> not to be exported. Another example is with static variables, like in
+> patch 17/29 , not exported as symbols, but required for the dump.
+> Dynamic memory regions are not have to also be considered, have a look
+> for example at patch 23/29 , where dynamically allocated memory needs to
+> be registered.
+> 
+> Do you think that I should move all kallsyms related symbols annotation
+> into a separate place and keep it for the static/dynamic regions in place ?
 
-That was the idea. All we should need is the start+size of the ranges. 
-No need to have these kmemdump specifics all over the kernel.
+If you want to use a symbol from kmemdump, then make that symbol 
+available to kmemdump.
+
+IOW, if we were to rip out kmemdump tomorrow, we wouldn't have to touch 
+any non-kmemdump-specific files.
 
 -- 
 Cheers,
