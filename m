@@ -1,140 +1,190 @@
-Return-Path: <linux-arch+bounces-13063-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13064-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 237C0B1B008
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Aug 2025 10:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D188AB1B170
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Aug 2025 11:50:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37F7017AE57
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Aug 2025 08:13:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1C6F179D24
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Aug 2025 09:50:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EEB2459F7;
-	Tue,  5 Aug 2025 08:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC2E26CE2C;
+	Tue,  5 Aug 2025 09:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FR+GmjLZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7191124502D;
-	Tue,  5 Aug 2025 08:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5434726C3B0
+	for <linux-arch@vger.kernel.org>; Tue,  5 Aug 2025 09:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754381593; cv=none; b=AtyHyoOcrJBdJbfs9gVtraV6zIyw2T2EJN87nkBuAVfHYQvzX0/RRi88ykLK2s8mpmnfyJPdjKKMS7IqxYN+6AUDTvE2hzjsGscx0Hwgp9DQp7XAg2itZxHYxhketsRfixLPxLH06RO8TTsVovK2vSjwzNuNnmfsYWmgktGsm2U=
+	t=1754387410; cv=none; b=Uif7LD1XFtN40IPMOfNKuoKPVxs3wjqcBhQQhrIQPIpVi6hJQaBEEGKOCu9+lWlt+9W8lajjbliW+emNOZEACuru9v9JmXERJcD8lKg0zM5MsNg3hYcZ+IJbzX/k1ZrsdTS9qgTpnOito7C8wXmF+j2541rH+v6iaBBdQ7/oyPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754381593; c=relaxed/simple;
-	bh=XY5X8rTqj6KCB7z+WOowtTK7MrFk016Y1kqMLEFIi1Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E0h7DJK0xgp290RvVwaOAmVZiHicoP+4EMXQQxkSGYiVtBv+1S78+XK8kuzoeJTPO76IwebepqXdOXlETV9D0HX+GuS/Mq6cGneanRGYeAMT9hWfoTMknx/Dgk6Vegedfz4yVzZvUl3TO370asMz5M2DZfhoawH4H041VsPgJOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4fc18de8e1bso1597728137.0;
-        Tue, 05 Aug 2025 01:13:10 -0700 (PDT)
+	s=arc-20240116; t=1754387410; c=relaxed/simple;
+	bh=nCfaEyH7MqXv+EacNelojLk+r3n+1Ey4CWEaurdGut4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HZbwg3zHTwHISsXyGXshGGLyKWAf4USHk26G/v//txRly2CTP6hStoejyPeM3M0NomA1tzr0fzIJm3uxZKilMxHUs7actpY/3HZHl0Q+0JSLvPahmEAKAhpltLUmQp3z3gvMIIBRuYom0qGk7G6g3h57+cdeVNGCzMWV+C7s6bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FR+GmjLZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1754387408;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=R3Nw7N9ZXr94BBw5pnV0yLMbnOotSy69DH7y+0p/p9Y=;
+	b=FR+GmjLZpRanQoDjYB8ckynoKgXn5A7aLwu79aGJ1YkPzlNT8FvDVSwpWDGxRAvKCc5Dxt
+	meKbaLE/hO0vBsqHri/RqYdLul+ZKvXyliIdL3PJVe+joSGuN7t2MICYqtWx3e2NW9B7aG
+	PfRrWiOlgCRN1XddKVuof1gJefC60cY=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-567-qjewYbMmORqAu_gfV_LQCw-1; Tue, 05 Aug 2025 05:50:06 -0400
+X-MC-Unique: qjewYbMmORqAu_gfV_LQCw-1
+X-Mimecast-MFC-AGG-ID: qjewYbMmORqAu_gfV_LQCw_1754387406
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-7073f12d826so115619966d6.0
+        for <linux-arch@vger.kernel.org>; Tue, 05 Aug 2025 02:50:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754381589; x=1754986389;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1754387406; x=1754992206;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FYbREyEF6GDi+6BqzkUaervyY8mSRtfMj7JERduR6Tc=;
-        b=obqFiUzJ2OPsKkHd0eqTl3a3iv5hfIiUxuCpyjCe/m0Jm0RbWDoMx8Tvx24TjGGopD
-         bh6aT16071W7O0SWwPDOar9xtihYS8bJtfBlrszDuo0aJOBFhjLwq2/HbIUqso40Rh75
-         H97pP8R8amKfQr43DSwZWs5LPcnC+9ZgQFP24BjB6XcwV1Zq6CKSS+sKOITjuknnzTja
-         7cpO+E2jNYIxK01Qys5+8d300u8dN7EA4o5ylOO/OF8/mbeXopzX7nSvcRws1ouWk4UK
-         Ufx7Jbn3yzHpk2PrOP54RV4D1iBYa34EkR2zok/KcI28FTM1IY9+EHvaJwz84FI7H1qc
-         IjuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7VXLaRmS9abg7Bp2VG8ACV21ytilyLmvSxoJA1QPkk1rhSWNiDPHKszYrLNuPaAZVp3KdChlMtQxyDg==@vger.kernel.org, AJvYcCUFd8DZl9/8VZ33zhxmpqdBShGS/kznRF7qwx/XG+18AyVDA8UPJV8tKzXHkJvfyOjgKINZsFphTI9QZg==@vger.kernel.org, AJvYcCUrq2ay9MJs0o522tTld/NBRUE5wkWEGYVe38ZR0vVL0U50jAQjF8PuTRc5iUBtydcOWEe9OeEMg0NXQNmL@vger.kernel.org, AJvYcCVhU5tJRl6ifN0WMd5qlx2qM+C+IYPH7zTwh+F05q6fKiqdHq+tiDU4JlIodweE7RSfKrunFkmjhIYfUw==@vger.kernel.org, AJvYcCVlsDVrc3elU6LwNlte/z1r9+75FvCAf7401WmJQ4/t65YzDnRj+s3dTdaregTn+Ip09MEz1BVnfCr5NqAl@vger.kernel.org, AJvYcCWUFzlnMUMFuxWoIssTZ3uoOG2J0cWMFUuuS2SW7p3RThnfPha2LaBJT6mkymMk1LbsGbpPK/G2hNI=@vger.kernel.org, AJvYcCWUM17ywiUSewmsi6e9mWpDjpAtjTTKIhv1U9El1HiEM28iKZWPEVdswVEzPYEO3aq4qVT2Hx8ZTCx+wA==@vger.kernel.org, AJvYcCX/DMi7GixA3rz58ntY9BJyEgDC6Wb+humsIllUOyL1Id3JnYoTxMCjvGW42WkdI4/kz6J724VidcnCPGeIDA==@vger.kernel.org, AJvYcCXRGoxkZVoirASvhObE6uODdKwiFtho6jHLh/jGscZD8pcvoox4xpBTuPA+mNfMq9IBa4FXsArjvJjc+Q==@vger.kernel.org, AJvYcCXZ2zlYcIlo
- 2ke1JnWD5puPRnUeZc9GxMTnZ7Tnnuwm4gGpXM1V7BWWSfSZlptf6c6vc7hnA7AlnMHegGd6WvO9@vger.kernel.org, AJvYcCXjBtlSaqBN4rrAnhmuLIPy0Hq4fuv9p4kp72s3WNVlkwPyxZa7NUtCRY6/ohB8AT9e55Pk6w9iH4LBxSpRl30=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1Uplx/rjI1GwQN3tLF+QP5AaqwiAXKoGUDQixv2wS6Eo9lK+f
-	KmPfJDwQqNFdp3EYq88fKEtaZRX8IzLaJtnkx5xNBw15MmxsTqkrj6VUpXTASBWd
-X-Gm-Gg: ASbGncvzB1ek0gQb8B52vu9wO0P0ByoequieyX+O5BL0HqnkH96QYKMLZIG/5dWgLpr
-	JUlOqWQTBSUztykQP4V11G0WwZ6fGFxZUiZTuwYqcivzRd+z8OxtB8cLjiAwNMykT8DyZ8Eaphk
-	1C53YForWLfj3n4zXe0rd6aIgwn7SV78jBrhQEEqUJnap0wRkBhMnsDNx50ARsUfan0CR9bq92p
-	F+RaAzHNIuK5UNSZfb+aP74FKkwKfC04AE3LOm1gR6HSin2PgDBjVis1j+54HOJsGOnWBcMgJKq
-	UpCj5Tl4mDYL9peaGkzUEFYn+ss21o1kW17cosB/KQYn8V97EJ7utCzO3bVT+CfT/rsT6IvrtaD
-	Athc1TCBUyHpg7sqMHoYNbQjWGey3j0lEYRhaTOPLSNLTNhcnmKKC90gRHrWKv+De7oF1uPE=
-X-Google-Smtp-Source: AGHT+IFdOe61nFJIUOcSEnlYcSchsWN/94QrRyWLlS24zFBUOfKImNT6AdVPffIk52sInJJy1DiPRg==
-X-Received: by 2002:a05:6102:6cc:b0:4e5:9426:f9e6 with SMTP id ada2fe7eead31-4fdc480e1cbmr4690428137.23.1754381588930;
-        Tue, 05 Aug 2025 01:13:08 -0700 (PDT)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88d8f3f016dsm2687418241.15.2025.08.05.01.13.07
+        bh=R3Nw7N9ZXr94BBw5pnV0yLMbnOotSy69DH7y+0p/p9Y=;
+        b=BXQx7bSEHmNOgtfcP2WLR6C0X0eT3fSQzormcx70AtrSVVDRULm5x6Q5WOtSdv2txQ
+         GDhRC4ylTay2RQNFp5mC0iXqG6Li974MEZbg6EbawCK7ohttI3xOhOIw1Xci0fBEGVSe
+         kxERWX8m09CVjlyRw663EK5s6WsV/jReelJwPE8+fVg0G7tfQU/HGwne7HO0H3tIKuen
+         DJd51PDMlaqjL915x2PwZUlDtcDwS4JNWSPvj4MenjMNs8NoXjMR4YdOa06caViSFKhA
+         wEK3Dtz5y4j2JwjB0ZBK/DvDL/lXnM8svaUuJUI06cxTnylSFZIexPQAPSBZraI6yJMj
+         DK6w==
+X-Forwarded-Encrypted: i=1; AJvYcCWEV2chSqVDYV8L46vnKuEL1CyzOcO7Pi0J5cOSpTj7eA1U+Zu8zhRGQHKmHeGMxzSEGPDqpXkvv4s2@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5LaDQ4x5w3hzoq99JwCI+UZ3dapYgW9q9TQDUizGdyWV7Zp9q
+	YY34dZGf1GbWtHgn+r65ZW4gUarVz+0z7z7XUY0ODOEfcP77LV4GsossWsVezSiYcVnfVq2UK3l
+	iqrYgybsMlv74yN2irMeV7h75ktUOYZdEedm0NKFR/B2uwFalLdStUjnK9J+f2QQ=
+X-Gm-Gg: ASbGnctmLVDxicQkaGIiuORPjytsgZ31eGSm7n+1inja+Fw7ZW5tP+M9rQoeqnB5PwW
+	djLeOAC/MyrF/BFX5TSiO5+3lvpE0w0d8PPDr5vZXV/ljhRfoeyGf+B521btLkbqVmz5VZnVKgi
+	ZsnZr3rbuUVQG3N/SOrQk54OGFnbJyNc5LmVwjVqGRmA3PIdMabKXQlcx5R1X6InZzNxY7T9NGK
+	pe7Vv6Sbi8n8QR6wBPJufKbcTgo8o1uAtLDsMFKrHMjg5AyPuNSRV4vEeBY9jEDZ7jruFDaBetR
+	GIHLMdeQY7Arg4C4Nq+CWEMzhKvEBgQJsSYi3b+McLT1BTyQ2qPB7uc8s94EdxR3
+X-Received: by 2002:ad4:5d47:0:b0:707:5c4f:f0c9 with SMTP id 6a1803df08f44-709365356c5mr196606856d6.16.1754387405961;
+        Tue, 05 Aug 2025 02:50:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHyx5UikJMmenj3I+DsKP/39+YkgKQdeXVza/ikYs70+jG1oaF8F4CiNJdzGsonQmcA7J7Qkg==
+X-Received: by 2002:ad4:5d47:0:b0:707:5c4f:f0c9 with SMTP id 6a1803df08f44-709365356c5mr196605396d6.16.1754387403253;
+        Tue, 05 Aug 2025 02:50:03 -0700 (PDT)
+Received: from [10.33.192.176] (nat-pool-str-t.redhat.com. [149.14.88.106])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7077cea1782sm67866596d6.93.2025.08.05.02.50.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Aug 2025 01:13:08 -0700 (PDT)
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-88bbfe763ecso1192580241.3;
-        Tue, 05 Aug 2025 01:13:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU3qh6UCKMGE7jnkUHkVkzHp4TN4Wfv2ZGwkNTduyZHYnn4utOUPisL0iK0G8QhknqhZ+6zQ9C1l6SgYg==@vger.kernel.org,
- AJvYcCUL4a4H1opxEDW1HuK6XpL8gNKGsMhuWHDKu71TjooXNzA8UuzcrYDTw2mI/a7OwMjpqkpLIuZaad32XkPC8g==@vger.kernel.org,
- AJvYcCUnQjrQVqx1urB49quzXXxpEgU0cwa4XPBQB38Z5e/OcIwrnSUBfwf/uO3ay/8NxNXYns7BNbR2UGvAD4kaX5s=@vger.kernel.org,
- AJvYcCUx40Oiprm67hf9rZSqss4NPrLnptaoZx/jRQQ3UWhbEhrRl0AzoystuV56RnIxGzS2KRoDisEVvJ8=@vger.kernel.org,
- AJvYcCV9WkuIaaPAdVumcqLOVtZcZUWYtOCr99IOZ2vnggBt3srZHb0lVmtd6MugieQwltYxvIQlVzpcsDNBDg==@vger.kernel.org,
- AJvYcCVQPy0vnqWfFSMztPIJJdDhA3RcWX79I9OrNOB/NFm+U6lXmGfbnwT9aAl0z8oy28UCvKV6LU/J4Swk+Q==@vger.kernel.org,
- AJvYcCWdroWswvftkvg8FTzX+tfXLXSO3Vm0WDM7fVmmzQJHqE5f5AxR4k83hYwnzT5IoWOAP0/25qrcGkfjAUmk@vger.kernel.org,
- AJvYcCWgyPjJLJwMAxIJcq8Hqmnwe+2UliWdvG/gLBEg+W7axJ21fU7r/NxTIbh9PU7F/T6l6vDVk5CT60IRMA==@vger.kernel.org,
- AJvYcCWj9H2OperikDSa80G76TUkt4FxIVqEQ99k+B4ckW012p6G2gxEiBp9gWTizDxUvMcCfo5W3e7V6pNMFjjr@vger.kernel.org,
- AJvYcCXOVbbF3haTd6plu5a/9/jHhttGkwXNF43NMhgnwQaGr5LMXDS7nvWTlyQPyE4kJueRUeUTajoK8QLdpQ==@vger.kernel.org,
- AJvYcCXTAUjwr3JWn203O4e3bPaLB1UAVXFJ+13HzLJt/y8CfLELYC0WjISTK9vYJL4PTDOY2MxNXBdrrQKY3Z5CW326@vger.kernel.org
-X-Received: by 2002:a05:6102:3a0b:b0:4d7:11d1:c24e with SMTP id
- ada2fe7eead31-4fdc480dc77mr4806207137.21.1754381587163; Tue, 05 Aug 2025
- 01:13:07 -0700 (PDT)
+        Tue, 05 Aug 2025 02:50:02 -0700 (PDT)
+Message-ID: <bfb22382-c513-4135-9e24-dbf7595dbd72@redhat.com>
+Date: Tue, 5 Aug 2025 11:50:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250804163910.work.929-kees@kernel.org> <20250804164417.1612371-11-kees@kernel.org>
-In-Reply-To: <20250804164417.1612371-11-kees@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 5 Aug 2025 10:12:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWRAxGqLxPY0eZkrg4zMr4qY5KUcTqPjNXEKOTeNYGc8A@mail.gmail.com>
-X-Gm-Features: Ac12FXxoASDmKZziFEtov1BZOWBk9xds-hH6z1CBqhINtQO4YVRNUk0c1YQzJUM
-Message-ID: <CAMuHMdWRAxGqLxPY0eZkrg4zMr4qY5KUcTqPjNXEKOTeNYGc8A@mail.gmail.com>
-Subject: Re: [PATCH 11/17] m68k: Add __attribute_const__ to ffs()-family implementations
-To: Kees Cook <kees@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-alpha@vger.kernel.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 34/41] sparc: Replace __ASSEMBLY__ with __ASSEMBLER__ in
+ non-uapi headers
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, sparclinux@vger.kernel.org
+References: <20250314071013.1575167-1-thuth@redhat.com>
+ <20250314071013.1575167-35-thuth@redhat.com>
+ <5d9ab8b51a3281f249f514598c949d2c9ca6d194.camel@physik.fu-berlin.de>
+From: Thomas Huth <thuth@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=thuth@redhat.com; keydata=
+ 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
+In-Reply-To: <5d9ab8b51a3281f249f514598c949d2c9ca6d194.camel@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 4 Aug 2025 at 18:44, Kees Cook <kees@kernel.org> wrote:
-> While tracking down a problem where constant expressions used by
-> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
-> initializer was convincing the compiler that it couldn't track the state
-> of the prior statically initialized value. Tracing this down found that
-> ffs() was used in the initializer macro, but since it wasn't marked with
-> __attribute__const__, the compiler had to assume the function might
-> change variable states as a side-effect (which is not true for ffs(),
-> which provides deterministic math results).
->
-> Add missing __attribute_const__ annotations to M68K's implementations
-> of ffs(), __ffs(), fls(), __fls(), and ffz() functions. These are
-> pure mathematical functions that always return the same result for
-> the same input with no side effects, making them eligible for compiler
-> optimization.
->
-> Build tested ARCH=m68k defconfig with GCC m68k-linux-gnu 14.2.0.
->
-> Link: https://github.com/KSPP/linux/issues/364 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
+On 03/08/2025 15.33, John Paul Adrian Glaubitz wrote:
+> Hi Thomas,
+> 
+> On Fri, 2025-03-14 at 08:10 +0100, Thomas Huth wrote:
+>> While the GCC and Clang compilers already define __ASSEMBLER__
+>> automatically when compiling assembly code, __ASSEMBLY__ is a
+>> macro that only gets defined by the Makefiles in the kernel.
+>> This can be very confusing when switching between userspace
+>> and kernelspace coding, or when dealing with uapi headers that
+>> rather should use __ASSEMBLER__ instead. So let's standardize on
+>> the __ASSEMBLER__ macro that is provided by the compilers now.
+...
+> This causes the kernel build to fail:
+> 
+>    CC [M]  drivers/gpu/drm/nouveau/nv04_fence.o
+>    CC [M]  drivers/gpu/drm/nouveau/nv10_fence.o
+>    CC [M]  drivers/gpu/drm/nouveau/nv17_fence.o
+>    CC [M]  drivers/gpu/drm/nouveau/nv50_fence.o
+>    CC [M]  drivers/gpu/drm/nouveau/nv84_fence.o
+>    CC [M]  drivers/gpu/drm/nouveau/nvc0_fence.o
+>    LD [M]  drivers/gpu/drm/nouveau/nouveau.o
+>    AR      drivers/gpu/built-in.a
+>    AR      drivers/built-in.a
+> make: *** [Makefile:2026: .] Error 2
+> glaubitz@node54:/data/home/glaubitz/linux> make
+>    CALL    scripts/checksyscalls.sh
+> <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+>    AS      arch/sparc/kernel/head_64.o
+> ./arch/sparc/include/uapi/asm/ptrace.h: Assembler messages:
+> ./arch/sparc/include/uapi/asm/ptrace.h:22: Error: Unknown opcode: `struct'
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+  Hi Adrian,
 
-# ffs: pass:9 fail:0 skip:0 total:9
+could you please give it another try, after applying this patch first:
 
-Gr{oetje,eeting}s,
+  https://lore.kernel.org/lkml/20250805092540.48334-1-thuth@redhat.com/
 
-                        Geert
+  Thanks,
+   Thomas
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
