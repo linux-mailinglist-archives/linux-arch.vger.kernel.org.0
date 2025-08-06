@@ -1,78 +1,78 @@
-Return-Path: <linux-arch+bounces-13080-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13081-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3766EB1C5B3
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Aug 2025 14:19:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 314A2B1C5B7
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Aug 2025 14:19:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5628B562818
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Aug 2025 12:19:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2631626624
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Aug 2025 12:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C47428A735;
-	Wed,  6 Aug 2025 12:19:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F86128B7ED;
+	Wed,  6 Aug 2025 12:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lj9qrj4p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7+HhwGG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC21E26D4DA;
-	Wed,  6 Aug 2025 12:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF90C28A1CC;
+	Wed,  6 Aug 2025 12:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754482742; cv=none; b=HS/3AoRa3dzKfUnciU4vtjjlnNeRQYLWxqG+Bs0JeyirIdJ0x1dddVYUID5WwD+QiA1P0ePUBAvmVN9/7es0j+EQsVoJgfCkks6Gdv0YH6vtDlU6EUbjhkMiy73cJFadKB1C4dxRpNFOfJqqdr+Uv8TvOy0hiifhnvMUN9X/DNc=
+	t=1754482743; cv=none; b=DSFEz/XjS6lbKHH91hQhSw+VF+FEk53qTm7YrG7AfbCa9dLB2mUftBoh0eGC2HvLxkmSmEfST+g8SeXQ8KGezP0/yyUWY2M63DLMFwrj8V22QfsLAiaHXZ/MHF2okiq5u3ZEvVkyBVqdShmNXQBhxXTjCjFuvid58u/D9JfJNlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754482742; c=relaxed/simple;
-	bh=GVty5/0Ttb9VZ9XytQgM7w6VAdlwlTBNzWw1/nVPS4o=;
+	s=arc-20240116; t=1754482743; c=relaxed/simple;
+	bh=v+x3oOA6VBkhoQgMaBoDpjblp1uQrgSriRdfjEaYUkY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AA8Jc30u32Fg/eJURsyjVIg1l9+Kj0zY5+KFpr0BtWou7ApDgLVFANBOqr25rc1IMjqEYdBQX9I+CSVPifhButtI5VAQTA3qSz+j5nDMN32atWQ4ZcwkYDTiI4U+K2NJC1+zFGJ+KzAC9nO8IUpih/Oz28g/j+iR0mB/uuu5mo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lj9qrj4p; arc=none smtp.client-ip=209.85.214.173
+	 MIME-Version; b=uECkZBaq+Ydvb14VaMIGQtXnCZ9RD23qauhnz6+Bq+USeXgmQF2213obXbgS16Pdu7V/sr2p4Zi5n4GZ0STiA1ud82q/r7oTMa9OstOFIc73Ue5ql3tPSM3m2b/auWCRJdsY8sh9BuLdpfq2CnLJhfHeQl13rkfuKaf59S+latE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7+HhwGG; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-23dc5bcf49eso94103885ad.2;
-        Wed, 06 Aug 2025 05:19:00 -0700 (PDT)
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b42254ea4d5so3425967a12.1;
+        Wed, 06 Aug 2025 05:19:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754482740; x=1755087540; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754482741; x=1755087541; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s+Q+j3V/ByE+IaoyN+/BWXCR7kwQAnsARsv3QK+N8rc=;
-        b=lj9qrj4pNeRkUsuboK/wxIN3q0fK7JHkHhWgG0wOHFFifhsnYVQbWWFwDyL31z/sbq
-         7rQvWaPVMQlIWq9RxhmUgp5Ddg5KYThI6npHE3ExaZ9eHwvQCQeIMEtsXrCv2qtNDCcq
-         +EqFtCy70dGqAIY8L9X4h+KSzPfWkOoXzj6vjYXBCMxWQhYDbGjEM4qzP9VH2eONoC2a
-         o7Enh+8AzArun67ZuI6QcfwvLjIhr3UM5QbfcVVgUGE0V2Aqq/K2w+Z9t0MIBHe4cl8Y
-         36D5bl/JZ46u2Eu93qpg1jsLw5crOE3wyTuHQSAflj7Xou1A+b5p3aeVoqZSU62GCexf
-         N5IQ==
+        bh=Nu1fPX8hvZAwlh5hbY7SO6NLCMrkEFDf2Xo0iEBAdP0=;
+        b=V7+HhwGGF1F3dn6iQF4wRolkWACQU658H7XOO91MopQ9FXBjp6whv01U5UUH8KXKnt
+         y4LSMmsFutKWpsiiFZaughTCmfeQUMT8/M9PYbeVpJ0EmXa1WRvx22n8hqFeIVxXCe0a
+         1DJ2e/Tqkpv7yg72UEvkrnttCbp6Cl2QlV0uM5dYS0FK6teRPrIiZSw7AEIJmRgQHQ59
+         V22bQjy1ybPpHLGzBAvhqn5yggXiyRfqIS/AmLr5gMOmTbCrYqiAGFJNPOc7aQn70vff
+         hsxjoTyaOSVRoWHo/qHtTpnrHDIY9yBHZOfI/mxVrRFidWqQf77f7jPXHgcS5tocN9DU
+         X8tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754482740; x=1755087540;
+        d=1e100.net; s=20230601; t=1754482741; x=1755087541;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s+Q+j3V/ByE+IaoyN+/BWXCR7kwQAnsARsv3QK+N8rc=;
-        b=U/4nkf67SQPVwtcSonFrxvfnvSzg2dgK6PezlF1o6oxlJ/sga4txjSSIwhfrJmUpAr
-         +nxFp1lGbHwRjiIecyck2/zEzXCnUAdMHeZXjOivKcOdtLvJnc6jBB0POo6kHzllDX9N
-         uKZ7gM8Skok+7fBglcUXwcMNKC1Ai0Yd8p4mX8ejhFtFnN9sSPllBiPI0L/VecKdaOLR
-         930mTNTrYmHMDEd5+H/wpcOXDt44o0jh786PcC0tuxKjIJ1ZFEfzRLP5WDjN1hsTCgzj
-         rreCTk4QsWTR/ZTlrDqx4EReMznngS/LPOgRs3/08r3Z0u1BZp5xNLgl/x6p3RK/1MxM
-         US+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU594z+FdBtNkKvtqlu9OVtbQKPPu7YCXkyhNeUpvJRLgQbJNqmug0ux2E1+oP0EXaT9r4B2gq9rY/BL+2I@vger.kernel.org, AJvYcCUpejYl7RWw3/DSinFn90LvPKr9RA6m+30zqAhAPYgL7jXSFKngNDjO2ApFTWpHSrjWtDdT6cZcb+RU@vger.kernel.org, AJvYcCW16uWIWpXBRmJ8gj32Jc2zx6+/AOIN60dmjwpEcxsCeVgSB2kIIhHN51OWuck6zapTwgQPuwjx9Goh/3kD@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxqhLdlCKFOzQgDStvDXZScjCG5KZ/nPjA7XG/TMUNt5pqxz2C
-	wk5/53HUkPJ6MUN6FIk4EpScGEdifPHYMRgEYQXEMsaaQb18cWT32kbt
-X-Gm-Gg: ASbGncvp1njce8xRTO2JeT4/bOyx5KILVqI5Ge354GFvYxfCYfWRwD5hQWkHMwXu+up
-	uuikzomOb78w42ddBbYL9dLNa8EWZZGKHdP/A2o7B4xl4wwZloFSXKyWhC9wlyjqqRUERkx/sUx
-	ZZd0ziW53EsYBQIX2wm0t8nwdl5uz1DSAjXN69mUzey59mVCoLVNltkp8+caHh1Ro57HtSlA43j
-	giwzdxWLuMB6fU4OJ9er0Ir5EqmK+MKYmsa14xaFserF3oTRcBA+fw3dAkVSfXol/RybpA3TrZ5
-	r8e6JcYqPEDPrRclYN2sOJNm7d73aerzuatJXDD6rNgwW6wrpR2ZAX8lcRjgZKfGrOMlPOiNfcU
-	heUkt+OUhzDagwcIDuuhnR2N+xDL26g8slhpWmu9gAMigmvT9CDZH6LP3fQ==
-X-Google-Smtp-Source: AGHT+IF6lsxtDwzX1BSb1lHqE+QCccLHBnKirR91sAXikkQfcoY6C8Bv9nfyDMenjWLIHzbAexHZnA==
-X-Received: by 2002:a17:902:f546:b0:235:f459:69c7 with SMTP id d9443c01a7336-2429f5a5472mr34897555ad.52.1754482739976;
-        Wed, 06 Aug 2025 05:18:59 -0700 (PDT)
+        bh=Nu1fPX8hvZAwlh5hbY7SO6NLCMrkEFDf2Xo0iEBAdP0=;
+        b=E2w1iIY3VfcDw52gkyxgs2Rf8/4itlyGh+Ed2D8KvU/LQMPwpHOL60chq0fFpd6+Pk
+         vyRATaxHwsF9L5aiMVZAw6Zf2ONuJL9yrNlVjUrN0L61PLATcbcRr7CH6zol6DCSg3eU
+         xampZM7lUC6rmBAvA6+5HsMvANsBs+fnlpj6t3lziFbajvqG0hy5460lQncpZ3En7H9h
+         FKzIJS024CEnDbrd43eKnKSFruO/ICqIINMP3oQESnf0sXjrgsGSYPc2KceJEKiTLKZ2
+         dE2OJahgaHwpVAZ0mOViJgb+1Uz3seqfXUq149GI4x9IS4X0r+MpoQ1xTJ3c54xawKQG
+         wf9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVGK7IW2usuMDIc20S/VVBBuyqMabmpwknLruEcheQsT3KmDVsxSWJc3XCaHua6Ey5gKUTXSzy+8xsMP2sd@vger.kernel.org, AJvYcCWP5ANcaFMau+6sI8jVZv+qRTZpNeVYBpzainDqFER0+TDf86ar9WnPutpOWLW3gairfLCDX32lI0eJgSvR@vger.kernel.org, AJvYcCXbb8sQFcUU4hSJbZR+yHiTqIL4zEnJrbK1n41BxWWXh18Pq5b4Kmwre3NXG0gkhOSSnSeTfb+T1WB+@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKHGzQVDtHYyIPWe3um6p2HJ4DsZhlLJkekkj9r/cACNvKww3J
+	5TKfxrj577BDgB34SHj+xE58xemBPhPRc5zD0gDEuOS1E17pS9wi0JGK
+X-Gm-Gg: ASbGncu0bYeqWIf3g0j8FwscFVcRAAYIM4NMdT1E6agyM0bsn5MDSl1bzlRWSOjcoUH
+	BnIqZWzNNs3LRd1TF3GVGI6f1qlc6k3sBzghU9jtB9LEMF/N8gkyiHiJYPHOAjLkzrPrTD9z5Oc
+	w9Ko+sXkPYC0jNiuILaE0tPFJkuqhO6b4oO9WfYtOhqtthaQ7BXz6sN/ywLR1MBiQ0DxFRl+xeA
+	6wonhr07myKMhQ+WAF6Z5oYE3tGeBakUWZWbF7mzrlc+VjJnicFTsXu5UR2ckE7dVlvo3LWm7b9
+	PHx/gxni8H7OuZ069aWnwKLTtr8q/2zM+azIsA9ET3aAPB1OpkS67U8TYvlJnLpRj2PbHXO4t2S
+	HKFDvBs9vj6T03oJgDlpWAzEUsN/ezMk8ytQvbtmfG+zd4I4=
+X-Google-Smtp-Source: AGHT+IFNPXn6wXlF+pzvpwbEuiDwLg8sOlt62mrcl3zQ7U/rTr0AevvKFL/Nog+roe9u8I1PpBu8dw==
+X-Received: by 2002:a17:903:a8b:b0:235:5d1:e366 with SMTP id d9443c01a7336-242a0a766afmr26881955ad.10.1754482740993;
+        Wed, 06 Aug 2025 05:19:00 -0700 (PDT)
 Received: from ubuntu-Virtual-Machine.mshome.net ([70.37.26.62])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1f0e81dsm157512705ad.46.2025.08.06.05.18.59
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-241d1f0e81dsm157512705ad.46.2025.08.06.05.19.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Aug 2025 05:18:59 -0700 (PDT)
+        Wed, 06 Aug 2025 05:19:00 -0700 (PDT)
 From: Tianyu Lan <ltykernel@gmail.com>
 To: kys@microsoft.com,
 	haiyangz@microsoft.com,
@@ -90,10 +90,11 @@ To: kys@microsoft.com,
 Cc: Tianyu Lan <tiala@microsoft.com>,
 	linux-arch@vger.kernel.org,
 	linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH V6 2/4 Resend] Drivers: hv: Allow vmbus message synic interrupt injected from Hyper-V
-Date: Wed,  6 Aug 2025 20:18:53 +0800
-Message-Id: <20250806121855.442103-3-ltykernel@gmail.com>
+	linux-kernel@vger.kernel.org,
+	Michael Kelley <mhklinux@outlook.com>
+Subject: [RFC PATCH V6 3/4 Resend] x86/hyperv: Don't use auto-eoi when Secure AVIC is available
+Date: Wed,  6 Aug 2025 20:18:54 +0800
+Message-Id: <20250806121855.442103-4-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250806121855.442103-1-ltykernel@gmail.com>
 References: <20250806121855.442103-1-ltykernel@gmail.com>
@@ -107,112 +108,34 @@ Content-Transfer-Encoding: 8bit
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-When Secure AVIC is enabled, VMBus driver should
-call x2apic Secure AVIC interface to allow Hyper-V
-to inject VMBus message interrupt.
+Hyper-V doesn't support auto-eoi with Secure AVIC.
+So set the HV_DEPRECATING_AEOI_RECOMMENDED flag to
+force writing the EOI register after handling an
+interrupt.
 
+Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 Reviewed-by: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
-Change since RFC V5:
-       - Rmove extra line and move hv_enable_coco_interrupt()
-         just after hv_set_msr() in the hv_synic_disable_regs().
-
-Change since RFC V4:
-        - Change the order to call hv_enable_coco_interrupt()
-	  in the hv_synic_enable/disable_regs().
-	- Update commit title "Drivers/hv:" to "Drivers: hv:"
-
 Change since RFC V3:
-       - Disable VMBus Message interrupt via hv_enable_
-       	 coco_interrupt() in the hv_synic_disable_regs().
+       - Update title prefix from "x86/Hyper-V" to "x86/hyperv"
 ---
- arch/x86/hyperv/hv_apic.c      | 5 +++++
- drivers/hv/hv.c                | 7 ++++++-
- drivers/hv/hv_common.c         | 5 +++++
- include/asm-generic/mshyperv.h | 1 +
- 4 files changed, 17 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/mshyperv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/hyperv/hv_apic.c b/arch/x86/hyperv/hv_apic.c
-index 01bc02cc0590..c9808a51fa37 100644
---- a/arch/x86/hyperv/hv_apic.c
-+++ b/arch/x86/hyperv/hv_apic.c
-@@ -54,6 +54,11 @@ static void hv_apic_icr_write(u32 low, u32 id)
- 	wrmsrq(HV_X64_MSR_ICR, reg_val);
- }
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index c78f860419d6..8f029650f16c 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -463,6 +463,8 @@ static void __init ms_hyperv_init_platform(void)
+ 		 ms_hyperv.max_vp_index, ms_hyperv.max_lp_index);
  
-+void hv_enable_coco_interrupt(unsigned int cpu, unsigned int vector, bool set)
-+{
-+	apic_update_vector(cpu, vector, set);
-+}
-+
- static u32 hv_apic_read(u32 reg)
- {
- 	u32 reg_val, hi;
-diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-index 308c8f279df8..d68a96de1626 100644
---- a/drivers/hv/hv.c
-+++ b/drivers/hv/hv.c
-@@ -312,10 +312,13 @@ void hv_synic_enable_regs(unsigned int cpu)
- 	shared_sint.as_uint64 = hv_get_msr(HV_MSR_SINT0 + VMBUS_MESSAGE_SINT);
+ 	hv_identify_partition_type();
++	if (cc_platform_has(CC_ATTR_SNP_SECURE_AVIC))
++		ms_hyperv.hints |= HV_DEPRECATING_AEOI_RECOMMENDED;
  
- 	shared_sint.vector = vmbus_interrupt;
-+
- 	shared_sint.masked = false;
- 	shared_sint.auto_eoi = hv_recommend_using_aeoi();
- 	hv_set_msr(HV_MSR_SINT0 + VMBUS_MESSAGE_SINT, shared_sint.as_uint64);
- 
-+	hv_enable_coco_interrupt(cpu, vmbus_interrupt, true);
-+
- 	/* Enable the global synic bit */
- 	sctrl.as_uint64 = hv_get_msr(HV_MSR_SCONTROL);
- 	sctrl.enable = 1;
-@@ -342,7 +345,6 @@ void hv_synic_disable_regs(unsigned int cpu)
- 	union hv_synic_scontrol sctrl;
- 
- 	shared_sint.as_uint64 = hv_get_msr(HV_MSR_SINT0 + VMBUS_MESSAGE_SINT);
--
- 	shared_sint.masked = 1;
- 
- 	/* Need to correctly cleanup in the case of SMP!!! */
-@@ -350,6 +352,9 @@ void hv_synic_disable_regs(unsigned int cpu)
- 	hv_set_msr(HV_MSR_SINT0 + VMBUS_MESSAGE_SINT, shared_sint.as_uint64);
- 
- 	simp.as_uint64 = hv_get_msr(HV_MSR_SIMP);
-+
-+	hv_enable_coco_interrupt(cpu, vmbus_interrupt, false);
-+
- 	/*
- 	 * In Isolation VM, sim and sief pages are allocated by
- 	 * paravisor. These pages also will be used by kdump
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 49898d10faff..0f024ab3d360 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -716,6 +716,11 @@ u64 __weak hv_tdx_hypercall(u64 control, u64 param1, u64 param2)
- }
- EXPORT_SYMBOL_GPL(hv_tdx_hypercall);
- 
-+void __weak hv_enable_coco_interrupt(unsigned int cpu, unsigned int vector, bool set)
-+{
-+}
-+EXPORT_SYMBOL_GPL(hv_enable_coco_interrupt);
-+
- void hv_identify_partition_type(void)
- {
- 	/* Assume guest role */
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index a729b77983fa..7907c9878369 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -333,6 +333,7 @@ bool hv_is_isolation_supported(void);
- bool hv_isolation_type_snp(void);
- u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size);
- u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2);
-+void hv_enable_coco_interrupt(unsigned int cpu, unsigned int vector, bool set);
- void hyperv_cleanup(void);
- bool hv_query_ext_cap(u64 cap_query);
- void hv_setup_dma_ops(struct device *dev, bool coherent);
+ 	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
+ 		hv_nested = true;
 -- 
 2.25.1
 
