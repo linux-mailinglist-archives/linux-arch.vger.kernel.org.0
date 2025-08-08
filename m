@@ -1,210 +1,129 @@
-Return-Path: <linux-arch+bounces-13095-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13096-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBBC6B1E6CF
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Aug 2025 12:52:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F41FCB1E7B8
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Aug 2025 13:48:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A09A43AB9FE
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Aug 2025 10:52:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3892F7AA47C
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Aug 2025 11:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CDF227E95;
-	Fri,  8 Aug 2025 10:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685E9274FF1;
+	Fri,  8 Aug 2025 11:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KlH2z2/S"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F282A5695;
-	Fri,  8 Aug 2025 10:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E27125C827;
+	Fri,  8 Aug 2025 11:48:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754650322; cv=none; b=KEoUyRLDJ++/+nIl0fR0kAN9Np/i2eGdcqKd0D6vM41dd19NdYUgpFB8b551pmeWWCqMWvA0rf/NB8LHlJsJuv06yWzXlLqzWR6ePE4sHQwhmPkdj5kmYTzCr6LiCUV0+2axdI/RZnCx/kmKRDgMLpwdvuUZjFGY7vluczKlgE4=
+	t=1754653725; cv=none; b=rb2vZ8Qjl9+1/jnZNdtdPz/xxc8R5nM0ulPP6lHHfXIa5rdKJImSQAvTEmPPzEWYXcbi7XXfxmsmUJFvkiCFpA8XiDuW/ohp5PBN1ADC/RyHp0vk0HGZBOGmIladYIpl3k4vz2gVjgSPHnzBdxpuaiIM1emfVc6KkcEgz52lEYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754650322; c=relaxed/simple;
-	bh=KesZR+F59DfKiQMTTe/qycskddKZgXqP+OvKbQU0IZQ=;
+	s=arc-20240116; t=1754653725; c=relaxed/simple;
+	bh=FUx4gUgdyZ2ZZBXuzAMKD50bvkFnEcWtdMYMuJy1cVM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=izK5HpFA/3aEZLWD8OkjUj3/bGayfxlvz9CZmffYxc7GFxT8UqyVcgeBUX1btP94n1LbqvIjZ8QmfVUTqg89/g3RJaBv45YE+q4MkCqg9itE1UNJl3KBLd2M0e8Q/u5LJ9OLZsrb4MwYjOVBrH4W+uPG07qxhdFSoiWbM8GPGN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48690C4CEED;
-	Fri,  8 Aug 2025 10:51:58 +0000 (UTC)
-Date: Fri, 8 Aug 2025 11:51:55 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
-	arnd@arndb.de, will@kernel.org, peterz@infradead.org,
-	akpm@linux-foundation.org, mark.rutland@arm.com,
-	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v3 1/5] asm-generic: barrier: Add
- smp_cond_load_relaxed_timewait()
-Message-ID: <aJXWyxzkA3x61fKA@arm.com>
-References: <20250627044805.945491-1-ankur.a.arora@oracle.com>
- <20250627044805.945491-2-ankur.a.arora@oracle.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HGwE/Z/fk7JD4UrBrzwpoch3JP8/PAbCDAJNWqm/HCmCeLY0Oos1nEKnmv69TNbH4yZVMTLWjbHRdmSea5O33HuOI4nO4xjqC992KoaNFgeaW+taVbZNcomiYrVMFTMsCsFEfdvQJx2fPAXxUt8kKE1XKBxpsHnWw0AhqS415OA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KlH2z2/S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EFFEC4CEF1;
+	Fri,  8 Aug 2025 11:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754653724;
+	bh=FUx4gUgdyZ2ZZBXuzAMKD50bvkFnEcWtdMYMuJy1cVM=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=KlH2z2/SRGW4K4fN/lCfwfHAWCLsioLuNXYi0U8bGmXfTGaqjSCRwOhCs4s6TOA0J
+	 7X5PzrzWTGmySfiKXxgGxB0TXo1/sEh2IwxOimdqCIM5itio7QuZye5qUFhTiowsro
+	 g9QGixSNwxKrLcq5ITi3jqk67TuJhrezSoeLBNFz3QMy7WAmsXR3PnPszSWAp/YNRf
+	 EpX42Uy/odYqRyAa1Gq9Pu3xMZtrRg9Wroqn8PxqGIn7GoY01TQOQU0yKZO8i1uzel
+	 dv/TdTFEOVjWt68sUn36VVGp+5yBeS/m5Bp5b7ElzfFVkSOFUCDepl9vRLQpiKGtKo
+	 ASrYLKLOSRMsg==
+Date: Fri, 8 Aug 2025 12:48:31 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: patchwork-bot+linux-riscv@kernel.org, linux-riscv@lists.infradead.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, conor@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
+	brauner@kernel.org, peterz@infradead.org, oleg@redhat.com,
+	ebiederm@xmission.com, kees@kernel.org, corbet@lwn.net,
+	shuah@kernel.org, jannh@google.com, conor+dt@kernel.org,
+	ojeda@kernel.org, alex.gaynor@gmail.com, boqun.feng@gmail.com,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, a.hindborg@kernel.org,
+	aliceryhl@google.com, tmgross@umich.edu, lossin@kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
+	richard.henderson@linaro.org, jim.shu@sifive.com,
+	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+	alexghiti@rivosinc.com, samitolvanen@google.com,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	zong.li@sifive.com, david@redhat.com
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+Message-ID: <09081487-89ac-4f8d-b9fc-e563f09726d2@sirena.org.uk>
+References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
+ <175450053775.2863135.11568399057706626223.git-patchwork-notify@kernel.org>
+ <db4eb976-693c-426c-a867-66cadd3dd7d8@sirena.org.uk>
+ <aJWz82F21pVTSVJi@debug.ba.rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="D45dRbRxMwDeSA/W"
+Content-Disposition: inline
+In-Reply-To: <aJWz82F21pVTSVJi@debug.ba.rivosinc.com>
+X-Cookie: What an artist dies with me!
+
+
+--D45dRbRxMwDeSA/W
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250627044805.945491-2-ankur.a.arora@oracle.com>
 
-On Thu, Jun 26, 2025 at 09:48:01PM -0700, Ankur Arora wrote:
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index d4f581c1e21d..d33c2701c9ee 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -273,6 +273,101 @@ do {									\
->  })
->  #endif
->  
-> +#ifndef SMP_TIMEWAIT_SPIN_BASE
-> +#define SMP_TIMEWAIT_SPIN_BASE		16
-> +#endif
-> +
-> +/*
-> + * Policy handler that adjusts the number of times we spin or
-> + * wait for cacheline to change before evaluating the time-expr.
-> + *
-> + * The generic version only supports spinning.
-> + */
-> +static inline u64 ___smp_cond_spinwait(u64 now, u64 prev, u64 end,
-> +				       u32 *spin, bool *wait, u64 slack)
-> +{
-> +	if (now >= end)
-> +		return 0;
-> +
-> +	*spin = SMP_TIMEWAIT_SPIN_BASE;
-> +	*wait = false;
-> +	return now;
-> +}
-> +
-> +#ifndef __smp_cond_policy
-> +#define __smp_cond_policy ___smp_cond_spinwait
-> +#endif
-> +
-> +/*
-> + * Non-spin primitive that allows waiting for stores to an address,
-> + * with support for a timeout. This works in conjunction with an
-> + * architecturally defined policy.
-> + */
-> +#ifndef __smp_timewait_store
-> +#define __smp_timewait_store(ptr, val)	do { } while (0)
-> +#endif
-> +
-> +#ifndef __smp_cond_load_relaxed_timewait
-> +#define __smp_cond_load_relaxed_timewait(ptr, cond_expr, policy,	\
-> +					 time_expr, time_end,		\
-> +					 slack) ({			\
-> +	typeof(ptr) __PTR = (ptr);					\
-> +	__unqual_scalar_typeof(*ptr) VAL;				\
-> +	u32 __n = 0, __spin = SMP_TIMEWAIT_SPIN_BASE;			\
-> +	u64 __prev = 0, __end = (time_end);				\
-> +	u64 __slack = slack;						\
-> +	bool __wait = false;						\
-> +									\
-> +	for (;;) {							\
-> +		VAL = READ_ONCE(*__PTR);				\
-> +		if (cond_expr)						\
-> +			break;						\
-> +		cpu_relax();						\
-> +		if (++__n < __spin)					\
-> +			continue;					\
-> +		if (!(__prev = policy((time_expr), __prev, __end,	\
-> +					  &__spin, &__wait, __slack)))	\
-> +			break;						\
-> +		if (__wait)						\
-> +			__smp_timewait_store(__PTR, VAL);		\
-> +		__n = 0;						\
-> +	}								\
-> +	(typeof(*ptr))VAL;						\
-> +})
-> +#endif
+On Fri, Aug 08, 2025 at 01:23:15AM -0700, Deepak Gupta wrote:
+> On Thu, Aug 07, 2025 at 01:28:36PM +0100, Mark Brown wrote:
 
-TBH, this still looks over-engineered to me, especially with the second
-patch trying to reduce the spin loops based on the remaining time. Does
-any of the current users of this interface need it to get more precise?
+> > Do you have an update for my clone3() shadow
 
-Also I feel the spinning added to poll_idle() is more of an architecture
-choice as some CPUs could not cope with local_clock() being called too
-frequently. The above generic implementation takes a spin into
-consideration even if an arch implementation doesn't need it (e.g. WFET
-or WFE). Yes, the arch policy could set a spin of 0 but it feels overly
-complicated for the generic implementation.
+> No I don't.
 
-Can we instead have the generic implementation without any spinning?
-Just polling a variable with cpu_relax() like
-smp_cond_load_acquire/relaxed() with the additional check for time. We
-redefine it in the arch code.
+> > stack series that I could roll in for when I repost that after the merge
+> > window, and/or instructions for how to run this stuff for RISC-V on some
+> > emulated platform?
 
-> +#define __check_time_types(type, a, b)			\
-> +		(__same_type(typeof(a), type) &&	\
-> +		 __same_type(typeof(b), type))
-> +
-> +/**
-> + * smp_cond_load_relaxed_timewait() - (Spin) wait for cond with no ordering
-> + * guarantees until a timeout expires.
-> + * @ptr: pointer to the variable to wait on
-> + * @cond: boolean expression to wait for
-> + * @time_expr: monotonic expression that evaluates to the current time
-> + * @time_end: end time, compared against time_expr
-> + * @slack: how much timer overshoot can the caller tolerate?
-> + * Useful for when we go into wait states. A value of 0 indicates a high
-> + * tolerance.
-> + *
-> + * Note that all times (time_expr, time_end, and slack) are in microseconds,
-> + * with no mandated precision.
-> + *
-> + * Equivalent to using READ_ONCE() on the condition variable.
-> + */
-> +#define smp_cond_load_relaxed_timewait(ptr, cond_expr, time_expr,	\
-> +				       time_end, slack) ({		\
-> +	__unqual_scalar_typeof(*ptr) _val;				\
-> +	BUILD_BUG_ON_MSG(!__check_time_types(u64, time_expr, time_end),	\
-> +			 "incompatible time units");			\
-> +	_val = __smp_cond_load_relaxed_timewait(ptr, cond_expr,		\
-> +						__smp_cond_policy,	\
-> +						time_expr, time_end,	\
-> +						slack);			\
-> +	(typeof(*ptr))_val;						\
-> +})
+> I would want to write-up instructions. But I don't want you to go through
+> a lot of hassle of building toolchain and bunch of other stuff.
+> Let me see how I can make it easy for you. Will report back.
 
-Looking at the current user of the acquire variant - rqspinlock, it does
-not even bother with a time_expr but rather added the time condition to
-cond_expr. I don't think it has any "slack" requirements, only that
-there's no deadlock eventually.
+Thanks.  FWIW I should already be sorted for the kernel build, unless
+there's a super new or specialist toolchain required for this feature
+(I'd guess I should be fine for the shadow stacks bit?) - it's userspace
+and emulation for the extension I'm missing.
 
-About poll_idle(), are there any slack requirement or we get away
-without?
+--D45dRbRxMwDeSA/W
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I think we have two ways forward (well, at least):
+-----BEGIN PGP SIGNATURE-----
 
-1. Clearly define what time_end is and we won't need a time_expr at all.
-   This may work for poll_idle(), not sure about rqspinlock. The
-   advantage is that we can drop the 'slack' argument since none of the
-   current users seem to need it. The downside is that we need to know
-   exactly what this time_end is to convert it to timer cycles for a
-   WFET implementation on arm64.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiV5A4ACgkQJNaLcl1U
+h9BR4gf/Yvc9us1uldFqSA9g7p+0bzU3IY/RfdDdME4qVGVWWXybW7b1P+6OdvKr
+lRLLeAJQkpEzhtLNeXXTVgRijmaDgccqM2d2Vkehw9qrW1+pwA56PX8PQPBtJsGL
+riODDRX0jZSrSVAPE/mwrQRc97vY83Tme2w2Psah2FzICcRcLdsC9vz3BIsquWgp
+5LbvWFyIS7PraLBoSkO76qBYDtRwjw3LzoANXm5rYo9QKsT48UPgjfvmzxLqTSxT
+oDMob4PjC2+1FU6Q1yzo5CUyK+aX58BM0OGwWEq4DDOCu5kd0ltVJen8HWszpfVz
+YgUpgySyAiGsfZTi1JBRv158syBsdQ==
+=5/MC
+-----END PGP SIGNATURE-----
 
-2. Drop time_end and only leave time_expr as a bool (we don't care
-   whether it uses ns, jiffies or whatever underneath, it's just a
-   bool). In this case, we could use a 'slack' argument mostly to make a
-   decision on whether we use WFET, WFE or just polling with
-   cpu_relax(). For WFET, the wait time would be based on the slack
-   value rather than some absolute end time which we won't have.
-
-I'd go with (2), it looks simpler. Maybe even drop the 'slack' argument
-for the time being until we have a clear user. The fallback on arm64
-would be from wfe (if event streaming available), wfet with the same
-period as the event stream (in the absence of a slack argument) or
-cpu_relax().
-
--- 
-Catalin
+--D45dRbRxMwDeSA/W--
 
