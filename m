@@ -1,96 +1,99 @@
-Return-Path: <linux-arch+bounces-13098-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13099-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 646AEB1F83F
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Aug 2025 05:42:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22187B1F851
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Aug 2025 06:34:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 744C6189BB66
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Aug 2025 03:42:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6D183B9B1D
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Aug 2025 04:34:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E818528E;
-	Sun, 10 Aug 2025 03:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D698284A35;
+	Sun, 10 Aug 2025 04:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="jyvGSVM9"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w+V9x+PR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEA120326;
-	Sun, 10 Aug 2025 03:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EF02AEFD
+	for <linux-arch@vger.kernel.org>; Sun, 10 Aug 2025 04:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754797333; cv=none; b=qeJlEH+oBEmv9LfBkOaYEVjsQbnJoxLhsLx0MgojQuOEDZHrC2N6CeWrxfb8+OHnEpg7BlGLY/C4uGEo4/SHN+mwvGyOs1vTZz8TCI4glygRYDkFqK9iH2RKdB9XSkiGsEI7fjtI1frc4Z6zoHkgujtIp1RlXN9D7qRhGnIrMM8=
+	t=1754800438; cv=none; b=pum/HUwHzamLPkVI+vUm5QiDT0V9m74X5KBxz5gS3642ncrGcPyDOmacdOnbqwcCX2LxiNZsD5bXa3atUbgxCr/PT7eQ0fDoGTfn602d67b10A1vl9keiqYDDIw3jtE7C7FBTGyRqrAKtEJcKBZXrTO3aQTn95hl5K8NCIaL9OA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754797333; c=relaxed/simple;
-	bh=sRQphQsbdSqw9t9FKGgb7so/WRPN2/oUCDWNlqAlQXQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mok5u96TAd3s8bH1gm9jwT4Lynp8i/iFDR5jZ2lm1etCsUMcu7EtfDrxSJV2wwsrfpY/qcddM56GfdJCQJty1Vu2xqTnSgeHY5MDlqaxwLtmDqTm9STMC5NPHws8G8zeLmwkY8QOthKahVSSXRv08IgOhjeveWrSBqXAh3qnbmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=jyvGSVM9; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=qPlTf7fIy8A1PMw5CFTdvUZdawfMWqNgCtcCDS0I6ns=; b=jyvGSVM9Efd2lJa4NnBZc0i7s8
-	MDLKei39E5U8we1Ym/wOUSx8PbpUzVdl5akuCRAIyUVt50fjyQgXm2sbidq9c5FJ/oKq3ICUUiya4
-	+zh19TdbLEbe05GZVvyV5f//g/tpRhYkei6leZucaX4fixb1mI+AZ1rRBlheqCQnuXbVrt2cJflIC
-	Ge/cTcpZEkVWHOMhd3AUjAvyszdHZXraaTEleiditvguT0nU5vZ8ZBW8tHtgpuvLGa/Ddo+aFJxWG
-	B0M9/+bZ/JX61aJ8la/KqjqMo067PeVEhAVC9dWza46Pxt0gN+WZ+PZFiTq9fu2KFWy6MedMSxhz/
-	IeOs7DMg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ukwwi-00000002FXU-0pkL;
-	Sun, 10 Aug 2025 03:42:08 +0000
-Date: Sun, 10 Aug 2025 04:42:08 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: sparclinux@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Subject: [PATCH] fix prototypes of reads[bwl]() on sparc64
-Message-ID: <20250810034208.GJ222315@ZenIV>
+	s=arc-20240116; t=1754800438; c=relaxed/simple;
+	bh=+ow+1NREKSc8fRztHEQX8KuMTiFIaRfqWbJt8HpuMgc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=b8K6RvnemFW7lmP4ojJtuM499RJPMfz8ATGNiSGgPhqzgfGAA1r1qTgojEITA04twLO/ekguTwZRbOngF3sEY92t9VSNeU5wrI0sH78Bo8OZIeTuC8z9X2Td3QjbciHG/IUUVDkdUbiKIjqkFmyfvzDmXwNHUYH8v6ECIIbYcSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w+V9x+PR; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1754800433;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0fgAIJfjOAMkD0Mb7Qr9ANhRFOd7/k4gDrAS8zFFIbc=;
+	b=w+V9x+PRRzC8ieyGtoDYJLAWiNEwE48DpIS76QpOBhgWDpa0csnXHRiUlZj6Ypbj2kKv3r
+	16JiatnLvcmFAitS3ufI3wyDwixLibdA4FB2hjVBB/ECBUe7B2sK3K23xwcEELwPFsjLqF
+	XqjJKOz1erySFVdOZq4qx1PwfEP6lnk=
+From: Tiwei Bie <tiwei.bie@linux.dev>
+To: johannes@sipsolutions.net
+Cc: richard@nod.at,
+	anton.ivanov@cambridgegreys.com,
+	linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	tiwei.btw@antgroup.com,
+	tiwei.bie@linux.dev
+Subject: Re: [PATCH 9/9] um: Add initial SMP support
+Date: Sun, 10 Aug 2025 12:33:34 +0800
+Message-Id: <20250810043334.530444-1-tiwei.bie@linux.dev>
+In-Reply-To: <20250730041838.1821401-1-tiwei.bie@linux.dev>
+References: <20250730041838.1821401-1-tiwei.bie@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Conventions for readsl() are the same as for readl() - any __iomem
-pointer is acceptable, both const and volatile ones being OK.  Same
-for readsb() and readsw().
+On Wed, 30 Jul 2025 12:18:38 +0800, Tiwei Bie wrote:
+> On Tue, 29 Jul 2025 17:37:24 +0200, Johannes Berg wrote:
+[...]
+> > 
+> > IOW, I think you've stumbled across an inconsistency in the generic
+> > files, and hence we should fix that, rather than having each
+> > architecture paper over it.
+> 
+> That does make sense. I will prepare a patch for that. Thanks!
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
-diff --git a/arch/sparc/include/asm/io_64.h b/arch/sparc/include/asm/io_64.h
-index c9528e4719cd..d8ed296624af 100644
---- a/arch/sparc/include/asm/io_64.h
-+++ b/arch/sparc/include/asm/io_64.h
-@@ -250,19 +250,19 @@ void insl(unsigned long, void *, unsigned long);
- #define insw insw
- #define insl insl
- 
--static inline void readsb(void __iomem *port, void *buf, unsigned long count)
-+static inline void readsb(const volatile void __iomem *port, void *buf, unsigned long count)
- {
- 	insb((unsigned long __force)port, buf, count);
- }
- #define readsb readsb
- 
--static inline void readsw(void __iomem *port, void *buf, unsigned long count)
-+static inline void readsw(const volatile void __iomem *port, void *buf, unsigned long count)
- {
- 	insw((unsigned long __force)port, buf, count);
- }
- #define readsw readsw
- 
--static inline void readsl(void __iomem *port, void *buf, unsigned long count)
-+static inline void readsl(const volatile void __iomem *port, void *buf, unsigned long count)
- {
- 	insl((unsigned long __force)port, buf, count);
- }
+Hmm, this issue might be a bit tricky to resolve.. The root cause
+is that smp_cond_load_relaxed() provided by asm/barrier.h relies
+on cpu_relax() [1][2], but the corresponding header isn't included.
+The reason why it's not included might be that asm/processor.h
+includes too many dependencies, which prevents barrier.h from
+including it. I haven't come up with an ideal way to address it
+yet. Fortunately, smp_cond_load_relaxed() is a macro, so cpu_relax()
+is needed only when smp_cond_load_relaxed() is invoked inside a
+function (i.e., when it's expanded during preprocessing).
+
+As for this series, I realized that I should implement spinlock in
+$SUBARCH (i.e., in a $SUBARCH native way, which won't require the
+above workaround anymore), similar to how atomic and barrier are
+implemented. I'll take that approach in the next version.
+
+Thanks again for the review!
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/asm-generic/barrier.h?h=v6.16#n253
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/um/asm/barrier.h?h=v6.16#n27
+
+Regards,
+Tiwei
 
