@@ -1,81 +1,81 @@
-Return-Path: <linux-arch+bounces-13143-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13144-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 674B3B22F30
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 19:35:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5F09B230B2
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 19:55:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 276DA3AFF11
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 17:35:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1C0E566367
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 17:55:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF2C2F8BEA;
-	Tue, 12 Aug 2025 17:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26072FDC55;
+	Tue, 12 Aug 2025 17:55:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bxCWVEz6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dIMfAvgs"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BCB2ECD27;
-	Tue, 12 Aug 2025 17:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FE62FAC02;
+	Tue, 12 Aug 2025 17:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755020147; cv=none; b=fplVrPEQmrhGp3MSJLqtqrG3fqm91qnkFyU1ibnw5o1k2I6fg/QDPZpevDiHcU37nefffXnCvJvtWc30sDQc6nBeGjqDbx0p0x9K8TceedUsERufgjM8VKC37LVfUOQ2pqKNpAnVPOiHANwCYxman52idDmA8Bbh6Y/80UIA0iA=
+	t=1755021317; cv=none; b=dGS1pUbJJ8NPVR1/oPhWHAtq7oYd45+27htHQ+9J3LD2RCZWgU7D+Jvw2c5g7rBRGrYO/tzQPt4/bESaeoSckNEQITqNPgsM2kmpkM/S3cGsESj+5jKYYC+XRiaK5+quh9eg4EGKoFYzze3zDEOz2+Xmz391bK36nsc/sdjRUUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755020147; c=relaxed/simple;
-	bh=/fk0SInUI+7YMulFy98YQ3QInCIqTEu3ouODgJVlNh0=;
+	s=arc-20240116; t=1755021317; c=relaxed/simple;
+	bh=PQ92Ps1KLUdy3bH+AaO3wSg7T74mkl3PFwFmSqQ51gM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XiXB1bUd+92r75N+PBR9vwRIrYUc6HjKo7C+0rn4Fwtko2W2e560C0Ih46Wjkk77TlV1oONH7e8j7tNqsl0IeFw1cY2TSkXed+36L2gGB0aE0chtoeQcvFdJ03aOKLIx1M4XSmcLrZF5xmidUKJy4PeD0EFg1T/PXlw3l8SRKTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bxCWVEz6; arc=none smtp.client-ip=209.85.210.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dv/RgAt248ieoBcXEcNwN7peIwbPOL0aOWOZPrxJEA7J2ovAoIIFtvrEw+Qa+ugaqVjqpxCpNnj3hxZMHB1ZtPOeQaCZ+/gN24AJ3WFOISFbTrS2XyIFkXzpVC9xH3Qs3KgubWG9lxNglWU6oWOjpBkNQg4WcSqmeWHQHpJTpvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dIMfAvgs; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-73c17c770a7so7215048b3a.2;
-        Tue, 12 Aug 2025 10:35:46 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-24049d1643aso42781895ad.3;
+        Tue, 12 Aug 2025 10:55:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755020146; x=1755624946; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1755021316; x=1755626116; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3QqRiRc8S5UuRZr109N2LH3VeQOZ0mfRe2blg1ehQPc=;
-        b=bxCWVEz60prW43TgzLsddNqdEAheCJ4Op9LskSWIIMe5WpsRsbvD9QVAEQKEIz+Udd
-         vqf1DgBStxW+viadZKflUOSDChRq5faexFE9oHRsD4B2VIIBu1EQQpNgdyd/hPXOYais
-         OwrY/Km+DCFZb0SBW4AtLPnJkqeKmuv+82G/3tm2Ow+qEuI3Tmd44Cfx337QbSGXddDD
-         /QEzt97s9hIcUyi30gPUyWsDR0SSVbNk1TIJ1nNYjN/7p0cYasWYxNqAAtUG+RPg7U4x
-         6gA5+w0qO5lcfz24701uiGMGBHXq/Xq1jS8qTP3ocqiFgXO+jMl7Ysvvorezh4KmjzHW
-         OLTA==
+        bh=ymZGpmngRJ7fOyPoIYIbr864BuGgQbxABMyIAp/lv7M=;
+        b=dIMfAvgsZ57UsrIZ4/MgyjcOdG8YzxhK0Nas9FRVyfoa2rauXWhwgCrQQkWPiuyfr5
+         pAVn5/jo12mWvWYXr1VJ8SmsEJcZzb5PG9vUTA25SBUz8dLYxA/G6ChV/11T9P9V5/Gq
+         J2ti1cbKEeLASNK2LG3YfrBCBlbcivrkIWoYu70QafNGOLGIshDyhFkpkFkn4wFOhIID
+         hKOZwbQOWji0YKCFtfYwxqmJhB+mCEcE1BVGzRAz7Bc14IRaGZb2LedgkZq8vjZT2gJu
+         HCUccuuCB6jPO7M7V5IWAQNQjMyHQ5IyaNJBu8EWHeDNVQElamvo1KKRZYM33tawYRev
+         I9YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755020146; x=1755624946;
+        d=1e100.net; s=20230601; t=1755021316; x=1755626116;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3QqRiRc8S5UuRZr109N2LH3VeQOZ0mfRe2blg1ehQPc=;
-        b=Jt5MKXbs7l7nJYDhjle/C8llkaEU8TgcoKxtQpiNrYoRVELEbLj9EBvcsffXjdrb+C
-         a/Zw6hqajQ82D+mwHpN3kNbfd3fxwFDGtdu1PqvcnrvGzlqsaUeQahIzdsWqzJeYWxvZ
-         /HWi/PTj1pxCVD22b2WGhQ1zK/JNq7GMJoHb98C2duP7Sl0M/9GoycpTa9NPv+GAkl86
-         y4EziMRBuWaz8cRRAaBrKXgc9vVP/eOI/KGXvM1+MM8zGUC/SiwESfBbZ8aLPhjYJ/tn
-         rNSSwgbDfn+5KE9K0pWG4DjyR4yofBVUWKS2pNTfATiltedAc7qGdeFqtjsMKw1OOBNO
-         47eQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUI8IJQSrh+B8uenj1JanJcS1g7n4emA0sxFl1PYdJyHMHQ5LXcQdRADlzeO554KCp4mMQHin3MdX+slicQaw==@vger.kernel.org, AJvYcCUhU7OKkRQEG8cRfCDCebynQCWpIE4dBsDQ9SyN/5370OTOzQ2en+rXfHWuTWlSDVX7u5V95ueMDAIv@vger.kernel.org, AJvYcCWNhEjO9ZdT4XmZrd9ZCxk6tHljADeKMuNjMhzjGf+KFRnR/zLe5lI7k/VPQOpT3X35L009X11MPPGNeHw2@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7RFdT0kkohInSqomn94CSHsi/tShc+Tv8rud0t5dIsEOkk5cf
-	I0LAn8x7FV3Q50BbDuMy1wrsKB+JvnDOfcrBsy9xxD+6/vfymrqo8Nx3r+RkuxNi
-X-Gm-Gg: ASbGnct1V21laYNVUfxQOmnSM84RP4x4i/zCi5LaB8RDSVYmds0pDjd4krCqH7PLu2c
-	byQJ/DbrZSUMU01YuckEfMQPWedejEZMmwXX4TpDaigJRlNfnCb4kCpVzHSd8phTxvwP7GSHxRE
-	nwud6Zgl9VsRgRVorqt3w/YAP0qgrwK6kKl8qXbXSNfj+HVq63zDr0A3zk4X2tVdJuRUDttTgoz
-	CALhWzsMxBgjPjOO+P4Agd+cj2nEdPm16owpFYx8W7/2GnjjuypeDX2dBYui/xkQCfrKKP06oIf
-	rZgRjcADrb3rHN5cojbzJv/h14elak3B/7XwRmpEWCgDF76Y0U5YKp1C26WHXGaV9MSEfJSpx+/
-	DE4/lEkanG1aUF1N5DgeWqSqZBqc151WLsblG0j4NZT7pqZT6AQv9LA==
-X-Google-Smtp-Source: AGHT+IEOQGwikHmdxCwnSLSNmqiAKdWaAmIlOvX98dKTEa3j/V/1mLnNx7izZ8MziWVIRtrOO5jPPA==
-X-Received: by 2002:a05:6a00:a17:b0:740:b5f9:287b with SMTP id d2e1a72fcca58-76e20c9a0f3mr83634b3a.1.1755020145514;
-        Tue, 12 Aug 2025 10:35:45 -0700 (PDT)
+        bh=ymZGpmngRJ7fOyPoIYIbr864BuGgQbxABMyIAp/lv7M=;
+        b=lcZS+ACgawfOafnK6iMaqClRXfavKqT7lR7C9wrcoZdMkqvrX3UM2Kir0JvsGJi7u/
+         O7gpHZPkAAKaAE8wxAcjij5mLJcOLfGfzqzifhy7EuLYwXKPdAue8xlAQNZHZxDDX9L/
+         xgAe2PhJAtPkK9vqgKfUjgO2/AA7N2vSZXR6vBoeN5/zbPRaua7r+Nv0V2uTZzn6MiZU
+         wDtFBx6VXA3ayeJWe0JkXbrCnoMfWQflcKhkZ1kx4LSGs3pQASQYdWkHVRFqUBwfKbOI
+         btODmDumeKlxY5ZYDJcySQLQJXOd5uj6VIEO7cTeW6SkFpTmZ9DDpM5Lgsh0saQ8EyEY
+         XlMg==
+X-Forwarded-Encrypted: i=1; AJvYcCV9X9vtGseMOumh1vXyMBlJlEm7FtuYQejSuaHcE70wMiya4ymOegyMCYPw8FK0T8bMqNLHwQPv++LU@vger.kernel.org, AJvYcCVVLW+aL/9tTwLzRb3JstnUaYSbMTNezFyEgF1GUUuK46Rs2he6NeTzDggx+p0SaNK/l86atLyhwEgjrxScPw==@vger.kernel.org, AJvYcCXNBj0Hh2FK4siXoah8tA3OiPXUp1mWs0KUb9yG1sJWsd107Dr+2e2R14B/TUlWP7PIVGQm028rnxlHk6aS@vger.kernel.org
+X-Gm-Message-State: AOJu0YznBbzpVMU+juDv30UFxCOjg4eXiFr6fSLY6mFTTEUyk76dz/Ay
+	nUNitCU3VtoWkADEoYABu3xg+g2yGtFjoC6rmSAeO9V75wfgbFWXzfbR
+X-Gm-Gg: ASbGncv00eaiApbOQru2hfVXiJeZdpXIqLqbq8gotjJIH8w/KGaoF41XogA0u7Qw/Cp
+	T7l16iTOLVVUv3A3arNTH+k4VmzHhDZcUMXZk/GvAmkdElWwFmVP3ZG7hgud4/Qzw6EI6X6dAhY
+	Fjzuu7OAjR548qDgS1KJt1ypx2VKYeT0wv9+GUoBlR1ORicWsdas6oWlJrC7bRHFhcxSh/phls8
+	zc6foWeUtcne4h2fEmPgZ2OIiqTlzxG0ZFKiDKUD14l5GUgDCTCZW1k4ZhAV9Gv/RPkK6ZkWFWK
+	RRsjeDgG7lw2duMjg6GNzExqSLTnqpnFo3JSJ+XUTDTQq8o3KDNlgtBCsgjq5bKzxDJs9d1aDyo
+	KsfAsPUujdCm043rXME1jeqYyTb15QcukKphut7Lq/4v2wxp/AJqf4EPOfpRPro4R
+X-Google-Smtp-Source: AGHT+IE18aIbwR3kUmI00of6zx1vDAbhjJri7AMTb1JJykSzC0p6KytmOlYDyZhwco9kF97wduWaUA==
+X-Received: by 2002:a17:903:2a8d:b0:243:8f:6db5 with SMTP id d9443c01a7336-2430d0a260amr1715145ad.6.1755021315592;
+        Tue, 12 Aug 2025 10:55:15 -0700 (PDT)
 Received: from fedora (c-67-164-59-41.hsd1.ca.comcast.net. [67.164.59.41])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76bd9795200sm28297220b3a.114.2025.08.12.10.35.43
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2422ba1e09csm279039935ad.16.2025.08.12.10.55.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Aug 2025 10:35:45 -0700 (PDT)
-Date: Tue, 12 Aug 2025 10:35:41 -0700
+        Tue, 12 Aug 2025 10:55:15 -0700 (PDT)
+Date: Tue, 12 Aug 2025 10:55:11 -0700
 From: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To: Qianfeng Rong <rongqianfeng@vivo.com>
-Cc: SeongJae Park <sj@kernel.org>,
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Qianfeng Rong <rongqianfeng@vivo.com>, SeongJae Park <sj@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
 	Will Deacon <will@kernel.org>,
@@ -83,7 +83,6 @@ Cc: SeongJae Park <sj@kernel.org>,
 	Nick Piggin <npiggin@gmail.com>,
 	Peter Zijlstra <peterz@infradead.org>,
 	David Hildenbrand <david@redhat.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	Rik van Riel <riel@surriel.com>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
 	Vlastimil Babka <vbabka@suse.cz>, Harry Yoo <harry.yoo@oracle.com>,
@@ -91,8 +90,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org
 Subject: Re: [PATCH v2] mm: remove redundant __GFP_NOWARN
-Message-ID: <aJt7bYkhuRBrIO_S@fedora>
+Message-ID: <aJt__zOHjGcaghNf@fedora>
 References: <20250812135225.274316-1-rongqianfeng@vivo.com>
+ <b5ca3ef2-bd36-4cb5-a733-a5d4f1fb32fa@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -101,20 +101,28 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250812135225.274316-1-rongqianfeng@vivo.com>
+In-Reply-To: <b5ca3ef2-bd36-4cb5-a733-a5d4f1fb32fa@lucifer.local>
 
-On Tue, Aug 12, 2025 at 09:52:25PM +0800, Qianfeng Rong wrote:
-> Commit 16f5dfbc851b ("gfp: include __GFP_NOWARN in GFP_NOWAIT") made
-> GFP_NOWAIT implicitly include __GFP_NOWARN.
+On Tue, Aug 12, 2025 at 05:46:47PM +0100, Lorenzo Stoakes wrote:
+> On Tue, Aug 12, 2025 at 09:52:25PM +0800, Qianfeng Rong wrote:
+> > Commit 16f5dfbc851b ("gfp: include __GFP_NOWARN in GFP_NOWAIT") made
+> > GFP_NOWAIT implicitly include __GFP_NOWARN.
+> >
+> > Therefore, explicit __GFP_NOWARN combined with GFP_NOWAIT (e.g.,
+> > `GFP_NOWAIT | __GFP_NOWARN`) is now redundant.  Let's clean up these
+> > redundant flags across subsystems.
+> >
+> > No functional changes.
+> >
+> > Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+> > Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
 > 
-> Therefore, explicit __GFP_NOWARN combined with GFP_NOWAIT (e.g.,
-> `GFP_NOWAIT | __GFP_NOWARN`) is now redundant.  Let's clean up these
-> redundant flags across subsystems.
-> 
-> No functional changes.
-> 
-> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
-> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
+> LGTM, I wonder if there are other such redundancies in the kernel?
 
-Reviewed-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+Looks like theres a lot left for this specific case. At least 48 show up
+that are spread out across subsystems when running 'git grep
+"GFP_NOWAIT.*GFP_NOWARN"'.
+
+I think they should be cleaned up in sets per-subsystem to minimize
+merge conflicts, as suggested in the commit mentioned above (16f5dfbc851b).
 
