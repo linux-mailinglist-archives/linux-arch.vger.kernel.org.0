@@ -1,60 +1,59 @@
-Return-Path: <linux-arch+bounces-13148-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13149-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9715EB23C69
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Aug 2025 01:47:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEB8DB23CD4
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Aug 2025 01:59:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D94E91A261AA
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 23:47:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 745877A3536
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 23:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FB272857C1;
-	Tue, 12 Aug 2025 23:47:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3AF62DE6F3;
+	Tue, 12 Aug 2025 23:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7+b0Qzm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PjYQXFJn"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57BA4C92;
-	Tue, 12 Aug 2025 23:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56C12E92C0;
+	Tue, 12 Aug 2025 23:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755042432; cv=none; b=oX3puKIb4w3QMHq8oFXiW670X+naQ/OrbWIeseLF7gc8aeWNRRXcHq54uBlmVbMF+JaaXsw7zi3UyLuS+/P4gG+Dvq20n6IDjL1U8dz14m3qe0uHwCCCgeD2jJY5vkJsr2yWp4sVviUe/aqbm46E+PEWY9RRfHnuubZwRPDndno=
+	t=1755043134; cv=none; b=LJVRfPH7+7SdBQ9XpXeYcdQiN6oWuFcr2aHqKEsbKsJgEF4feo7sye9RtdsvbMTNZOC/zHYy6IpIpE6F5mkI43yclGkD32r9jodB/evNCu5z67V673hGCB9xRqzjg7yMdbNFah418epdSU3RZ2RfP4cL1lRwBwMse7VXRpHTECc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755042432; c=relaxed/simple;
-	bh=6/+orTgGYBQfHXPoerjO8V9IKyQHK1j/VpihArC4tGQ=;
+	s=arc-20240116; t=1755043134; c=relaxed/simple;
+	bh=6RTpC3D8LV0nbW7I0DLWD1vO3AMzBQzn+vJfUMCi94o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j7RZux2Lx29gB/uECp1UHi0bMwxVqYJNOAVYnhrQrPre/yyTxnXEna7hoqTx2FZ77MI/vG3wh7+3e2QLElgNYb5AslI61apm8OU0esWaAo4Bxasy8//6R9bEmRHZEVHKyfcyy1S4ZAI7YVKAaISRyyTDhqgjJmJZqWfWHqL/Jpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7+b0Qzm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4825FC4CEF0;
-	Tue, 12 Aug 2025 23:47:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cHw7/Chtc5p/IV67XofhT6JTNR0NNnAKT6CAJQfMLhppbWcHnbWR+PK0YKgHzE99OpWOSU3lZ0BA+agW+NW6hAJVcoLa2ml+VieIduG8z6rjIB7w1KgJFjwi2lZSquSoxa6TwfCO8SCH1lAuL2uquXgIQlGjCOE83tj8dYs0SpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PjYQXFJn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE5FC4CEF0;
+	Tue, 12 Aug 2025 23:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755042431;
-	bh=6/+orTgGYBQfHXPoerjO8V9IKyQHK1j/VpihArC4tGQ=;
+	s=k20201202; t=1755043133;
+	bh=6RTpC3D8LV0nbW7I0DLWD1vO3AMzBQzn+vJfUMCi94o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=h7+b0Qzm64vGjtcIXKsO7ef+X3Cj0DsR/4Nq/RPnvkMLFHcmJBxhHkrnTTxAjDTDV
-	 dvVMxJO95zCT/bfXQQarkH4bvygThDl4uVqROsi5qMKA06UislR6SVRssodHiZotfn
-	 ohk1jjxyHAP02diqTrAUkPQfFuG1ovB1mnM1+rPlkZJzko0wiZ9Byu0w8mPUSAlBI/
-	 zW9ymEWAybMq6DrgZRGyrwJQhSeLZj9X8pPSqXfUXU5nK48cvhbz7VOW1dIP08lCBw
-	 Ow+jiKV4pTqa2B2YQ9p7lfrsl8iugrKdBZPyPQvKH2CIf9DEG0JQaGzm3SSPwY/3U2
-	 e/n/s7l+MAagA==
-Date: Tue, 12 Aug 2025 23:47:10 +0000
+	b=PjYQXFJn9iKvqzwdnILDMBZyIZTff9TliAadgE1bYFKAEExQ3FeU3YpM/INxxjmCU
+	 05p8dwY2uSWRGCNqHUMK92ufC/MBPD7sBw5MHZmGaD8Vm9uMO6guqfP6f9XU7UIEfW
+	 wkbMKG235glKvSIMMn6QA7SgeJRmxUQsDJ/qWDE1nQuRtWnGA6A/iPxmzU/YmVax4w
+	 Xw7waM9D6y3HIH9csD+/hIiD1wGxK2mViZF5K6znwuuCaWzjA3JuSS/M+8tZJIrDei
+	 gafFgMny6fH9f6gmO4QfLdEBeKOs4UZs2jc1DShkGIGW+R5mzE5bQBmRwFXPZgOZ69
+	 HBhRLx2n2sqBQ==
+Date: Tue, 12 Aug 2025 23:58:51 +0000
 From: Wei Liu <wei.liu@kernel.org>
-To: Tianyu Lan <ltykernel@gmail.com>
+To: mhklinux@outlook.com
 Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
 	decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, arnd@arndb.de, Neeraj.Upadhyay@amd.com,
-	kvijayab@amd.com, Tianyu Lan <tiala@microsoft.com>,
-	linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH V6 0/4 Resend] x86/Hyper-V: Add AMD Secure AVIC for
- Hyper-V platform
-Message-ID: <aJvSfmmArKeEsD01@liuwe-devbox-ubuntu-v2.tail21d00.ts.net>
-References: <20250806121855.442103-1-ltykernel@gmail.com>
+	bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+	lpieralisi@kernel.org, kw@linux.com, mani@kernel.org,
+	robh@kernel.org, bhelgaas@google.com, arnd@arndb.de, x86@kernel.org,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v4 0/7] hyperv: Introduce new way to manage hypercall args
+Message-ID: <aJvVO8d1JdK9mchO@liuwe-devbox-ubuntu-v2.tail21d00.ts.net>
+References: <20250718045545.517620-1-mhklinux@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -63,18 +62,22 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250806121855.442103-1-ltykernel@gmail.com>
+In-Reply-To: <20250718045545.517620-1-mhklinux@outlook.com>
 
-On Wed, Aug 06, 2025 at 08:18:51PM +0800, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
+On Thu, Jul 17, 2025 at 09:55:38PM -0700, mhkelley58@gmail.com wrote:
+> From: Michael Kelley <mhklinux@outlook.com>
+> 
 [...]
-> Tianyu Lan (4):
->   x86/hyperv: Don't use hv apic driver when Secure AVIC is available
->   Drivers: hv: Allow vmbus message synic interrupt injected from Hyper-V
->   x86/hyperv: Don't use auto-eoi when Secure AVIC is available
->   x86/hyperv: Allow Hyper-V to inject STIMER0 interrupts
+> 
+> Michael Kelley (7):
+>   Drivers: hv: Introduce hv_setup_*() functions for hypercall arguments
+>   x86/hyperv: Use hv_setup_*() to set up hypercall arguments -- part 1
+>   x86/hyperv: Use hv_setup_*() to set up hypercall arguments -- part 2
+>   Drivers: hv: Use hv_setup_*() to set up hypercall arguments
+>   PCI: hv: Use hv_setup_*() to set up hypercall arguments
+>   Drivers: hv: Use hv_setup_*() to set up hypercall arguments for mshv
+>     code
+>   Drivers: hv: Replace hyperv_pcpu_input/output_arg with hyperv_pcpu_arg
 
-Are they still RFC? They look like ready to be merged.
-
-Wei
+Queued for inclusion into hyperv-next. Thanks!
 
