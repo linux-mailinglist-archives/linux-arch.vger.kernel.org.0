@@ -1,224 +1,287 @@
-Return-Path: <linux-arch+bounces-13133-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13134-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12985B2286D
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 15:29:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC7A1B22909
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 15:47:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D8E83A761A
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 13:24:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8BF607A3338
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Aug 2025 13:45:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 400E9283FC8;
-	Tue, 12 Aug 2025 13:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C5F285047;
+	Tue, 12 Aug 2025 13:47:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="Xq5vXzOT"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="N/xaT4Z+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013052.outbound.protection.outlook.com [52.101.127.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DB6280324;
-	Tue, 12 Aug 2025 13:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755004982; cv=fail; b=bOkRjZ+QDvqaFwGgWD+7dFXT6Hu5SeF9R4o11TIeITBc5X+PRtoDX3tuNXck4Oa16MeECw+nrcC0ROdpGubK/7xm4tRdQdqY6WjpQ7t0kyxCPV+XQEpPNQP529i6cZnTVMxV6byrJEJedtBjh9WXkI0KBZEA9hiiB8CkoOtJW+Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755004982; c=relaxed/simple;
-	bh=1EB8b1NdfTk13Czvi0M3O562lNrOo7z+d3ktUOLanSA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=QzdhjZJ1MIfBYAntGNVcLHWod73Vj2AzkmZXmv10c7E+Xn1/XrSLyRe/aruVFYFpMW2ymgnsySopjEhysbeQ0vk6a3vyo1WPp1xVzexdZ1i37hKMsx/13i3gh5phPaMX39yomRwkXmKhtwpfNLCxLj2zT6Og/kCAFAWw5nqC4rU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=Xq5vXzOT; arc=fail smtp.client-ip=52.101.127.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=utcIynnM4c563z7poikWu58ZRDVRl+2wZpmz3dKBLx9evAotly706C6acb1hg7YOP/4mAnELXHBew5zSB4QyJYAPPTYDGTq3oJkAyJWagSy37po59xN5wyYYnb+sOiZ+rJsSWuRlct/N3T7RtEfnHK1zqBheao5N+NMSukMoBoDCfCbUhOfgQMbpTaQx+Du/0e/wZ0tYATvattFkvQDE1m7l8OxM/80LKbLnOHJtXHN+o0lcy8zmxDU5Yrdto9CG//Md8tGdH68Wh/utF+8B7YuafyA9svdjWAXDDKY5wWIG7KM3KUm/anTV7C12Juekj5Qcyk2GIkJHmLpuDJBAyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vqmHXe9pVein9z7nd/rEZ8jJ+KJnZwt+Y9ZPbcBERFE=;
- b=tmATwDqcg4N53zlcbF1XUA2yrI6dDWl2cHdK1nmv1QzgGhL5KZIoU3WUQTMqSaFN86N+qM5ulJ5l/c53wF4v8wskhcZ7VmuCuduVvbQH49M9hOlpnqLp8oZmNSOA5E99Ov11A3+69YUqae738xPIvxMvmu1E9KpYZD2BUq6YKDoALqrvcuT1FWtHHOEmy8LLWwsWRCAFknG9QpMqgpH9wHzNuX5VbHkyOT/+N4ZzIxjdNwzpjNglkowvOzpUdknxPwU8GLYy2LbXYvItx9Xf3G5/Fp6oyLHUpv8nzMzc6xnQgWKn6LmF2f/TOCErsSGTpdKKK8zAo4hAz0fMBLv2gA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vqmHXe9pVein9z7nd/rEZ8jJ+KJnZwt+Y9ZPbcBERFE=;
- b=Xq5vXzOTIR1ZGTQ9eMkC8o44MEx5562pEzwpxRViPEDvaQVqByopUQMp2BwHRBu/lwgiRpr/oDLEcR7aILQzoFailNe5/kl+/BMfbtLUrPtDM7sceKIalHmei2UFLo7gargnLdbVankopEe1GI95RqMXGz+icZlORS/WPVZmh1iFUF/E6IPsMAqwvPmb+JIXHUOvyEHLgNEgSbuZR2A3UKHGOygCcek5/wByIXkjWBlxfF4egbeC5MdVS5cUaHNqUprMvQMzfaDidu1neGiZ7Zien/uJxkiJqj4EshCSE7tNpZF2hG6d+NpuONiYVsyWb2uTB8Td9PZ0vyouy5xrLw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
- KUZPR06MB8073.apcprd06.prod.outlook.com (2603:1096:d10:43::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9009.22; Tue, 12 Aug 2025 13:22:58 +0000
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666%4]) with mapi id 15.20.9009.018; Tue, 12 Aug 2025
- 13:22:58 +0000
-Message-ID: <0e01b83c-17f7-40b7-a9ba-3118b281a72d@vivo.com>
-Date: Tue, 12 Aug 2025 21:22:51 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm: remove redundant __GFP_NOWARN
-Content-Language: en-US
-To: Harry Yoo <harry.yoo@oracle.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin
- <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- David Hildenbrand <david@redhat.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Rik van Riel
- <riel@surriel.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Uladzislau Rezki <urezki@gmail.com>,
- linux-fsdevel@vger.kernel.org, sj@kernel.org, damon@lists.linux.dev,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20250812095747.121135-1-rongqianfeng@vivo.com>
- <aJs9dPMdY_W5uZdc@hyeyoo>
-From: Qianfeng Rong <rongqianfeng@vivo.com>
-In-Reply-To: <aJs9dPMdY_W5uZdc@hyeyoo>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TY2PR01CA0021.jpnprd01.prod.outlook.com
- (2603:1096:404:a::33) To SI2PR06MB5140.apcprd06.prod.outlook.com
- (2603:1096:4:1af::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12FD6283FD7
+	for <linux-arch@vger.kernel.org>; Tue, 12 Aug 2025 13:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755006428; cv=none; b=PZ7NQXb2kL1qgKRfQJxomFNwwB0jxQ3PvQzN77dHaNcNZRE4rddWzF2qfc78xWvbzcamUFolTnpGYVzIm63AjuB5EiwxZZzmWTl5djCNEvBSvxlSTmQQYVbylspAOEK/Rcktq+af+5I98lmzKlcVY819xOuUxwbBVBQADO0XvRA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755006428; c=relaxed/simple;
+	bh=qNJQ858gOSPy6kQdYFjCHpvz41LSZgIxrbPFpqAX2+0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=NVsmUM0EErN05si1E05hCRTdmF7+t5Reej3Wq+WtZ5mA2GIDlolvZ/4b5OCAgTbYDB7WwoZW35SLgqyt25wvILgA/SzIoGaA/oFGZ0EtkxibObl9TaXLeBNTL4G+LqeETcDJhC+SQyo07akOdSBRvqgNNNcsqGE0kFafQsRn4HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=N/xaT4Z+; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-23fd3fe0d81so51874955ad.3
+        for <linux-arch@vger.kernel.org>; Tue, 12 Aug 2025 06:47:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1755006426; x=1755611226; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D8WoxjvDBkfx4Zq67j4dS/oZqS1XLjrG4y/OFkK7qEk=;
+        b=N/xaT4Z+YJbX1F5Qlk2hTKw2G1nBF7m9cps97WTm0LXSVH7I6xBQynVMZRiLxflYpK
+         hVSlsvA69pyIRWUnUDcHCFtlTI2itKepVpFCSWJCkzJJ/YN56zMSWTxOe6WW3VJW6BWK
+         9Tv4btG8+Q33Enzl0giTO0pNJohCJG2CPNyGo/rQrw8FbLaVLSTk5LFG3Xd1BZNrkIhj
+         VNO74Q+ZFCXh0j6y0TQTGGtEkx4VLkRs19+ml4qVvOWRBEPODAx1lAWr8YwKptWABdy/
+         /wNp0xKf0YNyxuWf58uPv2w3MKirYkiPcejDZSemywiQGPfrtHDp0AV8aIZA5diyRPdu
+         3y9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755006426; x=1755611226;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D8WoxjvDBkfx4Zq67j4dS/oZqS1XLjrG4y/OFkK7qEk=;
+        b=DdzkNOaLGNE24IS8tVTnt5SQruHuoSHI2nwiiWsiD+k5Nc2qmMqUZjRyEA4YWEXyCf
+         XzIMR5xF3qIevtAvokcI2P/M0YVdLdgYnZAkVMMDjGTDOZEhV3wll4d3urtDBJq5ydzQ
+         EMrNWxXHaVQVB5qr5dAaQJcw+0mFE2R4v0uNyz8e5vUkwdMY9fltgMhnfEewuWZY35rB
+         ZTLYvvqj6qpZEfQv39eR2gHqVoO8wVqN5WU18RUhnEf30+Q4J/tqbT8Z8JKvCozdvfn/
+         tEndKI5/ZdLQcpgEIanXrJfF4+CrNzn764r3U5yR/v+Dp7t10k3Ot/6KJ4v4NEPoO1sn
+         k+og==
+X-Forwarded-Encrypted: i=1; AJvYcCUN6zuj4497dmdvkpcC3+G04qLLVAsFxKrcjHag1rmh6Y9qmjPXVHTyDciLWhlCs0XNiBSK0wTDPj76@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMKT/0d3ZB6ajVrFxEwpTDv8ZDHtJ/fpaYIrX03nFTX50qIhaE
+	GUBClhJElD4ujia1KsbtqcWTfyqxkcZDc5J6CTwcUlR+SWwhUNl/ZFWck74VRfQEPzp7cCOS+nX
+	RzD7qVqHoLIfM
+X-Gm-Gg: ASbGncsgZMgekuN1J4eZLqiVr/ZGKq+6S/sh8TDQUV77MPruQCb1RV6HIfv0lD83P32
+	9TaXD2mLZAPxt+6sTssWaOTnmoAhW2kTnvX/tsTSx5Mb4fJQeFTAnQ9HbIKqcayLgGKFXvk+vwj
+	hHmyLQhfPyLNla4+wLBVtBzHgw4fQ28pqMbMJrgdxgoP3qVeEbunuHkN7cdcMDDXx9B0m8pAFt8
+	4F914vWgtbkBbprFuoUzMOA+D+J8kxv4f9G97nbxfrCiIihIJs0IxtgKw8QXsmzB19HBjjcwapU
+	fqs7pWaP2nfAshDCOaWjRpWdt1U9WkpgZgLil7LbheHEh5oDxD3CuzsbEWywZYjRwOz9XUmtkTY
+	neXVU32V/BuKrRqgClaaw3X48IDoEyAcVeIq+xpta676ubj9hv0c=
+X-Google-Smtp-Source: AGHT+IHA60tP4SeRa6XXCks2V9uQ+cQDXkYaDUBAx/8PtuesE53gCrJ6FR505cnAE/3WujtaqV6XRQ==
+X-Received: by 2002:a17:902:ccc2:b0:240:99d8:84 with SMTP id d9443c01a7336-242fc38ac30mr53371355ad.52.1755006426232;
+        Tue, 12 Aug 2025 06:47:06 -0700 (PDT)
+Received: from H3DJ4YJ04F.bytedance.net ([2001:c10:ff04:0:1000:0:1:d])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b42890523basm12948595a12.45.2025.08.12.06.46.58
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 12 Aug 2025 06:47:05 -0700 (PDT)
+From: Yongting Lin <linyongting@bytedance.com>
+To: anthony.yznaga@oracle.com
+Cc: akpm@linux-foundation.org,
+	andreyknvl@gmail.com,
+	arnd@arndb.de,
+	brauner@kernel.org,
+	catalin.marinas@arm.com,
+	dave.hansen@intel.com,
+	david@redhat.com,
+	ebiederm@xmission.com,
+	khalid@kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	luto@kernel.org,
+	markhemm@googlemail.com,
+	maz@kernel.org,
+	mhiramat@kernel.org,
+	neilb@suse.de,
+	pcc@google.com,
+	rostedt@goodmis.org,
+	vasily.averin@linux.dev,
+	viro@zeniv.linux.org.uk,
+	willy@infradead.org,
+	xhao@linux.alibaba.com
+Subject: Re: [PATCH v2 13/20] x86/mm: enable page table sharing
+Date: Tue, 12 Aug 2025 21:46:55 +0800
+Message-Id: <20250812134655.68614-1-linyongting@bytedance.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250404021902.48863-14-anthony.yznaga@oracle.com>
+References: <20250404021902.48863-14-anthony.yznaga@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|KUZPR06MB8073:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ad5eb5b-0dc4-4690-f3dc-08ddd9a35a88
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?M0JiTEtvMldnM0N2enlIemEzUjRPaVc3eWRiSkM0Qk0xdW5NZXU5SHVkbUZw?=
- =?utf-8?B?d25RQmVOQ1FNQVhRSXF0V0VCamdqczlkUnN6bk5EczZsZXJyTG03RklmN2lF?=
- =?utf-8?B?L3R6R1ZxaGZyWU5jcFJsdzFRSGV5T21vbVY1RkhXWkZCREJRdjdxYjZOV21J?=
- =?utf-8?B?bE9kTDNpcDFPWmFpN1BROExyOTcybFFJNnNmOHRRM0FGT0x5S3VpZDU1TTBJ?=
- =?utf-8?B?TzBGZ2M3aytIR2hWNzkvRWVVbjdXUXhnMm04bjVUNXVRUzJ2bm9CdTMyT2Vo?=
- =?utf-8?B?SVlOeTVGZUxEUmgyaDc1ME9USXhQL1g3VFh0ZE5Sa01GZlg5eCtuaDh5K1pT?=
- =?utf-8?B?NW5UNkFLTjNpQ2Q1ZVRWMm4xb3pwZUIvY2hHWDE3TWVLNGE2ajdRZ1pPR3Ft?=
- =?utf-8?B?OGFKNnJlQi9LalNIWTJnNUhFcStUS3RvcjlhQ0NDTzhidFJZRE5JcXhqWjZz?=
- =?utf-8?B?dElRS284NUpEVkN1V1NoWC9zL0pNSkkxTU83TmNxWkRBRmRIQmFXU2RXUm84?=
- =?utf-8?B?RW1mcDhhYXhTSHh2YnlSS090UktYSHdvS0k2d1NFNkpMWnhxMEczWHpRbXBC?=
- =?utf-8?B?eTZ3elRaSUhlUSt2SG9wS2VTUEQ5SC84cTJyWW9hL0NTY0hLeFZ1Mk82ZVdY?=
- =?utf-8?B?aDRGaXFoVm5SUVF4cEJ6dVM0QmdhSVZQalNKczRnYnYyVkZGSlNPR0h0amx1?=
- =?utf-8?B?NUU2NnFWL1J6WmptaHhEKzloY3FUTkxNVlpkejhLTzdydmFvRTJXR2lrMExR?=
- =?utf-8?B?UWU4aE5qeGFrTnM2cS9ZYjArR3pZTTFRV0czYmhNVEdDMVYwOVZCcmh5MnZq?=
- =?utf-8?B?cEprRkN6RjR2UmluUm9SNEREcGI5cE1lTWpiQ01IS2R4WFFnOVF0L2tTUlRG?=
- =?utf-8?B?MVhYSkY4WG5Td1JnSEtWYzVPTll0UW9kVWRscnFJR2Q3bUhZcVZjNytSSzVq?=
- =?utf-8?B?clNaK1JJaUZ5SGMvN2QydkQvL0xVTkpaWUIwQXJ0OTFYazdrb0duMHBBY3FJ?=
- =?utf-8?B?R2luWlJnMzdrRVRyNCtlTjlja0IxRUd1YkZvSTBmQVFDd1JpY2FNVzIxbG0v?=
- =?utf-8?B?OWwwMkhSNjFURHVzVWE0aXRVVlc5cDJmOVdnMXR2U2loN2JrWUkvVUxwVjlR?=
- =?utf-8?B?MFNXQ3drQjZoWUpuQkg4ODBsNUs3eGxaTjMzRGhPaWFXdloxZHhIcHFHVGlZ?=
- =?utf-8?B?ZlFkWExHOTk4b1NWY3ZZcHVOWVgyVEFudDNGNGZHb084UzIxNzBYSUM0QTZa?=
- =?utf-8?B?N3l1SWRjZXlSQVl3aXVvSHBCS3NCeVhya0FOZ0tFYVo3d2ZOcDRyNEZYQXZw?=
- =?utf-8?B?b3RXL1ZiMjluMTJFNDNaOEhwOXFEQUJxU3Rid3ZIdTZvY0NNZk9TU2RyVTJj?=
- =?utf-8?B?Y2I0SGFVV3ZmNXFmU0FROEdQY3I3ZWtxKy9SN0E4dnVORklpVHdtcmh0L0U3?=
- =?utf-8?B?Zk1WWjg3dGs5UlRoNlJGbCtma2s5eWR4anp0dWRQZnJ2NUJ1cXlvdHdISkht?=
- =?utf-8?B?bk1jK0ZMaysxcnBoVnpnTzZOZVQ3VUFMWnB2Um5ESGd0NDB5N3p6OGJVMUNj?=
- =?utf-8?B?Q05LUHRtK3RQZ2JJTmxOSkxpcjJCVFpxdm5NRm9Qd0VUMk9UMDM2cmlBYWtT?=
- =?utf-8?B?dWxMOFdMUm4rYlJ6MGZ6ZUFSY1gwcnFKOVVSWnVMSndCOEhyUUZhRXJkWE9q?=
- =?utf-8?B?d3BPYVZpZ0ZSRDFBUitJRUpSRlZPT2s2bE01dXZxTFVDSlBXMHIxM1ZLdDF3?=
- =?utf-8?B?N3IwR2ZpL2g2eUJka2tETndiUWF5OGVZaU9LUDdJcndFVEF4QXRFYXZqWDBs?=
- =?utf-8?B?R0Rib05ZRVFSUkVvK0ltOEJFaThTRU10eGpoVGFoNmg5em1rM2s1a3B5aUU3?=
- =?utf-8?B?TS9IS3pwcEdZUHFiNUFGVnRJclZyRWNlQkJQY0ZrbU1JdWEza215Q0VyVTB3?=
- =?utf-8?Q?JrR/JvmurG0=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?b054UnI5Qm9YYmIwOVl2emhtY3BUNHkrR2w5eU5yWldUV3lSS0hyeWdqa2dt?=
- =?utf-8?B?czFjY1BsUnc1RGVvcm1Od2pjKzlPUkJidzF5a3dMZmZxc29ic3hldnpCeEd2?=
- =?utf-8?B?VXRwT0kvczhaS3h5V2RlU1pDOTkyQnlPUnVDejFLOTd4Q1M2cUNGZWN4L2tP?=
- =?utf-8?B?bGwrRTMxK3BkWG0wNE9JOXFjdGRCNUo5V200b2lEcVd3b1lWWG8reTBVRzBi?=
- =?utf-8?B?Z0VReTdta0hYdjliazhYRFVhMk4wUWZERzdmbDN4a0ZtOXl2OGc1N0lGVDA4?=
- =?utf-8?B?TWpVK0pjNisrQVRnNEhMNEc5V25vM1ZSOHpQNDQ5cEg5RDA4aFlpN3huckI3?=
- =?utf-8?B?MEdmME1ESVRHTERxR3Z6Sys1VTk4MXluRnFVZXh2ZEx4enIwcm5MR2ZCdWNQ?=
- =?utf-8?B?dkFqVGdBcTMreUIxN1NCVWtBR0YxbjRHc1FMN1ZZb1ZteVJoVjYxRHRDWi9z?=
- =?utf-8?B?VGQzRGxTemJwUTlIdkdjSXM3Zk9FQ3VMU2hlT2RjTFpGbC9OclpxQ09wN2x6?=
- =?utf-8?B?S2ZSWjIwWVczbzZJaG4waFJESWY0Ty9xYjFjeDhMbUZuMCtaNGFZZFpTZUlT?=
- =?utf-8?B?OGcxK3J6VlBPQU1KSHI1cG1QZ0kvaGgySEdhbVh6Q1RlY01CRDFaWjZURzkx?=
- =?utf-8?B?VE5LZCtlVEYwQ3pBVytzQURKck9IRnBrT2lYeTBDZ2RHRXF1dWU4SjFUSW84?=
- =?utf-8?B?dGd3REZ4NXlYQ1VVQ1FKdW5rN0FwakVEYmFQUDVibXhOUldNNzFSd1BBL0h5?=
- =?utf-8?B?UUw1SE1QeUMrZ2NTbnFKNStEOUllMkdSZmFrNHlNQk55NGUyMnp2a2EyZ2h2?=
- =?utf-8?B?UlF0NVZLVmxFa1prbjArcEFKTFU2czN6NkRwTW5GdWM0NFZDQncrVzlNWi8r?=
- =?utf-8?B?SEJGWEtMbGdrWFBhbzdDRm5DT3RjWk5NOXpmZjlpb0JpVytPamRpL28vYnRZ?=
- =?utf-8?B?dTAvaVVYMEZSUlpRdnhLWW5yQ3lUdXhPYTE5NkFXUzVQTlVPU2RKeDFCVTN3?=
- =?utf-8?B?UmkzcFJnVUQ4QkhZNHJnSUNLTWQwQVRiS3BLcWpodDRkQ2YwUmRPaTRZTDdU?=
- =?utf-8?B?M0hDb0dVbU96RC9vY08reUZydlBMUzd5Z3oyelpkMGdrNVkwdDRPZ2N2dHFx?=
- =?utf-8?B?M0tYRkUvSm9FaU5GTE40WU5aVWRSaVhTQ1A4cEZoZXVxUXVDbTBTUzY3Z1hW?=
- =?utf-8?B?OGl2VHpGUVpLMHlEajlCazV5dlhieFoxV0QrRmM1SFVadUVnZ0d0dzJ6eHh1?=
- =?utf-8?B?YitaM0p1d1ZCYzVyUHVpNHBCNXJXZ3VEdHk2RTRQRXZoY01qVGlielI1bVpH?=
- =?utf-8?B?ZkRxWnNxZS9yR2dKczJON05XSCtJRkVja1Y4R25vdTl3bjBUODR5bXRQeXRP?=
- =?utf-8?B?dWhZMk9VaEhCcTNjUWRhSXp0SUd3Z2FNU0kwVzlDcUh5b1d3STRGOW1MU0dJ?=
- =?utf-8?B?L0c1ckxjYWE0bTZMZSt5YUluQVZaMHBFOXpUV000OXk4bjBuT1h0K2xyYlJr?=
- =?utf-8?B?azNHcVo3MmowL3V5OW1LL0pzbktqUGNMb3dFWEZmMktQdGp5b29FTFpQeVRK?=
- =?utf-8?B?WlNqL0ZsMzlZaGdVRWw2SHJoZFBQbklRQ3A3TStqOXJlV1ljRDhJZTdOcFF5?=
- =?utf-8?B?K2o2dzlMQVYwa1pIb3JKbDlkdk1WYktyRFArbWtzemlkV2JjNDEvclhVU2dp?=
- =?utf-8?B?elRXcjNkd0xRRjlkMDczbGxiZjB5Z3ZxTWNhS1Y3Vjk3cXN5YTFKNnVLL2Jq?=
- =?utf-8?B?Sk5ZY1NZWjdzMDliMjRiQnk4N2JRUzE4dTJ1ekdTR1Znc2laWEpsUlF3YjJj?=
- =?utf-8?B?UytvbWNVUWRseTEycDEwamxZMzFsY2lsdTlTT0oyS3RFcHN6Q0JsNXVTbjEy?=
- =?utf-8?B?d0x0M1h6dWZkbTdranpvekJSc0J5bU9IZ0NVdWV4N0VzOWlVMU41THY2eGRO?=
- =?utf-8?B?d2dHeFNyaHp2ei8wYWlxa0t1TS9kK0xUdFpUN2tNaWtNOFNRTmhWbDFFcGEv?=
- =?utf-8?B?Ri9sM2FqVVp6dGdmdTZON2dVTDBjMjVhZVdnK2szWnMwNytGQkVWYkE2ZmU2?=
- =?utf-8?B?cE94Q01iU1pWWkJiWWFxTzI2SGJnMTVMVFQ2TEIyNmlEUHNQQ1hubmdsVEt6?=
- =?utf-8?Q?+FyYSwgBXVoiLU2la6QKIVcNs?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ad5eb5b-0dc4-4690-f3dc-08ddd9a35a88
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2025 13:22:57.9925
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p1zG1HZyl4fnc+tShvulmvUXhg7VR4gV7Q9xxvueazmEWbZkGnsdFL3Sbrogm0zMpPqi9iudihWdCrp/20R5yw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KUZPR06MB8073
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
-在 2025/8/12 21:11, Harry Yoo 写道:
-> [You don't often get email from harry.yoo@oracle.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+On 4/4/25 10:18 AM, Anthony Yznaga wrote:
+> Enable x86 support for handling page faults in an mshare region by
+> redirecting page faults to operate on the mshare mm_struct and vmas
+> contained in it.
+> Some permissions checks are done using vma flags in architecture-specfic
+> fault handling code so the actual vma needed to complete the handling
+> is acquired before calling handle_mm_fault(). Because of this an
+> ARCH_SUPPORTS_MSHARE config option is added.
 >
-> On Tue, Aug 12, 2025 at 05:57:46PM +0800, Qianfeng Rong wrote:
->> Commit 16f5dfbc851b ("gfp: include __GFP_NOWARN in GFP_NOWAIT") made
->> GFP_NOWAIT implicitly include __GFP_NOWARN.
->>
->> Therefore, explicit __GFP_NOWARN combined with GFP_NOWAIT (e.g.,
->> `GFP_NOWAIT | __GFP_NOWARN`) is now redundant.  Let's clean up these
->> redundant flags across subsystems.
->>
->> No functional changes.
->>
->> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
->> ---
-> Maybe
+> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+> ---
+>  arch/Kconfig        |  3 +++
+>  arch/x86/Kconfig    |  1 +
+>  arch/x86/mm/fault.c | 37 ++++++++++++++++++++++++++++++++++++-
+>  mm/Kconfig          |  2 +-
+>  4 files changed, 41 insertions(+), 2 deletions(-)
 >
-> .gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) |
->                          __GFP_NOWARN | __GFP_NOMEMALLOC | GFP_NOWAIT,
->
-> in mm/damon/paddr.c also can be cleaned up to
->
-> .gfp_mask = (GFP_HIGHUSER_MOVABLE & ~__GFP_RECLAIM) |
->                          | __GFP_NOMEMALLOC | GFP_NOWAIT,
->
-> ?
-Thanks for the reminder.  I did miss one modification spot.  After checking,
-I found this code section was moved to mm/damon/ops-common.c.  I'll submit
-v2 immediately.
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 9f6eb09ef12d..2e000fefe9b3 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1652,6 +1652,9 @@ config HAVE_ARCH_PFN_VALID
+>  config ARCH_SUPPORTS_DEBUG_PAGEALLOC
+>  	bool
+>  
+> +config ARCH_SUPPORTS_MSHARE
+> +	bool
+> +
+>  config ARCH_SUPPORTS_PAGE_TABLE_CHECK
+>  	bool
+>  
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 1502fd0c3c06..1f1779decb44 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -125,6 +125,7 @@ config X86
+>  	select ARCH_SUPPORTS_ACPI
+>  	select ARCH_SUPPORTS_ATOMIC_RMW
+>  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
+> +	select ARCH_SUPPORTS_MSHARE		if X86_64
+>  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
+>  	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
+>  	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index 296d294142c8..49659d2f9316 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1216,6 +1216,8 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  	struct mm_struct *mm;
+>  	vm_fault_t fault;
+>  	unsigned int flags = FAULT_FLAG_DEFAULT;
+> +	bool is_shared_vma;
+> +	unsigned long addr;
+>  
+>  	tsk = current;
+>  	mm = tsk->mm;
+> @@ -1329,6 +1331,12 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  	if (!vma)
+>  		goto lock_mmap;
+>  
+> +	/* mshare does not support per-VMA locks yet */
+> +	if (vma_is_mshare(vma)) {
+> +		vma_end_read(vma);
+> +		goto lock_mmap;
+> +	}
+> +
+>  	if (unlikely(access_error(error_code, vma))) {
+>  		bad_area_access_error(regs, error_code, address, NULL, vma);
+>  		count_vm_vma_lock_event(VMA_LOCK_SUCCESS);
+> @@ -1357,17 +1365,38 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  lock_mmap:
+>  
+>  retry:
+> +	addr = address;
+> +	is_shared_vma = false;
+>  	vma = lock_mm_and_find_vma(mm, address, regs);
+>  	if (unlikely(!vma)) {
+>  		bad_area_nosemaphore(regs, error_code, address);
+>  		return;
+>  	}
+>  
+> +	if (unlikely(vma_is_mshare(vma))) {
+> +		fault = find_shared_vma(&vma, &addr);
+> +
+> +		if (fault) {
+> +			mmap_read_unlock(mm);
+> +			goto done;
+> +		}
+> +
+> +		if (!vma) {
+> +			mmap_read_unlock(mm);
+> +			bad_area_nosemaphore(regs, error_code, address);
+> +			return;
+> +		}
+> +
+> +		is_shared_vma = true;
+> +	}
+> +
+>  	/*
+>  	 * Ok, we have a good vm_area for this memory access, so
+>  	 * we can handle it..
+>  	 */
+>  	if (unlikely(access_error(error_code, vma))) {
+> +		if (unlikely(is_shared_vma))
+> +			mmap_read_unlock(vma->vm_mm);
+>  		bad_area_access_error(regs, error_code, address, mm, vma);
+>  		return;
+>  	}
+> @@ -1385,7 +1414,11 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  	 * userland). The return to userland is identified whenever
+>  	 * FAULT_FLAG_USER|FAULT_FLAG_KILLABLE are both set in flags.
+>  	 */
+> -	fault = handle_mm_fault(vma, address, flags, regs);
+> +	fault = handle_mm_fault(vma, addr, flags, regs);
+> +
+> +	if (unlikely(is_shared_vma) && ((fault & VM_FAULT_COMPLETED) ||
+> +	    (fault & VM_FAULT_RETRY) || fault_signal_pending(fault, regs)))
+> +		mmap_read_unlock(mm);
 
-Best regards,
-Qianfeng
->
-> With or without that:
->
-> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
->
-> --
-> Cheers,
-> Harry / Hyeonggon
->
+I was backporting these patches of mshare to 5.15 kernel and trying to do some
+basic tests. Then found a potential issue.
+
+Reaching here means find_shared_vma function has been executed successfully 
+and host_mm->mmap_lock has got locked.
+
+When returned fault variable has VM_FAULT_COMPLETED or VM_FAULT_RETRY flags,
+or fault_signal_pending(fault, regs) takes true, there is not chance to release
+locks of both mm and host_mm(i.e. vma->vm_mm) in the following Snippet of Code.
+
+As a result, needs to release vma->vm_mm.mmap_lock as well.
+
+So it is supposed to be like below:
+
+-	fault = handle_mm_fault(vma, address, flags, regs);
++	fault = handle_mm_fault(vma, addr, flags, regs);
++
++	if (unlikely(is_shared_vma) && ((fault & VM_FAULT_COMPLETED) ||
++	    (fault & VM_FAULT_RETRY) || fault_signal_pending(fault, regs))) {
++		mmap_read_unlock(vma->vm_mm);
++		mmap_read_unlock(mm);
++	}
+
+>  
+>  	if (fault_signal_pending(fault, regs)) {
+>  		/*
+> @@ -1413,6 +1446,8 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  		goto retry;
+>  	}
+>  
+> +	if (unlikely(is_shared_vma))
+> +		mmap_read_unlock(vma->vm_mm);
+>  	mmap_read_unlock(mm);
+>  done:
+>  	if (likely(!(fault & VM_FAULT_ERROR)))
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index e6c90db83d01..8a5a159457f2 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1344,7 +1344,7 @@ config PT_RECLAIM
+>  
+>  config MSHARE
+>  	bool "Mshare"
+> -	depends on MMU
+> +	depends on MMU && ARCH_SUPPORTS_MSHARE
+>  	help
+>  	  Enable msharefs: A ram-based filesystem that allows multiple
+>  	  processes to share page table entries for shared pages. A file
+
+Yongting Lin.
 
