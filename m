@@ -1,200 +1,205 @@
-Return-Path: <linux-arch+bounces-13151-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13152-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F8F7B23D49
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Aug 2025 02:42:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8152B23E36
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Aug 2025 04:26:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBA633AAAB0
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Aug 2025 00:41:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF4CE178831
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Aug 2025 02:26:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62FF49475;
-	Wed, 13 Aug 2025 00:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2581DFE0B;
+	Wed, 13 Aug 2025 02:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vJ2ozjWN"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="mcBoqign"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013018.outbound.protection.outlook.com [52.101.127.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334494685;
-	Wed, 13 Aug 2025 00:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755045682; cv=none; b=lvRL13G2xSmx8G/BLpak14c9ailqxJi/gmCj0faPZuaAM//ZdMJ6vodPCx7KwuQmW235I66zgBeNdVQJlaiXVTD97amWfGUtRkm27Vnzkdti5U/s/WkCYXZPzg178AbQTqs7fyAH+djlD9k/8oHFrLk7uD7WKfCfROy1aJf3jdA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755045682; c=relaxed/simple;
-	bh=Asl961UA0vCD59+9K43qgi5UO6CxgMvHPUzfukUNK24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Om9OxuIk++tU38ug3SFRPGCnn2FeNoIjGcTu7UhNY+s9mlpF3mgbcerr0DkGDF4YMjckXaMATmf0ufZxKadsjSpG5oksgXD6FJpNYq3NFGskVVQUPDAl57VlhSwChLzbBTKBszRSZ6F9+IBaM8Sed3qzmDuG2zrhKrqzoaQ+sEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vJ2ozjWN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6494EC4CEF0;
-	Wed, 13 Aug 2025 00:41:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755045681;
-	bh=Asl961UA0vCD59+9K43qgi5UO6CxgMvHPUzfukUNK24=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vJ2ozjWNphL/gaj64VX0kduHHYvtCg2wG0Qn1q3Eo0znTTQEWAb7/AOGep3z0Afpo
-	 2Ay2/hE0Eat3ioXCuCl6mg+l4mPD5Cdm0nZWz3GD/hCRYkKNDZ3rljqXggql5iwbZf
-	 1hVf5D8ri+rTQP5fZazAfYv5ekrFw2AU7VisIoC6uXj9LfRbm97O2FG/TVyUsrrHr7
-	 JWeqWldHB6kDW/RJtaDuAj31lbtkfzSWJNwsnsiXTgEnUDo+ByfLSY8/uvfv7rq9R4
-	 aopPNxNNxDvb0DHs9jVxWOn/+cn01wb99WAyxwjslCZNBsa7DAx1/mdum2jyEiUTvE
-	 4dlMG1OOwjRSw==
-Date: Wed, 13 Aug 2025 00:41:20 +0000
-From: Wei Liu <wei.liu@kernel.org>
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc: mhklinux@outlook.com, kys@microsoft.com, haiyangz@microsoft.com,
-	wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	hpa@zytor.com, lpieralisi@kernel.org, kw@linux.com, mani@kernel.org,
-	robh@kernel.org, bhelgaas@google.com, arnd@arndb.de, x86@kernel.org,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v4 2/7] x86/hyperv: Use hv_setup_*() to set up hypercall
- arguments -- part 1
-Message-ID: <aJvfMN5BhyO5Ap5m@liuwe-devbox-ubuntu-v2.tail21d00.ts.net>
-References: <20250718045545.517620-1-mhklinux@outlook.com>
- <20250718045545.517620-3-mhklinux@outlook.com>
- <252e58be-4377-49b7-a572-0d40f54993d1@linux.microsoft.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8409F2C0F8F;
+	Wed, 13 Aug 2025 02:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755051959; cv=fail; b=gX6WA1i9viql3/hyFHrZ9BRQEj0DPxEOUD01FshB1nrbAsWP6SQrYwCf5AbftJadpIvB6KKwUhM+4NyZMrNAsL3Z5zCJaxRapA4zD1ExUabTKb1c5AWW34cWOnz1YIvRqm8rrpo97bhe/CVs69VycupEPGXp4kjprDAAqL4YU+o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755051959; c=relaxed/simple;
+	bh=Wt61k6Ypx8L2hCXlJ1K8oaODQZCEL2xYrpSLjcGma1A=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=mV/Gw0iV76aUIhB209D6LagLWeG+IAO8LKxwsEqbMPEWkiLdwIJtqrxKFYeiXp5LlHjgrRh9Jtf8imcKVHpd05OxA4MzwNUDJcOkPXulVXX51Q9Z313HErD7Td9w2AvUSu/8B2zpLEZLSIphqAAbjKopPVr6FgPX8gBPRESSKPk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=mcBoqign; arc=fail smtp.client-ip=52.101.127.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vhfFxXen0bzBHF5UER5C4Kek7s2izmwSlXMDKtHeBKf4CFfAkgHrlzhiii/sI8iIyRgsjadY5qrgBI6OrTldDbGmC8u8IkAZamRtk3VV7QVPhyTxPYEQOE+aCH/grMHI+QS5KWnu6elGI9WrHUGh73oXgmU9B8reuFbO5gvhIfo0MFi1H82euX9cBixCJYnJp970zV9Bt+SheqLlAZnAIqk3QxsH0FAELEbzkF7VfhIKfvSidzwFKLYshM++iLsICGWLwEKscQrc3xhqE4nff9VDiQgCuVs4bEyQtQ4J/2vl+5VcfO+cN4Xrl6G80sRvlzeDELZXKdifyf21Mx5UuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hL9iZBN8GkU0UTCDUv2nEZdr/lNCJVrWlKzmhiA3SeY=;
+ b=suPKtsH1s6wIyPzQqmKOPAuR5wxu72AW8iIsouWMxrXoBG0XmwYD/I4GXrMGHsGWJzOqLGytf0z6K7N2FITB2CK+dJCZig7e0jL6J2KJkP4KpeG3+7u4elPD/Cta3P7/8K7vSiDj5I0CnA9bwA5tj1d4PKlGJhtL3DHAaNxJecsHqY0FBeQpUqQmKLRhrDhNOnhaSzLP+Nz2e/gpDIAKRzap5Sze5dYWYB4gpaErB201Bfjn6OoZncQSp0v+JshrWS16YhwryLc74ylV+51fYFcmknybirWZx4zMeFA4jV9hKpekNv1nFHbj6dzQPXPFbpfdjPnLldPEvfuuR+0Cdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hL9iZBN8GkU0UTCDUv2nEZdr/lNCJVrWlKzmhiA3SeY=;
+ b=mcBoqignWCD2XOsiI8fyjFMJrfbBiOFpVRDqxSE6u/EBBLmdLJ/ppOqHAhISUOP3+wu8Mw4lIADPkdnZ6CGOQ5LKCQJOx5O7oPXmtQnOGaIO00YZYN+tzIBrqBFWYOrPyy1zrf7h13NNgaiwLzIwYeK+bajlnsBcSS/v+eYnXQqDOFLLha2W6aZbjxd3BG5WVkAPAK2lf+ZW8T3ZNd3r4mobjeJE5LIv5F8qsqZdP+5vQWprUkLyybHMtF/mW8kHozpold/EOIxDIy5SkdFS/tJzTHJDGGooTVquEwQfoaf7gRoDozkX3SY29twYOyMRuEa/gpW5WQhXEKDxk4iz1A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
+ TYSPR06MB6409.apcprd06.prod.outlook.com (2603:1096:400:411::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9009.22; Wed, 13 Aug 2025 02:25:52 +0000
+Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
+ ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
+ ([fe80::468a:88be:bec:666%4]) with mapi id 15.20.9009.018; Wed, 13 Aug 2025
+ 02:25:52 +0000
+Message-ID: <784dd559-612d-4037-b315-d1b30253538a@vivo.com>
+Date: Wed, 13 Aug 2025 10:25:47 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] mm: remove redundant __GFP_NOWARN
+Content-Language: en-US
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: SeongJae Park <sj@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ David Hildenbrand <david@redhat.com>, Rik van Riel <riel@surriel.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Harry Yoo <harry.yoo@oracle.com>,
+ Uladzislau Rezki <urezki@gmail.com>, damon@lists.linux.dev,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20250812135225.274316-1-rongqianfeng@vivo.com>
+ <b5ca3ef2-bd36-4cb5-a733-a5d4f1fb32fa@lucifer.local>
+From: Qianfeng Rong <rongqianfeng@vivo.com>
+In-Reply-To: <b5ca3ef2-bd36-4cb5-a733-a5d4f1fb32fa@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2P153CA0016.APCP153.PROD.OUTLOOK.COM (2603:1096::26) To
+ SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <252e58be-4377-49b7-a572-0d40f54993d1@linux.microsoft.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|TYSPR06MB6409:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ddd737c-05b8-4ba5-30c2-08ddda10b998
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WGJmWDN5T1F3c2N2cTREWEE5bUc3L2duL2dHSjloRUxYRlkyZjZPSkNqZmVx?=
+ =?utf-8?B?cmNUdFl6dlEvK0NHVmRMVWc3WlhjYXJaVngvcUI1Zm1kdFNwVkpCYzFSbmVQ?=
+ =?utf-8?B?eTRvVVE5RCtIOXY1d2lOQ245dVprSGM0MGRidndYcjNZaWF1allSN09oTk00?=
+ =?utf-8?B?RUU0eTFxaFMwV1NoMzlGWEVldkJLN3BVdkRXOXR2ckt6YWRjSTNPRzN4end4?=
+ =?utf-8?B?a0c5Ykx6elRUOGNZajVZWHBkSUJaQ0Z4aE9vcW5SbzVkWDhHTTVrQVg1bzBx?=
+ =?utf-8?B?anNKV2UrRHpVUGd3NC85alU2Um5OTzJ5aktyQ1BsVU8zQmVMSnJWQ2VjZWtn?=
+ =?utf-8?B?UjNBQ1lvbGxuczkwZTlpKzMxT3F4cXdtWUY5NjVTVmZUUm9naVpUMTZOSFNa?=
+ =?utf-8?B?a0xLeWtsS3UrQUw2VUxFNkd4SUVhR3JxOEdONE9BaDEvV3dhYXdXVmtFUVRU?=
+ =?utf-8?B?N0RCWWVDQWN6WldkYWsrM2V1Tk9XdVZNSlVpa21DQW12WlNXZW5uRnovdm5O?=
+ =?utf-8?B?WkxpeTJnS202TUZpdHZRa21ZVllMaVFNTWxXQ1VDeDY2VEtmV0w1cVRYNUxn?=
+ =?utf-8?B?RjNOQ1AzWEpDU21DSGlreWFoUnJXVGFCM0pUbFBscVNXM3AwUWhobUhmOUNm?=
+ =?utf-8?B?VE9ZWERkSVRocWNtWnNMczBVS2JSUUQ1WEN4QmR0ZG5yYnMxa2NkdmNRZFVE?=
+ =?utf-8?B?Qjl4Tm9wT3U5b044OGYwQUtrdUxYUDFFemlkT1FieHFVUVdQOXFzT1JISkVr?=
+ =?utf-8?B?dE5Zb2FJN1Z0NUVQVnc3aXdTVmJEUUo3eWVEWEovV2ltMTZmYmQxZzQ2RnRX?=
+ =?utf-8?B?SktuMFR5M2hBdmJXdWJkTm1SUUZOK0gzaG1OVUdyU0djNFJYOFdUZ2FNT3ZU?=
+ =?utf-8?B?Qnl1M0MzbkVCK1RVVnRBM2ZXR2lUOWQ1Wjg1SWl5WVNEV2VoL05qM09HalJQ?=
+ =?utf-8?B?cmxudjNyUVVqbVE0cDA5OUhRMW4xNkc5T3J2MzRDTHhhZmZHWDFHbXA1ZDgx?=
+ =?utf-8?B?QWVwa29uc3kvUFc2c0xtQ1gyREVoMlZ6dWZFVDUwM29acnhmamxPcjRwUHhs?=
+ =?utf-8?B?SVY5MG85WkN3RnpvSTZ0UkhRSTFjbUpRQVNldWxVRUZKR3orazVBY0NZbnNi?=
+ =?utf-8?B?VE1BRnAyYlB1aTNWMDNtbERkTkJUNlp3ZDl0Q1l3MUJ5TDF1aTlnSDM3c3RU?=
+ =?utf-8?B?cDRKTDloN0Y1UDBmZGhJZ2lRUUQzQ0ZyUktoL0ZLV1dEVnIvY2htVGNSRGZO?=
+ =?utf-8?B?Vk1XVDlsTHEvdVdveW1DeC82Z0JDTis5Y0EvRm5TV29zaHl0SkRiVTBBZld4?=
+ =?utf-8?B?Y20rWFF3eHhiYVZTVmRzK0NnWFJKY1hacU5XUHFRdkNBT0ZnU0NtbzIyYjda?=
+ =?utf-8?B?UDB5ZjhFUzRIY2xHSDlQMUVOK0VubzNaVXJxeUVZWHZ0c2hZeVlwMnhkWDNt?=
+ =?utf-8?B?MU1hM1NwTjRCVlJCWk9hd29DRFk4WTIyYWk5VllHR3hINXBibTE4VlBxRUlV?=
+ =?utf-8?B?NklXTElHcDFuVURHcDZlYjk2b2QxV244ZStmWGF3dzVBRmRqQVo0NHpHWlM4?=
+ =?utf-8?B?NVNudExMM0xnOE81TDg4a29leE0wSTFJWVUrTFlmSUE1ZGhJMGpxVmlJenpO?=
+ =?utf-8?B?STlNM0ViYTQ3aDdmelVmb0dlOUgySFV5eVVPanYwNzdHU01MQ2dCU1V6bDND?=
+ =?utf-8?B?aStqaWJTMVBjRnhEdFZ6dHdzajVub1lMNkQ0SlcvUWV3UGN5cFFsWWhiNS9u?=
+ =?utf-8?B?YzRIQzdYV05aS3JEWmkxYTZadE9YTm5MZkRTL21UMUs1Vjh4a3JQWmxqSzZo?=
+ =?utf-8?B?aUgxYnpUWkFCaTFWMTBkcHRQeVYrR2JXWERlWUVXaE5aUHdKT2hIaGdQaDNn?=
+ =?utf-8?B?R2JMV3VJdU40bFljbVovMWNQRXBnYVNlQzhpS043NkU2UDVVVEExekdyZnBE?=
+ =?utf-8?Q?WIuv4VEXmxQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bUhiaGpqeVVMeHZPUCtlcmtNaXhzM2xJSHFSUDBnVm5leUM0SDcwUFNyS1c2?=
+ =?utf-8?B?dmZMUUlsalpKQXg1dXR6Vkc0aFBSUkdkeklOZjRwMTZ0T1hHVmhMVHJ1dDQ2?=
+ =?utf-8?B?SU9qS0I2NktnWWROeEdGYTIwQnVmMy95NTJlY3RJcjh6bzM1YUtGTVE3d0Zs?=
+ =?utf-8?B?WHlJc0Q4c0U3SEsxRWxiOEVpM1J5a3hwejFHeExtZUw2WWJrb2lQM1NvaDM3?=
+ =?utf-8?B?czg1MEVNc2szNTFQR0NoWUI2VkdFQ0F4aGwzakY1VTFYdUZRcUd5elFJdDV2?=
+ =?utf-8?B?RzdxV0lEV3Nyek1pTnM0T0o1dmRNY2FNYnpTZm4xaGw2Nzdzdm1CbDJwanE3?=
+ =?utf-8?B?RkJDMC91d0srb3FlUm1kN2VDR1BITm1oalRLZU1FTm5RQmI0N2RCODRrWWUr?=
+ =?utf-8?B?dUxTc0doYU9IWGhEc1BUYUdieUp3UUJWMFFNZnNrcFAvSSs3Wno0R2xNd0R5?=
+ =?utf-8?B?ZzA4OS85eVFKZVZ0WEVJdWdaWEdWWElxK3VsMi9LVU05d3ZQS3ZZbjhrc1NM?=
+ =?utf-8?B?a0ovb0NtckV5cDBjR0hYWTVMUXZ3SjhqVHZveFA2OFZaL2RzS1lVT1NSNDd1?=
+ =?utf-8?B?c2ptN1pXdE8vL2l1U0FwRm4rMTVQVEY4OFlmcU9lWVV4RlpUTWlKQTB5S3U5?=
+ =?utf-8?B?WGNDQkVHM056UExFVHFycUp1cmsyUjdIKzBmM0FvMVVBZ2xCeStvNndHbmpr?=
+ =?utf-8?B?b1lqWjlKQ0NDSDl1TmNnd1pJUmkxTCtmZ1lLZTNpNmxIMkhUQk02aVFPTzc3?=
+ =?utf-8?B?d1REa2JPeitvREhtaFVyYklSdnlSSnprTkthekEwY0IrQTA1SThvTjdVeXNi?=
+ =?utf-8?B?QkRxdkt1U1dCeEcwb2w0OGdPN01ocWQycnU4c3Nmeko2UGliRjl6ZEhrRkNW?=
+ =?utf-8?B?cndsd3FqbTRsVkVpWFdXWDBQMFdWMCtleGdXaUVFM2JYM2hXRXRGemIrbGlV?=
+ =?utf-8?B?cWRUZFJxMlJrVmhHVTZTcEh4ZExlWGt0NzNTb2ZKV0h1WnFhVjF2aU5kbFAx?=
+ =?utf-8?B?YlI1a21qQjFVRlU1MWVNZjBlcTh2MThKS2kvMzJtL0lTcUlWdUx0ODBCL2Z3?=
+ =?utf-8?B?QW5PR3BJdTFGTm1Oa0FrUDdKdSthSGVNUDAwdGZhRWl0dDlWdDZZK25SekhD?=
+ =?utf-8?B?RlpTejd1NVlxdlV5czFJR01UTmRNZlpaZzFObGtLL296WHpqcGJFK0k3WmpP?=
+ =?utf-8?B?SnAwM1JiakhpQldpVzQzUWNMWE11MTJnd2RoQmJKU3VPbXRLR3dEL0ZxYXZ5?=
+ =?utf-8?B?bWd5UHFVTzU0dE9ZazJnSXlXTE9PY2w3U1A1STlzUGplQ3psWnpPSmJwdW8x?=
+ =?utf-8?B?VFNaOWlBM0ZpbkxyRXUrQzk0UEM0dXpSb2VrYnVwenRyVUowSzl5ZEgxb3BJ?=
+ =?utf-8?B?Q0szejVzYjJHTmZmVW1hOWVrc2pLaVB5QWhzdno1NE5waHB4SHFPS2hXVHkz?=
+ =?utf-8?B?SEtYeHE5d2VZRFU4cUR2cDI0YW9WMlZncElEejZPeHhTa2dnYWdvZlZwTnNF?=
+ =?utf-8?B?c3VXcFBEQVU0dVJUS2VtdENaRERxK3hvaGFKYzhqZ1N2ZG1YVHJBNFdaVGt2?=
+ =?utf-8?B?N0ZWNm1ibTM5d21MVjdOcVc5Z1JhTnZORjl2NExhYkhkbDM5cllrWGFZR0hJ?=
+ =?utf-8?B?L1JQbVdsc3cwWFBDRG9ZQnVyOURSNnZMM1Y3a0NGeURIOFdmYmxoc1FRY3ZV?=
+ =?utf-8?B?V3RqR0dXdGxqd3d3dDZMN2ljZDZlNFVKeWVReVE1enZ4QXpjejZDV3pwWWpO?=
+ =?utf-8?B?VlNrOGd2NWxKYWZocU9nUmIzS0UxUjU5VW5IUFlaWW1NOU9PcEcyTWswM29N?=
+ =?utf-8?B?akhNL3psbFNOT1J2ajB2WTFzWGxzbnVSN2xjSzdKa0FzQ1hkYlBUcnBVR1E0?=
+ =?utf-8?B?aCtSNHRZN3VQSUE0QWNUMTVvT1V3VDFlT0t2SVV4K0NhR21Zd1ZUSU9qZkc3?=
+ =?utf-8?B?SE1kZkcxZmJMaGVZYjU0OEx3WUxTaXB3UUUrZ1hBY2d0ZktCNDd2ZnlqR01k?=
+ =?utf-8?B?VTAzSmR0aGZpb0p0U0NKbFZ5c3BqWlRJQVg1VUJURitvdmJrUzY2cE9ETzdk?=
+ =?utf-8?B?N3VLZnFuSGpZN3lMQjFkTldpS3RCUkRnakxSdGlzUzgvK0lvV2RZL05pcWhs?=
+ =?utf-8?Q?jlq1i5MmERhR8Y2p+8yXGVvOV?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ddd737c-05b8-4ba5-30c2-08ddda10b998
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2025 02:25:52.6243
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sFcXLstFqaAzY0yErOeCqfHju4GJfFceycPShuNaOHwodkQAZdGIBRGPz+4MqPmY9xtonhDWHycGwW1NhOJJtg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6409
 
-On Tue, Aug 12, 2025 at 05:22:29PM -0700, Nuno Das Neves wrote:
-> On 7/17/2025 11:55 PM, mhkelley58@gmail.com wrote:
-> > From: Michael Kelley <mhklinux@outlook.com>
-> > 
-> > Update hypercall call sites to use the new hv_setup_*() functions
-> > to set up hypercall arguments. Since these functions zero the
-> > fixed portion of input memory, remove now redundant calls to memset()
-> > and explicit zero'ing of input fields.
-> > 
-> > Signed-off-by: Michael Kelley <mhklinux@outlook.com>
-> > Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> > ---
-> > 
-> > Notes:
-> >     Changes in v4:
-> >     * Rename hv_hvcall_*() functions to hv_setup_*() [Easwar Hariharan]
-> >     * Rename hv_hvcall_in_batch_size() to hv_get_input_batch_size()
-> >       [Easwar Hariharan]
-> >     
-> >     Changes in v2:
-> >     * Fixed get_vtl() and hv_vtl_apicid_to_vp_id() to properly treat the input
-> >       and output arguments as arrays [Nuno Das Neves]
-> >     * Enhanced __send_ipi_mask_ex() and hv_map_interrupt() to check the number
-> >       of computed banks in the hv_vpset against the batch_size. Since an
-> >       hv_vpset currently represents a maximum of 4096 CPUs, the hv_vpset size
-> >       does not exceed 512 bytes and there should always be sufficent space. But
-> >       do the check just in case something changes. [Nuno Das Neves]
-> > 
-> 
-> <snip>
-> 
-> > diff --git a/arch/x86/hyperv/irqdomain.c b/arch/x86/hyperv/irqdomain.c
-> > index 090f5ac9f492..87ebe43f58cf 100644
-> > --- a/arch/x86/hyperv/irqdomain.c
-> > +++ b/arch/x86/hyperv/irqdomain.c
-> > @@ -21,15 +21,15 @@ static int hv_map_interrupt(union hv_device_id device_id, bool level,
-> >  	struct hv_device_interrupt_descriptor *intr_desc;
-> >  	unsigned long flags;
-> >  	u64 status;
-> > -	int nr_bank, var_size;
-> > +	int batch_size, nr_bank, var_size;
-> >  
-> >  	local_irq_save(flags);
-> >  
-> > -	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-> > -	output = *this_cpu_ptr(hyperv_pcpu_output_arg);
-> > +	batch_size = hv_setup_inout_array(&input, sizeof(*input),
-> > +			sizeof(input->interrupt_descriptor.target.vp_set.bank_contents[0]),
-> > +			&output, sizeof(*output), 0);
-> >  
-> 
-> Hi Michael, I finally managed to test this series on (nested) root
-> partition and encountered an issue when I applied this patch.
-> 
-> With the above change, I saw HV_STATUS_INVALID_ALIGNMENT from this
-> hypercall. I printed out the addresses and sizes and everything looked
-> correct. The output seemed to be correctly placed at the end of the
-> percpu page. E.g. if input was allocated at an address ending in 0x3000,
-> output would be at 0x3ff0, because hv_output_map_device_interrupt is
-> 0x10 bytes in size.
-> 
-> But it turns out, the definition for hv_output_map_device_interrupt
-> is out of date (or was never correct)! It should be:
-> 
-> struct hv_output_map_device_interrupt {
-> 	struct hv_interrupt_entry interrupt_entry;
-> 	u64 extended_status_deprecated[5];
-> } __packed;
-> 
-> (The "extended_status_deprecated" field is missing in the current code.)
-> 
-> Due to this, when the hypervisor validates the hypercall input/output,
-> it sees that output is going across a page boundary, because it knows
-> sizeof(hv_output_map_device_interrupt) is actually 0x58.
-> 
-> I confirmed that adding the "extended_status_deprecated" field fixes the
-> issue. That should be fixed either as part of this patch or an additional
-> one.
 
-Thanks for testing this, Nuno. In that case, can you please submit a
-patch for hv_output_map_device_interrupt? That can go in via the fixes
-tree.
+在 2025/8/13 0:46, Lorenzo Stoakes 写道:
+> On Tue, Aug 12, 2025 at 09:52:25PM +0800, Qianfeng Rong wrote:
+>> Commit 16f5dfbc851b ("gfp: include __GFP_NOWARN in GFP_NOWAIT") made
+>> GFP_NOWAIT implicitly include __GFP_NOWARN.
+>>
+>> Therefore, explicit __GFP_NOWARN combined with GFP_NOWAIT (e.g.,
+>> `GFP_NOWAIT | __GFP_NOWARN`) is now redundant.  Let's clean up these
+>> redundant flags across subsystems.
+>>
+>> No functional changes.
+>>
+>> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+>> Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
+> LGTM, I wonder if there are other such redundancies in the kernel?
+For similar redundancies in other subsystems, I submitted separate patches
+to minimize potential merge conflicts.
 
-Thanks,
-Wei
-
-> 
-> Nuno
-> 
-> PS. I have yet to test the mshv driver changes in patch 6, I'll try to
-> do so this week.
-> 
-> >  	intr_desc = &input->interrupt_descriptor;
-> > -	memset(input, 0, sizeof(*input));
-> >  	input->partition_id = hv_current_partition_id;
-> >  	input->device_id = device_id.as_uint64;
-> >  	intr_desc->interrupt_type = HV_X64_INTERRUPT_TYPE_FIXED;
-> > @@ -41,7 +41,6 @@ static int hv_map_interrupt(union hv_device_id device_id, bool level,
-> >  	else
-> >  		intr_desc->trigger_mode = HV_INTERRUPT_TRIGGER_MODE_EDGE;
-> >  
-> > -	intr_desc->target.vp_set.valid_bank_mask = 0;
-> >  	intr_desc->target.vp_set.format = HV_GENERIC_SET_SPARSE_4K;
-> >  	nr_bank = cpumask_to_vpset(&(intr_desc->target.vp_set), cpumask_of(cpu));
-> >  	if (nr_bank < 0) {
-> > @@ -49,6 +48,11 @@ static int hv_map_interrupt(union hv_device_id device_id, bool level,
-> >  		pr_err("%s: unable to generate VP set\n", __func__);
-> >  		return -EINVAL;
-> >  	}
-> > +	if (nr_bank > batch_size) {
-> > +		local_irq_restore(flags);
-> > +		pr_err("%s: nr_bank too large\n", __func__);
-> > +		return -EINVAL;
-> > +	}
-> >  	intr_desc->target.flags = HV_DEVICE_INTERRUPT_TARGET_PROCESSOR_SET;
-> >  
-> >  	/*
-> > @@ -78,9 +82,8 @@ static int hv_unmap_interrupt(u64 id, struct hv_interrupt_entry *old_entry)
-> >  	u64 status;
-> >  
-> >  	local_irq_save(flags);
-> > -	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-> >  
-> > -	memset(input, 0, sizeof(*input));
-> > +	hv_setup_in(&input, sizeof(*input));
-> >  	intr_entry = &input->interrupt_entry;
-> >  	input->partition_id = hv_current_partition_id;
-> >  	input->device_id = id;
-> 
-> 
+Best regards,
+Qianfeng
+>
+> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+>
+>
 
