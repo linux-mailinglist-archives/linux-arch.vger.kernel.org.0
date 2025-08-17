@@ -1,210 +1,167 @@
-Return-Path: <linux-arch+bounces-13176-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13177-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9294BB29142
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Aug 2025 05:04:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CE66B2921D
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Aug 2025 09:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD7BB1B244A6
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Aug 2025 03:04:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37C214E5C67
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Aug 2025 07:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 533C61A2381;
-	Sun, 17 Aug 2025 03:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28265238159;
+	Sun, 17 Aug 2025 07:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lQ2nK4Hi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HbnT+t1/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62C316CD33;
-	Sun, 17 Aug 2025 03:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C88B19E82A;
+	Sun, 17 Aug 2025 07:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755399869; cv=none; b=hMfcJmasOkCPnEPy6A6tq8RFsxDtseuz+I8lKRpou4i0wCuZuNWbnsb7Vj8IMRfzxX2b0cJNG0vlLhfHIyxw6m7emAbVeZZi+JCbmpdmbOq/A9uHSxG7LpGpR33Cn9TVkdn4YicbjCugB3sXPDcdokErotffD/GwZs1dI76d/D8=
+	t=1755417467; cv=none; b=QngyFyn0fOU9cxGVlb7hnyLK/5IVkulWJ7OgXdRN9EC7J6w7aVMCJbDYdtATYagCCEknT/egvHeppFB9nwmBdeE6gaYd8MijfpJgDSoMnAutSZQbtIWHUgcsNq1LjUQavE51wvv0nN8V+M1AbKebuz3bOqhG8I+RQNSibAIIIHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755399869; c=relaxed/simple;
-	bh=bwzZ0EHT9CLOPYhrp9QBXtnFojq0Dx5Sqmor4zirmvg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N8TPNT2tMRyaK+vFCgB58DPaz0uSwi70zUQnNDhKjJaEnBF5jX09R0aD/AI1dt8cHJ7/+lE7YyG0bbsA6ctJagMyoA2LntOJMNHEM7xQc+8rqHdARGbwf3dGh0FJE+FbRSdWQXXWUJR4jwVFo6MLx4ZSxGLauhLTGKANHS35I3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lQ2nK4Hi; arc=none smtp.client-ip=209.85.222.172
+	s=arc-20240116; t=1755417467; c=relaxed/simple;
+	bh=yQuiJ45Vh6J7gKXVGoZus8IP+oatDjgK0XKBk6cWb/4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=k+e4K6mJ4qGXICqsLN8xB9/oQarNUGCHRtTjQwBBJdYsDphHPwBt9cPKcGrv5KnflmvKAwis8dBX4YxP0mV7uYjwy6QI+0DtOu1whDRvvL9ENF5Ni5VrZZmEDJ20zCI0D3TPwKsyYBtIwWozkCTcnEyM/8OYFleFtfY+noZ9yms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HbnT+t1/; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7e8704cdc76so347753185a.1;
-        Sat, 16 Aug 2025 20:04:27 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3bb81a0c36aso108675f8f.3;
+        Sun, 17 Aug 2025 00:57:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755399867; x=1756004667; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nZs6He76FpZcbIW1aa62IVHXHMVIhxGtWlvMIkdGXCc=;
-        b=lQ2nK4HiTXDbvHIm0IRwqsdSsyqHX6EQgUH1W4BN5f4asdYHSCqfhth4/qolL0HIOK
-         G6cJdufJ7NB4M6xspQJZYrmY9BIfInPliwdkEY27tPZm5qy/u6y03S1TM8+lOuo6qGih
-         1JrIxo9Er6NuXveGtK/eEqivsOFa8CvTcxcbngRDz1jFe8IKwM0wzWJSqxVB3UjwBG1S
-         vpfVCJdVPyf65NKZIHHSR8pNuecfNolZNENJr/Rv1VALlySBu/ZPQTeHMeZ4BfKhzrdo
-         5mCQC0YrjdfOa0L627uSR+oPwuNZehyQR9sw50wJAdhmw1YA+0OaxWVWMmRe8xKKtWb9
-         b30g==
+        d=gmail.com; s=20230601; t=1755417462; x=1756022262; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:from:content-language
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q1jkR3N9Y1QTztsNiDkJcC+i9uf2sc9OYJvJHiG79qQ=;
+        b=HbnT+t1/XDEZLrU6hReGPicZAgIXdEkRfJ722FdE1yoOIrR6v5g08PBnWrAZUVoprf
+         dtccwKvHtmP0yEwJ0CuLsQp0j4M3fb834i50A2qGMOkD4HFe2N5IlroDG7vf9gV4mznT
+         XdrChAsy4IhzL3jScm6J8wXoWKaQPByb4xCIsi/JRBAbfVNW13SxCvCujZ/M9vGHN1Hw
+         aHjbjmaYTNzNlpLECWKwDRP9OySoE8J3FmWHC/zaZPu9Rv6941FMvKDkwzW+Xgpf6CHm
+         ka2Fkwy/gFNZQhexuFL70UYTUZqRHA9dhfIYzvmyZv06p71SRtWF1Dmd/9ZHfVqc/h9Q
+         QeJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755399867; x=1756004667;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nZs6He76FpZcbIW1aa62IVHXHMVIhxGtWlvMIkdGXCc=;
-        b=cV2fE4mkb5wxPhmp+3V4rTIqMZcwlt5dDgU6tB4S7oVZ+mY42aRZvEb46IJfwkjwDk
-         hBOG5k7b0YJbczaUlX5i2ZTRVYpcu2J9LrtV1KTFtjAj8NVn61lUDF36XfJnHQtZW8/D
-         yD/HIWWdT8vy21nVHhYjc1RlzrWCNE/zItpa4fYlrjOPgJ246l2zWGd2QH12c/cdfQLU
-         X1Al1iL2jGY8UCa1Lt7dpek8pwZG4ZUCuCLD6l+9EDSBFowlSJGoLJq1P0iYic0WYGaw
-         WASLDyE2uBe7DvWNyF3lEdHDausr7NugNUKtZAq2MHxTwXWyZYuIGKUDRLSDY9vXQnfn
-         nnhw==
-X-Forwarded-Encrypted: i=1; AJvYcCW4sMzAkDXknetn74gjHCKaOwZi3E3x8rH9opKHP2LzrdLnaBjFxQYuqGqiLFrzq2TDD00EclP7HA4PD1kEEJY=@vger.kernel.org, AJvYcCWHHziG+McE2eVvKx4uJVh1495ZIUbs2fz79hYuUCgb9EiNB8tgAfy9WG5PTIfYNM3ix9yoAVuQUbag@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeVNyjQIPqgytQkhL3Dq3oBwjvg/Y0MkjAWpYEFRvtRnXPtflt
-	SnZBteKQ2zZ17+F+gJcNYzFiARn9eNdp5am1LW+BU6eQek64Rh44J3pK
-X-Gm-Gg: ASbGnct9ILMx0RPQECo/sKyuffOgkIiZ2iyzZ05KNAn2cdyt523CdYpBBy1weg4e7s8
-	uDkbQI9rPllevexzTNyd/+SFBHzSa7eplvJkYumfpj/JtzpRWKTjFZXxqoSZw/ik7kru2PZCr7x
-	B1oUGrkyakNxNa6JiQ3iLPbOJvGzfsBW2HuzJRhwaQZJF+uChA/jvN1D1I10Cc9T94Ju9YsrNr1
-	27nBYb969ETtn0bB28kIUsEYGkudNauHXxMAEAsZZUuenwQl86vuvkpwVRR5Yx07vS3tTdaL3pb
-	qsOU89OiGytLBbV8LdUg8/Bv0yRckHmRky/WnCkm09mkbhKn7CTS0gejBTBCXlXrKLmeh/8hfga
-	0JdCEakObFxTOqhsfgsy1pumvJFEg2VAV/wFtWPM6RE6FThff6eyQebSDnCJMZz98mbFdNylrRK
-	zH65H9WhEUcHHRscLugfw+M/0=
-X-Google-Smtp-Source: AGHT+IEcGyW6Wy1k4I4mrqmEJrNmhDO/3ICtkA1wv9HqXpE1GA4A8FOzSyKlvNXQZJn5H+9FCilqUQ==
-X-Received: by 2002:a05:620a:29c5:b0:7e3:4aec:2888 with SMTP id af79cd13be357-7e8867ca173mr523543285a.35.1755399866644;
-        Sat, 16 Aug 2025 20:04:26 -0700 (PDT)
-Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e87e06a913sm369430285a.26.2025.08.16.20.04.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Aug 2025 20:04:26 -0700 (PDT)
-Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 605B3F40066;
-	Sat, 16 Aug 2025 23:04:25 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Sat, 16 Aug 2025 23:04:25 -0400
-X-ME-Sender: <xms:uUahaLscPFBD_WSTneNGPp2tkdvcy1WgzXTblU8HYKZr-l7ZnjEo7Q>
-    <xme:uUahaN-mnRssVlF_QUvBa9wNziqfXgIHq2pum7Vx6GebVrIArRiQKujn67vvmfeA1
-    ugYnJCG2XvAieERqQ>
-X-ME-Received: <xmr:uUahaDXGr-F5oHvn5Ad65Y7j-xA89I7gnGhvZfEHlSaPWRGkL4MxP8oK>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddugeekiedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpefhkeelhedtvdehhfdtvdekgffhkeefveffledvuedtffffveeiveegjedujedv
-    udenucffohhmrghinhepohhpvghrrghtihhonhhsrdhsrghfvghthienucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhht
-    phgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqd
-    gsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvgdpnhgs
-    pghrtghpthhtohepvdejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlohhssh
-    hinheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehv
-    ghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhfohhrqdhlihhnuh
-    igsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhkmhhmsehlihhsthhs
-    rdhlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhope
-    hgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhopegsjhhorhhnfegpghhhsehp
-    rhhothhonhhmrghilhdrtghomh
-X-ME-Proxy: <xmx:uUahaJusuFa-0t7Lw_LEL_9ELnKkA_q5UYdmYxy3Fk38xEm7-uWEmw>
-    <xmx:uUahaJ8XkBhmWiod53qs32Uqv3mGw6F_d7yNCbJLqtNmUpLUlCvNFA>
-    <xmx:uUahaC3_yhzmifJR9-qcusOPVtKDZLbqakA19xqCgKMAIr04CkG4pQ>
-    <xmx:uUahaOQd3jaWfajZEboVoaO3emueN1D2NIBbuPtDwHdSgrBBPy4fmQ>
-    <xmx:uUahaFBzSy_XpD15mAcb78ytkOv237PQkQqfHA-su0-RobZgt-Gj2hGh>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 16 Aug 2025 23:04:24 -0400 (EDT)
-Date: Sat, 16 Aug 2025 20:04:23 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Benno Lossin <lossin@kernel.org>
-Cc: linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	lkmm@lists.linux.dev, linux-arch@vger.kernel.org,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>, Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Lyude Paul <lyude@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v8 6/9] rust: sync: atomic: Add the framework of
- arithmetic operations
-Message-ID: <aKFGtzQnUdH4zUGD@tardis-2.local>
-References: <20250719030827.61357-1-boqun.feng@gmail.com>
- <20250719030827.61357-7-boqun.feng@gmail.com>
- <DC0AKAL1LW84.MR2RFTMX1H61@kernel.org>
- <aKCtbSDuJNrtdLNp@tardis-2.local>
- <DC43RPUDBY6M.1TGSQKJV9BKSF@kernel.org>
+        d=1e100.net; s=20230601; t=1755417462; x=1756022262;
+        h=content-transfer-encoding:cc:to:subject:from:content-language
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=q1jkR3N9Y1QTztsNiDkJcC+i9uf2sc9OYJvJHiG79qQ=;
+        b=fgFoB/u7J3uXh37Mt1pVdDhr1T/Drx3K1zOy2xXwSmHUwurTSMTlSmX/wu+6vL78zB
+         OnNY9Q2konImUDkdmNLXGq54HYtNR0ONl4L1uuXLeLqLc4fXaF54W4sEOEO8sMkziXDg
+         TJ3ugBeVZkGixyR/E7MBnFYllmUgbXyrB54kyWIhG1tnQRekPiPEx82VMPx07U2yLOaB
+         9MB+sDundmlMsshi8paUTraxTNxizx8sPJ8IJFfGY0Oe1XDGuKaj1Vy0+WZcSJC9HFpl
+         4Ala8jRlkoohddvuSIVNLiX9sYCKjeo6aD0988rjbErlGpYgMk2V1faLGdwhiBR4ggSZ
+         jPxg==
+X-Forwarded-Encrypted: i=1; AJvYcCWdFdsT+SFg7kDFYgzMkAQmmQQPTBB/BLfmjK6++lfpqOFSct4OmE+skAl90PTWZ/UrCLQdqztZWuk=@vger.kernel.org, AJvYcCXvgsiL1kflx7xkctaCbdFFEnfSrqnTeATun1td03379WpO8AbBdPDf6MJk6mQVge2OWiXJrmcsMd4/KObR@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTg7SGwGmzzoHooYoKfYlQrFQUsC6JQFZHcBfvI3/a7dVluQ0j
+	jN00KBWEnuONeZ9fF1uLu208J30faJ9rbvpqARooXuNkMXsMjS18JDf4HFjrrLUNtWv3
+X-Gm-Gg: ASbGncvK4tOIJ3VCgzRF8hpV1bKUgmTjAj+nw33klv50a6h4zaN7wiilrq4sHZkLGxB
+	tarQc0kqAATcDnzEUABzaibTTAV8VmwSZ6Hkr/UtFDBwA1xoJtuBkMi2hJBBpwBqoBRbit8zsts
+	iNlhXVzAW+Ww8vkZsU+st21DQMoLzgBFGpvjfbV/2sqeDBQSItaMfx5nTGQX3qcu1oMsGgYTcKc
+	Ldb3IhbvsrpEdgk50CDXXhMtt5INAcopmPSlpWImH0pZKfPER2HNlfkIGJgwVeVoBQQyfH+SGAX
+	opnXQzDpwY3JwwaVRpoxP4IhjZBYolNkb6+wLaTusx/Y+A+SCZe+cFVD4Be1P+CH36QZ8D+EEaE
+	+5ixLwx2chvGYlNcUFZJdu4JLrfdhj3tkwvh35m8cDTxVqqF3L47gb2jhVqqA
+X-Google-Smtp-Source: AGHT+IG0TuVeq8GaU64aAuSrS/zwB4M2Cdr1TpOKqXkZ6Cyu7l4eMbbzZ6Z/mb/euW/bgJ7ibOyzdQ==
+X-Received: by 2002:a5d:584d:0:b0:3a4:f912:86af with SMTP id ffacd0b85a97d-3bb6816f428mr2502294f8f.2.1755417462245;
+        Sun, 17 Aug 2025 00:57:42 -0700 (PDT)
+Received: from localhost (67.red-80-39-24.staticip.rima-tde.net. [80.39.24.67])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3bb676c9b1csm8361011f8f.45.2025.08.17.00.57.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Aug 2025 00:57:41 -0700 (PDT)
+Message-ID: <4616546f-f10c-419b-a32f-ae1a059f15e4@gmail.com>
+Date: Sun, 17 Aug 2025 09:57:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DC43RPUDBY6M.1TGSQKJV9BKSF@kernel.org>
+Content-Language: en-US, en-GB, es-ES
+From: Xose Vazquez Perez <xose.vazquez@gmail.com>
+Subject: Re: [PATCH] LoongArch: Increase COMMAND_LINE_SIZE to 4096
+To: Ming Wang <wangming01@loongson.cn>
+Cc: LINUX_ARCH-ML <linux-arch@vger.kernel.org>,
+ API-ML <linux-api@vger.kernel.org>, KERNEL-ML
+ <linux-kernel@vger.kernel.org>, X86-ML <x86@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Aug 16, 2025 at 09:35:26PM +0200, Benno Lossin wrote:
-> On Sat Aug 16, 2025 at 6:10 PM CEST, Boqun Feng wrote:
-> > On Tue, Aug 12, 2025 at 10:04:12AM +0200, Benno Lossin wrote:
-> >> On Sat Jul 19, 2025 at 5:08 AM CEST, Boqun Feng wrote:
-> >> > +/// Types that support atomic add operations.
-> >> > +///
-> >> > +/// # Safety
-> >> > +///
-> >> > +/// `wrapping_add` any value of type `Self::Repr::Delta` obtained by [`Self::rhs_into_delta()`] to
-> >> 
-> >> Can you add a normal comment TODO here:
-> >> 
-> >>     // TODO: properly define `wrapping_add` in this context.
-> >
-> > Yeah, this sounds good to me. How do you propose we arrange the normal
-> > comment with the doc comment, somthing like:
-> >
-> >     // TODO: properly define `wrapping_add` in this context.
-> >     
-> >     /// Types that support atomic add operations.
-> >     ///
-> >     /// # Safety
-> >     ///
-> >     /// `wrapping_add` any value of type `Self::Repr::Delta` obtained by [`Self::rhs_into_delta()`] to
-> >     ...
-> >     pub unsafe trait AtomicAdd<...> {
-> >         ...
-> >     }
+Ming Wang wrote:
+
+> The default COMMAND_LINE_SIZE of 512, inherited from asm-generic, is
+> too small for modern use cases. For example, kdump configurations or
+> extensive debugging parameters can easily exceed this limit.
 > 
+> Therefore, increase the command line size to 4096 bytes, aligning
+> LoongArch with the MIPS architecture. This change follows a broader
+> trend among architectures to raise this limit to support modern needs;
+> for instance, PowerPC increased its value for similar reasons in
+> commit a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE to 2048").
 > 
-> Inline maybe?
+> Similar to the change made for RISC-V in commit 61fc1ee8be26
+> ("riscv: Bump COMMAND_LINE_SIZE value to 1024"), this is considered
+> a safe change. The broader kernel community has reached a consensus
+> that modifying COMMAND_LINE_SIZE from UAPI headers does not
+> constitute a uABI breakage, as well-behaved userspace applications
+> should not rely on this macro.
 > 
->     /// Types that support atomic add operations.
->     ///
->     /// # Safety
->     ///
->     // TODO: properly define `wrapping_add` in this context:
-
-The colon looks a bit weird to me. I would replace that with a period,
-i.e.
-
-     // TODO: properly define `wrapping_add` in the following comment.
-     /// `wrapping_add` any value of type `Self::Repr::Delta` obtained by [`Self::rhs_into_delta()`] to
-
-Thoughts?
-
-Regards,
-Boqun
-
->     /// `wrapping_add` any value of type `Self::Repr::Delta` obtained by [`Self::rhs_into_delta()`] to
->     /// any value of type `Self::Repr` obtained through transmuting a value of type `Self` to must
->     /// yield a value with a bit pattern also valid for `Self`.
-> 
+> Suggested-by: Huang Cun <cunhuang@tencent.com>
+> Signed-off-by: Ming Wang <wangming01@loongson.cn>
 > ---
-> Cheers,
-> Benno
+>  arch/loongarch/include/uapi/asm/setup.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>  create mode 100644 arch/loongarch/include/uapi/asm/setup.h
 > 
+> diff --git a/arch/loongarch/include/uapi/asm/setup.h b/arch/loongarch/include/uapi/asm/setup.h
+> new file mode 100644
+> index 000000000000..d46363ce3e02
+> --- /dev/null
+> +++ b/arch/loongarch/include/uapi/asm/setup.h
+> @@ -0,0 +1,8 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +
+> +#ifndef _UAPI_ASM_LOONGARCH_SETUP_H
+> +#define _UAPI_ASM_LOONGARCH_SETUP_H
+> +
+> +#define COMMAND_LINE_SIZE	4096
+> +
+> +#endif /* _UAPI_ASM_LOONGARCH_SETUP_H */
+> -- 
+> 2.43.0
+
+A bit chaotic and arbitrary sizes:
+
+$ git grep "define.*COMMAND_LINE_SIZE"
+arch/alpha/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE	256
+arch/arc/include/asm/setup.h:#define COMMAND_LINE_SIZE 256
+arch/arm64/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE	2048
+arch/arm/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE 1024
+arch/m68k/include/asm/setup.h:#define CL_SIZE COMMAND_LINE_SIZE
+arch/m68k/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE 256
+arch/microblaze/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE	256
+arch/mips/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE	4096
+arch/mips/loongson64/reset.c:#define KEXEC_ARGV_SIZE	COMMAND_LINE_SIZE
+arch/parisc/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE	1024
+arch/powerpc/boot/ops.h:#define	BOOT_COMMAND_LINE_SIZE	2048
+arch/powerpc/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE	2048
+arch/riscv/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE	1024
+arch/s390/include/asm/setup.h:#define COMMAND_LINE_SIZE CONFIG_COMMAND_LINE_SIZE
+arch/s390/include/asm/setup.h:#define LEGACY_COMMAND_LINE_SIZE	896
+arch/sparc/include/uapi/asm/setup.h:# define COMMAND_LINE_SIZE 2048
+arch/sparc/include/uapi/asm/setup.h:# define COMMAND_LINE_SIZE 256
+arch/um/include/asm/setup.h:#define COMMAND_LINE_SIZE 4096
+arch/x86/include/asm/setup.h:#define COMMAND_LINE_SIZE 2048
+arch/xtensa/include/uapi/asm/setup.h:#define COMMAND_LINE_SIZE	256
+include/uapi/asm-generic/setup.h:#define COMMAND_LINE_SIZE	512
+kernel/trace/ftrace.c:#define FTRACE_FILTER_SIZE		COMMAND_LINE_SIZE
+tools/power/x86/turbostat/turbostat.c:#define COMMAND_LINE_SIZE 2048
+tools/testing/selftests/kho/init.c:#define COMMAND_LINE_SIZE	2048
+
+Maybe they should be standardized ???
+
+And for s390 it is configurable, see 622021cd6c560
 
