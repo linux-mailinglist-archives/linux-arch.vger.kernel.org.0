@@ -1,152 +1,244 @@
-Return-Path: <linux-arch+bounces-13189-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13190-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C2E2B2A0DA
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Aug 2025 13:58:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CC3BB2AFCD
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Aug 2025 19:55:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A5AF1967F9A
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Aug 2025 11:53:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 222BF560C55
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Aug 2025 17:55:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97D1131B121;
-	Mon, 18 Aug 2025 11:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="h2oUcSs1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Xn1NVHAl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7CCC24C07F;
+	Mon, 18 Aug 2025 17:55:08 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC68331B11E;
-	Mon, 18 Aug 2025 11:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C5D35950;
+	Mon, 18 Aug 2025 17:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755517934; cv=none; b=mN29VIVPVGTtrempVa+pFk4LnuZdoVnj8r9nTogDlhYRYUdkJ4buBaR0kHPT/bkcMVRJ0TTOPXhdmqJzOlAxTFLYKMnGqGSW9j7E73FxSUKnUYeQGYs9UJQr8NvagaMiguFlvP8V1QZuJj+kLJCcAGOBXI3jZDaX1GHJQbFnBQ4=
+	t=1755539708; cv=none; b=HY3FhGnCD0weQHfP1YG+NKc9bE8bRbVTpOetpDzo4wbnB6FZXaRnDEtXriBnZa5219guhndnCIG7snkdsQrhr3mP+uZWVltNM5rHfrEonvMVdloZ4a7cNoI+SnQyvH4FfpxMmkUdD7ds5C/xWewQSlv7+DS1Rdyg1lYvZTYqO9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755517934; c=relaxed/simple;
-	bh=BgEMoriLmYxwTAa7R5ERI/+xqJkVQhPiYVNAlgRqxAo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=HVLrz/qCmxAvN5Pi5oOm7lXyNHswCCGY7fvwZYOuzCI39kVyokQz8+VuK5UgR00wCYASiavXNkyYXNcpj9xnpCRPFXM9KNwwZO+rf0ugKSWrN/nVCOuFvqFC8dJb133ZEOSVnH7f2JpXEobLfzYI/f6YX5qjOwOeT+Ip8OoNT3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=h2oUcSs1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Xn1NVHAl; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id D1493140019F;
-	Mon, 18 Aug 2025 07:52:10 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 18 Aug 2025 07:52:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1755517930;
-	 x=1755604330; bh=xdAWM4VoEFpKIci+YeNFUKl++/E12AuQc7lCaC4JGcM=; b=
-	h2oUcSs131J819wJvJTUef53dLSfrK3pHFPlRRldLsqNj9I/hXPeoGtIHI0iT3/y
-	cDYnQVVpuW99OmB7K+lPEFvYdVlGGBNmmq5brTZ1CAlRoGmeryryE1GgmNfXg9uh
-	TgBMuyniCnAQzZ49puTDzar5NmC2cyIQM67Krx8syaWCMDckSSPKeP8gtu49mR+G
-	CScPZBKcukCsHxfgw5eePK/lgh0k5Afs7gCHTtSlDE6Igs8y0RlJdZCC0DWaBMRg
-	3jpdEJ3JKLLqkOvj0mbZeYhRRnHHa/10vtfCvAe6EL/zUe+Hg6IYuunKbU10dpID
-	qk1wvIO+zggkXBgzJra/9g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1755517930; x=
-	1755604330; bh=xdAWM4VoEFpKIci+YeNFUKl++/E12AuQc7lCaC4JGcM=; b=X
-	n1NVHAlgbfDXUlT2I+6XovZZtytwOYYHPOHqmZcI+YdW7j58ItLIEfUJAZ3lVOV6
-	BwkxX93JgbcU+Z1tJZjR7UFzFxrmFtg+ZzAc6fYXpjM3ZltckyQADhlFNe2qJG2J
-	kX+4e0UCLeJGHkp5gxeCB0L+CmHqcEeSK0mK5gspf3CL3JOjNvb3TWJI6GyHs22l
-	s9ycEf9qKB17CHI5RpN3wR1Q4JrHBLbL3zWKAhYwwj+h2Igl2dMGUvwkzO3Nrtiv
-	7V2g2jQ2PzcYqqKPaFq0h+ePlEDqvP1G3YJwsXG2AvIs0h47UXsRBrjfjM14Pef5
-	w0oj60Po2VNhCShuZi7dA==
-X-ME-Sender: <xms:6ROjaOuitNLKajWCXYgTbY8qebcCFPEWU-gG3euwtsq2g5EHyoqrFw>
-    <xme:6ROjaDec4kPycLiFwmKAMf_8STikAe2q1_5SGAwDjQYAQ32OeQyoIArLarw0HxrwE
-    PczG7UIPN7LJrDzVBw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduhedvheegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddupdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehhrghrihhsohhknhesrghmrgiiohhnrdgtohhmpdhrtghpthhtoh
-    eptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghr
-    khdrrhhuthhlrghnugesrghrmhdrtghomhdprhgtphhtthhopegtlhesghgvnhhtfihord
-    horhhgpdhrtghpthhtohepmhgvmhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
-    iihhvghnghhlihhfvghnghdusehhuhgrfigvihdrtghomhdprhgtphhtthhopehpvghtvg
-    hriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:6ROjaFqAG9vVd4hWbW6eNyE7SESzQeaM9w92hMsr4lLEwp7yjsDzFg>
-    <xmx:6ROjaMofJKUARlp42HjoQme1HABCrz4GM1iJYrMnUidh95kfG7D9xA>
-    <xmx:6ROjaDHMlVoyoJbcVzEHbynZIsAzzrbI8zRo0UwXjZ1TdWUZpXVJqQ>
-    <xmx:6ROjaGo6Jrd7CjQbAz9kCTkTcJLtjqJ2mGKByJ8Caslhk4ctJ8mcmA>
-    <xmx:6hOjaDx8XTH3TIRclWvE8wp-hX4Cj7u2C4YXrjNi-XuGmN1mVBnwmWxF>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id EF07E700065; Mon, 18 Aug 2025 07:52:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1755539708; c=relaxed/simple;
+	bh=VJ1CkKtywdMxJWNUL6EhAq1DnqQL7DbmlHelKHs9YL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NXlRiLsOrTW5aisPrA2fOUn6ZQUSxZAOPkup6Km/xW5IbWeqmrRpuw/IVaqYFhd1wqWkllFT5HSnX8CMQAl/fT65moU/ijjJhodBtaaK1f9WDCFNRAp0XZtIj+bXp1GvGsJcXDciu2l+9d7VuELyHFmqjpFRXxZYo+ecRSQmbko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A47FDC4CEEB;
+	Mon, 18 Aug 2025 17:55:04 +0000 (UTC)
+Date: Mon, 18 Aug 2025 18:55:02 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+	arnd@arndb.de, will@kernel.org, peterz@infradead.org,
+	akpm@linux-foundation.org, mark.rutland@arm.com,
+	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+	rafael@kernel.org, daniel.lezcano@linaro.org
+Subject: Re: [PATCH v3 1/5] asm-generic: barrier: Add
+ smp_cond_load_relaxed_timewait()
+Message-ID: <aKNo9pxx2w9sjJjc@arm.com>
+References: <20250627044805.945491-1-ankur.a.arora@oracle.com>
+ <20250627044805.945491-2-ankur.a.arora@oracle.com>
+ <aJXWyxzkA3x61fKA@arm.com>
+ <877bz98sqb.fsf@oracle.com>
+ <aJy414YufthzC1nv@arm.com>
+ <87bjoi2wdf.fsf@oracle.com>
+ <aJ3K4tQCztOXF6hO@arm.com>
+ <87plctwq7x.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Awa8eXB9XRs-
-Date: Mon, 18 Aug 2025 13:51:28 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Catalin Marinas" <catalin.marinas@arm.com>
-Cc: "Ankur Arora" <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
- "Will Deacon" <will@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Mark Rutland" <mark.rutland@arm.com>, harisokn@amazon.com,
- "Christoph Lameter (Ampere)" <cl@gentwo.org>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, zhenglifeng1@huawei.com,
- xueshuai@linux.alibaba.com, "Joao Martins" <joao.m.martins@oracle.com>,
- "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
- "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "Daniel Lezcano" <daniel.lezcano@linaro.org>
-Message-Id: <1ccb0011-d2d2-453f-afcd-dd2967bf572a@app.fastmail.com>
-In-Reply-To: <aJ3d2uoKtDop_gQO@arm.com>
-References: <20250627044805.945491-1-ankur.a.arora@oracle.com>
- <20250627044805.945491-2-ankur.a.arora@oracle.com> <aJXWyxzkA3x61fKA@arm.com>
- <877bz98sqb.fsf@oracle.com> <aJy414YufthzC1nv@arm.com>
- <67b6b738-0f1c-4dd4-817d-95f55ec9272b@app.fastmail.com>
- <aJ3d2uoKtDop_gQO@arm.com>
-Subject: Re: [PATCH v3 1/5] asm-generic: barrier: Add smp_cond_load_relaxed_timewait()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87plctwq7x.fsf@oracle.com>
 
-On Thu, Aug 14, 2025, at 15:00, Catalin Marinas wrote:
-> On Wed, Aug 13, 2025 at 06:29:37PM +0200, Arnd Bergmann wrote:
->> On Wed, Aug 13, 2025, at 18:09, Catalin Marinas wrote:
->> and virtual machines with CPU overcommit.
->
-> Not sure it helps here. With vCPU overcommit, KVM enables WFE trapping
-> and the event stream no longer has any effect (it's not like it
-> interrupts the host).
+On Sun, Aug 17, 2025 at 03:14:26PM -0700, Ankur Arora wrote:
+> So, I tried to pare back the code and the following (untested) is
+> what I came up with. Given the straight-forward rate-limiting, and the
+> current users not needing accurate timekeeping, this uses a
+> bool time_check_expr. Figured I'd keep it simple until someone actually
+> needs greater complexity as you suggested.
+> 
+> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+> index d4f581c1e21d..e8793347a395 100644
+> --- a/include/asm-generic/barrier.h
+> +++ b/include/asm-generic/barrier.h
+> @@ -273,6 +273,34 @@ do {                                                                       \
+>  })
+>  #endif
+> 
+> +
+> +#ifndef SMP_TIMEWAIT_SPIN_COUNT
+> +#define SMP_TIMEWAIT_SPIN_COUNT                200
+> +#endif
+> +
+> +#ifndef smp_cond_load_relaxed_timewait
+> +#define smp_cond_load_relaxed_timewait(ptr, cond_expr,                 \
+> +                                       time_check_expr)                \
+> +({                                                                     \
+> +       typeof(ptr) __PTR = (ptr);                                      \
+> +       __unqual_scalar_typeof(*ptr) VAL;                               \
+> +       u32 __n = 0, __spin = SMP_TIMEWAIT_SPIN_COUNT;                  \
+> +                                                                       \
+> +       for (;;) {                                                      \
+> +               VAL = READ_ONCE(*__PTR);                                \
+> +               if (cond_expr)                                          \
+> +                       break;                                          \
+> +               cpu_relax();                                            \
+> +               if (++__n < __spin)                                     \
+> +                       continue;                                       \
+> +               if ((time_check_expr))                                  \
+> +                       break;                                          \
+> +               __n = 0;                                                \
+> +       }                                                               \
+> +       (typeof(*ptr))VAL;                                              \
+> +})
+> +#endif
 
-I would expect a similar overhead for the WFE trapping as for the
-bare-metal hardware case: When the WFE traps, the host has to
-reschedule all guests that are in WFE periodically, while WFET
-with event stream disabled means this can be driven by an accurate
-host timer.
+This looks fine, at least as it would be used by poll_idle(). The only
+reason for not folding time_check_expr into cond_expr is the poll_idle()
+requirement to avoid calling time_check_expr too often.
 
-> That said, my worry is that either broken hardware or software rely on
-> the event stream unknowingly, e.g. someone using WFE in a busy loop. And
-> for hardware errata, we've had a few where the wakeup events don't
-> propagate between clusters, though these we can toggle on a case by case
-> basis.
+> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+> index f5801b0ba9e9..c9934ab68da2 100644
+> --- a/arch/arm64/include/asm/barrier.h
+> +++ b/arch/arm64/include/asm/barrier.h
+> @@ -219,6 +219,43 @@ do {                                                                       \
+>         (typeof(*ptr))VAL;                                              \
+>  })
+> 
+> +extern bool arch_timer_evtstrm_available(void);
+> +
+> +#ifndef SMP_TIMEWAIT_SPIN_COUNT
+> +#define SMP_TIMEWAIT_SPIN_COUNT                200
+> +#endif
+> +
+> +#define smp_cond_load_relaxed_timewait(ptr, cond_expr,                 \
+> +                                         time_check_expr)              \
+> +({                                                                     \
+> +       typeof(ptr) __PTR = (ptr);                                      \
+> +       __unqual_scalar_typeof(*ptr) VAL;                               \
+> +       u32 __n = 0, __spin = 0;                                        \
+> +       bool __wfet = alternative_has_cap_unlikely(ARM64_HAS_WFXT);     \
+> +       bool __wfe = arch_timer_evtstrm_available();                    \
+> +       bool __wait = false;                                            \
+> +                                                                       \
+> +       if (__wfet || __wfe)                                            \
+> +               __wait = true;                                          \
+> +       else                                                            \
+> +               __spin = SMP_TIMEWAIT_SPIN_COUNT;                       \
+> +                                                                       \
+> +       for (;;) {                                                      \
+> +               VAL = READ_ONCE(*__PTR);                                \
+> +               if (cond_expr)                                          \
+> +                       break;                                          \
+> +               cpu_relax();                                            \
+> +               if (++__n < __spin)                                     \
+> +                       continue;                                       \
+> +               if ((time_check_expr))                                  \
+> +                       break;                                          \
+> +               if (__wait)                                             \
+> +                       __cmpwait_relaxed(__PTR, VAL);                  \
+> +               __n = 0;                                                \
+> +       }                                                               \
+> +       (typeof(*ptr))VAL;                                              \
+> +})
 
-Don't we already support hardware without a functional architected
-timer even with? Those don't use the event stream today even when
-CONFIG_ARM_ARCH_TIMER_EVTSTREAM is enabled.
+For arm64, I wouldn't bother with the spin count. Since cpu_relax()
+doesn't do anything, I doubt it makes any difference, especially as we
+are likely to use WFE anyway. If we do add one, I'd like it backed by
+some numbers to show it makes a difference in practice.
 
-     Arnd
+The question is whether 100us granularity is good enough for poll_idle()
+(I came to the conclusion it's fine for rqspinlock, given their 1ms
+deadlock check).
+
+>  #include <asm-generic/barrier.h>
+> 
+> __cmpwait_relaxed() will need adjustment to set a deadline for WFET.
+
+Yeah, __cmpwait_relaxed() doesn't use WFET as it doesn't need a timeout
+(it just happens to have one with the event stream).
+
+We could extend this or create a new one that uses WFET and takes an
+argument. If extending this one, for example a timeout argument of 0
+means WFE, non-zero means WFET cycles. This adds a couple of more
+instructions.
+
+What I had in mind of time_expr was a ktime_t would be something like:
+
+	for (;;) {
+		VAL = READ_ONCE(*__PTR);
+		if (cond_expr)
+			break;
+
+		cycles = some_func_of(time_expr);	// see __udelay()
+		if (cycles <= 0)
+			break;
+
+		if (__wfet) {
+			__cmpwait_relaxed(__PTR, VAL, get_cycles() + cycles);
+		} else if (__wfe && cycles >= timer_evt_period) {
+			__cmpwait_relaxed(__PTR, VAL, 0);
+		} else {
+			cpu_relax();
+		}
+	}
+
+Now, if we don't care about the time check granularity (for now) and
+time_check_expr is a bool (this seems to work better for rqspinlock), I
+think we could do something like:
+
+	for (;;) {
+		VAL = READ_ONCE(*__PTR);
+		if (cond_expr)
+			break;
+		if (time_check_expr)
+			break;
+
+		if (__wfe) {
+			__cmpwait_relaxed(__PTR, VAL, 0);
+		} else if (__wfet) {
+			__cmpwait_relaxed(__PTR, VAL, get_cycles() + timer_evt_period);
+		} else {
+			cpu_relax();
+		}
+	}
+
+We go with WFE first in this case to avoid get_cycles() unnecessarily.
+
+I'd suggest we add the WFET support in __cmpwait_relaxed() (or a
+different function) as a separate patch, doesn't even need to be part of
+this series. WFE is good enough to get things moving. WFET will only
+make a difference if (1) we disable the event stream or (2) we need
+better accuracy of the timeout.
+
+> AFAICT the rqspinlock code should be able to work by specifying something
+> like:
+>   ((ktime_get_mono_fast_ns() > tval)) || (deadlock_check(&lock_context)))
+> as the time_check_expr.
+
+Why not the whole RES_CHECK_TIMEOUT(...) as in rqspinlock.c? It does the
+deadlock check only after a timeout over a millisecond. Just follow the
+res_atomic_cond_read_acquire() calls but replace '||' with a comma.
+
+> I think they also want to rate limit how often deadlock_check() is
+> called, so they can redefine SMP_TIMEWAIT_SPIN_COUNT to some large
+> value for arm64.
+
+Everyone would want a different rate of checking other stuff, so I think
+this needs to go in their time_check_expr.
+
+-- 
+Catalin
 
