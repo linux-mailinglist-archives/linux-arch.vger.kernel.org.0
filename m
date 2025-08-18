@@ -1,203 +1,152 @@
-Return-Path: <linux-arch+bounces-13187-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13189-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88362B29E3D
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Aug 2025 11:44:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C2E2B2A0DA
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Aug 2025 13:58:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 467BB3B0606
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Aug 2025 09:44:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A5AF1967F9A
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Aug 2025 11:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 664B530F52F;
-	Mon, 18 Aug 2025 09:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97D1131B121;
+	Mon, 18 Aug 2025 11:52:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="hVcdb+/+"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="h2oUcSs1";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Xn1NVHAl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AC9A21B9E2
-	for <linux-arch@vger.kernel.org>; Mon, 18 Aug 2025 09:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC68331B11E;
+	Mon, 18 Aug 2025 11:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755510258; cv=none; b=stzWapqKvJ4DsjTER1QhIEUC54TkxLyez/dda9T+CjubtIhLFPfNCv7v4BtaIPjOIgTlJYL4M2I5AO8yMNsYTJtK64t3xYKqZYwmcsd5qagXXM9Z87um64+CcKebYQFh/0N36npGQCcO9i54prqPX2fEjlQK4vaHJ2sgpDcbukk=
+	t=1755517934; cv=none; b=mN29VIVPVGTtrempVa+pFk4LnuZdoVnj8r9nTogDlhYRYUdkJ4buBaR0kHPT/bkcMVRJ0TTOPXhdmqJzOlAxTFLYKMnGqGSW9j7E73FxSUKnUYeQGYs9UJQr8NvagaMiguFlvP8V1QZuJj+kLJCcAGOBXI3jZDaX1GHJQbFnBQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755510258; c=relaxed/simple;
-	bh=D1SHf/Q6k0gRHYTrXsDfLwpQODuU63rUiRHOBs/zSPo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YLQzShc4pdZ73W2bCc9Ov2TUnxCCMxob0ygX4mbBOxcBOQs4A/f50EavjgJ1wIBs3AzA6C9qDbR1IXq040w/umYwGNKeREu3qaXwjB3K5E1rjuVgNZRdhkoDFkR09k+4xKBTL4EeDGhuNbag7kMnxnmMfVpMg+kjSFwH4VgV7ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=hVcdb+/+; arc=none smtp.client-ip=209.85.210.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so3246431b3a.1
-        for <linux-arch@vger.kernel.org>; Mon, 18 Aug 2025 02:44:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1755510256; x=1756115056; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OhUabrkYn48Lbikledq2qqqh5BAE4/QD+CFPQO3FXYg=;
-        b=hVcdb+/+2F6eC8dmagybpHuDcj+SckB99H98mgqiKJNlCR7A9Y32zyYRMRCEuYiQdq
-         2p7R0YV2adsgeL40iNrcKmb2u04IhkUQXNjOX2GV3l/gNcfB3Y9oGJOw3I12tO1ur38D
-         A6lHYVDIZRUfVKGR0xHweDKiPIVWpCXvMsJVELGP6B+nDlNpCeOftCiDSeS4F4nt7ZU8
-         AnuxVTyGXcNjfGKdkUdbGyq3hDW0SZhp7kn2vN+c3t+GmDwpRssGtiJHgQUalJwZdGRU
-         fCXih0nlFHW3v0Kqt6jvNe9+439EXXMDjeHvHjbZXD3aTZenPbUjRX3ItK7g9JVnH0jx
-         5OzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755510256; x=1756115056;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OhUabrkYn48Lbikledq2qqqh5BAE4/QD+CFPQO3FXYg=;
-        b=D7a7bum/U+LWzLXU8l+/dCzQ1LDdiypwCcXA6SHsVJyF2hs/KptLSnxeKjLMeR71tP
-         cGLTJ79dCrntXYwpnQVqYFV7ep1UwuZSViEUfzeGmXfsuDhMOiqkKR/0fK8TQjGGYqQZ
-         ZOI5yZplVMkWAbXHkOxgWz/n6Wb4ij/fAVyYAdIirITUhnc4XwikFNw+k+VDfO8afuRk
-         ldqeMMQXRAs+8y71+qCzMuJrfUneVmziqSId/kV/Bvr3vTRwF2MZatcqePNdCPMl+Lcj
-         80/tHLjLnxjzSZiTCpjXAuHL7KaGMKnlfWH0nLvp882MITDBswwPdYTG2XmiYUbNzJjg
-         8OyA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6g6MHz9935bg9TCRHoFmWC/C+J0XWyRspVPE2iJi6C5UdIDv2Zs4VGvfHvACnNOTcC2FK1ecyA66x@vger.kernel.org
-X-Gm-Message-State: AOJu0YyD1FlV213fI26Kh92BSnlORy1O08a0z3++qM8XPnc/jaQqnqZY
-	onRFLWu/oSbKxDdTjc96kdpZuku+7XaagPFRhmshPaab432217Bzz9ULcvaBf88dc2U=
-X-Gm-Gg: ASbGncsTSADtDzzHTokfkx0ISAkKmxIPJsBynE4TnrdRwzq4ZFX7++WFMKxgA4oKBiR
-	jFjJXm51D/cctp2C34tuHFHaIIcgMnWZvtN4gbNYhXP0ekdAiYu4NvCRNz9zP9ATyvbA4LN6+iY
-	DXuBMHMgrjbeK/RQP07uADIJnaKNneSBwBuJOZXH4FpjZ6igOwv0tjhHo03tIeDwNDsZyIbnyG+
-	OKcDMIAUE9oV+tt6hgfqHwzrhQ+ChB4PmIMx5nhafJqn2cTmLBYa9rGuRsiEc0tk5DUtxycVqnG
-	gBLwmceRIDkpFKn5ucYdeKMvCL5uaBDcdD6DgPImgFP/9X9eDmUBBgQ92YEV08qzEsAuczNj54/
-	XN2lTC/Uni+7PTj0N+/4YPAaJ9bB/AniLRNRTx8x5vo81ywr+wO7CG9Qj0ESW
-X-Google-Smtp-Source: AGHT+IEZaY/YH9MtTwNMDfFJQKUI2OS6UAuZArNL0C86X+FxToOfXP0efaPYaMKUFj+v4u4OB+zJ+g==
-X-Received: by 2002:a05:6a20:2451:b0:222:ca3f:199 with SMTP id adf61e73a8af0-240d297f5c3mr16558144637.18.1755510255710;
-        Mon, 18 Aug 2025 02:44:15 -0700 (PDT)
-Received: from H3DJ4YJ04F.bytedance.net ([203.208.189.9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e45292c7bsm6733189b3a.36.2025.08.18.02.44.05
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 18 Aug 2025 02:44:15 -0700 (PDT)
-From: Yongting Lin <linyongting@bytedance.com>
-To: anthony.yznaga@oracle.com,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org
-Cc: akpm@linux-foundation.org,
-	andreyknvl@gmail.com,
-	arnd@arndb.de,
-	brauner@kernel.org,
-	catalin.marinas@arm.com,
-	dave.hansen@intel.com,
-	david@redhat.com,
-	ebiederm@xmission.com,
-	khalid@kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linyongting@bytedance.com,
-	luto@kernel.org,
-	markhemm@googlemail.com,
-	maz@kernel.org,
-	mhiramat@kernel.org,
-	neilb@suse.de,
-	pcc@google.com,
-	rostedt@goodmis.org,
-	vasily.averin@linux.dev,
-	viro@zeniv.linux.org.uk,
-	willy@infradead.org,
-	xhao@linux.alibaba.com,
-	linux-kselftest@vger.kernel.org,
-	libo.gcs85@bytedance.com,
-	yuanzhu@bytedance.com
-Subject: Re: [PATCH v2 13/20] x86/mm: enable page table sharing
-Date: Mon, 18 Aug 2025 17:44:02 +0800
-Message-Id: <20250818094402.13385-1-linyongting@bytedance.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <e3aca3b7-4f38-410d-91d6-5a2521dedb6c@oracle.com>
-References: <e3aca3b7-4f38-410d-91d6-5a2521dedb6c@oracle.com>
+	s=arc-20240116; t=1755517934; c=relaxed/simple;
+	bh=BgEMoriLmYxwTAa7R5ERI/+xqJkVQhPiYVNAlgRqxAo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=HVLrz/qCmxAvN5Pi5oOm7lXyNHswCCGY7fvwZYOuzCI39kVyokQz8+VuK5UgR00wCYASiavXNkyYXNcpj9xnpCRPFXM9KNwwZO+rf0ugKSWrN/nVCOuFvqFC8dJb133ZEOSVnH7f2JpXEobLfzYI/f6YX5qjOwOeT+Ip8OoNT3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=h2oUcSs1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Xn1NVHAl; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id D1493140019F;
+	Mon, 18 Aug 2025 07:52:10 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Mon, 18 Aug 2025 07:52:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1755517930;
+	 x=1755604330; bh=xdAWM4VoEFpKIci+YeNFUKl++/E12AuQc7lCaC4JGcM=; b=
+	h2oUcSs131J819wJvJTUef53dLSfrK3pHFPlRRldLsqNj9I/hXPeoGtIHI0iT3/y
+	cDYnQVVpuW99OmB7K+lPEFvYdVlGGBNmmq5brTZ1CAlRoGmeryryE1GgmNfXg9uh
+	TgBMuyniCnAQzZ49puTDzar5NmC2cyIQM67Krx8syaWCMDckSSPKeP8gtu49mR+G
+	CScPZBKcukCsHxfgw5eePK/lgh0k5Afs7gCHTtSlDE6Igs8y0RlJdZCC0DWaBMRg
+	3jpdEJ3JKLLqkOvj0mbZeYhRRnHHa/10vtfCvAe6EL/zUe+Hg6IYuunKbU10dpID
+	qk1wvIO+zggkXBgzJra/9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1755517930; x=
+	1755604330; bh=xdAWM4VoEFpKIci+YeNFUKl++/E12AuQc7lCaC4JGcM=; b=X
+	n1NVHAlgbfDXUlT2I+6XovZZtytwOYYHPOHqmZcI+YdW7j58ItLIEfUJAZ3lVOV6
+	BwkxX93JgbcU+Z1tJZjR7UFzFxrmFtg+ZzAc6fYXpjM3ZltckyQADhlFNe2qJG2J
+	kX+4e0UCLeJGHkp5gxeCB0L+CmHqcEeSK0mK5gspf3CL3JOjNvb3TWJI6GyHs22l
+	s9ycEf9qKB17CHI5RpN3wR1Q4JrHBLbL3zWKAhYwwj+h2Igl2dMGUvwkzO3Nrtiv
+	7V2g2jQ2PzcYqqKPaFq0h+ePlEDqvP1G3YJwsXG2AvIs0h47UXsRBrjfjM14Pef5
+	w0oj60Po2VNhCShuZi7dA==
+X-ME-Sender: <xms:6ROjaOuitNLKajWCXYgTbY8qebcCFPEWU-gG3euwtsq2g5EHyoqrFw>
+    <xme:6ROjaDec4kPycLiFwmKAMf_8STikAe2q1_5SGAwDjQYAQ32OeQyoIArLarw0HxrwE
+    PczG7UIPN7LJrDzVBw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduhedvheegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddupdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehhrghrihhsohhknhesrghmrgiiohhnrdgtohhmpdhrtghpthhtoh
+    eptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghr
+    khdrrhhuthhlrghnugesrghrmhdrtghomhdprhgtphhtthhopegtlhesghgvnhhtfihord
+    horhhgpdhrtghpthhtohepmhgvmhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
+    iihhvghnghhlihhfvghnghdusehhuhgrfigvihdrtghomhdprhgtphhtthhopehpvghtvg
+    hriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:6ROjaFqAG9vVd4hWbW6eNyE7SESzQeaM9w92hMsr4lLEwp7yjsDzFg>
+    <xmx:6ROjaMofJKUARlp42HjoQme1HABCrz4GM1iJYrMnUidh95kfG7D9xA>
+    <xmx:6ROjaDHMlVoyoJbcVzEHbynZIsAzzrbI8zRo0UwXjZ1TdWUZpXVJqQ>
+    <xmx:6ROjaGo6Jrd7CjQbAz9kCTkTcJLtjqJ2mGKByJ8Caslhk4ctJ8mcmA>
+    <xmx:6hOjaDx8XTH3TIRclWvE8wp-hX4Cj7u2C4YXrjNi-XuGmN1mVBnwmWxF>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id EF07E700065; Mon, 18 Aug 2025 07:52:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: Awa8eXB9XRs-
+Date: Mon, 18 Aug 2025 13:51:28 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Catalin Marinas" <catalin.marinas@arm.com>
+Cc: "Ankur Arora" <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+ "Will Deacon" <will@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, harisokn@amazon.com,
+ "Christoph Lameter (Ampere)" <cl@gentwo.org>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, zhenglifeng1@huawei.com,
+ xueshuai@linux.alibaba.com, "Joao Martins" <joao.m.martins@oracle.com>,
+ "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+ "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Daniel Lezcano" <daniel.lezcano@linaro.org>
+Message-Id: <1ccb0011-d2d2-453f-afcd-dd2967bf572a@app.fastmail.com>
+In-Reply-To: <aJ3d2uoKtDop_gQO@arm.com>
+References: <20250627044805.945491-1-ankur.a.arora@oracle.com>
+ <20250627044805.945491-2-ankur.a.arora@oracle.com> <aJXWyxzkA3x61fKA@arm.com>
+ <877bz98sqb.fsf@oracle.com> <aJy414YufthzC1nv@arm.com>
+ <67b6b738-0f1c-4dd4-817d-95f55ec9272b@app.fastmail.com>
+ <aJ3d2uoKtDop_gQO@arm.com>
+Subject: Re: [PATCH v3 1/5] asm-generic: barrier: Add smp_cond_load_relaxed_timewait()
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Thank you! Anthony.
-
-Yep, I checked the comments in arch/mm/x86/fault.c file which says as your
-advices in previous email.
-
-
-I changed my code in kernel 5.5 as below:
-
-       if (unlikely(is_shared_vma) && ((fault & VM_FAULT_RETRY) &&
-           (flags & FAULT_FLAG_ALLOW_RETRY) || fault_signal_pending(fault, regs)))
-               mmap_read_unlock(mm);
-
-BTW: I wrote some selftests in my github repostory, which perform
-the basic function of mshare, and I will write some complicated cases
-to support the new functions or defect found in mshare. For example,
-once you support mshare as a VMA in KVM (just as the defeat viewed by 
-Jann Horn), I will add extra test cases to verify its correctiness for 
-this scenario.
-
-From Jann Horn's review:
-https://lore.kernel.org/all/CAG48ez3cUZf+xOtP6UkkS2-CmOeo+3K5pvny0AFL_XBkHh5q_g@mail.gmail.com/
-
-Currently, I put my selftest in my github repostory, and you could retrieve it
-as below:
-
-    git remote add yongting-mshare-selftests https://github.com/ivanalgo/linux-kernel-develop/
-    git fetch yongting-mshare-selftests dev-mshare-v2-selftest-v1
-    git cherry-pick a64f2ff6497d13c09badc0fc68c44d9995bc2fef
-
-At this stage, I am not sure what is the best way to proceed:
-- Should I send them as part of your next version (v3)?
-- Or should I post them separately as [RFC PATCH] for early review?
-
-Please let me know your preference and any sugestion is welcome.
-I am happy to rebase and resend in the format that works best for
-the community.
-
-Thanks
-Yongting
-
-> Anthony
+On Thu, Aug 14, 2025, at 15:00, Catalin Marinas wrote:
+> On Wed, Aug 13, 2025 at 06:29:37PM +0200, Arnd Bergmann wrote:
+>> On Wed, Aug 13, 2025, at 18:09, Catalin Marinas wrote:
+>> and virtual machines with CPU overcommit.
 >
->>
->> As a result, needs to release vma->vm_mm.mmap_lock as well.
->>
->> So it is supposed to be like below:
->>
->> -    fault = handle_mm_fault(vma, address, flags, regs);
->> +    fault = handle_mm_fault(vma, addr, flags, regs);
->> +
->> +    if (unlikely(is_shared_vma) && ((fault & VM_FAULT_COMPLETED) ||
->> +        (fault & VM_FAULT_RETRY) || fault_signal_pending(fault, regs))) {
->> +        mmap_read_unlock(vma->vm_mm);
->> +        mmap_read_unlock(mm);
->> +    }
->>
->>>         if (fault_signal_pending(fault, regs)) {
->>>           /*
->>> @@ -1413,6 +1446,8 @@ void do_user_addr_fault(struct pt_regs *regs,
->>>           goto retry;
->>>       }
->>>   +    if (unlikely(is_shared_vma))
->>> +        mmap_read_unlock(vma->vm_mm);
->>>       mmap_read_unlock(mm);
->>>   done:
->>>       if (likely(!(fault & VM_FAULT_ERROR)))
->>> diff --git a/mm/Kconfig b/mm/Kconfig
->>> index e6c90db83d01..8a5a159457f2 100644
->>> --- a/mm/Kconfig
->>> +++ b/mm/Kconfig
->>> @@ -1344,7 +1344,7 @@ config PT_RECLAIM
->>>     config MSHARE
->>>       bool "Mshare"
->>> -    depends on MMU
->>> +    depends on MMU && ARCH_SUPPORTS_MSHARE
->>>       help
->>>         Enable msharefs: A ram-based filesystem that allows multiple
->>>         processes to share page table entries for shared pages. A file 
->>
->> Yongting Lin. 
->
->
+> Not sure it helps here. With vCPU overcommit, KVM enables WFE trapping
+> and the event stream no longer has any effect (it's not like it
+> interrupts the host).
+
+I would expect a similar overhead for the WFE trapping as for the
+bare-metal hardware case: When the WFE traps, the host has to
+reschedule all guests that are in WFE periodically, while WFET
+with event stream disabled means this can be driven by an accurate
+host timer.
+
+> That said, my worry is that either broken hardware or software rely on
+> the event stream unknowingly, e.g. someone using WFE in a busy loop. And
+> for hardware errata, we've had a few where the wakeup events don't
+> propagate between clusters, though these we can toggle on a case by case
+> basis.
+
+Don't we already support hardware without a functional architected
+timer even with? Those don't use the event stream today even when
+CONFIG_ARM_ARCH_TIMER_EVTSTREAM is enabled.
+
+     Arnd
 
