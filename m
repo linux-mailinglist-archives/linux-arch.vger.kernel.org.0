@@ -1,126 +1,91 @@
-Return-Path: <linux-arch+bounces-13195-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13196-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE1B2B2BF06
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 12:35:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C776FB2C951
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 18:17:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4F913BCD97
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 10:34:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B625F5C105D
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 16:17:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07C9A322A2E;
-	Tue, 19 Aug 2025 10:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 395F1211A11;
+	Tue, 19 Aug 2025 16:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="N1L+7JjX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9FC322A28;
-	Tue, 19 Aug 2025 10:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88101448E0;
+	Tue, 19 Aug 2025 16:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755599693; cv=none; b=gYzJdfyxgLK3YWnssc9EWzOQAZg/bFOPM1jNr8DOdXf6PPTFgiD1mvSsqQe3hTUq6f0c65ZHMIHjQgsuuOTIf8gKRIE5eZ8iuXsKd0nYRwrL6200fHlA+OiZtP7AVJ5PdZjjMlSCWPO7XJnMQHr9uIyVedCyQbAF2r552VW3M60=
+	t=1755620252; cv=none; b=qLWYSi8rtA5Dj4yF5r1mp18bqx06xW7yL+Rn6VECHRVXWokIvuOfuh7m8xqfKtcMv4jY7pJ5zIWDU09puIQge+eMtvjoYHzHleGhemoMQZonK+AMFRzBilrmgM1Fcyn8kkE0lSGvaDbJ/ijM9ZxLdWQ+mOPfcwTl9c0BOEwfWx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755599693; c=relaxed/simple;
-	bh=YfxtKZ3KDpHdxU2AkTGk82RkHMdmrgN3HOIFgt4raRc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HrcWNq5rQKnMPxWn1IHyAjCEO1kIGs00E1UQOJSz9A8F/lsbfJZnng4PoaJ7vYcIw/HcnVpqH1K44iosvprC5uZKax6c6yu6Qqi93zGsYqH4kBSCp7KyKYCmUqigq59eXmr92aSK7QdQGS+moKBZsvWSv0B5CihNvxjrLjtMqPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1E8C113D0;
-	Tue, 19 Aug 2025 10:34:49 +0000 (UTC)
-Date: Tue, 19 Aug 2025 11:34:47 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
-	arnd@arndb.de, will@kernel.org, peterz@infradead.org,
-	akpm@linux-foundation.org, mark.rutland@arm.com,
-	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
-	rafael@kernel.org, daniel.lezcano@linaro.org
-Subject: Re: [PATCH v3 1/5] asm-generic: barrier: Add
- smp_cond_load_relaxed_timewait()
-Message-ID: <aKRTRyQAaWFtRvDv@arm.com>
-References: <20250627044805.945491-1-ankur.a.arora@oracle.com>
- <20250627044805.945491-2-ankur.a.arora@oracle.com>
- <aJXWyxzkA3x61fKA@arm.com>
- <877bz98sqb.fsf@oracle.com>
- <aJy414YufthzC1nv@arm.com>
- <87bjoi2wdf.fsf@oracle.com>
- <aJ3K4tQCztOXF6hO@arm.com>
- <87plctwq7x.fsf@oracle.com>
- <aKNo9pxx2w9sjJjc@arm.com>
- <87sehotp9q.fsf@oracle.com>
+	s=arc-20240116; t=1755620252; c=relaxed/simple;
+	bh=cBAf66/ecC3KCAWVPNJ0mEfLod6jzDCzAlx19ze5M0E=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=rTsNNgDd8d2wWWkZvFY+S1HZKPY8EtsD4IDdTQlW09WGRDuMTWL++DlOzroE6hDpOk/wBDaXVkrbu/BL43F6Ahi98lnTxZuiMIXRsgdSorsUqp/loZ3E6mvfGCjXt1lFpPaiduIG0NAVMhBG/ro6lsCAsSOAqifgQ3dD6/Ox108=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=N1L+7JjX; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.65.160.36] (unknown [20.236.10.206])
+	by linux.microsoft.com (Postfix) with ESMTPSA id BDEC22015BAB;
+	Tue, 19 Aug 2025 09:17:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BDEC22015BAB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1755620250;
+	bh=UK2us52F74pzoMRfapfu4Rp2ypnjpe2h7wtZmQTFVCg=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=N1L+7JjX6y8w/ZP7VUshCcip8y+O09W05cXUKI09ngHqlwUZXPAmrbNAJx3tQnrzq
+	 +a0Hb5cGkkQwMy3figAfhIb01yZEYgYFujwovjw2PJXcHUCQ/ScKgDjaFBWEooQVIE
+	 yJ+TGHkr1Lxe1oI+CNvCGdg57x+0EP1uikxYxeVo=
+Message-ID: <0a0c8921-9236-45fb-b047-742a34379e63@linux.microsoft.com>
+Date: Tue, 19 Aug 2025 09:17:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sehotp9q.fsf@oracle.com>
+User-Agent: Mozilla Thunderbird
+From: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
+Subject: Re: [PATCH] mshv: Add support for a new parent partition
+ configuration
+To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Cc: easwar.hariharan@linux.microsoft.com, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, kys@microsoft.com,
+ haiyangz@microsoft.com, wei.liu@kernel.org, mhklinux@outlook.com,
+ decui@microsoft.com, arnd@arndb.de
+References: <1755588559-29629-1-git-send-email-nunodasneves@linux.microsoft.com>
+Content-Language: en-US
+In-Reply-To: <1755588559-29629-1-git-send-email-nunodasneves@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 18, 2025 at 12:15:29PM -0700, Ankur Arora wrote:
-> Catalin Marinas <catalin.marinas@arm.com> writes:
-> > On Sun, Aug 17, 2025 at 03:14:26PM -0700, Ankur Arora wrote:
-> >> __cmpwait_relaxed() will need adjustment to set a deadline for WFET.
-> >
-> > Yeah, __cmpwait_relaxed() doesn't use WFET as it doesn't need a timeout
-> > (it just happens to have one with the event stream).
-> >
-> > We could extend this or create a new one that uses WFET and takes an
-> > argument. If extending this one, for example a timeout argument of 0
-> > means WFE, non-zero means WFET cycles. This adds a couple of more
-> > instructions.
+On 8/19/2025 12:29 AM, Nuno Das Neves wrote:
+> Detect booting as an "L1VH" partition. This is a new scenario very
+> similar to root partition where the mshv_root driver can be used to
+> create and manage guest partitions.
 > 
-> Though then we would need an ALTERNATIVE for WFET to fallback to WFE where
-> not available. This is a minor point, but how about just always using
-> WFE or WFET appropriately instead of choosing between the two based on
-> etime.
+> It mostly works the same as root partition, but there are some
+> differences in how various features are handled. hv_l1vh_partition()
+> is introduced to handle these cases. Add hv_parent_partition()
+> which returns true for either case, replacing some hv_root_partition()
+> checks.
 > 
->   static inline void __cmpwait_case_##sz(volatile void *ptr,              \
->                                   unsigned long val,                      \
->                                   unsigned long etime)                    \
->                                                                           \
->           unsigned long tmp;                                              \
->                                                                           \
->           const unsigned long ecycles = xloops_to_cycles(nsecs_to_xloops(etime)); \
->           asm volatile(                                                   \
->           "       sevl\ n"                                                \
->           "       wfe\ n"                                                 \
->           "       ldxr" #sfx "\ t%" #w "[tmp], %[v]\n"                    \
->           "       eor     %" #w "[tmp], %" #w "[tmp], %" #w "[val]\ n"    \
->           "       cbnz    %" #w "[tmp], 1f\ n"                            \
->           ALTERNATIVE("wfe\ n",                                           \
->                   "msr s0_3_c1_c0_0, %[ecycles]\ n",                      \
->                   ARM64_HAS_WFXT)                                         \
->           "1:"                                                            \
->           : [tmp] "=&r" (tmp), [v] "+Q" (*(u##sz *)ptr)                   \
->           : [val] "r" (val), [ecycles] "r" (ecycles));                    \
->   }
-> 
-> This would cause us to compute the end time unnecessarily for WFE but,
-> given that nothing will use the output of that computation, wouldn't
-> WFE be able to execute before the result of that computation is available?
-> (Though I guess WFE is somewhat special, so the usual rules might not
-> apply.)
+> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 
-The compiler cannot tell what's happening inside the asm block, so it
-will compute ecycles, place it in a register before the asm. The
-hardware won't do anything smarter like skip the computation because the
-register holding ecycles is not going to be used (or it is going to be
-re-written later). So I wouldn't want to penalise the existing
-smp_cond_load_acquire() which only needs a WFE.
+Seems the plurality of subject prefixes for drivers/hv files has been "Drivers: hv"
+so far, including the 2 commits for drivers/hv/mshv*. Are you planning to change
+the standard for mshv driver going forward?
 
-We could patch WFET in and always pass -1UL in the non-timeout case but
-I think we are better off just duplicating the whole thing. It's going
-to be inlined anyway, so it's not like we end up with lots of these
-functions.
+It'd be good to have a small blurb about what an L1VH partition is in the commit
+message, as well as what guides which hv_root_partition() call gets replaced with
+hv_parent_partition().
 
--- 
-Catalin
+<snip>
+
+Thanks,
+Easwar (he/him)
 
