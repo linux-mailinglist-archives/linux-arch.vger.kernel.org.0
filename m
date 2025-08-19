@@ -1,225 +1,126 @@
-Return-Path: <linux-arch+bounces-13194-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13195-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1DD0B2BAB8
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 09:29:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE1B2B2BF06
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 12:35:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D6453B0C94
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 07:29:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4F913BCD97
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 10:34:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8354B2848B1;
-	Tue, 19 Aug 2025 07:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="NQ3JndSi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07C9A322A2E;
+	Tue, 19 Aug 2025 10:34:54 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D746122D9F7;
-	Tue, 19 Aug 2025 07:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9FC322A28;
+	Tue, 19 Aug 2025 10:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755588564; cv=none; b=IR48N+XVBwG/2UykBV3k3Rwz0uoY83rxydDXhlC2i4w2ndOmUhsk4p3v2ZPrGRj0sI/J5Aueut+5NOlrg6CIzxTxNYGKXNiw4VnAHkTjqvNwBxqPaQJN/FHOoKOj7wOp/Kw9DRFqNZs5OJ/CbUG/BeMwE9O1IIrZbpFKnW1dGJM=
+	t=1755599693; cv=none; b=gYzJdfyxgLK3YWnssc9EWzOQAZg/bFOPM1jNr8DOdXf6PPTFgiD1mvSsqQe3hTUq6f0c65ZHMIHjQgsuuOTIf8gKRIE5eZ8iuXsKd0nYRwrL6200fHlA+OiZtP7AVJ5PdZjjMlSCWPO7XJnMQHr9uIyVedCyQbAF2r552VW3M60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755588564; c=relaxed/simple;
-	bh=zmJ4oEkg/wsHorsGWyyTdx9Ow5bGQ0WGNug4IrVA5ZA=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=cDp7SU3LLScyObBLay3DyqbvyGlckEy5YEdZ4rdQOE6An6gX2bonUl6j8VMmVLVWoqy5Ll4Bkg8T2fPpnzcbNMVJ36vASBEUsDYv2WhNKpwJSzxHEpV5L/cGfqlSateNjsVz47gA/3C/CXIuqL9X8OzF0bMIMyFxEOx7yVySMoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=NQ3JndSi; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1032)
-	id 597D92113369; Tue, 19 Aug 2025 00:29:22 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 597D92113369
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1755588562;
-	bh=tUxdMWnI67dhYQwXGjOBEKVZI8EfEtyZKrA8xyUFX7M=;
-	h=From:To:Cc:Subject:Date:From;
-	b=NQ3JndSidFl3XzfsFMOggAl8X/S92o6u9CxcAmGbifX1dWrdNU1HiBTxqByV6Xf7Y
-	 d/uU+96PAChnhvcY1DNVPgq8W3ekFPcn/NwaCY9g7dgStVDRDkj/1G+q5P/Iysfe6R
-	 lN4Fre8WrXbU9m7Fcx0yOlZvvxx3L5pUENRVGlk4=
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-To: linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Cc: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	mhklinux@outlook.com,
-	decui@microsoft.com,
-	arnd@arndb.de,
-	Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Subject: [PATCH] mshv: Add support for a new parent partition configuration
-Date: Tue, 19 Aug 2025 00:29:19 -0700
-Message-Id: <1755588559-29629-1-git-send-email-nunodasneves@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
+	s=arc-20240116; t=1755599693; c=relaxed/simple;
+	bh=YfxtKZ3KDpHdxU2AkTGk82RkHMdmrgN3HOIFgt4raRc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HrcWNq5rQKnMPxWn1IHyAjCEO1kIGs00E1UQOJSz9A8F/lsbfJZnng4PoaJ7vYcIw/HcnVpqH1K44iosvprC5uZKax6c6yu6Qqi93zGsYqH4kBSCp7KyKYCmUqigq59eXmr92aSK7QdQGS+moKBZsvWSv0B5CihNvxjrLjtMqPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1E8C113D0;
+	Tue, 19 Aug 2025 10:34:49 +0000 (UTC)
+Date: Tue, 19 Aug 2025 11:34:47 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+	arnd@arndb.de, will@kernel.org, peterz@infradead.org,
+	akpm@linux-foundation.org, mark.rutland@arm.com,
+	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+	rafael@kernel.org, daniel.lezcano@linaro.org
+Subject: Re: [PATCH v3 1/5] asm-generic: barrier: Add
+ smp_cond_load_relaxed_timewait()
+Message-ID: <aKRTRyQAaWFtRvDv@arm.com>
+References: <20250627044805.945491-1-ankur.a.arora@oracle.com>
+ <20250627044805.945491-2-ankur.a.arora@oracle.com>
+ <aJXWyxzkA3x61fKA@arm.com>
+ <877bz98sqb.fsf@oracle.com>
+ <aJy414YufthzC1nv@arm.com>
+ <87bjoi2wdf.fsf@oracle.com>
+ <aJ3K4tQCztOXF6hO@arm.com>
+ <87plctwq7x.fsf@oracle.com>
+ <aKNo9pxx2w9sjJjc@arm.com>
+ <87sehotp9q.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sehotp9q.fsf@oracle.com>
 
-Detect booting as an "L1VH" partition. This is a new scenario very
-similar to root partition where the mshv_root driver can be used to
-create and manage guest partitions.
+On Mon, Aug 18, 2025 at 12:15:29PM -0700, Ankur Arora wrote:
+> Catalin Marinas <catalin.marinas@arm.com> writes:
+> > On Sun, Aug 17, 2025 at 03:14:26PM -0700, Ankur Arora wrote:
+> >> __cmpwait_relaxed() will need adjustment to set a deadline for WFET.
+> >
+> > Yeah, __cmpwait_relaxed() doesn't use WFET as it doesn't need a timeout
+> > (it just happens to have one with the event stream).
+> >
+> > We could extend this or create a new one that uses WFET and takes an
+> > argument. If extending this one, for example a timeout argument of 0
+> > means WFE, non-zero means WFET cycles. This adds a couple of more
+> > instructions.
+> 
+> Though then we would need an ALTERNATIVE for WFET to fallback to WFE where
+> not available. This is a minor point, but how about just always using
+> WFE or WFET appropriately instead of choosing between the two based on
+> etime.
+> 
+>   static inline void __cmpwait_case_##sz(volatile void *ptr,              \
+>                                   unsigned long val,                      \
+>                                   unsigned long etime)                    \
+>                                                                           \
+>           unsigned long tmp;                                              \
+>                                                                           \
+>           const unsigned long ecycles = xloops_to_cycles(nsecs_to_xloops(etime)); \
+>           asm volatile(                                                   \
+>           "       sevl\ n"                                                \
+>           "       wfe\ n"                                                 \
+>           "       ldxr" #sfx "\ t%" #w "[tmp], %[v]\n"                    \
+>           "       eor     %" #w "[tmp], %" #w "[tmp], %" #w "[val]\ n"    \
+>           "       cbnz    %" #w "[tmp], 1f\ n"                            \
+>           ALTERNATIVE("wfe\ n",                                           \
+>                   "msr s0_3_c1_c0_0, %[ecycles]\ n",                      \
+>                   ARM64_HAS_WFXT)                                         \
+>           "1:"                                                            \
+>           : [tmp] "=&r" (tmp), [v] "+Q" (*(u##sz *)ptr)                   \
+>           : [val] "r" (val), [ecycles] "r" (ecycles));                    \
+>   }
+> 
+> This would cause us to compute the end time unnecessarily for WFE but,
+> given that nothing will use the output of that computation, wouldn't
+> WFE be able to execute before the result of that computation is available?
+> (Though I guess WFE is somewhat special, so the usual rules might not
+> apply.)
 
-It mostly works the same as root partition, but there are some
-differences in how various features are handled. hv_l1vh_partition()
-is introduced to handle these cases. Add hv_parent_partition()
-which returns true for either case, replacing some hv_root_partition()
-checks.
+The compiler cannot tell what's happening inside the asm block, so it
+will compute ecycles, place it in a register before the asm. The
+hardware won't do anything smarter like skip the computation because the
+register holding ecycles is not going to be used (or it is going to be
+re-written later). So I wouldn't want to penalise the existing
+smp_cond_load_acquire() which only needs a WFE.
 
-Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
----
- drivers/hv/hv_common.c         | 20 ++++++++++++--------
- drivers/hv/mshv_root_main.c    | 22 ++++++++++++++--------
- include/asm-generic/mshyperv.h | 11 +++++++++++
- 3 files changed, 37 insertions(+), 16 deletions(-)
+We could patch WFET in and always pass -1UL in the non-timeout case but
+I think we are better off just duplicating the whole thing. It's going
+to be inlined anyway, so it's not like we end up with lots of these
+functions.
 
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index cbe4a954ad46..a6839593ca31 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -357,7 +357,7 @@ int __init hv_common_init(void)
- 	hyperv_pcpu_arg = alloc_percpu(void  *);
- 	BUG_ON(!hyperv_pcpu_arg);
- 
--	if (hv_root_partition()) {
-+	if (hv_parent_partition()) {
- 		hv_synic_eventring_tail = alloc_percpu(u8 *);
- 		BUG_ON(!hv_synic_eventring_tail);
- 	}
-@@ -506,7 +506,7 @@ int hv_common_cpu_init(unsigned int cpu)
- 	if (msr_vp_index > hv_max_vp_index)
- 		hv_max_vp_index = msr_vp_index;
- 
--	if (hv_root_partition()) {
-+	if (hv_parent_partition()) {
- 		synic_eventring_tail = (u8 **)this_cpu_ptr(hv_synic_eventring_tail);
- 		*synic_eventring_tail = kcalloc(HV_SYNIC_SINT_COUNT,
- 						sizeof(u8), flags);
-@@ -532,7 +532,7 @@ int hv_common_cpu_die(unsigned int cpu)
- 	 * originally allocated memory is reused in hv_common_cpu_init().
- 	 */
- 
--	if (hv_root_partition()) {
-+	if (hv_parent_partition()) {
- 		synic_eventring_tail = this_cpu_ptr(hv_synic_eventring_tail);
- 		kfree(*synic_eventring_tail);
- 		*synic_eventring_tail = NULL;
-@@ -703,13 +703,17 @@ void hv_identify_partition_type(void)
- 	 * the root partition setting if also a Confidential VM.
- 	 */
- 	if ((ms_hyperv.priv_high & HV_CREATE_PARTITIONS) &&
--	    (ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
- 	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
--		pr_info("Hyper-V: running as root partition\n");
--		if (IS_ENABLED(CONFIG_MSHV_ROOT))
--			hv_curr_partition_type = HV_PARTITION_TYPE_ROOT;
--		else
-+
-+		if (!IS_ENABLED(CONFIG_MSHV_ROOT)) {
- 			pr_crit("Hyper-V: CONFIG_MSHV_ROOT not enabled!\n");
-+		} else if (ms_hyperv.priv_high & HV_CPU_MANAGEMENT) {
-+			pr_info("Hyper-V: running as root partition\n");
-+			hv_curr_partition_type = HV_PARTITION_TYPE_ROOT;
-+		} else {
-+			pr_info("Hyper-V: running as L1VH partition\n");
-+			hv_curr_partition_type = HV_PARTITION_TYPE_L1VH;
-+		}
- 	}
- }
- 
-diff --git a/drivers/hv/mshv_root_main.c b/drivers/hv/mshv_root_main.c
-index aca3331ad516..7c710703cd96 100644
---- a/drivers/hv/mshv_root_main.c
-+++ b/drivers/hv/mshv_root_main.c
-@@ -37,12 +37,6 @@ MODULE_AUTHOR("Microsoft");
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("Microsoft Hyper-V root partition VMM interface /dev/mshv");
- 
--/* TODO move this to mshyperv.h when needed outside driver */
--static inline bool hv_parent_partition(void)
--{
--	return hv_root_partition();
--}
--
- /* TODO move this to another file when debugfs code is added */
- enum hv_stats_vp_counters {			/* HV_THREAD_COUNTER */
- #if defined(CONFIG_X86)
-@@ -2190,6 +2184,15 @@ struct notifier_block mshv_reboot_nb = {
- 	.notifier_call = mshv_reboot_notify,
- };
- 
-+static int __init mshv_l1vh_partition_init(struct device *dev)
-+{
-+	hv_scheduler_type = HV_SCHEDULER_TYPE_CORE_SMT;
-+	dev_info(dev, "Hypervisor using %s\n",
-+		 scheduler_type_to_string(hv_scheduler_type));
-+
-+	return 0;
-+}
-+
- static void mshv_root_partition_exit(void)
- {
- 	unregister_reboot_notifier(&mshv_reboot_nb);
-@@ -2224,7 +2227,7 @@ static int __init mshv_parent_partition_init(void)
- 	struct device *dev;
- 	union hv_hypervisor_version_info version_info;
- 
--	if (!hv_root_partition() || is_kdump_kernel())
-+	if (!hv_parent_partition() || is_kdump_kernel())
- 		return -ENODEV;
- 
- 	if (hv_get_hypervisor_version(&version_info))
-@@ -2261,7 +2264,10 @@ static int __init mshv_parent_partition_init(void)
- 
- 	mshv_cpuhp_online = ret;
- 
--	ret = mshv_root_partition_init(dev);
-+	if (hv_root_partition())
-+		ret = mshv_root_partition_init(dev);
-+	else
-+		ret = mshv_l1vh_partition_init(dev);
- 	if (ret)
- 		goto remove_cpu_state;
- 
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index dbbacd47ca35..f0f0eacb2eef 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -31,6 +31,7 @@
- enum hv_partition_type {
- 	HV_PARTITION_TYPE_GUEST,
- 	HV_PARTITION_TYPE_ROOT,
-+	HV_PARTITION_TYPE_L1VH,
- };
- 
- struct ms_hyperv_info {
-@@ -457,12 +458,22 @@ static inline bool hv_root_partition(void)
- {
- 	return hv_curr_partition_type == HV_PARTITION_TYPE_ROOT;
- }
-+static inline bool hv_l1vh_partition(void)
-+{
-+	return hv_curr_partition_type == HV_PARTITION_TYPE_L1VH;
-+}
-+static inline bool hv_parent_partition(void)
-+{
-+	return hv_root_partition() || hv_l1vh_partition();
-+}
- int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
- int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
- int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
- 
- #else /* CONFIG_MSHV_ROOT */
- static inline bool hv_root_partition(void) { return false; }
-+static inline bool hv_l1vh_partition(void) { return false; }
-+static inline bool hv_parent_partition(void) { return false; }
- static inline int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages)
- {
- 	return -EOPNOTSUPP;
 -- 
-2.34.1
-
+Catalin
 
