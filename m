@@ -1,96 +1,108 @@
-Return-Path: <linux-arch+bounces-13235-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13236-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08130B2DA22
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 12:34:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C592B2E2F1
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 19:07:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B14AF1C46296
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 10:34:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF062189CB76
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 17:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03E62E285C;
-	Wed, 20 Aug 2025 10:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23AF32A3E2;
+	Wed, 20 Aug 2025 17:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="R/9SvcRf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E62420322;
-	Wed, 20 Aug 2025 10:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E8436CE0D;
+	Wed, 20 Aug 2025 17:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755686046; cv=none; b=ZowhsFmbALfCUZuR33p5ifH5cdv/dha5zlJBph88PTcLL0XoOkyMMnASbi+ntst1YcS1o1kQnuay09nBiEer20ksfMnylNmFyNa1jCayzlRbhJDT+FvlTXCf23Z/srPs/nhC+XM3hVPqjx1fBJJf+VjetVugIvGYL5QvUyjxDJQ=
+	t=1755709632; cv=none; b=mTRC8TOECUEcUmb8kC1FB4KJ3e/Ie3qU0rfmhnQnu3tkp8Vygja1HPRXecnEaTiWxyLlG5u4QytTsx/ZUZGQVPRFY0ALvU8ADv18LKFKfsGNpDAx8hR6pSH8QHd+SyltnwlAe/aRzWvn5UGLa4l69f4rXOUaLrUs29Qi6E0ia28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755686046; c=relaxed/simple;
-	bh=Q9Pi1LJZoJIyH4rNb50nbJrtCZbYFD9cd+yIHpffavU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rWIkwZxeupSMjsKNg7HjoJyJ44ozYnfwMxwHc2sraTJqNIZJN8bqYjZCdQVZC7aNou065SqUjkjAWNwFiWrydA8Kg9Jc09SZQ1Aaef49KBHGgAgvQrKCY5Zipe6S36ya0jqe8P4/3YiEHC6vgJbrgjchffK75LIzTAth3Uhc/Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4c6N6g74knz6M4qN;
-	Wed, 20 Aug 2025 18:31:55 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5B24F140119;
-	Wed, 20 Aug 2025 18:34:03 +0800 (CST)
-Received: from SecurePC-101-06.huawei.com (10.122.19.247) by
- frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 20 Aug 2025 12:34:02 +0200
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Catalin Marinas <catalin.marinas@arm.com>, <james.morse@arm.com>,
-	<linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-mm@kvack.org>, Will Deacon <will@kernel.org>, Dan Williams
-	<dan.j.williams@intel.com>, Davidlohr Bueso <dave@stgolabs.net>, "H . Peter
- Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-CC: Yicong Yang <yangyicong@huawei.com>, <linuxarm@huawei.com>, Yushan Wang
-	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
- Rutland <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski
-	<luto@kernel.org>
-Subject: [PATCH v3 8/8] Hack: Pretend we have PSCI 1.2
-Date: Wed, 20 Aug 2025 11:29:50 +0100
-Message-ID: <20250820102950.175065-9-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250820102950.175065-1-Jonathan.Cameron@huawei.com>
-References: <20250820102950.175065-1-Jonathan.Cameron@huawei.com>
+	s=arc-20240116; t=1755709632; c=relaxed/simple;
+	bh=zJJXarkWRvK9U5sgJZh498uNlfpa8H3ZMfTenpd3sjA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VXxM8yW9yTorhWDXlUgf8wbOjC0+Pi23ELVzqLm4uHd5Kp5CPPs33daeUcVD8eXYsq6D+A2siN7cRweNaz/83kIOvqFPBDDlabd0YyDQvi9T9pdXv8WORflAy5NuYzIYsvKDU3HmGKqfsaeJ3RDAGKlKuuAKEPhiR2yA/Qe7wWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=R/9SvcRf; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=qayB9LeR+RX6qridAjwC/zM9VoXQvXrNVT4vZTRfnEA=; b=R/9SvcRfJuRvlkls/k6xHiZo0X
+	7JJOUj/v+RIkIQ3mpC3FpeaiwocGruY1eprsKXh06G8RTQcg5BAQTeprwpvLcw4Mi8DmFYXTFgEdM
+	R0JZ7nWeBSdQngpgJTmRBhg0RtStcBJOJaHl0CrcWj1wApC62jEkVYeDLiUJ0YNfheUyM+3NbDgVk
+	mBRPhB+APpGklJ7AQyKqWdv5YlxKFmReO9DU1jffLEvPUGP1oKzNXeC9HkH99Er6Iw+K7Fv6gq9M3
+	Wp6KGkNzn+Ea767MMcS0lG6kMbPI5qWa+JxC+1jxfYqL26wuFOSF3kY56cfDDhYAqM1Wc7wp/yMyv
+	Gdjhnkhw==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uomHF-0000000ETuY-2LE7;
+	Wed, 20 Aug 2025 17:07:09 +0000
+Message-ID: <dc829b1a-f0d5-42b8-b128-e305a1ceb32b@infradead.org>
+Date: Wed, 20 Aug 2025 10:07:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- frapeml500008.china.huawei.com (7.182.85.71)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 7/8] acpi: PoC of Cache control via ACPI0019 and _DSM
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
+ linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ Will Deacon <will@kernel.org>, Dan Williams <dan.j.williams@intel.com>,
+ Davidlohr Bueso <dave@stgolabs.net>, "H . Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>
+Cc: Yicong Yang <yangyicong@huawei.com>, linuxarm@huawei.com,
+ Yushan Wang <wangyushan12@huawei.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+ Andy Lutomirski <luto@kernel.org>
+References: <20250820102950.175065-1-Jonathan.Cameron@huawei.com>
+ <20250820102950.175065-8-Jonathan.Cameron@huawei.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250820102950.175065-8-Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Need to update QEMU to PSCI 1.2. In meantime lie.
-This is just here to aid testing, not for review!
+Hi,
 
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- drivers/firmware/psci/psci.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 8/20/25 3:29 AM, Jonathan Cameron wrote:
+> diff --git a/drivers/cache/Kconfig b/drivers/cache/Kconfig
+> index 4551b28e14dd..158d3819004e 100644
+> --- a/drivers/cache/Kconfig
+> +++ b/drivers/cache/Kconfig
+> @@ -3,6 +3,13 @@ menu "Cache Drivers"
+>  
+>  if GENERIC_CPU_CACHE_MAINTENANCE
+>  
+> +config ACPI_CACHE_CONTROL
+> +       tristate "ACPI cache maintenance"
+> +       depends on ARM64 && ACPI
+> +       help
 
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index 38ca190d4a22..804b0d7cda4b 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -646,6 +646,8 @@ static void __init psci_init_smccc(void)
- 		}
- 	}
- 
-+	/* Hack until qemu version stuff updated */
-+	arm_smccc_version_init(ARM_SMCCC_VERSION_1_2, psci_conduit);
- 	/*
- 	 * Conveniently, the SMCCC and PSCI versions are encoded the
- 	 * same way. No, this isn't accidental.
+If there is a v4, please use one tab to indent the 3 lines above.
+
+> +         ACPI0019 device ID in DSDT identifies an interface that may be used
+
+and tab + 2 spaces to indent the 1 line above.
+
+> +	 to carry out certain forms of cache flush operation.
+
 -- 
-2.48.1
+~Randy
 
 
