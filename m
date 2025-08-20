@@ -1,66 +1,66 @@
-Return-Path: <linux-arch+bounces-13203-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13212-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A0F0B2D0ED
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 03:06:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06180B2D11B
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 03:09:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E64CC7B2623
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 01:04:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D19545875DE
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 01:07:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60EE1A9F83;
-	Wed, 20 Aug 2025 01:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901AE2045B6;
+	Wed, 20 Aug 2025 01:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eWQsvBL0"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Qx3zTwpE"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B72E194A45;
-	Wed, 20 Aug 2025 01:05:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A7F1F4161;
+	Wed, 20 Aug 2025 01:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755651951; cv=none; b=UHzTfpqdmkv8nMcSiKwy9vnxBJHbIcsPHyqPDj2JECkHGQtLtbEaQvL+1THCb6SUMX2WAfQjX7rrzBbQaARPjid6Haq3hfJ6sdr6resxTN9E6MXFO+f7mNVNXvhF9/gKJrBX+ovEOBmz7wmlyYe75jTnWiJBWAHWuDOEj1Upr6Q=
+	t=1755651959; cv=none; b=itdBuKd2y0L6cid3H2kjHE3Pi0UEPb+qIGqFJIX8U8CBmErLMZ8t/0kOaUdyMnnIpAbOKKIo6sdYJDbMMGT1K3+79xTjXIt0FADKS/V7/ZZJnv23aLOQqxECWoBOsdT9qkIDf6hFcKIH2ml4vNm9DMtCCYjgoHlcQjkUq5bo5fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755651951; c=relaxed/simple;
-	bh=lAig7eb/hob+2A4NLAvkyBsI1qHNRKx8MbiGSivCp0E=;
+	s=arc-20240116; t=1755651959; c=relaxed/simple;
+	bh=O0ZKrrHX4tTjCQplZtJ1DpbnmSC1BfCawA8dp8HslY8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pUJF7BJTtCHltcGbmoqgh2xgfVjQ3lLKMq96xiuMIsdxG6lIIPg+xv+JVyjKnES7Rw47+8FQARw9jYlQp80hmxu2CZpBw82W2IX4Pv4/JrOhx9kdwi/mngOgFaw3g9BtRhlhggOrbJzH3Pxnz33r9zt2W03fY9eQgpKMvVwv9wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eWQsvBL0; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=aQbwe+Dhvo5O88ay840z2Kly++o5hdXOSbC/8E9ZaQIGeLrC8gIlxEJ5o/UONlghsyk78xcELnVrQHWA5VLUNDvt3wfAYYA7LH4MZqQ/8MdSh2ODeYBS4HJv8/XAr45xgDXj1nsaF66QTgOXGlV68iCe75HxePiTcrnMgOHyJ84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Qx3zTwpE; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57JLCUxL017628;
-	Wed, 20 Aug 2025 01:04:34 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57JLCHN2012275;
+	Wed, 20 Aug 2025 01:04:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=vzGmx
-	D04TI1mSj9V+t8aruaidXWI36zruInJlfX4dNY=; b=eWQsvBL0w0HGsmRYPf6QJ
-	nKgKCB0Ak6IKgVB31Cwbq4ZFRGACcRwkED1X9KA/yjb8SIGcNRrk5Dzeb4hf2GbE
-	SJF78ULl3t8V1t4EdUl4TsrZ3viw4H3AjsYtAkWPv6QcEjwFs6JurtluZbJnqgZG
-	w7NeF3RniN/YQ4PI4XWF6FtIv/2XVU1pvkAyxso3d15RgS4wYHQsM7bZN/N4Ert+
-	nh8Zw2rAdvM0v7eLENDcFtuw+EmcCr/SYIiUaSFtKbiNz+gzrje+YuVvlTKPpk79
-	9D8Tc0gN9RCjcSKvZaFiNv+HatM6FUqK8SoX0Fa9uA8gXFVIibcD71jtER1ETWmg
-	g==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=fQFnq
+	88K9K4MmLcnD5W2me3DfjuW88ktErhJymD1WnQ=; b=Qx3zTwpEPQiJbr5opLwnj
+	wmakVtwduCmaE3tTazo7NJUMAQCEHfLwh7/zfEi1FrWDp2Vyff1swsmjQJBz87zj
+	OAfNy32xhgUU9kOHk8s7RpobXBdEdY+yOvJaWo/BNTS9HGwocgV6O8pXxTCChtrG
+	rZwz2r4wnyN571Uo8xFztiEtXDAyr+UK4OPRZBPzJzOBdObLKE8k4aVKjoXZVNQK
+	D8+MD8pxuZcp7k4rSuQSMC4a/t8pYWx5JOMI/iGx4wxkli24AaMDti/E0VD8F/a5
+	DYVCSKIqyRn8bJqVxiK9LodcEIykI2AC9sxpYuuS8CuEynLfXThTFnMotro2nkd1
+	A==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48n0ttg8bu-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48n0trr8dq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 20 Aug 2025 01:04:34 +0000 (GMT)
+	Wed, 20 Aug 2025 01:04:36 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57JNsqtx007279;
-	Wed, 20 Aug 2025 01:04:33 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57JN314f007380;
+	Wed, 20 Aug 2025 01:04:36 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 48my3q29qj-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 48my3q29rq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 20 Aug 2025 01:04:33 +0000
+	Wed, 20 Aug 2025 01:04:35 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 57K14NdA011685;
-	Wed, 20 Aug 2025 01:04:32 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 57K14NdC011685;
+	Wed, 20 Aug 2025 01:04:34 GMT
 Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 48my3q29gw-4;
-	Wed, 20 Aug 2025 01:04:31 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 48my3q29gw-5;
+	Wed, 20 Aug 2025 01:04:34 +0000
 From: Anthony Yznaga <anthony.yznaga@oracle.com>
 To: linux-mm@kvack.org
 Cc: akpm@linux-foundation.org, andreyknvl@gmail.com, arnd@arndb.de,
@@ -79,9 +79,9 @@ Cc: akpm@linux-foundation.org, andreyknvl@gmail.com, arnd@arndb.de,
         viro@zeniv.linux.org.uk, vschneid@redhat.com, willy@infradead.org,
         x86@kernel.org, xhao@linux.alibaba.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH v3 03/22] mm/mshare: make msharefs writable and support directories
-Date: Tue, 19 Aug 2025 18:03:56 -0700
-Message-ID: <20250820010415.699353-4-anthony.yznaga@oracle.com>
+Subject: [PATCH v3 04/22] mm/mshare: allocate an mm_struct for msharefs files
+Date: Tue, 19 Aug 2025 18:03:57 -0700
+Message-ID: <20250820010415.699353-5-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250820010415.699353-1-anthony.yznaga@oracle.com>
 References: <20250820010415.699353-1-anthony.yznaga@oracle.com>
@@ -99,174 +99,143 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malw
  phishscore=0 bulkscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2508110000 definitions=main-2508200007
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE5MDE5NyBTYWx0ZWRfX6nrVr8GQuiM2
- KpjmSaQeCD+L4Xo8HZem/Sq+wiCbpltxbCytOR+N8x61m38VYPq6poGPjOnGit/hsZYn8ivdRgF
- bY5K+BX2GWQk6V1LjuiSqrdzBsKYtKOb44Uf/vAL/OjS4aY5Ilq4yLEEacafLde7CuWUTVvqH2P
- 1furpmQ6sPJr71xRnjQ8XqEY8N8V18arQD7y6SGMZlQBkspOKSx1nTanvVEWmXMfxt9ZddnzjW+
- KMKf8+WjGcVZnYnNDFAys09xbO0fKtzCWwU151mf1HZDyB90k3kE0aaCrgqKvFTlqpbJAa9LzKI
- exHqAx/dG6oABfEE2CBw+NrYTwuadPkrDFv2YqrZawWDcEsiHyp79EuoAsCQb33VofrnXTWMjYc
- EGpUw5V/ABbuV5d98GU7IUMv7B8dOQ==
-X-Proofpoint-GUID: wwEvDZgrz76BuuzQ800K3COTnMBSVo6E
-X-Proofpoint-ORIG-GUID: wwEvDZgrz76BuuzQ800K3COTnMBSVo6E
-X-Authority-Analysis: v=2.4 cv=V94kEeni c=1 sm=1 tr=0 ts=68a51f22 cx=c_pps
+X-Proofpoint-ORIG-GUID: cHfUWM3KGiFs7FJoiOuwHErwqfvdF0rU
+X-Proofpoint-GUID: cHfUWM3KGiFs7FJoiOuwHErwqfvdF0rU
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE5MDE5NyBTYWx0ZWRfX+V+sG7is/uC0
+ FR8t0L4s8S37T0jKbVUSzYW6Vn+KN5uC9PmxNS7i0HKw54PL2u8Qp/FFBHiTpwOsLkWb+9Mx9Q2
+ hJ6NgARxnInuZ+mJmpbVfRngMlyviPDYAmmiQTCNKzP0kHb38TJSe90pNUE77CtzcJGanBgACoD
+ SSWuuT6/F2qkhR2P3HcNz5zSvKYFy9KFBoT+Zxg+/1wQdGgb6K4Ckaz9o/owAOOcsUVZpOGBK6l
+ Kkz00FvgZWY2B9zMQSZOzcK5auVBWnCmmqu8Nq9YoO6P6xo5c3uJlYSlx+9a5iFb4Fm0o0UOCik
+ KqIHJhthilO7tzm7Ja7Co3S24Yy/AgarEGSvpi3RD3pTF5GHiqCZFJYn4JK6Ot/+VAVkCEOheFK
+ rAvygBTEBSS88CrUSVjGknuTdiV1/w==
+X-Authority-Analysis: v=2.4 cv=Qp4HHVyd c=1 sm=1 tr=0 ts=68a51f24 cx=c_pps
  a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=-pbL9rYvnyYrJvq5bQ8A:9
+ a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=eZrgD7rVaXJ09-4h1GUA:9
  a=UhEZJTgQB8St2RibIkdl:22 a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=QOGEsqRv6VhmHaoFNykA:22
 
-From: Khalid Aziz <khalid@kernel.org>
-
-Make msharefs filesystem writable and allow creating directories
-to support better access control to mshare'd regions defined in
-msharefs.
+When a new file is created under msharefs, allocate a new mm_struct
+to be associated with it for the lifetime of the file.
+The mm_struct will hold the VMAs and pagetables for the mshare region
+the file represents.
 
 Signed-off-by: Khalid Aziz <khalid@kernel.org>
 Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 ---
- mm/mshare.c | 116 +++++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 115 insertions(+), 1 deletion(-)
+ mm/mshare.c | 68 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
 diff --git a/mm/mshare.c b/mm/mshare.c
-index d666471bc94b..c43b53a7323a 100644
+index c43b53a7323a..400f198c0791 100644
 --- a/mm/mshare.c
 +++ b/mm/mshare.c
-@@ -19,14 +19,128 @@
+@@ -19,6 +19,11 @@
  
  const unsigned long mshare_align = P4D_SIZE;
  
-+static const struct inode_operations msharefs_dir_inode_ops;
-+static const struct inode_operations msharefs_file_inode_ops;
++struct mshare_data {
++	struct mm_struct *mm;
++	refcount_t ref;
++};
 +
- static const struct file_operations msharefs_file_operations = {
+ static const struct inode_operations msharefs_dir_inode_ops;
+ static const struct inode_operations msharefs_file_inode_ops;
+ 
+@@ -26,11 +31,55 @@ static const struct file_operations msharefs_file_operations = {
  	.open			= simple_open,
  };
  
-+static struct inode
-+*msharefs_get_inode(struct mnt_idmap *idmap, struct super_block *sb,
-+			const struct inode *dir, umode_t mode)
-+{
-+	struct inode *inode = new_inode(sb);
-+
-+	if (!inode)
-+		return ERR_PTR(-ENOMEM);
-+
-+	inode->i_ino = get_next_ino();
-+	inode_init_owner(&nop_mnt_idmap, inode, dir, mode);
-+	simple_inode_init_ts(inode);
-+
-+	switch (mode & S_IFMT) {
-+	case S_IFREG:
-+		inode->i_op = &msharefs_file_inode_ops;
-+		inode->i_fop = &msharefs_file_operations;
-+		break;
-+	case S_IFDIR:
-+		inode->i_op = &msharefs_dir_inode_ops;
-+		inode->i_fop = &simple_dir_operations;
-+		inc_nlink(inode);
-+		break;
-+	default:
-+		iput(inode);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	return inode;
-+}
-+
 +static int
-+msharefs_mknod(struct mnt_idmap *idmap, struct inode *dir,
-+		struct dentry *dentry, umode_t mode)
++msharefs_fill_mm(struct inode *inode)
 +{
-+	struct inode *inode;
++	struct mm_struct *mm;
++	struct mshare_data *m_data = NULL;
++	int ret = -ENOMEM;
 +
-+	inode = msharefs_get_inode(idmap, dir->i_sb, dir, mode);
-+	if (IS_ERR(inode))
-+		return PTR_ERR(inode);
++	mm = mm_alloc();
++	if (!mm)
++		return -ENOMEM;
 +
-+	d_instantiate(dentry, inode);
-+	dget(dentry);
-+	inode_set_mtime_to_ts(dir, inode_set_ctime_current(dir));
++	mm->mmap_base = mm->task_size = 0;
 +
++	m_data = kzalloc(sizeof(*m_data), GFP_KERNEL);
++	if (!m_data)
++		goto err_free;
++	m_data->mm = mm;
++
++	refcount_set(&m_data->ref, 1);
++	inode->i_private = m_data;
 +	return 0;
++
++err_free:
++	mmput(mm);
++	kfree(m_data);
++	return ret;
 +}
 +
-+static int
-+msharefs_create(struct mnt_idmap *idmap, struct inode *dir,
-+		struct dentry *dentry, umode_t mode, bool excl)
++static void
++msharefs_delmm(struct mshare_data *m_data)
 +{
-+	return msharefs_mknod(idmap, dir, dentry, mode | S_IFREG);
++	mmput(m_data->mm);
++	kfree(m_data);
 +}
 +
-+static struct dentry *
-+msharefs_mkdir(struct mnt_idmap *idmap, struct inode *dir,
-+		struct dentry *dentry, umode_t mode)
++static void mshare_data_putref(struct mshare_data *m_data)
 +{
-+	int ret = msharefs_mknod(idmap, dir, dentry, mode | S_IFDIR);
++	if (!refcount_dec_and_test(&m_data->ref))
++		return;
 +
-+	if (!ret)
-+		inc_nlink(dir);
-+	return ERR_PTR(ret);
++	msharefs_delmm(m_data);
 +}
 +
- struct msharefs_info {
- 	struct dentry *info_dentry;
+ static struct inode
+ *msharefs_get_inode(struct mnt_idmap *idmap, struct super_block *sb,
+ 			const struct inode *dir, umode_t mode)
+ {
+ 	struct inode *inode = new_inode(sb);
++	int ret;
+ 
+ 	if (!inode)
+ 		return ERR_PTR(-ENOMEM);
+@@ -43,6 +92,11 @@ static struct inode
+ 	case S_IFREG:
+ 		inode->i_op = &msharefs_file_inode_ops;
+ 		inode->i_fop = &msharefs_file_operations;
++		ret = msharefs_fill_mm(inode);
++		if (ret) {
++			iput(inode);
++			inode = ERR_PTR(ret);
++		}
+ 		break;
+ 	case S_IFDIR:
+ 		inode->i_op = &msharefs_dir_inode_ops;
+@@ -141,6 +195,19 @@ static const struct inode_operations msharefs_dir_inode_ops = {
+ 	.rename		= msharefs_rename,
  };
  
-+static inline bool
-+is_msharefs_info_file(const struct dentry *dentry)
++static void
++msharefs_evict_inode(struct inode *inode)
 +{
-+	struct msharefs_info *info = dentry->d_sb->s_fs_info;
++	struct mshare_data *m_data = inode->i_private;
 +
-+	return info->info_dentry == dentry;
++	if (!m_data)
++		goto out;
++
++	mshare_data_putref(m_data);
++out:
++	clear_inode(inode);
 +}
-+
-+static int
-+msharefs_rename(struct mnt_idmap *idmap,
-+		struct inode *old_dir, struct dentry *old_dentry,
-+		struct inode *new_dir, struct dentry *new_dentry,
-+		unsigned int flags)
-+{
-+	if (is_msharefs_info_file(old_dentry) ||
-+	    is_msharefs_info_file(new_dentry))
-+		return -EPERM;
-+
-+	return simple_rename(idmap, old_dir, old_dentry, new_dir,
-+			     new_dentry, flags);
-+}
-+
-+static int
-+msharefs_unlink(struct inode *dir, struct dentry *dentry)
-+{
-+	if (is_msharefs_info_file(dentry))
-+		return -EPERM;
-+
-+	return simple_unlink(dir, dentry);
-+}
-+
-+static const struct inode_operations msharefs_file_inode_ops = {
-+	.setattr	= simple_setattr,
-+};
-+
-+static const struct inode_operations msharefs_dir_inode_ops = {
-+	.create		= msharefs_create,
-+	.lookup		= simple_lookup,
-+	.link		= simple_link,
-+	.unlink		= msharefs_unlink,
-+	.mkdir		= msharefs_mkdir,
-+	.rmdir		= simple_rmdir,
-+	.rename		= msharefs_rename,
-+};
 +
  static ssize_t
  mshare_info_read(struct file *file, char __user *buf, size_t nbytes,
  		loff_t *ppos)
-@@ -106,7 +220,7 @@ msharefs_fill_super(struct super_block *sb, struct fs_context *fc)
- 	inode->i_ino = 1;
- 	inode->i_mode = S_IFDIR | 0777;
- 	simple_inode_init_ts(inode);
--	inode->i_op = &simple_dir_inode_operations;
-+	inode->i_op = &msharefs_dir_inode_ops;
- 	inode->i_fop = &simple_dir_operations;
- 	set_nlink(inode, 2);
+@@ -158,6 +225,7 @@ static const struct file_operations mshare_info_ops = {
  
+ static const struct super_operations mshare_s_ops = {
+ 	.statfs		= simple_statfs,
++	.evict_inode	= msharefs_evict_inode,
+ };
+ 
+ static int
 -- 
 2.47.1
 
