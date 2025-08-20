@@ -1,137 +1,195 @@
-Return-Path: <linux-arch+bounces-13226-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13227-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBEBDB2D9E1
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 12:16:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55E9EB2DA00
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 12:30:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD7CF5E121C
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 10:15:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E354C685A4E
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 10:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF9612D94BC;
-	Wed, 20 Aug 2025 10:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xk/l9Yjb";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uqPIa7gz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDA2B2E0B48;
+	Wed, 20 Aug 2025 10:29:56 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A112459D4;
-	Wed, 20 Aug 2025 10:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDD3264624;
+	Wed, 20 Aug 2025 10:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755684910; cv=none; b=cpSYtc9xzG7M/Z1UsEU/mwIYBi3iJzCi4TbUgZYzQx0BnkGYjrdVfThQ++4cf9PEvODgTP+FRlqMmun4uF2xK2sm4bK1Ss+5L4eiLx3xrUd8JaHnCL6ZUNh5qqtJr65KAmER2Ue2xf98gBMweZdSuIUKu2wAPluAXJQ7UGJw+gk=
+	t=1755685796; cv=none; b=nANr/sY/k76aYKPYwTIp03ioDYWmlCswzt8PJQe8dALzYHA2Ge9KadCwUbEvhuLXneCSHDfTbmMXd89/VKYeQ3EcUestv+o+HMqh+8pI7WS8qz/6Tle43xgvkKRmEUh5cjRjAtBtONa6mDNYd0dFZRM84odGvObHeMiSuKTXS3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755684910; c=relaxed/simple;
-	bh=uahLgJ+9Vb1frTk4rhXXm3v4WzbXDg3Zmu/qGvO8wY0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ew+5emFedoCTUE8w+zoHDF+vHW6xUN/RQCZxWxGIpXnwtWzgdT/9BDgQSWdzxJiwO3JEgpn7LEDkHtjoSqHz1/up6+GjjCjAotgJh1PrxSsfOeOcJOU4XJ812tK+WXyq4SAjmDV8t2/IosqiDN7f5xidLbs8DTCa5KaJ+qVqfMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xk/l9Yjb; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uqPIa7gz; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Wed, 20 Aug 2025 12:15:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1755684907;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Iq9Rp/OuC3PCbtXKJ+rrICU+++sBXQCJ0QqJmyLjg+I=;
-	b=xk/l9YjbZxA1WTuNZDPDzZ8Wdc5Ml1Z8iLcrdiinHR/jwkPKoZe+/Yal4T3iQYwXywj3aL
-	TuAdMOj+eQI0qmH4cwrwb6A3GMEaaVQoSspG8drK9wAs5SV2ideGv0qB3XhysuV56KbSJ4
-	Ji1ZYj+TAl0GzjJEk9GVKmLEw7BefXb3EhPgFPnViqNPKbjRmStIhai3NtAluEf5PrZHVV
-	T4448Dt1lvhIAkl03wcMAqvjtP2i+hGi5Mem2w/M3c9233P9HviyrsxwKIaTEioVDHmkb5
-	w4lNJSNOF2EW+K8iCdf0/FKJRU8M0mcWk1yvh6VZByLxUK8W+1DJdnpNq/W+nA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1755684907;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Iq9Rp/OuC3PCbtXKJ+rrICU+++sBXQCJ0QqJmyLjg+I=;
-	b=uqPIa7gzVKO93eAxiDkhCF2+ypJHv38VRv3c6TBXEdvdEQOGkI4lmIgUVLp7mtuPYYNrwu
-	m3d54o5VitT9DoBQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: John Stultz <jstultz@google.com>
-Cc: Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Shuah Khan <shuah@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org, 
-	Richard Cochran <richardcochran@gmail.com>, Christopher Hall <christopher.s.hall@intel.com>, 
-	Miroslav Lichvar <mlichvar@redhat.com>, Werner Abt <werner.abt@meinberg-usa.com>, 
-	David Woodhouse <dwmw2@infradead.org>, Kurt Kanzenbach <kurt@linutronix.de>, 
-	Nam Cao <namcao@linutronix.de>, Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH 12/14] vdso/gettimeofday: Add support for auxiliary clocks
-Message-ID: <20250820113704-8b174953-f02a-4376-9359-e4007914ac2a@linutronix.de>
-References: <20250701-vdso-auxclock-v1-0-df7d9f87b9b8@linutronix.de>
- <20250701-vdso-auxclock-v1-12-df7d9f87b9b8@linutronix.de>
- <CANDhNCqvKOc9JgphQwr0eDyJiyG4oLFS9R8rSFvU0fpurrJFDg@mail.gmail.com>
+	s=arc-20240116; t=1755685796; c=relaxed/simple;
+	bh=qH4IBUz0cBSRbL6T2wLAPPu5nrICSVB34pQP+fsrzUU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=noDwYr2NDM2DWiVQEMxjHgYxXdySo6D5eEERwGWNZlHyKOhdwkC98ZA4LwYyukftHROiqNBEMp2ZpdScd2+5BEUdHrxWI5YyImR8TwLK6xIGXqp6u85R4dt9EqhnkSaXQp1agvuIJWojBBE1UW7DoQ7UmYAF5AnjMi2z1v3knQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4c6N0n0mSFz6L5l4;
+	Wed, 20 Aug 2025 18:26:49 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 05FE5140119;
+	Wed, 20 Aug 2025 18:29:52 +0800 (CST)
+Received: from SecurePC-101-06.huawei.com (10.122.19.247) by
+ frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 20 Aug 2025 12:29:51 +0200
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Catalin Marinas <catalin.marinas@arm.com>, <james.morse@arm.com>,
+	<linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-mm@kvack.org>, Will Deacon <will@kernel.org>, Dan Williams
+	<dan.j.williams@intel.com>, Davidlohr Bueso <dave@stgolabs.net>, "H . Peter
+ Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+CC: Yicong Yang <yangyicong@huawei.com>, <linuxarm@huawei.com>, Yushan Wang
+	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
+ Rutland <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski
+	<luto@kernel.org>
+Subject: [PATCH v3 0/8] Cache coherency management subsystem
+Date: Wed, 20 Aug 2025 11:29:42 +0100
+Message-ID: <20250820102950.175065-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANDhNCqvKOc9JgphQwr0eDyJiyG4oLFS9R8rSFvU0fpurrJFDg@mail.gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-Hi John,
+Support system level interfaces for cache maintenance as found on some
+ARM64 systems. This is needed for correct functionality during various
+forms of memory hotplug (e.g. CXL). Typical hardware has MMIO interface
+found via ACPI DSDT.
 
-On Wed, Aug 20, 2025 at 01:03:56AM -0700, John Stultz wrote:
-> On Tue, Jul 1, 2025 at 1:58 AM Thomas Weißschuh
-> <thomas.weissschuh@linutronix.de> wrote:
-> >
-> > Expose the auxiliary clocks through the vDSO.
-> >
-> > Architectures not using the generic vDSO time framework,
-> > namely SPARC64, are not supported.
-> >
-> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> 
-> Just as a heads up, I've just been bisecting and this commit seems to
-> be causing problems on arm64 devices, running 32bit versions of
-> kselftest nanosleep or inconsistency-check tests. Running the 64bit
-> versions of the tests are not showing issues.
+Includes parameter changes to cpu_cache_invalidate_memregion() but no
+functional changes for architectures that already support this call.
 
-Thanks for the report, I can reproduce the issue.
+v3:
+  - Squash the layers by moving all the management code into
+    lib/cache_maint.c that architectures can opt into via
+    GENERIC_CPU_CACHE_MAINTENANCE (Dan).  I added entries to Conor's
+    drivers/cache MAINTAINERS entry to include this lib/ code but if
+    preferred I can add a separate entry for it.
+  - Add a new patch 1 that drops the old IODESC_RES_ parameter as it never
+    did anything other than document intent.  With the addition of a
+    flushing range, we would have to check the range and resource type
+    matched. Simpler to just drop the parameter. (Dan)
+  - Minor fixes and renames as per reviews.
+  - Even if all else looks good, I fully expect some discussion of the
+    naming as I'm not particularly happy with it.
+  - Open question on whether is acceptable for the answer to whether
+    cpu_cache_invalidate_memregion() is supported to change as drivers
+    register (potentially after initial boot).  Could design a firmware
+    table solution to this, but will take a while - not sure if it is
+    necessary.
+  - Switch to a fwctl style allocation function that makes the container
+    nature of the allocation explicit.
 
-> From my initial digging, it looks like clockids that aren't vdso
-> enabled (CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID,
-> CLOCK_REALTIME_ALARM, CLOCK_BOOTTIME_ALARM) are somehow getting caught
-> in the vdso logic and are *not* falling back to the syscall (stracing
-> the test I don't see syscalls happen before the failure), and the
-> values returned don't look to be correct.
+On current ARM64 systems (and likely other architectures) the
+implementation of cache flushing need for actions such as CXL memory
+hotplug e.g. cpu_cache_invalidate_memregion(), is performed by system
+components outside of the CPU, controlled via either firmware or MMIO
+interfaces.
 
-The generic vDSO code assumes that it can use the UAPI headers, also in the
-compat vDSO. This is true for most architectures, as the UAPI headers work
-correctly in 32-bit and 64-bit mode. On arm64 this is different, as the headers
-from arm64/ are never used by regular 32-bit userpspace. So
-arch/arm64/include/uapi/asm/bitsperlong.h defines __BITS_PER_LONG=64 even when
-used by the 32-bit compat vDSO. The commit you identified uses __GENMASK()
-which uses __BITS_PER_LONG. Due to the mismatch between __BITS_PER_LONG and the
-real long datatype we run into an out-of-bounds shift and therefore undefined
-behaviour. And of course -Wshift-count-overflow is explicitly disabled.
+These control units run the necessary coherency protocol operations to
+cause the write backs and cache flushes to occur asynchronously. The allow
+filtering by PA range to reduce disruption to the system. Systems
+supporting this interface must be designed to ensure that, when complete,
+all cache lines in the range are in invalid state or clean state
+(prefetches may have raced with the invalidation). This must include
+memory-side caches and other non architectural caches beyond the Point
+of Coherence (ARM terminology) such that writes will reach memory even
+after OS programmable address decoders are modified (for CXL this is
+any HDM decoders that aren't locked). Software will guarantee that no
+writes to these memory ranges race with this operation. Whilst this is
+subtly different from write backs must reach the physical memory that
+difference probably doesn't matter to those reading this series.
 
-There are a few possible fixes, none of which is really great.
-I'll send some patches.
+The possible distributed nature of the relevant coherency management
+units (e.g. due to interleaving) requires the appropriate commands to be
+issued to multiple (potentially heterogeneous) units. To enable this a
+registration framework is provided to which drivers may register a set
+of callbacks. Upon a request for a cache maintenance operation the
+framework iterates over all registered callback sets, calling first a
+command to write back and invalidate, and then optionally a command to wait
+for completion. Filtering on relevance is left to the individual drivers.
 
-> The inconsistency-check output looks like:
+Two drivers are included. This HiSilicon Hydra Home Agent driver which
+controls hardware found on some of our relevant server SoCs and,
+mostly to show that the approach is general, a driver based on a firmware
+interface that was in a public PSCI specification alpha version
+(now dropped - don't merge that!)
 
-(...)
+QEMU emulation code at
+http://gitlab.com/jic23/qemu cxl-2025-03-20 
 
-> Which hints we're returning nanosecond values in the tv_sec field somehow.
+Remaining opens:
+- Naming.  All suggestions welcome!
+- I don't particularly like defining 'generic' infrastructure with so few
+  implementations. If anyone can point me at docs for another one or two,
+  or confirm that they think this is fine that would be great!
+- I made up the ACPI spec - it's not documented, non official and honestly
+  needs work. I would however like to get feedback on whether it is
+  something we want to try and get through the ACPI Working group as a much
+  improved code first proposal?  The potential justification being to avoid
+  the need for lots trivial drivers where maybe a bit of DSDT interpreted
+  code does the job better. (Currently I'm not hearing much demand for this
+  so will probably drop in a future version).
 
-That seems to be an artifact of the UB from above, this happens even if
-do_aux() just returns 'false'.
+Thanks to all who engaged in the discussion so far.
 
+Jonathan
 
-Thomas
+Jonathan Cameron (5):
+  memregion: Drop unused IORES_DESC_* parameter from
+    cpu_cache_invalidate_memregion()
+  MAINTAINERS: Add Jonathan Cameron to drivers/cache
+  arm64: Select GENERIC_CPU_CACHE_MAINTENANCE and
+    ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+  acpi: PoC of Cache control via ACPI0019 and _DSM
+  Hack: Pretend we have PSCI 1.2
+
+Yicong Yang (2):
+  memregion: Support fine grained invalidate by
+    cpu_cache_invalidate_memregion()
+  lib: Support ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+
+Yushan Wang (1):
+  cache: Support cache maintenance for HiSilicon SoC Hydra Home Agent
+
+ MAINTAINERS                        |   3 +
+ arch/arm64/Kconfig                 |   2 +
+ arch/x86/mm/pat/set_memory.c       |   2 +-
+ drivers/cache/Kconfig              |  22 ++++
+ drivers/cache/Makefile             |   3 +
+ drivers/cache/acpi_cache_control.c | 153 +++++++++++++++++++++++
+ drivers/cache/hisi_soc_hha.c       | 187 +++++++++++++++++++++++++++++
+ drivers/cxl/core/region.c          |   5 +-
+ drivers/firmware/psci/psci.c       |   2 +
+ drivers/nvdimm/region.c            |   2 +-
+ drivers/nvdimm/region_devs.c       |   2 +-
+ include/linux/cache_coherency.h    |  57 +++++++++
+ include/linux/memregion.h          |  10 +-
+ lib/Kconfig                        |   3 +
+ lib/Makefile                       |   2 +
+ lib/cache_maint.c                  | 128 ++++++++++++++++++++
+ 16 files changed, 575 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/cache/acpi_cache_control.c
+ create mode 100644 drivers/cache/hisi_soc_hha.c
+ create mode 100644 include/linux/cache_coherency.h
+ create mode 100644 lib/cache_maint.c
+
+-- 
+2.48.1
+
 
