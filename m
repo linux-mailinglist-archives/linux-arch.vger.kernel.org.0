@@ -1,305 +1,424 @@
-Return-Path: <linux-arch+bounces-13200-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13215-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8771B2CDBE
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 22:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC864B2D122
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 03:10:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95A49526566
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Aug 2025 20:26:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98BF65A02E8
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 01:08:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D8131B10B;
-	Tue, 19 Aug 2025 20:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48CA52153F1;
+	Wed, 20 Aug 2025 01:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hpJSToZH"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="d+OVceRi"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51C22FE06A;
-	Tue, 19 Aug 2025 20:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755635207; cv=fail; b=pU7nChUnxtGDtzRbML5XlUm9qVX/XJ+QrVo/Ml3h5IoE6fYoymp99UW3Kkpv6l9gAI7Fro7J6pBuygzTPP/4C+Oggo0yGc2DVneZBaTu3krlS90rnAiN5pqfsv7KMElae5s7K8hzId3K6pfKVvCv1eMi/s2vJV96kJnJqJYicHU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755635207; c=relaxed/simple;
-	bh=JkuPZZPWKRCceJ/Y3z52DSRCJ/dDcqqJesTjCBSuPEY=;
-	h=From:Date:To:CC:Message-ID:In-Reply-To:References:Subject:
-	 Content-Type:MIME-Version; b=nlFYbEvJzRAzJk483KmpZkoMuC5CKLuZr7KWusUTi2RriugK+u7/H+fluj25p1J/Pr626Od97WLx2KxG/g1Ki4+R91GKFBs4ZXSWs5aWsBpAgfYADllOY90JR+s9W9Wiju1NvoNkJDivX4VJF3MbZuwY9svKFXJqv8IaOtNOi3s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hpJSToZH; arc=fail smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755635206; x=1787171206;
-  h=from:date:to:cc:message-id:in-reply-to:references:
-   subject:content-transfer-encoding:mime-version;
-  bh=JkuPZZPWKRCceJ/Y3z52DSRCJ/dDcqqJesTjCBSuPEY=;
-  b=hpJSToZHgjORNVYS8+8o8rQ0+3EcBFJ4eDykPZw9LifIGfjAHJ45hV0C
-   tM7hpklI7U9g+I5fg5QKlE14V26gFYR4w+n5o/Yws9QB3oHdYz4az30xb
-   ERqXhk8hFtiEBzbwQ7h5z4ccdZOE0HuWlsB5fROt6uaddTPGQZck/RuSY
-   rPMvq7FrFx7aoLCRaQ7y00In7hO45KXdo7/GaC46IK5HvZf+Li+UGiwFH
-   etO09pS9SABHZLvHPMgzI+BPuIeWGgJXFl2WiGOZjX/qDX10ltY3R6Hm2
-   LF8nLYBPvH34r0yMPwDslfjsyd8m1u1vwqdUiTpqsUBHJgqnFa982gmjP
-   Q==;
-X-CSE-ConnectionGUID: U7LC59piSQGktw+Cmu0PeQ==
-X-CSE-MsgGUID: Egm673+URHuVl+En88GIaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="57754789"
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="57754789"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 13:26:45 -0700
-X-CSE-ConnectionGUID: Htsj+hWgQZqKYrpSfL4Nhg==
-X-CSE-MsgGUID: O2cyMS+iShiwoTSIjtYjGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
-   d="scan'208";a="168360159"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 13:26:44 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Tue, 19 Aug 2025 13:26:44 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Tue, 19 Aug 2025 13:26:44 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (40.107.243.63)
- by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Tue, 19 Aug 2025 13:26:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nGzqunJcKJJgPFBjANnncAgeUNjha4G81X8HArW6+GOdpL5aVQkvX+r/dESYdW/R0EGk6jviJ2sjR/kMTX3aeBWbgVeOwwf19CK20eXKfUD7pPB9nNgYKg0Xz//ft+7B5wk3kpWHaaWpeXWVbd+UhJSh31aWUFpBbZgVDYHhRRB9ErrTK5U0Xs+G5uVEfOVWiJAvHcTEJSqDVVzTrOGhBc1c+2VF01cPyr7Hb+IJ9OvdDfwQxOg9NCGOq7Pn9wffl+K4Zou1qe4h6F03Bq43EUejgCy3F8yMcvHNNPsXP1B9c8yWhazFNyI9b7ThtUnN82O6hNajHo1IPjauXPkJWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fZTH5fBjS6W0ehK0OOUIHOkhBwtS+rvlbsxIipBeECY=;
- b=OUKmzqaKbXOAo9+2gtWoJd9WhMXrGl1buH4GpWZtS6JzTalG9W4K52yHpZKKuJGkJIbisSI1/dHtbZY5mj05rB/1TIL9kcdXnyk8FxTo593YWGW1nTyWxA2rVA4Gx38SqgAZRpLrK93/MI60ubR4TB8byrqL9HuZSEtNrma7xGK9ELHXo2lFLJ3NZKYrBd9l3gOKrIluBlPakQp0AUmXyacVHk0cWGLMcLqLJQcnq8+uppz/v3Bjs41w66sSrVoOZK7NOWTqmDGGsS9b+JN8HKVPcBaJG7n9FJXSalZWRfVmPlc9r0/6F7HX0m89rR6YTaKjAgebEjeIEoI6Q32FHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by IA0PR11MB8335.namprd11.prod.outlook.com (2603:10b6:208:493::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Tue, 19 Aug
- 2025 20:26:41 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::6b05:74cf:a304:ecd8]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::6b05:74cf:a304:ecd8%2]) with mapi id 15.20.9031.023; Tue, 19 Aug 2025
- 20:26:41 +0000
-From: <dan.j.williams@intel.com>
-Date: Tue, 19 Aug 2025 13:26:39 -0700
-To: Roman Kisel <romank@linux.microsoft.com>, <alok.a.tiwari@oracle.com>,
-	<arnd@arndb.de>, <bp@alien8.de>, <corbet@lwn.net>,
-	<dave.hansen@linux.intel.com>, <decui@microsoft.com>,
-	<haiyangz@microsoft.com>, <hpa@zytor.com>, <kys@microsoft.com>,
-	<mhklinux@outlook.com>, <mingo@redhat.com>, <rdunlap@infradead.org>,
-	<tglx@linutronix.de>, <Tianyu.Lan@microsoft.com>, <wei.liu@kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-	<linux-doc@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <x86@kernel.org>
-CC: <apais@microsoft.com>, <benhill@microsoft.com>, <bperkins@microsoft.com>,
-	<sunilmut@microsoft.com>
-Message-ID: <68a4ddff258de_2709100ba@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <20250714221545.5615-16-romank@linux.microsoft.com>
-References: <20250714221545.5615-1-romank@linux.microsoft.com>
- <20250714221545.5615-16-romank@linux.microsoft.com>
-Subject: Re: [PATCH hyperv-next v4 15/16] Drivers: hv: Support establishing
- the confidential VMBus connection
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR02CA0009.namprd02.prod.outlook.com
- (2603:10b6:a02:ee::22) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4641F1537;
+	Wed, 20 Aug 2025 01:05:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755651961; cv=none; b=lHb0W7irEuOPi/xWzixe5w5zPOqmUdBCcZdHORhAOm75zMCHK/al8ojcA8Nuip4kyGEy9k469Mdgf1iZZIvO8L5vNkO5ZrK0A83NNFMZ2IdgSYhW3k/WMFc7fr8owyTdw4GhPFyyYYJDq7iMufTSJDZz8IAugsYotCrzhEraUZQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755651961; c=relaxed/simple;
+	bh=BP0s0ZRJzzvDjOYC+uOZKUUt2q2jXkrQCyiVPtaMOTU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pvlPJ8qUSN3LBnPqnnfo2Y0BulZCQnEuQ31wnxojczAou9EqT7rkbzrNMGmMEtjzEzRMH62hfwLfFHKla98oygob5QiiDslf6T6ktdkSY0ojkA+8escgwDtuy23cr6d/hkEUaf7Vk2V6ikqGlL11G+s/NFqWtV+MTwtf0hH7wn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=d+OVceRi; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57JLCuZS018276;
+	Wed, 20 Aug 2025 01:04:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=yOxEwT+T1uqOenKkiLLGcZTLlycG8
+	JzdJvAh7LNRZAo=; b=d+OVceRi8FoTPSnr+nZurx+xT0P5n2i3EBibLN9opc5Nz
+	PDD7EEvHzXoOI/HUgqfP8VRGasRtQiY+LqS4+tDxlw/jvUsH4uN+TOtvvpy89ZYA
+	vdaXzSQl2DUvXRBDqy1xdZHl+TlGIeykt3ZXlqWIHQ4o5hg1t411w+/i9olWAfac
+	VyXtBw5RyTk17aeHpDnXCFxL+LF3rl1qB4Ky1QOPh7xPZ7HUD1Kx7EkO4NXZSXW8
+	CH4dUQKPe+R4eP7OG8wPt1tCxCJBdXI1PxxZR1NYVAlFOa1Mxm26HPPca+LjwgMZ
+	ABjqfjJkzCKb/LEEMVKHZR34mc6U2Cpabo65iYpuQ==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48n0ttg8bq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 20 Aug 2025 01:04:25 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57JNbsob007234;
+	Wed, 20 Aug 2025 01:04:24 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 48my3q29m6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 20 Aug 2025 01:04:24 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 57K14Nd4011685;
+	Wed, 20 Aug 2025 01:04:23 GMT
+Received: from localhost.localdomain (ca-dev60.us.oracle.com [10.129.136.27])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 48my3q29gw-1;
+	Wed, 20 Aug 2025 01:04:23 +0000
+From: Anthony Yznaga <anthony.yznaga@oracle.com>
+To: linux-mm@kvack.org
+Cc: akpm@linux-foundation.org, andreyknvl@gmail.com, arnd@arndb.de,
+        bp@alien8.de, brauner@kernel.org, bsegall@google.com, corbet@lwn.net,
+        dave.hansen@linux.intel.com, david@redhat.com,
+        dietmar.eggemann@arm.com, ebiederm@xmission.com, hpa@zytor.com,
+        jakub.wartak@mailbox.org, jannh@google.com, juri.lelli@redhat.com,
+        khalid@kernel.org, liam.howlett@oracle.com, linyongting@bytedance.com,
+        lorenzo.stoakes@oracle.com, luto@kernel.org, markhemm@googlemail.com,
+        maz@kernel.org, mhiramat@kernel.org, mgorman@suse.de, mhocko@suse.com,
+        mingo@redhat.com, muchun.song@linux.dev, neilb@suse.de,
+        osalvador@suse.de, pcc@google.com, peterz@infradead.org,
+        pfalcato@suse.de, rostedt@goodmis.org, rppt@kernel.org,
+        shakeel.butt@linux.dev, surenb@google.com, tglx@linutronix.de,
+        vasily.averin@linux.dev, vbabka@suse.cz, vincent.guittot@linaro.org,
+        viro@zeniv.linux.org.uk, vschneid@redhat.com, willy@infradead.org,
+        x86@kernel.org, xhao@linux.alibaba.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH v3 00/22] Add support for shared PTEs across processes
+Date: Tue, 19 Aug 2025 18:03:53 -0700
+Message-ID: <20250820010415.699353-1-anthony.yznaga@oracle.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|IA0PR11MB8335:EE_
-X-MS-Office365-Filtering-Correlation-Id: 090b5398-7d61-4f19-0fe4-08dddf5eb4bb
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020|7053199007;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?ei9GWC9yeGNoRXI1VDlrRTBiazlJYUYyV2lzY3NTMjY4czQ0QTkrVnNMRFVj?=
- =?utf-8?B?UCtVc2JtVXNUQ3lWT2pqZzRLQUNHV3loRTlmM253WG1mcHBMNmJUN0MwMHdU?=
- =?utf-8?B?aHdiNzZZeFNMNUd0RkdaZGxDcWk0S3lrV09zeHZvVGFXcVhBT3ovN0FVby9m?=
- =?utf-8?B?bDAvTU1hNERHZUo4Wm9JQ1pjL2xDMU1ySm5rZUFteE1nT3JMdW5XKzBUNmVa?=
- =?utf-8?B?SVBacTBJQVVYSnc3bkx1UXprWVlFUFVPZUNyOEtlUm03NnNPU2tjYmRkZ09x?=
- =?utf-8?B?cExFMFhKVXVHdkF6MDlFd2hQUkxGVk1iYkxXV0ZvYmpVZmNGSGFoRWpmZ1lY?=
- =?utf-8?B?bVVsS3RiL01kUW5DTWkvWUp5T3JMQ25QNHl5MmtSRVlMRzE2MklzckNZTW1q?=
- =?utf-8?B?YmhXZjRzeHdJQnY5Wmp6S0ZTc3pBTkxxckxTMWRRUk1NOTNRMVVCbFhMTFlz?=
- =?utf-8?B?NXNwV3lpVEoreEhNL1EzQ1ZTaEJ3bWVscUc4QS9ROExnMUY0QjVUcDNYK29J?=
- =?utf-8?B?NzdLbWRuTGFLcDltQm95Yzh0SzNWajVhRlFTUXpRcStueXJRK2wvdzRVZDFt?=
- =?utf-8?B?YTBJQ2hOTDkzU2ZQRDYyNldWdUVwM3R5UEdJcnFYOEdxNGFQWnUwaHlHdmtX?=
- =?utf-8?B?S04wYkdYQ0tzOERvNDg1MXpMZ203QzVwOHUxTGNxR2RuaEhIdXVIRFFDemE0?=
- =?utf-8?B?eDdteUxZaHpFMldGY2wwR2VZRnJpQXFhcE0wU0o3SEIzMVEzVWtudGNtYWF2?=
- =?utf-8?B?aE9FbWd0NWk1NDl2c3ovTTdiVmc3Uktyd3VtZDZtRi9mbkJEaVQxNGxKOTVv?=
- =?utf-8?B?RjIzbjVFeGNyTXNRUExmVDFsWWhSUFRNSW43eGNrSEFHdVRITUV5WUw0T003?=
- =?utf-8?B?bHViQk1yL2VRaHJFQWNUT1daeFZlYjgwZUFUUlJhb3FZYW1waWMyNlB2SFdQ?=
- =?utf-8?B?SWVFbE9MN2pNUUpzQWJ0NmNlbVI3N2FqcElGV3dpRXZhRTZPcW1CVno3dFlI?=
- =?utf-8?B?SGZzZ2FTcXQzT3l3SS9TMTU2bHI3UWh1VnVlMlJGdWswSGY4b2duNzRHcndC?=
- =?utf-8?B?ZkJCUHg1SlRZaGxVcnl3QVVzN0ZwMDV4UGszWmQ3UGZROVVlUXY1VUQzb2s2?=
- =?utf-8?B?N2VpczdnYU5tT3N6T2V5dlc1ZUVvSEd1cFBsYlJ5VzZ3S1BpT1JZMUNnYTRl?=
- =?utf-8?B?aGxLNmZDc2NaQURkV2dsU0JmeVV4SWtYbStuOGdkdklaQWtyMnBVemFNZjVM?=
- =?utf-8?B?MGYzSFc3V1UyVkNoMDdiYmJNd24xOEJhKzQ3a2p5SFN6TTVJRVFHY0w3QU84?=
- =?utf-8?B?cGczZlZaaFk3dnRaR3dUR1NwbndnL2dxdFRaNmpURDZVWDdVNkZEN3RJVjht?=
- =?utf-8?B?QnhJOXZ0bkU4d09GYjdhYVJsaGpZQU45bGFYbjFIMU0xc3JhT1MraE1XS1k4?=
- =?utf-8?B?VG9GRVB6MlRKV2NVQjhFY3B0b0xLWkVVRXZNWkFhOVYxMVR6aDZxL3FKTks5?=
- =?utf-8?B?anZVVlg0ZXE3RDFGMUt1YnJFc1UwZXdoeitmRm5McDJ4ekNYbUYwdjN0ZGF5?=
- =?utf-8?B?SHQzRlRlQVFQL0dvR1BINHV6VXdTWWdBRHJ1YWhRUFJ6UXhiQ3dUUGNFZFJB?=
- =?utf-8?B?bDlMOWQxZjBIU1g2YlRLRlRheGJhL1p2bm5aSVRWcEk5b09DbG0reHdUSTRX?=
- =?utf-8?B?Um9ab3BLZjRSN0tiYTJ0U3hMRXdUQzNPZ3NHa0ZiRGdZeStVZ2ljc0hLUkRQ?=
- =?utf-8?B?dnM1dnJrWHpZUDdnd245SDQyU0M4VXpTbkZVZTVNbU5oNWNjaGdTMnZNRitZ?=
- =?utf-8?B?SnlHY241K3hOTGdEbmNqZ3JsRFRRRmFaZGtlQXV2Z09IYkVUdlFtaVI3bFpu?=
- =?utf-8?B?elhicldpMllwSTVtcS9ESjQrcGlzRndycE9xaGttc1hHN1BPQkNlenJ4bVdJ?=
- =?utf-8?B?OUlrU0FCYzZaWXRxMUxFWjBlWENKR3ZGeFpTUUZQNUVzMUNmTDd5WlJzaEI5?=
- =?utf-8?B?WVl4T3ExWGNBPT0=?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N2JhSTB1SHd2VmQwL1czWGIwdHlzeW1CcXVkQk8yUnpiMmljUEhDcUh0MGk2?=
- =?utf-8?B?UGl5MmxHQnRQWkVpWllVNjVSbXV6SFFhMS9Na3BwUWEydDZaSWY5UjJlZkRO?=
- =?utf-8?B?QnNaMlUyaWplMFNVMW14OURKU2llUlQyak1zTUVoVVQ5d1ZlVTNrZjN5MC92?=
- =?utf-8?B?OURtbE56R0NxcFRYRmlaV1lSejJvWEFTOHZNQTg3WldXQWpGQ3FNQzE4RTNa?=
- =?utf-8?B?N3ZRODg3SWNnMnBQeklycGd3RXlFZ3FiKzBreVVQRzFoUmFqMkF3WlJjTEsy?=
- =?utf-8?B?M09RalR5ZFIxN0R0SU56Z3h4NHJZMG1sVTJyS0hLWnEwcVJFdVRvSEk4NDJ4?=
- =?utf-8?B?WGJ2YnVvY0lsMmw3SEFIVHd1MVJqKzFNa0F6UkorWUVVVFJzRFd1aU9rZUdL?=
- =?utf-8?B?KzhSRjE0cmVlbC80UEdWM0VJUGdYSTlDRW1PV1lGOWlWODJjWjdNSWpvOEIz?=
- =?utf-8?B?c001SW0xb1R4a1RFSjNMR2t4dVlOY1JtZUtjbUdKejJHS2tQWmdlbEJpcndo?=
- =?utf-8?B?S2FMNmd0MWVFQVZsTzkxMW1oL2hBK0ZkMjU5RUEwQ0hLVmJ2VGhldnAwRHo4?=
- =?utf-8?B?cEFWbDZwZm5VZk1UZVQ5QysxdHNIaE5JMjVha20wdE5pVTBhaTF2K2VDRzNT?=
- =?utf-8?B?YUtkUzE4cStta2ZUekIvd2FNNW5xMkN2cGZCRndlb1hpYTdMZGlaU1hCVlN3?=
- =?utf-8?B?eUgzS3djNlRUQ0dtQkQ2TlF6Y3pta3JQaVBRbzBjREUxYm56OTRSUUxxeWVL?=
- =?utf-8?B?VUhlTi8wUXhzdnNZUW04YjF3TmRUcmh6UUdRSkhBUFlKNlNwbldiaWtTVDZj?=
- =?utf-8?B?NStvOTVsaDE5YWNlWTgwSCtxWE1NWW5wazF0RVI4bUdzTWFUUmxhMGU5ZjFa?=
- =?utf-8?B?UXBuSDgrUmt3Sk1ZNjdmMnJJd2ZwSVhtdHhLTHk5VmJDMzJMTGhNT05rNTlT?=
- =?utf-8?B?ck1MMG9kcmlHNmVieS9reDRFYnJNZmhaZ09tMHpyZjlCVDkxeU82NFJJN1RW?=
- =?utf-8?B?cFhMVHVHT1kzSHptS3UrdHhmTmorTUxTYkxrZFVlQUZZLy9xeDFkU3NTdm9z?=
- =?utf-8?B?SzlBU3JCSkxnYzQ1Y0Fhc0J3WnBYNlh0eHhsaEpmMUdnOExpVW9Oc3VCWGR0?=
- =?utf-8?B?ZEVrcnZ6Y2pncU5zRjVCQVZKL1d4MTVWQk5EL0FJUzVWdDU3aDJreUtObGFs?=
- =?utf-8?B?eTVpTi9WdWJWaTBnclowVUlhTXUyS3V2ZG9EVjVvQzh1UDlPUE11L29QNG5Y?=
- =?utf-8?B?aTFqbVVJS1BqK1VpcnFUWFFPcXdZRzNTcjZjbi9pVnQ2WjlPSVM5b09jY1J2?=
- =?utf-8?B?L1BDaG9qRjhGenZkWlh2blNSU3plVEc0V2NhUWhKT2pHQ0Z0cTE0b0UxVUZO?=
- =?utf-8?B?V2h5Tkg4NnNSMTlHNktiSzJTcHNPRDZycmtyWjNFQ21ZUHRSc2VWUUt6YlQ2?=
- =?utf-8?B?MThaRnU0QUJUR0xCTlJuSmozQzlwWm5HbThsT0hUNUpJVjZGekZ1bUpIQ0Rn?=
- =?utf-8?B?eEJWL2VBV0xxamlXTlhpZHgvUFRiMFNoUkY3aHVMN3dPWk9oREswakg1ODBn?=
- =?utf-8?B?TFduZGtWZXc1Y2dhL2VjLzBsQit2OEYrSXNWeFM2QStnWTA3TTM3dDNJVzZx?=
- =?utf-8?B?YUdsRFRxSEpCNTdCc0E2L3pRNEdFb3o3M2UrUUxkN2QrRzI4RlQvMGEwT0Qy?=
- =?utf-8?B?OVA2eDdERHdYZGVoeVFML3Q2akxDUkJRN2oweDM2Ty9NdzVmRDJPbmxxUjJX?=
- =?utf-8?B?ZkdzYUYzc3AwTlJTUmRHSDl5QmxJb0ErNTF5SUFLRFNPN09rN3ZXUkNraFJU?=
- =?utf-8?B?MUp5MmNreG42dDFsNGZuWW1ZRHg2UFhVWnhPbndtMzY4VFg0NnNlUzYwcnBj?=
- =?utf-8?B?TndFUlppTjZaWTZUNmQ2YisvVEo1UHBmMURjVjFmZlpBSkY0RDVSZk12bDNs?=
- =?utf-8?B?bVNDRU0vbE9KZjR2RkhDcXE4d1pUVzRiQzNuOHFsNVdaQVcxWVdKb0N6NS92?=
- =?utf-8?B?S1AyUmV1VDROK29xamFBak9UQm81UVVzN1A3R3BnTVRFb1VXS1pUelhvTkU0?=
- =?utf-8?B?dDdoSlFzbFdBZ011ZDI3L2VyZHZCT2tJdTB2MGxVNlpBdEE4SEcrTGxyS0RP?=
- =?utf-8?B?SG9BRjhNTStyY0FGckFVSm1BNWt0NGRQcWR3cVdUSGwvU1BiU2I2K1c3dUhk?=
- =?utf-8?B?WGc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 090b5398-7d61-4f19-0fe4-08dddf5eb4bb
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2025 20:26:41.1042
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: b/7G7cx7NOc/NAw9zLEbHon8ahcL7m1AH5KuPGBI4e0VEYLcr6VSxDRKDqnWH1uiBDu5nPGcZNkI1G1Uy38O86W8w5YA2t337WSM4HLyr+0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB8335
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-19_04,2025-08-14_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2508110000 definitions=main-2508200007
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE5MDE5NyBTYWx0ZWRfX+SEU8RDqteOz
+ XUMpaVaMowy1Tb6w4TIC5QCSee2MKsZ0fkxpxNj4ZSSJL3dZTdOEbW4H9XnR5H8tXRttDHaC3O/
+ 99gbLxvusWcbJv3R8Nap1CR7bVt6hxVEmxwHCP/ZHLMS9FMRh/VQzcPVYg85Oxnm4Hr48z9inLs
+ 5xsD3c5+VEhEcNtHivpn9iyx6Ydi+BS5JMecHCAeAWJYIx+VvmtQHTe0D5MeXXwdXMvs4rk/rTH
+ dQ9pDsUMRluHA5/5ljIymUKg6ktUIXtYJVo0abr5XydoAAz/2a/jUmjWEbz2q84zCbW1TMZ/S0X
+ VYoUVyY5oLPcL3ZCLbutpuO4PgBjKiQNvK0070Hu0HrvFnovQmQfad88GsY64tVpurjw2zNkUYx
+ 7ZweZavRfXuN4x8Y8gRvnaxw0mSBjw==
+X-Proofpoint-GUID: zMqsmGIGkx_DvU6VbeGf39ZlkMNr0VZB
+X-Proofpoint-ORIG-GUID: zMqsmGIGkx_DvU6VbeGf39ZlkMNr0VZB
+X-Authority-Analysis: v=2.4 cv=V94kEeni c=1 sm=1 tr=0 ts=68a51f19 cx=c_pps
+ a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
+ a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=zf8HbCBmOu6KmpLAX5MA:9
+ a=3tvOSNxEL8ccU_JU:21 a=UhEZJTgQB8St2RibIkdl:22 a=Z5ABNNGmrOfJ6cZ5bIyy:22
+ a=QOGEsqRv6VhmHaoFNykA:22
 
-Roman Kisel wrote:
-> To establish the confidential VMBus connection the CoCo VM guest
-> first attempts to connect to the VMBus server run by the paravisor.
-> If that fails, the guest falls back to the non-confidential VMBus.
-> 
-> Implement that in the VMBus driver initialization.
-> 
-> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
-> ---
->  drivers/hv/vmbus_drv.c | 189 ++++++++++++++++++++++++++++-------------
->  1 file changed, 130 insertions(+), 59 deletions(-)
-> 
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-[..]
-> @@ -1401,41 +1474,42 @@ static int vmbus_bus_init(void)
->  		}
->  	}
->  
-> -	ret = hv_synic_alloc();
-> -	if (ret)
-> -		goto err_alloc;
-> -
-> -	works = alloc_percpu(struct work_struct);
-> -	if (!works) {
-> -		ret = -ENOMEM;
-> -		goto err_alloc;
-> -	}
-> -
->  	/*
-> -	 * Initialize the per-cpu interrupt state and stimer state.
-> -	 * Then connect to the host.
-> +	 * Attempt to establish the confidential VMBus connection first if this VM is
-> +	 * a hardware confidential VM, and the paravisor is present.
-> +	 *
-> +	 * All scenarios here are:
-> +	 *	1. No paravisor,
-> +	 *  2. Paravisor without VMBus relay, no hardware isolation,
-> +	 *  3. Paravisor without VMBus relay, with hardware isolation,
-> +	 *  4. Paravisor with VMBus relay, no hardware isolation,
-> +	 *  5. Paravisor with VMBus relay, with hardware isolation.
-> +	 *
-> +	 * In the cloud, scenarios 1, 4, 5 are most common, and outside the cloud,
-> +	 * scenario 1 should be the most common at the moment. Detecting of the Confidential
-> +	 * VMBus support below takes that into account running `vmbus_alloc_synic_and_connect()`
-> +	 * only once (barring any faults not related to VMBus) in these cases. That is true
-> +	 * for the scenario 2, too, albeit it might be not as feature-rich as 1, 4, 5.
-> +	 *
-> +	 * However, the code will be doing much more work in scenario 3 where it will have to
-> +	 * first initialize lots of structures for every CPU only to likely tear them down later
-> +	 * and start again, now without attempting to use Confidential VMBus, thus taking a
-> +	 * performance hit. Such systems are rather uncomoon today, don't support more than
-> +	 * ~300 CPUs, and are rarely used with many dozens of CPUs. As the time goes on, that
-> +	 * will be even less common. Hence, the preference is to not specialize the code for
-> +	 * that scenario.
+Memory pages shared between processes require page table entries
+(PTEs) for each process. Each of these PTEs consume some of
+the memory and as long as the number of mappings being maintained
+is small enough, this space consumed by page tables is not
+objectionable. When very few memory pages are shared between
+processes, the number of PTEs to maintain is mostly constrained by
+the number of pages of memory on the system. As the number of shared
+pages and the number of times pages are shared goes up, amount of
+memory consumed by page tables starts to become significant. This
+issue does not apply to threads. Any number of threads can share the
+same pages inside a process while sharing the same PTEs. Extending
+this same model to sharing pages across processes can eliminate this
+issue for sharing across processes as well.
 
-I read this blurb looking for answers to my question below, no luck, and
-left further wondering what is the comment trying to convey to future
-maintenance?
+Some of the field deployments commonly see memory pages shared
+across 1000s of processes. On x86_64, each page requires a PTE that
+is 8 bytes long which is very small compared to the 4K page
+size. When 2000 processes map the same page in their address space,
+each one of them requires 8 bytes for its PTE and together that adds
+up to 8K of memory just to hold the PTEs for one 4K page. On a
+database server with 300GB SGA, a system crash was seen with
+out-of-memory condition when 1500+ clients tried to share this SGA
+even though the system had 512GB of memory. On this server, in the
+worst case scenario of all 1500 processes mapping every page from
+SGA would have required 878GB+ for just the PTEs. If these PTEs
+could be shared, the a substantial amount of memory saved.
 
->  	 */
-> -	cpus_read_lock();
-> -	for_each_online_cpu(cpu) {
-> -		struct work_struct *work = per_cpu_ptr(works, cpu);
-> +	ret = -ENODEV;
-> +	if (ms_hyperv.paravisor_present && (hv_isolation_type_tdx() || hv_isolation_type_snp())) {
-> +		is_confidential = true;
+This patch series implements a mechanism that allows userspace
+processes to opt into sharing PTEs. It adds a new in-memory
+filesystem - msharefs. A file created on msharefs represents a
+shared region where all processes mapping that region will map
+objects within it with shared PTEs. When the file is created,
+a new host mm struct is created to hold the shared page tables
+and vmas for objects later mapped into the shared region. This
+host mm struct is associated with the file and not with a task.
+When a process mmap's the shared region, a vm flag VM_MSHARE
+is added to the vma. On page fault the vma is checked for the
+presence of the VM_MSHARE flag. If found, the host mm is
+searched for a vma that covers the fault address. Fault handling
+then continues using that host vma which establishes PTEs in the
+host mm. Fault handling in a shared region also links the shared
+page table to the process page table if the shared page table
+already exists.
 
-In comparison to PCIe TDISP where there is an explicit validation step
-of cryptographic evidence that the platform is what it claims to be, I
-am missing the same for this.
+Ioctls are used to map and unmap objects in the shared region and
+to (eventually) perform other operations on the shared objects such
+as changing protections.
 
-I would expect something like a paravisor signed golden measurement with
-a certificate that can be built-in to the kernel to validate that "yes,
-in addition to the platform claims that can be emulated, this bus
-enumeration is signed by an authority this kernel image trusts."
+API
+===
 
-My motivation for commenting here is for alignment purposes with the
-PCIe TDISP enabling and wider concerns about accepting other devices for
-private operation. Specifically, I want to align on a shared
-representation in the device-core (struct device) to communicate that a
-device is either on a bus that has been accepted for private operation
-(confidential-vmbus today, potentially signed-ACPI-devices tomorrow), or
-is a device that has been individually accepted for private operation
-(PCIe TDISP). In both cases there needs to be either a golden
-measurement mechanism built-in, or a userspace acceptance dependency in
-the flow.
+The steps to use this feature are:
 
-Otherwise what mitigates a guest conveying secrets to a device that is
-merely emulating a trusted bus/device?
+1. Mount msharefs on /sys/fs/mshare -
+        mount -t msharefs msharefs /sys/fs/mshare
+
+2. mshare regions have alignment and size requirements. The start
+   address for the region must be aligned to an address boundary and
+   be a multiple of fixed size. This alignment and size requirement
+   can be obtained by reading the file /sys/fs/mshare/mshare_info
+   which returns a number in text format. mshare regions must be
+   aligned to this boundary and be a multiple of this size.
+
+3. For the process creating an mshare region:
+        a. Create a file on /sys/fs/mshare, for example -
+                fd = open("/sys/fs/mshare/shareme",
+                                O_RDWR|O_CREAT|O_EXCL, 0600);
+
+        b. Establish the size of the region
+                ftruncate(fd, BUFFER_SIZE);
+
+        c. Map some memory in the region
+                struct mshare_create mcreate;
+
+                mcreate.region_offset = 0;
+                mcreate.size = BUFFER_SIZE;
+                mcreate.offset = 0;
+                mcreate.prot = PROT_READ | PROT_WRITE;
+                mcreate.flags = MAP_ANONYMOUS | MAP_SHARED | MAP_FIXED;
+                mcreate.fd = -1;
+
+                ioctl(fd, MSHAREFS_CREATE_MAPPING, &mcreate)
+
+        d. Map the mshare region into the process
+                mmap((void *)TB(2), BUFFER_SIZE, PROT_READ | PROT_WRITE,
+                        MAP_FIXED | MAP_SHARED, fd, 0);
+
+        e. Write and read to mshared region normally.
+
+4. For processes attaching an mshare region:
+        a. Open the file on msharefs, for example -
+                fd = open("/sys/fs/mshare/shareme", O_RDWR);
+
+        b. Get information about mshare'd region from the file:
+                struct stat sb;
+
+                fstat(fd, &sb);
+                mshare_size = sb.st_size;
+
+        c. Map the mshare'd region into the process
+                mmap((void *)TB(2), mshare_size, PROT_READ | PROT_WRITE,
+                        MAP_FIXED | MAP_SHARED, fd, 0);
+
+5. To delete the mshare region -
+                unlink("/sys/fs/mshare/shareme");
+
+
+
+Example Code
+============
+
+Snippet of the code that a donor process would run looks like below:
+
+-----------------
+        struct mshare_create mcreate;
+
+        fd = open("/sys/fs/mshare/mshare_info", O_RDONLY);
+        read(fd, req, 128);
+        alignsize = atoi(req);
+        close(fd);
+        fd = open("/sys/fs/mshare/shareme", O_RDWR|O_CREAT|O_EXCL, 0600);
+        start = alignsize * 4;
+        size = alignsize * 2;
+
+        ftruncate(fd, size);
+
+        mcreate.region_offset = 0;
+        mcreate.size = size;
+        mcreate.offset = 0;
+        mcreate.prot = PROT_READ | PROT_WRITE;
+        mcreate.flags = MAP_ANONYMOUS | MAP_SHARED | MAP_FIXED;
+        mcreate.fd = -1;
+        ret = ioctl(fd, MSHAREFS_CREATE_MAPPING, &mcreate);
+        if (ret < 0)
+                perror("ERROR: MSHAREFS_CREATE_MAPPING");
+
+        addr = mmap((void *)start, size, PROT_READ | PROT_WRITE,
+                        MAP_FIXED | MAP_SHARED, fd, 0);
+        if (addr == MAP_FAILED)
+                perror("ERROR: mmap failed");
+
+        strncpy(addr, "Some random shared text",
+                        sizeof("Some random shared text"));
+-----------------
+
+Snippet of code that a consumer process would execute looks like:
+
+-----------------
+        fd = open("/sys/fs/mshare/shareme", O_RDONLY);
+
+        fstat(fd, &sb);
+        size = sb.st_size;
+
+        if (!size)
+                perror("ERROR: mshare region not init'd");
+
+        addr = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+        printf("Guest mmap at %px:\n", addr);
+        printf("%s\n", addr);
+        printf("\nDone\n");
+
+-----------------
+
+v3:
+  - Based on mm-new as of 2025-08-15
+  - (Fix) When unmapping an msharefs VMA, unlink the shared page tables
+    from the process page table using the new unmap_page_range vm_ops hook
+    rather than having free_pgtables() skip mshare VMAs (Jann Horn).
+  - (Fix) Keep a reference count on shared PUD pages to prevent UAF when
+    the unmap of objects in the mshare region also frees shared page
+    tables.
+  - (New) Support mapping files and anonymous hugetlb memory in an mshare
+    region.
+  - (New) Implement ownership of mshare regions. The process that
+    creates an mshare region is assigned as the owner. See the patch for
+    details.
+  - (Changed) Undid previous attempt at cgroup support. Cgroup accounting
+    is now directed to the owner process.
+  - (TBD) Support for mmu notifiers is not yet implemented. There are some
+    hurdles to be overcome. Mentioned here because it came up in comments
+    on the v2 series (Jann Horn).
+
+v2:
+  (https://lore.kernel.org/all/20250404021902.48863-1-anthony.yznaga@oracle.com/)
+  - Based on mm-unstable as of 2025-04-03 (8ff02705ba8f)
+  - Set mshare size via fallocate or ftruncate instead of MSHAREFS_SET_SIZE.
+    Removed MSHAREFS_SET_SIZE/MSHAREFS_GET_SIZE ioctls. Use stat to get size.
+    (David H)
+  - Remove spinlock from mshare_data. Initializing the size is protected by
+    the inode lock.
+  - Support mapping a single mshare region at different virtual addresses.
+  - Support system selection of the start address when mmap'ing an mshare
+    region.
+  - Changed MSHAREFS_CREATE_MAPPING and MSHAREFS_UNMAP to use a byte offset
+    to specify the start of a mapping.
+  - Updated documentation.
+
+v1:
+  (https://lore.kernel.org/linux-mm/20250124235454.84587-1-anthony.yznaga@oracle.com/)
+  - Based on mm-unstable mm-hotfixes-stable-2025-01-16-21-11
+  - Use mshare size instead of start address to check if mshare region
+    has been initialized.
+  - Share page tables at PUD level instead of PGD.
+  - Rename vma_is_shared() to vma_is_mshare() (James H / David H)
+  - Introduce and use mmap_read_lock_nested() (Kirill)
+  - Use an mmu notifier to flush all TLBs when updating shared pagetable
+    mappings. (Dave Hansen)
+  - Move logic for finding the shared vma to use to handle a fault from
+    handle_mm_fault() to do_user_addr_fault() because the arch-specific
+    fault handling checks vma flags for access permissions.
+  - Add CONFIG_MSHARE / ARCH_SUPPORTS_MSHARE
+  - Add msharefs_get_unmapped_area()
+  - Implemented vm_ops->unmap_page_range (Kirill)
+  - Update free_pgtables/free_pgd_range to free process pagetable levels
+    but not shared pagetable levels.
+  - A first take at cgroup support
+
+RFC v2 -> v3:
+  - Now based on 6.11-rc5
+  - Addressed many comments from v2.
+  - Simplified filesystem code. Removed refcounting of the
+    shared mm_struct allocated for an mshare file. The mm_struct
+    and the pagetables and mappings it contains are freed when
+    the inode is evicted.
+  - Switched to an ioctl-based interface. Ioctls implemented
+    are used to set and get the start address and size of an
+    mshare region and to map objects into an mshare region
+    (only anon shared memory is supported in this series).
+  - Updated example code
+
+[1] v2: https://lore.kernel.org/linux-mm/cover.1656531090.git.khalid.aziz@oracle.com/
+
+RFC v1 -> v2:
+  - Eliminated mshare and mshare_unlink system calls and
+    replaced API with standard mmap and unlink (Based upon
+    v1 patch discussions and LSF/MM discussions)
+  - All fd based API (based upon feedback and suggestions from
+    Andy Lutomirski, Eric Biederman, Kirill and others)
+  - Added a file /sys/fs/mshare/mshare_info to provide
+    alignment and size requirement info (based upon feedback
+    from Dave Hansen, Mark Hemment and discussions at LSF/MM)
+  - Addressed TODOs in v1
+  - Added support for directories in msharefs
+  - Added locks around any time vma is touched (Dave Hansen)
+  - Eliminated the need to point vm_mm in original vmas to the
+    newly synthesized mshare mm
+  - Ensured mmap_read_unlock is called for correct mm in
+    handle_mm_fault (Dave Hansen)
+
+Anthony Yznaga (15):
+  mm/mshare: allocate an mm_struct for msharefs files
+  mm/mshare: add ways to set the size of an mshare region
+  mm/mshare: flush all TLBs when updating PTEs in an mshare range
+  sched/numa: do not scan msharefs vmas
+  mm: add mmap_read_lock_killable_nested()
+  mm: add and use unmap_page_range vm_ops hook
+  mm: introduce PUD page table shared count
+  x86/mm: enable page table sharing
+  mm: create __do_mmap() to take an mm_struct * arg
+  mm: pass the mm in vma_munmap_struct
+  sched/mshare: mshare ownership
+  mm/mshare: Add an ioctl for unmapping objects in an mshare region
+  mm/mshare: support mapping files and anon hugetlb in an mshare region
+  mm/mshare: provide a way to identify an mm as an mshare host mm
+  mm/mshare: charge fault handling allocations to the mshare owner
+
+Khalid Aziz (7):
+  mm: Add msharefs filesystem
+  mm/mshare: pre-populate msharefs with information file
+  mm/mshare: make msharefs writable and support directories
+  mm/mshare: Add a vma flag to indicate an mshare region
+  mm/mshare: Add mmap support
+  mm/mshare: prepare for page table sharing support
+  mm/mshare: Add an ioctl for mapping objects in an mshare region
+
+ Documentation/filesystems/index.rst           |   1 +
+ Documentation/filesystems/msharefs.rst        |  96 ++
+ .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+ arch/Kconfig                                  |   3 +
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/mm/fault.c                           |  40 +-
+ include/linux/mm.h                            |  52 +
+ include/linux/mm_types.h                      |  38 +-
+ include/linux/mmap_lock.h                     |   7 +
+ include/linux/mshare.h                        |  25 +
+ include/linux/sched.h                         |   5 +
+ include/trace/events/mmflags.h                |   7 +
+ include/uapi/linux/magic.h                    |   1 +
+ include/uapi/linux/msharefs.h                 |  38 +
+ ipc/shm.c                                     |  17 +
+ kernel/exit.c                                 |   1 +
+ kernel/fork.c                                 |   1 +
+ kernel/sched/fair.c                           |   3 +-
+ mm/Kconfig                                    |  11 +
+ mm/Makefile                                   |   4 +
+ mm/hugetlb.c                                  |  25 +
+ mm/memory.c                                   |  76 +-
+ mm/mmap.c                                     |  10 +-
+ mm/mshare.c                                   | 942 ++++++++++++++++++
+ mm/vma.c                                      |  22 +-
+ mm/vma.h                                      |   3 +-
+ 26 files changed, 1385 insertions(+), 45 deletions(-)
+ create mode 100644 Documentation/filesystems/msharefs.rst
+ create mode 100644 include/linux/mshare.h
+ create mode 100644 include/uapi/linux/msharefs.h
+ create mode 100644 mm/mshare.c
+
+-- 
+2.47.1
+
 
