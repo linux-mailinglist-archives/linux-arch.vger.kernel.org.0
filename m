@@ -1,120 +1,124 @@
-Return-Path: <linux-arch+bounces-13237-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13238-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A569BB2E455
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 19:48:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05C42B2E973
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Aug 2025 02:32:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CECF4722AEB
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Aug 2025 17:44:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C50651C87B91
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Aug 2025 00:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69A426B75C;
-	Wed, 20 Aug 2025 17:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E656A1531F9;
+	Thu, 21 Aug 2025 00:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="0bnL8T2y"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="fgRkRCib"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08896258EDD;
-	Wed, 20 Aug 2025 17:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC355464E;
+	Thu, 21 Aug 2025 00:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755711862; cv=none; b=jZ74kGe4E8URwwnpoeTH70KZiTyHb8SkaiLd6cn/AVwdDDYfQsyR8IdmJmWn1YlzcA2ZtCbBJPPZTQP4qNnzy+Uh8fgUt4KyAuMM2usgJJf2J2dY7I7T7FyKU87+dyclepPJq0j7Bzge3uOc+xVFR0J1G0KHIPVJxM00ei+Wke0=
+	t=1755736319; cv=none; b=SmtAOFYDui0gWChB+VvIBYkxrYtpIxJOnvtWHyONl6ZmpcZqR/PXevXRjS4Ky5m3o+ZmYu7+pr8ExFL+tgyYxYuTlylJLB0ogkbILqgddHBuHYmORwuSzeRFRRKY22j/rQoQrNyawmFbVy8+wdLFAdiHbixxz0hjgrtcr5CBhc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755711862; c=relaxed/simple;
-	bh=KdiDUstdHQrni4Yr7Jvhf1893eG6oulvykElyBviLoE=;
+	s=arc-20240116; t=1755736319; c=relaxed/simple;
+	bh=dU8whZC5nQFnLKTOvPqBGari4dX5MZhx1uUJG2HCUm0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VwS0pBEN+Q49OZKsk46Vg3qjYpvx1vukiq+POWlxdZQF+HXI+JDWnABImP3QUsXEeJoMQv48H0QjdOQnVHKlk3kAiaM8PCUKTxldRE9zj4OzxuDy0QMWGVx0gtHTXNnhszuJiBDPPk9YpBNQEPIFvaUhAuBQOqIvvQGcwSnUhhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=0bnL8T2y; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=YxAG2wevlF9hvSfOpG1gi4gKf2kHDvkSjadttXruPpE=; b=0bnL8T2ybDOrHa+Py3KB+20XsQ
-	krFSkRJ/lGSHI9KlQ0qlkdhK+qS23YBluLAvVOyoBvbJO/SbTCQXDRBwJo0tZ+Cp1m4DSS1z7XGDT
-	bq75CSkTotCMGqtD4tBJ7i8YIpE632ix5UOtckpT48GQey1yMweypKEPi1eouIUYb+w6RTQ0TeOYI
-	wwoHU5dIl+eMuf1/t1xis+rSnKTjBKynLeo+mDeoVyVPXnDdZUOyF4W1BgoI2zlm/SJELWzpgpvX9
-	8tvSWxDqv45x4EHLAoK02HGSqLAaZNADQVCvJUVy3JC9HhNc1ybuyAFZufFH2NHAbbXOxL6igBxc6
-	4N59ti0g==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uomrD-0000000Eaag-3xcU;
-	Wed, 20 Aug 2025 17:44:20 +0000
-Message-ID: <a68bf620-14b5-4500-8cb9-26a7b28af058@infradead.org>
-Date: Wed, 20 Aug 2025 10:44:18 -0700
+	 In-Reply-To:Content-Type; b=FQoqE+PEwaprjRvY/re/Z1CUKLjLVlEQ//ZXTeDP80xb8CzYKYLJyf+wS0M07REN/ibH69fTQ9/rVincHWvP7EU7pRZvfoOmGzV4xATZsZ6dzGgB9IhHiViv5gf33Jxi02b84orYKck5wYXeFc//TtmOCwXrtdIuNK5rxcMRwo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=fgRkRCib; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.75.64.99] (unknown [40.78.13.173])
+	by linux.microsoft.com (Postfix) with ESMTPSA id CCC642115A23;
+	Wed, 20 Aug 2025 17:31:56 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CCC642115A23
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1755736317;
+	bh=6tWe+ykgzm/q5D9sU/3IncC099spEIMtixvUbdzAH0g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fgRkRCibLmm15Pgj0Dh8/jXOwqg24NZtEsHFxPDCYCWFNKvdjQOPsd9qotCOSoosQ
+	 cu/PsJA282fh2UGhoSI1UmRJsqDcyGAExSxBjohPwbnUeuDqiGzNeMNU4ark2z/Bif
+	 tzJS095bYDDRM8uaEoba7Lr+LE005zUfQHCqXVKA=
+Message-ID: <f711d4ad-87a8-9cb3-aabc-a493ff18986a@linux.microsoft.com>
+Date: Wed, 20 Aug 2025 17:31:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/8] lib: Support
- ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
- linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org,
- Will Deacon <will@kernel.org>, Dan Williams <dan.j.williams@intel.com>,
- Davidlohr Bueso <dave@stgolabs.net>, "H . Peter Anvin" <hpa@zytor.com>,
- Peter Zijlstra <peterz@infradead.org>
-Cc: Yicong Yang <yangyicong@huawei.com>, linuxarm@huawei.com,
- Yushan Wang <wangyushan12@huawei.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, x86@kernel.org,
- Andy Lutomirski <luto@kernel.org>
-References: <20250820102950.175065-1-Jonathan.Cameron@huawei.com>
- <20250820102950.175065-4-Jonathan.Cameron@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 1/7] Drivers: hv: Introduce hv_hvcall_*() functions for
+ hypercall arguments
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250820102950.175065-4-Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+To: mhklinux@outlook.com, kys@microsoft.com, haiyangz@microsoft.com,
+ wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+ lpieralisi@kernel.org, kw@linux.com, manivannan.sadhasivam@linaro.org,
+ robh@kernel.org, bhelgaas@google.com, arnd@arndb.de
+Cc: x86@kernel.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-arch@vger.kernel.org
+References: <20250415180728.1789-1-mhklinux@outlook.com>
+ <20250415180728.1789-2-mhklinux@outlook.com>
+From: Mukesh R <mrathor@linux.microsoft.com>
+In-Reply-To: <20250415180728.1789-2-mhklinux@outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+On 4/15/25 11:07, mhkelley58@gmail.com wrote:
+> From: Michael Kelley <mhklinux@outlook.com>
+> 
+> Current code allocates the "hyperv_pcpu_input_arg", and in
+> some configurations, the "hyperv_pcpu_output_arg". Each is a 4 KiB
+> page of memory allocated per-vCPU. A hypercall call site disables
+> interrupts, then uses this memory to set up the input parameters for
+> the hypercall, read the output results after hypercall execution, and
+> re-enable interrupts. The open coding of these steps leads to
+> inconsistencies, and in some cases, violation of the generic
+> requirements for the hypercall input and output as described in the
+> Hyper-V Top Level Functional Spec (TLFS)[1].
+> 
+<snip>
 
+> The new functions are realized as a single inline function that
+> handles the most complex case, which is a hypercall with input
+> and output, both of which contain arrays. Simpler cases are mapped to
+> this most complex case with #define wrappers that provide zero or NULL
+> for some arguments. Several of the arguments to this new function
+> must be compile-time constants generated by "sizeof()"
+> expressions. As such, most of the code in the new function can be
+> evaluated by the compiler, with the result that the code paths are
+> no longer than with the current open coding. The one exception is
+> new code generated to zero the fixed-size portion of the input area
+> in cases where it is not currently done.
 
-On 8/20/25 3:29 AM, Jonathan Cameron wrote:
-> +struct cache_coherency_device *
-> +_cache_coherency_device_alloc(const struct coherency_ops *ops, size_t size);
-> +/**
-> + * cache_coherency_device_alloc - Allocate a cache coherency device
-> + * @ops: Cache maintenance operations
-> + * @drv_struct: structure that contains the struct cache_coherency_device
-> + * @member: Name of the struct cache_coherency_device member in @drv_struct.
-> + *
-> + * This allocates and initializes the cache_coherency_device embedded in the
-> + * drv_struct. Upon success the pointer must be freed via
-> + * cache_coherency_device_free().
-> + *
-> + * Returns a 'drv_struct \*' on success, NULL on error.
+IMHO, this is unnecessary change that just obfuscates code. With status quo
+one has the advantage of seeing what exactly is going on, one can use the
+args any which way, change batch size any which way, and is thus flexible.
+With time these functions only get more complicated and error prone. The
+saving of ram is very minimal, this makes analyzing crash dumps harder,
+and in some cases like in your patch 3/7 disables unnecessarily in error case:
 
-Preferably:
+- if (count > HV_MAX_MODIFY_GPA_REP_COUNT) {
+-  pr_err("Hyper-V: GPA count:%d exceeds supported:%lu\n", count,
+-   HV_MAX_MODIFY_GPA_REP_COUNT);
++ local_irq_save(flags);      <<<<<<<
+...
 
- * Returns: a &drv_struct * on success, %NULL on error.
+So, this is a nak from me. sorry.
 
+<snip>
 
-> + */
-> +#define cache_coherency_device_alloc(ops, drv_struct, member)	    \
-> +	({								    \
-> +		static_assert(__same_type(struct cache_coherency_device,    \
-> +					  ((drv_struct *)NULL)->member));   \
-> +		static_assert(offsetof(drv_struct, member) == 0);	    \
-> +		(drv_struct *)_cache_coherency_device_alloc(ops,	    \
-> +			sizeof(drv_struct));				    \
-> +	})
-> +void cache_coherency_device_free(struct cache_coherency_device *ccd);
-> +
-> +#endif
+> +/*
+> + * Allocate one page that is shared between input and output args, which is
+> + * sufficient for all current hypercalls. If a future hypercall requires
 
--- 
-~Randy
+That is incorrect. We've iommu map hypercalls that will use up entire page
+for input. More coming as we implement ram withdrawl from the hypervisor.
 
+Thanks,
+-Mukesh
 
