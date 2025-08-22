@@ -1,80 +1,65 @@
-Return-Path: <linux-arch+bounces-13253-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13254-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14472B3202A
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Aug 2025 18:09:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC11B32134
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Aug 2025 19:11:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6275F5861B0
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Aug 2025 16:04:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50006B205B6
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Aug 2025 17:09:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 538292882CE;
-	Fri, 22 Aug 2025 16:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45D1231771E;
+	Fri, 22 Aug 2025 17:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PiVc7+0f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UdisCh3a"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CEC25DAE7;
-	Fri, 22 Aug 2025 16:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE65313558;
+	Fri, 22 Aug 2025 17:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755878568; cv=none; b=UzeoCxxQ8mH02pJNtxu2MnBmXyFlmJdrjJnxlMtCWpxho+0uT1ewfzyh8ZzfFhxnY9othJAqEudGO0hMsQ43QSfS6/Q1GIIKNEwdogI9CRW769nrDCj3E/rZ+WJm1iPNvrhyus1OGkMIWtootRhKTjKpnYW2RGQq+NmP74T39pE=
+	t=1755882515; cv=none; b=mAh0qXW2Q+FbYqLbmVA0r06iohBpNGZEZ4PdQyV0qQc5YK1V2lDu40OO9C0BihFlHwUGDffTrJGkG+U92l3nmy35ookmdZ1m4lwpdgFNa6ljcw5CwfdH0yuxefwpxiLQ+lzfiGJY05mC0VnD2GnJliHp7oYb0sX04bmac9EFdwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755878568; c=relaxed/simple;
-	bh=ix73bSoNn7yvd8cn3z1HdCW0ZY0XpvKwTxIznMfcvLI=;
+	s=arc-20240116; t=1755882515; c=relaxed/simple;
+	bh=3YE+ZQ5vrX6aLU86H7BJlfzyReIaU+5+8eV+03TzXIE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SJrti5uf8JelK2OgLeM7OMF/jk9gTWYohQxnjFs7ihVvQmKiIKPWZxRZjxx8szw4bKekCxaUgs4htSLp4J1asIl2VKwf6ABgrb7R/Grx7k3/H2XSZE3P9sp7CjHA0KQoYIKd8tV/nXoeBxaIx1m2vUqJWRlWYqct41+TDVvjR3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PiVc7+0f; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-55f34d792c4so61285e87.3;
-        Fri, 22 Aug 2025 09:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755878564; x=1756483364; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x+hhnaziEbvfcvK+nslqj/VWqrGu2JLJjIG2S0rWuqQ=;
-        b=PiVc7+0fLRSGjiYBuSZPamCvyujMhSPcA3xBJSg0+VqfnvmRFaQeb2nFfy5szPCikd
-         A8zQtQbQSALxFfxbIn6GSntw9RdTHdTFgQ/6FxyECO70Kg8xk0ijNZitRxLzclNa9PcO
-         AbvMURGyyggjMAxv6zg+C9Pi33LJCZimYuEokyPorYycA0YRbU9BjIH8v9RGac9dGQQ3
-         vpjJIF9yeRSV9V9adZTdfDhJ1RpxQ2pNewkmRQPQXqBv+FqzRG/VHrnCyk9bqMU3el3h
-         loIkqhqcJ8aTNdHseVhvt1SuRaYEX1Xgypqw3QxA3zsZtfjNrT5HAiW7s9ukY/mKGVyo
-         LtIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755878564; x=1756483364;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x+hhnaziEbvfcvK+nslqj/VWqrGu2JLJjIG2S0rWuqQ=;
-        b=uft/VNRTcpeM7y2H8BY9VEFrXS/bEVHAYTk/5d6g/NxIGrbbLL6l1Zf5zu607aR75h
-         65M52ytOAaVv5MYdbFMteeHOsN4pU+2hJE7U+eWOKgzjrIWcxxnkC5kTIpcMnkpRdXvW
-         I1ICHIqALh0Qwau3n6Mts9Lj26rfXk1QJjsx4+Cu+TcdvVPwTXgmK+ooMlGZDIPsErre
-         sDyLauE83oDnluYT+GjKkzAu4uXq30qRVED0TGM7jvQbgZ5JBN5bRlQt38bMEjhoLW2O
-         wOLBVwqqLftCQFtCNUiDf+yg4cfNGy8iTCqpyqBwYdLw1DC8b+J1Kq62ZWQEMe9jkW1d
-         hdpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8hdu3g+Lqdij5Tv3f6W2GB0ZpO6SYJQ+hGnCPviK+ndi7huCb20JwLvfZDxOwcmjP9W9Bkw95@vger.kernel.org, AJvYcCUfvRPhuhp5YnZAn0RiEE8JbM8ADIC+4ARTyPb/k9wjAuVhfkvGI5Qk940dHNF3HVL8xj/v9rQI9U1Q@vger.kernel.org, AJvYcCXENbh3fki6I4awF52RGQ0tdKEBz1uuxntXH9Cpv6GCYq85zojC1lBa8kKSli7UQm3xNKT5s4/SvUFdNpXx@vger.kernel.org
-X-Gm-Message-State: AOJu0YztootUYyk+HosBxCET9hipQw+f0SX7rwbnY7zY0p4KI/VRcasm
-	whIWK6RqPkvuXxFqfM/orOxC/uSnU5kcRYmboLtfQ8NN9uEy7a5NdnHr
-X-Gm-Gg: ASbGnctthQbVDB6C+9x0EQ/dqkdocBvN6e4GS1TpTzHy+iqEZw1Y0dfn6GEtdb7eJET
-	NDfGLCJlRI9ZchpEXCBDQQYYiSeNJFPTzurwzdTcNbYRxCASfVA+m76D7vYmBRLwRnnYATRqNsL
-	2sE6fk/f2vjJoQjNDvhKSXeRNnLq+BNkOfG3hwoAcjRKRvcnVU5+j0nehLS/DtHNXtdk8XFj+lv
-	i2DqPelXOPOQsSMxjjn6ULwAMqSFIyMiV9OBBH3CvPoqfTGTpH+UlI5fd1jp0Yx4H1VqpcgAwjb
-	qaLgStXzDnrNPvE1gkOJQbVwEeHagpAMSGiPoVMpKLE3LbGf/eErEjXwwb15PDCeRKkRIaeiHIs
-	dOTct71w9IDxNsi10o6b9xM0DJgH7
-X-Google-Smtp-Source: AGHT+IGQszajDGNQAKf7QN48qEfm9n4yUiAaOTXLuqd4oLvJ2QirlJ8t5DPSvNvccFn1KcRv53kJsg==
-X-Received: by 2002:a05:6512:220f:b0:55b:2242:a9d8 with SMTP id 2adb3069b0e04-55f0d36fademr679617e87.7.1755878564032;
-        Fri, 22 Aug 2025 09:02:44 -0700 (PDT)
-Received: from [10.214.35.248] ([80.93.240.68])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55f35c02c89sm37612e87.34.2025.08.22.09.02.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Aug 2025 09:02:43 -0700 (PDT)
-Message-ID: <2fb52098-3952-48f1-b6c3-bbc95ce00d8d@gmail.com>
-Date: Fri, 22 Aug 2025 18:02:40 +0200
+	 In-Reply-To:Content-Type; b=EvKSY7eOCePdIViuD5e7ccsVIx4og45Les/fASzb05d7agk1xppGs5LgEakc+myDIkbKf2EwAKAqjykvCWTl7FwfzHHc9apnU2tOl+nxNxSPnkr7Xp4pXStcEHTtxB0zf2oJZR7Fq+nD490hsZcSHA5lEGzb/XNNIQyhudgL+0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UdisCh3a; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755882514; x=1787418514;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3YE+ZQ5vrX6aLU86H7BJlfzyReIaU+5+8eV+03TzXIE=;
+  b=UdisCh3aO1k4opOUZ2oyZsUiursTw0kvOVJk3awJnEBVj7mrjPgxrllr
+   DqOZ4d840wLVxG+jmuZHSrYBgJPIC1xIbA8g2cH5bUwKYTh/GTB1H9Gux
+   OR4DYYPqTWyKwWtz2z2wXYtWvqy/GEPnfCJxNgbTG08ybM4aBamNyYFZ0
+   jfptxmTsA5oJLMiOWlEKHGhE4CV0KJfghWkg5/mB/YwRNzjmGs5klqkVY
+   hDnXVP/orq1pHT3Yh/9ORguz5wtWALqM17HTwDZHFaWvsc1eArTy3R5eV
+   D955f2YU8ABbpTqXvPdoNgpxQ/cKybEOc0pRzLp1CD5fjyTuwS487+Puw
+   A==;
+X-CSE-ConnectionGUID: mx6iYmbhQoG0FLrcuu1qkw==
+X-CSE-MsgGUID: Bj47Yn0DTVGZ+oCpjiqJCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="61840234"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="61840234"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 10:08:32 -0700
+X-CSE-ConnectionGUID: 5Nu5hnUPTz+8m2WU1ivarg==
+X-CSE-MsgGUID: YdsZ6B6rSVa6oYkMnHlSKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="174065694"
+Received: from tfalcon-desk.amr.corp.intel.com (HELO [10.125.108.168]) ([10.125.108.168])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 10:08:31 -0700
+Message-ID: <79027c6f-f2f3-41b2-9ff3-c5576fc06c5c@intel.com>
+Date: Fri, 22 Aug 2025 10:08:30 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,7 +68,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] mm: fix KASAN build error due to p*d_populate_kernel()
-To: Harry Yoo <harry.yoo@oracle.com>, Dave Hansen <dave.hansen@intel.com>
+To: Harry Yoo <harry.yoo@oracle.com>
 Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, andreyknvl@gmail.com,
  aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, apopple@nvidia.com,
  ardb@kernel.org, arnd@arndb.de, bp@alien8.de, cl@gentwo.org,
@@ -96,22 +81,63 @@ Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, andreyknvl@gmail.com,
  linux-mm@kvack.org, lorenzo.stoakes@oracle.com, luto@kernel.org,
  maobibo@loongson.cn, mhocko@suse.com, mingo@redhat.com, osalvador@suse.de,
  peterx@redhat.com, peterz@infradead.org, rppt@kernel.org,
- ryan.roberts@arm.com, stable@vger.kernel.org, surenb@google.com,
- tglx@linutronix.de, thuth@redhat.com, tj@kernel.org, urezki@gmail.com,
- vbabka@suse.cz, vincenzo.frascino@arm.com, x86@kernel.org,
+ ryabinin.a.a@gmail.com, ryan.roberts@arm.com, stable@vger.kernel.org,
+ surenb@google.com, tglx@linutronix.de, thuth@redhat.com, tj@kernel.org,
+ urezki@gmail.com, vbabka@suse.cz, vincenzo.frascino@arm.com, x86@kernel.org,
  zhengqi.arch@bytedance.com
 References: <20250821093542.37844-1-harry.yoo@oracle.com>
  <20250821115731.137284-1-harry.yoo@oracle.com>
  <3976ef5d-a959-408a-b538-7feba1f0ab7a@intel.com> <aKfDrKBaMc24cNgC@hyeyoo>
+From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
-From: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
 In-Reply-To: <aKfDrKBaMc24cNgC@hyeyoo>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 8/22/25 3:11 AM, Harry Yoo wrote:
+On 8/21/25 18:11, Harry Yoo wrote:
 > On Thu, Aug 21, 2025 at 10:36:12AM -0700, Dave Hansen wrote:
 >> On 8/21/25 04:57, Harry Yoo wrote:
 >>> However, {pgd,p4d}_populate_kernel() is defined as a function regardless
@@ -145,20 +171,6 @@ On 8/22/25 3:11 AM, Harry Yoo wrote:
 >> macro magic and just assume that the macros won't reference it.
 >>
 >> If a symbol isn't being defined, it shouldn't be referenced in C code.:q
-
-
-That's not exactly the case for the kernel. It historically relied on being
-compiled with optimization and compiler being able to eliminate unused references.
-AFAIR BUILD_BUG_ON() works like that, there are also plenty of code like
-
-if  (IS_ENABLED(CONFIG_SOMETHING))
-	ptr = &something;
-else
-	ptr = &something_else; 
-
-e.g. irq_remaping_prepare();
-
-
 > 
 > A fair point, and that's what KASAN code has been doing for years.
 > 
@@ -167,37 +179,25 @@ e.g. irq_remaping_prepare();
 > 
 > You mean defining some wrapper functions for p*d_populate_kernel() in
 > KASAN with different implementations based on ifdeffery?
-> 
+
+That would work.
+
+So would something like:
+
+#if CONFIG_PGTABLE_LEVELS >= 4
+extern p4d_t kasan_early_shadow_p4d[MAX_PTRS_PER_P4D];
+#else
+#define kasan_early_shadow_p4d NULL
+#endif
+
 > Just to clarify, what should be the exact ifdeffery to cover these cases?
 > #if CONFIG_PGTABLE_LEVELS == 4 and 5, or
 > #ifdef __PAGETABLE_P4D_FOLDED and __PAGETABLE_PUD_FOLDED ?
 > 
-
-I think ifdef should be the same as for symbol, so '#if CONFIG_PGTABLE_LEVELS > 4'
-for *_p4d and '#if CONFIG_PGTABLE_LEVELS > 3' for *_pud
-
-
 > I have no strong opinion on this, let's hear what KASAN folks think.
-> 
 
-So, I think we have following options:
+I think CONFIG_PGTABLE_LEVELS works, but in the end I'm not picky about
+the specific #ifdefs that work.
 
-1. Macros as you did.
-2. Hide references in function under  '#if CONFIG_PGTABLE_LEVELS > x', like Dave suggested.
-3. It should be enough to just add if in code like
-            if (CONFIG_PGTABLE_LEVELS > 4)
-		pgd_populate_kernel(addr, pgd,
-                                          lm_alias(kasan_early_shadow_p4d));
-Compiler should be able to optimize it away.
-
-4. I guess that the link error is due to enabled CONFIG_DEBUG_VIRTUAL=y
-lm_alias() ends up with __phys_addr_symbol() function call which compiler can't optimize away.
-Technically we can declare __phys_addr_symbol() with __attribute__((pure)), so compiler will
-be able to optimize away this call, because the result should be unused.
-But I'm not sure we really want that, because it's debug function and even if the result is unused
-we might want to still have a check if symbol address is correct.
-
-
-I would probably prefer 3rd option, but I don't really have very strong opinion, so either way is fine.
 
 
