@@ -1,203 +1,236 @@
-Return-Path: <linux-arch+bounces-13254-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13255-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BC11B32134
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Aug 2025 19:11:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38B7EB32673
+	for <lists+linux-arch@lfdr.de>; Sat, 23 Aug 2025 04:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50006B205B6
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Aug 2025 17:09:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B91387AAA8F
+	for <lists+linux-arch@lfdr.de>; Sat, 23 Aug 2025 02:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45D1231771E;
-	Fri, 22 Aug 2025 17:08:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9E41FF7D7;
+	Sat, 23 Aug 2025 02:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UdisCh3a"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GjVLRSsK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE65313558;
-	Fri, 22 Aug 2025 17:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4001A5B8D;
+	Sat, 23 Aug 2025 02:25:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755882515; cv=none; b=mAh0qXW2Q+FbYqLbmVA0r06iohBpNGZEZ4PdQyV0qQc5YK1V2lDu40OO9C0BihFlHwUGDffTrJGkG+U92l3nmy35ookmdZ1m4lwpdgFNa6ljcw5CwfdH0yuxefwpxiLQ+lzfiGJY05mC0VnD2GnJliHp7oYb0sX04bmac9EFdwc=
+	t=1755915920; cv=none; b=Vs+s4Cv4dz+yAz2MKCmHy4nUPnxTVTmTvQGuHuOQJPmXnbUz/ozNMwRb7w1JR671ZZ4rMEnateJKznz7HxG9GAags0e/VLMwngjqBtEOOZebTENA0V5oc2sE2IICQ/163kI1vS0EsTQEWC1K5KA2M7YqdKrj/RyKwUs7XBY/q30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755882515; c=relaxed/simple;
-	bh=3YE+ZQ5vrX6aLU86H7BJlfzyReIaU+5+8eV+03TzXIE=;
+	s=arc-20240116; t=1755915920; c=relaxed/simple;
+	bh=PM7cD9nTxySnbUQZGscpBUeIv/ats1aD5ukPOJqDbZw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EvKSY7eOCePdIViuD5e7ccsVIx4og45Les/fASzb05d7agk1xppGs5LgEakc+myDIkbKf2EwAKAqjykvCWTl7FwfzHHc9apnU2tOl+nxNxSPnkr7Xp4pXStcEHTtxB0zf2oJZR7Fq+nD490hsZcSHA5lEGzb/XNNIQyhudgL+0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UdisCh3a; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1755882514; x=1787418514;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3YE+ZQ5vrX6aLU86H7BJlfzyReIaU+5+8eV+03TzXIE=;
-  b=UdisCh3aO1k4opOUZ2oyZsUiursTw0kvOVJk3awJnEBVj7mrjPgxrllr
-   DqOZ4d840wLVxG+jmuZHSrYBgJPIC1xIbA8g2cH5bUwKYTh/GTB1H9Gux
-   OR4DYYPqTWyKwWtz2z2wXYtWvqy/GEPnfCJxNgbTG08ybM4aBamNyYFZ0
-   jfptxmTsA5oJLMiOWlEKHGhE4CV0KJfghWkg5/mB/YwRNzjmGs5klqkVY
-   hDnXVP/orq1pHT3Yh/9ORguz5wtWALqM17HTwDZHFaWvsc1eArTy3R5eV
-   D955f2YU8ABbpTqXvPdoNgpxQ/cKybEOc0pRzLp1CD5fjyTuwS487+Puw
-   A==;
-X-CSE-ConnectionGUID: mx6iYmbhQoG0FLrcuu1qkw==
-X-CSE-MsgGUID: Bj47Yn0DTVGZ+oCpjiqJCw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="61840234"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="61840234"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 10:08:32 -0700
-X-CSE-ConnectionGUID: 5Nu5hnUPTz+8m2WU1ivarg==
-X-CSE-MsgGUID: YdsZ6B6rSVa6oYkMnHlSKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="174065694"
-Received: from tfalcon-desk.amr.corp.intel.com (HELO [10.125.108.168]) ([10.125.108.168])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 10:08:31 -0700
-Message-ID: <79027c6f-f2f3-41b2-9ff3-c5576fc06c5c@intel.com>
-Date: Fri, 22 Aug 2025 10:08:30 -0700
+	 In-Reply-To:Content-Type; b=PbuKwgSN7HxBl8S/IIqsaJH1rHVRdZPimXPdVkJ42BsaFFqctvnboCs6VQdaPpXBcfG+s9Fq6rUuY/o2ALHL7iGt3rmSTyajJoRsLMTrMjzQMclV4T5/RMdajbVS412XtnA0Fzotv4MOi+ptP8MCKZrlVOpFTIltjZZw2PXhh8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GjVLRSsK; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.93.192.3] (unknown [40.118.131.60])
+	by linux.microsoft.com (Postfix) with ESMTPSA id E4847211A290;
+	Fri, 22 Aug 2025 19:25:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E4847211A290
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1755915910;
+	bh=4y5QZ5oFZhp2SJvVoX6O4b6evTpheMhZ02f8/B45KnY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GjVLRSsKRMfVHbq/xQ970m7p4avf+00bZS1RAkr0uceT5HHlLG3+G5uWmSXlf+gZa
+	 dl8L5veqyG/O4AMtu+QdvFgaLRSKgOIv803vQUwbApnz0whx6+59oAh83MOSBPWn8k
+	 G7d3+W4Fs/ZU+8iK834Lx57vBG732bsLqXxKeF0Y=
+Message-ID: <d6e63ef3-bdd2-f185-f065-76b333dd1fc3@linux.microsoft.com>
+Date: Fri, 22 Aug 2025 19:25:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] mm: fix KASAN build error due to p*d_populate_kernel()
-To: Harry Yoo <harry.yoo@oracle.com>
-Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, andreyknvl@gmail.com,
- aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, apopple@nvidia.com,
- ardb@kernel.org, arnd@arndb.de, bp@alien8.de, cl@gentwo.org,
- dave.hansen@linux.intel.com, david@redhat.com, dennis@kernel.org,
- dev.jain@arm.com, dvyukov@google.com, glider@google.com,
- gwan-gyeong.mun@intel.com, hpa@zyccr.com, jane.chu@oracle.com,
- jgross@suse.de, jhubbard@nvidia.com, joao.m.martins@oracle.com,
- joro@8bytes.org, kas@kernel.org, kevin.brodsky@arm.com,
- linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, lorenzo.stoakes@oracle.com, luto@kernel.org,
- maobibo@loongson.cn, mhocko@suse.com, mingo@redhat.com, osalvador@suse.de,
- peterx@redhat.com, peterz@infradead.org, rppt@kernel.org,
- ryabinin.a.a@gmail.com, ryan.roberts@arm.com, stable@vger.kernel.org,
- surenb@google.com, tglx@linutronix.de, thuth@redhat.com, tj@kernel.org,
- urezki@gmail.com, vbabka@suse.cz, vincenzo.frascino@arm.com, x86@kernel.org,
- zhengqi.arch@bytedance.com
-References: <20250821093542.37844-1-harry.yoo@oracle.com>
- <20250821115731.137284-1-harry.yoo@oracle.com>
- <3976ef5d-a959-408a-b538-7feba1f0ab7a@intel.com> <aKfDrKBaMc24cNgC@hyeyoo>
-From: Dave Hansen <dave.hansen@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 1/7] Drivers: hv: Introduce hv_hvcall_*() functions for
+ hypercall arguments
 Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <aKfDrKBaMc24cNgC@hyeyoo>
-Content-Type: text/plain; charset=UTF-8
+To: Michael Kelley <mhklinux@outlook.com>,
+ "kys@microsoft.com" <kys@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "tglx@linutronix.de" <tglx@linutronix.de>,
+ "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "hpa@zytor.com" <hpa@zytor.com>,
+ "lpieralisi@kernel.org" <lpieralisi@kernel.org>, "kw@linux.com"
+ <kw@linux.com>,
+ "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
+ "robh@kernel.org" <robh@kernel.org>,
+ "bhelgaas@google.com" <bhelgaas@google.com>, "arnd@arndb.de" <arnd@arndb.de>
+Cc: "x86@kernel.org" <x86@kernel.org>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20250415180728.1789-1-mhklinux@outlook.com>
+ <20250415180728.1789-2-mhklinux@outlook.com>
+ <f711d4ad-87a8-9cb3-aabc-a493ff18986a@linux.microsoft.com>
+ <33b59cc4-2834-b6c7-5ffd-7b9d620a4ce5@linux.microsoft.com>
+ <SN6PR02MB4157376DD06C1DC2E28A76B7D432A@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <833a0c96-470f-acff-72e7-cc82995fbc2f@linux.microsoft.com>
+ <SN6PR02MB4157875C0979EFF29626A18CD43DA@SN6PR02MB4157.namprd02.prod.outlook.com>
+From: Mukesh R <mrathor@linux.microsoft.com>
+In-Reply-To: <SN6PR02MB4157875C0979EFF29626A18CD43DA@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/21/25 18:11, Harry Yoo wrote:
-> On Thu, Aug 21, 2025 at 10:36:12AM -0700, Dave Hansen wrote:
->> On 8/21/25 04:57, Harry Yoo wrote:
->>> However, {pgd,p4d}_populate_kernel() is defined as a function regardless
->>> of the number of page table levels, so the compiler may not optimize
->>> them away. In this case, the following linker error occurs:
-> 
-> Hi, thanks for taking a look, Dave!
-> 
-> First of all, this is a fix-up patch of a mm-hotfixes patch series that
-> fixes a bug (I should have explained that in the changelog) [1].
-> 
-> [1] https://lore.kernel.org/linux-mm/20250818020206.4517-1-harry.yoo@oracle.com
-> 
-> I think we can continue discussing it and perhaps do that as part of
-> a follow-up series, because the current patch series need to be backported
-> to -stable and your suggestion to improve existing code doesn't require
-> -stable backports.
-> 
-> Does that sound fine?
-> 
->> This part of the changelog confused me. I think it's focusing on the
->> wrong thing.
+On 8/21/25 19:10, Michael Kelley wrote:
+> From: Mukesh R <mrathor@linux.microsoft.com> Sent: Thursday, August 21, 2025 1:50 PM
 >>
->> The code that's triggering this is literally:
+>> On 8/21/25 12:24, Michael Kelley wrote:
+>>> From: Mukesh R <mrathor@linux.microsoft.com> Sent: Wednesday, August 20, 2025
+>> 7:58 PM
+>>>>
+>>>> On 8/20/25 17:31, Mukesh R wrote:
+>>>>> On 4/15/25 11:07, mhkelley58@gmail.com wrote:
+>>>>>> From: Michael Kelley <mhklinux@outlook.com>
+>>>>>>
+>>>>>>
+>> <snip>
+>>>>>
+>>>>>
+>>>>> IMHO, this is unnecessary change that just obfuscates code. With status quo
+>>>>> one has the advantage of seeing what exactly is going on, one can use the
+>>>>> args any which way, change batch size any which way, and is thus flexible.
+>>>
+>>> I started this patch set in response to some errors in open coding the
+>>> use of hyperv_pcpu_input/output_arg, to see if helper functions could
+>>> regularize the usage and reduce the likelihood of future errors. Balancing
+>>> the pluses and minuses of the result, in my view the helper functions are
+>>> an improvement, though not overwhelmingly so. Others may see the
+>>> tradeoffs differently, and as such I would not go to the mat in arguing the
+>>> patches must be taken. But if we don't take them, we need to go back and
+>>> clean up minor errors and inconsistencies in the open coding at some
+>>> existing hypercall call sites.
 >>
->>>                         pgd_populate(&init_mm, pgd,
->>>                                         lm_alias(kasan_early_shadow_p4d));
+>> Yes, definitely. Assuming Nuno knows what issues you are referring to,
+>> I'll work with him to get them addressed asap. Thanks for noticing them.
+>> If Nuno is not aware, I'll ping you for more info.
 >>
->> It sure _looks_ like it's unconditionally referencing the
->> 'kasan_early_shadow_p4d' symbol. I think it's wrong to hide that with
->> macro magic and just assume that the macros won't reference it.
 >>
->> If a symbol isn't being defined, it shouldn't be referenced in C code.:q
+>>>>> With time these functions only get more complicated and error prone. The
+>>>>> saving of ram is very minimal, this makes analyzing crash dumps harder,
+>>>>> and in some cases like in your patch 3/7 disables unnecessarily in error case:
+>>>>>
+>>>>> - if (count > HV_MAX_MODIFY_GPA_REP_COUNT) {
+>>>>> -  pr_err("Hyper-V: GPA count:%d exceeds supported:%lu\n", count,
+>>>>> -   HV_MAX_MODIFY_GPA_REP_COUNT);
+>>>>> + local_irq_save(flags);      <<<<<<<
+>>>>> ...
+>>>
+>>> FWIW, this error case is not disabled. It is checked a few lines further down as:
+>>
+>> I meant disabled interrupts. The check moves after disabling interrupts, so
+>> it runs "disabled" in traditional OS terminology :).
 > 
-> A fair point, and that's what KASAN code has been doing for years.
+> Got it. But why is it problem to make this check with interrupts disabled?
+
+You are creating disabling overhead where that overhead previously
+did not exist.
+
+
+> The check is just for robustness and should never be true since
+> hv_mark_gpa_visiblity() is called from only one place that already ensures
+> the PFN count won't overflow a single page.
 > 
->> The right way to do it is to have an #ifdef in a header that avoids
->> compiling in the reference to the symbol.
+>>
+>>>
+>>> +       if (count > batch_size) {
+>>> +               pr_err("Hyper-V: GPA count:%d exceeds supported:%u\n", count,
+>>> +                      batch_size);
+>>>
+>>>>>
+>>>>> So, this is a nak from me. sorry.
+>>>>>
+>>>>
+>>>> Furthermore, this makes us lose the ability to permanently map
+>>>> input/output pages in the hypervisor. So, Wei kindly undo.
+>>>>
+>>>
+>>> Could you elaborate on "lose the ability to permanently map
+>>> input/output pages in the hypervisor"? What specifically can't be
+>>> done and why?
+>>
+>> Input and output are mapped at fixed GPA/SPA always to avoid hyp
+>> having to map/unmap every time.
 > 
-> You mean defining some wrapper functions for p*d_populate_kernel() in
-> KASAN with different implementations based on ifdeffery?
+> OK. But how does this patch set impede doing a fixed mapping?
 
-That would work.
+The output address can be varied depending on the hypercall, instead
+of it being fixed always at fixed address:
 
-So would something like:
+          *(void **)output = space + offset; <<<<<<
 
-#if CONFIG_PGTABLE_LEVELS >= 4
-extern p4d_t kasan_early_shadow_p4d[MAX_PTRS_PER_P4D];
-#else
-#define kasan_early_shadow_p4d NULL
-#endif
-
-> Just to clarify, what should be the exact ifdeffery to cover these cases?
-> #if CONFIG_PGTABLE_LEVELS == 4 and 5, or
-> #ifdef __PAGETABLE_P4D_FOLDED and __PAGETABLE_PUD_FOLDED ?
+> Wouldn't that fixed mapping be done at the time the page or pages
+> are allocated, and then be transparent to hypercall call sites?
 > 
-> I have no strong opinion on this, let's hear what KASAN folks think.
+>>
+>>> <snip>
+>>>
+>>>>>
+>>>>>> +/*
+>>>>>> + * Allocate one page that is shared between input and output args, which is
+>>>>>> + * sufficient for all current hypercalls. If a future hypercall requires
+>>>>>
+>>>>> That is incorrect. We've iommu map hypercalls that will use up entire page
+>>>>> for input. More coming as we implement ram withdrawl from the hypervisor.
+>>>
+>>> At least some form of ram withdrawal is already implemented upstream as
+>>> hv_call_withdraw_memory(). The hypercall has a very small input using the
+>>> hv_setup_in() helper, but the output list of PFNs must go to a separately
+>>> allocated page so it can be retained with interrupts enabled while
+>>> __free_page() is called. The use of this separate output page predates the
+>>> introduction of the hv_setup_in() helper.
+>>
+>> Yeah, I am talking about hyp memory that loader gives it, and during the
+>> lifetime it accumulates for VMs. We are opening the flood gates, so you
+>> will see lots patches very soon.
+>>
+>>
+>>> For iommu map hypercalls, what do the input and output look like? Is the
+>>> paradigm different from the typical small fixed portion plus a variable size
+>>> array of values that are fed into a rep hypercall? Is there also a large amount
+>>> of output from the hypercall? Just curious if there's a case that's fundamentally
+>>> different from the current set of hypercalls.
+>>
+>> Patches coming soon, but at high level, hypercall includes list of SPAs
+>> that hypevisor will map into the iommu. These can get large. We will be
+>> exploring what we can do better to pass them, perhaps multiple pages, not
+>> sure yet, but for now it's single page.
+> 
+> To be clear, if the iommu hypercall does not produce any output, this patch
+> set uses the entire per-cpu hypercall arg page for input. For example,
 
-I think CONFIG_PGTABLE_LEVELS works, but in the end I'm not picky about
-the specific #ifdefs that work.
+Good
 
+> hv_mark_gpa_visibility() uses the entire page for input, which is mostly an
+> array of PFNs.
+> 
+> Using multiple input pages is definitely a new paradigm, on both the
+> hypervisor and guest sides, and that will need additional infrastructure,
+> with or without this patch set.
+
+Right. With this patch set, every hcall is affected rather than just one
+when code is modified to support that. That means one must test every
+hypercall.
+
+> I'm just trying to understand where there are real technical blockers vs.
+> concern about the style and the encapsulation the helpers impose.
+
+Well no technical blockers that can't be resolved, but style and obfuscation
+that helpers impose are big concern.
+
+Thanks,
+-Mukesh
 
 
