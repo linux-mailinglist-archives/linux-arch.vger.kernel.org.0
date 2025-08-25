@@ -1,89 +1,129 @@
-Return-Path: <linux-arch+bounces-13263-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13264-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1350B34543
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Aug 2025 17:11:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A661B346A9
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Aug 2025 18:03:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C88F1A83E28
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Aug 2025 15:10:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 421B0171F88
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Aug 2025 16:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B361F4E57;
-	Mon, 25 Aug 2025 15:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF7C3002B6;
+	Mon, 25 Aug 2025 16:03:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="O5gfEw85"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="onb/x+8o";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="pQ6ucEVO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CAN01-YT3-obe.outbound.protection.outlook.com (mail-yt3can01on2132.outbound.protection.outlook.com [40.107.115.132])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E594230BD9;
-	Mon, 25 Aug 2025 15:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.115.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2A81DF965;
+	Mon, 25 Aug 2025 16:03:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756134617; cv=fail; b=tZkp95fSMYuy9pTn+wQD+tTX2GD4qPyuDQ81aSD/dzXqF17gola94558zk8Kpv/RoVYjMZAvVRghaU2vE7+cFLadVH3i4nVCVEXYpvotvSsOMlWwBS+dKioUe1SmEduqrvzWNQZEOWWERy5qCD68x3zNK8X9V+Wn2hRw4Rpjs+M=
+	t=1756137811; cv=fail; b=le3H2e8zSo8Z6a7i5rx+pcQs7vFpYHAWiIH7im+BlP+E0L0hLco5FMODEOaZwWeZRkze7vMRvzJlVrFi58eOufm/bP/dluaQvTDQtV3Y7QhYNJHkEe1FviKrsWIO9M88UFpbblCfYb3YCJ5qrj8mblQ8uk4WsROWqKauR96/V0U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756134617; c=relaxed/simple;
-	bh=ol7ns7upJzW31Jj3/M+prTvFFwNlhX56wf9oIEXEtyU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=pTZGqVrFPRtANJVvPH/NJOM5McFwI3o2Ir00jqNKcFA7W1Qep2o0IiRJOp7X0IGdOKKph4sPIOjD3iTbXfS7ypr0jmIwqiP4ihu5J5ny9CAhLANCLBbhzEVRSCFWDbRPZPjvwdCZykQvycmOHsUqwt7PXCxDwYVypxfS7ilsVAI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=O5gfEw85; arc=fail smtp.client-ip=40.107.115.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1756137811; c=relaxed/simple;
+	bh=SeG5lb+3OFVwOotv1vFP6rFY47G/8I5at+Q+EVD+bFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=nvsxHNB4T+VwZSaprbe9AbghAAReaIp86t0ST4xi1zMqOzGuV4fVLCtKy/XILyLiHa8EjKt0knmEQa5LCGVKVhjND2fvNc4kkKTjAmtj46+hMTIfvIMo7EgqnJ263LEO82Pcock5W40+gXGr3kT3bM5FIW8VRgV7/WPPV7oHTtY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=onb/x+8o; dkim=fail (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=pQ6ucEVO reason="signature verification failed"; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57PFfv3p012690;
+	Mon, 25 Aug 2025 16:02:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=yvL6M5j4mPen5RcKYMs+Q3Sw0xLty6CObCpwStUhw50=; b=
+	onb/x+8oISGenpJKYECkyvmqQIXhhN4CyFvXx3yMQWe9bmEoLLRa4fx1UBMqusMV
+	bSVcWxxCZal3DPYN0+G0BYArbW6j6CeyLecIX/noYhYtky/8QMSBFZq99zIu80g1
+	GOscaCSo6oOD7E0EqTf2VudVQVxpOH0ngGTOPmGah8IUURtYpM23YOnuxE3Gndzk
+	D+3kFCKTw0z0bz42yQOaYzewete1ZydsPsVvjHsYFS4ixM/LukO6IaSVjzGvoc6s
+	58cVUX29BVyvTX7LYwBBKuK9+Ny4CHYL2aI0L7qAynKJRFpoumPIGh5hxj4oExL3
+	2aj5aD9dYPkuZ2N+SOthSQ==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 48q4e22n84-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 25 Aug 2025 16:02:41 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 57PFBSan005028;
+	Mon, 25 Aug 2025 16:02:40 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10on2067.outbound.protection.outlook.com [40.107.92.67])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 48qj88ne74-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 25 Aug 2025 16:02:40 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rB9sbzLwqcr0ll3/qRnPgpqm8eXPCEJch7C+kkj/Rio8Tsj6+9P7aJZaUNvNvfCQyRYUx9OcvGycMPbMIBw9U3VAJUu1U7bfa3kYCsHrU8pVq8FMwbbnuuXfp9NAv1Lcd4G/BXLAGQjUZ3OsT5DsgXvZI5hOfcjtwpZ6PVfVBIkLLWsaZvOu0p6B6HKEpj8cBRSPvgKklkJYrX7feEgiozTZhd5S3wDVVgyj6ovbtfQbKMETvRkkLrILtYKFqCUJMc5deRA5giX6ryPiZp+uhr4ybBjSd4TuQsXzCz3eaZwjdg8gn8KZfx8CWZ0xXl2hzy8PFrc6JVnmuNEFi03vTg==
+ b=BXpPP23nfrz50NxWbGGPPbSjVAIXbyaR+S4pRCd9gUMJ7asbFYZ6BUlqZNk0fF7Zj3IjcxS5F9xyrjswUCXvykakaC8LU2hnvoweNsIb6ox9ewk1J2l3dCs0P9gQCjia1BipBnRNutbZLBEDRJqM5vnTxKJl0PBho/9cXNMCeKrm7GOdjykdZJybF5kRSG6x5SSDkkP3HH0eUNBhfTEz5e4aSW8IJW8aQlKdEWLbET0G685bslbQlX5IZRj8X3dJFdzCx5eOy3TMD9b7bDjF4AlZmhb6RA8+C139BuoNVHZgA9WhL4RdlvT0Da13uM01LyN9s/Mhx+APbTLy4sf5zg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e818OtUbcO1ENstCBv2TtLcxNPp6xq78ayC+1/2U2ho=;
- b=uWjXjne8PjOHRjpBv89Utv5wDDWZV2ZHkxJvgnSru4TvuVNNa2f6ZEy4Z4zqEecxxPR2n3PGI0uDawXQe0BCza4eyjtgRCGRckZo/9DOmJEwHEByFoIe3eH+ul92Jg/CkQDUtmWXv+P0IB0puOV4+jcWzCjIKNwaLqDKotT/OdjHSnRyVqo8E++WD/+lVAm/FRnR+fowXPjOApua2J3x6oK0WJQ9RuqWW5W4eFSyH+bLix+eYMSRATtLW3ol40OiYhhWnW6+C1NT8UYuyO4eZ/p/eJt7tLynERMQ6TG6x9vFwOvxDcvCpFwnl/Ou5mUWM+2uTY3Vo5WDcGTFFdy1Ew==
+ bh=5rM7zJBqy7JZfT5ozsR6vQZpIBSGhID3PDQQw+swsaw=;
+ b=RJxD77NtcPDXBAlLjqSGAa8/cCq9D6tqKG8HKXiKYaAcI/kijIwxIXiE6VGzhcZGFZMrLLhompYeHhpyLbj8EAp6NrdqNqGGkeucZX/Pg5XkAxBTg8yqw7jMV2StiqI+KCFrf5Cm4BhLLNKlVR9L5rh0IvrisanCXRM2cIFNgdb1bQCZZKLwSJBtpcdQmWhHqPqjgCMIluywraEGRWaQS9cKZBwgMUpuzrZTWE2C5f2WB1pCC+v+k+ODP80wHFRV53dQAmQpGg20EOJwnek/b4VRQs4sTbxcZ92rWV76WhVD5H4STM+MSxdAKtK8spFCLQ0SyCM7d1d1/XnbOm2RBg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
- dkim=pass header.d=efficios.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
- s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e818OtUbcO1ENstCBv2TtLcxNPp6xq78ayC+1/2U2ho=;
- b=O5gfEw85hXPtiXtNpXhkbsOMeRxxGGIN4FwMnU72PQtxJ6WmFvVdPRgR2jzqjfWRoZZbtsJejFq3lZCGNrCfjvatA2JILLXGNpa7nC9naq5SebcrujLxS3tCknvR9aUiVOafEXAUFBT7vAxxiErL3ixLiOg2rsmuObGqXIn1SE/+ymhZ256keELu4IBQS8MldUjoCdGgRdH2G3E+orfsJXDnhB9ZDmLrAxdwzWg81rdNNvZqQuNrGnWuznyljFKsVp1A+TNP2Y8n/ldcv8qUGQvEMKv/FdjAvBM7Twth7hl7sNkp2QivekfgMyaXT9hLwfpDCwyxwFTpwy/5zWjMqw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=efficios.com;
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YQBPR0101MB5959.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:36::21) with
+ bh=5rM7zJBqy7JZfT5ozsR6vQZpIBSGhID3PDQQw+swsaw=;
+ b=pQ6ucEVOPoYqljp+q2cOVP5UdhWwzEgrbF25vKjSRM3WPQieU9hZmhDv/s7IVMXtFcyZRpVDdZF11a7H8//tEaxmPL1H/Xlud2Ic3gQQyDfewXjvnOGO9VbvZCMiOzwfVjrQBwszqS7D7ndszujcaYpunRvvUXQU/l+cHuHtKYM=
+Received: from CH3PR10MB7329.namprd10.prod.outlook.com (2603:10b6:610:12c::16)
+ by SJ0PR10MB4607.namprd10.prod.outlook.com (2603:10b6:a03:2dc::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.22; Mon, 25 Aug
- 2025 15:10:05 +0000
-Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::50f1:2e3f:a5dd:5b4%3]) with mapi id 15.20.9052.021; Mon, 25 Aug 2025
- 15:10:05 +0000
-Message-ID: <51040f12-4f56-465f-b021-2563002307fb@efficios.com>
-Date: Mon, 25 Aug 2025 11:10:03 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [patch V2 00/37] rseq: Optimize exit to user space
-To: Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>, Peter Zijlstra <peterz@infradead.org>,
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, x86@kernel.org,
- Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, linux-arch@vger.kernel.org,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Michael Ellerman <mpe@ellerman.id.au>, Jonas Bonn <jonas@southpole.se>,
- Florian Weimer <fweimer@redhat.com>
-References: <20250823161326.635281786@linutronix.de>
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Language: en-US
-In-Reply-To: <20250823161326.635281786@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR01CA0091.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:3::27) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:be::5)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.21; Mon, 25 Aug
+ 2025 16:02:37 +0000
+Received: from CH3PR10MB7329.namprd10.prod.outlook.com
+ ([fe80::f238:6143:104c:da23]) by CH3PR10MB7329.namprd10.prod.outlook.com
+ ([fe80::f238:6143:104c:da23%7]) with mapi id 15.20.9052.019; Mon, 25 Aug 2025
+ 16:02:36 +0000
+Date: Tue, 26 Aug 2025 01:02:18 +0900
+From: Harry Yoo <harry.yoo@oracle.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Dennis Zhou <dennis@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Christoph Lameter <cl@gentwo.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kasan-dev@googlegroups.com,
+        Mike Rapoport <rppt@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Suren Baghdasaryan <surenb@google.com>, Thomas Huth <thuth@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Michal Hocko <mhocko@suse.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
+        "Kirill A. Shutemov" <kas@kernel.org>,
+        Oscar Salvador <osalvador@suse.de>, Jane Chu <jane.chu@oracle.com>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Joerg Roedel <joro@8bytes.org>, Alistair Popple <apopple@nvidia.com>,
+        Joao Martins <joao.m.martins@oracle.com>, linux-arch@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH V4 mm-hotfixes 2/3] mm: introduce and use
+ {pgd,p4d}_populate_kernel()
+Message-ID: <aKyJCsXC5dL3Olpq@hyeyoo>
+References: <20250811053420.10721-1-harry.yoo@oracle.com>
+ <20250811053420.10721-3-harry.yoo@oracle.com>
+ <26796993-5a17-487e-a32e-d9f7577216c3@csgroup.eu>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <26796993-5a17-487e-a32e-d9f7577216c3@csgroup.eu>
+X-ClientProxiedBy: SEWP216CA0016.KORP216.PROD.OUTLOOK.COM
+ (2603:1096:101:2b6::10) To CH3PR10MB7329.namprd10.prod.outlook.com
+ (2603:10b6:610:12c::16)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -91,529 +131,192 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YQBPR0101MB5959:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2e18dc0-267c-4437-03be-08dde3e978f2
+X-MS-TrafficTypeDiagnostic: CH3PR10MB7329:EE_|SJ0PR10MB4607:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9a9c0387-7e1c-4aa0-c4a8-08dde3f0ceaa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Mm9aT0RzeTdDeFdEL1dVdWtGS04zeDhhSjY5MG9naU9HYlJEQjRXVGdFNlBy?=
- =?utf-8?B?c2FUck95dEtPdnY1TGk4OS96M0w5bnZ1b08wRVNNYXRHT2pVV1o0VnhQa0E2?=
- =?utf-8?B?aEZTQXpHUTRqZzN4QnNwY2VEWER2ejdtUEpReUU4ZXBFUHBuRzFDNUh2cFVq?=
- =?utf-8?B?SjdRTmkwWW1oYzNrclVSS01pQkF1UEorVXJzYWV1MTVEeldvb3FJb2h3TWRB?=
- =?utf-8?B?SHR6ZHRwTEFFMmVwdGQ0VFN0V2JHbnBYUjlmaFpxT3QvQ0crSmZnNGp1UjFq?=
- =?utf-8?B?NCtwWGFlTlI1NWVIYWdZcDBBa0N3a3JjNDVQNU55S3hxbDdjZ29KSEFVZjFL?=
- =?utf-8?B?aVVFUnY3T1lUTThKNXo5Tkp6eFlVMkgwM09KQXY4Y1QyTU1sb1V0TDFpMDZQ?=
- =?utf-8?B?WE9CTWFiYk9VQ1dydC9KUGEyQUNPSUVXTHdLOFV2a3NFTXh3WTFOcEpPZGZ3?=
- =?utf-8?B?S0l0ZFBZczlmU1lTRE1UeVR3TW9ZZjA1N0lBb3Q5ZnNzZDBnQThSVk16Tlhp?=
- =?utf-8?B?cDMySWFkYUxQVFhKZ3A5bmpNTkdZMnczRjNaT3NUQmtiUldmTklhNVdEa01Z?=
- =?utf-8?B?bEtmRUl2UktpU3IxQ2VTVXBsNWRvUzA3WWFqbXZ2Z2ZWcUFWSHBwcjZTaXQ3?=
- =?utf-8?B?SVBGeGg2aThBTkQ1bkt2R21BamlaYU5YU2xPaFBBZWtxNEdlS1pwWUFKcDhU?=
- =?utf-8?B?YklpdkVuSzFTRU5QaWIvRk13TDRGNlRFZDlvZWFlNnpiNmVZcUc5a0lwblJJ?=
- =?utf-8?B?Q0puRGc0ZzRjKzhWMlBrejFmWGd6U25QQktLQmZ6c2pVaWlVajhNQW10UVBy?=
- =?utf-8?B?d1VMem1wYzlHUWtwSERyZlJMT1kvSzlwMDNtY2QzejZiUmU2QWsvZmU4bDJC?=
- =?utf-8?B?Vnl1cFNWakF1MlN5aW1TZ3RyenF1NUxpOXhRWGVUWnBmNjFNQ1NKaUR5VXpY?=
- =?utf-8?B?TWZEVURmUGVpRGpNcFBuOFkvaXJoZndGUHJJWVM5WkFOTXo2VDZ1cGJReTRx?=
- =?utf-8?B?ZlNrV09Lc3E3aEc2OWJIRVdrRnc4NTR2elBWV2diL0dWMFhuVUtUVkQxSWhC?=
- =?utf-8?B?NklCeGJtVzIyYXZSVDN2SW1hbmxXMGE4bXA0QlVzWEt2bWV6OXZJMGZ5U21R?=
- =?utf-8?B?K3VxazdDUFo5dzdmRnpocGRwTW9reE9KR2dCM0FTNEJVRXl0T2ZiUkppMFd5?=
- =?utf-8?B?bUt6YmpJdHBiVElvMnpqWXRBU256dmxaL291YzZqWGFNbW90VG9RTjVCdjB3?=
- =?utf-8?B?OXZOcndTTzdxTU91SzBiRy9nSjQyYnJCbUhlTFNSdHJlRlZuM1BweEhqdGtu?=
- =?utf-8?B?dVZFSmRydktjN0FGb2dwbm9iYlJpSXk3cDlxSWhoTmpyZXZNQk5ZM0UwaHZZ?=
- =?utf-8?B?R3F6QUczMVB1ejIzMnFBekI1ZjdlRm5ORVdSM2hsd0R4dTBRL2FBbFFRNFp6?=
- =?utf-8?B?R2JSS1A4SEVNVWk1STBzZWQ2cjJSQmRtNUNXYTFIdjU5NFZzcGhna283T1Nn?=
- =?utf-8?B?TDdnTW5IWHZGK1FGNVhtVjNYcWMyUTBkeEY2cWFRRFlxcExHajc2N2lrdUtY?=
- =?utf-8?B?SmV4OFNQeDl0VUZXWDlFVC96Y2JKZjg5OWpiTzJhN3NOZDFmdk5hbXZXNSt0?=
- =?utf-8?B?Y3ZsbHVQSXNFc3FZUFovb0VXZ2ovUDhQemhacVE2ZHh5VTJITDNJajFnUUFI?=
- =?utf-8?B?VTVhUTM4eTJza1I1T01ickxVZkVwOThDV2FqWU5CeWNPOStXVER2UGs2Zzd6?=
- =?utf-8?B?SEtocUVjUGh3R1BQZCtNSHhZc1FxN2FYdG9vRlhFZ0pFbHRjNmN4Y1c5OGxH?=
- =?utf-8?Q?5Fr46PAfrFR5e0O3uE3gV449CC/01j54PIa6I=3D?=
+	=?iso-8859-1?Q?4slTHjk9SvjaYPkCsX5PB90gVyOaa33YVza7tQlUKi6i2tnLDHgauaNbUU?=
+ =?iso-8859-1?Q?cS2bMrt+gO16IYP5r9IqkV7M4KYiF2escMItoMldUrVEKFU2EEnTpVgwrk?=
+ =?iso-8859-1?Q?tUpZ9WH9v2OGp471gM33aLEHWsKyYZAvhfb6zDPbLvnqgRX5tU0Zj6MLKK?=
+ =?iso-8859-1?Q?I59ROElCNt4pIbZSWq+z5af8Y/PvFxwFU9EDHqzTK3qtZP5jMxTAHw+lLo?=
+ =?iso-8859-1?Q?HYtoZYPIVdYlLrcM7ysktbz65FgKk11JqmLDqLXVnu8ljnZLMfQ0T3gRMt?=
+ =?iso-8859-1?Q?mVqOVYJyKxAN2dsWZCC6iCy3jhYZ6zXEc5dhuygNoDVEnrdHpFh1oh9Mt9?=
+ =?iso-8859-1?Q?hvrc0FNZrkIeTzNberwXEjS7YTfXDtHroLHetGPecOE3FZd5dO+CmNDG7Y?=
+ =?iso-8859-1?Q?PmKVaXHxDSDQX33Vgq65SJz3DV6vUJpewni0ZJG7Zy235qvaEu+W+RTc1Y?=
+ =?iso-8859-1?Q?1NI39HoyNEe150xrzmm7WBXwhpKEqyt3Jh1fidLwNrpy3LmCSmxrGfyP8W?=
+ =?iso-8859-1?Q?8U9VLZTnAm3NG5lzFGLe6KqcDqpGuwiRFMNyroYa7MACIuJ81Yckkq00bm?=
+ =?iso-8859-1?Q?vwKELpgewk3oqYORKKO74RTt4xJAQSjPqGwBIiV7Gz/3eeRrv/cfCaW4om?=
+ =?iso-8859-1?Q?R10J1zGajGnQw771Uh3GaJxxC1sLoxNK9FdDCt5J0Y+/smBn8eH7GWSNRj?=
+ =?iso-8859-1?Q?eU3r5JtfEjqev0/hYYYVGIeJIobxeANoaMFxVvD8Rxl4plCWSZ3GeY/xF/?=
+ =?iso-8859-1?Q?LNGhD5jvdnhdyV3YieNB1mBu3lFce85vR2OqKeCvd5bgcwBvBEWU3uojzO?=
+ =?iso-8859-1?Q?ZnrGaGXLKcF6be6Ed6xaacN2JEro2ag2p4wp3kjxAlBnOjr75cgu5IXcGO?=
+ =?iso-8859-1?Q?u95tEgN7i2LxgP43AghYxnbqfc8FUH0wXqK07crhUQYRB5n5OVf6hC2stu?=
+ =?iso-8859-1?Q?60tuPoSUomEwpOBNkO5J1iAJFwMNshli2fwngDeEb39RyXPC7idAObofFh?=
+ =?iso-8859-1?Q?7GgeumpHRi8G9t5X0cCocEf6XLgxH6bfBGTGUkVFMUjsPDZOLSWZkntJMs?=
+ =?iso-8859-1?Q?komXwc+ggGEdjy6V/2xefobarIpeT+N1QyARsKCh0j4F0c/cMIprnYqDX6?=
+ =?iso-8859-1?Q?zcNRqttURz9YiXi6CExmSp/YJU6C2kn4AQ6YWRiyfXdeH0d9wGkS/ei3F2?=
+ =?iso-8859-1?Q?IEn+m+xwf/CGIbENXk9N4uiL2rtpbtyC5whiK+D/lRJc/jMNu2OA7cNjCB?=
+ =?iso-8859-1?Q?T1frHBOrok4NFOU8yapmkjqRwWFNZ2RZdwjh1YGRr7srwIDcXAyIDuoLho?=
+ =?iso-8859-1?Q?NWWlKz4SG0ZNi9qIdBxDymSXv3jXXFOCl91o7ViM9Z2OMLlz15QmEhpf1i?=
+ =?iso-8859-1?Q?/WsswW0DRRARWErjXbu1VAkDiZusQOnnSAqfuaitYaGWxXAAeiw/ewCPS/?=
+ =?iso-8859-1?Q?cG9M+S8fKrhCyd80beWtJrEusZPJRkS6ABFMbQ=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR10MB7329.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?R25LWjdFMXNUb3RqcTBTSGI0S3JvMk41QjYyc2V3NjZFS0I1U0JkRDRaMmxj?=
- =?utf-8?B?bU8rZThFcDZleGxpNDk0bGNoS2JvUlA4d0RGeGFOQVFhbHNWcGgwZ3Bvc1VJ?=
- =?utf-8?B?MUJhQ252citmYUptTkJPbmVqcTk0L1V2bEVLVDhJTVN6NUFOaVB5ck1RcHQz?=
- =?utf-8?B?TjVoSWt4a2paRCtZdTlaU2N6TEZEZWl6STNYK1NpRGdSdHdVYjFDU2NLMThy?=
- =?utf-8?B?VGtEYTIzVlQrN2pYNWZVYlZsUW5aSjM0U05sd3NFK1VTeVhKTkRwcVpqblpK?=
- =?utf-8?B?eXdJU013dC9MNjA1ZnlJSERQU0pDZnhDT1B4MmlLRkxRUXF1SnV0OW1VVGxx?=
- =?utf-8?B?YURBMld6c0hXZE9QTy96S3V5bGs2NUlkakdCSmhtaFNwalZ1WmlscWNjcEZ5?=
- =?utf-8?B?TXo4dTJKRDhKcDYwR3NTaHh1NDZBNjFsWGtCMHpSMTlsanpsd0hDRlNNR3Np?=
- =?utf-8?B?RVFFWGFTU1pjSkdDazdGQnlLbEdsTENqS1pTMk04MEFRR3JXUjhiZXd5ZCtY?=
- =?utf-8?B?T1JtdFE1UVk0OUlzYUtmYmlIelNDamZ4SldpWWxpR0J2WU1wM2w3WXZvRmM3?=
- =?utf-8?B?KzV1Sno1QjRFdk9KVU5IM3M2N1JaMEUybEx2ZFh1WU83Q2ZpVmRYQkdxaDZk?=
- =?utf-8?B?azlGQU8wejhVMzN1SjdCZ0NsV0hBcXA5b28xTXBOdi9aTnh2eXJnTGNNZnUw?=
- =?utf-8?B?WmtmWHRyaDNEQXdUeXNBTTUxT0tGQW1JbDZrTHNxZm5OdzVsbG4yb2V0Z3ZV?=
- =?utf-8?B?bGpCTlZGNXFIOWlxRnJvK2QwcWtCK2FRWW92THRXL1dhOU54MkZtM2R3K1Iy?=
- =?utf-8?B?L1RSVncyMjRneXh2Wm5jWTF4YUVkbEVrMDlBRXQ1NVZzZ241ZGVFNWtTNHNw?=
- =?utf-8?B?a0hkMGl2QVdNVDd1bUkrbnpRUUNxMzl0cERxSjlBSXVjdHJYakN2QzRoaGpz?=
- =?utf-8?B?TUR5VHBBV1lZTHRZNHRDZEtmRlF5cmpSckdVdFVXRTR6eU9qRWRuWXlaSGh5?=
- =?utf-8?B?cFd5a0hJS1Z1MkY2dVBqSjQwTGFIQmIxQVMzS0Qydnd3L202bjNoQUVEL2VO?=
- =?utf-8?B?SkZTd2hkUUlTTzE3MWVFNWgweW8xcDBsWW9PMlhRcDJKNWJSR3Nxbks3RUdp?=
- =?utf-8?B?cVBvOEFKMXZWOExDMDAxUndxVllqY0I0RHlSdGFUZ0IyS1FlNkIyMGI1ckk5?=
- =?utf-8?B?NmFPbStNS0o4a3F4alUyVVhlZVJWakhaSVZXYnVxMGZHUVBGb2luTis4MGo0?=
- =?utf-8?B?YnU2N1d3SGR5RWhML3JpaUgyNjIveTFLTUh6Wm1mU2NZaHRvSHNnQTRVdmpB?=
- =?utf-8?B?Tk1MdEh5dFF0bWpmeGtHODQ4YkVLUVowQ0o3WldkSmdEU3lqeGF1NC9tc2FW?=
- =?utf-8?B?L05yTmdDVExad0RrdDFVSDMyaG1aUkUzMVdhS3B0U1VRdFowaWVObUl4d1Ux?=
- =?utf-8?B?Ky9Kakovc2oyNUw2alN6aDVaQmdFWnVHSlErNmppdFNxVHBwcEhCSDRLbVFN?=
- =?utf-8?B?eVR5U05WRVltem9sQjBSMVFkbXd2UnJ0b0FrKzF2U2dmWFkxSnhOVzZKZ3d5?=
- =?utf-8?B?d2VMbFB4RjB2TGJLT3dxWjJCL3craDdWajA0SnhKM1FuRVRFdzhtZFBJMWFx?=
- =?utf-8?B?RFdINHBBeUpYUHNxQzErWG5reHBlWEk5WW55U3VTTVNGaEhKMXp1S0FjMmdq?=
- =?utf-8?B?QjhML0NtRm1GMnkyNlAxZW9kMnlaSUJTRWl2VU9UZ0I0cE0rNWkrYnZ0OFh6?=
- =?utf-8?B?UUN6azF2YlNHVnRWQmhyWU5OYmNKNUNlN0hUcFl6N1pUd3N4WDlQeUFLUGlj?=
- =?utf-8?B?K2NFMWpPNW5JVEVianIzRHNpOGlnS1RxSDF0NXZYQ1hLYkszcEUyZEc1NE1K?=
- =?utf-8?B?S1hBTDFXRVVaVTBwRVZGZnYrRHB4TlVWS1lnalBGb1VJcE5XQy9FcTVVZ3A4?=
- =?utf-8?B?bUUyTEtPOWNvc3JjS3pwRTdBaFdjZHJ6U0ZXdytiVzdGcHRHajR6Z3puYkVj?=
- =?utf-8?B?L1A3aHVnTGpTOFE1MXBVWHJ3Qk9kNlVxK3NNc1dRR1lEVm1zL1hPM0tIeWZ2?=
- =?utf-8?B?YVlXbXFRVHBuQVM0c1UvNUNDZFhEUVl4NXJka2RUNHYwQlp4bWFkaERjbmo3?=
- =?utf-8?B?QXZoa2tDRDVhaENZOHIveTNybFcxMjRGN2YrRWFOVVBxVkhHUjk4eTdIeDh5?=
- =?utf-8?Q?obZG7VLT2HRQW+2JRpLn0Kg=3D?=
-X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2e18dc0-267c-4437-03be-08dde3e978f2
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+	=?iso-8859-1?Q?hsymHHMkUVI/W6MC/qQj3I4JXW7qEH5IXncZSkZaB2E+LKPGG4Tf7RohNH?=
+ =?iso-8859-1?Q?8hF22qjxQp5P6tsVWssvuXqhE30O45DsBu3SRA7n2ewlnz2Gb0Yec6ZPUJ?=
+ =?iso-8859-1?Q?f9rrA3riLpGF8u0PGR+E5HfTav0ZHZvG9chbo8YP1GkuZFZumNfRotFOXn?=
+ =?iso-8859-1?Q?JgPFCrXBRQNPL5cZikKuVurvUwBwIAxDQaxq9EMBzJuG5xj9vEK+80XV8Q?=
+ =?iso-8859-1?Q?GjjDzemSIJ4TBNoOtcrH7GHAoQ6xTj/3n8qm3DHbU7te76cRSJHUtutMSV?=
+ =?iso-8859-1?Q?UvTqLXZe6pAnhoH5sFPGZnFU0HuDuEwPvRced9U0urW1T+lE7bryS6SdJk?=
+ =?iso-8859-1?Q?lzQX2U0njUkve6V7Zlj1YdBY+KiPMSKVPlJPEeDsY5i5X19E5uA7/fhQ8S?=
+ =?iso-8859-1?Q?5O2USadx+4+8+ZWvoW1MX7dhb4ySaE/Fc2v+MOZwJm59+IDUhlQ8felaNi?=
+ =?iso-8859-1?Q?a4lDSBfp8g7KzCJnvJBMbuISs5FBFsFOQbvgwwImWvNi9vu4Y0Bm6qx6LH?=
+ =?iso-8859-1?Q?Imd2zDsM22+AxkgvedfpncHrTDDtDGKrhQRIICsp3uWnPWgTERY+3qM53p?=
+ =?iso-8859-1?Q?AMZMLRAQwgZHyjOAvTEIfrwUIPvRKfSLpa6qC2QMZcHHByYFg0wVZq9gGU?=
+ =?iso-8859-1?Q?3oZSLF76uP/GSMQGDf24EtDdMuorNQ+4Vi6FVKVe0xTNzuv2IO5O7xUmVC?=
+ =?iso-8859-1?Q?unqrzydsrJTrxmNodcHFFoNWgNkwtHvbkm7mk8Zl+CYgWMum7rLh5xMett?=
+ =?iso-8859-1?Q?psD0dujPHO6GXs3mk7BoPtv80X9C/evYeV1MaDbfIZ2n+cQI01WZYBKyhO?=
+ =?iso-8859-1?Q?1sjHBQ4FH6XRJr6VZ3uFWjjqy4+0RvTfmw/ukCQbYLByiapYsCUnHJg6u2?=
+ =?iso-8859-1?Q?2O6lehCCH96WBeTy+ygoNBVeLeszXfvP1/ro6dhgDIYrSd1qZIb9nux80y?=
+ =?iso-8859-1?Q?6qDGY+d2cdbi7yVE/vFae/gAmTYdXy85lN2mQyDxw5EWYYaqXto6MxMn29?=
+ =?iso-8859-1?Q?i8RorrKPFYXww/tB6CmJpKFcq8NfgVP5B09jK4P5GUlJ8S0+ouBSyXMXUN?=
+ =?iso-8859-1?Q?vYnuZGGDEH1JWqBfdmuH+8/wUaChIB2H+sQR7l630oT9vbptSZ3Rj18kqB?=
+ =?iso-8859-1?Q?iOxlhcvik2obtCCZr0F8leZk6KJHryjoTTBh6255sUs4kGRw0Vo+lIBJBb?=
+ =?iso-8859-1?Q?1gQM6zJTikEFAhmP69jPOOsYyajwlYi0rSQ2eo1jsVzia1w7mankryCYPQ?=
+ =?iso-8859-1?Q?+qjVuPEOBNJxkzG7RsVWycKlpb8XGoenOkfeJ5NV0eInptmPffS1cL/Sog?=
+ =?iso-8859-1?Q?HPovCWMyoI5E2jff3bY9PKBPWTIDKRg/vZKIiglgCtNwsKBbazC17vkdF2?=
+ =?iso-8859-1?Q?cUI1Y6bSnmZG1NCAOiPZ0v9Vm+LQGCIq4OuAZrF5lPd4w+5pQnVBJyHBdF?=
+ =?iso-8859-1?Q?O0t+JB7d4U+cbvok6CF3XOPjL+fyiMUW9A67TmT5n90+2nrqt2qkHNJLVy?=
+ =?iso-8859-1?Q?fZqPiQFG1lrWzG/OvmylsS1AmMh8ju3uzF54cV1Tbgp8haAOz67FA95rWq?=
+ =?iso-8859-1?Q?uIIiNfxhUJykOkWYIAHCo87LxWwfNpjx/bjURLp3AhaNQRbNJF0AVYtoOU?=
+ =?iso-8859-1?Q?/P++0vkCY0WHAS1BoNx5Dre3Ju5dyfqe6T?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	U3EdGh1NRN084yHAmx4KjuEnU2ZInNqv2kxqKfgzEngB6YOk57dbARIkzc8hrfaf5N3g5QTmDurOP3TYXNu2+68i8ESeaxHdlRy/sIGXGcsd+xggaoBfv8cbANeIZBiCqIIx6ivLcEwSFpz9wK9+sAC7l3Opxd+eh4IAxy/gqUOsIDd4/ROKD5gvOymW3XNJFDAq/nvsxb/pEx42s/Iz8cYEF/L1c6ugodquUsb66oEJGniTqADPz9iheVKpGmKnUIyuByPmzrfsv/vx04wqoRAY3oIhPrO8ubex7AIshMlG2AC6ilA/dgWThajBzB6C8aSMRDFQmTlQBiGdXCrd2CmJq20bODtEaV6wkaqtNwWGfcPmFued2YnN/g+GAqDbxUlF6lkhCkuXq7jE0zyfO1R6H+Q25T44PgpT58n4g64ZutG+8nB8DU/OrAkmNPsSDVwXTwlh4/88SfaUFVEZqHxNmfY81UzduEaQTmMqWz6B8tAsdygglbu4PgBN1QWpbNyuzxfBKOi1Ut1OTubKk9Qu0+z9RRCVfpuvAwHhAaGaLGospeWBsu/3jnv2NSUTRw+2n9lq3aybs5CCfW6GJeWbcA6PFiI8HmdGVcBuWfg=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a9c0387-7e1c-4aa0-c4a8-08dde3f0ceaa
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR10MB7329.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2025 15:10:05.3797
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2025 16:02:35.9474
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fAv8yjz6N0T1eEXL9EkEd1KoENUKcW7RHzxj8cjdSUZVphnpYan1CyK+exTtWRvvaaDmpZChbJ69IxdmUhirIZlFCS7Z5xDWKsB0lHLDkVc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR0101MB5959
+X-MS-Exchange-CrossTenant-UserPrincipalName: psWQrwHhFkvmYmZ6scIsUGr+sxALQ4w2Vg2pD3amgYPEyDtoX+q2zFS6+/svAHIoUcRckvCILgTvh1htPJpIAA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4607
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-25_07,2025-08-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
+ phishscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2508110000
+ definitions=main-2508250144
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAxNyBTYWx0ZWRfX6pR0U+2O/SOQ
+ mQY9tgh14sjBKCqmzGUzXLOXW0p0LJFK45dbtAMTFHZvmq8NFl0bwXEvX3bu4TeELXCazYvu5Qj
+ epVbf/5t3WAbYvjANQrGKx8qSjb1LzRbeu7P+j9tYu1BPqA3eGlYaAKKTGmQ7dhxHuA/XpBj1Hj
+ iqhECk6QQfpMUqxcckUXtf4tGBDdi4MPXDfhsV5aujEQjZznekyUThWxgd162HbIZXjZUu35aJe
+ MmDy8jxPt9qCy5IUthhDVpEgf4KGCR4ADe0WHK2/atJ4SpCKUJ1xOraYOn1g0cUUzp4yBkoylrH
+ 2sOyvyR2PGCDPzaJQpbnGU6Tl+xf71G1i69d8wFuSpj1O1VGeem23g1Egb9YBsQ9I952dbFmeTG
+ BwH+eg/xq89shu55EkDXNm/NbpZuhg==
+X-Proofpoint-ORIG-GUID: dm-hYueEENp1RGfnegDKRoGjRSpae4Nu
+X-Proofpoint-GUID: dm-hYueEENp1RGfnegDKRoGjRSpae4Nu
+X-Authority-Analysis: v=2.4 cv=IauHWXqa c=1 sm=1 tr=0 ts=68ac8921 b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
+ a=2OwXVqhp2XgA:10 a=GoEa3M9JfhUA:10 a=VwQbUJbxAAAA:8 a=cI9SBmEsuJOggFUlpjAA:9
+ a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10 cc=ntf awl=host:12069
 
-On 2025-08-23 12:39, Thomas Gleixner wrote:
-> OA
-> This is a follow up on the initial series, which did a very basic attempt
-> to sanitize the RSEQ handling in the kernel:
+On Mon, Aug 25, 2025 at 01:27:20PM +0200, Christophe Leroy wrote:
 > 
->     https://lore.kernel.org/all/20250813155941.014821755@linutronix.de
 > 
-> Further analysis turned up more than these initial problems:
+> Le 11/08/2025 à 07:34, Harry Yoo a écrit :
+> > Introduce and use {pgd,p4d}_populate_kernel() in core MM code when
+> > populating PGD and P4D entries for the kernel address space.
+> > These helpers ensure proper synchronization of page tables when
+> > updating the kernel portion of top-level page tables.
+> > 
+> > Until now, the kernel has relied on each architecture to handle
+> > synchronization of top-level page tables in an ad-hoc manner.
+> > For example, see commit 9b861528a801 ("x86-64, mem: Update all PGDs for
+> > direct mapping and vmemmap mapping changes").
+> > 
+> > However, this approach has proven fragile for following reasons:
+> > 
+> >    1) It is easy to forget to perform the necessary page table
+> >       synchronization when introducing new changes.
+> >       For instance, commit 4917f55b4ef9 ("mm/sparse-vmemmap: improve memory
+> >       savings for compound devmaps") overlooked the need to synchronize
+> >       page tables for the vmemmap area.
+> > 
+> >    2) It is also easy to overlook that the vmemmap and direct mapping areas
+> >       must not be accessed before explicit page table synchronization.
+> >       For example, commit 8d400913c231 ("x86/vmemmap: handle unpopulated
+> >       sub-pmd ranges")) caused crashes by accessing the vmemmap area
+> >       before calling sync_global_pgds().
+> > 
+> > To address this, as suggested by Dave Hansen, introduce _kernel() variants
+> > of the page table population helpers, which invoke architecture-specific
+> > hooks to properly synchronize page tables. These are introduced in a new
+> > header file, include/linux/pgalloc.h, so they can be called from common code.
+> > 
+> > They reuse existing infrastructure for vmalloc and ioremap.
+> > Synchronization requirements are determined by ARCH_PAGE_TABLE_SYNC_MASK,
+> > and the actual synchronization is performed by arch_sync_kernel_mappings().
+> > 
+> > This change currently targets only x86_64, so only PGD and P4D level
+> > helpers are introduced. In theory, PUD and PMD level helpers can be added
+> > later if needed by other architectures.
+> 
+> AFAIK pmd_populate_kernel() already exist on all architectures, and I'm not
+> sure it does what you expect. Or am I missing something ?
 
-Thanks Thomas for looking into this. Sorry for the delayed reply,
-I was on vacation.
+It does not do what I expect.
 
-> 
->    1) task::rseq_event_mask is a pointless bit-field despite the fact that
->       the ABI flags it was meant to support have been deprecated and
->       functionally disabled three years ago.
+Yes, if someone is going to introduce a PMD level helper, existing
+pmd_populate_kernel() should be renamed or removed.
 
-Yes, this should be converted to a simple boolean now.
+To be honest I'm not really sure why we need both pmd_populate() and
+pmd_populate_kernel(). It is introduced by historical commit
+3a0b82c08a0e8668 ("adds simple support for atomically-mapped PTEs.
+On highmem systems this enables the allocation of the pagetables in
+highmem.") [1], but as there's no explanation or comment so I can only
+speculate.
 
-> 
->    2) task::rseq_event_mask is accumulating bits unless there is a critical
->       section discovered in the user space rseq memory. This results in
->       pointless invocations of the rseq user space exit handler even if
->       there had nothing changed. As a matter of correctness these bits have
->       to be clear when exiting to user space and therefore pristine when
->       coming back into the kernel. Aside of correctness, this also avoids
->       pointless evaluation of the user space memory, which is a performance
->       benefit.
+Key differences I recognize is 1) the type of the last parameter is
+pgtable_t (which can be either struct page * or pte_t * depending on
+architecture) in pmd_populate() and pte_t * in pmd_populate_kernel(),
+and 2) some architectures treat user and kernel page tables differently.
 
-Thanks for catching this, that's indeed not the intended behavior.
+Regarding 1), I think a reasonable experience is that pmd_populate()
+should take struct page * in some architectures because
+with CONFIG_HIGHPTE=y pte_t * might not be accessible, but kernel
+page tables are not allocated from highmem even with CONFIG_HIGHPTE=y
+so pmd_populate_kernel() can take pte_t *, and that can save a few
+instructions.
 
-> 
->    3) The evaluation of critical sections does not differentiate between
->       syscall and interrupt/exception exits. The current implementation
->       silently tolerates and fixes up critical sections which invoked a
->       syscall unless CONFIG_DEBUG_RSEQ is enabled.
-> 
->       That's just wrong. If user space does that on a production kernel it
->       can keep the pieces. The kernel is not there to proliferate mindless
->       user space programming and letting everyone pay the performance
->       penalty.
+And some architectures (that does not support HIGHPTE?) define pgtable_t
+as pte_t * to support sub-page page tables (Commit 2f569afd9ced
+("CONFIG_HIGHPTE vs. sub-page page tables.")).
 
-Agreed. There is no point in supporting a userspace behavior on
-production kernels that is prevented on debug kernels, especially
-if this adds overhead to production kernels.
+Maybe things to clean up in the future:
 
-> 
-> Additional findings:
-> 
->    4) The decision to raise the work for exit is more than suboptimal.
+1) Once CONFIG_HIGHPTE is completely dropped (is that ever going to
+   happen?), pte_t * can be used instead of struct page *. 
 
-Terminology-wise, just making sure we are on the same page: here
-you are talking about "exit to usermode", and *not* the exit(2) system
-call. I'm clarifying because I know mm people care about fork/clone/exit
-syscall overhead as well.
+2) Convert users of pmd_populate_kernel() to use pmd_populate().
+   But some architectures treat user and kernel page tables differently
+   and that will be handled in pmd_populate()  (depending on
+   (mm == &init_mm))
 
->       Basically every context switch does so if the task has rseq, which is
->       nowadays likely as glibc makes use of it if available.
-
-Correct.
-
-> 
->       The consequence is that a lot of exits have to process RSEQ just for
->       nothing. The only reasons to do so are:
-> 
->         the task was interrupted in user space and schedules
-
-interrupted or takes a trap/exception (I will assume you consider traps and
-exceptions as an interrupt classes within this discussion).
-
-> 
->       or
-> 
->         the CPU or MM CID changes in schedule() independent of the entry
->         mode
-
-or the numa node id, which is typically tied to the CPU number, except
-on powerpc AFAIR where numa node id to cpu mapping can be reconfigured
-dynamically.
-
-> 
->       That reduces the invocation space obviously significantly.
-
-Yes.
-
-> 
->    5) Signal handling does the RSEQ update unconditionally.
-> 
->       That's wrong as the only reason to do so is when the task was
->       interrupted in user space independent of a schedule event.
-> 
->       The only important task in that case is to handle the critical section
->       because after switching to the signal frame the original return IP is
->       not longer available.
-> 
->       The CPU/MM CID values do not need to be updated at that point as they
->       can change again before the signal delivery goes out to user space.
-> 
->       Again, if the task was in a critical section and issued a syscall then
->       it can keep the pieces as that's a violation of the ABI contract.
-
-The key thing here is that the state of the cpu/mm cid/numa node id
-fields are updated before returning to the userspace signal handler,
-and that a rseq critical section within a signal handler works.
- From your description here we can indeed do less work on signal
-delivery and still meet those requirements. That's good.
-
-> 
->    6) CPU and MM CID are updated unconditionally
-> 
->       That's again a pointless exercise when they didn't change. Then the
->       only action required is to check the critical section if and only if
->       the entry came via an interrupt.
-> 
->       That can obviously be avoided by caching the values written to user
->       space and avoiding that path if they haven't changed
-
-This is a good performance improvement, I agree. Note that this
-will likely break Google's tcmalloc hack of re-using the cpu_id_start
-field as a way to get notified about preemption. But they were warned
-not to do that, and it breaks the documented userspace ABI contract,
-so they will need to adapt. This situation is documented here:
-
-commit 7d5265ffcd8b
-     rseq: Validate read-only fields under DEBUG_RSEQ config
-
-> 
->    7) The TIF_NOTIFY_RESUME mechanism is a horrorshow
-> 
->       TIF_NOTIFY_RESUME is a multiplexing TIF bit and needs to invoke the
->       world and some more. Depending on workloads this can be set by
->       task_work, security, block and memory management. All unrelated to
->       RSEQ and quite some of them are likely to cause a reschedule.
->       But most of them are low frequency.
-> 
->       So doing this work in the loop unconditionally is just waste. The
->       correct point to do this is at the end of that loop once all other bits
->       have been processed, because that's the point where the task is
->       actually going out to user space.
-
-Note that the rseq work can trigger a page fault and a reschedule, which
-makes me whether moving this work out of the work loop can be OK ?
-I'll need to have a closer look at the relevant patches to understand
-this better.
-
-I suspect that the underlying problem here is not that the notify resume
-adds too much overhead, but rather that we're setting the
-TIF_NOTIFY_RESUME bit way more often than is good for us.
-
-Initially I focused on minimizing the scheduler overhead, at the
-expense of doing more work than strictly needed on exit to usermode.
-But of course reality is not as simple, and we need to fine the right
-balance.
-
-If your goal is to have fewer calls to the resume notifier triggered
-by rseq, we could perhaps change the way rseq_set_notify_resume()
-is implemented to make it conditional on either:
-
-- migration,
-- preemption AND
-     current->rseq->rseq_cs userspace value is set OR
-     would require a page fault to be read.
-- preemption AND mm_cid changes.
-
-I'm not sure what to do about the powerpc numa node id reconfiguration
-fringe use-case though.
-
-> 
->    8) #7 caused another subtle work for nothing issue
-> 
->       IO/URING and hypervisors invoke resume_user_mode_work() with a NULL
->       pointer for pt_regs, which causes the RSEQ code to ignore the critical
->       section check, but updating the CPU ID/ MM CID values unconditionally.
-> 
->       For IO/URING this invocation is irrelevant because the IO workers can
->       never go out to user space and therefore do not have RSEQ memory in
->       the first place. So it's a non problem in the existing code as
->       task::rseq is NULL in that case.
-
-OK
-
-> 
->       Hypervisors are a different story. They need to drain task_work and
->       other pending items, which are multiplexed by TIF_NOTIFY_RESUME,
->       before entering guest mode.
-> 
->       The invocation of resume_user_mode_work() clears TIF_NOTIFY_RESUME,
->       which means if rseq would ignore that case then it could miss a CPU
->       or MM CID update on the way back to user space.
-> 
->       The handling of that is just a horrible and mindless hack as the event
->       might be re-raised between the time the ioctl() enters guest mode and
->       the actual exit to user space.
-> 
->       So the obvious thing is to ignore the regs=NULL call and let the
->       offending hypervisor calls check when returning from the ioctl()
->       whether the event bit is set and re-raise the notification again.
-
-Is this a useless work issue or a correctness issue ?
-
-Also, AFAIU, your proposed approach will ensure that the rseq fields
-are up to date when returning to userspace from the ioctl in the host
-process, but there are no guarantees about having up to date fields
-when running the guest VM. I'm fine with this, but I think it needs to
-be clearly spelled out.
-
-> 
->    9) Code efficiency
-> 
->       RSEQ aims to improve performance for user space, but it completely
->       ignores the fact, that this needs to be implemented in a way which
->       does not impact the performance of the kernel significantly.
-> 
->       So far this did not pop up as just a few people used it, but that has
->       changed because glibc started to use it widely.
-
-The history of incremental rseq upstreaming into the kernel and then glibc can
-help understand how this situation came to be:
-
-Linux commit d7822b1e24f2 ("rseq: Introduce restartable sequences system call")
-
-(2018)
-
-     This includes microbenchmarks of specific use-cases, which clearly
-     do not stress neither the scheduler nor exit to usermode.
-
-     It includes jemalloc memory allocator (Facebook) latency benchmarks,
-     which depend heavily on the userspace fast-paths.
-
-     It includes hackbench results, cover the scheduling and return
-     to usermode overhead. Given that there was no libc integration
-     back then, the hackbench results do not include any rseq-triggered
-     resume notifier work.
-
-     Based on the rseq use at that point in time, the overhead of
-     rseq was acceptable for it to be merged.
-
-glibc commit 95e114a0919d ("nptl: Add rseq registration")
-
-(2021)
-
-     Florian Weimer added this feature to glibc. At this point
-     the overhead you observe now should have become visible.
-     This integration and performance testing was done by the
-     glibc maintainers and distribution vendors who packaged this
-     libc.
-
-[...]
-
-> That said, this series addresses the overall problems by:
-> 
->    1) Limiting the RSEQ work to the actual conditions where it is
->       required. The full benefit is only available for architectures using
->       the generic entry infrastructure. All others get at least the basic
->       improvements.
-> 
->    2) Re-implementing the whole user space handling based on proper data
->       structures and by actually looking at the impact it creates in the
->       fast path.
-> 
->    3) Moving the actual handling of RSEQ out to the latest point in the exit
->       path, where possible. This is fully inlined into the fast path to keep
->       the impact confined.
-> 
->       The initial attempt to make it completely independent of TIF bits and
->       just handle it with a quick check unconditionally on exit to user
->       space turned out to be not feasible. On workloads which are doing a
->       lot of quick syscalls the extra four instructions add up
->       significantly.
-> 
->       So instead I ended up doing it at the end of the exit to user TIF
->       work loop once when all other TIF bits have been processed. At this
->       point interrupts are disabled and there is no way that the state
->       can change before the task goes out to user space for real.
-
-I'll need to review what happens in case rseq needs to take a page fault
-after your proposed changes. More discussion to come around the specific
-patch in the series.
-
-> 
->    Versus the limitations of #1 and #3:
-> 
->     I wasted several days of my so copious time to figure out how to not
->     break all the architectures, which still insist on benefiting from core
->     code improvements by pulling everything and the world into their
->     architecture specific hackery.
-> 
->     It's more than five years now that the generic entry code infrastructure
->     has been introduced for the very reason to lower the burden for core
->     code developers and maintainers and to share the common functionality
->     across the architecture zoo.
-> 
->     Aside of the initial x86 move, which started this effort, there are only
->     three architectures who actually made the effort to utilize this. Two of
->     them were new ones, which were asked to use it right away.
-> 
->     The only existing one, which converted over since then is S390 and I'm
->     truly grateful that they improved the generic infrastructure in that
->     process significantly.
-> 
->     On ARM[64] there are at least serious efforts underway to move their
->     code over.
-> 
->     Does everybody else think that core code improvements come for free and
->     the architecture specific hackery does not put any burden on others?
-> 
->     Here is the hall of fame as far as RSEQ goes:
-> 
->     	arch/mips/Kconfig:      select HAVE_RSEQ
-> 	arch/openrisc/Kconfig:  select HAVE_RSEQ
-> 	arch/powerpc/Kconfig:   select HAVE_RSEQ
-> 
->     Two of them are barely maintained and shouldn't have RSEQ in the first
->     place....
-> 
->     While I was very forthcoming in the past to accomodate for that and went
->     out of my way to enable stuff for everyone, but I'm drawing a line now.
-> 
->     All extra improvements which are enabled by #1/#3 depend hard on the
->     generic infrastructure.
-> 
->     I know that it's quite some effort to move an architecture over, but
->     it's a one time effort and investment into the future. This 'my
->     architecture is special for no reason' mindset is not sustainable and
->     just pushes the burden on others. There is zero justification for this.
-> 
->     Not converging on common infrastructure is not only a burden for the
->     core people, it's also a missed opportunity for the architectures to
->     lower their own burden of chasing core improvements and implementing
->     them each with a different set of bugs.
-> 
->     This is not the first time this happens. There are enough other examples
->     where it took ages to consolidate on common code. This just accumulates
->     technical debt and needless complexity, which everyone suffers from.
-> 
->     I have happily converted the four architectures, which use the generic
->     entry code over, to utilize a shared generic TIF bit header so that
->     adding the TIF_RSEQ bit becomes a two line change and all four get the
->     benefit immediately. That was more consequent than just adding the bits
->     for each of them and it makes further maintainence of core
->     infrastructure simpler for all sides. See?
-
-
-Can we make RSEQ depend on CONFIG_GENERIC_ENTRY (if that is the correct
-option) ?
-
-This would force additional architectures to move to the generic entry
-infrastructure if they want to benefit from rseq.
-
-I'll start looking into the series now.
-
-Thanks,
-
-Mathieu
-
-> 
-> 
-> That said, as for the first version these patches have a pile of dependencies:
-> 
-> The series depends on the separately posted rseq bugfix:
-> 
->     https://lore.kernel.org/lkml/87o6sj6z95.ffs@tglx/
-> 
-> and the uaccess generic helper series:
-> 
->     https://lore.kernel.org/lkml/20250813150610.521355442@linutronix.de/
-> 
-> and a related futex fix in
-> 
->     git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/urgent
-> 
-> The combination of all of them and some other related fixes (rseq
-> selftests) are available here:
-> 
->      git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/base
-> 
-> For your convenience all of it is also available as a conglomerate from
-> git:
-> 
->      git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/perf
-> 
-> The diffstat looks large, but a lot of that is due to extensive comments
-> and the extra hackery to accommodate for random architecture code.
-> 
-> I did not yet come around to test this on anything else than x86. Help with
-> that would be truly appreciated.
-> 
-> Thanks,
-> 
-> 	tglx
-> 
->    "Additional problems are the offspring of poor solutions." - Mark Twain
-> 	
-> ---
->   Documentation/admin-guide/kernel-parameters.txt |    4
->   arch/Kconfig                                    |    4
->   arch/loongarch/Kconfig                          |    1
->   arch/loongarch/include/asm/thread_info.h        |   76 +-
->   arch/riscv/Kconfig                              |    1
->   arch/riscv/include/asm/thread_info.h            |   29 -
->   arch/s390/Kconfig                               |    1
->   arch/s390/include/asm/thread_info.h             |   44 -
->   arch/x86/Kconfig                                |    1
->   arch/x86/entry/syscall_32.c                     |    3
->   arch/x86/include/asm/thread_info.h              |   74 +-
->   b/include/asm-generic/thread_info_tif.h         |   51 ++
->   b/include/linux/rseq_entry.h                    |  601 +++++++++++++++++++++++
->   b/include/linux/rseq_types.h                    |   72 ++
->   drivers/hv/mshv_root_main.c                     |    2
->   fs/binfmt_elf.c                                 |    2
->   fs/exec.c                                       |    2
->   include/linux/entry-common.h                    |   38 -
->   include/linux/irq-entry-common.h                |   68 ++
->   include/linux/mm.h                              |   25
->   include/linux/resume_user_mode.h                |    2
->   include/linux/rseq.h                            |  216 +++++---
->   include/linux/sched.h                           |   50 +
->   include/linux/thread_info.h                     |    5
->   include/trace/events/rseq.h                     |    4
->   include/uapi/linux/rseq.h                       |   21
->   init/Kconfig                                    |   28 +
->   kernel/entry/common.c                           |   37 -
->   kernel/entry/syscall-common.c                   |    8
->   kernel/rseq.c                                   |  610 ++++++++++--------------
->   kernel/sched/core.c                             |   10
->   kernel/sched/membarrier.c                       |    8
->   kernel/sched/sched.h                            |    5
->   virt/kvm/kvm_main.c                             |    3
->   34 files changed, 1406 insertions(+), 700 deletions(-)
-
+[1] https://web.git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=3a0b82c08a0e86683783c30d7fec9d1b06c2fe20
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Cheers,
+Harry / Hyeonggon
 
