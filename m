@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-13267-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13268-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8794FB34EED
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 00:21:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8192FB34F21
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 00:41:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50E54203372
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Aug 2025 22:21:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 995381A84E6D
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Aug 2025 22:41:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3CE228C866;
-	Mon, 25 Aug 2025 22:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F642BD59C;
+	Mon, 25 Aug 2025 22:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ACi4l3dX"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="b8uj2Vlf"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D2BD2586C5
-	for <linux-arch@vger.kernel.org>; Mon, 25 Aug 2025 22:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42DCC29D26C;
+	Mon, 25 Aug 2025 22:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756160499; cv=none; b=M7VdnGlOGPLihqhxy+onpzCfl90BNr4I+er0FOcuoh7AtMlqCWEDIO5Hh9ZgKlBouissljlNAy6E1NbwmKlI3DCP2A72TZlsyIJCiOl8UGc307wNdlLjYxtH0DTQ4n6B5xsszik1+2HLq6gen229XZODVn5HNQixndxHxvHHTsU=
+	t=1756161681; cv=none; b=TA7BwnX32IPTi1NnYqeJgOH75tFCaoDdhhkMnP/GmZMBaRI9dw21mFILYriJSUG8IvjbK1GJ9d4lEYd8uFV/3fTl+XRF+sSBgmnrTIxbalGRxeUkcnapmF92boVkqXUhgBEIcFvdFApVgI0IKFmLUg8T51ybdYWpXHqoJ/2OWEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756160499; c=relaxed/simple;
+	s=arc-20240116; t=1756161681; c=relaxed/simple;
 	bh=vENPD8qIYT0SxnJvVGHSlqT6IgLPf2Q+JP29FkUujyk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ooqBBy4Iv/HTUaRF1LKfjunPw5JU6/f6rylGylPe0KGLQfUaWFIyzwvt0QRQA85dYaJnR0CgwBQXX55wDdS1jiV3kncENm8NiwmOfprNUYMj48sYC6K4Sz1kA6R2C/uMiA4qqv4ULBPBPuJAETfkCVmQiLDMPpHXCVh1I0Mb2PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ACi4l3dX; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=kR4n02ydmjKgejVdJzJnLWcA0RwRKOLLgdIDdb545c/hEFl+vgb4iFEcs8nKzY3yY5A3m9C7ro3//DjeQigh9zdcsVWvFZfVRWqqMpiY71L/uJM+ZVxgZsw/eeBGxpwSBI80l8gKTc1+cAlMAzQzOb+xioNDfmiKk4yzBYJk7rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=b8uj2Vlf; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.160.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 717D0211829E;
-	Mon, 25 Aug 2025 15:21:27 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 717D0211829E
+	by linux.microsoft.com (Postfix) with ESMTPSA id 4F71E211829B;
+	Mon, 25 Aug 2025 15:41:19 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4F71E211829B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1756160487;
+	s=default; t=1756161679;
 	bh=4V+Di2CdNqpVDQpM4RzbnLiWDx2BluMDafouDHKyG8g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ACi4l3dXrgui4cUUQ8kBMoxD2n9Rl5jgG/i2exa/h/ZU+PoCXAXn/4JTYi7YcRrK2
-	 d+XzUqF8KFoexIbYxZTuJETwYGRqFVr/WnGMbBAA2v0HA7JxgE9ufZEtJeX9RLjkKO
-	 A4mxpXhnVsyl+vFZLS0X7cxaMf/5RMcL77Lt8Kcc=
+	b=b8uj2VlfaJc8cUSf3cp8QIWiLVMDA0I6acFWKSRutFKxvRSVRxNEI5i6h7LTLr2lm
+	 9d/01sTCBI4LyyY41CphZFLzHuiozoulcz66giqgRJO5Nv5lU0IBMFRl8Rm9NcuyXS
+	 OAbQ8HTLq/d+Kf+fhIlklCqG0J5qp0jrMGEt+acI=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: dan.j.williams@intel.com
 Cc: Tianyu.Lan@microsoft.com,
@@ -56,10 +56,21 @@ Cc: Tianyu.Lan@microsoft.com,
 	hpa@zytor.com,
 	kys@microsoft.com,
 	linux-arch@vger.kernel.org,
-	linux-coco@lists.linux.dev
+	linux-coco@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	mhklinux@outlook.com,
+	mingo@redhat.com,
+	rdunlap@infradead.org,
+	romank@linux.microsoft.com,
+	sunilmut@microsoft.com,
+	tglx@linutronix.de,
+	wei.liu@kernel.org,
+	x86@kernel.org
 Subject: Re: [PATCH hyperv-next v4 15/16] Drivers: hv: Support establishing the confidential VMBus connection
-Date: Mon, 25 Aug 2025 15:21:26 -0700
-Message-ID: <20250825222126.356372-1-romank@linux.microsoft.com>
+Date: Mon, 25 Aug 2025 15:41:17 -0700
+Message-ID: <20250825224117.360875-1-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <68a4ddff258de_2709100ba@dwillia2-xfh.jf.intel.com.notmuch>
 References: <68a4ddff258de_2709100ba@dwillia2-xfh.jf.intel.com.notmuch>
