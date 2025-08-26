@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-13276-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13277-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C98F1B35413
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 08:18:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B82BB35419
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 08:18:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53F41684A48
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 06:18:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A356A1B651B9
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 06:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2872F60CC;
-	Tue, 26 Aug 2025 06:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 097A82F6171;
+	Tue, 26 Aug 2025 06:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Y7BA+StB";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eX4ApMd4"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qt50fHhk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4r2qNWGA"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6173A2853E9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D3A2882D7;
 	Tue, 26 Aug 2025 06:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756189103; cv=none; b=C0y6d5/RFxc3L6sBk3oYE+1JcDkauxir4Om/UAop0eGNcVucffRYLxaOP5iuk5qybBAK50sS1xwE07RnGGui+ZXvct7lTI+vLVHdqoumD9pY/6GR3MO8vhhe+tRR3lXBSlcGQlAYv3jKS3CtW5nPjWHbADiCkr7dGTVuWtjFthA=
+	t=1756189103; cv=none; b=eQxos7/4YhmskqRLTrPC0rMKYVzq+yMMZYlpZT1WQmmpHlOwGX5PHwFAuLiTdwvLptzYZtMR+edmvZmts9STuQHf7f3o5wU+pmz0fhmGhitKf1HzsV7sJ+ZI6dZ1pAO1erF/qjyWDZ3z5531LDWGOaBg+D5v6WtA/Y/5eL74uaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756189103; c=relaxed/simple;
-	bh=EexCAO4ByrqWp36PwLc6Nuk8KsCI0mVA6scJ+GgAbLc=;
+	bh=jRrDQXs97w6WapLhaOa7Pkm+jLScLDYfjSl6yi3XN18=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j6YRCFX1O+vdS5t/DeG9CDAKtIOR/LsASJkZziN3l2KLRLK72oGOzs9wg+Hgm1VJEAk+fS/BjWWJZjCcpNevrF79eL5IsH45ro6YnRtCSl3rZG91O4i3Gf0fM5HQ/cu6r3h48DQLJj6MODfrq+hutpamdFSBfu0mV50As3JUoHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Y7BA+StB; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eX4ApMd4; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=F8eglTJuqYo+IJlfM9drigqDh3vHGkEFPBfAjJSxVwTnX6We9PSmPg0AaOdiRZTVXTxEbxF1bJaEsZ00o3ge7fbjGnzeS7WmarwH252une24rOMRd7ryJP1+X9zrfv4xumvoqn/SwmA0Bn8xzZNypaTU7qgFKj8KqcVQn9IZuj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qt50fHhk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4r2qNWGA; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1756189099;
+	s=2020; t=1756189100;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Uszkh3lqv/KNmuDmi3U8LEjAUFp6txufWN65uYpGjyY=;
-	b=Y7BA+StBK859WKGDBThqNJzUURHkFFg61E0vffUNTCQF1VxCAHN6xIXKlyiHbm9eajvVvI
-	Jt2GBaIF/pi7LvI0utN6sJQhfLqKDQPZOqDyCHKEfKrCO50+UW590sV1dM+eZn6te1RbF9
-	PyeES+znaqYbX/ssIrN39kD3Kk09hoWNTLMrNZp3to3aZHXhrk/vJALCBcxIxdORkBp/am
-	uLQaB0JAQI/GDq9oYJJEaiJmug7ASdO6OyB8IVh15jxqnnvzCkRVdctLGYZ4k8F1iN9Zvz
-	muN/flVMNl5dCVqSsfywVPrbMq2Yg/EKUtf+JWnprwsvjdX/+lc9kWIeQ4TJsQ==
+	bh=K6H2kK7oB9XL3kf3qEPW1KLZGm1z/W4mCckKnzb/rKs=;
+	b=qt50fHhkADqQAuGueYGo1TQTCS9pRKukjkJcKGMOVdY+09d6hUTKCyc1AyfhiAYF831YBL
+	4q99aXnzXtByc6BFg3oxoOao3aYxAJC/4V4yv6pRmF5M82cdIFMVR2cYlHIKLsm2rpv9id
+	oUjPKAO+oKu1SN3APxKQuqKX/DGssbMKCw4Xz2n4zZRJ7UN5maoM+zI/Lf0RlegSXAgyuq
+	/yWxcu5VK+/r04Tbb+GtsRhZKDrv/mWRyQGwmgm3a7+vendx0i7Ty/I1Fshrv0+b0ZWwlG
+	SH+n/VsvVlEtE2tm2DP+xUhGKNTJBp08j1K4fjgxsZPCn8yrdRPmmOis69Lp3w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1756189099;
+	s=2020e; t=1756189100;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Uszkh3lqv/KNmuDmi3U8LEjAUFp6txufWN65uYpGjyY=;
-	b=eX4ApMd4ziFJ+O7XtN9ONWYbWvF8LT00ruUQ8zsD0FgJE7m4FLwFuEe2Mo8xsi0CtiVh9r
-	4pAcBkCmeL70n1BQ==
-Date: Tue, 26 Aug 2025 08:17:05 +0200
-Subject: [PATCH 02/11] ARM: VDSO: remove cntvct_ok global variable
+	bh=K6H2kK7oB9XL3kf3qEPW1KLZGm1z/W4mCckKnzb/rKs=;
+	b=4r2qNWGAXu/UOi8WftkYX57YkiorzJNR/wCQ1OowTx3aIeHRybvVVg1TQp7nZhB0xzChNO
+	mlSahIjP53UFu/BQ==
+Date: Tue, 26 Aug 2025 08:17:06 +0200
+Subject: [PATCH 03/11] vdso: Move ENABLE_COMPAT_VDSO from core to arm64
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -63,8 +63,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250826-vdso-cleanups-v1-2-d9b65750e49f@linutronix.de>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250826-vdso-cleanups-v1-3-d9b65750e49f@linutronix.de>
 References: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
 In-Reply-To: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -93,80 +93,122 @@ Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  linux-kselftest@vger.kernel.org, 
  Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756189098; l=2467;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756189098; l=4201;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=SraZm0ID4pbqm566wM3v0Ccba0fElQJFwVMRPDgnQv0=;
- b=gZMwdBr81Gd7SfGI9zA49QzosCdIhBKgEYiZOU6oZRlEUfUXED78+TGCO1Aix2Xt9rw5NrYMT
- tA6ghwW+GTLCIiMiWaHkprmyw7TLEyHTqzP7iQQA/CqwF/kDQFk1ywg
+ bh=jRrDQXs97w6WapLhaOa7Pkm+jLScLDYfjSl6yi3XN18=;
+ b=zVe/bWMXPBpBICIiM3Xs7CuOoAOqkdw7N9nfQnVMF1yQFhNpPWnyujMRcuO3pxZbGv51ey0DT
+ uPROdPxZB3gDVO9rZsFSY0vOzcTTDPeOEOBO9SI9WjiLictQ4yCGkTS
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+The ENABLE_COMAPT_VDSO symbol is only used by arm64 and only for the
+time-related functionality. There should be no new users, so it doesn't
+need to be in the generic vDSO code.
 
-The cntvct_ok variable has not had any external user since commit
-c7a18100bdff ("lib/vdso: Avoid highres update if clocksource is not
-VDSO capable").
+Move the logic into arm64 architecture-specific code and replace the
+explicit define by the standard '#ifdef __aarch64__'.
 
-It also only has one user in vdso.c, once during init, so rather than
-having the caller of patch_vdso() initialize cntvct_ok, just call
-cntvct_functional() directly and avoid the global variable entirely.
-
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/arm/include/asm/vdso/vsyscall.h |  2 --
- arch/arm/kernel/vdso.c               | 10 +++-------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ arch/arm64/include/asm/vdso/compat_barrier.h      | 7 +++----
+ arch/arm64/include/asm/vdso/compat_gettimeofday.h | 6 +++---
+ arch/arm64/include/asm/vdso/gettimeofday.h        | 8 ++++++++
+ arch/arm64/kernel/vdso32/Makefile                 | 1 -
+ include/vdso/datapage.h                           | 4 ----
+ 5 files changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm/include/asm/vdso/vsyscall.h b/arch/arm/include/asm/vdso/vsyscall.h
-index 4e7226ad02ec4dcf88203c9046e1b320a10e7373..ff1c729af05f03ac5db86c28276db2e4a31c775c 100644
---- a/arch/arm/include/asm/vdso/vsyscall.h
-+++ b/arch/arm/include/asm/vdso/vsyscall.h
-@@ -7,8 +7,6 @@
- #include <vdso/datapage.h>
- #include <asm/cacheflush.h>
+diff --git a/arch/arm64/include/asm/vdso/compat_barrier.h b/arch/arm64/include/asm/vdso/compat_barrier.h
+index 3ac35f4a667cfc8c03fb6b6913c5a02b230a1659..6d75e03d38274a6b8549ab10a0f3c9732e7fae56 100644
+--- a/arch/arm64/include/asm/vdso/compat_barrier.h
++++ b/arch/arm64/include/asm/vdso/compat_barrier.h
+@@ -7,11 +7,10 @@
  
--extern bool cntvct_ok;
--
- static __always_inline
- void __arch_sync_vdso_time_data(struct vdso_time_data *vdata)
- {
-diff --git a/arch/arm/kernel/vdso.c b/arch/arm/kernel/vdso.c
-index 325448ffbba0c29895ea5d97e60d6f51e552cb2e..e38a30477f3d70939f6d57c79fad52eed73c49b4 100644
---- a/arch/arm/kernel/vdso.c
-+++ b/arch/arm/kernel/vdso.c
-@@ -54,11 +54,9 @@ struct elfinfo {
- 	char		*dynstr;	/* ptr to .dynstr section */
- };
- 
--/* Cached result of boot-time check for whether the arch timer exists,
-- * and if so, whether the virtual counter is useable.
-+/* Boot-time check for whether the arch timer exists, and if so,
-+ * whether the virtual counter is usable.
+ #ifndef __ASSEMBLY__
+ /*
+- * Warning: This code is meant to be used with
+- * ENABLE_COMPAT_VDSO only.
++ * Warning: This code is meant to be used from the compat vDSO only.
   */
--bool cntvct_ok __ro_after_init;
--
- static bool __init cntvct_functional(void)
- {
- 	struct device_node *np;
-@@ -159,7 +157,7 @@ static void __init patch_vdso(void *ehdr)
- 	 * want programs to incur the slight additional overhead of
- 	 * dispatching through the VDSO only to fall back to syscalls.
- 	 */
--	if (!cntvct_ok) {
-+	if (!cntvct_functional()) {
- 		vdso_nullpatch_one(&einfo, "__vdso_gettimeofday");
- 		vdso_nullpatch_one(&einfo, "__vdso_clock_gettime");
- 		vdso_nullpatch_one(&einfo, "__vdso_clock_gettime64");
-@@ -197,8 +195,6 @@ static int __init vdso_init(void)
- 	vdso_total_pages = VDSO_NR_PAGES; /* for the data/vvar pages */
- 	vdso_total_pages += text_pages;
+-#ifndef ENABLE_COMPAT_VDSO
+-#error This header is meant to be used with ENABLE_COMPAT_VDSO only
++#ifdef __arch64__
++#error This header is meant to be used with from the compat vDSO only
+ #endif
  
--	cntvct_ok = cntvct_functional();
--
- 	patch_vdso(vdso_start);
+ #ifdef dmb
+diff --git a/arch/arm64/include/asm/vdso/compat_gettimeofday.h b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
+index d60ea7a72a9cb3457c412d0ece21ed76ae77782d..7d1a116549b1b98d6eb7a78d053958c6a71799ec 100644
+--- a/arch/arm64/include/asm/vdso/compat_gettimeofday.h
++++ b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
+@@ -2,8 +2,8 @@
+ /*
+  * Copyright (C) 2018 ARM Limited
+  */
+-#ifndef __ASM_VDSO_GETTIMEOFDAY_H
+-#define __ASM_VDSO_GETTIMEOFDAY_H
++#ifndef __ASM_VDSO_COMPAT_GETTIMEOFDAY_H
++#define __ASM_VDSO_COMPAT_GETTIMEOFDAY_H
  
- 	return 0;
+ #ifndef __ASSEMBLY__
+ 
+@@ -163,4 +163,4 @@ static inline bool vdso_clocksource_ok(const struct vdso_clock *vc)
+ 
+ #endif /* !__ASSEMBLY__ */
+ 
+-#endif /* __ASM_VDSO_GETTIMEOFDAY_H */
++#endif /* __ASM_VDSO_COMPAT_GETTIMEOFDAY_H */
+diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
+index da1ab87595925fdfa74fd10d0c9548f109970588..c59e84105b43cdb0c823da3dd793a83781f84302 100644
+--- a/arch/arm64/include/asm/vdso/gettimeofday.h
++++ b/arch/arm64/include/asm/vdso/gettimeofday.h
+@@ -5,6 +5,8 @@
+ #ifndef __ASM_VDSO_GETTIMEOFDAY_H
+ #define __ASM_VDSO_GETTIMEOFDAY_H
+ 
++#ifdef __aarch64__
++
+ #ifndef __ASSEMBLY__
+ 
+ #include <asm/alternative.h>
+@@ -96,4 +98,10 @@ static __always_inline const struct vdso_time_data *__arch_get_vdso_u_time_data(
+ 
+ #endif /* !__ASSEMBLY__ */
+ 
++#else /* !__aarch64__ */
++
++#include "compat_gettimeofday.h"
++
++#endif /* __aarch64__ */
++
+ #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index f2dfdc7dc8185bc045907283b68ab18fed980312..230fdc26796aa5ba561519bcf2de8ccd7ad3b9f8 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -59,7 +59,6 @@ VDSO_CAFLAGS += -DDISABLE_BRANCH_PROFILING
+ VDSO_CAFLAGS += -march=armv8-a
+ 
+ VDSO_CFLAGS := $(VDSO_CAFLAGS)
+-VDSO_CFLAGS += -DENABLE_COMPAT_VDSO=1
+ # KBUILD_CFLAGS from top-level Makefile
+ VDSO_CFLAGS += -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+                -fno-strict-aliasing -fno-common \
+diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
+index 02533038640e53c40291c7e09139e0f9b32f502a..0b1982f15de427723c9ff8502ca1eaa195f9a6a1 100644
+--- a/include/vdso/datapage.h
++++ b/include/vdso/datapage.h
+@@ -196,11 +196,7 @@ enum vdso_pages {
+  * - clock_gettime_fallback(): fallback for clock_gettime.
+  * - clock_getres_fallback(): fallback for clock_getres.
+  */
+-#ifdef ENABLE_COMPAT_VDSO
+-#include <asm/vdso/compat_gettimeofday.h>
+-#else
+ #include <asm/vdso/gettimeofday.h>
+-#endif /* ENABLE_COMPAT_VDSO */
+ 
+ #else /* !__ASSEMBLY__ */
+ 
 
 -- 
 2.50.1
