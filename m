@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-13281-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13282-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30BE7B3542D
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 08:19:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C834B35433
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 08:19:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DD981B65121
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 06:19:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74FB668525E
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Aug 2025 06:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C902F83A5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B257F2F83B7;
 	Tue, 26 Aug 2025 06:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="s4Tv7+zx";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aMy3eGdf"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RgDlVbjO";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8pcUg9Do"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4479A2F618F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932072F6567;
 	Tue, 26 Aug 2025 06:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756189106; cv=none; b=O2Y5gN0XShPRI3X4FYqThBbd9VukPmnqBZEhlbu9uTdbYnBn5pcHGx4tXHjPSeujHlGNHie284385A1BMV7nFTSl2V/QBtxVcu2vb/pErQwtaHHR3XZL5oNwqX1fXLPpqQmmaIu7PJW+kkvCR/6gvtXDuy+tDY0HMz8V4hIOa18=
+	t=1756189106; cv=none; b=nIqeohaX1vDenTw4H3RtjL3SZRXV5q7YUV5AF7PskEE8a2zuWRtJI1j6XRT1JaNuDB9e5NyxLKelp/x6kjyEdK1T0dfL97EDwp9iVSp2iSisRjcya2yGSuvQseChA1tNR2K7d8rIIikqevkaFc0emdLxksZgC5FF1ZqM407DQaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756189106; c=relaxed/simple;
-	bh=MIu9l2pTXbhJrvGPCmWjImoXUcbBkNjVmM+9aAFDkec=;
+	bh=t5/9HDmyIs2t4g7FWEeD3BGuAZjUNxjgX5TY/5a0ZYE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tPuWj6pDafWtR8vuz2wvF/ShEVYGdXUQ7/MXldtrui7aSI2rZCTt8SrVSkoNxAWaIE8gthj3F+g+7wc0jApgxGl+8LXmH0hR1YYVY791iHvczCwwnNitXRVz3lr181EBXfA/kj57RxgecTHEb7ZxdbRe8bbOw1sGYUz8IEQw5cI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=s4Tv7+zx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aMy3eGdf; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=OH4NAA25wdO1T5Pf1NT+uBX4KXl5OljTqF29VMrDCaKDJGQNT6YYw4MFnLEPGXXGrBtD5lk7gR9lZQYa2xYEB3AQqImZTk7rgUem8M6iE+hXISu4Aj2TUe4qxXY1hl+2IxMoWq6++u5nenL8QNgCidBy84NRZPFuNDZdCJe7vfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RgDlVbjO; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8pcUg9Do; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1756189102;
+	s=2020; t=1756189103;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DrBALLudUMMQIpB9Jb++BwmBRlfN0yHG1/njX6fnTE0=;
-	b=s4Tv7+zxFO1UuAQBOJqY36fYzoMoq9HBwuIpEoBOQcWaZh9/ewd4GAmLh1SU0pUebpqr7O
-	IrbBTzCLj7CJDuzlV6Dcdr1OqFm6SyO764o/62pnvhkTGUXW7ugMG+bh1U2I/2k0NNBSr5
-	OP1XpFRZEaXTaVFqIq3YdSg5+qsRfdKUKvpdsuwozMooSfzSGI0VUbRnkjOqSx5qOrar6I
-	ypdEH+UclFWViex+hKIMMrHA9akYZJ7i5W7/rVbBGGVIoe66Tmy8jOSesu8OQcaEiRtLvM
-	BHYdoRiODg0CG8wUQD0HRSdvaeLU921bXP6hDATICdIR91DBtxAh0Kw0aN0s1A==
+	bh=0t+60eV41IKUZ9ezcmekgKTWqNgupDcJulsKXmUteXI=;
+	b=RgDlVbjO8jhuoPY4mfKuN7Slnu45ISnAWFOw/cSKuUrM166A5Xf4Erm/D2UDrSZRjb+TRd
+	kgmua8gHOCLunG9wwz2DpSTBXdpmSEa71Lb0hP+HK5ysGZ4To/F9r9b4YwQ9GRjarwPVe9
+	uS9AhT4Sz0+dbivk9lEzt4gd1nc4bK5HMZCjdAVtZW/0Fq3ATh+T7SGWw+DWsEEnez8l0S
+	l+JOMfNCM36pb3xgaN/Xdoh5jXwrQ/yCb90R7Ig/RRuSEtYwhJZ6k4ETPQI7pdrgOQZwVs
+	cqIUgd5QTF7ISENOyaqbvQpo+sHhZmxunt2tS6GEfzGIrgBnNf5Lv/0G9tlpGA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1756189102;
+	s=2020e; t=1756189103;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DrBALLudUMMQIpB9Jb++BwmBRlfN0yHG1/njX6fnTE0=;
-	b=aMy3eGdfoQdV0esGEjqNzj2T+GNVN9Gu5aP0E8xfdTY9CE2D/Ql6h41CsmHASq33jrTvgS
-	d2ksM8s+JfbrYcAg==
-Date: Tue, 26 Aug 2025 08:17:10 +0200
-Subject: [PATCH 07/11] vdso: Drop kconfig GENERIC_VDSO_32
+	bh=0t+60eV41IKUZ9ezcmekgKTWqNgupDcJulsKXmUteXI=;
+	b=8pcUg9DoAWVBxDLyXzgtGwnNadG0alezHP8Es7YoGFl4eRzHD98RNasRncD8HY+yHWoxjq
+	+eUsVcLyCZNMQYCA==
+Date: Tue, 26 Aug 2025 08:17:11 +0200
+Subject: [PATCH 08/11] vdso: Drop kconfig GENERIC_COMPAT_VDSO
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250826-vdso-cleanups-v1-7-d9b65750e49f@linutronix.de>
+Message-Id: <20250826-vdso-cleanups-v1-8-d9b65750e49f@linutronix.de>
 References: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
 In-Reply-To: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -93,11 +93,11 @@ Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  linux-kselftest@vger.kernel.org, 
  Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756189098; l=1702;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756189098; l=1240;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=MIu9l2pTXbhJrvGPCmWjImoXUcbBkNjVmM+9aAFDkec=;
- b=VT2YYQvzHfODm57uAqR09c1duKjkkmGSVqmCVlLdgGb/ARCoX9KqMLFcxG4POgZTTs3Rm7rqY
- RTH8Lz9nPvLBWpZeMT5QB55ugWOPWVYU1mHssRVmDUpj+5tIKw9H+EU
+ bh=t5/9HDmyIs2t4g7FWEeD3BGuAZjUNxjgX5TY/5a0ZYE=;
+ b=CNBKp7BJyz4ivh16tO14JDMhakvNZC/uzVXIEyWpElrKLVyg8TDExe/3LZIlXzjfpdnGKz/bi
+ sJVuBe1Vf4yBKs8TudfOmPB/74FMQCcA5A/RjRFrYkYOWqYvHO0ISoL
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
@@ -107,51 +107,36 @@ Remove it.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/arm/mm/Kconfig | 1 -
- arch/x86/Kconfig    | 1 -
- lib/vdso/Kconfig    | 7 -------
- 3 files changed, 9 deletions(-)
+ arch/arm64/Kconfig | 1 -
+ lib/vdso/Kconfig   | 5 -----
+ 2 files changed, 6 deletions(-)
 
-diff --git a/arch/arm/mm/Kconfig b/arch/arm/mm/Kconfig
-index 5c1023a6d78c1b4db67b2d62b71af5a79b7e701f..2347988cf6417b91d8d3580387b53e610ed49a00 100644
---- a/arch/arm/mm/Kconfig
-+++ b/arch/arm/mm/Kconfig
-@@ -926,7 +926,6 @@ config VDSO
- 	default y if ARM_ARCH_TIMER
- 	select HAVE_GENERIC_VDSO
- 	select GENERIC_TIME_VSYSCALL
--	select GENERIC_VDSO_32
- 	select GENERIC_GETTIMEOFDAY
- 	select GENERIC_VDSO_DATA_STORE
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index e9bbfacc35a64d7ef1793a5d7f7ff8db138f2814..5c61b19ea9c80559ca3c4d1aa0732c6126494cb0 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1782,7 +1782,6 @@ config COMPAT_VDSO
+ 	bool "Enable vDSO for 32-bit applications"
+ 	depends on !CPU_BIG_ENDIAN
+ 	depends on (CC_IS_CLANG && LD_IS_LLD) || "$(CROSS_COMPILE_COMPAT)" != ""
+-	select GENERIC_COMPAT_VDSO
+ 	default y
  	help
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 58d890fe2100eb6990880bcf5ba600cdefb0a7d1..4f120070a51bd4e225256440649a2dae17025c41 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -14,7 +14,6 @@ config X86_32
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select CLKSRC_I8253
- 	select CLONE_BACKWARDS
--	select GENERIC_VDSO_32
- 	select HAVE_DEBUG_STACKOVERFLOW
- 	select KMAP_LOCAL
- 	select MODULES_USE_ELF_REL
+ 	  Place in the process address space of 32-bit applications an
 diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index 45df764b49ad62479e6456e00c053e46131936a3..76157c26931d28327750ad53bfcae5109a29d998 100644
+index 76157c26931d28327750ad53bfcae5109a29d998..2594dd7185be762a4a94aa38ecec5db016776f85 100644
 --- a/lib/vdso/Kconfig
 +++ b/lib/vdso/Kconfig
-@@ -12,13 +12,6 @@ config GENERIC_GETTIMEOFDAY
+@@ -12,11 +12,6 @@ config GENERIC_GETTIMEOFDAY
  	  Each architecture that enables this feature has to
  	  provide the fallback implementation.
  
--config GENERIC_VDSO_32
+-config GENERIC_COMPAT_VDSO
 -	bool
--	depends on GENERIC_GETTIMEOFDAY && !64BIT
 -	help
--	  This config option helps to avoid possible performance issues
--	  in 32 bit only architectures.
+-	  This config option enables the compat VDSO layer.
 -
- config GENERIC_COMPAT_VDSO
+ config GENERIC_VDSO_TIME_NS
  	bool
  	help
 
