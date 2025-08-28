@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-13317-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13318-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB6CFB390BF
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Aug 2025 03:08:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B357EB390C5
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Aug 2025 03:09:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DD5320586C
-	for <lists+linux-arch@lfdr.de>; Thu, 28 Aug 2025 01:08:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2572A982BC1
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Aug 2025 01:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C17A225393C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0496254AF5;
 	Thu, 28 Aug 2025 01:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="dW2cYtwu"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ONsBxjcK"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B85244679;
-	Thu, 28 Aug 2025 01:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 627EB2459E1;
+	Thu, 28 Aug 2025 01:06:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756343186; cv=none; b=U41YH+mK/3AYTjjN8qupS74BN/J2blzWI7va4w1TApNSLe8cn/eBTpjuPd0aeZ8H/RduLL7bv0mTi9bwXztwGL3/95OFkszVhYi8bhci9VE8JOpvLPyFZoCYtmJGuUgfqsghaOGW7jY2Gp5hygjNGoqwJBDptpcMHn7fNhDQ/Fg=
+	t=1756343186; cv=none; b=HtJT8SKkWaD+suhjlnnewcqmptEVvWVx5QMkVeOZULwy6xVDxPQEMEFAi9RUoW3ZP3I9kteUnJVq4YTB0+dwhiIruNqDtWi6poSCYVml0/ttAxA7jZBjl6TM71mXAMvLWnUkDvPzS3typGuIk0gd3cMYVDbUfabDSJupyOObujc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756343186; c=relaxed/simple;
-	bh=WBPIfgVxPGV/LSFNZSZg5i9TojfsH9u2tXp3iGnaa74=;
+	bh=dLBtBMRxPgTl5LlhBr9ohEdugqGfe8R5auGo67rDwCI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DqUhYMLd65bdJCE7QRvIJ/RVJYng8ae19BkNqt4u4UEzatKFtjpC696u3t9B/fpO7bQ+nVh0/NqOa0hCK+Uxx8a3cZMJJVSq2ZoCGodyUTl5CYOqNYTSgcSm+MVJBNb5BhDLIRadB24q/my+HSKH8o8H22clCn+DomUpEZv3pCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=dW2cYtwu; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=T1KS4AC2/z0x0xwVdLuQIL+SBNYnGeYLcTh4KXVZ7XjeLgxRiYNCXyNFwI4nsw5hN9LFNOYJPtIkW2sZpQeUZJguLGqOUAFzu15qm8P7eLvhksywxj8X+B92EAFFCeVH3tdB3gcHg2iCwidilA3XuzumRVHIEuzkt27c/CJ6OOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ONsBxjcK; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.174.60])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 5683A2110809;
+	by linux.microsoft.com (Postfix) with ESMTPSA id DB729201656A;
 	Wed, 27 Aug 2025 18:06:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5683A2110809
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DB729201656A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1756343184;
-	bh=4R3Q4+AFI3c1tV24p2R3HQuzaQyvhOVsFSX+WtZ8g/0=;
+	s=default; t=1756343185;
+	bh=A/sW4Txq4BEAcrtbSZAL2Hl6CGu5CJrb8pFJartsG9I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dW2cYtwuTChPapSgBj0Li5BFqiyv2r+oBas5yvSUzDaFTra3ATGiMzUnpzNkDf4XX
-	 LSQZKhKKrb3rTi1gWo6x4/ANdzzcgXtnWdfJEvRwPbE8PE3w72uSHIBAdp0+p4qE81
-	 L2NgAqM6maLKqq3Ei/WDVEufRuh702bo9Cxmj8+E=
+	b=ONsBxjcKEXQyVoEG7U5jGuGktZAASYyXKzIkN2Xtsbc9uWpm+kNcPlkBYxViWuPaj
+	 ZryvEaUS65dUufMSLJA/HyYkLmEASOBDpNmLVaHe+RsYYhAeIhIYzYNJ5T4C6nLx7U
+	 OwYOs+ZBHHYWehnB0I1RrtfUAwxCpfy9DwkqWbyg=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bp@alien8.de,
@@ -63,9 +63,9 @@ Cc: benhill@microsoft.com,
 	bperkins@microsoft.com,
 	sunilmut@microsoft.com,
 	romank@linux.microsoft.com
-Subject: [PATCH hyperv-next v5 14/16] Drivers: hv: Support confidential VMBus channels
-Date: Wed, 27 Aug 2025 18:05:55 -0700
-Message-ID: <20250828010557.123869-15-romank@linux.microsoft.com>
+Subject: [PATCH hyperv-next v5 15/16] Drivers: hv: Set the default VMBus version to 6.0
+Date: Wed, 27 Aug 2025 18:05:56 -0700
+Message-ID: <20250828010557.123869-16-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250828010557.123869-1-romank@linux.microsoft.com>
 References: <20250828010557.123869-1-romank@linux.microsoft.com>
@@ -77,78 +77,39 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To make use of Confidential VMBus channels, initialize the
-co_ring_buffers and co_external_memory fields of the channel
-structure.
+The confidential VMBus is supported by the protocol version
+6.0 onwards.
 
-Advertise support upon negotiating the version and compute
-values for those fields and initialize them.
+Attempt to establish the VMBus 6.0 connection thus enabling
+the confidential VMBus features when available.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 ---
- drivers/hv/channel_mgmt.c | 19 +++++++++++++++++++
- drivers/hv/connection.c   |  3 +++
- 2 files changed, 22 insertions(+)
+ drivers/hv/connection.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-index 6d66cbc9030b..74fed2c073d4 100644
---- a/drivers/hv/channel_mgmt.c
-+++ b/drivers/hv/channel_mgmt.c
-@@ -1022,6 +1022,7 @@ static void vmbus_onoffer(struct vmbus_channel_message_header *hdr)
- 	struct vmbus_channel_offer_channel *offer;
- 	struct vmbus_channel *oldchannel, *newchannel;
- 	size_t offer_sz;
-+	bool co_ring_buffer, co_external_memory;
- 
- 	offer = (struct vmbus_channel_offer_channel *)hdr;
- 
-@@ -1034,6 +1035,22 @@ static void vmbus_onoffer(struct vmbus_channel_message_header *hdr)
- 		return;
- 	}
- 
-+	co_ring_buffer = is_co_ring_buffer(offer);
-+	co_external_memory = is_co_external_memory(offer);
-+	if (!co_ring_buffer && co_external_memory) {
-+		pr_err("Invalid offer relid=%d: the ring buffer isn't encrypted\n",
-+			offer->child_relid);
-+		return;
-+	}
-+	if (co_ring_buffer || co_external_memory) {
-+		if (vmbus_proto_version < VERSION_WIN10_V6_0 || !vmbus_is_confidential()) {
-+			pr_err("Invalid offer relid=%d: no support for confidential VMBus\n",
-+				offer->child_relid);
-+			atomic_dec(&vmbus_connection.offer_in_progress);
-+			return;
-+		}
-+	}
-+
- 	oldchannel = find_primary_channel_by_offer(offer);
- 
- 	if (oldchannel != NULL) {
-@@ -1112,6 +1129,8 @@ static void vmbus_onoffer(struct vmbus_channel_message_header *hdr)
- 		pr_err("Unable to allocate channel object\n");
- 		return;
- 	}
-+	newchannel->co_ring_buffer = co_ring_buffer;
-+	newchannel->co_external_memory = co_external_memory;
- 
- 	vmbus_setup_channel_state(newchannel, offer);
- 
 diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-index 1fe3573ae52a..5ac9232396f7 100644
+index 5ac9232396f7..5d9cb5bf2d62 100644
 --- a/drivers/hv/connection.c
 +++ b/drivers/hv/connection.c
-@@ -105,6 +105,9 @@ int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo, u32 version)
- 		vmbus_connection.msg_conn_id = VMBUS_MESSAGE_CONNECTION_ID;
- 	}
+@@ -51,6 +51,7 @@ EXPORT_SYMBOL_GPL(vmbus_proto_version);
+  * Linux guests and are not listed.
+  */
+ static __u32 vmbus_versions[] = {
++	VERSION_WIN10_V6_0,
+ 	VERSION_WIN10_V5_3,
+ 	VERSION_WIN10_V5_2,
+ 	VERSION_WIN10_V5_1,
+@@ -65,7 +66,7 @@ static __u32 vmbus_versions[] = {
+  * Maximal VMBus protocol version guests can negotiate.  Useful to cap the
+  * VMBus version for testing and debugging purpose.
+  */
+-static uint max_version = VERSION_WIN10_V5_3;
++static uint max_version = VERSION_WIN10_V6_0;
  
-+	if (vmbus_is_confidential() && version >= VERSION_WIN10_V6_0)
-+		msg->feature_flags = VMBUS_FEATURE_FLAG_CONFIDENTIAL_CHANNELS;
-+
- 	/*
- 	 * shared_gpa_boundary is zero in non-SNP VMs, so it's safe to always
- 	 * bitwise OR it
+ module_param(max_version, uint, S_IRUGO);
+ MODULE_PARM_DESC(max_version,
 -- 
 2.43.0
 
