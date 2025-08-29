@@ -1,78 +1,81 @@
-Return-Path: <linux-arch+bounces-13327-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13328-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28A66B3B95C
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Aug 2025 12:54:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 220C3B3B957
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Aug 2025 12:54:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F812188D852
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Aug 2025 10:55:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6238D3B6F88
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Aug 2025 10:54:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F433112AB;
-	Fri, 29 Aug 2025 10:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E62C311589;
+	Fri, 29 Aug 2025 10:54:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tlxk/oXq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HlZ28ScE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7725430FF13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA0230FF30
 	for <linux-arch@vger.kernel.org>; Fri, 29 Aug 2025 10:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756464874; cv=none; b=qLGL9xySweIW5ABo8Phy+Cs75p+oUIWHw4BlKmmTuG6QooUT8mXiuerAX9nn2sDprLeoVfk0hA1bEwzoNOb1JurkBN5ckfN9PX3HqGSF5VrHYi1s5wNEGuO5RS8/KmR0B7+nAw///MfmPDUqNlSpdjdDHWy5cer6Bpp4s29dlzc=
+	t=1756464874; cv=none; b=DZB9xav5BsEgbwAvSsMQO6SVzS2fV0FcsNWLBNht5sAdIpQ76qgYEoUdVggSm+qtuGwZqGYQVp1eHYIbScLYFNqXgCRQ2F0pWNiBVGFhJmmanOFsTKbKJMidc9W28SMbpYLxRH0fx2yz0PbzniwPzD39VHUmurGWRQPUXn3EN2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1756464874; c=relaxed/simple;
-	bh=/4lgxBFBXe5YAPib3n1NIP7CqiEc2ADQutfeyO4Ql5Y=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=XK0sNNHM0zVZe2xov377BqVFxRd5jg5h+AXn+A7/F6996EJRq6cBJ+wzU2AEhdIzzQE/7LaG/zyIG2JX4c80GrwUcXPB4MPlkyL1tPdikJgNZwBrWwTfvxohuveh/Xo+tcWJ3sInoC9tZVYjsSPsEEhkmHdV1vSGw1RtxHg9a0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tlxk/oXq; arc=none smtp.client-ip=209.85.208.74
+	bh=o00iDb5UYdIfCyM60Ae3j8Plc64XIahNETckMuCAzEc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Evh9RgnDFWH/m8iVNeqT6Mlzk7hXIDvpKq35K11SfsTVFjIwU9GDxUFhz1GRMxzIRo804xQCLXXyO9n011L2yxDDGt0PrlDXqanc/zTLlCpJEJ76evDu00QErLEf35xHDxAjAVOKSV7oR6gNomjJPBQLcXq4Z63KtfKoXg3pV80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HlZ28ScE; arc=none smtp.client-ip=209.85.218.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-61c6d735f25so1812545a12.0
+Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-afcb7a3a160so180279866b.2
         for <linux-arch@vger.kernel.org>; Fri, 29 Aug 2025 03:54:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20230601; t=1756464871; x=1757069671; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MTstZdg+IFpEL06up0r6KWAqHR4urEga4onDvlcfI9I=;
-        b=Tlxk/oXqaA/SneN6knomc8fsvNcga4X6Yhq6+UcMP8Tt1ItQtRroOBzY6uq7ZMkQYN
-         qbcanDWyURXrYnNFZQk8d76UUjd919J+dt4VR41bAhemSEoZet9FmdIY5rOh0GdaSzli
-         rsoZRMmvJFLi0KdWpoWnaFz2cqM6jriDJ7A4q7caJzSshLtISxfwOA/bhJpXb5lZw2Z7
-         Ny9ZfmFm/+3FC/bPpWItmENNtK2XIWJ15BfRIkVPC8zWVed2zvARgdkiiA6s9oLVx7op
-         TZATy3h/W2k1qWXO1Wk50FTdQ7P+drouKk/vwOrm0hZI3w7pOzGm+XXMXbFZCjrb8DeK
-         vV8Q==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jzTerVh/nCBDl27Owgk/DKlFx8Mn2cN/NIkEjSaweuQ=;
+        b=HlZ28ScEhlTJqsqRcihNvC+4ZcY6FG7G31PA5SpYEqdHwPtySmu/4g2Y5cFAbrpoBJ
+         6dTm1S2tUnqTLjlEEUOLh/cIqXfpKtWXIsdBGxz11dJOtPQ0XDf43DLkIYAoQD3vnvDJ
+         WVmrJG5FTo51FDWy57DIqvUocUGNKbk/oB8Csn+elsCNJjxXpwTVsjsfqmzdwYJFAjNZ
+         CSvjjmSXEnKePujyZbTqgD2vcrqA1dp0g0VigdPzpIrkl2DQfmiXJhdPMZyoPfWtisL4
+         smMKGg3bjvP1rppjnOhd0RDxetBcnO4JMNdVRY1Uip6jMJaD+/7z6xq5m/Mb+zbyCGLh
+         FIKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1756464871; x=1757069671;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MTstZdg+IFpEL06up0r6KWAqHR4urEga4onDvlcfI9I=;
-        b=HVudjCBc33Hl8jijpOw43HGojgo1j4NOuUzi8dK06pgIumPjB03szJy2BbiepwYZK7
-         q9rBl4E6LYkcVlSfr9hZaEWDNaiFA3afW4K4ZHOdhXRk9ei1FsVYviUpnvJhSagsxQBB
-         eagIVpjxwVmukM8tqp/FlCzZUNPLr5MP8HE4MPmHawpX6oQ5d2tJkC5R5XGwL1G92iTX
-         IUb61APuacIhEVJQ/6mJA+2/0LqC0ujmzdSj92+YdIyg7jUvzxW6T5s1HdTmoRJw8rrR
-         jv0kS/CXShMJ0bssAsx7pBwPQ4QxeCFwwRAGkwde7L24x8tnSPcZ149hdwc18TA+R6r9
-         BSpA==
-X-Forwarded-Encrypted: i=1; AJvYcCXmDIAk1aFMjX0tbw1fYoawl7K0P7PlrRE9U7UiC/Kjji7HGyUvQWOuDpc/+1YehfpeonAc1p4pZahF@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2rnI+6ug4QoJw+MZyMjn7xdl9jW8voFXKdQ5UJeudEIi4HeP/
-	etBoCJ/8aR6LEwyu/MCzBT62B5o51EDH4ZAfUWfWwJye6b2cZVNVQY81GzPMAHtMSEliTkbT2+G
-	vdFLztp3I+ilZezQ4Vw==
-X-Google-Smtp-Source: AGHT+IGyBZPYAxC2QPneWYAvzHS6WMIz8B1nFWUJPBrnRl3yjjUsDZG3jLzbCQ+RMfQCg25v3V4Tuq3Js9lkLiA=
-X-Received: from edf12.prod.google.com ([2002:a05:6402:21cc:b0:61c:f8dd:a29])
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jzTerVh/nCBDl27Owgk/DKlFx8Mn2cN/NIkEjSaweuQ=;
+        b=Feo5ukb7CLPcHTbAeAR/lWmhthmeHfZG4KmZ5+9o6aikbLkf9C91NqC1GIe1Ey0iZz
+         v4Wbz2uuS1hhMurk9cu6FjzID25D78jNYStiw4y92FAmRdQ1rmBSmXwznJT9RN3In9hh
+         Mpi6Ftd5JvJL7fX2L67WHpS8JfsXR5bFz7mEIuEedUTF6LoCBElP8VSbLUjYKtRLCkaG
+         Cm0zYDOdbtTNzrsFW1QtKsL7h/7eSX7Mjhf23ZEvz1hIFUPF8SeMZeL3xpY1tCI1ce3c
+         n5Cq7aO3jxyn1HAJ90hFatboGJ4OwafHOVvZcu44E+Th9eIwZEZt0Z4tp795XKz96y7t
+         tcOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXIj1GkgIM9NYedUc+IE+pzoSk7RKN0jZ6uuq7dj5QZwQ37Cd5R8RVujnNfpf6/DDXnvtInHxGtiZtJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLKIJnK9C29AchG6s+k3MSkAjr4Vif1qESfKohUvr1h5cfjD8X
+	D/Ko37SNbMKUT3tYKBsVN+LRm/MwsribmKtade4brnXTpn/36dR3f/wSrl4wUiTH3+IP7FtOEwM
+	4v1F6wJC92qr0zPLikw==
+X-Google-Smtp-Source: AGHT+IFTtQCdjV7sfltO3GmOq7hzjj4vCpIsNY9YQpuWWop+sd3pviuI1QGFkyDeMWAuOScrxjcHr9lkftkQ/q0=
+X-Received: from ejcrx18.prod.google.com ([2002:a17:906:8e12:b0:afe:944f:fea5])
  (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:5c8:b0:61c:d4c2:bcfc with SMTP id 4fb4d7f45d1cf-61cd4c2c9aamr4614283a12.18.1756464869977;
- Fri, 29 Aug 2025 03:54:29 -0700 (PDT)
-Date: Fri, 29 Aug 2025 10:54:08 +0000
+ 2002:a17:907:968c:b0:afd:d9e4:51e7 with SMTP id a640c23a62f3a-afe296bceabmr2540214466b.63.1756464870885;
+ Fri, 29 Aug 2025 03:54:30 -0700 (PDT)
+Date: Fri, 29 Aug 2025 10:54:09 +0000
+In-Reply-To: <20250829105418.3053274-1-sidnayyar@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20250829105418.3053274-1-sidnayyar@google.com>
 X-Mailer: git-send-email 2.51.0.338.gd7d06c2dae-goog
-Message-ID: <20250829105418.3053274-1-sidnayyar@google.com>
-Subject: [RFC PATCH 00/10] scalable symbol flags with __kflagstab
+Message-ID: <20250829105418.3053274-2-sidnayyar@google.com>
+Subject: [PATCH 01/10] define kernel symbol flags
 From: Siddharth Nayyar <sidnayyar@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Sami Tolvanen <samitolvanen@google.com>
@@ -82,92 +85,30 @@ Cc: Nicolas Schier <nicolas.schier@linux.dev>, Petr Pavlu <petr.pavlu@suse.com>,
 	Siddharth Nayyar <sidnayyar@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Hi everyone,
+Symbol flags is an enumeration used to represent flags as a bitset, for
+example a flag to tell if a symbols GPL only.
 
-This patch series proposes a new, scalable mechanism to represent
-boolean flags for exported kernel symbols.
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
+---
+ include/linux/module_symbol.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Problem Statement:
-
-The core architectural issue with kernel symbol flags is our reliance on
-splitting the main symbol table, ksymtab. To handle a single boolean
-property, such as GPL-only, all exported symbols are split across two
-separate tables: __ksymtab and __ksymtab_gpl.
-
-This design forces the module loader to perform a separate search on
-each of these tables for every symbol it needs, for vmlinux and for all
-previously loaded modules.
-
-This approach is fundamentally not scalable. If we were to introduce a
-second flag, we would need four distinct symbol tables. For n boolean
-flags, this model requires an exponential growth to 2^n tables,
-dramatically increasing complexity.
-
-Another consequence of this fragmentation is degraded performance. For
-example, a binary search on the symbol table of vmlinux, that would take
-only 14 comparison steps (assuming ~2^14 or 16K symbols) in a unified
-table, can require up to 26 steps when spread across two tables
-(assuming both tables have ~2^13 symbols). This performance penalty
-worsens as more flags are added.
-
-Proposed Solution:
-
-This series introduces a __kflagstab section to store symbol flags in a
-dedicated data structure, similar to how CRCs are handled in the
-__kcrctab.
-
-The flags for a given symbol in __kflagstab will be located at the same
-index as the symbol's entry in __ksymtab and its CRC in __kcrctab. This
-design decouples the flags from the symbol table itself, allowing us to
-maintain a single, sorted __ksymtab. As a result, the symbol search
-remains an efficient, single lookup, regardless of the number of flags
-we add in the future.
-
-The motivation for this change comes from the Android kernel, which uses
-an additional symbol flag to restrict the use of certain exported
-symbols by unsigned modules, thereby enhancing kernel security. This
-__kflagstab can be implemented as a bitmap to efficiently manage which
-symbols are available for general use versus those restricted to signed
-modules only.
-
-Patch Series Overview:
-
-* Patch 1-8: Introduce the __kflagstab, migrate the existing GPL-only
-  flag to this new mechanism, and clean up the old __ksymtab_gpl
-  infrastructure.
-* Patch 9-10: Add a "symbol import protection" flag,
-  which disallows unsigned modules from importing symbols marked with
-  this flag.
-
-This is an RFC, and I am seeking feedback on the overall approach and
-implementation before moving forward.
-
-Thanks,
-Siddharth Nayyar
-
-Siddharth Nayyar (10):
-  define kernel symbol flags
-  linker: add kflagstab section to vmlinux and modules
-  modpost: create entries for kflagstab
-  module loader: use kflagstab instead of *_gpl sections
-  modpost: put all exported symbols in ksymtab section
-  module loader: remove references of *_gpl sections
-  linker: remove *_gpl sections from vmlinux and modules
-  remove references to *_gpl sections in documentation
-  modpost: add symbol import protection flag to kflagstab
-  module loader: enforce symbol import protection
-
- Documentation/kbuild/modules.rst  |   6 +-
- include/asm-generic/vmlinux.lds.h |  21 +++----
- include/linux/export-internal.h   |  28 ++++++---
- include/linux/module.h            |   4 +-
- include/linux/module_symbol.h     |   6 ++
- kernel/module/internal.h          |   5 +-
- kernel/module/main.c              | 101 ++++++++++++++----------------
- scripts/mod/modpost.c             |  27 ++++++--
- scripts/module.lds.S              |   3 +-
- 9 files changed, 107 insertions(+), 94 deletions(-)
-
+diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
+index 77c9895b9ddb..574609aced99 100644
+--- a/include/linux/module_symbol.h
++++ b/include/linux/module_symbol.h
+@@ -2,6 +2,11 @@
+ #ifndef _LINUX_MODULE_SYMBOL_H
+ #define _LINUX_MODULE_SYMBOL_H
+ 
++/* Kernel symbol flags bitset. */
++enum ksym_flags {
++	KSYM_FLAG_GPL_ONLY	= 1 << 0,
++};
++
+ /* This ignores the intensely annoying "mapping symbols" found in ELF files. */
+ static inline bool is_mapping_symbol(const char *str)
+ {
 -- 
 2.51.0.338.gd7d06c2dae-goog
 
