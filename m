@@ -1,81 +1,88 @@
-Return-Path: <linux-arch+bounces-13343-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13344-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99D0EB3DD1E
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 10:57:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 649F7B3DF6C
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 12:02:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47859179517
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 08:57:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65D073ACFA7
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 10:02:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56EEE2FE57C;
-	Mon,  1 Sep 2025 08:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB9B3043C8;
+	Mon,  1 Sep 2025 10:02:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jertd+g0"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CQix3hq0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB9328DB76
-	for <linux-arch@vger.kernel.org>; Mon,  1 Sep 2025 08:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DF020DD48
+	for <linux-arch@vger.kernel.org>; Mon,  1 Sep 2025 10:02:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756717035; cv=none; b=I+23/dQ5VAeFkRuGL2yCsieQy1NkANoAuqclwaGjd/6ccq0tSee+zRSK0gxWHXWAKNPQrvvCEzkYEn1GHcEPWnOL0LnG4G0Ak4HX5p5jCjBUtwZLpUZQ6d/oT7nq7UlXgH8DCN7sgjelHV1BMrbvKNF2ngVp3tHPe7gef8XuFD4=
+	t=1756720926; cv=none; b=VsD/pEq6kjPYRcvVIZC06O+7r++h8aF/8y8uMCzvQleeDB387g6cPH3IDq9boUkQTL7uUsdi6jJx6PYUuzj1Yk3w4MEufWf8FO/q7Vp10XxXuhbQCGLOAvPRxPzhGR4iLntKcwLdocnFO3uyk/2oiwFVe7l1cYVyaNrjQgBk8JE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756717035; c=relaxed/simple;
-	bh=S5LxcegLHjjkJFwecl3nvsi4dPkd/e09Ww7/aNdBdvU=;
+	s=arc-20240116; t=1756720926; c=relaxed/simple;
+	bh=ypTD0sEZG5IOONmhSh4yZK8w8GcKNQIdnI9zf9EhGuE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tW5iD3F9aqvc/ZV6pS6HZHyO5gZt6GN6WSI7fdBP618tFCPeiTY/sO4YoBWtueVlk4dxo7yucRvgNMGlhjOhk9W7rRY0UGwT/JJpzZQNj3KAANmGo9RWmZY/EESSVzah4SX2PTgEJoLGGHXixGt4mVZbBoS2N9zZz0wKqfffvtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Jertd+g0; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-71d71bcab69so32939937b3.0
-        for <linux-arch@vger.kernel.org>; Mon, 01 Sep 2025 01:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756717032; x=1757321832; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qgvQHB1ThISY9uVHxKPAb9k4TCRL2UiR6ffxI/PWq3M=;
-        b=Jertd+g0KUmgdzzUxrEWW0ujJM79vx5caBqd82hXrxFJU1a9k7xq6dTjKlI5DF9bWZ
-         TanqX838J1PRyV3NxyxzoLZIoLzp2dKSgzWFYxw5xpRGMGdeoBy3BSFLtSZchkXMQSy4
-         RkJRFjDXRi6Hrhzp1rbPggv/WHsfwCywFnRXSOLXv4PnaPPC8NctCnWIXSQu47AVvrJ+
-         Ljz3Ub4Pd+IUXsVETYH1FJAqvC24KybXm4N36mBZGCbridSpTdFWO2DDKatsGjsJ2cq9
-         70Tzr0237PgXP5hlGIZkyQLZNe9wdd+OksazAzGgks9SfTPK3qf66bsMVkLSMdQHQwm3
-         VdCw==
+	 In-Reply-To:Content-Type; b=IZf+1j14hKCRyyBJ6aGqZ529BkCJrLHyhSTh0Wj+rPowS8b0Rg4sL9kpZmueERs5wJPc8y92ajpzAFJhBY3UyO9NuHMVr43sr+Zv+nv8U427i+KNjGPOlaetcvdYROAm8Dy+0iyeO1jeixJ+KGoPHKTTTDnnyvPiInM493+4/K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CQix3hq0; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756720923;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=+lQeSnVszPSSY9ZXSFHEL5gERJYR6xjSMj4HUufxrw4=;
+	b=CQix3hq00bRBN/IAtV2Cr9gNpZENe+1tROP+kSGL58N0dnlhFsldM187IW0CtjcPWtx1Vg
+	PSnbTzJY4ClUpo6rOT298GBiBNxn6jKvcrxSDwmAcCEN580wH0S9i35dWGfBX2q5FL6Iib
+	pPI4v+7/tL5l2fBHBiYRjNzS2/9NFNs=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-649-xKBH0lf9MXKXHKfVybGEbQ-1; Mon, 01 Sep 2025 06:02:02 -0400
+X-MC-Unique: xKBH0lf9MXKXHKfVybGEbQ-1
+X-Mimecast-MFC-AGG-ID: xKBH0lf9MXKXHKfVybGEbQ_1756720921
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3d2edf6af18so761534f8f.1
+        for <linux-arch@vger.kernel.org>; Mon, 01 Sep 2025 03:02:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756717032; x=1757321832;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qgvQHB1ThISY9uVHxKPAb9k4TCRL2UiR6ffxI/PWq3M=;
-        b=xK3uByfgZy5Qi92M8qmAaX/EJoGiHkj+y6eRfTyqlFlxm+IAlf8yQ5OhenlaPbEb3a
-         yxp9hl6sogqmuz4I263i6kGVs8OipV+lRfHZMRTH5F2zxpS3OvnPjML1WVE8MGsbyEOs
-         LhPhHnzRe+GIJ8NRt+EAtJXJXxRzX1oinIQGnCZ5Y+9qN1oYemAMn891Bo2BNrjAWjkZ
-         uozWlOyQ6ciTS8jRF2msYg+CGPipDOE0Qb2kKVLGAdnq45q9y/zuHmrqQJ9v3lzY6/Ea
-         dAd0vR50Z9wpbFzwnQeC32+hpAN/9vJSo3kJ/GwcvAXfEVtqtG/14i8a6DSW6tlDTL5Y
-         +LvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWEp9LwICS8tr5FL88DoxSDiiYYK5pVM2hLFz35Ia7W99zr0ymiBhJVoAZWNpjRcuwFVtIVQYPRJ90p@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy72vb5bJuEf5yS+6DgFGf0gLH9RIoi+FAOAiaQLzonSvzlkXMm
-	StaGZeEuJ7EshtNNb0OpbCLSUarToC/ZNpclUObcwT4pmY0FWaFzcuBjkE912Mg8M9E=
-X-Gm-Gg: ASbGnctPB4mL1EnFSROEFYEbyjzGp4sCFA+zDGrf45WKgPA/7V9oKF4DNW9krBSjGKI
-	4g+OCWrN195pHJVjbGwur/bSrmnIdw9eWWrY1bAqSGA8qUiyKcHV7A1J4hh4bJKbAD396B5resH
-	AxVRXCMPGzWUKIC66rfmkNRnIBXnzpQosRPeaW6kPTbhKyP4EmcP6hrLwVNmsX4wz8nUX+fJKRK
-	SotHaurE8sSFeaG9+sn1OAtZB5AzWXCoXfxBETlTCKQo5zk7x0yRyX4GBEsfjzymahQFm+xGaes
-	xWh6Sci6dbH7umJxDvkS/ov2isJb1DsDGynyNQ9ZBu6TbdlkaBS98Cu10Jj/ADclwVG+WbQB4t3
-	sVOsM+GRAksAqob0Q7MlVy3cLy7FoVKIpNaTSQ8DxghOZd4LxX057k0BvIvh++DXH0Jo2uLZ+Tf
-	eKHbdLhkTQv5AdHA==
-X-Google-Smtp-Source: AGHT+IG38bjjyQjzt0c80VXnwoUSoXxUbipjOE1UiZhaYOXnFBnq4b3rik9mxtcs1scAlzx7pRovJg==
-X-Received: by 2002:a05:690c:a4c1:20b0:722:92c5:8e80 with SMTP id 00721157ae682-72292c59299mr23345777b3.40.1756717032133;
-        Mon, 01 Sep 2025 01:57:12 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:335e:2208:211c:f884:abe7:c955? ([2a0d:3344:335e:2208:211c:f884:abe7:c955])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7227d8cc1fbsm13391337b3.37.2025.09.01.01.57.07
+        d=1e100.net; s=20230601; t=1756720921; x=1757325721;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+lQeSnVszPSSY9ZXSFHEL5gERJYR6xjSMj4HUufxrw4=;
+        b=OGsVeetcTvXGddDek55cBW67Sp5L5QnDcfUFTaLT6IEB94usJAkRORstDfZHAsEYLi
+         LoW+SZPrv66UuPEj/yeNdVCS2TqvrHN60VZ3n0p0pV35kPgSXUSLlWHUqjJn/riJ8qhw
+         HByrGf26eYgnKyf36wJQrPVedWJE4FX6i1XTbPDHE1RkLjUXU186PV+IU3scX4KGaTyR
+         1iWWinJto67wszFIgJOvWCSiVoTPvjrmpltJx7gGLKzrVK0ognnCpUz1UJADevhTug3H
+         lRsX0pKBTSSDERm2TAMGfkZ+P+WfdK21F6j2I/d90mPARw0BvKGAWAwhm2EdbL6bYDuf
+         fpDg==
+X-Forwarded-Encrypted: i=1; AJvYcCWz06nIh0MkYTkVLtUW77J7Abe/eAxQuO1ddMHY5/a64Pj8FNIeDrNhUhRq7tg/6n8vuesJM//YS0+U@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZHjKXk+aNROX2P7uv1IDRFdbZB7V+I2koHny3vizDTOuEpGiC
+	Jh5S/b7Vd3NIpiKFQca4HggkYDWJzI9o2hTVcRY44f+URvD4FqhLPlnlM2sQGdCYi64GvZ7KoKD
+	9CwUa4g1TIOKNa+AlywKO7cxvXKpIq9sqoo8gm3TXo9/4JaPAv2UXl8lxbMMBJ28=
+X-Gm-Gg: ASbGncuczL21WcPq4ezxRuoyIBcjdKvtpHKp2DN03hSV3LJIu0IF4qLvTB7p9QB55QB
+	/zElkKwUa6xkUMcXNcEX+lMPnevOPcS87UoC2MEy471VwfEpdNsPMPkALExoi6BXJ4gs6R1NDpI
+	Jp96w2gWQSy0PEw3oGXzB1IQWt+bjzOwJpC297sqUHgKvv3t8U2YdFJjM+M6aZVi+T3YUpoVxos
+	HbWWZOCbAQI+aDPm6uldxZEhGE+4eXfWqZFELmSHscL7trcMz6Fc0G1767YGYox7DvOkocNzJDy
+	GWm0Ek985aDDPlwB1ObEQvYIf10JnxXmG117/WKC/yIqttE1Lfhfy3aJGGhNZpPMobZw/Wa6FzS
+	Yq95/hykkcTTdLIGw+PMU9ZKBMRo/JJYiCHFmCGmKm6t6cUq9y5xInMyQsepr6Gf2p5w=
+X-Received: by 2002:a5d:64cd:0:b0:3d1:abf7:e1c8 with SMTP id ffacd0b85a97d-3d1d98d60e1mr4874725f8f.0.1756720920964;
+        Mon, 01 Sep 2025 03:02:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGvPsDFpHZYqBUf8mT2gRUFJpfAuTdUtgOPMP4pMlCUZ06zRhnpYdXw7CHR6fjLFikWold/+w==
+X-Received: by 2002:a5d:64cd:0:b0:3d1:abf7:e1c8 with SMTP id ffacd0b85a97d-3d1d98d60e1mr4874687f8f.0.1756720920452;
+        Mon, 01 Sep 2025 03:02:00 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f37:2b00:948c:dd9f:29c8:73f4? (p200300d82f372b00948cdd9f29c873f4.dip0.t-ipconnect.de. [2003:d8:2f37:2b00:948c:dd9f:29c8:73f4])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf275d2717sm14699314f8f.15.2025.09.01.03.01.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 01:57:11 -0700 (PDT)
-Message-ID: <40e802eb-3764-47af-8b4f-9f7c8b5b60c1@linaro.org>
-Date: Mon, 1 Sep 2025 11:57:06 +0300
+        Mon, 01 Sep 2025 03:01:59 -0700 (PDT)
+Message-ID: <7e1f4f64-dfc4-4366-8e01-0891b2d4d2b4@redhat.com>
+Date: Mon, 1 Sep 2025 12:01:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -84,7 +91,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC][PATCH v2 22/29] mm/numa: Register information into Kmemdump
-To: David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>
+To: Eugen Hristev <eugen.hristev@linaro.org>, Michal Hocko <mhocko@suse.com>
 Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  linux-arch@vger.kernel.org, linux-mm@kvack.org, tglx@linutronix.de,
  andersson@kernel.org, pmladek@suse.com,
@@ -94,7 +101,6 @@ Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  Christoph Hellwig <hch@infradead.org>,
  Sergey Senozhatsky <senozhatsky@chromium.org>
 References: <20250724135512.518487-1-eugen.hristev@linaro.org>
- <20250724135512.518487-23-eugen.hristev@linaro.org>
  <ffc43855-2263-408d-831c-33f518249f96@redhat.com>
  <e66f29c2-9f9f-4b04-b029-23383ed4aed4@linaro.org>
  <751514db-9e03-4cf3-bd3e-124b201bdb94@redhat.com>
@@ -113,293 +119,89 @@ References: <20250724135512.518487-1-eugen.hristev@linaro.org>
  <99d2cc96-03ea-4026-883e-1ee083a96c39@redhat.com>
  <98afe1bd-99d2-4b5d-866a-e9541390fab4@linaro.org>
  <c59f2528-31b0-4b9d-8d20-f204a0600ff6@redhat.com>
-From: Eugen Hristev <eugen.hristev@linaro.org>
+ <40e802eb-3764-47af-8b4f-9f7c8b5b60c1@linaro.org>
+From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
-In-Reply-To: <c59f2528-31b0-4b9d-8d20-f204a0600ff6@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+Autocrypt: addr=david@redhat.com; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
+ ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZoEEwEIAEQCGwMCF4ACGQEFCwkIBwICIgIG
+ FQoJCAsCBBYCAwECHgcWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaJzangUJJlgIpAAKCRBN
+ 3hD3AP+DWhAxD/9wcL0A+2rtaAmutaKTfxhTP0b4AAp1r/eLxjrbfbCCmh4pqzBhmSX/4z11
+ opn2KqcOsueRF1t2ENLOWzQu3Roiny2HOU7DajqB4dm1BVMaXQya5ae2ghzlJN9SIoopTWlR
+ 0Af3hPj5E2PYvQhlcqeoehKlBo9rROJv/rjmr2x0yOM8qeTroH/ZzNlCtJ56AsE6Tvl+r7cW
+ 3x7/Jq5WvWeudKrhFh7/yQ7eRvHCjd9bBrZTlgAfiHmX9AnCCPRPpNGNedV9Yty2Jnxhfmbv
+ Pw37LA/jef8zlCDyUh2KCU1xVEOWqg15o1RtTyGV1nXV2O/mfuQJud5vIgzBvHhypc3p6VZJ
+ lEf8YmT+Ol5P7SfCs5/uGdWUYQEMqOlg6w9R4Pe8d+mk8KGvfE9/zTwGg0nRgKqlQXrWRERv
+ cuEwQbridlPAoQHrFWtwpgYMXx2TaZ3sihcIPo9uU5eBs0rf4mOERY75SK+Ekayv2ucTfjxr
+ Kf014py2aoRJHuvy85ee/zIyLmve5hngZTTe3Wg3TInT9UTFzTPhItam6dZ1xqdTGHZYGU0O
+ otRHcwLGt470grdiob6PfVTXoHlBvkWRadMhSuG4RORCDpq89vu5QralFNIf3EysNohoFy2A
+ LYg2/D53xbU/aa4DDzBb5b1Rkg/udO1gZocVQWrDh6I2K3+cCs7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <40e802eb-3764-47af-8b4f-9f7c8b5b60c1@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 8/27/25 23:06, David Hildenbrand wrote:
-> On 27.08.25 16:08, Eugen Hristev wrote:
+>>> What do you think ?
 >>
+>> Looks a bit over-engineered, and will require us to import a header
+>> (likely kmemdump.h) in these files, which I don't really enjoy.
 >>
->> On 8/27/25 15:18, David Hildenbrand wrote:
->>> On 27.08.25 13:59, Eugen Hristev wrote:
->>>>
->>>>
->>>> On 8/25/25 16:58, David Hildenbrand wrote:
->>>>> On 25.08.25 15:36, Eugen Hristev wrote:
->>>>>>
->>>>>>
->>>>>> On 8/25/25 16:20, David Hildenbrand wrote:
->>>>>>>
->>>>>>>>>
->>>>>>>>> IIRC, kernel/vmcore_info.c is never built as a module, as it also
->>>>>>>>> accesses non-exported symbols.
->>>>>>>>
->>>>>>>> Hello David,
->>>>>>>>
->>>>>>>> I am looking again into this, and there are some things which in my
->>>>>>>> opinion would be difficult to achieve.
->>>>>>>> For example I looked into my patch #11 , which adds the `runqueues` into
->>>>>>>> kmemdump.
->>>>>>>>
->>>>>>>> The runqueues is a variable of `struct rq` which is defined in
->>>>>>>> kernel/sched/sched.h , which is not supposed to be included outside of
->>>>>>>> sched.
->>>>>>>> Now moving all the struct definition outside of sched.h into another
->>>>>>>> public header would be rather painful and I don't think it's a really
->>>>>>>> good option (The struct would be needed to compute the sizeof inside
->>>>>>>> vmcoreinfo). Secondly, it would also imply moving all the nested struct
->>>>>>>> definitions outside as well. I doubt this is something that we want for
->>>>>>>> the sched subsys. How the subsys is designed, out of my understanding,
->>>>>>>> is to keep these internal structs opaque outside of it.
->>>>>>>
->>>>>>> All the kmemdump module needs is a start and a length, correct? So the
->>>>>>> only tricky part is getting the length.
->>>>>>
->>>>>> I also have in mind the kernel user case. How would a kernel programmer
->>>>>> want to add some kernel structs/info/buffers into kmemdump such that the
->>>>>> dump would contain their data ? Having "KMEMDUMP_VAR(...)" looks simple
->>>>>> enough.
->>>>>
->>>>> The other way around, why should anybody have a saying in adding their
->>>>> data to kmemdump? Why do we have that all over the kernel?
->>>>>
->>>>> Is your mechanism really so special?
->>>>>
->>>>> A single composer should take care of that, and it's really just start +
->>>>> len of physical memory areas.
->>>>>
->>>>>> Otherwise maybe the programmer has to write helpers to compute lengths
->>>>>> etc, and stitch them into kmemdump core.
->>>>>> I am not saying it's impossible, but just tiresome perhaps.
->>>>>
->>>>> In your patch set, how many of these instances did you encounter where
->>>>> that was a problem?
->>>>>
->>>>>>>
->>>>>>> One could just add a const variable that holds this information, or even
->>>>>>> better, a simple helper function to calculate that.
->>>>>>>
->>>>>>> Maybe someone else reading along has a better idea.
->>>>>>
->>>>>> This could work, but it requires again adding some code into the
->>>>>> specific subsystem. E.g. struct_rq_get_size()
->>>>>> I am open to ideas , and thank you very much for your thoughts.
->>>>>>
->>>>>>>
->>>>>>> Interestingly, runqueues is a percpu variable, which makes me wonder if
->>>>>>> what you had would work as intended (maybe it does, not sure).
->>>>>>
->>>>>> I would not really need to dump the runqueues. But the crash tool which
->>>>>> I am using for testing, requires it. Without the runqueues it will not
->>>>>> progress further to load the kernel dump.
->>>>>> So I am not really sure what it does with the runqueues, but it works.
->>>>>> Perhaps using crash/gdb more, to actually do something with this data,
->>>>>> would give more insight about its utility.
->>>>>> For me, it is a prerequisite to run crash, and then to be able to
->>>>>> extract the log buffer from the dump.
->>>>>
->>>>> I have the faint recollection that percpu vars might not be stored in a
->>>>> single contiguous physical memory area, but maybe my memory is just
->>>>> wrong, that's why I was raising it.
->>>>>
->>>>>>
->>>>>>>
->>>>>>>>
->>>>>>>>     From my perspective it's much simpler and cleaner to just add the
->>>>>>>> kmemdump annotation macro inside the sched/core.c as it's done in my
->>>>>>>> patch. This macro translates to a noop if kmemdump is not selected.
->>>>>>>
->>>>>>> I really don't like how we are spreading kmemdump all over the kernel,
->>>>>>> and adding complexity with __section when really, all we need is a place
->>>>>>> to obtain a start and a length.
->>>>>>>
->>>>>>
->>>>>> I understand. The section idea was suggested by Thomas. Initially I was
->>>>>> skeptic, but I like how it turned out.
->>>>>
->>>>> Yeah, I don't like it. Taste differs ;)
->>>>>
->>>>> I am in particular unhappy about custom memblock wrappers.
->>>>>
->>>>> [...]
->>>>>
->>>>>>>>
->>>>>>>> To have this working outside of printk, it would be required to walk
->>>>>>>> through all the printk structs/allocations and select the required info.
->>>>>>>> Is this something that we want to do outside of printk ?
->>>>>>>
->>>>>>> I don't follow, please elaborate.
->>>>>>>
->>>>>>> How is e.g., log_buf_len_get() + log_buf_addr_get() not sufficient,
->>>>>>> given that you run your initialization after setup_log_buf() ?
->>>>>>>
->>>>>>>
->>>>>>
->>>>>> My initial thought was the same. However I got some feedback from Petr
->>>>>> Mladek here :
->>>>>>
->>>>>> https://lore.kernel.org/lkml/aBm5QH2p6p9Wxe_M@localhost.localdomain/
->>>>>>
->>>>>> Where he explained how to register the structs correctly.
->>>>>> It can be that setup_log_buf is called again at a later time perhaps.
->>>>>>
->>>>>
->>>>> setup_log_buf() is a __init function, so there is only a certain time
->>>>> frame where it can be called.
->>>>>
->>>>> In particular, once the buddy is up, memblock allocations are impossible
->>>>> and it would be deeply flawed to call this function again.
->>>>>
->>>>> Let's not over-engineer this.
->>>>>
->>>>> Peter is on CC, so hopefully he can share his thoughts.
->>>>>
->>>>
->>>> Hello David,
->>>>
->>>> I tested out this snippet (on top of my series, so you can see what I
->>>> changed):
->>>>
->>>>
->>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->>>> index 18ba6c1e174f..7ac4248a00e5 100644
->>>> --- a/kernel/sched/core.c
->>>> +++ b/kernel/sched/core.c
->>>> @@ -67,7 +67,6 @@
->>>>    #include <linux/wait_api.h>
->>>>    #include <linux/workqueue_api.h>
->>>>    #include <linux/livepatch_sched.h>
->>>> -#include <linux/kmemdump.h>
->>>>
->>>>    #ifdef CONFIG_PREEMPT_DYNAMIC
->>>>    # ifdef CONFIG_GENERIC_IRQ_ENTRY
->>>> @@ -120,7 +119,12 @@
->>>> EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
->>>>    EXPORT_TRACEPOINT_SYMBOL_GPL(sched_compute_energy_tp);
->>>>
->>>>    DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
->>>> -KMEMDUMP_VAR_CORE(runqueues, sizeof(runqueues));
->>>> +
->>>> +size_t runqueues_get_size(void);
->>>> +size_t runqueues_get_size(void)
->>>> +{
->>>> +       return sizeof(runqueues);
->>>> +}
->>>>
->>>>    #ifdef CONFIG_SCHED_PROXY_EXEC
->>>>    DEFINE_STATIC_KEY_TRUE(__sched_proxy_exec);
->>>> diff --git a/kernel/vmcore_info.c b/kernel/vmcore_info.c
->>>> index d808c5e67f35..c6dd2d6e96dd 100644
->>>> --- a/kernel/vmcore_info.c
->>>> +++ b/kernel/vmcore_info.c
->>>> @@ -24,6 +24,12 @@
->>>>    #include "kallsyms_internal.h"
->>>>    #include "kexec_internal.h"
->>>>
->>>> +typedef void* kmemdump_opaque_t;
->>>> +
->>>> +size_t runqueues_get_size(void);
->>>> +
->>>> +extern kmemdump_opaque_t runqueues;
->>>
->>> I would have tried that through:
->>>
->>> struct rq;
->>> extern struct rq runqueues;
->>>
->>> But the whole PER_CPU_SHARED_ALIGNED makes this all weird, and likely
->>> not the way we would want to handle that.
->>>
->>>>    /* vmcoreinfo stuff */
->>>>    unsigned char *vmcoreinfo_data;
->>>>    size_t vmcoreinfo_size;
->>>> @@ -230,6 +236,9 @@ static int __init crash_save_vmcoreinfo_init(void)
->>>>
->>>>           kmemdump_register_id(KMEMDUMP_ID_COREIMAGE_VMCOREINFO,
->>>>                                (void *)vmcoreinfo_data, vmcoreinfo_size);
->>>> +       kmemdump_register_id(KMEMDUMP_ID_COREIMAGE_runqueues,
->>>> +                            (void *)&runqueues, runqueues_get_size());
->>>> +
->>>>           return 0;
->>>>    }
->>>>
->>>> With this, no more .section, no kmemdump code into sched, however, there
->>>> are few things :
->>>
->>> I would really just do here something like the following:
->>>
->>> /**
->>>    * sched_get_runqueues_area - obtain the runqueues area for dumping
->>>    * @start: ...
->>>    * @size: ...
->>>    *
->>>    * The obtained area is only to be used for dumping purposes.
->>>    */
->>> void sched_get_runqueues_area(void *start, size_t size)
->>> {
->>> 	start = &runqueues;
->>> 	size = sizeof(runqueues);
->>> }
->>>
->>> might be cleaner.
->>>
+>> I would start simple, without any such macro-magic. It's a very simple
+>> function after all, and likely you won't end up having many of these?
 >>
->> How about this in the header:
->>
->> #define DECLARE_DUMP_AREA_FUNC(subsys, symbol) \
->>
->> void subsys ## _get_ ## symbol ##_area(void **start, size_t *size);
->>
->>
->>
->> #define DEFINE_DUMP_AREA_FUNC(subsys, symbol) \
->>
->> void subsys ## _get_ ## symbol ##_area(void **start, size_t *size)\
->>
->> {\
->>
->>          *start = &symbol;\
->>
->>          *size = sizeof(symbol);\
->>
->> }
->>
->>
->> then, in sched just
->>
->> DECLARE_DUMP_AREA_FUNC(sched, runqueues);
->>
->> DEFINE_DUMP_AREA_FUNC(sched, runqueues);
->>
->> or a single macro that wraps both.
->>
->> would make it shorter and neater.
->>
->> What do you think ?
 > 
-> Looks a bit over-engineered, and will require us to import a header 
-> (likely kmemdump.h) in these files, which I don't really enjoy.
+> Thanks David, I will do it as you suggested and see what comes out of it.
 > 
-> I would start simple, without any such macro-magic. It's a very simple 
-> function after all, and likely you won't end up having many of these?
-> 
+> I have one side question you might know much better to answer:
+> As we have a start and a size for each region, this start is a virtual
+> address. The firmware/coprocessor that reads the memory and dumps it,
+> requires physical addresses.
 
-Thanks David, I will do it as you suggested and see what comes out of it.
+Right. I was asking myself the same question while reviewing: should we 
+directly export physical ranges here instead of virtual ones. I guess 
+virtual ones is ok.
 
-I have one side question you might know much better to answer:
-As we have a start and a size for each region, this start is a virtual
-address. The firmware/coprocessor that reads the memory and dumps it,
-requires physical addresses. What do you suggest to use to retrieve that
-address ? virt_to_phys might be problematic, __pa or __pa_symbol? or
-better lm_alias ?
-As kmemdump is agnostic of the region of the memory the `start` comes
-from, and it should be portable and platform independent.
+What do you suggest to use to retrieve that
+> address ? virt_to_phys might be problematic, __pa or __pa_symbol? or
+> better lm_alias ?
 
-Thanks again,
-Eugen
+All areas should either come from memblock or be global variables, right?
+
+IIRC, virt_to_phys() should work for these. Did you run into any 
+problems with them or why do you think virt_to_phys could be problematic?
+
+-- 
+Cheers
+
+David / dhildenb
+
 
