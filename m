@@ -1,88 +1,80 @@
-Return-Path: <linux-arch+bounces-13352-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13353-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8C74B3E274
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 14:17:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D0BBB3E2E6
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 14:31:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F15016F2FF
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 12:17:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4304F7B0521
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 12:29:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC562522B4;
-	Mon,  1 Sep 2025 12:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0EBC32BF3F;
+	Mon,  1 Sep 2025 12:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ax0LyEmU"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DvN7JTzn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E463F21257F
-	for <linux-arch@vger.kernel.org>; Mon,  1 Sep 2025 12:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E88F3277B3
+	for <linux-arch@vger.kernel.org>; Mon,  1 Sep 2025 12:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756729046; cv=none; b=Iel25U0bltSllTNlAcqI60KFfhxsHNozNZh6opyKJg9jmh3HIdkr9nLyTXarCiQ8OnRoM27fqY1VLwTVRgwswC5aA4Z+F27ZAW1mdEEgrv6jnRDkX1NFwW/jnf6zImKa/kUEirhDwdooV6J94r3TaMtwTIQ6m+c540CXgCU1uxY=
+	t=1756729627; cv=none; b=RR5cb9lIFSMGAz6O4w+lUUv6saU6k3bHZeD9hGJgU66zbUdNkG8MbLVr7TNdZ9FCp4A4Tyl4M+1AgZ4PDar5UYa2vZDd4lJKTSpyqd9sh+jbZT3jNawKfxE+vJENCLbfvJjybt1CsdhsjoqAPAYvb4IrhsC6XJmPuzE8KWloTuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756729046; c=relaxed/simple;
-	bh=k7M8OR4wKtmKuqQD3hylcZEN/8z56k7Zbk5QDUkg7u8=;
+	s=arc-20240116; t=1756729627; c=relaxed/simple;
+	bh=NI3j//K+uv280Ub1AAwzmSKy0oNo3n7zmmHOVS4hqJw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mqGE7K/NBoTH8j5qxo35Eozf+1COSxn7z/xDzc14a5PvdYdFhS76EcBB/zUD5mFW8hfEXS69werJojxk6m5e1kRB0q2ihKXWuXJJ0N4DFtGZw7ckdwGNNtaeqaLww49EOJxh1VScBDE8b/5LMmPsHPqe1V7/eyCIQU+rPLq+MpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ax0LyEmU; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756729043;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=E7wsDKVeU07tqfba5mhUpd3DLLKgZKYNe/5Ehj98m6A=;
-	b=Ax0LyEmUOkyQmZNFI3AKxwrWKsjRz0xpOEADKre2FrO/xAgveHKB+5+QMc/rd8dwixy/Ko
-	wDtdMPOPfUHNX3qA0r6Q3dAk1rwY9gRGroPj9ZzwpKAbQgU4glIIytgkbZTLsfBeg275tU
-	PNIDG85UQYDuboWbD+MpPPG3fnG2V00=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-590-ax3scpLPPkqZFGlWlyK6YQ-1; Mon, 01 Sep 2025 08:17:22 -0400
-X-MC-Unique: ax3scpLPPkqZFGlWlyK6YQ-1
-X-Mimecast-MFC-AGG-ID: ax3scpLPPkqZFGlWlyK6YQ_1756729042
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3ccd58af2bbso1863836f8f.0
-        for <linux-arch@vger.kernel.org>; Mon, 01 Sep 2025 05:17:22 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=EQC3Cc7fFOHWvHxLQP5/gVmkE3fHNTxGjD+58B6yxYqzzAvlEa3wpYJSQnc/OGGf8L/OCFIiMpZasNwRb1gnwBJJJL4CULAppUxNqig7vMmcFeUH8bLlqYe4O7voInFmc+I1X6jfzU0fsu4GjII9u439mVCq8TrViQ8cYlUOW2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DvN7JTzn; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3cbb3ff70a0so2639390f8f.2
+        for <linux-arch@vger.kernel.org>; Mon, 01 Sep 2025 05:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1756729624; x=1757334424; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CvXFM2+EDhInaja9QZo9cQmXYbU073wpqmRBXkRFUBM=;
+        b=DvN7JTznmTgh9C5aWlllMdoPjvzuLsP2rqj0D1Rp6pMS1HNU+9dHfXvc3l7BLcnUQx
+         y8NnaUXXZlO8FQ9BUqCFPLJCGZ8RWM00pfuFH0WzyCW7oR1tBGVCTa0jOCupyiMxp/0Y
+         W0arLHgpl728aSFjv8Hqd3b7IOYygQ2zmdYzv4Htd2iodz99XlNZQeQmbrDGjMvFXc8u
+         FKcWwqwsbpH+ZjZacq/PU7sksS6QMv15u94T9D9EXqr60KEPW/yZf5B7toQk2ldCxSoP
+         pR37goby4lon67/Xo5BZzuHYJRpEzEEgsZNrpRGSOYuz20iDVNkknDg7zohLcCiKJLaF
+         ZGJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756729042; x=1757333842;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E7wsDKVeU07tqfba5mhUpd3DLLKgZKYNe/5Ehj98m6A=;
-        b=Mvn3rDApermYgZoylpmQfk7KoEM5EQVO/VIBSJlso4PfNSudHqJQ+f/tEOXrVhI2sK
-         NQDestohyDH7i9kr0CgePO1JyWeNu2VLrGIh7Ldr0IEtSOHG4ningOZlnmZTmSU7uZhd
-         BNxCAJ6iYRSy81SEpJ63pf7vH62PUsqC3J1bF+Tm3MOhfP4zSGc0ZiaHvvKe/51SWxAf
-         5tcqJ5iqBbbg/u6Qb0aiKXhdjjjrkta3ayoRiEpZFOS0q7QpoE6anmj0mxkckwKZ75YJ
-         LntYTWGvpCmLxMPEu/1UNDZh0IDdMR/TlTcjQJr2WkfSkLXniIVOt2QLL/iyQnS9YFcf
-         tNXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW7sjMLHYxqh+XmX8EEDnsBnvTH6REhA8IZtS0J6rnxrpOlX1CjCIPSB1QsobAbNeaMbJD3CSpSb8Ja@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt0S06ZMTw/fpt3bRpv0IGlODi2F+fKSCU7swIVdteTq1qEyOU
-	v4Gu4qf6O4BufOsoVUfAStHoGJjkgdH/FCio2RTEs9acYPzpQQH6TD2KWO+O6GdheJe2hKO8zbx
-	dhmzGA6GkxIJMpKmkL8rkHNI0/bj+j9remR56yOKUkTaCy8Hpsgm2CO7sVlBWL9k=
-X-Gm-Gg: ASbGnctrwiCiIcLXi5gmQDl8WRW8wHHi+n8fDPRiLDzyUsOxYWvKvaFitEVwnBxYX3j
-	bZnLAxn/Ra3onA2/AG4DeoHAycv+pahn6ylbs8oXtnEUn6WSMOBFgtna70fC97FJ62F3LJCjiHC
-	TxlkpVtA8nHasvuw5I9pf2wtXmxuO0db4VVMn2EJPoSsHYoAHQkHPVm4PjamNei8CbGd354W/Qn
-	3TCiBiUm3BCmX281no+4nONymHdP0mfP7ae2so1oydNUBgtOUqc/D9kZdCXcvi2fezE9agddInP
-	5TmCMeFlVscJS4zg4KP0zEvW7ikMgFhrDDbxxI24mELDLp2h/Iy1WEBj5ui9mNNhLvQl25NhTMf
-	csGNpETkcSQ+56DpSfNwAHv1H1MZ9QrfHeMCy0e5o6/Mh/PTnDcIS2NS5tKpYY9oPb3Q=
-X-Received: by 2002:a05:6000:290e:b0:3c7:e6d0:b1b6 with SMTP id ffacd0b85a97d-3d1dcb77f57mr6172976f8f.9.1756729041599;
-        Mon, 01 Sep 2025 05:17:21 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH4HyO3MsW/7JB2c6b+uWwxyC9MpHi848L8uRbEPhjkFkXwnypkP58uX2s27AjDoWG3KsJ0dw==
-X-Received: by 2002:a05:6000:290e:b0:3c7:e6d0:b1b6 with SMTP id ffacd0b85a97d-3d1dcb77f57mr6172942f8f.9.1756729041066;
-        Mon, 01 Sep 2025 05:17:21 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f37:2b00:948c:dd9f:29c8:73f4? (p200300d82f372b00948cdd9f29c873f4.dip0.t-ipconnect.de. [2003:d8:2f37:2b00:948c:dd9f:29c8:73f4])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d48760d1c9sm7371553f8f.17.2025.09.01.05.17.18
+        d=1e100.net; s=20230601; t=1756729624; x=1757334424;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CvXFM2+EDhInaja9QZo9cQmXYbU073wpqmRBXkRFUBM=;
+        b=rUguw2PZiZfZa9PYq62rBdJRgRhnAtmwRjg7Eow1VviLEhl+H7Tp9m8wxLfCjnUy74
+         35ru4TCU0m9HL8cfNT+Trax174SVQ3mROv6aw7BMnaI55Shi05VuUA2zATmAAMlO3JAK
+         +DsbwRU1SKcDZiJp0hFCVeYhQe+4FikVyGiiGjcLG//FWlcXUBKRa2WPqvokqR0Z1wxZ
+         CujteCwH6bzAuXAn9VdrW8TXtJi320pKiCawXYBm/p6xETXx6kIN1fgu6X6uS4FBw28f
+         DKzi2kys680/8MBJZ6BNuVp3ORbVZrE5f93PO/3LmDe3PrPrCEsABjkagjQI6qRqgmvR
+         lPzA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3WK/SCWI57/q88Rorg+JjznkzgroYqD3Xij6ERi4XBr5jSuLaUsOY37fK6UiMCCk72e5541brTbT6@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjFDNQcdxAYLDKvQhywGJ33+DbzJ0yv7F+yz//o2jgNXuo9MCx
+	jk1HE5AKhaDroGJeOlXgjgqwCKIst4QMSnlIklrwIA9VxE1+l+6AOwWV9IhpkykkKhQ=
+X-Gm-Gg: ASbGnct2VxvfGuaoB9kWm/QUwIlS80LeZ2z330cYCyNIhfILAlvIPgqrH6pILudOmBb
+	phjMb2x05ApTlzkd2RvDxGd4okDUDZdZCgu5ID5HBBfbT6pa2bL13c46lLRRHEDy4d9+Nxe1xYu
+	YJL7rGpB+fwhWl80MzZDL0y5JUmfMdtyUNR2aYO6+8uPyx/Lf/tCjrkHOfY8TyUw4rFCu1duHpy
+	EbFNB5PJD4YSbr/KdjH8i7xPFNu8C1S2qJN7Uu5lpMiJi4wE3Ie1A50FP13Yv8B3XAATGZkaTCa
+	+WuUAFy/3+SzmILOacHZsX/f+jcPaY+Fe/WG2mHGzLBEcogN6rHIn/5QP2NlpP7DtUHCJXt16k6
+	jxJwd9lGI9XvcOScTf4imkYlTnSQJNg/hG7KwcuENDC8S/KYGlAKWRw==
+X-Google-Smtp-Source: AGHT+IGMZj0MUqoNS8l03J940dxpE/Oa7+eZtp6hkgsi4bqmdFUhhinsYeDmT1bsO+4zfR2NPsVVzA==
+X-Received: by 2002:a05:6000:240d:b0:3d7:c86:800f with SMTP id ffacd0b85a97d-3d70c868524mr2579250f8f.60.1756729623615;
+        Mon, 01 Sep 2025 05:27:03 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d7330e4bc9sm3325617f8f.10.2025.09.01.05.27.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 05:17:20 -0700 (PDT)
-Message-ID: <cab1db60-e7bc-4f31-b781-c52ad1b24da6@redhat.com>
-Date: Mon, 1 Sep 2025 14:17:18 +0200
+        Mon, 01 Sep 2025 05:27:03 -0700 (PDT)
+Message-ID: <4e215854-59df-489b-b92d-8d2fb2edf522@suse.com>
+Date: Mon, 1 Sep 2025 14:27:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -90,159 +82,100 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v2 22/29] mm/numa: Register information into Kmemdump
-To: Eugen Hristev <eugen.hristev@linaro.org>, Michal Hocko <mhocko@suse.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-mm@kvack.org, tglx@linutronix.de,
- andersson@kernel.org, pmladek@suse.com,
- linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
- corbet@lwn.net, mojha@qti.qualcomm.com, rostedt@goodmis.org,
- jonechou@google.com, tudor.ambarus@linaro.org,
- Christoph Hellwig <hch@infradead.org>,
- Sergey Senozhatsky <senozhatsky@chromium.org>
-References: <20250724135512.518487-1-eugen.hristev@linaro.org>
- <751514db-9e03-4cf3-bd3e-124b201bdb94@redhat.com>
- <aJCRgXYIjbJ01RsK@tiehlicka>
- <e2c031e8-43bd-41e5-9074-c8b1f89e04e6@linaro.org>
- <23e7ec80-622e-4d33-a766-312c1213e56b@redhat.com>
- <f43a61b4-d302-4009-96ff-88eea6651e16@linaro.org>
- <77d17dbf-1609-41b1-9244-488d2ce75b33@redhat.com>
- <ecd33fa3-8362-48f0-b3c2-d1a11d8b02e3@linaro.org>
- <9f13df6f-3b76-4d02-aa74-40b913f37a8a@redhat.com>
- <64a93c4a-5619-4208-9e9f-83848206d42b@linaro.org>
- <f1f290fc-b2f0-483b-96d5-5995362e5a8b@redhat.com>
- <01c67173-818c-48cf-8515-060751074c37@linaro.org>
- <aab5e2af-04d6-485f-bf81-557583f2ae4b@redhat.com>
- <1b52419c-101b-487e-a961-97bd405c5c33@linaro.org>
- <99d2cc96-03ea-4026-883e-1ee083a96c39@redhat.com>
- <98afe1bd-99d2-4b5d-866a-e9541390fab4@linaro.org>
- <c59f2528-31b0-4b9d-8d20-f204a0600ff6@redhat.com>
- <40e802eb-3764-47af-8b4f-9f7c8b5b60c1@linaro.org>
- <7e1f4f64-dfc4-4366-8e01-0891b2d4d2b4@redhat.com>
- <94f537ae-c2b1-4928-a3f3-6449c30cb624@linaro.org>
-From: David Hildenbrand <david@redhat.com>
+Subject: Re: [RFC PATCH 00/10] scalable symbol flags with __kflagstab
+To: Siddharth Nayyar <sidnayyar@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Nicolas Schier <nicolas.schier@linux.dev>,
+ Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250829105418.3053274-1-sidnayyar@google.com>
 Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- qIws/H2t
-In-Reply-To: <94f537ae-c2b1-4928-a3f3-6449c30cb624@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250829105418.3053274-1-sidnayyar@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 01.09.25 14:02, Eugen Hristev wrote:
+On 8/29/25 12:54 PM, Siddharth Nayyar wrote:
+> Hi everyone,
 > 
+> This patch series proposes a new, scalable mechanism to represent
+> boolean flags for exported kernel symbols.
 > 
-> On 9/1/25 13:01, David Hildenbrand wrote:
->>>>> What do you think ?
->>>>
->>>> Looks a bit over-engineered, and will require us to import a header
->>>> (likely kmemdump.h) in these files, which I don't really enjoy.
->>>>
->>>> I would start simple, without any such macro-magic. It's a very simple
->>>> function after all, and likely you won't end up having many of these?
->>>>
->>>
->>> Thanks David, I will do it as you suggested and see what comes out of it.
->>>
->>> I have one side question you might know much better to answer:
->>> As we have a start and a size for each region, this start is a virtual
->>> address. The firmware/coprocessor that reads the memory and dumps it,
->>> requires physical addresses.
->>
->> Right. I was asking myself the same question while reviewing: should we
->> directly export physical ranges here instead of virtual ones. I guess
->> virtual ones is ok.
+> Problem Statement:
 > 
-> In patch 22/29, some areas are registered using
-> memblock_phys_alloc_try_nid() which allocates physical.
-> In this case , phys_to_virt() didn't work for me, it was returning a
-> wrong address. I used __va() and this worked. So there is a difference
-> between them.
+> The core architectural issue with kernel symbol flags is our reliance on
+> splitting the main symbol table, ksymtab. To handle a single boolean
+> property, such as GPL-only, all exported symbols are split across two
+> separate tables: __ksymtab and __ksymtab_gpl.
+> 
+> This design forces the module loader to perform a separate search on
+> each of these tables for every symbol it needs, for vmlinux and for all
+> previously loaded modules.
+> 
+> This approach is fundamentally not scalable. If we were to introduce a
+> second flag, we would need four distinct symbol tables. For n boolean
+> flags, this model requires an exponential growth to 2^n tables,
+> dramatically increasing complexity.
+> 
+> Another consequence of this fragmentation is degraded performance. For
+> example, a binary search on the symbol table of vmlinux, that would take
+> only 14 comparison steps (assuming ~2^14 or 16K symbols) in a unified
+> table, can require up to 26 steps when spread across two tables
+> (assuming both tables have ~2^13 symbols). This performance penalty
+> worsens as more flags are added.
+> 
+> Proposed Solution:
+> 
+> This series introduces a __kflagstab section to store symbol flags in a
+> dedicated data structure, similar to how CRCs are handled in the
+> __kcrctab.
+> 
+> The flags for a given symbol in __kflagstab will be located at the same
+> index as the symbol's entry in __ksymtab and its CRC in __kcrctab. This
+> design decouples the flags from the symbol table itself, allowing us to
+> maintain a single, sorted __ksymtab. As a result, the symbol search
+> remains an efficient, single lookup, regardless of the number of flags
+> we add in the future.
 
-memblock_alloc_internal() calls memblock_alloc_range_nid() to then 
-perform a phys_to_virt().
+Merging __ksymtab and __ksymtab_gpl into a single section looks ok to
+me, and similarly for __kcrctab and __kcrtab_gpl. The __ksymtab_gpl
+support originally comes from commit 3344ea3ad4 ("[PATCH] MODULE_LICENSE
+and EXPORT_SYMBOL_GPL support") [1], where it was named __gpl_ksymtab.
+The commit doesn't mention why the implementation opts for using
+a separate section, but I suspect it was designed this way to reduce
+memory/disk usage.
 
-memblock_phys_alloc_try_nid() calls memblock_alloc_range_nid() without 
-the phys_to_virt().
+A question is whether the symbol flags should be stored in a new
+__kflagstab section, instead of adding a flag member to the existing
+__ksymtab. As far as I'm aware, no userspace tool (particularly kmod)
+uses the __ksymtab data, so we are free to update its format.
 
-So it's rather surprising the a phys_to_virt() would not work in that case.
+Note that I believe that __kcrctab/__kcrtab_gpl is a separate section
+because the CRC data is available only if CONFIG_MODVERSIONS=y.
 
-Maybe for these cases where you export the area through a new helper, 
-you can just export the physical addr + length instead.
-
-Then, it's also clear that this area is actually physically contiguous.
+Including the flags as part of __ksymtab would be obviously a simpler
+schema. On the other hand, an entry in __ksymtab has in the worst case
+a size of 24 bytes with an 8-byte alignment requirement. This means that
+adding a flag to it would require additional 8 bytes per symbol.
 
 > 
->>
->> What do you suggest to use to retrieve that
->>> address ? virt_to_phys might be problematic, __pa or __pa_symbol? or
->>> better lm_alias ?
->>
->> All areas should either come from memblock or be global variables, right?
-> 
-> I would like to be able to register from anywhere. For example someone
-> debugging their driver, to just register kmalloc'ed struct.
-> Other use case is to register dma coherent CMA areas.
+> The motivation for this change comes from the Android kernel, which uses
+> an additional symbol flag to restrict the use of certain exported
+> symbols by unsigned modules, thereby enhancing kernel security. This
+> __kflagstab can be implemented as a bitmap to efficiently manage which
+> symbols are available for general use versus those restricted to signed
+> modules only.
 
-Then probably better to export physical addresses (that you need either 
-way) directly from the helpers you have to add.
+I think it would be useful to explain in more detail how this protected
+schema is used in practice and what problem it solves. Who is allowed to
+provide these limited unsigned modules and if the concern is kernel
+security, can't you enforce the use of only signed modules?
 
-> 
->>
->> IIRC, virt_to_phys() should work for these. Did you run into any
->> problems with them or why do you think virt_to_phys could be problematic?
->>
-> 
-> I am pondering about whether it would work in all cases, considering
-> it's source code comments that it shall not be used because it does not
-> work for any address.
-
-Yeah, it does for example not work for kernel stacks IIRC.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=3344ea3ad4b7c302c846a680dbaeedf96ed45c02
 
 -- 
-Cheers
-
-David / dhildenb
-
+Thanks,
+Petr
 
