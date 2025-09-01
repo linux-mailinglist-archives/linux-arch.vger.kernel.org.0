@@ -1,346 +1,405 @@
-Return-Path: <linux-arch+bounces-13342-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13343-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E2CFB3D411
-	for <lists+linux-arch@lfdr.de>; Sun, 31 Aug 2025 17:13:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99D0EB3DD1E
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 10:57:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC36D16F66F
-	for <lists+linux-arch@lfdr.de>; Sun, 31 Aug 2025 15:13:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47859179517
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 08:57:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21FB9269CE6;
-	Sun, 31 Aug 2025 15:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56EEE2FE57C;
+	Mon,  1 Sep 2025 08:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="I+NpHRxY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jertd+g0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10olkn2023.outbound.protection.outlook.com [40.92.42.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308112475E3;
-	Sun, 31 Aug 2025 15:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.42.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756653182; cv=fail; b=uY4+IX7ZOfD4DW16ilgX2v3xWRkfCWmpVb/avuJh8waO8Hd9aKz55rpgE8LHMhTY6pJalzOs6D9h17tPNMcpxJFmB3ixsbr//m9zSb2XWkSxckf7x+UzJvdPesVS0FbUHtMt/yjGJ1Ssauj0Gb8ke2kIzkc+1eHgTpvZ9g1txs0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756653182; c=relaxed/simple;
-	bh=2B3BQJ3+CyErRY6eemQpabeYf4NU/qXovNVX6lWis7o=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=MMfu64uHftdODFwdIQw1/mQIXcNq/irKSsc+OqeWrO2BQzgdE0Po1aHteXxevyf1qe5HQ3MhbbyfnSL5M/UuwRAeLWTeiK7dJXME47CnCKBMcnAB6gY2LxRUHNWrU5pF4ymWJzulPfpNw3hDO+cqooe5RSyzXJapuuurX9N5lkA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=I+NpHRxY; arc=fail smtp.client-ip=40.92.42.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=S281X6P+3KFWQVQsB9EgvrQxgoNy51M3XzWXKASapCsnLySjOysjdI2Qs069KbRtEsWPSXP5TodbLQ4FHhIzw/n7FCQZlOZmUSh1qt7GMmMvHBJSKIuuQNb2z2/Vqf0iAe8SPFfOsO/L2lo8+yx1MErATkIkwDYKArUtp9CT8Lzhtm5HawDWUgi4Z925WEGh2JXhnMT8mJIhlSn19OrWDFdbxRK9TFWQl8N+HKY8T46jAS3uD0NJxe/RrDxHTL/sMChX+zLWq79sjDTskm5tkoAQdtW7wtkMbpGx68r/gAlVT4vVVY9hoPoUWNZIEadYnojIIrWfFeNuUQCJJ77R5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HcdzxLJ0DMpSocShLc2GYOKFHLxUPaWCKkbw198clNY=;
- b=nVe1Fl46OHvSMgL+11J8oreTao6Y3WM0lK2Jawp6wuYjxhF9HHpXJshKaz9EUB8U4UJjrMepOI/DfMlloAs1zcZ2NxI5a/51mrAGSuXaMdIdo1hoLO90rH4rsBRQgkupW9AS3f/qcrGUjSTt5DOdmqiCfqApQEsBfCE/GK4vzqtD1mqln4BaApa+bBG7qCD5uqOSe6vJp7bzVaq2g24F4U5AITypbJdgDH76jMQ63rQAI3TsiN1QzZiva7M3GloWtYwYbnjfgzgID0y+pH5BmFiaXGDc+x8vBMsBjr2R6bi8r262njJlthrAaQ7ZPv6dEWA3a881pDRXQczC9W5lOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HcdzxLJ0DMpSocShLc2GYOKFHLxUPaWCKkbw198clNY=;
- b=I+NpHRxYnL6uQ1BLWuZ245mqAPk8kp9QE5jiXXIqffnCOezUfwR6/MrBfOi+ph0932dWpKpVgeaKVqqkSoJB6L5MRiiHOMoEvq3UOUP29RVAWH2I4rDi40O/CvhXJdK6BnttbYGf2Z1O8su1myUZYDTcugjv/ZRgTXypKgPUl0xepyOCR2gQvz1VaoFJkKBYmWZID88xUDTgmQAIStDBF6xMzG8YVkhOkr9rBsx76hSKTxFZr69u3MzbrekYNalQyFlDNgMo0kr/4O2CUv+A9WiO3LBl1kdGhDe3KyKxfU69RnnHdA9V8fWcKjDoOl3wq7rdJ+KvhiS4TJTw0vyc+Q==
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by DM3PR02MB10273.namprd02.prod.outlook.com (2603:10b6:0:46::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.27; Sun, 31 Aug
- 2025 15:12:58 +0000
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df%4]) with mapi id 15.20.9052.019; Sun, 31 Aug 2025
- 15:12:58 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
-	<haiyangz@microsoft.com>, "wei.liu@kernel.org" <wei.liu@kernel.org>,
-	"decui@microsoft.com" <decui@microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>
-Subject: RE: [PATCH] mshv: Add support for a new parent partition
- configuration
-Thread-Topic: [PATCH] mshv: Add support for a new parent partition
- configuration
-Thread-Index: AQHcENr8Fd5MLCIhVEC8kLUNqDb1wrR86h4A
-Date: Sun, 31 Aug 2025 15:12:57 +0000
-Message-ID:
- <SN6PR02MB4157FE1A347214085549E72CD404A@SN6PR02MB4157.namprd02.prod.outlook.com>
-References:
- <1755588559-29629-1-git-send-email-nunodasneves@linux.microsoft.com>
-In-Reply-To:
- <1755588559-29629-1-git-send-email-nunodasneves@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|DM3PR02MB10273:EE_
-x-ms-office365-filtering-correlation-id: e61f575a-9572-452c-1f2f-08dde8a0de92
-x-microsoft-antispam:
- BCL:0;ARA:14566002|8062599012|8060799015|19110799012|13091999003|461199028|31061999003|41001999006|15080799012|3412199025|40105399003|440099028|102099032;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?VeTpRqt/urczy4D0BjHHP+9Z5IryW/SgQA1xwPw+JRtVlpJuS6Nj9SaIpewa?=
- =?us-ascii?Q?YEiNWtVzXkN1g20tRJCrVKwhgJUW3WOa/nkd8JgwmIPJzHWwjqKJgUno02Xf?=
- =?us-ascii?Q?tObSFs3xZtAKvTogQVV4TByqDlljzzC4MjEQJoJQKGk/UR6iRi5RxxgTSW9o?=
- =?us-ascii?Q?q5N9o1rCzn/oPgAJcKg7AW/XCm6IXSn8/x7lsFVCITSTc3vnntazz5AMdhEI?=
- =?us-ascii?Q?J+mE6vQhzBMLLlfEIZeZf9Sv0tIns1rCDgW845DdMR/K8rSWCFXK+oLmPeUg?=
- =?us-ascii?Q?tf400Ssj438S8r4i/7cF00BYaQIns3MBkkqAzpy+5S6VgoDTkjgUnUAhPF9A?=
- =?us-ascii?Q?S+Eb77obScHf5fezfPL7q1s8C3AuyJd0RzhLnpjWgS4bA3jm+F7isXSfafpY?=
- =?us-ascii?Q?C4r6rFYWuazxc5g1qc9NuUxiAxrDWS8I62I2zPR99rCh58z8/adUlGTLTfd3?=
- =?us-ascii?Q?JwvUugKKULA8utghTYSfOhVXQiRY4vZrbv2Mv7hqxblhfeHpinZaTr79AZ03?=
- =?us-ascii?Q?UMM/wgw3v6hMPip6CATTEatrw5YTzRd3RCoQMSSDRG821S8A4OGJrafqfypf?=
- =?us-ascii?Q?ycH5nS4YX82htolDIJfx1hixm/11zK12N0zV9j+5DXvuuwEW7WOQZYpssLlq?=
- =?us-ascii?Q?D4aeVBctvUyYY+83DLo5SFQotUMOLk8XGoBUAl5Hl3Qat8jTSTeAjTiP/szd?=
- =?us-ascii?Q?bUGT6B9ZjlQ/YXDY60Z8R6fKwLMFpSC8bAvwzAVBI9embqgidOPWqre1E2Qw?=
- =?us-ascii?Q?2SdzUNFChQLqVWMUfh5I2Z908tucvjMpQyXGnPl/pvNUm8ghUswyuTVEYiZo?=
- =?us-ascii?Q?KCg+sOmbfW0Kom/eK4Ig2e+O6VSchOOzxTNPLjwf8n9SKEJeP/oxd33EWpNo?=
- =?us-ascii?Q?qFYTvLaHqGcR3gMaq3vfnt3d0R8R0q8PrF0F3Fl05Ps52v7TDsEWfhJ+FCho?=
- =?us-ascii?Q?U2XsJXGipnQwHmkqP09qnJ7he3DH2ILur6fwh/Cmvzlh91cZA+AoLYfpZeaV?=
- =?us-ascii?Q?BkVBVABCO4bkoiwCvA+Y5wUUNV4zGQHrAc+0fF+4uCKA5TaWEQz6bcxmCFBo?=
- =?us-ascii?Q?ARvzbCslKJb/JH97BnAypjIjdTuycKnKGEW+A0xlfMXXteyp5EzBb+pZsFo6?=
- =?us-ascii?Q?F18KITK9kn2VY1GTsR/HrsRUINkSQNWcw8DaXVNvVdzWTM1gcNjvzn71Jru1?=
- =?us-ascii?Q?/ahOIT/NUC5CJbCnKokaBWWTajhOw/mB/3rdnQ=3D=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?YD5hBoumqmobIlRtb/9gXQej21UMcby4D5wx5j/ATdBLUkipT9Y8xQssuQsW?=
- =?us-ascii?Q?RSFaGwpVdZC5zyf4Zo4h0H0rINv/pLGLXaEMk9jARWOCXZPMUakpEO8Ww1lw?=
- =?us-ascii?Q?yN08FU2B/SAUqk+3hmTdQrsrmRjOYQT6rDnS2HQSovCSPQlUpb7tLQgQdhdV?=
- =?us-ascii?Q?zwPqZZIMUxpj6zSvCCWmlL+slJn30uFalh0NzHnvTp7dOeaJ/Jvjn/z1bfMp?=
- =?us-ascii?Q?HLcZh7wdmIN7t9GflhMoYtkfXAZRuRwPjb22NH+ahZpb0C+6DTnqZxszlLXJ?=
- =?us-ascii?Q?dPCmmOCK+R2gIO2xLi7Aerc7xMVk2CXp1hixEsu50IfTFLsA3x1b2vyBPPYj?=
- =?us-ascii?Q?Y0wawPOKQwcFbPFcvgkDVy6VLcZ72oHRJfCkm7iLXbeDJyPeZ8DD0T4hUJbD?=
- =?us-ascii?Q?0G/b1axZVE540+sjsMb74L7oPRDR2xwgI0Xc/TYoxdvhCfQvmMBRBQYEXg3H?=
- =?us-ascii?Q?lTHTcYQwNgs7iP3D+NNMQe5f5xK75ddaU4vUIUSTjoZqOcX1VNKFl9KvqDPO?=
- =?us-ascii?Q?jUxki9C7t4WSNv9Xazzq96KF6/GSYLZOGVh6qRreoL5nBhcwICJwfbN4si02?=
- =?us-ascii?Q?2hSkY84E/R0n7LKhEXn3ymtWLxs1TB491IWQfCp3XyngsUH6Loov0dpijAO6?=
- =?us-ascii?Q?338U9IkdigowxgRENPfHnREreUYLwhsLp7C59o2nSiVR+YLxjIOX/i915aQm?=
- =?us-ascii?Q?w8VI1J1ohM3k93KJXNZWql1bXWxJEtXQMHaN8ZDZmAYt5vTyGW1GjuGvaB/4?=
- =?us-ascii?Q?IpDSVeqgBP1Esny3/eIxSIsFqhMz/EOAiAqAYasSiuOP03eVl2+pOa6dQjd2?=
- =?us-ascii?Q?34UvNEuIZf4VG0gw7vKbwRd86fkih0ANwBLwUfL/FZ5DKXZchv6ofaO/RzID?=
- =?us-ascii?Q?/v3jbQRh+wuqPhoV7mvGIMfEpgyPxWOPw/JB8tsC1xWSGfPqcdEKv0iKqyky?=
- =?us-ascii?Q?Je4Z0iC7aVEdZb5YBk9cfz80kv28+AyUwuLtJ9crVI2W49AV2vwseuersuje?=
- =?us-ascii?Q?yeXD82EcLqPfKlyXdc5R3McagbGDvr5CaNU/ZH7Oi+GICAmNs055CZeG9t1a?=
- =?us-ascii?Q?ZKr4PmVng29tNqjeylXV9QLrLaziX9m829344AsHJS2+nFkfw5D9MjDeFJu+?=
- =?us-ascii?Q?z0peBq9BOPSGVKAYoby+15S7F98wQ0u7NtXg0BBfUsNK9YR0ytwgV0UHOifv?=
- =?us-ascii?Q?lKLSye4hKPU8psXhC7hBXnN8VDE6jt5c60xgf3oeQsgc5nhMi7echjbLPnw?=
- =?us-ascii?Q?=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB9328DB76
+	for <linux-arch@vger.kernel.org>; Mon,  1 Sep 2025 08:57:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756717035; cv=none; b=I+23/dQ5VAeFkRuGL2yCsieQy1NkANoAuqclwaGjd/6ccq0tSee+zRSK0gxWHXWAKNPQrvvCEzkYEn1GHcEPWnOL0LnG4G0Ak4HX5p5jCjBUtwZLpUZQ6d/oT7nq7UlXgH8DCN7sgjelHV1BMrbvKNF2ngVp3tHPe7gef8XuFD4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756717035; c=relaxed/simple;
+	bh=S5LxcegLHjjkJFwecl3nvsi4dPkd/e09Ww7/aNdBdvU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tW5iD3F9aqvc/ZV6pS6HZHyO5gZt6GN6WSI7fdBP618tFCPeiTY/sO4YoBWtueVlk4dxo7yucRvgNMGlhjOhk9W7rRY0UGwT/JJpzZQNj3KAANmGo9RWmZY/EESSVzah4SX2PTgEJoLGGHXixGt4mVZbBoS2N9zZz0wKqfffvtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Jertd+g0; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-71d71bcab69so32939937b3.0
+        for <linux-arch@vger.kernel.org>; Mon, 01 Sep 2025 01:57:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1756717032; x=1757321832; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qgvQHB1ThISY9uVHxKPAb9k4TCRL2UiR6ffxI/PWq3M=;
+        b=Jertd+g0KUmgdzzUxrEWW0ujJM79vx5caBqd82hXrxFJU1a9k7xq6dTjKlI5DF9bWZ
+         TanqX838J1PRyV3NxyxzoLZIoLzp2dKSgzWFYxw5xpRGMGdeoBy3BSFLtSZchkXMQSy4
+         RkJRFjDXRi6Hrhzp1rbPggv/WHsfwCywFnRXSOLXv4PnaPPC8NctCnWIXSQu47AVvrJ+
+         Ljz3Ub4Pd+IUXsVETYH1FJAqvC24KybXm4N36mBZGCbridSpTdFWO2DDKatsGjsJ2cq9
+         70Tzr0237PgXP5hlGIZkyQLZNe9wdd+OksazAzGgks9SfTPK3qf66bsMVkLSMdQHQwm3
+         VdCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756717032; x=1757321832;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qgvQHB1ThISY9uVHxKPAb9k4TCRL2UiR6ffxI/PWq3M=;
+        b=xK3uByfgZy5Qi92M8qmAaX/EJoGiHkj+y6eRfTyqlFlxm+IAlf8yQ5OhenlaPbEb3a
+         yxp9hl6sogqmuz4I263i6kGVs8OipV+lRfHZMRTH5F2zxpS3OvnPjML1WVE8MGsbyEOs
+         LhPhHnzRe+GIJ8NRt+EAtJXJXxRzX1oinIQGnCZ5Y+9qN1oYemAMn891Bo2BNrjAWjkZ
+         uozWlOyQ6ciTS8jRF2msYg+CGPipDOE0Qb2kKVLGAdnq45q9y/zuHmrqQJ9v3lzY6/Ea
+         dAd0vR50Z9wpbFzwnQeC32+hpAN/9vJSo3kJ/GwcvAXfEVtqtG/14i8a6DSW6tlDTL5Y
+         +LvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWEp9LwICS8tr5FL88DoxSDiiYYK5pVM2hLFz35Ia7W99zr0ymiBhJVoAZWNpjRcuwFVtIVQYPRJ90p@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy72vb5bJuEf5yS+6DgFGf0gLH9RIoi+FAOAiaQLzonSvzlkXMm
+	StaGZeEuJ7EshtNNb0OpbCLSUarToC/ZNpclUObcwT4pmY0FWaFzcuBjkE912Mg8M9E=
+X-Gm-Gg: ASbGnctPB4mL1EnFSROEFYEbyjzGp4sCFA+zDGrf45WKgPA/7V9oKF4DNW9krBSjGKI
+	4g+OCWrN195pHJVjbGwur/bSrmnIdw9eWWrY1bAqSGA8qUiyKcHV7A1J4hh4bJKbAD396B5resH
+	AxVRXCMPGzWUKIC66rfmkNRnIBXnzpQosRPeaW6kPTbhKyP4EmcP6hrLwVNmsX4wz8nUX+fJKRK
+	SotHaurE8sSFeaG9+sn1OAtZB5AzWXCoXfxBETlTCKQo5zk7x0yRyX4GBEsfjzymahQFm+xGaes
+	xWh6Sci6dbH7umJxDvkS/ov2isJb1DsDGynyNQ9ZBu6TbdlkaBS98Cu10Jj/ADclwVG+WbQB4t3
+	sVOsM+GRAksAqob0Q7MlVy3cLy7FoVKIpNaTSQ8DxghOZd4LxX057k0BvIvh++DXH0Jo2uLZ+Tf
+	eKHbdLhkTQv5AdHA==
+X-Google-Smtp-Source: AGHT+IG38bjjyQjzt0c80VXnwoUSoXxUbipjOE1UiZhaYOXnFBnq4b3rik9mxtcs1scAlzx7pRovJg==
+X-Received: by 2002:a05:690c:a4c1:20b0:722:92c5:8e80 with SMTP id 00721157ae682-72292c59299mr23345777b3.40.1756717032133;
+        Mon, 01 Sep 2025 01:57:12 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:335e:2208:211c:f884:abe7:c955? ([2a0d:3344:335e:2208:211c:f884:abe7:c955])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7227d8cc1fbsm13391337b3.37.2025.09.01.01.57.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Sep 2025 01:57:11 -0700 (PDT)
+Message-ID: <40e802eb-3764-47af-8b4f-9f7c8b5b60c1@linaro.org>
+Date: Mon, 1 Sep 2025 11:57:06 +0300
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: e61f575a-9572-452c-1f2f-08dde8a0de92
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2025 15:12:58.2779
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR02MB10273
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH v2 22/29] mm/numa: Register information into Kmemdump
+To: David Hildenbrand <david@redhat.com>, Michal Hocko <mhocko@suse.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org, tglx@linutronix.de,
+ andersson@kernel.org, pmladek@suse.com,
+ linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
+ corbet@lwn.net, mojha@qti.qualcomm.com, rostedt@goodmis.org,
+ jonechou@google.com, tudor.ambarus@linaro.org,
+ Christoph Hellwig <hch@infradead.org>,
+ Sergey Senozhatsky <senozhatsky@chromium.org>
+References: <20250724135512.518487-1-eugen.hristev@linaro.org>
+ <20250724135512.518487-23-eugen.hristev@linaro.org>
+ <ffc43855-2263-408d-831c-33f518249f96@redhat.com>
+ <e66f29c2-9f9f-4b04-b029-23383ed4aed4@linaro.org>
+ <751514db-9e03-4cf3-bd3e-124b201bdb94@redhat.com>
+ <aJCRgXYIjbJ01RsK@tiehlicka>
+ <e2c031e8-43bd-41e5-9074-c8b1f89e04e6@linaro.org>
+ <23e7ec80-622e-4d33-a766-312c1213e56b@redhat.com>
+ <f43a61b4-d302-4009-96ff-88eea6651e16@linaro.org>
+ <77d17dbf-1609-41b1-9244-488d2ce75b33@redhat.com>
+ <ecd33fa3-8362-48f0-b3c2-d1a11d8b02e3@linaro.org>
+ <9f13df6f-3b76-4d02-aa74-40b913f37a8a@redhat.com>
+ <64a93c4a-5619-4208-9e9f-83848206d42b@linaro.org>
+ <f1f290fc-b2f0-483b-96d5-5995362e5a8b@redhat.com>
+ <01c67173-818c-48cf-8515-060751074c37@linaro.org>
+ <aab5e2af-04d6-485f-bf81-557583f2ae4b@redhat.com>
+ <1b52419c-101b-487e-a961-97bd405c5c33@linaro.org>
+ <99d2cc96-03ea-4026-883e-1ee083a96c39@redhat.com>
+ <98afe1bd-99d2-4b5d-866a-e9541390fab4@linaro.org>
+ <c59f2528-31b0-4b9d-8d20-f204a0600ff6@redhat.com>
+From: Eugen Hristev <eugen.hristev@linaro.org>
+Content-Language: en-US
+In-Reply-To: <c59f2528-31b0-4b9d-8d20-f204a0600ff6@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Tuesday, Augu=
-st 19, 2025 12:29 AM
->=20
-> Detect booting as an "L1VH" partition. This is a new scenario very
-> similar to root partition where the mshv_root driver can be used to
-> create and manage guest partitions.
->=20
-> It mostly works the same as root partition, but there are some
-> differences in how various features are handled. hv_l1vh_partition()
-> is introduced to handle these cases. Add hv_parent_partition()
-> which returns true for either case, replacing some hv_root_partition()
-> checks.
->=20
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> ---
->  drivers/hv/hv_common.c         | 20 ++++++++++++--------
->  drivers/hv/mshv_root_main.c    | 22 ++++++++++++++--------
->  include/asm-generic/mshyperv.h | 11 +++++++++++
->  3 files changed, 37 insertions(+), 16 deletions(-)
->=20
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index cbe4a954ad46..a6839593ca31 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -357,7 +357,7 @@ int __init hv_common_init(void)
->  	hyperv_pcpu_arg =3D alloc_percpu(void  *);
->  	BUG_ON(!hyperv_pcpu_arg);
->=20
-> -	if (hv_root_partition()) {
-> +	if (hv_parent_partition()) {
->  		hv_synic_eventring_tail =3D alloc_percpu(u8 *);
->  		BUG_ON(!hv_synic_eventring_tail);
->  	}
-> @@ -506,7 +506,7 @@ int hv_common_cpu_init(unsigned int cpu)
->  	if (msr_vp_index > hv_max_vp_index)
->  		hv_max_vp_index =3D msr_vp_index;
->=20
-> -	if (hv_root_partition()) {
-> +	if (hv_parent_partition()) {
->  		synic_eventring_tail =3D (u8 **)this_cpu_ptr(hv_synic_eventring_tail);
->  		*synic_eventring_tail =3D kcalloc(HV_SYNIC_SINT_COUNT,
->  						sizeof(u8), flags);
-> @@ -532,7 +532,7 @@ int hv_common_cpu_die(unsigned int cpu)
->  	 * originally allocated memory is reused in hv_common_cpu_init().
->  	 */
->=20
-> -	if (hv_root_partition()) {
-> +	if (hv_parent_partition()) {
->  		synic_eventring_tail =3D this_cpu_ptr(hv_synic_eventring_tail);
->  		kfree(*synic_eventring_tail);
->  		*synic_eventring_tail =3D NULL;
-> @@ -703,13 +703,17 @@ void hv_identify_partition_type(void)
->  	 * the root partition setting if also a Confidential VM.
->  	 */
->  	if ((ms_hyperv.priv_high & HV_CREATE_PARTITIONS) &&
-> -	    (ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
->  	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
-> -		pr_info("Hyper-V: running as root partition\n");
-> -		if (IS_ENABLED(CONFIG_MSHV_ROOT))
-> -			hv_curr_partition_type =3D HV_PARTITION_TYPE_ROOT;
-> -		else
-> +
-> +		if (!IS_ENABLED(CONFIG_MSHV_ROOT)) {
->  			pr_crit("Hyper-V: CONFIG_MSHV_ROOT not enabled!\n");
-> +		} else if (ms_hyperv.priv_high & HV_CPU_MANAGEMENT) {
-> +			pr_info("Hyper-V: running as root partition\n");
-> +			hv_curr_partition_type =3D HV_PARTITION_TYPE_ROOT;
-> +		} else {
-> +			pr_info("Hyper-V: running as L1VH partition\n");
-> +			hv_curr_partition_type =3D HV_PARTITION_TYPE_L1VH;
-> +		}
->  	}
->  }
->=20
-> diff --git a/drivers/hv/mshv_root_main.c b/drivers/hv/mshv_root_main.c
-> index aca3331ad516..7c710703cd96 100644
-> --- a/drivers/hv/mshv_root_main.c
-> +++ b/drivers/hv/mshv_root_main.c
-> @@ -37,12 +37,6 @@ MODULE_AUTHOR("Microsoft");
->  MODULE_LICENSE("GPL");
->  MODULE_DESCRIPTION("Microsoft Hyper-V root partition VMM interface /dev/=
-mshv");
->=20
-> -/* TODO move this to mshyperv.h when needed outside driver */
-> -static inline bool hv_parent_partition(void)
-> -{
-> -	return hv_root_partition();
-> -}
-> -
->  /* TODO move this to another file when debugfs code is added */
->  enum hv_stats_vp_counters {			/* HV_THREAD_COUNTER */
->  #if defined(CONFIG_X86)
-> @@ -2190,6 +2184,15 @@ struct notifier_block mshv_reboot_nb =3D {
->  	.notifier_call =3D mshv_reboot_notify,
->  };
->=20
-> +static int __init mshv_l1vh_partition_init(struct device *dev)
-> +{
-> +	hv_scheduler_type =3D HV_SCHEDULER_TYPE_CORE_SMT;
-> +	dev_info(dev, "Hypervisor using %s\n",
-> +		 scheduler_type_to_string(hv_scheduler_type));
-> +
-> +	return 0;
-> +}
 
-I'm a bit late reviewing this patch, but I have a suggestion. With this
-function added, setting hv_scheduler_type and outputting the message
-is now in two places:  here and in mshv_retrieve_scheduler_type().
 
-Instead, check for root vs. L1VH in mshv_retrieve_scheduler_type(),
-and either call hv_retrieve_scheduler_type(), or force to
-HV_SCHEDULER_TYPE_CORE_SMT.  Then the rest of the code in
-mshv_retrieve_scheduler_type(), including outputting the message,
-just works. That puts all the logic about the scheduler type in one
-place.
+On 8/27/25 23:06, David Hildenbrand wrote:
+> On 27.08.25 16:08, Eugen Hristev wrote:
+>>
+>>
+>> On 8/27/25 15:18, David Hildenbrand wrote:
+>>> On 27.08.25 13:59, Eugen Hristev wrote:
+>>>>
+>>>>
+>>>> On 8/25/25 16:58, David Hildenbrand wrote:
+>>>>> On 25.08.25 15:36, Eugen Hristev wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 8/25/25 16:20, David Hildenbrand wrote:
+>>>>>>>
+>>>>>>>>>
+>>>>>>>>> IIRC, kernel/vmcore_info.c is never built as a module, as it also
+>>>>>>>>> accesses non-exported symbols.
+>>>>>>>>
+>>>>>>>> Hello David,
+>>>>>>>>
+>>>>>>>> I am looking again into this, and there are some things which in my
+>>>>>>>> opinion would be difficult to achieve.
+>>>>>>>> For example I looked into my patch #11 , which adds the `runqueues` into
+>>>>>>>> kmemdump.
+>>>>>>>>
+>>>>>>>> The runqueues is a variable of `struct rq` which is defined in
+>>>>>>>> kernel/sched/sched.h , which is not supposed to be included outside of
+>>>>>>>> sched.
+>>>>>>>> Now moving all the struct definition outside of sched.h into another
+>>>>>>>> public header would be rather painful and I don't think it's a really
+>>>>>>>> good option (The struct would be needed to compute the sizeof inside
+>>>>>>>> vmcoreinfo). Secondly, it would also imply moving all the nested struct
+>>>>>>>> definitions outside as well. I doubt this is something that we want for
+>>>>>>>> the sched subsys. How the subsys is designed, out of my understanding,
+>>>>>>>> is to keep these internal structs opaque outside of it.
+>>>>>>>
+>>>>>>> All the kmemdump module needs is a start and a length, correct? So the
+>>>>>>> only tricky part is getting the length.
+>>>>>>
+>>>>>> I also have in mind the kernel user case. How would a kernel programmer
+>>>>>> want to add some kernel structs/info/buffers into kmemdump such that the
+>>>>>> dump would contain their data ? Having "KMEMDUMP_VAR(...)" looks simple
+>>>>>> enough.
+>>>>>
+>>>>> The other way around, why should anybody have a saying in adding their
+>>>>> data to kmemdump? Why do we have that all over the kernel?
+>>>>>
+>>>>> Is your mechanism really so special?
+>>>>>
+>>>>> A single composer should take care of that, and it's really just start +
+>>>>> len of physical memory areas.
+>>>>>
+>>>>>> Otherwise maybe the programmer has to write helpers to compute lengths
+>>>>>> etc, and stitch them into kmemdump core.
+>>>>>> I am not saying it's impossible, but just tiresome perhaps.
+>>>>>
+>>>>> In your patch set, how many of these instances did you encounter where
+>>>>> that was a problem?
+>>>>>
+>>>>>>>
+>>>>>>> One could just add a const variable that holds this information, or even
+>>>>>>> better, a simple helper function to calculate that.
+>>>>>>>
+>>>>>>> Maybe someone else reading along has a better idea.
+>>>>>>
+>>>>>> This could work, but it requires again adding some code into the
+>>>>>> specific subsystem. E.g. struct_rq_get_size()
+>>>>>> I am open to ideas , and thank you very much for your thoughts.
+>>>>>>
+>>>>>>>
+>>>>>>> Interestingly, runqueues is a percpu variable, which makes me wonder if
+>>>>>>> what you had would work as intended (maybe it does, not sure).
+>>>>>>
+>>>>>> I would not really need to dump the runqueues. But the crash tool which
+>>>>>> I am using for testing, requires it. Without the runqueues it will not
+>>>>>> progress further to load the kernel dump.
+>>>>>> So I am not really sure what it does with the runqueues, but it works.
+>>>>>> Perhaps using crash/gdb more, to actually do something with this data,
+>>>>>> would give more insight about its utility.
+>>>>>> For me, it is a prerequisite to run crash, and then to be able to
+>>>>>> extract the log buffer from the dump.
+>>>>>
+>>>>> I have the faint recollection that percpu vars might not be stored in a
+>>>>> single contiguous physical memory area, but maybe my memory is just
+>>>>> wrong, that's why I was raising it.
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>>>
+>>>>>>>>     From my perspective it's much simpler and cleaner to just add the
+>>>>>>>> kmemdump annotation macro inside the sched/core.c as it's done in my
+>>>>>>>> patch. This macro translates to a noop if kmemdump is not selected.
+>>>>>>>
+>>>>>>> I really don't like how we are spreading kmemdump all over the kernel,
+>>>>>>> and adding complexity with __section when really, all we need is a place
+>>>>>>> to obtain a start and a length.
+>>>>>>>
+>>>>>>
+>>>>>> I understand. The section idea was suggested by Thomas. Initially I was
+>>>>>> skeptic, but I like how it turned out.
+>>>>>
+>>>>> Yeah, I don't like it. Taste differs ;)
+>>>>>
+>>>>> I am in particular unhappy about custom memblock wrappers.
+>>>>>
+>>>>> [...]
+>>>>>
+>>>>>>>>
+>>>>>>>> To have this working outside of printk, it would be required to walk
+>>>>>>>> through all the printk structs/allocations and select the required info.
+>>>>>>>> Is this something that we want to do outside of printk ?
+>>>>>>>
+>>>>>>> I don't follow, please elaborate.
+>>>>>>>
+>>>>>>> How is e.g., log_buf_len_get() + log_buf_addr_get() not sufficient,
+>>>>>>> given that you run your initialization after setup_log_buf() ?
+>>>>>>>
+>>>>>>>
+>>>>>>
+>>>>>> My initial thought was the same. However I got some feedback from Petr
+>>>>>> Mladek here :
+>>>>>>
+>>>>>> https://lore.kernel.org/lkml/aBm5QH2p6p9Wxe_M@localhost.localdomain/
+>>>>>>
+>>>>>> Where he explained how to register the structs correctly.
+>>>>>> It can be that setup_log_buf is called again at a later time perhaps.
+>>>>>>
+>>>>>
+>>>>> setup_log_buf() is a __init function, so there is only a certain time
+>>>>> frame where it can be called.
+>>>>>
+>>>>> In particular, once the buddy is up, memblock allocations are impossible
+>>>>> and it would be deeply flawed to call this function again.
+>>>>>
+>>>>> Let's not over-engineer this.
+>>>>>
+>>>>> Peter is on CC, so hopefully he can share his thoughts.
+>>>>>
+>>>>
+>>>> Hello David,
+>>>>
+>>>> I tested out this snippet (on top of my series, so you can see what I
+>>>> changed):
+>>>>
+>>>>
+>>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>>>> index 18ba6c1e174f..7ac4248a00e5 100644
+>>>> --- a/kernel/sched/core.c
+>>>> +++ b/kernel/sched/core.c
+>>>> @@ -67,7 +67,6 @@
+>>>>    #include <linux/wait_api.h>
+>>>>    #include <linux/workqueue_api.h>
+>>>>    #include <linux/livepatch_sched.h>
+>>>> -#include <linux/kmemdump.h>
+>>>>
+>>>>    #ifdef CONFIG_PREEMPT_DYNAMIC
+>>>>    # ifdef CONFIG_GENERIC_IRQ_ENTRY
+>>>> @@ -120,7 +119,12 @@
+>>>> EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
+>>>>    EXPORT_TRACEPOINT_SYMBOL_GPL(sched_compute_energy_tp);
+>>>>
+>>>>    DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
+>>>> -KMEMDUMP_VAR_CORE(runqueues, sizeof(runqueues));
+>>>> +
+>>>> +size_t runqueues_get_size(void);
+>>>> +size_t runqueues_get_size(void)
+>>>> +{
+>>>> +       return sizeof(runqueues);
+>>>> +}
+>>>>
+>>>>    #ifdef CONFIG_SCHED_PROXY_EXEC
+>>>>    DEFINE_STATIC_KEY_TRUE(__sched_proxy_exec);
+>>>> diff --git a/kernel/vmcore_info.c b/kernel/vmcore_info.c
+>>>> index d808c5e67f35..c6dd2d6e96dd 100644
+>>>> --- a/kernel/vmcore_info.c
+>>>> +++ b/kernel/vmcore_info.c
+>>>> @@ -24,6 +24,12 @@
+>>>>    #include "kallsyms_internal.h"
+>>>>    #include "kexec_internal.h"
+>>>>
+>>>> +typedef void* kmemdump_opaque_t;
+>>>> +
+>>>> +size_t runqueues_get_size(void);
+>>>> +
+>>>> +extern kmemdump_opaque_t runqueues;
+>>>
+>>> I would have tried that through:
+>>>
+>>> struct rq;
+>>> extern struct rq runqueues;
+>>>
+>>> But the whole PER_CPU_SHARED_ALIGNED makes this all weird, and likely
+>>> not the way we would want to handle that.
+>>>
+>>>>    /* vmcoreinfo stuff */
+>>>>    unsigned char *vmcoreinfo_data;
+>>>>    size_t vmcoreinfo_size;
+>>>> @@ -230,6 +236,9 @@ static int __init crash_save_vmcoreinfo_init(void)
+>>>>
+>>>>           kmemdump_register_id(KMEMDUMP_ID_COREIMAGE_VMCOREINFO,
+>>>>                                (void *)vmcoreinfo_data, vmcoreinfo_size);
+>>>> +       kmemdump_register_id(KMEMDUMP_ID_COREIMAGE_runqueues,
+>>>> +                            (void *)&runqueues, runqueues_get_size());
+>>>> +
+>>>>           return 0;
+>>>>    }
+>>>>
+>>>> With this, no more .section, no kmemdump code into sched, however, there
+>>>> are few things :
+>>>
+>>> I would really just do here something like the following:
+>>>
+>>> /**
+>>>    * sched_get_runqueues_area - obtain the runqueues area for dumping
+>>>    * @start: ...
+>>>    * @size: ...
+>>>    *
+>>>    * The obtained area is only to be used for dumping purposes.
+>>>    */
+>>> void sched_get_runqueues_area(void *start, size_t size)
+>>> {
+>>> 	start = &runqueues;
+>>> 	size = sizeof(runqueues);
+>>> }
+>>>
+>>> might be cleaner.
+>>>
+>>
+>> How about this in the header:
+>>
+>> #define DECLARE_DUMP_AREA_FUNC(subsys, symbol) \
+>>
+>> void subsys ## _get_ ## symbol ##_area(void **start, size_t *size);
+>>
+>>
+>>
+>> #define DEFINE_DUMP_AREA_FUNC(subsys, symbol) \
+>>
+>> void subsys ## _get_ ## symbol ##_area(void **start, size_t *size)\
+>>
+>> {\
+>>
+>>          *start = &symbol;\
+>>
+>>          *size = sizeof(symbol);\
+>>
+>> }
+>>
+>>
+>> then, in sched just
+>>
+>> DECLARE_DUMP_AREA_FUNC(sched, runqueues);
+>>
+>> DEFINE_DUMP_AREA_FUNC(sched, runqueues);
+>>
+>> or a single macro that wraps both.
+>>
+>> would make it shorter and neater.
+>>
+>> What do you think ?
+> 
+> Looks a bit over-engineered, and will require us to import a header 
+> (likely kmemdump.h) in these files, which I don't really enjoy.
+> 
+> I would start simple, without any such macro-magic. It's a very simple 
+> function after all, and likely you won't end up having many of these?
+> 
 
-Then move the call to mshv_retrieve_scheduler_type() directly
-into mshv_parent_partition_init() just before
+Thanks David, I will do it as you suggested and see what comes out of it.
 
-	if (hv_root_partition())
-		ret =3D mshv_root_partition_init(dev);
+I have one side question you might know much better to answer:
+As we have a start and a size for each region, this start is a virtual
+address. The firmware/coprocessor that reads the memory and dumps it,
+requires physical addresses. What do you suggest to use to retrieve that
+address ? virt_to_phys might be problematic, __pa or __pa_symbol? or
+better lm_alias ?
+As kmemdump is agnostic of the region of the memory the `start` comes
+from, and it should be portable and platform independent.
 
-mshv_l1vh_partition_init() is no longer needed.
-
-Independent of the suggestion, everything else looks good.
-
-Reviewed-by: Michael Kelley <mhklinux@outlook.com>
-
-> +
->  static void mshv_root_partition_exit(void)
->  {
->  	unregister_reboot_notifier(&mshv_reboot_nb);
-> @@ -2224,7 +2227,7 @@ static int __init mshv_parent_partition_init(void)
->  	struct device *dev;
->  	union hv_hypervisor_version_info version_info;
->=20
-> -	if (!hv_root_partition() || is_kdump_kernel())
-> +	if (!hv_parent_partition() || is_kdump_kernel())
->  		return -ENODEV;
->=20
->  	if (hv_get_hypervisor_version(&version_info))
-> @@ -2261,7 +2264,10 @@ static int __init mshv_parent_partition_init(void)
->=20
->  	mshv_cpuhp_online =3D ret;
->=20
-> -	ret =3D mshv_root_partition_init(dev);
-> +	if (hv_root_partition())
-> +		ret =3D mshv_root_partition_init(dev);
-> +	else
-> +		ret =3D mshv_l1vh_partition_init(dev);
->  	if (ret)
->  		goto remove_cpu_state;
->=20
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index dbbacd47ca35..f0f0eacb2eef 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -31,6 +31,7 @@
->  enum hv_partition_type {
->  	HV_PARTITION_TYPE_GUEST,
->  	HV_PARTITION_TYPE_ROOT,
-> +	HV_PARTITION_TYPE_L1VH,
->  };
->=20
->  struct ms_hyperv_info {
-> @@ -457,12 +458,22 @@ static inline bool hv_root_partition(void)
->  {
->  	return hv_curr_partition_type =3D=3D HV_PARTITION_TYPE_ROOT;
->  }
-> +static inline bool hv_l1vh_partition(void)
-> +{
-> +	return hv_curr_partition_type =3D=3D HV_PARTITION_TYPE_L1VH;
-> +}
-> +static inline bool hv_parent_partition(void)
-> +{
-> +	return hv_root_partition() || hv_l1vh_partition();
-> +}
->  int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
->  int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
->  int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flag=
-s);
->=20
->  #else /* CONFIG_MSHV_ROOT */
->  static inline bool hv_root_partition(void) { return false; }
-> +static inline bool hv_l1vh_partition(void) { return false; }
-> +static inline bool hv_parent_partition(void) { return false; }
->  static inline int hv_call_deposit_pages(int node, u64 partition_id, u32 =
-num_pages)
->  {
->  	return -EOPNOTSUPP;
-> --
-> 2.34.1
-
+Thanks again,
+Eugen
 
