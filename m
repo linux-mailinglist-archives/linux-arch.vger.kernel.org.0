@@ -1,345 +1,256 @@
-Return-Path: <linux-arch+bounces-13354-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13355-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64E48B3E75F
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 16:38:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6174B4074D
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Sep 2025 16:45:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE3167AEED9
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Sep 2025 14:36:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2838C1B66020
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Sep 2025 14:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCFE12045AD;
-	Mon,  1 Sep 2025 14:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E17314A79;
+	Tue,  2 Sep 2025 14:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gXGubOZY"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="jwSJ1UwT"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04olkn2025.outbound.protection.outlook.com [40.92.47.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48EC33A025
-	for <linux-arch@vger.kernel.org>; Mon,  1 Sep 2025 14:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8BC31280F;
+	Tue,  2 Sep 2025 14:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.47.25
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756737478; cv=fail; b=i66tnNW+jxmIPCep9W8qxdhFBF+y3xoYJoAkDBruB7gR46KtHVRRW9zn7n10PzPPHrIsKTV3WMx5LAiq/LILsCZ/e15dhlOskmOwopB7qp983Jbc0x9kd/mwBAy2ei8p8oGowZeZBxdCdujx1havlWhyvnHbXvBNd6owQTW6VyY=
+	t=1756824150; cv=fail; b=pTCS8Bjj770UsHtliXnQeUzRloskFWz6S182s9+o6Cb5EyxqD3zPk8Rgz24k1jjRJTj9IdZ89+Qpbaf/yE6rNu95BcvCclXer8tkyY0UcOaIDtoizcUFmFp/Dh8YSi1CF0YLFdy2/jLr2ieke4OrM2TK68PRIgmUkhMt+JjMtUI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756737478; c=relaxed/simple;
-	bh=WTFpKZaetAJxbceMxrj8tvVByBUItVagzr7TOa8DGN8=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:MIME-Version; b=WB5O/1vNghCdeDwb51lr0TtvLKzVGBTDfXMObOgAFG8rBrAhV3sVOag7EZIIm3z/t24tOgNyCETQCd+1iTRDnYO4wwy75kjNRpJbxHIxd8xp9dunY0R1W7pB9QZMYKpdAy5qtjxkWJLJjj9FYUv66tkdcDN/E0S+/f9MAvfLX4o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gXGubOZY; arc=fail smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756737477; x=1788273477;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WTFpKZaetAJxbceMxrj8tvVByBUItVagzr7TOa8DGN8=;
-  b=gXGubOZY2if7TmIG8IpEkXmyKI1FJlf9qHpSfBe6mWu+Hx6v7w5HSdYB
-   MIVmTkWyz+JGLpKjNhQ2Qk485Gpfkvw6s7gbS9mOIFRRD/CjNFgqdoidr
-   afLuQshcJtqxSSeJjPO3NoG2rto2c7HrcfkgU0grFezvSnPb6nxsmq95X
-   ocQbdAvM1usj6NSlr6bIJLJ5cPs9iw6Q02dK0sjy5Z4S189d1Pu8EvQZo
-   Jl/Jvhkopwi9P38MgJPFly3ZBYHM0XSh3Lc3HOKbn0bi97Dv5RK3YRceZ
-   mE5VHjeF9cf06+dLWU1QYLrxwAZ2A79N1Rmif+1qnG788MQYsvc1+vd9N
-   Q==;
-X-CSE-ConnectionGUID: HZ8tVGlBSJm8lgIEwDc2QA==
-X-CSE-MsgGUID: IxwHnkCCRNe5KnU/jQGEYg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="58916090"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="58916090"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 07:37:56 -0700
-X-CSE-ConnectionGUID: gG8u+oZESH6VMFhe/C5XTA==
-X-CSE-MsgGUID: GLqu547cSc+1MNw3QQcSlg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
-   d="scan'208";a="208240003"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 07:37:56 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 1 Sep 2025 07:37:55 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Mon, 1 Sep 2025 07:37:55 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (40.107.95.88) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Mon, 1 Sep 2025 07:37:55 -0700
+	s=arc-20240116; t=1756824150; c=relaxed/simple;
+	bh=bc6meLVigi9jK80hx0nfKMwMQ/gvl7U0LFpgsOpOYvI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=edFYY2MixzInr8KI9P4i0oFc4h79S3Wssm2qBTHqww8QLZ6dXRmlIzsSmjWcqPyPOjjPEL12NFHX41D07CLL8PxEnv9JhDx9Pr9ByqGXwtpW4cNIJAEYJF6OpHYN7fk+I+z9IrTUvOkimIRwNjoSqeGYRluTN05/LU2VzgvAFLQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=jwSJ1UwT; arc=fail smtp.client-ip=40.92.47.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DpkStVqkmgoBHBzg7gbntBd2GaSvxU5OptcP7amdkr4S6prKXCZJZFl/ewc3hKMrzlBU9Q2GU0FpxTK0GnpD4E2/77OAlLXr0FjbT6dEUeRIrBABPetHOuwPuWjYCQ9OPzqtSy/ZRzAVp/J5Tr464gvAZ2zLDM33m1iHE3W2cMNFDJXx9GPH2xl99DclSLJwK9yU8wkJMBeiWm4HPWAWThXct8PTu5aCeIYLeRPvvErtzZxwndZeVa8oGRu/2LacNDdKEERGh8e/qlFjVxc54AbMJFfjxsk+g+QnHt05YWaFwuicR1C4a7MMMBKRmPrWwY9TOvhRN7spOlglHiMd1A==
+ b=aakwmMClCu8oCI4EoudNUs3yF152c8Yz/lIZMCtjqxOkbeDGPTwTbLXhIZ4+U/BPaDTOC5jqB62gKo+9tutk27NMK9D2KpoRsy4d9aP0yFPdh0ziTeLWwlOTNmMD4c56xHqG5I62qRM+sOKJwFPkXUWBAbF3fr7/wq58Jyo9Bg7nIyhikIeoIjr0q9Ey4Y9TJXEDK1IBeAq0X6DevMso1Z8AVWsIk4HuAureeQbW2quoNMBZyKUHlEmcIGcDBxfj5ZoE9A699rWUaaMsJwyPaJWOWH4DZVHlQFKFRtLwGUr8PlLtXU4qheSL0O3OGfJHYVRkKB6V110gga6ryHH6zA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9/jOCCFsyc2lXhgDIdBAugwRd89wTUpkQTVAbIFeVOU=;
- b=VwUl7kv0XNoWy3refXi1tdLEn7NqPtO6o6tlFUbXecSjn94OiMxiRz62UBbNeZm5CAxUwE/fKSjXr/dDz/u2deFArtRN2YmBO/bpViFXOglvyhEq+cx+b32X2q+pMOuZ7VDSTsQRsAfxq2cKajdc5Llz/jQ/PXSVu54N9djyhOLzI8/dIb4rqeM32jXwcTPWdgRDzAKfy+9UbOqz5XB0TaDs1oi93i8fcjNXigdXQ2Udv5uiXz550vdtrU8BbfcioMTae9ax3FtM5zUbsMrsgL8qT2XhVdNG9HcuB3CWPTb7yBqLZC4cnL29AZN+qTf3C1g8RSstdl5BQ/l/EZDSjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
- by CO1PR11MB5106.namprd11.prod.outlook.com (2603:10b6:303:93::17) with
+ bh=se48TOdd2F1d+ktohq1z2zeXEu8JTZdq5AVMM0zhXMg=;
+ b=QO7Gpb1n2/f/GaoNmCqjj+Ji5g6qESxEvGmd7A+vQTiZKO9H76Zx9S8j0VFrwlUaB7Djg+OM01e+v+cxABUmo2RTxQ2qsbLS5TKelkubzUu8649b/5sJrn/JXpbwsGMT6/EBZYJ6+fu/hcWL9eoVkLrESiMVNknMDBxycQQmNY8PLH7Xj8nE1AQyki5zAhOKKO0j0FRJ3roN4bNMDMIMWznD4lz0z9En+ljK576xBaVAxDCbmJHvIRq3iDUuavk37VMaRUXupwT0yqssjY20Vl+IEwJJKTK/T6mFlrUGor/4g3eqow4L7OcAdVp1upL+98bld0EIc0CoTV0bBQaPyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=se48TOdd2F1d+ktohq1z2zeXEu8JTZdq5AVMM0zhXMg=;
+ b=jwSJ1UwTUR7FROfYEAkIS7w9pDUwf3rntpgIiVolslCBe7lO5SV8seVs2VL8nrRoKC6pg1EC9pWRx8gDJyv8QJr07hdk2vJJDh7bh4HR/F5IHEimH8bj9zRwrs/xTtPIN5gHo5a57W/MG+68CjvMNGNMZ/YqOxAGMMx5u+jQ+WERJ8UsIjtbq1AvtN1RVcuKDGo/aiEFHGc/Qk8bXWu9gNCFVmCodl+yOISwVF7jViX0xY4uQzlVTOdxx6jNu0ELPpc8octKLzfAwqO/sLZHd8vcfPg6ggXer8HkyBspw/kUK2hRWPwv35DOqjQLl7q+DKX4l8dGfpwMnZaDxSzJUg==
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
+ by LV3PR02MB10030.namprd02.prod.outlook.com (2603:10b6:408:19c::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.27; Mon, 1 Sep
- 2025 14:37:52 +0000
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::4622:29cf:32b:7e5c]) by LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::4622:29cf:32b:7e5c%5]) with mapi id 15.20.9073.021; Mon, 1 Sep 2025
- 14:37:52 +0000
-Date: Mon, 1 Sep 2025 22:37:44 +0800
-From: kernel test robot <oliver.sang@intel.com>
-To: Dave Hansen <dave.hansen@linux.intel.com>
-CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-arch@vger.kernel.org>,
-	<linux-mm@kvack.org>, <oliver.sang@intel.com>
-Subject: [daveh-devel:kpte] [mm]  ccbd04de39:
- BUG:KASAN:wild-memory-access_in_pmd_alloc_one_noprof
-Message-ID: <202509012256.9322539b-lkp@intel.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.29; Tue, 2 Sep
+ 2025 14:42:23 +0000
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df%4]) with mapi id 15.20.9052.027; Tue, 2 Sep 2025
+ 14:42:23 +0000
+From: Michael Kelley <mhklinux@outlook.com>
+To: Mukesh Rathor <mrathor@linux.microsoft.com>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+	"linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>
+CC: "maarten.lankhorst@linux.intel.com" <maarten.lankhorst@linux.intel.com>,
+	"mripard@kernel.org" <mripard@kernel.org>, "tzimmermann@suse.de"
+	<tzimmermann@suse.de>, "airlied@gmail.com" <airlied@gmail.com>,
+	"simona@ffwll.ch" <simona@ffwll.ch>, "jikos@kernel.org" <jikos@kernel.org>,
+	"bentiss@kernel.org" <bentiss@kernel.org>, "kys@microsoft.com"
+	<kys@microsoft.com>, "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+	"wei.liu@kernel.org" <wei.liu@kernel.org>, "decui@microsoft.com"
+	<decui@microsoft.com>, "dmitry.torokhov@gmail.com"
+	<dmitry.torokhov@gmail.com>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+	<edumazet@google.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "bhelgaas@google.com"
+	<bhelgaas@google.com>, "James.Bottomley@HansenPartnership.com"
+	<James.Bottomley@HansenPartnership.com>, "martin.petersen@oracle.com"
+	<martin.petersen@oracle.com>, "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>, "deller@gmx.de" <deller@gmx.de>,
+	"arnd@arndb.de" <arnd@arndb.de>, "sgarzare@redhat.com" <sgarzare@redhat.com>,
+	"horms@kernel.org" <horms@kernel.org>
+Subject: RE: [PATCH V0 0/2] Fix CONFIG_HYPERV and vmbus related anamoly
+Thread-Topic: [PATCH V0 0/2] Fix CONFIG_HYPERV and vmbus related anamoly
+Thread-Index: AQHcF7c4ZH9DwegJF0iLCVnaUNUDXbR7UfGg
+Date: Tue, 2 Sep 2025 14:42:23 +0000
+Message-ID:
+ <SN6PR02MB4157917D84D00DBDAF54BD69D406A@SN6PR02MB4157.namprd02.prod.outlook.com>
+References: <20250828005952.884343-1-mrathor@linux.microsoft.com>
+In-Reply-To: <20250828005952.884343-1-mrathor@linux.microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|LV3PR02MB10030:EE_
+x-ms-office365-filtering-correlation-id: a40a4d39-6566-4539-a02c-08ddea2eed9e
+x-ms-exchange-slblob-mailprops:
+ YfhX3sd/0TVWrg+fxRScxfg9v9HXnUFl2bb0N5PwJ9age037L4Klz87A6NyjFdfQ8zYEvCPDD2Z9dLgS+qpBFyEHZS2T1G+CFZEgm+otSlW4Nu0RhuXIKAu0H1UhoRCwQASdRc4cGepmATgSb6B2epRKeVqTeXYHfl6108YYmB7N7wUwun8wMQKTjdrQdaBBW09pShWMy6EWb8JkjoYu08Eh9snF/14iUrTKGhJ8k/v5H8vGBbY5djvgqkc0MPupD1QcwqQJS9v/wHFcO7lGzq3sFWDchzBC1XwEG1/dtjJahWz81gqAgmgi54mBn3G07pKtjZip2C+iJ3ec47VvBI33oXcoOSq1JryUrrvV3wW+w0/S/KqJl5Yb4vAK5xx4Ce4IBk5XyegLrP7RMDF6ceNuyZEoB4MBoftKwedS+VHgef9sVbtWZTruMc3b5CJ913sSHinCpWY2hfpvDoADbDz1+WGxBU+ugPhESyFk4wkXH9NI91Lurhpew/sm5TWWXjyfREHFJlLLPLXVvweHEBU0GthnadUA0YgcrsLopyok2R5gn9WYjoA33feypqNNzl4cH1gSc4rkoRfmlMhxLYfzeM15NT2ShoJhD1Y7B+K1p+3wjI81qY3XG3QkLxgITxn2plnZvbZtrV5nJgLyyD+t1e/eMcW9mgo2GrQ8mN4CJwU5/pUqdDBQnatH5afrQLP2SSGSX0AfGbdxIA19BYpYXmIRmOpq8nENXwnSmvS4kYxE2eGUXyIV4nW1+bLC0BBTxz/T9sFskJSn4B+gtJglK197aqwlcJAaXSm5rUM=
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|19110799012|8060799015|8062599012|13091999003|461199028|31061999003|15080799012|3412199025|40105399003|41105399003|440099028|53005399003|102099032;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?MsjLxTZUp2l4MG7FKz/9FJAkVd/1+5Eun0kfhThgV2qEyvQJO+CV+tmo4iy1?=
+ =?us-ascii?Q?lR3ACW81kjxrouPyC7IHE66uupNO6CMKqsP536wbPSVEQpIM2JRhUBkzHzcM?=
+ =?us-ascii?Q?EzbI0xmg1I8+IeGXOHyqUPK5hND+98TPkmYS3lzY4jmxipxF7H0pKZ2ED30S?=
+ =?us-ascii?Q?QzdCk/9G+ngIHBpXza1zvFAPLAYVDV7003oFNBbPddEYJn7CrBRI1vtjy5eK?=
+ =?us-ascii?Q?6CMnSfaJnw+pUbqxS+wUYnll9a7SUhfEmUhT8Mg1ck/lpYhHTHMUq14RSWXo?=
+ =?us-ascii?Q?j+RdoSlQSL8gZXl2fL6AKtdVDlvNKqP9Tgk6eriZ/ErIE+3VlFL3wTcfMpfa?=
+ =?us-ascii?Q?MRB0ajnoZeX5S2gujlG/H3rwyaXoTgmTc7fw75F+RKYwtNm+Sp/GsuaMVzZP?=
+ =?us-ascii?Q?t3dm1uME6RY3qdT0J/cggjx8rE3Av21QD0gxEehXEDMV9zMb97DUwGUwjHqy?=
+ =?us-ascii?Q?Fl1V+xGIyT/Ewb4bqr2COnHP0zEmAfxkydRUi0d6sDPPzhRx2yUmaoiHO9dZ?=
+ =?us-ascii?Q?Kon+Z23INKDN7dxO+ek4iSImOrazEP1SgSCxvQsNDOhZnp9mVjYahvueTQ3l?=
+ =?us-ascii?Q?dqy94Mw9pKJ/zNd87pdZU22Gg4aZV5RT+2NrWW1DngEucAGqBuxIoZk7+5BT?=
+ =?us-ascii?Q?qov5wrbCDV3NyIYRbpnEwlIBT7YwfBJJy4Lxy6JQGV3RJy5qG6KVGPVhFr6s?=
+ =?us-ascii?Q?OWSbWGAdcPNt/TSgoAXj0QWndW7TIZ7JHmdEbG6Zm3BKq4JC9oFcV+RkmEGB?=
+ =?us-ascii?Q?W0Azxgppmxso1Oyi2tSbu+pXjw7/n4C0xzcJ1DKyOzuA52tpjTintfgOC6f7?=
+ =?us-ascii?Q?NYGJYPl7q+liLpxeXehXJPVzHdBcyYdyMWB7znvDzf2/NBqcgt7UV1gKSkoL?=
+ =?us-ascii?Q?jmarwzk1x7Z3Rz1/I/bCaM7H6vUSEx8W8wgQi+5N1XYZ3AMlRFJmoTuoHAcR?=
+ =?us-ascii?Q?MjEc0ABQhHvWmoc5I0R+Ve6bHxcOssatURNQgkYkaF5pMnwA58rCG7sd2FAL?=
+ =?us-ascii?Q?pWnS256pWzV92Oq269+BitW5GVvOEfF7Nyz1/oKGApqlK9CbFQ/dilaPcwEw?=
+ =?us-ascii?Q?/uB2ZKmvzInR+7kH3k1VlYNJs6Mq82le/IbUpmP9lWh4Bgz0ckguEQ86gjy/?=
+ =?us-ascii?Q?IVUcIXGy9QFqpPh2CLCCo5dZ79WYW1G9d3SaEr+LEGu7bOmA7F5vrF+IYP/R?=
+ =?us-ascii?Q?wXh5CGCxQOr+dwFWwGCtnXjeNDg4UEt6tSjj5CPET2xeoqOedGfg8fe8NYg?=
+ =?us-ascii?Q?=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?4ioLFhR5M7csGXZ4ltKT8xjjCUJDyLM5t7kKKEL6ltC9DniUyp1BkwuRGHV+?=
+ =?us-ascii?Q?1YgfGQx0IrOzJRPimNqCEuePUNLPjV9zBliPeOIQC2/S41/9qAlh/FUATZ9Y?=
+ =?us-ascii?Q?gUU9T/Ghu5nO+MGq4z92Pw57kgRgXPM0UIgMiNcnkLEXpImxEbrh+KfZ0YZx?=
+ =?us-ascii?Q?aT/Xv0frboHUwt6LS3pKlxjxn/Na2DFfPLQOCAAvCqtLRcWXUyZmBtq4/4T/?=
+ =?us-ascii?Q?8HC5lshDIBs3f6CgcONu51Zv0/oG+eD7kO+vjcuzd71WuyLV069/tJes1LND?=
+ =?us-ascii?Q?o4BwqShs9hBge2t71qySBj7KIC38VPSKKApmw4RWDlTXqqO/vm/2XUUG77sK?=
+ =?us-ascii?Q?rtuyuhRPPqaE6gSct+THgNuDM8NscsAoj/+q28vVNsDdpXlEg1G0ZL/mAqbP?=
+ =?us-ascii?Q?zHoFYxNjTAIvsxu4ze3yVbrWbYVs1pIhKn2qfHF+yRLYXP04T3MOEXOIsS4W?=
+ =?us-ascii?Q?RHZaT34ZWU9e+DsK1Nx/bBRS6Z4qEgqhIOiHXmBl8XxEqXRx0PWWXOz4sIsl?=
+ =?us-ascii?Q?LgFpWSkUBe5l0pq1K86IsGGJC+opaQ2607UGoJJgB0xHHvnayNlBEUV6XHQy?=
+ =?us-ascii?Q?1sfLZ1SwUEu53tXrp9aVORYshTGLj7M6gcBIAiKkW/3niJOGDmS+4JHSRjis?=
+ =?us-ascii?Q?koJ80zD24Y/yDbVPa0ZQvaBdh4KIUQ2OAhhBA64y6wn2aoW5uhbI9QNKXryd?=
+ =?us-ascii?Q?6rrVM5tF8ghHHex3FEwEg0AxlXAAObMuA4zF1xLN161XTq9mSMztbnZU1xJj?=
+ =?us-ascii?Q?s8C11XZgeO0ohkcATRFS2Gj/JAiE238MgcBPNk8Flrf9HxYukrbFPnwgtDXV?=
+ =?us-ascii?Q?G82kG4ma5cjENkIzCqyRzlZbuCq9QpeGv3Y3zMcpR8vJRxtMGxV4XQVGTFju?=
+ =?us-ascii?Q?BNS6MEFc+VUcqpojdL3em8tR4EX1IJZo5eX+XHJ1zqnAdeRlofmt92rzCbDx?=
+ =?us-ascii?Q?RtdL/WR4+P6csfBrYv0MbAn3U8i4oGp+bcATwYULVLrElqMYsnfxVvaTHvXK?=
+ =?us-ascii?Q?00K9/WxiTeyxp7jto6ST0StV87M2gSSUu2e1OB6/RhVUnbOlpHXx6eYRmSfM?=
+ =?us-ascii?Q?tkZVa7yw9onzj+Ohlg0l7Y9jvAMNQ3TCi3Gj4kHrmk0qFDP50KR9lDBQsXML?=
+ =?us-ascii?Q?BTVh8UfkQVdYJHwylV548FswQz4T9WlNGLzrLG1uOQLRh8anicL0hSbWigb1?=
+ =?us-ascii?Q?/kes0dO4FsQ7FZqMwru2++j6NiHHKjWy90ybMezCKVtxPCGgVPseBDb6x28?=
+ =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-ClientProxiedBy: SI2PR01CA0035.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::13) To LV3PR11MB8603.namprd11.prod.outlook.com
- (2603:10b6:408:1b6::9)
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|CO1PR11MB5106:EE_
-X-MS-Office365-Filtering-Correlation-Id: 898ddfae-7c12-49d6-f1ff-08dde96521ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?F0t1Uwa/L40EfPPXE6g90OVv7Y0OVGSb7qGVuyCybOwJQzpTiqLwFF9xtOaS?=
- =?us-ascii?Q?61GT6BnQUwG+WBSmAjGpWwbZMZTCUI7CXqwfUWFN9YUQdUbHypwqSqjY+lwb?=
- =?us-ascii?Q?myzWBf8d7kQcx6IyHxYRjMTRvEXxLs3YlpeB9LcAuQVkiNhMhGEtx24jOsmg?=
- =?us-ascii?Q?SFg4rK+gwUY1VOQRQvfaQqot4bJr+IuAef2KmZYu66jUtE34lHJQpUm/fogG?=
- =?us-ascii?Q?oewwARu5O6V4XY3KoeTC9qTyhLaUag9XICgmldPix607oOr+xT60UJLYKp64?=
- =?us-ascii?Q?bGxgKx6OImd53O+wLL84vh4nRZlvOFf9/PbRbeJypnM/cF25PasFmaRSb546?=
- =?us-ascii?Q?XZuoCk3tu0bOq6KOrdeaWQajq4CzhDBK057xlEaPO69IEA/jt7F9AocuehMy?=
- =?us-ascii?Q?Zphg+UqZraQ3wmif6oUW2XNb9x3wQIuqWukqOpx4C33RHNF14K7ujj8bRZv3?=
- =?us-ascii?Q?WqB3ApB/N7cmHGCoCgt6dQABZVyUim1CmUIoqRMaImVWETm9LHL/04w1NLg6?=
- =?us-ascii?Q?P+TvaTU1aIVVYPlgAp7JmvnwJdl4eBaFPK9M/60Hhv0Jx3fofvebK+Kp95i3?=
- =?us-ascii?Q?by3U9qYqeVXYdNHb0wVvLtJRahH0Vmae1bcNAZJddFvTV9jOMKfcfIhvAsSq?=
- =?us-ascii?Q?+eKTzsXOmwCny2wPr7giDMCUD9yRetk2AjkQ8BlDr0boBg2N7iUKe4zKa9bf?=
- =?us-ascii?Q?A7gTKEAyMdwbW1Dt6zMb6QPOB9MjaZRPWGh+hkXx6AHzuCPgf+G3Yo2PO9wp?=
- =?us-ascii?Q?QVvaEbT1Ywc499LjmOli+fsHKwgRs9GkBx9jgKXu4/bNmg+tU9MkeU1EV3kq?=
- =?us-ascii?Q?NbGrJw1U51A6IN6rtN8HUcZXWJqDvxAHtc6i9O7CIls2+s4oUU2I5MgUxPfR?=
- =?us-ascii?Q?INsEwb24Tn97Hd4znpzlH9Y6Nzo03oJ5wDIjx4K+h8B/XCcUBmqoqpVqNUQ5?=
- =?us-ascii?Q?mL3rvw4QvwMpihb0Oovay4AuCyYmxd1PD5cz8vfnKRyPRbsQIVWrLPl/Gj6p?=
- =?us-ascii?Q?j160k4FuPvBiquY2dchfBBHt9z0Js3w2ZnyybvAk4EAeTpPI3Cj+xzP22zkI?=
- =?us-ascii?Q?+giEif9GvKOvFiMXxNMLWdj/qTBFrqyQbnUmQPdwB/jiYR6I4U8vWuuyzMmC?=
- =?us-ascii?Q?8j2JdyCS08JvcrttbBRVzkQVjYbD6m08WrSlNdbyiEZVVEdyJhr3JBuG72iu?=
- =?us-ascii?Q?cQQSiv5GoZjUdrdm+IGzN9rzfd0l7qrNrOG3bUoIIAa19FWJtVWXeGaoPV2E?=
- =?us-ascii?Q?49X1HlmWKRnCv8G8S39l51Co15zi+6sE7tOLHhG+89ZVJtlUUMlrrG3VNipd?=
- =?us-ascii?Q?S/ijiFL6AGQFA1tdehWmXgb74+V4TI0gzRLIxvSwH/Hl3RNTrXF53f1K9Wxu?=
- =?us-ascii?Q?g/0XHfSsALSqvrAZGVdKBI/it0/U?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?l3IWmpYb8E+5f00CQzuNKXsVCuDyLK5UdE1X0SDrh420aFDJG7RgY0et7qAQ?=
- =?us-ascii?Q?0Po3dZSVt2gWXPbfJnqzNk9+a9QNbJ5zCaCTPdonuQAP4QBJnyYWB/T0hzHb?=
- =?us-ascii?Q?p4I9/jToY3TRdLFKKgUy4laNRikYuGNepFxs57p89zesSYkzz96BA8aUfRVl?=
- =?us-ascii?Q?pesGI1HTnOz/2bhokdwanJV/YUqbmtO5LGlACYkAMNKNVOshA8tBfCkKlFp/?=
- =?us-ascii?Q?4SjUjq/Fk1zaW3pVRTnO/k2P+Q1Py9NMpgI8kqQgCpOu+N+EcaAwVu8YMl5X?=
- =?us-ascii?Q?o6VRMf+fW1AUqFU4sZkf7OeXz5UYY6sTGydRngE251ymUYW7ARi+SlVZRRKb?=
- =?us-ascii?Q?cJdvx5awZc7KlxWz8SvmeK9Yr3gbZ2I5uICbkg3mUdisq4VXL0nF35W71z5w?=
- =?us-ascii?Q?06Km4iN42hJqeQtqlcEFnt7RXfmtMh0cl4gKJruUy0ElRsx5XHBOaEutjKvO?=
- =?us-ascii?Q?4xOdETyQ1PtmojjV/YC1UvGc8Pz2sXDVwMSmEc0qZwyyvpmt8VZIohbTISVY?=
- =?us-ascii?Q?9sH+MGzPt7hVxI4oEN2ImyYWGbG7f8+aLyvoYQ1TlGN8saWABaVHQHwMXriN?=
- =?us-ascii?Q?tvJ3/aRCZPiNxKJaZhW5SqF349S7HqeHsri0CP8qAxj9zYPtyuw7mxWPQ1vv?=
- =?us-ascii?Q?37DJUZvsIFGKUQqMkmcc1UB9K7KMOXlVPctB5BFDet70kvGHPlWzUkUeHiyO?=
- =?us-ascii?Q?62gdt6iejf1scj6Iy8Yqq9TyPfElsArP4ZYzuSXKavbYEiHKt+YFcOvVhADY?=
- =?us-ascii?Q?MvW5IzRFB2+C/9wsY58srRqtKjrU+pzlZCrbbgYjBk6e0HSwJxPq2mXMnPBc?=
- =?us-ascii?Q?PMJMlL3JhOp0l0Zv+6Ph9m4wb2TQ6yAyDB/0TBngIp6EPHpLH8seCeIKcYQZ?=
- =?us-ascii?Q?J9UcJZdKDc+Z8Wm13uAsTfOzxBuyGt2gqycurmioy8W1JRF3N/jwmFgYnsqN?=
- =?us-ascii?Q?rpSBZWf/Qtr3suX84zYt+S1wNTZoE0i7GIAqUU3B8f/QLU7jtJHdheJunJxi?=
- =?us-ascii?Q?LEK8jA/LKo7FAvI8De+mrmfHuwALms2vBQJCU3tOjMHDkoNrwlBwEQv83bc2?=
- =?us-ascii?Q?xNS6sn9uWvCfpYdK2T++3IEP0Uw6bTX4jvNmN9zPFsKuIWWnLjAzoVKkwMl8?=
- =?us-ascii?Q?/zS2PlN9PodfXVs2689Ps3VXTGTbh6OwN9oes8VUEATynnwgLOZS7ZTuIQGJ?=
- =?us-ascii?Q?VNgwwUGNy5VGtncfOdSA1L2Bz4P8L4g6XXSg6hR1wJ2cAyHZPitYQTZ7Gu62?=
- =?us-ascii?Q?hjaaoYtx499LAGytwun46kWXb/OKdgbjpmR1NGFmOqNZmQ+TYTf928w2XdYy?=
- =?us-ascii?Q?fHw2sB/+FWeKtKaNYn+1lSCayBWV0jGHeStFmz2atzw8sQ4U5k5sWnIueV2R?=
- =?us-ascii?Q?U2AFXZs+nUs1wreYaT6HmCViAHRjPwJWoz0w0bjcdgC3YOl9OrkmUQ0LdOf9?=
- =?us-ascii?Q?5cCXCVn+PFpwza/zgm5OWwRGhfMxCSggiHiAWK45ujB6ipwvDd6e74eYp6/F?=
- =?us-ascii?Q?J7n4CBDBzZQG2vkkOOa1i9dDfvwz3di6YcFzIWoiX/ia5qMXHARV1ztX41yS?=
- =?us-ascii?Q?CxUj1WOywaTYLtNFuSAYaOwEHuVV/aa9B+6fpRtsOdZwQlppOUzb954675/I?=
- =?us-ascii?Q?Bw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 898ddfae-7c12-49d6-f1ff-08dde96521ea
-X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
+X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2025 14:37:52.7723
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: a40a4d39-6566-4539-a02c-08ddea2eed9e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2025 14:42:23.2331
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3Tz7BLyw7klvlsPZ+aBUK+Ca6hS6LXinzgz3UIghjMhXfdzHszEAqMvB9VIZqoBgFwV4C4WHBQ1OYB7dD8gA9A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5106
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR02MB10030
 
+From: Mukesh Rathor <mrathor@linux.microsoft.com> Sent: Wednesday, August 2=
+7, 2025 6:00 PM
+>=20
+> At present, drivers/Makefile will subst =3Dm to =3Dy for CONFIG_HYPERV fo=
+r hv
+> subdir. Also, drivers/hv/Makefile replaces =3Dm to =3Dy to build in
+> hv_common.c that is needed for the drivers. Moreover, vmbus driver is
+> built if CONFIG_HYPER is set, either loadable or builtin.
+>=20
+> This is not a good approach. CONFIG_HYPERV is really an umbrella config t=
+hat
+> encompasses builtin code and various other things and not a dedicated con=
+fig
+> option for VMBUS. Vmbus should really have a config option just like
+> CONFIG_HYPERV_BALLOON etc. This small series introduces CONFIG_HYPERV_VMB=
+US
+> to build VMBUS driver and make that distinction explicit. With that
+> CONFIG_HYPERV could be changed to bool.
 
+Separating the core hypervisor support (CONFIG_HYPERV) from the VMBus
+support (CONFIG_HYPERV_VMBUS) makes sense to me. Overall the code
+is already mostly in separate source files code, though there's some
+entanglement in the handling of VMBus interrupts, which could be
+improved later.
 
-Hello,
+However, I have a compatibility concern. Consider this scenario:
 
-kernel test robot noticed "BUG:KASAN:wild-memory-access_in_pmd_alloc_one_noprof" on:
+1) Assume running in a Hyper-V VM with a current Linux kernel version
+    built with CONFIG_HYPERV=3Dm.
+2) Grab a new version of kernel source code that contains this patch set.
+3) Run 'make olddefconfig' to create the .config file for the new kernel.
+4) Build the new kernel. This succeeds.
+5) Install and run the new kernel in the Hyper-V VM. This fails.
 
-commit: ccbd04de39826d130b67374e68599e128b53acab ("mm: Actually mark kernel page table pages")
-https://git.kernel.org/cgit/linux/kernel/git/daveh/devel.git kpte
+The failure occurs because CONFIG_HYPERV=3Dm is no longer legal,
+so the .config file created in Step 3 has CONFIG_HYPERV=3Dn. The
+newly built kernel has no Hyper-V support and won't run in a
+Hyper-V VM.
 
-in testcase: boot
+As a second issue, if in Step 1 the current kernel was built with
+CONFIG_HYPERV=3Dy, then the .config file for the new kernel will have
+CONFIG_HYPERV=3Dy, which is better. But CONFIG_HYPERV_VMBUS
+defaults to 'n', so the new kernel doesn't have any VMBus drivers
+and won't run in a typical Hyper-V VM.
 
-config: x86_64-randconfig-001-20250829
-compiler: gcc-12
-test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+The second issue could be fixed by assigning CONFIG_HYPERV_VMBUS
+a default value, such as whatever CONFIG_HYPERV is set to. But
+I'm not sure how to fix the first issue, except by continuing to
+allow CONFIG_HYPERV=3Dm.=20
 
-(please refer to attached dmesg/kmsg for entire log/backtrace)
+See additional minor comments in Patches 1 and 2.
 
+Michael
 
-+-------------------------------------------------------------------------------+------------+------------+
-|                                                                               | a2440f9328 | ccbd04de39 |
-+-------------------------------------------------------------------------------+------------+------------+
-| BUG:KASAN:wild-memory-access_in_pmd_alloc_one_noprof                          | 0          | 11         |
-| Oops:general_protection_fault,probably_for_non-canonical_address#:#[##]KASAN  | 0          | 11         |
-| KASAN:maybe_wild-memory-access_in_range[#-#]                                  | 0          | 11         |
-| RIP:pmd_alloc_one_noprof                                                      | 0          | 11         |
-| Kernel_panic-not_syncing:Fatal_exception                                      | 0          | 11         |
-+-------------------------------------------------------------------------------+------------+------------+
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <oliver.sang@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202509012256.9322539b-lkp@intel.com
-
-
-[ 1.250500][ T0] BUG: KASAN: wild-memory-access in pmd_alloc_one_noprof+0x34/0x7f 
-[    1.251149][    T0] Write of size 8 at addr fefefefefefefefe by task swapper/0
-[    1.251674][    T0]
-[    1.251837][    T0] CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.17.0-rc3-00002-gccbd04de3982 #1 PREEMPT  a53390bc94bb546224a464bcf114b97da0f198de
-[    1.252806][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-[    1.253538][    T0] Call Trace:
-[    1.253770][    T0]  <TASK>
-[ 1.253980][ T0] dump_stack_lvl (lib/dump_stack.c:123) 
-[ 1.254351][ T0] kasan_report (mm/kasan/report.c:597) 
-[ 1.254674][ T0] ? pmd_alloc_one_noprof+0x34/0x7f 
-[ 1.255130][ T0] kasan_check_range (mm/kasan/generic.c:183 mm/kasan/generic.c:189) 
-[ 1.255486][ T0] pmd_alloc_one_noprof+0x34/0x7f 
-[ 1.255930][ T0] __pud_alloc (mm/memory.c:6427) 
-[ 1.256247][ T0] preallocate_vmalloc_pages (include/linux/mm.h:2838 arch/x86/mm/init_64.c:1336) 
-[ 1.256651][ T0] mm_core_init (mm/mm_init.c:2776) 
-[ 1.256981][ T0] start_kernel (init/main.c:959) 
-[ 1.257311][ T0] x86_64_start_reservations (arch/x86/kernel/head64.c:175) 
-[ 1.257701][ T0] x86_64_start_kernel (arch/x86/kernel/ebda.c:57) 
-[ 1.258068][ T0] common_startup_64 (arch/x86/kernel/head_64.S:419) 
-[    1.258426][    T0]  </TASK>
-[    1.258641][    T0] ==================================================================
-[    1.259211][    T0] Disabling lock debugging due to kernel taint
-[    1.259661][    T0] Oops: general protection fault, probably for non-canonical address 0xfefefefefefefefe: 0000 [#1] KASAN
-[    1.260447][    T0] KASAN: maybe wild-memory-access in range [0xf7f817f7f7f7f7f0-0xf7f817f7f7f7f7f7]
-[    1.261096][    T0] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G    B               6.17.0-rc3-00002-gccbd04de3982 #1 PREEMPT  a53390bc94bb546224a464bcf114b97da0f198de
-[    1.262163][    T0] Tainted: [B]=BAD_PAGE
-[    1.262457][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-[ 1.263181][ T0] RIP: pmd_alloc_one_noprof+0x34/0x7f 
-[ 1.263671][ T0] Code: e8 eb 5f d1 ff 48 81 fd 00 11 6e b1 75 24 48 bb fe fe fe fe fe fe fe fe e8 d3 5f d1 ff be 08 00 00 00 48 89 df e8 91 7d 0a 00 <80> 0b 04 bb c0 0d 00 00 e8 b9 5f d1 ff 89 df 31 c9 31 d2 81 cf 00
-All code
-========
-   0:	e8 eb 5f d1 ff       	call   0xffffffffffd15ff0
-   5:	48 81 fd 00 11 6e b1 	cmp    $0xffffffffb16e1100,%rbp
-   c:	75 24                	jne    0x32
-   e:	48 bb fe fe fe fe fe 	movabs $0xfefefefefefefefe,%rbx
-  15:	fe fe fe 
-  18:	e8 d3 5f d1 ff       	call   0xffffffffffd15ff0
-  1d:	be 08 00 00 00       	mov    $0x8,%esi
-  22:	48 89 df             	mov    %rbx,%rdi
-  25:	e8 91 7d 0a 00       	call   0xa7dbb
-  2a:*	80 0b 04             	orb    $0x4,(%rbx)		<-- trapping instruction
-  2d:	bb c0 0d 00 00       	mov    $0xdc0,%ebx
-  32:	e8 b9 5f d1 ff       	call   0xffffffffffd15ff0
-  37:	89 df                	mov    %ebx,%edi
-  39:	31 c9                	xor    %ecx,%ecx
-  3b:	31 d2                	xor    %edx,%edx
-  3d:	81                   	.byte 0x81
-  3e:	cf                   	iret
-	...
-
-Code starting with the faulting instruction
-===========================================
-   0:	80 0b 04             	orb    $0x4,(%rbx)
-   3:	bb c0 0d 00 00       	mov    $0xdc0,%ebx
-   8:	e8 b9 5f d1 ff       	call   0xffffffffffd15fc6
-   d:	89 df                	mov    %ebx,%edi
-   f:	31 c9                	xor    %ecx,%ecx
-  11:	31 d2                	xor    %edx,%edx
-  13:	81                   	.byte 0x81
-  14:	cf                   	iret
-	...
-[    1.265038][    T0] RSP: 0000:ffffffffb0e07e68 EFLAGS: 00010046
-[    1.265467][    T0] RAX: 0000000000000000 RBX: fefefefefefefefe RCX: ffffffffab0f6f61
-[    1.266023][    T0] RDX: 0000000000000000 RSI: ffffffffb0e42740 RDI: 0000000000000002
-[    1.266586][    T0] RBP: ffffffffb16e1100 R08: 0000000000000000 R09: 0000000000000000
-[    1.267144][    T0] R10: 0000000000000007 R11: ffffffffb0e42740 R12: dffffc0000000000
-[    1.267700][    T0] R13: fffffbfff6163097 R14: ffffffffb16e1100 R15: 0000000000000000
-[    1.268258][    T0] FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
-[    1.268884][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    1.269347][    T0] CR2: ffff88843ffff000 CR3: 0000000098328000 CR4: 00000000000000b0
-[    1.269906][    T0] Call Trace:
-[    1.270134][    T0]  <TASK>
-[ 1.270350][ T0] __pud_alloc (mm/memory.c:6427) 
-[ 1.270668][ T0] preallocate_vmalloc_pages (include/linux/mm.h:2838 arch/x86/mm/init_64.c:1336) 
-[ 1.271068][ T0] mm_core_init (mm/mm_init.c:2776) 
-[ 1.271396][ T0] start_kernel (init/main.c:959) 
-[ 1.271723][ T0] x86_64_start_reservations (arch/x86/kernel/head64.c:175) 
-[ 1.272112][ T0] x86_64_start_kernel (arch/x86/kernel/ebda.c:57) 
-[ 1.272476][ T0] common_startup_64 (arch/x86/kernel/head_64.S:419) 
-[    1.272824][    T0]  </TASK>
-[    1.273034][    T0] Modules linked in:
-[    1.273309][    T0] ---[ end trace 0000000000000000 ]---
-[ 1.273688][ T0] RIP: pmd_alloc_one_noprof+0x34/0x7f 
-[ 1.274194][ T0] Code: e8 eb 5f d1 ff 48 81 fd 00 11 6e b1 75 24 48 bb fe fe fe fe fe fe fe fe e8 d3 5f d1 ff be 08 00 00 00 48 89 df e8 91 7d 0a 00 <80> 0b 04 bb c0 0d 00 00 e8 b9 5f d1 ff 89 df 31 c9 31 d2 81 cf 00
-All code
-========
-   0:	e8 eb 5f d1 ff       	call   0xffffffffffd15ff0
-   5:	48 81 fd 00 11 6e b1 	cmp    $0xffffffffb16e1100,%rbp
-   c:	75 24                	jne    0x32
-   e:	48 bb fe fe fe fe fe 	movabs $0xfefefefefefefefe,%rbx
-  15:	fe fe fe 
-  18:	e8 d3 5f d1 ff       	call   0xffffffffffd15ff0
-  1d:	be 08 00 00 00       	mov    $0x8,%esi
-  22:	48 89 df             	mov    %rbx,%rdi
-  25:	e8 91 7d 0a 00       	call   0xa7dbb
-  2a:*	80 0b 04             	orb    $0x4,(%rbx)		<-- trapping instruction
-  2d:	bb c0 0d 00 00       	mov    $0xdc0,%ebx
-  32:	e8 b9 5f d1 ff       	call   0xffffffffffd15ff0
-  37:	89 df                	mov    %ebx,%edi
-  39:	31 c9                	xor    %ecx,%ecx
-  3b:	31 d2                	xor    %edx,%edx
-  3d:	81                   	.byte 0x81
-  3e:	cf                   	iret
-	...
-
-Code starting with the faulting instruction
-===========================================
-   0:	80 0b 04             	orb    $0x4,(%rbx)
-   3:	bb c0 0d 00 00       	mov    $0xdc0,%ebx
-   8:	e8 b9 5f d1 ff       	call   0xffffffffffd15fc6
-   d:	89 df                	mov    %ebx,%edi
-   f:	31 c9                	xor    %ecx,%ecx
-  11:	31 d2                	xor    %edx,%edx
-  13:	81                   	.byte 0x81
-  14:	cf                   	iret
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20250901/202509012256.9322539b-lkp@intel.com
-
-
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>=20
+> For now, hv_common.c is left as is to reduce conflicts for upcoming patch=
+es,
+> but once merges are mostly done, that and some others should be moved to
+> virt/hyperv directory.
+>=20
+> Mukesh Rathor (2):
+>   hyper-v: Add CONFIG_HYPERV_VMBUS option
+>   hyper-v: Make CONFIG_HYPERV bool
+>=20
+>  drivers/Makefile               |  2 +-
+>  drivers/gpu/drm/Kconfig        |  2 +-
+>  drivers/hid/Kconfig            |  2 +-
+>  drivers/hv/Kconfig             | 14 ++++++++++----
+>  drivers/hv/Makefile            |  4 ++--
+>  drivers/input/serio/Kconfig    |  4 ++--
+>  drivers/net/hyperv/Kconfig     |  2 +-
+>  drivers/pci/Kconfig            |  2 +-
+>  drivers/scsi/Kconfig           |  2 +-
+>  drivers/uio/Kconfig            |  2 +-
+>  drivers/video/fbdev/Kconfig    |  2 +-
+>  include/asm-generic/mshyperv.h |  8 +++++---
+>  net/vmw_vsock/Kconfig          |  2 +-
+>  13 files changed, 28 insertions(+), 20 deletions(-)
+>=20
+> --
+> 2.36.1.vfs.0.0
+>=20
 
 
