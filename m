@@ -1,127 +1,128 @@
-Return-Path: <linux-arch+bounces-13365-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13366-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07EE5B419EC
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Sep 2025 11:27:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52F3BB42605
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Sep 2025 17:56:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EFC634E2CCD
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Sep 2025 09:27:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 051CE1886238
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Sep 2025 15:57:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3562F0C6A;
-	Wed,  3 Sep 2025 09:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 029E6292B54;
+	Wed,  3 Sep 2025 15:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ecURXDdC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.26.1.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE71C2F0C67;
-	Wed,  3 Sep 2025 09:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D4B291C07;
+	Wed,  3 Sep 2025 15:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.26.1.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756891644; cv=none; b=bWY/jRRkg/YSJtfqPgLApXNrV2GsHmnNv3nZ/ZofbmgKgdCJaPhW3v5QoVe2u3+gLpMQ1JNp7+k5dhtrbWYyDhG+hZvf+w96zVHypMSu8DH5w5nqroBJlMbo/M3ueB/Ua0f7oQGZj96kwh0MPIo7lsU9ML3/PdwHsbnyeW//+iY=
+	t=1756915001; cv=none; b=nd6SvQko3m6ivQUKxIA1L/Kse74b+wxQZ8oJkwIe+N+xULKyud0GDJnQY9NhZstnhIhyu4tqWIJrV8pzBeP/BJ9btowTi8tzvqdoM4rONZMSO6MdjDT/XL3vSDrf7fT7eOBePyUci+rDBly1/PF2qgvJ3+VsSuWNoSc3hUbHiho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756891644; c=relaxed/simple;
-	bh=TTBvdDWN0SRxo51afac9to5kGEx6F2cJ42lwCTuMAjw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dvVoGIGd2ENl/HKjLlwPNFxqS7CIgtp/FYJ5ggib55wx9dBIMIwgKQpDM7fGZBKb9jx+o+3+IDeSOSJKIyLAZL+8IgJuxp1JJ70FzMfHWO55z136qHtUU6uLzpb7GN4A6M+kJBxHZFQucEMg47ApYcIJwjdoBhMtrTy/aevcIK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E21C4CEF0;
-	Wed,  3 Sep 2025 09:27:21 +0000 (UTC)
-Date: Wed, 3 Sep 2025 10:27:18 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
-	arnd@arndb.de, will@kernel.org, peterz@infradead.org,
-	akpm@linux-foundation.org, mark.rutland@arm.com,
-	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+	s=arc-20240116; t=1756915001; c=relaxed/simple;
+	bh=Shk7aP7NdVdTxePF1n5l+uKN9YxwBMJp3bE/HqRzo1U=;
+	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=K2BTeGlja97kInLygF7aRCjEBOEC2B+3Z6KSTtffjG3pmnU+SMoo52y3Qzs85jVtHCqkK+ZQlTcIsfLVuJOh4OIa1d5SGzLa2OxKTjld09wqoIbsmVzYU95GD86cfsk8cgu1+tN2wNtbt1Zz3AWfy8X00AZBWkZMlVpr9pufR14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ecURXDdC; arc=none smtp.client-ip=52.26.1.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1756915000; x=1788451000;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version:subject;
+  bh=Shk7aP7NdVdTxePF1n5l+uKN9YxwBMJp3bE/HqRzo1U=;
+  b=ecURXDdCrpQMlKeVpnhv5FGi1R9+yeDRNqDv4no3bmbFbNfjsgVzjPJT
+   1db4Fetgcbt6A43z7ChQBJoycabO4WowqDTiWlE/NhuHzsp3VmhD0BCrC
+   vNqkSfnbRkK2aYeFwMYpDvqaMFrfm6fwswVGB7tu6/0uS4SfwZLUyHvDC
+   dg6k6jYZSpHpOgiRV6kjEqQBrBzY8mKcvolW1oFFAimXoNDNvNbCD7uwt
+   rJ4qc3MEaFmAYr7Z3e3TElFPPFS/FVV7ScT/rmC/Pi+wVijhT/siLo9xQ
+   mEwYB1CSzqNtoGLp/p0Newo1WVqyce0L5kINVpB2Nks2e5Ui+hJ40gOyi
+   g==;
+X-CSE-ConnectionGUID: QiOcNpiNSHuG08I7kgtVrw==
+X-CSE-MsgGUID: efa5nN+GQgSifqLXSQNwvw==
+X-IronPort-AV: E=Sophos;i="6.18,236,1751241600"; 
+   d="scan'208";a="2318615"
 Subject: Re: [PATCH v4 0/5] barrier: Add smp_cond_load_*_timewait()
-Message-ID: <aLgJ9iqQhq-LT9S0@arm.com>
+Thread-Topic: [PATCH v4 0/5] barrier: Add smp_cond_load_*_timewait()
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 15:56:39 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [10.0.38.20:35374]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.63.19:2525] with esmtp (Farcaster)
+ id 3521494c-cd0c-4c7e-a87c-f69a666db393; Wed, 3 Sep 2025 15:56:39 +0000 (UTC)
+X-Farcaster-Flow-ID: 3521494c-cd0c-4c7e-a87c-f69a666db393
+Received: from EX19D032UWA004.ant.amazon.com (10.13.139.56) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Wed, 3 Sep 2025 15:56:39 +0000
+Received: from EX19D032UWA003.ant.amazon.com (10.13.139.37) by
+ EX19D032UWA004.ant.amazon.com (10.13.139.56) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Wed, 3 Sep 2025 15:56:38 +0000
+Received: from EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497]) by
+ EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497%5]) with mapi id
+ 15.02.2562.020; Wed, 3 Sep 2025 15:56:38 +0000
+From: "Okanovic, Haris" <harisokn@amazon.com>
+To: "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"ankur.a.arora@oracle.com" <ankur.a.arora@oracle.com>
+CC: "joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
+	"xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
+	"boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>, "memxor@gmail.com"
+	<memxor@gmail.com>, "zhenglifeng1@huawei.com" <zhenglifeng1@huawei.com>,
+	"konrad.wilk@oracle.com" <konrad.wilk@oracle.com>, "cl@gentwo.org"
+	<cl@gentwo.org>, "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"ast@kernel.org" <ast@kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
+	"will@kernel.org" <will@kernel.org>, "mark.rutland@arm.com"
+	<mark.rutland@arm.com>, "peterz@infradead.org" <peterz@infradead.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "Okanovic, Haris"
+	<harisokn@amazon.com>
+Thread-Index: AQHcGLwkeAOmnfRWAUuaDQGZvBHLrrR+O4GAgANprQA=
+Date: Wed, 3 Sep 2025 15:56:38 +0000
+Message-ID: <23aca480075a8efc307c9aa07ff62f0f39bbee4e.camel@amazon.com>
 References: <20250829080735.3598416-1-ankur.a.arora@oracle.com>
- <aLWITwwDg06F1eXu@arm.com>
- <87tt1kpj4z.fsf@oracle.com>
+	 <aLWITwwDg06F1eXu@arm.com>
+In-Reply-To: <aLWITwwDg06F1eXu@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0E18BDB4F8F2474DAC3E5EE6935FEE88@amazon.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tt1kpj4z.fsf@oracle.com>
 
-On Tue, Sep 02, 2025 at 03:46:52PM -0700, Ankur Arora wrote:
-> Catalin Marinas <catalin.marinas@arm.com> writes:
-> > Can you have a go at poll_idle() to see how it would look like using
-> > this API? It doesn't necessarily mean we have to merge them all at once
-> > but it gives us a better idea of the suitability of the interface.
-> 
-> So, I've been testing with some version of the following:
-> 
-> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
-> index 9b6d90a72601..361879396d0c 100644
-> --- a/drivers/cpuidle/poll_state.c
-> +++ b/drivers/cpuidle/poll_state.c
-> @@ -8,35 +8,25 @@
->  #include <linux/sched/clock.h>
->  #include <linux/sched/idle.h>
-> 
-> -#define POLL_IDLE_RELAX_COUNT	200
-> -
->  static int __cpuidle poll_idle(struct cpuidle_device *dev,
->  			       struct cpuidle_driver *drv, int index)
->  {
-> -	u64 time_start;
-> -
-> -	time_start = local_clock_noinstr();
-> +	unsigned long flags;
-> 
->  	dev->poll_time_limit = false;
-> 
->  	raw_local_irq_enable();
->  	if (!current_set_polling_and_test()) {
-> -		unsigned int loop_count = 0;
-> -		u64 limit;
-> +		u64 limit, time_end;
-> 
->  		limit = cpuidle_poll_time(drv, dev);
-> +		time_end = local_clock_noinstr() + limit;
-> 
-> -		while (!need_resched()) {
-> -			cpu_relax();
-> -			if (loop_count++ < POLL_IDLE_RELAX_COUNT)
-> -				continue;
-> +		flags = smp_cond_load_relaxed_timewait(&current_thread_info()->flags,
-> +						       VAL & _TIF_NEED_RESCHED,
-> +						       (local_clock_noinstr() >= time_end));
-
-It makes sense to have the non-strict comparison, though it changes the
-original behaviour slightly. Just mention it in the commit log.
-
-> 
-> -			loop_count = 0;
-> -			if (local_clock_noinstr() - time_start > limit) {
-> -				dev->poll_time_limit = true;
-> -				break;
-> -			}
-> -		}
-> +		dev->poll_time_limit = (local_clock_noinstr() >= time_end);
-
-Could we do this instead and avoid another clock read:
-
-		dev->poll_time_limit = !(flags & _TIF_NEED_RESCHED);
-
-In the original code, it made sense since it had to check the clock
-anyway and break the loop.
-
-When you repost, please include the rqspinlock and poll_idle changes as
-well to show how the interface is used.
-
--- 
-Catalin
+T24gTW9uLCAyMDI1LTA5LTAxIGF0IDEyOjQ5ICswMTAwLCBDYXRhbGluIE1hcmluYXMgd3JvdGU6
+DQo+IENBVVRJT046IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9y
+Z2FuaXphdGlvbi4gRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
+IHlvdSBjYW4gY29uZmlybSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUu
+DQo+IA0KPiANCj4gDQo+IE9uIEZyaSwgQXVnIDI5LCAyMDI1IGF0IDAxOjA3OjMwQU0gLTA3MDAs
+IEFua3VyIEFyb3JhIHdyb3RlOg0KPiA+IEFua3VyIEFyb3JhICg1KToNCj4gPiAgIGFzbS1nZW5l
+cmljOiBiYXJyaWVyOiBBZGQgc21wX2NvbmRfbG9hZF9yZWxheGVkX3RpbWV3YWl0KCkNCj4gPiAg
+IGFybTY0OiBiYXJyaWVyOiBBZGQgc21wX2NvbmRfbG9hZF9yZWxheGVkX3RpbWV3YWl0KCkNCj4g
+PiAgIGFybTY0OiBycXNwaW5sb2NrOiBSZW1vdmUgcHJpdmF0ZSBjb3B5IG9mDQo+ID4gICAgIHNt
+cF9jb25kX2xvYWRfYWNxdWlyZV90aW1ld2FpdA0KPiA+ICAgYXNtLWdlbmVyaWM6IGJhcnJpZXI6
+IEFkZCBzbXBfY29uZF9sb2FkX2FjcXVpcmVfdGltZXdhaXQoKQ0KPiA+ICAgcnFzcGlubG9jazog
+dXNlIHNtcF9jb25kX2xvYWRfYWNxdWlyZV90aW1ld2FpdCgpDQo+IA0KPiBDYW4geW91IGhhdmUg
+YSBnbyBhdCBwb2xsX2lkbGUoKSB0byBzZWUgaG93IGl0IHdvdWxkIGxvb2sgbGlrZSB1c2luZw0K
+PiB0aGlzIEFQST8gSXQgZG9lc24ndCBuZWNlc3NhcmlseSBtZWFuIHdlIGhhdmUgdG8gbWVyZ2Ug
+dGhlbSBhbGwgYXQgb25jZQ0KPiBidXQgaXQgZ2l2ZXMgdXMgYSBiZXR0ZXIgaWRlYSBvZiB0aGUg
+c3VpdGFiaWxpdHkgb2YgdGhlIGludGVyZmFjZS4NCg0KVGhpcyBpcyB3aGF0IEkgdGVzdGVkIG9u
+IEFSTSBvbiBGcmk6DQoNCmh0dHBzOi8vZ2l0aHViLmNvbS9oYXJpc29rYW5vdmljL2xpbnV4L2Js
+b2IvMzdlMDJiOTUwYzk5MzcwNDY2ZTczODVlNWU3NTRiYmQ2MjMyZWY5NS9kcml2ZXJzL2NwdWlk
+bGUvcG9sbF9zdGF0ZS5jI0wyNA0KDQpSZWdhcmRzLA0KSGFyaXMgT2thbm92aWMNCkFXUyBHcmF2
+aXRvbiBTb2Z0d2FyZQ0KDQo+IA0KPiAtLQ0KPiBDYXRhbGluDQoNCg==
 
