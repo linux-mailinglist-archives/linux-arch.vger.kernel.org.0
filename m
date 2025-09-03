@@ -1,128 +1,83 @@
-Return-Path: <linux-arch+bounces-13366-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13367-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52F3BB42605
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Sep 2025 17:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B245B426D7
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Sep 2025 18:25:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 051CE1886238
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Sep 2025 15:57:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B02DE188D862
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Sep 2025 16:25:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 029E6292B54;
-	Wed,  3 Sep 2025 15:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ecURXDdC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D85952E9EAC;
+	Wed,  3 Sep 2025 16:25:09 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.26.1.71])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D4B291C07;
-	Wed,  3 Sep 2025 15:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.26.1.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C252D2389;
+	Wed,  3 Sep 2025 16:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756915001; cv=none; b=nd6SvQko3m6ivQUKxIA1L/Kse74b+wxQZ8oJkwIe+N+xULKyud0GDJnQY9NhZstnhIhyu4tqWIJrV8pzBeP/BJ9btowTi8tzvqdoM4rONZMSO6MdjDT/XL3vSDrf7fT7eOBePyUci+rDBly1/PF2qgvJ3+VsSuWNoSc3hUbHiho=
+	t=1756916709; cv=none; b=L37CoaAiYSIN2aNr4WUWKWWggyqORKytDQVFdBjPn9zxnjIS55Z0lYiB86apeaeQWzV2gqxHjFsvCW63A2dUW51qFLajBnUMbJ1IV2R9jbeGbYR1MC2I9+O9bDusVv2C11gVYYPvTef3R2s/MUpnauBus3Je9T0u9D4DsZGU3vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756915001; c=relaxed/simple;
-	bh=Shk7aP7NdVdTxePF1n5l+uKN9YxwBMJp3bE/HqRzo1U=;
-	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=K2BTeGlja97kInLygF7aRCjEBOEC2B+3Z6KSTtffjG3pmnU+SMoo52y3Qzs85jVtHCqkK+ZQlTcIsfLVuJOh4OIa1d5SGzLa2OxKTjld09wqoIbsmVzYU95GD86cfsk8cgu1+tN2wNtbt1Zz3AWfy8X00AZBWkZMlVpr9pufR14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ecURXDdC; arc=none smtp.client-ip=52.26.1.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1756915000; x=1788451000;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version:subject;
-  bh=Shk7aP7NdVdTxePF1n5l+uKN9YxwBMJp3bE/HqRzo1U=;
-  b=ecURXDdCrpQMlKeVpnhv5FGi1R9+yeDRNqDv4no3bmbFbNfjsgVzjPJT
-   1db4Fetgcbt6A43z7ChQBJoycabO4WowqDTiWlE/NhuHzsp3VmhD0BCrC
-   vNqkSfnbRkK2aYeFwMYpDvqaMFrfm6fwswVGB7tu6/0uS4SfwZLUyHvDC
-   dg6k6jYZSpHpOgiRV6kjEqQBrBzY8mKcvolW1oFFAimXoNDNvNbCD7uwt
-   rJ4qc3MEaFmAYr7Z3e3TElFPPFS/FVV7ScT/rmC/Pi+wVijhT/siLo9xQ
-   mEwYB1CSzqNtoGLp/p0Newo1WVqyce0L5kINVpB2Nks2e5Ui+hJ40gOyi
-   g==;
-X-CSE-ConnectionGUID: QiOcNpiNSHuG08I7kgtVrw==
-X-CSE-MsgGUID: efa5nN+GQgSifqLXSQNwvw==
-X-IronPort-AV: E=Sophos;i="6.18,236,1751241600"; 
-   d="scan'208";a="2318615"
-Subject: Re: [PATCH v4 0/5] barrier: Add smp_cond_load_*_timewait()
-Thread-Topic: [PATCH v4 0/5] barrier: Add smp_cond_load_*_timewait()
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 15:56:39 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [10.0.38.20:35374]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.63.19:2525] with esmtp (Farcaster)
- id 3521494c-cd0c-4c7e-a87c-f69a666db393; Wed, 3 Sep 2025 15:56:39 +0000 (UTC)
-X-Farcaster-Flow-ID: 3521494c-cd0c-4c7e-a87c-f69a666db393
-Received: from EX19D032UWA004.ant.amazon.com (10.13.139.56) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Wed, 3 Sep 2025 15:56:39 +0000
-Received: from EX19D032UWA003.ant.amazon.com (10.13.139.37) by
- EX19D032UWA004.ant.amazon.com (10.13.139.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Wed, 3 Sep 2025 15:56:38 +0000
-Received: from EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497]) by
- EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497%5]) with mapi id
- 15.02.2562.020; Wed, 3 Sep 2025 15:56:38 +0000
-From: "Okanovic, Haris" <harisokn@amazon.com>
-To: "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"ankur.a.arora@oracle.com" <ankur.a.arora@oracle.com>
-CC: "joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
-	"boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>, "memxor@gmail.com"
-	<memxor@gmail.com>, "zhenglifeng1@huawei.com" <zhenglifeng1@huawei.com>,
-	"konrad.wilk@oracle.com" <konrad.wilk@oracle.com>, "cl@gentwo.org"
-	<cl@gentwo.org>, "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"ast@kernel.org" <ast@kernel.org>, "linux-arch@vger.kernel.org"
-	<linux-arch@vger.kernel.org>, "arnd@arndb.de" <arnd@arndb.de>,
-	"will@kernel.org" <will@kernel.org>, "mark.rutland@arm.com"
-	<mark.rutland@arm.com>, "peterz@infradead.org" <peterz@infradead.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "Okanovic, Haris"
-	<harisokn@amazon.com>
-Thread-Index: AQHcGLwkeAOmnfRWAUuaDQGZvBHLrrR+O4GAgANprQA=
-Date: Wed, 3 Sep 2025 15:56:38 +0000
-Message-ID: <23aca480075a8efc307c9aa07ff62f0f39bbee4e.camel@amazon.com>
-References: <20250829080735.3598416-1-ankur.a.arora@oracle.com>
-	 <aLWITwwDg06F1eXu@arm.com>
-In-Reply-To: <aLWITwwDg06F1eXu@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0E18BDB4F8F2474DAC3E5EE6935FEE88@amazon.com>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1756916709; c=relaxed/simple;
+	bh=cgpUpMcs0TZ+BTiy4jhYZlsUuXa74ohmhvxC655ADM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PBkQIbwf2rTaWL0bLNsn2+GFUvXKh/gZ3XjFKWS8/EK1Re3yRd+cIEaRADWPO7gZNJdMS+3lw4aCCaylFvN6AYlga3C4auB2s8ulTFb5LwhX3oMGzz2zSxFC56fCkpb9o9Q8vaa9QIf1bWtVmhT5gdA8+zANJPm/OTcAQnM9u90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23600C4CEE7;
+	Wed,  3 Sep 2025 16:25:04 +0000 (UTC)
+Date: Wed, 3 Sep 2025 17:25:02 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: james.morse@arm.com, linux-cxl@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	Will Deacon <will@kernel.org>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Yicong Yang <yangyicong@huawei.com>, linuxarm@huawei.com,
+	Yushan Wang <wangyushan12@huawei.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v3 3/8] lib: Support
+ ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+Message-ID: <aLhr3v4z_YIYaq9Z@arm.com>
+References: <20250820102950.175065-1-Jonathan.Cameron@huawei.com>
+ <20250820102950.175065-4-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250820102950.175065-4-Jonathan.Cameron@huawei.com>
 
-T24gTW9uLCAyMDI1LTA5LTAxIGF0IDEyOjQ5ICswMTAwLCBDYXRhbGluIE1hcmluYXMgd3JvdGU6
-DQo+IENBVVRJT046IFRoaXMgZW1haWwgb3JpZ2luYXRlZCBmcm9tIG91dHNpZGUgb2YgdGhlIG9y
-Z2FuaXphdGlvbi4gRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
-IHlvdSBjYW4gY29uZmlybSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUu
-DQo+IA0KPiANCj4gDQo+IE9uIEZyaSwgQXVnIDI5LCAyMDI1IGF0IDAxOjA3OjMwQU0gLTA3MDAs
-IEFua3VyIEFyb3JhIHdyb3RlOg0KPiA+IEFua3VyIEFyb3JhICg1KToNCj4gPiAgIGFzbS1nZW5l
-cmljOiBiYXJyaWVyOiBBZGQgc21wX2NvbmRfbG9hZF9yZWxheGVkX3RpbWV3YWl0KCkNCj4gPiAg
-IGFybTY0OiBiYXJyaWVyOiBBZGQgc21wX2NvbmRfbG9hZF9yZWxheGVkX3RpbWV3YWl0KCkNCj4g
-PiAgIGFybTY0OiBycXNwaW5sb2NrOiBSZW1vdmUgcHJpdmF0ZSBjb3B5IG9mDQo+ID4gICAgIHNt
-cF9jb25kX2xvYWRfYWNxdWlyZV90aW1ld2FpdA0KPiA+ICAgYXNtLWdlbmVyaWM6IGJhcnJpZXI6
-IEFkZCBzbXBfY29uZF9sb2FkX2FjcXVpcmVfdGltZXdhaXQoKQ0KPiA+ICAgcnFzcGlubG9jazog
-dXNlIHNtcF9jb25kX2xvYWRfYWNxdWlyZV90aW1ld2FpdCgpDQo+IA0KPiBDYW4geW91IGhhdmUg
-YSBnbyBhdCBwb2xsX2lkbGUoKSB0byBzZWUgaG93IGl0IHdvdWxkIGxvb2sgbGlrZSB1c2luZw0K
-PiB0aGlzIEFQST8gSXQgZG9lc24ndCBuZWNlc3NhcmlseSBtZWFuIHdlIGhhdmUgdG8gbWVyZ2Ug
-dGhlbSBhbGwgYXQgb25jZQ0KPiBidXQgaXQgZ2l2ZXMgdXMgYSBiZXR0ZXIgaWRlYSBvZiB0aGUg
-c3VpdGFiaWxpdHkgb2YgdGhlIGludGVyZmFjZS4NCg0KVGhpcyBpcyB3aGF0IEkgdGVzdGVkIG9u
-IEFSTSBvbiBGcmk6DQoNCmh0dHBzOi8vZ2l0aHViLmNvbS9oYXJpc29rYW5vdmljL2xpbnV4L2Js
-b2IvMzdlMDJiOTUwYzk5MzcwNDY2ZTczODVlNWU3NTRiYmQ2MjMyZWY5NS9kcml2ZXJzL2NwdWlk
-bGUvcG9sbF9zdGF0ZS5jI0wyNA0KDQpSZWdhcmRzLA0KSGFyaXMgT2thbm92aWMNCkFXUyBHcmF2
-aXRvbiBTb2Z0d2FyZQ0KDQo+IA0KPiAtLQ0KPiBDYXRhbGluDQoNCg==
+On Wed, Aug 20, 2025 at 11:29:45AM +0100, Jonathan Cameron wrote:
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index c483951b624f..cd8e5844f9bb 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -543,6 +543,9 @@ config MEMREGION
+>  config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+>  	bool
+>  
+> +config GENERIC_CPU_CACHE_MAINTENANCE
+> +	bool
+
+Nit: you could select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION here since
+the interface is now provided by the generic implementation.
+
+-- 
+Catalin
 
