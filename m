@@ -1,96 +1,97 @@
-Return-Path: <linux-arch+bounces-13410-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13411-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BD95B49975
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Sep 2025 21:10:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAD1CB499DA
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Sep 2025 21:22:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ADFD1B27048
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Sep 2025 19:11:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C65ED7AC31D
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Sep 2025 19:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38DCB2376EB;
-	Mon,  8 Sep 2025 19:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC4727E04C;
+	Mon,  8 Sep 2025 19:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="C41TvhKD";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="aXQit2Mc"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="sC5hatoP";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ysP+rb/f"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1FB28399;
-	Mon,  8 Sep 2025 19:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C971277807;
+	Mon,  8 Sep 2025 19:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757358654; cv=fail; b=AFD3xWSm1VxjCdtLQ/iyP6it7XdbaqvSukOW2tuW/dU1aWv5iClQeAyP6EwijiPK8ZqP/U4ZKSGGkBTAEFZNB1hc8L/BVn0ZLpi1W8D9Dv2vHtN3GefcvzwpTdhoIF+JBkTSJlkmNBGbkAyVpcsE5f8O718jFyHIPlP3LJA8Fuo=
+	t=1757359349; cv=fail; b=sTgbIomX+A6mE7Llo5qo6DtWB/bXY+IX7gbc1mRpY1veGuDL2EN9hMIQilkmcCEfQq7ZXPd2iE1lheaCKvpc+fhnwMRvWnEO7Fg5CQuuqBVfEHJ/trjohdzFIPPE3EOzxFdEdz9D11b0+TSm8omWDTryFNmMnu+xcOnKF/7b8Cw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757358654; c=relaxed/simple;
-	bh=GcFoNKSix6LPzVmymyX3gtE1ThgyeE6tIBnoFKMkTCE=;
-	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Njb3aRLGIDZVziY8b2mL5udhFEqS9TYDdb/0M9AuH5+VnENvos0KzzfeVddrG3HcIIcZCCeu0392b8ubkyH804Zm4AJS3Xcs/EHiP+0moxJ5Tbj5Q/mtpnvwwa7SUuBqD88lmWZm4f5uC1VPuqjRuUOe77beuxVdveKxqTJL9ts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=C41TvhKD; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=aXQit2Mc; arc=fail smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1757359349; c=relaxed/simple;
+	bh=LhMgRSgHdmVTLJIGegW/Ny4Z9a0PUtshALx45VOBA90=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=IZ5fyCoUjwxCSEUnhEVpSGZ5v2Vuq1asDXE4QsGmIHRlY/QgNnfZHb7qceceKHMGIKUaOC8NTIUSuwYva33Bax+/oyylpGmYsL6b4dlfiMlY8Wom19+OZ+h2t7v/sKW3FzLSTnEbzT5V3R7x/BcQWvG94NAnf9fH7t/ygSY53Xo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=sC5hatoP; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ysP+rb/f; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 588Hfqf0023827;
-	Mon, 8 Sep 2025 19:09:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 588Hg4MG007494;
+	Mon, 8 Sep 2025 19:21:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=M5lCHM2BXFp5PND4Fl4O2N8zW/sxOBXRJH32aPZAeDM=; b=
-	C41TvhKDcmy8msdS7OFN+gtsWEmj4zsRYh7B3ke50eE4oRXz8KnN5TzrMXH6yr7K
-	/ZjbPoRpu8q0W79oALkqs9ENUVrDAf+mQCfLf65xyx+nD5FDDDmlMpCpiX3ZseIy
-	zci5z3SHchMjTo2tHsQgN1X5H+5DBEg/CB+V5gUMYASlY30slkiUxKmKQWMXkMUm
-	Bngrur65Ry6ESh4kCMo36mXwEBYobSMZov0M4tLF9I+XsJ3F2Rhree4wT5+t/3tx
-	RVeBug+B+NamXFSStLdgcfYg+DysyBbdUv18kv7AkABOhA6CQxcyBB5Nlx6YbbKG
-	OTSkR7Su4uffI81I27FBvA==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49226srcry-1
+	corp-2025-04-25; bh=+c3a0V8lka9Afee1Nw7nJmCm0dx1rrGMyatPnpE9y+k=; b=
+	sC5hatoPixIwnAB8UnxXLgLhN/R8BODVCSbybmlFGk0cbPSyyZ3KJvxTweRAHGtl
+	mGQ9uVco2DgROsidXdvIX9LT2On0EtcBV0nQ05HSqQGBjgUbSMM8/4/tN90FFQ6D
+	MBFWV07ykzJQR8Oq6n1/1JyBUK95nQLS6Ibu4pGmRl4QfY6nopVZo1S9JbnWNYZL
+	9zDIB133U+6quvdgh18mp+hSAe7GCrAQKJFtpTOZXbV1i3PHPBHGhhlTP7R/KtTy
+	0UBOuViKGx5QXZW3L4EMrXTDyNZbacVt0pNYB9vP/ebST6HIsl24tVrZdYnz9aZN
+	Ei8QG69efRshHK83FcpZ/w==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4922x909qf-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 08 Sep 2025 19:09:50 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 588HmvL5026344;
-	Mon, 8 Sep 2025 19:09:49 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12on2041.outbound.protection.outlook.com [40.107.244.41])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 490bd8mfpj-1
+	Mon, 08 Sep 2025 19:21:22 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 588HFsns031484;
+	Mon, 8 Sep 2025 19:21:21 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 490bd8m3sg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 08 Sep 2025 19:09:49 +0000
+	Mon, 08 Sep 2025 19:21:21 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bt3FBqjUZdXQiaeDQRtYjj0qiLhx3RaqTbN3moTN0zUTbOjxHe7rQMPPJyANgBhKByJHbhCY5xKIb68zG/TpMLxZ1s3bIMnX5KthC00cKslNp8A4rQMMRopLnJiHOvcnervv8e5+baeH+xrwkhTlw0IGxp8ZMFCTc2FQOuNfDjqSTdThUNpfsCqh7VEFs4d6x+6t+IuYyddC7iXav2O488oWfgny6ZiN2bIsE1nRx18B19pLoUlAd0fxyz/IOexzGywEH90b0RNb4jei58nVK1Sn1y0Pmq0XJTDbuO8Mxp3Gak5b1D8zyEIle9dGbUoxK8Q81pi36jhJ8cFZGZs9zw==
+ b=De6J9q8pa//8Nj40Hc2BQ25XUC3CdcXPzxwEbbX0RqPlTwKwIjvqqdWBYi/7qNq0SdDgUIJE1GYm06HuoyELegAMQtSSww0h2MitgyumSc3PUF295wmBq4Xji742Aka+loLttag0a/Y1bubawx0IIHMSK9gFmJPh2sF1VMN+Zz2o00cqXlu4KpCP3QSnf98foKAra7QlRBPpfxMVSCq5P90Nfejczg9nzRdkjt3K2NW/3cxoG8/Qrs/7gAyk7JN+Ii6AlhgxruiciZFgPN5EjUCCbzwWKQ5FIZ9HTmjb1MMW6N+vYaa773GQ8JIVyAPiPWw1xYcQZfXhZoDwDTPLMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M5lCHM2BXFp5PND4Fl4O2N8zW/sxOBXRJH32aPZAeDM=;
- b=Wf6wCqgspvw6VESUH8nnLL8PEkrrRD+5exP5KHAhQcY4mD/3/9LwzerOYeNIEvhd4yCK2kpR1U4zfNZg6TOEWlMg4wFCARasXG3D5422qRXMCoTPbLQX+77MP54bInkRolvaOP6SxF6taG+LYrnIl8ab2CP+N5xQr4DbWlhJkvLGsX99z9jzIGPcpEggcQnNoBefX1cJDVXZYmniEWxwds6OFRoIHx3n2OxKp6zosDxm8ktjrEBKHLYqMuPkuEh/LdCbSSi5v2CvAeqX/9MjIvfDW8nfh3xoOI5rSUMP2ih2uyzvUwBy3Grcw8kjS9UReFOsjjolhPQx1ybLjb5h8g==
+ bh=+c3a0V8lka9Afee1Nw7nJmCm0dx1rrGMyatPnpE9y+k=;
+ b=gDk53tcuKk0vKq6giLZwLZAQSTfwbbF3TVXWbvbG8A20JZaRiV53xztuASurr7aQd003p5bsAS/vvt6ZDe+t5mona836GlNuxNal21Tu00pNFHDJk5+TsfgI/2AjlytAiq+peE5wX/QC3ElS2y6PK5MjL1ZbECKE3u3DR2s4pYjVD/Pf2777TjB/TFvK485KDP5WyGHHN8bRbOnYOONI/+iZFk4lkhpPj83SozQXhmCzGouBYX36ImZj4k6N50abpZa2SiDId/ByBEA0LXaSvoq0uy08ebeF0HPjH5s05gvVZYkzBZ4J+Q2RVeJCN3mejIyr1jhCFY/YV5A4G+sg0w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M5lCHM2BXFp5PND4Fl4O2N8zW/sxOBXRJH32aPZAeDM=;
- b=aXQit2McsXeSeYUxqbYHlErAA67U1r6j7A+NWet1BWCaIwHRertCuTYcZKSXZhIpNXEj/DlPbUhT11Hne6UF8ZlP3XAOWcMmm4h7+BbFxs9vv8MPQGPZRLCey/EDUCedL7wb7Pjp09uqUYnmv/QGtj8EuhfPuWPBdjUl1Lbwdsc=
+ bh=+c3a0V8lka9Afee1Nw7nJmCm0dx1rrGMyatPnpE9y+k=;
+ b=ysP+rb/flTyqRev5Qqe0uxKX0wwFJSv2Ss1W9OC6ZZvFOnZB6hJIybKqFtWW2+PQpEEWFPagoFp/SJkm/zt+ZRmcGSB9fxA18DJsJBWsbDPeRmAUMigBNUVqA0QNAihPVSC09JuSjYZXXtfZC73sWy9N9mZpefYjiXPBhOE/Z58=
 Received: from MW6PR10MB7660.namprd10.prod.outlook.com (2603:10b6:303:24b::12)
- by BLAPR10MB5058.namprd10.prod.outlook.com (2603:10b6:208:320::11) with
+ by PH0PR10MB7006.namprd10.prod.outlook.com (2603:10b6:510:285::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Mon, 8 Sep
- 2025 19:09:45 +0000
+ 2025 19:21:18 +0000
 Received: from MW6PR10MB7660.namprd10.prod.outlook.com
  ([fe80::41fa:92d3:28b9:2a15]) by MW6PR10MB7660.namprd10.prod.outlook.com
  ([fe80::41fa:92d3:28b9:2a15%5]) with mapi id 15.20.9094.021; Mon, 8 Sep 2025
- 19:09:45 +0000
-Message-ID: <db2f17fd-6711-4521-8d2a-73c3fd8d914e@oracle.com>
-Date: Mon, 8 Sep 2025 12:09:40 -0700
+ 19:21:17 +0000
+Message-ID: <3752d094-e754-4453-b404-75d92de3e364@oracle.com>
+Date: Mon, 8 Sep 2025 12:21:11 -0700
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 01/22] mm: Add msharefs filesystem
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org, andreyknvl@gmail.com, arnd@arndb.de,
+Subject: Re: [PATCH v3 22/22] mm/mshare: charge fault handling allocations to
+ the mshare owner
+To: David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
+Cc: akpm@linux-foundation.org, andreyknvl@gmail.com, arnd@arndb.de,
         bp@alien8.de, brauner@kernel.org, bsegall@google.com, corbet@lwn.net,
-        dave.hansen@linux.intel.com, david@redhat.com,
-        dietmar.eggemann@arm.com, ebiederm@xmission.com, hpa@zytor.com,
-        jakub.wartak@mailbox.org, jannh@google.com, juri.lelli@redhat.com,
-        khalid@kernel.org, linyongting@bytedance.com,
+        dave.hansen@linux.intel.com, dietmar.eggemann@arm.com,
+        ebiederm@xmission.com, hpa@zytor.com, jakub.wartak@mailbox.org,
+        jannh@google.com, juri.lelli@redhat.com, khalid@kernel.org,
+        liam.howlett@oracle.com, linyongting@bytedance.com,
         lorenzo.stoakes@oracle.com, luto@kernel.org, markhemm@googlemail.com,
         maz@kernel.org, mhiramat@kernel.org, mgorman@suse.de, mhocko@suse.com,
         mingo@redhat.com, muchun.song@linux.dev, neilb@suse.de,
@@ -102,15 +103,15 @@ To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-mm@kvack.org,
         x86@kernel.org, xhao@linux.alibaba.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
 References: <20250820010415.699353-1-anthony.yznaga@oracle.com>
- <20250820010415.699353-2-anthony.yznaga@oracle.com>
- <lgwf5d2y2ok2f52l7xi6klln4hbncnoyn2s2jdi3k4wi5ngfz4@kbtqjwirdnqj>
+ <20250820010415.699353-23-anthony.yznaga@oracle.com>
+ <a0238ff1-3ca2-4f0b-8452-26584b531724@redhat.com>
 Content-Language: en-US
 From: Anthony Yznaga <anthony.yznaga@oracle.com>
-In-Reply-To: <lgwf5d2y2ok2f52l7xi6klln4hbncnoyn2s2jdi3k4wi5ngfz4@kbtqjwirdnqj>
+In-Reply-To: <a0238ff1-3ca2-4f0b-8452-26584b531724@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR13CA0013.namprd13.prod.outlook.com
- (2603:10b6:a03:180::26) To MW6PR10MB7660.namprd10.prod.outlook.com
+X-ClientProxiedBy: PH8PR07CA0033.namprd07.prod.outlook.com
+ (2603:10b6:510:2cf::20) To MW6PR10MB7660.namprd10.prod.outlook.com
  (2603:10b6:303:24b::12)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -119,431 +120,148 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW6PR10MB7660:EE_|BLAPR10MB5058:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50b3792d-f962-4254-99c6-08ddef0b45d5
+X-MS-TrafficTypeDiagnostic: MW6PR10MB7660:EE_|PH0PR10MB7006:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1848be74-9ed4-467e-35b8-08ddef0ce245
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|921020;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dkUrc0pqQnlGd0Rha0VLZ0ZoUnFFNTZEWkllOXpEd1ZMRXZhM29UekI3QWhl?=
- =?utf-8?B?Mko4YWpaT1VjMGw0Z3RDQ1BXNy9wZVArV0wzRzVad0U3Q3IxNng1ZzJSOURl?=
- =?utf-8?B?NE01QTVJL2N0aXljY1l6UC9aTmhFV0l1Z3Q0emgydUFVbW5DMlFIU1pHRHpi?=
- =?utf-8?B?NCtrZnlScVJ4L2U5MitDL1l1R3pwaDBOY1gzdGY0SmFvRzRoSFptblRJcnhE?=
- =?utf-8?B?bzd6NUR2THdhcWlFU2dNWjZiVnpyQkxvNGYwZHFocjArS2tFbjJKcnlLVTkz?=
- =?utf-8?B?ZFVXWVNQYloydDMzZ0F2NWFNdmREWTQyQnJnODByaCs1T3M2OGdnK0Y5U0hH?=
- =?utf-8?B?Y0lybkFrSDRaemNvajNycm1SYU5qSjF5a3RBZ08wM0tMMFhpSklUeHNZS3NM?=
- =?utf-8?B?d3U4Y1JUakRGUDdnbTBkelQvelYwRnBoYURJRzJ0NFVHTlVrTWJLZHZ0dzBR?=
- =?utf-8?B?UENjOUhJckRzNnpDNldNdHdjM0E5MVRHMnUrRW90dmhxakN3OHF1M2txQjZ5?=
- =?utf-8?B?Y0JIUVRTZlNDdHFuQTlsNmZzZlozYjZ3VVNSNTVuV1prUHcvelZ1cjlwa3NX?=
- =?utf-8?B?ZHpobFRYTDJCWEI2eCtXYkFEN0VQc24wVzFjRGlHUWUrWENvWmszL0hSdDJo?=
- =?utf-8?B?dFp1WXYvNC9WL25pUElhNk9GVUJCVk00anl1bXFsU0x3NDB5cmRXTDJYc0pR?=
- =?utf-8?B?cFkvb2dWbWQwSFQvUmVqQitlVVVFUFB0SFhNWWxrTG1oZXhHekF6ZndsS1k4?=
- =?utf-8?B?VDdsQWRsOE1UM292ejU3aUdMMTk4ODJITDlabi9NNTNXSEJpN3Njakw5M29q?=
- =?utf-8?B?N3loTFl4eUV3QW85MWExdEREdzJVam5pZHZKN3czaFIyciticlptMWdSVHYz?=
- =?utf-8?B?SDVEekZDdTYxNGQzWjR2T2xKSHI1TnBra2JmQ2VmVVdiTlBqTjV0N2tKZUNq?=
- =?utf-8?B?NEVLaXowQVJlWjJkMEt0aEo4b3ZvUmdzZ05LZjFFWmV3cG9vUmN0YVUxazE5?=
- =?utf-8?B?Q09mN3ROQmtmRW56a2d2aGNqM0oxL3JucmNlSVY0cWxhcFkxTFVNUExUT0Nh?=
- =?utf-8?B?S3BnMzloK2svKy90RlpOZkI3cDYzZU5wTlN1enZjOXBBK3ZUOGFPb1o2MklG?=
- =?utf-8?B?OGdncThJVkhZWis4a0N5ZkRoQzVnZ0FEQy9JWDN5b21OQ1hUdW9nT2NQaVZO?=
- =?utf-8?B?R0ZwVi9WL3RyRk9nWkcxcDIzdXBpdVV6VzlZS0thZDVROEd1WjU2azI3VzdC?=
- =?utf-8?B?QzdjQWhCUnRWWkxhalYrS0JUVEx1cFQ0MVp4N1FIWis0RHJlY2ZKVVoyQzlM?=
- =?utf-8?B?VmFPOGhPdkZzVGpXTWVIZExxNTlyL0ovT1c0Vld1ZXR2WWtEcFhOMmNTdEtW?=
- =?utf-8?B?NFBhb0RCUEF3TXlJUWZnSXJXTEJQbHprQ3I2dzVFdVNPSUkvWVBuS1dqeHB6?=
- =?utf-8?B?SXBsLy8zbDBKZUYrVE1acHN6dmN4TXQrN1FOWnNMbFpqdGNlLzFQekx0c0c1?=
- =?utf-8?B?WlE4S1JhRWxId3ZudmRjbDh0MGw3S2NiSitkMko4TDVFYU9VUCt3SW5XZzFm?=
- =?utf-8?B?Z2xkTFZpSXVDNWZkcFlGRzJFUUdlaEV6dEtCWGJmSHZOM2NzSmR3Q1NpMWQ2?=
- =?utf-8?B?UGJWNEVZd2p4K20xWU1qWFhsZ1ZXZEpHcEJpVDBrZ25iVzU2aGhTTm9VcC9I?=
- =?utf-8?B?QzBnSkNJZzd3dVVDbUl0NW5UbE9MOS94QjRpNzhBa013dVI1UE5rd24vRUpL?=
- =?utf-8?B?bnNWT1gzQ0dUbytIaEpVSElVaDg1dXhRTFFsY1hHTXVZc0xxcGMvK3BFT01L?=
- =?utf-8?B?cHdDVkhIamdCbWxxL1hJSlQxeHJWUVliMmRVUzhnUURpNGE4L1pJL3BSWWQw?=
- =?utf-8?B?YkVLd3I1WUVES0xLYnFIdWJEV3hQRm4rR0xoMmFzWURHMnZSTXpyNkxyZklY?=
- =?utf-8?B?M08yNWZnMEh2T0Q1WHErRmJ3TnR1ZXZOQjMyRTRNQTU2MU1NU3hhUHV2MEZ5?=
- =?utf-8?B?aUxHWXZpMmlRPT0=?=
+	=?utf-8?B?UDBDaWJxZnhvRkJhc1JTYi9hK0xxOWJTcjBxSTcyK2tlTCtmc0ozSXViN1VU?=
+ =?utf-8?B?R0lqSDFvK1lYUXdJWXNhMHNWVXNDU0U3bW5mR0NHVjFlcGoyN09JSi8zQWRv?=
+ =?utf-8?B?ZkQ1cHlqejhkQzlxeGFzYyt5b0ppcmp6ZUVkeU1Wbmhzdi9mWnhMbU15UnVX?=
+ =?utf-8?B?VU9EQTVCeGQwME1mcDJkeERLS2E4c0tzQjNBYW85QjIyWFVzRCtWSGhZWURY?=
+ =?utf-8?B?ajlVSTlsUlUzRVJPT0ROMWJ1L2E0RWsrM2NTTERiVGd4M1JBUFdEdUR6b29P?=
+ =?utf-8?B?Y3JOZldFTW5KNVZSMG9CeEJPM2RJRlFnMElZa2dkQ0kxQjRlL3lkYlVQT1lW?=
+ =?utf-8?B?NmM4Z0IwOTRHWTZIZG84QmtlNGRWMjNveWxmYmJXbEhPZWdiMUwzNDJTcHk5?=
+ =?utf-8?B?SW8wb29Xa25MdVQrZTRqRUVsTDJVQzhuMkYxOEJIa25zSTJHdnlGTXF3SC9m?=
+ =?utf-8?B?TjBHYlFsNG52MTMycGp5ZDJXK2V6ZWk1QVlwT2VEZUsvY0VtL003K1lvVGll?=
+ =?utf-8?B?VFlITnRsNjBpRnFKQ1VxYzFHUkY5MWltQzBScFdwOHU5UnFKVmlWQW1DcUFJ?=
+ =?utf-8?B?dktFSFRTRzBxZVVIUkhSWmNiK21VSTVCK2lFTjJaemR1NHFleUFteDlXOVFz?=
+ =?utf-8?B?OWEyVFBGN0N1RTQzVmhIZ29qZTQ3YkswbVROWE5iMytNYk5jZU1DdUd4T1Va?=
+ =?utf-8?B?SzdtcUE3MHlOUC9XaUYrd0xuMTF0c1JQb2s1dms0SFdFUCttWDZzTHVHR3JI?=
+ =?utf-8?B?VnVBUHNyaDJrTU5sT3M5M2owbFlWcTlKSGYxZHVEN3FtaG5nVFQ3azMxNU5w?=
+ =?utf-8?B?Q3NuZytraGJtMDdsa0hVN3dVNlpXS0UxYVV3a2tuZ3JkSU9XR0F4aGFmVEt2?=
+ =?utf-8?B?VnA2bitQT25obUlXZ2JIL0FqMXptWmNNeFNEWmExRFBaTytVN3NGdzQ5SUlt?=
+ =?utf-8?B?STZmSXh1NnBJY0JKd2puNEVzc1MrQW5GeUtRb2N1blo0REpIb3ZvN3FJUGlE?=
+ =?utf-8?B?SDdxUi9IWG5TUGF2RjNPYzBNQ01RdUhxQ1hMMDVaV09DUWo2ZGJ2aGgxNzhl?=
+ =?utf-8?B?M3pFb3lJNC9CUjJ3VnJVYXVjVTFzMkZ6NFhQYlpqK3NpMGN2b0FuNmltYUVt?=
+ =?utf-8?B?cGRnNkJQTUQyakRjOXJOZmZ4QTBjRUx6SThQRm5PZXFxa0t1MTZ4RmRsbUI2?=
+ =?utf-8?B?MkFIRlhkVjF2TUZJM2pMRVQxa3Z3MWhSVzBBTFVEeFhCQzIyYWZnSERUQlpr?=
+ =?utf-8?B?bHd6citSMWExS0dBV1c0cmpDemlBeVJpdTIwVVF6RDJIbHd4b0pUd3h6MktZ?=
+ =?utf-8?B?K2hqaitva1docEh5Z3R4Mlg4R2VhNnJBc2NUNVI4aTRvSi91bkNtRGlQbURM?=
+ =?utf-8?B?NXVLQjdMMG1pQzVTRkJTWm84UXlXek5ZY2JGUkFaenJja3NCTzlobG1xb0U0?=
+ =?utf-8?B?N21qSEI3bXQwdVFEaXNVTmJTd0Jxb290QmJIS2o5UldUeXRIaXRMSkQzc0Mx?=
+ =?utf-8?B?emNHUzh5V3lsTkxUeFUrbUtKM29aMXA5NkRDRWJWZi9vb0xRYk5mN1lOZHhp?=
+ =?utf-8?B?b0hnVG9iajI1S2NDWGxGYm1acmk2clZnZlBIRlovcVBUQjFvTUo0Mk1qUkRH?=
+ =?utf-8?B?S3FweU9zem1iUG16QjkrU2RRa0duc2pidGRLWmorc3NRd3BEMHdSY3E2SUxV?=
+ =?utf-8?B?amhrM1dNN25pNSthdTdvaGZVdVpSRUxYUkgwK2Q0SkQ2MytTaE5ZS0hydFlH?=
+ =?utf-8?B?V0lxVTFFMkJEdXA1dzBYSGFIZ1RNbFluem55Q2o3S0FWN25uQlNQQTdydmZU?=
+ =?utf-8?B?T25lN0o2WWM5RlIwT1ljdTBFOVlRZjBwZ2ZJYVpJV0plRHVjZXhvQVlHYmZ4?=
+ =?utf-8?B?SUwyaDB0cng5cE9DaXlNekpSSjJtdXh0K3lPMnVnRFBoVGc9PQ==?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR10MB7660.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR10MB7660.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bitrdFVtNzZRb2Nrc3JSOHE1dHM3cmpVUEFYcmJtTUdFWk4vUnZHWTFscWUr?=
- =?utf-8?B?R2YvL1lpR2NFMGtKTmNpL2l3NDhiMUNlblBrSkU2UkFqb1JvTlhBU0NRQzJD?=
- =?utf-8?B?TllJMFpEWjMwQnlhdWpTbE1OV2JFZys4eUhjcW5PQlNlcDMza1Y0d0RNeVUr?=
- =?utf-8?B?NTAycjMxbmp5aWVzZ3lOQjhqQkNqbWJBdzVFTXRObjcxejhUSW1yaEFoV2ZM?=
- =?utf-8?B?M25tbUpNdzhuVnFjdUR3cUh0b0hzd0owbng1M015RndQTys5a0hTTW1lZld0?=
- =?utf-8?B?MTZSd1JabERrNFI4NVdPdkFGcGsvUlN1R2taaGd0ckpiUXZrdnBKNVR6eTlo?=
- =?utf-8?B?QVVGd2l2cTV5REpxdzlsUS9yNFBQWDVzcU1FbmdJQWJUWk5COW44MkxkR1dz?=
- =?utf-8?B?N2VoUk40bXFEV2FUVjg3UmRyWEF3eFhJa3I3c1A3ZlQvYk9qdVhuMHRWTzll?=
- =?utf-8?B?NHBBZWRmUlA3WUw2bUorbUhqeURwNGxxWmFjUktNS0sxOEF0cVFQd3JqVWpO?=
- =?utf-8?B?YnBZUFR2R2x1ZTRNeGxScXJQd3Z3NXBHZWphTW1IUXVwVmdPQUtCS2VKdGhP?=
- =?utf-8?B?ZmJ5NUJybUtsdjhrVGI3WFBhUnE5ekNjMys4SmFOKzduMTJuL3NXV2ZKYTJH?=
- =?utf-8?B?N1lWa2VBa3o4cXlVTXFvM2M3QzBwRWFFc096MFJzTHA2Uk1CUHMycFVpa2p1?=
- =?utf-8?B?RU5UYmFyN05ZMnJQazZobG5kWi9qM2V5RldodEVQb050WlFTdVo0alhWdnNK?=
- =?utf-8?B?ekxpSXh4Ym9nbGhEcTBPdUg4SHl3dUNacWQ0R0lFR1AvSFlhN2VVRFhFZFYv?=
- =?utf-8?B?RlFqc2ptZEUzSHRVbllNN3d6QnVLWGcyL2c4N0ZJaFFjOFNmQkpTS28yaXBM?=
- =?utf-8?B?VXVPMENYaUFpUHRReHp3RTU1b3J3b3hsek42RjFaUEtPQm83Tmo5R0preStp?=
- =?utf-8?B?UjJEdnZiMHhRblh0ZWN5U3FzZWpDcUVJYktMalZzVm9mQWp0cnpieEVwWCsx?=
- =?utf-8?B?S2hkYkYyYkMvVHF4VEJjRkgrU1ZnVzdJY1RQTGZhMG41QVRRRFAxYzZsSDVn?=
- =?utf-8?B?VlROcjJvcnpXV2xnRU1hQkQ5OVQvaHMzZm1xdUQ4M1o4RmJuNytuaVZPbm14?=
- =?utf-8?B?UTExNnhWT3U1V3BoZ3BhQ2t0cWNFYlJHVkJVcDFkTVJpNEpiRUk1a3hiRkdP?=
- =?utf-8?B?UzhFSEJLcktGVklZL1ZmbENPRkJZWUhaN1M1cVlNUGpzWUJsaXpER2hSTXBE?=
- =?utf-8?B?cjJqd2tGZ1ZuaDhhUVRsOGsvWnZ2MnlxTDQrS3cxZ3RWdEhycnl3a29uOGxZ?=
- =?utf-8?B?NFR5OFNlaUFVckRDUFFOQi8xbmRQSGlBTTY5K1hCTlNWeWc0ckpiVTJHUzJ2?=
- =?utf-8?B?Mk9sUkRQUWhDS2d5bFRZb3ZzWG85MXBsSDZMQWhqaUc4ckVNWG8wNS9vT2dn?=
- =?utf-8?B?SFhxUW9DZnZaNVkwR0RVZVY4aVhNdndRMTFlbEFsZG5vVkF4NEkrVlpVZlli?=
- =?utf-8?B?eWVlenNJM0RyNms2cHRRKzdxV1BDWlc5azVWUlRjN1NuWnRCNjdwYzRvRnlx?=
- =?utf-8?B?eGsvVWJtdC9hdXhkdERmYVV1N2VkUzNHSlZFUHlkK2ZqMmRjRFdJcVJEYWhp?=
- =?utf-8?B?U0FTQ3E1emdGcGdPRVFTd2YzQTJZMzQ1cElxcXU1aVB4dkJWS1cwK05rMEtt?=
- =?utf-8?B?Wld1bXNKQ3N3NGRPbWlKU3Z4eWRnRHVkWHJDc24rdjNaZUwrTFh2UHdwcE93?=
- =?utf-8?B?cTlVUDZiaEZkN1orVkhjNmpSOGFicXFubUhBRndhY1RMYVRpbEVYVDYxUm9V?=
- =?utf-8?B?TWt5YXM0K2FVNSs2UXZxRnVNK3JFOTEzdWNYWEljektpMGxpczFUdG5HOHc5?=
- =?utf-8?B?ckRtZDY1SzVmWmhKM2RDaGZMM1l5bXRwRXBmUTB0YzhLQzNJeWpvc0RQcWhP?=
- =?utf-8?B?R2taUy8zdER1WXNQUGk3M3c4aG45MWdZd3FoVGRXa3gwZTlDenZia1EySm1z?=
- =?utf-8?B?TlNtNURDNzlpN3R4R0d3NjlxNmRtNFNSMkhKakpUTnliQTBiTG1BMHV5bUFq?=
- =?utf-8?B?VjR3QWpBb0NReDUrSCs4Z3JCSjJvNUw0NXVSajBSSWQxWS90TWxtSkdLalhO?=
- =?utf-8?B?aHdNQURwZVoxejl0aG5QaFBPSWhrMEtwQlpZODdvU0JPY1VheFc5QlBNaDY1?=
- =?utf-8?B?VWc9PQ==?=
+	=?utf-8?B?b0VPQXhWRHg0ZFFhclJBNHFtajJmMDN0aXFoQ3pYejB0WDgzWmptWkErOUIv?=
+ =?utf-8?B?SmdNS09aME9CTUZsL2FUK0ttaTZVWUFzQkVaQUZDOEkrV2NKbFA0dXp5c3o1?=
+ =?utf-8?B?MkNBZ3JpcGtSM0lUeTRLaGlnKzdaNnVFNXZERTgvSnh0RmVnMHNiTDIrZFJP?=
+ =?utf-8?B?TXExTFd3T3ZmOUJOMVI5L1JhSG9TSU9tRS95bE5PblptVmdycG9tRU05OGRM?=
+ =?utf-8?B?ZzltUVZ1c2xybnZEQlN3Tkw5ZDg3N3dvdXdET3E1WU44aHBBNmRNQ0tpUzEx?=
+ =?utf-8?B?QlpQVGJ4T0d6VVJBU3I5SUpGanZJcjc1UUlYTVdPN1NxK081RmdXTUQ4Y1JO?=
+ =?utf-8?B?UFlsQ3FSU1Z0UHdNT01SclQ1MDNmYmNMWFhnSCt3d24yLzRJRGgzc1lyVGww?=
+ =?utf-8?B?aW51V3NDT3Zpb2MvZytkWjBCWFJ4eWtYaDNnM1p4S3RFZ21UeEJ6bjc3LzFX?=
+ =?utf-8?B?dzZLSDVkQUgzUTdnalIyaEFHeFVPd0JEN2g1d0UyVGNTRXY4WlZjQzhKVE9h?=
+ =?utf-8?B?Y1EzNUdYcmFXNlBqeHlZVm9PUGQ5QzVnMFlVWStxSWtMb2xTa1crWFdCTStw?=
+ =?utf-8?B?OW4wL3dIVmhkVVY2b2pkWkE5NXVjQlhPSUZhMzhJazdxcERRZ29SenQxOVRK?=
+ =?utf-8?B?NlpUY1NSOXJJSmZvQzI5TTFMc3oyUThsVElTUlVGZnVMSkIybDUrN3QydG53?=
+ =?utf-8?B?VndXNHRYRnY0NTBrMXlHeExPYU9QUmJ3OE5wUk5Jb2Z4YVF3ZEhJQ0dacXdm?=
+ =?utf-8?B?VVUxZVJ2OG5sa3ZpZmU5UXU2Wmd6Ylp1UjlmVWNhSkduamU1OEJIS3I1dEJo?=
+ =?utf-8?B?SWVwbFRPd3V6eFRtZmN2Qm1yU2liNTZ3cWswRzYzQmtVOTZ1RXZuUkJINW1t?=
+ =?utf-8?B?dkRaWlkvcXVkODhkSTBscDc5V28zM0pCbG5zVTNyU3RmamhmZlB5TUVtakJh?=
+ =?utf-8?B?MngxT05SQTlKTFpyeE1EWWVwT1A5K3BpUGFXZ3lpNnZTNENmeElLZEp5aDNU?=
+ =?utf-8?B?MUtkSG1ySHpLT0xTMHYyU0ZsL0Zwc3U5VXlCcG45dytGaHNaSlFZQk4yQ0pD?=
+ =?utf-8?B?U0hLZkgzNXVxT2dHT0JBNjdJUEpjWXJEb21hbDcvRXgvREs5ZVhqMGlTV2Ft?=
+ =?utf-8?B?bDJDOTdZdm9xaVlhMVptdkNIWkdyZlhYbnFFcVNkRDlWd3pDZ3IzeEdUaHVa?=
+ =?utf-8?B?ZHYxVXVneVdOZnZBc0ZhTDVJeDI4WWZxRytBZXljQlVFa0pmTUI1R3RnaXFj?=
+ =?utf-8?B?MTNIeVFscWRZdElIMXI4MElmU0tyc3RBaHlqZ2MzWkZXTTRUays1U2R3OElq?=
+ =?utf-8?B?dG82NjNDMHBaQUxwNlMxVWtrZlFEcGk4QTJ3aVhJcktlS0R0QTRNQk11ZlBR?=
+ =?utf-8?B?bkxqeXZWUGZtc2kzVUw5ejY5UVUyMFFCK2pMWkRIWFVCdlptemJYalVqWm56?=
+ =?utf-8?B?M2JPa0xkWEgrNXMwbHBnajdsZkpJZDdsVlI2SjVYMTc5bmd2VDBHdjBrVUJ3?=
+ =?utf-8?B?M1VYY1RzekduYkhsdGh5N1lCTUd2eUZqYXZ3QjVzSk05OXZibHhvNEVTcXV1?=
+ =?utf-8?B?TnNUdzN3UlRZc1FFSlVFRWVMQ2pXVEZwQjZTdmFYY1YwR0RwZjZGRDF6OGgz?=
+ =?utf-8?B?dUhjRHAwTUhiSjhUUWZnTTlhUlNTM0VIS3hwcFl0cjRTd2VYNWZhaUMwamUy?=
+ =?utf-8?B?WFpTdVQxZTMxdVBjT3lDZFJWeVFFUTNzOTBKMnBtNW9XRlRiWmVUVTVjMUxI?=
+ =?utf-8?B?OVcwRUJpcDZ3SjFvUU55cjQ2dE9ud29EY0RoeHROV1l0R1MzdGI1ZFZMMzVN?=
+ =?utf-8?B?dXg4VnpxWFhuRFB0bWtuVWRCQkxIWVFqSDZSbWVRUWlUbVJTZmR1OFNudFZZ?=
+ =?utf-8?B?VW9xa2U2VjRMWlN1R2MvaWtqVGMyOWVSQ3NpTTNFYVFIZGowYlo5UXQxODFq?=
+ =?utf-8?B?Rk1Dam94Z2JLcjRheWJRRExaRWs3SHJ5eS9kajR3TXJZYld1V1dZSlJRT3h6?=
+ =?utf-8?B?a1Aya1FNUGk2Wjd6Z0o0NU1rSGUvME5ucDY4VSt5YzdrNndYWHNDSU9PdjVB?=
+ =?utf-8?B?MllsODlZalhEcHJFeVh3T291VkpZRzZVM0prRk55MmJLcnVzMGQxazg3LzBj?=
+ =?utf-8?B?TmNpc1pxcUQyVjVGQlJrUTV1TS92RzdXR1llemtVRkhzT3IrR1hxVnJHOElM?=
+ =?utf-8?B?SkE9PQ==?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	rbS94WjPuh7pOSKa6U5UAa3mJmjrvOAq9xKETxCS5CbRB5rzCBcyxf642WVaC9vZPEjKlhTNEeDf5E7frC3sUDoa58yETXR93RJQRn6ENNIZoP6wTzaK4Q1GHzPBoYK9aG786u9GC0m2IsRlEQxNz6tpTx0GPWI3jYhcCIKh0GL6wN3EzMOVjcmEiBncseE3gnR3l0B0xeNEHDJuqES8Q6e3afTuS1Y7QPw4J9tOrsFa4M/YP9QUab15EA/ctRhEhdXyvD55/XJl3IbLBM9V1AmtN4yoqzdqXIVuFoPgMMnrssLOqcoPtjQ/OzKf22Pa+867K1Kn+aa+ASBkDLxGLbY2FHur+zZ6g/EBO9e0f4G0SREGlOn6+/HIyxeboGuf9K8O+XGNI3vbH5wcyP8EF8HQG0jJ4D1E/AsI0WaLZYot0OElqXqaQcni6GEBq7l+d2pqc9+1o55jDVdlmQpG6XnnetwjmL3xrKjhzFW7hrssKDusW64xqMGfTyAduY+/ll6zH059FWGoH1qtIOu2u/3tFJsngW1VPgr2Kmeg+O/Q5ULm9db5J+fHqpQHTDuYo7hpKGZ6HZlNnjOOjnicEfZbm3OzaR7zBkzXVBuoWK8=
+	IKCLa0RF4XyKKNhJ/zHnOb4e2SExCGLWtkMRRf11etT9IR2RC6o0vo2PxS/2Ax/IlYxVfJoNNX9qiBbGNSNNHDceKRDghhtQhWHmgC1J4CKEiFjedJ2AVhKjzzx68lcutIp+F/vI5jq/FWltiMwXDuUQNrd126ZalG7/j/GedeQ/diQIY3zRyXIdL3h81rG0Fn3WRVnm3M4s+4fxQPm/7GevaJKhoRj77/+DRmG7KYmTo/DYIxcuLtvGds4PURovlWVSNzgzs4GZ+fV3bs8uYJC0JMV1mQNdLsbdMMS+r7TT+mpcDoPodV8s7zDZACbYaFRlCsDOtJWH5xW9F7cNq/fZxBh/8rpqjdien9827RM5aB/W381SV7cOYF6sMXn3nUCaVfnT6gYxiztuybTjxyQmp12GXX8mn1c5IEBHx/NgV+RaNhTH41HGEQJpz9V/z57rAf2gDtlKiRg/OdFlqqx8vIR2o+lE1p5u2rL57NWi5qxJQY8wr6RPLgjXomBp8/Ke7wGoFO93OB/Gp2uXHRqk/oRp9s6ogkEFicKwFpQ3adzkCSlavfSH41yiFHZoZEsOEQ4XCjcbVzs8Ha1vgO+KmvxT5Sitoo9PKx6vFU8=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50b3792d-f962-4254-99c6-08ddef0b45d5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1848be74-9ed4-467e-35b8-08ddef0ce245
 X-MS-Exchange-CrossTenant-AuthSource: MW6PR10MB7660.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2025 19:09:45.3561
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2025 19:21:17.6694
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GOwnrYu6F4V94jV1y8LHzHWksSwksVgY4ihnJyu104vE88Os+XYh/DITIVDQEdcXBR3H/j0jdIfPXJkUyknJ1qt1mqnAhRQP5tVNB1UUbDA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5058
+X-MS-Exchange-CrossTenant-UserPrincipalName: 15A8VJjveglQv/TWYOY+OvRA8g24zPDx6Wmi4APT2M535vj0lT8c0joFc9sZtB3fV0jVlCpQ9Gvue4BpsriUJBfWrrRufWQ+I1hkjWcCXxM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB7006
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-08_06,2025-09-08_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
- mlxscore=0 adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2508110000
- definitions=main-2509080189
-X-Authority-Analysis: v=2.4 cv=QeRmvtbv c=1 sm=1 tr=0 ts=68bf29fe b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 spamscore=0 phishscore=0 bulkscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2508110000 definitions=main-2509080191
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA4MDE2NiBTYWx0ZWRfX2j4HS46EWcFs
+ gB6tdpYLMq3e3MLBkrPjJ16i9j+AFLLF+0O6tK/3ZAWUkQ8dD0+fT4gRpHNLus4rIUvd47HCTcg
+ NK2l2eKi8m4FTMHTmT2z8VZKvx+EIbe3kBmS77GUvua+5DVO7KRbcYIU9MQhadjRMFdwbJ+tMBW
+ fvKCOufqUFKUz28/0vHFvz+j2O37seoD23Z0z/I07YM6Ymglrf9Qvsxa3F9cYd9be3Y/SPi/wgH
+ JRCwQzo5uzUd41VU1aSoDJPXzbKSAAmq1UkMBqB3LQs/UmdwjRekd30sluFqHiXkevovK4GOt5e
+ Jp/h/UVBnovlQSWNfKexywmausHGDpBXsojEEOanZ6Q+EWau9ximztEdA4eeHmx4f2w6Pml1pou
+ wmbiX30D
+X-Proofpoint-GUID: zb-CzWDmkudGcKj-_1bSh__ZxwfUODY_
+X-Proofpoint-ORIG-GUID: zb-CzWDmkudGcKj-_1bSh__ZxwfUODY_
+X-Authority-Analysis: v=2.4 cv=LYY86ifi c=1 sm=1 tr=0 ts=68bf2cb2 cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
  a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=yJojWOMRYYMA:10 a=GoEa3M9JfhUA:10 a=yPCof4ZbAAAA:8 a=VwQbUJbxAAAA:8
- a=NeSQVN01N5FM5_svAXAA:9 a=QEXdDO2ut3YA:10 cc=ntf awl=host:13602
-X-Proofpoint-ORIG-GUID: OnGwgNgwg-e37oNfmBq-KXqbEeNhRuT7
-X-Proofpoint-GUID: OnGwgNgwg-e37oNfmBq-KXqbEeNhRuT7
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA4MDE1OCBTYWx0ZWRfXxlrs0T2mdBN5
- hE1D+dVdImNbIE2YAquJkP1HSg/5Gl03anFJJTcq8CkeShJWXP3GCn/YL0lbaoy2ELaegt51iMj
- HQK/HlvvUeLjvwigcgaWXTEOiC46U87nHy6P+iUSSZVcq/rb/Oxon/u0jF8wzu+F+BUT3P8aCjT
- b6Oz5LuO8Vtj1u/8ljM0o6NoKupQoE6UVub7Z+/eMvVHL/xTLzvGEIaHETfgvCQsna2Q6RU9Sd1
- btX9c+bCJdshW0Pbf5U75eh1FPwkB/vj1zlyX4nyZjsTYq6PFM26WYZy7cYZmeE0HpVjdJmIqZq
- OCgAtSgY8EIQCnqyhvQr9MVF6vOXxShVuONqhUNF7NQlEvgF6NoCDcR73bsJVNVbUA6VxBlrHmk
- gIYV+YsaxazbZ5xTeUbIrR8Y5ccHYQ==
+ a=yJojWOMRYYMA:10 a=GoEa3M9JfhUA:10 a=i-pEsNv00SWCavqrx0oA:9
+ a=QEXdDO2ut3YA:10
 
 
 
-On 9/8/25 11:29 AM, Liam R. Howlett wrote:
-> * Anthony Yznaga <anthony.yznaga@oracle.com> [250819 21:04]:
->> From: Khalid Aziz <khalid@kernel.org>
+On 9/8/25 11:50 AM, David Hildenbrand wrote:
+> On 20.08.25 03:04, Anthony Yznaga wrote:
+>> When handling a fault in an mshare range, redirect charges for page
+>> tables and other allocations to the mshare owner rather than the
+>> current task.
 >>
->> Add a pseudo filesystem that contains files and page table sharing
->> information that enables processes to share page table entries.
->> This patch adds the basic filesystem that can be mounted, a
->> CONFIG_MSHARE option to enable the feature, and documentation.
->>
->> Signed-off-by: Khalid Aziz <khalid@kernel.org>
->> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
->> ---
->>   Documentation/filesystems/index.rst    |  1 +
->>   Documentation/filesystems/msharefs.rst | 96 +++++++++++++++++++++++++
->>   include/uapi/linux/magic.h             |  1 +
->>   mm/Kconfig                             | 11 +++
->>   mm/Makefile                            |  4 ++
->>   mm/mshare.c                            | 97 ++++++++++++++++++++++++++
->>   6 files changed, 210 insertions(+)
->>   create mode 100644 Documentation/filesystems/msharefs.rst
->>   create mode 100644 mm/mshare.c
->>
->> diff --git a/Documentation/filesystems/index.rst b/Documentation/filesystems/index.rst
->> index 11a599387266..dcd6605eb228 100644
->> --- a/Documentation/filesystems/index.rst
->> +++ b/Documentation/filesystems/index.rst
->> @@ -102,6 +102,7 @@ Documentation for filesystem implementations.
->>      fuse-passthrough
->>      inotify
->>      isofs
->> +   msharefs
->>      nilfs2
->>      nfs/index
->>      ntfs3
->> diff --git a/Documentation/filesystems/msharefs.rst b/Documentation/filesystems/msharefs.rst
->> new file mode 100644
->> index 000000000000..3e5b7d531821
->> --- /dev/null
->> +++ b/Documentation/filesystems/msharefs.rst
->> @@ -0,0 +1,96 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +=====================================================
->> +Msharefs - A filesystem to support shared page tables
->> +=====================================================
->> +
->> +What is msharefs?
->> +-----------------
->> +
->> +msharefs is a pseudo filesystem that allows multiple processes to
->> +share page table entries for shared pages. To enable support for
->> +msharefs the kernel must be compiled with CONFIG_MSHARE set.
->> +
->> +msharefs is typically mounted like this::
->> +
->> +	mount -t msharefs none /sys/fs/mshare
->> +
->> +A file created on msharefs creates a new shared region where all
->> +processes mapping that region will map it using shared page table
->> +entries. Once the size of the region has been established via
->> +ftruncate() or fallocate(), the region can be mapped into processes
->> +and ioctls used to map and unmap objects within it. Note that an
->> +msharefs file is a control file and accessing mapped objects within
->> +a shared region through read or write of the file is not permitted.
->> +
->> +How to use mshare
->> +-----------------
->> +
->> +Here are the basic steps for using mshare:
->> +
->> +  1. Mount msharefs on /sys/fs/mshare::
->> +
->> +	mount -t msharefs msharefs /sys/fs/mshare
->> +
->> +  2. mshare regions have alignment and size requirements. Start
->> +     address for the region must be aligned to an address boundary and
->> +     be a multiple of fixed size. This alignment and size requirement
->> +     can be obtained by reading the file ``/sys/fs/mshare/mshare_info``
->> +     which returns a number in text format. mshare regions must be
->> +     aligned to this boundary and be a multiple of this size.
->> +
->> +  3. For the process creating an mshare region:
->> +
->> +    a. Create a file on /sys/fs/mshare, for example::
->> +
->> +        fd = open("/sys/fs/mshare/shareme",
->> +                        O_RDWR|O_CREAT|O_EXCL, 0600);
->> +
->> +    b. Establish the size of the region::
->> +
->> +        fallocate(fd, 0, 0, BUF_SIZE);
->> +
->> +      or::
->> +
->> +        ftruncate(fd, BUF_SIZE);
->> +
->> +    c. Map some memory in the region::
->> +
->> +	struct mshare_create mcreate;
->> +
->> +	mcreate.region_offset = 0;
->> +	mcreate.size = BUF_SIZE;
->> +	mcreate.offset = 0;
->> +	mcreate.prot = PROT_READ | PROT_WRITE;
->> +	mcreate.flags = MAP_ANONYMOUS | MAP_SHARED | MAP_FIXED;
->> +	mcreate.fd = -1;
->> +
->> +	ioctl(fd, MSHAREFS_CREATE_MAPPING, &mcreate);
->> +
->> +    d. Map the mshare region into the process::
->> +
->> +	mmap(NULL, BUF_SIZE,
->> +		PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
->> +
->> +    e. Write and read to mshared region normally.
->> +
->> +
->> +  4. For processes attaching an mshare region:
->> +
->> +    a. Open the msharefs file, for example::
->> +
->> +	fd = open("/sys/fs/mshare/shareme", O_RDWR);
->> +
->> +    b. Get the size of the mshare region from the file::
->> +
->> +        fstat(fd, &sb);
->> +        mshare_size = sb.st_size;
->> +
->> +    c. Map the mshare region into the process::
->> +
->> +	mmap(NULL, mshare_size,
->> +		PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
->> +
->> +  5. To delete the mshare region::
->> +
->> +		unlink("/sys/fs/mshare/shareme");
->> diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
->> index bb575f3ab45e..e53dd6063cba 100644
->> --- a/include/uapi/linux/magic.h
->> +++ b/include/uapi/linux/magic.h
->> @@ -103,5 +103,6 @@
->>   #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
->>   #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
->>   #define PID_FS_MAGIC		0x50494446	/* "PIDF" */
->> +#define MSHARE_MAGIC		0x4d534852	/* "MSHR" */
->>   
->>   #endif /* __LINUX_MAGIC_H__ */
->> diff --git a/mm/Kconfig b/mm/Kconfig
->> index 4108bcd96784..8b50e9785729 100644
->> --- a/mm/Kconfig
->> +++ b/mm/Kconfig
->> @@ -1400,6 +1400,17 @@ config PT_RECLAIM
->>   config FIND_NORMAL_PAGE
->>   	def_bool n
->>   
->> +config MSHARE
->> +	bool "Mshare"
->> +	depends on MMU
->> +	help
->> +	  Enable msharefs: A pseudo filesystem that allows multiple processes
->> +	  to share kernel resources for mapping shared pages. A file created on
->> +	  msharefs represents a shared region where all processes mapping that
->> +	  region will map objects within it with shared page table entries and
->> +	  VMAs. Ioctls are used to configure and map objects into the shared
->> +	  region.
->> +
->>   source "mm/damon/Kconfig"
->>   
->>   endmenu
->> diff --git a/mm/Makefile b/mm/Makefile
->> index ef54aa615d9d..4af111b29c68 100644
->> --- a/mm/Makefile
->> +++ b/mm/Makefile
->> @@ -48,6 +48,10 @@ ifdef CONFIG_64BIT
->>   mmu-$(CONFIG_MMU)	+= mseal.o
->>   endif
->>   
->> +ifdef CONFIG_MSHARE
->> +mmu-$(CONFIG_MMU)	+= mshare.o
->> +endif
->> +
->>   obj-y			:= filemap.o mempool.o oom_kill.o fadvise.o \
->>   			   maccess.o page-writeback.o folio-compat.o \
->>   			   readahead.o swap.o truncate.o vmscan.o shrinker.o \
->> diff --git a/mm/mshare.c b/mm/mshare.c
->> new file mode 100644
->> index 000000000000..f703af49ec81
->> --- /dev/null
->> +++ b/mm/mshare.c
->> @@ -0,0 +1,97 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Enable cooperating processes to share page table between
->> + * them to reduce the extra memory consumed by multiple copies
->> + * of page tables.
->> + *
->> + * This code adds an in-memory filesystem - msharefs.
->> + * msharefs is used to manage page table sharing
->> + *
->> + *
->> + * Copyright (C) 2024 Oracle Corp. All rights reserved.
->> + * Author:	Khalid Aziz <khalid@kernel.org>
 > 
-> Probably needs a new year or year range and another author?
-
-Yes. I'll make sure the next series is updated.
-
+> That looks rather weird. I would have thought there would be an easy way 
+> to query the mshare owner for a given mshare mapping, and if the current 
+> MM corresponds to that owner you know that you are running in the owner 
+> context.
 > 
->> + *
->> + */
->> +
->> +#include <linux/fs.h>
->> +#include <linux/fs_context.h>
->> +#include <uapi/linux/magic.h>
->> +
->> +static const struct file_operations msharefs_file_operations = {
->> +	.open			= simple_open,
->> +};
->> +
->> +static const struct super_operations mshare_s_ops = {
->> +	.statfs		= simple_statfs,
->> +};
->> +
->> +static int
->> +msharefs_fill_super(struct super_block *sb, struct fs_context *fc)
->> +{
->> +	struct inode *inode;
->> +
->> +	sb->s_blocksize		= PAGE_SIZE;
->> +	sb->s_blocksize_bits	= PAGE_SHIFT;
->> +	sb->s_maxbytes		= MAX_LFS_FILESIZE;
->> +	sb->s_magic		= MSHARE_MAGIC;
->> +	sb->s_op		= &mshare_s_ops;
->> +	sb->s_time_gran		= 1;
->> +
->> +	inode = new_inode(sb);
->> +	if (!inode)
->> +		return -ENOMEM;
->> +
->> +	inode->i_ino = 1;
->> +	inode->i_mode = S_IFDIR | 0777;
->> +	simple_inode_init_ts(inode);
->> +	inode->i_op = &simple_dir_inode_operations;
->> +	inode->i_fop = &simple_dir_operations;
->> +	set_nlink(inode, 2);
->> +
->> +	sb->s_root = d_make_root(inode);
->> +	if (!sb->s_root)
->> +		return -ENOMEM;
+> Of course, we could have a helper like is_mshare_owner(mapping, current) 
+> or sth like that.
 > 
-> I don't know the recovery here, but what about inode and inode link
-> count?
 
-If d_make_root() returns NULL it will have called iput_final(inode) 
-which takes care of freeing the inode.
-
-> 
->> +
->> +	return 0;
->> +}
->> +
->> +static int
->> +msharefs_get_tree(struct fs_context *fc)
->> +{
->> +	return get_tree_nodev(fc, msharefs_fill_super);
->> +}
->> +
->> +static const struct fs_context_operations msharefs_context_ops = {
->> +	.get_tree	= msharefs_get_tree,
->> +};
->> +
->> +static int
->> +mshare_init_fs_context(struct fs_context *fc)
->> +{
->> +	fc->ops = &msharefs_context_ops;
->> +	return 0;
->> +}
->> +
->> +static struct file_system_type mshare_fs = {
->> +	.name			= "msharefs",
->> +	.init_fs_context	= mshare_init_fs_context,
->> +	.kill_sb		= kill_litter_super,
->> +};
->> +
->> +static int __init
->> +mshare_init(void)
->> +{
->> +	int ret;
->> +
->> +	ret = sysfs_create_mount_point(fs_kobj, "mshare");
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = register_filesystem(&mshare_fs);
->> +	if (ret)
->> +		sysfs_remove_mount_point(fs_kobj, "mshare");
->> +
->> +	return ret;
->> +}
->> +
->> +core_initcall(mshare_init);
->> -- 
->> 2.47.1
->>
+I'm not quite following you. Charges for newly faulted pages will be 
+automatically directed to the mshare owner because the mshare mm will 
+have its mm_owner field pointing to the owner. On the other hand, 
+allocations for page table pages are handled differently. 
+GFP_PGTABLE_USER causes the accounting to go through 
+__memcg_kmem_charge_page() which will charge them to the memcg for the 
+current task unless unless current->active_memcg is set to point to 
+another memcg.
 
 
