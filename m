@@ -1,88 +1,88 @@
-Return-Path: <linux-arch+bounces-13405-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13406-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA326B49890
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Sep 2025 20:46:03 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65E0AB498B9
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Sep 2025 20:50:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAB37207BDE
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Sep 2025 18:46:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1771B4E2114
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Sep 2025 18:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2444131CA57;
-	Mon,  8 Sep 2025 18:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C92B31C58B;
+	Mon,  8 Sep 2025 18:50:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="atM+x1QP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BTv8aFrQ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE8E31CA52
-	for <linux-arch@vger.kernel.org>; Mon,  8 Sep 2025 18:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34203126BB
+	for <linux-arch@vger.kernel.org>; Mon,  8 Sep 2025 18:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757357138; cv=none; b=fFAA8KHU3YFyUm6bvbmKxYEhypBzQuzdLrxcMqJSXWIns8kcnpURT4Lm0OptIOmfMlhUbdDtpedxLQ6ToB4n0exE6jaWB5hFxBorvEjioZ+/WX06LFZLvDoANm+1IxteljLb9wazD55VgM9qeqmam0UJ9zSXkAIolm1EKm4LAQw=
+	t=1757357409; cv=none; b=PElnZFOR1dCXzbAPgx5nCCfq6jwkvYCzS6sw7H4KlEb78ACCEW5jh+c6uz5VxMSfkDRtqVHtMDcBI27M1uzRP2QnZbViddphtH/cMCKqQKKn0dMZzC3QtxKcwMcp/pTESfyEbIt+Sl7IQpeZAxLdesrFBb/Gze1r51e05AKJD8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757357138; c=relaxed/simple;
-	bh=u4634A0GpgrHa65LJw+AaevVl1eVSTRE0zlvp0/N79A=;
+	s=arc-20240116; t=1757357409; c=relaxed/simple;
+	bh=E7Vj9/23AE8WzpJfHTcwBG4Ng9PhfJNp1DnthXzdKgQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fpzk+oAKkr/v13WCDU+9GGnZOaR35jEaFc7Ie834xbFl1a88R6q/e/nEBDEoHbSs9bkyWKuPLoR167NEvPzU/g67gVDDHcPkGWGBJLIjOopsRHQY6JuPbRcQTryIQ7pfoi1ZubmSn21hQXjfW40XlqaYKs8FkuDZ1FWq34HtOJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=atM+x1QP; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=m0rUbtvNKxvfVKHXub+YhH2xAGub5BwRIkLsjSrl6S45ovVEg3sLEKX/mYlkSfS1d0XilyPVYMGLpeSwskTwm5i/l+PpNDJv7Su8bDGyIAICNyMBi8DhSjvBHWip5qSMoeKeKGavEphw4ZH1ub2o+0JEueGWRMVZDeABm00uRUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BTv8aFrQ; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757357135;
+	s=mimecast20190719; t=1757357407;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=CZ1U0+nto9ykqfQPo7HpxxJzqiGtL77TvIiUKaOMOeM=;
-	b=atM+x1QPEOhL/+n9ifJwPdqj9r2YVswjCJzHonahWQS0HKPS6r5djVcPRqvn0Km1gMXnSW
-	vfuci1PkWvppH825uN6EI5aI3+XcWP2ii0MZWXtRVkeYM0z7xkLeBOzZhyHoqaU9EhjfW4
-	2WcOf9KoqdW191eYfhof4MJ/BWUlBSs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=UUZtrw9Ce3OTyc4thmlH4DQBN7q3kEq/o1AqpiGl1UQ=;
+	b=BTv8aFrQrheRmrF+X3FDFSQ6pv9Ebdy7wxRroe8siDq6dwemph8TTuIf5pjjdqqhxox+a+
+	bmlBoYXmEYhU/Jt9yTX5w8hleg2kOCkODfUXcoPbcWkUHWzZpH81Aa6Yj93Re7MullL7qk
+	XvAyx1ocDnbOMc5XRTbBqb4InRqagFI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-151-pDDH-23iOWS3ceea96wlZA-1; Mon, 08 Sep 2025 14:45:33 -0400
-X-MC-Unique: pDDH-23iOWS3ceea96wlZA-1
-X-Mimecast-MFC-AGG-ID: pDDH-23iOWS3ceea96wlZA_1757357132
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45cb6d8f42bso45238085e9.2
-        for <linux-arch@vger.kernel.org>; Mon, 08 Sep 2025 11:45:33 -0700 (PDT)
+ us-mta-335-Rs8jW5cTP16LrC_PT6uN1A-1; Mon, 08 Sep 2025 14:50:05 -0400
+X-MC-Unique: Rs8jW5cTP16LrC_PT6uN1A-1
+X-Mimecast-MFC-AGG-ID: Rs8jW5cTP16LrC_PT6uN1A_1757357404
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-45cb612d362so24888815e9.3
+        for <linux-arch@vger.kernel.org>; Mon, 08 Sep 2025 11:50:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757357132; x=1757961932;
+        d=1e100.net; s=20230601; t=1757357404; x=1757962204;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CZ1U0+nto9ykqfQPo7HpxxJzqiGtL77TvIiUKaOMOeM=;
-        b=iBgwBQtHxzwNq37WHeV7rl2P8H+10okwzHHLSOeOW0tMM1/IhtX5Kj2F9CHCgDw9/D
-         mOL4llkG+JbXKHrCcyL3MfSD9A1/lbYFMo6YDyiGT1bmVO3yeF8BELq9pKztNj3Wnhji
-         oYmNtA4jLDbQ2m7cgkvTvH+BzpZqD/KECCmoBGHZcvMBb+usF6WetvbkCYeK3eGGEVBC
-         IcX6rGzHRCLk8OrUXbTZMB9xmC2CirZHGpcOBGuBJczxHq3M2dBaZp9/o6Nk5N7F90Rg
-         Qwl2GcLizuqmtxwSphM1e2ylRfLx6wQsE07OYxdLRMcU2jZfgLYY8hepPHT8+mpjjdAa
-         8ENg==
-X-Forwarded-Encrypted: i=1; AJvYcCWgQMOXrYM8H9goPAm/3gDva8BLsaar2MGiHRhcZH+ZLFis8spq0MBsxCu2dx5JlL9lw7FI0Wv+wb5v@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrvwPT9WCujhUw4+eU9QjfKsaSQ+aX3PY7kvZi9eAoX5rJaYBe
-	kPMuRVjWDK7WRFZemQbUJHIh0mXlLkzegDl8HHfGM8BDamutqqYyPeGXkoBw5eX+hAznsInYkFZ
-	Wef5GRnOA+PQQmUgbxdipe+CQ7trQ4xkVwewLkGNYykm2wxRZtcaVwCPgfouOgxU=
-X-Gm-Gg: ASbGncvk6lWP5kipy4W1vxJMh022D4vcW0EFUlP8BmHa4fLXpoINf1enXnjhPMQzhf3
-	zb5m5otZWrPLzjFQQC6z3dVFogzRQ8wgQo1JHqukpdSoOci0iuU/Lypx+HcYsUyr87OBnA2ZBMg
-	/e7ZiNrpwA9ncyTZCm6Jcv5HhwxNoSqLr8zcDBLCvj8kkwl1TzCklbWiPxB+0ZbKekW65na5KKk
-	2EZ/tGaxaT6ZJlsfzX5/+yjtLhb7MV+LtMeAD+wiKueZiSsdFmLgjniXhP4MdPorOCl+aQySiMa
-	rUsXFAV7OwIB9CSOqtw2jMazVRB6ooLs00AfNxXssznL8c0PCnxJdST4WRDr+SnTpVihkYHcGZ7
-	kgV7r5DdzYr97TFHFm8Nb/jHGTsiJ7wDptXQ/AojzzPUB1K/NT0CoOM3HBaEWVZa1
-X-Received: by 2002:a05:600c:46ca:b0:459:d3ce:2cbd with SMTP id 5b1f17b1804b1-45de072e878mr66056735e9.13.1757357132077;
-        Mon, 08 Sep 2025 11:45:32 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGl6W6PZgDJSOeT0hvE61lJkei0qub4EjvxomlpdB428UuZFOkk6zMkWPcWT58RiDXm1V4n4A==
-X-Received: by 2002:a05:600c:46ca:b0:459:d3ce:2cbd with SMTP id 5b1f17b1804b1-45de072e878mr66056435e9.13.1757357131588;
-        Mon, 08 Sep 2025 11:45:31 -0700 (PDT)
+        bh=UUZtrw9Ce3OTyc4thmlH4DQBN7q3kEq/o1AqpiGl1UQ=;
+        b=UgpWGdF+eF6hm4+qD+KUPEk460ILAbMSsyDMmTteTHp8rdlOpE6EyZhSjA9mUyRuwO
+         2N8Ld5Z77ztflBbZcVXtxkOQyAcPeTjfKYUWVpNpbipITOt9DhUsxigidt8+kgncY7YK
+         c8/MtxzR/1j7v3coM6Wfdd0WhssRw5w2AYKd7u4sYpna3CCs+qM6ZEPH5SzVQuoKfe3m
+         SFg0uvxOJh7lNfkF5Ih20yrzm+S4X3epFFCn9Y2067Tj7e9gyrpC0HRvhYiifIf409Pr
+         1OD+RICasmHGcC3OpbNbK5rnz6a7eAlVirlvKdoiujusTjx4ZKD6Bqq2QIgEuH9Is9dY
+         jFqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVaHsy7BNAtnoz97dPTu1bkCjep5RhAUrsOw6QNPNSAP7wMDfpB8CoNE4L0S3cLlnPnrmSWiJvumrTO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7mJ/uL9IknZLxjDPoVl0kctL3JyWlIYns5Z9lwOjrw0D4vEH2
+	T0CAaKVcbaoiosH359NKY6WGAM4dgbfO1UhaKpLXjzKSdhbgXtQ1gnblb4TKucrCzb9QEtXG+dl
+	Jx//yGSMgoHSWGo4t7/xZkKlkYukJ2EEYUoV//4NoNhx79sUJQMeKjtEM2COqvfU=
+X-Gm-Gg: ASbGnct8XsUU92FwRM2/OC2zIOKnd2LLuQIogFuoK9CmzzcMpFHrqmpO3kX/YklEWZJ
+	8cRSIil70fTbQT4md/LLoFbFFOXnxXkCWZgdRBn8TW55ir0In/KsNmnSedflJxaMsAyRXVlO9ty
+	JRi6ZYy7ucPRzb5R3hs1cTuCX22wC7MT9ZwzyDjlUryOnPNLQrzOON7wlan+qJqTU7GQFrm/VqL
+	Xy2Bei6KiKG5tpnXXHbxL7Q/MnT282h0vQHDqpFsva0EE+tBnow6lxyRUCMGmjjpPX1RXmqDj/W
+	558G5PXmscr7LujkQEQsMSRztYSVT/jSp0nenf0EuDjXv8sSrJ3LDa3eCHDMkZDJRj+8VAce/l2
+	NDFAmYGobem7xEvajlftTnWmHdiqpcZmGJQ84Up6peeg5KAp+kFQpvOL+PJb2Vouy
+X-Received: by 2002:a05:600c:3b8b:b0:45d:d356:c358 with SMTP id 5b1f17b1804b1-45dddec3b92mr97992965e9.16.1757357403766;
+        Mon, 08 Sep 2025 11:50:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEGm/PFvNVvzQhpYmtJ6sQ83PhVXMHxysLrDdewgd4nQchvdGU1VvxC8ioJR+t94JeN3eCthg==
+X-Received: by 2002:a05:600c:3b8b:b0:45d:d356:c358 with SMTP id 5b1f17b1804b1-45dddec3b92mr97992345e9.16.1757357403298;
+        Mon, 08 Sep 2025 11:50:03 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f25:700:d846:15f3:6ca0:8029? (p200300d82f250700d84615f36ca08029.dip0.t-ipconnect.de. [2003:d8:2f25:700:d846:15f3:6ca0:8029])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45de5180623sm34433125e9.0.2025.09.08.11.45.28
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d92d51982bsm27196227f8f.21.2025.09.08.11.50.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Sep 2025 11:45:30 -0700 (PDT)
-Message-ID: <5c43116f-fef9-426d-8c90-1a3a129f3d20@redhat.com>
-Date: Mon, 8 Sep 2025 20:45:28 +0200
+        Mon, 08 Sep 2025 11:50:02 -0700 (PDT)
+Message-ID: <a0238ff1-3ca2-4f0b-8452-26584b531724@redhat.com>
+Date: Mon, 8 Sep 2025 20:50:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -90,8 +90,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 06/22] mm/mshare: Add a vma flag to indicate an mshare
- region
+Subject: Re: [PATCH v3 22/22] mm/mshare: charge fault handling allocations to
+ the mshare owner
 To: Anthony Yznaga <anthony.yznaga@oracle.com>, linux-mm@kvack.org
 Cc: akpm@linux-foundation.org, andreyknvl@gmail.com, arnd@arndb.de,
  bp@alien8.de, brauner@kernel.org, bsegall@google.com, corbet@lwn.net,
@@ -110,7 +110,7 @@ Cc: akpm@linux-foundation.org, andreyknvl@gmail.com, arnd@arndb.de,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arch@vger.kernel.org
 References: <20250820010415.699353-1-anthony.yznaga@oracle.com>
- <20250820010415.699353-7-anthony.yznaga@oracle.com>
+ <20250820010415.699353-23-anthony.yznaga@oracle.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -157,22 +157,24 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20250820010415.699353-7-anthony.yznaga@oracle.com>
+In-Reply-To: <20250820010415.699353-23-anthony.yznaga@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 20.08.25 03:03, Anthony Yznaga wrote:
-> From: Khalid Aziz <khalid@kernel.org>
+On 20.08.25 03:04, Anthony Yznaga wrote:
+> When handling a fault in an mshare range, redirect charges for page
+> tables and other allocations to the mshare owner rather than the
+> current task.
 > 
-> An mshare region contains zero or more actual vmas that map objects
-> in the mshare range with shared page tables.
-> 
-> Signed-off-by: Khalid Aziz <khalid@kernel.org>
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
-> ---
 
-Why can't we query the mapping instead?
+That looks rather weird. I would have thought there would be an easy way 
+to query the mshare owner for a given mshare mapping, and if the current 
+MM corresponds to that owner you know that you are running in the owner 
+context.
+
+Of course, we could have a helper like is_mshare_owner(mapping, current) 
+or sth like that.
+
 
 -- 
 Cheers
