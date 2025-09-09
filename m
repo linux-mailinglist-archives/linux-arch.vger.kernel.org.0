@@ -1,167 +1,107 @@
-Return-Path: <linux-arch+bounces-13450-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13452-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA839B4AD46
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 14:04:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9491FB4FA85
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 14:19:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 207EE3B77B0
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 12:04:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1EFE1C26855
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 12:19:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4C3322C71;
-	Tue,  9 Sep 2025 12:01:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351D5321F40;
+	Tue,  9 Sep 2025 12:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="B5yzCWuk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SP6bx5Cm"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0B43375D2;
-	Tue,  9 Sep 2025 12:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93EC93314AD;
+	Tue,  9 Sep 2025 12:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757419309; cv=none; b=UvQfWel7LyLzOkpMY+knWQyMLWcpzjcYwhlSYCXLXUK/UYkuTcsqhweU97DuMS4fd4oWwrAFsF6rJAnqH/+7u80qDnFcm1yg068vYNj2jZe52FL+xbs9J7vZqgNCgNZuXGl8uwnV6syNFSwHZVx+w68WR9ZObtB2x9bsmRJ6veo=
+	t=1757420338; cv=none; b=i0t1Tml4zUIrXpLWZkzeH6l7roR+ilXdqPl4JGRJ5KYQKskbaklwzhUH9vFZkp0n2e9Ia/MOquVYqv0A0eSSUcg4XtI7X02Nf5xNr2P3FuApm16kkkbu4yiiGtZgbkn2J05/7AMjr0+wHBuXBxo62Pa9t4pCOQssvU0WN93rago=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757419309; c=relaxed/simple;
-	bh=N6IRjFCXXGTABEmrr3+BNt5bYAsS2h9Z95211GPss+M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=hiedUpi1d0L/h0jpQr8ylskGOjmMhI3n+2SXlMc+k3hdjm3JTZ1k3ckgyqWxrR/hd5grGOAKOXugKbLWXODHAvQ+RrqTDGWJQlP7fRYkqGcEPFPEfek9k9BBPGzzGN0kioJHS7QfTgDuJ+9q83zczIde2ScfG8YL3Zf+MCr9Q/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4cLj4R71w3z13NM6;
-	Tue,  9 Sep 2025 19:57:43 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3CCB71401F4;
-	Tue,  9 Sep 2025 20:01:43 +0800 (CST)
-Received: from kwepemn200010.china.huawei.com (7.202.194.133) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 9 Sep 2025 20:01:42 +0800
-Received: from [10.174.178.56] (10.174.178.56) by
- kwepemn200010.china.huawei.com (7.202.194.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 9 Sep 2025 20:01:42 +0800
-Message-ID: <5c88f8c4-c06b-4eb9-8883-202d15130938@huawei.com>
-Date: Tue, 9 Sep 2025 20:01:41 +0800
+	s=arc-20240116; t=1757420338; c=relaxed/simple;
+	bh=HTqvjQ/oVYKvz6ilnyLZHRCvRZIkG9HmG1PJYU5Umfg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=V0p1fo5ne5bqc/TPxMAnQeDzbWdw0K2Sn1BRgyUCUCsyTjhivfvzgRxN7M41PXaV6USk+jeQB0SqH6heW9eLtnR8+2SerzGsuD93tfBKdazqYiwIMwPOFOTtkE7h67sWNsInL5l3POJxJ5alpwTRxha0Y1ek8kVm+/T3dsEfMik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=B5yzCWuk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SP6bx5Cm; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1757420334;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ev+FVEcj3joLVHvg0emrOdxTz+Twd4BERFs1IwE/SmU=;
+	b=B5yzCWukx1PMJpi3tQVwAq1pV9tsx+4OT75yWgEwGYv1jyfgJOCHX8VpMYzLq3CyUZMqun
+	G8Clo0nRPTJGDtwR1f/yv2/qSoIh3uinFMjHufGc+uvMD+76VpN51z73uQqd0yZMbcAIov
+	2SXxZbSFpuJBLS1Je9G2pLnoYIXOezmHtG+EaGAiGBvn4fAFhBO9F9VmMjTIYoba5Jv/9N
+	nS4YPMlbCHP1L9MT/stlYS89gQ0B4hjyuYe5e9ynkvlZmQnYrP1sjNWKawxB4j0y89g1mw
+	TCFXjunPsQj5T0GTT+Od+nQbV9tiY4B4VQovxtu7hskJVjVLmLJY43j679wpew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1757420334;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ev+FVEcj3joLVHvg0emrOdxTz+Twd4BERFs1IwE/SmU=;
+	b=SP6bx5CmUDfNfbsVS6hMc0+ZM8WVMbw8iZCCjrdg22Nc+eCxACnxpQHJLLo7VWinTPghwt
+	11urCJ6vFt1kvKBw==
+To: Randy Dunlap <rdunlap@infradead.org>, K Prateek Nayak
+ <kprateek.nayak@amd.com>, LKML <linux-kernel@vger.kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Peter Zijlstra
+ <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, Boqun
+ Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Prakash
+ Sangappa <prakash.sangappa@oracle.com>, Madadi Vineeth Reddy
+ <vineethr@linux.ibm.com>, Steven Rostedt <rostedt@goodmis.org>, Sebastian
+ Andrzej Siewior <bigeasy@linutronix.de>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org
+Subject: Re: [patch 03/12] rseq: Provide static branch for time slice
+ extensions
+In-Reply-To: <94f08403-31f5-43ee-871d-5e0ebcfd3b6c@infradead.org>
+References: <20250908225709.144709889@linutronix.de>
+ <20250908225752.744169647@linutronix.de>
+ <0f28cc54-1f84-4f28-bd61-ee9e0b9d0d0c@amd.com>
+ <94f08403-31f5-43ee-871d-5e0ebcfd3b6c@infradead.org>
+Date: Tue, 09 Sep 2025 14:12:29 +0200
+Message-ID: <87v7lrvn82.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] once: fix race by moving DO_ONCE to separate section
-To: <bobo.shaobowang@huawei.com>, <xiexiuqi@huawei.com>, <arnd@arndb.de>,
-	<masahiroy@kernel.org>, <kuba@kernel.org>, <edumazet@google.com>,
-	<linux-arch@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>
-References: <20250909112911.66023-1-xiqi2@huawei.com>
-Content-Language: en-GB
-From: Qi Xi <xiqi2@huawei.com>
-In-Reply-To: <20250909112911.66023-1-xiqi2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemn200010.china.huawei.com (7.202.194.133)
+Content-Type: text/plain
 
+On Mon, Sep 08 2025 at 21:11, Randy Dunlap wrote:
+> On 9/8/25 8:10 PM, K Prateek Nayak wrote:
+>> Hello Thomas,
+>> 
+>> On 9/9/2025 4:29 AM, Thomas Gleixner wrote:
+>>> +#ifdef CONFIG_RSEQ_SLICE_EXTENSION
+>>> +DEFINE_STATIC_KEY_TRUE(rseq_slice_extension_key);
+>>> +
+>>> +static int __init rseq_slice_cmdline(char *str)
+>>> +{
+>>> +	bool on;
+>>> +
+>>> +	if (kstrtobool(str, &on))
+>>> +		return -EINVAL;
+>>> +
+>>> +	if (!on)
+>>> +		static_branch_disable(&rseq_slice_extension_key);
+>>> +	return 0;
+>> 
+>> I believe this should return "1" signalling that the cmdline was handled
+>> correctly to avoid an "Unknown kernel command line parameters" message.
+>
+> Good catch. I agree.
+> Thanks.
 
-On 09/09/2025 19:29, Qi Xi wrote:
-> The commit c2c60ea37e5b ("once: use __section(".data.once")") moved
-> DO_ONCE's ___done variable to .data.once section, which conflicts with
-> DO_ONCE_LITE() that also uses the same section.
->
-> This creates a race condition when clear_warn_once is used:
->
-> Thread 1 (DO_ONCE)             Thread 2 (DO_ONCE)
-> __do_once_start
->      read ___done (false)
->      acquire once_lock
-> execute func
-> __do_once_done
->      write ___done (true)      __do_once_start
->      release once_lock             // Thread 3 clear_warn_once reset ___done
->                                    read ___done (false)
->                                    acquire once_lock
->                                execute func
-> schedule once_work            __do_once_done
-> once_deferred: OK             write ___done (true)
-> static_branch_disable         release once_lock
->                                schedule once_work
->                                once_deferred:
->                                    BUG_ON(!static_key_enabled)
-When simulating concurrent execution between DO_ONCE() and
-clear_warn_once (clears the entire .data..once section in __do_once_done()),
-BUG_ON() can be easily reproduced.
-
-+#include <asm/sections.h>
-  void __do_once_done(bool *done, struct static_key_true *once_key,
-                     unsigned long *flags, struct module *mod)
-         __releases(once_lock)
-  {
-         *done = true;
-         spin_unlock_irqrestore(&once_lock, *flags);
-+       memset(__start_once, 0, __end_once - __start_once);
-+       pr_info("__do_once_done done: %d\n", *done); // *done equals 0
-         once_disable_jump(once_key, mod);
-  }
-
->
-> DO_ONCE_LITE() in once_lite.h is used by WARN_ON_ONCE() and other warning
-> macros. Keep its ___done flag in the .data..once section and allow resetting
-> by clear_warn_once, as originally intended.
->
-> In contrast, DO_ONCE() is used for functions like get_random_once() and
-> relies on its ___done flag for internal synchronization. We should not reset
-> DO_ONCE() by clear_warn_once.
->
-> Fix it by isolating DO_ONCE's ___done into a separate .data..do_once section,
-> shielding it from clear_warn_once.
->
-> Fixes: c2c60ea37e5b ("once: use __section(".data.once")")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Qi Xi <xiqi2@huawei.com>
-> ---
-> v3 -> v2: apply the same section change to DO_ONCE_SLEEPABLE().
-> v2 -> v1: add comments for DO_ONCE_LITE() and DO_ONCE().
-> ---
->   include/asm-generic/vmlinux.lds.h | 1 +
->   include/linux/once.h              | 4 ++--
->   2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 883dbac79da9..94850b52e5cc 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -384,6 +384,7 @@
->   	__start_once = .;						\
->   	*(.data..once)							\
->   	__end_once = .;							\
-> +	*(.data..do_once)						\
->   	STRUCT_ALIGN();							\
->   	*(__tracepoints)						\
->   	/* implement dynamic printk debug */				\
-> diff --git a/include/linux/once.h b/include/linux/once.h
-> index 30346fcdc799..449a0e34ad5a 100644
-> --- a/include/linux/once.h
-> +++ b/include/linux/once.h
-> @@ -46,7 +46,7 @@ void __do_once_sleepable_done(bool *done, struct static_key_true *once_key,
->   #define DO_ONCE(func, ...)						     \
->   	({								     \
->   		bool ___ret = false;					     \
-> -		static bool __section(".data..once") ___done = false;	     \
-> +		static bool __section(".data..do_once") ___done = false;     \
->   		static DEFINE_STATIC_KEY_TRUE(___once_key);		     \
->   		if (static_branch_unlikely(&___once_key)) {		     \
->   			unsigned long ___flags;				     \
-> @@ -64,7 +64,7 @@ void __do_once_sleepable_done(bool *done, struct static_key_true *once_key,
->   #define DO_ONCE_SLEEPABLE(func, ...)						\
->   	({									\
->   		bool ___ret = false;						\
-> -		static bool __section(".data..once") ___done = false;		\
-> +		static bool __section(".data..do_once") ___done = false;	\
->   		static DEFINE_STATIC_KEY_TRUE(___once_key);			\
->   		if (static_branch_unlikely(&___once_key)) {			\
->   			___ret = __do_once_sleepable_start(&___done);		\
+It seems I can't get that right ever ....
 
