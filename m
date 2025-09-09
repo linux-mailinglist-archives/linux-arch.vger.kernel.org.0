@@ -1,114 +1,117 @@
-Return-Path: <linux-arch+bounces-13444-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13445-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 270AEB4A081
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 06:11:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37948B4A228
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 08:25:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38C271B254E3
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 04:11:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 061634E30C2
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 06:24:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D2A2C1587;
-	Tue,  9 Sep 2025 04:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98536305977;
+	Tue,  9 Sep 2025 06:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="K49EFCyf"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="z0pQ6SS7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5663654654;
-	Tue,  9 Sep 2025 04:11:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A5A302166;
+	Tue,  9 Sep 2025 06:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757391082; cv=none; b=sGhdTaCrDUjbBNFvZTinYumrFWnwTPZsJKbn8PgE6dGO7efKw5JCq3HBLDiavX0DnDiNdTLKDCMgiAAWTyTr2WZ6LhgziaxDs0n5WKjL+mBpkPynM/N5tS7134TWTLsziRUU17U92jrxVfLLVbeEM1ryBPZiRIT5dQyywgmzZKk=
+	t=1757399014; cv=none; b=pirHo5uUnTrAuNle4ntUsm7sCq2WSG6ai5cx7t+Sx2c0EemI7OfSEC7+PdZGUUkHJAWdZEXMqTx+/91fM6vBm/+D1cEXHOj3jxN6DxZeOkYJiAY8oOp0HS3fPZ9+DZT5QM+2OmjXtDQ4bkiUORqH/Mg9GPHznEcmzbNb2XxOyEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757391082; c=relaxed/simple;
-	bh=o80n4ExUoBAJUnTE9XsmrZlYvocq1FJTlQI4X2crCJM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N06MrD8K0DG7T2FVxAUrNLvbWhyT9veKFmCQ/Sncte9X8sEif0XXeA+q9o3k3DBjtFeMxeT1T7EIYgtwDy0nQ2ZbBceaqWc+D8YvvP+rHLdbr6uuHcQaweFGd7OZ9m3GcpF4FFHDYjuAxdlywZZpqr15EpK6amCaBU1k9i9PGuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=K49EFCyf; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=H+Mt0obVe+OHMg9mtzsKgB8kbdimq6iDYKrqcoNyusY=; b=K49EFCyfJCBdULh6YgKLpruaW1
-	nxEQBusnHzafOmNDLfmKbUUs4c/GEAxqA44xLHdxfZ6eRp0PjSplqlQdYgfO22DNza++WZ726bKt5
-	Qy03D7XgBLDX1AoXtVha0T3f8jlZ4vl75tBRZzjM7ebrwxx1fACZwjEuutDBPuBeHYqESFFQbk7NM
-	5MI52+YgIwPBHN+oO/45Dr/+1mGSHyvQK9HUhml69clnXhog4/3r9L5nAxUE7IWOwXCcuFcJImaz5
-	rqF6Jq/hVRvExIpQa6fVqsryZd+pvoTdMiEnhToqiJZ3oUni7D89n7kAKByh70iIrAklYdpT2lSy5
-	pTqujRHw==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uvphN-0000000487l-0Nke;
-	Tue, 09 Sep 2025 04:11:17 +0000
-Message-ID: <94f08403-31f5-43ee-871d-5e0ebcfd3b6c@infradead.org>
-Date: Mon, 8 Sep 2025 21:11:16 -0700
+	s=arc-20240116; t=1757399014; c=relaxed/simple;
+	bh=RpvqyvM6Tia415RbHYKNy7KCcVHJVN5DwJEHb6JVKqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jaD1QkK70TkyYH3fHnyvk4eAIH6f3QtX/mgONquJhr9BvHOKRdEJEy1EJ2dx/TgZ4bSYb/809hNH+L5nrDf99FUknHVvs19YdX0vAQrfE5/Bq/PesRzobqb8i3gr9rGPVp7gf6YtnAufWd/EcK357C1pQnbzy7WsMJ7bSmxZePE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=z0pQ6SS7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 221BFC4CEF5;
+	Tue,  9 Sep 2025 06:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1757399012;
+	bh=RpvqyvM6Tia415RbHYKNy7KCcVHJVN5DwJEHb6JVKqw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=z0pQ6SS7eR2zJMW725Xm153fb0MmYDN1/F8RX2jDWN2asJKPn77OQKv9tW/ECSX74
+	 n91mDIMxCmVgzgjo0XihSloDRxk0DL7XjSz5NeCnILW9zIXDgL3wto4DW60mCvCOnb
+	 9v07Qb67+9Mg9qqlyJjeIBBIGn/m4BzYCjgW5pRE=
+Date: Tue, 9 Sep 2025 08:23:28 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Mukesh R <mrathor@linux.microsoft.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	linux-arch@vger.kernel.org, virtualization@lists.linux.dev,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	jikos@kernel.org, bentiss@kernel.org, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	dmitry.torokhov@gmail.com, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, bhelgaas@google.com,
+	James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+	deller@gmx.de, arnd@arndb.de, sgarzare@redhat.com, horms@kernel.org
+Subject: Re: [PATCH v1 2/2] Drivers: hv: Make CONFIG_HYPERV bool
+Message-ID: <2025090946-antibody-mortician-d6e1@gregkh>
+References: <20250906010952.2145389-1-mrathor@linux.microsoft.com>
+ <20250906010952.2145389-3-mrathor@linux.microsoft.com>
+ <2025090621-rumble-cost-2c0d@gregkh>
+ <d7d7b23f-eaea-2dbc-9c9d-4bee082f6fe7@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [patch 03/12] rseq: Provide static branch for time slice
- extensions
-To: K Prateek Nayak <kprateek.nayak@amd.com>,
- Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney"
- <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Prakash Sangappa <prakash.sangappa@oracle.com>,
- Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-References: <20250908225709.144709889@linutronix.de>
- <20250908225752.744169647@linutronix.de>
- <0f28cc54-1f84-4f28-bd61-ee9e0b9d0d0c@amd.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <0f28cc54-1f84-4f28-bd61-ee9e0b9d0d0c@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d7d7b23f-eaea-2dbc-9c9d-4bee082f6fe7@linux.microsoft.com>
 
-
-
-On 9/8/25 8:10 PM, K Prateek Nayak wrote:
-> Hello Thomas,
+On Mon, Sep 08, 2025 at 02:01:34PM -0700, Mukesh R wrote:
+> On 9/6/25 04:36, Greg KH wrote:
+> > On Fri, Sep 05, 2025 at 06:09:52PM -0700, Mukesh Rathor wrote:
+> >> With CONFIG_HYPERV and CONFIG_HYPERV_VMBUS separated, change CONFIG_HYPERV
+> >> to bool from tristate. CONFIG_HYPERV now becomes the core Hyper-V
+> >> hypervisor support, such as hypercalls, clocks/timers, Confidential
+> >> Computing setup, PCI passthru, etc. that doesn't involve VMBus or VMBus
+> >> devices.
+> > 
+> > But why are you making it so that this can not be a module anymore?  You
+> > are now forcing ALL Linux distro users to always have this code in their
+> > system, despite not ever using the feature.  That feels like a waste to
+> > me.
+> > 
+> > What is preventing this from staying as a module?  Why must you always
+> > have this code loaded at all times for everyone?
 > 
-> On 9/9/2025 4:29 AM, Thomas Gleixner wrote:
->> +#ifdef CONFIG_RSEQ_SLICE_EXTENSION
->> +DEFINE_STATIC_KEY_TRUE(rseq_slice_extension_key);
->> +
->> +static int __init rseq_slice_cmdline(char *str)
->> +{
->> +	bool on;
->> +
->> +	if (kstrtobool(str, &on))
->> +		return -EINVAL;
->> +
->> +	if (!on)
->> +		static_branch_disable(&rseq_slice_extension_key);
->> +	return 0;
+> This is currently not a module. I assume it was at the beginning. In
+> drivers/Makefile today:
 > 
-> I believe this should return "1" signalling that the cmdline was handled
-> correctly to avoid an "Unknown kernel command line parameters" message.
-
-Good catch. I agree.
-Thanks.
-
->> +}
->> +__setup("rseq_slice_ext=", rseq_slice_cmdline);
->> +#endif /* CONFIG_RSEQ_SLICE_EXTENSION */
->>
+> obj-$(subst m,y,$(CONFIG_HYPERV))       += hv/
 > 
+> 
+> More context: CONFIG_HYPERV doesn't really reflect one module. It is
+> both for kernel built in code and building of stuff in drivers/hv.
+> 
+> drivers/hv then builds 4 modules:
+> 
+> obj-$(CONFIG_HYPERV)            += hv_vmbus.o
+> obj-$(CONFIG_HYPERV_UTILS)      += hv_utils.o
+> obj-$(CONFIG_HYPERV_BALLOON)    += hv_balloon.o
+> obj-$(CONFIG_MSHV_ROOT)         += mshv_root.o
+> 
+> Notice vmbus is using CONFIG_HYPERV because there is no 
+> CONFIG_HYPERV_VMBUS. We are trying to fix that here.
 
--- 
-~Randy
+Ah, I missed that this was getting changed in the Makefile in patch 1,
+that is what I was worried about.
 
+Nevermind, this should be fine, sorry for the noise.  I'll go queue it
+up later today.
+
+greg k-h
 
