@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-13436-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13437-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3509BB49FAB
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 05:09:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C021B49FAE
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 05:09:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4E6D4469BC
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 03:09:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01C7F446A0D
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 03:09:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0422594BE;
-	Tue,  9 Sep 2025 03:09:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C6AC25A324;
+	Tue,  9 Sep 2025 03:09:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="L9fDzuI7"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="Iiio6PXm"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azolkn19012011.outbound.protection.outlook.com [52.103.23.11])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazolkn19011008.outbound.protection.outlook.com [52.103.11.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C5D2459C8;
-	Tue,  9 Sep 2025 03:09:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.23.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EED25A2C7;
+	Tue,  9 Sep 2025 03:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.11.8
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757387351; cv=fail; b=mc+iQC3hZATR/+M/Ir2AD77uFBwkQ1vD1A2jEJR5I6zElDx8xFoPSc55LoxT/5FYycSBvof+gdjCv/yDA8l0cRiH2cI33kQ3ixZp+FjjSr1Cr8BhMHQYXFxKth+7zkB4+F2/7K2WYb9g3fpmOGbCLzu95MNjQB6wibkYvqCE21U=
+	t=1757387365; cv=fail; b=Py1GZ6TlUhtXi/fPYx3sWAQQOu85rZiGjGoDZtGlO3FUV9oSnc99jZo2qiUztFDA6iidkAZDEjJ2FlIcAGOpfRmFI5oFXfD6xNbmz+i3Gs69csFWutrOVk60dNHpBqE/lNFLhTYwI7+0VoLuFCUVLi3A+AJ8rfRiXn5po0ajZlY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757387351; c=relaxed/simple;
-	bh=5Asgca6ff0D0ntKCQBP+Nozq+J9cSZkf9xdlK8LQySE=;
+	s=arc-20240116; t=1757387365; c=relaxed/simple;
+	bh=VKVD5qOJ3m1scvnfr7nLl1qvHzUkNmey4xFZeh6ccJc=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=E693fZIAHPzlyPfg76LzMb9GX7GOyIMR86oj5FgIYCcJJZj6A78aA2kE3UCxNLE/HsJ3tuSj1Vn+J69nXyzr7NPB9zxugEiwCsDusoEh9uxyLDFqvokDoPYwmBbPriyDDaDl06KxpUVhU6hYDOZqh0qUI60NgMEbw1vodZo55r8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=L9fDzuI7; arc=fail smtp.client-ip=52.103.23.11
+	 Content-Type:MIME-Version; b=kma4B3IukEgSniXFndNN28h2+laa2yuiG5Vwe+D4Af0dmlQOvjQ0EgPLJb9sEnDryM2TqO/HkBRHuDz3D7Jc29WvQpOmnb9OnqXuFKbwqHfQ9dewOmsKVk5l1WWFJhw9JqZ6Ovdi8AW6Bb9Jxt4EY88cw+t0hCrpWoZGZ42I1j8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=Iiio6PXm; arc=fail smtp.client-ip=52.103.11.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d4kukQ481mavGJuYRXmkhB5tn0yL+Rq70srEQZa66qUKrUFWVlD8eZ3W4vidw6JHhUClRxB6e4WEJCMxvxYFfl8hsaWE82yHvDP2vE5hYH9GGZf7bZnq5nO0ZdYgiJBH9Le7IIpNa1quKr/M4ljdTbUglTlf6jpKf+vuOmVldltJanutJ77O3kzKfS3CIW+uRBJ40BDxXBGvYYP19izCliElQBGjV1YLEFsFeQynnpCoMqPUyEJ3CEAerHsHhnsbGg7mzoSuBbnLf3PMgfGjcKmCVJn7kORS1xZhIhSaM7Wyuu816BGq5zGPFQTYikXVFJ4t3NY2PJaZmJXw16TjFw==
+ b=TFUoz/P//soKXcC6w9RevKwmWrSUDfFw/EOLjpYNHQpAUpeqQe+tB/81l+hsbaiqxXrRY0YkwGeI4ldZcbM3aCVNU9roCF7853pyuV+ly3xGfopuPQO3yJbf1mrDLp53tJv6VJA0ggLK3R2RQiBgz8EOGujrMmbTN6vCEujzVu7Ol5Txs0sP5/sfSoUBhdznXsr9xEa5slAG3y6dyKFYGdHcTMYRL/0uVzJMYC/P7iIm2ueUFz22IpUhHAFwvwijSS5K6ge93t92C0WMCMMKnlx3PKBv+tIrIubaENad9titCQiNe6M7S6V+Ze8FdNHYiOUwkXiK0v23yIMFV/Bs3w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m1i37IsLaIbXYjNVLrUYIlmWuBy3+uOelM6OEK65a3w=;
- b=r56Sg8qBjePrRNiFJVxhO1pDluXdEJIyUZNYpUNwJahpGes2C6rV3hYpNHqzR3w9zRGW5XbAqCuzGzLDIVRkD30Tt+kJz0cDw4d0tIY1sRkb3tDrCahQ8UTC05NEsYl15XKVkj0LdgCfqd9pqiA+AuVSekrsIKCPXNrA7LkntTeFm5Eb6aLmXNohnSQ1WoygB9amEca1bxGnADptJNbViY6BGeagZbVZsDYcYybCpSbJBr/ysWYw9CpuaxZt69fd5eYpH2r8IbMbw+QxqDCp7ZZ5Fps7Ji6/PwKrbuHycrmMkxDiIOL2a3AhiVt4WTEExgLXbuuoH7A155wg4RogGw==
+ bh=wzpTGTJwVKgL7Sj/XQL+ucmWlrHuW1DQ/Y0gXcnBZXM=;
+ b=OUibp6HVPyCC4wz3tuBi9hR4l48XDhQV/YC/PsAlJi0xBFgbBTPNPg10GEVWCZXeQvW750OIZO22Uu5qZzZi1sLfpia8acGUoHd0TjUiEjpS6XDKOyBBycTOX/WaBcDLcX1+Ba3FSRH3tAxB7ceG4Bwa2xCBzHKi4Gxya+RkmU0P/P2ErY8kdtyb46Aw68oXaItpGS/BATHjF1YbBk/6C5ZNZedbJDim+lbqIAlY0ephEy9J+WYdavYoMEQFvaXFxj6PLinA0oBletLTvewE2RAsi7qz170IY/FD1+ca/0ZUDvWewXIf9RJ5ueM84atqifLt1m/UODAuVmeZBRnt6w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m1i37IsLaIbXYjNVLrUYIlmWuBy3+uOelM6OEK65a3w=;
- b=L9fDzuI78jFJlE6Mi7EHgsuA9HXMoqGSeiSkyyb7nPiIDjlyQoldyUgpZ4oaxZx+LDJ37yYU3sSb1bARaa7OTvbw3wkvgvvcCUk8PluyNC+pJTKM0zAiJU1D6zwpEnSD4rb2Gt/DAx6vcvCK33/tQa6YEwN8vooe7QMQi/5ntMGPhe/KfDWMpM6HLf/SCsdKFV3vbCzfqLN7oCRAAS6gROHfkdc019NNzP7aDAD63qNJjdpBRYKrr0A3ebUe66fLKaKh6ypC1w34/fennhEslG/1sNl/eXp1ERZ8BRHHttubQVVxlW+ZkGZ1c0mMTSp35LGqVit4nTnR30xjyYw9PQ==
+ bh=wzpTGTJwVKgL7Sj/XQL+ucmWlrHuW1DQ/Y0gXcnBZXM=;
+ b=Iiio6PXmQpQQOLAurKqwVNIyifzUPHDlpi4UlIEACcNBn1LROFf1phHM5x1Cv/C4e3fu5NmK/GVgThccnekm2G3/tvaKWbnoFTkEzJXH68C0MJY2RQLqlP6F5So3zW8yQT7uyoLck+JXHoqxzCOfeyHPgJanPXO6EZ1sR2hsU/uLzwqDI7i3oDe4plCRjsP9CxNt5z0/F1fI1kdX1oh/xW/zhF3p7YrDyXrh9U17bN+F88I7arVIVECDHM69dF3qJmMup/oPQsnbfv8zRB1GQN5MpPkvt2Oik/FGzMe/O9ZpSkv4bmBqp7rzxWliVQOI+BrqlJIoC3PwHll/q6gmxw==
 Received: from BN7PR02MB4148.namprd02.prod.outlook.com (2603:10b6:406:f6::17)
  by DM8PR02MB8055.namprd02.prod.outlook.com (2603:10b6:8:18::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.17; Tue, 9 Sep
- 2025 03:09:05 +0000
+ 2025 03:09:20 +0000
 Received: from BN7PR02MB4148.namprd02.prod.outlook.com
  ([fe80::6007:d1a1:bcf9:58ef]) by BN7PR02MB4148.namprd02.prod.outlook.com
  ([fe80::6007:d1a1:bcf9:58ef%4]) with mapi id 15.20.9094.018; Tue, 9 Sep 2025
- 03:09:05 +0000
+ 03:09:20 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 	"bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
@@ -71,70 +71,72 @@ To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 	<linux-arch@vger.kernel.org>
 CC: "benhill@microsoft.com" <benhill@microsoft.com>, "bperkins@microsoft.com"
 	<bperkins@microsoft.com>, "sunilmut@microsoft.com" <sunilmut@microsoft.com>
-Subject: RE: [PATCH hyperv-next v5 00/16] Confidential VMBus
-Thread-Topic: [PATCH hyperv-next v5 00/16] Confidential VMBus
-Thread-Index: AQHcF7f+XPdlxfCyL0CN1MV9SyqDBLSJ5aVA
-Date: Tue, 9 Sep 2025 03:09:05 +0000
+Subject: RE: [PATCH hyperv-next v5 01/16] Documentation: hyperv: Confidential
+ VMBus
+Thread-Topic: [PATCH hyperv-next v5 01/16] Documentation: hyperv: Confidential
+ VMBus
+Thread-Index: AQHcF7f/mdWHUV1+6EKwR9hlD0+GS7SJ6lcg
+Date: Tue, 9 Sep 2025 03:09:20 +0000
 Message-ID:
- <BN7PR02MB41489330C83724F1DC3E8427D40FA@BN7PR02MB4148.namprd02.prod.outlook.com>
+ <BN7PR02MB41483CDBDB7475FAAB754BF1D40FA@BN7PR02MB4148.namprd02.prod.outlook.com>
 References: <20250828010557.123869-1-romank@linux.microsoft.com>
-In-Reply-To: <20250828010557.123869-1-romank@linux.microsoft.com>
+ <20250828010557.123869-2-romank@linux.microsoft.com>
+In-Reply-To: <20250828010557.123869-2-romank@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: BN7PR02MB4148:EE_|DM8PR02MB8055:EE_
-x-ms-office365-filtering-correlation-id: f9df587b-1efa-4ae1-020d-08ddef4e3c4b
+x-ms-office365-filtering-correlation-id: 31c1209f-07cb-4d9b-0a25-08ddef4e453e
 x-microsoft-antispam:
- BCL:0;ARA:14566002|8060799015|19110799012|8062599012|13091999003|461199028|31061999003|15080799012|52005399003|10035399007|4302099013|3412199025|440099028|40105399003|12091999003|102099032|1602099012|56899033;
+ BCL:0;ARA:14566002|8060799015|19110799012|8062599012|13091999003|461199028|31061999003|15080799012|10035399007|3412199025|440099028|40105399003|12091999003|102099032|56899033;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?/O8zGP4x1QoPE9tbvI0AuIDsMhAlD9g8KIVBcd2js2i8OftPato0np0BlZzO?=
- =?us-ascii?Q?M26gumJG9d24SI05C2Hpe6NZHQcP3rwJLju/U1tF0D5iACttE+pQYx8TLSaM?=
- =?us-ascii?Q?Qhaa/o3R+xHNTnWT0Q49qXuTrznI41fFl2wO/LkkDcGGcOjdErEKissgfMsm?=
- =?us-ascii?Q?fF/foK2qOPWBGR8vDrCjVp92bbl85OpIvs/JdpVYkhweJd4WjumIZnB2JNDT?=
- =?us-ascii?Q?nzYHlk4LAhj9u1FpPsuamPtU0TqhS8ytCHUIZP7FRF8IowHFNm2FujdcADU9?=
- =?us-ascii?Q?lqWbcXZrSJhL3K88hqHM+5iyNQ3uKAezXczd72ZgAGfXuSYOEZbfPebgcgnU?=
- =?us-ascii?Q?zETbgAaZSDYWbkOJcYonxKj/QYI/9TF7E5tNNbAcV+l9uYqLgqnuFR0SStU3?=
- =?us-ascii?Q?qnPEzAx3r5MDxoWnGkx8bdvlt8VXvE5hwO5YE7Ig83iz/qmRUnA1m0MFZgtO?=
- =?us-ascii?Q?P0AUVcVRGEaOjZaGSUxcn7je6APQGyUzs9ZRBcDewmwNgkdEv/iHUCxmxxwo?=
- =?us-ascii?Q?Jsje07LQC4F/qQEFdIuH+cG4C8d6u4aE/TLkeRoJ/0cztAqmHPX2hqwu+3X6?=
- =?us-ascii?Q?OdGXPTy7DhVoRf3xP6l39IuZEDm490X3FuRjl0uYwb4uky6yDDRRx/Na8phl?=
- =?us-ascii?Q?epD1PmY/fNcCTD5d5lCSnGZZbR0+2mAhOzYCoCPT/Icj/ue6+iL96CnCMZzz?=
- =?us-ascii?Q?9rq6C8yBxwC3Q5tngi1zV0iBvSYyz12na836Ljt0lFhaANJrYM9qpmfEBst1?=
- =?us-ascii?Q?4nnAMpIZoNNNOswcCPdQs1jtPlf85TqQLFbXcFA8RzHfXSUL1EPYlEQZGCDl?=
- =?us-ascii?Q?UnWHQqJ8EtAxbZXmHxmuRK8HwPKSDFJPSm0Pjel3p6hFPQJOIrVlWZAyEicz?=
- =?us-ascii?Q?6w0GMeoYaj9qqewO7rGbQbXXT2ujG089H18wRHh9GOr+BdaU8Z2PemnGpRL+?=
- =?us-ascii?Q?QoNmZdsOLhDTjz/C70ukIvOc1yqVWb3d05lI1zXz3PRWqcgaR/p71878Mt2e?=
- =?us-ascii?Q?p7XXkCxkD2JELzAhaVVDbf5i+Hpcjp6HIvIYHnpRhW2syGkPx8kT2G2Q55KQ?=
- =?us-ascii?Q?VHTruRtOgr7dkzSuPg3+BFS7xnFMGDDyjV2AZa4LULuCs/nkUkBhFDSZs7GI?=
- =?us-ascii?Q?sVq4n/3Uf/J9IC5o2mRFhbpYOzM1eB62H4v3lxULZJ3gxq1uNbK0eYw205qH?=
- =?us-ascii?Q?rOjQ2BdCZ6RFSL4cqfltEfpdkIjpdxDBM67jX0alypo044tiISauwIOEDOsr?=
- =?us-ascii?Q?w3gx2ZkKOyMnOhtoQXlFRwFa3+sXjuDGLIc6TcIMcMUkuKhsw/RjuKdJNJla?=
- =?us-ascii?Q?BhfwG1dBMv7hC3ATLZSOhUuz?=
+ =?us-ascii?Q?esemdWQzSSGsY3f63NCvmgYxXy2GIOEpIKJFXqlTEDkyezkNH9hZPjTxvf2Q?=
+ =?us-ascii?Q?XXq2llbpPSVw7ZbZlaQDmMTpBlti3XriGkujR7bX/f8F0F4aOgqRUHPLnCLX?=
+ =?us-ascii?Q?NIuaA6BtyojbMb/6oYYXrxezGAJWe2kJrjviP/ibB+u6tvJxsWp2A6e8UM3h?=
+ =?us-ascii?Q?TqFqBdkAQ4vA5BLVny+Ytv42dzKRNs2/1Rr6VSmVTPKdBNfFnLsjf67j3Jm0?=
+ =?us-ascii?Q?quOV53iE4OQZk3c+EF7jGOAFnEW+8u7bhASPYpvxSyC3tYfYTPYtQLzOkLz5?=
+ =?us-ascii?Q?xhecqhxryaAL4YOjCqDw+wqPZhzuiZaYI/yM9ubGDUCwBZPSnRC8fBFRWumh?=
+ =?us-ascii?Q?BXBnlVxhbxRB7Nwu2WAx6GY4jrZOo/FecPLkHYdLeAw63mg2VxVipRXkFuC3?=
+ =?us-ascii?Q?9InFz1AsPKbCnvA2rsTFUwjS04pQ7Ui6NN2YJ//uMO6ASszTEFaO8QkCYDFX?=
+ =?us-ascii?Q?psxD03/B9K8HIkbsr+HhsN2Ao8Brj574wkH59MunmKtKuEYN5VpBu10NmRIu?=
+ =?us-ascii?Q?UDpTxIECvL/dSXEmmZbkNSIfeHGSY1VYcRskjoCHYRkC3/A/08T5Cgm1gznZ?=
+ =?us-ascii?Q?qpsMNqiCACydpzFWproZRTp8E/NJclV0JMbrEMef2L0D4s1AvJm2kdp7go3p?=
+ =?us-ascii?Q?Fs7PWXO9RrBbqVExVA/sxx5lQGr0sI+ImdxCD8Xlp6rvxC9XVsxxtu4QZONs?=
+ =?us-ascii?Q?XJ+abrla8mKcDo4hwYJHtOchiSh4LvKUqHQgYktcow54px+d9J7MVu6rGo1T?=
+ =?us-ascii?Q?cRRRuZgGPk/Qrf49+T79j3WnpiiIAFhsFxwVRlzJXcvlF7NzqKYiWz2eNWVK?=
+ =?us-ascii?Q?Juc8BSMrcBoHDdtWTEB4hoOapaoIEnu/0NJV4km0EQml5Gqv7rlAkIhckibH?=
+ =?us-ascii?Q?/AyvFQTDr59hkc8PudbL717Pjl+g29uPZHXx+2Q6Yd/yJKFeVswua+x2Q/KV?=
+ =?us-ascii?Q?1Vrbu9cOWyUKU7ZsToBrR9VnEcWk7fhVnjscTYazq3JQnRgdxxJQe/WzhdxO?=
+ =?us-ascii?Q?+JydfpPeskBBWXM/kbEdpsEDhiGyqg9jwsZoXqQWodbKm78Z7cwfayCdE/ND?=
+ =?us-ascii?Q?WiaWqYlbRVgw8dVkUcsOS7OqYWTLK00DQpnwbpicLZA5JLNH8VLvWr82Dm2O?=
+ =?us-ascii?Q?XTFdfZ9ost2yw3CXn+zOEbhhOfpTy1rLWgSIcCO9/j4tpxQQjBa6qIWGI+cN?=
+ =?us-ascii?Q?g//rpZedrx3lw8A/QzpD19FzJm94bwNWDRaVNf8mJswSyi8qI7ghf7xG2pM?=
+ =?us-ascii?Q?=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Us28SZSEim9j3iXY7ccihMy1f7n6hiKEfOaepRFqAdmVo5BHvei93SgijoNb?=
- =?us-ascii?Q?QLK9s+7Vt7Flcwj+JyynmCHxx0ahfLm183O3ACQYlcgfLPYX3gDJId9XNQAA?=
- =?us-ascii?Q?KFOLf8/HOp8f57kARMoaCdB9//uzcpnajxqrhoqyj651Z7RL7QmntEfAdehx?=
- =?us-ascii?Q?QqP1ip/tMiijijPpA5Pxzt4malZKrqNItHOEZ/57620sis6/7YCc1d5RnS43?=
- =?us-ascii?Q?wWxLaS+gtVeGBgb2MRsen5nuX8C0SIhzaZqQdiS/19sD4BKwtRoekvK8k9pU?=
- =?us-ascii?Q?eRTbAQLvFEMcKSyieY0jU68DLrVAN5IkLU5w6hbBz5ApRKVml5cDJHfSTdrA?=
- =?us-ascii?Q?Vqw2cnW2aYZQHvTFtgkmUJn55aHsLyDnnQVbryIyml6rzy/swnCFrNzNuxk/?=
- =?us-ascii?Q?N/0YnoyX8NpQb1djO+Qz47379tP6o+EL3zOkSUt1ElXC4jYPmzPJ3PKZK4iN?=
- =?us-ascii?Q?6NZMWef/1hd7gnBxLEBJwSiDOZJDXoymr+Sb+svW5OTp6ztD3lMYfpAme0Dc?=
- =?us-ascii?Q?Eh5XyYCu9tWVimJYlGvc8foQCVZmZiiTiAuxbhq+mHrw1St8mbbH/TdzcswF?=
- =?us-ascii?Q?SQKf56z0NYP7NIXKfdTavxcW6LNJTqc5jjKCKkFOEit25Skoob2SopLMr6GQ?=
- =?us-ascii?Q?srGlo+uvVUl5qqGgCTPuqOaRMIYmOb3I1K69kY3T/kXeLmRC5nwbRuau4c3g?=
- =?us-ascii?Q?ApBSWgEh3UT+OfOEtNVrbM5rI2fvn3COeJfFOnEMvO2Q99Cdk3NVgLf8n7sF?=
- =?us-ascii?Q?olklKW5FfCtpa+MveEIbFJ0UZNYZUoYAhZ+DPQ1DF3XcDOKRuSUSwv72KYjj?=
- =?us-ascii?Q?mN73ieLf8/xFy3ZdBL/pESjO/aPJzhDV2Ox2WqRMZ4+m9i0r3ALGfxq5H6A/?=
- =?us-ascii?Q?KiCgoxeJhqX6qgLGq80kn6Z7DjlcI1CldF5Z9WvvwhZYm1Sa3/XyhNUoL8Xj?=
- =?us-ascii?Q?isSYgXaf+eEJKLz4z7qZnP4weLlW5NXELFEjIv3iCxrulTtQBh9Evh9DOwgi?=
- =?us-ascii?Q?Mbb1VsByHvCZwd7lByIko6bdCa3QKWANzRtymriGSmRjU+iqUkAhDs25f9a6?=
- =?us-ascii?Q?WVG222eWv9BPxu5btiNsYPAoLVdkAhLHiryhHgPQAbpKD8zEttAWAvlQaUm0?=
- =?us-ascii?Q?xp2a2qx9Rpy4Vl57umBNuxev0PRbgDiuZj/ZSFepjkonD2mJtcuMP6pt+Kho?=
- =?us-ascii?Q?jLaIHzEO4LfwHJofc6Tfc861bh/AfI0lpsCU/ecC2a2RLlCjwvh8a38ML5A?=
+ =?us-ascii?Q?K7UjO6AVhKSM22C0FC6JtEmrz2mTTvgGVVpeklWgyMsNP9v+eLqF4Mcm05DB?=
+ =?us-ascii?Q?8lQHTBiRY18O8FPks+WoaWn74/Wc0jX8Bl8gmjNFBAG2ExEwEuVbKgP7UPP2?=
+ =?us-ascii?Q?O/BLvHnfywi6Q/bK/Y0WRbPxCbXXAFrdZpBMD67z+gHY8/up/WqzqHooKZ+/?=
+ =?us-ascii?Q?nOLLdmY+AZqFpOmMVrUzqXLtAyaglVmUxzrGyyEb6apnPUvPQwrY/fLe94eJ?=
+ =?us-ascii?Q?7R/ynYC50veO202S9sQV6//jx60FQkYzcIn7Mz8Bwz3a22Do4xXwKlGJvypR?=
+ =?us-ascii?Q?OY/fxq88xc5Tz/GvBUH0cUWQ3+Ce938etpCton/YWfKGRqKAAZswxssTUvU/?=
+ =?us-ascii?Q?5FCpdPi+uJj6OWlHtZrNhDuBj6Q9SC4fs3zsMkhBcJNDFUGJ+7JUANwuaS1W?=
+ =?us-ascii?Q?nI4sSsEg6aTWKRhUzU4Z2ZA10g9vA4nTRb9my9e478oPd+KIojuU26NvaxMv?=
+ =?us-ascii?Q?qWJmOCDwTJWKpHg/h/jUZY0iXsMZqwwf7WmhzE0ivYQjBJs2B0Mvi1GF9oWx?=
+ =?us-ascii?Q?syjkEZ3S/ap9alQpBOlWJuxt96sCQpFngZi1ipRevW3LmdlessIs2Uef7yah?=
+ =?us-ascii?Q?9cVCB+Rr8fVJmtGyQPTvr7QmsvGVU6Fmc/cFEepAgmRngvntCaw2to9wz5yf?=
+ =?us-ascii?Q?8HtC6PHmkMSFoKj1bv0SfLGF+EFAXygdwVxQHeB4khLOffDNxc0VqAUElFxl?=
+ =?us-ascii?Q?QSFGGRkf892PMbEEdbAuRR4llP81PxHRK8Sz4J4oUU9CdAbkD1kBZCHVxjTB?=
+ =?us-ascii?Q?MSAs8pYHXo7newwl2k1bL+8EVbb6rdikUfXhwuMudUembtr7Ze+TxtozfO5A?=
+ =?us-ascii?Q?OSlzaaxl0bd/FfKvnzorYPcaE9+XZzy61Syt01Kf9YmzyX4WX0fNrBM7rUUx?=
+ =?us-ascii?Q?RonkBYPcJrCCDX1NVHBCIojaRwTinBCty2FWqLqcmqqxjxWgmhcXOZkXDcHt?=
+ =?us-ascii?Q?PF1BNSsCmwHmsHm3XNI/IRJztT91Pm9m2Zo+mLQyTrK1pujBqfXUT5WX8GVP?=
+ =?us-ascii?Q?raPAPPjFDYUzG+EsPrLh7QrS4zqeqinYfzEjd5V0qhdi47nvxGNK1nTYWsyC?=
+ =?us-ascii?Q?hM1DtptAYAuEjLsb1nqbx4pbtJeAKChuNKsxZEiSh+O1X8m4A8p7UyoNIqkF?=
+ =?us-ascii?Q?XwOySq4zocw1wM/0fMEWSuv3ezaEFR9UBRaNC/jCGacsolbicXz9ifI6bmqy?=
+ =?us-ascii?Q?+2uudqWmZRTLn0auQOrY744wkWO+svAefO6yEqIazTokQ7+lvAdu72YPp10?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -148,8 +150,8 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BN7PR02MB4148.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9df587b-1efa-4ae1-020d-08ddef4e3c4b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2025 03:09:05.4126
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31c1209f-07cb-4d9b-0a25-08ddef4e453e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2025 03:09:20.4360
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -159,279 +161,250 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR02MB8055
 From: Roman Kisel <romank@linux.microsoft.com> Sent: Wednesday, August 27, =
 2025 6:06 PM
 >=20
-> Hello all,
+> Define what the confidential VMBus is and describe what advantages
+> it offers on the capable hardware.
 >=20
-> This is the 5th version of the patch series, and the full changelog
-> is at the end of the cover letter. The most notable change is that
-> now there is a CPUID bit set under the virtualization leaf to indicate
-> that the Confidential VMBus is available. The fallback approach used
-> in the first versions received some criticism, and that has been addresse=
-d
-> in this version.
+> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+> Reviewed-by: Alok Tiwari <alok.a.tiwari@oracle.com>
+> Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+> ---
+>  Documentation/virt/hyperv/coco.rst | 143 ++++++++++++++++++++++++++++-
+>  1 file changed, 142 insertions(+), 1 deletion(-)
 >=20
-> The COUID bit is obviously an x86_64 specific technique. On ARM64, the
-
-s/COUID/CPUID/
-
-> Confidential VMBus is expected to be required once support for ARM CC is
-> implemented. Despite that change, the functions for getting and setting
-> registers via paravisor remain fallible. That provides a clearer root cau=
-se
-> for failures instead of printing messages about unchecked MSR accesses.
-> That might seem as not needed with the paravisors run in Azure (OpenHCL
-> and the TrustedLauch aka HCL paravisor). However, if someone decides to
-> implement their own or tweak the exisiting one, this will help with debug=
-ging.
+> diff --git a/Documentation/virt/hyperv/coco.rst b/Documentation/virt/hype=
+rv/coco.rst
+> index c15d6fe34b4e..38900aec761c 100644
+> --- a/Documentation/virt/hyperv/coco.rst
+> +++ b/Documentation/virt/hyperv/coco.rst
+> @@ -178,7 +178,7 @@ These Hyper-V and VMBus memory pages are marked as
+> decrypted:
 >=20
-> TLDR; is that these patches are for the Hyper-V guests, and the patches
-> allow to keep data flowing from physical devices into the guests encrypte=
-d
-> at the CPU level so that neither the root/host partition nor the hypervis=
-or
-> can access the data being processed (they only "see" the encrypted/garble=
-d
-> data) unless the guest decides to share it. The changes are backward comp=
-atible
-> with older systems, and their full potential is realized on hardware that
-> supports memory encryption.
+>  * VMBus monitor pages
 >=20
-> These features also require running a paravisor, such as
-> OpenHCL (https://github.com/microsoft/openvmm) used in Azure. Another
-> implementation of the functionality available in this patch set is
-> available in the Hyper-V UEFI: https://github.com/microsoft/mu_msvm.
+> -* Synthetic interrupt controller (synic) related pages (unless supplied =
+by
+> +* Synthetic interrupt controller (SynIC) related pages (unless supplied =
+by
+>    the paravisor)
 >=20
-> A more detailed description of the patches follows.
->=20
-> The guests running on Hyper-V can be confidential where the memory and th=
+>  * Per-cpu hypercall input and output pages (unless running with a paravi=
+sor)
+> @@ -232,6 +232,147 @@ with arguments explicitly describing the access. Se=
 e
-> register content are encrypted, provided that the hardware supports that
-> (currently support AMD SEV-SNP and Intel TDX is implemented) and the gues=
-t
-
-s/support/support for/
-
-> is capable of using these features. The confidential guests cannot be
-> introspected by the host nor the hypervisor without the guest sharing the
-> memory contents upon doing which the memory is decrypted.
+>  _hv_pcifront_read_config() and _hv_pcifront_write_config() and the
+>  "use_calls" flag indicating to use hypercalls.
 >=20
-> In the confidential guests, neither the host nor the hypervisor need to b=
-e
-> trusted, and the guests processing sensitive data can take advantage of t=
-hat.
->=20
-> Not trusting the host and the hypervisor (removing them from the Trusted
-> Computing Base aka TCB) necessitates that the method of communication
-> between the host and the guest be changed. Here is the data flow for a
-> conventional and the confidential VMBus connections (`C` stands for the
-> client or VSC, `S` for the server or VSP, the `DEVICE` is a physical one,
-> might be with multiple virtual functions):
->=20
-> 1. Without the paravisor the devices are connected to the host, and the
-> host provides the device emulation or translation to the guest:
->=20
->   +---- GUEST ----+       +----- DEVICE ----+        +----- HOST -----+
->   |               |       |                 |        |                |
->   |               |       |                 |        |                |
->   |               |       |                 =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+> +Confidential VMBus
+> +------------------
+> +The confidential VMBus enables the confidential guest not to interact wi=
+th
+> +the untrusted host partition and the untrusted hypervisor. Instead, the =
+guest
+> +relies on the trusted paravisor to communicate with the devices processi=
+ng
+> +sensitive data. The hardware (SNP or TDX) encrypts the guest memory and =
+the
+> +register state while measuring the paravisor image using the platform se=
+curity
+> +processor to ensure trusted and confidential computing.
+> +
+> +Confidential VMBus provides a secure communication channel between the g=
+uest
+> +and the paravisor, ensuring that sensitive data is protected from hyperv=
+isor-
+> +level access through memory encryption and register state isolation.
+> +
+> +Confidential VMBus is an extension of Confidential Computing (CoCo) VMs
+> +(a.k.a. "Isolated" VMs in Hyper-V terminology). Without Confidential VMB=
+us,
+> +guest VMBus device drivers (the "VSC"s in VMBus terminology) communicate
+> +with VMBus servers (the VSPs) running on the Hyper-V host. The
+> +communication must be through memory that has been decrypted so the
+> +host can access it. With Confidential VMBus, one or more of the VSPs res=
+ide
+> +in the trusted paravisor layer in the guest VM. Since the paravisor laye=
+r also
+> +operates in encrypted memory, the memory used for communication with
+> +such VSPs does not need to be decrypted and thereby exposed to the
+> +Hyper-V host. The paravisor is responsible for communicating securely
+> +with the Hyper-V host as necessary.
+> +
+> +The data is transferred directly between the VM and a vPCI device (a.k.a=
+.
+> +a PCI pass-thru device, see :doc:`vpci`) that is directly assigned to VT=
+L2
+> +and that supports encrypted memory. In such a case, neither the host par=
+tition
+> +nor the hypervisor has any access to the data. The guest needs to establ=
+ish
+> +a VMBus connection only with the paravisor for the channels that process
+> +sensitive data, and the paravisor abstracts the details of communicating
+> +with the specific devices away providing the guest with the well-establi=
+shed
+> +VSP (Virtual Service Provider) interface that has had support in the Hyp=
+er-V
+> +drivers for a decade.
+> +
+> +In the case the device does not support encrypted memory, the paravisor
+> +provides bounce-buffering, and although the data is not encrypted, the b=
+acking
+> +pages aren't mapped into the host partition through SLAT. While not impo=
+ssible,
+> +it becomes much more difficult for the host partition to exfiltrate the =
+data
+> +than it would be with a conventional VMBus connection where the host par=
+tition
+> +has direct access to the memory used for communication.
+> +
+> +Here is the data flow for a conventional VMBus connection (`C` stands fo=
+r the
+> +client or VSC, `S` for the server or VSP, the `DEVICE` is a physical one=
+, might
+> +be with multiple virtual functions)::
+> +
+> +  +---- GUEST ----+       +----- DEVICE ----+        +----- HOST -----+
+> +  |               |       |                 |        |                |
+> +  |               |       |                 |        |                |
+> +  |               |       |                 =3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D                |
->   |               |       |                 |        |                |
->   |               |       |                 |        |                |
->   |               |       |                 |        |                |
->   +----- C -------+       +-----------------+        +------- S ------+
->          ||                                                   ||
->          ||                                                   ||
->   +------||------------------ VMBus --------------------------||------+
->   |                     Interrupts, MMIO                              |
->   +-------------------------------------------------------------------+
->=20
-> 2. With the paravisor, the devices are connected to the paravisor, and
-> the paravisor provides the device emulation or translation to the guest.
-> The guest doesn't communicate with the host directly, and the guest
-> communicates with the paravisor via the VMBus. The host is not trusted
-> in this model, and the paravisor is trusted:
->=20
->   +---- GUEST --------------- VTL0 ------+               +-- DEVICE --+
->   |                                      |               |            |
->   | +- PARAVISOR --------- VTL2 -----+   |               |            |
->   | |     +-- VMBus Relay ------+    =3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=
+> +  |               |       |                 |        |                |
+> +  |               |       |                 |        |                |
+> +  |               |       |                 |        |                |
+> +  +----- C -------+       +-----------------+        +------- S ------+
+> +         ||                                                   ||
+> +         ||                                                   ||
+> +  +------||------------------ VMBus --------------------------||------+
+> +  |                     Interrupts, MMIO                              |
+> +  +-------------------------------------------------------------------+
+> +
+> +and the Confidential VMBus connection::
+> +
+> +  +---- GUEST --------------- VTL0 ------+               +-- DEVICE --+
+> +  |                                      |               |            |
+> +  | +- PARAVISOR --------- VTL2 -----+   |               |            |
+> +  | |     +-- VMBus Relay ------+    =3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D            |
->   | |     |   Interrupts, MMIO  |    |   |               |            |
->   | |     +-------- S ----------+    |   |               +------------+
->   | |               ||               |   |
->   | +---------+     ||               |   |
->   | |  Linux  |     ||    OpenHCL    |   |
->   | |  kernel |     ||               |   |
->   | +---- C --+-----||---------------+   |
->   |       ||        ||                   |
->   +-------++------- C -------------------+               +------------+
->           ||                                             |    HOST    |
->           ||                                             +---- S -----+
->   +-------||----------------- VMBus ---------------------------||-----+
->   |                     Interrupts, MMIO                              |
->   +-------------------------------------------------------------------+
->=20
-> Note that in the second case the guest doesn't need to share the memory
-> with the host as it communicates only with the paravisor within their
-> partition boundary. That is precisely the raison d'etre and the value
-> proposition of this patch series: equip the confidential guest to use
-> private (encrypted) memory and rely on the paravisor when this is
-> available to be more secure.
->=20
-> An implementation of the VMBus relay that offers the Confidential VMBus
-> channels is available in the OpenVMM project as a part of the OpenHCL
-> paravisor. Please refer to
->=20
->   * https://openvmm.dev/guide/, and
->   * https://github.com/microsoft/openvmm
->=20
-> for more information about the OpenHCL paravisor. A VMBus client
-> that can work with the Confidential VMBus is available in the
-> open-source Hyper-V UEFI: https://github.com/microsoft/mu_msvm.
->=20
-> I'd like to thank the following people for their help with this
-> patch series:
->=20
-> * Dexuan for help with validation and the fruitful discussions,
-> * Easwar for reviewing the refactoring of the page allocating and
->   freeing in `hv.c`,
-> * John and Sven for the design,
-> * Mike for helping to avoid pitfalls when dealing with the GFP flags,
-> * Sven for blazing the trail and implementing the design in few
->   codebases.
->=20
-> I made sure to validate the patch series on
->=20
->     {TrustedLaunch(x86_64), OpenHCL} x
->     {SNP(x86_64), TDX(x86_64), No hardware isolation, No paravisor} x
->     {VMBus 5.0, VMBus 6.0} x
->     {arm64, x86_64}.
->=20
-> [V5]
->     - Rebased onto the latest hyperv-next tree.
->=20
->     - Fixed build issues with the configs provided by the kernel robot.
->       **Thank you, kernel robot!**
->=20
->     - Fixed the potential NULL deref in a failure path.
->       **Thank you, Michael!**
->=20
->     - Removed the added blurb from the vmbus_drv.c with taxonomy of Hyper=
--V VMs
->       that was providing reasons for the trade-offs in the fallback code.=
- That
->       code is no longer needed.
->=20
-> [V4] https://lore.kernel.org/linux-hyperv/20250714221545.5615-1-romank@li=
-nux.microsoft.com/
->     - Rebased the patch series on top of the latest hyperv-next branch,
->       applying changes as needed.
->=20
->     - Fixed typos and clarifications all around the patch series.
->     - Added clarifications in the patch 7 for `ms_hyperv.paravisor_presen=
-t && !vmbus_is_confidential()`
->       and using hypercalls vs SNP or TDX specific protocols.
->       **Thank you, Alok!**
->=20
->     - Trim the Documentation changes to 80 columns.
->       **Thank you, Randy!**
->=20
->     - Make sure adhere to the RST format, actually built the PDF docs
->       and made sure the layout was correct.
->     **Thank you, Jon!**
->=20
->     - Better section order in Documentation.
->     - Fixed the commit descriptions where suggested.
->     - Moved EOI/EOM signaling for the confidential VMBus to the specializ=
-ed function.
->     - Removed the unused `cpu` parameters.
->     - Clarified comments in the `hv_per_cpu_context` struct
->     - Explicitly test for NULL and only call `iounmap()` if non-NULL inst=
-ead of
->       using `munmap()`.
->     - Don't deallocate SynIC pages in the CPU online and offline paths.
->     - Made sure the post page needs to be allocated for the future.
->     - Added comments to describe trade-offs.
->     **Thank you, Michael!**
->=20
-> [V3] https://lore.kernel.org/linux-hyperv/20250604004341.7194-1-romank@li=
-nux.microsoft.com/
->     - The patch series is rebased on top of the latest hyperv-next branch=
-.
->     - Reworked the "wiring" diagram in the cover letter, added links to t=
+> +  | |     |   Interrupts, MMIO  |    |   |               |            |
+> +  | |     +-------- S ----------+    |   |               +------------+
+> +  | |               ||               |   |
+> +  | +---------+     ||               |   |
+> +  | |  Linux  |     ||    OpenHCL    |   |
+> +  | |  kernel |     ||               |   |
+> +  | +---- C --+-----||---------------+   |
+> +  |       ||        ||                   |
+> +  +-------++------- C -------------------+               +------------+
+> +          ||                                             |    HOST    |
+> +          ||                                             +---- S -----+
+> +  +-------||----------------- VMBus ---------------------------||-----+
+> +  |                     Interrupts, MMIO                              |
+> +  +-------------------------------------------------------------------+
+> +
+> +An implementation of the VMBus relay that offers the Confidential VMBus
+> +channels is available in the OpenVMM project as a part of the OpenHCL
+> +paravisor. Please refer to
+> +
+> +  * https://openvmm.dev/, and
+> +  * https://github.com/microsoft/openvmm
+> +
+> +for more information about the OpenHCL paravisor.
+> +
+> +A guest that is running with a paravisor must determine at runtime if
+> +Confidential VMBus is supported by the current paravisor. It may do that=
+ by
+> +first trying to establish a Confidential VMBus connection with the parav=
+isor
+> +using standard mechanisms where the memory remains encrypted. If this su=
+cceeds,
+> +then the guest can proceed to use Confidential VMBus. If it fails, then =
+the
+> +guest must fallback to establishing a non-Confidential VMBus connection =
+with
+> +the Hyper-V host.=20
+
+Is it appropriate to document the "fallback" approach, given that on x86-64
+there's an explicit CPUID indicator, and that ARM64 will be hardwired to
+assume Confidential VMBus? Mentioning an unimplemented approach has
+the potential for causing confusion.
+
+> +The x86_64-specific approach may rely on the CPUID
+> +Virtualization stack leaf; the ARM64 implementation is expected to suppo=
+rt
+> +the Confidential VMBus unconditionally when running the ARM CC guests.
+> +
+> +Confidential VMBus is a characteristic of the VMBus connection as a whol=
+e,
+> +and of each VMBus channel that is created. When a Confidential VMBus
+> +connection is established, the paravisor provides the guest the message-=
+passing
+> +path that is used for VMBus device creation and deletion, and it provide=
+s a
+> +per-CPU synthetic interrupt controller (SynIC) just like the SynIC that =
+is
+> +offered by the Hyper-V host. Each VMBus device that is offered to the gu=
+est
+> +indicates the degree to which it participates in Confidential VMBus. The=
+ offer
+> +indicates if the device uses encrypted ring buffers, and if the device u=
+ses
+> +encrypted memory for DMA that is done outside the ring buffer. These set=
+tings
+> +may be different for different devices using the same Confidential VMBus
+> +connection.
+> +
+> +Although these settings are separate, in practice it'll always be encryp=
+ted
+> +ring buffer only, or both encrypted ring buffer and external data. If a =
+channel
+> +is offered by the paravisor with confidential VMBus, the ring buffer can=
+ always
+> +be encrypted since it's strictly for communication between the VTL2 para=
+visor
+> +and the VTL0 guest. However, other memory regions are often used for e.g=
+. DMA,
+> +so they need to be accessible by the underlying hardware, and must be
+> +unencrypted (unless the device supports encrypted memory). Currently, th=
+ere are
+> +not any VSPs in OpenHCL that support encrypted external memory, but futu=
+re
+> +versions are expected to enable this capability.
+> +
+> +Because some devices on a Confidential VMBus may require decrypted ring =
+buffers
+> +and DMA transfers, the guest must interact with two SynICs -- the one pr=
+ovided
+> +by the paravisor and the one provided by the Hyper-V host when Confident=
+ial
+> +VMBus is not offered. Interrupts are always signaled by the paravisor Sy=
+nIC,
+> +but the guest must check for messages and for channel interrupts on both=
+ SynICs.
+> +
+> +In the case of a confidential VMBus, regular SynIC access by the guest i=
+s
+> +intercepted by the paravisor (this includes various MSRs such as the SIM=
+P and
+> +SIEFP, as well as hypercalls like HvPostMessage and HvSignalEvent). If t=
 he
->       OpenVMM project and the OpenHCL paravisor.
->=20
->     - More precise wording in the comments and clearer code.
->     **Thank you, Alok!**
->=20
->     - Reworked the documentation patch.
->     - Split the patchset into much more granular patches.
->     - Various fixes and improvements throughout the patch series.
->     **Thank you, Michael!**
->=20
-> [V2] https://lore.kernel.org/linux-hyperv/20250511230758.160674-1-romank@=
-linux.microsoft.com/
->     - The patch series is rebased on top of the latest hyperv-next branch=
-.
->=20
->     - Better wording in the commit messages and the Documentation.
->     **Thank you, Alok and Wei!**
->=20
->     - Removed the patches 5 and 6 concerning turning bounce buffering off=
- from
->       the previous version of the patch series as they were found to be
->       architecturally unsound. The value proposition of the patch series =
-is not
->       diminished by this removal: these patches were an optimization and =
-only for
->       the storage (for the simplicity sake) but not for the network. Thes=
-e changes
->       might be proposed in the future again after revolving the issues.
->     ** Thanks you, Christoph, Dexuan, Dan, Michael, James, Robin! **
->=20
-> [V1] https://lore.kernel.org/linux-hyperv/20250409000835.285105-1-romank@=
-linux.microsoft.com/
->=20
-> Roman Kisel (16):
->   Documentation: hyperv: Confidential VMBus
->   drivers: hv: VMBus protocol version 6.0
->   arch: hyperv: Get/set SynIC synth.registers via paravisor
->   arch/x86: mshyperv: Trap on access for some synthetic MSRs
->   Drivers: hv: Rename fields for SynIC message and event pages
->   Drivers: hv: Allocate the paravisor SynIC pages when required
->   Drivers: hv: Post messages through the confidential VMBus if available
->   Drivers: hv: remove stale comment
->   Drivers: hv: Check message and event pages for non-NULL before iounmap(=
-)
->   Drivers: hv: Rename the SynIC enable and disable routines
->   Drivers: hv: Functions for setting up and tearing down the paravisor Sy=
-nIC
->   Drivers: hv: Allocate encrypted buffers when requested
->   Drivers: hv: Free msginfo when the buffer fails to decrypt
->   Drivers: hv: Support confidential VMBus channels
->   Drivers: hv: Set the default VMBus version to 6.0
->   Drivers: hv: Support establishing the confidential VMBus connection
->=20
->  Documentation/virt/hyperv/coco.rst | 143 +++++++++-
->  arch/x86/include/asm/mshyperv.h    |   2 +
->  arch/x86/kernel/cpu/mshyperv.c     |  86 +++++-
->  drivers/hv/channel.c               |  73 +++--
->  drivers/hv/channel_mgmt.c          |  27 +-
->  drivers/hv/connection.c            |   6 +-
->  drivers/hv/hv.c                    | 426 ++++++++++++++++++++---------
->  drivers/hv/hv_common.c             |  24 ++
->  drivers/hv/hyperv_vmbus.h          |  70 ++++-
->  drivers/hv/mshv_root.h             |   2 +-
->  drivers/hv/mshv_synic.c            |   6 +-
->  drivers/hv/ring_buffer.c           |   5 +-
->  drivers/hv/vmbus_drv.c             | 186 ++++++++-----
->  include/asm-generic/mshyperv.h     |  39 +--
->  include/hyperv/hvgdk_mini.h        |   1 +
->  include/linux/hyperv.h             |  69 +++--
->  16 files changed, 878 insertions(+), 287 deletions(-)
->=20
->=20
-> base-commit: 03ac62a578566730ab3c320f289f7320798ee2e1
+> +guest actually wants to communicate with the hypervisor, it has to use s=
+pecial
+> +mechanisms (GHCB page on SNP, or tdcall on TDX). Messages can be of eith=
+er
+> +kind: with confidential VMBus, messages use the paravisor SynIC, and if =
+the
+> +guest chose to communicate directly to the hypervisor, they use the hype=
+rvisor
+> +SynIC. For interrupt signaling, some channels may be running on the host
+> +(non-confidential, using the VMBus relay) and use the hypervisor SynIC, =
+and
+> +some on the paravisor and use its SynIC. The RelIDs are coordinated by t=
+he
+> +OpenHCL VMBus server and are guaranteed to be unique regardless of wheth=
+er
+> +the channel originated on the host or the paravisor.
+> +
+>  load_unaligned_zeropad()
+>  ------------------------
+>  When transitioning memory between encrypted and decrypted, the caller of
 > --
 > 2.43.0
 >=20
