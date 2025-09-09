@@ -1,90 +1,117 @@
-Return-Path: <linux-arch+bounces-13454-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13455-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36CA3B4FB63
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 14:38:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9854B50208
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 18:01:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 559BD1C601EE
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 12:38:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A8BB7AA189
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Sep 2025 15:59:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968C332A3D8;
-	Tue,  9 Sep 2025 12:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7EF3258ED1;
+	Tue,  9 Sep 2025 16:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gVIEy9P3";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2xlJSqd/"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="zTXq6smt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257AA322DB4;
-	Tue,  9 Sep 2025 12:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586E624397A;
+	Tue,  9 Sep 2025 16:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757421477; cv=none; b=aKy7WL1hK3CPBJpCCshkhEPmMb6AfJ+NH1mFcw3zHoSZIE0VQZ/kMhbe/c5JMJ28uCXp1Gmr8L7OruWRRQRVLmCl2ZJMfYvZq1KOT+tqVGtA+kICijLPRGfe7r3hyPVBQQH1OsLZmskBZOo1ulGQT92Jpah1/YT/e7Xwi7h7Ygg=
+	t=1757433683; cv=none; b=fpPW+chz2C/XVKcOs/sWIcoRga5gZeVtgZErMcEWFMuc+gkuhQX+IHAyWNf6xa2snWQOlt+bSsKCIxspHcNwd0tM/h174Q83gEKyoqEOkcPAKMde/PMyRwxb0j3//01fqyiyCKrs25fT7eSnzGCmsUybcYfg3UY+mHgrRdrEhog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757421477; c=relaxed/simple;
-	bh=H8hZBFuaGCxEuXIGV38vj5JgKcCgDj247yDqFpnurRI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ePHwhdtkiE10kjDYsONjX5w4be8W6fz3wHbo/YBF+WvnR9z3BoG94yI7o9DA5WExBzL7sJ351XCevCSRPHhWa3ZkBhY83CrRMfL9bFkGRQ6UaoNtbWeqlTr5kD43dbiNOJp1qNbLo3z5feX/YRRn2tMq/jhnyCLR+5NqsGQ2dj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gVIEy9P3; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2xlJSqd/; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1757421474;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5Um56MO6Hq4AwOnzJ7D/qva49PwBVaEV0uBgzg3toHk=;
-	b=gVIEy9P3ljh8c2xVFo99+PSRIH5lMlI555kLIYmKiG1Fb0K602eAAKi6/HWoOMG2slDmvS
-	aVOIkejHz5j/Lg7qNWZg6C1aMnx7xx90lh8R5kccVYp9EBcdUnZIvIeQZO05Ddvcb/rAjM
-	TfkpILWlHyPQz536W7e76hggep4PAEOGOYCZOHnzjAujkuu+lPOg6W6KEUj8HLuwfmdvG7
-	SxZe+PmPs8hvnv2nP4NLChPRwkoyekK4AZ4YlUu4rLVPb44jt+p1WOFmBEtwKocHS59K+i
-	+ZGqU1usd64lvu8aSLPPfpgUy/I2mnc2QEL7Dx+V/6c/nYOuX/+q9NwI7GWKHQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1757421474;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5Um56MO6Hq4AwOnzJ7D/qva49PwBVaEV0uBgzg3toHk=;
-	b=2xlJSqd/+rzD+Im+p2LcvY0WGrQPCgDbgaLKsr4e2bTGkGHgCtXpYzvYcPM1eHGvhOgnA7
-	nrQHPoxAOXXLGqDA==
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: Peter Zilstra <peterz@infradead.org>, Peter Zijlstra
- <peterz@infradead.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Prakash Sangappa <prakash.sangappa@oracle.com>, Madadi Vineeth Reddy
- <vineethr@linux.ibm.com>, K Prateek Nayak <kprateek.nayak@amd.com>, Steven
- Rostedt <rostedt@goodmis.org>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [patch 00/12] rseq: Implement time slice extension mechanism
-In-Reply-To: <20250908225709.144709889@linutronix.de>
-References: <20250908225709.144709889@linutronix.de>
-Date: Tue, 09 Sep 2025 14:37:53 +0200
-Message-ID: <87ms73vm1q.ffs@tglx>
+	s=arc-20240116; t=1757433683; c=relaxed/simple;
+	bh=zSttbFfUJbT1dbYvt8ZmIXvptbSmiISm7HofeLAq/Mg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L4WKjuEFHHez/2BkUj6tlGe9vPIru27Zr4AIyG3RL+//rEKY7kD1pIJVhXD1lytHRbzbOLWAzScrKxAge1ovXvooDLOrlURDVuIHZ4H0aJpUaGXiKMVckYmhZVvwetdQJ5Nip4wvPuKGKOpjXd2qPow9tN8WYVG6God+/+B6kBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=zTXq6smt; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=1AmmQtJpgAtvBwqwiCJRi6SPMvAwCEB308R+UkiJ9V0=; b=zTXq6smtxdu8pNaXVD07tNonvc
+	tQ7gRxoLmEJEX8aqMs0cHrDoo2ymzUZ5v2mFTtCFmdJBeHb4/AaU18avWqywM+7BNIG8M5rSMjVaq
+	LYmYa3au4B02A5JjBRDDQ66O6/WafnxjPmYUZ+r4/dUJEH+UYiiT7j0RAsONgQ1nW6N9Grr5N7I20
+	cCKFtUGMZuM1Dkot0/sZpm42CTZfEH2cneRar8BU6Nwt1hsGEKCLII5iV4q3ABRf14IuPxdXvm/q3
+	Vb2uIxpGiuDJv8qepNFa3LgOkrFkqXY8bOxmMfYph1HywOE4HKmzc6qoR5MLwQndDPdc9DUhbIb+R
+	PzExahEQ==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uw0mW-00000008NHJ-2xnM;
+	Tue, 09 Sep 2025 16:01:20 +0000
+Message-ID: <78605ac1-e385-4a93-b656-aca2753fa172@infradead.org>
+Date: Tue, 9 Sep 2025 09:01:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [patch 03/12] rseq: Provide static branch for time slice
+ extensions
+To: Thomas Gleixner <tglx@linutronix.de>,
+ K Prateek Nayak <kprateek.nayak@amd.com>, LKML <linux-kernel@vger.kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Prakash Sangappa <prakash.sangappa@oracle.com>,
+ Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+References: <20250908225709.144709889@linutronix.de>
+ <20250908225752.744169647@linutronix.de>
+ <0f28cc54-1f84-4f28-bd61-ee9e0b9d0d0c@amd.com>
+ <94f08403-31f5-43ee-871d-5e0ebcfd3b6c@infradead.org> <87v7lrvn82.ffs@tglx>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <87v7lrvn82.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 09 2025 at 00:59, Thomas Gleixner wrote:
-> For your convenience all of it is also available as a conglomerate from
-> git:
->
->     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/slice
 
-Force pushed a new version into the branch, which addresses the initial
-feedback and fallout.
 
-Thanks,
+On 9/9/25 5:12 AM, Thomas Gleixner wrote:
+> On Mon, Sep 08 2025 at 21:11, Randy Dunlap wrote:
+>> On 9/8/25 8:10 PM, K Prateek Nayak wrote:
+>>> Hello Thomas,
+>>>
+>>> On 9/9/2025 4:29 AM, Thomas Gleixner wrote:
+>>>> +#ifdef CONFIG_RSEQ_SLICE_EXTENSION
+>>>> +DEFINE_STATIC_KEY_TRUE(rseq_slice_extension_key);
+>>>> +
+>>>> +static int __init rseq_slice_cmdline(char *str)
+>>>> +{
+>>>> +	bool on;
+>>>> +
+>>>> +	if (kstrtobool(str, &on))
+>>>> +		return -EINVAL;
+>>>> +
+>>>> +	if (!on)
+>>>> +		static_branch_disable(&rseq_slice_extension_key);
+>>>> +	return 0;
+>>>
+>>> I believe this should return "1" signalling that the cmdline was handled
+>>> correctly to avoid an "Unknown kernel command line parameters" message.
+>>
+>> Good catch. I agree.
+>> Thanks.
+> 
+> It seems I can't get that right ever ....
 
-        tglx
+Yeah, it's bass-ackwards.
+
+I guess that's partly why we have early_param() and friends.
+
+-- 
+~Randy
+
 
