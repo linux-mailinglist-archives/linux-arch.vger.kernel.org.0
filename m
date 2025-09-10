@@ -1,84 +1,83 @@
-Return-Path: <linux-arch+bounces-13470-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13471-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACEA1B5153A
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Sep 2025 13:15:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83F94B51554
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Sep 2025 13:20:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62E3B3AA747
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Sep 2025 11:15:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DF263ABCED
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Sep 2025 11:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6595D1FE47B;
-	Wed, 10 Sep 2025 11:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF292797A1;
+	Wed, 10 Sep 2025 11:20:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="cdPJSWuG"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="NlNGZNXK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2074.outbound.protection.outlook.com [40.107.243.74])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2056.outbound.protection.outlook.com [40.107.220.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9E425FA1D;
-	Wed, 10 Sep 2025 11:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D179245005;
+	Wed, 10 Sep 2025 11:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.56
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757502922; cv=fail; b=D+zD2xeoW41O15+l2+Jy0kG+8eFQEfuYIcQxyIx4FOdRO/vShqSl7UdxoXcezl7ZUhdO8yjDxaLRGSn6hvr/kCD3VErv0Q1UxChcKIMGhUOSS4wnruclbx2oNfCKxAJXOKsZAYunt43XnRGfeFqAA9dHVVgKI0xapdtOaM+v0FM=
+	t=1757503224; cv=fail; b=B4SLpc3/JA+OSVZzsCGi5o41IrY+ODkMZueYbqHT0o00cFU/4P4NKoXfjatu1+WBvbdDIMmQtC4U4sWWb7f8VKqQXrOAUggLtkmvxpUnTH2+qkbSq4yWSLk8IP31IWN1y680lsaSeE8qXzKuRRQ3r79+XMWmo8p4HP+9c1KLCYM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757502922; c=relaxed/simple;
-	bh=Q/575BUW+F+kjkOTRG3CHifRoUKPy6AK82sizh2lgaY=;
+	s=arc-20240116; t=1757503224; c=relaxed/simple;
+	bh=WAwUmVKqsUm+RRdRqo5TNaaA7PWkS/lUOYvwMbfey7o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TGoOU1uDxAOMhkrTKTgB3Dx9ZEn5n+GWhoPzz000uHMs9y6MR4AW5EfOdn5Eza3oluFetXAPbVQSJTHUL+y0GOwwtJr2TitZILsKDH1aqthI+zrzlFFddMy0OCkkGCxd10mXx+cVa9DD+hlMkE45F2nCNPyiUtJp8oUoHyCuHXg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=cdPJSWuG; arc=fail smtp.client-ip=40.107.243.74
+	 In-Reply-To:Content-Type; b=LYAoLOy04Dc503cs/KvQGAlBEgqFsddjWrMYtZhsWGjMK/SDoQrAAbUNnsYXRQgXsmyXoG+rHWm5Rhvg48S0WpP7qTkCs/qgpovh1eNVioOLdLUNd1LFFDnOG9HaWX3dtkdaJ6gTO6xitfYwIQPDpnPoFkBMHy6ubvU4lbQ4m80=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=NlNGZNXK; arc=fail smtp.client-ip=40.107.220.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=O+7n6U2E7OYCYp+xpaqr1fF6ZwLxyk8RvMaBj3N8JiedfSYZbHHVmz2YZa+vShVMLM6Rf4+P+SfARMCXJJvNY5iWAgQDFOlZ4tJCr2WOvgOk3X0Quv0ltnce3YyVMJeHZOo0POYOOprL6L7qAVVtArIi6V5RYd9H/U3pBi/yl0SfiU+A0EGuCNU9uWj5di6mVY3xLiQaIHhwm7NDukAOHgZJy8XQIL81bZUsbtIwr+pByEC/v6iZEWEpDIvFz7rSwWxvLtJhVy/6kfMuLbLM1R48fq1ff/C5PSPbGy6/UsNY7ZomltKqsY48AWy9jzU49+PCSpRPGuclC+VdV/yYNw==
+ b=HDupi+FcErLeo1eahbq+iXX9OtB2JFEJVwVYmtU594uDpULXQ9v5KrYxy5+iBcP4s/rzQo5RBlw1F2TzT3X7vdEPKjRjf/MFcg7G0wurpaM+9kDrP8y7hTB7k+8Qaiu4JLuBqmkBZ+w4/iGV1CBz4gOjBY1vVyTkFiNVZLzKoVGVQW7gG51em4Oy4SgthrWdQeXniFnr7trywSphzeTEscAoub6q3GMHVtxETcQZT2HuF1XtTuOLyNprawAkzRyfQIBCcnOiyVsnjY6Xd0xIM8gXsSyRaqu7jHfYoAJH2BggM5mQUWeJaycScnL/8KliLV940OVZU+BV+6dUO8X22w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pdkr507djNLM5gYA+3uzP1wSRUhn5taWd3QEr/QuFfU=;
- b=fqz1id6oRhlXZJ1Mq/PIkxBHbmXVUFUjf9oE0dZi79EyjqO1Bb6GqPlKc84di0PLstMFO8Ejro5ZZERk3CSy+1Wh6dQ09VkgVXRQ9h4L3TpAdJyGoEVorhS6/wbyBN6dvQsHyB7GxqxSkwkR6nImHzxjpXqs3DlMEiBkLVWqxyfxf6sF9vTgwlDtfMw0b4WWTBZjDU1P+v9Dn7onlmtYW71n7oN5vcE5cxz9gnzZWrq8llNOBQfsjsQrym6bhn/OBRpNqczlziS5GS3k7I0s3NzcRq4F/QRcqNAOyaQx/hRB+KW9XVVpL0Yh3m53umnf+m8kWNXHeK+pZhnUPYYYBw==
+ bh=x3LG7ctCzek9pDgk9ylT7FeHeKYCJyPs7gCuJcZlXL0=;
+ b=GTqFSHF0GABxiEUt5mUk91dIlMihTXOHOTplZnZ0bcUEWi+BYJ3y5ngq3vPhp+N93xUMcKN8kKDpjGIwYvvC9wMqE8QwJ+Yrv80sEnVZ5nSJm+x3w2ZUg0Jfj3qEGngD2Mv795DDNNjMdidOy5pIE3ceGyN+WWNx07d3ZjhGdjRzfb2vVi9B5NSdGxynG6o1NeBli8LN6C/u0lepzgeT4xPl168pwh6o2mvaLlFZ9fMcHfvz6f/QX29dXoUAo8hNzPyAP1RAQ8vvwcTj9/gtVXHzOV1S5Qc5mS1z5qtrHTQEyioG8gWI6D2sliYmhYfh3KiudIp5s6LZVZFDP8xV9Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linutronix.de smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pdkr507djNLM5gYA+3uzP1wSRUhn5taWd3QEr/QuFfU=;
- b=cdPJSWuGQJs7CQHdLbRnU6igStHGUs2Um0sr7/kZqYGpYjLkYucqh1+aUo/yCAjgQPshdLbVIoc4IDoZQDZrCpVXwr9YWX4Y8s+M5R9lT2+Og41Wf0y08BItaxDIP7+ZujSUhBjK7PXPjfrpzsVzC8lTS2Pai/2RLKROIu/x2RE=
-Received: from MW4P220CA0003.NAMP220.PROD.OUTLOOK.COM (2603:10b6:303:115::8)
- by DS0PR12MB8526.namprd12.prod.outlook.com (2603:10b6:8:163::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Wed, 10 Sep
- 2025 11:15:16 +0000
-Received: from MWH0EPF000989E8.namprd02.prod.outlook.com
- (2603:10b6:303:115:cafe::e6) by MW4P220CA0003.outlook.office365.com
- (2603:10b6:303:115::8) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9094.22 via Frontend Transport; Wed,
- 10 Sep 2025 11:15:16 +0000
+ bh=x3LG7ctCzek9pDgk9ylT7FeHeKYCJyPs7gCuJcZlXL0=;
+ b=NlNGZNXKG4CnVoIm/wUFDowqeK1eOth98ns8Nv7bVMGPHjFy1fQSGJauFLVzTjHQPKdBVbpwHj9tWn4jfMzd/d4vREaZFUOr+CnR2SDl7wvQaTlD/r0LKvNyc6jUESk9CWRJZUX5nYS0aoUKlEcQP4oTuytebo+6IxwdkscA0ug=
+Received: from MN2PR01CA0011.prod.exchangelabs.com (2603:10b6:208:10c::24) by
+ SJ1PR12MB6196.namprd12.prod.outlook.com (2603:10b6:a03:456::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9094.22; Wed, 10 Sep 2025 11:20:19 +0000
+Received: from BN3PEPF0000B06E.namprd21.prod.outlook.com
+ (2603:10b6:208:10c:cafe::78) by MN2PR01CA0011.outlook.office365.com
+ (2603:10b6:208:10c::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9115.15 via Frontend Transport; Wed,
+ 10 Sep 2025 11:20:35 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
-Received: from satlexmb08.amd.com (165.204.84.17) by
- MWH0EPF000989E8.mail.protection.outlook.com (10.167.241.135) with Microsoft
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BN3PEPF0000B06E.mail.protection.outlook.com (10.167.243.73) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9115.13 via Frontend Transport; Wed, 10 Sep 2025 11:15:15 +0000
-Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb08.amd.com
- (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 10 Sep
- 2025 04:15:07 -0700
-Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb09.amd.com
- (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 10 Sep
- 2025 04:15:06 -0700
-Received: from [10.85.34.232] (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Wed, 10 Sep 2025 04:15:02 -0700
-Message-ID: <e61943a6-0005-4146-a5bd-485d3b32e709@amd.com>
-Date: Wed, 10 Sep 2025 16:45:01 +0530
+ 15.20.9137.0 via Frontend Transport; Wed, 10 Sep 2025 11:20:19 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Wed, 10 Sep
+ 2025 04:20:18 -0700
+Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 10 Sep
+ 2025 06:20:18 -0500
+Received: from [10.85.34.232] (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Wed, 10 Sep 2025 04:20:14 -0700
+Message-ID: <eeb87b48-aec9-4b3d-a0c1-afc83346b624@amd.com>
+Date: Wed, 10 Sep 2025 16:50:13 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -86,115 +85,105 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [patch 06/12] rseq: Implement sys_rseq_slice_yield()
+Subject: Re: [patch 08/12] rseq: Implement time slice extension enforcement
+ timer
 To: Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
-CC: Arnd Bergmann <arnd@arndb.de>, <linux-arch@vger.kernel.org>, Peter Zilstra
-	<peterz@infradead.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, Prakash Sangappa
+CC: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Peter Zijlstra
+	<peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng
+	<boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Prakash Sangappa
 	<prakash.sangappa@oracle.com>, Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
 	Steven Rostedt <rostedt@goodmis.org>, Sebastian Andrzej Siewior
-	<bigeasy@linutronix.de>
+	<bigeasy@linutronix.de>, Arnd Bergmann <arnd@arndb.de>,
+	<linux-arch@vger.kernel.org>
 References: <20250908225709.144709889@linutronix.de>
- <20250908225752.936257349@linutronix.de>
+ <20250908225753.077967162@linutronix.de>
 Content-Language: en-US
 From: K Prateek Nayak <kprateek.nayak@amd.com>
-In-Reply-To: <20250908225752.936257349@linutronix.de>
+In-Reply-To: <20250908225753.077967162@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+Received-SPF: None (SATLEXMB04.amd.com: kprateek.nayak@amd.com does not
+ designate permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989E8:EE_|DS0PR12MB8526:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71f228b9-d56e-4dca-61ea-08ddf05b51c2
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06E:EE_|SJ1PR12MB6196:EE_
+X-MS-Office365-Filtering-Correlation-Id: cc1c4b16-f63c-4f65-f091-08ddf05c0661
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014|7416014;
+	BCL:0;ARA:13230040|82310400026|1800799024|7416014|36860700013|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dkxqd0ttRVFDTTBnNlJhZEYzZnExanZod2JmT3Zhb0ZITzcvUUc4dmRaK3pB?=
- =?utf-8?B?eWJEdStxV2dTMGgySUxLTFh1a2JuV2k0YURUNFVQanJsYzBnQUpHVjlQMERK?=
- =?utf-8?B?ZjZLZ20rM1NNQzJlMFB4eDJSWExCcHBVOFhqS0tzc2x4ekZad0RFQmxmY3RU?=
- =?utf-8?B?ajVPUHhnMmQyM1ZaRHRQZ0g0bjRUazEzVXdBbThDQWRQbUJxQXZpZUNTNytX?=
- =?utf-8?B?Q0lxWGZ5SER0d3VUaVZwa0ZFcVFnM3lhRzJKcHFWTlB0TW9wb25FS3FqTzhl?=
- =?utf-8?B?Z1phVytCRkROWE5ONFhkdFEvZk9Td3hRUWRFS05ObFl1SUpjY3l4QjNGNHlU?=
- =?utf-8?B?dzdleEpsclFzcG5zT0R2OVJha1JMVjBjVGRKQWlSZGZoTVBlTFNkdksxalJ2?=
- =?utf-8?B?YXFSbC96TTFqUUpFbHQwL1JrZld3elMydDF6OGtmb0xYajJXZVJUVWRKT2JG?=
- =?utf-8?B?ZGVXUGdWbnVmRjZGdXV4OHY3dFA5WjAwQ3p1cnFVTUg3T1YwRzYrRmgyaU1X?=
- =?utf-8?B?TW5UUVhIdWxJSHhSeTBTMmNoTWM0RVZlaDVJYVJwRVVNc3pBYmZUeElKQzB4?=
- =?utf-8?B?VHVVakxIdGpiU0MvZTBzR0RSY0V0TEJCUXRWbiswV2xzbzhlRmZUa3hwTnFV?=
- =?utf-8?B?dDZ6ZjRER3J4aERrdDNub2dyN1VFbW9lcWc3QWsrNFVrYXlYRFRGSUZjQWd6?=
- =?utf-8?B?eTE4clo4REFnUWVTdWRiS0NhOUIzSTU3MzYzNWdNRFgzdmhEeEYzZTVNemNT?=
- =?utf-8?B?bEI5cXViNGxZeFRZTFN6V3YrU2dZNWtNOENPVlJzdkhDQWVnK1hNUDBlK3h5?=
- =?utf-8?B?ckEwdWxUa1Q0NEdJNVV5QUJIREIyUXRyc0JkSElMZFVWYVM5b25VaVI5Vmk1?=
- =?utf-8?B?aXhwS0piTndnM1dWUXBleVVxWlNRWUZRMktBaDJtVHBNbWZ4NnROU0Nlempx?=
- =?utf-8?B?N1FvcHh3Qm1VeDhzWnk5MEpjWmg5VTJUTGE1ejBsM0xlaHhMVVYxdmNiajlN?=
- =?utf-8?B?dVFHcEFheXV5Q2hneE0xR1pzOFdmQkx1bVd2VW5UNWRTZkdVZ2pNaWl5eWtw?=
- =?utf-8?B?UzlMY3l3VWs2TVlqdzZ4L0dLUUtVaWF5VGtGNjk4dWw5M2pFQzB6MEVrZGpv?=
- =?utf-8?B?MnJheFphai9zTjhrc2xSVzB4b2pTd3h2TEJlMUtQT3JhRVFKc0I1eVJWWUxV?=
- =?utf-8?B?Ym9uaWlFd0FrVllNTk54eXlRT1VGa2c3b0RKVHFIOHNQVFRkd1FXSU54ek4x?=
- =?utf-8?B?V25xWnAzNVMwN1BjMjRRTWpPRWMxSDhnZWtLRElBQlNNK1R5RTlzWE9Rb0pW?=
- =?utf-8?B?WnRLb25EdCtqZ0JhRGt6Q2NDSmJGdlJodE9FUC8rNWlFenFwZkpUMDlrVzJl?=
- =?utf-8?B?S0xWRVZ5YkFOanVjUWlVdmEwb0k3OVAya2NGeDUyWE9HZHZteGlFN3IxL0dK?=
- =?utf-8?B?STJySGtRSmQxR0RzRDMvSDY0R3duUlpUOGNsZDB4WC9BajJGa2VoWUJVbU1J?=
- =?utf-8?B?T2FkSy9MVU9pdTJIdFVZQi9tVnBBNElNV1UvQUVvZHY3OUJDQkF4UDIwZWV2?=
- =?utf-8?B?NUdRTWRZRzhFMnFvM3o3Vmt3Zmoxa3NzQlR6SEJxc2dyU0JIbTZBYWp6VUdm?=
- =?utf-8?B?aG9ZaXhIVUpPcHJUS2pON3lYYW1MOHhnbVZjbzFSWHNuT3AzTHdXR3NUZjh4?=
- =?utf-8?B?dmhXMTc4YjNFbUdTL24xQVh1RlAzWUJjZE0zUUJaYTJXZnFKU21Wa3ZlYjg4?=
- =?utf-8?B?ejVXYzZ3Y0ZwK2xwaHpISlBHZVBjbXdSN0xpcUgzcTl2WUsrbUhSdEQyU2Rq?=
- =?utf-8?B?eitWcWtyYmhVYk1NaTB3bFoxbWMwUk56U1BZOGVuR3ZoNkROaU9HdzNPNE9Q?=
- =?utf-8?B?VGRBV29wUmtoSzFZTjFocGZQTTYyWGMvZ0VyN2dvbEFSSGtiZmRSWWJxaGVP?=
- =?utf-8?B?RFRKUm9Hdk5mN244S0NkckJxWmxLZVJTcnZzN3FiNVRPWU5VZE00MHAvRTNq?=
- =?utf-8?B?QXQ1Z0NPMTl5dzQwMEpZeVNGcVo2T05Hc1pqVjN6bWp5bWpldTJDM0VYbUow?=
- =?utf-8?Q?t7PW5O?=
+	=?utf-8?B?WFY3dWxjbUhMNUJGVDU1U0o2UHVYVnYyRjBSU2IzRzJ4UjMzQlRHanRPbFNM?=
+ =?utf-8?B?Tisxdkp2a1QrTEtSaEJRdDNZSmJiQXBaZXEwaDBtRVN0cDhiK1hkcndFRHlG?=
+ =?utf-8?B?eFlEbkpKRkhiVUJocWxsY0lVaDBuS29vZ2tKTVozSlk3WjN6cVpteVNINVZ0?=
+ =?utf-8?B?cjVpV3B1RnlPcXdSMHEwWTNtNnNZZFlZYkUyOURqQzhJY0QxSkRpamxXMUxL?=
+ =?utf-8?B?TEZKK29QeHg4c2hlVWN4Z1NDcUgzUW9Wb3k4YkZxQUwwNTFrbFhNVEd3S1JC?=
+ =?utf-8?B?cGdPamVRbThidFAwM01MWGZUcnBDcW5OTCs4TlJYdmNSSU1TS3pKcU4xNkxt?=
+ =?utf-8?B?cEtHL2NPQnVYaEQrTDFWR3hnUVRTdjMraTc0K3VkbUhvemk2aXFFY241bXhr?=
+ =?utf-8?B?NXdzL1dvRUZadjdWejdmaSthclFHdXNLbExhdHVIUlYvVXRIUytYcExKWC9E?=
+ =?utf-8?B?VHV6Z1hLVXQ3YXJBM3R1MWpHd0hMRStsVUE5VGR2aFdEWldnRHl5TnNRSDc5?=
+ =?utf-8?B?aXdRdmNoWGhyekI0Yk15ZmxYcWRVUHNxaXQxcXNFQkt0bS9RanYxWUIxeWp4?=
+ =?utf-8?B?djZFbFJJNC8wc1JqMXJnS1VMK0FXMTV6L0tNNlJzSStjYmQ1K2NLTG5TTzVC?=
+ =?utf-8?B?eWhrR2FHb0VNVGttWFBtRWNoRWluMlNNdEE3RENhbTEzQnliblR6Lyt6SFJF?=
+ =?utf-8?B?azdQdnQ3NVU4U0xCeDJUbjdpaDhLWDU4YXM1MWdYV0puSEJ4OHNtcXlka0RI?=
+ =?utf-8?B?Rm1hSnVOeWtUdTdOVzJhVVdVL3JGYUpxb29JZmM1UnI1aVkzYlBEZlRBbW1k?=
+ =?utf-8?B?bWppRkxTTllqZGJzTXM0WGV0cTFZMWtmT2VuTVlnUmljR0pJNWEzTDhSYnVl?=
+ =?utf-8?B?a1BhY2lrNlN5eVVlZmZTd25NdSszUW0vai9qbkJGTXNoNjV4a29uQmZlWDhM?=
+ =?utf-8?B?cjJJZzdyVmdKaFEvQTk5cFVvUVd3aXBWa014czlQWXpVTmdpcVQxc0ptOTkv?=
+ =?utf-8?B?TlpRMWtLcFRXaDFyemtncm5CQUVXOVpkWW13RC91ZEhzbjBCaVpNUXBCWUc5?=
+ =?utf-8?B?YS9sU3NrNUhJSG5XN0V3UWlETXhScFZwQmRtd01md1VXTUxvRXViTUJzVG11?=
+ =?utf-8?B?UVM5NGo3aDc3S0JHSi9keHIzelV6d0dRRlM2QzFsby9peU5MMDZnYUZBMFln?=
+ =?utf-8?B?cTJQS3VZcSs1WmFab0UvOCt4ZGsrYXliTDBPc1ZDQjlRUmNYUnFRcEtFMWR2?=
+ =?utf-8?B?ZGU5UnZwU0NMUGZ4WnRENEYxU3Y4UnJXVktsTmJCMG55eXZPK0VmVllWQWZF?=
+ =?utf-8?B?RzEwOUFDSE1zdFFCc2E5Y3M3bmtXeGliQUw5NVJnMGt4KzFOM0xQVDdRekx1?=
+ =?utf-8?B?NXNnVHh6VEtkV3F5cTk2QUpnL1lPZ1Z0NUk5MFVQM2RqNWEzdEZDblRhUS8w?=
+ =?utf-8?B?akJCTlJTOEM3dCtPa2pDTExUN1VhZFExaTZPM2szL20wbkcyRTlUNmpnOHhC?=
+ =?utf-8?B?ZHlucHlsdEwvVTNsVHNNL2ltMzdJbDBEZnk2ZWdBSkNUdXJ0dFdsQkUxN2Zx?=
+ =?utf-8?B?NEVtNVRETDMxUmpKbFEranZ1eGNlZGYwRlhSenNwbGx2aVFHckM0dTE3OWZG?=
+ =?utf-8?B?Q21sa3ZuSW10dittNWhJYys4bm5YcHZXMHlVVVZqenJXU0g1ekpFZVE5ekU2?=
+ =?utf-8?B?b24wRnk1YmVETFloMTNZa3MzbzlQNURVVGFDbnh0QU1PQUpRYTFVaTFNaVBR?=
+ =?utf-8?B?a2grVGM5TkVNVjA2cjdKYXVsbWNVSU1RU3RTNytXc2RLVVBoYXBoZWo5dS9v?=
+ =?utf-8?B?WnFyY1E0WmNYWnpLblEzcE1pclViWWQxNnd6V3BKZTNxYjRyRUlWWlBkblA3?=
+ =?utf-8?B?cGs0bFVkdWdnaU5ISnpoZUp1RVlIVVhURU15K3FoWklpTWRhSUhncVEydVVw?=
+ =?utf-8?B?Nll5aG9lV3dpTExzMjYyelJpZS9rUHZzUXBTUmxNZm9BYWRHME9GMHRqSzNK?=
+ =?utf-8?B?cnVkN0lCMjcxWDk5WmJPU1ZvR1FVNzVEMFZBeU5LSXNHS3hYSjZlYVN6MURr?=
+ =?utf-8?Q?AS0yVg?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(36860700013)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 11:15:15.9522
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 11:20:19.0797
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71f228b9-d56e-4dca-61ea-08ddf05b51c2
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc1c4b16-f63c-4f65-f091-08ddf05c0661
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000989E8.namprd02.prod.outlook.com
+	BN3PEPF0000B06E.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8526
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6196
 
 Hello Thomas,
 
 On 9/9/2025 4:30 AM, Thomas Gleixner wrote:
-> --- a/kernel/rseq.c
-> +++ b/kernel/rseq.c
-> @@ -542,6 +542,15 @@ int rseq_slice_extension_prctl(unsigned
->  	return -EFAULT;
->  }
->  
+> The timer is armed when an extenstion was granted right before actually
 
-nit.
+nit. s/extenstion/extension/ 
 
-Perhaps a small note here to highlight how need_resched() is true
-for tasks who had the slice extension granted. Something like:
+> returning to user mode in rseq_exit_to_user_mode_restart().
 
-/**
- * sys_rseq_slice_yield - yield the current processor if a task granted with
- * slice extension is done with the critical work before being forced out.
- *
- * This syscall entry work ensures NEED_RESCHED is set if the task was granted
- * a slice extension before arriving here.
- *
- * Return: 1 if the task successfully yielded the CPU within the granted slice.
- *	   0 if the slice extension was either never granted or was revoked by
- *	   going over the granted extension.
- */
+[..snip..]
 
-> +SYSCALL_DEFINE0(rseq_slice_yield)
+> +static void rseq_cancel_slice_extension_timer(void)
 > +{
-> +	if (need_resched()) {
-> +		schedule();
-> +		return 1;
-> +	}
-> +	return 0;
-> +}
+> +	struct slice_timer *st = this_cpu_ptr(&slice_timer);
+> +
+> +	/*
+> +	 * st->cookie can be safely read as preemption is disabled and the
+> +	 * timer is CPU local. The active check can obviously race with the
+> +	 * hrtimer interrupt, but that's better than disabling interrupts
+> +	 * unconditionaly right away.
+
+nit. s/unconditionaly/unconditionally/
 
 -- 
 Thanks and Regards,
