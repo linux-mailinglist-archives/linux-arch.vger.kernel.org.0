@@ -1,132 +1,185 @@
-Return-Path: <linux-arch+bounces-13465-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13467-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E854B509A5
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Sep 2025 02:11:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 988D3B50CDE
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Sep 2025 06:42:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FE0B175F94
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Sep 2025 00:11:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A3FE465279
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Sep 2025 04:42:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C32B17A2EC;
-	Wed, 10 Sep 2025 00:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 916002BCF7F;
+	Wed, 10 Sep 2025 04:42:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="HDz4T4KV"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QqRYxGev"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF59F1519AC;
-	Wed, 10 Sep 2025 00:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757463037; cv=none; b=mREGylZprMJbMFXSLm+S92r/qrUx/pt/SWK1WVvOQOGyG4fxWKiEJE0GpCUbY3aDfUbLitFFwYvUhfhvpkHmOl0WTZNMud2f06maAGnIRNtvVBDmtjN5tAILO2zuMwuh7JzmCybp3KCYhEP7VNIL3wEeXK4nAzeJVWBn8HVJ/Qc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757463037; c=relaxed/simple;
-	bh=q/ziq/sUT7Of0/H7JokzIW0lhhgE97n2M8dhiEw2UDg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=G0tmgB961YyBdVbcagZqbgyoWf9f3XXuIh0lMxoiwE8uOzwTqgiyXDvXKUjADBXLR7mTyNP8bbhfQdLaso60Ch9QhYVnkYWHBYPELEuOXKR+RVbhs9X7I6UFNYRTHVuRdzmO98dku8fCcz+JsqbAkp6NhR4PZrC/TOlAxHH7+ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=HDz4T4KV; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from mrdev.corp.microsoft.com (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 341D62018E57;
-	Tue,  9 Sep 2025 17:10:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 341D62018E57
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1757463035;
-	bh=nI3PflUd3wNj5pOM2O9InP9JfvCuyftn+sp1Rq9+iXg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HDz4T4KVd8o7wBOmDi4hrYWzQsTff0ZEvOLs7UBXGXCBgoQgiPrKqHo159t1laeH1
-	 JgRxFOVs42SnciTJPQr8AEeT/IDiuqqbDBPVj3fDgNpqFFv0DxO0LuI8I0CX8V8RfP
-	 qg/RgJFKkIwJ0JtoSUgoQp3zoCQqxehV6s8gX848=
-From: Mukesh Rathor <mrathor@linux.microsoft.com>
-To: linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Cc: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	arnd@arndb.de
-Subject: [PATCH v1 6/6] x86/hyperv: Enable build of hypervisor crashdump collection files
-Date: Tue,  9 Sep 2025 17:10:09 -0700
-Message-Id: <20250910001009.2651481-7-mrathor@linux.microsoft.com>
-X-Mailer: git-send-email 2.36.1.vfs.0.0
-In-Reply-To: <20250910001009.2651481-1-mrathor@linux.microsoft.com>
-References: <20250910001009.2651481-1-mrathor@linux.microsoft.com>
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2046.outbound.protection.outlook.com [40.107.244.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E377D1F30BB;
+	Wed, 10 Sep 2025 04:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757479355; cv=fail; b=RRUHWbT/SHEeU0U4VC86DMWLggvSEbM2IcqlCtowAMZQgUpHxHI7kw8cKDAckpDTGcDTQJIsVNBdTIDwFVZMhKIG4CT1psctDQnFuXiot4FzaKjFu/ehjKIawbgI920717950yZ1qdUglDOTO4ybJ2IM7zw+omozBoiuK95y/Eo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757479355; c=relaxed/simple;
+	bh=LzfYaemeGy7J3nBvZWmuTLXBxlP5GLyb81Q+bfLL7ic=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Z4f+3Qf6ugALMiJ0sInNkK/RUw7Ex41AZ8tbU/SmrpCmjhlJBh+alYWmhMabq5MYZKdZXEfrqtjwj5e5S+BlniC8m6xR2ZQnIK+FLTQXwoCVBJuxM40awhRWyf4A/WOqIBmXpyKWXurxNRy6a1S8iM3lQWQE35gKN1HG48Kdu88=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QqRYxGev; arc=fail smtp.client-ip=40.107.244.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QoWvALvRvmk6bHA9VxkVkOERBtlZqZuI16zGJhH6J1IHwle5lgimRx8ZeCGBMNog93xnmE5rpHd5FBUgKF9fqV/xbW+KbVRiDrIZQ1ifdhtG2g9qKxsMHLNPlV2PlL/r0mbz4rbguh0Nugpzh4bllDwkhsDO59ZLKUVOZUoeA4H92KGEmtDPRUYziWX9jD+iL/gFCbaPSdqNPcz/0gLk3D12Od9rugPIsmgcbzEyivEWTzEy2HDA+SnWLdYbCyFXJspufrLas5DlDBjxgoE9i3SYLx88zPF50miXPXmuybLITDYEgNmORAtgMIJYS/EFUIYufqxnwFQdURxs4a4MOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+uGGlUVYBucNt0v9638C7TYkBKuHsuG4LerbndhhGXI=;
+ b=nrxGApjAqHoNpBAL7zeTk5O+NVU/Pwuyh8li0OpFWlVuQ0FCZbo6196/yNgbjaSLq17O9cUj81SDBwfBpRqBjBGMOcGti8YqyEhLvO6VhH4goRVP0kYJRuDgMPp0tX1pxf9pXfA2rSPXmGzVLHuxqnfhTuZXclrAlsL42VXhrws3zbX2HbuVFGlmdQmC+HZD2hjJa63Vdu0KyUV512GymGoXH7AoIooyUMXZ49/arsL4mHmFr5YLRNtit9b/OSzytkrPpPzd5hEcbagzY7dsn+ggMCnxHyFwLu5paFLt2c//EyP9daja3ti48aCb3xLdm77W27I6NH4NmzaefZQXWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linutronix.de smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+uGGlUVYBucNt0v9638C7TYkBKuHsuG4LerbndhhGXI=;
+ b=QqRYxGevfgYH5VJuWmZA6kwgElKqjxZ6Mno2AJd2hBYYsxULKikwmXsEpDgc1kYmD2FZ4ZeQPRwEIzeBEgmHPDoP4S3Aan+eoeXPY4xQaCORld0eFndGD0PYcCycGEQtqDCRsxCHSoaqhG80vc119CnxrxlupkfztGuyl7o8nWs=
+Received: from SJ0PR03CA0352.namprd03.prod.outlook.com (2603:10b6:a03:39c::27)
+ by IA1PR12MB8406.namprd12.prod.outlook.com (2603:10b6:208:3da::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Wed, 10 Sep
+ 2025 04:42:28 +0000
+Received: from CY4PEPF0000E9DC.namprd05.prod.outlook.com
+ (2603:10b6:a03:39c:cafe::a1) by SJ0PR03CA0352.outlook.office365.com
+ (2603:10b6:a03:39c::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9115.16 via Frontend Transport; Wed,
+ 10 Sep 2025 04:42:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
+Received: from satlexmb08.amd.com (165.204.84.17) by
+ CY4PEPF0000E9DC.mail.protection.outlook.com (10.167.241.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9115.13 via Frontend Transport; Wed, 10 Sep 2025 04:42:28 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Tue, 9 Sep
+ 2025 21:42:27 -0700
+Received: from satlexmb07.amd.com (10.181.42.216) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 9 Sep
+ 2025 23:42:26 -0500
+Received: from [10.85.34.232] (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Tue, 9 Sep 2025 21:42:22 -0700
+Message-ID: <c3caa913-910d-4717-89e0-625959faf12c@amd.com>
+Date: Wed, 10 Sep 2025 10:12:21 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [patch 00/12] rseq: Implement time slice extension mechanism
+To: Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
+CC: Peter Zilstra <peterz@infradead.org>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>, "Prakash
+ Sangappa" <prakash.sangappa@oracle.com>, Madadi Vineeth Reddy
+	<vineethr@linux.ibm.com>, Steven Rostedt <rostedt@goodmis.org>, "Sebastian
+ Andrzej Siewior" <bigeasy@linutronix.de>, Arnd Bergmann <arnd@arndb.de>,
+	<linux-arch@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>
+References: <20250908225709.144709889@linutronix.de> <87ms73vm1q.ffs@tglx>
+Content-Language: en-US
+From: K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <87ms73vm1q.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Received-SPF: None (SATLEXMB04.amd.com: kprateek.nayak@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9DC:EE_|IA1PR12MB8406:EE_
+X-MS-Office365-Filtering-Correlation-Id: 398c362d-e6ab-4a18-9528-08ddf024722c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dHBCMjRrT3lQOERRN25hUUJHQWtTdU5lU1Q3NElkUTU3dzlMMHIwVnZ4d2w3?=
+ =?utf-8?B?M1E5RDhoMjVtWDg1a1NNZ0ZPL3lvNXUwdjVrY3E2QUZLZ1RrbDkzK2ZnU1dL?=
+ =?utf-8?B?ZGNxcEFyaXk0N2ZWWUhjRXJQZDdFcmFHdXhoSHZ5L29KZ3Z6UmVUaFc2R2xM?=
+ =?utf-8?B?SWhENzloa2d2bUh6ZVdnbTZURE1kc0tVRnRPUnpoWnpuYVY1YUhtMER1S1lL?=
+ =?utf-8?B?VVZVYm9RUFFkc0xQWi90d3k3QnBFREtkdFY5WEFNYUkyeHBvSTk2Mk80dEhJ?=
+ =?utf-8?B?Wmc0SVhSa1BSZVJVQ1lubGpCazNnYWhXY0Y0M282bWZ6NFlabGVjVmQzZDd2?=
+ =?utf-8?B?RzByUG43Q1dwNWxPWi8wL3AzMDFVSVg3ZFgydHdjUCtqSHE3ZTBmMEJKSm04?=
+ =?utf-8?B?UkVRYzFSS2xzVm5VSHZZNW52V3BVOG5Uemt5RXJNdEtHQTB5UGkva0t2RzlY?=
+ =?utf-8?B?RWpLQXVJLzRDcFg5NC9RaERneEQrQXhxdlM4M25pMFU4cVAvWVJ0ZkNXaTFJ?=
+ =?utf-8?B?SnEvcHpmcU1BSDFsUC93eGNZeTBoZis2dHVxVWpia0UzNnhZUEM1aTJuc1hq?=
+ =?utf-8?B?L3c5WFByWkM1SDJFYVZWUDJnckRsWEpja2ZUZmExd3dTUlJkWWlSU0JQRmJk?=
+ =?utf-8?B?RTJmVTNjNHN0VmZTRFpiTWE1bmVyRFZla29jWE9YYWpMaTlvRko5bmFxQUYx?=
+ =?utf-8?B?YjlXMGdPa1h1aVNReWRIcUVJV3E5ZlJHeXhXUlFkRUxmc2RhQUs5d0NZS0xi?=
+ =?utf-8?B?dlJNZDNMeldsRU1TNjloNXJBWmhFVmJoRTF1aUo5enJmUTdQV0RKNndzQ2Rl?=
+ =?utf-8?B?akYyUjhMSUpTR0x6V1dOV2lZMEl4R1JBcTdPSDJSR0RWdXplSFEwRzdiMWpD?=
+ =?utf-8?B?aUVTYjBJRnhpWE9pTUN2b3ZUWENCdzJJUE1HQ0tROXV2NU1oSGhuTGVlWUdH?=
+ =?utf-8?B?UjB0K1R5elRxUGpPdmhPY3R5UWEramR3UkQ5U0QxY1RDbWZIbUV0R25xVUV0?=
+ =?utf-8?B?dHBKOWRGelorNll0bUdaSFRCVUpnVXQ4TEh6M3JRZ1JDb0JTS1pURS9UWVZW?=
+ =?utf-8?B?WjllSTFqYzBlRXJQQVlnVDFsODFoRGt0c1FUbjY2bDJGTnQzRVZCeGkzdWdz?=
+ =?utf-8?B?ZkhQaG5PSzdtUDd1cm9EZ3lvU2VFZkpUb1RwODEwKzlyOU5xYkdJc1NQcjQ5?=
+ =?utf-8?B?ZXRCbERpR2pzQkxqcnpWOWtHdmZSUUtTcUZJcjE2WW1BUWhKenVqV0xQYkE2?=
+ =?utf-8?B?M01iTExOYWU3ZFhDYW12WXZTNEs2WWYyMVlrcktpbW4vbVZnc3lOdTZsYWJZ?=
+ =?utf-8?B?UE05cXhvamE4QnBYSU81UWdKR0ZZbG94THNmanFWd1pZZ1FhVzRzM1B6bWN6?=
+ =?utf-8?B?OXhDNjBSdyswRUduN1dDV3BDWVluV2RuQnBUVUlmeWcweWY5dFdnb3MwQ2NC?=
+ =?utf-8?B?ZHdGb3ZTd0NpT3g2TVhINytNdGFyM1JQaGxwU2EvUGgwWnl2b2ErVFh1aGR6?=
+ =?utf-8?B?T1A0TGZlMW9ndmhNdUk3ei9OUHVta2hDRUtFUmh3UkdYVjJwY0NJTXl6dVhO?=
+ =?utf-8?B?WFBGVFBvWFEwcnhjcHVjL1Z1YjZOQ1JGeGhQVW4rQ0pYYUtvNEo4NThPS2ZI?=
+ =?utf-8?B?Tk03ckgxYWtjZnlJWE5pTnhyRGtEY0xwM0hWSkt2UzZqcnlqWURvUHJxOFBx?=
+ =?utf-8?B?TkpIU3pIUTRWS2g1TVU1NytURTNJUTlsejFoaHNnY1NUdVdtMnlnemRSS0NZ?=
+ =?utf-8?B?a0Y3VEJSS092OTlDdWpLd2ZLRHRRaGJwaTRhUjVZTDRENFRwK1pvQkN2VEdn?=
+ =?utf-8?B?ZWZwaXh4TEhUR3FOZCtEM3ZyMU1Da2tGQU51bGFqVWpJbmJXcDRhZlNTeFNX?=
+ =?utf-8?B?K1BtRHVibG95QWdHZkU5cjlRUTdPMDQrZzZwS3N1VGdlQ09jWnBnOTNYZmJo?=
+ =?utf-8?B?NFFseGZkbFN1aEY2ZEkxL1JaempBOEp4eDJuaTdDM2dYSUtsZlJkM3h2bEdE?=
+ =?utf-8?B?MTR4VTVPT2EzZmFVU29DV0pxR292dDRzNjJnM1QvSmsrOEhqZFlJR0pkYzlq?=
+ =?utf-8?Q?8p3Cy9?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2025 04:42:28.0619
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 398c362d-e6ab-4a18-9528-08ddf024722c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9DC.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8406
 
-Enable build of the new files introduced in the earlier commits and add
-call to do the setup during boot.
+Hello Thomas,
 
-Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
----
- arch/x86/hyperv/Makefile       | 6 ++++++
- arch/x86/hyperv/hv_init.c      | 1 +
- include/asm-generic/mshyperv.h | 9 +++++++++
- 3 files changed, 16 insertions(+)
+On 9/9/2025 6:07 PM, Thomas Gleixner wrote:
+> On Tue, Sep 09 2025 at 00:59, Thomas Gleixner wrote:
+>> For your convenience all of it is also available as a conglomerate from
+>> git:
+>>
+>>     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/slice
+> 
+> Force pushed a new version into the branch, which addresses the initial
+> feedback and fallout.
 
-diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-index d55f494f471d..6f5d97cddd80 100644
---- a/arch/x86/hyperv/Makefile
-+++ b/arch/x86/hyperv/Makefile
-@@ -5,4 +5,10 @@ obj-$(CONFIG_HYPERV_VTL_MODE)	+= hv_vtl.o
- 
- ifdef CONFIG_X86_64
- obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
-+
-+ ifdef CONFIG_MSHV_ROOT
-+  CFLAGS_REMOVE_hv_trampoline.o += -pg
-+  CFLAGS_hv_trampoline.o        += -fno-stack-protector
-+  obj-$(CONFIG_CRASH_DUMP)      += hv_crash.o hv_trampoline.o
-+ endif
- endif
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index afdbda2dd7b7..577bbd143527 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -510,6 +510,7 @@ void __init hyperv_init(void)
- 		memunmap(src);
- 
- 		hv_remap_tsc_clocksource();
-+		hv_root_crash_init();
- 	} else {
- 		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
- 		wrmsrq(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index dbd4c2f3aee3..952c221765f5 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -367,6 +367,15 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
- int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
- int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
- 
-+#if CONFIG_CRASH_DUMP
-+void hv_root_crash_init(void);
-+void hv_crash_asm32(void);
-+void hv_crash_asm64_lbl(void);
-+void hv_crash_asm_end(void);
-+#else   /* CONFIG_CRASH_DUMP */
-+static inline void hv_root_crash_init(void) {}
-+#endif  /* CONFIG_CRASH_DUMP */
-+
- #else /* CONFIG_MSHV_ROOT */
- static inline bool hv_root_partition(void) { return false; }
- static inline bool hv_l1vh_partition(void) { return false; }
+Everything build fine now and the rseq selftests are happy too. Feel
+free to include:
+
+Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+
 -- 
-2.36.1.vfs.0.0
+Thanks and Regards,
+Prateek
 
 
