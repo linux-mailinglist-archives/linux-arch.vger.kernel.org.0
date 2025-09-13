@@ -1,57 +1,77 @@
-Return-Path: <linux-arch+bounces-13523-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13524-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E67A7B559AB
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Sep 2025 00:46:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B75CB55AD5
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Sep 2025 02:40:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E64AC3AD3A1
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Sep 2025 22:46:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8EEA1D6123B
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Sep 2025 00:40:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6637267B89;
-	Fri, 12 Sep 2025 22:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E73AC1547CC;
+	Sat, 13 Sep 2025 00:40:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b="acIupnwF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KTDTLabl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B5E18871F;
-	Fri, 12 Sep 2025 22:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.95
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757717188; cv=pass; b=CdHkWitXfBUSOYM8w8LeScDyL81bxpzV/DbNGR01ecUv6tSN8iZ9ihUvd/vnBlF7WOMYvEJX4Y8N1qDBOf03WHAbW9ni4hfhmbFadCeFeGO0jp/K+/WdCOpXj4puUL5Oy4Wmkrlyx+rLUdClhNZ9Z/Uv1GgHbQdOXR9mBFvAWzU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757717188; c=relaxed/simple;
-	bh=guye89JU8c6lU3xOKktnL/Suo1HlmTbQCY9h2iBDVkw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lxzx0IabSO5yvxP6/QXwcUmvLEkQFogYWLhenJGKLBzvSqnQIVJ11blDGIy4vNWh+Gn63GqE0Wd11rwN3S7Kbvg8AAX7hXJaFoYlNBXs6ORmqudh42KVQYzssCf0BL/vhFIq8QUpd/I0nX/eWjfwmcOERZ+r7P92kTokPf+2cK0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=safinaskar@zohomail.com header.b=acIupnwF; arc=pass smtp.client-ip=136.143.188.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
-ARC-Seal: i=1; a=rsa-sha256; t=1757716883; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=cYmkTWVTcQlLmLr5V8p1CrwhziHK5jWEHqN1/x0dbbnP4N6eqwJhNpFD+YvvcG1JcA1pILR0lg+/Ny7uiewAqWrYp0xgwBVqCid/qUwxU2pBACMW8E+qi9+gH5uFDpaMNSKBUmBcqwPg32DVp6NEprKLCwOzLldRlExaYRgKRTw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1757716883; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=q9iQK8EdIF6RRP4HkX18/uU6rY0egPm6PmmgTdmDikE=; 
-	b=Ju1dqMVIkIYpU5LdsWBIf/CGwDsN0K99qbvJhITUG43b4iO5ReBci570gSrCvJZpIaavRZGeh519zGwQ3xzl9eLPP7B/6fd5qSQvFqfvp30skE+0PjF0wF1ZPM088gDBmx9lu1/Hmu9iiGaXsgt143EyXlTcYz1mO0b4E8ZkWow=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zohomail.com;
-	spf=pass  smtp.mailfrom=safinaskar@zohomail.com;
-	dmarc=pass header.from=<safinaskar@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757716883;
-	s=zm2022; d=zohomail.com; i=safinaskar@zohomail.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
-	bh=q9iQK8EdIF6RRP4HkX18/uU6rY0egPm6PmmgTdmDikE=;
-	b=acIupnwFZvyRH5FokPCft4nvGFUMr39pqEpKs0NtNZVw5kg9Xyn8fLnVwVnsMrYi
-	icAGCn5xQY/D8nPVu8I73mfObC5kAiAiUgDDUOK0dT7tuN6mPBE7LpoJ79v5Pcf1s+2
-	+A3prhgVdkGFxaNK2Z8tJ6RB7TjqHAI2HFOwbXVs=
-Received: by mx.zohomail.com with SMTPS id 1757716881894668.1339002049043;
-	Fri, 12 Sep 2025 15:41:21 -0700 (PDT)
-From: Askar Safin <safinaskar@zohomail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271D245C14
+	for <linux-arch@vger.kernel.org>; Sat, 13 Sep 2025 00:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757724009; cv=none; b=WJ78kolE9jhjzwj7HSeB32v5eRtasUP7wM+WZOoZ/1Q1SfGXBavhXp8J5NTRWM0ehXplfFHVdQMJ0USDDMLLnrMzZJZoq8s/8cprH9xxmCqxtUr5lNpqbExU6rBvOf9wQF3OMIz9lLCUOqbPx95nh+oWUcwOF5MVE40ydxEYVAA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757724009; c=relaxed/simple;
+	bh=qWSJ9cVYeoy/I9YIWeZ/NoeqNv03O5nF69asVgm6nYY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HnVhismw/9YcqkBa1g6ZVbzMOLttnsnhIkg7kdPGdrbqsYYGrhyGgqP7zQEEo9+/OXQwn79B8R5jTTOouzWzQckx+feuPj5PsF/Jla12Waac/oARXoWCEIpGSzycRBta2w5DPyNaCasDdI7blZ2G+6PXhZDKCLrEmi6K6cwfQhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KTDTLabl; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b046f6fb230so479595666b.1
+        for <linux-arch@vger.kernel.org>; Fri, 12 Sep 2025 17:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757724001; x=1758328801; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=52+cGRj7+PdCBvIKyhk4FPWMxzGxsEuNUe9nubIwFOs=;
+        b=KTDTLabl5rgRN4b1Qm03N6eV53XquqpnkPnOi0PwWPpVjJbrmsqLW7mtb/kreHPeTH
+         L2GT3OKtzvb9lqqSsPOFyYehnhtjYtz3zE+Gqt+DDzaWPas+yHfYVudbCOC2CmrWXW+2
+         /BcEhdhbLIErVonqLAtS/BBKupLMMZ4zV8JFSi2Crr8Iywm8BOpUjbJ0Ib3NIwv7YRkv
+         23DNEWKq/iaET1DECVFLJsxOwnPnd20oSA3rlD+6F83cyZJmivLa8NOPFP1q58W+sAfx
+         2ily+tIBrS4ToEziGZ1VosSCzMuw4qEdN/zlnmKoYukjxmHLhlCIzEIEM4P31x/HiqdQ
+         EKAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757724001; x=1758328801;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=52+cGRj7+PdCBvIKyhk4FPWMxzGxsEuNUe9nubIwFOs=;
+        b=JuS+T8MY63LIbqMf2gAYf5Gwt5dQc03np0JVlbtwyYhkPEtDvEfpTeVkkbZd7Xzeo0
+         OQTQMi/49MvHTtVLWL+3POv7Ipgyd15HhTJthN3GLuQ+jO4nfL8SaJLIMZq9FBD7sfIz
+         xEre0tWc6UWCA00FtNKjRV36wxoWF6yy1AlK1ilqzluYcI0VkSAhTioGm52TayVGg8wU
+         bej2Aka5m3yExXCRt7i/gJImcLLooDdvPVKX2giM6p9JiUeKXV56SEXG85TgroIx4pK/
+         RV4UGgjEvmp7b7rcyFNfgdkdjWRx38Bn7gqmCUjHvOX6wqRYU7gpym2SWVflQFoxUEIh
+         sC+A==
+X-Forwarded-Encrypted: i=1; AJvYcCXcC60xH6D5NngUadwJRNHtpYBLo3vkFTYj1W/ALElg6/hz682JHSm5/EbQgHv3sGWm4sbhK8fppmQh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxi1aljpgA24E+n3BebGBdzh+DjBReR9bSEEE3+9BxZ8ALK/K3Z
+	L/WpBVEN1Dj0Qajltmqcq6/Nh3E00HrNlNV+4pojtXCT2X2XGfa4TC/k
+X-Gm-Gg: ASbGnctnZFaQGqB0oO27A71EEDUwgPegJyTipUf7xUUZeMMXywBXO0y9xLEd+wXTjmS
+	PWYtJtTIeVnsUxefNqdQ9WNWWzxdQlL78SJ8ftWh/m5MEJPKxfrsU88GgCHzvks0a21/Ku07qc/
+	1BlaQiXkWIuffqPlFHgCJC+Ngp0zs0IpCjht+SJSAeUl8zMAmRspgSR4sEo1o/7EZdN15mhVRrc
+	6Aa679Xht7aP3cgr/jESpdNnPJ5aMHt68zLgOuBl1EPCqKyAci2jJnRasseANGK6N5e64w503Su
+	C544UKrwh3hQQtdpIHTsc2/fc3ws7E5lvH8d1k4hqeK7Iv6TjALEAQzz9LrrbBIV+yAS9V3MIAD
+	B2YRCRWeMcfMJE/Xfd7s=
+X-Google-Smtp-Source: AGHT+IF4yjCZcgx3PleuGQf+gyje4P5YWuxRl2sdlWt7pYyme8W7tPI+PtyaqBqXZIeov8NIT4wIcw==
+X-Received: by 2002:a17:907:d17:b0:b07:87fe:c53f with SMTP id a640c23a62f3a-b07a62910dbmr973672466b.2.1757724001146;
+        Fri, 12 Sep 2025 17:40:01 -0700 (PDT)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b07b3347b6fsm475414166b.111.2025.09.12.17.39.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Sep 2025 17:40:00 -0700 (PDT)
+From: Askar Safin <safinaskar@gmail.com>
 To: linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -105,14 +125,11 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	Kees Cook <kees@kernel.org>,
 	Thorsten Blum <thorsten.blum@linux.dev>,
 	Heiko Carstens <hca@linux.ibm.com>,
-	patches@lists.linux.dev,
-	stable+noautosel@kernel.org
-Subject: [PATCH 03/62] init: sh, sparc, x86: remove unused constants RAMDISK_PROMPT_FLAG and RAMDISK_LOAD_FLAG
-Date: Fri, 12 Sep 2025 22:38:38 +0000
-Message-ID: <20250912223937.3735076-4-safinaskar@zohomail.com>
+	patches@lists.linux.dev
+Subject: [PATCH RESEND 00/62] initrd: remove classic initrd support
+Date: Sat, 13 Sep 2025 00:37:39 +0000
+Message-ID: <20250913003842.41944-1-safinaskar@gmail.com>
 X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250912223937.3735076-1-safinaskar@zohomail.com>
-References: <20250912223937.3735076-1-safinaskar@zohomail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -120,89 +137,628 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Feedback-ID: rr080112274be46f51a3e6d7b65453b8c4000084fba7464352cc4dc9cd50377fd7f09b0684ed62a16f1e6eeb:zu08011227aebba3291345918c920d3b3a00008f86ff3411911b832b8b206255ff0b95bb9fe1592be8b5327b:rf0801122cd997ff081c6a0f543772417b00002b369a2b05bf7efffc2b9c1c1140566e0d80ce0978fa409c151951bada9a:ZohoMail
-X-ZohoMailClient: External
 
-They were used for initrd before c8376994c86.
+Intro
+====
+This patchset removes classic initrd (initial RAM disk) support,
+which was deprecated in 2020.
+Initramfs still stays, and RAM disk itself (brd) still stays, too.
+init/do_mounts* and init/*initramfs* are listed in VFS entry in
+MAINTAINERS, so I think this patchset should go through VFS tree.
+This patchset touchs every subdirectory in arch/, so I tested it
+on 8 (!!!) archs in Qemu (see details below).
+Warning: this patchset renames CONFIG_BLK_DEV_INITRD (!!!) to CONFIG_INITRAMFS
+and CONFIG_RD_* to CONFIG_INITRAMFS_DECOMPRESS_* (for example,
+CONFIG_RD_GZIP to CONFIG_INITRAMFS_DECOMPRESS_GZIP).
+If you still use initrd, see below for workaround.
 
-c8376994c86c made them unused and forgot to remove them
+Details
+====
+I not only removed initrd, I also removed a lot of code, which
+became dead, including a lot of code in arch/.
 
-Fixes: c8376994c86c ("initrd: remove support for multiple floppies")
-Cc: <stable+noautosel@kernel.org> # because changes uapi headers
-Signed-off-by: Askar Safin <safinaskar@zohomail.com>
----
- arch/sh/kernel/setup.c                | 2 --
- arch/sparc/kernel/setup_32.c          | 2 --
- arch/sparc/kernel/setup_64.c          | 2 --
- arch/x86/include/uapi/asm/bootparam.h | 2 --
- arch/x86/kernel/setup.c               | 2 --
- 5 files changed, 10 deletions(-)
+Still I think the only two architectures I touched in non-trivial
+way are sh and 32-bit arm.
 
-diff --git a/arch/sh/kernel/setup.c b/arch/sh/kernel/setup.c
-index 039a51291002..d66f098e9e9f 100644
---- a/arch/sh/kernel/setup.c
-+++ b/arch/sh/kernel/setup.c
-@@ -71,8 +71,6 @@ EXPORT_SYMBOL(sh_mv);
- extern int root_mountflags;
- 
- #define RAMDISK_IMAGE_START_MASK	0x07FF
--#define RAMDISK_PROMPT_FLAG		0x8000
--#define RAMDISK_LOAD_FLAG		0x4000
- 
- static char __initdata command_line[COMMAND_LINE_SIZE] = { 0, };
- 
-diff --git a/arch/sparc/kernel/setup_32.c b/arch/sparc/kernel/setup_32.c
-index 704375c061e7..eb60be31127f 100644
---- a/arch/sparc/kernel/setup_32.c
-+++ b/arch/sparc/kernel/setup_32.c
-@@ -172,8 +172,6 @@ extern unsigned short root_flags;
- extern unsigned short root_dev;
- extern unsigned short ram_flags;
- #define RAMDISK_IMAGE_START_MASK	0x07FF
--#define RAMDISK_PROMPT_FLAG		0x8000
--#define RAMDISK_LOAD_FLAG		0x4000
- 
- extern int root_mountflags;
- 
-diff --git a/arch/sparc/kernel/setup_64.c b/arch/sparc/kernel/setup_64.c
-index 63615f5c99b4..f728f1b00aca 100644
---- a/arch/sparc/kernel/setup_64.c
-+++ b/arch/sparc/kernel/setup_64.c
-@@ -145,8 +145,6 @@ extern unsigned short root_flags;
- extern unsigned short root_dev;
- extern unsigned short ram_flags;
- #define RAMDISK_IMAGE_START_MASK	0x07FF
--#define RAMDISK_PROMPT_FLAG		0x8000
--#define RAMDISK_LOAD_FLAG		0x4000
- 
- extern int root_mountflags;
- 
-diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
-index dafbf581c515..f53dd3f319ba 100644
---- a/arch/x86/include/uapi/asm/bootparam.h
-+++ b/arch/x86/include/uapi/asm/bootparam.h
-@@ -6,8 +6,6 @@
- 
- /* ram_size flags */
- #define RAMDISK_IMAGE_START_MASK	0x07FF
--#define RAMDISK_PROMPT_FLAG		0x8000
--#define RAMDISK_LOAD_FLAG		0x4000
- 
- /* loadflags */
- #define LOADED_HIGH	(1<<0)
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 1b2edd07a3e1..6409e766fb17 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -223,8 +223,6 @@ extern int root_mountflags;
- unsigned long saved_video_mode;
- 
- #define RAMDISK_IMAGE_START_MASK	0x07FF
--#define RAMDISK_PROMPT_FLAG		0x8000
--#define RAMDISK_LOAD_FLAG		0x4000
- 
- static char __initdata command_line[COMMAND_LINE_SIZE];
- #ifdef CONFIG_CMDLINE_BOOL
+Also I renamed some files, functions and variables (which became misnomers) to proper names,
+moved some code around, removed a lot of mentions of initrd
+in code and comments. Also I cleaned up some docs.
+
+For example, I renamed the following global variables:
+
+__initramfs_start
+__initramfs_size
+phys_initrd_start
+phys_initrd_size
+initrd_start
+initrd_end
+
+to:
+
+__builtin_initramfs_start
+__builtin_initramfs_size
+phys_external_initramfs_start
+phys_external_initramfs_size
+virt_external_initramfs_start
+virt_external_initramfs_end
+
+New names precisely capture meaning of these variables.
+
+Also I renamed CONFIG_BLK_DEV_INITRD (which became total misnomer)
+to CONFIG_INITRAMFS. And CONFIG_RD_* to CONFIG_INITRAMFS_DECOMPRESS_*.
+This will break all configs out there (update your configs!).
+Still I think this is okay,
+because config names never were part of stable API.
+Still, I don't have strong opinion here, so I can drop these renamings
+if needed.
+
+Other user-visible changes:
+
+- Removed kernel command line parameters "load_ramdisk" and
+"prompt_ramdisk", which did nothing and were deprecated
+- Removed kernel command line parameter "ramdisk_start",
+which was used for initrd only (not for initramfs)
+- Removed kernel command line parameter "noinitrd",
+which was inconsistent: it controlled initrd only
+(not initramfs), except for EFI boot, where it
+controlled both initramfs and initrd. EFI users
+still can disable initramfs simply by not passing it
+- Removed kernel command line parameter "ramdisk_size",
+which used for controlling ramdisk (brd), but only
+in non-modular mode. Use brd.rd_size instead, it
+always works
+- Removed /proc/sys/kernel/real-root-dev . It was used
+for initrd only
+
+This patchset is based on v6.17-rc5.
+
+Testing
+====
+I tested my patchset on many architectures in Qemu using my Rust
+program, heavily based on mkroot [1].
+
+I used the following cross-compilers:
+
+aarch64-linux-musleabi
+armv4l-linux-musleabihf
+armv5l-linux-musleabihf
+armv7l-linux-musleabihf
+i486-linux-musl
+i686-linux-musl
+mips-linux-musl
+mips64-linux-musl
+mipsel-linux-musl
+powerpc-linux-musl
+powerpc64-linux-musl
+powerpc64le-linux-musl
+riscv32-linux-musl
+riscv64-linux-musl
+s390x-linux-musl
+sh4-linux-musl
+sh4eb-linux-musl
+x86_64-linux-musl
+
+taken from this directory [2].
+
+So, as you can see, there are 18 triplets, which correspond to 8 subdirs in arch/.
+
+And note that this list contains two archs (arm and sh) touched in non-trivial way.
+
+For every triplet I tested that:
+- Initramfs still works (both builtin and external)
+- Direct boot from disk still works
+
+Workaround
+====
+If "retain_initrd" is passed to kernel, then initramfs/initrd,
+passed by bootloader, is retained and becomes available after boot
+as read-only magic file /sys/firmware/initrd [3].
+
+No copies are involved. I. e. /sys/firmware/initrd is simply
+a reference to original blob passed by bootloader.
+
+This works even if initrd/initramfs is not recognized by kernel
+in any way, i. e. even if it is not valid cpio archive, nor
+a fs image supported by classic initrd.
+
+This works both with my patchset and without it.
+
+This means that you can emulate classic initrd so:
+link builtin initramfs to kernel. In /init in this initramfs
+copy /sys/firmware/initrd to some file in / and loop-mount it.
+
+This is even better than classic initrd, because:
+- You can use fs not supported by classic initrd, for example erofs
+- One copy is involved (from /sys/firmware/initrd to some file in /)
+as opposed to two when using classic initrd
+
+Still, I don't recommend using this workaround, because
+I want everyone to migrate to proper modern initramfs.
+But still you can use this workaround if you want.
+
+Also: it is not possible to directly loop-mount
+/sys/firmware/initrd . Theoretically kernel can be changed
+to allow this (and/or to make it writable), but I think nobody needs this.
+And I don't want to implement this.
+
+P. S. When I sent this patchset first time, zoho mail banned me for
+too much email. So I resend this using gmail. The only change is
+email change, there are no other changes
+
+[1] https://github.com/landley/toybox/tree/master/mkroot
+[2] https://landley.net/toybox/downloads/binaries/toolchains/latest
+[3] https://lore.kernel.org/all/20231207235654.16622-1-graf@amazon.com/
+
+Askar Safin (62):
+  init: remove deprecated "load_ramdisk" command line parameter, which
+    does nothing
+  init: remove deprecated "prompt_ramdisk" command line parameter, which
+    does nothing
+  init: sh, sparc, x86: remove unused constants RAMDISK_PROMPT_FLAG and
+    RAMDISK_LOAD_FLAG
+  init: x86, arm, sh, sparc: remove variable rd_image_start, which
+    controls starting block number of initrd
+  init: remove "ramdisk_start" command line parameter, which controls
+    starting block number of initrd
+  arm: init: remove special logic for setting brd.rd_size
+  arm: init: remove ATAG_RAMDISK
+  arm: init: remove FLAG_RDLOAD and FLAG_RDPROMPT
+  arm: init: document rd_start (in param_struct) as obsolete
+  initrd: remove initrd (initial RAM disk) support
+  init, efi: remove "noinitrd" command line parameter
+  init: remove /proc/sys/kernel/real-root-dev
+  ext2: remove ext2_image_size and associated code
+  init: m68k, mips, powerpc, s390, sh: remove Root_RAM0
+  doc: modernize Documentation/admin-guide/blockdev/ramdisk.rst
+  brd: remove "ramdisk_size" command line parameter
+  doc: modernize Documentation/filesystems/ramfs-rootfs-initramfs.rst
+  doc: modernize
+    Documentation/driver-api/early-userspace/early_userspace_support.rst
+  init: remove mentions of "ramdisk=" command line parameter
+  doc: remove Documentation/power/swsusp-dmcrypt.rst
+  init: remove all mentions of root=/dev/ram*
+  doc: remove obsolete mentions of pivot_root
+  init: rename __initramfs_{start,size} to
+    __builtin_initramfs_{start,size}
+  init: remove wrong comment
+  init: rename phys_initrd_{start,size} to
+    phys_external_initramfs_{start,size}
+  init: move phys_external_initramfs_{start,size} to init/initramfs.c
+  init: alpha: remove "extern unsigned long initrd_start, initrd_end"
+  init: alpha, arc, arm, arm64, csky, m68k, microblaze, mips, nios2,
+    openrisc, parisc, powerpc, s390, sh, sparc, um, x86, xtensa: rename
+    initrd_{start,end} to virt_external_initramfs_{start,end}
+  init: move virt_external_initramfs_{start,end} to init/initramfs.c
+  doc: remove documentation for block device 4 0
+  init: rename initrd_below_start_ok to initramfs_below_start_ok
+  init: move initramfs_below_start_ok to init/initramfs.c
+  init: remove init/do_mounts_initrd.c
+  init: inline create_dev into the only caller
+  init: make mount_root_generic static
+  init: make mount_root static
+  init: remove root_mountflags from init/do_mounts.h
+  init: remove most headers from init/do_mounts.h
+  init: make console_on_rootfs static
+  init: rename free_initrd_mem to free_initramfs_mem
+  init: rename reserve_initrd_mem to reserve_initramfs_mem
+  init: rename <linux/initrd.h> to <linux/initramfs.h>
+  setsid: inline ksys_setsid into the only caller
+  doc: kernel-parameters: remove [RAM] from reserve_mem=
+  doc: kernel-parameters: replace [RAM] with [INITRAMFS]
+  init: edit docs for initramfs-related configs
+  init: fix typo: virtul => virtual
+  init: fix comment
+  init: rename ramdisk_execute_command to initramfs_execute_command
+  init: rename ramdisk_command_access to initramfs_command_access
+  init: rename get_boot_config_from_initrd to
+    get_boot_config_from_initramfs
+  init: rename do_retain_initrd to retain_initramfs
+  init: rename kexec_free_initrd to kexec_free_initramfs
+  init: arm, x86: deal with some references to initrd
+  init: rename CONFIG_BLK_DEV_INITRD to CONFIG_INITRAMFS
+  init: rename CONFIG_RD_GZIP to CONFIG_INITRAMFS_DECOMPRESS_GZIP
+  init: rename CONFIG_RD_BZIP2 to CONFIG_INITRAMFS_DECOMPRESS_BZIP2
+  init: rename CONFIG_RD_LZMA to CONFIG_INITRAMFS_DECOMPRESS_LZMA
+  init: rename CONFIG_RD_XZ to CONFIG_INITRAMFS_DECOMPRESS_XZ
+  init: rename CONFIG_RD_LZO to CONFIG_INITRAMFS_DECOMPRESS_LZO
+  init: rename CONFIG_RD_LZ4 to CONFIG_INITRAMFS_DECOMPRESS_LZ4
+  init: rename CONFIG_RD_ZSTD to CONFIG_INITRAMFS_DECOMPRESS_ZSTD
+
+ .../admin-guide/blockdev/ramdisk.rst          | 104 +----
+ .../admin-guide/device-mapper/dm-init.rst     |   4 +-
+ Documentation/admin-guide/devices.txt         |  12 -
+ Documentation/admin-guide/index.rst           |   1 -
+ Documentation/admin-guide/initrd.rst          | 383 ------------------
+ .../admin-guide/kernel-parameters.rst         |   4 +-
+ .../admin-guide/kernel-parameters.txt         |  38 +-
+ Documentation/admin-guide/nfs/nfsroot.rst     |   4 +-
+ Documentation/admin-guide/sysctl/kernel.rst   |   6 -
+ Documentation/arch/arm/ixp4xx.rst             |   4 +-
+ Documentation/arch/arm/setup.rst              |   6 +-
+ Documentation/arch/m68k/kernel-options.rst    |  29 +-
+ Documentation/arch/x86/boot.rst               |   4 +-
+ .../early_userspace_support.rst               |  18 +-
+ .../filesystems/ramfs-rootfs-initramfs.rst    |  20 +-
+ Documentation/power/index.rst                 |   1 -
+ Documentation/power/swsusp-dmcrypt.rst        | 140 -------
+ Documentation/security/ipe.rst                |   2 +-
+ .../translations/zh_CN/power/index.rst        |   1 -
+ arch/alpha/kernel/core_irongate.c             |  12 +-
+ arch/alpha/kernel/proto.h                     |   2 +-
+ arch/alpha/kernel/setup.c                     |  32 +-
+ arch/arc/configs/axs101_defconfig             |   2 +-
+ arch/arc/configs/axs103_defconfig             |   2 +-
+ arch/arc/configs/axs103_smp_defconfig         |   2 +-
+ arch/arc/configs/haps_hs_defconfig            |   2 +-
+ arch/arc/configs/haps_hs_smp_defconfig        |   2 +-
+ arch/arc/configs/hsdk_defconfig               |   2 +-
+ arch/arc/configs/nsim_700_defconfig           |   2 +-
+ arch/arc/configs/nsimosci_defconfig           |   2 +-
+ arch/arc/configs/nsimosci_hs_defconfig        |   2 +-
+ arch/arc/configs/nsimosci_hs_smp_defconfig    |   2 +-
+ arch/arc/configs/tb10x_defconfig              |   4 +-
+ arch/arc/configs/vdk_hs38_defconfig           |   2 +-
+ arch/arc/configs/vdk_hs38_smp_defconfig       |   2 +-
+ arch/arc/mm/init.c                            |  14 +-
+ arch/arm/Kconfig                              |   2 +-
+ arch/arm/boot/dts/arm/integratorap.dts        |   2 +-
+ arch/arm/boot/dts/arm/integratorcp.dts        |   2 +-
+ .../dts/aspeed/aspeed-bmc-facebook-cmm.dts    |   2 +-
+ .../aspeed/aspeed-bmc-facebook-galaxy100.dts  |   2 +-
+ .../aspeed/aspeed-bmc-facebook-minipack.dts   |   2 +-
+ .../aspeed/aspeed-bmc-facebook-wedge100.dts   |   2 +-
+ .../aspeed/aspeed-bmc-facebook-wedge40.dts    |   2 +-
+ .../dts/aspeed/aspeed-bmc-facebook-yamp.dts   |   2 +-
+ .../ast2600-facebook-netbmc-common.dtsi       |   2 +-
+ arch/arm/boot/dts/hisilicon/hi3620-hi4511.dts |   2 +-
+ .../ixp/intel-ixp42x-welltech-epbx100.dts     |   2 +-
+ arch/arm/boot/dts/nspire/nspire-classic.dtsi  |   2 +-
+ arch/arm/boot/dts/nspire/nspire-cx.dts        |   2 +-
+ .../boot/dts/samsung/exynos4210-origen.dts    |   2 +-
+ .../boot/dts/samsung/exynos4210-smdkv310.dts  |   2 +-
+ .../boot/dts/samsung/exynos4412-smdk4412.dts  |   2 +-
+ .../boot/dts/samsung/exynos5250-smdk5250.dts  |   2 +-
+ arch/arm/boot/dts/st/ste-nomadik-nhk15.dts    |   2 +-
+ arch/arm/boot/dts/st/ste-nomadik-s8815.dts    |   2 +-
+ arch/arm/boot/dts/st/stm32429i-eval.dts       |   2 +-
+ arch/arm/boot/dts/st/stm32746g-eval.dts       |   2 +-
+ arch/arm/boot/dts/st/stm32f429-disco.dts      |   2 +-
+ arch/arm/boot/dts/st/stm32f469-disco.dts      |   2 +-
+ arch/arm/boot/dts/st/stm32f746-disco.dts      |   2 +-
+ arch/arm/boot/dts/st/stm32f769-disco.dts      |   2 +-
+ arch/arm/boot/dts/st/stm32h743i-disco.dts     |   2 +-
+ arch/arm/boot/dts/st/stm32h743i-eval.dts      |   2 +-
+ arch/arm/boot/dts/st/stm32h747i-disco.dts     |   2 +-
+ arch/arm/boot/dts/st/stm32h750i-art-pi.dts    |   2 +-
+ arch/arm/configs/aspeed_g4_defconfig          |   8 +-
+ arch/arm/configs/aspeed_g5_defconfig          |   8 +-
+ arch/arm/configs/assabet_defconfig            |   4 +-
+ arch/arm/configs/at91_dt_defconfig            |   4 +-
+ arch/arm/configs/axm55xx_defconfig            |   2 +-
+ arch/arm/configs/bcm2835_defconfig            |   2 +-
+ arch/arm/configs/clps711x_defconfig           |   4 +-
+ arch/arm/configs/collie_defconfig             |   4 +-
+ arch/arm/configs/davinci_all_defconfig        |   2 +-
+ arch/arm/configs/exynos_defconfig             |   4 +-
+ arch/arm/configs/footbridge_defconfig         |   2 +-
+ arch/arm/configs/gemini_defconfig             |   2 +-
+ arch/arm/configs/h3600_defconfig              |   2 +-
+ arch/arm/configs/hisi_defconfig               |   4 +-
+ arch/arm/configs/imx_v4_v5_defconfig          |   2 +-
+ arch/arm/configs/imx_v6_v7_defconfig          |   4 +-
+ arch/arm/configs/integrator_defconfig         |   2 +-
+ arch/arm/configs/ixp4xx_defconfig             |   2 +-
+ arch/arm/configs/keystone_defconfig           |   2 +-
+ arch/arm/configs/lpc18xx_defconfig            |  12 +-
+ arch/arm/configs/lpc32xx_defconfig            |   4 +-
+ arch/arm/configs/milbeaut_m10v_defconfig      |   2 +-
+ arch/arm/configs/multi_v4t_defconfig          |   2 +-
+ arch/arm/configs/multi_v5_defconfig           |   2 +-
+ arch/arm/configs/multi_v7_defconfig           |   2 +-
+ arch/arm/configs/mvebu_v7_defconfig           |   2 +-
+ arch/arm/configs/mxs_defconfig                |   2 +-
+ arch/arm/configs/neponset_defconfig           |   4 +-
+ arch/arm/configs/nhk8815_defconfig            |   2 +-
+ arch/arm/configs/omap1_defconfig              |   2 +-
+ arch/arm/configs/omap2plus_defconfig          |   2 +-
+ arch/arm/configs/pxa910_defconfig             |   2 +-
+ arch/arm/configs/pxa_defconfig                |   4 +-
+ arch/arm/configs/qcom_defconfig               |   2 +-
+ arch/arm/configs/rpc_defconfig                |   2 +-
+ arch/arm/configs/s3c6400_defconfig            |   4 +-
+ arch/arm/configs/s5pv210_defconfig            |   4 +-
+ arch/arm/configs/sama5_defconfig              |   4 +-
+ arch/arm/configs/sama7_defconfig              |   2 +-
+ arch/arm/configs/shmobile_defconfig           |   2 +-
+ arch/arm/configs/socfpga_defconfig            |   2 +-
+ arch/arm/configs/sp7021_defconfig             |  12 +-
+ arch/arm/configs/spear13xx_defconfig          |   2 +-
+ arch/arm/configs/spear3xx_defconfig           |   2 +-
+ arch/arm/configs/spear6xx_defconfig           |   2 +-
+ arch/arm/configs/spitz_defconfig              |   2 +-
+ arch/arm/configs/stm32_defconfig              |   2 +-
+ arch/arm/configs/sunxi_defconfig              |   2 +-
+ arch/arm/configs/tegra_defconfig              |   2 +-
+ arch/arm/configs/u8500_defconfig              |   4 +-
+ arch/arm/configs/versatile_defconfig          |   2 +-
+ arch/arm/configs/vexpress_defconfig           |   2 +-
+ arch/arm/configs/vf610m4_defconfig            |  10 +-
+ arch/arm/configs/vt8500_v6_v7_defconfig       |   2 +-
+ arch/arm/configs/wpcm450_defconfig            |   2 +-
+ arch/arm/include/uapi/asm/setup.h             |  10 -
+ arch/arm/kernel/atags_compat.c                |  10 -
+ arch/arm/kernel/atags_parse.c                 |  16 +-
+ arch/arm/kernel/setup.c                       |   2 +-
+ arch/arm/mm/init.c                            |  24 +-
+ arch/arm64/configs/defconfig                  |   2 +-
+ arch/arm64/kernel/setup.c                     |   2 +-
+ arch/arm64/mm/init.c                          |  17 +-
+ arch/csky/kernel/setup.c                      |  24 +-
+ arch/csky/mm/init.c                           |   2 +-
+ arch/hexagon/configs/comet_defconfig          |   2 +-
+ arch/loongarch/configs/loongson3_defconfig    |   2 +-
+ arch/loongarch/kernel/mem.c                   |   2 +-
+ arch/loongarch/kernel/setup.c                 |   4 +-
+ arch/m68k/configs/amiga_defconfig             |   2 +-
+ arch/m68k/configs/apollo_defconfig            |   2 +-
+ arch/m68k/configs/atari_defconfig             |   2 +-
+ arch/m68k/configs/bvme6000_defconfig          |   2 +-
+ arch/m68k/configs/hp300_defconfig             |   2 +-
+ arch/m68k/configs/mac_defconfig               |   2 +-
+ arch/m68k/configs/multi_defconfig             |   2 +-
+ arch/m68k/configs/mvme147_defconfig           |   2 +-
+ arch/m68k/configs/mvme16x_defconfig           |   2 +-
+ arch/m68k/configs/q40_defconfig               |   2 +-
+ arch/m68k/configs/stmark2_defconfig           |   2 +-
+ arch/m68k/configs/sun3_defconfig              |   2 +-
+ arch/m68k/configs/sun3x_defconfig             |   2 +-
+ arch/m68k/kernel/setup_mm.c                   |  12 +-
+ arch/m68k/kernel/setup_no.c                   |  12 +-
+ arch/m68k/kernel/uboot.c                      |  17 +-
+ arch/microblaze/kernel/cpu/mb.c               |   2 +-
+ arch/microblaze/kernel/setup.c                |   2 +-
+ arch/microblaze/mm/init.c                     |  12 +-
+ arch/mips/ath79/prom.c                        |  12 +-
+ arch/mips/configs/ath25_defconfig             |  12 +-
+ arch/mips/configs/ath79_defconfig             |   4 +-
+ arch/mips/configs/bcm47xx_defconfig           |   2 +-
+ arch/mips/configs/bigsur_defconfig            |   2 +-
+ arch/mips/configs/bmips_be_defconfig          |   2 +-
+ arch/mips/configs/bmips_stb_defconfig         |  14 +-
+ arch/mips/configs/cavium_octeon_defconfig     |   2 +-
+ arch/mips/configs/eyeq5_defconfig             |   2 +-
+ arch/mips/configs/eyeq6_defconfig             |   2 +-
+ arch/mips/configs/generic_defconfig           |   2 +-
+ arch/mips/configs/gpr_defconfig               |   2 +-
+ arch/mips/configs/lemote2f_defconfig          |   2 +-
+ arch/mips/configs/loongson2k_defconfig        |   2 +-
+ arch/mips/configs/loongson3_defconfig         |   2 +-
+ arch/mips/configs/malta_defconfig             |   2 +-
+ arch/mips/configs/mtx1_defconfig              |   2 +-
+ arch/mips/configs/rb532_defconfig             |   2 +-
+ arch/mips/configs/rbtx49xx_defconfig          |   2 +-
+ arch/mips/configs/rt305x_defconfig            |   4 +-
+ arch/mips/configs/sb1250_swarm_defconfig      |   2 +-
+ arch/mips/configs/xway_defconfig              |   4 +-
+ arch/mips/kernel/setup.c                      |  53 ++-
+ arch/mips/mm/init.c                           |   2 +-
+ arch/mips/sibyte/common/cfe.c                 |  36 +-
+ arch/mips/sibyte/swarm/setup.c                |   2 +-
+ arch/nios2/kernel/setup.c                     |  20 +-
+ arch/openrisc/configs/or1klitex_defconfig     |   2 +-
+ arch/openrisc/configs/or1ksim_defconfig       |   4 +-
+ arch/openrisc/configs/simple_smp_defconfig    |  14 +-
+ arch/openrisc/configs/virt_defconfig          |   2 +-
+ arch/openrisc/kernel/setup.c                  |  24 +-
+ arch/openrisc/kernel/vmlinux.h                |   2 +-
+ arch/parisc/boot/compressed/misc.c            |   2 +-
+ arch/parisc/configs/generic-32bit_defconfig   |   2 +-
+ arch/parisc/configs/generic-64bit_defconfig   |   2 +-
+ arch/parisc/defpalo.conf                      |   2 +-
+ arch/parisc/kernel/pdt.c                      |   6 +-
+ arch/parisc/kernel/setup.c                    |   8 +-
+ arch/parisc/mm/init.c                         |  32 +-
+ arch/powerpc/configs/44x/akebono_defconfig    |   2 +-
+ arch/powerpc/configs/44x/arches_defconfig     |   2 +-
+ arch/powerpc/configs/44x/bamboo_defconfig     |   2 +-
+ arch/powerpc/configs/44x/bluestone_defconfig  |   2 +-
+ .../powerpc/configs/44x/canyonlands_defconfig |   2 +-
+ arch/powerpc/configs/44x/ebony_defconfig      |   2 +-
+ arch/powerpc/configs/44x/eiger_defconfig      |   2 +-
+ arch/powerpc/configs/44x/fsp2_defconfig       |  10 +-
+ arch/powerpc/configs/44x/icon_defconfig       |   2 +-
+ arch/powerpc/configs/44x/iss476-smp_defconfig |   2 +-
+ arch/powerpc/configs/44x/katmai_defconfig     |   2 +-
+ arch/powerpc/configs/44x/rainier_defconfig    |   2 +-
+ arch/powerpc/configs/44x/redwood_defconfig    |   2 +-
+ arch/powerpc/configs/44x/sam440ep_defconfig   |   2 +-
+ arch/powerpc/configs/44x/sequoia_defconfig    |   2 +-
+ arch/powerpc/configs/44x/taishan_defconfig    |   2 +-
+ arch/powerpc/configs/44x/warp_defconfig       |   2 +-
+ arch/powerpc/configs/52xx/cm5200_defconfig    |   2 +-
+ arch/powerpc/configs/52xx/lite5200b_defconfig |   2 +-
+ arch/powerpc/configs/52xx/motionpro_defconfig |   2 +-
+ arch/powerpc/configs/52xx/tqm5200_defconfig   |   2 +-
+ arch/powerpc/configs/83xx/asp8347_defconfig   |   2 +-
+ .../configs/83xx/mpc8313_rdb_defconfig        |   2 +-
+ .../configs/83xx/mpc8315_rdb_defconfig        |   2 +-
+ .../configs/83xx/mpc832x_rdb_defconfig        |   2 +-
+ .../configs/83xx/mpc834x_itx_defconfig        |   2 +-
+ .../configs/83xx/mpc834x_itxgp_defconfig      |   2 +-
+ .../configs/83xx/mpc836x_rdk_defconfig        |   2 +-
+ .../configs/83xx/mpc837x_rdb_defconfig        |   2 +-
+ arch/powerpc/configs/85xx/ge_imp3a_defconfig  |   2 +-
+ arch/powerpc/configs/85xx/ksi8560_defconfig   |   2 +-
+ arch/powerpc/configs/85xx/socrates_defconfig  |   2 +-
+ arch/powerpc/configs/85xx/stx_gp3_defconfig   |   2 +-
+ arch/powerpc/configs/85xx/tqm8540_defconfig   |   2 +-
+ arch/powerpc/configs/85xx/tqm8541_defconfig   |   2 +-
+ arch/powerpc/configs/85xx/tqm8548_defconfig   |   2 +-
+ arch/powerpc/configs/85xx/tqm8555_defconfig   |   2 +-
+ arch/powerpc/configs/85xx/tqm8560_defconfig   |   2 +-
+ .../configs/85xx/xes_mpc85xx_defconfig        |   2 +-
+ arch/powerpc/configs/amigaone_defconfig       |   2 +-
+ arch/powerpc/configs/cell_defconfig           |   2 +-
+ arch/powerpc/configs/chrp32_defconfig         |   2 +-
+ arch/powerpc/configs/fsl-emb-nonhw.config     |   2 +-
+ arch/powerpc/configs/g5_defconfig             |   2 +-
+ arch/powerpc/configs/gamecube_defconfig       |   2 +-
+ arch/powerpc/configs/holly_defconfig          |   2 +-
+ arch/powerpc/configs/linkstation_defconfig    |   2 +-
+ arch/powerpc/configs/mgcoge_defconfig         |   4 +-
+ arch/powerpc/configs/microwatt_defconfig      |   2 +-
+ arch/powerpc/configs/mpc512x_defconfig        |   2 +-
+ arch/powerpc/configs/mpc5200_defconfig        |   2 +-
+ arch/powerpc/configs/mpc83xx_defconfig        |   2 +-
+ arch/powerpc/configs/pasemi_defconfig         |   2 +-
+ arch/powerpc/configs/pmac32_defconfig         |   2 +-
+ arch/powerpc/configs/powernv_defconfig        |   2 +-
+ arch/powerpc/configs/ppc44x_defconfig         |   2 +-
+ arch/powerpc/configs/ppc64_defconfig          |   2 +-
+ arch/powerpc/configs/ppc64e_defconfig         |   2 +-
+ arch/powerpc/configs/ppc6xx_defconfig         |   2 +-
+ arch/powerpc/configs/ps3_defconfig            |   2 +-
+ arch/powerpc/configs/skiroot_defconfig        |  12 +-
+ arch/powerpc/configs/wii_defconfig            |   2 +-
+ arch/powerpc/kernel/prom.c                    |  22 +-
+ arch/powerpc/kernel/prom_init.c               |   6 +-
+ arch/powerpc/kernel/setup-common.c            |  25 +-
+ arch/powerpc/kernel/setup_32.c                |   2 +-
+ arch/powerpc/kernel/setup_64.c                |   2 +-
+ arch/powerpc/mm/init_32.c                     |   2 +-
+ arch/powerpc/platforms/52xx/lite5200.c        |   2 +-
+ arch/powerpc/platforms/83xx/km83xx.c          |   2 +-
+ arch/powerpc/platforms/85xx/mpc85xx_mds.c     |   2 +-
+ arch/powerpc/platforms/chrp/setup.c           |   2 +-
+ .../platforms/embedded6xx/linkstation.c       |   2 +-
+ .../platforms/embedded6xx/storcenter.c        |   2 +-
+ arch/powerpc/platforms/powermac/setup.c       |   8 +-
+ arch/riscv/configs/defconfig                  |   2 +-
+ arch/riscv/configs/nommu_k210_defconfig       |  16 +-
+ arch/riscv/configs/nommu_virt_defconfig       |  12 +-
+ arch/riscv/mm/init.c                          |   4 +-
+ arch/s390/boot/ipl_parm.c                     |   2 +-
+ arch/s390/boot/startup.c                      |   4 +-
+ arch/s390/configs/zfcpdump_defconfig          |   2 +-
+ arch/s390/kernel/setup.c                      |  10 +-
+ arch/s390/mm/init.c                           |   2 +-
+ arch/sh/configs/apsh4a3a_defconfig            |   2 +-
+ arch/sh/configs/apsh4ad0a_defconfig           |   2 +-
+ arch/sh/configs/ecovec24-romimage_defconfig   |   2 +-
+ arch/sh/configs/edosk7760_defconfig           |   2 +-
+ arch/sh/configs/kfr2r09-romimage_defconfig    |   2 +-
+ arch/sh/configs/kfr2r09_defconfig             |   2 +-
+ arch/sh/configs/magicpanelr2_defconfig        |   2 +-
+ arch/sh/configs/migor_defconfig               |   2 +-
+ arch/sh/configs/rsk7201_defconfig             |   2 +-
+ arch/sh/configs/rsk7203_defconfig             |   2 +-
+ arch/sh/configs/sdk7786_defconfig             |   8 +-
+ arch/sh/configs/se7206_defconfig              |   2 +-
+ arch/sh/configs/se7705_defconfig              |   2 +-
+ arch/sh/configs/se7722_defconfig              |   2 +-
+ arch/sh/configs/se7751_defconfig              |   2 +-
+ arch/sh/configs/secureedge5410_defconfig      |   2 +-
+ arch/sh/configs/sh03_defconfig                |   2 +-
+ arch/sh/configs/sh7757lcr_defconfig           |   2 +-
+ arch/sh/configs/titan_defconfig               |   2 +-
+ arch/sh/configs/ul2_defconfig                 |   2 +-
+ arch/sh/configs/urquell_defconfig             |   2 +-
+ arch/sh/include/asm/setup.h                   |   1 -
+ arch/sh/kernel/head_32.S                      |   2 +-
+ arch/sh/kernel/setup.c                        |  27 +-
+ arch/sparc/boot/piggyback.c                   |   4 +-
+ arch/sparc/configs/sparc32_defconfig          |   2 +-
+ arch/sparc/configs/sparc64_defconfig          |   2 +-
+ arch/sparc/kernel/head_32.S                   |   4 +-
+ arch/sparc/kernel/head_64.S                   |   6 +-
+ arch/sparc/kernel/setup_32.c                  |   9 +-
+ arch/sparc/kernel/setup_64.c                  |   9 +-
+ arch/sparc/mm/init_32.c                       |  22 +-
+ arch/sparc/mm/init_64.c                       |  20 +-
+ arch/um/kernel/Makefile                       |   2 +-
+ arch/um/kernel/initrd.c                       |   6 +-
+ arch/x86/Kconfig                              |   2 +-
+ arch/x86/boot/header.S                        |   2 +-
+ arch/x86/boot/startup/sme.c                   |   2 +-
+ arch/x86/configs/i386_defconfig               |   2 +-
+ arch/x86/configs/x86_64_defconfig             |   2 +-
+ arch/x86/include/uapi/asm/bootparam.h         |   7 +-
+ arch/x86/kernel/cpu/microcode/amd.c           |   2 +-
+ arch/x86/kernel/cpu/microcode/core.c          |  12 +-
+ arch/x86/kernel/cpu/microcode/intel.c         |   2 +-
+ arch/x86/kernel/cpu/microcode/internal.h      |   2 +-
+ arch/x86/kernel/devicetree.c                  |   2 +-
+ arch/x86/kernel/setup.c                       |  39 +-
+ arch/x86/mm/init.c                            |   8 +-
+ arch/x86/mm/init_32.c                         |   2 +-
+ arch/x86/mm/init_64.c                         |   2 +-
+ arch/x86/tools/relocs.c                       |   2 +-
+ arch/xtensa/Kconfig                           |   2 +-
+ arch/xtensa/boot/dts/csp.dts                  |   2 +-
+ arch/xtensa/configs/audio_kc705_defconfig     |   2 +-
+ arch/xtensa/configs/cadence_csp_defconfig     |  12 +-
+ arch/xtensa/configs/generic_kc705_defconfig   |   2 +-
+ arch/xtensa/configs/nommu_kc705_defconfig     |  12 +-
+ arch/xtensa/configs/smp_lx200_defconfig       |   2 +-
+ arch/xtensa/configs/virt_defconfig            |   2 +-
+ arch/xtensa/configs/xip_kc705_defconfig       |   2 +-
+ arch/xtensa/kernel/setup.c                    |  26 +-
+ drivers/acpi/Kconfig                          |   2 +-
+ drivers/acpi/tables.c                         |  10 +-
+ drivers/base/firmware_loader/main.c           |   2 +-
+ drivers/block/Kconfig                         |   8 +-
+ drivers/block/brd.c                           |  20 +-
+ drivers/firmware/efi/efi.c                    |  10 +-
+ .../firmware/efi/libstub/efi-stub-helper.c    |   5 +-
+ drivers/gpu/drm/ci/arm.config                 |   2 +-
+ drivers/gpu/drm/ci/arm64.config               |   2 +-
+ drivers/gpu/drm/ci/x86_64.config              |   2 +-
+ drivers/of/fdt.c                              |  18 +-
+ fs/ext2/ext2.h                                |   9 -
+ fs/init.c                                     |  14 -
+ include/asm-generic/vmlinux.lds.h             |   8 +-
+ include/linux/ext2_fs.h                       |  13 -
+ include/linux/init_syscalls.h                 |   1 -
+ include/linux/initramfs.h                     |  26 ++
+ include/linux/initrd.h                        |  37 --
+ include/linux/root_dev.h                      |   1 -
+ include/linux/syscalls.h                      |   1 -
+ include/uapi/linux/sysctl.h                   |   1 -
+ init/.kunitconfig                             |   2 +-
+ init/Kconfig                                  |  28 +-
+ init/Makefile                                 |   6 +-
+ init/do_mounts.c                              |  28 +-
+ init/do_mounts.h                              |  42 --
+ init/do_mounts_initrd.c                       | 154 -------
+ init/do_mounts_rd.c                           | 334 ---------------
+ init/initramfs.c                              | 152 ++++---
+ init/main.c                                   |  66 +--
+ kernel/sys.c                                  |   7 +-
+ kernel/sysctl.c                               |   2 +-
+ kernel/umh.c                                  |   2 +-
+ scripts/package/builddeb                      |   2 +-
+ .../ktest/examples/bootconfigs/tracing.bconf  |   3 -
+ tools/testing/selftests/bpf/config.aarch64    |   2 +-
+ tools/testing/selftests/bpf/config.ppc64el    |   2 +-
+ tools/testing/selftests/bpf/config.riscv64    |   2 +-
+ tools/testing/selftests/bpf/config.s390x      |   2 +-
+ tools/testing/selftests/kho/vmtest.sh         |   2 +-
+ .../testing/selftests/nolibc/Makefile.nolibc  |   4 +-
+ tools/testing/selftests/vsock/config          |   2 +-
+ .../selftests/wireguard/qemu/kernel.config    |   2 +-
+ usr/Kconfig                                   |  70 ++--
+ usr/Makefile                                  |   2 +-
+ usr/initramfs_data.S                          |   4 +-
+ 385 files changed, 969 insertions(+), 2346 deletions(-)
+ delete mode 100644 Documentation/admin-guide/initrd.rst
+ delete mode 100644 Documentation/power/swsusp-dmcrypt.rst
+ create mode 100644 include/linux/initramfs.h
+ delete mode 100644 include/linux/initrd.h
+ delete mode 100644 init/do_mounts_initrd.c
+ delete mode 100644 init/do_mounts_rd.c
+
+
+base-commit: 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c
 -- 
 2.47.2
 
