@@ -1,181 +1,202 @@
-Return-Path: <linux-arch+bounces-13560-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13561-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7275EB55D88
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Sep 2025 03:19:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 788BDB55DD4
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Sep 2025 04:18:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 226935C5A8B
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Sep 2025 01:19:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A48E61C26B9C
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Sep 2025 02:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74FC81B4248;
-	Sat, 13 Sep 2025 01:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A8E16EB42;
+	Sat, 13 Sep 2025 02:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JdasfyAT"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="m21hctkB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9EA61A314B
-	for <linux-arch@vger.kernel.org>; Sat, 13 Sep 2025 01:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBCC43594F;
+	Sat, 13 Sep 2025 02:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757726374; cv=none; b=NdXuy18cwT89gCWK769tv5tekQcgg+Ixfoy5CdlA8ojwUGnAYVANWSUypGAhCdkzpU+EUyH+NxW6DnEd0N9hQTx4yAH/d8OpfpscdohuVAcdQ3Rzt69LwnuzSEquus0ntEGpWlZzP2bPf3t1Tc0v9567EjMyOdxCF+splwB6Kdg=
+	t=1757729896; cv=none; b=jp7jeHktROoJArB88XY0n8vDSICXDbBKxlsgbzYE3+gt8AHybtAnNJVmEJvPFNzJjYv4JXUrrwcDSW427ke+LsLCFsyjTF2uUX6vCi+sYAUejh+VEvLrR6CXIZVkj/hsNCsuSWfCDmFRL8L/rVZEQBWanGb1S0fl55zZ27k8HAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757726374; c=relaxed/simple;
-	bh=0dZBfgRsarIoSXxUVt0yhSx8VT0ilXZcRzH3UEVxVxY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V9WaSFN64xoXB3+h7i162fVaSlbYrqQXZBNlrGg0SiSObubZ71wprNEkfKao7khenYxcUO1021FRmGeje09T3uMXs+/p2bymp0ITYAmgEA9g+SebsBPBehoX0CR9CJEGzkjB1nyxzQWF+M37X4EtdjaCCoHfc76VRaZlA5iSa7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JdasfyAT; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b07c38680b3so228177966b.1
-        for <linux-arch@vger.kernel.org>; Fri, 12 Sep 2025 18:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757726370; x=1758331170; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=01GQX+A5wcxVOfa45EtHUSgPI4YB4B2sFvA+zw7J76I=;
-        b=JdasfyATZKgVuDGioUqz8M95vHmUjDA0X+pQzxpf/9WU/t+U6Kr5Hnn8A/pwyQbEEj
-         tG9d5C4koMLr9jbbHvOg3kmOIpnqmXdSH9FzLhmDOw7FKaw9Ew5j+I2E2DqtaAF0kBLZ
-         78wviOrJLl+vWbv0yCaEb7FNWVwdYcrEt3ieIj7Euu12bhdJuyE+iXc5Pb1FYjgjb8hF
-         cX5p4CCG19iBqFwJotgYe++od9U/7qY0/+Gz7PK70bhGuzPjXacGCU6LuDPtHZleKndu
-         uaVp9WGOG3lboi/Y241AWiDrohHR47mki0UFwavjwS1g6Qe4yDpW5hurcQZvXGxBtRDc
-         ssdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757726370; x=1758331170;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=01GQX+A5wcxVOfa45EtHUSgPI4YB4B2sFvA+zw7J76I=;
-        b=LKw3j8bIWEqNjgKiNYcV9yRX1pAV170bzIp58r9zpLfbXQrLD/akqS8jOHXEZ84j56
-         pRgmvHi6a+/2Dl7hjXnC2IPHCRc1tgnnebgKRFHGJfAUYNt2iPGPV5uO9IjiaWng5jX2
-         ui00KlfjW87ssmfBUGVY7YhdGoUWsElLcZTvd5zs3jwbkpDSi1uNVjMDxPGCGxHtJov5
-         4QwnHWcPhzgEcqqXkk/dumt5/X5vde/nMKdtSCVCfdkVj/TUVMpMGlSTpuISGEl3wJX2
-         bR3wwpE2XFtLV2X8o2EJ4njLaK8EAnO455If/usLM9oH4WvGOVKZpibfUEb7t5KJiNwh
-         AzTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXlW0dIb15DiEanCaIuZqjPmoRcqf3dAivL80Tb5uKfk7VAl+svVjknc8Q9W3oBJQYYYx5JYLZ+HHpw@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuQJIKiQ27N7G3G24OVqoRQ4cSE4vaKp4QXl7JsSXP5tXe9F5C
-	a+S0hfEbsTsEcIRwcfTg21H6c+HDEeMR/3kWMD3Gt+xOw3rLFUftVTfg
-X-Gm-Gg: ASbGncvRjQfZdmd3Ib007a8I/I5JqzF8e8FyfQ1/2geVaQySPNWy7axun7Yu5SybtTw
-	hs/uD6jnyN6JFuIN8ix2YgBJVMoRjHJ13XU8GrsT7ze//gwz7Ae6lLJQmgD/48Wwqn3F8T/LgI7
-	mw3nHUBF/7YOGqtWQSbkUE5bPdJZX0cm4Z0SX2DAIfU6BuMzP707Or2MnR24PpCIPfMc/NOUCFW
-	FpmDqShso/4vUAvnr7xrti21ATuAH8jqqp1wKb4W0/UOuVQlnqZzc2ppUm1eA/gtWt4UvlnM1un
-	blvZv8qPWeiRxur+c+v4REcE8Hl3Mth4eY946/dlxq4OQLrIZOZ6qwS6/4GDv/iW/zQp5gTFf2g
-	OmJomCAogvNCDveRrB3WGBnjHTzsXBg==
-X-Google-Smtp-Source: AGHT+IEzeVwYKpSq5hVwsza+AqQmwMGGceGxnApLyMFPwDCsoulMW4PoMJQ37ACnH/5BZ1euJLookQ==
-X-Received: by 2002:a17:906:2493:b0:b04:9822:1ab4 with SMTP id a640c23a62f3a-b07c35fb2e4mr458597866b.27.1757726369974;
-        Fri, 12 Sep 2025 18:19:29 -0700 (PDT)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b07b32dd5bfsm465661666b.63.2025.09.12.18.19.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Sep 2025 18:19:29 -0700 (PDT)
-From: Askar Safin <safinaskar@gmail.com>
-To: linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Christoph Hellwig <hch@lst.de>,
-	Jens Axboe <axboe@kernel.dk>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Julian Stecklina <julian.stecklina@cyberus-technology.de>,
-	Gao Xiang <hsiangkao@linux.alibaba.com>,
-	Art Nikpal <email2tema@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Eric Curtin <ecurtin@redhat.com>,
-	Alexander Graf <graf@amazon.com>,
-	Rob Landley <rob@landley.net>,
-	Lennart Poettering <mzxreary@0pointer.de>,
-	linux-arch@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	x86@kernel.org,
-	Ingo Molnar <mingo@redhat.com>,
-	linux-block@vger.kernel.org,
-	initramfs@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	"Theodore Y . Ts'o" <tytso@mit.edu>,
-	linux-acpi@vger.kernel.org,
-	Michal Simek <monstr@monstr.eu>,
-	devicetree@vger.kernel.org,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Thorsten Blum <thorsten.blum@linux.dev>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	patches@lists.linux.dev
-Subject: [PATCH RESEND 36/62] init: make mount_root static
-Date: Sat, 13 Sep 2025 00:38:15 +0000
-Message-ID: <20250913003842.41944-37-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250913003842.41944-1-safinaskar@gmail.com>
-References: <20250913003842.41944-1-safinaskar@gmail.com>
+	s=arc-20240116; t=1757729896; c=relaxed/simple;
+	bh=8qXiJSMEz70CJJyZBmfhphnYdJah4N8ITAV+vxiw8B0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=toevmmp2HUMIO+icuToOW0b1q+beGncq9L5tUMu1YjNYEaXWan4U3ieekIzvYLGZ7vTyY0IAKteeUoIWGWl8A25TkrOYkuqLNZCIKm9YxY/GWu4MjHzF5v0iSbTzQwJW+wcTbIOqUTRFh8rpPAsOsXjKC8sHgbntge/8O5h5QwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=m21hctkB; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.0.88] (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 3EC6D211AD04;
+	Fri, 12 Sep 2025 19:18:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3EC6D211AD04
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1757729893;
+	bh=qOt0TBqCe0QCWONCv2pqyI3pCBn1b1ZIwH52f/TrEDE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=m21hctkBJpAAvPT14i0FYZtzlISv5mc1KdMdUKKQhmnzfoCElHUGBS+seT0oarMWz
+	 Iot9rItOfVaGuBBzEf1dpzmTbMUw768EMx54jcKZGqo9hdfr970CkylZBj8ESJFeCq
+	 A5s6IMzPUDi2A+V2R/nF+SwCQVXtZBcN3o1+C4dE=
+Message-ID: <1033ff35-850c-e2f0-e2f3-1d5bf4b96a76@linux.microsoft.com>
+Date: Fri, 12 Sep 2025 19:18:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v3 1/7] Drivers: hv: Introduce hv_hvcall_*() functions for
+ hypercall arguments
+Content-Language: en-US
+To: Michael Kelley <mhklinux@outlook.com>,
+ "kys@microsoft.com" <kys@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "tglx@linutronix.de" <tglx@linutronix.de>,
+ "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "hpa@zytor.com" <hpa@zytor.com>,
+ "lpieralisi@kernel.org" <lpieralisi@kernel.org>, "kw@linux.com"
+ <kw@linux.com>,
+ "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>,
+ "robh@kernel.org" <robh@kernel.org>,
+ "bhelgaas@google.com" <bhelgaas@google.com>, "arnd@arndb.de" <arnd@arndb.de>
+Cc: "x86@kernel.org" <x86@kernel.org>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20250415180728.1789-1-mhklinux@outlook.com>
+ <20250415180728.1789-2-mhklinux@outlook.com>
+ <f711d4ad-87a8-9cb3-aabc-a493ff18986a@linux.microsoft.com>
+ <33b59cc4-2834-b6c7-5ffd-7b9d620a4ce5@linux.microsoft.com>
+ <SN6PR02MB4157376DD06C1DC2E28A76B7D432A@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <833a0c96-470f-acff-72e7-cc82995fbc2f@linux.microsoft.com>
+ <SN6PR02MB4157875C0979EFF29626A18CD43DA@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <d6e63ef3-bdd2-f185-f065-76b333dd1fc3@linux.microsoft.com>
+ <SN6PR02MB41575CDB3874DB0867FF9E8FD43EA@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB4157BF605BE8EE1777AE1860D408A@SN6PR02MB4157.namprd02.prod.outlook.com>
+From: Mukesh R <mrathor@linux.microsoft.com>
+In-Reply-To: <SN6PR02MB4157BF605BE8EE1777AE1860D408A@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This is cleanup after initrd removal
+On 9/12/25 08:25, Michael Kelley wrote:
+> From: Michael Kelley <mhklinux@outlook.com> Sent: Monday, August 25, 2025 2:01 PM
+>>
+>> From: Mukesh R <mrathor@linux.microsoft.com> Sent: Friday, August 22, 2025 7:25 PM
+>>>
+>>> On 8/21/25 19:10, Michael Kelley wrote:
+>>>> From: Mukesh R <mrathor@linux.microsoft.com> Sent: Thursday, August 21, 2025 1:50 PM
+>>>>>
+>>>>> On 8/21/25 12:24, Michael Kelley wrote:
+>>>>>> From: Mukesh R <mrathor@linux.microsoft.com> Sent: Wednesday, August 20, 2025 7:58 PM
+>>>>>>>
+>>>>>>> On 8/20/25 17:31, Mukesh R wrote:
+>>>>>>>> With time these functions only get more complicated and error prone. The
+>>>>>>>> saving of ram is very minimal, this makes analyzing crash dumps harder,
+>>>>>>>> and in some cases like in your patch 3/7 disables unnecessarily in error case:
+>>>>>>>>
+>>>>>>>> - if (count > HV_MAX_MODIFY_GPA_REP_COUNT) {
+>>>>>>>> -  pr_err("Hyper-V: GPA count:%d exceeds supported:%lu\n", count,
+>>>>>>>> -   HV_MAX_MODIFY_GPA_REP_COUNT);
+>>>>>>>> + local_irq_save(flags);      <<<<<<<
+>>>>>>>> ...
+>>>>>>
+>>>>>> FWIW, this error case is not disabled. It is checked a few lines further down as:
+>>>>>
+>>>>> I meant disabled interrupts. The check moves after disabling interrupts, so
+>>>>> it runs "disabled" in traditional OS terminology :).
+>>>>
+>>>> Got it. But why is it problem to make this check with interrupts disabled?
+>>>
+>>> You are creating disabling overhead where that overhead previously
+>>> did not exist.
+>>
+>> I'm not clear on what you mean by "disabling overhead". The existing code
+>> does the following:
+>>
+>> 1) Validate that "count" is not too big, and return an error if it is.
+>> 2) Disable interrupts
+>> 3) Populate the per-cpu hypercall input arg
+>> 4) Make the hypercall
+>> 5) Re-enable interrupts
+>>
+>> With the patch, steps 1 and 2 are done in a different order:
+>>
+>> 2) Disable interrupts
+>> 1) Validate that "count" is not too big. Re-enable interrupts and return an error if it is.
+>> 3) Populate the per-cpu hypercall input arg
+>> 4) Make the hypercall
+>> 5) Re-enable interrupts
+>>
+>> Validating "count" with interrupts disabled is probably an additional
+>> 2 or 3 instructions executed with interrupts disabled, which is negligible
+>> compared to the thousands (or more) of instructions the hypercall will
+>> execute with interrupts disabled.
+>>
+>> Or are you referring to something else as "disabling overhead"?
+> 
+> Mukesh -- anything further on what you see as the problem here?
+> I'm just not getting what your concern is.
 
-Signed-off-by: Askar Safin <safinaskar@gmail.com>
----
- init/do_mounts.c | 2 +-
- init/do_mounts.h | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+It increases the interrupts disabled window, does a print from
+interrupts disabled (not a great idea unless it is pr_emerg and system
+is crashing), and in case of actual error of (count > batch_size) 
+interrupts are getting enabled and disabled that were not before.
 
-diff --git a/init/do_mounts.c b/init/do_mounts.c
-index c722351c991f..7ec5ee5a5c19 100644
---- a/init/do_mounts.c
-+++ b/init/do_mounts.c
-@@ -381,7 +381,7 @@ static inline void mount_block_root(char *root_device_name)
- }
- #endif /* CONFIG_BLOCK */
- 
--void __init mount_root(char *root_device_name)
-+static void __init mount_root(char *root_device_name)
- {
- 	switch (ROOT_DEV) {
- 	case Root_NFS:
-diff --git a/init/do_mounts.h b/init/do_mounts.h
-index f291c30f7407..90422fb07c02 100644
---- a/init/do_mounts.h
-+++ b/init/do_mounts.h
-@@ -12,7 +12,6 @@
- #include <linux/task_work.h>
- #include <linux/file.h>
- 
--void  mount_root(char *root_device_name);
- extern int root_mountflags;
- 
- /* Ensure that async file closing finished to prevent spurious errors. */
--- 
-2.47.2
+> [snip]
+> 
+>>>>>>> Furthermore, this makes us lose the ability to permanently map
+>>>>>>> input/output pages in the hypervisor. So, Wei kindly undo.
+>>>>>>>
+>>>>>>
+>>>>>> Could you elaborate on "lose the ability to permanently map
+>>>>>> input/output pages in the hypervisor"? What specifically can't be
+>>>>>> done and why?
+>>>>>
+>>>>> Input and output are mapped at fixed GPA/SPA always to avoid hyp
+>>>>> having to map/unmap every time.
+>>>>
+>>>> OK. But how does this patch set impede doing a fixed mapping?
+>>>
+>>> The output address can be varied depending on the hypercall, instead
+>>> of it being fixed always at fixed address:
+>>>
+>>>           *(void **)output = space + offset; <<<<<<
+>>
+>> Agreed. But since mappings from GPA to SPA are page granular, having
+>> such a fixed mapping means that there's a mapping for every byte in
+>> the page containing the GPA to the corresponding byte in the SPA,
+>> right? So even though the offset above may vary across hypercalls,
+>> the output GPA still refers to the same page (since the offset is always
+>> less than 4096), and that page has a fixed mapping. I would expect the
+>> hypercall code in the hypervisor to look for an existing mapping based
+>> on the output page, not the output address that includes the offset.
+>> But I'm haven't looked at the hypervisor code. If the Hyper-V folks say
+>> that a non-zero offset thwarts finding the existing mapping, what does
+>> the hypervisor end up doing? Creating a 2nd mapping wouldn't seem
+>> to make sense. So I'm really curious about what's going on ....
+>>
+> 
+> Again, any further information about why we "lose the ability to
+> permanently map input/output pages"? It seems doubtful to me
+> that an offset within the same page would make any difference,
+> but maybe Hyper-V is doing something unexpected. If so, I'd like
+> to know more about what that is.
+> 
+> Michael
+
+
+you've to pass the offset/pointer ever time, and hyp has to map
+that instead of just per cpu permanent mapping.
+
+-Mukesh
 
 
