@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-13638-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13639-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44840B58756
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Sep 2025 00:19:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FC0AB5877E
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Sep 2025 00:28:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 083F1166E68
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 22:19:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52EB017088C
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 22:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497792C027A;
-	Mon, 15 Sep 2025 22:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A23182C0F9A;
+	Mon, 15 Sep 2025 22:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gGT6EmnQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btiFbV66"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9AD29E114;
-	Mon, 15 Sep 2025 22:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61851280A5A;
+	Mon, 15 Sep 2025 22:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757974752; cv=none; b=LPH2znTb2tOhZvs5WQPeSQxv5M+IMYQLc/rf/1UWPzX52I3dqoz+AeHadUqOFhzogt7/FC1KkFacm4KVaMohqdiD/kf7n2SPmcO8YWhKP0AWxtDMPnE3pMiWP8OUU+ecj4MPxqT3aHLDKZ6Jo3Us+GlFvr8AI/KTewjbVz4iUe4=
+	t=1757975290; cv=none; b=qZZCDAJCB7RbnumFG6BRxlRT2jvgO7BBcVAHwvW1oCnZRtF/GEPJrHsfweOewzrTfEvlsM/PRkc6kxvPZCVajTbCabcK/PAC1xmK0DCnvhf2RQrUuBVyVgCRfqHo0Vd5SswRyTeS81R0s8CCv6a2QNEJTNFld8ex6FjFknCkX4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757974752; c=relaxed/simple;
-	bh=b/KAMT/vU3fpIChuCZ8uax4id1ddqwonwf8AV/cakto=;
+	s=arc-20240116; t=1757975290; c=relaxed/simple;
+	bh=Wcpg6tFqbeXrFoRBlvkg7Sf+BtHE6/mi4vJgwFoUZ7w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S2U0buxusUzkJR/mgwCfcWv/x01Mg5aCeq1SjGR2vTYPUg8y93wc9t+mpDqBMEbyZRhgSJJCqS4ULenjJ5/aZul+aUg2W0OHE0qz2/pcB+CwI/JTzscmVVdHAdV6HJNraEqbMfQPpSY4cAm7trYxcJp5wjGCyaQEwb5uUzXE6VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gGT6EmnQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C50C4CEF1;
-	Mon, 15 Sep 2025 22:19:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=EAL6e8EpyXPJgBKPZ1TXHPF4pj5VD7BG9YenEa0Ar1/lRoFRMGil5uukQ/PVyXEo43p4iRWsjs0eybSuVy4Nukk2Syrdcpswp5ikeq8s3STS/BoXIb+60d1/HxJq31C5x8JyLJf/oFvYPRzT0CaPQDVyfPBTuKGoQkYxTRp+L30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btiFbV66; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE259C4CEF1;
+	Mon, 15 Sep 2025 22:28:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757974751;
-	bh=b/KAMT/vU3fpIChuCZ8uax4id1ddqwonwf8AV/cakto=;
+	s=k20201202; t=1757975290;
+	bh=Wcpg6tFqbeXrFoRBlvkg7Sf+BtHE6/mi4vJgwFoUZ7w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gGT6EmnQvukqFMqMtqlepbmHr2WQI1aQineneVKQQSGzOY1R6Q+XDnwa3NsHXFQOV
-	 hmI40g/TeZ7O/rX9/+oJl1mrj/tdRdV5JiW6497YhnCgSztVVbei6nPKjfkGcS0eVG
-	 6J/oVwgHOtWRKx2Q2bxpv/YuoGK0hmyIOFQ01bKfzCSnazZXtKE5x6b/Rz39elUVTF
-	 dJmk2wUg4D3bzoi7AqfyRJi1PJTa7b2g2oomBqh773Qjhba70EW1sj2NgI9EPVxqON
-	 x2hGtjFgJvhONx5/L8mpl0ia6De74xa66l+Y6mAi5ahONM7ADPHt9qw/alKSWsd0Qs
-	 d1D0WOSovq6ZA==
-Date: Mon, 15 Sep 2025 15:18:59 -0700
+	b=btiFbV66ndT5PiIZKyhZnWESs8zz13HkVRGGazrbMKTT4i+wheS/50P4tznON9TyA
+	 a58Hw/PgCuOAvxPnuSLa/Sl0Cr4WPrfPd5Aae+v1MEk7ZhupfTtxeqdXD49BcpCmjR
+	 j04dEBmtBubaNUzCl/IOXOUzUcuSaywrmwoE/r31Ded7UHFyuLbQGcmyBSHG5iy1Ay
+	 dnZDqqyZ0L2NHVjXaNZsZzyLlpsoNEk736iFJTsw059hVGtLtLEl5gJRickoHqnJr+
+	 UMwJRFPkvIVIM725yAa3peQjy4+9NywQ/bqbohEuAm/i9n+0WhUTjicS5UtSncs+Ux
+	 gd2aTTgxJ1EQw==
+Date: Mon, 15 Sep 2025 15:27:58 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Tariq Toukan <tariqt@nvidia.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -84,8 +84,9 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Patrisious Haddad <phaddad@nvidia.com>
 Subject: Re: [PATCH net-next V2] net/mlx5: Improve write-combining test
  reliability for ARM64 Grace CPUs
-Message-ID: <20250915221859.GB925462@ax162>
+Message-ID: <20250915222758.GC925462@ax162>
 References: <1757925308-614943-1-git-send-email-tariqt@nvidia.com>
+ <20250915221859.GB925462@ax162>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -94,27 +95,34 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1757925308-614943-1-git-send-email-tariqt@nvidia.com>
+In-Reply-To: <20250915221859.GB925462@ax162>
 
-On Mon, Sep 15, 2025 at 11:35:08AM +0300, Tariq Toukan wrote:
-...
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/Makefile b/drivers/net/ethernet/mellanox/mlx5/core/Makefile
-> index d77696f46eb5..06d0eb190816 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/Makefile
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/Makefile
-> @@ -176,3 +176,9 @@ mlx5_core-$(CONFIG_PCIE_TPH) += lib/st.o
->  
->  obj-$(CONFIG_MLX5_DPLL) += mlx5_dpll.o
->  mlx5_dpll-y :=	dpll.o
-> +
-> +#
-> +# NEON WC specific for mlx5
-> +#
-> +mlx5_core-$(CONFIG_KERNEL_MODE_NEON) += lib/wc_neon_iowrite64_copy.o
-> +FLAGS_lib/wc_neon_iowrite64_copy.o += $(CC_FLAGS_FPU)
+On Mon, Sep 15, 2025 at 03:18:59PM -0700, Nathan Chancellor wrote:
+> On Mon, Sep 15, 2025 at 11:35:08AM +0300, Tariq Toukan wrote:
+> ...
+> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/Makefile b/drivers/net/ethernet/mellanox/mlx5/core/Makefile
+> > index d77696f46eb5..06d0eb190816 100644
+> > --- a/drivers/net/ethernet/mellanox/mlx5/core/Makefile
+> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/Makefile
+> > @@ -176,3 +176,9 @@ mlx5_core-$(CONFIG_PCIE_TPH) += lib/st.o
+> >  
+> >  obj-$(CONFIG_MLX5_DPLL) += mlx5_dpll.o
+> >  mlx5_dpll-y :=	dpll.o
+> > +
+> > +#
+> > +# NEON WC specific for mlx5
+> > +#
+> > +mlx5_core-$(CONFIG_KERNEL_MODE_NEON) += lib/wc_neon_iowrite64_copy.o
+> > +FLAGS_lib/wc_neon_iowrite64_copy.o += $(CC_FLAGS_FPU)
+> 
+> Does this work as is? I think this needs to be CFLAGS instead of FLAGS
+> but I did not test to verify.
 
-Does this work as is? I think this needs to be CFLAGS instead of FLAGS
-but I did not test to verify.
+Also, Documentation/core-api/floating-point.rst states that code should
+also use CFLAGS_REMOVE_ for CC_FLAGS_NO_FPU as well as adding
+CC_FLAGS_FPU.
+
+  CFLAGS_REMOVE_lib/wc_neon_iowrite64_copy.o += $(CC_FLAGS_NO_FPU)
 
 Cheers,
 Nathan
