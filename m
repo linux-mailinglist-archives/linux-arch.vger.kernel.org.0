@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-13633-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13634-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 037DCB58409
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 19:54:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9057CB58412
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 19:55:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B4351AA6C94
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 17:54:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AC032A1699
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 17:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796C8299923;
-	Mon, 15 Sep 2025 17:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FB42BD016;
+	Mon, 15 Sep 2025 17:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="rM3/AI0Q"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="ccwrt/Q6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazolkn19012058.outbound.protection.outlook.com [52.103.2.58])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazolkn19012053.outbound.protection.outlook.com [52.103.2.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E7A5C96;
-	Mon, 15 Sep 2025 17:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.2.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7D719ABD8;
+	Mon, 15 Sep 2025 17:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.2.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757958873; cv=fail; b=Qn7YHOrwZi4glXhwYtzPdGxtrXP/SiPFC09tHEs1fJW4OT+s4I3FUtIZeglRCV5FKBg5fIQhKIG0abEhJzBl1Y2+Zy7BlYKaYPyLb+CNNnTSuqQcEe4fh1nRcokXkJ0u98WWiZO8pxI3HhR76VrzVML5Ov54iR6CDHn+JR520kg=
+	t=1757958922; cv=fail; b=nI0CJR/FDfngSZFT+O5KtxA68lxf8+YVa62C7M3CGF9pc9mDrTccDrFpZ7K1pJXGglCjJLTg4026UDR6EfnyBDn3cWsDVUYiB0WFYeRh+7v/b2eTvu91CrQqZZIcI7KCThuNJlkRhZuiRQrFOK/LiwGLyE6L5zMesnuvpX6safs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757958873; c=relaxed/simple;
-	bh=FJmQOhgKJ0vhlGNCUbAW7GrSuMkvszsLX0eu38ORwFw=;
+	s=arc-20240116; t=1757958922; c=relaxed/simple;
+	bh=qdeGbb9F9o4p3/mUuUQ6Xp1ttYFePubrvIRVmN/whhc=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=TGaCGt/y3SwJ9zF0TcNYl9x2qMbqhHqe5VFSslyHa7U7h6SivJ6Tk7U2utNwidFKn6nLDX1YfQWFNeWLUWKPVioL9QdIvl9kGSYtucTGerhLaROYdO7TSOP2NUb2HVtPVyR7jGt2g5lO/peK8P98UqxDkgOV5uuGgz5bGCAu97U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=rM3/AI0Q; arc=fail smtp.client-ip=52.103.2.58
+	 Content-Type:MIME-Version; b=hmvXgKktr+M94EMLNFYft3rOkPNA1yclkIjnLr6ADIqATcGuEUBX2fqe8Kb0b3g0an6YdzrnMt7VY3m7COccQfILpJhRGqETLDUbUcUBRt7fo/olkQvpAPGWQLwtp2T1LRxW7egaIRlBxcSsP5Igg+m/F8ozUdT1bjbLxjrT8qY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=ccwrt/Q6; arc=fail smtp.client-ip=52.103.2.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DWZG/z1aNG28oZ7AWELeUw8w/XcdOYoc0XN401vNBa/zIQgiMjRjKcJq3YL9pGxcK3cV5ayHAyvARzmBxiRgB4jqKRS3YLgasU4YcLBOwa9htwr+dVf2Whq3EU7ymrHxS033jircPdo485SseMvX7AcQZ+p42ZBs7zg8ZFrcvtdXcn3Asb9c9zN3J4Y9UG7LpmhHPA0agyJ+BKs4otY9cyn2wz73bHua3NBtOg44fpBF1Zxam2FNSyGLHibpdACZFmpYXghWm83ouOwzgz8K7GyPl1XLN6zzRcT78xmWmmH3Dcjw8dbu6RnSxSvPnzAAE0h5FgJ+XkZzmphFcR7F1w==
+ b=ZFyb87xmQPhIsKVFHU47RD3Sw0gckyMRl7UCYoqR4eocemyzAjpTAx5aUoQwly9NXsLVFXGdHr+ZHjKC1s8PPcqT9XbhSSupqMcJNbF4Kh3oKADOobF/5EXC3TvERkbcp3bDEUygWxHft2bDg+dPxrGjCwMYkRZ68ewGCkgr8lEh4cl42zxjdb28bexelIvaXCcl4Lknl5/VR6m0oh9LWdctZo77nck2ADLURlsAztql9v8LYAIP4RFNKrfGMK2X8ztPIp9ChClClAKvTZjzxgYVGWREJiWlid645t8AUvd9TZSQayQuXWNqtozrGdPa3kimFDXzlREEabDQo8wEQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1m9xNZQTA7gfVUifKCmT9rjSe2I9HJDK5/NzpaW1Yx4=;
- b=pJpwsiVtPaz00P1VJAZA2m5C4iRexm3LQsLRXX83+VQ0i7cSFN2yRUUwURwpca9YaykCNyV4MdCWPcoH1f6FhlhZo9wE55tAaEhI1EpaQ+NUYUzvpfA1RaHXbaqep74YJApoJsK58x92fLGM3El72rwrhvTVh/saaaK1bbjqrR2hP2+gL+hpdPIP/f+yv41AP53QEvDueOQuW0Rb+WWwccjcWJxcxIGDZHr/XJvXSFS54BUX+fpJu8UYXOVLxF5lU4AfYU45BG7twCxhMEzvAUdGzgpmRNWcBwzi8+5TwVOkj+n0ScG5YRGwfPH+lyPsnkxw2BVRp2+XBP9bKesOaw==
+ bh=rFeLlBPRBUWr1RhG2TsXaWJzdSzcdzkCimUjgup9zWk=;
+ b=hvdTF567OMiine8bs2phmMgwLdvWjXSIWoeoYPv1jRt7xW5f081T+Ut8fYZoZ8n8IX4ZaBSFy6cJQhc4dkDt32822ZbfwwlqbIJLpWWmNZ9nFgmT7bAL/nrS/cCF7a1uUUyXGYych2/KrgmWFXSrtJqjCG4+/LeBzG8AXMw8fkzRvJYP+QkNXqrqhBY0VvywNYgvXD7OkOaiAAGK/l5teyWz0LM3JqJ2GOG3QM/5FJKh515C9ULH9MLCjT2bhzI19Ds5rMojrTlN3REG49qWkgiEy0JWpKoBfxS6G3WshNWTqVOJaszac6ppO+Vi1cyfNnVDxjpTBVygJuD7zmhE8g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1m9xNZQTA7gfVUifKCmT9rjSe2I9HJDK5/NzpaW1Yx4=;
- b=rM3/AI0QghFl+seE+niVb73GePYynomw6ZcYzo4BDbcMA2oRIzJCyNkMR/JIe/oQbgArTkjUgro4qtuTJlrVAs0R84Up1l2Y0v5UOQUHMsB0dBlMaoek0OrtEPGecvZSf/3o+DLCC02QBZ/Fbh2nE3mccaS+ddQS0QIqSFPnOR2Igu+d9Rt09CB3dZ6wFew6E5whQNG39kSvUiBKgrdcAoRTXimnSHh7bdfxcF/5xI3Ivy0p8/4mVsdUpjSpsOVrcHVCIpcT++W/OhlH9wkdu703U5SNKF0gMen8cLXPAckMKo1RcANoGQkfmbvo/hm/KZOqp8fmlQWlWdg6n5pVTQ==
+ bh=rFeLlBPRBUWr1RhG2TsXaWJzdSzcdzkCimUjgup9zWk=;
+ b=ccwrt/Q6E286TOeOTrbB38ma8ieBZVkOjFrhhQXZ2YalZ2OAi//y3HNXdn1HQiAH86VpMC9k61/UlgVFBM2pQLCeChP0oD9XU5coyiPDoMgDqqHSt/QE/xpX1vQVRCUE8q4AYMWtSiM0c9O9579aaGbuQlfu48y+06S7z4tPrtEJj0tYR1CBm5YoXnru79xIFiV+2xsxknAujIRKtvZxzMqZn9xNBsiN5y7tjCPbhe8vcva6y0xBxujp4sCvEpfTrwQ3l2YZYQbOMu0mYE8f/7posxWVswzBXqA8zhhCr0nh7CDgHagjcv6w7zFhFsSypJsD9xgQ1slBZcZG0edN7g==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
  by LV3PR02MB10056.namprd02.prod.outlook.com (2603:10b6:408:19a::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.19; Mon, 15 Sep
- 2025 17:54:22 +0000
+ 2025 17:55:16 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.9115.020; Mon, 15 Sep 2025
- 17:54:22 +0000
+ 17:55:16 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Mukesh Rathor <mrathor@linux.microsoft.com>,
 	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
@@ -66,71 +66,71 @@ CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
 	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
 	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
 	"arnd@arndb.de" <arnd@arndb.de>
-Subject: RE: [PATCH v1 3/6] hyperv: Add definitions for hypervisor crash dump
- support
-Thread-Topic: [PATCH v1 3/6] hyperv: Add definitions for hypervisor crash dump
- support
-Thread-Index: AQHcIed8M0Zuk7Pq9UqlkAFRSftZ8LSSw9+w
-Date: Mon, 15 Sep 2025 17:54:22 +0000
+Subject: RE: [PATCH v1 4/6] x86/hyperv: Add trampoline asm code to transition
+ from hypervisor
+Thread-Topic: [PATCH v1 4/6] x86/hyperv: Add trampoline asm code to transition
+ from hypervisor
+Thread-Index: AQHcIed7U5ohN25fCEyUdB67GAYSdLSSxdog
+Date: Mon, 15 Sep 2025 17:55:16 +0000
 Message-ID:
- <SN6PR02MB41577F7E862976DE192DB9C0D415A@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB41570D14679ED23C930878CCD415A@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20250910001009.2651481-1-mrathor@linux.microsoft.com>
- <20250910001009.2651481-4-mrathor@linux.microsoft.com>
-In-Reply-To: <20250910001009.2651481-4-mrathor@linux.microsoft.com>
+ <20250910001009.2651481-5-mrathor@linux.microsoft.com>
+In-Reply-To: <20250910001009.2651481-5-mrathor@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|LV3PR02MB10056:EE_
-x-ms-office365-filtering-correlation-id: b600b8ab-26e4-4d76-9e3e-08ddf480e707
+x-ms-office365-filtering-correlation-id: 7435b001-4672-45ae-6daa-08ddf4810737
 x-microsoft-antispam:
- BCL:0;ARA:14566002|15080799012|8062599012|8060799015|461199028|19110799012|13091999003|31061999003|3412199025|440099028|40105399003|102099032|12091999003;
+ BCL:0;ARA:14566002|15080799012|41001999006|8062599012|8060799015|461199028|19110799012|13091999003|31061999003|3412199025|440099028|40105399003|102099032;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?YmiSXC5FbWlmJe23b7gB4MyQLwckxwpJHvD+txzOeeaKCC2BJJVR3Ge+nT42?=
- =?us-ascii?Q?l/LGxG9fTsd6MyypIHZ5kYoAZ2HOR1orGE6x8wLHP+xnR18Hum3vU1F9zfwE?=
- =?us-ascii?Q?sz1qJDG+/iYUFQpJqWBuQ9MpLAa2iV9jJSEHuaOaldTHrEGHj5IAD654wMIm?=
- =?us-ascii?Q?OXLUOb6FZodNoTjvzyZ5wGg+0YyVySbfPxkT3JkA/Jy07RfAFXRuzxn7EmXC?=
- =?us-ascii?Q?y9dBq/Hm9SPEOsycs5rDCx0fUe8CpbOtRLSzDkUSRlUrb6XeyrwErte1FJxL?=
- =?us-ascii?Q?2JDBlK2vx6Tf/j5gwM8s2EadbYQKxP0/fIeWC07yrlpxr1XN5RU3DnHWMvMc?=
- =?us-ascii?Q?I9ndLR9XHJ8mrcj4eAhrGr9NiQ1i0aKScWTdMMO/CAZOcbNSzQBkZC6ofWrL?=
- =?us-ascii?Q?cmR7m9/MLuI8wynS4WpRDSVaR+3CvqIG/AE44M/Ek+akqs6VoWptscNbveUM?=
- =?us-ascii?Q?VwU8InwX5homhbpTdsYQrBgjYoUWRXiOhjE9vsv+0/4zy1NLB7B5SP+R19vV?=
- =?us-ascii?Q?TTnar8chUbAeVZpJeHvQmzk0Y1Q8k10Ed/xJ42Ht278tfobtV1tmc5SXctA4?=
- =?us-ascii?Q?Oa6XG6vJa8G6i1nWYuVXYblGwk+d1x/B4IKwV66cldCRB0aM8UEOmPRgXGKC?=
- =?us-ascii?Q?fLYaKg2vvt3hOZzl9Y5FGQvCC+N9A8j41ftx1yMuY+pw/43WtUtnm/XpCQUL?=
- =?us-ascii?Q?R3gIpa3wvqr6WGXrLmnOCaYgkFQVsuclyp96ujQkdptJ2WnP29vmerLgnsuP?=
- =?us-ascii?Q?SUNsiEGBc04HWsx7MFUsl1RC0FLqaLqM2BrzyzJrLoBneBdq47M8A9kwvxgE?=
- =?us-ascii?Q?ofNhQuwEgqAsjQzrNxae5Va+VQfWr7B5IkfnO7Y79JrgV2WUTLi1tC6G6nJl?=
- =?us-ascii?Q?N06iTfBOtLSfP3ZcB9lfSyNasphpnyb7VawsGNB1GhbV/oyLeIz42z9krN1h?=
- =?us-ascii?Q?VFrOhR2WiwA2l3Bmm6bSEQPWEV+4Wuo4RZIPXcI19iatLrJDU31d/6EH6ZZ9?=
- =?us-ascii?Q?o58iyq2O5XFK9NwirtCjCfQamlAoEAmcw0R9uDU0C5ImffJ/hpuhNg9OjWTZ?=
- =?us-ascii?Q?+kG+uRv1Lv+cAbol+KRTCKV6+AlHmLqCO6lyffKK+xDaTi3trrmXmpK+A9CP?=
- =?us-ascii?Q?SM8YdDa0TJSVwFcXRdxbn6Dy5tdTrQ7zvX++AncTbK/dTqcbJ3NHUKk6VAa+?=
- =?us-ascii?Q?tvmQwPY5BZOkVli54ESHKPCkbuABArLHqufTqw=3D=3D?=
+ =?us-ascii?Q?uyfRs/6kkcSH6WmTBtkAFb8mTdR5NP0FSyDckkVLk0q/AkzNpQx/Z98CYfbx?=
+ =?us-ascii?Q?OV5YxCEIfMwl2AzoUpsd2gMQNWQAkVaye8ED7P6MhumIbvUGIlYdmZTwjngL?=
+ =?us-ascii?Q?RSEH5/ZiUCswfbSglqvzsms39mDXsX9JUBBMctyfF3GHVYJ6BM2vpwQGpApq?=
+ =?us-ascii?Q?l5yhKtExgY+6hu4X80HInGdfnpoNTT9alxqv2/vSmmc6xWMpIw5IRxahcBs2?=
+ =?us-ascii?Q?p1ZbbGy/K4q8Z4WX7OJFhZ5LCVqQd3YJHF7lP+TRidEDVYlC+C6x0oRzHxjR?=
+ =?us-ascii?Q?1JBn70J53bHWMidfVK+4t3X4pZ8/bBO6HddXLf60QHHIOm9ufL50FgIKElr2?=
+ =?us-ascii?Q?syHLlf618LA/XLgUZO5t//Dlz5TRQwGNEzpP0ziNKI4vtbOVyOCNlWtSzzOb?=
+ =?us-ascii?Q?i6ieI++CEXEZ0LOZ/R7fcZUWMKQqByhcC5+bR+0YWdVdnTa2Pqu/eGReqHqT?=
+ =?us-ascii?Q?DtrUgbVNKxn1bXXOjvcnl5vBVvWN0xCp73EvvTA0Qm/xjYMiTF62RujgGIWE?=
+ =?us-ascii?Q?/NhCBbblMM+c1TKznZzIu+8pPo6yNQ5SHIBRzSTtBFMmNZGav62lmOcLtLK6?=
+ =?us-ascii?Q?KuvN8pO2sZFiaMUrwSh/RXjCPhgAoJOb4wmiC+MSL34RT6h24iYsJGERSAtJ?=
+ =?us-ascii?Q?LZwKh6drmyUhekxuLq54UvzCnWp6hIzPiRs+Y0LWNJ1asXf1fdAZlXGmM91L?=
+ =?us-ascii?Q?AX64hXImuaRttYvhQvnQbCCqcupq2mJFha1yQYZAPNSCA/mmpx/Jgr3VEL7n?=
+ =?us-ascii?Q?qxuBA6l82AW2wLFngr7gWmQ09IehImBeaR8Bpm1R95mJPShjeiY+k8UYoehZ?=
+ =?us-ascii?Q?FixH5VGvBbc/cPv2CCfmBCf+b6oq4yifLvtZKfP1Al36Ch16IVkkLjUIJ6bT?=
+ =?us-ascii?Q?zuOKxpsgFilS962rZf9TdpJl+XKQqR5J6cw8p8mcwVlaJfaRYW08c8E3WJjK?=
+ =?us-ascii?Q?MLNVbZS2kLRNTDihwfx9EoCAn4VD+wJWAUQfSFtXkg/i8B5bJ5aJ3BpL/gA3?=
+ =?us-ascii?Q?uSg9qprbdT0DubhAwYhEvBPfiQ3ukZGYFKHcTq46KF5x0Tw9ZDCt8LwtuLq2?=
+ =?us-ascii?Q?hLbQgEUU65FP7JeGfjupzPeS2agkT9VzmNGyhdfxXWdqVkiSsinoUTthKoVJ?=
+ =?us-ascii?Q?XPyYZeLOldOn7i+F0uqbmHQAFIEOqPxN0LIvyq/+2A1Zt78VFwsJFgyahekP?=
+ =?us-ascii?Q?qaI6M39M00cTbrxiP5I0mCUE2n6ZglS7OehA0A=3D=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?KruHmrAlbFoJwQKN3rwfCvGimGlc7yIQNGGqXs/csI6iIp9O2ZyeLqUBJyYG?=
- =?us-ascii?Q?TcnGYYezyD1srRMYDLceF70yJyf9Bhqu2BUfmYmHo4jXGQVyuzwhl2gbq9WP?=
- =?us-ascii?Q?2wDuelz+jnwV13+vo3LLq+4bZDrFgrwCZpoWuvkXqviMxSuVq/QyIayiNFeM?=
- =?us-ascii?Q?FUXaBV1+OBOZngcKPhv0rh2Bd+TmlnIOfUlc8cnpuKEi4NNjM9C7Fzt0hoYw?=
- =?us-ascii?Q?FL4VyLHtaDhZ+SQjwpA7ekJuW4PgJ5b4rtQiIfMpKrIZO1jrDVrCme1nCX/W?=
- =?us-ascii?Q?W37slK/gDRZLtLv5RyABlnoyliuUTw1p8A+O4qVvZshqVwoY1ylWYrTSOift?=
- =?us-ascii?Q?vYMVruUir0DdkXnJsaUD0UvhGFPg5x2vgCO8lWnipXA1BnaLec/rlrCUUeho?=
- =?us-ascii?Q?V4zQ8z39t1tiB+JKMRMZ+J/ILz/4pkDhdSuIV3ajdRTdd/H1evIOvr6hn/Ov?=
- =?us-ascii?Q?f00UvyqqNaQ9nSVuOtymxQwECTEmSwQi3IXtyzDv66HujQjRQoTtKX1Wsa3A?=
- =?us-ascii?Q?kfPyEruYyqPitmxtId2nADWqoX82LDtYAeRi3tqg6OEeD3TNuIRTIM1oVfJA?=
- =?us-ascii?Q?Kgh8ynxgocI2cPmu8arNlDlW7aElqstcL6T7TYsCeakWKcZXNwmHwez7L59m?=
- =?us-ascii?Q?VMJNp1/wPe1jywS31g2SJuJ8yYMeA+npLyiLdWMAevTyKHmoyXqeJn5P1IWZ?=
- =?us-ascii?Q?ZSvbROnuv/SB6/y++Hb9378IfqykLXzxrPo4A9Qu1JO5qA6lHtGFu9lGIEAd?=
- =?us-ascii?Q?caktXs1S53yuHE7Mbp8wJkhGnMaHWfxSb/2ezpUR9dh628ZyUmPsv0M1vpvL?=
- =?us-ascii?Q?H5rVxFwfBMuFDQ9Ol8aV52K90ZEgmlFd0sbG1lHATeMRlQnZ9aiWcNcrmv4T?=
- =?us-ascii?Q?SlqJ1ZA9LUJd25UES6H+z0+C/KDZL2MegZHtrJN19Fb8/ZNbnfjY4qokanyY?=
- =?us-ascii?Q?ahw2Baxv9ix8g5KAH4h1MmFF3hauTbsGF+sWxdqI1g5MTR66xLIbLJl5Txo8?=
- =?us-ascii?Q?ZJ9V2l9zFDmDHeq2UJSIQdbVoiH8OCJh9mTX1TkrTppQZT2blyWMoXbh6T8m?=
- =?us-ascii?Q?NGh/wzgZi+Ol2BJJKW1kB/Wa6J7cH/5wMckGGSSGnVDiCTD7KFRcDcNyWTbu?=
- =?us-ascii?Q?1wBEIJ/DMd848DRYY12+sO2EoY2y2wPfRvpshjuzpusZ18u70gMll1nuqkWk?=
- =?us-ascii?Q?9P/DddyoJmxf+o8rc0j3T4n8Egbn4x5+q2wYL2oYMF4+6Uf2W+mLa2Qb4JI?=
+ =?us-ascii?Q?KqJSD8hNvAPs6BjRg11YB6Kgxfw/f20OgGKgX4SKFLkaOrwr2lfhrOpM47Z5?=
+ =?us-ascii?Q?XBGuoPe+0qDoUGOy9yDX+jjeGWn83kFls6Qi46tLOulbOHGnvrKSkXHZwFPi?=
+ =?us-ascii?Q?L8avj5QroiJ3wRMqysSD0cXCtvy8SDk5a0E5lwVceLztfArM0NTpGj9t/rf5?=
+ =?us-ascii?Q?7JI3Xc7o0arhnhRjTD3GFpS1tjKgLBkrFsGwS/En7A1vZx8P64cVMvnL29LK?=
+ =?us-ascii?Q?dQfVlMC6ih46I0Y7u0xZ1JTDbuq2wjwfYxrAg1P7i4BOERUoLPFcMsp/erg0?=
+ =?us-ascii?Q?zowFn2BGqPU2jDUSa5+rdBejD1/naV4ikSeC6CE4NmdlLFX0Xc6Z6k2eOm91?=
+ =?us-ascii?Q?u1sbeh5Y5igpkjUgwVihrTRmqY1lXAuFH3NhuOLPE9OjinpiyxoOHzHnvnxJ?=
+ =?us-ascii?Q?fclF3r41GMWDi19UVBGvSQj7VqZ1RHnPiw86aLh+mB+MitA48bEw4P4KyrJv?=
+ =?us-ascii?Q?1EXlNkVeq+KCv+x5rdRyYrxllPiwPoxq8lULxV5zvD8/Bo9Xgwc3mue6MJ+3?=
+ =?us-ascii?Q?kJTotIOHCKGbKAlHUmDAEd7n1K5GmKsSH9SHyOPVmiMIK6/+k/hGDrQwvLuc?=
+ =?us-ascii?Q?g139vqGB5G9UGq8SIZb5yk7BRsCqcaU95awv0jUl+cbAu9UVBl9aKyggOOJw?=
+ =?us-ascii?Q?DAdjSlj8ZtRWFVLFotCPUPu3GYQgiI18kYn3YE8OdXsYsoxiedI/IU6jFAQU?=
+ =?us-ascii?Q?k4hG9ig0zD9oXD7/XvrSr8PE6E3LtCHELaoU9uKUHu60/wstlHI9O/0BIyr7?=
+ =?us-ascii?Q?CMpSCMnk6plyw2OiH7FxJHo6zO8Xg0sggIMbToxwMe/F73oKEBhkDglfYTJ9?=
+ =?us-ascii?Q?ssrhIT2YpJk7ouM6P9wFwx4n9eFss6743CYnNrKMyAK8i9/kOkyDtT8ndMw0?=
+ =?us-ascii?Q?yObXHGhxu7NJxjcrnL71knF3c7th5TLSJoedaf0+jaaoSjPv7Pu8x+XCvZpt?=
+ =?us-ascii?Q?tFSWIhcDY0ufWyipA9tsubN503J9QO62/YHrmwmPrSsd3FDkMhjDsdRyN6UD?=
+ =?us-ascii?Q?rOY7NnS8kVLaJbbn/p8pVDIdBGt86LXyXtxuv2nUniE44Yj2al+Yka4AZ5/N?=
+ =?us-ascii?Q?vErbze9XoeA4fTBCTnZPgx6KcRbLXxZVLb3NwVeT9JhlREWojaPhU2qzhMr6?=
+ =?us-ascii?Q?FWRAirRPLmF9dbq+iMEJj/yWbsfYKe03IKje01iBm8kNTz9Al0f+gjoY4Wab?=
+ =?us-ascii?Q?Dnd1vqya/tIyf3ewMbEllPRszAPhkoWXtS5RByU3O4bTpYBxNTPP2zpgTfo?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -144,8 +144,8 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: b600b8ab-26e4-4d76-9e3e-08ddf480e707
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2025 17:54:22.5201
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7435b001-4672-45ae-6daa-08ddf4810737
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2025 17:55:16.5422
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -155,102 +155,205 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR02MB10056
 From: Mukesh Rathor <mrathor@linux.microsoft.com> Sent: Tuesday, September =
 9, 2025 5:10 PM
 >=20
-> Add data structures for hypervisor crash dump support to the hypervisor
-> host ABI header file. Details of their usages are in subsequent commits.
+> Introduce a small asm stub to transition from the hypervisor to linux
+
+I'd argue for capitalizing "Linux" here and in other places in commit
+text and code comments throughout this patch set.
+
+> upon devirtualization.
+
+In this patch and subsequent patches, you've used the phrase "upon
+devirtualization", which seems a little vague to me. Does this mean
+"when devirtualization is complete" or perhaps "when the hypervisor
+completes devirtualization"? Since there's no spec on any of this,
+being as precise as possible will help future readers.
+
+>=20
+> At a high level, during panic of either the hypervisor or the dom0 (aka
+> root), the nmi handler asks hypervisor to devirtualize.
+
+Suggest:
+
+At a high level, during panic of either the hypervisor or Linux running
+in dom0 (a.k.a. the root partition), the Linux NMI handler asks the
+hypervisor to devirtualize.
+
+> As part of that,
+> the arguments include an entry point to return back to linux. This asm
+> stub implements that entry point.
+>=20
+> The stub is entered in protected mode, uses temporary gdt and page table
+> to enable long mode and get to kernel entry point which then restores ful=
+l
+> kernel context to resume execution to kexec.
 >=20
 > Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
 > ---
->  include/hyperv/hvhdk_mini.h | 55 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
+>  arch/x86/hyperv/hv_trampoline.S | 105 ++++++++++++++++++++++++++++++++
+>  1 file changed, 105 insertions(+)
+>  create mode 100644 arch/x86/hyperv/hv_trampoline.S
 >=20
-> diff --git a/include/hyperv/hvhdk_mini.h b/include/hyperv/hvhdk_mini.h
-> index 858f6a3925b3..ad9a8048fb4e 100644
-> --- a/include/hyperv/hvhdk_mini.h
-> +++ b/include/hyperv/hvhdk_mini.h
-> @@ -116,6 +116,17 @@ enum hv_system_property {
->  	/* Add more values when needed */
->  	HV_SYSTEM_PROPERTY_SCHEDULER_TYPE =3D 15,
->  	HV_DYNAMIC_PROCESSOR_FEATURE_PROPERTY =3D 21,
-> +	HV_SYSTEM_PROPERTY_CRASHDUMPAREA =3D 47,
-> +};
-> +
-> +#define HV_PFN_RANGE_PGBITS 24  /* HV_SPA_PAGE_RANGE_ADDITIONAL_PAGES_BI=
-TS */
-> +union hv_pfn_range {            /* HV_SPA_PAGE_RANGE */
-> +	u64 as_uint64;
-> +	struct {
-> +		/* 39:0: base pfn.  63:40: additional pages */
-> +		u64 base_pfn : 64 - HV_PFN_RANGE_PGBITS;
-> +		u64 add_pfns : HV_PFN_RANGE_PGBITS;
-> +	} __packed;
->  };
->=20
->  enum hv_dynamic_processor_feature_property {
-> @@ -142,6 +153,8 @@ struct hv_output_get_system_property {
->  #if IS_ENABLED(CONFIG_X86)
->  		u64 hv_processor_feature_value;
->  #endif
-> +		union hv_pfn_range hv_cda_info; /* CrashdumpAreaAddress */
-> +		u64 hv_tramp_pa;                /* CrashdumpTrampolineAddress */
->  	};
->  } __packed;
->=20
-> @@ -234,6 +247,48 @@ union hv_gpa_page_access_state {
->  	u8 as_uint8;
->  } __packed;
->=20
-> +enum hv_crashdump_action {
-> +	HV_CRASHDUMP_NONE =3D 0,
-> +	HV_CRASHDUMP_SUSPEND_ALL_VPS,
-> +	HV_CRASHDUMP_PREPARE_FOR_STATE_SAVE,
-> +	HV_CRASHDUMP_STATE_SAVED,
-> +	HV_CRASHDUMP_ENTRY,
-> +};
+> diff --git a/arch/x86/hyperv/hv_trampoline.S b/arch/x86/hyperv/hv_trampol=
+ine.S
+> new file mode 100644
+> index 000000000000..27a755401a42
+> --- /dev/null
+> +++ b/arch/x86/hyperv/hv_trampoline.S
+> @@ -0,0 +1,105 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * X86 specific Hyper-V kdump/crash related code.
 
-Nit: Since these values are part of the ABI, it's probably better
-to assign explicit values to each enum member in order to
-ward off any mistaken reordering or additions in the middle
-of the list.
+Add a qualification that this is for root partition only, and not for
+general guests?
+
+> + *
+> + * Copyright (C) 2025, Microsoft, Inc.
+> + *
+> + */
+> +#include <linux/linkage.h>
+> +#include <asm/alternative.h>
+> +#include <asm/msr.h>
+> +#include <asm/processor-flags.h>
+> +#include <asm/nospec-branch.h>
+> +
+> +/*
+> + * void noreturn hv_crash_asm32(arg1)
+> + *    arg1 =3D=3D edi =3D=3D 32bit PA of struct hv_crash_trdata
+
+I think this is "struct hv_crash_tramp_data".
+
+> + *
+> + * The hypervisor jumps here upon devirtualization in protected mode. Th=
+is
+> + * code gets copied to a page in the low 4G ie, 32bit space so it can ru=
+n
+> + * in the protected mode. Hence we cannot use any compile/link time offs=
+ets or
+> + * addresses. It restores long mode via temporary gdt and page tables an=
+d
+> + * eventually jumps to kernel code entry at HV_CRASHDATA_OFFS_C_entry.
+> + *
+> + * PreCondition (ie, Hypervisor call back ABI):
+> + *  o CR0 is set to 0x0021: PE(prot mode) and NE are set, paging is disa=
+bled
+> + *  o CR4 is set to 0x0
+> + *  o IA32_EFER is set to 0x901 (SCE and NXE are set)
+> + *  o EDI is set to the Arg passed to HVCALL_DISABLE_HYP_EX.
+> + *  o CS, DS, ES, FS, GS are all initialized with a base of 0 and limit =
+0xFFFF
+> + *  o IDTR, TR and GDTR are initialized with a base of 0 and limit of 0x=
+FFFF
+> + *  o LDTR is initialized as invalid (limit of 0)
+> + *  o MSR PAT is power on default.
+> + *  o Other state/registers are cleared. All TLBs flushed.
+
+Clarification about "Other state/registers are cleared":  What about
+processor features that Linux may have enabled or disabled during its
+initial boot? Are those still in the states Linux set? Or are they reset to
+power-on defaults? For example, if Linux enabled x2apic, is x2apic
+still enabled when the stub is entered?
+
+> + *
+> + * See Intel SDM 10.8.5
+
+Hmmm. I downloaded the latest combined SDM, and section 10.8.5
+in Volume 3A is about Microcode Update Resources, which doesn't
+seem applicable here. Other volumes don't have a section 10.8.5.
+
+> + */
+> +
+> +#define HV_CRASHDATA_OFFS_TRAMPCR3    0x0    /*	 0 */
+> +#define HV_CRASHDATA_OFFS_KERNCR3     0x8    /*	 8 */
+> +#define HV_CRASHDATA_OFFS_GDTRLIMIT  0x12    /* 18 */
+> +#define HV_CRASHDATA_OFFS_CS_JMPTGT  0x28    /* 40 */
+> +#define HV_CRASHDATA_OFFS_C_entry    0x30    /* 48 */
+
+It seems like these offsets should go in a #include file along
+with the definition of struct hv_crash_tramp_data. Then the
+BUILD_BUG_ON() calls in hv_crash_setup_trampdata() could
+check against these symbolic names instead of hardcoding
+numbers that must match these.
+
+> +#define HV_CRASHDATA_TRAMPOLINE_CS    0x8
+
+This #define isn't used anywhere.
 
 > +
-> +struct hv_partition_event_root_crashdump_input {
-> +	u32 crashdump_action; /* enum hv_crashdump_action */
-> +} __packed;
+> +	.text
+> +	.code32
 > +
-> +struct hv_input_disable_hyp_ex {   /* HV_X64_INPUT_DISABLE_HYPERVISOR_EX=
- */
-> +	u64 rip;
-> +	u64 arg;
-> +} __packed;
+> +SYM_CODE_START(hv_crash_asm32)
+> +	UNWIND_HINT_UNDEFINED
+> +	ANNOTATE_NOENDBR
+
+No ENDBR here, presumably because this function is entered via other
+than an indirect CALL or JMP instruction. Right?
+
+> +	movl	$X86_CR4_PAE, %ecx
+> +	movl	%ecx, %cr4
 > +
-> +struct hv_crashdump_area {	   /* HV_CRASHDUMP_AREA */
-> +	u32 version;
-> +	union {
-> +		u32 flags_as_uint32;
-> +		struct {
-> +			u32 cda_valid : 1;
-> +			u32 cda_unused : 31;
-> +		} __packed;
-> +	};
-> +	/* more unused fields */
-> +} __packed;
+> +	movl %edi, %ebx
+> +	add $HV_CRASHDATA_OFFS_TRAMPCR3, %ebx
+> +	movl %cs:(%ebx), %eax
+> +	movl %eax, %cr3
 > +
-> +union hv_partition_event_input {
-> +	struct hv_partition_event_root_crashdump_input crashdump_input;
-> +};
+> +	# Setup EFER for long mode now.
+> +	movl	$MSR_EFER, %ecx
+> +	rdmsr
+> +	btsl	$_EFER_LME, %eax
+> +	wrmsr
 > +
-> +enum hv_partition_event {
-> +	HV_PARTITION_EVENT_ROOT_CRASHDUMP =3D 2,
-> +};
+> +	# Turn paging on using the temp 32bit trampoline page table.
+> +	movl %cr0, %eax
+> +	orl $(X86_CR0_PG), %eax
+> +	movl %eax, %cr0
 > +
-> +struct hv_input_notify_partition_event {
-> +	u32 event;      /* enum hv_partition_event */
-> +	union hv_partition_event_input input;
-> +} __packed;
+> +	/* since kernel cr3 could be above 4G, we need to be in the long mode
+> +	 * before we can load 64bits of the kernel cr3. We use a temp gdt for
+> +	 * that with CS.L=3D1 and CS.D=3D0 */
+> +	mov %edi, %eax
+> +	add $HV_CRASHDATA_OFFS_GDTRLIMIT, %eax
+> +	lgdtl %cs:(%eax)
 > +
->  struct hv_lp_startup_status {
->  	u64 hv_status;
->  	u64 substatus1;
+> +	/* not done yet, restore CS now to switch to CS.L=3D1 */
+> +	mov %edi, %eax
+> +	add $HV_CRASHDATA_OFFS_CS_JMPTGT, %eax
+> +	ljmp %cs:*(%eax)
+> +SYM_CODE_END(hv_crash_asm32)
+> +
+> +	/* we now run in full 64bit IA32-e long mode, CS.L=3D1 and CS.D=3D0 */
+> +	.code64
+> +	.balign 8
+> +SYM_CODE_START(hv_crash_asm64)
+> +	UNWIND_HINT_UNDEFINED
+> +	ANNOTATE_NOENDBR
+
+But this *is* entered via an indirect JMP, right? So back to my
+earlier question about the state of processor feature enablement.
+If Linux enabled IBT, is it still enabled after devirtualization and
+the hypervisor invokes this entry point? Linux guests on Hyper-V
+have historically not enabled IBT, but patches that enable it are
+now in linux-next, and will go into the 6.18 kernel. So maybe
+this needs an ENDBR64.
+
+> +SYM_INNER_LABEL(hv_crash_asm64_lbl, SYM_L_GLOBAL)
+> +	/* restore kernel page tables so we can jump to kernel code */
+> +	mov %edi, %eax
+> +	add $HV_CRASHDATA_OFFS_KERNCR3, %eax
+> +	movq %cs:(%eax), %rbx
+> +	movq %rbx, %cr3
+> +
+> +	mov %edi, %eax
+> +	add $HV_CRASHDATA_OFFS_C_entry, %eax
+> +	movq %cs:(%eax), %rbx
+> +	ANNOTATE_RETPOLINE_SAFE
+> +	jmp *%rbx
+> +
+> +	int $3
+> +
+> +SYM_INNER_LABEL(hv_crash_asm_end, SYM_L_GLOBAL)
+> +SYM_CODE_END(hv_crash_asm64)
 > --
 > 2.36.1.vfs.0.0
 >=20
