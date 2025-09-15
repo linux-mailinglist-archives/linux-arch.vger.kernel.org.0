@@ -1,120 +1,96 @@
-Return-Path: <linux-arch+bounces-13611-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13612-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4E2CB574A1
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 11:20:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB2DDB574E4
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 11:27:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 761D2443DAD
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 09:19:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D9B41778CC
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 09:27:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7715F2F5327;
-	Mon, 15 Sep 2025 09:19:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3DB22EA730;
+	Mon, 15 Sep 2025 09:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="y6rhBH2y";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SJvrSjvI";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="dMec5VwZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="NOo6WaFM"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FXPR1bVn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFD52F3C00
-	for <linux-arch@vger.kernel.org>; Mon, 15 Sep 2025 09:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3A83D984;
+	Mon, 15 Sep 2025 09:26:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757927984; cv=none; b=qYUNiR1BcHvA88WEpput3iTyGHlp7TiMhWpA4mtl+/KjG1zZFXJydUcCnB/WgaAjBy6AIW0tPUsoGtq0VGtx9YI5pQlAsQUM+NzA0D9cq759YI4hFXifIzxZVcTsLVDiXoZh9EEXKKL879OMFi/R/6xDMRUG8IkjnbF1CzZNREA=
+	t=1757928419; cv=none; b=hwqkFM70H/iPuRwKBji1rF/rUCmWCLCpfjJe4pVF2l+5saXmzsLGJ7rJhBdRbdLQoJl/c7HZPpdjf64YiTcIEFGTunfgAg3/NrYyQuc+DjxCtTLuhU1LWq/FcLCopfNKHtZlLBn8GcOyPK4N5gt+L+nLhDC8aF5YZYe34spLYi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757927984; c=relaxed/simple;
-	bh=XA6mXkBIPFgan+x1bf5BLCjXCwYPhLpEO9xTsEBGW0c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jMgUF7e9i+uSLxRuPUWdFbPk3+1LgloQy4/RZPaK/Sfq3xSmZl8Impbd5raSwfOMFbYK28EeXTWcdMlLf67hCmCWSnvLVJx3eus6xuJyyDWuN5GOXnO8+471NrwqOibDXcM0CowYbwHQjqCLDe/hD9R5Z+l3NUUIN9cpsjbEhX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=y6rhBH2y; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SJvrSjvI; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=dMec5VwZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=NOo6WaFM; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id EA1BB33712;
-	Mon, 15 Sep 2025 09:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757927979; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PhWypHhs76OUhW0wRhEmCSwbci4KHZ6s4gw5WflTcZE=;
-	b=y6rhBH2yIHqcEhWvW3OK/M1MGL07yB+6JMwC6X/CknVE5ua038lWDkVtBxXcMW2YiW0/gB
-	rSMv7hNa/JVKJWM7hARJEEPpYWbHOSmUMRbz8f4sVhqeny14kYvL5lcca9exMU9JyNeq6n
-	Pyq6WFF1sN1B85usXfvLUNO8krTzzDE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757927979;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PhWypHhs76OUhW0wRhEmCSwbci4KHZ6s4gw5WflTcZE=;
-	b=SJvrSjvI7wBdkhoQj3MZ4ZBU7tX1b1mGqMmsm9Le3rr8bw1HFENqVr83A7BDG7tAfD/H3I
-	rh7jnWIRJSAAW1Cg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757927978; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PhWypHhs76OUhW0wRhEmCSwbci4KHZ6s4gw5WflTcZE=;
-	b=dMec5VwZSk27WNcuKLsJWYANLg5lWjboI6lQZXChre5tGBQy9LfQiob4gACGMYnIEyj7wt
-	of5w1OHw8GaX5rzloEDHnRzUEa9We+whyL+vVkIgzkYI4qkYUE0EW8OsHCuSl7kqKZApPI
-	R62vbkO0euBFSVizbuH5OjHtbfjlT3s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757927978;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PhWypHhs76OUhW0wRhEmCSwbci4KHZ6s4gw5WflTcZE=;
-	b=NOo6WaFMZo/gSs0Cn6FVxnoIe/rbPumE4+eUSjak33WwfmR1YoYCMva3UzVfmUFBWfq4S4
-	cDjh2ACDImG9O8DA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D5CE31398D;
-	Mon, 15 Sep 2025 09:19:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id FQ3QMyrax2hoeQAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 15 Sep 2025 09:19:38 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 74FF7A0A2B; Mon, 15 Sep 2025 11:19:38 +0200 (CEST)
-Date: Mon, 15 Sep 2025 11:19:38 +0200
-From: Jan Kara <jack@suse.cz>
-To: Askar Safin <safinaskar@gmail.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>, 
-	Andy Shevchenko <andy.shevchenko@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, Julian Stecklina <julian.stecklina@cyberus-technology.de>, 
-	Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Eric Curtin <ecurtin@redhat.com>, 
-	Alexander Graf <graf@amazon.com>, Rob Landley <rob@landley.net>, 
-	Lennart Poettering <mzxreary@0pointer.de>, linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-um@lists.infradead.org, 
-	x86@kernel.org, Ingo Molnar <mingo@redhat.com>, linux-block@vger.kernel.org, 
-	initramfs@vger.kernel.org, linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org, "Theodore Y . Ts'o" <tytso@mit.edu>, 
-	linux-acpi@vger.kernel.org, Michal Simek <monstr@monstr.eu>, devicetree@vger.kernel.org, 
-	Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>, patches@lists.linux.dev
-Subject: Re: [PATCH RESEND 13/62] ext2: remove ext2_image_size and associated
- code
-Message-ID: <5xr5efvf4dhy43fchbvfsxspzgde5bxezhszdgqcya4eqrocgy@lqqkaq5wok6a>
-References: <20250913003842.41944-1-safinaskar@gmail.com>
- <20250913003842.41944-14-safinaskar@gmail.com>
+	s=arc-20240116; t=1757928419; c=relaxed/simple;
+	bh=0ny8FKWjpUlbLud8VuX99OuONGyKCRz9Iotsxs0Aopw=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=istNtp0za0MRjRT/wnj6/0sXCGLBO0fIxVK04Z+u3ge36DkB1SIRzCdkQxy77IpCybvIImdKc3NyFV81HnH70iCcpQGZtZiboIchsl+iYYvmACkLoAQ8l87Ig0UsknBO/FlTHbFxcGrA9jr6QKTDkK44Pw2EQuXXezyX/nnSSOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FXPR1bVn; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 385BF140020F;
+	Mon, 15 Sep 2025 05:26:56 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Mon, 15 Sep 2025 05:26:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1757928416; x=1758014816; bh=qB5j5tPDORmdLoU8aR2TXEt209oeznvEGDo
+	zn2hFDXo=; b=FXPR1bVndsbxvdAus3OYAegJiWque9bPlLzTAjV7DJvzRw/tMpi
+	NqZsa3wpk/eHcgqPzLS5H5nb0PzLLlGdVavwovhns5ZqgqBTkpbC06jAzYjMqxSW
+	OWtiYlAndcQDq2jp2wGLAKCC7wRtfek9XG+HfjOAHgmafoIALR2Xx9EtZYRH4l3w
+	t7f3spWOMxzqhmgbVVVmClvr5yF0+oE2LH5xm/EelN9BzVNfDkaF3ABR29H0R7g1
+	UVvn9vEjjsNAojKIcuzeR+4bMa0anBrrHtEV6AmdpstIaA4Ja19Eda6vz/iK+4Hm
+	ka/fXU4xZVxnPq1RQlcENUjXA9wDYB4spPg==
+X-ME-Sender: <xms:39vHaE1QE2pFrgzQbcY9bE2RK6dSIubB6M0yfdIDxUp6R6kcIoFnSw>
+    <xme:39vHaJhs8xrDU-wj9xNJ3J2fHEGs3pMi9aGOH6FYGjMaNLNZmfpHphjzX4Hd-tL0s
+    fp-AR56He9YwAFsN3M>
+X-ME-Received: <xmr:39vHaEZLwGt4VxZhRZDNR7xRUqkZUCnpIrkqZzPfiiXTqq5w4HdmNNHMPRygEE1zlhFk6Ypsk5CACzMb21pAqTJs6ujEszJGTSs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdefjeeffecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfvhhgr
+    ihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvg
+    hrnhepleeuheelheekgfeuvedtveetjeekhfffkeeffffftdfgjeevkeegfedvueehueel
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthh
+    grihhnsehlihhnuhigqdhmieekkhdrohhrghdpnhgspghrtghpthhtohepuddvpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpth
+    htohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepfihilhhl
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnug
+    grthhiohhnrdhorhhgpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgt
+    ohhmpdhrtghpthhtoheptghorhgsvghtsehlfihnrdhnvghtpdhrtghpthhtohepmhgrrh
+    hkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhn
+    vghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrtg
+    hhsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:39vHaFUS-TllTcenWAQP1Pr1NfefUNmI2ediOKRwOUO5q1S7Bqrt-A>
+    <xmx:39vHaMHLTnfA1PWVnpNDavVrzp_7yzH82Dnm7c2qkY9yBou4tYKaAg>
+    <xmx:39vHaPYxcmTdBLpNkfjyc3ovnscn6NuinLMr6a5o0y_umFEXJtSXfA>
+    <xmx:39vHaLGV9M12b-1gKcMso0TsmGPyLQgoVJ_TANBqy9RYwGw299Sjzg>
+    <xmx:4NvHaBsm2NqGSf4IwAc1PaH3UlTBBsX1W3yu2HXkg9n7WGk6wc0a1rGB>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 Sep 2025 05:26:52 -0400 (EDT)
+Date: Mon, 15 Sep 2025 19:26:46 +1000 (AEST)
+From: Finn Thain <fthain@linux-m68k.org>
+To: Arnd Bergmann <arnd@arndb.de>
+cc: Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, 
+    Andrew Morton <akpm@linux-foundation.org>, 
+    Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+    Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
+    Linux-Arch <linux-arch@vger.kernel.org>, 
+    Geert Uytterhoeven <geert@linux-m68k.org>, linux-m68k@vger.kernel.org, 
+    Lance Yang <lance.yang@linux.dev>
+Subject: Re: [RFC v2 2/3] atomic: Specify alignment for atomic_t and
+ atomic64_t
+In-Reply-To: <f1f95870-9ef1-42e8-bb74-b7120820028e@app.fastmail.com>
+Message-ID: <c130a0bd-f581-a1da-cc10-0c09c782dfca@linux-m68k.org>
+References: <cover.1757810729.git.fthain@linux-m68k.org> <abf2bf114abfc171294895b63cd00af475350dba.1757810729.git.fthain@linux-m68k.org> <f1f95870-9ef1-42e8-bb74-b7120820028e@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -122,100 +98,39 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250913003842.41944-14-safinaskar@gmail.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_COUNT_THREE(0.00)[3];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,linux-foundation.org,linuxfoundation.org,kernel.org,zeniv.linux.org.uk,suse.cz,lst.de,kernel.dk,gmail.com,cyphar.com,linutronix.de,cyberus-technology.de,linux.alibaba.com,redhat.com,amazon.com,landley.net,0pointer.de,lists.infradead.org,lists.linux.dev,lists.linux-m68k.org,lists.ozlabs.org,mit.edu,monstr.eu,linux.dev,linux.ibm.com];
-	R_RATELIMIT(0.00)[to_ip_from(RLbyy5b47ky7xssyr143sji8pp)];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[55];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -2.30
 
-On Sat 13-09-25 00:37:52, Askar Safin wrote:
-> It is not used anymore
+
+On Mon, 15 Sep 2025, Arnd Bergmann wrote:
+
+> On Sun, Sep 14, 2025, at 02:45, Finn Thain wrote:
+> > index 100d24b02e52..7ae82ac17645 100644
+> > --- a/include/asm-generic/atomic64.h
+> > +++ b/include/asm-generic/atomic64.h
+> > @@ -10,7 +10,7 @@
+> >  #include <linux/types.h>
+> > 
+> >  typedef struct {
+> > -	s64 counter;
+> > +	s64 counter __aligned(sizeof(long));
+> >  } atomic64_t;
 > 
-> Signed-off-by: Askar Safin <safinaskar@gmail.com>
-
-Looks good.
-
-Acked-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext2/ext2.h          |  9 ---------
->  include/linux/ext2_fs.h | 13 -------------
->  2 files changed, 22 deletions(-)
+> Why is this not aligned to 8 bytes? I checked all supported 
+> architectures and found that arc, csky, m68k, microblaze, openrisc, sh 
+> and x86-32 use a smaller alignment by default, but arc and x86-32 
+> override it to 8 bytes already. x86 changed it back in 2009 with commit 
+> bbf2a330d92c ("x86: atomic64: The atomic64_t data type should be 8 bytes 
+> aligned on 32-bit too"), and arc uses the same one.
 > 
-> diff --git a/fs/ext2/ext2.h b/fs/ext2/ext2.h
-> index cf97b76e9fd3..d623a14040d9 100644
-> --- a/fs/ext2/ext2.h
-> +++ b/fs/ext2/ext2.h
-> @@ -608,15 +608,6 @@ struct ext2_dir_entry_2 {
->  					 ~EXT2_DIR_ROUND)
->  #define EXT2_MAX_REC_LEN		((1<<16)-1)
->  
-> -static inline void verify_offsets(void)
-> -{
-> -#define A(x,y) BUILD_BUG_ON(x != offsetof(struct ext2_super_block, y));
-> -	A(EXT2_SB_MAGIC_OFFSET, s_magic);
-> -	A(EXT2_SB_BLOCKS_OFFSET, s_blocks_count);
-> -	A(EXT2_SB_BSIZE_OFFSET, s_log_block_size);
-> -#undef A
-> -}
-> -
->  /*
->   * ext2 mount options
->   */
-> diff --git a/include/linux/ext2_fs.h b/include/linux/ext2_fs.h
-> index 1fef88569037..e5ebe6cdf06c 100644
-> --- a/include/linux/ext2_fs.h
-> +++ b/include/linux/ext2_fs.h
-> @@ -27,17 +27,4 @@
->   */
->  #define EXT2_LINK_MAX		32000
->  
-> -#define EXT2_SB_MAGIC_OFFSET	0x38
-> -#define EXT2_SB_BLOCKS_OFFSET	0x04
-> -#define EXT2_SB_BSIZE_OFFSET	0x18
-> -
-> -static inline u64 ext2_image_size(void *ext2_sb)
-> -{
-> -	__u8 *p = ext2_sb;
-> -	if (*(__le16 *)(p + EXT2_SB_MAGIC_OFFSET) != cpu_to_le16(EXT2_SUPER_MAGIC))
-> -		return 0;
-> -	return (u64)le32_to_cpup((__le32 *)(p + EXT2_SB_BLOCKS_OFFSET)) <<
-> -		le32_to_cpup((__le32 *)(p + EXT2_SB_BSIZE_OFFSET));
-> -}
-> -
->  #endif	/* _LINUX_EXT2_FS_H */
-> -- 
-> 2.47.2
+
+Right, I forgot to check includes in arch/x86/include. (I had assumed this 
+definition was relevant to that architecture, hence the sizeof(long), in 
+order to stick to native alignment on x86-32.)
+
+> Changing csky, m68k, microblaze, openrisc and sh to use the same 
+> alignment as all others is probably less risky in the long run in case 
+> anything relies on that the same way that code expects native alignment 
+> on atomic_t.
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+By "native alignment", do you mean "natural alignment" here?
 
