@@ -1,229 +1,283 @@
-Return-Path: <linux-arch+bounces-13636-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13637-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0185B5841E
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 19:56:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71A81B58680
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 23:16:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5471F4C327C
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 17:56:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CA551AA5BAD
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 21:17:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429762BEFE6;
-	Mon, 15 Sep 2025 17:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CC1F29E10F;
+	Mon, 15 Sep 2025 21:16:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="Ih7ja9tn"
+	dkim=pass (2048-bit key) header.d=landley.net header.i=@landley.net header.b="hn99im0l"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazolkn19012086.outbound.protection.outlook.com [52.103.20.86])
+Received: from frog.ash.relay.mailchannels.net (frog.ash.relay.mailchannels.net [23.83.222.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0452BD016;
-	Mon, 15 Sep 2025 17:56:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.20.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559662D052;
+	Mon, 15 Sep 2025 21:16:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.222.63
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757958978; cv=fail; b=PphgiF7HozDvnooMRObHK9AK9VZbEuQM0+CqdIGfyNxofyfe17AzqP/pRM7eu8qAOZJOwOt8zuC3G9GMXiCwwHr0iU458ZAiEN6KS0iqR5eOEkx/LtqhD3SRqdyVZhCxcTAg+a6wZcxeFecA2rfo1HmB22lO26xNWvC55gEt9Co=
+	t=1757971009; cv=pass; b=b/khlKAqJLhdlvZaKPcymaT45GVyAdNFYIxiFikF8y0CLsZlofDOuFi1u6Fi10JA6ROeFPjiXazQoIDcZ0QA+8LkOVAi7dNOsPyJqezk3gsqSWba5gL8RwA0bepLHwqDbGZkZCiP/V3Rn69J/Utya03BiWyz0eEYzF27smsQk+w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757958978; c=relaxed/simple;
-	bh=A2V9axL0CK3Mk3Eg9PAktAVxkNmLOdCLDCfDb0llcWM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=MW6N53Ahed7zHgZAJVmzvbpk8QqQ/ujlhymXtJlVx03bJlw7v9I1QSJpRWmSs9o01eTLGN66syTYcJLj200+KdUdR/xOYmYW7jeVG1VodoQzWAnnS3YPAetwFMkqhJw+zlyrooXDZIo1h6M+UhIXBfRXvXtnVPWrkK8VBoWBCOk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=Ih7ja9tn; arc=fail smtp.client-ip=52.103.20.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=U/vvhPGqQQA9NmYhrm7qorijTFQxUMktboM0usv0Xd+ug1VqzLt3RiseY5p9nMI+nZKbnto/qXu/cPJ9NJEAHdY01ad4507fXaPlbCHcGxfDdq0Ro2nxMFwuKVTIeQ3fxfBPpRV6Etihi7NPE2pv6wpruIZ3JUOBTK+fje5pCGOVoqqusrGVk6Nxg7WrvA10InqNYv5inLsMnkcmZX7ok8gyCbxLuzmFQf4lZMRYjLA0xkeskSztJRdeef5ule3wH7CV3UCTFjdtlUJjv+uVOP/V3VarwYk1D0G94ZR4LdmqVydBSHzR9lT5fUKZ27GODhztpoAam5aVSY0YmidWaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tl6YLICMu2uTOwAq9CpBZwOiHgEoMxX3ABozcvr3Qsc=;
- b=wvucBIh+8TMqKyNw+BMcZOQ0K6wjgIp2V7UcM4LJx1pxb7lv0OB9CdzP9NwPGvQdZAqdjkPkBTYvht0yu5lcahl8UKKxK6ZERJHZDib0nuTyEH+Euyhs09753j1dyw2s3cSKq/VIOwgy8ymLFgyu2RHu4vFIotKHrE/amnF58CRzG18w3jeR91vkk8EdItUocsZP8lqyDzKqEYE3LG1OvVrfJ3PSQoYqpmdjV6VvtNgi4ozH93VQ7JBZ9k2NiK8U+XlitkumsV1aSxUjTtCUppc/PReo68pnGeX+qXcoGsnOB29YO24CEzFBdnyAl0rzu3t0Zrn8cirKj5CylHDCoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tl6YLICMu2uTOwAq9CpBZwOiHgEoMxX3ABozcvr3Qsc=;
- b=Ih7ja9tng4p+yOUGXjcroSPDduNgKye3N6Hs8JxFhQyHtPpA7M8ZvAhG6j+6rmyaQHDgrSZZgeKFDphBNugevT2GUms9ESydNsWw2R1nNIasaP0/n7XIlny2kYcnJoIDQ1jmmqLOB3dMRMwODBefGaarQw5Tp+5zQ291RaMyK4s39g9H6wEO4AcstkThf12b/17Ulmve7XyVdxL4dWJHbkng7JBiwHWyDZXZyfs+SRORCyC3PVk6v+aXOAfaC9SnNc7PLUQIKOX+DlxltDo0evHM8lvEPgA40gvaxzgjMA9rhz9Vx48m3/+xRfD3a0VHyTff4Ehew7YVYk/uNUPIxg==
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by LV3PR02MB10056.namprd02.prod.outlook.com (2603:10b6:408:19a::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.19; Mon, 15 Sep
- 2025 17:56:14 +0000
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df%3]) with mapi id 15.20.9115.020; Mon, 15 Sep 2025
- 17:56:13 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Mukesh Rathor <mrathor@linux.microsoft.com>,
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
-	<haiyangz@microsoft.com>, "wei.liu@kernel.org" <wei.liu@kernel.org>,
-	"decui@microsoft.com" <decui@microsoft.com>, "tglx@linutronix.de"
-	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
-	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"arnd@arndb.de" <arnd@arndb.de>
-Subject: RE: [PATCH v1 6/6] x86/hyperv: Enable build of hypervisor crashdump
- collection files
-Thread-Topic: [PATCH v1 6/6] x86/hyperv: Enable build of hypervisor crashdump
- collection files
-Thread-Index: AQHcIeeD/3QUCmD7EEewGvIyXSLQYbSUe5GA
-Date: Mon, 15 Sep 2025 17:56:13 +0000
-Message-ID:
- <SN6PR02MB415730C50D722D289E33296ED415A@SN6PR02MB4157.namprd02.prod.outlook.com>
-References: <20250910001009.2651481-1-mrathor@linux.microsoft.com>
- <20250910001009.2651481-7-mrathor@linux.microsoft.com>
-In-Reply-To: <20250910001009.2651481-7-mrathor@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|LV3PR02MB10056:EE_
-x-ms-office365-filtering-correlation-id: e256ef43-ce9b-474f-58de-08ddf481295e
-x-microsoft-antispam:
- BCL:0;ARA:14566002|15080799012|41001999006|8062599012|8060799015|461199028|19110799012|13091999003|31061999003|3412199025|440099028|40105399003|102099032;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?58wNXqj0gHYMGcLknMlAAgeGPosGbceZMHqMpra9hV41vvY3OFE0YTXhXKYb?=
- =?us-ascii?Q?HCcbDN18iPF4TfRZqz0J36XQSMCA80EH2mNxaveDCpqTPDUJok1JQKBCSd2u?=
- =?us-ascii?Q?Z/asN7WRIEU0SA3gxf9e03dNZ9qXXlReVophNL2bBWe9PlLGRzjr7Hh3vKMj?=
- =?us-ascii?Q?XxpNKhnRQk6jkxNTJgkfE8TXx7kPw9vtFTe8LeB0+WUWeGuFQ8vOGiofyZoG?=
- =?us-ascii?Q?o5izSv9O/Ym/nlc0Dm7H7F8MgufxzpJ24TMw7txO7YpsrFc2mndJd2gaLsln?=
- =?us-ascii?Q?ntiJQu1vgLj1OvijI6otKxUBxTKWL9u0Q3pgkmUD1WI7v0Mg6DZm4CVQky8y?=
- =?us-ascii?Q?UlNGnrCMVedHQo5y+UUQvDUZ7fcvBp3ZK+eacWalieVLP/NJMNa9XlfQN87q?=
- =?us-ascii?Q?qSna76g2pluqPdTdyHTEuU8FYVHez0j54SD8GMQx80xs8pGFakqj7VBPHvbK?=
- =?us-ascii?Q?9ERFV9OnYsZ4mM+WH2dWy2Mmbo/129WQRxBcsOL8yR6X0kzICji6Zxqn67p7?=
- =?us-ascii?Q?SqHzPEmydXNuM3exNI/qjDK8JiN6ekBbtXDmpoMrVtwOpuUTDXIXsRsCvAts?=
- =?us-ascii?Q?kg0F1IfoVBO3xA919CkPlhq0Y6fudE1mchm4Oh+bCmG5eU8sNhQBhxfDEB+S?=
- =?us-ascii?Q?YTZNyqttS7mMTnQzLPVVsEIVdSog1mnjml5RT52BS9GBfLL9Hzun+U+3B9Bp?=
- =?us-ascii?Q?nHEwwtl2+cGJlSDL+rSepd+0Phne99/3xjlVJHAd5Xu10vvE6YqrVJx0t8xy?=
- =?us-ascii?Q?XoDXMa8zLA5hPOZ2zPCp5/tmgQiDg9iFtEmYjWX4pfKOa7XQrdGl1bGm+06b?=
- =?us-ascii?Q?wdJcKigDvoIBMybirX6QHH/AjvZhX27jhB2hA3D2065OqKdMyKedUIUNoF0I?=
- =?us-ascii?Q?PeNdeSyDS8VsVdiS3o9chijP6prp6jf2Pizrjao4wZeYazfGm/+x8J12E8ir?=
- =?us-ascii?Q?BAc3gNjAjp9BQ9jsQhK0/W8GsGOZ9HbNQKTqh+8nL5ajIZbp7SxEPP3eSE9L?=
- =?us-ascii?Q?tu7/Nfq9YQxeErNuijN+NYfkR46Rshu6SZWR2eamgPW1IpA2HQUXLx5QD+8V?=
- =?us-ascii?Q?vY93gk+ZyH4MdPO+Z6GKGrleohnaYRPEJRsxD7iqUFMHCUXWbwzV2t0EPjAg?=
- =?us-ascii?Q?wpVrTsbvKw0+jmPKMR0Y42ISLHRnuQwR3VcAx5px0H/OnXCxD0F3qB9nhVka?=
- =?us-ascii?Q?fBsNpTdO6zxsZwA4mckJTKIE9nExujOhvEFcTA=3D=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Smrk/9lFO+fTFG+dYk3cZ+QH6vxaWI7NEPLSpi/8KxB4tFrkvHrcOrVKtW3k?=
- =?us-ascii?Q?U4PPZR9XjyPm9tN1pbxwtmDdlE5hBlxSh5slwHljt87U4fj4XQHBet/4frE4?=
- =?us-ascii?Q?NF7VJo5pbLjok1/+lYbW6YtNhmBVT0Au86+nKgpWICyYawbs0suR7YgF7uR7?=
- =?us-ascii?Q?0OaSRj1cck2AhmtTrF0k59Lb+eYOzV2L2XYXvwT3PbneX/Xg1hpN25Fku04B?=
- =?us-ascii?Q?oMCAao2nTxLIdz5P0aIFD87oDm7UWMHRlS/dK3fzk0Lskt/Mp6QZaOECylVY?=
- =?us-ascii?Q?iLO729xzpodfbkh7bYVc0dDd+3EE3szGuMOcGBkazlddW3yKJxjEZ6o1zdux?=
- =?us-ascii?Q?9ZkDgHgHkw1YgZtcF4TuUlAtpt/+eR7DjLBoDQJjHOkzDfZBCIllF5ZghlcM?=
- =?us-ascii?Q?kP2XeeVlnBVPwWoY+t1BaE4H0SXThrerIqk/sLQEOe9A3f3sJI+c18pk35O+?=
- =?us-ascii?Q?EROIqM+UCjvEZt+KkH9Mwg3yI73XklVqYaeoE+60hMmRsitLplaussKaDSWV?=
- =?us-ascii?Q?qrgeXdRcpDsOE3PJ9cyskNEZriEneyXqbO1/faupQ4aimkhHzulVd+dS0VLs?=
- =?us-ascii?Q?PW7JwapvO+Ka0pAEVdC73Flv2H5+5cFKzDiPHfUJ0Tq4fTt0AvGh534KHqOC?=
- =?us-ascii?Q?3gDAMI3Bbr3jKvRfDBamoWxOd16gskWH4IAEVgSwsiKL9B71r8L8xzSiTqOb?=
- =?us-ascii?Q?t8IOwkMBZyD/d8WfK8KlA2wIrmzRi1G2PkqiQxqsNqns06/yz9MEeG0SJuyH?=
- =?us-ascii?Q?KOEPREeE4K5qx/YmiuRcv/Md3CrBUGuZVdfRVCXmfsiKgmOo2tSN2zAQCQ/E?=
- =?us-ascii?Q?1T8xMf1+RNU/mypCJHh9JwNcpFEjGCXCh2zygrZy74Gjb5NqHyCyluoWD8oH?=
- =?us-ascii?Q?YsdoBjs/qh/XGLb7tPBf9Dr+XM5qcfovkn4QCXWQRfwWwGGonR/SJLktwtDE?=
- =?us-ascii?Q?jMYTwb8OJFqaarmMpUsyHxXnL4FtXyU0sGGaMezKtVaKC+xKJUboPFMkY+Fs?=
- =?us-ascii?Q?2OIOJCZWEm+3DW84SbS2s0AYj6ypgk2xuOzTGr+c7FBMGxjwCLf36w2sNBzk?=
- =?us-ascii?Q?GFNSJM0uUj8FWFbmyDM8Q1CPeJf2EoNqglg/YwlbhD32fFty2S1OrZdDjDj0?=
- =?us-ascii?Q?8snNTas7/Mo24Gg2vjcd7kxuFzD1TJUYVKldFJQDBWJJo2bR5sSFIA4VKlSi?=
- =?us-ascii?Q?RIgKJTQDO2ltdBdGEtR64DhnMi3VYp8Clr7Tze3Q+atX1yo71Ta6QKC+2XU?=
- =?us-ascii?Q?=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1757971009; c=relaxed/simple;
+	bh=XM3XKQ5jJB/NRmfxGIRymJW83Dn38opP9h7KE9Mh1Fk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ETMs+Y2Y75aVyqsIFn8yoIGQD0xN1GAzyuVX+3HIXDjCO55/4UaaR8kcSJCj7Jt5y2iLDuSMccxSjgObl6QZgivn6gPtsWERLaemrHN7xX+L9/Mc3745lBjEnmon79FRj4agASAo7+7WxEDy/X3YUqgKcUXlTSvEJzTiWwHKU24=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=landley.net; spf=pass smtp.mailfrom=landley.net; dkim=pass (2048-bit key) header.d=landley.net header.i=@landley.net header.b=hn99im0l; arc=pass smtp.client-ip=23.83.222.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=landley.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=landley.net
+X-Sender-Id: dreamhost|x-authsender|rob@landley.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 968258E2BE4;
+	Mon, 15 Sep 2025 21:05:20 +0000 (UTC)
+Received: from pdx1-sub0-mail-a312.dreamhost.com (trex-blue-3.trex.outbound.svc.cluster.local [100.106.207.148])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 7F7018E2C1F;
+	Mon, 15 Sep 2025 21:05:19 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1757970320; a=rsa-sha256;
+	cv=none;
+	b=FvgXqYHopx4Eg97mRKI8YTgJvrM5uX3hCyA3PstNG3tElSt5C8Mkh16K26ulc4hSsVKTwm
+	jS2iRuOvoFtVg23iLmldnlytqHxYeolaJsyfj8H9DSakx31ClyoFyXVp7iwZ2teQvFuGpD
+	7saB7Wb4g9tAoqQmvsAu+UkcIlhVWTJzOhYRfUz/BaC08DNcuaaQQ9As8b8ykz1bHx7Qk4
+	TBDIHtaaxH15dWAfQpWNrqJJMfgLr/Vh4+3miXzPpdfAMtZz9JhTu8o8DhIj9xhKVHKRwa
+	bwWqLubQ4kcKxK/2hf/oaDh9DMbl/qSfr7Eus3yNXxVfu+spuLPfBiaIS0ertg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1757970320;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=uCpj1HrCG/lIFPmsjCJyYsttI0Vr58GFZK2WKDkB6bM=;
+	b=TrnkHhqm0Tp2Y/WSmzMAHR5Hhj24mtPtbQYmBJGsRakDWzg0mrJuBQoW9Qkjf7BGvzNNiH
+	2H1V/J8m98raC3dPissEKtvzgOQ/Hk71uVhQ6kj9WsCG0K4v6raNCVOsjB2cVm10SC7pnX
+	WxSZlPhsLyt7jNTRP69EAqO62VJJbdbVWYt/YK0l1PbM6GNyoiMvREWQ3rw4KysPytNuVO
+	2/ZnkG/pktV9GKqEbQ9+gUEw2tbIV0YT43iSdJj78GsI/5MaQ7x6n5ojdu79KkG9JBYmK8
+	GwXKzdwJN0Mu44sDWX8K+r6sdW0U/yb7L1RpJBIrkhHihenS55Fk4oEdNruPqA==
+ARC-Authentication-Results: i=1;
+	rspamd-76d5d85dd7-gchpr;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=rob@landley.net
+X-Sender-Id: dreamhost|x-authsender|rob@landley.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|rob@landley.net
+X-MailChannels-Auth-Id: dreamhost
+X-Shade-Trouble: 5607b4e4499028f3_1757970320441_1498479094
+X-MC-Loop-Signature: 1757970320441:4276322646
+X-MC-Ingress-Time: 1757970320441
+Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.106.207.148 (trex/7.1.3);
+	Mon, 15 Sep 2025 21:05:20 +0000
+Received: from [192.168.88.7] (unknown [209.81.127.98])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: rob@landley.net)
+	by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4cQcxR2ZPnzFr;
+	Mon, 15 Sep 2025 14:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=landley.net;
+	s=dreamhost; t=1757970319;
+	bh=uCpj1HrCG/lIFPmsjCJyYsttI0Vr58GFZK2WKDkB6bM=;
+	h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
+	b=hn99im0llKSPW8E4jU23jnYGHjKkBB42PZKG9Y5nexC8X6GV18Ye+xjEO0dI68API
+	 P0iIc1uUspgFQAEvTZJLAiGacD/gPQaqYVm1QWE0N/6QokQnP06W1bW8XwSoYhszK+
+	 lhn3ZJav0Djh8uCO1T1JTFZ2nxRyoQNIwSBLc+tBT4L5AJvvFnEk/puQX4fjV81Sze
+	 CQbiCBjHhliP+rleng7xNOeK8VpGNGP6Px4E+lL1g37CD4cYE8Qe9KRdlQRN3asHoO
+	 TI/V5yxrsCSuRB+QTSU/G3DsOoX+FIakqvSZS3fVzb5U3KSBT5DjgaaVyyrqpLaA73
+	 VR4ur/x6Wjb7g==
+Message-ID: <8f595eec-e85e-4c1f-acb0-5069a01c1012@landley.net>
+Date: Mon, 15 Sep 2025 16:05:14 -0500
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: e256ef43-ce9b-474f-58de-08ddf481295e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2025 17:56:13.8024
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR02MB10056
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND 17/62] doc: modernize
+ Documentation/filesystems/ramfs-rootfs-initramfs.rst
+To: Askar Safin <safinaskar@gmail.com>, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+ Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+ Jens Axboe <axboe@kernel.dk>, Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Aleksa Sarai <cyphar@cyphar.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Julian Stecklina <julian.stecklina@cyberus-technology.de>,
+ Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Eric Curtin <ecurtin@redhat.com>,
+ Alexander Graf <graf@amazon.com>, Lennart Poettering <mzxreary@0pointer.de>,
+ linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-um@lists.infradead.org, x86@kernel.org, Ingo Molnar
+ <mingo@redhat.com>, linux-block@vger.kernel.org, initramfs@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org,
+ "Theodore Y . Ts'o" <tytso@mit.edu>, linux-acpi@vger.kernel.org,
+ Michal Simek <monstr@monstr.eu>, devicetree@vger.kernel.org,
+ Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>,
+ Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>,
+ patches@lists.linux.dev
+References: <20250913003842.41944-1-safinaskar@gmail.com>
+ <20250913003842.41944-18-safinaskar@gmail.com>
+Content-Language: en-US
+From: Rob Landley <rob@landley.net>
+In-Reply-To: <20250913003842.41944-18-safinaskar@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Mukesh Rathor <mrathor@linux.microsoft.com> Sent: Tuesday, September =
-9, 2025 5:10 PM
->=20
-> Enable build of the new files introduced in the earlier commits and add
-> call to do the setup during boot.
->=20
-> Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
-> ---
->  arch/x86/hyperv/Makefile       | 6 ++++++
->  arch/x86/hyperv/hv_init.c      | 1 +
->  include/asm-generic/mshyperv.h | 9 +++++++++
->  3 files changed, 16 insertions(+)
->=20
-> diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-> index d55f494f471d..6f5d97cddd80 100644
-> --- a/arch/x86/hyperv/Makefile
-> +++ b/arch/x86/hyperv/Makefile
-> @@ -5,4 +5,10 @@ obj-$(CONFIG_HYPERV_VTL_MODE)	+=3D hv_vtl.o
->=20
->  ifdef CONFIG_X86_64
->  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+=3D hv_spinlock.o
-> +
-> + ifdef CONFIG_MSHV_ROOT
-> +  CFLAGS_REMOVE_hv_trampoline.o +=3D -pg
-> +  CFLAGS_hv_trampoline.o        +=3D -fno-stack-protector
-> +  obj-$(CONFIG_CRASH_DUMP)      +=3D hv_crash.o hv_trampoline.o
-> + endif
->  endif
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index afdbda2dd7b7..577bbd143527 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -510,6 +510,7 @@ void __init hyperv_init(void)
->  		memunmap(src);
->=20
->  		hv_remap_tsc_clocksource();
-> +		hv_root_crash_init();
->  	} else {
->  		hypercall_msr.guest_physical_address =3D vmalloc_to_pfn(hv_hypercall_p=
-g);
->  		wrmsrq(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index dbd4c2f3aee3..952c221765f5 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -367,6 +367,15 @@ int hv_call_deposit_pages(int node, u64 partition_id=
-, u32
-> num_pages);
->  int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
->  int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flag=
-s);
->=20
-> +#if CONFIG_CRASH_DUMP
-> +void hv_root_crash_init(void);
-> +void hv_crash_asm32(void);
-> +void hv_crash_asm64_lbl(void);
-> +void hv_crash_asm_end(void);
-> +#else   /* CONFIG_CRASH_DUMP */
-> +static inline void hv_root_crash_init(void) {}
-> +#endif  /* CONFIG_CRASH_DUMP */
-> +
+On 9/12/25 19:37, Askar Safin wrote:
+> Update it to reflect initrd removal.
+> 
+> Also I specified that error reports should
+> go to linux-doc@vger.kernel.org , because
+> Rob Landley said that he keeps getting
+> reports about this document and is unable
+> to fix them
 
-The hv_crash_asm* functions are x86 specific. Seems like their
-declarations should go in arch/x86/include/asm/mshyperv.h, not in
-the architecture-neutral include/asm-generic/mshyperv.h.
+Do you think emailing a list I could forward stuff to will improve matters?
 
->  #else /* CONFIG_MSHV_ROOT */
->  static inline bool hv_root_partition(void) { return false; }
->  static inline bool hv_l1vh_partition(void) { return false; }
-> --
-> 2.36.1.vfs.0.0
->=20
+I find the community an elaborate bureaucracy unresponsive to hobbyists. 
+Documentation/process/submitting-patches.rst being a 934 line document 
+with a bibliography, plus a 24 step checklist not counting the a) b) c) 
+subsections are just symptoms. The real problem is following those is 
+not sufficient to navigate said bureaucracy.
 
+>   What is ramfs?
+>   --------------
+>   
+> @@ -101,9 +103,9 @@ archive is extracted into it, the kernel will fall through to the older code
+>   to locate and mount a root partition, then exec some variant of /sbin/init
+>   out of that.
+>   
+> -All this differs from the old initrd in several ways:
+> +All this differs from the old initrd (removed in 2025) in several ways:
+
+Why keep the section when you removed the old mechanism? You took away 
+their choices, you don't need to sell them on it.
+
+(Unless you're trying to sell them on using a current linux kernel 
+rather than 2.6 or bsd or qnx or something. But if they _do_ remove 32 
+bit support, or stick a rust dependency in the base build, I suspect 
+that ship has sailed...)
+
+> -  - The old initrd was always a separate file, while the initramfs archive is
+> +  - The old initrd was always a separate file, while the initramfs archive can be
+>       linked into the linux kernel image.  (The directory ``linux-*/usr`` is
+>       devoted to generating this archive during the build.)
+>   
+> @@ -137,7 +139,7 @@ Populating initramfs:
+>   
+>   The 2.6 kernel build process always creates a gzipped cpio format initramfs
+>   archive and links it into the resulting kernel binary.  By default, this
+> -archive is empty (consuming 134 bytes on x86).
+> +archive is nearly empty (consuming 134 bytes on x86).
+
+Those two lines you just touched contradict each other.
+
+For historical reference, commit c33df4eaaf41 in 2007 added a second 
+codepath to special case NOT having an initramfs, for some reason. 
+That's how static linked cpio in the kernel image and external initrd= 
+loaded cpio from the bootloader wound up having different behavior.
+
+The init/noinitramfs.c file does init/mkdir("/dev") and 
+init_mknod("/dev/console") because calling the syscall_blah() functions 
+directly was considered icky so they created gratuitous wrappers to do 
+it for you instead, because that's cleaner somehow. (Presumably the same 
+logic as C++ having get and set methods that perform a simple assignment 
+and return a value. Because YOU can't be trusted to touch MY code.)
+
+Note that ONLY init/noinitramfs.c creates /dev/console. You'd THINK the 
+logical thing to do would be to detect failure of the filp_open() in 
+console_on_rootfs() and do the mkdir/mknod there and retry (since that's 
+__init code too), but no...
+
+My VERY vague recollection from back in the dark ages is if you didn't 
+specify any INITRAMFS_SOURCE in kconfig then gen_init_cpio got called 
+with no arguments and spit out a "usage" section that got interpreted as 
+scripts/gen_initramfs_list.sh output, back when the plumbing ignored 
+lines it didn't understand but there was an "example: a simple 
+initramfs" section in the usage with "dir /dev" and "nod /dev/console" 
+lines that created a cpio archive with /dev/console in it which would 
+get statically linked in as a "default", and code reached out and used 
+this because it was there without understanding WHY it was there. So it 
+initially worked by coincidence, and rather than make it explicit they 
+went "two codepaths, half the testing!" and thus...
+
+Anyway, that's why the 130+ byte archive was there. It wasn't actually 
+empty, even when initramfs was disabled.
+
+One of the "cleanups that didn't actually fix it" was 
+https://github.com/mpe/linux-fullhistory/commit/2bd3a997befc if you want 
+to dig into the history yourself. I wrote my docs in 2005 and that was 
+2010 so "somewhere in there"...
+
+> -If the kernel has initrd support enabled, an external cpio.gz archive can also
+> -be passed into a 2.6 kernel in place of an initrd.  In this case, the kernel
+> -will autodetect the type (initramfs, not initrd) and extract the external cpio
+> +If the kernel has CONFIG_BLK_DEV_INITRD enabled, an external cpio.gz archive can also
+
+You renamed that symbol, then even you use the old name here.
+
+> +be passed into a 2.6 kernel.  In this case, the kernel will extract the external cpio
+>   archive into rootfs before trying to run /init.
+>   
+> -This has the memory efficiency advantages of initramfs (no ramdisk block
+> -device) but the separate packaging of initrd (which is nice if you have
+> +This is nice if you have
+>   non-GPL code you'd like to run from initramfs, without conflating it with
+> -the GPL licensed Linux kernel binary).
+> +the GPL licensed Linux kernel binary.
+
+IANAL: Whether or not this qualifies as "mere aggregation" had yet to go 
+to court last I heard.
+
+Which is basically why 
+https://hackmd.io/@starnight/Load_Firmware_Files_Later_in_Linux_Kernel 
+was so screwed up in the first place: the logical thing to do would be 
+put the firmware in a static initramfs and have the module 
+initialization happen after initramfs was populated... BUT LICENSING! We 
+must have a much more complicated implementation because license. I 
+believe I suggested passing said initramfs in via the initrd mechanism 
+so it remains a separate file until boot time, and was ignored. *shrug* 
+The usual...
+
+>   It can also be used to supplement the kernel's built-in initramfs image.  The
+>   files in the external archive will overwrite any conflicting files in
+> @@ -278,7 +278,7 @@ User Mode Linux, like so::
+>     EOF
+>     gcc -static hello.c -o init
+>     echo init | cpio -o -H newc | gzip > test.cpio.gz
+> -  # Testing external initramfs using the initrd loading mechanism.
+> +  # Testing external initramfs.
+
+Does grub not still call it "initrd"?
+
+>     qemu -kernel /boot/vmlinuz -initrd test.cpio.gz /dev/zero
+
+A) they added -hda so you don't have to give it a dummy /dev/zero anymore.
+
+B) there's no longer a "qemu" defaulting to the current architecture, 
+you have to explicitly specify qemu-system-blah unless you create the 
+symlink yourself by hand. This was considered an "improvement" by IBM 
+bureaucrats. (Not a regression, a "feature". Oh well...)
+
+C) to be honest I'd just point people at mkroot for examples these days, 
+but I'm biased. (It smells like me.)
+
+Rob
 
