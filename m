@@ -1,112 +1,170 @@
-Return-Path: <linux-arch+bounces-13617-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13622-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2298B577BF
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 13:13:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EA57B57962
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 13:54:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F16A1A2048F
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 11:13:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECD853A228C
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Sep 2025 11:53:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ED472FB978;
-	Mon, 15 Sep 2025 11:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E4233019B4;
+	Mon, 15 Sep 2025 11:51:11 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4AA2F4A1B;
-	Mon, 15 Sep 2025 11:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 400A12FF678;
+	Mon, 15 Sep 2025 11:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757934776; cv=none; b=cPCzSUF+PPHlbf8AqZXzmYMZ1Ck2zxoTk54rEnSGnGZxAR0p45ZhnBmPN3zOAcyMADY54xXbXtWld5ceDtCJf2MPCjenLpRhA9yR6nmSC+1izgDwNd2eIDGdxMWuzfFX+10AOVIQbHxHBSbb+f1lzfiX2aO5YblpvAfP8lmCQN8=
+	t=1757937070; cv=none; b=b618J1zmYB89GKhSyKYoY5TGQL3a3ZYdWSUz2+GGiaGMSClsjAKHhBT3PIpthavOLTwtGA5JCo2Mu/lDEXRlmTIwW7OP+Pd6S5bSYAChsUdT3QOn1YWKQb7IJPL3AhosxRJvKxoS1/9wH/lcZUUnE0SAOZs5ILdui2Dxwxz2rpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757934776; c=relaxed/simple;
-	bh=eVy68csJY7b9yoCQmJI6i2Tv+f5t46MzAEsuXx4+f4o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F4u1qqsoC9XOcHCfyyH9JyhoAMvQdUkmle1pjVyW0zI0eoVUdx34gy1+laZ5aN+f99pr9sCErI2cx92QT7NdrTYBEQRBgUmO/QSgkBk6DpHjAGmWZ9elZ+ZZAL/NvKKKOI0oxSfC4oVFJaIQaJ3h+dVmE06B/8CoxQwTqgRDQTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E26BBC4CEF1;
-	Mon, 15 Sep 2025 11:12:52 +0000 (UTC)
-Date: Mon, 15 Sep 2025 12:12:50 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
-	arnd@arndb.de, will@kernel.org, peterz@infradead.org,
-	akpm@linux-foundation.org, mark.rutland@arm.com,
-	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v5 0/5] barrier: Add smp_cond_load_*_timeout()
-Message-ID: <aMf0sjveqxZXulEi@arm.com>
-References: <20250911034655.3916002-1-ankur.a.arora@oracle.com>
- <aMLd2QOFrZnaKcWf@arm.com>
- <87tt18k5y7.fsf@oracle.com>
+	s=arc-20240116; t=1757937070; c=relaxed/simple;
+	bh=8Z5zmYLUV+4ZrO5EHC1XTvy0sirc64JgGyrM0lTrX/4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CnP2qZqtGGlnXTgK/nCG2UtBNje10VNQXB7MDAwRmIKEDPn8nJkNqdFp+a9nMhku4WxiuEwexLbwIkhy7vSeONvwWm9FRfJMIZYsJHUjFzAUndu1FUhqRkDnhc/Ch3wGeNY912m4ada4u/Vvuq856GH8gdssDGpGiNz5307DVFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4cQMtW5q8Yz9sxd;
+	Mon, 15 Sep 2025 13:16:51 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id OLcbQxt2yUNY; Mon, 15 Sep 2025 13:16:51 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4cQMtV4LnCz9sxb;
+	Mon, 15 Sep 2025 13:16:50 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 706ED8B766;
+	Mon, 15 Sep 2025 13:16:50 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id sggpKi6r1EPD; Mon, 15 Sep 2025 13:16:50 +0200 (CEST)
+Received: from [10.25.207.160] (unknown [10.25.207.160])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id B33B28B763;
+	Mon, 15 Sep 2025 13:16:49 +0200 (CEST)
+Message-ID: <053f39a9-06dc-4fbd-ad1b-325f9d3f3f66@csgroup.eu>
+Date: Mon, 15 Sep 2025 13:16:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tt18k5y7.fsf@oracle.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND 02/62] init: remove deprecated "prompt_ramdisk"
+ command line parameter, which does nothing
+To: Askar Safin <safinaskar@gmail.com>, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+ Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+ Jens Axboe <axboe@kernel.dk>, Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Aleksa Sarai <cyphar@cyphar.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Julian Stecklina <julian.stecklina@cyberus-technology.de>,
+ Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Eric Curtin <ecurtin@redhat.com>,
+ Alexander Graf <graf@amazon.com>, Rob Landley <rob@landley.net>,
+ Lennart Poettering <mzxreary@0pointer.de>, linux-arch@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-um@lists.infradead.org, x86@kernel.org,
+ Ingo Molnar <mingo@redhat.com>, linux-block@vger.kernel.org,
+ initramfs@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-efi@vger.kernel.org,
+ linux-ext4@vger.kernel.org, "Theodore Y . Ts'o" <tytso@mit.edu>,
+ linux-acpi@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+ devicetree@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+ Kees Cook <kees@kernel.org>, Thorsten Blum <thorsten.blum@linux.dev>,
+ Heiko Carstens <hca@linux.ibm.com>, patches@lists.linux.dev
+References: <20250913003842.41944-1-safinaskar@gmail.com>
+ <20250913003842.41944-3-safinaskar@gmail.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <20250913003842.41944-3-safinaskar@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 11, 2025 at 02:57:52PM -0700, Ankur Arora wrote:
-> Catalin Marinas <catalin.marinas@arm.com> writes:
-> > On Wed, Sep 10, 2025 at 08:46:50PM -0700, Ankur Arora wrote:
-> >> This series adds waited variants of the smp_cond_load() primitives:
-> >> smp_cond_load_relaxed_timeout(), and smp_cond_load_acquire_timeout().
-> >>
-> >> As the name suggests, the new interfaces are meant for contexts where
-> >> you want to wait on a condition variable for a finite duration. This
-> >> is easy enough to do with a loop around cpu_relax() and a periodic
-> >> timeout check (pretty much what we do in poll_idle(). However, some
-> >> architectures (ex. arm64) also allow waiting on a cacheline. So,
-> >>
-> >>   smp_cond_load_relaxed_timeout(ptr, cond_expr, time_check_expr)
-> >>   smp_cond_load_acquire_timeout(ptr, cond_expr, time_check_expr)
-> >>
-> >> do a mixture of spin/wait with a smp_cond_load() thrown in.
-> >>
-> >> The added parameter, time_check_expr, determines the bail out condition.
-> >>
-> >> There are two current users for these interfaces. poll_idle() with
-> >> the change:
-> >>
-> >>   poll_idle() {
-> >>       ...
-> >>       time_end = local_clock_noinstr() + cpuidle_poll_time(drv, dev);
-> >>
-> >>       raw_local_irq_enable();
-> >>       if (!current_set_polling_and_test())
-> >>       	 flags = smp_cond_load_relaxed_timeout(&current_thread_info()->flags,
-> >>       					(VAL & _TIF_NEED_RESCHED),
-> >>       					((local_clock_noinstr() >= time_end)));
-> >>       dev->poll_time_limit = !(flags & _TIF_NEED_RESCHED);
-> >>       raw_local_irq_disable();
-> >>       ...
-> >>   }
-> >
-> > You should have added this as a patch in the series than include the
-> > implementation in the cover letter.
+
+
+Le 13/09/2025 à 02:37, Askar Safin a écrit :
+> [Vous ne recevez pas souvent de courriers de safinaskar@gmail.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
 > 
-> This was probably an overkill but I wanted to not add another subsystem
-> to this series.
+> This is preparation for initrd removal
 
-If you include it, it's easier to poke the cpuidle maintainers and ask
-if they are ok with the proposed API as I want to avoid changing it
-afterwards. It doesn't mean they'll have to be merged together, they can
-go upstream via separate routes.
+Squash patch 1 and patch 2 together and say this is cleanup of two 
+options deprecated by commit c8376994c86c ("initrd: remove support for 
+multiple floppies") with the documentation by commit 6b99e6e6aa62 
+("Documentation/admin-guide: blockdev/ramdisk: remove use of "rdev"")
 
-> Will take care of the cpuidle changes in the arm64 polling in idle series.
+Christophe
 
-Thanks. We also need Will, Peter Z and Arnd to ack the API and the
-generic changes (probably once you added the linux/atomic.h changes).
+> 
+> Signed-off-by: Askar Safin <safinaskar@gmail.com>
+> ---
+>   Documentation/admin-guide/kernel-parameters.txt | 2 --
+>   arch/arm/configs/neponset_defconfig             | 2 +-
+>   init/do_mounts_rd.c                             | 7 -------
+>   3 files changed, 1 insertion(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index d3b05ce249ff..f940c1184912 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5229,8 +5229,6 @@
+>                          Param: <number> - step/bucket size as a power of 2 for
+>                                  statistical time based profiling.
+> 
+> -       prompt_ramdisk= [RAM] [Deprecated]
+> -
+>          prot_virt=      [S390] enable hosting protected virtual machines
+>                          isolated from the hypervisor (if hardware supports
+>                          that). If enabled, the default kernel base address
+> diff --git a/arch/arm/configs/neponset_defconfig b/arch/arm/configs/neponset_defconfig
+> index 16f7300239da..4d720001c12e 100644
+> --- a/arch/arm/configs/neponset_defconfig
+> +++ b/arch/arm/configs/neponset_defconfig
+> @@ -9,7 +9,7 @@ CONFIG_ASSABET_NEPONSET=y
+>   CONFIG_ZBOOT_ROM_TEXT=0x80000
+>   CONFIG_ZBOOT_ROM_BSS=0xc1000000
+>   CONFIG_ZBOOT_ROM=y
+> -CONFIG_CMDLINE="console=ttySA0,38400n8 cpufreq=221200 rw root=/dev/mtdblock2 mtdparts=sa1100:512K(boot),1M(kernel),2560K(initrd),4M(root) prompt_ramdisk=0 mem=32M noinitrd initrd=0xc0800000,3M"
+> +CONFIG_CMDLINE="console=ttySA0,38400n8 cpufreq=221200 rw root=/dev/mtdblock2 mtdparts=sa1100:512K(boot),1M(kernel),2560K(initrd),4M(root) mem=32M noinitrd initrd=0xc0800000,3M"
+>   CONFIG_FPE_NWFPE=y
+>   CONFIG_PM=y
+>   CONFIG_MODULES=y
+> diff --git a/init/do_mounts_rd.c b/init/do_mounts_rd.c
+> index ac021ae6e6fa..f7d53bc21e41 100644
+> --- a/init/do_mounts_rd.c
+> +++ b/init/do_mounts_rd.c
+> @@ -17,13 +17,6 @@
+>   static struct file *in_file, *out_file;
+>   static loff_t in_pos, out_pos;
+> 
+> -static int __init prompt_ramdisk(char *str)
+> -{
+> -       pr_warn("ignoring the deprecated prompt_ramdisk= option\n");
+> -       return 1;
+> -}
+> -__setup("prompt_ramdisk=", prompt_ramdisk);
+> -
+>   int __initdata rd_image_start;         /* starting block # of image */
+> 
+>   static int __init ramdisk_start_setup(char *str)
+> --
+> 2.47.2
+> 
+> 
 
--- 
-Catalin
 
