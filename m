@@ -1,210 +1,296 @@
-Return-Path: <linux-arch+bounces-13656-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13657-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2077BB5962A
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Sep 2025 14:28:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE548B59659
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Sep 2025 14:38:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56A8A3A78EA
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Sep 2025 12:27:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03C4F1BC3D43
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Sep 2025 12:38:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2872E229E;
-	Tue, 16 Sep 2025 12:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6025E30C61A;
+	Tue, 16 Sep 2025 12:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Vt8nEguP"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="aNmO3Pob";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UEC3Q4OY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010047.outbound.protection.outlook.com [52.101.46.47])
+Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BC7296BA9;
-	Tue, 16 Sep 2025 12:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758025642; cv=fail; b=ZkNhcNfXmGkp3z+i6qhH1sJxu8nsln1ulLMtNJpL2tsvWLvz3BffwEBwYFOBP3VqfhhZTKA0pOrtKk76Nf80cMtBwRlX5GnRyOWxF9IDgNVWpo+MUTFLRNUVzN0hZ8ynbQvNBlCMKDMrOxo5bhIjHrJMs4tu9SprhbAlr/LUFvU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758025642; c=relaxed/simple;
-	bh=29djyWZrh6FQWgd0h+gLz6NRxpnOsK+wFsaxmpVYnfU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=D9YfVo+sT78kw2mIHQ5dSy6ai7R75MkR2q+hOzFNv23soo4jpQeGHy54bQsA65NfMgI8drlJXEeq8y0AmKABuZtZ7b34rU+qh5Stp4UM7L/R3wvapwyCe48lMV4Iy0U8IdpuI0cnRsAy124j/PPxPLp9byAbrO6T9NTllbhlh/E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Vt8nEguP; arc=fail smtp.client-ip=52.101.46.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Re6V7JKkGxS1dyWRke8/6wOKDntWZ8yWkxuS8prsBAB4VqP43QrN1FjKEsriiaX5WVcT/XOoiFUHp4378nTypob8bu2UkMOEVxaTaLnkpl/D89BM08e44hdr5A2E2bsDQ8sxZ6rwHQVYn6I2PMwzG7IlUbCJDLb4DcfUa5/wyG5SOfo8hIMGz1pBAWaaYQba2gTgrGvLPnjEVbXTZ3IBWN0X0PFOnaZjxu9Jc37EHDAaPGi4HRKVNXHCqmhV9JBuER2w6UTBH2VjvrA7Bhb+O3L6aOYu+oNdeLrXdSzwu69xr8dEqsOfxeqQxBn15Q1ce3aA7S00G1mdjWuZwIW5tA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=29djyWZrh6FQWgd0h+gLz6NRxpnOsK+wFsaxmpVYnfU=;
- b=pRdi9oQpDxDCiVOzDMnib1m7sgBM9x6em2dOt3US/KMEStb6hoxycRaRUqMgqzAErgIbVHTpclds/ZI7+AknsCM44Vpp8cqnljHrEI6qR02Xt6D2Bqwnr5CoCMt19gJMw7ZemDDO7wKhE3dS9AwPH2wSHvJHhBRv6z4hOGMgHteyOjhL75zJxPxf3NySCzR/d+vGtqSju91v2PKbDQV4bFHMnilfLlKAiltWje2GjKWT32CRxxRgZ/VviNXZhbv1PDQjMv83m13r2Oc989h962JjzEBU4qE47f3itxeWWx87dtbPw7WbR2f7GFq86R+B6w3BPj+kxk6ktus7fo0Quw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=29djyWZrh6FQWgd0h+gLz6NRxpnOsK+wFsaxmpVYnfU=;
- b=Vt8nEguPey+90jSx+BiFKH1r00kQAYDB/mOVy7SyVy21l9rFPyTNm8RNbsAXy2j9QgKGnNJsobBVC0RN4Nl7cpElVPwnvhxI/yE988XBUWHitjuApUlGPS+pSfWHJifnbuVtoNAQ046hoeb3oJN4hpn06DdICHX+YOz1fhz4XAT9TJqR0eXzvr0l05xjijGXD0V4DOXKhIiWDZ0++xn9jY6PvuxIqzuB6lFvBXgJJrEsdG1CeH8VPZ8gZ+XfUwvIz3eViL3Aw/CwcYd2imn+ju5wnu5puzu08xzU66s61A4AKzD9MprYLfWNDXAUbCzyQsNRt/HPiJKSOf3gXGyp8w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH7PR12MB5757.namprd12.prod.outlook.com (2603:10b6:510:1d0::13)
- by PH7PR12MB5829.namprd12.prod.outlook.com (2603:10b6:510:1d4::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9115.21; Tue, 16 Sep
- 2025 12:27:18 +0000
-Received: from PH7PR12MB5757.namprd12.prod.outlook.com
- ([fe80::f012:300c:6bf4:7632]) by PH7PR12MB5757.namprd12.prod.outlook.com
- ([fe80::f012:300c:6bf4:7632%2]) with mapi id 15.20.9115.022; Tue, 16 Sep 2025
- 12:27:18 +0000
-Date: Tue, 16 Sep 2025 09:27:15 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Patrisious Haddad <phaddad@nvidia.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>, Mark Bloch <mbloch@nvidia.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
-	Leon Romanovsky <leonro@nvidia.com>,
-	Michael Guralnik <michaelgur@nvidia.com>,
-	Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Justin Stitt <justinstitt@google.com>, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Leon Romanovsky <leonro@mellanox.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Jijie Shao <shaojijie@huawei.com>
-Subject: Re: [PATCH net-next V2] net/mlx5: Improve write-combining test
- reliability for ARM64 Grace CPUs
-Message-ID: <20250916122715.GA1086830@nvidia.com>
-References: <1757925308-614943-1-git-send-email-tariqt@nvidia.com>
- <20250915221859.GB925462@ax162>
- <20250915222758.GC925462@ax162>
- <20250915224810.GM1024672@nvidia.com>
- <20250915231506.GA973819@ax162>
- <d259ffa9-6c9e-488f-a64f-81025deba75c@nvidia.com>
- <9d4cd8d2-343e-4448-ab59-65e69728c850@app.fastmail.com>
- <0c61ff65-fdc7-43a3-a62b-75e0d76b95fd@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c61ff65-fdc7-43a3-a62b-75e0d76b95fd@nvidia.com>
-X-ClientProxiedBy: SJ0PR03CA0331.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::6) To PH7PR12MB5757.namprd12.prod.outlook.com
- (2603:10b6:510:1d0::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BF630BF65;
+	Tue, 16 Sep 2025 12:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758026289; cv=none; b=ijAR9XURcB0OsGnZBWrDmAZOuwzZ69QMLLrL5TABhZOQSRFaxzMvRKN98qE9ZrT8BFaRCqZ16hoVKW2JkYFewYiqGraLFIlUzK8BwhOrHJNhrNxmewmtv7/ri03bZ68yCAbkzeoJMofuhMpYQK5CkijuwgbXTVs33iaQ/j5Y+Es=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758026289; c=relaxed/simple;
+	bh=HP0EtwHi3GYYbAlKpcPitJRQVxCLFOBSg/Ob4whwGkA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=A3pY1Y6ufoAWA0dg4ZnFcR4prUKaf7f9ESPbDd/OWmhmHeMOetMbv6yikX8u9TqwmwLfmaaNzfOKOYl2RfIHurTZU730CzZd7xOioyM+nPmQW0Wd3rtRmegk1QTjzvTyQDF8kocKmV/nbn+77tVd1K/+6KM2kKRoEe4I9vZGG/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=aNmO3Pob; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UEC3Q4OY; arc=none smtp.client-ip=202.12.124.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 434C11D002BC;
+	Tue, 16 Sep 2025 08:38:05 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Tue, 16 Sep 2025 08:38:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1758026285;
+	 x=1758112685; bh=LsX5t9gccjS16o2ILNjJEVNCm3CidZ51dGZaJlgA0HA=; b=
+	aNmO3PobZc2iJqRBzBtBosh4byuA9RYvCwuduEdujehFowfsFgYXGbbuuPuhsG61
+	tf0OZ86aXXvobL5kUYKBqItCfR3/GIL1sQwt0OSN5bsDoq++6axnp5RUIMLzlqW6
+	FNiSOfWLIBAKL6yxgf5t8UC2WcvTZI2ZZ/crocqsttQAUn0LdICWL34JTxap7TAJ
+	up3qDVbyxWoq+oosapkL0M7uF5jyuzCbf3Qe9ez3EveDhmoj2dxyWOEi/pAVp0C5
+	JgOM2cTPC3XZpMfLtz7Cv2ZZzLQw5wcSdF4oSf8jf6W6VdziP3uffnf6EiQhllvi
+	BySEp5wv7iB0ztjRduOy0g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758026285; x=
+	1758112685; bh=LsX5t9gccjS16o2ILNjJEVNCm3CidZ51dGZaJlgA0HA=; b=U
+	EC3Q4OYi2JwrsXu3OHNHPMRD8amgl1/LKq499DssbWdOQTFRBHJcl+r1fi2uPYIy
+	c9b85ynGMtXlnhL+YumMCBSYab8Ce+o0640n6rPg/rCmTA23Xyux/C6e/KNG4mVq
+	08ZAjogBdhzmwLkt92LbHHXZ5anCm+QpJvPvCs04f6xwRcO7qJ70iY8JdO69Jzk/
+	VwmlZf+tX7Sp3/pX2D7Rysn3l/r4TsXYC9q+yeIHVnyFHDnpGGwkrKzUFHD4EEPa
+	WWRvjf8bfqWcjrhAD5+nD6vXCZWhQ7XBEvCah1bT+80YvSoT8TP7GOPhmD9tINig
+	Le9ipP/NIjFcWKW4Deg8Q==
+X-ME-Sender: <xms:LFrJaJ3AcCICh2Hu43LZoEblFO0g4IjtUL0lpRd2mZ2cgiIk9zFoqg>
+    <xme:LFrJaAEtwfWncuKKTz1XkRiv9F5PlGSY6U-uEBIARz6vVsILhqwkE5QTVH7LK7wCW
+    KIWWwSXhsZZkfS8yiM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdegtdehlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeehjeejhfeftdfgieehleefleehgedugfevieeiveeivedvudegheehudefkefhfeen
+    ucffohhmrghinhepphgrshhtvggsihhnrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghr
+    tghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmrghrkhdrrh
+    huthhlrghnugesrghrmhdrtghomhdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhm
+    rghilhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrgh
+    dprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghkphhm
+    sehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehfthhhrghinh
+    eslhhinhhugidqmheikehkrdhorhhgpdhrtghpthhtohepghgvvghrtheslhhinhhugidq
+    mheikehkrdhorhhgpdhrtghpthhtoheptghorhgsvghtsehlfihnrdhnvghtpdhrtghpth
+    htoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:LFrJaHHjTEgrNZmohOM0zDsiLnPP7bABqFjNly-j-_iZYe-nTHCFJg>
+    <xmx:LFrJaF6a7rlNS-HvirGtvYha_SZUrQ3ks0bAcIfn4raYZHkJbV1uPQ>
+    <xmx:LFrJaIbEeqKN_E9_zmQq1Q-wkxYoJvdvo7-9lMRK3u8UOTEhZkwfQQ>
+    <xmx:LFrJaLjiXAUaNHQZ9B_dP4LqvIaBzb-SmpIWYddVw5uYlVFRhxq0jQ>
+    <xmx:LVrJaEmzIvqg_roFz_kCIDz_yuZ5PSD8XbPbDMMWaGE6yhS5g_B4cBQh>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4C90370006A; Tue, 16 Sep 2025 08:38:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5757:EE_|PH7PR12MB5829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6db59993-56c6-46e0-7d44-08ddf51c6034
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?OU9Ki5BgUYy4KaarFG1AujxHmELTeuYLrim9NLvrGqaU4+Ys0dnzCEwiC38z?=
- =?us-ascii?Q?Iy2JyXDqXPqmhe4LFNgbtewYHISR8NRmAVac/kL4x2jA9/ndD2yy+Bt+E7b6?=
- =?us-ascii?Q?njVI7QXKeT/9X0NMaTqaRyNyZwdjvttnWYcFsSDNHI1/RDjl5jimPYPiYoBL?=
- =?us-ascii?Q?MmYUhNJPTU5sb4e9U7iQD86nAa4ZOkXRSF/TWKaTEEb+DGJEkhKzD2FgaMp+?=
- =?us-ascii?Q?+3k359AABonpMOHYgXo2/kmW9t/9dY6Dd577+R7bjm9Y1cnbBlnc6sNpBwxT?=
- =?us-ascii?Q?g+uA+QmUv5btFthNuOP1h9TcYiMo9lJdfxxQbwrQaUMjMbDdN+ssjfEZXt80?=
- =?us-ascii?Q?nnsUgHwfl/4ioMQwj3yRjsN2/GNwBcENg8vMpRQylzvo3yIREg7LZrnlg1q7?=
- =?us-ascii?Q?Ju3TNHYGz3XJuxLco8HoPvfHHNEsVooI5CpNtMFViNobVgXQGlJU1MzGTvfb?=
- =?us-ascii?Q?cKwP0cuPM8TkgyiKwuBYRelvsCKtnKnXfgqtloKnkFkcmEcTm+MmedqTdVo6?=
- =?us-ascii?Q?9CGQ/YjmrreMFB+3c6x0x1kpPNvi6t4QgmiwGNTBdkYin0RsxON6dh3wHvBB?=
- =?us-ascii?Q?kzEUXArVVV6QHq+L0HRhUXACS7DKAF3f/RYd9DsgMVd4R0KuCmWkp2i+Dt51?=
- =?us-ascii?Q?j6/PSJHuwUiyGpgKsYfWnrfEd2zW+P7nR8qlDat+5vYzMAPV8lCd1L3rM5Ao?=
- =?us-ascii?Q?77e5xcexT3xNVPm8rAKV8w1JuxVvqKyrUB3f8DyzZei9nuTZuAUJt4CM3NcK?=
- =?us-ascii?Q?2XxN4BtNW87fRVWCo1J5xvXbKtfUDlYQRmeD0UV6olFbkYULwzPgutdFcUam?=
- =?us-ascii?Q?dgEfw8jFHSkYD8xoPXNeu61IWNQlhUFszTMvpu4iyUPcHuSZ4LXeYz9u0Yc7?=
- =?us-ascii?Q?L7CJ8FDIZJt2Tw3EXiyMPtEQcufnfZZSn06ed62HnM9Lk2z7RR1PpDGTZrrK?=
- =?us-ascii?Q?dQUacdXHHJcV1/igV+bQA+CNfnHNm08Hly5GlQ/fwFdG6i1m+vCW9XbwhJd4?=
- =?us-ascii?Q?Mm/Ux/wpzRaAeiawaarpxs08rh1Vu9JhoTe9ZeRofRkKAWllxW8C8YpY8AQe?=
- =?us-ascii?Q?Jln2QdUqw9CdfF9WzocsLgzdWljVJ7ft0EanbB79qVo4D0rYHu3qIydrMsJ5?=
- =?us-ascii?Q?EBOkyo3BTbZGjYF2PMDxtDWwNWdyppUKFp3tiJk9vv4Ub2eth3Tn9FKGuDYN?=
- =?us-ascii?Q?Qop6X0NpmiLsQugn3TCfMJOa/eXTwaPr396VfACibmq+TLHI/+iZMZ77PcvU?=
- =?us-ascii?Q?/RDSxNoNVS/aMV9MgTl0ik3j8sjJ6HqLScDumn2/xqSldMdlFMBg2BEK8oao?=
- =?us-ascii?Q?X9zhpSZ1qxKVFcDcF86Yrt0YeC/5QhylSit4cnfccjJbBa2KiQbOhaCTjKsl?=
- =?us-ascii?Q?ELWc0VPhvcmmahAOlk483w6MResxRl+LFMqQXc1isJYj50aGww=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5757.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?CtOLTFf7jAByejLRQNvzsni8x5e0USv+UUhr+cPyg5U3PHDO9uA77SljLLgs?=
- =?us-ascii?Q?M3sxPrQRXGcjdwFOuEd4DJzEUnLAa9gSSAIkJq8V9DVj0s5tN7HtuVZVZHDm?=
- =?us-ascii?Q?gEjomOJugw7poRYwfZN5Fsipugr3tNAyN2pZ6isbe4LhT6oVsZzXG5X/mzG5?=
- =?us-ascii?Q?6xzqfvBD9VVxhUsx17NDhbFPl/17PMeqdf4eWfc4EU0NEttJj/e2XzbpgomU?=
- =?us-ascii?Q?eFuD2ROtWwFDZiJvqM/n4V6gAdLe4cJnLYvo+2Qj3q0Z6puise4Vkm2ogpnp?=
- =?us-ascii?Q?2WJkvsSr26Kgp2E5/mVAB7NR/1uv7qrSgPp3BRSGS3v+JtJNUuOhCZBSiD1B?=
- =?us-ascii?Q?9EKGt8vdZUE0614jo3s+yi1ixCaZ5E/lL/kjms5/jk9V6YA6yKnvtbBUHpoZ?=
- =?us-ascii?Q?i9atRkcKFg7ACx/utCty8J3+pWWAqM2035LEjP+mioV+YNKp+gQEoD6/URYj?=
- =?us-ascii?Q?Mu0dfnbA8Ly8dbHw98a0TDFDkTV1Kyt7DLOQEsYnEthXztvoJUrF24F3i6eA?=
- =?us-ascii?Q?zcAPSpNCN1cNXACIcgWE3lDAQPjzruOo/au5bQ34QxmXHXEa1RxkIRNAOwRi?=
- =?us-ascii?Q?A011fFmzIp/82o+Hn5HG6kIupFNjOFIDMlQIvvYMCts1G7cmjc1S/OYtv+2u?=
- =?us-ascii?Q?jOhdSGDE5rjZ5dhOI5pPDsVMd/s5z7NoVzxoRLCa3P8RlL7UKedGGKtCKtY6?=
- =?us-ascii?Q?IFpmKuMHJRUaZO7IkV9MDTB2Enbmj7imiMvMopviBBf4BEYj9pyw4FG/MH0S?=
- =?us-ascii?Q?dWJEkf/d5Z79udyJV1aE6OZVsgdsDFOTUijUErmXriZXKWPuZbqZRcOCNMFM?=
- =?us-ascii?Q?JmkH3k5lrUboolVqoeYT58ZVwxM4MhIyHVUuLXHPKGOEReWWh7Jwn+cA50Jk?=
- =?us-ascii?Q?9mR248kZZCDAAw6eWyyafJKRk2XWaN/ZIXmLx22jLMWj05rJayxOQyUK5JcK?=
- =?us-ascii?Q?e/dSEcXpmIcTosuzBbXXAHLe6ACwng4aGVLYQInaWILeEOLINba4FCnOINnj?=
- =?us-ascii?Q?JuLpKihbHt+PhFVTOv709NilF0k+gtXJezxGOxXmDV66m+YZP3NBpOF+rFjw?=
- =?us-ascii?Q?Ws8e1uinkDb3TBON+bmJ3nxK5Ca4s/gwDedg5w1p5GGvAHVgikxI2XyXqU62?=
- =?us-ascii?Q?6ielbc6SIohidIGtwsuycrYj5gjBdfR9Tan1tw92cIrgReRyrf8x3HCDK4/O?=
- =?us-ascii?Q?Mn/6PiDT9m98f1ioIZD0uUxXvn59J44bRZ5ujCS8ogc6HelF9pFUlZQlzkCz?=
- =?us-ascii?Q?nin665tVBIy3useAT8Sjo8y6Qy76TElnfDfv7fvUwKCUz58gi+JoqpUC1u29?=
- =?us-ascii?Q?6uVKYE4kWeFNOzLV2P50RKtIau9XKc5hYyxgxnSBPFQVhMnjfmxGDabit7+N?=
- =?us-ascii?Q?nwX01+Flxn3hE6xyOpMYxoPL3hpvLEtMZvg9Nr3RCsKAMKFln0ojGdIuX12W?=
- =?us-ascii?Q?vyQK/m9Qaig78g6hQ7h9kRjbXcSwpylNI9hT3gnKO0j6rwJvdbSomKO394cc?=
- =?us-ascii?Q?ELYy5bm5b2QQvgVY5iJskPQSNwZ3RslV7dUJkrlvdngJzwWV2B9vkeDZ15D2?=
- =?us-ascii?Q?u6OSOhKik/bms/z1wJOKBn8zfF97ags6C8Fn3dxo?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6db59993-56c6-46e0-7d44-08ddf51c6034
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5757.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2025 12:27:18.0839
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: J9q2YrQv6nL42m1nrY0cv6NTsh+yEItRzcOCgmp9v0gY2tdCuaJIDmrjs7/mkfCd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5829
+X-ThreadId: A-ya5D5_Z2ZZ
+Date: Tue, 16 Sep 2025 14:37:21 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Finn Thain" <fthain@linux-m68k.org>
+Cc: "Peter Zijlstra" <peterz@infradead.org>, "Will Deacon" <will@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Mark Rutland" <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>, linux-m68k@vger.kernel.org
+Message-Id: <534e8ff8-70cb-4b78-b0b4-f88645bd180a@app.fastmail.com>
+In-Reply-To: <1c9095f5-df5c-2129-df11-877a03a205ab@linux-m68k.org>
+References: <cover.1757810729.git.fthain@linux-m68k.org>
+ <e5a38b0ccf2d37185964a69b6e8657c992966ff7.1757810729.git.fthain@linux-m68k.org>
+ <20250915080054.GS3419281@noisy.programming.kicks-ass.net>
+ <4b687706-a8f1-5f51-6e64-6eb09ae3eb5b@linux-m68k.org>
+ <20250915100604.GZ3245006@noisy.programming.kicks-ass.net>
+ <8247e3bd-13c2-e28c-87d8-5fd1bfed7104@linux-m68k.org>
+ <57bca164-4e63-496d-9074-79fd89feb835@app.fastmail.com>
+ <1c9095f5-df5c-2129-df11-877a03a205ab@linux-m68k.org>
+Subject: Re: [RFC v2 3/3] atomic: Add alignment check to instrumented atomic operations
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 16, 2025 at 12:47:17PM +0300, Patrisious Haddad wrote:
+On Tue, Sep 16, 2025, at 02:16, Finn Thain wrote:
+> On Mon, 15 Sep 2025, Arnd Bergmann wrote:
+>
+>> IIRC there are only a small number of uapi structures that need
+>> __packed annotations to maintain the existing syscall ABI.
+>> 
+>
+> Packing uapi structures (and adopting -malign-int) sounds easier than the 
+> alternative, which might be to align certain internal kernel struct 
+> members, on a case-by-case basis, where doing so could be shown to improve 
+> performance on some architecture or other (while keeping -mno-align-int).
+>
+> Well, it's easy to find all the structs that belong to the uapi, but it's 
+> not easy to find all the internal kernel structs that describe MMIO 
+> registers. For -malign-int, both kinds of structs are a problem.
 
-> Using the correct CC flags by itself is sufficient and correct - and I don't
-> see other neon users using the ".arch_extension simd" you mentioned , so why
-> do you think it is needed here ?
+Right, especially since those structure definitions are more
+likely to be used on older drivers, there are probably some that
+do happen on m68k. On the other hand, any driver that is portable
+to non-m68k targets won't have this problem.
 
-If you do it as Arnd suggests then we don't need a another file,
-makefile changes and so on. You can just drop a 5 line inline right
-before it is used.
+I tried a trivial m68k defconfig build with "-Wpadded -malign-int"
+and found 3021 instances of structure padding, compared to 2271
+without -malign-int. That is still something one could very reasonably
+go through with 'vim -q output', as almost all of them are obviously
+kernel-internal structures and not problematic.
 
-Jason
+A quick manual scan only shows a number of uapi structures but very
+few drivers. There are a few hardware structures that are internally
+packed but in a structure that has gets an extra two bytes of harmless
+padding at the end (struct CUSTOM, struct amiga_hw_present,
+struct atari_hw_present, struct TT_DMA, struct ppc_regs). The only
+ones I could find that actually seemed suspicious are:
+
+arch/m68k/include/asm/atarihw.h:426:10: warning: padding struct to align 'dst_address' [-Wpadded]
+arch/m68k/include/asm/openprom.h:76:13: warning: padding struct to align 'boot_dev_ctrl' [-Wpadded]
+drivers/net/ethernet/i825xx/82596.c:250:1: warning: padding struct size to alignment boundary
+
+I'm sure there are a few more, but probably not a lot more.
+See https://pastebin.com/Z2bjnD0G for the full list. I've also
+tried annotating the ones that show up in defconfig, see diffstat
+below.
+
+Unfortunately I found no way of annotating a struct a whole to use
+the traditional padding rules: "#pragma pack(push, 2)" lowers the
+alignment of all struct members to two bytes, including those
+with an explicit alignment like __aligned_u64. A struct-wide
+__attribute__((packed, aligned(2))) seems even worse, as it
+makes all members inside of the struck tightly packed and only
+aligns the struct itself.
+
+This means all misaligned members have to be individually marked
+as __packed, unless someone comes up with another type of
+annotation.
+
+> If better performance is to be had, my guess is that aligning atomic_t 
+> will get 80% of it (just an appeal to the Pareto principle, FWIW...)
+
+arch/m68k selects CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS for anything
+other than Dragonball, so I would not expect much performance difference
+at all, unless CASL on unaligned data ends up causing alignment traps
+as it does on most architectures.
+
+     Arnd
+
+ arch/m68k/atari/atakeyb.c                          |  2 +-
+ arch/m68k/include/asm/amigahw.h                    |  4 +--
+ arch/m68k/include/asm/atarihw.h                    |  6 ++--
+ arch/m68k/include/asm/mvme147hw.h                  |  2 +-
+ arch/m68k/include/asm/openprom.h                   |  2 +-
+ arch/m68k/include/uapi/asm/ptrace.h                |  2 +-
+ arch/m68k/include/uapi/asm/sigcontext.h            |  2 +-
+ arch/m68k/include/uapi/asm/stat.h                  |  4 +--
+ drivers/net/ethernet/i825xx/82596.c                |  4 +--
+ include/uapi/asm-generic/termios.h                 |  2 +-
+ include/uapi/linux/acct.h                          |  2 +-
+ include/uapi/linux/ax25.h                          |  6 ++--
+ include/uapi/linux/blktrace_api.h                  |  2 +-
+ include/uapi/linux/btrfs.h                         |  2 +-
+ include/uapi/linux/cdrom.h                         | 36 +++++++++++-----------
+ include/uapi/linux/dlm.h                           |  2 +-
+ include/uapi/linux/dqblk_xfs.h                     |  2 +-
+ include/uapi/linux/ethtool.h                       | 14 ++++-----
+ include/uapi/linux/fb.h                            |  6 ++--
+ include/uapi/linux/fd.h                            |  6 ++--
+ include/uapi/linux/filter.h                        |  2 +-
+ include/uapi/linux/hdlc/ioctl.h                    |  6 ++--
+ include/uapi/linux/hiddev.h                        |  2 +-
+ include/uapi/linux/i2c-dev.h                       |  2 +-
+ include/uapi/linux/i2c.h                           |  2 +-
+ include/uapi/linux/if.h                            |  2 +-
+ include/uapi/linux/if_arcnet.h                     |  4 +--
+ include/uapi/linux/if_bonding.h                    |  2 +-
+ include/uapi/linux/if_bridge.h                     | 14 ++++-----
+ include/uapi/linux/if_link.h                       |  2 +-
+ include/uapi/linux/if_plip.h                       |  2 +-
+ include/uapi/linux/if_pppox.h                      |  2 +-
+ include/uapi/linux/if_vlan.h                       |  2 +-
+ include/uapi/linux/inet_diag.h                     |  2 +-
+ include/uapi/linux/input.h                         |  4 +--
+ include/uapi/linux/ip6_tunnel.h                    |  4 +--
+ include/uapi/linux/kd.h                            |  2 +-
+ include/uapi/linux/llc.h                           |  2 +-
+ include/uapi/linux/loop.h                          |  2 +-
+ include/uapi/linux/mctp.h                          |  4 +--
+ include/uapi/linux/mptcp.h                         |  2 +-
+ include/uapi/linux/mroute.h                        |  4 +--
+ include/uapi/linux/mroute6.h                       |  6 ++--
+ include/uapi/linux/msdos_fs.h                      |  2 +-
+ include/uapi/linux/msg.h                           |  6 ++--
+ include/uapi/linux/mtio.h                          |  2 +-
+ include/uapi/linux/netfilter/ipset/ip_set.h        |  4 +--
+ include/uapi/linux/netfilter/nf_nat.h              |  2 +-
+ include/uapi/linux/netfilter/x_tables.h            |  8 ++---
+ include/uapi/linux/netfilter/xt_HMARK.h            |  2 +-
+ include/uapi/linux/netfilter/xt_TPROXY.h           |  4 +--
+ include/uapi/linux/netfilter/xt_connbytes.h        |  2 +-
+ include/uapi/linux/netfilter/xt_connmark.h         |  6 ++--
+ include/uapi/linux/netfilter/xt_conntrack.h        |  4 +--
+ include/uapi/linux/netfilter/xt_esp.h              |  2 +-
+ include/uapi/linux/netfilter/xt_hashlimit.h        |  6 ++--
+ include/uapi/linux/netfilter/xt_helper.h           |  2 +-
+ include/uapi/linux/netfilter/xt_ipcomp.h           |  2 +-
+ include/uapi/linux/netfilter/xt_iprange.h          |  2 +-
+ include/uapi/linux/netfilter/xt_l2tp.h             |  2 +-
+ include/uapi/linux/netfilter/xt_mac.h              |  2 +-
+ include/uapi/linux/netfilter/xt_mark.h             |  2 +-
+ include/uapi/linux/netfilter/xt_owner.h            |  2 +-
+ include/uapi/linux/netfilter/xt_realm.h            |  2 +-
+ include/uapi/linux/netfilter/xt_recent.h           |  4 +--
+ include/uapi/linux/netfilter/xt_set.h              |  4 +--
+ include/uapi/linux/netfilter/xt_statistic.h        |  2 +-
+ include/uapi/linux/netfilter/xt_tcpmss.h           |  2 +-
+ include/uapi/linux/netfilter/xt_tcpudp.h           |  2 +-
+ include/uapi/linux/netfilter/xt_time.h             |  2 +-
+ include/uapi/linux/netfilter/xt_u32.h              |  6 ++--
+ include/uapi/linux/netfilter_arp/arp_tables.h      |  2 +-
+ include/uapi/linux/netfilter_arp/arpt_mangle.h     |  2 +-
+ include/uapi/linux/netfilter_bridge/ebt_802_3.h    |  2 +-
+ include/uapi/linux/netfilter_bridge/ebt_arp.h      |  2 +-
+ include/uapi/linux/netfilter_bridge/ebt_arpreply.h |  2 +-
+ include/uapi/linux/netfilter_bridge/ebt_mark_m.h   |  2 +-
+ include/uapi/linux/netfilter_bridge/ebt_nat.h      |  2 +-
+ include/uapi/linux/netfilter_bridge/ebt_stp.h      |  4 +--
+ include/uapi/linux/netfilter_bridge/ebt_vlan.h     |  2 +-
+ include/uapi/linux/netfilter_ipv4/ipt_ah.h         |  2 +-
+ include/uapi/linux/netfilter_ipv6/ip6_tables.h     |  2 +-
+ include/uapi/linux/netfilter_ipv6/ip6t_ah.h        |  2 +-
+ include/uapi/linux/netfilter_ipv6/ip6t_frag.h      |  2 +-
+ include/uapi/linux/netfilter_ipv6/ip6t_opts.h      |  2 +-
+ include/uapi/linux/netfilter_ipv6/ip6t_rt.h        |  2 +-
+ include/uapi/linux/netfilter_ipv6/ip6t_srh.h       |  2 +-
+ include/uapi/linux/netrom.h                        |  2 +-
+ include/uapi/linux/nfs_idmap.h                     |  2 +-
+ include/uapi/linux/nfs_mount.h                     |  2 +-
+ include/uapi/linux/pkt_cls.h                       |  2 +-
+ include/uapi/linux/rds.h                           |  4 +--
+ include/uapi/linux/rose.h                          |  8 ++---
+ include/uapi/linux/route.h                         |  2 +-
+ include/uapi/linux/rtc.h                           |  2 +-
+ include/uapi/linux/sctp.h                          | 18 +++++------
+ include/uapi/linux/sed-opal.h                      |  2 +-
+ include/uapi/linux/sem.h                           |  2 +-
+ include/uapi/linux/serial.h                        |  4 +--
+ include/uapi/linux/soundcard.h                     |  8 ++---
+ include/uapi/linux/taskstats.h                     |  2 +-
+ include/uapi/linux/virtio_net.h                    |  4 +--
+ include/uapi/linux/wireless.h                      |  4 +--
+ include/uapi/linux/xfrm.h                          | 26 ++++++++--------
+ include/uapi/mtd/mtd-abi.h                         |  2 +-
+ include/uapi/rdma/hfi/hfi1_ioctl.h                 |  2 +-
+ include/uapi/rdma/ib_user_ioctl_verbs.h            |  2 +-
+ include/uapi/rdma/ib_user_mad.h                    |  2 +-
+ 109 files changed, 205 insertions(+), 204 deletions(-)
 
