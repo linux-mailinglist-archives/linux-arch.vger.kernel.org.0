@@ -1,143 +1,141 @@
-Return-Path: <linux-arch+bounces-13668-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13669-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EACB9B81469
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Sep 2025 20:01:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A761EB81CA3
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Sep 2025 22:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA2EF1C80C08
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Sep 2025 18:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FAED526074
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Sep 2025 20:37:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BC4A3009C7;
-	Wed, 17 Sep 2025 18:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B9E2C08AA;
+	Wed, 17 Sep 2025 20:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b="g1LtUuBN"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="kF4TbRiJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13252FDC56
-	for <linux-arch@vger.kernel.org>; Wed, 17 Sep 2025 18:00:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48E442C0F92;
+	Wed, 17 Sep 2025 20:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758132049; cv=none; b=SXLIcSQMFhSy/yrn98A6tpzrwoV5WONGdnZMQ1O7N0krV+Pu4ziW/qVEUcL9YyShGF4eU+sTU8lD2UY6T+uwQDLAfait6vvEg+pXFZXKmipR+csOYpe53IET+YXOF8gzWfKDIBXfLfqwpW2syTXiCHFX6BBAMVLkEbo7F1dq0bE=
+	t=1758141449; cv=none; b=M6nIT5brlYoe9rEYzUNRiGIELnBnmEoI+0bg9jnN/kyuzVbj555A8hx7d8vIOdUrtvNgCsS3SH4KUCX3f/xU3dJbeiIULI7YEObvmotla6C/OV69wxx1FhPZiJt5w5UgrXWpJjuG/IK4iBVVmM+y3wbeNnln31VFP7rhuQc4v1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758132049; c=relaxed/simple;
-	bh=DLDcGQ3mu3T/MPVKq0NF9V2I5Jn6ILZwFaw9KVQfhOo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SEpLowpb9c2WeJrgZZOOtpRLXKLMYE+WRJ6LCbzqb4b8CdAnchR4i0x0HOgLb5B1V+cSQQ7rGxb4GWB/vlxxUPU84whDGQ4BnZBCobTe0tP0FmJQKIXJN8MQIwRbtuodMy0/NsPqveo5UW40MjMxEdzf9QCxhLY/dDUD3z5ZiHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b=g1LtUuBN; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-578a8bd4bd2so83233e87.1
-        for <linux-arch@vger.kernel.org>; Wed, 17 Sep 2025 11:00:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20230601.gappssmtp.com; s=20230601; t=1758132044; x=1758736844; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0Pv4dFUExNQfPloEDat7jfEF9BkjeLOy7zrinjdnc80=;
-        b=g1LtUuBN2lj4qvyQzWAdLKTewMPpvB0BMgAm3EhYmOSEcT379TNMgVSmJk7DCmgjc/
-         T0eHokwlFMY3Yd+mXYCz+ekytPn0ndF69T0GJJIC1YMQr15FXnETUToESn8hAOjjN4TJ
-         wc+dE3joK8Hj6X0qrUlvmHpmCBRx7/hVESh3NV1/RSPbebawN77L/JxPYbAY8rno5NPR
-         h45BlMuQrVS79kOiLhszZHO32mHd/xwXNvhKNiRJJPEEOxGanxAq7D4RvCoxMPnsrP0o
-         gtEy+UX8pbw1CA/Tbhp0++SKDmI4SgqYBJ/2EKyXEOwvuyrgRQgYTYLI+VQny1h7rWhV
-         /NkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758132044; x=1758736844;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0Pv4dFUExNQfPloEDat7jfEF9BkjeLOy7zrinjdnc80=;
-        b=hV8uvKr5D0RhoZjxGsB7E9kXGJEszjoLJKQn0MHXEdZ/RAvpoyhottmicptDlvH0OR
-         G+SSSd6Nr67A8Z9UyTw6nipW7ZECnmedRLsbBeA898LeezMePmZzw30dZuemxvTq20cF
-         Ncwoe2UrN7n1C2cacnNfhLoIJHcetIRAmsPr3UvmB3o43fkrABb8UmwIQLbzz2ZakbtP
-         yNZoAwwLt0xc+JfIEmOzQ+fqeZuw/R1rLi2b2EedyNjT0xFeMMef3xlEw9lCKTqPreSv
-         oUNP7T5BWHwNX7+n4bzyt13itU0UnlyS05ijrll3X2Dei/PQ8ugvSfKmZTJwV+uc4Wf5
-         bsng==
-X-Forwarded-Encrypted: i=1; AJvYcCXVIblQ8dGrvT2EGXGVdjBu16/gBfanYzxjJawRZy8LWrppSZ1x+HZbFPPq6PXOV8vlyoj3m5KeTBIt@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4Ikbv0xC8PESbF5DUk/KhUMF9K/jFgXzDq//QIqwp2zgGF6nf
-	PF+LRpShN4M5qRd/69C/prXoDv8LpUzxp+dg+j0rNldWl7fHVzmeRxb/1ay0p7vSCxk0ubQcT02
-	jXhbC8QmxT2oco7SwEiQVRE5ijH7bB3Q8vGh1n5a4
-X-Gm-Gg: ASbGnctRaGgpWaS6V979PNQPJGsyhqZQkU9XeLZ+IpcWIV2gs4uTHvlLR+ydh6d9vUh
-	gF8nLZwuQH3XeLMujwAKdTEhHf7iHzwkb3Rsrhv+DzfElTWcGaQuIjhJ4UBZdqidmU/s8jQUo5B
-	qL8C4aQz8fMUJjYiRPp8wWOBEyNQRd8OLZKO64k71V3NfsZMOX1O+Fd0VyoAanor8m40TpODNbJ
-	HlP7A==
-X-Google-Smtp-Source: AGHT+IGI+xF2OSgRbI6+fabXiqu9Xwuf5bxWYwnja/rNGOUuSmNzhH42MNUAKuR34Ox7ov8nmiujA9clDhMS84oRbmU=
-X-Received: by 2002:ac2:4e09:0:b0:576:d217:3f2f with SMTP id
- 2adb3069b0e04-57796b5e819mr1028160e87.3.1758132043747; Wed, 17 Sep 2025
- 11:00:43 -0700 (PDT)
+	s=arc-20240116; t=1758141449; c=relaxed/simple;
+	bh=AWnh0NDS/NEl3/tOmsRcC/Zo8FnKWT24coEwr6CX2WM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=A5/dB+D5ITqVq4StCbbUhoJwnmCNX4lPsv0DHUFYcEo03QnJjcApASBz31bXaYljbw5Fh/dKFSr99/9eEcSsoVUJdgX/PvwV23OA9KRbcPlOaOJSuT2yky/2/or/MS5o6AOMYvWISaJKGnoyKN7SC0ohH88+hhwTSvbNB9Vfovc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=kF4TbRiJ; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [192.168.0.88] (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 029C32018E76;
+	Wed, 17 Sep 2025 13:37:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 029C32018E76
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1758141446;
+	bh=+4I7C7Q7CI6dsIGmNlx01sNT/RMz5ftV/bvrE7ITfI0=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=kF4TbRiJ/nRP0Y9pFPSvvhykjMiKyFCCghTNptUZAw8wEPuyEuJwweRwE617btrQ3
+	 rBAA3qpifxa8OGo3i0OaQHFnUlhF4Olwj5noyi4U5mgJeWySRpKKro6ARr+5Hcl8ht
+	 xQGn0+AzC7V7/WHFWHMT6gbL+fh4EqP5e4VRFxO0=
+Message-ID: <f5877c92-e66b-e530-3431-a91e68388899@linux.microsoft.com>
+Date: Wed, 17 Sep 2025 13:37:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250912223937.3735076-1-safinaskar@zohomail.com> <0342fbda-9901-4293-afa7-ba6085eb1688@landley.net>
-In-Reply-To: <0342fbda-9901-4293-afa7-ba6085eb1688@landley.net>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Wed, 17 Sep 2025 11:00:32 -0700
-X-Gm-Features: AS18NWAGwakGZ9zjxjq7MnfN8O7ZgOJb6fmKIJ0JIML7P3j0NnlDZ27eNb5S7Es
-Message-ID: <CALCETrXHxOkHoS+0zhvc4cfpZqJ0wpfQUDnXW-A-qyQkqur-DQ@mail.gmail.com>
-Subject: Re: [PATCH 00/62] initrd: remove classic initrd support
-To: Rob Landley <rob@landley.net>
-Cc: Askar Safin <safinaskar@zohomail.com>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Brauner <brauner@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>, 
-	Jens Axboe <axboe@kernel.dk>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
-	Aleksa Sarai <cyphar@cyphar.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Julian Stecklina <julian.stecklina@cyberus-technology.de>, 
-	Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Eric Curtin <ecurtin@redhat.com>, 
-	Alexander Graf <graf@amazon.com>, Lennart Poettering <mzxreary@0pointer.de>, linux-arch@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org, x86@kernel.org, 
-	Ingo Molnar <mingo@redhat.com>, linux-block@vger.kernel.org, initramfs@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	"Theodore Y . Ts'o" <tytso@mit.edu>, linux-acpi@vger.kernel.org, Michal Simek <monstr@monstr.eu>, 
-	devicetree@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v1 5/6] x86/hyperv: Implement hypervisor ram collection
+ into vmcore
+Content-Language: en-US
+From: Mukesh R <mrathor@linux.microsoft.com>
+To: Michael Kelley <mhklinux@outlook.com>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Cc: "kys@microsoft.com" <kys@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "tglx@linutronix.de" <tglx@linutronix.de>,
+ "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+ "arnd@arndb.de" <arnd@arndb.de>
+References: <20250910001009.2651481-1-mrathor@linux.microsoft.com>
+ <20250910001009.2651481-6-mrathor@linux.microsoft.com>
+ <SN6PR02MB4157CD8153650CC9D379A03DD415A@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <87cab5ec-ab76-b1cf-4891-30314e5dace6@linux.microsoft.com>
+In-Reply-To: <87cab5ec-ab76-b1cf-4891-30314e5dace6@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 15, 2025 at 10:09=E2=80=AFAM Rob Landley <rob@landley.net> wrot=
-e:
+On 9/16/25 18:13, Mukesh R wrote:
+> On 9/15/25 10:55, Michael Kelley wrote:
+>> From: Mukesh Rathor <mrathor@linux.microsoft.com> Sent: Tuesday, September 9, 2025 5:10 PM
+>>>
+>>> Introduce a new file to implement collection of hypervisor ram into the
+>>
+>> s/ram/RAM/ (multiple places)
+> 
+> a quick grep indicates using saying ram is common, i like ram over RAM
+> 
+>>> vmcore collected by linux. By default, the hypervisor ram is locked, ie,
+>>> protected via hw page table. Hyper-V implements a disable hypercall which
+>>
+>> The terminology here is a bit confusing since you have two names for
+>> the same thing: "disable" hypervisor, and "devirtualize". Is it possible to
+>> just use "devirtualize" everywhere, and drop the "disable" terminology?
+> 
+> The concept is devirtualize and the actual hypercall was originally named
+> disable. so intermixing is natural imo.
 
-> While you're at it, could you fix static/builtin initramfs so PID 1 has
-> a valid stdin/stdout/stderr?
->
-> A static initramfs won't create /dev/console if the embedded initramfs
-> image doesn't contain it, which a non-root build can't mknod, so the
-> kernel plumbing won't see it dev in the directory we point it at unless
-> we build with root access.
+[snip]
 
-I have no current insight as to whether there's a kernel issue here,
-but why are you trying to put actual device nodes in an actual
-filesystem as part of a build process?  It's extremely straightforward
-to emit devices nodes in cpio format, and IMO it's far *more*
-straightforward to do that than to make a whole directory, try to get
-all the modes right, and cpio it up.
+>>> +
+>>> +/*
+>>> + * Setup a temporary gdt to allow the asm code to switch to the long mode.
+>>> + * Since the asm code is relocated/copied to a below 4G page, it cannot use rip
+>>> + * relative addressing, hence we must use trampoline_pa here. Also, save other
+>>> + * info like jmp and C entry targets for same reasons.
+>>> + *
+>>> + * Returns: 0 on success, -1 on error
+>>> + */
+>>> +static int hv_crash_setup_trampdata(u64 trampoline_va)
+>>> +{
+>>> +	int size, offs;
+>>> +	void *dest;
+>>> +	struct hv_crash_tramp_data *tramp;
+>>> +
+>>> +	/* These must match exactly the ones in the corresponding asm file */
+>>> +	BUILD_BUG_ON(offsetof(struct hv_crash_tramp_data, tramp32_cr3) != 0);
+>>> +	BUILD_BUG_ON(offsetof(struct hv_crash_tramp_data, kernel_cr3) != 8);
+>>> +	BUILD_BUG_ON(offsetof(struct hv_crash_tramp_data, gdtr32.limit) != 18);
+>>> +	BUILD_BUG_ON(offsetof(struct hv_crash_tramp_data,
+>>> +						     cs_jmptgt.address) != 40);
+>>
+>> It would be nice to pick up the constants from a #include file that is
+>> shared with the asm code in Patch 4 of the series.
+> 
+> yeah, could go either way, some don't like tiny headers...  if there are
+> no objections to new header for this, i could go that way too.
 
-I wrote an absolutely trivial tool for this several years ago:
 
-https://github.com/amluto/virtme/blob/master/virtme/cpiowriter.py
+yeah, i experimented with creating a new header or try to add to existing.
+new header doesn't make sense for just 5 #defines, adding C struct there
+is not a great idea given it's scope is limited to the specific function
+in the c file. adding to another header results in ifdefs for ASM/KERNEL,
+so not really worth it. I think for now it is ok, we can live with it.
+If arm ends up adding more declarations, we can look into it.
 
-it would be barely more complicated to strip the trailer off an cpio
-file from some other source, add some device nodes, and stick the
-trailer back on.  But it's also really, really, really easy to emit an
-entire, functioning cpio-formatted initramfs from plain user code with
-no filesystem manipulation at all.  This also makes that portion of
-the build reproducible, which is worth quite a bit IMO.
 
---Andy
+Thanks,
+-Mukesh
+
+[ .. deleted.. ]
 
