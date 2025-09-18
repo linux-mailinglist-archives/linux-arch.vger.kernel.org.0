@@ -1,162 +1,107 @@
-Return-Path: <linux-arch+bounces-13683-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13684-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9A7DB86CC2
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Sep 2025 21:58:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5314EB86D0C
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Sep 2025 22:00:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A297116CF3B
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Sep 2025 19:58:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C65A16F025
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Sep 2025 20:00:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD18830DEC5;
-	Thu, 18 Sep 2025 19:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7376F31961D;
+	Thu, 18 Sep 2025 20:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hNlT1dRM"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="f8/8Pko/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F115330748A
-	for <linux-arch@vger.kernel.org>; Thu, 18 Sep 2025 19:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E4A3195FE;
+	Thu, 18 Sep 2025 20:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758225500; cv=none; b=pV365OxSjhxXrUhVU/NtN+hAtCnQPpisYYlyXGaUyiTvYESj7eKlNNhuXArF26xoNkZ4NihzCRwahghXVEt3tH+0kiKlLEISLKY2RACOvO6FJCFNzISnTkmQ1ShWActMHsSTQ9HaCZtduFNAwN4enyN9IoDWYeTFhdLJBOii5Vw=
+	t=1758225633; cv=none; b=RY0zhn3QOMAU9DgLFpJK6A0nnpX4WcoAiIBFqd9JEa5JzEfl9WT6bpyVKxe7S+MXgAcGTpRFjHHwU5RKGasC+0SeEjKRG27fx/aZUSFE/ySCoVLhLK0yPNU6jmh//MznFQTR9T1YtWQ5Rs5ZpeZhJiUGioAXxwrPIgDqzk/FtLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758225500; c=relaxed/simple;
-	bh=hrTKVKMuOKbLilzSA+VEl+XSSF0VIocT2KvCzkuRjcw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f1t2Uut8X0vjHihrfCxVizQx3oAuiXtbEMNuxUGbeTeANElP+n+8kVqPaX5vSXPNhpixLZ4XTUGM7jyyz80nSDh/C9k9foNUqACygyJ6Y5+tUQ1/Mk7uUAwRPZVV5Q5FTUWQYFvTUFJFp4p801sMMc1U4qqh7Ec9drnq0SsFgxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hNlT1dRM; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b0787fdb137so211167566b.0
-        for <linux-arch@vger.kernel.org>; Thu, 18 Sep 2025 12:58:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758225496; x=1758830296; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9McvDjxp1cOQ8m8DQ7zr8KAOkClRv+R613f7KwPZqLk=;
-        b=hNlT1dRMFhV3nNEO8OCPXfEiZjy7HadMXu4vRgp3Ipj8QW/pTjkxFRxYZEa69pe80J
-         R5WZR6uBlmeIbF+VQhBUi3wnRJuDxh3ZSYPm2HtEzHdmYgYFzaLOTkBNZpxqwUsXFCi5
-         xh48TC/I8mOWxP2I4D6qthvi1wAkVJadHw9+Q6aETqCdcS+tzshGNcO1qODnTVXpUxR3
-         DzGuLf7FRf7YNLECrqzb9ayMBLdTqRvBk0ivmzKueGmRkmu1GRq1Uqn5Uc0kg8EqXgPJ
-         5wCj9Urjk2M3jfgX+oYXsBuDx3I+zNM2GW5fMn6rB/kk6qlx/ZV55XBxceRxo80pIEfP
-         n68Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758225496; x=1758830296;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9McvDjxp1cOQ8m8DQ7zr8KAOkClRv+R613f7KwPZqLk=;
-        b=tRN4F7j9QgBOv6pVVcJ3otr2raICcPfrETgqCTNcaYc+2kf9/jxFHE1A5cmIX6SmZs
-         kEeiuaoxuj9xaBybV09dCf3DpT2CpHcl3lEDic4eVZbZWaJKmQMzwjOjSYhH6uxzPSGf
-         2ao/peawu1bGGSmglBtD9tsZAyq9JA0SN7AWMEAoZarWN4Al/YsmJHnDVMST45f1/waz
-         hevwBqDx8zX3u3NTluruHFM4RwwGzwHaXFd5H86/JJBJwZXv7hRDtb6EkTtXznebCMjR
-         yKJt5cUlTJZzxnANS7tDzpGcE/Kh5oKnPvXBmx37ERkdQ4ZjYX36teNhQtaHJOn5qoEw
-         VcQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUt24EaJbTN4ujgZiZkNlAi6J5ri2cTD0juVwZRvwj7deZrf5Y/HlPL/t1mUujoi/e+efXdpopx2w0L@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQi5ovdZg99WKXUptc1CYR+9mt0ONhMw7KWtP433joSnoWkeGh
-	bnTSJob+5OFKg8cuFZLPWtou8Zj5zI6JOHZ25KOh+PQIAxUTtVmlbdor
-X-Gm-Gg: ASbGncte3HaW4dy4ybnXCAyza75WDY/lzbuhxB9kmo6ivLfkmMpCgDHy5nJoa4tUhHT
-	jR0H9DdXz9trXzx2cdJPhopPkkor7yAwHrv7HWzpg7MxGLtmcXFIu8quZ3T5fKOG3A0xDOjcXS9
-	0wbRC3FkgCFVRLAQFhw9vf+vC3EudfRHeNKmBpxe3hZNMSUBmA2Y49QHkFYzLn2Rz+nHFWMhhUN
-	1e5L3N4c+bp+kxrgaCiAD03LUnN5TI7qfQ01rDja0P4Ju4n3N5H/YFsnQfo530JsSGxaFvbDZvp
-	yqY1nvK1vKSQkqzHYbjOnAYAxwfTQua7zsceeIWBC+8/cFMCdP2yy54fQMD0+2hmOK/Jb4AHQVq
-	84o8UguWmqspFrpguyVSCNZ1m7Q54m/mZrSVhTA==
-X-Google-Smtp-Source: AGHT+IH2NBu6L+bASXNqg9sJUcZ42MFCB2aqzEFiqoDEW6um54A4CtHcJnO37auTgFbi6nwycKDm8A==
-X-Received: by 2002:a17:907:a089:b0:b19:969a:86 with SMTP id a640c23a62f3a-b24f35aa177mr45885966b.37.1758225496090;
-        Thu, 18 Sep 2025 12:58:16 -0700 (PDT)
-Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b1fd1101c44sm264530466b.82.2025.09.18.12.58.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Sep 2025 12:58:15 -0700 (PDT)
-From: Askar Safin <safinaskar@gmail.com>
-To: nschichan@freebox.fr
-Cc: akpm@linux-foundation.org,
-	andy.shevchenko@gmail.com,
-	axboe@kernel.dk,
-	brauner@kernel.org,
-	cyphar@cyphar.com,
-	devicetree@vger.kernel.org,
-	ecurtin@redhat.com,
-	email2tema@gmail.com,
-	graf@amazon.com,
-	gregkh@linuxfoundation.org,
-	hca@linux.ibm.com,
-	hch@lst.de,
-	hsiangkao@linux.alibaba.com,
-	initramfs@vger.kernel.org,
-	jack@suse.cz,
-	julian.stecklina@cyberus-technology.de,
-	kees@kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org,
-	linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	mcgrof@kernel.org,
-	mingo@redhat.com,
-	monstr@monstr.eu,
-	mzxreary@0pointer.de,
-	patches@lists.linux.dev,
-	rob@landley.net,
-	safinaskar@gmail.com,
-	sparclinux@vger.kernel.org,
-	thomas.weissschuh@linutronix.de,
-	thorsten.blum@linux.dev,
-	torvalds@linux-foundation.org,
-	tytso@mit.edu,
-	viro@zeniv.linux.org.uk,
-	x86@kernel.org
-Subject: Re: [PATCH RESEND 00/62] initrd: remove classic initrd support
-Date: Thu, 18 Sep 2025 22:58:06 +0300
-Message-ID: <20250918195806.6337-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20250918152830.438554-1-nschichan@freebox.fr>
-References: <20250918152830.438554-1-nschichan@freebox.fr>
+	s=arc-20240116; t=1758225633; c=relaxed/simple;
+	bh=cKo8QnxTqwRlZbbrTi6NfByG+sCorX6sVt0V6y4S1EQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G5lE5A60+cKKMffogpC1FvqBT/5ogUilC56NCrJoLWo8bde+aLFFSUfJ2jIf6qF4u0k2TZPfnfEf+7n3Jae9juqxkur8ypszZEgO396KDewwX74RdWOJY9Jjnpxt4PlAaa/WqDRLf/D9++GUb0awTPxXr6tXd6r1srAlVCqFWo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=f8/8Pko/; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D5CCF40E01B3;
+	Thu, 18 Sep 2025 20:00:20 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 1khS_LFk5DMP; Thu, 18 Sep 2025 20:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1758225617; bh=XI8MbpBy+ycWzG5aO02jWHqOsvEkXPBPzx6jQtrzNY0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f8/8Pko/2jb7mdI3q8FvyM+z/0suyHgNXRse10uugugMJdlXgPLIkaqMRCtvbcdWb
+	 C7voUCVa0isP7XjAONjs0of4kM6o934NMivN1P+/rx/WybQkUKDaHtSalg9QODm3H4
+	 7o9d5jdyezqh/4V1AGSW06kTODhdRYMHABgf0z39QQVmIbDINovD3O1wStzgYNSYZm
+	 V2eBLWTBsuUldNphGqRO7aaIG2UDhWTFQdyBWW51KXfz/CB4cYNAWJZiURSSU3lJeK
+	 Xr4BFA7L+btTDiF1tCnMIuM1wKNtqiwBfHpcFrRIK8kDHE1mDODjoUdmm2F0FfVinQ
+	 v50OZBWMN6YGRZ+iXCS4EuEg8iMZaxMu22Skhj+flIMyaZBOzXHL28+9i9DNm54gCp
+	 TOq5JD9vQq1PoIvV9pKwqyGXMdKO88cwcdiKpmgg46EHXFO415ND02wXllDjoJSURp
+	 Xhb4dfwEJisZzzj//t1pvZSv4e/fOCR53YShixh7C2LmnW2Ytuh3TMFx8eoV7eqxZe
+	 AImKJZTeWuXtSUffloQRl1ShQYQaiSkR/X5OjSWgMWtXy0lSXkWXoLqggfaXutrxVd
+	 BeSg5Op1YtAXo1ipExLr9Z2tGFIHpBDeOJkV9CziBkPuNV3YM//gtJPpoFEJf9b7S+
+	 YzHZ+Ca4pOeOLFoBzb1/FrSw=
+Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id CB88C40E01C9;
+	Thu, 18 Sep 2025 19:59:58 +0000 (UTC)
+Date: Thu, 18 Sep 2025 21:59:52 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Tianyu Lan <ltykernel@gmail.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	arnd@arndb.de, Neeraj.Upadhyay@amd.com, tiala@microsoft.com,
+	romank@linux.microsoft.com, linux-arch@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Michael Kelley <mhklinux@outlook.com>
+Subject: Re: [PATCH 5/5] x86/Hyper-V: Add Hyper-V specific hvcall to set
+ backing page
+Message-ID: <20250918195952.GFaMxkuFc1OqfWavWv@fat_crate.local>
+References: <20250918150023.474021-1-tiala@microsoft.com>
+ <20250918150023.474021-6-tiala@microsoft.com>
+ <20250918150959.GEaMwgx78CGCxjGce8@fat_crate.local>
+ <CAMvTesBwkFr7VYoEYq5hc7NJi5xdiz037bmzoaEV2eG__h-kTg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMvTesBwkFr7VYoEYq5hc7NJi5xdiz037bmzoaEV2eG__h-kTg@mail.gmail.com>
 
-> When booting with root=/dev/ram0 in the kernel commandline,
-> handle_initrd() where the deprecation message resides is never called,
-> which is rather unfortunate (init/do_mounts_initrd.c):
+On Fri, Sep 19, 2025 at 01:11:02AM +0800, Tianyu Lan wrote:
+> Could I move the check into savic_register_gpa() or add a stub function
+> to check guest runs on Hyper-V  or not and then call associated function
+> to register APIC backing page?
 
-Yes, this is unfortunate.
+You probably should do
 
-I personally still think that initrd should be removed.
+static struct apic apic_x2apic_savic_hyperv
 
-I suggest using workaround I described in cover letter.
-
-Also, for unknown reasons I didn't get your letter in my inbox.
-(Not even in spam folder.) I ocasionally found it on lore.kernel.org .
+and copy the apic_x2apic_savic contents into it and overwrite the .setup
+function with your variant.
 
 -- 
-Askar Safin
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
