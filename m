@@ -1,77 +1,78 @@
-Return-Path: <linux-arch+bounces-13674-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13675-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B150FB856E0
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Sep 2025 17:04:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 852C0B856F8
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Sep 2025 17:05:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 506EA7E0807
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Sep 2025 15:02:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BA5E7E16F1
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Sep 2025 15:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A098330CB54;
-	Thu, 18 Sep 2025 15:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D580B30F541;
+	Thu, 18 Sep 2025 15:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HYjWbxCo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cX8f40vZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0351B30CB20
-	for <linux-arch@vger.kernel.org>; Thu, 18 Sep 2025 15:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89D630E0C2
+	for <linux-arch@vger.kernel.org>; Thu, 18 Sep 2025 15:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758207678; cv=none; b=aoKdBal5HtCdt0Zu5oVDKcB7hg5x323TrpEZ1xcxoSgF/qUFsxH11YmwFMFuTkb3reb4c8GhcsnLRPJi2y4GesuaWvaZxkKfr8LMAhOcrB1o+OgPSaL7g0C6hw/6vWAJYvppAnR1gHhk2ZSiS8dCP4yPt4kmYXxurmT8uKGRPfs=
+	t=1758207681; cv=none; b=XmK+xWkIeAPVGE3zLTHZDHBRG9ZJvaznrBAGqtpA6UjUlCB4UnwH6cMpfS4PK0t2gUUIFJd8Y1qzvRxipBb5KtXfI8oJ8P/oTt22NyJFJ9yOOkXctFASpjPQVmbB5Ank5DUE1qarguQiRFJccOvd7MHUqk/K/ULowyeSDdyRQow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758207678; c=relaxed/simple;
-	bh=Kd85ZUqbXMXjSsnseasdGJ1OpbHCYbM/zpeXnU30bB0=;
+	s=arc-20240116; t=1758207681; c=relaxed/simple;
+	bh=eVQr/Kx6NZQK3rRjt7zFL4OZxVMPYo8FaFD5GEZkQVw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UHnJQust6AYxW1NqK+L3blAr4yHM1nF/bV2lFEF4xq7h8cHYjy1kFED9/6XGlOVWkQJqhYnGMqixV1C795/zeUM6rkmlkMhEWsdcajftNSneOWfMTJe8/VFC5UVZ4H3FZ9JyD2WxbQKSI1YkU9bp8Z9In559eldqeCkz1Y6y5j8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HYjWbxCo; arc=none smtp.client-ip=209.85.214.179
+	 MIME-Version; b=A9msGjFHLQgOlh/Udcy55XqwiGTzbb1K85qA6Hwrfd7hWHWa4w1koCCqp14ji9/EV2dNZ0BiZJJOkr4sin5dGUaGgwNnkVF7PerOmT02v9rflC+TfffU38yN84f8yrH1Me4xFUBIwo6sB2aUEb81XvDeI9fMWPAJEx/2fytfhxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cX8f40vZ; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2445806e03cso12791995ad.1
-        for <linux-arch@vger.kernel.org>; Thu, 18 Sep 2025 08:01:16 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2570bf6058aso13980655ad.0
+        for <linux-arch@vger.kernel.org>; Thu, 18 Sep 2025 08:01:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758207676; x=1758812476; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758207679; x=1758812479; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dbpUNPOiDYoiEn45wuc0crNJHXScwpSkJ4TCqMU8+dk=;
-        b=HYjWbxCoZZKc5mice91v6AUfGrFqZv6ZeRdiSmoSq8+2E3hm6x1LPQ+KbSQPFElhb3
-         PiTMdc/XlUsK4JfuphO7G61iDe1l+cWCDI+GLFFVL5bd+pislLD6zJ7/5y+ecibrOebE
-         e1l40sy7gnZ1hn+8XNnhwzpB5ILlWsBe8+YZLfxgtqUUABL7HfIhp6WRX11S3zEF6PJ9
-         RC/u1AR+cp2u/Wla6HkTU93C5BAGelrgbKpO7TF/JuatOYEYsjqXKYjuxM52A0gW6SLK
-         4LkvXJLbTvzBlSkQ6WawlhZLhD9ktEtqC7+sb+8c9xKv24Z4dqA2fTmOAARc9x6ZreuU
-         sCNw==
+        bh=dG0jro0uTdkJs/pzarvH7pNTSG+qtFn+7rA2b+WmfoU=;
+        b=cX8f40vZbQapzX8D1VSxwmrNjoJxNqWNoWGiLwgrBITmSpWCQ9mMTGvm8YMY6vr5+7
+         R4MHIIzCzO2a9M7drYcChZlBox3pBt3vVRY73tcBDsPnJo4YDYMy+jrqFn4AyIfuArR1
+         e8uEDu22+zLsZYgymsdiCIpzzpMj/J8ezH5yImJiK/uLGbDcKjMzWvQOkifL7njLWE7W
+         Dvi/rPT5fgfhalEi0gIty3B/p82ZTftPwXFXB82tkuk5mfmIY9GKQ0wP2XB1qzo9gpfQ
+         3xDn7k4+avHOD23KcDeTwGldoKQ0yVUPKTshsQLZBvARrrCMBbY2vOliDScv/YKe+1BD
+         hntQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758207676; x=1758812476;
+        d=1e100.net; s=20230601; t=1758207679; x=1758812479;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dbpUNPOiDYoiEn45wuc0crNJHXScwpSkJ4TCqMU8+dk=;
-        b=WxeKCbOjHSGjOZpYBN7ng6R6MMSimQtAZOQMzVo8CXniZqFqDRaBCRSuKmq8cgB0Gz
-         0zZW+3NVOmCabVXokfZkkcpSIIVztpYVsuX3IJCqqSe5a+kbwlAL7Qy2vYv82CucMqc4
-         obBWZKLm/V4OYz+O3T06OO2OVdCu94R4Cvd+/8k1HW/ObAuAlp7Iuaa9N+0PpTW6K82y
-         huU3jGLyk2F2K6qESdjtIIJE6pY3V2BLoBvOgTBqS1t13DfPA3qPjJ6vA/nxeA7JyN25
-         PgI6XXLRizs1H1KsBUfBJjCYn9tKpViRYx/QnhYVrPbjHMhrvqgzrVLZ+59pHV+xAd4w
-         tIVw==
-X-Gm-Message-State: AOJu0YzqtEwrFt+ZCQ+dyYICMb5vbnQuIxPo7YeDYHkcrn6ZD1uuJf3d
-	5VgDiJZouum6oe8Pg58kVo9DUmCYY+9YrRaDKAUfzdhvZTiCNUBdlV+p
-X-Gm-Gg: ASbGncszNta/KW2HADMnFmheja/NysE/ErV48wLGVj5SbJJL/YL4OpTt4ozrq1Yv5z9
-	hD60ZfPBuEEjXSezLVKp3d+v3uskcc8kFmrCbWVi+fbDW1bHsAXJ7BTx+/c9IuA28uZdhoVonu5
-	UypA46/10dgM/PKsyAMBRX/xikWaWkAV90C0Lef4uaYto6SAC644C21TULUyK0u6+QLzoQjNm24
-	hbf69QgYxHZcruIhwEr3iCUP2/kLMdtwTcMhLS7J53tlUw0rP0Sd3T0QdvBs4HVOv3XeZCbKrCH
-	dwfPFZwjo/qhkL14B5DR0LZ6ZylBDa46sp4sAfjvHO2VvQzLQcDM2QlN46ONqvkhHNorBcPLHlB
-	z0sCtdeRIbnBDDVdv/vEFUh3+YFqjEvwDBvTGqVXiO3E1H5hCSxo26HjAcbARv2HzpQ==
-X-Google-Smtp-Source: AGHT+IErSIYbBjTISh274TM0XQdjLCNlviEsTm6HU/bE+ESPLBBXm3Y78kyPvgMPCcKp5u/y/AKUxw==
-X-Received: by 2002:a17:903:230a:b0:262:cd8c:bfa8 with SMTP id d9443c01a7336-268137f1e73mr70081335ad.34.1758207675702;
-        Thu, 18 Sep 2025 08:01:15 -0700 (PDT)
+        bh=dG0jro0uTdkJs/pzarvH7pNTSG+qtFn+7rA2b+WmfoU=;
+        b=j1gJb9l0pl2Y+Ib7GoRKE6yFkmdTfdDFx4JmoH73e5wMw+Axq6C/h7yBwmhzS6Gkvo
+         NK4rE86Qup6i1S8MMk0nYxbqaXIUMqIXeBIipOZtkDA7/IQPCK9Ob67Cijytcx8/i1ki
+         HLWK5gpmVKmDUB6bIaXbOamzJR1/w+q+InwJweQDFZ0IdHjqxlUwfcqDyeJBdBQJ5/0Y
+         wV1146ADYowPRLLfl+Z0x/pGi5Ij8Glv9QrSKpwGHm1BNZb/KspMrk+Bgza+RXWTIisM
+         RINm+QBBPpKHb782JByr50jYsoKgnugMBmxw2SnRLiHcYVbFj/8MN0aVwCanO5nDb7xT
+         xlxg==
+X-Gm-Message-State: AOJu0YwuismehucEumywi8y9YHshU6TefXyxES3YCgpItL2YfNFyhwk3
+	0ZUb0cG3MbTnhPfkZsUtpopfiZBqhs7q5GFUtvXUae2LA9/NRBlAw2++
+X-Gm-Gg: ASbGncu38zdxPoGOaerDmQTqKKKsDL/CoQoRx+GUPyxYRveSvO64c+A/bmK+2UdVN4W
+	G461Jw/XqWOUtFtZW3rvLH/NDa7vqKCFtY8G41CDDnrVvspK29PQUsNzYVBEbSiTRcdvU1Rt4Gl
+	3ghxFNLOtPhG7FKP2jzlZ4V9oo/CxVwR8zA/t+LNotlLp7sbUSTDYIZDK3hDBodBxMAj911UFX4
+	+0nf2g1YBHSKcC6NfqPmiGUgGBBpw7qY/XWTqPNMvp541iVHKwS1vPETMw3dcNCedhM2ZZEtuSd
+	HcMxpbCwmN6sDnJRtumbaTQO0RfryotTFi83AhAhmxStSNPlHtNuaqodp7NVg2DcEJ2n5HKRy8L
+	/oOV2rwa6dspGyM/R8yFY07G7yBRXN8FyjI/XG6mc+E50pkzs6Z4fu9dMOOBBF2LRRZEHxprC7m
+	oL
+X-Google-Smtp-Source: AGHT+IFLnIbH2uyT2zEhKLQLVqmq/YgG9sNgP7kOLxvII749sNXuGepABW+zJ4LvDcTkJfKXX8GKWw==
+X-Received: by 2002:a17:903:124e:b0:267:cd93:cba9 with SMTP id d9443c01a7336-268137f318bmr84863505ad.35.1758207676944;
+        Thu, 18 Sep 2025 08:01:16 -0700 (PDT)
 Received: from ubuntu-Virtual-Machine.mshome.net ([70.37.26.59])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-26980302b20sm28425005ad.101.2025.09.18.08.01.06
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-26980302b20sm28425005ad.101.2025.09.18.08.01.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Sep 2025 08:01:07 -0700 (PDT)
+        Thu, 18 Sep 2025 08:01:16 -0700 (PDT)
 From: Tianyu Lan <ltykernel@gmail.com>
 X-Google-Original-From: Tianyu Lan <tiala@microsoft.com>
 To: kys@microsoft.com,
@@ -93,9 +94,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-hyperv@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Michael Kelley <mhklinux@outlook.com>
-Subject: [PATCH 3/5] x86/hyperv: Don't use auto-eoi when Secure AVIC is available
-Date: Thu, 18 Sep 2025 11:00:21 -0400
-Message-Id: <20250918150023.474021-4-tiala@microsoft.com>
+Subject: [PATCH 4/5] x86/hyperv: Allow Hyper-V to inject STIMER0 interrupts
+Date: Thu, 18 Sep 2025 11:00:22 -0400
+Message-Id: <20250918150023.474021-5-tiala@microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250918150023.474021-1-tiala@microsoft.com>
 References: <20250918150023.474021-1-tiala@microsoft.com>
@@ -107,31 +108,41 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hyper-V doesn't support auto-eoi with Secure AVIC.
-So set the HV_DEPRECATING_AEOI_RECOMMENDED flag
-to force writing the EOI register after handling an interrupt.
+When Secure AVIC is enabled, call Secure AVIC
+function to allow Hyper-V to inject STIMER0 interrupt.
 
-Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 Reviewed-by: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
+Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
- arch/x86/kernel/cpu/mshyperv.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/hyperv/hv_init.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index c78f860419d6..6dd3ae66a646 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -464,6 +464,9 @@ static void __init ms_hyperv_init_platform(void)
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index afdbda2dd7b7..a38bb96c9f5e 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -133,6 +133,10 @@ static int hv_cpu_init(unsigned int cpu)
+ 		wrmsrq(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+ 	}
  
- 	hv_identify_partition_type();
- 
-+	if (cc_platform_has(CC_ATTR_SNP_SECURE_AVIC))
-+		ms_hyperv.hints |= HV_DEPRECATING_AEOI_RECOMMENDED;
++	/* Allow Hyper-V stimer vector to be injected from Hypervisor. */
++	if (ms_hyperv.misc_features & HV_STIMER_DIRECT_MODE_AVAILABLE)
++		apic_update_vector(cpu, HYPERV_STIMER0_VECTOR, true);
 +
- 	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
- 		hv_nested = true;
- 		pr_info("Hyper-V: running on a nested hypervisor\n");
+ 	return hyperv_init_ghcb();
+ }
+ 
+@@ -240,6 +244,9 @@ static int hv_cpu_die(unsigned int cpu)
+ 		*ghcb_va = NULL;
+ 	}
+ 
++	if (ms_hyperv.misc_features & HV_STIMER_DIRECT_MODE_AVAILABLE)
++		apic_update_vector(cpu, HYPERV_STIMER0_VECTOR, false);
++
+ 	hv_common_cpu_die(cpu);
+ 
+ 	if (hv_vp_assist_page && hv_vp_assist_page[cpu]) {
 -- 
 2.25.1
 
