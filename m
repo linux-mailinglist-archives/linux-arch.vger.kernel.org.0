@@ -1,153 +1,147 @@
-Return-Path: <linux-arch+bounces-13691-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13692-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97092B8881F
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Sep 2025 11:06:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 408B2B8A43C
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Sep 2025 17:25:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 552FC3AB77A
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Sep 2025 09:06:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08EC217F951
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Sep 2025 15:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DB1E2BE638;
-	Fri, 19 Sep 2025 09:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A4EF319606;
+	Fri, 19 Sep 2025 15:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fOZ5QFge"
+	dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b="xbo3W1UF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B8E1BEF7E;
-	Fri, 19 Sep 2025 09:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C825831815D
+	for <linux-arch@vger.kernel.org>; Fri, 19 Sep 2025 15:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758272815; cv=none; b=tBAYmBd2QOenQCa9ogn2X6jjoxfdhEtC/tOzDIkkp311FgyeENoVxhpTyYG1PZDjgHmYhK+kOQWR8qVPNACn95xuTZfmdiE0YX4GAfM/d96f3Ysy+qUP95RdGUg5NuA+PDitnYyE+HU80gEZ02ViwuZTGh0nZrymof2Pzg5eOsw=
+	t=1758295506; cv=none; b=piWNgEHXAcPRSbnOnTaybiatUqt46XYj/LCnWtSZ5cVZHj3ML/h4y0Om/Z38p+vG46/1rLUZ1zeev8GP/cCw1H0gLTidwVXFegH9qRx/X55fsp9ZnK3vGhhCjrEfZ3oULXZVRD9mOZMl4mnq8b2nHarcNUreEZOTaOVF1fMLHhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758272815; c=relaxed/simple;
-	bh=1yW7A+oComf/wcAUSW0nWfvML7FUNggSBtaw622QSOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ivh8JCr/WxCtmy6+17cnsoykm3ujp/KvvGMEFcCVx/LqdeUnNqc4VJW1OfVDSzBleaqPTxrTdOAanEUSKsiIRuxHSNRZjAeDyxEljTSODEIw3JOa6ydKWAGJsZP4lXg0F2Sj/41OVuzWNazQNbuBQdO4YkDv88/nPxIKeFybPM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fOZ5QFge; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id B64F940E01A3;
-	Fri, 19 Sep 2025 09:06:50 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 2qjkM8NXCu5T; Fri, 19 Sep 2025 09:06:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1758272806; bh=wGHRDwqpnW3oFoks5BATinRh9aEQBXbKrHaBS+ur7ww=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fOZ5QFgevnHtJt0zKv1lcNNgyEYUi6N8xK3UhNLQiCaNEj3akCCp3itoaX7XnnFZD
-	 6pmX9+97hyLNFlrkv5S+FKC8dBVlGKfNNgCtZrbcCbW4IS9pjHnP39HYb6cPmB0k0Z
-	 uogOHwDg5SQoRqPGJveZnxRRNZ0FMRgr65z4XxUT8NQHTyUCxEITt0dHk6sPsy/jiX
-	 PfCM11+ZPBo39JvUaEWbaWEjsSoT82N9Ud6orUGQq9M/KoLMjVctYRRZ5NBFLk4QZO
-	 bAPek+3GZMcq5S/ozy3Pu0ezKYra+Rkiz+us9lW7QVcuSV6sYFGn754TkFNsLqeZcB
-	 hQKw3P7EK/1YqKWA1cgQTQHCKzEItUKTJixChmKBkNtIoBfCuR7vOilR+ylWfrnkdU
-	 voRo7+8pG2SIXeFYHnGbufBtE+a3eQKpLouYK60BTNQTdfaqTL2ixDDJXgLiN4yGUq
-	 1/QuXiFKVezl7Sf1RGJeU2dYO83/k1OyPpWLR9gkiINBeqy4w2RxRoo4BiNm0knehf
-	 xWoHLSdLfGAQ9/r/W+fPCEreIdTIzfoktMfmRerkUujvdTCgZPxNDg8Car05r0bMXx
-	 Xf6MeEzjYDTNI9YppOmx4DBUd/gOzzJdy4uqb/DiBtpb9fh1JKSt/l6UdYgtrfo+1e
-	 LGzKEfkRDi1sFa5EWwe6DNcw=
-Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 9BBCA40E019E;
-	Fri, 19 Sep 2025 09:06:31 +0000 (UTC)
-Date: Fri, 19 Sep 2025 11:06:25 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Michael Kelley <mhklinux@outlook.com>,
-	Mukesh R <mrathor@linux.microsoft.com>
-Cc: "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"kys@microsoft.com" <kys@microsoft.com>,
-	"haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-	"wei.liu@kernel.org" <wei.liu@kernel.org>,
-	"decui@microsoft.com" <decui@microsoft.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"arnd@arndb.de" <arnd@arndb.de>
-Subject: Re: [PATCH v1 4/6] x86/hyperv: Add trampoline asm code to transition
- from hypervisor
-Message-ID: <20250919090625.GBaM0dEegelsB724bZ@fat_crate.local>
-References: <20250910001009.2651481-1-mrathor@linux.microsoft.com>
- <20250910001009.2651481-5-mrathor@linux.microsoft.com>
- <SN6PR02MB41570D14679ED23C930878CCD415A@SN6PR02MB4157.namprd02.prod.outlook.com>
- <79f5d0ac-0b3e-70fc-2cbe-8a2352642746@linux.microsoft.com>
- <SN6PR02MB4157CAE4FA74E482A96471B1D416A@SN6PR02MB4157.namprd02.prod.outlook.com>
+	s=arc-20240116; t=1758295506; c=relaxed/simple;
+	bh=tIBWHHOOKfm2qL1G0oNEg1lQ/EY8RTTkm2B9w+25Bvk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TLjiJLJuoHOndvuLIs2yo8Sea5MU5iKRPsLLNu5XcDFdhZMoZ4/iSx44O/s/F9JHssQDbme8GKWu+FK5CA4c/24jL4XL9bU3Eb/elCPwAH0jCbyv1/HYFZRhV19Lf6tck8feXqYdISgI6K+3Jpns0QnRF+A3XPb53N/UgI4QBkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr; spf=pass smtp.mailfrom=freebox.fr; dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b=xbo3W1UF; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freebox.fr
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-55f7ab2a84eso2641348e87.1
+        for <linux-arch@vger.kernel.org>; Fri, 19 Sep 2025 08:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=freebox-fr.20230601.gappssmtp.com; s=20230601; t=1758295500; x=1758900300; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EztjVQ+y07YMfegmHOd0VyK62XkODMWu0LdNE29WAS0=;
+        b=xbo3W1UFpKFkZ1p3cmir9bHExoubmn+zN65uKZIOYM/VNr4k3So7pYfDI6mX/D9Xs7
+         tKrFxrKGsa1OUV4/BaJm81tBW61J4ZGYYxqxZFHL+2WJXFRTEp/mhXDIaLf+cQRcgUXe
+         AYqPNZvLbxLN1AyYo7ig5n8eVxO+iPi1huE+4hW6lV7MZkf7YHIdjHXfXdto2VLmATJZ
+         knqRg3MYiebrHRGL5TV4krfrv3EaVDwqo3YKPYYlEuRSeFOsywbR4G16hcwfzRVUvkmK
+         +8rrea1TuR59LvTS19HlGLqGt+kLHJ+F5+322OVOV6/84SIcgYqHnsi5cc3ulWFd4ja5
+         pnpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758295500; x=1758900300;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EztjVQ+y07YMfegmHOd0VyK62XkODMWu0LdNE29WAS0=;
+        b=u3YN3pZoAdYo1Nue6T1Dx/FAm8weo0ppne2nE/oOZFF2JkIi3XbFM+CZmVlwPzVEEW
+         JYcQaXiIxbHvRBGGyfS6hfjNG2pAF6W4Dv9JU9lg0JWPyevR9PJeMUlJAwJ/EEfaVNAS
+         5WT2IZlOThaNZ6HrlADU7jqm71TVcAOVnuQS7b68R2DFRMVYysCzc2oA9MTz0yXBrIN8
+         2YsQvZKBR+p6lVJC89odDeluxtYFxaeky1DhiQlqW1Gs9scbDnfhwMLeyDqMZgN8shYR
+         HQYDnll7iykqPZ9/XfG2M6jqKqcH+83Pf+nMub/Xy+Ejn3EPOzDR1saw6eug4/yTAFLG
+         61Mg==
+X-Forwarded-Encrypted: i=1; AJvYcCVLU+sHPtjJs9XSH0UPzALrhRsC87uXFZbMCgZhUweICAU2pmYEmipYcLwLOF8uaE80WgwVTAILGzCX@vger.kernel.org
+X-Gm-Message-State: AOJu0YyE8ZUWXpsQSN8R6tTfzYlJa6uw8oMSqmCkDUHQVcp//L5vSunb
+	OM3FHPWd1daP76h8TPgOBPVSsPXsQFP6/cNlmt40qaDs/Salg3Pf8W7r6QUygX5N+UzhAK6zBFk
+	0DTTJ3fXbZLw1imUn5olWMRfr0wSf7l3c1pLPg0PTwQ==
+X-Gm-Gg: ASbGnctJwkL82mV1TptG5N5Wqnl8/iPvkrAW4j4INjeRXJMVlRpsZdW267+iaFT9DDv
+	hZ06H/km+GJ+WdCG2/VMXTc8c2eX66BmJPr49DFpN3har2cgQ087HZxPATmls9csrjgjhu4vWtZ
+	WuukZF7+rWmeBAQESb0CgDCL0XucVixqeiSzDjOSE0PEnFdJqaMM8zn00PYqvKtcIyJqnMmLeNT
+	JsztGqj8D05OyM=
+X-Google-Smtp-Source: AGHT+IHin4gQus9SrkFEog2pTedfunr2Ers950l0f82oxrEtfjemfexmsAorW/Dsqdjvay/GpFMt6pfW/hwC+qBHF14=
+X-Received: by 2002:a05:6512:2c0b:b0:571:b70b:7dbf with SMTP id
+ 2adb3069b0e04-579e2507c81mr1455897e87.17.1758295499599; Fri, 19 Sep 2025
+ 08:24:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SN6PR02MB4157CAE4FA74E482A96471B1D416A@SN6PR02MB4157.namprd02.prod.outlook.com>
+References: <20250918152830.438554-1-nschichan@freebox.fr> <20250918195806.6337-1-safinaskar@gmail.com>
+In-Reply-To: <20250918195806.6337-1-safinaskar@gmail.com>
+From: Nicolas Schichan <nschichan@freebox.fr>
+Date: Fri, 19 Sep 2025 17:24:48 +0200
+X-Gm-Features: AS18NWBwMqIXE_dMXDlT0ngUIReSbekPPTszWv5gIfg03bAEg3Id33JL3Yqjedw
+Message-ID: <CAHNNwZAzecVcJXZmycX063-=p-M5jVkfStfgYVKJruOFo7y9zg@mail.gmail.com>
+Subject: Re: [PATCH RESEND 00/62] initrd: remove classic initrd support
+To: Askar Safin <safinaskar@gmail.com>
+Cc: akpm@linux-foundation.org, andy.shevchenko@gmail.com, axboe@kernel.dk, 
+	brauner@kernel.org, cyphar@cyphar.com, devicetree@vger.kernel.org, 
+	ecurtin@redhat.com, email2tema@gmail.com, graf@amazon.com, 
+	gregkh@linuxfoundation.org, hca@linux.ibm.com, hch@lst.de, 
+	hsiangkao@linux.alibaba.com, initramfs@vger.kernel.org, jack@suse.cz, 
+	julian.stecklina@cyberus-technology.de, kees@kernel.org, 
+	linux-acpi@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, mcgrof@kernel.org, 
+	mingo@redhat.com, monstr@monstr.eu, mzxreary@0pointer.de, 
+	patches@lists.linux.dev, rob@landley.net, sparclinux@vger.kernel.org, 
+	thomas.weissschuh@linutronix.de, thorsten.blum@linux.dev, 
+	torvalds@linux-foundation.org, tytso@mit.edu, viro@zeniv.linux.org.uk, 
+	x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Sep 18, 2025 at 11:52:35PM +0000, Michael Kelley wrote:
-> From: Mukesh R <mrathor@linux.microsoft.com> Sent: Tuesday, September 16, 2025 2:31 PM
-> > 
-> > On 9/15/25 10:55, Michael Kelley wrote:
-> > > From: Mukesh Rathor <mrathor@linux.microsoft.com> Sent: Tuesday, September 9, 2025 5:10 PM
-> > >>
-> > >> Introduce a small asm stub to transition from the hypervisor to linux
-> > >
-> > > I'd argue for capitalizing "Linux" here and in other places in commit
-> > > text and code comments throughout this patch set.
-> > 
-> > I'd argue against it. A quick grep indicates it is a common practice,
-> > and in the code world goes easy on the eyes :).
+Hello,
 
-But not in commit messages.
+> > When booting with root=/dev/ram0 in the kernel commandline,
+> > handle_initrd() where the deprecation message resides is never called,
+> > which is rather unfortunate (init/do_mounts_initrd.c):
 
-Commit messages should be maximally readable and things should start in
-capital letters if that is their common spelling.
+> Yes, this is unfortunate.
+>
+> I personally still think that initrd should be removed.
 
-When it comes to "Linux", yeah, that's so widespread so you have both. If I'm
-referring to what Linux does as a policy or in general or so on, I'd spell it
-capitalized but I don't think we've enforced that too strictly...
+Considering that the deprecation message didn't get displayed in some
+configurations, maybe it's a bit early at the very least.
 
-> I'll offer a final comment on this topic, and then let it be. There's
-> a history of Greg K-H, Marc Zyngier, Boris Petkov, Sean Christopherson,
-> and other maintainers giving comments to use the capitalized form
-> of "Linux", "MSR", "RAM", etc. See:
+> I suggest using workaround I described in cover letter.
 
-MSR, RAM and other abbreviations are capitalized and that's the only correct
-way to spell them.
+I'm not too keen on having an initramfs just to loop-mount
+/sys/firmware/initrd, after all current kernels are able to handle the
+use case just fine.
 
-> > >> upon devirtualization.
+It looks like there is a lot of code calling into specific filesystems
+so that the initrd code can guess the size of the file system before
+copying into /dev/ram0, and I believe this is what causes the main
+gripe against initrd today. What is wrong with just copying
+/initrd.image using its actual size into /dev/ram0 instead of guessing
+it with the help of filesystem specific code ?
 
-What is "devirtualization"?
+> Also, for unknown reasons I didn't get your letter in my inbox.
+> (Not even in spam folder.) I ocasionally found it on lore.kernel.org .
 
-> > since control comes back to linux at the callback here, i fail to
-> > understand what is vague about it. when hyp completes devirt,
-> > devirt is complete.
+Sorry about that, When I used git-send-email yesterday to reply, the
+SMTP server I used wasn't authenticated to google, so all gmail
+recipients were dropped. Hopefully this work better today.
 
-This "speak" is what gets on my nerves. You're writing here as if everyone is
-in your head and everyone knows what "hyp" and "devirt" is.
-
-Commit mesages are not code and they should be maximally readable and
-accessible to the widest audience, not only to the three people who develop
-the feature.
-
-If this patch were aimed at the things I maintain, it'll need a serious commit
-message scrubbing and sanitizing first.
-
-HTH.
+Regards,
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Nicolas Schichan
 
