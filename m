@@ -1,166 +1,163 @@
-Return-Path: <linux-arch+bounces-13724-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13725-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57BDBB94EB4
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Sep 2025 10:06:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0128EB95933
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Sep 2025 13:09:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 825B0484F68
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Sep 2025 08:06:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BAD8A4A4601
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Sep 2025 11:08:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80DC03191D8;
-	Tue, 23 Sep 2025 08:06:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5160321299;
+	Tue, 23 Sep 2025 11:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HGBqskiY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bqYTjiRB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05AD73191D6;
-	Tue, 23 Sep 2025 08:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F5132144A
+	for <linux-arch@vger.kernel.org>; Tue, 23 Sep 2025 11:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758614760; cv=none; b=P6QeXlpHpb2EsWPQDE6dpVlAiAw/+NI7LrU0psZFjvzJtPkLy1YHk92OVi3pdIZjmyBquTb88BQeKNDtoE0UbjYmLCExJMQ3A8yToqeFgklpqURirQRiqW/c7XHSf79aaoZi8Uh28Y80/42/fOcX7an2a1iHjTYP5eoWEK9Dc34=
+	t=1758625692; cv=none; b=FY+daL15/ctS1WfhrLbV5758o7j3QVlSn5FPkOruy84z4gi9fQX0o54CTX50ZhafUi6sgsPFJzey3j5dZh/iOaenBDZrmfr9lz3m8Ww22avrC0Hms33HngKthpdIutEywbiEsPikAnWSJGfosvJNZUs+JQ2kLdjVJ2ryIXjVhik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758614760; c=relaxed/simple;
-	bh=yNHzc7LJKJBnquHWz2WBCHWhmln5tYYqkJ/w13zzswg=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=lQ7G+TVIueF4Ol4CLpYqi6Rwm/csw/wLJR/QRpRn9VYNWdkNL1zahbCZMfEL5bi6kXP6Z5/zThDm7zDYOPRO0cna4boslzA1DldX0AXFOfB6pWUPh/GdB+W/1G5FyNYULHn21X2yva4LwxxjFs67DWehDjrB3aPJsDJYqmp7Pk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HGBqskiY; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 05C2DEC00D8;
-	Tue, 23 Sep 2025 04:05:57 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Tue, 23 Sep 2025 04:05:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1758614757; x=1758701157; bh=HsNf8DJ2SZR8XPmPI1ImnGlY7viJV3KBY1t
-	tBHJeqA0=; b=HGBqskiYYAuByvO4Ban8x9INTx7pSSh2Vv/Ed0WbX8ENMGLdlzE
-	FY/035R2G7oAjYLLPlrFXUYUErcxbpbpujOP8Htar0TAw8v8IgyCnabIpbdvXLwE
-	I/t9rb3ZCegUkKNbOxk9a2a0Z06UPl2wk8EGW6rGc63El89P9ShOVbrc09ByifXV
-	VzHTWBwaCalKMaCzsaSyWUWt6odDmR6E7TIGZEgEYZiHOVY95/Aa7Rdljd3aq75T
-	MUYDRqxTBwxIEXVAgi9LpgzMknqCB2lV9fyiQ4Fxig4QdjHlNHfVvNKr/bUqAhor
-	kOoBSXqxIQJTUHHwVudgh8iiVFEf4/SDQcg==
-X-ME-Sender: <xms:5FTSaIffj3JthDNWw6ZEo0KJVpPn-MvIIuOGamqQRhFhzPq7z7b_xQ>
-    <xme:5FTSaEqEIvbJzM0BhLTsTztzEdRzPgkoXVAxfQrK0BflIBu7TvdoAQ7I4y9k8B6PC
-    hKHJJM8HTZcH76GFAvNdzJ4uJ6MAw_SedumIY7Phwtb8IZgmh2rcio>
-X-ME-Received: <xmr:5FTSaBBOL0IAboKoxUsGneAmD3qLGhcAhwVEywYBXD98LHg1vUGvMQXSNTLmdyCJ3MAp2uV_sK4u1CoiFfm_Njj9ZcKYkfmmWK8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeitddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfvhhgr
-    ihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepleeuheelheekgfeuvedtveetjeekhfffkeeffffftdfgjeevkeegfedvueehueel
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthh
-    grihhnsehlihhnuhigqdhmieekkhdrohhrghdpnhgspghrtghpthhtohepuddvpdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpth
-    htohepghgvvghrtheslhhinhhugidqmheikehkrdhorhhgpdhrtghpthhtohepphgvthgv
-    rhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdho
-    rhhgpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpth
-    htoheptghorhgsvghtsehlfihnrdhnvghtpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgr
-    nhgusegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrh
-    drkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:5FTSaFe-9gET0cQqA5CMm5ydSRJGb4RzB-3EcqmgubJ_5GL72JmDxA>
-    <xmx:5FTSaJvUstR3Equ9afU6blRRic64eTGwfQ2FFejy_s_p2LHxP4wlLQ>
-    <xmx:5FTSaMjS9Tz21UE6tMCdzVGSUeIHUB12wAnvmbMKVjr4KHKA2O0Ovg>
-    <xmx:5FTSaBu7FJ7Z4yaldl-S3qwQJQqMmhpEGgLjmg7jyMBY5JtYMkIGeA>
-    <xmx:5FTSaI3oTB5FlXkXHMZRie9BuoZbpPgzKia9TbKO2cz9T2fotupg89Hw>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 23 Sep 2025 04:05:54 -0400 (EDT)
-Date: Tue, 23 Sep 2025 18:05:51 +1000 (AEST)
-From: Finn Thain <fthain@linux-m68k.org>
-To: Arnd Bergmann <arnd@arndb.de>
-cc: Geert Uytterhoeven <geert@linux-m68k.org>, 
-    Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-    Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
-    Linux-Arch <linux-arch@vger.kernel.org>, linux-m68k@vger.kernel.org, 
-    Lance Yang <lance.yang@linux.dev>
-Subject: Re: [RFC v2 2/3] atomic: Specify alignment for atomic_t and
- atomic64_t
-In-Reply-To: <d707b875-8e3c-4c18-a26f-bf2c5f554bc2@app.fastmail.com>
-Message-ID: <3b55179e-b290-bbf5-fdf2-bb7834884017@linux-m68k.org>
-References: <cover.1757810729.git.fthain@linux-m68k.org> <abf2bf114abfc171294895b63cd00af475350dba.1757810729.git.fthain@linux-m68k.org> <CAMuHMdUgkVYyUvc85_P9TyTM5f-=mC=+X=vtCWN45EMPqF7iMg@mail.gmail.com> <6c295a4e-4d18-a004-5db8-db2e57afc957@linux-m68k.org>
- <57ac401b-222b-4c85-b719-9e671a4617cf@app.fastmail.com> <86be5cf0-065e-d55d-fdb6-b9cf6655165e@linux-m68k.org> <d707b875-8e3c-4c18-a26f-bf2c5f554bc2@app.fastmail.com>
+	s=arc-20240116; t=1758625692; c=relaxed/simple;
+	bh=/XZsuYZiVJXloC6rrE97OTbLdirXXVYnP1HJQkVSPy4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Sth9/r+JXKdy32YoZ2tnUf3tQAJo9BLISQYAX0QvYz2++6XAdKVbvXfW+INcUQhW/fUF2vf6JLTizpMubjnnX143EXmYkiqOxR9cbsAlUqJOCBUf+chSKjaKz0JOUveZhuG7Av80nwhrY3WfPzd1uzYa2WpvmIbCPQAwCO66+kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bqYTjiRB; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-62fa84c6916so11287a12.0
+        for <linux-arch@vger.kernel.org>; Tue, 23 Sep 2025 04:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1758625689; x=1759230489; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V2nNizs4EXcS6KdJvj0JrfZmsBGMOILUvFCRBf/9eF8=;
+        b=bqYTjiRBUd6WehS77qKkZZ/Jyt+yuisivITRGxPEcCqprD88Ot1ZsMINk4JzeqeC5w
+         Jiozv2UR//8SsKYs2EvD9lH+91HjU1cOS1I6hJ6wZS1hHtU53Y8u/iOwepdXE3vS0nE8
+         9NqyheTgpoh42f6xaE7kFXIn0gDIxSMVlHR61p/rYLGoV+VJE6kXxPAAeZDU5W6PTtPb
+         wj7I75TPH32wHLvcqKdRd+AAZiZx7DKaVIeS6K0V4Ahm6lHQSHMFRtrcs66moGU7KRdA
+         KolPLykc25/JiweeQhABKQoUzBvgR0tgSP09xmxt6P+dSfN/Zt8+5fRtqhoze8NUrbDp
+         zE5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758625689; x=1759230489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V2nNizs4EXcS6KdJvj0JrfZmsBGMOILUvFCRBf/9eF8=;
+        b=WUjZs/JcQ8Ghde7aXYt8APc40xnwIYxXl21Fj7z00pc4eahJb8mVb4VGZ7HwlbJzFR
+         fciGpwOjCdncVPS1SIdbuaTyfvwgUtJgPR0YXrpa2UAVwYI3sCUoJomcpe7TINgh5+jz
+         10gnArkIYByCFUh+rDgtRgnqACo2JEzAChEUPxlLspm+OeRFmlLn+Nwc5ukzlzWL9TQj
+         TgqNHferDa4j1MoCqhPKt3qhdUa7SMyo8LdByTQoMSUxwbHNO5vJkmSh7xuYghYm7ajy
+         /nY84kZ0IgNDUpY/bP9b5g9o1lRcLCHalXGA9jWFQl5OAWGXXPqzj2tLMttMTlu4neE3
+         bJNw==
+X-Gm-Message-State: AOJu0Yx8uCIF8Jnc6qy66bmgq80UPFoOAZo1I+Gl0OaVuep0k1FcTiA/
+	7WubQz/8VFloCgXk+bId+1BQkkVz7aVXFm3NDUqKmAoEi4ZTR53uJ/KwqtU9U0n5wbPImiIuzdZ
+	jnRBhgooc4SnffFh9ol0TkSqcILPCjSoHv8ETpSMD
+X-Gm-Gg: ASbGncu6YzKhI/2jzQw4LE3xN5s5cgbyAFc4Ih2Hm7Eis9fK7rRXoPym62Wt3JCWktL
+	6FYZ4IyidjzzKjmSquKojnIbq2Xy7ULx9wYflI3XZgaLl4B+T3RlQREpO2JgsBzu69GPNtMQmQq
+	8TqZTVrz1Q+z+ufN5NTSh7ZX3ZrkgQMc9DFvDSjWt++j+qGF67PMSnIDoE2L30WHTd6K9bt9dkz
+	nkPlOyOAkQB
+X-Google-Smtp-Source: AGHT+IHOG4WkpDAtV/b73oGn6Rwke1EUIyIWRMd8NKkWBm8ULAtIMX19l+qwsw2RlB89gRURbDqwg9zWE9ZKCbG8XBI=
+X-Received: by 2002:a05:6402:1d1a:b0:633:2321:a07b with SMTP id
+ 4fb4d7f45d1cf-63466aa27aemr55515a12.0.1758625688454; Tue, 23 Sep 2025
+ 04:08:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+References: <20250330164229.2174672-1-varadgautam@google.com>
+ <CAOLDJO+=+hcz498KRc+95dF5y3hZdtm+3y35o2rBC9qAOF-vDg@mail.gmail.com>
+ <CAOLDJOKiEmde5Max0BnTBVpNmfpm-wwYLJ4Etv8D2KZKPHyFzw@mail.gmail.com>
+ <CAOLDJOJ=QcQ065UTAdGayO2kbpGMOwCtdEGVm8TvQO8Wf8CSMw@mail.gmail.com>
+ <CAOLDJOJ98EccMJ4O3FyX4mSFtHnbQ4iwwXsHT2EbLL+KrXfvtw@mail.gmail.com> <f74d9899-6aba-4c8e-87b1-cd6ecc7772e6@app.fastmail.com>
+In-Reply-To: <f74d9899-6aba-4c8e-87b1-cd6ecc7772e6@app.fastmail.com>
+From: Varad Gautam <varadgautam@google.com>
+Date: Tue, 23 Sep 2025 13:07:57 +0200
+X-Gm-Features: AS18NWDiaK8IssKPSakKKBWc2hagHQKHETrpRj1q8Sp4WHHDh4oDk9ZMPOZEQX0
+Message-ID: <CAOLDJO+8JApK5_qjtn+DhCnQoF+Lp-x1KP_QQvJUqecp744T1w@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic/io.h: Skip trace helpers if rwmmio events are disabled
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, 
+	Sai Prakash Ranjan <quic_saipraka@quicinc.com>, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hey Arnd,
 
-On Tue, 23 Sep 2025, Arnd Bergmann wrote:
-
-> On Tue, Sep 23, 2025, at 08:28, Finn Thain wrote:
-> > On Mon, 22 Sep 2025, Arnd Bergmann wrote:
-> >> On Mon, Sep 22, 2025, at 10:16, Finn Thain wrote:
-> > @@ -8,7 +8,7 @@ struct vfsmount;
-> >  struct path {
-> >         struct vfsmount *mnt;
-> >         struct dentry *dentry;
-> > -} __randomize_layout;
-> > +} __aligned(sizeof(long)) __randomize_layout;
+On Sat, Jul 26, 2025 at 6:22=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Thu, Jul 24, 2025, at 13:49, Varad Gautam wrote:
+> > On Wed, May 28, 2025 at 5:28=E2=80=AFPM Varad Gautam <varadgautam@googl=
+e.com> wrote:
+> >>
+> >> On Mon, Apr 28, 2025 at 9:41=E2=80=AFPM Varad Gautam <varadgautam@goog=
+le.com> wrote:
+> >> >
+> >> > On Mon, Apr 7, 2025 at 6:13=E2=80=AFPM Varad Gautam <varadgautam@goo=
+gle.com> wrote:
+> >> > >
+> >> > > On Sun, Mar 30, 2025 at 6:42=E2=80=AFPM Varad Gautam <varadgautam@=
+google.com> wrote:
+> >> > > >
+> >> > > > With `CONFIG_TRACE_MMIO_ACCESS=3Dy`, the `{read,write}{b,w,l,q}{=
+_relaxed}()`
+> >> > > > mmio accessors unconditionally call `log_{post_}{read,write}_mmi=
+o()`
+> >> > > > helpers, which in turn call the ftrace ops for `rwmmio` trace ev=
+ents
+> >> > > >
+> >> > > > This adds a performance penalty per mmio accessor call, even whe=
+n
+> >> > > > `rwmmio` events are disabled at runtime (~80% overhead on local
+> >> > > > measurement).
+> >> > > >
+> >> > > > Guard these with `tracepoint_enabled()`.
+> >> > > >
+> >> > > > Signed-off-by: Varad Gautam <varadgautam@google.com>
+> >> > > > Fixes: 210031971cdd ("asm-generic/io: Add logging support for MM=
+IO accessors")
+> >> > > > Cc: <stable@vger.kernel.org>
+> >> > >
+> >> > > Ping.
+> >> > >
+> >> >
+> >> > Ping.
+> >> >
+> >>
+> >> Ping. Arnd, can this be picked up into the asm-generic tree?
+> >>
 > >
-> > There's no need: struct path contains a struct dentry, which contains a 
-> > seqcount_spinlock_t, which contains a spinlock_t which contains an 
-> > atomic_t member, which is explicitly aligned.
-> >
-> > Despite that, there's still some kmem cache or other allocator somewhere 
-> > that has produced some misaligned path and dentry structures. So we get 
-> > misaligned atomics somewhere in the VFS and TTY layers. I was unable to 
-> > find those allocations.
-> 
-> Ok, I see. Those would certainly be good to find. I would assume that 
-> all kmem caches have a sensible alignment on each architecture, but I 
-> think the definition in linux/slab.h actually ends up setting the 
-> minimum to 2 here:
-> 
-> #ifndef ARCH_KMALLOC_MINALIGN
-> #define ARCH_KMALLOC_MINALIGN __alignof__(unsigned long long)
-> #elif ARCH_KMALLOC_MINALIGN > 8
-> #define KMALLOC_MIN_SIZE ARCH_KMALLOC_MINALIGN
-> #define KMALLOC_SHIFT_LOW ilog2(KMALLOC_MIN_SIZE)
-> #endif
-> 
-> #ifndef ARCH_SLAB_MINALIGN
-> #define ARCH_SLAB_MINALIGN __alignof__(unsigned long long)
-> #endif
-> 
-> Maybe we should just change __alignof__(unsigned long long) to a plain 
-> '8' here and make that the minimum alignment everywhere, same as the 
-> atomic64_t alignment change.
-> 
+> > Ping.
+>
+> I'm sorry I keep missing this one. It's really too late again for
+> the merge window, so it won't be in 6.17 either, but I've applied
+> it locally in my asm-generic branch that I'm planning for 6.18
+> so I hope I won't miss it again.
+>
 
-It would be better (less wasteful of memory) to specify the alignment 
-parameter to kmem_cache_create() only at those call sites where it 
-matters.
+Can I follow this along somewhere? (I don't see it on arnd/asm-generic.git =
+atm.)
 
-> Alternatively, we can keep the __alignof__ here in order to reduce 
-> padding on architectures with a default 4-byte alignment for __u64, but 
-> then override ARCH_SLAB_MINALIGN and ARCH_KMALLOC_MINALIGN on m68k to be 
-> '4' instead of '2'.
-> 
+The unnecessary log_*_mmio() calls are showing up on enough Pixel devices
+as a CPU cycles wastage, and I'm sure other Androids see it too.
 
-Raising that to 4 would probably have little or no effect (for m68k or any 
-other arch). Back when I prepared the RFC patch series, I instrumented 
-create_cache() in mm/slab_common.c, and those caches that were allocated 
-at boot (for my usual minimal m68k .config) were already aligned to 4 
-bytes or 16.
+Thanks,
+Varad
 
-Also, increasing ARCH_SLAB_MINALIGN to 8 didn't solve the VFS/TTY layer 
-problem I have with CONFIG_DEBUG_ATOMIC on m68k. So the culprit is not the 
-obvious suspect (a kmem cache of objects with atomic64_t members). There's 
-some other allocator at work and it's aligning objects to 2 bytes not 4.
+> I currently have nothing queued up for 6.17 at all, but I already
+> have some of my own patches that I plan to submit for review after
+> the merge window and merge through the asm-generic tree.
+>
+>      Arnd
 
