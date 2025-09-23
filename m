@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-13733-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13734-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E778CB97396
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Sep 2025 20:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DFBB2B973AB
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Sep 2025 20:45:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E143619C3D59
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Sep 2025 18:44:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D206118A4D08
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Sep 2025 18:46:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE5A43019B9;
-	Tue, 23 Sep 2025 18:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B38426E706;
+	Tue, 23 Sep 2025 18:45:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="f8yn9ZUQ"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="AAOgpE+C"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013015.outbound.protection.outlook.com [40.107.162.15])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013040.outbound.protection.outlook.com [52.101.72.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 592282FB081;
-	Tue, 23 Sep 2025 18:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDB2A48;
+	Tue, 23 Sep 2025 18:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.40
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758653053; cv=fail; b=PqmQZ6Ae93F8GRuny3cvNjxP2bM+0UDoKlw/M1Geoj7pchZszzRUfhh3XzYRMOzGpleg10p0kNRiPnT7bI0tBFz2I72K5JyNkSwykywLsDP9pxozKnE1OeCTn4Lck24fZ6K6X8MMkStjbLHC6927kPe0akH/hz6de+TkbaL5Pxw=
+	t=1758653137; cv=fail; b=KOe4O40dw8BtOEYMojPu6jJ5GnpSLVoUI9cgh2X/yT6hvgk6y8DL2hVlvnO2Ij6tXWJzBJtXOqUZDqdOXnDSTKWIVD4nFeW59Psy62VCQFEm/jOZMLBRiCvNceudug9PIoDmAjoYo+oSoloSmo1SQeHpp6eUU6UmEzEqjMyJXDE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758653053; c=relaxed/simple;
-	bh=v42NJWLr3ASqTJO0vk6gqWFOjVdIZ2rOHy04w3d0C08=;
+	s=arc-20240116; t=1758653137; c=relaxed/simple;
+	bh=VcAmDjXY9KSVEodvX3YTnqEyepfIipFGS09IS2k62Y8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=HNry0HrLLWxQJAdg3TL912/l78mgEh2O64SReuhqtgGd6NN9UBa0awCbrRKwoL/GC5Z1YwDLfTDJKHZ8kyNfIEk1hKLNqbHLYY73ilWVymOZ8QGL6AdE9O87+4AzkhVOqu2l1EVd/aEcx1nyV5LaKYC5FklSH+MZ5xkqldp5kIo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=f8yn9ZUQ; arc=fail smtp.client-ip=40.107.162.15
+	 Content-Disposition:In-Reply-To:MIME-Version; b=b0AzD7yi2gVxf2XaT/El8nB0muyldV93BckiGZ6nQqwpeS+k3aIyPy5DbfkoesDZDwnxk7g9BaqJ6I06KRxkZ4ZTPo+J3WxA+iWyqAQvffqUXXkiI0ZPx/5mLHSHABR9kgnQrbxMg4RhW4ih+c/KCJ/v2L6bsknwzrOi9+oXdFU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=AAOgpE+C; arc=fail smtp.client-ip=52.101.72.40
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Zr70iqNSFoTqkyc5CSf+7lu/XdKzUSQtEne9zAr/gJiG1nFaNvPPrw7N2tdiqIlhrH2CngZCyG4QGnBOV9AL/XgT8IxeFpZL3PEExWw35CvuSmo24sTy+E06Th6zuv1bY1qHe6ihyyYfFKoHOF8IJWXlZP6GWzRCo/Xnmi4KDLo5LweR6XWuU1uWdON3N6QybbJ75/VBOuymIlsm2GfrdhYf8HTdCrCX2Eq+V6P/Kg08dKFbihKbih2O0lYwaHejgpFkSfTM1EjOiNwodDMvHeMmnAZSo8xVuqJYot4P34JsD40QRPdD4k/Ezcm51FrEJiVNor7JJ1yYc2F2pc/qFA==
+ b=rWk0V9Z1lobUzmsoMqP1df1vEyKYbrfGy9YDLIjZA2QmNGPfdC8OcXHnznlog78C9RSETGGcnEr4qoF7uwLxndOeApHwENYHVt4sQkmqqW78cKOP5ARoud68edk0QwZOEW8+illICe+U8jAMlk66Ef2oJgWkN+1/k9C5rtDTP51GI/XDOVwqOQ7nU7zDL9rX3CqgFiANNrNw2Ch2xz9a6HFfJyskOyeftPm1sTCJxq4qLMopTTclWlFaGkOTrYsZ3DBROhzwGQ67npE76rVvPIZus689KpgAuYjQOfNmkfbOrgyIITnX4qhMsSZqgmHjn1lylJsl1CT/2C9rBgQYdg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WQuH6xgNKFl64dJ8ap/O8xRTPBKQvjsAjgHG/MRoRxM=;
- b=VDe6MMD9y8BPyrgqZQ/25xW1C3ORhZxfByfaxvPCw8BzAcwHiDiris2W8lipYZQtEV2R1/cqiwy9jTV+ux0bkeU1PauG8+RIH/X/et0kynY8s94TgdMN2OIwjn9O+yE3/DacGBS5z2pbzthus9hEfo8M8/xoPSyqHwrRtfu16HvBmr0ZurFvF2fbIuc4bDIMEIKD8R0kLZtEX+0uwrijquqvZK+AMWC/GSLU3NYi9deVhaouub4fY0/Ve6okskb392o0t76h5TKOf+HBU3NGRiuixocYdgrA3MpiBioOHYQsvIaWZRNoB/UTjwyPN0+BDs6skWfHjQ45ilr1u5q5QQ==
+ bh=PqlHJ3v3Os2vyYC/PGpLXoER4boSJjiQN8+QEkGsIKY=;
+ b=SCefBx/8tgpCrPbK59auJpcX0VXZocewYl6I54sKDN3bQvr8LdCBjx66UEBKZFzaJjgaskWrawo0AJhwRUwQaXvVLGgjR+rmdKScvDSEZoIN/QR+69cbB1Lq3e5rbFfbZMKQxkFJo6KNXEakr6dL7W7OJNaCAZ8vqa/KcTHXVx1FxvSvMfqdhjOAxFEuHk2rlXuzP9sXZ7PepPc6K8ESlcoaNDu6EU+tDzGu9HazpfoyxM0VQYEo52ay9u1jsv3BAad0z3oBamaF1yxByZv7u0lZIEj760IDckjzifhhr1FKG862fsCMNkfDCDalZfPYmJiTveFNGC0qBY60WPT6RQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WQuH6xgNKFl64dJ8ap/O8xRTPBKQvjsAjgHG/MRoRxM=;
- b=f8yn9ZUQJpAESILnSMcze1ykI+/nlPpiJqj4L7aZFDkBLz0L2E4Fg38u2NODLMIzyO9OMYGH8YZnVRqdjEdAI5kNw76l5AH3shOGFUlHTA4AjGWCckbAl3yy1dC1bTczDMfgIcOwXX8JSfB+/3l5hc4LSkarv3XIMy+IYX9GkdMToQNpunE9Rniotjx0YqNglqQrU3XQkaKQ9O714+IKtVFYGsg7+hYqQTCmIDoEQSzPHDcMkKMDiP/tuAPqDelysy4lv9FZhXISpheOPChm3H5f7v63RZ1Exk3ow0WY+qbarJe1UCjQP7n+E+oX1qeUI629AZa0ARplftD8ZsDNUQ==
+ bh=PqlHJ3v3Os2vyYC/PGpLXoER4boSJjiQN8+QEkGsIKY=;
+ b=AAOgpE+CdTLUf86eBGhYUOnn7VOMaJOOJWUZjpMK9KPQ9nC3MFHSzzXtKQAqVF0f+ixU8JnHZAuTUuqivMhUylVPybX8OxGk0ut3PD3VyW1va3tT1wZjBXGD76hve79l8crOqWEfQMCqOWu6H7mdm8gUF7DYdCRbM9S19Dn6g/jYdSKi/LpUi1XbmVjey9+K/+tLCZSm58/w9252XLorUg+rKvOeozLOJY4hkrDfVJVxQJU9eQxutuWQm+n0wQB6HyHJhChCuM5Ul+nUpfWLC2aemASZIytxAdI/WsxVu89bg5TqD+I6RmpIz1eD69FTdUvvdOl+CrIyzuAlFXtpOA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AS4PR04MB9621.eurprd04.prod.outlook.com (2603:10a6:20b:4ff::22)
- by GVXPR04MB10473.eurprd04.prod.outlook.com (2603:10a6:150:1e6::15) with
+ by PA1PR04MB10769.eurprd04.prod.outlook.com (2603:10a6:102:488::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.9; Tue, 23 Sep
- 2025 18:44:05 +0000
+ 2025 18:45:31 +0000
 Received: from AS4PR04MB9621.eurprd04.prod.outlook.com
  ([fe80::a84d:82bf:a9ff:171e]) by AS4PR04MB9621.eurprd04.prod.outlook.com
  ([fe80::a84d:82bf:a9ff:171e%4]) with mapi id 15.20.9160.008; Tue, 23 Sep 2025
- 18:44:05 +0000
-Date: Tue, 23 Sep 2025 14:43:55 -0400
+ 18:45:31 +0000
+Date: Tue, 23 Sep 2025 14:45:19 -0400
 From: Frank Li <Frank.li@nxp.com>
 To: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
 Cc: git@amd.com, michal.simek@amd.com, alexandre.belloni@bootlin.com,
@@ -72,16 +72,16 @@ Cc: git@amd.com, michal.simek@amd.com, alexandre.belloni@bootlin.com,
 	linux-hardening@vger.kernel.org, radhey.shyam.pandey@amd.com,
 	srinivas.goud@amd.com, shubhrajyoti.datta@amd.com,
 	manion05gk@gmail.com
-Subject: Re: [PATCH V7 2/4] asm-generic/io.h: Add big-endian MMIO accessors
-Message-ID: <aNLqa4poPkkvASbq@lizhi-Precision-Tower-5810>
+Subject: Re: [PATCH V7 3/4] i3c: master: Add endianness support for
+ i3c_readl_fifo() and i3c_writel_fifo()
+Message-ID: <aNLqv/yjhwu3/ai0@lizhi-Precision-Tower-5810>
 References: <20250923154551.2112388-1-manikanta.guntupalli@amd.com>
- <20250923154551.2112388-3-manikanta.guntupalli@amd.com>
-Content-Type: text/plain; charset=utf-8
+ <20250923154551.2112388-4-manikanta.guntupalli@amd.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250923154551.2112388-3-manikanta.guntupalli@amd.com>
-X-ClientProxiedBy: PH8PR22CA0016.namprd22.prod.outlook.com
- (2603:10b6:510:2d1::9) To AS4PR04MB9621.eurprd04.prod.outlook.com
+In-Reply-To: <20250923154551.2112388-4-manikanta.guntupalli@amd.com>
+X-ClientProxiedBy: SJ0PR13CA0113.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c5::28) To AS4PR04MB9621.eurprd04.prod.outlook.com
  (2603:10a6:20b:4ff::22)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -90,107 +90,89 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR04MB9621:EE_|GVXPR04MB10473:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96641ce8-35ce-4294-3f61-08ddfad12c27
+X-MS-TrafficTypeDiagnostic: AS4PR04MB9621:EE_|PA1PR04MB10769:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2fe6a1c7-2037-4201-cc6e-08ddfad15f50
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|19092799006|52116014|7416014|376014|7053199007|38350700014;
+	BCL:0;ARA:13230040|19092799006|7416014|52116014|376014|1800799024|366016|38350700014|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ekRLMnhQRWI4T01hN2FXSTA5aHFHdHAyR1Y1M0MzT1BUTFh1RE11OVdUazdZ?=
- =?utf-8?B?NnRRZDlGWFc0Ui85OVg1NHpsT3A5UERYUTJiSDg3alB6U1NlbXgvN0R6Rjl0?=
- =?utf-8?B?U3JpcXVnUC9vWVhPeS9TVUdDaUliOVFUaHNtUFUxdm9Fb0J0K2dDYWR3a1dO?=
- =?utf-8?B?cm45eVhSRjZRaGNZbkV4VnBuRWlxWFZJUk5VaUZRWDJvUUdLNmJGUDROOEZC?=
- =?utf-8?B?WHpzSE9ibHVmRXdHYTZoeU96Y3AwanN6cHdQQTVyN3YxR0ZEMEMvVzhuL3VV?=
- =?utf-8?B?UG1RZHhxOHpka21LbjNxUW0rbmlVL2REMDVIRkVKcU83VTFXOUtoN2FSa3lG?=
- =?utf-8?B?ZnI3ajloTDlMbzFHQW4wUkV0Zy9YRkRWVXFBeXlSVUorQ24yMXgzbVlCemFY?=
- =?utf-8?B?cUVhY2Z3TVhTZC9hY2tqKy96V0xPRTZ3WWRuYnE0bGRPcnFIczhoUjRBdWdD?=
- =?utf-8?B?aFpMNUpCQ1ZmZFBqQ2VxZ1lxMURWakI0UWRBbTRvT3JwTzdqVFRySzBvaXZs?=
- =?utf-8?B?ZmtvVWE5VVhZMS8wcVNaWWdmbEtPNUp1TU15akFPYmt1dHcxLzJqcjU1Rk10?=
- =?utf-8?B?MHY4eHVGN0daZVNMSHlnNDZPa2pxM3dxaGJ4NkEvUlZiOE9UT3Fady9sOGc5?=
- =?utf-8?B?MmhZTDdEOUl5WFV3a1VhaUVmOUVsRGlRUnNOamROb3FVb3pNYkt2N0dGNGRG?=
- =?utf-8?B?RkM5amFoNnRyd0FWR2J5Q2N3ZUJpMm1WRzBJUDZjcmhBcHlabUpVdDRlZmk0?=
- =?utf-8?B?NFlFS3RNSjQ5dU9yQ2lYTmZkSDE0bmdGM213Wk9UanZlSWV4TDJZVHFOMjJo?=
- =?utf-8?B?QXZXMFB3SEs1ZnZVd2paSDcxbEkxemwreWZYTXExRjdMS2kzK0pVS1JEdnRw?=
- =?utf-8?B?eEVQejZJTjRXL0o1OVpKY3ppOXVqSDdQOHA4eE1MMjR2blhhVk1VZkx1R3k2?=
- =?utf-8?B?K1prVTdaQ2VKSFB4M0ZBR05HSnZxTjIxUGRjSWVnYVMvMTVFN2o0eHBQNUt4?=
- =?utf-8?B?L2lGMHRIRDN5bGVKUEYyc245aWFLOHNualJjYkgzZ2FLWmwzUi81MTAzQzhW?=
- =?utf-8?B?b0ZDKzZQYlBob3Vna0p1TTFLYUM5MWtOR2Jsc1dhNVFJTDR6a1VjVmE5YWNn?=
- =?utf-8?B?UjlaMTVmVWxRRlNXbVFDOFhpVmV0TWEvaWJJUzhMcHhDbTV4V0o0anVmYWc3?=
- =?utf-8?B?U0UxU0JBUmowRk5MSXhrY2NQMlVCblpseFljRVQrVWdyVW9qV014RnJLaDZP?=
- =?utf-8?B?V1FSWWRCV3B2KzhsVGUxcTh5STJGWlBsbG5nQWw4UjkzRmNOcHVtSlJCNW01?=
- =?utf-8?B?OElJN3V2UFo1SHhQOEtXcU1oQ0M2T0NDMXBxR0dncDFvYzhzSEdCNUVnc0NR?=
- =?utf-8?B?bXNFQ20vYmM3RTlXTnFHKzlZUHkxOUgwcXVUZHBmWVhWVlpQa3Bta3dCdWZj?=
- =?utf-8?B?T0hCajBiaXhvQjFtd0NUSWRubHp4ZFpicTBQbjJJdWJtQTNXK21OVHNETEJk?=
- =?utf-8?B?Q1hRL3ZlKzB5cWVpMVlJSlc3MHhseW1keGh5RllhTU9VRjhpTDBwSURmL3Rz?=
- =?utf-8?B?OVlacWp0MVViUFBQdG80VXJJSTZYcGlrUW5LRTBjNVlOUWN6RG9TdkVucUE3?=
- =?utf-8?B?VUQ2M0tiVEdZbUp0S2hBYWRHcTlnZVRza3lvaytqTWwzK1ArMjExbXlHd2M5?=
- =?utf-8?B?Yy9wMkJKMnlqcllBNTQ0Q2UrTGNtNUxOYWtTVUlBalFvYVBGTHg5aENhenlz?=
- =?utf-8?B?QXZhYUkzbDFNRFNzOTlCSFpvRFI4d2tNcUVSMTFvckJEc213c2hzbWZjWlBV?=
- =?utf-8?B?L1RIZmhCTThSU1RRbnNwWmR3TEVhaHFEWkhRcFl1MzVuNDUzWjRVaVpzY25q?=
- =?utf-8?B?aEZvMlA2LzlrRUF1WEVTQlFoQUxHS0ZUeWtmYUVSKzZTNjlpNEk4RUdYbkZh?=
- =?utf-8?B?R1h3K0tKUXRCNFJGVyt0RjlXTkpjaGVsWDhCZ0E5a0hucnVuYWxMdHdkdXIz?=
- =?utf-8?B?YTI2Y1F6WXF3PT0=?=
+	=?us-ascii?Q?bOyfRWpDCUmDjPdKVgJXniYFKeoS/WXE7cqvuR1WGT3/ZqKou8mJOn2AyPRe?=
+ =?us-ascii?Q?4SllOr4OTC1AgihavTw6VXMu6zOp+MAgm+8vEWq3xtvg9v74Y8v+yanktJX/?=
+ =?us-ascii?Q?VLGHLWSR0JD4cSgBhlmXcevVrUdvRfTGooJI23fOBLCYUNrw7iYYdOsYtrBH?=
+ =?us-ascii?Q?y+9R3SDS1W2arwIzfHGtTqiKKwZ3R9JlMaBRXLqVMis4BhpW/7a411ii9Lj7?=
+ =?us-ascii?Q?5yDyZyh5NSpwzKPXUMlqzEtktXwSNu9YGlaLGVSMyeDpuxUPXN9o2XI1VyrJ?=
+ =?us-ascii?Q?E6PemOY4NJRnJISEwr9OFW6AkmEvlaVBr2iMI6Oa1Tp+vw2jA4WQoKkWBNkv?=
+ =?us-ascii?Q?YMslvRqNrmDlfhW73bd8afAGiYDIhCYGAq85vDx3c3IGJwyuj95vIGILjzk6?=
+ =?us-ascii?Q?MbUsGHii1wD7vCwJGGpcvIKvzXdOQHcxLiv2FyOBzMD/oRaQxBYHp2/QWKSB?=
+ =?us-ascii?Q?1OrYwj178ssrFgo6GOaXmdJxVdaA8BPS2Br2sIbKq3cRnRvmOBsoVMdgjMv6?=
+ =?us-ascii?Q?PkmRjEv0S+qIrAMRa1DzUGdRPrWeBjcd/fIJX4SYya/QKTMDWN0+xETpgFwn?=
+ =?us-ascii?Q?n9lfW9FBt2T8I/YgRXRi3Tda8leuo5lQj/BNG4k/6npPf4tI+8rF4Edy12Rh?=
+ =?us-ascii?Q?/jHV5VmXwwVEgpd3AXtCy3uJqoancCGlKu72LwsEsA4iSOgiW89cU/kp1aTw?=
+ =?us-ascii?Q?5qQ6RAG1dXMjUJhMt9Bq1kG5xLjWUJaNyktVp3vBfUb2TdxECAhruVkJxMjI?=
+ =?us-ascii?Q?/JX6ypvsyyfzrkDT++aSfaxoZzG+iKi87NcbNuMfXpQvIPLUYSGpuObVXNQS?=
+ =?us-ascii?Q?g54K35JfYpdKF1Cw+SP8qH5PyTsHJZsO8tTnQvLCSdfrRVnEdm2Sig9SwYvD?=
+ =?us-ascii?Q?U+w7DwV+7T+tZb3wiVDPU0aKvpdrDIDulPfSN4j6rktdaKrOxm4ZYV5d5RZU?=
+ =?us-ascii?Q?IdZsCpK8KZwSi6LWXtXwtgzDaa8/M+GMr1zWCVETSrXVJAXojtZs5jQU0qfh?=
+ =?us-ascii?Q?/8QDKTOEt7PxRD87HGLHWh8QfOFd4HMbLT9+bstU5Iyw9Z1yC5CSFKNdVn1N?=
+ =?us-ascii?Q?VX+bDHb1IhcGrkhf+nnTM8MlYvNKthnX4Baj6i3jyyOGReZD4POi3CnKUD9n?=
+ =?us-ascii?Q?i7Wa/TsjwE9dVfxIzA7lHsZR8VLgK1LevvlPv9ZJ1EzKXyfINtLzynE2xY4v?=
+ =?us-ascii?Q?d/pT30YfCgtUVTLdyr7fMUAE4TJg09E8rJr0A6f1B9/M2u+Xy21zj3/p3Wqs?=
+ =?us-ascii?Q?3nwg02jOhf0k9HsQrZCWygmTnDHpeLNUSndgeVctV0y1X0Wbo7wW04pR/qK3?=
+ =?us-ascii?Q?D1JM5nkXJ5Ta1GgXYNpvuf2+Jgv1hzpcCgwocYukhWOMzWq3nWk2ztjSDfKx?=
+ =?us-ascii?Q?eqs74W3ulvBm/Zov1lf82NC0N70dbKaeiydE8QihKTxaZUgCQyjXSzfSDis6?=
+ =?us-ascii?Q?6ajhA+8WAfK8DdJUoLlsMLLABt+VKRrGY+WOrBHCYp/3oTEUq6PM5g=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9621.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(52116014)(7416014)(376014)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9621.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(7416014)(52116014)(376014)(1800799024)(366016)(38350700014)(7053199007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dFdlRlA5NDI4VUpTU2RGOHZnZlpUL1ozOCsxK01oTkkyRFJ3YU9VZDkzZG4r?=
- =?utf-8?B?MEF1ZUpuMVpsTVNDN0h2UFBmV1BSdjBnQzNRbnpHaHg0QlZIU0s0TkdMcENO?=
- =?utf-8?B?M0FWNURzMm9jMGRjWis3ZUtIcGZZRHdXZHY5VkY5UjJrNGJZdk5hejA0SXNp?=
- =?utf-8?B?VnBnNmYzTUVRTWRSTmhJRDBaWUx0S0NyOXZ1RkFBcllwc0hubDRXL3RlRjBn?=
- =?utf-8?B?VlhDTHBpcEtpQmZJcjhmOG04MkJwOXVXSDkva1JBWVNqUnJBaVhoeWc2S3FU?=
- =?utf-8?B?UG85R1V5SXphWGJjV2RuNGRQaGw1N1VhNmd2M2FHRjJIdEoydFpYc3N0VXUx?=
- =?utf-8?B?TGhPa3lXbGw5cEFPTGNjYzN2ejc3WUMvS0pwYXFKcDJsdGp4OXJZeU9yQ25H?=
- =?utf-8?B?MTJTWjN5M1pMbFR6S0VFbXFtWkJKMVo0TGdkS0ZJc096THhQWVVQV2llalQ0?=
- =?utf-8?B?MytLNjJtUDBvYVl1U0JQWnIzcDUyNllpdk1JRGJGTk5DUzh2eC9xY25KNXpU?=
- =?utf-8?B?Y0xjWHVhWEZKbGRBb2pHc0cwYjRsODB1blRESjdKV2RxN3ZjVDJrMWJ0dVNC?=
- =?utf-8?B?UGtDa203TEx5VkpBcTN6ZUgyTWZRTVhFRTlUdTJmcGRUajJkRFAxM21pZmsr?=
- =?utf-8?B?ai9sZ1ZsTWd3YUJnZEhZd0NMSDcraStibFlwMEdacFJzVHVnTWt3Y2RxQ3lj?=
- =?utf-8?B?TktEb1UyWXg2U3h2NEE1UWZocnkwNndSQWNJV05yM1A1c1I3YlE5VmxsRUlG?=
- =?utf-8?B?dHJibzVpWnc5WUtGdDdYdlFhZ243Y1Y3clI0eWNrL2Z5S3p2Slp4b2lZZjFD?=
- =?utf-8?B?NmVaZ25IUWtEaVFTb3lHZkQzdnQwSWpPMHhDbzZmWGoySTlFakpqRjE2bTJk?=
- =?utf-8?B?VVkvNzN4d01lbnpzWW9Nby81WjZzcllFRzBQQ1B1SHhSdVdpWDBLRDJOVFVk?=
- =?utf-8?B?VDhqWmkwUGVrVnhkVjFPZjM1WWxaMVEyV0NZYnVtdmhheVdmeFc1c2x3QVU1?=
- =?utf-8?B?V0ROMXRnMWZhcXpzODN6Y0ZQV2U4dDJkWGxxaDdLSTFmZE9CTUdUdHQxMGxk?=
- =?utf-8?B?bnUwVFFCME9nYnhuY092UzJtWFZWVTZ6L0hadVBPT2JlVjkxcXd0S2tneUF0?=
- =?utf-8?B?blZScmxVZ2RRTU5EaU5udWJsQzhyUjB6aGs4cUVPWmI5V2UrNThRRENIQmVx?=
- =?utf-8?B?YlloMytJdzh2RXdoRkc4WWJGUXByOUJuS0tqRGNWNGRUalpVMkJCUTIzV1ds?=
- =?utf-8?B?djhUbFFYc0drV1k0L0hzcFZMS0xoNjJhbTZoWjh4QzRRUnhzU1poY3pKWGlP?=
- =?utf-8?B?STdnS3g3Y1dpU0wyQ2J6V3ZZM3lqVEFYUzhLSmhhRDZiY3o0U0VScHlhc0ti?=
- =?utf-8?B?SVZ2a1BDbHBDK1RPZWVIZzBWYUI3ei9MMm5ZbDNNUlVmWmlrSFprQW1yVUdY?=
- =?utf-8?B?Sytxc0l5bjVpdk5ic0VUcldtVlN6WDZVOWtaLzlYVHVvRnJwL284TjY1VmFz?=
- =?utf-8?B?RzYrM0w3SENXVHcwN0NsMVZWTE16RjVCYVNUdUF0ZDJQUGx1U1NQeVV3L3BE?=
- =?utf-8?B?Z1RnRnh1UEYweGdFUXVYWXJtZHZwZ0VlelVkU1IyaDhvVlNGaHZCbzh5ZVpP?=
- =?utf-8?B?cG1zaXZ4SFJnM0lENG55OWVCMGhGdm9tL0thZUpkRjdsdnZIYkdmZW13c0N0?=
- =?utf-8?B?bGdsTE9OQklFcUw2YjlYT0FRV2pBZjBTdmY0ZjE4c1o3bVhZSmd1eURqNEQ3?=
- =?utf-8?B?cXNGWlh4YjdYYmdhb1lUV1EvMlVoWEgxWHRZTjBudFliY2J0ZGxwQUJWOUZ2?=
- =?utf-8?B?T0YwVmIyRG8yNG9xYmxmR1BBZTJ2c1dEMkhSY2RZRWhib3RIOWUvMnBySjFH?=
- =?utf-8?B?MThCdENsZmZFRDZlYkMvV2d5VmpIZEdOWkx3T0JMRUNQVUlJQWlRUTgxcFc3?=
- =?utf-8?B?ajIrS3RZMFd2VlRyekZ3ZnNmc21OYU9DMGwwL1BjNnFmVlNzSmVCdGQzSzBk?=
- =?utf-8?B?VDk0NE9GRExwMTFnOXRYNzlqZEYvQVVCQWdUMlE4ZHo1Y1FjbTVqVm5CNWQy?=
- =?utf-8?B?dG56U2NRcER2SldJbUhiS1dtMmJzc3plTVdkMm4xamxVbE1DbDF0MDZyd2dp?=
- =?utf-8?Q?Yd+M=3D?=
+	=?us-ascii?Q?2xH85hSmUwmeBoptsoiAyOUmDCpL2kKUICKyi3vDqvAB1mh2PDnwLndJtT1Y?=
+ =?us-ascii?Q?qDD33beFiYsO1o8PqZmvh0wxIUcOkDO9Kxi1QE6kL9vQLGhP9Z+e8L4J+nRx?=
+ =?us-ascii?Q?PfgFV3Y82w1dwGSi/rjZ4eFQbEPbXtKFwCdY5blanOlp9C4AvuLioU7WYbYd?=
+ =?us-ascii?Q?P4o5SxB0acFVYDzLSj5TVOiCwTxv6OETS4DnSvZfPl310xFCumCSDcdJlvMB?=
+ =?us-ascii?Q?uva74shudCDUE5tbihLOo9NsKSCd0CudtwI72smqxP/mDNErVREkOIUCo00b?=
+ =?us-ascii?Q?2lRYeOP6SCRYiFfG0IwHMUQnptOZVwW8FWChp/uBmsCdPXew85c8+s+0B01Q?=
+ =?us-ascii?Q?mxWpOy46ETxBItICO61lYQ6NABKutGRlBQP3YbQdx6EVnBJddcSg+JJ6Aclo?=
+ =?us-ascii?Q?7/q/T0P2zdDzCwXU3HYQVK++g/C0uhlczyQiXLi1hugmqQ5tqJUELUeRks4G?=
+ =?us-ascii?Q?OXCCractJowwDndco7iUJCCsk+k3AFR0UPZaXukrqz1f49dBU+nDAY1cV5G5?=
+ =?us-ascii?Q?jq9JCGvtxhwFx3b8127XNHt4VA6RnqK5cl/8Wl3DEnmeUbVcEdjDTLy0i/p7?=
+ =?us-ascii?Q?ciLTTl7V+IlFASI2Jd9oN7orXfn6+Bnit+jMIkQSt0BVvbXVZuCZct+ZtxWl?=
+ =?us-ascii?Q?2qPZtrnohpisqQJwMGJSqjE+Dv/QU5qauL7jSi9k84k38LWGqdHw16htnQxI?=
+ =?us-ascii?Q?6wert2PQGJQn/ozgmt/KTZmI0OmCQZO/YCDykhrWVeEGzJhhL7jc1vYoteug?=
+ =?us-ascii?Q?cn87rngEVAOUS86482LqVC7Z1sxDbIrcYIShbeh+Fhwgq6PR87SxKzw89UYA?=
+ =?us-ascii?Q?S+iu39VwO+lpCcF7YXJgNJp6gJ0UhBfTue2Pd3r0z83EwJLEPDHYRQ7cxCRv?=
+ =?us-ascii?Q?Sg/jdT2gyHqUHUw/FcZs1V0vA4lim+TxtTqrFw5cxR2Sbw90u77scau8FDNo?=
+ =?us-ascii?Q?iZrmxB5lOtH/C2egltSrZZRGa+snPnqBixDwBShutbWNv80QREh9NnZqMeAG?=
+ =?us-ascii?Q?U+/1zxBMNL7egF/bUCesxW+4mxXhlVcWHWCU8HWk3JuMLHQRViJKNwWQ9p4l?=
+ =?us-ascii?Q?QJiix6AoB0AFaxketWwfN1UIVCe3OwWyQDJMI1Dc7l/1RSKBrWTKR0CMREDx?=
+ =?us-ascii?Q?uPIXn1XBzOORaRRBr/5tm2rIOsJPjVPeiPkUKplpQV+/Qni+Hzlv3mehjgti?=
+ =?us-ascii?Q?iVL9VMt+pwPICqhxAfYrj3hkOGl9b9sg16MxUpdnNDVEopfR87VoUqRikjmp?=
+ =?us-ascii?Q?lsbBVBvj934TZSJ4FECcg7xi8/flffWw4+g2UqQezlkniIWoFGlt3UVR3dQJ?=
+ =?us-ascii?Q?Ym7lW4+E3U1N0PuMLNX5I67i9LZe1ALs0kF6duqp4h1OecnKKP0aysCo8v3q?=
+ =?us-ascii?Q?MynWNOBl8yummbENvjXQsl46wK3Ntg1Npu/PkwPOKjcYv+/i8cJNL5eWvH5W?=
+ =?us-ascii?Q?gD1LxCG8XWbbfrfcEqYSV9/3zVE295GTm6Zbpjt5TGBax+/bbQIqgusIB7GI?=
+ =?us-ascii?Q?LQ9wQRsOrMi/z2DEBTEdyizPCSxot8qtTH7Nf6nep1pDorN5wxmrGk5i1UOT?=
+ =?us-ascii?Q?EA9vBJ7SZTJ4t1TotbnR14v8WCRilo8LZevDvbwP?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96641ce8-35ce-4294-3f61-08ddfad12c27
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fe6a1c7-2037-4201-cc6e-08ddfad15f50
 X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9621.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2025 18:44:05.5466
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2025 18:45:31.2878
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Sa2s60U2WSTb5S6cpIYNRO9TTuk/ukVBGY9QqQ4itbJOeCkEoviEGa+J2xmamqNNgFX06Ct8XpdNgHc7LCZUSA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10473
+X-MS-Exchange-CrossTenant-UserPrincipalName: Le98MGW3l9Pu6mjo/XSH9mPfDsG6VUJCEU7oh1aeSaUkDJgYm8yL/54sMsk2x+hf1lGp3fdSPpQDpWgxNMGe1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10769
 
-On Tue, Sep 23, 2025 at 09:15:49PM +0530, Manikanta Guntupalli wrote:
-> Add MMIO accessors to support big-endian memory operations. These helpers
-> include {read, write}{w, l, q}_be() and {read, write}s{w, l, q}_be(),
-> which allows to access big-endian memory regions while returning
-> the results in the CPU’s native endianness.
+On Tue, Sep 23, 2025 at 09:15:50PM +0530, Manikanta Guntupalli wrote:
+> Add endianness handling to the FIFO access helpers i3c_readl_fifo() and
+> i3c_writel_fifo(). This ensures correct data transfers on platforms where
+> the FIFO registers are expected to be accessed in either big-endian or
+> little-endian format.
 >
-> This provides a consistent interface to interact with hardware using
-> big-endian register layouts.
+> Update the Synopsys, Cadence, and Renesas I3C master controller drivers to
+> pass the appropriate endianness argument to these helpers.
 >
 > Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
 > ---
@@ -200,229 +182,189 @@ Reviewed-by: Frank Li <Frank.Li@nxp.com>
 > Changes since V7:
 > This patch introduced in V7.
 > ---
->  include/asm-generic/io.h | 202 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 202 insertions(+)
+>  drivers/i3c/internals.h              | 35 +++++++++++++++++++++++-----
+>  drivers/i3c/master/dw-i3c-master.c   |  9 ++++---
+>  drivers/i3c/master/i3c-master-cdns.c |  9 ++++---
+>  drivers/i3c/master/renesas-i3c.c     | 12 ++++++----
+>  4 files changed, 49 insertions(+), 16 deletions(-)
 >
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index 11abad6c87e1..d18a8ca6c06c 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -295,6 +295,96 @@ static inline void writeq(u64 value, volatile void __iomem *addr)
->  #endif
->  #endif /* CONFIG_64BIT */
+> diff --git a/drivers/i3c/internals.h b/drivers/i3c/internals.h
+> index 0d857cc68cc5..399bbf006dcd 100644
+> --- a/drivers/i3c/internals.h
+> +++ b/drivers/i3c/internals.h
+> @@ -24,21 +24,35 @@ int i3c_dev_request_ibi_locked(struct i3c_dev_desc *dev,
+>  			       const struct i3c_ibi_setup *req);
+>  void i3c_dev_free_ibi_locked(struct i3c_dev_desc *dev);
 >
-> +/*
-> + * {read,write}{w,l,q}_be() access big endian memory and return result
-> + * in native endianness.
-> + */
+> +enum i3c_fifo_endian {
+> +	I3C_FIFO_LITTLE_ENDIAN,
+> +	I3C_FIFO_BIG_ENDIAN,
+> +};
 > +
-> +#ifndef readw_be
-> +#define readw_be readw_be
-> +static inline u16 readw_be(const volatile void __iomem *addr)
-> +{
-> +	u16 val;
+>  /**
+>   * i3c_writel_fifo - Write data buffer to 32bit FIFO
+>   * @addr: FIFO Address to write to
+>   * @buf: Pointer to the data bytes to write
+>   * @nbytes: Number of bytes to write
+> + * @endian: Endianness of FIFO write
+>   */
+>  static inline void i3c_writel_fifo(void __iomem *addr, const void *buf,
+> -				   int nbytes)
+> +				   int nbytes, enum i3c_fifo_endian endian)
+>  {
+> -	writesl(addr, buf, nbytes / 4);
+> +	if (endian)
+> +		writesl_be(addr, buf, nbytes / 4);
+> +	else
+> +		writesl(addr, buf, nbytes / 4);
 > +
-> +	log_read_mmio(16, addr, _THIS_IP_, _RET_IP_);
-> +	__io_br();
-> +	val = __be16_to_cpu((__be16 __force)__raw_readw(addr));
-> +	__io_ar(val);
-> +	log_post_read_mmio(val, 16, addr, _THIS_IP_, _RET_IP_);
-> +	return val;
-> +}
-> +#endif
-> +
-> +#ifndef readl_be
-> +#define readl_be readl_be
-> +static inline u32 readl_be(const volatile void __iomem *addr)
-> +{
-> +	u32 val;
-> +
-> +	log_read_mmio(32, addr, _THIS_IP_, _RET_IP_);
-> +	__io_br();
-> +	val = __be32_to_cpu((__be32 __force)__raw_readl(addr));
-> +	__io_ar(val);
-> +	log_post_read_mmio(val, 32, addr, _THIS_IP_, _RET_IP_);
-> +	return val;
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_64BIT
-> +#ifndef readq_be
-> +#define readq_be readq_be
-> +static inline u64 readq_be(const volatile void __iomem *addr)
-> +{
-> +	u64 val;
-> +
-> +	log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
-> +	__io_br();
-> +	val = __be64_to_cpu((__be64 __force)__raw_readq(addr));
-> +	__io_ar(val);
-> +	log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
-> +	return val;
-> +}
-> +#endif
-> +#endif /* CONFIG_64BIT */
-> +
-> +#ifndef writew_be
-> +#define writew_be writew_be
-> +static inline void writew_be(u16 value, volatile void __iomem *addr)
-> +{
-> +	log_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-> +	__io_bw();
-> +	__raw_writew((u16 __force)__cpu_to_be16(value), addr);
-> +	__io_aw();
-> +	log_post_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
-> +}
-> +#endif
-> +
-> +#ifndef writel_be
-> +#define writel_be writel_be
-> +static inline void writel_be(u32 value, volatile void __iomem *addr)
-> +{
-> +	log_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-> +	__io_bw();
-> +	__raw_writel((u32 __force)__cpu_to_be32(value), addr);
-> +	__io_aw();
-> +	log_post_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_64BIT
-> +#ifndef writeq_be
-> +#define writeq_be writeq_be
-> +static inline void writeq_be(u64 value, volatile void __iomem *addr)
-> +{
-> +	log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-> +	__io_bw();
-> +	__raw_writeq((u64 __force)__cpu_to_be64(value), addr);
-> +	__io_aw();
-> +	log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
-> +}
-> +#endif
-> +#endif /* CONFIG_64BIT */
-> +
->  /*
->   * {read,write}{b,w,l,q}_relaxed() are like the regular version, but
->   * are not guaranteed to provide ordering against spinlocks or memory
-> @@ -524,6 +614,118 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
->  #endif
->  #endif /* CONFIG_64BIT */
+>  	if (nbytes & 3) {
+>  		u32 tmp = 0;
 >
-> +/*
-> + * {read,write}s{w,l,q}_be() repeatedly access the same memory address
-> + * in big endianness in 16-, 32- or 64-bit chunks (@count times) and
-> + * return result in native endianness.
-> + */
+>  		memcpy(&tmp, buf + (nbytes & ~3), nbytes & 3);
+> -		writel(tmp, addr);
 > +
-> +#ifndef readsw_be
-> +#define readsw_be readsw_be
-> +static inline void readsw_be(const volatile void __iomem *addr,
-> +			     void *buffer,
-> +			     unsigned int count)
-> +{
-> +	if (count) {
-> +		u16 *buf = buffer;
+> +		if (endian)
+> +			writel_be(tmp, addr);
+> +		else
+> +			writel(tmp, addr);
+>  	}
+>  }
+>
+> @@ -47,15 +61,24 @@ static inline void i3c_writel_fifo(void __iomem *addr, const void *buf,
+>   * @addr: FIFO Address to read from
+>   * @buf: Pointer to the buffer to store read bytes
+>   * @nbytes: Number of bytes to read
+> + * @endian: Endianness of FIFO read
+>   */
+>  static inline void i3c_readl_fifo(const void __iomem *addr, void *buf,
+> -				  int nbytes)
+> +				  int nbytes, enum i3c_fifo_endian endian)
+>  {
+> -	readsl(addr, buf, nbytes / 4);
+> +	if (endian)
+> +		readsl_be(addr, buf, nbytes / 4);
+> +	else
+> +		readsl(addr, buf, nbytes / 4);
 > +
-> +		do {
-> +			u16 x = __be16_to_cpu((__be16 __force)__raw_readw(addr));
-> +			*buf++ = x;
-> +		} while (--count);
-> +	}
-> +}
-> +#endif
+>  	if (nbytes & 3) {
+>  		u32 tmp;
+>
+> -		tmp = readl(addr);
+> +		if (endian)
+> +			tmp = readl_be(addr);
+> +		else
+> +			tmp = readl(addr);
 > +
-> +#ifndef readsl_be
-> +#define readsl_be readsl_be
-> +static inline void readsl_be(const volatile void __iomem *addr,
-> +			     void *buffer,
-> +			     unsigned int count)
-> +{
-> +	if (count) {
-> +		u32 *buf = buffer;
-> +
-> +		do {
-> +			u32 x = __be32_to_cpu((__be32 __force)__raw_readl(addr));
-> +			*buf++ = x;
-> +		} while (--count);
-> +	}
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_64BIT
-> +#ifndef readsq_be
-> +#define readsq_be readsq_be
-> +static inline void readsq_be(const volatile void __iomem *addr,
-> +			     void *buffer,
-> +			     unsigned int count)
-> +{
-> +	if (count) {
-> +		u64 *buf = buffer;
-> +
-> +		do {
-> +			u64 x = __be64_to_cpu((__be64 __force)__raw_readq(addr));
-> +			*buf++ = x;
-> +		} while (--count);
-> +	}
-> +}
-> +#endif
-> +#endif /* CONFIG_64BIT */
-> +
-> +#ifndef writesw_be
-> +#define writesw_be writesw_be
-> +static inline void writesw_be(volatile void __iomem *addr,
-> +			      const void *buffer,
-> +			      unsigned int count)
-> +{
-> +	if (count) {
-> +		const u16 *buf = buffer;
-> +
-> +		do {
-> +			__raw_writew((u16 __force)__cpu_to_be16(*buf), addr);
-> +			buf++;
-> +		} while (--count);
-> +	}
-> +}
-> +#endif
-> +
-> +#ifndef writesl_be
-> +#define writesl_be writesl_be
-> +static inline void writesl_be(volatile void __iomem *addr,
-> +			      const void *buffer,
-> +			      unsigned int count)
-> +{
-> +	if (count) {
-> +		const u32 *buf = buffer;
-> +
-> +		do {
-> +			__raw_writel((u32 __force)__cpu_to_be32(*buf), addr);
-> +			buf++;
-> +		} while (--count);
-> +	}
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_64BIT
-> +#ifndef writesq_be
-> +#define writesq_be writesq_be
-> +static inline void writesq_be(volatile void __iomem *addr,
-> +			      const void *buffer,
-> +			      unsigned int count)
-> +{
-> +	if (count) {
-> +		const u64 *buf = buffer;
-> +
-> +		do {
-> +			__raw_writeq((u64 __force)__cpu_to_be64(*buf), addr);
-> +			buf++;
-> +		} while (--count);
-> +	}
-> +}
-> +#endif
-> +#endif /* CONFIG_64BIT */
-> +
->  #ifndef PCI_IOBASE
->  #define PCI_IOBASE ((void __iomem *)0)
->  #endif
+>  		memcpy(buf + (nbytes & ~3), &tmp, nbytes & 3);
+>  	}
+>  }
+> diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i3c-master.c
+> index 974122b2d20e..5d723ac041c2 100644
+> --- a/drivers/i3c/master/dw-i3c-master.c
+> +++ b/drivers/i3c/master/dw-i3c-master.c
+> @@ -337,19 +337,22 @@ static int dw_i3c_master_get_free_pos(struct dw_i3c_master *master)
+>  static void dw_i3c_master_wr_tx_fifo(struct dw_i3c_master *master,
+>  				     const u8 *bytes, int nbytes)
+>  {
+> -	i3c_writel_fifo(master->regs + RX_TX_DATA_PORT, bytes, nbytes);
+> +	i3c_writel_fifo(master->regs + RX_TX_DATA_PORT, bytes, nbytes,
+> +			I3C_FIFO_LITTLE_ENDIAN);
+>  }
+>
+>  static void dw_i3c_master_read_rx_fifo(struct dw_i3c_master *master,
+>  				       u8 *bytes, int nbytes)
+>  {
+> -	i3c_readl_fifo(master->regs + RX_TX_DATA_PORT, bytes, nbytes);
+> +	i3c_readl_fifo(master->regs + RX_TX_DATA_PORT, bytes, nbytes,
+> +		       I3C_FIFO_LITTLE_ENDIAN);
+>  }
+>
+>  static void dw_i3c_master_read_ibi_fifo(struct dw_i3c_master *master,
+>  					u8 *bytes, int nbytes)
+>  {
+> -	i3c_readl_fifo(master->regs + IBI_QUEUE_STATUS, bytes, nbytes);
+> +	i3c_readl_fifo(master->regs + IBI_QUEUE_STATUS, bytes, nbytes,
+> +		       I3C_FIFO_LITTLE_ENDIAN);
+>  }
+>
+>  static struct dw_i3c_xfer *
+> diff --git a/drivers/i3c/master/i3c-master-cdns.c b/drivers/i3c/master/i3c-master-cdns.c
+> index 97b151564d3d..de3b5e894b4b 100644
+> --- a/drivers/i3c/master/i3c-master-cdns.c
+> +++ b/drivers/i3c/master/i3c-master-cdns.c
+> @@ -428,13 +428,15 @@ to_cdns_i3c_master(struct i3c_master_controller *master)
+>  static void cdns_i3c_master_wr_to_tx_fifo(struct cdns_i3c_master *master,
+>  					  const u8 *bytes, int nbytes)
+>  {
+> -	i3c_writel_fifo(master->regs + TX_FIFO, bytes, nbytes);
+> +	i3c_writel_fifo(master->regs + TX_FIFO, bytes, nbytes,
+> +			I3C_FIFO_LITTLE_ENDIAN);
+>  }
+>
+>  static void cdns_i3c_master_rd_from_rx_fifo(struct cdns_i3c_master *master,
+>  					    u8 *bytes, int nbytes)
+>  {
+> -	i3c_readl_fifo(master->regs + RX_FIFO, bytes, nbytes);
+> +	i3c_readl_fifo(master->regs + RX_FIFO, bytes, nbytes,
+> +		       I3C_FIFO_LITTLE_ENDIAN);
+>  }
+>
+>  static bool cdns_i3c_master_supports_ccc_cmd(struct i3c_master_controller *m,
+> @@ -1319,7 +1321,8 @@ static void cdns_i3c_master_handle_ibi(struct cdns_i3c_master *master,
+>  	buf = slot->data;
+>
+>  	nbytes = IBIR_XFER_BYTES(ibir);
+> -	i3c_readl_fifo(master->regs + IBI_DATA_FIFO, buf, nbytes);
+> +	i3c_readl_fifo(master->regs + IBI_DATA_FIFO, buf, nbytes,
+> +		       I3C_FIFO_LITTLE_ENDIAN);
+>
+>  	slot->len = min_t(unsigned int, IBIR_XFER_BYTES(ibir),
+>  			  dev->ibi->max_payload_len);
+> diff --git a/drivers/i3c/master/renesas-i3c.c b/drivers/i3c/master/renesas-i3c.c
+> index 174d3dc5d276..5610cf71740e 100644
+> --- a/drivers/i3c/master/renesas-i3c.c
+> +++ b/drivers/i3c/master/renesas-i3c.c
+> @@ -835,7 +835,8 @@ static int renesas_i3c_priv_xfers(struct i3c_dev_desc *dev, struct i3c_priv_xfer
+>  		}
+>
+>  		if (!i3c_xfers[i].rnw && i3c_xfers[i].len > 4) {
+> -			i3c_writel_fifo(i3c->regs + NTDTBP0, cmd->tx_buf, cmd->len);
+> +			i3c_writel_fifo(i3c->regs + NTDTBP0, cmd->tx_buf, cmd->len,
+> +					I3C_FIFO_LITTLE_ENDIAN);
+>  			if (cmd->len > NTDTBP0_DEPTH * sizeof(u32))
+>  				renesas_set_bit(i3c->regs, NTIE, NTIE_TDBEIE0);
+>  		}
+> @@ -1021,7 +1022,8 @@ static irqreturn_t renesas_i3c_tx_isr(int irq, void *data)
+>  			/* Clear the Transmit Buffer Empty status flag. */
+>  			renesas_clear_bit(i3c->regs, NTST, NTST_TDBEF0);
+>  		} else {
+> -			i3c_writel_fifo(i3c->regs + NTDTBP0, cmd->tx_buf, cmd->len);
+> +			i3c_writel_fifo(i3c->regs + NTDTBP0, cmd->tx_buf, cmd->len,
+> +					I3C_FIFO_LITTLE_ENDIAN);
+>  		}
+>  	}
+>
+> @@ -1061,7 +1063,8 @@ static irqreturn_t renesas_i3c_resp_isr(int irq, void *data)
+>  			if (NDBSTLV0_RDBLV(renesas_readl(i3c->regs, NDBSTLV0)) && !cmd->err)
+>  				bytes_remaining = data_len - cmd->rx_count;
+>
+> -			i3c_readl_fifo(i3c->regs + NTDTBP0, cmd->rx_buf, bytes_remaining);
+> +			i3c_readl_fifo(i3c->regs + NTDTBP0, cmd->rx_buf, bytes_remaining,
+> +				       I3C_FIFO_LITTLE_ENDIAN);
+>  			renesas_clear_bit(i3c->regs, NTIE, NTIE_RDBFIE0);
+>  			break;
+>  		default:
+> @@ -1203,7 +1206,8 @@ static irqreturn_t renesas_i3c_rx_isr(int irq, void *data)
+>  			cmd->i2c_bytes_left--;
+>  		} else {
+>  			read_bytes = NDBSTLV0_RDBLV(renesas_readl(i3c->regs, NDBSTLV0)) * sizeof(u32);
+> -			i3c_readl_fifo(i3c->regs + NTDTBP0, cmd->rx_buf, read_bytes);
+> +			i3c_readl_fifo(i3c->regs + NTDTBP0, cmd->rx_buf, read_bytes,
+> +				       I3C_FIFO_LITTLE_ENDIAN);
+>  			cmd->rx_count = read_bytes;
+>  		}
+>
 > --
 > 2.34.1
 >
