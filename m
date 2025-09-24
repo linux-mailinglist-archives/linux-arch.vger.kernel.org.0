@@ -1,127 +1,130 @@
-Return-Path: <linux-arch+bounces-13753-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13754-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38CC4B9A3BF
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 16:26:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65D1FB9A45F
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 16:36:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E4B31888C11
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 14:26:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DFFD19C4E86
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 14:36:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB7423A99E;
-	Wed, 24 Sep 2025 14:26:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A0E3064B8;
+	Wed, 24 Sep 2025 14:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ABnLaHLH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ptr86+sn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sU4qbKHf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A7F35957;
-	Wed, 24 Sep 2025 14:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1611A9FA7;
+	Wed, 24 Sep 2025 14:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758723960; cv=none; b=qdR6hUQCS8uD8Ucp0769v7AJDD9yu3ymhbxy00PZ1H3lC29xRH2oUw62jaieN9bmHGTRY9cuGxPPl2NjSJWz14YWAN4QGu8nyIDugZJn7s0bCKg897IUoPYLWUrBPmDpEvtSgz0NV2w15eHxQ0Ul6fIJtPWR4g2hEx5dsO59i4U=
+	t=1758724585; cv=none; b=mP1N2OvJpCaBKc70UX3oNtuDa93h9IISP3W2rPYrCK+rWvQg9RXQfPWzp2u7HIy+HGuC1QCZ1UyOPHmgS5YE15RxiCIDFGASHm8boJJYibC+n2LRPjDt7Y8bU1nkyjkbPD2JRrEdI9j9fz8+1ZUHrNTmaMOh6oDJhvJhe/88Vxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758723960; c=relaxed/simple;
-	bh=QFWBONOv+JjrIBPL48JQ4QvYiAYnI30gWv6I+2hMBYM=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=fDwuKQhGHVT42JYA/ukJn9vgF09eyAlt4VyJKWTY2v6Yd1U0kEOfARQbdVZCCkbgnEYzmbkhd6z0MuebBsZaCm7gzeNCM+KR9TZv1golR7mgOiV8fIiNTnHtVMMWtpYnGgOXL5rAMBsMI2nK2cNlqFsOZTh4zQUEgzTy9E26psc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ABnLaHLH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ptr86+sn; arc=none smtp.client-ip=202.12.124.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 8EA9D7A018F;
-	Wed, 24 Sep 2025 10:25:57 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Wed, 24 Sep 2025 10:25:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1758723957;
-	 x=1758810357; bh=CYj2gFEOZtbt1Ar9rV1vSIxgaPpdpGpGnomr5hhS6bE=; b=
-	ABnLaHLHY6enFOkbtaLiqCcrwdzIiq3TTIzDh4p5OMwJ33sMXBWUAFC8X6jO1Lpg
-	k5Da0CFapUeuvOvKEAQl974Wr8C8upmB4lP7MLCATZgyLrUeiXdlR/HvxnyCJHLq
-	MWp2LL/pwc5YgcWEAKBIwBSVC39tC86d5GgSwa4Myo4zSkcTlqJEkeoEkzy70qNd
-	WQuEXUcZZTsF2vm+A0RczsuLg98K1hYEYvGI+HjGjmbmFYQ2RQSvgHUrmwMI6iUh
-	jjQsyIebKQG8GTWA3bZvOjtFnhY3fHaO8X5I9X0IsxhQVnWxMrexresK+RVnJM3h
-	dS+JfE9jFFbHbwa5c+OFNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758723957; x=
-	1758810357; bh=CYj2gFEOZtbt1Ar9rV1vSIxgaPpdpGpGnomr5hhS6bE=; b=P
-	tr86+snoRceiJQuaUAGTFRHMDsQmzS4ySzEIXGPkyEMj1IeNJp1CRiTz7Q0zC8o7
-	u5UIS7bzujtobAhxsZLXLZ0bx/aJY8hHJNM12GVb4cSwyWI4u1cUkHTUC7TebtMg
-	YLSpwTVEM2+FrzS8ERCbCsTmgbh0oYj8I1ufyV7aIfZaK9EgDgVrvx1ohcrQ4GSh
-	ozT1ebCKju1uD/3UWj4MBeqcTTToMvGeO8n004/WGi9yvVBLfDrz+1+J8kta8fub
-	vUP2Hs5EunbqO7uoSEkP0pb9xHqfna5bUTWXdNkeur6Mt7M/djot9Rt7N8IdF5Hf
-	xt2V030iv575AZrX7t4uQ==
-X-ME-Sender: <xms:df_TaCUR04N1XCgJpzLKDnMiTdUSJpMNyXc1Uvac-DqHaX2JeAwLmA>
-    <xme:df_TaJZe8IFNoWxUxun544VspA_oXSghx_Yw4CNnJ25CwwXvaa-BXIwdjCUUvkyPQ
-    F0_weuxabAozQ8Zd5fq6JOCt0mio3iE5By8HrCwb25HA2o8quJSx1w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeifeekgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopehvrghrrggughgruhhtrghmsehgohhoghhlvgdrtghomhdprhgtphhtth
-    hopehquhhitggpshgrihhprhgrkhgrsehquhhitghinhgtrdgtohhmpdhrtghpthhtohep
-    lhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
-    hinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    shhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:df_TaJrtsKgi6wwcmSrLw3m9v-Y3tFGFkraLNzQx8E4AlooA8QGfIA>
-    <xmx:df_TaPXHNlaDOQdLZ2Hdiq1BtV6WSbJcFwtRagz6eSvUxB9sg0J7Ug>
-    <xmx:df_TaACcmAFZetQ1reCSQnUfeqDoGWZOPRszCYaR-2JKQ8aPVnx7vw>
-    <xmx:df_TaL3bD34ZItnRIpGZE8ZtYihtEkjA1dVf0JhKHjDgJZHjOiuuZQ>
-    <xmx:df_TaKQCmepOXgBZIIFYd8J_j73SpHJwfaE5kWUgSMHZCtJa4YGyGShs>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 1087F700069; Wed, 24 Sep 2025 10:25:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1758724585; c=relaxed/simple;
+	bh=dtMyGOLRj3HY14tPCzeUn90iQCDhGJqxqhE3t2ov7aU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=H7oe+o0hGlCZor2JhJ44f/qqNbSJ+8me/8dG/ciBpOR8tXzzHn8Hj+FOJQCaNmLl6u02xVOhxyUTDcsq3Lq5LTwVqYqLUaXorJ4rXZljz1JRQADtNymT7O/PBPC2/EEw2flU3FEqcc+DBnx1HNEC3VsC423ZNLIRAwkf3K/1mBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sU4qbKHf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F373C4CEE7;
+	Wed, 24 Sep 2025 14:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758724584;
+	bh=dtMyGOLRj3HY14tPCzeUn90iQCDhGJqxqhE3t2ov7aU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=sU4qbKHfWJn/GVEqOSKG90PR7kq8un4mmh2XnGkYWYj96nm0vP3t0kpMc9qgQDF/r
+	 Njj8+x9+98clpezx9Qbexhjiiqb9LgGf2zO7zaasjP6Aw3ZwagcAIEE8M1xw+MaWmu
+	 YUaMY0p/KqRd8zFg6n7QJyC9wlkAy1COyRWfXsjDCyXLlLAmMW+OOVMT0stiJlFThR
+	 pSjukkkFK4og3+n0QfVwwodCBFQYwRR1q0tdqFB+L5GUbegS/N6BCgBwxdv/nKP85r
+	 1KUsbDv30oxCq+omuKsOLciS1wr91DsaxnZLhDWTt7/0uf59+4ZuwoESQ7BQmcDgr0
+	 wKP3Ex22F2I6w==
+Date: Wed, 24 Sep 2025 08:36:11 -0600 (MDT)
+From: Paul Walmsley <pjw@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+    Andrew Morton <akpm@linux-foundation.org>, 
+    "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+    Vlastimil Babka <vbabka@suse.cz>, 
+    Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+    Paul Walmsley <paul.walmsley@sifive.com>, 
+    Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+    Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+    Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+    Christian Brauner <brauner@kernel.org>, 
+    Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
+    Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+    Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+    Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
+    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+    =?ISO-8859-15?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+    Andreas Hindborg <a.hindborg@kernel.org>, 
+    Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+    Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+    linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+    linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+    richard.henderson@linaro.org, jim.shu@sifive.com, 
+    Andy Chiu <andybnac@gmail.com>, kito.cheng@sifive.com, 
+    charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com, 
+    cleger@rivosinc.com, alexghiti@rivosinc.com, samitolvanen@google.com, 
+    broonie@kernel.org, rick.p.edgecombe@intel.com, 
+    rust-for-linux@vger.kernel.org, Zong Li <zong.li@sifive.com>, 
+    David Hildenbrand <david@redhat.com>, Andy Chiu <andybnac@gmail.com>
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+In-Reply-To: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
+Message-ID: <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
+References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AgLkk2v4HBWZ
-Date: Wed, 24 Sep 2025 16:25:36 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Varad Gautam" <varadgautam@google.com>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>,
- "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Message-Id: <d2514e7b-be87-4c77-9096-7285f2b715a0@app.fastmail.com>
-In-Reply-To: 
- <CAOLDJO+8JApK5_qjtn+DhCnQoF+Lp-x1KP_QQvJUqecp744T1w@mail.gmail.com>
-References: <20250330164229.2174672-1-varadgautam@google.com>
- <CAOLDJO+=+hcz498KRc+95dF5y3hZdtm+3y35o2rBC9qAOF-vDg@mail.gmail.com>
- <CAOLDJOKiEmde5Max0BnTBVpNmfpm-wwYLJ4Etv8D2KZKPHyFzw@mail.gmail.com>
- <CAOLDJOJ=QcQ065UTAdGayO2kbpGMOwCtdEGVm8TvQO8Wf8CSMw@mail.gmail.com>
- <CAOLDJOJ98EccMJ4O3FyX4mSFtHnbQ4iwwXsHT2EbLL+KrXfvtw@mail.gmail.com>
- <f74d9899-6aba-4c8e-87b1-cd6ecc7772e6@app.fastmail.com>
- <CAOLDJO+8JApK5_qjtn+DhCnQoF+Lp-x1KP_QQvJUqecp744T1w@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic/io.h: Skip trace helpers if rwmmio events are disabled
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, Sep 23, 2025, at 13:07, Varad Gautam wrote:
->
-> Can I follow this along somewhere? (I don't see it on arnd/asm-generic.git atm.)
->
-> The unnecessary log_*_mmio() calls are showing up on enough Pixel devices
-> as a CPU cycles wastage, and I'm sure other Androids see it too.
+Hi,
 
-Pushed out now. I still had it in my local branch, but did not
-have any other asm-generic changes, so I ended up missing it again...
+On Thu, 31 Jul 2025, Deepak Gupta wrote:
 
-     Arnd
+[ ... ]
+
+> vDSO related Opens (in the flux)
+> =================================
+> 
+> I am listing these opens for laying out plan and what to expect in future
+> patch sets. And of course for the sake of discussion.
+> 
+
+[ ... ]
+
+> How many vDSOs
+> ---------------
+> Shadow stack instructions are carved out of zimop (may be operations) and if CPU
+> doesn't implement zimop, they're illegal instructions. Kernel could be running on
+> a CPU which may or may not implement zimop. And thus kernel will have to carry 2
+> different vDSOs and expose the appropriate one depending on whether CPU implements
+> zimop or not.
+
+If we merge this series without this, then when CFI is enabled in the 
+Kconfig, we'll wind up with a non-portable kernel that won't run on older 
+hardware.  We go to great lengths to enable kernel binary portability 
+across the presence or absence of other RISC-V extensions, and I think 
+these CFI extensions should be no different.
+
+So before considering this for merging, I'd like to see at least an 
+attempt to implement the dual-vDSO approach (or something equivalent) 
+where the same kernel binary with CFI enabled can run on both pre-Zimop 
+and post-Zimop hardware, with the existing userspaces that are common 
+today.
+
+thanks Deepak,
+
+- Paul
 
