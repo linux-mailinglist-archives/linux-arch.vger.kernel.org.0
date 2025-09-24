@@ -1,186 +1,219 @@
-Return-Path: <linux-arch+bounces-13760-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13761-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7614AB9BB17
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 21:26:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98292B9C229
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 22:38:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 706521BC1D10
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 19:26:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89D823B6B27
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 20:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB0D8306B06;
-	Wed, 24 Sep 2025 19:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CCC32D5BD;
+	Wed, 24 Sep 2025 20:35:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=landley.net header.i=@landley.net header.b="qP7ktGKp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cImYsZAx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from eastern.birch.relay.mailchannels.net (eastern.birch.relay.mailchannels.net [23.83.209.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C3A1C8603;
-	Wed, 24 Sep 2025 19:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.209.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758741976; cv=pass; b=QqwhKov7zOBNob91ZIKleb+x94NIUDCPaN7BZF9uLkBt4kE5xramulnCLAdSdiW0cyVJnFkfObRmVW+2NaPKT+aaJFXgTmWdiNSNwH4hOtb3uGsMVl8mDk1BpbbJvDdvvabhxDwk1NimvAx+JyJdqdQVC0c7wjU8JPNz/YyGJ6c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758741976; c=relaxed/simple;
-	bh=BHsTkzdWZajDNDK+ioNil3t9QVIX4IumG9TxYgK95/0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EkBWl7S0eZencH7xz9rP5NLYMH3a5x6ctyim2l14bTBbgE/n98yRgcXErmafAn+2jL6RCklgG7CtUkdaWspVo86kuwH0b/6PF+vk44y7fFgu6xQD8K1CGTzLHKUHHPcFcwC6B6nwx4gqzzmoyiOG4U4cGPQxxGZydr1sO2adL+E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=landley.net; spf=pass smtp.mailfrom=landley.net; dkim=pass (2048-bit key) header.d=landley.net header.i=@landley.net header.b=qP7ktGKp; arc=pass smtp.client-ip=23.83.209.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=landley.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=landley.net
-X-Sender-Id: dreamhost|x-authsender|rob@landley.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id D68F56C2CDF;
-	Wed, 24 Sep 2025 19:20:52 +0000 (UTC)
-Received: from pdx1-sub0-mail-a233.dreamhost.com (trex-blue-5.trex.outbound.svc.cluster.local [100.108.153.55])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 4D82F6C092A;
-	Wed, 24 Sep 2025 19:20:51 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1758741652; a=rsa-sha256;
-	cv=none;
-	b=FIelBRpKbw4XRCXREIY6GrcomZxyh5mPLsvXc2d6FGp/peq6EwuUT5C41+2LA0F+ggX9yV
-	8sDI+KYqBxmckQrPVNV7rWra63fWqq+o5yLlx5MZRnuTdHQZEQgAmgblFxuGyjaNVrHFDk
-	wPn+M2/WQfSpmZ0IkQEEN3MHnMtbF5yhytJwedRo1ogyg8SQR/ZRrsw9DI3lHGj/2mLKAm
-	dj8jGFwnS4OjNKQjH2R6mDLZ7tlU8MommvaAha7o+UWIylY5K2nv2k5iepHunaoM660neK
-	8apwlyJbofcRsA4DvFw4pkrtRAv7P9DWllpqqR+qR+EGkoSllD3i7IkmAH8Mog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-	s=arc-2022; t=1758741652;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:dkim-signature;
-	bh=2+5k4o1pMixQXt5VsjL/MYZwcVCEyggOqRD9o8b/qSc=;
-	b=ChRw8wSjyogd2do/v/H6TxZGH/WsiQerw/hid5S8KViit0lwA1gMH0+6UMTmJNQMMIezrz
-	gsCOkeBMJedUyPmRdN0+x/Ibzn4kOtJ+sG57y0ioHbgMKfWThGzPdrmcr4dMMVSyyUw2rk
-	dVBBOmfhJTtYNtYRTDWhwp+mpqmWhEqvL9C8FrlKqiY59ItiMJEd3l6YkcBc//9Lzk6+Fh
-	mvjXUWAyzYxp+VnxExIXavdSHQcTxa/FAQIzz9fgRHT07mtFGrsyWRfq7ZmdI4pGoAxOfN
-	0MoQjrfyn0a4j6aLMBwkDQq4B0YTsphgd54S7yxIuOYwH85l63FNfS25ErSZgQ==
-ARC-Authentication-Results: i=1;
-	rspamd-55b8bfbc7f-nnn52;
-	auth=pass smtp.auth=dreamhost smtp.mailfrom=rob@landley.net
-X-Sender-Id: dreamhost|x-authsender|rob@landley.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|rob@landley.net
-X-MailChannels-Auth-Id: dreamhost
-X-Callous-Spill: 350181bf214e86d3_1758741652308_3044232165
-X-MC-Loop-Signature: 1758741652308:255498347
-X-MC-Ingress-Time: 1758741652308
-Received: from pdx1-sub0-mail-a233.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.108.153.55 (trex/7.1.3);
-	Wed, 24 Sep 2025 19:20:52 +0000
-Received: from [192.168.88.7] (unknown [209.81.127.98])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: rob@landley.net)
-	by pdx1-sub0-mail-a233.dreamhost.com (Postfix) with ESMTPSA id 4cX6Bm0dnXzJl;
-	Wed, 24 Sep 2025 12:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=landley.net;
-	s=dreamhost; t=1758741651;
-	bh=2+5k4o1pMixQXt5VsjL/MYZwcVCEyggOqRD9o8b/qSc=;
-	h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
-	b=qP7ktGKps9suFLn+SvwXNJfmXIq5m7DqxjIn++FPW06rQGLdyFrasnCUUBtJnzZ2L
-	 032Pr1ux0M59Obr3XwUHOtHtLFaEBxNmmkXxqPxYnCt1Q6ZqoWdAD9Q0W04+4gmjQl
-	 ds3vnt+/qY5ti8rpHJ46bodAbnhitDUyLxlQ0tRxKsiwmL7TThWSclVniorsogf6MJ
-	 gohNW1AXGJyGgriupkN0gkhVYK+ork7/6bPtZBHhvaB43HB07jP863XLDHcc31YH0+
-	 wfQhtcquMUPSEA+sEb7jFLcwMpbQdjW0Rd1EFegx855pG/OiLXxmVQR1JAWLIYES88
-	 kVFfZokS8hZqg==
-Message-ID: <de56cabd-05a9-4528-8150-9ad97209640e@landley.net>
-Date: Wed, 24 Sep 2025 14:20:47 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AF732D5AF;
+	Wed, 24 Sep 2025 20:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758746132; cv=none; b=bdqOVxhFiLFNlpNaJajXcjfHpaXZ5hXIpK6CgS4Xq1elA8RSe0HyyNN752NVtcKSSJcYKHhrZFJcHXTi6u0pU4IUjk3FrIaKY79UKHZzfAujrLCuhGXRsGpheOrQesnimph/VA8oWz3A25K0ZXDMy2tleogo29pIikiIlvBkxUE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758746132; c=relaxed/simple;
+	bh=yIIG1XirvNHRjmi8n5doZRkSjBLwdxxinyVL08mmVww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ey5eI7naemrEoKDZ4k4gXJmpZqVHGhhFqIjcr+oRIKkwc3z3tjTgEXjhaQ2x/QscBnrfCJaV7Q1TN2FQLe+gR4dzLwGemxwNf3TLYp9OfPiFfqhntnu5EM6tSPhP2c4WIJ0+HeTr0i6cLnHxxSM22IwLcvAXkiJOpxqKLh4SsyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cImYsZAx; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758746130; x=1790282130;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yIIG1XirvNHRjmi8n5doZRkSjBLwdxxinyVL08mmVww=;
+  b=cImYsZAxVyHhV/PeuE6AmvED8MkGu5EMy0N6jSJPah5jAwgSsbLfnUdO
+   ERkl5GdkZL7adenQAlozkjP+IHZUdG60MJpmL/0Oax4utRsaH9x12egNn
+   c0y5RwVjiewbxb5lw6agnABe4iqpoS0pl1zAzqhkEj7A8uE/Ht38kvibm
+   l2QqnmVXbPVaZg+7fS58rmoGW0aCWRWboJgOXWVz8l12e6/B0XzUo7VNJ
+   Krx2DRWGsYjTEAzAol84rqN1Aj73uwUYNw7/Mn9sgSq+e+WKKT2NXPQtv
+   T0GCaijmbgcVncTUbvGI4GLAuQEEJi5D71D7hnClXPtu8cre3810M/g4R
+   Q==;
+X-CSE-ConnectionGUID: FLB/VJYlS4K0lARshSDH3w==
+X-CSE-MsgGUID: 1DjhRa9dTSCd3Exu4e+mHg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="61107250"
+X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
+   d="scan'208";a="61107250"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 13:35:29 -0700
+X-CSE-ConnectionGUID: fGvhU9vnSUqnQqd/QW8Okg==
+X-CSE-MsgGUID: kGVSi16kQa6u+aYiLlNf8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
+   d="scan'208";a="181405897"
+Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
+  by orviesa004.jf.intel.com with ESMTP; 24 Sep 2025 13:35:22 -0700
+Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v1WCt-0004Xt-1P;
+	Wed, 24 Sep 2025 20:35:19 +0000
+Date: Thu, 25 Sep 2025 04:34:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Manikanta Guntupalli <manikanta.guntupalli@amd.com>, git@amd.com,
+	michal.simek@amd.com, alexandre.belloni@bootlin.com,
+	Frank.Li@nxp.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, pgaj@cadence.com,
+	wsa+renesas@sang-engineering.com, tommaso.merciai.xr@bp.renesas.com,
+	arnd@arndb.de, quic_msavaliy@quicinc.com, Shyam-sundar.S-k@amd.com,
+	sakari.ailus@linux.intel.com, billy_tsai@aspeedtech.com,
+	kees@kernel.org, gustavoars@kernel.org,
+	jarkko.nikula@linux.intel.com, jorge.marques@analog.com,
+	linux-i3c@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, radhey.shyam.pandey@amd.com,
+	srinivas.goud@amd.com, shubhrajyoti.datta@amd.com,
+	manion05gk@gmail.com,
+	Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+Subject: Re: [PATCH V7 2/4] asm-generic/io.h: Add big-endian MMIO accessors
+Message-ID: <202509250413.sOTeU37m-lkp@intel.com>
+References: <20250923154551.2112388-3-manikanta.guntupalli@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND 00/62] initrd: remove classic initrd support
-To: Alexander Patrakov <patrakov@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Askar Safin <safinaskar@gmail.com>, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, Linus Torvalds
- <torvalds@linux-foundation.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
- Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
- Jens Axboe <axboe@kernel.dk>, Andy Shevchenko <andy.shevchenko@gmail.com>,
- Aleksa Sarai <cyphar@cyphar.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Julian Stecklina <julian.stecklina@cyberus-technology.de>,
- Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Eric Curtin <ecurtin@redhat.com>,
- Alexander Graf <graf@amazon.com>, Lennart Poettering <mzxreary@0pointer.de>,
- linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-um@lists.infradead.org, x86@kernel.org, Ingo Molnar
- <mingo@redhat.com>, linux-block@vger.kernel.org, initramfs@vger.kernel.org,
- linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org,
- "Theodore Y . Ts'o" <tytso@mit.edu>, linux-acpi@vger.kernel.org,
- Michal Simek <monstr@monstr.eu>, devicetree@vger.kernel.org,
- Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>,
- Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>,
- patches@lists.linux.dev
-References: <20250913003842.41944-1-safinaskar@gmail.com>
- <ffbf1a04-047d-4787-ac1e-f5362e1ca600@csgroup.eu>
- <CAN_LGv3Opj9RW0atfXODy-Epn++5mt_DLEi-ewxR9Me5x46Bkg@mail.gmail.com>
-Content-Language: en-US
-From: Rob Landley <rob@landley.net>
-In-Reply-To: <CAN_LGv3Opj9RW0atfXODy-Epn++5mt_DLEi-ewxR9Me5x46Bkg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250923154551.2112388-3-manikanta.guntupalli@amd.com>
 
-On 9/24/25 11:17, Alexander Patrakov wrote:
->> Therefore is it really initrd you are removing or just some corner case
->> ? If it is really initrd, then how does QEMU still work with that
->> -initrd parameter ?
-> 
-> The QEMU -initrd parameter is a misnomer. It can be used to pass an
-> initrd or an initramfs, and the kernel automatically figures out what
-> it is.
+Hi Manikanta,
 
-It's not a misnomer, initrams has always been able to make use of the 
-existing initrd loading mechanism to read images externally supplied by 
-the bootloader. It's what grub calls it too. I documented it in the 
-"External initramfs images" section of 
-https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt 
-back in 2005. The mechanism itself is 30 years old 
-(Documentation/initrd.txt was written by Werner Almsberger in linux 
-1.3.73 from March 7, 1996, ala 
-https://github.com/mpe/linux-fullhistory/commit/afc106342783 ).
+kernel test robot noticed the following build warnings:
 
-Since initrd contents could always be in a bunch of different 
-autodetected formats (and optionally compressed just like the kernel), 
-initramfs just hooked in to the staircase and said "if the format is 
-cpio, call this function to handle it". The patch series proposes 
-removing all the other formats, but not otherwise changing the existing 
-external image loader mechanism. (Personally I think removing the 
-architecture-specific hacks but leaving the generic support under init/ 
-would probably have made more sense as a first step.)
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master arnd-asm-generic/master v6.17-rc7 next-20250924]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The bootloader hands off an initrd image, initramfs is the boot-time 
-cpio extraction plumbing that's _init tagged and gets freed, and rootfs 
-is the persistent mounted instance of ramfs or tmpfs that's always there 
-and is analogous to the init task (PID 1) except for the mount tree. 
-(And is often overmounted so it's not visible, but it's still there. And 
-is NOT SPECIAL: overmounts aren't a new concept, nor is hiding them in 
-things like "df".)
+url:    https://github.com/intel-lab-lkp/linux/commits/Manikanta-Guntupalli/dt-bindings-i3c-Add-AMD-I3C-master-controller-support/20250923-234944
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250923154551.2112388-3-manikanta.guntupalli%40amd.com
+patch subject: [PATCH V7 2/4] asm-generic/io.h: Add big-endian MMIO accessors
+config: sparc-allnoconfig (https://download.01.org/0day-ci/archive/20250925/202509250413.sOTeU37m-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509250413.sOTeU37m-lkp@intel.com/reproduce)
 
-There's a REASON my documentation file was called 
-ramfs-rootfs-initramfs.txt: the naming's always been a bit... layered. 
-(And yes, I have always spelled initmpfs with only one t.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509250413.sOTeU37m-lkp@intel.com/
 
-Rob
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/io.h:12,
+                    from include/linux/irq.h:20,
+                    from include/asm-generic/hardirq.h:17,
+                    from arch/sparc/include/asm/hardirq_32.h:11,
+                    from arch/sparc/include/asm/hardirq.h:7,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/interrupt.h:11,
+                    from include/linux/trace_recursion.h:5,
+                    from include/linux/ftrace.h:10,
+                    from include/linux/perf_event.h:43,
+                    from arch/sparc/mm/fault_32.c:22:
+>> arch/sparc/include/asm/io.h:16:9: warning: 'readw_be' redefined
+      16 | #define readw_be(__addr)        __raw_readw(__addr)
+         |         ^~~~~~~~
+   In file included from arch/sparc/include/asm/io_32.h:21,
+                    from arch/sparc/include/asm/io.h:7:
+   include/asm-generic/io.h:304:9: note: this is the location of the previous definition
+     304 | #define readw_be readw_be
+         |         ^~~~~~~~
+>> arch/sparc/include/asm/io.h:17:9: warning: 'readl_be' redefined
+      17 | #define readl_be(__addr)        __raw_readl(__addr)
+         |         ^~~~~~~~
+   include/asm-generic/io.h:319:9: note: this is the location of the previous definition
+     319 | #define readl_be readl_be
+         |         ^~~~~~~~
+>> arch/sparc/include/asm/io.h:19:9: warning: 'writel_be' redefined
+      19 | #define writel_be(__w, __addr)  __raw_writel(__w, __addr)
+         |         ^~~~~~~~~
+   include/asm-generic/io.h:363:9: note: this is the location of the previous definition
+     363 | #define writel_be writel_be
+         |         ^~~~~~~~~
+>> arch/sparc/include/asm/io.h:20:9: warning: 'writew_be' redefined
+      20 | #define writew_be(__l, __addr)  __raw_writew(__l, __addr)
+         |         ^~~~~~~~~
+   include/asm-generic/io.h:351:9: note: this is the location of the previous definition
+     351 | #define writew_be writew_be
+         |         ^~~~~~~~~
+--
+   In file included from include/linux/io.h:12,
+                    from include/linux/irq.h:20,
+                    from include/asm-generic/hardirq.h:17,
+                    from arch/sparc/include/asm/hardirq_32.h:11,
+                    from arch/sparc/include/asm/hardirq.h:7,
+                    from include/linux/hardirq.h:11,
+                    from include/linux/highmem.h:12,
+                    from include/linux/pagemap.h:11,
+                    from arch/sparc/mm/srmmu.c:15:
+>> arch/sparc/include/asm/io.h:16:9: warning: 'readw_be' redefined
+      16 | #define readw_be(__addr)        __raw_readw(__addr)
+         |         ^~~~~~~~
+   In file included from arch/sparc/include/asm/io_32.h:21,
+                    from arch/sparc/include/asm/io.h:7:
+   include/asm-generic/io.h:304:9: note: this is the location of the previous definition
+     304 | #define readw_be readw_be
+         |         ^~~~~~~~
+>> arch/sparc/include/asm/io.h:17:9: warning: 'readl_be' redefined
+      17 | #define readl_be(__addr)        __raw_readl(__addr)
+         |         ^~~~~~~~
+   include/asm-generic/io.h:319:9: note: this is the location of the previous definition
+     319 | #define readl_be readl_be
+         |         ^~~~~~~~
+>> arch/sparc/include/asm/io.h:19:9: warning: 'writel_be' redefined
+      19 | #define writel_be(__w, __addr)  __raw_writel(__w, __addr)
+         |         ^~~~~~~~~
+   include/asm-generic/io.h:363:9: note: this is the location of the previous definition
+     363 | #define writel_be writel_be
+         |         ^~~~~~~~~
+>> arch/sparc/include/asm/io.h:20:9: warning: 'writew_be' redefined
+      20 | #define writew_be(__l, __addr)  __raw_writew(__l, __addr)
+         |         ^~~~~~~~~
+   include/asm-generic/io.h:351:9: note: this is the location of the previous definition
+     351 | #define writew_be writew_be
+         |         ^~~~~~~~~
+   arch/sparc/mm/srmmu.c: In function 'poke_hypersparc':
+   arch/sparc/mm/srmmu.c:1074:32: warning: variable 'clear' set but not used [-Wunused-but-set-variable]
+    1074 |         volatile unsigned long clear;
+         |                                ^~~~~
+
+
+vim +/readw_be +16 arch/sparc/include/asm/io.h
+
+21dccddf45aae2 Jan Andersson 2011-05-10   9  
+21dccddf45aae2 Jan Andersson 2011-05-10  10  /*
+21dccddf45aae2 Jan Andersson 2011-05-10  11   * Defines used for both SPARC32 and SPARC64
+21dccddf45aae2 Jan Andersson 2011-05-10  12   */
+21dccddf45aae2 Jan Andersson 2011-05-10  13  
+21dccddf45aae2 Jan Andersson 2011-05-10  14  /* Big endian versions of memory read/write routines */
+21dccddf45aae2 Jan Andersson 2011-05-10  15  #define readb_be(__addr)	__raw_readb(__addr)
+21dccddf45aae2 Jan Andersson 2011-05-10 @16  #define readw_be(__addr)	__raw_readw(__addr)
+21dccddf45aae2 Jan Andersson 2011-05-10 @17  #define readl_be(__addr)	__raw_readl(__addr)
+21dccddf45aae2 Jan Andersson 2011-05-10  18  #define writeb_be(__b, __addr)	__raw_writeb(__b, __addr)
+21dccddf45aae2 Jan Andersson 2011-05-10 @19  #define writel_be(__w, __addr)	__raw_writel(__w, __addr)
+21dccddf45aae2 Jan Andersson 2011-05-10 @20  #define writew_be(__l, __addr)	__raw_writew(__l, __addr)
+21dccddf45aae2 Jan Andersson 2011-05-10  21  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
