@@ -1,186 +1,276 @@
-Return-Path: <linux-arch+bounces-13758-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13759-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0727B9AFAA
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 19:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16206B9B883
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 20:40:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E30341B2842F
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 17:09:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13C05188999B
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 18:40:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF993148B8;
-	Wed, 24 Sep 2025 17:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616F92D7387;
+	Wed, 24 Sep 2025 18:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YLmB0RBH"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="VsuONNpA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47725302CB2;
-	Wed, 24 Sep 2025 17:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB2831329E
+	for <linux-arch@vger.kernel.org>; Wed, 24 Sep 2025 18:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758733738; cv=none; b=ZW4wbkauzeZK/yWss5Rvb7FuynAVJ/IvkHn50guOnAsaBLh8xscZdxCqrZtmk1BxG4tNSqk9OKT0SvbHsu3gHml79eOcWjWcNlpk2v37UUom5JIOr5DzD3h8Haej7z93yTbW2RF2TlpE18yQdNdazQPaSActiNpzmdhlwAqPXYE=
+	t=1758739222; cv=none; b=dpK+05LmNBB/D1O1vLwMBpdNDClOd2NoPwsXQXA7b9ZoWpibqbuC/PlU1n/OlF8QwDZVmmgcxOtQY5WI6cOSxpnFHx2ymogbRGOJiYcPRAf0eGezHzF6RjXO20JJsNq0gXf9YeDMgGTZJ9NjquY4oEDxQXqo+j6HhBMBdaKRWO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758733738; c=relaxed/simple;
-	bh=/FSO6/ipB0cJtJTFavrv+ZfHe+XpgrP21tHroZy25rk=;
+	s=arc-20240116; t=1758739222; c=relaxed/simple;
+	bh=Lz5nNPc99WsglaCwylBBNPoIg34qFlQe9Q2dS/0RE9A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bKn1sksX8xL3ImCqMZXotEK3kNBgy9Tp/OV4nAkST1YSKEB67g+blWg4uw35mDh27md/H6qKXeXXF3d3i+wVeAjQnytzqt81MSyostDUcJrlTCEXXPvJn2z1N/GMZkVvD6h0dunxMMjG7Ng0yT97Y5d0J8ebGydYdKR0SIH7Lv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YLmB0RBH; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758733736; x=1790269736;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/FSO6/ipB0cJtJTFavrv+ZfHe+XpgrP21tHroZy25rk=;
-  b=YLmB0RBH2eBGHs0TqIZyxhgKieQHiz2HKSrwaVAM0F4sM6+TggrUkaQO
-   r5Ii2+vEx2cg5w5ifSK6ggkPHKLg8T3/y8chXPYuTeCpu3xBwHXeUipMr
-   Gctbq1U7Z9JzuoYLzDJO5qskkQ1NGZ6jT9FxgqAmfNOLLcIrnW7POeH+L
-   hdcuzc+GoUmRQSVcAfLqNEqTRe9groqabOIYIftX7cB0e+Ga4cQktuIYX
-   T+H9rdw3LPjLqL7cen327JMbE8GPfMrI7VbUVjYdmilCdSJtRGMjaKLSY
-   Uo3f2DenfxvqN3H+I9z2yO2xJ8ZzCWem0n19x+pXnnGpSMIjUtL0/f5t8
-   g==;
-X-CSE-ConnectionGUID: ehoeje9/T/uUt265+7vAzQ==
-X-CSE-MsgGUID: Q71WBlKFRBisDhH2glDK7Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="83643399"
-X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="83643399"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 10:08:45 -0700
-X-CSE-ConnectionGUID: FqUjPxVWQ3myxASj/onOeA==
-X-CSE-MsgGUID: wBuOCrR5R/y2hpXIKC5Y4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="181473382"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 24 Sep 2025 10:08:40 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1Sys-0004ND-0b;
-	Wed, 24 Sep 2025 17:08:38 +0000
-Date: Thu, 25 Sep 2025 01:07:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mukesh Rathor <mrathor@linux.microsoft.com>,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	arnd@arndb.de
-Subject: Re: [PATCH v2 6/6] x86/hyperv: Enable build of hypervisor crashdump
- collection files
-Message-ID: <202509250034.2hNDVmj0-lkp@intel.com>
-References: <20250923214609.4101554-7-mrathor@linux.microsoft.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=SNj7deHIn4U+rVh0olHp/C6dRh3bpr2vAPRogwFKKu4juZDolACLfZ8zd887s2m1w7MA6y/zLrtHB/gVjDnhn8UQozGGlYm3dAPfCquMalM9IBSKRRcVr9PNDTMIn7C1+eM161eBDGa8FqlCIoBLo4Ex1CDq5WXFTirSyjuDtfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=VsuONNpA; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-24456ce0b96so1375345ad.0
+        for <linux-arch@vger.kernel.org>; Wed, 24 Sep 2025 11:40:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc.com; s=google; t=1758739219; x=1759344019; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CmJ3vOxzWTYE+jCZQu9PTb3XdXqCFWVRNB5Wst4HaN8=;
+        b=VsuONNpAqu0JaeJsXkucyiqb9txr3bCS6eMsNg+mtgnll/4/do/YTAXwbIyojoI4KP
+         j+aJOz3rEKSSRpgmZHUVnZKCi9/XhkAV3j0BiTPTsZtuprVpmd1yMXMQlSZ52aFNxqtE
+         q8/GtB++wZ8Tct12HaAs2r/ncjI2DHX5o0WrnmMeYden8OXB2DVC3QC3vF05elVIYlOd
+         nphQIBnz0WEHObPM71Jhk5FzNnASKuXbPc7gKdEfwgkkrtelMCo1/DZvIf+unmXbbiaL
+         xat7KaZeSKCHYyaxZ0iOqqxQvjgvj04bmbAoaU4xe4e5NdegVdtXsbtNGoiDdbv2ERBO
+         iESQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758739219; x=1759344019;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CmJ3vOxzWTYE+jCZQu9PTb3XdXqCFWVRNB5Wst4HaN8=;
+        b=Ml8y0OT6PD369FdY48kW/yyg1GeGfSWlFzyG/nZnVjKQpF1+ZXEVsqk0BRXQiRHDeD
+         fk5OZsSpe1FDCJvF5aQZyMviCFDNqMln+60K5aqnb7yaUeGP16nuwQKGMKFhwURrxtuK
+         QQ4S/KKsTkaLOtrlvhbj8tJl2fPmSzIjo59qFki3nx6fz0up5j8mIAQEZRLlvnIs8zrX
+         a0O1XDv203s93cAnSpegFpAzqVL1+VShdHz6F2hpjZV3DF98jLcHpr/s/mmJMgXFYHSK
+         EnlsXN8pU01hy9pwvOU02X9MRQv+pQHbKPr2Mto4SbWZc7mwB5kvLDo0B8FXh0Q6CROi
+         ytNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVStK/WC338YvcjXFL0sozPQTCRlRK1//eXAlW9kxQPVies1kjLCMpYC5OSW2Dp3arfezLC45L/j6ux@vger.kernel.org
+X-Gm-Message-State: AOJu0YysawnMjdQjQOI6YuvjkDMZR5Gxkn/WT/fQsMDrih5po+xUUwxx
+	JetFu3FLFW8lKapfsKC0jmm/KzPMoRFQD0vD+iZahjHMCUtq+/wWOKi3FHSh5umatVI=
+X-Gm-Gg: ASbGnctcFhCuo4MONmDSKwt8S93v41jslLr8ZiXccOcf/k+pXaFbxsRGNGJEOSQh9Pt
+	AgL1yEbbgCnK7gWqZu4bTRf+ihkJFanznx4lwBoaAxRcTh8UEzy3j+Mjz8QARQH0rKcBYgmvrp7
+	O3ov3xNPihjxrqAzUqCNJLArLbl3cHGlPhT82gv9IEaEmSMZVnRMZYLxLkHWni4Xowu8PfcE55X
+	E1efsHKwxHCI6fERLMTriGhTGv3yzFDohy/7eGiic404WpSeQxsI3f1iBlkBZD9XNeBSdOd38mt
+	nA/RPqapWziFPll41/oUWvm+awXJrKK1FVEEEVTuwe84vvo/kxaaBXpVEfE/pHd12v0dpbay5o2
+	iHSad11QfNuU7hhM9xT867BS6EXoO6Uk8
+X-Google-Smtp-Source: AGHT+IGXuHXHBWPf+oE+Ln4Jp/4CaKr0teMjK8nrYhSg666HYgvhIXatAPi5gWQsQGiN1OujHcfx1A==
+X-Received: by 2002:a17:902:e790:b0:24b:270e:56d4 with SMTP id d9443c01a7336-27ed4c67b42mr6992845ad.4.1758739219414;
+        Wed, 24 Sep 2025 11:40:19 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2698035ddcasm198787335ad.142.2025.09.24.11.40.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Sep 2025 11:40:18 -0700 (PDT)
+Date: Wed, 24 Sep 2025 11:40:15 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Paul Walmsley <pjw@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
+	richard.henderson@linaro.org, jim.shu@sifive.com,
+	Andy Chiu <andybnac@gmail.com>, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	Zong Li <zong.li@sifive.com>, David Hildenbrand <david@redhat.com>,
+	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+	Florian Weimer <fweimer@redhat.com>, bharrington@redhat.com,
+	Aurelien Jarno <aurel32@debian.org>
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+Message-ID: <aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com>
+References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
+ <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20250923214609.4101554-7-mrathor@linux.microsoft.com>
+In-Reply-To: <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
 
-Hi Mukesh,
+On Wed, Sep 24, 2025 at 08:36:11AM -0600, Paul Walmsley wrote:
+>Hi,
+>
+>On Thu, 31 Jul 2025, Deepak Gupta wrote:
+>
+>[ ... ]
+>
+>> vDSO related Opens (in the flux)
+>> =================================
+>>
+>> I am listing these opens for laying out plan and what to expect in future
+>> patch sets. And of course for the sake of discussion.
+>>
+>
+>[ ... ]
+>
+>> How many vDSOs
+>> ---------------
+>> Shadow stack instructions are carved out of zimop (may be operations) and if CPU
+>> doesn't implement zimop, they're illegal instructions. Kernel could be running on
+>> a CPU which may or may not implement zimop. And thus kernel will have to carry 2
+>> different vDSOs and expose the appropriate one depending on whether CPU implements
+>> zimop or not.
+>
+>If we merge this series without this, then when CFI is enabled in the
+>Kconfig, we'll wind up with a non-portable kernel that won't run on older
+>hardware.  We go to great lengths to enable kernel binary portability
+>across the presence or absence of other RISC-V extensions, and I think
+>these CFI extensions should be no different.
+>
+>So before considering this for merging, I'd like to see at least an
+>attempt to implement the dual-vDSO approach (or something equivalent)
+>where the same kernel binary with CFI enabled can run on both pre-Zimop
+>and post-Zimop hardware, with the existing userspaces that are common
+>today.
 
-kernel test robot noticed the following build errors:
+Added some distro folks in this email chain.
 
-[auto build test ERROR on next-20250923]
-[also build test ERROR on v6.17-rc7]
-[cannot apply to tip/x86/core linus/master v6.17-rc7 v6.17-rc6 v6.17-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+After patchwork meeting today, I wanted to continue discussion here. So thanks
+Paul for looking into it and initiating a discussion here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Rathor/x86-hyperv-Rename-guest-crash-shutdown-function/20250924-054910
-base:   next-20250923
-patch link:    https://lore.kernel.org/r/20250923214609.4101554-7-mrathor%40linux.microsoft.com
-patch subject: [PATCH v2 6/6] x86/hyperv: Enable build of hypervisor crashdump collection files
-config: x86_64-randconfig-004-20250924 (https://download.01.org/0day-ci/archive/20250925/202509250034.2hNDVmj0-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509250034.2hNDVmj0-lkp@intel.com/reproduce)
+This patch series has been in the queue for quite a long time and we have had
+deliberations on vDSO topic earlier as well and after those deliberations it
+was decided to go ahead with merge and it indeed was sent for 6.17 merge
+window. Unfortunatley due to other unforeseen reasons, entirety of riscv
+changes were not picked. So it's a bit disappointing to see back-paddling on
+this topic.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509250034.2hNDVmj0-lkp@intel.com/
+Anyways, we are here. So I'll provide a bit of context for the list about
+deliberations and discussions we have been having for so many merge windows.
+This so that a holistic discussion can happen on this before we make a
+decision.
 
-All errors (new ones prefixed by >>):
+Issue
+======
 
-   arch/x86/hyperv/hv_crash.c:282:6: warning: variable 'status' set but not used [-Wunused-but-set-variable]
-     282 |         u64 status;
-         |             ^
->> arch/x86/hyperv/hv_crash.c:631:2: error: must use 'struct' tag to refer to type 'smp_ops'
-     631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
-         |         ^
-         |         struct 
->> arch/x86/hyperv/hv_crash.c:631:9: error: expected identifier or '('
-     631 |         smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
-         |                ^
-   1 warning and 2 errors generated.
+Instructions in RISC-V shadow stack extension (zicfiss - [1]) are carved out of
+"may be ops" aka zimop extension [2]. "may be ops" are illegal on non-RVA23
+hardware. This means any existing riscv CPU or future CPU which isn't RVA23
+compliant and not implementing zimop will treat these encodings as illegal.
+
+Current kernel patches enable shadow stack and landing pad support for
+userspace using config `CONFIG_RISCV_USER_CFI`. If this config is selected then
+vDSO that will be exposed to user space will also have shadow stack
+instructions in them. Kernel compiled with `CONFIG_RISCV_USER_CFI`, for sake of
+this discussion lets call it RVA23 compiled kernel.
+
+Issue that we discussed earlier and even today is "This RVA23 compiled kernel
+won't be able to support non-RVA23 userspace on non-RVA23 hardware because".
+Please note that issue exists only on non-RVA23 hardware (which is existing
+hardware and future hardware which is not implementing zimop). RVA23 compiled
+kernel can support any sort of userspace on RVA23 hardware.
 
 
-vim +631 arch/x86/hyperv/hv_crash.c
+Discussion
+===========
 
-c619422e77519d Mukesh Rathor 2025-09-23  580  
-c619422e77519d Mukesh Rathor 2025-09-23  581  /* Setup for kdump kexec to collect hypervisor RAM when running as root/dom0 */
-c619422e77519d Mukesh Rathor 2025-09-23  582  void hv_root_crash_init(void)
-c619422e77519d Mukesh Rathor 2025-09-23  583  {
-c619422e77519d Mukesh Rathor 2025-09-23  584  	int rc;
-c619422e77519d Mukesh Rathor 2025-09-23  585  	struct hv_input_get_system_property *input;
-c619422e77519d Mukesh Rathor 2025-09-23  586  	struct hv_output_get_system_property *output;
-c619422e77519d Mukesh Rathor 2025-09-23  587  	unsigned long flags;
-c619422e77519d Mukesh Rathor 2025-09-23  588  	u64 status;
-c619422e77519d Mukesh Rathor 2025-09-23  589  	union hv_pfn_range cda_info;
-c619422e77519d Mukesh Rathor 2025-09-23  590  
-c619422e77519d Mukesh Rathor 2025-09-23  591  	if (pgtable_l5_enabled()) {
-c619422e77519d Mukesh Rathor 2025-09-23  592  		pr_err("Hyper-V: crash dump not yet supported on 5level PTs\n");
-c619422e77519d Mukesh Rathor 2025-09-23  593  		return;
-c619422e77519d Mukesh Rathor 2025-09-23  594  	}
-c619422e77519d Mukesh Rathor 2025-09-23  595  
-c619422e77519d Mukesh Rathor 2025-09-23  596  	rc = register_nmi_handler(NMI_LOCAL, hv_crash_nmi_local, NMI_FLAG_FIRST,
-c619422e77519d Mukesh Rathor 2025-09-23  597  				  "hv_crash_nmi");
-c619422e77519d Mukesh Rathor 2025-09-23  598  	if (rc) {
-c619422e77519d Mukesh Rathor 2025-09-23  599  		pr_err("Hyper-V: failed to register crash nmi handler\n");
-c619422e77519d Mukesh Rathor 2025-09-23  600  		return;
-c619422e77519d Mukesh Rathor 2025-09-23  601  	}
-c619422e77519d Mukesh Rathor 2025-09-23  602  
-c619422e77519d Mukesh Rathor 2025-09-23  603  	local_irq_save(flags);
-c619422e77519d Mukesh Rathor 2025-09-23  604  	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-c619422e77519d Mukesh Rathor 2025-09-23  605  	output = *this_cpu_ptr(hyperv_pcpu_output_arg);
-c619422e77519d Mukesh Rathor 2025-09-23  606  
-c619422e77519d Mukesh Rathor 2025-09-23  607  	memset(input, 0, sizeof(*input));
-c619422e77519d Mukesh Rathor 2025-09-23  608  	input->property_id = HV_SYSTEM_PROPERTY_CRASHDUMPAREA;
-c619422e77519d Mukesh Rathor 2025-09-23  609  
-c619422e77519d Mukesh Rathor 2025-09-23  610  	status = hv_do_hypercall(HVCALL_GET_SYSTEM_PROPERTY, input, output);
-c619422e77519d Mukesh Rathor 2025-09-23  611  	cda_info.as_uint64 = output->hv_cda_info.as_uint64;
-c619422e77519d Mukesh Rathor 2025-09-23  612  	local_irq_restore(flags);
-c619422e77519d Mukesh Rathor 2025-09-23  613  
-c619422e77519d Mukesh Rathor 2025-09-23  614  	if (!hv_result_success(status)) {
-c619422e77519d Mukesh Rathor 2025-09-23  615  		pr_err("Hyper-V: %s: property:%d %s\n", __func__,
-c619422e77519d Mukesh Rathor 2025-09-23  616  		       input->property_id, hv_result_to_string(status));
-c619422e77519d Mukesh Rathor 2025-09-23  617  		goto err_out;
-c619422e77519d Mukesh Rathor 2025-09-23  618  	}
-c619422e77519d Mukesh Rathor 2025-09-23  619  
-c619422e77519d Mukesh Rathor 2025-09-23  620  	if (cda_info.base_pfn == 0) {
-c619422e77519d Mukesh Rathor 2025-09-23  621  		pr_err("Hyper-V: hypervisor crash dump area pfn is 0\n");
-c619422e77519d Mukesh Rathor 2025-09-23  622  		goto err_out;
-c619422e77519d Mukesh Rathor 2025-09-23  623  	}
-c619422e77519d Mukesh Rathor 2025-09-23  624  
-c619422e77519d Mukesh Rathor 2025-09-23  625  	hv_cda = phys_to_virt(cda_info.base_pfn << HV_HYP_PAGE_SHIFT);
-c619422e77519d Mukesh Rathor 2025-09-23  626  
-c619422e77519d Mukesh Rathor 2025-09-23  627  	rc = hv_crash_trampoline_setup();
-c619422e77519d Mukesh Rathor 2025-09-23  628  	if (rc)
-c619422e77519d Mukesh Rathor 2025-09-23  629  		goto err_out;
-c619422e77519d Mukesh Rathor 2025-09-23  630  
-c619422e77519d Mukesh Rathor 2025-09-23 @631  	smp_ops.crash_stop_other_cpus = hv_crash_stop_other_cpus;
+So the issue is not really shadow stack instructions but rather may be op
+instructions in codegen (binaries and vDSO) which aren't hidden behind any
+flag (to hide them if hardware doesn't support). And if I can narrow down
+further, primary issue we are discussing is that if cfi is enabled during
+kernel compile, it is bringing in a piece of code (vDSO) which won't work
+on existing hardware. But the counter point is if someone were to deploy
+RVA23 compiled kernel on non-RVA23 hardware, they must have compiled
+rest of the userspace without shadow stack instructions in them for such
+a hardware. And thus at this point they could simply choose *not* to turn on
+`CONFIG_RISCV_USER_CFI` when compiling such kernel. It's not that difficult to
+do so.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Any distro who is shipping userspace (which all of them are) along with kernel
+will not be shipping two different userspaces (one with shadow stack and one
+without them). If distro are shipping two different userspaces, then they might
+as well ship two different kernels. Tagging some distro folks here to get their
+take on shipping different userspace depending on whether hardware is RVA23 or
+not. @Heinrich, @Florian, @redbeard and @Aurelien.
+
+Major distro's have already drawn a distinction here that they will drop
+support for hardware which isn't RVA23 for the sake of keeping binary
+distribution simple.
+
+Only other use case that was discussed of a powerful linux user who just wants
+to use a single kernel on all kinds of riscv hardware. I am imagining such a
+user knows enough about kernel and if is really dear to them, they can develop
+their own patches and send it upstream to support their own usecase and we can
+discuss them out. Current patchset don't prevent such a developer to send such
+patches upstream.
+
+I heard the argument in meeting today that "Zbb" enabling works similar for
+kernel today. I looked at "Zbb" enabling. It's for kernel usage and it's
+surgically placed in kernel using asm hidden behind alternatives. vDSO isn't
+compiled with Zbb. Shadow stack instructions are part of codegen for C files
+compiled into vDSO.
+
+Furthermore,
+
+Kernel control flow integrity will introduce shadow stack instructions all
+over the kernel binary. Such kernel won't be deployable on non-RVA23 hardware.
+How to deal with this problem for a savvy kernel developer who wants to run
+same cfi enabled kernel binary on multiple hardware?
+
+Coming from engineering and hacker point of view, I understand the desire here
+but I still see that it's complexity enforced on rest of the kernel from a user
+base which anyways can achieve such goals. For majority of usecases, I don't
+see a reason to increase complexity in the kernel for build, possibly runtime
+patching and thus possibly introduce more issues and errors just for the sake
+of a science project.
+
+Being said that, re-iterating that currently default for `CONFIG_RISCV_USER_CFI`
+is "n" which means it won't be breaking anything unless a user opts "Y". So even
+though I really don't see a reason and usability to have complexity in kernel to
+carry multiple vDSOs, current patchsets are not a hinderance for such future
+capability (because current default is No) and motivated developer is welcome
+to build on top of it. Bottomline is I don't see a reason to block current
+patchset from merging in v6.18.
+
+
+[1] - https://github.com/riscv/riscv-isa-manual/blob/main/src/unpriv-cfi.adoc#shadow-stack-zicfiss
+[2] - https://github.com/riscv/riscv-isa-manual/blob/main/src/zimop.adoc
+
+>
+>thanks Deepak,
+>
+>- Paul
 
