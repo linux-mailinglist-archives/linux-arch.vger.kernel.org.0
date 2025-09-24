@@ -1,276 +1,186 @@
-Return-Path: <linux-arch+bounces-13759-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13760-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16206B9B883
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 20:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7614AB9BB17
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 21:26:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13C05188999B
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 18:40:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 706521BC1D10
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 19:26:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616F92D7387;
-	Wed, 24 Sep 2025 18:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB0D8306B06;
+	Wed, 24 Sep 2025 19:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="VsuONNpA"
+	dkim=pass (2048-bit key) header.d=landley.net header.i=@landley.net header.b="qP7ktGKp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eastern.birch.relay.mailchannels.net (eastern.birch.relay.mailchannels.net [23.83.209.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB2831329E
-	for <linux-arch@vger.kernel.org>; Wed, 24 Sep 2025 18:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758739222; cv=none; b=dpK+05LmNBB/D1O1vLwMBpdNDClOd2NoPwsXQXA7b9ZoWpibqbuC/PlU1n/OlF8QwDZVmmgcxOtQY5WI6cOSxpnFHx2ymogbRGOJiYcPRAf0eGezHzF6RjXO20JJsNq0gXf9YeDMgGTZJ9NjquY4oEDxQXqo+j6HhBMBdaKRWO0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758739222; c=relaxed/simple;
-	bh=Lz5nNPc99WsglaCwylBBNPoIg34qFlQe9Q2dS/0RE9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SNj7deHIn4U+rVh0olHp/C6dRh3bpr2vAPRogwFKKu4juZDolACLfZ8zd887s2m1w7MA6y/zLrtHB/gVjDnhn8UQozGGlYm3dAPfCquMalM9IBSKRRcVr9PNDTMIn7C1+eM161eBDGa8FqlCIoBLo4Ex1CDq5WXFTirSyjuDtfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=VsuONNpA; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-24456ce0b96so1375345ad.0
-        for <linux-arch@vger.kernel.org>; Wed, 24 Sep 2025 11:40:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1758739219; x=1759344019; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CmJ3vOxzWTYE+jCZQu9PTb3XdXqCFWVRNB5Wst4HaN8=;
-        b=VsuONNpAqu0JaeJsXkucyiqb9txr3bCS6eMsNg+mtgnll/4/do/YTAXwbIyojoI4KP
-         j+aJOz3rEKSSRpgmZHUVnZKCi9/XhkAV3j0BiTPTsZtuprVpmd1yMXMQlSZ52aFNxqtE
-         q8/GtB++wZ8Tct12HaAs2r/ncjI2DHX5o0WrnmMeYden8OXB2DVC3QC3vF05elVIYlOd
-         nphQIBnz0WEHObPM71Jhk5FzNnASKuXbPc7gKdEfwgkkrtelMCo1/DZvIf+unmXbbiaL
-         xat7KaZeSKCHYyaxZ0iOqqxQvjgvj04bmbAoaU4xe4e5NdegVdtXsbtNGoiDdbv2ERBO
-         iESQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758739219; x=1759344019;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CmJ3vOxzWTYE+jCZQu9PTb3XdXqCFWVRNB5Wst4HaN8=;
-        b=Ml8y0OT6PD369FdY48kW/yyg1GeGfSWlFzyG/nZnVjKQpF1+ZXEVsqk0BRXQiRHDeD
-         fk5OZsSpe1FDCJvF5aQZyMviCFDNqMln+60K5aqnb7yaUeGP16nuwQKGMKFhwURrxtuK
-         QQ4S/KKsTkaLOtrlvhbj8tJl2fPmSzIjo59qFki3nx6fz0up5j8mIAQEZRLlvnIs8zrX
-         a0O1XDv203s93cAnSpegFpAzqVL1+VShdHz6F2hpjZV3DF98jLcHpr/s/mmJMgXFYHSK
-         EnlsXN8pU01hy9pwvOU02X9MRQv+pQHbKPr2Mto4SbWZc7mwB5kvLDo0B8FXh0Q6CROi
-         ytNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVStK/WC338YvcjXFL0sozPQTCRlRK1//eXAlW9kxQPVies1kjLCMpYC5OSW2Dp3arfezLC45L/j6ux@vger.kernel.org
-X-Gm-Message-State: AOJu0YysawnMjdQjQOI6YuvjkDMZR5Gxkn/WT/fQsMDrih5po+xUUwxx
-	JetFu3FLFW8lKapfsKC0jmm/KzPMoRFQD0vD+iZahjHMCUtq+/wWOKi3FHSh5umatVI=
-X-Gm-Gg: ASbGnctcFhCuo4MONmDSKwt8S93v41jslLr8ZiXccOcf/k+pXaFbxsRGNGJEOSQh9Pt
-	AgL1yEbbgCnK7gWqZu4bTRf+ihkJFanznx4lwBoaAxRcTh8UEzy3j+Mjz8QARQH0rKcBYgmvrp7
-	O3ov3xNPihjxrqAzUqCNJLArLbl3cHGlPhT82gv9IEaEmSMZVnRMZYLxLkHWni4Xowu8PfcE55X
-	E1efsHKwxHCI6fERLMTriGhTGv3yzFDohy/7eGiic404WpSeQxsI3f1iBlkBZD9XNeBSdOd38mt
-	nA/RPqapWziFPll41/oUWvm+awXJrKK1FVEEEVTuwe84vvo/kxaaBXpVEfE/pHd12v0dpbay5o2
-	iHSad11QfNuU7hhM9xT867BS6EXoO6Uk8
-X-Google-Smtp-Source: AGHT+IGXuHXHBWPf+oE+Ln4Jp/4CaKr0teMjK8nrYhSg666HYgvhIXatAPi5gWQsQGiN1OujHcfx1A==
-X-Received: by 2002:a17:902:e790:b0:24b:270e:56d4 with SMTP id d9443c01a7336-27ed4c67b42mr6992845ad.4.1758739219414;
-        Wed, 24 Sep 2025 11:40:19 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2698035ddcasm198787335ad.142.2025.09.24.11.40.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 11:40:18 -0700 (PDT)
-Date: Wed, 24 Sep 2025 11:40:15 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Paul Walmsley <pjw@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
-	richard.henderson@linaro.org, jim.shu@sifive.com,
-	Andy Chiu <andybnac@gmail.com>, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
-	Zong Li <zong.li@sifive.com>, David Hildenbrand <david@redhat.com>,
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-	Florian Weimer <fweimer@redhat.com>, bharrington@redhat.com,
-	Aurelien Jarno <aurel32@debian.org>
-Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
-Message-ID: <aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com>
-References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
- <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C3A1C8603;
+	Wed, 24 Sep 2025 19:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.209.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758741976; cv=pass; b=QqwhKov7zOBNob91ZIKleb+x94NIUDCPaN7BZF9uLkBt4kE5xramulnCLAdSdiW0cyVJnFkfObRmVW+2NaPKT+aaJFXgTmWdiNSNwH4hOtb3uGsMVl8mDk1BpbbJvDdvvabhxDwk1NimvAx+JyJdqdQVC0c7wjU8JPNz/YyGJ6c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758741976; c=relaxed/simple;
+	bh=BHsTkzdWZajDNDK+ioNil3t9QVIX4IumG9TxYgK95/0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EkBWl7S0eZencH7xz9rP5NLYMH3a5x6ctyim2l14bTBbgE/n98yRgcXErmafAn+2jL6RCklgG7CtUkdaWspVo86kuwH0b/6PF+vk44y7fFgu6xQD8K1CGTzLHKUHHPcFcwC6B6nwx4gqzzmoyiOG4U4cGPQxxGZydr1sO2adL+E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=landley.net; spf=pass smtp.mailfrom=landley.net; dkim=pass (2048-bit key) header.d=landley.net header.i=@landley.net header.b=qP7ktGKp; arc=pass smtp.client-ip=23.83.209.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=landley.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=landley.net
+X-Sender-Id: dreamhost|x-authsender|rob@landley.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id D68F56C2CDF;
+	Wed, 24 Sep 2025 19:20:52 +0000 (UTC)
+Received: from pdx1-sub0-mail-a233.dreamhost.com (trex-blue-5.trex.outbound.svc.cluster.local [100.108.153.55])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 4D82F6C092A;
+	Wed, 24 Sep 2025 19:20:51 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1758741652; a=rsa-sha256;
+	cv=none;
+	b=FIelBRpKbw4XRCXREIY6GrcomZxyh5mPLsvXc2d6FGp/peq6EwuUT5C41+2LA0F+ggX9yV
+	8sDI+KYqBxmckQrPVNV7rWra63fWqq+o5yLlx5MZRnuTdHQZEQgAmgblFxuGyjaNVrHFDk
+	wPn+M2/WQfSpmZ0IkQEEN3MHnMtbF5yhytJwedRo1ogyg8SQR/ZRrsw9DI3lHGj/2mLKAm
+	dj8jGFwnS4OjNKQjH2R6mDLZ7tlU8MommvaAha7o+UWIylY5K2nv2k5iepHunaoM660neK
+	8apwlyJbofcRsA4DvFw4pkrtRAv7P9DWllpqqR+qR+EGkoSllD3i7IkmAH8Mog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1758741652;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=2+5k4o1pMixQXt5VsjL/MYZwcVCEyggOqRD9o8b/qSc=;
+	b=ChRw8wSjyogd2do/v/H6TxZGH/WsiQerw/hid5S8KViit0lwA1gMH0+6UMTmJNQMMIezrz
+	gsCOkeBMJedUyPmRdN0+x/Ibzn4kOtJ+sG57y0ioHbgMKfWThGzPdrmcr4dMMVSyyUw2rk
+	dVBBOmfhJTtYNtYRTDWhwp+mpqmWhEqvL9C8FrlKqiY59ItiMJEd3l6YkcBc//9Lzk6+Fh
+	mvjXUWAyzYxp+VnxExIXavdSHQcTxa/FAQIzz9fgRHT07mtFGrsyWRfq7ZmdI4pGoAxOfN
+	0MoQjrfyn0a4j6aLMBwkDQq4B0YTsphgd54S7yxIuOYwH85l63FNfS25ErSZgQ==
+ARC-Authentication-Results: i=1;
+	rspamd-55b8bfbc7f-nnn52;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=rob@landley.net
+X-Sender-Id: dreamhost|x-authsender|rob@landley.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|rob@landley.net
+X-MailChannels-Auth-Id: dreamhost
+X-Callous-Spill: 350181bf214e86d3_1758741652308_3044232165
+X-MC-Loop-Signature: 1758741652308:255498347
+X-MC-Ingress-Time: 1758741652308
+Received: from pdx1-sub0-mail-a233.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.108.153.55 (trex/7.1.3);
+	Wed, 24 Sep 2025 19:20:52 +0000
+Received: from [192.168.88.7] (unknown [209.81.127.98])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: rob@landley.net)
+	by pdx1-sub0-mail-a233.dreamhost.com (Postfix) with ESMTPSA id 4cX6Bm0dnXzJl;
+	Wed, 24 Sep 2025 12:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=landley.net;
+	s=dreamhost; t=1758741651;
+	bh=2+5k4o1pMixQXt5VsjL/MYZwcVCEyggOqRD9o8b/qSc=;
+	h=Date:Subject:To:Cc:From:Content-Type:Content-Transfer-Encoding;
+	b=qP7ktGKps9suFLn+SvwXNJfmXIq5m7DqxjIn++FPW06rQGLdyFrasnCUUBtJnzZ2L
+	 032Pr1ux0M59Obr3XwUHOtHtLFaEBxNmmkXxqPxYnCt1Q6ZqoWdAD9Q0W04+4gmjQl
+	 ds3vnt+/qY5ti8rpHJ46bodAbnhitDUyLxlQ0tRxKsiwmL7TThWSclVniorsogf6MJ
+	 gohNW1AXGJyGgriupkN0gkhVYK+ork7/6bPtZBHhvaB43HB07jP863XLDHcc31YH0+
+	 wfQhtcquMUPSEA+sEb7jFLcwMpbQdjW0Rd1EFegx855pG/OiLXxmVQR1JAWLIYES88
+	 kVFfZokS8hZqg==
+Message-ID: <de56cabd-05a9-4528-8150-9ad97209640e@landley.net>
+Date: Wed, 24 Sep 2025 14:20:47 -0500
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND 00/62] initrd: remove classic initrd support
+To: Alexander Patrakov <patrakov@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Askar Safin <safinaskar@gmail.com>, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Linus Torvalds
+ <torvalds@linux-foundation.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+ Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+ Jens Axboe <axboe@kernel.dk>, Andy Shevchenko <andy.shevchenko@gmail.com>,
+ Aleksa Sarai <cyphar@cyphar.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Julian Stecklina <julian.stecklina@cyberus-technology.de>,
+ Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Eric Curtin <ecurtin@redhat.com>,
+ Alexander Graf <graf@amazon.com>, Lennart Poettering <mzxreary@0pointer.de>,
+ linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-um@lists.infradead.org, x86@kernel.org, Ingo Molnar
+ <mingo@redhat.com>, linux-block@vger.kernel.org, initramfs@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org,
+ "Theodore Y . Ts'o" <tytso@mit.edu>, linux-acpi@vger.kernel.org,
+ Michal Simek <monstr@monstr.eu>, devicetree@vger.kernel.org,
+ Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>,
+ Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>,
+ patches@lists.linux.dev
+References: <20250913003842.41944-1-safinaskar@gmail.com>
+ <ffbf1a04-047d-4787-ac1e-f5362e1ca600@csgroup.eu>
+ <CAN_LGv3Opj9RW0atfXODy-Epn++5mt_DLEi-ewxR9Me5x46Bkg@mail.gmail.com>
+Content-Language: en-US
+From: Rob Landley <rob@landley.net>
+In-Reply-To: <CAN_LGv3Opj9RW0atfXODy-Epn++5mt_DLEi-ewxR9Me5x46Bkg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 24, 2025 at 08:36:11AM -0600, Paul Walmsley wrote:
->Hi,
->
->On Thu, 31 Jul 2025, Deepak Gupta wrote:
->
->[ ... ]
->
->> vDSO related Opens (in the flux)
->> =================================
->>
->> I am listing these opens for laying out plan and what to expect in future
->> patch sets. And of course for the sake of discussion.
->>
->
->[ ... ]
->
->> How many vDSOs
->> ---------------
->> Shadow stack instructions are carved out of zimop (may be operations) and if CPU
->> doesn't implement zimop, they're illegal instructions. Kernel could be running on
->> a CPU which may or may not implement zimop. And thus kernel will have to carry 2
->> different vDSOs and expose the appropriate one depending on whether CPU implements
->> zimop or not.
->
->If we merge this series without this, then when CFI is enabled in the
->Kconfig, we'll wind up with a non-portable kernel that won't run on older
->hardware.  We go to great lengths to enable kernel binary portability
->across the presence or absence of other RISC-V extensions, and I think
->these CFI extensions should be no different.
->
->So before considering this for merging, I'd like to see at least an
->attempt to implement the dual-vDSO approach (or something equivalent)
->where the same kernel binary with CFI enabled can run on both pre-Zimop
->and post-Zimop hardware, with the existing userspaces that are common
->today.
+On 9/24/25 11:17, Alexander Patrakov wrote:
+>> Therefore is it really initrd you are removing or just some corner case
+>> ? If it is really initrd, then how does QEMU still work with that
+>> -initrd parameter ?
+> 
+> The QEMU -initrd parameter is a misnomer. It can be used to pass an
+> initrd or an initramfs, and the kernel automatically figures out what
+> it is.
 
-Added some distro folks in this email chain.
+It's not a misnomer, initrams has always been able to make use of the 
+existing initrd loading mechanism to read images externally supplied by 
+the bootloader. It's what grub calls it too. I documented it in the 
+"External initramfs images" section of 
+https://kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt 
+back in 2005. The mechanism itself is 30 years old 
+(Documentation/initrd.txt was written by Werner Almsberger in linux 
+1.3.73 from March 7, 1996, ala 
+https://github.com/mpe/linux-fullhistory/commit/afc106342783 ).
 
-After patchwork meeting today, I wanted to continue discussion here. So thanks
-Paul for looking into it and initiating a discussion here.
+Since initrd contents could always be in a bunch of different 
+autodetected formats (and optionally compressed just like the kernel), 
+initramfs just hooked in to the staircase and said "if the format is 
+cpio, call this function to handle it". The patch series proposes 
+removing all the other formats, but not otherwise changing the existing 
+external image loader mechanism. (Personally I think removing the 
+architecture-specific hacks but leaving the generic support under init/ 
+would probably have made more sense as a first step.)
 
-This patch series has been in the queue for quite a long time and we have had
-deliberations on vDSO topic earlier as well and after those deliberations it
-was decided to go ahead with merge and it indeed was sent for 6.17 merge
-window. Unfortunatley due to other unforeseen reasons, entirety of riscv
-changes were not picked. So it's a bit disappointing to see back-paddling on
-this topic.
+The bootloader hands off an initrd image, initramfs is the boot-time 
+cpio extraction plumbing that's _init tagged and gets freed, and rootfs 
+is the persistent mounted instance of ramfs or tmpfs that's always there 
+and is analogous to the init task (PID 1) except for the mount tree. 
+(And is often overmounted so it's not visible, but it's still there. And 
+is NOT SPECIAL: overmounts aren't a new concept, nor is hiding them in 
+things like "df".)
 
-Anyways, we are here. So I'll provide a bit of context for the list about
-deliberations and discussions we have been having for so many merge windows.
-This so that a holistic discussion can happen on this before we make a
-decision.
+There's a REASON my documentation file was called 
+ramfs-rootfs-initramfs.txt: the naming's always been a bit... layered. 
+(And yes, I have always spelled initmpfs with only one t.)
 
-Issue
-======
-
-Instructions in RISC-V shadow stack extension (zicfiss - [1]) are carved out of
-"may be ops" aka zimop extension [2]. "may be ops" are illegal on non-RVA23
-hardware. This means any existing riscv CPU or future CPU which isn't RVA23
-compliant and not implementing zimop will treat these encodings as illegal.
-
-Current kernel patches enable shadow stack and landing pad support for
-userspace using config `CONFIG_RISCV_USER_CFI`. If this config is selected then
-vDSO that will be exposed to user space will also have shadow stack
-instructions in them. Kernel compiled with `CONFIG_RISCV_USER_CFI`, for sake of
-this discussion lets call it RVA23 compiled kernel.
-
-Issue that we discussed earlier and even today is "This RVA23 compiled kernel
-won't be able to support non-RVA23 userspace on non-RVA23 hardware because".
-Please note that issue exists only on non-RVA23 hardware (which is existing
-hardware and future hardware which is not implementing zimop). RVA23 compiled
-kernel can support any sort of userspace on RVA23 hardware.
-
-
-Discussion
-===========
-
-So the issue is not really shadow stack instructions but rather may be op
-instructions in codegen (binaries and vDSO) which aren't hidden behind any
-flag (to hide them if hardware doesn't support). And if I can narrow down
-further, primary issue we are discussing is that if cfi is enabled during
-kernel compile, it is bringing in a piece of code (vDSO) which won't work
-on existing hardware. But the counter point is if someone were to deploy
-RVA23 compiled kernel on non-RVA23 hardware, they must have compiled
-rest of the userspace without shadow stack instructions in them for such
-a hardware. And thus at this point they could simply choose *not* to turn on
-`CONFIG_RISCV_USER_CFI` when compiling such kernel. It's not that difficult to
-do so.
-
-Any distro who is shipping userspace (which all of them are) along with kernel
-will not be shipping two different userspaces (one with shadow stack and one
-without them). If distro are shipping two different userspaces, then they might
-as well ship two different kernels. Tagging some distro folks here to get their
-take on shipping different userspace depending on whether hardware is RVA23 or
-not. @Heinrich, @Florian, @redbeard and @Aurelien.
-
-Major distro's have already drawn a distinction here that they will drop
-support for hardware which isn't RVA23 for the sake of keeping binary
-distribution simple.
-
-Only other use case that was discussed of a powerful linux user who just wants
-to use a single kernel on all kinds of riscv hardware. I am imagining such a
-user knows enough about kernel and if is really dear to them, they can develop
-their own patches and send it upstream to support their own usecase and we can
-discuss them out. Current patchset don't prevent such a developer to send such
-patches upstream.
-
-I heard the argument in meeting today that "Zbb" enabling works similar for
-kernel today. I looked at "Zbb" enabling. It's for kernel usage and it's
-surgically placed in kernel using asm hidden behind alternatives. vDSO isn't
-compiled with Zbb. Shadow stack instructions are part of codegen for C files
-compiled into vDSO.
-
-Furthermore,
-
-Kernel control flow integrity will introduce shadow stack instructions all
-over the kernel binary. Such kernel won't be deployable on non-RVA23 hardware.
-How to deal with this problem for a savvy kernel developer who wants to run
-same cfi enabled kernel binary on multiple hardware?
-
-Coming from engineering and hacker point of view, I understand the desire here
-but I still see that it's complexity enforced on rest of the kernel from a user
-base which anyways can achieve such goals. For majority of usecases, I don't
-see a reason to increase complexity in the kernel for build, possibly runtime
-patching and thus possibly introduce more issues and errors just for the sake
-of a science project.
-
-Being said that, re-iterating that currently default for `CONFIG_RISCV_USER_CFI`
-is "n" which means it won't be breaking anything unless a user opts "Y". So even
-though I really don't see a reason and usability to have complexity in kernel to
-carry multiple vDSOs, current patchsets are not a hinderance for such future
-capability (because current default is No) and motivated developer is welcome
-to build on top of it. Bottomline is I don't see a reason to block current
-patchset from merging in v6.18.
-
-
-[1] - https://github.com/riscv/riscv-isa-manual/blob/main/src/unpriv-cfi.adoc#shadow-stack-zicfiss
-[2] - https://github.com/riscv/riscv-isa-manual/blob/main/src/zimop.adoc
-
->
->thanks Deepak,
->
->- Paul
+Rob
 
