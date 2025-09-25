@@ -1,324 +1,301 @@
-Return-Path: <linux-arch+bounces-13776-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13777-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24733BA0048
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 16:31:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBD01BA0A60
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 18:38:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F8C03AEC83
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 14:30:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D27A56334D
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 16:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A668C2D97AC;
-	Thu, 25 Sep 2025 14:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D837307AEA;
+	Thu, 25 Sep 2025 16:38:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="LhWRuoRl"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="sLy+XqpG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011039.outbound.protection.outlook.com [40.93.194.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873282D7DF0
-	for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 14:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758810632; cv=none; b=I2+qY+sMcHv6TmQzT0VuEwkoWPN1s1CXsVdBOlXjGtPagTJHpTlQbe2mkQ3dRKGGm5II8DovRigrktaGmpMJLCQeJAX0ozDoGrABfzwdiHHnZrPZwwJujh4ZgrqxTO09zi5TgDl/UUYGt6PmzKbIQxBRvw80co7nArjh6bRmsyA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758810632; c=relaxed/simple;
-	bh=C0GfpwF7RY7Xo4qa0YBZdMNr7838kNVWqEk+4k+STrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EsLpTC3InxRtygN7cP+1aK5qiw7IqqWLc/scAZ8mN3RtwcWv+WluxzYQ3+yypGeax4n+IxjuTkiUNPU9MspJi06FQWEctDO9FPJ8CXGWc5iF3rbzkKqHqP8WgtDEouhszve9BFRe3sfMCN9dRI3/0HfvXtacMraE+egl1zMdLq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=LhWRuoRl; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2697899a202so17344515ad.0
-        for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 07:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1758810629; x=1759415429; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=B/ScXH9deltQU9YLRjtGdHjjN9goLEMoCpX6Ad5jX+g=;
-        b=LhWRuoRlIOpX0Eb7orLG7HINPKL4NxpLqV8UjVFVXQ6JGBZ+/MnLWcKx2FCPuUdYWg
-         CUdKHZPhEtgBtAZRCDM4zK/wr2UYfEXXPH5SSvy6cvn6qgfvQwZhi9gWjDRO0D6LXna1
-         rj3aK27ZJ2GaUVaQVqmCyjouwM4nTJR7NcdU7lN5tIQ08Ch9x6FuWfpzVonhRtiUMi8R
-         7fv4IjYWywwHz+MshJnPKPrc4HiLahN62o7z/GrztqVydi3bMEG9crneIqkG71vU3i/O
-         AvdiVMLQAkKMhtZcSA3UmVkr8LciY1LYWdSedWs7yWj/2c+2aRjpvufIVvEBNC7LdqLv
-         d6kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758810629; x=1759415429;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/ScXH9deltQU9YLRjtGdHjjN9goLEMoCpX6Ad5jX+g=;
-        b=aVlRNKhCmjCuF+5t6he3hnbzLP1XmICoRlf7pR7AXhT6sz1P/Sg2IQid6zqCXlH7yM
-         XcNoaR1tmV/LmcDb7XRgroUtbt9eet9zVYjx8xidWFpg3T4+S9XBU4oaJO02SzVp47+m
-         cxn1OndTOlVUIvzmSzIfnu/punVVtQqdlyLYGauyeqmdlRvJRJE3zu1/v7ZliD+0weHW
-         obJb+C5sdl6oCboGOWTQEvFMHkB6ls4XuFfkxC/3rlgO7sfOUZsLoUktKI/QuUmqF+/Q
-         F/O9FWIgZy019MYIukOYftzl8l+b/L4RAzeqgC86ePmUWnOzCSNhSqK9c9YLsuzm4CUx
-         qkLA==
-X-Forwarded-Encrypted: i=1; AJvYcCU86Tf8VwnHqIQnQkxCc+M393QRsfEE3P8m3v3RtvuRKpgJApk14+LCN6qPo8LSXI6ebmaT/EzNoeNW@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxs7e8gtpXjrftsSYXeI8Gujar9JAJE3jVbZagINQVt6biyw7Yx
-	1pgNxkle6SiQyKalzzB4tMvdNETp9FUWZVEvvh7/kj52urNiz0ssQI/f4ulwyFCKtFM=
-X-Gm-Gg: ASbGncuHXGPVlWfHVVlYsl82a1ffM3MJCLPqVz1/aR166lhReFnhVDoXJXH33k5Cm6S
-	7eLuqIW142xVF7qaGc39v2rV8OyNGtr6Lv3sMo8DjaFt7KkF3FEIbzBUCGF/k/VLpB05D//na/H
-	c8h52KQERVFlNN8Fi1/QYlErkZcL9a0iDpPyfSDBdejr3zRJE1CrUb+TKwTctcdLoR3hvSHG+uW
-	R76a7R4Q8Wx6mawX9l377NkB0f+3na8VczIer7pzsVdaAO62g9RquvxL6LgOkK5dSk5C6uNrp88
-	6K/LlXGkrXCRNAQ36SD1cN/88Jd74FoQSsJjLbqE+9yu9aEY48slHbeRFY1JIsxCjx5wnm4L1zM
-	aU1tj9pRlB6H7RPahtSJfcV0/tFoNVuPU
-X-Google-Smtp-Source: AGHT+IGw4nlcyMj0x1ophUEj8Naebsm2dV8OM2R6VcoSoV/iVH85aly4v8pa48kMi8x3QmjHpu5KEw==
-X-Received: by 2002:a17:903:3845:b0:26e:7ac9:9d3 with SMTP id d9443c01a7336-27ed722bb71mr33822815ad.18.1758810628859;
-        Thu, 25 Sep 2025 07:30:28 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed670f748sm27032895ad.42.2025.09.25.07.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 07:30:28 -0700 (PDT)
-Date: Thu, 25 Sep 2025 07:30:24 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Andy Chiu <andybnac@gmail.com>
-Cc: Paul Walmsley <pjw@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
-	richard.henderson@linaro.org, jim.shu@sifive.com,
-	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com,
-	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
-	Zong Li <zong.li@sifive.com>, David Hildenbrand <david@redhat.com>,
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-	Florian Weimer <fweimer@redhat.com>, bharrington@redhat.com,
-	Aurelien Jarno <aurel32@debian.org>
-Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
-Message-ID: <aNVSAD4Og23rNTms@debug.ba.rivosinc.com>
-References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
- <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
- <aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com>
- <CAFTtA3Nxq0UmXcuN7jmQOiuTbrenKbR4ihH027ya1WWybgLq4Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3D0307AE3;
+	Thu, 25 Sep 2025 16:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.39
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758818282; cv=fail; b=GnWUvJR2CgxmisqpTHkFYihFEQbZHP49Uj3Vb2UNItKfV1b+0o2Vh0Ycrd9cFopRpcFqJfvBVlbnH8CZnltK2V33OaIYZ4niJ+1OwXJ5b2DwCAliDhfNvp7bwU/mkY2Yj2Ob2348GEZEKfijJSaxCS/2ghdR05fIDMrpYuejkkk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758818282; c=relaxed/simple;
+	bh=5f9+lEp9lUYJdLZivmQhnr34yVHMiPFmB0SCpYKfzj4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=r7kUoH93fQNV/qc85FubSMmrWPKIcPVpy5g0uKDZbMuSlRd+DRWSK7cUGx5V0kSJEYU/q632PSjDI/+HC2MWJvzMgPkNDgPCQOfDZF0wqt5QUr8dkiSojJiLH/IdECzunX8v1ToVpDPbHufkqGJo+L1358pN8dAJGgAiQjaJ9LQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=sLy+XqpG; arc=fail smtp.client-ip=40.93.194.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=suJuiL2XZIGtwuMOX8GR1AnC8B8Rk0cv9eP2zcNUxNSx38atuxGNB1CAY8L0iaKlVvvgDyURoU7gXtgnLat+Pj90KpAMWBlaSLz7ApFqBINP/4u0NcluugUu9rr9P64JycEQmHkFXWMe4scP+s46U0Ic+RDb9a+5pqWoX/IH60NKfhdwZJrid73zy3sfCWQuJ0trfpo3ZG0waVkgwDAAeA7YwfDcO6g//FUF8nvxdMelH5cRkDGyAQs/sDHq+j5x9AgJvspthmPRBkMlWS03kSvpRKj2oNNGxtHob6+btHwriIA/zYqOt2XgNEY2jExnTx1md3d61+A2nZ2BVQkBPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5f9+lEp9lUYJdLZivmQhnr34yVHMiPFmB0SCpYKfzj4=;
+ b=LcEEgga0ULz/yUtykb447bL3yM6Eb4PzODXfox+0C5YBK9sj6kOI+TO7NCdrPU6TAtYtzk2qZabLMkr0eYVnHKiV+OkfS/+rrbdxbvVcNNYzRxGL9cX3KG23H/ad8B2LZu9ayM/HsTJE7YB+4cffb0SpoWhAB0R8HYMA5P98RfSw5E9qNwU9QKzojG8krh0lNzo3ckDUjzJLWVu56u7PCzf98TVV3682+Ay9wGNpxcNnQWNXzdS9qr2/xi4jYeRKoRJlF7KcY5DV2tgYFhXnikaD2xQhoQhO2gc17gMZ00vRWeJ/6FitpZQft/zGkJ2tfvJEyS7MaVNv4upi0M4hNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5f9+lEp9lUYJdLZivmQhnr34yVHMiPFmB0SCpYKfzj4=;
+ b=sLy+XqpGJL1ZPtgTYnX4ax+D7cl0JdXJ2CpzkOKrMld1CDRyMv+yz5IGV/ng5li+1Y6+SePpPGS6y0uN1/OFHHhFVxH8cG0n0NRj8xateRU0+W4i8/n3zv6QAe1bgpXu+PTR+6eklUgd1WAO8FsCtGaQ+8fOWIHuhE+6JjUpjH4=
+Received: from DM4PR12MB6109.namprd12.prod.outlook.com (2603:10b6:8:ae::11) by
+ PH7PR12MB9074.namprd12.prod.outlook.com (2603:10b6:510:2f4::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.10; Thu, 25 Sep
+ 2025 16:37:55 +0000
+Received: from DM4PR12MB6109.namprd12.prod.outlook.com
+ ([fe80::680c:3105:babe:b7e1]) by DM4PR12MB6109.namprd12.prod.outlook.com
+ ([fe80::680c:3105:babe:b7e1%4]) with mapi id 15.20.9160.008; Thu, 25 Sep 2025
+ 16:37:55 +0000
+From: "Guntupalli, Manikanta" <manikanta.guntupalli@amd.com>
+To: Arnd Bergmann <arnd@arndb.de>, "git (AMD-Xilinx)" <git@amd.com>, "Simek,
+ Michal" <michal.simek@amd.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Frank Li <Frank.Li@nxp.com>, Rob Herring
+	<robh@kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, =?iso-8859-2?Q?Przemys=B3aw_Gaj?= <pgaj@cadence.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	"tommaso.merciai.xr@bp.renesas.com" <tommaso.merciai.xr@bp.renesas.com>,
+	"quic_msavaliy@quicinc.com" <quic_msavaliy@quicinc.com>, "S-k, Shyam-sundar"
+	<Shyam-sundar.S-k@amd.com>, Sakari Ailus <sakari.ailus@linux.intel.com>,
+	"'billy_tsai@aspeedtech.com'" <billy_tsai@aspeedtech.com>, Kees Cook
+	<kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, Jarkko
+ Nikula <jarkko.nikula@linux.intel.com>, Jorge Marques
+	<jorge.marques@analog.com>, "linux-i3c@lists.infradead.org"
+	<linux-i3c@lists.infradead.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+CC: "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>, "Goud, Srinivas"
+	<srinivas.goud@amd.com>, "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
+	"manion05gk@gmail.com" <manion05gk@gmail.com>
+Subject: RE: [PATCH V7 3/4] i3c: master: Add endianness support for
+ i3c_readl_fifo() and i3c_writel_fifo()
+Thread-Topic: [PATCH V7 3/4] i3c: master: Add endianness support for
+ i3c_readl_fifo() and i3c_writel_fifo()
+Thread-Index:
+ AQHcLKFhrxQvMAo9OkSHor4BRo6l1bShHNCAgADPJECAAC7KAIAAJThQgAAfVACAABEjwIAACgMAgAEkxmCAADN1gIAAR8EQ
+Date: Thu, 25 Sep 2025 16:37:54 +0000
+Message-ID:
+ <DM4PR12MB610946C438F742BA743A0BDA8C1FA@DM4PR12MB6109.namprd12.prod.outlook.com>
+References: <20250923154551.2112388-1-manikanta.guntupalli@amd.com>
+ <20250923154551.2112388-4-manikanta.guntupalli@amd.com>
+ <13bbd85e-48d2-4163-b9f1-2a2a870d4322@app.fastmail.com>
+ <DM4PR12MB61098EA538FCB7CED2E5C47B8C1CA@DM4PR12MB6109.namprd12.prod.outlook.com>
+ <4199b1ca-c1c7-41ef-b053-415f0cd80468@app.fastmail.com>
+ <DM4PR12MB6109E009DAC953525093FE808C1CA@DM4PR12MB6109.namprd12.prod.outlook.com>
+ <134c3a96-4023-47ab-8aa9-fd6ab75e5654@app.fastmail.com>
+ <DM4PR12MB610989A03A7560F2A03792838C1CA@DM4PR12MB6109.namprd12.prod.outlook.com>
+ <295ee05e-3366-4846-9c8b-85ac09d79d48@app.fastmail.com>
+ <DM4PR12MB61090F307DBA2B99AFC93B168C1FA@DM4PR12MB6109.namprd12.prod.outlook.com>
+ <b2ce3e0b-a639-4e70-a5e7-ffbdc855153e@app.fastmail.com>
+In-Reply-To: <b2ce3e0b-a639-4e70-a5e7-ffbdc855153e@app.fastmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Enabled=True;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_SetDate=2025-09-25T16:31:41.0000000Z;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Name=Open
+ Source;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_ContentBits=3;MSIP_Label_f265efc6-e181-49d6-80f4-fae95cf838a0_Method=Privileged
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB6109:EE_|PH7PR12MB9074:EE_
+x-ms-office365-filtering-correlation-id: 49f1c009-ebe0-4559-cac6-08ddfc51e0ca
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700021|921020;
+x-microsoft-antispam-message-info:
+ =?iso-8859-2?Q?tScMJWhBtzh2UJP6LryOl+Hz+XkdI5oobrNbmDN/QPxHER+/DSQPtLE1Ej?=
+ =?iso-8859-2?Q?c4tiNUnl675YGIGLzOxSmLpepDArJ56CsUHXsityMk1/LXGeFOh/lcQLwL?=
+ =?iso-8859-2?Q?kfvkN9sEyZEaPkYBqGj1qh92P8K88KdUTamcca+NoxMP7ASVw/z3vJ/RtO?=
+ =?iso-8859-2?Q?RkLnXNkDEGN6ibB2tlP5zDDRwdvpxuTY8p8cw8TeG9UkBV/+R7l858Iq5y?=
+ =?iso-8859-2?Q?7URnD9cSh6sil1Jzb2UulegdqX4PLgiExgeaDpiQ4Ynj9cEXkwzJmxruGL?=
+ =?iso-8859-2?Q?8Qoi8o1jMroT8bAUWv35UjOnGWCYZ5ceAz1muEJal00y2BW+ShDRWglw6k?=
+ =?iso-8859-2?Q?N8gxxOtl4VgAmmFYtixq9rLRWTY89FPBibJLQpLQsvYlOemOiOWZV8dedU?=
+ =?iso-8859-2?Q?5IG7IyED2qjXihI3tXqDrDUzXqpTDrZ9IpL9nnkvXcwXagkVa2dYv//6g3?=
+ =?iso-8859-2?Q?F1XnqZNaw2uD4r/zZVG59GDrkLzf1Z4rnUBPzwiw4dr81XNK6rt7AdBbiF?=
+ =?iso-8859-2?Q?eGI3QFokKBmCh9XsqFJ0OGXLVWSDy55B8y3+I6P+pWdcwXpQx8Qw3GYILn?=
+ =?iso-8859-2?Q?4sTSxC7eeC2v8DImfRDfr31PkzmwmcPO9TRyo/3lkbwxGt8ZRfLVayCIAm?=
+ =?iso-8859-2?Q?Mdl554I7wcyJKPM4BEYlXivkj+Os9mZYVc9nQx9yyep447QpAUNa7N9ANh?=
+ =?iso-8859-2?Q?ageL8wt6HZK0HVTGVcmaD1h4XJm+90yuqPbKef/Ues9BMoUSZWvf0eAx9B?=
+ =?iso-8859-2?Q?JY5IskUtwDPTDHCajTH+oCPj1OxnNKk9Gjq5xKt9556DtLLtPMIy1Z7shS?=
+ =?iso-8859-2?Q?a5s10u/y42X4eCdQq7J8n/Ywy4c4WBRJlklPx0aA2wV6StC4mfmlg01ELg?=
+ =?iso-8859-2?Q?uKODPFbIx4Cm+aQFj8kWlU+KfsGAi00j3ZV9Wu03Ey759jgI/usTlQvoyz?=
+ =?iso-8859-2?Q?uXy0hgXNb7zFcOUxYmwowPm7f/TXuwpW9uo5lFb7qQ3iCqupqlLfiFJd0D?=
+ =?iso-8859-2?Q?IGMh7cpu/WbRGN0dlFzPH95k+Xsv13QoLgDbLbuW6cOXE3+3FttNSGc+xa?=
+ =?iso-8859-2?Q?/PufuOisbRrwi5GXRY14Iawej+8HE87Z5P+ENI/Hp+miVLxtVejmxzCjVy?=
+ =?iso-8859-2?Q?5xCjQV7KUTZ4x9YTPJS3IodYG26c+JCVZtXJ8UzIDxGvj4xfLqlzM/YK77?=
+ =?iso-8859-2?Q?Hxk6T2RLeYj5ZAAWUc4sU6WA657SJs55AX7pmvk0sltz8ed5XQUOp7R6Wm?=
+ =?iso-8859-2?Q?qawseDaLmg1wGe20QlT+8bg2XWifajqJiFdXDq2SvtgfP5yVKe8Azbnd33?=
+ =?iso-8859-2?Q?dkJeCX5C4tYDoWD5YoO9zLpUkJqN0D3WgvvgICxAebU5LpQTuNaiExNQGn?=
+ =?iso-8859-2?Q?7SbnZH8PN4Yux5vsIVj9IwcitUC8yBcjV8N0Y5xDqOBcR1rOmXUyYMRupj?=
+ =?iso-8859-2?Q?Ulgm5J4fBejwU1OpBxpSu1JybabMlC1gNjWv8dIcwJ5hJUzUmvoJ1c7lhg?=
+ =?iso-8859-2?Q?asJybaBBSTN240aIm0UJ4+dV3/VoTnNuv3xfasQF+cazGY6x7schRCRUvJ?=
+ =?iso-8859-2?Q?fpLmhoYEhL8C8JWJAEFFRLViAOm3u8QrWc9Yy4HPu5MOsbJdqA=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6109.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700021)(921020);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-2?Q?jkvrdHR3X6Q+BnqiVgR7H/6KVAK1Bq35QuWrSq5j/F8z0omo3oJzkPjRGF?=
+ =?iso-8859-2?Q?glDdOPxwnTSdopVa5IiH/kReAVJomVOywO1LB0QMe6kxZxY9aZIwFM+guf?=
+ =?iso-8859-2?Q?ik+5WitRGqyw6siU9AKjoQ45YlldkLud3dTTbFMbOSwH0cLWlZwRVSahj+?=
+ =?iso-8859-2?Q?648EGM/5Qce21nNfCJgGbXA6Q6shPrAdcCY+wTX4eu9yv94QuYO6QgRYrF?=
+ =?iso-8859-2?Q?J2BWbZQol6HqhjuLCsitmzEWI/k4b22e/17I/Fm6wl/DZ4j8B3G6f9XiLv?=
+ =?iso-8859-2?Q?I/YGJlZ2c4ojJY+/c9lkVvM5emYA4oEyioSnWJt7QHmzyFKOeYIza22p5I?=
+ =?iso-8859-2?Q?hoU5yBHDTSw9Ck1oNH2bKlXeFqy+KtPL6kIBFWgqmCUDJyegV2Ub/kR0d1?=
+ =?iso-8859-2?Q?/vhJbaBcyqPLs3K5TBltlH1IQIh5AExMrdfk0e592lGxMuo2LctaxIZPTu?=
+ =?iso-8859-2?Q?sydWO2uDtjzve1YD2cT/wq/cyd65AvlX76aMEsTJeA5zAhBuH0TR8GmwOM?=
+ =?iso-8859-2?Q?5BQJpioN+Bfe71X3IiUjPkTEAvSQCDO0ZSUap60PJLwEATobUERVa2Q3LB?=
+ =?iso-8859-2?Q?9u+43Zw9viu+05UEjzwJZCDJhhoNdZaDE8tJRfOwvd6yUDTVU3XlvOfhE4?=
+ =?iso-8859-2?Q?bZBSskmTuvg1iS+Xm4+nSolgaE83znkKTZJWN7Nbu8F8DHY6I67s+Qa3yj?=
+ =?iso-8859-2?Q?9d/cHSDHFvOUt8or8MPHvhyjtYGQh57Usz7mTlcLJdNBdO0rV+e7BUkMfe?=
+ =?iso-8859-2?Q?38jrx9lYn5IWHHMqRT6CMTQhi0n3VIed0i7QdenuisKGoU6e9vwSJrslww?=
+ =?iso-8859-2?Q?Gzx3Y9bWDUQtIAm+ny3gjbH84lAPvaGQceW3JGWwjkbyprpeipt9ARnd4Y?=
+ =?iso-8859-2?Q?/H6k7TuYYzptBafx/iI6gfgCa/rW6G41jveR9PpjTXvNhgMLczf8Em/39f?=
+ =?iso-8859-2?Q?4wmW7nEs19tLtbt9zL7JZZ6UwZURy6Uy7yLD7mkE2T0WwLy3FIaURmawl4?=
+ =?iso-8859-2?Q?kRiSe5VdjAX6cFbBo+BpxXB8SdTy3sBtgO7VXlXatqx5tepcSh21CgRej0?=
+ =?iso-8859-2?Q?mLL7IB1Y+GtmA4pJgcIZ+I69vXv7/lcNnZjGdKvowkw3wtiSx75lXa+dWi?=
+ =?iso-8859-2?Q?QwLHc8RU8An6Vp+6ZHKfC6SmpOaRzCASCgZgdRbHd2nohbWwkrpEH6qbx/?=
+ =?iso-8859-2?Q?EmKIMVqSdDTI66PON9/nT2WXASA0lmP6QudRnDfo5UQCEGYP3lTqp5Nx7d?=
+ =?iso-8859-2?Q?VwhZNP61lQrryeCiTnONYntA2pamDhuDTy6xUE6VV8FXj5RV6QalqBH37A?=
+ =?iso-8859-2?Q?rbJVuiWvnv3N2udkOIpJW6Xdx8HAwoftlQJSp5csQW2TuqS/LgOS75YhXW?=
+ =?iso-8859-2?Q?7Oqxpy6wz3TzHwhiypZ9ngTXSjQLDpNxT12Ighixtir5oPAQUSO2xaC6ig?=
+ =?iso-8859-2?Q?BKwU37M5QLfDYaAEf2dDG6c1U9A/fcItTEaqWNRnQRhI3SFq00oyRV6Ovc?=
+ =?iso-8859-2?Q?6Tv6wFsAn0okqIUt4ke7z/DyWUPRYrNj+YrM42Afhut5U5CQAt3HNNY2su?=
+ =?iso-8859-2?Q?5EDgxR73qE/I2T8qgb/FFzaxOP1aG0PtuJ887+Fqg4j2YOVg9TewPzP7G2?=
+ =?iso-8859-2?Q?tmPqqYv0G1NTE=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFTtA3Nxq0UmXcuN7jmQOiuTbrenKbR4ihH027ya1WWybgLq4Q@mail.gmail.com>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6109.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49f1c009-ebe0-4559-cac6-08ddfc51e0ca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2025 16:37:54.9998
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Qw8nGTgrniPmF3KCARQZaYBHu/ttO3M/Df3gb/tJZPQ/7cvZ5QVblxlJOTAUnj5/BLTaAr61poiVCkXmgUuPEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9074
 
-On Thu, Sep 25, 2025 at 07:30:08AM -0500, Andy Chiu wrote:
->Hi Deepak,
+[Public]
+
+Hi,
+
+> -----Original Message-----
+> From: Arnd Bergmann <arnd@arndb.de>
+> Sent: Thursday, September 25, 2025 5:45 PM
+> To: Guntupalli, Manikanta <manikanta.guntupalli@amd.com>; git (AMD-Xilinx=
+)
+> <git@amd.com>; Simek, Michal <michal.simek@amd.com>; Alexandre Belloni
+> <alexandre.belloni@bootlin.com>; Frank Li <Frank.Li@nxp.com>; Rob Herring
+> <robh@kernel.org>; krzk+dt@kernel.org; Conor Dooley <conor+dt@kernel.org>=
+;
+> Przemys=B3aw Gaj <pgaj@cadence.com>; Wolfram Sang <wsa+renesas@sang-
+> engineering.com>; tommaso.merciai.xr@bp.renesas.com;
+> quic_msavaliy@quicinc.com; S-k, Shyam-sundar <Shyam-sundar.S-k@amd.com>;
+> Sakari Ailus <sakari.ailus@linux.intel.com>; 'billy_tsai@aspeedtech.com'
+> <billy_tsai@aspeedtech.com>; Kees Cook <kees@kernel.org>; Gustavo A. R. S=
+ilva
+> <gustavoars@kernel.org>; Jarkko Nikula <jarkko.nikula@linux.intel.com>; J=
+orge
+> Marques <jorge.marques@analog.com>; linux-i3c@lists.infradead.org;
+> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; Linux-Arch <lin=
+ux-
+> arch@vger.kernel.org>; linux-hardening@vger.kernel.org
+> Cc: Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>; Goud, Srinivas
+> <srinivas.goud@amd.com>; Datta, Shubhrajyoti <shubhrajyoti.datta@amd.com>=
+;
+> manion05gk@gmail.com
+> Subject: Re: [PATCH V7 3/4] i3c: master: Add endianness support for i3c_r=
+eadl_fifo()
+> and i3c_writel_fifo()
 >
->On Wed, Sep 24, 2025 at 1:40 PM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> On Wed, Sep 24, 2025 at 08:36:11AM -0600, Paul Walmsley wrote:
->> >Hi,
->> >
->> >On Thu, 31 Jul 2025, Deepak Gupta wrote:
->> >
->> >[ ... ]
->> >
->> >> vDSO related Opens (in the flux)
->> >> =================================
->> >>
->> >> I am listing these opens for laying out plan and what to expect in future
->> >> patch sets. And of course for the sake of discussion.
->> >>
->> >
->> >[ ... ]
->> >
->> >> How many vDSOs
->> >> ---------------
->> >> Shadow stack instructions are carved out of zimop (may be operations) and if CPU
->> >> doesn't implement zimop, they're illegal instructions. Kernel could be running on
->> >> a CPU which may or may not implement zimop. And thus kernel will have to carry 2
->> >> different vDSOs and expose the appropriate one depending on whether CPU implements
->> >> zimop or not.
->> >
->> >If we merge this series without this, then when CFI is enabled in the
->> >Kconfig, we'll wind up with a non-portable kernel that won't run on older
->> >hardware.  We go to great lengths to enable kernel binary portability
->> >across the presence or absence of other RISC-V extensions, and I think
->> >these CFI extensions should be no different.
->> >
->> >So before considering this for merging, I'd like to see at least an
->> >attempt to implement the dual-vDSO approach (or something equivalent)
->> >where the same kernel binary with CFI enabled can run on both pre-Zimop
->> >and post-Zimop hardware, with the existing userspaces that are common
->> >today.
->>
->> Added some distro folks in this email chain.
->>
->> After patchwork meeting today, I wanted to continue discussion here. So thanks
->> Paul for looking into it and initiating a discussion here.
->>
->> This patch series has been in the queue for quite a long time and we have had
->> deliberations on vDSO topic earlier as well and after those deliberations it
->> was decided to go ahead with merge and it indeed was sent for 6.17 merge
->> window. Unfortunatley due to other unforeseen reasons, entirety of riscv
->> changes were not picked. So it's a bit disappointing to see back-paddling on
->> this topic.
->>
->> Anyways, we are here. So I'll provide a bit of context for the list about
->> deliberations and discussions we have been having for so many merge windows.
->> This so that a holistic discussion can happen on this before we make a
->> decision.
->>
->> Issue
->> ======
->>
->> Instructions in RISC-V shadow stack extension (zicfiss - [1]) are carved out of
->> "may be ops" aka zimop extension [2]. "may be ops" are illegal on non-RVA23
->> hardware. This means any existing riscv CPU or future CPU which isn't RVA23
->> compliant and not implementing zimop will treat these encodings as illegal.
->>
->> Current kernel patches enable shadow stack and landing pad support for
->> userspace using config `CONFIG_RISCV_USER_CFI`. If this config is selected then
->> vDSO that will be exposed to user space will also have shadow stack
->> instructions in them. Kernel compiled with `CONFIG_RISCV_USER_CFI`, for sake of
->> this discussion lets call it RVA23 compiled kernel.
->>
->> Issue that we discussed earlier and even today is "This RVA23 compiled kernel
->> won't be able to support non-RVA23 userspace on non-RVA23 hardware because".
->> Please note that issue exists only on non-RVA23 hardware (which is existing
->> hardware and future hardware which is not implementing zimop). RVA23 compiled
->> kernel can support any sort of userspace on RVA23 hardware.
->>
->>
->> Discussion
->> ===========
->>
->> So the issue is not really shadow stack instructions but rather may be op
->> instructions in codegen (binaries and vDSO) which aren't hidden behind any
->> flag (to hide them if hardware doesn't support). And if I can narrow down
->> further, primary issue we are discussing is that if cfi is enabled during
->> kernel compile, it is bringing in a piece of code (vDSO) which won't work
->> on existing hardware. But the counter point is if someone were to deploy
->> RVA23 compiled kernel on non-RVA23 hardware, they must have compiled
->> rest of the userspace without shadow stack instructions in them for such
->> a hardware. And thus at this point they could simply choose *not* to turn on
->> `CONFIG_RISCV_USER_CFI` when compiling such kernel. It's not that difficult to
->> do so.
->>
->> Any distro who is shipping userspace (which all of them are) along with kernel
->> will not be shipping two different userspaces (one with shadow stack and one
->> without them). If distro are shipping two different userspaces, then they might
->> as well ship two different kernels. Tagging some distro folks here to get their
->> take on shipping different userspace depending on whether hardware is RVA23 or
->> not. @Heinrich, @Florian, @redbeard and @Aurelien.
->>
->> Major distro's have already drawn a distinction here that they will drop
->> support for hardware which isn't RVA23 for the sake of keeping binary
->> distribution simple.
->>
->> Only other use case that was discussed of a powerful linux user who just wants
->> to use a single kernel on all kinds of riscv hardware. I am imagining such a
->> user knows enough about kernel and if is really dear to them, they can develop
->> their own patches and send it upstream to support their own usecase and we can
->> discuss them out. Current patchset don't prevent such a developer to send such
->> patches upstream.
->>
->> I heard the argument in meeting today that "Zbb" enabling works similar for
->> kernel today. I looked at "Zbb" enabling. It's for kernel usage and it's
->> surgically placed in kernel using asm hidden behind alternatives. vDSO isn't
->> compiled with Zbb. Shadow stack instructions are part of codegen for C files
->> compiled into vDSO.
->>
->> Furthermore,
->>
->> Kernel control flow integrity will introduce shadow stack instructions all
->> over the kernel binary. Such kernel won't be deployable on non-RVA23 hardware.
->> How to deal with this problem for a savvy kernel developer who wants to run
->> same cfi enabled kernel binary on multiple hardware?
->>
->> Coming from engineering and hacker point of view, I understand the desire here
->> but I still see that it's complexity enforced on rest of the kernel from a user
->> base which anyways can achieve such goals. For majority of usecases, I don't
->> see a reason to increase complexity in the kernel for build, possibly runtime
->> patching and thus possibly introduce more issues and errors just for the sake
->> of a science project.
->>
->> Being said that, re-iterating that currently default for `CONFIG_RISCV_USER_CFI`
->> is "n" which means it won't be breaking anything unless a user opts "Y". So even
->> though I really don't see a reason and usability to have complexity in kernel to
->> carry multiple vDSOs, current patchsets are not a hinderance for such future
->> capability (because current default is No) and motivated developer is welcome
->> to build on top of it. Bottomline is I don't see a reason to block current
->> patchset from merging in v6.18.
+> On Thu, Sep 25, 2025, at 11:26, Guntupalli, Manikanta wrote:
 >
->Sorry for reiterating, I have been gone for a while, so maybe I lost a
->bit of context.
+> >> Can you explain how that works? What I see is that your
+> >> readsl_be()/writesl_be() functions do a byteswap on every four bytes,
+> >> so the bytestream that gets copied to/from the FIFO gets garbled, in
+> >> particular the final
+> >> (unaligned) bytes of the kernel buffer end up in the higher bytes of
+> >> the FIFO register rather than the first bytes as they do on a big-endi=
+an kernel.
+> >>
+> >> Are both the big-endian and little-endian kernels in your tests on
+> >> microblaze, using the upstream version of asm/io.h? Is there a
+> >> hardware byteswap between the CPU local bus and the i3c controller?
+> >> If there is one, is it set the same way for both kernels?
+> >>
+> > To clarify, my testing was performed on the latest upstream kernel on
+> > a
+> > ZCU102 (Zynq UltraScale+ MPSoC, Cortex-A53, little-endian) with
+> > big-endian FIFOs and no bus-level byteswap. For more details, please
+> > refer to my reply in Re: [PATCH] [v2] i3c: fix big-endian FIFO
+> > transfers.
 >
->In that case, should we add a comment in the Kconfig that says "it
->breaks userspace on older-than RVA23 platforms"?
-
-Its quite apparant for whoever is compiling userspace for non-RVA23 hardware.
-First sspush/sspopchk instruction in ld/libc will do illegal instruction. It
-won't even come to vDSO's sspush/sspopchk.
-
-But sure if that's what get these patches merged in, I can add that comment.
-
+> Ok, thanks fro the clarification. I got confused by your description ment=
+ioning big-
+> endian in [PATCH V7 3/4] and assumed this would be on a big-endian microb=
+laze
+> CPU, after I saw that the original i3c_readl_fifo() had a bug in that con=
+figuration that
+> your patch addressed and this being a driver for a xilinx design. That fi=
+x just turned
+> out unrelated to what you were actually trying to do ;-)
 >
->Perhaps a very ugly way to make RVA23-compiled kernel compatible with
->pre-RVA23 platforms is to decode maybe-ops in the illegal exception
->handler...
-
-Yes that can be done but that shouldn't gate current patchset from merging in.
-
+> > Please don't take this as negative or aggressive-my intention is
+> > purely to learn and ensure it works correctly in all cases.
 >
->Btw, I don't think kenrel-level shadow stack should be an argument
-
-Argument to block current patches is below
-"Kernel should be binary portable". That's why I gave that argument.
-A kernel compiled with shadow stack (kcfi) is not portable on non-RVA23
-hardware.
-
-Yes we can try making kernel portable by carrying two different vDSO.
-One that is for non-RVA23 (actually non-zimop) hardware and one for
-RVA23 hardware. But I don't imagine a distro shipping two different
-userspaces (ld/glibc, everything) once they start compiling their
-userspace with RVA23. If for an instance they start compiling two
-userspaces, its not that big of an effort to compile kernel differently
-as well. If for an instance they choose to only support rv64gc for
-userspace then they are not opting anyways for CFI then just not select
-that option in kernel compile. I just don't see a scenario where kernel
-is forced to carry two different libraries while rest of the userspace
-will not distribute two different binaries for same release.
-
->here, as kernel-level APIs are more flexible by nature.
-
-I didn't get it. How kernel level APIs help with binary portability
-of a kernel compiled in with shadow stack instructions to run on hardware
-where these instructions are illegal?
-
+> No worries, I should not have jumped to conclusions myself based on what =
+I saw in
+> your implementation and assumed that fixing the one bug would address you=
+r
+> problem as well.
 >
->Thanks,
->Andy
+> I do understand that your driver clearly needs a special case, we just ne=
+ed to come
+> to a conclusion what exactly the hardware does and how to best deal with =
+it. This is
+> partly about whether you may be able to use an external DMA engine such a=
+s
+> xlnx,zynqmp-dma-1.0 or xlnx,zynqmp-dpdma, and whether that would need the
+> same byteswap.
+>
+> If you already plan to add that support, you likely need to allocate a bo=
+unce buffer
+> and byteswap the data in place to have it copied in and out of the FIFO, =
+and when
+> you have that, you can use the regular i3c_readl_fifo() unchanged.
+> If you are sure that the i3c controller is not going to be used with DMA,=
+ or if the FIFO
+> register as seen by the DMA master does not require a byteswap, having a =
+local
+> helper for the transfer is likely easier.
+>
+Thanks for understanding.
+
+The I3C controller is not going to be used with DMA in our case.
+
+We had initially implemented local helpers, but based on Frank Li's suggest=
+ion, we added the support in i3c_readl_fifo() and i3c_writel_fifo() to make=
+ it more generic and beneficial for others as well. That's why we included =
+it here.
+
+Thanks,
+Manikanta.
 
