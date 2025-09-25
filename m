@@ -1,325 +1,186 @@
-Return-Path: <linux-arch+bounces-13773-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13774-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D777B9F42B
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 14:33:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1013CB9F69A
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 15:06:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ECD424E360E
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 12:33:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 082C67B0A88
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 13:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EC31A0B15;
-	Thu, 25 Sep 2025 12:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A73932101AE;
+	Thu, 25 Sep 2025 13:06:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wonu9OGu"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="2sy9lRm+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YDFbe+E+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4594B302760
-	for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 12:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B7E1A5B9E;
+	Thu, 25 Sep 2025 13:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758803425; cv=none; b=gA8jJn6a+Od2SBctY9HdG62DP0j6vsLdLQtsIv6yyam29IfkuSyZvDncYFNaK6TmaMcKrA1A2d/RVwyLDZXxgbVgphGZxjbwIhIhhKUiJSDpMiVt2HxT2xjyJv5chK+uDNPJ5peHT378ZMffPdcLAD565CiIdaBmSpP0wQCVB9g=
+	t=1758805587; cv=none; b=ASSIepC2o9gv5mZ2Ski2K3ILPcuQtcwHdpEsfKdXEquR3ifnc0JmfPYnAYYr/XWMTubDluRn8gVL4MXkj1QjBdqmvfNpt3rRjHR3BN2kpqFYJgjU9ElvEtaabGvEzTDspbsErZvIBBXhhoEgenPKm5tkMm3Lo8rZXkF9aV0SVMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758803425; c=relaxed/simple;
-	bh=gRqU1xzOrRjzeCyUuiZjwTh+L281vaPrDr8rLgP04ww=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GiCtZnQAfntzMoIbKyqydBeGqTX/ipsUnPhG/JeUqx+iJa6wMdzc8ZUyPNAFYr3Zedvm0Fm4EGkrCb5fFHL6/kXw8nQ8RUhpOxjeJ3jrTrWL6B85EVzd3EKeP2sPQpPq/+o/uoaxYVIpxglHTr0Wc3HfOkGdpqfOTe2TC1TzC+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wonu9OGu; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-afcb7ae6ed0so148133666b.3
-        for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 05:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758803420; x=1759408220; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cpogRHSrLfl51nWywJppLMZXYXi2KQs1G3uCf0+H8cQ=;
-        b=Wonu9OGumbc9AH+HNcEvnPFgPsKvIibyOuunFjTMW3rTP31bdWcsYAGvtbybUMbGQG
-         t3m7B6KRrgx6sO6fkjY7ILCCnu83IFKyyi+GHBsYZoDddHNz56cZYOQsesyXpv9be+/R
-         Pw1IlWcHZXt/0Gl1PnwLjB7IQsQc3TRrs9ttRcabVhciEdl45Xp4zJiESmjEdav9Wn9/
-         1SaTipXDrpv/udRwu5sdllf0htX5M81PWOmrblKd9iNy3Fl2XP8FhP8h8FaCEyDoZSWO
-         Zvss3FVgDUVIPxSsNu9Y2qTAWdCrADgnTdVO4vJ95hDx/DobKXeL8UoXaVhhBlu+LAm+
-         2hJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758803420; x=1759408220;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cpogRHSrLfl51nWywJppLMZXYXi2KQs1G3uCf0+H8cQ=;
-        b=S+ym8aezKVjUZPzNyIgyuyzpBJHpOUDfOeNISCe40Ib5zd0Fj/uEulfYa7+86eM+Kx
-         xTOcdhEPdEwyF4Kq8ow7caXbNxG3zsdpQikUBIpolr422E6vv1yj6W/NkhFNTNhDayCt
-         sVicc0/Qjvr6FuzmvAENbnuHyq932mBd1kZpzUIdotpDBNmhQ3wEiRPV8by7yEdFUpbp
-         W5k6j4u+3JbkdIkvsy3cKq3ey62/589K6Gh26+ren0JbP4rA+zFJOuQTH8v5d2vahzjO
-         bG/JYAyKmqxEE7a3Pb0jAret0RLyzT5cGd0BEfJRMR7vskHPdm3ttRpDV8Frdl/skUvO
-         IQeg==
-X-Forwarded-Encrypted: i=1; AJvYcCWq2UgZ6t2E4m4o4Y5PM6h/WXYrTE2jKLL0uZURL3j/xvT4ohRvb1IfbLZ35HQnQ4NOgEDG5bmYLBao@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLAF5uwbXthtfXQDVOsQuIKS2KcWobSBo55bHSKRvqbJdXXY7s
-	/0kYIrKs9Mj5TQWTfa4V5bZmg1IVZRuoBD14KwiaLkjOqP1vWLGCWT/NjHA9fCWPS3PHqeDL8Ss
-	YonJ1AUnmXaruWteS+9A5504xFEzY6wA=
-X-Gm-Gg: ASbGncsMSQz3Hb+5SxKKCj48O3EJeRC8LGUDV0Xl+QQJzVq3i3GHwQzheUImxWfEJ/w
-	Zj1JTzlVQAq5pWmSY+cCbdmZyU7jBojOQ+Qr4IPxmbEY57LMllMvRhtp8Mh0/QlRDcFM+FAoScI
-	N+FTXFpCs3BGnJT5GNBLbfyFym3/tTHNqHxHeo27ZzHsIGgc4pVlcKUT852YO/fCCUVD9dwPwIg
-	f9i
-X-Google-Smtp-Source: AGHT+IGrMTtF3rO6PyqglimJ6kWsoCOnyf9RbZPnOG2/Nl32fMXOunJIE5E6zYa1d9+08xohVhzghLhulRn9g+pvf4U=
-X-Received: by 2002:a17:907:3f87:b0:b09:2331:f150 with SMTP id
- a640c23a62f3a-b34b84aba85mr396036566b.16.1758803420120; Thu, 25 Sep 2025
- 05:30:20 -0700 (PDT)
+	s=arc-20240116; t=1758805587; c=relaxed/simple;
+	bh=q4ye3IXiZsxvGSYcC9c9EM/q62U5jr861gIEvwgcJ4k=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=oJ/oErxF/+rlFePfHyEsYdvdepwh6tbTUyefqFvT+rH27tWbvEStCEmb1f4UPscp1q1f5xO5S1wwlg/XcogCX8uZt7tp6rN/5E58kVJ/Ji8F50Tk1dCTdw1gQLQyv9D2FeXbYs/d61bruD6j7MpR6+bcae13V2x+H3u6Ec0keHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=2sy9lRm+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YDFbe+E+; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id CBE32138017F;
+	Thu, 25 Sep 2025 09:06:24 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 25 Sep 2025 09:06:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1758805584;
+	 x=1758812784; bh=u2t/IQnp2g1FbVsKAQ8P89KTHzrqE0MZVHtdNZXXUsE=; b=
+	2sy9lRm+gAWZynhTnnCoQXRW35ce44lRrHZk/Cj9ytb440KmET5Ee2VrjZ2i4vfw
+	MMA5DLOA52iz5f+9Tk9cDJENLM2M9dqv/A2AtWJebWPMhYT+pGAk0Po6sF8u6F2P
+	GvPDxasy8rYihjkIMnRv2WHO63/xYwIR1an9t+8GSFbDmpZTRV0lnpt03KhmvY7A
+	7a5QzHCsz4u3rYwdfsAHjHE9sHNjWIeoBQ1uhn9mT/D1myooWR8bf0aAycnO+pMP
+	HnVzVB7J8xNhoB5ORSk7ILbqFkB2z3O93fjhBfnmNPLKOAsq/3IpuL9l4nVG8g4N
+	mkrIfUjiAm8MHu4xzK2JGg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758805584; x=
+	1758812784; bh=u2t/IQnp2g1FbVsKAQ8P89KTHzrqE0MZVHtdNZXXUsE=; b=Y
+	DFbe+E+QUPnk8ohwlw+7+tCt2thZQDd39kOlIwkrNBEU7Co/agHx0rWkKjcOjA4I
+	UxezTrOOu8BXHzRgSapyFYfG9SX1kIl/WGWgr/Hfp6GIqR7/HMSXj7UQOEatrk/5
+	DYrufeME9R6pr2M8lcqPnU6gX0GrkJCdHskdDkmWzcb9zfiBMS+s0WlLS/oW+Fji
+	rolpwCYMrC24e8wBaRGrus/OOdlsyf7EYszqmc8M32TORASYA+2gMpkkmKd7FE8f
+	U/wa81NqjBlZM0fqPAQa3NUPT4FZNk3k8m626tF6kSBG3D0qMQbHLltDHBgwa3QR
+	eRtVlFB9twL0AnwY0Z01Q==
+X-ME-Sender: <xms:Tz7VaOuN1fHT7_CJ1M6Gnkl8KMZjSvhMKV9e7dIZabjJhgMnpIIGPA>
+    <xme:Tz7VaORioU__2iKdwpL9HoErjM3EvudsXvEupsPo3pA1NxFV5V1QU7XN8Wib-zp_S
+    16KYYY4OGNVTs2zP_NC6uWHukZ9PRhBi-DiKYylxhwmAU-XX15Cudc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeiieehiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehtddpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtoheptggrthgrlhhinh
+    drmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghn
+    ugesrghrmhdrtghomhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
+    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsg
+    hosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvshgruhhlnhhivghrshesghho
+    ohhglhgvrdgtohhmpdhrtghpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgifvghird
+    gtohhm
+X-ME-Proxy: <xmx:Tz7VaLONgGDZn_yzUUvrXVOl0hfFzMUiEkhzxoWqQOi-PcUPFwP-pg>
+    <xmx:Tz7VaMhnVxcbYGiNq_WRkNKihp9YFbK9lF2FWAxrC1U7-1vSgIYB3g>
+    <xmx:Tz7VaHcMXgUMVAMUHYoZfREurZSQ8d1L55qd6WjCburksshl5MIoFg>
+    <xmx:Tz7VaBwaJ4XBSeHmatUTHuC0iN8fiuQ4V0Fp0oXEq2VXGUQBPl5GsQ>
+    <xmx:UD7VaJv9R6PSAHhGKSRFTmjzH4H84iAYseEmAQRQ9mtcsAYdejym4Av0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E579E70006D; Thu, 25 Sep 2025 09:06:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
- <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org> <aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com>
-In-Reply-To: <aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com>
-From: Andy Chiu <andybnac@gmail.com>
-Date: Thu, 25 Sep 2025 07:30:08 -0500
-X-Gm-Features: AS18NWByhWo0dHTSYL4t2oFRcok3gmrZ-pBxSOOqriMBIQLUznFC4iXNOpyJQRE
-Message-ID: <CAFTtA3Nxq0UmXcuN7jmQOiuTbrenKbR4ihH027ya1WWybgLq4Q@mail.gmail.com>
-Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Paul Walmsley <pjw@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
-	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-	richard.henderson@linaro.org, jim.shu@sifive.com, kito.cheng@sifive.com, 
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com, 
-	cleger@rivosinc.com, alexghiti@rivosinc.com, samitolvanen@google.com, 
-	broonie@kernel.org, rick.p.edgecombe@intel.com, 
-	rust-for-linux@vger.kernel.org, Zong Li <zong.li@sifive.com>, 
-	David Hildenbrand <david@redhat.com>, Heinrich Schuchardt <heinrich.schuchardt@canonical.com>, 
-	Florian Weimer <fweimer@redhat.com>, bharrington@redhat.com, 
-	Aurelien Jarno <aurel32@debian.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: AiLhtS-R-ASF
+Date: Thu, 25 Sep 2025 15:05:52 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jason Gunthorpe" <jgg@nvidia.com>,
+ "Patrisious Haddad" <phaddad@nvidia.com>
+Cc: "Tariq Toukan" <tariqt@nvidia.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Saeed Mahameed" <saeedm@nvidia.com>,
+ "Leon Romanovsky" <leon@kernel.org>, "Mark Bloch" <mbloch@nvidia.com>,
+ Netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "Gal Pressman" <gal@nvidia.com>,
+ "Leon Romanovsky" <leonro@nvidia.com>,
+ "Michael Guralnik" <michaelgur@nvidia.com>,
+ "Moshe Shemesh" <moshe@nvidia.com>, "Will Deacon" <will@kernel.org>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
+ "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ "Justin Stitt" <justinstitt@google.com>, linux-s390@vger.kernel.org,
+ llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Salil Mehta" <salil.mehta@huawei.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
+ "Yisen Zhuang" <yisen.zhuang@huawei.com>,
+ "Leon Romanovsky" <leonro@mellanox.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ "Jijie Shao" <shaojijie@huawei.com>, "Simon Horman" <horms@kernel.org>
+Message-Id: <13c5072c-dc93-477c-b72e-02156a0ecc2e@app.fastmail.com>
+In-Reply-To: <20250925122139.GW2617119@nvidia.com>
+References: <1758800913-830383-1-git-send-email-tariqt@nvidia.com>
+ <20250925115433.GU2617119@nvidia.com>
+ <d548b14e-ae28-4807-9b29-9961543ea549@nvidia.com>
+ <20250925122139.GW2617119@nvidia.com>
+Subject: Re: [PATCH net-next V5] net/mlx5: Improve write-combining test reliability for
+ ARM64 Grace CPUs
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Deepak,
+On Thu, Sep 25, 2025, at 14:21, Jason Gunthorpe wrote:
+> On Thu, Sep 25, 2025 at 03:15:46PM +0300, Patrisious Haddad wrote:
+>> 
+>> On 9/25/2025 2:54 PM, Jason Gunthorpe wrote:
+>> > On Thu, Sep 25, 2025 at 02:48:33PM +0300, Tariq Toukan wrote:
+>> > > +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
+>> > > +				size_t mmio_wqe_size, unsigned int offset)
+>> > > +{
+>> > > +#if defined(CONFIG_KERNEL_MODE_NEON) && defined(CONFIG_ARM64)
+>> > IS_ENABLED() not defined()
+>> I just wonder why, Is there a preference in the driver from like
+>> aesthetic/convention point of view?
+>> Since here it technically doesnt matter - IS_ENABLED have no functional
+>> difference from defined since these are boolean configs not *tristate*ones
+>> (cant be loaded as module).
+>
+> I think it is an aesthetic convention to avoid defined(CONFIG_*) as
+> the reasoning it is not tristate is a bit tricky.
 
-On Wed, Sep 24, 2025 at 1:40=E2=80=AFPM Deepak Gupta <debug@rivosinc.com> w=
-rote:
->
-> On Wed, Sep 24, 2025 at 08:36:11AM -0600, Paul Walmsley wrote:
-> >Hi,
-> >
-> >On Thu, 31 Jul 2025, Deepak Gupta wrote:
-> >
-> >[ ... ]
-> >
-> >> vDSO related Opens (in the flux)
-> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>
-> >> I am listing these opens for laying out plan and what to expect in fut=
-ure
-> >> patch sets. And of course for the sake of discussion.
-> >>
-> >
-> >[ ... ]
-> >
-> >> How many vDSOs
-> >> ---------------
-> >> Shadow stack instructions are carved out of zimop (may be operations) =
-and if CPU
-> >> doesn't implement zimop, they're illegal instructions. Kernel could be=
- running on
-> >> a CPU which may or may not implement zimop. And thus kernel will have =
-to carry 2
-> >> different vDSOs and expose the appropriate one depending on whether CP=
-U implements
-> >> zimop or not.
-> >
-> >If we merge this series without this, then when CFI is enabled in the
-> >Kconfig, we'll wind up with a non-portable kernel that won't run on olde=
-r
-> >hardware.  We go to great lengths to enable kernel binary portability
-> >across the presence or absence of other RISC-V extensions, and I think
-> >these CFI extensions should be no different.
-> >
-> >So before considering this for merging, I'd like to see at least an
-> >attempt to implement the dual-vDSO approach (or something equivalent)
-> >where the same kernel binary with CFI enabled can run on both pre-Zimop
-> >and post-Zimop hardware, with the existing userspaces that are common
-> >today.
->
-> Added some distro folks in this email chain.
->
-> After patchwork meeting today, I wanted to continue discussion here. So t=
-hanks
-> Paul for looking into it and initiating a discussion here.
->
-> This patch series has been in the queue for quite a long time and we have=
- had
-> deliberations on vDSO topic earlier as well and after those deliberations=
- it
-> was decided to go ahead with merge and it indeed was sent for 6.17 merge
-> window. Unfortunatley due to other unforeseen reasons, entirety of riscv
-> changes were not picked. So it's a bit disappointing to see back-paddling=
- on
-> this topic.
->
-> Anyways, we are here. So I'll provide a bit of context for the list about
-> deliberations and discussions we have been having for so many merge windo=
-ws.
-> This so that a holistic discussion can happen on this before we make a
-> decision.
->
-> Issue
-> =3D=3D=3D=3D=3D=3D
->
-> Instructions in RISC-V shadow stack extension (zicfiss - [1]) are carved =
-out of
-> "may be ops" aka zimop extension [2]. "may be ops" are illegal on non-RVA=
-23
-> hardware. This means any existing riscv CPU or future CPU which isn't RVA=
-23
-> compliant and not implementing zimop will treat these encodings as illega=
-l.
->
-> Current kernel patches enable shadow stack and landing pad support for
-> userspace using config `CONFIG_RISCV_USER_CFI`. If this config is selecte=
-d then
-> vDSO that will be exposed to user space will also have shadow stack
-> instructions in them. Kernel compiled with `CONFIG_RISCV_USER_CFI`, for s=
-ake of
-> this discussion lets call it RVA23 compiled kernel.
->
-> Issue that we discussed earlier and even today is "This RVA23 compiled ke=
-rnel
-> won't be able to support non-RVA23 userspace on non-RVA23 hardware becaus=
-e".
-> Please note that issue exists only on non-RVA23 hardware (which is existi=
-ng
-> hardware and future hardware which is not implementing zimop). RVA23 comp=
-iled
-> kernel can support any sort of userspace on RVA23 hardware.
->
->
-> Discussion
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> So the issue is not really shadow stack instructions but rather may be op
-> instructions in codegen (binaries and vDSO) which aren't hidden behind an=
-y
-> flag (to hide them if hardware doesn't support). And if I can narrow down
-> further, primary issue we are discussing is that if cfi is enabled during
-> kernel compile, it is bringing in a piece of code (vDSO) which won't work
-> on existing hardware. But the counter point is if someone were to deploy
-> RVA23 compiled kernel on non-RVA23 hardware, they must have compiled
-> rest of the userspace without shadow stack instructions in them for such
-> a hardware. And thus at this point they could simply choose *not* to turn=
- on
-> `CONFIG_RISCV_USER_CFI` when compiling such kernel. It's not that difficu=
-lt to
-> do so.
->
-> Any distro who is shipping userspace (which all of them are) along with k=
-ernel
-> will not be shipping two different userspaces (one with shadow stack and =
-one
-> without them). If distro are shipping two different userspaces, then they=
- might
-> as well ship two different kernels. Tagging some distro folks here to get=
- their
-> take on shipping different userspace depending on whether hardware is RVA=
-23 or
-> not. @Heinrich, @Florian, @redbeard and @Aurelien.
->
-> Major distro's have already drawn a distinction here that they will drop
-> support for hardware which isn't RVA23 for the sake of keeping binary
-> distribution simple.
->
-> Only other use case that was discussed of a powerful linux user who just =
-wants
-> to use a single kernel on all kinds of riscv hardware. I am imagining suc=
-h a
-> user knows enough about kernel and if is really dear to them, they can de=
-velop
-> their own patches and send it upstream to support their own usecase and w=
-e can
-> discuss them out. Current patchset don't prevent such a developer to send=
- such
-> patches upstream.
->
-> I heard the argument in meeting today that "Zbb" enabling works similar f=
-or
-> kernel today. I looked at "Zbb" enabling. It's for kernel usage and it's
-> surgically placed in kernel using asm hidden behind alternatives. vDSO is=
-n't
-> compiled with Zbb. Shadow stack instructions are part of codegen for C fi=
-les
-> compiled into vDSO.
->
-> Furthermore,
->
-> Kernel control flow integrity will introduce shadow stack instructions al=
-l
-> over the kernel binary. Such kernel won't be deployable on non-RVA23 hard=
-ware.
-> How to deal with this problem for a savvy kernel developer who wants to r=
-un
-> same cfi enabled kernel binary on multiple hardware?
->
-> Coming from engineering and hacker point of view, I understand the desire=
- here
-> but I still see that it's complexity enforced on rest of the kernel from =
-a user
-> base which anyways can achieve such goals. For majority of usecases, I do=
-n't
-> see a reason to increase complexity in the kernel for build, possibly run=
-time
-> patching and thus possibly introduce more issues and errors just for the =
-sake
-> of a science project.
->
-> Being said that, re-iterating that currently default for `CONFIG_RISCV_US=
-ER_CFI`
-> is "n" which means it won't be breaking anything unless a user opts "Y". =
-So even
-> though I really don't see a reason and usability to have complexity in ke=
-rnel to
-> carry multiple vDSOs, current patchsets are not a hinderance for such fut=
-ure
-> capability (because current default is No) and motivated developer is wel=
-come
-> to build on top of it. Bottomline is I don't see a reason to block curren=
-t
-> patchset from merging in v6.18.
+In my impression there is no general agreement on this, I would
+probably have picked defined() here myself but don't mind the
+IS_ENABLED() variant either.
 
-Sorry for reiterating, I have been gone for a while, so maybe I lost a
-bit of context.
+On the other hand, I would in general strongly prefer
 
-In that case, should we add a comment in the Kconfig that says "it
-breaks userspace on older-than RVA23 platforms"?
+     if (IS_ENABLED(CONFIG_FOO)) {
+            ...
+     }
 
-Perhaps a very ugly way to make RVA23-compiled kernel compatible with
-pre-RVA23 platforms is to decode maybe-ops in the illegal exception
-handler...
+over any of the preprocessor conditionals, both for readability
+and for improving compile-time coverage of the conditional code.
 
-Btw, I don't think kenrel-level shadow stack should be an argument
-here, as kernel-level APIs are more flexible by nature.
+Unfortunately that does not work here because kernel_neon_begin()
+etc are only defined on Arm.
 
-Thanks,
-Andy
+     Arnd
 
