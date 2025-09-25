@@ -1,219 +1,180 @@
-Return-Path: <linux-arch+bounces-13761-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13762-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98292B9C229
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 22:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 795E5B9D0F1
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 03:50:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89D823B6B27
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Sep 2025 20:37:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39B014282BD
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 01:50:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CCC32D5BD;
-	Wed, 24 Sep 2025 20:35:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cImYsZAx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF62123ED5B;
+	Thu, 25 Sep 2025 01:49:57 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AF732D5AF;
-	Wed, 24 Sep 2025 20:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A251C27;
+	Thu, 25 Sep 2025 01:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758746132; cv=none; b=bdqOVxhFiLFNlpNaJajXcjfHpaXZ5hXIpK6CgS4Xq1elA8RSe0HyyNN752NVtcKSSJcYKHhrZFJcHXTi6u0pU4IUjk3FrIaKY79UKHZzfAujrLCuhGXRsGpheOrQesnimph/VA8oWz3A25K0ZXDMy2tleogo29pIikiIlvBkxUE=
+	t=1758764997; cv=none; b=SXfX+sLGE1AlOvTP+GabzkzD2cgejP4fXKq/CEjsO1FU3MFGASTVH80RYLonyO9Ta9nfocRbWjOd8styp5xQgGQpMKew5C3Kh9iiaSdaT3G85o+HW5Q7V7X42/BdfMGaNt7byK42txPwofCHYMYugCMbeFTsNw6J/mcxmTXz0x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758746132; c=relaxed/simple;
-	bh=yIIG1XirvNHRjmi8n5doZRkSjBLwdxxinyVL08mmVww=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ey5eI7naemrEoKDZ4k4gXJmpZqVHGhhFqIjcr+oRIKkwc3z3tjTgEXjhaQ2x/QscBnrfCJaV7Q1TN2FQLe+gR4dzLwGemxwNf3TLYp9OfPiFfqhntnu5EM6tSPhP2c4WIJ0+HeTr0i6cLnHxxSM22IwLcvAXkiJOpxqKLh4SsyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cImYsZAx; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758746130; x=1790282130;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yIIG1XirvNHRjmi8n5doZRkSjBLwdxxinyVL08mmVww=;
-  b=cImYsZAxVyHhV/PeuE6AmvED8MkGu5EMy0N6jSJPah5jAwgSsbLfnUdO
-   ERkl5GdkZL7adenQAlozkjP+IHZUdG60MJpmL/0Oax4utRsaH9x12egNn
-   c0y5RwVjiewbxb5lw6agnABe4iqpoS0pl1zAzqhkEj7A8uE/Ht38kvibm
-   l2QqnmVXbPVaZg+7fS58rmoGW0aCWRWboJgOXWVz8l12e6/B0XzUo7VNJ
-   Krx2DRWGsYjTEAzAol84rqN1Aj73uwUYNw7/Mn9sgSq+e+WKKT2NXPQtv
-   T0GCaijmbgcVncTUbvGI4GLAuQEEJi5D71D7hnClXPtu8cre3810M/g4R
-   Q==;
-X-CSE-ConnectionGUID: FLB/VJYlS4K0lARshSDH3w==
-X-CSE-MsgGUID: 1DjhRa9dTSCd3Exu4e+mHg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11563"; a="61107250"
-X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="61107250"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 13:35:29 -0700
-X-CSE-ConnectionGUID: fGvhU9vnSUqnQqd/QW8Okg==
-X-CSE-MsgGUID: kGVSi16kQa6u+aYiLlNf8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,291,1751266800"; 
-   d="scan'208";a="181405897"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 24 Sep 2025 13:35:22 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v1WCt-0004Xt-1P;
-	Wed, 24 Sep 2025 20:35:19 +0000
-Date: Thu, 25 Sep 2025 04:34:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Manikanta Guntupalli <manikanta.guntupalli@amd.com>, git@amd.com,
-	michal.simek@amd.com, alexandre.belloni@bootlin.com,
-	Frank.Li@nxp.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, pgaj@cadence.com,
-	wsa+renesas@sang-engineering.com, tommaso.merciai.xr@bp.renesas.com,
-	arnd@arndb.de, quic_msavaliy@quicinc.com, Shyam-sundar.S-k@amd.com,
-	sakari.ailus@linux.intel.com, billy_tsai@aspeedtech.com,
-	kees@kernel.org, gustavoars@kernel.org,
-	jarkko.nikula@linux.intel.com, jorge.marques@analog.com,
-	linux-i3c@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, radhey.shyam.pandey@amd.com,
-	srinivas.goud@amd.com, shubhrajyoti.datta@amd.com,
-	manion05gk@gmail.com,
-	Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Subject: Re: [PATCH V7 2/4] asm-generic/io.h: Add big-endian MMIO accessors
-Message-ID: <202509250413.sOTeU37m-lkp@intel.com>
-References: <20250923154551.2112388-3-manikanta.guntupalli@amd.com>
+	s=arc-20240116; t=1758764997; c=relaxed/simple;
+	bh=hXgRfhO3Mng/XGi/pRU/x+1zhWbJ5p34r+FvO687Gcg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=MrTF6qoYKNlw1TPCYImKOiARR1sRUECLBMvD0PP4fK7ValgXnX9TvHcqKk4iiuzWv/h4YcV17oCKaw62d2TVP4PSyMX+KKYhf1orX/UtRxwAfE9gcHHTz+YSKb5Etx4227mI5kCM4cVbdpcSxORW9Xy1NrXkYFaLrKMfPZ0KpEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4cXGrx3h7Yz27hbN;
+	Thu, 25 Sep 2025 09:50:57 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id E4D121A016C;
+	Thu, 25 Sep 2025 09:49:45 +0800 (CST)
+Received: from kwepemn200010.china.huawei.com (7.202.194.133) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 25 Sep 2025 09:49:45 +0800
+Received: from [10.174.178.56] (10.174.178.56) by
+ kwepemn200010.china.huawei.com (7.202.194.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 25 Sep 2025 09:49:44 +0800
+Message-ID: <2fc167c7-9d32-4869-a0be-cd17e6701248@huawei.com>
+Date: Thu, 25 Sep 2025 09:49:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250923154551.2112388-3-manikanta.guntupalli@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] once: fix race by moving DO_ONCE to separate section
+From: Qi Xi <xiqi2@huawei.com>
+To: <bobo.shaobowang@huawei.com>, <xiexiuqi@huawei.com>, <arnd@arndb.de>,
+	<masahiroy@kernel.org>, <kuba@kernel.org>, <edumazet@google.com>,
+	<linux-arch@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>
+References: <20250909112911.66023-1-xiqi2@huawei.com>
+ <5c88f8c4-c06b-4eb9-8883-202d15130938@huawei.com>
+Content-Language: en-GB
+In-Reply-To: <5c88f8c4-c06b-4eb9-8883-202d15130938@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemn200010.china.huawei.com (7.202.194.133)
 
-Hi Manikanta,
+kindly ping
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master arnd-asm-generic/master v6.17-rc7 next-20250924]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Manikanta-Guntupalli/dt-bindings-i3c-Add-AMD-I3C-master-controller-support/20250923-234944
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250923154551.2112388-3-manikanta.guntupalli%40amd.com
-patch subject: [PATCH V7 2/4] asm-generic/io.h: Add big-endian MMIO accessors
-config: sparc-allnoconfig (https://download.01.org/0day-ci/archive/20250925/202509250413.sOTeU37m-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250925/202509250413.sOTeU37m-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509250413.sOTeU37m-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/io.h:12,
-                    from include/linux/irq.h:20,
-                    from include/asm-generic/hardirq.h:17,
-                    from arch/sparc/include/asm/hardirq_32.h:11,
-                    from arch/sparc/include/asm/hardirq.h:7,
-                    from include/linux/hardirq.h:11,
-                    from include/linux/interrupt.h:11,
-                    from include/linux/trace_recursion.h:5,
-                    from include/linux/ftrace.h:10,
-                    from include/linux/perf_event.h:43,
-                    from arch/sparc/mm/fault_32.c:22:
->> arch/sparc/include/asm/io.h:16:9: warning: 'readw_be' redefined
-      16 | #define readw_be(__addr)        __raw_readw(__addr)
-         |         ^~~~~~~~
-   In file included from arch/sparc/include/asm/io_32.h:21,
-                    from arch/sparc/include/asm/io.h:7:
-   include/asm-generic/io.h:304:9: note: this is the location of the previous definition
-     304 | #define readw_be readw_be
-         |         ^~~~~~~~
->> arch/sparc/include/asm/io.h:17:9: warning: 'readl_be' redefined
-      17 | #define readl_be(__addr)        __raw_readl(__addr)
-         |         ^~~~~~~~
-   include/asm-generic/io.h:319:9: note: this is the location of the previous definition
-     319 | #define readl_be readl_be
-         |         ^~~~~~~~
->> arch/sparc/include/asm/io.h:19:9: warning: 'writel_be' redefined
-      19 | #define writel_be(__w, __addr)  __raw_writel(__w, __addr)
-         |         ^~~~~~~~~
-   include/asm-generic/io.h:363:9: note: this is the location of the previous definition
-     363 | #define writel_be writel_be
-         |         ^~~~~~~~~
->> arch/sparc/include/asm/io.h:20:9: warning: 'writew_be' redefined
-      20 | #define writew_be(__l, __addr)  __raw_writew(__l, __addr)
-         |         ^~~~~~~~~
-   include/asm-generic/io.h:351:9: note: this is the location of the previous definition
-     351 | #define writew_be writew_be
-         |         ^~~~~~~~~
---
-   In file included from include/linux/io.h:12,
-                    from include/linux/irq.h:20,
-                    from include/asm-generic/hardirq.h:17,
-                    from arch/sparc/include/asm/hardirq_32.h:11,
-                    from arch/sparc/include/asm/hardirq.h:7,
-                    from include/linux/hardirq.h:11,
-                    from include/linux/highmem.h:12,
-                    from include/linux/pagemap.h:11,
-                    from arch/sparc/mm/srmmu.c:15:
->> arch/sparc/include/asm/io.h:16:9: warning: 'readw_be' redefined
-      16 | #define readw_be(__addr)        __raw_readw(__addr)
-         |         ^~~~~~~~
-   In file included from arch/sparc/include/asm/io_32.h:21,
-                    from arch/sparc/include/asm/io.h:7:
-   include/asm-generic/io.h:304:9: note: this is the location of the previous definition
-     304 | #define readw_be readw_be
-         |         ^~~~~~~~
->> arch/sparc/include/asm/io.h:17:9: warning: 'readl_be' redefined
-      17 | #define readl_be(__addr)        __raw_readl(__addr)
-         |         ^~~~~~~~
-   include/asm-generic/io.h:319:9: note: this is the location of the previous definition
-     319 | #define readl_be readl_be
-         |         ^~~~~~~~
->> arch/sparc/include/asm/io.h:19:9: warning: 'writel_be' redefined
-      19 | #define writel_be(__w, __addr)  __raw_writel(__w, __addr)
-         |         ^~~~~~~~~
-   include/asm-generic/io.h:363:9: note: this is the location of the previous definition
-     363 | #define writel_be writel_be
-         |         ^~~~~~~~~
->> arch/sparc/include/asm/io.h:20:9: warning: 'writew_be' redefined
-      20 | #define writew_be(__l, __addr)  __raw_writew(__l, __addr)
-         |         ^~~~~~~~~
-   include/asm-generic/io.h:351:9: note: this is the location of the previous definition
-     351 | #define writew_be writew_be
-         |         ^~~~~~~~~
-   arch/sparc/mm/srmmu.c: In function 'poke_hypersparc':
-   arch/sparc/mm/srmmu.c:1074:32: warning: variable 'clear' set but not used [-Wunused-but-set-variable]
-    1074 |         volatile unsigned long clear;
-         |                                ^~~~~
-
-
-vim +/readw_be +16 arch/sparc/include/asm/io.h
-
-21dccddf45aae2 Jan Andersson 2011-05-10   9  
-21dccddf45aae2 Jan Andersson 2011-05-10  10  /*
-21dccddf45aae2 Jan Andersson 2011-05-10  11   * Defines used for both SPARC32 and SPARC64
-21dccddf45aae2 Jan Andersson 2011-05-10  12   */
-21dccddf45aae2 Jan Andersson 2011-05-10  13  
-21dccddf45aae2 Jan Andersson 2011-05-10  14  /* Big endian versions of memory read/write routines */
-21dccddf45aae2 Jan Andersson 2011-05-10  15  #define readb_be(__addr)	__raw_readb(__addr)
-21dccddf45aae2 Jan Andersson 2011-05-10 @16  #define readw_be(__addr)	__raw_readw(__addr)
-21dccddf45aae2 Jan Andersson 2011-05-10 @17  #define readl_be(__addr)	__raw_readl(__addr)
-21dccddf45aae2 Jan Andersson 2011-05-10  18  #define writeb_be(__b, __addr)	__raw_writeb(__b, __addr)
-21dccddf45aae2 Jan Andersson 2011-05-10 @19  #define writel_be(__w, __addr)	__raw_writel(__w, __addr)
-21dccddf45aae2 Jan Andersson 2011-05-10 @20  #define writew_be(__l, __addr)	__raw_writew(__l, __addr)
-21dccddf45aae2 Jan Andersson 2011-05-10  21  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 09/09/2025 20:01, Qi Xi wrote:
+>
+> On 09/09/2025 19:29, Qi Xi wrote:
+>> The commit c2c60ea37e5b ("once: use __section(".data.once")") moved
+>> DO_ONCE's ___done variable to .data.once section, which conflicts with
+>> DO_ONCE_LITE() that also uses the same section.
+>>
+>> This creates a race condition when clear_warn_once is used:
+>>
+>> Thread 1 (DO_ONCE)             Thread 2 (DO_ONCE)
+>> __do_once_start
+>>      read ___done (false)
+>>      acquire once_lock
+>> execute func
+>> __do_once_done
+>>      write ___done (true)      __do_once_start
+>>      release once_lock             // Thread 3 clear_warn_once reset 
+>> ___done
+>>                                    read ___done (false)
+>>                                    acquire once_lock
+>>                                execute func
+>> schedule once_work            __do_once_done
+>> once_deferred: OK             write ___done (true)
+>> static_branch_disable         release once_lock
+>>                                schedule once_work
+>>                                once_deferred:
+>>                                    BUG_ON(!static_key_enabled)
+> When simulating concurrent execution between DO_ONCE() and
+> clear_warn_once (clears the entire .data..once section in 
+> __do_once_done()),
+> BUG_ON() can be easily reproduced.
+>
+> +#include <asm/sections.h>
+>  void __do_once_done(bool *done, struct static_key_true *once_key,
+>                     unsigned long *flags, struct module *mod)
+>         __releases(once_lock)
+>  {
+>         *done = true;
+>         spin_unlock_irqrestore(&once_lock, *flags);
+> +       memset(__start_once, 0, __end_once - __start_once);
+> +       pr_info("__do_once_done done: %d\n", *done); // *done equals 0
+>         once_disable_jump(once_key, mod);
+>  }
+>
+>>
+>> DO_ONCE_LITE() in once_lite.h is used by WARN_ON_ONCE() and other 
+>> warning
+>> macros. Keep its ___done flag in the .data..once section and allow 
+>> resetting
+>> by clear_warn_once, as originally intended.
+>>
+>> In contrast, DO_ONCE() is used for functions like get_random_once() and
+>> relies on its ___done flag for internal synchronization. We should 
+>> not reset
+>> DO_ONCE() by clear_warn_once.
+>>
+>> Fix it by isolating DO_ONCE's ___done into a separate .data..do_once 
+>> section,
+>> shielding it from clear_warn_once.
+>>
+>> Fixes: c2c60ea37e5b ("once: use __section(".data.once")")
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Qi Xi <xiqi2@huawei.com>
+>> ---
+>> v3 -> v2: apply the same section change to DO_ONCE_SLEEPABLE().
+>> v2 -> v1: add comments for DO_ONCE_LITE() and DO_ONCE().
+>> ---
+>>   include/asm-generic/vmlinux.lds.h | 1 +
+>>   include/linux/once.h              | 4 ++--
+>>   2 files changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/asm-generic/vmlinux.lds.h 
+>> b/include/asm-generic/vmlinux.lds.h
+>> index 883dbac79da9..94850b52e5cc 100644
+>> --- a/include/asm-generic/vmlinux.lds.h
+>> +++ b/include/asm-generic/vmlinux.lds.h
+>> @@ -384,6 +384,7 @@
+>>       __start_once = .;                        \
+>>       *(.data..once)                            \
+>>       __end_once = .;                            \
+>> +    *(.data..do_once)                        \
+>>       STRUCT_ALIGN();                            \
+>>       *(__tracepoints)                        \
+>>       /* implement dynamic printk debug */                \
+>> diff --git a/include/linux/once.h b/include/linux/once.h
+>> index 30346fcdc799..449a0e34ad5a 100644
+>> --- a/include/linux/once.h
+>> +++ b/include/linux/once.h
+>> @@ -46,7 +46,7 @@ void __do_once_sleepable_done(bool *done, struct 
+>> static_key_true *once_key,
+>>   #define DO_ONCE(func, ...)                             \
+>>       ({                                     \
+>>           bool ___ret = false;                         \
+>> -        static bool __section(".data..once") ___done = false;         \
+>> +        static bool __section(".data..do_once") ___done = false;     \
+>>           static DEFINE_STATIC_KEY_TRUE(___once_key);             \
+>>           if (static_branch_unlikely(&___once_key)) {             \
+>>               unsigned long ___flags;                     \
+>> @@ -64,7 +64,7 @@ void __do_once_sleepable_done(bool *done, struct 
+>> static_key_true *once_key,
+>>   #define DO_ONCE_SLEEPABLE(func, ...)                        \
+>>       ({                                    \
+>>           bool ___ret = false;                        \
+>> -        static bool __section(".data..once") ___done = false;        \
+>> +        static bool __section(".data..do_once") ___done = false;    \
+>>           static DEFINE_STATIC_KEY_TRUE(___once_key); \
+>>           if (static_branch_unlikely(&___once_key)) {            \
+>>               ___ret = __do_once_sleepable_start(&___done);        \
 
