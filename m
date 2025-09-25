@@ -1,497 +1,324 @@
-Return-Path: <linux-arch+bounces-13775-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13776-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1AB2B9F74D
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 15:12:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24733BA0048
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 16:31:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB8297AD1A8
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 13:11:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F8C03AEC83
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 14:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9932288EE;
-	Thu, 25 Sep 2025 13:12:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A668C2D97AC;
+	Thu, 25 Sep 2025 14:30:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b="CRz+5vlS"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="LhWRuoRl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F8F223DFF
-	for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 13:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873282D7DF0
+	for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 14:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758805953; cv=none; b=QRdu7Sbr9h84YTx6dKT0jgJgsm3/m1dtUQeB4Y8w/PGKOqJaAshsuxmXWTJBOF3C+UAE9fN8cdwrub14INX/qB42v1otgyQwF5e+4WQLXDaSeDfwLxLMm9cFjak124BjMKDzZ9lmh9ECZn89hqJPrno+Iz67KGv0qBrt4mghDPc=
+	t=1758810632; cv=none; b=I2+qY+sMcHv6TmQzT0VuEwkoWPN1s1CXsVdBOlXjGtPagTJHpTlQbe2mkQ3dRKGGm5II8DovRigrktaGmpMJLCQeJAX0ozDoGrABfzwdiHHnZrPZwwJujh4ZgrqxTO09zi5TgDl/UUYGt6PmzKbIQxBRvw80co7nArjh6bRmsyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758805953; c=relaxed/simple;
-	bh=9AXpZB1bwcU/tOfhENucqnGAndFUojEuOkjiz/Zv4RQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ogYry3VhC1DjqjEvUoX2hHhSL3OeG9XWf/S3RgcIXvbNU7Te0FATpQ5rbdWsW6PhLMFA/RDnTnittWfNKcCTjNsih1Sm7HiOM8SqUYu7DheSlWacd4NKSr92taM88PGNzAmaHSN5FxEqBkhxkkA/HoC9TF+YAXZd1eEdRaLPBJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr; spf=pass smtp.mailfrom=freebox.fr; dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b=CRz+5vlS; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freebox.fr
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3ecde0be34eso1232672f8f.1
-        for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 06:12:29 -0700 (PDT)
+	s=arc-20240116; t=1758810632; c=relaxed/simple;
+	bh=C0GfpwF7RY7Xo4qa0YBZdMNr7838kNVWqEk+4k+STrc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EsLpTC3InxRtygN7cP+1aK5qiw7IqqWLc/scAZ8mN3RtwcWv+WluxzYQ3+yypGeax4n+IxjuTkiUNPU9MspJi06FQWEctDO9FPJ8CXGWc5iF3rbzkKqHqP8WgtDEouhszve9BFRe3sfMCN9dRI3/0HfvXtacMraE+egl1zMdLq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=LhWRuoRl; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2697899a202so17344515ad.0
+        for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 07:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=freebox-fr.20230601.gappssmtp.com; s=20230601; t=1758805948; x=1759410748; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NfJVwYFcsQ06QJkEnurciWiF3KgCM9rgqn4VVbABEtQ=;
-        b=CRz+5vlS551m+/ibrrRNCR05aMB/XHm006u7vorJTWL8KnZICEOAUANVKfnYA17O6n
-         CNSPshs989BTySJxhVJjDQVgMGaKDdMiH3CECJdyi/M1fe2VRT3raSjIKb/Hlvwh7G6v
-         JeK6qKCSPjuD07vK1RwG2F5a4t5BpVDGoO8/gxEqKiTZfKvqJWXcWT9pTCarqVnQsLHE
-         5ucPrcXT5w4T3QmqA0pfGPahpuB/tMMPUBNHICg7bBcyx9MvrPir/Z3ASpVDEUZRuat+
-         Emr0AO0ruL/nGstrHje868zLQxrrGECkqEwR4Q0rk20LDfrLBaIEK7TCh5xcMBb3bFRm
-         o72A==
+        d=rivosinc.com; s=google; t=1758810629; x=1759415429; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=B/ScXH9deltQU9YLRjtGdHjjN9goLEMoCpX6Ad5jX+g=;
+        b=LhWRuoRlIOpX0Eb7orLG7HINPKL4NxpLqV8UjVFVXQ6JGBZ+/MnLWcKx2FCPuUdYWg
+         CUdKHZPhEtgBtAZRCDM4zK/wr2UYfEXXPH5SSvy6cvn6qgfvQwZhi9gWjDRO0D6LXna1
+         rj3aK27ZJ2GaUVaQVqmCyjouwM4nTJR7NcdU7lN5tIQ08Ch9x6FuWfpzVonhRtiUMi8R
+         7fv4IjYWywwHz+MshJnPKPrc4HiLahN62o7z/GrztqVydi3bMEG9crneIqkG71vU3i/O
+         AvdiVMLQAkKMhtZcSA3UmVkr8LciY1LYWdSedWs7yWj/2c+2aRjpvufIVvEBNC7LdqLv
+         d6kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758805948; x=1759410748;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NfJVwYFcsQ06QJkEnurciWiF3KgCM9rgqn4VVbABEtQ=;
-        b=HPt4M9RyjlP3RwX79eJ2NQtRPw7201pcqNyxkUapTB4LOT59H4E23QBprh3VailGPx
-         WUjx0v9WgWbTrdNVOnE2u4QAu7S0z1CWCjNTyEj7CbEPdi6r0zvLXRR/Rc/FPTnaG02B
-         G4zp4/B6csuunOPBmU2mVPQi6RsHg0oK629h/ePs7YQXn2aXRkIGnRRpCa3uGbHPYMKW
-         W5SNhCyavwuOwgCOtsTeiCZuH+AgFHwIpamYSmjjpJv6gpF1KkKP5oesg7EfO2PHHomD
-         Iw4s7UsvWLEpsp5i3Q63ldKBxSCGDisElZwC52zoNFKJyC5ls1dYKgj9I1qIrIoODnLr
-         DB4g==
-X-Forwarded-Encrypted: i=1; AJvYcCVCPaVIoKtiJPaNUOB3XtRCaHtkZNHy5yI+xUdX9KaTw5BwwAtqkkZfoGkLK5BXEd2TJGQj9Wp96gPO@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9F/dU7aV/X4CE3m7D3sQLawxzZVmNXnNRAaXRNoS2P0xj1IjQ
-	fQoiQ5+tPUHAXfsdP8IgSMO+qdTop7Ohp9jAWnfaYGh0XiCGOkQfb2QV7Z75/iH09xA=
-X-Gm-Gg: ASbGncv2aOealuYLHdJw2zIKVbqORUDjElQjl85knYo8E+2rkPTdyOmvfuvEiUqbJaE
-	2cK4sMSyKeoJuMgFllm/SElIiEe/pFJklTuRA6sJK0VYJGKS0m+SH4MHTvXHfECZobbvI6OXMJN
-	oehb+WAxXKq3DuY8tcLxrcbEhAH9UOdXye/kXDJyvU3HygkdXSPy3zimct5g8at0jnT8+VS2BFr
-	jOgsG8jWciii8ByEODc25sI6NpHkOlMMp0Ny4aJEvQtTAJQqwH2C+THkR5dNhGvo1Fhqo/Dhebg
-	bdDDk5uqORAC33vf585lirbmibsVcJ9iObHnvsa0sCSNNtFbB+R2fydgihW6TI0G7yQ97BUR5vc
-	0T7/wjIjkQTcLMHmm8fjmMTAK/o83YXr+CXA52u4aAt2Q6f9QCA==
-X-Google-Smtp-Source: AGHT+IGfEDsgYy1Y3V7mn/9vw12xwbotyOf9S0qvgxiLF/dTs1GE6jSNXI03j1w/2hgZi5tVGzAx+Q==
-X-Received: by 2002:a05:6000:290e:b0:3fc:cbfc:fbee with SMTP id ffacd0b85a97d-40f65bbb807mr2115268f8f.19.1758805948078;
-        Thu, 25 Sep 2025 06:12:28 -0700 (PDT)
-Received: from daria.iliad.local (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e33bef4b4sm32929635e9.20.2025.09.25.06.12.27
+        d=1e100.net; s=20230601; t=1758810629; x=1759415429;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B/ScXH9deltQU9YLRjtGdHjjN9goLEMoCpX6Ad5jX+g=;
+        b=aVlRNKhCmjCuF+5t6he3hnbzLP1XmICoRlf7pR7AXhT6sz1P/Sg2IQid6zqCXlH7yM
+         XcNoaR1tmV/LmcDb7XRgroUtbt9eet9zVYjx8xidWFpg3T4+S9XBU4oaJO02SzVp47+m
+         cxn1OndTOlVUIvzmSzIfnu/punVVtQqdlyLYGauyeqmdlRvJRJE3zu1/v7ZliD+0weHW
+         obJb+C5sdl6oCboGOWTQEvFMHkB6ls4XuFfkxC/3rlgO7sfOUZsLoUktKI/QuUmqF+/Q
+         F/O9FWIgZy019MYIukOYftzl8l+b/L4RAzeqgC86ePmUWnOzCSNhSqK9c9YLsuzm4CUx
+         qkLA==
+X-Forwarded-Encrypted: i=1; AJvYcCU86Tf8VwnHqIQnQkxCc+M393QRsfEE3P8m3v3RtvuRKpgJApk14+LCN6qPo8LSXI6ebmaT/EzNoeNW@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxs7e8gtpXjrftsSYXeI8Gujar9JAJE3jVbZagINQVt6biyw7Yx
+	1pgNxkle6SiQyKalzzB4tMvdNETp9FUWZVEvvh7/kj52urNiz0ssQI/f4ulwyFCKtFM=
+X-Gm-Gg: ASbGncuHXGPVlWfHVVlYsl82a1ffM3MJCLPqVz1/aR166lhReFnhVDoXJXH33k5Cm6S
+	7eLuqIW142xVF7qaGc39v2rV8OyNGtr6Lv3sMo8DjaFt7KkF3FEIbzBUCGF/k/VLpB05D//na/H
+	c8h52KQERVFlNN8Fi1/QYlErkZcL9a0iDpPyfSDBdejr3zRJE1CrUb+TKwTctcdLoR3hvSHG+uW
+	R76a7R4Q8Wx6mawX9l377NkB0f+3na8VczIer7pzsVdaAO62g9RquvxL6LgOkK5dSk5C6uNrp88
+	6K/LlXGkrXCRNAQ36SD1cN/88Jd74FoQSsJjLbqE+9yu9aEY48slHbeRFY1JIsxCjx5wnm4L1zM
+	aU1tj9pRlB6H7RPahtSJfcV0/tFoNVuPU
+X-Google-Smtp-Source: AGHT+IGw4nlcyMj0x1ophUEj8Naebsm2dV8OM2R6VcoSoV/iVH85aly4v8pa48kMi8x3QmjHpu5KEw==
+X-Received: by 2002:a17:903:3845:b0:26e:7ac9:9d3 with SMTP id d9443c01a7336-27ed722bb71mr33822815ad.18.1758810628859;
+        Thu, 25 Sep 2025 07:30:28 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed670f748sm27032895ad.42.2025.09.25.07.30.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 06:12:27 -0700 (PDT)
-From: nschichan@freebox.fr
-To: nschichan@freebox.fr
-Cc: akpm@linux-foundation.org,
-	andy.shevchenko@gmail.com,
-	axboe@kernel.dk,
-	brauner@kernel.org,
-	cyphar@cyphar.com,
-	devicetree@vger.kernel.org,
-	ecurtin@redhat.com,
-	email2tema@gmail.com,
-	graf@amazon.com,
-	gregkh@linuxfoundation.org,
-	hca@linux.ibm.com,
-	hch@lst.de,
-	hsiangkao@linux.alibaba.com,
-	initramfs@vger.kernel.org,
-	jack@suse.cz,
-	julian.stecklina@cyberus-technology.de,
-	kees@kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org,
-	linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-ext4@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	mcgrof@kernel.org,
-	mingo@redhat.com,
-	monstr@monstr.eu,
-	mzxreary@0pointer.de,
-	patches@lists.linux.dev,
-	rob@landley.net,
-	safinaskar@gmail.com,
-	sparclinux@vger.kernel.org,
-	thomas.weissschuh@linutronix.de,
-	thorsten.blum@linux.dev,
-	torvalds@linux-foundation.org,
-	tytso@mit.edu,
-	viro@zeniv.linux.org.uk,
-	x86@kernel.org
-Subject: [PATCH-RFC] init: simplify initrd code (was Re: [PATCH RESEND 00/62] initrd: remove classic initrd support).
-Date: Thu, 25 Sep 2025 15:10:56 +0200
-Message-Id: <20250925131055.3933381-1-nschichan@freebox.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAHNNwZC7gC7zaZGiSBhobSAb4m2O1BuoZ4r=SQBF-tCQyuAPvw@mail.gmail.com>
-References: <CAHNNwZC7gC7zaZGiSBhobSAb4m2O1BuoZ4r=SQBF-tCQyuAPvw@mail.gmail.com>
+        Thu, 25 Sep 2025 07:30:28 -0700 (PDT)
+Date: Thu, 25 Sep 2025 07:30:24 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Andy Chiu <andybnac@gmail.com>
+Cc: Paul Walmsley <pjw@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
+	richard.henderson@linaro.org, jim.shu@sifive.com,
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com,
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	Zong Li <zong.li@sifive.com>, David Hildenbrand <david@redhat.com>,
+	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+	Florian Weimer <fweimer@redhat.com>, bharrington@redhat.com,
+	Aurelien Jarno <aurel32@debian.org>
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+Message-ID: <aNVSAD4Og23rNTms@debug.ba.rivosinc.com>
+References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
+ <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
+ <aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com>
+ <CAFTtA3Nxq0UmXcuN7jmQOiuTbrenKbR4ihH027ya1WWybgLq4Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFTtA3Nxq0UmXcuN7jmQOiuTbrenKbR4ihH027ya1WWybgLq4Q@mail.gmail.com>
 
-From: Nicolas Schichan <nschichan@freebox.fr>
+On Thu, Sep 25, 2025 at 07:30:08AM -0500, Andy Chiu wrote:
+>Hi Deepak,
+>
+>On Wed, Sep 24, 2025 at 1:40 PM Deepak Gupta <debug@rivosinc.com> wrote:
+>>
+>> On Wed, Sep 24, 2025 at 08:36:11AM -0600, Paul Walmsley wrote:
+>> >Hi,
+>> >
+>> >On Thu, 31 Jul 2025, Deepak Gupta wrote:
+>> >
+>> >[ ... ]
+>> >
+>> >> vDSO related Opens (in the flux)
+>> >> =================================
+>> >>
+>> >> I am listing these opens for laying out plan and what to expect in future
+>> >> patch sets. And of course for the sake of discussion.
+>> >>
+>> >
+>> >[ ... ]
+>> >
+>> >> How many vDSOs
+>> >> ---------------
+>> >> Shadow stack instructions are carved out of zimop (may be operations) and if CPU
+>> >> doesn't implement zimop, they're illegal instructions. Kernel could be running on
+>> >> a CPU which may or may not implement zimop. And thus kernel will have to carry 2
+>> >> different vDSOs and expose the appropriate one depending on whether CPU implements
+>> >> zimop or not.
+>> >
+>> >If we merge this series without this, then when CFI is enabled in the
+>> >Kconfig, we'll wind up with a non-portable kernel that won't run on older
+>> >hardware.  We go to great lengths to enable kernel binary portability
+>> >across the presence or absence of other RISC-V extensions, and I think
+>> >these CFI extensions should be no different.
+>> >
+>> >So before considering this for merging, I'd like to see at least an
+>> >attempt to implement the dual-vDSO approach (or something equivalent)
+>> >where the same kernel binary with CFI enabled can run on both pre-Zimop
+>> >and post-Zimop hardware, with the existing userspaces that are common
+>> >today.
+>>
+>> Added some distro folks in this email chain.
+>>
+>> After patchwork meeting today, I wanted to continue discussion here. So thanks
+>> Paul for looking into it and initiating a discussion here.
+>>
+>> This patch series has been in the queue for quite a long time and we have had
+>> deliberations on vDSO topic earlier as well and after those deliberations it
+>> was decided to go ahead with merge and it indeed was sent for 6.17 merge
+>> window. Unfortunatley due to other unforeseen reasons, entirety of riscv
+>> changes were not picked. So it's a bit disappointing to see back-paddling on
+>> this topic.
+>>
+>> Anyways, we are here. So I'll provide a bit of context for the list about
+>> deliberations and discussions we have been having for so many merge windows.
+>> This so that a holistic discussion can happen on this before we make a
+>> decision.
+>>
+>> Issue
+>> ======
+>>
+>> Instructions in RISC-V shadow stack extension (zicfiss - [1]) are carved out of
+>> "may be ops" aka zimop extension [2]. "may be ops" are illegal on non-RVA23
+>> hardware. This means any existing riscv CPU or future CPU which isn't RVA23
+>> compliant and not implementing zimop will treat these encodings as illegal.
+>>
+>> Current kernel patches enable shadow stack and landing pad support for
+>> userspace using config `CONFIG_RISCV_USER_CFI`. If this config is selected then
+>> vDSO that will be exposed to user space will also have shadow stack
+>> instructions in them. Kernel compiled with `CONFIG_RISCV_USER_CFI`, for sake of
+>> this discussion lets call it RVA23 compiled kernel.
+>>
+>> Issue that we discussed earlier and even today is "This RVA23 compiled kernel
+>> won't be able to support non-RVA23 userspace on non-RVA23 hardware because".
+>> Please note that issue exists only on non-RVA23 hardware (which is existing
+>> hardware and future hardware which is not implementing zimop). RVA23 compiled
+>> kernel can support any sort of userspace on RVA23 hardware.
+>>
+>>
+>> Discussion
+>> ===========
+>>
+>> So the issue is not really shadow stack instructions but rather may be op
+>> instructions in codegen (binaries and vDSO) which aren't hidden behind any
+>> flag (to hide them if hardware doesn't support). And if I can narrow down
+>> further, primary issue we are discussing is that if cfi is enabled during
+>> kernel compile, it is bringing in a piece of code (vDSO) which won't work
+>> on existing hardware. But the counter point is if someone were to deploy
+>> RVA23 compiled kernel on non-RVA23 hardware, they must have compiled
+>> rest of the userspace without shadow stack instructions in them for such
+>> a hardware. And thus at this point they could simply choose *not* to turn on
+>> `CONFIG_RISCV_USER_CFI` when compiling such kernel. It's not that difficult to
+>> do so.
+>>
+>> Any distro who is shipping userspace (which all of them are) along with kernel
+>> will not be shipping two different userspaces (one with shadow stack and one
+>> without them). If distro are shipping two different userspaces, then they might
+>> as well ship two different kernels. Tagging some distro folks here to get their
+>> take on shipping different userspace depending on whether hardware is RVA23 or
+>> not. @Heinrich, @Florian, @redbeard and @Aurelien.
+>>
+>> Major distro's have already drawn a distinction here that they will drop
+>> support for hardware which isn't RVA23 for the sake of keeping binary
+>> distribution simple.
+>>
+>> Only other use case that was discussed of a powerful linux user who just wants
+>> to use a single kernel on all kinds of riscv hardware. I am imagining such a
+>> user knows enough about kernel and if is really dear to them, they can develop
+>> their own patches and send it upstream to support their own usecase and we can
+>> discuss them out. Current patchset don't prevent such a developer to send such
+>> patches upstream.
+>>
+>> I heard the argument in meeting today that "Zbb" enabling works similar for
+>> kernel today. I looked at "Zbb" enabling. It's for kernel usage and it's
+>> surgically placed in kernel using asm hidden behind alternatives. vDSO isn't
+>> compiled with Zbb. Shadow stack instructions are part of codegen for C files
+>> compiled into vDSO.
+>>
+>> Furthermore,
+>>
+>> Kernel control flow integrity will introduce shadow stack instructions all
+>> over the kernel binary. Such kernel won't be deployable on non-RVA23 hardware.
+>> How to deal with this problem for a savvy kernel developer who wants to run
+>> same cfi enabled kernel binary on multiple hardware?
+>>
+>> Coming from engineering and hacker point of view, I understand the desire here
+>> but I still see that it's complexity enforced on rest of the kernel from a user
+>> base which anyways can achieve such goals. For majority of usecases, I don't
+>> see a reason to increase complexity in the kernel for build, possibly runtime
+>> patching and thus possibly introduce more issues and errors just for the sake
+>> of a science project.
+>>
+>> Being said that, re-iterating that currently default for `CONFIG_RISCV_USER_CFI`
+>> is "n" which means it won't be breaking anything unless a user opts "Y". So even
+>> though I really don't see a reason and usability to have complexity in kernel to
+>> carry multiple vDSOs, current patchsets are not a hinderance for such future
+>> capability (because current default is No) and motivated developer is welcome
+>> to build on top of it. Bottomline is I don't see a reason to block current
+>> patchset from merging in v6.18.
+>
+>Sorry for reiterating, I have been gone for a while, so maybe I lost a
+>bit of context.
+>
+>In that case, should we add a comment in the Kconfig that says "it
+>breaks userspace on older-than RVA23 platforms"?
 
-- drop prompt_ramdisk and ramdisk_start kernel parameters
-- drop compression support
-- drop image autodetection, the whole /initrd.image content is now
-  copied into /dev/ram0
-- remove rd_load_disk() which doesn't seem to be used anywhere.
+Its quite apparant for whoever is compiling userspace for non-RVA23 hardware.
+First sspush/sspopchk instruction in ld/libc will do illegal instruction. It
+won't even come to vDSO's sspush/sspopchk.
 
-There is now no more limitation on the type of initrd filesystem that
-can be loaded since the code trying to guess the initrd filesystem
-size is gone (the whole /initrd.image file is used).
+But sure if that's what get these patches merged in, I can add that comment.
 
-A few global variables in do_mounts_rd.c are now put as local
-variables in rd_load_image() since they do not need to be visible
-outside this function.
----
+>
+>Perhaps a very ugly way to make RVA23-compiled kernel compatible with
+>pre-RVA23 platforms is to decode maybe-ops in the illegal exception
+>handler...
 
-Hello,
+Yes that can be done but that shouldn't gate current patchset from merging in.
 
-Hopefully my email config is now better and reaches gmail users
-correctly.
+>
+>Btw, I don't think kenrel-level shadow stack should be an argument
 
-The patch below could probably split in a few patches, but I think
-this simplify the code greatly without removing the functionality we
-depend on (and this allows now to use EROFS initrd images).
+Argument to block current patches is below
+"Kernel should be binary portable". That's why I gave that argument.
+A kernel compiled with shadow stack (kcfi) is not portable on non-RVA23
+hardware.
 
-Coupled with keeping the function populate_initrd_image() in
-init/initramfs.c, this will keep what we need from the initrd code.
+Yes we can try making kernel portable by carrying two different vDSO.
+One that is for non-RVA23 (actually non-zimop) hardware and one for
+RVA23 hardware. But I don't imagine a distro shipping two different
+userspaces (ld/glibc, everything) once they start compiling their
+userspace with RVA23. If for an instance they start compiling two
+userspaces, its not that big of an effort to compile kernel differently
+as well. If for an instance they choose to only support rv64gc for
+userspace then they are not opting anyways for CFI then just not select
+that option in kernel compile. I just don't see a scenario where kernel
+is forced to carry two different libraries while rest of the userspace
+will not distribute two different binaries for same release.
 
-This removes support of loading bzip/gz/xz/... compressed images as
-well, not sure if many user depend on this feature anymore.
+>here, as kernel-level APIs are more flexible by nature.
 
-No signoff because I'm only seeking comments about those changes right
-now.
+I didn't get it. How kernel level APIs help with binary portability
+of a kernel compiled in with shadow stack instructions to run on hardware
+where these instructions are illegal?
 
- init/do_mounts.h    |   2 -
- init/do_mounts_rd.c | 243 +-------------------------------------------
- 2 files changed, 4 insertions(+), 241 deletions(-)
-
-diff --git a/init/do_mounts.h b/init/do_mounts.h
-index 6069ea3eb80d..c0028ee3cff6 100644
---- a/init/do_mounts.h
-+++ b/init/do_mounts.h
-@@ -24,12 +24,10 @@ static inline __init int create_dev(char *name, dev_t dev)
- 
- #ifdef CONFIG_BLK_DEV_RAM
- 
--int __init rd_load_disk(int n);
- int __init rd_load_image(char *from);
- 
- #else
- 
--static inline int rd_load_disk(int n) { return 0; }
- static inline int rd_load_image(char *from) { return 0; }
- 
- #endif
-diff --git a/init/do_mounts_rd.c b/init/do_mounts_rd.c
-index ac021ae6e6fa..5a69ff43f5ee 100644
---- a/init/do_mounts_rd.c
-+++ b/init/do_mounts_rd.c
-@@ -14,173 +14,9 @@
- 
- #include <linux/decompress/generic.h>
- 
--static struct file *in_file, *out_file;
--static loff_t in_pos, out_pos;
--
--static int __init prompt_ramdisk(char *str)
--{
--	pr_warn("ignoring the deprecated prompt_ramdisk= option\n");
--	return 1;
--}
--__setup("prompt_ramdisk=", prompt_ramdisk);
--
--int __initdata rd_image_start;		/* starting block # of image */
--
--static int __init ramdisk_start_setup(char *str)
--{
--	rd_image_start = simple_strtol(str,NULL,0);
--	return 1;
--}
--__setup("ramdisk_start=", ramdisk_start_setup);
--
--static int __init crd_load(decompress_fn deco);
--
--/*
-- * This routine tries to find a RAM disk image to load, and returns the
-- * number of blocks to read for a non-compressed image, 0 if the image
-- * is a compressed image, and -1 if an image with the right magic
-- * numbers could not be found.
-- *
-- * We currently check for the following magic numbers:
-- *	minix
-- *	ext2
-- *	romfs
-- *	cramfs
-- *	squashfs
-- *	gzip
-- *	bzip2
-- *	lzma
-- *	xz
-- *	lzo
-- *	lz4
-- */
--static int __init
--identify_ramdisk_image(struct file *file, loff_t pos,
--		decompress_fn *decompressor)
--{
--	const int size = 512;
--	struct minix_super_block *minixsb;
--	struct romfs_super_block *romfsb;
--	struct cramfs_super *cramfsb;
--	struct squashfs_super_block *squashfsb;
--	int nblocks = -1;
--	unsigned char *buf;
--	const char *compress_name;
--	unsigned long n;
--	int start_block = rd_image_start;
--
--	buf = kmalloc(size, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
--
--	minixsb = (struct minix_super_block *) buf;
--	romfsb = (struct romfs_super_block *) buf;
--	cramfsb = (struct cramfs_super *) buf;
--	squashfsb = (struct squashfs_super_block *) buf;
--	memset(buf, 0xe5, size);
--
--	/*
--	 * Read block 0 to test for compressed kernel
--	 */
--	pos = start_block * BLOCK_SIZE;
--	kernel_read(file, buf, size, &pos);
--
--	*decompressor = decompress_method(buf, size, &compress_name);
--	if (compress_name) {
--		printk(KERN_NOTICE "RAMDISK: %s image found at block %d\n",
--		       compress_name, start_block);
--		if (!*decompressor)
--			printk(KERN_EMERG
--			       "RAMDISK: %s decompressor not configured!\n",
--			       compress_name);
--		nblocks = 0;
--		goto done;
--	}
--
--	/* romfs is at block zero too */
--	if (romfsb->word0 == ROMSB_WORD0 &&
--	    romfsb->word1 == ROMSB_WORD1) {
--		printk(KERN_NOTICE
--		       "RAMDISK: romfs filesystem found at block %d\n",
--		       start_block);
--		nblocks = (ntohl(romfsb->size)+BLOCK_SIZE-1)>>BLOCK_SIZE_BITS;
--		goto done;
--	}
--
--	if (cramfsb->magic == CRAMFS_MAGIC) {
--		printk(KERN_NOTICE
--		       "RAMDISK: cramfs filesystem found at block %d\n",
--		       start_block);
--		nblocks = (cramfsb->size + BLOCK_SIZE - 1) >> BLOCK_SIZE_BITS;
--		goto done;
--	}
--
--	/* squashfs is at block zero too */
--	if (le32_to_cpu(squashfsb->s_magic) == SQUASHFS_MAGIC) {
--		printk(KERN_NOTICE
--		       "RAMDISK: squashfs filesystem found at block %d\n",
--		       start_block);
--		nblocks = (le64_to_cpu(squashfsb->bytes_used) + BLOCK_SIZE - 1)
--			 >> BLOCK_SIZE_BITS;
--		goto done;
--	}
--
--	/*
--	 * Read 512 bytes further to check if cramfs is padded
--	 */
--	pos = start_block * BLOCK_SIZE + 0x200;
--	kernel_read(file, buf, size, &pos);
--
--	if (cramfsb->magic == CRAMFS_MAGIC) {
--		printk(KERN_NOTICE
--		       "RAMDISK: cramfs filesystem found at block %d\n",
--		       start_block);
--		nblocks = (cramfsb->size + BLOCK_SIZE - 1) >> BLOCK_SIZE_BITS;
--		goto done;
--	}
--
--	/*
--	 * Read block 1 to test for minix and ext2 superblock
--	 */
--	pos = (start_block + 1) * BLOCK_SIZE;
--	kernel_read(file, buf, size, &pos);
--
--	/* Try minix */
--	if (minixsb->s_magic == MINIX_SUPER_MAGIC ||
--	    minixsb->s_magic == MINIX_SUPER_MAGIC2) {
--		printk(KERN_NOTICE
--		       "RAMDISK: Minix filesystem found at block %d\n",
--		       start_block);
--		nblocks = minixsb->s_nzones << minixsb->s_log_zone_size;
--		goto done;
--	}
--
--	/* Try ext2 */
--	n = ext2_image_size(buf);
--	if (n) {
--		printk(KERN_NOTICE
--		       "RAMDISK: ext2 filesystem found at block %d\n",
--		       start_block);
--		nblocks = n;
--		goto done;
--	}
--
--	printk(KERN_NOTICE
--	       "RAMDISK: Couldn't find valid RAM disk image starting at %d.\n",
--	       start_block);
--
--done:
--	kfree(buf);
--	return nblocks;
--}
--
- static unsigned long nr_blocks(struct file *file)
- {
--	struct inode *inode = file->f_mapping->host;
--
--	if (!S_ISBLK(inode->i_mode))
--		return 0;
--	return i_size_read(inode) >> 10;
-+	return i_size_read(file->f_mapping->host) >> 10;
- }
- 
- int __init rd_load_image(char *from)
-@@ -190,10 +26,11 @@ int __init rd_load_image(char *from)
- 	int nblocks, i;
- 	char *buf = NULL;
- 	unsigned short rotate = 0;
--	decompress_fn decompressor = NULL;
- #if !defined(CONFIG_S390)
- 	char rotator[4] = { '|' , '/' , '-' , '\\' };
- #endif
-+	struct file *in_file, *out_file;
-+	loff_t in_pos = 0, out_pos = 0;
- 
- 	out_file = filp_open("/dev/ram", O_RDWR, 0);
- 	if (IS_ERR(out_file))
-@@ -203,17 +40,6 @@ int __init rd_load_image(char *from)
- 	if (IS_ERR(in_file))
- 		goto noclose_input;
- 
--	in_pos = rd_image_start * BLOCK_SIZE;
--	nblocks = identify_ramdisk_image(in_file, in_pos, &decompressor);
--	if (nblocks < 0)
--		goto done;
--
--	if (nblocks == 0) {
--		if (crd_load(decompressor) == 0)
--			goto successful_load;
--		goto done;
--	}
--
- 	/*
- 	 * NOTE NOTE: nblocks is not actually blocks but
- 	 * the number of kibibytes of data to load into a ramdisk.
-@@ -228,10 +54,7 @@ int __init rd_load_image(char *from)
- 	/*
- 	 * OK, time to copy in the data
- 	 */
--	if (strcmp(from, "/initrd.image") == 0)
--		devblocks = nblocks;
--	else
--		devblocks = nr_blocks(in_file);
-+	nblocks = devblocks = nr_blocks(in_file);
- 
- 	if (devblocks == 0) {
- 		printk(KERN_ERR "RAMDISK: could not determine device size\n");
-@@ -264,7 +87,6 @@ int __init rd_load_image(char *from)
- 	}
- 	pr_cont("done.\n");
- 
--successful_load:
- 	res = 1;
- done:
- 	fput(in_file);
-@@ -275,60 +97,3 @@ int __init rd_load_image(char *from)
- 	init_unlink("/dev/ram");
- 	return res;
- }
--
--int __init rd_load_disk(int n)
--{
--	create_dev("/dev/root", ROOT_DEV);
--	create_dev("/dev/ram", MKDEV(RAMDISK_MAJOR, n));
--	return rd_load_image("/dev/root");
--}
--
--static int exit_code;
--static int decompress_error;
--
--static long __init compr_fill(void *buf, unsigned long len)
--{
--	long r = kernel_read(in_file, buf, len, &in_pos);
--	if (r < 0)
--		printk(KERN_ERR "RAMDISK: error while reading compressed data");
--	else if (r == 0)
--		printk(KERN_ERR "RAMDISK: EOF while reading compressed data");
--	return r;
--}
--
--static long __init compr_flush(void *window, unsigned long outcnt)
--{
--	long written = kernel_write(out_file, window, outcnt, &out_pos);
--	if (written != outcnt) {
--		if (decompress_error == 0)
--			printk(KERN_ERR
--			       "RAMDISK: incomplete write (%ld != %ld)\n",
--			       written, outcnt);
--		decompress_error = 1;
--		return -1;
--	}
--	return outcnt;
--}
--
--static void __init error(char *x)
--{
--	printk(KERN_ERR "%s\n", x);
--	exit_code = 1;
--	decompress_error = 1;
--}
--
--static int __init crd_load(decompress_fn deco)
--{
--	int result;
--
--	if (!deco) {
--		pr_emerg("Invalid ramdisk decompression routine.  "
--			 "Select appropriate config option.\n");
--		panic("Could not decompress initial ramdisk image.");
--	}
--
--	result = deco(NULL, 0, compr_fill, compr_flush, NULL, NULL, error);
--	if (decompress_error)
--		result = 1;
--	return result;
--}
--- 
-2.34.1
-
+>
+>Thanks,
+>Andy
 
