@@ -1,186 +1,497 @@
-Return-Path: <linux-arch+bounces-13774-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13775-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1013CB9F69A
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 15:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D1AB2B9F74D
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 15:12:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 082C67B0A88
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 13:04:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB8297AD1A8
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Sep 2025 13:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A73932101AE;
-	Thu, 25 Sep 2025 13:06:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9932288EE;
+	Thu, 25 Sep 2025 13:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="2sy9lRm+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YDFbe+E+"
+	dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b="CRz+5vlS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B7E1A5B9E;
-	Thu, 25 Sep 2025 13:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F8F223DFF
+	for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 13:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758805587; cv=none; b=ASSIepC2o9gv5mZ2Ski2K3ILPcuQtcwHdpEsfKdXEquR3ifnc0JmfPYnAYYr/XWMTubDluRn8gVL4MXkj1QjBdqmvfNpt3rRjHR3BN2kpqFYJgjU9ElvEtaabGvEzTDspbsErZvIBBXhhoEgenPKm5tkMm3Lo8rZXkF9aV0SVMg=
+	t=1758805953; cv=none; b=QRdu7Sbr9h84YTx6dKT0jgJgsm3/m1dtUQeB4Y8w/PGKOqJaAshsuxmXWTJBOF3C+UAE9fN8cdwrub14INX/qB42v1otgyQwF5e+4WQLXDaSeDfwLxLMm9cFjak124BjMKDzZ9lmh9ECZn89hqJPrno+Iz67KGv0qBrt4mghDPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758805587; c=relaxed/simple;
-	bh=q4ye3IXiZsxvGSYcC9c9EM/q62U5jr861gIEvwgcJ4k=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=oJ/oErxF/+rlFePfHyEsYdvdepwh6tbTUyefqFvT+rH27tWbvEStCEmb1f4UPscp1q1f5xO5S1wwlg/XcogCX8uZt7tp6rN/5E58kVJ/Ji8F50Tk1dCTdw1gQLQyv9D2FeXbYs/d61bruD6j7MpR6+bcae13V2x+H3u6Ec0keHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=2sy9lRm+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YDFbe+E+; arc=none smtp.client-ip=103.168.172.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.phl.internal (Postfix) with ESMTP id CBE32138017F;
-	Thu, 25 Sep 2025 09:06:24 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 25 Sep 2025 09:06:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1758805584;
-	 x=1758812784; bh=u2t/IQnp2g1FbVsKAQ8P89KTHzrqE0MZVHtdNZXXUsE=; b=
-	2sy9lRm+gAWZynhTnnCoQXRW35ce44lRrHZk/Cj9ytb440KmET5Ee2VrjZ2i4vfw
-	MMA5DLOA52iz5f+9Tk9cDJENLM2M9dqv/A2AtWJebWPMhYT+pGAk0Po6sF8u6F2P
-	GvPDxasy8rYihjkIMnRv2WHO63/xYwIR1an9t+8GSFbDmpZTRV0lnpt03KhmvY7A
-	7a5QzHCsz4u3rYwdfsAHjHE9sHNjWIeoBQ1uhn9mT/D1myooWR8bf0aAycnO+pMP
-	HnVzVB7J8xNhoB5ORSk7ILbqFkB2z3O93fjhBfnmNPLKOAsq/3IpuL9l4nVG8g4N
-	mkrIfUjiAm8MHu4xzK2JGg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758805584; x=
-	1758812784; bh=u2t/IQnp2g1FbVsKAQ8P89KTHzrqE0MZVHtdNZXXUsE=; b=Y
-	DFbe+E+QUPnk8ohwlw+7+tCt2thZQDd39kOlIwkrNBEU7Co/agHx0rWkKjcOjA4I
-	UxezTrOOu8BXHzRgSapyFYfG9SX1kIl/WGWgr/Hfp6GIqR7/HMSXj7UQOEatrk/5
-	DYrufeME9R6pr2M8lcqPnU6gX0GrkJCdHskdDkmWzcb9zfiBMS+s0WlLS/oW+Fji
-	rolpwCYMrC24e8wBaRGrus/OOdlsyf7EYszqmc8M32TORASYA+2gMpkkmKd7FE8f
-	U/wa81NqjBlZM0fqPAQa3NUPT4FZNk3k8m626tF6kSBG3D0qMQbHLltDHBgwa3QR
-	eRtVlFB9twL0AnwY0Z01Q==
-X-ME-Sender: <xms:Tz7VaOuN1fHT7_CJ1M6Gnkl8KMZjSvhMKV9e7dIZabjJhgMnpIIGPA>
-    <xme:Tz7VaORioU__2iKdwpL9HoErjM3EvudsXvEupsPo3pA1NxFV5V1QU7XN8Wib-zp_S
-    16KYYY4OGNVTs2zP_NC6uWHukZ9PRhBi-DiKYylxhwmAU-XX15Cudc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeiieehiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehtddpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtoheptggrthgrlhhinh
-    drmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghn
-    ugesrghrmhdrtghomhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
-    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
-    pehjuhhsthhinhhsthhithhtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehmohhrsg
-    hosehgohhoghhlvgdrtghomhdprhgtphhtthhopehnuggvshgruhhlnhhivghrshesghho
-    ohhglhgvrdgtohhmpdhrtghpthhtohepshgrlhhilhdrmhgvhhhtrgeshhhurgifvghird
-    gtohhm
-X-ME-Proxy: <xmx:Tz7VaLONgGDZn_yzUUvrXVOl0hfFzMUiEkhzxoWqQOi-PcUPFwP-pg>
-    <xmx:Tz7VaMhnVxcbYGiNq_WRkNKihp9YFbK9lF2FWAxrC1U7-1vSgIYB3g>
-    <xmx:Tz7VaHcMXgUMVAMUHYoZfREurZSQ8d1L55qd6WjCburksshl5MIoFg>
-    <xmx:Tz7VaBwaJ4XBSeHmatUTHuC0iN8fiuQ4V0Fp0oXEq2VXGUQBPl5GsQ>
-    <xmx:UD7VaJv9R6PSAHhGKSRFTmjzH4H84iAYseEmAQRQ9mtcsAYdejym4Av0>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E579E70006D; Thu, 25 Sep 2025 09:06:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1758805953; c=relaxed/simple;
+	bh=9AXpZB1bwcU/tOfhENucqnGAndFUojEuOkjiz/Zv4RQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ogYry3VhC1DjqjEvUoX2hHhSL3OeG9XWf/S3RgcIXvbNU7Te0FATpQ5rbdWsW6PhLMFA/RDnTnittWfNKcCTjNsih1Sm7HiOM8SqUYu7DheSlWacd4NKSr92taM88PGNzAmaHSN5FxEqBkhxkkA/HoC9TF+YAXZd1eEdRaLPBJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr; spf=pass smtp.mailfrom=freebox.fr; dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b=CRz+5vlS; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freebox.fr
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3ecde0be34eso1232672f8f.1
+        for <linux-arch@vger.kernel.org>; Thu, 25 Sep 2025 06:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=freebox-fr.20230601.gappssmtp.com; s=20230601; t=1758805948; x=1759410748; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NfJVwYFcsQ06QJkEnurciWiF3KgCM9rgqn4VVbABEtQ=;
+        b=CRz+5vlS551m+/ibrrRNCR05aMB/XHm006u7vorJTWL8KnZICEOAUANVKfnYA17O6n
+         CNSPshs989BTySJxhVJjDQVgMGaKDdMiH3CECJdyi/M1fe2VRT3raSjIKb/Hlvwh7G6v
+         JeK6qKCSPjuD07vK1RwG2F5a4t5BpVDGoO8/gxEqKiTZfKvqJWXcWT9pTCarqVnQsLHE
+         5ucPrcXT5w4T3QmqA0pfGPahpuB/tMMPUBNHICg7bBcyx9MvrPir/Z3ASpVDEUZRuat+
+         Emr0AO0ruL/nGstrHje868zLQxrrGECkqEwR4Q0rk20LDfrLBaIEK7TCh5xcMBb3bFRm
+         o72A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758805948; x=1759410748;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NfJVwYFcsQ06QJkEnurciWiF3KgCM9rgqn4VVbABEtQ=;
+        b=HPt4M9RyjlP3RwX79eJ2NQtRPw7201pcqNyxkUapTB4LOT59H4E23QBprh3VailGPx
+         WUjx0v9WgWbTrdNVOnE2u4QAu7S0z1CWCjNTyEj7CbEPdi6r0zvLXRR/Rc/FPTnaG02B
+         G4zp4/B6csuunOPBmU2mVPQi6RsHg0oK629h/ePs7YQXn2aXRkIGnRRpCa3uGbHPYMKW
+         W5SNhCyavwuOwgCOtsTeiCZuH+AgFHwIpamYSmjjpJv6gpF1KkKP5oesg7EfO2PHHomD
+         Iw4s7UsvWLEpsp5i3Q63ldKBxSCGDisElZwC52zoNFKJyC5ls1dYKgj9I1qIrIoODnLr
+         DB4g==
+X-Forwarded-Encrypted: i=1; AJvYcCVCPaVIoKtiJPaNUOB3XtRCaHtkZNHy5yI+xUdX9KaTw5BwwAtqkkZfoGkLK5BXEd2TJGQj9Wp96gPO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9F/dU7aV/X4CE3m7D3sQLawxzZVmNXnNRAaXRNoS2P0xj1IjQ
+	fQoiQ5+tPUHAXfsdP8IgSMO+qdTop7Ohp9jAWnfaYGh0XiCGOkQfb2QV7Z75/iH09xA=
+X-Gm-Gg: ASbGncv2aOealuYLHdJw2zIKVbqORUDjElQjl85knYo8E+2rkPTdyOmvfuvEiUqbJaE
+	2cK4sMSyKeoJuMgFllm/SElIiEe/pFJklTuRA6sJK0VYJGKS0m+SH4MHTvXHfECZobbvI6OXMJN
+	oehb+WAxXKq3DuY8tcLxrcbEhAH9UOdXye/kXDJyvU3HygkdXSPy3zimct5g8at0jnT8+VS2BFr
+	jOgsG8jWciii8ByEODc25sI6NpHkOlMMp0Ny4aJEvQtTAJQqwH2C+THkR5dNhGvo1Fhqo/Dhebg
+	bdDDk5uqORAC33vf585lirbmibsVcJ9iObHnvsa0sCSNNtFbB+R2fydgihW6TI0G7yQ97BUR5vc
+	0T7/wjIjkQTcLMHmm8fjmMTAK/o83YXr+CXA52u4aAt2Q6f9QCA==
+X-Google-Smtp-Source: AGHT+IGfEDsgYy1Y3V7mn/9vw12xwbotyOf9S0qvgxiLF/dTs1GE6jSNXI03j1w/2hgZi5tVGzAx+Q==
+X-Received: by 2002:a05:6000:290e:b0:3fc:cbfc:fbee with SMTP id ffacd0b85a97d-40f65bbb807mr2115268f8f.19.1758805948078;
+        Thu, 25 Sep 2025 06:12:28 -0700 (PDT)
+Received: from daria.iliad.local (freebox.vlq16.iliad.fr. [213.36.7.13])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e33bef4b4sm32929635e9.20.2025.09.25.06.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Sep 2025 06:12:27 -0700 (PDT)
+From: nschichan@freebox.fr
+To: nschichan@freebox.fr
+Cc: akpm@linux-foundation.org,
+	andy.shevchenko@gmail.com,
+	axboe@kernel.dk,
+	brauner@kernel.org,
+	cyphar@cyphar.com,
+	devicetree@vger.kernel.org,
+	ecurtin@redhat.com,
+	email2tema@gmail.com,
+	graf@amazon.com,
+	gregkh@linuxfoundation.org,
+	hca@linux.ibm.com,
+	hch@lst.de,
+	hsiangkao@linux.alibaba.com,
+	initramfs@vger.kernel.org,
+	jack@suse.cz,
+	julian.stecklina@cyberus-technology.de,
+	kees@kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-block@vger.kernel.org,
+	linux-csky@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev,
+	mcgrof@kernel.org,
+	mingo@redhat.com,
+	monstr@monstr.eu,
+	mzxreary@0pointer.de,
+	patches@lists.linux.dev,
+	rob@landley.net,
+	safinaskar@gmail.com,
+	sparclinux@vger.kernel.org,
+	thomas.weissschuh@linutronix.de,
+	thorsten.blum@linux.dev,
+	torvalds@linux-foundation.org,
+	tytso@mit.edu,
+	viro@zeniv.linux.org.uk,
+	x86@kernel.org
+Subject: [PATCH-RFC] init: simplify initrd code (was Re: [PATCH RESEND 00/62] initrd: remove classic initrd support).
+Date: Thu, 25 Sep 2025 15:10:56 +0200
+Message-Id: <20250925131055.3933381-1-nschichan@freebox.fr>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAHNNwZC7gC7zaZGiSBhobSAb4m2O1BuoZ4r=SQBF-tCQyuAPvw@mail.gmail.com>
+References: <CAHNNwZC7gC7zaZGiSBhobSAb4m2O1BuoZ4r=SQBF-tCQyuAPvw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AiLhtS-R-ASF
-Date: Thu, 25 Sep 2025 15:05:52 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jason Gunthorpe" <jgg@nvidia.com>,
- "Patrisious Haddad" <phaddad@nvidia.com>
-Cc: "Tariq Toukan" <tariqt@nvidia.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Saeed Mahameed" <saeedm@nvidia.com>,
- "Leon Romanovsky" <leon@kernel.org>, "Mark Bloch" <mbloch@nvidia.com>,
- Netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, "Gal Pressman" <gal@nvidia.com>,
- "Leon Romanovsky" <leonro@nvidia.com>,
- "Michael Guralnik" <michaelgur@nvidia.com>,
- "Moshe Shemesh" <moshe@nvidia.com>, "Will Deacon" <will@kernel.org>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
- "Justin Stitt" <justinstitt@google.com>, linux-s390@vger.kernel.org,
- llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
- "Bill Wendling" <morbo@google.com>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Salil Mehta" <salil.mehta@huawei.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
- "Yisen Zhuang" <yisen.zhuang@huawei.com>,
- "Leon Romanovsky" <leonro@mellanox.com>,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
- "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "Jijie Shao" <shaojijie@huawei.com>, "Simon Horman" <horms@kernel.org>
-Message-Id: <13c5072c-dc93-477c-b72e-02156a0ecc2e@app.fastmail.com>
-In-Reply-To: <20250925122139.GW2617119@nvidia.com>
-References: <1758800913-830383-1-git-send-email-tariqt@nvidia.com>
- <20250925115433.GU2617119@nvidia.com>
- <d548b14e-ae28-4807-9b29-9961543ea549@nvidia.com>
- <20250925122139.GW2617119@nvidia.com>
-Subject: Re: [PATCH net-next V5] net/mlx5: Improve write-combining test reliability for
- ARM64 Grace CPUs
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 25, 2025, at 14:21, Jason Gunthorpe wrote:
-> On Thu, Sep 25, 2025 at 03:15:46PM +0300, Patrisious Haddad wrote:
->> 
->> On 9/25/2025 2:54 PM, Jason Gunthorpe wrote:
->> > On Thu, Sep 25, 2025 at 02:48:33PM +0300, Tariq Toukan wrote:
->> > > +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
->> > > +				size_t mmio_wqe_size, unsigned int offset)
->> > > +{
->> > > +#if defined(CONFIG_KERNEL_MODE_NEON) && defined(CONFIG_ARM64)
->> > IS_ENABLED() not defined()
->> I just wonder why, Is there a preference in the driver from like
->> aesthetic/convention point of view?
->> Since here it technically doesnt matter - IS_ENABLED have no functional
->> difference from defined since these are boolean configs not *tristate*ones
->> (cant be loaded as module).
->
-> I think it is an aesthetic convention to avoid defined(CONFIG_*) as
-> the reasoning it is not tristate is a bit tricky.
+From: Nicolas Schichan <nschichan@freebox.fr>
 
-In my impression there is no general agreement on this, I would
-probably have picked defined() here myself but don't mind the
-IS_ENABLED() variant either.
+- drop prompt_ramdisk and ramdisk_start kernel parameters
+- drop compression support
+- drop image autodetection, the whole /initrd.image content is now
+  copied into /dev/ram0
+- remove rd_load_disk() which doesn't seem to be used anywhere.
 
-On the other hand, I would in general strongly prefer
+There is now no more limitation on the type of initrd filesystem that
+can be loaded since the code trying to guess the initrd filesystem
+size is gone (the whole /initrd.image file is used).
 
-     if (IS_ENABLED(CONFIG_FOO)) {
-            ...
-     }
+A few global variables in do_mounts_rd.c are now put as local
+variables in rd_load_image() since they do not need to be visible
+outside this function.
+---
 
-over any of the preprocessor conditionals, both for readability
-and for improving compile-time coverage of the conditional code.
+Hello,
 
-Unfortunately that does not work here because kernel_neon_begin()
-etc are only defined on Arm.
+Hopefully my email config is now better and reaches gmail users
+correctly.
 
-     Arnd
+The patch below could probably split in a few patches, but I think
+this simplify the code greatly without removing the functionality we
+depend on (and this allows now to use EROFS initrd images).
+
+Coupled with keeping the function populate_initrd_image() in
+init/initramfs.c, this will keep what we need from the initrd code.
+
+This removes support of loading bzip/gz/xz/... compressed images as
+well, not sure if many user depend on this feature anymore.
+
+No signoff because I'm only seeking comments about those changes right
+now.
+
+ init/do_mounts.h    |   2 -
+ init/do_mounts_rd.c | 243 +-------------------------------------------
+ 2 files changed, 4 insertions(+), 241 deletions(-)
+
+diff --git a/init/do_mounts.h b/init/do_mounts.h
+index 6069ea3eb80d..c0028ee3cff6 100644
+--- a/init/do_mounts.h
++++ b/init/do_mounts.h
+@@ -24,12 +24,10 @@ static inline __init int create_dev(char *name, dev_t dev)
+ 
+ #ifdef CONFIG_BLK_DEV_RAM
+ 
+-int __init rd_load_disk(int n);
+ int __init rd_load_image(char *from);
+ 
+ #else
+ 
+-static inline int rd_load_disk(int n) { return 0; }
+ static inline int rd_load_image(char *from) { return 0; }
+ 
+ #endif
+diff --git a/init/do_mounts_rd.c b/init/do_mounts_rd.c
+index ac021ae6e6fa..5a69ff43f5ee 100644
+--- a/init/do_mounts_rd.c
++++ b/init/do_mounts_rd.c
+@@ -14,173 +14,9 @@
+ 
+ #include <linux/decompress/generic.h>
+ 
+-static struct file *in_file, *out_file;
+-static loff_t in_pos, out_pos;
+-
+-static int __init prompt_ramdisk(char *str)
+-{
+-	pr_warn("ignoring the deprecated prompt_ramdisk= option\n");
+-	return 1;
+-}
+-__setup("prompt_ramdisk=", prompt_ramdisk);
+-
+-int __initdata rd_image_start;		/* starting block # of image */
+-
+-static int __init ramdisk_start_setup(char *str)
+-{
+-	rd_image_start = simple_strtol(str,NULL,0);
+-	return 1;
+-}
+-__setup("ramdisk_start=", ramdisk_start_setup);
+-
+-static int __init crd_load(decompress_fn deco);
+-
+-/*
+- * This routine tries to find a RAM disk image to load, and returns the
+- * number of blocks to read for a non-compressed image, 0 if the image
+- * is a compressed image, and -1 if an image with the right magic
+- * numbers could not be found.
+- *
+- * We currently check for the following magic numbers:
+- *	minix
+- *	ext2
+- *	romfs
+- *	cramfs
+- *	squashfs
+- *	gzip
+- *	bzip2
+- *	lzma
+- *	xz
+- *	lzo
+- *	lz4
+- */
+-static int __init
+-identify_ramdisk_image(struct file *file, loff_t pos,
+-		decompress_fn *decompressor)
+-{
+-	const int size = 512;
+-	struct minix_super_block *minixsb;
+-	struct romfs_super_block *romfsb;
+-	struct cramfs_super *cramfsb;
+-	struct squashfs_super_block *squashfsb;
+-	int nblocks = -1;
+-	unsigned char *buf;
+-	const char *compress_name;
+-	unsigned long n;
+-	int start_block = rd_image_start;
+-
+-	buf = kmalloc(size, GFP_KERNEL);
+-	if (!buf)
+-		return -ENOMEM;
+-
+-	minixsb = (struct minix_super_block *) buf;
+-	romfsb = (struct romfs_super_block *) buf;
+-	cramfsb = (struct cramfs_super *) buf;
+-	squashfsb = (struct squashfs_super_block *) buf;
+-	memset(buf, 0xe5, size);
+-
+-	/*
+-	 * Read block 0 to test for compressed kernel
+-	 */
+-	pos = start_block * BLOCK_SIZE;
+-	kernel_read(file, buf, size, &pos);
+-
+-	*decompressor = decompress_method(buf, size, &compress_name);
+-	if (compress_name) {
+-		printk(KERN_NOTICE "RAMDISK: %s image found at block %d\n",
+-		       compress_name, start_block);
+-		if (!*decompressor)
+-			printk(KERN_EMERG
+-			       "RAMDISK: %s decompressor not configured!\n",
+-			       compress_name);
+-		nblocks = 0;
+-		goto done;
+-	}
+-
+-	/* romfs is at block zero too */
+-	if (romfsb->word0 == ROMSB_WORD0 &&
+-	    romfsb->word1 == ROMSB_WORD1) {
+-		printk(KERN_NOTICE
+-		       "RAMDISK: romfs filesystem found at block %d\n",
+-		       start_block);
+-		nblocks = (ntohl(romfsb->size)+BLOCK_SIZE-1)>>BLOCK_SIZE_BITS;
+-		goto done;
+-	}
+-
+-	if (cramfsb->magic == CRAMFS_MAGIC) {
+-		printk(KERN_NOTICE
+-		       "RAMDISK: cramfs filesystem found at block %d\n",
+-		       start_block);
+-		nblocks = (cramfsb->size + BLOCK_SIZE - 1) >> BLOCK_SIZE_BITS;
+-		goto done;
+-	}
+-
+-	/* squashfs is at block zero too */
+-	if (le32_to_cpu(squashfsb->s_magic) == SQUASHFS_MAGIC) {
+-		printk(KERN_NOTICE
+-		       "RAMDISK: squashfs filesystem found at block %d\n",
+-		       start_block);
+-		nblocks = (le64_to_cpu(squashfsb->bytes_used) + BLOCK_SIZE - 1)
+-			 >> BLOCK_SIZE_BITS;
+-		goto done;
+-	}
+-
+-	/*
+-	 * Read 512 bytes further to check if cramfs is padded
+-	 */
+-	pos = start_block * BLOCK_SIZE + 0x200;
+-	kernel_read(file, buf, size, &pos);
+-
+-	if (cramfsb->magic == CRAMFS_MAGIC) {
+-		printk(KERN_NOTICE
+-		       "RAMDISK: cramfs filesystem found at block %d\n",
+-		       start_block);
+-		nblocks = (cramfsb->size + BLOCK_SIZE - 1) >> BLOCK_SIZE_BITS;
+-		goto done;
+-	}
+-
+-	/*
+-	 * Read block 1 to test for minix and ext2 superblock
+-	 */
+-	pos = (start_block + 1) * BLOCK_SIZE;
+-	kernel_read(file, buf, size, &pos);
+-
+-	/* Try minix */
+-	if (minixsb->s_magic == MINIX_SUPER_MAGIC ||
+-	    minixsb->s_magic == MINIX_SUPER_MAGIC2) {
+-		printk(KERN_NOTICE
+-		       "RAMDISK: Minix filesystem found at block %d\n",
+-		       start_block);
+-		nblocks = minixsb->s_nzones << minixsb->s_log_zone_size;
+-		goto done;
+-	}
+-
+-	/* Try ext2 */
+-	n = ext2_image_size(buf);
+-	if (n) {
+-		printk(KERN_NOTICE
+-		       "RAMDISK: ext2 filesystem found at block %d\n",
+-		       start_block);
+-		nblocks = n;
+-		goto done;
+-	}
+-
+-	printk(KERN_NOTICE
+-	       "RAMDISK: Couldn't find valid RAM disk image starting at %d.\n",
+-	       start_block);
+-
+-done:
+-	kfree(buf);
+-	return nblocks;
+-}
+-
+ static unsigned long nr_blocks(struct file *file)
+ {
+-	struct inode *inode = file->f_mapping->host;
+-
+-	if (!S_ISBLK(inode->i_mode))
+-		return 0;
+-	return i_size_read(inode) >> 10;
++	return i_size_read(file->f_mapping->host) >> 10;
+ }
+ 
+ int __init rd_load_image(char *from)
+@@ -190,10 +26,11 @@ int __init rd_load_image(char *from)
+ 	int nblocks, i;
+ 	char *buf = NULL;
+ 	unsigned short rotate = 0;
+-	decompress_fn decompressor = NULL;
+ #if !defined(CONFIG_S390)
+ 	char rotator[4] = { '|' , '/' , '-' , '\\' };
+ #endif
++	struct file *in_file, *out_file;
++	loff_t in_pos = 0, out_pos = 0;
+ 
+ 	out_file = filp_open("/dev/ram", O_RDWR, 0);
+ 	if (IS_ERR(out_file))
+@@ -203,17 +40,6 @@ int __init rd_load_image(char *from)
+ 	if (IS_ERR(in_file))
+ 		goto noclose_input;
+ 
+-	in_pos = rd_image_start * BLOCK_SIZE;
+-	nblocks = identify_ramdisk_image(in_file, in_pos, &decompressor);
+-	if (nblocks < 0)
+-		goto done;
+-
+-	if (nblocks == 0) {
+-		if (crd_load(decompressor) == 0)
+-			goto successful_load;
+-		goto done;
+-	}
+-
+ 	/*
+ 	 * NOTE NOTE: nblocks is not actually blocks but
+ 	 * the number of kibibytes of data to load into a ramdisk.
+@@ -228,10 +54,7 @@ int __init rd_load_image(char *from)
+ 	/*
+ 	 * OK, time to copy in the data
+ 	 */
+-	if (strcmp(from, "/initrd.image") == 0)
+-		devblocks = nblocks;
+-	else
+-		devblocks = nr_blocks(in_file);
++	nblocks = devblocks = nr_blocks(in_file);
+ 
+ 	if (devblocks == 0) {
+ 		printk(KERN_ERR "RAMDISK: could not determine device size\n");
+@@ -264,7 +87,6 @@ int __init rd_load_image(char *from)
+ 	}
+ 	pr_cont("done.\n");
+ 
+-successful_load:
+ 	res = 1;
+ done:
+ 	fput(in_file);
+@@ -275,60 +97,3 @@ int __init rd_load_image(char *from)
+ 	init_unlink("/dev/ram");
+ 	return res;
+ }
+-
+-int __init rd_load_disk(int n)
+-{
+-	create_dev("/dev/root", ROOT_DEV);
+-	create_dev("/dev/ram", MKDEV(RAMDISK_MAJOR, n));
+-	return rd_load_image("/dev/root");
+-}
+-
+-static int exit_code;
+-static int decompress_error;
+-
+-static long __init compr_fill(void *buf, unsigned long len)
+-{
+-	long r = kernel_read(in_file, buf, len, &in_pos);
+-	if (r < 0)
+-		printk(KERN_ERR "RAMDISK: error while reading compressed data");
+-	else if (r == 0)
+-		printk(KERN_ERR "RAMDISK: EOF while reading compressed data");
+-	return r;
+-}
+-
+-static long __init compr_flush(void *window, unsigned long outcnt)
+-{
+-	long written = kernel_write(out_file, window, outcnt, &out_pos);
+-	if (written != outcnt) {
+-		if (decompress_error == 0)
+-			printk(KERN_ERR
+-			       "RAMDISK: incomplete write (%ld != %ld)\n",
+-			       written, outcnt);
+-		decompress_error = 1;
+-		return -1;
+-	}
+-	return outcnt;
+-}
+-
+-static void __init error(char *x)
+-{
+-	printk(KERN_ERR "%s\n", x);
+-	exit_code = 1;
+-	decompress_error = 1;
+-}
+-
+-static int __init crd_load(decompress_fn deco)
+-{
+-	int result;
+-
+-	if (!deco) {
+-		pr_emerg("Invalid ramdisk decompression routine.  "
+-			 "Select appropriate config option.\n");
+-		panic("Could not decompress initial ramdisk image.");
+-	}
+-
+-	result = deco(NULL, 0, compr_fill, compr_flush, NULL, NULL, error);
+-	if (decompress_error)
+-		result = 1;
+-	return result;
+-}
+-- 
+2.34.1
+
 
