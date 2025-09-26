@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-13783-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13788-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CBFEBA366B
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Sep 2025 12:54:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0863CBA36AA
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Sep 2025 13:00:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42FAA6235E3
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Sep 2025 10:54:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA4DE7AF371
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Sep 2025 10:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A492F3C01;
-	Fri, 26 Sep 2025 10:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5734B2F3C15;
+	Fri, 26 Sep 2025 10:59:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="nn4DiteV"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="DNde8Hmz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011048.outbound.protection.outlook.com [52.101.62.48])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010002.outbound.protection.outlook.com [52.101.201.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DDB299AB3;
-	Fri, 26 Sep 2025 10:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1C11A0728;
+	Fri, 26 Sep 2025 10:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.2
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758884059; cv=fail; b=Q3WrKtYa5cqntgOaGm0TWPL0ZBFzRuZ4fmGvxewTBPDsFA3zkcJKEuMpURzfkV5fSSbB9g3gtYLzgCPv/d2yTcnqpOcFhAGNCDSyp9Fw5PztF3Q7GsF5wvshrUCJbQq7rxZq/xl/6/xGpwPyCJE5MJk9HlLzStPgYIdlRmjI1eM=
+	t=1758884392; cv=fail; b=Q1NBckKF+AmijLQNNW6HFnhfkKrooROSXrq3d8+Q04xv/R9EMBFJPcyNUDYWtDW82P0dk5kOcqm8Qht0sRbf0pSzlaaSE3lS51ng6107NxmxPs5LeVWZ98rmzXLCEjtw2KJqfN2Fr3MZ2kHUiUWbPGBBoZRf2MBbe2pNW7HHyEw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758884059; c=relaxed/simple;
-	bh=sSqr/oUbOSFIc25Rs5dZOBHBJh3QW6Zpxi1JKBKdIHI=;
+	s=arc-20240116; t=1758884392; c=relaxed/simple;
+	bh=M6gFHvaJVpiZKJqHjNf4N7eJIblRQjW489JnTU3J9zE=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FyCQAzh8/MvrggOq9NeB7/+ECht2gDusJMRXUtp7gxOmkRyGoBC96jdH03Z1cO5nG81X7oqplC2RBxg9sUBXhHZkZGBFx+bYna1U3bh/VDnHkS3BqGMtsfbdWP1zzGchYuJTqkT18CQURSD39C3rAb40BvT3ycNOVERltOWXi7M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=nn4DiteV; arc=fail smtp.client-ip=52.101.62.48
+	 MIME-Version:Content-Type; b=lJeFSFZKxaj5L+uSNZoSoH1npQnXG7RdPWL7dG6H9o2nk08WEqrjnrBSCBOj1+x0rOPg8VgXQUc5S7kXTsIYkoxNWqpjzAxx0Y9L0AHJmvGLMY7uMzKIqWfGEHvDifwmHfQm1SqH2TwvSd26zWscDFAVUPDLi8OzpOE+rAxWJHg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=DNde8Hmz; arc=fail smtp.client-ip=52.101.201.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=unMMwTxpTJGLSkhcS7oPhH6MJSGagrZPjhAVQ6d0sc55jOru3h0dO/vFudj9GBPFtMUpUS0Q6KfUmV+XBvyv4WZj85LSU+YCxz6ImlJzb53WFLMssRemnr8mdolVxapnVDOhrdvKGU6gdGeIUKzj81Evd/YTYFv88aS5TCuV32SdCji+bxqQ/s75c+jZ3Zg0pMHGOf15U9XwDUbn/5IAnLiqMeplhurRcKgc1pttLmoGCp6Kq1Y3SJrC9aonDDHVu53ijL7W7ep3aVzkq/dklZN9bSkgDsGTwvMpKLkzd3LMSG/yhBEFtsxlsMDq71fuyC3Q/7CsC5vqv+RUlleH9Q==
+ b=PtuzHUHggKE38dd4hCrVJH98U8o46GezL85H1LHoYOQZM/BElpTPg50zwFQ07DD2CIgvpidQGH6ni3RIICsAvih3qbwQzgc7phnKtivox51PjKdBczb7pTtD+y3wiShwgJ55EFMFfMJLjiJ//mBY3kZ9tTlns46JSB6jQw1ZAt8zwqlTDfmOXFKA52q0JB9BMg0ke4a/rI6NwsqhoXem6aVWYIidXafqDu+mZuHcabmhtxPosAfXZRCb7ks5EGOWS7kShw85ZrrbJ1Bw4bSPTuRMlN8zJ5J7d7KP6DjOGQ349XOL0yNDlSJX/acivMeseN63s5U3sBfELGtkQUKIjw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XIlS8VG9BhAuPq8+q2wxIohgg8u2w+HSy/2b+JV/3Ac=;
- b=X/6pLUKiBviXz2wQd+pLL67THTjdQ85k+TFRLguXe9Mpa+Uj72qQ0UopmQ08j8GSHKJWEYKZRD+7jMHupNJbgvJ07CF6UU+Hj0to82JgpEyk3RNMy3WH//qs6DGg9EfbtM3CTm0OlZ39l0eSBwJ7MPDm8Nt1lzDjDnhrK41wWSO9B0n9MLfo1uXFMNwx9WrBcRZYXmnfH7+PJj0K0aCAWBysRxOKY+Ymqt1tY1lbChV3dkQa++9l5c1sqaNmsmzWwIGiWIiVGUn/6Fq62uZwKNmyw2FVifmgJLeuxcWaNwpqbd2c5VhM6bi04y0Hr0gYpRld7XB9ILsTha5f59saBg==
+ bh=E3hBq9Fzr7MFqIOU0wU2Fuhlzau0yLKsxJp0QqKOawU=;
+ b=fNPcb+rQpoQjlKb1xOaNTtg6ZqCqyXq+UMoNtZrUYNRzNuSqVu5q6ZjgE6bV3XVGUgQJlV7EcOobj5kgD5TAG4v2kLf1cF8pejax1jAPzu6jGfb67n0VAxKWJhNE8XZKj7TQf2ceE5emlBM9HCGkvB+gKtdyU+GR/XgBP10XrANWhwb00RaaH5M5744ePZYAwVrAEC803au6zlPrHV4OGOHfzXDm5t0MaL6CmU29/ib8RalMJineBmjk05etHR15YGsRikqPRdf8H84MtbqEX1TnCiH5wfBwW/QDCUlyzXodxs6woRvizDfrTG0xpXGwurwX0hBUmZTWLLYOGRuSgw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XIlS8VG9BhAuPq8+q2wxIohgg8u2w+HSy/2b+JV/3Ac=;
- b=nn4DiteVCeXmePzO4JG3eQNkt810tl68HEwRUkuxBv2I9TS2wI8/3BYODXd8DOITzAuE42KE4CsB6Uz5VN7Q4uV3a5GncwEeByKGojcCdSK1947v1krksxnu9lAEz8cxkDkgzHxSACLlUhl6T5Tv6c+054nSeewbq/l+tpba5mM=
-Received: from BL0PR05CA0029.namprd05.prod.outlook.com (2603:10b6:208:91::39)
- by PH7PR12MB6954.namprd12.prod.outlook.com (2603:10b6:510:1b7::21) with
+ bh=E3hBq9Fzr7MFqIOU0wU2Fuhlzau0yLKsxJp0QqKOawU=;
+ b=DNde8Hmz95ugLSKC5r2AfQJP3J2raZ2tZo8PXaKmn9lvpdZykDhDC5e2HVsguxr5BF3DaVZa7Rbr8Yz9/r4ajjONtkrOzuxPhxPt51Sd/6AbuWcME1a6rSwKdyh50e/CUyHOR8+EGEUarbDyBVSAhE7Rczv68iK/3QhtBbvv3S0=
+Received: from BL1PR13CA0062.namprd13.prod.outlook.com (2603:10b6:208:2b8::7)
+ by DS0PR12MB8785.namprd12.prod.outlook.com (2603:10b6:8:14c::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.10; Fri, 26 Sep
- 2025 10:54:10 +0000
-Received: from BL02EPF0002992E.namprd02.prod.outlook.com
- (2603:10b6:208:91:cafe::71) by BL0PR05CA0029.outlook.office365.com
- (2603:10b6:208:91::39) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9182.6 via Frontend Transport; Fri,
- 26 Sep 2025 10:54:10 +0000
+ 2025 10:54:19 +0000
+Received: from BL02EPF0002992A.namprd02.prod.outlook.com
+ (2603:10b6:208:2b8:cafe::e0) by BL1PR13CA0062.outlook.office365.com
+ (2603:10b6:208:2b8::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9182.4 via Frontend Transport; Fri,
+ 26 Sep 2025 10:54:12 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,20 +63,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
 Received: from satlexmb08.amd.com (165.204.84.17) by
- BL02EPF0002992E.mail.protection.outlook.com (10.167.249.59) with Microsoft
+ BL02EPF0002992A.mail.protection.outlook.com (10.167.249.55) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9160.9 via Frontend Transport; Fri, 26 Sep 2025 10:54:10 +0000
+ 15.20.9160.9 via Frontend Transport; Fri, 26 Sep 2025 10:54:18 +0000
 Received: from SATLEXMB06.amd.com (10.181.40.147) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Fri, 26 Sep
- 2025 03:54:09 -0700
+ 2025 03:54:18 -0700
 Received: from satlexmb08.amd.com (10.181.42.217) by SATLEXMB06.amd.com
  (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 26 Sep
- 2025 05:54:08 -0500
+ 2025 05:54:17 -0500
 Received: from xhdradheys41.xilinx.com (10.180.168.240) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Fri, 26 Sep 2025 03:54:01 -0700
+ Transport; Fri, 26 Sep 2025 03:54:10 -0700
 From: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
 To: <git@amd.com>, <michal.simek@amd.com>, <alexandre.belloni@bootlin.com>,
 	<Frank.Li@nxp.com>, <robh@kernel.org>, <krzk+dt@kernel.org>,
@@ -91,9 +91,9 @@ To: <git@amd.com>, <michal.simek@amd.com>, <alexandre.belloni@bootlin.com>,
 CC: <radhey.shyam.pandey@amd.com>, <srinivas.goud@amd.com>,
 	<shubhrajyoti.datta@amd.com>, <manion05gk@gmail.com>, Manikanta Guntupalli
 	<manikanta.guntupalli@amd.com>
-Subject: [PATCH V8 1/5] dt-bindings: i3c: Add AMD I3C master controller support
-Date: Fri, 26 Sep 2025 16:23:45 +0530
-Message-ID: <20250926105349.2932952-2-manikanta.guntupalli@amd.com>
+Subject: [PATCH V8 2/5] asm-generic/io.h: Add big-endian MMIO accessors
+Date: Fri, 26 Sep 2025 16:23:46 +0530
+Message-ID: <20250926105349.2932952-3-manikanta.guntupalli@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250926105349.2932952-1-manikanta.guntupalli@amd.com>
 References: <20250926105349.2932952-1-manikanta.guntupalli@amd.com>
@@ -103,155 +103,306 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0002992E:EE_|PH7PR12MB6954:EE_
-X-MS-Office365-Filtering-Correlation-Id: d6b2568b-9039-4c02-2b6c-08ddfceb0626
+X-MS-TrafficTypeDiagnostic: BL02EPF0002992A:EE_|DS0PR12MB8785:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1cf62e7f-5023-40f9-c62c-08ddfceb0af5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|7416014|376014|36860700013|1800799024|13003099007|921020;
+ BCL:0;ARA:13230040|1800799024|36860700013|82310400026|7416014|376014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?UtHl8W6p/cNIMpFW8hyh8MZLiU/j90fBbsKQ3ZsHgDG17ZJsJ6anayiU0EVz?=
- =?us-ascii?Q?H9tGRv9t6CFMFCNjfQr7DIx6BBnkokcxWzxsKxqRo/itxn6eeFsjSB7/m8du?=
- =?us-ascii?Q?jdy/i8M1y4GUk6YhevKDbtviERBBLNyCOkVac9/+yBvlSPxG6GsViOP4eoSp?=
- =?us-ascii?Q?8M+RqdSP3BbqLYIXFPhklYUlxIs91DgJD9A5NmwiKxuH7VbcAy+y0JHZuHOk?=
- =?us-ascii?Q?nH2sSgKRkW9gLZCzd9lk4tRsSkxghSGZC0mXpWr0JyzuT3Pv7/aq3FhdFn9O?=
- =?us-ascii?Q?m9R7kMPyyJLWgmpT5NfTdPyF+MnVGNBrKffRwyNZMIM7TDHTSNOKCFB6rKMn?=
- =?us-ascii?Q?Lq7nC8GrpwC4I0PCKwy8YOMjAMas1vmWzRcWOsdjltzMGpgGlczyWsiVJYIN?=
- =?us-ascii?Q?0RsHNVotdx6vkkX7BiRVw5UXuCb7JcyrSC4Cc885am9jwMsrDlBoSiPkgngQ?=
- =?us-ascii?Q?9SydnWdNOxD4kHnL4aaiSQUr6hD8AzEJSHgtDQXW8nLdq1kFCEIn1v7uIPuo?=
- =?us-ascii?Q?Bp+QXAD+llJbaVR7f0i/Q9Y10EDuO3VzBxHkROLmFiXPqZUsua5uexKEOHPo?=
- =?us-ascii?Q?3cqb6breOf19/z7fkrfrfRYdYVVQE/IKZKK4kJZzOd+/zISKmnKJMUbrJukU?=
- =?us-ascii?Q?t26Qwec259cmTrGBIH/IW7qOu3JkV59YRxRqnaDwSO7/EvJyINkZlxOm4scT?=
- =?us-ascii?Q?VD6NXf1F4cFWSufGLFKntLtA728aHt5fQscNXeMYzNhnB63L72PI8NBagZYz?=
- =?us-ascii?Q?0nU1aJoiAxjlkslAiDcLpk8nQDE/j/+LEjePlx6jwGFCqlBDbI8h41grClB/?=
- =?us-ascii?Q?GfOo55K9Pg3bj27OOhtSXNomJnU93naT6ikhL+dG8EO6EwJRCnlBJYv1mTp2?=
- =?us-ascii?Q?OPkgY0wVJUyqlFNzEgl7xfgVwXXz3/WnJLMpgvs3Gbs22RuVata0F63li1U2?=
- =?us-ascii?Q?AFZltz11Wvy7YSXt/O0I1IYqT7PQGgGB2tMW2SSsBy/jOSLYCwUBZJly0rRA?=
- =?us-ascii?Q?Ruf8433V4/PiHrAO8QRWzcd1tpxUiBpH9fEpRabSQ7/PnKtXdtXqyUNIlskA?=
- =?us-ascii?Q?ZzbP7i9ul5nMmXGVbiJFraEFAJzmggjfNliL/Wp8D95MQiAM+VKwTdxbFG7b?=
- =?us-ascii?Q?fDy9ENvyWjpWofkE310GJF9YyP+QmNOFeKZ2a8uMValcnB0Ws/5WyCDaRX6j?=
- =?us-ascii?Q?bNX0Vu+JI1+GTDgussl3BX0xoeEKWc9mEeKdVGmRw89bHY6DabdXCSFx+JeS?=
- =?us-ascii?Q?zExGIfax8pxBJ8HnDQ/2UHlm17Pg0pleOydNzG4j679bVlE0d+NU2JCqFdDt?=
- =?us-ascii?Q?Jd8fjfHGUfcgM9LpNI/fbd9g7/IjtorlRM01cKeqAMzEQtdmaVmSZbkgju1D?=
- =?us-ascii?Q?HR851XwOmM3FH3lxyW0n1tSWryYhnEpkRPYoQ4QichUlFmpoCE9JsZE+2s71?=
- =?us-ascii?Q?+Yh1jJdXXVWsCSmLunlFzJS8bPK0mVb6nhzDa/eKZs1h6UYxKnQyDnStmq4m?=
- =?us-ascii?Q?KohqNgvwd3kH1hMoLwqDewjYPD/yz4H5WeWCX81yLTk2IMWmpZ3h86eyWA?=
- =?us-ascii?Q?=3D=3D?=
+ =?utf-8?B?VmNIdXFqNGxxWS9McVdWck5yN0FUaTY4cVFSRlZ6ekV6M0JrY3VXL2FUMWkr?=
+ =?utf-8?B?Vmw1ek1oS005NXpYNEFTZ2FhSExFNnkrQnVPRVVSY0dwNEVETVp6ZlVMeUpM?=
+ =?utf-8?B?bS8vL0JWTTZ1dXBpdkU1RitqRmNQaW1EeU9Cdmg5L2JNaGEvb2RxVENMUnNN?=
+ =?utf-8?B?bkV1MTMxY1dBc2NZK1Z0eldBaHVoek4xaEtXUlRxeGR0MWZKM3V2dHN5UC9L?=
+ =?utf-8?B?ZjE1QUh0YU9ldEZtSUJPby9kN0JNMlQzZFlVaXhTWW1qL2hkN2NSOThGY1I1?=
+ =?utf-8?B?QTNoMklVQW9ScytWMXh0QkVkc001a29ZbzRxZmY5ek9iY3Z6VUVTUkUvaUl4?=
+ =?utf-8?B?YkV6TEE1TXFkOWtkU0JZMGpSRnpocXFHcXpoZDRKQ1hLc25HeVNHWG9Yb09V?=
+ =?utf-8?B?a1NvRHorY2JmdjU2RDJycWF4WTduVHRTSzU0aTNTZEJEMldxT0M1akd2b0M3?=
+ =?utf-8?B?WUFwNWhmcW5UWFAyVEwrL3FTUHpQNmpLQ0xqZFM5WlNUbGQ5SnZmcjRyT3Fx?=
+ =?utf-8?B?Tlcwa1V4bThvL2JEc2w1YThDczBMbjQ1T3l3dlZySUFMbXREcEZsLytvR0ky?=
+ =?utf-8?B?N0NrN3oxd3ZZeFpWZHhJMzF1YWczS2ZuRHlXcjUvUjFKY001b0RkWVA1TC9T?=
+ =?utf-8?B?WmUyMSs2QkNITFJ5dVhINDArT3Y3c0MrZm50M3dLZGVZQ2JtU0hLcFNoekMr?=
+ =?utf-8?B?VTRJY3BZRGJIZmhIbTUySTUyZTA4MXFtdGkyMnVVQWVoRXpQWVI4OUVjRU45?=
+ =?utf-8?B?bHpBNXJSRFBaYklyUEtPYUJtaTJLanhmUHNudDRETHVIY2xVL0hvSmR2Uktl?=
+ =?utf-8?B?Q25nSmE0YThPclBTVHRHcjVkOURoRGVrSE5wdWlGb3BNUVdDNUt3SWRpME9k?=
+ =?utf-8?B?bUdsOE1aMWw5aFN4NHVTQ2Q3cEhZZ3FKZHRYdEUxODhhOGRKWWk2SzZZSmww?=
+ =?utf-8?B?bDRqbHc4ZXc5ank0S3hQb1ZsdXQ1aGtLYTlhUU5VWGhhVXRENDFXSFVsSCs3?=
+ =?utf-8?B?OU0yRmhURTZNRTRqL2t6Ujc1SDV3Y1cxY0lab0pFOW1CNlhCYjV5YVZMNDFu?=
+ =?utf-8?B?SFBsYm9BL2g2YnBGZTVORHVsTS9JbFRkR2NvUTFmeVZSUUh3OFBWZWpRWkx4?=
+ =?utf-8?B?MldJY0tja1BwZTVlN1V1elF5cEpUSk10V2hRTFN5K3NLWkhlMFBrSkp5bUZZ?=
+ =?utf-8?B?azRCckoxc01sNlhLWTVkTjdGTFlkSVFpbjlBbVBFR21vRTU0TUVtVllMdDRk?=
+ =?utf-8?B?REVRYngvaTdKb0dpakRKN1FTMnhWeHRWVEtaQlk2UkRjUFZyWXpkREExQWsx?=
+ =?utf-8?B?WmJjdFQvRmQ0dDNTWnNycXZXaEplZTltcTFDUy81dzQyamVnYlRKZFRWQWRo?=
+ =?utf-8?B?eWxrU3lxK05PMStpeGx6d1U5dlZLWitmQ2xnU1V1Kzl6L2VXY2xsY2JBS09x?=
+ =?utf-8?B?aVNuR2xVeEt1YzdzTXUwVUs3WWRxRjd0YzBuTkdCb0gxekFNRjRrS2p1bU5p?=
+ =?utf-8?B?dXBhRHNpU1lhdlViNmRocUtRUVJvQXdyZC8yQTFQNlRqMTdGa0dFM3ZTNEdV?=
+ =?utf-8?B?am1hSGFtbndqaWNYcTNQaFJBazNoQVNDSldtdGphVDNnc3piYlMyeW5mWWtW?=
+ =?utf-8?B?QWpNWXFITEQxVkg4TXRjMG5rbGErTHk5TTlhWkNZYUUvMHhONGN0Zlk3N1U0?=
+ =?utf-8?B?MTdDSXN3aEY2Y2ZVMSt4ZjNPQksyWWx5Qk5Ta2dVcDFUdzhITUlmeCtmbUNp?=
+ =?utf-8?B?MEVNck1ZL2ZvM24rdVJlL2NRUzh3eis2SGh4blJValRoRXgwaWlHbzZiUHhH?=
+ =?utf-8?B?QW9PN1pMeXFXZFdDNzVsZXk1eDdQNk1xVlJISjlwdTlUV0tkdExJakdRRFhY?=
+ =?utf-8?B?NnBJcUIzZklxNElvOEo1MitLdmNYN1RweXNoSE1Zd2dPZVdtbTBUQnBPMFhv?=
+ =?utf-8?B?TE1IZE84Q2FnZ25PT0hidXhxNDY4disyc3JMa2E1dExwNEtVVHpvSFZOZEVo?=
+ =?utf-8?B?Z2ZITDFRWWN6QW4wWWVYM0NRbld2ZkZCcEt2dVZjb05hUFJNd2xtL0NNTkJp?=
+ =?utf-8?B?U1JXVG1nNHZ6cjlkWWtiVXlIRkJyaEtCUVlMZz09?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(36860700013)(1800799024)(13003099007)(921020);DIR:OUT;SFP:1101;
+ CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2025 10:54:10.6722
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2025 10:54:18.7445
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6b2568b-9039-4c02-2b6c-08ddfceb0626
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1cf62e7f-5023-40f9-c62c-08ddfceb0af5
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0002992E.namprd02.prod.outlook.com
+ BL02EPF0002992A.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6954
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8785
 
-Add device tree binding documentation for the AMD I3C master
-controller version 1.0.
+Add MMIO accessors to support big-endian memory operations. These helpers
+include {read, write}{w, l, q}_be() and {read, write}s{w, l, q}_be(),
+which allows to access big-endian memory regions while returning
+the results in the CPU’s native endianness.
+
+This provides a consistent interface to interact with hardware using
+big-endian register layouts.
 
 Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 ---
-Changes for V2:
-Updated commit subject and description.
-Moved allOf to after required.
-Removed xlnx,num-targets property.
-
-Changes for V3:
-Updated commit description.
-Corrected the order of properties and removed resets property.
-Added compatible to required list.
-Added interrupts to example.
-
-Changes for V4:
-Added h/w documentation details.
-
-Changes for V5:
-Renamed the xlnx,axi-i3c.yaml file into xlnx,axi-i3c-1.0.yaml.
-
-Changes for V6:
-Corrected the file name for $id in yaml to fix the dtschema warning.
-
-Changes for V7:
-Added i3c controller version details to commit description.
+Changes since V7:
+This patch introduced in V7.
 
 Changes for V8:
 None.
 ---
- .../bindings/i3c/xlnx,axi-i3c-1.0.yaml        | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i3c/xlnx,axi-i3c-1.0.yaml
+ include/asm-generic/io.h | 202 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 202 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i3c/xlnx,axi-i3c-1.0.yaml b/Documentation/devicetree/bindings/i3c/xlnx,axi-i3c-1.0.yaml
-new file mode 100644
-index 000000000000..17c63807dbcf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i3c/xlnx,axi-i3c-1.0.yaml
-@@ -0,0 +1,55 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i3c/xlnx,axi-i3c-1.0.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index 11abad6c87e1..d18a8ca6c06c 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -295,6 +295,96 @@ static inline void writeq(u64 value, volatile void __iomem *addr)
+ #endif
+ #endif /* CONFIG_64BIT */
+ 
++/*
++ * {read,write}{w,l,q}_be() access big endian memory and return result
++ * in native endianness.
++ */
 +
-+title: AMD I3C master
++#ifndef readw_be
++#define readw_be readw_be
++static inline u16 readw_be(const volatile void __iomem *addr)
++{
++	u16 val;
 +
-+maintainers:
-+  - Manikanta Guntupalli <manikanta.guntupalli@amd.com>
++	log_read_mmio(16, addr, _THIS_IP_, _RET_IP_);
++	__io_br();
++	val = __be16_to_cpu((__be16 __force)__raw_readw(addr));
++	__io_ar(val);
++	log_post_read_mmio(val, 16, addr, _THIS_IP_, _RET_IP_);
++	return val;
++}
++#endif
 +
-+description:
-+  The AXI-I3C IP is an I3C Controller with an AXI4-Lite interface, compatible
-+  with the MIPI I3C Specification v1.1.1. The design includes bidirectional I/O
-+  buffers that implement open collector drivers for the SDA and SCL signals.
-+  External pull-up resistors are required to properly hold the bus at a Logic-1
-+  level when the drivers are released.
++#ifndef readl_be
++#define readl_be readl_be
++static inline u32 readl_be(const volatile void __iomem *addr)
++{
++	u32 val;
 +
-+  For more details, please see https://docs.amd.com/r/en-US/pg439-axi-i3c
++	log_read_mmio(32, addr, _THIS_IP_, _RET_IP_);
++	__io_br();
++	val = __be32_to_cpu((__be32 __force)__raw_readl(addr));
++	__io_ar(val);
++	log_post_read_mmio(val, 32, addr, _THIS_IP_, _RET_IP_);
++	return val;
++}
++#endif
 +
-+properties:
-+  compatible:
-+    const: xlnx,axi-i3c-1.0
++#ifdef CONFIG_64BIT
++#ifndef readq_be
++#define readq_be readq_be
++static inline u64 readq_be(const volatile void __iomem *addr)
++{
++	u64 val;
 +
-+  reg:
-+    maxItems: 1
++	log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
++	__io_br();
++	val = __be64_to_cpu((__be64 __force)__raw_readq(addr));
++	__io_ar(val);
++	log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
++	return val;
++}
++#endif
++#endif /* CONFIG_64BIT */
 +
-+  clocks:
-+    maxItems: 1
++#ifndef writew_be
++#define writew_be writew_be
++static inline void writew_be(u16 value, volatile void __iomem *addr)
++{
++	log_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
++	__io_bw();
++	__raw_writew((u16 __force)__cpu_to_be16(value), addr);
++	__io_aw();
++	log_post_write_mmio(value, 16, addr, _THIS_IP_, _RET_IP_);
++}
++#endif
 +
-+  interrupts:
-+    maxItems: 1
++#ifndef writel_be
++#define writel_be writel_be
++static inline void writel_be(u32 value, volatile void __iomem *addr)
++{
++	log_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
++	__io_bw();
++	__raw_writel((u32 __force)__cpu_to_be32(value), addr);
++	__io_aw();
++	log_post_write_mmio(value, 32, addr, _THIS_IP_, _RET_IP_);
++}
++#endif
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
++#ifdef CONFIG_64BIT
++#ifndef writeq_be
++#define writeq_be writeq_be
++static inline void writeq_be(u64 value, volatile void __iomem *addr)
++{
++	log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
++	__io_bw();
++	__raw_writeq((u64 __force)__cpu_to_be64(value), addr);
++	__io_aw();
++	log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
++}
++#endif
++#endif /* CONFIG_64BIT */
 +
-+allOf:
-+  - $ref: i3c.yaml#
+ /*
+  * {read,write}{b,w,l,q}_relaxed() are like the regular version, but
+  * are not guaranteed to provide ordering against spinlocks or memory
+@@ -524,6 +614,118 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
+ #endif
+ #endif /* CONFIG_64BIT */
+ 
++/*
++ * {read,write}s{w,l,q}_be() repeatedly access the same memory address
++ * in big endianness in 16-, 32- or 64-bit chunks (@count times) and
++ * return result in native endianness.
++ */
 +
-+unevaluatedProperties: false
++#ifndef readsw_be
++#define readsw_be readsw_be
++static inline void readsw_be(const volatile void __iomem *addr,
++			     void *buffer,
++			     unsigned int count)
++{
++	if (count) {
++		u16 *buf = buffer;
 +
-+examples:
-+  - |
-+    i3c@80000000 {
-+        compatible = "xlnx,axi-i3c-1.0";
-+        reg = <0x80000000 0x10000>;
-+        clocks = <&zynqmp_clk 71>;
-+        interrupt-parent = <&imux>;
-+        interrupts = <0 89 4>;
-+        #address-cells = <3>;
-+        #size-cells = <0>;
-+    };
-+...
++		do {
++			u16 x = __be16_to_cpu((__be16 __force)__raw_readw(addr));
++			*buf++ = x;
++		} while (--count);
++	}
++}
++#endif
++
++#ifndef readsl_be
++#define readsl_be readsl_be
++static inline void readsl_be(const volatile void __iomem *addr,
++			     void *buffer,
++			     unsigned int count)
++{
++	if (count) {
++		u32 *buf = buffer;
++
++		do {
++			u32 x = __be32_to_cpu((__be32 __force)__raw_readl(addr));
++			*buf++ = x;
++		} while (--count);
++	}
++}
++#endif
++
++#ifdef CONFIG_64BIT
++#ifndef readsq_be
++#define readsq_be readsq_be
++static inline void readsq_be(const volatile void __iomem *addr,
++			     void *buffer,
++			     unsigned int count)
++{
++	if (count) {
++		u64 *buf = buffer;
++
++		do {
++			u64 x = __be64_to_cpu((__be64 __force)__raw_readq(addr));
++			*buf++ = x;
++		} while (--count);
++	}
++}
++#endif
++#endif /* CONFIG_64BIT */
++
++#ifndef writesw_be
++#define writesw_be writesw_be
++static inline void writesw_be(volatile void __iomem *addr,
++			      const void *buffer,
++			      unsigned int count)
++{
++	if (count) {
++		const u16 *buf = buffer;
++
++		do {
++			__raw_writew((u16 __force)__cpu_to_be16(*buf), addr);
++			buf++;
++		} while (--count);
++	}
++}
++#endif
++
++#ifndef writesl_be
++#define writesl_be writesl_be
++static inline void writesl_be(volatile void __iomem *addr,
++			      const void *buffer,
++			      unsigned int count)
++{
++	if (count) {
++		const u32 *buf = buffer;
++
++		do {
++			__raw_writel((u32 __force)__cpu_to_be32(*buf), addr);
++			buf++;
++		} while (--count);
++	}
++}
++#endif
++
++#ifdef CONFIG_64BIT
++#ifndef writesq_be
++#define writesq_be writesq_be
++static inline void writesq_be(volatile void __iomem *addr,
++			      const void *buffer,
++			      unsigned int count)
++{
++	if (count) {
++		const u64 *buf = buffer;
++
++		do {
++			__raw_writeq((u64 __force)__cpu_to_be64(*buf), addr);
++			buf++;
++		} while (--count);
++	}
++}
++#endif
++#endif /* CONFIG_64BIT */
++
+ #ifndef PCI_IOBASE
+ #define PCI_IOBASE ((void __iomem *)0)
+ #endif
 -- 
 2.34.1
 
