@@ -1,178 +1,129 @@
-Return-Path: <linux-arch+bounces-13807-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13808-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CFD0BACA93
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Sep 2025 13:16:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 462D1BAEA2B
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Sep 2025 23:59:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28A247AA34A
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Sep 2025 11:14:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A2DF17E9B0
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Sep 2025 21:59:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8899C2F6182;
-	Tue, 30 Sep 2025 11:16:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF3E255E53;
+	Tue, 30 Sep 2025 21:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fcx1suq+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9zRW5f1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E720125D53C
-	for <linux-arch@vger.kernel.org>; Tue, 30 Sep 2025 11:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56E9283FCB;
+	Tue, 30 Sep 2025 21:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759230964; cv=none; b=JjBoKw9HKZYf5a7dWH3r4qv/JoA83JodRyyV2p7uEySsIyJKLNe7CvJXoPPW3WsL4pQwpu3TlzNJd+RRijjc/lrzk9/AZLSuxHeotnG0DhIw2jm2za96Qk8sfFhQXTNvKL3/6ZmsegFj5UbWdUq1SK+aXb45aaGzFWFtfDWgJeE=
+	t=1759269570; cv=none; b=bkx1nCXdxyZ9Qnoo30mlLfYHh9wfvUm+BBK/Uth/suZUDkrk/iRwmffuGSl95H+0OGr7gRA1cj4RoOXM8ye2eODCvKeWMzDmCFh4g9fCphA+ld5M2dskJXFgUcOud/8xGTTl8qQ/z4SCGlOicoKYz9yeWc4Tag8QFMFDdCblaMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759230964; c=relaxed/simple;
-	bh=8V4GgwEO++Ce8hUatVMIQ/GshH7wdH34txBzsQRlSoA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=MndMYy/nqBpohV/jbD5c1MLbI3KXEqWf8VMmIQIdAsUcUR/PtHRhfwukabXHTF+UGDDumKwGhbqErNhxt7n+pC0JRKFtbs3il1WlCmMyRmzn2EvMRwzLsASRh2PwBDWzeTIeu1KYCu3QHhQHH/cnHKjuizS1qaQfVfvk1Ej0kaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fcx1suq+; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759230961;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZEOnnvfg2VP9jFylWLMcLAcGpm2F4oh7aBv+d9st9Ec=;
-	b=Fcx1suq+YQ4JkHnceK1TRbr6FJRrxgjqE13X2F9fBG0ZECocJU1PuBhczYdyln4rDuGS0z
-	RfalgTaBVJYuCx4aElsTGluPu5Go3DXXOqpX7XtMDlU955jNwfRgDnDg1ZVKhOf2OLHuQX
-	BljmP026zyvkFKOytqyDFjtuydKARlA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-303-2CvSDyiXOYen3hR5ZWAO6g-1; Tue,
- 30 Sep 2025 07:15:57 -0400
-X-MC-Unique: 2CvSDyiXOYen3hR5ZWAO6g-1
-X-Mimecast-MFC-AGG-ID: 2CvSDyiXOYen3hR5ZWAO6g_1759230955
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6AD1C1800365;
-	Tue, 30 Sep 2025 11:15:55 +0000 (UTC)
-Received: from fweimer-oldenburg.csb.redhat.com (unknown [10.44.33.56])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 018161800447;
-	Tue, 30 Sep 2025 11:15:34 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Paul Walmsley <pjw@kernel.org>,  Thomas Gleixner <tglx@linutronix.de>,
-  Ingo Molnar <mingo@redhat.com>,  Borislav Petkov <bp@alien8.de>,  Dave
- Hansen <dave.hansen@linux.intel.com>,  x86@kernel.org,  "H. Peter Anvin"
- <hpa@zytor.com>,  Andrew Morton <akpm@linux-foundation.org>,  "Liam R.
- Howlett" <Liam.Howlett@oracle.com>,  Vlastimil Babka <vbabka@suse.cz>,
-  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,  Paul Walmsley
- <paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>,  Albert
- Ou <aou@eecs.berkeley.edu>,  Conor Dooley <conor@kernel.org>,  Rob Herring
- <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Arnd
- Bergmann <arnd@arndb.de>,  Christian Brauner <brauner@kernel.org>,  Peter
- Zijlstra <peterz@infradead.org>,  Oleg Nesterov <oleg@redhat.com>,  Eric
- Biederman <ebiederm@xmission.com>,  Kees Cook <kees@kernel.org>,  Jonathan
- Corbet <corbet@lwn.net>,  Shuah Khan <shuah@kernel.org>,  Jann Horn
- <jannh@google.com>,  Conor Dooley <conor+dt@kernel.org>,  Miguel Ojeda
- <ojeda@kernel.org>,  Alex Gaynor <alex.gaynor@gmail.com>,  Boqun Feng
- <boqun.feng@gmail.com>,  Gary Guo <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6?=
- =?utf-8?Q?rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  Andreas Hindborg <a.hindborg@kernel.org>,
-  Alice Ryhl <aliceryhl@google.com>,  Trevor Gross <tmgross@umich.edu>,
-  Benno Lossin <lossin@kernel.org>,  linux-kernel@vger.kernel.org,
-  linux-fsdevel@vger.kernel.org,  linux-mm@kvack.org,
-  linux-riscv@lists.infradead.org,  devicetree@vger.kernel.org,
-  linux-arch@vger.kernel.org,  linux-doc@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  alistair.francis@wdc.com,
-  richard.henderson@linaro.org,  jim.shu@sifive.com,  Andy Chiu
- <andybnac@gmail.com>,  kito.cheng@sifive.com,  charlie@rivosinc.com,
-  atishp@rivosinc.com,  evan@rivosinc.com,  cleger@rivosinc.com,
-  alexghiti@rivosinc.com,  samitolvanen@google.com,  broonie@kernel.org,
-  rick.p.edgecombe@intel.com,  rust-for-linux@vger.kernel.org,  Zong Li
- <zong.li@sifive.com>,  David Hildenbrand <david@redhat.com>,  Heinrich
- Schuchardt <heinrich.schuchardt@canonical.com>,  bharrington@redhat.com,
-  Aurelien Jarno <aurel32@debian.org>, bergner@tenstorrent.com,
- jeffreyalaw@gmail.com
-Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
-In-Reply-To: <aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com> (Deepak Gupta's message
-	of "Wed, 24 Sep 2025 11:40:15 -0700")
-References: <20250731-v5_user_cfi_series-v19-0-09b468d7beab@rivosinc.com>
-	<f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
-	<aNQ7D6_ZYMhCdkmL@debug.ba.rivosinc.com>
-Date: Tue, 30 Sep 2025 13:15:32 +0200
-Message-ID: <lhuldlwgpij.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1759269570; c=relaxed/simple;
+	bh=BVnmmKLHLEcnQVn984iBuQrv+XBJSYDym/oSwUyQgx4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oU3NQU1Mw0L3HTRgXEstXl88ep5REeoZMQpabUZDnFXjRlQK63JFCJUARINFSZkaB60kHa6QYzcbIShRfJOSC0EnbS7QVXaCv6CEIzmOAo3/otu1ALXa6AhEt82WcrwatVxfg+He1SlwK7G5wjoz1us7HuIaOooKcfQo6cm1N5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M9zRW5f1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C22C4CEF0;
+	Tue, 30 Sep 2025 21:59:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759269569;
+	bh=BVnmmKLHLEcnQVn984iBuQrv+XBJSYDym/oSwUyQgx4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M9zRW5f1iSgD/0wmJZ/sYnhqEw5BkzmmMOMo3UvjOaQcbvvr8jWIgVVKU6+NOAX/p
+	 sPkV+DgUzKNqX9tGNyktOm3KiGA89ghYhU7Gp8aVDt0ICm2Koqb07NId9ESHjquhkq
+	 pOO4+WZLDbx/JYgcsUJzq3WjfOyafPJ35eDZedXB4nK14k3RetOZjFlu3iWiz9HLUk
+	 IMXXKk6ZGpARVIVFCKoJKwbO2JwNDx64Vv6CTT0JNbO2zNMfaJNUFqNn63pWre1O/B
+	 iWqDu+wXuUgDLjuh8IQ7bTnunYGd1nWu55gI1fY+BAqxX1v414ogVAg1YlF5HAGLF9
+	 iiUJgvMEvaB1A==
+Date: Tue, 30 Sep 2025 21:59:28 +0000
+From: Wei Liu <wei.liu@kernel.org>
+To: Michael Kelley <mhklinux@outlook.com>
+Cc: Roman Kisel <romank@linux.microsoft.com>,
+	"arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"decui@microsoft.com" <decui@microsoft.com>,
+	"haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"kys@microsoft.com" <kys@microsoft.com>,
+	"mikelley@microsoft.com" <mikelley@microsoft.com>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"Tianyu.Lan@microsoft.com" <Tianyu.Lan@microsoft.com>,
+	"wei.liu@kernel.org" <wei.liu@kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"benhill@microsoft.com" <benhill@microsoft.com>,
+	"bperkins@microsoft.com" <bperkins@microsoft.com>,
+	"sunilmut@microsoft.com" <sunilmut@microsoft.com>
+Subject: Re: [PATCH hyperv-next v5 04/16] arch/x86: mshyperv: Trap on access
+ for some synthetic MSRs
+Message-ID: <aNxSwL_Wga9XP-0z@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
+References: <20250828010557.123869-1-romank@linux.microsoft.com>
+ <20250828010557.123869-5-romank@linux.microsoft.com>
+ <BN7PR02MB414878837D34F40D23DB9506D40FA@BN7PR02MB4148.namprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN7PR02MB414878837D34F40D23DB9506D40FA@BN7PR02MB4148.namprd02.prod.outlook.com>
 
-* Deepak Gupta:
+On Tue, Sep 09, 2025 at 03:11:47AM +0000, Michael Kelley wrote:
+> From: Roman Kisel <romank@linux.microsoft.com> Sent: Wednesday, August 27, 2025 6:06 PM
+> > 
+> > hv_set_non_nested_msr() has special handling for SINT MSRs
+> > when a paravisor is present. In addition to updating the MSR on the
+> > host, the mirror MSR in the paravisor is updated, including with the
+> > proxy bit. But with Confidential VMBus, the proxy bit must not be
+> > used, so add a special case to skip it.
+> > 
+> > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+> > Reviewed-by: Alok Tiwari <alok.a.tiwari@oracle.com>
+> > Reviewed-by: Tianyu Lan <tiala@microsoft.com>
+> > ---
+[...]
+> > diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> > index a619b661275b..5e2c6fd637d2 100644
+> > --- a/arch/x86/kernel/cpu/mshyperv.c
+> > +++ b/arch/x86/kernel/cpu/mshyperv.c
+> > @@ -28,6 +28,7 @@
+> >  #include <asm/apic.h>
+> >  #include <asm/timer.h>
+> >  #include <asm/reboot.h>
+> > +#include <asm/msr.h>
+> >  #include <asm/nmi.h>
+> >  #include <clocksource/hyperv_timer.h>
+> >  #include <asm/msr.h>
+> > @@ -38,6 +39,16 @@
+> >  bool hv_nested;
+> >  struct ms_hyperv_info ms_hyperv;
+> > 
+> > +#define HYPERV_SINT_PROXY_ENABLE	BIT(20)
+> > +#define HYPERV_SINT_PROXY_DISABLE	0
+> 
+> Seems like these definitions belong in hvgdk_mini.h together with
+> the definition of "union hv_synic_sint". Since that union already
+> defines the "proxy" field, the definitions really should be in terms
+> of that field (though I'd have to fiddle with the code to figure out
+> if there's a reasonable way to do that).
+> 
 
-> Any distro who is shipping userspace (which all of them are) along
-> with kernel will not be shipping two different userspaces (one with
-> shadow stack and one without them). If distro are shipping two
-> different userspaces, then they might as well ship two different
-> kernels. Tagging some distro folks here to get their take on shipping
-> different userspace depending on whether hardware is RVA23 or
-> not. @Heinrich, @Florian, @redbeard and @Aurelien.
->
-> Major distro's have already drawn a distinction here that they will drop
-> support for hardware which isn't RVA23 for the sake of keeping binary
-> distribution simple.
+If we use sint.proxy (or sint->proxy) then we don't even need this
+definition. I think this is only needed because the code writes u64
+directly to the MSR without reinterpreting it as hv_synic_sint.
 
-The following are just my personal thoughts.
-
-For commercial distributions, I just don't see how things work out if
-you have hardware that costs less than (say) $30 over its lifetime, and
-you want LTS support for 10+ years.  The existing distribution business
-models aren't really compatible with such low per-node costs.  So it
-makes absolute sense for distributions to target more powerful cores,
-and therefore require RVA23.  Nobody is suggesting that mainstream
-distributions should target soft-float, either.
-
-For community distributions, it is a much tougher call.  Obsoleting
-virtually all existing hardware sends a terrible signal to early
-supporters of the architecture.  But given how limited the RISC-V
-baseline ISA is, I'm not sure if there is much of a choice here.  Maybe
-it's possible to soften the blow by committing to (say) two more years
-of baseline ISA support, and then making the switch, assuming that RVA23
-hardware for local installation is widely available by then.
-
-However, my real worry is that in the not-too-distant future, another
-ISA transition will be required after RVA23.  This is not entirely
-hypothetical because RVA23 is still an ISA designed mostly for C (at
-least in the scalar space, I don't know much about the vector side).
-Other architectures carry forward support for efficient overflow
-checking (as required by Ada and some other now less-popular languages,
-and as needed for efficiently implementing fixnums with arbitrary
-precision fallback).  Considering current industry trends, it is not
-inconceivable that these ISA features become important again in the near
-term.
-
-You can see the effect of native overflow checking support if you look
-at Ada code examples with integer arithmetic.  For example, this:
-
-function Fib (N: Integer) return Integer is
-begin
-   if N <= 1 then
-      return N;
-   else
-      return Fib (N - 1) + Fib (N - 2);
-   end if;
-end;
-
-produces about 370 RISC-V instructions with -gnato, compared to 218
-instructions with -gnato0 and overflow checking disabled (using GCC
-trunk).  For GCC 15, the respective instruction counts are 301 and 258
-for x86-64, and 288 and 244 for AArch64.  RVA23 reduces the instruction
-count with overflow checking to 353.  A further reduction should be
-possible once GCC starts using xnor in its overflow checks, but I expect
-that the overhead from overflow checking will remain high.
-
-Thanks,
-Florian
-
+Wei
 
