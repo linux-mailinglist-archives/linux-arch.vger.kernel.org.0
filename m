@@ -1,128 +1,175 @@
-Return-Path: <linux-arch+bounces-13821-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13822-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33FDABAF5B9
-	for <lists+linux-arch@lfdr.de>; Wed, 01 Oct 2025 09:08:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72686BAFD79
+	for <lists+linux-arch@lfdr.de>; Wed, 01 Oct 2025 11:28:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1E051897D0F
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Oct 2025 07:09:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26A7F3C6729
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Oct 2025 09:28:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81B9247284;
-	Wed,  1 Oct 2025 07:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24D32D8DAF;
+	Wed,  1 Oct 2025 09:28:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BHKMtLub"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464FB7261E
-	for <linux-arch@vger.kernel.org>; Wed,  1 Oct 2025 07:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C5F277C94
+	for <linux-arch@vger.kernel.org>; Wed,  1 Oct 2025 09:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759302513; cv=none; b=OpqkQLZhiUwLpkrRv+IYpgv2xIpS26mQdzX6cGrgRp4PpwFnp8C+09n1EGcQw2fSah8MqvwR+INmTOjJDYV5npyzHeNOvrQl/UobNWDlORBk1dX6ksnwilM0pxOfN9m+zKznIZzcDpFTYSICgaA3teZS2olByTqq3CZbjzOlm0w=
+	t=1759310898; cv=none; b=f/R+WSyFSNJNxKeHsOlOfT02zP/bstkzXiHZyoZUDXK8htZ1+PwPBeQFwT3B4kLOv43CR8hC3htYkzk9Vz3vIXhyEf05T+AKasypJ0CklIbKW2QeDTca5vDrwAxRjawk1Ft4Vh7/+FwSjeQTcSsxcvHtXLzeyJjfh5KBQd2MbzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759302513; c=relaxed/simple;
-	bh=7ANDfXM38Gq8udquxdGN69lHmB9wggZcgP0ai0VsdIo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZQ6oENgIKayLxUbW2nTzUTADeUdXJAoPp6S71CyHvSaOBFeV4eenq/6t6ZUYcTLuXB1py4vcy02C8sTD7ZpAuh8TrieLLepianKL5f16D9WIAFFpnIQC23ZdNF1zVfPbPuSGONd547gdRimkPv8OpC3cvWk7SRWznQlyKHMO9i4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-54bc04b9d07so2931451e0c.1
-        for <linux-arch@vger.kernel.org>; Wed, 01 Oct 2025 00:08:32 -0700 (PDT)
+	s=arc-20240116; t=1759310898; c=relaxed/simple;
+	bh=u8Q/puU00m1+Ma30hn2PbTN/YeCwD3+SnWOZqn5KRRE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HZWG0LcSjWoJ/iHKbZLK4LTfPJXUiGsLXHQsRet7xlzjvdaG7S3i8tQjjwNisabKnu1DarHW5li8eyAmzN4+BlzJEXYQhBzPedWLOZLGfnDqQLLJuE2Pw/9KUR04We2cFXwPmgpIrf4QZv0fZ7JegvfKQVtXjbIOqhebRPKT5jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BHKMtLub; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1759310896;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ybtVMUpvDW3U/F2Zx0MRGWKL6mjqpdZhKS9ovQqZCJg=;
+	b=BHKMtLubZVnUb3kgB8l8GqsQOgsRsfJQJORgdf1eigTzkrvrcMBtWwXXK7JK45Gcw8Q6aR
+	DLMdlexDdwY70oyFUA059g04mpYC6ew0fNiD55sKAkoeE0Gy1K+I4VXBrY3sVzbjTOJMQC
+	i+NHFO2+xR92ZRiQRCz9b0OuIXQrQnk=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-618-prg988vtPBieSikHa85pjQ-1; Wed, 01 Oct 2025 05:28:15 -0400
+X-MC-Unique: prg988vtPBieSikHa85pjQ-1
+X-Mimecast-MFC-AGG-ID: prg988vtPBieSikHa85pjQ_1759310894
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3f93db57449so3886802f8f.2
+        for <linux-arch@vger.kernel.org>; Wed, 01 Oct 2025 02:28:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759302511; x=1759907311;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z1Xe/yIXoUfwDHnypUCkmL2agWH96d+WyVy9U6y5GP4=;
-        b=WbP9oMUGgQ1Asg8CcQQLeu3r7PKm4jahffjWGocXIa+RFpSF9q2n9nSXc+6Gcg7zor
-         Rj79Z6vBBEEwHu5rQ6qrK9slPk2U4C4rJJwoxre4lsU1nuT1TUujWpjQJjB9AnCfPsqX
-         CSHmUKd4aTsaT0vGaUq+bQ14PhnT2vLMabCh+VsZCmktDEAWmJ1PK4KltMvuH/UX/thj
-         FYKWuoUQqOLgTU1DL7+/HMBaASof/jFgyhujtz+9zv8F9bgfnihRF5w4ejjFSbKn0mQ4
-         R8imKPmC8Pzg8hciXHuSXOfC6PfCa7d9KVqQS+zLAopYJ7yGAq5kAvEjS5ZShOZlAk6R
-         MJbw==
-X-Forwarded-Encrypted: i=1; AJvYcCVU9gQ8lFK80EE8HNHEbkQwzY8uISXwLLNRT6MTlJ256lYZKpypfREhC8xzKHW60hel6E2BtTIZAGia@vger.kernel.org
-X-Gm-Message-State: AOJu0YwozeelydZEsVpdI/cu3UEGMIzYwUWYvGQOa5Y5yv50HeoAfP6F
-	LUyA65z8XXia0edllWZoOfpLnPAKCt5p+on22qS2e53lb5meQIPz0bdlyRMP8zO9
-X-Gm-Gg: ASbGnctziiKYhDd9dlNx2WpguIapWXqpZ/PQL2yM9PHZaZBXab42JW2TeeVQnN04gsx
-	d/NfNsIwUPZmsW4ESDf4Fh69BYjrniCUwq1L+OW3GmRpBNjPljeEYBftNRzgrlK50Cj2UuADWzF
-	LaZlZ24vaKim3RffNIubUpUimoli406GLtp7qq+KJU+oh60gT6dKEdPJL1LJv+cWgJ8uaQSls2t
-	qtGVXKSnzeWX+3PJWbFcUcbWITVqdhHY4VAijmVD533K1g8l6ce/skZgRIkry10682VMfG0dTKC
-	9fJIGPekfhnKAY92166cd+apcOMvd8pnWusg96gqerQBJAldFqYSWtHX9wSbAKOfcmpivJxDQ7Q
-	pKtyuM0+pap1GiGqavnicF/0n3zhOMkbaeeDGbRfUdlu4nUmPMJxo9vnvoZWedwSWS8BI99WwLZ
-	MwuYMZNr3C
-X-Google-Smtp-Source: AGHT+IE2hZuvlUwekJIeSBX3L+qz8Kh4zsOuSs9GDkcJqq+sF0zSZdJLM5gjpGLzD4WZa5xVPXnunQ==
-X-Received: by 2002:a05:6122:251a:b0:544:8d16:4541 with SMTP id 71dfb90a1353d-5522d2a3936mr899232e0c.7.1759302510676;
-        Wed, 01 Oct 2025 00:08:30 -0700 (PDT)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-54bed88199csm3330467e0c.3.2025.10.01.00.08.29
-        for <linux-arch@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1759310894; x=1759915694;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ybtVMUpvDW3U/F2Zx0MRGWKL6mjqpdZhKS9ovQqZCJg=;
+        b=nNFIe8ncmZj/9XwdB2v3DOUHkE//paXBR9/eRHX+BagDPqiFNvtjGbvJ14TlullT2b
+         /WQFFnRBkbd1iQXxeXwW3qX7nwx37KYx0Opes+jUVR2i4+U5PHzYbCJe/7Ge6PU6ASz9
+         YS3O9YqocCKapdZmtEWyXunBgP7U/tj2JLZ/rUGpauRhHIleSCujcYxPUdktAXPNSEB6
+         4nnFqBUEYCmJ7fepUDu61ovjgU0eDYv0t8Eb6/W3sA7EsKDepdc9K5VO6mb+T9MOHjWp
+         2n0jbLOPf3j3IFPDD0+u+6tw2gk/fuJR/DzX33yiIScDLfVRubEPZpuc5XBBiX/JQf/j
+         bMkg==
+X-Forwarded-Encrypted: i=1; AJvYcCW1wk8EmriFqeDC4BBqRwjQmBMEEjpJdtc0F7sKXSkjhHijTTnI+wQ74OhSEkQWIlsTkAgF3zIiUIp4@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw99UkZtPpON1AXn/XDeaOx5eSGA0quNuqINnsj1fuVuthtvcL+
+	wwFx+Wg2cPVytqo4mMKFWj9E4I9JOoDjA5L6H7m27fH2I015ycucrVbwQnYF+uptZ+13QJJz6QT
+	Zydx2Jh7IByi0tRpmDvmOnILzX+a+6sxiMqXu4J7J/HimBRTIXPErePsmk42oxKs=
+X-Gm-Gg: ASbGncslF6rkWpI6USDr2LqCBIbAXNUifvs2HLpug2BU5b9x0NpfxxCbezHu5O3F3L/
+	HBdS0S+xtuZRUxOTcUUmEooGnLvHKtX2VFh0Mmhfqdaa0OvOY+X9pPpqv6ly8C2sVS3De5rRATk
+	TA8Lr2oU5eIIBFUpfS0G+fl6I9uBsBPEMj2CrqndOBHGo4iXwvUcsT5gEiZv1Saq7tZ3c30X5SR
+	yH+ZrpbG1i8NqKo8D/LchYfY0e9NN9WxmBjbTbs2hNDKCsSPxx0njU4s2AyBFPJxYI3woBsJYD5
+	PgT1+hl3Kpov24SaRV5R34YYhNL2GZ7rwYt4gjjS+ERPb0SCVYfrMXyD89PLv6tXPrKBdQVzz+r
+	aRL3s9mJ0BLnunS7aKw==
+X-Received: by 2002:a5d:588a:0:b0:3ec:248f:f86a with SMTP id ffacd0b85a97d-425578183aamr2084093f8f.48.1759310893714;
+        Wed, 01 Oct 2025 02:28:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH2jGX49TGzAee2RWy6ApUBj/jwFn2OVqWsFJymuz8OiVF8ehgSB3/azRECWeXusX/4XaZBCg==
+X-Received: by 2002:a5d:588a:0:b0:3ec:248f:f86a with SMTP id ffacd0b85a97d-425578183aamr2084020f8f.48.1759310893212;
+        Wed, 01 Oct 2025 02:28:13 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fac4a5e41sm28042341f8f.0.2025.10.01.02.28.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Oct 2025 00:08:29 -0700 (PDT)
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-90f6d66e96dso1802714241.0
-        for <linux-arch@vger.kernel.org>; Wed, 01 Oct 2025 00:08:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXcsC1AANf6NVwkohI9xWYSHosxmSOml3hOrM6iq+mUPh5FNraRTQY2yjH9J6lCCi7tCz0DDW8BmBw8@vger.kernel.org
-X-Received: by 2002:a05:6102:26c3:b0:558:72c1:2762 with SMTP id
- ada2fe7eead31-5d3fe5358bdmr972805137.11.1759302509044; Wed, 01 Oct 2025
- 00:08:29 -0700 (PDT)
+        Wed, 01 Oct 2025 02:28:12 -0700 (PDT)
+Message-ID: <651ee9fe-706e-4471-a71b-e7a12b42cc3e@redhat.com>
+Date: Wed, 1 Oct 2025 11:28:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1757810729.git.fthain@linux-m68k.org> <abf2bf114abfc171294895b63cd00af475350dba.1757810729.git.fthain@linux-m68k.org>
- <CAMuHMdUgkVYyUvc85_P9TyTM5f-=mC=+X=vtCWN45EMPqF7iMg@mail.gmail.com>
- <6c295a4e-4d18-a004-5db8-db2e57afc957@linux-m68k.org> <57ac401b-222b-4c85-b719-9e671a4617cf@app.fastmail.com>
- <86be5cf0-065e-d55d-fdb6-b9cf6655165e@linux-m68k.org> <ec2982e3-2996-918e-f406-32f67a0decfe@linux-m68k.org>
- <CAMuHMdV1eGkq_kOPTGbfDt4E2V5zCTdYc_BGJg-56-ZUS353YQ@mail.gmail.com> <7c2c4da1-57f6-23b6-dbff-6288ef3f2a4f@linux-m68k.org>
-In-Reply-To: <7c2c4da1-57f6-23b6-dbff-6288ef3f2a4f@linux-m68k.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 1 Oct 2025 09:08:17 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVwYvJSoAWDTJJYOTt8mgtfa+sB_uevYR3NXFUK2fVS5A@mail.gmail.com>
-X-Gm-Features: AS18NWD9LDo6xA5ckwXmlLEmk9kfyHz5Y83hVqr1eWllj9E1zqRP90XkriKsg1k
-Message-ID: <CAMuHMdVwYvJSoAWDTJJYOTt8mgtfa+sB_uevYR3NXFUK2fVS5A@mail.gmail.com>
-Subject: Re: [RFC v2 2/3] atomic: Specify alignment for atomic_t and atomic64_t
-To: Finn Thain <fthain@linux-m68k.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
-	Linux-Arch <linux-arch@vger.kernel.org>, linux-m68k@vger.kernel.org, 
-	Lance Yang <lance.yang@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next V6] net/mlx5: Improve write-combining test
+ reliability for ARM64 Grace CPUs
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ Mark Bloch <mbloch@nvidia.com>, netdev@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
+ Jason Gunthorpe <jgg@nvidia.com>, Michael Guralnik <michaelgur@nvidia.com>,
+ Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Vasily Gorbik <gor@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt <justinstitt@google.com>,
+ linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+ Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Salil Mehta <salil.mehta@huawei.com>, Sven Schnelle <svens@linux.ibm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+ Yisen Zhuang <yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
+ Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>,
+ Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev,
+ Niklas Schnelle <schnelle@linux.ibm.com>, Jijie Shao <shaojijie@huawei.com>,
+ Simon Horman <horms@kernel.org>, Patrisious Haddad <phaddad@nvidia.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Jakub Kicinski <kuba@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>
+References: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Finn,
+Hi,
 
-On Wed, 1 Oct 2025 at 03:46, Finn Thain <fthain@linux-m68k.org> wrote:
-> On Tue, 30 Sep 2025, Geert Uytterhoeven wrote:
-> > > To silence the misalignment WARN from CONFIG_DEBUG_ATOMIC, for 64-bit
-> > > atomic operations, for my small m68k .config, it was also necesary to
-> > > increase ARCH_SLAB_MINALIGN to 8. However, I'm not advocating a
-> >
-> > Probably ARCH_SLAB_MINALIGN should be 4 on m68k.  Somehow I thought that
-> > was already the case, but it is __alignof__(unsigned long long) = 2.
->
-> I agree -- setting ARCH_SLAB_MINALIGN to 4 would be better style, and may
-> avoid surprises in future. Right now that won't have any effect because
-> that value gets increased to sizeof(void *) by calculate_alignment() and
+On 9/28/25 11:08 PM, Tariq Toukan wrote:
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/wc.c b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> index 999d6216648a..c281153bd411 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> @@ -7,6 +7,10 @@
+>  #include "mlx5_core.h"
+>  #include "wq.h"
+>  
+> +#if IS_ENABLED(CONFIG_KERNEL_MODE_NEON) && IS_ENABLED(CONFIG_ARM64)
+> +#include <asm/neon.h>
+> +#endif
+> +
+>  #define TEST_WC_NUM_WQES 255
+>  #define TEST_WC_LOG_CQ_SZ (order_base_2(TEST_WC_NUM_WQES))
+>  #define TEST_WC_SQ_LOG_WQ_SZ TEST_WC_LOG_CQ_SZ
+> @@ -255,6 +259,27 @@ static void mlx5_wc_destroy_sq(struct mlx5_wc_sq *sq)
+>  	mlx5_wq_destroy(&sq->wq_ctrl);
+>  }
+>  
+> +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
+> +				size_t mmio_wqe_size, unsigned int offset)
+> +{
+> +#if IS_ENABLED(CONFIG_KERNEL_MODE_NEON) && IS_ENABLED(CONFIG_ARM64)
+> +	if (cpu_has_neon()) {
+> +		kernel_neon_begin();
+> +		asm volatile
+> +		(".arch_extension simd;\n\t"
 
-Ah, so there it happens...
+Here I'm observing build errors with aarch64-linux-gnu-gcc 12.1.1
+20220507 (Red Hat Cross 12.1.1-1):
 
-> gets increased to ARCH_KMALLOC_MINALIGN or ARCH_DMA_MINALIGN by
-> __kmalloc_minalign().
+/tmp/cchqHdeI.s: Assembler messages:
+/tmp/cchqHdeI.s:746: Error: unknown architectural extension `simd;'
 
-Thanks for checking!
+I can't reproduce the error on any recent compiler version via
+godbolt.org, so I *think* this should not block/be reverted for the MR,
+but could you please have a look soonish?
 
-Gr{oetje,eeting}s,
+Thanks,
 
-                        Geert
+Paolo
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
