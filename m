@@ -1,220 +1,192 @@
-Return-Path: <linux-arch+bounces-13819-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13820-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2F27BAF29D
-	for <lists+linux-arch@lfdr.de>; Wed, 01 Oct 2025 08:00:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A0FDBAF465
+	for <lists+linux-arch@lfdr.de>; Wed, 01 Oct 2025 08:44:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D48A8189F087
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Oct 2025 06:00:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9940B7A5927
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Oct 2025 06:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78C22D6620;
-	Wed,  1 Oct 2025 06:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE89426F2B2;
+	Wed,  1 Oct 2025 06:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nJoNubzx"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="f3OOVoaW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xSOr+vjf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B8827F74B;
-	Wed,  1 Oct 2025 06:00:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C50FC0A;
+	Wed,  1 Oct 2025 06:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759298404; cv=none; b=XdB6R+01Gdx1XYmkdFPbzAnHfRV8SIcXpJ4+I5iR5HXb3fju/x9986J/fuL79dZ8w/HWBfzWmA+rHSXycZhXXMEo85t8KkZIff8tcCFBf8N2g8d6wtM0URKdZB2a18GLtQzvhwnkyWzCxFCADAYEkCVYdWzYdHnGc6kZttU2HHI=
+	t=1759301089; cv=none; b=NxBDc4nAx/h1odXUKlwuTTdt9mn8tF20xxFeDGzi6qm0HVZTtBkR7BZWCFIdIxr3bHguDfiUMllv6/qENWZ2EV1r7VmSBEDuWBJWF1fHA7FRy0dqy2X6H90q8MO/LclLhn60fGjOo1vpwGK8kKTlltn0sDtJfAAOrYbv3tqBIc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759298404; c=relaxed/simple;
-	bh=BL+aFBzA9dlLWjXJCXVuikVhV/kBThl2YlDnC4VRyxo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PUiY9C3qrGu/IC8NMLp5SxteNLp4+hE/Vf3lqjQmF5XMCAi6n+RSlVET/8BkNmvKXG61C6ebGEdrkcC0U4JrNTo/i6gp/4PcCvPSviA3v7IEK3XaFDU0EGOOlnM6ABS4nkVZwj18pCB6kC0B/wotYYk2vJXVB3kqp7vQjfNOw9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nJoNubzx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC7E2C4CEF5;
-	Wed,  1 Oct 2025 06:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759298404;
-	bh=BL+aFBzA9dlLWjXJCXVuikVhV/kBThl2YlDnC4VRyxo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nJoNubzxfsFRjlfmaL9Hnx11xwd97uKJuurs+fRG1FTDKyEaac+39+u/vd73SpdmL
-	 wVlmUCwqd4LB4tpS4ic173g1xVisffNBLtRfUbsO23h5hAE4txXOOxD1+I3TtmOVEq
-	 OgKe8sgYqk1XyFuKqIETnxQ9TAul3I/9bZw3/R2ywFva6K06ndhpGjBfRh8vGuaYZX
-	 QoLx++WPUTAMvQ/7k9U1rmXGCHt5tEmhcav7CcuVZA6Y9OQD4E49H/FQJJHZfBCf4v
-	 WlgnVJrBMA4rBDDTQ8M2ILo0yZ03YUkCjIIBJEbNXTUNPlajhNgmuz0bWn3bWrqgfk
-	 0umhPVtI+0nVA==
-Date: Wed, 1 Oct 2025 06:00:02 +0000
-From: Wei Liu <wei.liu@kernel.org>
-To: Mukesh Rathor <mrathor@linux.microsoft.com>
-Cc: linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	arnd@arndb.de
-Subject: Re: [PATCH v2 4/6] x86/hyperv: Add trampoline asm code to transition
- from hypervisor
-Message-ID: <20251001060002.GA603271@liuwe-devbox-debian-v2.local>
-References: <20250923214609.4101554-1-mrathor@linux.microsoft.com>
- <20250923214609.4101554-5-mrathor@linux.microsoft.com>
+	s=arc-20240116; t=1759301089; c=relaxed/simple;
+	bh=Z8BCe4iaNeWsBEaGqmtX0eVcmR+lCvjMbO5uvQdSXPI=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=XHbHP9uN1HwUWz+vmydx6VDiBhmt2ogY79+NkvQdc6ZFFOngF2+7wL86GDYPYZMXqpjARt2JMQp1HFhZSaGGYWS80oV2tam01/PDiP/geUEII9cbLkJUnD4M6HV02Zb61dki95SgmJ2NBaJZSveqZJLb81yftDVIwj+XKCaXpSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=f3OOVoaW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=xSOr+vjf; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id D0191EC016F;
+	Wed,  1 Oct 2025 02:44:45 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Wed, 01 Oct 2025 02:44:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1759301085;
+	 x=1759387485; bh=h2PY/hlOQdw6rIXoyxgJocjwCk9M0fTS2q6ugQ8vStE=; b=
+	f3OOVoaWj9LdGVQ6RtQMMoNU6teZtU4LDc/GtQ7Fb6I125mIMqkiXqVW3OXR4kaZ
+	w3II2aqG+UeH5P56lmx/k9OQhYgK6ELBFLWyJyK2x/zmkYmMML2iZi+z9917oQaw
+	XLeyW8+yW/kiEjQQ9aujQPSwnKmMFIvibVZcGZNd1fRtUIMxGQE6SqVCCu64P1NA
+	1H98hMJ/sFG6UfNRiHXTBK4bnMMLQXgWfEiMOsdo2+Kxuxh3N+Ymecq39RUCshfi
+	A64q76vXFJBNMJSriI7JRzXK6LsqJ7cUPeEozmD0ACf1yf2j7iOUtnhikyUJl7sM
+	cb33CETpIwQrcCtoS+dIew==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1759301085; x=
+	1759387485; bh=h2PY/hlOQdw6rIXoyxgJocjwCk9M0fTS2q6ugQ8vStE=; b=x
+	SOr+vjf5o49Cs3kdLa0KFfmES0CN5oX6gDHNUgTadphBVZ7SZg3yr3on32YOsK1K
+	a07Vpxb4f48DM4+GNlt6vyBrjRq1sSZ4Nyw/avfqUXgATomU1Y94C0F0u3EKTMLe
+	N0ODhY2zFD6PXp68+DIe7HEkJXKFxha0jl4GF3cZ2lI2pqkw+VzB31C0scRpdyix
+	RV3EKsPWsKyGrzlO4EI2n/wymIfI/uKAOL8W50/IaDXpJqtAZUUSMHLzlnMz1XVx
+	M9t0Nk/1ph8LO8GMeLrmmfr+uLwJeVbmY1a0N+lLZY01z07z78JfqGsqpIJDUDKz
+	KMCTzOrmGuDS6Qdt6tL1g==
+X-ME-Sender: <xms:3M3caIpfzTxAblV-d58n9nFgXChpTwPYDuc5ruVmk4IChRCROrueuw>
+    <xme:3M3caJd9DgLkriGdU-eNZfSGTLdHYR8aqktZaaVP6LCr4esldYgJTuMvPECpukm9m
+    kBbPzsdOfgaEUN3EPeY5DRFdcFpwzZn0Cw3tjEjdzpMXx-GlgAlG9LE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekvdeghecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvfffgfefhgfdtiedvieetfefgkefhieegvdejfffgheeiuedttdetkeffhefgvden
+    ucffohhmrghinhepghhouggsohhlthdrohhrghdpghhnuhdrohhrghenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdr
+    uggvpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
+    epmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtohepsghoqhhunhdr
+    fhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgrug
+    gvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoh
+    epfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehgvggvrhht
+    sehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehlrghntggvrdihrghngheslh
+    hinhhugidruggvvhdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvth
+X-ME-Proxy: <xmx:3M3caElhms60U0Ao69Bt2Dm8K8zQopNSyPlZUHP9GUO8mDllOWRU0A>
+    <xmx:3M3caKOA2frNA-FJj-6AiEo_14JZOv2ZvaIA9IqpKELmkVy5UIfHFA>
+    <xmx:3M3caO5YYqXqLB6gfDJ3VfI8XeVxd641akUYUTN7CWqrh3nRyzV0WA>
+    <xmx:3M3caOZQm4vC6bvNDg3DgNEbm3t89yjJXYVotEwUTDya-dr21BQj3Q>
+    <xmx:3c3caIT5lJMN91gr0HIkVMw4aQxhh0ZeYklDiDJMGJYj4a4ld3S2SOMJ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 99C12700069; Wed,  1 Oct 2025 02:44:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250923214609.4101554-5-mrathor@linux.microsoft.com>
+X-ThreadId: Ah_uXtpTlO07
+Date: Wed, 01 Oct 2025 08:44:01 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Finn Thain" <fthain@linux-m68k.org>
+Cc: "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Will Deacon" <will@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Mark Rutland" <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-m68k@vger.kernel.org,
+ "Lance Yang" <lance.yang@linux.dev>
+Message-Id: <7de25cf0-595e-4b8e-b0da-6e5a66ec1358@app.fastmail.com>
+In-Reply-To: <60325e45-e4a7-d0cf-ba28-a1a811f9a890@linux-m68k.org>
+References: <cover.1757810729.git.fthain@linux-m68k.org>
+ <abf2bf114abfc171294895b63cd00af475350dba.1757810729.git.fthain@linux-m68k.org>
+ <CAMuHMdUgkVYyUvc85_P9TyTM5f-=mC=+X=vtCWN45EMPqF7iMg@mail.gmail.com>
+ <6c295a4e-4d18-a004-5db8-db2e57afc957@linux-m68k.org>
+ <57ac401b-222b-4c85-b719-9e671a4617cf@app.fastmail.com>
+ <86be5cf0-065e-d55d-fdb6-b9cf6655165e@linux-m68k.org>
+ <ec2982e3-2996-918e-f406-32f67a0decfe@linux-m68k.org>
+ <e02f861b-706c-4f6d-bded-002601da954a@app.fastmail.com>
+ <60325e45-e4a7-d0cf-ba28-a1a811f9a890@linux-m68k.org>
+Subject: Re: [RFC v2 2/3] atomic: Specify alignment for atomic_t and atomic64_t
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 23, 2025 at 02:46:07PM -0700, Mukesh Rathor wrote:
-> Introduce a small asm stub to transition from the hypervisor to Linux
-> after devirtualization. Devirtualization means disabling hypervisor on
-> the fly, so after it is done, the code is running on physical processor
-> instead of virtual, and hypervisor is gone. This can be done by a
-> root/dom0 vm only.
+On Wed, Oct 1, 2025, at 03:03, Finn Thain wrote:
+> On Tue, 30 Sep 2025, Arnd Bergmann wrote:
 
-I want to scrub "dom0" from comments and commit messages. We drew
-parallels to Xen when we first wrote this code, but it's not a useful
-term externally. "root" or "root partition" should be sufficient.
+>> What is the alignment of stack variables on m68k? E.g. if you have a 
+>> function with two local variables, would that still be able to trigger 
+>> the check?
+>> 
+>> int f(atomic64_t *a)
+>> {
+>>      u16 pad;
+>>      u64 old;
+>>      
+>>      g(&pad);
+>>      atomic64_try_cmpxchg(a, &old, 0);
+>> }
+>> 
+>
+> I assume so:
+>
+> int foo(void) {
+>     short s;
+>     long long ll;
+>     return alignof(ll);
+> }
+>
+> # Compilation provided by Compiler Explorer at https://godbolt.org/
+> foo():
+>         link.w %fp,#0
+>         moveq #2,%d0
+>         unlk %fp
+>         rts
 
-> 
-> At a high level, during panic of either the hypervisor or the dom0 (aka
-> root), the NMI handler asks hypervisor to devirtualize. As part of that,
-> the arguments include an entry point to return back to Linux. This asm
-> stub implements that entry point.
-> 
-> The stub is entered in protected mode, uses temporary gdt and page table
-> to enable long mode and get to kernel entry point which then restores full
-> kernel context to resume execution to kexec.
-> 
-> Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
-> ---
->  arch/x86/hyperv/hv_trampoline.S | 101 ++++++++++++++++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 arch/x86/hyperv/hv_trampoline.S
-> 
-> diff --git a/arch/x86/hyperv/hv_trampoline.S b/arch/x86/hyperv/hv_trampoline.S
-> new file mode 100644
-> index 000000000000..25f02ff12286
-> --- /dev/null
-> +++ b/arch/x86/hyperv/hv_trampoline.S
-> @@ -0,0 +1,101 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * X86 specific Hyper-V kdump/crash related code.
-> + *
-> + * Copyright (C) 2025, Microsoft, Inc.
-> + *
-> + */
-> +#include <linux/linkage.h>
-> +#include <asm/alternative.h>
-> +#include <asm/msr.h>
-> +#include <asm/processor-flags.h>
-> +#include <asm/nospec-branch.h>
-> +
-> +/*
-> + * void noreturn hv_crash_asm32(arg1)
-> + *    arg1 == edi == 32bit PA of struct hv_crash_tramp_data
-> + *
-> + * The hypervisor jumps here upon devirtualization in protected mode. This
-> + * code gets copied to a page in the low 4G ie, 32bit space so it can run
-> + * in the protected mode. Hence we cannot use any compile/link time offsets or
-> + * addresses. It restores long mode via temporary gdt and page tables and
-> + * eventually jumps to kernel code entry at HV_CRASHDATA_OFFS_C_entry.
-> + *
-> + * PreCondition (ie, Hypervisor call back ABI):
-> + *  o CR0 is set to 0x0021: PE(prot mode) and NE are set, paging is disabled
-> + *  o CR4 is set to 0x0
-> + *  o IA32_EFER is set to 0x901 (SCE and NXE are set)
-> + *  o EDI is set to the Arg passed to HVCALL_DISABLE_HYP_EX.
-> + *  o CS, DS, ES, FS, GS are all initialized with a base of 0 and limit 0xFFFF
-> + *  o IDTR, TR and GDTR are initialized with a base of 0 and limit of 0xFFFF
-> + *  o LDTR is initialized as invalid (limit of 0)
-> + *  o MSR PAT is power on default.
-> + *  o Other state/registers are cleared. All TLBs flushed.
-> + */
-> +
-> +#define HV_CRASHDATA_OFFS_TRAMPCR3    0x0    /*  0 */
-> +#define HV_CRASHDATA_OFFS_KERNCR3     0x8    /*  8 */
-> +#define HV_CRASHDATA_OFFS_GDTRLIMIT  0x12    /* 18 */
-> +#define HV_CRASHDATA_OFFS_CS_JMPTGT  0x28    /* 40 */
-> +#define HV_CRASHDATA_OFFS_C_entry    0x30    /* 48 */
-> +
-> +	.text
-> +	.code32
-> +
+This just returns the guaranteed alignment of the 'long long'
+type based on -malign-int/-mno-align-int. Checking again I
+find that gcc's m68k-linux target aligns stack allocations
+to 4 bytes, though the m68k-unknown target apparently keeps
+the 2 byte alignment:
 
-I recently learned that instrumentation may be problematic for context
-switching code. I have not studied this code and noinstr usage in tree
-extensively so cannot make a judgement here.
+https://gcc.gnu.org/legacy-ml/gcc-patches/2007-09/msg01572.html
 
-It is worth checking out the recent discussion on the VTL transition
-code.
+https://godbolt.org/z/48fGMj56W
 
-https://lore.kernel.org/linux-hyperv/27e50bb7-7f0e-48fb-bdbc-6c6d606e7113@redhat.com/
+Surprisingly the godbolt.org link also shows a significant
+overhead when building the same code with -malign-int
+in the second tab. This is unrelated to the issue here,
+but I wonder if that is something to report to the gcc
+bug tracker if we ever get to building the kernel with
+-malign-int. Similarly, I noticed that clang does not
+support the -malign-int flag on m68k at all.
 
-And check out the in-tree document Documentation/core-api/entry.rst.
+>> Since there is nothing telling the compiler that the 'old' argument to 
+>> atomic*_try_cmpcxchg() needs to be naturally aligned, maybe that check 
+>> should be changed to only test for the ABI-guaranteed alignment? I think 
+>> that would still be needed on x86-32.
+>>  
+>
+> I don't know why we would check the alignment of the 'old' quantity. It's 
+> going to be loaded into a register before being used, right?
 
-Wei
+I was wondering about that as well, but checking for alignof(*old)
+probably can't hurt. The only architectures that actually have
+a custom arch_try_cmpxchg*() are s390 and x86 and those don't
+care about alignmnent of 'old', but it's possible that another
+architecture that can't handle unaligned load/store would add
+an inline asm implementation in the future and break if an
+alignment fixup happens in the middle of an ll/sc loop.
 
-> +SYM_CODE_START(hv_crash_asm32)
-> +	UNWIND_HINT_UNDEFINED
-> +	ENDBR
-> +	movl	$X86_CR4_PAE, %ecx
-> +	movl	%ecx, %cr4
-> +
-> +	movl %edi, %ebx
-> +	add $HV_CRASHDATA_OFFS_TRAMPCR3, %ebx
-> +	movl %cs:(%ebx), %eax
-> +	movl %eax, %cr3
-> +
-> +	/* Setup EFER for long mode now */
-> +	movl	$MSR_EFER, %ecx
-> +	rdmsr
-> +	btsl	$_EFER_LME, %eax
-> +	wrmsr
-> +
-> +	/* Turn paging on using the temp 32bit trampoline page table */
-> +	movl %cr0, %eax
-> +	orl $(X86_CR0_PG), %eax
-> +	movl %eax, %cr0
-> +
-> +	/* since kernel cr3 could be above 4G, we need to be in the long mode
-> +	 * before we can load 64bits of the kernel cr3. We use a temp gdt for
-> +	 * that with CS.L=1 and CS.D=0 */
-> +	mov %edi, %eax
-> +	add $HV_CRASHDATA_OFFS_GDTRLIMIT, %eax
-> +	lgdtl %cs:(%eax)
-> +
-> +	/* not done yet, restore CS now to switch to CS.L=1 */
-> +	mov %edi, %eax
-> +	add $HV_CRASHDATA_OFFS_CS_JMPTGT, %eax
-> +	ljmp %cs:*(%eax)
-> +SYM_CODE_END(hv_crash_asm32)
-> +
-> +	/* we now run in full 64bit IA32-e long mode, CS.L=1 and CS.D=0 */
-> +	.code64
-> +	.balign 8
-> +SYM_CODE_START(hv_crash_asm64)
-> +	UNWIND_HINT_UNDEFINED
-> +	ENDBR
-> +	/* restore kernel page tables so we can jump to kernel code */
-> +	mov %edi, %eax
-> +	add $HV_CRASHDATA_OFFS_KERNCR3, %eax
-> +	movq %cs:(%eax), %rbx
-> +	movq %rbx, %cr3
-> +
-> +	mov %edi, %eax
-> +	add $HV_CRASHDATA_OFFS_C_entry, %eax
-> +	movq %cs:(%eax), %rbx
-> +	ANNOTATE_RETPOLINE_SAFE
-> +	jmp *%rbx
-> +
-> +	int $3
-> +
-> +SYM_INNER_LABEL(hv_crash_asm_end, SYM_L_GLOBAL)
-> +SYM_CODE_END(hv_crash_asm64)
-> -- 
-> 2.36.1.vfs.0.0
-> 
-> 
+      Arnd
 
