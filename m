@@ -1,183 +1,248 @@
-Return-Path: <linux-arch+bounces-13889-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13890-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13896BB586A
-	for <lists+linux-arch@lfdr.de>; Fri, 03 Oct 2025 00:07:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF77BB5992
+	for <lists+linux-arch@lfdr.de>; Fri, 03 Oct 2025 01:20:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 906021AE128E
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Oct 2025 22:08:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51FA83ABD3D
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Oct 2025 23:20:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF10280A56;
-	Thu,  2 Oct 2025 22:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D250C28C87D;
+	Thu,  2 Oct 2025 23:20:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="AqOHoEGj"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="UlZXQBIH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UPWCT2uX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4001026FA67;
-	Thu,  2 Oct 2025 22:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD99288530;
+	Thu,  2 Oct 2025 23:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759442857; cv=none; b=KUu3DolVt49+U57rrDX6gBzz6Kue6IqxkM5AOF+bvlRZBJC3X/UVWtA5T/XKagZKGziFB214WUFZohU2/uhVPUBgoxmR5quXFiQcVPv7l1chAAJcgbU5t5ceA13PG7OkaL59k9BcUWvUB7kxvMnJ1bR4oZotQl0p+7U9wSYFuAQ=
+	t=1759447213; cv=none; b=p2bQPuwC/u9KevDZ3EAXC4W+J4uwW1Jb3j8nFmg1oV0NH5+wpRUJZ1kRHKR00OTa1w3a6IccgPOevQafD6J8mDa+Z5vuFdXSukCrzfYZrogWsqj4OC1+EUHZNDzCEiVNQyhjy7m+18AwkLyQaGkwOzcP1I5o84PonqJlhpM1IvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759442857; c=relaxed/simple;
-	bh=l9PRSkbOjbx0wvtEpYGBAC3hbhyKfaeWce4pvuSbQx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f/ieUXT5szYhpfcTTCQusQsU1NvZEAUzN9W8oIHBmAcNerCN0GcY0gdwNqrwbLRaahQlFQGlEyda7LVR8EPt541K1XBc0mvCAXNSIlRPjaVfue8fVZOq0T7/7dxMrVuP9z3ZSoHIBKb//jshy2FgCU2kvSj67SqGyjGSekoFkEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=AqOHoEGj; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.0.88] (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 57DAA211B7CF;
-	Thu,  2 Oct 2025 15:07:29 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 57DAA211B7CF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1759442849;
-	bh=xao0TbEt05A1Jnsh0i7O5sFYiMY/ojUq1im/BfgOwWs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AqOHoEGjS9LxyxRg0pHXUeETMaK7Ee5xZr/jWadxdFPSF+OK1t9+2iowHEHKP5Ovh
-	 2d1opguXm/jHio3AKfpruIlXIlE+dAFxXS4vin7q/s6EE6Jc6qC00BDDElsHVc/BEc
-	 HIF3Q0s/+53BSY/1vgf+IKi+rSht/duDqRWsrMd4=
-Message-ID: <f6835c8e-70de-7bd0-f116-0a4eae0ef29c@linux.microsoft.com>
-Date: Thu, 2 Oct 2025 15:07:28 -0700
+	s=arc-20240116; t=1759447213; c=relaxed/simple;
+	bh=BR/jqWo92itmdMH1ocfUuKDAP7WulChibnIwAiSXhT4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=As55O0BgHHu7XadPt6rE8gWYgT1KYrbqPzeVZGWgC5JFMIasraf95uQ+Xd16EXZcK4J5Z1KOPYSUcJZhHASyGrDj5IfenDbmLy4YpVNuJ7mk1Frg/O0JkIGOztW6eK+6l2sWg+PLUHk+LTAtWw4lg/mSmQe2zIAawEffjygT5Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=UlZXQBIH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UPWCT2uX; arc=none smtp.client-ip=202.12.124.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id DB1F41300343;
+	Thu,  2 Oct 2025 19:20:09 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Thu, 02 Oct 2025 19:20:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1759447209;
+	 x=1759454409; bh=8eLJoj9XRO384G/VvXT2HeFOAWEdoc6vPNt14uKR73A=; b=
+	UlZXQBIHPI3UaJe+qvjb/0azu1Oe5qtfVSOgfR9F74ejhfdVcoLT5yCscAFxGXg8
+	pwym4mpSChHvERlZa3eyvyx08BV44zMw3YGN0tM+vPnhSUz76Sq/1sLgdMvN//1t
+	MgHWqimhr0AzYrwUzdnliiWe0Dm9Z34Ogn+/sldz60VOggZ3d7nAO9W0sjAS+ODa
+	YJDWUIJqUD3rBGsCWCRyC9s7i9AA9pS/qByHexvhH8G1gQsu2dD8k1LeI24HGUWh
+	/03Dje8K6N7L4VyDIt3NIojzwr6tdgIOBwfeBK5umF7roU56mWwwY3FulE7R0j2n
+	QUpOkKf5lBp7bdgkzhLbPw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1759447209; x=
+	1759454409; bh=8eLJoj9XRO384G/VvXT2HeFOAWEdoc6vPNt14uKR73A=; b=U
+	PWCT2uXT/GxiygPtmHbccRddiUfCEYjhtJdXJccb/5YerEHrZjTt4d9N2RDQu1Wk
+	qyOu+HowFfq+mSzSu4jBKZpxK4j61odikvauJS62BQvPo05HzMc2V0Q02lDG/KuV
+	xFOFsUSRnUOVxEuk/jp9b7DJX/6hFCwfMhDmrQ+Gjgp+bzUnTy9kM9MFcHK3eQR5
+	T9dRhCCh7CnFM2shDd7H9AIA40TS7O85KP3muQgcpbkTId7BGzFMnUMJQzEW6cKC
+	RXT0xfdCbnheksb/9HE80aFjG/+J9g7pqLK4D083rrfitbbZ+Xq2jg/7x8JM1H12
+	rJ7EgoklB90Zb+f1OtOPw==
+X-ME-Sender: <xms:pwjfaGV4JN0Ma44cNnMBrUtL97DgMZmD0pMjmYN8l-menv5GZtsfLg>
+    <xme:pwjfaNbUXFszpshl1sBUhW_dmCbyy6ss_a2I-2pSkgussU5ZHyuAg_MFZejD8O402
+    j78984Anpb1DwJaQlM1svAPgMii0eUG1MbwQfJ4GQa5C5t5JGIzwDY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdekjeefvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegledpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepughrihdquggvvhgvlheslhhishhtshdrfhhrvggvuggvshhkthhoph
+    drohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdr
+    ihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnrghrohdqmhhmqdhsihhgse
+    hlihhsthhsrdhlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhrthdquggv
+    vhgvlheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopegtohhrsggvtheslh
+    ifnhdrnhgvthdprhgtphhtthhopehthihtshhosehmihhtrdgvughupdhrtghpthhtohep
+    jhhovghlrghgnhgvlhhfsehnvhhiughirgdrtghomhdprhgtphhtthhopeiiihihsehnvh
+    hiughirgdrtghomhdprhgtphhtthhopegurghmihgvnhdrlhgvmhhorghlsehophgvnhhs
+    ohhurhgtvgdrfigutgdrtghomh
+X-ME-Proxy: <xmx:pwjfaJ2BSQWnOhQ8IplrbbGK-gyE5_grSXYP3j9439lOC_jvlo5zZA>
+    <xmx:pwjfaGp-w5NGLIBr_AoLUes9YDJp8xiczs-IYhNS4F_HgHxvLrrzZA>
+    <xmx:pwjfaHE7EXWw8nb_0yF2EO6HFQilk8UVSNu6kLKe14icznmhBIcCwA>
+    <xmx:pwjfaI62HivFrwmWVnm93cq4CY8LYM9QpIUA5yL17t5fpoJyAMu_1w>
+    <xmx:qQjfaCYKV7n5Om4PDcHknSXz-bYbngxY5RgrPIa40VVrCIhGD4C03q0Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 38369700065; Thu,  2 Oct 2025 19:20:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 5/6] x86/hyperv: Implement hypervisor RAM collection
- into vmcore
-Content-Language: en-US
-To: Wei Liu <wei.liu@kernel.org>
-Cc: linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, kys@microsoft.com, haiyangz@microsoft.com,
- decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de
-References: <20250923214609.4101554-1-mrathor@linux.microsoft.com>
- <20250923214609.4101554-6-mrathor@linux.microsoft.com>
- <20251002214236.GC925245@liuwe-devbox-debian-v2.local>
-From: Mukesh R <mrathor@linux.microsoft.com>
-In-Reply-To: <20251002214236.GC925245@liuwe-devbox-debian-v2.local>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: Aghr8S2aY07B
+Date: Fri, 03 Oct 2025 01:19:33 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Byungchul Park" <byungchul@sk.com>
+Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+ "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+ linux-ide@vger.kernel.org, "Andreas Dilger" <adilger.kernel@dilger.ca>,
+ linux-ext4@vger.kernel.org, "Ingo Molnar" <mingo@redhat.com>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Will Deacon" <will@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Joel Fernandes" <joel@joelfernandes.org>,
+ "Sasha Levin" <sashal@kernel.org>,
+ "Daniel Vetter" <daniel.vetter@ffwll.ch>, duyuyang@gmail.com,
+ "Johannes Berg" <johannes.berg@intel.com>, "Tejun Heo" <tj@kernel.org>,
+ "Theodore Ts'o" <tytso@mit.edu>, "Matthew Wilcox" <willy@infradead.org>,
+ "Dave Chinner" <david@fromorbit.com>,
+ "Amir Goldstein" <amir73il@gmail.com>, kernel-team@lge.com,
+ linux-mm@kvack.org, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Michal Hocko" <mhocko@kernel.org>, "Minchan Kim" <minchan@kernel.org>,
+ "Johannes Weiner" <hannes@cmpxchg.org>, vdavydov.dev@gmail.com,
+ "SeongJae Park" <sj@kernel.org>, jglisse@redhat.com,
+ "Dennis Zhou" <dennis@kernel.org>, "Christoph Lameter" <cl@linux.com>,
+ "Pekka Enberg" <penberg@kernel.org>,
+ "David Rientjes" <rientjes@google.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>, ngupta@vflare.org,
+ linux-block@vger.kernel.org, "Josef Bacik" <josef@toxicpanda.com>,
+ linux-fsdevel@vger.kernel.org, "Jan Kara" <jack@suse.cz>,
+ "Jeff Layton" <jlayton@kernel.org>,
+ "Dan Williams" <dan.j.williams@intel.com>,
+ "Christoph Hellwig" <hch@infradead.org>,
+ "Darrick J. Wong" <djwong@kernel.org>, dri-devel@lists.freedesktop.org,
+ rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+ hamohammed.sa@gmail.com, harry.yoo@oracle.com, chris.p.wilson@intel.com,
+ "Gwan-gyeong Mun" <gwan-gyeong.mun@intel.com>,
+ max.byungchul.park@gmail.com, "Boqun Feng" <boqun.feng@gmail.com>,
+ "Waiman Long" <longman@redhat.com>, yunseong.kim@ericsson.com,
+ ysk@kzalloc.com, "Yeoreum Yun" <yeoreum.yun@arm.com>,
+ Netdev <netdev@vger.kernel.org>,
+ "Matthew Brost" <matthew.brost@intel.com>, her0gyugyu@gmail.com,
+ "Jonathan Corbet" <corbet@lwn.net>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>,
+ "Sumit Semwal" <sumit.semwal@linaro.org>, gustavo@padovan.org,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ "Andi Shyti" <andi.shyti@kernel.org>,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Mike Rapoport" <rppt@kernel.org>,
+ "Suren Baghdasaryan" <surenb@google.com>,
+ "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Petr Pavlu" <petr.pavlu@suse.com>, da.gomez@kernel.org,
+ "Sami Tolvanen" <samitolvanen@google.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ "Frederic Weisbecker" <frederic@kernel.org>, neeraj.upadhyay@kernel.org,
+ joelagnelf@nvidia.com, "Josh Triplett" <josh@joshtriplett.org>,
+ "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+ "Lai Jiangshan" <jiangshanlai@gmail.com>, qiang.zhang@linux.dev,
+ "Juri Lelli" <juri.lelli@redhat.com>,
+ "Vincent Guittot" <vincent.guittot@linaro.org>,
+ "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+ "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
+ "Valentin Schneider" <vschneid@redhat.com>,
+ "Chuck Lever" <chuck.lever@oracle.com>, neil@brown.name,
+ okorniev@redhat.com, "Dai Ngo" <Dai.Ngo@oracle.com>,
+ "Tom Talpey" <tom@talpey.com>, trondmy@kernel.org,
+ "Anna Schumaker" <anna@kernel.org>, "Kees Cook" <kees@kernel.org>,
+ "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+ "Clark Williams" <clrkwllms@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, ada.coupriediaz@arm.com,
+ kristina.martsenko@arm.com, "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+ "Mark Brown" <broonie@kernel.org>,
+ "Kevin Brodsky" <kevin.brodsky@arm.com>,
+ "David Woodhouse" <dwmw@amazon.co.uk>,
+ "Shakeel Butt" <shakeel.butt@linux.dev>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Zi Yan" <ziy@nvidia.com>,
+ "Yu Zhao" <yuzhao@google.com>,
+ "Baolin Wang" <baolin.wang@linux.alibaba.com>, usamaarif642@gmail.com,
+ joel.granados@kernel.org, "Wei Yang" <richard.weiyang@gmail.com>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ tim.c.chen@linux.intel.com, linux <linux@treblig.org>,
+ "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+ lillian@star-ark.net, "Huacai Chen" <chenhuacai@kernel.org>,
+ francesco@valla.it, guoweikang.kernel@gmail.com, link@vivo.com,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Christian Brauner" <brauner@kernel.org>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ "Oleg Nesterov" <oleg@redhat.com>, "Mateusz Guzik" <mjguzik@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, wangfushuai@baidu.com,
+ linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+ linux-i2c@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-modules@vger.kernel.org, rcu <rcu@vger.kernel.org>,
+ linux-nfs@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Message-Id: <3bbe14af-ccdc-4c78-a7ca-d4ed39fa6b5d@app.fastmail.com>
+In-Reply-To: <63034035-03e4-4184-afce-7e1a897a90e9@efficios.com>
+References: <20251002081247.51255-1-byungchul@sk.com>
+ <20251002081247.51255-2-byungchul@sk.com>
+ <2025100230-grafted-alias-22a2@gregkh>
+ <63034035-03e4-4184-afce-7e1a897a90e9@efficios.com>
+Subject: Re: [PATCH v17 01/47] llist: move llist_{head,node} definition to types.h
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 10/2/25 14:42, Wei Liu wrote:
-> On Tue, Sep 23, 2025 at 02:46:08PM -0700, Mukesh Rathor wrote:
-> [...]
->> +
->> +/*
->> + * This is the C entry point from the asm glue code after the devirt hypercall.
-> 
-> devirt -> devirtualization
-> 
->> + * We enter here in IA32-e long mode, ie, full 64bit mode running on kernel
->> + * page tables with our below 4G page identity mapped, but using a temporary
->> + * GDT. ds/fs/gs/es are null. ss is not usable. bp is null. stack is not
->> + * available. We restore kernel GDT, and rest of the context, and continue
->> + * to kexec.
->> + */
-> [...]
->> +
->> +static noinline __noclone void crash_nmi_callback(struct pt_regs *regs)
->> +{
->> +	struct hv_input_disable_hyp_ex *input;
->> +	u64 status;
->> +	int msecs = 1000, ccpu = smp_processor_id();
->> +
->> +	if (ccpu == 0) {
->> +		/* crash_save_cpu() will be done in the kexec path */
->> +		cpu_emergency_stop_pt();	/* disable performance trace */
->> +		atomic_inc(&crash_cpus_wait);
->> +	} else {
->> +		crash_save_cpu(regs, ccpu);
->> +		cpu_emergency_stop_pt();	/* disable performance trace */
->> +		atomic_inc(&crash_cpus_wait);
->> +		for (;;)
->> +			cpu_relax();
->> +	}
->> +
->> +	while (atomic_read(&crash_cpus_wait) < num_online_cpus() && msecs--)
->> +		mdelay(1);
->> +
->> +	stop_nmi();
->> +	if (!hv_has_crashed)
->> +		hv_notify_prepare_hyp();
->> +
->> +	if (crashing_cpu == -1)
->> +		crashing_cpu = ccpu;		/* crash cmd uses this */
->> +
->> +	hv_hvcrash_ctxt_save();
->> +	hv_mark_tss_not_busy();
->> +	hv_crash_fixup_kernpt();
->> +
->> +	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
->> +	memset(input, 0, sizeof(*input));
->> +	input->rip = trampoline_pa;
->> +	input->arg = devirt_arg;
->> +
->> +	status = hv_do_hypercall(HVCALL_DISABLE_HYP_EX, input, NULL);
->> +
-> 
-> If I understand this correctly, after this call, upon return from the
-> hypervisor, Linux will start executing the trampoline code.
+On Thu, Oct 2, 2025, at 15:53, Mathieu Desnoyers wrote:
+> On 2025-10-02 04:24, Greg KH wrote:
+>> On Thu, Oct 02, 2025 at 05:12:01PM +0900, Byungchul Park wrote:
+>>> llist_head and llist_node can be used by some other header files.  For
+>>> example, dept for tracking dependencies uses llist in its header.  To
+>>> avoid header dependency, move them to types.h.
+>> 
+>> If you need llist in your code, then include llist.h.  Don't force all
+>> types.h users to do so as there is not a dependency in types.h for
+>> llist.h.
+>> 
+>> This patch shouldn't be needed as you are hiding "header dependency" for
+>> other files.
+>
+> I agree that moving this into a catch-all types.h is not what we should
+> aim for.
+>
+> However, it's a good practice to move the type declarations to a
+> separate header file, so code that only cares about type and not
+> implementation of static inline functions can include just that.
+>
+> Perhaps we can move struct llist_head and struct llist_node to a new
+> include/linux/llist_types.h instead ?
 
-correct.
+We have around a dozen types of linked lists, and the most common
+two of them are currently defined in linux/types.h, while the
+rest of them are each defined in the same header as the inteface
+definition.
 
+Duplicating each of those headers by splitting out the trivial
+type definition doesn't quite seem right either, as we'd end
+up with even more headers that have to be included indirectly
+in each compilation unit.
 
->> +	hv_panic_timeout_reboot();
-> 
-> Why is this needed? Is it to catch the case when the hypercall fails?
-  
-correct.
- 
+Maybe a shared linux/list_types.h would work, to specifically
+contain all the list_head variants that are meant to be included
+in larger structures?
 
-> [...]
->> +static void __noclone hv_crash_stop_other_cpus(void)
->> +{
->> +	static bool crash_stop_done;
->> +	struct pt_regs lregs;
->> +	int ccpu = smp_processor_id();
->> +
->> +	if (hv_has_crashed)
->> +		return;		/* all cpus already in NMI handler path */
->> +
->> +	if (!kexec_crash_loaded()) {
->> +		hv_notify_prepare_hyp();
->> +		hv_panic_timeout_reboot();	/* no return */
->> +	}
->> +
->> +	/* If hyp crashes also, we could come here again before cpus_stopped is
-> 
-> hypervisor or hv (given the same term is used in the function)
-> 
->> +	 * set in crash_smp_send_stop(). So use our own check.
->> +	 */
->> +	if (crash_stop_done)
->> +		return;
->> +	crash_stop_done = true;
->> +
->> +	/* Linux has crashed: hv is healthy, we can ipi safely */
-> 
-> IPI.
-> 
->> +
->> +err_out:
->> +	unregister_nmi_handler(NMI_LOCAL, "hv_crash_nmi");
->> +	pr_err("Hyper-V: only linux (but not hyp) kdump support enabled\n");
-> 
-> hypervisor not hyp. This is a message for the user so we should be as
-> clear as possible.
-
-> Wei
-> 
->> +}
->> -- 
->> 2.36.1.vfs.0.0
->>
-
+    Arnd
 
