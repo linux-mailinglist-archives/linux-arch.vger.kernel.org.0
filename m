@@ -1,79 +1,97 @@
-Return-Path: <linux-arch+bounces-13829-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13830-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9307DBB23B9
-	for <lists+linux-arch@lfdr.de>; Thu, 02 Oct 2025 03:13:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41F26BB299E
+	for <lists+linux-arch@lfdr.de>; Thu, 02 Oct 2025 08:12:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB16B4A27A3
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Oct 2025 01:12:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3CAA321C54
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Oct 2025 06:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5131CDFCA;
-	Thu,  2 Oct 2025 01:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA9E632;
+	Thu,  2 Oct 2025 06:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hSgpB8WF"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="bps/jHLa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569631CBEAA;
-	Thu,  2 Oct 2025 01:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BC034BA47
+	for <linux-arch@vger.kernel.org>; Thu,  2 Oct 2025 06:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759367462; cv=none; b=uyCvdYA3Ols53BJa7k8faBXdCTw2Ur/0WyLFJxIuaxJlC8jnfuJ2m1bMGV29/OYvEq22htfe5+ovbb36lMfXWCla1vZQsCwp6gxQA0Y+7oN5WXdSDk6bsYO4iXTLuXsR2SkvDKI4OWVJON0rTut9Vc8QSRlBynqzvHIzanMnKcQ=
+	t=1759385525; cv=none; b=PJqFKxGJx/4wkQq/HgahSSYXAYWLAib5dq8EP7oK2ha6jHF4MgGCzqHqbGd0RhRmXm9oKA+3IWgk9f/ktkmjQL0guG0hVq/t249NOzd9h8NXU6inGOXk8xsGHaORLC2YVOePF0xO1hrT2tffQ/Z1/OiNU481D55EcfziOkLyU7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759367462; c=relaxed/simple;
-	bh=uVDyCERNUjOod9Whu8MaQQGgrpgB/6cwPaHpJGQjG8I=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Fhf+OcWk1UnEjxg+GohWLiAvoH6er6F2OaIXBeLKRIgriNGeBr7GAcH+fuUjkMv5uVEHngiiTXu5p1Dh4VuEs6rtV9QW1h1ZVyir3ZwZt8UJPH6HjIw1/gjxSdoHuPxOmdfyJyItcJcZehetEwbIUTW3PZ741EZ+BYoj23LSrjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hSgpB8WF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39835C4CEF5;
-	Thu,  2 Oct 2025 01:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759367462;
-	bh=uVDyCERNUjOod9Whu8MaQQGgrpgB/6cwPaHpJGQjG8I=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=hSgpB8WFomdioOQKe5Zy2DkiCcEGjoqrLfavcFE8rvtz5xb7S2Q9w3PjZeqJWfNCi
-	 fsN700NPOVwGHD3jjd5VIUgjrQ3LwWhRuu4bc4824WNeC/vB1YNeLLkdKIcRWVdQlt
-	 2c6LweK9n8f7XdKG8qijsbCoL4Fx8S9ypaMcqCfLmoFxDvz8wFcW1n/2v9R0Q88/pJ
-	 pjCkeuKfWmNlKzlzKuoQ/gEQeeUbmpPSAltwWYU6gsjRQmw0+F+RIZbwlX/mTaijcv
-	 z26QL1yP0dN/0F9B9rB0gTgdZ18vLrZ035I+jWQNpTykOVnnevKgA+h0X0bS/h1qhO
-	 jBSYS7lhZXfRw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE0F239EF947;
-	Thu,  2 Oct 2025 01:10:55 +0000 (UTC)
-Subject: Re: [GIT PULL] asm-generic: updates for 6.18
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <7617c200-a7a1-4957-bf5b-c1cc36487563@app.fastmail.com>
-References: <7617c200-a7a1-4957-bf5b-c1cc36487563@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <7617c200-a7a1-4957-bf5b-c1cc36487563@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.18
-X-PR-Tracked-Commit-Id: edcc8a38b5ac1a3dbd05e113a38a25b937ebefe5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d2b2fea3503e5e12b2e28784152937e48bcca6ff
-Message-Id: <175936745462.2689671.6313874170065271211.pr-tracker-bot@kernel.org>
-Date: Thu, 02 Oct 2025 01:10:54 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org, Qi Xi <xiqi2@huawei.com>, Varad Gautam <varadgautam@google.com>
+	s=arc-20240116; t=1759385525; c=relaxed/simple;
+	bh=dudDrSmyAnmIwnEea6hkJCcFEHHVqPZ3cWYKZN6eHcM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OMm2VCZvgPSR4Ud0AeI7YmOOQI75Y0JQUqz1oH9UxsoZBCMDmXywFP/Z+kmja2qDPCCP0nej/HIonEUVlDGAnRBEZ8W2EFfa6aSjj6p0mfzvp4+jpE0XiEWe7MNocpfcQbuCZGALVbyD/WAn/TqBbwmuAtOtTf1e2I829rRzeQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=bps/jHLa; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=XeGs/A7JZKt44zompJ6AE70C6JySorOcriRy8XM93E0=; b=bps/jHLa1rCW4zQnTrjKin/zwx
+	tZXTIe4JyJaoxXt+nD+XVvRkYRE2NMO7SI5WfuN1WTcC8PmMqwOhgoNlesM+PSdEkXsghYvXcy+OD
+	q6bcwvvgDQ1flbDrg7UOyVreoilFjzgBh6j3P2CgT3YWVr/AGSCMXN8AhWs8WXgzCceBuwzBZGKGS
+	u+4zi38Oj27CpeccwgyLa5yCnZgbDx8WTDV9oi2nIdo46LrcuIL5I+SiM0bxsLdsHnmouAf7BDrDQ
+	pzaBONoFud0xygp+075fIdB3cMi2hGwe/nkKBkjQIxramh5vaCbjV/dAPaP2UBJ1yqGcyi6uOlZnG
+	aRZ9Gopg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v4CXn-0000000Card-2Whh;
+	Thu, 02 Oct 2025 06:12:00 +0000
+Date: Thu, 2 Oct 2025 07:11:59 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-arch@vger.kernel.org
+Subject: [git pull] non-vfs misc stuff
+Message-ID: <20251002061159.GL39973@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-The pull request you sent on Thu, 02 Oct 2025 00:34:49 +0200:
+The following changes since commit 76eeb9b8de9880ca38696b2fb56ac45ac0a25c6c:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.18
+  Linux 6.17-rc5 (2025-09-07 14:22:57 -0700)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d2b2fea3503e5e12b2e28784152937e48bcca6ff
+are available in the Git repository at:
 
-Thank you!
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-misc
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+for you to fetch changes up to f037fd7fbca4d111955b5889417ddf6fb24498e5:
+
+  alpha: unobfuscate _PAGE_P() definition (2025-09-15 21:12:05 -0400)
+
+----------------------------------------------------------------
+assorted dead code removal around asm/pgtable.h
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+
+----------------------------------------------------------------
+Al Viro (6):
+      csky: remove BS check for FAULT_FLAG_ALLOW_RETRY
+      PAGE_PTR() had been last used outside of arch/* in 1.1.94
+      SET_PAGE_DIR() users had been gone since 2.3.12pre1
+      alpha: get rid of the remnants of BAD_PAGE and friends
+      kill FIRST_USER_PGD_NR
+      alpha: unobfuscate _PAGE_P() definition
+
+ arch/alpha/include/asm/pgtable.h      | 25 +------------------------
+ arch/alpha/mm/init.c                  | 27 ---------------------------
+ arch/csky/mm/fault.c                  |  2 +-
+ arch/m68k/include/asm/pgtable_mm.h    | 10 ----------
+ arch/microblaze/include/asm/pgtable.h |  1 -
+ arch/openrisc/include/asm/pgtable.h   | 17 -----------------
+ arch/xtensa/include/asm/pgtable.h     |  1 -
+ 7 files changed, 2 insertions(+), 81 deletions(-)
 
