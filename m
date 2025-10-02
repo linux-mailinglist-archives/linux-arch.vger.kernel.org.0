@@ -1,227 +1,174 @@
-Return-Path: <linux-arch+bounces-13886-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13887-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ACAEBB44C8
-	for <lists+linux-arch@lfdr.de>; Thu, 02 Oct 2025 17:22:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D382DBB4955
+	for <lists+linux-arch@lfdr.de>; Thu, 02 Oct 2025 18:45:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4BD3188CE7A
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Oct 2025 15:23:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82E943A7169
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Oct 2025 16:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9B519F127;
-	Thu,  2 Oct 2025 15:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414F2243374;
+	Thu,  2 Oct 2025 16:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cg2lqv/P"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="MnCNTtKy"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A45D198A11;
-	Thu,  2 Oct 2025 15:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2B228E0F
+	for <linux-arch@vger.kernel.org>; Thu,  2 Oct 2025 16:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759418562; cv=none; b=UDBROaz4ckt1krcgygLRnhcgxRRrh/DtIcwcqzap0Uz/g/0JXoOxwGxee0QVEE8pVzKVUsu6jyzLs4knXscSeaJ6+q+oER2b4TB2cEwSIjXN/YRrBC3jf9lOknJaH3nhJ4lBybyJaTjp2YqdVQWncTxXK7QiBqUJCyFtLek5Gi0=
+	t=1759423546; cv=none; b=BDDkih8veM+0g3kjuhJz+Hyc1m0mB60DhhLQ9XyIMsu0F7EmBRb6cTg94iTCZMPKK5PQxj7747lZ9EGKjrx8hGMk50Mk3/hscsJ/XWkM6hJLqyyTDx09tr9cg061HVjAbRFZEvebUcGZClfw89Isw0DULzZNKLx3jkiPvCoidsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759418562; c=relaxed/simple;
-	bh=S3MwlH8YkjyOEDNxmKqyDUdi0jp5jGqvML1MU0Fs+R4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s6+zIFiHqhIZ72aZx/yRor6koPAMRwCyNHsZea6CXdE8GnM8Vqu6pcF8P+H1COZ4y27mC+XcvJB0aeptgd51BSwmonln5R4XbP3hE9Yib5KWoMhT/kXQMLE+pO3IQFUC0TLsEs+InTc7XBBJftjs7k7vKBwfizTDGKzEuPjfbLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cg2lqv/P; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1759418561; x=1790954561;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=S3MwlH8YkjyOEDNxmKqyDUdi0jp5jGqvML1MU0Fs+R4=;
-  b=cg2lqv/POnxipyYbWLGMhpETw6U8ZJPp8gZUQ9vGkKuoTt3BvPLI41Y8
-   f3USgBMOKNgFi+nyKo2y+29hDYaOfPRPByh6ku4H2qNDIwDrvWXmVtJdr
-   tWM/cl7Ymmq4Dv5YM3doJKfCmmITGWBSESIp5xHVPVP3fZXIH4E93sSpG
-   G959n6qOKIuibaEB06bM06EstOL7O0XZHdYw7QqpyHW5KgNVpelPGtlLs
-   Algv7hU0tiwQiu4uJWPdMU4IODevS31S1m504eMVlM3wbJkELiitNypo9
-   FX3A0OpKtd1X0b2WMM5hC22c27DB1PrzbqriifX2FXSSat52OXN3yoYmB
-   g==;
-X-CSE-ConnectionGUID: yggf4LITSY63RdkQVOsnlQ==
-X-CSE-MsgGUID: 8QDoV1wDSTKlyKaDk4q8Rw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="84322333"
-X-IronPort-AV: E=Sophos;i="6.18,309,1751266800"; 
-   d="scan'208";a="84322333"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 08:22:39 -0700
-X-CSE-ConnectionGUID: Wnfj603OToCU7K3W3E/LVg==
-X-CSE-MsgGUID: +iy4mVcrQz+ktPy0z5LcKQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,309,1751266800"; 
-   d="scan'208";a="179474408"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO [10.125.109.249]) ([10.125.109.249])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 08:22:31 -0700
-Message-ID: <cd056d80-aadd-4f8a-8aad-c34b55686fac@intel.com>
-Date: Thu, 2 Oct 2025 08:22:29 -0700
+	s=arc-20240116; t=1759423546; c=relaxed/simple;
+	bh=1A9QR3g98F/jojxQcsQCrmr26ivi3VklZB9Uaf1MTlU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nO2OXIhx3wC30oq3M2IdAws56rsduLup1vHLHLZrZ1ld1cMfdOMv8KSg2ZC5Qz47BzslKcc0jMyYFW3tRYv8DylwIY9s/QrZgDpMTP3XSfyM0U5pjFAosgxG3V8QxKBAOGlY5ORYwVb5udQPKYWSi45qPIKcgJMUqw3co/qUYBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=MnCNTtKy; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b49c1c130c9so841655a12.0
+        for <linux-arch@vger.kernel.org>; Thu, 02 Oct 2025 09:45:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc.com; s=google; t=1759423544; x=1760028344; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1A9QR3g98F/jojxQcsQCrmr26ivi3VklZB9Uaf1MTlU=;
+        b=MnCNTtKyaUFuYYeEXqZEKsPn1vNDgYmRgHmoSDQ8pqXwUSDg16tnaJOgTbmxgYCSvL
+         ttR2mJcpVSyIWsNEzqKaewCXI+Uay0LF2DDWupFbx5qC+TzrL3zZWA9hdFKOXXZVA5qK
+         Y1FaX6+H91TwLVFtSs9nB4NLFg/L8P8mEIWc7t+8xMfrysxek/vB8TIdxtYPttEjse2z
+         Y55kKHaAckwEyWi/CGg8BQ2bDzcVi95jfBDWStSUhFArx5zXdaw2gxxGx45GVeMuVQ4x
+         DVR4wQa2JaTxA7N3eLWIVOtBzIDk3bxnp+uXhzQhEyT9dpbD3pRdCf9WzKl7ERe2SexX
+         7DcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759423544; x=1760028344;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1A9QR3g98F/jojxQcsQCrmr26ivi3VklZB9Uaf1MTlU=;
+        b=HVK3wQqjBx216XWtSX03UUBAQJsODseM6Sg9Iiim1mhSRIdqyWQEdgA+9pYwUhBr/S
+         5DXl0hYi3v2gIYblAZE0zc35HaI1bK5j9/8zw0Vtt6i+1ZwzsUPhV42NFqnqe6BBP+YU
+         YzNddPr2SLApwd91aUw73qukwDOvaKtljBkn7ThCjOJWvNY+aRqKHNlH3SGrld0aOz/R
+         Nl9JenrDsN2FkR0taDjm9kQlhF3FkXGBJhxanhJ/Awu13HY3Y7wPKUqvMdS64S09+CAJ
+         vX0tJ0mDv97Y1zM6zpOw9+Tvc4+AePF+XVc39rnfm6QVklmPwZMB0vbxxavj/1x3ymOD
+         a3HA==
+X-Forwarded-Encrypted: i=1; AJvYcCV9GVw1SBMrSdJqKO4ZzuU8D61+DBX+tivCpY5b1rd7o1vEqHO4/TDRXR0+OlSWWAZ3jHD3Iek2vCZ5@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxieglFpiorgPm8TJOLkZtANvMy0N2rGVrotA9hgX9QSXwpMBI
+	t7EgcIcqKa5c5ilTyZdEx3uagFyE7P0Az3eui7yU86Hi8m487sJJGFQkxpIDOz56Us0=
+X-Gm-Gg: ASbGncu6za3Hm801lL4AGrnj9EdE0PWgIgpiJoZxkOlOKge96SLmNFJs79KDhIjE+PX
+	74Gq2NphLU0oK9Vi0Y2PRtFCDb+x04s7oIIA7G0KN5w55wqSbp1E60MWfrPq+DPlb//0hfjpjdT
+	psQ2oU+pFWiEewL57DCP2HazMLnDILW31d54d62lOGCSnOwhVyfJd67eHLq0g16gasVQbw5HNC0
+	nyDGr1eG1z8m5DEgCH+wDACyq3L9PkLznBVFxRzy0TP8VZTuezVlWsHdidV+pXxXkfpob/a1jSx
+	gyqGJkYKwglHw/hdyLmwjRjn/WiK4/2eDqbCpcBs3bwCy2M4FVuqWSj81rAxixh92JttQrrzEVF
+	MEz7Dl6cs6byiHBC171fB7c9wL0Ir1SH/vF4YrwJAsAQFmdZpnsCNdzTE
+X-Google-Smtp-Source: AGHT+IGOeNAivntNqMaBDACXUIJXINgHBVnHmalDozgA9lIHXQF1UAZCwzUqmrzChLzk9pEqivj7cA==
+X-Received: by 2002:a17:90a:e70f:b0:32e:e186:726d with SMTP id 98e67ed59e1d1-339c27a1901mr8380a91.31.1759423544003;
+        Thu, 02 Oct 2025 09:45:44 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339b4f3ceedsm2812742a91.18.2025.10.02.09.45.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Oct 2025 09:45:43 -0700 (PDT)
+Date: Thu, 2 Oct 2025 09:45:40 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Florian Weimer <fweimer@redhat.com>
+Cc: Charles Mirabile <cmirabil@redhat.com>, pjw@kernel.org,
+	Liam.Howlett@oracle.com, a.hindborg@kernel.org,
+	akpm@linux-foundation.org, alex.gaynor@gmail.com,
+	alexghiti@rivosinc.com, aliceryhl@google.com,
+	alistair.francis@wdc.com, andybnac@gmail.com, aou@eecs.berkeley.edu,
+	arnd@arndb.de, atishp@rivosinc.com, bjorn3_gh@protonmail.com,
+	boqun.feng@gmail.com, bp@alien8.de, brauner@kernel.org,
+	broonie@kernel.org, charlie@rivosinc.com, cleger@rivosinc.com,
+	conor+dt@kernel.org, conor@kernel.org, corbet@lwn.net,
+	dave.hansen@linux.intel.com, david@redhat.com,
+	devicetree@vger.kernel.org, ebiederm@xmission.com,
+	evan@rivosinc.com, gary@garyguo.net, hpa@zytor.com,
+	jannh@google.com, jim.shu@sifive.com, kees@kernel.org,
+	kito.cheng@sifive.com, krzk+dt@kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, lorenzo.stoakes@oracle.com,
+	lossin@kernel.org, mingo@redhat.com, ojeda@kernel.org,
+	oleg@redhat.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+	peterz@infradead.org, richard.henderson@linaro.org,
+	rick.p.edgecombe@intel.com, robh@kernel.org,
+	rust-for-linux@vger.kernel.org, samitolvanen@google.com,
+	shuah@kernel.org, tglx@linutronix.de, tmgross@umich.edu,
+	vbabka@suse.cz, x86@kernel.org, zong.li@sifive.com
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+Message-ID: <aN6sNFBzx8NPU3Th@debug.ba.rivosinc.com>
+References: <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
+ <20250926192919.349578-1-cmirabil@redhat.com>
+ <aNbwNN_st4bxwdwx@debug.ba.rivosinc.com>
+ <CABe3_aE4+06Um2x3e1D=M6Z1uX4wX8OjdcT48FueXRp+=KD=-w@mail.gmail.com>
+ <aNcAela5tln5KTUI@debug.ba.rivosinc.com>
+ <lhu3484i9en.fsf@oldenburg.str.redhat.com>
+ <aNxsWYYnj22G5xuX@debug.ba.rivosinc.com>
+ <lhuwm5dh6hf.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v17 08/47] x86_64, dept: add support
- CONFIG_ARCH_HAS_DEPT_SUPPORT to x86_64
-To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org
-Cc: kernel_team@skhynix.com, torvalds@linux-foundation.org,
- damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
- adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, mingo@redhat.com,
- peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
- rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
- daniel.vetter@ffwll.ch, duyuyang@gmail.com, johannes.berg@intel.com,
- tj@kernel.org, tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
- amir73il@gmail.com, gregkh@linuxfoundation.org, kernel-team@lge.com,
- linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
- minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
- sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
- penberg@kernel.org, rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
- linux-block@vger.kernel.org, josef@toxicpanda.com,
- linux-fsdevel@vger.kernel.org, jack@suse.cz, jlayton@kernel.org,
- dan.j.williams@intel.com, hch@infradead.org, djwong@kernel.org,
- dri-devel@lists.freedesktop.org, rodrigosiqueiramelo@gmail.com,
- melissa.srw@gmail.com, hamohammed.sa@gmail.com, harry.yoo@oracle.com,
- chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
- max.byungchul.park@gmail.com, boqun.feng@gmail.com, longman@redhat.com,
- yunseong.kim@ericsson.com, ysk@kzalloc.com, yeoreum.yun@arm.com,
- netdev@vger.kernel.org, matthew.brost@intel.com, her0gyugyu@gmail.com,
- corbet@lwn.net, catalin.marinas@arm.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, luto@kernel.org,
- sumit.semwal@linaro.org, gustavo@padovan.org, christian.koenig@amd.com,
- andi.shyti@kernel.org, arnd@arndb.de, lorenzo.stoakes@oracle.com,
- Liam.Howlett@oracle.com, rppt@kernel.org, surenb@google.com,
- mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
- samitolvanen@google.com, paulmck@kernel.org, frederic@kernel.org,
- neeraj.upadhyay@kernel.org, joelagnelf@nvidia.com, josh@joshtriplett.org,
- urezki@gmail.com, mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
- qiang.zhang@linux.dev, juri.lelli@redhat.com, vincent.guittot@linaro.org,
- dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
- vschneid@redhat.com, chuck.lever@oracle.com, neil@brown.name,
- okorniev@redhat.com, Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
- anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
- clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
- kristina.martsenko@arm.com, wangkefeng.wang@huawei.com, broonie@kernel.org,
- kevin.brodsky@arm.com, dwmw@amazon.co.uk, shakeel.butt@linux.dev,
- ast@kernel.org, ziy@nvidia.com, yuzhao@google.com,
- baolin.wang@linux.alibaba.com, usamaarif642@gmail.com,
- joel.granados@kernel.org, richard.weiyang@gmail.com,
- geert+renesas@glider.be, tim.c.chen@linux.intel.com, linux@treblig.org,
- alexander.shishkin@linux.intel.com, lillian@star-ark.net,
- chenhuacai@kernel.org, francesco@valla.it, guoweikang.kernel@gmail.com,
- link@vivo.com, jpoimboe@kernel.org, masahiroy@kernel.org,
- brauner@kernel.org, thomas.weissschuh@linutronix.de, oleg@redhat.com,
- mjguzik@gmail.com, andrii@kernel.org, wangfushuai@baidu.com,
- linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
- linux-i2c@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-modules@vger.kernel.org, rcu@vger.kernel.org,
- linux-nfs@vger.kernel.org, linux-rt-devel@lists.linux.dev
-References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-9-byungchul@sk.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
- LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
- lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
- MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
- IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
- aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
- I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
- E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
- F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
- CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
- P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
- 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
- GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
- MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
- Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
- lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
- 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
- qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
- BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
- 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
- vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
- FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
- l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
- yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
- +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
- asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
- WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
- sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
- KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
- MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
- hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
- vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20251002081247.51255-9-byungchul@sk.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <lhuwm5dh6hf.fsf@oldenburg.str.redhat.com>
 
-On 10/2/25 01:12, Byungchul Park wrote:
-> dept needs to notice every entrance from user to kernel mode to treat
-> every kernel context independently when tracking wait-event dependencies.
-> Roughly, system call and user oriented fault are the cases.
+On Thu, Oct 02, 2025 at 01:45:48PM +0200, Florian Weimer wrote:
+>* Deepak Gupta:
+>
+>> On Tue, Sep 30, 2025 at 11:20:32AM +0200, Florian Weimer wrote:
+>>>* Deepak Gupta:
+>>>
+>>>> In case of shadow stack, it similar situation. If enabled compiler
+>>>> decides to insert sspush and sspopchk. They necessarily won't be
+>>>> prologue or epilogue but somewhere in function body as deemed fit by
+>>>> compiler, thus increasing the complexity of runtime patching.
+>>>>
+>>>> More so, here are wishing for kernel to do this patching for usermode
+>>>> vDSO when there is no guarantee of such of rest of usermode (which if
+>>>> was compiled with shadow stack would have faulted before vDSO's
+>>>> sspush/sspopchk if ran on pre-zimop hardware)
+>>>
+>>>I think this capability is desirable so that you can use a distribution
+>>>kernel during CFI userspace bringup.
+>>
+>> I didn't get it, can you elaborate more.
+>>
+>> Why having kernel carry two vDSO (one with shadow stack and one without) would
+>> be required to for CFI userspace bringup?
+>>
+>> If Distro is compiling for RVA23 CONFIG_RISCV_USERCFI has to be selected yes,
+>> kernel can have vDSO with shadow stack. Distro can light this option only when
+>> its compiling entire distro for RVA23.
+>
+>I think it boils down to whether you want CFI bringup contributions from
+>people who do not want to or cannot build their own custom RVA23
+>kernels.
 
-"Roughly"?
+How will they contribute to CFI bringup without having a CFI compiled usersapce?
+If their userspace is compiled with shadow stack instructions and they can't take
+this userspace to old hardware else it'll start faulting as soon as control is
+given to userspace (first sspush or sspopcheck in userspace).
 
->  #define __SYSCALL(nr, sym) extern long __x64_##sym(const struct pt_regs *);
->  #define __SYSCALL_NORETURN(nr, sym) extern long __noreturn __x64_##sym(const struct pt_regs *);
-> @@ -86,6 +87,12 @@ static __always_inline bool do_syscall_x32(struct pt_regs *regs, int nr)
->  /* Returns true to return using SYSRET, or false to use IRET */
->  __visible noinstr bool do_syscall_64(struct pt_regs *regs, int nr)
->  {
-> +	/*
-> +	 * This is a system call from user mode.  Make dept work with a
-> +	 * new kernel mode context.
-> +	 */
-> +	dept_update_cxt();
-> +
->  	add_random_kstack_offset();
->  	nr = syscall_enter_from_user_mode(regs, nr);
+>
+>Another use case would be running container images with CFI on a
+>distribution kernel which supports pre-RVA23 hardware.
 
-Please take a look in syscall_enter_from_user_mode(). You'll see the
-quite nicely-named function: enter_from_user_mode(). That might be a
-nice place to put code that you want to run when the kernel is entered
-from user mode.
+Container image with CFI will have glibc and ld (and all other userspace) also
+compiled with shadow stack instructions in it. As soon as you take this
+container image to a pre-RVA23 hardware, you won't even reach vDSO. It'll break
+much before that, unless kernel is taking a trap on all sspush/sspopchk
+instructions in prologue/epilogue of functions in userspace (glibc, ld, etc)
 
-> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-> index 998bd807fc7b..017edb75f0a0 100644
-> --- a/arch/x86/mm/fault.c
-> +++ b/arch/x86/mm/fault.c
-> @@ -19,6 +19,7 @@
->  #include <linux/mm_types.h>
->  #include <linux/mm.h>			/* find_and_lock_vma() */
->  #include <linux/vmalloc.h>
-> +#include <linux/dept.h>
->  
->  #include <asm/cpufeature.h>		/* boot_cpu_has, ...		*/
->  #include <asm/traps.h>			/* dotraplinkage, ...		*/
-> @@ -1219,6 +1220,12 @@ void do_user_addr_fault(struct pt_regs *regs,
->  	tsk = current;
->  	mm = tsk->mm;
->  
-> +	/*
-> +	 * This fault comes from user mode.  Make dept work with a new
-> +	 * kernel mode context.
-> +	 */
-> +	dept_update_cxt();
-No, this fault does not come from user mode. That's why we call it "user
-addr" fault, not "user mode" fault. You end up here if, for instance,
-the kernel faults doing a copy_from_user().
+>
+>Thanks,
+>Florian
+>
 
