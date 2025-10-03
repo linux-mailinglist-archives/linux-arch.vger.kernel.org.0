@@ -1,36 +1,36 @@
-Return-Path: <linux-arch+bounces-13891-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13892-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0BD3BB5B51
-	for <lists+linux-arch@lfdr.de>; Fri, 03 Oct 2025 03:12:21 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61968BB5B78
+	for <lists+linux-arch@lfdr.de>; Fri, 03 Oct 2025 03:13:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24E6A19E335F
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Oct 2025 01:12:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B7F424E684A
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Oct 2025 01:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC9EA1D5ABF;
-	Fri,  3 Oct 2025 01:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88405207A22;
+	Fri,  3 Oct 2025 01:13:12 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2ADDB665;
-	Fri,  3 Oct 2025 01:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3C5A202961;
+	Fri,  3 Oct 2025 01:13:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759453937; cv=none; b=PsuuInKde2cKT45KdZuUoBVEMQMtJwKJjzT48enmKtTxGvl0RodQjuhUVsrbEX6d9ffOfn2C/8Bt8UX5CO/kEFRC67Yky7vQDK7IPm4QLMi0CJIyz92KJIcQwJqgFBPa1Z6BjCXMlbG2fcAW2ciknVfNwZ+hMKVmipWKhOGE7z0=
+	t=1759453992; cv=none; b=tfhuVwgPfAz/C6G3IiKdvQeZ7sj5vBwNFpWn+O6HNY/1zF2zr0HdZp33vjw1zZFfwfM16jeBWOxXOtMVbQWp3DwjQR4rZ9FlSTF1K1Xy8VV3lA6qmGb8lTVbtUEPCngYrn1WZ/CVpgqmCYP/WXr8szOqOf2miie80WTDnRi8OlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759453937; c=relaxed/simple;
-	bh=jqNbqnfs7B8WuSF26Geu0v/uXfznc4Wl0LNfRtCJUUM=;
+	s=arc-20240116; t=1759453992; c=relaxed/simple;
+	bh=hk7Rlsd9UPPMJ2Q0igAIU2AnRfE/DegFn6VbdMtkOoo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K+Yc9WT7ggDnTucqWuWAoxn2LX8GKycfeC6AxBSjYueDjmlnMGcUhi70oDz4SiBVBJHbLzMaM8kLZiDKKNvro/hCim1gkguy2+DCKcPKzKhIWsNjtZ37VPMk/cRmiB9qoFkYRjIzFjUrMgttnvY01XvwXsvSvn9wY1ZcQu1QFh4=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ct7UXUFSMGSuTUEcHZeDQVlltqeg4R0r90aABGTKam51OCtl2lwZ0NZvuM33Rh/l9wRKsW8P59TQQkqTPBDmAVt7NJ1FSNibEozHDbH4hGMkjixjnUU29ct12IWoBrbJg1ejR37ZPQ+d5STI8NsP61Bzod/Xb/0umnb90QVOQ9w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-93-68df22e7fb7d
-Date: Fri, 3 Oct 2025 10:12:01 +0900
+X-AuditID: a67dfc5b-c45ff70000001609-0c-68df2323f589
+Date: Fri, 3 Oct 2025 10:13:02 +0900
 From: Byungchul Park <byungchul@sk.com>
-To: Dave Hansen <dave.hansen@intel.com>
+To: Jan Kara <jack@suse.cz>
 Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
 	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
@@ -45,7 +45,7 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
 	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
 	ngupta@vflare.org, linux-block@vger.kernel.org,
-	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
+	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org,
 	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
 	djwong@kernel.org, dri-devel@lists.freedesktop.org,
 	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
@@ -90,12 +90,12 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 08/47] x86_64, dept: add support
- CONFIG_ARCH_HAS_DEPT_SUPPORT to x86_64
-Message-ID: <20251003011201.GD75385@system.software.com>
+Subject: Re: [PATCH v17 30/47] fs/jbd2: use a weaker annotation in journal
+ handling
+Message-ID: <20251003011302.GE75385@system.software.com>
 References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-9-byungchul@sk.com>
- <cd056d80-aadd-4f8a-8aad-c34b55686fac@intel.com>
+ <20251002081247.51255-31-byungchul@sk.com>
+ <bmthlv2tsd76mgzaoy5gspzdkved6le5xv23xjsc3yafkhrsgh@vvmjdwygm7gn>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -104,103 +104,97 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cd056d80-aadd-4f8a-8aad-c34b55686fac@intel.com>
+In-Reply-To: <bmthlv2tsd76mgzaoy5gspzdkved6le5xv23xjsc3yafkhrsgh@vvmjdwygm7gn>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xbdRTH/d03dXV3V9yuEGOsS2ZQplP+OBiHMyTuZtEEsz802x+jsTe2
-	WXmkMBxGk85J1+Ef1s4xW2C2bDBoy8aKMl6dhYVqh83oXtQNKAxsIW0lIo/g+rCVLO6fk0/y
-	/Z7vOTk5DM41UzmMqrxa1JTL1TJKQkhim6z5YVlQ+VrXQAE0XXJQoHeaSBi7aEcQXNEjWHvY
-	iENdX4qA5fX7NKRcHgQNfiMOkWtLCM4sHCNgYWQvxIIDJKQmwxiMr0YRtM0lMZhzn0CQaDgM
-	P7R0U2CdmcTh9soiBd7TX1MQ8zdh8GcXBZYvXSQ0NxrTsc1OAvqm+2nwR+IYTDQYMbA734dg
-	W4iAUUMLlh5HQcPlbXC6cwCDRt8tEh60m2mIz+yClKUCPPYwDRdjN0jwTt0lIRIyUnBFO02D
-	8/cRBMu3ZzDQ968Q4Lr3Mlh15wkwnZ2gYNDlJUCfWEZwq7+JgilHigRt41r6CO5REm7axwi4
-	FA5gMOr5lYAb/Z0ktI77MZiZDpDQ7fsN36MQbN09mFB3M0EJjrMOJNQZ0uVadBEXWkejlOBa
-	tRDCt758oc88SQsW5xGhuz1PODe4gAn3IrsFp+0kJTiXjLRgfTiPl7xyQPKWQlSrakTNq0Wl
-	EqV3LIFVnso+qjMlKS0ybK5HWQzPFvArQzH0iHXXT/7HBLudX7vci2WYYnfwgcA6nuHsNF/v
-	uEDXIwmDs1dyef+Ps2mBYZ5m5Xzozo6MR8oCb/DZqYyHY79DvLElSG8IW3ivaY7IMM7m8YHk
-	Apbpxdlc/kKSyWAWu5vvGXwy43iGfZF39/yCbaw2lcXXd3y4wc/yQ+0BwoBY82Oh5sdCzf+H
-	WhBuQ5yqvKZMrlIX7FTWlquO7vy4osyJ0k/b9kX8YC9aGts/jFgGyTZJhcopJUfKa6pqy4YR
-	z+CybGlp+4SSkyrktZ+JmopDmiNqsWoY5TKEbJv09dVPFRz7ibxaPCyKlaLmkYoxWTlaVO0u
-	jL70zh9WWR6S/1zizv9pqfDvu0WzHeuHikb2DTTFTcXOXspTsnjc8sAR/Yutzz0Vun/OFi9W
-	zO99L1GjPcO98Oa+b54oPnBnz0ceXVdrJ8eWbH3jK3Joywf6f/Yn3y6dP17xec7VY9yJ2fDW
-	qxH9eFSnfs5X+vy73y8/FbIVCptlRJVSvisP11TJ/wV5WqOHsAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxbZRTHfe69fe6lrnpX67gBP1UXMpZtLvHlTDddNJEnJhK/kTgj3Gx3
-	tgItayeOJTMwKOJ8oRTbhpa5yrKCwAaDiiBjYTSyAGsEYY4orLAVWDOQbCuU8lLsjTHuy8nv
-	5P/7J+fD4Wj1uiKF0xuOSyaDmKfFSkaZ+XrprjltUPdiiz8J/ijpZWApUsFAbUszhoq2GgUM
-	X2pCEFyqQBBdc9Ng6dpkYMPWz0Ik9hcLmz39CBwjNhqafSUUPGqNY7jvf4jAPh3C4AyXMLDo
-	/RqBa9bNQvjXDFgIditgc3KOglvL8wi8oTgFod4vEGw4cuFcXTuGtcBvNDjtwwh+mJ6k4WF4
-	CsG91oTh67+NoKfhNIYZ6080jIaegrGlRQwD9q8wLIzUUvB3KwbP6R4FnHXbEJSeb8HgONvG
-	QNfULyyM3F+nYMJho6Cp7T0IemcZGLLWUYkjE9blZHA7S6nEuEeB/WI3BTFvIws3zk8w4C3e
-	Du7AqALuNLhYWJ/eC5seI/Q3zbEwWWlnDjoQiVq+ZUhjewdFLL9vYNL8fTMia6s2RCIXSmli
-	sSZW//wiTcraPyMXhuYxWV26iUnPsochg3UCqQrsIl2uSZaUXf2Tff+1D5T7j0h5+kLJtOeN
-	HKVuYHiDKqjWnCivieNiZH36DEriBP4loXzwSyQzw78gRC93UjJjPk0YH4/RMmsSPPhjPXsG
-	KTma/zlVGPHdTQQc9wwvCrM302RHxYNgDTRh2VHz3yHBVhdk/w22CgM1IUZmmk8XxuNhSu7S
-	fKpQH+dkTOIPCB1XnpSNZ/nnhd6O65QVqVyPlV2PlV3/lz2IbkQavaEwX9TnvbzbnKsrMuhP
-	7D5szG9DiZ/0nlqv6kSR0Yw+xHNIu0VFCm7r1Aqx0FyU34cEjtZqVDkNEzq16ohYdFIyGbNN
-	n+ZJ5j6UyjHaZNW7WVKOmv9YPC7lSlKBZPovpbiklGL0+cyHHdcisU+iD7jgmwaDfVv4Wpbx
-	HW9a7luDW/btq88m16PPKX3dEf+NU+LBsnFjdWwl+eITH1UGZtPT9vi5ZRgdW3DGdmRGs1Nq
-	pjKPDe089vahVysOvbIy1b7jlm9mNStc2deycrRz9ZtqV7hkTOPMliyXarfXejLCuNxapdUy
-	Zp24N502mcV/AI9Fdl+PAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHe8/lPWfDwWkZvbVA27qA0UWLeIguEkSnD0UQfagoG3lwo23a
+	VqZFYeZyFYZpJc4us4t5I9fMULtNS2Nd16Sy0HWhLJl28TIrTduMqG8//v+H3/N8eHha2cJO
+	4vWmHZLZpDWosZyRd0cUz5qqea2baxvAYK0bYaDXOYyh+/V1Ft67sxEMPnpCQ8EJL4Lit+00
+	XG32I/iQW0ND99NTFNS9qefgaWCIgraTeRRUuFZBQSeGk1cmwMPzbQyUZEyDokctLIw4kqG5
+	4iMHgY48DK6XTQhs9f0MFJ5pw9BSfwqDv3KEBa/7AQu+Ci8DHnsZA8GjKvAey2GhpP8LBz63
+	g4LSbwUsdDw7SIEzy85BzW0rguxP1zHk+xwYnuedxXBiyIbBdjdIQ03TAAfOb5cw9FWUY/ic
+	28dCUZOfi58rDliPMmJ59TVKtPp+YbHyTCUS+y4eoEVrbojudH2hxZtBByPeP0fEOns7Jzpc
+	O8XzNzopsbinnxVfBRaLrvJDWHT15HFrojbIFyVKBn2qZJ6zZItc96S9kk7JFtIuFFoy0OmI
+	w0jGE2E++dgxgP6yr+g4FWZGmErqegJMmLEwg7S2/qDDHCmoiL25LJTLeVooU5HqF5mjxThh
+	HbH25+MwKwQgV4+00+EhpVCCyGDVY/SnGEs8he9HrbQQQ1qHO0Pb+BCryKVhPhzLhNXk3I+v
+	oyPjBQ1xX7tHhT1EeCcjDVW3uD+XTiQNpa1MLhLs/2nt/2nt/7QORJcjpd6UatTqDfNn69JN
+	+rTZW5ONLhR6tZK9QxtrUY93bSMSeKSOUIgpfp2S1aZa0o2NiPC0OlKxpbRNp1QkatN3S+bk
+	BPNOg2RpRCqeUU9QxAV3JSqFJO0OaZskpUjmvy3FyyZloPwj0VFDacZ5NQvcSyVmbdY6Tdnk
+	OfUrV/C/cqIOrDHEOcdkaafEG2Mu54CmN0F+IdCSqNi8nInes8jGLJy5u2P6ehT51Zb0+GWX
+	4Vjs9rHssviuKaYFDd81F321nQmBWsU+5NlQHUx+99Mz6HkYvQlJ9/b7nbKFw7LM3tgHcUlq
+	xqLTxsbQZov2N8+HMXdmAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTVxzHPffc3nvp7HLXMbmjiVlacYsRH/ORn84sMyZ6s2TqH1tYjGY0
+	4842PNMqik8eNhBcZq0rSAtaKHYInSAPFbELwVjjEHlUBYUKmKIgIMZRFArtblkW/efkc76P
+	3+/8cRgsn5NEM9qUfYIuRZ2kpKSkdPtXObEqVb9mVa53MTzMaibBP5lHQnG1k4K82iIJdFyq
+	QtDvz0PwJmDFYGgMkTBnctMwOd1LQ8jlRlDQacLgrM8i4J+aIAWjN18jMA/6KCgcySJhwvEr
+	AsszKw0jt7bBeH+TBELe5wR0T40hcPiCBPiacxHMFSTC+bI6CgJt7RgKzR0ISge9GIZrRLPe
+	/QSBqyKbgiFjAwaP70O475+g4I75JAXjncUEvKyhwJbtkkCJ1YQgx15NQUFJLQmNA9dp6Byd
+	JaCvwERAVe130O94RkKrsYwQ3yemLkeBtTCHEI9hAsx/NhEw7aik4a69jwRHZgxY2zwSeFph
+	oWF2cDWEbKngrnpOg/eUmYRL4+2Sb8yIf2P4jeQr664QvKFrjuKd55yID8yYED95IQfzBqN4
+	vTk2gfkTdQf4C61jFD/jf0Dxrikbyf9dxvGn22L5RouX5k/89ZjeuXGXdFOCkKRNF3Qrv46X
+	atq9TpyWyx4sL9JnopKF+SiC4di1XJf1dyLMJLuEa3w9SoaZYj/nenqmcZgjWQVncV8UdSmD
+	2YsKrq47e974mP2BM/jPUGGWscDVn/TicEjOOhAXqL6H/jM+4u4U+eanYnYZ1xMcEbcxIiu4
+	P4JMWI5gt3Nl06/mI5+wKq75ym3CiGSW99qW99qWd20bwpUoUpuSnqzWJq1boU/UZKRoD674
+	OTW5Fomf0nF09vQ1NOnZ1oJYBikXyvi0Jxq5RJ2uz0huQRyDlZGy+Io+jVyWoM44JOhSf9Lt
+	TxL0LUjBkMoo2bdxQryc3aveJyQKQpqg+98lmIjoTKRYs2dg3ZYt3RVXF5d+IexuHWo2NsQ8
+	+mzRTntwY6ln96nymSW3zPn+tru9U9mukqb9Q3uG7arh6PU7YvLX62/vONb76dsGO2FQJRxZ
+	vnXgcHmUrTUucKZvweUfAx1pNzaHvjx7fO8vH4yUnl0wkeCZenl0A3yvlGnjugaWxt7Y2oBf
+	rFSSeo169TKs06v/BVxfeWGQAwAA
 X-CFilter-Loop: Reflected
 
-On Thu, Oct 02, 2025 at 08:22:29AM -0700, Dave Hansen wrote:
-> On 10/2/25 01:12, Byungchul Park wrote:
-> > dept needs to notice every entrance from user to kernel mode to treat
-> > every kernel context independently when tracking wait-event dependencies.
-> > Roughly, system call and user oriented fault are the cases.
-> 
-> "Roughly"?
-
-I will change it to a better one.
-
-> >  #define __SYSCALL(nr, sym) extern long __x64_##sym(const struct pt_regs *);
-> >  #define __SYSCALL_NORETURN(nr, sym) extern long __noreturn __x64_##sym(const struct pt_regs *);
-> > @@ -86,6 +87,12 @@ static __always_inline bool do_syscall_x32(struct pt_regs *regs, int nr)
-> >  /* Returns true to return using SYSRET, or false to use IRET */
-> >  __visible noinstr bool do_syscall_64(struct pt_regs *regs, int nr)
-> >  {
-> > +     /*
-> > +      * This is a system call from user mode.  Make dept work with a
-> > +      * new kernel mode context.
-> > +      */
-> > +     dept_update_cxt();
-> > +
-> >       add_random_kstack_offset();
-> >       nr = syscall_enter_from_user_mode(regs, nr);
-> 
-> Please take a look in syscall_enter_from_user_mode(). You'll see the
-> quite nicely-named function: enter_from_user_mode(). That might be a
-> nice place to put code that you want to run when the kernel is entered
-> from user mode.
-
-I wanted to put dept_update_cxt() to the very beginning of c code but..
-yeah enter_from_user_mode() looks fine or even better.  Thanks a lot.
-
-> > diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-> > index 998bd807fc7b..017edb75f0a0 100644
-> > --- a/arch/x86/mm/fault.c
-> > +++ b/arch/x86/mm/fault.c
-> > @@ -19,6 +19,7 @@
-> >  #include <linux/mm_types.h>
-> >  #include <linux/mm.h>                        /* find_and_lock_vma() */
-> >  #include <linux/vmalloc.h>
-> > +#include <linux/dept.h>
+On Thu, Oct 02, 2025 at 10:40:56AM +0200, Jan Kara wrote:
+> On Thu 02-10-25 17:12:30, Byungchul Park wrote:
+> > jbd2 journal handling code doesn't want jbd2_might_wait_for_commit()
+> > to be placed between start_this_handle() and stop_this_handle().  So it
+> > marks the region with rwsem_acquire_read() and rwsem_release().
 > >
-> >  #include <asm/cpufeature.h>          /* boot_cpu_has, ...            */
-> >  #include <asm/traps.h>                       /* dotraplinkage, ...           */
-> > @@ -1219,6 +1220,12 @@ void do_user_addr_fault(struct pt_regs *regs,
-> >       tsk = current;
-> >       mm = tsk->mm;
+> > However, the annotation is too strong for that purpose.  We don't have
+> > to use more than try lock annotation for that.
 > >
-> > +     /*
-> > +      * This fault comes from user mode.  Make dept work with a new
-> > +      * kernel mode context.
-> > +      */
-> > +     dept_update_cxt();
-> No, this fault does not come from user mode. That's why we call it "user
-> addr" fault, not "user mode" fault. You end up here if, for instance,
-> the kernel faults doing a copy_from_user().
+> > rwsem_acquire_read() implies:
+> >
+> >    1. might be a waiter on contention of the lock.
+> >    2. enter to the critical section of the lock.
+> >
+> > All we need in here is to act 2, not 1.  So trylock version of
+> > annotation is sufficient for that purpose.  Now that dept partially
+> > relies on lockdep annotaions, dept interpets rwsem_acquire_read() as a
+> > potential wait and might report a deadlock by the wait.
+> >
+> > Replace it with trylock version of annotation.
+> >
+> > Signed-off-by: Byungchul Park <byungchul@sk.com>
+> 
+> Indeed. Feel free to add:
+> 
+> Reviewed-by: Jan Kara <jack@suse.cz>
 
-My bad.  Thank you.  I will fix it.  Thank you very much.
+Thank you, Jan.
 
 	Byungchul
+
+>                                                                 Honza
+> 
+> > ---
+> >  fs/jbd2/transaction.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/fs/jbd2/transaction.c b/fs/jbd2/transaction.c
+> > index c7867139af69..b4e65f51bf5e 100644
+> > --- a/fs/jbd2/transaction.c
+> > +++ b/fs/jbd2/transaction.c
+> > @@ -441,7 +441,7 @@ static int start_this_handle(journal_t *journal, handle_t *handle,
+> >       read_unlock(&journal->j_state_lock);
+> >       current->journal_info = handle;
+> >
+> > -     rwsem_acquire_read(&journal->j_trans_commit_map, 0, 0, _THIS_IP_);
+> > +     rwsem_acquire_read(&journal->j_trans_commit_map, 0, 1, _THIS_IP_);
+> >       jbd2_journal_free_transaction(new_transaction);
+> >       /*
+> >        * Ensure that no allocations done while the transaction is open are
+> > --
+> > 2.17.1
+> >
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
 
