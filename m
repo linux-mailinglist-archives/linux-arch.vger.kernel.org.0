@@ -1,48 +1,40 @@
-Return-Path: <linux-arch+bounces-13897-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13898-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BEFABB688D
-	for <lists+linux-arch@lfdr.de>; Fri, 03 Oct 2025 13:33:45 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8845BB7335
+	for <lists+linux-arch@lfdr.de>; Fri, 03 Oct 2025 16:37:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45131483903
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Oct 2025 11:33:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 94FD14EC231
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Oct 2025 14:37:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D672EB86F;
-	Fri,  3 Oct 2025 11:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFzKRkRA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24AE323B604;
+	Fri,  3 Oct 2025 14:37:15 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F32527EC99;
-	Fri,  3 Oct 2025 11:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8396139E;
+	Fri,  3 Oct 2025 14:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759491220; cv=none; b=PCztNRJGzLy2NUIwoOLg01XTAv1rbIGtDCFvul92yK6tjt/e/7ISwWFbyIuZ3Hm2wbhaLHb4iw/iUSAM6+dpiBgDy4/XAtwTu8xB/TlXnVZBpBKAwnt1Kdqvyfom2wYNdRZVmJjtYGLM+T/nqwiCbvLWc9L2FDYE5CZ4QcU8ZWM=
+	t=1759502235; cv=none; b=D25l0+KTvICCJwZbCyV10c5Guqp9obZqZxtoAUTm32L3Fc6cPiY7wUspKmW8nRXHssjNpZVrs8+d86fPEo7KYY07ioRQa8UkJ6bnEoWG9tofdcUdWcHotaZ2WfDfxbcG4FA22Bbfo4eb9p7DcGdK0Yi5LBjjdd75CfNwjIFNXCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759491220; c=relaxed/simple;
-	bh=8JvzZz+MrzjUmB/qmn12k1T1z8wI8NEqkWeYCArS4nA=;
+	s=arc-20240116; t=1759502235; c=relaxed/simple;
+	bh=ify0TfiFKa3Hes8KZtJjaG2GeXYqffaYoF8Y5oCDXXg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RnZaFvAfyHdSfOhsi4zZO7HXEiqZ2z5JEhvwYIXKpeLTEPPEEXgkjdhswYZbOoRbbG0vI7lh5oUb3Wn3ol2puwzP7WwkfmmBQ7/Z9owv59PQsYgiqxh96PhXpd/qfsP+fv5K7qaVIPp8zPLV9dnq3BdpJfG1p+aibtaQLoNdFwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFzKRkRA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B48C4CEF5;
-	Fri,  3 Oct 2025 11:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759491219;
-	bh=8JvzZz+MrzjUmB/qmn12k1T1z8wI8NEqkWeYCArS4nA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lFzKRkRAagp0TVhUdTwIsW0EPgf7xwe5vUnZsgItAsbqWLbYcv7v2Q3oCdo6pdbpH
-	 TxK4cHFxGzDDbQDQTmmTAALXtRce7awXslf/w51ZRllOlHQfykkv/S85tSAEJm9jFJ
-	 GYwvA6uugwAlC/eFWM7ehADw13/t37TYV5luOUQD7lDrfqGG54YTKnaTyEWvTdRb0c
-	 orc+Nn8y24EKqDs+XjojdkthXLkOB/CpwUkMKq+3hkvcz1Knd27dZO22vw3HIZH/oz
-	 KeJJqGDMye/t+diEqfyZzsugo6eKkklnr+1Zd5LuUfHG/pa69kR/h1070kPLMeXwGn
-	 kaCdIbmTIMmYw==
-Date: Fri, 3 Oct 2025 12:33:03 +0100
-From: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=U6cE2diKRDWdmOgbZp5W0Q018xpyzLFAzYyIbMQ/ZEyxi2OrmtuIgrcpmDS1WC4dIZ0EcSNlZhka4rqrK/hq8gdn21NR1WGbNKUeXG6kAXxetZi8vqANffhmh6hqZZA5Of4sQnEwaQT26qoqUf1ika7R7wrW2QvHdd6TilZUPwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09D741A9A;
+	Fri,  3 Oct 2025 07:37:04 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8693C3F5A1;
+	Fri,  3 Oct 2025 07:36:47 -0700 (PDT)
+Date: Fri, 3 Oct 2025 15:36:42 +0100
+From: Mark Rutland <mark.rutland@arm.com>
 To: Byungchul Park <byungchul@sk.com>
 Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
@@ -84,15 +76,16 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
 	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
 	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
+	clrkwllms@kernel.org, ada.coupriediaz@arm.com,
 	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
-	kevin.brodsky@arm.com, dwmw@amazon.co.uk, shakeel.butt@linux.dev,
-	ast@kernel.org, ziy@nvidia.com, yuzhao@google.com,
-	baolin.wang@linux.alibaba.com, usamaarif642@gmail.com,
-	joel.granados@kernel.org, richard.weiyang@gmail.com,
-	geert+renesas@glider.be, tim.c.chen@linux.intel.com,
-	linux@treblig.org, alexander.shishkin@linux.intel.com,
-	lillian@star-ark.net, chenhuacai@kernel.org, francesco@valla.it,
+	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
+	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
+	yuzhao@google.com, baolin.wang@linux.alibaba.com,
+	usamaarif642@gmail.com, joel.granados@kernel.org,
+	richard.weiyang@gmail.com, geert+renesas@glider.be,
+	tim.c.chen@linux.intel.com, linux@treblig.org,
+	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
+	chenhuacai@kernel.org, francesco@valla.it,
 	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
 	masahiroy@kernel.org, brauner@kernel.org,
 	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
@@ -104,89 +97,76 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	linux-rt-devel@lists.linux.dev
 Subject: Re: [PATCH v17 09/47] arm64, dept: add support
  CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64
-Message-ID: <b69ab7d0-ba5e-4d22-88ef-53e0ebf07869@sirena.org.uk>
+Message-ID: <aN_fel4Rpqz6TPsD@J2N7QTR9R3>
 References: <20251002081247.51255-1-byungchul@sk.com>
  <20251002081247.51255-10-byungchul@sk.com>
- <a7f41101-d80a-4cee-ada5-9c591321b1d7@sirena.org.uk>
- <20251003014641.GF75385@system.software.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CPEOfhRT6FsWLRqF"
-Content-Disposition: inline
-In-Reply-To: <20251003014641.GF75385@system.software.com>
-X-Cookie: hangover, n.:
-
-
---CPEOfhRT6FsWLRqF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20251002081247.51255-10-byungchul@sk.com>
 
-On Fri, Oct 03, 2025 at 10:46:41AM +0900, Byungchul Park wrote:
-> On Thu, Oct 02, 2025 at 12:39:31PM +0100, Mark Brown wrote:
-> > On Thu, Oct 02, 2025 at 05:12:09PM +0900, Byungchul Park wrote:
-> > > dept needs to notice every entrance from user to kernel mode to treat
-> > > every kernel context independently when tracking wait-event dependenc=
-ies.
-> > > Roughly, system call and user oriented fault are the cases.
+On Thu, Oct 02, 2025 at 05:12:09PM +0900, Byungchul Park wrote:
+> dept needs to notice every entrance from user to kernel mode to treat
+> every kernel context independently when tracking wait-event dependencies.
+> Roughly, system call and user oriented fault are the cases.
+> 
+> Make dept aware of the entrances of arm64 and add support
+> CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64.
+> 
+> Signed-off-by: Byungchul Park <byungchul@sk.com>
+> ---
+>  arch/arm64/Kconfig          | 1 +
+>  arch/arm64/kernel/syscall.c | 7 +++++++
+>  arch/arm64/mm/fault.c       | 7 +++++++
+>  3 files changed, 15 insertions(+)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index e9bbfacc35a6..a8fab2c052dc 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -281,6 +281,7 @@ config ARM64
+>  	select USER_STACKTRACE_SUPPORT
+>  	select VDSO_GETRANDOM
+>  	select VMAP_STACK
+> +	select ARCH_HAS_DEPT_SUPPORT
+>  	help
+>  	  ARM 64-bit (AArch64) Linux support.
+>  
+> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+> index c442fcec6b9e..bbd306335179 100644
+> --- a/arch/arm64/kernel/syscall.c
+> +++ b/arch/arm64/kernel/syscall.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/ptrace.h>
+>  #include <linux/randomize_kstack.h>
+>  #include <linux/syscalls.h>
+> +#include <linux/dept.h>
+>  
+>  #include <asm/debug-monitors.h>
+>  #include <asm/exception.h>
+> @@ -96,6 +97,12 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+>  	 * (Similarly for HVC and SMC elsewhere.)
+>  	 */
+>  
+> +	/*
+> +	 * This is a system call from user mode.  Make dept work with a
+> +	 * new kernel mode context.
+> +	 */
+> +	dept_update_cxt();
 
-> > > Make dept aware of the entrances of arm64 and add support
-> > > CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64.
+As Mark Brown pointed out in his replies, this patch is missing a whole
+bunch of cases and does not work correctly as-is.
 
-> > The description of what needs to be tracked probably needs some
-> > tightening up here, it's not clear to me for example why exceptions for
-> > mops or the vector extensions aren't included here, or what the
-> > distinction is with error faults like BTI or GCS not being tracked?
+As Dave Hansen pointed out on the x86 patch, you shouldn't do this
+piecemeal in architecture code, and should instead work with the
+existing context tracking, e.g. by adding logic to
+enter_from_user_mode() and exit_to_user_mode(), or by reusing some
+existing context tracking logic that's called there.
 
-> Thanks for the feedback but I'm afraid I don't get you.  Can you explain
-> in more detail with example?
-
-Your commit log says we need to track every entrance from user mode to
-kernel mode but the code only adds tracking to syscalls and some memory
-faults.  The exception types listed above (and some others) also result
-in entries to the kernel from userspace.
-
-> JFYI, pairs of wait and its event need to be tracked to see if each
-> event can be prevented from being reachable by other waits like:
-
->    context X				context Y
->=20
->    lock L
->    ...
->    initiate event A context		start toward event A
->    ...					...
->    wait A // wait for event A and	lock L // wait for unlock L and
->           // prevent unlock L		       // prevent event A
->    ...					...
->    unlock L				unlock L
-> 					...
-> 					event A
-
-> I meant things like this need to be tracked.
-
-I don't think that's at all clear from the above context, and the
-handling for some of the above exception types (eg, the vector
-extensions) includes taking locks.
-
---CPEOfhRT6FsWLRqF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjftG4ACgkQJNaLcl1U
-h9AJAwf9GUZ8nquWa7D1no47c5NWSm5cMwwvmTjDaPtYC52seNgxT47rqiAa032b
-rbQuOcdIvbMOoRrk3oOjch4rbo2VSgw1bzxKncoUyWrQ1rw9rhdfmdQpZZSbT1XQ
-ZE3VcLNDV3bfjO2GU8cTjiUDwM29qIeTSzCIn9ubfHcuEvoaYes1/BrQYAwB6ghQ
-7LjwZANFGJdatftOLPlVL8kKM/B5H6eSUlr8bUS9hlZE2g39/1LLb9UexVvnMj8u
-6gPRXHiHF5Vzad2FqVmWKt4F1F39CJ4g1c624zJiIGAWP9iBONB8dIyQPlTmK4U7
-mnXQy7USXtlxU+Xw5RCO9fy5x0Ahxw==
-=LMdg
------END PGP SIGNATURE-----
-
---CPEOfhRT6FsWLRqF--
+Mark.
 
