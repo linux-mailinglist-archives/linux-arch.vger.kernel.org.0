@@ -1,144 +1,155 @@
-Return-Path: <linux-arch+bounces-13927-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13928-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85435BBDD53
-	for <lists+linux-arch@lfdr.de>; Mon, 06 Oct 2025 13:09:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98F8CBBE407
+	for <lists+linux-arch@lfdr.de>; Mon, 06 Oct 2025 15:57:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A33C18980EB
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 11:09:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5317F3A6001
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 13:57:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B823267B89;
-	Mon,  6 Oct 2025 11:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F042D3A94;
+	Mon,  6 Oct 2025 13:57:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="L0W0W0zr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="csGpiTI/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Xe94k6yo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE25170A11;
-	Mon,  6 Oct 2025 11:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDFE28AB16
+	for <linux-arch@vger.kernel.org>; Mon,  6 Oct 2025 13:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759748972; cv=none; b=aaIVmFAlqOtvxngd9SIfQ8yrRXhFxkH4YZXApgQXR8XoJPwAViaJcQ4G8Bgzthit0H3RyfX0QpjCId58s3VwUTjec90SLYgB+Fh3CiHRP+fRqWbPvV5H0NUqmY2C4pNunBmuPQ0eItk/NsMWotS3wOjD4r0K+VsMtoDsILFE0Hs=
+	t=1759759066; cv=none; b=edK641DJhWcmm1oBhEcmuBRU8TPLNoRDvlbH+cZ7nH8dFxWwnVzfRgyYxY3z0/ygEiShrhtST1aJImQ2HlorwNtoAPgbSrePVqVncd1C81GUGfwxgDKFCbRLXlZws+rOx+lxs4mU+lbbWw2NuvLo77nUlKpZlBBR/OvTy1U/pzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759748972; c=relaxed/simple;
-	bh=iiNffHnTx8Pb202eharTBuQvX3jDw0eC9DrGa8U6EQA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=loDOXuJk7WhoYfmKbGp4zcmt1jFP8GqCHOIr8bk59w6gcfhpBUWwIW434DQV4cesfJNx/PGTtSQa6wY/nBzaxKFp8QkD3CO/4MioHRtBoLHnI8KeQ5Zs0tTeOAb7hQWq1yMm//ZqyTbkELIP6mEk8i1ouwHzXsto2fRDsDj5la8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=L0W0W0zr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=csGpiTI/; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id 93285EC00DE;
-	Mon,  6 Oct 2025 07:09:28 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-06.internal (MEProxy); Mon, 06 Oct 2025 07:09:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1759748968;
-	 x=1759835368; bh=oQr2Z+5xhGdK3c4D5pXVny9a8KKlRowOFGyX0jHZkFk=; b=
-	L0W0W0zrDIxkRpMNjsP0GpnYr49Zm7NbXvAr3HV4YnE/L1NQuSKvD/6o9bS6/0G+
-	OTxSxNPQKiCQTS0jilYj/ug0+Tzejh/fEM+viQKDVE9Bf0JDFYWZ0AdwdrUZpCjr
-	tYyY7dBZw5OReKhGRdPyB1/BcGAVwUfVa9dV8B+qoha7LC83dMphyoOkiJXSQm2h
-	SOGm/uoQpP93QhcMi0K3IVbtrz24TuhqbPY4X2WGzvL+z+Frp2geDqmavLI1CHbU
-	6vvkd7H3RZA/kURLGxpbIqyczcFH5eGVcvtDdk2qTYUkhDaMDpCxDULGrKxBCu+b
-	dv3TgkErgUaay43QWw/jLQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1759748968; x=
-	1759835368; bh=oQr2Z+5xhGdK3c4D5pXVny9a8KKlRowOFGyX0jHZkFk=; b=c
-	sGpiTI/QyhntH9oqno6KaikRMNh64/fbq2nUe0r3iiQPpiht8ZstyHst0ctTGzOm
-	Dbn/TwJcHL2tI8+FxO+dyU0M2Lh7nrJ6yC5L4jqdzEmOnfKTyBUkXO7OsBWz6Qfk
-	ovubapVYBxxVcnxx80ZfbEhsFf76SwefyULb4m+BPY0c1DqqCIfOZ/NaiyAevInh
-	MBuboA/2BvU1HhVUyunCLaIgSNEiMm4oG1ofbASLYCynQFpY/0ENmYXeK3J2E9/9
-	KldBnmz+uREeipvmhuEOvgpfDxtpF69NTz7wlhC5EnrpoLJdGTGNrcdAjTRFLRst
-	ykPmOvIpXhKqZA/FCtf1w==
-X-ME-Sender: <xms:Z6PjaBSeap3uRzX5Hfxsbtc9YjxTnLko18CYpLvxnYeZhDkr277K9Q>
-    <xme:Z6PjaCv90eZGDOM0u3pJNRH0JnN_kbmpEywY-cKHhVHUOSvhmY6cr0_UDXVPiTuen
-    NZzdg7J7AeycJ-_hl7OrkJjde1b4OUDElK3OOfJwHjM0VqX7uDOog>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdeljeefkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtoh
-    epsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepphgvthgvrhii
-    sehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhg
-    pdhrtghpthhtohepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtth
-    hopehgvggvrhhtsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehlrghntggv
-    rdihrghngheslhhinhhugidruggvvhdprhgtphhtthhopegtohhrsggvtheslhifnhdrnh
-    gvth
-X-ME-Proxy: <xmx:Z6PjaBX0cBgZ2CgBOyBd1TwdSkWiBoruyUO9s2Oxz5LB3GQA-d106Q>
-    <xmx:Z6PjaLStS_r5Errx1Qi3eBp4-QOpj97zD9y-2P-QDtT8L6KkYbppdQ>
-    <xmx:Z6PjaMvumckM1omos56IlPrzbowiquwXXaL602ABw6FmKpE_MdOIFw>
-    <xmx:Z6PjaMYsOmBqFct7xibtZ4Ln_DgNvjDzJwdIXQDrI9z1dGV5UKFXfQ>
-    <xmx:aKPjaN4wUe5yun1MsuHEzALlD7APlgm3cCx-9X6w9gyiOdeIWKW1goi9>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 98D76700065; Mon,  6 Oct 2025 07:09:27 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1759759066; c=relaxed/simple;
+	bh=aoHPu3E0mvHoalx0FWQM3EH+lnlTpy4HtT99+90hPDc=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=AuHWVftTUZ8pf/ubX2z8bAwUG9pSxuIpNEKVUgeqGvY17kIHUDdb3d/RgUMnZWb6lPW+zRlFFRDEqlZmrg3e22aTD4YqOMOduWQz8aH8s26+w6hZjCUUMSlLWmmYxk4HyjScvu/kHehVf8ucC1MQ2LlpxUhIyWe2r0/FmMEq4Yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Xe94k6yo; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1759759064;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N38NCXKatF4Nc9lTi4kU9EIStYgT9YorHxjupIC+4LM=;
+	b=Xe94k6yoBohVja/fm+Awb2foeGBYDIIapZ9QvawSy8Jx8YGdKmSM4QQKk4iibJCZiSe54Q
+	gBlnaXphDubGHU3nUg7iw51qGnQ3MDHEtfKCvdWEIQFtiUMWDyxXJRjj68Cpa4qQysKa4f
+	mQd6S9D9nkSsyuvweLQ/jDZNO+vsB8w=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-534-ViUllQ_cOyKw2cdCB-nn-g-1; Mon, 06 Oct 2025 09:57:42 -0400
+X-MC-Unique: ViUllQ_cOyKw2cdCB-nn-g-1
+X-Mimecast-MFC-AGG-ID: ViUllQ_cOyKw2cdCB-nn-g_1759759061
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3ee130237e1so1749512f8f.0
+        for <linux-arch@vger.kernel.org>; Mon, 06 Oct 2025 06:57:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759759061; x=1760363861;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N38NCXKatF4Nc9lTi4kU9EIStYgT9YorHxjupIC+4LM=;
+        b=osQ7EcuKvlFiyI59NcaYdy0K7ce4gOIR02Ia4BlaN8qUQ2iiJtXF/5Hqh8+qLq6ABj
+         coj//WmnDkRktQoFpPNCxhe2zFjkh8wEP+w8ZiMh/RZZcwtAwoTvYQTd2oMFl2COziwz
+         3OGEKZkgqY1IlaW3dX5dPsIhKCSJQ2+PbSsysr2PDJlAJXK42zIIhN7I2p6OtwSD0SN5
+         sSPeBfsmSxa0alR+Xn82vQ5JjasJGGzInDrgN0sHfpItwjm4bxAlVl8pFVqu3XqBQK+u
+         QvuqTyMIP3U76gc0HC3GlLhgB7t1nsSEEdPttfPzN7SRcEsJiHJO0n109Bk2YcBTa/Pl
+         yIrw==
+X-Forwarded-Encrypted: i=1; AJvYcCUOGydfFkl6AzpcdC3DfFKcKUqSO+GMgB67GL01NDKApMaZ+RKVYtZTyGBKBWxZ3HSZCoQeOX83abMr@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnbwkOMzhmu5Rp41FUGvUjLQHLePjQ281yGFxMihH0G/vvrF5o
+	m31qAtslm6bgFXat8JFLuMW6RM6uhq3/4rOK8G2b5Ij6aoSObGaxpQN3KrP8mvmp2QlGm3veIq2
+	aY+EJvlEYJMWUpoWXtTDCkU2OwC3xY7sODx/uUxw/wXzFag6EPjwBA2QOUT/L3xI=
+X-Gm-Gg: ASbGncu7I02zbP0GfME43toylRknPIpmFf1wnqqMEzr+p4TTV6arKSGpc/tgzZyo0Qp
+	AmY3DIgGmnucMTT/qe69Z24nAgkE3RcwhasXeHa0ZH328c4d+Rdsl9uuEo+pMBzEJuc2+2yDRJ9
+	BxqzpmNAR1Kz9Xqeq7AlekIiWB+9+P+EEl8+VbjCyUUYvtY6gUcFJwJR7L8pGfIhb3XSqohe7Aq
+	I3GtcxNJLRlxenOOimbYsDzhJJ863yut/E7/fvWrN2F+7PbAzmDP4cAYdcnn92gctRcdBHBzIEV
+	MT4h0uvnNeHZxf6IkAPT1SaSTViwUH49cqwDFt435gciYKY/qOTQ2u8mruNOdLaUW2YJJaucqW2
+	WlVKrGkoyua3ysOBufYQ=
+X-Received: by 2002:a05:6000:24c8:b0:3e7:471c:1de3 with SMTP id ffacd0b85a97d-4256714c990mr8743334f8f.14.1759759061382;
+        Mon, 06 Oct 2025 06:57:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGSEXhNL5qt3C2EExsoRcqgHMQ8DFjBOOTUMJgsVGWdtBaHzjZoYrl+W+SOqr9EcfM/+bfqVw==
+X-Received: by 2002:a05:6000:24c8:b0:3e7:471c:1de3 with SMTP id ffacd0b85a97d-4256714c990mr8743277f8f.14.1759759060881;
+        Mon, 06 Oct 2025 06:57:40 -0700 (PDT)
+Received: from rh (p200300f6af131a0027bd20bfc18c447d.dip0.t-ipconnect.de. [2003:f6:af13:1a00:27bd:20bf:c18c:447d])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4255d8a6c54sm21356683f8f.11.2025.10.06.06.57.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Oct 2025 06:57:40 -0700 (PDT)
+Date: Mon, 6 Oct 2025 15:57:38 +0200 (CEST)
+From: Sebastian Ott <sebott@redhat.com>
+To: Tariq Toukan <tariqt@nvidia.com>
+cc: Catalin Marinas <catalin.marinas@arm.com>, 
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+    Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+    "David S. Miller" <davem@davemloft.net>, 
+    Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+    Mark Bloch <mbloch@nvidia.com>, netdev@vger.kernel.org, 
+    linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>, 
+    Jason Gunthorpe <jgg@nvidia.com>, Michael Guralnik <michaelgur@nvidia.com>, 
+    Moshe Shemesh <moshe@nvidia.com>, Will Deacon <will@kernel.org>, 
+    Alexander Gordeev <agordeev@linux.ibm.com>, 
+    Andrew Morton <akpm@linux-foundation.org>, 
+    Christian Borntraeger <borntraeger@linux.ibm.com>, 
+    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+    Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
+    Vasily Gorbik <gor@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+    "H. Peter Anvin" <hpa@zytor.com>, Justin Stitt <justinstitt@google.com>, 
+    linux-s390@vger.kernel.org, llvm@lists.linux.dev, 
+    Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>, 
+    Nathan Chancellor <nathan@kernel.org>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Salil Mehta <salil.mehta@huawei.com>, Sven Schnelle <svens@linux.ibm.com>, 
+    Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org, 
+    Yisen Zhuang <yisen.zhuang@huawei.com>, Arnd Bergmann <arnd@arndb.de>, 
+    Leon Romanovsky <leonro@mellanox.com>, linux-arch@vger.kernel.org, 
+    linux-arm-kernel@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>, 
+    Michael Guralnik <michaelgur@mellanox.com>, patches@lists.linux.dev, 
+    Niklas Schnelle <schnelle@linux.ibm.com>, 
+    Jijie Shao <shaojijie@huawei.com>, Simon Horman <horms@kernel.org>, 
+    Patrisious Haddad <phaddad@nvidia.com>
+Subject: Re: [PATCH net-next V6] net/mlx5: Improve write-combining test
+ reliability for ARM64 Grace CPUs
+In-Reply-To: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
+Message-ID: <e77083c4-82ac-0c95-1cf1-5a13f15e7c58@redhat.com>
+References: <1759093688-841357-1-git-send-email-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Ah_uXtpTlO07
-Date: Mon, 06 Oct 2025 13:09:07 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Peter Zijlstra" <peterz@infradead.org>
-Cc: "Finn Thain" <fthain@linux-m68k.org>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>, "Will Deacon" <will@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Boqun Feng" <boqun.feng@gmail.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Mark Rutland" <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-m68k@vger.kernel.org,
- "Lance Yang" <lance.yang@linux.dev>
-Message-Id: <92c5af4d-c6e9-43bf-ba2c-ce6627b8d962@app.fastmail.com>
-In-Reply-To: <20251006102228.GT3245006@noisy.programming.kicks-ass.net>
-References: <cover.1757810729.git.fthain@linux-m68k.org>
- <abf2bf114abfc171294895b63cd00af475350dba.1757810729.git.fthain@linux-m68k.org>
- <CAMuHMdUgkVYyUvc85_P9TyTM5f-=mC=+X=vtCWN45EMPqF7iMg@mail.gmail.com>
- <6c295a4e-4d18-a004-5db8-db2e57afc957@linux-m68k.org>
- <57ac401b-222b-4c85-b719-9e671a4617cf@app.fastmail.com>
- <86be5cf0-065e-d55d-fdb6-b9cf6655165e@linux-m68k.org>
- <ec2982e3-2996-918e-f406-32f67a0decfe@linux-m68k.org>
- <e02f861b-706c-4f6d-bded-002601da954a@app.fastmail.com>
- <257a045a-f39d-8565-608f-f01f7914be21@linux-m68k.org>
- <d9e3f41e-d152-4382-bb99-7b134ff9f26f@app.fastmail.com>
- <20251006102228.GT3245006@noisy.programming.kicks-ass.net>
-Subject: Re: [RFC v2 2/3] atomic: Specify alignment for atomic_t and atomic64_t
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-On Mon, Oct 6, 2025, at 12:22, Peter Zijlstra wrote:
-> On Mon, Oct 06, 2025 at 12:07:24PM +0200, Arnd Bergmann wrote:
->
->> It looks like Mark Rutland fixed the try_cmpxchg() function this
->> way in commit ec570320b09f ("locking/atomic: Correct (cmp)xchg()
->> instrumentation"), but for some reason we still have the wrong
->> annotation on the atomic_try_cmpxchg() helpers.
->
->> Mark, I've tried to modify your script to produce that output,
->> the output looks correct to me, but it makes the script more
->> complex than I liked and I'm not sure that matching on
->> "${type}"="p" is the best way to check for this.
->
-> I don't see anything wrong with this. The result looks good.
+On Mon, 29 Sep 2025, Tariq Toukan wrote:
+> +static void mlx5_iowrite64_copy(struct mlx5_wc_sq *sq, __be32 mmio_wqe[16],
+> +				size_t mmio_wqe_size, unsigned int offset)
+> +{
+> +#if IS_ENABLED(CONFIG_KERNEL_MODE_NEON) && IS_ENABLED(CONFIG_ARM64)
+> +	if (cpu_has_neon()) {
+> +		kernel_neon_begin();
+> +		asm volatile
+> +		(".arch_extension simd;\n\t"
+> +		"ld1 {v0.16b, v1.16b, v2.16b, v3.16b}, [%0]\n\t"
+> +		"st1 {v0.16b, v1.16b, v2.16b, v3.16b}, [%1]"
+> +		:
+> +		: "r"(mmio_wqe), "r"(sq->bfreg.map + offset)
+> +		: "memory", "v0", "v1", "v2", "v3");
+> +		kernel_neon_end();
+> +		return;
+> +	}
+> +#endif
 
-Thanks for having a look, I've sent it out as a proper patch now.
+This one breaks the build for me:
+/tmp/cc2vw3CJ.s: Assembler messages:
+/tmp/cc2vw3CJ.s:391: Error: unknown architectural extension `simd;'
 
-      Arnd
+Removing the extra ";" after simd seems to fix it.
+
+Regards,
+Sebastian
+
 
