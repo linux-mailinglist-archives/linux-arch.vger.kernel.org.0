@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-13937-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13938-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 114BFBBFB4F
-	for <lists+linux-arch@lfdr.de>; Tue, 07 Oct 2025 00:42:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9515BBFB5B
+	for <lists+linux-arch@lfdr.de>; Tue, 07 Oct 2025 00:42:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C14F43C0268
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 22:42:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90010189A66C
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 22:42:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4694420010A;
-	Mon,  6 Oct 2025 22:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8D3214801;
+	Mon,  6 Oct 2025 22:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="bN0VxL1R"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="rKo5bJJ0"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D744613AF2;
-	Mon,  6 Oct 2025 22:42:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15A1288A2;
+	Mon,  6 Oct 2025 22:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759790537; cv=none; b=Pd0e3J0ftp/zvZHGaa8thTlNB/xSAAPe45oUCFqkY996uR9X8/SyFHM/7GL7nexortLJw5j0PJVs1mp+aGe+wDfzUlzZoHYLK7iLZSK+b0Qkv3Pwz05FCzZ4Il0KEiQmQfUBCiQIDn23rb7MZyuIArWoXOivCSnip8hpTYn8gHk=
+	t=1759790538; cv=none; b=LdW9b08xkx1WrAtjl7qJfKU1O9WR8ezAQLf8qcG0RL54F/CX2zc8Ns+Exwlgf/loo8hDRuqdxWsqIyeCEntdHcHBxLLjv2k2qJJ4H75JHuzWnV1holVtHFWZaDB08tJ7sq6TNMRJ2fRQosG4eWz5yQBYO8rnO3J3r1Z+QUKdhxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759790537; c=relaxed/simple;
-	bh=S2seYnSBWNpUZZfe1+SRlqlrUngJ9CIbdmWjkV9Ucqs=;
+	s=arc-20240116; t=1759790538; c=relaxed/simple;
+	bh=4QFWhw/VhPH8Jg9vfMQpWMMN0VSErg30cgw08sZp81E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S0skLf8Y9hxw1thZl+jwty7NBwKOfpYt02bfT7hdRZfEigtLGlsI05JwjqQJz26twRe9mmQfK6rM7b98AqwSGII+yXJjS60mLa+mcWmxArHtnzLB1rLRTBuCwDl8px1slp7ixwfgOOEoFDV1KNFAkqlu2P+xVzRLsIotuGO7NS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=bN0VxL1R; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=Ugwf2BEToAvFD+3fNWquwWzD/IrywYzzhkuGwXxsgxvXSkLx0iGDviYFnpUwJdv8awA95GyifOylsjB3wAU0pUWjwD03UyTkcE+sY6Ks3IzWoKcugjxFh7dKLvwEh98X+G1xzlKwF0QLw9EZlMyBYLrhyb2ZL5ulVZYpvbrAuBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=rKo5bJJ0; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from mrdev.corp.microsoft.com (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
-	by linux.microsoft.com (Postfix) with ESMTPSA id D60AC211CDE5;
-	Mon,  6 Oct 2025 15:42:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D60AC211CDE5
+	by linux.microsoft.com (Postfix) with ESMTPSA id A7BA5211CDF5;
+	Mon,  6 Oct 2025 15:42:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A7BA5211CDF5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1759790535;
-	bh=GPke4Hp9X16mRfC52IJ74wQ9iqM8BxN3GRbqd3x/cU8=;
+	s=default; t=1759790536;
+	bh=shIB0wSQTVqlYsvlrJ8+kHGgr1N/kb1B3QWxAVfE8N0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bN0VxL1RwCjo04fIkG18we1sograwR1sEpujqz+Tbed3uo9rCRlNG0wmL6d1D1IYX
-	 FUyu8fTsIfiZLnllTSPpl3IdmxkpEYSi07420L3xpFGkDWjOSHbATE0FkX6pjRmKxL
-	 Op+kLyBJxWZTWzUb7Av+25IwGMuOaNkOTui+y2LU=
+	b=rKo5bJJ0IQToDB3Ti7yd6bUByY4p76mCRW4AR++9x3iBxpdnGmbcOajjiywDXZRfl
+	 5RHgMQ+vYFY+eSddc5ByPMHHXXAM1Oqw2LvlOUIjYUXlYhsDX+Ga5jOjGtTbtZe53Z
+	 MbQCualM0e5XR+zzDvACPxz1qGPenhVNrt7ncHT0=
 From: Mukesh Rathor <mrathor@linux.microsoft.com>
 To: linux-hyperv@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: kys@microsoft.com,
 	x86@kernel.org,
 	hpa@zytor.com,
 	arnd@arndb.de
-Subject: [PATCH v3 1/6] x86/hyperv: Rename guest crash shutdown function
-Date: Mon,  6 Oct 2025 15:42:03 -0700
-Message-Id: <20251006224208.1060990-2-mrathor@linux.microsoft.com>
+Subject: [PATCH v3 2/6] hyperv: Add two new hypercall numbers to guest ABI public header
+Date: Mon,  6 Oct 2025 15:42:04 -0700
+Message-Id: <20251006224208.1060990-3-mrathor@linux.microsoft.com>
 X-Mailer: git-send-email 2.36.1.vfs.0.0
 In-Reply-To: <20251006224208.1060990-1-mrathor@linux.microsoft.com>
 References: <20251006224208.1060990-1-mrathor@linux.microsoft.com>
@@ -69,39 +69,36 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rename hv_machine_crash_shutdown to more appropriate
-hv_guest_crash_shutdown and make it applicable to guests only. This
-in preparation for the subsequent hypervisor root crash support
-patches.
+In preparation for the subsequent crashdump patches, copy two hypercall
+numbers to the guest ABI header published by Hyper-V. One to notify
+hypervisor of an event that occurs in the root partition, other to ask
+hypervisor to disable the hypervisor.
 
 Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
 ---
- arch/x86/kernel/cpu/mshyperv.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/hyperv/hvgdk_mini.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 25773af116bc..1c6ec9b6107f 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -219,7 +219,7 @@ static void hv_machine_shutdown(void)
- #endif /* CONFIG_KEXEC_CORE */
+diff --git a/include/hyperv/hvgdk_mini.h b/include/hyperv/hvgdk_mini.h
+index 77abddfc750e..bec54a103d62 100644
+--- a/include/hyperv/hvgdk_mini.h
++++ b/include/hyperv/hvgdk_mini.h
+@@ -469,6 +469,7 @@ union hv_vp_assist_msr_contents {	 /* HV_REGISTER_VP_ASSIST_PAGE */
+ #define HVCALL_MAP_DEVICE_INTERRUPT			0x007c
+ #define HVCALL_UNMAP_DEVICE_INTERRUPT			0x007d
+ #define HVCALL_RETARGET_INTERRUPT			0x007e
++#define HVCALL_NOTIFY_PARTITION_EVENT                   0x0087
+ #define HVCALL_NOTIFY_PORT_RING_EMPTY			0x008b
+ #define HVCALL_REGISTER_INTERCEPT_RESULT		0x0091
+ #define HVCALL_ASSERT_VIRTUAL_INTERRUPT			0x0094
+@@ -492,6 +493,7 @@ union hv_vp_assist_msr_contents {	 /* HV_REGISTER_VP_ASSIST_PAGE */
+ #define HVCALL_GET_VP_CPUID_VALUES			0x00f4
+ #define HVCALL_MMIO_READ				0x0106
+ #define HVCALL_MMIO_WRITE				0x0107
++#define HVCALL_DISABLE_HYP_EX                           0x010f
  
- #ifdef CONFIG_CRASH_DUMP
--static void hv_machine_crash_shutdown(struct pt_regs *regs)
-+static void hv_guest_crash_shutdown(struct pt_regs *regs)
- {
- 	if (hv_crash_handler)
- 		hv_crash_handler(regs);
-@@ -562,7 +562,8 @@ static void __init ms_hyperv_init_platform(void)
- 	machine_ops.shutdown = hv_machine_shutdown;
- #endif
- #if defined(CONFIG_CRASH_DUMP)
--	machine_ops.crash_shutdown = hv_machine_crash_shutdown;
-+	if (!hv_root_partition())
-+		machine_ops.crash_shutdown = hv_guest_crash_shutdown;
- #endif
- #endif
- 	/*
+ /* HV_HYPERCALL_INPUT */
+ #define HV_HYPERCALL_RESULT_MASK	GENMASK_ULL(15, 0)
 -- 
 2.36.1.vfs.0.0
 
