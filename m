@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-13934-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13935-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 110FABBEF94
-	for <lists+linux-arch@lfdr.de>; Mon, 06 Oct 2025 20:34:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 953C4BBF0AB
+	for <lists+linux-arch@lfdr.de>; Mon, 06 Oct 2025 20:58:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 88D5E4F4657
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 18:31:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2A213B342C
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 18:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 314442D6E77;
-	Mon,  6 Oct 2025 18:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D660422A4E9;
+	Mon,  6 Oct 2025 18:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="aFf4iSCN"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GHrYyZ0a"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B671D618C;
-	Mon,  6 Oct 2025 18:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69BDD2D29C8;
+	Mon,  6 Oct 2025 18:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759775442; cv=none; b=VXdyu1IiwTS+nm0GlhyuWcwPeqtjLK9lYhewZbw7ze5dqcCUGW1LkeSgfW4OC4a7Z93lCb3j7t4NQH5iekigv9Kw4LPqhKcVSvhEUgboVFPMRs9kGjXx6itse9fnaLGa7eSHOBrPErvVKb5psv2YQT5Vp/mwov4Qf4lJ6GlPfUE=
+	t=1759777099; cv=none; b=BnTbVbO/cQ9hXF08rtJIqBfnFUQRAlPTyyZrtf0OYhB5nHUTAMiqmNM0AyPUOUvxJe76KlwGfwU2vN8nRzRjWJsp86ehIIuAPtWy0y06pX0GF6cQTlHZ+08seGP8+PEn5wpvIzxDhSOWrvT5Dbj2IvJekL1VlG4KCHMnodIskWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759775442; c=relaxed/simple;
-	bh=iUCByOCa4O0HN9ykRHF9A6sRhtXzXxF8NdZt7hDemZg=;
+	s=arc-20240116; t=1759777099; c=relaxed/simple;
+	bh=ADpUC5a/KbGr9ijN/AYgIQQjKvQHxqzoQFuxlJkwsY8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g7oMe5DOrW1izZKiQoiFvL+CFeZvazEhTVEpwQ8RZZRalW2mabSTJj4qcSKfoYzvBKtgqfkk/61unuAQooiaR7Mg672PTsFMFWyf5AN2cn1xwXjZUFAItk1RjCQrSLXyLv26TaVnaMi7XorK6TSVJjFopRji7Ju6XDfrZuiOu3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=aFf4iSCN; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=K8n1m/pEXiQ4rL6dI7CQzTbwxrlDseZFCN1IvY+B2eEaPf+P4RVCT8W14PBm9+m4RqG2n1rWsi4VrTR+CgsRnwEiGN48vy8o405Rf+8y26zE939nSc7dBS1Ij+oXVySMaB+thqoUXsf1FTaqm0rXtbAUuUnlmi45Q2NtAZRjP6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GHrYyZ0a; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.137.184.60] (unknown [131.107.1.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id C0D97211CDEF;
-	Mon,  6 Oct 2025 11:30:39 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C0D97211CDEF
+	by linux.microsoft.com (Postfix) with ESMTPSA id 3794B2117F86;
+	Mon,  6 Oct 2025 11:58:17 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3794B2117F86
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1759775440;
-	bh=cyxIx+MJtrd6uNL71MuB7b1PPIy+SoA2XMGIG2qal7I=;
+	s=default; t=1759777097;
+	bh=CG4uNAr7eRV79CEdokFEBr+fu5qn0tGaU9OYH2B1EFQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aFf4iSCNj2NMfgURX6QLKtEU8RIrB9LGM1bU4rzVOPieXcWuZm3GScH0g+exvsvJ9
-	 wZNdVSY6qiBOsLYigB9SXJZpPM74lauBNchPeOlQp/bC+7GQHTkt+vs6rGmqRnseuX
-	 eN+EuQ36+nsqr4JLccXFNKOJXDWHtJ7wVh5OX384=
-Message-ID: <6a8176dd-ffa7-4ec1-a373-6ab61abd962e@linux.microsoft.com>
-Date: Mon, 6 Oct 2025 11:30:39 -0700
+	b=GHrYyZ0acgVf/vYwMfmEjWbvU6Q5eb0OAWGGV8X/ezTDgfVQoa79WAJ9rAR1UYHbW
+	 Lb4eh5TWutTsNpaMES6jvLQmr9iBdPVeV4UDb6k4MCwcbc7p9/UGbmbZg0peHlQesX
+	 /Vbso1ntAltNROqKYB4I9iEgSN52ujV/nSrFta9k=
+Message-ID: <93371148-87c3-4429-a9de-4115e10cda1f@linux.microsoft.com>
+Date: Mon, 6 Oct 2025 11:58:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,14 +49,9 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v6 05/17] arch/x86: mshyperv: Trap on access
- for some synthetic MSRs
-To: Michael Kelley <mhklinux@outlook.com>
-Cc: "benhill@microsoft.com" <benhill@microsoft.com>,
- "bperkins@microsoft.com" <bperkins@microsoft.com>,
- "sunilmut@microsoft.com" <sunilmut@microsoft.com>,
- "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
- "corbet@lwn.net" <corbet@lwn.net>,
+Subject: Re: [PATCH hyperv-next v6 00/17] Confidential VMBus
+To: Michael Kelley <mhklinux@outlook.com>, "arnd@arndb.de" <arnd@arndb.de>,
+ "bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
  "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
  "decui@microsoft.com" <decui@microsoft.com>,
  "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
@@ -71,12 +66,14 @@ Cc: "benhill@microsoft.com" <benhill@microsoft.com>,
  "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
  "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Cc: "benhill@microsoft.com" <benhill@microsoft.com>,
+ "bperkins@microsoft.com" <bperkins@microsoft.com>,
+ "sunilmut@microsoft.com" <sunilmut@microsoft.com>
 References: <20251003222710.6257-1-romank@linux.microsoft.com>
- <20251003222710.6257-6-romank@linux.microsoft.com>
- <SN6PR02MB41571BD37714C5F0AB770CB5D4E3A@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB415707D796045E8BD30396D8D4E3A@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Language: en-US
 From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB41571BD37714C5F0AB770CB5D4E3A@SN6PR02MB4157.namprd02.prod.outlook.com>
+In-Reply-To: <SN6PR02MB415707D796045E8BD30396D8D4E3A@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
@@ -87,18 +84,27 @@ On 10/6/2025 9:55 AM, Michael Kelley wrote:
 
 [...]
 
->> +/*
->> + * When running with the paravisor, controls proxying the synthetic interrupts
->> + * from the host
->> + */
->> +static bool hv_para_sint_proxy;
+>>   include/linux/hyperv.h             |  69 ++++--
+>>   15 files changed, 793 insertions(+), 306 deletions(-)
+>>
 > 
-> This needs to move down a few lines and be under the #if IS_ENABLED(CONFIG_HYPERV)
-> in order to eliminate the "unused variable" warning reported by the kernel test robot.
+> Nice! The net lines of code added is now 487, vs. 591
+> lines added in v5 of this series.
+> 
 
-Thanks, Michael, will do!
+Thanks, I appreciate your help throughout the multiple versions very
+much!!
 
-[...]
+> Modulo the contradiction above in this cover letter, the two typos in
+> the documentation in Patch 1, and the simple fix for the error reported
+> by the kernel test robot for Patch 5, I'm happy with this entire series.
+
+I'll wait few days just in case and will send out the fixed series :)
+
+> For the series,
+> 
+> Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+
 -- 
 Thank you,
 Roman
