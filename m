@@ -1,112 +1,125 @@
-Return-Path: <linux-arch+bounces-13935-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13936-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 953C4BBF0AB
-	for <lists+linux-arch@lfdr.de>; Mon, 06 Oct 2025 20:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3973BBBFB49
+	for <lists+linux-arch@lfdr.de>; Tue, 07 Oct 2025 00:42:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2A213B342C
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 18:58:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E96CC3C0123
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 22:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D660422A4E9;
-	Mon,  6 Oct 2025 18:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2061F1302;
+	Mon,  6 Oct 2025 22:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GHrYyZ0a"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="DUlG9RIH"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69BDD2D29C8;
-	Mon,  6 Oct 2025 18:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB0934BA5F;
+	Mon,  6 Oct 2025 22:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759777099; cv=none; b=BnTbVbO/cQ9hXF08rtJIqBfnFUQRAlPTyyZrtf0OYhB5nHUTAMiqmNM0AyPUOUvxJe76KlwGfwU2vN8nRzRjWJsp86ehIIuAPtWy0y06pX0GF6cQTlHZ+08seGP8+PEn5wpvIzxDhSOWrvT5Dbj2IvJekL1VlG4KCHMnodIskWo=
+	t=1759790536; cv=none; b=RyRndXDhUxD/4SpzbDIV4Ep8j8/fsYelsjR6c5cYTnWInK2UTufNZaBaoW4irujqunAKXmFm3SvWyeSa15RGGdLmReKKDi3TSwshxdEGlGk7ozhBcnUGYHbgb1BwHoKlPtY53YCJxCYkNFhhO2mmBGnqYbNaU+tWIWDc0j4mddw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759777099; c=relaxed/simple;
-	bh=ADpUC5a/KbGr9ijN/AYgIQQjKvQHxqzoQFuxlJkwsY8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K8n1m/pEXiQ4rL6dI7CQzTbwxrlDseZFCN1IvY+B2eEaPf+P4RVCT8W14PBm9+m4RqG2n1rWsi4VrTR+CgsRnwEiGN48vy8o405Rf+8y26zE939nSc7dBS1Ij+oXVySMaB+thqoUXsf1FTaqm0rXtbAUuUnlmi45Q2NtAZRjP6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GHrYyZ0a; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1759790536; c=relaxed/simple;
+	bh=JC3PtmGSuHGNwX/n7XZ+q5TOo5+bg7eggD2SQKbmqw4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oABRZm/vUXm/2ArRha6SmiWrUnEWct5VHNP7+iXqyyg7buusML9dt4wVPrUPU55Gs42xmPK65oHFj+PAyrGb+lzirylKosBg7GPE7Ihez04wPGUazJ1SvOrQICVc4egL+zIcXPGr1Xl3sy6Cs3SRK9ruSMz5XsR/6I0Xurug4uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=DUlG9RIH; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.184.60] (unknown [131.107.1.188])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 3794B2117F86;
-	Mon,  6 Oct 2025 11:58:17 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3794B2117F86
+Received: from mrdev.corp.microsoft.com (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
+	by linux.microsoft.com (Postfix) with ESMTPSA id ED405211AF3F;
+	Mon,  6 Oct 2025 15:42:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com ED405211AF3F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1759777097;
-	bh=CG4uNAr7eRV79CEdokFEBr+fu5qn0tGaU9OYH2B1EFQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GHrYyZ0acgVf/vYwMfmEjWbvU6Q5eb0OAWGGV8X/ezTDgfVQoa79WAJ9rAR1UYHbW
-	 Lb4eh5TWutTsNpaMES6jvLQmr9iBdPVeV4UDb6k4MCwcbc7p9/UGbmbZg0peHlQesX
-	 /Vbso1ntAltNROqKYB4I9iEgSN52ujV/nSrFta9k=
-Message-ID: <93371148-87c3-4429-a9de-4115e10cda1f@linux.microsoft.com>
-Date: Mon, 6 Oct 2025 11:58:16 -0700
+	s=default; t=1759790534;
+	bh=lfFnN2zSYZqHKaI+3lFIiwJexefKef7Xf1P2QYZKBOg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DUlG9RIH0xCXLrEZtI0q4utqVN+UxjGbH7F/V6YMFhAlo5DD7CcD+TlAbEOV9CLvf
+	 +y9cW9oeyEQ2BSyvwa6c8h6a8PHJoAOAu65wr+WH2bu8A5MDDKGg0m3rtGRabionPP
+	 /NBrhtLw0wpWHrlSQOInaZ73/fdqcAkE1t2R1TS4=
+From: Mukesh Rathor <mrathor@linux.microsoft.com>
+To: linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Cc: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	arnd@arndb.de
+Subject: [PATCH v3 0/6] Hyper-V: Implement hypervisor core collection
+Date: Mon,  6 Oct 2025 15:42:02 -0700
+Message-Id: <20251006224208.1060990-1-mrathor@linux.microsoft.com>
+X-Mailer: git-send-email 2.36.1.vfs.0.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH hyperv-next v6 00/17] Confidential VMBus
-To: Michael Kelley <mhklinux@outlook.com>, "arnd@arndb.de" <arnd@arndb.de>,
- "bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "decui@microsoft.com" <decui@microsoft.com>,
- "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "hpa@zytor.com" <hpa@zytor.com>, "kys@microsoft.com" <kys@microsoft.com>,
- "mikelley@microsoft.com" <mikelley@microsoft.com>,
- "mingo@redhat.com" <mingo@redhat.com>,
- "tglx@linutronix.de" <tglx@linutronix.de>,
- "Tianyu.Lan@microsoft.com" <Tianyu.Lan@microsoft.com>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>, "x86@kernel.org"
- <x86@kernel.org>, "linux-hyperv@vger.kernel.org"
- <linux-hyperv@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Cc: "benhill@microsoft.com" <benhill@microsoft.com>,
- "bperkins@microsoft.com" <bperkins@microsoft.com>,
- "sunilmut@microsoft.com" <sunilmut@microsoft.com>
-References: <20251003222710.6257-1-romank@linux.microsoft.com>
- <SN6PR02MB415707D796045E8BD30396D8D4E3A@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Language: en-US
-From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB415707D796045E8BD30396D8D4E3A@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+This patch series implements hypervisor core collection when running
+under Linux as root. By default initial hypervisor RAM is already mapped
+into Linux as reserved. Further any RAM deposited comes from Linux memory
+heap. The hypervisor locks all that RAM to protect it from root or any
+other domains. At a high level, the methodology involes devirtualizing
+the system on the fly upon either Linux crash or the hypervisor crash,
+then collecting core as usual. This means hypervisor RAM is automatically
+collected into the vmcore.  Devirtualization is the process of disabling
+the hypervisor and taking control of the system.
 
+Hypervisor pages are then accessible via crash command (using raw mem
+dump) or windbg which has the ability to read hypervisor pdb symbol
+file.
 
-On 10/6/2025 9:55 AM, Michael Kelley wrote:
-> From: Roman Kisel <romank@linux.microsoft.com> Sent: Friday, October 3, 2025 3:27 PM
+V3:
+ o remove usage of the word "dom0" as asked by maintainer
+ o change hyp to hv in comment and ipi to IPI
+ o rebase to:  hyperv-next: commit b595edcb2472
 
-[...]
+V2:
+ o change few comments and commit-messages
+ o add support for panic_timeout for better support if kdump kernel
+   is not loaded.
+ o some other minor changes, like change devirt_cr3arg to devirt_arg,
+   int to bool. 
 
->>   include/linux/hyperv.h             |  69 ++++--
->>   15 files changed, 793 insertions(+), 306 deletions(-)
->>
-> 
-> Nice! The net lines of code added is now 487, vs. 591
-> lines added in v5 of this series.
-> 
+V1:
+ o Describe changes in imperative mood. Remove "This commit"
+ o Remove pr_emerg: causing unnecessary review noise
+ o Add missing kexec_crash_loaded()
+ o Remove leftover unnecessary memcpy in hv_crash_setup_trampdata
+ o Address objtool warnings via annotations
 
-Thanks, I appreciate your help throughout the multiple versions very
-much!!
+Mukesh Rathor (6):
+  x86/hyperv: Rename guest crash shutdown function
+  hyperv: Add two new hypercall numbers to guest ABI public header
+  hyperv: Add definitions for hypervisor crash dump support
+  x86/hyperv: Add trampoline asm code to transition from hypervisor
+  x86/hyperv: Implement hypervisor RAM collection into vmcore
+  x86/hyperv: Enable build of hypervisor crashdump collection files
 
-> Modulo the contradiction above in this cover letter, the two typos in
-> the documentation in Patch 1, and the simple fix for the error reported
-> by the kernel test robot for Patch 5, I'm happy with this entire series.
-
-I'll wait few days just in case and will send out the fixed series :)
-
-> For the series,
-> 
-> Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+ arch/x86/hyperv/Makefile        |   6 +
+ arch/x86/hyperv/hv_crash.c      | 642 ++++++++++++++++++++++++++++++++
+ arch/x86/hyperv/hv_init.c       |   1 +
+ arch/x86/hyperv/hv_trampoline.S | 101 +++++
+ arch/x86/include/asm/mshyperv.h |  13 +
+ arch/x86/kernel/cpu/mshyperv.c  |   5 +-
+ include/hyperv/hvgdk_mini.h     |   2 +
+ include/hyperv/hvhdk_mini.h     |  55 +++
+ 8 files changed, 823 insertions(+), 2 deletions(-)
+ create mode 100644 arch/x86/hyperv/hv_crash.c
+ create mode 100644 arch/x86/hyperv/hv_trampoline.S
 
 -- 
-Thank you,
-Roman
+2.36.1.vfs.0.0
 
 
