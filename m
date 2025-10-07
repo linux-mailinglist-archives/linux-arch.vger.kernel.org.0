@@ -1,136 +1,135 @@
-Return-Path: <linux-arch+bounces-13942-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13943-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F6FBBBFB7F
-	for <lists+linux-arch@lfdr.de>; Tue, 07 Oct 2025 00:43:22 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22ABCBC0054
+	for <lists+linux-arch@lfdr.de>; Tue, 07 Oct 2025 04:23:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2D22D4F2AFF
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Oct 2025 22:43:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C8FEE4E406A
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Oct 2025 02:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B51CD260565;
-	Mon,  6 Oct 2025 22:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6B901A5B8B;
+	Tue,  7 Oct 2025 02:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="rrIConmy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dsUbabb6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4041D25743E;
-	Mon,  6 Oct 2025 22:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9557464
+	for <linux-arch@vger.kernel.org>; Tue,  7 Oct 2025 02:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759790542; cv=none; b=NRoHG8GyAI+fL1Dd+0dig3do+joZgWNP/e5XN/KQV6xjJPpE5O91P3UShDXYwk7m79pgouNgEioXh7VuDskB4dS2KQVjDpO5nCgw/9ihvYFYwfTIk/oKH/j7Eo7MExk0nBBHTHH0/uvmtnsAHvtbYxSdObamYd3CzfUA96v4R1I=
+	t=1759803796; cv=none; b=Gesx5NNygsojMjjZvGxH8rSELFqQYpPhhuWJ19f6E7HKB3CLW1LDVaT3WEupTChbuwH0bO3y5x85EspyUknk3Rr/rGoicrx3u7gAnZToGcJpcgC2dOohqq3xXdQdHDRlU1oeixeuaJ+YGrx4RYTBDGK8qxtdqZdiUf33KmJ3LLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759790542; c=relaxed/simple;
-	bh=c0talsjJ+Z2WNoUByEezA9K8avqHThlX+xsZdpzpl04=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=g1tbOhXp4jo8C2zK9ioRFMWEYKqxFTqad6X7D96NjJ9IfvEi61bgdAOKKcOciFryZJs/0/DgYkxx8hu92pIv61o2yUY1i2yCASOMV8oKfl5NZC1JGS/3rPbvL7pY4InR7U6VqiHV72u108I3hnfJnEd7bLDFnuXjUhuLJyJeLP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=rrIConmy; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from mrdev.corp.microsoft.com (192-184-212-33.fiber.dynamic.sonic.net [192.184.212.33])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 50AC5211CDFB;
-	Mon,  6 Oct 2025 15:42:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 50AC5211CDFB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1759790540;
-	bh=AqiQrPrnDYRH34965IVGlS/fEWTJe0jV5/CD4sbHfgA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rrIConmy5ZUn7H0CU6g5EaZI5nBoH7ITjXYZAL+6SI8Z7njBBQDpFAh66K6fr1+95
-	 UxQoXA4jq7C8Q1qPxqfb1KrKJ/RrrCDlsshUC/1vwcIaLDeSkNCHMvmf9vYKRe1wYa
-	 qMQMnusHRDjYGMXV/vh8K8mAubaCfV29sCebrq48=
-From: Mukesh Rathor <mrathor@linux.microsoft.com>
-To: linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Cc: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	hpa@zytor.com,
-	arnd@arndb.de
-Subject: [PATCH v3 6/6] x86/hyperv: Enable build of hypervisor crashdump collection files
-Date: Mon,  6 Oct 2025 15:42:08 -0700
-Message-Id: <20251006224208.1060990-7-mrathor@linux.microsoft.com>
-X-Mailer: git-send-email 2.36.1.vfs.0.0
-In-Reply-To: <20251006224208.1060990-1-mrathor@linux.microsoft.com>
-References: <20251006224208.1060990-1-mrathor@linux.microsoft.com>
+	s=arc-20240116; t=1759803796; c=relaxed/simple;
+	bh=VFmeDcTP2xUAQewFWw/R0BKl+XcGbbncNDnV2L/OXN0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QbOywl/as7jALi5uGtvvbs9ofpkoW3edNc4aXfcJDrV1WCfjgwOR/rNA+ptTLh+DbAUnDPbSQxdihw1eFhd1eF9uKQ1UAx/FtG75RTRf4jmErHjPeKGEFpX4yHLI65GCgcHW6l4Od3d8vIe2MWIK1+qEbd5X1c+h/qbcxBWvrUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dsUbabb6; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3324fdfd54cso6608552a91.0
+        for <linux-arch@vger.kernel.org>; Mon, 06 Oct 2025 19:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759803795; x=1760408595; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VFmeDcTP2xUAQewFWw/R0BKl+XcGbbncNDnV2L/OXN0=;
+        b=dsUbabb6l06KJXGCdPtZiVMtWdwnBLSbSQsM1Rk5pumQuR/OkOgFCKVg4GQxwFDGMS
+         mBWrQKCqrj0pK+6jFR6HWD52gXGSAgL2LOl6TDduNamn6NH8S18yyAaYDZlfizrvjU40
+         1xSrp3nibSL+PF29vEbKn8tRaB6MQRLYzBXZaUZz1JKRwySPFYH3wOY1HAD/NOUrRXdc
+         tpcpSns+N2l7Ky5dPi8MQldx1qpyQPsF1Aql9UOrjo8B6MIvnlIKSsQ36tKBuhNNvxms
+         tV1r9M+Mh8Z4wY90kX54phHFNpUHHHKv9WPb2eSucGx312kuwHLTT/pBGA8a8q7p13g/
+         OR+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759803795; x=1760408595;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VFmeDcTP2xUAQewFWw/R0BKl+XcGbbncNDnV2L/OXN0=;
+        b=q+hwGsOC/hP0fzBhgKRBXtOW3mP2YWx3gxtzgoaPvNYgJkCJbYvP/pWKWRJuZdXK+D
+         ABjjUS2rGFQCwzfLfg3g/p2Gi8E5EK0ycensvS9wSnBsaWLHHpjD/XRBn84CWhHH8XNF
+         Ec5ebTNFWF3XugzjVG4msyIe/W64J0BVmR7U4e0hsIQaqqnsN9BPq45iAUJCy1HTz029
+         IjV7R1ZCBtIrOHWXmhSs0FF2mOyRc1h3QRvzMGiGErfpTSLEnsicbpEZTsG7W2b34p1L
+         PBJnu8zyjX8S4f+VOEMEgxP93YkflR7OOQipfOEIt1iEVYXS3BzJeytB3ZQ53uWnK0Td
+         EhRA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsVm2TzzT/GioyRyrWmDi9/BbC1+ewVCRxq3rFiwJON5Fu05FQ/1D5+SB7JGdpSmPqHxlIXkU8AiMI@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjWuaVqBLSlk0XyTFRXyKEUcX9MzHZ62jclSE6eQFPFCvwITfA
+	DE5bsdqbBOMz/ajAXYVcaK/y3zUrdW1TG3B8NnCX6Kobea8p1J18ZnR7
+X-Gm-Gg: ASbGncvuC6eoGcNcmBraILDcoLnVP2jONreHvhXHt9yXq1f8wIzMeW0zi3Xm4B2KHby
+	n0bqlov1Mqxjc9cCr7ODlD3xh1YbDSw2dUB48p+7Mh+VauwS65Qs+Lw1kR/Rjr22lWIxGOgFU7q
+	+e+sFJu2Gfu0xWO5LFTlnisduc0ItNJPNFsNN/uc678X7Ao88YN+SXX44XG3IzPg/EhyzV0SXKK
+	0CDSYGkdX8CInh21m9aTNDcb2EbJV7iiBabcZji6MAP2FSCMnfX4OZqJnEwSdtTv1PVqYwgL7EM
+	KUtluSui/Ti1dJUrLHA5noDJ68flsuNpLhRO2DoKMk4d5dsYqmP4DgljZ3YCs4cGAQ+8Kwc9E9Z
+	rB/Eb4UqtvzZ8Pienh4bDd/NTJkgHlHW9gdgyOoTTfOYhur8F4w==
+X-Google-Smtp-Source: AGHT+IFOWjODpkm0RXk0UNQxPxlDwgwSSLwVcoAanx1LQC/FF/GVJT5hQh4wQ4RD5szE0at/zJ+BUA==
+X-Received: by 2002:a17:90b:4a84:b0:32b:ab04:291e with SMTP id 98e67ed59e1d1-339c279971dmr17239314a91.25.1759803794482;
+        Mon, 06 Oct 2025 19:23:14 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-339a6ff26f8sm18166635a91.13.2025.10.06.19.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Oct 2025 19:23:13 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 8DC154233432; Tue, 07 Oct 2025 09:23:10 +0700 (WIB)
+Date: Tue, 7 Oct 2025 09:23:10 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Roman Kisel <romank@linux.microsoft.com>, arnd@arndb.de, bp@alien8.de,
+	corbet@lwn.net, dave.hansen@linux.intel.com, decui@microsoft.com,
+	haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
+	mikelley@microsoft.com, mingo@redhat.com, tglx@linutronix.de,
+	Tianyu.Lan@microsoft.com, wei.liu@kernel.org, x86@kernel.org,
+	linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc: benhill@microsoft.com, bperkins@microsoft.com, sunilmut@microsoft.com
+Subject: Re: [PATCH hyperv-next v6 01/17] Documentation: hyperv: Confidential
+ VMBus
+Message-ID: <aOR5juzHnsK2E40z@archie.me>
+References: <20251003222710.6257-1-romank@linux.microsoft.com>
+ <20251003222710.6257-2-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BxWMTnibnAgGT5v9"
+Content-Disposition: inline
+In-Reply-To: <20251003222710.6257-2-romank@linux.microsoft.com>
 
-Enable build of the new files introduced in the earlier commits and add
-call to do the setup during boot.
 
-Signed-off-by: Mukesh Rathor <mrathor@linux.microsoft.com>
----
- arch/x86/hyperv/Makefile        |  6 ++++++
- arch/x86/hyperv/hv_init.c       |  1 +
- arch/x86/include/asm/mshyperv.h | 13 +++++++++++++
- 3 files changed, 20 insertions(+)
+--BxWMTnibnAgGT5v9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-index d55f494f471d..6f5d97cddd80 100644
---- a/arch/x86/hyperv/Makefile
-+++ b/arch/x86/hyperv/Makefile
-@@ -5,4 +5,10 @@ obj-$(CONFIG_HYPERV_VTL_MODE)	+= hv_vtl.o
- 
- ifdef CONFIG_X86_64
- obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
-+
-+ ifdef CONFIG_MSHV_ROOT
-+  CFLAGS_REMOVE_hv_trampoline.o += -pg
-+  CFLAGS_hv_trampoline.o        += -fno-stack-protector
-+  obj-$(CONFIG_CRASH_DUMP)      += hv_crash.o hv_trampoline.o
-+ endif
- endif
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index afdbda2dd7b7..577bbd143527 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -510,6 +510,7 @@ void __init hyperv_init(void)
- 		memunmap(src);
- 
- 		hv_remap_tsc_clocksource();
-+		hv_root_crash_init();
- 	} else {
- 		hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
- 		wrmsrq(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index abc4659f5809..207d953d7b90 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -292,6 +292,19 @@ static __always_inline u64 hv_raw_get_msr(unsigned int reg)
- }
- int hv_apicid_to_vp_index(u32 apic_id);
- 
-+#if IS_ENABLED(CONFIG_MSHV_ROOT)
-+
-+#ifdef CONFIG_CRASH_DUMP
-+void hv_root_crash_init(void);
-+void hv_crash_asm32(void);
-+void hv_crash_asm64(void);
-+void hv_crash_asm_end(void);
-+#else   /* CONFIG_CRASH_DUMP */
-+static inline void hv_root_crash_init(void) {}
-+#endif  /* CONFIG_CRASH_DUMP */
-+
-+#endif  /* CONFIG_MSHV_ROOT */
-+
- #else /* CONFIG_HYPERV */
- static inline void hyperv_init(void) {}
- static inline void hyperv_setup_mmu_ops(void) {}
--- 
-2.36.1.vfs.0.0
+On Fri, Oct 03, 2025 at 03:26:54PM -0700, Roman Kisel wrote:
+> +The data is transferred directly between the VM and a vPCI device (a.k.a.
+> +a PCI pass-thru device, see :doc:`vpci`) that is directly assigned to VT=
+L2
+> +and that supports encrypted memory. In such a case, neither the host par=
+tition
 
+Nit: You can also write the cross-reference simply as vpci.rst.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--BxWMTnibnAgGT5v9
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaOR5fQAKCRD2uYlJVVFO
+o7mVAP9gyGXv/aQVGaS5iH1wf6rUETBzEy69Mg8TYKRf5l2JsQEA5cnv0cPiT81i
+pUA3Vos9PED8kntZHhKYkra64woP1wo=
+=xXE5
+-----END PGP SIGNATURE-----
+
+--BxWMTnibnAgGT5v9--
 
