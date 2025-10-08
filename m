@@ -1,165 +1,243 @@
-Return-Path: <linux-arch+bounces-13959-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13960-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 910B4BC5EFB
-	for <lists+linux-arch@lfdr.de>; Wed, 08 Oct 2025 18:04:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 588DEBC6109
+	for <lists+linux-arch@lfdr.de>; Wed, 08 Oct 2025 18:46:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2D15424E46
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Oct 2025 15:43:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 078C54007AE
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Oct 2025 16:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 448BE2F5A2C;
-	Wed,  8 Oct 2025 15:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gnF5NSC5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 742211FC0FC;
+	Wed,  8 Oct 2025 16:46:04 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2909E2FD1D3
-	for <linux-arch@vger.kernel.org>; Wed,  8 Oct 2025 15:35:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A7C34BA37;
+	Wed,  8 Oct 2025 16:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759937734; cv=none; b=KMK64wtthmB1lodvkr4md5FVKyQzLqzNBxb6zLsy5pvpbeAejPheHtyD+OieT7kusihfZG3qQGPPkQEjYhAD1keS/qY/Hb8NhYpT97mCF1Q47nWSCkJtT1f3ovhWnBNmWdr4F3dHWXNWDP6etpR4GMIkdJFJw0PwbGpeTwrfD48=
+	t=1759941964; cv=none; b=Xl4EdQYTdAKzQCwuMUau5Rd/zFmBOpnaRWAYs7zPgsq6iy+f0lDqcbYoGz93RY0Y/d8NpBIGLtspCdRdLeHKuLJdIwAwEhVfCqfD88ZAYo8q+kL3KKy/TPvEC7bXgtO2ALGD57W3+l9q+ozhNVy0GkCvByGX8b+IzRknyLfZxig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759937734; c=relaxed/simple;
-	bh=MeMMelM99YxAP2TiJ88uHut4Vgu4VVwfVNl7tmbTWec=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GLZGKfA4mf6UvcVqHA7OOOpVxNQq3rRLpwcfYMIMEIms0yl9NHsOy5nMtYE4q7R6f/k9oX/9x49oBUuA1cEnMwmph/6nKFODjnbbyTGgxFMRXteZ0KOhilt1AyfCSgEq+nE7X1S7hvm1FaKQ+1qVn6Iq4X4PCDcqJVRxgrQ1+mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gnF5NSC5; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-46e6ba26c50so45902015e9.2
-        for <linux-arch@vger.kernel.org>; Wed, 08 Oct 2025 08:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759937730; x=1760542530; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ubNXaozyh7/Vs/XkTA5KuPjbCc9zS+vNuDnCIrZD13M=;
-        b=gnF5NSC50KY8J07hJipP4oSUoycsnB5USbLkXj+IRUeEwb3bhLFIKuLsoO+gxroQqH
-         hNZucazjbQHPSMYn+rF05W2Qm3NgXiO7yCF9cwfH9tWKSGGHfK4wkKRldds27153FYrR
-         8UKbPPGXjJxFj3MrHOd8mQaIZPKcL6NWlyyyQ1ZZiS22z8O/vCA1h6d/le88excK+PFp
-         Vo00gWI0eYa81mis8wk396h9ZHapvR1zw3LLf1tVJ3LsVduqBpxPIBGIToL6c1ssdr1o
-         ImqpvGWiGv1rwoShyyRI1RY5uMErpIXY+BSvv2MHpNpxoy+OWIoFZzY+yMlrBFVfwYoj
-         F3Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759937730; x=1760542530;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ubNXaozyh7/Vs/XkTA5KuPjbCc9zS+vNuDnCIrZD13M=;
-        b=vNDIyqQMPkan7H2HMOYDIDoI6qiz2OHwNyWIg7yQ4aUbTUqJxJU8a4OTjgIHwYqeP6
-         jjNJA7Jzem0P8cKljLPKOo0rrfATaLOMm+ju2pniHcJzE/pyu+fOADNKkZck2VJ1klkX
-         yP0NvP+2fwmeZk41DV6LfazGwBMPA+0HbTLcHxEf9GWmbqGf8am0cfAqjoat60l9jbvi
-         YX12r6TZYNvXUPGFvctl4qgfvOZvcQ2+DBHO9EpfZdOeNwCfu/yLe6v1NC0y50+6VnEG
-         I3wKdMrhxhJaB28ag+y5GwhmbnAuw+9PxM5NhH0fMLo4okc6MyzrT9tHzWlK1rGPLl+4
-         PzGg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJw2SpZyVYS6GYbVDHHTfpMAmZfGY8Hbrk/4NgUZjXYjNiTgSJ4PjDucqjqqtvPz6HeTw4w8RnMxHk@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj2o7YHjSRKFZpWMhGG/ZPf67uDk+lhxiWFDGgVkUnr78Bd/j0
-	mtyyZKFX4G+Jed0uAUO3zEdFJvKDdWn5QRQfqpALJEQbvyB8lvnt7o29GmfYMKcyyAQ=
-X-Gm-Gg: ASbGncuk2xqNzpZPIbK3XAJm1UtX1kjUBLbDFUR5r7ZSmloQvJ/3jcRyj9kcJoWSMoa
-	dNgVcX4KVeXK94b/aGfNlGwnyy3xpFTY+G0kxtFXbpkKyH7c3NLkigegmV2no1FGGZ9prH21Sln
-	m0e94y22K7eeRPIM1nJTtQhLEUIWk337XIrLcJPrDBCacuJlwu0rWZ4J3E443MwyOmzYhAyGUJE
-	uqU+JKkdymEshQiD5HXJl1vy7y/AJvYXiseGHI9GML0zXBvtm70qEY+Jc1MRqCo0qBj+/ZR9TsJ
-	ggWgvCA/m1VgXUnPMXOlTzphS8EqLOGed34CbtatGAmJiJHKpEFkgkWYIHdGqyV/BaBsEQQ1s4W
-	O+G2YqYEXg039VoQmWf9+hE020wcAngZZ5FV/CSsXbfb+TRvuthcSyaYNCpoNKH3DEX4lyxJUpn
-	E=
-X-Google-Smtp-Source: AGHT+IGq0oHp24srWcJJTjTppYJ2gdwL9MgZY8IY0dg2EY9BvDrG3QQbJW280mmxjX7I0sdyPXCadA==
-X-Received: by 2002:a05:600c:529a:b0:46e:3e25:1626 with SMTP id 5b1f17b1804b1-46fa9aefe15mr27734775e9.19.1759937730499;
-        Wed, 08 Oct 2025 08:35:30 -0700 (PDT)
-Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fab3cc939sm16809025e9.1.2025.10.08.08.35.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Oct 2025 08:35:29 -0700 (PDT)
-Message-ID: <75099eaa-4b51-4580-ac82-2c9f892f34b2@suse.com>
-Date: Wed, 8 Oct 2025 17:35:28 +0200
+	s=arc-20240116; t=1759941964; c=relaxed/simple;
+	bh=Et3crhlfigLJh//2iS/2JcZzE02zq5Pm8n2vG8zR6qg=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UlfpbmpG8VpV8tPewFZvreGkq3Fxq7aDXDAGWaUduW5MklUIv6+N4Mejj6f+wCnxObKeDDsh3QsQ2l6ppcXYTyipu/HpdKD6He3gomRwMmF/sV4LOYW+lE5JzIDeDItz+fHtPKJBrfE/nqjX5HJAjLt4zd2Hy41xkb0/Ne5jr1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4chf1r1fCvz6839B;
+	Thu,  9 Oct 2025 00:42:40 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1CCB61400D9;
+	Thu,  9 Oct 2025 00:45:59 +0800 (CST)
+Received: from localhost (10.122.19.247) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 8 Oct
+ 2025 17:45:54 +0100
+Date: Wed, 8 Oct 2025 17:45:51 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: <dan.j.williams@intel.com>
+CC: Catalin Marinas <catalin.marinas@arm.com>, <james.morse@arm.com>,
+	<linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-mm@kvack.org>, Will Deacon <will@kernel.org>, Davidlohr Bueso
+	<dave@stgolabs.net>, "H . Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
+	<peterz@infradead.org>, "Yicong Yang" <yangyicong@huawei.com>,
+	<linuxarm@huawei.com>, Yushan Wang <wangyushan12@huawei.com>, Lorenzo
+ Pieralisi <lpieralisi@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, Thomas Gleixner
+	<tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v3 3/8] lib: Support
+ ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+Message-ID: <20251008174551.00000e95@huawei.com>
+In-Reply-To: <68bf43b1dd06f_75e3100ed@dwillia2-mobl4.notmuch>
+References: <20250820102950.175065-1-Jonathan.Cameron@huawei.com>
+	<20250820102950.175065-4-Jonathan.Cameron@huawei.com>
+	<68bf43b1dd06f_75e3100ed@dwillia2-mobl4.notmuch>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/10] module loader: enforce symbol import protection
-To: Siddharth Nayyar <sidnayyar@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Nicolas Schier <nicolas.schier@linux.dev>,
- Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250829105418.3053274-1-sidnayyar@google.com>
- <20250829105418.3053274-11-sidnayyar@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250829105418.3053274-11-sidnayyar@google.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-On 8/29/25 12:54 PM, Siddharth Nayyar wrote:
-> The module loader will reject unsigned modules from loading if such a
-> module attempts to import a symbol which has the import protection bit
-> set in the kflagstab entry for the symbol.
+On Mon, 8 Sep 2025 13:59:29 -0700
+dan.j.williams@intel.com wrote:
+
+> Jonathan Cameron wrote:
+> > From: Yicong Yang <yangyicong@hisilicon.com>
+> > 
+> > ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION provides the mechanism for
+> > invalidating certain memory regions in a cache-incoherent manner. Currently
+> > this is used by NVDIMM and CXL memory drivers in cases where it is
+> > necessary to flush all data from caches by physical address range.
+> > 
+> > In some architectures these operations are supported by system components
+> > that may become available only later in boot as they are either present
+> > on a discoverable bus, or via a firmware description of an MMIO interface
+> > (e.g. ACPI DSDT). Provide a framework to handle this case.
+> > 
+> > Architectures can opt in for this support via
+> > CONFIG_GENERIC_CPU_CACHE_MAINTENANCE
+> > 
+> > Add a registration framework. Each driver provides an ops structure and
+> > the first op is Write Back and Invalidate by PA Range. The driver may
+> > over invalidate.
+> > 
+> > An optional completion check operation is also provided. If present
+> > that should be called to ensure that the action has finished.
+> > 
+> > When multiple agents are present in the system each should register with
+> > this framework and the core code will issue the invalidate to all of them
+> > before checking for completion on each. This is done to avoid need for
+> > filtering in the core code which can become complex when interleave,
+> > potentially across different cache coherency hardware is going on, so it
+> > is easier to tell everyone and let those who don't care do nothing.
+> > 
+> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> > Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > ---
+> > v3: Squash all the layering from v2 so that the infrastucture is
+> >     always present.
+> >     Suggestions on naming welcome. Note that the hardware I have
+> >     available supports a much richer set of maintenance operations
+> >     than Write Back and Invalidate, so I'd like a name that
+> >     covers all resonable maintenance operations.
+> >     Use an allocation wrapper macro, based on the fwctl one to
+> >     ensure that the first element of the allocated driver structure
+> >     is a struct cache_coherency_device.
+> >     Thanks to all who provided feedback.
+> > ---
+> >  include/linux/cache_coherency.h |  57 ++++++++++++++
+> >  lib/Kconfig                     |   3 +
+> >  lib/Makefile                    |   2 +
+> >  lib/cache_maint.c               | 128 ++++++++++++++++++++++++++++++++
+> >  4 files changed, 190 insertions(+)
+> > 
+> > diff --git a/include/linux/cache_coherency.h b/include/linux/cache_coherency.h
+> > new file mode 100644
+> > index 000000000000..cb195b17b6e6
+> > --- /dev/null
+> > +++ b/include/linux/cache_coherency.h
+> > @@ -0,0 +1,57 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Cache coherency maintenace operation device drivers
+> > + *
+> > + * Copyright Huawei 2025
+> > + */
+> > +#ifndef _LINUX_CACHE_COHERENCY_H_
+> > +#define _LINUX_CACHE_COHERENCY_H_
+> > +
+> > +#include <linux/list.h>
+> > +#include <linux/types.h>
+> > +
+> > +struct cc_inval_params {
+> > +	phys_addr_t addr;
+> > +	size_t size;
+> > +};
+> > +
+> > +struct cache_coherency_device;
+> > +
+> > +struct coherency_ops {
+> > +	int (*wbinv)(struct cache_coherency_device *ccd, struct cc_inval_params *invp);
+> > +	int (*done)(struct cache_coherency_device *ccd);
+> > +};
+> > +
+> > +struct cache_coherency_device {
+> > +	struct list_head node;
+> > +	const struct coherency_ops *ops;
+> > +};  
 > 
-> Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
-> ---
-> [...]
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 4437c2a451ea..ece074a6ba7b 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -380,6 +380,7 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
->  	fsa->crc = symversion(syms->crcs, sym - syms->start);
->  	fsa->sym = sym;
->  	fsa->license = (sym_flags & KSYM_FLAG_GPL_ONLY) ? GPL_ONLY : NOT_GPL_ONLY;
-> +	fsa->is_protected = sym_flags & KSYM_FLAG_PROTECTED;
->  
->  	return true;
->  }
-> @@ -1273,6 +1274,11 @@ static const struct kernel_symbol *resolve_symbol(struct module *mod,
->  		goto getname;
->  	}
->  
-> +	if (fsa.is_protected && !mod->sig_ok) {
-> +		fsa.sym = ERR_PTR(-EACCES);
-> +		goto getname;
-> +	}
-> +
->  getname:
->  	/* We must make copy under the lock if we failed to get ref. */
->  	strscpy(ownername, module_name(fsa.owner), MODULE_NAME_LEN);
+> Why is this called a device when there is no 'struct device'?
+> 
+> This is just 'cache_coherency_ops'.
 
-The is_protected check should be moved before the ref_module() call.
-Adding a reference to another module should be always the last step,
-after all symbol checks have been performed.
+That's fair. The device went away as Greg KH quite reasonably didn't like the
+idea of a struct device with no userspace ABI at all.
 
-> @@ -1550,8 +1556,12 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
->  				break;
->  
->  			ret = PTR_ERR(ksym) ?: -ENOENT;
-> -			pr_warn("%s: Unknown symbol %s (err %d)\n",
-> -				mod->name, name, ret);
-> +			if (ret == -EACCES)
-> +				pr_warn("%s: Protected symbol %s (err %d)\n",
-> +					mod->name, name, ret);
-> +			else
-> +				pr_warn("%s: Unknown symbol %s (err %d)\n",
-> +					mod->name, name, ret);
->  			break;
->  
->  		default:
+I'll change the various register / unregister to use terminology
 
-I suggest moving the error message about the symbol being protected down
-into resolve_symbol(), at the point where this issue is detected. This
-approach is generally used for other checks, such as the CRC or
-namespace check. Additionally, I think it would make sense to change the
-current "Unknown symbol" warning here to "Unresolved symbol" to be more
-accurate.
+cache_coherency_ops_instance_register() etc to make it clear it
+isn't just a register one global set of ops.
 
--- 
-Thanks,
-Petr
+> 
+> Are you sure that this structure does not need something like "priority" or
+> "level" indicator to know where the ops should be sorted in a list? Or is
+> it the responsibility of the arch to make sure that the registration order
+> of the ops structures follows the hierarchy order of the caches?
+
+For all known implementations where we actually need this (so hosts with CXL
+or similar) the implementation is in a device somewhere on the coherency fabric
+that is capable of causing appropriate invalidation messages to be issued
+to all caches to the point where it knows that it there are no copies in
+the wrong state anywhere. In a simple model an offload agent has grabbed
+exclusive ownership of the line and written the content to memory.
+
+The multiple 'device' support is about different cachelines being the
+responsibility of different cache flushing 'devices' (interleave, multiple
+sockets etc), not a single line being flushed from different places.
+
+The PSCI spec alpha (that never went further) did allow for a case where a
+complex timing dance was needed but IIRC even that didn't assume an ordering
+constraint across the various devices.  It envisioned a stop world situation
+where all fetches were disabled until the line was definitely flushed by everyone.
+Thankfully we don't know of any implementation that needs that.
+
+We might need to extend things in future, but for now no ordering needed.
+
+> > diff --git a/lib/cache_maint.c b/lib/cache_maint.c
+> > new file mode 100644
+> > index 000000000000..05d9c5e99941
+> > --- /dev/null
+> > +++ b/lib/cache_maint.c
+> > @@ -0,0 +1,128 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Generic support for Memory System Cache Maintenance operations.
+> > + *
+> > + * Coherency maintenance drivers register with this simple framework that will
+> > + * iterate over each registered instance to first kick off invalidation and
+> > + * then to wait until it is complete.
+> > + *
+> > + * If no implementations are registered yet cpu_cache_has_invalidate_memregion()
+> > + * will return false. If this runs concurrently with unregistration then a
+> > + * race exists but this is no worse than the case where the device responsible
+> > + * for a given memory region has not yet registered.
+> > + */
+> > +#include <linux/cache_coherency.h>
+> > +#include <linux/cleanup.h>
+> > +#include <linux/container_of.h>
+> > +#include <linux/export.h>
+> > +#include <linux/list.h>
+> > +#include <linux/memregion.h>
+> > +#include <linux/module.h>
+> > +#include <linux/rwsem.h>
+> > +#include <linux/slab.h>
+> > +
+> > +static LIST_HEAD(cache_device_list);
+> > +static DECLARE_RWSEM(cache_device_list_lock);
+> > +
+> > +void cache_coherency_device_free(struct cache_coherency_device *ccd)
+> > +{
+> > +	kfree(ccd);
+> > +}
+> > +EXPORT_SYMBOL_GPL(cache_coherency_device_free);  
+> 
+> Why do you need a new GPL export wrapper for kfree?
+As per your other comment this will become a kref_put() I think.
+> 
+
 
