@@ -1,81 +1,80 @@
-Return-Path: <linux-arch+bounces-13956-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13957-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 107DFBC52EF
-	for <lists+linux-arch@lfdr.de>; Wed, 08 Oct 2025 15:24:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8720ABC53B7
+	for <lists+linux-arch@lfdr.de>; Wed, 08 Oct 2025 15:35:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36675401590
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Oct 2025 13:24:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 868E319E101B
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Oct 2025 13:36:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0CED283FFC;
-	Wed,  8 Oct 2025 13:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD7C42857FA;
+	Wed,  8 Oct 2025 13:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WA3uLfNt"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dywjDn0h"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86612848A0
-	for <linux-arch@vger.kernel.org>; Wed,  8 Oct 2025 13:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7705328507E
+	for <linux-arch@vger.kernel.org>; Wed,  8 Oct 2025 13:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759929880; cv=none; b=hVNsOqXk1ds8/xXgWxadW2OGVex1CCTMcUuQ5AM/nrnbPCntJLCu5T/f1gxM8KtGyecxUX/vIZdoUXmqCUtI/mTWB0W/F5Dv+leagxdNQyoPiSPxnOJDPfXVzOGPsBWSAXpEUz7Sz6f/HqEbE+z06EOeIBy6pvw8YQaRJbi5LQc=
+	t=1759930536; cv=none; b=TBbmUAP2pakW0DkK9HIoOCBXdboBi8Ky/y2LVviHgGqC1rEhWVgFid4ITrUS400sO/ihREtrk3Rv4zFQKakqKTFGS1M8GHybJdCwRBnPhQPSa54ZtsfghWRfd8C4ijVe9bUp76LrZCL5njZyLILZih0VuIfK1aLjKJ1eA8w7w9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759929880; c=relaxed/simple;
-	bh=fHRL68xgbrs4S5d+Rk03mc7ClH8sihNkbqrGqaL31yo=;
+	s=arc-20240116; t=1759930536; c=relaxed/simple;
+	bh=7vGH8N/m6PE6lnr/uLWOIY85RQ6MjHgDYrjIeFb+YNg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i5pt2/PqaDZ+uxsxAhL/Hm0BUBLqnGcs+f9jA5//BaMXBXCKKCLNvW8AjsJdbm10DQ2j2HM2/PbggHYPc5rIA4hTLLq9YrjU8NFNU7whsAG9zT5Fi0QiNfqjR13zYL8qxw3BPOgdHjr+aPTyqibl7RlHnpdd/rj8bJgmasMQSPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WA3uLfNt; arc=none smtp.client-ip=209.85.221.42
+	 In-Reply-To:Content-Type; b=vDGTF6RCbSZrJ0Imaa1rOPzMsMSxRcORu0xzosbUFoE8q/EJ/dNLLfKQP90bT4vFOuJBkQMyvVS4OvgBc/kMIFPG/4ab0IE7VkXQzfQTaHXQ6xQGnE8CU58VGXiQbFgr8cwf8JomLpDNixbjocDQxmEGiV6NhPOU+qqsWWl8UgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dywjDn0h; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3ee130237a8so5456819f8f.0
-        for <linux-arch@vger.kernel.org>; Wed, 08 Oct 2025 06:24:37 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-46e3af7889fso45618425e9.2
+        for <linux-arch@vger.kernel.org>; Wed, 08 Oct 2025 06:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759929876; x=1760534676; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1759930532; x=1760535332; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ai9bodin2zTCE30sm2MezQ75jr/Y4H7WdWVegLgSDKU=;
-        b=WA3uLfNtZKVV9l37I3e/ToYZya1MGuHLUToON1sDJ/mLNk46sz/nZGuPgKgrnftm0t
-         HjTiJHGd+b8TbTp8eU2AQrbPTpifE+cM4okUjyzbzXtjNNkWm6TiDG2fgLsoUvQ/543K
-         broEnKIROX30s0w4pdscVGlZYdYRs1ZSg0ALpZFhRbFMD5pBMpXgG2xDETEN3s9rO52P
-         ayBhwuPWIMGvmWTxzTuBPYmkuQ2YObGPFr4YCWt9S8aNBtJidU7quF6COOIeSrPQJL+4
-         GPMcCr1hYobFqLfwpJzqZgyj7dW9HM4M0VnjpYnYXk0fMfT7zTnKLKA8qQhdicB8t71T
-         gNFA==
+        bh=hDHlNMCgPWfKcx9mEMfAa7rnZ2ePjEXMkf1KPca5jNs=;
+        b=dywjDn0hZVcYnCqsGOJwB9zIwhAuPBx6/MnaRssTC2JfxFetIhJNqVQHO9Glfw/Mzl
+         jdCKVnXimtkCw+nFxD3dFnOx4hTdnFv3SbJ5xkAh87EiDw6ziOab7IrwKFiDG1dvfCNd
+         zBYEFhKO89Acm6ztRue/IbFMpeXzKHV5zH5R+BhNi/y0az0Q0aLDXYMhdJKVuVLQsclY
+         yZcjxPi+91EiGK8WBuDigRSxaFesJlkjC1nKNfND+ejLHMimqJvAFU/kRvEiRA7THLqA
+         odnmDDe3Drz2vcYt5g/ZyOvD3MWFevAngP95s6KBpFuSxrjXluGXf9FpghAzLon+0V8D
+         T86A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759929876; x=1760534676;
+        d=1e100.net; s=20230601; t=1759930532; x=1760535332;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ai9bodin2zTCE30sm2MezQ75jr/Y4H7WdWVegLgSDKU=;
-        b=NsY8Dz81+XebLKkBHPUoBCFtTb9WWUp1ah/TDj0tKGWnq3v8wAm42rF1BfYtB4wXLl
-         ruWhnCbtr/pTrrZSgO25UR8CGcyYE0Ic0OvaTBtlf8YXG5SyOMxS7JxYgisDmoHo/KIa
-         SoD1tNJugqdviG8lxf8FrvHbXFeY0V2/O4Mf5vuu2oI38pAVbTuQGdFC06k8pO7HyOUe
-         bkB26T3wdc60Fngp8VIvpVvHAzn0FWIWpybz6np0PgJWFldJu1Z2/67WQ4h7YiZ/xsQu
-         zkTVoLRi5YgHeVXiwmUEkbFmeelTRiKulTaVVy020Wm0iryEmk3OxS1uxwhJPnNRnCnH
-         pfcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWUhycCGuLjPhEa9Lhg95dlVDWm5RlLswHU+Y1mM0R1hUNy0SP+ptkAdYBIQE33ny+cSI8FKpw4ICpK@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv8l5khIRr4zMQiZVwJ9hNpt+fbpDDS4+Niq0+McoCazkYnRoL
-	QzY5oufqViVOfDTaX49W0SUR4RnS31eD12bX3TPb4m7U0lpPMquIB/K1nsfz6mL3R34N9wT6KAY
-	w0CIP
-X-Gm-Gg: ASbGncuGLTKmv+QSzzVBAXoAy8aDz5yZH+R0pxLdgyiM4y+PDHW6PhfJp3XcO9ZUtDy
-	fuJ7hp7Ql3AJgQWobzA74+b4Co3Ls138EMy26h4VhdLZ8AJOd+MxyeNCh+g7Rhar0FZ6Pcg0kJg
-	r1oipjZCArr0xEEADUkSX1hh8l1vlvKqWdNxnZ1IuPX+03URoUoqnVQM86lKLvTiTF1IauHeGFD
-	WOZWuIETqYlDz88KXsAFAtxLY1zFeI86J6Eq43FRiKeARB+4/I3EnIL1iAH4NKemPHU255PE237
-	977Kn6nzYU7yBhY+IyU1YGIAWVz6IW2RJU9S42wibdniBaxNmqYULtfocJ/KdKumuRvHBv93iGU
-	gp3j+XDfbu5rKgchs57VwRy7RI2nrwrzkA2R5ABN/Gt4NK7zqlA1X0mXg1pI6rBIc
-X-Google-Smtp-Source: AGHT+IHuhMKyjw9ZbS23OBrv8VA5JUlHXtFCz8Wrw4kfUqnmq3pfnc8RuPQ01+3mL+le3/TLouPIeg==
-X-Received: by 2002:a05:6000:22c7:b0:3ec:6259:5079 with SMTP id ffacd0b85a97d-42666ab1b7fmr2477434f8f.11.1759929876072;
-        Wed, 08 Oct 2025 06:24:36 -0700 (PDT)
+        bh=hDHlNMCgPWfKcx9mEMfAa7rnZ2ePjEXMkf1KPca5jNs=;
+        b=DO8T/5UdifqlP9zGvtavWe2k/MYpfrkqgkPpDpC/QGf6kKCwOQg69rIHOoHNd+C4KS
+         qfapxh8W9LFL1rpBhuieAULdO5/viVpSi3dY0SycTY+HKwpJeIxBXDrbv1L7KXS6taS/
+         96+BdM0abOWBCvk+uNoDF+czoalxG0DQe/+oGt8rPuH7B3LtqcmN6DKgR93++QCrm2Bp
+         BUi0jJeKGQAVLQuji7pmWAJcTEYtcXvKoN64XRLR2bnAfvPh+qaxengFWo19DZ7TE9cr
+         uYcTf5TDHb4tsNjnNnQCSA+0KnSR9+hx3Fxgh/vS17faSg4VFx3psDqpU9qN1YCNf/PE
+         8QPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXOf5Ub+cH7WrTUdpmQZcYdTShXNErqVG8wKueq2pQ6e0jh8EcqAUwERLIdcbuoybIrjvpDt7Mx4Gg6@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7KazKH/EKp4ltaaalocIL21jyzs5iGs96y/GJuB5Cq0T/mudu
+	gNPBHkccpT5IeJGgq1pSdFyF3sgL8mEnKuJNStfCtRU5yZrlJo/fYfXitFUdyZ2wLzc=
+X-Gm-Gg: ASbGncvbN4y7gBF/HhkZdvaKM+dl8tWnrMVtehMGuSxYlPkgLGpDj3GgTBwGaVQD3zs
+	px2hI1lgf9OhUqodbWLYN+oTNhJjMCOStLHILAgn2CUbVF1ZAG1C4Ji/WWTwdA1TN0eZ1MAU300
+	oKTWPkV5QqKgovetpKKyJNxTqU9Qa009q5A84cL1yQn0oZ0dspauAd1TfozC5p/iEgRTiQTK7GY
+	b0rHh1OwEUw34qu93CC8MW87AQFHk8sF5AAhvQG9RZlPFh4/ok0KIlEq42I659zXDAr+Seq3S8Z
+	lXis5Fd+OLVul4CG5ofcZbqk3hNm8T6TXMOpKaGo6agw9Y/+FcMt1fLxgK5FO5+qjbsza+W2x53
+	tUwDRewNTf25DdmHuCEAnLE9JHaIUSIw63bC5t1TnCq3bE5QCwGbV3h6PNd7qvJn6
+X-Google-Smtp-Source: AGHT+IEXN1OK+uUWcZYHcu8mGQCE4xlOe4D5UqEffJSE6zNfCHiuL17ImKFC3KKJ16P8hPWOZxwfnw==
+X-Received: by 2002:a05:600c:4f92:b0:458:c094:8ba5 with SMTP id 5b1f17b1804b1-46fa9a96588mr24061795e9.12.1759930531814;
+        Wed, 08 Oct 2025 06:35:31 -0700 (PDT)
 Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4255d8ab8b0sm29892836f8f.18.2025.10.08.06.24.35
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4255d8e9762sm30365608f8f.38.2025.10.08.06.35.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Oct 2025 06:24:35 -0700 (PDT)
-Message-ID: <b394956c-5973-438b-9e43-f7081a89fa97@suse.com>
-Date: Wed, 8 Oct 2025 15:24:35 +0200
+        Wed, 08 Oct 2025 06:35:31 -0700 (PDT)
+Message-ID: <6e057525-ca8d-4f96-bb52-cca6cafbe835@suse.com>
+Date: Wed, 8 Oct 2025 15:35:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,8 +82,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/10] remove references to *_gpl sections in
- documentation
+Subject: Re: [PATCH 09/10] modpost: add symbol import protection flag to
+ kflagstab
 To: Siddharth Nayyar <sidnayyar@google.com>
 Cc: Nathan Chancellor <nathan@kernel.org>,
  Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
@@ -93,46 +92,41 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
  linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250829105418.3053274-1-sidnayyar@google.com>
- <20250829105418.3053274-9-sidnayyar@google.com>
+ <20250829105418.3053274-10-sidnayyar@google.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250829105418.3053274-9-sidnayyar@google.com>
+In-Reply-To: <20250829105418.3053274-10-sidnayyar@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/29/25 12:54 PM, Siddharth Nayyar wrote:
+> When the unused exports whitelist is provided, the symbol protection bit
+> is set for symbols not present in the unused exports whitelist.
+> 
+> The flag will be used in the following commit to prevent unsigned
+> modules from the using symbols other than those explicitly declared by
+> the such modules ahead of time.
+> 
 > Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 > ---
->  Documentation/kbuild/modules.rst | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/kbuild/modules.rst b/Documentation/kbuild/modules.rst
-> index d0703605bfa4..f2022fa2342f 100644
-> --- a/Documentation/kbuild/modules.rst
-> +++ b/Documentation/kbuild/modules.rst
-> @@ -426,11 +426,11 @@ Symbols From the Kernel (vmlinux + modules)
->  Version Information Formats
->  ---------------------------
+> [...]
+> diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
+> index 574609aced99..96fe3f4d7424 100644
+> --- a/include/linux/module_symbol.h
+> +++ b/include/linux/module_symbol.h
+> @@ -3,8 +3,9 @@
+>  #define _LINUX_MODULE_SYMBOL_H
 >  
-> -	Exported symbols have information stored in __ksymtab or __ksymtab_gpl
-> -	sections. Symbol names and namespaces are stored in __ksymtab_strings,
-> +	Exported symbols have information stored in the __ksymtab section.
-> +	Symbol names and namespaces are stored in __ksymtab_strings section,
->  	using a format similar to the string table used for ELF. If
->  	CONFIG_MODVERSIONS is enabled, the CRCs corresponding to exported
-> -	symbols will be added to the __kcrctab or __kcrctab_gpl.
-> +	symbols will be added to the __kcrctab section.
+>  /* Kernel symbol flags bitset. */
+> -enum ksym_flags {
+> +enum symbol_flags {
+>  	KSYM_FLAG_GPL_ONLY	= 1 << 0,
+> +	KSYM_FLAG_PROTECTED	= 1 << 1,
+>  };
 >  
->  	If CONFIG_BASIC_MODVERSIONS is enabled (default with
->  	CONFIG_MODVERSIONS), imported symbols will have their symbol name and
 
-Nit: I realize this part of the document primarily discusses sections
-related to modversions, but I think it would be good to briefly mention
-also the existence of the __kflagstab section. The first sentence could
-say:
-
-Exported symbols have information stored in the __ksymtab and
-__kflagstab sections.
+Nit: The ksym_flags enum is added in patch #1. If you prefer a different
+name, you can change it in that patch.
 
 -- 
 Thanks,
