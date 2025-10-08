@@ -1,134 +1,180 @@
-Return-Path: <linux-arch+bounces-13957-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-13958-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8720ABC53B7
-	for <lists+linux-arch@lfdr.de>; Wed, 08 Oct 2025 15:35:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C499DBC5677
+	for <lists+linux-arch@lfdr.de>; Wed, 08 Oct 2025 16:13:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 868E319E101B
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Oct 2025 13:36:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A1EF3B9BEA
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Oct 2025 14:13:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD7C42857FA;
-	Wed,  8 Oct 2025 13:35:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dywjDn0h"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D77392980C2;
+	Wed,  8 Oct 2025 14:13:42 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7705328507E
-	for <linux-arch@vger.kernel.org>; Wed,  8 Oct 2025 13:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED5E19F115;
+	Wed,  8 Oct 2025 14:13:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759930536; cv=none; b=TBbmUAP2pakW0DkK9HIoOCBXdboBi8Ky/y2LVviHgGqC1rEhWVgFid4ITrUS400sO/ihREtrk3Rv4zFQKakqKTFGS1M8GHybJdCwRBnPhQPSa54ZtsfghWRfd8C4ijVe9bUp76LrZCL5njZyLILZih0VuIfK1aLjKJ1eA8w7w9Q=
+	t=1759932822; cv=none; b=P38oFtGXM59g2U9Qzrh+OYQ7P0RMiS66mLppVm8/IAzWBppW1dX5UYF1OLDc3iANE+mCXgsIpm8bYXAB5PRchivK2sGSqDpco4uFnTyByWIbo0Sp1CwMz7zlcAaPhanBkUjprq+qoTTnfaTLEF2PSKU3uAzP+bcxTxEFolG/9os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759930536; c=relaxed/simple;
-	bh=7vGH8N/m6PE6lnr/uLWOIY85RQ6MjHgDYrjIeFb+YNg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vDGTF6RCbSZrJ0Imaa1rOPzMsMSxRcORu0xzosbUFoE8q/EJ/dNLLfKQP90bT4vFOuJBkQMyvVS4OvgBc/kMIFPG/4ab0IE7VkXQzfQTaHXQ6xQGnE8CU58VGXiQbFgr8cwf8JomLpDNixbjocDQxmEGiV6NhPOU+qqsWWl8UgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dywjDn0h; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-46e3af7889fso45618425e9.2
-        for <linux-arch@vger.kernel.org>; Wed, 08 Oct 2025 06:35:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759930532; x=1760535332; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hDHlNMCgPWfKcx9mEMfAa7rnZ2ePjEXMkf1KPca5jNs=;
-        b=dywjDn0hZVcYnCqsGOJwB9zIwhAuPBx6/MnaRssTC2JfxFetIhJNqVQHO9Glfw/Mzl
-         jdCKVnXimtkCw+nFxD3dFnOx4hTdnFv3SbJ5xkAh87EiDw6ziOab7IrwKFiDG1dvfCNd
-         zBYEFhKO89Acm6ztRue/IbFMpeXzKHV5zH5R+BhNi/y0az0Q0aLDXYMhdJKVuVLQsclY
-         yZcjxPi+91EiGK8WBuDigRSxaFesJlkjC1nKNfND+ejLHMimqJvAFU/kRvEiRA7THLqA
-         odnmDDe3Drz2vcYt5g/ZyOvD3MWFevAngP95s6KBpFuSxrjXluGXf9FpghAzLon+0V8D
-         T86A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759930532; x=1760535332;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hDHlNMCgPWfKcx9mEMfAa7rnZ2ePjEXMkf1KPca5jNs=;
-        b=DO8T/5UdifqlP9zGvtavWe2k/MYpfrkqgkPpDpC/QGf6kKCwOQg69rIHOoHNd+C4KS
-         qfapxh8W9LFL1rpBhuieAULdO5/viVpSi3dY0SycTY+HKwpJeIxBXDrbv1L7KXS6taS/
-         96+BdM0abOWBCvk+uNoDF+czoalxG0DQe/+oGt8rPuH7B3LtqcmN6DKgR93++QCrm2Bp
-         BUi0jJeKGQAVLQuji7pmWAJcTEYtcXvKoN64XRLR2bnAfvPh+qaxengFWo19DZ7TE9cr
-         uYcTf5TDHb4tsNjnNnQCSA+0KnSR9+hx3Fxgh/vS17faSg4VFx3psDqpU9qN1YCNf/PE
-         8QPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXOf5Ub+cH7WrTUdpmQZcYdTShXNErqVG8wKueq2pQ6e0jh8EcqAUwERLIdcbuoybIrjvpDt7Mx4Gg6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7KazKH/EKp4ltaaalocIL21jyzs5iGs96y/GJuB5Cq0T/mudu
-	gNPBHkccpT5IeJGgq1pSdFyF3sgL8mEnKuJNStfCtRU5yZrlJo/fYfXitFUdyZ2wLzc=
-X-Gm-Gg: ASbGncvbN4y7gBF/HhkZdvaKM+dl8tWnrMVtehMGuSxYlPkgLGpDj3GgTBwGaVQD3zs
-	px2hI1lgf9OhUqodbWLYN+oTNhJjMCOStLHILAgn2CUbVF1ZAG1C4Ji/WWTwdA1TN0eZ1MAU300
-	oKTWPkV5QqKgovetpKKyJNxTqU9Qa009q5A84cL1yQn0oZ0dspauAd1TfozC5p/iEgRTiQTK7GY
-	b0rHh1OwEUw34qu93CC8MW87AQFHk8sF5AAhvQG9RZlPFh4/ok0KIlEq42I659zXDAr+Seq3S8Z
-	lXis5Fd+OLVul4CG5ofcZbqk3hNm8T6TXMOpKaGo6agw9Y/+FcMt1fLxgK5FO5+qjbsza+W2x53
-	tUwDRewNTf25DdmHuCEAnLE9JHaIUSIw63bC5t1TnCq3bE5QCwGbV3h6PNd7qvJn6
-X-Google-Smtp-Source: AGHT+IEXN1OK+uUWcZYHcu8mGQCE4xlOe4D5UqEffJSE6zNfCHiuL17ImKFC3KKJ16P8hPWOZxwfnw==
-X-Received: by 2002:a05:600c:4f92:b0:458:c094:8ba5 with SMTP id 5b1f17b1804b1-46fa9a96588mr24061795e9.12.1759930531814;
-        Wed, 08 Oct 2025 06:35:31 -0700 (PDT)
-Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4255d8e9762sm30365608f8f.38.2025.10.08.06.35.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Oct 2025 06:35:31 -0700 (PDT)
-Message-ID: <6e057525-ca8d-4f96-bb52-cca6cafbe835@suse.com>
-Date: Wed, 8 Oct 2025 15:35:30 +0200
+	s=arc-20240116; t=1759932822; c=relaxed/simple;
+	bh=B/D3kUvY7OMyeVsf9T6JXPJxNREc8Db0eb/ZrW+5kXM=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dokyDXwsN1EBBZr6adtHQyTxGGTjYxWDT0yhOwuXdavLxgi24hLxncEZ/paea7yJJnEGq9WMh7UBbJ6tOl8EveD0VDjOBu0V5R84dv3XCeF6wdX/YX2SEJKt+vC/uitV0ogl8dN6/GkbydSwFkUnjCrt3VtcAj4hyoXGL5x0IsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4chZfv4gGzz6L4vx;
+	Wed,  8 Oct 2025 22:11:03 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id 964541400DB;
+	Wed,  8 Oct 2025 22:13:36 +0800 (CST)
+Received: from localhost (10.122.19.247) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 8 Oct
+ 2025 15:13:35 +0100
+Date: Wed, 8 Oct 2025 15:13:33 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: <dan.j.williams@intel.com>
+CC: Catalin Marinas <catalin.marinas@arm.com>, <james.morse@arm.com>,
+	<linux-cxl@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-mm@kvack.org>, Will Deacon <will@kernel.org>, Davidlohr Bueso
+	<dave@stgolabs.net>, "H . Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
+	<peterz@infradead.org>, "Yicong Yang" <yangyicong@huawei.com>,
+	<linuxarm@huawei.com>, Yushan Wang <wangyushan12@huawei.com>, Lorenzo
+ Pieralisi <lpieralisi@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, Thomas Gleixner
+	<tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCH v3 6/8] cache: Support cache maintenance for HiSilicon
+ SoC Hydra Home Agent
+Message-ID: <20251008151333.00001b94@huawei.com>
+In-Reply-To: <68bf52fa851d9_75e3100ac@dwillia2-mobl4.notmuch>
+References: <20250820102950.175065-1-Jonathan.Cameron@huawei.com>
+	<20250820102950.175065-7-Jonathan.Cameron@huawei.com>
+	<68bf52fa851d9_75e3100ac@dwillia2-mobl4.notmuch>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/10] modpost: add symbol import protection flag to
- kflagstab
-To: Siddharth Nayyar <sidnayyar@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Nicolas Schier <nicolas.schier@linux.dev>,
- Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250829105418.3053274-1-sidnayyar@google.com>
- <20250829105418.3053274-10-sidnayyar@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250829105418.3053274-10-sidnayyar@google.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100011.china.huawei.com (7.191.174.247) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-On 8/29/25 12:54 PM, Siddharth Nayyar wrote:
-> When the unused exports whitelist is provided, the symbol protection bit
-> is set for symbols not present in the unused exports whitelist.
+On Mon, 8 Sep 2025 15:04:42 -0700
+dan.j.williams@intel.com wrote:
+
+> Jonathan Cameron wrote:
+> > From: Yushan Wang <wangyushan12@huawei.com>
+> > 
+> > Hydra Home Agent is a device used to maintain cache coherency. Add support
+> > of explicit cache maintenance operations for it.
+> > 
+> > Memory resource of HHA conflicts with that of HHA PMU. A workaround is
+> > implemented here by replacing devm_ioremap_resource() to devm_ioremap() to
+> > workaround the resource conflict check.
+> > 
+> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> > Co-developed-by: Yicong Yang <yangyicong@hisilicon.com>
+> > Signed-off-by: Yushan Wang <wangyushan12@huawei.com>
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>  
+> [..]
+> > +static int hisi_soc_hha_probe(struct platform_device *pdev)
+> > +{
+> > +	struct hisi_soc_hha *soc_hha;
+> > +	struct resource *mem;
+> > +	int ret;
+> > +
+> > +	soc_hha = cache_coherency_device_alloc(&hha_ops, struct hisi_soc_hha,
+> > +					       ccd);
+> > +	if (!soc_hha)
+> > +		return -ENOMEM;
+> > +
+> > +	platform_set_drvdata(pdev, soc_hha);
+> > +
+> > +	mutex_init(&soc_hha->lock);
+> > +
+> > +	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > +	if (!mem)
+> > +		return -ENODEV;
+> > +
+> > +	/*
+> > +	 * HHA cache driver share the same register region with HHA uncore PMU
+> > +	 * driver in hardware's perspective, none of them should reserve the
+> > +	 * resource to itself only.  Here exclusive access verification is
+> > +	 * avoided by calling devm_ioremap instead of devm_ioremap_resource to
+> > +	 * allow both drivers to exist at the same time.
+> > +	 */
+> > +	soc_hha->base = ioremap(mem->start, resource_size(mem));
+> > +	if (IS_ERR_OR_NULL(soc_hha->base)) {
+> > +		ret = dev_err_probe(&pdev->dev, PTR_ERR(soc_hha->base),
+> > +				"failed to remap io memory");
+> > +		goto err_free_ccd;
+> > +	}
+> > +
+> > +	ret = cache_coherency_device_register(&soc_hha->ccd);
+> > +	if (ret)
+> > +		goto err_iounmap;
+> > +
+> > +	return 0;
+> > +
+> > +err_iounmap:
+> > +	iounmap(soc_hha->base);
+> > +err_free_ccd:
+> > +	cache_coherency_device_free(&soc_hha->ccd);  
 > 
-> The flag will be used in the following commit to prevent unsigned
-> modules from the using symbols other than those explicitly declared by
-> the such modules ahead of time.
+> I understand that this scheme works because ccd is the first member and
+> that is forced at alloc the same way fwctl does it. However, fwctl hides
+> confusing code like this behind put_device() in the free path. So I would
+> say if you want to borrow the "_alloc(ops, drv_struct, member)" approach do
+> also hide the "offsetof(drv_struct, member) == 0" in the object release
+> path and not have eye-popping code like:
 > 
-> Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
-> ---
-> [...]
-> diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
-> index 574609aced99..96fe3f4d7424 100644
-> --- a/include/linux/module_symbol.h
-> +++ b/include/linux/module_symbol.h
-> @@ -3,8 +3,9 @@
->  #define _LINUX_MODULE_SYMBOL_H
->  
->  /* Kernel symbol flags bitset. */
-> -enum ksym_flags {
-> +enum symbol_flags {
->  	KSYM_FLAG_GPL_ONLY	= 1 << 0,
-> +	KSYM_FLAG_PROTECTED	= 1 << 1,
->  };
->  
+>     cache_coherency_device_free(&soc_hha->ccd)
+> 
+> ...that throws away the allocation side cleverness into a cloud of reader
+> confusion. Either make this an actual "device" or otherwise have a kref.
+> 
+The device option is out because Greg KH was not keen on me using that
+infrastructure when we don't have any userspace ABI. 
 
-Nit: The ksym_flags enum is added in patch #1. If you prefer a different
-name, you can change it in that patch.
+Kref seems fine but because we have to pass an explicit release to kref_put()
+we end up either with the odd looking
 
--- 
-Thanks,
-Petr
+kfree_put(&soc_hha->cci, cache_coherency_ops_inst_free);
+
+or wrapping it up with a helper along the lines of
+cache_coherency_ops_instance_put(&soc_hha->cci);
+
+That seems reasonable but given there is no real reference counting going on
+(the reference count == 1 from alloc to this call) using an actual kref is
+perhaps overkill because this is really the same as having no kref and
+just implementing.
+
+void cache_coherency_ops_instance_put(struct cache_coherency_ops_inst *cci)
+{
+	kfree(cci);
+}
+
+So other than a rename it is the same as current implementation. :(
+
+So for now I'm thinking have the helper and use a kref even if it's rather
+silly just because it will then behave how people (hopefully) expect it to.
+
+Jonathan
+
+
+
+
 
