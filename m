@@ -1,133 +1,482 @@
-Return-Path: <linux-arch+bounces-14002-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14003-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95CD9BCDB4D
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 17:06:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCBF5BCDD2E
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 17:41:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 410AD3562B5
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 15:06:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9893E4F29AA
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 15:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB042F90E0;
-	Fri, 10 Oct 2025 15:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 544EE2FB966;
+	Fri, 10 Oct 2025 15:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cukOrGdK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Pc0Zpxvj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C762F8BF7
-	for <linux-arch@vger.kernel.org>; Fri, 10 Oct 2025 15:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4862FB628
+	for <linux-arch@vger.kernel.org>; Fri, 10 Oct 2025 15:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760108713; cv=none; b=S6TJEM8qlm6Ayvht7U4kVEcC2sJ9tu3q0f08GvGF2MYW8l+7+uce5NnsFDs35bSpo766dis6JAuAdfmhCohSJE7L1RXtEt3ecgUwALc9sloE8zxv5I7hyQNwUmQay9czq9Lb7co2WZ0UFO5TkjUbR7fDAAD7+XxEqdpqCZAwo3g=
+	t=1760110869; cv=none; b=X2OKPXv2edoFpjbZaJgIboTyx4MzgJLMHUCOMZoP0aXcZvnqA/v5vcmwCrz3Kgriot4HV1yMj0SBUeC04EoBFzLhVxs4fVLMX5DyNAqd+XMYDbZS31stWC5CndXzR8WLtReGTi/vmGOg+RsuEzmYkZv7KT8WufM/pQABqSNu/Ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760108713; c=relaxed/simple;
-	bh=auvR4vzTTatOuCuru52VOtm4KI7SmeTOVUgJyw2/46g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g6oNf6pmHUY/TjfnF340aA/pHjylEfgnc3IBpeVZeoBEnLqEC2oD/amNOMdf3jALKAPlq6b8YhlbC6PNer1w27va+gk/TPCTzB4AtT41Bz5o4IOD8WTh+9ztNEgC/yRfGMPxlMO0UhzvZFWBf3rBbUzOD+K2Y/d+UHZRKigEij4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cukOrGdK; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b3da3b34950so358792566b.3
-        for <linux-arch@vger.kernel.org>; Fri, 10 Oct 2025 08:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760108709; x=1760713509; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NIWxPopIPg40sXCXJnzxg4lhVvntApAACn3HESqIPcY=;
-        b=cukOrGdK67ALc138mnVZJfA3nAbcSaf9ydeV1KhpWWi4VAc2Reodc632tdlco8WCam
-         6lmTryDBz8Pwky0HIhVJGEdxdSIf+t7NjJZt66/OCUU01cmxp+7b2d9nrdbpTot4q3Xw
-         PG8OPQYolf/jm7ASPNQQLQxnQpjWMLLE8DE0H7sAy535HzhvOfIi9iDMTUNjgURkfN38
-         sPcLH8bje6HSkKtd2nm1jf0miU3Fm3O8g947/Ybrc/iWH3QK6BG/H1hhM4S750ZmcsYw
-         dK2uOqJRJTQHyoL56Sg0wLuhcKFqk5jTN+4Tgym4kGXc1tRa0WHfSarSptSXNVsGG1tq
-         IDQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760108709; x=1760713509;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NIWxPopIPg40sXCXJnzxg4lhVvntApAACn3HESqIPcY=;
-        b=pWoaFiA4kPBhjsrkjIY/4usvFPylExIrgdHRMwLnrHUj0qHB/B8QjQ5powvlfu2/VX
-         1TDBJUX0AruKJEcNoyg2HxIjfHVPp/FT5ZOlbM7a8nMT9Yu17YAGKpl+Ig5igc0L3mm6
-         fsJukOaUgBLqDlQRtHze4p0+kq9HTBW4uPO7ObzL6mYTqbmldVhwz3f840KrAtvEr2dp
-         +OeM6da5PaODnWjUwOyYUIqXvs21CxLdY3BM7ktpFqswYJbYF+oaOYZzCyUf3tC++14k
-         q/s8ncxGgNkazMPvXB4IZRIfXiVI51H+XaT/wDikjSFWUbU5JmXwcsARfJayrvPAOCR+
-         gejQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZDST9sH3tRnkXEROswaxwkcV2wqAdz6RV3fXNgczMj4IK1vUhG2GDmR5R14YB1vyDPGD/eu0vYavJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YySwzjGBxdZinpv1XA8+ObdAmqgHHxvT8eyDaAsJw7F24+RIxJ8
-	+CoY5pwMn+9W7Dkl+bud2TNtNr9DlLOiaBMRBfDDe1Btpvu955DRcV7prZsSax2IHMKlvtE8mdf
-	v+p/C4V/DUIlda4iW2Y6WI80vemiUMBU=
-X-Gm-Gg: ASbGncs8lfRmKoJSirBdOJOiHaMYnu9rTjBHIWetBokcXxDc9f9kareCHTw6YIv4mm5
-	s+MKlyqt0QEEdr70jhKKS5Z9G4PpFTpFo/dAvdsjBHwID3/NhfwRmd9V8WPC5+xeleiniuGOtn1
-	BniNs1UEaLRGTGbZHXSabLgFv5K61KjjF1EReztWhyKrc9vDOX+FK2GrOtSwXUPanBa3PD9RtsX
-	7ex8AQ9w7+/fPgRPBrpGt7FnEXl7PoISXVDGvKoVK5s9L0=
-X-Google-Smtp-Source: AGHT+IF09dfhTcQpiRWLSf2A1k/s4FQSc760VKHf84ZQbfzXVjJJrp2yCq5wGIDsYhhFT8HuSa1w5HwjyUCOwQmF8So=
-X-Received: by 2002:a17:907:2da3:b0:b3e:e244:1d8 with SMTP id
- a640c23a62f3a-b50abaa44c8mr1245748966b.34.1760108709145; Fri, 10 Oct 2025
- 08:05:09 -0700 (PDT)
+	s=arc-20240116; t=1760110869; c=relaxed/simple;
+	bh=FSEANxrU9dp19+Ag4I4xMghkVdEvzoah8qS7zSDG6Us=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pbLK1wUllvytto/0jGJnoJ3b11FitDLrHN8IuPX27frroUEoXQOg9CMRb1yIYtmNWxTU3KqMRUV3yBdk6rocTaR9A2lDOZUIiJa0h9laaJ0mdeiLNccJ3WPhkvkvYJpZzoGeXyxY6PFFHbtnKqQbdVWAmzhEduYOgEah1iayaR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Pc0Zpxvj; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760110866;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Fyc/O040ioe2LeCss0F0AJFhQQxKnCcKYI13CFwyqX8=;
+	b=Pc0ZpxvjNh5ZlXfr56oxOglj6EJMy5wFQVKBepNCTPm7/C8RgKuFR9oNTPqm8FiJdDyCcK
+	HdV+maqq9dpjt7jEWEqujRGP9XAX+wYLic7z9mqPW15ji+NFkH4cF95Zed4FsrFItN8cAw
+	mkOv3VyrTFkbW6DarEuWB7hLO5fzvGo=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-322-pJcu7FHtPGSeetPSPwFhxw-1; Fri,
+ 10 Oct 2025 11:40:58 -0400
+X-MC-Unique: pJcu7FHtPGSeetPSPwFhxw-1
+X-Mimecast-MFC-AGG-ID: pJcu7FHtPGSeetPSPwFhxw_1760110846
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 71FE31800576;
+	Fri, 10 Oct 2025 15:40:44 +0000 (UTC)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.224.29])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CD83E18004D8;
+	Fri, 10 Oct 2025 15:40:25 +0000 (UTC)
+From: Valentin Schneider <vschneid@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	rcu@vger.kernel.org,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Jason Baron <jbaron@akamai.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Han Shen <shenhan@google.com>,
+	Rik van Riel <riel@surriel.com>,
+	Jann Horn <jannh@google.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Clark Williams <williams@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	Daniel Wagner <dwagner@suse.de>,
+	Petr Tesarik <ptesarik@suse.com>
+Subject: [PATCH v6 00/29] context_tracking,x86: Defer some IPIs until a user->kernel transition
+Date: Fri, 10 Oct 2025 17:38:10 +0200
+Message-ID: <20251010153839.151763-1-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251010094047.3111495-1-safinaskar@gmail.com> <20251010094047.3111495-3-safinaskar@gmail.com>
-In-Reply-To: <20251010094047.3111495-3-safinaskar@gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Fri, 10 Oct 2025 18:04:33 +0300
-X-Gm-Features: AS18NWCvLx5PLZaUkorsbem-B-yR3hlKjw6yF-hbdTFMFmR4Zuzb6EIcT1htWkA
-Message-ID: <CAHp75VezkZ7A1VOP8cBH8h0DKVumP66jjUbepMCP87wGOrh+MQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] initrd: remove deprecated code path (linuxrc)
-To: Askar Safin <safinaskar@gmail.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Brauner <brauner@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>, 
-	Jens Axboe <axboe@kernel.dk>, Aleksa Sarai <cyphar@cyphar.com>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Julian Stecklina <julian.stecklina@cyberus-technology.de>, 
-	Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Alexander Graf <graf@amazon.com>, 
-	Rob Landley <rob@landley.net>, Lennart Poettering <mzxreary@0pointer.de>, linux-arch@vger.kernel.org, 
-	linux-block@vger.kernel.org, initramfs@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Michal Simek <monstr@monstr.eu>, Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Dave Young <dyoung@redhat.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Borislav Petkov <bp@alien8.de>, Jessica Clarke <jrtc27@jrtc27.com>, 
-	Nicolas Schichan <nschichan@freebox.fr>, David Disseldorp <ddiss@suse.de>, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Fri, Oct 10, 2025 at 12:42=E2=80=AFPM Askar Safin <safinaskar@gmail.com>=
- wrote:
->
-> Remove linuxrc initrd code path, which was deprecated in 2020.
->
-> Initramfs and (non-initial) RAM disks (i. e. brd) still work.
->
-> Both built-in and bootloader-supplied initramfs still work.
->
-> Non-linuxrc initrd code path (i. e. using /dev/ram as final root
-> filesystem) still works, but I put deprecation message into it
+Context
+=======
 
-...
+We've observed within Red Hat that isolated, NOHZ_FULL CPUs running a
+pure-userspace application get regularly interrupted by IPIs sent from
+housekeeping CPUs. Those IPIs are caused by activity on the housekeeping CPUs
+leading to various on_each_cpu() calls, e.g.:
 
-> -       noinitrd        [RAM] Tells the kernel not to load any configured
-> +       noinitrd        [Deprecated,RAM] Tells the kernel not to load any=
- configured
->                         initial RAM disk.
+  64359.052209596    NetworkManager       0    1405     smp_call_function_many_cond (cpu=0, func=do_kernel_range_flush)
+    smp_call_function_many_cond+0x1
+    smp_call_function+0x39
+    on_each_cpu+0x2a
+    flush_tlb_kernel_range+0x7b
+    __purge_vmap_area_lazy+0x70
+    _vm_unmap_aliases.part.42+0xdf
+    change_page_attr_set_clr+0x16a
+    set_memory_ro+0x26
+    bpf_int_jit_compile+0x2f9
+    bpf_prog_select_runtime+0xc6
+    bpf_prepare_filter+0x523
+    sk_attach_filter+0x13
+    sock_setsockopt+0x92c
+    __sys_setsockopt+0x16a
+    __x64_sys_setsockopt+0x20
+    do_syscall_64+0x87
+    entry_SYSCALL_64_after_hwframe+0x65
 
-How one is supposed to run this when just having a kernel is enough?
-At least (ex)colleague of mine was a heavy user of this option for
-testing kernel builds on the real HW.
+The heart of this series is the thought that while we cannot remove NOHZ_FULL
+CPUs from the list of CPUs targeted by these IPIs, they may not have to execute
+the callbacks immediately. Anything that only affects kernelspace can wait
+until the next user->kernel transition, providing it can be executed "early
+enough" in the entry code.
 
---=20
-With Best Regards,
-Andy Shevchenko
+The original implementation is from Peter [1]. Nicolas then added kernel TLB
+invalidation deferral to that [2], and I picked it up from there.
+
+Deferral approach
+=================
+
+Storing each and every callback, like a secondary call_single_queue turned out
+to be a no-go: the whole point of deferral is to keep NOHZ_FULL CPUs in
+userspace for as long as possible - no signal of any form would be sent when
+deferring an IPI. This means that any form of queuing for deferred callbacks
+would end up as a convoluted memory leak.
+
+Deferred IPIs must thus be coalesced, which this series achieves by assigning
+IPIs a "type" and having a mapping of IPI type to callback, leveraged upon
+kernel entry.
+
+Kernel entry vs execution of the deferred operation
+===================================================
+
+This is what I've referred to as the "Danger Zone" during my LPC24 talk [4].
+
+There is a non-zero length of code that is executed upon kernel entry before the
+deferred operation can be itself executed (before we start getting into
+context_tracking.c proper), i.e.:
+
+  idtentry_func_foo()                <--- we're in the kernel
+    irqentry_enter()
+      irqentry_enter_from_user_mode()
+	enter_from_user_mode()
+	  [...]
+	    ct_kernel_enter_state()
+	      ct_work_flush()        <--- deferred operation is executed here
+
+This means one must take extra care to what can happen in the early entry code,
+and that <bad things> cannot happen. For instance, we really don't want to hit
+instructions that have been modified by a remote text_poke() while we're on our
+way to execute a deferred sync_core(). Patches doing the actual deferral have
+more detail on this.
+
+The annoying one: TLB flush deferral
+====================================
+
+While leveraging the context_tracking subsystem works for deferring things like
+kernel text synchronization, it falls apart when it comes to kernel range TLB
+flushes. Consider the following execution flow:
+
+  <userspace>
+  
+  !interrupt!
+
+  SWITCH_TO_KERNEL_CR3        <--- vmalloc range becomes accessible
+
+  idtentry_func_foo()
+    irqentry_enter()
+      irqentry_enter_from_user_mode()
+	enter_from_user_mode()
+	  [...]
+	    ct_kernel_enter_state()
+	      ct_work_flush() <--- deferred flush would be done here
+
+
+Since there is no sane way to assert no stale entry is accessed during
+kernel entry, any code executed between SWITCH_TO_KERNEL_CR3 and
+ct_work_flush() is at risk of accessing a stale entry.
+
+Dave had suggested hacking up something within SWITCH_TO_KERNEL_CR3 itself,
+which is what has been implemented in the new RFC patches.
+
+How bad is it?
+==============
+
+Code
+++++
+
+I'm happy that the COALESCE_TLBI asm code fits in ~half a screen,
+although it open-codes native_write_cr4() without the pinning logic.
+
+I hate the kernel_cr3_loaded signal; it's a kludgy context_tracking.state
+duplicate but I need *some* sort of signal to drive the TLB flush deferral and
+the context_tracking.state one is set too late in kernel entry. I couldn't
+find any fitting existing signals for this.
+
+I'm also unhappy to introduce two different IPI deferral mechanisms. I tried
+shoving the text_poke_sync() in KERNEL_SWITCH_CR3, but it got ugly(er) really
+fast. 
+
+Performance
++++++++++++
+
+Tested by measuring the duration of 10M `syscall(SYS_getpid)` calls on
+NOHZ_FULL CPUs, with rteval (hackbench + kernel compilation) running on the
+housekeeping CPUs:
+
+o Xeon E5-2699:   base avg 770ns,  patched avg 1340ns (74% increase)
+o Xeon E7-8890:   base avg 1040ns, patched avg 1320ns (27% increase)
+o Xeon Gold 6248: base avg 270ns,  patched avg 273ns  (.1% increase)
+
+I don't get that last one, I did spend a ridiculous amount of time making sure
+the flush was being executed, and AFAICT yes, it was. What I take out of this is
+that it can be a pretty massive increase in the entry overhead (for NOHZ_FULL
+CPUs), and that's something I want to hear thoughts on
+
+Noise
++++++
+
+Xeon E5-2699 system with SMToff, NOHZ_FULL, isolated CPUs.
+RHEL10 userspace.
+
+Workload is using rteval (kernel compilation + hackbench) on housekeeping CPUs
+and a dummy stay-in-userspace loop on the isolated CPUs. The main invocation is:
+
+$ trace-cmd record -e "ipi_send_cpumask" -f "cpumask & CPUS{$ISOL_CPUS}" \
+	           -e "ipi_send_cpu"     -f "cpu & CPUS{$ISOL_CPUS}" \
+		   rteval --onlyload --loads-cpulist=$HK_CPUS \
+		   --hackbench-runlowmem=True --duration=$DURATION
+
+This only records IPIs sent to isolated CPUs, so any event there is interference
+(with a bit of fuzz at the start/end of the workload when spawning the
+processes). All tests were done with a duration of 6 hours.
+
+v6.17
+o ~5400 IPIs received, so about ~200 interfering IPI per isolated CPU
+o About one interfering IPI just shy of every 2 minutes
+
+v6.17 + patches
+o Zilch!
+
+Patches
+=======
+
+o Patches 1-2 are standalone objtool cleanups.
+
+o Patches 3-4 add an RCU testing feature.
+
+o Patches 5-6 add infrastructure for annotating static keys and static calls
+  that may be used in noinstr code (courtesy of Josh).
+o Patches 7-20 use said annotations on relevant keys / calls.
+o Patch 21 enforces proper usage of said annotations (courtesy of Josh).
+
+o Patch 22 deals with detecting NOINSTR text in modules
+
+o Patches 23-24 deal with kernel text sync IPIs
+
+o Patches 25-29 deal with kernel range TLB flush IPIs
+
+Patches are also available at:
+https://gitlab.com/vschneid/linux.git -b redhat/isolirq/defer/v6
+
+Acknowledgements
+================
+
+Special thanks to:
+o Clark Williams for listening to my ramblings about this and throwing ideas my way
+o Josh Poimboeuf for all his help with everything objtool-related
+o Dave Hansen for patiently educating me about mm
+o All of the folks who attended various (too many?) talks about this and
+  provided precious feedback.  
+
+Links
+=====
+
+[1]: https://lore.kernel.org/all/20210929151723.162004989@infradead.org/
+[2]: https://github.com/vianpl/linux.git -b ct-work-defer-wip
+[3]: https://youtu.be/0vjE6fjoVVE
+[4]: https://lpc.events/event/18/contributions/1889/
+[5]: http://lore.kernel.org/r/eef09bdc-7546-462b-9ac0-661a44d2ceae@intel.com
+[6]: https://lore.kernel.org/lkml/20230620144618.125703-1-ypodemsk@redhat.com/
+
+Revisions
+=========
+
+v5 -> v6
+++++++++
+
+o Rebased onto v6.17
+o Small conflict fixes with cpu_buf_idle_clear smp_text_poke() renaming
+
+o Added the TLB flush craziness
+
+v4 -> v5
+++++++++
+
+o Rebased onto v6.15-rc3
+o Collected Reviewed-by
+
+o Annotated a few more static keys
+o Added proper checking of noinstr sections that are in loadable code such as
+  KVM early entry (Sean Christopherson)
+
+o Switched to checking for CT_RCU_WATCHING instead of CT_STATE_KERNEL or
+  CT_STATE_IDLE, which means deferral is now behaving sanely for IRQ/NMI
+  entry from idle (thanks to Frederic!)
+
+o Ditched the vmap TLB flush deferral (for now)  
+  
+
+RFCv3 -> v4
++++++++++++
+
+o Rebased onto v6.13-rc6
+
+o New objtool patches from Josh
+o More .noinstr static key/call patches
+o Static calls now handled as well (again thanks to Josh)
+
+o Fixed clearing the work bits on kernel exit
+o Messed with IRQ hitting an idle CPU vs context tracking
+o Various comment and naming cleanups
+
+o Made RCU_DYNTICKS_TORTURE depend on !COMPILE_TEST (PeterZ)
+o Fixed the CT_STATE_KERNEL check when setting a deferred work (Frederic)
+o Cleaned up the __flush_tlb_all() mess thanks to PeterZ
+
+RFCv2 -> RFCv3
+++++++++++++++
+
+o Rebased onto v6.12-rc6
+
+o Added objtool documentation for the new warning (Josh)
+o Added low-size RCU watching counter to TREE04 torture scenario (Paul)
+o Added FORCEFUL jump label and static key types
+o Added noinstr-compliant helpers for tlb flush deferral
+
+
+RFCv1 -> RFCv2
+++++++++++++++
+
+o Rebased onto v6.5-rc1
+
+o Updated the trace filter patches (Steven)
+
+o Fixed __ro_after_init keys used in modules (Peter)
+o Dropped the extra context_tracking atomic, squashed the new bits in the
+  existing .state field (Peter, Frederic)
+  
+o Added an RCU_EXPERT config for the RCU dynticks counter size, and added an
+  rcutorture case for a low-size counter (Paul) 
+
+o Fixed flush_tlb_kernel_range_deferrable() definition
+
+Josh Poimboeuf (3):
+  jump_label: Add annotations for validating noinstr usage
+  static_call: Add read-only-after-init static calls
+  objtool: Add noinstr validation for static branches/calls
+
+Valentin Schneider (26):
+  objtool: Make validate_call() recognize indirect calls to pv_ops[]
+  objtool: Flesh out warning related to pv_ops[] calls
+  rcu: Add a small-width RCU watching counter debug option
+  rcutorture: Make TREE04 use CONFIG_RCU_DYNTICKS_TORTURE
+  x86/paravirt: Mark pv_sched_clock static call as __ro_after_init
+  x86/idle: Mark x86_idle static call as __ro_after_init
+  x86/paravirt: Mark pv_steal_clock static call as __ro_after_init
+  riscv/paravirt: Mark pv_steal_clock static call as __ro_after_init
+  loongarch/paravirt: Mark pv_steal_clock static call as __ro_after_init
+  arm64/paravirt: Mark pv_steal_clock static call as __ro_after_init
+  arm/paravirt: Mark pv_steal_clock static call as __ro_after_init
+  perf/x86/amd: Mark perf_lopwr_cb static call as __ro_after_init
+  sched/clock: Mark sched_clock_running key as __ro_after_init
+  KVM: VMX: Mark __kvm_is_using_evmcs static key as __ro_after_init
+  x86/speculation/mds: Mark cpu_buf_idle_clear key as allowed in
+    .noinstr
+  sched/clock, x86: Mark __sched_clock_stable key as allowed in .noinstr
+  KVM: VMX: Mark vmx_l1d_should flush and vmx_l1d_flush_cond keys as
+    allowed in .noinstr
+  stackleack: Mark stack_erasing_bypass key as allowed in .noinstr
+  module: Add MOD_NOINSTR_TEXT mem_type
+  context-tracking: Introduce work deferral infrastructure
+  context_tracking,x86: Defer kernel text patching IPIs
+  x86/mm: Make INVPCID type macros available to assembly
+  x86/mm/pti: Introduce a kernel/user CR3 software signal
+  x86/mm/pti: Implement a TLB flush immediately after a switch to kernel
+    CR3
+  x86/mm, mm/vmalloc: Defer kernel TLB flush IPIs under
+    CONFIG_COALESCE_TLBI=y
+  x86/entry: Add an option to coalesce TLB flushes
+
+ arch/Kconfig                                  |   9 ++
+ arch/arm/kernel/paravirt.c                    |   2 +-
+ arch/arm64/kernel/paravirt.c                  |   2 +-
+ arch/loongarch/kernel/paravirt.c              |   2 +-
+ arch/riscv/kernel/paravirt.c                  |   2 +-
+ arch/x86/Kconfig                              |  18 +++
+ arch/x86/entry/calling.h                      |  36 ++++++
+ arch/x86/entry/syscall_64.c                   |   4 +
+ arch/x86/events/amd/brs.c                     |   2 +-
+ arch/x86/include/asm/context_tracking_work.h  |  18 +++
+ arch/x86/include/asm/invpcid.h                |  14 ++-
+ arch/x86/include/asm/text-patching.h          |   1 +
+ arch/x86/include/asm/tlbflush.h               |   6 +
+ arch/x86/kernel/alternative.c                 |  39 ++++++-
+ arch/x86/kernel/asm-offsets.c                 |   1 +
+ arch/x86/kernel/cpu/bugs.c                    |   2 +-
+ arch/x86/kernel/kprobes/core.c                |   4 +-
+ arch/x86/kernel/kprobes/opt.c                 |   4 +-
+ arch/x86/kernel/module.c                      |   2 +-
+ arch/x86/kernel/paravirt.c                    |   4 +-
+ arch/x86/kernel/process.c                     |   2 +-
+ arch/x86/kvm/vmx/vmx.c                        |  11 +-
+ arch/x86/kvm/vmx/vmx_onhyperv.c               |   2 +-
+ arch/x86/mm/tlb.c                             |  34 ++++--
+ include/asm-generic/sections.h                |  15 +++
+ include/linux/context_tracking.h              |  21 ++++
+ include/linux/context_tracking_state.h        |  54 +++++++--
+ include/linux/context_tracking_work.h         |  26 +++++
+ include/linux/jump_label.h                    |  30 ++++-
+ include/linux/module.h                        |   6 +-
+ include/linux/objtool.h                       |   7 ++
+ include/linux/static_call.h                   |  19 ++++
+ kernel/context_tracking.c                     |  69 +++++++++++-
+ kernel/kprobes.c                              |   8 +-
+ kernel/kstack_erase.c                         |   6 +-
+ kernel/module/main.c                          |  76 ++++++++++---
+ kernel/rcu/Kconfig.debug                      |  15 +++
+ kernel/sched/clock.c                          |   7 +-
+ kernel/time/Kconfig                           |   5 +
+ mm/vmalloc.c                                  |  34 +++++-
+ tools/objtool/Documentation/objtool.txt       |  34 ++++++
+ tools/objtool/check.c                         | 106 +++++++++++++++---
+ tools/objtool/include/objtool/check.h         |   1 +
+ tools/objtool/include/objtool/elf.h           |   1 +
+ tools/objtool/include/objtool/special.h       |   1 +
+ tools/objtool/special.c                       |  15 ++-
+ .../selftests/rcutorture/configs/rcu/TREE04   |   1 +
+ 47 files changed, 682 insertions(+), 96 deletions(-)
+ create mode 100644 arch/x86/include/asm/context_tracking_work.h
+ create mode 100644 include/linux/context_tracking_work.h
+
+--
+2.51.0
+
 
