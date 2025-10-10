@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-14029-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14030-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42CFFBCDE52
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 17:55:06 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F24BCDDDF
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 17:51:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 630B95471FB
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 15:48:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B84EF4FED96
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 15:48:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954572FBE01;
-	Fri, 10 Oct 2025 15:47:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78ACC265609;
+	Fri, 10 Oct 2025 15:47:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iI6JAHfL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MBW6oBoh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20C52FBDF0
-	for <linux-arch@vger.kernel.org>; Fri, 10 Oct 2025 15:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F92D256C76
+	for <linux-arch@vger.kernel.org>; Fri, 10 Oct 2025 15:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760111262; cv=none; b=jvl+gzGouU9Bk/gkJD9h3hvCSdXJ4KGNcwVTxYnfS+bD2GuaG471dWzPFsl2ECrDIm2oTiM4q+Gx0eFELYUqM6xwTUOjmK3YZh44b8kNT2TKEXkPlBTS8l8O9B0pejVaQMAE+PmWU7FyhgkjSA+VbwrDd/9ftrnJ2RYn5vaFVy4=
+	t=1760111277; cv=none; b=BYDghBaXp6Q6RPFnrhMtnMLMJLkyrZIUnNt2FXFNsjXJsWmDpsAHaFbJ9k5LCRpPVdjdGLIJCmWLnXLInJYZd62pSCw4QtjamVzIPf6L6R2dXQ1mgn6LnjSe6a8ipzo7zYnBuTwbamAY8L5az5R6PmAY70Y2nH840moU2THdS9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760111262; c=relaxed/simple;
-	bh=C71Q+gqxu3FdMOCm94VISW42L1WJ3pD4CusQBfFzOYo=;
+	s=arc-20240116; t=1760111277; c=relaxed/simple;
+	bh=Ar5fHFcXneWQeLKrtiZtoxax3DEZk0SizqA3+z41jWI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=t74XOOyEL5456Y+SYpX/MPtKhlCR2dsUU4ULN19Mi7iMjAcu2iWyhJbZOochZEyMqqxaFW+hnBQ0NuWzU8eIAHhDOESYChhtdmQ0ZwDr8mCmnkRLyrPIHp9j6gjO60YR02rtojxL2Qyl0LvUie9T860upPVfbEs7D3mBQlUkPDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iI6JAHfL; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=hdU4ocE6+dG6dIgcyFPUcT3sAREgHAl12YHp13SPUmfC5aWAgERSJNMi5JdX0aoufy6121RWxHgimGyD0Z/XC9eZ4NtcUT2QFLrBNRBSd2q6/3459DKcflMcX/wVDRSkd2dGcLsf5xX9OCHioNNDgLKTVTk9pidwNZzIXcf9Zjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MBW6oBoh; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760111260;
+	s=mimecast20190719; t=1760111274;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tZSxQNDyqaqLbPz4fQtAMe+wkuer6c/+cc0bKB75WPM=;
-	b=iI6JAHfL7zDtwrrVpSFt0cDLa3t11hQcW7bZZ+3zcIdupBCldkIFnsY3KEhF+SSQkwYPQ5
-	wTEy0hQdes2eIpi9ii0cZx4pttKCqPevbk4YPUOB3vwyuBFW6Ftz27vDr8pkFmFf6T8Ay6
-	fEltQDjUSXERaRw5+gqXXleOqtfTUUs=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+	bh=/lrJSvBCTikD7TRV03gO07iD7OhDeDgSrJU4nyWpmM8=;
+	b=MBW6oBohdgjVUs4y6XLXc3eYNcxlBionbFD4u7LpCirzZyK4WJsYKwawCK9bGeeJDQxsmw
+	Gnr5ZB5K+JH4xu1hCnD9YSEB043c/qj2oUvEspM8uataic515emxocWa1iX8N57td3S3kz
+	2hUHvFmY02CM/ivzrLjwRFP1ogi1eio=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-384-gHsLeaZYN2q0fujOe0R-ug-1; Fri,
- 10 Oct 2025 11:47:35 -0400
-X-MC-Unique: gHsLeaZYN2q0fujOe0R-ug-1
-X-Mimecast-MFC-AGG-ID: gHsLeaZYN2q0fujOe0R-ug_1760111251
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-659-LjpbKfoTP3momteVKJ_GvA-1; Fri,
+ 10 Oct 2025 11:47:52 -0400
+X-MC-Unique: LjpbKfoTP3momteVKJ_GvA-1
+X-Mimecast-MFC-AGG-ID: LjpbKfoTP3momteVKJ_GvA_1760111266
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F0A791956096;
-	Fri, 10 Oct 2025 15:47:30 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0A5A719560B4;
+	Fri, 10 Oct 2025 15:47:46 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.224.29])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EDAAF180035E;
-	Fri, 10 Oct 2025 15:47:15 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7BA791800576;
+	Fri, 10 Oct 2025 15:47:31 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
@@ -105,9 +105,9 @@ Cc: Thomas Gleixner <tglx@linutronix.de>,
 	Marcelo Tosatti <mtosatti@redhat.com>,
 	Daniel Wagner <dwagner@suse.de>,
 	Petr Tesarik <ptesarik@suse.com>
-Subject: [RFC PATCH v6 26/29] x86/mm/pti: Introduce a kernel/user CR3 software signal
-Date: Fri, 10 Oct 2025 17:38:36 +0200
-Message-ID: <20251010153839.151763-27-vschneid@redhat.com>
+Subject: [RFC PATCH v6 27/29] x86/mm/pti: Implement a TLB flush immediately after a switch to kernel CR3
+Date: Fri, 10 Oct 2025 17:38:37 +0200
+Message-ID: <20251010153839.151763-28-vschneid@redhat.com>
 In-Reply-To: <20251010153839.151763-1-vschneid@redhat.com>
 References: <20251010153839.151763-1-vschneid@redhat.com>
 Precedence: bulk
@@ -119,110 +119,95 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Later commits will rely on this information to defer kernel TLB flush
-IPIs. Update it when switching to and from the kernel CR3.
+Deferring kernel range TLB flushes requires the guarantee that upon
+entering the kernel, no stale entry may be accessed. The simplest way to
+provide such a guarantee is to issue an unconditional flush upon switching
+to the kernel CR3, as this is the pivoting point where such stale entries
+may be accessed.
 
-This will only be really useful for NOHZ_FULL CPUs, but it should be
-cheaper to unconditionally update a never-used per-CPU variable living in
-its own cacheline than to check a shared cpumask such as
-  housekeeping_cpumask(HK_TYPE_KERNEL_NOISE)
-at every entry.
+As this is only relevant to NOHZ_FULL, restrict the mechanism to NOHZ_FULL
+CPUs.
 
 Note that the COALESCE_TLBI config option is introduced in a later commit,
 when the whole feature is implemented.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
-Per the cover letter, I really hate this, but couldn't come up with
-anything better.
----
- arch/x86/entry/calling.h        | 16 ++++++++++++++++
- arch/x86/entry/syscall_64.c     |  4 ++++
- arch/x86/include/asm/tlbflush.h |  3 +++
- 3 files changed, 23 insertions(+)
+ arch/x86/entry/calling.h      | 26 +++++++++++++++++++++++---
+ arch/x86/kernel/asm-offsets.c |  1 +
+ 2 files changed, 24 insertions(+), 3 deletions(-)
 
 diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
-index 94519688b0071..813451b1ddecc 100644
+index 813451b1ddecc..19fb6de276eac 100644
 --- a/arch/x86/entry/calling.h
 +++ b/arch/x86/entry/calling.h
-@@ -171,11 +171,24 @@ For 32-bit we have the following conventions - kernel is built with
+@@ -9,6 +9,7 @@
+ #include <asm/ptrace-abi.h>
+ #include <asm/msr.h>
+ #include <asm/nospec-branch.h>
++#include <asm/invpcid.h>
+
+ /*
+
+@@ -171,8 +172,27 @@ For 32-bit we have the following conventions - kernel is built with
 	andq    $(~PTI_USER_PGTABLE_AND_PCID_MASK), \reg
  .endm
 
-+.macro COALESCE_TLBI
-+#ifdef CONFIG_COALESCE_TLBI
-+	movl     $1, PER_CPU_VAR(kernel_cr3_loaded)
-+#endif // CONFIG_COALESCE_TLBI
-+.endm
+-.macro COALESCE_TLBI
++.macro COALESCE_TLBI scratch_reg:req
+ #ifdef CONFIG_COALESCE_TLBI
++	/* No point in doing this for housekeeping CPUs */
++	movslq  PER_CPU_VAR(cpu_number), \scratch_reg
++	bt	\scratch_reg, tick_nohz_full_mask(%rip)
++	jnc	.Lend_tlbi_\@
 +
-+.macro NOTE_SWITCH_TO_USER_CR3
-+#ifdef CONFIG_COALESCE_TLBI
-+	movl     $0, PER_CPU_VAR(kernel_cr3_loaded)
-+#endif // CONFIG_COALESCE_TLBI
-+.endm
++	ALTERNATIVE "jmp .Lcr4_\@", "", X86_FEATURE_INVPCID
++	movq $(INVPCID_TYPE_ALL_INCL_GLOBAL), \scratch_reg
++	/* descriptor is all zeroes, point at the zero page */
++	invpcid empty_zero_page(%rip), \scratch_reg
++	jmp .Lend_tlbi_\@
++.Lcr4_\@:
++	/* Note: this gives CR4 pinning the finger */
++	movq PER_CPU_VAR(cpu_tlbstate + TLB_STATE_cr4), \scratch_reg
++	xorq $(X86_CR4_PGE), \scratch_reg
++	movq \scratch_reg, %cr4
++	xorq $(X86_CR4_PGE), \scratch_reg
++	movq \scratch_reg, %cr4
 +
- .macro SWITCH_TO_KERNEL_CR3 scratch_reg:req
-	ALTERNATIVE "jmp .Lend_\@", "", X86_FEATURE_PTI
++.Lend_tlbi_\@:
+	movl     $1, PER_CPU_VAR(kernel_cr3_loaded)
+ #endif // CONFIG_COALESCE_TLBI
+ .endm
+@@ -188,7 +208,7 @@ For 32-bit we have the following conventions - kernel is built with
 	mov	%cr3, \scratch_reg
 	ADJUST_KERNEL_CR3 \scratch_reg
 	mov	\scratch_reg, %cr3
-+	COALESCE_TLBI
+-	COALESCE_TLBI
++	COALESCE_TLBI \scratch_reg
  .Lend_\@:
  .endm
 
-@@ -183,6 +196,7 @@ For 32-bit we have the following conventions - kernel is built with
-	PER_CPU_VAR(cpu_tlbstate + TLB_STATE_user_pcid_flush_mask)
-
- .macro SWITCH_TO_USER_CR3 scratch_reg:req scratch_reg2:req
-+	NOTE_SWITCH_TO_USER_CR3
-	mov	%cr3, \scratch_reg
-
-	ALTERNATIVE "jmp .Lwrcr3_\@", "", X86_FEATURE_PCID
-@@ -242,6 +256,7 @@ For 32-bit we have the following conventions - kernel is built with
+@@ -256,7 +276,7 @@ For 32-bit we have the following conventions - kernel is built with
 
 	ADJUST_KERNEL_CR3 \scratch_reg
 	movq	\scratch_reg, %cr3
-+	COALESCE_TLBI
+-	COALESCE_TLBI
++	COALESCE_TLBI \scratch_reg
 
  .Ldone_\@:
  .endm
-@@ -258,6 +273,7 @@ For 32-bit we have the following conventions - kernel is built with
-	bt	$PTI_USER_PGTABLE_BIT, \save_reg
-	jnc	.Lend_\@
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index 6259b474073bc..f5abdcbb150d9 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -105,6 +105,7 @@ static void __used common(void)
 
-+	NOTE_SWITCH_TO_USER_CR3
-	ALTERNATIVE "jmp .Lwrcr3_\@", "", X86_FEATURE_PCID
+	/* TLB state for the entry code */
+	OFFSET(TLB_STATE_user_pcid_flush_mask, tlb_state, user_pcid_flush_mask);
++	OFFSET(TLB_STATE_cr4, tlb_state, cr4);
 
-	/*
-diff --git a/arch/x86/entry/syscall_64.c b/arch/x86/entry/syscall_64.c
-index b6e68ea98b839..2589d232e0ba1 100644
---- a/arch/x86/entry/syscall_64.c
-+++ b/arch/x86/entry/syscall_64.c
-@@ -83,6 +83,10 @@ static __always_inline bool do_syscall_x32(struct pt_regs *regs, int nr)
-	return false;
- }
-
-+#ifdef CONFIG_COALESCE_TLBI
-+DEFINE_PER_CPU(bool, kernel_cr3_loaded) = true;
-+#endif
-+
- /* Returns true to return using SYSRET, or false to use IRET */
- __visible noinstr bool do_syscall_64(struct pt_regs *regs, int nr)
- {
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index 00daedfefc1b0..e39ae95b85072 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -17,6 +17,9 @@
- #include <asm/pgtable.h>
-
- DECLARE_PER_CPU(u64, tlbstate_untag_mask);
-+#ifdef CONFIG_COALESCE_TLBI
-+DECLARE_PER_CPU(bool, kernel_cr3_loaded);
-+#endif
-
- void __flush_tlb_all(void);
-
+	/* Layout info for cpu_entry_area */
+	OFFSET(CPU_ENTRY_AREA_entry_stack, cpu_entry_area, entry_stack_page);
 --
 2.51.0
 
