@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-14030-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14031-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2F24BCDDDF
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 17:51:21 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72D42BCDDC4
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 17:48:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B84EF4FED96
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 15:48:22 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id ED7D934FDF3
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 15:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78ACC265609;
-	Fri, 10 Oct 2025 15:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9698826D4D8;
+	Fri, 10 Oct 2025 15:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MBW6oBoh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ccSQzqIO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F92D256C76
-	for <linux-arch@vger.kernel.org>; Fri, 10 Oct 2025 15:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D263D2F90D3
+	for <linux-arch@vger.kernel.org>; Fri, 10 Oct 2025 15:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760111277; cv=none; b=BYDghBaXp6Q6RPFnrhMtnMLMJLkyrZIUnNt2FXFNsjXJsWmDpsAHaFbJ9k5LCRpPVdjdGLIJCmWLnXLInJYZd62pSCw4QtjamVzIPf6L6R2dXQ1mgn6LnjSe6a8ipzo7zYnBuTwbamAY8L5az5R6PmAY70Y2nH840moU2THdS9w=
+	t=1760111295; cv=none; b=H1b13u7P31o0swyiWUvjKEqr3Je13hTVTRVtE9PjjWWgKValmS8DKzPH6pJZdaOr78Y9nsU3vjXLfmDg2eB3eias4CQREsKYmh0hp73T+tQeyYefyg+Eg6/pl4RUAbQCWJB8Qhg1Y7HpCu4e9ZOABqrZvSEGulMBhpyJFCoiebM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760111277; c=relaxed/simple;
-	bh=Ar5fHFcXneWQeLKrtiZtoxax3DEZk0SizqA3+z41jWI=;
+	s=arc-20240116; t=1760111295; c=relaxed/simple;
+	bh=VTyfa05lwmhXcbBavbgICIhnfR0mj66QOmvmyK/xxEc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hdU4ocE6+dG6dIgcyFPUcT3sAREgHAl12YHp13SPUmfC5aWAgERSJNMi5JdX0aoufy6121RWxHgimGyD0Z/XC9eZ4NtcUT2QFLrBNRBSd2q6/3459DKcflMcX/wVDRSkd2dGcLsf5xX9OCHioNNDgLKTVTk9pidwNZzIXcf9Zjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MBW6oBoh; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=dJEeuoo1e57ICX2t2UmcHVqs3xJRDWTZOpt/UrLTkYHZ6ZCYdTDPXTd+F2PKtz3VFABpXxNCWCRoZHOWPHORLEqv3p60L1KMaF16tQThCAo/h9rsoR+fJuMXFvl/JTQj7E0m1zEcOU4PPHDbJniqevDqni4boFFxgnaIqKrNsF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ccSQzqIO; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760111274;
+	s=mimecast20190719; t=1760111293;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/lrJSvBCTikD7TRV03gO07iD7OhDeDgSrJU4nyWpmM8=;
-	b=MBW6oBohdgjVUs4y6XLXc3eYNcxlBionbFD4u7LpCirzZyK4WJsYKwawCK9bGeeJDQxsmw
-	Gnr5ZB5K+JH4xu1hCnD9YSEB043c/qj2oUvEspM8uataic515emxocWa1iX8N57td3S3kz
-	2hUHvFmY02CM/ivzrLjwRFP1ogi1eio=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=Cbj4zp7uSZx/T4/nBfgioKWu9VmcYJpiOH4O825NldU=;
+	b=ccSQzqIO1678FWk4MIbVKKQF3DpBHjDrB7ukZAaCQ0S0olR2KRb3m6ot6eZuCPtF0LsBi9
+	Tyt8M4nh1cTeChUQLbgffAH7DaxNXxO6MyPCu7MX2e7J90NVdUI9eslfh1JSKmfhBlpO56
+	QTYbN8jhd2lmwUOcsO6q6xSdMcl+OYo=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-659-LjpbKfoTP3momteVKJ_GvA-1; Fri,
- 10 Oct 2025 11:47:52 -0400
-X-MC-Unique: LjpbKfoTP3momteVKJ_GvA-1
-X-Mimecast-MFC-AGG-ID: LjpbKfoTP3momteVKJ_GvA_1760111266
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-78-vBNA1yILN1WPT3ArJUl3tA-1; Fri,
+ 10 Oct 2025 11:48:07 -0400
+X-MC-Unique: vBNA1yILN1WPT3ArJUl3tA-1
+X-Mimecast-MFC-AGG-ID: vBNA1yILN1WPT3ArJUl3tA_1760111281
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0A5A719560B4;
-	Fri, 10 Oct 2025 15:47:46 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 509861800452;
+	Fri, 10 Oct 2025 15:48:01 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.224.29])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7BA791800576;
-	Fri, 10 Oct 2025 15:47:31 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 98E831800576;
+	Fri, 10 Oct 2025 15:47:46 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
@@ -105,9 +105,9 @@ Cc: Thomas Gleixner <tglx@linutronix.de>,
 	Marcelo Tosatti <mtosatti@redhat.com>,
 	Daniel Wagner <dwagner@suse.de>,
 	Petr Tesarik <ptesarik@suse.com>
-Subject: [RFC PATCH v6 27/29] x86/mm/pti: Implement a TLB flush immediately after a switch to kernel CR3
-Date: Fri, 10 Oct 2025 17:38:37 +0200
-Message-ID: <20251010153839.151763-28-vschneid@redhat.com>
+Subject: [RFC PATCH v6 28/29] x86/mm, mm/vmalloc: Defer kernel TLB flush IPIs under CONFIG_COALESCE_TLBI=y
+Date: Fri, 10 Oct 2025 17:38:38 +0200
+Message-ID: <20251010153839.151763-29-vschneid@redhat.com>
 In-Reply-To: <20251010153839.151763-1-vschneid@redhat.com>
 References: <20251010153839.151763-1-vschneid@redhat.com>
 Precedence: bulk
@@ -119,95 +119,194 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Deferring kernel range TLB flushes requires the guarantee that upon
-entering the kernel, no stale entry may be accessed. The simplest way to
-provide such a guarantee is to issue an unconditional flush upon switching
-to the kernel CR3, as this is the pivoting point where such stale entries
-may be accessed.
+Previous commits have added an unconditional TLB flush right after
+switching to the kernel CR3 on NOHZ_FULL CPUs, and a software signal to
+determine whether a CPU has its kernel CR3 loaded.
 
-As this is only relevant to NOHZ_FULL, restrict the mechanism to NOHZ_FULL
-CPUs.
+Using these two components, we can now safely defer kernel TLB flush IPIs
+targeting NOHZ_FULL CPUs executing in userspace (i.e. with the user CR3
+loaded).
 
 Note that the COALESCE_TLBI config option is introduced in a later commit,
 when the whole feature is implemented.
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/x86/entry/calling.h      | 26 +++++++++++++++++++++++---
- arch/x86/kernel/asm-offsets.c |  1 +
- 2 files changed, 24 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/tlbflush.h |  3 +++
+ arch/x86/mm/tlb.c               | 34 ++++++++++++++++++++++++++-------
+ mm/vmalloc.c                    | 34 ++++++++++++++++++++++++++++-----
+ 3 files changed, 59 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
-index 813451b1ddecc..19fb6de276eac 100644
---- a/arch/x86/entry/calling.h
-+++ b/arch/x86/entry/calling.h
-@@ -9,6 +9,7 @@
- #include <asm/ptrace-abi.h>
- #include <asm/msr.h>
- #include <asm/nospec-branch.h>
-+#include <asm/invpcid.h>
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index e39ae95b85072..6d533afd70952 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -321,6 +321,9 @@ extern void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
+				unsigned long end, unsigned int stride_shift,
+				bool freed_tables);
+ extern void flush_tlb_kernel_range(unsigned long start, unsigned long end);
++#ifdef CONFIG_COALESCE_TLBI
++extern void flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end);
++#endif
 
+ static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
+ {
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index 39f80111e6f17..aa3a83d5eccc2 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -12,6 +12,7 @@
+ #include <linux/task_work.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/mmu_context.h>
++#include <linux/sched/isolation.h>
+
+ #include <asm/tlbflush.h>
+ #include <asm/mmu_context.h>
+@@ -1509,23 +1510,24 @@ static void do_kernel_range_flush(void *info)
+		flush_tlb_one_kernel(addr);
+ }
+
+-static void kernel_tlb_flush_all(struct flush_tlb_info *info)
++static void kernel_tlb_flush_all(smp_cond_func_t cond, struct flush_tlb_info *info)
+ {
+	if (cpu_feature_enabled(X86_FEATURE_INVLPGB))
+		invlpgb_flush_all();
+	else
+-		on_each_cpu(do_flush_tlb_all, NULL, 1);
++		on_each_cpu_cond(cond, do_flush_tlb_all, NULL, 1);
+ }
+
+-static void kernel_tlb_flush_range(struct flush_tlb_info *info)
++static void kernel_tlb_flush_range(smp_cond_func_t cond, struct flush_tlb_info *info)
+ {
+	if (cpu_feature_enabled(X86_FEATURE_INVLPGB))
+		invlpgb_kernel_range_flush(info);
+	else
+-		on_each_cpu(do_kernel_range_flush, info, 1);
++		on_each_cpu_cond(cond, do_kernel_range_flush, info, 1);
+ }
+
+-void flush_tlb_kernel_range(unsigned long start, unsigned long end)
++static inline void
++__flush_tlb_kernel_range(smp_cond_func_t cond, unsigned long start, unsigned long end)
+ {
+	struct flush_tlb_info *info;
+
+@@ -1535,13 +1537,31 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+				  TLB_GENERATION_INVALID);
+
+	if (info->end == TLB_FLUSH_ALL)
+-		kernel_tlb_flush_all(info);
++		kernel_tlb_flush_all(cond, info);
+	else
+-		kernel_tlb_flush_range(info);
++		kernel_tlb_flush_range(cond, info);
+
+	put_flush_tlb_info();
+ }
+
++void flush_tlb_kernel_range(unsigned long start, unsigned long end)
++{
++	__flush_tlb_kernel_range(NULL, start, end);
++}
++
++#ifdef CONFIG_COALESCE_TLBI
++static bool flush_tlb_kernel_cond(int cpu, void *info)
++{
++	return housekeeping_cpu(cpu, HK_TYPE_KERNEL_NOISE) ||
++	       per_cpu(kernel_cr3_loaded, cpu);
++}
++
++void flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end)
++{
++	__flush_tlb_kernel_range(flush_tlb_kernel_cond, start, end);
++}
++#endif
++
  /*
+  * This can be used from process context to figure out what the value of
+  * CR3 is without needing to do a (slow) __read_cr3().
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 5edd536ba9d2a..c42f413a7a693 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -494,6 +494,30 @@ void vunmap_range_noflush(unsigned long start, unsigned long end)
+	__vunmap_range_noflush(start, end);
+ }
 
-@@ -171,8 +172,27 @@ For 32-bit we have the following conventions - kernel is built with
-	andq    $(~PTI_USER_PGTABLE_AND_PCID_MASK), \reg
- .endm
-
--.macro COALESCE_TLBI
-+.macro COALESCE_TLBI scratch_reg:req
- #ifdef CONFIG_COALESCE_TLBI
-+	/* No point in doing this for housekeeping CPUs */
-+	movslq  PER_CPU_VAR(cpu_number), \scratch_reg
-+	bt	\scratch_reg, tick_nohz_full_mask(%rip)
-+	jnc	.Lend_tlbi_\@
++#ifdef CONFIG_COALESCE_TLBI
++/*
++ * !!! BIG FAT WARNING !!!
++ *
++ * The CPU is free to cache any part of the paging hierarchy it wants at any
++ * time. It's also free to set accessed and dirty bits at any time, even for
++ * instructions that may never execute architecturally.
++ *
++ * This means that deferring a TLB flush affecting freed page-table-pages (IOW,
++ * keeping them in a CPU's paging hierarchy cache) is a recipe for disaster.
++ *
++ * This isn't a problem for deferral of TLB flushes in vmalloc, because
++ * page-table-pages used for vmap() mappings are never freed - see how
++ * __vunmap_range_noflush() walks the whole mapping but only clears the leaf PTEs.
++ * If this ever changes, TLB flush deferral will cause misery.
++ */
++void __weak flush_tlb_kernel_range_deferrable(unsigned long start, unsigned long end)
++{
++	flush_tlb_kernel_range(start, end);
++}
++#else
++#define flush_tlb_kernel_range_deferrable(start, end) flush_tlb_kernel_range(start, end)
++#endif
 +
-+	ALTERNATIVE "jmp .Lcr4_\@", "", X86_FEATURE_INVPCID
-+	movq $(INVPCID_TYPE_ALL_INCL_GLOBAL), \scratch_reg
-+	/* descriptor is all zeroes, point at the zero page */
-+	invpcid empty_zero_page(%rip), \scratch_reg
-+	jmp .Lend_tlbi_\@
-+.Lcr4_\@:
-+	/* Note: this gives CR4 pinning the finger */
-+	movq PER_CPU_VAR(cpu_tlbstate + TLB_STATE_cr4), \scratch_reg
-+	xorq $(X86_CR4_PGE), \scratch_reg
-+	movq \scratch_reg, %cr4
-+	xorq $(X86_CR4_PGE), \scratch_reg
-+	movq \scratch_reg, %cr4
-+
-+.Lend_tlbi_\@:
-	movl     $1, PER_CPU_VAR(kernel_cr3_loaded)
- #endif // CONFIG_COALESCE_TLBI
- .endm
-@@ -188,7 +208,7 @@ For 32-bit we have the following conventions - kernel is built with
-	mov	%cr3, \scratch_reg
-	ADJUST_KERNEL_CR3 \scratch_reg
-	mov	\scratch_reg, %cr3
--	COALESCE_TLBI
-+	COALESCE_TLBI \scratch_reg
- .Lend_\@:
- .endm
+ /**
+  * vunmap_range - unmap kernel virtual addresses
+  * @addr: start of the VM area to unmap
+@@ -507,7 +531,7 @@ void vunmap_range(unsigned long addr, unsigned long end)
+ {
+	flush_cache_vunmap(addr, end);
+	vunmap_range_noflush(addr, end);
+-	flush_tlb_kernel_range(addr, end);
++	flush_tlb_kernel_range_deferrable(addr, end);
+ }
 
-@@ -256,7 +276,7 @@ For 32-bit we have the following conventions - kernel is built with
+ static int vmap_pages_pte_range(pmd_t *pmd, unsigned long addr,
+@@ -2333,7 +2357,7 @@ static bool __purge_vmap_area_lazy(unsigned long start, unsigned long end,
 
-	ADJUST_KERNEL_CR3 \scratch_reg
-	movq	\scratch_reg, %cr3
--	COALESCE_TLBI
-+	COALESCE_TLBI \scratch_reg
+	nr_purge_nodes = cpumask_weight(&purge_nodes);
+	if (nr_purge_nodes > 0) {
+-		flush_tlb_kernel_range(start, end);
++		flush_tlb_kernel_range_deferrable(start, end);
 
- .Ldone_\@:
- .endm
-diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-index 6259b474073bc..f5abdcbb150d9 100644
---- a/arch/x86/kernel/asm-offsets.c
-+++ b/arch/x86/kernel/asm-offsets.c
-@@ -105,6 +105,7 @@ static void __used common(void)
+		/* One extra worker is per a lazy_max_pages() full set minus one. */
+		nr_purge_helpers = atomic_long_read(&vmap_lazy_nr) / lazy_max_pages();
+@@ -2436,7 +2460,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
+	flush_cache_vunmap(va->va_start, va->va_end);
+	vunmap_range_noflush(va->va_start, va->va_end);
+	if (debug_pagealloc_enabled_static())
+-		flush_tlb_kernel_range(va->va_start, va->va_end);
++		flush_tlb_kernel_range_deferrable(va->va_start, va->va_end);
 
-	/* TLB state for the entry code */
-	OFFSET(TLB_STATE_user_pcid_flush_mask, tlb_state, user_pcid_flush_mask);
-+	OFFSET(TLB_STATE_cr4, tlb_state, cr4);
+	free_vmap_area_noflush(va);
+ }
+@@ -2884,7 +2908,7 @@ static void vb_free(unsigned long addr, unsigned long size)
+	vunmap_range_noflush(addr, addr + size);
 
-	/* Layout info for cpu_entry_area */
-	OFFSET(CPU_ENTRY_AREA_entry_stack, cpu_entry_area, entry_stack_page);
+	if (debug_pagealloc_enabled_static())
+-		flush_tlb_kernel_range(addr, addr + size);
++		flush_tlb_kernel_range_deferrable(addr, addr + size);
+
+	spin_lock(&vb->lock);
+
+@@ -2949,7 +2973,7 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
+	free_purged_blocks(&purge_list);
+
+	if (!__purge_vmap_area_lazy(start, end, false) && flush)
+-		flush_tlb_kernel_range(start, end);
++		flush_tlb_kernel_range_deferrable(start, end);
+	mutex_unlock(&vmap_purge_lock);
+ }
+
 --
 2.51.0
 
