@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-14040-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14041-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5123DBD1964
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 08:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D6503BD26A1
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 12:00:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 428994EA9D0
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 06:06:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE6854F0039
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 10:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1478F2E0939;
-	Mon, 13 Oct 2025 06:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADEDA2FE575;
+	Mon, 13 Oct 2025 10:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E08XGpzm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYGb4s7P"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715712DE703
-	for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 06:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B2A2FE568
+	for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 09:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760335596; cv=none; b=gtrBnGo7LuO/+fYrP76gSH4VOvUvAJYFTJ948ubH39sdehovtmSyPHjUdxy+8cfNUs4gXE0CL1pJV/KQqWSem+H5s0oL2DhEemaU7XgalOPLAmGr4zr0BKVlDawlH8vGXJhY4tVkDk2ZfogU73++w2C1yiStEjDMhIrJenbmNLw=
+	t=1760349601; cv=none; b=HZFKCjCRB0S80cDHMTEOgRObVNs1IXVsxDg+mPf1NNg3AIVFT1YLEx5PZBZoyvb9iAb0q+ACzx1OgVVUQLOsYbhwfsCVRpg+a/XH/tCLjmuTCfsVe1ax9TuAd3DJsjFErEf1B112eQtKBYX6FjCejuHAw913EvgekspA0jD+W4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760335596; c=relaxed/simple;
-	bh=RSL7ODefchx0oaqAeJ6n26+cCreCbBCiVlRzlUCjIjc=;
+	s=arc-20240116; t=1760349601; c=relaxed/simple;
+	bh=+zOuCBbttI2pym4Pdpz046IX8ZPwrX2sj4yc80Raf0c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h8fcsR3AyJiJZ7kmLmNft6nM0SOzqNz4lEZv13FL+XCwLYMJzR24SgPdLLQWZK0KlFQCKdiNWTLVwgLyF3SW4u4w1p6aJ8TwSsLvQulW+yMv10E/f1sdXcQafHmZCISR4bsYf0iStrPruAYksdsiYzx1eQALhGcmyk+2TTRX84o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E08XGpzm; arc=none smtp.client-ip=74.125.224.43
+	 To:Cc:Content-Type; b=jnNWvvWOjsBO7WcdZZkbhIiPrRyC/2CIDMCMnA7sUIvCqiioxTeM+uY3ZHD+PEWkr8Y4XAUt89VS7OWFvotz/tr2WBEFB1qxVJolxvx3Wtqgz0aGnU3rTN1yvgIiMMGvQf5krllxVHgSE/roJ+RgrJGdqiPJVZalBBOmqio4pwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYGb4s7P; arc=none smtp.client-ip=74.125.224.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-6348447d5easo3603463d50.0
-        for <linux-arch@vger.kernel.org>; Sun, 12 Oct 2025 23:06:33 -0700 (PDT)
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6348447d5easo3766430d50.0
+        for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 02:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760335592; x=1760940392; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760349599; x=1760954399; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RSL7ODefchx0oaqAeJ6n26+cCreCbBCiVlRzlUCjIjc=;
-        b=E08XGpzmHVw0+qDzU5sCl5j2nWjFq/4gmZrI+HSMqUtrUQdW75O40jzorsqViIJ5Op
-         YueCYgQvB7QPc4pUrMdPo6WnC+J7hR1UlRYyfnedh94HC57pUVWE3OllsoN75neJ05zd
-         7IcSugJKTLhjY0wSwmbSfQ1BF+GIHKMdxFsZBTI139vylrWwsfot4THqwBnc5WWO1ADS
-         owqxNkoEXxySlcupDmKJPMhXmeet3aWT00Ul8qKcfRlZ1+XFeBRnw6Pd6ASpf6fNaQKa
-         kriZgtpxAU1TcDZRtFRbT0eY4rS6fV6XOKhazNP5uPTqs37bNueBArVUKMrsryxA49Ua
-         /esQ==
+        bh=hZsaCMPk0e7xOahYxc9B2HTwzlp/3SZdj7OzfRUl7Tc=;
+        b=lYGb4s7PFPtlQAqGLwjY6C3BoptYCrvsiQTPmRJWe0jrmue4kzt875LXGc+nwMus5e
+         gg/dRRivympKqj/Xbh/kqv4jfo3sNkaRAWWH4kZP7QO+EYk91Xl5ZvumS/kg92GHtPjk
+         j1DbxG/Dgk3vmqFQjqZbS6cxMNqHU4DeIsE2rSdChE2dhflRSZVNKpBaEr6XVXJ3d+35
+         Uw6w91MZJuEBrgw2xCsk0gcBTZMcncRHXUPfRkRDe21ahILoyvU3E/QbhqdS6KHwrvfA
+         79Um23YLTNO6t/m7Vr/uQlJA0nZ6SxJWNCgTAeqdZEx/sH8Vu9rR490wZ3vArZnHDyqH
+         MjnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760335592; x=1760940392;
+        d=1e100.net; s=20230601; t=1760349599; x=1760954399;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RSL7ODefchx0oaqAeJ6n26+cCreCbBCiVlRzlUCjIjc=;
-        b=DoKZ/2qS1OCDdcEdWjr6U27dE2VEnknxCQArV2PUCe3M2LOJ3GDN3dqLEZlfIMnXrf
-         XAi3wtb8iPYeYcOIr2scEuoBE7P3Xd0RwS01mGkGV98pFchJ63dt85TdlmwP0HHKCueT
-         22u8V0BPKQR70DFbnXLNHkFUBp/yXC4uJU+t6OVskU4RzQYrKfg1upbuGUuFQLfhVDIq
-         hCLZjqQOfo7X7KQ1rhE96ZC5oHVBpkcGguQCbIOk+GWJ8uDCa2I+vdvAKPWPM4IphBmk
-         3quX/IKkNrCsWfoNzkSa8M2iVmP82ogw/q8fGf9ZBk3hlN1cvXMrqts4naxBCXiG696H
-         3a8g==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ5dUoOSX00jp2/ytvB1SpdYFmvvL0PHtlnCYBWeNeKlHNyiVcGNcoPAqlQJMXD/5M80oCyZ486Wz4@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhV0f5brhPqUgfSAA3Oysl+m5KEjYD/VYw3YObFwzW/x4YobBh
-	z8+5Z3ZlSuSB+Y88Ewi2I8najVdbtda/xtxMO8878iP2o+1UyFaWBJ+yv1bHCH89L98iYH0pNW1
-	xZseCWxoLNqA9MIDVQAifzfoBSqtx7YQ=
-X-Gm-Gg: ASbGncsu1oiaogEGlLedmtKpLuAM8azZrapGeP2PAZh0iMXh2ApDP2/T59gtY1fdP5J
-	8BL9F+AQ5WMHRmAsRDg3uHLa3IrWgYn5REt+Hmwd+FE0VurQhjsY2y+JMeAWPb70acVMcq4MTTd
-	6fXT3ajk5mouMeWifrSRD0e9hA6ZYUnD61tDpr/U8oTQr9wl0iV2+3ykKu++DILA737Nhsu67cw
-	opliEQK0LLItkrdpEgNBxYdbUuJYTyzTKFK
-X-Google-Smtp-Source: AGHT+IGNAOIcFLi0/Sm93Y3jSHSuxr+30gS3y7Fr34MKhVqQQnt1MJ/lLmHR6+qpb+bVmq5VVWr9ycljJFZ2Qxe2L4U=
-X-Received: by 2002:a05:690e:4142:b0:63c:f4eb:1b0d with SMTP id
- 956f58d0204a3-63cf4eb1b25mr7582533d50.22.1760335592286; Sun, 12 Oct 2025
- 23:06:32 -0700 (PDT)
+        bh=hZsaCMPk0e7xOahYxc9B2HTwzlp/3SZdj7OzfRUl7Tc=;
+        b=odvwtBgGeOcuwVs2/OVUse+YTGFzHCu5xdifzkOcrPsybSFFPke+mDWKXDguApfY6D
+         agvQOWw/3FnOMLM1UlMGgtlOzNph/Fvdks/6Ph1/K2j7jJpO08LHBNKwxnInoUNH0Ird
+         ydYBxN5MS0h7QtSkHItpei/F5M/xWGlizJOTMkJge+WGsyXroyHary/0w2/M73ci9ImO
+         x2o25uTrg17b4jd6gdLmARSaeSyKi5SJNucHM4lbKik+dOoQKUXOdHUbBjwJAqTNRorv
+         dBwCyoUtQIpYNAxIg/N2PCEBhEDzwjEOcnl9G9Pv/yk3a4NlppCXkkOVJ/HSYit+pLKb
+         M6Pg==
+X-Forwarded-Encrypted: i=1; AJvYcCWvaOfxN4IVQTXiyNysbcHZaBzxdEZSIBOxTZdW1H/44Q7PY2fm92ZB3Y1EzUP7zII+1wGR8Ejv1U9q@vger.kernel.org
+X-Gm-Message-State: AOJu0YxS1dogkff/71V/RnbQxXzO29MKxdQfE4J6df1v0WUnEYSSQae8
+	eWI/EOO3jcYtCDLmU2FaqfgtOcPffkzzohsZeO0KwYBJBGuKotdRSGE570n0nbCjRAD7f7/2NYt
+	h7q2uHGpogh5iIy1S23FGu7vYddwjbNA=
+X-Gm-Gg: ASbGncv08r4h0opNeETQQF/cNoc4yPRNdfl+xs0j0MZ6OGsiwpBpdsC/77pcQMxy6Vd
+	vagzdiaYdhsmpqoM6pSOSv/PKvwnXrP2VuAx0a/EWwQpjazzy0QDfEzt4sS6FdbFY6L3lw4s2li
+	wPh0VSQ7liQQjcqT8qJMtsDHzDFmahKqkC/T8RZ2PC4yoR43gSMcB7+l2GAqrUlGg31mr2alu6Y
+	L+ER52ALQ89EJpteBc28xXXETZCIBynv2eJ
+X-Google-Smtp-Source: AGHT+IEjiQMnhpQ/Kb5hfGFGrybCEQQLnH8Bm2H6/rcdu7ghvXP+Te8kpl6LHQn/PIgvNHwUMvVrGJdsfOorS0mdutU=
+X-Received: by 2002:a53:ee07:0:b0:63c:daf9:bf21 with SMTP id
+ 956f58d0204a3-63cdaf9fa65mr11783686d50.24.1760349598638; Mon, 13 Oct 2025
+ 02:59:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,14 +76,13 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20251010094047.3111495-1-safinaskar@gmail.com>
- <20251010094047.3111495-2-safinaskar@gmail.com> <CAHp75VeJM_OoCWDX20FhphRi6e7rG9Z4X6zkjx9vFF12n7Ef7A@mail.gmail.com>
-In-Reply-To: <CAHp75VeJM_OoCWDX20FhphRi6e7rG9Z4X6zkjx9vFF12n7Ef7A@mail.gmail.com>
+ <20251010094047.3111495-3-safinaskar@gmail.com> <CAHp75VezkZ7A1VOP8cBH8h0DKVumP66jjUbepMCP87wGOrh+MQ@mail.gmail.com>
+In-Reply-To: <CAHp75VezkZ7A1VOP8cBH8h0DKVumP66jjUbepMCP87wGOrh+MQ@mail.gmail.com>
 From: Askar Safin <safinaskar@gmail.com>
-Date: Mon, 13 Oct 2025 09:05:56 +0300
-X-Gm-Features: AS18NWAQKixJeSnu1jMDTs2ReasUmQ44oKevMSLcLyEUnjeI8Werl5Jwf9tycOM
-Message-ID: <CAPnZJGDvHbDt_JvDNLN+LaU+5yFyB_qkdBtVhSEV60_yktAVzw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] init: remove deprecated "load_ramdisk" and
- "prompt_ramdisk" command line parameters
+Date: Mon, 13 Oct 2025 12:59:21 +0300
+X-Gm-Features: AS18NWA-897xF_-UIFWa7pg6NN4-821ID7y01MXNqW6009NHHhcR0gsdnks-4OY
+Message-ID: <CAPnZJGBAc-kqZ-MAKRGrk1big=N_GZupxKgM_+TodqgteffLvw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] initrd: remove deprecated code path (linuxrc)
 To: Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Linus Torvalds <torvalds@linux-foundation.org>, 
@@ -106,17 +105,31 @@ Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 10, 2025 at 6:02=E2=80=AFPM Andy Shevchenko
+On Fri, Oct 10, 2025 at 6:05=E2=80=AFPM Andy Shevchenko
 <andy.shevchenko@gmail.com> wrote:
-> 1) often the last period is missing in the commit messages;
-I will fix in v3.
+> > -       noinitrd        [RAM] Tells the kernel not to load any configur=
+ed
+> > +       noinitrd        [Deprecated,RAM] Tells the kernel not to load a=
+ny configured
+> >                         initial RAM disk.
+>
+> How one is supposed to run this when just having a kernel is enough?
+> At least (ex)colleague of mine was a heavy user of this option for
+> testing kernel builds on the real HW.
 
-> 2) in this change it's unclear for how long (years) the feature was
-> deprecated, i.e. the other patch states that 2020 for something else.
-> I wonder if this one has the similar order of oldness.
+This option applies to initrd only, not to initramfs.
+Except for EFI mode, when it applies to both.
 
-These two commits were done in 2020, too. I will fix in v3.
+I will remove this option when I remove initrd.
 
---
+In EFI mode it is easy just not to pass initramfs, so all is okay.
+
+Also I will clarify docs in v3.
+
+Also, please, answer here:
+https://lore.kernel.org/regressions/20250918183336.5633-1-safinaskar@gmail.=
+com/
+
+--=20
 Askar Safin
 
