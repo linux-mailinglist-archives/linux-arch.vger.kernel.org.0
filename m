@@ -1,168 +1,122 @@
-Return-Path: <linux-arch+bounces-14039-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14040-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E090CBD173D
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 07:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5123DBD1964
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 08:06:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 953C34E9EE4
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 05:27:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 428994EA9D0
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 06:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 059962D2481;
-	Mon, 13 Oct 2025 05:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1478F2E0939;
+	Mon, 13 Oct 2025 06:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E08XGpzm"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69D322D12F3;
-	Mon, 13 Oct 2025 05:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715712DE703
+	for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 06:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760333254; cv=none; b=ipYCUmYbOI87Q5gWA5fXtd8GlDagmNqhOO5Cz5rY+ddUkb4+nC5+28B8AMuItzZ5yzMUkIMkknjULjIQkhrhX13qB7Mnog8L0tFKcY35OZGtPWIvNjD/JGwC+r7pEqltaRA8vZlD7+K3MBETtVvCAX2FStiW1iyl3Cb/Xj0Itfg=
+	t=1760335596; cv=none; b=gtrBnGo7LuO/+fYrP76gSH4VOvUvAJYFTJ948ubH39sdehovtmSyPHjUdxy+8cfNUs4gXE0CL1pJV/KQqWSem+H5s0oL2DhEemaU7XgalOPLAmGr4zr0BKVlDawlH8vGXJhY4tVkDk2ZfogU73++w2C1yiStEjDMhIrJenbmNLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760333254; c=relaxed/simple;
-	bh=ndYgSHNbLnvyYLEcoIN3mUPNVlCWqqRkCrrregrceHU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QSoCN5bu9Q9sohdNSGFeRMpqBGlJiJVL6aVKZJoaEvwc3hXiPfIai9/91MgkZnQRIqoxIz+7h0L8GetNG0V5tu2LiycvOHOAbdaA3Nb5l3IMzQ3amatlSmRjys69o4+kexIt307PFQy894gO9cQWrAfyKthENAyGSBQDODI0LZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-4e-68ec8dc17dc6
-Date: Mon, 13 Oct 2025 14:27:24 +0900
-From: Byungchul Park <byungchul@sk.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-	tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-	amir73il@gmail.com, gregkh@linuxfoundation.org, kernel-team@lge.com,
-	linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-	minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-	sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-	ngupta@vflare.org, linux-block@vger.kernel.org,
-	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
-	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-	djwong@kernel.org, dri-devel@lists.freedesktop.org,
-	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
-	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
-	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
-	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
-	yeoreum.yun@arm.com, netdev@vger.kernel.org,
-	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
-	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
-	sumit.semwal@linaro.org, gustavo@padovan.org,
-	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
-	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
-	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
-	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
-	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
-	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
-	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
-	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
-	yuzhao@google.com, baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com, joel.granados@kernel.org,
-	richard.weiyang@gmail.com, geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com, linux@treblig.org,
-	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
-	chenhuacai@kernel.org, francesco@valla.it,
-	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
-	masahiroy@kernel.org, brauner@kernel.org,
-	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
-	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 35/47] i2c: rename wait_for_completion callback to
- wait_for_completion_cb
-Message-ID: <20251013052724.GA9169@system.software.com>
-References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-36-byungchul@sk.com>
- <aOFNz2mKXCXUImwO@shikoro>
+	s=arc-20240116; t=1760335596; c=relaxed/simple;
+	bh=RSL7ODefchx0oaqAeJ6n26+cCreCbBCiVlRzlUCjIjc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=h8fcsR3AyJiJZ7kmLmNft6nM0SOzqNz4lEZv13FL+XCwLYMJzR24SgPdLLQWZK0KlFQCKdiNWTLVwgLyF3SW4u4w1p6aJ8TwSsLvQulW+yMv10E/f1sdXcQafHmZCISR4bsYf0iStrPruAYksdsiYzx1eQALhGcmyk+2TTRX84o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E08XGpzm; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-6348447d5easo3603463d50.0
+        for <linux-arch@vger.kernel.org>; Sun, 12 Oct 2025 23:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760335592; x=1760940392; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RSL7ODefchx0oaqAeJ6n26+cCreCbBCiVlRzlUCjIjc=;
+        b=E08XGpzmHVw0+qDzU5sCl5j2nWjFq/4gmZrI+HSMqUtrUQdW75O40jzorsqViIJ5Op
+         YueCYgQvB7QPc4pUrMdPo6WnC+J7hR1UlRYyfnedh94HC57pUVWE3OllsoN75neJ05zd
+         7IcSugJKTLhjY0wSwmbSfQ1BF+GIHKMdxFsZBTI139vylrWwsfot4THqwBnc5WWO1ADS
+         owqxNkoEXxySlcupDmKJPMhXmeet3aWT00Ul8qKcfRlZ1+XFeBRnw6Pd6ASpf6fNaQKa
+         kriZgtpxAU1TcDZRtFRbT0eY4rS6fV6XOKhazNP5uPTqs37bNueBArVUKMrsryxA49Ua
+         /esQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760335592; x=1760940392;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RSL7ODefchx0oaqAeJ6n26+cCreCbBCiVlRzlUCjIjc=;
+        b=DoKZ/2qS1OCDdcEdWjr6U27dE2VEnknxCQArV2PUCe3M2LOJ3GDN3dqLEZlfIMnXrf
+         XAi3wtb8iPYeYcOIr2scEuoBE7P3Xd0RwS01mGkGV98pFchJ63dt85TdlmwP0HHKCueT
+         22u8V0BPKQR70DFbnXLNHkFUBp/yXC4uJU+t6OVskU4RzQYrKfg1upbuGUuFQLfhVDIq
+         hCLZjqQOfo7X7KQ1rhE96ZC5oHVBpkcGguQCbIOk+GWJ8uDCa2I+vdvAKPWPM4IphBmk
+         3quX/IKkNrCsWfoNzkSa8M2iVmP82ogw/q8fGf9ZBk3hlN1cvXMrqts4naxBCXiG696H
+         3a8g==
+X-Forwarded-Encrypted: i=1; AJvYcCXQ5dUoOSX00jp2/ytvB1SpdYFmvvL0PHtlnCYBWeNeKlHNyiVcGNcoPAqlQJMXD/5M80oCyZ486Wz4@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhV0f5brhPqUgfSAA3Oysl+m5KEjYD/VYw3YObFwzW/x4YobBh
+	z8+5Z3ZlSuSB+Y88Ewi2I8najVdbtda/xtxMO8878iP2o+1UyFaWBJ+yv1bHCH89L98iYH0pNW1
+	xZseCWxoLNqA9MIDVQAifzfoBSqtx7YQ=
+X-Gm-Gg: ASbGncsu1oiaogEGlLedmtKpLuAM8azZrapGeP2PAZh0iMXh2ApDP2/T59gtY1fdP5J
+	8BL9F+AQ5WMHRmAsRDg3uHLa3IrWgYn5REt+Hmwd+FE0VurQhjsY2y+JMeAWPb70acVMcq4MTTd
+	6fXT3ajk5mouMeWifrSRD0e9hA6ZYUnD61tDpr/U8oTQr9wl0iV2+3ykKu++DILA737Nhsu67cw
+	opliEQK0LLItkrdpEgNBxYdbUuJYTyzTKFK
+X-Google-Smtp-Source: AGHT+IGNAOIcFLi0/Sm93Y3jSHSuxr+30gS3y7Fr34MKhVqQQnt1MJ/lLmHR6+qpb+bVmq5VVWr9ycljJFZ2Qxe2L4U=
+X-Received: by 2002:a05:690e:4142:b0:63c:f4eb:1b0d with SMTP id
+ 956f58d0204a3-63cf4eb1b25mr7582533d50.22.1760335592286; Sun, 12 Oct 2025
+ 23:06:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aOFNz2mKXCXUImwO@shikoro>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0xTdxjG8z93KiVnHYsHSObSjS3CdDcy3uxC2BLnyZLFLVuMww+usWc7
-	DZeSokzmHIVOIE4d69KqLWq5FYQKtWUIYpNSR5UhsbVOu621EgpK1obEgJsXYD0sy/z2y/s+
-	z/M+H14GV7RQ2YymYpegq1CVKSkZIUumt23wHUqILxvd6+B6nZeAln4HBYG+XgSxxSYES0Y/
-	DSsePwJz0IiDY6AOA9NUnIJ5+0EEllkrDXNjmyEZGyFhJXobA3t8GYO4tzFlNZfCyTY3BQ8n
-	r+BwxBRA0DoVxeGOM7Uc8N9E4Omup2Cm+SccQvEMGDd9R0Ey2IKBrd5DwnGrEYGhvZ8C83EX
-	AcO3ztEQMRsx6HV9AOYza8F6xJDqcnoEg/v2Hhout0cIsOtzwToZSnWxacHfe5uG6PcmAvqS
-	V0iIXWwg4az+Fg2u38YQLFybwsBxcBaHpnOLBHh+z4fWhg4Cjp2IUHDeM05A09ICAr31LxIC
-	3gkSJvyXCBi3nCKg80YQA/fkZRzCzTOoWM33uAcxfv/VJYp3nHAg/uEDI+IXOg04fyExj/Od
-	EwmKf7D4K8V77tkI/pc2jv9hcgM/bInSvM21m3d35/Ht5+cwvvXuIvlhfonsLbVQpqkWdC8V
-	fSYTTV25lQlqT0ekhdajYfIASmM4toDTt4ZSzKxy/dUsaUywuVyj14kkptgXuHD4Pi5xJvsa
-	5zBY6QNIxuDs2RwuODCNS94n2Z1c/7fPSShnC7lLoU2SXMHWcvM+26pVzj7BjR+LExLjbB4X
-	Xp7DJDnO5nBdy4w0TktdejRzeLXYU+yznHfwIiZd4tibadyNyDT1b+MsbrQ7TDQj1vJYrOWx
-	WMv/sTaE9yCFpqK6XKUpK9go1lRo9mzcqS13odTP2vc92j6E7gY+9iGWQcp0uTjyp6ggVdVV
-	NeU+xDG4MlNeuDchKuRqVc1Xgk67Q7e7TKjyoRyGUK6Vv3rvS7WC/UK1SygVhEpB998WY9Ky
-	9ah4bN03/cqC9w4XfRrrQxf+2LTlZM9pcfro0WtDSFQF3in+eqU5GXt9c3Ar8ebTzzjmMobw
-	bV2fvLumoQTedv64Xxtqn21M3/bGmp8/qswYfT7TIA58vtdZV7tefNHaa3j/1J2/neFDwSxd
-	4ai6dCsDWktUN7WvdLAjv+S6o7YoG6xKokpUvZKH66pU/wDSCxH1rwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTH89znvtGs89JBeJTsS5FoNKAGDWdDDXGZ3G3ZwjeWfZmd3tgG
-	KNpKJy7bgFJguDmoaYktzgpaGK3Q8aIWU9ZhYAISBWQjG8iYRSWWNZmgqbytd8kyv5z8zjn/
-	X87z4eGxKsps4nX6E5JBrylQswpa8UGWOe2nb8Lanb7O7fBLWZCGpcVqGhravSxUd5xj4G6b
-	B8HMUjWC58tODBb/Og2r1gEOFqO/c7AeGEBgH7Vi8HaVUfDUt8bCk5t/I7DNhliony+jIeL+
-	GoHjoZOD+f4cWJi5wcD69CMKfn0WRuAOrVEQClYhWLXnw4XGThaWR+5gqLfdRXBxdhrDY19s
-	2TVwH0GgpZyFudpuDOOhV+HeUoSFQdtpFhZGGyj4y8eCqzzAwHmnFYG5qZ0F+/kOGvx/9HAw
-	+mSFgim7lQJPx/sw435Iw3BtIxV7Xyz1QxI4681UrDymwHblBgVRdysHt5umaHCXpoJzZJyB
-	P1scHKzM7oJ1VxEMeB5xMP2tjYa2hTtMth2Jzy1naLG18yolWsZWWdH7nReJyy+sSFy8bMai
-	pTbW3gxHsFjR+al4eTjMii+WJlgx8MxFi0ONRKwbSRP9jmlOrOj9jcvN+kix94hUoDNJhh37
-	Dym0tubUY2H25KWpBq4U+ZkaxPNE2E3KxzbWoDieFlJJVdCHZGaFLWRyMoplThAyiNfs5GqQ
-	gsfCtWQy2vUAy+5rwmHSXrFZRqWQSW6Nvy3HVcKXJNLn+ldVCvFk8FyIlhkL28jk2jwlx7GQ
-	TJrXeHkcF7u0MneGkTlRSCHBqz9TtUjpeMl2vGQ7/rddCLeiBJ3eVKjRFexJN+ZrS/S6k+mH
-	iwo7UOxDuj9fqbuOFsdz+pDAI/UrytyqsFbFaEzGksI+RHisTlBmfhYbKY9oSk5JhqKPDcUF
-	krEPJfO0Okn5bp50SCUc1ZyQ8iXpmGT4b0vxcZtKkSQMx4ey2lN+zNqcGRlqPb0n+72pW/2J
-	xWQuafmTia3piYO2poPJxyubo13dljfeDGrKh/QT+9LrXw9kzHyP83pRWPB9mLHwjidt0BPd
-	kNvWk6ItrlN9sXMj17/Bn5BUme09W7y1J4dqOdv9YP9YnektYpltO8D64xsOMr2myq/UtFGr
-	2bUNG4yafwCIKJ+/jAMAAA==
-X-CFilter-Loop: Reflected
+References: <20251010094047.3111495-1-safinaskar@gmail.com>
+ <20251010094047.3111495-2-safinaskar@gmail.com> <CAHp75VeJM_OoCWDX20FhphRi6e7rG9Z4X6zkjx9vFF12n7Ef7A@mail.gmail.com>
+In-Reply-To: <CAHp75VeJM_OoCWDX20FhphRi6e7rG9Z4X6zkjx9vFF12n7Ef7A@mail.gmail.com>
+From: Askar Safin <safinaskar@gmail.com>
+Date: Mon, 13 Oct 2025 09:05:56 +0300
+X-Gm-Features: AS18NWAQKixJeSnu1jMDTs2ReasUmQ44oKevMSLcLyEUnjeI8Werl5Jwf9tycOM
+Message-ID: <CAPnZJGDvHbDt_JvDNLN+LaU+5yFyB_qkdBtVhSEV60_yktAVzw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] init: remove deprecated "load_ramdisk" and
+ "prompt_ramdisk" command line parameters
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Brauner <brauner@kernel.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>, 
+	Jens Axboe <axboe@kernel.dk>, Aleksa Sarai <cyphar@cyphar.com>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+	Julian Stecklina <julian.stecklina@cyberus-technology.de>, 
+	Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Alexander Graf <graf@amazon.com>, 
+	Rob Landley <rob@landley.net>, Lennart Poettering <mzxreary@0pointer.de>, linux-arch@vger.kernel.org, 
+	linux-block@vger.kernel.org, initramfs@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Michal Simek <monstr@monstr.eu>, Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Dave Young <dyoung@redhat.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Borislav Petkov <bp@alien8.de>, Jessica Clarke <jrtc27@jrtc27.com>, 
+	Nicolas Schichan <nschichan@freebox.fr>, David Disseldorp <ddiss@suse.de>, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 04, 2025 at 06:39:43PM +0200, Wolfram Sang wrote:
-> On Thu, Oct 02, 2025 at 05:12:35PM +0900, Byungchul Park wrote:
-> > Functionally no change.  This patch is a preparation for DEPT(DEPendency
-> > Tracker) to track dependencies related to a scheduler API,
-> > wait_for_completion().
-> >
-> > Unfortunately, struct i2c_algo_pca_data has a callback member named
-> > wait_for_completion, that is the same as the scheduler API, which makes
-> > it hard to change the scheduler API to a macro form because of the
-> > ambiguity.
-> >
-> > Add a postfix _cb to the callback member to remove the ambiguity.
-> >
-> > Signed-off-by: Byungchul Park <byungchul@sk.com>
-> 
-> This patch seems reasonable in any case. I'll pick it, so you have one
-> dependency less. Good luck with the series!
+On Fri, Oct 10, 2025 at 6:02=E2=80=AFPM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> 1) often the last period is missing in the commit messages;
+I will fix in v3.
 
-Thanks, Wolfram Sang!
+> 2) in this change it's unclear for how long (years) the feature was
+> deprecated, i.e. the other patch states that 2020 for something else.
+> I wonder if this one has the similar order of oldness.
 
-	Byungchul
+These two commits were done in 2020, too. I will fix in v3.
 
-> Applied to for-next, thanks!
+--
+Askar Safin
 
