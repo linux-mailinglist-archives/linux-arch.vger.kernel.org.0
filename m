@@ -1,177 +1,237 @@
-Return-Path: <linux-arch+bounces-14053-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14055-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABF1FBD523F
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 18:40:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7B6ABD4CF6
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 18:11:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DE083E6626
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 16:01:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 621EC188B162
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 16:11:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C96031D738;
-	Mon, 13 Oct 2025 15:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95C330BF65;
+	Mon, 13 Oct 2025 15:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EoGaZkvb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AfYgJeQ1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE2D31D361
-	for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 15:39:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EB430BBBD
+	for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 15:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760370000; cv=none; b=Mw3YMZuHr26aYAFCmX8PW5ya6cNsf/+D1if8sxn1v22r9+JxNVDNaP8qHsln5Cnn/ux+qlcpMF2pA+Q2+XrflJ/mPG6JwYIQuWl6ACEosYilU0vqj+277eC0SGXOB0p+muyW4Q5ydVSlmJxNXNOwurPfBfb3uaNMDjhYHFzjbm8=
+	t=1760370851; cv=none; b=m8wsLBuqv9uN10/eNnKtQbTvYkMArqTwqnpD7DhOeNFHWGoqDd65sbChuD8XorgQl2SJBrhaAKMWq61umG4LcbK1kPYKzJquthxQPIo+it0Nm7ro5e8lTwdFsmyAUChfjCL2cK5nHU3Ax3fnAEYhj0ReKz5Vdvfg5cw8NLRIB+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760370000; c=relaxed/simple;
-	bh=bdfeOJ1CSPp//SYUVDBBQsYQyaNxDAAd/0lEE35bEzg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=hVilBo+PaNeAGq5pLRfT4JpunmjwvGymqOEaXH129WgXdVb6D7v5z/VH346Ug6Mk1wAB8tByTfUW83Z4eUncUxMHK7WA68emJq2K+M9qFH6ToLiftLjZeW2punvXUlrGfjUanx6/x2lq0hbuUiIrJhlnOq0o7F/YWssiaFDjNLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EoGaZkvb; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-46e509374dcso18342215e9.1
-        for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 08:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760369996; x=1760974796; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kwQoFRjsq01KVdK43Vv6ynyDB+DHrQ33po0r+B72Arc=;
-        b=EoGaZkvbAHoVLP/1Qqz3QEWC9Bu6buB2FzlNyVguEOY2Of1OKSUH08OO9ugDWHSdMT
-         zThb95JjRQ8T1cZp85fi/vLMC5Kjd3xVu55ZkQsYe86hhAWauuDojqwr88z+OUHrnngp
-         cLAdKHSOgPkmA7nSrT9tX8g51Kw0Sctqof7CaWYNcZn3vTJV+CJ/A6e3DbsFdT6C5Hvs
-         WfzK1XR2OYdYGRSGkcMco6c898jlxJv2H7xSGxahwP/mZmfWWqJw3tOaQxg4dnJuzXR7
-         Qnw+/ztls/FttKZe5vqeYU8nNQgSoXKiT2N4Y+ePjMdcjDvkRtT+l+jjuufcRkODTQdU
-         QRkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760369996; x=1760974796;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kwQoFRjsq01KVdK43Vv6ynyDB+DHrQ33po0r+B72Arc=;
-        b=PsPremAbI+Cin4vj86O22eyp5MAmBRGmYHj0b5QRogQhLloUKz1bPik3DKKpVLPp2d
-         JaU8fQLvtsb8qoxAuZ2BmUDuQB8ehh0eGDXlesNV7y9MahwHDRyA9MSvdGErUHmmo1Ja
-         BCheG6MajSZ1RVkACshJmiWo36iS+UAIajwzXMaAepVGCf8ZKbYXc/ItHqBQ7M4C+p6r
-         5uSUXraO5wlpPaJhSkv8EYRchLlirdsVK+aHdXFxJh9ZhO/UJY/3Af7Ac3IOQx/9WpDy
-         Q8VaJJ+Fsqj+ZLdTgkdCgYjwOdX0jW0NwC8NgT2VDLcSWhPGJTWYwLl41w5C78ZBAcVP
-         kkgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXpMJQgv2NudNUvVdjoi8Mkd7Prfwr4y3K/e2A2sSo9lo6zsku2fGPezlU2WlUCgOXppPxtBycPHBO/@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWunbQbIUQrTB0C0JNaZripHV/P+A+wuIXjLz3ALhdG37xlVbx
-	a4VdBnyhPNgXoqQPRpSE0IUqRfCfxHfPBYPTufLQjpko4oLe6D2Y7N0m9fzKj625YXsgq/arp7P
-	A1IStPgzFpDiH9dq+aw==
-X-Google-Smtp-Source: AGHT+IGVlYoiHkeXsTQFrvn9kgZVTgCWcB8oIqtDdxIvtExFOS98aaxHP9f4wr11J0Rsb8Np2hM9BT88Mo6nEpA=
-X-Received: from wman12.prod.google.com ([2002:a05:600c:6c4c:b0:46e:6740:21ac])
- (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:8586:b0:46e:37a7:48d1 with SMTP id 5b1f17b1804b1-46fab89b7abmr122964145e9.34.1760369995668;
- Mon, 13 Oct 2025 08:39:55 -0700 (PDT)
-Date: Mon, 13 Oct 2025 15:39:17 +0000
-In-Reply-To: <20251013153918.2206045-1-sidnayyar@google.com>
+	s=arc-20240116; t=1760370851; c=relaxed/simple;
+	bh=OvzJovNv1ctaRAi0qWxBvnsOPU9DoRZIj3SLiUKtWkA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PujwoHl8pfCa85zoz/vzLVjIZVPWrdGHGIZK3dq23krejYVUwrwcfvwX/lCFlwwSIzQ1kQwXVsP/ph6Hx5K6CS/R/F4+LZRAVNTwvTUZreMn7TIv0987ZKgUxVqW+N5fwHsemWvDe7BoEq+bCWu9piau9O6E4E/Nr/XkCdFoqv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AfYgJeQ1; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760370849;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wVWnS0RcSrifKORRkaxSlEBfAdbDlyJkXOwnKgyyCWE=;
+	b=AfYgJeQ1gC1GSNrKw12Ht1DOe7+ILg3nFS359qUVBJwtDgqQwdh+u2fNKSzgqrimsijcVY
+	8qu0jxMGntNhi4kskjdfuGyuF/B8X6qYDioQRubBvpysaD3c/ohTKAgtahT263pEffmAoC
+	k36bEfw+BujXUrRRup6zwid5o87oWCQ=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-104-hoQr19x9MGeShnhZzexXCg-1; Mon,
+ 13 Oct 2025 11:54:05 -0400
+X-MC-Unique: hoQr19x9MGeShnhZzexXCg-1
+X-Mimecast-MFC-AGG-ID: hoQr19x9MGeShnhZzexXCg_1760370842
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D86331954105;
+	Mon, 13 Oct 2025 15:54:01 +0000 (UTC)
+Received: from chopper.lan (unknown [10.22.81.1])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9BC8E30002D0;
+	Mon, 13 Oct 2025 15:53:56 +0000 (UTC)
+From: Lyude Paul <lyude@redhat.com>
+To: rust-for-linux@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	Daniel Almeida <daniel.almeida@collabora.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jinjie Ruan <ruanjinjie@huawei.com>,
+	Ada Couprie Diaz <ada.coupriediaz@arm.com>,
+	Juergen Christ <jchrist@linux.ibm.com>,
+	Brian Gerst <brgerst@gmail.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)),
+	linux-s390@vger.kernel.org (open list:S390 ARCHITECTURE),
+	linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
+Subject: [PATCH v13 04/17] preempt: Introduce __preempt_count_{sub, add}_return()
+Date: Mon, 13 Oct 2025 11:48:06 -0400
+Message-ID: <20251013155205.2004838-5-lyude@redhat.com>
+In-Reply-To: <20251013155205.2004838-1-lyude@redhat.com>
+References: <20251013155205.2004838-1-lyude@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251013153918.2206045-1-sidnayyar@google.com>
-X-Mailer: git-send-email 2.51.0.740.g6adb054d12-goog
-Message-ID: <20251013153918.2206045-10-sidnayyar@google.com>
-Subject: [PATCH v2 09/10] modpost: add symbol import protection flag to kflagstab
-From: Siddharth Nayyar <sidnayyar@google.com>
-To: petr.pavlu@suse.com
-Cc: arnd@arndb.de, linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	mcgrof@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev, 
-	samitolvanen@google.com, sidnayyar@google.com, maennich@google.com, 
-	gprocida@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-When the unused exports whitelist is provided, the symbol protection bit
-is set for symbols not present in the unused exports whitelist.
+From: Boqun Feng <boqun.feng@gmail.com>
 
-The flag will be used in the following commit to prevent unsigned
-modules from the using symbols other than those explicitly declared by
-the such modules ahead of time.
+In order to use preempt_count() to tracking the interrupt disable
+nesting level, __preempt_count_{add,sub}_return() are introduced, as
+their name suggest, these primitives return the new value of the
+preempt_count() after changing it. The following example shows the usage
+of it in local_interrupt_disable():
 
-Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+	// increase the HARDIRQ_DISABLE bit
+	new_count = __preempt_count_add_return(HARDIRQ_DISABLE_OFFSET);
+
+	// if it's the first-time increment, then disable the interrupt
+	// at hardware level.
+	if (new_count & HARDIRQ_DISABLE_MASK == HARDIRQ_DISABLE_OFFSET) {
+		local_irq_save(flags);
+		raw_cpu_write(local_interrupt_disable_state.flags, flags);
+	}
+
+Having these primitives will avoid a read of preempt_count() after
+changing preempt_count() on certain architectures.
+
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+
 ---
- include/linux/module_symbol.h |  1 +
- scripts/mod/modpost.c         | 13 +++++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+V10:
+* Add commit message I forgot
+* Rebase against latest pcpu_hot changes
+V11:
+* Remove CONFIG_PROFILE_ALL_BRANCHES workaround from
+  __preempt_count_add_return()
 
-diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
-index 574609aced99..1d0414da4c7c 100644
---- a/include/linux/module_symbol.h
-+++ b/include/linux/module_symbol.h
-@@ -5,6 +5,7 @@
- /* Kernel symbol flags bitset. */
- enum ksym_flags {
- 	KSYM_FLAG_GPL_ONLY	= 1 << 0,
-+	KSYM_FLAG_PROTECTED	= 1 << 1,
- };
+ arch/arm64/include/asm/preempt.h | 18 ++++++++++++++++++
+ arch/s390/include/asm/preempt.h  | 10 ++++++++++
+ arch/x86/include/asm/preempt.h   | 10 ++++++++++
+ include/asm-generic/preempt.h    | 14 ++++++++++++++
+ 4 files changed, 52 insertions(+)
+
+diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/preempt.h
+index 932ea4b620428..0dd8221d1bef7 100644
+--- a/arch/arm64/include/asm/preempt.h
++++ b/arch/arm64/include/asm/preempt.h
+@@ -55,6 +55,24 @@ static inline void __preempt_count_sub(int val)
+ 	WRITE_ONCE(current_thread_info()->preempt.count, pc);
+ }
  
- /* This ignores the intensely annoying "mapping symbols" found in ELF files. */
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 8936db84779b..8d360bab50d6 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -61,6 +61,9 @@ static bool extra_warn;
- bool target_is_big_endian;
- bool host_is_big_endian;
++static inline int __preempt_count_add_return(int val)
++{
++	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
++	pc += val;
++	WRITE_ONCE(current_thread_info()->preempt.count, pc);
++
++	return pc;
++}
++
++static inline int __preempt_count_sub_return(int val)
++{
++	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
++	pc -= val;
++	WRITE_ONCE(current_thread_info()->preempt.count, pc);
++
++	return pc;
++}
++
+ static inline bool __preempt_count_dec_and_test(void)
+ {
+ 	struct thread_info *ti = current_thread_info();
+diff --git a/arch/s390/include/asm/preempt.h b/arch/s390/include/asm/preempt.h
+index 6ccd033acfe52..5ae366e26c57d 100644
+--- a/arch/s390/include/asm/preempt.h
++++ b/arch/s390/include/asm/preempt.h
+@@ -98,6 +98,16 @@ static __always_inline bool should_resched(int preempt_offset)
+ 	return unlikely(READ_ONCE(get_lowcore()->preempt_count) == preempt_offset);
+ }
  
-+/* Are symbols protected against being used by unsigned modules? */
-+static bool default_symbol_protected_status;
++static __always_inline int __preempt_count_add_return(int val)
++{
++	return val + __atomic_add(val, &get_lowcore()->preempt_count);
++}
++
++static __always_inline int __preempt_count_sub_return(int val)
++{
++	return __preempt_count_add_return(-val);
++}
++
+ #define init_task_preempt_count(p)	do { } while (0)
+ /* Deferred to CPU bringup time */
+ #define init_idle_preempt_count(p, cpu)	do { } while (0)
+diff --git a/arch/x86/include/asm/preempt.h b/arch/x86/include/asm/preempt.h
+index 578441db09f0b..1220656f3370b 100644
+--- a/arch/x86/include/asm/preempt.h
++++ b/arch/x86/include/asm/preempt.h
+@@ -85,6 +85,16 @@ static __always_inline void __preempt_count_sub(int val)
+ 	raw_cpu_add_4(__preempt_count, -val);
+ }
+ 
++static __always_inline int __preempt_count_add_return(int val)
++{
++	return raw_cpu_add_return_4(__preempt_count, val);
++}
++
++static __always_inline int __preempt_count_sub_return(int val)
++{
++	return raw_cpu_add_return_4(__preempt_count, -val);
++}
 +
  /*
-  * Cut off the warnings when there are too many. This typically occurs when
-  * vmlinux is missing. ('make modules' without building vmlinux.)
-@@ -225,6 +228,7 @@ struct symbol {
- 	bool is_func;
- 	bool is_gpl_only;	/* exported by EXPORT_SYMBOL_GPL */
- 	bool used;		/* there exists a user of this symbol */
-+	bool protected;		/* this symbol cannot be used by unsigned modules */
- 	char name[];
- };
+  * Because we keep PREEMPT_NEED_RESCHED set when we do _not_ need to reschedule
+  * a decrement which hits zero means we have no preempt_count and should
+diff --git a/include/asm-generic/preempt.h b/include/asm-generic/preempt.h
+index 51f8f3881523a..c8683c046615d 100644
+--- a/include/asm-generic/preempt.h
++++ b/include/asm-generic/preempt.h
+@@ -59,6 +59,20 @@ static __always_inline void __preempt_count_sub(int val)
+ 	*preempt_count_ptr() -= val;
+ }
  
-@@ -246,7 +250,8 @@ static struct symbol *alloc_symbol(const char *name)
- 
- static uint8_t get_symbol_flags(const struct symbol *sym)
++static __always_inline int __preempt_count_add_return(int val)
++{
++	*preempt_count_ptr() += val;
++
++	return *preempt_count_ptr();
++}
++
++static __always_inline int __preempt_count_sub_return(int val)
++{
++	*preempt_count_ptr() -= val;
++
++	return *preempt_count_ptr();
++}
++
+ static __always_inline bool __preempt_count_dec_and_test(void)
  {
--	return sym->is_gpl_only ? KSYM_FLAG_GPL_ONLY : 0;
-+	return (sym->is_gpl_only ? KSYM_FLAG_GPL_ONLY : 0) |
-+		(sym->protected ? KSYM_FLAG_PROTECTED : 0);
- }
- 
- /* For the hash of exported symbols */
-@@ -370,6 +375,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
- 	s->namespace = xstrdup(namespace);
- 	list_add_tail(&s->list, &mod->exported_symbols);
- 	hash_add_symbol(s);
-+	s->protected = default_symbol_protected_status;
- 
- 	return s;
- }
-@@ -1785,8 +1791,10 @@ static void handle_white_list_exports(const char *white_list)
- 	while ((name = strsep(&p, "\n"))) {
- 		struct symbol *sym = find_symbol(name);
- 
--		if (sym)
-+		if (sym) {
- 			sym->used = true;
-+			sym->protected = false;
-+		}
- 	}
- 
- 	free(buf);
-@@ -2294,6 +2302,7 @@ int main(int argc, char **argv)
- 			break;
- 		case 'u':
- 			unused_exports_white_list = optarg;
-+			default_symbol_protected_status = true;
- 			break;
- 		case 'W':
- 			extra_warn = true;
+ 	/*
 -- 
-2.51.0.740.g6adb054d12-goog
+2.51.0
 
 
