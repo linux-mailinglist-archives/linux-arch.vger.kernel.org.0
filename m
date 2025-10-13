@@ -1,149 +1,168 @@
-Return-Path: <linux-arch+bounces-14033-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14034-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5282ABCE650
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 21:31:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D63ABD112D
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 03:18:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A957427C30
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Oct 2025 19:31:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D79423BB7FB
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 01:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAA6223A9AC;
-	Fri, 10 Oct 2025 19:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="4DtP1zW4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CCDC1F4295;
+	Mon, 13 Oct 2025 01:18:53 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD531D6193;
-	Fri, 10 Oct 2025 19:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE9712B94;
+	Mon, 13 Oct 2025 01:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760124691; cv=none; b=aTihdudJj5RkQ/gqgcsYHVtjYRy46OpxX4AqrvCaknqL4ofOphpuhuZOMMbXxu5izlWGMMU7Cl3EBAPshxJht+yXurkWJq9IqFFRk3IF9MA5Zoig1/+hoc+hEKma6Oz3QWFfACI+231uCoY8BoFeYw9yrEh6lCQAMUTpFh1mcrI=
+	t=1760318333; cv=none; b=bDM7T0hEccmgRdyWp8O0X0wVXZ+srvqFz/39G/Vc0y819R+SbGGjha40i8nSDSK5KNtXs7NDadPqVsmLa84w0LuRN8W2YdiWW//XtBLa2RKTfr1lw6JtAbkIaB8CkPFrr8PfZcM3mX055AJPEYcjbq1kmDDjgZ+xX9RXvD8MlYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760124691; c=relaxed/simple;
-	bh=AiHgADCO575LW3Jd7nNp0VaAAqwI7NoyKpnJZKEjRNM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O1nlNCr8ge9BgMV1re6mdCNuEKmFczV6jlELXEbEzksmrFykCR/+KQWcWxH1FEofGG9rfdzyM4nvg4nYVP0am7wSsS7Ko8ZlwUVnUpyPqnBc8XGVLYu6txNNwlgjYo2AaEcvVpGCR0IIxDQf2gBagtxZrJMIYTdyoTTHya0WxRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=4DtP1zW4; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=PCNi5/OuVnRwhbzGyuTsh6ukiwTm+O6EJKLlJ1B2gEw=; b=4DtP1zW44Vb6QBKbJyt2gzFny1
-	yvoH5OtVcCy5Ms02majpKQ1uofu1fe3sIP/2IwWe1pCnQE1bX/8S8BSzkwIvvlSHeCqkZdgpfQzr9
-	l1DJFzOWWnoL1D328ZjMcbAmNQAJvPWCjCuiLz0JQmgF36GPQmgapZSILT2ZZnvEKTjGFe4YT7Bnw
-	ooE7Hco/w4VVet2bxVfVNpG2TcG1kU6a8lC9wtEY55wtgG6NGbFAcZ99cGEbz9k7PPnniY3FpdeAu
-	ZxsMIKZ7IfV2CP/X40W2eXqppC5Ws+ANhxeYX9gxltQ7OeitlW10UYQMb6/T8ERzySBkf2wXv9sGm
-	b7s1whdw==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v7Ipn-00000009FkH-15gP;
-	Fri, 10 Oct 2025 19:31:23 +0000
-Message-ID: <07ae142e-4266-44a3-9aa1-4b2acbd72c1b@infradead.org>
-Date: Fri, 10 Oct 2025 12:31:22 -0700
+	s=arc-20240116; t=1760318333; c=relaxed/simple;
+	bh=NiasNDnL7bI+RWAs1WgZxXifIHYVm8cB4osG/bTqMcU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QOIjkf/VpiYM60gfY8pp/Hjy6++5r5wMDYR3MEnfLMzR+aEBylmAG0LNN9Odhm29N3+onVQcHBSrLSumAy+hmIujg32cYJHz9KqdiPRSVs8Ur6dW1/ik9Tc4NmgH7nnhMv8tP1qANSz80oZYQLmF+xzdv5VEfgvl3N/hroRi5gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c2dff70000001609-68-68ec4fde8eb0
+Date: Mon, 13 Oct 2025 10:03:21 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+	tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+	amir73il@gmail.com, gregkh@linuxfoundation.org, kernel-team@lge.com,
+	linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+	minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+	sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+	ngupta@vflare.org, linux-block@vger.kernel.org,
+	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
+	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+	djwong@kernel.org, dri-devel@lists.freedesktop.org,
+	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
+	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
+	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
+	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
+	yeoreum.yun@arm.com, netdev@vger.kernel.org,
+	matthew.brost@intel.com, her0gyugyu@gmail.com,
+	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
+	sumit.semwal@linaro.org, gustavo@padovan.org,
+	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
+	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
+	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
+	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	qiang.zhang@linux.dev, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
+	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
+	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
+	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
+	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
+	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
+	yuzhao@google.com, baolin.wang@linux.alibaba.com,
+	usamaarif642@gmail.com, joel.granados@kernel.org,
+	richard.weiyang@gmail.com, geert+renesas@glider.be,
+	tim.c.chen@linux.intel.com, linux@treblig.org,
+	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
+	chenhuacai@kernel.org, francesco@valla.it,
+	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
+	masahiroy@kernel.org, brauner@kernel.org,
+	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
+	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v17 28/47] dept: add documentation for dept
+Message-ID: <20251013010321.GA52546@system.software.com>
+References: <20251002081247.51255-1-byungchul@sk.com>
+ <20251002081247.51255-29-byungchul@sk.com>
+ <87ldlssg1b.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] initrd: remove deprecated code path (linuxrc)
-To: Askar Safin <safinaskar@gmail.com>, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
- Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
- Jens Axboe <axboe@kernel.dk>, Andy Shevchenko <andy.shevchenko@gmail.com>,
- Aleksa Sarai <cyphar@cyphar.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Julian Stecklina <julian.stecklina@cyberus-technology.de>,
- Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Alexander Graf <graf@amazon.com>,
- Rob Landley <rob@landley.net>, Lennart Poettering <mzxreary@0pointer.de>,
- linux-arch@vger.kernel.org, linux-block@vger.kernel.org,
- initramfs@vger.kernel.org, linux-api@vger.kernel.org,
- linux-doc@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
- Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>,
- Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>,
- Arnd Bergmann <arnd@arndb.de>, Dave Young <dyoung@redhat.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Krzysztof Kozlowski <krzk@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Jessica Clarke <jrtc27@jrtc27.com>, Nicolas Schichan <nschichan@freebox.fr>,
- David Disseldorp <ddiss@suse.de>, patches@lists.linux.dev
-References: <20251010094047.3111495-1-safinaskar@gmail.com>
- <20251010094047.3111495-3-safinaskar@gmail.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251010094047.3111495-3-safinaskar@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ldlssg1b.fsf@trenco.lwn.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTdxTH87v3d29vG2uuFcNvkCVbnTE04mMx5vyxqJuJuYQsumG2ZGbZ
+	bqRZq7zWymvJljIKQzRbdQFCAWlRK0IR1iIoDoM0Y3alSmVox0ZR7AB5yKaUhzpYL2aZ/5x8
+	8j0n3/PI4WhVDRvH6TOOag0ZYpqaVWDF9Cp74vC+Kd3WZ9cTIDJbgqG62clCiauSgb6LjQiG
+	IyUIiq4sY5hd/F0Gy509CJ60LLEw6XmMoOJhAYYZxwkEy0NjFDjCSxSEu75B8E/5Eaitc7Pw
+	zH+LBvv9IRrGW6J6a08IQX94NfwamWHBW3achelANQU1VacQFJ5pZiEw+ZyCRte74LPUUdEG
+	LJT/EAtVFYVUNIxTUNZ0lYJFR4MMHKYNUOXvZ2Ck3hqdzJYJPY1jMhj6rgzDxelbDEyOnmKh
+	3XRPBq7ffkJQ0hHB4HpwhwF78VkMlaf/YOHHTi+G/o5qFk60XGIg5FxmwFQ1H12+y8dA81iQ
+	Al/PDQxe6wUM9+8FGXD7e2kIWv5E0PSoLnqGOQe9O1WYL/oWCw3uNkpwnnYiYfZcIS0UWaLk
+	mZqhBbM7Vzjnm2KFp5EBVuics2HhlzoinPQnClesQzLBfG1QJthc2YK7XrM/8SPFW6naNH2O
+	1rBl56cKnaczhLPOsHn14fdNqJgpRXKO8NuJwzeBShG3wkG7QZIxv4H0Pr3ESszyG0kwuEhL
+	JTH8G2Ti2AelSMHR/Pl48v1ozUrNWn4XuTngRBIreSA1Ac8Kq3gzIn/3ii/0NcRbGcYS07yG
+	BJceUpInzceT80ucJMv5TWTeMkJLvI5fT7rafqakXoQflZPqghB6MfIr5Hp9EFsQb33J1vqS
+	rfV/WxuiG5BKn5GTLurTtm/W5Wfo8zYfykx3oejTOr58fvAyetyX0o14DqlXKXVXJ3UqRswx
+	5qd3I8LR6hjlyeJxnUqZKuZ/oTVkfmLITtMau1E8h9WxyjfnclNV/GfiUe0RrTZLa/gvS3Hy
+	OBNKTkjI3ZEd9478wrUHE0/yyre0epKTim6KC5rBvUnp9h3v/cVS3YrXFYMHYu4Gbnw+0n7Q
+	vL+jaeOj2Nsfakwtx3et3rPPf/vjA1lfDx7L2Z3k7F//Vcrb87XimgLzApXcW7vXtGfAdji8
+	ra3JuNblzeoThgMpr7XufHVhbGvKppCuvUKNjTpxm4Y2GMV/AZ3vxSmwAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxbZRTHfe7Lc28bO68VtycjfrDuJRJBl+k8cUaXqNkNUXQz2Xxjrt2u
+	tuGlyy3D4WLCWxFxaqlp2dp1MtgKgbJ1BRaRdEEaWbaBDJFRdYV1qQxGkaiwhgLFdsa4Lye/
+	8z///8n5cHhaHWfX8obCIkku1OZrsJJR5mytyBx7Pap/ytWWBdfKehiYn6tm4PhZD4Zq3zEW
+	rp5pRTA+X40gtuikwdy1wsCytY+DuYXfOFjx9yGwD1lp8HSUUfC3N4FhOvAXAls4gqFuqoyB
+	WfcRBI4JJwdTP2yHmfFuFlZCtygYvRNF4I4kKIj0fIpg2Z4H3zS0Y1gcGKShznYVwclwiIZJ
+	b3LY0TeGwN9cjuF3SycNw5FV8PP8LIZLts8xzAwdp+APL4b6cj8LLqcVQUXjWQx2l4+Brhvf
+	cTA0vUTBdbuVglbfazDunmDgiqWBSt6XdJ1bA866CipZJimwtXVTsOBu4aC/8ToD7tL14BwY
+	ZuFms4ODpfAmWKk3Ql/rLQ5CX9kYODMzyG6zITFm/pIRW9rPU6L5p2Usek54kLgYtyJx7nQF
+	LZotyTYQnaXFyvaPxNNXoliMz49g0X+nnhEvNxCxdiBT7HKEOLHywq/cG8+9o3x+v5RvKJbk
+	J1/Yq9QH/GPMgUZ8qDmysxRVsTWI54nwNAmelGuQgmeE9aQ/3olTjIWNJBhcoFOWNGEduf3Z
+	rhqk5GmhKZ18PeG663lIeJH8OOJBKVYJQFxDgbusFioR+bNf+6/+ILl0LMKkmBYySDAxRaV2
+	0kI6aUrwKVkhPEFilpt0ih8WHiM95y9SFqRy3JN23JN2/J+uR3QLSjMUFhdoDfnPZJny9CWF
+	hkNZ+4wFPpT8SPcnS7Xfornh7b1I4JHmfpW+e1qvZrXFppKCXkR4WpOmqq2a1KtV+7UlH0uy
+	8X35YL5k6kXpPKNZo8reLe1VCx9qi6Q8STogyf9NKV6xthS5r+VIl2U245eD0cAjh+/b4jWe
+	em/j6Pe6dFfuznc/CDlWb6jLzlzep9PZSXlr7aPPvt0SfOXwjuwLqzdn9DpHXlLciK17tWkC
+	F9U8MCX4ir2d4qqcPbmzm31HwqNuz+Dtl+UtRp05trVKEX/z8Q7YlgiVNOTKF0+95Qwf5dp0
+	G77QMCa9dlMGLZu0/wCekX8tjQMAAA==
+X-CFilter-Loop: Reflected
 
-Hi,
-
-On 10/10/25 2:40 AM, Askar Safin wrote:
-> Remove linuxrc initrd code path, which was deprecated in 2020.
+On Thu, Oct 02, 2025 at 11:36:16PM -0600, Jonathan Corbet wrote:
+> Byungchul Park <byungchul@sk.com> writes:
 > 
-> Initramfs and (non-initial) RAM disks (i. e. brd) still work.
+> > This document describes the concept and APIs of dept.
+> >
+> > Signed-off-by: Byungchul Park <byungchul@sk.com>
+> > ---
+> >  Documentation/dependency/dept.txt     | 735 ++++++++++++++++++++++++++
+> >  Documentation/dependency/dept_api.txt | 117 ++++
+> >  2 files changed, 852 insertions(+)
+> >  create mode 100644 Documentation/dependency/dept.txt
+> >  create mode 100644 Documentation/dependency/dept_api.txt
 > 
-> Both built-in and bootloader-supplied initramfs still work.
+> As already suggested, this should be in RST; you're already 95% of the
+> way there.  Also, please put it under Documentation/dev-tools; we don't
+> need another top-level directory for this.
+
+Sure.  I will.  Thanks!
+
+	Byungchul
 > 
-> Non-linuxrc initrd code path (i. e. using /dev/ram as final root
-> filesystem) still works, but I put deprecation message into it
+> Thanks,
 > 
-> Signed-off-by: Askar Safin <safinaskar@gmail.com>
-> ---
->  .../admin-guide/kernel-parameters.txt         |  4 +-
->  fs/init.c                                     | 14 ---
->  include/linux/init_syscalls.h                 |  1 -
->  include/linux/initrd.h                        |  2 -
->  init/do_mounts.c                              |  4 +-
->  init/do_mounts.h                              | 18 +---
->  init/do_mounts_initrd.c                       | 85 ++-----------------
->  init/do_mounts_rd.c                           | 17 +---
->  8 files changed, 17 insertions(+), 128 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 521ab3425504..24d8899d8a39 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -4285,7 +4285,7 @@
->  			Note that this argument takes precedence over
->  			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
->  
-> -	noinitrd	[RAM] Tells the kernel not to load any configured
-> +	noinitrd	[Deprecated,RAM] Tells the kernel not to load any configured
->  			initial RAM disk.
->  
->  	nointremap	[X86-64,Intel-IOMMU,EARLY] Do not enable interrupt
-> @@ -5299,7 +5299,7 @@
->  	ramdisk_size=	[RAM] Sizes of RAM disks in kilobytes
->  			See Documentation/admin-guide/blockdev/ramdisk.rst.
->  
-> -	ramdisk_start=	[RAM] RAM disk image start address
-> +	ramdisk_start=	[Deprecated,RAM] RAM disk image start address
->  
->  	random.trust_cpu=off
->  			[KNL,EARLY] Disable trusting the use of the CPU's
-
-There are more places in Documentation/ that refer to "linuxrc".
-Should those also be removed or fixed?
-
-accounting/delay-accounting.rst
-admin-guide/initrd.rst
-driver-api/early-userspace/early_userspace_support.rst
-power/swsusp-dmcrypt.rst
-translations/zh_CN/accounting/delay-accounting.rst
-
-
-Thanks.
-
-
+> jon
 
