@@ -1,136 +1,116 @@
-Return-Path: <linux-arch+bounces-14043-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14045-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 425DABD384E
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 16:30:54 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70B74BD4A86
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 18:00:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A048189ED91
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 14:31:17 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 299EA350003
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 16:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E47244679;
-	Mon, 13 Oct 2025 14:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5C5311976;
+	Mon, 13 Oct 2025 15:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="USDXVyCI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KjgXCWRq"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C63221FCB
-	for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 14:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318223115BE
+	for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 15:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760365845; cv=none; b=DtVqPYxK4qa7b4iylsqan69yuZNB6eXg8ClfLFC4LFhWhp/Wj9ea2tAU0rkJ6Olw6wsy7fs6zkIWcgJ1/V2uBPgpwGJqwTFujLsegb1zjEUpOiRS9DJC5ZA0HvJZrOrDopRQhV1/aMh0VqdSf/rMvB3ZyghDFr1yXCivFQZbStI=
+	t=1760369991; cv=none; b=mEh2jBToNnU+SZKJ0amfvUYGYUewm8DkZfgc5IMEozLAfoWWqdpZnzPfOYAYPIfcSJlZWgnqlGmuBcsap60GKtGDGPQkjOVbyRbxPHtLMUOq6L8x34zewL1854rb5+MVfrxD/QCTDQgYasJwcLGeRfGcZ/wF0EfIqBaszlYIfwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760365845; c=relaxed/simple;
-	bh=p7OPEdJE5ToR35hajbcxBsZGseYV7ErRLMU40tXYi4w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rP08FKTRkrAJzh7ETycx+SJH13JwEII2Db6d1Lh3NpJj6msa5xlKBoZuMn1c0kcyDfIDWk5UMHHaUACoyGAt5p8EdIKpsjxd3dPue9gAKQImg3xLxlkjPREVicaWXfPGf72zjmTgAn1Rf28UmtjOVPqjosLLI5/L9Oc9KBQnRlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=USDXVyCI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760365842;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BTlu2d/OCa7smgTdfnf6rps6xmzbDobGt8v/NuBgfVM=;
-	b=USDXVyCI1oHzHhJx940Mf5G5w3g/qYVZP4qIK1Gp/c10/5wpfMTKP2gDvhwZfXcdR+kQ/y
-	YpgA/UfKZJB1vxm/eepm4Z+W4YmFIViZMfRXJj2PzqoAszTFfjduBmEPxr8plMr3c1r4XV
-	5YPChx3jFFQqEfunEnO6Eqs2wDEHG/g=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-542-WHoEOy0QNoS_DHwHLaA70A-1; Mon,
- 13 Oct 2025 10:30:37 -0400
-X-MC-Unique: WHoEOy0QNoS_DHwHLaA70A-1
-X-Mimecast-MFC-AGG-ID: WHoEOy0QNoS_DHwHLaA70A_1760365832
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AAB3019560A7;
-	Mon, 13 Oct 2025 14:30:29 +0000 (UTC)
-Received: from fweimer-oldenburg.csb.redhat.com (unknown [10.44.32.50])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 414E01954107;
-	Mon, 13 Oct 2025 14:30:12 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Charles Mirabile <cmirabil@redhat.com>,  pjw@kernel.org,
-  Liam.Howlett@oracle.com,  a.hindborg@kernel.org,
-  akpm@linux-foundation.org,  alex.gaynor@gmail.com,
-  alexghiti@rivosinc.com,  aliceryhl@google.com,  alistair.francis@wdc.com,
-  andybnac@gmail.com,  aou@eecs.berkeley.edu,  arnd@arndb.de,
-  atishp@rivosinc.com,  bjorn3_gh@protonmail.com,  boqun.feng@gmail.com,
-  bp@alien8.de,  brauner@kernel.org,  broonie@kernel.org,
-  charlie@rivosinc.com,  cleger@rivosinc.com,  conor+dt@kernel.org,
-  conor@kernel.org,  corbet@lwn.net,  dave.hansen@linux.intel.com,
-  david@redhat.com,  devicetree@vger.kernel.org,  ebiederm@xmission.com,
-  evan@rivosinc.com,  gary@garyguo.net,  hpa@zytor.com,  jannh@google.com,
-  jim.shu@sifive.com,  kees@kernel.org,  kito.cheng@sifive.com,
-  krzk+dt@kernel.org,  linux-arch@vger.kernel.org,
-  linux-doc@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-mm@kvack.org,  linux-riscv@lists.infradead.org,
-  lorenzo.stoakes@oracle.com,  lossin@kernel.org,  mingo@redhat.com,
-  ojeda@kernel.org,  oleg@redhat.com,  palmer@dabbelt.com,
-  paul.walmsley@sifive.com,  peterz@infradead.org,
-  richard.henderson@linaro.org,  rick.p.edgecombe@intel.com,
-  robh@kernel.org,  rust-for-linux@vger.kernel.org,
-  samitolvanen@google.com,  shuah@kernel.org,  tglx@linutronix.de,
-  tmgross@umich.edu,  vbabka@suse.cz,  x86@kernel.org,  zong.li@sifive.com
-Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
-In-Reply-To: <aN6sNFBzx8NPU3Th@debug.ba.rivosinc.com> (Deepak Gupta's message
-	of "Thu, 2 Oct 2025 09:45:40 -0700")
-References: <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
-	<20250926192919.349578-1-cmirabil@redhat.com>
-	<aNbwNN_st4bxwdwx@debug.ba.rivosinc.com>
-	<CABe3_aE4+06Um2x3e1D=M6Z1uX4wX8OjdcT48FueXRp+=KD=-w@mail.gmail.com>
-	<aNcAela5tln5KTUI@debug.ba.rivosinc.com>
-	<lhu3484i9en.fsf@oldenburg.str.redhat.com>
-	<aNxsWYYnj22G5xuX@debug.ba.rivosinc.com>
-	<lhuwm5dh6hf.fsf@oldenburg.str.redhat.com>
-	<aN6sNFBzx8NPU3Th@debug.ba.rivosinc.com>
-Date: Mon, 13 Oct 2025 16:30:09 +0200
-Message-ID: <lhujz0yoowe.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1760369991; c=relaxed/simple;
+	bh=mUdyWiaMtVvum5RTj9ic5YSdMHipXTsRvWK4ObexLVs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=RvPwlcYm0WnLM7+htWDzX+EiTB9lzkFGnQLhWXwJTyynyxhpIuQQL6AWQGarOe6MBe81Gif5gcvcHf/oXE+/OEePXKw5BKVQC9ayC2A4ldUSFzMt+J5j3CqXctUczLJCiVRFpl1lM0QNliCZxuEQfaOYRItwAO3oANbRGG8cGB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KjgXCWRq; arc=none smtp.client-ip=209.85.221.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3ee1365964cso4359875f8f.2
+        for <linux-arch@vger.kernel.org>; Mon, 13 Oct 2025 08:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760369987; x=1760974787; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l8l5v6qiimGPtv9u5QonCWzpEhlvJ98SCHb4SgKDHVc=;
+        b=KjgXCWRqzLtxqtRGkyFp1OT/ckSaASJ6feu6CqLLa/He/M07ri4tWczTjjwiLGB/oL
+         fBxPi/o4LQGx/QIoE78VYtEJfqMze/+zX9ga8bu2VUSWCUtQ1VjNQKlGwy4UbI1zkYZ4
+         HoIPfLQJfZZ78yjiLNTCBwZfLr28L3+buKbY8vl0ZS8JlmGLD3pXDeMBof8TO2sZWyze
+         JrUYR1C+CknKMyFkiVWM+yXST235jYdvNZpbclvhHgQZM5J0bT05/nWqAv8DdaQOt84U
+         5iOw4ZAYGXFh8SyAR6orNaqVxy8fRA+tvc51ybgY2Ic1+/zO1o429sdhGwwq6y6+V9c3
+         IUrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760369987; x=1760974787;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l8l5v6qiimGPtv9u5QonCWzpEhlvJ98SCHb4SgKDHVc=;
+        b=odfzZhzcfBfEXSSlm4hdLYEpqcSThL7M/6hRSHmTkQpbFnd9yWnLq+DDUdCPklymVY
+         /tol+sIbc85l1p3Iwwv6PDn3KjWPKRzweYVCwWawc0gkMNfrvqiRUzEchEkvSaMp81ac
+         Vts8HNeD85TBzXHXuDLrj9Pl8al/uCdaX7FvAOnD9oBLN7BE6UYEqdegLiM23RRzxxup
+         ZE6b1vo7cvpzOlEBIpwcybHliSqqYGGkdNJMm0q+enjIbVF3brMJWHszRzm1L6Ph05nk
+         oGIUFc7LUeqY71gU937knxOaChahAeV5wp+CzktKQHJmiKzX7Bi5cpj0176QgHRgVvF+
+         sAvg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8PMFkDWABySGTsJCL1I8Uvgpx2Ebn1LJoTVGsQPBPiqxfxK7A12KIAAS9OCYMZ2NzuW3RXECK0DmG@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOss2uSfEeiB6uU+Iec1E15gMosVDBNfKU44nsYVN0/6ABOX7G
+	gmxi64V1lKM3EYWqzdqkhzDGZ0m+kRCD/1jbnK9EEdAOzgTbqgCkqLs7bwTyFalVNhNdrnhipJF
+	juJSovZONM6Wq1rHN2g==
+X-Google-Smtp-Source: AGHT+IH1j8tUfipQWeFaA8XhmoFYMLY/hNVnlYfVWyuGOekLQXj/Amrxq8GIzS8vIR8WKDj6T3Cvmmf/SjVMboU=
+X-Received: from wrmp8.prod.google.com ([2002:adf:e608:0:b0:426:d630:53cb])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:adf:e18a:0:b0:426:d54e:81a4 with SMTP id ffacd0b85a97d-426d54e81b9mr6525079f8f.56.1760369987644;
+ Mon, 13 Oct 2025 08:39:47 -0700 (PDT)
+Date: Mon, 13 Oct 2025 15:39:09 +0000
+In-Reply-To: <20251013153918.2206045-1-sidnayyar@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Mime-Version: 1.0
+References: <20251013153918.2206045-1-sidnayyar@google.com>
+X-Mailer: git-send-email 2.51.0.740.g6adb054d12-goog
+Message-ID: <20251013153918.2206045-2-sidnayyar@google.com>
+Subject: [PATCH v2 01/10] define kernel symbol flags
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: petr.pavlu@suse.com
+Cc: arnd@arndb.de, linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	mcgrof@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev, 
+	samitolvanen@google.com, sidnayyar@google.com, maennich@google.com, 
+	gprocida@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-* Deepak Gupta:
+Symbol flags is an enumeration used to represent flags as a bitset, for
+example a flag to tell if a symbols GPL only.
 
-> How will they contribute to CFI bringup without having a CFI compiled
-> usersapce?
+Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ include/linux/module_symbol.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Build glibc themselves and then proceed one library at the time.
-
->>Another use case would be running container images with CFI on a
->>distribution kernel which supports pre-RVA23 hardware.
->
-> Container image with CFI will have glibc and ld (and all other
-> userspace) also compiled with shadow stack instructions in it. As soon
-> as you take this container image to a pre-RVA23 hardware, you won't
-> even reach vDSO. It'll break much before that, unless kernel is taking
-> a trap on all sspush/sspopchk instructions in prologue/epilogue of
-> functions in userspace (glibc, ld, etc)
-
-The idea is that you can use a stock distribution kernel to run CFI
-images (potentially form a different distribution or version of the
-distribution).
-
-But maybe none of this really matters.  How far out is CFI-checking
-hardware?  Is it going to arrive much later than the RVA23 flag day
-that people are suggesting?
-
-Thanks,
-Florian
+diff --git a/include/linux/module_symbol.h b/include/linux/module_symbol.h
+index 77c9895b9ddb..574609aced99 100644
+--- a/include/linux/module_symbol.h
++++ b/include/linux/module_symbol.h
+@@ -2,6 +2,11 @@
+ #ifndef _LINUX_MODULE_SYMBOL_H
+ #define _LINUX_MODULE_SYMBOL_H
+ 
++/* Kernel symbol flags bitset. */
++enum ksym_flags {
++	KSYM_FLAG_GPL_ONLY	= 1 << 0,
++};
++
+ /* This ignores the intensely annoying "mapping symbols" found in ELF files. */
+ static inline bool is_mapping_symbol(const char *str)
+ {
+-- 
+2.51.0.740.g6adb054d12-goog
 
 
