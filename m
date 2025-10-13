@@ -1,59 +1,61 @@
-Return-Path: <linux-arch+bounces-14056-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14057-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5186CBD576E
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 19:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 841FFBD5D4B
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 21:01:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EC1DF4E5CDB
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 17:18:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 421074EDF23
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 19:01:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B5E23817D;
-	Mon, 13 Oct 2025 17:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43CB264614;
+	Mon, 13 Oct 2025 19:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TEAssBod"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NZWkdTCD"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269C31474CC;
-	Mon, 13 Oct 2025 17:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DD11EDA02;
+	Mon, 13 Oct 2025 19:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760375931; cv=none; b=J76o7VG9J5MoY8TSVFBE4XBo+EKQMQJ4887tIWqhpq/We8swRBPDfGyqFyiHB+E77jz0Hqe++ZTcq8E/t0fDz7gWrE7R7f0BzNAh7hGRX3xbx4AzkHI/FyuyHoVjgWvSzIWf0Zu89ae8G/JoXi8+C+YMRL8fkRMBl+cKDDQo9Ak=
+	t=1760382104; cv=none; b=p8PHyHmXZbEAym0gIzfSjdpFj9ywNOlZCmo5W6AO+Xq59ArY0IGP/43DTWNdEQ2vX3KONmHzHy6jOJ5i0kIgywhGm87YManFReB+6ZdTlU2SWyIK75ZPcg/+AnYdEkr42Slh08TiPbNRPW24ICjOb3gyM63Xv1hRE8AIHawvF3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760375931; c=relaxed/simple;
-	bh=Y2MERDprkb3kMR+/1R9Ry9rEFwG0OBUDXG60Qqf7fTk=;
+	s=arc-20240116; t=1760382104; c=relaxed/simple;
+	bh=+CxRU6U03dEdDulYL+z4R714ymbWoLNPP82BVX+Tfvo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cnFN18zZ5jmW9kb09QkplPcfeHEZMC7lsZ99jgrdZHIfAKxf50Mklzug5FtUYCsSfVqKmG1odGmC7/JUm08NCionfDRdVRoC5AXmuMbrKKVRi1bQRgciLnfRsfHJN3Stwkw9o8jhk3GW/ug5J0Ece5+719wS83XUd31zrKF1fpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TEAssBod; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53DD4C4CEE7;
-	Mon, 13 Oct 2025 17:18:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oVljfhHVld9FjrT/zoAoRaAUbJy6MhwMHEI/AzMZOjac9ZCm6CbBg3almNBGlUkV1pG61vLmsrwuaxxqqR13oa59Kk9du+s19KFvtloS1YdKe2qON907oHhlEwz6Xq/Ld5b+4UOQ94AvFhPVte8QEK5Ntu/dwvkSqSlDcHHAhEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NZWkdTCD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3060C4CEE7;
+	Mon, 13 Oct 2025 19:01:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760375930;
-	bh=Y2MERDprkb3kMR+/1R9Ry9rEFwG0OBUDXG60Qqf7fTk=;
+	s=k20201202; t=1760382104;
+	bh=+CxRU6U03dEdDulYL+z4R714ymbWoLNPP82BVX+Tfvo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TEAssBodpy/H2SjEdm70ucFRkyzfFcjqWRYKLYGlDBbLnT8qfTUyhV97pt7z2SNXy
-	 r9qjoY/o8vDxu+tr5kRhkRLmC4kdNfYgloAUE3NxioeOMnGSq+UN59Y7Ar7hzdeAkA
-	 uuoPpNjbupGqZplE4orOX72EGNa9FZobpi8pKn7WZdfrpCkkVWM081Bk8myrAYjLhf
-	 FFT6x0s7rT/Bbkp558vf2iAoQPGAYJ7DGsup8LVDrr88fxT+iM4abDMJtF+deU+Lu9
-	 MwiKdCnNQ0kd9lijsLbMADP4R0jUNQumQ+jEm61b5tYjpPeg9xX4IK3hXRkG/ymjzt
-	 hJL/k+vhYsUvQ==
-Date: Mon, 13 Oct 2025 17:18:49 +0000
+	b=NZWkdTCDgyWKBgOE6e03He+XHuLVo1ncetCCzvD0rGiz6ZBTre9WlVoAz0sEERqR0
+	 mP4CGIzzFTIDAn0Dg4fZiSrloNqgbqV6NYuuh/3HjhQzDQ16Pt8Xg7j2lbLYCHj4WG
+	 UrTODAuJiLpMOXkMHg7d+bjbfhtKvvgYz0MJ4c6FRb6LqgPkSN7lgN1UwtYCjbSY64
+	 sOSv97a/NY8LnQ2y0fQO5XA4R/mWTgr6ufYEVOlBe3lwO3acyd2fOBFNjjmCYLDLMf
+	 QUGeW/qffpOGsVb9x8VkSDai/4dSXPi/SK4/xfHJAQy0FQbLAciL0Fo/zdxCMAWwFC
+	 RZCd0uj5oLnVg==
+Date: Mon, 13 Oct 2025 19:01:42 +0000
 From: Wei Liu <wei.liu@kernel.org>
-To: Tianyu Lan <ltykernel@gmail.com>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, arnd@arndb.de, Neeraj.Upadhyay@amd.com,
-	tiala@microsoft.com, kvijayab@amd.com, romank@linux.microsoft.com,
-	linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH 0/5] x86/Hyper-V: Add AMD Secure AVIC for Hyper-V platform
-Message-ID: <20251013171849.GA3710129@liuwe-devbox-debian-v2.local>
-References: <20250918150023.474021-1-tiala@microsoft.com>
- <aNxiPhrbquYg3PGq@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
+To: Roman Kisel <romank@linux.microsoft.com>
+Cc: arnd@arndb.de, bp@alien8.de, bagasdotme@gmail.com, corbet@lwn.net,
+	dave.hansen@linux.intel.com, decui@microsoft.com,
+	haiyangz@microsoft.com, hpa@zytor.com, kys@microsoft.com,
+	mikelley@microsoft.com, mingo@redhat.com, tglx@linutronix.de,
+	Tianyu.Lan@microsoft.com, wei.liu@kernel.org, x86@kernel.org,
+	linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	benhill@microsoft.com, bperkins@microsoft.com,
+	sunilmut@microsoft.com
+Subject: Re: [PATCH hyperv-next v7 00/17] Confidential VMBus
+Message-ID: <20251013190142.GB3862989@liuwe-devbox-debian-v2.local>
+References: <20251008233419.20372-1-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -62,50 +64,36 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aNxiPhrbquYg3PGq@liuwe-devbox-ubuntu-v2.lamzopl0uupeniq2etz1fddiyg.xx.internal.cloudapp.net>
+In-Reply-To: <20251008233419.20372-1-romank@linux.microsoft.com>
 
-On Tue, Sep 30, 2025 at 11:05:34PM +0000, Wei Liu wrote:
-> On Thu, Sep 18, 2025 at 11:00:18AM -0400, Tianyu Lan wrote:
-> > Secure AVIC is a new hardware feature in the AMD64
-> > architecture to allow SEV-SNP guests to prevent the
-> > hypervisor from generating unexpected interrupts to
-> > a vCPU or otherwise violate architectural assumptions
-> > around APIC behavior.
-> > 
-> > Each vCPU has a guest-allocated APIC backing page of
-> > size 4K, which maintains APIC state for that vCPU.
-> > APIC backing page's ALLOWED_IRR field indicates the
-> > interrupt vectors which the guest allows the hypervisor
-> > to send.
-> > 
-> > This patchset is to enable the feature for Hyper-V
-> > platform. Patch "Drivers: hv: Allow vmbus message
-> > synic interrupt injected from Hyper-V" is to expose
-> > new fucntion hv_enable_coco_interrupt() and device
-> > driver and arch code may update AVIC backing page
-> > ALLOWED_IRR field to allow Hyper-V inject associated
-> > vector.
-> > 
-> > The patchset is based on the tip tree commit 27a17e02418e
-> > (x86/sev: Indicate the SEV-SNP guest supports Secure AVIC)
-> > 
-> > Tianyu Lan (5):
-> >   x86/hyperv: Don't use hv apic driver when Secure AVIC is available
-> >   drivers: hv: Allow vmbus message synic interrupt injected from Hyper-V
-> >   x86/hyperv: Don't use auto-eoi when Secure AVIC is available
-> >   x86/hyperv: Allow Hyper-V to inject STIMER0 interrupts
+On Wed, Oct 08, 2025 at 04:34:02PM -0700, Roman Kisel wrote:
+[...]
 > 
-> These look good to me.
+> Roman Kisel (17):
+>   Documentation: hyperv: Confidential VMBus
+>   Drivers: hv: VMBus protocol version 6.0
+>   arch/x86: mshyperv: Discover Confidential VMBus availability
+>   arch: hyperv: Get/set SynIC synth.registers via paravisor
+>   arch/x86: mshyperv: Trap on access for some synthetic MSRs
+>   Drivers: hv: Rename fields for SynIC message and event pages
+>   Drivers: hv: Allocate the paravisor SynIC pages when required
+>   Drivers: hv: Post messages through the confidential VMBus if available
+>   Drivers: hv: remove stale comment
+>   Drivers: hv: Check message and event pages for non-NULL before
+>     iounmap()
+>   Drivers: hv: Rename the SynIC enable and disable routines
+>   Drivers: hv: Functions for setting up and tearing down the paravisor
+>     SynIC
+>   Drivers: hv: Allocate encrypted buffers when requested
+>   Drivers: hv: Free msginfo when the buffer fails to decrypt
+>   Drivers: hv: Support confidential VMBus channels
+>   Drivers: hv: Set the default VMBus version to 6.0
+>   Drivers: hv: Support establishing the confidential VMBus connection
 
-I applied these four to hyperv-next.
+Applied to hyperv-next. Thanks.
 
-> 
-> >   x86/Hyper-V: Add Hyper-V specific hvcall to set backing page
-> 
-> Please address Borislav's comment on this patch.
+I needed to fix up a few minor things due to changes made by Tianyu's
+patches. Dexuan, please verify that everything is still OK.
 
-This is no longer needed.
-
-Thanks,
 Wei
 
