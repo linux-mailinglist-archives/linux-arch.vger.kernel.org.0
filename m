@@ -1,36 +1,36 @@
-Return-Path: <linux-arch+bounces-14037-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14038-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B8CBD15F6
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 06:28:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE0FDBD16F5
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 07:24:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A1EAC4E3657
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 04:28:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 687DC3B4B90
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Oct 2025 05:24:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7616283CA3;
-	Mon, 13 Oct 2025 04:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 645492727E0;
+	Mon, 13 Oct 2025 05:24:07 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F425233D9E;
-	Mon, 13 Oct 2025 04:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BB1817597;
+	Mon, 13 Oct 2025 05:24:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760329700; cv=none; b=ZJSsqMAXfpo0wBCFE+8LJ7JyKJw/m/Lws7j36fbnH/tlXctl2grgOkPpmi15GrF9760mcL3rLosyKFIVbr2E2BkbMLCovaKjzMUdo9uDjQ9MNZUWUZgHem3N3j+6opAXZT5t//lrYV52YvqjAN7gS6xpq79QT2lmwrK66RJhiOo=
+	t=1760333047; cv=none; b=SToUgE8ulh7OgKtiPUBjbpAyMWD38Q+bPiH/uwx6asYF2p0vjCEwOfwRVAqpOqXfJplBMqJ0cQmbqg31nJ/HZ/t10NjvSzZYAPa6jU4qshrfDM7BPXL95h/iiFFsSaikTDecGgrQdD1yEOAe1btON7QSNBdI3k2DKxkxS5we66E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760329700; c=relaxed/simple;
-	bh=D2j4VRk7a14GHI55HmxdAs/3Rt4Jbr/RtZrqE5xz2U0=;
+	s=arc-20240116; t=1760333047; c=relaxed/simple;
+	bh=6Qo/Wic5X1LYWt4OoazfZZbUqoh99G+h1XTb2LemI04=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uEQBo6GGcOPzD5Wg5lv5ZDEQT6Iw86NMXRHy2kw6t6YZHBAAuZkaQ/hO7Y1LlG58AzqK8csuXm6IeiJKJUnew+tzhbrbWEnCTCaVFar29JQzE+Gns2Vpiz4bTn1+RHRkq1x8RnFPhMBXhSOBGPtWHY1XN+6Q/JZmCZ8hsFyBA0Q=
+	 Content-Type:Content-Disposition:In-Reply-To; b=BYKv2Xx0IzscXaWfFKfc47wOLzJj8ZdNOeyP/K885GKb1WdVCKRcapxSsdVUCiELif34zWlaLMe0yiX6RkeJ/fwpBKuvfBDzR0g7IMpRKaccFiDjhYUQgjrjnMpjO6QLQcCyiwJv0GMA8UtM89AmFNZLyyv1kClYMQEu4EfZLr8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-b9-68ec7fdcf266
-Date: Mon, 13 Oct 2025 13:28:07 +0900
+X-AuditID: a67dfc5b-c2dff70000001609-69-68ec8cf09a1c
+Date: Mon, 13 Oct 2025 14:23:54 +0900
 From: Byungchul Park <byungchul@sk.com>
-To: Mark Rutland <mark.rutland@arm.com>
+To: NeilBrown <neil@brown.name>
 Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
 	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
@@ -68,10 +68,10 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	qiang.zhang@linux.dev, juri.lelli@redhat.com,
 	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
 	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
-	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
-	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, ada.coupriediaz@arm.com,
+	chuck.lever@oracle.com, okorniev@redhat.com, Dai.Ngo@oracle.com,
+	tom@talpey.com, trondmy@kernel.org, anna@kernel.org,
+	kees@kernel.org, bigeasy@linutronix.de, clrkwllms@kernel.org,
+	mark.rutland@arm.com, ada.coupriediaz@arm.com,
 	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
 	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
 	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
@@ -90,12 +90,11 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 09/47] arm64, dept: add support
- CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64
-Message-ID: <20251013042807.GB6925@system.software.com>
+Subject: Re: [PATCH v17 28/47] dept: add documentation for dept
+Message-ID: <20251013052354.GA75512@system.software.com>
 References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-10-byungchul@sk.com>
- <aN_fel4Rpqz6TPsD@J2N7QTR9R3>
+ <20251002081247.51255-29-byungchul@sk.com>
+ <175947451487.247319.6809470356431942803@noble.neil.brown.name>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -104,109 +103,270 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aN_fel4Rpqz6TPsD@J2N7QTR9R3>
+In-Reply-To: <175947451487.247319.6809470356431942803@noble.neil.brown.name>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0zMcRzH9/39v+P069R8k82cNVsbyWx9NmZ4YL8HTGYzfx5w9ONu6til
-	KLPKvw6xnA3dLXXoOlzkGpLiRKVLKUs7UbhocTl13TWqu7k7M569vu/3Z6/v58GHI+U99GxO
-	rTkgajXKdAUjpaTfp5sW9uUNqxbf1UVBT4Gdgs7btxAE9M0sXOzSk+B+5kXww1yEwDBoZOGz
-	vRBB2dUaBibbX5EwVB16NliOMvCl+B4JpUY9gmPX7jDQ5Z4i4IN5kALjpSECzPkJ4LIYWHAP
-	6hnwdX8iQFfnp8B08joF9Q2tFOgCPgTNtS4Ciqrv0dBpb6OhrfkFBZ8+OmmoaX9JQpXnKgNm
-	/w8WWs7aCajweUhw9I2xcOF1OQMTlU0IHBMOArylQRpudYW+LjiHQPd8nISf1QM0lPqSoSrQ
-	g8DY1M+uXCxYr1iRMDmhR0JF2zAjTPjfMML59oXCQ0MfK5TbsoQaS6Jwrf4rIZi8flqw3TzF
-	CO976hnB09HBCldaNwhPSq2s8C44QKbGbZUuTxPT1dmiNmnFDqnKNWin9ttiDllOnafz0feo
-	00jCYX4prnpnoP9y2YPjVJgpPgFXjldGmOEXYKfzFxnmmBAX1flCuZQjeVM8brB2RoqZ/HY8
-	daObCLOMT8HvbaNEeEjOH0U4/46O/FNE49aSzxErySdiZ/BraIgLcTyuDHLhWBKKTQ9HIgvF
-	8vOx/X5LxIP5fgke9ZxAfzaNw08tTqoY8Yb/tIb/tIZ/2nJE3kRytSY7Q6lOX7pIlaNRH1q0
-	a1+GDYWuzXxkalst8nZubEQ8hxTTZapHbpWcVmZn5mQ0IsyRihhZyuFhlVyWpszJFbX7tmuz
-	0sXMRhTPUYpZsiXjB9Pk/B7lAXGvKO4XtX9bgpPMzkdz8ua6O3rT6Nje1MliY7Sidtqcg7uS
-	e+PPRu+8VFaM512uS3a4StpXeJ6ht99a/IWP+198SPLG0Zq3qbnB4bGMgb7AWFKMI6r2zTqj
-	ZXzNlnm5uw+vPlMyYimQxCqzRtZLt03rrl43P88y5C0MrBqdYUipcEna/Gs3LysY2WRtalJQ
-	mSplciKpzVT+BqaXzE1pAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTH89z73Bc6ul07jDeQJUs3Y8SoM7p4Msxi/KB3LDP7sMTMxGAz
-	b2zDm2kRxcUIFCI6o7SzdLSKFEep0AkWlCHpJBjrgFWpVGWOipgKVNoxWYtDSvGWZZlfTn7n
-	/3LyfHhYUpGg0llNQZGoLVDlKWkZlu3M0q8dORZWf/T7i9XwoKwHQyxaheFcq5OGKlctBYOX
-	WxCMxqoQvJy3klDZtYhhwehhIDr3BwOLbg+CGp+RBGdHGQF/tyVomLo5g8A0FqTBHCrDMG0/
-	hcAybmUgdGsHREa7KVgMTBDwcDaMwB5MEBDsOY5goSYXLjS00zDvvUuC2TSIwDYWIGGyTTI7
-	PI8RuB3lNDyrvkrCUPBt8MemaegzfUdDxHeOgD/baKgvd1Nw3mpEoL/YSkPNeReGrifXGfBN
-	xQkYqTES0OL6Akbt4xgGqhsI6X1S6soKsJr1hDQmCTD91E3AnL2Zgd8ujmCwl64Eq3eIgqcO
-	CwPxsQ2wWF8InpYJBgJnTBguR+5SW01IeFl5GgvN7dcIofLeAi0465xImH9lREK0UU8KldXS
-	ejM8TQoV7YeExoEwLbyK3acF92w9FvobeMHgXSt0WQKMUPHLI+bLT3bLtuwT8zTFonb9p3tl
-	6qfjPfiAK+2w44SBKkWRd06iFJbnNvEXOitwkjG3km+abVpimlvFDw/PkUlOk/jU9aiky1iS
-	s2XwbufgkvEul8PHL/mJJMu5zfyI6wWRDCm4csSXtlaR/xrL+L7a4NJVksvkhxMhKcRKnME3
-	JdiknCLJtq6/qCQv5z7ge67dJqqR3PJG2/JG2/J/ux6RzShNU1Ccr9LkfbxOl6suKdAcXvdN
-	Yb4LSb/SfjRu+BlFh3b0Io5FylS5untKraBUxbqS/F7Es6QyTb7527BaId+nKjkiagtztAfz
-	RF0vymCxcoU8e5e4V8HtVxWJuaJ4QNT+5xJsSnopavznkR+fyDkZOHtcf+f5j1lnFRMtX7X2
-	RTfKfP2h9DX+eXJLaNuRnbHs3u3esgann+Ft34/1v0cdelY3MGNYvudewKCd+GxyTXnEQXm3
-	vu/+nMlMXWa+6nqr88YuWx16/uuxBarzccfMDxXZDl+7L27+8ODXp4n81LmsGY/PXlukxDq1
-	akMmqdWpXgMpcDDEkQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTVxjGc+49t/e2ocmxunEQsyVVXEIyp4sfb5ybLsuS84cmGhM1M1Ma
+	e7NWS9HyoWgWa4QJKIagttqiFssKVgyjDCabIIMoMxkVFKVoVegYggWcja1R+XDFGP3vl+d5
+	87zPH4/EazqF2ZLRnCVbzDqTVqHCqtGE8k//OzJiWPjSvwiizwowlNVUKyC/cQrDsxf3RLB1
+	lfIQbosgsA8fwOAYdIrQExtBMGHbAa86bvBQ3n+fh39L6nkY7Srj4KC7RgG22kRw2oc4+Nsd
+	xOCxpoCz45YAoSqHCFOuDHjY/pMAv1n7RPD1XkVQ8HsUw+Wm6xiuXQpxcOSXegGszucCXBw7
+	pwBP9IkIN1tcHFxzfQilgxER6q/kI2gvbuGgw+kXIHj0MYbmgj4OHjlOc3DspksBkdOTAlzo
+	wnA434YhL7gELk7cQeC8+kBctZB56xo4Vn2mGrG8ut3sZfS2gjXFXJg1Ou6LLK/5rshcvmxW
+	V5XK3JeHOVYeiQrsbvhL5vMWKtiY3y+yv06+wmyg286tTfpOtUIvm4w5suWzr9JUhgPeJ/zO
+	3q/3dE4kWVFxahGSJEoW0xPFS4uQchofOOr4OGOSQrsHG8U4K8gnNBB4Ma3PIh/T2l97uSKk
+	knjiSaYBe2zamElWUv/tahRnNQF6pexnFD/SkApEz54oEN8YM+j1UwM4zjxJpYHJYS5egifJ
+	tHJSistKspr2eIa4OH9A5tKWhvbpZ5SElLS7r4Z70zSJ/lkVwCWION6LdbwX63gX60K8F2mM
+	5px0ndG0eIEh12zcs2BbRroP/b8zz4/jmy+hSOf6VkQkpE1QG/4IGzSCLiczN70VUYnXzlIv
+	2zdi0Kj1uty9siVjqyXbJGe2omQJaxPVn8d26zXkB12WvEOWd8qWty4nKWdbUeWcXav1S+fp
+	0/IiZVPNz7/YoDteeC6/wrlpNFgxr2n/Pru5oWdusOr72vlzxpaFNna0VRaO+2Y0+vuzko6m
+	bSb9Kcu97OmQpzg7d2/OFrbdmWBb587+Rmjbvsb1j3JoLfEOnEm88FFv6dT42CryrSocSgnH
+	tpWMHOo2nX/qlucf1OJMg25RKm/J1L0Gg++vf2MDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUwTdxjH/d1d747OMyeDeEiisdOZkKgz0/hEjUOj8XyZGrPMl0RHI+fa
+	8JrWVdBsoQKhOtDSpG1oURHkhqUKAjOiKWtwdnPCyosMdEKHqbxIuy4bxSAUvGrM/OfJ5/l+
+	n++T54+HxmMjsoW0OvOEoMlUpitIOSHfsyF/xT/FAdUn4XIW/tC7CQiPGwgor3OSYGgok0HH
+	jVoEvrABwcspOw6FzbMEREweCsYn/6Rg1uVBYOk04eBs0mPwX/0MCWP3/kVgHvSTYB3VExAS
+	ixHYhuwUjN7fDkHfXRnM9g9j0DsRQCD6ZzDwu4sQRCxpcLmykYSpdi8OVnMHgiuD/TiM1Etm
+	k2cAgavmDAnPjT/i0O2fB4/CIRIemL8nIdhZjsHf9SRUnHHJ4KLdhCC/qo4Ey8UGApr/ukNB
+	59g0Bk8tJgxqGz4HnzhEwENjJSbdJ03dXAB2az4mlREMzNfvYjApOihoq3pKgJi3DOzt3TJ4
+	VmOjYHpwNcxWZIGndpiC/gtmAm4EvbJkM+JfFp4neEfjLYwv7IqQvPOSE/FTr0yIH6/Ox/lC
+	o9TeC4RwvqDxJF/9MEDyr8I9JO+aqCD43yo5vrR9Bd9s66f4gpYn1L71h+UbU4V0tU7QrNqU
+	IlfpHSE8+/HmnI5IQh4qSTqHYmiOXcMN2BrxKBPsMu7RUDMVZZJdzvX1Tb7R49jF3M2mx9g5
+	JKdxVkzk+qwTb4wP2c+433ucKMoMC9xP5dUoOhTLXkXcZbOBemvM5x6U+Yko42wS1zczKm2i
+	JU7kfpiho3IMu5vrFUewKMezH3HuW79gRsTY3kvb3kvb/k9XINyB4tSZugylOn3tSm2aKjdT
+	nbPyWFZGA5KeUvx2uvQ2Gu/e3opYGinmMvuKAqpYmVKnzc1oRRyNK+KYdacliUlV5p4SNFlf
+	ab5JF7StKJEmFAuYnQeElFj2a+UJIU0QsgXNOxejYxbmod1HJuJ9V7K7wLNkOMJ81xPzZcr5
+	bccSci9s3FG85VoIPt1r3ZNzVCRdXkNCywdOmRf74vrBtqJDJR+ftPTqurKPl+x6saHEvfbJ
+	+mTSn7ouVLejR++t31/jphYlz41T0B2+4ICSdpTN2aprK2ihz6qYMeOan4Pxvx69s2VpKVOl
+	ILQq5eokXKNVvgZzqHjckAMAAA==
 X-CFilter-Loop: Reflected
 
-On Fri, Oct 03, 2025 at 03:36:42PM +0100, Mark Rutland wrote:
-> On Thu, Oct 02, 2025 at 05:12:09PM +0900, Byungchul Park wrote:
-> > dept needs to notice every entrance from user to kernel mode to treat
-> > every kernel context independently when tracking wait-event dependencies.
-> > Roughly, system call and user oriented fault are the cases.
+On Fri, Oct 03, 2025 at 04:55:14PM +1000, NeilBrown wrote:
+> On Thu, 02 Oct 2025, Byungchul Park wrote:
+> > This document describes the concept and APIs of dept.
 > >
-> > Make dept aware of the entrances of arm64 and add support
-> > CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64.
-> >
-> > Signed-off-by: Byungchul Park <byungchul@sk.com>
-> > ---
-> >  arch/arm64/Kconfig          | 1 +
-> >  arch/arm64/kernel/syscall.c | 7 +++++++
-> >  arch/arm64/mm/fault.c       | 7 +++++++
-> >  3 files changed, 15 insertions(+)
-> >
-> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > index e9bbfacc35a6..a8fab2c052dc 100644
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -281,6 +281,7 @@ config ARM64
-> >       select USER_STACKTRACE_SUPPORT
-> >       select VDSO_GETRANDOM
-> >       select VMAP_STACK
-> > +     select ARCH_HAS_DEPT_SUPPORT
-> >       help
-> >         ARM 64-bit (AArch64) Linux support.
-> >
-> > diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> > index c442fcec6b9e..bbd306335179 100644
-> > --- a/arch/arm64/kernel/syscall.c
-> > +++ b/arch/arm64/kernel/syscall.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/ptrace.h>
-> >  #include <linux/randomize_kstack.h>
-> >  #include <linux/syscalls.h>
-> > +#include <linux/dept.h>
-> >
-> >  #include <asm/debug-monitors.h>
-> >  #include <asm/exception.h>
-> > @@ -96,6 +97,12 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
-> >        * (Similarly for HVC and SMC elsewhere.)
-> >        */
-> >
-> > +     /*
-> > +      * This is a system call from user mode.  Make dept work with a
-> > +      * new kernel mode context.
-> > +      */
-> > +     dept_update_cxt();
 > 
-> As Mark Brown pointed out in his replies, this patch is missing a whole
-> bunch of cases and does not work correctly as-is.
-> 
-> As Dave Hansen pointed out on the x86 patch, you shouldn't do this
-> piecemeal in architecture code, and should instead work with the
-> existing context tracking, e.g. by adding logic to
-> enter_from_user_mode() and exit_to_user_mode(), or by reusing some
+> Thanks for the documentation.  I've been trying to understand it.
 
-I will consider it.  However, I need to check if there are not any waits
-and events before enter_from_user_mode(), or after exit_to_user_mode()
-since those functions aren't the outmost functions for kernel mode C
-code anyway.
+You're welcome.  Feel free to ask me if you have any questions.
+
+> > +How DEPT works
+> > +--------------
+> > +
+> > +Let's take a look how DEPT works with the 1st example in the section
+> > +'Limitation of lockdep'.
+> > +
+> > +   context X    context Y       context Z
+> > +
+> > +                mutex_lock A
+> > +   folio_lock B
+> > +                folio_lock B <- DEADLOCK
+> > +                                mutex_lock A <- DEADLOCK
+> > +                                folio_unlock B
+> > +                folio_unlock B
+> > +                mutex_unlock A
+> > +                                mutex_unlock A
+> > +
+> > +Adding comments to describe DEPT's view in terms of wait and event:
+> > +
+> > +   context X    context Y       context Z
+> > +
+> > +                mutex_lock A
+> > +                /* wait for A */
+> > +   folio_lock B
+> > +   /* wait for A */
+> > +   /* start event A context */
+> > +
+> > +                folio_lock B
+> > +                /* wait for B */ <- DEADLOCK
+> > +                /* start event B context */
+> > +
+> > +                                mutex_lock A
+> > +                                /* wait for A */ <- DEADLOCK
+> > +                                /* start event A context */
+> > +
+> > +                                folio_unlock B
+> > +                                /* event B */
+> > +                folio_unlock B
+> > +                /* event B */
+> > +
+> > +                mutex_unlock A
+> > +                /* event A */
+> > +                                mutex_unlock A
+> > +                                /* event A */
+> > +
+> 
+> I can't see the value of the above section.
+> The first section with no comments is useful as it is easy to see the
+> deadlock being investigate.  The section below is useful as it add
+> comments to explain how DEPT sees the situation.  But the above section,
+> with some but not all of the comments, does seem (to me) to add anything
+> useful.
+
+I just wanted to convert 'locking terms' to 'wait and event terms' by
+one step.  However, I can remove the section you pointed out that you
+thought was useless.
+
+> > +Adding more supplementary comments to describe DEPT's view in detail:
+> > +
+> > +   context X    context Y       context Z
+> > +
+> > +                mutex_lock A
+> > +                /* might wait for A */
+> > +                /* start to take into account event A's context */
+> 
+> What do you mean precisely by "context".
+
+That means one of task context, irq context, wq worker context (even
+though it can also be considered as task context), or something.
+
+Of course, in the example above, it must be task context since it showed
+a case involving only sleepible ones.  However, I wanted to use general
+terms in the document to cover all the types of context e.g. irq, task,
+and so on.
+
+> You use the word in the heading "context X  context Y  context Z"
+> so it seems like "context" means "task" or "process".  But then as I
+> read on, I think - maybe it means something else.  If it does, then you
+> should use different words.  Maybe "task X ..." in the heading.
+
+It should cover all the types of context.  What word would you recommend
+for that purpose?
+
+> If the examples that follow It seems that the "context" for event A
+> starts at "mutex lock A" when it (possibly) waits for a mutex and ends
+> at "mutex unlock A" - which are both in the same process.  Clearly
+> various other events that happen between these two points in the same
+> process could be seen as the "context" for event A.
+> 
+> However event B starts in "context X" with "folio_lock B" and ends in
+> "context Z" or "context Y" with "folio_unlock B".  Is that right?
+
+Right.
+
+> My question then is: how do you decide which, of all the event in all
+> the processes in all the system, between the start[S] and the end[E] are
+> considered to be part of the "context" of event A.
+
+DEPT can identify the "context" of event A only *once* the event A is
+actually executed, and builds dependencies between the event and the
+recorded waits in the "context" of event A since [S].
+
+> I think it would help me if you defined what a "context" is earlier.
+
+Sorry if my description was not clear enough.
 
 	Byungchul
 
-> existing context tracking logic that's called there.
+> What sorts of things appear in a context?
 > 
-> Mark.
+> Thanks,
+> NeilBrown
+> 
+> 
+> > +                /* 1 */
+> > +   folio_lock B
+> > +   /* might wait for B */
+> > +   /* start to take into account event B's context */
+> > +   /* 2 */
+> > +
+> > +                folio_lock B
+> > +                /* might wait for B */ <- DEADLOCK
+> > +                /* start to take into account event B's context */
+> > +                /* 3 */
+> > +
+> > +                                mutex_lock A
+> > +                                /* might wait for A */ <- DEADLOCK
+> > +                                /* start to take into account
+> > +                                   event A's context */
+> > +                                /* 4 */
+> > +
+> > +                                folio_unlock B
+> > +                                /* event B that's been valid since 2 */
+> > +                folio_unlock B
+> > +                /* event B that's been valid since 3 */
+> > +
+> > +                mutex_unlock A
+> > +                /* event A that's been valid since 1 */
+> > +
+> > +                                mutex_unlock A
+> > +                                /* event A that's been valid since 4 */
+> > +
+> > +Let's build up dependency graph with this example. Firstly, context X:
+> > +
+> > +   context X
+> > +
+> > +   folio_lock B
+> > +   /* might wait for B */
+> > +   /* start to take into account event B's context */
+> > +   /* 2 */
+> > +
+> > +There are no events to create dependency. Next, context Y:
+> > +
+> > +   context Y
+> > +
+> > +   mutex_lock A
+> > +   /* might wait for A */
+> > +   /* start to take into account event A's context */
+> > +   /* 1 */
+> > +
+> > +   folio_lock B
+> > +   /* might wait for B */
+> > +   /* start to take into account event B's context */
+> > +   /* 3 */
+> > +
+> > +   folio_unlock B
+> > +   /* event B that's been valid since 3 */
+> > +
+> > +   mutex_unlock A
+> > +   /* event A that's been valid since 1 */
+> > +
+> > +There are two events. For event B, folio_unlock B, since there are no
+> > +waits between 3 and the event, event B does not create dependency. For
+> > +event A, there is a wait, folio_lock B, between 1 and the event. Which
+> > +means event A cannot be triggered if event B does not wake up the wait.
+> > +Therefore, we can say event A depends on event B, say, 'A -> B'. The
+> > +graph will look like after adding the dependency:
+> > +
+> > +   A -> B
+> > +
+> > +   where 'A -> B' means that event A depends on event B.
+> > +
+> > +Lastly, context Z:
+> > +
+> > +   context Z
+> > +
+> > +   mutex_lock A
+> > +   /* might wait for A */
+> > +   /* start to take into account event A's context */
+> > +   /* 4 */
+> > +
+> > +   folio_unlock B
+> > +   /* event B that's been valid since 2 */
+> > +
+> > +   mutex_unlock A
+> > +   /* event A that's been valid since 4 */
+> > +
+> > +There are also two events. For event B, folio_unlock B, there is a
+> > +wait, mutex_lock A, between 2 and the event - remind 2 is at a very
+> > +start and before the wait in timeline. Which means event B cannot be
+> > +triggered if event A does not wake up the wait. Therefore, we can say
+> > +event B depends on event A, say, 'B -> A'. The graph will look like
+> > +after adding the dependency:
+> > +
+> > +    -> A -> B -
+> > +   /           \
+> > +   \           /
+> > +    -----------
+> > +
+> > +   where 'A -> B' means that event A depends on event B.
+> > +
+> > +A new loop has been created. So DEPT can report it as a deadlock. For
+> > +event A, mutex_unlock A, since there are no waits between 4 and the
+> > +event, event A does not create dependency. That's it.
+> > +
+> > +CONCLUSION
+> > +
+> > +DEPT works well with any general synchronization mechanisms by focusing
+> > +on wait, event and its context.
+> > +
 
