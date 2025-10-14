@@ -1,102 +1,79 @@
-Return-Path: <linux-arch+bounces-14091-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14092-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF1BBD7961
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Oct 2025 08:39:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45549BD7F4D
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Oct 2025 09:36:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 893033A6B49
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Oct 2025 06:38:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BEEE84E7ADE
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Oct 2025 07:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41DB2C235F;
-	Tue, 14 Oct 2025 06:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2182E2E6CB3;
+	Tue, 14 Oct 2025 07:36:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NeETP5mB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E101C2010EE;
-	Tue, 14 Oct 2025 06:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B7672BF00A;
+	Tue, 14 Oct 2025 07:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760423932; cv=none; b=WNAlLULDCKWPSEza5dePnMCsNPcTxKwGcctrWh8yDaQtShjRNmEc512BFSJ6MCCiekxXDbISm6xBarMKUvI9S4Wd7JD6wzMqip8GISxoQBzpLk/vTzPJqXRHctld2woMVoNF/vFlD1RtsXm6b4j5P0k1leUPVO7mojT+YUwwkIM=
+	t=1760427364; cv=none; b=F016hsHEAQe12eSvtvTbL2TTKiaodVenJ7lAPglAtelxBwIgfFH1lQnBXiNzeO00DCOEeu9dgQFY2tifs/NYGPIjkwnFoCYoId2i8FhN/T+0+kg3j2HW/eBQtbwtuNqF68KEtgVJ4XvjGH/D5pQ+6+xYBcgvVMfeLffnAe6hCg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760423932; c=relaxed/simple;
-	bh=WTdEIPVnTjVYFmBVT010VFa83HYwQgS+DTRMlHzMHzE=;
+	s=arc-20240116; t=1760427364; c=relaxed/simple;
+	bh=2284CvY5KmX5EI9TFoaFTarD8eR3jMtTJMBg6GQjNRU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I6IU/dR+myfq1GsCZb73Jb2DO9UMNCaZnDFrTgZjF+aBdB0Qy8XsG3LPq9RY5Bd/tdO6IA0i5kTrnewLtndR0ZG2RdC2ZCq49XOKvya32vSM0gtKr8ewKJKRS1P1FMLshof5/KZ5oANr+IOdSk74hwhskM5bi7TXN4WQlYzT8j8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-23-68edefefb741
-Date: Tue, 14 Oct 2025 15:38:33 +0900
-From: Byungchul Park <byungchul@sk.com>
-To: NeilBrown <neil@brown.name>
-Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-	tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-	amir73il@gmail.com, gregkh@linuxfoundation.org, kernel-team@lge.com,
-	linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-	minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-	sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-	ngupta@vflare.org, linux-block@vger.kernel.org,
-	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
-	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-	djwong@kernel.org, dri-devel@lists.freedesktop.org,
-	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
-	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
-	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
-	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
-	yeoreum.yun@arm.com, netdev@vger.kernel.org,
-	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
-	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
-	sumit.semwal@linaro.org, gustavo@padovan.org,
-	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
-	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
-	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
-	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
-	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	chuck.lever@oracle.com, okorniev@redhat.com, Dai.Ngo@oracle.com,
-	tom@talpey.com, trondmy@kernel.org, anna@kernel.org,
-	kees@kernel.org, bigeasy@linutronix.de, clrkwllms@kernel.org,
-	mark.rutland@arm.com, ada.coupriediaz@arm.com,
-	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
-	yuzhao@google.com, baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com, joel.granados@kernel.org,
-	richard.weiyang@gmail.com, geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com, linux@treblig.org,
-	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
-	chenhuacai@kernel.org, francesco@valla.it,
-	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
-	masahiroy@kernel.org, brauner@kernel.org,
-	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
-	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 28/47] dept: add documentation for dept
-Message-ID: <20251014063833.GA58074@system.software.com>
-References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-29-byungchul@sk.com>
- <175947451487.247319.6809470356431942803@noble.neil.brown.name>
- <20251013052354.GA75512@system.software.com>
- <176042183810.1793333.13639772065939276568@noble.neil.brown.name>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XJGJQABz+Td97f456XwXr2PrN4snGeNRJEpF5kiXWiX7Py4qTtEEqvBRBVPLpI3dJZq/CCq3yI3w/yWvnVZtzApyqhGw0DSjzl25nY01+m5U5oSbXKDgSCGj+nNcKaz1bIvumVkt6/bIyPFe848iwSssq3zR5M2FGxTMwsPi14k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NeETP5mB; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760427362; x=1791963362;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2284CvY5KmX5EI9TFoaFTarD8eR3jMtTJMBg6GQjNRU=;
+  b=NeETP5mBo5TBVX8A2D1tqSu8bWV8LrJXJLMLl7rZ6tx563C2NLy6rObi
+   8MEorqkaUXb/y1VdbyEDwZPkDDl2bC10hXfqwcPPgD4tQlLbzHx8nZ1Er
+   mtwNC6IExHoAumaQIYe/XHUrPp9rp63bhbPikqpuBSea971Dzh11/F3dG
+   bCxuSiTEF0NaD1kr4Ot8dygByRmtZAjt97wrjrbW05fObZiGZuy6VxMaC
+   nrmjXqEIQCBb+GARrTQCFWdPnC7aoSSnjs2vX69SaWNvJ5b/kWqWJAQ2y
+   0x+eZXu7CcRpno+xK+MPrmVuPswaMuQoQp1ckQxALP6itU228qn+X0B76
+   A==;
+X-CSE-ConnectionGUID: CqGbbvIHQ2ik6kFTQ94w+A==
+X-CSE-MsgGUID: 5Q0DaljVRxCmMznHi+4lAg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="62676435"
+X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
+   d="scan'208";a="62676435"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2025 00:36:01 -0700
+X-CSE-ConnectionGUID: gTATWPGlTfSS0LfoG70TaA==
+X-CSE-MsgGUID: mhAv5gGKRSmK6SgdH2mMkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,227,1754982000"; 
+   d="scan'208";a="205508506"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 14 Oct 2025 00:35:58 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1v8ZZT-0002Vz-2H;
+	Tue, 14 Oct 2025 07:35:49 +0000
+Date: Tue, 14 Oct 2025 15:34:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Siddharth Nayyar <sidnayyar@google.com>, petr.pavlu@suse.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, arnd@arndb.de,
+	linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	mcgrof@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev,
+	samitolvanen@google.com, sidnayyar@google.com, maennich@google.com,
+	gprocida@google.com
+Subject: Re: [PATCH v2 10/10] module loader: enforce symbol import protection
+Message-ID: <202510141538.VZqnRzHh-lkp@intel.com>
+References: <20251013153918.2206045-11-sidnayyar@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -105,189 +82,108 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <176042183810.1793333.13639772065939276568@noble.neil.brown.name>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxbVRjGPfee+9Fm1WvF7DiMJjVzygJuhmTvovuKRm9MbDDGLZkxs8rN
-	2qwULIwNF5NuYxuyEbCmVMogZQzW0SKlsLlOapCPIim4goMVxnAQZCJ0TRDQAQVblsX993uf
-	J+/zvCc5PK2sZDfwOkOOZDRo9CpWjuXhdVXJkUhYu2VoaTsMHm/FcL7BxUKBp4yBf5bKaTjl
-	XcUQNfs5mHtwm4NVnx9BaZ+Zhun2WQSWsQkWrFPHMdgmyzmY6nwXbi3MIKidWKFgovUMgmjp
-	IbBaggj+dMcmn+MEC3+UXKHh5nyEhW7LWRbCfecpuO9mwX7Cx0BFuRnByeoGFkorPBj6ppcp
-	GCk1U+D0vA+BkgtUrC7mNa4HS/2PFPRUj2AYd9g4WB7bCqv2TPA773Fwp9iC4fvwDQa6RwcZ
-	+L3rNAM/mO7GHnFzjALXuUkaCq7PY/ANb4aq0xcxlFWOsNDi68ZQEJ1D4L82TsE59xUGRl2r
-	DARbAwz0O4MYGu6FKAj4f8Fw43o9A029PfTudLGu6SoluipdSFxaNCPxVEmM2mcitFgTmGHF
-	xfkBVvymN1n02u5wYv5Pw5xo9xwW8zvCjNjkSBKrW6YocXh6h+ip+5pNS9ovfzNd0utyJeNr
-	Oz+Vay8W27ksb/LR5vYOZEIVLxQiGU+EVNLRe5t7xN/5/qILEc9jYSPp9O6Oy6ywiYRCD+g4
-	JwgvksbmIaoQyXlaqE0kIevCmvGMsIv8OuBCcVYIQPqdDWuZSsFKkTOBDx7qT5PusgkcZ1pI
-	IqGVKSreRQuJ5NIKH5dlgprcGrWurT4rvERar3atdRFhXEYu50fRwzufIz87QrgECbbHYm2P
-	xdr+j7Ujug4pdYbcDI1On5qizTPojqZ8npnhQbFfW/vV8sfX0GzwwzYk8Ei1ThFamdEqGU1u
-	dl5GGyI8rUpQbDsWkxTpmrwvJWPmAeNhvZTdhhJ5rFqveH3hSLpSOKjJkQ5JUpZkfORSvGyD
-	CRVtbNlv6mF2vH32iTTZy2amf7a303z35LcH/o1gx2JKkfrVQJBseWcPU+PO21vwpDg+d+HI
-	TrXKmyDLMjz1yWb1exkfFadtP1b01vwrg5fIZM3BnC8GVPdrm02pVbs+G6kPLvu3DSwN/aZw
-	vxFU12xy/v28vmOPpXGfPaeoa2+0T8pV4WytZmsSbczW/Adn3NiEsQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTHfe7z9N5LQ8214riRRLMaozFBZZnbyTCIH6ZXjUSJk8TEaKN3
-	tuHNtYKiMSkCgzCHpVlbaUUrjmpKFaQV7bCGgWVzDBWY2k2RQQqKgE2Ul/BWbF0W/XLyP7//
-	+eecD4fF8hnJYladdUTUZCkzFLSUSFMSC+KDwRHVWl+DBB7nNxEYGy0hcK7WSUNJfYUEHl6r
-	QdAzVoJgYtqKocgzR2DW0MrA6ORTBua8rQhMHQYMTnc+BW/rQjQMtbxBYOwN0GAezCcQtJ9G
-	YBmwMjDo2wwjPY0SmOt+QcGT8WEE9kCIgkBTMYJZUzpcqHLRMN3+AIPZ+BDBxd5uDC/rwqa7
-	9TkC75VTNPTrb2DoCsyHv8aCNNwz/kDDSMc5Cl7X0WA75ZVApdWAoOBSLQ2mynoCnn9/YaBj
-	aIaCZyYDBTX126HHPkCgTV9Fhe8LT12PBau5gAqXlxQYrzZSMGl3MPDnpWcE7LrlYG3vkkDf
-	FQsDM70JMGfLhtaaFwx0nzESuDbyQJJsRMJEURkRHK4GSijqnKUF53knEqanDEgYrS7AQpE+
-	3LYMB7FQ6DoqVLcN08LU2CNa8I7biPBHFS+Ut8cLHks3IxTe+YfZ8dUe6fqDYoY6V9SsSdov
-	Vf18xsYc9sQfc7fcRTpUuaQURbE89zl/1vsKlyKWJdxy3udJjmCaW8H7/ZM4omO4pfx1999U
-	KZKymLPH8X7z+HtjIbeBv//IiSJaxgHfWVPLRLScM1N8cdvO//gC/l5FgEQ05lbx/tAgFdmF
-	uTj+coiN4CguhX/y3Pw+uohbxjc1/EbpkczyUdryUdryIW1D2IFi1Fm5mUp1xrrV2nRVXpb6
-	2OoD2Zn1KPyT9pMz5bfQaNfmZsSxSBEt84eGVXKJMlebl9mMeBYrYmRfnggj2UFl3nFRk71P
-	k5MhaptRHEsUsbKtaeJ+OXdIeURMF8XDouZ/l2KjFutQ2cUV61y/uivcKYGeNbFJ3wf2vDLn
-	7N7Y79uk/2kfKf4s9VP/tOO2+2uTvR2/1e9NNva5BjatNMlzEnVeotmSoPnE7LtZ2VDtOKna
-	GN3YyS76duj+0vjTE0l76Xmvb32TFv208HHfiV3zE1MHf79bNlWecuDHAd0Xk9/1b9uWtrb/
-	0FEF0aqUCauwRqt8B4xzrPqPAwAA
-X-CFilter-Loop: Reflected
+In-Reply-To: <20251013153918.2206045-11-sidnayyar@google.com>
 
-On Tue, Oct 14, 2025 at 05:03:58PM +1100, NeilBrown wrote:
-> On Mon, 13 Oct 2025, Byungchul Park wrote:
-> > On Fri, Oct 03, 2025 at 04:55:14PM +1000, NeilBrown wrote:
-> > > On Thu, 02 Oct 2025, Byungchul Park wrote:
-> > > > This document describes the concept and APIs of dept.
-> > > >
-> > >
-> > > Thanks for the documentation.  I've been trying to understand it.
-> >
-> > You're welcome.  Feel free to ask me if you have any questions.
-> >
-> > > > +How DEPT works
-> > > > +--------------
-> > > > +
-> > > > +Let's take a look how DEPT works with the 1st example in the section
-> > > > +'Limitation of lockdep'.
-> > > > +
-> > > > +   context X    context Y       context Z
-> > > > +
-> > > > +                mutex_lock A
-> > > > +   folio_lock B
-> > > > +                folio_lock B <- DEADLOCK
-> > > > +                                mutex_lock A <- DEADLOCK
-> > > > +                                folio_unlock B
-> > > > +                folio_unlock B
-> > > > +                mutex_unlock A
-> > > > +                                mutex_unlock A
-> > > > +
-> > > > +Adding comments to describe DEPT's view in terms of wait and event:
-> > > > +
-> > > > +   context X    context Y       context Z
-> > > > +
-> > > > +                mutex_lock A
-> > > > +                /* wait for A */
-> > > > +   folio_lock B
-> > > > +   /* wait for A */
-> > > > +   /* start event A context */
-> > > > +
-> > > > +                folio_lock B
-> > > > +                /* wait for B */ <- DEADLOCK
-> > > > +                /* start event B context */
-> > > > +
-> > > > +                                mutex_lock A
-> > > > +                                /* wait for A */ <- DEADLOCK
-> > > > +                                /* start event A context */
-> > > > +
-> > > > +                                folio_unlock B
-> > > > +                                /* event B */
-> > > > +                folio_unlock B
-> > > > +                /* event B */
-> > > > +
-> > > > +                mutex_unlock A
-> > > > +                /* event A */
-> > > > +                                mutex_unlock A
-> > > > +                                /* event A */
-> > > > +
-> > >
-> > > I can't see the value of the above section.
-> > > The first section with no comments is useful as it is easy to see the
-> > > deadlock being investigate.  The section below is useful as it add
-> > > comments to explain how DEPT sees the situation.  But the above section,
-> > > with some but not all of the comments, does seem (to me) to add anything
-> > > useful.
-> >
-> > I just wanted to convert 'locking terms' to 'wait and event terms' by
-> > one step.  However, I can remove the section you pointed out that you
-> > thought was useless.
-> 
-> But it seems you did it in two steps???
-> 
-> If you think the middle section with some but not all of the comments
-> adds value (And maybe it does - maybe I just haven't seen it yet), the
-> please explain what value is being added at each step.
-> 
-> It is currently documented as:
-> 
->  +Adding comments to describe DEPT's view in terms of wait and event:
-> 
-> then
-> 
->  +Adding more supplementary comments to describe DEPT's view in detail:
-> 
-> Maybe if you said more DEPT's view so at this point so that when we see
-> the supplementary comments, we can understand how they relate to DEPT's
-> view.
+Hi Siddharth,
 
-As you pointed out, I'd better remove the middle part so as to simplify
-it.  It doesn't give much information I also think.
+kernel test robot noticed the following build errors:
 
-> > > > +
-> > > > +   context X    context Y       context Z
-> > > > +
-> > > > +                mutex_lock A
-> > > > +                /* might wait for A */
-> > > > +                /* start to take into account event A's context */
-> > >
-> > > What do you mean precisely by "context".
-> >
-> > That means one of task context, irq context, wq worker context (even
-> > though it can also be considered as task context), or something.
-> 
-> OK, that makes sense.  If you provide this definition for "context"
-> before you use the term, I think that will help the reader.
+[auto build test ERROR on arnd-asm-generic/master]
+[also build test ERROR on soc/for-next linus/master v6.18-rc1 next-20251013]
+[cannot apply to mcgrof/modules-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thank you.  I will add it.
+url:    https://github.com/intel-lab-lkp/linux/commits/Siddharth-Nayyar/define-kernel-symbol-flags/20251014-005305
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+patch link:    https://lore.kernel.org/r/20251013153918.2206045-11-sidnayyar%40google.com
+patch subject: [PATCH v2 10/10] module loader: enforce symbol import protection
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251014/202510141538.VZqnRzHh-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251014/202510141538.VZqnRzHh-lkp@intel.com/reproduce)
 
-> > > If the examples that follow It seems that the "context" for event A
-> > > starts at "mutex lock A" when it (possibly) waits for a mutex and ends
-> > > at "mutex unlock A" - which are both in the same process.  Clearly
-> > > various other events that happen between these two points in the same
-> > > process could be seen as the "context" for event A.
-> > >
-> > > However event B starts in "context X" with "folio_lock B" and ends in
-> > > "context Z" or "context Y" with "folio_unlock B".  Is that right?
-> >
-> > Right.
-> >
-> > > My question then is: how do you decide which, of all the event in all
-> > > the processes in all the system, between the start[S] and the end[E] are
-> > > considered to be part of the "context" of event A.
-> >
-> > DEPT can identify the "context" of event A only *once* the event A is
-> > actually executed, and builds dependencies between the event and the
-> > recorded waits in the "context" of event A since [S].
-> 
-> So a dependency is an ordered set of pairs of "context" and "wait" or
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510141538.VZqnRzHh-lkp@intel.com/
 
-I don't get what you were trying to tell here.  FWIW, DEPT focuses on
-*event* contexts and, within each event context, it tracks pairs of
-waits that appears since [S] and the interesting event that identifies
-the event context.
+All errors (new ones prefixed by >>):
 
-> "context" and "event".  "wait"s and "event"s are linked by some abstract
-> identifier for the event (like lockdep's lock classes).
+>> kernel/module/main.c:1271:32: error: no member named 'sig_ok' in 'struct module'
+    1271 |         if (fsa.is_protected && !mod->sig_ok) {
+         |                                  ~~~  ^
+   1 error generated.
 
-Yeah, kind of.
 
-> How are the contexts abstracted. Is it just "same" or "different"
+vim +1271 kernel/module/main.c
 
-I don't get this.  Can you explain in more detail?
+  1228	
+  1229	/* Resolve a symbol for this module.  I.e. if we find one, record usage. */
+  1230	static const struct kernel_symbol *resolve_symbol(struct module *mod,
+  1231							  const struct load_info *info,
+  1232							  const char *name,
+  1233							  char ownername[])
+  1234	{
+  1235		struct find_symbol_arg fsa = {
+  1236			.name	= name,
+  1237			.gplok	= !(mod->taints & (1 << TAINT_PROPRIETARY_MODULE)),
+  1238			.warn	= true,
+  1239		};
+  1240		int err;
+  1241	
+  1242		/*
+  1243		 * The module_mutex should not be a heavily contended lock;
+  1244		 * if we get the occasional sleep here, we'll go an extra iteration
+  1245		 * in the wait_event_interruptible(), which is harmless.
+  1246		 */
+  1247		sched_annotate_sleep();
+  1248		mutex_lock(&module_mutex);
+  1249		if (!find_symbol(&fsa))
+  1250			goto unlock;
+  1251	
+  1252		if (fsa.license == GPL_ONLY)
+  1253			mod->using_gplonly_symbols = true;
+  1254	
+  1255		if (!inherit_taint(mod, fsa.owner, name)) {
+  1256			fsa.sym = NULL;
+  1257			goto getname;
+  1258		}
+  1259	
+  1260		if (!check_version(info, name, mod, fsa.crc)) {
+  1261			fsa.sym = ERR_PTR(-EINVAL);
+  1262			goto getname;
+  1263		}
+  1264	
+  1265		err = verify_namespace_is_imported(info, fsa.sym, mod);
+  1266		if (err) {
+  1267			fsa.sym = ERR_PTR(err);
+  1268			goto getname;
+  1269		}
+  1270	
+> 1271		if (fsa.is_protected && !mod->sig_ok) {
+  1272			pr_warn("%s: Cannot use protected symbol %s\n",
+  1273				mod->name, name);
+  1274			fsa.sym = ERR_PTR(-EACCES);
+  1275			goto getname;
+  1276		}
+  1277	
+  1278		err = ref_module(mod, fsa.owner);
+  1279		if (err) {
+  1280			fsa.sym = ERR_PTR(err);
+  1281			goto getname;
+  1282		}
+  1283	
+  1284	getname:
+  1285		/* We must make copy under the lock if we failed to get ref. */
+  1286		strscpy(ownername, module_name(fsa.owner), MODULE_NAME_LEN);
+  1287	unlock:
+  1288		mutex_unlock(&module_mutex);
+  1289		return fsa.sym;
+  1290	}
+  1291	
 
-	Byungchul
-
-> I'll try reading the document again and see how much further I get.
-> 
-> Thanks,
-> NeilBrown
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
