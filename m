@@ -1,42 +1,42 @@
-Return-Path: <linux-arch+bounces-14113-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14114-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39614BDCB55
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 08:24:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02591BDCC43
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 08:40:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6FF2634DE97
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 06:24:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFDE53AE390
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 06:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6CB3101B0;
-	Wed, 15 Oct 2025 06:24:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327403128DA;
+	Wed, 15 Oct 2025 06:40:33 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFED3101C5;
-	Wed, 15 Oct 2025 06:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FC63128D7;
+	Wed, 15 Oct 2025 06:40:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760509456; cv=none; b=SaEsTtJcm/aDD/W6dm/DOxKpxfvt0loKs0ZcT85umP4oYWzBSLcWa/AR0m/2IiASQ7YTuVLx73jowVoRpDi8Gs3pS3jeKleNf3rYun1OSsPMQLulXO9U7PvLNSAHyZfkOI2YrJ/ij3FRxVQTMnUBedArRPEgdgmFFeu8kXbuWBc=
+	t=1760510432; cv=none; b=lRp+k6svewGohjP/r3p+SaJ2JJPFUue/8kTxgc5GoxBHV8U27GF5MwJhEqexEd+blvLpTc7Qbd8CQvQ8OxuClwJU4mRyhWgIQsiJp/uMGbDFEL/y/jl66TLRgQgx5YSWkP/uNVcpTKOsCUGocaWS99fL5yiY5ZXe6VDlD2UiZ9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760509456; c=relaxed/simple;
-	bh=jk6V8uAWe05WcVxwCmCyOuLV3NnfCAjwrc4eKkGZJ1U=;
+	s=arc-20240116; t=1760510432; c=relaxed/simple;
+	bh=IYD1jN5WkZj4VgxNMFXq2HVKXVKvIXQ7z1epo6PKEZE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FanVtn0EfV700yJq9lT1Pec0EtyigrVMqytUoZjuSgJfuTK+Pt5wuhDk4bGFCq7K9PA0rFLd0mAvrNh+L+qHE1Ai4M2i5GL0Td6PT1fmELi77/xKAnMHNG7KKQSsZTQ9cJPuiBsmTJuirU4s2tzMd7ZsH8r5LhCiE51+J6FaeaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tinylab.org; spf=pass smtp.mailfrom=tinylab.org; arc=none smtp.client-ip=54.204.34.130
+	 MIME-Version:Content-Type; b=S77tWTcwAg65bcIytqpSJeoXBVlH0HruPTFJXwowV9NUGzsF02ieQWzkCntHi/Uw44CozGZesOslYM4Vq1Xt15OU+VeSLK3yoVoVO5w74JalsbO752cQxyYbrGYGxZPe3CtQ7h2ZmIFazrSE8/kKicPiWB+kPbqMTyTA21pawhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tinylab.org; spf=pass smtp.mailfrom=tinylab.org; arc=none smtp.client-ip=54.254.200.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tinylab.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tinylab.org
-X-QQ-mid: esmtpsz19t1760509371td6f1d5ef
-X-QQ-Originating-IP: MUaYd5o57zoY0W6wIrPI4YBjDwhi9ENIo8kee4n+TZM=
+X-QQ-mid: zesmtpgz1t1760510334tf939942d
+X-QQ-Originating-IP: od4bNRLOLfQkHFiv6vxwr/aDip+WTs/jGF3/NVLsJ6I=
 Received: from GPU-Server-A6000.. ( [202.201.1.132])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 15 Oct 2025 14:22:48 +0800 (CST)
+	id ; Wed, 15 Oct 2025 14:38:51 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6832363004775497478
+X-BIZMAIL-ID: 7569591979002680664
 EX-QQ-RecipientCnt: 14
 From: Yuan Tan <tanyuan@tinylab.org>
 To: arnd@arndb.de,
@@ -53,9 +53,9 @@ Cc: linux-arch@vger.kernel.org,
 	ronbogo@outlook.com,
 	z1652074432@gmail.com,
 	lx24@stu.ynu.edu.cn
-Subject: [PATCH v2 8/8] riscv: use PUSHSECTION in ex_table, jump_table, bug_table and alternatives
-Date: Wed, 15 Oct 2025 14:22:39 +0800
-Message-ID: <22B977FCB8434D8A+8905ca92f19047804ba693f7cd3b2ef1e2721bad.1760463245.git.tanyuan@tinylab.org>
+Subject: [PATCH v2/resend 0/8] dce, riscv: Unused syscall trimming with PUSHSECTION and conditional KEEP()
+Date: Wed, 15 Oct 2025 14:38:43 +0800
+Message-ID: <30C972B6393DBAC5+cover.1760463245.git.tanyuan@tinylab.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1760463245.git.tanyuan@tinylab.org>
 References: <cover.1760463245.git.tanyuan@tinylab.org>
@@ -65,184 +65,171 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: OZiGlmjmGvyhm8XwKSZjejE2w2AJd1XT2qIO4ynT4Q9Dl8pkGcdYDe7j
-	7n0zDhkb1yAMlVHWWSABnrSSKVAWeIqoJ1SoXInDMX6oQaE52ehrlqX4TlEMF1vQ4KDkiIf
-	8/10wRaoWROJCRE3JFtikuA3LK300eNmtL9+VJBZBAiIqKd2sHQvYNfmNDK6Oua/2AAouuM
-	GbJmxPb/Ra33LapAkAmC1+RfFK+xsBIvuPdzS4tS/rrlkqAKAVsvpV2QRUspN9JUABeaZjK
-	BC70j1V2O3uqoWFmc8osnYG/7lhVK5L0yEcUsZS5asL2yoFx31D+Vk5Rd0B2zHaAD6fthkj
-	LErUxR8sfpHWDi02sW/MieLmTTE98h11qhTpNr0/hEJnCRWKofysSKHWm5KvoGPhsxv5VV1
-	49nqQtWhJkf4Rx1e3lqB26ZwsH4hHGwSY8gUA/q1wUTNcEoH7kmGnz6thTvn1zJ4c6L/u6G
-	2VwDQLsbl6t6BPcG0ylMGjSHzRydHgjOFyAYKxy9cUJVvwvcPDR2G4qt1Beq1eZevhShUna
-	/vK4fx6bw49Vp5z+a1O3CnONSM4su08yL6saCSvKYIMfOaEHe6Y0gSL7DTB63J4p69qBvTQ
-	m4zFwUq8bpiOIjg4TbqF+QmNCwtBbrIb9zCOVIHik/rRW5f4g8qVhb4b5Nxe49o+DWr1PbY
-	6LHvwLrBfCS2kTKmbSg5fTeKcbh8/hu4T9yhqeJ9gOIGPo46TcAf/LMM3rlVUCI5BRR6+/7
-	yDGuKCGmA+9+fpKdSiO+ck5d86BQ5Dj8w4ZqPvbqVei0UiA7gvwhDz7Ul5XLSUZY0hGlPM7
-	HySeSQqlHA+OoCQaa4TXVGtbOd9PCrh0/nMSQN/wrSLFW/7dxC7ekIUbqlrVYj7KUS70HiJ
-	fIHDI5NtfLx2oYNRZd24DtaoTy9M1poMHU8t3yipK3ClJtb1sZS5VU9Xot2qlaXfp5763TY
-	xXYm6LtV/OE4Brz8ETGH77Hvbafxpg9XAivWUYGM2m7AQyhvgwavz+v37
+Feedback-ID: zesmtpgz:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-QQ-XMAILINFO: MaCc72GaN9m8qL2E+p+VxAnDC9Emg9BFN0S9WtO8VtB6w16H8sjM/mBD
+	SLVT3pdHgymGpo4+rjPRwQgIfNWX90LospHz9yrGx36hiPDNh7qiok84cYPcs+UrLCeRCRJ
+	Sgus7rCiAXVY/K94LAle50NQYZEike+Msx9CTR7bOXBm4XaLvSk7DZJqpVxBSLSi0sPOFOa
+	+RJHmxNfE+4vNjzT/LsXi6xOfCzCqPkn9vU+Eu9C3MWEIQslQY1jfMeJWo3bXwWr9DYUeVd
+	KA7BBCTARhSItCZYDfzBxqNyHS898n7ZKFh9KcHnsNsY2HAdeEDftcL56I8qSMNO/um6V0/
+	ecZMSZnE0sDM1UA0rJF4jietbTh2jQgeg0wAMva5eyXtSQsapAElScaQ6VqLdyj2zg0Mhpb
+	VezmPBl+IV/Jn7SChGHtSm8qpfO5dRXRB4SuveYqv7UTykurrik2zd++RW7gz3zJv68qo80
+	NTvn7g65faBHXtufhBySENulVMYqAE8+FxUcHSxEQDb9KxaOQq5zcOPWYq4sRkys6ZgwI+E
+	xrFwnIXS3AEMdBMj++oOReeoKqdFhcIso0pAciedYonpEqxWT/+igKudJto56iSgCIbps7E
+	vsZCQwhjo1wdg+kJUUWx1o/hP8G7YmB/HLwcPMP9tut/IW7RRegwdALdjID0k08BPh9YLaL
+	3NH9BpA4S0HqpuqBVeAUCyvN9rEDhduCChXSt7AjdZL/hjuAN9Bw2G0YuZ10DjrKAyVmiVU
+	vJGGRqmJKw2yWN8tYYEcGnYg2/rxDLoQUTRXl4twECbrOzo4SC9SOaBhO7OKGk+XqEeq40U
+	G2qmQIbuJjDErPIZMHvcvinkQhLshH0C9kqMrAOLacOYBagzOFiZ3eq/ws+458wt5YeJC7v
+	dcSVKhpOYYFxn0s3KtUaQeB7piiR4nZgju2ixHFn5lEJhvgW0Kt/5f6nViQyssKzfQCRwpn
+	BM3v18yHt9svFvGCDdEvUL7wDTFee9jxlHWOyOipi6FpZW5148KrtQ/Qx/OYsQVco/PAAeW
+	p10lrBN3/bS3EzpVdOiQAS8KxtHd8=
 X-QQ-XMRINFO: Mgo7HCA7/T7wHQuXcPxwuSA=
 X-QQ-RECHKSPAM: 0
 
-Replace plain .pushsection with the new PUSHSECTION macro for __ex_table,
-__bug_table, __jump_table, and .alternative on RISC-V.
+Hi all,
 
-PUSHSECTION establishes proper references between the caller and the
-generated sections, allowing --gc-sections to recognize their dependencies
-correctly. This avoids the need for KEEP() and prevents dependency
-inversion where unused sections keep others alive.
+Sorry for the noise — it looks like my mail provider rewrote the Message-ID
+of the cover letter, which broke the thread. I'm resending the cover letter
+to make the series appear correctly threaded on lore.
 
-With this change, CONFIG_TRIM_UNUSED_SYSCALLS can correctly discard unused
-syscalls together with their exception tables.
+This series aims to introduce syscall trimming support based on dead code
+and data elimination (DCE). This can reduce the final image size, which is
+particularly useful for embedded devices, while also reducing the attack
+surface. It might further benefit specialized scenarios such as unikernels
+or LTO builds, and could potentially help shrink the instruction cache
+footprint.
 
-This update takes effect only when built with an assembler that supports
-BFD_RELOC_NONE, and falls back to the existing behavior otherwise.
+Besides that, this series also introduces a new PUSHSECTION macro. This
+wrapper allows sections created by .pushsection to have a proper reference
+relationship with their callers, so that --gc-sections can safely work
+without requiring unconditional KEEP() entries in linker scripts.
 
-Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-Signed-off-by: Peihan Liu <ronbogo@outlook.com>
----
- arch/riscv/include/asm/alternative-macros.h |  8 +++++---
- arch/riscv/include/asm/asm-extable.h        | 10 ++++++----
+Since the new syscalltbl.sh infrastructure has been merged, I think it’s a
+good time to push this patchsetTODO? forward.
+
+Patch 1–3 introduce the infrastructure for TRIM_UNUSED_SYSCALLS, mainly
+allowing syscalltbl.sh to decide which syscalls to keep according to
+USED_SYSCALLS.
+Patch 4 enables TRIM_UNUSED_SYSCALLS for the RISC-V architecture. With
+syscalltbl.sh now available, this feature should be applicable to all
+architectures that support LD_DEAD_CODE_DATA_ELIMINATION and use
+syscalltbl.sh, but let’s focus on RISC-V first.
+Patch 5–8 address the dependency inversion problem caused by sections
+created with .pushsection that are forcibly retained by KEEP() in linker
+scripts.
+
+Here is an example to illustrate the problem:
+
+void fun2(void);
+
+void fun1(void) {
+	asm volatile (
+		".pushsection .text.pushed,\"ax\"\n\t" "call fun2\n\t"
+		".popsection\n\t"
+	);
+}
+
+If fun1() is used, .text.fun1 is kept alive, but .text.pushed has no
+reference to .text.fun1, so --gc-sections may incorrectly discard
+.text.pushed. To avoid this, the kernel traditionally wraps such sections
+with KEEP() in the linker script. However, KEEP() introduces a dependency
+inversion: if fun1() and fun2() are unused, .text.fun1, .text.fun2 and
+.text.pushed should be removed, but KEEP() forces .text.pushed to stay,
+which even keeps .text.fun2. As a result, sections that should be
+eliminated are retained unnecessarily.
+
+In Linux, sections such as ex_table, jump_table, bug_table, and alternative
+are created by .pushsection and suffer from this issue. They prevent some
+syscalls from being trimmed.
+
+Ideally, .text.fun1 and .text.pushed should share the same fate: if fun1()
+is not referenced, .text.pushed should be discarded as well. To achieve
+this, we can establish a relocation with a directive between the caller and
+the section created by .pushsection:
+
+.section .text.fun1,"ax"
+.reloc ., BFD_RELOC_NONE, pushedlabel
+.pushsection .text.pushed,"ax" pushedlabel:
+	call fun2
+.popsection
+
+Based on this idea, we introduce the PUSHSECTION macro. This macro emits a
+relocation directive and a new label automatically, while remaining fully
+compatible with all existing .pushsection parameters. With this macro, all
+current uses of .pushsection (and even .section) in the kernel can be
+replaced, significantly reducing the number of KEEP() in linker scripts and
+enabling --gc-sections to work more effectively.
+
+Without PUSHSECTION, there are 56 syscalls that cannot be trimmed in
+defconfig and TRIM_UNUSED_SYSCALLS enabled. With PUSHSECTION, all syscalls
+can now be properly trimmed.
+
+We have tested enabling TRIM_UNUSED_SYSCALLS while keeping all syscalls
+listed in USED_SYSCALLS and successfully booted Ubuntu on a configuration
+based on v6.18-rc1 defconfig. The detailed configuration is provided in
+[1]. This confirms that the trimming mechanism functions correctly under a
+standard kernel setup.
+
+The vmlinux size with tinyconfig is as follows:
+
+|                                 | syscall remain | vmlinux size   | vmlinux after strip |
+| ------------------------------- | -------------- | -------------- | ------------------- |
+| enable DCE                      | 188            | 1437008        | 915160              |
+| enable DCE and syscall trimming | 3              | 1263528 (-12%) | 800472 (-13%)       |
+
+
+Changes in v2:
+- Rebased on the unified syscalltbl.sh infrastructure for syscall trimming.
+USED_SYSCALLS now accepts only syscall names to avoid confusion, whereas v1
+also allowed entry point symbols.
+- Uses the .reloc directive to establish dependencies.
+Compared with previous proposals using SHF_LINK_ORDER or SHF_GROUP, this
+approach provides a generic, parameter-compatible macro for all
+.pushsection usages without side effects.
+
+
+Previous versions:
+- RFC: https://lore.kernel.org/lkml/cover.1676594211.git.falcon@tinylab.org/
+- v1 part 1: https://lore.kernel.org/lkml/cover.1695679700.git.falcon@tinylab.org/
+- v1 part 2: https://lore.kernel.org/lkml/cover.1699025537.git.tanyuan@tinylab.org/
+
+Links:
+[1] https://pastebin.com/St51bk2K
+
+
+Yuan Tan (4):
+  kconfig: add CONFIG_PUSHSECTION_WITH_RELOC for relocation support
+  compiler.h: introduce PUSHSECTION macro to establish proper references
+  vmlinux.lds.h: support conditional KEEP() in linker script
+  riscv: use PUSHSECTION in ex_table, jump_table, bug_table and
+    alternatives
+
+Yuhang Zheng (4):
+  init/Kconfig: add CONFIG_TRIM_UNUSED_SYSCALLS and related options
+  scripts/syscalltbl.sh: add optional --used-syscalls argument for
+    syscall trimming
+  scripts/Makefile.asm-headers: pass USED_SYSCALLS to syscalltbl.sh
+  riscv: enable HAVE_TRIM_UNUSED_SYSCALLS when toolchain supports DCE
+
+ arch/riscv/Kconfig                          |  1 +
+ arch/riscv/include/asm/alternative-macros.h |  8 ++--
+ arch/riscv/include/asm/asm-extable.h        | 10 +++--
  arch/riscv/include/asm/bug.h                |  2 +-
- arch/riscv/include/asm/jump_label.h         |  3 ++-
- arch/riscv/kernel/vmlinux.lds.S             |  9 ++++++++-
- 5 files changed, 22 insertions(+), 10 deletions(-)
+ arch/riscv/include/asm/jump_label.h         |  3 +-
+ arch/riscv/kernel/vmlinux.lds.S             |  9 +++-
+ include/asm-generic/vmlinux.lds.h           | 12 ++++-
+ include/linux/compiler.h                    | 43 +++++++++++++++++-
+ include/linux/compiler_types.h              |  8 ++--
+ init/Kconfig                                | 49 +++++++++++++++++++++
+ scripts/Makefile.asm-headers                |  4 ++
+ scripts/syscalltbl.sh                       | 19 +++++++-
+ 12 files changed, 150 insertions(+), 18 deletions(-)
 
-diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-index 9619bd5c8eba..dd24c3e1117b 100644
---- a/arch/riscv/include/asm/alternative-macros.h
-+++ b/arch/riscv/include/asm/alternative-macros.h
-@@ -2,9 +2,11 @@
- #ifndef __ASM_ALTERNATIVE_MACROS_H
- #define __ASM_ALTERNATIVE_MACROS_H
- 
-+#include <linux/compiler.h>
-+
- #ifdef CONFIG_RISCV_ALTERNATIVE
- 
--#ifdef __ASSEMBLER__
-+#ifdef __ASSEMBLY__
- 
- .macro ALT_ENTRY oldptr newptr vendor_id patch_id new_len
- 	.4byte \oldptr - .
-@@ -16,7 +18,7 @@
- 
- .macro ALT_NEW_CONTENT vendor_id, patch_id, enable = 1, new_c
- 	.if \enable
--	.pushsection .alternative, "a"
-+	PUSHSECTION .alternative, "a"
- 	ALT_ENTRY 886b, 888f, \vendor_id, \patch_id, 889f - 888f
- 	.popsection
- 	.subsection 1
-@@ -67,7 +69,7 @@
- 
- #define ALT_NEW_CONTENT(vendor_id, patch_id, enable, new_c)		\
- 	".if " __stringify(enable) " == 1\n"				\
--	".pushsection .alternative, \"a\"\n"				\
-+	PUSHSECTION(.alternative, "a")					\
- 	ALT_ENTRY("886b", "888f", __stringify(vendor_id), __stringify(patch_id), "889f - 888f") \
- 	".popsection\n"							\
- 	".subsection 1\n"						\
-diff --git a/arch/riscv/include/asm/asm-extable.h b/arch/riscv/include/asm/asm-extable.h
-index 37d425d7a762..24eb29f2ef82 100644
---- a/arch/riscv/include/asm/asm-extable.h
-+++ b/arch/riscv/include/asm/asm-extable.h
-@@ -2,6 +2,8 @@
- #ifndef __ASM_ASM_EXTABLE_H
- #define __ASM_ASM_EXTABLE_H
- 
-+#include <linux/compiler.h>
-+
- #define EX_TYPE_NONE			0
- #define EX_TYPE_FIXUP			1
- #define EX_TYPE_BPF			2
-@@ -10,10 +12,10 @@
- 
- #ifdef CONFIG_MMU
- 
--#ifdef __ASSEMBLER__
-+#ifdef __ASSEMBLY__
- 
- #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
--	.pushsection	__ex_table, "a";		\
-+	PUSHSECTION __ex_table, "a";			\
- 	.balign		4;				\
- 	.long		((insn) - .);			\
- 	.long		((fixup) - .);			\
-@@ -31,8 +33,8 @@
- #include <linux/stringify.h>
- #include <asm/gpr-num.h>
- 
--#define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
--	".pushsection	__ex_table, \"a\"\n"		\
-+#define __ASM_EXTABLE_RAW(insn, fixup, type, data)      \
-+	PUSHSECTION(__ex_table, "a")			\
- 	".balign	4\n"				\
- 	".long		((" insn ") - .)\n"		\
- 	".long		((" fixup ") - .)\n"		\
-diff --git a/arch/riscv/include/asm/bug.h b/arch/riscv/include/asm/bug.h
-index 4c03e20ad11f..855860c34209 100644
---- a/arch/riscv/include/asm/bug.h
-+++ b/arch/riscv/include/asm/bug.h
-@@ -54,7 +54,7 @@ typedef u32 bug_insn_t;
- #define ARCH_WARN_ASM(file, line, flags, size)			\
- 		"1:\n\t"					\
- 			"ebreak\n"				\
--			".pushsection __bug_table,\"aw\"\n\t"	\
-+			PUSHSECTION(__bug_table, "aw")          \
- 		"2:\n\t"					\
- 		__BUG_ENTRY(file, line, flags) "\n\t"		\
- 			".org 2b + " size "\n\t"                \
-diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
-index 3ab5f2e3212b..1134a9bc95a7 100644
---- a/arch/riscv/include/asm/jump_label.h
-+++ b/arch/riscv/include/asm/jump_label.h
-@@ -11,13 +11,14 @@
- 
- #include <linux/types.h>
- #include <asm/asm.h>
-+#include <linux/compiler.h>
- 
- #define HAVE_JUMP_LABEL_BATCH
- 
- #define JUMP_LABEL_NOP_SIZE 4
- 
- #define JUMP_TABLE_ENTRY(key, label)			\
--	".pushsection	__jump_table, \"aw\"	\n\t"	\
-+	PUSHSECTION(__jump_table, "aw")	                \
- 	".align		" RISCV_LGPTR "		\n\t"	\
- 	".long		1b - ., " label " - .	\n\t"	\
- 	"" RISCV_PTR "	" key " - .		\n\t"	\
-diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-index 61bd5ba6680a..e6d117047226 100644
---- a/arch/riscv/kernel/vmlinux.lds.S
-+++ b/arch/riscv/kernel/vmlinux.lds.S
-@@ -7,6 +7,13 @@
- #define RO_EXCEPTION_TABLE_ALIGN	4
- #define RUNTIME_DISCARD_EXIT
- 
-+#ifdef CONFIG_PUSHSECTION_WITH_RELOC
-+#define NOKEEP___jump_table 1
-+#define NOKEEP___ex_table 1
-+#define NOKEEP___bug_table 1
-+#define NOKEEP_alternative 1
-+#endif
-+
- #ifdef CONFIG_XIP_KERNEL
- #include "vmlinux-xip.lds.S"
- #else
-@@ -117,7 +124,7 @@ SECTIONS
- 	. = ALIGN(8);
- 	.alternative : {
- 		__alt_start = .;
--		KEEP(*(.alternative))
-+		COND_KEEP(alternative, *(.alternative*))
- 		__alt_end = .;
- 	}
- 	__init_end = .;
+
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+prerequisite-patch-id: 7af3175326df94637f04a050dee7356416eb1edd
 -- 
 2.43.0
 
