@@ -1,42 +1,42 @@
-Return-Path: <linux-arch+bounces-14111-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14112-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E935BDCB1A
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 08:20:51 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19EABBDCB52
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 08:24:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82C7519A662C
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 06:21:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CA24A4EB014
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 06:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D287530FC01;
-	Wed, 15 Oct 2025 06:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E550030FF39;
+	Wed, 15 Oct 2025 06:24:06 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECA430F956;
-	Wed, 15 Oct 2025 06:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE6E3101A0;
+	Wed, 15 Oct 2025 06:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760509242; cv=none; b=HsxSVF0yBRuyCxoG9O/vdpzVu/jmWNualHcHxsQpq/pVd8Nvb9f75ypIln5N2LC2Txl8wHi+p8v19JAisXjx0uCYVcBr6KJcMg4p5RToG2C8rmz+q3cG4+0UJ3DsfjzapQV1/yOePPaXA9UxqOL4F0nH8r+vA2BwPcwUet1UeRk=
+	t=1760509444; cv=none; b=JkqJXJtfC5FUAK5zS5samqj1cVjySFlMi6FR/4508iX3wX5D39QIEhTesc0mUvy7wlA5p40e/kRb03iYe8uE64+oJJEohBzoNG5zGScZ1/nI+hvv3j/JJsApcYyBkSSxwjEU+Ug7/r5XlDrztckIDZeBtH4rs+nMxJpeQ7ZeJeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760509242; c=relaxed/simple;
-	bh=mxpuMiUTRYCSgSeahpphZP0KRUV5gJ7/k69WdZ4eDk4=;
+	s=arc-20240116; t=1760509444; c=relaxed/simple;
+	bh=OdcQpDjnY6Vkmboyo/9JHZoVVOgKF3OwQ6+J+yCUZ14=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DY9zQJSAu0A6NEKTFAuzeoJ6/rHLcy/io1PW8U2Fq062YUYGYzuqyfYRgy5JlmUrS3wsxPwUpXNHt6dzqqt3Ga+AlnyANs9oVr5qU/bze5mEXAsItLeOFexfz6RLPBCmmTEdZNJGwhfY2shO9CYUNxbOGUhJgfPGpY1pUUzwPIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tinylab.org; spf=pass smtp.mailfrom=tinylab.org; arc=none smtp.client-ip=54.206.34.216
+	 MIME-Version:Content-Type; b=Ow/wtuikGWQcyontC0NJE/L8WL16qCuN4qvutsSTbcm22rVxbyBXstcMQq1sxYe7XXA7zl6kCPxCuMMcVduFFRenqDCAQUKjKGoDDqJ5ECEuYfshuNqRHFYZR8pObovEtLWs7/h2Kmv1PL0BOQ1T7GLxb8zg6lKPu9kUU/2nr7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tinylab.org; spf=pass smtp.mailfrom=tinylab.org; arc=none smtp.client-ip=54.204.34.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tinylab.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tinylab.org
-X-QQ-mid: zesmtpsz6t1760509173te78262a4
-X-QQ-Originating-IP: u3H1w+MhVp5h6FxUuPEeE01YpOSGlM/XWUOC3g4qmu4=
+X-QQ-mid: esmtpsz17t1760509347t6c7396dc
+X-QQ-Originating-IP: +rvgJOymfhQGSFW+gyMHV9XEE53HaMbisGq3cCwjcu8=
 Received: from GPU-Server-A6000.. ( [202.201.1.132])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 15 Oct 2025 14:19:29 +0800 (CST)
+	id ; Wed, 15 Oct 2025 14:22:24 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16704342638795234820
+X-BIZMAIL-ID: 14340811432135975756
 EX-QQ-RecipientCnt: 14
 From: Yuan Tan <tanyuan@tinylab.org>
 To: arnd@arndb.de,
@@ -53,9 +53,9 @@ Cc: linux-arch@vger.kernel.org,
 	ronbogo@outlook.com,
 	z1652074432@gmail.com,
 	lx24@stu.ynu.edu.cn
-Subject: [PATCH v2 6/8] compiler.h: introduce PUSHSECTION macro to establish proper references
-Date: Wed, 15 Oct 2025 14:19:20 +0800
-Message-ID: <40854460DE090346+c30007da67d26ae0e8651732f32a8ede4926db14.1760463245.git.tanyuan@tinylab.org>
+Subject: [PATCH v2 7/8] vmlinux.lds.h: support conditional KEEP() in linker script
+Date: Wed, 15 Oct 2025 14:22:15 +0800
+Message-ID: <8BFF520DF61C1BB6+096017ae9362c21b090c1f3c97bbd0fdf305bd27.1760463245.git.tanyuan@tinylab.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1760463245.git.tanyuan@tinylab.org>
 References: <cover.1760463245.git.tanyuan@tinylab.org>
@@ -65,132 +65,143 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: OKKHiI6c9SH3NWplfEdQvnkgxVSivyXpkBuL/axxpl/Cw8vkJRWUxIg3
-	HnJnLIJn1Vso5lCrTHERFND2Ac71fMqpoJpzhLKM/tNaKuz9NpD7d+rQiUljVR/GWuET1mt
-	3UaqN9XgxVhmUHLpHSHiofcU3XjIq6Nn6vWFfy1qzYjjaeOyAFF9pfiH89nZqsThMYOVbU9
-	7CnM9Hb+6zBiCgKSCVP1TFrkRdrMTt14fDfFevi4AVidq8HQ2A4lXjmJxrLF/61Nm+ckGC8
-	TrsU+uN0N4V69Ib04ucUt5reAn4u+PWLGRozgAi339J1G5MNP+wxbFXW4K2b833OmXlqfcq
-	x4Lv6Qr0W/J4QJjv6S6u4Uf9IANZOadhwGhvKOzdQo0a8fDotfumAoZSxmqSwksIlLZoNdy
-	+YjDpNhmfwQUaMbjrPRXYlTO7VX7MnpMO+XOXg/Lr/sNVJNIDs4Jk5xWgP4PaFh3ruFaitm
-	wTOkiK0RuFStXCkuIo1NuAFyV0CSXSnymAqZ1skVLsV6xgc2YlecQQJRgB6dqCqai5oCvnG
-	hLN+7v/MQQBkK+V99Fadrk4q4EmlFAGRzg77qfWvPQp9ge76QSOU+lZtayzdrzEwhuAo18d
-	CpnHzOXv28z2tvxOGOFpamFQvswm3VWfgUuZP0FGZCKKYk4jBFQEJ0xhlh1bCPK8dgDfdv6
-	L8w3Qz2G+tzK0P/54t7VG9Ji7/harpqcwFlsLCrjCEPbzasbHewR4na9964hter6LwgGyIX
-	zHm4rQYD7msdNncbis1usBYIoVM7M9+jH83trUe28Q3Wv5R0CllhAOjj8NpWE1fChhSKSGM
-	SsTzIpLxA9CC6dDgRHG2boniS2d+cF1S3pyM9f8wE9GdqHOV+hwV5bP4D+vJHWUUYwfSNUP
-	fTESbxrygLNfIYLVYpNw7L4nTUI6+KQJTQ0JXmn1NVlCWrtZFH409SWmS9qmWYzf34ROfLF
-	VpGy6tXpOTbZxTouwQ1+OHlK4j2Ht0hIi4XP1eMqKC3hH9+2kBEtdKEZYxKK3SaMqpmIhEU
-	lIUpqE+2TRFGcZvDMO
-X-QQ-XMRINFO: OJlEh3abS6gXi5NWrXbD0WI=
+Feedback-ID: esmtpsz:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-QQ-XMAILINFO: MyirvGjpKb1jdp298dlRfLmn+nbhEczkj6ZLOKa2DAhtqOK96soFsuPw
+	KAqB/9oS27tYnWz9f2RTJIXuxj17H1envL6I09Ui8Ph603WM54p3wOUFun8ztMV5IweTLWD
+	B/gTO3QxAON7LbZqsDbEWboqcQcZi0ce6tLugF81A2eJjezbBBhu0oKXMGC1EZ4k2HuJCoD
+	KhCe5TcF6NW3SqGGpWImKhhyPrSPsQsQ+LDX00kLDyKMaOx7vtUA7f8aPDKXIxU0iRFdM8B
+	d79UFU56muabpxQMAblM5jo81KJIpGBWOE6Ywt9pseeUd1Bmi60EGsTtTpr0SFtIbHcdwL4
+	uMzbWlPwlj3U3MB3+5n19Wxq8v0UMwGpDoX5rDa2PCMGKPFL3kPxZj252SNNQW2iuHfVmOj
+	xMP7p7Fw4d1A69+B6m+fSTaI1u4lW4aojvclhoTDuD2Q9kKywqG3pv/b+jR5NQqG1NqMCAc
+	fllNA04l3og57zAPpvziRGOhA9QyVwwZjWT4thUxYkQF9RU3ZfXoT3xIxsy+SdeQwu7Vrh0
+	2s4Ssxy8ZAhqKAKYDjkjds50THGtR1xsVABsvoOXFbNubhszxOznAcDN2ceK3xwoAeGlZis
+	M+sTttGCMq1HE+mC5sDiZI8XyVHNXVAEDTAOQ/2eKX6Yj9QgjgYcxYcuq6sdLoJn4OqbPk5
+	R29DODxEj2lzP3FGDwYhcKUUO4RV8hsVUg1mI+OzMT4OErzrqV7R3oxHrwFWcaylB/I9n1k
+	GsChY/J7EQelCRm2IrmE482sBsLfqWORgciaNhY/jQ2p6G1EUdOU+8KVCELW9EWcXh+qdAQ
+	HrkyUoNRJysImnsBhPQ3ZJc/e8OyBYxd3F21ZsErNiJw7uDQG4MWvMOzHTU+Ue8Mxv+sS+P
+	P9b+1E/Ed90w13XbJ4jabDSvV5SBlAtjbMRQv58dLNPNuXYSC0+lFYkSTOwT6adXXWX1ATU
+	fG6asPYfbXMPT103mClG0s6M0bcpPWRoT9HiCX7mXefBdlKpip46bWVjgHqYq+loq46hWNl
+	hNMlILbryjIKPHmu56
+X-QQ-XMRINFO: MYTJVxP1dBxwZFBmm3GDYp0=
 X-QQ-RECHKSPAM: 0
 
-When a section is created by .pushsection in assembly, there is no
-reference between the caller function and the newly created section. As a
-result, --gc-sections may incorrectly discard the newly created section.
+Introduce a conditional KEEP() helper, COND_KEEP(), that allows a
+section to be kept only if a corresponding NOKEEP_<sec> macro is not
+defined. This provides a finer-grained mechanism to control which
+sections are protected from garbage collection.
 
-To prevent such incorrect garbage collection, kernel code often wraps these
-sections with KEEP() in linker scripts. While this guarantees that the
-sections are retained, it introduces a dependency inversion: unused
-sections are kept unnecessarily, and any sections they reference are also
-forcibly retained. This prevents the linker from eliminating truly unused
-code or data.
+Traditionally, many sections — for example, the exception table and jump
+table — are created by .pushsection and wrapped with KEEP() in
+vmlinux.lds.h to prevent them from being discarded by the linker, even when
+they are not actually referenced. This can block dead code and data
+elimination (DCE) when the section is known to be safe to drop.
 
-Introduce a new PUSHSECTION macro in include/linux/compiler.h to create a
-proper reference between the .pushsection caller and the generated section.
-The macro is fully compatible with all existing .pushsection parameters and
-has no side effects, making it safe to replace all current .pushsection
-usages with this version.
+With COND_KEEP(), architectures or subsystems can safely remove the KEEP()
+in cases where the section can be safely garbage-collected.
 
-PUSHSECTION works by emitting a unique label inside the new section, and
-adding a relocation from the caller function to that label. This ensures
-the linker recognizes the dependency and keeps both sections alive
-together. So we don't need to wrap the section with KEEP() in linker
-anymore.
+The implementation adds:
+  - __KEEP_ACT_0() / __KEEP_ACT_1() helpers for macro expansion
+  - BSEC_MAIN() to handle possible sub-section patterns, such as
+    __ex_table.18
+  - COND_KEEP() macro, which wraps KEEP() conditionally based on
+    __is_defined(NOKEEP_<sec>)
 
-To guarantee uniqueness of the section and label names, both __COUNTER__
-and %= are used:
-Either alone is insufficient:
-  - __COUNTER__ alone fails when the function containing PUSHSECTION is
-    inlined multiple times, causing duplicate labels.
-  - %= alone fails when multiple PUSHSECTION directives appear within a
-    single inline assembly block.
+Example usage:
 
-In assembly code, a separate definition is provided because the C macro
-cannot ensure unique section/label names when expanded inside an assembler
-macro (.macro).
+COND_KEEP(alternative, *(.alternative*))
+
+Additionally, move the ___PASTE()/__PASTE() definitions in
+include/linux/compiler_types.h out from under the '#ifndef __ASSEMBLY__'
+guard so that they are visible to assembly.
+
+No functional change unless NOKEEP_<sec> is defined.
 
 Signed-off-by: Yuan Tan <tanyuan@tinylab.org>
 Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-Signed-off-by: Xiao Liu <lx24@stu.ynu.edu.cn>
 Signed-off-by: Peihan Liu <ronbogo@outlook.com>
 ---
- include/linux/compiler.h | 43 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+ include/asm-generic/vmlinux.lds.h | 12 ++++++++++--
+ include/linux/compiler_types.h    |  8 ++++----
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 5b45ea7dff3e..bba79cedbe24 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -3,6 +3,7 @@
- #define __LINUX_COMPILER_H
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 8a9a2e732a65..8bb411ace863 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -51,6 +51,7 @@
+  */
  
- #include <linux/compiler_types.h>
-+#include <linux/stringify.h>
+ #include <asm-generic/codetag.lds.h>
++#include <linux/compiler_types.h>
  
- #ifndef __ASSEMBLY__
+ #ifndef LOAD_OFFSET
+ #define LOAD_OFFSET 0
+@@ -113,14 +114,21 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+ #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
+ #define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..L* .bss..compoundliteral*
+ #define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
++#define BSEC_MAIN(sec) sec sec##.[0-9a-zA-Z_]*
+ #else
+ #define DATA_MAIN .data .data.rel .data.rel.local
+ #define SDATA_MAIN .sdata
+ #define RODATA_MAIN .rodata
+ #define BSS_MAIN .bss
+ #define SBSS_MAIN .sbss
++#define BSEC_MAIN(sec) sec
+ #endif
  
-@@ -267,7 +268,47 @@ static inline void *offset_to_ptr(const int *off)
- 	return (void *)((unsigned long)off + *off);
- }
++#define __KEEP_ACT_0(sec) KEEP(sec)
++#define __KEEP_ACT_1(sec) sec
++
++#define COND_KEEP(sec, list) __PASTE(__KEEP_ACT_, __is_defined(NOKEEP_##sec))(list)
++
+ /*
+  * GCC 4.5 and later have a 32 bytes section alignment for structures.
+  * Except GCC 4.9, that feels the need to align on 64 bytes.
+@@ -196,12 +204,12 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
  
--#endif /* __ASSEMBLY__ */
-+#ifdef CONFIG_PUSHSECTION_WITH_RELOC
-+#define __PUSHSECTION_RELOC(lbl) ".reloc ., BFD_RELOC_NONE, " lbl "\n\t"
-+#define __PUSHSECTION_HELPER(prefix) __stringify(prefix.%=) "_" __stringify(__COUNTER__)
-+#define __PUSHSECTION_LABEL(lbl) lbl ":\n\t"
-+#else
-+#define __PUSHSECTION_RELOC(lbl)
-+#define __PUSHSECTION_HELPER(prefix) __stringify(prefix)
-+#define __PUSHSECTION_LABEL(lbl)
-+#endif
-+
-+#define _PUSHSECTION(lbl, sec, ...)					\
-+	__PUSHSECTION_RELOC(lbl)					\
-+	".pushsection " sec ", " #__VA_ARGS__ "\n\t" __PUSHSECTION_LABEL(lbl)
-+
-+#define PUSHSECTION(sec, ...)						\
-+	_PUSHSECTION(__PUSHSECTION_HELPER(.Lsec), __PUSHSECTION_HELPER(sec), __VA_ARGS__)
-+
-+#else /* __ASSEMBLY__ */
-+
-+#ifdef CONFIG_PUSHSECTION_WITH_RELOC
-+#define __PUSHSECTION_RELOC .reloc ., BFD_RELOC_NONE, \label
-+#define __PUSHSECTION_HELPER(prefix) prefix\().\@
-+#define __PUSHSECTION_LABEL \label:
-+#else
-+#define __PUSHSECTION_RELOC
-+#define __PUSHSECTION_HELPER(prefix) prefix
-+#define __PUSHSECTION_LABEL
-+#endif
-+
-+.macro  _PUSHSECTION label:req, section:req, args:vararg
-+	__PUSHSECTION_RELOC
-+	.pushsection __PUSHSECTION_HELPER(\section), \args
-+	__PUSHSECTION_LABEL
-+.endm
-+
-+.macro  PUSHSECTION section:req, args:vararg
-+	_PUSHSECTION .Lsec\@, \section, \args
-+.endm
-+
-+#endif /* !__ASSEMBLY__ */
-+
+ #define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
+ 	_BEGIN_##_label_ = .;						\
+-	KEEP(*(_sec_))							\
++	COND_KEEP(_sec_, *(BSEC_MAIN(_sec_)))				\
+ 	_END_##_label_ = .;
  
- #ifdef CONFIG_64BIT
- #define ARCH_SEL(a,b) a
+ #define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
+ 	_label_##_BEGIN_ = .;						\
+-	KEEP(*(_sec_))							\
++	COND_KEEP(_sec_, *(BSEC_MAIN(_sec_)))				\
+ 	_label_##_END_ = .;
+ 
+ #define BOUNDED_SECTION_BY(_sec_, _label_)				\
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 59288a2c1ad2..680ba4afbe7d 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -79,10 +79,6 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ # define __builtin_warning(x, y...) (1)
+ #endif /* __CHECKER__ */
+ 
+-/* Indirect macros required for expanded argument pasting, eg. __LINE__. */
+-#define ___PASTE(a,b) a##b
+-#define __PASTE(a,b) ___PASTE(a,b)
+-
+ #ifdef __KERNEL__
+ 
+ /* Attributes */
+@@ -425,6 +421,10 @@ struct ftrace_likely_data {
+ 
+ #endif /* __ASSEMBLY__ */
+ 
++/* Indirect macros required for expanded argument pasting, eg. __LINE__. */
++#define ___PASTE(a, b) a##b
++#define __PASTE(a, b) ___PASTE(a, b)
++
+ /*
+  * The below symbols may be defined for one or more, but not ALL, of the above
+  * compilers. We don't consider that to be an error, so set them to nothing.
 -- 
 2.43.0
 
