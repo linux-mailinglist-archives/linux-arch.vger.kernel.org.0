@@ -1,158 +1,172 @@
-Return-Path: <linux-arch+bounces-14116-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14117-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0E8ABDD2B6
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 09:41:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41E33BDD31C
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 09:48:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92BAA3C6A49
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 07:40:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA0E13B2464
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 07:48:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6FCC304BBA;
-	Wed, 15 Oct 2025 07:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5FF915539A;
+	Wed, 15 Oct 2025 07:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ggOhvzE/"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Pq+2ekRO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PP8As33C"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A667F2153E7;
-	Wed, 15 Oct 2025 07:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C019478;
+	Wed, 15 Oct 2025 07:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760514050; cv=none; b=YcnDswQM4czpSsI0e2xABtj22QyKVED7z4z43qHRCblYUmuTjPxdd1it4rNGgCqPKXxNc/I5jxMgnYZyGacHOLoyIpwUK0i47wQQIFMxSGHlwK+DLrhQn7po/kHeVPPkCC3dpMeJpeaphGNRqe4SDei7MZhqXQ5lctnhRoXfDgw=
+	t=1760514500; cv=none; b=GPIrtnG5oFHbTUm7EPTSY+TztxhhDXdaIMZhoxuzRVypZ6vs6lbvh/CW4hFiJUfmpo61iRMu5QRNeuLdxOysMDFMllRlJRIgNpfglFkGokspAT5q70WxfB8JxLd0lrVDznU8sUzrrtVxlzcaF1LRSzl/7cwfBcCQNzi0znqxYm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760514050; c=relaxed/simple;
-	bh=dt30EklpSZi/7lhcJZNz9S2gIHGZWvqZN5FUmUz3/jw=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=K5XVLJFP4ofYGscBtc1KXg9E30fapWbIoWRBAce+C5QDIrboektgOpLoaUAhDHcOr2UNDkN29/h6gjOHTUf8qR2TvQM13uG8L7FNmnRjdsOyIBb4wtrU9JO33BR60mlVHs0koeiERtC4qtXJFfkw7W9/1X2/NFVtsmyObx6RReU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ggOhvzE/; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfout.stl.internal (Postfix) with ESMTP id 84E1D1D001A0;
-	Wed, 15 Oct 2025 03:40:47 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Wed, 15 Oct 2025 03:40:47 -0400
+	s=arc-20240116; t=1760514500; c=relaxed/simple;
+	bh=Q8le+30L67JnqHzyVz6EUJ3Z7+QstWCPGdsdpO6AnNM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=OeN7xKlyeplo9H/yAEkMyy0r5RcdCbR1E1AqUpJQK19MOo9qP1xp80t9yQBd51DFUZpNNacShfEtTMq8W2itVbzgpLwH3qhkACC9T0G5aJ1rjoykqNQ6LoT5hr6F6rjZpNrpKqm2CeufAgCOw/nP0tEj1jmaGmwCH5f6QWTd6NI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Pq+2ekRO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PP8As33C; arc=none smtp.client-ip=202.12.124.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id CAD2C7A01B8;
+	Wed, 15 Oct 2025 03:48:17 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Wed, 15 Oct 2025 03:48:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1760514497;
+	 x=1760600897; bh=RPb7u4xx/8qqCuf2oUI5wjlc24oyWMuCecmZxoE4X84=; b=
+	Pq+2ekRObjZTvtZI7FGIsKHXZ7rTbxjIXIeXLHekKKFmJglgIlgL/G3JVVKS2cPq
+	zmt+s1bJVdERsg24Ov8++y87RCvGIhKTAOZx9XPYADKYar/0rqtZCFz1FcV+iTJ9
+	SP9byB1UdPGjXxa3PETMNIeVa/7+SdOt2NQxAwAyC2bxJ77mQ+Yc2Xy0xei0mGls
+	dVENzhycADwBQCJM9jKH+aDfz+v92TV6GU3d3Ps4Jx8ohdQ3i7erHqSdN/cZy8GC
+	8wgf/RxY3/KNBaUdoR1dWyVtPZJioASGLf908ZdxTr/ASl04cAsEuBChfD2D9lif
+	HFVwZp7GONk2shTsHYWrpw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1760514047; x=1760600447; bh=Hjz+mqNYfvzjq/YJEYihb4TnZiLmD1Lj/yX
-	vDrOsq5A=; b=ggOhvzE/7YVP9rUtx9NtsXRkOsnCUJ/qt2NFNUpu3oXu6ci9usU
-	9FwZHtgU8LRnAIO5s/IJdmxbLYqCd4rJ7HVVWQFb8CiHDKnWZ/dtofEKyw8Ol9Rp
-	r7X5qfX/MWWAvOgwFDggReiRiF0ATQnyLtA0A0YVo/2x9znfosycZ3+Gk1rhOvld
-	1KqZ2UdWKYLrWL5DiEvSQOC3NMr0jriN3wtE6sQpLaQxyNdm+ge1G4M0ecc6S0m4
-	R4p27Nf9FgXyAf4dmTSc68BrRw2zSneIax+fd1n7ed9PGcFwPWkO58mv3Fn76KjZ
-	ZWlZ1Q14tRmXqjvTdJ9BeA1KlGsQfp6Sokw==
-X-ME-Sender: <xms:_k_vaFvQ6j6nUU9Bz9OmIrnvm1b43RCX6IjtYMrvOQCRcb7LZSuGCQ>
-    <xme:_k_vaCJs1lzijUQR7-Bpe29tzk0vmejTwk-v6rAZ6-0k_oDo6yoSkfSiPzXp3-FAT
-    N_PV6kOM9MmxreuEIjdWXogP-WCvC-aAmg5xjE-xlVBahfIdqt8JQ>
-X-ME-Received: <xmr:_k_vaBbkQR-x7xV9LEBBoGKY9rkzilWsr14DSBEIvCzTDxOG02osw2ak1iaUkq3vm2wEBmsHRhIj8-35Ve35BrXtXM-IFGmjB-Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduvddvkeegucetufdoteggodetrf
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1760514497; x=
+	1760600897; bh=RPb7u4xx/8qqCuf2oUI5wjlc24oyWMuCecmZxoE4X84=; b=P
+	P8As33CD5/IVeoE5nDPaUB08USXI3sb0M8eLdwrJ/xa666ST4nxkdPU/820fjm9d
+	cadcQmKuC+jMNdiNsUSKF3p3Ih5jtqRClvOH2citjgFU8lcqVwdGay75uNeF/T5U
+	P0ToLFsESgxZx3udHJVJWqWEKBrvKGYcsa74+ce3csDBcKV2kCvHx5b+gXK2cnJW
+	pR4QygXrl8Gw31vrpGS9ap7CHLpga/R56PHTDbD3F85irFCk73HtPNyTekEAVRD+
+	4tpym6B56tn0/nz2/PqyoddWhIc5M6rrLTb+oDrdpkqIZ8UiLjusKl19dbUUPZc4
+	fd3ZIAntYp3YYLeGI6MZg==
+X-ME-Sender: <xms:v1HvaF1eoori7IPYSnFkTHnRFQMj1BjLOOuctp9sLUBli-Ih2bmbSA>
+    <xme:v1HvaG6PNGcjuDfQr4mxHFSUC1rzYJbTJw3TsF_tiNNjKlC4i3MwlAy_1OJay-vHO
+    680_rJLK_A_ADNBg1OUXcDkanDl1KYndVZBYp6xz2hJRaYAZTvyn_o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduvddvkeehucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcuvfhh
-    rghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeelueehleehkefgueevtdevteejkefhffekfeffffdtgfejveekgeefvdeuheeu
-    leenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfth
-    hhrghinheslhhinhhugidqmheikehkrdhorhhgpdhnsggprhgtphhtthhopedufedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhhiugdrlhgrihhghhhtrdhlihhnuh
-    igsehgmhgrihhlrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggu
-    rdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    grkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepsgho
-    qhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoheptghorhgsvghtsehlfi
-    hnrdhnvghtpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhr
-    tghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehlihhnuhigqdhkvg
-    hrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:_k_vaNkowgqRDxU0NrAP6HZs27XEnrfVUnwK4cWX2Ev_9_WkFonUbQ>
-    <xmx:_k_vaHXi1PoUukZyiT8j65TiGM3flKikc39SU7PKTnoemtd_VuXg6w>
-    <xmx:_k_vaPLIE-igCSJb_mDiNimE5GR9xSzZNvdI_UIPlDwllRy0ikDQDg>
-    <xmx:_k_vaHuOiZS341r5sWdGZlxWEwoLz_Q9W5uXweooNJh2ZLbBDZfUeQ>
-    <xmx:_0_vaETJOQMYxuBxhK-52T5aaFOLCH365KBvspjjxybBzPmgyHp2i3km>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Oct 2025 03:40:43 -0400 (EDT)
-Date: Wed, 15 Oct 2025 18:40:39 +1100 (AEDT)
-From: Finn Thain <fthain@linux-m68k.org>
-To: David Laight <david.laight.linux@gmail.com>
-cc: Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-    Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
-    linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-    Geert Uytterhoeven <geert@linux-m68k.org>, linux-m68k@vger.kernel.org, 
-    linux-doc@vger.kernel.org
-Subject: Re: [RFC v3 1/5] documentation: Discourage alignment assumptions
-In-Reply-To: <20251014112359.451d8058@pumpkin>
-Message-ID: <f5f939ae-f966-37ba-369d-be147c0642a3@linux-m68k.org>
-References: <cover.1759875560.git.fthain@linux-m68k.org> <76571a0e5ed7716701650ec80b7a0cd1cf07fde6.1759875560.git.fthain@linux-m68k.org> <20251014112359.451d8058@pumpkin>
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudefpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomhdprhgtphhtthhope
+    iiudeihedvtdejgeegfedvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgrshgrhhhi
+    rhhohieskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehlihhnuhigqdhrihhstghvsehlihhsthhsrdhinhhfrhgr
+    uggvrggurdhorhhgpdhrtghpthhtohepihesmhgrshhkrhgrhidrmhgvpdhrtghpthhtoh
+    eprhhonhgsohhgohesohhuthhlohhokhdrtghomhdprhgtphhtthhopehlgidvgeesshht
+    uhdrhihnuhdrvgguuhdrtghnpdhrtghpthhtohepfhgrlhgtohhnsehtihhnhihlrggsrd
+    horhhg
+X-ME-Proxy: <xmx:v1HvaHGhZmoNBMd1kYBSezIFtgDlQJhQoeDAmRm8ZjtbdWMODQvFmg>
+    <xmx:v1HvaAvDypVvQShhy7wsGqQYcrx8Doz1ApqeFWMsNx-OYB8pNGJ4ug>
+    <xmx:v1HvaNl-cI05bZPbO9fJsBJe_h29tuGHTXu4P_SjJF7MfM8VzqJvhA>
+    <xmx:v1HvaDMNHvClW8XavlcxP4ut7l3HfEmziXf88sKkVS7ouAlId7m79A>
+    <xmx:wVHvaP4mykMyhdrihqGaClJRS0DTgfIa8AZQPYxcPVi1I8sJh8yWF1Io>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 8177B700054; Wed, 15 Oct 2025 03:48:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+X-ThreadId: A-HrBBL8x6OF
+Date: Wed, 15 Oct 2025 09:47:11 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Yuan Tan" <tanyuan@tinylab.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, linux-kbuild@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ i@maskray.me, "Zhangjin Wu" <falcon@tinylab.org>, ronbogo@outlook.com,
+ z1652074432@gmail.com, lx24@stu.ynu.edu.cn
+Message-Id: <33333fdd-2aa2-4ce0-8781-92222829ea12@app.fastmail.com>
+In-Reply-To: <30C972B6393DBAC5+cover.1760463245.git.tanyuan@tinylab.org>
+References: <30C972B6393DBAC5+cover.1760463245.git.tanyuan@tinylab.org>
+Subject: Re: [PATCH v2 0/8] dce, riscv: Unused syscall trimming with PUSHSECTION and
+ conditional KEEP()
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Oct 15, 2025, at 08:16, Yuan Tan wrote:
+> Hi all,
+>
+> This series aims to introduce syscall trimming support based on dead c=
+ode
+> and data elimination (DCE). This can reduce the final image size, whic=
+h is
+> particularly useful for embedded devices, while also reducing the atta=
+ck
+> surface. It might further benefit specialized scenarios such as uniker=
+nels
+> or LTO builds, and could potentially help shrink the instruction cache
+> footprint.
+>
+> Besides that, this series also introduces a new PUSHSECTION macro. This
+> wrapper allows sections created by .pushsection to have a proper refer=
+ence
+> relationship with their callers, so that --gc-sections can safely work
+> without requiring unconditional KEEP() entries in linker scripts.
+>
+> Since the new syscalltbl.sh infrastructure has been merged, I think it=
+=E2=80=99s a
+> good time to push this patchsetTODO? forward.
+>
+> Patch 1=E2=80=933 introduce the infrastructure for TRIM_UNUSED_SYSCALL=
+S, mainly
+> allowing syscalltbl.sh to decide which syscalls to keep according to
+> USED_SYSCALLS.
+> Patch 4 enables TRIM_UNUSED_SYSCALLS for the RISC-V architecture. With
+> syscalltbl.sh now available, this feature should be applicable to all
+> architectures that support LD_DEAD_CODE_DATA_ELIMINATION and use
+> syscalltbl.sh, but let=E2=80=99s focus on RISC-V first.
+> Patch 5=E2=80=938 address the dependency inversion problem caused by s=
+ections
+> created with .pushsection that are forcibly retained by KEEP() in link=
+er
+> scripts.
 
-On Tue, 14 Oct 2025, David Laight wrote:
+Thanks a lot for your work on this. I think it is indeed valuable to
+be able to optimize kernels with a smaller subset of system calls for
+known workloads, and have as much dead code elimination as possible.
 
-> On Wed, 08 Oct 2025 09:19:20 +1100
-> Finn Thain <fthain@linux-m68k.org> wrote:
-> 
-> > Discourage assumptions that simply don't hold for all Linux ABIs.
-> > Exceptions to the natural alignment rule for scalar types include
-> > long long on i386 and sh.
-> > ---
-> >  Documentation/core-api/unaligned-memory-access.rst | 7 -------
-> >  1 file changed, 7 deletions(-)
-> > 
-> > diff --git a/Documentation/core-api/unaligned-memory-access.rst b/Documentation/core-api/unaligned-memory-access.rst
-> > index 5ceeb80eb539..1390ce2b7291 100644
-> > --- a/Documentation/core-api/unaligned-memory-access.rst
-> > +++ b/Documentation/core-api/unaligned-memory-access.rst
-> > @@ -40,9 +40,6 @@ The rule mentioned above forms what we refer to as natural alignment:
-> >  When accessing N bytes of memory, the base memory address must be evenly
-> >  divisible by N, i.e. addr % N == 0.
-> >  
-> > -When writing code, assume the target architecture has natural alignment
-> > -requirements.
-> 
-> I think I'd be more explicit, perhaps:
-> Note that not all architectures align 64bit items on 8 byte boundaries or
-> even 32bit items on 4 byte boundaries.
-> 
+However, I continue to think that the added scripting with a known
+set of syscall names is fundamentally the wrong approach to get to
+this list: This adds complexity to the build process in one of
+the areas that is already too complicated, and it duplicates what
+we can already do with Kconfig for a subset of the system calls.
 
-That's what the next para is alluding to...
+I think the way we should configure the set of syscalls instead is
+to add more Kconfig symbols guarded by CONFIG_EXPERT that turn
+classes of syscalls on or off. You have obviously done the research
+to come up with a list of used/unused entry points for one or more
+workloads. Can you share those lists?
 
-> > In reality, only a few architectures require natural alignment on all sizes
-> > of memory access. However, we must consider ALL supported architectures; 
-> > writing code that satisfies natural alignment requirements is the easiest way 
-> > to achieve full portability.
-
-How about this?
-
-"In reality, only a few architectures require natural alignment for all 
-sizes of memory access. That is, not all architectures need 64-bit values 
-to be aligned on 8-byte boundaries and 32-bit values on 4-byte boundaries. 
-However, when writing code intended to achieve full portability, we must 
-consider all supported architectures."
-
-> > @@ -103,10 +100,6 @@ Therefore, for standard structure types you can always rely on the compiler
-> >  to pad structures so that accesses to fields are suitably aligned (assuming
-> >  you do not cast the field to a type of different length).
-> >  
-> > -Similarly, you can also rely on the compiler to align variables and function
-> > -parameters to a naturally aligned scheme, based on the size of the type of
-> > -the variable.
-> > -
-> >  At this point, it should be clear that accessing a single byte (u8 or char)
-> >  will never cause an unaligned access, because all memory addresses are evenly
-> >  divisible by one.
-> 
-> 
+      Arnd
 
