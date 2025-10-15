@@ -1,236 +1,132 @@
-Return-Path: <linux-arch+bounces-14114-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14115-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02591BDCC43
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 08:40:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B44ABDD256
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 09:38:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFDE53AE390
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 06:40:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90B953B16D7
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Oct 2025 07:37:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327403128DA;
-	Wed, 15 Oct 2025 06:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D04C31329D;
+	Wed, 15 Oct 2025 07:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MqmgDj7S"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FC63128D7;
-	Wed, 15 Oct 2025 06:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73B0304BBA;
+	Wed, 15 Oct 2025 07:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760510432; cv=none; b=lRp+k6svewGohjP/r3p+SaJ2JJPFUue/8kTxgc5GoxBHV8U27GF5MwJhEqexEd+blvLpTc7Qbd8CQvQ8OxuClwJU4mRyhWgIQsiJp/uMGbDFEL/y/jl66TLRgQgx5YSWkP/uNVcpTKOsCUGocaWS99fL5yiY5ZXe6VDlD2UiZ9E=
+	t=1760513846; cv=none; b=ju6EqBgwG1IhddvFXEayJq90848Zseu1azkj76c9eDFENbm418EzFUBPFMMIkMYDxlnO65aCDdJhjT8eRm5yRHfuyQDS/ovE5LHZeyBu+7HBr4bDQtAojeSFK4hmvwN/i1aKD5Mj+ecPscMZSk6CD+vWhlf1qjQJ34ZO9L99SRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760510432; c=relaxed/simple;
-	bh=IYD1jN5WkZj4VgxNMFXq2HVKXVKvIXQ7z1epo6PKEZE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S77tWTcwAg65bcIytqpSJeoXBVlH0HruPTFJXwowV9NUGzsF02ieQWzkCntHi/Uw44CozGZesOslYM4Vq1Xt15OU+VeSLK3yoVoVO5w74JalsbO752cQxyYbrGYGxZPe3CtQ7h2ZmIFazrSE8/kKicPiWB+kPbqMTyTA21pawhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tinylab.org; spf=pass smtp.mailfrom=tinylab.org; arc=none smtp.client-ip=54.254.200.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tinylab.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tinylab.org
-X-QQ-mid: zesmtpgz1t1760510334tf939942d
-X-QQ-Originating-IP: od4bNRLOLfQkHFiv6vxwr/aDip+WTs/jGF3/NVLsJ6I=
-Received: from GPU-Server-A6000.. ( [202.201.1.132])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 15 Oct 2025 14:38:51 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7569591979002680664
-EX-QQ-RecipientCnt: 14
-From: Yuan Tan <tanyuan@tinylab.org>
-To: arnd@arndb.de,
-	masahiroy@kernel.org,
-	nathan@kernel.org,
-	palmer@dabbelt.com,
-	linux-kbuild@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Cc: linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	i@maskray.me,
-	tanyuan@tinylab.org,
-	falcon@tinylab.org,
-	ronbogo@outlook.com,
-	z1652074432@gmail.com,
-	lx24@stu.ynu.edu.cn
-Subject: [PATCH v2/resend 0/8] dce, riscv: Unused syscall trimming with PUSHSECTION and conditional KEEP()
-Date: Wed, 15 Oct 2025 14:38:43 +0800
-Message-ID: <30C972B6393DBAC5+cover.1760463245.git.tanyuan@tinylab.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1760463245.git.tanyuan@tinylab.org>
-References: <cover.1760463245.git.tanyuan@tinylab.org>
+	s=arc-20240116; t=1760513846; c=relaxed/simple;
+	bh=usd1O1gWSARVzS39vvkdNKA/0m34I6mskKXhBcUW4JE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cjTSi33AVhOeDBqS79Ku9N6IvAhEaoCVqUNWtPx68g8b6GVSstyoMp+NsMK9wA5F2f4xHw2+CHHyWUI51Q5kSIqeoqG1MvT6WKP7zmMaCrZcZeje/zAyaGCgh4+pm6f3iepR4iV13zOILDZUn3laTNvu+/1/dVeGfHHvAfzvoxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MqmgDj7S; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=K0Byfm25HAm+hkuPU/+MWl6Aww3n7DOCSkjI/zRPF4w=; b=MqmgDj7SwmG2m7iemtBBl9O0WI
+	ICtTPOLnsUcUEE4QyBZjiakIuKfaL+DI/SdBoajINUi8s4JFhUj8jouZ2qRnSmxvH8zv4QrAgQwJz
+	sOml5c8u2hWLB+BaJgIfH8xYKmDE847NLIBewcea/0pgau3GjKmrVc+9OzvXNxsSM/XoMk/dz3nRg
+	exDTpN2rGq5/7FPem/jALj6GOaYzvaUXXbxh0DYGbV0COAW1BETkq/VNK9VRhQESH23SGL/Im0QA3
+	aGidDeS4PVbzj8jqZEoaUBqx0iYkA5zpd+f52FuSEaKjF7v6HxMkp56PwgFA/7wBrC3VGjf5uXwY9
+	VQcd+Z4g==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v8w4D-0000000A8y5-3wOB;
+	Wed, 15 Oct 2025 07:37:03 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A4D59300325; Wed, 15 Oct 2025 09:37:01 +0200 (CEST)
+Date: Wed, 15 Oct 2025 09:37:01 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: nathan@kernel.org, Matt.Kelly2@boeing.com, akpm@linux-foundation.org,
+	andrew.j.oppelt@boeing.com, anton.ivanov@cambridgegreys.com,
+	ardb@kernel.org, arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
+	chuck.wolber@boeing.com, dave.hansen@linux.intel.com,
+	dvyukov@google.com, hpa@zytor.com, jinghao7@illinois.edu,
+	johannes@sipsolutions.net, jpoimboe@kernel.org,
+	justinstitt@google.com, kees@kernel.org, kent.overstreet@linux.dev,
+	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	llvm@lists.linux.dev, luto@kernel.org, marinov@illinois.edu,
+	masahiroy@kernel.org, maskray@google.com,
+	mathieu.desnoyers@efficios.com, matthew.l.weber3@boeing.com,
+	mhiramat@kernel.org, mingo@redhat.com, morbo@google.com,
+	ndesaulniers@google.com, oberpar@linux.ibm.com, paulmck@kernel.org,
+	richard@nod.at, rostedt@goodmis.org, samitolvanen@google.com,
+	samuel.sarkisian@boeing.com, steven.h.vanderleest@boeing.com,
+	tglx@linutronix.de, tingxur@illinois.edu, tyxu@illinois.edu,
+	wentaoz5@illinois.edu, x86@kernel.org
+Subject: Re: [RFC PATCH 0/4] Enable Clang's Source-based Code Coverage and
+ MC/DC for x86-64
+Message-ID: <20251015073701.GZ3419281@noisy.programming.kicks-ass.net>
+References: <20250829181007.GA468030@ax162>
+ <20251014232639.673260-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-QQ-XMAILINFO: MaCc72GaN9m8qL2E+p+VxAnDC9Emg9BFN0S9WtO8VtB6w16H8sjM/mBD
-	SLVT3pdHgymGpo4+rjPRwQgIfNWX90LospHz9yrGx36hiPDNh7qiok84cYPcs+UrLCeRCRJ
-	Sgus7rCiAXVY/K94LAle50NQYZEike+Msx9CTR7bOXBm4XaLvSk7DZJqpVxBSLSi0sPOFOa
-	+RJHmxNfE+4vNjzT/LsXi6xOfCzCqPkn9vU+Eu9C3MWEIQslQY1jfMeJWo3bXwWr9DYUeVd
-	KA7BBCTARhSItCZYDfzBxqNyHS898n7ZKFh9KcHnsNsY2HAdeEDftcL56I8qSMNO/um6V0/
-	ecZMSZnE0sDM1UA0rJF4jietbTh2jQgeg0wAMva5eyXtSQsapAElScaQ6VqLdyj2zg0Mhpb
-	VezmPBl+IV/Jn7SChGHtSm8qpfO5dRXRB4SuveYqv7UTykurrik2zd++RW7gz3zJv68qo80
-	NTvn7g65faBHXtufhBySENulVMYqAE8+FxUcHSxEQDb9KxaOQq5zcOPWYq4sRkys6ZgwI+E
-	xrFwnIXS3AEMdBMj++oOReeoKqdFhcIso0pAciedYonpEqxWT/+igKudJto56iSgCIbps7E
-	vsZCQwhjo1wdg+kJUUWx1o/hP8G7YmB/HLwcPMP9tut/IW7RRegwdALdjID0k08BPh9YLaL
-	3NH9BpA4S0HqpuqBVeAUCyvN9rEDhduCChXSt7AjdZL/hjuAN9Bw2G0YuZ10DjrKAyVmiVU
-	vJGGRqmJKw2yWN8tYYEcGnYg2/rxDLoQUTRXl4twECbrOzo4SC9SOaBhO7OKGk+XqEeq40U
-	G2qmQIbuJjDErPIZMHvcvinkQhLshH0C9kqMrAOLacOYBagzOFiZ3eq/ws+458wt5YeJC7v
-	dcSVKhpOYYFxn0s3KtUaQeB7piiR4nZgju2ixHFn5lEJhvgW0Kt/5f6nViQyssKzfQCRwpn
-	BM3v18yHt9svFvGCDdEvUL7wDTFee9jxlHWOyOipi6FpZW5148KrtQ/Qx/OYsQVco/PAAeW
-	p10lrBN3/bS3EzpVdOiQAS8KxtHd8=
-X-QQ-XMRINFO: Mgo7HCA7/T7wHQuXcPxwuSA=
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251014232639.673260-1-sashal@kernel.org>
 
-Hi all,
+On Tue, Oct 14, 2025 at 07:26:35PM -0400, Sasha Levin wrote:
+> This series adds support for Clang's Source-based Code Coverage to the
+> Linux kernel, enabling more accurate coverage measurement at the source
+> level compared to gcov. This is particularly valuable for safety-critical
+> use cases (automotive, medical, aerospace) where MC/DC coverage is required
+> for certification.
+> 
+> Changes since previous patchset [1]:
+> - Rebased on v6.18-rc1
+> - Adapted to lib/crypto reorganization (curve25519 exclusion moved to
+>   lib/crypto/Makefile)
+> - Minor correctness fixes throughout the codebase
+> 
+> The implementation has been tested with a kernel build using Clang 18+ and
+> boots successfully in a KVM environment with instrumentation enabled.
+> 
+> [1] https://lore.kernel.org/all/20240905043245.1389509-1-wentaoz5@illinois.edu/
+> 
+> Wentao Zhang (4):
+>   llvm-cov: add Clang's Source-based Code Coverage support
+>   llvm-cov: add Clang's MC/DC support
+>   x86: disable llvm-cov instrumentation
+>   x86: enable llvm-cov support
+> 
+>  Makefile                          |   9 ++
+>  arch/Kconfig                      |   1 +
+>  arch/x86/Kconfig                  |   2 +
+>  arch/x86/crypto/Makefile          |   1 +
+>  arch/x86/kernel/vmlinux.lds.S     |   2 +
+>  include/asm-generic/vmlinux.lds.h |  36 +++++
+>  kernel/Makefile                   |   1 +
+>  kernel/llvm-cov/Kconfig           | 121 ++++++++++++++
+>  kernel/llvm-cov/Makefile          |   8 +
+>  kernel/llvm-cov/fs.c              | 253 ++++++++++++++++++++++++++++++
+>  kernel/llvm-cov/llvm-cov.h        | 157 ++++++++++++++++++
+>  lib/crypto/Makefile               |   3 +-
+>  scripts/Makefile.lib              |  23 +++
+>  scripts/mod/modpost.c             |   2 +
 
-Sorry for the noise — it looks like my mail provider rewrote the Message-ID
-of the cover letter, which broke the thread. I'm resending the cover letter
-to make the series appear correctly threaded on lore.
+I'm thinking I'm going to NAK this based on the fact that I'm not
+interested in playing file based games. As long as this thing doesn't
+honour noinstr I don't want this near x86.
 
-This series aims to introduce syscall trimming support based on dead code
-and data elimination (DCE). This can reduce the final image size, which is
-particularly useful for embedded devices, while also reducing the attack
-surface. It might further benefit specialized scenarios such as unikernels
-or LTO builds, and could potentially help shrink the instruction cache
-footprint.
-
-Besides that, this series also introduces a new PUSHSECTION macro. This
-wrapper allows sections created by .pushsection to have a proper reference
-relationship with their callers, so that --gc-sections can safely work
-without requiring unconditional KEEP() entries in linker scripts.
-
-Since the new syscalltbl.sh infrastructure has been merged, I think it’s a
-good time to push this patchsetTODO? forward.
-
-Patch 1–3 introduce the infrastructure for TRIM_UNUSED_SYSCALLS, mainly
-allowing syscalltbl.sh to decide which syscalls to keep according to
-USED_SYSCALLS.
-Patch 4 enables TRIM_UNUSED_SYSCALLS for the RISC-V architecture. With
-syscalltbl.sh now available, this feature should be applicable to all
-architectures that support LD_DEAD_CODE_DATA_ELIMINATION and use
-syscalltbl.sh, but let’s focus on RISC-V first.
-Patch 5–8 address the dependency inversion problem caused by sections
-created with .pushsection that are forcibly retained by KEEP() in linker
-scripts.
-
-Here is an example to illustrate the problem:
-
-void fun2(void);
-
-void fun1(void) {
-	asm volatile (
-		".pushsection .text.pushed,\"ax\"\n\t" "call fun2\n\t"
-		".popsection\n\t"
-	);
-}
-
-If fun1() is used, .text.fun1 is kept alive, but .text.pushed has no
-reference to .text.fun1, so --gc-sections may incorrectly discard
-.text.pushed. To avoid this, the kernel traditionally wraps such sections
-with KEEP() in the linker script. However, KEEP() introduces a dependency
-inversion: if fun1() and fun2() are unused, .text.fun1, .text.fun2 and
-.text.pushed should be removed, but KEEP() forces .text.pushed to stay,
-which even keeps .text.fun2. As a result, sections that should be
-eliminated are retained unnecessarily.
-
-In Linux, sections such as ex_table, jump_table, bug_table, and alternative
-are created by .pushsection and suffer from this issue. They prevent some
-syscalls from being trimmed.
-
-Ideally, .text.fun1 and .text.pushed should share the same fate: if fun1()
-is not referenced, .text.pushed should be discarded as well. To achieve
-this, we can establish a relocation with a directive between the caller and
-the section created by .pushsection:
-
-.section .text.fun1,"ax"
-.reloc ., BFD_RELOC_NONE, pushedlabel
-.pushsection .text.pushed,"ax" pushedlabel:
-	call fun2
-.popsection
-
-Based on this idea, we introduce the PUSHSECTION macro. This macro emits a
-relocation directive and a new label automatically, while remaining fully
-compatible with all existing .pushsection parameters. With this macro, all
-current uses of .pushsection (and even .section) in the kernel can be
-replaced, significantly reducing the number of KEEP() in linker scripts and
-enabling --gc-sections to work more effectively.
-
-Without PUSHSECTION, there are 56 syscalls that cannot be trimmed in
-defconfig and TRIM_UNUSED_SYSCALLS enabled. With PUSHSECTION, all syscalls
-can now be properly trimmed.
-
-We have tested enabling TRIM_UNUSED_SYSCALLS while keeping all syscalls
-listed in USED_SYSCALLS and successfully booted Ubuntu on a configuration
-based on v6.18-rc1 defconfig. The detailed configuration is provided in
-[1]. This confirms that the trimming mechanism functions correctly under a
-standard kernel setup.
-
-The vmlinux size with tinyconfig is as follows:
-
-|                                 | syscall remain | vmlinux size   | vmlinux after strip |
-| ------------------------------- | -------------- | -------------- | ------------------- |
-| enable DCE                      | 188            | 1437008        | 915160              |
-| enable DCE and syscall trimming | 3              | 1263528 (-12%) | 800472 (-13%)       |
-
-
-Changes in v2:
-- Rebased on the unified syscalltbl.sh infrastructure for syscall trimming.
-USED_SYSCALLS now accepts only syscall names to avoid confusion, whereas v1
-also allowed entry point symbols.
-- Uses the .reloc directive to establish dependencies.
-Compared with previous proposals using SHF_LINK_ORDER or SHF_GROUP, this
-approach provides a generic, parameter-compatible macro for all
-.pushsection usages without side effects.
-
-
-Previous versions:
-- RFC: https://lore.kernel.org/lkml/cover.1676594211.git.falcon@tinylab.org/
-- v1 part 1: https://lore.kernel.org/lkml/cover.1695679700.git.falcon@tinylab.org/
-- v1 part 2: https://lore.kernel.org/lkml/cover.1699025537.git.tanyuan@tinylab.org/
-
-Links:
-[1] https://pastebin.com/St51bk2K
-
-
-Yuan Tan (4):
-  kconfig: add CONFIG_PUSHSECTION_WITH_RELOC for relocation support
-  compiler.h: introduce PUSHSECTION macro to establish proper references
-  vmlinux.lds.h: support conditional KEEP() in linker script
-  riscv: use PUSHSECTION in ex_table, jump_table, bug_table and
-    alternatives
-
-Yuhang Zheng (4):
-  init/Kconfig: add CONFIG_TRIM_UNUSED_SYSCALLS and related options
-  scripts/syscalltbl.sh: add optional --used-syscalls argument for
-    syscall trimming
-  scripts/Makefile.asm-headers: pass USED_SYSCALLS to syscalltbl.sh
-  riscv: enable HAVE_TRIM_UNUSED_SYSCALLS when toolchain supports DCE
-
- arch/riscv/Kconfig                          |  1 +
- arch/riscv/include/asm/alternative-macros.h |  8 ++--
- arch/riscv/include/asm/asm-extable.h        | 10 +++--
- arch/riscv/include/asm/bug.h                |  2 +-
- arch/riscv/include/asm/jump_label.h         |  3 +-
- arch/riscv/kernel/vmlinux.lds.S             |  9 +++-
- include/asm-generic/vmlinux.lds.h           | 12 ++++-
- include/linux/compiler.h                    | 43 +++++++++++++++++-
- include/linux/compiler_types.h              |  8 ++--
- init/Kconfig                                | 49 +++++++++++++++++++++
- scripts/Makefile.asm-headers                |  4 ++
- scripts/syscalltbl.sh                       | 19 +++++++-
- 12 files changed, 150 insertions(+), 18 deletions(-)
-
-
-base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-prerequisite-patch-id: 7af3175326df94637f04a050dee7356416eb1edd
--- 
-2.43.0
-
+And we have kcov support, and gcov and now llvm-cov, surely 3 coverage
+solutions is like 2 too many?
 
