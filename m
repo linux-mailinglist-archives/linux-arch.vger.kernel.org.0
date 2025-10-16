@@ -1,283 +1,194 @@
-Return-Path: <linux-arch+bounces-14159-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14160-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00750BE20ED
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Oct 2025 09:59:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 293CCBE226E
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Oct 2025 10:30:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D1CCC4E1743
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Oct 2025 07:59:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2F003B9A43
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Oct 2025 08:30:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE0A82FDC30;
-	Thu, 16 Oct 2025 07:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E332130649C;
+	Thu, 16 Oct 2025 08:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Dnh00I6k";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JYFqVQPa"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="NUet8qN5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370A027732;
-	Thu, 16 Oct 2025 07:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF557304BDF
+	for <linux-arch@vger.kernel.org>; Thu, 16 Oct 2025 08:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760601589; cv=none; b=slpZ+gfzyyLb2AUx5qVArKvEVvCa1U6SrU2u2i0L45nYs7wsIywHQyT8ft1C4JnJWd7uzSBdnpMc+wh+allQ6p7+bbBtsA663oPauGWy6nBrWB0+AdHFqsqapUHVeihlnt5I8lBLYF1OOFXLu9O8Ks5AW1o4GQ8tHac4/NdDNPQ=
+	t=1760603403; cv=none; b=D2cmjyZAnJJALdrKqLspQ/8po0aveT4ivDvZj5MSmhu4aUoziV40G7fWmkQP3iJ0a9ONfhNbFJTm+S/Q9AnFV9jsCTUHGMVToUjyLH4g3TkkVp9fAMcOQV5V+EkJzHeN25fnwu0xwovLHSiBB581NG73bUg1DhwRoxBYVmuetsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760601589; c=relaxed/simple;
-	bh=GLELI6edHgJ4rLrCFdN0EgSviGgY+6eg489je3IK53g=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=h4bqVzh3AO1yK/wfZBraJTYpHIyteQ2I4rnPGdAbRfX4TtbxDdocpYoVrMiid91e15IF8Im4Ps2jTJ1s0G8h6hCxovG4idJLAhSiPaWKPjj3JyeTgmiOZyEzRRatnIFkM4XFrcvw7WGpgxnx3KkIMYmLYgroTaZxa7gW4rGzpys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Dnh00I6k; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JYFqVQPa; arc=none smtp.client-ip=202.12.124.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 15FA6130062E;
-	Thu, 16 Oct 2025 03:59:45 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 16 Oct 2025 03:59:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1760601584;
-	 x=1760608784; bh=gsmN9Z3FJYObp60BofhTavDFXwdg3R8bCLb5lDfrp7M=; b=
-	Dnh00I6kWVC+90tFamluJ46nm3D90eaqL0not1NLL0Cr+oHq1AUstzTsjXEufvBI
-	NKe2r19Up1jt5g2erE0H9NZzSUsEwNbMW9FRXnxndtl3Lli4e2zbiP0AQv1EWoOD
-	olKL334NBGt24dzX/MGdzVyc7CvR8cP0CZikzEQeB5ajsFcZR3snfokqT0SNLjBO
-	KTPxZAhrqo6BPtJCpjGWLSnlXTYCQlH+qpbeHtMOz2u7RuDiBigtm6UIaOCo9AZ5
-	rsR+zdgIPqAkCD3+fH5VfVEIVTZx+XlTE+gfyauocMOCekgftjlVYi3Qc+/iOsIw
-	Qrtnbjr1vmobuL1Cb/1eDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1760601584; x=
-	1760608784; bh=gsmN9Z3FJYObp60BofhTavDFXwdg3R8bCLb5lDfrp7M=; b=J
-	YFqVQPaF5TLM1U/Tn8/wz8rwBmZ3Rf1ciGLzKTV0RIzWA0trjMl+PvprizsQ3eQx
-	EmPoEloHqDhEqFeYQuqcuMa0UihOKKujcw6Kag1LPuJ6awioecbMKklIRPpGGAlm
-	Z/XOeWlGUtgS5sRTc+lPbYDU0CdkOqx8Mc1eRY6nuSDcNzys7BHhzsn2t1sDcNU4
-	s/KclAErUxhVtaxcUjiDz67VQvQAuHap+gGqt3m6rIeRFfw1L65ihkmbxdYKh8B/
-	A12xotHVXjZNTjw7HqOm5H6wDv6FzSAJc3okjrV5tnNyS7Sc1j8LjXcSGLveRDC/
-	PUWvipCNKFttJGawk5P+g==
-X-ME-Sender: <xms:7aXwaCh0KeFEB9Lz8Gt7Nxq4e_TdQu0NcmZkqq0Skmu5qnLvZHdcYQ>
-    <xme:7aXwaN04cb3r_2ZICkRKRvQcS_SYVxXNnyB4RdbSZQfatj2ru8zRQTnJH2uBIAxyl
-    BuhkOqSjhlQVJqi6DkrLV_Emt-lXcmIkxJKv5nYlLFDx3xU0UyzfQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduvdehjeehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgeelpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegurhhiqdguvghvvghlsehlihhsthhsrdhfrhgvvgguvghskhhtoh
-    hprdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhs
-    rdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhgrrhhoqdhmmhdqshhigh
-    eslhhishhtshdrlhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqrhhtqdgu
-    vghvvghlsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheptghorhgsvghtse
-    hlfihnrdhnvghtpdhrtghpthhtohepthihthhsohesmhhithdrvgguuhdprhgtphhtthho
-    pehjohgvlhgrghhnvghlfhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepiihihiesnh
-    hvihguihgrrdgtohhmpdhrtghpthhtohepuggrmhhivghnrdhlvghmohgrlhesohhpvghn
-    shhouhhrtggvrdifuggtrdgtohhm
-X-ME-Proxy: <xmx:7qXwaF73EL6Wx1oi645Jpe2lS5LjUOa0e0we3mKVQTSE3p0t5WtlcQ>
-    <xmx:7qXwaF_SZMGZDLyxSroOVGRtH_rQbTm8j5j-1WoqVCGKOxiqi37MRw>
-    <xmx:7qXwaKgQnzHzqlVSGnHM9v5A-eHyieFGElZzCzacMtdBaIymwbCU0g>
-    <xmx:7qXwaBlI2bpTfBZIpc_5FEL5K34_sy966F03LOitDOOWHQPhpIbuUQ>
-    <xmx:8KXwaBm8mD5l3EECvoNK0awzSPWIFuIwr0vxYRb-zAKqRTZQhRxc6xx7>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C2CC7700063; Thu, 16 Oct 2025 03:59:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1760603403; c=relaxed/simple;
+	bh=k42KT1WkRBHWgkIIkqFIrWGAaoELe9bfpMASrrF8Y1A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jZO+yT6fB4z+x0txxrNwsIKxYF8ljTHuU5SxA9BhBJrZCpqbo73K/87RxrTnoY9NV91ydm1Z/YszfiipqnTQZ3HTGTqzv+KLitus+AMyRDpikfJLvZwwBS+V9dK2KbWsz7FBUmJDuFJR2o6flv8CaYrw1DIsmiSooYVodeHXtMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=NUet8qN5; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6399328ff1fso839142a12.0
+        for <linux-arch@vger.kernel.org>; Thu, 16 Oct 2025 01:30:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1760603400; x=1761208200; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3dZ3zNJcojA/sJlGgESgs39Z0uRLTeXYPBFHIy0pECs=;
+        b=NUet8qN5qrIYpFMgTvxdLdaHAI3OmmhKtR6iYJUENg83HZukG96jRvxXWHpp7fsboa
+         duwILzd8rnxNUv4SU1zkws1Ubu68LmBtvJ+js4M1KWNXYmXN4aZxH2Hys3d17hGSe8QI
+         fncCtCpiimHCjHeGzhXiAOSFDhnHHLWQtz/cWbkzUdC9W4vDRsHwMC3Dw8GDvWA9phj5
+         anl4TlmUvZnmvsY76VWE395cAdPlRewMgJWu6C1ceDKOlrJs9dDkmHWFSYaXPULnwFFO
+         5bRjd9HJH8BvZ0JVkePiRFYyX8WskpSp4KqCDBErpH+sybEokKD8wbI66Po4KnAM0OsG
+         EIwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760603400; x=1761208200;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3dZ3zNJcojA/sJlGgESgs39Z0uRLTeXYPBFHIy0pECs=;
+        b=Re9GPD+Lx8TY6teDN0pKOItvPH3V5/gnLnWzJ1Qyva7z8IYxFd/RaFjY85zF+FOUWb
+         MR6znN9SYyS/EtlaVI+K01zhbXpmq8wFa/RseQYGR4ohgjV6V9TttplIwfDcIUPeiP/m
+         47apaZ8pLo7WoeUVIHaFKmGp6zw/Y8tdhOmE2EtNoRTFX/ZBHijB2O76Xbe71Vh9O9z+
+         LjSscFspgjMMauPtPW5WvCLN6MrhvbIKtIInS2xdonHDZhzaIyypPd5JVqjd3UGP60y4
+         gDARiJL+4G3HXYXBSaJivfN8GEUeuu0Bh3bbott7+loI+YLhoc/Arn4TU3Rinfs7qOf2
+         KDHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVTk5k4w31iPiEa2nWfIH1gTA2ddDPXJzJXKDv2X0xe0pEo28SFVkMCCz9D+fAsylZFzXMOB2hA7LKq@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPTnIc0FT3LZmMGAuD+T2rtTuOYbz88DOKJAhR1Eg5GPAJfOmq
+	X6LVRyfxaKtlep1B5MvomERLw55XxMWWBottN5nnVPoyRgnGiP5VXcHlkqSAyQFqcY80DL+H7xr
+	hKSAQKO4s2HsJmXaNrMAaJ39osZlfzEzkq/IqyFvbeQ==
+X-Gm-Gg: ASbGncstEmJUGtXLuOyFJdB54eOxmzcPPJIOH6b2JZ124opvtH8bwzSq3wtbAsNdQFC
+	IVCfzoMmwQxJHhMqv4fnJraFNAePkOIIPJyXjr/KrpkAXuqeQNMRcJ5zU+5vJ+FoQy5mSriUcqD
+	AkNktGK+RMde7TAzvix4de5Zjg1eEEW+NwxEQ50tdpyGHHQ5kHfFHtdOPriF6uh4+v+KibguVrb
+	Ofo2YoJq+cyJcrRZSVpeqk//MMgNKpM68jT/SSPNQ4uPXOhjRHMrb+id8ZKDWh6DAHEMT6c2w==
+X-Google-Smtp-Source: AGHT+IGyB7jwp1R/sb2SSrLIrlHDUB3Rfhzku7rZfdn97lwiX7fw79YoDZXn2zqSu6ScM4J5e0VHXW4a+hMbV7/+6J0=
+X-Received: by 2002:a05:6402:35d2:b0:63b:dff7:8956 with SMTP id
+ 4fb4d7f45d1cf-63bdff78c26mr7390999a12.7.1760603400109; Thu, 16 Oct 2025
+ 01:30:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Aghr8S2aY07B
-Date: Thu, 16 Oct 2025 09:59:11 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Byungchul Park" <byungchul@sk.com>
-Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
- "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
- linux-ide@vger.kernel.org, "Andreas Dilger" <adilger.kernel@dilger.ca>,
- linux-ext4@vger.kernel.org, "Ingo Molnar" <mingo@redhat.com>,
- "Peter Zijlstra" <peterz@infradead.org>, "Will Deacon" <will@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Joel Fernandes" <joel@joelfernandes.org>,
- "Sasha Levin" <sashal@kernel.org>,
- "Daniel Vetter" <daniel.vetter@ffwll.ch>, duyuyang@gmail.com,
- "Johannes Berg" <johannes.berg@intel.com>, "Tejun Heo" <tj@kernel.org>,
- "Theodore Ts'o" <tytso@mit.edu>, "Matthew Wilcox" <willy@infradead.org>,
- "Dave Chinner" <david@fromorbit.com>,
- "Amir Goldstein" <amir73il@gmail.com>, kernel-team@lge.com,
- linux-mm@kvack.org, "Andrew Morton" <akpm@linux-foundation.org>,
- "Michal Hocko" <mhocko@kernel.org>, "Minchan Kim" <minchan@kernel.org>,
- "Johannes Weiner" <hannes@cmpxchg.org>, vdavydov.dev@gmail.com,
- "SeongJae Park" <sj@kernel.org>, jglisse@redhat.com,
- "Dennis Zhou" <dennis@kernel.org>, "Christoph Lameter" <cl@linux.com>,
- "Pekka Enberg" <penberg@kernel.org>,
- "David Rientjes" <rientjes@google.com>,
- "Vlastimil Babka" <vbabka@suse.cz>, ngupta@vflare.org,
- linux-block@vger.kernel.org, "Josef Bacik" <josef@toxicpanda.com>,
- linux-fsdevel@vger.kernel.org, "Jan Kara" <jack@suse.cz>,
- "Jeff Layton" <jlayton@kernel.org>,
- "Dan Williams" <dan.j.williams@intel.com>,
- "Christoph Hellwig" <hch@infradead.org>,
- "Darrick J. Wong" <djwong@kernel.org>, dri-devel@lists.freedesktop.org,
- rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
- hamohammed.sa@gmail.com, harry.yoo@oracle.com, chris.p.wilson@intel.com,
- "Gwan-gyeong Mun" <gwan-gyeong.mun@intel.com>,
- max.byungchul.park@gmail.com, "Boqun Feng" <boqun.feng@gmail.com>,
- "Waiman Long" <longman@redhat.com>, yunseong.kim@ericsson.com,
- ysk@kzalloc.com, "Yeoreum Yun" <yeoreum.yun@arm.com>,
- Netdev <netdev@vger.kernel.org>,
- "Matthew Brost" <matthew.brost@intel.com>, her0gyugyu@gmail.com,
- "Jonathan Corbet" <corbet@lwn.net>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>,
- "Sumit Semwal" <sumit.semwal@linaro.org>, gustavo@padovan.org,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Andi Shyti" <andi.shyti@kernel.org>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Mike Rapoport" <rppt@kernel.org>,
- "Suren Baghdasaryan" <surenb@google.com>,
- "Luis Chamberlain" <mcgrof@kernel.org>,
- "Petr Pavlu" <petr.pavlu@suse.com>, da.gomez@kernel.org,
- "Sami Tolvanen" <samitolvanen@google.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- "Frederic Weisbecker" <frederic@kernel.org>, neeraj.upadhyay@kernel.org,
- joelagnelf@nvidia.com, "Josh Triplett" <josh@joshtriplett.org>,
- "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
- "Lai Jiangshan" <jiangshanlai@gmail.com>, qiang.zhang@linux.dev,
- "Juri Lelli" <juri.lelli@redhat.com>,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
- "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
- "Valentin Schneider" <vschneid@redhat.com>,
- "Chuck Lever" <chuck.lever@oracle.com>, neil@brown.name,
- okorniev@redhat.com, "Dai Ngo" <Dai.Ngo@oracle.com>,
- "Tom Talpey" <tom@talpey.com>, trondmy@kernel.org,
- "Anna Schumaker" <anna@kernel.org>, "Kees Cook" <kees@kernel.org>,
- "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
- "Clark Williams" <clrkwllms@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, ada.coupriediaz@arm.com,
- kristina.martsenko@arm.com, "Kefeng Wang" <wangkefeng.wang@huawei.com>,
- "Mark Brown" <broonie@kernel.org>,
- "Kevin Brodsky" <kevin.brodsky@arm.com>,
- "David Woodhouse" <dwmw@amazon.co.uk>,
- "Shakeel Butt" <shakeel.butt@linux.dev>,
- "Alexei Starovoitov" <ast@kernel.org>, "Zi Yan" <ziy@nvidia.com>,
- "Yu Zhao" <yuzhao@google.com>,
- "Baolin Wang" <baolin.wang@linux.alibaba.com>, usamaarif642@gmail.com,
- joel.granados@kernel.org, "Wei Yang" <richard.weiyang@gmail.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>,
- tim.c.chen@linux.intel.com, linux <linux@treblig.org>,
- "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
- lillian@star-ark.net, "Huacai Chen" <chenhuacai@kernel.org>,
- francesco@valla.it, guoweikang.kernel@gmail.com, link@vivo.com,
- "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Christian Brauner" <brauner@kernel.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- "Oleg Nesterov" <oleg@redhat.com>, "Mateusz Guzik" <mjguzik@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, wangfushuai@baidu.com,
- linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
- linux-i2c@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-modules@vger.kernel.org, rcu <rcu@vger.kernel.org>,
- linux-nfs@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Message-Id: <6241800d-9456-4d5f-b55d-611e33f2c446@app.fastmail.com>
-In-Reply-To: <20251016004640.GB2948@system.software.com>
-References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-2-byungchul@sk.com>
- <2025100230-grafted-alias-22a2@gregkh>
- <63034035-03e4-4184-afce-7e1a897a90e9@efficios.com>
- <3bbe14af-ccdc-4c78-a7ca-d4ed39fa6b5d@app.fastmail.com>
- <20251016004640.GB2948@system.software.com>
-Subject: Re: [PATCH v17 01/47] llist: move llist_{head,node} definition to types.h
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20251015-v5_user_cfi_series-v21-0-6a07856e90e7@rivosinc.com> <20251015-v5_user_cfi_series-v21-25-6a07856e90e7@rivosinc.com>
+In-Reply-To: <20251015-v5_user_cfi_series-v21-25-6a07856e90e7@rivosinc.com>
+From: Zong Li <zong.li@sifive.com>
+Date: Thu, 16 Oct 2025 16:29:48 +0800
+X-Gm-Features: AS18NWC3gX9SfykK7BeQoaaUJU9Tso-y_BcITA4tZMgogw7A7IijvQhu4Ma2nRQ
+Message-ID: <CANXhq0qHT=nnwG3SX3s_D3G2QqKGmQBbdzFwiQ5MMkimxCHJHQ@mail.gmail.com>
+Subject: Re: [PATCH v21 25/28] riscv: create a config for shadow stack and
+ landing pad instr support
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 16, 2025, at 02:46, Byungchul Park wrote:
-> On Fri, Oct 03, 2025 at 01:19:33AM +0200, Arnd Bergmann wrote:
->> On Thu, Oct 2, 2025, at 15:53, Mathieu Desnoyers wrote:
->> > On 2025-10-02 04:24, Greg KH wrote:
->> >> On Thu, Oct 02, 2025 at 05:12:01PM +0900, Byungchul Park wrote:
-
->> Maybe a shared linux/list_types.h would work, to specifically
+On Thu, Oct 16, 2025 at 2:14=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> w=
+rote:
 >
-> I found a way to resolve my issue, but I thought it's good idea
-> regardless of my issue and took a quick look.  However, it seems like
-> there's an overwhelming amount of work since it might require to replace
-> all the existing include <linux/types.h> for use of list things with the
-> new one :-).
+> This patch creates a config for shadow stack support and landing pad inst=
+r
+> support. Shadow stack support and landing instr support can be enabled by
+> selecting `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wire=
+s
+> up path to enumerate CPU support and if cpu support exists, kernel will
+> support cpu assisted user mode cfi.
+>
+> If CONFIG_RISCV_USER_CFI is selected, select `ARCH_USES_HIGH_VMA_FLAGS`,
+> `ARCH_HAS_USER_SHADOW_STACK` and DYNAMIC_SIGFRAME for riscv.
+>
+> Reviewed-by: Zong Li <zong.li@sifive.com>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  arch/riscv/Kconfig                  | 21 +++++++++++++++++++++
+>  arch/riscv/configs/hardening.config |  4 ++++
+>  2 files changed, 25 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 0c6038dc5dfd..aed033e2b526 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -1146,6 +1146,27 @@ config RANDOMIZE_BASE
+>
+>            If unsure, say N.
+>
+> +config RISCV_USER_CFI
+> +       def_bool y
+> +       bool "riscv userspace control flow integrity"
+> +       depends on 64BIT && $(cc-option,-mabi=3Dlp64 -march=3Drv64ima_zic=
+fiss)
+> +       depends on RISCV_ALTERNATIVE
+> +       select RISCV_SBI
+> +       select ARCH_HAS_USER_SHADOW_STACK
+> +       select ARCH_USES_HIGH_VMA_FLAGS
+> +       select DYNAMIC_SIGFRAME
+> +       help
+> +         Provides CPU assisted control flow integrity to userspace tasks=
+.
+> +         Control flow integrity is provided by implementing shadow stack=
+ for
+> +         backward edge and indirect branch tracking for forward edge in =
+program.
+> +         Shadow stack protection is a hardware feature that detects func=
+tion
+> +         return address corruption. This helps mitigate ROP attacks.
+> +         Indirect branch tracking enforces that all indirect branches mu=
+st land
+> +         on a landing pad instruction else CPU will fault. This mitigate=
+s against
+> +         JOP / COP attacks. Applications must be enabled to use it, and =
+old user-
+> +         space does not get protection "for free".
+> +         default n.
 
-I don't think it's that bad, since almost every header ends up
-including linux/list.h indirectly at the moment.
+Maybe it is default 'y' instead of 'n'
 
-A little bit of scripting to find the headers that reference
-'struct list_head' but don't also include linux/list.h reveals
-this relatively short set that would need to include the new
-header:
-
-> include/keys/asymmetric-parser.h
-> include/linux/dynamic_debug.h
-> include/linux/genalloc.h
-> include/linux/gpio/machine.h
-> include/linux/hiddev.h
-> include/linux/iio/iio-opaque.h
-> include/linux/iio/sysfs.h
-> include/linux/input/touch-overlay.h
-> include/linux/irq_poll.h
-> include/linux/iscsi_boot_sysfs.h
-> include/linux/kcore.h
-> include/linux/kcsan-checks.h
-> include/linux/kcsan.h
-> include/linux/lockdep_types.h
-> include/linux/logic_pio.h
-> include/linux/maple.h
-> include/linux/mfd/iqs62x.h
-> include/linux/mlx5/macsec.h
-> include/linux/mount.h
-> include/linux/mtd/map.h
-> include/linux/mtd/nand-qpic-common.h
-> include/linux/mtd/partitions.h
-> include/linux/mutex_types.h
-> include/linux/nfs_fs_i.h
-> include/linux/of_iommu.h
-> include/linux/parport_pc.h
-> include/linux/pinctrl/pinctrl.h
-> include/linux/plist_types.h
-> include/linux/pm_wakeup.h
-> include/linux/reboot-mode.h
-> include/linux/shm.h
-> include/linux/smpboot.h
-> include/linux/sunrpc/xprtmultipath.h
-> include/linux/usb/audio.h
-> include/linux/workqueue_types.h
-> include/linux/zpool.h
-> include/net/bluetooth/hci_sync.h
-> include/net/bluetooth/l2cap.h
-> include/net/bluetooth/rfcomm.h
-> include/net/dcbnl.h
-> include/sound/i2c.h
-> include/sound/soc-jack.h
-> include/target/iscsi/iscsi_transport.h
-> include/video/udlfb.h
-
-A lot of these don't have any #include statements at all,
-which indicates that they expect to only be included in
-places where the dependencies are already visible.
-
-      Arnd
+> +
+>  endmenu # "Kernel features"
+>
+>  menu "Boot options"
+> diff --git a/arch/riscv/configs/hardening.config b/arch/riscv/configs/har=
+dening.config
+> new file mode 100644
+> index 000000000000..089f4cee82f4
+> --- /dev/null
+> +++ b/arch/riscv/configs/hardening.config
+> @@ -0,0 +1,4 @@
+> +# RISCV specific kernel hardening options
+> +
+> +# Enable control flow integrity support for usermode.
+> +CONFIG_RISCV_USER_CFI=3Dy
+>
+> --
+> 2.43.0
+>
 
