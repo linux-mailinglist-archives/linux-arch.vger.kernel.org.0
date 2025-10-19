@@ -1,142 +1,123 @@
-Return-Path: <linux-arch+bounces-14192-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14193-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C9C1BEDF32
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Oct 2025 08:50:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 593EEBEE04F
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Oct 2025 10:11:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C6E9D4E2383
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Oct 2025 06:50:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35D153B7193
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Oct 2025 08:11:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 523C221A95D;
-	Sun, 19 Oct 2025 06:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA2622FE11;
+	Sun, 19 Oct 2025 08:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cl0KoSN2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ccTdEhIo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2865178372;
-	Sun, 19 Oct 2025 06:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC0322541C
+	for <linux-arch@vger.kernel.org>; Sun, 19 Oct 2025 08:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760856631; cv=none; b=K/78XNAKiDzDOooJcNp6Eu7AipUYBG1kPLI8N/p5Cza3u1FLaw2JLMT5Zo8BYIUgv2wrfJXIekPQJ4MKhqrHKYxeHu2n5PKjQi/v1gR9tQPp1p0HCXWMQh93jRWQwhafmjrxGk3HtW7t1K2WNNouBp355Vl+DkRC1mW8enY/ZJE=
+	t=1760861464; cv=none; b=ptKmpeeDuE8q4YtjoBZLvr6dcKrHA4LevQhgScsY+UFGIYzXWIwyeDRIFOVbBxS39Xb98LGPaOFNVfiDS1vSVMtN3kOPPLHIgNtjApgptIysMqtoWfAmQ3vcsqJOPErnafOiC14cYapBcyYYQGrxf1m+rf1ASF9QY6baeJNjPkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760856631; c=relaxed/simple;
-	bh=EdgpjTa5vPTpdpYEzLk3B3e9bf5d6qYFWAfS+EwNqnE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XiUeVLimD7Xq4wSNC3HT1XLtnTbynNPLVCwp5kXj5tnPfO2LiZS7Aq3Hwcs9tAOrM4NxzNwsFxaGc+bDR/nSuaoZCEWPzZS0KK5z/1IrC2OiPCslTQ4AtyUyXJrOlkgO0X0N3i/BwgXUfIqBbW8d97EvWjh0wtDx/lsiuCVDo6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cl0KoSN2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F25C4CEE7;
-	Sun, 19 Oct 2025 06:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760856630;
-	bh=EdgpjTa5vPTpdpYEzLk3B3e9bf5d6qYFWAfS+EwNqnE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cl0KoSN24WldfEYSRSfu5lozmGJAVE9xioGE6C+PBBseYSuE/7hgf2KbKvxu1nAfq
-	 +AnxTaK9VaE7xdn62r2Zk9oFnNMs7lSpecdggsfr9Z5mfbyraggVUnrWZwla30ASHd
-	 TTQUKVBXbjDXmyKfOdXMojvKQKorenot/jpefXad8wpoUyJQ/gWBwcSUSTx6MlFUkq
-	 O4BqR0RMnSAfMnvUpkN7wKJhQIsaUmfqwAekVS20NwyN/940rzzKb69Mu6Ni7vQrxn
-	 4PzVEO7y+ixH5H5iambi/6vum/20jOqyGoZB3A2tTRPyBtt8DjbzWrov4g4xwvEbN2
-	 ljhF5KLlm27vA==
-Date: Sun, 19 Oct 2025 02:50:21 -0400
-From: Guo Ren <guoren@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	x86@kernel.org, linux-alpha@vger.kernel.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 03/17] csky: Add __attribute_const__ to ffs()-family
- implementations
-Message-ID: <aPSKLRnWUAVSGQjF@gmail.com>
-References: <20250804163910.work.929-kees@kernel.org>
- <20250804164417.1612371-3-kees@kernel.org>
+	s=arc-20240116; t=1760861464; c=relaxed/simple;
+	bh=0JD5EhU3dMvt2TzDGGngYx4VWjKCENlPlTrXXievwr0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hJm9VnC0K0rJxXUkvx8veGGyn3W+wTE3l2gYqtGQ0ybm5JBtQbPjtaxH2B/JFfQEDDu6QEfJH6PkSlTZUO1V4BVwtWPhfnZ/+z/IFwiwVX9ouZCjKmQwOSC2BN1plExZLpluZYWKVNfULnx3jTYP8z7+1G79BdzeLfsDwqPbNvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ccTdEhIo; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7815092cd0bso33323497b3.2
+        for <linux-arch@vger.kernel.org>; Sun, 19 Oct 2025 01:11:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760861461; x=1761466261; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0JD5EhU3dMvt2TzDGGngYx4VWjKCENlPlTrXXievwr0=;
+        b=ccTdEhIopdhypwI8L3JBil5M4STne8SmRaQFfCBM02l9LkTDCeY07VksMZS734XIYW
+         fSr9E0vMaFgWvM5hpUfvHCdQwXqN1rLdg7uGpCmcE1a8p73wsSFiGM9KgaCUVorU2bB4
+         QXlk0k/rKjfCpslj0HWJBncYE9y9o12Mjtf9KUBJxsuzUFBzDISvTP/UdlOzuowk2O9I
+         i6m0bPW8oTEyUXCgLGFGHisuLGD8VhQ1MKnYlEu61P8OxgXOJsE/nO9c7FNSYyLg97yE
+         4ySn5cXO9k6TDK22f8AGkED3Ks52VuOYFicnSfjIjvJlszMjZfsukHxg61ULY8iC4TUN
+         9kxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760861461; x=1761466261;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0JD5EhU3dMvt2TzDGGngYx4VWjKCENlPlTrXXievwr0=;
+        b=PBJLJGR1ENC5NAXCFPh9xfF39t+p7rzAxaIxy0g0RTr2kI7/JE/eIp8MVo/YsD8XqA
+         C396z6r0lVt8KOxuXfw9bbg1nXPpY40L7CfIxkCQdIgVQo3NQkZXRQ0WU9i2nUywWgOF
+         SpVTcFDXp+yRP2DlCE32MBwl0cQw7aelLkdqZ91M6eXlhPptg5aycJ8k9JioPI8pHRyo
+         mwidu9E+VwV9zLS7wsJmtv7UduPUBg4U3csCVxTOs6/QdzAgsKw0lLz7buJs3R0QrVDw
+         PnWVclBc7hzPa268r2rUddZrKE9puUcYzl4Bu1QNgfOhpQk+qPox01zc/EUC67WGY9cs
+         WDiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV7Q5HD8/F2OJmJOgVI5g66uG3GL3xM5ZZ9UW3PnpSEYq8HSViA4ci10/uYDuVhTKyPMdCZPi7V/Dn/@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO9U7AgX3nyb71ksg/qDiOR9P+OvRNYdgjx+kdX4I3xf1yW6lS
+	LFKMNHBUrjm1+4Y/vcBV9rhPGhpAC6+8o35TFHKAgWXSRCBQaDIqso8IdplaVVSnZZMnH5BAA7I
+	kq1BeEzVs5bA9iIbTEk42yPr9gplROeXfj+PtmfU=
+X-Gm-Gg: ASbGncutCOWmf/BukhOuzgZ3727GnUtZXRjmwfPrOhFAbepVyZeLsJ1ZVKIbwN1RjBy
+	Hc1VjCou4xviuEeIin9EyMlvYcgiOtHdQ+sbuVRdd5GYHG3fljcYeLy99Cdz0AHmJzJxtAUM7wu
+	DPSBBthtXlXMtNSOumePHVc6vUV3ZWZ4LiRFAF2k6uS5OTbVzQG933BzsiFYrtgxrQoHgbCY/vJ
+	zvbhdyx9bF2OzxGlJNyOFzWXalgwrvrKXBl9KTQ0O4J6Xm+/8Fx9xCMKQXFWDukfYcGq6f5YPo=
+X-Google-Smtp-Source: AGHT+IEDp/usYEtVSaz10lwwm2/rh8YYcBuxag2F0nuBjSfSMoio/EijPl9t2f1PGKCDHr/mRoxnx6oC2CKJ7h3r2Ic=
+X-Received: by 2002:a05:690c:31e:b0:782:9037:1491 with SMTP id
+ 00721157ae682-7837780ba2dmr109813007b3.42.1760861461100; Sun, 19 Oct 2025
+ 01:11:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250804164417.1612371-3-kees@kernel.org>
+References: <20241202010844.144356-16-ebiggers@kernel.org> <20251019060845.553414-1-safinaskar@gmail.com>
+In-Reply-To: <20251019060845.553414-1-safinaskar@gmail.com>
+From: Askar Safin <safinaskar@gmail.com>
+Date: Sun, 19 Oct 2025 11:10:25 +0300
+X-Gm-Features: AS18NWAhDVf2aU8hB0qWERPwO9zi-ils_dPukaoQchmqqRauvEb3B93Zz-69KFg
+Message-ID: <CAPnZJGAb7AM4p=HdsDhYcANCzD8=gpGjuP4wYfr2utLp3WMSNQ@mail.gmail.com>
+Subject: Re: [PATCH v4 15/19] lib/crc32: make crc32c() go directly to lib
+To: ebiggers@kernel.org
+Cc: ardb@kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 04, 2025 at 09:43:59AM -0700, Kees Cook wrote:
-> While tracking down a problem where constant expressions used by
-> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
-> initializer was convincing the compiler that it couldn't track the state
-> of the prior statically initialized value. Tracing this down found that
-> ffs() was used in the initializer macro, but since it wasn't marked with
-> __attribute__const__, the compiler had to assume the function might
-> change variable states as a side-effect (which is not true for ffs(),
-> which provides deterministic math results).
-> 
-> Add missing __attribute_const__ annotations to C-SKY's implementations of
-> ffs(), __ffs(), fls(), and __fls() functions. These are pure mathematical
-> functions that always return the same result for the same input with no
-> side effects, making them eligible for compiler optimization.
-LGTM.
+On Sun, Oct 19, 2025 at 9:09=E2=80=AFAM Askar Safin <safinaskar@gmail.com> =
+wrote:
+>
+> Eric Biggers <ebiggers@kernel.org>:
+> > Now that the lower level __crc32c_le() library function is optimized fo=
+r
+>
+> This patch (i. e. 38a9a5121c3b ("lib/crc32: make crc32c() go directly to =
+lib"))
+> solves actual bug I found in practice. So, please, backport it
+> to stable kernels.
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Oops. I just noticed that this patch removes module "libcrc32c".
+And this breaks build for Debian kernel v6.12.48.
+Previously I tested minimal build using "make localmodconfig".
+Now I tried full build of Debian kernel using "dpkg-buildpackage".
+And it failed, because some of Debian files reference "libcrc32c",
+which is not available.
 
-> 
-> Build tested ARCH=csky defconfig with GCC csky-linux 15.1.0.
-> 
-> Link: https://github.com/KSPP/linux/issues/364 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
->  arch/csky/include/asm/bitops.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/csky/include/asm/bitops.h b/arch/csky/include/asm/bitops.h
-> index 72e1b2aa29a0..80d67eee6e86 100644
-> --- a/arch/csky/include/asm/bitops.h
-> +++ b/arch/csky/include/asm/bitops.h
-> @@ -9,7 +9,7 @@
->  /*
->   * asm-generic/bitops/ffs.h
->   */
-> -static inline int ffs(int x)
-> +static inline __attribute_const__ int ffs(int x)
->  {
->  	if (!x)
->  		return 0;
-> @@ -26,7 +26,7 @@ static inline int ffs(int x)
->  /*
->   * asm-generic/bitops/__ffs.h
->   */
-> -static __always_inline unsigned long __ffs(unsigned long x)
-> +static __always_inline __attribute_const__ unsigned long __ffs(unsigned long x)
->  {
->  	asm volatile (
->  		"brev %0\n"
-> @@ -39,7 +39,7 @@ static __always_inline unsigned long __ffs(unsigned long x)
->  /*
->   * asm-generic/bitops/fls.h
->   */
-> -static __always_inline int fls(unsigned int x)
-> +static __always_inline __attribute_const__ int fls(unsigned int x)
->  {
->  	asm volatile(
->  		"ff1 %0\n"
-> @@ -52,7 +52,7 @@ static __always_inline int fls(unsigned int x)
->  /*
->   * asm-generic/bitops/__fls.h
->   */
-> -static __always_inline unsigned long __fls(unsigned long x)
-> +static __always_inline __attribute_const__ unsigned long __fls(unsigned long x)
->  {
->  	return fls(x) - 1;
->  }
-> -- 
-> 2.34.1
-> 
-> 
+So, please, don't backport this patch to stable kernels.
+I'm sorry.
+
+
+
+--=20
+Askar Safin
 
