@@ -1,91 +1,121 @@
-Return-Path: <linux-arch+bounces-14194-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14195-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46466BEE37A
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Oct 2025 13:02:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD598BEE9C4
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Oct 2025 18:25:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8227189CD07
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Oct 2025 11:02:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 974F73AD543
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Oct 2025 16:25:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6339029E0F7;
-	Sun, 19 Oct 2025 11:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D8B92EBB93;
+	Sun, 19 Oct 2025 16:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rKwQGAx/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2EokHRL"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BBC1E51FA;
-	Sun, 19 Oct 2025 11:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E851A00F0;
+	Sun, 19 Oct 2025 16:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760871750; cv=none; b=nyVaRkZB7IDaCAV+OetMOj96IUgT2JGlfAMaDoGBXeyektFHmN+AUrkYME3YB9quXwOpPArv+nKJzunU+atfbbfJKHsl44tDzO6apJuKQ6AKkS/w7g8M4e//saoR/old42A7lzEmw4kj0/lX7jJE+ukiDccJajMerWp6+007tSc=
+	t=1760891120; cv=none; b=XHqLF6dvRtksg/rpYaCpQd0wvqWfyKJgzRoZOqo5spJ4Cn/TkCZgTu6JzpGpBu0J1SKlNei0ueCrHDOMqGwoUKzWBCBz3S9ZE0auTv0slrLqXDj6EYOZyyn3TRcK+xmuf68aD9XzkJ/k2fOaQu7wV9hIHvFwVkoglY1/dUjCpeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760871750; c=relaxed/simple;
-	bh=CThnH2ArXxvqvI9FWX9AIdwSiaKRUpnSBMLyaBc58C8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JRR4qVdvxujaYiXLwDNsscGq6KP9KH6sR54C2lW7hgC8MJa0+mK5jGUEE9+W6jutCB1TpC16iK3hV28xj6+S/nFrOlq85mRiW+kVQN7tFpxocA20nl5fS3MWqOPdrfbl7MvVD7dCE6ep07WYebrS556QIz6VHc9W6DAtBMDHWWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rKwQGAx/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853C4C4CEE7;
-	Sun, 19 Oct 2025 11:02:28 +0000 (UTC)
+	s=arc-20240116; t=1760891120; c=relaxed/simple;
+	bh=AqeDRU1eKSmQXUiCZ7pwi0Bd8BGGXBM48O4Ou5Xs+sw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ny8OD4gi8nAij93+qSPZ92ytYCmvNp2te+9feN52PBmDlCrgJ1LDdj5X2hGC62awAnItnCA0/a6WPJfjeS0Obn/cuF4G9jS+9seTkI2xHvvDm9V2UN3sxVdmY/T5nBWmWwbDG3Y/jYnCrBraz4hwbcw1tiUMrGiFXEDLdfNHHNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2EokHRL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7610C4CEE7;
+	Sun, 19 Oct 2025 16:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760871749;
-	bh=CThnH2ArXxvqvI9FWX9AIdwSiaKRUpnSBMLyaBc58C8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rKwQGAx/KsmhE3mZc1/j08WN3lyNtntPwDGe6+KzZ/Fbt68wejKZ7+300qA3F9UuQ
-	 jLu3HwgmItJd09+xndw5Gm5PZjdfke2lZkx4RSC11Fj6ik6XcOlF/Q7vyiujpvQEyI
-	 gfC1acfQAU0jFS2wKpEifjl3IwpqK408X8gdB0ZiUwLtxj+OoLHkOoH3z8Y5+BD3eq
-	 HIVNw2fvCeN2hWHiatd4iw8m8zM95YdEytUfqS8E87dzuA4BFBF9zn8sBKeZkJnsmo
-	 GCs0k+uifRs9gih69Bxj5riDC5xO5DfXf7XJIdqj/KcuCUwkJ1xqNWioxFwr5AbCCp
-	 gIzPUWIxKkcHQ==
-From: guoren@kernel.org
-To: guoren@kernel.org
-Cc: linux-csky@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	arnd@arndb.de,
-	linux-arch@vger.kernel.org
-Subject: [PATCH] csky: Remove compile warning for CONFIG_SMP
-Date: Sun, 19 Oct 2025 07:02:14 -0400
-Message-Id: <20251019110214.3392011-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.40.1
+	s=k20201202; t=1760891119;
+	bh=AqeDRU1eKSmQXUiCZ7pwi0Bd8BGGXBM48O4Ou5Xs+sw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F2EokHRLd68kZBeDRRdhxJ1rDW2elFlh8EnkyaTJnHSCfqkoujh7BohpZc68H407D
+	 6bUXmBrNoq7Ww0jTMF1QQwGeMEpfXz0BrGd0k+T8PJbgWDRrKfDcnhwumf2RRZV3Tp
+	 M1nqa0cZRI89OYqyvuvRWeFwctcqJgDf9nK43gHk2G3mRl3usq7ey6ziFEp5oxVwef
+	 8ha/lyEniLuE2fegL9ApZJO+lst38G6OUrwAE6O/NFZ/Mz1YaBFZd+ociss1pkQv9d
+	 0MzWPAoBwoLUZ5+ACw5ohULeXVrjB6+3sdA7UiNPKC79wDn4zGf7+6LA7UKkZ5vUk5
+	 GbYsQCDUj5ADg==
+Date: Sun, 19 Oct 2025 09:23:46 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Askar Safin <safinaskar@gmail.com>
+Cc: ardb@kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
+	x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v4 15/19] lib/crc32: make crc32c() go directly to lib
+Message-ID: <20251019162346.GB1604@sol>
+References: <20241202010844.144356-16-ebiggers@kernel.org>
+ <20251019060845.553414-1-safinaskar@gmail.com>
+ <CAPnZJGAb7AM4p=HdsDhYcANCzD8=gpGjuP4wYfr2utLp3WMSNQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPnZJGAb7AM4p=HdsDhYcANCzD8=gpGjuP4wYfr2utLp3WMSNQ@mail.gmail.com>
 
-From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+On Sun, Oct 19, 2025 at 11:10:25AM +0300, Askar Safin wrote:
+> On Sun, Oct 19, 2025 at 9:09 AM Askar Safin <safinaskar@gmail.com> wrote:
+> >
+> > Eric Biggers <ebiggers@kernel.org>:
+> > > Now that the lower level __crc32c_le() library function is optimized for
+> >
+> > This patch (i. e. 38a9a5121c3b ("lib/crc32: make crc32c() go directly to lib"))
+> > solves actual bug I found in practice. So, please, backport it
+> > to stable kernels.
+> 
+> Oops. I just noticed that this patch removes module "libcrc32c".
+> And this breaks build for Debian kernel v6.12.48.
+> Previously I tested minimal build using "make localmodconfig".
+> Now I tried full build of Debian kernel using "dpkg-buildpackage".
+> And it failed, because some of Debian files reference "libcrc32c",
+> which is not available.
+> 
+> So, please, don't backport this patch to stable kernels.
+> I'm sorry.
 
-When CONFIG_SMP is enabled, there is a compile warning:
+Right, this commit simplified the CRC library design by removing the
+libcrc32c module.  initramfs build scripts that hard-coded the addition
+of libcrc32c.ko into the ramdisk (which I don't think was ever necessary
+in the first place, though it did used to be useful to hard-code some of
+the *other* CRC modules like crc32c-intel) had to be updated to remove
+it.  It looks like Debian did indeed do that, and they updated it in
+https://salsa.debian.org/kernel-team/linux/-/commit/6c242c647f84bfdbdc22a6a758fa59da4e941a10#1251f9400a85485d275e1709758350aa098709a8
 
-arch/csky/kernel/smp.c:242:6: warning: no previous prototype for
-'csky_start_secondary' [-Wmissing-prototypes]
-  242 | void csky_start_secondary(void)
-      |      ^~~~~~~~~~~~~~~~~~~~
+As for your original problem, I'd glad to see that the simplified design
+is preventing problems.  There's an issue with backporting this commit
+alone, though.  This was patch 15 of a 19-patch series for a good
+reason: the CRC-32C implementation in lib/ wasn't architecture-optimized
+until after patches 1-14 of this series.  Backporting this commit alone
+would make crc32c() no longer utilize architecture-optimized code.
 
-Add a similar prototype with csky_start in sections.h.
+Now, it already didn't do so reliably (and this patch series fixed
+that).  However, backporting this commit alone would make it never do
+so.  So it would regress performance in some cases.
 
-Signed-off-by: Guo Ren (Alibaba DAMO Academy) <guoren@kernel.org>
----
- arch/csky/include/asm/sections.h | 1 +
- 1 file changed, 1 insertion(+)
+Since the errors you're actually getting are:
 
-diff --git a/arch/csky/include/asm/sections.h b/arch/csky/include/asm/sections.h
-index 83e82b7c0f6c..ee5cdf226a9b 100644
---- a/arch/csky/include/asm/sections.h
-+++ b/arch/csky/include/asm/sections.h
-@@ -8,5 +8,6 @@
- extern char _start[];
- 
- asmlinkage void csky_start(unsigned int unused, void *dtb_start);
-+asmlinkage void csky_start_secondary(void);
- 
- #endif /* __ASM_SECTIONS_H */
--- 
-2.40.1
+    [   19.619731] Invalid ELF header magic: != ELF
+    modprobe: can't load module libcrc32c (kernel/lib/libcrc32c.ko.xz): unknown symbol in module, or unknown parameter
 
+I do have to wonder if this is actually a busybox bug or
+misconfiguration, where it's passing a compressed module to the kernel
+without decompressing it?  And removing the module just hid the problem.
+
+- Eric
 
