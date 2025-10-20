@@ -1,84 +1,83 @@
-Return-Path: <linux-arch+bounces-14235-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14237-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFF58BF3F0F
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Oct 2025 00:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56813BF3F15
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Oct 2025 00:40:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67D2618C5F82
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Oct 2025 22:39:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10B5918C638A
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Oct 2025 22:39:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252F12F363F;
-	Mon, 20 Oct 2025 22:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA9E2F28EB;
+	Mon, 20 Oct 2025 22:36:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bjxMXWw6"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eWr514gx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7E42F39A4;
-	Mon, 20 Oct 2025 22:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5692F39A4;
+	Mon, 20 Oct 2025 22:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760999780; cv=none; b=uHSUVSEgARs9SzYSn+KktUFrFhb+6puT4w0ttlqCyods4xcC/u6bGJBbqwBdyGyjq6wiDq+5ATj1seSvfq40dWzjSxlstrp1p5F68QaP7D0fL65nwUjEJszrPZXM1qqUfZlZlH1gsWW56TkfU23ao8hs4+SSw6DZaPVL66xOzyc=
+	t=1760999804; cv=none; b=uLk0hVINuXXPmZcdyWhZC6peQSFJrAjj1g0bmXJLa0LfJigW5tVxc4LjoayXUOBJCXmUwlfFnbi6CeB4HRaE2L4yTSBTUTaJ9cgEjZU2ieLd9dFRaV7L1Y8MpjDlxDEMwFqhlQ6wYMIMsEnvNB0h8EojPBSDeZZiiqaYFKrhB9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760999780; c=relaxed/simple;
-	bh=Ds40lvVQ8ct4/JMQM6+DhsSpkMtda2d+9Lt4Ht9DnyM=;
-	h=To:Cc:Message-ID:In-Reply-To:References:From:Subject:Date; b=YwvtfJJGL5eiNUECS2fmW8MX5DO1/IfPk1W3InpZT08B2LIG0u9R5qD/1rGQVRU5adH4Ivdwy35kF3YJ0Bs0eg16+5OlJSqryjRP1LuXF5nB2VjovgcqEyoaIkPlAuXKGPlgYav9G2fduym7tzeTtONCaIiDhNDWtRx0UzQlUzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bjxMXWw6; arc=none smtp.client-ip=202.12.124.156
+	s=arc-20240116; t=1760999804; c=relaxed/simple;
+	bh=yybUSf5T3g/3w85klnU1zuJcnxM9ZRoEL4oq6VF0u5w=;
+	h=To:Cc:Message-ID:In-Reply-To:References:From:Subject:Date; b=IsbBhHGG7py5xJgaF5IIQ1/1RE1ZKKbUhk4istm8HPZfNOEgXpfznBJhw/n6y3drN3qjZy9Dt/gKarDnl+n3eiGWMQ2f8gK+vyRkFIpB+t2TN+Z5UbDgOI600S/Lfg6dPorut6GFN4GGm/Zdh2UYWM9PsZMOBYNrTGwCCeLZ2XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eWr514gx; arc=none smtp.client-ip=202.12.124.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id B6DC57A0133;
-	Mon, 20 Oct 2025 18:36:16 -0400 (EDT)
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id D532A1D0013B;
+	Mon, 20 Oct 2025 18:36:41 -0400 (EDT)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Mon, 20 Oct 2025 18:36:17 -0400
+  by phl-compute-05.internal (MEProxy); Mon, 20 Oct 2025 18:36:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
 	:feedback-id:from:from:in-reply-to:in-reply-to:message-id
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1760999776; x=
-	1761086176; bh=sCEkbZKrl8bKnVzNmi1Kw704fMBYVAIdlc+QSCIPujs=; b=b
-	jxMXWw6NFgPgWlWIleVc5chc/9HyOBYg4QfUexgH7mW9G7DwDFLUs6WoHP7R8Dtr
-	vZ1mpPHNEO32cKKWTGz5KkSxj44VP8A6DpSnDmkPiKfj1Grh3g09d7BRvr6Osl1J
-	lMNhboHYycxPoMbgkR62/+qKldWsgONUhK23vIp40NmiInBmAQ3os+OKu0S/ZIjX
-	OZ0y+ebfoFVEJ3GZNVg4s6YEVxGyX+UYwOu8WAiJVRQT+SBayG3j8VlW918OCzQ9
-	O2KB2EHehfsoBCiQBzNmqFTn6prHdQrPOVziONsj1xuvjC0fFbLRspfC576OYlOD
-	RiZHjWcrhJpSw2GuHEedw==
-X-ME-Sender: <xms:YLn2aDM5ztU0qc5Qrv8G8OfHLyfrINQ1mU09qaM5riZ30J6aZjZHMg>
-    <xme:YLn2aBog_OILZHfR7G52mcosCIVTThdbArql8CjHGP5bMdt9xNuyAO6yG4sMhSpbL
-    PQUJfZ1dLRDz0Xxj8Vk0nkWp2k-S_Kw8tlAy6BHOMFVridgc49OPwA>
-X-ME-Received: <xmr:YLn2aK5UoBUjWR8kTOscOql0nJ3Hs0QhwcesUDHLnsoAtxRIz-74iy9ry-weE1oh7h5RuizBTBJEYYHg_ncxB2UMpG5r7xySCog>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1760999801; x=
+	1761086201; bh=Of30O2Rz6y1OZ0rGOWsuDyxzWM+1+/UyDo323/R5FGA=; b=e
+	Wr514gxs7XHhxnXDx33HM79f8FpGzy11zZr8o58/ddhcZi+bIsKL17ERx0z6W+Ok
+	XSAC854j1ld8xfWEQlbJvu0/FTifGVo9hOKlT3D/zBSe4/6g8qJRMoL9c/7aWpau
+	Miv+EtNzVoDRJ+4j4W2mkDtDpZCoWSyMdhhOZm7fQR/hqql+NVYtFp9wYKksH8oJ
+	7hWjqZHAgNwbsEIJafBxX5J1fMQaD1i4GrYg5Rq0zcv33JcyIqYDhrW7TGekycx+
+	YHlheC3Qm1p4cKcH98AoEqgw0pYpj5el+7HJnamR4uLI4Xfw1yviOVicXn6ZUWPZ
+	ZOsy8wm/9YMA/1epwMB3g==
+X-ME-Sender: <xms:ebn2aJqe3wCQztty0Eg7JO0cBdpNkaBUi1NWvfg6myVjEqNuUgWvNg>
+    <xme:ebn2aBpbr-Lc7Qubd2DasScwikzAWyyRh-rmfb6chc0cCP3ydhRFkF0QhMUccAAi7
+    agI-C3tfJFa6eoWNkcrLrboD8gI8QDD4QPGSyQJRMIvhVYXRIEQlw>
+X-ME-Received: <xmr:ebn2aBCPOyzeLdxNoS7XgseyaSewb6ntphcd6mizRgq9q5AhR715HzR9FGS7c3d1zqDWAPb6YDEfKW-MHyeJGxoLwT0PWa6oSE4>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddufeeltdegucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
     gurhepvfevkfgjfhfhufffsedttdertddttddtnecuhfhrohhmpefhihhnnhcuvfhhrghi
     nhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtthgvrh
-    hnpeevgffgtdfhhfefveeuudfgtdeugfeftedtveekieeggfduleetgeegueehgeffffen
-    ucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrg
-    hinheslhhinhhugidqmheikehkrdhorhhgpdhnsggprhgtphhtthhopedufedpmhhouggv
-    pehsmhhtphhouhhtpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorh
-    hgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjrghm
-    vghsrdgsohhtthhomhhlvgihsehhrghnshgvnhhprghrthhnvghrshhhihhprdgtohhmpd
-    hrtghpthhtohepuggvlhhlvghrsehgmhigrdguvgdprhgtphhtthhopegrkhhpmheslhhi
-    nhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprghrnhgusegrrhhnug
-    gsrdguvgdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdrtghomhdprhgt
-    phhtthhopehgvggvrhhtsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehlih
-    hnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:YLn2aJGpQGZyi2GtNbRJleRIQRoBTk0wG6N6WEWGz0nlM5OsXBC5og>
-    <xmx:YLn2aM0A99CJ7CAKjcBJNFLsA2wYpQoVrOf7Ry6Y5wIif-NcSVoqPg>
-    <xmx:YLn2aGrE_QT4LWs_mDQqnHgb74JmCxRw-saALwloywQZf7gIS5tcGQ>
-    <xmx:YLn2aJNwt_7R44CVe6YKm5RqiyusTz7Ywbj8JqorLwKIFnSTM4Reaw>
-    <xmx:YLn2aEXfsXXPFvjs8a7lFi4MnbqpAA6EDe4ZAp50rnLHhJVpsktM2iw3>
+    hnpeehkeduffehjedvieevkeelleegffeiuddvgeeluefhuedugeekkeehffekgffgheen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhr
+    ghdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
+    hpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopeifihhllheskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtih
+    honhdrohhrghdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtohep
+    sghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepghgvvghrtheslh
+    hinhhugidqmheikehkrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvgh
+    gvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmheikehksehvghgv
+    rhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:ebn2aHtaFt3xcLClVGePvHw78UM2pz-tnMBVOLTuimkKvLnCNiafbw>
+    <xmx:ebn2aILKrdSWiX7_kIY0kSGTk29cuFV50PgPoNkRnVWPfFiWgpHGYg>
+    <xmx:ebn2aGaLQIADTMPb_fZ8HVXG-971zt9z7gM3IonV0_5ZlH69Pg8U2w>
+    <xmx:ebn2aCBCD4YtGT9_aUIKsolfx3BJ3cIaVWbEC2TRztzgOnaNazmpPA>
+    <xmx:ebn2aLLa9Rb_sgXBEtYgaSjLLmDM2o3mitZDR346egTg0hwtQdQVzkX6>
 Feedback-ID: i58a146ae:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Oct 2025 18:36:13 -0400 (EDT)
+ 20 Oct 2025 18:36:38 -0400 (EDT)
 To: Peter Zijlstra <peterz@infradead.org>,
-    Will Deacon <will@kernel.org>,
-    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-    Helge Deller <deller@gmx.de>
+    Will Deacon <will@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
     Arnd Bergmann <arnd@arndb.de>,
     Boqun Feng <boqun.feng@gmail.com>,
@@ -86,14 +85,13 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
     linux-arch@vger.kernel.org,
     linux-kernel@vger.kernel.org,
     linux-m68k@vger.kernel.org,
-    Mark Rutland <mark.rutland@arm.com>,
-    linux-parisc@vger.kernel.org
-Message-ID: <c36756368f0ee942d5a995a603ce290eba06a5b6.1760999284.git.fthain@linux-m68k.org>
+    Mark Rutland <mark.rutland@arm.com>
+Message-ID: <7943c7f0196171c918df671c68003e62b69c8509.1760999284.git.fthain@linux-m68k.org>
 In-Reply-To: <cover.1760999284.git.fthain@linux-m68k.org>
 References: <cover.1760999284.git.fthain@linux-m68k.org>
 From: Finn Thain <fthain@linux-m68k.org>
-Subject: [RFC v4 2/5] parisc: Drop linux/kernel.h include from asm/bug.h
- header
+Subject: [RFC v4 4/5] atomic: Add alignment check to instrumented atomic
+ operations
 Date: Tue, 21 Oct 2025 09:28:04 +1100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -101,57 +99,83 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 
-This patch series will add WARN_ON_ONCE() calls to the header file
-linux/instrumented.h. That requires including linux/bug.h,
-but doing so causes the following compiler error on parisc:
+From: Peter Zijlstra <peterz@infradead.org>
 
-In file included from ./include/linux/atomic/atomic-instrumented.h:17,
-                 from ./include/linux/atomic.h:82,
-                 from ./arch/parisc/include/asm/bitops.h:13,
-                 from ./include/linux/bitops.h:67,
-                 from ./include/linux/kernel.h:23,
-                 from ./arch/parisc/include/asm/bug.h:5,
-                 from ./include/linux/bug.h:5,
-                 from ./include/linux/page-flags.h:10,
-                 from kernel/bounds.c:10:
-./include/linux/instrumented.h: In function 'instrument_atomic_alignment_check':
-./include/linux/instrumented.h:69:9: error: implicit declaration of function 'WARN_ON_ONCE' [-Werror=implicit-function-declaration]
-   69 |         WARN_ON_ONCE((unsigned long)v & (size - 1));
-      |         ^~~~~~~~~~~~
-cc1: some warnings being treated as errors
-make[3]: *** [scripts/Makefile.build:182: kernel/bounds.s] Error 1
+Add a Kconfig option for debug builds which logs a warning when an
+instrumented atomic operation takes place that's misaligned.
+Some platforms don't trap for this.
 
-The problem is, asm/bug.h indirectly includes atomic-instrumented.h,
-which means a new cycle appeared in the graph of #includes. And because
-some headers in the cycle can't see all definitions, WARN_ON_ONCE()
-appears to be an undeclared function.
-
-This only happens on parisc and it's easy to fix. In the error
-message above, linux/kernel.h is included by asm/bug.h. But it's no
-longer needed there, so remove it.
-
-The comment about needing BUGFLAG_TAINT seems to be incorrect as of
-commit 19d436268dde ("debug: Add _ONCE() logic to report_bug()"). Also,
-a comment in linux/kernel.h strongly discourages its use here.
-
-Compile-tested only.
+Link: https://lore.kernel.org/lkml/20250901093600.GF4067720@noisy.programming.kicks-ass.net/
 ---
- arch/parisc/include/asm/bug.h | 2 --
- 1 file changed, 2 deletions(-)
+Changed since v2:
+ - Always check for natural alignment.
+---
+To make this useful on those architectures that don't naturally align
+scalars (x86-32, m68k and sh come to mind), please also use
+"[PATCH] atomic: skip alignment check for try_cmpxchg() old arg"
+https://lore.kernel.org/all/20251006110740.468309-1-arnd@kernel.org/
+---
+ include/linux/instrumented.h |  4 ++++
+ lib/Kconfig.debug            | 10 ++++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/arch/parisc/include/asm/bug.h b/arch/parisc/include/asm/bug.h
-index 833555f74ffa..dbf65623c513 100644
---- a/arch/parisc/include/asm/bug.h
-+++ b/arch/parisc/include/asm/bug.h
-@@ -2,8 +2,6 @@
- #ifndef _PARISC_BUG_H
- #define _PARISC_BUG_H
+diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+index 711a1f0d1a73..402a999a0d6b 100644
+--- a/include/linux/instrumented.h
++++ b/include/linux/instrumented.h
+@@ -7,6 +7,7 @@
+ #ifndef _LINUX_INSTRUMENTED_H
+ #define _LINUX_INSTRUMENTED_H
  
--#include <linux/kernel.h>	/* for BUGFLAG_TAINT */
--
- /*
-  * Tell the user there is some problem.
-  * The offending file and line are encoded in the __bug_table section.
++#include <linux/bug.h>
+ #include <linux/compiler.h>
+ #include <linux/kasan-checks.h>
+ #include <linux/kcsan-checks.h>
+@@ -67,6 +68,7 @@ static __always_inline void instrument_atomic_read(const volatile void *v, size_
+ {
+ 	kasan_check_read(v, size);
+ 	kcsan_check_atomic_read(v, size);
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ATOMIC) && ((unsigned long)v & (size - 1)));
+ }
+ 
+ /**
+@@ -81,6 +83,7 @@ static __always_inline void instrument_atomic_write(const volatile void *v, size
+ {
+ 	kasan_check_write(v, size);
+ 	kcsan_check_atomic_write(v, size);
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ATOMIC) && ((unsigned long)v & (size - 1)));
+ }
+ 
+ /**
+@@ -95,6 +98,7 @@ static __always_inline void instrument_atomic_read_write(const volatile void *v,
+ {
+ 	kasan_check_write(v, size);
+ 	kcsan_check_atomic_read_write(v, size);
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_DEBUG_ATOMIC) && ((unsigned long)v & (size - 1)));
+ }
+ 
+ /**
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index dc0e0c6ed075..1c7e30cdfe04 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1363,6 +1363,16 @@ config DEBUG_PREEMPT
+ 	  depending on workload as it triggers debugging routines for each
+ 	  this_cpu operation. It should only be used for debugging purposes.
+ 
++config DEBUG_ATOMIC
++	bool "Debug atomic variables"
++	depends on DEBUG_KERNEL
++	help
++	  If you say Y here then the kernel will add a runtime alignment check
++	  to atomic accesses. Useful for architectures that do not have trap on
++	  mis-aligned access.
++
++	  This option has potentially significant overhead.
++
+ menu "Lock Debugging (spinlocks, mutexes, etc...)"
+ 
+ config LOCK_DEBUGGING_SUPPORT
 -- 
 2.49.1
 
