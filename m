@@ -1,185 +1,249 @@
-Return-Path: <linux-arch+bounces-14241-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14242-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36937BF54B1
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Oct 2025 10:38:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC1B2BF6A8D
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Oct 2025 15:06:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 270133B7F8D
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Oct 2025 08:36:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8072419A4842
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Oct 2025 13:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D15304BDB;
-	Tue, 21 Oct 2025 08:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CFB933030B;
+	Tue, 21 Oct 2025 13:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Rk3c94xz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TmVm6iiF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6B9272E54
-	for <linux-arch@vger.kernel.org>; Tue, 21 Oct 2025 08:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CAE82F49E3;
+	Tue, 21 Oct 2025 13:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761035708; cv=none; b=bc5HBbAwhZwE05e26UeZ/rGVOt5EFFVL8zJThzJOul8Ryx/VThPMvVjymEFmSfRpRUrAHbsFRdm82eg9GfUJURMDUZvrdWGcbuHebvzaORg4x7PZz660b4QJW9T5WEngJ/cmgOLjiYeuuJyWNRf6vkSDcbKdGy1bygBV56j0dYo=
+	t=1761051946; cv=none; b=f88tqZV8ZzDQATP139FGexUBFz4mdzWYL+YvnzHhspRfzwhxLiSl+syqI7y6QbLKlMeVPHAU43UQRvS9Unuts2iDCjQ2bgvxwliuuX2xhMv6JBHpnQeJmiOj2vF7d0L/vmkBljKm7Pn79uYh7k4sTE4hApFdbR+NSDrZZvfHqhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761035708; c=relaxed/simple;
-	bh=YaSBAbdAjpIG34xK5rBs7dOb6NfAJ+QEOT4p38B32Nc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mvi0IBCJ8nolsyYjgjfsCJ+Nfv7W01VzZbxuZAe8usQhcqlsACwqrex442BrOLTAT2IfvQUTKAb5NzTWSUKg6S0pJmb8/7EouEP+kVIW/DY44kPWhMKzHAwcuCIKcPRltPstavFiFiC0MkK01yzgIytImMM46n+t7RulJ28sKT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Rk3c94xz; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-474975af41dso3875355e9.2
-        for <linux-arch@vger.kernel.org>; Tue, 21 Oct 2025 01:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1761035705; x=1761640505; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+WElwxfDhwAQUTUU6M8FcHqJx7EeTmN3/ZrtK46jRLY=;
-        b=Rk3c94xzzE0PN+RoGuou8xmw60tdtJ74A+P801lG5T219t+6Uyrw4ql05seXnyG/sa
-         sqTeUwbErdOik9QKSGOIvpAj66MJbLhlBbKsK+hKn38sJewgPA/j5lUU28kPB0mis9NQ
-         TTCoO/pWRX/bthYXQvgjCN/Nkipa/Gp73jwOFHWHBbOsrdya0eTUCETlPh9Y1pfXfE4w
-         4TjV94xtu0DpaBT1sm0M9Fti4+tkUuTwTpDOpdXtQOWzh2p8SkuBaqnyoA2TdzF6vKV5
-         eDooE409MyRlLDfjxstpvor9y2+tEtghOUVW45qnVIroxuF8f/Cox/9PwaxxtrY0UvAI
-         bVmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761035705; x=1761640505;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WElwxfDhwAQUTUU6M8FcHqJx7EeTmN3/ZrtK46jRLY=;
-        b=SZfWY79Iov81Z7stO0ugk0x9NptouRv+DjqBQcO/F6RpSM6z0OCq0MwFdQd3bROxG+
-         ka3oFvC4xC+yRuYD5wPpInOXPJu2J7nkwz7fj+Kv9JkqWywp2uLa1hgaf6i8h5bASofP
-         mQSC+iPA85Oc0O1stOj1BqozuOBzPuV0siMTaheBqg+YI9Rc5YV2o80Q8pnZ0gflEZ+8
-         /5FSHO0bvNIOAbW2RjzGycdHMl4zMscqO4Xk+Qz2a++A9F/PNgYQzVQ5YhzZqu+Jght2
-         SyFsAXIPAapLFCINUWEDzT6bvKa/dJSBl9rUYxDpgFr1BOHpGptGVLwiqkG7A9aAFkmM
-         x7rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWswMq+FAnQ+8OS/ci4amov+Huue3NOaW48ixq9EG7LxMU5ZJO1UBcTeKCYHP+VDdpkdZiBSxQ+9IZ0@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLFc97oFALAW1f1gbTfjrFrd3XuwZnYFVRCzHX+7rQOijzf3lk
-	RimSpqwereMS18UKOo7ElqxIxzXeXwaxqSmrVWS7zD2BnsgY07OkyETAjKbYWNWb7IE=
-X-Gm-Gg: ASbGncv/yoUyr7WFwPGTelWIiBPbWPgRYkErO5hESPvEcdRbl/uY7pobQ7HTF85tpWk
-	qinC5R1tIlXRsJRUohTDVSLcLN8MGE6GdPojVr4vULbbgQoM5Up9JHxzA5cy3yCm8cvJvhryWVL
-	S7M4a1uw/qN0MQHjHcYh4e3/lzZIln4ZVrLF6ZLi0c+UYdrPWR1f4Vx92C3GM9T2eqhSbKg0hLm
-	9URUK1AXZck7I3KADfw94B/9/M70u11a3+OTMZfn1cJxbmNbf/+iSCY/BRcbeP79CUkJrgPnSzz
-	w74QoxWAijSUKv2QoM+fASEyppBfcPVdNDmAO6K5ixES8yLz7eBG2+XaNTID1dzubZhBBJ9GDUp
-	KFtXYNpe2R60gqhdLshwCdWTH/POTWuvqLAbKbXVAU8t58yoiJO1Vkgu227encKPJ+N6vZE0SRV
-	UNAuqdCwDx6brvXkjO0fywPXL8wAyF7jA=
-X-Google-Smtp-Source: AGHT+IHyHD3i9/mFT3HJ78GMd7f/qo1UWDeznE2MAfRacbhe0fu1pqUuTs5oe6SC2j+nOkpKxqDXfw==
-X-Received: by 2002:a05:600c:8284:b0:46f:b43a:aedf with SMTP id 5b1f17b1804b1-47117925da1mr94027305e9.38.1761035704645;
-        Tue, 21 Oct 2025 01:35:04 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f009a7dasm21065529f8f.25.2025.10.21.01.35.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Oct 2025 01:35:04 -0700 (PDT)
-Message-ID: <cac5ed5e-3320-4db0-99d8-ea5e97e56bfb@suse.com>
-Date: Tue, 21 Oct 2025 10:35:03 +0200
+	s=arc-20240116; t=1761051946; c=relaxed/simple;
+	bh=2j2nO3EgyZKblgDRpc+2rhG8AcAKEEabgVHZG2MOf3o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q7dpufJTOk4UOWTY2JF2WS2za+Mh87kBTMnXb/ng9fcTVz81Tuyxt6hPfywLLIOKAtbjg8y9hqZXGO4Whqhnos70l2YXJgK68cuLvEjwFsjySwkHgzFbwuvIVvw66Je8S2fStuBjdqGEM3lB8gjZS9wGxgC/gZGsVxzsesHTveo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TmVm6iiF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FDC7C4CEF1;
+	Tue, 21 Oct 2025 13:05:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761051945;
+	bh=2j2nO3EgyZKblgDRpc+2rhG8AcAKEEabgVHZG2MOf3o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TmVm6iiFaz6anEm3kd0My8ZIfUCldrigV+ZcegItWYdxZrA9XcebcFYT1MscZ+Bfk
+	 VEdyNailQh9YtaHUbFy98sCS778OwbHwgxhCuVIyUlL+RnCqrZV+wlUXkxus8vkmmH
+	 wTfZRmnd8ZoxO8NFhXD2KkWxbPWgLkHE43O/4dn2DzKF/G6XO5nLBrRIOLmsOs063A
+	 aVdE8UKPA/mxr3ZwMDkZNOeVf35jw4VyuWcbrzlcnDe5R/JkHHiQSUHe90cjFoE6KX
+	 A+IPfDmrVlX+aH3+RJDyQNAHVobVFUrcgzbB98Z/822kUNM/+WUfAraNn3ZSsrvcz2
+	 tJXHoYFb+417g==
+Date: Tue, 21 Oct 2025 15:05:35 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Askar Safin <safinaskar@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>, 
+	Jens Axboe <axboe@kernel.dk>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+	Aleksa Sarai <cyphar@cyphar.com>, 
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, Julian Stecklina <julian.stecklina@cyberus-technology.de>, 
+	Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Alexander Graf <graf@amazon.com>, Rob Landley <rob@landley.net>, 
+	Lennart Poettering <mzxreary@0pointer.de>, linux-arch@vger.kernel.org, linux-block@vger.kernel.org, 
+	initramfs@vger.kernel.org, linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Michal Simek <monstr@monstr.eu>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Thorsten Blum <thorsten.blum@linux.dev>, 
+	Heiko Carstens <hca@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, Dave Young <dyoung@redhat.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Borislav Petkov <bp@alien8.de>, Jessica Clarke <jrtc27@jrtc27.com>, 
+	Nicolas Schichan <nschichan@freebox.fr>, David Disseldorp <ddiss@suse.de>, patches@lists.linux.dev
+Subject: Re: [PATCH v3 0/3] initrd: remove half of classic initrd support
+Message-ID: <20251021-bannmeile-arkaden-ae2ea9264b85@brauner>
+References: <20251017060956.1151347-1-safinaskar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/10] scalable symbol flags with __kflagstab
-To: Siddharth Nayyar <sidnayyar@google.com>, corbet@lwn.net
-Cc: arnd@arndb.de, gprocida@google.com, linux-arch@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, maennich@google.com, mcgrof@kernel.org,
- nathan@kernel.org, nicolas.schier@linux.dev, samitolvanen@google.com
-References: <87ikgieiar.fsf@trenco.lwn.net>
- <20251020224317.723069-1-sidnayyar@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20251020224317.723069-1-sidnayyar@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251017060956.1151347-1-safinaskar@gmail.com>
 
-On 10/21/25 12:43 AM, Siddharth Nayyar wrote:
-> On Mon, Oct 13, 2025 at 8:02PM Jonathan Corbet <corbet@lwn.net> wrote:
->> I ask "how it will be used" since you don't provide any way to actually
->> mark exports with this new flag. What is the intended usage here?
+On Fri, Oct 17, 2025 at 06:09:53AM +0000, Askar Safin wrote:
+> Intro
+> ====
+> This patchset removes half of classic initrd (initial RAM disk) support,
+> i. e. linuxrc code path, which was deprecated in 2020.
+> Initramfs still stays, RAM disk itself (brd) still stays.
+> And other half of initrd stays, too.
+> init/do_mounts* are listed in VFS entry in
+> MAINTAINERS, so I think this patchset should go through VFS tree.
+> I tested the patchset on 8 (!!!) archs in Qemu (see details below).
+> If you still use initrd, see below for workaround.
 > 
-> Patch 09/10 (last hunk) provides a mechanism to enable import protection
-> for all symbols exported by vmlinux. To summarise, modpost enables
-> import protection when CONFIG_UNUSED_KSYMS_WHITELIST is set. This
-> results in all symbols except for the ones mentioned in the whitelist to
-> be protected from being imported by out-of-tree modules. In other words,
-> out-of-tree modules can only use symbols mentioned in
-> CONFIG_UNUSED_KSYMS_WHITELIST, when the config option is set.
-> 
-> I realise I should have documented this behaviour, both in the cover
-> letter as well as in kernel documentation. I will do so in the following
-> version of the patch series.
-> 
-> Please share any feedback on the mechnism to enable the mechanism. In my
-> opinion, CONFIG_UNUSED_KSYMS_WHITELIST has a complementary goal to
-> import protection and therefore I felt like using the option to enable
-> import protection. In case this seems to convoluted, I am okay with
-> introducing an explicit option to enable import protection.
+> In 2020 deprecation notice was put to linuxrc initrd code path.
+> In v1 I tried to remove initrd
+> fully, but Nicolas Schichan reported that he still uses
+> other code path (root=/dev/ram0 one) on million devices [4].
+> root=/dev/ram0 code path did not contain deprecation notice.
 
-CONFIG_UNUSED_KSYMS_WHITELIST was originally added in commit
-1518c633df78 ("kbuild: allow symbol whitelisting with
-TRIM_UNUSED_KSYMS"), specifically for Android. Looking at configs of
-several distributions [1], it appears that it has only been used by
-Android so far. This means it is likely acceptable to protect the
-whitelist symbols in this manner.
+Without Acks or buy-in from other maintainers this is not a change we
+can just do given that a few people already piped up and expressed
+reservations that this would be doable for them.
 
-On the other hand, I think what is protected (all exported symbols or
-CONFIG_UNUSED_KSYMS_WHITELIST) and how it is protected
-(KSYM_FLAG_PROTECTED) are two different things, so it might be cleaner
-to keep them separate.
+@Christoph, you marked this as deprecated years ago.
+What's your take on this?
 
 > 
->> If I understand things correctly, applying this series will immediately
->> result in the inability to load any previously built modules, right?
->> That will create a sort of flag day for anybody with out-of-tree modules
->> that some may well see as a regression. Is that really the intent?
+> So, in this version of patchset I remove deprecated code path,
+> i. e. linuxrc one, while keeping other, i. e. root=/dev/ram0 one.
 > 
-> Unfortunately this series will break all modules which export symbols
-> since older versions of such modules will not have the kflagstab
-> section.
-
-I would add that out-of-tree modules are typically leaves that don't
-export any symbols. This means it should still be possible to load such
-modules on an updated kernel.
-
-A problem occurs when out-of-tree support is split into multiple
-modules, where one module exports data for another. Some drivers can be
-split in such a way. For example, a NIC driver might be divided into
-core, Ethernet and InfiniBand modules, where the core provides exports
-for the latter modules.
-
-In such a case, the kernel will ignore the __ksymtab_gpl section in the
-first module and issue a warning about it (patch #6). Eventually, when
-the second module is attempted to be inserted, the load operation will
-result in an error due to an unresolved import.
-
-In practice, I believe this series should have limited impact. Stable
-trees and distributions that care about kABI stability should not
-backport it. In contrast, people who follow master releases typically
-don't use out-of-tree modules, or they know how to deal with updating
-them. In this case, only recompilation is needed, which is less
-impactful than when an API changes and the actual module code needs to
-be updated.
-
-In the past, there were already breaking changes to the format of the
-exported data, notably in commit 7290d5809571 ("module: use relative
-references for __ksymtab entries") and 8651ec01daed ("module: add
-support for symbol namespaces."). As far as I'm aware, these changes
-didn't cause significant trouble, even though they actually resulted in
-silent breakages of old modules with exports.
-
+> Also I put deprecation notice to remaining code path, i. e. to
+> root=/dev/ram0 one. I plan to send patches for full removal
+> of initrd after one year, i. e. in September 2026 (of course,
+> initramfs will still work).
 > 
-> Out-of-tree modules which do not export symbols of their own will only
-> fail to load in case the CONFIG_UNUSED_KSYMS_WHITELIST is set and the
-> symbols which these modules consume are not present in the whitelist.
-
-[1] https://oracle.github.io/kconfigs/?config=UTS_RELEASE&config=UNUSED_KSYMS_WHITELIST
-
--- 
-Thanks,
-Petr
+> Also, I tried to make this patchset small to make sure it
+> can be reverted easily. I plan to send cleanups later.
+> 
+> Details
+> ====
+> Other user-visible changes:
+> 
+> - Removed kernel command line parameters "load_ramdisk" and
+> "prompt_ramdisk", which did nothing and were deprecated
+> - Removed /proc/sys/kernel/real-root-dev . It was used
+> for initrd only
+> - Command line parameters "noinitrd" and "ramdisk_start=" are deprecated
+> 
+> This patchset is based on v6.18-rc1.
+> 
+> Testing
+> ====
+> I tested my patchset on many architectures in Qemu using my Rust
+> program, heavily based on mkroot [1].
+> 
+> I used the following cross-compilers:
+> 
+> aarch64-linux-musleabi
+> armv4l-linux-musleabihf
+> armv5l-linux-musleabihf
+> armv7l-linux-musleabihf
+> i486-linux-musl
+> i686-linux-musl
+> mips-linux-musl
+> mips64-linux-musl
+> mipsel-linux-musl
+> powerpc-linux-musl
+> powerpc64-linux-musl
+> powerpc64le-linux-musl
+> riscv32-linux-musl
+> riscv64-linux-musl
+> s390x-linux-musl
+> sh4-linux-musl
+> sh4eb-linux-musl
+> x86_64-linux-musl
+> 
+> taken from this directory [2].
+> 
+> So, as you can see, there are 18 triplets, which correspond to 8 subdirs in arch/.
+> 
+> For every triplet I tested that:
+> - Initramfs still works (both builtin and external)
+> - Direct boot from disk still works
+> - Remaining initrd code path (root=/dev/ram0) still works
+> 
+> Workaround
+> ====
+> If "retain_initrd" is passed to kernel, then initramfs/initrd,
+> passed by bootloader, is retained and becomes available after boot
+> as read-only magic file /sys/firmware/initrd [3].
+> 
+> No copies are involved. I. e. /sys/firmware/initrd is simply
+> a reference to original blob passed by bootloader.
+> 
+> This works even if initrd/initramfs is not recognized by kernel
+> in any way, i. e. even if it is not valid cpio archive, nor
+> a fs image supported by classic initrd.
+> 
+> This works both with my patchset and without it.
+> 
+> This means that you can emulate classic initrd so:
+> link builtin initramfs to kernel; in /init in this initramfs
+> copy /sys/firmware/initrd to some file in / and loop-mount it.
+> 
+> This is even better than classic initrd, because:
+> - You can use fs not supported by classic initrd, for example erofs
+> - One copy is involved (from /sys/firmware/initrd to some file in /)
+> as opposed to two when using classic initrd
+> 
+> Still, I don't recommend using this workaround, because
+> I want everyone to migrate to proper modern initramfs.
+> But still you can use this workaround if you want.
+> 
+> Also: it is not possible to directly loop-mount
+> /sys/firmware/initrd . Theoretically kernel can be changed
+> to allow this (and/or to make it writable), but I think nobody needs this.
+> And I don't want to implement this.
+> 
+> On Qemu's -initrd and GRUB's initrd
+> ====
+> Don't panic, this patchset doesn't remove initramfs
+> (which is used by nearly all Linux distros). And I don't
+> have plans to remove it.
+> 
+> Qemu's -initrd option and GRUB's initrd command refer
+> to initrd bootloader mechanism, which is used to
+> load both initrd and (external) initramfs.
+> 
+> So, if you use Qemu's -initrd or GRUB's initrd,
+> then you likely use them to pass initramfs, and thus
+> you are safe.
+> 
+> v1: https://lore.kernel.org/lkml/20250913003842.41944-1-safinaskar@gmail.com/
+> 
+> v1 -> v2 changes:
+> - A lot. I removed most patches, see cover letter for details
+> 
+> v2: https://lore.kernel.org/lkml/20251010094047.3111495-1-safinaskar@gmail.com/
+> 
+> v2 -> v3 changes:
+> - Commit messages
+> - Expanded docs for "noinitrd"
+> - Added link to /sys/firmware/initrd workaround to pr_warn
+> 
+> [1] https://github.com/landley/toybox/tree/master/mkroot
+> [2] https://landley.net/toybox/downloads/binaries/toolchains/latest
+> [3] https://lore.kernel.org/all/20231207235654.16622-1-graf@amazon.com/
+> [4] https://lore.kernel.org/lkml/20250918152830.438554-1-nschichan@freebox.fr/
+> 
+> Askar Safin (3):
+>   init: remove deprecated "load_ramdisk" and "prompt_ramdisk" command
+>     line parameters
+>   initrd: remove deprecated code path (linuxrc)
+>   init: remove /proc/sys/kernel/real-root-dev
+> 
+>  .../admin-guide/kernel-parameters.txt         |  12 +-
+>  Documentation/admin-guide/sysctl/kernel.rst   |   6 -
+>  arch/arm/configs/neponset_defconfig           |   2 +-
+>  fs/init.c                                     |  14 ---
+>  include/linux/init_syscalls.h                 |   1 -
+>  include/linux/initrd.h                        |   2 -
+>  include/uapi/linux/sysctl.h                   |   1 -
+>  init/do_mounts.c                              |  11 +-
+>  init/do_mounts.h                              |  18 +--
+>  init/do_mounts_initrd.c                       | 107 ++----------------
+>  init/do_mounts_rd.c                           |  24 +---
+>  11 files changed, 23 insertions(+), 175 deletions(-)
+> 
+> 
+> base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+> -- 
+> 2.47.3
+> 
 
