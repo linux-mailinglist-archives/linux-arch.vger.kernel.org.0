@@ -1,86 +1,159 @@
-Return-Path: <linux-arch+bounces-14243-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14244-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41705BF7E7F
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Oct 2025 19:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF968BF9B26
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 04:16:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD62B3B218C
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Oct 2025 17:31:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65689403079
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 02:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 260F334845E;
-	Tue, 21 Oct 2025 17:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 562911F582E;
+	Wed, 22 Oct 2025 02:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="SRu7Npy7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dGvnAwwZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A353FF9EC;
-	Tue, 21 Oct 2025 17:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29D721019C
+	for <linux-arch@vger.kernel.org>; Wed, 22 Oct 2025 02:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761067901; cv=none; b=qevKgT00rT01lxNFUxRKdVbmtMmSt2OjBgZiGmVew/OHOQvvDYROnquD9NQu9Hmxa2WBYri/LcGmgxI6/oOpwMMAS1R4lNysgqC7k/fmmexGbuFWmVtj8zIKOm8WzeyYN2226MkG6omWr8ipfIPmFCFape4oBAJb/dCTu6ZPCMo=
+	t=1761099366; cv=none; b=NFaKc4tL6iCBfsXqEJIuglWhAo/kPDQTHwZ7o0BOmtHZPDKSJMnJaQG02J7/47SmgBN+Gvo//OCgLUvZAEnQehwOBPL2XdVDApRkWCUo7Lu4JmkyDf9WrprHGh1+edwcoZqMEyhOF/AjzFana4OqHZNLtRb50ztxB7kn1K4APNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761067901; c=relaxed/simple;
-	bh=hltXOIbWWgBTBlvQco48LT2+SFzQye7FM3u76fXl0Cs=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=fB2vxyi1JYItNrBGFa//IhuUeSzxrcOiePOxsxMvKSCj7ujwuRSUfZYQm5acmmDLALwWC9QSg/atWs9s43JKrpfemMGdEe5SvpVcXRVdXWt4P0eOy4IIgjBVHvW83PYqVIemzXiF7zCDKUDiXIdgdP7+FdkMdmgC638ICQ9YH9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=SRu7Npy7; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1761067898;
-	bh=hltXOIbWWgBTBlvQco48LT2+SFzQye7FM3u76fXl0Cs=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=SRu7Npy7HxfLnS2UzT8UOEQICfEq8fFhMonn8ojuq2x6uY1SqNw9T7RYvu279i72V
-	 Lwqlx30oO7ATXpynvx7oKdcTPd/rdIT4BF8qzcVPuEN3j3El0u8HNPcUPk4ICNU/hU
-	 CR9cE3C3hGT6s2WAE7X1IlaYEJsL7RX1Szu8SoEg=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id F09DD4028E; Tue, 21 Oct 2025 10:31:38 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id EDE534015D;
-	Tue, 21 Oct 2025 10:31:38 -0700 (PDT)
-Date: Tue, 21 Oct 2025 10:31:38 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-    linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, arnd@arndb.de, 
-    catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
-    akpm@linux-foundation.org, mark.rutland@arm.com, harisokn@amazon.com, 
-    ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org, 
-    memxor@gmail.com, zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, 
-    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
-    konrad.wilk@oracle.com
-Subject: Re: [PATCH v7 2/7] arm64: barrier: Support
- smp_cond_load_relaxed_timeout()
-In-Reply-To: <20251017061606.455701-3-ankur.a.arora@oracle.com>
-Message-ID: <c8be3663-42db-4c8e-cb5c-b7f28aaefc04@gentwo.org>
-References: <20251017061606.455701-1-ankur.a.arora@oracle.com> <20251017061606.455701-3-ankur.a.arora@oracle.com>
+	s=arc-20240116; t=1761099366; c=relaxed/simple;
+	bh=ZNYpaJWfK2uX7fNuNpV/cydFuI7wkAz8CLs/mB6yfTU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UNLMcCd4Xl/k2icNdV9r+jEV86tHLQdwOSXtkceyThSdOUEuJ8t8ZoUrpUoiw56cGb+iL2KOC5Adnd+TuEdq2lJcEtJipyo/CPdmGgcVoneOhIiABYRvZzoMN57nf6bil1CmLPSRRwzMo9Cflc+z510QR4YJDJQJVUEZF2ogc88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dGvnAwwZ; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7a265a02477so308170b3a.2
+        for <linux-arch@vger.kernel.org>; Tue, 21 Oct 2025 19:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761099363; x=1761704163; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+yFbQwKVrg4ulSzHTYcdE0/YBPiD7WzPZ8N0zJ6yfUg=;
+        b=dGvnAwwZt24nsiLUJRQ+UeeMvxr4qhMK7hbIRNA/JtjRZm+MyX5aOyGPmAE9+aG63s
+         sIPjbmktHkBIYrux7vtL2hYmwgKy0ZO3SrjGJoinbBzGJ0vhWAzp3oFa2NwKF+6HSpaF
+         U33/acgsn/aL38aB64HDrZvRVH3aNZwo/M+146H2/AR8b2/2Bsd1Sx4Ti5+ucnXNz4rP
+         jDfYjgKGeoOKPPUszAjZK8/F2YJ5RlC+Z7nmDvQ5Hymjjng1sFkw+m7TSR13ClGpOhwb
+         mWuP6aVNTUZKshV9RAdycFKEF39Uue+m3oIL87XatFOPv0ffaBxrpAiEi6kShMe0dkda
+         r2sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761099363; x=1761704163;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+yFbQwKVrg4ulSzHTYcdE0/YBPiD7WzPZ8N0zJ6yfUg=;
+        b=eW5H1QnRmZXljK5GMfrtWoGfsNfPwcXeZAjC62SNObSnuZBX8rnrJSNmqG9ALPWo0C
+         uW0GvZHwhNDix+a07c4fvw8Kq61GVNjKPdDnAlnIPiWsFjBEHHlGrT4IU5yd402AWEWf
+         D3YqAwIvxEkH4s9R9TrPXfJgoc4jeVdXYUpvxTTw/N+hKpuR6fJRM69j9pTvstDfahfM
+         1CqgJtiW7Hj5l0/czOx2k0xKA1zNHO1Vqwkh00PSnYSvF1ijfYSbzhrUcZAgTltvJtxf
+         1SMh1DpDRBgUOx++a6FZqnBALTE4d/CkhwTsLDbI7QqC7/Kt3MTP/iHPUklY6fLjKOF9
+         Ty+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWOYXzeVwiK1W2JQ1dGxz5lJgAU4dIk8wMfiKpjEKihkLURujz2DfQGgDg1/LtVpLCPN4RywS0bUxR4@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNemmNaKlL7MHazY+q2uxqfOxre68QZlIUSTiqmlOpTGAyQnM3
+	0UWCjrk5CAVCX+gT7L1nWnwLDNvJo3tZtHA+X1Pn5RAwUrrJv4+Et+iP
+X-Gm-Gg: ASbGncu4iqbLKShra3xakISmrM4JrE9BqY+VxwBX2kwF5DyY2rqkrwdl2oGiSnOt9Q5
+	pdczuwF423nmkOtC/zV3Z64/Hp/9s9Hk8u7N2YDLvf/q/MijJd9ptWMxQwd+HKayjDT9FVPDCdn
+	7pJBtRKhMu1sv2T6hV4yDwj7cw8WJfVd4gXAnPcHN4nMwIEowMX3rmhsGD9ZCeCrdBCOeTBUIrc
+	sRAleMPyPzcjWxFICFe/HsoIqzZ3d01y1H+abcj9zuiTrcadsAzqWcWzGYWm0SI0UaTzy9sTC1a
+	lB3h0RG9Z9t6ctmazyxbTngAh0XtebdddzLLG333ZAnYmH7smAwohVbGaSB+g/RZdIP8GEhRTrp
+	Fdpt8B/7sx/erj8S5rslZZCJHHUzIPUqv3KYEadddyAuEewOVe0YNsfXhGBELmYR83NGsdmj87f
+	OZy29iEnx+zTGk
+X-Google-Smtp-Source: AGHT+IHgcLczGY0gNkz46ZH3wqYDdp+xytg9WZxLoXNNek71M0Z3I+LEtQXMo7LSXlQTlq9C1XGtow==
+X-Received: by 2002:a05:6a20:5493:b0:304:4f7c:df90 with SMTP id adf61e73a8af0-334a861852amr26222250637.50.1761099363079;
+        Tue, 21 Oct 2025 19:16:03 -0700 (PDT)
+Received: from archie.me ([103.124.138.80])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a23010da0bsm12753936b3a.55.2025.10.21.19.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Oct 2025 19:16:02 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 48C344209E4B; Wed, 22 Oct 2025 09:16:00 +0700 (WIB)
+Date: Wed, 22 Oct 2025 09:16:00 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Askar Safin <safinaskar@gmail.com>, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Julian Stecklina <julian.stecklina@cyberus-technology.de>,
+	Gao Xiang <hsiangkao@linux.alibaba.com>,
+	Art Nikpal <email2tema@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Graf <graf@amazon.com>, Rob Landley <rob@landley.net>,
+	Lennart Poettering <mzxreary@0pointer.de>,
+	linux-arch@vger.kernel.org, linux-block@vger.kernel.org,
+	initramfs@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-doc@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+	Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>,
+	Thorsten Blum <thorsten.blum@linux.dev>,
+	Heiko Carstens <hca@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+	Dave Young <dyoung@redhat.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, Jessica Clarke <jrtc27@jrtc27.com>,
+	Nicolas Schichan <nschichan@freebox.fr>,
+	David Disseldorp <ddiss@suse.de>, patches@lists.linux.dev
+Subject: Re: [PATCH v3 2/3] initrd: remove deprecated code path (linuxrc)
+Message-ID: <aPg-YF2pcyI-HusN@archie.me>
+References: <20251017060956.1151347-1-safinaskar@gmail.com>
+ <20251017060956.1151347-3-safinaskar@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="m/ueW+980/ea0Wf8"
+Content-Disposition: inline
+In-Reply-To: <20251017060956.1151347-3-safinaskar@gmail.com>
 
-On Thu, 16 Oct 2025, Ankur Arora wrote:
 
-> +#define SMP_TIMEOUT_POLL_COUNT	1
+--m/ueW+980/ea0Wf8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-A way to disable the spinning in the core code and thus arm64 wont spin
-there anymore. Good.
+On Fri, Oct 17, 2025 at 06:09:55AM +0000, Askar Safin wrote:
+> +		if (rd_load_image()) {
+> +			pr_warn("using deprecated initrd support, will be removed in Septembe=
+r 2026; "
+> +				"use initramfs instead or (as a last resort) /sys/firmware/initrd; "
+> +				"see section \"Workaround\" in "
+> +				"https://lore.kernel.org/lkml/20251010094047.3111495-1-safinaskar@gm=
+ail.com\n");
+>  		}
 
-Spinning is bad and a waste of cpu resources. If this is done then I
-would like the arch code to implement the spinning and not the core so
-that there is a motivation for the arch maintainer to
-come up with a way to avoid the spinning at some point.
+Do you mean that initrd support will be removed in LTS kernel release of 20=
+26?
 
-The patch is ok as is.
+Thanks.=20
 
-Reviewed-by: Christoph Lameter (Ampere) <cl@gentwo.org>
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--m/ueW+980/ea0Wf8
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaPg+YAAKCRD2uYlJVVFO
+o9OtAQCr/giTF4+FVt9hiDGkb1l4yn/kE0D0NKGYI1gigRnAqAEAhLIU0ssllGOB
+IgSBphGX7ddV9bgZvHiqagtFYOgJwwo=
+=plLG
+-----END PGP SIGNATURE-----
+
+--m/ueW+980/ea0Wf8--
 
