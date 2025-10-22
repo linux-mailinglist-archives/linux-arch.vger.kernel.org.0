@@ -1,160 +1,190 @@
-Return-Path: <linux-arch+bounces-14249-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14250-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A633BFAFB8
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 10:52:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEF74BFBA5F
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 13:34:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3847189EFCF
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 08:53:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89B0F4800D8
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 11:34:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD9F3064BB;
-	Wed, 22 Oct 2025 08:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="C5kuHeMa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C506285CA3;
+	Wed, 22 Oct 2025 11:33:57 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881BD30649A;
-	Wed, 22 Oct 2025 08:52:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E1DCA6B;
+	Wed, 22 Oct 2025 11:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761123155; cv=none; b=q5KxQwKHDb09WR3RlcyT4U7JQL+zH2YKpE/SYrwqN5dWM0u9WtCpJENKvVH5M9L6bzH+bjkNwhLMqJ7zPlHPEIpbWEnzSjDWsfm0Z/zNyBNbd70VoGWAmsgOyR23nctU7sVB+5+891Kn36keXKPY/KMJzWCeMxsTFmt0keOcUJs=
+	t=1761132837; cv=none; b=myyuNYbzS3SRBd1ixx2HJe5Oux5C3jhmcraMQxlThroVuDw1cDFfaSnq95G7dLsEX3uvN/gVfUJjYvh/KNrCNoEqmcw9JatAq7HVA9lrhF+/UjJsB3IjQ3zZSyYZ5GQVd8XvTaWzCZaDx2zkK50Wfz21dGQVRd0b63IUzY+yi9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761123155; c=relaxed/simple;
-	bh=a/aYw9um5mmbOeR+Zc4NkjwlXD1bC6f0L9h0bx/RsnU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EfIQhndteEdiEh6Ohxhr7yNjmh7sD0KIWqacBIm7SXIGm5oYehqlqRKwKFvS7UUFi4ASRzkpe+07G9RDcLyWXcHsUhGGf5l0JoI3c9iG7E6m8CobkKk/bYxo6ct51sATjVB0j0i2SXaJ+AeIpwOXw4v01tg3aTRdpxiMNbqAcPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=C5kuHeMa; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59LMwNdg001260;
-	Wed, 22 Oct 2025 08:52:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=x5nVMa1XAhPUXMnT7ptKtvcjLmXqVU
-	h5yjJZ/45AaLc=; b=C5kuHeMafLvRh6Ei3XDjCPDykk3uXii9FHRMwPjdkO4okZ
-	wqVVbjEAuHThQCNR2i6L7hRXABA9k2yyowOV8Mj1XW9nNhHjR32vjDrFkUG2Blwx
-	A04qMTpMK+u0hxOyOafTcZDWkFpd860QOFUo66wE6lU5P6/XZOqbhnDjGxZkq8o+
-	vxHl721pDEhOQx6jKYgRmkqW8ZQK/YK68nQwvnZatXMaEAU89kDtOqzXfXNJwvSR
-	5oToZFFLc5JZfHhC6xAOu4CHJV1vXUKnun9IxtClDtIltf/Y8QiIOMA8j0nypudF
-	Zh0Ysn+bE05QgbsLcPev/tWYYinf3o3LDLaUW5qg==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49v31s3rc7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Oct 2025 08:52:28 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59M82HwL011053;
-	Wed, 22 Oct 2025 08:52:27 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 49vqx173v9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Oct 2025 08:52:27 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59M8qNn051904904
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 Oct 2025 08:52:23 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B20DB20049;
-	Wed, 22 Oct 2025 08:52:23 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6A49420040;
-	Wed, 22 Oct 2025 08:52:23 +0000 (GMT)
-Received: from osiris (unknown [9.155.211.25])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 22 Oct 2025 08:52:23 +0000 (GMT)
-Date: Wed, 22 Oct 2025 10:52:21 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Ingo Molnar <mingo@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>, linux-arch@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 16/15] bugs/s390: Use in 'cond_str' to __EMIT_BUG()
-Message-ID: <20251022085221.14219A7f-hca@linux.ibm.com>
-References: <20250515124644.2958810-1-mingo@kernel.org>
- <20250515124644.2958810-11-mingo@kernel.org>
- <20250520133927.7932C19-hca@linux.ibm.com>
- <aEabAPB5Y9EbSPkt@gmail.com>
- <20250609155657.8183A92-hca@linux.ibm.com>
+	s=arc-20240116; t=1761132837; c=relaxed/simple;
+	bh=yUPVLciN6zsj6UESXutXjdkrnNr1pBeFSqAjpU16DLs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oNismmK1TbYUyBXqGVNCMfe1uxOFni7sVSr2SqyiqZSwihrpf6Gt7PCc61/GQ9mCklZSVgxKyi+ZThIK4I78yrkZgurpI2j0YtrqPcnhEKVjqdoxI3/3B5DmsfBzwZviG/rF/Au87E5jzAUKvahvpDnAyhz56ubAMJfF04QvI6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cs6RM1Yb4z6GDLk;
+	Wed, 22 Oct 2025 19:30:39 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id ABDEB1400C8;
+	Wed, 22 Oct 2025 19:33:51 +0800 (CST)
+Received: from SecurePC-101-06.huawei.com (10.122.19.247) by
+ dubpeml100005.china.huawei.com (7.214.146.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 22 Oct 2025 12:33:50 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Conor Dooley <conor@kernel.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, <linux-cxl@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-arch@vger.kernel.org>,
+	<linux-mm@kvack.org>, Dan Williams <dan.j.williams@intel.com>, "H . Peter
+ Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Andrew Morton
+	<akpm@linux-foundation.org>
+CC: <james.morse@arm.com>, Will Deacon <will@kernel.org>, Davidlohr Bueso
+	<dave@stgolabs.net>, <linuxarm@huawei.com>, Yushan Wang
+	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
+ Rutland <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski
+	<luto@kernel.org>, Dave Jiang <dave.jiang@intel.com>
+Subject: [PATCH v4 0/6] Cache coherency management subsystem
+Date: Wed, 22 Oct 2025 12:33:43 +0100
+Message-ID: <20251022113349.1711388-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250609155657.8183A92-hca@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LTYgem-GKj4AYFIgCqhWGPObn1r3NOZ5
-X-Proofpoint-GUID: LTYgem-GKj4AYFIgCqhWGPObn1r3NOZ5
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE4MDAyMiBTYWx0ZWRfX9TYRyfWiZt6G
- HWLxyKz0bQxtneu1hpUkOLO6/QebTrx6tPJf8KuEabVIbJ0Byx14sEcnb72THPL9qU/DB9H5piO
- ZOU9gky536Y/olxqJo3i242lj+skMqXS0Do8dWszIQVRcelwo5s1vQBrcdkgKe7yUu8ohbhl7lf
- tlsSOW3q19+qKQRlZiHTm8aPt6VBvZC1k6JbryziAj1N8JazbAgC4XjxQeQ/6PGw3gLK7dRA6Fa
- vsYnH5kmKUcBlnRQHUcj5fHQJszhNs1j4yBwXHS1xDyDDbhsiOCnCHpdYxbzWOxoQHQbJveBOeP
- eVPkVxGjdgi94HqYMt8kffXTNt/e77lkJwTbnU4jmSABOhyQ5HUuGHfO4GdUb+FzptS8UexjaW/
- IyHALLPA4ydtjFLjThQuXBgieEJNlg==
-X-Authority-Analysis: v=2.4 cv=IJYPywvG c=1 sm=1 tr=0 ts=68f89b4c cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=kj9zAlcOel0A:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=h8emfhCFL6kOGPYS9jUA:9 a=CjuIK1q_8ugA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-22_03,2025-10-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 clxscore=1011 suspectscore=0 spamscore=0
- bulkscore=0 adultscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510180022
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml100011.china.huawei.com (7.191.174.247) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-Hi Ingo,
+Support system level interfaces for cache maintenance as found on some
+ARM64 systems. This is needed for correct functionality during various
+forms of memory hotplug (e.g. CXL). Typical hardware has MMIO interface
+found via ACPI DSDT.
 
-On Mon, Jun 09, 2025 at 05:56:57PM +0200, Heiko Carstens wrote:
-> On Mon, Jun 09, 2025 at 10:27:44AM +0200, Ingo Molnar wrote:
-> > So I'm not sure what happened: I tried to reproduce what I did 
-> > originally, but my naive patch ran into assembler build errors when a 
-> > WARN_ON() macro tried to use the '%' C operator, such as 
-> > fs/crypto/crypto.c:123:
-> > 
-> >  include/linux/compiler_types.h:497:20: error: invalid 'asm': invalid %-code
-> >  arch/s390/include/asm/bug.h:12:2: note: in expansion of macro 'asm_inline'
-> >  arch/s390/include/asm/bug.h:50:2: note: in expansion of macro '__EMIT_BUG'
-> >  include/asm-generic/bug.h:119:3: note: in expansion of macro '__WARN_FLAGS'
-> >  fs/crypto/crypto.c:123:6: note: in expansion of macro 'WARN_ON_ONCE'
-> > 
-> > Which corresponds to:
-> > 
-> >         if (WARN_ON_ONCE(len % FSCRYPT_CONTENTS_ALIGNMENT != 0))
-> >                 return -EINVAL;
-> > 
-> > I'm quite sure I never saw these build errors - I saw linker errors 
-> > related to the u16 overflow I documented in the changelog. (Note to 
-> > self: copy & paste more of the build error context next time around.)
-> > 
-> > Your version doesn't have that build problem, so I picked it up with 
-> > the changelog below and your Signed-off-by. Does that look good to you?
-> 
-> Yes, fine with me.
+Includes parameter changes to cpu_cache_invalidate_memregion() but no
+functional changes for architectures that already support this call.
 
-Given that this missed the last merge I'm wondering what is supposed to
-happen with this series?
+How to merge?  When this is ready to proceed (so subject to review
+feedback on this version), I'm not sure what the best route into the
+kernel is. Conor could take the lot via his tree for drivers/cache but
+the generic changes perhaps suggest it might be better if Andrew
+handles this?  Any merge conflicts in drivers/cache will be trivial
+build file stuff. Or maybe even take it throug one of the affected
+trees such as CXL.
 
-It is still in linux-next, and I'd like to see at least the non
-CONFIG_DEBUG_BUGVERBOSE_DETAILED s390 parts upstream with the next merge
-window. In particular I'm talking about the two commits
+v4: (Small changes called out in each patch)
+- Drop the ACPI driver. It has done it's job as a second implementation
+  to help with generality testing. I have heard zero interest in actually
+  doing the specification work needed to make that official. Easy to bring
+  back if needed in future. I have it locally still as a second test
+  case.
+- Add a cpu_cache_invalidate_all() helper for the 0,-1 case that is used
+  to indicate everything should be flushed as no fine grained range info
+  available.
+- Simplify the necessary symbols to be selected by architectures by
+  making CONFIG_GENERIC_CPU_CACHE_MAINTENANCE select
+  ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+- Avoid naming mentioning devices as there is no struct device.
+- Use a kref so as to have something on which a _put() operation makes
+  sense avoiding rather confusing freeing of an internal structure pointer
+  that was seen in v3.
+- Gather tags given.
+- Various minor things like typos, header tweaks etc.
+Thanks to all who reviewed v3.
 
-ed845c363d8c ("bugs/s390: Remove private WARN_ON() implementation")
-6584ff203aec ("bugs/s390: Use 'cond_str' in __EMIT_BUG()")
+On current ARM64 systems (and likely other architectures) the
+implementation of cache flushing need for actions such as CXL memory
+hotplug e.g. cpu_cache_invalidate_memregion(), is performed by system
+components outside of the CPU, controlled via either firmware or MMIO
+interfaces.
 
-where the second commit is mainly a rework of the s390 specific bug
-support.
+These control units run the necessary coherency protocol operations to
+cause the write backs and cache flushes to occur asynchronously. They allow
+filtering by PA range to reduce disruption to the system. Systems
+supporting this interface must be designed to ensure that, when complete,
+all cache lines in the range are in invalid state or clean state
+(prefetches may have raced with the invalidation). This must include
+memory-side caches and other non architectural caches beyond the Point
+of Coherence (ARM terminology) such that writes will reach memory even
+after OS programmable address decoders are modified (for CXL this is
+any HDM decoders that aren't locked). Software will guarantee that no
+writes to these memory ranges race with this operation. Whilst this is
+subtly different from write backs must reach the physical memory that
+difference probably doesn't matter to those reading this series.
+
+The often distributed nature of the relevant coherency management units
+(e.g. due to interleaving) requires the appropriate commands to be issued
+to multiple (potentially heterogeneous) units. To enable this a
+registration framework is provided to which drivers may register a set
+of callbacks. Upon a request for a cache maintenance operation the
+framework iterates over all registered callback sets, calling first a
+command to write back and invalidate, and then optionally a command to wait
+for completion. Filtering on relevance if a give request is left to the
+individual drivers.
+
+In this version only one driver is included. This is the HiSilicon Hydra
+Home Agent driver which controls hardware found on some of our relevant
+server SoCs. Also available (I can post if anyone is interested)
+is an ACPI driver based on a firmware interface that was in a public
+PSCI specification alpha version
+
+QEMU emulation code at
+http://gitlab.com/jic23/qemu cxl-2025-03-20 
+
+Notes:
+- I don't particularly like defining 'generic' infrastructure with so few
+  implementations. If anyone can point me at docs for another one or two,
+  or confirm that they think this is fine that would be great!
+  The converse to this is I don't want to wait longer for those to surface
+  given the necessity to support this one platform that I do know about!
+
+
+Jonathan Cameron (3):
+  memregion: Drop unused IORES_DESC_* parameter from
+    cpu_cache_invalidate_memregion()
+  arm64: Select GENERIC_CPU_CACHE_MAINTENANCE
+  MAINTAINERS: Add Jonathan Cameron to drivers/cache and add
+    lib/cache_maint.c + header
+
+Yicong Yang (2):
+  memregion: Support fine grained invalidate by
+    cpu_cache_invalidate_memregion()
+  lib: Support ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+
+Yushan Wang (1):
+  cache: Support cache maintenance for HiSilicon SoC Hydra Home Agent
+
+ MAINTAINERS                     |   3 +
+ arch/arm64/Kconfig              |   1 +
+ arch/x86/mm/pat/set_memory.c    |   2 +-
+ drivers/cache/Kconfig           |  15 +++
+ drivers/cache/Makefile          |   2 +
+ drivers/cache/hisi_soc_hha.c    | 191 ++++++++++++++++++++++++++++++++
+ drivers/cxl/core/region.c       |   5 +-
+ drivers/nvdimm/region.c         |   2 +-
+ drivers/nvdimm/region_devs.c    |   2 +-
+ include/linux/cache_coherency.h |  61 ++++++++++
+ include/linux/memregion.h       |  16 ++-
+ lib/Kconfig                     |   4 +
+ lib/Makefile                    |   2 +
+ lib/cache_maint.c               | 138 +++++++++++++++++++++++
+ 14 files changed, 436 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/cache/hisi_soc_hha.c
+ create mode 100644 include/linux/cache_coherency.h
+ create mode 100644 lib/cache_maint.c
+
+-- 
+2.48.1
+
 
