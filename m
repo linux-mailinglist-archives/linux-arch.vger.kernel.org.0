@@ -1,56 +1,55 @@
-Return-Path: <linux-arch+bounces-14273-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14274-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DD60BFE37F
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 22:47:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F1E8BFE41B
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 23:11:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0EC764FD03C
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 20:47:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B948E3A811C
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Oct 2025 21:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BDA5301009;
-	Wed, 22 Oct 2025 20:47:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A0822DECAA;
+	Wed, 22 Oct 2025 21:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMDWLrfV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WB/NSEOY"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DBD43009C3;
-	Wed, 22 Oct 2025 20:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDB0275B16;
+	Wed, 22 Oct 2025 21:11:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761166048; cv=none; b=RBLZKQwkbbZZMtxds+IdV0kUero4q5sB05W7dTPeIBpbuwDwldV/NSjtgeEGZmt60TUBzFIGL91TbRRY3UXU3m2F+ytAbBjYvi4Nbyeiqx1eYUHe6t2FgUFpD7N4x4DghyVUJK5bXVgcurr/JLnb6XLs1rZhE1o/hKMQFwEe+lQ=
+	t=1761167479; cv=none; b=qn8ovFLylWHNWUuwFeCS6rz96hOfUdGYDziqwPe85psAhkaARp7Q22doyLlr4LGRLLXTkLcPNIqMwn9eVVIO/DGuqoj4sfBVYMIDVarq/Z6kwCcvZKChSS8Ak7k5qcLlmI0p2InndvJq+00tjfG0daoutPrtaZ0UncUcgf+iVT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761166048; c=relaxed/simple;
-	bh=e4wpAeuwnWxwPsv6xR22bTAFdrGhHjpoATj1khsZ/3E=;
+	s=arc-20240116; t=1761167479; c=relaxed/simple;
+	bh=5v3JRmduY4uSzLf2Pqm6596Of3Jc6oNa3Sp1BFVrPsc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FjZaTWtmpIHvdKZ+xMOTAGundTbepc5SX2rsiVrm7AkW/M6OYfGN9DY5oF0insv/OAhaL39svhAl0cz3TH+V3wgcDuY0LB0hscXEwL2mcIcsrFwgnbOyAM2oJnhpeywdBbFR2QDY/IAmvvEE3FzTvqG77BQlQ4JzcgnzcyXVoEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMDWLrfV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F71BC4CEE7;
-	Wed, 22 Oct 2025 20:47:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rdd5W7oC5JxEmAO0FEcUN4NKMvPHLNB3Hvw+NFG6+jXaicPLYezaP3VhWPzYdVtlUnXgz/JCaN78WyUxuP0SkOdykxWkranRVk15x3/JH+D1qMMnfb8S8d56WDSApGr2c7jHOQipDvkpgvFsnm2H+m6k7qsHB2JrD//MbMoQj6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WB/NSEOY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578E7C4CEE7;
+	Wed, 22 Oct 2025 21:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761166047;
-	bh=e4wpAeuwnWxwPsv6xR22bTAFdrGhHjpoATj1khsZ/3E=;
+	s=k20201202; t=1761167478;
+	bh=5v3JRmduY4uSzLf2Pqm6596Of3Jc6oNa3Sp1BFVrPsc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eMDWLrfV+vZznUoPf7CPswB3dBThpbX2cO+2bWvkQ50o2TCrvoCdE1Cd8xXrUFRoi
-	 4RQOPMKhr+0tnSOK+DiKcMtj1oDkCTxPA4mHmnI44BotWVAjb9ldTnLMyTQjyS1Glb
-	 ijl24xdpzSdzrCZEKhn++IHDQPpZbUdTkCvlJsrAxJb/YRqToadM7K56X3TBjl4HEM
-	 Kyj7DofAye5roHM4RI4hcbcHBS9HAWzaMufkLYbmgqUo5c4mw2HV49+ecHPYhV766I
-	 BEuFIsEhcM7FbKPeKnO/YdST5KXQbtfPvLsfWmyESS1GnxaOKoG42xaOoXjHPKwp4J
-	 2Yalv6aXeJwRQ==
-Date: Wed, 22 Oct 2025 21:47:21 +0100
+	b=WB/NSEOYaZfqO71RaPt4ZWYdN0blDNxWfW5ICS4fnS9/Stg8tNvDA58HxOwxxfAop
+	 6hilG6zy+ngXSW5OHpCRTxNenF9Bk2EaGFRCumPTjrRK/bVON+bnvy/p0jMxSCxSLz
+	 Mp+CQpC8F2aarMsxM/M65yF0VX2LxhP4WqDUOqiQqQxpBBwSLDBsOAGAEp/+f54G0J
+	 5gfATau19beB423OmBeJDw9m3Jlk4q89eSCMKQ4jChXPVDrj46xZpnq4bMGDdW6jjZ
+	 TIcUJFiK3RcYlJnhG+XHlTjtlGrXivlL71exLBuObtDML9tzLkoDNFK+ey2dSEnLdw
+	 wIQpY+RrFrnDw==
+Date: Wed, 22 Oct 2025 22:11:12 +0100
 From: Conor Dooley <conor@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	Dan Williams <dan.j.williams@intel.com>,
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, linux-cxl@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, Dan Williams <dan.j.williams@intel.com>,
 	"H . Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>, james.morse@arm.com,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>, james.morse@arm.com,
 	Will Deacon <will@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
 	linuxarm@huawei.com, Yushan Wang <wangyushan12@huawei.com>,
 	Lorenzo Pieralisi <lpieralisi@kernel.org>,
@@ -60,10 +59,11 @@ Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
 	x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
 	Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v4 0/6] Cache coherency management subsystem
-Message-ID: <20251022-harsh-juggling-2d4778b0649e@spud>
+Subject: Re: [PATCH v4 3/6] lib: Support
+ ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+Message-ID: <20251022-tried-alright-752fa98ff086@spud>
 References: <20251022113349.1711388-1-Jonathan.Cameron@huawei.com>
- <20251022122241.d2aa0d7864f67112aa7691bf@linux-foundation.org>
+ <20251022113349.1711388-4-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -71,62 +71,67 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="S6HWZzkHmuKfgcDz"
+	protocol="application/pgp-signature"; boundary="Vn2cL8c0hs3HiHri"
 Content-Disposition: inline
-In-Reply-To: <20251022122241.d2aa0d7864f67112aa7691bf@linux-foundation.org>
+In-Reply-To: <20251022113349.1711388-4-Jonathan.Cameron@huawei.com>
 
 
---S6HWZzkHmuKfgcDz
+--Vn2cL8c0hs3HiHri
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 22, 2025 at 12:22:41PM -0700, Andrew Morton wrote:
-> On Wed, 22 Oct 2025 12:33:43 +0100 Jonathan Cameron <Jonathan.Cameron@hua=
-wei.com> wrote:
+On Wed, Oct 22, 2025 at 12:33:46PM +0100, Jonathan Cameron wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
 >=20
-> > Support system level interfaces for cache maintenance as found on some
-> > ARM64 systems. This is needed for correct functionality during various
-> > forms of memory hotplug (e.g. CXL). Typical hardware has MMIO interface
-> > found via ACPI DSDT.
-> >=20
-> > Includes parameter changes to cpu_cache_invalidate_memregion() but no
-> > functional changes for architectures that already support this call.
+> ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION provides the mechanism for
+> invalidating certain memory regions in a cache-incoherent manner. Current=
+ly
+> this is used by NVDIMM and CXL memory drivers in cases where it is
+> necessary to flush all data from caches by physical address range.
 >=20
-> I see additions to lib/ so presumably there is an expectation that
-> other architectures might use this.
+> In some architectures these operations are supported by system components
+> that may become available only later in boot as they are either present
+> on a discoverable bus, or via a firmware description of an MMIO interface
+> (e.g. ACPI DSDT). Provide a framework to handle this case.
 >=20
-> Please expand on this.  Any particular architectures in mind?  Any
-> words of wisdom which maintainers of those architectures might benefit
-> from?
-
-It seems fairly probable that we're gonna end up with riscv systems
-where drivers are being used for both this and the existing non-standard
-cache ops stuff.
-
-> > How to merge?  When this is ready to proceed (so subject to review
-> > feedback on this version), I'm not sure what the best route into the
-> > kernel is. Conor could take the lot via his tree for drivers/cache but
-> > the generic changes perhaps suggest it might be better if Andrew
-> > handles this?  Any merge conflicts in drivers/cache will be trivial
-> > build file stuff. Or maybe even take it throug one of the affected
-> > trees such as CXL.
+> Architectures can opt in for this support via
+> CONFIG_GENERIC_CPU_CACHE_MAINTENANCE
 >=20
-> Let's not split the series up.  Either CXL or COnor's tree is fine my
-> me.
+> Add a registration framework. Each driver provides an ops structure and
+> the first op is Write Back and Invalidate by PA Range. The driver may
+> over invalidate.
+>=20
+> An optional completion check operation is also provided. If present
+> that should be called to ensure that the action has finished.
+>=20
+> When multiple agents are present in the system each should register with
+> this framework and the core code will issue the invalidate to all of them
+> before checking for completion on each. This is done to avoid need for
+> filtering in the core code which can become complex when interleave,
+> potentially across different cache coherency hardware is going on, so it
+> is easier to tell everyone and let those who don't care do nothing.
+>=20
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-CXL is fine by me, greater volume there probably by orders of magnitude.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
---S6HWZzkHmuKfgcDz
+I'm fine with this stuff. I do wonder though, have you actually
+encountered systems with the multiple "agents" or is that something
+theoretical?
+
+--Vn2cL8c0hs3HiHri
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaPlC2QAKCRB4tDGHoIJi
-0tdvAQDJHGwCvxYrXGJs6nPPk7w5pV6+UajlzpKhldIVtCgm2QD/XrQK+qDLbAJA
-ymsJdZLdZoCSVVQ542yRJc4RjGzDnA8=
-=4U3B
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaPlIcAAKCRB4tDGHoIJi
+0ilcAQCnVKkCAStY/FbYOAkfI+W/JVlX+Y1Vm+WSmJKzsDcbvwD/WDlSH0CF9gAy
+unvtdkqI/cCeZqx8cis9fpSarDvOjQY=
+=Xs5l
 -----END PGP SIGNATURE-----
 
---S6HWZzkHmuKfgcDz--
+--Vn2cL8c0hs3HiHri--
 
