@@ -1,94 +1,86 @@
-Return-Path: <linux-arch+bounces-14360-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14361-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F7D9C115BF
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Oct 2025 21:17:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A41CC120C7
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 00:31:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3DC9A4FB634
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Oct 2025 20:14:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 402FA3A97CA
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Oct 2025 23:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67BAB32C30D;
-	Mon, 27 Oct 2025 20:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2644331A4A;
+	Mon, 27 Oct 2025 23:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tw5k8+RR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVuJFpex"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235C032BF2F
-	for <linux-arch@vger.kernel.org>; Mon, 27 Oct 2025 20:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71389331A47;
+	Mon, 27 Oct 2025 23:23:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761596000; cv=none; b=qup+xIkgDPNG046frmaXWWTkxDOrLsP0mEiIsFkGr/v5LEP5PcIodjX+DWrB+nkryCxzhCbkSLfDB+jkrfaY5/NVA1UjLPLw1qgclLTG1B3feO2VN86fSYPoCG3W6BKRFlWkurpNBIUO1Tqce+PIh5rQYFC8AVPsn8yQXr3GYaA=
+	t=1761607409; cv=none; b=ooMUNej0TGnPQdMO0H7tt1QL0pxIUr6IasqD3Aow4HcMXs6meX1cGwJomxloa5I02pRB6K2v4cV3LCkZthLTUv+0xh8jPO8ohtvO0Fv+/mRbpGiWRTA/zRiQBiNYcEMKTwyT4rOr6ALLHRGvu7X8ErXcReQPAHgBmyY11d8dwYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761596000; c=relaxed/simple;
-	bh=7/jgPYWC0V1D8IWJvZFoe28znSAzn2itXE/nwEWLtiQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=emkut8rSRMLKmp3uuobp8J+nFPZiwFZlW3REOSyleuR5hlHeRbsYqNDWBLXFzxrkHb0U5G3cCbfrfnnWF5VasHN6aie9KkfpavM8gE8MtUkXPRRsXckGauUX0pflWGAU3PtPkGLVdadoR94LqWuhbzfui6RltjAQ89mbFzDOeLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tw5k8+RR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8992C19421
-	for <linux-arch@vger.kernel.org>; Mon, 27 Oct 2025 20:13:19 +0000 (UTC)
+	s=arc-20240116; t=1761607409; c=relaxed/simple;
+	bh=vtrMXHoNlvkXATR6ZSfjuBP5mynQBqBA+oSOYxvRKBY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Io2X7kzEdmiPuy7hCyDKNzmDZxQnJdRcUPKl8dNXOuLVMEf5Fzgis+oaYFWDzpTh2HILgKk80qnzGEs+AzXJgGPWUiLsgLfy0CiJWi7i8ab4O186auQN01QTe0n3Q81rND5WzIR/rmoFZkTGbYZAaV/a+JcAbU+KO6zlh3U+s7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVuJFpex; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A6EEC4CEF1;
+	Mon, 27 Oct 2025 23:23:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761595999;
-	bh=7/jgPYWC0V1D8IWJvZFoe28znSAzn2itXE/nwEWLtiQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tw5k8+RRR8ZQWGB85VYzWf2Wi58LdQQOsk1Wd6HUWngGMEl3xHQQJ+6QMEnaIqyjE
-	 hwq+u9XOBdXqtLS1aSDdxiMwMIgByssijVT+USX9/Zm4rKR3bw++NOg5WdUIl+kM+E
-	 j6sh6H4aYiKT/EyPhuYAvwLCadoZzOlRFiWbZQZKl3eFz+is5npDUZT7ZerlpYPO9f
-	 QwhlCyG5YN6UWxOfBnsK1VxGWtD3RO24J4/QNZEMqBkgfeibbDqjzFf4GA8n9onp3+
-	 fKXGM4DZFNJwJyYXnRSLvTFEXN7NdjFiTrAuuoO2f9tfqnujndf+H2tDbrE1WrzoW5
-	 nmJlPR4bI4x4Q==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-654ee606fb5so745261eaf.0
-        for <linux-arch@vger.kernel.org>; Mon, 27 Oct 2025 13:13:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXzBMn4dCMAQOyISmk+unyj3uoujjOy0Y+TFO1UDDZ9bWydONb27q78CU48WmWlRGq/6L7dO76HOdpb@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY3qcu8Vcna2rPI5OlXZNh3zuHCYHqx3MA+KQbwW3tvHKj2pTJ
-	i8vfS83FfL9L6qowG6D0SgXK2pRuF9q6iV+oaLSx7KF2rmZmBfO80M3aaC02IhS5/aCUj4OT6FF
-	2hZq3KQojsSASQmKZI/q7qFXnqfo3b0k=
-X-Google-Smtp-Source: AGHT+IFzhgtS06rA+RZsyYcTHjt7tKv3IPYAqJiI30Zg7pVKVf7PdFA1QapVHBr8NekG6KSfuz58bzGzmJpR6s1c8PI=
-X-Received: by 2002:a05:6808:8919:10b0:44f:6df7:cf42 with SMTP id
- 5614622812f47-44f6df7d022mr64955b6e.64.1761595999030; Mon, 27 Oct 2025
- 13:13:19 -0700 (PDT)
+	s=k20201202; t=1761607409;
+	bh=vtrMXHoNlvkXATR6ZSfjuBP5mynQBqBA+oSOYxvRKBY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=SVuJFpexrMZoSxIE+BV6qqrN0HTyO1GYBRzS2ldPVQI/4EMmcj0cpQh0mIQolXIh7
+	 gWmDPklR1Y90YWPCfnDEsJcNWv1PboQ+Cd9+5HwKgBxvaUf1ebgtzmtmOYbFoK/6TM
+	 zUq0H8n6N1d+PPSkcHf1nnAJZuBbQ+ObfjxTOHW1bHJZFR+fFCMzPjJjNfaWpLuU+E
+	 QBh9+aERWbhWHNQQyyvQygHoNM87mJ+ZSZRjIaMjnrLqvSSlo0T7HAdryyDsjOaahu
+	 VTB93FljKF5Ddkytm0SnmwYvQWeEcFNpaFcG7L66EhMkxxwpVGhmYy2V7qK4S8slBs
+	 rAEu4ahzEuWtw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ Dimitri John Ledkov <dimitri.ledkov@surgut.co.uk>
+Cc: masahiroy@kernel.org, arnd@arndb.de
+In-Reply-To: <20251026202100.679989-1-dimitri.ledkov@surgut.co.uk>
+References: <20251026202100.679989-1-dimitri.ledkov@surgut.co.uk>
+Subject: Re: [PATCH] kbuild: align modinfo section for Secureboot
+ Authenticode EDK2 compat
+Message-Id: <176160740777.2230796.18257976954650435988.b4-ty@kernel.org>
+Date: Mon, 27 Oct 2025 16:23:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251017061606.455701-1-ankur.a.arora@oracle.com>
- <20251017061606.455701-8-ankur.a.arora@oracle.com> <874irkun26.fsf@oracle.com>
-In-Reply-To: <874irkun26.fsf@oracle.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 27 Oct 2025 21:13:07 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gHbOKN_3gVufY-Uv5yNuFsZ7vGdJgm8VMWJMq8EJJ5iA@mail.gmail.com>
-X-Gm-Features: AWmQ_bnp6ii4CmrVCoy6tewQvRu5JbQ235PW681sgNQsgSfTn4C6zcDylVx5kw8
-Message-ID: <CAJZ5v0gHbOKN_3gVufY-Uv5yNuFsZ7vGdJgm8VMWJMq8EJJ5iA@mail.gmail.com>
-Subject: Re: [PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org, 
-	peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com, 
-	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, memxor@gmail.com, 
-	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, 
-	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev
 
-On Mon, Oct 27, 2025 at 9:07=E2=80=AFPM Ankur Arora <ankur.a.arora@oracle.c=
-om> wrote:
->
->
-> Hi Rafael, Daniel,
->
-> Could you take a look at the proposed smp_cond_load_relaxed_timeout()
-> interface and how it's used here and see if that looks fine to you?
 
-Well, can you please resend this with a CC to linux-pm?
+On Sun, 26 Oct 2025 20:21:00 +0000, Dimitri John Ledkov wrote:
+> Previously linker scripts would always generate vmlinuz that has sections
+> aligned. And thus padded (correct Authenticode calculation) and unpadded
+> calculation would be same. As in https://github.com/rhboot/pesign userspace
+> tool would produce the same authenticode digest for both of the following
+> commands:
+> 
+>     pesign --padding --hash --in ./arch/x86_64/boot/bzImage
+>     pesign --nopadding --hash --in ./arch/x86_64/boot/bzImage
+> 
+> [...]
 
-I believe others on that list may be interested in it too.
+Applied, thanks!
 
-Thanks!
+[1/1] kbuild: align modinfo section for Secureboot Authenticode EDK2 compat
+      https://git.kernel.org/kbuild/c/d50f21091358b
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
 
