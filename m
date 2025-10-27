@@ -1,57 +1,57 @@
-Return-Path: <linux-arch+bounces-14351-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14352-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6190AC0CAB3
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Oct 2025 10:33:43 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ECEBC0CB9D
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Oct 2025 10:40:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD22B3A6FB4
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Oct 2025 09:29:09 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 13ECA4E814A
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Oct 2025 09:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B2D2E92D6;
-	Mon, 27 Oct 2025 09:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69C972F2619;
+	Mon, 27 Oct 2025 09:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="J2p2qfnG";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Bpj003fp"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iZWe9Ehr";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Z0MeAO7Y"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D61EEA6;
-	Mon, 27 Oct 2025 09:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33751A2547;
+	Mon, 27 Oct 2025 09:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761557346; cv=none; b=l3JxB6OcBfnKa25HGHS76H24RAbwaDfxbIZq+CExsNJ3mpvAiLvbMED7h7EK5Mp2OkNjUIaDMPeW7SkpSYgmkGOxMq7Gyk2SK5KGNw+Sv+8S4YmcuPCkp3GCdP8st7BhLr07/gBkWCZaZoG+bvTgtCL1RCY/ywUzaihQeRxpmd8=
+	t=1761558025; cv=none; b=M5Wboe3SLir2lfvEqGNEGMp4ZWQCRPp+WWFi1MPYhjHoiCuWNNllssiCGKocOZTyxDL8oq01WdWbLhSyOoBm4aUS0w3ZFn2PtyHjauA2QkuqGzoH0iBNcaee23QobVBW0PEOKRb3VDmtQ6FMo3Wr/TBE0KyURHeZ/bx8IUsCN1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761557346; c=relaxed/simple;
-	bh=+BWwjSsK3LJJOmiDFTF+Hy6QpGnroVjKs/vRRZ/rk30=;
+	s=arc-20240116; t=1761558025; c=relaxed/simple;
+	bh=/2xr/VTYXXffOJMMGSVhNyVlfRnEybe/oSAvYrqIhpA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lBVGUMkHNiXoPNOoI2eoqH8TrJOAHBeTNJV4c6JPqpm+IaA58koDHVVMVeF3hFtqr59K9dmM4UQZBvTcs3hOM3wN3QwaS5/1yf1yFVzidp4xzy0wfTee/XoDrH1VRPDuV5qlXyQ/V/7ycBCwnAdtWCc9zylM3YOQ3BW+c8cq6Yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=J2p2qfnG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Bpj003fp; arc=none smtp.client-ip=193.142.43.55
+	 Content-Type:Content-Disposition:In-Reply-To; b=Anbg9rPyLBF/bHBYpqI9PAfL9EET8so0QgGxJogMPNLs4YXFTBjEuflJYQp6J1Ay48eHLbIS3fOb+YTn7gFHTia15VsJgOd07MKlHuDXb6tf2mpV3QTPPqZhA40tzsdt/+r0d7p5rbjEC41UHXwEw8dhEPloIoU+iuvAkcO8UoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iZWe9Ehr; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Z0MeAO7Y; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 27 Oct 2025 10:29:01 +0100
+Date: Mon, 27 Oct 2025 10:40:19 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1761557343;
+	s=2020; t=1761558021;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dN2WGLKJLTILaSCeVMwVxkFyJlJGIPBlamDv+nHPaTc=;
-	b=J2p2qfnGHgRJ3BvgvsnniZWuDKdN+t9UQe7q4baD2L2nnbqDikUapSl1P6FZSGcvqNRLS+
-	x8wnvprs+MGbc2jGrhGGxYjNsClpyoyGJLbeP9kqDTFsEDqR1wae9tQYwuXu7w0fk6P8RY
-	dbAgASIJ9m1YBdkHfHUspT0OFzTVGLWS1z6FxGdaCn2WF1uZg8xEkcydqPY18TiZb0hVOI
-	G4m2/IJAxWXHgBOcZID72toNFdi2QJaue4xbqXXAkx/1pS4VV7aJUIrd1lELzXF49CqfHv
-	i1pEmcmJiqRPvAMpkW8+27dAO6SFDD2/Vz1OihXdYzKekwWybodGnZjp9ZOpRA==
+	bh=al41PRhuMv92E4hy7sTVqHUK2Lm7i8edcdRrAQO9r/o=;
+	b=iZWe9EhrIlTTEWAL59SUfZEol4VyuXx9Bm9SCcbc9q2Q573ri5wCIGwdg/UGoXZRS1dwLF
+	CdqK+W8Jj9i3x9/mR3RbtP3TPByAC1RdcjAeWeq0yChjWLpuaHs0YncC0YaepD4Z2PaApZ
+	brEVZuPLx5LeWVsy8O8oTzavJo+NxX+Al/CobRK4JivXzQYeOjB9sbZ7+gT3td+TMjsW16
+	O7mSRQOHGX3SaKheqGNRsnunUW1/VlRjGhsF0uscXzfVXFFXwa2gllo8fPAtd4oH9NpuVc
+	6JwA/xpBaHkuuBVg9Ev9WEVokPxAEtl8aq6SbpCCZajXSzzNSK98jJZKWZRchw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1761557343;
+	s=2020e; t=1761558021;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dN2WGLKJLTILaSCeVMwVxkFyJlJGIPBlamDv+nHPaTc=;
-	b=Bpj003fprKxxi7SMLMy6A7fyp99rPfNgf0JgjIx7iLe5+S5sd2jP/xu6dFbELSsb7J+cAm
-	yEwDhi4EmySkHBBQ==
+	bh=al41PRhuMv92E4hy7sTVqHUK2Lm7i8edcdRrAQO9r/o=;
+	b=Z0MeAO7YVm+h4NFGJTXOJ3DBi5EqkEWzEkQM0/WzX+G3PIkdB8K91LzH5cntAJUal2VCPI
+	nHp24Wo5waTqX+Ag==
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 To: Thomas Gleixner <tglx@linutronix.de>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -64,11 +64,11 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
 	K Prateek Nayak <kprateek.nayak@amd.com>,
 	Steven Rostedt <rostedt@goodmis.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org
-Subject: Re: [patch V2 03/12] rseq: Provide static branch for time slice
+Subject: Re: [patch V2 05/12] rseq: Add prctl() to enable time slice
  extensions
-Message-ID: <20251027092901.fm5D-9TX@linutronix.de>
+Message-ID: <20251027094019.foWBPFO2@linutronix.de>
 References: <20251022110646.839870156@linutronix.de>
- <20251022121427.091502763@linutronix.de>
+ <20251022121427.216861528@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -77,37 +77,26 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251022121427.091502763@linutronix.de>
+In-Reply-To: <20251022121427.216861528@linutronix.de>
 
-On 2025-10-22 14:57:32 [+0200], Thomas Gleixner wrote:
-> Guard the time slice extension functionality with a static key, which can
-> be disabled on the kernel command line.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
+On 2025-10-22 14:57:34 [+0200], Thomas Gleixner wrote:
+> --- a/include/linux/rseq.h
+> +++ b/include/linux/rseq.h
+> @@ -164,4 +164,13 @@ void rseq_syscall(struct pt_regs *regs);
+>  static inline void rseq_syscall(struct pt_regs *regs) { }
+>  #endif /* !CONFIG_DEBUG_RSEQ */
+>  
+> +#ifdef CONFIG_RSEQ_SLICE_EXTENSION
+> +int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3);
+> +#else /* CONFIG_RSEQ_SLICE_EXTENSION */
+> +static inline int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3)
+> +{
+> +	return -EINVAL;
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+This should be -ENOTSUPP as in the !rseq_slice_extension_enabled() case.
+After all it is the same condition.
 
-Might want to fold:
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6c42061ca20e5..34325cf61b8de 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6482,6 +6482,10 @@
- 
- 	rootflags=	[KNL] Set root filesystem mount option string
- 
-+	rseq_slice_ext= [KNL] RSEQ slice extension
-+			Disable the slice extension at boot time by
-+			setting it to "off". Default is "on".
-+
- 	initramfs_options= [KNL]
-                         Specify mount options for for the initramfs mount.
- 
+> +}
 
 Sebastian
 
