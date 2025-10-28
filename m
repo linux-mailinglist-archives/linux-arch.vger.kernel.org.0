@@ -1,175 +1,161 @@
-Return-Path: <linux-arch+bounces-14371-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14372-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9CB5C138DD
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 09:34:14 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAD0DC13951
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 09:43:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 14F013504F6
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 08:34:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 514D64E28B6
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 08:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104D51DDA24;
-	Tue, 28 Oct 2025 08:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE222D8DC8;
+	Tue, 28 Oct 2025 08:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="N3JSUMKv";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OOzR5ynh"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Xq7ERVrJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Eodsjk9g"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4372021576E;
-	Tue, 28 Oct 2025 08:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 437D12C17A8;
+	Tue, 28 Oct 2025 08:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761640448; cv=none; b=Ru+mJfsExbzTETmLtUnjlse4Rvd/kjokXmaKh52LYrzim4pkCgq5PK/nUS/H5jqNIyEUAozhR1L6na+iID46yeFDcvj6/kQ+5Cba4UUajrb31CYCuZ4f17wlQ+1vsMpQhWWN1yHmSxhxVuRlq/4E73ZcASs7bZUPtcTVZC8967w=
+	t=1761640996; cv=none; b=p72MLnObd41MrcZ2luyYKXTE34Nmj0j7tobsGwL6VUKd9+xUUTZqmQOJ2tHaxLdwzytDfsQ8iv++gUYG7j7knCoI575cYQHobu+Cw0nS73ElHKrhkb4No7NhqmJ4NWfypOSfKgefWDFYI4JVJX4n1AJDWL/khDrBUSC93ERKRb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761640448; c=relaxed/simple;
-	bh=CYLmaOBgHYt3LSzhmMb2Wlpalqn3kMa60TBG7D9z+UI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AVz3j8HZVoi7rjNvBqxJ0VtLKle5rb5NWggH9dwz9FQwSnvvyU+lHQ8Qfsaf0//xx7BX6TKavvIJlXF168tYf0skIdAVvFI5C2rcEp4P55z/21srOkEuJejMvXkZeWAtqKH+zJ9+Y1KL0zmMpkUlEGCvUKMng+dCle4ji3Y0AEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=N3JSUMKv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OOzR5ynh; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 28 Oct 2025 09:33:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1761640437;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=v8bo8tT6fUf4Z0oRK29BRJ8yd34/WHo4boCnEa8kDIY=;
-	b=N3JSUMKvMR4/nK4bPpfSSsRRu7u5CzJvaYbZ3VQndBFt9eNFXNXNOf/nivfdwEsY61Dwyx
-	bzl9I4o49guELHZVTUhqopidgnngWdWYGgn4i4zDFaiztVATxia5LvyXfbikjtQUwC81Lu
-	kPxKRYtQwjsSjugjFVi9S3ORBsoWfgGyWxfkgubSCXaFq3DB9gYFH8aWYn3qtyAgd4bf3I
-	4A82bm9YgIgP5r7dRSj3NE71xIjrK4WyueIW+SOimY27Ji/CMZkLjxbYgXkLJtm38uqVjW
-	C6CFtijmnLs5Zr5dA7G8rA9NtgdCe4HcNXoZToWOqjJoq/Uu/b2nsafEq/prTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1761640437;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=v8bo8tT6fUf4Z0oRK29BRJ8yd34/WHo4boCnEa8kDIY=;
-	b=OOzR5ynhJ5kHWV2nAudvooXqPaF166obYxwIeuAX9mjXK8Pg/Xjv7WjPSseHYaS5s8mg+o
-	anM+JRb4QxgL0FDA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
-	Prakash Sangappa <prakash.sangappa@oracle.com>,
-	Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Steven Rostedt <rostedt@goodmis.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org
-Subject: Re: [patch V2 08/12] rseq: Implement time slice extension
- enforcement timer
-Message-ID: <20251028083356.cDl403Q9@linutronix.de>
-References: <20251022110646.839870156@linutronix.de>
- <20251022121427.406689298@linutronix.de>
- <20251027113822.UfDZz0mf@linutronix.de>
- <87cy68wbt6.ffs@tglx>
+	s=arc-20240116; t=1761640996; c=relaxed/simple;
+	bh=24piICuL1TFvQkkPUpBURn6MSOHQmPj30SRS3p89FRg=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=FJ/5obfr1rUlKrMI/pgZKuVbC65p4JNb2d1yFeztGVDgQS2Krs9SEWLc1QiTubyn5YUee6Y1cMdOzmTbNPiN8MTRAIOjaPAqaN0IzxSCmFPaT/rR+HYVnS2hYR2eVZ4UVomRmT9wtz0w2bp8JKxZ/zoReEmhvsDnmI40eNx2uP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Xq7ERVrJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Eodsjk9g; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 3C646EC049C;
+	Tue, 28 Oct 2025 04:43:12 -0400 (EDT)
+Received: from phl-imap-17 ([10.202.2.105])
+  by phl-compute-04.internal (MEProxy); Tue, 28 Oct 2025 04:43:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1761640992;
+	 x=1761727392; bh=0JJIkDhabFeQu41OWvb1I0C49bKjs5BXbI+33V7E/DI=; b=
+	Xq7ERVrJvCMn7KM+GJIjGJU6l/nnqobgi2ttOFMlQ3gzVppaypAMXeNoGpJG6J7w
+	iU4q6IJEeMYQ7SAACfECkIOrlyiKMWDfdYWzsl73R1f+8KzfecXegG25oGI0xMCz
+	dOXuwLiI63yhQNuGnf8bko+4nJXq0rGCKPHCxoBak7JxJD3/+Av6Ryjk2j4u+cJZ
+	Ghdgf2CQxAh1RnArZ3j10fmuwkMad8qPZQOTiyNvrDTBwYyIgzX0AFwRJ91gA2L5
+	VqaOwLG/kMSmJHyy7ZbAedUj3lonwWXmGHmDYJ4fcvy0FPXe8iNwfeXFKNLtQedX
+	o2ywp7YtllGKuWrJLW0GOA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1761640992; x=
+	1761727392; bh=0JJIkDhabFeQu41OWvb1I0C49bKjs5BXbI+33V7E/DI=; b=E
+	odsjk9gmyhy5abk7WI2miFV+T87z564P1AYR2TvLZGQpqArDmPokF/t722n3I4Tj
+	EpyVxm/uAn+B/CYsExrbwg/Ym1wj4JcV+ZXs+foGaPgnXUpESUdCszPEwxut/zFX
+	xcV3bSxllP3wL3eb7VK35iE0S+g0Bv1b2tN/3WjNv7KFE9KeHHvMBwmfVdHU5bLN
+	2i+DFfnEauC8R0f4aLHDvo4s2qkQGmvwPl5ODYfWEEVxmNgQbRCu/9+UrtQDsAp2
+	McBvjLHmuFvxcH7KzrGNlPW/+MzCC0ohSNNRNr0BzoIAq5V1sil47l8i1m6Ne+yD
+	gj+ehDon30hPc80oq9r8Q==
+X-ME-Sender: <xms:HoIAaUtaYFqBbJcPsIwH_N9aBY3VmmgjKJsuzycGO5yhkf5od7uupQ>
+    <xme:HoIAacSn2C6gyejJUVK9jxPnsznK09RRPtkVN6ix7AeSkMwhE7L64Q7_h61Ot49T4
+    DU0HE5d1ja8ZDWj0zMtyVbwIxkocyj4fqybNYAX81eNbgbEp7ckiN4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduiedtgedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddvpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehhrghrihhsohhknhesrghmrgiiohhnrdgtohhmpdhrtghpthhtoh
+    eptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehmrghr
+    khdrrhhuthhlrghnugesrghrmhdrtghomhdprhgtphhtthhopegtlhesghgvnhhtfihord
+    horhhgpdhrtghpthhtohepmhgvmhigohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
+    iihhvghnghhlihhfvghnghdusehhuhgrfigvihdrtghomhdprhgtphhtthhopehpvghtvg
+    hriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:HoIAaRK98uVZXggexNZJxfpOi2NhgCDBpdBortjF4YEFlnX-7575tg>
+    <xmx:HoIAaYtT4qxWDTg6TXCMRVb6I7jai_a5cVtV7XatpNk52wWObCtxyw>
+    <xmx:HoIAaZsQi0-T0s8zmmp7YXxMdSo49olveWp-cJiaKFFMl0_-8Q_RPQ>
+    <xmx:HoIAaXVHVooVmeleiM97lpwcJ8DxjnGIMcPMdIXgwf_9CIvgOPFLpw>
+    <xmx:IIIAaR6OVmbqtFe8haMko2FXa-g9Vh851x94veFTolgXUIvEFDoTVRSF>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B93ADC40054; Tue, 28 Oct 2025 04:43:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <87cy68wbt6.ffs@tglx>
+X-ThreadId: Ab2ZwGVH8-qs
+Date: Tue, 28 Oct 2025 09:42:50 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Ankur Arora" <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Haris Okanovic" <harisokn@amazon.com>,
+ "Christoph Lameter (Ampere)" <cl@gentwo.org>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, zhenglifeng1@huawei.com,
+ xueshuai@linux.alibaba.com, "Joao Martins" <joao.m.martins@oracle.com>,
+ "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+ "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>
+Message-Id: <3642cfd1-7da6-4a75-80b7-00c21ab6955f@app.fastmail.com>
+In-Reply-To: <20251028053136.692462-3-ankur.a.arora@oracle.com>
+References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
+ <20251028053136.692462-3-ankur.a.arora@oracle.com>
+Subject: Re: [RESEND PATCH v7 2/7] arm64: barrier: Support
+ smp_cond_load_relaxed_timeout()
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On 2025-10-27 17:26:29 [+0100], Thomas Gleixner wrote:
-> On Mon, Oct 27 2025 at 12:38, Sebastian Andrzej Siewior wrote:
-> > On 2025-10-22 14:57:38 [+0200], Thomas Gleixner wrote:
-> >> +static enum hrtimer_restart rseq_slice_expired(struct hrtimer *tmr)
-> >> +{
-> >> +	struct slice_timer *st =3D container_of(tmr, struct slice_timer, tim=
-er);
-> >> +
-> >> +	if (st->cookie =3D=3D current && current->rseq.slice.state.granted) {
-> >> +		rseq_stat_inc(rseq_stats.s_expired);
-> >> +		set_need_resched_current();
-> >> +	}
-> >
-> > You arm the timer while leaving to userland. Once in userland the task
-> > can be migrated to another CPU. Once migrated, this CPU can host another
-> > task while the timer fires and does nothing.
->=20
-> That's inevitable. If the scheduler decides to do that then there is
-> nothing which can be done about it and that's why the cookie pointer
-> exists.
+On Tue, Oct 28, 2025, at 06:31, Ankur Arora wrote:
+> Support waiting in smp_cond_load_relaxed_timeout() via
+> __cmpwait_relaxed(). Limit this to when the event-stream is enabled,
+> to ensure that we wake from WFE periodically and don't block forever
+> if there are no stores to the cacheline.
+>
+> In the unlikely event that the event-stream is unavailable, fallback
+> to spin-waiting.
+>
+> Also set SMP_TIMEOUT_POLL_COUNT to 1 so we do the time-check for each
+> iteration in smp_cond_load_relaxed_timeout().
 
-Without an interrupt on the target CPU, there is nothing stopping the
-task from overstepping its fair share.
+After I looked at the entire series again, this one feels like
+a missed opportunity. Especially on low-power systems but possibly
+on any ARMv9.2+ implementation including Cortex-A320, it would
+be nice to be able to both turn off the event stream and also
+make this function take fewer wakeups:
 
-> >> +	return HRTIMER_NORESTART;
-> >> +}
-> >> +
-> > =E2=80=A6
-> >> +static void rseq_cancel_slice_extension_timer(void)
-> >> +{
-> >> +	struct slice_timer *st =3D this_cpu_ptr(&slice_timer);
-> >> +
-> >> +	/*
-> >> +	 * st->cookie can be safely read as preemption is disabled and the
-> >> +	 * timer is CPU local. The active check can obviously race with the
-> >> +	 * hrtimer interrupt, but that's better than disabling interrupts
-> >> +	 * unconditionally right away.
-> >> +	 *
-> >> +	 * As this is most probably the first expiring timer, the cancel is
-> >> +	 * expensive as it has to reprogram the hardware, but that's less
-> >> +	 * expensive than going through a full hrtimer_interrupt() cycle
-> >> +	 * for nothing.
-> >> +	 *
-> >> +	 * hrtimer_try_to_cancel() is sufficient here as with interrupts
-> >> +	 * disabled the timer callback cannot be running and the timer base
-> >> +	 * is well determined as the timer is pinned on the local CPU.
-> >> +	 */
-> >> +	if (st->cookie =3D=3D current && hrtimer_active(&st->timer)) {
-> >> +		scoped_guard(irq)
-> >> +			hrtimer_try_to_cancel(&st->timer);
-> >
-> > I don't see why hrtimer_active() and IRQ-disable is a benefit here.
-> > Unless you want to avoid a branch to hrtimer_try_to_cancel().
-> >
-> > The function has its own hrtimer_active() check and disables interrupts
-> > while accessing the hrtimer_base lock. Since preemption is disabled,
-> > st->cookie remains stable.
-> > It can fire right after the hrtimer_active() here. You could just
-> >
-> > 	if (st->cookie =3D=3D current)
-> > 		hrtimer_try_to_cancel(&st->timer);
-> >
-> > at the expense of a branch to hrtimer_try_to_cancel() if the timer
-> > already expired (no interrupts off/on).
->=20
-> That's not equivalent. As this is CPU local the interrupt disable
-> ensures that the timer is not running on this CPU. Otherwise you need
-> hrtimer_cancel(). Read the comment. :)
+> +/* Re-declared here to avoid include dependency. */
+> +extern bool arch_timer_evtstrm_available(void);
+> +
+> +#define cpu_poll_relax(ptr, val)					\
+> +do {									\
+> +	if (arch_timer_evtstrm_available())				\
+> +		__cmpwait_relaxed(ptr, val);				\
+> +	else								\
+> +		cpu_relax();						\
+> +} while (0)
+> +
 
-Since it is a CPU local timer which is HRTIMER_MODE_HARD, from this CPUs
-perspective it is either about to run or it did run. Therefore the
-hrtimer_try_to_cancel() can't return -1 due to
-hrtimer_callback_running() =3D=3D true.
-If you drop hrtimer_active() check and scoped_guard(irq),
-hrtimer_try_to_cancel() will do the same hrtimer_active() check as you
-have above followed by disable interrupts via lock_hrtimer_base() and
-here hrtimer_callback_running() can't return true because interrupts are
-disabled and the timer can't run on a remote CPU because it is a
-CPU-local timer.
+Since the caller knows exactly how long it wants to wait for,
+we should be able to fit a 'wfet' based primitive in here and
+pass the timeout as another argument.
 
-So you avoid a branch to hrtimer_try_to_cancel() if the timer already
-fired.
-
-> Thanks,
->=20
->         tglx
-
-Sebastian
+    Arnd
 
