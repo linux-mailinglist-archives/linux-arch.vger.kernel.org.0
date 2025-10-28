@@ -1,59 +1,58 @@
-Return-Path: <linux-arch+bounces-14383-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14384-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50AF7C153CF
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 15:49:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E5A9C15AC9
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 17:05:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3F72C4E944A
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 14:49:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8551C1A61A07
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 16:00:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89419248F4D;
-	Tue, 28 Oct 2025 14:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E259A34166C;
+	Tue, 28 Oct 2025 15:59:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="huHQXCvp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0Rjdky4"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BBD224AF1;
-	Tue, 28 Oct 2025 14:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADC02D5924;
+	Tue, 28 Oct 2025 15:59:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761662958; cv=none; b=tVceoydioJrBqYZPc/PiSrRKs/t2jPxKfONK8p+T9+O5o6dY3eFb/gfi58dWHR4mUUz/Hn4Xb8lxKf7yi6nBxpW8dDbLqMnKBCxTjUR6l2NthEa1r4iRC4VNQVWJOPyt7MeWQshdKHBjzeaX1yZWf9m43xcQZu3XtnDj8jeAlQA=
+	t=1761667159; cv=none; b=A3hkZvIaIE5rDyaXGLk1XsOvICspbnGFOv2ohQWfB8ezwe3LgD9Xds/NtG9o7f3aajZ1F+CxiI9+pA9xhKgX1kthGeIvK3hEup1A/xCsFzAAovbdAEtFrxiLMSgjbAETW5Omg58t+2tLY2XlAtFz/F3J1/83KNjX7MN2F6Zbyjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761662958; c=relaxed/simple;
-	bh=/YcbY6Xd39AsABVLZZYIvhdW8ivhFU4lURFGb2RCZr8=;
+	s=arc-20240116; t=1761667159; c=relaxed/simple;
+	bh=SDRIuqWM2TI7GYT8HdCkn7TBcJvTMa+nGGBd4kxLWaU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hxc8N413euu4Eh80TwLyO/1T/SyxEX37D6EuDw7H/WXKCuJ0RWQPLtjMpONpGAq6h1Lg2hfBGMxBvAJly95g4G5auA8ggM0/4CDQo8Lb8+7UZBhCa56LYelsPcARoSY9vUDYsgxD2BArkTv4SJcB3T5pKmdkNjoBPxZpIOrV1GI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=huHQXCvp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64951C4CEE7;
-	Tue, 28 Oct 2025 14:49:16 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LM8wB4FvWv6t0ONt4DiNcJ2pxHO15xcGD581IJGcMHq89GYl0GK7ejvzemNscQurTzSjWd7LzOfNCyaXcSZOhPdOEvnxKSZyXspQN2VifDUZ9tbLFmsjZqPVgqhUr+JH/AP0tBnRtELAfyhDeP3uGFG+6YU2+hbdT0mXz6LT/dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0Rjdky4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55CEC4CEE7;
+	Tue, 28 Oct 2025 15:59:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761662956;
-	bh=/YcbY6Xd39AsABVLZZYIvhdW8ivhFU4lURFGb2RCZr8=;
+	s=k20201202; t=1761667159;
+	bh=SDRIuqWM2TI7GYT8HdCkn7TBcJvTMa+nGGBd4kxLWaU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=huHQXCvp0W/S5F1ENdurMkw2WwJZbMBNDXAh91iSKf/vrNDl1NLBkoXJdUx/C19Qv
-	 Z4qNcGgTCDjqG04Q8z3Gw4n7Ol2Hs4TiC0IGtfV35bwyLcbAG4VH3lZOOkEdiJR4uv
-	 98GKb95kopcHzMuvU3H2025SulpKC226+6+rZMUmhwVvLSkelVU5+Fv/hfF6vOYswZ
-	 XcZScHHzyBVq+mz32oPgQ0NUDZQKpY6cLjssBtvUS7RZby1k7TivV6VhaUkRZyqa69
-	 4+Ez+WRvhuVyLYG73RXpS/ughenkh3oUdmNmmth4K/glGp+Eu28p8jOe+6mgl5gPer
-	 pCdjOFhzrTR8g==
-Date: Tue, 28 Oct 2025 15:49:14 +0100
+	b=h0Rjdky40XtCVRjoUUWv5rLiJ9ZMpCagJKFXeyfzHOGEHTGw9bKgoBDki9igeNVWF
+	 hxxzLvARw99/t5f4Lqs+Dj5fZyVuN3fZZCRfCFM55ZeACJS/rijOr6rAqCQE7Hwid1
+	 QyXcKn0xMZDkHD1ajCbuYBSCn+ENYdvO5PJWUuqfmfteG28nQwGE4UO2KHjBeLwl2c
+	 hE32PRBdNnuYpqH0YyIEEpoBXAGIkGRuRSDfPq/9QdewsKj3LtsQ6g4eJFxD5TaKJO
+	 HpEpDWwMqwcXSfnux9kuKahgFba9EgaGpASx7PAIM38ag+Pw/+fgAan6RlnvKpPKM4
+	 jLUxM6PBiYL0w==
+Date: Tue, 28 Oct 2025 16:59:16 +0100
 From: Frederic Weisbecker <frederic@kernel.org>
 To: Valentin Schneider <vschneid@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, rcu@vger.kernel.org,
 	x86@kernel.org, linux-arm-kernel@lists.infradead.org,
 	loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
 	linux-arch@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
 	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
@@ -80,11 +79,11 @@ Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, rcu@vger.kernel.org,
 	Yair Podemsky <ypodemsk@redhat.com>,
 	Marcelo Tosatti <mtosatti@redhat.com>,
 	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [PATCH v6 24/29] context_tracking,x86: Defer kernel text
- patching IPIs
-Message-ID: <aQDX6hHV3b1-_wuF@localhost.localdomain>
+Subject: Re: [RFC PATCH v6 27/29] x86/mm/pti: Implement a TLB flush
+ immediately after a switch to kernel CR3
+Message-ID: <aQDoVAs5UZwQo-ds@localhost.localdomain>
 References: <20251010153839.151763-1-vschneid@redhat.com>
- <20251010153839.151763-25-vschneid@redhat.com>
+ <20251010153839.151763-28-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -94,56 +93,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251010153839.151763-25-vschneid@redhat.com>
+In-Reply-To: <20251010153839.151763-28-vschneid@redhat.com>
 
-Le Fri, Oct 10, 2025 at 05:38:34PM +0200, Valentin Schneider a écrit :
-> text_poke_bp_batch() sends IPIs to all online CPUs to synchronize
-> them vs the newly patched instruction. CPUs that are executing in userspace
-> do not need this synchronization to happen immediately, and this is
-> actually harmful interference for NOHZ_FULL CPUs.
+Le Fri, Oct 10, 2025 at 05:38:37PM +0200, Valentin Schneider a écrit :
+> Deferring kernel range TLB flushes requires the guarantee that upon
+> entering the kernel, no stale entry may be accessed. The simplest way to
+> provide such a guarantee is to issue an unconditional flush upon switching
+> to the kernel CR3, as this is the pivoting point where such stale entries
+> may be accessed.
 > 
-> As the synchronization IPIs are sent using a blocking call, returning from
-> text_poke_bp_batch() implies all CPUs will observe the patched
-> instruction(s), and this should be preserved even if the IPI is deferred.
-> In other words, to safely defer this synchronization, any kernel
-> instruction leading to the execution of the deferred instruction
-> sync (ct_work_flush()) must *not* be mutable (patchable) at runtime.
+> As this is only relevant to NOHZ_FULL, restrict the mechanism to NOHZ_FULL
+> CPUs.
 > 
-> This means we must pay attention to mutable instructions in the early entry
-> code:
-> - alternatives
-> - static keys
-> - static calls
-> - all sorts of probes (kprobes/ftrace/bpf/???)
+> Note that the COALESCE_TLBI config option is introduced in a later commit,
+> when the whole feature is implemented.
 > 
-> The early entry code leading to ct_work_flush() is noinstr, which gets rid
-> of the probes.
-> 
-> Alternatives are safe, because it's boot-time patching (before SMP is
-> even brought up) which is before any IPI deferral can happen.
-> 
-> This leaves us with static keys and static calls.
-> 
-> Any static key used in early entry code should be only forever-enabled at
-> boot time, IOW __ro_after_init (pretty much like alternatives). Exceptions
-> are explicitly marked as allowed in .noinstr and will always generate an
-> IPI when flipped.
-> 
-> The same applies to static calls - they should be only updated at boot
-> time, or manually marked as an exception.
-> 
-> Objtool is now able to point at static keys/calls that don't respect this,
-> and all static keys/calls used in early entry code have now been verified
-> as behaving appropriately.
-> 
-> Leverage the new context_tracking infrastructure to defer sync_core() IPIs
-> to a target CPU's next kernel entry.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 > Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  arch/x86/entry/calling.h      | 26 +++++++++++++++++++++++---
+>  arch/x86/kernel/asm-offsets.c |  1 +
+>  2 files changed, 24 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
+> index 813451b1ddecc..19fb6de276eac 100644
+> --- a/arch/x86/entry/calling.h
+> +++ b/arch/x86/entry/calling.h
+> @@ -9,6 +9,7 @@
+>  #include <asm/ptrace-abi.h>
+>  #include <asm/msr.h>
+>  #include <asm/nospec-branch.h>
+> +#include <asm/invpcid.h>
+> 
+>  /*
+> 
+> @@ -171,8 +172,27 @@ For 32-bit we have the following conventions - kernel is built with
+> 	andq    $(~PTI_USER_PGTABLE_AND_PCID_MASK), \reg
+>  .endm
+> 
+> -.macro COALESCE_TLBI
+> +.macro COALESCE_TLBI scratch_reg:req
+>  #ifdef CONFIG_COALESCE_TLBI
+> +	/* No point in doing this for housekeeping CPUs */
+> +	movslq  PER_CPU_VAR(cpu_number), \scratch_reg
+> +	bt	\scratch_reg, tick_nohz_full_mask(%rip)
+> +	jnc	.Lend_tlbi_\@
 
-Acked-by: Frederic Weisbecker <frederic@kernel.org>
+I assume it's not possible to have a static call/branch to
+take care of all this ?
+
+Thanks.
 
 -- 
 Frederic Weisbecker
