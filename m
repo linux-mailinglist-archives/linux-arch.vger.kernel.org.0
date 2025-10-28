@@ -1,171 +1,132 @@
-Return-Path: <linux-arch+bounces-14380-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14381-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75BF0C14A4D
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 13:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D6DEC14BF2
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 14:04:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47A1A19C3830
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 12:31:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 574A91886BC4
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Oct 2025 13:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91F5632E6A7;
-	Tue, 28 Oct 2025 12:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75CDA3093DF;
+	Tue, 28 Oct 2025 13:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IN9IXmlp"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="S0GM83XJ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Eh7BMRuo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0CC32BF52
-	for <linux-arch@vger.kernel.org>; Tue, 28 Oct 2025 12:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B411F4C8E;
+	Tue, 28 Oct 2025 13:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761654640; cv=none; b=g/JxzJ4w+wsyiSu5jb2TwQvt7lG3TIrPFVeVHw0l57cPW42jJ4DdHklzAi67Phiu0VRjuip1KFRn9z4EdngtzbxklgIxocApHFl/paXtAPQLJF/8Ebzlh+M5e9LraQ4htsS9++C1uIQ53ljoEg0E5+UmjL25mtcEzK04aKVI01s=
+	t=1761656666; cv=none; b=L4l2j8Gad+J6RuR1ZmxlyZwRIXOXIn6zjibmSQXrb9AzqecUmMt02yXy/1R67m6IgZmg8Zhaj5C+BqRuNH/o9wsoWATxDritljvWlqfsQqSRhvE05/zTUM+EZKvXSIgUAnA8szEVYLvNMrrTW6T1l4F0mDWZLI6lhcZsnuUJSqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761654640; c=relaxed/simple;
-	bh=FUJwnKqupuATzqa/yUkbLMKYSmrcPHWiju1XCYAtVvU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AgBjxo9YIYW8RSoTsHSocqhgGKKIG//uTeDa/C+4wxwzFfmnuZm8o/PMLarSTqUZfLBJi2H9OmBbks5dwQx3ZZpGylAHsVr2RlXVrwwJA5fJGC5OCbOYtVZytvcXguo60h8O70xLo9zzAG57UBHYrNRGJ0Bk6Fb/9DM4EGhUiqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IN9IXmlp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155F0C4CEE7
-	for <linux-arch@vger.kernel.org>; Tue, 28 Oct 2025 12:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761654640;
-	bh=FUJwnKqupuATzqa/yUkbLMKYSmrcPHWiju1XCYAtVvU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IN9IXmlpfWmyQMe+4yoJTRjrGkXONjtInjRNNGwLDljJ1Ic7/ddFwvqAuTWuBxGEf
-	 ggNv4arOeC36FTqSclS7agsLn0giGAlgy3711NOxA7QnriWNWG0jBFLFs9N5h4BZGw
-	 Q8c+lbqvJ6pAW0kKUoegNkJhQkV8aLUg35ip0R31lA0L+fU9zQfaSwQjysXPIvBTEI
-	 3RGk17q9uhF2ESP/I0/Ie5Dm/p5vDSh3YZTnUEYOO0p2nt4xh+HbjTSvfGCK5tFXHS
-	 m7IOMOESNFONZnvFolxLiDeuUIdGtz94/CWxElVzIK1hkjq/Yf6lT+t5faKd6ehqUp
-	 6HDN0JNqG/u5Q==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-3d56d0cb3dbso671977fac.3
-        for <linux-arch@vger.kernel.org>; Tue, 28 Oct 2025 05:30:40 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWqPKH7tdRs9SdkeR3h8GQ3caefufgRSW9nLT0L86uDmXi8ndVBASJyDsrSz232TjHBY96O9zY1hohG@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgO9UEW2g38gL6T4+IImjzdDbE8cfiUAoB7wFRxM1rLIWN4gyv
-	GFzmMRn7/29lcY+YSRGysJ2Q7vlZ86wIT/CDRrGIgLCgCWp/FPNsw2dp54tTlsEPzUsV54nELH2
-	pn4MYkS5ps+wApejCalneYel+NdnSnLI=
-X-Google-Smtp-Source: AGHT+IF4/+n4/HUbYzvmzntYRGMqRLoTUquPBb05pAoL2nb4JIDivDwVJlZRViGR0xOD6wLtOHPmiqYRVXII1LbUhvo=
-X-Received: by 2002:a05:6870:a188:b0:3d2:f6c1:1744 with SMTP id
- 586e51a60fabf-3d5d9554f00mr1276006fac.28.1761654639396; Tue, 28 Oct 2025
- 05:30:39 -0700 (PDT)
+	s=arc-20240116; t=1761656666; c=relaxed/simple;
+	bh=0keN4uf+oCdEM7z/g5nLocViNiPVNqPlCkfcHTjbj6U=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=oSDPoSDv4KnMS7TJZjNt/9L5gWyqAzF90PYHA66rAAO8ny7LgvDfexdAmvE9OY+A3Z/9HTp2VhMnIGTO77ClOz0klbFXEpvDf0zp+4DGsC9BjQV6zKwv/8w2vvUlDGe/DGaGO3BsuQ2rJ41E4j4t/tQPpyAX7heRgc4gAkCmpDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=S0GM83XJ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Eh7BMRuo; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1761656663;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rih7V8lhhV1Uz9qrmE1IenQly0r+yFC6m8HuQcXUPXU=;
+	b=S0GM83XJ3PoMyN971w8gTFPPU1e548Pej/XIJ+9//zCe7NwXSn3vIuPv+TGgD63SiXBkdc
+	NMn3VDb4no6mOqlI5Z88NkY44riYWGvupt5vgqyKtEktDF+ity2aV6gxeT6mRTrE4Ibutl
+	dpEHhIssyNiU0d8L4YXcC/BzCI2v7bEtTFRn6xPrS0nCaxgUOt0sG9Nev1aQChRVIzncc5
+	W+u7KjtFoM/c4oLsxZCtgLV+gPDaAK8swnwkG+L6lL5gRKgUpGjbLqKQ85/vsYwAOa7x6S
+	dszFB2IqC1R/+ECTyuFghjwkfIdCh2ij5dvPcbkeCZw0+f5TL+ucfwdRGyEsMw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1761656663;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rih7V8lhhV1Uz9qrmE1IenQly0r+yFC6m8HuQcXUPXU=;
+	b=Eh7BMRuork9NPVe6xTsHHrohgpRZjJS9RuQeWGeQ1KN/O13+xvasfZ0sedC0ob993aB90Z
+	9nqu++w9eFQUbOCg==
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: LKML <linux-kernel@vger.kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng
+ <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Prakash Sangappa
+ <prakash.sangappa@oracle.com>, Madadi Vineeth Reddy
+ <vineethr@linux.ibm.com>, K Prateek Nayak <kprateek.nayak@amd.com>, Steven
+ Rostedt <rostedt@goodmis.org>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org
+Subject: Re: [patch V2 08/12] rseq: Implement time slice extension
+ enforcement timer
+In-Reply-To: <20251028083356.cDl403Q9@linutronix.de>
+References: <20251022110646.839870156@linutronix.de>
+ <20251022121427.406689298@linutronix.de>
+ <20251027113822.UfDZz0mf@linutronix.de> <87cy68wbt6.ffs@tglx>
+ <20251028083356.cDl403Q9@linutronix.de>
+Date: Tue, 28 Oct 2025 14:04:22 +0100
+Message-ID: <87ms5buqi1.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251028053136.692462-1-ankur.a.arora@oracle.com> <20251028053136.692462-8-ankur.a.arora@oracle.com>
-In-Reply-To: <20251028053136.692462-8-ankur.a.arora@oracle.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 28 Oct 2025 13:30:28 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bmK2EK_uRWSBm9YaeD6TrkAr4FPkjdGF2gNL1N7yUrOkz2AUZHQBAURvQI
-Message-ID: <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org, 
-	peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com, 
-	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org, 
-	daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com, 
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com, 
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Tue, Oct 28, 2025 at 6:32=E2=80=AFAM Ankur Arora <ankur.a.arora@oracle.c=
-om> wrote:
+On Tue, Oct 28 2025 at 09:33, Sebastian Andrzej Siewior wrote:
+> On 2025-10-27 17:26:29 [+0100], Thomas Gleixner wrote:
+>> On Mon, Oct 27 2025 at 12:38, Sebastian Andrzej Siewior wrote:
+>> > On 2025-10-22 14:57:38 [+0200], Thomas Gleixner wrote:
+>> >> +static enum hrtimer_restart rseq_slice_expired(struct hrtimer *tmr)
+>> >> +{
+>> >> +	struct slice_timer *st = container_of(tmr, struct slice_timer, timer);
+>> >> +
+>> >> +	if (st->cookie == current && current->rseq.slice.state.granted) {
+>> >> +		rseq_stat_inc(rseq_stats.s_expired);
+>> >> +		set_need_resched_current();
+>> >> +	}
+>> >
+>> > You arm the timer while leaving to userland. Once in userland the task
+>> > can be migrated to another CPU. Once migrated, this CPU can host another
+>> > task while the timer fires and does nothing.
+>> 
+>> That's inevitable. If the scheduler decides to do that then there is
+>> nothing which can be done about it and that's why the cookie pointer
+>> exists.
 >
-> The inner loop in poll_idle() polls over the thread_info flags,
-> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
-> exits once the condition is met, or if the poll time limit has
-> been exceeded.
->
-> To minimize the number of instructions executed in each iteration,
-> the time check is done only intermittently (once every
-> POLL_IDLE_RELAX_COUNT iterations). In addition, each loop iteration
-> executes cpu_relax() which on certain platforms provides a hint to
-> the pipeline that the loop busy-waits, allowing the processor to
-> reduce power consumption.
->
-> This is close to what smp_cond_load_relaxed_timeout() provides. So,
-> restructure the loop and fold the loop condition and the timeout check
-> in smp_cond_load_relaxed_timeout().
+> Without an interrupt on the target CPU, there is nothing stopping the
+> task from overstepping its fair share.
 
-Well, it is close, but is it close enough?
+If a task gets migrated then it can't overstep the share because the
+migration is bringing it back into the kernel, schedules it out and
+schedules it in on the new CPU. So the whole accounting start over
+freshly. That's the same as if the task gets the extension granted, goes
+to user space and gets interrupted again. If that interrupt sets
+NEED_RESCHED the grant is "revoked" and the timer fires for nothing.
 
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> ---
->  drivers/cpuidle/poll_state.c | 29 ++++++++---------------------
->  1 file changed, 8 insertions(+), 21 deletions(-)
+> Since it is a CPU local timer which is HRTIMER_MODE_HARD, from this CPUs
+> perspective it is either about to run or it did run. Therefore the
+> hrtimer_try_to_cancel() can't return -1 due to
+> hrtimer_callback_running() == true.
+> If you drop hrtimer_active() check and scoped_guard(irq),
+> hrtimer_try_to_cancel() will do the same hrtimer_active() check as you
+> have above followed by disable interrupts via lock_hrtimer_base() and
+> here hrtimer_callback_running() can't return true because interrupts are
+> disabled and the timer can't run on a remote CPU because it is a
+> CPU-local timer.
 >
-> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
-> index 9b6d90a72601..dc7f4b424fec 100644
-> --- a/drivers/cpuidle/poll_state.c
-> +++ b/drivers/cpuidle/poll_state.c
-> @@ -8,35 +8,22 @@
->  #include <linux/sched/clock.h>
->  #include <linux/sched/idle.h>
->
-> -#define POLL_IDLE_RELAX_COUNT  200
-> -
->  static int __cpuidle poll_idle(struct cpuidle_device *dev,
->                                struct cpuidle_driver *drv, int index)
->  {
-> -       u64 time_start;
-> -
-> -       time_start =3D local_clock_noinstr();
-> +       u64 time_end;
-> +       u32 flags =3D 0;
->
->         dev->poll_time_limit =3D false;
->
-> +       time_end =3D local_clock_noinstr() + cpuidle_poll_time(drv, dev);
+> So you avoid a branch to hrtimer_try_to_cancel() if the timer already
+> fired.
 
-Is there any particular reason for doing this unconditionally?  If
-not, then it looks like an arbitrary unrelated change to me.
+Yes you are right. Seems I've suffered from brain congestion. Let me
+remove it.
 
-> +
->         raw_local_irq_enable();
->         if (!current_set_polling_and_test()) {
-> -               unsigned int loop_count =3D 0;
-> -               u64 limit;
-> -
-> -               limit =3D cpuidle_poll_time(drv, dev);
-> -
-> -               while (!need_resched()) {
-> -                       cpu_relax();
-> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT)
-> -                               continue;
-> -
-> -                       loop_count =3D 0;
-> -                       if (local_clock_noinstr() - time_start > limit) {
-> -                               dev->poll_time_limit =3D true;
-> -                               break;
-> -                       }
-> -               }
-> +               flags =3D smp_cond_load_relaxed_timeout(&current_thread_i=
-nfo()->flags,
-> +                                                     (VAL & _TIF_NEED_RE=
-SCHED),
-> +                                                     (local_clock_noinst=
-r() >=3D time_end));
+Thanks,
 
-So my understanding of this is that it reduces duplication with some
-other places doing similar things.  Fair enough.
-
-However, since there is "timeout" in the name, I'd expect it to take
-the timeout as an argument.
-
-> +               dev->poll_time_limit =3D !(flags & _TIF_NEED_RESCHED);
->         }
->         raw_local_irq_disable();
->
-> --
+        tglx
 
