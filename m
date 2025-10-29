@@ -1,349 +1,199 @@
-Return-Path: <linux-arch+bounces-14415-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14416-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABE76C1CD0F
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 19:45:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC163C1CD51
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 19:54:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 767814E0758
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 18:45:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1427188D357
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 18:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8EB53563EB;
-	Wed, 29 Oct 2025 18:45:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B44357716;
+	Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="om5GOMGN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9953563F3;
-	Wed, 29 Oct 2025 18:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5D93563E2
+	for <linux-arch@vger.kernel.org>; Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761763510; cv=none; b=r8L74rvqibM2K5bk481sk+Jjdb3sjcA9j69zApdPBTv079Kym/rYqcaZcTXewGXRCaYf1nfOslIkL5D7yh0PwiNSlEQ7Xq00m+7u00rBKkbbxlcIwpyiC2qEtRuBCtFLfnTu8R1AZ034SAwP/1sst0c5T4F+EuGhlXozcbJ+lLY=
+	t=1761763995; cv=none; b=DMjcp2fbWImIie0pY4MVpZyAJdIcoWMPqiRd2dmnqnvNDaoSEgjVBzwIbXHBBx3PRFxrL6sn/Peql29667jEkzVtpWnmyH4aSeJPnK3RTBq+2UyD7k/+bh1t3iXq///Abs3i+YUkFJSbj5Dpiwn1G/MgD5UHmGmgptct6uhZig0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761763510; c=relaxed/simple;
-	bh=S35Fm961GY2YlSo8uAUGRL5gwuLjqeaZeUi+ydZ6nRE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EyarhpXqZZHkwzk0nZTz68TNoC1dUMatpX3C2NRbe/MlspI5wyYzDKc++4dqFLMkpWxydOFGLePMEDf3F+ldcSeYgTASaeGZqVj6bWbXCW+FvbxeHAnppbT5+PDVAAFHCdWRVCC+9nWPEe6HjSeBWxu3Xu11bd2aK+IGIqb62uY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id 39E041608C8;
-	Wed, 29 Oct 2025 18:45:00 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id 8881018;
-	Wed, 29 Oct 2025 18:44:57 +0000 (UTC)
-Date: Wed, 29 Oct 2025 14:45:38 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Prakash Sangappa
- <prakash.sangappa@oracle.com>, Madadi Vineeth Reddy
- <vineethr@linux.ibm.com>, K Prateek Nayak <kprateek.nayak@amd.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Arnd Bergmann
- <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: Re: [patch V3 08/12] rseq: Implement time slice extension
- enforcement timer
-Message-ID: <20251029144538.5eb5c772@gandalf.local.home>
-In-Reply-To: <20251029130403.923191772@linutronix.de>
-References: <20251029125514.496134233@linutronix.de>
-	<20251029130403.923191772@linutronix.de>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1761763995; c=relaxed/simple;
+	bh=P1fpBKLpz3NhAHV8OSXmDOMSQKs45JoWLRgxhe1ZXi0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pNuMRP3/9nlH6rrn+5AbfJI6n0upBe4soL9D0PXcy7YreZ5bUef6Fhy9bOcXd7tgdbF82MJnMatstKOMpsQQZunuvml38sfgioe3rkxgXaiduTf+23W7Yz6hs/chLcmXi1jhlpvm7I1Wuhn7ZEXfVu52LVPZezt+hUvHxn+787Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=om5GOMGN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6D9C4CEFF
+	for <linux-arch@vger.kernel.org>; Wed, 29 Oct 2025 18:53:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761763995;
+	bh=P1fpBKLpz3NhAHV8OSXmDOMSQKs45JoWLRgxhe1ZXi0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=om5GOMGN4jz2H6VEosyifBY2fP9P2ZUxOzCaRZL+HWT0ktMU1vscRxWze4AnqmN8g
+	 U1PMJjoZkfd0gW1nqZKC/4AS3EJyhpT1K5fqsr9qPURuI6TSh5IKlZMIDmFkrfz2io
+	 lKsCwZumZaNJ+iVnccVNxAso/e1ludjC5D8+WgjeoXlSbcosCg+xn0eoC3C9uegr/y
+	 k4Hwo6K7QY68O8So1EonT0CeW5fABtEVwMaIi7LO9LkOh31l//qWPkMSV4jaZ6wOEQ
+	 CvAoxXEZwRlB4ud0b57tRWmXsQWCKq7c2kOIMG8Lzh9SQkguTQDCgf/u2KUV7ZENpw
+	 McpI/YV3EyWQQ==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7c53f916ef1so43312a34.1
+        for <linux-arch@vger.kernel.org>; Wed, 29 Oct 2025 11:53:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV6wT7fKP5t7zDEni4ebCclvUKGrCUjObRemp2qnH0K/h7fwlrya9HA54wwsdp2iqNJLBuIIesDMKpK@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWjTpvDkG5SrqKev1vZR+jeLyOrjuVsMTvbF4OYA1xL86xzFjQ
+	2oJmE5PYxg9bTMh6Uuza/u1Gl+JuWEIEZtknZXQ5pArRFVR5yyZzzUy9QgDZmRvBIFDR68KG6dK
+	1DNY40jI1ffy6xKm4Rh1Bq9tGAxOXrg4=
+X-Google-Smtp-Source: AGHT+IHqLr30NAl5M0UDPxgOiX509nO1xreEttv2Ja7V2VTnyLfOfv1uaRlgWgHZXMApbjkmBIuGTq5OSxr3Ncgi/MM=
+X-Received: by 2002:a05:6808:148c:b0:441:cf96:934f with SMTP id
+ 5614622812f47-44f7a89144cmr1770625b6e.47.1761763994437; Wed, 29 Oct 2025
+ 11:53:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: ptwwk4m8hbhzsxqoo5cwfwd4cz7ghnc3
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 8881018
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19JDM0v7jHtUmDmJ4SLbqYwfkLUzOp4lIs=
-X-HE-Tag: 1761763497-913457
-X-HE-Meta: U2FsdGVkX1+LpLZQLCQRUd8UBz/WIsR4X+8kjxCCHNCLpDg8Ev6f+AXGW/EGJGlFpw7aPAmHGOy7hpv6R/FqtK7+7U3YRJAVeKqz1cfQBmyAoaGBmhG7s4ZiPIcqb7qNex/VaCEX1sTNfkL0uik+2LPnsu0wY5QD9/J8Sop2BqB5BFTxXj6tHWu0SAWr/4SIEOvBfLc623Mej8HTGGzb/YKLy30zLIJlmo9x6kpVcdRqNQU2zBmDFsatH904udUqn/yVuPsnogXtcVwCpJ4seJerK/TaYB7LA26QEypxMB6aVNNAhnG3mtX31JKtYlm0
+References: <20251028053136.692462-1-ankur.a.arora@oracle.com>
+ <20251028053136.692462-8-ankur.a.arora@oracle.com> <CAJZ5v0hSvzHfsE4nrEW-Ey0dnJ+m=dSU-f1RywGNU0Xyi3jXtQ@mail.gmail.com>
+ <87ms5ajp4c.fsf@oracle.com>
+In-Reply-To: <87ms5ajp4c.fsf@oracle.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 29 Oct 2025 19:53:03 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
+X-Gm-Features: AWmQ_bk7-QDWwa1cDV85f7xAgSvOSsXB0uuTzMcOx_--MTMmqkafGtIfA3jK8No
+Message-ID: <CAJZ5v0hQ7G9jvOv9VtRmsCKahBpUcPJMMOe07k_2mqsvggWcWg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v7 7/7] cpuidle/poll_state: Poll via smp_cond_load_relaxed_timeout()
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de, 
+	catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
+	akpm@linux-foundation.org, mark.rutland@arm.com, harisokn@amazon.com, 
+	cl@gentwo.org, ast@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com, 
+	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, 
+	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 29 Oct 2025 14:22:26 +0100 (CET)
-Thomas Gleixner <tglx@linutronix.de> wrote:
+On Wed, Oct 29, 2025 at 5:42=E2=80=AFAM Ankur Arora <ankur.a.arora@oracle.c=
+om> wrote:
+>
+>
+> Rafael J. Wysocki <rafael@kernel.org> writes:
+>
+> > On Tue, Oct 28, 2025 at 6:32=E2=80=AFAM Ankur Arora <ankur.a.arora@orac=
+le.com> wrote:
+> >>
+> >> The inner loop in poll_idle() polls over the thread_info flags,
+> >> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
+> >> exits once the condition is met, or if the poll time limit has
+> >> been exceeded.
+> >>
+> >> To minimize the number of instructions executed in each iteration,
+> >> the time check is done only intermittently (once every
+> >> POLL_IDLE_RELAX_COUNT iterations). In addition, each loop iteration
+> >> executes cpu_relax() which on certain platforms provides a hint to
+> >> the pipeline that the loop busy-waits, allowing the processor to
+> >> reduce power consumption.
+> >>
+> >> This is close to what smp_cond_load_relaxed_timeout() provides. So,
+> >> restructure the loop and fold the loop condition and the timeout check
+> >> in smp_cond_load_relaxed_timeout().
+> >
+> > Well, it is close, but is it close enough?
+>
+> I guess that's the question.
+>
+> >> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> >> ---
+> >>  drivers/cpuidle/poll_state.c | 29 ++++++++---------------------
+> >>  1 file changed, 8 insertions(+), 21 deletions(-)
+> >>
+> >> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state=
+.c
+> >> index 9b6d90a72601..dc7f4b424fec 100644
+> >> --- a/drivers/cpuidle/poll_state.c
+> >> +++ b/drivers/cpuidle/poll_state.c
+> >> @@ -8,35 +8,22 @@
+> >>  #include <linux/sched/clock.h>
+> >>  #include <linux/sched/idle.h>
+> >>
+> >> -#define POLL_IDLE_RELAX_COUNT  200
+> >> -
+> >>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
+> >>                                struct cpuidle_driver *drv, int index)
+> >>  {
+> >> -       u64 time_start;
+> >> -
+> >> -       time_start =3D local_clock_noinstr();
+> >> +       u64 time_end;
+> >> +       u32 flags =3D 0;
+> >>
+> >>         dev->poll_time_limit =3D false;
+> >>
+> >> +       time_end =3D local_clock_noinstr() + cpuidle_poll_time(drv, de=
+v);
+> >
+> > Is there any particular reason for doing this unconditionally?  If
+> > not, then it looks like an arbitrary unrelated change to me.
+>
+> Agreed. Will fix.
+>
+> >> +
+> >>         raw_local_irq_enable();
+> >>         if (!current_set_polling_and_test()) {
+> >> -               unsigned int loop_count =3D 0;
+> >> -               u64 limit;
+> >> -
+> >> -               limit =3D cpuidle_poll_time(drv, dev);
+> >> -
+> >> -               while (!need_resched()) {
+> >> -                       cpu_relax();
+> >> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT)
+> >> -                               continue;
+> >> -
+> >> -                       loop_count =3D 0;
+> >> -                       if (local_clock_noinstr() - time_start > limit=
+) {
+> >> -                               dev->poll_time_limit =3D true;
+> >> -                               break;
+> >> -                       }
+> >> -               }
+> >> +               flags =3D smp_cond_load_relaxed_timeout(&current_threa=
+d_info()->flags,
+> >> +                                                     (VAL & _TIF_NEED=
+_RESCHED),
+> >> +                                                     (local_clock_noi=
+nstr() >=3D time_end));
+> >
+> > So my understanding of this is that it reduces duplication with some
+> > other places doing similar things.  Fair enough.
+> >
+> > However, since there is "timeout" in the name, I'd expect it to take
+> > the timeout as an argument.
+>
+> The early versions did have a timeout but that complicated the
+> implementation significantly. And the current users poll_idle(),
+> rqspinlock don't need a precise timeout.
+>
+> smp_cond_load_relaxed_timed(), smp_cond_load_relaxed_timecheck()?
+>
+> The problem with all suffixes I can think of is that it makes the
+> interface itself nonobvious.
+>
+> Possibly something with the sense of bail out might work.
 
-> --- a/include/linux/rseq_entry.h
-> +++ b/include/linux/rseq_entry.h
-> @@ -86,8 +86,24 @@ static __always_inline bool rseq_slice_e
->  {
->  	return static_branch_likely(&rseq_slice_extension_key);
->  }
-> +
-> +extern unsigned int rseq_slice_ext_nsecs;
-> +bool __rseq_arm_slice_extension_timer(void);
-> +
-> +static __always_inline bool rseq_arm_slice_extension_timer(void)
-> +{
-> +	if (!rseq_slice_extension_enabled())
-> +		return false;
-> +
-> +	if (likely(!current->rseq.slice.state.granted))
-> +		return false;
-> +
-> +	return __rseq_arm_slice_extension_timer();
-> +}
-> +
->  #else /* CONFIG_RSEQ_SLICE_EXTENSION */
->  static inline bool rseq_slice_extension_enabled(void) { return false; }
-> +static inline bool rseq_arm_slice_extension_timer(void) { return false; }
->  #endif /* !CONFIG_RSEQ_SLICE_EXTENSION */
->  
->  bool rseq_debug_update_user_cs(struct task_struct *t, struct pt_regs *regs, unsigned long csaddr);
-> @@ -542,17 +558,19 @@ static __always_inline void clear_tif_rs
->  static __always_inline bool
->  rseq_exit_to_user_mode_restart(struct pt_regs *regs, unsigned long ti_work)
->  {
-> -	if (likely(!test_tif_rseq(ti_work)))
-> -		return false;
-> -
-> -	if (unlikely(__rseq_exit_to_user_mode_restart(regs))) {
-> -		current->rseq.event.slowpath = true;
-> -		set_tsk_thread_flag(current, TIF_NOTIFY_RESUME);
-> -		return true;
-> +	if (unlikely(test_tif_rseq(ti_work))) {
-> +		if (unlikely(__rseq_exit_to_user_mode_restart(regs))) {
-> +			current->rseq.event.slowpath = true;
-> +			set_tsk_thread_flag(current, TIF_NOTIFY_RESUME);
-> +			return true;
+It basically has two conditions, one of which is checked in every step
+of the internal loop and the other one is checked every
+SMP_TIMEOUT_POLL_COUNT steps of it.  That isn't particularly
+straightforward IMV.
 
-Just to make sure I understand this. By setting TIF_NOTIFY_RESUME and
-returning true it can still comeback to set the timer?
-
-I guess this also begs the question of if user space can use both the
-restartable sequences at the same time as requesting an extended time slice?
-
-> +		}
-> +		clear_tif_rseq();
->  	}
-> -
-> -	clear_tif_rseq();
-> -	return false;
-> +	/*
-> +	 * Arm the slice extension timer if nothing to do anymore and the
-> +	 * task really goes out to user space.
-> +	 */
-> +	return rseq_arm_slice_extension_timer();
->  }
->  
->  #endif /* CONFIG_GENERIC_ENTRY */
-> --- a/include/linux/rseq_types.h
-> +++ b/include/linux/rseq_types.h
-> @@ -89,9 +89,11 @@ union rseq_slice_state {
->  /**
->   * struct rseq_slice - Status information for rseq time slice extension
->   * @state:	Time slice extension state
-> + * @expires:	The time when a grant expires
->   */
->  struct rseq_slice {
->  	union rseq_slice_state	state;
-> +	u64			expires;
->  };
->  
->  /**
-> --- a/kernel/rseq.c
-> +++ b/kernel/rseq.c
-> @@ -71,6 +71,8 @@
->  #define RSEQ_BUILD_SLOW_PATH
->  
->  #include <linux/debugfs.h>
-> +#include <linux/hrtimer.h>
-> +#include <linux/percpu.h>
->  #include <linux/prctl.h>
->  #include <linux/ratelimit.h>
->  #include <linux/rseq_entry.h>
-> @@ -499,8 +501,78 @@ SYSCALL_DEFINE4(rseq, struct rseq __user
->  }
->  
->  #ifdef CONFIG_RSEQ_SLICE_EXTENSION
-> +struct slice_timer {
-> +	struct hrtimer	timer;
-> +	void		*cookie;
-> +};
-> +
-> +unsigned int rseq_slice_ext_nsecs __read_mostly = 30 * NSEC_PER_USEC;
-> +static DEFINE_PER_CPU(struct slice_timer, slice_timer);
->  DEFINE_STATIC_KEY_TRUE(rseq_slice_extension_key);
->  
-> +static enum hrtimer_restart rseq_slice_expired(struct hrtimer *tmr)
-> +{
-> +	struct slice_timer *st = container_of(tmr, struct slice_timer, timer);
-> +
-> +	if (st->cookie == current && current->rseq.slice.state.granted) {
-> +		rseq_stat_inc(rseq_stats.s_expired);
-> +		set_need_resched_current();
-> +	}
-> +	return HRTIMER_NORESTART;
-> +}
-> +
-> +bool __rseq_arm_slice_extension_timer(void)
-> +{
-> +	struct slice_timer *st = this_cpu_ptr(&slice_timer);
-> +	struct task_struct *curr = current;
-> +
-> +	lockdep_assert_irqs_disabled();
-> +
-> +	/*
-> +	 * This check prevents that a granted time slice extension exceeds
-
-           This check prevents a granted time slice ...
-
-> +	 * the maximum scheduling latency when the grant expired before
-> +	 * going out to user space. Don't bother to clear the grant here,
-> +	 * it will be cleaned up automatically before going out to user
-> +	 * space.
-> +	 */
-> +	if ((unlikely(curr->rseq.slice.expires < ktime_get_mono_fast_ns()))) {
-> +		set_need_resched_current();
-> +		return true;
-> +	}
-> +
-> +	/*
-> +	 * Store the task pointer as a cookie for comparison in the timer
-> +	 * function. This is safe as the timer is CPU local and cannot be
-> +	 * in the expiry function at this point.
-> +	 */
-
-I'm just curious in this scenario:
-
-  1) Task A requests an extension and is granted.
-      st->cookie = Task A
-      hrtimer_start();
-
-  2) Before getting back to user space, a RT kernel thread wakes up and
-     preempts Task A. Does this clear the timer?
-
-  3) RT kernel thread finishes but then schedules Task B within the expiry.
-
-  4) Task B requests an extension (assuming it had a short time slice that
-     allowed it to end before the expiry of the original timer).
-
-I guess it doesn't matter that st->cookie = Task B, as Task A was already
-scheduled out. But would calling hrtimer_start() on an existing timer cause
-any issue?
-
-I guess it doesn't matter as it looks like the code in hrtimer_start() does
-indeed remove an existing timer.
-
-> +	st->cookie = curr;
-> +	hrtimer_start(&st->timer, curr->rseq.slice.expires, HRTIMER_MODE_ABS_PINNED_HARD);
-> +	/* Arm the syscall entry work */
-> +	set_task_syscall_work(curr, SYSCALL_RSEQ_SLICE);
-> +	return false;
-> +}
-> +
-> +static void rseq_cancel_slice_extension_timer(void)
-> +{
-> +	struct slice_timer *st = this_cpu_ptr(&slice_timer);
-> +
-> +	/*
-> +	 * st->cookie can be safely read as preemption is disabled and the
-> +	 * timer is CPU local.
-> +	 *
-> +	 * As this is most probably the first expiring timer, the cancel is
-
-           As this is probably the first ...
-
-> +	 * expensive as it has to reprogram the hardware, but that's less
-> +	 * expensive than going through a full hrtimer_interrupt() cycle
-> +	 * for nothing.
-> +	 *
-> +	 * hrtimer_try_to_cancel() is sufficient here as the timer is CPU
-> +	 * local and once the hrtimer code disabled interrupts the timer
-> +	 * callback cannot be running.
-> +	 */
-> +	if (st->cookie == current)
-> +		hrtimer_try_to_cancel(&st->timer);
-
-If the above scenario did happen, the timer will go off as
-st->cookie == current would likely be false?
-
-Hmm, if it does go off and the task did schedule back in, would it get its
-need_resched set? This is a very unlikely scenario thus I guess it doesn't
-really matter.
-
-I'm just thinking about corner cases and how it could affect this code and
-possibly cause noticeable issues.
-
--- Steve
-
-
-> +}
-> +
->  static inline void rseq_slice_set_need_resched(struct task_struct *curr)
->  {
->  	/*
-> @@ -558,10 +630,11 @@ void rseq_syscall_enter_work(long syscal
->  	rseq_stat_inc(rseq_stats.s_yielded);
->  
->  	/*
-> -	 * Required to make set_tsk_need_resched() correct on PREEMPT[RT]
-> -	 * kernels.
-> +	 * Required to stabilize the per CPU timer pointer and to make
-> +	 * set_tsk_need_resched() correct on PREEMPT[RT] kernels.
->  	 */
->  	scoped_guard(preempt) {
-> +		rseq_cancel_slice_extension_timer();
->  		/*
->  		 * Now that preemption is disabled, quickly check whether
->  		 * the task was already rescheduled before arriving here.
-> @@ -652,6 +725,31 @@ SYSCALL_DEFINE0(rseq_slice_yield)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_SYSCTL
-> +static const unsigned int rseq_slice_ext_nsecs_min = 10 * NSEC_PER_USEC;
-> +static const unsigned int rseq_slice_ext_nsecs_max = 50 * NSEC_PER_USEC;
-> +
-> +static const struct ctl_table rseq_slice_ext_sysctl[] = {
-> +	{
-> +		.procname	= "rseq_slice_extension_nsec",
-> +		.data		= &rseq_slice_ext_nsecs,
-> +		.maxlen		= sizeof(unsigned int),
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_douintvec_minmax,
-> +		.extra1		= (unsigned int *)&rseq_slice_ext_nsecs_min,
-> +		.extra2		= (unsigned int *)&rseq_slice_ext_nsecs_max,
-> +	},
-> +};
-> +
-> +static void rseq_slice_sysctl_init(void)
-> +{
-> +	if (rseq_slice_extension_enabled())
-> +		register_sysctl_init("kernel", rseq_slice_ext_sysctl);
-> +}
-> +#else /* CONFIG_SYSCTL */
-> +static inline void rseq_slice_sysctl_init(void) { }
-> +#endif  /* !CONFIG_SYSCTL */
-> +
->  static int __init rseq_slice_cmdline(char *str)
->  {
->  	bool on;
-> @@ -664,4 +762,17 @@ static int __init rseq_slice_cmdline(cha
->  	return 1;
->  }
->  __setup("rseq_slice_ext=", rseq_slice_cmdline);
-> +
-> +static int __init rseq_slice_init(void)
-> +{
-> +	unsigned int cpu;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		hrtimer_setup(per_cpu_ptr(&slice_timer.timer, cpu), rseq_slice_expired,
-> +			      CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED_HARD);
-> +	}
-> +	rseq_slice_sysctl_init();
-> +	return 0;
-> +}
-> +device_initcall(rseq_slice_init);
->  #endif /* CONFIG_RSEQ_SLICE_EXTENSION */
-
+Honestly, I prefer the existing code.  It is much easier to follow and
+I don't see why the new code would be better.  Sorry.
 
