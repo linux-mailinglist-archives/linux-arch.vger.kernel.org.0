@@ -1,106 +1,91 @@
-Return-Path: <linux-arch+bounces-14411-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14412-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00F5CC1BC37
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 16:46:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E9F6C1C150
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 17:30:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 882DE5837AF
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 15:11:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67EE0563E7C
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 15:40:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1102E1EE1;
-	Wed, 29 Oct 2025 15:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iXlPihwQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="195qSjd7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510CF2EB87F;
+	Wed, 29 Oct 2025 15:40:21 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BD92E0901;
-	Wed, 29 Oct 2025 15:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED3A3358A0;
+	Wed, 29 Oct 2025 15:40:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761750660; cv=none; b=B7Iw217KUxfTO72UVLqwujMQF2TWzcFbXzWjEtuwPCekFwVgGWxnl61dD9b0E4UsPacS1VnZ85+UcwQ8t2ySh1c0oDYySF+pophfgTYQCABt0QgD7K4VpbNh3msJeWh4cc6gOcSOJ/FnbSKt/2mEKBjvdnTYYOzTAA8dYQ4SOlE=
+	t=1761752421; cv=none; b=hXdoZqkHFCvsZ4X2Ld0CpISL1eOUvX0NFvCdYTumpnIIVn29nEhpKQe0IVhezM7bl3ECK+ittyzqIzmjAj0ClN6ulBog/H0lZRao6ikBqHMyM6Zk6CFASJEQ6NaNxGRe2x/kjAb0+mPrK4GGD2ABuRf7d+6615MLGWY1h5TY6fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761750660; c=relaxed/simple;
-	bh=sAv1z1FgZI5xEbZMpuf1SeLtdIlGbwOrSChKTjqrO4s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cWetpCp4ATUrf4mpkQ7UM/kmPpbA/OtpAz4eUMUZOy8EQ0UbvM5EMm+/Em1pcLVTS7cWae3OLz/vp/MO5rfG8tWZWqEy4mMMzaFn8XjMITa6V/v7UKVAebKG1z3A6JghWkGMe+6XvfXW52loixUAWMPcWxO6j9UfQez0bZi7mrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iXlPihwQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=195qSjd7; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Wed, 29 Oct 2025 16:10:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1761750656;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lc3orl+6C4wXnR7bqU7PuJ/5Qcp1MmFzz8u4/5D8yFQ=;
-	b=iXlPihwQwKdKVlWTaeY1e9XWLmIzLWoVB4Cu8lRBZkWrv57wnynUT7O/IRYuYkgguJIWFe
-	B3dErPgcZcoV+NOgUnu/ZEGyFvJXkMyWSNGFQUj10+akh+8S36Vvf+HdtbhOmXBDjV5dGF
-	IIjKq/AVdjy2iIOv5EUXiPic86GuxWjVsgYAFhJz7DfH2Z6AVSKoVYbVZe8+Q7JTE+AnfI
-	h3HiO1AZBkno6buUFVUJhYZHyDJZ/UZPw2x0MoBisSY/BCErCNnorY79GB/O7FoLqNRVUq
-	kIrlsP7R8p5oqfcBkYc/rv1PcR+DJetLkYXBQE8xIyktE7uCweAlUG4u1UWe9Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1761750656;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lc3orl+6C4wXnR7bqU7PuJ/5Qcp1MmFzz8u4/5D8yFQ=;
-	b=195qSjd7J0TZl5Ns3PzXRbF5K8Z3NLL/WPo5wQY2oKV96hWiTkETaujqR2f9yIE6mK9iD1
-	1de1cmk6Huz9FxAQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
-	Prakash Sangappa <prakash.sangappa@oracle.com>,
-	Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Steven Rostedt <rostedt@goodmis.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org
+	s=arc-20240116; t=1761752421; c=relaxed/simple;
+	bh=wcQ8IGFKbehv60Qvlp3njLD4yfBr3RovVxP1nGvSmw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SIp5l4JJKCp4UbUjGiBhRmut13JbY4qLbMFaVNq7sKXR9XIqrapIuNDtt/lG5O3nUHXVHWEKj/Skn4hzXRsFefVxGEj/QLZWdx4p9ALI6f2F145QAwGC7Nw8fFQPsJR4m4Gpxm4atUOHhvzInxzGODm9pRBlp3K5bxQRockYb9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 80B8D49EC4;
+	Wed, 29 Oct 2025 15:40:11 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id C6E8620027;
+	Wed, 29 Oct 2025 15:40:08 +0000 (UTC)
+Date: Wed, 29 Oct 2025 11:40:49 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>, LKML
+ <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet
+ <corbet@lwn.net>, Prakash Sangappa <prakash.sangappa@oracle.com>, Madadi
+ Vineeth Reddy <vineethr@linux.ibm.com>, K Prateek Nayak
+ <kprateek.nayak@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org
 Subject: Re: [patch V3 00/12] rseq: Implement time slice extension mechanism
-Message-ID: <20251029151055.SA-WMUQ_@linutronix.de>
+Message-ID: <20251029114049.1686a619@gandalf.local.home>
+In-Reply-To: <20251029151055.SA-WMUQ_@linutronix.de>
 References: <20251029125514.496134233@linutronix.de>
+	<20251029151055.SA-WMUQ_@linutronix.de>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251029125514.496134233@linutronix.de>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: C6E8620027
+X-Stat-Signature: bg1a9jc981s9q7ws1mmwqsc5sp1frpgn
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/yGtvNgo/ftBl+pn41DDvnv5l+1wGiMn0=
+X-HE-Tag: 1761752408-769937
+X-HE-Meta: U2FsdGVkX1928eAfm8v96ZRbrNSxVm164YIoSoaDtyQyWWKdkYy4PisP9DyX7Zu7CCifDc4HhieAewPkRrMiNo78Hron/VMfL44sF7/2xTX1x0YrxOUVknYq/JtdO+r4aib6ptfLcJ8/Qv4IlvZpBRUQCWEQzEwrSp1O4zwgSDToPrNNtWgOdYwF5hV1m6939tn3H4KCuO1aG2bug+DcLjraGkJ7tDnLxYPU7rsug/zaq7OQKXk2+kIT3tGK/VtpOiPzU030nAU+VsAb0N+Og2VGl+LklgYrDMGuvlNSvHmbAdaHSe5/XQfrB3L60dAVnFMzLO4GBA/qGFfZX7SrU1kjwgdTOvqVfCJ341nHaJgGVKoHIL5m9A==
 
-On 2025-10-29 14:22:11 [+0100], Thomas Gleixner wrote:
-> Changes vs. V2:
->=20
->    - Rebase on the newest RSEQ and uaccess changes
-=E2=80=A6
-> and in git:
->=20
->     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/cid
->=20
-> For your convenience all of it is also available as a conglomerate from
-> git:
->=20
->     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/sli=
-ce
+On Wed, 29 Oct 2025 16:10:55 +0100
+Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
 
-rseq/slice is older than rseq/cid. rseq/slice has the
-__put_kernel_nofault typo. rseq/cid looks correct.
+> > and in git:
+> > 
+> >     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/cid
+> > 
+> > For your convenience all of it is also available as a conglomerate from
+> > git:
+> > 
+> >     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/slice  
+> 
+> rseq/slice is older than rseq/cid. rseq/slice has the
+> __put_kernel_nofault typo. rseq/cid looks correct.
 
-> Thanks,
->=20
-> 	tglx
+Yeah, I started looking at both too, and checking out req/slice and trying
+to do a rebase on top of rseq/cid causes a bunch of conflicts.
 
-Sebastian
+I'm continuing the rebase and just skipping the changed commits.
+
+-- Steve
 
