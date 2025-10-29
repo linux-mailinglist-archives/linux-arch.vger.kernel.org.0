@@ -1,55 +1,55 @@
-Return-Path: <linux-arch+bounces-14402-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14403-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 657CAC1ABC9
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 14:34:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB354C1AD55
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 14:42:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC45C663B86
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 13:27:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0192B663CC3
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 13:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768CB34679C;
-	Wed, 29 Oct 2025 13:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E26B3451CB;
+	Wed, 29 Oct 2025 13:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yMHA8vaG";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CU66RykL"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pfop2Pyk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1KDDDduN"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B2E345736;
-	Wed, 29 Oct 2025 13:22:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9540034575E;
+	Wed, 29 Oct 2025 13:22:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761744149; cv=none; b=gRD1mDPvyDJjmhaBHiUgaNLHyYS64jehQ3EdoO9HM82zVACv9BOGb946m+wH0CSHGRHNBQoTkCFTe+qbbhuhNZTspeRyEHfAipa2JvHvgjznLrv3iM8bZI7mK/v6kr7d92HR5BEqfQ1bHxWXxzxkpx9ks50rolMys0lw94xbXWo=
+	t=1761744150; cv=none; b=umLhWe4egpI7+W/0HQzdDElqr37155E74qJk0dL/NbnIhMaVHi8sdBaRPbIpQF1NsNUNCbY1u6fW630Xrlb/yorpXicXri+8JdJhSLAQxgzFArCH5hf0yfB7dD43QnQOaPqoXNm94K2vDV0l4TtmLeWJNgOujpvOO8jz+B7OjSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761744149; c=relaxed/simple;
-	bh=Z/SOwScKb9n0Wnnan5XIzK9tU7Z6ttrmgwtsrJBbmrI=;
+	s=arc-20240116; t=1761744150; c=relaxed/simple;
+	bh=UHXmiBMTC62xAL06thle+HBDfXTrPUw4Yw673HAQL2M=;
 	h=Message-ID:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Date; b=qICE9AKeQlBNLHunZJ+ryKpKZoT3TtTuZLU+j0fFTLLAc7pgtyvX1kEBC0zHdOopsoG86chllOh5E1E5pdGRPhSX8iMdk8b1lVchxm3kyemNc+xzSLkA5gBNBC5LBOY+3IRz3KyO9J0wU+4HIBC0SwKv9lCFeLjmK7m6F+3dTnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yMHA8vaG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CU66RykL; arc=none smtp.client-ip=193.142.43.55
+	 Content-Type:Date; b=dxc9tZsjoVhXtszGmiG1qWH2Iz8+4xlzGWIhid1XUOJA6SsFC1JUoasO0N+cdLVrqBl/qxc//ldEdfObTPei/wqGbjbFmxN1B6y/x4bw+RWVmUvCmGm+Ffb6khLkaYVf40GtrUPUrszpRR5iNZxRWa3yYmeVP9IL9vw/BpcWdRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pfop2Pyk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1KDDDduN; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Message-ID: <20251029130403.860155882@linutronix.de>
+Message-ID: <20251029130403.923191772@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1761744145;
+	s=2020; t=1761744147;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=AOf1VdqtLADxLcXVcCIj1ueKsoIjJGN/hkZ5MD1j+bc=;
-	b=yMHA8vaGHnVOvsJ54RWzQFc8oqYyBfWqnD+c4L2gRyn/yKkwcdVsDTxblNK2hu8wDWejBi
-	L2q58UdGowSV2qVpe1TOt+vuOPWyMfdZwnWWCYKmCUVaaxiMe5HT5q5ZuFJk1snO9FJldx
-	CWqbwE02axhGd2hzfOGkUm1kVuxX0Odz8yQYNJRF1bK4zJtA0ZsFKSFs16j230hfkZ7Dl6
-	VYssPLI2bKaZ0YUPcBcP6s5GQwhhMQbvOUFyP7Jth/w1r1EaKDwybLhIWtF/0re1qMAk94
-	vvp8R4oc07aoQRlPpbNVWy/MuEuVd5WFqqwmZVhJH6QwXknoNxHCszR837vBiA==
+	 references:references; bh=i/n+PXsZpikXhoZ//1ckNeYYWN4uNlkPxDCb8KzeydQ=;
+	b=pfop2PykaDRSZ+cSCGAMqz9qtoUM9zbL9n3sfkgbJF33PbrFBfiHeMDEERFre2mJi5Dc9n
+	9t1pmsYQ79SaOijXAJ5iJOWkib/0ndcjH0Cp4tYDFbVQhghmCeHkQ2Z6HyqfOJc+smmzmn
+	AZ0ofHH5Cim7JEixnwmNrvavwib8LLvhFj5zB0VCSFFP8LmzL/259Y0NOIG42rBf7HL4cU
+	cK2fn/gX6yTjOzpaQLtsqhFlkaLM2bQMJSCgqJzNjXnrMPAvOzXtnZ+z7xSRn359BxZxjo
+	Q6DlyO+ngilggngk0PRUD1b6ZGqdJvEDMPuYtnB8pb4aYsisohFSKJI4thfH8w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1761744145;
+	s=2020e; t=1761744147;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=AOf1VdqtLADxLcXVcCIj1ueKsoIjJGN/hkZ5MD1j+bc=;
-	b=CU66RykLVlY9jtt9F+tXOZcQan4/iDzcroE7P1vLKKts7lt8crGi/BQy+OPUw0o2cis2oN
-	nD7d5VjRYvJ7bMDw==
+	 references:references; bh=i/n+PXsZpikXhoZ//1ckNeYYWN4uNlkPxDCb8KzeydQ=;
+	b=1KDDDduN8oX1MO9KqJ1I55L/792QuK0YZhmkUVunh7WG8moeiDveG9R5O3owCTjjS6gUIE
+	ifQCJDiZXdDHv8DQ==
 From: Thomas Gleixner <tglx@linutronix.de>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>,
@@ -64,8 +64,8 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
  Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
  Arnd Bergmann <arnd@arndb.de>,
  linux-arch@vger.kernel.org
-Subject: [patch V3 07/12] rseq: Implement syscall entry work for time slice
- extensions
+Subject: [patch V3 08/12] rseq: Implement time slice extension enforcement
+ timer
 References: <20251029125514.496134233@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,203 +74,293 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 29 Oct 2025 14:22:24 +0100 (CET)
+Date: Wed, 29 Oct 2025 14:22:26 +0100 (CET)
 
-The kernel sets SYSCALL_WORK_RSEQ_SLICE when it grants a time slice
-extension. This allows to handle the rseq_slice_yield() syscall, which is
-used by user space to relinquish the CPU after finishing the critical
-section for which it requested an extension.
+If a time slice extension is granted and the reschedule delayed, the kernel
+has to ensure that user space cannot abuse the extension and exceed the
+maximum granted time.
 
-In case the kernel state is still GRANTED, the kernel resets both kernel
-and user space state with a set of sanity checks. If the kernel state is
-already cleared, then this raced against the timer or some other interrupt
-and just clears the work bit.
+It was suggested to implement this via the existing hrtick() timer in the
+scheduler, but that turned out to be problematic for several reasons:
 
-Doing it in syscall entry work allows to catch misbehaving user space,
-which issues a syscall from the critical section. Wrong syscall and
-inconsistent user space result in a SIGSEGV.
+   1) It creates a dependency on CONFIG_SCHED_HRTICK, which can be disabled
+      independently of CONFIG_HIGHRES_TIMERS
+
+   2) HRTICK usage in the scheduler can be runtime disabled or is only used
+      for certain aspects of scheduling.
+
+   3) The function is calling into the scheduler code and that might have
+      unexpected consequences when this is invoked due to a time slice
+      enforcement expiry. Especially when the task managed to clear the
+      grant via sched_yield(0).
+
+It would be possible to address #2 and #3 by storing state in the
+scheduler, but that is extra complexity and fragility for no value.
+
+Implement a dedicated per CPU hrtimer instead, which is solely used for the
+purpose of time slice enforcement.
+
+The timer is armed when an extension was granted right before actually
+returning to user mode in rseq_exit_to_user_mode_restart().
+
+It is disarmed, when the task relinquishes the CPU. This is expensive as
+the timer is probably the first expiring timer on the CPU, which means it
+has to reprogram the hardware. But that's less expensive than going through
+a full hrtimer interrupt cycle for nothing.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: Boqun Feng <boqun.feng@gmail.com>
 ---
-V3: Use get/put_user()
+V3: Add sysctl documentation, simplify timer cancelation - Sebastian
 ---
- include/linux/entry-common.h  |    2 -
- include/linux/rseq.h          |    2 +
- include/linux/thread_info.h   |   16 ++++----
- kernel/entry/syscall-common.c |   11 ++++-
- kernel/rseq.c                 |   79 ++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 100 insertions(+), 10 deletions(-)
+ Documentation/admin-guide/sysctl/kernel.rst |    6 +
+ include/linux/rseq_entry.h                  |   38 ++++++---
+ include/linux/rseq_types.h                  |    2 
+ kernel/rseq.c                               |  115 +++++++++++++++++++++++++++-
+ 4 files changed, 149 insertions(+), 12 deletions(-)
 
---- a/include/linux/entry-common.h
-+++ b/include/linux/entry-common.h
-@@ -36,8 +36,8 @@
- 				 SYSCALL_WORK_SYSCALL_EMU |		\
- 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
- 				 SYSCALL_WORK_SYSCALL_USER_DISPATCH |	\
-+				 SYSCALL_WORK_SYSCALL_RSEQ_SLICE |	\
- 				 ARCH_SYSCALL_WORK_ENTER)
--
- #define SYSCALL_WORK_EXIT	(SYSCALL_WORK_SYSCALL_TRACEPOINT |	\
- 				 SYSCALL_WORK_SYSCALL_TRACE |		\
- 				 SYSCALL_WORK_SYSCALL_AUDIT |		\
---- a/include/linux/rseq.h
-+++ b/include/linux/rseq.h
-@@ -165,8 +165,10 @@ static inline void rseq_syscall(struct p
- #endif /* !CONFIG_DEBUG_RSEQ */
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -1228,6 +1228,12 @@ reboot-cmd (SPARC only)
+ ROM/Flash boot loader. Maybe to tell it what to do after
+ rebooting. ???
  
- #ifdef CONFIG_RSEQ_SLICE_EXTENSION
-+void rseq_syscall_enter_work(long syscall);
- int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3);
- #else /* CONFIG_RSEQ_SLICE_EXTENSION */
-+static inline void rseq_syscall_enter_work(long syscall) { }
- static inline int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3)
++rseq_slice_extension_nsec
++=========================
++
++A task can request to delay its scheduling if it is in a critical section
++via the prctl(PR_RSEQ_SLICE_EXTENSION_SET) mechanism. This sets the maximum
++allowed extension in nanoseconds before scheduling of the task is enforced.
+ 
+ sched_energy_aware
+ ==================
+--- a/include/linux/rseq_entry.h
++++ b/include/linux/rseq_entry.h
+@@ -86,8 +86,24 @@ static __always_inline bool rseq_slice_e
  {
- 	return -ENOTSUPP;
---- a/include/linux/thread_info.h
-+++ b/include/linux/thread_info.h
-@@ -46,15 +46,17 @@ enum syscall_work_bit {
- 	SYSCALL_WORK_BIT_SYSCALL_AUDIT,
- 	SYSCALL_WORK_BIT_SYSCALL_USER_DISPATCH,
- 	SYSCALL_WORK_BIT_SYSCALL_EXIT_TRAP,
-+	SYSCALL_WORK_BIT_SYSCALL_RSEQ_SLICE,
- };
+ 	return static_branch_likely(&rseq_slice_extension_key);
+ }
++
++extern unsigned int rseq_slice_ext_nsecs;
++bool __rseq_arm_slice_extension_timer(void);
++
++static __always_inline bool rseq_arm_slice_extension_timer(void)
++{
++	if (!rseq_slice_extension_enabled())
++		return false;
++
++	if (likely(!current->rseq.slice.state.granted))
++		return false;
++
++	return __rseq_arm_slice_extension_timer();
++}
++
+ #else /* CONFIG_RSEQ_SLICE_EXTENSION */
+ static inline bool rseq_slice_extension_enabled(void) { return false; }
++static inline bool rseq_arm_slice_extension_timer(void) { return false; }
+ #endif /* !CONFIG_RSEQ_SLICE_EXTENSION */
  
--#define SYSCALL_WORK_SECCOMP		BIT(SYSCALL_WORK_BIT_SECCOMP)
--#define SYSCALL_WORK_SYSCALL_TRACEPOINT	BIT(SYSCALL_WORK_BIT_SYSCALL_TRACEPOINT)
--#define SYSCALL_WORK_SYSCALL_TRACE	BIT(SYSCALL_WORK_BIT_SYSCALL_TRACE)
--#define SYSCALL_WORK_SYSCALL_EMU	BIT(SYSCALL_WORK_BIT_SYSCALL_EMU)
--#define SYSCALL_WORK_SYSCALL_AUDIT	BIT(SYSCALL_WORK_BIT_SYSCALL_AUDIT)
--#define SYSCALL_WORK_SYSCALL_USER_DISPATCH BIT(SYSCALL_WORK_BIT_SYSCALL_USER_DISPATCH)
--#define SYSCALL_WORK_SYSCALL_EXIT_TRAP	BIT(SYSCALL_WORK_BIT_SYSCALL_EXIT_TRAP)
-+#define SYSCALL_WORK_SECCOMP			BIT(SYSCALL_WORK_BIT_SECCOMP)
-+#define SYSCALL_WORK_SYSCALL_TRACEPOINT		BIT(SYSCALL_WORK_BIT_SYSCALL_TRACEPOINT)
-+#define SYSCALL_WORK_SYSCALL_TRACE		BIT(SYSCALL_WORK_BIT_SYSCALL_TRACE)
-+#define SYSCALL_WORK_SYSCALL_EMU		BIT(SYSCALL_WORK_BIT_SYSCALL_EMU)
-+#define SYSCALL_WORK_SYSCALL_AUDIT		BIT(SYSCALL_WORK_BIT_SYSCALL_AUDIT)
-+#define SYSCALL_WORK_SYSCALL_USER_DISPATCH	BIT(SYSCALL_WORK_BIT_SYSCALL_USER_DISPATCH)
-+#define SYSCALL_WORK_SYSCALL_EXIT_TRAP		BIT(SYSCALL_WORK_BIT_SYSCALL_EXIT_TRAP)
-+#define SYSCALL_WORK_SYSCALL_RSEQ_SLICE		BIT(SYSCALL_WORK_BIT_SYSCALL_RSEQ_SLICE)
- #endif
- 
- #include <asm/thread_info.h>
---- a/kernel/entry/syscall-common.c
-+++ b/kernel/entry/syscall-common.c
-@@ -17,8 +17,7 @@ static inline void syscall_enter_audit(s
+ bool rseq_debug_update_user_cs(struct task_struct *t, struct pt_regs *regs, unsigned long csaddr);
+@@ -542,17 +558,19 @@ static __always_inline void clear_tif_rs
+ static __always_inline bool
+ rseq_exit_to_user_mode_restart(struct pt_regs *regs, unsigned long ti_work)
+ {
+-	if (likely(!test_tif_rseq(ti_work)))
+-		return false;
+-
+-	if (unlikely(__rseq_exit_to_user_mode_restart(regs))) {
+-		current->rseq.event.slowpath = true;
+-		set_tsk_thread_flag(current, TIF_NOTIFY_RESUME);
+-		return true;
++	if (unlikely(test_tif_rseq(ti_work))) {
++		if (unlikely(__rseq_exit_to_user_mode_restart(regs))) {
++			current->rseq.event.slowpath = true;
++			set_tsk_thread_flag(current, TIF_NOTIFY_RESUME);
++			return true;
++		}
++		clear_tif_rseq();
  	}
+-
+-	clear_tif_rseq();
+-	return false;
++	/*
++	 * Arm the slice extension timer if nothing to do anymore and the
++	 * task really goes out to user space.
++	 */
++	return rseq_arm_slice_extension_timer();
  }
  
--long syscall_trace_enter(struct pt_regs *regs, long syscall,
--				unsigned long work)
-+long syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long work)
- {
- 	long ret = 0;
+ #endif /* CONFIG_GENERIC_ENTRY */
+--- a/include/linux/rseq_types.h
++++ b/include/linux/rseq_types.h
+@@ -89,9 +89,11 @@ union rseq_slice_state {
+ /**
+  * struct rseq_slice - Status information for rseq time slice extension
+  * @state:	Time slice extension state
++ * @expires:	The time when a grant expires
+  */
+ struct rseq_slice {
+ 	union rseq_slice_state	state;
++	u64			expires;
+ };
  
-@@ -32,6 +31,14 @@ long syscall_trace_enter(struct pt_regs
- 			return -1L;
- 	}
- 
-+	/*
-+	 * User space got a time slice extension granted and relinquishes
-+	 * the CPU. The work stops the slice timer to avoid an extra round
-+	 * through hrtimer_interrupt().
-+	 */
-+	if (work & SYSCALL_WORK_SYSCALL_RSEQ_SLICE)
-+		rseq_syscall_enter_work(syscall);
-+
- 	/* Handle ptrace */
- 	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
- 		ret = ptrace_report_syscall_entry(regs);
+ /**
 --- a/kernel/rseq.c
 +++ b/kernel/rseq.c
-@@ -501,6 +501,85 @@ SYSCALL_DEFINE4(rseq, struct rseq __user
+@@ -71,6 +71,8 @@
+ #define RSEQ_BUILD_SLOW_PATH
+ 
+ #include <linux/debugfs.h>
++#include <linux/hrtimer.h>
++#include <linux/percpu.h>
+ #include <linux/prctl.h>
+ #include <linux/ratelimit.h>
+ #include <linux/rseq_entry.h>
+@@ -499,8 +501,78 @@ SYSCALL_DEFINE4(rseq, struct rseq __user
+ }
+ 
  #ifdef CONFIG_RSEQ_SLICE_EXTENSION
++struct slice_timer {
++	struct hrtimer	timer;
++	void		*cookie;
++};
++
++unsigned int rseq_slice_ext_nsecs __read_mostly = 30 * NSEC_PER_USEC;
++static DEFINE_PER_CPU(struct slice_timer, slice_timer);
  DEFINE_STATIC_KEY_TRUE(rseq_slice_extension_key);
  
-+static inline void rseq_slice_set_need_resched(struct task_struct *curr)
++static enum hrtimer_restart rseq_slice_expired(struct hrtimer *tmr)
 +{
-+	/*
-+	 * The interrupt guard is required to prevent inconsistent state in
-+	 * this case:
-+	 *
-+	 * set_tsk_need_resched()
-+	 * --> Interrupt
-+	 *       wakeup()
-+	 *        set_tsk_need_resched()
-+	 *	  set_preempt_need_resched()
-+	 *     schedule_on_return()
-+	 *        clear_tsk_need_resched()
-+	 *	  clear_preempt_need_resched()
-+	 * set_preempt_need_resched()		<- Inconsistent state
-+	 *
-+	 * This is safe vs. a remote set of TIF_NEED_RESCHED because that
-+	 * only sets the already set bit and does not create inconsistent
-+	 * state.
-+	 */
-+	scoped_guard(irq)
++	struct slice_timer *st = container_of(tmr, struct slice_timer, timer);
++
++	if (st->cookie == current && current->rseq.slice.state.granted) {
++		rseq_stat_inc(rseq_stats.s_expired);
 +		set_need_resched_current();
++	}
++	return HRTIMER_NORESTART;
 +}
 +
-+static void rseq_slice_validate_ctrl(u32 expected)
++bool __rseq_arm_slice_extension_timer(void)
 +{
-+	u32 __user *sctrl = &current->rseq.usrptr->slice_ctrl.all;
-+	u32 uval;
-+
-+	if (get_user(uval, sctrl) || uval != expected)
-+		force_sig(SIGSEGV);
-+}
-+
-+/*
-+ * Invoked from syscall entry if a time slice extension was granted and the
-+ * kernel did not clear it before user space left the critical section.
-+ */
-+void rseq_syscall_enter_work(long syscall)
-+{
++	struct slice_timer *st = this_cpu_ptr(&slice_timer);
 +	struct task_struct *curr = current;
-+	struct rseq_slice_ctrl ctrl = { .granted = curr->rseq.slice.state.granted };
 +
-+	clear_task_syscall_work(curr, SYSCALL_RSEQ_SLICE);
-+
-+	if (static_branch_unlikely(&rseq_debug_enabled))
-+		rseq_slice_validate_ctrl(ctrl.all);
++	lockdep_assert_irqs_disabled();
 +
 +	/*
-+	 * The kernel might have raced, revoked the grant and updated
-+	 * userspace, but kept the SLICE work set.
++	 * This check prevents that a granted time slice extension exceeds
++	 * the maximum scheduling latency when the grant expired before
++	 * going out to user space. Don't bother to clear the grant here,
++	 * it will be cleaned up automatically before going out to user
++	 * space.
 +	 */
-+	if (!ctrl.granted)
-+		return;
-+
-+	rseq_stat_inc(rseq_stats.s_yielded);
-+
-+	/*
-+	 * Required to make set_tsk_need_resched() correct on PREEMPT[RT]
-+	 * kernels.
-+	 */
-+	scoped_guard(preempt) {
-+		/*
-+		 * Now that preemption is disabled, quickly check whether
-+		 * the task was already rescheduled before arriving here.
-+		 */
-+		if (!curr->rseq.event.sched_switch)
-+			rseq_slice_set_need_resched(curr);
++	if ((unlikely(curr->rseq.slice.expires < ktime_get_mono_fast_ns()))) {
++		set_need_resched_current();
++		return true;
 +	}
 +
-+	curr->rseq.slice.state.granted = false;
 +	/*
-+	 * Clear the grant in user space and check whether this was the
-+	 * correct syscall to yield. If the user access fails or the task
-+	 * used an arbitrary syscall, terminate it.
++	 * Store the task pointer as a cookie for comparison in the timer
++	 * function. This is safe as the timer is CPU local and cannot be
++	 * in the expiry function at this point.
 +	 */
-+	if (put_user(0U, &curr->rseq.usrptr->slice_ctrl.all) || syscall != __NR_rseq_slice_yield)
-+		force_sig(SIGSEGV);
++	st->cookie = curr;
++	hrtimer_start(&st->timer, curr->rseq.slice.expires, HRTIMER_MODE_ABS_PINNED_HARD);
++	/* Arm the syscall entry work */
++	set_task_syscall_work(curr, SYSCALL_RSEQ_SLICE);
++	return false;
 +}
 +
- int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3)
++static void rseq_cancel_slice_extension_timer(void)
++{
++	struct slice_timer *st = this_cpu_ptr(&slice_timer);
++
++	/*
++	 * st->cookie can be safely read as preemption is disabled and the
++	 * timer is CPU local.
++	 *
++	 * As this is most probably the first expiring timer, the cancel is
++	 * expensive as it has to reprogram the hardware, but that's less
++	 * expensive than going through a full hrtimer_interrupt() cycle
++	 * for nothing.
++	 *
++	 * hrtimer_try_to_cancel() is sufficient here as the timer is CPU
++	 * local and once the hrtimer code disabled interrupts the timer
++	 * callback cannot be running.
++	 */
++	if (st->cookie == current)
++		hrtimer_try_to_cancel(&st->timer);
++}
++
+ static inline void rseq_slice_set_need_resched(struct task_struct *curr)
  {
- 	switch (arg2) {
+ 	/*
+@@ -558,10 +630,11 @@ void rseq_syscall_enter_work(long syscal
+ 	rseq_stat_inc(rseq_stats.s_yielded);
+ 
+ 	/*
+-	 * Required to make set_tsk_need_resched() correct on PREEMPT[RT]
+-	 * kernels.
++	 * Required to stabilize the per CPU timer pointer and to make
++	 * set_tsk_need_resched() correct on PREEMPT[RT] kernels.
+ 	 */
+ 	scoped_guard(preempt) {
++		rseq_cancel_slice_extension_timer();
+ 		/*
+ 		 * Now that preemption is disabled, quickly check whether
+ 		 * the task was already rescheduled before arriving here.
+@@ -652,6 +725,31 @@ SYSCALL_DEFINE0(rseq_slice_yield)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_SYSCTL
++static const unsigned int rseq_slice_ext_nsecs_min = 10 * NSEC_PER_USEC;
++static const unsigned int rseq_slice_ext_nsecs_max = 50 * NSEC_PER_USEC;
++
++static const struct ctl_table rseq_slice_ext_sysctl[] = {
++	{
++		.procname	= "rseq_slice_extension_nsec",
++		.data		= &rseq_slice_ext_nsecs,
++		.maxlen		= sizeof(unsigned int),
++		.mode		= 0644,
++		.proc_handler	= proc_douintvec_minmax,
++		.extra1		= (unsigned int *)&rseq_slice_ext_nsecs_min,
++		.extra2		= (unsigned int *)&rseq_slice_ext_nsecs_max,
++	},
++};
++
++static void rseq_slice_sysctl_init(void)
++{
++	if (rseq_slice_extension_enabled())
++		register_sysctl_init("kernel", rseq_slice_ext_sysctl);
++}
++#else /* CONFIG_SYSCTL */
++static inline void rseq_slice_sysctl_init(void) { }
++#endif  /* !CONFIG_SYSCTL */
++
+ static int __init rseq_slice_cmdline(char *str)
+ {
+ 	bool on;
+@@ -664,4 +762,17 @@ static int __init rseq_slice_cmdline(cha
+ 	return 1;
+ }
+ __setup("rseq_slice_ext=", rseq_slice_cmdline);
++
++static int __init rseq_slice_init(void)
++{
++	unsigned int cpu;
++
++	for_each_possible_cpu(cpu) {
++		hrtimer_setup(per_cpu_ptr(&slice_timer.timer, cpu), rseq_slice_expired,
++			      CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED_HARD);
++	}
++	rseq_slice_sysctl_init();
++	return 0;
++}
++device_initcall(rseq_slice_init);
+ #endif /* CONFIG_RSEQ_SLICE_EXTENSION */
 
 
