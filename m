@@ -1,73 +1,74 @@
-Return-Path: <linux-arch+bounces-14423-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14424-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C82B3C1D812
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 22:48:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A445CC1D81E
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 22:49:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B2883BC97D
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 21:47:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B0793BE8B5
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Oct 2025 21:49:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EABF42E0919;
-	Wed, 29 Oct 2025 21:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74E8274FE8;
+	Wed, 29 Oct 2025 21:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ALcdaJBB";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XWXQhz/j"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wM+/bLof";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Nnja9PTA"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF7B231A21;
-	Wed, 29 Oct 2025 21:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3207F26FDBF;
+	Wed, 29 Oct 2025 21:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761774376; cv=none; b=lHzTBQxOrrHris5uUv/cILRZg4odCzM4HsApKAltQKGZYfquYUAU7Pl5yjovF4XWdH3hdrpBGahATuGGZ7b66B+KTmOgld59C8ApkmazO5SRMyFWjfryuPRyEfXHsPfqUbPEfTh47foluaCDZCin8QeAkUu8D0ypoMTDw8hY3Jk=
+	t=1761774552; cv=none; b=CMtzQM2yIpwQP33eZdjVPodh090JhWlZN8PGiajh2VTadkU7RQjt9x2KgTgPEno/vJduQv6iBVFmjSK0LshtIku3J8jTLvmentM0Ofrq+of36SoDgaw1tIK5ItuOUGjj25Ukt+kh1vVBQnp2XTweo1mVYB9uxb2+vCMvumdeW54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761774376; c=relaxed/simple;
-	bh=oUVq9T0BribGrtHTzW8NUeoOdTkxqt7zLvPRcgX3Tmw=;
+	s=arc-20240116; t=1761774552; c=relaxed/simple;
+	bh=PdakDEMwDpKEunjCNPeKNOneLY3Fpl6Ym+Yp+6prNhg=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=d0hhoOdw1FWkEXw0VXr5RtiL6wyVrg+foiRb6gXHvOfHyysaT5xxoZjvNaV08bsG6TQpCRY02qnfrBkrfJVX6cmF4HQYlai/aDCLzYmUMASPU+2T5Jwsb2xcplIs3Yi7dyDPjxIoaJlsqTJo5cgeUnKgF5JEv6KpZxJWj0bOaVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ALcdaJBB; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XWXQhz/j; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version:Content-Type; b=lAeFRguvZHpHE6Y6EpAR02rmYJ1YIFlEmaTGsCyctdBuscWRNDktx4DD4xR92MQ8SGPCR0+NrbynkwRUipdqiSj7XR4xRkxSg6i9mOvzO56FjgCAzfRZ3gg5yu+k3jLao2CLUJ4akXzDcPAzaCCsEEf+ruBGjGQTWXivAMe6Vsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wM+/bLof; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Nnja9PTA; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1761774373;
+	s=2020; t=1761774549;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=mm2CEk/mPOeuapP6PBjLIIKJfWyInNAFbDpswPeDTd0=;
-	b=ALcdaJBBKOxDyZPNQzSz40g8uqCVW4NJOhwLxmTVN+TyZb0HPjlDtHAVqnHGp5y5QmJLEa
-	ZT7pJt59d9/Nce7192ImarQho22GiD14tLj6XnsHHSLvHR8bTofLhSXmv/lYScp+qXcVxj
-	U4+kc0sGHoZ2irTix5D9EO+e7loGry6oZ4Z8nGBdosY8h5FXNlr6XWaMfmZm9HlUgSiEnN
-	mIi6CfkQIsDz5v+MaEtyVMQQjjb+m1CcgFt04hF01JlqDEAq8N6PBCcsHCYqNJ+sw+UHPs
-	rmf9QC8Zjx8INBnFd4kcPDwFl+y0ldMRGk0kmaSeS7et+nWdUxc629pDtMUFWg==
+	bh=a+1+g+BBSioCLO7lofYehLGt49t+sSorvoz7gc+WYOI=;
+	b=wM+/bLofdPFjQap+KDNuoMQQ6fjPctXzq/sIJF89moyK1+romjHG7GFFJ7GmdgpnLYcekA
+	oxmjJmlxZOmfNmNHENWkBTu8ywFmh0kRM3sspAzbh6aS+wct5P2jmS3uWDOVxnjp6meCRr
+	qSkfZgHJ2heDwF5h1oOgjzPLlfFA+4KLpiokvIVut5TEN8PzQQFO28oti+HlXPTNDojXFF
+	7cygcx6kBP9t+U5kiYLKvcSA6bsNbAFvG9wAMjEmqXMf3vq4Bc4qMiNmO7kH5vQmakwAKp
+	jPzpRs1KSTWaK0b1dQdvppo+R7yyBKKmdjwmffoMZGecnT2JOtrSvSiUlbgJIA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1761774373;
+	s=2020e; t=1761774549;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=mm2CEk/mPOeuapP6PBjLIIKJfWyInNAFbDpswPeDTd0=;
-	b=XWXQhz/jHJMpVBYVUON9l/1rUZ5f/dAUZsg2KQ48vnw93qUhNHenZBUioZUDcuN3LqMuGQ
-	NXZ7233R2spLYyAw==
-To: Steven Rostedt <rostedt@goodmis.org>
+	bh=a+1+g+BBSioCLO7lofYehLGt49t+sSorvoz7gc+WYOI=;
+	b=Nnja9PTAuXyepD+aRUEpd/II28H5erWb4dwlSNcTCcB3mduwkozXs0umHzw7YZL7qN9vuF
+	gNV1yupshOQuQvCg==
+To: Steven Rostedt <rostedt@goodmis.org>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>
 Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra
  <peterz@infradead.org>, Mathieu Desnoyers
  <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>,
  Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Prakash Sangappa <prakash.sangappa@oracle.com>, Madadi Vineeth Reddy
- <vineethr@linux.ibm.com>, K Prateek Nayak <kprateek.nayak@amd.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Arnd Bergmann
- <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: Re: [patch V3 10/12] rseq: Implement rseq_grant_slice_extension()
-In-Reply-To: <20251029160859.22bb6eed@gandalf.local.home>
+ Prakash Sangappa <prakash.sangappa@oracle.com>, Madadi
+ Vineeth Reddy <vineethr@linux.ibm.com>, K Prateek Nayak
+ <kprateek.nayak@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org
+Subject: Re: [patch V3 00/12] rseq: Implement time slice extension mechanism
+In-Reply-To: <20251029114049.1686a619@gandalf.local.home>
 References: <20251029125514.496134233@linutronix.de>
- <20251029130404.051555060@linutronix.de>
- <20251029160859.22bb6eed@gandalf.local.home>
-Date: Wed, 29 Oct 2025 22:46:12 +0100
-Message-ID: <87jz0dtm8r.ffs@tglx>
+ <20251029151055.SA-WMUQ_@linutronix.de>
+ <20251029114049.1686a619@gandalf.local.home>
+Date: Wed, 29 Oct 2025 22:49:08 +0100
+Message-ID: <87h5vhtm3v.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,40 +77,30 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Wed, Oct 29 2025 at 16:08, Steven Rostedt wrote:
-> On Wed, 29 Oct 2025 14:22:30 +0100 (CET)
-> Thomas Gleixner <tglx@linutronix.de> wrote:
->> +		/*
->> +		 * Quick check conditions where a grant is not possible or
->> +		 * needs to be revoked.
->> +		 *
->> +		 *  1) Any TIF bit which needs to do extra work aside of
->> +		 *     rescheduling prevents a grant.
->> +		 *
+On Wed, Oct 29 2025 at 11:40, Steven Rostedt wrote:
+> On Wed, 29 Oct 2025 16:10:55 +0100
+> Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
 >
-> I'm curious to why any other TIF bit causes this to refuse a grant?
+>> > and in git:
+>> > 
+>> >     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/cid
+>> > 
+>> > For your convenience all of it is also available as a conglomerate from
+>> > git:
+>> > 
+>> >     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/slice  
+>> 
+>> rseq/slice is older than rseq/cid. rseq/slice has the
+>> __put_kernel_nofault typo. rseq/cid looks correct.
 >
-> If deferred unwinding gets implemented, and profiling is enabled, it uses
-> task_work. From my understanding, task_work will set a TIF bit. Would this
-> mean that we would not be able to profile this feature with the deferred
-> unwinder? As profiling it will prevent it from being used?
+> Yeah, I started looking at both too, and checking out req/slice and trying
+> to do a rebase on top of rseq/cid causes a bunch of conflicts.
+>
+> I'm continuing the rebase and just skipping the changed commits.
 
-You still can use it. The point is that a set TIF bit will do extra
-work, which means extra scheduling latency. The extra work might be
-short enough to still make the grant useful, but that's something which
-needs to be worked out and analyzed. Quite some of the TIF bits actually
-end up with another reschedule request.
+Forgot to push the updated branch out....
 
-As this whole thing is an opportunistic poor mans priority ceiling
-attempt, I opted for the simple decision of not granting it when other
-TIF bits are set. KISS rules :)
-
-That's not set in stone and has no user space ABI relevance because it's
-solely a kernel implementation detail.
-
-> -- Steve
-
-Can you please trim your replies as anybody else does?
+Fixed now.
 
 Thanks,
 
