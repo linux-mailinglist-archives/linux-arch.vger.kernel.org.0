@@ -1,348 +1,207 @@
-Return-Path: <linux-arch+bounces-14436-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14437-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18C2EC24C26
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 12:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F98C24DC9
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 12:53:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 390B71889E70
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 11:21:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33C461A2366D
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 11:53:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10823338599;
-	Fri, 31 Oct 2025 11:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34894347BC0;
+	Fri, 31 Oct 2025 11:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VLW/68ZH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F0E230BCB;
-	Fri, 31 Oct 2025 11:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C85347BB8
+	for <linux-arch@vger.kernel.org>; Fri, 31 Oct 2025 11:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761909637; cv=none; b=IkTQsirQR8m+povmOQcpqxyn8RcblxUsoZYXfOnW42BuB9PksGw+yvbiQALVz1IEX+eGeViYyGWJ3U+iee/uvuUJUnANyUnpZkVcSihPDr5RHQLm1ONpoCKbR1Ib3duQFhfHsjSCxoBKA2iywL/sTzLbDJNoMMTylFQZtD5Wxu8=
+	t=1761911585; cv=none; b=XLij7C5ncNUCpP48Kb4nAb5M9Q/gfQc3KNLE2rRDUrJaq+Xg+vWNtIASOwLCk2FNmdTslyyYXMM2XYjekKjZ0Ov6UPAlvNyBP3fl/lclcvNARedzQ5Pg5IiP/n7culqLFcDFWxsLgb0IFvWqgRxf4EwxDylZxmToZHUJ3WTcxLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761909637; c=relaxed/simple;
-	bh=7aZKUwiWvOng5eZa4Ym2Mpd0GaiW3RDr4LLthazBqb8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mRdBf+4Z5v4Qr7eGZBcahXPprBXErWcZTMc0vFn0gxJFV+ft0lRac/Gz8v8zJavLbmp/deWuYwuSlwr+A5VW/WQwE5wY3hEJn5kReUdiD7Rin7xspoilNv/SOHvkVwUSuf9XEBb06FvBsvwGUSltpRJqFrg8cm39o/9Ua9Fj04Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cydlN4qSQz67Pyr;
-	Fri, 31 Oct 2025 19:18:40 +0800 (CST)
-Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0CA5C140427;
-	Fri, 31 Oct 2025 19:20:33 +0800 (CST)
-Received: from SecurePC-101-06.huawei.com (10.122.19.247) by
- dubpeml100005.china.huawei.com (7.214.146.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 31 Oct 2025 11:20:31 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Conor Dooley <conor@kernel.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, <linux-cxl@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-arch@vger.kernel.org>,
-	<linux-mm@kvack.org>, Dan Williams <dan.j.williams@intel.com>, "H . Peter
- Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Andrew Morton
-	<akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Drew Fustini
-	<fustini@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Alexandre
- Belloni <alexandre.belloni@bootlin.com>, Krzysztof Kozlowski
-	<krzk@kernel.org>
-CC: <james.morse@arm.com>, Will Deacon <will@kernel.org>, Davidlohr Bueso
-	<dave@stgolabs.net>, <linuxarm@huawei.com>, Yushan Wang
-	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
- Rutland <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski
-	<luto@kernel.org>, Dave Jiang <dave.jiang@intel.com>
-Subject: [PATCH v5 6/6] cache: Support cache maintenance for HiSilicon SoC Hydra Home Agent
-Date: Fri, 31 Oct 2025 11:17:09 +0000
-Message-ID: <20251031111709.1783347-7-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20251031111709.1783347-1-Jonathan.Cameron@huawei.com>
-References: <20251031111709.1783347-1-Jonathan.Cameron@huawei.com>
+	s=arc-20240116; t=1761911585; c=relaxed/simple;
+	bh=6fzFmvYYmy0FD/zsZjCIHvVy5pIl85gYKYFQYc5ntms=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=a+2NOTwwRk6n276/vMw0LKyQZfu2hDbCCm3Iikt1PXyfsdGODnxG2B+zNKNA0pnKszDs39SsIv9dsWI57A6TMb8ceEfV5uK2p3/h7vf1wJXha5qUTSaUsrZeCRxhC6Kbju/9KtvDkS1+QDVSYDzs0fJSlFMFTTraJInzN6ZKC1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VLW/68ZH; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761911581;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gTUIS93GUZsQyg4tbyddEkDWsI2/kBv/P3HZONFfij8=;
+	b=VLW/68ZHSgBq5lCtIBt6zBfYUUL9IMbTYLjZAqwK/FhqjF+QAXx3GTgJuMBL3GSVIzTNtD
+	LkNkGQjSvlhnngMQwMoTJIMtampraNBpsyA+MGl4E7l8zOtU4XE6QYh/GSciXnW1xubfiQ
+	5jnxJTDgQ9z0DxI0INAjX7EOwrYO8QY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-088sPeUtMymjkCQ7an03VQ-1; Fri, 31 Oct 2025 07:53:00 -0400
+X-MC-Unique: 088sPeUtMymjkCQ7an03VQ-1
+X-Mimecast-MFC-AGG-ID: 088sPeUtMymjkCQ7an03VQ_1761911579
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-42814749a6fso1856541f8f.2
+        for <linux-arch@vger.kernel.org>; Fri, 31 Oct 2025 04:53:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761911579; x=1762516379;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gTUIS93GUZsQyg4tbyddEkDWsI2/kBv/P3HZONFfij8=;
+        b=kAXwFSKhASKgoZbs/jfsVwuoRvQzKy6zaQXORcPFKdFoDXUfgJ2xxx1E3BmIurwNTE
+         F69UXNEgxX2dKoQn9+lYcip/lmgdB98c+aQEkLI9flHvgwEF0AGIX76gMGf1nemkx6IV
+         Wt4tnjuI+LCb0eZjGtXTBlgg/GxFEqVX8E70XBJtZuyLEqOtixeKXFozGrOB/xUBgKHd
+         2QC0UqOfmnTes+bOSdZPoJvbjw8Mn9l7mtTW16A91EE71Nb9PYh1viK3RpTX4VXLE1uq
+         ZpVtvDhPQUntISFuq/IICXZJdJgpC3wHM8xTA9LfO+cm0KcPOOlKL23lZ24xEMUlyxWn
+         0wew==
+X-Forwarded-Encrypted: i=1; AJvYcCV4bStWItfH+zoefB/IlLp+oV+0L20S7e1DUVwQltDUsBbjQOQH4yKw/KEj5Q8mh9iIzhHSJBGEW8Fn@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoPkIHelw8T05SRNDShwlPYG+670TNKqoOBX57HhbSsIvHOSJZ
+	0N/yCSQacU5Cx7lOlu+BguaT12nxFIHu/P/cGiCGjVhQjQrc7EkTkxkE9QUdVCGOOQSqZNKpaqP
+	4jqw1BNqlBgM9EAZB4dFQziO349zY4sQrPLmyN7y4piGRkpDow4rp/mqVQnS2HWo=
+X-Gm-Gg: ASbGncuDq9xQs1wBPb+V7rgXY488i4VC5Uh4Ug3rx8Ww3T/Jv2qXmu0eu9H692gT0Rz
+	fcJcZtRh0J7p6R1J80/UYO5wut6nnhlZp4NlcbUVUtme++p3sIS4l9nM+bicGmQYT3SsP5hgp1Q
+	upsva7icvhtxSP1+BnGIYbTKREhzrMVDK09MpiQuVnsbRlQTOh9Vbr8eTOAgg8dyOiQwZw1PL0o
+	QKfQvzQmoWqN92/os8QpUI5hgFv+Bs/kj4j6X7AKy2/3NQ8w3VbrNB4cZDtf4ZKYsGLMwTFTIsF
+	lcgURMlU+dsr4UOPaH0fnWA706IHNmUSNKM3L1UWUOQpw9NOy7vmbXCieATbNYzTiR4tBAN60j6
+	d3n/T5DdfDMvRoi4joixmqHt6i7IOW0peeoaXJ9Tr86pmfkpUIkTD9FTtcjE4
+X-Received: by 2002:a5d:5888:0:b0:3e9:3b91:e846 with SMTP id ffacd0b85a97d-429bd676a88mr2912808f8f.10.1761911579309;
+        Fri, 31 Oct 2025 04:52:59 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH1wuetlLZ34asXy13r1bfmujThSOSUu3cZmMHhgfxqrER8G1YsbbHDsXHGv7ziQ36i83pqkg==
+X-Received: by 2002:a5d:5888:0:b0:3e9:3b91:e846 with SMTP id ffacd0b85a97d-429bd676a88mr2912761f8f.10.1761911578857;
+        Fri, 31 Oct 2025 04:52:58 -0700 (PDT)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-135-146.abo.bbox.fr. [213.44.135.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429c1142e7dsm3186896f8f.17.2025.10.31.04.52.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 04:52:58 -0700 (PDT)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Petr Tesarik <ptesarik@suse.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, rcu@vger.kernel.org,
+ x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-arch@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Josh
+ Poimboeuf <jpoimboe@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo
+ Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, Andy
+ Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Paolo Bonzini
+ <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Jason
+ Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard
+ Biesheuvel <ardb@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ "David S.
+ Miller" <davem@davemloft.net>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
+ Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Mel Gorman <mgorman@suse.de>, Andrew
+ Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>,
+ Han Shen <shenhan@google.com>, Rik van Riel <riel@surriel.com>, Jann Horn
+ <jannh@google.com>, Dan Carpenter <dan.carpenter@linaro.org>, Oleg
+ Nesterov <oleg@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, Clark
+ Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Marcelo Tosatti <mtosatti@redhat.com>, Daniel Wagner <dwagner@suse.de>
+Subject: Re: [PATCH v6 06/29] static_call: Add read-only-after-init static
+ calls
+In-Reply-To: <20251030112251.5afcf9ed@mordecai>
+References: <20251010153839.151763-1-vschneid@redhat.com>
+ <20251010153839.151763-7-vschneid@redhat.com>
+ <20251030112251.5afcf9ed@mordecai>
+Date: Fri, 31 Oct 2025 12:52:56 +0100
+Message-ID: <xhsmhqzujp9t3.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
- dubpeml100005.china.huawei.com (7.214.146.113)
 
-From: Yushan Wang <wangyushan12@huawei.com>
+On 30/10/25 11:25, Petr Tesarik wrote:
+> On Fri, 10 Oct 2025 17:38:16 +0200
+> Valentin Schneider <vschneid@redhat.com> wrote:
+>
+>> From: Josh Poimboeuf <jpoimboe@kernel.org>
+>>
+>> Deferring a code patching IPI is unsafe if the patched code is in a
+>> noinstr region.  In that case the text poke code must trigger an
+>> immediate IPI to all CPUs, which can rudely interrupt an isolated NO_HZ
+>> CPU running in userspace.
+>>
+>> If a noinstr static call only needs to be patched during boot, its key
+>> can be made ro-after-init to ensure it will never be patched at runtime.
+>>
+>> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+>> ---
+>>  include/linux/static_call.h | 16 ++++++++++++++++
+>>  1 file changed, 16 insertions(+)
+>>
+>> diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+>> index 78a77a4ae0ea8..ea6ca57e2a829 100644
+>> --- a/include/linux/static_call.h
+>> +++ b/include/linux/static_call.h
+>> @@ -192,6 +192,14 @@ extern long __static_call_return0(void);
+>>      };								\
+>>      ARCH_DEFINE_STATIC_CALL_TRAMP(name, _func)
+>>
+>> +#define DEFINE_STATIC_CALL_RO(name, _func)				\
+>> +	DECLARE_STATIC_CALL(name, _func);				\
+>> +	struct static_call_key __ro_after_init STATIC_CALL_KEY(name) = {\
+>> +		.func = _func,						\
+>> +		.type = 1,						\
+>> +	};								\
+>> +	ARCH_DEFINE_STATIC_CALL_TRAMP(name, _func)
+>> +
+>>  #define DEFINE_STATIC_CALL_NULL(name, _func)				\
+>>      DECLARE_STATIC_CALL(name, _func);				\
+>>      struct static_call_key STATIC_CALL_KEY(name) = {		\
+>> @@ -200,6 +208,14 @@ extern long __static_call_return0(void);
+>>      };								\
+>>      ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
+>>
+>> +#define DEFINE_STATIC_CALL_NULL_RO(name, _func)				\
+>> +	DECLARE_STATIC_CALL(name, _func);				\
+>> +	struct static_call_key __ro_after_init STATIC_CALL_KEY(name) = {\
+>> +		.func = NULL,						\
+>> +		.type = 1,						\
+>> +	};								\
+>> +	ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)
+>> +
+>
+> I think it would be a good idea to add a comment describing when these
+> macros are supposed to be used, similar to the explanation you wrote for
+> the _NOINSTR variants. Just to provide a clue for people adding a new
+> static key in the future, because the commit message may become a bit
+> hard to find if there are a few cleanup patches on top.
+>
 
-Hydra Home Agent is a device used to maintain cache coherency. Add support
-for explicit cache maintenance operations using it. A system has multiple
-of these agents. Whilst only one agent is responsible for a given cache
-line, interleave means that for a range operation, responsibility for the
-cache lines making up the range will typically be spread across multiple
-instances.
+I was about to write such a comment but I had another take; The _NOINSTR
+static key helpers are special and only relevant to IPI deferral; whereas
+the _RO helpers actually change the backing storage for the keys and as a
+bonus are used by the IPI deferral instrumentation.
 
-Co-developed-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Yushan Wang <wangyushan12@huawei.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+IMO it's the same here for the static calls, it makes sense to mark the
+relevant ones as _RO regardless of IPI deferral.
 
----
-v5: Drop stale comment on devm_ioremap_resource() as it is no longer used.
-    Also drop mention from patch description (Conor)
+I could however add a comment to ANNOTATE_NOINSTR_ALLOWED() itself,
+something like:
 
-    Add some overview comments to top of driver and improve comment on
-    searching for a cacheline to be explicit about what happens if it is
-    not found (as not in scope for device, or happens not to be in any
-    caches). (Conor)
-    Also update the commit message to make it clear there are always
-    multiple instances of this unit in a system (Conor)
+```
+/*
+ * This is used to tell objtool that a given static key is safe to be used
+ * within .noinstr code, and it doesn't need to generate a warning about it.
+ *
+ * For more information, see tools/objtool/Documentation/objtool.txt,
+ * "non-RO static key usage in noinstr code"
+ */
+#define ANNOTATE_NOINSTR_ALLOWED(key) __ANNOTATE_NOINSTR_ALLOWED(key)
+```
 
-v4: Update for naming changes around device / instance.
-    Switch to kref put based freeing via helper.
----
- drivers/cache/Kconfig        |  15 +++
- drivers/cache/Makefile       |   2 +
- drivers/cache/hisi_soc_hha.c | 194 +++++++++++++++++++++++++++++++++++
- 3 files changed, 211 insertions(+)
-
-diff --git a/drivers/cache/Kconfig b/drivers/cache/Kconfig
-index db51386c663a..4551b28e14dd 100644
---- a/drivers/cache/Kconfig
-+++ b/drivers/cache/Kconfig
-@@ -1,6 +1,21 @@
- # SPDX-License-Identifier: GPL-2.0
- menu "Cache Drivers"
- 
-+if GENERIC_CPU_CACHE_MAINTENANCE
-+
-+config HISI_SOC_HHA
-+	tristate "HiSilicon Hydra Home Agent (HHA) device driver"
-+	depends on (ARM64 && ACPI) || COMPILE_TEST
-+	help
-+	  The Hydra Home Agent (HHA) is responsible for cache coherency
-+	  on the SoC. This drivers enables the cache maintenance functions of
-+	  the HHA.
-+
-+	  This driver can be built as a module. If so, the module will be
-+	  called hisi_soc_hha.
-+
-+endif
-+
- config AX45MP_L2_CACHE
- 	bool "Andes Technology AX45MP L2 Cache controller"
- 	depends on RISCV
-diff --git a/drivers/cache/Makefile b/drivers/cache/Makefile
-index 55c5e851034d..b3362b15d6c1 100644
---- a/drivers/cache/Makefile
-+++ b/drivers/cache/Makefile
-@@ -3,3 +3,5 @@
- obj-$(CONFIG_AX45MP_L2_CACHE)		+= ax45mp_cache.o
- obj-$(CONFIG_SIFIVE_CCACHE)		+= sifive_ccache.o
- obj-$(CONFIG_STARFIVE_STARLINK_CACHE)	+= starfive_starlink_cache.o
-+
-+obj-$(CONFIG_HISI_SOC_HHA)		+= hisi_soc_hha.o
-diff --git a/drivers/cache/hisi_soc_hha.c b/drivers/cache/hisi_soc_hha.c
-new file mode 100644
-index 000000000000..25ff0f5ae79b
---- /dev/null
-+++ b/drivers/cache/hisi_soc_hha.c
-@@ -0,0 +1,194 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for HiSilicon Hydra Home Agent (HHA).
-+ *
-+ * Copyright (c) 2025 HiSilicon Technologies Co., Ltd.
-+ * Author: Yicong Yang <yangyicong@hisilicon.com>
-+ *         Yushan Wang <wangyushan12@huawei.com>
-+ *
-+ * A system typically contains multiple HHAs. Each is responsible for a subset
-+ * of the physical addresses in the system, but interleave can make the mapping
-+ * from a particular cache line to a responsible HHA complex. As such no
-+ * filtering is done in the driver, with the hardware being responsible for
-+ * responding with success for even if it was not responsible for any addresses
-+ * in the range on which the operation was requested.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/cache_coherency.h>
-+#include <linux/dev_printk.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/memregion.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+
-+#define HISI_HHA_CTRL		0x5004
-+#define   HISI_HHA_CTRL_EN	BIT(0)
-+#define   HISI_HHA_CTRL_RANGE	BIT(1)
-+#define   HISI_HHA_CTRL_TYPE	GENMASK(3, 2)
-+#define HISI_HHA_START_L	0x5008
-+#define HISI_HHA_START_H	0x500c
-+#define HISI_HHA_LEN_L		0x5010
-+#define HISI_HHA_LEN_H		0x5014
-+
-+/* The maintain operation performs in a 128 Byte granularity */
-+#define HISI_HHA_MAINT_ALIGN	128
-+
-+#define HISI_HHA_POLL_GAP_US		10
-+#define HISI_HHA_POLL_TIMEOUT_US	50000
-+
-+struct hisi_soc_hha {
-+	/* Must be first element */
-+	struct cache_coherency_ops_inst cci;
-+	/* Locks HHA instance to forbid overlapping access. */
-+	struct mutex lock;
-+	void __iomem *base;
-+};
-+
-+static bool hisi_hha_cache_maintain_wait_finished(struct hisi_soc_hha *soc_hha)
-+{
-+	u32 val;
-+
-+	return !readl_poll_timeout_atomic(soc_hha->base + HISI_HHA_CTRL, val,
-+					  !(val & HISI_HHA_CTRL_EN),
-+					  HISI_HHA_POLL_GAP_US,
-+					  HISI_HHA_POLL_TIMEOUT_US);
-+}
-+
-+static int hisi_soc_hha_wbinv(struct cache_coherency_ops_inst *cci,
-+			struct cc_inval_params *invp)
-+{
-+	struct hisi_soc_hha *soc_hha =
-+		container_of(cci, struct hisi_soc_hha, cci);
-+	phys_addr_t top, addr = invp->addr;
-+	size_t size = invp->size;
-+	u32 reg;
-+
-+	if (!size)
-+		return -EINVAL;
-+
-+	addr = ALIGN_DOWN(addr, HISI_HHA_MAINT_ALIGN);
-+	top = ALIGN(addr + size, HISI_HHA_MAINT_ALIGN);
-+	size = top - addr;
-+
-+	guard(mutex)(&soc_hha->lock);
-+
-+	if (!hisi_hha_cache_maintain_wait_finished(soc_hha))
-+		return -EBUSY;
-+
-+	/*
-+	 * Hardware will search for addresses ranging [addr, addr + size - 1],
-+	 * last byte included, and perform maintenance in 128 byte granules
-+	 * on those cachelines which contain the addresses. If a given instance
-+	 * is either not responsible for a cacheline or that cacheline is not
-+	 * currently present then the search will fail, no operation will be
-+	 * necessary and the device will report success.
-+	 */
-+	size -= 1;
-+
-+	writel(lower_32_bits(addr), soc_hha->base + HISI_HHA_START_L);
-+	writel(upper_32_bits(addr), soc_hha->base + HISI_HHA_START_H);
-+	writel(lower_32_bits(size), soc_hha->base + HISI_HHA_LEN_L);
-+	writel(upper_32_bits(size), soc_hha->base + HISI_HHA_LEN_H);
-+
-+	reg = FIELD_PREP(HISI_HHA_CTRL_TYPE, 1); /* Clean Invalid */
-+	reg |= HISI_HHA_CTRL_RANGE | HISI_HHA_CTRL_EN;
-+	writel(reg, soc_hha->base + HISI_HHA_CTRL);
-+
-+	return 0;
-+}
-+
-+static int hisi_soc_hha_done(struct cache_coherency_ops_inst *cci)
-+{
-+	struct hisi_soc_hha *soc_hha =
-+		container_of(cci, struct hisi_soc_hha, cci);
-+
-+	guard(mutex)(&soc_hha->lock);
-+	if (!hisi_hha_cache_maintain_wait_finished(soc_hha))
-+		return -ETIMEDOUT;
-+
-+	return 0;
-+}
-+
-+static const struct cache_coherency_ops hha_ops = {
-+	.wbinv = hisi_soc_hha_wbinv,
-+	.done = hisi_soc_hha_done,
-+};
-+
-+static int hisi_soc_hha_probe(struct platform_device *pdev)
-+{
-+	struct hisi_soc_hha *soc_hha;
-+	struct resource *mem;
-+	int ret;
-+
-+	soc_hha = cache_coherency_ops_instance_alloc(&hha_ops,
-+						     struct hisi_soc_hha, cci);
-+	if (!soc_hha)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, soc_hha);
-+
-+	mutex_init(&soc_hha->lock);
-+
-+	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!mem) {
-+		ret = -ENOMEM;
-+		goto err_free_cci;
-+	}
-+
-+	soc_hha->base = ioremap(mem->start, resource_size(mem));
-+	if (!soc_hha->base) {
-+		ret = dev_err_probe(&pdev->dev, -ENOMEM,
-+				    "failed to remap io memory");
-+		goto err_free_cci;
-+	}
-+
-+	ret = cache_coherency_ops_instance_register(&soc_hha->cci);
-+	if (ret)
-+		goto err_iounmap;
-+
-+	return 0;
-+
-+err_iounmap:
-+	iounmap(soc_hha->base);
-+err_free_cci:
-+	cache_coherency_ops_instance_put(&soc_hha->cci);
-+	return ret;
-+}
-+
-+static void hisi_soc_hha_remove(struct platform_device *pdev)
-+{
-+	struct hisi_soc_hha *soc_hha = platform_get_drvdata(pdev);
-+
-+	cache_coherency_ops_instance_unregister(&soc_hha->cci);
-+	iounmap(soc_hha->base);
-+	cache_coherency_ops_instance_put(&soc_hha->cci);
-+}
-+
-+static const struct acpi_device_id hisi_soc_hha_ids[] = {
-+	{ "HISI0511", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, hisi_soc_hha_ids);
-+
-+static struct platform_driver hisi_soc_hha_driver = {
-+	.driver = {
-+		.name = "hisi_soc_hha",
-+		.acpi_match_table = hisi_soc_hha_ids,
-+	},
-+	.probe = hisi_soc_hha_probe,
-+	.remove = hisi_soc_hha_remove,
-+};
-+
-+module_platform_driver(hisi_soc_hha_driver);
-+
-+MODULE_IMPORT_NS("CACHE_COHERENCY");
-+MODULE_DESCRIPTION("HiSilicon Hydra Home Agent driver supporting cache maintenance");
-+MODULE_AUTHOR("Yicong Yang <yangyicong@hisilicon.com>");
-+MODULE_AUTHOR("Yushan Wang <wangyushan12@huawei.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.48.1
+> Just my two cents,
+> Petr T
 
 
