@@ -1,123 +1,98 @@
-Return-Path: <linux-arch+bounces-14438-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14439-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A133DC25974
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 15:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F69BC25989
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 15:35:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 111154EB4CE
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 14:33:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CB8FC4F425D
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 14:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5740D31A555;
-	Fri, 31 Oct 2025 14:33:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E80213271EB;
+	Fri, 31 Oct 2025 14:34:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f+fKj/3+";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JPkfZ9K5"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="S7G8PDDT";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gMH/vPZR"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61502EBBAF;
-	Fri, 31 Oct 2025 14:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AABD3446C4;
+	Fri, 31 Oct 2025 14:34:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761921180; cv=none; b=iUMyES5G8dIgGlLZpDRogSB6O7ik1vmzYUqPPwVRTJ+MFFped7q41xdqOA8u9zN4lTvjZPFnlNNBGLNRRS7DQPiprXlWvvirqvzE7tpPJ+D90PVzsYBaZvRE0yXINVdtcrMr1eB5YlRZIrDjt0TmshnOztoeWF6sNjXOhskbPCY=
+	t=1761921241; cv=none; b=O6odbrKN3KjNg2pGb6eERNExdd7Mdn6XybQxusr8cewJpd85ycyOFyOKPiM47reTZ/xcGkQgYCj/SlElQA2E8J8R2XgW4ik5Cj7ht71eGy5HYFwWMN8y/kzj5ldpCgHimVNxDb1RLcyPrbGJMggYlHn/bdkLW5K75JRQaZMI0O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761921180; c=relaxed/simple;
-	bh=Pql8y+9KVqO2oYJxK+ekz1JwkNsR08SbyFlMz5p4NO8=;
+	s=arc-20240116; t=1761921241; c=relaxed/simple;
+	bh=oCd32TGYosUpHI2g3izm4DtPefSiFGd2NNA9FWdwD8k=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=q4HRzDwwiwDTVC2GyQGEVizePtEUDj63/+mjQXhQ1wuT8Gp49YwPKtymoCu7vsu8qrcCmvrk/DSnS69UlNIfVFcCLwh3xZmdHGCHuQy9sV9UiwruCOHPyc9utgl/q8kP11FnSJwSWQtAV/F1z1AVcGygUnf8/kTS2nyrxts3NUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f+fKj/3+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JPkfZ9K5; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version:Content-Type; b=SHYqQXGB1mjpmnkbikjhtG0rCz4v/hq1B7O9Jdh64/MnLkwoYpcu7v4Sy3FML3F671sJY9bUXs6p5Ay93bJSE/W5WuqZLV4VSvdkaFPc+uUgVeG4p+u/qALPvgqUa8iuEdI8x9YFom87aOVcw1CyTrGdCozauNpzNf3DUtcAJYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=S7G8PDDT; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gMH/vPZR; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1761921177;
+	s=2020; t=1761921238;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uWjiQGeCH8V9Weyht1eZQ9p8KytDBMq+frDo4cdg/2Y=;
-	b=f+fKj/3+x9Yoob0D8C9xpBzd8QrYbV7HeNBDGK2vU54YY1d6HsRiBY13isO8n6Ro0L/d7u
-	0BCJqfzce1iNcqXFi90ojNruS+so/F1jLi5C4TDIss0AE+5aMdEUO5sR+rCR3hWcorVSJA
-	lBBVJqg7MJd6Yju98/7MCi9e1aqumkogMLIS2pgA9aDCsHcM2WBVoj18iJnUdfi/BY5eka
-	O2kzHQQdICBlLYF7sA4VK8GXxPMud4XMfZFTrvh+zzD5IWT3Vh0JmhLlBsQzcDlpaQo5jz
-	c6El6I87dkkBReSCHv9Zw1tWj/wjN2KrDZuCmPtZ+kiIyxlh/iReqXmHjT7vPQ==
+	bh=/gPrkOyHw+jtitSd/styaLzTyEK55/gfEC8zn4XBenY=;
+	b=S7G8PDDTaMzYQXgvAKT7I1z+Htgj7YspvF/MjvT9K32jS7wWQCBWOD/2isW2alYn+ofsaa
+	klEvAn4hF/q7Q3bK3k2+sroLczxPsfVhVyswCi/KNf5KQm/5H7UWS1eqf0/Wbtf/DaL+KT
+	va+F68jq8hteaBWO7p55+r7aGNvrsmZ3bXmT++l2kO4M75Tn+F9cQgQaOWPd7iVVhLQMIb
+	V6I1sCgQtQno3I6ezfam/098t8Z2DWGQVmlwupkfBq95uwFAXMs4/Cg5rfBYw4FLwbKP6N
+	Eaakx2UZx/tbXhPD6B5RPRg9so5tqMRG8ieYbRB6AN0aM9aJB1KnpfVd7Bh8xA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1761921177;
+	s=2020e; t=1761921238;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uWjiQGeCH8V9Weyht1eZQ9p8KytDBMq+frDo4cdg/2Y=;
-	b=JPkfZ9K5WhL9d8W6v8tP3csJHQ4WV0vpBAuMM9yw01vvgszR9JYqMW5oH4rmqP7QZ8nmoe
-	YAe41+yAf+euCZDw==
-To: Prakash Sangappa <prakash.sangappa@oracle.com>
+	bh=/gPrkOyHw+jtitSd/styaLzTyEK55/gfEC8zn4XBenY=;
+	b=gMH/vPZR8GcSIU/cE5e1OQ5x8erfDDZMfWClo+57aZEjik7nkfYqXgNgD91uVqUg2Oqtio
+	t93M2uEF+r1uvHCA==
+To: Steven Rostedt <rostedt@goodmis.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra
  <peterz@infradead.org>, Mathieu Desnoyers
  <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>,
  Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Madadi Vineeth Reddy <vineethr@linux.ibm.com>, K Prateek Nayak
- <kprateek.nayak@amd.com>, Steven
- Rostedt <rostedt@goodmis.org>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Arnd Bergmann <arnd@arndb.de>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [patch V3 02/12] rseq: Add fields and constants for time slice
- extension
-In-Reply-To: <999E136D-49BE-4AEE-8392-C09D0511351C@oracle.com>
+ Prakash Sangappa <prakash.sangappa@oracle.com>, Madadi Vineeth Reddy
+ <vineethr@linux.ibm.com>, K Prateek Nayak <kprateek.nayak@amd.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Arnd Bergmann
+ <arnd@arndb.de>, linux-arch@vger.kernel.org
+Subject: Re: [patch V3 10/12] rseq: Implement rseq_grant_slice_extension()
+In-Reply-To: <20251029180446.7b18c9a2@gandalf.local.home>
 References: <20251029125514.496134233@linutronix.de>
- <20251029130403.542731428@linutronix.de>
- <999E136D-49BE-4AEE-8392-C09D0511351C@oracle.com>
-Date: Fri, 31 Oct 2025 15:32:55 +0100
-Message-ID: <875xbvta3s.ffs@tglx>
+ <20251029130404.051555060@linutronix.de>
+ <20251029160859.22bb6eed@gandalf.local.home> <87jz0dtm8r.ffs@tglx>
+ <20251029180446.7b18c9a2@gandalf.local.home>
+Date: Fri, 31 Oct 2025 15:33:58 +0100
+Message-ID: <87346zta21.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, Oct 30 2025 at 22:01, Prakash Sangappa wrote:
+On Wed, Oct 29 2025 at 18:04, Steven Rostedt wrote:
 
->> On Oct 29, 2025, at 6:22=E2=80=AFAM, Thomas Gleixner <tglx@linutronix.de=
-> wrote:
->>=20
->> Aside of a Kconfig knob add the following items:
->>=20
->>   - Two flag bits for the rseq user space ABI, which allow user space to
->>     query the availability and enablement without a syscall.
->>=20
->>   - A new member to the user space ABI struct rseq, which is going to be
->>     used to communicate request and grant between kernel and user space.
->>=20
->>   - A rseq state struct to hold the kernel state of this
->>=20
->>   - Documentation of the new mechanism
->>=20
-> [=E2=80=A6]
->> +
->> +If both the request bit and the granted bit are false when leaving the
->> +critical section, then this indicates that a grant was revoked and no
->> +further action is required by userspace.
->> +
->> +The required code flow is as follows::
->> +
->> +    rseq->slice_ctrl.request =3D 1;
->> +    critical_section();
->> +    if (rseq->slice_ctrl.granted)
->> +         rseq_slice_yield();
->> +
->> +As all of this is strictly CPU local, there are no atomicity requiremen=
-ts.
->> +Checking the granted state is racy, but that cannot be avoided at all::
->> +
->> +    if (rseq->slice_ctrl & GRANTED)
-> Could this be?
-> 	if (rseq->slice_ctrl.granted)
+> On Wed, 29 Oct 2025 22:46:12 +0100
+> Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+>> Can you please trim your replies as anybody else does?
+>
+> I did trim it. I only kept the function in question, but deleted everything
+> else.
+>
+> I do like to keep a bit of context, as sometimes I find people tend to trim
+> a bit too much.
 
-Yes.
+That's fine, but leaving stale quotes after
+
+       Steve
+
+is not.
 
