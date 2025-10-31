@@ -1,151 +1,205 @@
-Return-Path: <linux-arch+bounces-14429-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14430-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE891C244B8
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 10:57:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2693C24C0D
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 12:19:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6392188BB33
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 09:56:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA42D4276E4
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Oct 2025 11:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE27A33290E;
-	Fri, 31 Oct 2025 09:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QDS6ufCW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E13FC3321AE;
+	Fri, 31 Oct 2025 11:17:17 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5332D2EB87C
-	for <linux-arch@vger.kernel.org>; Fri, 31 Oct 2025 09:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC3C306B1A;
+	Fri, 31 Oct 2025 11:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761904544; cv=none; b=tddpejFJ0pnErI6D6ZVlMFLc/H5iQys4f3BA9xdMt5j+9odmU93YrbcTNFSHOpepDFdswGM3hzygo1cl0XTLn5vEBH1/6eheDyu/exgikbBVR3F888iXpcwEPUm4sUuTIGfmvFks6NFK9bOX08bqQEySu+ajQj0gLspTU5CAHdU=
+	t=1761909437; cv=none; b=VoSVzPpIW3esuDx8ilwNukMoYt+u17+Ek+GdHm4weBoEuzo1J3jFz0zNxmZNrSMTPfdc7Ui8WnEd2cUprTBJTEocKjrvAIt/uxr54juZh6AY626F4nF13oTbo6L6e0VNBXW+bsuxS8sRB0L0Nnny27fkDOgGDZ7U29UziTiK6Uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761904544; c=relaxed/simple;
-	bh=kTCg+N3NYwBLqF+pIITZOoHrF01dYEOCOu0+H1nRDT0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rYeIIwcD2ENNFmz3YpZxegCI3yIUPEJPdtzno9SZdfjWec4e2iBvGwTD221D406RZXeJKMs8Ky4VX5BeCUOlG+VZ8ihuwpCafQG878w0VLo1gRe0vYiGOgTMMhljCPd64QUthmdSZ4dvzH+ZkCh2DY8XG4Ho7gtARePcu6LXlcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QDS6ufCW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761904542;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kTCg+N3NYwBLqF+pIITZOoHrF01dYEOCOu0+H1nRDT0=;
-	b=QDS6ufCWZz1lF5hV2Y3i6QUMRhHJ3h3sQmCe58iBzunyP0lpcKoNbI7hfnRw6ZH5ermo8b
-	aFE1Hi2m2p7UXvYF+Rt6kU1jSdHce/RhKGA1jcMfsAHxa6loKvfnWpDdYH35BoVa0LacRQ
-	McuFipCNuI/Ry+enNMx2oUNw+oClcC4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-636-zqcNjcLqOi62aqIrswg7Nw-1; Fri, 31 Oct 2025 05:55:40 -0400
-X-MC-Unique: zqcNjcLqOi62aqIrswg7Nw-1
-X-Mimecast-MFC-AGG-ID: zqcNjcLqOi62aqIrswg7Nw_1761904539
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-427015f63faso1209247f8f.0
-        for <linux-arch@vger.kernel.org>; Fri, 31 Oct 2025 02:55:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761904539; x=1762509339;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kTCg+N3NYwBLqF+pIITZOoHrF01dYEOCOu0+H1nRDT0=;
-        b=RmFwlX6WFmm6VQ+QQFnLd6JQN61Gy5VRpOU0BjPm8NMSBHOJgDlRPBPEb4bZtLky1h
-         7fl7rBTgtiVe0uH+KoMUUyW9W7F61rxGdXHo+jOU5CYpeq/uXLbhvGqZ/p4RvHMuNQtL
-         6LY5p6NDn5l7IC9xhAbGQS3v6rXTS7yMjpQOTC63KUaoA5OrUeLkgh1n6J+XoGWeZsWb
-         eYE3Ix2VYa3wRDBG7XNUA+Zv4Z/JykurMkymPfQm1aMjNE8n4qQhekTfd8dpXwf1g0Qz
-         4q+q3IqOkLN4qBwaHFswMol5Z+cqGf3+dO1kGkWGFqCIUuCYQj3Dka+ohdFAuaR/dNQQ
-         AUNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUaVQYZDyH60VASeZ42bNR4nPDCvKediye8O5vgt3dS+79ryNeAEaUOLPl+7T3s5DCgvon+pl4Cg2/n@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYId7p454qORzZBICAapFxnAwkKGMZcWH/L0FSK46ZTjV4fXvw
-	L4fIGv5OMTcURE9MybKNUI8tHcOEt15oaR77tl0E/Z3zWrwqoYW6IDAg8GGJdqmCWctpBg+ZAA5
-	mHKYS9iV7usFOEj/2s52VqrgrusoFS35m6JwDEbqCCwvd/KnJVz/bDDTX6mm4gfM=
-X-Gm-Gg: ASbGnctrXMvvvh9EjYahb1vok3mmYB1G1KdZvpeQjY7b9V+rpZMcjStSTI8icfRVQ0Z
-	oKZe5IYr1L50MYiEQjhZOG7aW4OwcdL4qy2Xvq581KssXjXrvwxJ4q8rbn3X7VwPczJPGad+IXk
-	xB54YBzVOMIVcqS1h+RarNkhwgP5eUB07az5K3whRPOTI2jIOvHVUEM4AF0PRWbc7n3wk9ZGD07
-	0zhAOQIptlUSNiNyAOR7pyVeBJiDi1vQXzXxzMDS4yZK5tYK6XxVbLW+KfKocTYYR09iVN+A+ge
-	fEbHJHYlZ5A1tlou4O96IRiG85IPrUuLmH1jO8UK27L26+i3t1LRSYZs4altLf/FI45od9bkNhm
-	udO4OTN6Fa0zHrps5GmkKKsiXZU5tgCaxcsm4ehG41exruMCn4iAisJ3Y5bO+
-X-Received: by 2002:a05:6000:310f:b0:40f:5eb7:f24a with SMTP id ffacd0b85a97d-429bd68869amr2437818f8f.12.1761904539505;
-        Fri, 31 Oct 2025 02:55:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGbUxApmJAOYlrcJigfNqaTRZ7Pz52J94NiUAhMgZ/Qwj+7BmCVMNCnPqwOLJ11D9kpjdgFWQ==
-X-Received: by 2002:a05:6000:310f:b0:40f:5eb7:f24a with SMTP id ffacd0b85a97d-429bd68869amr2437793f8f.12.1761904539055;
-        Fri, 31 Oct 2025 02:55:39 -0700 (PDT)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-135-146.abo.bbox.fr. [213.44.135.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429c1406a45sm2624895f8f.47.2025.10.31.02.55.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Oct 2025 02:55:38 -0700 (PDT)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, rcu@vger.kernel.org,
- x86@kernel.org, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-arch@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Thomas
- Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H.
- Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Paolo Bonzini
- <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>, "Paul E. McKenney"
- <paulmck@kernel.org>, Jason Baron <jbaron@akamai.com>, Steven Rostedt
- <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, "David S. Miller" <davem@davemloft.net>, Neeraj
- Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
- <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, Boqun Feng
- <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Mel Gorman <mgorman@suse.de>,
- Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada
- <masahiroy@kernel.org>, Han Shen <shenhan@google.com>, Rik van Riel
- <riel@surriel.com>, Jann Horn <jannh@google.com>, Dan Carpenter
- <dan.carpenter@linaro.org>, Oleg Nesterov <oleg@redhat.com>, Juri Lelli
- <juri.lelli@redhat.com>, Clark Williams <williams@redhat.com>, Yair
- Podemsky <ypodemsk@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
- Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v6 27/29] x86/mm/pti: Implement a TLB flush
- immediately after a switch to kernel CR3
-In-Reply-To: <aQIpXyX-z8ltB1i5@localhost.localdomain>
-References: <20251010153839.151763-1-vschneid@redhat.com>
- <20251010153839.151763-28-vschneid@redhat.com>
- <aQDoVAs5UZwQo-ds@localhost.localdomain>
- <xhsmh3472qah4.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <aQHtBudA4aw4a3gT@localhost.localdomain>
- <xhsmhwm4dpzh4.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <aQIpXyX-z8ltB1i5@localhost.localdomain>
-Date: Fri, 31 Oct 2025 10:55:36 +0100
-Message-ID: <xhsmhtszfpf8n.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1761909437; c=relaxed/simple;
+	bh=rmzf6vaUfXpB/gU7kLbFY00wrLGp6GPaCpigSBaq1os=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GwH4v8ApIRwRhHo7rXPc46am2Di+s1taUXXHx3FEZTWUfOAV58Bv507xTPdK76hDncc9kyhFUCYPGYHREq90fDcNJeNr4f6zJ14XS/Jyd/M9QJ/L1NlYLJOcqoW/2ht5dVetz+cqyszQq2Hs0fpzEMAlO84SeX+/AreLx38vNS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4cydjQ6cF3zJ46bm;
+	Fri, 31 Oct 2025 19:16:58 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id D0B20140370;
+	Fri, 31 Oct 2025 19:17:11 +0800 (CST)
+Received: from SecurePC-101-06.huawei.com (10.122.19.247) by
+ dubpeml100005.china.huawei.com (7.214.146.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 31 Oct 2025 11:17:10 +0000
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Conor Dooley <conor@kernel.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, <linux-cxl@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-arch@vger.kernel.org>,
+	<linux-mm@kvack.org>, Dan Williams <dan.j.williams@intel.com>, "H . Peter
+ Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Andrew Morton
+	<akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Drew Fustini
+	<fustini@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Alexandre
+ Belloni <alexandre.belloni@bootlin.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>
+CC: <james.morse@arm.com>, Will Deacon <will@kernel.org>, Davidlohr Bueso
+	<dave@stgolabs.net>, <linuxarm@huawei.com>, Yushan Wang
+	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
+ Rutland <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski
+	<luto@kernel.org>, Dave Jiang <dave.jiang@intel.com>
+Subject: [PATCH v5 0/6]  Cache coherency management subsystem
+Date: Fri, 31 Oct 2025 11:17:03 +0000
+Message-ID: <20251031111709.1783347-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500010.china.huawei.com (7.191.174.240) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-On 29/10/25 15:49, Frederic Weisbecker wrote:
-> Le Wed, Oct 29, 2025 at 03:13:59PM +0100, Valentin Schneider a =C3=A9crit=
- :
->> Given we have ALTERNATIVE's in there I assume something like a
->> boot-time-driven static key could do, but I haven't found out yet if and
->> how that can be shoved in an ASM file.
->
-> Right, I thought I had seen static keys in ASM already but I can't find it
-> anymore. arch/x86/include/asm/jump_label.h is full of reusable magic
-> though.
->
+Support system level interfaces for cache maintenance as found on some
+ARM64 systems. It is expected that systems using other CPU architectures
+(such as RiscV) that support CXL memory and allow for native OS flows
+will also use this. This is needed for correct functionality during
+various forms of memory hotplug (e.g. CXL). Typical hardware has MMIO
+interface found via ACPI DSDT. A system will often contain multiple
+hardware instances.
 
-I got something ugly that /seems/ to work, now to spend twice the time to
-clean it up :-)
+Includes parameter changes to cpu_cache_invalidate_memregion() but no
+functional changes for architectures that already support this call.
 
-> Thanks.
->
-> --
-> Frederic Weisbecker
-> SUSE Labs
+How to merge?
+- Current suggestion would be via Conor's drivers/cache tree which routes
+  through the SoC tree.
+  *  Andrew Morton has expressed he is fine with the MM related changes
+     going via another appropriate tree.
+  *  CXL maintainers expressed that they don't consider it appropriate
+     to go through theit tree.
+  *  The tiny touching of Arm specific code has an ack from Catalin.
+
+v5: Changes called out in individual patches.
+Comment and patch description updates to make the following clearer.
+  - Difference from cache-coherence operations for non-coherent DMA.
+    Longer term it may make sense to share infrastructure but for now
+    we have two parallel systems as there would be near zero overlap
+    in code or functionality.
+  - Why multiple agent handling is necessary and what that means for
+    the HiSilicon HHAs in our systems + the driver inclued in this set.
+ 
+v4: (Small changes called out in each patch)
+- Drop the ACPI driver. It has done it's job as a second implementation
+  to help with generality testing. I have heard zero interest in actually
+  doing the specification work needed to make that official. Easy to bring
+  back if needed in future. I have it locally still as a second test
+  case.
+- Add a cpu_cache_invalidate_all() helper for the 0,-1 case that is used
+  to indicate everything should be flushed as no fine grained range info
+  available.
+- Simplify the necessary symbols to be selected by architectures by
+  making CONFIG_GENERIC_CPU_CACHE_MAINTENANCE select
+  ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+- Avoid naming mentioning devices as there is no struct device.
+- Use a kref so as to have something on which a _put() operation makes
+  sense avoiding rather confusing freeing of an internal structure pointer
+  that was seen in v3.
+- Gather tags given.
+- Various minor things like typos, header tweaks etc.
+Thanks to all who reviewed v3.
+
+On current ARM64 systems (and likely other architectures) the
+implementation of cache flushing need for actions such as CXL memory
+hotplug e.g. cpu_cache_invalidate_memregion(), is performed by system
+components outside of the CPU, controlled via either firmware or MMIO
+interfaces.
+
+These control units run the necessary coherency protocol operations to
+cause the write backs and cache flushes to occur asynchronously. They allow
+filtering by PA range to reduce disruption to the system. Systems
+supporting this interface must be designed to ensure that, when complete,
+all cache lines in the range are in invalid state or clean state
+(prefetches may have raced with the invalidation). This must include
+memory-side caches and other non architectural caches beyond the Point
+of Coherence (ARM terminology) such that writes will reach memory even
+after OS programmable address decoders are modified (for CXL this is
+any HDM decoders that aren't locked). Software will guarantee that no
+writes to these memory ranges race with this operation. Whilst this is
+subtly different from write backs must reach the physical memory that
+difference probably doesn't matter to those reading this series.
+
+The often distributed nature of the relevant coherency management units
+(e.g. due to interleaving) requires the appropriate commands to be issued
+to multiple (potentially heterogeneous) units. To enable this a
+registration framework is provided to which drivers may register a set
+of callbacks. Upon a request for a cache maintenance operation the
+framework iterates over all registered callback sets, calling first a
+command to write back and invalidate, and then optionally a command to wait
+for completion. Filtering on relevance if a give request is left to the
+individual drivers.
+
+In this version only one driver is included. This is the HiSilicon Hydra
+Home Agent driver which controls hardware found on some of our relevant
+server SoCs. Also available (I can post if anyone is interested)
+is an ACPI driver based on a firmware interface that was in a public
+PSCI specification alpha version
+
+QEMU emulation code at
+http://gitlab.com/jic23/qemu cxl-2025-03-20 
+
+Notes:
+- I don't particularly like defining 'generic' infrastructure with so few
+  implementations. If anyone can point me at docs for another one or two,
+  or confirm that they think this is fine that would be great!
+  The converse to this is I don't want to wait longer for those to surface
+  given the necessity to support this one platform that I do know about!
+
+Jonathan Cameron (3):
+  memregion: Drop unused IORES_DESC_* parameter from
+    cpu_cache_invalidate_memregion()
+  arm64: Select GENERIC_CPU_CACHE_MAINTENANCE
+  MAINTAINERS: Add Jonathan Cameron to drivers/cache and add
+    lib/cache_maint.c + header
+
+Yicong Yang (2):
+  memregion: Support fine grained invalidate by
+    cpu_cache_invalidate_memregion()
+  lib: Support ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+
+Yushan Wang (1):
+  cache: Support cache maintenance for HiSilicon SoC Hydra Home Agent
+
+ MAINTAINERS                     |   3 +
+ arch/arm64/Kconfig              |   1 +
+ arch/x86/mm/pat/set_memory.c    |   2 +-
+ drivers/cache/Kconfig           |  15 +++
+ drivers/cache/Makefile          |   2 +
+ drivers/cache/hisi_soc_hha.c    | 194 ++++++++++++++++++++++++++++++++
+ drivers/cxl/core/region.c       |   5 +-
+ drivers/nvdimm/region.c         |   2 +-
+ drivers/nvdimm/region_devs.c    |   2 +-
+ include/linux/cache_coherency.h |  61 ++++++++++
+ include/linux/memregion.h       |  16 ++-
+ lib/Kconfig                     |   4 +
+ lib/Makefile                    |   2 +
+ lib/cache_maint.c               | 138 +++++++++++++++++++++++
+ 14 files changed, 439 insertions(+), 8 deletions(-)
+ create mode 100644 drivers/cache/hisi_soc_hha.c
+ create mode 100644 include/linux/cache_coherency.h
+ create mode 100644 lib/cache_maint.c
+
+-- 
+2.48.1
 
 
