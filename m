@@ -1,379 +1,313 @@
-Return-Path: <linux-arch+bounces-14546-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14547-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7A89C37F04
-	for <lists+linux-arch@lfdr.de>; Wed, 05 Nov 2025 22:18:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDD62C38121
+	for <lists+linux-arch@lfdr.de>; Wed, 05 Nov 2025 22:43:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5E4F5348E64
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Nov 2025 21:18:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47A423ADA20
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Nov 2025 21:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B942DC328;
-	Wed,  5 Nov 2025 21:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 324902C0F97;
+	Wed,  5 Nov 2025 21:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="QVUjeqd3"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ioc6Jcgd";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="R7hiAxR7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AD32DCBFC
-	for <linux-arch@vger.kernel.org>; Wed,  5 Nov 2025 21:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762377385; cv=none; b=jE5aIHd4nWoaODZ98reeObGQGwoLlWA3GD6xn7LCR+pYNASy0wlWlYLRwSd/322+kJA8wiWg4v6qj5TEmXjQURfbm+Y5nCf/kth6kR86bhosyjX2Zc0CzCJsoh7vltBeesRwTJa8/7sJ3jqtkG3+bY2DO5MRFlPX93VOJOQH4tQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762377385; c=relaxed/simple;
-	bh=MUuSQMMFm7rsszh+tEpt1DpEUZIKd+AvF16JNtf+f78=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e1bmmn9W5iWUOK4gvUgsK4F7rUPUAlUFehimddM8wlgQauT5v5OKf9kz+i9okWGNklPSbguzpvZfy/v4xKaA6JdUQ8lGXluATEhsvcDOoBvQPW0oqOKeziMYLgXOSzX5hBuSscCnBWqCGbybSJbnMnVU5UC49nlIlpQPxQ9whS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=QVUjeqd3; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2957850c63bso3517605ad.0
-        for <linux-arch@vger.kernel.org>; Wed, 05 Nov 2025 13:16:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68AFC2C0276;
+	Wed,  5 Nov 2025 21:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762377957; cv=fail; b=LQr05e4Uw5VYA3m5kX5VO68QRahCr4OjNdFI+pk+0p7rHBQaza8PvPT3mKCJL45CdjJLgiqGX4G4mRQ4D+3yNXqW8k5iSkhoyzkCC8pJF57zew6DIuywp74OO6yqgY30mzvW4YEcVlzGBdqouwywMDGEkMU1J3qkPNys9rfsv4s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762377957; c=relaxed/simple;
+	bh=rJqlQU4ip6N3g33HV/ALkfpr+jI8Z0axueQvoCUWfCM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=pGL+EfS/YPo5m3gJuN6J5b8sRrMCQICgSk2jyFGQDptxOMXTEY0FL2jyfPv7M7LW+/wRkw0VIi6RUmj0HBbPQB0rUrcHpykTFKgPBbwVDZZdiuetDo2je6/5E+qEFYfVjuJxFVJeqi9YyaGGPgJaLExz/4TGgpmdSJP0n0A1Aeo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ioc6Jcgd; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=R7hiAxR7; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A5H9KGQ017629;
+	Wed, 5 Nov 2025 21:24:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=rJqlQU4ip6N3g33HV/
+	ALkfpr+jI8Z0axueQvoCUWfCM=; b=ioc6Jcgd6hDXstO+UTaCQesp6pPuUt4Z10
+	+gUXf3NRT8T2RZusx2q4KHnY8AfF/iKSeiAO1JDaCqUa9sawqzKRsl/3xyqZpTov
+	erx9qgPB8Qst/ppzKX78RDwfMR+l5xXP8Uv1F4huO6EQAMm91swOVdf6qqenDDnY
+	758jVZY6y1EUWvqeEhv2hBQbbSrfBMY2TZwEVfKyGjn2ee26YX5U/jucDIcK8pso
+	9nXkJePl1Hc8UbLHDmbE/2l+y/AyYtnBIdsNox5CRQln4bETo9N+ZFvPs1czg4Se
+	XwhDFnchPV3YGcg2D0/R22RJsLDSjoCGvzf6oMiheYhEBQxYGQcA==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a8aqw8jm1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 05 Nov 2025 21:24:57 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A5K368T015031;
+	Wed, 5 Nov 2025 21:24:56 GMT
+Received: from bl0pr03cu003.outbound.protection.outlook.com (mail-eastusazon11012051.outbound.protection.outlook.com [52.101.53.51])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a58nbagn7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 05 Nov 2025 21:24:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oxcX230kGAgS5bvnqYtODiXx2Ir0zVU6wErfAPerCpmIouQRJnPh6tSCJoRhjWfX82Krd3sEW/PWN+g39gtYChHYCikOZStOaXuGFV5We8mtUZK7JW7oUtkumuaYWnLpSND3nhjl+lvMCfuHBok2gtzLDoNqz161Ahh7DZdycwcvNyIHNfubxd6HIr2Od2JFuWGTM+xF3AnUXQKUDxwxVLVniYP7gr/24ke5UzNh4DaPB+KTrDnPvzlWkafizBIAdp1m53s/qFgHMPOBXnxQzSvwR4+h+srpDfypIbAvox3xNijLLzcIaioy6OH+syIqqpf6R02ZuYPnU6GBUieMTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rJqlQU4ip6N3g33HV/ALkfpr+jI8Z0axueQvoCUWfCM=;
+ b=O5W4Ng6G3uiarefMQ5uIrIy6F86hT6CFGmuXkuq80E/uB16xaxvUqht8TC2Wc5n87n2OuGJwOfJBbUs9N+DPV8dT6P8WHOuk8z5CJmWw7QrWJZCGmJf1Iag9I52kvJuU8i8cW0B9Fk0EJAA6dV9C5JYSd7mrD36cm85TbpdvR8L4DFqHyKMjzD2n96vckjn7b/+Qo8LVUqM/cm1wrHsNp1QTFccuULUBbpAG5J7Fz5HBL1QMLzrHCEAkSdt1fAUN1/TyB0x07DqDNKrf0ZxI9GhNrIIj6IO2sjBKUSLxRdWhM1mJGOfR0gc3U5PPA96wa6G6/w5wCu3Uc87k2shNuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1762377382; x=1762982182; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=D1ax2+b/BmZMbWQLmn1abjqqCYtcXZuyWWUp9gYac88=;
-        b=QVUjeqd3I/ISPYvwHkX5zl1duD++foY7I87kyrugd7YXBcjkYcAkinbRTx3kbaeqm7
-         KEl3bLQqvgsTCcBLBI618uIRJN4lL2jU83HX0ZTeAglac/2A+VEk1Qjtc5Au8myQt1ui
-         sZZSdWUSLlBxtUt/X8+3jVl7aVtHWSZMausAKmO2GIOTFrGknwwyeQXxzbN8ICGuRX+0
-         3ISRol/N5YPyYbJXlG124y04aPpEq1HRGEPiC7cB+gJiJ5MXIBZVvLJXHdmFOXk7SB3X
-         maguTgO12M7aVkybsewzKpb5uyvizHvDM1Es0vFvuOP5y4Fp0z1JK2pr/fIUucbEEYdP
-         61JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762377382; x=1762982182;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D1ax2+b/BmZMbWQLmn1abjqqCYtcXZuyWWUp9gYac88=;
-        b=ua+1csHj6Ex5uCw8K4ZmcXD6AmK2aIL4CahNq7cncRItEAMGUB06QosDGPNQNOtGwR
-         CsAlN3ZWJE6p8abht3vBYqw7kVIX2T3lrzGwe7N8l3C61uk484jFutsMzMWYGvm/FxA3
-         SICywL9cRTJRvraeMUWSKfYN+z+Tdl9s7GuQVcSetrMoANEcRQuzDgrvokB1iXzsLtTU
-         uMwRyF/xbqySI+9AIQjmmv6nPy7KeQosMCwVsnzPJ4Ixz38B9Xmlhw0wtMgBOpHwcLYQ
-         LwpjIhfCmxcmrbnF90GEvkXCxhAuED6UyXCpssKZQBs9mVE0sYGqzEqZU8NYdMpwUCVz
-         38bg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6Lu0u69eb4dU6390c4jwhryZJA5Ju32JGngp8xlWleTxz7qKg/iRJQZh6eJC5eTIWts9ne7Lwqm+o@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx15F6SbYvMqcFCJcbRfYZPJdLIQ1HGnOwRG8a/PbqBzt3KIu0O
-	yqXPwZwB5ji9HRlRd6dVwMpms5aCHkVy1LKmH+uqtcLcUbW2SfpDX8EvsqJL2Xcko8Q=
-X-Gm-Gg: ASbGncvaP0aHCJfZmnaQMPWNZnKvCOPzOgt+IntwzYSRErEkwSZvFLnMy6yWq56vexn
-	vJjLLd9kPgC5P98iY88KH5M6hmiVNbe9QBOcIjXa9LKLnQTszAfk+a8cfgViIzIIY2uEUSntWcd
-	kitijjk6pSDfQ6Gyoz/cZB2K71Ni0xb3+77LVitFXRb7FmbCCR4FIX2DmiGAygo9T7kyg443oJ6
-	SssxiMNuf4kQ+WAyagYMO+0W/dk1oCaEBQlS4bvFguxbyFz3Eqx/UpwlwMAbK/gpL2qQnHkVjYT
-	Cr7M1QCCFrwgkR3C85aoZpuiaESki4EjWEM5KQgX8C49F+WSFsmAEpw3l4HJfHxnOshl3f7J805
-	0lIpVGy0ihcV1MkxWr4MqhaXOHKCW5XV9bmKJydmRjuRKZS532SHyhlMvJ5TaJ59dJkgGyxiYqb
-	9TN5abWU2yhA==
-X-Google-Smtp-Source: AGHT+IGIZBQp5DjsGz3HmRAWZhPw8v6GqkWpZnGJFSt/AXCLpNaQaJyXUplBHQF5DvKtwaSJAHwvDg==
-X-Received: by 2002:a17:903:2304:b0:295:557e:7468 with SMTP id d9443c01a7336-2965173831dmr10789365ad.28.1762377381822;
-        Wed, 05 Nov 2025 13:16:21 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-296509682casm4836705ad.22.2025.11.05.13.16.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 13:16:21 -0800 (PST)
-Date: Wed, 5 Nov 2025 13:16:19 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: Joel Stanley <joel@jms.id.au>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, jim.shu@sifive.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	Zong Li <zong.li@sifive.com>, Jesse Huang <jesse.huang@sifive.com>,
-	Michael Ellerman <mpe@tenstorrent.com>
-Subject: Re: [PATCH v22 00/28] riscv control-flow integrity for usermode
-Message-ID: <aQu-o1-e6FK1dByM@debug.ba.rivosinc.com>
-References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com>
- <CACPK8XeQf9UJuu39bGcm2mySWrKYvUadOgFRmpas+AS9fXA2WA@mail.gmail.com>
- <aQuyiVdxyqWNooJ5@debug.ba.rivosinc.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rJqlQU4ip6N3g33HV/ALkfpr+jI8Z0axueQvoCUWfCM=;
+ b=R7hiAxR7DXilJ0sRmh+3d1YTbr8+tIALnmUWZpsQfwJrb9+unx/wdvx8c8yMFS3SjCvADeGPTrYKLWCTaS+S3MoAN2z92pKzEqAwVMy6Ydcq2hprmEV5eh/ARDnLqPi714qdqruhIuIlkc+xFrj81Wbfukmzcv0oH1tPTSsCorA=
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
+ by PH0PR10MB4647.namprd10.prod.outlook.com (2603:10b6:510:43::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.7; Wed, 5 Nov
+ 2025 21:24:52 +0000
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2%6]) with mapi id 15.20.9275.015; Wed, 5 Nov 2025
+ 21:24:52 +0000
+Date: Wed, 5 Nov 2025 21:24:50 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: "David Hildenbrand (Red Hat)" <davidhildenbrandkernel@gmail.com>
+Cc: Gregory Price <gourry@gourry.net>, Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+        Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+        Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+        Lance Yang <lance.yang@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+        Oscar Salvador <osalvador@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+        Byungchul Park <byungchul@sk.com>,
+        Ying Huang <ying.huang@linux.alibaba.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+        Kemeng Shi <shikemeng@huaweicloud.com>,
+        Kairui Song <kasong@tencent.com>, Nhat Pham <nphamcs@gmail.com>,
+        Baoquan He <bhe@redhat.com>, Chris Li <chrisl@kernel.org>,
+        SeongJae Park <sj@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, Xu Xin <xu.xin16@zte.com.cn>,
+        Chengming Zhou <chengming.zhou@linux.dev>,
+        Jann Horn <jannh@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <nao.horiguchi@gmail.com>,
+        Pedro Falcato <pfalcato@suse.de>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Rik van Riel <riel@surriel.com>, Harry Yoo <harry.yoo@oracle.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, damon@lists.linux.dev
+Subject: Re: [PATCH 02/16] mm: introduce leaf entry type and use to simplify
+ leaf entry logic
+Message-ID: <52dd0c85-9e06-4cb2-a9f9-71662922cba9@lucifer.local>
+References: <cover.1762171281.git.lorenzo.stoakes@oracle.com>
+ <2c75a316f1b91a502fad718de9b1bb151aafe717.1762171281.git.lorenzo.stoakes@oracle.com>
+ <aQugI-F_Jig41FR9@casper.infradead.org>
+ <aQukruJP6CyG7UNx@gourry-fedora-PF4VCD3F>
+ <373a0e43-c9bf-4b5b-8d39-4f71684ef883@lucifer.local>
+ <aQus_MNi2gFyY_pL@gourry-fedora-PF4VCD3F>
+ <fb718e69-8827-4226-8ab4-38d80ee07043@lucifer.local>
+ <7f507cb7-f6aa-4f52-b0b5-8f0f27905122@gmail.com>
+ <2d1f420e-c391-487d-a3cc-536eb62f3518@lucifer.local>
+ <563246df-cca4-4d21-bad0-7269ab5a419c@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <563246df-cca4-4d21-bad0-7269ab5a419c@gmail.com>
+X-ClientProxiedBy: LO4P265CA0253.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:37c::6) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aQuyiVdxyqWNooJ5@debug.ba.rivosinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|PH0PR10MB4647:EE_
+X-MS-Office365-Filtering-Correlation-Id: 80ab337b-5114-4a6f-3dd1-08de1cb1c1d1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?iZcQ+3SWKW19Jsvu/yfGdl1hcgJ/BmegoD3UcV+CY5ERETT0VxI3fWwFRa1w?=
+ =?us-ascii?Q?PlkD5v+pabTn1yc6/BHW1Vbw4sMZlaG9F5uYlmq94/B3DnmUCgSJK6RM/mXx?=
+ =?us-ascii?Q?tTIJTkbgmKgsSP8v+wa1lzDe8UajUdY5cPrUE/2mjamJqs6n97t9IJ+pQr4o?=
+ =?us-ascii?Q?IKI2dBWx3t8ETCuZ20qQyeyVbWivqYwmfrYvsZDFv60sgq4ZoaCJ8ZmHtX9o?=
+ =?us-ascii?Q?VK2znImnwM403ZLGlyddvUxbaWXbR7q7UM3gTGq5HstbJ5/7klRYaCG3u3NK?=
+ =?us-ascii?Q?zs/Ncza9HlHiylQxIOSk7rsAa21jE3CCFPX3tnoJvHFCWW2qd9tmKbfkNtQD?=
+ =?us-ascii?Q?A/jBCQ3shr2CNG2zPZdVba86iKb4cu6qnXhTCoLIx2G9WhWURxumzYhRCD6L?=
+ =?us-ascii?Q?brN4F8bP+OxqvfTwljTBMki6Ftyls9xTrqktUUeXasAlOOoXQDAVTfbYNPGi?=
+ =?us-ascii?Q?dd/ZoDqshEc0jpqIFx2UQNVFF/Hx9I6NQRfvDvonzr9q745I2QrY+thmXDyf?=
+ =?us-ascii?Q?tRFTIXyo5EEtsK1yYUNlQOiuYCNfHXj3YvwAoUwQLM2uY/qDefRgsHhUQTuV?=
+ =?us-ascii?Q?rMxSKefZG4JrJ64uOxVO0IeoRlQlwbh6X8MGUxpKWRuCN9uV0ExEKleTef8S?=
+ =?us-ascii?Q?8jG7n7oC8sWimrDUF4+kBuPL8t9gVBWOd9SqP4XeB2aB4KxqF2aqgyS1BQAm?=
+ =?us-ascii?Q?xFt5G2Dcg/gEy4XmtYjP+G353TYQvEk3od999uiH4/HIy24eTB/JdvQbnfUh?=
+ =?us-ascii?Q?YH+yhRTqiR2RA4YelOdL6yv1zjghgVHT5zTh/zgTlfAlkhqW40RdGtEAnFL4?=
+ =?us-ascii?Q?cVZ5jKyrPAbuuD30agvueGPdjWuDHa08FgqRh0JJ2KGimYatN5woPF6/RFhA?=
+ =?us-ascii?Q?XhnPUaEiiB550aTEb/RgOQuDbKhMRHIEGpdWnpQaHRBqr2SuVCcPb2Qqp5EH?=
+ =?us-ascii?Q?W/RDLTqZ5UVDfnFFxFR86FOneLhLw5xfsNTXqdoQuRCL/a4S3OZnqfgXxwIe?=
+ =?us-ascii?Q?ARG40LC+/qIZI0LxDq2Wc5nnUrBNQapY5dNPMxP3WPmgLD3UoO6iGhAssJEn?=
+ =?us-ascii?Q?P0O4ibtq6zjXpM9mjqzEPSl71S08A/WcAuyJUh7x+eX94paeb15FAJ6e+UbA?=
+ =?us-ascii?Q?OixLkUJs5DIMcOn0oWVwb7OM6CakQm6e6lRD8ePm44UX4bOaQ8JhGbaz2EeF?=
+ =?us-ascii?Q?NwiEAXYyRVRLaqplwISVQVRWOfG7boAyVnspjcke55DLWFwmOz3O47gg7Zsr?=
+ =?us-ascii?Q?0VSG5jHttNhiql09BBaiBgu5mJj5TUYbmXRg72OJC/fYYgMEATVL5+sqfjJB?=
+ =?us-ascii?Q?ILyPAJnRBYOZFGz/Hy0Dhi3fp34DaavfzJQ09L25wDa0S/nJFWS5981/CiP2?=
+ =?us-ascii?Q?DS5cuUUCcd4qD3TuII4B2CGhW0SaY29W4TOmSKwItLLogMIOFTtoQrFAZXIN?=
+ =?us-ascii?Q?rLvoMMmAhqx8NtGeFlpVHe/xVPoKyUIX?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?aur2IweSn6Wf53GrEty9TKSm9dTtTotU/XWUpN5sioG69JZ6p2DungELMiaL?=
+ =?us-ascii?Q?GIW71Z4YtmLME9EuQzBuyrOGGUfvx3wK/R0V7TfrCozWcW8e4XylCJpJhm02?=
+ =?us-ascii?Q?1QXfXS3sN1T6DdCcCNPNCZaKMl/rXPwMXokUvp2H+neTFA4ci+fKNEqZcOTk?=
+ =?us-ascii?Q?N05CvsuQ3ho8jkbGiN39XPKy6Qii6KwZbPKS3uSVauxk3Jme5m/JiQy+olyx?=
+ =?us-ascii?Q?i/d7iKiGtVrbi4/FwhbyOi9Ddo78XmEzWEGdRuwyCKELjQtagJVvBIu/vjTV?=
+ =?us-ascii?Q?4Dod5mgMfZTS5BMTJu2Y6L8VtJ4sx+eXcO2HzIQclrGihWFbDgLbf3LWCQPt?=
+ =?us-ascii?Q?38iu4T1ZyBq1iqBkveMrZPgBezxYMrC+Egb+5kW5lTJR7HaNabs26LKEDVCH?=
+ =?us-ascii?Q?IBxWGn5DdqxALquUjS4T4Pa9ZYjEtX3HPCLCGEqrlobu/LHGN1ohUKP8yYfX?=
+ =?us-ascii?Q?noEYYESSYbUJb/WjeBC0n6W16dlaZ6MnmfDMhUR7O8oOG4jffhG3NScFDccB?=
+ =?us-ascii?Q?HeJRLqGbXcNsOVzClnnK4ovcZpOvpSnX1IdtiCxvV6fEmezHK4foUn2TwqHW?=
+ =?us-ascii?Q?OYg0+w1FinJet1sXUL5FeTsUNdg5A8+ayuVxOCzdEnSwZEYYHK79Rfqia7nO?=
+ =?us-ascii?Q?sxAhJZZ7C70jtPgKEQjSNRUec2iP9SlHEmoRYL3EHBPYkpLFSam2h+WUOFak?=
+ =?us-ascii?Q?pAkHwAJZUF7sz5Kp7Z9eJG69bKmYFMNplPN28nljeT9LfrWu4+eKhp1wouaj?=
+ =?us-ascii?Q?4V8bjntA5JFT0v6x9NUrCJ5qJXRvT7dixnGtO0NI7WncquM/er3MZnc+oXgt?=
+ =?us-ascii?Q?zwEjMVfw4QACcPN1JjYTGjuBnN2eiG54+87dhclFSHSZDILT2NeU+Nn8bZkH?=
+ =?us-ascii?Q?0+tbkY1UEphj+ftTbVNnq9Wb7hBKLq5Zejnw/ytQdQNW8JLJQewR+9cnxTno?=
+ =?us-ascii?Q?QJUfycZNZdB01ZSh5TyyYthssJYOfuXG9YXuHhcUAzwda72C49a4XfDRQ/1a?=
+ =?us-ascii?Q?1JDzee9DohXAHrqJhkuyq7IV5ZdTpDL4nqvDUwqoQK4J6SfktRf+sWgRwZHf?=
+ =?us-ascii?Q?y1YYshEcP735rgDI/qoiUNUvg/Ym/tQGU2s0sRg/G2p7Bqd8ZMwdzqtvjCWl?=
+ =?us-ascii?Q?pi22o+NtLJ8O0M0ZzeKg+/7Tbzg+qHnPIZ4XAHaVzj1Hs8+nmleKIsKAptQN?=
+ =?us-ascii?Q?Gety8DHtbFq0Au8osOfumVtFOF+sxUHKYqY/PAYRGolq9LZsBnDftTZpXZrI?=
+ =?us-ascii?Q?dBrwG//VfHN529zZj8MO4c4cYAIDiKoh4loKv7zqc0B7Iq9TfsR+nHwOWH5v?=
+ =?us-ascii?Q?DLxc/8fZzwlD7C0ZQf1dMo6NC++kPoVbIvJo8lj7nYFn6h2nSjgmrg700bdO?=
+ =?us-ascii?Q?jHulnEXMyRHhDAd5SoCWgELm/z04+2NO1nwbsnC4rb1RdNy614zvr90pszfW?=
+ =?us-ascii?Q?hJJ9V4HoLF2iIf5jY47ObWcCrEeHg/VR6o2x1dF9aQdCaFHBYVBO90UsmULY?=
+ =?us-ascii?Q?lj1U6YYIKgebs0l4CscKeEKvna7zdHC9qx95hEEVmaJP4yq42lzCiRT0HENp?=
+ =?us-ascii?Q?K3E0XLLVIPWa3qkTQlb+W0CTIZnhNVFcecUqNDBNZdSsFvSnsDnQ3sHGeYrN?=
+ =?us-ascii?Q?LA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	wRpVkKU5NO2LuvX0jXuDU4469Nh5zszNiWPV5eXisby0oNAwxV0sfgBwEn8vFmD7OKTEdjszR3GSApJs8FsHUC/hVmbK9p1lnKDO+mQCnNhBGL6F9Gu+UnaKcIsriifN5D1G1MxUzdRpl1kVTE1aNrglacFVxR8WeT1iAbFYXyDD/Flv/5/kYQcWwC9sOhH/eIX2rUAGlSSH269HNoFjHNxx7o1b4Kf2NyFduCFXKYrP6KRIo3Rw1f+NKeLjjbXpF/YryHjuBhSTusnRzFIMR+4+5ER8s+5JyO7NFDeApqnu1ziIbf4OOPr674SBp0r03S6YR5tRH8SBCb2WG+8YWDIElebExOBLtTjnyekI4j+jaSGwZGa5oQQ4coddn+JTyaYi1GxkW87ZaSPVTtmhVqm8A0CN289uRhsSxeeCa74ggQ7YTYhZDppPOqOub7dnDby+NkiGodFtaAD98160FwO0S6vtRLxtxwpTAiV7/1qO6TLhITwRGMSJujYSq0p/eYre5bRs90g9ud/Fz/t3b1BKP5PzRpS5oIZrm3PqtlEAPZNlCLBCIFyS9GoswFSKNNYMloudBvfJXhxpvtjg6FSNyM78TNnxgpKMpsVerMc=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80ab337b-5114-4a6f-3dd1-08de1cb1c1d1
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2025 21:24:52.0393
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dg6CpCsEEp2ijWUofsQ77h2sEaNiMVwMaTlNHFTjcWhcMsf4sbsmC3nuhmUwmfuFuO8vegtGAftbZqKRT6a31MBdcGXQ1e+urO35UZK2LnU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4647
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-05_08,2025-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=662 spamscore=0
+ adultscore=0 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
+ definitions=main-2511050168
+X-Authority-Analysis: v=2.4 cv=NajrFmD4 c=1 sm=1 tr=0 ts=690bc0a9 b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=TsAl5O-2LqVuh9mVfYsA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-ORIG-GUID: fwABJklmdWaI7L_vBdFGh30ox8KU_mnX
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDEzMyBTYWx0ZWRfX80ytXy4do+jD
+ fTdHif+fT1HhUMPx3qtSd6Ha8vYaP1F/TXL5CC/vHPZ1VtOg3j+w515RMFUhEoiye3tTbov/OZm
+ OdbNAXpCSoTvkkUMjsMkQjJma7qbDUiUvNmLBEjEC6XkU8yf9+4xDYJoUrOF1vYk32QR4fAhdUs
+ /IlatjAEnCDBkMdTiVcmsGj1g6YoSUJPkvoD0r+mmnZZbR4iZvBihuStKbv9Vlp39Dcwt+bCmCC
+ hnoBK0mTXtcvSevSGy3XnFIXOruv4JeNj43WFoBIC78NXO+2QeEOF8wFD7I0GQ3lzXf/ZzW56vg
+ rrmVKpWMedD8ecxJ130k0b4OlvbPihu+PwQmS12TI3I6DPuc6LH6EnzYxSIyQUf1baSpqT8hNfl
+ mExHbJ6cFEtX1Dp6OE6f+NLDlCfU4A==
+X-Proofpoint-GUID: fwABJklmdWaI7L_vBdFGh30ox8KU_mnX
 
-On Wed, Nov 05, 2025 at 12:24:41PM -0800, Deepak Gupta wrote:
->On Tue, Nov 04, 2025 at 05:34:11PM +1030, Joel Stanley wrote:
->>Hello Deepak,
->>
->>On Fri, 24 Oct 2025 at 03:31, Deepak Gupta via B4 Relay
->><devnull+debug.rivosinc.com@kernel.org> wrote:
->>>
->>>v22: fixing build error due to -march=zicfiss being picked in gcc-13 and above
->>>but not actually doing any codegen or recognizing instruction for zicfiss.
->>>Change in v22 makes dependence on `-fcf-protection=full` compiler flag to
->>>ensure that toolchain has support and then only CONFIG_RISCV_USER_CFI will be
->>>visible in menuconfig.
->>
->>Following our discussion at the riscv summit I spent some time with
->>this patch set with the goal of giving a test run on emulation. I only
->>got as far as qemu, as I couldn't get the selftests passing there.
->>
->>I had trouble running the podman container so I built a toolchain
->>using the riscv-gnu-toolchain branch (cfi-dev, d19f3009f6c2) you
->>pointed to.
->>
->>The opensbi branch was a bit old and wouldn't build with GCC 15, so I
->>tried to rebase and noticed the patches were already upstream. Have
->>you tested using v1.7 (or newer) there? Is there something I missed,
->>do we need more patches on upstream opensbi?
->>
->>I booted it in qemu 10.1.2 with the zicfi extensions both on and off.
->>
->>qemu-system-riscv64 -M virt,aia=aplic-imsic,aia-guests=5 \
->> -cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
->> -smp 8 -nographic -bios fw_dynamic.elf
->> -m 1024M -kernel arch/riscv/boot/Image \
->> -initrd selftests/selftests.cpio \
->> -append 'init=mini-init command="cfitests"'
->>
->>My results:
->>
->>no zicfi, no z*mop (crash, as expected):
->>-------------------------------------------------
->>
->>Running command: cfitests
->>system_opcode_insn: Invalid opcode for CSR read/write instruction[
->>0.462709] cfitests[85]: unhandled signal 4 code 0x1 at
->>0x0000000000011c44 in cfitests[1c44,10000+6d000]
->>[    0.463141] CPU: 4 UID: 0 PID: 85 Comm: cfitests Not tainted
->>6.18.0-rc3-tt-defconfig-jms-00090-g6e2297f1edbc #93 NONE
->>[    0.463338] Hardware name: riscv-virtio,qemu (DT)
->>[    0.463573] epc : 0000000000011c44 ra : 00000000000104e0 sp :
->>00007fffebd0ddb0
->>...
->>[    0.465177] status: 0000000200004020 badaddr: 00000000ce104073
->>cause: 0000000000000002
->>[    0.465410] Code: 0893 05d0 4501 0073 0000 b7f5 4501 b7f9 0017 0000
->>(4073) ce10
->>
->>no zicfi, z*mop (failed to start, as expected):
->>-----------------------------------------------------------
->>
->>Running command: cfitests
->>TAP version 13
->># Starting risc-v CFI tests
->>Bail out! Get landing pad status failed with -22
->>
->>zicfi, z*mop (failed to start, unexpected):
->>-------------------------------------------------------
->>Running command: cfitests
->>TAP version 13
->># Starting risc-v CFI tests
->>Bail out! Get landing pad status failed with -22
->>
->>I went digging to see why the zicfi enabled kernel failed. The
->>userspace binary was built with CFI:
->>
->>$ riscv64-unknown-linux-gnu-readelf -n selftests/cfitests
->>
->>Displaying notes found in: .note.gnu.property
->> Owner                Data size     Description
->> GNU                  0x00000010    NT_GNU_PROPERTY_TYPE_0
->>     Properties: RISC-V AND feature: CFI_LP_UNLABELED, CFI_SS
->>
->>I then tested your opensbi tree with some hacks to get it built with a
->>newer compiler. This produced different results, which was unexpected:
->>
->>Running command: cfitests
->>TAP version 13
->># Starting risc-v CFI tests
->>Bail out! Landing pad is not enabled, should be enabled via glibc
->># Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+On Wed, Nov 05, 2025 at 10:15:51PM +0100, David Hildenbrand (Red Hat) wrote:
+> On 05.11.25 22:08, Lorenzo Stoakes wrote:
+> > On Wed, Nov 05, 2025 at 09:11:45PM +0100, David Hildenbrand (Red Hat) wrote:
+> > > On 05.11.25 21:05, Lorenzo Stoakes wrote:
+> > > > On Wed, Nov 05, 2025 at 03:01:00PM -0500, Gregory Price wrote:
+> > > > > On Wed, Nov 05, 2025 at 07:52:36PM +0000, Lorenzo Stoakes wrote:
+> > > > > > On Wed, Nov 05, 2025 at 02:25:34PM -0500, Gregory Price wrote:
+> > > > > > > On Wed, Nov 05, 2025 at 07:06:11PM +0000, Matthew Wilcox wrote:
+> > > > > > I thought about doing this but it doesn't really work as the type is
+> > > > > > _abstracted_ from the architecture-specific value, _and_ we use what is
+> > > > > > currently the swp_type field to identify what this is.
+> > > > > >
+> > > > > > So we would lose the architecture-specific information that any 'hardware leaf'
+> > > > > > entry would require and not be able to reliably identify it without losing bits.
+> > > > > >
+> > > > > > Trying to preserve the value _and_ correctly identify it as a present entry
+> > > > > > would be difficult.
+> > > > > >
+> > > > > > And I _really_ didn't want to go on a deep dive through all the architectures to
+> > > > > > see if we could encode it differently to allow for this.
+> > > > > >
+> > > > > > Rather I think it's better to differentiate between s/w + h/w leaf entries.
+> > > > > >
+> > > > >
+> > > > > Reasonable - names are hard, but just about anything will be better than swp_entry.
+> > > > >
+> > > > > SWE / sw_entry seems perfectly reasonable.
+> > > >
+> > > > I'm not a lover of 'sw' in there it's just... eye-stabby. Is that a word?
+> > > >
+> > > > I am quite fond of my suggested soft_leaf_t, softleaf_xxx()
+> > >
+> > > We do have soft_dirty.
+> > >
+> > > It will get interesting with pte_swp_soft_dirty() :)
+> >
+> > Hmm but that's literally a swap entry, and is used against an actual PTE entry
+> > not an abstracted s/w leaf entry so I doubt that'd require renaming on any
+> > level.
+>
+> It's used on migration entries as well. Just like pte_swp_uffd_wp().
+>
+> So, it's ... tricky :)
+>
+> But maybe I am missing your point (my brain is exhausted from uffd code)
 
-Ok so I think atleast I have narrowed down the issue. It seems like
-something is going on with how libc will initialize cfi in case of
-static compile.
-I enabled logging whenever prctl set/get are called and my rootfs
-binaries which are all dynamically linked are setting cfi prctls
-correctly. Except when I run statically compiled `cfitest`. It bails
-on "Shadow stack is not enabled" (unlike in your case where it bails
-saying landing pad is not enabled).
+We'd either not rename it or rename it to something like pte_is_uffd_wp(). So
+it's not even so relevant.
 
-Shortlog
-"""
-Welcome to Buildroot
-buildroot login: root
-[   51.361564] login[129]: arch_set_shadow_stack_status set successfully, shadow stack base 7fffbb977000size 800000
-[   51.362708] login[129]: arch_set_indir_br_lp_status set successfully
-[   51.363805] login[129]: arch_get_indir_br_lp_status called
-[   51.364296] login[129]: arch_get_shadow_stack_status called
-[   51.448918] bash[129]: arch_set_shadow_stack_status set successfully, shadow stack base 7fff9b516000size 800000
-[   51.450030] bash[129]: arch_set_indir_br_lp_status set successfully
-[   51.450568] bash[129]: arch_get_indir_br_lp_status called
-[   51.451047] bash[129]: arch_get_shadow_stack_status called
-[   51.552710] id[130]: arch_set_shadow_stack_status set successfully, shadow stack base 7fff7fa2a000size 800000
-[   51.553798] id[130]: arch_set_indir_br_lp_status set successfully
-[   51.554306] id[130]: arch_get_indir_br_lp_status called
-[   51.554757] id[130]: arch_get_shadow_stack_status called
-# mount -t 9p -o trans=virtio,version=9p2000.L host0 /mnt
-[   65.484939] mount[131]: arch_set_shadow_stack_status set successfully, shadow stack base 7fffa71a0000size 800000
-[   65.487002] mount[131]: arch_set_indir_br_lp_status set successfully
-[   65.488482] mount[131]: arch_get_indir_br_lp_status called
-[   65.489346] mount[131]: arch_get_shadow_stack_status called
-# /mnt/cfitests
-[   74.235075] cfitests[132]: arch_set_indir_br_lp_status set successfully
-[   74.249763] cfitests[132]: arch_get_indir_br_lp_status called
-[   74.250823] cfitests[132]: arch_get_shadow_stack_status called
-TAP version 13
-# Starting risc-v tests
-[   74.374286] cfitests[132]: arch_get_indir_br_lp_status called
-[   74.375497] cfitests[132]: arch_get_shadow_stack_status called
-Bail out! Shadow stack is not enabled, should be enabled via glibc
-# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-#
-"""
+We'd probably call that something like pte_is_soft_dirty() in the soft dirty
+case. The 'swp' part of that is pretty redundant.
 
-Full log (with cfi prctls get/set) of boot at pastebin below
-https://pastebin.com/JbX2Yv5W
+If people were insistent on having softleaf in there we could call it
+pte_softleaf_is_soft_dirty() which isn't qutie so bad. But I'd not want to put
+softleaf in there anyway.
 
-CCed: Jesse Huang who is leading glibc patches. Can help us figure out
-why statically compiled binaries are failing to set cfi prctls appropriately.
+sw_entry or sw_leaf or sw_leaf_entry would all have the same weirdness.
 
-Paul,
-
-Given that it's not an issue in kernel changes, we should still be going ahead
-with it for 6.19
-
->>
->>The selftest binary and the little toy init that starts it are both
->>statically linked and built against the toolchain's glibc, so I would
->>expect this to work.
->>
->>$ riscv64-unknown-linux-gnu-readelf -n sifive-cfi-build/sysroot/usr/lib/libc.a
->>
->>File: sifive-cfi-build/sysroot/usr/lib/libc.a(init-first.o)
->>
->>Displaying notes found in: .note.gnu.property
->> Owner                Data size        Description
->> GNU                  0x00000010       NT_GNU_PROPERTY_TYPE_0
->>     Properties: RISC-V AND feature: CFI_LP_UNLABELED, CFI_SS
->>
->>The kernel seems to have detected that CFI is available and is built with it:
->>
->>$ grep CFI .config
->>CONFIG_RISCV_USER_CFI=y
->>CONFIG_ARCH_SUPPORTS_CFI=y
->>
->>I did notice the func-sig-dev gcc branch is a few commits ahead of
->>what the sifive riscv-gnu-toolchain points to.
->>
->>I had to context switch to some other tasks at this point. I wanted to
->>do some more digging to work out what was wrong, but I haven't found
->>time, so here are my notes in the hope that they are useful. I'll let
->>you know if I discover anything further.
->
->
->I have it working on my end with latest upstream opensbi (no hacks, same
->compiler)
->
->"""
->$ git log
->commit 38a6106b1099646f25657bba53cefb80886721a7 (HEAD -> master, origin/master, origin/HEAD)
->Author: Benoît Monin <benoit.monin@bootlin.com>
->Date:   Mon Oct 27 14:12:17 2025 +0100
->
->    lib: utils/ipi: mswi: add MIPS P8700 compatible
->....
->"""
->
->I am surprised that change of compiler on opensbi changed errorcode for userspace
->in your setup. That's quite bizarre.
->
->Output from cfitests (with toolchain that's on docker. I didn't compile from
->cfi-dev branch).
->
-># /mnt/cfitests
->TAP version 13
-># Starting risc-v tests
-># Landing pad and shadow stack are enabled for binary
-># cfi_ptrace_test, ptrace test succeeded
-># Executing RISC-V shadow stack self tests
->1..5
-># Exercising shadow stack fork test
-># Parent pid 133 and child pid 135
-># dummy calls for sspush and sspopchk in context of parent
-># Spewing out shadow stack ptr: 7fffbf4a9fb8
->  This is to ensure shadow stack is indeed enabled and working
-># Waiting on child to finish
-># dummy calls for sspush and sspopchk in context of child
-># Spewing out shadow stack ptr: 7fffbf4a9fb8
->  This is to ensure shadow stack is indeed enabled and working
->ok 1 shstk fork test
-># Exercising shadow stack map test
->ok 2 map shadow stack syscall
-># Exercising shadow stack gup tests
->ok 3 shadow stack gup tests
-># Exercising shadow stack signal test
->ok 4 shadow stack signal tests
-># Exercising shadow stack protection test (WPT)
->ok 5 memory protections of shadow stack memory
-># Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
->#
->
->Is there a place where I can grab your kselftest `cfitests` binary?
->
->Only difference I can see is that `cfitests` in my case is not statically
->compiled
->
->"""
->$ riscv64-unknown-linux-gnu-readelf -d /scratch/debug/sources/spectacles/cfitests | grep NEEDED
-> 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
->
->"""
->
->>
->>Cheers,
->>
->>Joel
->>
->>
->>>How to test this series
->>>=======================
->>>
->>>Toolchain
->>>---------
->>>$ git clone git@github.com:sifive/riscv-gnu-toolchain.git -b cfi-dev
->>>$ riscv-gnu-toolchain/configure --prefix=<path-to-where-to-build> --with-arch=rv64gc_zicfilp_zicfiss --enable-linux --disable-gdb  --with-extra-multilib-test="rv64gc_zicfilp_zicfiss-lp64d:-static"
->>>$ make -j$(nproc)
->>>
->>>Qemu
->>>----
->>>Get the lastest qemu
->>>$ cd qemu
->>>$ mkdir build
->>>$ cd build
->>>$ ../configure --target-list=riscv64-softmmu
->>>$ make -j$(nproc)
->>>
->>>Opensbi
->>>-------
->>>$ git clone git@github.com:deepak0414/opensbi.git -b v6_cfi_spec_split_opensbi
->>>$ make CROSS_COMPILE=<your riscv toolchain> -j$(nproc) PLATFORM=generic
->>>
->>>Linux
->>>-----
->>>Running defconfig is fine. CFI is enabled by default if the toolchain
->>>supports it.
->>>
->>>$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc) defconfig
->>>$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc)
->>>
->>>Running
->>>-------
->>>
->>>Modify your qemu command to have:
->>>-bios <path-to-cfi-opensbi>/build/platform/generic/firmware/fw_dynamic.bin
->>>-cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
+I want it to be something that is readable + not hideous to look at but still
+clear as to what it's referring too. Softleaf covers all of that off... :)
 
