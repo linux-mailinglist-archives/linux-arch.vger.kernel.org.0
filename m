@@ -1,132 +1,174 @@
-Return-Path: <linux-arch+bounces-14527-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14528-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DC27C37294
-	for <lists+linux-arch@lfdr.de>; Wed, 05 Nov 2025 18:44:58 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C442C37327
+	for <lists+linux-arch@lfdr.de>; Wed, 05 Nov 2025 18:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBEED188E64E
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Nov 2025 17:45:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C39F4FF44E
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Nov 2025 17:46:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F67339B47;
-	Wed,  5 Nov 2025 17:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FDD22F7446;
+	Wed,  5 Nov 2025 17:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="J40xNsLy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7Mf6l0a"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27155336EEC
-	for <linux-arch@vger.kernel.org>; Wed,  5 Nov 2025 17:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16169239E88;
+	Wed,  5 Nov 2025 17:46:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762364685; cv=none; b=QwQleBRaJVubM+d2CX2QDnIuF4Is3sgKkBl2T1CzcfuokOLG+0CbYwPWTOf57ZK3g75tNH0P/mjC/3K7zZ/b9/JcxTCwZglA/2daAMBxSGZm3ZwX6MHDgvmRRLSS2JtfU0GO3DKGcFFJiwbe5PD8GVXz7x1bohU/BaWmM+AcEnE=
+	t=1762364792; cv=none; b=Vq09r7z4GTrmB6srJ89qtod2uxtJGGmFzdNRAOvsd9NAOIBV3Srda7wlTNpscHhNRKnCKyDKzPh9v/x+TUfI5CGlJx76RXFz+F4ThjwFQQaUm23op1RlXxfYbWCZeDI4MuwlIewG7UpThnd7lX0I7yHfITvYHM/y86+RQwvP27o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762364685; c=relaxed/simple;
-	bh=HUkuOvaJBgzglKmoQ0+qkvFukOe5dDQ3E3jps5qH8yg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iZgIQwYAobLC1C8fuBQcwrSa49SsQvokibKPRj7ESD5I/FJAQxfZBZTexMnicR/cdXFof9n6MHSbthfbiyacfqIWAnXssOiFYCHfLnGRiaO0/PNtmXUQc76i5pgl5Jj4z46FfCgvci1TbdrU26L03FKKAVJDDKqT3RbUb3MA8MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=J40xNsLy; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-58b027beea6so20e87.1
-        for <linux-arch@vger.kernel.org>; Wed, 05 Nov 2025 09:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762364681; x=1762969481; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HUkuOvaJBgzglKmoQ0+qkvFukOe5dDQ3E3jps5qH8yg=;
-        b=J40xNsLy/P3FH9ngX86nNzMKjkxfEccbIIBTI/ybiGLyBW/jbl4CuEQp0x2CEK7Anh
-         3uaBzM2wz+AgVij7CWDHh4YOyKQj02OPu4ge/KnsIJPWcnoTxMjei28fxOFOVrPxjWvd
-         1tsO0kv+ctxdr6SunZ/lhvTbcURPGC788zVeRY4lQsSuYXHJ9iUN6opOL5ICAYUO/u0/
-         1drGwyuHnmJ3a9TiajQU/83cLDH1sNIfLkvKbDD9p1RNkj+GzEetgot9O2J6sntLO1Qw
-         FmC6b/idfm9ycZYIVoxDBi6DuCBOaSEYienFsiRgDFUNAS/7FgzWc/eO5VyazcBTXkFL
-         5yyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762364681; x=1762969481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HUkuOvaJBgzglKmoQ0+qkvFukOe5dDQ3E3jps5qH8yg=;
-        b=PYPprQWsQctCpwjLzMS/ZHGR0QA1jbipH/+gdL6xUenTL0N7fkj2UTvDIFAou/iTsu
-         XG4pSrpTnnXWuHaF5m4wIMHCHFjDREMNbVGXCEsEz/uKrJMelicIT8qkYWqXJ9x7Pk/2
-         hpGmOGibo6Dp7xrTHlyCLpteaqiT8oNqHy/7SJCzK+j3tshKq3lfwTdOls4E3FV31aul
-         MXnBkMPFShlyR8U/W4mdSZd3dy2jEIBBSKho3sXrWG5T8E2osmmARpqFcSV3zuYLI0iV
-         Po+CBanCYkDydlvLOSdMim5Fl7ii4npGMNDA/+ee9o3VhWXaEIKpSNPtFqQX6nPHvAzQ
-         00Aw==
-X-Forwarded-Encrypted: i=1; AJvYcCU+3EBp1IWhsEZSr3k6/EWU9EIGBpPfG6xxU6RjsoZX0NqDYddqeo95NS9xqYsSNAyDcA3G/oyZJZEB@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbOI/MxzWYJ8EBgUWw1mpCL04RAgQ0HiADztWxHy/gSHEf6NrA
-	XTLjfmZ62lsnniYx1nwPFkNqxacbidqEOTrhQO/K5zF8jDqpArCnp7dlEYaTH1cU+YzhrsDcQaX
-	fGaB9NCrqC6AR8DWbSndZMOFXCYPH60W1tiheItbA
-X-Gm-Gg: ASbGnctoynYy9J6DRlfUwNKtQyzpG6reejsrNDkaU+gkPDzPI6sfv3btvNQIDm0QY/U
-	P01WUcUE+3XdUmFBZcgRclsPfTizMLSjDKvz9R1uAEkI7O3GgfU2NB25hXkY17KH260cfqYSkZ5
-	FicgQ7MALD/qCuZ0Q3vXY9Jw1X86OvqnoTY7ICCScVQOM2TucG0DSeBH2BTPgZKwnAg2l1gmSma
-	t00wnr29IBzJoVrbQS5DKkoyHP2TxmnJP6UUQAC+f3zh6qcWnx08rNmiDLAWOuZ1j2Vbep2MfEs
-	LIG2EYan16QvkHI=
-X-Google-Smtp-Source: AGHT+IH/OofWVZO6t+ABXcpC0vTR/s1RGUpbRd9qbTsriVnGknn3XRKBHSzmxdu2/OyTuJYhBxIZQv2+pBEj17RuTlQ=
-X-Received: by 2002:a05:6512:5ce:b0:594:2644:95c6 with SMTP id
- 2adb3069b0e04-5943fd37dd8mr299460e87.7.1762364680964; Wed, 05 Nov 2025
- 09:44:40 -0800 (PST)
+	s=arc-20240116; t=1762364792; c=relaxed/simple;
+	bh=woawi0pKo/kryyYybe6UTBTWMoVsh5qziqijASjnREk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bvz8rShcpQbPzWdjrT7/BwbIt492YUOY5iCXSQyaUdsoPc3VH7Ix3IGdSAgimoUIztvsKiV1T89l4wb98+21lezcizqcIeSZtoQWFVG8Zof6+YhGrQvE8B+/KNd+Q0ANpK4EJKzfRkuQhqtgA1/7CoYC1x52te/UWdH6gs+kTI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7Mf6l0a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1533CC4CEF5;
+	Wed,  5 Nov 2025 17:46:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762364791;
+	bh=woawi0pKo/kryyYybe6UTBTWMoVsh5qziqijASjnREk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X7Mf6l0akmdIq5iKgqrPQJacdZIwvZNDplWJ7ZFAiTj1m5jo/r4RZiwBnuufL7FJz
+	 rvjLuH5kIUsBewW58/KIJ4AtGpjFM65vgcq5Mq40hqFViVaFYaMO3B+3S2DJBgREr8
+	 Ydhgli/Ewi5GXUbKU7XplIRtFLKzGALUr+LrfoBKdNnCob1uuo8LERCMDso+bO1Ogb
+	 2kFxvq6vNnlZJHsASSZyjiY4DFFHKnlLj9M1sIw8Xs7M5lI6s7rwKH+tP57RLGeYQo
+	 I7shlbbDQcR6rzKbVlqZcx0moVDvOcKmF1aICmG6LscQYeQvqFcaYK64Yfrix1vGrk
+	 oPe9jn359SAFw==
+Date: Wed, 5 Nov 2025 18:46:28 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, rcu@vger.kernel.org, x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Jason Baron <jbaron@akamai.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Han Shen <shenhan@google.com>, Rik van Riel <riel@surriel.com>,
+	Jann Horn <jannh@google.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Oleg Nesterov <oleg@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Clark Williams <williams@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
+Subject: Re: [PATCH v6 00/29] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+Message-ID: <aQuNdOEmPYkI03my@localhost.localdomain>
+References: <20251010153839.151763-1-vschneid@redhat.com>
+ <aQDuY3rgOK-L8D04@localhost.localdomain>
+ <xhsmhzf9aov51.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <aQJLpSYz3jdazzdb@localhost.localdomain>
+ <xhsmh8qgk5txe.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com>
- <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-5-ea98cf4d40b3@meta.com>
- <aQuKi535hyWMLBX4@mini-arch>
-In-Reply-To: <aQuKi535hyWMLBX4@mini-arch>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 5 Nov 2025 09:44:28 -0800
-X-Gm-Features: AWmQ_bmalEOFVEMViz4jCYnQSNwi-DTRPOf8GHyJIDjQOr0wbo_hnqMUoM5NhB8
-Message-ID: <CAHS8izNv89OicB7Nv5s-JbZ8nnMEE5R0-B54UiVQPXOQBx9PbQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 5/6] net: devmem: document SO_DEVMEM_AUTORELEASE
- socket option
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Bobby Eshleman <bobbyeshleman@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Stanislav Fomichev <sdf@fomichev.me>, Bobby Eshleman <bobbyeshleman@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <xhsmh8qgk5txe.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 
-On Wed, Nov 5, 2025 at 9:34=E2=80=AFAM Stanislav Fomichev <stfomichev@gmail=
-.com> wrote:
->
-> On 11/04, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+Le Wed, Nov 05, 2025 at 05:24:29PM +0100, Valentin Schneider a écrit :
+> On 29/10/25 18:15, Frederic Weisbecker wrote:
+> > Le Wed, Oct 29, 2025 at 11:32:58AM +0100, Valentin Schneider a écrit :
+> >> I need to have a think about that one; one pain point I see is the context
+> >> tracking work has to be NMI safe since e.g. an NMI can take us out of
+> >> userspace. Another is that NOHZ-full CPUs need to be special cased in the
+> >> stop machine queueing / completion.
+> >>
+> >> /me goes fetch a new notebook
 > >
->
-> [..]
->
-> > +Autorelease Control
-> > +~~~~~~~~~~~~~~~~~~~
->
-> Have you considered an option to have this flag on the dmabuf binding
-> itself? This will let us keep everything in ynl and not add a new socket
-> option. I think also semantically, this is a property of the binding
-> and not the socket? (not sure what's gonna happen if we have
-> autorelease=3Don and autorelease=3Doff sockets receiving to the same
-> dmabuf)
+> > Something like the below (untested) ?
+> >
+> 
+> Some minor nits below but otherwise that looks promising.
+> 
+> One problem I'm having however is reasoning about the danger zone; what
+> forbidden actions could a NO_HZ_FULL CPU take when entering the kernel
+> while take_cpu_down() is happening?
+> 
+> I'm actually not familiar with why we actually use stop_machine() for CPU
+> hotplug; I see things like CPUHP_AP_SMPCFD_DYING::smpcfd_dying_cpu() or
+> CPUHP_AP_TICK_DYING::tick_cpu_dying() expect other CPUs to be patiently
+> spinning in multi_cpu_stop(), and I *think* nothing in the entry code up to
+> context_tracking entry would disrupt that, but it's not a small thing to
+> reason about.
+> 
+> AFAICT we need to reason about every .teardown callback from
+> CPUHP_TEARDOWN_CPU to CPUHP_AP_OFFLINE and their explicit & implicit
+> dependencies on other CPUs being STOP'd.
 
-I think this thread (and maybe other comments on that patch) is the
-context that missed your inbox:
+You're raising a very interesting question. The initial point of stop_machine()
+is to synchronize this:
 
-https://lore.kernel.org/netdev/aQIoxVO3oICd8U8Q@devvm11784.nha0.facebook.co=
-m/
+    set_cpu_online(cpu, 0)
+    migrate timers;
+    migrate hrtimers;
+    flush IPIs;
+    etc...
 
-Let us know if you disagree.
+against this pattern:
 
---=20
-Thanks,
-Mina
+    preempt_disable()
+    if (cpu_online(cpu))
+        queue something; // could be timer, IPI, etc...
+    preempt_enable()
+
+There have been attempts:
+
+      https://lore.kernel.org/all/20241218171531.2217275-1-costa.shul@redhat.com/
+
+And really it should be fine to just do:
+
+    set_cpu_online(cpu, 0)
+    synchronize_rcu()
+    migrate / flush stuff
+
+Probably we should try that instead of the busy loop I proposed
+which only papers over the problem.
+
+Of course there are other assumptions. For example the tick
+timekeeper is migrated easily knowing that all online CPUs are
+not idle (cf: tick_cpu_dying()). So I expect a few traps, with RCU
+for example and indeed all these hotplug callbacks must be audited
+one by one.
+
+I'm not entirely unfamiliar with many of them. Let me see what I can do...
+
+Thanks.
+
+-- 
+Frederic Weisbecker
+SUSE Labs
 
