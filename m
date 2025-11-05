@@ -1,132 +1,92 @@
-Return-Path: <linux-arch+bounces-14519-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14520-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 275D6C361FF
-	for <lists+linux-arch@lfdr.de>; Wed, 05 Nov 2025 15:43:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A878DC36CCB
+	for <lists+linux-arch@lfdr.de>; Wed, 05 Nov 2025 17:51:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82D261888740
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Nov 2025 14:43:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E9C6641CF1
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Nov 2025 16:05:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7128832E149;
-	Wed,  5 Nov 2025 14:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F29333755;
+	Wed,  5 Nov 2025 16:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="gCDf5z05"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WWxLLBhl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA5532D7F0
-	for <linux-arch@vger.kernel.org>; Wed,  5 Nov 2025 14:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71305333745;
+	Wed,  5 Nov 2025 16:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762353751; cv=none; b=ZQHqjrWoaKRAxp7MMljavSrAbV/axAgSO0nrFQ1vUjG1yQpZ22sVKj6fl0h0JA7Ktl/ikmWhQy9xOtZgDyCRQHNh1k5jMXDlg0AYSEtznBkOoMntwtwDab4ujIKyHaOTSVhJIimEENPgLlE+AMfoWJNUQKofh8LvMB/k473lTH8=
+	t=1762358705; cv=none; b=iFdFlfEDF9UgJtoo5HwmIYEJl63+VRCDcPIUdtZj+r6QhgsIzrmWjWEQ9X8NslnQvtdS4WBOBFXyjH1+em4WEDp9Dqht//a4MY4n2vVYCNtsi0ZOFUuTP5X8ukjr0ig3ptAe6Ptg2Zej5OJlRnpRsALsD1b1Q2YwNGSX5fuFGkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762353751; c=relaxed/simple;
-	bh=ij2iHrslX/5yNAV81WvwyiP5ZRrrhcDqQSgtHEa9ZoY=;
+	s=arc-20240116; t=1762358705; c=relaxed/simple;
+	bh=Vc8K3MrTyVwbjqp/DCwioUL/LWadEWrFyl8zAIAawBA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rrobb3pDFGpIjxtRmqqUZrYscLHFGtr5w2XuNgpA42b8PtJXhnxaDgSUJD5NMVvhh67YysERw1FEUpWgDtubLdCKVF6hxZEaEkNyf1udN8cPoAzx8hxeTyJ4deGmS4ovHMt8zoc8TSaLCfxHE/Pg+XQKUMpic2Z73f6j/CX65HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=gCDf5z05; arc=none smtp.client-ip=209.85.222.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8b2148ca40eso198255385a.1
-        for <linux-arch@vger.kernel.org>; Wed, 05 Nov 2025 06:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1762353748; x=1762958548; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCP0hsq/q40gFxNmjoVFcp0QbOx89aTWebuusBQgCaY=;
-        b=gCDf5z05uYtlJggKnF95ezS3J3umvz7sQMNDZDnGK8dtKLvayu7kdaLUtT1vMZ6cHs
-         1GrwbtfIe7scOFlP2tQeblKFtqfnBbDDvWuaerJCvF4fbX4Iuw1jMMO5qNBS6ZY5ORf7
-         wlXA8FlARkhwl3/zBiBwJU4aOeCxfoymxp+HA7s9/gBrOxzS0LNRs3+Mbv6zW6wrbKgS
-         Vw1NtjBOiZPKJ476QYp/x9lkuvghR476RYKYUJr6/ygsD+kVyEil9ToZF0qbl82FpAPl
-         jncikulGE0TeNC1J/5fCUZfNhIKnf6FldJa+Hdi7S90irvpaNARjjyogJGnYymejeFSJ
-         J/Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762353748; x=1762958548;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gCP0hsq/q40gFxNmjoVFcp0QbOx89aTWebuusBQgCaY=;
-        b=DZZ1G3SCiay/VEE/KgcSNdfe8icW1VCYkkPMAZ8Q3uiF4hJMOQlArr6f/Yho+HOR4T
-         /Mk3tLql4PAVZm49vf1gQRfZ59ywP5Bhc6qFoEoqryJYkX8trpADiO4X+lGcXPVrbm9c
-         SHNrmfhFxFMflu0MWLqTXX0nMbPV0cyrhRGiR7f+KyLvMXw/ajImqDdcLDgYLWER+z0U
-         xkjwx+4MAsnm/62LmjNY7LVrwx8mDy4SFMgZRMI/QUfLkJbMd5BBgW4cpOv8xMP0Q7gB
-         bFPVhzUOR0AioJgRNTgwDWMDnyxsLlVHHH8c/dXWpNVs1hI26VDyAi4fha4BYacpjWTy
-         /nzw==
-X-Forwarded-Encrypted: i=1; AJvYcCWToQ4i0zV/3jyFz1fboSbJv6btCVgZGQN9h8TGJdj0u+mIrDj+sL8Edv0d/9c6MsIV6Ooj3XKcbmlZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqWgtONpvfiuXQNO24xcDewFo6pBGwfC6uyguSNlTOnFJdSAt+
-	AAAlUxB7xd7hWCtvfkELais60nskO43XzqwTzfdJ3RK8BUo9HELkowIkuFVNt2jD83s=
-X-Gm-Gg: ASbGncuMQMqEjWaQyvvMdErJ5U3FrCIqXfUgo8zQLP7vEB5G2mRsEzf5sWsbaE/yS3i
-	AOd6Lz6Wg8iX5kqmL1OxX9du219nAXYtwduDI1qi4FObvM904ntOJ3vAS0da6zMzByGR/dRAJBp
-	RA7mjsurEOfHUK25y7TPzOxd1uH/Ks41jLDF+7wmx+OZRD4IqVHhgdm4+U4EEvkNJJoNsebEmlV
-	C3nzg2zlvBOoOWl/6F9NA+qTgrNAPkCPjsjbK/NyG4/qZx4X4I9aXNYk5TymWfTQe8msSwh81+e
-	24GmoJ95ZyEyZBFQ5QYMZ+14BPsbS5lIpb+gox0RssuVbZ4h/WWuJpPKWiLY5KUWlq1P17mvkGV
-	J3l6r/HzFJBv5rSuqb4bIFOKRNSpSUQAHQCLUWlJgjlpa9l2qifgKFHTxxaGe2xbpjTpn06QbiF
-	8p0U+yiUBdEPclbW1BGzvfv1KsPvklS3UcuMwlHzUA+ZstnuSjqixTrw8ZD8e0lNpYr1Lrfw==
-X-Google-Smtp-Source: AGHT+IFOPmymxkVWTStAmI1fSxsEHrX8n+cH3NR2hrKHNMeSwi6zTbwFsDY5mjtR5/Zbzi6pU1fUXg==
-X-Received: by 2002:a05:620a:4416:b0:8ab:4ada:9b2f with SMTP id af79cd13be357-8b220b7f441mr375892585a.56.1762353748298;
-        Wed, 05 Nov 2025 06:42:28 -0800 (PST)
-Received: from gourry-fedora-PF4VCD3F (pool-96-255-20-138.washdc.ftas.verizon.net. [96.255.20.138])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b21fc36dbasm239867985a.19.2025.11.05.06.42.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 06:42:27 -0800 (PST)
-Date: Wed, 5 Nov 2025 09:42:24 -0500
-From: Gregory Price <gourry@gourry.net>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	David Hildenbrand <david@redhat.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
-	Byungchul Park <byungchul@sk.com>,
-	Ying Huang <ying.huang@linux.alibaba.com>,
-	Alistair Popple <apopple@nvidia.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Kairui Song <kasong@tencent.com>, Nhat Pham <nphamcs@gmail.com>,
-	Baoquan He <bhe@redhat.com>, Chris Li <chrisl@kernel.org>,
-	SeongJae Park <sj@kernel.org>, Matthew Wilcox <willy@infradead.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Xu Xin <xu.xin16@zte.com.cn>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Jann Horn <jannh@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry.yoo@oracle.com>,
-	Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, damon@lists.linux.dev
-Subject: Re: [PATCH 02/16] mm: introduce leaf entry type and use to simplify
- leaf entry logic
-Message-ID: <aQtiUPwhY5brDrna@gourry-fedora-PF4VCD3F>
-References: <cover.1762171281.git.lorenzo.stoakes@oracle.com>
- <2c75a316f1b91a502fad718de9b1bb151aafe717.1762171281.git.lorenzo.stoakes@oracle.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=SZjnpqfxb6jukRNbpicOg5pcCcfM0cC/zMR/vPHisCqezO4J+SOUHVfMPVKpZQx7joK6SrBKswVJtuTEDnrmIEMpuWYTRZq5MK08ZlfVscLzyU3t4kyG2In30X4s5YzhnAWpejyGtx98/6qFIBQ46hN3G4sp6cFZtFJD5ecF1O0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WWxLLBhl; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762358704; x=1793894704;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Vc8K3MrTyVwbjqp/DCwioUL/LWadEWrFyl8zAIAawBA=;
+  b=WWxLLBhl7yIK6JGmib04vE0mFhsfXn2YkEfHDIn3tYvE3K9Vb6Oll/Z0
+   52aZM8r060HRaAgwsy0C293rkhEsYxTLAV9Et6yH4NoJMjkqELH8cUIuX
+   AS3bCtrJA9vzvOD62VtMbkgxgsvKfOX0DP9pGp6IqVPdaty5Kq/jIqS8R
+   UacmOIcLvF6LSK5gAj9mO9Ezw01YoPQbS+hG9D+dRqrk96LEEGQbXtAuU
+   e0VgAVJD2RZ0wEkSfgRfJ4jXKO9JESZqV3TkdzmfdvoU/nkNW5sRgpZBO
+   r6oscRlb3jhPYu/wJLvBmyov8F94I7fsSmT/Ug8FY9M4r7Wz00fZ8MTvm
+   w==;
+X-CSE-ConnectionGUID: LuP+QlqfRtKVDcQsAF6BJw==
+X-CSE-MsgGUID: 4FKFNoJUQd+veTUGGHjH/g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="75829680"
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="75829680"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 08:04:45 -0800
+X-CSE-ConnectionGUID: uKDzES6cQJ+/2F/g+UvqTw==
+X-CSE-MsgGUID: reYSz8GhRLO04UAr3rNsZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="210969542"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 05 Nov 2025 08:04:40 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vGfzS-000SoS-0u;
+	Wed, 05 Nov 2025 16:04:24 +0000
+Date: Thu, 6 Nov 2025 00:02:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Mina Almasry <almasrymina@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v6 3/6] net: devmem: prepare for autorelease rx
+ token management
+Message-ID: <202511052307.doTV8fDn-lkp@intel.com>
+References: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -135,37 +95,90 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2c75a316f1b91a502fad718de9b1bb151aafe717.1762171281.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3@meta.com>
 
-On Mon, Nov 03, 2025 at 12:31:43PM +0000, Lorenzo Stoakes wrote:
-> +typedef swp_entry_t leaf_entry_t;
-> +
-> +#ifdef CONFIG_MMU
-> +
-> +/* Temporary until swp_entry_t eliminated. */
-> +#define LEAF_TYPE_SHIFT SWP_TYPE_SHIFT
-> +
-> +enum leaf_entry_type {
-> +	/* Fundamental types. */
-> +	LEAFENT_NONE,
-> +	LEAFENT_SWAP,
-> +	/* Migration types. */
-> +	LEAFENT_MIGRATION_READ,
-> +	LEAFENT_MIGRATION_READ_EXCLUSIVE,
-> +	LEAFENT_MIGRATION_WRITE,
-> +	/* Device types. */
-> +	LEAFENT_DEVICE_PRIVATE_READ,
-> +	LEAFENT_DEVICE_PRIVATE_WRITE,
-> +	LEAFENT_DEVICE_EXCLUSIVE,
-> +	/* H/W posion types. */
-> +	LEAFENT_HWPOISON,
-> +	/* Marker types. */
-> +	LEAFENT_MARKER,
-> +};
-> +
+Hi Bobby,
 
-Have been browsing the patch set again, will get around a deeper review,
-but just wanted to say this is a thing of beauty :]
+kernel test robot noticed the following build warnings:
 
-~Gregory
+[auto build test WARNING on 255d75ef029f33f75fcf5015052b7302486f7ad2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/net-devmem-rename-tx_vec-to-vec-in-dmabuf-binding/20251105-092703
+base:   255d75ef029f33f75fcf5015052b7302486f7ad2
+patch link:    https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3%40meta.com
+patch subject: [PATCH net-next v6 3/6] net: devmem: prepare for autorelease rx token management
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251105/202511052307.doTV8fDn-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251105/202511052307.doTV8fDn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511052307.doTV8fDn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> net/core/sock.c:1107:12: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+    1107 |                                 return ret;
+         |                                        ^~~
+   net/core/sock.c:1095:9: note: initialize the variable 'ret' to silence this warning
+    1095 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+--
+>> net/ipv4/tcp.c:2626:6: warning: variable 'refs' is uninitialized when used here [-Wuninitialized]
+    2626 |                                         refs++;
+         |                                         ^~~~
+   net/ipv4/tcp.c:2496:10: note: initialize the variable 'refs' to silence this warning
+    2496 |         int refs;
+         |                 ^
+         |                  = 0
+   1 warning generated.
+
+
+vim +/ret +1107 net/core/sock.c
+
+  1085	
+  1086	static noinline_for_stack int
+  1087	sock_devmem_dontneed_manual_release(struct sock *sk, struct dmabuf_token *tokens,
+  1088					    unsigned int num_tokens)
+  1089	{
+  1090		struct net_iov *niov;
+  1091		unsigned int i, j;
+  1092		netmem_ref netmem;
+  1093		unsigned int token;
+  1094		int num_frags = 0;
+  1095		int ret;
+  1096	
+  1097		if (!sk->sk_devmem_info.binding)
+  1098			return -EINVAL;
+  1099	
+  1100		for (i = 0; i < num_tokens; i++) {
+  1101			for (j = 0; j < tokens[i].token_count; j++) {
+  1102				token = tokens[i].token_start + j;
+  1103				if (token >= sk->sk_devmem_info.binding->dmabuf->size / PAGE_SIZE)
+  1104					break;
+  1105	
+  1106				if (++num_frags > MAX_DONTNEED_FRAGS)
+> 1107					return ret;
+  1108	
+  1109				niov = sk->sk_devmem_info.binding->vec[token];
+  1110				if (atomic_dec_and_test(&niov->uref)) {
+  1111					netmem = net_iov_to_netmem(niov);
+  1112					WARN_ON_ONCE(!napi_pp_put_page(netmem));
+  1113				}
+  1114				ret++;
+  1115			}
+  1116		}
+  1117	
+  1118		atomic_sub(ret, &sk->sk_devmem_info.outstanding_urefs);
+  1119	
+  1120		return ret;
+  1121	}
+  1122	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
