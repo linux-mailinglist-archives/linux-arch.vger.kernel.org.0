@@ -1,206 +1,631 @@
-Return-Path: <linux-arch+bounces-14521-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14523-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB206C36ABB
-	for <lists+linux-arch@lfdr.de>; Wed, 05 Nov 2025 17:24:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A74CAC3732A
+	for <lists+linux-arch@lfdr.de>; Wed, 05 Nov 2025 18:52:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A009134ED3B
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Nov 2025 16:24:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6936C665EF5
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Nov 2025 17:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3163230EF7C;
-	Wed,  5 Nov 2025 16:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3BA34214C;
+	Wed,  5 Nov 2025 17:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DmopsFdP";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="PKq1zyDD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RJzAi+et"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE4686334
-	for <linux-arch@vger.kernel.org>; Wed,  5 Nov 2025 16:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C2B341656;
+	Wed,  5 Nov 2025 17:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762359879; cv=none; b=qCelsapfRGfjkhma1Ou8nTwiZk7DVMwe19Sqa5z9EuFBUsdE2rHWaqJTzSxorAkcJT6c/PjU9k28u10XELjVi6zKFq4uJiWvfVldOHIDR55Vm8B0JSHhKoU4qDHQymiRudD08U+OyY5JqEgKFhVqyTCwtSo42W/jQCWLaqKn4ZI=
+	t=1762363368; cv=none; b=NE3e4ysPfqcGgdgGTeGpJWZeDPq4BpPnTU9+AMSyZgTLo8s+BrjrzdsxDz08zlo9PKDAdz1LH8GWjrzupW5aBWGPCNIUIipowMEFHaIFjBsPqT9HXcdeX27Y3sdEzHCmftzJ+9Zg9vt6POJsDnFtEHP26g5NJ+hy59C1JcZHRO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762359879; c=relaxed/simple;
-	bh=Fflidx7xTzSLnI3Prwh+YYynUZ15M7y2pcYRBHfDZ5k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KQDmMWLm9NVcgKXPHMFn2tFBWagt84sJHKfNE95NDikV1FOTiWxHu384kjWPdguBaCjR2y7R1JpBrLvOW3zHk56029SDDlGLhyRMUSuAVIOx57lrYbLQ4ANEoCenY7kspCECK8Y0dQ0fzU3ERPuNpCogWA/GRlEJ27FvfAJGs6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DmopsFdP; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=PKq1zyDD; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762359876;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nPk6YcBuruLXQ/o+Uci3gsoXIOQlnGdWukNwLQbwsoc=;
-	b=DmopsFdP1EdJvoClL2S9EALuNLiB8sEYj6RifbSP342V8EqpKpo92ULT+JyUdn7Iw5/veS
-	bGzK1sb03J0NXHZb6wyERWVbWOPgPRCVsC63KkaOejukzp+hQUQNcmw2QFHgBwU1pw3aUX
-	bVc1JwRV53e/4rMfD5FTM7nbqzdG3PM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-yurvBqx0NxCtlkiVDDm25w-1; Wed, 05 Nov 2025 11:24:34 -0500
-X-MC-Unique: yurvBqx0NxCtlkiVDDm25w-1
-X-Mimecast-MFC-AGG-ID: yurvBqx0NxCtlkiVDDm25w_1762359873
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-429c8d07874so5587f8f.3
-        for <linux-arch@vger.kernel.org>; Wed, 05 Nov 2025 08:24:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762359873; x=1762964673; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nPk6YcBuruLXQ/o+Uci3gsoXIOQlnGdWukNwLQbwsoc=;
-        b=PKq1zyDDMhJz7TMdiLUGglU4RMfHBVbkqi6/8Gah/5D1lbA96wM/quVmfjDNhtPEGW
-         QlAFYeYHPzY2g7qgUkta3iTK+znskcZL9S5Ih9Sz2D/ogoU9rC8/O6uDEzbbUNzkqzvA
-         9D+Vj/Gc0IkvfEXKz2CMawAzkGR22bpqb1S0B/G3+Sp9VFmk73dElJOFjDyGSWERagWc
-         zU6YamwJXDnRvN6sI/FSRPN260fQUPYZuNIeXaV/iHuWNVhjf528TnDyXdJ48+/vAAHA
-         zlT17Xl4V0N9tF0ujowitHIYj9GKzGloATTxMP0xd3OGkJwHs6STVgiwv8Ai0TdRl8TO
-         ssdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762359873; x=1762964673;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nPk6YcBuruLXQ/o+Uci3gsoXIOQlnGdWukNwLQbwsoc=;
-        b=XtfL+Ena2j6Bm/s/L+3wFbuztMaAKSNJh7PKeanmj5A6UcLVBr8zDK49TMBJU2HeBF
-         UQviVC2tQRO/MXgKfm+fE/YGJVdZktojNvZfin9Lgq20S+0Bf1+RPbxUjA98ue/VZn9w
-         1GeOp/O6ZxDd4+V8TRumw3Mmx+Q/oxelnfJzwi67r/SGI28KrTdP8Ry3BFSxkA2MAf4k
-         uPWhCGq+lUcQktjMDYLtfCyKMPghKa1x6fu7R2oRU3n+fCnWHnXylo4lr79HOoPcYkac
-         X+LoHwLZCIdt7lAqJ2XXDJBCJ+P+zXZkT8yYMnDkUo9urfEYt0PeghQOC5Xrsht8AU3S
-         3hzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVN6W59dZhAdA/7H37GVSAgldLEg3kmH+MnPu3Ho+vg/UgwU1kV6dhwsEq6hE6p0iiBoL9/f3gaCNl3@vger.kernel.org
-X-Gm-Message-State: AOJu0YwM1KGz6mJSkyE90GaAQMGeefLJjuFMesxOCB9Gq+72HHvzvBya
-	XlZlO7HaCDaPiOrH9/N/UF70yX1Gyy2e1eefJrdcCyyDSjCLcN2g/MEbkvaj+6HqhEKkmgwSzBg
-	rFxH6E1mCmpjdiuRQoE9+Y4NA/YBHXor4/2y5Gj15hLQZ9FphNtJ/lZLghQTKZyc=
-X-Gm-Gg: ASbGncvh8VsmPQA8FTWq/CbE9S2Wm+tnTac+mT+AaWIw60dlIeTU/lpYJx0UmWyBaFb
-	IffH9Q5U1i9h4Y/2fQZ+qpd56R90x/qZh8d7QNjgzLheXbecS2YiROPzFa/r55QqF4LFc7QNERl
-	KVWiEDDiTL9jtWKZxF6Kta18lM8LBKgS+tfmlkdA/sJjrP31Y27ToYlH4tqW2D+QxdRmFgOZERm
-	YMdvKPE9MGXyZ3kRci+Ve8KHCPz6PsHLoH17hc8w1/1TvuHHUdUHTwQ389H0ehUPlWTD6yoQR0l
-	q6WGzM6vPNrmZv06hy/fqMobGblGQ4eGbK3BYbuN52+LakQ1AkAYP21Fov0XfkYu1qAKzoInSWx
-	7FIpQw1lVVzQgeAxTguTtMSw0Yn18F02t6xkyAAFiN7UtODwSgrU+LEQrD2Lo
-X-Received: by 2002:a05:6000:2907:b0:429:d4c2:cadb with SMTP id ffacd0b85a97d-429e3311ac6mr3563196f8f.58.1762359873174;
-        Wed, 05 Nov 2025 08:24:33 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEL75fsQ0H2l1YahgWByyszuFW6670iMBa0il80FwPsU0pgmLcV2khMdpXTiSamLH801kgv9g==
-X-Received: by 2002:a05:6000:2907:b0:429:d4c2:cadb with SMTP id ffacd0b85a97d-429e3311ac6mr3563132f8f.58.1762359872637;
-        Wed, 05 Nov 2025 08:24:32 -0800 (PST)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-135-146.abo.bbox.fr. [213.44.135.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429dc1fd2a7sm11003113f8f.39.2025.11.05.08.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 08:24:31 -0800 (PST)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, rcu@vger.kernel.org, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
- Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann
- <arnd@arndb.de>, "Paul E. McKenney" <paulmck@kernel.org>, Jason Baron
- <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel
- <ardb@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, "David S.
- Miller" <davem@davemloft.net>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
- Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Mel Gorman <mgorman@suse.de>, Andrew
- Morton <akpm@linux-foundation.org>, Masahiro Yamada
- <masahiroy@kernel.org>, Han Shen <shenhan@google.com>, Rik van Riel
- <riel@surriel.com>, Jann Horn <jannh@google.com>, Dan Carpenter
- <dan.carpenter@linaro.org>, Oleg Nesterov <oleg@redhat.com>, Juri Lelli
- <juri.lelli@redhat.com>, Clark Williams <williams@redhat.com>, Yair
- Podemsky <ypodemsk@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
- Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [PATCH v6 00/29] context_tracking,x86: Defer some IPIs until a
- user->kernel transition
-In-Reply-To: <aQJLpSYz3jdazzdb@localhost.localdomain>
-References: <20251010153839.151763-1-vschneid@redhat.com>
- <aQDuY3rgOK-L8D04@localhost.localdomain>
- <xhsmhzf9aov51.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <aQJLpSYz3jdazzdb@localhost.localdomain>
-Date: Wed, 05 Nov 2025 17:24:29 +0100
-Message-ID: <xhsmh8qgk5txe.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1762363368; c=relaxed/simple;
+	bh=4gfOWwW0GFfhp9pQAKvKIhPMiQyCt9baT5qwGYjaEoU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RIzb7RGZQLjtxxcD4c+jdUu+qZ5mrFUJuPIiqt8qLrh2OoMGbG5LSh8OW4VxOg4ckQm59OYAHvPK0avZWGo+vvvfH2gk8O3l2JEmjKE9tge5UrCSbFnYUSICpnJCZyXd0SoKcACoWGVBR6MHmr7YtY8eq3+06/cflRPHFs9rtqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RJzAi+et; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762363366; x=1793899366;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4gfOWwW0GFfhp9pQAKvKIhPMiQyCt9baT5qwGYjaEoU=;
+  b=RJzAi+etWLsi25WoUVov9tGmfwitKXK0me6TMxp+4MKkZIANthiip0L8
+   1nNp7Ht0fojlYaRSE07D+K7vqSgZLlI6Fh/DPq68qLO1RVqn+lX1VbzC+
+   xnspjVKVk2LBPqNGi36Wi11Ty2v0VoODxhTgG+jVcDwdPl3M8gihcpsTs
+   JAw1mYJi6J9Ye0gPva8y8MYVv2o3r2HkMU1YIWVhsJten0NqtuMk+h9/Y
+   MRwKidlV8eu7L9+iVGR5V5RmX6LD6OhSAGKBJRYHbHrj5TtTOVuyJFqrc
+   /a0vDwBCwjJMMZ9xiSeQYxH1jwQUNp6NmeNoXQhY5dfZ1j241a42DlKsS
+   Q==;
+X-CSE-ConnectionGUID: SrBx/XnRR6ymVmxBb0tFgg==
+X-CSE-MsgGUID: N5uB3qrfRWiXHmlRzKxSwA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="68138873"
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="68138873"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 09:22:45 -0800
+X-CSE-ConnectionGUID: TKbHJc1sSSK5BwuR0hqAkQ==
+X-CSE-MsgGUID: ethfkIvNQum9yX43XwuImw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="192686787"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 05 Nov 2025 09:22:36 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vGhCC-000SvP-2a;
+	Wed, 05 Nov 2025 17:21:38 +0000
+Date: Thu, 6 Nov 2025 01:16:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Mina Almasry <almasrymina@google.com>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v6 4/6] net: devmem: add SO_DEVMEM_AUTORELEASE
+ for autorelease control
+Message-ID: <202511060041.0DVnS1CV-lkp@intel.com>
+References: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-4-ea98cf4d40b3@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-4-ea98cf4d40b3@meta.com>
 
-On 29/10/25 18:15, Frederic Weisbecker wrote:
-> Le Wed, Oct 29, 2025 at 11:32:58AM +0100, Valentin Schneider a =C3=A9crit=
- :
->> I need to have a think about that one; one pain point I see is the conte=
-xt
->> tracking work has to be NMI safe since e.g. an NMI can take us out of
->> userspace. Another is that NOHZ-full CPUs need to be special cased in the
->> stop machine queueing / completion.
->>
->> /me goes fetch a new notebook
->
-> Something like the below (untested) ?
->
+Hi Bobby,
 
-Some minor nits below but otherwise that looks promising.
+kernel test robot noticed the following build errors:
 
-One problem I'm having however is reasoning about the danger zone; what
-forbidden actions could a NO_HZ_FULL CPU take when entering the kernel
-while take_cpu_down() is happening?
+[auto build test ERROR on 255d75ef029f33f75fcf5015052b7302486f7ad2]
 
-I'm actually not familiar with why we actually use stop_machine() for CPU
-hotplug; I see things like CPUHP_AP_SMPCFD_DYING::smpcfd_dying_cpu() or
-CPUHP_AP_TICK_DYING::tick_cpu_dying() expect other CPUs to be patiently
-spinning in multi_cpu_stop(), and I *think* nothing in the entry code up to
-context_tracking entry would disrupt that, but it's not a small thing to
-reason about.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/net-devmem-rename-tx_vec-to-vec-in-dmabuf-binding/20251105-092703
+base:   255d75ef029f33f75fcf5015052b7302486f7ad2
+patch link:    https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-4-ea98cf4d40b3%40meta.com
+patch subject: [PATCH net-next v6 4/6] net: devmem: add SO_DEVMEM_AUTORELEASE for autorelease control
+config: sparc64-randconfig-002-20251105 (https://download.01.org/0day-ci/archive/20251106/202511060041.0DVnS1CV-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 10.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511060041.0DVnS1CV-lkp@intel.com/reproduce)
 
-AFAICT we need to reason about every .teardown callback from
-CPUHP_TEARDOWN_CPU to CPUHP_AP_OFFLINE and their explicit & implicit
-dependencies on other CPUs being STOP'd.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511060041.0DVnS1CV-lkp@intel.com/
 
-> @@ -176,6 +177,68 @@ struct multi_stop_data {
->       atomic_t		thread_ack;
->  };
->
-> +static DEFINE_PER_CPU(int, stop_machine_poll);
-> +
-> +void stop_machine_poll_wait(void)
+All errors (new ones prefixed by >>):
 
-That needs to be noinstr, and AFAICT there's no problem with doing just tha=
-t.
+   net/core/sock.c: In function 'sk_setsockopt':
+>> net/core/sock.c:1395:7: error: 'SO_DEVMEM_AUTORELEASE' undeclared (first use in this function)
+    1395 |  case SO_DEVMEM_AUTORELEASE:
+         |       ^~~~~~~~~~~~~~~~~~~~~
+   net/core/sock.c:1395:7: note: each undeclared identifier is reported only once for each function it appears in
+   net/core/sock.c: In function 'sk_getsockopt':
+   net/core/sock.c:2255:7: error: 'SO_DEVMEM_AUTORELEASE' undeclared (first use in this function)
+    2255 |  case SO_DEVMEM_AUTORELEASE:
+         |       ^~~~~~~~~~~~~~~~~~~~~
 
-> +{
-> +	int *poll =3D this_cpu_ptr(&stop_machine_poll);
-> +
-> +	while (*poll)
-> +		cpu_relax();
-> +	/* Enforce the work in stop machine to be visible */
-> +	smp_mb();
-> +}
-> +
-> +static void stop_machine_poll_start(struct multi_stop_data *msdata)
-> +{
-> +	int cpu;
-> +
-> +	if (housekeeping_enabled(HK_TYPE_KERNEL_NOISE))
 
-I think that wants a negation
+vim +/SO_DEVMEM_AUTORELEASE +1395 net/core/sock.c
 
-> +		return;
-> +
-> +	/* Random target can't be known in advance */
-> +	if (!msdata->active_cpus)
-> +		return;
+  1282	
+  1283	/*
+  1284	 *	This is meant for all protocols to use and covers goings on
+  1285	 *	at the socket level. Everything here is generic.
+  1286	 */
+  1287	
+  1288	int sk_setsockopt(struct sock *sk, int level, int optname,
+  1289			  sockptr_t optval, unsigned int optlen)
+  1290	{
+  1291		struct so_timestamping timestamping;
+  1292		struct socket *sock = sk->sk_socket;
+  1293		struct sock_txtime sk_txtime;
+  1294		int val;
+  1295		int valbool;
+  1296		struct linger ling;
+  1297		int ret = 0;
+  1298	
+  1299		/*
+  1300		 *	Options without arguments
+  1301		 */
+  1302	
+  1303		if (optname == SO_BINDTODEVICE)
+  1304			return sock_setbindtodevice(sk, optval, optlen);
+  1305	
+  1306		if (optlen < sizeof(int))
+  1307			return -EINVAL;
+  1308	
+  1309		if (copy_from_sockptr(&val, optval, sizeof(val)))
+  1310			return -EFAULT;
+  1311	
+  1312		valbool = val ? 1 : 0;
+  1313	
+  1314		/* handle options which do not require locking the socket. */
+  1315		switch (optname) {
+  1316		case SO_PRIORITY:
+  1317			if (sk_set_prio_allowed(sk, val)) {
+  1318				sock_set_priority(sk, val);
+  1319				return 0;
+  1320			}
+  1321			return -EPERM;
+  1322		case SO_TYPE:
+  1323		case SO_PROTOCOL:
+  1324		case SO_DOMAIN:
+  1325		case SO_ERROR:
+  1326			return -ENOPROTOOPT;
+  1327	#ifdef CONFIG_NET_RX_BUSY_POLL
+  1328		case SO_BUSY_POLL:
+  1329			if (val < 0)
+  1330				return -EINVAL;
+  1331			WRITE_ONCE(sk->sk_ll_usec, val);
+  1332			return 0;
+  1333		case SO_PREFER_BUSY_POLL:
+  1334			if (valbool && !sockopt_capable(CAP_NET_ADMIN))
+  1335				return -EPERM;
+  1336			WRITE_ONCE(sk->sk_prefer_busy_poll, valbool);
+  1337			return 0;
+  1338		case SO_BUSY_POLL_BUDGET:
+  1339			if (val > READ_ONCE(sk->sk_busy_poll_budget) &&
+  1340			    !sockopt_capable(CAP_NET_ADMIN))
+  1341				return -EPERM;
+  1342			if (val < 0 || val > U16_MAX)
+  1343				return -EINVAL;
+  1344			WRITE_ONCE(sk->sk_busy_poll_budget, val);
+  1345			return 0;
+  1346	#endif
+  1347		case SO_MAX_PACING_RATE:
+  1348			{
+  1349			unsigned long ulval = (val == ~0U) ? ~0UL : (unsigned int)val;
+  1350			unsigned long pacing_rate;
+  1351	
+  1352			if (sizeof(ulval) != sizeof(val) &&
+  1353			    optlen >= sizeof(ulval) &&
+  1354			    copy_from_sockptr(&ulval, optval, sizeof(ulval))) {
+  1355				return -EFAULT;
+  1356			}
+  1357			if (ulval != ~0UL)
+  1358				cmpxchg(&sk->sk_pacing_status,
+  1359					SK_PACING_NONE,
+  1360					SK_PACING_NEEDED);
+  1361			/* Pairs with READ_ONCE() from sk_getsockopt() */
+  1362			WRITE_ONCE(sk->sk_max_pacing_rate, ulval);
+  1363			pacing_rate = READ_ONCE(sk->sk_pacing_rate);
+  1364			if (ulval < pacing_rate)
+  1365				WRITE_ONCE(sk->sk_pacing_rate, ulval);
+  1366			return 0;
+  1367			}
+  1368		case SO_TXREHASH:
+  1369			if (!sk_is_tcp(sk))
+  1370				return -EOPNOTSUPP;
+  1371			if (val < -1 || val > 1)
+  1372				return -EINVAL;
+  1373			if ((u8)val == SOCK_TXREHASH_DEFAULT)
+  1374				val = READ_ONCE(sock_net(sk)->core.sysctl_txrehash);
+  1375			/* Paired with READ_ONCE() in tcp_rtx_synack()
+  1376			 * and sk_getsockopt().
+  1377			 */
+  1378			WRITE_ONCE(sk->sk_txrehash, (u8)val);
+  1379			return 0;
+  1380		case SO_PEEK_OFF:
+  1381			{
+  1382			int (*set_peek_off)(struct sock *sk, int val);
+  1383	
+  1384			set_peek_off = READ_ONCE(sock->ops)->set_peek_off;
+  1385			if (set_peek_off)
+  1386				ret = set_peek_off(sk, val);
+  1387			else
+  1388				ret = -EOPNOTSUPP;
+  1389			return ret;
+  1390			}
+  1391	#ifdef CONFIG_PAGE_POOL
+  1392		case SO_DEVMEM_DONTNEED:
+  1393			return sock_devmem_dontneed(sk, optval, optlen);
+  1394	
+> 1395		case SO_DEVMEM_AUTORELEASE:
+  1396			return sock_devmem_set_autorelease(sk, optval, optlen);
+  1397	#endif
+  1398		case SO_SNDTIMEO_OLD:
+  1399		case SO_SNDTIMEO_NEW:
+  1400			return sock_set_timeout(&sk->sk_sndtimeo, optval,
+  1401						optlen, optname == SO_SNDTIMEO_OLD);
+  1402		case SO_RCVTIMEO_OLD:
+  1403		case SO_RCVTIMEO_NEW:
+  1404			return sock_set_timeout(&sk->sk_rcvtimeo, optval,
+  1405						optlen, optname == SO_RCVTIMEO_OLD);
+  1406		}
+  1407	
+  1408		sockopt_lock_sock(sk);
+  1409	
+  1410		switch (optname) {
+  1411		case SO_DEBUG:
+  1412			if (val && !sockopt_capable(CAP_NET_ADMIN))
+  1413				ret = -EACCES;
+  1414			else
+  1415				sock_valbool_flag(sk, SOCK_DBG, valbool);
+  1416			break;
+  1417		case SO_REUSEADDR:
+  1418			sk->sk_reuse = (valbool ? SK_CAN_REUSE : SK_NO_REUSE);
+  1419			break;
+  1420		case SO_REUSEPORT:
+  1421			if (valbool && !sk_is_inet(sk))
+  1422				ret = -EOPNOTSUPP;
+  1423			else
+  1424				sk->sk_reuseport = valbool;
+  1425			break;
+  1426		case SO_DONTROUTE:
+  1427			sock_valbool_flag(sk, SOCK_LOCALROUTE, valbool);
+  1428			sk_dst_reset(sk);
+  1429			break;
+  1430		case SO_BROADCAST:
+  1431			sock_valbool_flag(sk, SOCK_BROADCAST, valbool);
+  1432			break;
+  1433		case SO_SNDBUF:
+  1434			/* Don't error on this BSD doesn't and if you think
+  1435			 * about it this is right. Otherwise apps have to
+  1436			 * play 'guess the biggest size' games. RCVBUF/SNDBUF
+  1437			 * are treated in BSD as hints
+  1438			 */
+  1439			val = min_t(u32, val, READ_ONCE(sysctl_wmem_max));
+  1440	set_sndbuf:
+  1441			/* Ensure val * 2 fits into an int, to prevent max_t()
+  1442			 * from treating it as a negative value.
+  1443			 */
+  1444			val = min_t(int, val, INT_MAX / 2);
+  1445			sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+  1446			WRITE_ONCE(sk->sk_sndbuf,
+  1447				   max_t(int, val * 2, SOCK_MIN_SNDBUF));
+  1448			/* Wake up sending tasks if we upped the value. */
+  1449			sk->sk_write_space(sk);
+  1450			break;
+  1451	
+  1452		case SO_SNDBUFFORCE:
+  1453			if (!sockopt_capable(CAP_NET_ADMIN)) {
+  1454				ret = -EPERM;
+  1455				break;
+  1456			}
+  1457	
+  1458			/* No negative values (to prevent underflow, as val will be
+  1459			 * multiplied by 2).
+  1460			 */
+  1461			if (val < 0)
+  1462				val = 0;
+  1463			goto set_sndbuf;
+  1464	
+  1465		case SO_RCVBUF:
+  1466			/* Don't error on this BSD doesn't and if you think
+  1467			 * about it this is right. Otherwise apps have to
+  1468			 * play 'guess the biggest size' games. RCVBUF/SNDBUF
+  1469			 * are treated in BSD as hints
+  1470			 */
+  1471			__sock_set_rcvbuf(sk, min_t(u32, val, READ_ONCE(sysctl_rmem_max)));
+  1472			break;
+  1473	
+  1474		case SO_RCVBUFFORCE:
+  1475			if (!sockopt_capable(CAP_NET_ADMIN)) {
+  1476				ret = -EPERM;
+  1477				break;
+  1478			}
+  1479	
+  1480			/* No negative values (to prevent underflow, as val will be
+  1481			 * multiplied by 2).
+  1482			 */
+  1483			__sock_set_rcvbuf(sk, max(val, 0));
+  1484			break;
+  1485	
+  1486		case SO_KEEPALIVE:
+  1487			if (sk->sk_prot->keepalive)
+  1488				sk->sk_prot->keepalive(sk, valbool);
+  1489			sock_valbool_flag(sk, SOCK_KEEPOPEN, valbool);
+  1490			break;
+  1491	
+  1492		case SO_OOBINLINE:
+  1493			sock_valbool_flag(sk, SOCK_URGINLINE, valbool);
+  1494			break;
+  1495	
+  1496		case SO_NO_CHECK:
+  1497			sk->sk_no_check_tx = valbool;
+  1498			break;
+  1499	
+  1500		case SO_LINGER:
+  1501			if (optlen < sizeof(ling)) {
+  1502				ret = -EINVAL;	/* 1003.1g */
+  1503				break;
+  1504			}
+  1505			if (copy_from_sockptr(&ling, optval, sizeof(ling))) {
+  1506				ret = -EFAULT;
+  1507				break;
+  1508			}
+  1509			if (!ling.l_onoff) {
+  1510				sock_reset_flag(sk, SOCK_LINGER);
+  1511			} else {
+  1512				unsigned long t_sec = ling.l_linger;
+  1513	
+  1514				if (t_sec >= MAX_SCHEDULE_TIMEOUT / HZ)
+  1515					WRITE_ONCE(sk->sk_lingertime, MAX_SCHEDULE_TIMEOUT);
+  1516				else
+  1517					WRITE_ONCE(sk->sk_lingertime, t_sec * HZ);
+  1518				sock_set_flag(sk, SOCK_LINGER);
+  1519			}
+  1520			break;
+  1521	
+  1522		case SO_BSDCOMPAT:
+  1523			break;
+  1524	
+  1525		case SO_TIMESTAMP_OLD:
+  1526		case SO_TIMESTAMP_NEW:
+  1527		case SO_TIMESTAMPNS_OLD:
+  1528		case SO_TIMESTAMPNS_NEW:
+  1529			sock_set_timestamp(sk, optname, valbool);
+  1530			break;
+  1531	
+  1532		case SO_TIMESTAMPING_NEW:
+  1533		case SO_TIMESTAMPING_OLD:
+  1534			if (optlen == sizeof(timestamping)) {
+  1535				if (copy_from_sockptr(&timestamping, optval,
+  1536						      sizeof(timestamping))) {
+  1537					ret = -EFAULT;
+  1538					break;
+  1539				}
+  1540			} else {
+  1541				memset(&timestamping, 0, sizeof(timestamping));
+  1542				timestamping.flags = val;
+  1543			}
+  1544			ret = sock_set_timestamping(sk, optname, timestamping);
+  1545			break;
+  1546	
+  1547		case SO_RCVLOWAT:
+  1548			{
+  1549			int (*set_rcvlowat)(struct sock *sk, int val) = NULL;
+  1550	
+  1551			if (val < 0)
+  1552				val = INT_MAX;
+  1553			if (sock)
+  1554				set_rcvlowat = READ_ONCE(sock->ops)->set_rcvlowat;
+  1555			if (set_rcvlowat)
+  1556				ret = set_rcvlowat(sk, val);
+  1557			else
+  1558				WRITE_ONCE(sk->sk_rcvlowat, val ? : 1);
+  1559			break;
+  1560			}
+  1561		case SO_ATTACH_FILTER: {
+  1562			struct sock_fprog fprog;
+  1563	
+  1564			ret = copy_bpf_fprog_from_user(&fprog, optval, optlen);
+  1565			if (!ret)
+  1566				ret = sk_attach_filter(&fprog, sk);
+  1567			break;
+  1568		}
+  1569		case SO_ATTACH_BPF:
+  1570			ret = -EINVAL;
+  1571			if (optlen == sizeof(u32)) {
+  1572				u32 ufd;
+  1573	
+  1574				ret = -EFAULT;
+  1575				if (copy_from_sockptr(&ufd, optval, sizeof(ufd)))
+  1576					break;
+  1577	
+  1578				ret = sk_attach_bpf(ufd, sk);
+  1579			}
+  1580			break;
+  1581	
+  1582		case SO_ATTACH_REUSEPORT_CBPF: {
+  1583			struct sock_fprog fprog;
+  1584	
+  1585			ret = copy_bpf_fprog_from_user(&fprog, optval, optlen);
+  1586			if (!ret)
+  1587				ret = sk_reuseport_attach_filter(&fprog, sk);
+  1588			break;
+  1589		}
+  1590		case SO_ATTACH_REUSEPORT_EBPF:
+  1591			ret = -EINVAL;
+  1592			if (optlen == sizeof(u32)) {
+  1593				u32 ufd;
+  1594	
+  1595				ret = -EFAULT;
+  1596				if (copy_from_sockptr(&ufd, optval, sizeof(ufd)))
+  1597					break;
+  1598	
+  1599				ret = sk_reuseport_attach_bpf(ufd, sk);
+  1600			}
+  1601			break;
+  1602	
+  1603		case SO_DETACH_REUSEPORT_BPF:
+  1604			ret = reuseport_detach_prog(sk);
+  1605			break;
+  1606	
+  1607		case SO_DETACH_FILTER:
+  1608			ret = sk_detach_filter(sk);
+  1609			break;
+  1610	
+  1611		case SO_LOCK_FILTER:
+  1612			if (sock_flag(sk, SOCK_FILTER_LOCKED) && !valbool)
+  1613				ret = -EPERM;
+  1614			else
+  1615				sock_valbool_flag(sk, SOCK_FILTER_LOCKED, valbool);
+  1616			break;
+  1617	
+  1618		case SO_MARK:
+  1619			if (!sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
+  1620			    !sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
+  1621				ret = -EPERM;
+  1622				break;
+  1623			}
+  1624	
+  1625			__sock_set_mark(sk, val);
+  1626			break;
+  1627		case SO_RCVMARK:
+  1628			sock_valbool_flag(sk, SOCK_RCVMARK, valbool);
+  1629			break;
+  1630	
+  1631		case SO_RCVPRIORITY:
+  1632			sock_valbool_flag(sk, SOCK_RCVPRIORITY, valbool);
+  1633			break;
+  1634	
+  1635		case SO_RXQ_OVFL:
+  1636			sock_valbool_flag(sk, SOCK_RXQ_OVFL, valbool);
+  1637			break;
+  1638	
+  1639		case SO_WIFI_STATUS:
+  1640			sock_valbool_flag(sk, SOCK_WIFI_STATUS, valbool);
+  1641			break;
+  1642	
+  1643		case SO_NOFCS:
+  1644			sock_valbool_flag(sk, SOCK_NOFCS, valbool);
+  1645			break;
+  1646	
+  1647		case SO_SELECT_ERR_QUEUE:
+  1648			sock_valbool_flag(sk, SOCK_SELECT_ERR_QUEUE, valbool);
+  1649			break;
+  1650	
+  1651		case SO_PASSCRED:
+  1652			if (sk_may_scm_recv(sk))
+  1653				sk->sk_scm_credentials = valbool;
+  1654			else
+  1655				ret = -EOPNOTSUPP;
+  1656			break;
+  1657	
+  1658		case SO_PASSSEC:
+  1659			if (IS_ENABLED(CONFIG_SECURITY_NETWORK) && sk_may_scm_recv(sk))
+  1660				sk->sk_scm_security = valbool;
+  1661			else
+  1662				ret = -EOPNOTSUPP;
+  1663			break;
+  1664	
+  1665		case SO_PASSPIDFD:
+  1666			if (sk_is_unix(sk))
+  1667				sk->sk_scm_pidfd = valbool;
+  1668			else
+  1669				ret = -EOPNOTSUPP;
+  1670			break;
+  1671	
+  1672		case SO_PASSRIGHTS:
+  1673			if (sk_is_unix(sk))
+  1674				sk->sk_scm_rights = valbool;
+  1675			else
+  1676				ret = -EOPNOTSUPP;
+  1677			break;
+  1678	
+  1679		case SO_INCOMING_CPU:
+  1680			reuseport_update_incoming_cpu(sk, val);
+  1681			break;
+  1682	
+  1683		case SO_CNX_ADVICE:
+  1684			if (val == 1)
+  1685				dst_negative_advice(sk);
+  1686			break;
+  1687	
+  1688		case SO_ZEROCOPY:
+  1689			if (sk->sk_family == PF_INET || sk->sk_family == PF_INET6) {
+  1690				if (!(sk_is_tcp(sk) ||
+  1691				      (sk->sk_type == SOCK_DGRAM &&
+  1692				       sk->sk_protocol == IPPROTO_UDP)))
+  1693					ret = -EOPNOTSUPP;
+  1694			} else if (sk->sk_family != PF_RDS) {
+  1695				ret = -EOPNOTSUPP;
+  1696			}
+  1697			if (!ret) {
+  1698				if (val < 0 || val > 1)
+  1699					ret = -EINVAL;
+  1700				else
+  1701					sock_valbool_flag(sk, SOCK_ZEROCOPY, valbool);
+  1702			}
+  1703			break;
+  1704	
+  1705		case SO_TXTIME:
+  1706			if (optlen != sizeof(struct sock_txtime)) {
+  1707				ret = -EINVAL;
+  1708				break;
+  1709			} else if (copy_from_sockptr(&sk_txtime, optval,
+  1710				   sizeof(struct sock_txtime))) {
+  1711				ret = -EFAULT;
+  1712				break;
+  1713			} else if (sk_txtime.flags & ~SOF_TXTIME_FLAGS_MASK) {
+  1714				ret = -EINVAL;
+  1715				break;
+  1716			}
+  1717			/* CLOCK_MONOTONIC is only used by sch_fq, and this packet
+  1718			 * scheduler has enough safe guards.
+  1719			 */
+  1720			if (sk_txtime.clockid != CLOCK_MONOTONIC &&
+  1721			    !sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
+  1722				ret = -EPERM;
+  1723				break;
+  1724			}
+  1725	
+  1726			ret = sockopt_validate_clockid(sk_txtime.clockid);
+  1727			if (ret)
+  1728				break;
+  1729	
+  1730			sock_valbool_flag(sk, SOCK_TXTIME, true);
+  1731			sk->sk_clockid = sk_txtime.clockid;
+  1732			sk->sk_txtime_deadline_mode =
+  1733				!!(sk_txtime.flags & SOF_TXTIME_DEADLINE_MODE);
+  1734			sk->sk_txtime_report_errors =
+  1735				!!(sk_txtime.flags & SOF_TXTIME_REPORT_ERRORS);
+  1736			break;
+  1737	
+  1738		case SO_BINDTOIFINDEX:
+  1739			ret = sock_bindtoindex_locked(sk, val);
+  1740			break;
+  1741	
+  1742		case SO_BUF_LOCK:
+  1743			if (val & ~SOCK_BUF_LOCK_MASK) {
+  1744				ret = -EINVAL;
+  1745				break;
+  1746			}
+  1747			sk->sk_userlocks = val | (sk->sk_userlocks &
+  1748						  ~SOCK_BUF_LOCK_MASK);
+  1749			break;
+  1750	
+  1751		case SO_RESERVE_MEM:
+  1752		{
+  1753			int delta;
+  1754	
+  1755			if (val < 0) {
+  1756				ret = -EINVAL;
+  1757				break;
+  1758			}
+  1759	
+  1760			delta = val - sk->sk_reserved_mem;
+  1761			if (delta < 0)
+  1762				sock_release_reserved_memory(sk, -delta);
+  1763			else
+  1764				ret = sock_reserve_memory(sk, delta);
+  1765			break;
+  1766		}
+  1767	
+  1768		default:
+  1769			ret = -ENOPROTOOPT;
+  1770			break;
+  1771		}
+  1772		sockopt_release_sock(sk);
+  1773		return ret;
+  1774	}
+  1775	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
