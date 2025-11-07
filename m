@@ -1,182 +1,150 @@
-Return-Path: <linux-arch+bounces-14561-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14562-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D50E3C3FC58
-	for <lists+linux-arch@lfdr.de>; Fri, 07 Nov 2025 12:45:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 460A7C3FFD3
+	for <lists+linux-arch@lfdr.de>; Fri, 07 Nov 2025 13:51:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 599281892EC5
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Nov 2025 11:45:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F3F7B4EF6F6
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Nov 2025 12:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D54225A631;
-	Fri,  7 Nov 2025 11:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCA7284889;
+	Fri,  7 Nov 2025 12:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XXWmGg0J"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="qChaefVE";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nQuoyt1G"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951CD2DF3DA
-	for <linux-arch@vger.kernel.org>; Fri,  7 Nov 2025 11:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDAE28507B;
+	Fri,  7 Nov 2025 12:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762515919; cv=none; b=Ns2ykSduSpvfbwS905rScplJMtuxgbPzi69D4HMaK/79/lHkNTwToiXPqTt2+GpaHC8Il/tvxRXRNJh6QT3J2jDjGma3lYKPJVSDkP3KHdn+ZvjUdBhd14CBxqniyTRpJS9Sbc8XHbomjwzos4KqiX8b3asbHyny/YwqnPkRCpM=
+	t=1762519830; cv=none; b=oN4L26h4jKqNQ9WA48M5Oq/VCt0aOLIdV5rPTzWNGjcBzmnietr71SF9uGrX5PlTLLmPFZvg91+aXMOoP/RPWDCVg2tuitPWYFD/rOWzB4IIfIfLCcWYpH7Ad9zgbPQbvK9vJ4pe4Gv5hvfgGxhZQaFzoyA0SH+gLmPchjE+Ztk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762515919; c=relaxed/simple;
-	bh=J/aI4rKmxspso1/MCo9q/nVgTvxtSI/RPPnCjmkZ3cE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cNFHgGX0w5TYy0fHB41AwHYFbsulkGoJJ0pkSVhDZsVPNVQdm/3REWzzUKPtqhw7BMZzuji0s/F9MFPjaw8Z05jr+UpBwiqOYrJbk65uFBoMH49T6ToQEBph/lyw6uKUFm26I/rNjcwlQb615jv5QYBeqervgUCpd7Zg/45mSNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XXWmGg0J; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7aad4823079so619989b3a.0
-        for <linux-arch@vger.kernel.org>; Fri, 07 Nov 2025 03:45:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762515917; x=1763120717; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P3UolEFy3bRdP252sm4YQ2agYywAUHuWFJXJIEy7jek=;
-        b=XXWmGg0JNlez0SkMg/AnaDYb2Wpi62VZD0MkDPerJyygC5aaRMGj9IQN74kgFkCyce
-         5WwkqZm8qEK98/7Ya2ux08ftJkb2p4VNM0AFVjVeHwAk1+6D9+1Vmm2pjeD+aBv9wZm3
-         enToORStbQohav9T3DxlfAAF6UaEUhLYOoKPpQgvlGszLozaQgC/jVj+9qYmOzHfOlyh
-         LNcPpeVlmdoO2jqweVMHg0tFWwm1A5ybSBNnj72NIxmBdmPXTCRmdqEfv6ZSIJH5ALJ6
-         g2jL70O3JTJXhOjBgJN5fodEytNc5s9lgDUcMWqriAmfPGcNJG33VGA+ygVoonLZS16g
-         8STw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762515917; x=1763120717;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=P3UolEFy3bRdP252sm4YQ2agYywAUHuWFJXJIEy7jek=;
-        b=XHWIO9tX9sP55deV8q28B/60Wjf6FZWNpRZDGRV41Eeq6/lbXmxELoqaGSCrewIaEa
-         +47nYwAHkpO8vvucAZLxr1JFcCGES50/UWV9vWNnZ5C7JTA1ocK89eaO6ZdrAd1dCdw3
-         eNiy4Uzjrv5ucUnhXd48Ld5AE/hIC1fqsU6DqUkglDHbZuulFopaVm92116Lzx+VAjvR
-         pD2KsuCOLr1OpQ+QLlwJK02ogTVlDYtS8d8ZTmdYaPSMw6exqWrNZfgpWfn8rxQ6fUvT
-         sRJAwoicdUhi5vkWVBSLWvmxdxmbgOusATZ8h2caALMtQS8NlK71ddr1QR9LsbzoQuej
-         oD5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUzbYT6168KnLQ5hvY0+RHQLg+EtMpNbvbEZe7OXJLir41qhCuzvRgCpGpkiqcnPlux7z7lXYWaIOx0@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfTHMs+LKt0gk61FrszKWGBWkaOgKHFBleu7NGtT4aMxmwBwYu
-	lF4PN6WOv1/754Y4HNaUWpO5QORCzikSphYsVoD4C6wp4IFjyCCehrR4
-X-Gm-Gg: ASbGncuMD5vQEyBUah0l9xZScJcn+O+7yiNLIJhacKM7n3F88zEFWLhb2H/75kJ5TKw
-	63YUasK4WS+suYp+Era28Bdfv1+rHMTfFw0w4/fFf2M0eXseA0/c2znCyTypp9bn1ZX1BmOKk7U
-	l/mV160m91PQAgO3p9F4iy8Nay6qxSMCFMesPUC6GLp6OThSMZqBvcAvdrXUBdcaWbSIr9fWlxG
-	PerBwj5+OjABhTFqPMd9ZsRuQT41uPwrRwxG8LIhAU6U4I/B4WP1x2Y3YzrYgzX65RB1+V4oJrI
-	6rKx68QEr0sI0Epyketqwxvuf66f17quCUh+7dXJU7oONMUX9yDOhqhUGKvZIHVZ9bBqpIt7F6d
-	7rxfG9L7gfWQ4THuT8Cq9j7Gv9mrYtZsxKFV4saVnfZQ+btqfS9l4RTq2yjQ9Ontz2ZcLJg7FlJ
-	UgyW+E
-X-Google-Smtp-Source: AGHT+IEgK3+y79M6QAxgxitqK9nN+XnGR2GDAi2/FrE6+S2IrZU3wlJefPhdXptP4GRU9s4WXBb9ew==
-X-Received: by 2002:a17:90b:35cf:b0:340:e8e9:cc76 with SMTP id 98e67ed59e1d1-3434c4eca56mr3374514a91.11.1762515916704;
-        Fri, 07 Nov 2025 03:45:16 -0800 (PST)
-Received: from EBJ9932692.tcent.cn ([43.129.202.66])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0ca1e718asm2717145b3a.30.2025.11.07.03.45.12
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 07 Nov 2025 03:45:16 -0800 (PST)
-From: Lance Yang <ioworker0@gmail.com>
-To: chenhuacai@loongson.cn
-Cc: akpm@linux-foundation.org,
-	arnd@arndb.de,
-	chenhuacai@kernel.org,
-	jack@suse.cz,
-	kevin.brodsky@arm.com,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	david@kernel.org,
-	lorenzo.stoakes@oracle.com,
-	vishal.moola@gmail.com,
-	Lance Yang <lance.yang@linux.dev>
-Subject: Re: [PATCH Resend] mm: Refine __{pgd,p4d,pud,pmd,pte}_alloc_one_*() about HIGHMEM
-Date: Fri,  7 Nov 2025 19:44:55 +0800
-Message-ID: <20251107114455.59111-1-ioworker0@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20251107095922.3106390-1-chenhuacai@loongson.cn>
-References: <20251107095922.3106390-1-chenhuacai@loongson.cn>
+	s=arc-20240116; t=1762519830; c=relaxed/simple;
+	bh=pAGwvfl0H7mdN4CM0rfF4FNsJkd5mKjss2RM62GObLA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=HWUOIeJQ+JGCsVnQ6SL8va+BLYS8/Wj2VqDBnFOn09NLMCdphZCyT2d577P1OfReiwTGGlhmV5xR+1scO30wYQXg0lq/jWjAaXthVT7BYEFGPFmewo71UZA3m+6TjZAyegpao9RLkUTnU+m2or5INxc/BJgWadIk+6zLPsvLvww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=qChaefVE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nQuoyt1G; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 4E452EC02A9;
+	Fri,  7 Nov 2025 07:50:27 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Fri, 07 Nov 2025 07:50:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1762519827;
+	 x=1762606227; bh=3C46CBmXvkNh/lNjT5LsxgIlwhV7BbbpfhRABJ49noQ=; b=
+	qChaefVEsgOZdf6lVF15n4ab38MYqDzr1mqd/5XHKwbiMkHaV5Dpmq9lC6UY3nvH
+	NLLARRlbmvHW9qvCr5nkfH2PW/80SVSWwScra/KDzw++XDKmOT29+VjlGRyMvFlL
+	O2J0jgHOUHpWHpUD2Zsxi9m6yURAuJGKcE7tFkSHLIPRjuHb7JjQ3S5O5OpOZHWZ
+	rhlMnpHKan2SVqGuYZBOSEpNsVqtdD3GYqeXAeh2XXXX1XPQnkZSV7zRxPZCFbRe
+	kOf7OnxwwSvLD8Jtztvr83sjMCdAmxmEpaigTovocm8YROIPRKSO6ZFP4IyIJ4V6
+	dNbfXrjQqpEwBuZUe2p9xg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762519827; x=
+	1762606227; bh=3C46CBmXvkNh/lNjT5LsxgIlwhV7BbbpfhRABJ49noQ=; b=n
+	Quoyt1GkFfWLYSqEEnibICGaxv4GhAWsUOcAfICcb+O6WBR/Rlkdfxz6OdjmAfdB
+	+LX3ULKcF+9kpM4K/OBBoEPadUP6+BkG4nktOdyeElK5gNvA9M/Xh0RjlaQW8ZkX
+	BTZ4xfJsqKxvwLt+HTDiFYApHblC5GL+CCAkFUXtQH0u+lpj+g/I0uk+Seipos5P
+	WePnZlT6j3JCKl6+64pc12MltjukZ4KKBY04u5DN+fiNyckiRZouyYQf+U9LJ8We
+	DFC51um+oBHVlYWVj1Ob/fRXZgBjhYAxo/HQfpA1Gpa7IBxxYRkVc2IJRFFMf+LO
+	GxIpaiwqrpos5Yz2WSKbg==
+X-ME-Sender: <xms:EusNaXe9cGgx0dI-PeJ5w3StTzQ9h72ZQBBez2U254nuiMPPCA1eVg>
+    <xme:EusNaYBpfHkPJWs8qd_EnBU66ZZftLJQviuvpfzUM8CC1xpKlEycwVu-LGnVwH980
+    C6p8jhEg0RIu-L8JoeqJmOZRJd0nOQW_1jSIl_T94WPXQ5fYw2r3As>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddukeeljeduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudefpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehkvghvihhnrdgsrhhoughskhihsegrrhhmrdgtohhmpdhrtghpth
+    htohepihhofihorhhkvghrtdesghhmrghilhdrtghomhdprhgtphhtthhopehvihhshhgr
+    lhdrmhhoohhlrgesghhmrghilhdrtghomhdprhgtphhtthhopegthhgvnhhhuhgrtggrih
+    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheplhhinhhugidqmhhmsehkvhgrtghkrdhorhhgpdhrtghpthhtoheprg
+    hkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlrghn
+    tggvrdihrghngheslhhinhhugidruggvvhdprhgtphhtthhopegthhgvnhhhuhgrtggrih
+    eslhhoohhnghhsohhnrdgtnh
+X-ME-Proxy: <xmx:EusNabR-hy4dOJ6b7ZA8_OFZ906Sv72CGyDtu6rj06WnoCapJDAqAA>
+    <xmx:EusNaZf2IH8cXFinuUPh-BfmQ8e6WYQh-EMZSzWReoRJff04oWaKnA>
+    <xmx:EusNaUuLtn1Ywbkws_-PhRTvfwWOoFFn5Kdzpe5Vu10hRHz0PJV0-A>
+    <xmx:EusNaVKkyJhqbpZVHw5r5dtgmXjTIEYS4wun2GGp7vf5IzK2kWW1Zw>
+    <xmx:E-sNaWadqPTvujXbbeGKAQETVX3PdlND9csF6KeOmKufF6lgMZO8MUNA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 572CF70006B; Fri,  7 Nov 2025 07:50:26 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AvUhhSuyoH3V
+Date: Fri, 07 Nov 2025 13:50:06 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Lance Yang" <ioworker0@gmail.com>, "Huacai Chen" <chenhuacai@loongson.cn>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "Jan Kara" <jack@suse.cz>,
+ "Kevin Brodsky" <kevin.brodsky@arm.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, david@kernel.org,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, vishal.moola@gmail.com,
+ "Lance Yang" <lance.yang@linux.dev>
+Message-Id: <f0efca40-aa3b-41ba-a8e4-c9595c19778e@app.fastmail.com>
+In-Reply-To: <20251107114455.59111-1-ioworker0@gmail.com>
+References: <20251107095922.3106390-1-chenhuacai@loongson.cn>
+ <20251107114455.59111-1-ioworker0@gmail.com>
+Subject: Re: [PATCH Resend] mm: Refine __{pgd,p4d,pud,pmd,pte}_alloc_one_*() about
+ HIGHMEM
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Lance Yang <lance.yang@linux.dev>
+On Fri, Nov 7, 2025, at 12:44, Lance Yang wrote:
+> From: Lance Yang <lance.yang@linux.dev>
+> On Fri,  7 Nov 2025 17:59:22 +0800, Huacai Chen wrote:
+>> 
+>>   */
+>>  static inline pte_t *__pte_alloc_one_kernel_noprof(struct mm_struct *mm)
+>>  {
+>> -	struct ptdesc *ptdesc = pagetable_alloc_noprof(GFP_PGTABLE_KERNEL &
+>> -			~__GFP_HIGHMEM, 0);
+>> +	struct ptdesc *ptdesc = pagetable_alloc_noprof(GFP_PGTABLE_KERNEL, 0);
+>
+> I looked into the history and it seems you are right. This defensive pattern
+> was likely introduced by Vishal Moola in commit c787ae5[1].
 
+Right, so not even so long ago, so we need to make sure we agree
+on a direction and don't send opposite patches in the name of
+cleanups.
 
-On Fri,  7 Nov 2025 17:59:22 +0800, Huacai Chen wrote:
-> __{pgd,p4d,pud,pmd,pte}_alloc_one_*() always allocate pages with GFP
-> flag GFP_PGTABLE_KERNEL/GFP_PGTABLE_USER. These two macros are defined
-> as follows:
-> 
->  #define GFP_PGTABLE_KERNEL	(GFP_KERNEL | __GFP_ZERO)
->  #define GFP_PGTABLE_USER	(GFP_PGTABLE_KERNEL | __GFP_ACCOUNT)
-> 
-> There is no __GFP_HIGHMEM in them, so we needn't to clear __GFP_HIGHMEM
-> explicitly.
+> After this cleanup, would it make sense to add a BUILD_BUG_ON() somewhere
+> to check that __GFP_HIGHMEM is not present in GFP_PGTABLE_KERNEL and
+> GFP_PGTABLE_USER? This would prevent any future regression ;)
+>
+> Just a thought ...
 
-Nice cleanup!
+I think we can go either way here, but I'd tend towards not
+adding more checks but instead removing any mention of __GFP_HIGHMEM
+that we can show is either pointless or can be avoided, with
+the goal of having only a small number of actual highmem
+allocations remaining in places we do care about (normal
+page cache, zram, possibly huge pages).
 
-> 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
-> Resend because the lines begin with # was eaten by git.
-> 
->  include/asm-generic/pgalloc.h | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-> index 3c8ec3bfea44..706e87b43b19 100644
-> --- a/include/asm-generic/pgalloc.h
-> +++ b/include/asm-generic/pgalloc.h
-> @@ -18,8 +18,7 @@
->   */
->  static inline pte_t *__pte_alloc_one_kernel_noprof(struct mm_struct *mm)
->  {
-> -	struct ptdesc *ptdesc = pagetable_alloc_noprof(GFP_PGTABLE_KERNEL &
-> -			~__GFP_HIGHMEM, 0);
-> +	struct ptdesc *ptdesc = pagetable_alloc_noprof(GFP_PGTABLE_KERNEL, 0);
-
-I looked into the history and it seems you are right. This defensive pattern
-was likely introduced by Vishal Moola in commit c787ae5[1].
-
-After this cleanup, would it make sense to add a BUILD_BUG_ON() somewhere
-to check that __GFP_HIGHMEM is not present in GFP_PGTABLE_KERNEL and
-GFP_PGTABLE_USER? This would prevent any future regression ;)
-
-Just a thought ...
-
-[1] https://github.com/torvalds/linux/commit/c787ae5b391496f4f63bc942c18eb9fdee05741f
-
-Cheers,
-Lance
-
->  
->  	if (!ptdesc)
->  		return NULL;
-> @@ -172,7 +171,6 @@ static inline pud_t *__pud_alloc_one_noprof(struct mm_struct *mm, unsigned long
->  
->  	if (mm == &init_mm)
->  		gfp = GFP_PGTABLE_KERNEL;
-> -	gfp &= ~__GFP_HIGHMEM;
->  
->  	ptdesc = pagetable_alloc_noprof(gfp, 0);
->  	if (!ptdesc)
-> @@ -226,7 +224,6 @@ static inline p4d_t *__p4d_alloc_one_noprof(struct mm_struct *mm, unsigned long
->  
->  	if (mm == &init_mm)
->  		gfp = GFP_PGTABLE_KERNEL;
-> -	gfp &= ~__GFP_HIGHMEM;
->  
->  	ptdesc = pagetable_alloc_noprof(gfp, 0);
->  	if (!ptdesc)
-> @@ -270,7 +267,6 @@ static inline pgd_t *__pgd_alloc_noprof(struct mm_struct *mm, unsigned int order
->  
->  	if (mm == &init_mm)
->  		gfp = GFP_PGTABLE_KERNEL;
-> -	gfp &= ~__GFP_HIGHMEM;
->  
->  	ptdesc = pagetable_alloc_noprof(gfp, order);
->  	if (!ptdesc)
+      Arnd
 
