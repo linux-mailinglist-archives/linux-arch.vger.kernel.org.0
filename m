@@ -1,114 +1,132 @@
-Return-Path: <linux-arch+bounces-14588-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14589-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7969EC432CB
-	for <lists+linux-arch@lfdr.de>; Sat, 08 Nov 2025 19:01:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A16CC43467
+	for <lists+linux-arch@lfdr.de>; Sat, 08 Nov 2025 21:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 276E44E6406
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Nov 2025 18:01:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE3243B0170
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Nov 2025 20:03:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D5D264617;
-	Sat,  8 Nov 2025 18:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF6E22422A;
+	Sat,  8 Nov 2025 20:03:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="oDUv3HSn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lNKbxfnK"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E47B23E32D;
-	Sat,  8 Nov 2025 18:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A8D26ACB;
+	Sat,  8 Nov 2025 20:03:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762624869; cv=none; b=suRqTtrUSpZUffQEBhKixh3yUwAD3ClNdWvPE8ymFhrANcB1hB/TTlpM9zb8PVoZ86PdaLfbyVpjNTctILuNC7Uia4Bpk/hH+W6DzW31lV+W4az7q4DtzEPgaY8XIGitFzSBhAwGjTPlWRxvCzD5iPemqSadWCIxZIEhr1OYkCo=
+	t=1762632180; cv=none; b=NYx+tTSXiLHctrU7nN3+9EgG2kBs/iRCpoPb74ODxYhv2i4jcqC0k+DocnKzi2NpDNz9SHNwtb3b4dFupOtNj1nHPS8lppPhrO5RE6axgWhXzq07CdVxqxVoZ+6Xz0Bi/0llQQBvH/wOEhXqDhrEyv1vrHFYi+5IH99/2WvUZd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762624869; c=relaxed/simple;
-	bh=WY8ReV6b5rLneuyL9AKjyd/kw56HVWU1CULr7FLVHP4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=hn2esUOsoXCZ+bd1svsRFD8TTkA18BiEv5XgbpLMOdG6yY/C1R9efVzbgcvjwhxvMbdrT+bUaLvsX29fF0jzdwKfdA0el9F0j19jfKhU6RwTh/OelRn+gR7AHQUb/K/yiC3VIdE0s9RnjuJOnRc9kH7vdPL2SlvIeMG6FQ+d5+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=oDUv3HSn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDFDC4CEFB;
-	Sat,  8 Nov 2025 18:01:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1762624866;
-	bh=WY8ReV6b5rLneuyL9AKjyd/kw56HVWU1CULr7FLVHP4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=oDUv3HSnjIfwPyFkFpXgxuM9gpIrqWGxlj+VbGgMDqQY7mvSx4LjzbZNiu+GyW66l
-	 sBSmHMFXObgsrY/JwizQJcL8IlCvpaHLDnEETtyGW2/R+vrTgZKu9v3oCok35vTcqF
-	 jmex0BTITiOowYk1xFcmp3KlwKUu3Iwim/OcS0ek=
-Date: Sat, 8 Nov 2025 10:01:04 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank
- <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, David
- Hildenbrand <david@redhat.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens
- <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara
- <jack@suse.cz>, Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R . Howlett"
- <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>, Ryan Roberts
- <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
- <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Muchun Song
- <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, Vlastimil
- Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Matthew Brost
- <matthew.brost@intel.com>, Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim
- <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, Gregory Price
- <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, Alistair
- Popple <apopple@nvidia.com>, Axel Rasmussen <axelrasmussen@google.com>,
- Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Kemeng Shi
- <shikemeng@huaweicloud.com>, Kairui Song <kasong@tencent.com>, Nhat Pham
- <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Chris Li
- <chrisl@kernel.org>, SeongJae Park <sj@kernel.org>, Matthew Wilcox
- <willy@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky
- <leon@kernel.org>, Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou
- <chengming.zhou@linux.dev>, Jann Horn <jannh@google.com>, Miaohe Lin
- <linmiaohe@huawei.com>, Naoya Horiguchi <nao.horiguchi@gmail.com>, Pedro
- Falcato <pfalcato@suse.de>, Pasha Tatashin <pasha.tatashin@soleen.com>, Rik
- van Riel <riel@surriel.com>, Harry Yoo <harry.yoo@oracle.com>, Hugh Dickins
- <hughd@google.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-arch@vger.kernel.org, damon@lists.linux.dev
-Subject: Re: [PATCH v2 00/16] mm: remove is_swap_[pte, pmd]() + non-swap
- entries, introduce leaf entries
-Message-Id: <20251108100104.bb9fc75f97b9263af7e5673b@linux-foundation.org>
-In-Reply-To: <cover.1762621567.git.lorenzo.stoakes@oracle.com>
-References: <cover.1762621567.git.lorenzo.stoakes@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1762632180; c=relaxed/simple;
+	bh=mZx3reTRacDiFfpeRs79kIi23F+uPMRdn0mb7yCb4lA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GTL/tG73w5icU/I0SUiOoB/+cwj/92zRowZCmVfbkV+6OKG/V+ieHlb2fb8IAHb2WamhSEwAELR9d7lRDXZMo3JBvtqRr+5bS3N8YHpsk9TgLW+nWGNiw3oECu73j3LLaiRckIIBXPA3pUhdc9TCMyrUcyn8IuPhakInjdJxYbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lNKbxfnK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97DD7C19422;
+	Sat,  8 Nov 2025 20:02:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762632180;
+	bh=mZx3reTRacDiFfpeRs79kIi23F+uPMRdn0mb7yCb4lA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lNKbxfnKqppFyjDbgVviqAKjzuqyrl142Vll5JtXbXhMZx9ScsfOQGWSjhVrVnTF/
+	 W46Amq2iHTbMWiCV73eSF5dNnu4nOzVILXSQ0LwZNmPAfs5De8lf7RP8n0+ocYLUNm
+	 Y0VB9/W4SBQYKN1XLrr7dsoUZ4XsZynyKqAhxqqge6RicKHf/c+V+JYIipWSV0NVV8
+	 Lheh82/DHzO8neWxDIm+NArCVP+u2Y2PHaLtEcwgjDMqVCKMgomUWZB9H7QUMJRnik
+	 NCFaIIMPr9Rrq/TqyVfDXSRrfIjwbI19FqZ5vVSIzcx/P5X6qOHcwJMWBACW0al3Fw
+	 9iOlOfua0KiDQ==
+Date: Sat, 8 Nov 2025 20:02:52 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>, arnd@arndb.de
+Cc: Catalin Marinas <catalin.marinas@arm.com>, linux-cxl@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, Dan Williams <dan.j.williams@intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Drew Fustini <fustini@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>, james.morse@arm.com,
+	Will Deacon <will@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
+	linuxarm@huawei.com, Yushan Wang <wangyushan12@huawei.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
+	Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v5 0/6]  Cache coherency management subsystem
+Message-ID: <20251108-spearmint-contend-aa3dd8a0220e@spud>
+References: <20251031111709.1783347-1-Jonathan.Cameron@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BnXojPaReIke2Qi9"
+Content-Disposition: inline
+In-Reply-To: <20251031111709.1783347-1-Jonathan.Cameron@huawei.com>
 
-On Sat,  8 Nov 2025 17:08:14 +0000 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
 
-> There's an established convention in the kernel that we treat leaf page
-> tables (so far at the PTE, PMD level) as containing 'swap entries' should
-> they be neither empty (i.e. p**_none() evaluating true) nor present
-> (i.e. p**_present() evaluating true).
-> 
-> However, at the same time we also have helper predicates - is_swap_pte(),
-> is_swap_pmd() - which are inconsistently used.
-> 
-> This is problematic, as it is logical to assume that should somebody wish
-> to operate upon a page table swap entry they should first check to see if
-> it is in fact one.
-> 
-> It also implies that perhaps, in future, we might introduce a non-present,
-> none page table entry that is not a swap entry.
-> 
-> This series resolves this issue by systematically eliminating all use of
-> the is_swap_pte() and is swap_pmd() predicates so we retain only the
-> convention that should a leaf page table entry be neither none nor present
-> it is a swap entry.
+--BnXojPaReIke2Qi9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I've updated mm.git's mm-unstable branch to this v2 series.
+Arnd,
+
+On Fri, Oct 31, 2025 at 11:17:03AM +0000, Jonathan Cameron wrote:
+> Support system level interfaces for cache maintenance as found on some
+> ARM64 systems. It is expected that systems using other CPU architectures
+> (such as RiscV) that support CXL memory and allow for native OS flows
+> will also use this. This is needed for correct functionality during
+> various forms of memory hotplug (e.g. CXL). Typical hardware has MMIO
+> interface found via ACPI DSDT. A system will often contain multiple
+> hardware instances.
+>=20
+> Includes parameter changes to cpu_cache_invalidate_memregion() but no
+> functional changes for architectures that already support this call.
+>=20
+> How to merge?
+> - Current suggestion would be via Conor's drivers/cache tree which routes
+>   through the SoC tree.
+
+I was gonna put this in linux-next, but I'm not really sure that Arnd
+was satisfied with the discussion on the previous version about
+suitability of the directory: https://lore.kernel.org/all/20251028114348.00=
+0006ed@huawei.com/
+
+Arnd, did that response satisfy you, or nah?
+
+Cheers,
+Conor.
+
+>   *  Andrew Morton has expressed he is fine with the MM related changes
+>      going via another appropriate tree.
+>   *  CXL maintainers expressed that they don't consider it appropriate
+>      to go through theit tree.
+>   *  The tiny touching of Arm specific code has an ack from Catalin.
+
+--BnXojPaReIke2Qi9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQ+h7AAKCRB4tDGHoIJi
+0mbmAPoDNoN5c++N+FdbOde62VPsuE/nQLuJqXMbpVYRgssj5gD9HgGSIr/5NCGC
+GU4C//DABkFlJ0fo45ADpizmnDu8JQ8=
+=3UFm
+-----END PGP SIGNATURE-----
+
+--BnXojPaReIke2Qi9--
 
