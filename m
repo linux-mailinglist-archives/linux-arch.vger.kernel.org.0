@@ -1,242 +1,222 @@
-Return-Path: <linux-arch+bounces-14607-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14608-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C492AC46FDB
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Nov 2025 14:45:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43D4CC4726E
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Nov 2025 15:23:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 722AB18819B9
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Nov 2025 13:45:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 923F84E742F
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Nov 2025 14:23:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D83E3101C5;
-	Mon, 10 Nov 2025 13:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3362930F945;
+	Mon, 10 Nov 2025 14:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nJRJnoHT"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="KXB2A4b7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020140.outbound.protection.outlook.com [52.101.189.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E1A30E0C5;
-	Mon, 10 Nov 2025 13:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762782309; cv=none; b=J+Ym0LAA5oRBo4e+cJkXLI3xrjF6kX1MGWi53H1IGQkZAFdOkVaEtmJuMjRQb6aiDePif7GN0cwIbqHlMockZo2PEc7vkU+XoJCclTGdF78EZc63zTUmLUHq3jvXKbmJBfDW/IxSAzIqscs/GPVZvWrqrgN2uT5G1DKYj7miw5g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762782309; c=relaxed/simple;
-	bh=K1xogRmcdnJHCvjWGY+Er/5mR9phjWmkoC/mTpkqq+Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XBOnXyO6mpRXeUuvr70iBH2Yyaeuumh3auWYopNX0jxvbcstdPSvCQNpr0nct2QYRfkjfO9x29x6Pc6c5a6sZ9ryy4oEzv7bF8mzRP8BSmyDsLaEiGltX16IbYcSLAzhFZm66rJZskquyRz7qWcLa/ODVI/GdPmDHO1xFcOLVuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nJRJnoHT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA5E7C4CEFB;
-	Mon, 10 Nov 2025 13:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762782305;
-	bh=K1xogRmcdnJHCvjWGY+Er/5mR9phjWmkoC/mTpkqq+Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nJRJnoHTl+9Cbeu8AtpQVl6MNu8LP7vYCarp/uXV0NbcLGe5/UyGPbNA4xSCI2RwC
-	 UPZmRzo9UEkoy089Iscpp5zjMrREPUnqLbKm++nbSkNKPu6x56aI+Xh3ev/QLMxEec
-	 5c0fkBUdfIeOd6MKzMEIqZzG7e6gVDaVhCSdHwTLfdkd4kAYztyAKHnKyl3X+S3fzV
-	 9ovZf4kVEn7eNQe3LemtVmi9zH1TsJkySJDyQTzaD4W3PCvng8gUNAjb73ZhIYrUPz
-	 9YxUpUh25WrfYWIBf27UgkW6dDxg8oF9+SWT6FXPYKflLL4vUgUmyLlAW0YPlrGzUi
-	 pT0FLuBk5ZvOQ==
-Date: Mon, 10 Nov 2025 15:44:43 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	David Hildenbrand <david@redhat.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
-	Byungchul Park <byungchul@sk.com>,
-	Gregory Price <gourry@gourry.net>,
-	Ying Huang <ying.huang@linux.alibaba.com>,
-	Alistair Popple <apopple@nvidia.com>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Kairui Song <kasong@tencent.com>, Nhat Pham <nphamcs@gmail.com>,
-	Baoquan He <bhe@redhat.com>, Chris Li <chrisl@kernel.org>,
-	SeongJae Park <sj@kernel.org>, Matthew Wilcox <willy@infradead.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Xu Xin <xu.xin16@zte.com.cn>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Jann Horn <jannh@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry.yoo@oracle.com>,
-	Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, damon@lists.linux.dev
-Subject: Re: [PATCH v2 01/16] mm: correctly handle UFFD PTE markers
-Message-ID: <aRHsSxhIikzC9AAN@kernel.org>
-References: <cover.1762621567.git.lorenzo.stoakes@oracle.com>
- <0b50fd4b1d3241d0965e6b969fb49bcc14704d9b.1762621568.git.lorenzo.stoakes@oracle.com>
- <aRHJ0RDu9fJGEBF8@kernel.org>
- <1a77db9b-ddb2-42bc-8e8f-f4794a5bfc6d@lucifer.local>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2894330100C;
+	Mon, 10 Nov 2025 14:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762784607; cv=fail; b=nTag4U8XM+9hHGnP7Fe0FOiBt+Nbx9zrD6A3pATXwpFWpDqH89iaaA8gcC30k2y8RS2Jmmje1JHyRR5DJg7xlwWJ1EspWpxLwQXK0Ak7fhZ5ha+oT+DP7uYSlbIzaJjh/uFgKSnwLpvkTY2TFY3XTYoAqxmqPYqZlfeBJLiXhEc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762784607; c=relaxed/simple;
+	bh=8xvzY2tYc5xV+64oD7BxJv2AvTH1kBJOxvqCR/IH110=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=JSFpE8wK80teELbt7d1kSstYl167iNOyM+nwzchAI1IzxNAfUCvUSPmZ8JhuR82XbgL1AHcC4uCrE5fj0+O7Q40a8DbXvHZO/ihFBwQQUPy9xo//PAT9YAW2mmgEw9w+3vaQCKIOOTgGTFJk/9qpbEBiHuwQVw7rksIE9sw/DPQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=KXB2A4b7; arc=fail smtp.client-ip=52.101.189.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=f3JhOGVttR0HqVLpx0NaMhMDHk2vDHBdLi1SArg42/XB8Fmz6z1NXOW8xmjC8qUrNYM474Iq14GfNeQZWajlFpiDWjNKxIc86WTdf5iHPwyvSuFBgUy/4Fy1kdmibnqCPC4R6oLdqNmFg6cT/vnZ/L/0ENoAWqw0UikVojMyCbFLTFrmirbxETjAOxLzQjeBRid//UPsMgdeQCS0zeuNLTdtL54Q419Mm4UHM2O1QOkOwr8TvbT0gGGCQESTpywHWJ0D5Pbbz6yYBivEzJ8e6QxKJcLoSb+2AAofdT7+QZvozIs6HOqyhT+/92H6PFX5RSRfx2J43NetbkMmx3KdsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7MYb26vfUNd83nxWfzvi6wL64/nK1CQCZEeXZapHjt0=;
+ b=r1r/ojY/NbspLmepHZ4VeJojniOUfVAjAIE4he/pKQWkLkyqGG6qW/CZsJI+Z7upeSu0e+oqRWNauuK/IQNVqVBFq7S0Yj3LtfIeSgxZW0OO3DoDnbz+F9NIMXK7YK0vAecC04h8zgldhPiIGpdFD60/lqtUQwMJMDp3vGxcXuRfkWtA54BvWaDTsUOPT+ehXw3x07belPCp1+/tWmvHOv38Gq/AUztb19cgyS/SibaXEj/I6+bqyyhRaZycvC9ZFg3ZoAc2huuhqrGLn5N2EHgSnPg3gG67U+VOYuAQEJUfbT64sBOCjkkS5fPbY3ns/EjS18bV7ap8hBjgJHL87w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7MYb26vfUNd83nxWfzvi6wL64/nK1CQCZEeXZapHjt0=;
+ b=KXB2A4b7uMqGp/0KJcg/uiZn5q+yO0WCojLDE8OklX5mNabkl2odlCeYKTNTtaITSLIRkzDRr/gs2YveKHjg/xZK4Yt3ezs78W0L0UsmYa/Zi7a6JoN/ztiQtdjsqmx2eug8iRPv4dKQ8jt7dfBtu75yESk2evLK1etUW9uz5+yCgYOVPmW2SAGn1HM25jGht5TXqr1imcpmKLeDIqk9tiUaFJmTz+zpSz2nlTn5c4h9Rcf5kds49T6dszXzfurJgh0KiWGnPSWWzMFpjeCueiTnmz2SWGtB+uDOv7vxA+aGg8EA0P91/vn+xB9bHe74+zzQA3AB+sUtD5NE6MPEAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT3PR01MB5552.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:60::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.16; Mon, 10 Nov
+ 2025 14:23:22 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::50f1:2e3f:a5dd:5b4%2]) with mapi id 15.20.9298.015; Mon, 10 Nov 2025
+ 14:23:22 +0000
+Message-ID: <2eee5e37-e541-4ac7-9479-cef3e62f234d@efficios.com>
+Date: Mon, 10 Nov 2025 09:23:20 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [patch V3 00/12] rseq: Implement time slice extension mechanism
+To: Prakash Sangappa <prakash.sangappa@oracle.com>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Arnd Bergmann <arnd@arndb.de>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20251029125514.496134233@linutronix.de>
+ <03687B00-0194-4707-ABCB-FB3CD5340F11@oracle.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <03687B00-0194-4707-ABCB-FB3CD5340F11@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT2PR01CA0029.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:38::34) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a77db9b-ddb2-42bc-8e8f-f4794a5bfc6d@lucifer.local>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB5552:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1294789e-89cb-4dbc-3991-08de2064b3cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SGtzU2lOaXVIN0pjMmdUN1FGMDNiNU9BdXpVaENjNHdlUXEzRGFQa3Z5aHAr?=
+ =?utf-8?B?dEFvcEg0SWNUTE9ja0hMNUJnQjYyS2ExR1dhWUpYZUdTQUZkb1FzV1EzdkVF?=
+ =?utf-8?B?NXZZcEVWdWo0dUhjWGpCaW04WFR1MFFBYzRQM3FwMFVVeVp5UGw4WlVKZTJ1?=
+ =?utf-8?B?VGZOWGRiS0lzMmx1eE1KR1cvcXRJWnM2OFh4U3dQajZSWXdyd3oyek1CbFU1?=
+ =?utf-8?B?dllaUVpWM0k0TGNlUDllU0JtWGM1M2l3ZEFTdlJKR0hPK1ljTmRIMHNZZGJm?=
+ =?utf-8?B?UDIyM0t6RUZPclU2MzdJVXo3L1pmK1VPY3pwczJOWGhFV2FkQXpDYVYwZWhn?=
+ =?utf-8?B?NFM0QlpWWDdEY2hKWTZndThlR2g4TnluK1JmVDI5VHZnamZheGNNTUpVYnFD?=
+ =?utf-8?B?WktyYzNOK3hmSjRVejVxZUZFYUlXOFc3dkFJRlpVU1BIa202dE5CbEMzcmRh?=
+ =?utf-8?B?R3FJNUV2ZytvUU5Fbll5SEg4WHd3OHdQWlF2dmxvTGZBQXoybHo1SFFObGNp?=
+ =?utf-8?B?WXRYbTFuSDFGWDJKNW4xd1JsWVpkZXJUUGxucWZ6OEo3VDNHeU1wNkp2SVdI?=
+ =?utf-8?B?Nm5LZWJ0dHE3emRldUlpeVlPak9hNFVnK0FKbDRqbXU1WVhOUE1lL1NmdmUy?=
+ =?utf-8?B?M2o0UDRwOHVaeXBQMjNxS3laUFJrWVMwUWdmK29Scmp3OFJ1RktPNExPam5v?=
+ =?utf-8?B?MW50OGlrT2h0OFBkOEgvV01RSDU1MndjWmhTUVN0N1RhSzE0Z0JnM29wd29F?=
+ =?utf-8?B?WnEvQnhjV1EzNjB3a3pEckZKdE5ubU9MNmZmcm9QTTRKTWhRR1ZuMFgzR2pk?=
+ =?utf-8?B?NzJBRTRRZE9XQ3RIT3dpb2VkRDJyY255RjMyK1lvQUlLdlNuRXBJSkZVcHlI?=
+ =?utf-8?B?YXR0WWRwaG01KzhaU1hDRDlEVkhZaE0xNWxqS3BRay9WTmU0SjFlSzdHZ3VT?=
+ =?utf-8?B?bUVBYVZLYTNXMkczZFV6Rm8wL1F4VzE3SHVLM1BlVWFLMjMvRkZ5bExUV09Z?=
+ =?utf-8?B?RHJCWFAwYVEwSjFyZkdDdVBTVlhSd2tQOEt6Mmw1RDB1S3B0WUlVakE4S0kx?=
+ =?utf-8?B?RmJ2MkxTYzRiUnFwOHdKYzZQUUlvcEVHRkVkdjNBcnZWT3hYb1ozejc5cUFC?=
+ =?utf-8?B?QnJDeG9CS3ltQnVPNmFBSDhxZ1pmUFNyWjhhN3h2RnZTN3Q5cWd6TTl4Vk42?=
+ =?utf-8?B?emdjVWcremswQ2lwc3YxZDRaNkRrWGpQMkJmZzJNanUvTFQrcmdTU081NmZ3?=
+ =?utf-8?B?OU1yZ0FGNExqdFNubFlVRkl2M3BNVndaaWlxR25ycW9ENnZZeFhRT3VScTVC?=
+ =?utf-8?B?b0lFakJKbXdCTHFWSW10eVJadG84U2orUS96cjVFMm1YZnpxS0NwWkoybHJP?=
+ =?utf-8?B?K3NhbitTSW1CVlJxN2xxNTM2NGwxcHJYNkxaNXNRZEluaTc2eFRxY2k4TTlz?=
+ =?utf-8?B?YlBFRDEvTTdqYkNCdkVMVUErVDJOOVovWWY4OGc3RTczT2wzTTd2cXJ1OXds?=
+ =?utf-8?B?MmUzc1hnWnl0SXVOeC9kelRWN0I4MGlhRmYxeHlQNlFjMExoR1I0MjRVazZH?=
+ =?utf-8?B?Rk42QkEyNDh5eFFHOTYwOHBneVl5OFJXQ280YlFqU1NhS1NPcldZaUY5WGV5?=
+ =?utf-8?B?U3E0R0Z1MlFvZlUycjNhdWRDaGJSaHhmSzFaNkVETkdMYS9vbGg1TVBGWUw3?=
+ =?utf-8?B?MDlVYWVzc0RHc2FmZitsUDA2dEhWMk1hVHZHdW54NGlKaVVOaWhUR2RTNnZJ?=
+ =?utf-8?B?NWc3SmE3dzRVMTlsU1Qvb3BlSG9sUEtLbWtZNXd0K3lsRmN3cmdFdnJIbldm?=
+ =?utf-8?B?WkNOclgrTW9mYWQydlFDT2tRcHdLOXVWcFdBTkloSUhwRkRTVGZ3MWJWSHlF?=
+ =?utf-8?B?ZGlRQ0UzQitYZGd3bktXaDMrZkRlTTJtRDc3RTlQT3gzUGc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UWoybHNrV1o2bE92Tm16VlRwYTZNbWpPUDA5VkpNMUN0a3dGYzF1TmhHY1Bt?=
+ =?utf-8?B?bEFta0ZUKzgzdGV2aitJREM4YUozaTZFbGQyZ1hmbGRxQ3FUd1dSOVZldU9n?=
+ =?utf-8?B?Y2w3b2U0NUR1T1l4R0ZGUFZkWkZQQzVYSmI2clNoZkZGU1NsM28rV29kOWEy?=
+ =?utf-8?B?VW03cWZ6SUVTQ21keFhxdWJYUmhLRHgvSlJ3V0I1a3FhWGJHRExkYU4rYWZr?=
+ =?utf-8?B?M083dWovcUlXMkZhZ28xMnhHeWc2S29Yb3ZYMmlHSTFXdEZzMDFqeWNVaVF5?=
+ =?utf-8?B?emdHem9NTWJVbHBhZUJrNXpHVGNabjBUSE9sVXJtMmgvK0FjTXdhbllnZmdU?=
+ =?utf-8?B?WlB3TUs4Zi9NVjlhd09qV1dlbmhjV0pzZlpOUzVQaVUzaW1ra3pqVHlyTkQ4?=
+ =?utf-8?B?QmFIMTVnYXNobUZlTmVCUi9vTjNhb29QSWprdXlERHVxZzV0UWdJRVlpdURL?=
+ =?utf-8?B?SWx0M3hZV1l1bkFxZXYyMndFRVJUamdnVGo5cmFoUGd2TmVUbWQva21wY3Rl?=
+ =?utf-8?B?OHhQcTVQSFRJR2FZWVk5LzRSQWxSRWRQYzZXRGVEMDA4OUhtL3c1VjRwN2E4?=
+ =?utf-8?B?dk9tQUtwc2NRRVFHckxWUWtSbFNFRTQrU1ZsM0ZnQnY4THZkMXNsSzhNaDdl?=
+ =?utf-8?B?UWV5NzBTenluakllSGNzVFRmVyswaTVobEY2bFdnUElMeStOZVFDVFh1czA2?=
+ =?utf-8?B?NHVlYmU2VnVxM2F3QzhCZXREd00zaTd1SkxGNlpXbnY1NXRTZktoQkVINCtu?=
+ =?utf-8?B?OExXT1dDNHZkbzhaemNrbTdyRU9oS3RTdnJ3SnpoMmtObEtCSWVaaDdiQUky?=
+ =?utf-8?B?ZXgxN1NPakFWdkdGTzcvUVRXQ1dKcWpOREhtVE9lMlA5MUpGL01ZWjRWY0RZ?=
+ =?utf-8?B?Wmc1WklyRm1weFp4L3RTOWU5MzZQNzFEeUxoUEJIRTkrbys0d2VIeHNqQWFI?=
+ =?utf-8?B?Ris0ZDhLY3d5aWF6K2NlZ2o2Ym5LZVI5TjJ2SDlGaWlkUW9BSCszUFJhYnJD?=
+ =?utf-8?B?RnMxelRmMVZqKzdDUDFZc2x3OXpUUGhRVFAvZjNjVEUyR0RtWUE0WVFEK2Vm?=
+ =?utf-8?B?R2hDSTdHUlZIclBlOFlnN0U0c0ZwcytnRjBpZmNxWVZ3WjlZUUpwbmxoanlU?=
+ =?utf-8?B?b2NyRFRiN3hnMm5JdVJ4Zityek1xWk1pT0VHNmkrelZETWM3RXBUR3psenY3?=
+ =?utf-8?B?VUxGeTNlRmRIVTlFb2N4UldnNEtuRjVzTE1kQUtodS9OUDU3ZVJMUDhocW9r?=
+ =?utf-8?B?RkFZRDFKd1lMNDVySjErdjVZbkFCNXJ2TUJJSS9vOW5YMXRSM3N5MHk3WjV0?=
+ =?utf-8?B?QVUzcGdEMGRRaUczZCtDTDBsMEZCcFAwcHZvNlhkVDVQOGJKcTJXQjUrbHd2?=
+ =?utf-8?B?bXVuQnZwMjZoWXpVT081WldxM2hJWEMyNnVRczM5WVpqWHMxdUZnYU14TjhY?=
+ =?utf-8?B?VG5OSmU4OHkvNnl1Yi9mL3ZpbjJMdm1jRGJqM3dFejBHbVZzMnR1SlBydTQ3?=
+ =?utf-8?B?N1pQdk1EVG1NWlJpVGN3VUl3NTlmZFl0YUhtdmUwMExxbzVLYmJ6K3FxK2N2?=
+ =?utf-8?B?SEhvZG5KUUxiYzRSYTZ4eTVCcVBYSVF5OU1BSUIreXJucHZFUVJRcmc1clNL?=
+ =?utf-8?B?WXZqOGkwdnJtcEdUaE5SWkd0dnRBbVBzbUVoWWVxNDJVenhhaDRiQkZzaEg3?=
+ =?utf-8?B?YmZpbHA5QVBHWXltVU5VcHJna3h6YzlYRUdYdCtoN2tHeDBlcXQ2YTlZdTNq?=
+ =?utf-8?B?M2l3cEh0SWFYVzNGNkJGRURSdjdLUkNLbWFDckVVTjRkaHc4UDhFQU85VTVF?=
+ =?utf-8?B?UnN5QjA1bG5PTmkrWjNvSitVME9SYUNDWnNLdk9YU21CRytJNE1OZFZBSkFh?=
+ =?utf-8?B?NG9rcEl6clNqanlNamthVjdhcy9sc3VBc3RCR0FvRVlCV1FwbEdEOEt2cUMv?=
+ =?utf-8?B?MDkzamZKTzNzN0lSTmUxSlNORjZaZVdtalRyTDFVdGJ4WlFTQ05zNlV2dGxS?=
+ =?utf-8?B?RmNtekJXOUNoMzh3WkNQWmVpQ1dadzY5Rld4M2M0VmNyN3psSVRnSnlLcVl0?=
+ =?utf-8?B?ZnljaGU4ZHNiY2g5d0gzRXdrK2wxdnFpb0pIWkc0bXJmeW5wc0NPSmpicWJ2?=
+ =?utf-8?B?RWZ0VFJPOGxvMkdtOXlOVXJIcEI1bHpHeHRjVCs5L3h0RVRGY0dOM0o1aFZh?=
+ =?utf-8?Q?HkpfhzT/gvMay5WOMxha+UQ=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1294789e-89cb-4dbc-3991-08de2064b3cc
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2025 14:23:22.0173
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: inw9Pln+NFZR9cp/PDw6myhXCVKP0gVBNYCal7soeOyfz/qxwZ05mhpQfBwDLb1vVoOEmd4n4lEfUcdtUz520SdSJirvGaXxJRy3uY2vN5A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB5552
 
-On Mon, Nov 10, 2025 at 01:01:36PM +0000, Lorenzo Stoakes wrote:
-> On Mon, Nov 10, 2025 at 01:17:37PM +0200, Mike Rapoport wrote:
-> > On Sat, Nov 08, 2025 at 05:08:15PM +0000, Lorenzo Stoakes wrote:
-> > > PTE markers were previously only concerned with UFFD-specific logic - that
-> > > is, PTE entries with the UFFD WP marker set or those marked via
-> > > UFFDIO_POISON.
-> > >
-> > > However since the introduction of guard markers in commit
-> > >  7c53dfbdb024 ("mm: add PTE_MARKER_GUARD PTE marker"), this has no longer
-> > >  been the case.
-> > >
-> > > Issues have been avoided as guard regions are not permitted in conjunction
-> > > with UFFD, but it still leaves very confusing logic in place, most notably
-> > > the misleading and poorly named pte_none_mostly() and
-> > > huge_pte_none_mostly().
-> > >
-> > > This predicate returns true for PTE entries that ought to be treated as
-> > > none, but only in certain circumstances, and on the assumption we are
-> > > dealing with H/W poison markers or UFFD WP markers.
-> > >
-> > > This patch removes these functions and makes each invocation of these
-> > > functions instead explicitly check what it needs to check.
-> > >
-> > > As part of this effort it introduces is_uffd_pte_marker() to explicitly
-> > > determine if a marker in fact is used as part of UFFD or not.
-> > >
-> > > In the HMM logic we note that the only time we would need to check for a
-> > > fault is in the case of a UFFD WP marker, otherwise we simply encounter a
-> > > fault error (VM_FAULT_HWPOISON for H/W poisoned marker, VM_FAULT_SIGSEGV
-> > > for a guard marker), so only check for the UFFD WP case.
-> > >
-> > > While we're here we also refactor code to make it easier to understand.
-> > >
-> > > Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-> > > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > > ---
-> > >  fs/userfaultfd.c              | 83 +++++++++++++++++++----------------
-> > >  include/asm-generic/hugetlb.h |  8 ----
-> > >  include/linux/swapops.h       | 18 --------
-> > >  include/linux/userfaultfd_k.h | 21 +++++++++
-> > >  mm/hmm.c                      |  2 +-
-> > >  mm/hugetlb.c                  | 47 ++++++++++----------
-> > >  mm/mincore.c                  | 17 +++++--
-> > >  mm/userfaultfd.c              | 27 +++++++-----
-> > >  8 files changed, 123 insertions(+), 100 deletions(-)
-> > >
-> > > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > > index 54c6cc7fe9c6..04c66b5001d5 100644
-> > > --- a/fs/userfaultfd.c
-> > > +++ b/fs/userfaultfd.c
-> > > @@ -233,40 +233,46 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
-> > >  {
-> > >  	struct vm_area_struct *vma = vmf->vma;
-> > >  	pte_t *ptep, pte;
-> > > -	bool ret = true;
-> > >
-> > >  	assert_fault_locked(vmf);
-> > >
-> > >  	ptep = hugetlb_walk(vma, vmf->address, vma_mmu_pagesize(vma));
-> > >  	if (!ptep)
-> > > -		goto out;
-> > > +		return true;
-> > >
-> > > -	ret = false;
-> > >  	pte = huge_ptep_get(vma->vm_mm, vmf->address, ptep);
-> > >
-> > >  	/*
-> > >  	 * Lockless access: we're in a wait_event so it's ok if it
-> > > -	 * changes under us.  PTE markers should be handled the same as none
-> > > -	 * ptes here.
-> > > +	 * changes under us.
-> > >  	 */
-> > > -	if (huge_pte_none_mostly(pte))
-> > > -		ret = true;
-> > > +
-> > > +	/* If missing entry, wait for handler. */
-> >
-> > It's actually #PF handler that waits ;-)
+On 2025-11-06 12:28, Prakash Sangappa wrote:
+[...]
+> Hit this watchdog panic.
 > 
-> Think I meant uffd userland 'handler' as in handle_userfault(). But this is not
-> clear obviously.
+> Using following tree. Assume this Is the latest.
+> https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git/ rseq/slice
 > 
-> >
-> > When userfaultfd_(huge_)must_wait() return true, it means that process that
-> > caused a fault should wait until userspace resolves the fault and return
-> > false means that it's ok to retry the #PF.
-> 
-> Yup.
-> 
-> >
-> > So the comment here should probably read as
-> >
-> > 	/* entry is still missing, wait for userspace to resolve the fault */
-> >
-> 
-> Will update to make clearer thanks.
-> 
-> >
-> > > +	if (huge_pte_none(pte))
-> > > +		return true;
-> > > +	/* UFFD PTE markers require handling. */
-> > > +	if (is_uffd_pte_marker(pte))
-> > > +		return true;
-> > > +	/* If VMA has UFFD WP faults enabled and WP fault, wait for handler. */
-> > >  	if (!huge_pte_write(pte) && (reason & VM_UFFD_WP))
-> > > -		ret = true;
-> > > -out:
-> > > -	return ret;
-> > > +		return true;
-> > > +
-> > > +	/* Otherwise, if entry isn't present, let fault handler deal with it. */
-> >
-> > Entry is actually present here, e.g because there is a thread that called
-> > UFFDIO_COPY in parallel with the fault, so no need to stuck the faulting
-> > process.
-> 
-> Well it might not be? Could be a swap entry, migration entry, etc. unless I'm
-> missing cases? Point of comment was 'ok if non-present in a way that doesn't
-> require a userfaultfd userland handler the fault handler will deal'
-> 
-> But anyway agree this isn't clear, probably better to just say 'otherwise no
-> need for userland uffd handler to do anything here' or similar.
+> Appears to be spinning in mm_get_cid(). Must be the mm cid changes.
+> https://lore.kernel.org/all/20251029123717.886619142@linutronix.de/
 
-It's not that userspace does not need to do anything, it's just that pte is
-good enough for the faulting thread to retry the page fault without waiting
-for userspace to resolve the fault.
- 
-> Cheers, Lorenzo
+When this happened during the development of the "complex" mm_cid
+scheme, this was typically caused by a stale "mm_cid" being kept around
+by a task even though it was not actually scheduled, thus causing
+over-reservation of concurrency IDs beyond the max_cids threshold. This
+ends up looping in:
+
+static inline unsigned int mm_get_cid(struct mm_struct *mm)
+{
+         unsigned int cid = __mm_get_cid(mm, READ_ONCE(mm->mm_cid.max_cids));
+
+         while (cid == MM_CID_UNSET) {
+                 cpu_relax();
+                 cid = __mm_get_cid(mm, num_possible_cpus());
+         }
+         return cid;
+}
+
+Based on the stacktrace you provided, it seems to happen within
+sched_mm_cid_fork() within copy_process, so perhaps it's simply an
+initialization issue in fork, or an issue when cloning a new thread ?
+
+Thanks,
+
+Mathieu
 
 -- 
-Sincerely yours,
-Mike.
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
