@@ -1,235 +1,161 @@
-Return-Path: <linux-arch+bounces-14646-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14647-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBA09C4CA2A
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Nov 2025 10:25:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0651C4CBDB
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Nov 2025 10:44:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B421F4F1317
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Nov 2025 09:19:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D10FA3A9C5E
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Nov 2025 09:40:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EBC02EDD5F;
-	Tue, 11 Nov 2025 09:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9612EFD9E;
+	Tue, 11 Nov 2025 09:40:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vGClO8NE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GCiWpRgX"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1642ECE9B
-	for <linux-arch@vger.kernel.org>; Tue, 11 Nov 2025 09:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C1C2EBBAF;
+	Tue, 11 Nov 2025 09:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762852791; cv=none; b=WAmG8LKH3kxRiB6D05TpUTuf0mJsJBCLQqSfowKu5NN3sJLTIhzh/4PHIzG2Tq0vgTcoqVYXaWb2apxfnbWeiX8+3HwqW7M4Cfne1C6IFJBZ5DZ/WCjy9PDfCIPYNn5PAP0OhVBMB9u5GumSsXOzzTDmPNXd0IxkXc6PMJU5qug=
+	t=1762854007; cv=none; b=ClXclZJlL3U58zMq9pjk/hLLH/RK4luaKCjc0ou1bBMjFqnpfyClSkqoF/6iK/y7/5lg5bFoh9gyGaTJMN8v1dVSbBLgBKWi4T0W1k1+dXldZQShrXoqFwbAkWcRmGKJiPhm8NZMHi+rWsvDmyLwLK04cC94L40OgUeor90K6Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762852791; c=relaxed/simple;
-	bh=dVuTtHvnVZEobITrk9FyDHPMZXl5yRe3omNS/JcWa64=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CBYa9xU1IlxxgeE1QgTKwymWRU8mUaRodk9ezFR5cUfZDNypIUy2i9UYFe1bPrh34wyC3pPhLAq8RpguYfDtbCNYcRcrQpeeqfBoRlJFTbBUjltQetC3EVtvmEDPD9RiLRLq0jF9mrrQ8uWRoSjqwJBilMob8f05NNjC1zDyphE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vGClO8NE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CAEC2BCB4
-	for <linux-arch@vger.kernel.org>; Tue, 11 Nov 2025 09:19:51 +0000 (UTC)
+	s=arc-20240116; t=1762854007; c=relaxed/simple;
+	bh=tV63J7taBdyVxD5Onk+zak6F3ctliG+Q3nAMch/i9HU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nkFvqRV57OF45zjTXDxHbx+nFo9SocMMRzR2HowxegepkjeNKqitE4TtaK6O5qi4HfKmNI29/p+5OTuexinHO6FrY1AAnRVQVZAz0VWvmE9JCD0XGbPhCXC+tSkb1inaKtcjJFvu5oQDlyi/k68FdZVXVcqiz7aQrvuFtgXihw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GCiWpRgX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55E4CC4CEF7;
+	Tue, 11 Nov 2025 09:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762852791;
-	bh=dVuTtHvnVZEobITrk9FyDHPMZXl5yRe3omNS/JcWa64=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=vGClO8NE0KorCNpVq7YjjPoJy4vppAc1exbgNg08YFojL+dCZUmXYan4Wftv6Gmgv
-	 GEa5Cfno24p5jxvYB/qDkaZk9C5q5w3kRLHUbzXznZ6oolxTsaWOZHMZ30eLed0sXX
-	 Egq/iKpmX81Z2Ojm2N/HTq94Olgee+8BMC8ZQeiiffDB8QDkji4mseoLtGvE7ZrhYn
-	 dP6Lyes8MmmyzNcHmC8Tv8TlcJnJCoZxEs+Jh5/+z/VVpJKPEC43Am3km0NAnjA2Au
-	 zZAMssPqCgroICwsfk9a9tSlMA452D+MVB2qo029A00ncGyiyFIJrvq/hmj6vDJQzp
-	 +9zlwlmMK1NvQ==
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7866375e943so33627637b3.0
-        for <linux-arch@vger.kernel.org>; Tue, 11 Nov 2025 01:19:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWcR/a3HPHXoHDeCcWl6pLI3/S6PNXjSk/cQctaF6ISY0mB/Z0Hh10lnPah5NyAveYBB4QtqvxzuQIM@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjctbGhOq6Fyny1jqnJXIzoMoOQYlHZGvFNGDVLJRCKrqgi2VS
-	utRX56GKmqFVe1imBVM+/tq9DZuO95aM+q5ZD7EjQfFuiikgdGe7ow9Q1gC/jcyl/CQoVT/2aKT
-	1oMsjATLHcA1Fs4/Nq9jnSIRIphZpbRMfi463mTA6Dg==
-X-Google-Smtp-Source: AGHT+IE7U/hfMH//RfLupvft/VoqtwYRbFfH+avnkA19gWihvYeZ3A5/gr7GLzY5y0EQ9dDLUE90MgX0MeQiFlzqDkk=
-X-Received: by 2002:a05:690c:3341:b0:786:6b92:b1f5 with SMTP id
- 00721157ae682-787d5439064mr100470067b3.47.1762852790107; Tue, 11 Nov 2025
- 01:19:50 -0800 (PST)
+	s=k20201202; t=1762854006;
+	bh=tV63J7taBdyVxD5Onk+zak6F3ctliG+Q3nAMch/i9HU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GCiWpRgXryUr0YiOuRCqFKMHFElrFfOJGLeX13fDzQhzdLeEMfA68uzI2EJFfxVhm
+	 0MUDm4yk8dcgPkbCGQ9mByaYozbzGtDDR+dxx7BYEgVrFiJ8SZ2pdALZBfQboS0gvo
+	 mHVFJX+o1gZPTNTphPXA9WbgGYWk9nlExIF62mZ73WXnbIrDTiR4NqRFsQaQL8Dvkw
+	 S1IFcQzK7HMyEOdAdOb32M0+zECDPIh+yvtjXasK0QRuj70XQpLdc9540fG5C8LyLy
+	 GOdJphkYB7U4gWmOkayWv8GOEYQl0T5F0efMNLKo7WjK4EvGrJauQ6RDtyW294LDmB
+	 ZpUDNt59CcokQ==
+Date: Tue, 11 Nov 2025 11:39:43 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	David Hildenbrand <david@redhat.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+	Byungchul Park <byungchul@sk.com>,
+	Gregory Price <gourry@gourry.net>,
+	Ying Huang <ying.huang@linux.alibaba.com>,
+	Alistair Popple <apopple@nvidia.com>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	Kemeng Shi <shikemeng@huaweicloud.com>,
+	Kairui Song <kasong@tencent.com>, Nhat Pham <nphamcs@gmail.com>,
+	Baoquan He <bhe@redhat.com>, Chris Li <chrisl@kernel.org>,
+	SeongJae Park <sj@kernel.org>, Matthew Wilcox <willy@infradead.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+	Xu Xin <xu.xin16@zte.com.cn>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Jann Horn <jannh@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
+	Naoya Horiguchi <nao.horiguchi@gmail.com>,
+	Pedro Falcato <pfalcato@suse.de>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry.yoo@oracle.com>,
+	Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-arch@vger.kernel.org, damon@lists.linux.dev
+Subject: Re: [PATCH v3 01/16] mm: correctly handle UFFD PTE markers
+Message-ID: <aRMEX5YP7ubGOmqo@kernel.org>
+References: <cover.1762812360.git.lorenzo.stoakes@oracle.com>
+ <c38625fd9a1c1f1cf64ae8a248858e45b3dcdf11.1762812360.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1762621567.git.lorenzo.stoakes@oracle.com>
- <CACePvbVq3kFtrue2smXRSZ86+EuNVf6q+awQnU-n7=Q4x7U9Lw@mail.gmail.com>
- <5b60f6e8-7eab-4518-808a-b34331662da5@lucifer.local> <CACePvbUvQu+So7OoUbJTMLODz8YDAOgWaM8A-RXFj2U_Qc-dng@mail.gmail.com>
- <3c0e9dd0-70ac-4588-813b-ffb24d40f067@lucifer.local>
-In-Reply-To: <3c0e9dd0-70ac-4588-813b-ffb24d40f067@lucifer.local>
-From: Chris Li <chrisl@kernel.org>
-Date: Tue, 11 Nov 2025 01:19:37 -0800
-X-Gmail-Original-Message-ID: <CACePvbUHCrNNy38G4fZP92sdMY7k5pRQkcfo=iPp0=10T5oCEw@mail.gmail.com>
-X-Gm-Features: AWmQ_bkffqW5YvxjFtC7ucCTeEYe-oG-VIvciMpKUSHdG9LRrce-7fJweHmox0c
-Message-ID: <CACePvbUHCrNNy38G4fZP92sdMY7k5pRQkcfo=iPp0=10T5oCEw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/16] mm: remove is_swap_[pte, pmd]() + non-swap
- entries, introduce leaf entries
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Matthew Brost <matthew.brost@intel.com>, Joshua Hahn <joshua.hahnjy@gmail.com>, 
-	Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Kairui Song <kasong@tencent.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, 
-	SeongJae Park <sj@kernel.org>, Matthew Wilcox <willy@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Jann Horn <jannh@google.com>, 
-	Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi <nao.horiguchi@gmail.com>, 
-	Pedro Falcato <pfalcato@suse.de>, Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry.yoo@oracle.com>, Hugh Dickins <hughd@google.com>, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-s390@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
-	damon@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c38625fd9a1c1f1cf64ae8a248858e45b3dcdf11.1762812360.git.lorenzo.stoakes@oracle.com>
 
-On Mon, Nov 10, 2025 at 3:28=E2=80=AFAM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
-> > > > I kind of wish the swap system could still use swp_entry_t. At leas=
-t I
-> > > > don't see any complete reason to massively rename all the swap syst=
-em
-> > > > code if we already know the entry is the limited meaning of swap en=
-try
-> > > > (device + offset).
-> > >
-> > > Well the reason would be because we are trying to keep things consist=
-ent
-> > > and viewing a swap entry as merely being one of the modes of a softle=
-af.
-> >
-> > Your reason applies to the multi-personality non-present pte entries.
-> > I am fine with those as softleaf. However the reasoning does not apply
-> > to the swap entry where we already know it is for actual swap. The
-> > multi-personality does not apply there. I see no conflict with the
-> > swp_entry type there. I argue that it is even cleaner that the swap
-> > codes only refer to those as swp_entry rather than softleaf because
-> > there is no possibility that the swap entry has multi-personality.
->
-> Swap is one of the 'personalities', very explicitly. Having it this way h=
-ugely
-> cleans up the code.
->
-> I'm not sure I really understand your objection given the type will be
-> bit-by-bit compatible.
+On Mon, Nov 10, 2025 at 10:21:19PM +0000, Lorenzo Stoakes wrote:
+> PTE markers were previously only concerned with UFFD-specific logic - that
+> is, PTE entries with the UFFD WP marker set or those marked via
+> UFFDIO_POISON.
+> 
+> However since the introduction of guard markers in commit
+>  7c53dfbdb024 ("mm: add PTE_MARKER_GUARD PTE marker"), this has no longer
+>  been the case.
+> 
+> Issues have been avoided as guard regions are not permitted in conjunction
+> with UFFD, but it still leaves very confusing logic in place, most notably
+> the misleading and poorly named pte_none_mostly() and
+> huge_pte_none_mostly().
+> 
+> This predicate returns true for PTE entries that ought to be treated as
+> none, but only in certain circumstances, and on the assumption we are
+> dealing with H/W poison markers or UFFD WP markers.
+> 
+> This patch removes these functions and makes each invocation of these
+> functions instead explicitly check what it needs to check.
+> 
+> As part of this effort it introduces is_uffd_pte_marker() to explicitly
+> determine if a marker in fact is used as part of UFFD or not.
+> 
+> In the HMM logic we note that the only time we would need to check for a
+> fault is in the case of a UFFD WP marker, otherwise we simply encounter a
+> fault error (VM_FAULT_HWPOISON for H/W poisoned marker, VM_FAULT_SIGSEGV
+> for a guard marker), so only check for the UFFD WP case.
+> 
+> While we're here we also refactor code to make it easier to understand.
+> 
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-Just to clarify. I only object to the blanket replacing all the
-swp_entry_t to softleaf_t.
-It seems you are not going to change the swp_entry_t for actual swap
-usage, we are in alignment then.
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-BTW, about the name "softleaf_t", it does not reflect the nature of
-this type is a not presented pte. If you have someone new to guess
-what does  "softleaf_t" mean, I bet none of them would have guessed it
-is a PTE  related value. I have considered  "idlepte_t", something
-given to the reader by the idea that it is not a valid PTE entry. Just
-some food for thought.
+with a small nit below
 
-> I'll deal with this when I come to this follow-up series.
->
-> As I said before I'm empathetic to conflicts, but also - this is somethin=
-g we
-> all have to live with. I have had to deal with numerous conflict fixups. =
-They're
-> really not all that bad to fix up.
->
-> And again I'm happy to do it for you if it's too egregious.
->
-> BUT I'm pretty sure we can just keep using swp_entry_t. In fact unless th=
-ere's
-> an absolutely compelling reason not to - this is exactly what I"ll do :)
+> ---
+>  
+> -	ret = false;
+> +	/*
+> +	 * A race could arise which would result in a softleaf entry such a
 
-Good.
+                                                                    ^ such as 
 
-> > > So this series will proceed as it is.
-> >
-> > Please clarify the "proceed as it is" regarding the actual swap code.
-> > I hope you mean you are continuing your series, maybe with
-> > modifications also consider my feedback. After all, you just say " But
-> > I did think perhaps we could maintain this type explicitly for the
-> > _actual_ swap code."
->
-> I mean keeping this series as-is, of course modulo changes in response to=
- review
-> feedback.
->
-> To be clear - I have no plans whatsoever to change the actual swap code _=
-in this
-> series_ beyond what is already here.
->
-> And in the follow-up that will do more on this - I will most likely keep =
-the
-> swp_entry_t as-is in core swap code or at least absolutely minimal change=
-s
-> there.
+> +	 * migration entry unexpectedly being present in the PMD, so explicitly
+> +	 * check for this and bail out if so.
+> +	 */
 
-Ack
-
-> And that series you will be cc'd on and welcome of course to push back on
-> anything you have an issue with :)
->
-> >
-> > > However I'm more than happy to help resolve conflicts - if you want t=
-o send
-> > > me any of these series off list etc. I can rebase to mm-new myself if
-> > > that'd be helpful?
-> >
-> > As I said above, leaving the actual swap code alone is more helpful
-> > and I consider it cleaner as well. We can also look into incremental
-> > change on your V2 to crave out the swap code.
->
-> Well I welcome review feedback.
->
-> I don't think I really touched anything particularly swap-specific that i=
-s
-> problematic, but obviously feel free to review and will absolutely try to
-> accommodate any reasonable requests!
->
-> >
-> > >
-> > > >
-> > > > Does this renaming have any behavior change in the produced machine=
- code?
-> > >
-> > > It shouldn't result in any meaningful change no.
-> >
-> > That is actually the reason to give the swap table change more
-> > priority. Just saying.
->
-> I'm sorry but this is not a reasonable request. I am being as empathetic =
-and
-> kind as I can be here, but this series is proceeding without arbitrary de=
-lay.
->
-> I will do everything I can to accommodate any concerns or issues you may =
-have
-> here _within reason_ :)
-
-I did not expect you to delay this. It is just expressing the
-viewpoint that this is internal clean up for benefit the developers
-rather than the end users.
-
-Keep the existing swp_entry_t for the actual core swap usage is within
-reasonable request. We already align on that.
-
-Chris
+-- 
+Sincerely yours,
+Mike.
 
