@@ -1,168 +1,207 @@
-Return-Path: <linux-arch+bounces-14640-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14641-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DACA0C4B72D
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Nov 2025 05:17:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8979C4B937
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Nov 2025 06:58:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51CA21895778
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Nov 2025 04:18:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2C60834E250
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Nov 2025 05:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98046248F7C;
-	Tue, 11 Nov 2025 04:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58D1726ED30;
+	Tue, 11 Nov 2025 05:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YoDqYKmz"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="bf2NA6+Y"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A00578F5D
-	for <linux-arch@vger.kernel.org>; Tue, 11 Nov 2025 04:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8D525A2BB
+	for <linux-arch@vger.kernel.org>; Tue, 11 Nov 2025 05:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762834651; cv=none; b=J6fls+9HJcttuFlAqDbTKa5oLcc0sQNhajj4UcbnZ6dxcWEONMzhFnBU01JG7OVv5yHbFZraEIoglH9T0heoep2n5swe8WQpfoRvLcTHqX5kryNo3qJV3bqwATpyCISA7cyVuXGW8WzTArEVJJEiEHy+Ne2CJP8M9J7K/dnannY=
+	t=1762840732; cv=none; b=XtRf2n3n0xF++BRR37zeyAMw3Jft4otuJjArHgMLNl1MI4X98+YHTfxPg7c5ZJ9EJnHTjIkHhqJES0tzhujXag2bMgBYfs0VlTnkvp2UjLZHRp65ab8/Ikj6SQEQ4bShtc84LXQ/TLrIkIWJsVUucfM8LgfmflLWrlLME5MjnoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762834651; c=relaxed/simple;
-	bh=+HDPvzmDF4pSMrTj/Ew9l4F35FfJ+clQaJCnh0ZMShI=;
+	s=arc-20240116; t=1762840732; c=relaxed/simple;
+	bh=5jnWpbWQQnlXG7OiNGwnG/0W4ah2GK8HKHu0tCa/bkU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rwj/RNt+5v/QtN1oBH46ObQ1U2MLY+58oAze0Anefp4sq6DBUnx0OIoDopxocot9GTjl34xr2Rxt0EgpSfHZGYm7V6CKqmhZ9Rji3eJ3QfpM2lC7c/Ozmbfb24YEE5hj+Nz3tNeZvJfdiGbCHmKTbVmhSeBMfkaY5tbMp2BVLO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YoDqYKmz; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-640c1fda178so6328027a12.1
-        for <linux-arch@vger.kernel.org>; Mon, 10 Nov 2025 20:17:29 -0800 (PST)
+	 To:Cc:Content-Type; b=CFykKUYbjqXPljBA4UxKhGgDP9X2f6bEJvVataCDgTU4jtGXfBM2tSn3G0DRgV6jdZf/YMG/viiGZLXXOSxoxO6s2M3mhVHXHWnmKc9LA1m/H2JHUiLHdyFK6OHpUxwfSHv99lew5TyFj48xU1JcSKy0Ex98SGm8/8r3kyp6hcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=bf2NA6+Y; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b72b495aa81so439239166b.2
+        for <linux-arch@vger.kernel.org>; Mon, 10 Nov 2025 21:58:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762834648; x=1763439448; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1762840729; x=1763445529; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+HDPvzmDF4pSMrTj/Ew9l4F35FfJ+clQaJCnh0ZMShI=;
-        b=YoDqYKmzGF8bM3YVyapZFCLzJs1aUatVlNiCsfStikT9VR5zqCIWINU7fA1htC3nUS
-         UI0gD1qeMAwmT+/quaeiRZxZAFbn+GZ0coRelao3yeEkeX9dBfQn2NF8WQgLS4UkKDoZ
-         rZ2/dMJewqkngOgMe9ISCM+2Rfryjru1YUdEs32TfBaCtwuEKd5xFzDASQF78BUDFy2I
-         kqHbRhiIJMuKML7/uQq8JdUzsltXQYRj5GOs9wbahxgxuz++xl++yaSr/MOUlNXfbAQE
-         U0s4xHhgiYanK2WqhIRiAXfqqhYIP0JbJaL5H9Vdy+KZa9wkimUFx4q+HFnqgRm2paww
-         D8pg==
+        bh=4IN4rRfnCOfr9RMuoqowEQ8Wlb2hMDvz+fZbNk629L0=;
+        b=bf2NA6+Yvd2ua4j/lCZ06zSGpaeIuMd0QxydpTqormXj5JI9DfScrlVQDa0NN58U6R
+         vBih8riPqLJJ+u/VD/NUMS2dw1GroYbA/w/9jocCN9AElt5wLXeJpQTSpbge8sTRY5ru
+         0qjwiqo/RF7cOR1X/sTWhM2tNTM2Q7B/ZyMwXvP+S5IczPd2OJDwJ2sggR1ijkpSwgbq
+         F/9a80Tc0Fr5VFAWU7AZePOuSKFDS2a2Ej8RWFbSQqLIc6Y6ugunc3tlPGaZA4itHrlP
+         m+FzKfS0YmXq1PwSQizSavNHzDXQOZHe61JLnfjGzC1/MNDdW6ZI06tNZVIbMWawZD1u
+         DqaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762834648; x=1763439448;
+        d=1e100.net; s=20230601; t=1762840729; x=1763445529;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+HDPvzmDF4pSMrTj/Ew9l4F35FfJ+clQaJCnh0ZMShI=;
-        b=jLDOz9t6V4SnM8P7+ARvPvMdXK6a1Pe+b9AmB1/XUtWU56X6GLrc0tB3mBRfNUkWgZ
-         yfuHldW02UFgziey6tJAvoPZuiT7hDAFl62SeNYTRR8faRxMbQ7vwhkLCP7MaLfi9zml
-         8Voc0HfubmCrnQAGqXbpVRP0GnFJJuIy2+5dMAG01+C4/I+5vxA3At9iPVbS78P/1Mrq
-         OyAT4sy03ekz5aJSBYgC/VRQvvQaKZcqmXpfh5YLQteB5qCaVkL260oinokBla6sZJAL
-         DnVzrZeVmxJgNAkgtLrqt4Y2t6Pcv7t27dKJrJ5iWHT6I+jJ4abSjoubGpj4m5jcEjiy
-         CsEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW+kcXzsWsS+bpGCf565zbds9PJPVAaTZ8ts85HqOSq00DkBjo62/hzz5TVP4PQVkHjES1B9+Jo6Qwj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWfSdsn8QMh/UZNhtT3KR0xFmO3NB+Ei1ZgcwHPMJ5/XVAK4Fc
-	7ORw5aXTB9zBYl5n6rEvZd+omh6tKX+WdZea41K7ovw/CoisOwA/YapVqnks3MYbqO9/pBwtq95
-	WRKOusWsk4u22BOFhQezXyWFCbszrrT0=
-X-Gm-Gg: ASbGncvbU8rSZBvW15s4M96+HS+RZT9Hrz4T5myBzxG5Fi45xFgMJp6bdJVrDIiVKHV
-	d6OWR5xwzsGlG+rEHked1kE7QlrfKlE9HQGhEs31SpefQ7kfWCHRN13bVNlMi4cVbuXFDlQpEYz
-	PxAmWTVp3e0K3Cl0hl5WLEja0qLXfviJ71yi/PSsTc/8470dr4W7/i8bIJ3FOow3GbAcmS8BRMe
-	nwSiNak5+ZF54KMeDGVEl89k5BgcnZA+Rz0KhyxVTC9pGgu+j2dmJRKut1OJAhRWEgJrnfserrJ
-	VJLyTJXCzvu6hw/HhpfZ0HeDQUNUddSaRoHgEA==
-X-Google-Smtp-Source: AGHT+IFxtJ5LUfVYMfACvoc6qLigR2M037K7mxtxeAfO+UoGi5MaKsWG6FcjLFJ3BqqcytYnHVwzOPfWzu221I34nu0=
-X-Received: by 2002:a05:6402:510e:b0:63b:f22d:9254 with SMTP id
- 4fb4d7f45d1cf-6415e6edc1cmr8920410a12.23.1762834647589; Mon, 10 Nov 2025
- 20:17:27 -0800 (PST)
+        bh=4IN4rRfnCOfr9RMuoqowEQ8Wlb2hMDvz+fZbNk629L0=;
+        b=bFs7aoBjQ2hU7olNZ1ZtuJyy52ve3jnnxvdwAbxQHQd3gmOY7r3w5FVtJzTkwNxOSM
+         EW2xFrk8u6eBS8KGI0abfBvOEmV5Vfman6n3IDnt6LtNP8GQL9x9ODWLj437xA3sL3Ft
+         LZTXMRCHpE++GOOcvM6QKV1pCZbdEC6SGxDWoQYnufKWcUQ+ofawnBLmpd5az26APg12
+         f/FFCXJhFR09O+qtY8+MlzcjmsBu4WWx74utiinEIDoDyreJwNTIS2N2KzifSrSRr2LP
+         Nl02Ar/tMnE3hPA8S4pjAUI4YLMsGUIuEAwfSPnd4Yb3K+oOFkoGKy19d+PiV2Ya9/Gy
+         GTcA==
+X-Forwarded-Encrypted: i=1; AJvYcCWIYSqPwr9jSm7eGBczQIkQQMKKrYvTm7jcNRNBQAfbLDCLxkAx72EcgWSjnWlhkSzY9IjqBv44n2qZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+msfd17KXIBgz+xd8RQwkMvKeLOAhIKdWdJHmI+/W1IhT+RPL
+	lk9UHnJrXS97bSA69BZVSikGFivrMTYxdvzdF2u5zvF3nON1OKkqdPetRFp5KwGy7m+CCyCGOpF
+	l48jwClr2iziC1rexoDHvr6CejeYbcbdYxf7TYdhRRQ==
+X-Gm-Gg: ASbGncs47YLTMk8sicqDhsyNMRpj2mUpWaGhfResbOL1ny5y89B1aj618GDPsEot8XW
+	Vd29xJZrfiunvquWkwB7xuNAmFaf5R/VwK+GL0TDUVV0+3qYGroRe4Fj0F2oyBIgn/rywuT48/j
+	mjw0D3WwY7zdECOHm+Vx5UGCxkIEXa3IqfSYV91XGbdvOGQrvOaeVsIzQnSsH/gc56pILcGZjtA
+	eCM42dCWWiHzix47bTEznQfjDeyfrjCUCNd/2gunfqBD9r0osESXYVBterIU8B0QvoD0gLyoA==
+X-Google-Smtp-Source: AGHT+IHHZP/aE/tVJZyLz+gOc0YU9Sc0i9PZJYzJ42dLOfI9Sr7WDBO2F0DsSawtvDJdjI2jksVRQSbzge+KnP9adhY=
+X-Received: by 2002:a17:907:1c21:b0:b70:a9fd:1170 with SMTP id
+ a640c23a62f3a-b72e05725a4mr966508366b.65.1762840728609; Mon, 10 Nov 2025
+ 21:58:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1762621567.git.lorenzo.stoakes@oracle.com>
- <CACePvbVq3kFtrue2smXRSZ86+EuNVf6q+awQnU-n7=Q4x7U9Lw@mail.gmail.com>
- <5b60f6e8-7eab-4518-808a-b34331662da5@lucifer.local> <CACePvbUvQu+So7OoUbJTMLODz8YDAOgWaM8A-RXFj2U_Qc-dng@mail.gmail.com>
- <3c0e9dd0-70ac-4588-813b-ffb24d40f067@lucifer.local> <c9e3ad0e-02ef-077c-c12c-f72057eb7817@google.com>
-In-Reply-To: <c9e3ad0e-02ef-077c-c12c-f72057eb7817@google.com>
-From: Kairui Song <ryncsn@gmail.com>
-Date: Tue, 11 Nov 2025 12:16:51 +0800
-X-Gm-Features: AWmQ_bmvt7re6_XRmXvUlAJCOhI6cJA0pVFvbyH2-3YOeH3XrYzunQCqAT7qyRY
-Message-ID: <CAMgjq7BT8+Vs+7=G5PUS5wsxAhWVzDTGLX5g3mXMpTJ8PFSbxA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/16] mm: remove is_swap_[pte, pmd]() + non-swap
- entries, introduce leaf entries
-To: Hugh Dickins <hughd@google.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Chris Li <chrisl@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, David Hildenbrand <david@redhat.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Matthew Brost <matthew.brost@intel.com>, Joshua Hahn <joshua.hahnjy@gmail.com>, 
-	Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, SeongJae Park <sj@kernel.org>, 
-	Matthew Wilcox <willy@infradead.org>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>, 
-	Jann Horn <jannh@google.com>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Pedro Falcato <pfalcato@suse.de>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Rik van Riel <riel@surriel.com>, 
-	Harry Yoo <harry.yoo@oracle.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-arch@vger.kernel.org, damon@lists.linux.dev
+References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com> <20251023-v5_user_cfi_series-v22-25-1935270f7636@rivosinc.com>
+In-Reply-To: <20251023-v5_user_cfi_series-v22-25-1935270f7636@rivosinc.com>
+From: Zong Li <zong.li@sifive.com>
+Date: Tue, 11 Nov 2025 13:58:37 +0800
+X-Gm-Features: AWmQ_bmwbidNFRD3Ln7UsJWJk61pCiG6pfhUPXDjXSV4C1IEKiwyDYyiO7oQK-g
+Message-ID: <CANXhq0oEpCow0G+KsJ6ZPuwsxmAFVqoKGEzygiwSmxFsmntiWg@mail.gmail.com>
+Subject: Re: [PATCH v22 25/28] riscv: create a config for shadow stack and
+ landing pad instr support
+To: debug@rivosinc.com
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 11, 2025 at 8:09=E2=80=AFAM Hugh Dickins <hughd@google.com> wro=
-te:
-> On Mon, 10 Nov 2025, Lorenzo Stoakes wrote:
-> > On Mon, Nov 10, 2025 at 03:04:48AM -0800, Chris Li wrote:
-> > >
-> > > That is actually the reason to give the swap table change more
-> > > priority. Just saying.
-> >
-> > I'm sorry but this is not a reasonable request. I am being as empatheti=
-c and
-> > kind as I can be here, but this series is proceeding without arbitrary =
-delay.
-> >
-> > I will do everything I can to accommodate any concerns or issues you ma=
-y have
-> > here _within reason_ :)
+On Fri, Oct 24, 2025 at 12:51=E2=80=AFAM Deepak Gupta via B4 Relay
+<devnull+debug.rivosinc.com@kernel.org> wrote:
 >
-> But Lorenzo, have you even tested your series properly yet, with
-> swapping and folio migration and huge pages and tmpfs under load?
-> Please do.
+> From: Deepak Gupta <debug@rivosinc.com>
 >
-> I haven't had time to bisect yet, maybe there's nothing more needed
-> than a one-liner fix somewhere; but from my experience it is not yet
-> ready for inclusion in mm and next - it stops testing other folks' work.
+> This patch creates a config for shadow stack support and landing pad inst=
+r
+> support. Shadow stack support and landing instr support can be enabled by
+> selecting `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wire=
+s
+> up path to enumerate CPU support and if cpu support exists, kernel will
+> support cpu assisted user mode cfi.
 >
-> I haven't tried today's v3, but from the cover letter of differences,
-> it didn't look like much of importance is fixed since v2: which
-> (after a profusion of "Bad swap offet entry 3ffffffffffff" messages,
+> If CONFIG_RISCV_USER_CFI is selected, select `ARCH_USES_HIGH_VMA_FLAGS`,
+> `ARCH_HAS_USER_SHADOW_STACK` and DYNAMIC_SIGFRAME for riscv.
+>
+> Reviewed-by: Zong Li <zong.li@sifive.com>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  arch/riscv/Kconfig                  | 22 ++++++++++++++++++++++
+>  arch/riscv/configs/hardening.config |  4 ++++
+>  2 files changed, 26 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 0c6038dc5dfd..4f9f9358e6e3 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -1146,6 +1146,28 @@ config RANDOMIZE_BASE
+>
+>            If unsure, say N.
+>
+> +config RISCV_USER_CFI
+> +       def_bool y
+> +       bool "riscv userspace control flow integrity"
+> +       depends on 64BIT && $(cc-option,-mabi=3Dlp64 -march=3Drv64ima_zic=
+fiss) && \
+> +                           $(cc-option,-fcf-protection=3Dfull)
 
-I also noticed the 0x3fff... issue in V2:
-https://lore.kernel.org/all/CAMgjq7AP383YfU3L5ZxJ9U3x-vRPnEkEUtmnPdXD29HiNC=
-8OrA@mail.gmail.com/
+Hi Deepak,
+I noticed that you added a $(cc-option,-fcf-protection=3Dfull) check in
+this version. I think this check will fail by a cc1 warning when using
+a newer toolchain, because -fcf-protection cannot be used alone, it
+must be specified together with the appropriate -march option.
+For example:
+  1. -fcf-protection=3Dbranch requires -march=3D..._zicfilp
+  2. -fcf-protection=3Dreturn requires -march=3D..._zicfiss
+  3. -fcf-protection=3Dfull requires -march=3D..._zicfilp_zicfiss
 
-The issue is caused by removing the pte_none check, that could result
-in issues like this, so that check has to stay I think, at least for
-the swap part.
 
-It seems V3 has fixed it, I can have a try later.
-
-I also hope we can keep the swap entry part untouched, Overloading
-swap entry for things like migration looks odd indeed, but setting and
-getting a PTE as swap entry seems clean and easy to understand.
-Existing usage of swap entries is quite logically consistent and
-stable, we might need to do some cleanup for swap but having a
-standalone type and define is very helpful.
+> +       depends on RISCV_ALTERNATIVE
+> +       select RISCV_SBI
+> +       select ARCH_HAS_USER_SHADOW_STACK
+> +       select ARCH_USES_HIGH_VMA_FLAGS
+> +       select DYNAMIC_SIGFRAME
+> +       help
+> +         Provides CPU assisted control flow integrity to userspace tasks=
+.
+> +         Control flow integrity is provided by implementing shadow stack=
+ for
+> +         backward edge and indirect branch tracking for forward edge in =
+program.
+> +         Shadow stack protection is a hardware feature that detects func=
+tion
+> +         return address corruption. This helps mitigate ROP attacks.
+> +         Indirect branch tracking enforces that all indirect branches mu=
+st land
+> +         on a landing pad instruction else CPU will fault. This mitigate=
+s against
+> +         JOP / COP attacks. Applications must be enabled to use it, and =
+old user-
+> +         space does not get protection "for free".
+> +         default y.
+> +
+>  endmenu # "Kernel features"
+>
+>  menu "Boot options"
+> diff --git a/arch/riscv/configs/hardening.config b/arch/riscv/configs/har=
+dening.config
+> new file mode 100644
+> index 000000000000..089f4cee82f4
+> --- /dev/null
+> +++ b/arch/riscv/configs/hardening.config
+> @@ -0,0 +1,4 @@
+> +# RISCV specific kernel hardening options
+> +
+> +# Enable control flow integrity support for usermode.
+> +CONFIG_RISCV_USER_CFI=3Dy
+>
+> --
+> 2.43.0
+>
+>
 
