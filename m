@@ -1,120 +1,133 @@
-Return-Path: <linux-arch+bounces-14667-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14668-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0717C52A5F
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 15:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA62CC52E93
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 16:11:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 54EE4341CEB
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 14:18:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0ED3F34E40D
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 15:00:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C932848A1;
-	Wed, 12 Nov 2025 14:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D64E33DEF7;
+	Wed, 12 Nov 2025 14:49:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b="zPH4iuqJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832DB27EFF1;
-	Wed, 12 Nov 2025 14:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C61833F371;
+	Wed, 12 Nov 2025 14:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.203.114
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762957078; cv=none; b=mr3C7dhz+1b5scruRqI5mbQzaA6xA2ZKEyV0e5J1Nb/H62/AiiYVbsOXrtqBOn9YISj1ptxTUaQd8RaJqt4EUsmTCqtBn0WvWxJRJINFYXzcvZQ2JUXCcSt2kf1V3B4YV6B6ddy0ma0FJ52rwO8thnTHvkulfiBwQ+9i24KLnzY=
+	t=1762958941; cv=none; b=Z6Xpw344MksgL94qViptc/rd4chxFP5T/sQY9tFkOILJqKVXkT8XgQwuvPjNfYgDV/2+LR7+b/bRSt2eCZVoXxigMcKvZxELqdgQpchW/AI/hAqOJSkKJ8EHeAVEkcR3kh0P9nCMquWpnLjPGxv1vleRzVJLqP9RR+6u/A0jM9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762957078; c=relaxed/simple;
-	bh=yHCsSRmzIEcc2+pbJTsDiLYepFiqMay3UJUEkTzqLjQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FgB2ik75bVbTosm0EGYPWF1+qG6wVz9l6fzurLVoMxulq8hc7w24E8cLmxr7BXzyJLIp4YVh/tQHbGYs/lhq9MmMb6Yz0AkRfNdBKRYv76aCvhekGz8yL0mRg5X7uI0+IARiThgKbMZjoz4FQbZIjYqS8hEyP50nA7QFE35Xh0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38B4D1515;
-	Wed, 12 Nov 2025 06:17:48 -0800 (PST)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B9D563F5A1;
-	Wed, 12 Nov 2025 06:17:52 -0800 (PST)
-Date: Wed, 12 Nov 2025 14:17:49 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Chenghai Huang <huangchenghai2@huawei.com>, arnd@arndb.de,
-	catalin.marinas@arm.com, will@kernel.org, akpm@linux-foundation.org,
-	anshuman.khandual@arm.com, ryan.roberts@arm.com,
-	andriy.shevchenko@linux.intel.com, herbert@gondor.apana.org.au,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-	linux-api@vger.kernel.org, fanghao11@huawei.com,
-	shenyang39@huawei.com, liulongfang@huawei.com, qianweili@huawei.com
-Subject: Re: [PATCH RFC 4/4] arm64/io: Add {__raw_read|__raw_write}128 support
-Message-ID: <aRSXDTT44_3iutEg@J2N7QTR9R3>
-References: <20251112015846.1842207-1-huangchenghai2@huawei.com>
- <20251112015846.1842207-5-huangchenghai2@huawei.com>
- <aRR9UesvUCFLdVoW@J2N7QTR9R3>
- <20251112140157.24ff4f2e@pumpkin>
+	s=arc-20240116; t=1762958941; c=relaxed/simple;
+	bh=qtnSAalOXMMqjBYnRbllgani0PlQcrFAYRoJzXnRcjk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S/FVTSI7kVDuqGcaq0VNE5wSIgIxNV3RIZS2lsxgs3RPAgQi5CDATpF5pUV5Of9eFN8PfbeZfVsqRgvcT5lRdbQqxvHUHOh/ShhBNKWba/KtwwT8eQFveeQVBTGSz4F4sRaQYuD+n4Uaby22z+FakN2E5CaKmpEiojH4wfSaLF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk; spf=pass smtp.mailfrom=codethink.co.uk; dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b=zPH4iuqJ; arc=none smtp.client-ip=188.40.203.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codethink.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codethink.co.uk; s=imap4-20230908; h=Sender:Content-Transfer-Encoding:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+	Reply-To; bh=Y/TNSDK51KEaNBTo1DMLY4DHz1Ol2XIRRHRNeKhH6vs=; b=zPH4iuqJDw0VV3v+
+	PBLlhleuXAl8nce9Lh9Hes0xKWiYiqRKLEL5zxcWj29as152Gv4stb5+hDnC2CjZAsQ2CAtYI98Nn
+	u7JbtvAacN7Zag/hZo8vWpgRPr1w5H1ckhz4haUGOtcEynXp0DgwpivTVXYYIwCrQRnS7Lv+faHFF
+	eRW/Gd113OvPW681OPDA1LmChdig2M8q9kSFX6nj0D4G9pSWaMd+T8bHUrPsM17bYQed902RtmjQZ
+	fB5994qHjw0GmdKAIlJxP/qGOxwYVqcRo55ZoA1Sgn+2xAjCukuA/qLHtt09Ry+gx5ajo+HvRzazc
+	YDFebkVPkCi+F0+mjA==;
+Received: from [63.135.74.212] (helo=[192.168.1.241])
+	by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+	id 1vJC94-004DRg-5j; Wed, 12 Nov 2025 14:48:26 +0000
+Message-ID: <59f8bc30-c1c6-4f07-87dd-cd2893ae87f7@codethink.co.uk>
+Date: Wed, 12 Nov 2025 14:48:23 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251112140157.24ff4f2e@pumpkin>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 3/4] io-128-nonatomic: introduce
+ io{read|write}128_{lo_hi|hi_lo}
+To: Chenghai Huang <huangchenghai2@huawei.com>, arnd@arndb.de,
+ catalin.marinas@arm.com, will@kernel.org, akpm@linux-foundation.org,
+ anshuman.khandual@arm.com, ryan.roberts@arm.com,
+ andriy.shevchenko@linux.intel.com, herbert@gondor.apana.org.au,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-api@vger.kernel.org
+Cc: fanghao11@huawei.com, shenyang39@huawei.com, liulongfang@huawei.com,
+ qianweili@huawei.com
+References: <20251112015846.1842207-1-huangchenghai2@huawei.com>
+ <20251112015846.1842207-4-huangchenghai2@huawei.com>
+Content-Language: en-GB
+From: Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20251112015846.1842207-4-huangchenghai2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Sender: ben.dooks@codethink.co.uk
 
-On Wed, Nov 12, 2025 at 02:01:57PM +0000, David Laight wrote:
-> On Wed, 12 Nov 2025 12:28:01 +0000
-> Mark Rutland <mark.rutland@arm.com> wrote:
+On 12/11/2025 01:58, Chenghai Huang wrote:
+> From: Weili Qian <qianweili@huawei.com>
 > 
-> > On Wed, Nov 12, 2025 at 09:58:46AM +0800, Chenghai Huang wrote:
-> > > From: Weili Qian <qianweili@huawei.com>
-> > > 
-> > > Starting from ARMv8.4, stp and ldp instructions become atomic.  
-> > 
-> > That's not true for accesses to Device memory types.
-> > 
-> > Per ARM DDI 0487, L.b, section B2.2.1.1 ("Changes to single-copy atomicity in
-> > Armv8.4"):
-> > 
-> >   If FEAT_LSE2 is implemented, LDP, LDNP, and STP instructions that load
-> >   or store two 64-bit registers are single-copy atomic when all of the
-> >   following conditions are true:
-> >   • The overall memory access is aligned to 16 bytes.
-> >   • Accesses are to Inner Write-Back, Outer Write-Back Normal cacheable memory.
-> > 
-> > IIUC when used for Device memory types, those can be split, and a part
-> > of the access could be replayed multiple times (e.g. due to an
-> > intetrupt).
+> In order to provide non-atomic functions for io{read|write}128.
+> We define a number of variants of these functions in the generic
+> iomap that will do non-atomic operations.
 > 
-> That can't be right.
+> These functions are only defined if io{read|write}128 are defined.
+> If they are not, then the wrappers that always use non-atomic operations
+> from include/linux/io-128-nonatomic*.h will be used.
+> 
+> Signed-off-by: Weili Qian <qianweili@huawei.com>
+> Signed-off-by: Chenghai Huang <huangchenghai2@huawei.com>
+> ---
+>   include/linux/io-128-nonatomic-hi-lo.h | 35 ++++++++++++++++++++++++++
+>   include/linux/io-128-nonatomic-lo-hi.h | 34 +++++++++++++++++++++++++
+>   2 files changed, 69 insertions(+)
+>   create mode 100644 include/linux/io-128-nonatomic-hi-lo.h
+>   create mode 100644 include/linux/io-128-nonatomic-lo-hi.h
+> 
+> diff --git a/include/linux/io-128-nonatomic-hi-lo.h b/include/linux/io-128-nonatomic-hi-lo.h
+> new file mode 100644
+> index 000000000000..b5b083a9e81b
+> --- /dev/null
+> +++ b/include/linux/io-128-nonatomic-hi-lo.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_IO_128_NONATOMIC_HI_LO_H_
+> +#define _LINUX_IO_128_NONATOMIC_HI_LO_H_
+> +
+> +#include <linux/io.h>
+> +#include <asm-generic/int-ll64.h>
+> +
+> +static inline u128 ioread128_hi_lo(const void __iomem *addr)
+> +{
+> +	u32 low, high;
 
-For better or worse, the architecture permits this, and I understand
-that there are implementations on which this can happen.
+did you mean u64 here?
 
-> IO accesses can reference hardware FIFO so must only happen once.
+> +	high = ioread64(addr + sizeof(u64));
+> +	low = ioread64(addr);
+> +
+> +	return low + ((u128)high << 64);
+> +}
+> +
+> +static inline void iowrite128_hi_lo(u128 val, void __iomem *addr)
+> +{
+> +	iowrite64(val >> 64, addr + sizeof(u64));
+> +	iowrite64(val, addr);
+> +}
+> +
 
-This has nothing to do with the endpoint, and so any FIFO in the
-endpoint is immaterial.
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
-I agree that we want to ensure that the accesses only happen once, which
-is why I have raised that it is unsound to use LDP/LDNP/STP in this way.
-
-> (Or is 'Device memory' something different from 'Device register'?
-
-I specifically said "Device memory type", which is an attribute that the
-MMU associates with a VA, and determines how the MMU (and memory system
-as a whole) treats accesses to that VA.
-
-You can find the architecture documentation I referenced at:
-
-  https://developer.arm.com/documentation/ddi0487/lb/
-
-> I'm also not sure that the bus cycles could get split by an interrupt,
-> that would require a mid-instruction interrupt - very unlikely.
-
-There are various reasons why an implementation might split the accesses
-made by a single instruction, and why an interrupt (or other event)
-might occur between accesses and cause a replay of some of the
-constituent accesses. This has nothing to do with splitting bus cycles.
-
-Mark.
+https://www.codethink.co.uk/privacy.html
 
