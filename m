@@ -1,264 +1,182 @@
-Return-Path: <linux-arch+bounces-14675-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14676-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 981C8C54049
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 19:54:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A172AC542A6
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 20:36:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BF423AF5C9
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 18:49:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B075C4E1C35
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 19:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D1C34AAFB;
-	Wed, 12 Nov 2025 18:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAE8822A4FC;
+	Wed, 12 Nov 2025 19:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Pmm2REXr";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4UXI8DMY";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Pmm2REXr";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4UXI8DMY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v28dvmxQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85093491CD
-	for <linux-arch@vger.kernel.org>; Wed, 12 Nov 2025 18:49:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D30340287
+	for <linux-arch@vger.kernel.org>; Wed, 12 Nov 2025 19:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762973343; cv=none; b=etuaxJa4MnWiBn9NYarBENV084mxzOn0T4OnhneDYp4OeGV1S7EUMbL41bdCWMoNo24xbxE0uWwN96WwHvjk1A+dPn/L/K03BdnGMRkFWtNajQoIZFpQh4A61+5vBZnsImUs8PJllJ5imCACLvxvUwYXN/7pQSlWyeGtKmLYjrk=
+	t=1762975464; cv=none; b=dBP1rlUG7hQgZEA5cBxhLMJOk970EID8x/P8h+O3kmwrgnTne7zrIxIRZzkNfd+w4mGVspsl4429FmNj3gZuPHlR/BCgpi/HfEoyAr1/FhU2puv0LpkrUhRpC+n9PMEeW/OdIUiulkjKK1ivbWnmjWYnFcTBP6ZvDlvG1rCsWhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762973343; c=relaxed/simple;
-	bh=k1KBaOWc9iO3SoX+n0iAl78/KjK6mRyLLMHPlt71iEw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LVjZzB68TzhczDgJQBZPBZfeIkaJcGAP+E9iTqsDHFEWwcg41o9bdXkSyBeQAVv6fHz0RQFcU1UGPUkUuon+YKwA/HCXAjR+8Fb3y/qEa1ETZfBLUsAgEtK9b32FhBxukFPWiyzb2LarAwzw4QXegRC1ZZ4B4Y2jIuAGl2cH8ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Pmm2REXr; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4UXI8DMY; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Pmm2REXr; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4UXI8DMY; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 73B4721BDD;
-	Wed, 12 Nov 2025 18:48:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762973339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/12U6SR7WkQgyj2k+NmhedtIT7x+SNnjxUusuTSQA7k=;
-	b=Pmm2REXrw1avWrBH+xz082qOSzPsytWtjS+uiwtgQHpTK+SEAHQwFa6VeDIk8oSgJJMf4G
-	7b/b0+HXynbZXSrqE3FRplaG9dxCTSDXEhupy9yHUiHvWzfxUciyh6svHFn8l1IZtpes12
-	VxEWNIDMso6lVfKLVbpC63dN32ixUTw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762973339;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/12U6SR7WkQgyj2k+NmhedtIT7x+SNnjxUusuTSQA7k=;
-	b=4UXI8DMYPhNXKXIhfaBTaPhH4Io+ehEVIOk/BV+5G9jRf1H+FIMfYKEFJj+sS/HLJSVIAi
-	PxJhju4cEI5v4eCA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=Pmm2REXr;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=4UXI8DMY
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762973339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/12U6SR7WkQgyj2k+NmhedtIT7x+SNnjxUusuTSQA7k=;
-	b=Pmm2REXrw1avWrBH+xz082qOSzPsytWtjS+uiwtgQHpTK+SEAHQwFa6VeDIk8oSgJJMf4G
-	7b/b0+HXynbZXSrqE3FRplaG9dxCTSDXEhupy9yHUiHvWzfxUciyh6svHFn8l1IZtpes12
-	VxEWNIDMso6lVfKLVbpC63dN32ixUTw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762973339;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/12U6SR7WkQgyj2k+NmhedtIT7x+SNnjxUusuTSQA7k=;
-	b=4UXI8DMYPhNXKXIhfaBTaPhH4Io+ehEVIOk/BV+5G9jRf1H+FIMfYKEFJj+sS/HLJSVIAi
-	PxJhju4cEI5v4eCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 02ED13EA61;
-	Wed, 12 Nov 2025 18:48:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 8rFgAJvWFGkCNgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Wed, 12 Nov 2025 18:48:59 +0000
-Message-ID: <dfcf8c59-e836-4e35-8585-656b64149ad7@suse.cz>
-Date: Wed, 12 Nov 2025 19:48:58 +0100
+	s=arc-20240116; t=1762975464; c=relaxed/simple;
+	bh=pMtifnGguWwXh6lHrgJXuydSaUf37tbidRI42Plh0jQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=nx1QgjlTz/QXw4/xzW+U0C5sOwq0S1NUCEn7g0gqTfauyCuSYPJVR1u7BZB+p7YGh4pogJHo0cdy1kfks/cPWZsHjFRhdJf7v2IHvYFjhBEYfcyDTs4ijRvfj1go7rBzHT1X90pbNTDSL7Jinx0iR4fmD3EZru6dbycxBR4DZ1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v28dvmxQ; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-47754c0796cso382835e9.3
+        for <linux-arch@vger.kernel.org>; Wed, 12 Nov 2025 11:24:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762975461; x=1763580261; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=shBTNgU9wHH3aiYzJkihBS7EM1mqulzE2iP8vCjc0uc=;
+        b=v28dvmxQ8Zqk6Vh9eI6jdOo+cRanJQb4lDpHiOF3/HPlGxuQA1nVe1ejPxMXYrYV0B
+         0Ud+hGbV0fAXbNnylkdXuk34gGq5XMUrzwQCTaAgJ2eOTTRg7JWSTCvjYVzhX4geqnSO
+         dwqQ4nk/MzvVreOX4/um3XWorEaghS+2AnSWXHbk+wyjZVAC2sueQk6bBT7PnVGEr9Be
+         YwyWlb1V9igFhl/x9u73xPM8IgTGK3kJ+EbEQKo5LrrRgd+mmZT51BQGffU7F8PQuyFg
+         3ieoY6f9dM1IaoeuvCqOWCbpbqB4ovYZH3xTLwwkBA/y8yydhrVi2iTDRHoVXUOsrBo/
+         4MYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762975461; x=1763580261;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=shBTNgU9wHH3aiYzJkihBS7EM1mqulzE2iP8vCjc0uc=;
+        b=DTxnN8uCwwR7FbhCnxyd6bPH0kLS0L6Z8ulxAk8Bd6f/nrKHn1eT8cqR7KV9TYOJcK
+         QknqQK6NwTYMH4FWYqr1tltLGhmAKMfmLntQzipyLThBSBLU7B4XnjM8PGRnl8X6IdS+
+         g4brfK+GA6a3e7LCJkudkFCohhLQedC2phHwp8AVRjETO2TIeZsFgYmh6g00zKQ63c5V
+         NLjDebSaS8pQHPSKyAFT1Vk8OgU3UlNKkSw+1IgF0r/uUzx+togO3Etm5GOt/zb8gDM2
+         aLlKMiqmLWQIkbf74jp/xhodKNXJ0D+0FC2dRyCivVSJf1W35TBl1pEvmZobHgjBReUr
+         iTVg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfZWvDRbF82nsTbnUqpmn34Pv5nFbRaok7hVdEGuYnkyMyQzxG0Q5hc9vWS91JxBM/mK/qKZiDFi2y@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXEizFZdk18o2aZdhnUkA6o3eqfgZLay5mrNtDEKAhc06/FRts
+	mZA37NEFmH329PaU10jW+17Bfm51Q6jszKhVQjpcmoRUeO9V8BhA9ZRsReWdjvbtZgBP1fA5y0p
+	YiI3PbQ==
+X-Google-Smtp-Source: AGHT+IF0IMOWBsJBJ0wnh8IgGWl4VgqHbLq1DSRsMKozY2Y54uc+oyrD1ecl+ZGARKGuxvpKlqMu/I45G/s=
+X-Received: from wmsp24.prod.google.com ([2002:a05:600c:1d98:b0:477:15b8:8ef1])
+ (user=lrizzo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4fc9:b0:477:5b0a:e616
+ with SMTP id 5b1f17b1804b1-47787071649mr35886245e9.5.1762975461305; Wed, 12
+ Nov 2025 11:24:21 -0800 (PST)
+Date: Wed, 12 Nov 2025 19:24:02 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/16] mm: avoid unnecessary uses of is_swap_pte()
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>,
- David Hildenbrand <david@redhat.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Nico Pache
- <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Oscar Salvador <osalvador@suse.de>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Kairui Song <kasong@tencent.com>, Nhat Pham <nphamcs@gmail.com>,
- Baoquan He <bhe@redhat.com>, Chris Li <chrisl@kernel.org>,
- SeongJae Park <sj@kernel.org>, Matthew Wilcox <willy@infradead.org>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>,
- Jann Horn <jannh@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
- Naoya Horiguchi <nao.horiguchi@gmail.com>, Pedro Falcato <pfalcato@suse.de>,
- Pasha Tatashin <pasha.tatashin@soleen.com>, Rik van Riel <riel@surriel.com>,
- Harry Yoo <harry.yoo@oracle.com>, Hugh Dickins <hughd@google.com>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-arch@vger.kernel.org, damon@lists.linux.dev
-References: <cover.1762812360.git.lorenzo.stoakes@oracle.com>
- <17fd6d7f46a846517fd455fadd640af47fcd7c55.1762812360.git.lorenzo.stoakes@oracle.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <17fd6d7f46a846517fd455fadd640af47fcd7c55.1762812360.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 73B4721BDD
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_CC(0.00)[linux.ibm.com,redhat.com,zeniv.linux.org.uk,kernel.org,suse.cz,arndb.de,nvidia.com,linux.alibaba.com,oracle.com,arm.com,linux.dev,suse.de,google.com,suse.com,intel.com,gmail.com,sk.com,gourry.net,huaweicloud.com,tencent.com,infradead.org,ziepe.ca,zte.com.cn,huawei.com,soleen.com,surriel.com,vger.kernel.org,kvack.org,lists.linux.dev];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[65];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:dkim,suse.cz:mid,suse.cz:email]
-X-Spam-Score: -3.01
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.2.1041.gc1ab5b90ca-goog
+Message-ID: <20251112192408.3646835-1-lrizzo@google.com>
+Subject: [PATCH 0/6] platform wide software interrupt moderation
+From: Luigi Rizzo <lrizzo@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, 
+	Luigi Rizzo <rizzo.unipi@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Sean Christopherson <seanjc@google.com>, 
+	Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Bjorn Helgaas <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Luigi Rizzo <lrizzo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/10/25 23:21, Lorenzo Stoakes wrote:
-> There's an established convention in the kernel that we treat PTEs as
-> containing swap entries (and the unfortunately named non-swap swap entries)
-> should they be neither empty (i.e. pte_none() evaluating true) nor present
-> (i.e. pte_present() evaluating true).
-> 
-> However, there is some inconsistency in how this is applied, as we also
-> have the is_swap_pte() helper which explicitly performs this check:
-> 
-> 	/* check whether a pte points to a swap entry */
-> 	static inline int is_swap_pte(pte_t pte)
-> 	{
-> 		return !pte_none(pte) && !pte_present(pte);
-> 	}
-> 
-> As this represents a predicate, and it's logical to assume that in order to
-> establish that a PTE entry can correctly be manipulated as a swap/non-swap
-> entry, this predicate seems as if it must first be checked.
-> 
-> But we instead, we far more often utilise the established convention of
-> checking pte_none() / pte_present() before operating on entries as if they
-> were swap/non-swap.
-> 
-> This patch works towards correcting this inconsistency by removing all uses
-> of is_swap_pte() where we are already in a position where we perform
-> pte_none()/pte_present() checks anyway or otherwise it is clearly logical
-> to do so.
-> 
-> We also take advantage of the fact that pte_swp_uffd_wp() is only set on
-> swap entries.
-> 
-> Additionally, update comments referencing to is_swap_pte() and
-> non_swap_entry().
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Platform wide software interrupt moderation specifically addresses a
+limitation of platforms, from many vendors, whose I/O performance drops
+significantly when the total rate of MSI-X interrupts is too high (e.g
+1-3M intr/s depending on the platform).
 
-LGTM (famous last words)
+Conventional interrupt moderation operates separately on each source,
+hence the configuration should target the worst case. On large servers
+with hundreds of interrupt sources, keeping the total rate bounded would
+require delays of 100-200us; and adaptive moderation would have to reach
+those delays with as little as 10K intr/s per source. These values are
+unacceptable for RPC or transactional workloads.
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+To address this problem, this code measures efficiently the total and
+per-CPU interrupt rates, so that individual moderation delays can be
+adjusted based on actual global and local load. This way, the system
+controls both global interrupt rates and individual CPU load, and
+tunes delays so they are normally 0 or very small except during actual
+local/global overload.
+
+Configuration is easy and robust. System administrators specify the
+maximum targets (moderation delay; interrupt rate; and fraction of time
+spent in hardirq), and per-CPU control loops adjust actual delays to try
+and keep metrics within the bounds.
+
+There is no need for exact targets, because the system is adaptive.
+Values like delay_us=100, target_irq_rate=1000000, hardirq_percent=70
+are good almost everywhere.
+
+The system does not rely on any special hardware feature except from
+MSI-X Pending Bit Array (PBA), a mandatory component of MSI-X
+
+Boot defaults are set via module parameters (/sys/module/irq_moderation
+and /sys/module/${DRIVER}) or at runtime via /proc/irq/moderation, which
+is also used to export statistics.  Moderation on individual irq can be
+turned on/off via /proc/irq/NN/moderation .
+
+PERFORMANCE BENEFITS:
+Below are some experimental results under high load (before/after rates
+are measured with conventional moderation or with this change):
+
+- 100Gbps NIC, 32 queues: rx goes from 50-60Gbps to 92.8 Gbps (line rate).
+- 200Gbps NIC, 10 VMs (total 160 queues): rx goes from 30 Gbps to 190 Gbps (line rate).
+- 12 SSD, 96 queues: 4K random read goes from 6M to 20.5 MIOPS (device max).
+
+In all cases, latency up to p95 is unaffected at low/moderate load,
+even if compared with no moderation at all.
+
+IMPLEMENTATION
+- Most of the code, including module parameters and procfs hooks for
+  configuration and telemetry, is in two files
+  include/linux/irq_moderation.h and kernel/irq/irq_moderation.c.
+
+- struct irq_desc is extended with a list entry and one field indicating
+  whether this source should use moderation
+
+- handle_irq_event() and sysrec_posted_msi_notification() have small
+  inline hooks to track interrupts and trigger moderation as needed.
+
+- per-CPU state is initialized via hooks in per-architecture files
+
+- optional device driver module parameters can be added to set driver
+  defaults to enable/disable moderation
+
+Luigi Rizzo (6):
+  genirq: platform wide interrupt moderation: Documentation, Kconfig,
+    irq_desc
+  genirq: soft_moderation: add base files, procfs hooks
+  genirq: soft_moderation: activate hooks in handle_irq_event()
+  genirq: soft_moderation: implement adaptive moderation
+  x86/irq: soft_moderation: add support for posted_msi (intel)
+  genirq: soft_moderation: implement per-driver defaults (nvme and vfio)
+
+ Documentation/core-api/irq/index.rst          |   1 +
+ Documentation/core-api/irq/irq-moderation.rst | 215 ++++++++
+ arch/x86/kernel/cpu/common.c                  |   1 +
+ arch/x86/kernel/irq.c                         |  12 +
+ drivers/irqchip/irq-gic-v3.c                  |   2 +
+ drivers/nvme/host/pci.c                       |   3 +
+ drivers/vfio/pci/vfio_pci_intrs.c             |   3 +
+ include/linux/interrupt.h                     |  28 +
+ include/linux/irq_moderation.h                | 265 ++++++++++
+ include/linux/irqdesc.h                       |   5 +
+ kernel/irq/Kconfig                            |  11 +
+ kernel/irq/Makefile                           |   1 +
+ kernel/irq/handle.c                           |   3 +
+ kernel/irq/irq_moderation.c                   | 482 ++++++++++++++++++
+ kernel/irq/irqdesc.c                          |   1 +
+ kernel/irq/proc.c                             |   2 +
+ 16 files changed, 1035 insertions(+)
+ create mode 100644 Documentation/core-api/irq/irq-moderation.rst
+ create mode 100644 include/linux/irq_moderation.h
+ create mode 100644 kernel/irq/irq_moderation.c
+
+-- 
+2.51.2.1041.gc1ab5b90ca-goog
 
 
