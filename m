@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-14677-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14678-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63A9EC542D6
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 20:38:43 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAA29C542BB
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 20:37:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BFD442183A
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 19:27:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9DB5E4E4993
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Nov 2025 19:28:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC39C34FF6A;
-	Wed, 12 Nov 2025 19:24:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216B5350A07;
+	Wed, 12 Nov 2025 19:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QT224pSc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wR96Uzqw"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CEF534DB52
-	for <linux-arch@vger.kernel.org>; Wed, 12 Nov 2025 19:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AC534F495
+	for <linux-arch@vger.kernel.org>; Wed, 12 Nov 2025 19:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762975467; cv=none; b=Gonj9exZtdBIwoFpdFXnUbk3/T3uUl35CaBrp+i+90SWZcdT8Qvu17YL0uSBnhmda1FwHqx5rOYrCX55QbxSBs3I5vOCn8fH3kCbrUcC+OoA4yayzTu8x8XaHrlfFhjO8N6oqEXThBOlAbFoajrhKCkkPct0XMatELl+PFE5Thw=
+	t=1762975470; cv=none; b=Hr4t9DLXqCz7Bf3HfSrSiNZ4x2VGyex9kDxKugPxiKh3UxurSXYKOBqQjA4J+w5C8uC7l6QFoSW/+C8vSx7vUMm/Q5Wlr9iaG4czOLd4qW5btxBXFMNCVOqr0A0Z/zsnLgig3mqkUIhswdl5dxdtyc3LOxqBP4xjBNUtisJV6yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762975467; c=relaxed/simple;
-	bh=ld2fsmdlt2T8HxwLNOlU6qnNXPyRkodM5rwY68LS6VY=;
+	s=arc-20240116; t=1762975470; c=relaxed/simple;
+	bh=JboPOrrlrY4Ko6LJbn94SzHonmcSfVDYwJHknxK4H3Y=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=QR8jXFr9pTS66o+A7Ec62owo9cCyIqbKfPcbpBZHpKY7OxsxRwLH/lhbYZJ4MHk1DtK0j+47AgRkY6zemGy4kDPYBmE4V1eDlB5f6HE70T3aJNcST7c7wVfdbhyuFDyiA+XNCjQfW0PS5Biv0tF5yWFMmgdPmYJoMc8ZiPEk01g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QT224pSc; arc=none smtp.client-ip=209.85.208.74
+	 To:Cc:Content-Type; b=nUsFFYg/m54Q/quo7idF+yRr11g6H/UG0s+uoJ7/M7bXyOZ+mRYOAOr3RIMyvfouP6T3dT1yNDyi7rhap3/mXz1gU7FqXI9S98MyYtyWz0lU2UnMEHv9eOMwnbBJA0LOV5xi1uMUgKLATjJINo4ZxSJVvIYfmj6WtDBYtSQ7bek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wR96Uzqw; arc=none smtp.client-ip=209.85.218.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-6417a4b67f9so1097a12.3
-        for <linux-arch@vger.kernel.org>; Wed, 12 Nov 2025 11:24:25 -0800 (PST)
+Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-b72de28c849so148355166b.1
+        for <linux-arch@vger.kernel.org>; Wed, 12 Nov 2025 11:24:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762975464; x=1763580264; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1762975466; x=1763580266; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RboGJiDgx522e/0FZwsBBrKlE2sz8rmng8iRZf/blE=;
-        b=QT224pScIFR88bQmg7aQrgi3AlC9h/oTvQdUNyM8rADBrAmBOYnfMlQOleNh4Unzch
-         GQTJ0LL6lHjdIcI3NP0BW+zaYDtEfSNOruNTpeoGg4iaffKUNmZUVS5VjAZMAACb77CD
-         HvkPbdiLFRdGQfWaHa06WbHIcxeSX3C33j7FRdkp11ETmQgsHAJWfVJM9sb++rD2hE27
-         3B2SgAJMXpL6QumY939W9SGtVH+GUcj81fc7s4aqZNmYt5Xhx9Tu9hUWcub1c2GsXI+9
-         qJKd26LrLNCo2ZOYcNQgXwYawch0V9TkMiiVsZu/TNAc2e2ECwj4pglFl0yblbrRTtxz
-         0AEA==
+        bh=B24mQnSZMVRgdG5U9hRXkGt9TnaPoRUEHUCFM9E7GFE=;
+        b=wR96UzqwAPrKEfTJIjFEVuwe0xevl/xEFkWYQ04EmhA0Pko+qnZym6fQbCoU8qywgI
+         9nQqadI0HKcqQv95b6MzoQ4LWozWP1p/7S3fagw92TRI0hleW/OggPd+8yhv8L77xX3c
+         /TNfetYUp+6WjoLoBxXkGTxR/eLtCdfr1255T+1m1IOzgEK/KXx34zm98Emuck2GhmVi
+         h18zaGQvNIfI3sROC2RMWjk8Sir0Ium06Q0NDpamZWjUdq/tAIkA/hqZ6oLwAwWaSVho
+         qt0+1lfbjSyDX3CPX5Vyk7sAeQoqNJjEfhM2Sm4Lrn3RwGzToLE70MyrOZE3dh/Mgq4w
+         xPDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762975464; x=1763580264;
+        d=1e100.net; s=20230601; t=1762975466; x=1763580266;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RboGJiDgx522e/0FZwsBBrKlE2sz8rmng8iRZf/blE=;
-        b=nkTDjBxoidHM2LVPdnUQCR22v1rcGakhlpxAmxFnn5f6geD7ZYlhpertf0axTHV/8L
-         ZTx0AL+09Qyx3R/Qs4tgLcdnJ4WRWbmaEJ5O94mavAZMqAyeOZ8zQtMTM/sSAmDk2eO3
-         8ECmQsGLBx7suFMsEnlZzPExNai6XkrRMZPX4sm43N7hfeYIs4gyS9dtuZPXuHkvgbuL
-         +pBFwMuRkQND1Yi6NVRM53KTbhxNHiUyYqvpUo8bXtKxkJxFrs1isTwVStR3sD2ura7y
-         Y5eE3Fim9NBBv5GPx74qTVnNYZ/DtSm4gVK6i0W9JT14Sy1n+SDYaCmoS/f3/kTjcjDq
-         d8mw==
-X-Forwarded-Encrypted: i=1; AJvYcCX/0A9PrtopSYdFxr4BFAK8X1bCBy1SDnqJInkOxR+qDdcVJFn8jUxIX/BlY79EnXFbiuNZKzuKwCbT@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZd0n/oHD9YZiZF6YiNI6SsLRviX/uE90aUnQPDtJzfTLHiiKp
-	YRIUoj6qCthO5jCn5j1vhSvBaCEmDMjQ+YZXKruNe+BmiGEWh3VngJuEhnjG64iio1moqj12a9t
-	YAa6C6A==
-X-Google-Smtp-Source: AGHT+IG1SKOI3GKLgrjPgVXOjy4ln+GVaRLJ1ECeOnc4FwvAXPRn2TxDI3BCwzytmIsWQ8IixfxCReuXBz0=
-X-Received: from edo21.prod.google.com ([2002:a05:6402:52d5:b0:641:4eeb:43cd])
- (user=lrizzo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:27c8:b0:63c:690d:6a46
- with SMTP id 4fb4d7f45d1cf-6431a4b65d3mr4184716a12.13.1762975463640; Wed, 12
- Nov 2025 11:24:23 -0800 (PST)
-Date: Wed, 12 Nov 2025 19:24:03 +0000
+        bh=B24mQnSZMVRgdG5U9hRXkGt9TnaPoRUEHUCFM9E7GFE=;
+        b=JzT4UzhNPVicLgGoa1LOmbQR7EStDRp79ICqtX4ZiLkVLV+kgnCM/nUJV+L6q6c4Nv
+         kFREL7NwSX5PAepe0pMUQEAPXvATIt/Bh0ub0A+xYV0Qr+RC5ITz84ZSRe3HnKoILUMZ
+         mMrRQ7PuHVq3+LmQCInBFMd+hp9hgC8Wg7QGTRmF81MvhrXbaM+2C4eLvmsgQUAdjamB
+         nIQHH62hCyhBVud6L4J10C8adEVA6zUOhvflkpkOe9RzoXavl9U0Hv2vUzKV3eGmh6c6
+         mLvCn/4PbKoosUPDSvYxV+gjMMaBZHgvaNh6HKL9uKP5PXXLP3dYQDPDZazZ1rTtJ7ri
+         dONg==
+X-Forwarded-Encrypted: i=1; AJvYcCVxTkLa7ddvUdp5C9t+tWPzps5pjVFfj2eKJwadiukAaeq9/wGEPft/Z7StLuOtOk+iSa8yIEVbay9B@vger.kernel.org
+X-Gm-Message-State: AOJu0YywJ4UJxvsICqftZDkujn9Hxom/ltiVoaMkQCZ3GQ5NL28O6/1J
+	gLtcc04EuDr18p2kP16NfmQarPZZpqlfiv2ERK8phb0UAoBdZi7I+sQUiHpiOsYNgyop7JGSkFP
+	C1m5nnA==
+X-Google-Smtp-Source: AGHT+IHRbH0+L2jlw8eibE1pxIXW03f0w5TdjuwI8vS9PEphIgcgFYF8p42VznymTU0p0+Uaeai1DRIrV5Y=
+X-Received: from ejczi12.prod.google.com ([2002:a17:907:e98c:b0:b6d:7901:e54f])
+ (user=lrizzo job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:1c25:b0:b72:7cd3:d55b
+ with SMTP id a640c23a62f3a-b733195f534mr450314366b.12.1762975465792; Wed, 12
+ Nov 2025 11:24:25 -0800 (PST)
+Date: Wed, 12 Nov 2025 19:24:04 +0000
 In-Reply-To: <20251112192408.3646835-1-lrizzo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,9 +74,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251112192408.3646835-1-lrizzo@google.com>
 X-Mailer: git-send-email 2.51.2.1041.gc1ab5b90ca-goog
-Message-ID: <20251112192408.3646835-2-lrizzo@google.com>
-Subject: [PATCH 1/6] genirq: platform wide interrupt moderation:
- Documentation, Kconfig, irq_desc
+Message-ID: <20251112192408.3646835-3-lrizzo@google.com>
+Subject: [PATCH 2/6] genirq: soft_moderation: add base files, procfs hooks
 From: Luigi Rizzo <lrizzo@google.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, 
 	Luigi Rizzo <rizzo.unipi@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
@@ -87,356 +86,590 @@ Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
 	Luigi Rizzo <lrizzo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Platform wide software interrupt moderation ("soft_moderation" in this
-patch series) specifically addresses a limitation of platforms from many
-vendors whose I/O performance drops significantly when the total rate of
-MSI-X interrupts is too high (e.g 1-3M intr/s depending on the platform).
+Add the main core files that implement soft_moderation, limited to static
+moderation, plus related small changes to include/linux/interrupt.h,
+kernel/irq/Makefile, and kernel/irq/proc.c
 
-Conventional interrupt moderation operates separately on each source,
-hence the configuration should target the worst case. On large servers
-with hundreds of interrupt sources, keeping the total rate bounded would
-require delays of 100-200us; and adaptive moderation would have to reach
-those delays with as little as 10K intr/s per source. These values are
-unacceptable for RPC or transactional workloads.
+- include/linux/irq_moderation.h has the two main struct, prototypes
+  and inline hooks
 
-To address this problem, this code measures efficiently the total and
-per-CPU interrupt rates, so that individual moderation delays can be
-adjusted based on actual global and local load. This way, the system
-controls both global interrupt rates and individual CPU load, and
-tunes delays so they are normally 0 or very small except during actual
-local/global overload.
+- kernel/irq/irq_moderation.c has the procfs handlers
 
-Configuration is easy and robust. System administrators specify the
-maximum targets (moderation delay; interrupt rate; and fraction of time
-spent in hardirq), and per-CPU control loops adjust actual delays to try
-and keep metrics within the bounds.
+The code is not yet hooked to the interrupt handler, so
+the feature is disabled but we can see the module parameters
+/sys/module/irq_moderation/parameters and read/write the procfs entries
+/proc/irq/soft_moderation and /proc/irq/NN/soft_moderation.
 
-There is no need for exact targets, because the system is adaptive; the
-defaults delay_us=100, target_irq_rate=1000000, hardirq_frac=70 intr/s,
-are good almost everywhere.
+Examples:
+cat /proc/irq/soft_moderation
+echo "delay_us=345" > /proc/irq/soft_moderation
+echo 1 | tee /proc/irq/*/nvme*/../soft_moderation
 
-The system does not rely on any special hardware feature except from
-MSI-X Pending Bit Array (PBA), a mandatory component of MSI-X
-
-Boot defaults are set via module parameters (/sys/module/irq_moderation
-and /sys/module/${DRIVER}) or at runtime via /proc/irq/moderation, which
-is also used to export statistics.  Moderation on individual irq can be
-turned on/off via /proc/irq/NN/moderation .
-
-The system does not rely on any special hardware feature except from
-MSI-X Pending Bit Array (PBA), a mandatory component of MSI-X
-
-This initial patch adds Documentation, Kconfig option, two fields in
-struct irq_desc, and prototypes in include/linux/interrupt.h
-
-No functional impact.
-
-Enabling the option will just extend struct irq_desc with two fields.
-
-CONFIG_SOFT_IRQ_MODERATION=y
+Change-Id: I472d9b5b31770aa2787f062f7fe5d411882be60e
 ---
- Documentation/core-api/irq/index.rst          |   1 +
- Documentation/core-api/irq/irq-moderation.rst | 215 ++++++++++++++++++
- include/linux/interrupt.h                     |  15 ++
- include/linux/irqdesc.h                       |   5 +
- kernel/irq/Kconfig                            |  11 +
- 5 files changed, 247 insertions(+)
- create mode 100644 Documentation/core-api/irq/irq-moderation.rst
+ include/linux/irq_moderation.h | 196 ++++++++++++++++++++
+ kernel/irq/Makefile            |   1 +
+ kernel/irq/irq_moderation.c    | 315 +++++++++++++++++++++++++++++++++
+ kernel/irq/proc.c              |   2 +
+ 4 files changed, 514 insertions(+)
+ create mode 100644 include/linux/irq_moderation.h
+ create mode 100644 kernel/irq/irq_moderation.c
 
-diff --git a/Documentation/core-api/irq/index.rst b/Documentation/core-api/irq/index.rst
-index 0d65d11e54200..b5a6e2ade69bb 100644
---- a/Documentation/core-api/irq/index.rst
-+++ b/Documentation/core-api/irq/index.rst
-@@ -9,3 +9,4 @@ IRQs
-    irq-affinity
-    irq-domain
-    irqflags-tracing
-+   irq-moderation
-diff --git a/Documentation/core-api/irq/irq-moderation.rst b/Documentation/core-api/irq/irq-moderation.rst
+diff --git a/include/linux/irq_moderation.h b/include/linux/irq_moderation.h
 new file mode 100644
-index 0000000000000..ff12dbabc701b
+index 0000000000000..4d90d7c4ca26b
 --- /dev/null
-+++ b/Documentation/core-api/irq/irq-moderation.rst
-@@ -0,0 +1,215 @@
-+.. SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++++ b/include/linux/irq_moderation.h
+@@ -0,0 +1,196 @@
++/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
 +
-+===========================================
-+Platform wide software interrupt moderation
-+===========================================
++#ifndef _LINUX_IRQ_MODERATION_H
++#define _LINUX_IRQ_MODERATION_H
 +
-+:Author: Luigi Rizzo <lrizzo@google.com>
++/*
++ * Platform wide software interrupt moderation, see
++ * Documentation/core-api/irq/irq-moderation.rst
++ */
 +
-+.. contents:: :depth: 2
++#include <linux/kernel.h>
++#include <linux/hrtimer.h>
++#include <linux/irq.h>
++#include <linux/irqdesc.h>
 +
-+Introduction
-+------------
-+
-+Platform Wide software interrupt moderation is a variant of moderation
-+that adjusts the delay based on platform-wide metrics, instead of
-+considering each source separately.  It then uses hrtimers to implement
-+adaptive, per-CPU moderation in software, without requiring any specific
-+hardware support other than Pending Bit Array, a standard feature
-+of MSI-X.
-+
-+To understand the motivation for this feature, we start with some
-+background on interrupt moderation.
-+
-+* **Interrupt** is a mechanism to **notify** the CPU of **events**
-+  that should be handled by software, for example, **completions**
-+  of I/O requests (network tx/rx, disk read/writes...).
-+
-+* Each event typically issues one interrupt, which is then processed by
-+  software before the next interrupt can be issued.  If more events fire
-+  in the meantime, the next interrupt notifies all of them. This is called
-+  **coalescing**, and it can happen unintentionally, as in the example.
-+
-+* Coalescing amortizes the fixed costs of processing one interrupt over
-+  multiple events, so it improves efficiency. This suggested the idea
-+  that we could intentionally make coalescing more likely. This is called
-+  interrupt **moderation**.
-+
-+* The most common and robust implementation of moderation enforces
-+  some minimum **delay** between subsequent interrupts, using a timer
-+  in the device or in software. Most NICs support programmable hardware
-+  moderation, with timer granularity down to 1us or so.  NVME also
-+  specifies hardware moderation timers, with 100us granularity.
-+
-+* One downside of moderation, especially with **fixed** delay, is that
-+  even with moderate load, the notification latency can increase by as
-+  much as the moderation delay. This is undesirable for transactional
-+  workloads. At high load the extra delay is less problematic, because
-+  the queueing delays that occur can be one or more orders of magnitude
-+  bigger.
-+
-+* To address this problem, software can dynamically adjust the delay, making
-+  it proportional to the I/O rate. This is called **adaptive** moderation,
-+  and it is commonly implemented in network device drivers.
-+
-+In summary, interrupt moderation, as normally implemented, is a very
-+effective way to reduce interrupt processing costs on a per-source
-+basis. The modest compromise on the extra latency can be removed with
-+adaptive moderation.
-+
-+MOTIVATION
-+~~~~~~~~~~
-+
-+There is one aspect that per-source moderation does not address.
-+
-+Several Systems-on-Chip (SoC) from all vendors (Intel, AMD, ARM), show
-+huge reduction in I/O throughput (up to 3-4x times slower for high speed
-+NICs or SSDs) in presence of high MSI-X interrupt rates across the entire
-+platform (1-3M intr/s total, depending on the SoC). Note that unaffected
-+SoCs can sustain 20-30M intr/s from MSI-X without performance degradation.
-+
-+The above performance degradation is not caused by overload of individual
-+CPUs. What matters is the total MSI-X interrupt rate, across either
-+individual PCIe root port, or the entire SoC. The specific root cause
-+depends on the SoC, but generally some internal block (in the PCIe root
-+port, or in the IOMMU block) applies excessive serialization around
-+MSI-X writes. This in turn causes huge delays in other PCIe transactions,
-+leading to the observed performance drop.
-+
-+EXISTING MITIGATIONS AND WHY THEY ARE INSUFFICIENT:
-+===================================================
-+
-+* As mentioned, traditional interrupt moderation operates on individual sources.
-+  Large server platforms can have hundreds of sources (NIC or NVME
-+  queues). To stay within the total platform limit (e.g. 1-3M intrs/s)
-+  one would need very large delays (100-200us), which are undesirable
-+  for transactional workloads (RPC, database).
-+
-+* Per-source adaptive moderation has the same problem. The adaptive control
-+  cannot tell whether other sources are active, so in order to be effective
-+  it must assume the worst case and jump to large delays with as little
-+  as 10K intrs/s, even if no other sources are active.
-+
-+* Back in 2020 we addressed this very problem for network devices with
-+  the ``napi_defer_hard_irq`` mechanism: after the first interrupt,
-+  NAPI does not rearm the queue interrupt, and instead runs the next
-+  softirq handler from an hrtimer. It keeps using the timer as interrupt
-+  source until one or a few handler calls generate no activity, at which
-+  point interrupts are re-enabled.
-+
-+  That way, under load, device interrupts (which are problematic for
-+  the platform) are highly reduced, and replaced with less problematic
-+  timer interrupts.  There are a few down sides though:
-+
-+  * the feature is only available for NAPI devices
-+
-+  * the timer delay is not adaptive, and must still be tuned based on the number
-+    of active sources
-+
-+  * the system generates extra calls to the NAPI handler
-+
-+  * it has non-intuitive interaction with devices that share tx/rx interrupts
-+    or implement optimizations that expect interrupts to be enabled.
-+
-+PLATFORM WIDE ADAPTIVE MODERATION
-+---------------------------------
-+
-+Platform-Wide adaptive interrupt moderation is designed to overcome the
-+above limitations. The system operates as follows:
-+
-+* on each interrupt, increments a per-CPU counter for number of interrupts
-+
-+* opportunistically, every ms or so, each CPU scalably accumulates
-+  the values across the entire system, so it can compute the total and
-+  per-CPU interrupt rate, and the number of CPUs actively processing
-+  interrupts.
-+
-+* with the above information and a system-wide, configurable
-+  ``target_irq_rate``, each CPU computes whether it is processing more
-+  or less than its fair share of interrupts. A simple control loop then
-+  adjusts up/down its per-CPU moderation delay. The value varies from 0 (disabled)
-+  to a configurable upper bound ``delay_us``.
-+
-+* when the per-CPU moderation delay goes above a threshold (e.g. 10us), the first
-+  interrupt served by that CPU will start an hrtimer to fire after the
-+  adaptive delay.  All interrupts sources served by that CPU will be
-+  disabled as they come.
-+
-+* when the timer fires, all disabled sources are re-enabled. The Pending
-+  Bit Array feature of MSI will avoid that interrupt generated while
-+  disabled are lost.
-+
-+This scheme is effective in keeping the total interrupt rate under
-+control as long as the configuration parameters are sensible
-+(``delay_us < #CPUs / target_irq_rate``).
-+
-+It also lends itself to some extensions, specifically:
-+
-+* **protect against hardirq overload**. It is possible for one CPU
-+  handling interrupts to be overwhelmed by hardirq processing. The
-+  control loop can be extended to declare an overload situation when the
-+  percentage of time spent in hardirq is above a configurable threshold
-+  ``hardirq_percent``. Moderation can thus kick in to keep the load within bounds.
-+
-+* **reduce latency using timer-based polling**. Similar to ``napi_defer_hard_irq``
-+  described earlier, once interrupts are disabled and we have an hrtimer active,
-+  we keep the timer active for a few rounds and run the handler from a timer callback
-+  instead of waiting for an interrupt. The ``timer_rounds`` parameter controls this behavior,
-+
-+  Say the control loop settles on 120us delay to stay within the global MSI-X rate limit.
-+  By setting ``timer_rounds=2``, each time we have a hardware interrupt, the handler
-+  will be called two more times by the timer. As a consequence, in the same conditions,
-+  the same global MSI-X rate will be reached with just 120/3 = 40us delay, thus improving
-+  latency significantly (note that those handlers call do cause extra CPU work, so we
-+  may lose some of the efficiency gains coming from large delays).
-+
-+CONFIGURATION 
-+-------------
-+
-+Configuration of this system is done via module parameters
-+``irq_moderation.${name}=${value}`` (for boot-time defaults)
-+or writing ``echo "${name}=${value}" > /proc/irq/soft_moderation``
-+for run-time configuration.
-+
-+Here are the existing module parameters
-+
-+* ``delay_us`` (0: off, range 0-500)
-+
-+   The maximum moderation delay. 0 means moderation is globally disabled.
-+
-+* ``target_irq_rate`` (0 off, range 0-50000000)
-+
-+  The maximum irq rate across the entire platform. The adaptive algorithm will adjust
-+  delays to stay within the target. Use 0 to disable this control.
-+
-+* ``hardirq_percent`` (0 off, range 0-100)
-+
-+  The maximum percentage of CPU time spent in hardirq. The adaptive algorithm will adjust
-+  delays to stay within the target. Use 0 to disable this control.
-+
-+* ``timer_rounds`` (0 0ff, range 0-20)
-+
-+  Once the moderation timer is activated, how many extra timer rounds to do before
-+  re-enabling interrupts.
-+
-+* ``update_ms`` (default 1, range 1-100)
-+
-+  How often the adaptive control should adjust delays. The default value (1ms) should be good
-+  in most circumstances.
-+
-+Interrupt moderation can be enabled/disabled on individual IRQs as follows:
-+
-+* module parameter ``${driver}.soft_moderation=1`` (default 0) selects
-+  whether to use moderation at device probe time.
-+
-+* ``echo 1 > /proc/irq/*/${irq_name}/../soft_moderation`` (default 0, disabled) toggles
-+  moderation on/off for specific IRQs once they are attached.
-+
-+**INTEL SPECIFIC**
-+
-+Recent intel CPUs support a kernel feature, enabled via boot parameter ``intremap=posted_msi``,
-+that routes all interrupts targeting one CPU via a special interrupt, called **posted_msi**,
-+whose handler in turn calls the individual interrupt handlers.
-+
-+The ``posted_msi`` kernel feature always uses moderation if enabled (``delay_us > 0``) and
-+individual IRQs do not need to be enabled individually.
-diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
-index 51b6484c04934..007201c8db6dd 100644
---- a/include/linux/interrupt.h
-+++ b/include/linux/interrupt.h
-@@ -872,6 +872,21 @@ extern int early_irq_init(void);
- extern int arch_probe_nr_irqs(void);
- extern int arch_early_irq_init(void);
- 
 +#ifdef CONFIG_IRQ_SOFT_MODERATION
 +
-+void irq_moderation_percpu_init(void);
-+void irq_moderation_init_fields(struct irq_desc *desc);
-+/* add/remove /proc/irq/NN/soft_moderation */
-+void irq_moderation_procfs_entry(struct irq_desc *desc, umode_t umode);
++/* Global configuration parameters and state */
++struct irq_mod_info {
++	/* These fields are written to by all CPUs */
++	____cacheline_aligned
++	atomic_long_t total_intrs; /* running count updated every update_ms */
++	atomic_long_t total_cpus; /* as above, active CPUs in this interval */
 +
-+#else   /* empty stubs to avoid conditional compilation */
++	/* These are mostly read (frequently), so use a different cacheline */
++	____cacheline_aligned
++	u64 procfs_write_ns;	/* last write to /proc/irq/soft_moderation */
++	uint delay_us;		/* fixed delay, or maximum for adaptive */
++	uint target_irq_rate;	/* target interrupt rate */
++	uint hardirq_percent;	/* target maximum hardirq percentage */
++	uint timer_rounds;	/* how many timer polls once moderation fires */
++	uint update_ms;		/* how often to update delay/rate/fraction */
++	uint scale_cpus;	/* (percent) scale factor to estimate active CPUs */
++	uint count_timer_calls;	/* count timer calls for irq limits */
++	uint count_msi_calls;	/* count calls from posted_msi for irq limits */
++	uint decay_factor;	/* keep it at 16 */
++	uint grow_factor;	/* keep it at 8 */
++	int pad[] ____cacheline_aligned;
++};
 +
-+static inline void irq_moderation_percpu_init(void) {}
-+static inline void irq_moderation_init_fields(struct irq_desc *desc) {}
-+static inline void irq_moderation_procfs_entry(struct irq_desc *desc, umode_t umode) {};
++extern struct irq_mod_info irq_mod_info;
 +
-+#endif
++/* Per-CPU moderation state */
++struct irq_mod_state {
++	struct hrtimer timer;	/* moderation timer */
++	struct list_head descs;	/* moderated irq_desc on this CPU */
 +
- /*
-  * We want to know which function is an entrypoint of a hardirq or a softirq.
-  */
-diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
-index fd091c35d5721..4eb05bc456abe 100644
---- a/include/linux/irqdesc.h
-+++ b/include/linux/irqdesc.h
-@@ -112,6 +112,11 @@ struct irq_desc {
++	/* Counters on last time we updated moderation delay */
++	u64 last_ns;		/* time of last update */
++	u64 last_irqtime;	/* from cpustat[CPUTIME_IRQ] */
++	u64 last_total_irqs;
++	u64 last_total_cpus;
++
++	bool in_posted_msi;	/* don't suppress handle_irq, set in posted_msi handler */
++	bool kick_posted_msi;	/* kick posted_msi from the timer callback */
++
++	u32 cycles;		/* calls since last ktime_get_ns() */
++	s32 irq_count;		/* irqs in the last cycle, signed as we also decrement */
++	u32 delay_ns;		/* fetched from irq_mod_info */
++	u32 mod_ns;		/* recomputed every update_ms */
++	u32 sleep_ns;		/* accumulated time for actual delay */
++	s32 rounds_left;	/* how many rounds left for moderation */
++
++	/* Statistics */
++	u32 irq_rate;		/* smoothed global irq rate */;
++	u32 my_irq_rate;	/* smoothed irq rate for this CPU */;
++	u32 cpu_count;		/* smoothed CPU count (scaled) */;
++	u32 src_count;		/* smoothed irq sources count (scaled) */;
++	u32 irq_high;		/* how many times above each threshold */
++	u32 my_irq_high;
++	u32 hardirq_high;
++	u32 timer_set;		/* counters for various events */
++	u32 timer_fire;
++	u32 disable_irq;
++	u32 enable_irq;
++	u32 timer_calls;
++	u32 from_posted_msi;
++	u32 stray_irq;
++	int pad[] ____cacheline_aligned;
++};
++
++DECLARE_PER_CPU_ALIGNED(struct irq_mod_state, irq_mod_state);
++
++static inline void irq_moderation_start_timer(struct irq_mod_state *ms)
++{
++	ms->timer_set++;
++	ms->rounds_left = clamp(READ_ONCE(irq_mod_info.timer_rounds), 0u, 20u) + 1;
++	hrtimer_start_range_ns(&ms->timer, ns_to_ktime(ms->sleep_ns),
++			       /*range*/2000, HRTIMER_MODE_REL_PINNED_HARD);
++}
++
++static inline bool irq_moderation_enabled(void)
++{
++	return READ_ONCE(irq_mod_info.delay_us);
++}
++
++static inline uint irq_moderation_get_update_ms(void)
++{
++	return clamp(READ_ONCE(irq_mod_info.update_ms), 1u, 100u);
++}
++
++/* Called on each interrupt for adaptive moderation delay adjustment */
++static inline void irq_moderation_adjust_delay(struct irq_mod_state *ms)
++{
++	u64 now, delta_time, update_ns;
++
++	ms->irq_count++;
++	if (ms->cycles++ < 16)	/* ktime_get_ns() is expensive, don't do too often */
++		return;
++	ms->cycles = 0;
++	now = ktime_get_ns();
++	delta_time = now - ms->last_ns;
++	update_ns = irq_moderation_get_update_ms() * NSEC_PER_MSEC;
++
++	/* Run approximately every update_ns, a little bit early is ok */
++	if (delta_time < update_ns - 5000)
++		return;
++
++	/* Fetch important state */
++	ms->delay_ns = clamp(irq_mod_info.delay_us, 1u, 500u) * NSEC_PER_USEC;
++
++	ms->last_ns = now;
++	ms->mod_ns = ms->delay_ns;
++}
++
++/* Return true if timer is active or delay is large enough to require moderation */
++static inline bool irq_moderation_needed(struct irq_mod_state *ms)
++{
++	if (!hrtimer_is_queued(&ms->timer)) {
++		ms->sleep_ns += ms->mod_ns;     /* accumulate sleep time */
++		if (ms->sleep_ns < 10000)       /* no moderation if too small */
++			return false;
++	}
++	return true;
++}
++
++void disable_irq_nosync(unsigned int irq);
++
++/*
++ * Use in handle_irq_event() before calling the handler. Decide whether this
++ * desc should be moderated, and in case disable the irq and add the desc to
++ * the list for this CPU.
++ */
++static inline void irq_moderation_hook(struct irq_desc *desc)
++{
++	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
++
++	if (!irq_moderation_enabled())
++		return;
++
++	if (!READ_ONCE(desc->moderation_mode))
++		return;
++
++	irq_moderation_adjust_delay(ms);
++
++	if (!list_empty(&desc->ms_node)) {
++		/*
++		 * Very unlikely, stray interrupt while the desc is moderated.
++		 * Unfortunately we cannot ignore it, just count it.
++		 */
++		ms->stray_irq++;
++		return;
++	}
++
++	if (!irq_moderation_needed(ms))
++		return;
++
++	list_add(&desc->ms_node, &ms->descs); /* Add to list of moderated desc */
++	/*
++	 * disable the irq. This will also cause irq_can_handle() return false
++	 * (through irq_can_handle_actions()), and that will prevent a handler
++	 * instance to be run again while the descriptor is being moderated.
++	 *
++	 * irq_moderation_epilogue() will then start the timer if needed.
++	 */
++	ms->disable_irq++;
++	disable_irq_nosync(desc->irq_data.irq); /* desc must be unlocked */
++}
++
++/* After the handler, if desc is moderated, make sure the timer is active. */
++static inline void irq_moderation_epilogue(const struct irq_desc *desc)
++{
++	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
++
++	if (!list_empty(&desc->ms_node) && !hrtimer_is_queued(&ms->timer))
++		irq_moderation_start_timer(ms);
++}
++
++#else	/* empty stubs to avoid conditional compilation */
++
++static inline void irq_moderation_hook(struct irq_desc *desc) {}
++static inline void irq_moderation_epilogue(const struct irq_desc *desc) {}
++
++#endif /* CONFIG_IRQ_SOFT_MODERATION */
++
++#endif /* _LINUX_IRQ_MODERATION_H */
+diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+index 6ab3a40556670..c06da43d644f2 100644
+--- a/kernel/irq/Makefile
++++ b/kernel/irq/Makefile
+@@ -9,6 +9,7 @@ obj-$(CONFIG_GENERIC_IRQ_CHIP) += generic-chip.o
+ obj-$(CONFIG_GENERIC_IRQ_PROBE) += autoprobe.o
+ obj-$(CONFIG_IRQ_DOMAIN) += irqdomain.o
+ obj-$(CONFIG_IRQ_SIM) += irq_sim.o
++obj-$(CONFIG_IRQ_SOFT_MODERATION) += irq_moderation.o
+ obj-$(CONFIG_PROC_FS) += proc.o
+ obj-$(CONFIG_GENERIC_PENDING_IRQ) += migration.o
+ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+diff --git a/kernel/irq/irq_moderation.c b/kernel/irq/irq_moderation.c
+new file mode 100644
+index 0000000000000..a9d2bdcf4d8c7
+--- /dev/null
++++ b/kernel/irq/irq_moderation.c
+@@ -0,0 +1,315 @@
++// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++
++#include <linux/module.h>
++#include <linux/seq_file.h>
++#include <linux/proc_fs.h>
++
++#include <linux/irq_moderation.h>
++#include <linux/kernel_stat.h>	/* interrupt.h, kcpustat_this_cpu */
++#include "internals.h"
++
++/*
++ * Platform-wide software interrupt moderation.
++ *
++ * see Documentation/core-api/irq/irq-moderation.rst
++ *
++ * === MOTIVATION AND OPERATION ===
++ *
++ * Some platforms show reduced I/O performance when the total device interrupt
++ * rate across the entire platform becomes too high. This code implements
++ * per-CPU adaptive moderation based on the total interrupt rate, as opposed
++ * to conventional moderation that operates separately on each source.
++ *
++ * It computes the total interrupt rate and number of sources, and uses the
++ * information to adaptively disable individual interrupts for small amounts
++ * of time using per-CPU hrtimers and MSI-X Pending Bit Array. Specifically:
++ *
++ * - a hook in handle_irq_event(), which applies only on sources configured
++ *   to use moderation, updates statistics and check whether we need
++ *   moderation on that CPU/irq. If so, calls disable_irq_nosync() and starts
++ *   an hrtimer with appropriate delay.
++ *
++ * - the timer callback calls enable_irq() for all disabled interrupts on that
++ *   CPU. That in turn will generate interrupts if there are pending events.
++ *
++ * === CONFIGURATION ===
++ *
++ * The following can be controlled at boot time via module parameters
++ *
++ *     irq_moderation.${NAME}=${VALUE}
++ *
++ * or at runtime by writing
++ *
++ *     echo "${NAME}=${VALUE}" > /proc/irq/soft_moderation
++ *
++ *   delay_us (default 50, range 10..500, 0 DISABLES MODERATION)
++ *     Fixed or maximum moderation delay.  A reasonable range is 20..100, higher
++ *     values can be useful if the hardirq handler is performing a significant
++ *     amount of work.
++ *
++ *     FIXED MODERATION mode requires target_irq_rate=0, hardirq_percent=0
++ *
++ *   target_irq_rate (default 1M, 0 off, range 0..50M)
++ *     the total irq rate above which moderation kicks in.
++ *     Not particularly critical, a value in the 500K-1M range is usually ok
++ *
++ *   hardirq_percent (default 70, 0 off, range 10..100)
++ *     the hardirq percentage above which moderation kicks in.
++ *     50-90 is a reasonable range.
++ *
++ *   timer_rounds (default 0, max 20)
++ *     once moderation triggers, periodically run handler zero or more
++ *     times using a timer rather than interrupts. This is similar to
++ *     napi_defer_hard_irqs on NICs.
++ *     A small value may help control load in interrupt-challenged platforms.
++ *
++ *   update_ms (default 1, range 1...100)
++ *     how often the load is measured and moderation delay updated.
++ *
++ * Moderation can be enabled/disabled for individual interrupts with
++ *
++ *    echo "on" > /proc/irq/NN/soft_moderation # use "off" to disable
++ *
++ * === MONITORING ===
++ *
++ * cat /proc/irq/soft_moderation shows per-CPU and global statistics.
++ *
++ */
++
++static_assert(offsetof(struct irq_mod_info, procfs_write_ns) == 64);
++
++struct irq_mod_info irq_mod_info ____cacheline_aligned = {
++	.delay_us = 100,
++	.update_ms = 1,
++	.count_timer_calls = true,
++};
++
++module_param_named(delay_us, irq_mod_info.delay_us, uint, 0444);
++MODULE_PARM_DESC(delay_us, "Max moderation delay us, 0 = moderation off, range 10..500.");
++
++module_param_named(timer_rounds, irq_mod_info.timer_rounds, uint, 0444);
++MODULE_PARM_DESC(timer_rounds, "How many extra timer polls once moderation triggered.");
++
++DEFINE_PER_CPU_ALIGNED(struct irq_mod_state, irq_mod_state);
++
++static void smooth_avg(u32 *dst, u32 val, u32 steps)
++{
++	*dst = ((64 - steps) * *dst + steps * val) / 64;
++}
++
++/* moderation timer handler, called in hardintr context */
++static enum hrtimer_restart moderation_timer_cb(struct hrtimer *timer)
++{
++	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
++	struct irq_desc *desc, *next;
++	uint srcs = 0;
++
++	ms->timer_fire++;
++	WARN_ONCE(ms->timer_set != ms->timer_fire,
++		  "CPU %d timer set %d fire %d (lost events?)\n",
++		  smp_processor_id(), ms->timer_set, ms->timer_fire);
++
++	ms->rounds_left--;
++
++	if (ms->rounds_left > 0) {
++		/* Timer still alive. Just call the handlers */
++		list_for_each_entry_safe(desc, next, &ms->descs, ms_node) {
++			ms->irq_count += irq_mod_info.count_timer_calls;
++			ms->timer_calls++;
++			handle_irq_event_percpu(desc);
++		}
++		ms->timer_set++;
++		hrtimer_forward_now(&ms->timer, ms->sleep_ns);
++		return HRTIMER_RESTART;
++	}
++
++	/* Last round, remove from list and enable_irq() */
++	list_for_each_entry_safe(desc, next, &ms->descs, ms_node) {
++		list_del(&desc->ms_node);
++		INIT_LIST_HEAD(&desc->ms_node);
++		srcs++;
++		ms->enable_irq++;
++		enable_irq(desc->irq_data.irq);	/* ok if the sync_lock/unlock are NULL */
++	}
++	smooth_avg(&ms->src_count, srcs * 256, 1);
++
++	ms->sleep_ns = 0;	/* prepare to accumulate next moderation delay */
++
++	WARN_ONCE(ms->disable_irq != ms->enable_irq,
++		  "CPU %d irq disable %d enable %d (%s)\n",
++		  smp_processor_id(), ms->disable_irq, ms->enable_irq,
++		     "bookkeeping error, some irq qill be stuck");
++
++	return HRTIMER_NORESTART;
++}
++
++/* Initialize moderation state in desc_set_defaults() */
++void irq_moderation_init_fields(struct irq_desc *desc)
++{
++	INIT_LIST_HEAD(&desc->ms_node);
++	desc->moderation_mode = 0;
++}
++
++/* Per-CPU state initialization */
++void irq_moderation_percpu_init(void)
++{
++	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
++
++	hrtimer_setup(&ms->timer, moderation_timer_cb, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED_HARD);
++	INIT_LIST_HEAD(&ms->descs);
++}
++
++static void set_moderation_mode(struct irq_desc *desc, bool mode)
++{
++	if (desc) {
++		struct irq_chip *chip = desc->irq_data.chip;
++
++		/* Make sure this is msi and we can run enable_irq from irq context */
++		mode &= desc->handle_irq == handle_edge_irq && chip && chip->irq_bus_lock == NULL &&
++				chip->irq_bus_sync_unlock == NULL;
++		if (mode != desc->moderation_mode)
++			desc->moderation_mode = mode;
++	}
++}
++
++#pragma clang diagnostic error "-Wformat"
++/* Print statistics */
++static int moderation_show(struct seq_file *p, void *v)
++{
++	ulong irq_rate = 0, irq_high = 0, my_irq_high = 0, hardirq_high = 0;
++	uint delay_us = irq_mod_info.delay_us;
++	struct irq_mod_state *ms;
++	u64 now = ktime_get_ns();
++	int j, active_cpus = 0;
++	struct irq_desc *desc = p->private;
++
++	if (desc) {
++		seq_printf(p, "%s\n", desc->moderation_mode ? "on" : "off");
++		return 0;
++	}
++
++	seq_puts(p, "# CPU     irq/s  my_irq/s  cpus  srcs  delay_ns       irq_hi     my_irq_hi"
++		 "   hardirq_hi    timer_set  disable_irq    from_msi  timer_calls  stray_irq\n");
++	for_each_online_cpu(j) {
++		ms = per_cpu_ptr(&irq_mod_state, j);
++		if (now - ms->last_ns > NSEC_PER_SEC) {
++			ms->my_irq_rate = 0;
++			ms->irq_rate = 0;
++			ms->cpu_count = 0;
++		} else {	/* average irq_rate over active CPUs */
++			active_cpus++;
++			irq_rate += ms->irq_rate;
++		}
++		/* compute totals */
++		irq_high += ms->irq_high;
++		my_irq_high += ms->my_irq_high;
++		hardirq_high += ms->hardirq_high;
++
++		seq_printf(p, "%5u  %8u  %8u  %4u  %4u  %8u  %11u  %11u  %11u  %11u  %11u  %11u  %11u  %9u\n",
++			   j, ms->irq_rate, ms->my_irq_rate, (ms->cpu_count + 128) / 256,
++			   (ms->src_count + 128) / 256, ms->mod_ns, ms->irq_high, ms->my_irq_high,
++			   ms->hardirq_high, ms->timer_set, ms->disable_irq,
++			   ms->from_posted_msi, ms->timer_calls, ms->stray_irq);
++	}
++
++	seq_printf(p, "\n"
++		   "enabled              %s\n"
++		   "delay_us             %u\n"
++		   "timer_rounds         %u\n"
++		   "count_timer_calls    %s\n",
++		   str_yes_no(delay_us),
++		   delay_us,
++		   irq_mod_info.timer_rounds,
++		   str_yes_no(irq_mod_info.count_timer_calls));
++
++	return 0;
++}
++
++static int moderation_open(struct inode *inode, struct file *file)
++{
++	return single_open(file, moderation_show, pde_data(inode));
++}
++
++/* helpers to set values */
++struct var_names {
++	const char *name;
++	uint *val;
++	int min;
++	int max;
++} var_names[] = {
++	{ "delay_us", &irq_mod_info.delay_us, 0, 500 },
++	{ "timer_rounds", &irq_mod_info.timer_rounds, 0, 50 },
++	{ "count_timer_calls", &irq_mod_info.count_timer_calls, 0, 1 },
++	{}
++};
++
++static int set_parameter(const char *buf, int len)
++{
++	struct var_names *n;
++	int l, val;
++
++	for (n = var_names; n->name; n++) {
++		l = strlen(n->name);
++		if (len >= l + 2 && !strncmp(buf, n->name, l) && buf[l] == '=')
++			break;
++	}
++	if (!n->name || !n->val)
++		return -EINVAL;
++	if (kstrtouint(buf + l + 1, 0, &val))
++		return -EINVAL;
++	WRITE_ONCE(*(n->val), clamp(val, n->min, n->max));
++	irq_mod_info.procfs_write_ns = ktime_get_ns();
++	return len;
++}
++
++static ssize_t moderation_write(struct file *f, const char __user *buf, size_t count, loff_t *ppos)
++{
++	char val[40];	/* bounded string size */
++	struct irq_desc *desc = (struct irq_desc *)pde_data(file_inode(f));
++
++	if (count == 0 || count + 1 > sizeof(val))
++		return -EINVAL;
++	if (copy_from_user(val, buf, count))
++		return -EFAULT;
++	val[count] = '\0';
++	if (val[count - 1] == '\n')
++		val[count - 1] = '\0';
++	if (!desc)
++		return set_parameter(val, count);
++
++	if (!strcmp(val, "off") || !strcmp(val, "0"))
++		set_moderation_mode(desc, false);
++	else if (!strcmp(val, "on") || !strcmp(val, "1"))
++		set_moderation_mode(desc, true);
++	else
++		return -EINVAL;
++	return count;	/* consume all */
++}
++
++static const struct proc_ops proc_ops = {
++	.proc_open	= moderation_open,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= single_release,
++	.proc_write	= moderation_write,
++};
++
++void irq_moderation_procfs_entry(struct irq_desc *desc, umode_t umode)
++{
++	if (umode)
++		proc_create_data("soft_moderation", umode, desc->dir, &proc_ops, desc);
++	else
++		remove_proc_entry("soft_moderation", desc->dir);
++}
++
++static int __init init_irq_moderation(void)
++{
++	proc_create_data("irq/soft_moderation", 0644, NULL, &proc_ops, (void *)0);
++	return 0;
++}
++
++MODULE_LICENSE("Dual BSD/GPL");
++MODULE_VERSION("1.0");
++MODULE_AUTHOR("Luigi Rizzo <lrizzo@google.com>");
++MODULE_DESCRIPTION("Platform wide software interrupt moderation");
++module_init(init_irq_moderation);
+diff --git a/kernel/irq/proc.c b/kernel/irq/proc.c
+index 29c2404e743be..3d2b583b9443e 100644
+--- a/kernel/irq/proc.c
++++ b/kernel/irq/proc.c
+@@ -374,6 +374,7 @@ void register_irq_proc(unsigned int irq, struct irq_desc *desc)
+ 	proc_create_single_data("effective_affinity_list", 0444, desc->dir,
+ 				irq_effective_aff_list_proc_show, irqp);
+ # endif
++	irq_moderation_procfs_entry(desc, 0644);
  #endif
- 	struct mutex		request_mutex;
- 	int			parent_irq;
-+#ifdef CONFIG_IRQ_SOFT_MODERATION
-+	/* mode: 0: off, 1: disable_irq_nosync() */
-+	u8			moderation_mode; /* written in procfs, read on irq */
-+	struct list_head	ms_node;	/* per-CPU list of moderated irq_desc */
-+#endif
- 	struct module		*owner;
- 	const char		*name;
- #ifdef CONFIG_HARDIRQS_SW_RESEND
-diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
-index 1b4254d19a73e..fb9c78b1deea8 100644
---- a/kernel/irq/Kconfig
-+++ b/kernel/irq/Kconfig
-@@ -155,6 +155,17 @@ config IRQ_KUNIT_TEST
+ 	proc_create_single_data("spurious", 0444, desc->dir,
+ 				irq_spurious_proc_show, (void *)(long)irq);
+@@ -395,6 +396,7 @@ void unregister_irq_proc(unsigned int irq, struct irq_desc *desc)
+ 	remove_proc_entry("effective_affinity", desc->dir);
+ 	remove_proc_entry("effective_affinity_list", desc->dir);
+ # endif
++	irq_moderation_procfs_entry(desc, 0);	/* remove */
+ #endif
+ 	remove_proc_entry("spurious", desc->dir);
  
- endmenu
- 
-+# Support platform wide software interrupt moderation
-+config IRQ_SOFT_MODERATION
-+	bool "Enable platform wide software interrupt moderation"
-+	help
-+	  Enable platform wide software interrupt moderation.
-+	  Uses a local timer to delay interrupts in configurable ways
-+	  and depending on various global system load indicators
-+	  and targets.
-+
-+	  If you don't know what to do here, say N.
-+
- config GENERIC_IRQ_MULTI_HANDLER
- 	bool
- 	help
 -- 
 2.51.2.1041.gc1ab5b90ca-goog
 
