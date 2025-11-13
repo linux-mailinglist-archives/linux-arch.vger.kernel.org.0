@@ -1,135 +1,146 @@
-Return-Path: <linux-arch+bounces-14727-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14728-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06496C56F61
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 11:45:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 581A4C571D5
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 12:13:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7C92E3424C5
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 10:42:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 864EB3B30F5
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 11:11:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50159331A7A;
-	Thu, 13 Nov 2025 10:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D936C339B44;
+	Thu, 13 Nov 2025 11:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o4kKUDTO"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="wkgAbgOj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C009C330D24
-	for <linux-arch@vger.kernel.org>; Thu, 13 Nov 2025 10:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EC4338F26;
+	Thu, 13 Nov 2025 11:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763030573; cv=none; b=EzhvSXmD2hEAg/papB4P0FGmQd9BIrKHuzfThBoUWdUHlWRSo2nR7tPafyraMY0FRmXYFnL3hsObHEuHL1jeZolNvSnAni3Sptc7lSoFa6+nUdbI4rWo/Q6jFCtBWqGPQeYdg1rH+UdaAl3N+F53+kImfHiF4fMJ2UnBfPZPIUA=
+	t=1763032264; cv=none; b=loKkzvoJ9R+ez66wetbdDbW5ZPAQZwtfgY3yD9VvKJviT+zMluvR0DdDeNHPfyq/7DFjk5cw80O6b3duYgTXJdouF4vGhhrH6J93MElkQCNAvLVkNxK3tkaWRegoVHSdDCcuE7jN1Ory5jnCeJh6l3VIqjNyWniLtR/ZnrktgIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763030573; c=relaxed/simple;
-	bh=Y2beyEks39HhBc2BrxrHaxgpiCJTDWPeYBQlMBA5pyo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f1cfjv7wArkVCShGF7/xS8l14B3T5cFZSHrvbZ+Ar8f89K+R29aT6rcmzGmAKA1zJ9gv5+sNnPZVlnLT8mQhp2KC27+NYlgOF9i2kyoiMWYWbGuVSpbBMupTEjZFWK0d8AIxh+LrtpkIt0MRK8w9P+Z6qNTnwz1Yycy913lHmGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o4kKUDTO; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4ed67a143c5so251381cf.0
-        for <linux-arch@vger.kernel.org>; Thu, 13 Nov 2025 02:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763030570; x=1763635370; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LeSfacy1gs/xLiayFMR+nTUKUnhwINpOKIlFew1QGiY=;
-        b=o4kKUDTOhrDUIlI72twzzXIeZBSAvRXsDh/lNy/kLuU8j1YmauTMakLPVudESa9Po5
-         iTitvYOFBKzxCVnW9Pw/oO0BykIH7ty96ACQp3PldWK8EFfTRhpAQXuDr1iz46vrV0jN
-         w1UtdfNiPKXbGHnyjgN6WY+jLoqrhd0JRfk3WsTQFFUfTAemp+UXliA+eMsDfp60LJfZ
-         1B8RoNQ9oniIpI5euU22+cdHVoJPLp9FPaqXUHr0alenHo9MDFSpAE2PaLy2xLM3L9le
-         VV2Q5la97jTCaWTLzf92aUKZInHELzUxpx9O8RTx1sAnQioLYVqv4BBMvLNsKwTBBlqZ
-         naJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763030570; x=1763635370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LeSfacy1gs/xLiayFMR+nTUKUnhwINpOKIlFew1QGiY=;
-        b=Dd3+7TjzeYtW/eM3XCpK0RVvH4JRPd7BwaU9URE8TI/uznoLJUQs2oQxiwBV15K6F7
-         mm1Y1aqHGmUZxmbcyNVxF3xTEDK3AS+O/SDw3Ovr9LinO5hhS/P169+t0Z8sIsqOgCQ3
-         iblt4iyDYRr1RmrT4kbLuTY5dNQkys3XM/FMq1nJxyjjSAhqrUYbqo0uiqQSuoezLag+
-         0pgJNXPZ8r6vruQIhb21y/UaBCwEpYkBfyoUyZ1/3E7y5clKoMaX1Y8eQg/eiC/eGqZX
-         hWQ66IvYmUWoCcdit9++B2ESfTaEI0cgINEFOF23jbkJ49EVg7FceVkHpqLCJQT1k2A3
-         m60w==
-X-Forwarded-Encrypted: i=1; AJvYcCU5ztiv7YD9m4fFTMaNDRwSL/XU3d37bJREeyAdRaLPqua2NSyhMkcKUZdkkAiVmynrssayAxAAhxNq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9NIEUxB8ahoZkEyVH3eWJYUZMG1urLAmhYY11fU/ZGk2pws41
-	w01oUp9YuiVUtwQ1u2rGrwui9kMJECrlXomXKQi0AyDvJVfCdu5UwCzqxwP9XJCIWT4r4XvnXac
-	OsnuhZ2l5SKtFj63yE3DpbGf0k4bcPZSBVIL8tfqd
-X-Gm-Gg: ASbGncvTN2r+mlaBmdUQOXDY4I7MZF06Ij1YN0/tbQ5SHjtVKQJ64YRRCqGHTZ7+jwB
-	zHRfUSpcM/+pzF0a5QNbm5+FFZBRFHUZ4VqWlmFIPiXVuLyH6KDeDUnrOxHPs1ls7M74CEREz+X
-	eX2zYVCqVVDWn4lGANOHOD7Hm00nxvHjMEpinBgINvOv4Wbq0H7YzVrURD9cqlbVF/o3R8KGauN
-	CehuoeJ08/JCm6CWX6jBLmOE5FR/VFncu1+GltSH4fE8LHVGShlbfoonP4mbdSKlRmYolEx44Ea
-	HC34kw==
-X-Google-Smtp-Source: AGHT+IGuq3UUASg2Jn8+Z0VXxFfKQzi8BW0tAm9drL020DxGhTLHU+Jdz0fBGmwffHQHjH6oxzuUdHoSWkLgUx57T1w=
-X-Received: by 2002:a05:622a:c6:b0:4e8:aa24:80ec with SMTP id
- d75a77b69052e-4ede787ca08mr5670161cf.14.1763030570203; Thu, 13 Nov 2025
- 02:42:50 -0800 (PST)
+	s=arc-20240116; t=1763032264; c=relaxed/simple;
+	bh=urH1pHnaK/uaQl/yo8yiCGx+iorwpacltUVK/RqwjKM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=SDr1b4hf2WNimT2xugrtodl9pxtoJSkTyECgpR1QWh2+TQMqSPXQSV34Nw12h1T7MeAsvnJ9E3tKOY9PiR05rWwgsf6/sNTpqa5Y3gewDxz2hnqy10D8TAKxbzKcpaxqFg+TCRzpT5X6osnfRVUgMZCdM4mXIUUbywcVbKfXXUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=wkgAbgOj; arc=none smtp.client-ip=113.46.200.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=sYdX7jPld9MHxC/2N/BdveINDqwOk1bdDkzTmhtgkOU=;
+	b=wkgAbgOj/Uyjk7TB32BI8+jld98422LU2nbkIaBXSanzYHVi6qJph7P+LYaPeIHyxTIgLssdk
+	NQu5KsJuHwWmg2eHARW+n+NAqI8UehAXAc67lMDLPw4XFhrBllr1+6vcAwL6U9EC1JXIXpDVMd7
+	26SAoBvKW98bxHl/K+3zxXw=
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4d6cwR1YknzKm5S;
+	Thu, 13 Nov 2025 19:09:11 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id F095D180044;
+	Thu, 13 Nov 2025 19:10:51 +0800 (CST)
+Received: from kwepemq200001.china.huawei.com (7.202.195.16) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 13 Nov 2025 19:10:51 +0800
+Received: from [10.67.120.171] (10.67.120.171) by
+ kwepemq200001.china.huawei.com (7.202.195.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 13 Nov 2025 19:10:51 +0800
+Message-ID: <fb2412cd-7417-4d65-9dea-d166a3bd146f@huawei.com>
+Date: Thu, 13 Nov 2025 19:10:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112192408.3646835-1-lrizzo@google.com> <20251112192408.3646835-7-lrizzo@google.com>
- <87ldkack1o.ffs@tglx>
-In-Reply-To: <87ldkack1o.ffs@tglx>
-From: Luigi Rizzo <lrizzo@google.com>
-Date: Thu, 13 Nov 2025 11:42:13 +0100
-X-Gm-Features: AWmQ_blpYZ1m-Z5TN3Dc6kUMVoF93xIL5WA2KrstazbwKwzAJ5LDdCDfctKA0QM
-Message-ID: <CAMOZA0KYpxXB7teDuxR1U2JJ4dOBR1KveR-F8MJuqGVodT6J+g@mail.gmail.com>
-Subject: Re: [PATCH 6/6] genirq: soft_moderation: implement per-driver
- defaults (nvme and vfio)
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Sean Christopherson <seanjc@google.com>, Jacob Pan <jacob.jun.pan@linux.intel.com>, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Bjorn Helgaas <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 3/4] io-128-nonatomic: introduce
+ io{read|write}128_{lo_hi|hi_lo}
+To: Ben Dooks <ben.dooks@codethink.co.uk>, <arnd@arndb.de>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <akpm@linux-foundation.org>,
+	<anshuman.khandual@arm.com>, <ryan.roberts@arm.com>,
+	<andriy.shevchenko@linux.intel.com>, <herbert@gondor.apana.org.au>,
+	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-crypto@vger.kernel.org>,
+	<linux-api@vger.kernel.org>
+CC: <fanghao11@huawei.com>, <shenyang39@huawei.com>, <liulongfang@huawei.com>,
+	<qianweili@huawei.com>
+References: <20251112015846.1842207-1-huangchenghai2@huawei.com>
+ <20251112015846.1842207-4-huangchenghai2@huawei.com>
+ <59f8bc30-c1c6-4f07-87dd-cd2893ae87f7@codethink.co.uk>
+From: huangchenghai <huangchenghai2@huawei.com>
+Content-Language: en-US
+In-Reply-To: <59f8bc30-c1c6-4f07-87dd-cd2893ae87f7@codethink.co.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemq200001.china.huawei.com (7.202.195.16)
 
-On Thu, Nov 13, 2025 at 11:18=E2=80=AFAM Thomas Gleixner <tglx@linutronix.d=
-e> wrote:
+
+在 2025/11/12 22:48, Ben Dooks 写道:
+> On 12/11/2025 01:58, Chenghai Huang wrote:
+>> From: Weili Qian <qianweili@huawei.com>
+>>
+>> In order to provide non-atomic functions for io{read|write}128.
+>> We define a number of variants of these functions in the generic
+>> iomap that will do non-atomic operations.
+>>
+>> These functions are only defined if io{read|write}128 are defined.
+>> If they are not, then the wrappers that always use non-atomic operations
+>> from include/linux/io-128-nonatomic*.h will be used.
+>>
+>> Signed-off-by: Weili Qian <qianweili@huawei.com>
+>> Signed-off-by: Chenghai Huang <huangchenghai2@huawei.com>
+>> ---
+>>   include/linux/io-128-nonatomic-hi-lo.h | 35 ++++++++++++++++++++++++++
+>>   include/linux/io-128-nonatomic-lo-hi.h | 34 +++++++++++++++++++++++++
+>>   2 files changed, 69 insertions(+)
+>>   create mode 100644 include/linux/io-128-nonatomic-hi-lo.h
+>>   create mode 100644 include/linux/io-128-nonatomic-lo-hi.h
+>>
+>> diff --git a/include/linux/io-128-nonatomic-hi-lo.h 
+>> b/include/linux/io-128-nonatomic-hi-lo.h
+>> new file mode 100644
+>> index 000000000000..b5b083a9e81b
+>> --- /dev/null
+>> +++ b/include/linux/io-128-nonatomic-hi-lo.h
+>> @@ -0,0 +1,35 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef _LINUX_IO_128_NONATOMIC_HI_LO_H_
+>> +#define _LINUX_IO_128_NONATOMIC_HI_LO_H_
+>> +
+>> +#include <linux/io.h>
+>> +#include <asm-generic/int-ll64.h>
+>> +
+>> +static inline u128 ioread128_hi_lo(const void __iomem *addr)
+>> +{
+>> +    u32 low, high;
 >
-> On Wed, Nov 12 2025 at 19:24, Luigi Rizzo wrote:
-...
-> > --- a/drivers/nvme/host/pci.c
-> > +++ b/drivers/nvme/host/pci.c
-> > @@ -72,6 +72,8 @@
-> >  static_assert(MAX_PRP_RANGE / NVME_CTRL_PAGE_SIZE <=3D
-> >       (1 /* prp1 */ + NVME_MAX_NR_DESCRIPTORS * PRPS_PER_PAGE));
-> >
-> > +DEFINE_IRQ_MODERATION_MODE_PARAMETER;
-> > +
-> >  static int use_threaded_interrupts;
-> >  module_param(use_threaded_interrupts, int, 0444);
-> >
-> > @@ -1989,6 +1991,7 @@ static int nvme_create_queue(struct nvme_queue *n=
-vmeq, int qid, bool polled)
-> >               result =3D queue_request_irq(nvmeq);
-> >               if (result < 0)
-> >                       goto release_sq;
-> > +             IRQ_MODERATION_SET_DEFAULT_MODE(pci_irq_vector(to_pci_dev=
-(dev->dev), vector));
+> did you mean u64 here?
 >
-> What's the point of this IRQ_MODERATION_SET_DEFAULT_MODE() wrapper?
+Thank you for your reminder, I made a rookie mistake.
 
-I wanted to avoid exposing the module parameter name,
-so that adding support in a driver is mechanical and we can
-change the name in one place for all (during this review or later).
 
-Ideally I would have preferred some generic parameter
-irq_moderation.enable_on=3D"nvme vfio ..."
-to set defaults without having to patch individual drivers.
-But I have not found a way to go from the irq_desc to the driver's name
-(desc->name is often renamed especially for NICs)
+Chenghai
 
-cheers
-luigi
+>> +    high = ioread64(addr + sizeof(u64));
+>> +    low = ioread64(addr);
+>> +
+>> +    return low + ((u128)high << 64);
+>> +}
+>> +
+>> +static inline void iowrite128_hi_lo(u128 val, void __iomem *addr)
+>> +{
+>> +    iowrite64(val >> 64, addr + sizeof(u64));
+>> +    iowrite64(val, addr);
+>> +}
+>> +
+>
 
