@@ -1,111 +1,162 @@
-Return-Path: <linux-arch+bounces-14732-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14733-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22B8FC57F9D
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 15:38:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D737AC5808A
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 15:51:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AAF9935083C
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 14:38:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA54A3A01EC
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 14:43:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4272C1598;
-	Thu, 13 Nov 2025 14:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108762D6621;
+	Thu, 13 Nov 2025 14:42:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="T29kqcDA";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UxJGGLdu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUFMEC43"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A7126E71F;
-	Thu, 13 Nov 2025 14:38:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1112D661C;
+	Thu, 13 Nov 2025 14:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763044716; cv=none; b=Ze+qeO1+7dNVRvBE09eoba3xl68LwWWLnho2coaJzuzzLQ2Ur6891SlCW0S4kwMmTVYAxxEWizmJ6ZuRqO01ekbXtZUeqaP4ArHUqf+uowuXW6UlekPOvyV+SWFLeZxS3pyjoGp/OEA1RERKzn56ZwntTitFcrMa81mfu+PN8ic=
+	t=1763044949; cv=none; b=Ach6JD4RpmRh8OPhlz4y11lqtNGFrmHDFmtM5CENf6CyLlMUXDIRHZeHs9+EnEYfNa3U1VIf6Pm7ebZkzBCQw5yIi4gtArUQUHsKPlPVbKlE5WtpbVFt7I1TB5O7MPZYc0yHAujsj5as+V1+/0gGyThMMlT+1KBc12uLdVPaoqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763044716; c=relaxed/simple;
-	bh=ckRaPpYysGTgWDsSatqWgYvgTnxwIinmoe1ULzFEXho=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=k1q/QimfGF9N6qrw2BUfwU5KqqNWL3b6l+3BKMFRWp1U/lRxH0+FS9uOrkCLM70kPmaucKovu63bISgELcJpSerHsthUK+4QM3wEZMLNjpHOKBxJtXClcs6X9isnv9nWIDiB17FeUtIPJNd4lntcEQavekme7K8+YLMsJbJr7Aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=T29kqcDA; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=UxJGGLdu; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763044713;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zEyYa8J+jraXJi4/0H/z8EoFzpp20Pv+f07pd+P/QNY=;
-	b=T29kqcDA9yUIrUcV8oHPqrRWfCRQ8FPjZbeVe6i5j6YCMpHXyjXANr9cp96Cuqvw5ILX/q
-	+NAV4JDvYZZZhFO4N/wejRqUB51SEAsqkOKIzFR5mdgZ59qzc4Y0jpz5GrFVpgsI594r6h
-	Jq7YSUkhRjwK8ChqlnOSfx6rvfRmGYWDsMs4xi6W+l4K5t0zXXy6kZx5qN3h6l3eeJ9aFe
-	CW6KY7rIacuzNhYZz9luc/JwyM9L2bYTtCpkwKm+/VUkV6qMrwUMNYd8Fs/tJ03//BU0ZZ
-	xalzep+uXN9H6ScWYPziiHfrQO+1h4eAkU6/Vi1odsTVCM4J3yvK7YjD7gfTDw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763044713;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zEyYa8J+jraXJi4/0H/z8EoFzpp20Pv+f07pd+P/QNY=;
-	b=UxJGGLduCZP+M4nn2ojD0iA9wL/P5AArwLfgqTZRdh95O6VmRiKZjJrpDcZVDydGHtgp1W
-	HGxUdwR9JoVFa4BA==
-To: Prakash Sangappa <prakash.sangappa@oracle.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, LKML
- <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- "Paul
- E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Madadi Vineeth Reddy
- <vineethr@linux.ibm.com>, K Prateek Nayak <kprateek.nayak@amd.com>, Steven
- Rostedt <rostedt@goodmis.org>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Arnd Bergmann <arnd@arndb.de>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [patch V3 00/12] rseq: Implement time slice extension mechanism
-In-Reply-To: <5DFB2CA1-8751-409F-BBEA-CB753E717821@oracle.com>
-References: <20251029125514.496134233@linutronix.de>
- <03687B00-0194-4707-ABCB-FB3CD5340F11@oracle.com>
- <2eee5e37-e541-4ac7-9479-cef3e62f234d@efficios.com>
- <b28c9f26-7a79-473c-a390-f502b74b02ac@efficios.com>
- <F940B2E6-2B76-4008-98B9-B29C27512A60@oracle.com> <87cy5mewxk.ffs@tglx>
- <368CA4A7-3640-45F7-810F-2E2A073FE27C@oracle.com>
- <5DFB2CA1-8751-409F-BBEA-CB753E717821@oracle.com>
-Date: Thu, 13 Nov 2025 15:38:32 +0100
-Message-ID: <878qgac80n.ffs@tglx>
+	s=arc-20240116; t=1763044949; c=relaxed/simple;
+	bh=dTOdH5XXahBmpE3YhOi/ArZkYgYWK5rGtHBHSoKtRnA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=S+hbF4vEjSQ+8pv/iLN6S9iUjRs7ASB6Fzt6OrSy2VsaSYts42jPiYFgh8m92lbO03/Y20zHAaQUe52THCYOwnrlpIWEWNUAk42SfGOQojQsv3e2frk2lufJzmM9bbNEyjSc7Y/WGmo+fX3DLweap+17QXQolfq5LZLBIQM1CiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUFMEC43; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67599C116D0;
+	Thu, 13 Nov 2025 14:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763044948;
+	bh=dTOdH5XXahBmpE3YhOi/ArZkYgYWK5rGtHBHSoKtRnA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BUFMEC43P+MjRbP7up2539GgXoU13bo2rMh1uVfKvuJHKQEH7voJMpJrpi1EJWaCV
+	 M3SyYJfXW7niBTieRafYfS+PJBUjz+tIhf+GLKNwxyJb5x3Ec77uThIN70hBIRh82e
+	 Dvy1oSSEDjCxt4mn3DX23bX69IusDYtu4IduDiR9jrXtZ9HRpuH7386Y9Bqi76w76n
+	 8fQM+zXBALAWXOCmIdPG+sJXKtB96PjtxwR7gmGrhEE16AuypB3KyX79j2Nsq5U+QP
+	 OZjoJsTems7T60JqVY5NOJBpKQlpZ/adk0wVUyPHQnhSGa5T1hzl9qZz/b8GjUgfZM
+	 4O/xghz/TIvGQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vJYWo-00000004u5n-0RcC;
+	Thu, 13 Nov 2025 14:42:26 +0000
+Date: Thu, 13 Nov 2025 14:42:25 +0000
+Message-ID: <86jyzut2ni.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Luigi Rizzo <lrizzo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Luigi Rizzo <rizzo.unipi@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH 1/6] genirq: platform wide interrupt moderation: Documentation, Kconfig, irq_desc
+In-Reply-To: <CAMOZA0K3hMSE32SnyVBW5NY4V=zuC3S7ueHfZN2sAWZNqRCwvQ@mail.gmail.com>
+References: <20251112192408.3646835-1-lrizzo@google.com>
+	<20251112192408.3646835-2-lrizzo@google.com>
+	<86o6p6t67m.wl-maz@kernel.org>
+	<CAMOZA0K3hMSE32SnyVBW5NY4V=zuC3S7ueHfZN2sAWZNqRCwvQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lrizzo@google.com, tglx@linutronix.de, rizzo.unipi@gmail.com, pabeni@redhat.com, akpm@linux-foundation.org, seanjc@google.com, jacob.jun.pan@linux.intel.com, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, bhelgaas@google.com, willemb@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, Nov 13 2025 at 02:34, Prakash Sangappa wrote:
->> On Nov 12, 2025, at 3:17=E2=80=AFPM, Prakash Sangappa <prakash.sangappa@=
-oracle.com> wrote:
->>> On Nov 12, 2025, at 1:57=E2=80=AFPM, Thomas Gleixner <tglx@linutronix.d=
-e> wrote:
->>> Can you verify that the top most commit of the rseq/slice branch is:
->>>=20
->>>   d2eb5c9c0693 ("selftests/rseq: Implement time slice extension test")
->>=20
->> No it is
->>=20
->> c46f12a1166058764da8e84a215a6b66cae2fe0a
->>    selftests/rseq: Implement time slice extension test
->>=20
->
-> Tested the latest from rseq/slice with the top most commit you mentioned =
-above and the=20
-> watchdog panic does not reproduce anymore.
+On Thu, 13 Nov 2025 13:33:51 +0000,
+Luigi Rizzo <lrizzo@google.com> wrote:
+>=20
+> On Thu, Nov 13, 2025 at 2:25=E2=80=AFPM Marc Zyngier <maz@kernel.org> wro=
+te:
+> >
+> > On Wed, 12 Nov 2025 19:24:03 +0000,
+> > Luigi Rizzo <lrizzo@google.com> wrote:
+> >
+> > [...]
+> >
+> > > The system does not rely on any special hardware feature except from
+> > > MSI-X Pending Bit Array (PBA), a mandatory component of MSI-X
+> >
+> > Is this stuff PCI specific? if so, Why? What is the actual dependency
+> > on PBA? It is it just that you are relying on the ability to mask
+> > interrupts without losing them, something that is pretty much a given
+> > on any architecture?
+>=20
+> You are right, I was overly restrictive. I only need what you say,
+> will replace the text accordingly.
+>=20
+> >
+> > [...]
+> > > +To understand the motivation for this feature, we start with some
+> > > +background on interrupt moderation.
+> >
+> > This reads like marketing blurb. This is an API documentation, and it
+> > shouldn't be a description of your motivations for building it the way
+> > you did. I'd suggest you stick to the API, and keep the motivations
+> > for the cover letter.
+>=20
+> ok will remove it.
+> Sorry if it reads like marketing, that is very very far from my intention=
+s.
+> I just wanted to give background information in a way that is easy
+> to access from the source tree.
 
-Thanks for checking. I'll post a V4 soonish.
+Background information is only valid at a given point in time, for a
+particular configuration, and rarely translate into something that
+spans architectures and implementation in a universal way. For a
+start, the quoted figures for interrupt rates are pretty much
+irrelevant -- think of reading this in 10 years...
+
+The descriptions are also massively x86-specific. That's probably OK
+for the stuff you care about, but I'd certainly would want things to
+be a bit more abstract and applicable to all architectures.
+
+> > > +* **Interrupt** is a mechanism to **notify** the CPU of **events**
+> > > +  that should be handled by software, for example, **completions**
+> > > +  of I/O requests (network tx/rx, disk read/writes...).
+> >
+> > That's only half of the truth, as this description only applies to
+> > *edge* interrupts. Level interrupts report a change in *state*, not an
+> > event.
+> >
+> > How do you plan to deal with interrupt moderation for level
+> > interrupts?
+>=20
+> I don't. This is restricted to edge interrupts.
+
+I also note that since you explicitly check for handle_edge_irq() in
+set_moderation_mode(), this will not work on anything GIC related, or
+any other architecture that uses the fasteoi flows. I really wonder
+why you are not looking at the actual trigger mode instead...
+
+Until you fix it, please refrain from touching the GICv3 code, and
+make sure this is solely enabled on x86 -- it clearly wasn't tested on
+anything else.
 
 Thanks,
 
-        tglx
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
 
