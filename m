@@ -1,146 +1,129 @@
-Return-Path: <linux-arch+bounces-14728-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14729-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 581A4C571D5
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 12:13:37 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECD91C57A37
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 14:26:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 864EB3B30F5
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 11:11:36 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 255AD342E12
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 13:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D936C339B44;
-	Thu, 13 Nov 2025 11:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A54235293A;
+	Thu, 13 Nov 2025 13:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="wkgAbgOj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RABtzDeV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EC4338F26;
-	Thu, 13 Nov 2025 11:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A27352932;
+	Thu, 13 Nov 2025 13:25:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763032264; cv=none; b=loKkzvoJ9R+ez66wetbdDbW5ZPAQZwtfgY3yD9VvKJviT+zMluvR0DdDeNHPfyq/7DFjk5cw80O6b3duYgTXJdouF4vGhhrH6J93MElkQCNAvLVkNxK3tkaWRegoVHSdDCcuE7jN1Ory5jnCeJh6l3VIqjNyWniLtR/ZnrktgIo=
+	t=1763040336; cv=none; b=LErYumUSlPiUknwiIQXSW9/XR2ldbi6sfzr/VtTyFuXd/eiYQQTSNpkcI+q1VojQD3f5HrePmhP0k5yfKMMtN3X5IXy3I6QlDB2gE5fCkbbzi0UPzLC3CrwnssHG63LJ4aQA+Rb5rRUitFPk7EdYjCSU/jt0PoncaWOC3y/q47s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763032264; c=relaxed/simple;
-	bh=urH1pHnaK/uaQl/yo8yiCGx+iorwpacltUVK/RqwjKM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SDr1b4hf2WNimT2xugrtodl9pxtoJSkTyECgpR1QWh2+TQMqSPXQSV34Nw12h1T7MeAsvnJ9E3tKOY9PiR05rWwgsf6/sNTpqa5Y3gewDxz2hnqy10D8TAKxbzKcpaxqFg+TCRzpT5X6osnfRVUgMZCdM4mXIUUbywcVbKfXXUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=wkgAbgOj; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=sYdX7jPld9MHxC/2N/BdveINDqwOk1bdDkzTmhtgkOU=;
-	b=wkgAbgOj/Uyjk7TB32BI8+jld98422LU2nbkIaBXSanzYHVi6qJph7P+LYaPeIHyxTIgLssdk
-	NQu5KsJuHwWmg2eHARW+n+NAqI8UehAXAc67lMDLPw4XFhrBllr1+6vcAwL6U9EC1JXIXpDVMd7
-	26SAoBvKW98bxHl/K+3zxXw=
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4d6cwR1YknzKm5S;
-	Thu, 13 Nov 2025 19:09:11 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id F095D180044;
-	Thu, 13 Nov 2025 19:10:51 +0800 (CST)
-Received: from kwepemq200001.china.huawei.com (7.202.195.16) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 13 Nov 2025 19:10:51 +0800
-Received: from [10.67.120.171] (10.67.120.171) by
- kwepemq200001.china.huawei.com (7.202.195.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 13 Nov 2025 19:10:51 +0800
-Message-ID: <fb2412cd-7417-4d65-9dea-d166a3bd146f@huawei.com>
-Date: Thu, 13 Nov 2025 19:10:50 +0800
+	s=arc-20240116; t=1763040336; c=relaxed/simple;
+	bh=2beZImer8eWKIWcDAocCGxfxykTRh4iaBe3x/wgdk4U=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZGCQLZcC4ASdIeaU6alr2NtkZrd1Wnd9SfTTzsg/txTI/Ltfa+i7+sc2dpP+efSu/Jdr4OhC1uw/VH2BNv1x792vKi8WuOK978GK4Ae5RhwWjxlJLnbJEZuZ8dweM/8SEzqhDyL11EZ03wrmKsO6lqHSwVxhUXT2EkK0gsOvoHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RABtzDeV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0096BC2BC87;
+	Thu, 13 Nov 2025 13:25:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763040336;
+	bh=2beZImer8eWKIWcDAocCGxfxykTRh4iaBe3x/wgdk4U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=RABtzDeVbXRDOvl93LROn+Mckrp/mKLXEXnPz99QkOkX+h1lng7C5tMyKn0xde662
+	 w5Mwl261mDV+jRn9c8RysceJjqrN558vI6j9Soco3hRKwV4OvPZMEh9/GqerBXBmob
+	 w9KOc6c4m/6tcsWUm4SK7Wi0E4+S/vFCBMsQz9DJSNO4+ayRbHXkUMkI3ZehJmzQcT
+	 yBQIa0W3Xdi2CuO3HICKIvH+p77EHLhG9cFWAQfKjTXASoA2L/R2wo1J8YneZ+sXIR
+	 mFQt3insYK4LypCl0Mwwestyw6XGbJjR22Kkxj0tbbRnoTsSmANRpAx3PFnYY88iIp
+	 eXFCQPzVaDpYA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vJXKP-00000004snh-1stV;
+	Thu, 13 Nov 2025 13:25:33 +0000
+Date: Thu, 13 Nov 2025 13:25:33 +0000
+Message-ID: <86o6p6t67m.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Luigi Rizzo <lrizzo@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Luigi Rizzo <rizzo.unipi@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH 1/6] genirq: platform wide interrupt moderation: Documentation, Kconfig, irq_desc
+In-Reply-To: <20251112192408.3646835-2-lrizzo@google.com>
+References: <20251112192408.3646835-1-lrizzo@google.com>
+	<20251112192408.3646835-2-lrizzo@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 3/4] io-128-nonatomic: introduce
- io{read|write}128_{lo_hi|hi_lo}
-To: Ben Dooks <ben.dooks@codethink.co.uk>, <arnd@arndb.de>,
-	<catalin.marinas@arm.com>, <will@kernel.org>, <akpm@linux-foundation.org>,
-	<anshuman.khandual@arm.com>, <ryan.roberts@arm.com>,
-	<andriy.shevchenko@linux.intel.com>, <herbert@gondor.apana.org.au>,
-	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-crypto@vger.kernel.org>,
-	<linux-api@vger.kernel.org>
-CC: <fanghao11@huawei.com>, <shenyang39@huawei.com>, <liulongfang@huawei.com>,
-	<qianweili@huawei.com>
-References: <20251112015846.1842207-1-huangchenghai2@huawei.com>
- <20251112015846.1842207-4-huangchenghai2@huawei.com>
- <59f8bc30-c1c6-4f07-87dd-cd2893ae87f7@codethink.co.uk>
-From: huangchenghai <huangchenghai2@huawei.com>
-Content-Language: en-US
-In-Reply-To: <59f8bc30-c1c6-4f07-87dd-cd2893ae87f7@codethink.co.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemq200001.china.huawei.com (7.202.195.16)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lrizzo@google.com, tglx@linutronix.de, rizzo.unipi@gmail.com, pabeni@redhat.com, akpm@linux-foundation.org, seanjc@google.com, jacob.jun.pan@linux.intel.com, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, bhelgaas@google.com, willemb@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
+On Wed, 12 Nov 2025 19:24:03 +0000,
+Luigi Rizzo <lrizzo@google.com> wrote:
 
-在 2025/11/12 22:48, Ben Dooks 写道:
-> On 12/11/2025 01:58, Chenghai Huang wrote:
->> From: Weili Qian <qianweili@huawei.com>
->>
->> In order to provide non-atomic functions for io{read|write}128.
->> We define a number of variants of these functions in the generic
->> iomap that will do non-atomic operations.
->>
->> These functions are only defined if io{read|write}128 are defined.
->> If they are not, then the wrappers that always use non-atomic operations
->> from include/linux/io-128-nonatomic*.h will be used.
->>
->> Signed-off-by: Weili Qian <qianweili@huawei.com>
->> Signed-off-by: Chenghai Huang <huangchenghai2@huawei.com>
->> ---
->>   include/linux/io-128-nonatomic-hi-lo.h | 35 ++++++++++++++++++++++++++
->>   include/linux/io-128-nonatomic-lo-hi.h | 34 +++++++++++++++++++++++++
->>   2 files changed, 69 insertions(+)
->>   create mode 100644 include/linux/io-128-nonatomic-hi-lo.h
->>   create mode 100644 include/linux/io-128-nonatomic-lo-hi.h
->>
->> diff --git a/include/linux/io-128-nonatomic-hi-lo.h 
->> b/include/linux/io-128-nonatomic-hi-lo.h
->> new file mode 100644
->> index 000000000000..b5b083a9e81b
->> --- /dev/null
->> +++ b/include/linux/io-128-nonatomic-hi-lo.h
->> @@ -0,0 +1,35 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef _LINUX_IO_128_NONATOMIC_HI_LO_H_
->> +#define _LINUX_IO_128_NONATOMIC_HI_LO_H_
->> +
->> +#include <linux/io.h>
->> +#include <asm-generic/int-ll64.h>
->> +
->> +static inline u128 ioread128_hi_lo(const void __iomem *addr)
->> +{
->> +    u32 low, high;
->
-> did you mean u64 here?
->
-Thank you for your reminder, I made a rookie mistake.
+[...]
 
+> The system does not rely on any special hardware feature except from
+> MSI-X Pending Bit Array (PBA), a mandatory component of MSI-X
 
-Chenghai
+Is this stuff PCI specific? if so, Why? What is the actual dependency
+on PBA? It is it just that you are relying on the ability to mask
+interrupts without losing them, something that is pretty much a given
+on any architecture?
 
->> +    high = ioread64(addr + sizeof(u64));
->> +    low = ioread64(addr);
->> +
->> +    return low + ((u128)high << 64);
->> +}
->> +
->> +static inline void iowrite128_hi_lo(u128 val, void __iomem *addr)
->> +{
->> +    iowrite64(val >> 64, addr + sizeof(u64));
->> +    iowrite64(val, addr);
->> +}
->> +
->
+[...]
+
+> +Platform Wide software interrupt moderation is a variant of moderation
+> +that adjusts the delay based on platform-wide metrics, instead of
+> +considering each source separately.  It then uses hrtimers to implement
+> +adaptive, per-CPU moderation in software, without requiring any specific
+> +hardware support other than Pending Bit Array, a standard feature
+> +of MSI-X.
+> +
+> +To understand the motivation for this feature, we start with some
+> +background on interrupt moderation.
+
+This reads like marketing blurb. This is an API documentation, and it
+shouldn't be a description of your motivations for building it the way
+you did. I'd suggest you stick to the API, and keep the motivations
+for the cover letter.
+
+> +
+> +* **Interrupt** is a mechanism to **notify** the CPU of **events**
+> +  that should be handled by software, for example, **completions**
+> +  of I/O requests (network tx/rx, disk read/writes...).
+
+That's only half of the truth, as this description only applies to
+*edge* interrupts. Level interrupts report a change in *state*, not an
+event.
+
+How do you plan to deal with interrupt moderation for level
+interrupts?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
