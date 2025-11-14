@@ -1,93 +1,79 @@
-Return-Path: <linux-arch+bounces-14788-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14789-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DC37C5E8C3
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 18:26:04 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23CC1C5E504
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 17:47:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CE1CF3C85C5
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 16:11:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 98EC93E33D4
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 16:22:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2414F3314A4;
-	Fri, 14 Nov 2025 16:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0664322768;
+	Fri, 14 Nov 2025 16:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="iUuUK+Iq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EPmgzzJc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HFKJbFmP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CB533122A;
-	Fri, 14 Nov 2025 16:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D3F2857FA;
+	Fri, 14 Nov 2025 16:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763136248; cv=none; b=X+rrXKVF0tKXwMqLkv9KfziVDKqkR9/N+uRe2KYR9PTyeFSy0Qvs4WtHF1TINjvTZNDUaqG+pZDoguzLAwcCbvgjv6htyEtqbF65E5VOom51YjnmDKVzEScLKjlcPiA4K7fqFcTtUqwlsiwbiH2PEtxgkRqoTMYYo6ZpA94Q59w=
+	t=1763137267; cv=none; b=fV2OkPPrLPYEqzs3lzYNLqi61iPTWNGm3EsMf2Xsn/otc2RvLf2cr/MHysJtxEHJPkkB2ojYHl5n0ul2XcyAZPETlpyGtnmdk6+NkjIM1Tby7FF/YYiHHBgXU85nIf7qQUIljCjxse/oog4P2s5lQsI/xP0BDvuTUPHo5bEmQvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763136248; c=relaxed/simple;
-	bh=P9cGJ7zPlBYZv8kQOzQWIlRFIUZrgMvyo5+1wG6uoUM=;
+	s=arc-20240116; t=1763137267; c=relaxed/simple;
+	bh=sdAOBvzBQbQ58hWdafyr1VicSS+CMEqs0nYJg4IbVNc=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=p47+B5qH8JjXaB/cpkfCWpQAzOyRbPJ5G6WgcJYvLUDA0Aa5oO7jAXIgpOAp38+XASH2qXwKqgQEBn/OmC5UlHfSQy5rrxceuJTSzzYgYdQgc9IinGNy212s/OhdUl2Axy6AGJYJ3SY+r95ShyJUwlDpWbGzLV2iHDknR+zCmFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=iUuUK+Iq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EPmgzzJc; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 8E2337A01AE;
-	Fri, 14 Nov 2025 11:04:02 -0500 (EST)
+	 Subject:Content-Type; b=rlaREvJG/TnbnFFwqICeiVApXVc2ImXezU26qnjE+kb0lrKI8opdBJmgK1iQX8N1pU/KxuxKtMczY+GCmonv5aiHzW0ToHOt6MR35mr4o0/7gAACtfvsdZm88/GT09v/R3N1l0KbMWqUOeOPKyYH1geLBFD1OEs14xC9sSyEg1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HFKJbFmP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23BFCC19421;
+	Fri, 14 Nov 2025 16:21:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763137267;
+	bh=sdAOBvzBQbQ58hWdafyr1VicSS+CMEqs0nYJg4IbVNc=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=HFKJbFmP9Ujt3AKc7/UDrJzlJi7JumxeosLUkWEyPeklpq5OZZt72yyohcI3A8DjR
+	 Q5Vh2zAeFMd2IiCnte0N/XnGK6DNbDRQ/7YvQ5lhwqg9RolCuYDSpfKJqS1B0vZukv
+	 WRM5Cfpv4s2uQBT9XQpMmVhLg7RU2QrLO7TehZVkVvfsiLOIriL0AHuR7xxhksMb0r
+	 rQ1Xr54dcBhj8eF/NMqOjBRjmPKn9v4PpWEBURevuz0YH6yMHvvs4zxmhQOC1HiZt1
+	 eaXuznue691T9OUZ0Tb36FWCOYcv7m6yoU4B67wWFVQhqHzZSTrRZF2fY0n7ubjqfK
+	 3ELPPESaDQuog==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 2A926F4006D;
+	Fri, 14 Nov 2025 11:21:05 -0500 (EST)
 Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 14 Nov 2025 11:04:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1763136242;
-	 x=1763222642; bh=M9f+1V/Gs5C5ClKhbfgT9um9exOzG9W9HnZ9J5MzYFY=; b=
-	iUuUK+IqWqJXW16WpkpxRxPRAtrf6jqtV7WJneZ3XbpcXufA5YS7BhLcfFN3iKGY
-	wVjrBvMkUBSaeOk9SVPhEh1CmfMmrDpdE2ogQ3sHiuidBHmYT82ymxj8Pm/g/Pea
-	gJeWNvSxej3ucg9i89MEvdGDo5tFuWpSKmkzX5kBAKAalJPch9aE780StTAW5NFx
-	Cmlbpi50BB2XPnhFURxMaI1Hg2WDObVPkE0uxWY/hKvxsjiJgtzpzTzyhgMibwPi
-	JOP5y0ENCFAaaMokteMOyLWKENySsm/55Y1q8nVGAJkalDFY1CiipLPwPWHNRXzz
-	Pf7LCQRkIHYGJB9bmpGdYA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763136242; x=
-	1763222642; bh=M9f+1V/Gs5C5ClKhbfgT9um9exOzG9W9HnZ9J5MzYFY=; b=E
-	PmgzzJcrt+h0JC8NtWhi4UJRX9JSEuwVpcW9P6a4pCvY0SdhcCGIMF6xyQFbrC0G
-	BOtT89f8YPJKbFNjWyvAXNY+1I/nW62tdg3sfFoEUhthpdYnbptmds2a0TaCpQFp
-	96IC/ikXcG4TaiQ9TitSuG0vIJmE3/sD82Beh1LV023voCOJPXGvFUIlw0fEV5n/
-	9sX7vQuB8+9cFSdG91otRe3+89cpyfjFrlWd+3azBdxXeGXipIhkFf5y623elKZL
-	hWa3BFMOxipEnFpGZOXyFgIdtR1niCl/7Mi+dLC7+VqVKhoMN8Kov+EHxRGA2qDW
-	BSNisJaMiHTUZPS/8y9GQ==
-X-ME-Sender: <xms:8VIXaSQUTbGlNqoBm96asAebHCJLTwjAMNlPXbzGLJF4vrZcYX7zhw>
-    <xme:8VIXaSm_qGICw4h1CKRHnPHP4ec_0wMH3rj0ydB-3a3qqTvG1luEEXgi3ZUCQIKN6
-    6FvXdlGJZEkYEGxiV3PNVZSbxyKCOQFWYGELxzfm0ejHp0QQWCE_aY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvuddtvdehucetufdoteggodetrf
+  by phl-compute-01.internal (MEProxy); Fri, 14 Nov 2025 11:21:05 -0500
+X-ME-Sender: <xms:8FYXaX1xeo7cwPzIqK0lN7OWVpvdACGCH0_QR-xqptpdj06yrqDiMg>
+    <xme:8FYXaQ5044wGZzeghlvmdCODRvYE2agaizWczUnN-jUKKWRJl7iq7FAPf_6mDi1Nk
+    _cq58VZC_S-DwQ4rAg_2zGQMltJ_hj7flJjkLTIUdudS5euDrsHNIs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvuddtvdelucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdelpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopegtrghtrghlih
-    hnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtohepjhgrmhgvshdrmhhorhhs
-    vgesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghnugesrghrmhdrtg
-    homhdprhgtphhtthhopegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhn
-    rdgtohhmpdhrtghpthhtohepjhhonhgrthhhrghnrdgtrghmvghrohhnsehhuhgrfigvih
-    drtghomhdprhgtphhtthhopehlihhnuhigrghrmheshhhurgifvghirdgtohhmpdhrtghp
-    thhtohepfigrnhhghihushhhrghnuddvsehhuhgrfigvihdrtghomhdprhgtphhtthhope
-    hpvghtvghriiesihhnfhhrrgguvggrugdrohhrgh
-X-ME-Proxy: <xmx:8VIXaaCQi_bM4GIEQ_jBunmYtmzlrZxFP7n5lAYiWyfa-4msWaS0iQ>
-    <xmx:8VIXaVSysmvIwseAM0TznwvZ94MPNSpd_nqP7aY25ncwx8evwSv4_w>
-    <xmx:8VIXaRalsjiiTdT-vQi9kNTQC_wzVzBavsjweVEQDrXnjhGzfpXXpg>
-    <xmx:8VIXaaW8w0IjPS9W8wroo2kONi-pnHfHvtBzWdvJYt9D-V7aoy1gzQ>
-    <xmx:8lIXaaNw9x_t5t-hIL3XLxZP43HBdfy0h65TDU0tI1Usk61Z7PgFp97w>
-Feedback-ID: i56a14606:Fastmail
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehnugih
+    ucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecuggftrf
+    grthhtvghrnhepkefhieejfedvueejheehiefgvdfhjeefjeelvdfghfelgeejudevleej
+    uddvvefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudekheei
+    fedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrd
+    hluhhtohdruhhspdhnsggprhgtphhtthhopeegkedpmhhouggvpehsmhhtphhouhhtpdhr
+    tghpthhtohepjhgsrghrohhnsegrkhgrmhgrihdrtghomhdprhgtphhtthhopegsphesrg
+    hlihgvnhekrdguvgdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthht
+    ohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehmrghthhhivg
+    hurdguvghsnhhohigvrhhssegvfhhfihgtihhoshdrtghomhdprhgtphhtthhopegsohhq
+    uhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopehurhgviihkihesghhmrg
+    hilhdrtghomhdprhgtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhr
+    tghpthhtohepjhgrnhhnhhesghhoohhglhgvrdgtohhm
+X-ME-Proxy: <xmx:8VYXaavy2Rcw5_KExroGJoSP4RswQNujNsiylB0Zboj1MLJmYGXRMQ>
+    <xmx:8VYXaZY6rZhPaBTbMRdgxZfVoWO_tE57Uf8RTZRFKYMUkM6OhPqO7w>
+    <xmx:8VYXaXq_i9JHyksMPvKjGa4dS9KQQoAc-nePruIhtsmCgMAuL00tWQ>
+    <xmx:8VYXaQqiB1qrgBqZ3MW1P6T2OaapMG_gHq2V-9XZpin12vZyrdLMFw>
+    <xmx:8VYXaUXaaOeVLlHat2d5uQs_qjo-uL7EhSwfZcFtiahVbx-tqC236JT4>
+Feedback-ID: ieff94742:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 41EC1700065; Fri, 14 Nov 2025 11:04:01 -0500 (EST)
+	id D4A0C700054; Fri, 14 Nov 2025 11:21:04 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -95,99 +81,97 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AWJreI-smgpg
-Date: Fri, 14 Nov 2025 17:03:40 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jonathan Cameron" <Jonathan.Cameron@huawei.com>
-Cc: "Conor Dooley" <conor@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>, linux-cxl@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
- "Dan Williams" <dan.j.williams@intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Drew Fustini" <fustini@kernel.org>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Krzysztof Kozlowski" <krzk@kernel.org>,
- "James Morse" <james.morse@arm.com>, "Will Deacon" <will@kernel.org>,
- "Davidlohr Bueso" <dave@stgolabs.net>, linuxarm@huawei.com,
- "Yushan Wang" <wangyushan12@huawei.com>,
- "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
+X-ThreadId: ATddxb8eqn9V
+Date: Fri, 14 Nov 2025 08:20:42 -0800
+From: "Andy Lutomirski" <luto@kernel.org>
+To: "Valentin Schneider" <vschneid@redhat.com>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ linux-mm@kvack.org, rcu@vger.kernel.org,
+ "the arch/x86 maintainers" <x86@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Cc: "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
  "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>, x86@kernel.org,
- "Andy Lutomirski" <luto@kernel.org>,
- "Dave Jiang" <dave.jiang@intel.com>
-Message-Id: <93c1c6be-dae5-477e-8924-1b77f8567732@app.fastmail.com>
-In-Reply-To: <20251114155746.00003719@huawei.com>
-References: <20251031111709.1783347-1-Jonathan.Cameron@huawei.com>
- <20251108-spearmint-contend-aa3dd8a0220e@spud>
- <20251114124958.00006a85@huawei.com>
- <20251114-juror-stiffness-046b47b8d9f7@spud>
- <02244119-d6b8-4ef4-833f-b8fba7a73f43@app.fastmail.com>
- <20251114155746.00003719@huawei.com>
-Subject: Re: [PATCH v5 0/6]  Cache coherency management subsystem
+ "H. Peter Anvin" <hpa@zytor.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Paolo Bonzini" <pbonzini@redhat.com>, "Arnd Bergmann" <arnd@arndb.de>,
+ "Frederic Weisbecker" <frederic@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ "Jason Baron" <jbaron@akamai.com>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Ard Biesheuvel" <ardb@kernel.org>,
+ "Sami Tolvanen" <samitolvanen@google.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ "Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
+ "Joel Fernandes" <joelagnelf@nvidia.com>,
+ "Josh Triplett" <josh@joshtriplett.org>,
+ "Boqun Feng" <boqun.feng@gmail.com>,
+ "Uladzislau Rezki" <urezki@gmail.com>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Mel Gorman" <mgorman@suse.de>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Han Shen" <shenhan@google.com>, "Rik van Riel" <riel@surriel.com>,
+ "Jann Horn" <jannh@google.com>,
+ "Dan Carpenter" <dan.carpenter@linaro.org>,
+ "Oleg Nesterov" <oleg@redhat.com>, "Juri Lelli" <juri.lelli@redhat.com>,
+ "Clark Williams" <williams@redhat.com>,
+ "Yair Podemsky" <ypodemsk@redhat.com>,
+ "Marcelo Tosatti" <mtosatti@redhat.com>,
+ "Daniel Wagner" <dwagner@suse.de>, "Petr Tesarik" <ptesarik@suse.com>,
+ "Shrikanth Hegde" <sshegde@linux.ibm.com>
+Message-Id: <c4768cf3-f131-44e6-9b25-ebeb633f32ee@app.fastmail.com>
+In-Reply-To: <20251114150133.1056710-1-vschneid@redhat.com>
+References: <20251114150133.1056710-1-vschneid@redhat.com>
+Subject: Re: [PATCH v7 00/31] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 14, 2025, at 16:57, Jonathan Cameron wrote:
-> On Fri, 14 Nov 2025 15:07:33 +0100 "Arnd Bergmann" <arnd@arndb.de> wrote:
-> Hi Arnd,
->
-> Thanks for taking another look.
->
-> Agreed splitting the menus reduces chance of confusion, so makes
-> sense to me as well.
->
-> Implementation wise I think we have to use menuconfig + bool if we want
-> to have help and dependencies and then an if block under that.
-> The syntax for Kconfig always leaves me finding an example to copy
-> rather than finding it intuitive
->
-> menuconfig CACHEMAINT_FOR_DMA
-> 	bool "Cache management for noncoherent DMA"
-> 	depends on RISCV
-> 	help
-> 	  These drivers implement support for noncoherent DMA master devices
-> 	  on platforms that lack the standard CPU interfaces for this.
->
-> if CACHEMAINT_FOR_DMA
-> ... drivers here...
->
-> endif #CACHEMAINT_FOR_DMA
->
-> menuconfig CACHEMAINT_FOR_HOTPLUG
-> 	bool "Cache management for hotplug like operations"
-> 	depends on GENERIC_CPU_CACHE_MAINTENANCE
-> 	help
-> 	   These drivers implement support for cache management flows
-> 	   as required for action such as memory hotplug on platforms
-> 	   where this is done by platform specific interfaces.
->
-> if CACHEMAINT_FOR_HOTPLUG
-> ... drivers here
->
-> endif #CACHEMAINT_FOR_HOTPLUG
 
-Works for me.
 
-> I'm not sure if the 'hotplug like' is close enough to all the cases
-> for device drivers that provide the services needed to implement
-> ARCH_HAS_CPU_CACHE_INVALIDATE_MEMEGION
+On Fri, Nov 14, 2025, at 7:01 AM, Valentin Schneider wrote:
+> Context
+> =======
+>
+> We've observed within Red Hat that isolated, NOHZ_FULL CPUs running a
+> pure-userspace application get regularly interrupted by IPIs sent from
+> housekeeping CPUs. Those IPIs are caused by activity on the housekeeping CPUs
+> leading to various on_each_cpu() calls, e.g.:
+>
 
-The _FOR_HOTPLUG does feel a little more specific than it should be,
-but I haven't come up with a better name for it yet. We'll
-probably figure that out if we ever get a second driver here.
+> The heart of this series is the thought that while we cannot remove NOHZ_FULL
+> CPUs from the list of CPUs targeted by these IPIs, they may not have to execute
+> the callbacks immediately. Anything that only affects kernelspace can wait
+> until the next user->kernel transition, providing it can be executed "early
+> enough" in the entry code.
+>
 
-> Alternative might be to phrase around pushing beyond the point of
-> coherence, but that seems to be an ARM specific term and would
-> seem to incorporate fine grained sharing where this interface might
-> work but isn't a good solution.
+I want to point out that there's another option here, although anyone trying to implement it would be fighting against quite a lot of history.
 
-Agreed.
+Logically, each CPU is in one of a handful of states: user mode, idle, normal kernel mode (possibly subdivided into IRQ, etc), and a handful of very narrow windows, hopefully uninstrumented and not accessing any PTEs that might be invalid, in the entry and exit paths where any state in memory could be out of sync with actual CPU state.  (The latter includes right after the CPU switches to kernel mode, for example.)  And NMI and MCE and whatever weird "security" entry types that Intel and AMD love to add.
 
-     Arnd
+The way the kernel *currently* deals with this has two big historical oddities:
+
+1. The entry and exit code cares about ti_flags, which is per-*task*, which means that atomically poking it from other CPUs involves the runqueue lock or other shenanigans (see the idle nr_polling code for example), and also that it's not accessible from the user page tables if PTI is on.
+
+2. The actual heavyweight atomic part (context tracking) was built for RCU, and it's sort or bolted on, and, as you've observed in this series, it's really quite awkward to do things that aren't RCU using context tracking.
+
+If this were a greenfield project, I think there's a straightforward approach that's much nicer: stick everything into a single percpu flags structure.  Imagine we have cpu_flags, which tracks both the current state of the CPU and what work needs to be done on state changes.  On exit to user mode, we would atomically set the mode to USER and make sure we don't touch anything like vmalloc space after that.  On entry back to kernel mode, we would avoid vmalloc space, etc, then atomically switch to kernel mode and read out whatever deferred work is needed.  As an optimization, if nothing in the current configuration needs atomic state tracking, the state could be left at USER_OR_KERNEL and the overhead of an extra atomic op at entry and exit could be avoided.
+
+And RCU would hook into *that* instead of having its own separate set of hooks.
+
+I think that actually doing this would be a big improvement and would also be a serious project.  There's a lot of code that would get touched, and the existing context tracking code is subtle and confusing.  And, as mentioned, ti_flags has the wrong scope.
+
+It's *possible* that one could avoid making ti_flags percpu either by extensive use of the runqueue locks or by borrowing a kludge from the idle code.  For the latter, right now, the reason that the wake-from-idle code works is that the optimized path only happens if the idle thread/cpu is "polling", and it's impossible for the idle ti_flags to be polling while the CPU isn't actually idle.  We could similarly observe that, if a ti_flags says it's in USER mode *and* is on, say, cpu 3, then cpu 3 is most definitely in USER mode.  So someone could try shoving the CPU number into ti_flags :-p   (USER means actually user or in the late exit / early entry path.)
+
+Anyway, benefits of this whole approach would include considerably (IMO) increased comprehensibility compared to the current tangled ct code and much more straightforward addition of new things that happen to a target CPU conditionally depending on its mode.  And, if the flags word was actually per cpu, it could be mapped such that SWITCH_TO_KERNEL_CR3 would use it -- there could be a single CR3 write (and maybe CR4/invpcid depending on whether a zapped mapping is global) and the flush bit could depend on whether a flush is needed.  And there would be basically no chance that a bug that accessed invalidated-but-not-flushed kernel data could be undetected -- in PTI mode, any such access would page fault!  Similarly, if kernel text pokes deferred the flush and serialization, the only code that could execute before noticing the deferred flush would be the user-CR3 code.
+
+Oh, any another primitive would be possible: one CPU could plausibly execute another CPU's interrupts or soft-irqs or whatever by taking a special lock that would effectively pin the remote CPU in user mode -- you'd set a flag in the target cpu_flags saying "pin in USER mode" and the transition on that CPU to kernel mode would then spin on entry to kernel mode and wait for the lock to be released.  This could plausibly get a lot of the on_each_cpu callers to switch over in one fell swoop: anything that needs to synchronize to the remote CPU but does not need to poke its actual architectural state could be executed locally while the remote CPU is pinned.
+
+--Andy
 
