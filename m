@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-14780-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14781-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45022C5DE80
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 16:36:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 938CFC5DEBB
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 16:38:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 597514F307E
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 15:27:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3B3E42183C
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 15:27:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C064C334C02;
-	Fri, 14 Nov 2025 15:16:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD3633508C;
+	Fri, 14 Nov 2025 15:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FKKh3xDd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DoGxGGSb"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31139334693
-	for <linux-arch@vger.kernel.org>; Fri, 14 Nov 2025 15:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1514334C1D
+	for <linux-arch@vger.kernel.org>; Fri, 14 Nov 2025 15:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763133394; cv=none; b=Fg1peVaKZXDtdHQWOkCIHWWuuPn0M5YCV6iiCySX5+jd3hy/YCN8wJWeVtvr0ydszTxKFMYWDWRvC+bbn1Sw16PASXmocHzYgXZekiEm4AM7J3335UQxtXmJanC6tbGHDDKRmPH5P2oepAfP/oIwf36hWgPuMjZr+PI4+ss/Wd4=
+	t=1763133406; cv=none; b=rtLaFKO+QZdG4yXy+ROYVffMIOCTIpobeSWoCBMem4z1pCgKXB71bjzqNf/yWfEbaZADliKQwU1HBsrlLaICKBRtLKDRCaxStC6avTiVh9epFHEQcLIUSVWomM6bj5+hhXAEN+gWWIkytz2EMx+hiUdetAVva1VajgG2879T/EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763133394; c=relaxed/simple;
-	bh=bRhz7pzmAvyxE+4fka8gvMXEnIf9tOF0eDiG/K4GcEQ=;
+	s=arc-20240116; t=1763133406; c=relaxed/simple;
+	bh=z9azdQ3tAjj8W6CUyGNM0oLwsd5ab0jCguNokgHO0/4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ua84dPzKYynZTDr8hfvM4pgzDsHBVmJGqunGoo7FSqP+/g14SHON3dblt2c70RqCo2j7moEt2gdZClg2MxY/VZvb+3CAqvw2vmf1cNnuVXRSqVUStyXaysdLiMWLElkCZrBCZz79HMonpmBAvXBr6GFpKOge9lWRcdLKexIGTAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FKKh3xDd; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=IWb9rS+YDwYl0e8Mq0sn6eTaNhkXZnPpOyMVXImS2BLt1zXznRXjIZUfVsX8kapbK+l5ivIVMv59te1Z/ovGEJU2xo8AvNhIDbvluUHMTVQAbM3wCXoFwWv7haxa+gEDP+3VKsyfOM10deM+l+3TQVcRTlUDYTGiX3upxBrALf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DoGxGGSb; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763133392;
+	s=mimecast20190719; t=1763133403;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3wtNiwO7mQgs61ieJ83HPyGKadANIMB4TUgH9LUJTDI=;
-	b=FKKh3xDdmPJ12i8gUYU1qoOdJVpq5dCNJilfkoVcJGAy8b02Py2x9Gi+ZBhESV0JiFJpcT
-	PhlurwJX3cv+SmXlcl9sj9OKxzC2zsia6dRRAjO1ZPeM2vSsdM2VnFwcwkKOfUr+8wMTfj
-	z+cJKSlxRsIvslWZ7Mda6t0cMRu+/Xo=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=uUsWRA0PhCMnZLZEkKPa9puqLJ49gF+6GXOwWTaFVY4=;
+	b=DoGxGGSbgCi28W481VTVJZ618MK2AMwpJWbabCNZ0Dzch0qgYF0AlSodGQJMDTPGjLzi9M
+	ss5Dt+eIvpt9GSGukv4skUrcyJPYD5N4KguPaug53ZQUDOQQwNsbwhvWemMvIVzl3dHqeT
+	4yN51Ubb+kcp36+Qy5q84CZStH32fa4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-530-KUYqLZu4MQq0ZGtzVQ5_Tw-1; Fri,
- 14 Nov 2025 10:16:26 -0500
-X-MC-Unique: KUYqLZu4MQq0ZGtzVQ5_Tw-1
-X-Mimecast-MFC-AGG-ID: KUYqLZu4MQq0ZGtzVQ5_Tw_1763133376
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-562-ckqYkCrGPcysWf_5rr0BIw-1; Fri,
+ 14 Nov 2025 10:16:38 -0500
+X-MC-Unique: ckqYkCrGPcysWf_5rr0BIw-1
+X-Mimecast-MFC-AGG-ID: ckqYkCrGPcysWf_5rr0BIw_1763133392
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 286521956094;
-	Fri, 14 Nov 2025 15:16:16 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3CBED180049F;
+	Fri, 14 Nov 2025 15:16:32 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.226.10])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EF3DD1800451;
-	Fri, 14 Nov 2025 15:15:59 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BD14A18004D8;
+	Fri, 14 Nov 2025 15:16:16 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
@@ -67,8 +67,7 @@ To: linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
 	linux-arch@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
+Cc: Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
@@ -79,6 +78,7 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Paolo Bonzini <pbonzini@redhat.com>,
 	Arnd Bergmann <arnd@arndb.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Jason Baron <jbaron@akamai.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -106,9 +106,9 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	Daniel Wagner <dwagner@suse.de>,
 	Petr Tesarik <ptesarik@suse.com>,
 	Shrikanth Hegde <sshegde@linux.ibm.com>
-Subject: [PATCH v7 26/31] x86/jump_label: Add ASM support for static_branch_likely()
-Date: Fri, 14 Nov 2025 16:14:23 +0100
-Message-ID: <20251114151428.1064524-6-vschneid@redhat.com>
+Subject: [PATCH v7 27/31] x86/mm: Make INVPCID type macros available to assembly
+Date: Fri, 14 Nov 2025 16:14:24 +0100
+Message-ID: <20251114151428.1064524-7-vschneid@redhat.com>
 In-Reply-To: <20251114150133.1056710-1-vschneid@redhat.com>
 References: <20251114150133.1056710-1-vschneid@redhat.com>
 Precedence: bulk
@@ -120,84 +120,51 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-A later commit will add some early entry code that only needs to be
-executed if nohz_full is present on the cmdline, not just if
-CONFIG_NO_HZ_FULL is compiled in. Add an ASM-callable static branch macro.
+A later commit will introduce a pure-assembly INVPCID invocation, allow
+assembly files to get the type definitions.
 
-Note that I haven't found a way to express unlikely (i.e. out-of-line)
-static branches in ASM macros without using extra jumps, which kind of
-defeats the purpose. Consider:
-
-  .macro FOOBAR
-	  // Key enabled:  JMP .Ldostuff_\@
-	  // Key disabled: NOP
-	  STATIC_BRANCH_UNLIKELY key, .Ldostuff_\@ // Patched to JMP if enabled
-	  jmp .Lend_\@
-  .Ldostuff_\@:
-	  <dostuff>
-  .Lend_\@:
-  .endm
-
-Instead, this should be expressed as a likely (i.e. in-line) static key:
-
-  .macro FOOBAR
-	  // Key enabled:  NOP
-	  // Key disabled: JMP .Lend_\@
-	  STATIC_BRANCH_LIKELY key, .Lend\@ // Patched to NOP if enabled
-	  <dostuff>
-  .Lend_\@:
-  .endm
-
-Suggested-by: Frederic Weisbecker <frederic@kernel.org>
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/x86/include/asm/jump_label.h | 33 ++++++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/invpcid.h | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/jump_label.h b/arch/x86/include/asm/jump_label.h
-index 61dd1dee7812e..3c9ba3948e225 100644
---- a/arch/x86/include/asm/jump_label.h
-+++ b/arch/x86/include/asm/jump_label.h
-@@ -7,7 +7,38 @@
- #include <asm/asm.h>
- #include <asm/nops.h>
+diff --git a/arch/x86/include/asm/invpcid.h b/arch/x86/include/asm/invpcid.h
+index 734482afbf81d..27ae75c2d7fed 100644
+--- a/arch/x86/include/asm/invpcid.h
++++ b/arch/x86/include/asm/invpcid.h
+@@ -2,6 +2,13 @@
+ #ifndef _ASM_X86_INVPCID
+ #define _ASM_X86_INVPCID
  
--#ifndef __ASSEMBLER__
-+#ifdef __ASSEMBLER__
++#define INVPCID_TYPE_INDIV_ADDR		0
++#define INVPCID_TYPE_SINGLE_CTXT	1
++#define INVPCID_TYPE_ALL_INCL_GLOBAL	2
++#define INVPCID_TYPE_ALL_NON_GLOBAL	3
 +
-+/*
-+ * There isn't a neat way to craft unlikely static branches in ASM, so they
-+ * all have to be expressed as likely (inline) static branches. This macro
-+ * thus assumes a "likely" usage.
-+ */
-+.macro ARCH_STATIC_BRANCH_LIKELY_ASM key, label, jump, hack
-+1:
-+.if \jump || \hack
-+	jmp \label
-+.else
-+	.byte BYTES_NOP5
-+.endif
-+	.pushsection __jump_table, "aw"
-+	_ASM_ALIGN
-+	.long 1b - .
-+	.long \label - .
-+	/* LIKELY so bit0=1, bit1=hack */
-+	_ASM_PTR \key + 1 + (\hack << 1) - .
-+	.popsection
-+.endm
++#ifndef __ASSEMBLER__
 +
-+.macro STATIC_BRANCH_TRUE_LIKELY key, label
-+	ARCH_STATIC_BRANCH_LIKELY_ASM \key, \label, 0, IS_ENABLED(CONFIG_HAVE_JUMP_LABEL_HACK)
-+.endm
-+
-+.macro STATIC_BRANCH_FALSE_LIKELY key, label
-+	ARCH_STATIC_BRANCH_LIKELY_ASM \key, \label, 1, 0
-+.endm
-+
-+#else /* !__ASSEMBLER__ */
+ static inline void __invpcid(unsigned long pcid, unsigned long addr,
+ 			     unsigned long type)
+ {
+@@ -17,11 +24,6 @@ static inline void __invpcid(unsigned long pcid, unsigned long addr,
+ 		     :: [desc] "m" (desc), [type] "r" (type) : "memory");
+ }
  
- #include <linux/stringify.h>
- #include <linux/types.h>
+-#define INVPCID_TYPE_INDIV_ADDR		0
+-#define INVPCID_TYPE_SINGLE_CTXT	1
+-#define INVPCID_TYPE_ALL_INCL_GLOBAL	2
+-#define INVPCID_TYPE_ALL_NON_GLOBAL	3
+-
+ /* Flush all mappings for a given pcid and addr, not including globals. */
+ static inline void invpcid_flush_one(unsigned long pcid,
+ 				     unsigned long addr)
+@@ -47,4 +49,6 @@ static inline void invpcid_flush_all_nonglobals(void)
+ 	__invpcid(0, 0, INVPCID_TYPE_ALL_NON_GLOBAL);
+ }
+ 
++#endif /* __ASSEMBLER__ */
++
+ #endif /* _ASM_X86_INVPCID */
 -- 
 2.51.0
 
