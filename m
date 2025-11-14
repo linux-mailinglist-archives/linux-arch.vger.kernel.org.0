@@ -1,89 +1,88 @@
-Return-Path: <linux-arch+bounces-14739-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14740-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0293DC5A5D6
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 23:44:52 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A96B6C5BFA5
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 09:28:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DF2B3B13BB
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Nov 2025 22:42:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4FB634E37D7
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Nov 2025 08:28:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CFE82FDC39;
-	Thu, 13 Nov 2025 22:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1A82FB637;
+	Fri, 14 Nov 2025 08:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lToG4/Xs"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="amR/yYSS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442F9322C81
-	for <linux-arch@vger.kernel.org>; Thu, 13 Nov 2025 22:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE9926E6E6
+	for <linux-arch@vger.kernel.org>; Fri, 14 Nov 2025 08:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763073768; cv=none; b=YvmsnrXd+e6pba7R8S5qk+c6uTkcplCWOcU4FuJFhBeyAbEJwvJ+fochN8Z3PwQfYRzgw6TI1uApt7gmTrjo4bDqdaIWLFo4Fgc8PlFvtZgAYFuZergEAt9bvq65lOPm6X/QMxWXW/SjRljyHmgvbGw7yvoifpUZrEnXxxDH3xA=
+	t=1763108899; cv=none; b=h1pt6tMt63F5I1f/LC4WPx3+gZcWFxv1ypiN2gznPzdwq8QW5cam4XXZ/dGNI5ZegfPPddC8QFbkcwoS9dfD2178UyHC+C6WepRGWZkYnRgrTKH9s58UXGFUIsjzB2/bbZ744GB+WvvD0JCCJtiENOwRh7lmOpkBKHy6u52G338=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763073768; c=relaxed/simple;
-	bh=TcHah/xGqOuR/iYF9lSI4H1JN0TWXwa84emMqcbTocM=;
+	s=arc-20240116; t=1763108899; c=relaxed/simple;
+	bh=KCn4uFukjRiL/0XJqVgN9z6kv9AkhpQT0mpHldHUNck=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I1U59XvEWk2espyFasR4NoLwN42Op+EOjrVf70G6urdSwqft3ZhAQH6fo626vdsmEROLbhd+sp/Bzoo8N3mZLEyV+es5NyumdLSReC6zCh7cVZYbZ352coA/KlioBJ9S+I0HKm9FlsLkjJwoNsGv6cghxghbzFWLBUFeqype6gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lToG4/Xs; arc=none smtp.client-ip=209.85.160.176
+	 To:Cc:Content-Type; b=QvAQUHzjnHQFDh+sDTKFxen97MDBMgQxW1dURmcDpyIjqhzwL+laCeIiRsIQTEMPjEk17PLktut1yJlVsxpFNur0gJZoC+1R7jRMcGHmaM1Ucq5ovphN4eQtCHtN0LN2XLAIMXwXbKRfsSAluPLSwEehgjDXZrMk4dcvvJqcVSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=amR/yYSS; arc=none smtp.client-ip=209.85.160.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4edb59dfda5so40311cf.1
-        for <linux-arch@vger.kernel.org>; Thu, 13 Nov 2025 14:42:45 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ede12521d4so197321cf.1
+        for <linux-arch@vger.kernel.org>; Fri, 14 Nov 2025 00:28:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763073765; x=1763678565; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763108897; x=1763713697; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ejv6A8rdWJkpPdH1oULXD4xDIYEN0CZbbCWSORyHwT4=;
-        b=lToG4/Xsz5DRF8whn7FoitzA9OohD5ep9to+ffsdZygoyTQeLoLrijRMTLFYj1KNC1
-         iuB7gJZpP54LhJAiq5qQemOrklrNR1ICkSKuDrvbwPwHnlelhvzhnuDYOQmPE/nxgxBt
-         cp5QKrBGLShgWbAiAWxeqFyGg0tsjGyURUVm+QBVLtxl2JR6+AZFY21SYF8stiywfrgv
-         fbir3gvXp1PfJbWw7/z16BLOzoU8HPJGccMrKTqWT4rFWT4jIrAjffmnGqAhIKKNb5g2
-         4rS35N2WA6pYXQs7J/YwDpmGx0/g9e+zCoFzLFVJy1jzOvNSnBfrS8X7H7rp+cQ57IqH
-         lHpg==
+        bh=1bmHT7xtPxAufeSjZNpEjMNtN/PIopHWc4OrXWKr35Y=;
+        b=amR/yYSSwCfmLxYR1nSwL2u2pOGU1oir1MneQ7wZnUOumPIspf1U+knOeKyjABnEU0
+         DJJXZHjhOkQTsbfxVpbe7QQoipatB2qIBjitLzKZVoqiJorcsXSENSmdHZku44ukEA1T
+         d+NOAC7pruu3HQVMz/tSiytK0eN6cAUeOIN0HJgkdwy2zm2tb1Qn/c4viGfZUK7zhrkB
+         FNfA60pEvL/g/OmTLftkxjNCYrVzqZ/C+t4OupwKJq+8/eQAnUJ0yrrvbChZXZtdG+kj
+         sjX2mSekJGCoC39rf1MghDW0mJwNTprS3h83yWMjc6l4IQlN3sm3iwbzErXWoQB5iGl2
+         Y6sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763073765; x=1763678565;
+        d=1e100.net; s=20230601; t=1763108897; x=1763713697;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Ejv6A8rdWJkpPdH1oULXD4xDIYEN0CZbbCWSORyHwT4=;
-        b=fWcaDY829RTlRSBTK6o7ukrAPhildA/HrH4+nu7yXSOzZr/BqDKJDXJL+LZwXLKV6N
-         FtMj9XHNMLw2xkACGV20IqS45yVFImp6G81X6S8kq+jjZW0fUSpjtInFbx/K2Jg+iQ+9
-         xLAZKQHzmTkve1UK8Z68rd4L4ZzIjMDpG6RYzAekoUhQivZItdT5iWWK18WRjD/BDuZd
-         mzY4qB5CCZJG8jFsG0EbZFsaLiVT4PnF2G0AuzvH6R3c7FZZIUxunYbet7hhaL1ZYHNr
-         SrXsiO01orHsAC9IwKYcLcbSVXJRKYJlGzuDE1JNYt4fHapBXSmx4Ma/SKgxL7UFPVg7
-         5+TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZ6lnKcPhEgYPwAqG4pSP7b+/PnDGMuZzzN8xYpSfDihT/36i68E3R440wKySYwJ/JwIOsnprx6nW1@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKEvrHe6Wd2zML8CPFWWQVlAt7BxWOxHjKjLoNsgkBbFhE0FrH
-	+6M7DyBaqbSrfrEkU3TPix7WS9Hszh5cjLJyaLYJFr3sN0CjQp13ZS+2jMppZ7uBdbZYjJep/j0
-	QvdFJ9QleYKbmcz/Bfxh5z8KRaKcfUIGS7uDIr/+c
-X-Gm-Gg: ASbGncsVKaftM7QdLfaIZipLyVKOdgS0d36oV0M/XtEjDKv5Pr770gWfcEgVNSQyroA
-	LqDu0sgUOCYbMZD+3JE2NEcoNhVSL0+mFI7Nl7sPguQfSwDXNj0ljk6S7n3mOJ92TRiIfflHu1F
-	GE/smLoj27iPYWd4eymSl9L9QaYpF6sss9urfsArFSXNQ0SIdFnu3Q7+r40gqaNXKgmgef5dMNo
-	tYsFqw5xbiwi9wnY/EoCMsa1bFi2eu/jSPnGKfu4Ft+VJfuVaL4I8uQU+imAlnRwxtDi0u6T9Ja
-	U1ZVjQ==
-X-Google-Smtp-Source: AGHT+IGQhDcH0SdIn2CvBhwa5KznFKitv2vTdAgxB7lpQqrZkmoO5mHAgC/M/Wvqz1dqGovXjEs1dmJBfzOp/yCogRE=
-X-Received: by 2002:ac8:7c56:0:b0:4e6:e07f:dc98 with SMTP id
- d75a77b69052e-4edf4815966mr715831cf.9.1763073764466; Thu, 13 Nov 2025
- 14:42:44 -0800 (PST)
+        bh=1bmHT7xtPxAufeSjZNpEjMNtN/PIopHWc4OrXWKr35Y=;
+        b=woYiM/5raz0+/Q8kDvrG/2CiK77pnuAjepxLHXBPvqh7Rq40c0ZmPf3uw5KcfWoyde
+         XW0UQNQhzsPc0X/ny9jP5ewZomgpSqAAiub+aL+JVc7DFVrPT07khbadG3ERc17Kjk+4
+         7t6bV+8nCa/yFMYIH8+7OXEkNgh8/cwQF4Ek0Qu5MPjmFItJChLWuAzGSQ+CRHKVoQbf
+         w6bAR+y4tVj2aFG0aJJ8BSSbIYJN4cjpGbK2S2nOgYbnYZsK7Spie18ujDpxYrzgmpuJ
+         sM3urjkpLEWcSZG/1AboLhW/JFGDnRB32xgRPjSj9nVYiJqM0tIU1pYeMbhdqpINK9Iu
+         W4yQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvYIFds6eup8D+Tv+xrrCQefTdlmuELed50B0p8/2JLybRWusL4zyjiDnZYTRm3Wj+6XPC7OvBHBQP@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXbuaUmRGiNlraVz6Ts9hn1z5UO3qcig20kk+wc7gPDpO82mGA
+	FZimkvs+Lf2zJGuJDTYbuEATg5BDnOExEqbBiTFO4zuMKN9/UaPAkijyVG+8WPo/Q94FapIUYyH
+	kCJSpTl+fWU8f8HT+GVCsDL42g2fnaVPhh++mpW+L
+X-Gm-Gg: ASbGncuiQ+ItR0EAxCV+OcymINVsZ+SQ3uPRDzQiIc0mQ0AOHvllPHzZfgkVRFcVePA
+	3lXznt2NwX3cBda9kMRw44uRaKnIeQffTXQXr9+dPRmzd8rKGUYW0B5Lm1DjCm1cHQBhg2SUnUA
+	tdNS1iUlxGn1Y9oWewxGVhItT74XpRlNH0rG5ypxIeIrawLubBYv6GsTCwtV5DM0tZN0IdfftGz
+	ZVuvggZL5FdZ6+PnAjebn5bgeiwblBT4zjU5Xf++Xqt2DNmg2jFE3novxGWgNE8fHWzDbo=
+X-Google-Smtp-Source: AGHT+IEWvuRghI75CmtMzlYsfsKx7vbKQDtoXD04cCHz9fsZZIzvB/1/cVSRXibV9067p9gACoWF3MaYvd4u4+vau/E=
+X-Received: by 2002:a05:622a:40e:b0:4ed:5f45:447c with SMTP id
+ d75a77b69052e-4edf32c0b11mr4688521cf.6.1763108896300; Fri, 14 Nov 2025
+ 00:28:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112192408.3646835-1-lrizzo@google.com> <20251112192408.3646835-3-lrizzo@google.com>
- <87346ie0vs.ffs@tglx> <87h5uycjr9.ffs@tglx>
-In-Reply-To: <87h5uycjr9.ffs@tglx>
+References: <20251112192408.3646835-1-lrizzo@google.com> <20251112192408.3646835-4-lrizzo@google.com>
+ <87tsyycllk.ffs@tglx>
+In-Reply-To: <87tsyycllk.ffs@tglx>
 From: Luigi Rizzo <lrizzo@google.com>
-Date: Thu, 13 Nov 2025 23:42:08 +0100
-X-Gm-Features: AWmQ_bnHlM5SNHcFsiCEUUN_5TFZ0ISzIaNj_vtxnJvvdexOWIMupjFYUa2-9mw
-Message-ID: <CAMOZA0+XXqau3rW-ZUKBkZASmEYwrmTuHfwkreniJk9NciCe_g@mail.gmail.com>
-Subject: Re: [PATCH 2/6] genirq: soft_moderation: add base files, procfs hooks
+Date: Fri, 14 Nov 2025 09:27:39 +0100
+X-Gm-Features: AWmQ_bkwIXA9gM5mIiIRBn3Nz6-20n_RQjhZ9rYMsWcH4gBFdE4LrvPT7qrMams
+Message-ID: <CAMOZA0Kak5bqEQytGQieHY1r6Loo-pAZks8qkROjU5z+OD2=HA@mail.gmail.com>
+Subject: Re: [PATCH 3/6] genirq: soft_moderation: activate hooks in handle_irq_event()
 To: Thomas Gleixner <tglx@linutronix.de>
 Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>, 
 	Paolo Abeni <pabeni@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
@@ -93,35 +92,45 @@ Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 13, 2025 at 11:24=E2=80=AFAM Thomas Gleixner <tglx@linutronix.d=
+On Thu, Nov 13, 2025 at 10:45=E2=80=AFAM Thomas Gleixner <tglx@linutronix.d=
 e> wrote:
 >
-> On Thu, Nov 13 2025 at 10:29, Thomas Gleixner wrote:
-> > On Wed, Nov 12 2025 at 19:24, Luigi Rizzo wrote:
-> >>  [...]
-> >> +            struct irq_chip *chip =3D desc->irq_data.chip;
-> >> +
-> >> +            /* Make sure this is msi and we can run enable_irq from i=
-rq context */
-> >> +            mode &=3D desc->handle_irq =3D=3D handle_edge_irq && chip=
- && chip->irq_bus_lock =3D=3D NULL &&
-> >> +                            chip->irq_bus_sync_unlock =3D=3D NULL;
+> On Wed, Nov 12 2025 at 19:24, Luigi Rizzo wrote:
+> >  [...]
+> > @@ -254,9 +255,11 @@ irqreturn_t handle_irq_event(struct irq_desc *desc=
+)
+> >       irqd_set(&desc->irq_data, IRQD_IRQ_INPROGRESS);
+> >       raw_spin_unlock(&desc->lock);
+> >
+> > +     irq_moderation_hook(desc); /* may disable irq so must run unlocke=
+d */
 >
-> Q: How does this make sure that it is MSI?
-> A: Not at all
+> That's just wrong. That can trivially be implemented in a way which
+> works with the lock held.
 
-Yeah the MSI thing was misguided, as Marc suggested I will replace the cond=
-ition
-with !irqd_is_level_type(&desc->irq_data)
+Do you mean I can move the call before the unlock and use __disable_irq()
+given that  moderation is only enabled on interrupts that have
+irq_bus_lock =3D=3D NULL, so disable_irq_nosync() which is
+        scoped_irqdesc_get_and_buslock(irq, IRQ_GET_DESC_CHECK_GLOBAL) {
+                __disable_irq(scoped_irqdesc);
+                return 0;
+        }
+effectively collapses to raw_spin_lock()
+This would save a lock/unlock dance and a few conditionals?
 
-> Q: How is this protected against concurrent modification?
-> A: Not at all
+> > @@ -134,6 +134,7 @@ static void desc_set_defaults(unsigned int irq, str=
+uct irq_desc *desc, int node,
+> >       desc->tot_count =3D 0;
+> >       desc->name =3D NULL;
+> >       desc->owner =3D owner;
+> > +     irq_moderation_init_fields(desc);
+>
+> That's clearly part of activation in handle_irq_event() ....
 
-Is there such a risk, specifically regarding changing desc->chip ?
-I expected desc->chip to be set when the irq is attached and never modified
-until destruction. Then, this function is called from within the
-procfs handler so
-the desc is already set. If it gets destroyed, changing mode is harmless.
+I don't follow. As far as I understand desc_set_defaults() makes sure we
+have a clean descriptor after release/before allocation. This includes
+clearing the moderation enable flag from a previous user of this desc,
+and the flag is only read in the hook in handle_irq_event().
 
 cheers
 luigi
