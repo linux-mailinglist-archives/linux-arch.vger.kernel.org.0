@@ -1,82 +1,101 @@
-Return-Path: <linux-arch+bounces-14799-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14800-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55533C5FD13
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Nov 2025 02:13:16 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 028B8C5FE5E
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Nov 2025 03:30:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 050EA4E3970
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Nov 2025 01:13:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 798CB35A781
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Nov 2025 02:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC0319F127;
-	Sat, 15 Nov 2025 01:13:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FD814A60C;
+	Sat, 15 Nov 2025 02:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQ6VT86g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bKvI9iwP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB512A1C7;
-	Sat, 15 Nov 2025 01:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0944B35CBD3;
+	Sat, 15 Nov 2025 02:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763169185; cv=none; b=f1d8tgZA5iDWa6r+IKriUncgfZs1Cpssurn4EIIn6y8vSafmG/eGQDRsVPpEiiAT4IfXjJ1C686pf6VwRFAjJTJQlpkL/r166sFsHJpLtsd/zrickiS4Y33EzVWW9GyIvOnO85uDNloH9SPft7H8+MVzAiPlruKzUKBfU0OgXSQ=
+	t=1763173835; cv=none; b=jP1Xk6vxH+c6T/q4yOtm4WHD0xIQpELNr9kwVCfJAJLB8hOi8kRWn1p83boWMf1dnY0pfnQviKXhsTyesI/7LQ6q4zf4Krm8S2aG8prs+uwbvkmaPDrxR/EoTLYmax0vzUSTn8j2ZEv9blYnEbJYVIu4weka7IAs/rCVvm2t9o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763169185; c=relaxed/simple;
-	bh=ZYpyydEIKJdUZcKYOQA153wYBuCQw3r8OGWjWBD7bf0=;
+	s=arc-20240116; t=1763173835; c=relaxed/simple;
+	bh=mO1ZdVZnWjsvWJthzELzsTV32Ev+RejyUQceGtcadCA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ok3R8BiIvCEcPnjCQZk0YQfsbL0qMW637gAdpXbl/fwDT8ltWXeiW1YPBKF4VgzNl+oXdruWZ2IcuYl29ZCH1dk7RiD6LXLH/o/DrZY1VHT3d5I0hpO5qCM4zgYAuvLizoDjgkc5PwSqz8dAbdYc+cH4vJ6aa/m2RxG48iQfJBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQ6VT86g; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763169185; x=1794705185;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZYpyydEIKJdUZcKYOQA153wYBuCQw3r8OGWjWBD7bf0=;
-  b=GQ6VT86gYd0zdopeUWvYFUKPw/stO6DxY1sbhFnQpqP5x5Ls2nzV5d81
-   Co+vW1XzBrID5yjAoKXxuR2sTtppKBrcx8rlcrc7hlqkANE72xRUC5hW7
-   zLMrb+LjwNbfeOnQvY08oCtViiKftD4NPtFpiWEoszJcoLAix7t4Txd23
-   PkpE2x0EkL3Y48nUpvWvGD8rKUQeMAlqT1dxt0tzA4Um2OcqoRE4qASEH
-   Am0cOxl9TIFuMBZO1MUQb90TtkjY+l1yV/qfqGPTqFZ2mk7OvRlC6sRw5
-   1ZzIP2RUzfCMqGZtg4ukaDIeFGNysD7Vz1R++7OqNpXLjTI0zBK72GOxw
-   Q==;
-X-CSE-ConnectionGUID: cPmPaZU1SKaYUB+870+RMQ==
-X-CSE-MsgGUID: 6FgbEz60Q8e6X5i7zlgleA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11613"; a="65152400"
-X-IronPort-AV: E=Sophos;i="6.19,306,1754982000"; 
-   d="scan'208";a="65152400"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 17:13:04 -0800
-X-CSE-ConnectionGUID: OyXkE+18SIC4r9bUHnq2cQ==
-X-CSE-MsgGUID: 7wNDei3wRnCT1vSqROvBmg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,306,1754982000"; 
-   d="scan'208";a="194228351"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 14 Nov 2025 17:12:59 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vK4qW-0007Zv-1X;
-	Sat, 15 Nov 2025 01:12:56 +0000
-Date: Sat, 15 Nov 2025 09:12:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qi Zheng <qi.zheng@linux.dev>, will@kernel.org, aneesh.kumar@kernel.org,
-	npiggin@gmail.com, peterz@infradead.org, dev.jain@arm.com,
-	akpm@linux-foundation.org, david@redhat.com, ioworker0@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-um@lists.infradead.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH 7/7] mm: make PT_RECLAIM depend on
- MMU_GATHER_RCU_TABLE_FREE && 64BIT
-Message-ID: <202511150832.iAyO0SAW-lkp@intel.com>
-References: <0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch@bytedance.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=SeagNI07tT+V0RDHBd/vPRuvk5/B/DZYuFmkfX3E1AT6cF949NlrEvxlXWPq5jTeDjXhtAQRlE3jec1UInxq7dE/1mdTcpeCgP5QGB75V4mqTCoy4SeLx2LWEvAntKqxZ3uInv1PnQFTbTdJK/t78EENwBc31ufuNcFuSK2yZ7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bKvI9iwP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE408C4CEF1;
+	Sat, 15 Nov 2025 02:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763173834;
+	bh=mO1ZdVZnWjsvWJthzELzsTV32Ev+RejyUQceGtcadCA=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=bKvI9iwPxt7jGyJN+/x9h4ABAVqnNOF8evCkTmxLgPaWLBC6Ai3FhrHhZEqRb/5XD
+	 QA2Jig8hSw0xPK6ir9azDHHkQ0jC4lmwGDZ53debIQxLdruXb0T5lPwISi80LoxuC/
+	 bbp1DdK3JauP007kkx1bbZycMyMytGcLMKamg/GulHKHyfrz1F2xg7qAp60T4GNG8x
+	 HvpXkxoKkv0RInCGzmjCQlVI/R5oG9XopzTEevjYqHGKbUQKcRXpxajPPDlWnkUbDu
+	 i5cyl95DWHBmB9eKL9g3qXut0V58Gvfz97MDTZVIuDRPU6PZcgK6pyn5KonKeWab9e
+	 Ss/NL0GhoEv5Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 4DC2BCE09CC; Fri, 14 Nov 2025 18:30:34 -0800 (PST)
+Date: Fri, 14 Nov 2025 18:30:34 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Andy Lutomirski <luto@kernel.org>
+Cc: Valentin Schneider <vschneid@redhat.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-mm@kvack.org, rcu@vger.kernel.org,
+	the arch/x86 maintainers <x86@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Jason Baron <jbaron@akamai.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Han Shen <shenhan@google.com>, Rik van Riel <riel@surriel.com>,
+	Jann Horn <jannh@google.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Oleg Nesterov <oleg@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Clark Williams <williams@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>
+Subject: Re: [PATCH v7 00/31] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+Message-ID: <ecc0201e-2fde-4344-9254-89bf29e5054f@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20251114150133.1056710-1-vschneid@redhat.com>
+ <c4768cf3-f131-44e6-9b25-ebeb633f32ee@app.fastmail.com>
+ <beb46a02-b902-438b-8b6d-b5f0d7ad0ae6@app.fastmail.com>
+ <89398bdf-4dad-4976-8eb9-1e86032c8794@paulmck-laptop>
+ <1a911310-4ca5-45a4-b9bf-5f37c6ab238e@app.fastmail.com>
+ <b3472cb3-86fa-4687-bfce-3b9a1bf4ff36@paulmck-laptop>
+ <4f1a7b15-cfdc-478e-8e43-98750608866c@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -85,55 +104,179 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch@bytedance.com>
+In-Reply-To: <4f1a7b15-cfdc-478e-8e43-98750608866c@app.fastmail.com>
 
-Hi Qi,
+On Fri, Nov 14, 2025 at 04:29:31PM -0800, Andy Lutomirski wrote:
+> 
+> 
+> On Fri, Nov 14, 2025, at 12:03 PM, Paul E. McKenney wrote:
+> > On Fri, Nov 14, 2025 at 10:45:08AM -0800, Andy Lutomirski wrote:
+> >> 
+> >> 
+> >> On Fri, Nov 14, 2025, at 10:14 AM, Paul E. McKenney wrote:
+> >> > On Fri, Nov 14, 2025 at 09:22:35AM -0800, Andy Lutomirski wrote:
+> >> >> 
+> >> 
+> >> >> > Oh, any another primitive would be possible: one CPU could plausibly 
+> >> >> > execute another CPU's interrupts or soft-irqs or whatever by taking a 
+> >> >> > special lock that would effectively pin the remote CPU in user mode -- 
+> >> >> > you'd set a flag in the target cpu_flags saying "pin in USER mode" and 
+> >> >> > the transition on that CPU to kernel mode would then spin on entry to 
+> >> >> > kernel mode and wait for the lock to be released.  This could plausibly 
+> >> >> > get a lot of the on_each_cpu callers to switch over in one fell swoop: 
+> >> >> > anything that needs to synchronize to the remote CPU but does not need 
+> >> >> > to poke its actual architectural state could be executed locally while 
+> >> >> > the remote CPU is pinned.
+> >> >
+> >> > It would be necessary to arrange for the remote CPU to remain pinned
+> >> > while the local CPU executed on its behalf.  Does the above approach
+> >> > make that happen without re-introducing our current context-tracking
+> >> > overhead and complexity?
+> >> 
+> >> Using the pseudo-implementation farther down, I think this would be like:
+> >> 
+> >> if (my_state->status == INDETERMINATE) {
+> >>    // we were lazy and we never promised to do work atomically.
+> >>    atomic_set(&my_state->status, KERNEL);
+> >>    this_entry_work = 0;
+> >>    /* we are definitely not pinned in this path */
+> >> } else {
+> >>    // we were not lazy and we promised we would do work atomically
+> >>    atomic exchange the entire state to { .work = 0, .status = KERNEL }
+> >>    this_entry_work = (whatever we just read);
+> >>    if (this_entry_work & PINNED) {
+> >>      u32 this_cpu_pin_count = this_cpu_ptr(pin_count);
+> >>      while (atomic_read(&this_cpu_pin_count)) {
+> >>        cpu_relax();
+> >>      }
+> >>    }
+> >>  }
+> >> 
+> >> and we'd have something like:
+> >> 
+> >> bool try_pin_remote_cpu(int cpu)
+> >> {
+> >>     u32 *remote_pin_count = ...;
+> >>     struct fancy_cpu_state *remote_state = ...;
+> >>     atomic_inc(remote_pin_count);  // optimistic
+> >> 
+> >>     // Hmm, we do not want that read to get reordered with the inc, so we probably
+> >>     // need a full barrier or seq_cst.  How does Linux spell that?  C++ has atomic::load
+> >>     // with seq_cst and maybe the optimizer can do the right thing.  Maybe it's:
+> >>     smp_mb__after_atomic();
+> >> 
+> >>     if (atomic_read(&remote_state->status) == USER) {
+> >>       // Okay, it's genuinely pinned.
+> >>       return true;
+> >> 
+> >>       // egads, if this is some arch with very weak ordering,
+> >>       // do we need to be concerned that we just took a lock but we
+> >>       // just did a relaxed read and therefore a subsequent access
+> >>       // that thinks it's locked might appear to precede the load and therefore
+> >>       // somehow get surprisingly seen out of order by the target cpu?
+> >>       // maybe we wanted atomic_read_acquire above instead?
+> >>     } else {
+> >>       // We might not have successfully pinned it
+> >>       atomic_dec(remote_pin_count);
+> >>     }
+> >> }
+> >> 
+> >> void unpin_remote_cpu(int cpu)
+> >> {
+> >>     atomic_dec(remote_pin_count();
+> >> }
+> >> 
+> >> and we'd use it like:
+> >> 
+> >> if (try_pin_remote_cpu(cpu)) {
+> >>   // do something useful
+> >> } else {
+> >>   send IPI;
+> >> }
+> >> 
+> >> but we'd really accumulate the set of CPUs that need the IPIs and do them all at once.
+> >> 
+> >> I ran the theorem prover that lives inside my head on this code using the assumption that the machine is a well-behaved x86 system and it said "yeah, looks like it might be correct".  I trust an actual formalized system or someone like you who is genuinely very good at this stuff much more than I trust my initial impression :)
+> >
+> > Let's start with requirements, non-traditional though that might be. ;-)
+> 
+> That's ridiculous! :-)
 
-kernel test robot noticed the following build errors:
+;-) ;-) ;-)
 
-[auto build test ERROR on deller-parisc/for-next]
-[also build test ERROR on uml/next tip/x86/core akpm-mm/mm-everything linus/master v6.18-rc5 next-20251114]
-[cannot apply to uml/fixes vgupta-arc/for-next vgupta-arc/for-curr]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > An "RCU idle" CPU is either in deep idle or executing in nohz_full
+> > userspace.
+> >
+> > 1.	If the RCU grace-period kthread sees an RCU-idle CPU, then:
+> >
+> > 	a.	Everything that this CPU did before entering RCU-idle
+> > 		state must be visible to sufficiently later code executed
+> > 		by the grace-period kthread, and:
+> >
+> > 	b.	Everything that the CPU will do after exiting RCU-idle
+> > 		state must *not* have been visible to the grace-period
+> > 		kthread sufficiently prior to having sampled this
+> > 		CPU's state.
+> >
+> > 2.	If the RCU grace-period kthread sees an RCU-nonidle CPU, then
+> > 	it depends on whether this is the same nonidle sojourn as was
+> > 	initially seen.  (If the kthread initially saw the CPU in an
+> > 	RCU-idle state, it would not have bothered resampling.)
+> >
+> > 	a.	If this is the same nonidle sojourn, then there are no
+> > 		ordering requirements.	RCU must continue to wait on
+> > 		this CPU.
+> >
+> > 	b.	Otherwise, everything that this CPU did before entering
+> > 		its last RCU-idle state must be visible to sufficiently
+> > 		later code executed by the grace-period kthread.
+> > 		Similar to (1a) above.
+> >
+> > 3.	If a given CPU quickly switches into and out of RCU-idle
+> > 	state, and it is always in RCU-nonidle state whenever the RCU
+> > 	grace-period kthread looks, RCU must still realize that this
+> > 	CPU has passed through at least one quiescent state.
+> >
+> > 	This is why we have a counter for RCU rather than just a
+> > 	simple state.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/alpha-mm-enable-MMU_GATHER_RCU_TABLE_FREE/20251114-191543
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git for-next
-patch link:    https://lore.kernel.org/r/0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch%40bytedance.com
-patch subject: [PATCH 7/7] mm: make PT_RECLAIM depend on MMU_GATHER_RCU_TABLE_FREE && 64BIT
-config: arm64-randconfig-002-20251115 (https://download.01.org/0day-ci/archive/20251115/202511150832.iAyO0SAW-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251115/202511150832.iAyO0SAW-lkp@intel.com/reproduce)
+Sigh...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511150832.iAyO0SAW-lkp@intel.com/
+4.	Entering and exiting either idle or nohz_full usermode execution
+	at task level can race with interrupts and NMIs attempting to
+	make this same transition.  (And you had much to do with the
+	current code that mediates the NMI races!)
 
-All errors (new ones prefixed by >>):
+> ...
+> 
+> > I am not seeing how the third requirement above is met, though.  I have
+> > not verified the sampling code that the RCU grace-period kthread is
+> > supposed to use because I am not seeing it right off-hand.
+> 
+> This is ct_rcu_watching_cpu_acquire, right?  Lemme think.  Maybe there's even a way to do everything I'm suggesting without changing that interface.
 
->> mm/pt_reclaim.c:31:2: error: call to undeclared function '__pte_free_tlb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      31 |         pte_free_tlb(tlb, pmd_pgtable(pmdval), addr);
-         |         ^
-   include/asm-generic/tlb.h:731:3: note: expanded from macro 'pte_free_tlb'
-     731 |                 __pte_free_tlb(tlb, ptep, address);             \
-         |                 ^
-   1 error generated.
+Yes.
 
+Also, the ordering can sometimes be implemnted at a distance, but it
+really does have to be there.
 
-vim +/__pte_free_tlb +31 mm/pt_reclaim.c
+> >> It wouldn't be outrageous to have real-time imply the full USER transition.
+> >
+> > We could have special code for RT, but this of course increases the
+> > complexity.  Which might be justified by sufficient speedup.
+> 
+> I'm thinking that the code would be arranged so that going to user mode in the USER or the INTERMEDIATE state would be fully valid and would just have different performance characteristics.  So the only extra complexity here would be the actual logic to choose which state to go to. and...
+> >
+> > And yes, many distros enable NO_HZ_FULL by default.  I will refrain from
+> > suggesting additional static branches.  ;-)
+> 
+> I'm not even suggesting a static branch.  I think the potential performance wins are big enough to justify a bona fide ordinary if statement or two :)  I'm also contemplating whether it could make sense to make this whole thing be unconditionally configured in if the performance in the case where no one uses it (i.e. everything is INTERMEDIATE instead of USER) is good enough.
 
-6375e95f381e3d Qi Zheng 2024-12-04  27  
-6375e95f381e3d Qi Zheng 2024-12-04  28  void free_pte(struct mm_struct *mm, unsigned long addr, struct mmu_gather *tlb,
-6375e95f381e3d Qi Zheng 2024-12-04  29  	      pmd_t pmdval)
-6375e95f381e3d Qi Zheng 2024-12-04  30  {
-6375e95f381e3d Qi Zheng 2024-12-04 @31  	pte_free_tlb(tlb, pmd_pgtable(pmdval), addr);
-6375e95f381e3d Qi Zheng 2024-12-04  32  	mm_dec_nr_ptes(mm);
-6375e95f381e3d Qi Zheng 2024-12-04  33  }
-6375e95f381e3d Qi Zheng 2024-12-04  34  
+Both sound like they would be nice to have...
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> I will ponder.
+
+...give or take feasibility, of course!  ;-)
+
+							Thanx, Paul
 
