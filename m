@@ -1,294 +1,167 @@
-Return-Path: <linux-arch+bounces-14797-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14798-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78740C5FBE2
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Nov 2025 01:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 299B8C5FC64
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Nov 2025 01:54:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1FF5D4E1EE9
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Nov 2025 00:29:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C07604E7896
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Nov 2025 00:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9280153598;
-	Sat, 15 Nov 2025 00:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BDE14BF92;
+	Sat, 15 Nov 2025 00:52:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tjbGuUVi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mWyVWeTA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1252629D;
-	Sat, 15 Nov 2025 00:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3284A21;
+	Sat, 15 Nov 2025 00:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763166594; cv=none; b=ctvtmLV7HBSkQFx+IPN4oIPDQSWZuPv80/Hb9+fcskogQVfHxHNtdeiaY1FDq0mnmyxFCSquToA+33X8vPdnxUIygMmxs1G6fEpR7yiCxqRjrdXHEednuxRab4bPRnMcNNbX/upWMOwPXUA589NXgq1MFgv1V2WAm7UhZWVpwnI=
+	t=1763167923; cv=none; b=d4WH4lma0OaWqq2Yg/+Fv7CWWlis5As4/kL8Nc54ND/ZJf0H1U/O3g6kMOOF0CJ+oUX1zp6UJxnOle8odYXWOHXp0en0VxpTKNXJ1W0hCooP+8ouixNYfqE1V661sARNd8BytbSAyVc72FzxR+RzJR9uMBYfA8FdGFyWiKGoUJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763166594; c=relaxed/simple;
-	bh=e9NLv0KhLEFdWRUZrMQNfpFyoR5NzFBMcL2BU/txkvI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Hly6SDQzj2i26EaF+kJsnH3sVrBFtltI0xvmzN/yNZvgiyas1W5Z63SYuJBQf+hvycNdv48HfmGUFbpQctZEfOHNcQtroMxPEYGSDK7aRsfE+150FhFh9/4aNR+fcULr3jej7G9Irroef1lwVPCEOMP/cx794hH5z0S1mx28mmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tjbGuUVi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E265C16AAE;
-	Sat, 15 Nov 2025 00:29:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763166594;
-	bh=e9NLv0KhLEFdWRUZrMQNfpFyoR5NzFBMcL2BU/txkvI=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=tjbGuUViIgE8DbMZEqvvASWk22Ni8F2yyswXkq6ljN6JvxrW3LFA/cXgdKIhjshwv
-	 5/9jA/0uwS2ugAqIxC2BaJDM2tO0CiEmXz2mcy8jnmS6X0mmaG1nDcHzqUrLVNzakx
-	 BgvHlPs92olV5IsIPCCaNWqu4BPLPQBD6PsM0s7FpPgyPeTZGPiudKEe5uzsKYV5XI
-	 G/dxssAg1GP1k3M3mFYQF+YHp4XRS2uczH5SFdZ10lvHLqUWaaxkYbqrAkLE2/OLHg
-	 xv0VGimI/uOfyV9+JEyvBH2GjHu6v5E/SMVQCilSpA5PNVN8y9cOaJu5c9lOyDxCkB
-	 p4wIy2YL1Sgrw==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 20E59F4007C;
-	Fri, 14 Nov 2025 19:29:52 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-01.internal (MEProxy); Fri, 14 Nov 2025 19:29:52 -0500
-X-ME-Sender: <xms:f8kXaYP_QFfIS1oOUOKZZl5jFHrPEcMk6RblzeoOcC2iEVuq3WeuhQ>
-    <xme:f8kXaZxQj47DKupgm51V26LsD93iRUKgXXFU3lyHHR4mps6LrHRMzy6DcQoYOOMmj
-    bJHCpDSv2hVfdh8z8WXIWBymfLTwSeaqxLXuFfEZ0taW3jWjhuJUw8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvudduvdeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehnugih
-    ucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecuggftrf
-    grthhtvghrnhepkefhieejfedvueejheehiefgvdfhjeefjeelvdfghfelgeejudevleej
-    uddvvefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudekheei
-    fedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrd
-    hluhhtohdruhhspdhnsggprhgtphhtthhopeegkedpmhhouggvpehsmhhtphhouhhtpdhr
-    tghpthhtohepjhgsrghrohhnsegrkhgrmhgrihdrtghomhdprhgtphhtthhopegsphesrg
-    hlihgvnhekrdguvgdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthht
-    ohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehmrghthhhivg
-    hurdguvghsnhhohigvrhhssegvfhhfihgtihhoshdrtghomhdprhgtphhtthhopegsohhq
-    uhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopehurhgviihkihesghhmrg
-    hilhdrtghomhdprhgtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhr
-    tghpthhtohepjhgrnhhnhhesghhoohhglhgvrdgtohhm
-X-ME-Proxy: <xmx:gMkXabdoCbTfms0FoEg_GJgl6FgXa5xQx_ty6BJZoh6HyeHV5zrznA>
-    <xmx:gMkXaZmIJ1z3KZvXB3KL6adMbSKrCf3nXuKgoqv8kqEf-6skVjaHFQ>
-    <xmx:gMkXaezk0f0oemBqCDivfz47Om-NPp3ENuY_X0n1HwPUOft4614Pww>
-    <xmx:gMkXaRiKeW_eNhYM6aVpR3mABUUm9mTwMaFvY-zCwmH8IiYGX7h-JQ>
-    <xmx:gMkXaVDb-JyrtuYINK607hAYSCZPkXpuh5uYtLwpret1M2npo3x_xlzw>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D1DF5700063; Fri, 14 Nov 2025 19:29:51 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1763167923; c=relaxed/simple;
+	bh=vczM4EmXtUbCfHooelDeHpgPNn3rTsFNVUclJSubvyA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IHkH6LAUSfEYZPVNjJkHYkMdP51CYIL9+WJ0JxqZxKLathLP57pPTWBMlG8NTC4b8i6PNmK/jU7LorPaPgSuE2kLNJvuFAZ+23z05FlcuR/betrFYc/pO/X9aF92e5dYfmixChIhBW8CM2NHgHSXQb7g9Sb4TIdPkYCcAe1qLDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mWyVWeTA; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763167922; x=1794703922;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vczM4EmXtUbCfHooelDeHpgPNn3rTsFNVUclJSubvyA=;
+  b=mWyVWeTAUahsYKNSAoDTZmuyaG01ZS8GM8czgRay2hPSTgGPjnZT27VQ
+   3RGWvbqWJSHmQsUdypGTvhtsgZkwb1mFf6TDlfY8+B9P19BIeuAlmvpoF
+   rd/gljnZg5cOjRwXvuCKWSQ5tFtaqzCnKhRbEQ/iHcNUxnSU2EKT+wA6y
+   p5C0huHoYWHIsO/AnhjaIx6DYGuDd2+HQbNVmo0bSWtAZbZE6IFI2BSLc
+   M1tXKtNX93/66+bVb+ow2j9wsWql6cgp9z4yqGIDBWROFPGBhyDC1lcG9
+   aYhCCZLWeJ5Yyw9tz5JErMR9V8SNx9cmlO2zCR8SLVFPurbGFHLNvCUPN
+   Q==;
+X-CSE-ConnectionGUID: s41EVLRlSqCLbfWyOfmkjw==
+X-CSE-MsgGUID: Ioro7WMMRGmGexIt/gQ+hA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11613"; a="76730939"
+X-IronPort-AV: E=Sophos;i="6.19,306,1754982000"; 
+   d="scan'208";a="76730939"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 16:52:01 -0800
+X-CSE-ConnectionGUID: nhmJTMybRgykHV04alN3Xw==
+X-CSE-MsgGUID: 35aAR/X3ReWs6zsMfpLkBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,306,1754982000"; 
+   d="scan'208";a="227249100"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 14 Nov 2025 16:51:56 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vK4WA-0007YJ-0f;
+	Sat, 15 Nov 2025 00:51:54 +0000
+Date: Sat, 15 Nov 2025 08:51:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qi Zheng <qi.zheng@linux.dev>, will@kernel.org, aneesh.kumar@kernel.org,
+	npiggin@gmail.com, peterz@infradead.org, dev.jain@arm.com,
+	akpm@linux-foundation.org, david@redhat.com, ioworker0@gmail.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH 7/7] mm: make PT_RECLAIM depend on
+ MMU_GATHER_RCU_TABLE_FREE && 64BIT
+Message-ID: <202511150845.XqOxPJxe-lkp@intel.com>
+References: <0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: ATddxb8eqn9V
-Date: Fri, 14 Nov 2025 16:29:31 -0800
-From: "Andy Lutomirski" <luto@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: "Valentin Schneider" <vschneid@redhat.com>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- linux-mm@kvack.org, rcu@vger.kernel.org,
- "the arch/x86 maintainers" <x86@kernel.org>,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Paolo Bonzini" <pbonzini@redhat.com>, "Arnd Bergmann" <arnd@arndb.de>,
- "Frederic Weisbecker" <frederic@kernel.org>,
- "Jason Baron" <jbaron@akamai.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Ard Biesheuvel" <ardb@kernel.org>,
- "Sami Tolvanen" <samitolvanen@google.com>,
- "David S. Miller" <davem@davemloft.net>,
- "Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
- "Joel Fernandes" <joelagnelf@nvidia.com>,
- "Josh Triplett" <josh@joshtriplett.org>,
- "Boqun Feng" <boqun.feng@gmail.com>,
- "Uladzislau Rezki" <urezki@gmail.com>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Mel Gorman" <mgorman@suse.de>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Han Shen" <shenhan@google.com>, "Rik van Riel" <riel@surriel.com>,
- "Jann Horn" <jannh@google.com>,
- "Dan Carpenter" <dan.carpenter@linaro.org>,
- "Oleg Nesterov" <oleg@redhat.com>, "Juri Lelli" <juri.lelli@redhat.com>,
- "Clark Williams" <williams@redhat.com>,
- "Yair Podemsky" <ypodemsk@redhat.com>,
- "Marcelo Tosatti" <mtosatti@redhat.com>,
- "Daniel Wagner" <dwagner@suse.de>, "Petr Tesarik" <ptesarik@suse.com>,
- "Shrikanth Hegde" <sshegde@linux.ibm.com>
-Message-Id: <4f1a7b15-cfdc-478e-8e43-98750608866c@app.fastmail.com>
-In-Reply-To: <b3472cb3-86fa-4687-bfce-3b9a1bf4ff36@paulmck-laptop>
-References: <20251114150133.1056710-1-vschneid@redhat.com>
- <c4768cf3-f131-44e6-9b25-ebeb633f32ee@app.fastmail.com>
- <beb46a02-b902-438b-8b6d-b5f0d7ad0ae6@app.fastmail.com>
- <89398bdf-4dad-4976-8eb9-1e86032c8794@paulmck-laptop>
- <1a911310-4ca5-45a4-b9bf-5f37c6ab238e@app.fastmail.com>
- <b3472cb3-86fa-4687-bfce-3b9a1bf4ff36@paulmck-laptop>
-Subject: Re: [PATCH v7 00/31] context_tracking,x86: Defer some IPIs until a
- user->kernel transition
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch@bytedance.com>
+
+Hi Qi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on deller-parisc/for-next]
+[also build test ERROR on uml/next tip/x86/core akpm-mm/mm-everything linus/master v6.18-rc5 next-20251114]
+[cannot apply to uml/fixes vgupta-arc/for-next vgupta-arc/for-curr]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/alpha-mm-enable-MMU_GATHER_RCU_TABLE_FREE/20251114-191543
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git for-next
+patch link:    https://lore.kernel.org/r/0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch%40bytedance.com
+patch subject: [PATCH 7/7] mm: make PT_RECLAIM depend on MMU_GATHER_RCU_TABLE_FREE && 64BIT
+config: arm64-randconfig-004-20251115 (https://download.01.org/0day-ci/archive/20251115/202511150845.XqOxPJxe-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251115/202511150845.XqOxPJxe-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511150845.XqOxPJxe-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/pt_reclaim.c:3:
+   mm/pt_reclaim.c: In function 'free_pte':
+>> include/asm-generic/tlb.h:731:3: error: implicit declaration of function '__pte_free_tlb'; did you mean 'pte_free_tlb'? [-Werror=implicit-function-declaration]
+      __pte_free_tlb(tlb, ptep, address);  \
+      ^~~~~~~~~~~~~~
+   mm/pt_reclaim.c:31:2: note: in expansion of macro 'pte_free_tlb'
+     pte_free_tlb(tlb, pmd_pgtable(pmdval), addr);
+     ^~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
+vim +731 include/asm-generic/tlb.h
 
-On Fri, Nov 14, 2025, at 12:03 PM, Paul E. McKenney wrote:
-> On Fri, Nov 14, 2025 at 10:45:08AM -0800, Andy Lutomirski wrote:
->> 
->> 
->> On Fri, Nov 14, 2025, at 10:14 AM, Paul E. McKenney wrote:
->> > On Fri, Nov 14, 2025 at 09:22:35AM -0800, Andy Lutomirski wrote:
->> >> 
->> 
->> >> > Oh, any another primitive would be possible: one CPU could plausibly 
->> >> > execute another CPU's interrupts or soft-irqs or whatever by taking a 
->> >> > special lock that would effectively pin the remote CPU in user mode -- 
->> >> > you'd set a flag in the target cpu_flags saying "pin in USER mode" and 
->> >> > the transition on that CPU to kernel mode would then spin on entry to 
->> >> > kernel mode and wait for the lock to be released.  This could plausibly 
->> >> > get a lot of the on_each_cpu callers to switch over in one fell swoop: 
->> >> > anything that needs to synchronize to the remote CPU but does not need 
->> >> > to poke its actual architectural state could be executed locally while 
->> >> > the remote CPU is pinned.
->> >
->> > It would be necessary to arrange for the remote CPU to remain pinned
->> > while the local CPU executed on its behalf.  Does the above approach
->> > make that happen without re-introducing our current context-tracking
->> > overhead and complexity?
->> 
->> Using the pseudo-implementation farther down, I think this would be like:
->> 
->> if (my_state->status == INDETERMINATE) {
->>    // we were lazy and we never promised to do work atomically.
->>    atomic_set(&my_state->status, KERNEL);
->>    this_entry_work = 0;
->>    /* we are definitely not pinned in this path */
->> } else {
->>    // we were not lazy and we promised we would do work atomically
->>    atomic exchange the entire state to { .work = 0, .status = KERNEL }
->>    this_entry_work = (whatever we just read);
->>    if (this_entry_work & PINNED) {
->>      u32 this_cpu_pin_count = this_cpu_ptr(pin_count);
->>      while (atomic_read(&this_cpu_pin_count)) {
->>        cpu_relax();
->>      }
->>    }
->>  }
->> 
->> and we'd have something like:
->> 
->> bool try_pin_remote_cpu(int cpu)
->> {
->>     u32 *remote_pin_count = ...;
->>     struct fancy_cpu_state *remote_state = ...;
->>     atomic_inc(remote_pin_count);  // optimistic
->> 
->>     // Hmm, we do not want that read to get reordered with the inc, so we probably
->>     // need a full barrier or seq_cst.  How does Linux spell that?  C++ has atomic::load
->>     // with seq_cst and maybe the optimizer can do the right thing.  Maybe it's:
->>     smp_mb__after_atomic();
->> 
->>     if (atomic_read(&remote_state->status) == USER) {
->>       // Okay, it's genuinely pinned.
->>       return true;
->> 
->>       // egads, if this is some arch with very weak ordering,
->>       // do we need to be concerned that we just took a lock but we
->>       // just did a relaxed read and therefore a subsequent access
->>       // that thinks it's locked might appear to precede the load and therefore
->>       // somehow get surprisingly seen out of order by the target cpu?
->>       // maybe we wanted atomic_read_acquire above instead?
->>     } else {
->>       // We might not have successfully pinned it
->>       atomic_dec(remote_pin_count);
->>     }
->> }
->> 
->> void unpin_remote_cpu(int cpu)
->> {
->>     atomic_dec(remote_pin_count();
->> }
->> 
->> and we'd use it like:
->> 
->> if (try_pin_remote_cpu(cpu)) {
->>   // do something useful
->> } else {
->>   send IPI;
->> }
->> 
->> but we'd really accumulate the set of CPUs that need the IPIs and do them all at once.
->> 
->> I ran the theorem prover that lives inside my head on this code using the assumption that the machine is a well-behaved x86 system and it said "yeah, looks like it might be correct".  I trust an actual formalized system or someone like you who is genuinely very good at this stuff much more than I trust my initial impression :)
->
-> Let's start with requirements, non-traditional though that might be. ;-)
+a00cc7d9dd93d6 Matthew Wilcox         2017-02-24  701  
+a00cc7d9dd93d6 Matthew Wilcox         2017-02-24  702  #define tlb_remove_pud_tlb_entry(tlb, pudp, address)			\
+a00cc7d9dd93d6 Matthew Wilcox         2017-02-24  703  	do {								\
+2631ed00b04988 Peter Zijlstra (Intel  2020-06-25  704) 		tlb_flush_pud_range(tlb, address, HPAGE_PUD_SIZE);	\
+a00cc7d9dd93d6 Matthew Wilcox         2017-02-24  705  		__tlb_remove_pud_tlb_entry(tlb, pudp, address);		\
+a00cc7d9dd93d6 Matthew Wilcox         2017-02-24  706  	} while (0)
+a00cc7d9dd93d6 Matthew Wilcox         2017-02-24  707  
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  708  /*
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  709   * For things like page tables caches (ie caching addresses "inside" the
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  710   * page tables, like x86 does), for legacy reasons, flushing an
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  711   * individual page had better flush the page table caches behind it. This
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  712   * is definitely how x86 works, for example. And if you have an
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  713   * architected non-legacy page table cache (which I'm not aware of
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  714   * anybody actually doing), you're going to have some architecturally
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  715   * explicit flushing for that, likely *separate* from a regular TLB entry
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  716   * flush, and thus you'd need more than just some range expansion..
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  717   *
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  718   * So if we ever find an architecture
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  719   * that would want something that odd, I think it is up to that
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  720   * architecture to do its own odd thing, not cause pain for others
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  721   * http://lkml.kernel.org/r/CA+55aFzBggoXtNXQeng5d_mRoDnaMBE5Y+URs+PHR67nUpMtaw@mail.gmail.com
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  722   *
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  723   * For now w.r.t page table cache, mark the range_size as PAGE_SIZE
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  724   */
+b5bc66b7131087 Aneesh Kumar K.V       2016-12-12  725  
+a90744bac57c3c Nicholas Piggin        2018-07-13  726  #ifndef pte_free_tlb
+9e1b32caa525cb Benjamin Herrenschmidt 2009-07-22  727  #define pte_free_tlb(tlb, ptep, address)			\
+^1da177e4c3f41 Linus Torvalds         2005-04-16  728  	do {							\
+2631ed00b04988 Peter Zijlstra (Intel  2020-06-25  729) 		tlb_flush_pmd_range(tlb, address, PAGE_SIZE);	\
+22a61c3c4f1379 Peter Zijlstra         2018-08-23  730  		tlb->freed_tables = 1;				\
+9e1b32caa525cb Benjamin Herrenschmidt 2009-07-22 @731  		__pte_free_tlb(tlb, ptep, address);		\
+^1da177e4c3f41 Linus Torvalds         2005-04-16  732  	} while (0)
+a90744bac57c3c Nicholas Piggin        2018-07-13  733  #endif
+^1da177e4c3f41 Linus Torvalds         2005-04-16  734  
 
-That's ridiculous! :-)
-
->
-> An "RCU idle" CPU is either in deep idle or executing in nohz_full
-> userspace.
->
-> 1.	If the RCU grace-period kthread sees an RCU-idle CPU, then:
->
-> 	a.	Everything that this CPU did before entering RCU-idle
-> 		state must be visible to sufficiently later code executed
-> 		by the grace-period kthread, and:
->
-> 	b.	Everything that the CPU will do after exiting RCU-idle
-> 		state must *not* have been visible to the grace-period
-> 		kthread sufficiently prior to having sampled this
-> 		CPU's state.
->
-> 2.	If the RCU grace-period kthread sees an RCU-nonidle CPU, then
-> 	it depends on whether this is the same nonidle sojourn as was
-> 	initially seen.  (If the kthread initially saw the CPU in an
-> 	RCU-idle state, it would not have bothered resampling.)
->
-> 	a.	If this is the same nonidle sojourn, then there are no
-> 		ordering requirements.	RCU must continue to wait on
-> 		this CPU.
->
-> 	b.	Otherwise, everything that this CPU did before entering
-> 		its last RCU-idle state must be visible to sufficiently
-> 		later code executed by the grace-period kthread.
-> 		Similar to (1a) above.
->
-> 3.	If a given CPU quickly switches into and out of RCU-idle
-> 	state, and it is always in RCU-nonidle state whenever the RCU
-> 	grace-period kthread looks, RCU must still realize that this
-> 	CPU has passed through at least one quiescent state.
->
-> 	This is why we have a counter for RCU rather than just a
-> 	simple state.
-
-...
-
-> I am not seeing how the third requirement above is met, though.  I have
-> not verified the sampling code that the RCU grace-period kthread is
-> supposed to use because I am not seeing it right off-hand.
-
-This is ct_rcu_watching_cpu_acquire, right?  Lemme think.  Maybe there's even a way to do everything I'm suggesting without changing that interface.
-
-
->> It wouldn't be outrageous to have real-time imply the full USER transition.
->
-> We could have special code for RT, but this of course increases the
-> complexity.  Which might be justified by sufficient speedup.
-
-I'm thinking that the code would be arranged so that going to user mode in the USER or the INTERMEDIATE state would be fully valid and would just have different performance characteristics.  So the only extra complexity here would be the actual logic to choose which state to go to. and...
->
-> And yes, many distros enable NO_HZ_FULL by default.  I will refrain from
-> suggesting additional static branches.  ;-)
-
-I'm not even suggesting a static branch.  I think the potential performance wins are big enough to justify a bona fide ordinary if statement or two :)  I'm also contemplating whether it could make sense to make this whole thing be unconditionally configured in if the performance in the case where no one uses it (i.e. everything is INTERMEDIATE instead of USER) is good enough.
-
-I will ponder.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
