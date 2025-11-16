@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-14805-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14806-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 527DFC61AA5
-	for <lists+linux-arch@lfdr.de>; Sun, 16 Nov 2025 19:29:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 148EAC61AA8
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Nov 2025 19:29:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 67ADF4E3906
-	for <lists+linux-arch@lfdr.de>; Sun, 16 Nov 2025 18:29:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0A153A49B8
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Nov 2025 18:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2486C310636;
-	Sun, 16 Nov 2025 18:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A746E310777;
+	Sun, 16 Nov 2025 18:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O9KYMWlu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aAjuBZ8X"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A156D30FF27
-	for <linux-arch@vger.kernel.org>; Sun, 16 Nov 2025 18:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD143101DF
+	for <linux-arch@vger.kernel.org>; Sun, 16 Nov 2025 18:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763317747; cv=none; b=W0KkxhM/aav+df3Yr8VWw2mH/IUKyFpPxQdiof+LtNN52X7+p65TSpXQjMjpgpRMJp5d84OrDnzoitEjrt00PaeI5xN0VcV4KNDdR3rq2sMwMniTbq6B9S0gAScMIOJx2NK6RHg7H2HBaLDnYT+eY+Y5xIg8Zyc94JV0Fa7UCqY=
+	t=1763317748; cv=none; b=Qa/1yVP8BPXI0T8MBk3YYpl4HNQ38dmIljnW3ExR4tOb2qcV9+INT9Z4ZZiJoh5lgK6HcjWlUdxwss9MoaulhF7XfI7hnmFy5J5VLvY7GlEjdAt1xg9IaX7B/kKLtDzeyINsovO5Moa6d6nYU2nmmyklfDFympXzGdBfXM7LYKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763317747; c=relaxed/simple;
-	bh=i2736iKp7h+PPdFM12cdP+3/YcBrTsf4ynOBdtpsy58=;
+	s=arc-20240116; t=1763317748; c=relaxed/simple;
+	bh=PGlVb3/BR+w330owp9L6uZzcuQN62qbEQA1RnRXuHv8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uw0r+9tw+As4qzHHzpJMMEwDILDKDV8kS9F1JtB4Mn2vdjvUQ3B6JnaoyZj8cdJKwYhfZBqw08aZKoHBhoHP3wvuf0bbVgU32siCZyrDEg7fDrAFP/8QCGL2ZhqmDITk6Zh7rNQlXbiJvejOEaZfg+smIe4xgwsfY48+DRYGYMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O9KYMWlu; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=kLgzivF+K/KnksZJNf9uXozJlUAyBf9yODQZ6K9cmlTzCPVTDvSISfStMnZsloqqCfRPYVAth+uH9mjYLiMW7SuU0dzvLDwuB91o+aqK+VjW1jnHIYpXRLc84SIEWV7cl18+rFYaFhBNGul7+4NpDYpjShBieeaTzT0knkmxzdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aAjuBZ8X; arc=none smtp.client-ip=209.85.218.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--lrizzo.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-477a027877eso5702525e9.2
-        for <linux-arch@vger.kernel.org>; Sun, 16 Nov 2025 10:29:04 -0800 (PST)
+Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b71043a0e4fso15479766b.2
+        for <linux-arch@vger.kernel.org>; Sun, 16 Nov 2025 10:29:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763317743; x=1763922543; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763317745; x=1763922545; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RR/NDNEDPm+9CFs5KbwjfzNvsCGF1IaHdbLrz2LpHYU=;
-        b=O9KYMWlud0zTiUoauy/xnRvw7SV3pUfBXfK+/mlXMsnSiN/HJQpZ+B+ZksxfQMLS7v
-         SGh+jeFlPRIOoC2Z2yAL+8470pV4cgmS3XuFbuU6kPToL8kA285YxRys79PdAJ2jSln1
-         PTxxrQJyuAHSlgnt657cOy4bHICFsRuyOvGsIn6sGNiIfJLxZn0iHXVJChJHoZoMhMWm
-         3XHuT3VQxx/E+r8g6EJu6q4oxBQDTuKPfEZRA32f5ns8WAC9yVKXVtxj7xvfwXjp+G10
-         hUSfLAW55g3W/LeORoKu+2O6f6omjqWmLh+BX63keUH5RErIebWtIE8Dil0SifqOHK0r
-         wUQA==
+        bh=i6sU9KeuFQh6LMrdnRT3ZXnJ1XbCSA0po2mzBh7D/EU=;
+        b=aAjuBZ8Xj8QZwXhK7tZtoT4RxTwnxuyfP/9vyqDehnXp2LwcoGGRkcmUAtA4V9GjZB
+         2MtyvGbTkbm/PgLnSc2JMPnzeBmO8m5A00lM4SIbJ8Mvk+zJ1vf40Zmv09kf25AXIFoO
+         H1/o8GOXupi1cCYSVlKHzHzQ00AwPwlBDW+d+tvAM/reOAZyHk9GEFt/J0lclj4DOWA1
+         jPRf24TgAMTRyxvAosMou5GHyM1DUW+PoLBFcsD5Aqmz3FsZVWgRDLSuEIzxVC5w5oUp
+         GI0OkPcVNvF/4N0n++GQWElomTEMJfeRN5u7AvCvsD47c1giOIz2WUMWZkkj+zPXVSS8
+         i41Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763317743; x=1763922543;
+        d=1e100.net; s=20230601; t=1763317745; x=1763922545;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RR/NDNEDPm+9CFs5KbwjfzNvsCGF1IaHdbLrz2LpHYU=;
-        b=D+ruQ0Rje93dNMtetBRzbHZlslQVV049PZUnU2jXmWZbiAHtUXJN93xQHGVTxavm6a
-         g4INHPFVx4h/EnFIFB91B8TxV79CljGSfAK3MdjnPKQgHBF5INPovuGbBYsR4R/FFjQB
-         NKCXoX8rMOzXO8H9tn9BxuCAtUn9aKMX3F5Vcn+lYXk0XyVRBnNkjQtYrtTIrC490DKI
-         UnwAqQOiBXm+7K7foezB/wUUwfzv1XoTIw5f1/5AO89Nefzu9hb+/hI2sPdEptrSqy9d
-         NcvvRGZU207CdpmsSglvyLRSUPDDqNFcJDxrAHn9DWabnPdMf5x8xf6sEpZ2fIDvtb19
-         +Wpw==
-X-Forwarded-Encrypted: i=1; AJvYcCX5mNohaRGxGuCqUL/9UC1CRjZ4ZtDlvHCZbohNei4/UaSZbF6KGGolPS54u7Gf8OBsQDpanfkODQIo@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBow3dIHvTq6kxRU6nauzgHCGr6ntBtY3OaI22xMXymS0QBzxm
-	D+Jv/CeFJXuXYeDCSheU24FcjBTnyw59rW53VAD2iatzBV4pvI2hT44u2qoyniRsrlrnWv0H6BG
-	fOTrkbg==
-X-Google-Smtp-Source: AGHT+IELtsHeFVviwLGVtVs79Fb+Irtxpz+z0fE6KcncX53DlyNJr6no4EwgXdKhNcbA8uQrN2+4/jx6lqc=
-X-Received: from wmbbd8.prod.google.com ([2002:a05:600c:1f08:b0:470:fd92:351d])
- (user=lrizzo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:3b19:b0:471:989:9d7b
- with SMTP id 5b1f17b1804b1-4778fe95fe2mr94613165e9.21.1763317743006; Sun, 16
- Nov 2025 10:29:03 -0800 (PST)
-Date: Sun, 16 Nov 2025 18:28:33 +0000
+        bh=i6sU9KeuFQh6LMrdnRT3ZXnJ1XbCSA0po2mzBh7D/EU=;
+        b=ljKgREJzqOABFnkrWoPMSVU/Pl4VyOSPWp/GPGP0fW78xwFcydmzB5v6OH3pAX+i1y
+         cEWNHzCH6bkkIhZj95Sa4Mkk/b0r1rOtOg+aW1ivhfMGy8bWx/wlrU47n6pBBRcDPDIX
+         6r8hxTdexDn7Nx5trgIBRVVYU/k7O/YVmMSrFoQEOWc4KhbN0DDHUIFIywvYvx9SAvzT
+         sKlni0CZrcjbLyE5ZnQnkHbF8iNFu9yerUWJLYx4Bm8SchiQeY3nd6nz0Nu5krHy6JIH
+         0APO19jo8STKu0DPj1OXoo1ZhltcGBPvHRTdLVjjyNOhtq5afoTm0fNv8Nphlet/nhih
+         WUQg==
+X-Forwarded-Encrypted: i=1; AJvYcCXiE9Lt5XWVTheaB1GkCyQI9A93fnwV2dHofyqFKucBbF+tuzIRd6NIo8i72VLwH6UX0eW4pmeiLbYj@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzjK3JRnaxq3W0lpAnwObluauo3ZW1GCdBtT+71VlzOqe3sw6E
+	6Yhdna8/oBI1SZ0QqR8cQjBiFCfNgHRljB5FPQh7eovM5uCOa0gA7DllOlu44C+zzgqiXPNqtLt
+	hyaUhtQ==
+X-Google-Smtp-Source: AGHT+IG/m7Q2aFX2LOC1aJZXldT76CaZ0dEjD6mFvmn4tCQXC3gPfeIfCn2gfM/3M4zwvTOvBJvklWaamsQ=
+X-Received: from ejfx24.prod.google.com ([2002:a17:906:a58:b0:b72:41e4:7560])
+ (user=lrizzo job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:3f1c:b0:b73:885b:7551
+ with SMTP id a640c23a62f3a-b73885b85bdmr417418566b.6.1763317744742; Sun, 16
+ Nov 2025 10:29:04 -0800 (PST)
+Date: Sun, 16 Nov 2025 18:28:34 +0000
 In-Reply-To: <20251116182839.939139-1-lrizzo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251116182839.939139-1-lrizzo@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251116182839.939139-3-lrizzo@google.com>
-Subject: [PATCH v2 2/8] genirq: soft_moderation: add base files, procfs
+Message-ID: <20251116182839.939139-4-lrizzo@google.com>
+Subject: [PATCH v2 3/8] genirq: soft_moderation: implement fixed moderation
 From: Luigi Rizzo <lrizzo@google.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>, 
 	Luigi Rizzo <rizzo.unipi@gmail.com>, Paolo Abeni <pabeni@redhat.com>, 
@@ -86,547 +86,339 @@ Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
 	Luigi Rizzo <lrizzo@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add the core files that implement procfs and module parameters
-for soft_moderation. This gives access to the module parameters
-/sys/module/irq_moderation/parameters and read/write the procfs entries
-/proc/irq/soft_moderation and /proc/irq/NN/soft_moderation.
+Add hooks into handle_irq_event() to implement fixed moderation.
+Moderation needs to be explicitly enabled on individual IRQs.
 
-Examples:
+When an IRQ with moderation enabled fires, start an hrtimer for
+irq_moderation.delay_us. While the timer is active, all IRQs with
+moderation enabled will be disabled after running the handler. When the
+timer fires, re-enable all disabled IRQs.
+
+Example (kernel built with CONFIG_IRQ_SOFT_MODERATION=y)
+
+  # enable fixed moderation
+  echo "delay_us=400" > /proc/irq/soft_moderation
+
+  # enable on network interrupts (change name as appropriate)
+  echo on | tee /proc/irq/*/*eth*/../soft_moderation
+
+  # show it works by looking at counters in /proc/irq/soft_moderation
   cat /proc/irq/soft_moderation
-  echo "delay_us=345" > /proc/irq/soft_moderation
-  echo 1 | tee /proc/irq/*/nvme*/../soft_moderation
 
-No functional change.
+  # Show runtime impact on ping times changing delay_us
+  ping -n -f -q -c 1000 ${some_nearby_host}
+  echo "delay_us=100" > /proc/irq/soft_moderation
+  ping -n -f -q -c 1000 ${some_nearby_host}
 
-Change-Id: I83fc9568e70885cc02e7fcd4dbe141d9ee329c82
+Configure via module parameters (irq_moderation.${name}=${value}) or
+procfs (echo "${name}=${value}" > /proc/irq/soft_moderation):
+
+delay_us   0=off, range 1-500, default 0
+    How long an interrupt is disabled after it fires. Small values are
+    accumulated until they are large enough, e.g. 10us. As an example,
+    delay_us=2 means that the timer is set only every 5 interrupts.
+
+timer_rounds  0-20, default 0
+    How many extra timer runs before re-enabling interrupts. This
+    reduces interrupts to one every (timer_rounds * delay_us). Similar
+    to the "napi_defer_hard_irqs" option in NAPI, but with some subtle
+    differences (e.g. here the number of rounds is deterministic, and
+    interrupts are disabled at MSI level).
+
+Change-Id: Ic52e95f4128da5e2964afdae0ba3cf9c5c3d732e
 Signed-off-by: Luigi Rizzo <lrizzo@google.com>
 ---
- kernel/irq/Makefile         |   1 +
- kernel/irq/irq_moderation.c | 305 ++++++++++++++++++++++++++++++++++++
- kernel/irq/irq_moderation.h | 149 ++++++++++++++++++
- kernel/irq/irqdesc.c        |   1 +
- kernel/irq/proc.c           |   3 +
- 5 files changed, 459 insertions(+)
- create mode 100644 kernel/irq/irq_moderation.c
- create mode 100644 kernel/irq/irq_moderation.h
+ kernel/irq/handle.c         |   3 ++
+ kernel/irq/irq_moderation.c |  86 +++++++++++++++++++++++++++++-
+ kernel/irq/irq_moderation.h | 102 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 189 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
-index 6ab3a40556670..c06da43d644f2 100644
---- a/kernel/irq/Makefile
-+++ b/kernel/irq/Makefile
-@@ -9,6 +9,7 @@ obj-$(CONFIG_GENERIC_IRQ_CHIP) += generic-chip.o
- obj-$(CONFIG_GENERIC_IRQ_PROBE) += autoprobe.o
- obj-$(CONFIG_IRQ_DOMAIN) += irqdomain.o
- obj-$(CONFIG_IRQ_SIM) += irq_sim.o
-+obj-$(CONFIG_IRQ_SOFT_MODERATION) += irq_moderation.o
- obj-$(CONFIG_PROC_FS) += proc.o
- obj-$(CONFIG_GENERIC_PENDING_IRQ) += migration.o
- obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
-diff --git a/kernel/irq/irq_moderation.c b/kernel/irq/irq_moderation.c
-new file mode 100644
-index 0000000000000..3a907b8f65698
---- /dev/null
-+++ b/kernel/irq/irq_moderation.c
-@@ -0,0 +1,305 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+
-+#include <linux/cpuhotplug.h>
-+#include <linux/irq.h>
-+#include <linux/irqdesc.h>
-+#include <linux/kernel_stat.h>
-+#include <linux/module.h>
-+#include <linux/seq_file.h>
-+#include <linux/proc_fs.h>
-+
-+#include "internals.h"
-+#include "irq_moderation.h"
-+
-+/*
-+ * Platform-wide software interrupt moderation.
-+ *
-+ * see Documentation/core-api/irq/irq-moderation.rst
-+ *
-+ * === MOTIVATION AND OPERATION ===
-+ *
-+ * Some platforms show reduced I/O performance when the total device interrupt
-+ * rate across the entire platform becomes too high. This code implements
-+ * per-CPU adaptive moderation based on the total interrupt rate, as opposed
-+ * to conventional moderation that operates separately on each source.
-+ *
-+ * It computes the total interrupt rate and number of sources, and uses the
-+ * information to adaptively disable individual interrupts for small amounts
-+ * of time using per-CPU hrtimers. Specifically:
-+ *
-+ * - a hook in handle_irq_event(), which applies only on sources configured
-+ *   to use moderation, updates statistics and check whether we need
-+ *   moderation on that CPU/irq. If so, calls disable_irq_nosync() and starts
-+ *   an hrtimer with appropriate delay.
-+ *
-+ * - the timer callback calls enable_irq() for all disabled interrupts on that
-+ *   CPU. That in turn will generate interrupts if there are pending events.
-+ *
-+ * === CONFIGURATION ===
-+ *
-+ * The following can be controlled at boot time via module parameters
-+ *
-+ *     irq_moderation.${NAME}=${VALUE}
-+ *
-+ * or at runtime by writing
-+ *
-+ *     echo "${NAME}=${VALUE}" > /proc/irq/soft_moderation
-+ *
-+ *   delay_us (default 0, suggested 100, range 0-500, 0 DISABLES MODERATION)
-+ *     Fixed or maximum moderation delay.  A reasonable range is 20..100, higher
-+ *     values can be useful if the hardirq handler is performing a significant
-+ *     amount of work.
-+ *
-+ *   timer_rounds (default 0, max 20)
-+ *     Once moderation triggers, periodically run handler zero or more
-+ *     times using a timer rather than interrupts. This is similar to
-+ *     napi_defer_hard_irqs on NICs.
-+ *     A small value may help control load in interrupt-challenged platforms.
-+ *
-+ * Moderation can be enabled/disabled for individual interrupts with
-+ *
-+ *    echo "on" > /proc/irq/NN/soft_moderation # use "off" to disable
-+ *
-+ * === MONITORING ===
-+ *
-+ * cat /proc/irq/soft_moderation shows per-CPU and global statistics.
-+ *
-+ */
-+
-+struct irq_mod_info irq_mod_info ____cacheline_aligned;
-+
-+/* Boot time value, copled to irq_mod_info.delay_us after init. */
-+static uint mod_delay_us;
-+module_param_named(delay_us, mod_delay_us, uint, 0444);
-+MODULE_PARM_DESC(delay_us, "Max moderation delay us, 0 = moderation off, range 0-500.");
-+
-+module_param_named(timer_rounds, irq_mod_info.timer_rounds, uint, 0444);
-+MODULE_PARM_DESC(timer_rounds, "How many timer polls once moderation triggers, range 0-20.");
-+
-+DEFINE_PER_CPU_ALIGNED(struct irq_mod_state, irq_mod_state);
-+
-+/* Initialize moderation state, used in desc_set_defaults() */
-+void irq_moderation_init_fields(struct irq_desc_mod *mod)
-+{
-+	INIT_LIST_HEAD(&mod->ms_node);
-+	mod->enable = false;
-+}
-+
-+static inline int set_moderation_mode(struct irq_desc *desc, bool enable)
-+{
-+	struct irq_data *irqd = &desc->irq_data;
-+	struct irq_chip *chip = desc->irq_data.chip;
-+
-+	/* Moderation is supported only in specific cases. */
-+	if (enable) {
-+		if (irqd_is_level_type(irqd) || !irqd_is_single_target(irqd) ||
-+		    chip->irq_bus_lock || chip->irq_bus_sync_unlock)
-+			return -EOPNOTSUPP;
-+	}
-+	desc->mod.enable = enable;
-+	return 0;
-+}
-+
-+#pragma clang diagnostic error "-Wformat"
-+/* Print statistics */
-+static int moderation_show(struct seq_file *p, void *v)
-+{
-+	uint delay_us = irq_mod_info.delay_us;
-+	int j;
-+
-+#define HEAD_FMT "%5s  %8s  %8s  %4s  %4s  %8s  %11s  %11s  %11s  %11s  %11s  %11s  %11s  %9s\n"
-+#define BODY_FMT "%5u  %8u  %8u  %4u  %4u  %8u  %11u  %11u  %11u  %11u  %11u  %11u  %11u  %9u\n"
-+
-+	seq_printf(p, HEAD_FMT,
-+		   "# CPU", "irq/s", "my_irq/s", "cpus", "srcs", "delay_ns",
-+		   "irq_hi", "my_irq_hi", "hardirq_hi", "timer_set",
-+		   "disable_irq", "from_msi", "timer_calls", "stray_irq");
-+
-+	for_each_possible_cpu(j) {
-+		struct irq_mod_state *ms = per_cpu_ptr(&irq_mod_state, j);
-+
-+		seq_printf(p, BODY_FMT,
-+			   j, ms->irq_rate, ms->my_irq_rate,
-+			   (ms->scaled_cpu_count + 128) / 256,
-+			   (ms->scaled_src_count + 128) / 256,
-+			   ms->mod_ns, ms->irq_high, ms->my_irq_high,
-+			   ms->hardirq_high, ms->timer_set, ms->disable_irq,
-+			   ms->from_posted_msi, ms->timer_calls, ms->stray_irq);
-+	}
-+
-+	seq_printf(p, "\n"
-+		   "enabled              %s\n"
-+		   "delay_us             %u\n"
-+		   "timer_rounds         %u\n",
-+		   str_yes_no(delay_us > 0),
-+		   delay_us, irq_mod_info.timer_rounds);
-+
-+	return 0;
-+}
-+
-+static int moderation_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, moderation_show, pde_data(inode));
-+}
-+
-+/* Helpers to set and clamp values from procfs or at init. */
-+struct param_names {
-+	const char *name;
-+	uint *val;
-+	uint min;
-+	uint max;
-+};
-+
-+static struct param_names param_names[] = {
-+	{ "delay_us", &irq_mod_info.delay_us, 0, 500 },
-+	{ "timer_rounds", &irq_mod_info.timer_rounds, 0, 20 },
-+	/* Empty entry indicates the following are not settable from procfs. */
-+	{},
-+	{ "update_ms", &irq_mod_info.update_ms, 1, 100 },
-+};
-+
-+static ssize_t moderation_write(struct file *f, const char __user *buf, size_t count, loff_t *ppos)
-+{
-+	struct param_names *n = param_names;
-+	char cmd[40];
-+	uint i, l, val;
-+
-+	if (count == 0 || count + 1 > sizeof(cmd))
-+		return -EINVAL;
-+	if (copy_from_user(cmd, buf, count))
-+		return -EFAULT;
-+	cmd[count] = '\0';
-+	for (i = 0;  i < ARRAY_SIZE(param_names) && n->name; i++, n++) {
-+		l = strlen(n->name);
-+		if (count < l + 2 || strncmp(cmd, n->name, l) || cmd[l] != '=')
-+			continue;
-+		if (kstrtouint(cmd + l + 1, 0, &val))
-+			return -EINVAL;
-+		WRITE_ONCE(*(n->val), clamp(val, n->min, n->max));
-+		/* Record last parameter change, for use in the control loop. */
-+		irq_mod_info.procfs_write_ns = ktime_get_ns();
-+		return count;
-+	}
-+	return -EINVAL;
-+}
-+
-+static const struct proc_ops proc_ops = {
-+	.proc_open	= moderation_open,
-+	.proc_read	= seq_read,
-+	.proc_lseek	= seq_lseek,
-+	.proc_release	= single_release,
-+	.proc_write	= moderation_write,
-+};
-+
-+/* Handlers for /proc/irq/NN/soft_moderation */
-+static int mode_show(struct seq_file *p, void *v)
-+{
-+	struct irq_desc *desc = p->private;
-+
-+	if (!desc)
-+		return -ENOENT;
-+
-+	seq_printf(p, "%s irq %u trigger 0x%x %s %smanaged %slazy handle_irq %pB\n",
-+		   desc->mod.enable ? "on" : "off", desc->irq_data.irq,
-+		   irqd_get_trigger_type(&desc->irq_data),
-+		   irqd_is_level_type(&desc->irq_data) ? "Level" : "Edge",
-+		   irqd_affinity_is_managed(&desc->irq_data) ? "" : "un",
-+		   irq_settings_disable_unlazy(desc) ? "un" : "", desc->handle_irq
-+		   );
-+	return 0;
-+}
-+
-+static ssize_t mode_write(struct file *f, const char __user *buf, size_t count, loff_t *ppos)
-+{
-+	struct irq_desc *desc = (struct irq_desc *)pde_data(file_inode(f));
-+	char cmd[40];
-+	bool enable;
-+	int ret;
-+
-+	if (!desc)
-+		return -ENOENT;
-+	if (count == 0 || count + 1 > sizeof(cmd))
-+		return -EINVAL;
-+	if (copy_from_user(cmd, buf, count))
-+		return -EFAULT;
-+	cmd[count] = '\0';
-+
-+	ret = kstrtobool(cmd, &enable);
-+	if (!ret)
-+		ret = set_moderation_mode(desc, enable);
-+	return ret ? : count;
-+}
-+
-+static int mode_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, mode_show, pde_data(inode));
-+}
-+
-+static const struct proc_ops mode_ops = {
-+	.proc_open	= mode_open,
-+	.proc_read	= seq_read,
-+	.proc_lseek	= seq_lseek,
-+	.proc_release	= single_release,
-+	.proc_write	= mode_write,
-+};
-+
-+void irq_moderation_procfs_add(struct irq_desc *desc, umode_t umode)
-+{
-+	proc_create_data("soft_moderation", umode, desc->dir, &mode_ops, desc);
-+}
-+
-+void irq_moderation_procfs_remove(struct irq_desc *desc)
-+{
-+	remove_proc_entry("soft_moderation", desc->dir);
-+}
-+
-+/* Per-CPU state initialization */
-+static void irq_moderation_percpu_init(void *data)
-+{
-+	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
-+
-+	INIT_LIST_HEAD(&ms->descs);
-+}
-+
-+static int cpuhp_setup_cb(uint cpu)
-+{
-+	irq_moderation_percpu_init(NULL);
-+	return 0;
-+}
-+
-+static void clamp_parameter(uint *dst, uint val)
-+{
-+	struct param_names *n = param_names;
-+	uint i;
-+
-+	for (i = 0; i < ARRAY_SIZE(param_names); i++, n++) {
-+		if (dst == n->val) {
-+			*dst = clamp(val, n->min, n->max);
-+			return;
-+		}
-+	}
-+}
-+
-+static int __init init_irq_moderation(void)
-+{
-+	uint *cur;
-+
-+	on_each_cpu(irq_moderation_percpu_init, NULL, 1);
-+	cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN, "moderation:online", cpuhp_setup_cb, NULL);
-+
-+	/* Clamp all initial values to the allowed range. */
-+	for (cur = &irq_mod_info.target_irq_rate; cur < irq_mod_info.pad; cur++)
-+		clamp_parameter(cur, *cur);
-+
-+	/* Finally, set delay_us to enable moderation if needed. */
-+	clamp_parameter(&irq_mod_info.delay_us, mod_delay_us);
-+
-+	proc_create_data("irq/soft_moderation", 0644, NULL, &proc_ops, NULL);
-+	return 0;
-+}
-+
-+MODULE_LICENSE("Dual BSD/GPL");
-+MODULE_VERSION("1.0");
-+MODULE_AUTHOR("Luigi Rizzo <lrizzo@google.com>");
-+MODULE_DESCRIPTION("Platform wide software interrupt moderation");
-+module_init(init_irq_moderation);
-diff --git a/kernel/irq/irq_moderation.h b/kernel/irq/irq_moderation.h
-new file mode 100644
-index 0000000000000..ccb8193482b51
---- /dev/null
-+++ b/kernel/irq/irq_moderation.h
-@@ -0,0 +1,149 @@
-+/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
-+
-+#ifndef _LINUX_IRQ_MODERATION_H
-+#define _LINUX_IRQ_MODERATION_H
-+
-+/*
-+ * Platform wide software interrupt moderation, see
-+ * Documentation/core-api/irq/irq-moderation.rst
-+ */
-+
-+#include <linux/hrtimer.h>
-+#include <linux/irq.h>
-+#include <linux/irqdesc.h>
-+#include <linux/kernel.h>
-+
-+#ifdef CONFIG_IRQ_SOFT_MODERATION
-+
-+/**
-+ * struct irq_mod_info - global configuration parameters and state
-+ * @total_intrs:	running count updated every update_ms
-+ * @total_cpus:		as above, active CPUs in this interval
-+ * @procfs_write_ns:	last write to /proc/irq/soft_moderation
-+ * @delay_us:		fixed delay, or maximum for adaptive
-+ * @target_irq_rate:	target maximum interrupt rate
-+ * @hardirq_percent:	target maximum hardirq percentage
-+ * @timer_rounds:	how many timer polls once moderation fires
-+ * @update_ms:		how often to update delay/rate/fraction
-+ * @scale_cpus:		(percent) scale factor to estimate active CPUs
-+ * @count_timer_calls:	count timer calls for irq limits
-+ * @count_msi_calls:	count calls from posted_msi for irq limits
-+ * @decay_factor:	smoothing factor for the control loop, keep at 16
-+ * @grow_factor:	smoothing factor for the control loop, keep it at 8
-+ */
-+struct irq_mod_info {
-+	/* These fields are written to by all CPUs */
-+	____cacheline_aligned
-+	atomic_long_t total_intrs;
-+	atomic_long_t total_cpus;
-+
-+	/* These are mostly read (frequently), so use a different cacheline */
-+	____cacheline_aligned
-+	u64 procfs_write_ns;
-+	uint delay_us;
-+	uint target_irq_rate;
-+	uint hardirq_percent;
-+	uint timer_rounds;
-+	uint update_ms;
-+	uint scale_cpus;
-+	uint count_timer_calls;
-+	uint count_msi_calls;
-+	uint decay_factor;
-+	uint grow_factor;
-+	uint pad[];
-+};
-+
-+extern struct irq_mod_info irq_mod_info;
-+
-+/**
-+ * struct irq_mod_state - per-CPU moderation state
-+ *
-+ * @timer:		moderation timer
-+ * @descs:		list of	moderated irq_desc on this CPU
-+ *
-+ * Counters on last time we updated moderation delay
-+ * @last_ns:		time of last update
-+ * @last_irqtime:	from cpustat[CPUTIME_IRQ]
-+ * @last_total_irqs:	from irq_mod_info
-+ * @last_total_cpus:	from irq_mod_info
-+ *
-+ * Local info to control hooks and timer callbacks
-+ * @dont_count:		do not count this interrupt
-+ * @in_posted_msi:	don't suppress handle_irq, set in posted_msi handler
-+ * @kick_posted_msi:	kick posted_msi from the timer callback
-+ * @rounds_left:	how many rounds left for timer callbacks
-+ *
-+ * @irq_count:		irqs in the last cycle, signed as we also decrement
-+ * @update_ns:		fetched from irq_mod_info
-+ * @delay_ns:		fetched from irq_mod_info
-+ * @mod_ns:		current moderation delay, recomputed every update_ms
-+ * @sleep_ns:		accumulated time for actual delay
-+ *
-+ * Statistics
-+ * @irq_rate:		smoothed global irq rate
-+ * @my_irq_rate:	smoothed irq rate for this CPU
-+ * @scaled_cpu_count:	smoothed CPU count (scaled)
-+ * @scaled_src_count:	smoothed count of irq sources (scaled)
-+ * @irq_high:		how many times global irq above threshold
-+ * @my_irq_high:	how many times local irq above threshold
-+ * @hardirq_high:	how many times local hardirq_percent above threshold
-+ * @timer_set:		how many timer_set calls
-+ * @timer_fire:		how many timer_fire, must match timer_set in timer callback
-+ * @disable_irq:	how many disable_irq calls
-+ * @enable_irq:		how many enable_irq, must match disable_irq in timer callback
-+ * @timer_calls:	how many handler calls from timer interrupt
-+ * @from_posted_msi:	how many calls from posted_msi handler
-+ * @stray_irq:		how many stray interrupts
-+ */
-+struct irq_mod_state {
-+	struct hrtimer timer;
-+	struct list_head descs;
-+
-+	/* Counters on last time we updated moderation delay */
-+	u64 last_ns;
-+	u64 last_irqtime;
-+	u64 last_total_irqs;
-+	u64 last_total_cpus;
-+
-+	bool dont_count;
-+	bool in_posted_msi;
-+	bool kick_posted_msi;
-+	u8 rounds_left;
-+
-+	u32 irq_count;
-+	u32 update_ns;
-+	u32 delay_ns;
-+	u32 mod_ns;
-+	u32 sleep_ns;
-+
-+	/* Statistics */
-+	u32 irq_rate;
-+	u32 my_irq_rate;
-+	u32 scaled_cpu_count;
-+	u32 scaled_src_count;
-+	u32 irq_high;
-+	u32 my_irq_high;
-+	u32 hardirq_high;
-+	u32 timer_set;
-+	u32 timer_fire;
-+	u32 disable_irq;
-+	u32 enable_irq;
-+	u32 timer_calls;
-+	u32 from_posted_msi;
-+	u32 stray_irq;
-+	int pad[] ____cacheline_aligned;
-+};
-+
-+DECLARE_PER_CPU_ALIGNED(struct irq_mod_state, irq_mod_state);
-+
-+void irq_moderation_procfs_add(struct irq_desc *desc, umode_t umode);
-+void irq_moderation_procfs_remove(struct irq_desc *desc);
-+
-+#else /* CONFIG_IRQ_SOFT_MODERATION */
-+
-+static inline void irq_moderation_procfs_add(struct irq_desc *desc, umode_t umode) {}
-+static inline void irq_moderation_procfs_remove(struct irq_desc *desc) {}
-+
-+#endif /* !CONFIG_IRQ_SOFT_MODERATION */
-+
-+#endif /* _LINUX_IRQ_MODERATION_H */
-diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-index db714d3014b5f..e5cdade3dbbce 100644
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -134,6 +134,7 @@ static void desc_set_defaults(unsigned int irq, struct irq_desc *desc, int node,
- 	desc->tot_count = 0;
- 	desc->name = NULL;
- 	desc->owner = owner;
-+	irq_moderation_init_fields(&desc->mod);
- 	for_each_possible_cpu(cpu)
- 		*per_cpu_ptr(desc->kstat_irqs, cpu) = (struct irqstat) { };
- 	desc_smp_init(desc, node, affinity);
-diff --git a/kernel/irq/proc.c b/kernel/irq/proc.c
-index 29c2404e743be..5dcbc36b7de1b 100644
---- a/kernel/irq/proc.c
-+++ b/kernel/irq/proc.c
-@@ -14,6 +14,7 @@
- #include <linux/mutex.h>
+diff --git a/kernel/irq/handle.c b/kernel/irq/handle.c
+index e103451243a0b..2f8d828ed143e 100644
+--- a/kernel/irq/handle.c
++++ b/kernel/irq/handle.c
+@@ -19,6 +19,7 @@
+ #include <trace/events/irq.h>
  
  #include "internals.h"
 +#include "irq_moderation.h"
  
- /*
-  * Access rules:
-@@ -374,6 +375,7 @@ void register_irq_proc(unsigned int irq, struct irq_desc *desc)
- 	proc_create_single_data("effective_affinity_list", 0444, desc->dir,
- 				irq_effective_aff_list_proc_show, irqp);
- # endif
-+	irq_moderation_procfs_add(desc, 0644);
- #endif
- 	proc_create_single_data("spurious", 0444, desc->dir,
- 				irq_spurious_proc_show, (void *)(long)irq);
-@@ -395,6 +397,7 @@ void unregister_irq_proc(unsigned int irq, struct irq_desc *desc)
- 	remove_proc_entry("effective_affinity", desc->dir);
- 	remove_proc_entry("effective_affinity_list", desc->dir);
- # endif
-+	irq_moderation_procfs_remove(desc);
- #endif
- 	remove_proc_entry("spurious", desc->dir);
+ #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+ void (*handle_arch_irq)(struct pt_regs *) __ro_after_init;
+@@ -254,9 +255,11 @@ irqreturn_t handle_irq_event(struct irq_desc *desc)
+ 	irqd_set(&desc->irq_data, IRQD_IRQ_INPROGRESS);
+ 	raw_spin_unlock(&desc->lock);
+ 
++	irq_moderation_hook(desc);
+ 	ret = handle_irq_event_percpu(desc);
+ 
+ 	raw_spin_lock(&desc->lock);
++	irq_moderation_epilogue(desc);
+ 	irqd_clear(&desc->irq_data, IRQD_IRQ_INPROGRESS);
+ 	return ret;
+ }
+diff --git a/kernel/irq/irq_moderation.c b/kernel/irq/irq_moderation.c
+index 3a907b8f65698..688c8e8c49392 100644
+--- a/kernel/irq/irq_moderation.c
++++ b/kernel/irq/irq_moderation.c
+@@ -56,6 +56,10 @@
+  *     napi_defer_hard_irqs on NICs.
+  *     A small value may help control load in interrupt-challenged platforms.
+  *
++ *
++ *   update_ms (default 5, range 1...100)
++ *     How often moderation delay is updated.
++ *
+  * Moderation can be enabled/disabled for individual interrupts with
+  *
+  *    echo "on" > /proc/irq/NN/soft_moderation # use "off" to disable
+@@ -66,7 +70,10 @@
+  *
+  */
+ 
+-struct irq_mod_info irq_mod_info ____cacheline_aligned;
++/* Recommended values for the control loop. */
++struct irq_mod_info irq_mod_info ____cacheline_aligned = {
++	.update_ms		= 5,
++};
+ 
+ /* Boot time value, copled to irq_mod_info.delay_us after init. */
+ static uint mod_delay_us;
+@@ -76,8 +83,66 @@ MODULE_PARM_DESC(delay_us, "Max moderation delay us, 0 = moderation off, range 0
+ module_param_named(timer_rounds, irq_mod_info.timer_rounds, uint, 0444);
+ MODULE_PARM_DESC(timer_rounds, "How many timer polls once moderation triggers, range 0-20.");
+ 
++module_param_named(update_ms, irq_mod_info.update_ms, uint, 0444);
++MODULE_PARM_DESC(update_ms, "Update interval in milliseconds, range 1-100");
++
+ DEFINE_PER_CPU_ALIGNED(struct irq_mod_state, irq_mod_state);
+ 
++DEFINE_STATIC_KEY_FALSE(irq_moderation_enabled_key);
++EXPORT_SYMBOL(irq_moderation_enabled_key);
++
++static inline void smooth_avg(u32 *dst, u32 val, u32 steps)
++{
++	*dst = ((64 - steps) * *dst + steps * val) / 64;
++}
++
++/* Moderation timer handler. */
++static enum hrtimer_restart timer_cb(struct hrtimer *timer)
++{
++	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
++	struct irq_desc *desc, *next;
++	uint srcs = 0;
++
++	ms->timer_fire++;
++	WARN_ONCE(ms->timer_set != ms->timer_fire,
++		  "CPU %d timer set %d fire %d (lost events?)\n",
++		  smp_processor_id(), ms->timer_set, ms->timer_fire);
++
++	ms->rounds_left--;
++
++	if (ms->rounds_left > 0) {
++		/* Timer still alive, just call the handlers. */
++		list_for_each_entry_safe(desc, next, &ms->descs, mod.ms_node) {
++			ms->irq_count += irq_mod_info.count_timer_calls;
++			ms->timer_calls++;
++			handle_irq_event_percpu(desc);
++		}
++		ms->timer_set++;
++		hrtimer_forward_now(&ms->timer, ms->sleep_ns);
++		return HRTIMER_RESTART;
++	}
++
++	/* Last round, remove from list and enable_irq(). */
++	list_for_each_entry_safe(desc, next, &ms->descs, mod.ms_node) {
++		list_del(&desc->mod.ms_node);
++		INIT_LIST_HEAD(&desc->mod.ms_node);
++		srcs++;
++		ms->enable_irq++;
++		enable_irq(desc->irq_data.irq);
++	}
++	smooth_avg(&ms->scaled_src_count, srcs * 256, 1);
++
++	/* Prepare to accumulate next moderation delay. */
++	ms->sleep_ns = 0;
++
++	WARN_ONCE(ms->disable_irq != ms->enable_irq,
++		  "CPU %d irq disable %d enable %d (%s)\n",
++		  smp_processor_id(), ms->disable_irq, ms->enable_irq,
++		  "bookkeeping error, some irq will be stuck");
++
++	return HRTIMER_NORESTART;
++}
++
+ /* Initialize moderation state, used in desc_set_defaults() */
+ void irq_moderation_init_fields(struct irq_desc_mod *mod)
+ {
+@@ -153,11 +218,24 @@ struct param_names {
+ static struct param_names param_names[] = {
+ 	{ "delay_us", &irq_mod_info.delay_us, 0, 500 },
+ 	{ "timer_rounds", &irq_mod_info.timer_rounds, 0, 20 },
++	{ "update_ms", &irq_mod_info.update_ms, 1, 100 },
+ 	/* Empty entry indicates the following are not settable from procfs. */
+ 	{},
+-	{ "update_ms", &irq_mod_info.update_ms, 1, 100 },
++	{ "count_timer_calls", &irq_mod_info.count_timer_calls, 0, 1 },
+ };
+ 
++static void update_enable_key(void)
++{
++	bool newval = irq_mod_info.delay_us != 0;
++
++	if (newval != static_key_enabled(&irq_moderation_enabled_key)) {
++		if (newval)
++			static_branch_enable(&irq_moderation_enabled_key);
++		else
++			static_branch_disable(&irq_moderation_enabled_key);
++	}
++}
++
+ static ssize_t moderation_write(struct file *f, const char __user *buf, size_t count, loff_t *ppos)
+ {
+ 	struct param_names *n = param_names;
+@@ -176,6 +254,8 @@ static ssize_t moderation_write(struct file *f, const char __user *buf, size_t c
+ 		if (kstrtouint(cmd + l + 1, 0, &val))
+ 			return -EINVAL;
+ 		WRITE_ONCE(*(n->val), clamp(val, n->min, n->max));
++		if (n->val == &irq_mod_info.delay_us)
++			update_enable_key();
+ 		/* Record last parameter change, for use in the control loop. */
+ 		irq_mod_info.procfs_write_ns = ktime_get_ns();
+ 		return count;
+@@ -258,6 +338,7 @@ static void irq_moderation_percpu_init(void *data)
+ {
+ 	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
+ 
++	hrtimer_setup(&ms->timer, timer_cb, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED_HARD);
+ 	INIT_LIST_HEAD(&ms->descs);
+ }
+ 
+@@ -293,6 +374,7 @@ static int __init init_irq_moderation(void)
+ 
+ 	/* Finally, set delay_us to enable moderation if needed. */
+ 	clamp_parameter(&irq_mod_info.delay_us, mod_delay_us);
++	update_enable_key();
+ 
+ 	proc_create_data("irq/soft_moderation", 0644, NULL, &proc_ops, NULL);
+ 	return 0;
+diff --git a/kernel/irq/irq_moderation.h b/kernel/irq/irq_moderation.h
+index ccb8193482b51..d9bc672ffd6f1 100644
+--- a/kernel/irq/irq_moderation.h
++++ b/kernel/irq/irq_moderation.h
+@@ -136,11 +136,113 @@ struct irq_mod_state {
+ 
+ DECLARE_PER_CPU_ALIGNED(struct irq_mod_state, irq_mod_state);
+ 
++extern struct static_key_false irq_moderation_enabled_key;
++
++/* Called on each interrupt for adaptive moderation delay adjustment. */
++static inline void irq_moderation_adjust_delay(struct irq_mod_state *ms)
++{
++	u64 now, delta_time;
++
++	ms->irq_count++;
++	/* ktime_get_ns() is expensive, don't do too often */
++	if (ms->irq_count & 0xf)
++		return;
++	now = ktime_get_ns();
++	delta_time = now - ms->last_ns;
++
++	/* Run approximately every update_ns, a little bit early is ok. */
++	if (delta_time < ms->update_ns - 5000)
++		return;
++
++	ms->update_ns = READ_ONCE(irq_mod_info.update_ms) * NSEC_PER_MSEC;
++	ms->delay_ns = READ_ONCE(irq_mod_info.delay_us) * NSEC_PER_USEC;
++
++	ms->mod_ns = ms->delay_ns;
++}
++
++/* Return true if timer is active or delay is large enough to require moderation */
++static inline bool irq_moderation_needed(struct irq_mod_state *ms)
++{
++	const u32 min_delay_ns = 10000;
++
++	if (!hrtimer_is_queued(&ms->timer)) {
++		/* accumulate sleep time, no moderation if too small */
++		ms->sleep_ns += ms->mod_ns;
++		if (ms->sleep_ns < min_delay_ns)
++			return false;
++	}
++	return true;
++}
++
++void disable_irq_nosync(unsigned int irq);
++
++/*
++ * Use in handle_irq_event() before calling the handler. Decide whether this
++ * desc should be moderated, and in case disable the irq and add the desc to
++ * the list for this CPU.
++ */
++static inline void irq_moderation_hook(struct irq_desc *desc)
++{
++	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
++
++	if (!static_branch_unlikely(&irq_moderation_enabled_key))
++		return;
++
++	if (!READ_ONCE(desc->mod.enable))
++		return;
++
++	irq_moderation_adjust_delay(ms);
++
++	if (!list_empty(&desc->mod.ms_node)) {
++		/*
++		 * Very unlikely, stray interrupt while the desc is moderated.
++		 * We cannot ignore it or we may miss events, but do count it.
++		 */
++		ms->stray_irq++;
++		return;
++	}
++
++	if (!irq_moderation_needed(ms))
++		return;
++
++	/* Add to list of moderated desc on this CPU */
++	list_add(&desc->mod.ms_node, &ms->descs);
++	/*
++	 * Disable the irq. This will also cause irq_can_handle() return false
++	 * (through irq_can_handle_actions()), and that will prevent a handler
++	 * instance to be run again while the descriptor is being moderated.
++	 *
++	 * irq_moderation_epilogue() will then start the timer if needed.
++	 */
++	ms->disable_irq++;
++	disable_irq_nosync(desc->irq_data.irq);
++}
++
++static inline void irq_moderation_start_timer(struct irq_mod_state *ms)
++{
++	ms->timer_set++;
++	ms->rounds_left = READ_ONCE(irq_mod_info.timer_rounds) + 1;
++	hrtimer_start_range_ns(&ms->timer, ns_to_ktime(ms->sleep_ns),
++			       /*range*/2000, HRTIMER_MODE_REL_PINNED_HARD);
++}
++
++/* After the handler, if desc is moderated, make sure the timer is active. */
++static inline void irq_moderation_epilogue(const struct irq_desc *desc)
++{
++	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
++
++	if (!list_empty(&desc->mod.ms_node) && !hrtimer_is_queued(&ms->timer))
++		irq_moderation_start_timer(ms);
++}
++
+ void irq_moderation_procfs_add(struct irq_desc *desc, umode_t umode);
+ void irq_moderation_procfs_remove(struct irq_desc *desc);
+ 
+ #else /* CONFIG_IRQ_SOFT_MODERATION */
+ 
++static inline void irq_moderation_hook(struct irq_desc *desc) {}
++static inline void irq_moderation_epilogue(const struct irq_desc *desc) {}
++
+ static inline void irq_moderation_procfs_add(struct irq_desc *desc, umode_t umode) {}
+ static inline void irq_moderation_procfs_remove(struct irq_desc *desc) {}
  
 -- 
 2.52.0.rc1.455.g30608eb744-goog
