@@ -1,360 +1,155 @@
-Return-Path: <linux-arch+bounces-14835-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14836-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C46DCC63A09
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 11:51:59 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51699C63CAE
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 12:25:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A154F4E156D
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 10:51:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 49649366D39
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 11:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0AC221FB4;
-	Mon, 17 Nov 2025 10:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188F0325705;
+	Mon, 17 Nov 2025 11:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AclkSZCU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1840028C84D;
-	Mon, 17 Nov 2025 10:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5559627F727;
+	Mon, 17 Nov 2025 11:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763376707; cv=none; b=tMRRXW/VVSYUhoT5D/Sr0sNB6GKuiODWjqBz4bntFD29Geng+4aB0bqMHqQzicg31RyA4n1Z0OmCGl5ltZpG4F6vl1OBV71Q7ajYZSjYnZqTVT9B/IN/ScMW72GpeXMYRPRM4GaQ7xzAv51LoG0olAxY3agDT3kM4HVOJFKng+o=
+	t=1763377973; cv=none; b=XajE5f/95B86Ae1O+8i6egSbCPxrILZME6i5e3+oV1MWEap7UBH19aXzlAeXH+bZmDKVJPejz5PsMuO8DQgl6IOQwX4qe75ZK1tRy2y/DQFiMPkvzed4yLRRgkJW8Ov6oS9WkLIEeXrY9KilNABN5xJ8clR+j+7NWW+PlaIwLKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763376707; c=relaxed/simple;
-	bh=hkSg2EkXZTwfwOyscE4ErkviTnNaH0dpCyGpCcbryBQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=K1XRwV0gdUOaQdPpsQRWXhJEcfWkr+JPHEjjD+KYaat8kbyR8Y1wcXxXlmvbr1sZVeFnMVrxYwRZ51rmzyfWypnyT5RfU6Ve/G1ZFaFiVoFP/092k6ZcMdEp0NrRvgJeosVt/4BJYP4vzqU6YbKXxMS1lURl8IR6Uj5grvMYbAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4d94Kt45g7zHnH7B;
-	Mon, 17 Nov 2025 18:51:14 +0800 (CST)
-Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4546514011D;
-	Mon, 17 Nov 2025 18:51:43 +0800 (CST)
-Received: from SecurePC-101-06.huawei.com (10.122.19.247) by
- dubpeml100005.china.huawei.com (7.214.146.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Mon, 17 Nov 2025 10:51:42 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Conor Dooley <conor@kernel.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, <linux-cxl@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-arch@vger.kernel.org>,
-	<linux-mm@kvack.org>, Dan Williams <dan.j.williams@intel.com>, "H . Peter
- Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Andrew Morton
-	<akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Drew Fustini
-	<fustini@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Alexandre
- Belloni <alexandre.belloni@bootlin.com>, Krzysztof Kozlowski
-	<krzk@kernel.org>
-CC: <james.morse@arm.com>, Will Deacon <will@kernel.org>, Davidlohr Bueso
-	<dave@stgolabs.net>, <linuxarm@huawei.com>, Yushan Wang
-	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Mark
- Rutland <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski
-	<luto@kernel.org>, Dave Jiang <dave.jiang@intel.com>
-Subject: [PATCH v6 7/7] cache: Support cache maintenance for HiSilicon SoC Hydra Home Agent
-Date: Mon, 17 Nov 2025 10:48:00 +0000
-Message-ID: <20251117104800.2041329-8-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20251117104800.2041329-1-Jonathan.Cameron@huawei.com>
-References: <20251117104800.2041329-1-Jonathan.Cameron@huawei.com>
+	s=arc-20240116; t=1763377973; c=relaxed/simple;
+	bh=uiVn5O+Z2ckh8lfSZDoQxdciZi4Sh+koQbfl/Op6dYw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dPZaTVRuOkhypHsHxDX6L4WmDg8DQNMk1+n0jzzHnuVdIzryX79Fhq33vF21zZZFQ0Mp0vwvTG6ZfzY8rmzAZ6cbE6KE9zc4SEESmQzA8+bF7+wgaqYtb2ujoqoURbLrfmPXun9W/glvxNYcv+AxYO3X22N6WnLV4PjMjT6Lerw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AclkSZCU; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763377971; x=1794913971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uiVn5O+Z2ckh8lfSZDoQxdciZi4Sh+koQbfl/Op6dYw=;
+  b=AclkSZCU/rTV7dGTu/uQTpzoQJ2eELTQhAuUy0conpa6ROvghjw8fLpu
+   zaqvTCc+64HZU0FVrGx6PZMtjk5QAVHiaRmCTb/LIYnGmGBW7gnxqVHKK
+   0YzZWB4FeThBjh9IF5xPCn05wd40ZuCkwTISyM9NlQsQ+p6EkwQvLTWGf
+   fuRTVpYaYO2Xv40nXVDAw/Q7jleiY30DEt+QMMnGx6pZt6Z5GL83agsvj
+   EJvIZfYJGU/x5GMdodODRzU3tDNLAGnfzt51IZXRNQZbiRcWkCLBqkYHf
+   O7oTAB5E2hLX1Y036UUW0rql9MIx5uBOfdctoAMPu7Z/hO3I7TRquJ2Po
+   w==;
+X-CSE-ConnectionGUID: c5xHgJRGQh+4nk+Nws5ilg==
+X-CSE-MsgGUID: U+MuZOxiT1aTJ79u5ePcig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="90851946"
+X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
+   d="scan'208";a="90851946"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 03:12:50 -0800
+X-CSE-ConnectionGUID: LarFWhw6Q7eLzbFJT0IRVQ==
+X-CSE-MsgGUID: Zi9XQFgmQ8u027dmYe6Hwg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
+   d="scan'208";a="221317842"
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 17 Nov 2025 03:12:47 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vKxA5-0000TH-22;
+	Mon, 17 Nov 2025 11:12:45 +0000
+Date: Mon, 17 Nov 2025 19:12:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luigi Rizzo <lrizzo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH v2 2/8] genirq: soft_moderation: add base files, procfs
+Message-ID: <202511171936.CT5XHXPZ-lkp@intel.com>
+References: <20251116182839.939139-3-lrizzo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
- dubpeml100005.china.huawei.com (7.214.146.113)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251116182839.939139-3-lrizzo@google.com>
 
-From: Yushan Wang <wangyushan12@huawei.com>
+Hi Luigi,
 
-Hydra Home Agent is a device used to maintain cache coherency. Add support
-for explicit cache maintenance operations using it. A system has multiple
-of these agents. Whilst only one agent is responsible for a given cache
-line, interleave means that for a range operation, responsibility for the
-cache lines making up the range will typically be spread across multiple
-instances.
+kernel test robot noticed the following build warnings:
 
-Put this driver on a new Kconfig menu under drivers/cache. The short
-description as memory hotplug like operations is intended to cover
-the somewhat complex set of cases where this unit applies and differentiate
-it clearly from typical non coherent DMA flows.
+[auto build test WARNING on tip/irq/core]
+[also build test WARNING on tip/x86/core tip/master linus/master v6.18-rc6 next-20251114]
+[cannot apply to tip/auto-latest]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Co-developed-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Yushan Wang <wangyushan12@huawei.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Rizzo/genirq-platform-wide-interrupt-moderation-Documentation-Kconfig-irq_desc/20251117-023148
+base:   tip/irq/core
+patch link:    https://lore.kernel.org/r/20251116182839.939139-3-lrizzo%40google.com
+patch subject: [PATCH v2 2/8] genirq: soft_moderation: add base files, procfs
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20251117/202511171936.CT5XHXPZ-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251117/202511171936.CT5XHXPZ-lkp@intel.com/reproduce)
 
----
-v6: New menu as suggested by Arnd. The description and naming may want
-    updating as more drivers are upstreamed and perhaps the usecase
-    based description is not sufficient. (Thanks Arnd!)
-v5: Drop stale comment on devm_ioremap_resource() as it is no longer used.
-    Also drop mention from patch description (Conor)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511171936.CT5XHXPZ-lkp@intel.com/
 
-    Add some overview comments to top of driver and improve comment on
-    searching for a cacheline to be explicit about what happens if it is
-    not found (as not in scope for device, or happens not to be in any
-    caches). (Conor)
-    Also update the commit message to make it clear there are always
-    multiple instances of this unit in a system (Conor)
+All warnings (new ones prefixed by >>):
 
-v4: Update for naming changes around device / instance.
-    Switch to kref put based freeing via helper.
----
- drivers/cache/Kconfig        |  22 ++++
- drivers/cache/Makefile       |   2 +
- drivers/cache/hisi_soc_hha.c | 194 +++++++++++++++++++++++++++++++++++
- 3 files changed, 218 insertions(+)
+>> kernel/irq/irq_moderation.c:103: warning: ignoring '#pragma clang diagnostic' [-Wunknown-pragmas]
+     103 | #pragma clang diagnostic error "-Wformat"
+   In file included from include/linux/uaccess.h:10,
+                    from include/linux/sched/task.h:13,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:34,
+                    from include/linux/seq_file.h:11,
+                    from kernel/irq/irq_moderation.c:8:
+   In function 'check_copy_size',
+       inlined from 'copy_from_user' at include/linux/uaccess.h:207:7,
+       inlined from 'moderation_write' at kernel/irq/irq_moderation.c:169:6:
+   include/linux/ucopysize.h:54:25: error: call to '__bad_copy_to' declared with attribute error: copy destination size is too small
+      54 |                         __bad_copy_to();
+         |                         ^~~~~~~~~~~~~~~
+   In function 'check_copy_size',
+       inlined from 'copy_from_user' at include/linux/uaccess.h:207:7,
+       inlined from 'mode_write' at kernel/irq/irq_moderation.c:223:6:
+   include/linux/ucopysize.h:54:25: error: call to '__bad_copy_to' declared with attribute error: copy destination size is too small
+      54 |                         __bad_copy_to();
+         |                         ^~~~~~~~~~~~~~~
 
-diff --git a/drivers/cache/Kconfig b/drivers/cache/Kconfig
-index 59a79df4c0ce..1518449d47b5 100644
---- a/drivers/cache/Kconfig
-+++ b/drivers/cache/Kconfig
-@@ -32,3 +32,25 @@ config STARFIVE_STARLINK_CACHE
- 	  Support for the StarLink cache controller IP from StarFive.
- 
- endif #CACHEMAINT_FOR_DMA
-+
-+menuconfig CACHEMAINT_FOR_HOTPLUG
-+	bool "Cache management for memory hot plug like operations"
-+	depends on GENERIC_CPU_CACHE_MAINTENANCE
-+	help
-+	  These drivers implement cache management for flows where it is necessary
-+	  to flush data from all host caches.
-+
-+if CACHEMAINT_FOR_HOTPLUG
-+
-+config HISI_SOC_HHA
-+	tristate "HiSilicon Hydra Home Agent (HHA) device driver"
-+	depends on (ARM64 && ACPI) || COMPILE_TEST
-+	help
-+	  The Hydra Home Agent (HHA) is responsible for cache coherency
-+	  on the SoC. This drivers enables the cache maintenance functions of
-+	  the HHA.
-+
-+	  This driver can be built as a module. If so, the module will be
-+	  called hisi_soc_hha.
-+
-+endif #CACHEMAINT_FOR_HOTPLUG
-diff --git a/drivers/cache/Makefile b/drivers/cache/Makefile
-index 55c5e851034d..b3362b15d6c1 100644
---- a/drivers/cache/Makefile
-+++ b/drivers/cache/Makefile
-@@ -3,3 +3,5 @@
- obj-$(CONFIG_AX45MP_L2_CACHE)		+= ax45mp_cache.o
- obj-$(CONFIG_SIFIVE_CCACHE)		+= sifive_ccache.o
- obj-$(CONFIG_STARFIVE_STARLINK_CACHE)	+= starfive_starlink_cache.o
-+
-+obj-$(CONFIG_HISI_SOC_HHA)		+= hisi_soc_hha.o
-diff --git a/drivers/cache/hisi_soc_hha.c b/drivers/cache/hisi_soc_hha.c
-new file mode 100644
-index 000000000000..25ff0f5ae79b
---- /dev/null
-+++ b/drivers/cache/hisi_soc_hha.c
-@@ -0,0 +1,194 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Driver for HiSilicon Hydra Home Agent (HHA).
-+ *
-+ * Copyright (c) 2025 HiSilicon Technologies Co., Ltd.
-+ * Author: Yicong Yang <yangyicong@hisilicon.com>
-+ *         Yushan Wang <wangyushan12@huawei.com>
-+ *
-+ * A system typically contains multiple HHAs. Each is responsible for a subset
-+ * of the physical addresses in the system, but interleave can make the mapping
-+ * from a particular cache line to a responsible HHA complex. As such no
-+ * filtering is done in the driver, with the hardware being responsible for
-+ * responding with success for even if it was not responsible for any addresses
-+ * in the range on which the operation was requested.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/cache_coherency.h>
-+#include <linux/dev_printk.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/memregion.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+
-+#define HISI_HHA_CTRL		0x5004
-+#define   HISI_HHA_CTRL_EN	BIT(0)
-+#define   HISI_HHA_CTRL_RANGE	BIT(1)
-+#define   HISI_HHA_CTRL_TYPE	GENMASK(3, 2)
-+#define HISI_HHA_START_L	0x5008
-+#define HISI_HHA_START_H	0x500c
-+#define HISI_HHA_LEN_L		0x5010
-+#define HISI_HHA_LEN_H		0x5014
-+
-+/* The maintain operation performs in a 128 Byte granularity */
-+#define HISI_HHA_MAINT_ALIGN	128
-+
-+#define HISI_HHA_POLL_GAP_US		10
-+#define HISI_HHA_POLL_TIMEOUT_US	50000
-+
-+struct hisi_soc_hha {
-+	/* Must be first element */
-+	struct cache_coherency_ops_inst cci;
-+	/* Locks HHA instance to forbid overlapping access. */
-+	struct mutex lock;
-+	void __iomem *base;
-+};
-+
-+static bool hisi_hha_cache_maintain_wait_finished(struct hisi_soc_hha *soc_hha)
-+{
-+	u32 val;
-+
-+	return !readl_poll_timeout_atomic(soc_hha->base + HISI_HHA_CTRL, val,
-+					  !(val & HISI_HHA_CTRL_EN),
-+					  HISI_HHA_POLL_GAP_US,
-+					  HISI_HHA_POLL_TIMEOUT_US);
-+}
-+
-+static int hisi_soc_hha_wbinv(struct cache_coherency_ops_inst *cci,
-+			struct cc_inval_params *invp)
-+{
-+	struct hisi_soc_hha *soc_hha =
-+		container_of(cci, struct hisi_soc_hha, cci);
-+	phys_addr_t top, addr = invp->addr;
-+	size_t size = invp->size;
-+	u32 reg;
-+
-+	if (!size)
-+		return -EINVAL;
-+
-+	addr = ALIGN_DOWN(addr, HISI_HHA_MAINT_ALIGN);
-+	top = ALIGN(addr + size, HISI_HHA_MAINT_ALIGN);
-+	size = top - addr;
-+
-+	guard(mutex)(&soc_hha->lock);
-+
-+	if (!hisi_hha_cache_maintain_wait_finished(soc_hha))
-+		return -EBUSY;
-+
-+	/*
-+	 * Hardware will search for addresses ranging [addr, addr + size - 1],
-+	 * last byte included, and perform maintenance in 128 byte granules
-+	 * on those cachelines which contain the addresses. If a given instance
-+	 * is either not responsible for a cacheline or that cacheline is not
-+	 * currently present then the search will fail, no operation will be
-+	 * necessary and the device will report success.
-+	 */
-+	size -= 1;
-+
-+	writel(lower_32_bits(addr), soc_hha->base + HISI_HHA_START_L);
-+	writel(upper_32_bits(addr), soc_hha->base + HISI_HHA_START_H);
-+	writel(lower_32_bits(size), soc_hha->base + HISI_HHA_LEN_L);
-+	writel(upper_32_bits(size), soc_hha->base + HISI_HHA_LEN_H);
-+
-+	reg = FIELD_PREP(HISI_HHA_CTRL_TYPE, 1); /* Clean Invalid */
-+	reg |= HISI_HHA_CTRL_RANGE | HISI_HHA_CTRL_EN;
-+	writel(reg, soc_hha->base + HISI_HHA_CTRL);
-+
-+	return 0;
-+}
-+
-+static int hisi_soc_hha_done(struct cache_coherency_ops_inst *cci)
-+{
-+	struct hisi_soc_hha *soc_hha =
-+		container_of(cci, struct hisi_soc_hha, cci);
-+
-+	guard(mutex)(&soc_hha->lock);
-+	if (!hisi_hha_cache_maintain_wait_finished(soc_hha))
-+		return -ETIMEDOUT;
-+
-+	return 0;
-+}
-+
-+static const struct cache_coherency_ops hha_ops = {
-+	.wbinv = hisi_soc_hha_wbinv,
-+	.done = hisi_soc_hha_done,
-+};
-+
-+static int hisi_soc_hha_probe(struct platform_device *pdev)
-+{
-+	struct hisi_soc_hha *soc_hha;
-+	struct resource *mem;
-+	int ret;
-+
-+	soc_hha = cache_coherency_ops_instance_alloc(&hha_ops,
-+						     struct hisi_soc_hha, cci);
-+	if (!soc_hha)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, soc_hha);
-+
-+	mutex_init(&soc_hha->lock);
-+
-+	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!mem) {
-+		ret = -ENOMEM;
-+		goto err_free_cci;
-+	}
-+
-+	soc_hha->base = ioremap(mem->start, resource_size(mem));
-+	if (!soc_hha->base) {
-+		ret = dev_err_probe(&pdev->dev, -ENOMEM,
-+				    "failed to remap io memory");
-+		goto err_free_cci;
-+	}
-+
-+	ret = cache_coherency_ops_instance_register(&soc_hha->cci);
-+	if (ret)
-+		goto err_iounmap;
-+
-+	return 0;
-+
-+err_iounmap:
-+	iounmap(soc_hha->base);
-+err_free_cci:
-+	cache_coherency_ops_instance_put(&soc_hha->cci);
-+	return ret;
-+}
-+
-+static void hisi_soc_hha_remove(struct platform_device *pdev)
-+{
-+	struct hisi_soc_hha *soc_hha = platform_get_drvdata(pdev);
-+
-+	cache_coherency_ops_instance_unregister(&soc_hha->cci);
-+	iounmap(soc_hha->base);
-+	cache_coherency_ops_instance_put(&soc_hha->cci);
-+}
-+
-+static const struct acpi_device_id hisi_soc_hha_ids[] = {
-+	{ "HISI0511", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, hisi_soc_hha_ids);
-+
-+static struct platform_driver hisi_soc_hha_driver = {
-+	.driver = {
-+		.name = "hisi_soc_hha",
-+		.acpi_match_table = hisi_soc_hha_ids,
-+	},
-+	.probe = hisi_soc_hha_probe,
-+	.remove = hisi_soc_hha_remove,
-+};
-+
-+module_platform_driver(hisi_soc_hha_driver);
-+
-+MODULE_IMPORT_NS("CACHE_COHERENCY");
-+MODULE_DESCRIPTION("HiSilicon Hydra Home Agent driver supporting cache maintenance");
-+MODULE_AUTHOR("Yicong Yang <yangyicong@hisilicon.com>");
-+MODULE_AUTHOR("Yushan Wang <wangyushan12@huawei.com>");
-+MODULE_LICENSE("GPL");
+
+vim +103 kernel/irq/irq_moderation.c
+
+   102	
+ > 103	#pragma clang diagnostic error "-Wformat"
+   104	/* Print statistics */
+   105	static int moderation_show(struct seq_file *p, void *v)
+   106	{
+   107		uint delay_us = irq_mod_info.delay_us;
+   108		int j;
+   109	
+
 -- 
-2.48.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
