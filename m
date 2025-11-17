@@ -1,188 +1,168 @@
-Return-Path: <linux-arch+bounces-14837-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14838-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98F38C6506A
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 17:03:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58481C65194
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 17:20:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0F2A93639A7
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 16:02:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 851A92A020
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 16:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145172BF3E2;
-	Mon, 17 Nov 2025 16:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD9A2C08CB;
+	Mon, 17 Nov 2025 16:17:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MOSlwQXu";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jzfyB+L2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IHla6hJf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BF82BEC30;
-	Mon, 17 Nov 2025 16:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA27E2BEC3A
+	for <linux-arch@vger.kernel.org>; Mon, 17 Nov 2025 16:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763395320; cv=none; b=VaMSX/44ESs1l//jf4w475bwoxPWAowo6115G3BhPcU4vBgfNa/Bz/nW1muBxzKmRQNcuq7qf7NJlGB1mekP2s2lBtFs3Vi9RuZCoOkMyz8L/u9otaZlizK9ao6luRJZVWXEmP4fc7A420rLfLR0KGQCrQ+we959SqyyjB04qrM=
+	t=1763396233; cv=none; b=LMge5kTKupibJrAJWLQeUkIF5wheR7UQyKoDB/zH4Yi2iPfd1GDPoMXjpReeyhUUGwtSsEJUMpv+6lU2GyiJ77366TuFFfhANMnWqiU3z2ma7RJxVJnoE3b8aZi8hbqZnlnIbVCQWFijLPSiIGmO8IqF2wWzITJONX+g4dIZNsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763395320; c=relaxed/simple;
-	bh=/bDhPxqWcSOXNHSzLXjTbMU4HdLO7Kz6FKbNXZulUuc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=F0455vkELi/ut+3zsAFZsfWtP523Z+5BA3YiKkfG4G6Bhus4aoqpB1iFMu0YQpGQq4qm3Bao0iDARaidsbfUjlduiIqojoHFYtVPQAyd6Rlb3MZq1xgP6H/Zr2S9bCtb8Hi1wur7aj96nCUGvGJsr/M9bcxFXnluC2TqS0ykG6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MOSlwQXu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jzfyB+L2; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763395311;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yOhFoErLEznTRFRgIdJg9ybcZm6YTsthnoRTsVL/SWE=;
-	b=MOSlwQXuLgADkZz//yRrqp56EF989/Ad9qRiGz+EMywn6lAKW9rrmSSF2qoLrUMZK7/BRC
-	SJfWBEkP5nnn6SV4UPqIYrvF8N65C5Ian9BeCSeDqQxpzbXBm8wD0G6/KD0C5CmUVS4B4m
-	HPbsmX++v6zDYc5aXQragpCKNHDLRsLuf+gvnCf/o8beOH7B/OgvOYeRsmwosg6gFz3E5R
-	eoVF3ESn7UW+AzGTn2wgHDWvJ966rcRCnMYwFlpvmIiC5P4D/OPohGydS2Cj1lPuVp7VEg
-	wpGmwjkyLqscyMgXa4iFQR2I0YhhC2onBq/enQ7NMT+mfwic/C43RAnBatJeRg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763395311;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yOhFoErLEznTRFRgIdJg9ybcZm6YTsthnoRTsVL/SWE=;
-	b=jzfyB+L2WZsnSiNg3tDYBpt+ZnsmUcq754/NzpsfuXlsQEtCog2Qoa6rrEfUmPgEJextYW
-	++HKZXzZaoG7vjDw==
-To: Luigi Rizzo <lrizzo@google.com>, Marc Zyngier <maz@kernel.org>, Luigi
- Rizzo <rizzo.unipi@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Andrew
- Morton <akpm@linux-foundation.org>, Sean Christopherson
- <seanjc@google.com>, Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, Bjorn Helgaas
- <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>, Luigi Rizzo
- <lrizzo@google.com>
-Subject: Re: [PATCH v2 2/8] genirq: soft_moderation: add base files, procfs
-In-Reply-To: <20251116182839.939139-3-lrizzo@google.com>
-References: <20251116182839.939139-1-lrizzo@google.com>
- <20251116182839.939139-3-lrizzo@google.com>
-Date: Mon, 17 Nov 2025 17:01:50 +0100
-Message-ID: <87wm3o7imp.ffs@tglx>
+	s=arc-20240116; t=1763396233; c=relaxed/simple;
+	bh=UWQ+omaMZ9nSTBNx+60hKimnXA5mMClLQiCDQwNh7tk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A23KuP3yxP5zA4fldFWZznyVaeMkj4zvYFIULh45dXLkFrPZfi7MAmw0eFb1NB/DHRhp1LnwKmGgaP6ewjX19PqiVsyBqR18vlNdvxFdnbUtUzWwDmyGFyXGlilx9yl3Lftf+FiP1L+z/zv7S5MYEsVSmDpd3U7atGAnxYczW60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IHla6hJf; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ee243b98caso273241cf.1
+        for <linux-arch@vger.kernel.org>; Mon, 17 Nov 2025 08:17:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763396231; x=1764001031; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JRueqkYVPlFWQeHHTLPL01TtGJ4sbdfecNuaUoxeiW8=;
+        b=IHla6hJfO9TedasNb9kHFFfNDO3njcoavr8US9MBDnfHtArPnDKd/wrMwr1vhviIeD
+         wu4eg3hMIn3F0YfYU3NQGsxclOOso2dZtSH7ezOouC57b1v5qPfz1zum0ihhC50mjT4Y
+         lNo8cOUS7NK0Gv1EKXmVb4RlrY1gKLlCq02/LGkn1TSg7V9u7FxZUJAjT6/utVfouevm
+         v9Q11dNo8d5uAhwNSvB+VXcN1qYea3Ky2ZiBTHzDYoV+tNWKqkUW3Nm+0lG8dK3zCk5D
+         SVfhQLAlkr7WkcVwquFqvmCwve37HUWl4gVlZgckVLgt4kmGZYakXDpr6xypcdIYVHbl
+         5y1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763396231; x=1764001031;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JRueqkYVPlFWQeHHTLPL01TtGJ4sbdfecNuaUoxeiW8=;
+        b=CRi1/V4U0gsMgAENDKmbQQv3v6O0e48GjCrThaCO3iA7OEU7YMzxZd5KTHU766arY+
+         1OJ4wBKIngh37p9lPZQhwXh0MV4VhrFF9wEntAx5u5buU0q1LBX/R6XYLSdu2BHW5u+6
+         oiqwDrvIN1a7XEvQ/XIqqMF7oMo4GtOq7828pbWjnp5kMQx0lSrtBvTochJIbuYTGFbi
+         3p2yMrRy+Rcs4rg8h/Kl3fnMSWvyRDL+Cic38iWbNkVqEx4f60AskHGQjcTOWcz1hMXy
+         9+P6xHfg60f+JsCFQuGrS2sGFJO2dKgcXODc5apXCGIGOc2tGxl1LY88OBIYR54l8Fw0
+         Xr4w==
+X-Forwarded-Encrypted: i=1; AJvYcCURIPe11RH3kEDXx3end3foL1NNUYOwMsirya4W209yoevsnW8dzxFFaWbw27Rp/uYP83nnhQ5tcxdh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3ok0welO7GfFycOUQ4YiHDCFHC2W1ohvvxkoqqvpyV1bQhIFW
+	JlUXYM58glK5v3ay3ggKzIPWcG8j26UbW6RVNdSzvcsaYiq2SO2eD+bMzSlFzDjmBNEEroe58HO
+	bWMCyPELFSdHA3yhcUQ4hy+AMZ6dTdTVMXMUn7Uuq
+X-Gm-Gg: ASbGncvsolE5uY8hzSCG6vFV/5muTgJtIXqr4Eyvp3ZOsC5eI61Bhv2inV6c/8vbXlp
+	EEvRyIfYKb+TI2gPIR/0Oa7v8zM9Bi2l4QyXxVg4DM/8xM4WUfde62tz34Y3luYt3pRDqaVG4Aw
+	vKLOvXfOAsxusUhZwPJI6Pu2G4ooSlGFO+DZUD3Vw/DlcR0bmWC9UPoKr71Ziax62WSCAZ1z6RD
+	ElMnIxH6O/Wxi1j2y96PBuWWczeOpKGuARWjk5A9oT1xOzcvgNnabMWOKf53g74HHdRJANLM4Jr
+	c40vew==
+X-Google-Smtp-Source: AGHT+IH4i1oZry3rlB9l4I6EFCgFE2BkJ+R7jQp/AXxivVep68MQEbr1j0Mf9IQ8Y7FVIqV7/uWcNTAQGciiFDS52jM=
+X-Received: by 2002:a05:622a:3cc:b0:4b3:7533:c1dd with SMTP id
+ d75a77b69052e-4ee2fd83e21mr226201cf.1.1763396230304; Mon, 17 Nov 2025
+ 08:17:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20251116182839.939139-1-lrizzo@google.com> <20251116182839.939139-3-lrizzo@google.com>
+ <87wm3o7imp.ffs@tglx>
+In-Reply-To: <87wm3o7imp.ffs@tglx>
+From: Luigi Rizzo <lrizzo@google.com>
+Date: Mon, 17 Nov 2025 17:16:32 +0100
+X-Gm-Features: AWmQ_bkBIg6tck_1LHHqIwNNfqkqjo3Y61fPoAWRwxGCh6tPRLAcX4ZQqDEp4zo
+Message-ID: <CAMOZA0JwGT946kAZYq_s3W6LQxwKAAqOGgtCWOYzomEZu4uYcg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/8] genirq: soft_moderation: add base files, procfs
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Sean Christopherson <seanjc@google.com>, Jacob Pan <jacob.jun.pan@linux.intel.com>, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Bjorn Helgaas <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 16 2025 at 18:28, Luigi Rizzo wrote:
-> +/* Handlers for /proc/irq/NN/soft_moderation */
-> +static int mode_show(struct seq_file *p, void *v)
-> +{
-> +	struct irq_desc *desc = p->private;
-> +
-> +	if (!desc)
-> +		return -ENOENT;
-> +
-> +	seq_printf(p, "%s irq %u trigger 0x%x %s %smanaged %slazy handle_irq %pB\n",
-> +		   desc->mod.enable ? "on" : "off", desc->irq_data.irq,
-> +		   irqd_get_trigger_type(&desc->irq_data),
-> +		   irqd_is_level_type(&desc->irq_data) ? "Level" : "Edge",
-> +		   irqd_affinity_is_managed(&desc->irq_data) ? "" : "un",
-> +		   irq_settings_disable_unlazy(desc) ? "un" : "", desc->handle_irq
+On Mon, Nov 17, 2025 at 5:01=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
+>
+> On Sun, Nov 16 2025 at 18:28, Luigi Rizzo wrote:
+> > +/* Handlers for /proc/irq/NN/soft_moderation */
+> > +static int mode_show(struct seq_file *p, void *v)
+> > +{
+> > +     struct irq_desc *desc =3D p->private;
+> > +
+> > +     if (!desc)
+> > +             return -ENOENT;
+> > +
+> > +     seq_printf(p, "%s irq %u trigger 0x%x %s %smanaged %slazy handle_=
+irq %pB\n",
+> > +                desc->mod.enable ? "on" : "off", desc->irq_data.irq,
+> > +                irqd_get_trigger_type(&desc->irq_data),
+> > +                irqd_is_level_type(&desc->irq_data) ? "Level" : "Edge"=
+,
+> > +                irqd_affinity_is_managed(&desc->irq_data) ? "" : "un",
+> > +                irq_settings_disable_unlazy(desc) ? "un" : "", desc->h=
+andle_irq
+>
+> Why are you exposing randomly picked information here? The only thing
+> what's interesting is whether the interrupt is moderated or not. The
+> interrupt number is redundant information. And all the other internal
+> details are available in debugfs already.
 
-Why are you exposing randomly picked information here? The only thing
-what's interesting is whether the interrupt is moderated or not. The
-interrupt number is redundant information. And all the other internal
-details are available in debugfs already.
+ah, sorry, forgot to clean up this internal debugging code.
+The previous version had only the enable.
 
-> +/* Per-CPU state initialization */
-> +static void irq_moderation_percpu_init(void *data)
-> +{
-> +	struct irq_mod_state *ms = this_cpu_ptr(&irq_mod_state);
-> +
-> +	INIT_LIST_HEAD(&ms->descs);
-> +}
-> +
-> +static int cpuhp_setup_cb(uint cpu)
-> +{
-> +	irq_moderation_percpu_init(NULL);
-> +	return 0;
-> +}
-> +
-> +static void clamp_parameter(uint *dst, uint val)
-> +{
-> +	struct param_names *n = param_names;
-> +	uint i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(param_names); i++, n++) {
-> +		if (dst == n->val) {
-> +			*dst = clamp(val, n->min, n->max);
-> +			return;
-> +		}
-> +	}
-> +}
-> +
-> +static int __init init_irq_moderation(void)
-> +{
-> +	uint *cur;
-> +
-> +	on_each_cpu(irq_moderation_percpu_init, NULL, 1);
+>
+> >
+> > +static int __init init_irq_moderation(void)
+> > +{
+> > +     uint *cur;
+> > +
+> > +     on_each_cpu(irq_moderation_percpu_init, NULL, 1);
+>
+> That's pointless. Register the hotplug callback without 'nocalls' and
+> let the hotplug code handle it.
 
-That's pointless. Register the hotplug callback without 'nocalls' and
-let the hotplug code handle it.
+Sounds good. I have a question on event ordering.
+Which event should I use to make sure the callback runs
+before interrupts are enabled on the new CPU ?
 
-> +	cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN, "moderation:online", cpuhp_setup_cb, NULL);
+> > ...
+> I asked you last time already to follow the TIP tree documentation, no?
+>
+> > +     uint target_irq_rate;
+> > +     uint hardirq_percent;
+> > +     uint timer_rounds;
+> > +     uint update_ms;
+> > +     uint scale_cpus;
+> > +     uint count_timer_calls;
+> > +     uint count_msi_calls;
+> > +     uint decay_factor;
+> > +     uint grow_factor;
+> > +     uint pad[];
+> > +};
+>
+> And again you decided to add these fat data structures all in once with
+> no usage. I told you last time that this is unreviewable and that stuff
+> should be introduced gradually with the usage.
 
-> +#ifdef CONFIG_IRQ_SOFT_MODERATION
-> +
-> +/**
-> + * struct irq_mod_info - global configuration parameters and state
-> + * @total_intrs:	running count updated every update_ms
-> + * @total_cpus:		as above, active CPUs in this interval
-> + * @procfs_write_ns:	last write to /proc/irq/soft_moderation
-> + * @delay_us:		fixed delay, or maximum for adaptive
-> + * @target_irq_rate:	target maximum interrupt rate
-> + * @hardirq_percent:	target maximum hardirq percentage
-> + * @timer_rounds:	how many timer polls once moderation fires
-> + * @update_ms:		how often to update delay/rate/fraction
-> + * @scale_cpus:		(percent) scale factor to estimate active CPUs
-> + * @count_timer_calls:	count timer calls for irq limits
-> + * @count_msi_calls:	count calls from posted_msi for irq limits
-> + * @decay_factor:	smoothing factor for the control loop, keep at 16
-> + * @grow_factor:	smoothing factor for the control loop, keep it at 8
-> + */
-> +struct irq_mod_info {
-> +	/* These fields are written to by all CPUs */
-> +	____cacheline_aligned
-> +	atomic_long_t total_intrs;
-> +	atomic_long_t total_cpus;
-> +
-> +	/* These are mostly read (frequently), so use a different cacheline */
-> +	____cacheline_aligned
-> +	u64 procfs_write_ns;
-> +	uint delay_us;
+Ok, will do.
+FWIW my goal was to get the telemetry functions in the first patch, and red=
+uce
+the clutter in subsequent patches, since each new field would create many
+chunks (docstring, struct field, init, print format and value).
 
-I asked you last time already to follow the TIP tree documentation, no?
-
-> +	uint target_irq_rate;
-> +	uint hardirq_percent;
-> +	uint timer_rounds;
-> +	uint update_ms;
-> +	uint scale_cpus;
-> +	uint count_timer_calls;
-> +	uint count_msi_calls;
-> +	uint decay_factor;
-> +	uint grow_factor;
-> +	uint pad[];
-> +};
-
-And again you decided to add these fat data structures all in once with
-no usage. I told you last time that this is unreviewable and that stuff
-should be introduced gradually with the usage.
-
-Feel free to ignore my feedback, but don't be upset if I ignore your
-patches then.
-
-Thanks,
-
-        tglx
+cheers
+luigi
 
