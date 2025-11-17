@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-14829-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14830-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03F6EC639CA
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 11:48:44 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28B2EC639D9
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 11:49:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E3BB84E18DD
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 10:48:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 096BE4E1AB9
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 10:49:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A7127F727;
-	Mon, 17 Nov 2025 10:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F262F7478;
+	Mon, 17 Nov 2025 10:49:13 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5065B242D97;
-	Mon, 17 Nov 2025 10:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D37257435;
+	Mon, 17 Nov 2025 10:49:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763376518; cv=none; b=qfAlC5Wg0DLv04oPr2QX/WFkAe3BNT6+yiOeJzZP+7vwy72nnRM7xibrEx4mVe9wgCp8tUPTsVRO2Rx6Ab+cfcNT7GzeWoNFl+kqyOcY1U3n9tIWabU5BEworyOoWHh7ALVwX7+lAuBh9SOLyzUIWvxGWvR3WrCZrPlFm4cN6fE=
+	t=1763376553; cv=none; b=DJ9HXAr4jsjgpw6BlIS9jYvU11XjIzpADCkCa1WasRKkUmZNDyUzHl9Il25Y7XtfzjbMgUYDwGDgTkARfFlpCDp/o8BhNSt4X4YPG9sFcLHmp+hzM2TTf6Ry5Cu3tUBuz3aLPL4P2JDOSCj6muLxz9F9DVi+fXnLjJNNA+ppgXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763376518; c=relaxed/simple;
-	bh=Qn27wh1TpCW1OCZ75v1EoF4DvGlEFHwbBWfMQGsCc6s=;
+	s=arc-20240116; t=1763376553; c=relaxed/simple;
+	bh=RzoE+z4WZtEst8a0TLTBQRiw3A4tvs5r2oyQpJBjHaQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G5jqzd7o+xy/XTvdervSHxJ884+EdaiTYPPv2ONv3vJgWOouAaH2+uLp3xmSzWnWuAzEuw5CAHh1cW0T9MP4f6O5YT346sCdtPohsbL9WMyTWJRlrdhCylWsbMwNNzhiiPUTucu78EKlAjwNoX1sFiqYwf3hZMYMWOlNX5+M560=
+	 MIME-Version:Content-Type; b=UpU/2XPs4EoMpubOieHmtbsfFvrL4j+WsR305/nJK9VltDJuzQ0kETy56KTRB4jnGF+LHy74JzNIh8OdbAli3ZZfBNdOgeOh3JINZTf1DAtdTsmDYh8HauONViJ8Nm7uWaMoBvLQtKxrxh+4/Y24A4Gsvt/6lwecBuoveNk9Ac8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4d94GF3pJgzHnHDn;
-	Mon, 17 Nov 2025 18:48:05 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4d94Gd1S7BzJ46tC;
+	Mon, 17 Nov 2025 18:48:25 +0800 (CST)
 Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3677B140159;
-	Mon, 17 Nov 2025 18:48:34 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id A6B1D14038F;
+	Mon, 17 Nov 2025 18:49:05 +0800 (CST)
 Received: from SecurePC-101-06.huawei.com (10.122.19.247) by
  dubpeml100005.china.huawei.com (7.214.146.113) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.36; Mon, 17 Nov 2025 10:48:32 +0000
+ 15.2.1544.36; Mon, 17 Nov 2025 10:49:04 +0000
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Conor Dooley <conor@kernel.org>, Catalin Marinas
 	<catalin.marinas@arm.com>, <linux-cxl@vger.kernel.org>,
@@ -56,9 +56,9 @@ CC: <james.morse@arm.com>, Will Deacon <will@kernel.org>, Davidlohr Bueso
 	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski
 	<luto@kernel.org>, Dave Jiang <dave.jiang@intel.com>
-Subject: [PATCH v6 1/7] memregion: Drop unused IORES_DESC_* parameter from cpu_cache_invalidate_memregion()
-Date: Mon, 17 Nov 2025 10:47:54 +0000
-Message-ID: <20251117104800.2041329-2-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v6 2/7] memregion: Support fine grained invalidate by cpu_cache_invalidate_memregion()
+Date: Mon, 17 Nov 2025 10:47:55 +0000
+Message-ID: <20251117104800.2041329-3-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20251117104800.2041329-1-Jonathan.Cameron@huawei.com>
 References: <20251117104800.2041329-1-Jonathan.Cameron@huawei.com>
@@ -73,118 +73,134 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
  dubpeml100005.china.huawei.com (7.214.146.113)
 
-The res_desc parameter was originally introduced for documentation purposes
-and with the idea that with HDM-DB CXL invalidation could be triggered from
-the device. That has not come to pass and the continued existence of the
-option is confusing when we add a range in the following patch which might
-not be a strict subset of the res_desc. So avoid that confusion by dropping
-the parameter.
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-Link: https://lore.kernel.org/linux-mm/686eedb25ed02_24471002e@dwillia2-xfh.jf.intel.com.notmuch/
+Extend cpu_cache_invalidate_memregion() to support invalidating a
+particular range of memory by introducing start and length parameters.
+Control of types of invalidation is left for when use cases turn up. For
+now everything is Clean and Invalidate.
+
+Where the range is unknown, use the provided cpu_cache_invalidate_all()
+helper to act as documentation of intent in a fashion that is clearer than
+passing (0, -1) to cpu_cache_invalidate_memregion().
+
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Acked-by: Davidlohr Bueso <dave@stgolabs.net>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 ---
-v6: No change.
-v5: No change.
-v4: Dan's tag (thanks!)
-V3: New patch.
-    As Dan calls out in the linked mail, an alternative might be to lookup
-    the ranges and enforce the descriptor but his expressed preference
-    was for dropping the parameter.
+v6: No change
+v5: Tiny tweaks to patch description for readability.
+v4: Add cpu_cache_invalidate_all() helper for the (0, -1) case that
+    applies when we don't have the invalidate range so just want to
+    invalidate all caches. - (Thanks to Dan Williams for this suggestion).
+v3: Rebase on top of previous patch that removed the IO_RESDESC_*
+    parameter.
 ---
- arch/x86/mm/pat/set_memory.c | 2 +-
- drivers/cxl/core/region.c    | 2 +-
- drivers/nvdimm/region.c      | 2 +-
- drivers/nvdimm/region_devs.c | 2 +-
- include/linux/memregion.h    | 7 +++----
- 5 files changed, 7 insertions(+), 8 deletions(-)
+ arch/x86/mm/pat/set_memory.c |  2 +-
+ drivers/cxl/core/region.c    |  5 ++++-
+ drivers/nvdimm/region.c      |  2 +-
+ drivers/nvdimm/region_devs.c |  2 +-
+ include/linux/memregion.h    | 13 +++++++++++--
+ 5 files changed, 18 insertions(+), 6 deletions(-)
 
 diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index d2d54b8c4dbb..0cfee2544ad4 100644
+index 0cfee2544ad4..05e7704f0128 100644
 --- a/arch/x86/mm/pat/set_memory.c
 +++ b/arch/x86/mm/pat/set_memory.c
 @@ -368,7 +368,7 @@ bool cpu_cache_has_invalidate_memregion(void)
  }
  EXPORT_SYMBOL_NS_GPL(cpu_cache_has_invalidate_memregion, "DEVMEM");
  
--int cpu_cache_invalidate_memregion(int res_desc)
-+int cpu_cache_invalidate_memregion(void)
+-int cpu_cache_invalidate_memregion(void)
++int cpu_cache_invalidate_memregion(phys_addr_t start, size_t len)
  {
  	if (WARN_ON_ONCE(!cpu_cache_has_invalidate_memregion()))
  		return -ENXIO;
 diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-index e14c1d305b22..36489cb086f3 100644
+index 36489cb086f3..7d0f6f07352f 100644
 --- a/drivers/cxl/core/region.c
 +++ b/drivers/cxl/core/region.c
-@@ -236,7 +236,7 @@ static int cxl_region_invalidate_memregion(struct cxl_region *cxlr)
+@@ -236,7 +236,10 @@ static int cxl_region_invalidate_memregion(struct cxl_region *cxlr)
  		return -ENXIO;
  	}
  
--	cpu_cache_invalidate_memregion(IORES_DESC_CXL);
-+	cpu_cache_invalidate_memregion();
+-	cpu_cache_invalidate_memregion();
++	if (!cxlr->params.res)
++		return -ENXIO;
++	cpu_cache_invalidate_memregion(cxlr->params.res->start,
++				       resource_size(cxlr->params.res));
  	return 0;
  }
  
 diff --git a/drivers/nvdimm/region.c b/drivers/nvdimm/region.c
-index cd9b52040d7b..47e263ecedf7 100644
+index 47e263ecedf7..53567f3ed427 100644
 --- a/drivers/nvdimm/region.c
 +++ b/drivers/nvdimm/region.c
 @@ -110,7 +110,7 @@ static void nd_region_remove(struct device *dev)
  	 * here is ok.
  	 */
  	if (cpu_cache_has_invalidate_memregion())
--		cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
-+		cpu_cache_invalidate_memregion();
+-		cpu_cache_invalidate_memregion();
++		cpu_cache_invalidate_all();
  }
  
  static int child_notify(struct device *dev, void *data)
 diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
-index a5ceaf5db595..c375b11aea6d 100644
+index c375b11aea6d..1220530a23b6 100644
 --- a/drivers/nvdimm/region_devs.c
 +++ b/drivers/nvdimm/region_devs.c
 @@ -90,7 +90,7 @@ static int nd_region_invalidate_memregion(struct nd_region *nd_region)
  		}
  	}
  
--	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
-+	cpu_cache_invalidate_memregion();
+-	cpu_cache_invalidate_memregion();
++	cpu_cache_invalidate_all();
  out:
  	for (i = 0; i < nd_region->ndr_mappings; i++) {
  		struct nd_mapping *nd_mapping = &nd_region->mapping[i];
 diff --git a/include/linux/memregion.h b/include/linux/memregion.h
-index c01321467789..945646bde825 100644
+index 945646bde825..a55f62cc5266 100644
 --- a/include/linux/memregion.h
 +++ b/include/linux/memregion.h
-@@ -26,8 +26,7 @@ static inline void memregion_free(int id)
- 
+@@ -27,6 +27,9 @@ static inline void memregion_free(int id)
  /**
   * cpu_cache_invalidate_memregion - drop any CPU cached data for
-- *     memregions described by @res_desc
-- * @res_desc: one of the IORES_DESC_* types
-+ *     memregion
+  *     memregion
++ * @start: start physical address of the target memory region.
++ * @len: length of the target memory region. -1 for all the regions of
++ *       the target type.
   *
   * Perform cache maintenance after a memory event / operation that
   * changes the contents of physical memory in a cache-incoherent manner.
-@@ -46,7 +45,7 @@ static inline void memregion_free(int id)
+@@ -45,7 +48,7 @@ static inline void memregion_free(int id)
   * the cache maintenance.
   */
  #ifdef CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
--int cpu_cache_invalidate_memregion(int res_desc);
-+int cpu_cache_invalidate_memregion(void);
+-int cpu_cache_invalidate_memregion(void);
++int cpu_cache_invalidate_memregion(phys_addr_t start, size_t len);
  bool cpu_cache_has_invalidate_memregion(void);
  #else
  static inline bool cpu_cache_has_invalidate_memregion(void)
-@@ -54,7 +53,7 @@ static inline bool cpu_cache_has_invalidate_memregion(void)
+@@ -53,10 +56,16 @@ static inline bool cpu_cache_has_invalidate_memregion(void)
  	return false;
  }
  
--static inline int cpu_cache_invalidate_memregion(int res_desc)
-+static inline int cpu_cache_invalidate_memregion(void)
+-static inline int cpu_cache_invalidate_memregion(void)
++static inline int cpu_cache_invalidate_memregion(phys_addr_t start, size_t len)
  {
  	WARN_ON_ONCE("CPU cache invalidation required");
  	return -ENXIO;
+ }
+ #endif
++
++static inline int cpu_cache_invalidate_all(void)
++{
++	return cpu_cache_invalidate_memregion(0, -1);
++}
++
+ #endif /* _MEMREGION_H_ */
 -- 
 2.48.1
 
