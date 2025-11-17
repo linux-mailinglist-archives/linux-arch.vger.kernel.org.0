@@ -1,176 +1,216 @@
-Return-Path: <linux-arch+bounces-14845-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14846-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C4B8C663DA
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 22:15:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69FA4C6647A
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 22:35:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0EA8A4E7B6A
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 21:15:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C4B57360988
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 21:35:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D1F2D0C63;
-	Mon, 17 Nov 2025 21:15:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F09E3254B8;
+	Mon, 17 Nov 2025 21:34:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kPljtp7B";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mV7SaHSJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X54UrvVd"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FBB299959;
-	Mon, 17 Nov 2025 21:14:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B582320CA8
+	for <linux-arch@vger.kernel.org>; Mon, 17 Nov 2025 21:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763414100; cv=none; b=cfMFVlxUKGv77UvUmZ1zwtViA0z+4b16xs6slnJcIDq/yIMVRqWakclQizvK2rU9owSFkWAhkqV0u6zljmr6fg6VxeEVxYehtyR2q5oIQpOf4gYz5xQPf9O8S29mogh2NIx1GFYwQ9ZH0+EfpPR+wteGD3UhcqQYxg5dSaACRIk=
+	t=1763415292; cv=none; b=jlInWg5f0+tmnKf5buqM0RSM9+FkGLioKTiZogMajpZvSrS1D62ArXsVF7k2khDvLQxkFJAFW5fEJDjWMn2GzcZEoghSHyZgFqOZBp8/kaEVfiKHRFqAiGyFFH3fnn8lf+biP6ItLKu2DxcorQyoA+0i+WNFHIpCCBdBG6tE780=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763414100; c=relaxed/simple;
-	bh=lX8wI6PQ/2D7rcjjkXgwvAXUE5/1D/Qqse9qSYErmr0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=IZKn0WhMExXZaICp0Jc7lEy2P64NVRx1arbGkpi299ERsmClUdn0OmGqVKrg2OgFCJU8okzadSgneAT8/RbogjFbE0B4GYhRPvPLqk3iqkXFu8IcUBAzDWLdyCj68hyt5lSV9fVyhBytAPw6fm0JQ2R/KVnp4odzHmMUtqeRpbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kPljtp7B; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mV7SaHSJ; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763414096;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZqSqZmb/QHBEB1yfgKv8nyzvBFCA2b0ocHfKwS4/9j0=;
-	b=kPljtp7Bo/1TLcxh7lHVJxhNwlWRqaos518VL52255LyCeZVmYiprCkhtgcvqNqbBUrVj2
-	H1AILC74yhL5o24gA3oNKowivwXO2Ai2y/recFeyg7BrYAoAKvBOmPu0lc1x4uHn+Ito7Z
-	BufM4aVpEA0cFtijqkq5TET2AN6z6irnzzJB7PkG1jlLr2aJ70paftSSPB+RbFoO0TN3pC
-	RVgyg8gnVVDsiVAvfaH1qBaZ8P2dz2FMrPqkYB/UQKj2reBU5Q9kspypcEkQNOtNNHfiuM
-	jbPEzlkTSPOX/2GUySqrjpYgijEcrOBnKPXv3bBOilHMpJ8zOApmDEZGL1uqzg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763414096;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZqSqZmb/QHBEB1yfgKv8nyzvBFCA2b0ocHfKwS4/9j0=;
-	b=mV7SaHSJ0MfZtcLdUSR1Uo/Rua+DQ7d/bf/tvrL9YVZlz/7RrNCs6PHGOqJRzachwx++B3
-	lDMN0mR6RfdAlhBw==
-To: Luigi Rizzo <lrizzo@google.com>, Marc Zyngier <maz@kernel.org>, Luigi
- Rizzo <rizzo.unipi@gmail.com>, Paolo Abeni <pabeni@redhat.com>, Andrew
- Morton <akpm@linux-foundation.org>, Sean Christopherson
- <seanjc@google.com>, Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, Bjorn Helgaas
- <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>, Luigi Rizzo
- <lrizzo@google.com>
-Subject: Re: [PATCH v2 5/8] x86/irq: soft_moderation: add support for
- posted_msi (intel)
-In-Reply-To: <20251116182839.939139-6-lrizzo@google.com>
-References: <20251116182839.939139-1-lrizzo@google.com>
- <20251116182839.939139-6-lrizzo@google.com>
-Date: Mon, 17 Nov 2025 22:14:56 +0100
-Message-ID: <87h5us744v.ffs@tglx>
+	s=arc-20240116; t=1763415292; c=relaxed/simple;
+	bh=YMjy/LNnaaMh7hFt6dbv4LTW8Qtd/6fDcchdaGKVQcg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hI5iNNVGz8gQUvwhtYZVSM3lvH4duNk/eUxVsKs5HLSy3GHn3w/fipgBwWCz8dWMKbde/NjkVWrdkSCfq53p3STCUa0XkWlP4i+xsA+XtLeiT33BpTf3T+FoOTyKP4QN6uzEFxGKH1o9RjteBqVI8u6qoXF8Gdd1yG7f2dLemE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X54UrvVd; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4edb8d6e98aso116361cf.0
+        for <linux-arch@vger.kernel.org>; Mon, 17 Nov 2025 13:34:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763415290; x=1764020090; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q8dLgGNlVdaAILft+FkrBT1VTzRi8vvFarbx0S6d5Hw=;
+        b=X54UrvVdVbCoXmnxC5FfbnXFqg1yFkYYpVvXJ80X3+ifnpE8Lj77jGWRZsaDR18Kp/
+         /qHCq6UXaILkDQbpKQbso9nVedNIje7B56jEKvmO6SfWuGLJLBxM5J/vKZptYpQgAjIL
+         oqSv3ioOg81OcRylSLLNATupQqvb6HnwdvsYz3CW/fSIYTNYhsm5XHNfssrrXifg5loi
+         bpCYr0g12DCwSWSakGxertkfHSNHkSN2GIhEMz/dMIDwvriy6ZKFWWt1FXsy3kOvpQyV
+         XlkVbzPtzUyaATCjwchDtiM2hnbgQZvvf8fCgKGIgTO7rJPefbib+mcBVcdHymFW8Rib
+         xM7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763415290; x=1764020090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q8dLgGNlVdaAILft+FkrBT1VTzRi8vvFarbx0S6d5Hw=;
+        b=KwV+mYiz2XNbEayxP4TvDMt9XltXEBChnaJ16jxVuMX1CFlPrrMxv1Uwy6aXsphyy0
+         o86iwL9vK1apFLOvH0CmTnnE7usfKa4gB6B3EAhSBZO+h1tFYzxHI3sE9arn/Om/nQPL
+         Ddp0JQXLMkcdXVxx+rMj+yyAgxvLb+g9DUXSY/A1DRxi/IXm7zFBarYAtYacvgfzmDVV
+         4kenKk1UVhm4Gmh+423F0VY4tAd0itLqLz4WTTSJEOnyA5CTEV3TeF0CmkGbWa8krhql
+         qLAkdaUOXFAImIOc2JEjqCdTyS+1LcYDThsRgO+l27coIygtKU3I45+8p7FZSBhzAyCd
+         rLmA==
+X-Forwarded-Encrypted: i=1; AJvYcCVscafSFAWnms5OgF164atFrGgIusaNEBysfwq9jnRnz8KWbY+a/41w8GavWQ8/O03Xse9JYWtv8NqH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx05v/p/n8gpqSUuAymEtuQDKcHt1zYc2xVVwO2PPSEoQle6Zy3
+	XJc3yO2NlF4JVWxsHQLyIStWDwlUQNRbwCLiQ66lGvcJr+zCU+ItPxLRfFsghiX9kLAT3qzDA+L
+	phNJwAKga/6zCZY8PoJ1U/nm5hYZuUVvRK3O+RSc/
+X-Gm-Gg: ASbGncvyTZCqZFhoVC9PEaXSTQD5Cp2RMF5hwHWchqCvGtlVEu/gtJNXvL1Rn2krFj0
+	HNyNMSVOyEOmD2zdBTGS/MfYjqZSpV6xY9+5ILRSISZfYAV6rreKkgxMHDwNBzAO71zBKl1NVRf
+	ZHDGpE6s9ky5Qzhc0EvaOV/Y7YeXgtaWqqOevfzz3Drg4FOtH7BgIqaQKeR7/2k2wczPDdHudmU
+	W+0LN1Z/02TfN9oGHjhwzANi6luvkRP6D10P1F3yNbakvdhS1ffmYguO2AG2EbDKEBn5u0=
+X-Google-Smtp-Source: AGHT+IFDTGy6j3oXuB0qDi3ryI2JJHRn57qRxE4nv/hZjBg3wkBN4JE2kcIGeFqkPEAK2S3qQMRWfPn6wXw3mCfgt/Q=
+X-Received: by 2002:ac8:5fcb:0:b0:4ed:9612:3fab with SMTP id
+ d75a77b69052e-4ee3149a03bmr1166741cf.12.1763415289536; Mon, 17 Nov 2025
+ 13:34:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20251116182839.939139-1-lrizzo@google.com> <20251116182839.939139-5-lrizzo@google.com>
+ <87jyzo757y.ffs@tglx>
+In-Reply-To: <87jyzo757y.ffs@tglx>
+From: Luigi Rizzo <lrizzo@google.com>
+Date: Mon, 17 Nov 2025 22:34:13 +0100
+X-Gm-Features: AWmQ_bkWF4JAIdvkMhMYd5tM-xWu49NMclZrqB0tbRXhbSJ952ws1Zwji4sP0Zg
+Message-ID: <CAMOZA0KKJ9S45-LnLtYKn-L8dL71tsfs29c6ZL3bkuTcNXorAw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] genirq: soft_moderation: implement adaptive moderation
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Sean Christopherson <seanjc@google.com>, Jacob Pan <jacob.jun.pan@linux.intel.com>, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Bjorn Helgaas <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 16 2025 at 18:28, Luigi Rizzo wrote:
-> On recent Intel CPUs, kernels compiled with CONFIG_X86_POSTED_MSI=y,
-> and the boot option "intremap=posted_msi", all MSI interrupts
-> that hit a CPU issue a single POSTED_MSI interrupt processed by
-> sysvec_posted_msi_notification() instead of having separate interrupts.
+On Mon, Nov 17, 2025 at 9:51=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
 >
-> This change adds soft moderation hooks to the above handler.
-
-'This change' is not any better than 'This patch'.
-
-> Soft moderation on posted_msi does not require per-source enable,
-> irq_moderation.delay_us > 0 suffices.
+> On Sun, Nov 16 2025 at 18:28, Luigi Rizzo wrote:
+> > Add two control parameters (target_irq_rate and hardirq_percent)
+> > to indicate the desired maximum values for these two metrics.
+> >
+> > Every update_ms the hook in handle_irq_event() recomputes the total and
+> > local interrupt rate and the amount of time spent in hardirq, compares
+> > the values with the targets, and adjusts the moderation delay up or dow=
+n.
+> >
+> > The interrupt rate is computed in a scalable way by counting interrupts
+> > per-CPU, and aggregating the value in a global variable only every
+> > update_ms. Only CPUs that actively process interrupts are actually
+> > accessing the shared variable, so the system scales well even on very
+> > large servers.
 >
-> To test it, run a kernel with the above options and enable moderation by
-> setting delay_us > 0.  The column "from_msi" in /proc/irq/soft_moderation
-> will show a non-zero value.
+> You still fail to explain why this is required and why a per CPU
+> moderation is not sufficient and what the benefits of the approach are.
 
-Impressive. But it would be more impressive and useful to actualy have
-an explanation why this is required and what the benefits are.
+It was explained in the first patch of the series and in Documentation/.
 
->  CFLAGS_head32.o := -fno-stack-protector
->  CFLAGS_head64.o := -fno-stack-protector
-> -CFLAGS_irq.o := -I $(src)/../include/asm/trace
-> +CFLAGS_irq.o := -I $(src)/../include/asm/trace -I $(srctree)/kernel/irq
+(First world problem, for sure: I have examples for AMD, Intel, Arm,
+all of them with 100+ CPUs per numa node, and 160-480 CPUs total)
+On some of the above platforms, MSIx interrupts cause heavy serialization
+of all other PCIe requests. As a result, when the total interrupt rate exce=
+eds
+1-2M intrs/s, I/O throughput degrades by up to 4x and more.
 
-Not going to happen. Architecture code has no business to tap into
-generic core infrastructure.
+To deal with this with per CPU moderation, without shared state, each CPU
+cannot allow more than some 5Kintrs/s, which means fixed moderation
+should be set at 200us, and adaptive moderation should jump to such
+delays as soon as the local rate reaches 5K intrs/s.
 
-> --- a/kernel/irq/irq_moderation.c
-> +++ b/kernel/irq/irq_moderation.c
-> @@ -11,6 +11,13 @@
->  #include "internals.h"
->  #include "irq_moderation.h"
+In reality, it is very unlikely that all CPUs are actively handling such hi=
+gh
+rates, so if we know better, we can adjust or remove moderation individuall=
+y,
+based on actual local and total interrupt rates and number of active CPUs.
 
->  
-> +#ifdef CONFIG_X86
+The purpose of this global mechanism is to figure out whether we are
+approaching a dangerous rate, and do individual tuning.
 
-Architecture specific muck has absolutely no place in generic code.
+> > +     /* Compare with global and per-CPU targets. */
+> > +     global_rate_high =3D irq_rate > target_rate;
+> > +     my_rate_high =3D my_irq_rate * active_cpus * irq_mod_info.scale_c=
+pus > target_rate * 100;
+> > [...]
+> > +     /* Moderate on this CPU only if both global and local rates are h=
+igh. */
+>
+> Because it's desired that CPUs can be starved by interrupts when enough
+> other CPUs only have a very low rate? I'm failing to understand that
+> logic and the comprehensive rationale in the change log does not help eit=
+her.
 
-> +#include <asm/apic.h>
-> +#include <asm/irq_remapping.h>
-> +#else
-> +static inline bool posted_msi_supported(void) { return false; }
-> +#endif
-> +
->  /*
->   * Platform-wide software interrupt moderation.
->   *
-> @@ -32,6 +39,10 @@
->   *   moderation on that CPU/irq. If so, calls disable_irq_nosync() and starts
->   *   an hrtimer with appropriate delay.
->   *
-> + * - Intel only: using "intremap=posted_msi", all the above is done in
-> + *   sysvec_posted_msi_notification(). In this case all host device interrupts
-> + *   are subject to moderation.
-> + *
->   * - the timer callback calls enable_irq() for all disabled interrupts on that
->   *   CPU. That in turn will generate interrupts if there are pending events.
->   *
-> @@ -230,6 +241,17 @@ static enum hrtimer_restart timer_cb(struct hrtimer *timer)
->  
->  	ms->rounds_left--;
->  
-> +#ifdef CONFIG_X86_POSTED_MSI
-> +	if (ms->kick_posted_msi) {
-> +		if (ms->rounds_left == 0)
-> +			ms->kick_posted_msi = false;
-> +		/* Next call will be from timer, count it conditionally. */
-> +		ms->dont_count = !irq_mod_info.count_timer_calls;
+The comment could be worded better, s/moderate/bump delay up/
 
-TBH, this is one of the worst hacks I've seen in a long time. It's
-admittedly creative, but that's unmaintainable and the worst precedent
-to open the flood gates for random architecture hacks in generic core
-code.
+The mechanism aims to make total_rate < target, by gently kicking
+individual delays up or down based on the condition
+ total_rate > target && local_rate > target / active_cpus ? bump_up()
+: bump_down()
 
-If you want this to work for that posted MSI muck, then this needs
-proper integration of those posted vectors into the interrupt core and a
-sane mechanism to do the accounting.
+If the control is effective, the total rate will be within bound and
+nobody suffers,
+neither the CPUs handing <1K intr/s, nor the lonely CPU handling 100K+ intr=
+/s
 
-> @@ -476,6 +500,18 @@ static ssize_t mode_write(struct file *f, const char __user *buf, size_t count,
->  	ret = kstrtobool(cmd, &enable);
->  	if (!ret)
->  		ret = set_moderation_mode(desc, enable);
-> +	if (ret) {
-> +		/* extra helpers for prodkernel */
-> +		if (cmd[count - 1] == '\n')
-> +			cmd[count - 1] = '\0';
-> +		ret = 0;
-> +		if (!strcmp(cmd, "managed"))
-> +			irqd_set(&desc->irq_data, IRQD_AFFINITY_MANAGED);
-> +		else if (!strcmp(cmd, "unmanaged"))
-> +			irqd_clear(&desc->irq_data, IRQD_AFFINITY_MANAGED);
+If suddenly the rates go up, the CPUs with higher rates will be moderated m=
+ore,
+hopefully converging to a new equilibrium.
+As any control system it has limits on what it can do.
 
-What the heck? Can you spare me the exposure to random google internal
-garbage? My eyes are bleeding already enough.
+> > [...]
+> > +     if (target_rate > 0 && irqrate_high(ms, delta_time, target_rate, =
+steps))
+> > +             below_target =3D false;
+> > +
+> > +     if (hardirq_percent > 0 && hardirq_high(ms, delta_time, hardirq_p=
+ercent))
+> > +             below_target =3D false;
+>
+> So that rate limits a per CPU overload, but only when IRQTIME accounting
+> is enabled. Oh well...
 
-Thanks,
+I can add checks to disallow setting the per-CPU overload when IRQTIME
+accounting is not present.
 
-        tglx
+>
+> > +     /* Controller: adjust delay with exponential decay/grow. */
+> > +     if (below_target) {
+> > +             ms->mod_ns -=3D ms->mod_ns * steps / (steps + irq_mod_inf=
+o.decay_factor);
+> > +             if (ms->mod_ns < 100)
+> > +                     ms->mod_ns =3D 0;
+>
+> These random numbers used to limit things are truly interresting and
+> easy to understand - NOT.
+>
+> > +     } else {
+> > +             /* Exponential grow does not restart if value is too smal=
+l. */
+> > +             if (ms->mod_ns < 500)
+> > +                     ms->mod_ns =3D 500;
+> > +             ms->mod_ns +=3D ms->mod_ns * steps / (steps + irq_mod_inf=
+o.grow_factor);
+> > +             if (ms->mod_ns > ms->delay_ns)
+> > +                     ms->mod_ns =3D ms->delay_ns;
+> > +     }
+>
+> Why does this need separate grow and decay factors? Just because more
+> knobs are better?
+
+Like in TCP, brake aggressively (grow factor is smaller) to respond
+quickly to overload,
+and accelerate prudently (decay factor is higher) to avoid reacting
+too optimistically.
+
+thanks again for the attention
+luigi
 
