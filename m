@@ -1,162 +1,193 @@
-Return-Path: <linux-arch+bounces-14856-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14857-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6F4DC68BED
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 11:14:55 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98458C69100
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 12:28:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 885EF38159E
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 10:12:00 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id A82132AABB
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 11:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA613396E8;
-	Tue, 18 Nov 2025 10:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UyPXQS0x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B39E34B43D;
+	Tue, 18 Nov 2025 11:27:57 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6743C3385A3
-	for <linux-arch@vger.kernel.org>; Tue, 18 Nov 2025 10:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA252F12D6;
+	Tue, 18 Nov 2025 11:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763460595; cv=none; b=MacgqoNX8jlqaJoF7frvAeyOwau0V6MwyIY/fLRY6bFVb1rlpF6d4yeGhwCJPzCFxb6T6qZ94THDzFmiWiY2g8QV/Op2MSjkLhqsF8BCIJ60W9hEdyc5tzNKPqBcZ9CzUoZp3y4TBVuk0lCrCcz0JPrAKNqwolOpxY90u9vGuyY=
+	t=1763465277; cv=none; b=eTnennDjBpYfrB3Bpo9Q0prSnue/Y6nzwMbV0BlzaTOZW1r5KatiwV4H/CsD2wPkdl5h6amBZnhlw1/MA7RwriNuSyKJvvB2ymbjzn3aZEesx6WOy2QVpc8BtYwVQJSdmiiFcZ+eJ1AtfjtQpC+OkS1siSihACUgJMIPVgxEUSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763460595; c=relaxed/simple;
-	bh=6aYYtVk0AwG+U0C+LbbNYj8knJWfMEhL5BUXdj7Wg1c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dto3bR442uuI5gtWC93kULA2pb9sxtJIRpKsCSaeQIauNxr+tFwvSBr3VAALcRjfwjcFFG0WSzascXDuh5Lk54Hd3CW8IK9DXZP1aSt60J23fbCpZcMhozyo0AZUPGnndQaGT8ibPiyuxQO/8Hxrg54cNjsksBjUH0R9f/3uHYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UyPXQS0x; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4edb8d6e98aso301441cf.0
-        for <linux-arch@vger.kernel.org>; Tue, 18 Nov 2025 02:09:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763460587; x=1764065387; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jdVIJoJksBNtx82CwJsTIKGgLDWjttcNd4eq6E2u+m4=;
-        b=UyPXQS0xLGs41uvX6G7+J3grk6oGHQ8lL62POhV+jbnWAYgDgbSXGHKgCMNpFCDCoo
-         sc0WoIbEYLujlvbcjidHA0eA4ryRI/aB7vuJXRpkD9K4ahhKAUsfXCAF2EsKzzTOSA1F
-         zgYso5bHnQF8f8mZ8ksfydzYFZZ+bvN2t4PPaPuFKSFPzFk/qgw4eWShQceNMt5dDzVe
-         YX9vjO9QM8OTt9/PI0TW9C8qB8ChIou87szaAElnv6+u3DJy77bF3UlWTEuP1/RXT4yz
-         qwcpwnMntziOMy8YHGL4+sDoO/34C/f53VKqT+8JxKLm7BGnaGvMcBjR57Qrdj0FJgGl
-         cR1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763460587; x=1764065387;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jdVIJoJksBNtx82CwJsTIKGgLDWjttcNd4eq6E2u+m4=;
-        b=AbMRLJR1kRj1Jbbnd5wgGFsd3lB5ttECGOqJiZSr6F0qf9SKIRGakkW8rA3GbeAw5Y
-         +4ayNMpu9q/OduqWLmyO8CTgudBSMJpl7AqNmgAUcuHJc7aevoBcw5tkpkM5Si3UHc8M
-         RaAccKji0OeiigNMwnkNDXa5ng8JG3lgukLEkvCRom6Z3UbtZIxuqDVscEzIMmqb5Hv5
-         l1mol7t2uoD0yZVB5izTrSMYpNROQhrGKKorhoV7bEYo1WLIyNRoWeobCf1npmxGbU9k
-         VxD1jy4DpwMovYdwchfjUGNbLI7Jn9DfhzmPHHINpH3XxM+SeAudNDGdmG2oiAWlXgJw
-         c0og==
-X-Forwarded-Encrypted: i=1; AJvYcCW+CVELdtbtwkQTxLa/2YRws57L635VZmhCEUS+UckyjQyNiTugj6ckyiUrShTJfiAIr8YHD9C4OOTU@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRcAIcmbib2YIZuB6CxBDZGNPSJ35udO+7jziZHmt5g5X0uV+c
-	4MR5Uph1Uf8LdQD1cDHrLQCyeYKBGfCMaZbKSlCuFGYi8SsoteuG8EQRAgIjRqFa3usDnu/Wb5e
-	YRfuILX/bkR2pZ24uKidFhX06YGeUABXBlfNAB+SU
-X-Gm-Gg: ASbGnctRtbfxEntK4F3s2tv5kiAPG3Qq3jUq4tdKLA8BQfDlAXxbeus8krw3SHFWYT5
-	k+JnkPexfeVwhLuobX+mF9161eTBpSoKrVUErmGXW+lQ1sdW8innRBhPacwMlz5mPJkdKH/iCto
-	xl/Shj9CEkk3plpV7Yh5t2lBBOsVDv+WuFSxwZRmC0lqyfZT9oHxPVjvKOFEpl9/dXGe0PeEXWj
-	9+gn3bZJbYprHfXnp1Vt7zuideryXhp2MnCEDX/VpyIyYAyuDkFE8J5DgMUZEpXHyJfPoSeLsTc
-	5fthCtB97XhMo9eGrw==
-X-Google-Smtp-Source: AGHT+IF8z5/L3DrHAYvRjbH0egclvlq6/dEoM7udbJlegMIWnZkaqrPLpmLwKxIKXM/v3JGjQoCyWgoT353bbLLMs7U=
-X-Received: by 2002:a05:622a:46c3:b0:4b7:9a9e:833f with SMTP id
- d75a77b69052e-4ee3a53c32amr377751cf.7.1763460586697; Tue, 18 Nov 2025
- 02:09:46 -0800 (PST)
+	s=arc-20240116; t=1763465277; c=relaxed/simple;
+	bh=PzC3f4GQwBO9nPr6IhO+01gQ4P7tutZWxJlje+gBQOE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uJwM+jorqTxy2YIUbaxfdwtw2CQChAuOajg+XjXWFyN9syaPv8OdslRsLP6RyC5ueUTdfQPlGZNufB9vgs/Xpycr63f+1hSxZOlC0rEWn6rZOfKN3HI3skSkYqFEHuGFKOH7bk7SIccEKNdYLLZ2ycf/JCWBQwt7d9HzOr32UiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F74C2BC86;
+	Tue, 18 Nov 2025 11:27:52 +0000 (UTC)
+From: Huacai Chen <chenhuacai@loongson.cn>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev,
+	linux-arch@vger.kernel.org,
+	Xuefeng Li <lixuefeng@loongson.cn>,
+	Guo Ren <guoren@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-kernel@vger.kernel.org,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Yawei Li <liyawei@loongson.cn>
+Subject: [PATCH V2 00/14] LoongArch: Add basic LoongArch32 support
+Date: Tue, 18 Nov 2025 19:27:14 +0800
+Message-ID: <20251118112728.571869-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251116182839.939139-1-lrizzo@google.com> <20251116182839.939139-4-lrizzo@google.com>
- <87seec78yf.ffs@tglx> <87bjl06yij.ffs@tglx> <CAMOZA0+rA-ys1JSb=GxpPEFS7W8TJGz23gSuUWi0Kv7TX2FfSg@mail.gmail.com>
- <878qg37n8p.ffs@tglx>
-In-Reply-To: <878qg37n8p.ffs@tglx>
-From: Luigi Rizzo <lrizzo@google.com>
-Date: Tue, 18 Nov 2025 11:09:10 +0100
-X-Gm-Features: AWmQ_bnnHGfm_IOznD1e9NqNlMmK3z5x1yaHDKjB0iIRJ4Ix7tKIHQAIJ07xBpU
-Message-ID: <CAMOZA0+K73YbPqq_vTS2sMkbV-0Fh5GSCt3ABfReV3DYk1CO2g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] genirq: soft_moderation: implement fixed moderation
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Sean Christopherson <seanjc@google.com>, Jacob Pan <jacob.jun.pan@linux.intel.com>, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Bjorn Helgaas <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 18, 2025 at 9:34=E2=80=AFAM Thomas Gleixner <tglx@linutronix.de=
-> wrote:
->
-> On Tue, Nov 18 2025 at 00:59, Luigi Rizzo wrote:
-> > On Tue, Nov 18, 2025 at 12:16=E2=80=AFAM Thomas Gleixner <tglx@linutron=
-ix.de> wrote:
-> >> There are a couple of other fundamental questions to answer upfront:
-> >>
-> >>    1) Is this throttle everything on a CPU the proper approach?
-> >>
-> >>       To me this does not make sense. The CPU hogging network adapter =
-or
-> >>       disk drive has no business to delay low frequency interrupts,
-> >>       which might be important, just because.
-> >
-> > while there is some shared fate, a low frequency source (with interrupt=
-s
-> > more than the adaptive_delay apart) on the same CPU as a high frequency
-> > source, will rarely if ever see any additional delay:
-> > the first interrupt from a source is always served right away,
-> > there is a high chance that the timer fires and the source
-> > is re-enabled before the next interrupt from the low frequency source.
->
-> I understand that from a practical point of view it might not make a real
-> difference, but when you look at it conceptually, then the interrupt
-> which causes the system to slow down is the one you want to switch over
-> into polling mode. All others are harmless as they do not contribute to
-> the overall problem in a significant enough way.
+LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+version (LA32S) and a 64-bit version (LA64). LoongArch32 use FDT as its
+boot protocol which is already supported in LoongArch64. LoongArch32's
+ILP32 ABI use the same calling convention as LoongArch64.
 
-(I appreciate the time you are dedicating to this thread)
+This patchset is adding basic LoongArch32 support in mainline kernel, it
+is the successor of Jiaxun Yang's previous work (V1):
+https://lore.kernel.org/loongarch/20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com/
 
-Fully agree. The tradeoff is that the rate accounting state
-(#interrupts in the last interval, a timestamp, mod_ns, sleep_ns)
-now would have to go into the irqdesc, and the extra layer
-of per-CPU aggregation is still needed to avoid hitting too often on
-the shared state.
+We can see a complete snapshot here:
+https://github.com/chenhuacai/linux/tree/loongarch-next
 
-I also want to reiterate that "polling mode" is not the core contribution
-of this patch series. There is limited polling only when timer_rounds>0,
-which is not what I envision to use, and will go away because
-as you showed it does not handle correctly the teardown path.
+Cross-compile tool chain to build kernel:
+https://github.com/sunhaiyong1978/Yongbao-Embedded/releases/download/0.13-2025.9.3/loongarch32-unknown-linux-gnu-gcc-0.13-20251105.x86_64.tar.xz
 
->  As a side effect of that approach the posted MSI integration then mostly
-> falls into place especially when combined with immediate masking.
-> Immediate masking is not a problem at all because in reality the high
-> frequency interrupt will be masked immediately on the next event (a few
-> microseconds later) anyway.
+A CLFS-based Linux distro (Yongbao):
+https://github.com/sunhaiyong1978/Yongbao-Embedded/releases/download/0.13-2025.9.3/loongarch32-Yongbao-Embedded-0.13-20251018-sysroot.tar.xz
 
-This again has pros and cons. The posted MSI feature
-helps only when there are N>1  high rate sources
-hitting the same CPU, and in that (real) case having to
-mask N sources one by one, rather than just not rearming
-the posted_msi interrupt, means an N-fold increase in
-the interrupt rate for a given moderation delay.
+Open-source tool chain which is under review (Also in maillist for upstream):
+https://github.com/cloudspurs/binutils-gdb/tree/la32/
+https://github.com/cloudspurs/gcc/tree/la32/
+https://github.com/cloudspurs/glibc/tree/la32/
 
-Note that even under load, actual moderation delays
-are typically as low as 20-40us, which are practically
-unnoticeable by low rate devices (moderation does
-not affect timers or system interrupts, and one
-has always the option to move the latency sensitive,
-low rate source to a different CPU where it would also
-benefit from the jitter induced by the heavy hitters).
+LA32 QEMU emulator (hardware is not as widely used as LA64):
+https://github.com/loongson-community/qemu/tree/la32-user-exp/
 
-cheers
-luigi
+Usage:
+1. Extract Yongbao to a virtual disk (la32.img);
+2. qemu-system-loongarch -kernel vmlinux -append "rw root=/dev/vda console=ttyS0,115200" \
+   -m 256M -cpu max32 -machine virt,accel=tcg -drive file=la32.img,format=raw,if=virtio -display none -serial stdio
+
+V1 -> V2:
+1, Rebased on 6.18-rc6;
+2, Port a full runnable kernel (except irqchip drivers);
+3, Remove controversial flush_icache syscall for now.
+
+Jiaxun Yang, Yawei Li and Huacai Chen(14):
+ LoongArch: Add atomic operations for 32BIT/64BIT;
+ LoongArch: Add adaptive CSR accessors for 32BIT/64BIT;
+ LoongArch: Adjust common macro definitions for 32BIT/64BIT;
+ LoongArch: Adjust boot & setup for 32BIT/64BIT;
+ LoongArch: Adjust memory management for 32BIT/64BIT;
+ LoongArch: Adjust process management for 32BIT/64BIT;
+ LoongArch: Adjust time routines for 32BIT/64BIT;
+ LoongArch: Adjust module loader for 32BIT/64BIT;
+ LoongArch: Adjust system call for 32BIT/64BIT;
+ LoongArch: Adjust user accessors for 32BIT/64BIT;
+ LoongArch: Adjust misc routines for 32BIT/64BIT;
+ LoongArch: Adjust VDSO/VSYSCALL for 32BIT/64BIT;
+ LoongArch: Adjust default config files for 32BIT/64BIT;
+ LoongArch: Adjust build infrastructure for 32BIT/64BIT.
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Yawei Li <liyawei@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/Kconfig                             |  115 +-
+ arch/loongarch/Makefile                            |   29 +-
+ arch/loongarch/boot/Makefile                       |    6 +
+ arch/loongarch/configs/loongson32_defconfig        | 1110 ++++++++++++++++++++
+ .../{loongson3_defconfig => loongson64_defconfig}  |    0
+ arch/loongarch/include/asm/Kbuild                  |    1 +
+ arch/loongarch/include/asm/addrspace.h             |   15 +-
+ arch/loongarch/include/asm/asm.h                   |   77 +-
+ arch/loongarch/include/asm/asmmacro.h              |  117 ++-
+ arch/loongarch/include/asm/atomic-amo.h            |  206 ++++
+ arch/loongarch/include/asm/atomic-llsc.h           |  100 ++
+ arch/loongarch/include/asm/atomic.h                |  197 +---
+ arch/loongarch/include/asm/checksum.h              |    4 +
+ arch/loongarch/include/asm/cmpxchg.h               |   48 +-
+ arch/loongarch/include/asm/cpu-features.h          |    3 -
+ arch/loongarch/include/asm/elf.h                   |    1 +
+ arch/loongarch/include/asm/inst.h                  |   12 +-
+ arch/loongarch/include/asm/irq.h                   |    5 +
+ arch/loongarch/include/asm/jump_label.h            |   12 +-
+ arch/loongarch/include/asm/local.h                 |   37 +
+ arch/loongarch/include/asm/loongarch.h             |  100 +-
+ arch/loongarch/include/asm/module.h                |   11 +
+ arch/loongarch/include/asm/page.h                  |    2 +-
+ arch/loongarch/include/asm/percpu.h                |   44 +-
+ arch/loongarch/include/asm/pgtable-bits.h          |   36 +-
+ arch/loongarch/include/asm/pgtable.h               |   74 +-
+ arch/loongarch/include/asm/stackframe.h            |   34 +-
+ arch/loongarch/include/asm/string.h                |    2 +
+ arch/loongarch/include/asm/timex.h                 |   29 +-
+ arch/loongarch/include/asm/uaccess.h               |   63 +-
+ arch/loongarch/include/asm/vdso/gettimeofday.h     |    4 +
+ arch/loongarch/include/uapi/asm/Kbuild             |    1 +
+ arch/loongarch/include/uapi/asm/unistd.h           |    6 +
+ arch/loongarch/kernel/Makefile.syscalls            |    1 +
+ arch/loongarch/kernel/cpu-probe.c                  |   23 +-
+ arch/loongarch/kernel/efi-header.S                 |    4 +
+ arch/loongarch/kernel/efi.c                        |    4 +-
+ arch/loongarch/kernel/entry.S                      |   22 +-
+ arch/loongarch/kernel/env.c                        |    9 +-
+ arch/loongarch/kernel/fpu.S                        |  111 ++
+ arch/loongarch/kernel/head.S                       |   39 +-
+ arch/loongarch/kernel/module.c                     |   80 +-
+ arch/loongarch/kernel/proc.c                       |   13 +-
+ arch/loongarch/kernel/process.c                    |    6 +-
+ arch/loongarch/kernel/ptrace.c                     |    5 +
+ arch/loongarch/kernel/relocate.c                   |    9 +-
+ arch/loongarch/kernel/switch.S                     |   25 +-
+ arch/loongarch/kernel/syscall.c                    |   15 +-
+ arch/loongarch/kernel/time.c                       |   31 +-
+ arch/loongarch/kernel/traps.c                      |   15 +-
+ arch/loongarch/kernel/unaligned.c                  |   30 +-
+ arch/loongarch/kernel/vmlinux.lds.S                |    7 +-
+ arch/loongarch/kvm/Kconfig                         |    2 +-
+ arch/loongarch/kvm/vcpu.c                          |    5 +-
+ arch/loongarch/lib/Makefile                        |    5 +-
+ arch/loongarch/lib/clear_user.S                    |   22 +-
+ arch/loongarch/lib/copy_user.S                     |   28 +-
+ arch/loongarch/lib/dump_tlb.c                      |   14 +-
+ arch/loongarch/lib/unaligned.S                     |   72 +-
+ arch/loongarch/mm/init.c                           |    4 +-
+ arch/loongarch/mm/page.S                           |  118 +--
+ arch/loongarch/mm/tlb.c                            |   12 +-
+ arch/loongarch/mm/tlbex.S                          |  322 ++++--
+ arch/loongarch/pci/pci.c                           |    8 +-
+ arch/loongarch/power/hibernate.c                   |    6 +-
+ arch/loongarch/power/suspend.c                     |   24 +-
+ arch/loongarch/power/suspend_asm.S                 |   72 +-
+ arch/loongarch/vdso/Makefile                       |    7 +-
+ arch/loongarch/vdso/vdso.lds.S                     |    4 +-
+ arch/loongarch/vdso/vgetcpu.c                      |    8 +
+ drivers/firmware/efi/libstub/Makefile              |    1 +
+ drivers/firmware/efi/libstub/loongarch.c           |    8 +-
+ drivers/pci/controller/Kconfig                     |    2 +-
+ lib/crc/Kconfig                                    |    2 +-
+ 74 files changed, 2915 insertions(+), 781 deletions(-)
+ create mode 100644 arch/loongarch/configs/loongson32_defconfig
+ rename arch/loongarch/configs/{loongson3_defconfig => loongson64_defconfig} (100%)
+ create mode 100644 arch/loongarch/include/asm/atomic-amo.h
+ create mode 100644 arch/loongarch/include/asm/atomic-llsc.h
+--
+2.27.0
+
 
