@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-14864-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14865-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44A48C6916F
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 12:31:10 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BFABC691A8
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 12:33:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 102992AE20
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 11:31:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BD2774F13F0
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 11:31:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8315353894;
-	Tue, 18 Nov 2025 11:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCDD935471A;
+	Tue, 18 Nov 2025 11:29:51 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D68E351FA2;
-	Tue, 18 Nov 2025 11:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACAC3352927;
+	Tue, 18 Nov 2025 11:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763465370; cv=none; b=o66XK0SNtgTU08va7jedjA9Zq8Vq1Pj8EKzy+SSmrYscFRemx7t91cZMxBNSG9vadEdcxc5V8Yj4pIaxvR9XVDb/eNUxNhEXjfo6/+1H8pobeCMUlsPSoY5fGh2uw5Fs6ZKVOmE7nxvzTBwsjvghAxlTojQQoLm0Xo5DqSPYBl8=
+	t=1763465391; cv=none; b=K2D2pwgXqDoB6T9BKFNLOlj60eRcmOafVBv+Jr+SxWK0mb6PD2/k2cAqqVWg8Jnpw+2cM7xUJeqOL261grZxwR51J2xHt0qk7ep1k6QqIL9ba2Y5mzYW/EFoux32n0cFyxH8PbZiCXpi0tHVgvrIbOtbHFsZ6cOATqFvoN5eO08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763465370; c=relaxed/simple;
-	bh=Pdde4Vww9SaDmeYG9SYusTP1ZmAbdmIocO2Kgmoe/LU=;
+	s=arc-20240116; t=1763465391; c=relaxed/simple;
+	bh=vyTyCaGvRBTJ4TOvT1DSg6cfgLdho1Gnp2qyvbDea58=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mUM9srmVpOLewCo30CYoqTs8nclm10rh3S9KtoeJFfIJQdp0sf1y+y6kkYlijhRQiHD/NIKsLUZSZA4MtE2vJTokKZoQC8Fqct9X5I27lz9dll5yE3wzNGbfnSoQUBETQBEaCmygNwAyx57NOKn2JVBMKl5UCNwIdtgOC/q2JeQ=
+	 MIME-Version; b=I/vA1i6z1mtP/WW2kKdQ0zpe2NTIVu5vclKS9Le36IXG1DmhGCxU6RgvM+79HfBTMcVNWNWFZyjHjzt90iWkmuXVs497b65Fh8QnYvnFWabxC062vjMK1kCHE/Qv0cmb85JrXk2tz6YL6ai7otbNxV8lu4C2Etbj+5aPVTnnGN4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A64C4CEFB;
-	Tue, 18 Nov 2025 11:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E59C16AAE;
+	Tue, 18 Nov 2025 11:29:47 +0000 (UTC)
 From: Huacai Chen <chenhuacai@loongson.cn>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Huacai Chen <chenhuacai@kernel.org>
@@ -40,9 +40,9 @@ Cc: loongarch@lists.linux.dev,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-kernel@vger.kernel.org,
 	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 07/14] LoongArch: Adjust time routines for 32BIT/64BIT
-Date: Tue, 18 Nov 2025 19:27:21 +0800
-Message-ID: <20251118112728.571869-8-chenhuacai@loongson.cn>
+Subject: [PATCH V2 08/14] LoongArch: Adjust module loader for 32BIT/64BIT
+Date: Tue, 18 Nov 2025 19:27:22 +0800
+Message-ID: <20251118112728.571869-9-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251118112728.571869-1-chenhuacai@loongson.cn>
 References: <20251118112728.571869-1-chenhuacai@loongson.cn>
@@ -54,265 +54,349 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adjust time routines for both 32BIT and 64BIT, including: rdtime_h() /
-rdtime_l() definitions for 32BIT and rdtime_d() definition for 64BIT,
-get_cycles() and get_cycles64() definitions for 32BIT/64BIT, show time
-frequency info ("CPU MHz" and "BogoMIPS") in /proc/cpuinfo, etc.
-
-Use do_div() for division which works on both 32BIT and 64BIT platforms.
+Adjust module loader for both 32BIT and 64BIT, including: change the s64
+type to long, change the u64 type to unsigned long, change the plt entry
+definition and handling, etc.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/loongarch.h | 32 +++++++++++++++++++++++++-
- arch/loongarch/include/asm/timex.h     | 29 ++++++++++++++++++++++-
- arch/loongarch/kernel/proc.c           | 13 ++++++-----
- arch/loongarch/kernel/syscall.c        |  2 +-
- arch/loongarch/kernel/time.c           | 15 ++++++------
- arch/loongarch/kvm/vcpu.c              |  5 ++--
- 6 files changed, 78 insertions(+), 18 deletions(-)
+ arch/loongarch/include/asm/module.h | 11 ++++
+ arch/loongarch/include/asm/percpu.h |  2 +-
+ arch/loongarch/kernel/module.c      | 80 +++++++++++++++++------------
+ 3 files changed, 59 insertions(+), 34 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index 804341bd8d2e..19e3f2c183fe 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -1238,7 +1238,35 @@
+diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/asm/module.h
+index f33f3fd32ecc..d56a968273de 100644
+--- a/arch/loongarch/include/asm/module.h
++++ b/arch/loongarch/include/asm/module.h
+@@ -38,8 +38,10 @@ struct got_entry {
  
- #ifndef __ASSEMBLER__
- 
--static __always_inline u64 drdtime(void)
-+#ifdef CONFIG_32BIT
-+
-+static __always_inline u32 rdtime_h(void)
-+{
-+	u32 val = 0;
-+
-+	__asm__ __volatile__(
-+		"rdtimeh.w %0, $zero\n\t"
-+		: "=r"(val)
-+		:
-+		);
-+	return val;
-+}
-+
-+static __always_inline u32 rdtime_l(void)
-+{
-+	u32 val = 0;
-+
-+	__asm__ __volatile__(
-+		"rdtimel.w %0, $zero\n\t"
-+		: "=r"(val)
-+		:
-+		);
-+	return val;
-+}
-+
-+#else
-+
-+static __always_inline u64 rdtime_d(void)
- {
- 	u64 val = 0;
- 
-@@ -1250,6 +1278,8 @@ static __always_inline u64 drdtime(void)
- 	return val;
- }
- 
+ struct plt_entry {
+ 	u32 inst_lu12iw;
++#ifdef CONFIG_64BIT
+ 	u32 inst_lu32id;
+ 	u32 inst_lu52id;
 +#endif
-+
- static inline unsigned int get_csr_cpuid(void)
- {
- 	return csr_read32(LOONGARCH_CSR_CPUID);
-diff --git a/arch/loongarch/include/asm/timex.h b/arch/loongarch/include/asm/timex.h
-index fb41e9e7a222..1640c66ab430 100644
---- a/arch/loongarch/include/asm/timex.h
-+++ b/arch/loongarch/include/asm/timex.h
-@@ -18,7 +18,34 @@ typedef unsigned long cycles_t;
+ 	u32 inst_jirl;
+ };
  
- static inline cycles_t get_cycles(void)
+@@ -57,6 +59,14 @@ static inline struct got_entry emit_got_entry(Elf_Addr val)
+ 
+ static inline struct plt_entry emit_plt_entry(unsigned long val)
  {
--	return drdtime();
 +#ifdef CONFIG_32BIT
-+	return rdtime_l();
++	u32 lu12iw, jirl;
++
++	lu12iw = larch_insn_gen_lu12iw(LOONGARCH_GPR_T1, ADDR_IMM(val, LU12IW));
++	jirl = larch_insn_gen_jirl(0, LOONGARCH_GPR_T1, ADDR_IMM(val, ORI));
++
++	return (struct plt_entry) { lu12iw, jirl };
 +#else
-+	return rdtime_d();
-+#endif
-+}
-+
-+#define get_cycles_hi get_cycles_hi
-+
-+static inline cycles_t get_cycles_hi(void)
-+{
-+	return rdtime_h();
-+}
-+
-+static inline u64 get_cycles64(void)
-+{
-+#ifdef CONFIG_32BIT
-+	u32 hi, lo;
-+
-+	do {
-+		hi = rdtime_h();
-+		lo = rdtime_l();
-+	} while (hi != rdtime_h());
-+
-+	return ((u64)hi << 32) | lo;
-+#else
-+	return rdtime_d();
+ 	u32 lu12iw, lu32id, lu52id, jirl;
+ 
+ 	lu12iw = larch_insn_gen_lu12iw(LOONGARCH_GPR_T1, ADDR_IMM(val, LU12IW));
+@@ -65,6 +75,7 @@ static inline struct plt_entry emit_plt_entry(unsigned long val)
+ 	jirl = larch_insn_gen_jirl(0, LOONGARCH_GPR_T1, ADDR_IMM(val, ORI));
+ 
+ 	return (struct plt_entry) { lu12iw, lu32id, lu52id, jirl };
 +#endif
  }
  
- #endif /* __KERNEL__ */
-diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-index cea30768ae92..464efdafa586 100644
---- a/arch/loongarch/kernel/proc.c
-+++ b/arch/loongarch/kernel/proc.c
-@@ -19,6 +19,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 	unsigned int isa = cpu_data[n].isa_level;
- 	unsigned int version = cpu_data[n].processor_id & 0xff;
- 	unsigned int fp_version = cpu_data[n].fpu_vers;
-+	u64 freq = cpu_clock_freq, bogomips = lpj_fine * cpu_clock_freq;
+ static inline struct plt_idx_entry emit_plt_idx_entry(unsigned long val)
+diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
+index 44a8aea2b0e5..583f2466262f 100644
+--- a/arch/loongarch/include/asm/percpu.h
++++ b/arch/loongarch/include/asm/percpu.h
+@@ -13,7 +13,7 @@
+  * the loading address of main kernel image, but far from where the modules are
+  * loaded. Tell the compiler this fact when using explicit relocs.
+  */
+-#if defined(MODULE) && defined(CONFIG_AS_HAS_EXPLICIT_RELOCS)
++#if defined(MODULE) && defined(CONFIG_AS_HAS_EXPLICIT_RELOCS) && defined(CONFIG_64BIT)
+ # if __has_attribute(model)
+ #  define PER_CPU_ATTRIBUTES __attribute__((model("extreme")))
+ # else
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+index 36d6d9eeb7c7..27f6d6b2e3ff 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -22,72 +22,76 @@
+ #include <asm/inst.h>
+ #include <asm/unwind.h>
  
- #ifdef CONFIG_SMP
- 	if (!cpu_online(n))
-@@ -28,8 +29,11 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 	/*
- 	 * For the first processor also print the system type
- 	 */
--	if (n == 0)
-+	if (n == 0) {
-+		do_div(freq, 10000);
-+		do_div(bogomips, const_clock_freq * (5000/HZ));
- 		seq_printf(m, "system type\t\t: %s\n\n", get_system_type());
-+	}
- 
- 	seq_printf(m, "processor\t\t: %ld\n", n);
- 	seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
-@@ -39,11 +43,8 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 	seq_printf(m, "Model Name\t\t: %s\n", __cpu_full_name[n]);
- 	seq_printf(m, "CPU Revision\t\t: 0x%02x\n", version);
- 	seq_printf(m, "FPU Revision\t\t: 0x%02x\n", fp_version);
--	seq_printf(m, "CPU MHz\t\t\t: %llu.%02llu\n",
--		      cpu_clock_freq / 1000000, (cpu_clock_freq / 10000) % 100);
--	seq_printf(m, "BogoMIPS\t\t: %llu.%02llu\n",
--		      (lpj_fine * cpu_clock_freq / const_clock_freq) / (500000/HZ),
--		      ((lpj_fine * cpu_clock_freq / const_clock_freq) / (5000/HZ)) % 100);
-+	seq_printf(m, "CPU MHz\t\t\t: %u.%02u\n", (u32)freq / 100, (u32)freq % 100);
-+	seq_printf(m, "BogoMIPS\t\t: %u.%02u\n", (u32)bogomips / 100, (u32)bogomips % 100);
- 	seq_printf(m, "TLB Entries\t\t: %d\n", cpu_data[n].tlbsize);
- 	seq_printf(m, "Address Sizes\t\t: %d bits physical, %d bits virtual\n",
- 		      cpu_pabits + 1, cpu_vabits + 1);
-diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/syscall.c
-index 168bd97540f8..ab94eb5ce039 100644
---- a/arch/loongarch/kernel/syscall.c
-+++ b/arch/loongarch/kernel/syscall.c
-@@ -75,7 +75,7 @@ void noinstr __no_stack_protector do_syscall(struct pt_regs *regs)
- 	 *
- 	 * The resulting 6 bits of entropy is seen in SP[9:4].
- 	 */
--	choose_random_kstack_offset(drdtime());
-+	choose_random_kstack_offset(get_cycles());
- 
- 	syscall_exit_to_user_mode(regs);
- }
-diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
-index 1c31bf3a16ed..5892f6da07a5 100644
---- a/arch/loongarch/kernel/time.c
-+++ b/arch/loongarch/kernel/time.c
-@@ -18,6 +18,7 @@
- #include <asm/loongarch.h>
- #include <asm/paravirt.h>
- #include <asm/time.h>
-+#include <asm/timex.h>
- 
- u64 cpu_clock_freq;
- EXPORT_SYMBOL(cpu_clock_freq);
-@@ -62,12 +63,12 @@ static int constant_set_state_oneshot(struct clock_event_device *evt)
- 
- static int constant_set_state_periodic(struct clock_event_device *evt)
+-static int rela_stack_push(s64 stack_value, s64 *rela_stack, size_t *rela_stack_top)
++static int rela_stack_push(long stack_value, long *rela_stack, size_t *rela_stack_top)
  {
--	unsigned long period;
- 	unsigned long timer_config;
-+	u64 period = const_clock_freq;
+ 	if (*rela_stack_top >= RELA_STACK_DEPTH)
+ 		return -ENOEXEC;
  
- 	raw_spin_lock(&state_lock);
+ 	rela_stack[(*rela_stack_top)++] = stack_value;
+-	pr_debug("%s stack_value = 0x%llx\n", __func__, stack_value);
++	pr_debug("%s stack_value = 0x%lx\n", __func__, stack_value);
  
--	period = const_clock_freq / HZ;
-+	do_div(period, HZ);
- 	timer_config = period & CSR_TCFG_VAL;
- 	timer_config |= (CSR_TCFG_PERIOD | CSR_TCFG_EN);
- 	csr_write(timer_config, LOONGARCH_CSR_TCFG);
-@@ -120,7 +121,7 @@ static int arch_timer_dying(unsigned int cpu)
- 
- static unsigned long get_loops_per_jiffy(void)
- {
--	unsigned long lpj = (unsigned long)const_clock_freq;
-+	u64 lpj = const_clock_freq;
- 
- 	do_div(lpj, HZ);
- 
-@@ -131,7 +132,7 @@ static long init_offset;
- 
- void save_counter(void)
- {
--	init_offset = drdtime();
-+	init_offset = get_cycles();
+ 	return 0;
  }
  
- void sync_counter(void)
-@@ -197,12 +198,12 @@ int constant_clockevent_init(void)
- 
- static u64 read_const_counter(struct clocksource *clk)
+-static int rela_stack_pop(s64 *stack_value, s64 *rela_stack, size_t *rela_stack_top)
++static int rela_stack_pop(long *stack_value, long *rela_stack, size_t *rela_stack_top)
  {
--	return drdtime();
-+	return get_cycles64();
+ 	if (*rela_stack_top == 0)
+ 		return -ENOEXEC;
+ 
+ 	*stack_value = rela_stack[--(*rela_stack_top)];
+-	pr_debug("%s stack_value = 0x%llx\n", __func__, *stack_value);
++	pr_debug("%s stack_value = 0x%lx\n", __func__, *stack_value);
+ 
+ 	return 0;
  }
  
- static noinstr u64 sched_clock_read(void)
+ static int apply_r_larch_none(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
  {
--	return drdtime();
-+	return get_cycles64();
+ 	return 0;
  }
  
- static struct clocksource clocksource_const = {
-@@ -235,7 +236,7 @@ void __init time_init(void)
- 	else
- 		const_clock_freq = calc_const_freq();
+ static int apply_r_larch_error(struct module *me, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	pr_err("%s: Unsupport relocation type %u, please add its support.\n", me->name, type);
+ 	return -EINVAL;
+ }
  
--	init_offset = -(drdtime() - csr_read(LOONGARCH_CSR_CNTC));
-+	init_offset = -(get_cycles() - csr_read(LOONGARCH_CSR_CNTC));
+ static int apply_r_larch_32(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	*location = v;
+ 	return 0;
+ }
  
- 	constant_clockevent_init();
- 	constant_clocksource_init();
-diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
-index 1245a6b35896..803224d297eb 100644
---- a/arch/loongarch/kvm/vcpu.c
-+++ b/arch/loongarch/kvm/vcpu.c
-@@ -9,6 +9,7 @@
- #include <asm/loongarch.h>
- #include <asm/setup.h>
- #include <asm/time.h>
-+#include <asm/timex.h>
++#ifdef CONFIG_32BIT
++#define apply_r_larch_64 apply_r_larch_error
++#else
+ static int apply_r_larch_64(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	*(Elf_Addr *)location = v;
+ 	return 0;
+ }
++#endif
  
- #define CREATE_TRACE_POINTS
- #include "trace.h"
-@@ -811,7 +812,7 @@ static int kvm_get_one_reg(struct kvm_vcpu *vcpu,
- 	case KVM_REG_LOONGARCH_KVM:
- 		switch (reg->id) {
- 		case KVM_REG_LOONGARCH_COUNTER:
--			*v = drdtime() + vcpu->kvm->arch.time_offset;
-+			*v = get_cycles() + vcpu->kvm->arch.time_offset;
- 			break;
- 		case KVM_REG_LOONGARCH_DEBUG_INST:
- 			*v = INSN_HVCL | KVM_HCALL_SWDBG;
-@@ -906,7 +907,7 @@ static int kvm_set_one_reg(struct kvm_vcpu *vcpu,
- 			 * only set for the first time for smp system
- 			 */
- 			if (vcpu->vcpu_id == 0)
--				vcpu->kvm->arch.time_offset = (signed long)(v - drdtime());
-+				vcpu->kvm->arch.time_offset = (signed long)(v - get_cycles());
- 			break;
- 		case KVM_REG_LOONGARCH_VCPU_RESET:
- 			vcpu->arch.st.guest_addr = 0;
+ static int apply_r_larch_sop_push_pcrel(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+-	return rela_stack_push(v - (u64)location, rela_stack, rela_stack_top);
++	return rela_stack_push(v - (unsigned long)location, rela_stack, rela_stack_top);
+ }
+ 
+ static int apply_r_larch_sop_push_absolute(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	return rela_stack_push(v, rela_stack, rela_stack_top);
+ }
+ 
+ static int apply_r_larch_sop_push_dup(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	int err = 0;
+-	s64 opr1;
++	long opr1;
+ 
+ 	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
+ 	if (err)
+@@ -104,7 +108,7 @@ static int apply_r_larch_sop_push_dup(struct module *mod, u32 *location, Elf_Add
+ 
+ static int apply_r_larch_sop_push_plt_pcrel(struct module *mod,
+ 			Elf_Shdr *sechdrs, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	ptrdiff_t offset = (void *)v - (void *)location;
+ 
+@@ -118,10 +122,10 @@ static int apply_r_larch_sop_push_plt_pcrel(struct module *mod,
+ }
+ 
+ static int apply_r_larch_sop(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	int err = 0;
+-	s64 opr1, opr2, opr3;
++	long opr1, opr2, opr3;
+ 
+ 	if (type == R_LARCH_SOP_IF_ELSE) {
+ 		err = rela_stack_pop(&opr3, rela_stack, rela_stack_top);
+@@ -164,10 +168,10 @@ static int apply_r_larch_sop(struct module *mod, u32 *location, Elf_Addr v,
+ }
+ 
+ static int apply_r_larch_sop_imm_field(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	int err = 0;
+-	s64 opr1;
++	long opr1;
+ 	union loongarch_instruction *insn = (union loongarch_instruction *)location;
+ 
+ 	err = rela_stack_pop(&opr1, rela_stack, rela_stack_top);
+@@ -244,31 +248,33 @@ static int apply_r_larch_sop_imm_field(struct module *mod, u32 *location, Elf_Ad
+ 	}
+ 
+ overflow:
+-	pr_err("module %s: opr1 = 0x%llx overflow! dangerous %s (%u) relocation\n",
++	pr_err("module %s: opr1 = 0x%lx overflow! dangerous %s (%u) relocation\n",
+ 		mod->name, opr1, __func__, type);
+ 	return -ENOEXEC;
+ 
+ unaligned:
+-	pr_err("module %s: opr1 = 0x%llx unaligned! dangerous %s (%u) relocation\n",
++	pr_err("module %s: opr1 = 0x%lx unaligned! dangerous %s (%u) relocation\n",
+ 		mod->name, opr1, __func__, type);
+ 	return -ENOEXEC;
+ }
+ 
+ static int apply_r_larch_add_sub(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	switch (type) {
+ 	case R_LARCH_ADD32:
+ 		*(s32 *)location += v;
+ 		return 0;
+-	case R_LARCH_ADD64:
+-		*(s64 *)location += v;
+-		return 0;
+ 	case R_LARCH_SUB32:
+ 		*(s32 *)location -= v;
+ 		return 0;
++#ifdef CONFIG_64BIT
++	case R_LARCH_ADD64:
++		*(s64 *)location += v;
++		return 0;
+ 	case R_LARCH_SUB64:
+ 		*(s64 *)location -= v;
++#endif
+ 		return 0;
+ 	default:
+ 		pr_err("%s: Unsupport relocation type %u\n", mod->name, type);
+@@ -278,7 +284,7 @@ static int apply_r_larch_add_sub(struct module *mod, u32 *location, Elf_Addr v,
+ 
+ static int apply_r_larch_b26(struct module *mod,
+ 			Elf_Shdr *sechdrs, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	ptrdiff_t offset = (void *)v - (void *)location;
+ 	union loongarch_instruction *insn = (union loongarch_instruction *)location;
+@@ -311,14 +317,16 @@ static int apply_r_larch_b26(struct module *mod,
+ }
+ 
+ static int apply_r_larch_pcala(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	union loongarch_instruction *insn = (union loongarch_instruction *)location;
+ 	/* Use s32 for a sign-extension deliberately. */
+ 	s32 offset_hi20 = (void *)((v + 0x800) & ~0xfff) -
+ 			  (void *)((Elf_Addr)location & ~0xfff);
++#ifdef CONFIG_64BIT
+ 	Elf_Addr anchor = (((Elf_Addr)location) & ~0xfff) + offset_hi20;
+ 	ptrdiff_t offset_rem = (void *)v - (void *)anchor;
++#endif
+ 
+ 	switch (type) {
+ 	case R_LARCH_PCALA_LO12:
+@@ -328,6 +336,7 @@ static int apply_r_larch_pcala(struct module *mod, u32 *location, Elf_Addr v,
+ 		v = offset_hi20 >> 12;
+ 		insn->reg1i20_format.immediate = v & 0xfffff;
+ 		break;
++#ifdef CONFIG_64BIT
+ 	case R_LARCH_PCALA64_LO20:
+ 		v = offset_rem >> 32;
+ 		insn->reg1i20_format.immediate = v & 0xfffff;
+@@ -336,6 +345,7 @@ static int apply_r_larch_pcala(struct module *mod, u32 *location, Elf_Addr v,
+ 		v = offset_rem >> 52;
+ 		insn->reg2i12_format.immediate = v & 0xfff;
+ 		break;
++#endif
+ 	default:
+ 		pr_err("%s: Unsupport relocation type %u\n", mod->name, type);
+ 		return -EINVAL;
+@@ -346,7 +356,7 @@ static int apply_r_larch_pcala(struct module *mod, u32 *location, Elf_Addr v,
+ 
+ static int apply_r_larch_got_pc(struct module *mod,
+ 			Elf_Shdr *sechdrs, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++			long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	Elf_Addr got = module_emit_got_entry(mod, sechdrs, v);
+ 
+@@ -369,7 +379,7 @@ static int apply_r_larch_got_pc(struct module *mod,
+ }
+ 
+ static int apply_r_larch_32_pcrel(struct module *mod, u32 *location, Elf_Addr v,
+-				  s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++				  long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	ptrdiff_t offset = (void *)v - (void *)location;
+ 
+@@ -377,14 +387,18 @@ static int apply_r_larch_32_pcrel(struct module *mod, u32 *location, Elf_Addr v,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_32BIT
++#define apply_r_larch_64_pcrel apply_r_larch_error
++#else
+ static int apply_r_larch_64_pcrel(struct module *mod, u32 *location, Elf_Addr v,
+-				  s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++				  long *rela_stack, size_t *rela_stack_top, unsigned int type)
+ {
+ 	ptrdiff_t offset = (void *)v - (void *)location;
+ 
+ 	*(u64 *)location = offset;
+ 	return 0;
+ }
++#endif
+ 
+ /*
+  * reloc_handlers_rela() - Apply a particular relocation to a module
+@@ -397,7 +411,7 @@ static int apply_r_larch_64_pcrel(struct module *mod, u32 *location, Elf_Addr v,
+  * Return: 0 upon success, else -ERRNO
+  */
+ typedef int (*reloc_rela_handler)(struct module *mod, u32 *location, Elf_Addr v,
+-			s64 *rela_stack, size_t *rela_stack_top, unsigned int type);
++			long *rela_stack, size_t *rela_stack_top, unsigned int type);
+ 
+ /* The handlers for known reloc types */
+ static reloc_rela_handler reloc_rela_handlers[] = {
+@@ -425,7 +439,7 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+ {
+ 	int i, err;
+ 	unsigned int type;
+-	s64 rela_stack[RELA_STACK_DEPTH];
++	long rela_stack[RELA_STACK_DEPTH];
+ 	size_t rela_stack_top = 0;
+ 	reloc_rela_handler handler;
+ 	void *location;
+@@ -462,9 +476,9 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+ 			return -EINVAL;
+ 		}
+ 
+-		pr_debug("type %d st_value %llx r_addend %llx loc %llx\n",
++		pr_debug("type %d st_value %lx r_addend %lx loc %lx\n",
+ 		       (int)ELF_R_TYPE(rel[i].r_info),
+-		       sym->st_value, rel[i].r_addend, (u64)location);
++		       (unsigned long)sym->st_value, (unsigned long)rel[i].r_addend, (unsigned long)location);
+ 
+ 		v = sym->st_value + rel[i].r_addend;
+ 		switch (type) {
 -- 
 2.47.3
 
