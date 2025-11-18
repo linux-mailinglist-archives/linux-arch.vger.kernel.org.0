@@ -1,91 +1,178 @@
-Return-Path: <linux-arch+bounces-14854-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14855-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19A5DC68682
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 10:02:09 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06262C688D5
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 10:32:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id B883B2A51F
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 09:02:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 97E824EA4A0
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 09:31:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE83330F522;
-	Tue, 18 Nov 2025 09:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1hpPFoEw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aqKlhTd+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE6F31771F;
+	Tue, 18 Nov 2025 09:30:49 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338A32773EC;
-	Tue, 18 Nov 2025 09:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FA0314B79;
+	Tue, 18 Nov 2025 09:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763456461; cv=none; b=UQ7pbYpaIUT9uiNW95j08/DL2WCfgrDTLV/Rf41qSsbCR5ORkBtQG2dNTusJVPdYwY3Gajh4xI3/mISqJeo7P+NByc5R1ILzoiVh3Gl1krHtnj/E0C5tY3qTsF7MfHA0xCSAnzRO7HoYuIILHAK5VbK17XHIxf27tIyw/S4goss=
+	t=1763458249; cv=none; b=Vs04e+g5vNOPGq+bF3u2LG4KBmM6WEd6HYRJ8nIMumGKOOievrxq1Y0g9vgPDnSXU3OatEJk+dyx9mw6dORBaaNcKp9JQZXJN4otoeN237AJTvWPVBp+8ENee/3BU7SJoZlai2SNtR8z0j5S5ejUmcx+oekFhe4u4u3an2ksHi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763456461; c=relaxed/simple;
-	bh=C34AzROnmObItnjwKJW5NjtpZhJk0bE64tPbBO2aWmA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=GgWULctZyL5CSaOeuvN249m8Cdlx0NLKi39mM7McvA4TOo0faaHpBCjEe1a7OalT2lMsmgjy2Dm6MYgJjugXjova5QjFPdQGVXbsV60UVbzIGzck52PW7XY9EQA+F25IUoz/w5zfXKrhX4wqUZ24rn2nGPz+MNqsI8Rhdy31i0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1hpPFoEw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aqKlhTd+; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763456458;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/J1hq5gEXqPn4gX5YwL+jVfVaVD1PS5DQlXW5HY+NxE=;
-	b=1hpPFoEwsA0eGITf7T8A5soAd4j/8ZsXFVZ7nX1JKTpjmfg/hQSlv37vJTjmYkjSsOZ3f5
-	KNT8es7qY0+BF47kX8z6POzj3W4HntHgShrOxAC1HFOoXQd+q1der+y+4Tua4xdlTyB3vL
-	0a44oZz8e5sXOtkyGZwCaBYzu76+L4LMWcx3eL09SDp+/iMs6CXwKzGv+n0nyjIZucnDpF
-	qcuI+Nea7RQYac9sK4JLAxbbwm9f9mxIqVes31GTIisn2j0B5NwrJ6A/jgAEvmMEURNz/T
-	RuSFhWzr6XeggT+MF3vzVEVKXCq8ETw9VuR/Pe4Os+QRJd6k16KeNqx2QM0s9Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763456458;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/J1hq5gEXqPn4gX5YwL+jVfVaVD1PS5DQlXW5HY+NxE=;
-	b=aqKlhTd++uRkvWi4igwQSm0wjqjDbM7F00xDeBN75xhNjlCxXx+r5U77uudTRlU/gpnWGl
-	HGZKgucAfPQInUAA==
-To: Luigi Rizzo <lrizzo@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>,
- Paolo Abeni <pabeni@redhat.com>, Andrew Morton
- <akpm@linux-foundation.org>, Sean Christopherson <seanjc@google.com>,
- Jacob Pan <jacob.jun.pan@linux.intel.com>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, Willem de
- Bruijn <willemb@google.com>
-Subject: Re: [PATCH v2 4/8] genirq: soft_moderation: implement adaptive
- moderation
-In-Reply-To: <CAMOZA0KKJ9S45-LnLtYKn-L8dL71tsfs29c6ZL3bkuTcNXorAw@mail.gmail.com>
-References: <20251116182839.939139-1-lrizzo@google.com>
- <20251116182839.939139-5-lrizzo@google.com> <87jyzo757y.ffs@tglx>
- <CAMOZA0KKJ9S45-LnLtYKn-L8dL71tsfs29c6ZL3bkuTcNXorAw@mail.gmail.com>
-Date: Tue, 18 Nov 2025 10:00:57 +0100
-Message-ID: <875xb77m0m.ffs@tglx>
+	s=arc-20240116; t=1763458249; c=relaxed/simple;
+	bh=U8SoEWNVo7Bg/vtnXCbFJOk39i8M3igdqr7sqdQ+yp4=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=chli7Jtj5SsehUVnZqEnw/yDHZpoAAbXGI1BLh9DwBtpJnWh+t4NYE9Gs2LYWEh2iPo2tUBzXoIpElEXj+z0F9UJXKvJHhJ5YYs5cXlUAL4w1ys47ET9GtflzHsbacOP7xqJml42IKeKot5iSKpGxHOZ35to9q5fUc9Vgitv88o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4d9fTk1j18zJ46cb;
+	Tue, 18 Nov 2025 17:30:02 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3F92E140277;
+	Tue, 18 Nov 2025 17:30:44 +0800 (CST)
+Received: from localhost (10.48.158.191) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 18 Nov
+ 2025 09:30:42 +0000
+Date: Tue, 18 Nov 2025 09:30:41 +0000
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Conor Dooley <conor@kernel.org>
+CC: Randy Dunlap <rdunlap@infradead.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, <linux-cxl@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-arch@vger.kernel.org>,
+	<linux-mm@kvack.org>, Dan Williams <dan.j.williams@intel.com>, "H . Peter
+ Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, "Andrew
+ Morton" <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, "Drew
+ Fustini" <fustini@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>, <james.morse@arm.com>, Will Deacon <will@kernel.org>,
+	Davidlohr Bueso <dave@stgolabs.net>, <linuxarm@huawei.com>, Yushan Wang
+	<wangyushan12@huawei.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, "Mark
+ Rutland" <mark.rutland@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, <x86@kernel.org>, Andy Lutomirski
+	<luto@kernel.org>, Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v6 3/7] lib: Support
+ ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+Message-ID: <20251118093041.00000c9e@huawei.com>
+In-Reply-To: <20251117-definite-uncounted-7cc07a377a71@spud>
+References: <20251117104800.2041329-1-Jonathan.Cameron@huawei.com>
+	<20251117104800.2041329-4-Jonathan.Cameron@huawei.com>
+	<3bf1793a-2ffd-4017-b4bf-dc63f3a2a7c8@infradead.org>
+	<20251117-definite-uncounted-7cc07a377a71@spud>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
-On Mon, Nov 17 2025 at 22:34, Luigi Rizzo wrote:
-> (First world problem, for sure: I have examples for AMD, Intel, Arm,
-> all of them with 100+ CPUs per numa node, and 160-480 CPUs total)
-> On some of the above platforms, MSIx interrupts cause heavy serialization
-> of all other PCIe requests. As a result, when the total interrupt rate exceeds
-> 1-2M intrs/s, I/O throughput degrades by up to 4x and more.
+On Tue, 18 Nov 2025 00:13:07 +0000
+Conor Dooley <conor@kernel.org> wrote:
 
-Is it actually the sum of all interrupts in the system or is it
-segmented per root port?
+> On Mon, Nov 17, 2025 at 10:51:11AM -0800, Randy Dunlap wrote:
+> > Hi,
+> > 
+> > On 11/17/25 2:47 AM, Jonathan Cameron wrote:  
+> > > diff --git a/lib/Kconfig b/lib/Kconfig
+> > > index e629449dd2a3..e11136d188ae 100644
+> > > --- a/lib/Kconfig
+> > > +++ b/lib/Kconfig
+> > > @@ -542,6 +542,10 @@ config MEMREGION
+> > >  config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> > >  	bool
+> > >  
+> > > +config GENERIC_CPU_CACHE_MAINTENANCE
+> > > +	bool
+> > > +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> > > +
+> > >  config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
+> > >  	bool  
+> > 
+> > Architectures and/or platforms select ARCH_HAS_*.
+> > 
+> > With this change above, it becomes the only entry in
+> > lib/Kconfig that does "select ARCH_HAS_anytning".
+> > 
+> > so I think this is wrong, back*wards.  
+> 
+> Maybe it is backwards, but I feel like this way is more logical. ARM64
+> has memregion invalidation only because this generic approach is
+> enabled, so the arch selects what it needs to get the support.
 
-Thanks,
+Exactly this. Catalin requested this form in response to an earlier
+version where arm64 Kconfig just had both selects for pretty much that
+reason. This is expected to be used on a subset of architectures.
+It is similar to things like GENERIC_ARCH_NUMA in this respect (though the
+arch_numa_init() etc in there are called only from other arch code
+so no ARCH_HAS_ symbols are associated with them).
 
-        tglx
+> Alternatively, something like
+
+I'm fine with this solution if Randy prefers it.
+
+Thanks for your help with this.
+
+Jonathan
+
+> | diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> | index 5f7f63d24931..75b2507f7eb2 100644
+> | --- a/arch/arm64/Kconfig
+> | +++ b/arch/arm64/Kconfig
+> | @@ -21,6 +21,7 @@ config ARM64
+> |  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+> |  	select ARCH_HAS_CACHE_LINE_SIZE
+> |  	select ARCH_HAS_CC_PLATFORM
+> | +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> |  	select ARCH_HAS_CURRENT_STACK_POINTER
+> |  	select ARCH_HAS_DEBUG_VIRTUAL
+> |  	select ARCH_HAS_DEBUG_VM_PGTABLE
+> | @@ -146,7 +147,6 @@ config ARM64
+> |  	select GENERIC_ARCH_TOPOLOGY
+> |  	select GENERIC_CLOCKEVENTS_BROADCAST
+> |  	select GENERIC_CPU_AUTOPROBE
+> | -	select GENERIC_CPU_CACHE_MAINTENANCE
+> |  	select GENERIC_CPU_DEVICES
+> |  	select GENERIC_CPU_VULNERABILITIES
+> |  	select GENERIC_EARLY_IOREMAP
+> | diff --git a/lib/Kconfig b/lib/Kconfig
+> | index 09aec4a1e13f..ac223e627bc5 100644
+> | --- a/lib/Kconfig
+> | +++ b/lib/Kconfig
+> | @@ -544,8 +544,9 @@ config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> |  	bool
+> |  
+> |  config GENERIC_CPU_CACHE_MAINTENANCE
+> | -	bool
+> | -	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> | +	def_bool y
+> | +	depends on ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> | +	depends on ARM64
+> |  
+> |  config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
+> |  	bool
+> implies (to me at least) that arm64 has memregion invalidation as an
+> architectural feature and that the GENERIC_CPU_CACHE_MAINTENANCE option
+> is a just common cross-arch code, like generic entry etc, rather than
+> being the option gating the drivers that provide the feature in the
+> first place.
+> 
+> I didn't really care which way it went, and was gonna post something to
+> squash and avoid another revision, but I found the resultant Kconfig
+> setup to be make less sense to me than what came before. If the switched
+> around version is less likely to be problematic etc, then sure, but I
+> amn't convinced by switching it at a first glance.
+> 
+
+
 
