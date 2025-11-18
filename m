@@ -1,153 +1,181 @@
-Return-Path: <linux-arch+bounces-14851-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14852-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F38BFC669C6
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 00:59:57 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D4A7C66A08
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 01:13:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DFCF94E0187
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Nov 2025 23:59:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9C95135A705
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 00:13:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA7C2E0B58;
-	Mon, 17 Nov 2025 23:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455B28635D;
+	Tue, 18 Nov 2025 00:13:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Pu76CTGk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNjrX6GQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4F130DEDA
-	for <linux-arch@vger.kernel.org>; Mon, 17 Nov 2025 23:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3CB2AD35;
+	Tue, 18 Nov 2025 00:13:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763423993; cv=none; b=tizx6vq0qYARXj5Te5v9gwapau/mmnxt2OEaucBQsk0iA6TvE2oRI3n2e/a3O4TkUiHVD3Cp3dcaG6r2SJgOrjC0tiIZOzRPcC0fvKd4fp4kuKlxYKemt5aKXr64iHuKc+mf0Zb21tZ4BZi3FOekCushr8N9i5EDmLS7aSv4nOk=
+	t=1763424798; cv=none; b=c5VcyGv6o4Q/MgQMjZGDtjTIjEl0jBGzMErBZpxHLFk2Rq7gK7CQj+Rjck8iqL82MzBBNqVhu6YwtBqtoqZweTu5XqSPEQgaC2mEDa3ZnVQsghP+4y8ZHFKAjxn0euJt+dRE7ClI18B5AKq3N0Tdg3VDgS1oFI9c+42Fjp0Osr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763423993; c=relaxed/simple;
-	bh=Sp7j6ej58rYd90C6uDZIjCgEWUqsEaH2spkhnJkdMG8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oJHWBhLc8lCaNxhadZavaxkxHf8wFV1CKH+l4zLxzuI7C9gCwwvhB7NvTp149ox3l5EWOhfC4+W2Ts4v9602gZMwERPfS9jMCuoL7NEx7fAHdWxoMU9e0Koq4zvEFxCoHoUvVSkX/5fGUuk6VMQpTK/ZMysQo/LqeY1faOED6WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Pu76CTGk; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4edb8d6e98aso160431cf.0
-        for <linux-arch@vger.kernel.org>; Mon, 17 Nov 2025 15:59:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763423990; x=1764028790; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qkUH+46jH5VgsbFoxpLj1Hw1oBiKTTQzmTA+0U0V9GM=;
-        b=Pu76CTGk32dpfUjX8hW9afYKZYR99dLR39dHx+6BN8YtBVzIaD3W1dC/JHZUsyRU6G
-         Vs/VaSlCitqT8ku2kkLtNAMfIMEnDIXZFzQUCotZqSChpMgAYKG0//Yz0ul0TIq05qy2
-         hMtN+cHFIyM3yQWDgdaSqYC2vFlAWT1Q4OA9kjCPWO6V2AuB1MHBJBwLhALNI34LqSWt
-         xfVJtA8bWdFIsVXNkUyZpWllG9/vxYEggPsKyxeDRWyqgKU7GPyvzTheKle/T66IAEHZ
-         oLhInNcwBo3qgCX0NSiuLm9fT9zVJ1DwPolr0sasejt00qyxCvhdQoWmHdyJPyX2YeH+
-         UsFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763423990; x=1764028790;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qkUH+46jH5VgsbFoxpLj1Hw1oBiKTTQzmTA+0U0V9GM=;
-        b=f+Jq1k9b6q751v84VVuMgAQFAQEJsKWwml9U2wALNUVDdeYa6v2x89PLA6+N+hdXb9
-         8TSUqSl26+KemIb12lHBfGG0sUNs4qwEsWjkCpnPcEI37pNeeggTLSApaju3YTMbspwM
-         gbXeQ9x6J1o9UVZwWGTOhGt3eToOeNiU9S99hNch2lQw2fAoIiXy8ebCPhKeFtdmRJVz
-         MqkBLTUbv+ow62Wk35KzGtlWdW6e+qN2bLOTubKwhQTDQJ9s4s9jUWo2r4dnGsMVQ5rb
-         +4Shm8WmeKsUQ2SbKUG4DkazcHc/T/mq4RfHfMFgZlCGNdWRBtIzc72NTCDYOcEnd6fj
-         McDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXnXAzIWul2Nn7b/7P853kiWK0vqZ0elRJBkiJ6ZDWsiVp4hBRAXqbm7oCoePaY/dHfAe4ssiqbs7NK@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHeYH53d63CaykE33ttOysjknVVY0CVVkZ78ImN6QQ4ki09u5B
-	Svw4LYEdT8hpaDkU/qzYhv6jbEfhrVhWKzmkAfiyvb6rVIaa8ItYy7FJua2vHA6JgJWBOl5AQMi
-	kgDkiX1sU74KXSKiNWPX6rY6ZTYb+hVwNUfDbITbV
-X-Gm-Gg: ASbGncsEEbNhAm+KuV4CJVD/ppeuuOfwD5AicBNDUn1hBi90N2lQNpZXUdPHIRCDttB
-	8Sib5obxkDs9uEYyKkZPUx0zHHteupCIt00iM7sIaMoO16+Q4cs3hecdhXXezkSk2UKlq4t8qxJ
-	kdHc2MwKVbcATLzCxMemaezWFoa3MkVujC71prNg8vULEOfpidOiCfxs7nbgyCOK2GNho1nii1D
-	2FogSup14T9kMH3XRvsr+5RHT8uUSdTv9CjTNiTF945CbJaHfibEcDzhdiM4/tv50K6lhc=
-X-Google-Smtp-Source: AGHT+IH3qxLI1NCS2WR9dbtuxf9qeLrmAMkfnduEJo1g3DDbfKJHRpsvaIlgBIzv7DA5ctyFXK9TX+TueoOyl1q8VTw=
-X-Received: by 2002:a05:622a:1114:b0:4e6:eaea:af3f with SMTP id
- d75a77b69052e-4ee3265ac31mr768141cf.3.1763423990326; Mon, 17 Nov 2025
- 15:59:50 -0800 (PST)
+	s=arc-20240116; t=1763424798; c=relaxed/simple;
+	bh=FA/B9Ov2AMGG74Hew1VbR3PJqHVMWv8DmTnLRuNyv0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aueGQWBGCf1ahJZeIEYuYcWL9w8eWkQ6rSjVo4oXaE8P88O91Z3YpauB+Nny48dUy3//VEUp0CuvUzzIzpafindOnAFxZtR555+VgBumVkhkMC0ZT6ObYu3LJmOz1BWbjSRVxPPX3l38vQs/c+/7h0Rw+b13vfThWCBrrUVmSZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNjrX6GQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7D3C19423;
+	Tue, 18 Nov 2025 00:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763424796;
+	bh=FA/B9Ov2AMGG74Hew1VbR3PJqHVMWv8DmTnLRuNyv0Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NNjrX6GQ+2j8/hvb2kxvzwqGZySojwDESUweIZ6sgye6A2Zs8p2VLCSnIY9CWNEge
+	 l6jE1bXGcJlT6JVMl+clC6zD8DQcisfaVPJoALcYuLz//pHVm1DfLtH1js7bZeoH4K
+	 wpqR8wUS/9tKTnGzCLxGS/6NgI3dOU86jdcDrGFJ1DVnaPFPXgAI9vaEnGOUuOLtOu
+	 udFawlouxXWSbfDO4zfuGq9kecgERtnjuIuMMyOQDbKNSZC5mHBPOVGVCFNDbOlmyD
+	 hFXfuHFNBaZIaoM2EWytAijxyehm7iVJP7mXxnnbZEg3uvj5zENTdALE6Wond1oGjZ
+	 n7K3V+abTjNYw==
+Date: Tue, 18 Nov 2025 00:13:07 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	Dan Williams <dan.j.williams@intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>, Drew Fustini <fustini@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>, james.morse@arm.com,
+	Will Deacon <will@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
+	linuxarm@huawei.com, Yushan Wang <wangyushan12@huawei.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
+	Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v6 3/7] lib: Support
+ ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+Message-ID: <20251117-definite-uncounted-7cc07a377a71@spud>
+References: <20251117104800.2041329-1-Jonathan.Cameron@huawei.com>
+ <20251117104800.2041329-4-Jonathan.Cameron@huawei.com>
+ <3bf1793a-2ffd-4017-b4bf-dc63f3a2a7c8@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251116182839.939139-1-lrizzo@google.com> <20251116182839.939139-4-lrizzo@google.com>
- <87seec78yf.ffs@tglx> <87bjl06yij.ffs@tglx>
-In-Reply-To: <87bjl06yij.ffs@tglx>
-From: Luigi Rizzo <lrizzo@google.com>
-Date: Tue, 18 Nov 2025 00:59:14 +0100
-X-Gm-Features: AWmQ_bkXBPXivBiRq7J5OIrvAFG1-eaCPvAyInFMnvLxPT4OgRyIcKryusnowp4
-Message-ID: <CAMOZA0+rA-ys1JSb=GxpPEFS7W8TJGz23gSuUWi0Kv7TX2FfSg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] genirq: soft_moderation: implement fixed moderation
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Sean Christopherson <seanjc@google.com>, Jacob Pan <jacob.jun.pan@linux.intel.com>, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Bjorn Helgaas <bhelgaas@google.com>, Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BAm6i4nhj7rGKbyg"
+Content-Disposition: inline
+In-Reply-To: <3bf1793a-2ffd-4017-b4bf-dc63f3a2a7c8@infradead.org>
+
+
+--BAm6i4nhj7rGKbyg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 18, 2025 at 12:16=E2=80=AFAM Thomas Gleixner <tglx@linutronix.d=
-e> wrote:
->
-> On Mon, Nov 17 2025 at 20:30, Thomas Gleixner wrote:
-> > On Sun, Nov 16 2025 at 18:28, Luigi Rizzo wrote:
-> >> +    ms->rounds_left--;
-> >> +
-> >> +    if (ms->rounds_left > 0) {
-> >> +            /* Timer still alive, just call the handlers. */
-> >> +            list_for_each_entry_safe(desc, next, &ms->descs, mod.ms_n=
-ode) {
-> >> +                    ms->irq_count +=3D irq_mod_info.count_timer_calls=
-;
+On Mon, Nov 17, 2025 at 10:51:11AM -0800, Randy Dunlap wrote:
+> Hi,
+>=20
+> On 11/17/25 2:47 AM, Jonathan Cameron wrote:
+> > diff --git a/lib/Kconfig b/lib/Kconfig
+> > index e629449dd2a3..e11136d188ae 100644
+> > --- a/lib/Kconfig
+> > +++ b/lib/Kconfig
+> > @@ -542,6 +542,10 @@ config MEMREGION
+> >  config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> >  	bool
+> > =20
+> > +config GENERIC_CPU_CACHE_MAINTENANCE
+> > +	bool
+> > +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+> > +
+> >  config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
+> >  	bool
+>=20
+> Architectures and/or platforms select ARCH_HAS_*.
+>=20
+> With this change above, it becomes the only entry in
+> lib/Kconfig that does "select ARCH_HAS_anytning".
+>=20
+> so I think this is wrong, back*wards.
 
-> I missed this gem before. How is this supposed to calculate an interrupt
-> rate when count_timer_calls is disabled?
+Maybe it is backwards, but I feel like this way is more logical. ARM64
+has memregion invalidation only because this generic approach is
+enabled, so the arch selects what it needs to get the support.
+Alternatively, something like
+| diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+| index 5f7f63d24931..75b2507f7eb2 100644
+| --- a/arch/arm64/Kconfig
+| +++ b/arch/arm64/Kconfig
+| @@ -21,6 +21,7 @@ config ARM64
+|  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+|  	select ARCH_HAS_CACHE_LINE_SIZE
+|  	select ARCH_HAS_CC_PLATFORM
+| +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+|  	select ARCH_HAS_CURRENT_STACK_POINTER
+|  	select ARCH_HAS_DEBUG_VIRTUAL
+|  	select ARCH_HAS_DEBUG_VM_PGTABLE
+| @@ -146,7 +147,6 @@ config ARM64
+|  	select GENERIC_ARCH_TOPOLOGY
+|  	select GENERIC_CLOCKEVENTS_BROADCAST
+|  	select GENERIC_CPU_AUTOPROBE
+| -	select GENERIC_CPU_CACHE_MAINTENANCE
+|  	select GENERIC_CPU_DEVICES
+|  	select GENERIC_CPU_VULNERABILITIES
+|  	select GENERIC_EARLY_IOREMAP
+| diff --git a/lib/Kconfig b/lib/Kconfig
+| index 09aec4a1e13f..ac223e627bc5 100644
+| --- a/lib/Kconfig
+| +++ b/lib/Kconfig
+| @@ -544,8 +544,9 @@ config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+|  	bool
+| =20
+|  config GENERIC_CPU_CACHE_MAINTENANCE
+| -	bool
+| -	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+| +	def_bool y
+| +	depends on ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
+| +	depends on ARM64
+| =20
+|  config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
+|  	bool
+implies (to me at least) that arm64 has memregion invalidation as an
+architectural feature and that the GENERIC_CPU_CACHE_MAINTENANCE option
+is a just common cross-arch code, like generic entry etc, rather than
+being the option gating the drivers that provide the feature in the
+first place.
 
-FWIW the code is supposed to count the MSI interrupts,
-which are the problematic ones.
-count_timer_calls was a debugging knob, but understood that
-it has no place in the upstream code.
+I didn't really care which way it went, and was gonna post something to
+squash and avoid another revision, but I found the resultant Kconfig
+setup to be make less sense to me than what came before. If the switched
+around version is less likely to be problematic etc, then sure, but I
+amn't convinced by switching it at a first glance.
 
-> This polish the Google PoC hackery to death will go nowhere. It's just a
-> ginormous waste of time. Not that I care about the time you waste with
-> that, but I pretty much care about mine.
->
-> That said, start over from scratch and take the feedback into account so
+--BAm6i4nhj7rGKbyg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-point taken.
+-----BEGIN PGP SIGNATURE-----
 
-> First of all please find some other wording than moderation. That's just
-> a randomly diced word without real meaning. Pick something which
-> describes what this infrastructure actually does: Adaptive polling, no?
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRu6EgAKCRB4tDGHoIJi
+0nZFAQDM8N23xRqxSRbXxCvV9U3SK6crnsbKb90b4UmJQ3Sp2AD+KZGuSHNYRHyF
+VDJQehUnQg16E9RkkY+PqRspoEYItwc=
+=ZlO7
+-----END PGP SIGNATURE-----
 
-The core feature (with timer_rounds =3D 0)  is really pure moderation:
-disable+start a timer after an interrupt, enable when the timer fires,
-no extra calls.
-
-It is only timer_rounds>0 (which as implemented is clearly broken,
-and will be removed) that combines moderation + N rounds of timed polling.
-
-> There are a couple of other fundamental questions to answer upfront:
->
->    1) Is this throttle everything on a CPU the proper approach?
->
->       To me this does not make sense. The CPU hogging network adapter or
->       disk drive has no business to delay low frequency interrupts,
->       which might be important, just because.
-
-while there is some shared fate, a low frequency source (with interrupts
-more than the adaptive_delay apart) on the same CPU as a high frequency
-source, will rarely if ever see any additional delay:
-the first interrupt from a source is always served right away,
-there is a high chance that the timer fires and the source
-is re-enabled before the next interrupt from the low frequency source.
-
-cheers
-luigi
+--BAm6i4nhj7rGKbyg--
 
