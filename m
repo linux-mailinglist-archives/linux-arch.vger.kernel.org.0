@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-14866-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14867-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1974C6918D
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 12:32:05 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF33FC691C4
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 12:34:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 63D5F380A60
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 11:32:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4B70E4F2CBE
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Nov 2025 11:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 822E23559F0;
-	Tue, 18 Nov 2025 11:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528F63557E3;
+	Tue, 18 Nov 2025 11:30:21 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639793559E8;
-	Tue, 18 Nov 2025 11:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D19C35028B;
+	Tue, 18 Nov 2025 11:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763465410; cv=none; b=YAdVX92XfXPq7bb1boB2iIeTiE53hoeEO6uGPZvLD4KEZvgjj5tUrSqyoIbMhrZkfwhz8AgcRyzfubbgYYPszLsvHpWlaqFpjDp/c0U55sGic6durZFx1RP2dQSN8c1to9aGWRFAZ0tjUeRWDQKdJSGd3xv8FHGqYnHnQT8mmGQ=
+	t=1763465421; cv=none; b=eCn8xrpzzHqSHvFfO9xKwEEosYZkbakFLxCO/+BRPqAA3J+dCNemRo9O3h89zkF+vND3fqiRkEJ3Cl43JGS+DY/5oe2b+AhC4RAnJ5Mk54p42IdPEeCPYVO86qdwAadJEf/wnBktCaEdHaWAeIvPTEwU8PmcIMhWwG/f6qHK5Zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763465410; c=relaxed/simple;
-	bh=K/4s2e2JBQaH3wwXOnhqEOZ4hFcV7sKz4I2QHUXDed0=;
+	s=arc-20240116; t=1763465421; c=relaxed/simple;
+	bh=mYQUjeewE7sioTasKERqUtzriQiuTzatGm3f95VWn/0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GBYSAOSZHKY5PRd+FpBVwsTRuUCk3KFEv1W8UaYmrS8XK5GE5jmZO78DKccpRzynpKjoAQO7ctrkwOlJ9stHEBHbcndGBwCXSraoe7IN8W/6P6QjHtdQQS2DijuktgVnCD7iM1nF3tzSDKu3TG8gr2q5pKHJrP/xWCp7NUvX/t4=
+	 MIME-Version; b=S3+ZAjtK3SAAM/17V5Uyld8B5iIVE/QuK+QHdm6rE6MfqdPUmdC2+k+V33IlznkJECqaZdPr3VwkaiFOkgxJZyqdZ1sdfASh/5DxeqCt2Gznx/5igKdeq1UKpNPLgsg9sUx1mj68ppvcbIpf+R4UXvOVBin9EYxmLbbUYIDnIaU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5EE0C2BCB6;
-	Tue, 18 Nov 2025 11:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6308C2BCB6;
+	Tue, 18 Nov 2025 11:30:17 +0000 (UTC)
 From: Huacai Chen <chenhuacai@loongson.cn>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Huacai Chen <chenhuacai@kernel.org>
@@ -40,9 +40,9 @@ Cc: loongarch@lists.linux.dev,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-kernel@vger.kernel.org,
 	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 09/14] LoongArch: Adjust system call for 32BIT/64BIT
-Date: Tue, 18 Nov 2025 19:27:23 +0800
-Message-ID: <20251118112728.571869-10-chenhuacai@loongson.cn>
+Subject: [PATCH V2 10/14] LoongArch: Adjust user accessors for 32BIT/64BIT
+Date: Tue, 18 Nov 2025 19:27:24 +0800
+Message-ID: <20251118112728.571869-11-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251118112728.571869-1-chenhuacai@loongson.cn>
 References: <20251118112728.571869-1-chenhuacai@loongson.cn>
@@ -54,146 +54,242 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adjust system call for both 32BIT and 64BIT, including: add the uapi
-unistd_{32,64}.h and syscall_table_{32,64}.h inclusion, add sys_mmap2()
-definition, change the system call entry routines, etc.
+Adjust user accessors for both 32BIT and 64BIT, including: get_user(),
+put_user(), copy_user(), clear_user(), etc.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/Kbuild        |  1 +
- arch/loongarch/include/uapi/asm/Kbuild   |  1 +
- arch/loongarch/include/uapi/asm/unistd.h |  6 ++++++
- arch/loongarch/kernel/Makefile.syscalls  |  1 +
- arch/loongarch/kernel/entry.S            | 22 +++++++++++-----------
- arch/loongarch/kernel/syscall.c          | 13 +++++++++++++
- 6 files changed, 33 insertions(+), 11 deletions(-)
+ arch/loongarch/include/asm/uaccess.h | 63 ++++++++++++++++++++++++++--
+ arch/loongarch/lib/clear_user.S      | 22 ++++++----
+ arch/loongarch/lib/copy_user.S       | 28 ++++++++-----
+ 3 files changed, 91 insertions(+), 22 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/Kbuild b/arch/loongarch/include/asm/Kbuild
-index b04d2cef935f..9034b583a88a 100644
---- a/arch/loongarch/include/asm/Kbuild
-+++ b/arch/loongarch/include/asm/Kbuild
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
-+syscall-y += syscall_table_32.h
- syscall-y += syscall_table_64.h
- generated-y += orc_hash.h
+diff --git a/arch/loongarch/include/asm/uaccess.h b/arch/loongarch/include/asm/uaccess.h
+index 0d22991ae430..4e259d490e45 100644
+--- a/arch/loongarch/include/asm/uaccess.h
++++ b/arch/loongarch/include/asm/uaccess.h
+@@ -19,10 +19,16 @@
+ #include <asm/asm-extable.h>
+ #include <asm-generic/access_ok.h>
  
-diff --git a/arch/loongarch/include/uapi/asm/Kbuild b/arch/loongarch/include/uapi/asm/Kbuild
-index 517761419999..89ac01faa5ae 100644
---- a/arch/loongarch/include/uapi/asm/Kbuild
-+++ b/arch/loongarch/include/uapi/asm/Kbuild
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
-+syscall-y += unistd_32.h
- syscall-y += unistd_64.h
-diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
-index 1f01980f9c94..e19c7f2f9f87 100644
---- a/arch/loongarch/include/uapi/asm/unistd.h
-+++ b/arch/loongarch/include/uapi/asm/unistd.h
-@@ -1,3 +1,9 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
- 
-+#include <asm/bitsperlong.h>
++#define __LSW	0
++#define __MSW	1
 +
-+#if __BITS_PER_LONG == 32
-+#include <asm/unistd_32.h>
+ extern u64 __ua_limit;
+ 
+-#define __UA_ADDR	".dword"
++#ifdef CONFIG_64BIT
+ #define __UA_LIMIT	__ua_limit
 +#else
- #include <asm/unistd_64.h>
++#define __UA_LIMIT	0x80000000UL
 +#endif
-diff --git a/arch/loongarch/kernel/Makefile.syscalls b/arch/loongarch/kernel/Makefile.syscalls
-index ab7d9baa2915..cd46c2b69c7f 100644
---- a/arch/loongarch/kernel/Makefile.syscalls
-+++ b/arch/loongarch/kernel/Makefile.syscalls
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
  
- # No special ABIs on loongarch so far
-+syscall_abis_32 +=
- syscall_abis_64 +=
-diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
-index 47e1db9a1ce4..b53d333a7c42 100644
---- a/arch/loongarch/kernel/entry.S
-+++ b/arch/loongarch/kernel/entry.S
-@@ -23,24 +23,24 @@ SYM_CODE_START(handle_syscall)
- 	UNWIND_HINT_UNDEFINED
- 	csrrd		t0, PERCPU_BASE_KS
- 	la.pcrel	t1, kernelsp
--	add.d		t1, t1, t0
-+	PTR_ADD		t1, t1, t0
- 	move		t2, sp
--	ld.d		sp, t1, 0
-+	PTR_L		sp, t1, 0
- 
--	addi.d		sp, sp, -PT_SIZE
-+	PTR_ADDI	sp, sp, -PT_SIZE
- 	cfi_st		t2, PT_R3
- 	cfi_rel_offset	sp, PT_R3
--	st.d		zero, sp, PT_R0
-+	LONG_S		zero, sp, PT_R0
- 	csrrd		t2, LOONGARCH_CSR_PRMD
--	st.d		t2, sp, PT_PRMD
-+	LONG_S		t2, sp, PT_PRMD
- 	csrrd		t2, LOONGARCH_CSR_CRMD
--	st.d		t2, sp, PT_CRMD
-+	LONG_S		t2, sp, PT_CRMD
- 	csrrd		t2, LOONGARCH_CSR_EUEN
--	st.d		t2, sp, PT_EUEN
-+	LONG_S		t2, sp, PT_EUEN
- 	csrrd		t2, LOONGARCH_CSR_ECFG
--	st.d		t2, sp, PT_ECFG
-+	LONG_S		t2, sp, PT_ECFG
- 	csrrd		t2, LOONGARCH_CSR_ESTAT
--	st.d		t2, sp, PT_ESTAT
-+	LONG_S		t2, sp, PT_ESTAT
- 	cfi_st		ra, PT_R1
- 	cfi_st		a0, PT_R4
- 	cfi_st		a1, PT_R5
-@@ -51,7 +51,7 @@ SYM_CODE_START(handle_syscall)
- 	cfi_st		a6, PT_R10
- 	cfi_st		a7, PT_R11
- 	csrrd		ra, LOONGARCH_CSR_ERA
--	st.d		ra, sp, PT_ERA
-+	LONG_S		ra, sp, PT_ERA
- 	cfi_rel_offset	ra, PT_ERA
- 
- 	cfi_st		tp, PT_R2
-@@ -67,7 +67,7 @@ SYM_CODE_START(handle_syscall)
- #endif
- 
- 	move		u0, t0
--	li.d		tp, ~_THREAD_MASK
-+	LONG_LI		tp, ~_THREAD_MASK
- 	and		tp, tp, sp
- 
- 	move		a0, sp
-diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/syscall.c
-index ab94eb5ce039..1249d82c1cd0 100644
---- a/arch/loongarch/kernel/syscall.c
-+++ b/arch/loongarch/kernel/syscall.c
-@@ -34,9 +34,22 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len, unsigned long,
- 	return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset >> PAGE_SHIFT);
+ /*
+  * get_user: - Get a simple variable from user space.
+@@ -126,6 +132,7 @@ extern u64 __ua_limit;
+  *
+  * Returns zero on success, or -EFAULT on error.
+  */
++
+ #define __put_user(x, ptr) \
+ ({									\
+ 	int __pu_err = 0;						\
+@@ -146,7 +153,7 @@ do {									\
+ 	case 1: __get_data_asm(val, "ld.b", ptr); break;		\
+ 	case 2: __get_data_asm(val, "ld.h", ptr); break;		\
+ 	case 4: __get_data_asm(val, "ld.w", ptr); break;		\
+-	case 8: __get_data_asm(val, "ld.d", ptr); break;		\
++	case 8: __get_data_asm_8(val, ptr); break;			\
+ 	default: BUILD_BUG(); break;					\
+ 	}								\
+ } while (0)
+@@ -167,13 +174,39 @@ do {									\
+ 	(val) = (__typeof__(*(ptr))) __gu_tmp;				\
  }
  
-+SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len, unsigned long,
-+		 prot, unsigned long, flags, unsigned long, fd, unsigned long, offset)
-+{
-+	if (offset & (~PAGE_MASK >> 12))
-+		return -EINVAL;
-+
-+	return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset >> (PAGE_SHIFT - 12));
++#ifdef CONFIG_64BIT
++#define __get_data_asm_8(val, ptr) \
++	__get_data_asm(val, "ld.d", ptr)
++#else /* !CONFIG_64BIT */
++#define __get_data_asm_8(val, ptr)					\
++{									\
++	u32 __lo, __hi;							\
++	u32 __user *__ptr = (u32 __user *)(ptr);			\
++									\
++	__asm__ __volatile__ (						\
++		"1:\n"							\
++		"	ld.w %1, %3				\n"	\
++		"2:\n"							\
++		"	ld.w %2, %4				\n"	\
++		"3:\n"							\
++		_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 3b, %0, %1)		\
++		_ASM_EXTABLE_UACCESS_ERR_ZERO(2b, 3b, %0, %1)		\
++		: "+r" (__gu_err), "=&r" (__lo), "=r" (__hi)		\
++		: "m" (__ptr[__LSW]), "m" (__ptr[__MSW]));		\
++	if (__gu_err)							\
++		__hi = 0;						\
++	(val) = (__typeof__(val))((__typeof__((val)-(val)))		\
++		((((u64)__hi << 32) | __lo)));				\
 +}
++#endif /* CONFIG_64BIT */
 +
- void *sys_call_table[__NR_syscalls] = {
- 	[0 ... __NR_syscalls - 1] = sys_ni_syscall,
-+#ifdef CONFIG_32BIT
-+#include <asm/syscall_table_32.h>
-+#else
- #include <asm/syscall_table_64.h>
-+#endif
- };
+ #define __put_user_common(ptr, size)					\
+ do {									\
+ 	switch (size) {							\
+ 	case 1: __put_data_asm("st.b", ptr); break;			\
+ 	case 2: __put_data_asm("st.h", ptr); break;			\
+ 	case 4: __put_data_asm("st.w", ptr); break;			\
+-	case 8: __put_data_asm("st.d", ptr); break;			\
++	case 8: __put_data_asm_8(ptr); break;				\
+ 	default: BUILD_BUG(); break;					\
+ 	}								\
+ } while (0)
+@@ -190,6 +223,30 @@ do {									\
+ 	: "Jr" (__pu_val));						\
+ }
  
- typedef long (*sys_call_fn)(unsigned long, unsigned long,
++#ifdef CONFIG_64BIT
++#define __put_data_asm_8(ptr) \
++	__put_data_asm("st.d", ptr)
++#else /* !CONFIG_64BIT */
++#define __put_data_asm_8(ptr)						\
++{									\
++	u32 __user *__ptr = (u32 __user *)(ptr);			\
++	u64 __x = (__typeof__((__pu_val)-(__pu_val)))(__pu_val);	\
++									\
++	__asm__ __volatile__ (						\
++		"1:\n"							\
++		"	st.w %z3, %1				\n"	\
++		"2:\n"							\
++		"	st.w %z4, %2				\n"	\
++		"3:\n"							\
++		_ASM_EXTABLE_UACCESS_ERR(1b, 3b, %0)			\
++		_ASM_EXTABLE_UACCESS_ERR(2b, 3b, %0)			\
++		: "+r" (__pu_err),					\
++			"=m" (__ptr[__LSW]),				\
++			"=m" (__ptr[__MSW])				\
++		: "rJ" (__x), "rJ" (__x >> 32));			\
++}
++#endif /* CONFIG_64BIT */
++
+ #define __get_kernel_nofault(dst, src, type, err_label)			\
+ do {									\
+ 	int __gu_err = 0;						\
+diff --git a/arch/loongarch/lib/clear_user.S b/arch/loongarch/lib/clear_user.S
+index 7a0db643b286..58c667dde882 100644
+--- a/arch/loongarch/lib/clear_user.S
++++ b/arch/loongarch/lib/clear_user.S
+@@ -13,11 +13,15 @@
+ #include <asm/unwind_hints.h>
+ 
+ SYM_FUNC_START(__clear_user)
++#ifdef CONFIG_32BIT
++	b		__clear_user_generic
++#else
+ 	/*
+ 	 * Some CPUs support hardware unaligned access
+ 	 */
+ 	ALTERNATIVE	"b __clear_user_generic",	\
+ 			"b __clear_user_fast", CPU_FEATURE_UAL
++#endif
+ SYM_FUNC_END(__clear_user)
+ 
+ EXPORT_SYMBOL(__clear_user)
+@@ -29,19 +33,20 @@ EXPORT_SYMBOL(__clear_user)
+  * a1: size
+  */
+ SYM_FUNC_START(__clear_user_generic)
+-	beqz	a1, 2f
++	beqz		a1, 2f
+ 
+-1:	st.b	zero, a0, 0
+-	addi.d	a0, a0, 1
+-	addi.d	a1, a1, -1
+-	bgtz	a1, 1b
++1:	st.b		zero, a0, 0
++	PTR_ADDI	a0, a0, 1
++	PTR_ADDI	a1, a1, -1
++	bgtz		a1, 1b
+ 
+-2:	move	a0, a1
+-	jr	ra
++2:	move		a0, a1
++	jr		ra
+ 
+-	_asm_extable 1b, 2b
++	_asm_extable 	1b, 2b
+ SYM_FUNC_END(__clear_user_generic)
+ 
++#ifdef CONFIG_64BIT
+ /*
+  * unsigned long __clear_user_fast(void *addr, unsigned long size)
+  *
+@@ -207,3 +212,4 @@ SYM_FUNC_START(__clear_user_fast)
+ SYM_FUNC_END(__clear_user_fast)
+ 
+ STACK_FRAME_NON_STANDARD __clear_user_fast
++#endif
+diff --git a/arch/loongarch/lib/copy_user.S b/arch/loongarch/lib/copy_user.S
+index 095ce9181c6c..c7264b779f6e 100644
+--- a/arch/loongarch/lib/copy_user.S
++++ b/arch/loongarch/lib/copy_user.S
+@@ -13,11 +13,15 @@
+ #include <asm/unwind_hints.h>
+ 
+ SYM_FUNC_START(__copy_user)
++#ifdef CONFIG_32BIT
++	b		__copy_user_generic
++#else
+ 	/*
+ 	 * Some CPUs support hardware unaligned access
+ 	 */
+ 	ALTERNATIVE	"b __copy_user_generic",	\
+ 			"b __copy_user_fast", CPU_FEATURE_UAL
++#endif
+ SYM_FUNC_END(__copy_user)
+ 
+ EXPORT_SYMBOL(__copy_user)
+@@ -30,22 +34,23 @@ EXPORT_SYMBOL(__copy_user)
+  * a2: n
+  */
+ SYM_FUNC_START(__copy_user_generic)
+-	beqz	a2, 3f
++	beqz		a2, 3f
+ 
+-1:	ld.b	t0, a1, 0
+-2:	st.b	t0, a0, 0
+-	addi.d	a0, a0, 1
+-	addi.d	a1, a1, 1
+-	addi.d	a2, a2, -1
+-	bgtz	a2, 1b
++1:	ld.b		t0, a1, 0
++2:	st.b		t0, a0, 0
++	PTR_ADDI	a0, a0, 1
++	PTR_ADDI	a1, a1, 1
++	PTR_ADDI	a2, a2, -1
++	bgtz		a2, 1b
+ 
+-3:	move	a0, a2
+-	jr	ra
++3:	move		a0, a2
++	jr		ra
+ 
+-	_asm_extable 1b, 3b
+-	_asm_extable 2b, 3b
++	_asm_extable	1b, 3b
++	_asm_extable	2b, 3b
+ SYM_FUNC_END(__copy_user_generic)
+ 
++#ifdef CONFIG_64BIT
+ /*
+  * unsigned long __copy_user_fast(void *to, const void *from, unsigned long n)
+  *
+@@ -281,3 +286,4 @@ SYM_FUNC_START(__copy_user_fast)
+ SYM_FUNC_END(__copy_user_fast)
+ 
+ STACK_FRAME_NON_STANDARD __copy_user_fast
++#endif
 -- 
 2.47.3
 
