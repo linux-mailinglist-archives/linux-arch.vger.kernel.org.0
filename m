@@ -1,236 +1,125 @@
-Return-Path: <linux-arch+bounces-14963-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14964-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20048C70B1F
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 19:50:13 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B707C70ECC
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 20:59:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D7A5A4E33DD
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 18:44:59 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0CD2034F615
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 19:56:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77EAA3043D7;
-	Wed, 19 Nov 2025 18:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6633431FA;
+	Wed, 19 Nov 2025 19:56:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqvxYHbN"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="b+5LHHKo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D62315785;
-	Wed, 19 Nov 2025 18:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FB2348860
+	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 19:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763577894; cv=none; b=NxJ4HzPfTMhjpWjZjm5uPGH1WDJikXnPZNS2jijCrN461sNdor+RXngyhS+znXy2IQa73mGcPYu+u91BjhfHWTex7xg0WvCRh9H0qAxLJWfoxGClUW3gXUtJerQCjRYhV+kIPMqn+1JFpQdfEaTrN9CG0OKvPTj9eIY5plS6tTE=
+	t=1763582164; cv=none; b=j31O2McTlVDQwNUIQ5JXYIi7FxUE7jImnI64yK0g5pNGTpD83GSEls7WaywB3I0K7qMCePxz2SlWKgdJ7zlVByQTtPSmQ80Aorghek9nmNLmSzJn/FGZAIPSqoy1PB492ylsS5ud48wRCYFOmXaAtHz0mucbiiSeoH3MMHIAfqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763577894; c=relaxed/simple;
-	bh=7AAXhdIN9XNuNFY637AtV3mAm4gPrrFNTZMcjXFYErg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mYpv7rY98SR5H4xHP6QC9RiXsotNlE5uDtQUSo75J/6LCvCSgiq5dsG0ycgT3u/7XF2ix00vsvx6kxNqTyc50SSmJh/+83KI2oMAu/5oqqBjiP1FYQYW/ka7aU+21HNTBr4xEzvyRa+VKtXjdeC3rpoTKsi572LVbhZEVyMI/IM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mqvxYHbN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81AF1C4CEF5;
-	Wed, 19 Nov 2025 18:44:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763577890;
-	bh=7AAXhdIN9XNuNFY637AtV3mAm4gPrrFNTZMcjXFYErg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mqvxYHbNym+xIqsVHSgdrQgyJOtvsXCayhPPiB6N/Xvv3p98UprOivIkAKOfo7tum
-	 BjgCE9oANwa6vv9VBMkqKLdltF1qmWLo9ANzFpvr659h2LaYez6F3jA9FJz70tdeQJ
-	 XBH/PBDaWttnGc0Z5GDo84/lH1A7gxjmFM6zL/jN3j/YzHtRzfSZWRomHTb7EvThz0
-	 oyztU6NI7SNHvsvSFM1hoYk9u8MMmDnEjbIYoHsw3A6qAgfmxpMXoa/ELrr4/OO+CP
-	 SOIt1uLy5+gHJzMJe41RZolswZO8i4mvTuFvAPolcdrlFh8/EX8RKHNQloElWsG/2L
-	 gmQ3LNTVyCgLg==
-Date: Wed, 19 Nov 2025 18:44:43 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Jonathan Cameron <jonathan.cameron@huawei.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-cxl@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	Dan Williams <dan.j.williams@intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Drew Fustini <fustini@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>, james.morse@arm.com,
-	Will Deacon <will@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
-	linuxarm@huawei.com, Yushan Wang <wangyushan12@huawei.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
-	Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v6 3/7] lib: Support
- ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-Message-ID: <20251119-charging-gallon-bea196c3a547@spud>
-References: <20251117104800.2041329-1-Jonathan.Cameron@huawei.com>
- <20251117104800.2041329-4-Jonathan.Cameron@huawei.com>
- <3bf1793a-2ffd-4017-b4bf-dc63f3a2a7c8@infradead.org>
- <20251117-definite-uncounted-7cc07a377a71@spud>
- <20251118093041.00000c9e@huawei.com>
- <2241d985-0e35-41e5-93b1-1e8d4e7a84bf@infradead.org>
- <20251119094255.00000020@huawei.com>
+	s=arc-20240116; t=1763582164; c=relaxed/simple;
+	bh=DN/DzA6q+86ev6MGPfAT+dLF+J2Uxfsbiqindp3jA1o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R1GH6l0zpKZdCGJtktAslUMNVwbqmp934nfPK/vpe3m3/T512k6wJE6JfF2+n4abam/wsWO6oZqdv+w7DHplSxq6GyBWPwBV9cNxa6qdWjAL3WlmTVcwy51qTLuv5oAToQ1tfG+NrlNzo0f1q6Z/Uyqg4zhKWnZ6cJPL+1bWMU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=b+5LHHKo; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-29812589890so1403005ad.3
+        for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 11:55:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1763582159; x=1764186959; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DN/DzA6q+86ev6MGPfAT+dLF+J2Uxfsbiqindp3jA1o=;
+        b=b+5LHHKo2uZFLgJwzREuY9gs6Zw+2e6wzfSVyCM6Eis7Crav0/UquXBkt3eWPsDkr1
+         zumaiIjnYOrQCagOg1M2UzdnVGm3MhCL43iRsDPC336Q2WCxQBcvPSe5leC4gw2poj7s
+         KsOFzixapMh3zBZemmBMkB2vuw8fEux8tQwtslZ2bLQ3n2gaiOIK1Uu0J9TWwaRmPCA+
+         pt6Y0hN/mNSTc+o/bby86XwRBgkwB+PebYDHdrqrwjXs9A5Hinsb/r9fsAi6ZI/yH2hl
+         sdlkuhJF03Ne6XEcF+wR8x9Cg5D3Y3iaZenTQdNJuE9JeHIAuVTfHPQjXHX1SWWjwTId
+         norw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763582159; x=1764186959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DN/DzA6q+86ev6MGPfAT+dLF+J2Uxfsbiqindp3jA1o=;
+        b=dCNGIvJJmBVmwwpVhas9sWtgPhy57uC0TgB6ecLZbovSxwby6vmgJujzLhLlX9IOHa
+         P0bXDxWO8S2hB4GO0us4RRX12qJjmIb5dHHYqKRnfZQrwk4ASd8j5JVRWB3A02elDX2N
+         11CS8/XD7k1VL+HW9j5pxmk0nk5K0xiQfWoqC/mxb/2MyJ2k4cwTw6tQcZyc6+3K41Fv
+         40zpALCpMRAI25ubFdAcnZoZPcEXOvsxpUF//CC8O6fYEKSqyrRzzO7zf0Kf1vopH0Nq
+         pfh+cMoFI2umVodxlQ/A8SEiigMgHW8ct4Lj6leqqtugYDLLL+ISbuQVypvd1PG16DIp
+         BvXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUB7lDLLDFbz6v0FhIK21mqMMpdvpCz9HZbdThm2KtxM3rWbi3PU1vwRDlp1zCUEqHGP0reUNNNbkZA@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp1TJMZVrfA/j87b6lqlV1dwoK2xmbx0DN+B0plHdhAEuL4yrQ
+	VZvGnC6Kp0uKiJvZ4/sbJzAcPeq/9Nu+xwFQ70Tp2C4p5JdX9sp9yAXAMszNad/BJLQQavkecQ2
+	EKggWuSUnQ353GXtzx/wHNymolBRVcGXbrG6YidW5
+X-Gm-Gg: ASbGncua6y5+h+NAkjqnSFBVQZWqBKUvZE5MCRrm5kb/ncOHH0eaWV8G21Hnh8mQ/pV
+	x1paexxqOoGSoguesrh8XhJ2cnEu9UwMLF5NW4xZB46cCq8+f7iUmiqUEix5dQ97abkY0OMGIkk
+	9uY3IBuFZTLXMa00IJuo94B7EXaXhB0H2yLRHnAVEgn4vbS+Xp8SN2WGofOE0vSuSECrRb4ESjd
+	77FCn9jQGNCJivtJjJe5RA+vZsFa8XgXHI2lmwR8qMiTBCO6VyM36dXM+qxWKOyV0R31R4=
+X-Google-Smtp-Source: AGHT+IFH9MSHfJWp6YXFB42UsuMhoLOkEWsFTDtMBAdcLCsEfu9ycctu3VPOXdyMN2njeOgrz0I5tCYbRs8o2VLROfk=
+X-Received: by 2002:a17:903:19cd:b0:295:a1a5:baf7 with SMTP id
+ d9443c01a7336-29b5b0d7f17mr6451945ad.37.1763582159025; Wed, 19 Nov 2025
+ 11:55:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8uMCJ8lN+XFmaZ3P"
-Content-Disposition: inline
-In-Reply-To: <20251119094255.00000020@huawei.com>
-
-
---8uMCJ8lN+XFmaZ3P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
+ <20250429-module-hashes-v3-7-00e9258def9e@weissschuh.net> <20251119112055.W1l5FOxc@linutronix.de>
+In-Reply-To: <20251119112055.W1l5FOxc@linutronix.de>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 19 Nov 2025 14:55:47 -0500
+X-Gm-Features: AWmQ_bn1L21n_pWrZnJvXRwL1Z-01d6qlYWdrkllcBBpENXLHykDJ3f6oq3wlNk
+Message-ID: <CAHC9VhTuf1u4B3uybZxdojcmz5sFG+_JHUCC=C0N=9gFDmurHg@mail.gmail.com>
+Subject: Re: [PATCH v3 7/9] module: Move lockdown check into generic module loader
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	=?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
+	Christian Heusel <christian@heusel.eu>, =?UTF-8?Q?C=C3=A2ju_Mihai=2DDrosi?= <mcaju95@gmail.com>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 19, 2025 at 09:42:55AM +0000, Jonathan Cameron wrote:
-> On Tue, 18 Nov 2025 17:18:31 -0800
-> Randy Dunlap <rdunlap@infradead.org> wrote:
->=20
-> > On 11/18/25 1:30 AM, Jonathan Cameron wrote:
-> > > On Tue, 18 Nov 2025 00:13:07 +0000
-> > > Conor Dooley <conor@kernel.org> wrote:
-> > >  =20
-> > >> On Mon, Nov 17, 2025 at 10:51:11AM -0800, Randy Dunlap wrote: =20
-> > >>> Hi,
-> > >>>
-> > >>> On 11/17/25 2:47 AM, Jonathan Cameron wrote:   =20
-> > >>>> diff --git a/lib/Kconfig b/lib/Kconfig
-> > >>>> index e629449dd2a3..e11136d188ae 100644
-> > >>>> --- a/lib/Kconfig
-> > >>>> +++ b/lib/Kconfig
-> > >>>> @@ -542,6 +542,10 @@ config MEMREGION
-> > >>>>  config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-> > >>>>  	bool
-> > >>>> =20
-> > >>>> +config GENERIC_CPU_CACHE_MAINTENANCE
-> > >>>> +	bool
-> > >>>> +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-> > >>>> +
-> > >>>>  config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
-> > >>>>  	bool   =20
-> > >>>
-> > >>> Architectures and/or platforms select ARCH_HAS_*.
-> > >>>
-> > >>> With this change above, it becomes the only entry in
-> > >>> lib/Kconfig that does "select ARCH_HAS_anytning".
-> > >>>
-> > >>> so I think this is wrong, back*wards.   =20
-> > >>
-> > >> Maybe it is backwards, but I feel like this way is more logical. ARM=
-64
-> > >> has memregion invalidation only because this generic approach is
-> > >> enabled, so the arch selects what it needs to get the support. =20
-> > >=20
-> > > Exactly this. Catalin requested this form in response to an earlier
-> > > version where arm64 Kconfig just had both selects for pretty much that
-> > > reason. This is expected to be used on a subset of architectures.
-> > > It is similar to things like GENERIC_ARCH_NUMA in this respect (thoug=
-h the
-> > > arch_numa_init() etc in there are called only from other arch code
-> > > so no ARCH_HAS_ symbols are associated with them).
-> > >  =20
-> > >> Alternatively, something like =20
-> > >=20
-> > > I'm fine with this solution if Randy prefers it. =20
-> >=20
-> > I do much prefer this alternative.
-> >=20
-> > > Thanks for your help with this. =20
-> >=20
-> > Thanks for listening.
->=20
-> Conor,
->=20
-> Given it is your proposed solution, I'm guessing you'll either spin a pat=
-ch
-> on top or squash it into original.  If you spin a patch for this.
->=20
-> Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+On Wed, Nov 19, 2025 at 6:20=E2=80=AFAM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> On 2025-04-29 15:04:34 [+0200], Thomas Wei=C3=9Fschuh wrote:
+> > The lockdown check buried in module_sig_check() will not compose well
+> > with the introduction of hash-based module validation.
+>
+> An explanation of why would be nice.
 
-New patch I think, since you say Catalin specifically asked for the
-current setup.
+/me shrugs
 
->=20
-> Thanks again!
->=20
-> Jonathan
->=20
-> >=20
-> >=20
-> > >> | diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > >> | index 5f7f63d24931..75b2507f7eb2 100644
-> > >> | --- a/arch/arm64/Kconfig
-> > >> | +++ b/arch/arm64/Kconfig
-> > >> | @@ -21,6 +21,7 @@ config ARM64
-> > >> |  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
-> > >> |  	select ARCH_HAS_CACHE_LINE_SIZE
-> > >> |  	select ARCH_HAS_CC_PLATFORM
-> > >> | +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-> > >> |  	select ARCH_HAS_CURRENT_STACK_POINTER
-> > >> |  	select ARCH_HAS_DEBUG_VIRTUAL
-> > >> |  	select ARCH_HAS_DEBUG_VM_PGTABLE
-> > >> | @@ -146,7 +147,6 @@ config ARM64
-> > >> |  	select GENERIC_ARCH_TOPOLOGY
-> > >> |  	select GENERIC_CLOCKEVENTS_BROADCAST
-> > >> |  	select GENERIC_CPU_AUTOPROBE
-> > >> | -	select GENERIC_CPU_CACHE_MAINTENANCE
-> > >> |  	select GENERIC_CPU_DEVICES
-> > >> |  	select GENERIC_CPU_VULNERABILITIES
-> > >> |  	select GENERIC_EARLY_IOREMAP
-> > >> | diff --git a/lib/Kconfig b/lib/Kconfig
-> > >> | index 09aec4a1e13f..ac223e627bc5 100644
-> > >> | --- a/lib/Kconfig
-> > >> | +++ b/lib/Kconfig
-> > >> | @@ -544,8 +544,9 @@ config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-> > >> |  	bool
-> > >> | =20
-> > >> |  config GENERIC_CPU_CACHE_MAINTENANCE
-> > >> | -	bool
-> > >> | -	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-> > >> | +	def_bool y
-> > >> | +	depends on ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-> > >> | +	depends on ARM64
-> > >> | =20
-> > >> |  config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
-> > >> |  	bool
-> > >> implies (to me at least) that arm64 has memregion invalidation as an
-> > >> architectural feature and that the GENERIC_CPU_CACHE_MAINTENANCE opt=
-ion
-> > >> is a just common cross-arch code, like generic entry etc, rather than
-> > >> being the option gating the drivers that provide the feature in the
-> > >> first place.
-> > >>
-> > >> I didn't really care which way it went, and was gonna post something=
- to
-> > >> squash and avoid another revision, but I found the resultant Kconfig
-> > >> setup to be make less sense to me than what came before. If the swit=
-ched
-> > >> around version is less likely to be problematic etc, then sure, but I
-> > >> amn't convinced by switching it at a first glance. =20
-> >=20
-> >=20
->=20
+I thought the explanation was sufficient.
 
---8uMCJ8lN+XFmaZ3P
-Content-Type: application/pgp-signature; name="signature.asc"
+> > Move it into module_integrity_check() which will work better.
+> >
+> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaR4QGwAKCRB4tDGHoIJi
-0jzVAP485em5r734PUQARl/Redcopl3WHKhio24hv69dhS+NiwEA4Tf9EI8upkHE
-ZhRrHxrcKvSCFgpopKmIEp+fHS2OBwU=
-=DQ0+
------END PGP SIGNATURE-----
-
---8uMCJ8lN+XFmaZ3P--
+--=20
+paul-moore.com
 
