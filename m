@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-14890-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14891-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3F17C6D242
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 08:34:35 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EADACC6D26C
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 08:35:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EA4A835C21F
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 07:34:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9CD6A381418
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 07:34:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 734A62ED844;
-	Wed, 19 Nov 2025 07:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86F3432721B;
+	Wed, 19 Nov 2025 07:33:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YWY8Wd/h"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Pb5LFJ+I"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A49284669
-	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 07:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D321C22259B
+	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 07:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763537583; cv=none; b=jliSmjfY5fk16HH9eD6A405y4kIk7E+Uo6h0L63CyqhxwF4PKvak1nXaoFaleU4V7ZOE+AXSIyLt6lmlVDAbvn7WRcB6bWzf9PvMSGowkTdswGA30pb8ha5k20FEJKAF3mugguNetyMNm+lx9K9XwWrYppmQGr1YrF3XCwjDJaE=
+	t=1763537593; cv=none; b=LSOM1yx5DjQVrUeYGcGG/l5dI+dI5CW1siEkVGpzUKywCWDNMW2RHvexhR1W85zkrHjejbXYLtYsSUQ7jEB8cZA1a8UeT+Vu0QwfpWFdzBOcLJvNZ+2nLQmr0Vh8vJ7w7xgXIV3Yy4eSqynHRbF5ug5YX0hmj4tsFN5vp7dRM2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763537583; c=relaxed/simple;
-	bh=mR3bwbJvmEN1mjsslqKPvgqNRGn6U+KmaDsJGLHCDmk=;
+	s=arc-20240116; t=1763537593; c=relaxed/simple;
+	bh=vlwGdUggpM5vGC8vjlql5LFmb/0pWkr6fxIIgauNlKk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GFJhWVDv3I94FusgNu36JtuI2+Li+gJNYLrOvwkM1Vp96lyCGAO0RsxAqu535WXKVEGk/ThJUQfaciDB51CJKFaJYHkvGoeCjVw4aDnsIGOZbpH0hdr+o3tWJaPPe/rgAQmToHmO1S0m5hftE58zIrEPasqyrq/nsVrasZg5ukI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YWY8Wd/h; arc=none smtp.client-ip=91.218.175.177
+	 MIME-Version; b=BBjVVpfGjSL1c0s1TZR/zYxl3p7QTvT/+2czD4Z3N4WcUHC/DWwR/yG6/XB2fCpzNhns3ioworL0nLyaQcLRZ3q0jRcQLIB0LV2qKrsheH8cja+yKyfcsCGCd0BK+zxeoHfDa1ez9VdK8HUSSqvbJbHL9exvuwYxjVMWGTKHPfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Pb5LFJ+I; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763537579;
+	t=1763537588;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xbQut2RAeaEKXRoxc7PGnBbX+lTx58XUfxm/tIDziS4=;
-	b=YWY8Wd/hFhv3CZWBDDzWNHWU3c4vCOTDJZW/mEzfM0Wlf7hnGTSivFcCRJ9xyCe64ovTmd
-	byPLPVtAT4GqYNj4gNPzHf5ibj7aP2MQEmdYxkGBgLDrH/5Ncl2qWFYZmMJp+cJyyYj/NQ
-	72JNhTJaov0NSjtaGyaV32a2xS5LLUE=
+	bh=zdgUvYzcKft0e9ATGbEv1Xh5QzTrrx2Vkhg8Ynjkseo=;
+	b=Pb5LFJ+IU/AZ2Oz4xGklQJtAr7Es3lk5E9mJtBOlpGjpEgsHLj1bdTC0GTVwKClzrR4LOK
+	intXEaBo7Ss5/OCkxQXg0NTRpmfVxlu9kTak8I4es9WvoPUCvmE9L4Qkpx6nGAl9AKSns5
+	kY9KU02r2QCtq/wVBDCUyb2Auh35ZjY=
 From: Qi Zheng <qi.zheng@linux.dev>
 To: will@kernel.org,
 	aneesh.kumar@kernel.org,
@@ -61,11 +61,10 @@ Cc: linux-arch@vger.kernel.org,
 	linux-parisc@vger.kernel.org,
 	linux-um@lists.infradead.org,
 	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>
-Subject: [PATCH v2 3/7] LoongArch: mm: enable MMU_GATHER_RCU_TABLE_FREE
-Date: Wed, 19 Nov 2025 15:31:20 +0800
-Message-ID: <0e12d201cc18a970c28c84030a0d79f5bda492ca.1763537007.git.zhengqi.arch@bytedance.com>
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH v2 4/7] mips: mm: enable MMU_GATHER_RCU_TABLE_FREE
+Date: Wed, 19 Nov 2025 15:31:21 +0800
+Message-ID: <1ef6075dca55a0ace4a6de6350531e4bc513080e.1763537007.git.zhengqi.arch@bytedance.com>
 In-Reply-To: <cover.1763537007.git.zhengqi.arch@bytedance.com>
 References: <cover.1763537007.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
@@ -85,32 +84,31 @@ first enable MMU_GATHER_RCU_TABLE_FREE to prepare for enabling the
 PT_RECLAIM feature, which resolves this problem.
 
 Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- arch/loongarch/Kconfig               | 1 +
- arch/loongarch/include/asm/pgalloc.h | 7 +++----
+ arch/mips/Kconfig               | 1 +
+ arch/mips/include/asm/pgalloc.h | 7 +++----
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 5b1116733d881..57d3e199605dc 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -186,6 +186,7 @@ config LOONGARCH
- 	select IRQ_LOONGARCH_CPU
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index e8683f58fd3e2..8b16dd4db7c08 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -99,6 +99,7 @@ config MIPS
+ 	select IRQ_FORCED_THREADING
+ 	select ISA if EISA
  	select LOCK_MM_AND_FIND_VMA
- 	select MMU_GATHER_MERGE_VMAS if MMU
 +	select MMU_GATHER_RCU_TABLE_FREE
- 	select MODULES_USE_ELF_RELA if MODULES
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
-diff --git a/arch/loongarch/include/asm/pgalloc.h b/arch/loongarch/include/asm/pgalloc.h
-index 08dcc698ec184..248f62d0b590e 100644
---- a/arch/loongarch/include/asm/pgalloc.h
-+++ b/arch/loongarch/include/asm/pgalloc.h
-@@ -55,8 +55,7 @@ static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
- 	return pte;
- }
+ 	select MODULES_USE_ELF_REL if MODULES
+ 	select MODULES_USE_ELF_RELA if MODULES && 64BIT
+ 	select PERF_USE_VMALLOC
+diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
+index 942af87f1cddb..9a7e5af16c00b 100644
+--- a/arch/mips/include/asm/pgalloc.h
++++ b/arch/mips/include/asm/pgalloc.h
+@@ -48,8 +48,7 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
+ extern void pgd_init(void *addr);
+ extern pgd_t *pgd_alloc(struct mm_struct *mm);
  
 -#define __pte_free_tlb(tlb, pte, address)	\
 -	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
@@ -118,7 +116,7 @@ index 08dcc698ec184..248f62d0b590e 100644
  
  #ifndef __PAGETABLE_PMD_FOLDED
  
-@@ -79,7 +78,7 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+@@ -72,7 +71,7 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
  	return pmd;
  }
  
@@ -127,8 +125,8 @@ index 08dcc698ec184..248f62d0b590e 100644
  
  #endif
  
-@@ -99,7 +98,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
- 	return pud;
+@@ -98,7 +97,7 @@ static inline void p4d_populate(struct mm_struct *mm, p4d_t *p4d, pud_t *pud)
+ 	set_p4d(p4d, __p4d((unsigned long)pud));
  }
  
 -#define __pud_free_tlb(tlb, x, addr)	pud_free((tlb)->mm, x)
