@@ -1,79 +1,79 @@
-Return-Path: <linux-arch+bounces-14938-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14939-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29CD4C6FE9E
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 17:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90688C6FE2F
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 16:59:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9651A4FEB54
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 15:49:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 82DE34FA4D2
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 15:49:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 205692EC55C;
-	Wed, 19 Nov 2025 15:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA883A5E88;
+	Wed, 19 Nov 2025 15:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gvo8Ljd/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XXrmnSHa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9430377EB6
-	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 15:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4617B393DCF
+	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 15:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763567156; cv=none; b=F1vjn23ofLve4NdWUpYs/IBpGYhM4d0p6Fy/25a0cKbMXdJ5Fl2YGa5MwHvIOlkrGWL0pjvG0CoHDK/HLbjhEXmXEnjK2tyBaRcYXd2D449itAOfBZR4KaMwll+fxucJnXbD61c2h/W6UwSQ8G5wPhjyi/ztmWcexmLXebmoX+o=
+	t=1763567159; cv=none; b=kbuuctPOnCqbhaRoKAukobmxrBSA5qQjEiqYP1Z63+YX8vByWA3S1a/dCMs/jq6csRXqkrMur8UW1V0OnEfp23lh1tjsYstyUrNmTr7JBenCtw0KJWfwKZeplFbZ/JLns5XXen87k41jSb/EIFkAOJS7sMLwWvvfdIsQxscD2Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763567156; c=relaxed/simple;
-	bh=P2BpXmRz69DL/Mo9gvHTNRnm0uC420IorTT0EImakDQ=;
+	s=arc-20240116; t=1763567159; c=relaxed/simple;
+	bh=f3/jMwmnVv3mI87uodqbEJ5zmLRyilWaBRh2oB7xeIA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k+/wukpecLvgIVLkUO1sADH0ZUVlGvWsq/5LgvSqUEId7wKqiCGihAcwIxRNdOKjkl1gjoyHJTYi28DTvIX7PJK3z6l3ZqHYjvxwoXdmCeLD9WSqahCfHsaCNnM4Zj/Ui4pitZNnyHaKGMDykBMIqdMEBw417LUDpeyNqz12dcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gvo8Ljd/; arc=none smtp.client-ip=209.85.221.41
+	 MIME-Version; b=i6+vCFazVp18tjn4dlnSbMvNNeobWAnpHaESj4yNoJlfnLIchjxa5OvjxgPd3rmFU55KKV27Y4gsRYDUElrtIevHqv1tl1Wv53yROxARj1npltjwaLQhfPaxtW92Q40QEQfI9aQpmBhj6x0Nn0jlPV7oF5j/et8JHynbBag3oN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XXrmnSHa; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42b3c5defb2so4677185f8f.2
-        for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 07:45:51 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso38465725e9.3
+        for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 07:45:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763567148; x=1764171948; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1763567150; x=1764171950; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l/EyDboeiBDU/UfklOwVUegNW3M8PrbX9Ov8/f+MrlA=;
-        b=gvo8Ljd//s70Ad6SW76idmhN0fRup0Xow21Ym1r2UBYinVsb5JC3n8VBpMue/pLWkU
-         htLFLuUG9II22JuzokqrUBl0FIowDCJB+lvn2qVtL1YvmFo7+wDaTYDGikVNNEn1YcH8
-         Iuhzb3XiCrFIuROQ3mOZhNdTianSbsO+8pjZSfDIvE4fFYqNI8gtbghZ+usPXOFIq8iq
-         i7U4tprdGjDoAg5SYQnep+sFOZ250TUOuoTa24+ZPpIoZVtyds47wZSiGn/keBZApxa7
-         Pam02IHJfIOB0F9q/5d2km4Th7hREloIwrLIh/HTlXC2IOIcZEQ7v0o90NFN6ydDKPp6
-         rVHw==
+        bh=TG3MkEScUQgKy+QWFE7rEK/ceT0KdBZscolLPvZ1jcY=;
+        b=XXrmnSHaTf1vf6uqqllPUT0sMUElMq1GY66Her4KbnbRi5e+DUU+M+SWXGUt2CZ6yi
+         Fcfg1D6NcZVjy26O1mHYrbiVIPaAlLBA2GBqvpgLMBXyymHP7sB69YUN84ZdMxEQx29S
+         DToilDeS7YIqZBRpQLn/r+GmhRa5gNuXE+wcynhuswMQIYn0NsTWAoMVNaNDtskjuf6d
+         eua2UlS0Q7BEVBAS9dnTmdA56yZpIwU8XFShysHoYhbEidZl0ofZ+gQZPlTrTx3l7IgY
+         d2eNag3MWaOS0TVX4RMZONoYBqxONt/LCOMwvGtHCkIwtA0Jveoa88lEMBckYQCQjlIx
+         QEGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763567148; x=1764171948;
+        d=1e100.net; s=20230601; t=1763567150; x=1764171950;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=l/EyDboeiBDU/UfklOwVUegNW3M8PrbX9Ov8/f+MrlA=;
-        b=sRwXpBxoVgo8Hqjb/F9FN2xCEOS59+kAp+muhUZkVAHi2E22X5uiegnUSaHxKyjKra
-         dmDIF1hdVg6xm1bueTSpd0A/GVvRA8v5wW/B5ybLH6kiQcJrNx7kieYvDPec15XSFaOm
-         5itiL4xC4n6QTJkuYwtuti2BJQ8nhFWZZ9Op+YPQ0j77EwMb4P+mu/f2plwDShjI5ehv
-         IbP8rKDIEmrtEef58at8yOtVF6H7JVHqttp8X9BOhXFvglDcgN6UtXtpR4sJPsESz4mA
-         f6yhZsZztrPglPke5QzPCFbZEiEtN+7NPyy2VkJ4wCJRR+HX/ATTKA2PKQq8b98FhBxC
-         9fJA==
-X-Forwarded-Encrypted: i=1; AJvYcCW1f7KM/ms82eFdZR6F2riIq4j5SdjywunG6hbs3GgSBGjs1qRP+Q0NDeDvVDBYT1V9Ad+zyWz0N4tp@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4m/e2NZ1TuinQxWWxaCxGgtmxNISsAyaIdybjl5+kzsQriFgF
-	G4lh05ZL0hZHn88h1NoEIDEx4/jTbkhQww0WK0HVTGf1LBBOI9DsuOo40Od1/13TF6E=
-X-Gm-Gg: ASbGncscqBAUEQETlQe60AojBIvXHedr1mBYtLZsg8FKY4gl9m0cNG9qYncWWqZCT/u
-	ZolW3MDkgLKz9PK4CtgCG9YMf1C3lKBGDH1wmrofMpe+XdhPiZOXHo+L7X42aNoUwfpdhQqaAIY
-	BLM890Vx412Y0yRCE6F2NS8PH1TU/Qdk/vkYV9g2AAB5n42fAzlyz7lqrXeJ7pCE7wUkbGJ9iwG
-	oeub1vqRmBSuFlbdt2ALwHPHrcYvE0lTm0xPEGKhz/W2BqjTPevBkL/elwmdbSF/SqO1QoUuas3
-	buhJTQJ/8GWWxMrDQlgcKOLsgV10GSpUZ5Wf01xrY04/wqPcbo6kKPuKG5zJdCvw5rrW1Y7Ijy/
-	qCDTO+W//tPy8bO0eJvQ86yxLHVnVrR0mSZdQYxe54+V2s7O4RQMgG88A2XQn16pp1wcwdnDsN0
-	6pShBNJ0FXW3p5wYaq2yA=
-X-Google-Smtp-Source: AGHT+IG3jCLeDmXIRQk0s6Z/im1uj+pkHlGcqCZtyflKDhFiJA87zd6Y92IL7f4uFHeiMPUMai5jbg==
-X-Received: by 2002:a05:6000:64a:b0:42b:396e:2817 with SMTP id ffacd0b85a97d-42b59378468mr19534486f8f.40.1763567148170;
-        Wed, 19 Nov 2025 07:45:48 -0800 (PST)
+        bh=TG3MkEScUQgKy+QWFE7rEK/ceT0KdBZscolLPvZ1jcY=;
+        b=mLJMVOtP6aZYr0sLoQE9ARkVU877yBe7AUyW+9105oWtqYeBjlsPId4GzvG0UbBrst
+         PZi9esnv2TPEBUCiipWat9lIA13SnuVU9yp4IBRbncUKgNXDUNhtQ3/dKMXp867iWwjX
+         rLasTO+ozp6zrKQ+bB52BfY1gtPATEH3a6F0U4+unjLj+0TDyHwv2qFY0vxmHOCZBIcx
+         Adqr5JTYOLqHywqrwoAE9q0cF3BL3Z4EekcFo8RYr41A+QfBd7zXZ7qqoHW111NH11+b
+         8rEvOce3D250j3IN1O0BHgbD1VYneGVZvTeiKLVMeR2LpFPSOmRS5hjUaCoQPtD5aoAR
+         eIcg==
+X-Forwarded-Encrypted: i=1; AJvYcCWc+anTOPH4HyfhqfmRrGjX60wD3HDmsRyJJx9qeRNB95oZCHa+OmyE8xz1yWHQisYvavRBDNh44Jiz@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEztExoKlmxH7jobVx6F2MiF6ZD6/xgh3dECw7rR8bIWjmvWzy
+	Kqj2fOLf7dBH707/Igw/RwK0FlqJaDh32PMpys7HCyu/XwuwgYkm7xH4SS3cdA9OKVc=
+X-Gm-Gg: ASbGncurNVJ9b/QhwpQl42aHHGpe3YEdb2OT+E8xhjfAKjB8dIkxzrhuCTDx5h4WcDV
+	VcAyDkM+AxbdmqfHmusDhIsj7tI8wp5brTh5ErUcUJ8uCh0U50OAxiTR3/R/xZtQHhJQC2YpkPj
+	9gl7PLZzObvpgzFLsYoefX4fB9jFgODshafLDQ/NUXu0yCSQPluME7EoRT7Y1tb+EmcnVtU4Cfl
+	WTKuwHXpm6Z+xmlrO6PPdOt7aLxKu5XxhVtmJh9tABsg65RTR7JCRhwBpm+nsIy3byf6jPE4iQO
+	U3D05pjt4hLzGzuq5Ljn5O3xQkmHmp+zQu861WxSlrjkTZQCsPXy0GShUp+WjD3YPcAorDomum1
+	9D+Vay42sGJL20hg3B/rz4g/2UGULDhNoHJqNOxAk0ZPAQ05eT6pu1/hp6toyGQwy6E3fssmska
+	ep11to8QTR6lrpibJ+hxGFwQG240gstA==
+X-Google-Smtp-Source: AGHT+IHArpVzpD3LO0mA1+dNKflLF3LKgYCdBzRW5r7OQjPk30YRri90746lAxdaW694nNfBsFGkIg==
+X-Received: by 2002:a05:600c:a05:b0:475:dc5c:3a89 with SMTP id 5b1f17b1804b1-4778fea881fmr202472465e9.34.1763567149948;
+        Wed, 19 Nov 2025 07:45:49 -0800 (PST)
 Received: from eugen-station.. ([82.76.24.202])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53dea1c9sm38765632f8f.0.2025.11.19.07.45.46
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53dea1c9sm38765632f8f.0.2025.11.19.07.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 07:45:47 -0800 (PST)
+        Wed, 19 Nov 2025 07:45:49 -0800 (PST)
 From: Eugen Hristev <eugen.hristev@linaro.org>
 To: linux-arm-msm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -98,9 +98,9 @@ Cc: tudor.ambarus@linaro.org,
 	tony.luck@intel.com,
 	kees@kernel.org,
 	Eugen Hristev <eugen.hristev@linaro.org>
-Subject: [PATCH 18/26] mm/memblock: Add MEMBLOCK_INSPECT flag
-Date: Wed, 19 Nov 2025 17:44:19 +0200
-Message-ID: <20251119154427.1033475-19-eugen.hristev@linaro.org>
+Subject: [PATCH 19/26] mm/numa: Register information into meminspect
+Date: Wed, 19 Nov 2025 17:44:20 +0200
+Message-ID: <20251119154427.1033475-20-eugen.hristev@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251119154427.1033475-1-eugen.hristev@linaro.org>
 References: <20251119154427.1033475-1-eugen.hristev@linaro.org>
@@ -112,110 +112,37 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This memblock flag indicates that a specific block is registered
-into an inspection table.
-The block can be marked for inspection using memblock_mark_inspect()
-and cleared with memblock_clear_inspect()
+Register dynamic information into meminspect:
+ - dynamic node data for each node
+
+This information is being allocated for each node, as physical address,
+so call memblock_mark_inspect that will mark the block accordingly.
 
 Signed-off-by: Eugen Hristev <eugen.hristev@linaro.org>
 ---
- include/linux/memblock.h |  7 +++++++
- mm/memblock.c            | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
+ mm/numa.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-index 221118b5a16e..c3e55a4475cf 100644
---- a/include/linux/memblock.h
-+++ b/include/linux/memblock.h
-@@ -51,6 +51,10 @@ extern unsigned long long max_possible_pfn;
-  * memory reservations yet, so we get scratch memory from the previous
-  * kernel that we know is good to use. It is the only memory that
-  * allocations may happen from in this phase.
-+ * @MEMBLOCK_INSPECT: memory region is annotated in kernel memory inspection
-+ * table. This means a dedicated entry will be created for this region which
-+ * will contain the memory's address and size. This allows kernel inspectors
-+ * to retrieve the memory.
-  */
- enum memblock_flags {
- 	MEMBLOCK_NONE		= 0x0,	/* No special request */
-@@ -61,6 +65,7 @@ enum memblock_flags {
- 	MEMBLOCK_RSRV_NOINIT	= 0x10,	/* don't initialize struct pages */
- 	MEMBLOCK_RSRV_KERN	= 0x20,	/* memory reserved for kernel use */
- 	MEMBLOCK_KHO_SCRATCH	= 0x40,	/* scratch memory for kexec handover */
-+	MEMBLOCK_INSPECT	= 0x80,	/* memory selected for kernel inspection */
- };
- 
- /**
-@@ -149,6 +154,8 @@ unsigned long memblock_addrs_overlap(phys_addr_t base1, phys_addr_t size1,
- bool memblock_overlaps_region(struct memblock_type *type,
- 			      phys_addr_t base, phys_addr_t size);
- bool memblock_validate_numa_coverage(unsigned long threshold_bytes);
-+int memblock_mark_inspect(phys_addr_t base, phys_addr_t size);
-+int memblock_clear_inspect(phys_addr_t base, phys_addr_t size);
- int memblock_mark_hotplug(phys_addr_t base, phys_addr_t size);
- int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
- int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
-diff --git a/mm/memblock.c b/mm/memblock.c
-index e23e16618e9b..a5df5ab286e5 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -17,6 +17,7 @@
- #include <linux/seq_file.h>
- #include <linux/memblock.h>
- #include <linux/mutex.h>
+diff --git a/mm/numa.c b/mm/numa.c
+index 7d5e06fe5bd4..379065dd633e 100644
+--- a/mm/numa.c
++++ b/mm/numa.c
+@@ -4,6 +4,7 @@
+ #include <linux/printk.h>
+ #include <linux/numa.h>
+ #include <linux/numa_memblks.h>
 +#include <linux/meminspect.h>
  
- #ifdef CONFIG_KEXEC_HANDOVER
- #include <linux/libfdt.h>
-@@ -1016,6 +1017,40 @@ static int __init_memblock memblock_setclr_flag(struct memblock_type *type,
- 	return 0;
- }
+ struct pglist_data *node_data[MAX_NUMNODES];
+ EXPORT_SYMBOL(node_data);
+@@ -20,6 +21,7 @@ void __init alloc_node_data(int nid)
+ 	if (!nd_pa)
+ 		panic("Cannot allocate %zu bytes for node %d data\n",
+ 		      nd_size, nid);
++	memblock_mark_inspect(nd_pa, nd_size);
  
-+/**
-+ * memblock_mark_inspect - Mark inspectable memory with flag MEMBLOCK_INSPECT.
-+ * @base: the base phys addr of the region
-+ * @size: the size of the region
-+ *
-+ * Return: 0 on success, -errno on failure.
-+ */
-+int __init_memblock memblock_mark_inspect(phys_addr_t base, phys_addr_t size)
-+{
-+	int ret;
-+
-+	ret = memblock_setclr_flag(&memblock.memory, base, size, 1, MEMBLOCK_INSPECT);
-+	if (ret)
-+		return ret;
-+
-+	meminspect_lock_register_pa(base, size);
-+
-+	return 0;
-+}
-+
-+/**
-+ * memblock_clear_inspect - Clear flag MEMBLOCK_INSPECT for a specified region.
-+ * @base: the base phys addr of the region
-+ * @size: the size of the region
-+ *
-+ * Return: 0 on success, -errno on failure.
-+ */
-+int __init_memblock memblock_clear_inspect(phys_addr_t base, phys_addr_t size)
-+{
-+	meminspect_lock_unregister_pa(base, size);
-+
-+	return memblock_setclr_flag(&memblock.memory, base, size, 0, MEMBLOCK_INSPECT);
-+}
-+
- /**
-  * memblock_mark_hotplug - Mark hotpluggable memory with flag MEMBLOCK_HOTPLUG.
-  * @base: the base phys addr of the region
-@@ -2704,6 +2739,7 @@ static const char * const flagname[] = {
- 	[ilog2(MEMBLOCK_RSRV_NOINIT)] = "RSV_NIT",
- 	[ilog2(MEMBLOCK_RSRV_KERN)] = "RSV_KERN",
- 	[ilog2(MEMBLOCK_KHO_SCRATCH)] = "KHO_SCRATCH",
-+	[ilog2(MEMBLOCK_INSPECT)] = "INSPECT",
- };
- 
- static int memblock_debug_show(struct seq_file *m, void *private)
+ 	/* report and initialize */
+ 	pr_info("NODE_DATA(%d) allocated [mem %#010Lx-%#010Lx]\n", nid,
 -- 
 2.43.0
 
