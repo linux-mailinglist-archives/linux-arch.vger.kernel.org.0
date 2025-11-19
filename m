@@ -1,194 +1,151 @@
-Return-Path: <linux-arch+bounces-14884-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14885-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E62F7C6C3A2
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 02:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43DC8C6CBE0
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 05:29:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 7570D28F01
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 01:18:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id CF41B2CD20
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 04:28:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A1C1E0083;
-	Wed, 19 Nov 2025 01:18:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A47132FBDF3;
+	Wed, 19 Nov 2025 04:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QC1tunr6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WoT5E2ns"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD79C19D07E;
-	Wed, 19 Nov 2025 01:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7178A2F7AD5
+	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 04:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763515124; cv=none; b=Ox/vF8dTpkNeeUcIeUDJ7oIw1FwzMvX/x9z7T5iMZ+v5IN1gY1AF5Caj50BZ9Hmv3L5BkE5bJ/1zSl7pxtVM8IZ9aFYsnemEKHUhm1umA5DiBEZcR46OwW2uA1JatwL5zmiPWZWxkC0bXcqrS7ocB1F9GWpxyXnM2u6CQVyy3No=
+	t=1763526518; cv=none; b=b1baPQ+4qgMMjkpwkn42fUNxmD2QSGAIAJq9OPZwv7rXFSPNmTy23hF8cyA6dtOKIEqnKrfr64ncXO9ZjcIUC5VNAYhxJXQRSrbNABgPPFPhjHLLO5M0KSq7PEC1QRai8UhxgejRmt0fuHZIC9K5WexeKpHxrIcg2C1nO5THHL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763515124; c=relaxed/simple;
-	bh=66Pk51Y6hl6cFLy/Cjj2s2RgDzKKBJ5zXtSZ1r+4xsY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kVmTx63JOeghdMIK/2vGEZBdfQEXT4+c2y8SgIhTMsAFKGPnhJjBulCjupa3iInJrigWLoSnBkBPKJc58u//581PXHgPeueF+CQu8V1X3e24dwcm3dvbJBcG5Btx29xu6/mq3nT+TNxkjKoOjwyfGF+0l8ynlFER9vIWceZP5KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QC1tunr6; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=jEWakcvW1TnAMoV+h8ZFjseo1NzKkn1k3ld14oxm230=; b=QC1tunr6eaQovDaqvqIBwr3X+/
-	C3C5mLb7Pa22aUwA2v5Fa6Ah0VeP6F5VFmTRWqBPTqD0qJqZ0fFlPrCq6bhhkG1jA0YTxGkJaUBwi
-	GQkwuUOualXgI8nvNDfrZZEwbffMu/1H2i/6cwuef4EsvzFYIzGipzrky8OkwVCzRZOpxybG/1TzI
-	NhRJtkYVP1+gbltlQKPs1SuTkbYcWXrjwLS1XcMN8Cvaxk5vtIdYcqZZ4YH+fjMgc+o50wNVoyCp+
-	l8heA9Yu81ccf5Z2bwICTGnz4TXBZCY9VEDbV5p6HemHQ4kcT9TxY/pIPsmLWD7eBJBUuYTcpZU1W
-	5typ2JHQ==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vLWq8-00000001L1B-2Eo5;
-	Wed, 19 Nov 2025 01:18:32 +0000
-Message-ID: <2241d985-0e35-41e5-93b1-1e8d4e7a84bf@infradead.org>
-Date: Tue, 18 Nov 2025 17:18:31 -0800
+	s=arc-20240116; t=1763526518; c=relaxed/simple;
+	bh=20yE8xmrCxVj0HrYnRHPetvSNta/9P+r724P2CoUT8E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gp/qMh6ZILU4tnEOFH71c/42T5k9A3FWBk0W0nHrAtdeCb+siNUVqRdInZjNOX97lIC+ISA3PjpQEoCxx+/IcPWHalO3XeVXohk/GjcnT94yeIWh5yTuFE1wHdnaqDIArH1pMFc5TsGzjeMBulpXvMG09gqQwLq71Qnh6CmBKkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WoT5E2ns; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C06C116D0
+	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 04:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763526517;
+	bh=20yE8xmrCxVj0HrYnRHPetvSNta/9P+r724P2CoUT8E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WoT5E2nsgswz/R4HXdq39gPnz91evi39ZR7Lb10+ZNh/kzQpGIYILQSsZpqIhTOTo
+	 4DT5dfjlDZrOknA0l4ruNsfJprDfZsSy9EJuc45Cz2DYQ5TQdKyKdIAReVEWebo3Zc
+	 bj2DFGhDGngPKiL9ha0yHyw8s0TxUcBlqz5Tm+e86rYw4hSp0MgPsf9AYyVgbqzlOd
+	 xgUU46w2pLQr5T8PVVYiFgE7ebbrkcsBXyLvXIM/jkmblf7gMnM34+D4ybc33acLSi
+	 RbjqKcdN91FeQqeI+j7AjlKyWMgAqCjaFPV2hI3Tk+FEK7OXaARSPWu1s9BIG6ZXTT
+	 RWw2VpPpY92Ew==
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b7277324054so870651766b.0
+        for <linux-arch@vger.kernel.org>; Tue, 18 Nov 2025 20:28:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVTQIXSHRFvy10hYXLB/Qqjx2CGokyp8EAYNZxVJuu9ZJj0VNtQVtiaNin1z3mH0N8En7R3i/doHb2o@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpUH2rT5N3DnHGFIgxoAge9+kcgGIwgLaG3LP7mSHqwBdyhKdc
+	NNhfGS/EKal4d32BrYsCwJv+A0E8AaTABoPKC+HL1KJdU8WEv5I5Er6hm7WY4L8Ar5RwkboaFap
+	KtVS6OLY9wXO0A1XY2FG9FPfqFxLVQ/w=
+X-Google-Smtp-Source: AGHT+IGbWywcXwPsVFpJurJ5GAZ0bygPjNfZNq8uY4NQtMfmy5NOh6gv+cE5A/pgHpI4GEGww35ib53dEJCVASGJLdQ=
+X-Received: by 2002:a17:907:96a8:b0:b73:9280:2e7 with SMTP id
+ a640c23a62f3a-b739280114dmr1154628566b.34.1763526514307; Tue, 18 Nov 2025
+ 20:28:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/7] lib: Support
- ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-To: Jonathan Cameron <jonathan.cameron@huawei.com>,
- Conor Dooley <conor@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, linux-cxl@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, Dan Williams <dan.j.williams@intel.com>,
- "H . Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Drew Fustini <fustini@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Krzysztof Kozlowski <krzk@kernel.org>, james.morse@arm.com,
- Will Deacon <will@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
- linuxarm@huawei.com, Yushan Wang <wangyushan12@huawei.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, x86@kernel.org,
- Andy Lutomirski <luto@kernel.org>, Dave Jiang <dave.jiang@intel.com>
-References: <20251117104800.2041329-1-Jonathan.Cameron@huawei.com>
- <20251117104800.2041329-4-Jonathan.Cameron@huawei.com>
- <3bf1793a-2ffd-4017-b4bf-dc63f3a2a7c8@infradead.org>
- <20251117-definite-uncounted-7cc07a377a71@spud>
- <20251118093041.00000c9e@huawei.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251118093041.00000c9e@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251118112728.571869-1-chenhuacai@loongson.cn>
+ <20251118112728.571869-5-chenhuacai@loongson.cn> <aRyoLBjD_8Hz91DV@pie>
+In-Reply-To: <aRyoLBjD_8Hz91DV@pie>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 19 Nov 2025 12:28:36 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5uoDjBRYpK_e7Z+vrcqLAbLXhEbEQP_aJ9f3aTdA+-eQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bkAxEgaL09SmaycStpQZWVNv5BLUeJhpEXHn5nZFiBjratzLwjaG9XQB3s
+Message-ID: <CAAhV-H5uoDjBRYpK_e7Z+vrcqLAbLXhEbEQP_aJ9f3aTdA+-eQ@mail.gmail.com>
+Subject: Re: [PATCH V2 04/14] LoongArch: Adjust boot & setup for 32BIT/64BIT
+To: Yao Zi <ziyao@disroot.org>
+Cc: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, f@disroot.org, 
+	loongarch@lists.linux.dev, linux-arch@vger.kernel.org, 
+	Xuefeng Li <lixuefeng@loongson.cn>, Guo Ren <guoren@kernel.org>, 
+	Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Nov 19, 2025 at 1:09=E2=80=AFAM Yao Zi <ziyao@disroot.org> wrote:
+>
+> On Tue, Nov 18, 2025 at 07:27:18PM +0800, Huacai Chen wrote:
+> > Adjust boot & setup for both 32BIT and 64BIT, including: efi header
+> > definition, MAX_IO_PICS definition, kernel entry and environment setup
+> > routines, etc.
+> >
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  arch/loongarch/include/asm/addrspace.h |  2 +-
+> >  arch/loongarch/include/asm/irq.h       |  5 ++++
+> >  arch/loongarch/kernel/efi-header.S     |  4 +++
+> >  arch/loongarch/kernel/efi.c            |  4 ++-
+> >  arch/loongarch/kernel/env.c            |  9 ++++--
+> >  arch/loongarch/kernel/head.S           | 39 +++++++++++---------------
+> >  arch/loongarch/kernel/relocate.c       |  9 +++++-
+> >  7 files changed, 45 insertions(+), 27 deletions(-)
+> >
+>
+> ...
+>
+> > diff --git a/arch/loongarch/kernel/env.c b/arch/loongarch/kernel/env.c
+> > index 23bd5ae2212c..3e8a25eb901b 100644
+> > --- a/arch/loongarch/kernel/env.c
+> > +++ b/arch/loongarch/kernel/env.c
+> > @@ -68,18 +68,23 @@ static int __init fdt_cpu_clk_init(void)
+> >
+> >       np =3D of_get_cpu_node(0, NULL);
+> >       if (!np)
+> > -             return -ENODEV;
+> > +             goto fallback;
+> >
+> >       clk =3D of_clk_get(np, 0);
+> >       of_node_put(np);
+> >
+> >       if (IS_ERR(clk))
+> > -             return -ENODEV;
+> > +             goto fallback;
+> >
+> >       cpu_clock_freq =3D clk_get_rate(clk);
+> >       clk_put(clk);
+> >
+> >       return 0;
+> > +
+> > +fallback:
+> > +     cpu_clock_freq =3D 200 * 1000 * 1000;
+>
+> Why pick 200MHz here? And shouldn't the clock being always provided in
+> devicetree if it's necessary for kernel to function?
+>
+> Per the schema for LoongArch CPUs (loongarch/cpus.yaml), "clocks"
+> property is also described as mandantory, thus I don't think such
+> fallback makes sense.
+Yes, "clocks" is mandatory in theory, but sometimes is missing in
+practice, at least in QEMU. On the other hand, if "clocks" really
+always exist, then the error checking in fdt_cpu_clk_init() can also
+be removed. So the fallback makes sense.
 
+Why pick 200MHz? That is because we assume the constant timer is
+100MHz (which is true for all real machines), 200MHz is the minimal
+multiple of 100MHz, it is more reasonable than 0MHz.
 
-On 11/18/25 1:30 AM, Jonathan Cameron wrote:
-> On Tue, 18 Nov 2025 00:13:07 +0000
-> Conor Dooley <conor@kernel.org> wrote:
-> 
->> On Mon, Nov 17, 2025 at 10:51:11AM -0800, Randy Dunlap wrote:
->>> Hi,
->>>
->>> On 11/17/25 2:47 AM, Jonathan Cameron wrote:  
->>>> diff --git a/lib/Kconfig b/lib/Kconfig
->>>> index e629449dd2a3..e11136d188ae 100644
->>>> --- a/lib/Kconfig
->>>> +++ b/lib/Kconfig
->>>> @@ -542,6 +542,10 @@ config MEMREGION
->>>>  config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
->>>>  	bool
->>>>  
->>>> +config GENERIC_CPU_CACHE_MAINTENANCE
->>>> +	bool
->>>> +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
->>>> +
->>>>  config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
->>>>  	bool  
->>>
->>> Architectures and/or platforms select ARCH_HAS_*.
->>>
->>> With this change above, it becomes the only entry in
->>> lib/Kconfig that does "select ARCH_HAS_anytning".
->>>
->>> so I think this is wrong, back*wards.  
->>
->> Maybe it is backwards, but I feel like this way is more logical. ARM64
->> has memregion invalidation only because this generic approach is
->> enabled, so the arch selects what it needs to get the support.
-> 
-> Exactly this. Catalin requested this form in response to an earlier
-> version where arm64 Kconfig just had both selects for pretty much that
-> reason. This is expected to be used on a subset of architectures.
-> It is similar to things like GENERIC_ARCH_NUMA in this respect (though the
-> arch_numa_init() etc in there are called only from other arch code
-> so no ARCH_HAS_ symbols are associated with them).
-> 
->> Alternatively, something like
-> 
-> I'm fine with this solution if Randy prefers it.
-
-I do much prefer this alternative.
-
-> Thanks for your help with this.
-
-Thanks for listening.
-
-
->> | diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> | index 5f7f63d24931..75b2507f7eb2 100644
->> | --- a/arch/arm64/Kconfig
->> | +++ b/arch/arm64/Kconfig
->> | @@ -21,6 +21,7 @@ config ARM64
->> |  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
->> |  	select ARCH_HAS_CACHE_LINE_SIZE
->> |  	select ARCH_HAS_CC_PLATFORM
->> | +	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
->> |  	select ARCH_HAS_CURRENT_STACK_POINTER
->> |  	select ARCH_HAS_DEBUG_VIRTUAL
->> |  	select ARCH_HAS_DEBUG_VM_PGTABLE
->> | @@ -146,7 +147,6 @@ config ARM64
->> |  	select GENERIC_ARCH_TOPOLOGY
->> |  	select GENERIC_CLOCKEVENTS_BROADCAST
->> |  	select GENERIC_CPU_AUTOPROBE
->> | -	select GENERIC_CPU_CACHE_MAINTENANCE
->> |  	select GENERIC_CPU_DEVICES
->> |  	select GENERIC_CPU_VULNERABILITIES
->> |  	select GENERIC_EARLY_IOREMAP
->> | diff --git a/lib/Kconfig b/lib/Kconfig
->> | index 09aec4a1e13f..ac223e627bc5 100644
->> | --- a/lib/Kconfig
->> | +++ b/lib/Kconfig
->> | @@ -544,8 +544,9 @@ config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
->> |  	bool
->> |  
->> |  config GENERIC_CPU_CACHE_MAINTENANCE
->> | -	bool
->> | -	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
->> | +	def_bool y
->> | +	depends on ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
->> | +	depends on ARM64
->> |  
->> |  config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
->> |  	bool
->> implies (to me at least) that arm64 has memregion invalidation as an
->> architectural feature and that the GENERIC_CPU_CACHE_MAINTENANCE option
->> is a just common cross-arch code, like generic entry etc, rather than
->> being the option gating the drivers that provide the feature in the
->> first place.
->>
->> I didn't really care which way it went, and was gonna post something to
->> squash and avoid another revision, but I found the resultant Kconfig
->> setup to be make less sense to me than what came before. If the switched
->> around version is less likely to be problematic etc, then sure, but I
->> amn't convinced by switching it at a first glance.
-
-
--- 
-~Randy
-
+Huacai
+>
+> > +
+> > +     return -ENODEV;
+> >  }
+> >  late_initcall(fdt_cpu_clk_init);
+>
+> Best regards,
+> Yao Zi
+>
 
