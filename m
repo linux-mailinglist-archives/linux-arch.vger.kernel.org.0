@@ -1,56 +1,56 @@
-Return-Path: <linux-arch+bounces-14895-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14896-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06FB7C6D421
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 08:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 580A4C6D577
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 09:13:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E4E514EA0B9
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 07:52:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 025A84F69BC
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Nov 2025 08:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06CFB2E0927;
-	Wed, 19 Nov 2025 07:51:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4CEA2EA158;
+	Wed, 19 Nov 2025 08:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tbj0IDnu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lrsTQqeS"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4975326959
-	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 07:51:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACBFF2D7DDC
+	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 08:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763538662; cv=none; b=pfFuZUGkv569SQ0gJsacjli8kbxdClhiq1obzHt6jCAAcBPXhYYhwCQBb8yDi6ho2YM/j6CYcKg+mAm/TDymCTqmT5G/7iQ/1Jgl0l/MbX65FJGGrWIiP/uDI+1X7oXcIX7mFzTbt0J74/1+2mf1bgy/6obMWe130pHp13otwho=
+	t=1763539296; cv=none; b=Y8Fqk/qPihZglKP6EycArFcsrHbAEtOfgwP7FUMRiJ0lZxkQQijOUXbRojm3Su8xKbdAf0mlHb1fDbu7I2L12RebjnVEK+tMfkpU988v+vq1E/vg1bDlPWmvWm4+LgKsax5MmVCSsvKnZtlRQGsQEE7ONt58EqkCvznWs0lZliw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763538662; c=relaxed/simple;
-	bh=AIYAqmAbGjH/cKlRsqKK2HzmYq4EY/exLMH80H6lBns=;
+	s=arc-20240116; t=1763539296; c=relaxed/simple;
+	bh=Hy41d9L/dFT8qEOybthTPcUHnSVaU1IQVXci4lliuTg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ma+ptxNrwPYsiTZQthT5/hke3n3x89XtYKLPnxfK0QKMCZJGs+MB51Jq2WZc4JgC+hlsSdnFgwhXE0K6VaICky3tJlqVRqaaaf6B5QFeZ5CT8KIODPkcLC3b6ly0mCA/PGSwolLWeEwlKvCo/kS7WCVY5VIQvAp+4cELXM5sspQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tbj0IDnu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C24C2BCAF
-	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 07:51:02 +0000 (UTC)
+	 To:Cc:Content-Type; b=SfoIMNlnrG7FgCkGpxEoMvAbF+RUK9M6KpihQsk3FEFImq6D7tTlxNPel4kg1TM0Al5uXup1JfgzPN23mQE4uKnhqwaurOdIoRQcc+s00+qloalAUCi8cL9RKUqOwU+fFpfhdgJXRCLmBUJWQYHB1s/imjUGKFSIKM+DOepgS3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lrsTQqeS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C871EC2BC86
+	for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 08:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763538662;
-	bh=AIYAqmAbGjH/cKlRsqKK2HzmYq4EY/exLMH80H6lBns=;
+	s=k20201202; t=1763539295;
+	bh=Hy41d9L/dFT8qEOybthTPcUHnSVaU1IQVXci4lliuTg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Tbj0IDnu+d9XXicvXdQmuk23J7SX72g+ReYpH7OkaFHx9PDc/hcq6DJP2SpUckoPc
-	 BL2ikZoetWirObyyec/p1EFOnXngEfZEejaElre+8HpFhbds2dCQAdMZTT3CGiF9Xy
-	 BLFg9wZix2uGyfCBWutfLnxVLzDNAAzH/itopEBlZCcyKqWdEDZWt5oXvkw0k3EIEZ
-	 2pCTgmex6QBAafGYjUL7e26bUpZ2c8OfAq4X9oULVQFFrIXX/KbrRvXEaRHPMzf9ws
-	 fh2nHacfUhTyPNF2RS5SEueL5eKj4zwS2GJlSiNY/daXppyS1sNjzbKX5MDyWxBaJJ
-	 t7Egj5Q+ULO9g==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-64312565c10so9568327a12.2
-        for <linux-arch@vger.kernel.org>; Tue, 18 Nov 2025 23:51:02 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWXUgIBkeqz9dHx0Uhamoa/j/wtFTZDs94HOdRsOUmGV9yhYoHGPn03O8dBSGV5uoWvCPiwqwxrap0k@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+kI05eNVDZOWm00A3SfYvOjF0dJszu+kSzASzQcCSNlYt53RN
-	zhb+1VilVVMpR5FKeQd7yX7/pe7o4KwPBRwIB2YeFWWpTjXZuaDYPSy0ZjVuRkWXbUDatbv+Ss4
-	YJhchTKC+faMhwRc/u6pQ9cVjCP4Dl0o=
-X-Google-Smtp-Source: AGHT+IHj0NbLKrDvqfxZamDidI0HGtwjF8TD5aehZ5tbu/BDIYakSDitOdrnPb+8E/FflHMOEcBOqD37e/SNyGIfGvY=
-X-Received: by 2002:a17:906:fd8a:b0:b73:8639:cd96 with SMTP id
- a640c23a62f3a-b738639d1b4mr1572590166b.24.1763538659984; Tue, 18 Nov 2025
- 23:50:59 -0800 (PST)
+	b=lrsTQqeSGJr7o296NzLjNgRFQvbOdFBxVd6qjr0GYIWSkgWM5RVkMCSY6pbIo0sid
+	 MGXEvQGtNUS6FAKxxReaLfZfiIJFHJ+P25KbOfDZEAA9R+GRD4K9vxr9ih8RwUl9fm
+	 BunGMWOsCuAlPc/k3PF3BwtNF6CYI2LA6lzoIoTdr8XazSC5mkSxGTqUeCjXsJAnmk
+	 yxd+/dIpBL6LqCX3D2KEVsYRLm83FsgkoIQhOwBGVn/g9ZXsAIZLaNElFbQe82EZam
+	 Q3yTHIfRg9SgehsVn/LO5fgdNbxiAg9rwoHaNcWs8/BdksGJIzegiwBQt/QBPL54su
+	 ZSRh+y35YOA3A==
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b72bf7e703fso1038859866b.2
+        for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 00:01:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWGnggfD/9GIz6LR4ux7GjgVeA0IUxTbhs1aKpUH0xXKh9BakAhlHwKqmWiTd4+aJG3Xj2FnC8sipil@vger.kernel.org
+X-Gm-Message-State: AOJu0Yymqnanm1Ex1TZqWBmkNs9vce8kt1c99nNXaKNML7s/lpo+Ys87
+	PjJO6oIvX1wiKAqMFxehCsCoQuD/RFkk0bgh8iloasWV/2Lqm4+rlHqJUsjU9Vr9uA+dxC/4WaV
+	6+FYV/RdcGCmwXxYxeK4FB+NbFvGhP4k=
+X-Google-Smtp-Source: AGHT+IH9Kdh+KL+AyfvImCQZGsljv/sPQQko5q9wwQDoEXwJ707oPWTbLzJMRg7L1OJ2znCC8NTv2vQOU2Er6n4wVyQ=
+X-Received: by 2002:a17:906:9fd0:b0:b70:aa96:6023 with SMTP id
+ a640c23a62f3a-b7367896f44mr2083428466b.24.1763539293954; Wed, 19 Nov 2025
+ 00:01:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -58,59 +58,97 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20251118112728.571869-1-chenhuacai@loongson.cn>
- <20251118112728.571869-5-chenhuacai@loongson.cn> <aRyoLBjD_8Hz91DV@pie>
- <CAAhV-H5uoDjBRYpK_e7Z+vrcqLAbLXhEbEQP_aJ9f3aTdA+-eQ@mail.gmail.com> <04b04b74-ef13-4dd0-a35a-d629acb617cb@app.fastmail.com>
-In-Reply-To: <04b04b74-ef13-4dd0-a35a-d629acb617cb@app.fastmail.com>
+ <20251118112728.571869-14-chenhuacai@loongson.cn> <debb8b35-8253-4422-a197-6d92e8d0c701@app.fastmail.com>
+In-Reply-To: <debb8b35-8253-4422-a197-6d92e8d0c701@app.fastmail.com>
 From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 19 Nov 2025 15:51:01 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6aM+nsK39iTDw1Fec25C7+D2UTh92X6FPf3gDouuyejQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bmHjlasw2gFPJKi8Gs0tpjJw05fzIHIMgusc4BZFnRD2eUXHNqhyRXAths
-Message-ID: <CAAhV-H6aM+nsK39iTDw1Fec25C7+D2UTh92X6FPf3gDouuyejQ@mail.gmail.com>
-Subject: Re: [PATCH V2 04/14] LoongArch: Adjust boot & setup for 32BIT/64BIT
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Yao Zi <ziyao@disroot.org>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Arnd Bergmann <arnd@arndb.de>, f@disroot.org, loongarch@lists.linux.dev, 
-	linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>, 
-	Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org
+Date: Wed, 19 Nov 2025 16:01:35 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7NU5z4bZDG3ZW+oHEp3jUE9_69g+zUXmT-+RcM07bOOw@mail.gmail.com>
+X-Gm-Features: AWmQ_bmaJURP5W5b3_-T670sGi5ex57s2vDFGuwOYvgxj6iTR76CyCp6MWPavbc
+Message-ID: <CAAhV-H7NU5z4bZDG3ZW+oHEp3jUE9_69g+zUXmT-+RcM07bOOw@mail.gmail.com>
+Subject: Re: [PATCH V2 13/14] LoongArch: Adjust default config files for 32BIT/64BIT
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev, 
+	Linux-Arch <linux-arch@vger.kernel.org>, Xuefeng Li <lixuefeng@loongson.cn>, 
+	guoren <guoren@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 19, 2025 at 2:03=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.co=
-m> wrote:
+Hi, Arnd,
+
+On Tue, Nov 18, 2025 at 9:46=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 >
+> On Tue, Nov 18, 2025, at 12:27, Huacai Chen wrote:
+> > Add loongson32_defconfig (for 32BIT) and rename loongson3_defconfig to
+> > loongson64_defconfig (for 64BIT).
+> >
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  arch/loongarch/configs/loongson32_defconfig   | 1110 +++++++++++++++++
+> >  ...ongson3_defconfig =3D> loongson64_defconfig} |    0
 >
+> I would suggest using .config fragment here and only listing
+> the differences in the defconfig files in there, rather than
+> duplicating everything.
 >
-> On Wed, 19 Nov 2025, at 12:28 PM, Huacai Chen wrote:
-> [...]
-> >> Per the schema for LoongArch CPUs (loongarch/cpus.yaml), "clocks"
-> >> property is also described as mandantory, thus I don't think such
-> >> fallback makes sense.
-> > Yes, "clocks" is mandatory in theory, but sometimes is missing in
-> > practice, at least in QEMU. On the other hand, if "clocks" really
-> > always exist, then the error checking in fdt_cpu_clk_init() can also
-> > be removed. So the fallback makes sense.
+> > +CONFIG_DMI=3Dy
+> > +CONFIG_EFI=3Dy
+> > +CONFIG_SUSPEND=3Dy
+> > +CONFIG_HIBERNATION=3Dy
+> > +CONFIG_ACPI=3Dy
+> > +CONFIG_ACPI_SPCR_TABLE=3Dy
+> > +CONFIG_ACPI_TAD=3Dy
+> > +CONFIG_ACPI_DOCK=3Dy
+> > +CONFIG_ACPI_IPMI=3Dm
+> > +CONFIG_ACPI_HOTPLUG_CPU=3Dy
+> > +CONFIG_ACPI_PCI_SLOT=3Dy
+> > +CONFIG_ACPI_HOTPLUG_MEMORY=3Dy
+> > +CONFIG_ACPI_BGRT=3Dy
 >
-> IMHO this should be fixed on QEMU side, but I recall QEMU do have clock
-> supplied in generic fdt?
-It is difficult to fix, you can have a try. :)
-If without fallback, cpuinfo shows 0MHz now.
+> You mention that loongarch32 uses ftb based boot,
+> so ACPI should probably be disabled here.
+I have tried my best, adding #ifdef CONFIG_ACPI all over the world but
+still failed. :)
+
+LoongArch is deeply coupled with ACPI and can hardly disabled. On the
+other hand, it is not forbidden to use ACPI for LoongArch32. So let's
+keep it, and I will modify the description for LoongArch32 booting.
 
 >
-> >
-> > Why pick 200MHz? That is because we assume the constant timer is
-> > 100MHz (which is true for all real machines), 200MHz is the minimal
-> > multiple of 100MHz, it is more reasonable than 0MHz.
+> > +CONFIG_DRM=3Dy
+> > +CONFIG_DRM_LOAD_EDID_FIRMWARE=3Dy
+> > +CONFIG_DRM_RADEON=3Dm
+> > +CONFIG_DRM_RADEON_USERPTR=3Dy
+> > +CONFIG_DRM_AMDGPU=3Dm
+> > +CONFIG_DRM_AMDGPU_SI=3Dy
+> > +CONFIG_DRM_AMDGPU_CIK=3Dy
+> > +CONFIG_DRM_AMDGPU_USERPTR=3Dy
+> > +CONFIG_DRM_AST=3Dy
+> > +CONFIG_DRM_QXL=3Dm
+> > +CONFIG_DRM_VIRTIO_GPU=3Dm
+> > +CONFIG_DRM_LOONGSON=3Dy
+> > +CONFIG_DRM_SIMPLEDRM=3Dy
+> > +CONFIG_FB=3Dy
+> > +CONFIG_FB_EFI=3Dy
+> > +CONFIG_FB_RADEON=3Dy
+> > +CONFIG_FIRMWARE_EDID=3Dy
 >
-> Maybe better panic here :-)
-No, this is not a fatal error, we don't need to treat everything as
-fatal. As you know, many "BUG_ON" have been replaced with "WARN_ON" in
-kernel.
+> Is AMDGPU actually working? This driver is rather tricky to get
+> reliable on new architectures.
+Never tried and probably not work. I will remove it.
+
+>
+> I would suggest turning off CONFIG_FB here (also on loongarch64).
+> There is a replacement driver for FB_EFI in DRM now.
+Do you mean simpledrm? It probably works but not always works. From
+sysfb_init() we know it only mark EFIFB as a simpledrm device when
+"compatible", so we still need FB_EFI as a fallback.
 
 Huacai
 
 >
-> Thanks
-> --
-> - Jiaxun
+>        Arnd
 >
 
