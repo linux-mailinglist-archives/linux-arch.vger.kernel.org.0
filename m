@@ -1,234 +1,229 @@
-Return-Path: <linux-arch+bounces-14978-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14979-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A52CC723A4
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 06:14:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8B5EC7291E
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 08:21:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id EEAF42CE54
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 05:14:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id A6A8E2F8EB
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 07:21:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D3A326F2BF;
-	Thu, 20 Nov 2025 05:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5F3302CBD;
+	Thu, 20 Nov 2025 07:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nb6ActO4"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8942526FDA5;
-	Thu, 20 Nov 2025 05:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3CE372AA1;
+	Thu, 20 Nov 2025 07:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763615663; cv=none; b=nflZCYJUOm5Mz0jNwUcOlYYgkNugM4AaDleTFMt/Baqto0PuF1/IZ7UrBrHNGklkP8o0u5lbNAa844ipJnkKzvvGkDF7XQvjvvw2Yqz1Zi0tJROzfgi/C9fipX4bsrJZVRkVC0Bi0tFv1U/o38ZVzN882ilwIVlJ3JhcyYqpVmA=
+	t=1763623272; cv=none; b=WOTjKHEDtbsE40zDET/KmtXgfPNXOG1LEWSgj4+hYYTNa9tdr8eEI/7MIu3VOMap/CdCbzzXYtprXPJNHNNKkIw6W9BSqwqKjYMfWKhffY2BJ9x+6y/DGXrUBIAaSLZvwnd2ABSHFO2WRdACc5/k1CFajmYSBxW/XzxikX+HOsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763615663; c=relaxed/simple;
-	bh=uUrpx+g526d5GVlYUAYE7oeVYDK91OLrSvMwSuOHD5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cXJs4qlwaZhMeUPnBCnKdA7PNn/U4dda1kotzi/HyM0qW+JC3V90u7vUxxazeaJUq6ZV5J9m2fHxpCXo+A4OlzaBo8tKBHt+OMyeOuQeETJeV4mN+n3LNwf1wlNUDqk90GfUoWox816CvLbx3vjJ0WdbQlOpt+gI8m8YrgzgRvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-91-691ea3a8efaf
-Date: Thu, 20 Nov 2025 14:14:11 +0900
-From: Byungchul Park <byungchul@sk.com>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-	tytso@mit.edu, david@fromorbit.com, amir73il@gmail.com,
-	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
-	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
-	hannes@cmpxchg.org, vdavydov.dev@gmail.com, sj@kernel.org,
-	jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-	ngupta@vflare.org, linux-block@vger.kernel.org,
-	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
-	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-	djwong@kernel.org, dri-devel@lists.freedesktop.org,
-	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
-	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
-	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
-	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
-	yeoreum.yun@arm.com, netdev@vger.kernel.org,
-	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
-	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
-	sumit.semwal@linaro.org, gustavo@padovan.org,
-	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
-	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
-	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
-	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
-	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
-	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
-	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
-	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
-	yuzhao@google.com, baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com, joel.granados@kernel.org,
-	richard.weiyang@gmail.com, geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com, linux@treblig.org,
-	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
-	chenhuacai@kernel.org, francesco@valla.it,
-	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
-	masahiroy@kernel.org, brauner@kernel.org,
-	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
-	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 44/47] dept: introduce APIs to set page usage and use
- subclasses_evt for the usage
-Message-ID: <20251120051411.GA18291@system.software.com>
-References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-45-byungchul@sk.com>
- <20251119105312.GA11582@system.software.com>
- <aR3WHf9QZ_dizNun@casper.infradead.org>
- <20251120020909.GA78650@system.software.com>
+	s=arc-20240116; t=1763623272; c=relaxed/simple;
+	bh=Q9x7pfr68ABlQkeGDOQXfTv4u0y1Q9ao0HbtlLeZBks=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G8G1KECx4JYF0ZzO1ftXXaDkqdQ+SagpOMeUrSavoPmI+BXaw7Z1S4NORPS/wlR4yvUM8PpgHraCSEcshQxSssVqxuGwCsCgUC4C70WpRWqh3OJ4aLoF1p8Uz8SxrBoQC6RFP9lHEOW5+Bh5jzUi3ctUl9QwD89CeQHxnsUDYM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nb6ActO4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED68C4CEF1;
+	Thu, 20 Nov 2025 07:21:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763623271;
+	bh=Q9x7pfr68ABlQkeGDOQXfTv4u0y1Q9ao0HbtlLeZBks=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Nb6ActO4kn5WR22MgZjBWnEhix29+SAXSkzvBaTiYlthZrhPeDL2UyotiI4/dFl3G
+	 CifRWjVgR+IJPR1LDUCi/XQzpU3AP2TnzTk7P0jgZwbG7vNm8sQquNWtMFl+/om2Tb
+	 LxYHzl8vQQELTJQb7NnXh80mV/vTTRhBUBxXHc7+lcavP0TtPpsXyKrQtj3bBODjAx
+	 +HgdU2zRDeqKOoI5hiFt9a9mKAt9tZ58Lp83ZEibBiIP16VJNgbSspvaUazIqEQESj
+	 87GBtLVfJZnjF+CR/0M18mx8sy7KXThc3JEI/6owWCwr6ZgohZQpRMi9pI15uksJ2M
+	 NQSikIjacL0WA==
+Message-ID: <c503061b-00cc-4d04-8380-3a0fe0a2c788@kernel.org>
+Date: Thu, 20 Nov 2025 08:21:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251120020909.GA78650@system.software.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0iTexjH+b23vVsNfi2jX1pBC09hF8tT9ARRCUFvQdGFoMsftXN8aztt
-	M2beAmuilU0FKeZqZunWMStnsVmmXZh28jLNrDxrlEpGWebUCDetadSMqH8ePjzfLx+ePx6e
-	VjxjI3mN/rBo0Ku0Sk7GyAYmly66Yp+tWVJYzII3081AYDiHgfbKawiGP7+UgKUvk4GhsjwE
-	z4N+BBZzO4LSni4aqhq6EXQEhjhoNudykGW/zsGT/jEKWgpsFBRZssLjPQWt9k4GyozRMNaz
-	FJq7vSxUG19JIKc2wMC9Fwug9MQlBnLGhxE03H5NgbFohIWWhiYGHtc6WOh55WPB9aiVBseg
-	jYMzg70I+oNlNDx1l1CQWWdn4Ea2VQKN+W4KTr6/w8GjojYW3lmLKXgQ8FPgcppp+HL5IYLs
-	zuUQGj3PgWPci9YuESouVCAh25Uq/Nvi54Qvgf854V6whBE8NiLUWLskQokzWXCVxwj2u32U
-	UPopwArOq6c4wTTQQQmDbW0S4U2H5XtgNNNbZuyWrUoQtZoU0RC7ep9M3VQR4g59nJ12fPQ+
-	ZUTN001IyhO8jLTbLMxP7vackYSZwdGkqWZggjk8j/h8n2kT4vkIPJ/4q+JMSMbT2BZFHJ46
-	NtyZirUk+F+lJNyRYyAjN1aFOwr8AZGbBVUTfjmeQprPvZlgGscQ39c+KtyncRS5/JUPr6V4
-	JfG6Tk8op+G5xH2rkQp7CO6VktpqJ/px5wxSV+5jChC2/qa1/qa1/tKWIPoqUmj0KTqVRrts
-	sTpdr0lb/Heizom+v1pZxtie2+hT+/Z6hHmknCzf2TBLo2BVKUnpunpEeFoZIY+On6lRyBNU
-	6UdEQ+JeQ7JWTKpHUTyjnC6PC6YmKPAB1WHxoCgeEg0/U4qXRhrR1p1pf3TNTzaENjwr3LQ7
-	0bv2aaPJ0zoektbBw2B1+sXMU1uEP3Wbd1X/JSbMUWcpI/X/1E8KKA6keorze3Vr6JfD/Qvj
-	Lp09vnn/jm1FW+/Ghg6OHu08tj6jMiPPnXPfMRJfsy5/MFdtkBVeY2L74stzN270DplXFLzN
-	aO3J4/wRSiZJrVoaQxuSVN8Am7Ei7mYDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTdxTH87v39t5Lt+qlsvBDHHE1RCMKaLbkuJnFRzJ+IRsx/qMxIdrI
-	jRTKI61DWbJIhUaCZtbOQmhFOgiVQEUolYAGwkMroMhrY920MmbloWWYjYc8u5Zkmf+cfM/5
-	fr4n54/D0/IVyWZelXlW1GQq1QpWykiTvsjfXV0ZpYp/+WwrjOjaGZibLWTgxh07C4WOUgkM
-	1NUiGJ0rRLCwbKFB3+JnYNXo4mB28RkH/lYXguJBIw12p46Cf+rXWHjT9TcC05iXhZIpHQMz
-	tisIzOMWDqYeJsD06H0J+D0TFPw670Ng865R4G2/hGC1OB3KKxpZWO7rp6HENIDgpzEPDZP1
-	AdPpeoGgtfoiC68Md2kY9m6An+dmWOgxXWZhevAGBX/Vs2C92CqBMosRQX7lHRaKyxwMtPxx
-	j4PBNysUPC82UlDr+AZGbeMMPDZUUIH7AlRDOFhK8qlAmaTAdPs+BYu2Gg6eVD5nwJYXDZa+
-	YQn8WW3mYGVsD/itWeCqneDAc9XEQN10v+SACZEF/Q8MqWlsooh+aJUl9pt2RJaXjIjMVuXT
-	RG8ItF2+GZoUNJ4jVY99LFma+4UlrfNWhvRWYHKtbzdpMXs4UtD2O3fk8xPS/SmiWpUjauK+
-	PCVN7bYvs9lvo87r37VReagnvAiF8Fj4FL/o/ZELakaIxt0t0+uaFbZjt3uRLkI8HybswD7n
-	3iIk5WmhIhLf7u2QBJlNghrPP6jjgoxMALxQvz/IyIXXCN81OJkgIxNCcU+pd13Twk7sXpui
-	gjwtROJba3xwHCLswyONxvWVHwnbcHvTI8qAZOb30ub30ub/01ZE16AwVWZOhlKl/ixWm56a
-	m6k6H3s6K8OBAj9p+37lWjOaHU7oRAKPFB/Kjrs+VsklyhxtbkYnwjytCJNFH9yikstSlLnf
-	iZqsk5pv1aK2E0XyjCJclnhMPCUXzijPiumimC1q/nMpPmRzHtq7o2DoxPHYmeqy1IMDhzu2
-	7DrXxI9uHLyZeCbu6aR1rFv/22H3oZdXbKFX9yUlNmx9p0s+etQfP+6oc0RsvP4qxZdY5CGf
-	HCjsbiMRX+OIXULZyAdfdbAx7nju5K3QDeOHtkddb2Z8F/QdzTFpyZcMS5d9D9MMb8vLJywI
-	zzvTdApGm6rcs5PWaJX/An0YZayPAwAA
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 25/26] dt-bindings: reserved-memory: Add Google Kinfo
+ Pixel reserved memory
+To: Eugen Hristev <eugen.hristev@linaro.org>, linux-arm-msm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, tglx@linutronix.de,
+ andersson@kernel.org, pmladek@suse.com, rdunlap@infradead.org,
+ corbet@lwn.net, david@redhat.com, mhocko@suse.com
+Cc: tudor.ambarus@linaro.org, mukesh.ojha@oss.qualcomm.com,
+ linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
+ jonechou@google.com, rostedt@goodmis.org, linux-doc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-arch@vger.kernel.org, tony.luck@intel.com, kees@kernel.org
+References: <20251119154427.1033475-1-eugen.hristev@linaro.org>
+ <20251119154427.1033475-26-eugen.hristev@linaro.org>
+ <e73bdb23-c27b-4a18-b7e3-942f2d40b726@kernel.org>
+ <060e7412-8f1f-4d31-af39-79213c560e85@linaro.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <060e7412-8f1f-4d31-af39-79213c560e85@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 20, 2025 at 11:09:09AM +0900, Byungchul Park wrote:
-> On Wed, Nov 19, 2025 at 02:37:17PM +0000, Matthew Wilcox wrote:
-> > On Wed, Nov 19, 2025 at 07:53:12PM +0900, Byungchul Park wrote:
-> > > On Thu, Oct 02, 2025 at 05:12:44PM +0900, Byungchul Park wrote:
-> > > > False positive reports have been observed since dept works with the
-> > > > assumption that all the pages have the same dept class, but the class
-> > > > should be split since the problematic call paths are different depending
-> > > > on what the page is used for.
-> > > >
-> > > > At least, ones in block device's address_space and ones in regular
-> > > > file's address_space have exclusively different usages.
-> > > >
-> > > > Thus, define usage candidates like:
-> > > >
-> > > >    DEPT_PAGE_REGFILE_CACHE /* page in regular file's address_space */
-> > > >    DEPT_PAGE_BDEV_CACHE    /* page in block device's address_space */
-> > > >    DEPT_PAGE_DEFAULT       /* the others */
-> > >
-> > > 1. I'd like to annotate a page to DEPT_PAGE_REGFILE_CACHE when the page
-> > >    starts to be associated with a page cache for fs data.
-> > >
-> > > 2. And I'd like to annotate a page to DEPT_PAGE_BDEV_CACHE when the page
-> > >    starts to be associated with meta data of fs e.g. super block.
-> > >
-> > > 3. Lastly, I'd like to reset the annotated value if any, that has been
-> > >    set in the page, when the page ends the assoication with either page
-> > >    cache or meta block of fs e.g. freeing the page.
-> > >
-> > > Can anyone suggest good places in code for the annotation 1, 2, 3?  It'd
-> > > be totally appreciated. :-)
-> > 
-> > I don't think it makes sense to track lock state in the page (nor
-> > folio).  Partly bcause there's just so many of them, but also because
-> > the locking rules don't really apply to individual folios so much as
-> > they do to the mappings (or anon_vmas) that contain folios.
+On 19/11/2025 17:19, Eugen Hristev wrote:
 > 
-> Thank you for the suggestion!
 > 
-> Since two folios associated to different mappings might appear in the
-> same callpath that usually be classified to a single class, I need to
-> think how to reflect the suggestion.
+> On 11/19/25 18:02, Krzysztof Kozlowski wrote:
+>> On 19/11/2025 16:44, Eugen Hristev wrote:
+>>> Add documentation for Google Kinfo Pixel reserved memory area.
+>>
+>> Above and commit msg describe something completely else than binding. In
+>> the binding you described kinfo Linux driver, above you suggest this is
+>> some sort of reserved memory.
+>>
+>>>
+>>> Signed-off-by: Eugen Hristev <eugen.hristev@linaro.org>
+>>> ---
+>>>  .../reserved-memory/google,kinfo.yaml         | 49 +++++++++++++++++++
+>>>  MAINTAINERS                                   |  5 ++
+>>>  2 files changed, 54 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/reserved-memory/google,kinfo.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/reserved-memory/google,kinfo.yaml b/Documentation/devicetree/bindings/reserved-memory/google,kinfo.yaml
+>>> new file mode 100644
+>>> index 000000000000..12d0b2815c02
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/reserved-memory/google,kinfo.yaml
+>>> @@ -0,0 +1,49 @@
+>>> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/reserved-memory/google,kinfo.yaml#
+>>
+>> Filename based on the compatible.
+>>
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Google Pixel Kinfo reserved memory
+>>> +
+>>> +maintainers:
+>>> +  - Eugen Hristev <eugen.hristev@linaro.org>
+>>> +
+>>> +description:
+>>> +  This binding describes the Google Pixel Kinfo reserved memory, a region
+>>
+>> Don't use "This binding", but please describe here hardware.
+>>
+>>> +  of reserved-memory used to store data for firmware/bootloader on the Pixel
+>>> +  platform. The data stored is debugging information on the running kernel.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - const: google,kinfo
+>>> +
+>>> +  memory-region:
+>>> +    maxItems: 1
+>>> +    description: Reference to the reserved-memory for the data
+>>
+>> This does not match description. Unfortunately it looks like you added a
+>> node just to instantiate Linux driver and this is not allowed.
+>>
+>> If this was some special reserved memory region, then it would be part
+>> of reserved memory bindings - see reserved-memory directory.
 > 
-> I guess you wanted to tell me a folio can only be associated to a single
-> mapping at once.  Right?  If so, sure, I should reflect it.
-> 
-> > If you're looking to find deadlock scenarios, I think it makes more
-> > sense to track all folio locks in a given mapping as the same lock
-> > type rather than track each folio's lock status.
-> > 
-> > For example, let's suppose we did something like this in the
-> > page fault path:
-> > 
-> > Look up and lock a folio (we need folios locked to insert them into
-> > the page tables to avoid a race with truncate)
-> > Try to allocate a page table
-> > Go into reclaim, attempt to reclaim a folio from this mapping
-> > 
-> > We ought to detect that as a potential deadlock, regardless of which
-> > folio in the mapping we attempt to reclaim.  So can we track folio
-> 
-> Did you mean 'regardless' for 'potential' detection, right?
-> 
-> > locking at the mapping/anon_vma level instead?
-> 
-> Piece of cake.  Even though it may increase the number of DEPT classes,
+> I sent this patch for reserved-memory directory, where all the
+> reserved-memory bindings reside. Or maybe I do not understand your
+> comment ?>
 
-Might be not as easy as I thought it'd be.  I need to think it more..
+There is no ref to reserved memory here. Please look first how reserved
+memory bindings are written,
 
-	Byungchul
+>> Compatible suggests that it is purely Linux driver, so another hint.
+> 
+> This reserved memory area is used by both Linux and firmware. Linux
+> stores some information into this reserved memory to be used by the
+> firmware/bootloader in some specific scenarios (e.g. crash or recovery
+> situations)
+> As the firmware reserves this memory for this specific purpose, it is
+> natural to inform Linux that the memory should not be used by another
+> purpose, but by the purpose it was reserved for.
 
-> I hope it will be okay.  I just need to know the points in code where
-> folios start/end being associated to their specific mappings.
+But you did not write bindings for it. You wrote bindings for Linux
+device driver, I already explained that last time.
+
+> Which would be the best way to have Linux understand where is this
+> memory area so it could be handled?
+
+
 > 
-> 	Byungchul
 > 
-> > ---
-> > 
-> > My current understanding of folio locking rules:
-> > 
-> > If you hold a lock on folio A, you can take a lock on folio B if:
-> > 
-> > 1. A->mapping == B->mapping and A->index < B->index
-> >    (for example writeback; we take locks on all folios to be written
-> >     back in order)
-> > 2. !S_ISBLK(A->mapping->host) and S_ISBLK(B->mapping->host)
-> > 3. S_ISREG(A->mapping->host) and S_ISREG(B->mapping->host) with
-> >    inode_lock() held on both and A->index < B->index
-> >    (the remap_range code)
+>>
+>> Looks like this is a SoC specific thing, so maybe this should be folded
+>> in some of the soc drivers.
+>>
+> Not really soc specific. Any soc who implements this at firmware level
+> can use it. The firmware can reserve some memory for this specific
+> purpose and then pass it to Linux, so Linux can fill it up.
+> It just happens that the Pixel phone has this implemented right now, but
+> it is not constrained to Pixel only.
+> 
+> Instantiating this driver with a call like platform_device_register_data
+> would make the driver unaware of where exactly the firmware looks for
+> the data. This is right now passed through the DT node. Do you have a
+> better suggestion on how to pass it ?
+
+I do not see how this question is relevant here. I don't care how you
+pass it to the driver, because we discuss bindings. You created bindings
+for Linux driver and that's a no. If you wanted that, I suggests that it
+could be instantiated by some other driver, but sure - we don't have to
+go that way, that was just an idea how to solve the problem bindings
+like this cannot be accepted.
+
+Best regards,
+Krzysztof
 
