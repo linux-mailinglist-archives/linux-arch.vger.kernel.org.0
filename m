@@ -1,83 +1,83 @@
-Return-Path: <linux-arch+bounces-14973-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14974-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F4D4C7201B
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 04:37:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11ABCC72027
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 04:37:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 0F7EB2E078
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 03:37:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id C04512DFAA
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 03:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE12F2FF67E;
-	Thu, 20 Nov 2025 03:37:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506A33009E1;
+	Thu, 20 Nov 2025 03:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GNp71wbV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ioh+t15g"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75FD2F5A10
-	for <linux-arch@vger.kernel.org>; Thu, 20 Nov 2025 03:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11D42F39D6
+	for <linux-arch@vger.kernel.org>; Thu, 20 Nov 2025 03:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763609835; cv=none; b=oXQIYNlvvRhF+tOQ9emuGUNKdlMOwkV7uGs46DgIqV5mgO/F1tn29QDvOKmiQLk9WQzA6PBKRkZ/p4+emWCCS9IMM5IdOujopSiPdo3ax833T7OgYQDPnGUOCbo5mNLhL4MvmWjqFseMTX4yC+4e60fayl5L9eZXr9GefaAJ4Hs=
+	t=1763609835; cv=none; b=tBjvst1LNFhkSB91EpDNA04OJ/80cX3AHSj/jv/H9nxLhyaJ2yac13bDYYdMfYasGvK5VUB+N4orny8Fadb2F5+7sXSc4T+6AoqI4aTKZjzPcuMv+jGEOMx+YlZkkgMfgDRh2HtFwax2sPNVZxmmIN9Qbz0geLz1EuEt7lHDEqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763609835; c=relaxed/simple;
-	bh=wuDktkvkmPPQMkrr7ULLpZaYVUd01D6PWmVFjXlkyqY=;
+	bh=7/XNyB/QLFMRNjNb6PbYdwSizLyVpMNRusy8wp8n+pw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=r5IH3e6ZFkf5MwBPMmpxstL+r2+9K2K2VkOcIL/bJ3MKy+ulcJdO3K0NGOvm8Pcxy0z1VIiyX6qpM8CftiMPICOWi9dVFNLysUeuIdbJh0eQ/XNWm/4X+bW4HEoDAQCiHbdtA3lKh43zWKQmWL/uUITYcmSRS2ystyiofJNBBEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GNp71wbV; arc=none smtp.client-ip=74.125.224.51
+	 In-Reply-To:To:Cc; b=QOHc4xqDYOkP5kZ26yY4vFAUuJz6CJJu1ZTylrTbwqHjtkr2ZonitU4zp1qbL4DHkUVFqEgXLElwBHJ+fLGIe2X8cbEqpw7PUFg8iHOxU/ViwdTr9HUAPbPOLFeTBVB881ygS/kztmcmdYQnKimhgGd6Em+NZYZM0KS+pNzATMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ioh+t15g; arc=none smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-640daf41b19so554415d50.0
-        for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 19:37:12 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-787be077127so4248367b3.2
+        for <linux-arch@vger.kernel.org>; Wed, 19 Nov 2025 19:37:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763609832; x=1764214632; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1763609833; x=1764214633; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nZTyU8CT4iARbspCBMuLPPZbuWjZ7S1vt4fEqVtqV7I=;
-        b=GNp71wbVJAfsI+xGI91OOvFT+BMpzV50+PagzJ7PVfotIJwvNsTlI+ir7yesWSWeJI
-         SdTqXFDTSrud/6naeEBiQxx2uZDg68awdbq0YVNrInrOioeIyTrxcnFNIMikB/3kCyO8
-         Y5cxwP2tG9YBAdlnCu8lm4M1LRGa+K9eiLbPJmu+MLcVLmsHbYMh3KbpuIiPaiyBuuGK
-         BRCv2VlN5kipm5P7lb4cEIRr0tlh85FVLTzVlC80vlEAZ8EtXqg7hkS7n34+V+rxlaMw
-         m+VOzp/7xYHt90eJA/+DnyKTby1fnyEjCVrccPgch3w0XyZq+p4sC3Xu7ywN3a2qzGsE
-         voBA==
+        bh=Y8HPHcTcPHipeEg2J18CsLH7RrVON818AUh8XbynViI=;
+        b=Ioh+t15gUP1FCkd+u+1wtNH1+icyAb7TgFSIk6rfTt8t6X0aFy9u4O2fcFE9JddFPl
+         Jn7+9ppxCHSLMGhLfmnGvD0Pc27M9EFixc+/7o7JwipbIcFSqE5yN3E2tew3I13gMfSw
+         lKl0oBJlk7Y6PCsDwpalzjolzGmPIqOwqqtzcwhI/S8WC6RbONgTw+xdg679Xp1V+CRQ
+         pGBMc+qmJsCFrwXKPltmREf2KHIfRQ6SMnHYP39Poff3uTwkJcGAuKWOdFg6opck773v
+         JPbvZAXvATsStAp4dqZpFycuBwHvcaCwyajXDdQReAFezniYm7ZELYG6ADsn3rrfK2d3
+         PDxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763609832; x=1764214632;
+        d=1e100.net; s=20230601; t=1763609833; x=1764214633;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=nZTyU8CT4iARbspCBMuLPPZbuWjZ7S1vt4fEqVtqV7I=;
-        b=sH08k7EfVPRRT0ylQHG9+7ooTU8ql9eLq7T6PZFkQIW4dC0FMsfm4osa3XkV++22VD
-         avdjC1+OpL+j2IIxQFXvziDHAdjokofJXSHC6jw9Fza9bmtn7qD27/beAuZo+B8DkIo8
-         I+opPcRqmF2NIxbWtybix/n5UGfFEwnmyWwPzQQywR5siHXuM8IUykVQu6bcNu2aqu5r
-         7tan4h3PMydsrZ96Ttx/sFNnoBa1KZsGFTaO3rSQ74mvkJ9+OYicUlhl/wQzixiCCEGn
-         5oA1Lx0iLn8guqgyg9tQGG1r5b0EfFcW7fhWSRmdupHjtoiam8DonUR0J0zZg1PErzlV
-         Ztdg==
-X-Forwarded-Encrypted: i=1; AJvYcCULDRBeKK8VoOHd99WKl8w3y+AyNej/T3/gzfRTVga5+sUwt9g6OwMG6u2gMQuemefdfU9BgtSMq0RT@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx16tIBb7NZOo4LSoELIhDhQ0orGBevUOGXm/HuqHS9CRxLkSDn
-	KZr0/V6XDuHWF+nwNPcCPNX/PTmL9l4h784fxeB6IcRfN2o5+woy7ysF
-X-Gm-Gg: ASbGncu9KiK0GIKMRx3cokohw5Jvlcm/1JBdnCOwanmyNwEtXbUyx9/RSJh6qL0BFre
-	mGyQNY8nobG8enCTuv8FB98oCxqFgnqaGmMJW3gmbFDGcUy9PQMSd7IAWn+qd3EepTG982ipFP3
-	zf+99NYdvRA2MAa99kvB8FrcX92vvZGWTT3SzVT2QOBFQdgYC8ZumozcTRlcip2CS3w9DTPqYk2
-	0b7/RT4YWJ8lSnLo3pXEPQ1V/Er1SN9KsWWv9uVwiY9EvAm9bN66KTO89WifP8ySlUhn27Um1Y9
-	HrDmjpWj0DwcdtNLiBDYXJ+MYlwNcEgbk7A4vCAejqCJXKXzz+wPdADsGJqYo3ZnLtCgD+0HeUk
-	LfX7chQbnYsuGATgW6zrsoaSE2nAPkValk/i9hTpdUQoA44rb1R/QVI5z1R/VkU/h/mUegub3b7
-	6bsnyZJZU/iX9ixdPlqXse
-X-Google-Smtp-Source: AGHT+IF6XnzoA3Fp2yvsn96tIgCF3KkDZHwgr96TFqQEESgZBGU4z3LvWvX/N+AZH+r8JfoIVeqOHw==
-X-Received: by 2002:a05:690e:168a:b0:63f:b605:b7f2 with SMTP id 956f58d0204a3-642f8df31e4mr616438d50.10.1763609831701;
-        Wed, 19 Nov 2025 19:37:11 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:2::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-642f71ae739sm452236d50.25.2025.11.19.19.37.11
+        bh=Y8HPHcTcPHipeEg2J18CsLH7RrVON818AUh8XbynViI=;
+        b=rhyqDQ296791mkTmYvt2M3IMcdXZwAz3EHRim8a3cugoUakIEhJhOPJvE3FdSf11/X
+         sh27Snijx5FDFM7RPEdRzP2maBmh//q+anlosff5y5hvB+xEOAYJyrH+X5I7lIllOBxY
+         jr3neWfefANJWxzug53CmLyMF1jgjbR0ExS+2NZA7kdBGhITGONK8P+fSN+troeDpuuH
+         lki5jSktxBMKTXKfB1H1LaIFm+DHAQ2NNel+q6YlC4x/wfKxH2caALKEI3xqqbkV4A5n
+         2gUFjRCG/+nTaJf62IK3kqYWY2f1hVk+E43LwooFYg0H/p0oUZDPFG13MCfTTYeqJ/zB
+         AG+A==
+X-Forwarded-Encrypted: i=1; AJvYcCV2PY6GGm8P6MAVXMq1luDntATmQiVq2sMfaXxiCL9nHcXKxwSn9tSFGirt7nJ2vNEzr+Ob6FOPvWUS@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTLDraKN7T6Tlpei+tkGNpxJVCn/kzILDFhCXVtmqi2y8T0Fie
+	rheCRhOmUszSX0pCNs85XcKNAHJIKienfdELKVydMK7yAtef0TyhgHdO
+X-Gm-Gg: ASbGnctlTm6qPtbRFcD2g0InSi7btyuM6xWER5K1PwRiT2NA/YwzHV4hhsGE8hG7I0p
+	tpdAi/N84C17uCW69bCnqcb0lob08Mrgj0YjmVrEYkS4VnakukX/lY3/sFL4RJYIWrty4ya7YXj
+	sxMU2ohm5fJJ4NNZqddJsKh7ix+D1vqY6qup9uCxc2BIaZrEWtBO1yO9lRsDLw81q638S9SitON
+	Gz7zff7DMCvY+T2CshSN5SSwWVO3OXlWaMOj3UCTHsdkuooI+kDMfiGqb91cQ+inSB9IJaICcq8
+	z9p9JOJebFRrWB/u+JLcfE4kWGOBaY8HHrLkAQ9DYk4f0Ukzr3zKT5qAO9a/9FdxvQqwsYrNkDm
+	zwbN+IJVFHlIOmp1fpglDTb9YNFu3tPVw3RkRzezTdqKuJDAcTarjz5/6L2PmXSzVx1+w26ut3e
+	TigxIN2w/DjZ4Y2ubaGYxM1ut+LhDMQGUJ
+X-Google-Smtp-Source: AGHT+IE0rUu8qu5Rkx9gHq3ccJHYL3kg9sZQWOC4lc4TwPWjYLNRb4WIbwmt/9NAqgJ1/c/9jA9W/w==
+X-Received: by 2002:a81:ee0b:0:b0:789:29ba:562c with SMTP id 00721157ae682-78a7965dfcamr13513017b3.64.1763609832623;
+        Wed, 19 Nov 2025 19:37:12 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:53::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78a798a77d0sm4153177b3.22.2025.11.19.19.37.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 19:37:11 -0800 (PST)
+        Wed, 19 Nov 2025 19:37:12 -0800 (PST)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Wed, 19 Nov 2025 19:37:08 -0800
-Subject: [PATCH net-next v7 1/5] net: devmem: rename tx_vec to vec in
- dmabuf binding
+Date: Wed, 19 Nov 2025 19:37:09 -0800
+Subject: [PATCH net-next v7 2/5] net: devmem: refactor sock_devmem_dontneed
+ for autorelease split
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-1-1abc8467354c@meta.com>
+Message-Id: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-2-1abc8467354c@meta.com>
 References: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
 In-Reply-To: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -106,107 +106,103 @@ X-Mailer: b4 0.14.3
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Rename the 'tx_vec' field in struct net_devmem_dmabuf_binding to 'vec'.
-This field holds pointers to net_iov structures. The rename prepares for
-reusing 'vec' for both TX and RX directions.
+Refactor sock_devmem_dontneed() in preparation for supporting both
+autorelease and manual token release modes.
 
-No functional change intended.
+Split the function into two parts:
+- sock_devmem_dontneed(): handles input validation, token allocation,
+  and copying from userspace
+- sock_devmem_dontneed_autorelease(): performs the actual token release
+  via xarray lookup and page pool put
+
+This separation allows a future commit to add a parallel
+sock_devmem_dontneed_manual_release() function that uses a different
+token tracking mechanism (per-niov reference counting) without
+duplicating the input validation logic.
+
+The refactoring is purely mechanical with no functional change. Only
+intended to minimize the noise in subsequent patches.
 
 Reviewed-by: Mina Almasry <almasrymina@google.com>
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- net/core/devmem.c | 22 +++++++++++-----------
- net/core/devmem.h |  2 +-
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ net/core/sock.c | 52 ++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 32 insertions(+), 20 deletions(-)
 
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 1d04754bc756..4dee2666dd07 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -75,7 +75,7 @@ void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
- 	dma_buf_detach(binding->dmabuf, binding->attachment);
- 	dma_buf_put(binding->dmabuf);
- 	xa_destroy(&binding->bound_rxqs);
--	kvfree(binding->tx_vec);
-+	kvfree(binding->vec);
- 	kfree(binding);
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 3b74fc71f51c..41274bd0394e 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1082,30 +1082,13 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
+ #define MAX_DONTNEED_FRAGS 1024
+ 
+ static noinline_for_stack int
+-sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
++sock_devmem_dontneed_autorelease(struct sock *sk, struct dmabuf_token *tokens,
++				 unsigned int num_tokens)
+ {
+-	unsigned int num_tokens, i, j, k, netmem_num = 0;
+-	struct dmabuf_token *tokens;
++	unsigned int i, j, k, netmem_num = 0;
+ 	int ret = 0, num_frags = 0;
+ 	netmem_ref netmems[16];
+ 
+-	if (!sk_is_tcp(sk))
+-		return -EBADF;
+-
+-	if (optlen % sizeof(*tokens) ||
+-	    optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
+-		return -EINVAL;
+-
+-	num_tokens = optlen / sizeof(*tokens);
+-	tokens = kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL);
+-	if (!tokens)
+-		return -ENOMEM;
+-
+-	if (copy_from_sockptr(tokens, optval, optlen)) {
+-		kvfree(tokens);
+-		return -EFAULT;
+-	}
+-
+ 	xa_lock_bh(&sk->sk_user_frags);
+ 	for (i = 0; i < num_tokens; i++) {
+ 		for (j = 0; j < tokens[i].token_count; j++) {
+@@ -1135,6 +1118,35 @@ sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+ 	for (k = 0; k < netmem_num; k++)
+ 		WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+ 
++	return ret;
++}
++
++static noinline_for_stack int
++sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
++{
++	struct dmabuf_token *tokens;
++	unsigned int num_tokens;
++	int ret;
++
++	if (!sk_is_tcp(sk))
++		return -EBADF;
++
++	if (optlen % sizeof(*tokens) ||
++	    optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
++		return -EINVAL;
++
++	num_tokens = optlen / sizeof(*tokens);
++	tokens = kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL);
++	if (!tokens)
++		return -ENOMEM;
++
++	if (copy_from_sockptr(tokens, optval, optlen)) {
++		kvfree(tokens);
++		return -EFAULT;
++	}
++
++	ret = sock_devmem_dontneed_autorelease(sk, tokens, num_tokens);
++
+ 	kvfree(tokens);
+ 	return ret;
  }
- 
-@@ -232,10 +232,10 @@ net_devmem_bind_dmabuf(struct net_device *dev,
- 	}
- 
- 	if (direction == DMA_TO_DEVICE) {
--		binding->tx_vec = kvmalloc_array(dmabuf->size / PAGE_SIZE,
--						 sizeof(struct net_iov *),
--						 GFP_KERNEL);
--		if (!binding->tx_vec) {
-+		binding->vec = kvmalloc_array(dmabuf->size / PAGE_SIZE,
-+					      sizeof(struct net_iov *),
-+					      GFP_KERNEL);
-+		if (!binding->vec) {
- 			err = -ENOMEM;
- 			goto err_unmap;
- 		}
-@@ -249,7 +249,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
- 					      dev_to_node(&dev->dev));
- 	if (!binding->chunk_pool) {
- 		err = -ENOMEM;
--		goto err_tx_vec;
-+		goto err_vec;
- 	}
- 
- 	virtual = 0;
-@@ -295,7 +295,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
- 			page_pool_set_dma_addr_netmem(net_iov_to_netmem(niov),
- 						      net_devmem_get_dma_addr(niov));
- 			if (direction == DMA_TO_DEVICE)
--				binding->tx_vec[owner->area.base_virtual / PAGE_SIZE + i] = niov;
-+				binding->vec[owner->area.base_virtual / PAGE_SIZE + i] = niov;
- 		}
- 
- 		virtual += len;
-@@ -315,8 +315,8 @@ net_devmem_bind_dmabuf(struct net_device *dev,
- 	gen_pool_for_each_chunk(binding->chunk_pool,
- 				net_devmem_dmabuf_free_chunk_owner, NULL);
- 	gen_pool_destroy(binding->chunk_pool);
--err_tx_vec:
--	kvfree(binding->tx_vec);
-+err_vec:
-+	kvfree(binding->vec);
- err_unmap:
- 	dma_buf_unmap_attachment_unlocked(binding->attachment, binding->sgt,
- 					  direction);
-@@ -363,7 +363,7 @@ struct net_devmem_dmabuf_binding *net_devmem_get_binding(struct sock *sk,
- 	int err = 0;
- 
- 	binding = net_devmem_lookup_dmabuf(dmabuf_id);
--	if (!binding || !binding->tx_vec) {
-+	if (!binding || !binding->vec) {
- 		err = -EINVAL;
- 		goto out_err;
- 	}
-@@ -414,7 +414,7 @@ net_devmem_get_niov_at(struct net_devmem_dmabuf_binding *binding,
- 	*off = virt_addr % PAGE_SIZE;
- 	*size = PAGE_SIZE - *off;
- 
--	return binding->tx_vec[virt_addr / PAGE_SIZE];
-+	return binding->vec[virt_addr / PAGE_SIZE];
- }
- 
- /*** "Dmabuf devmem memory provider" ***/
-diff --git a/net/core/devmem.h b/net/core/devmem.h
-index 0b43a648cd2e..1ea6228e4f40 100644
---- a/net/core/devmem.h
-+++ b/net/core/devmem.h
-@@ -63,7 +63,7 @@ struct net_devmem_dmabuf_binding {
- 	 * address. This array is convenient to map the virtual addresses to
- 	 * net_iovs in the TX path.
- 	 */
--	struct net_iov **tx_vec;
-+	struct net_iov **vec;
- 
- 	struct work_struct unbind_w;
- };
 
 -- 
 2.47.3
