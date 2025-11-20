@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-14970-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14971-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 221EDC71C23
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 03:09:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D95C5C71DC9
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 03:34:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sto.lore.kernel.org (Postfix) with ESMTPS id 6043B2958D
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 02:09:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 1AC6D2C97F
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 02:34:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CC926FA6F;
-	Thu, 20 Nov 2025 02:09:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBC2A2D3720;
+	Thu, 20 Nov 2025 02:34:25 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684621DE3DC;
-	Thu, 20 Nov 2025 02:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB58429B77C;
+	Thu, 20 Nov 2025 02:34:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763604568; cv=none; b=Isfni3xDAXIpgyEEW2460j4u0ulf1xJlD3S6FLMzvNR31Hu7GUROolsJcJrSI4l0CoPpNBIIQIaFWfjNoqi9m7hekUeF6nGio9ysSoKcBT8vqNzYTdLn4ST7NtH7cDKraZR0YJHb6WAyRnSNRmhqCe80QpZiL4BeijmcD69B/Dw=
+	t=1763606065; cv=none; b=jYwr2+6wEACyI9/NLUcaLmsUifXbBN5ExkpJTnAy7p3OElohJhoQMm26cI68bu9bFpRCp+a2qJE05cD3EkQfWAaLYrFnQX9nPOuUlYG1HN6FbPXiY5dljp4orqw4Wi8XTBEnAx1IteB5BDMd3SMc11Ctbzlrxbh6eybJtMISwvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763604568; c=relaxed/simple;
-	bh=QUgA1HX7B/qcO1RvgSuXmUmQCsyytJqwclA8xmQo11E=;
+	s=arc-20240116; t=1763606065; c=relaxed/simple;
+	bh=/EG5zoBd9EOTX77N44tGF7qVruGgiPwa1ndxkUQivj4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uqmTeN8IXLccaRcij+riy3sey2Kq/PuOPVvsP1u5dOfSOYyqTrUqxAIBaEDTRQFtXbgpClsanmlpnPpXKS/nQMIGq8bhKkw+0Rk5wtOoqs7RzrU/PUVE22S56OjynKh3R2JBAXdnZK1GJ/fZCBly1t+aJoZB0B0ltU7MV8K5wdY=
+	 Content-Type:Content-Disposition:In-Reply-To; b=PgHiAhW590Z/lBWCgyPPXJGPgD4WHwVEQ9rqpjRujQgMNOSi3o1ixJLMv9o3Sjhn5kEJnb04Sr4jvxstHh0AtvAVvjQo1mZ7HoYLUUhqDYLZNOdP2M0iiWxT/7zFNcP+MCglsJoU5B4KlbeLJBVaxEnjTyWB8nFRgOARRSGmEkA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-d3-691e784bff7b
-Date: Thu, 20 Nov 2025 11:09:09 +0900
+X-AuditID: a67dfc5b-c2dff70000001609-28-691e7e2be02d
+Date: Thu, 20 Nov 2025 11:34:13 +0900
 From: Byungchul Park <byungchul@sk.com>
 To: Matthew Wilcox <willy@infradead.org>
 Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
@@ -92,11 +92,12 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	linux-rt-devel@lists.linux.dev
 Subject: Re: [PATCH v17 44/47] dept: introduce APIs to set page usage and use
  subclasses_evt for the usage
-Message-ID: <20251120020909.GA78650@system.software.com>
+Message-ID: <20251120023413.GA27403@system.software.com>
 References: <20251002081247.51255-1-byungchul@sk.com>
  <20251002081247.51255-45-byungchul@sk.com>
  <20251119105312.GA11582@system.software.com>
  <aR3WHf9QZ_dizNun@casper.infradead.org>
+ <20251120020909.GA78650@system.software.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -105,124 +106,132 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aR3WHf9QZ_dizNun@casper.infradead.org>
+In-Reply-To: <20251120020909.GA78650@system.software.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTZxSH89773tvbat214nwnzixdCAYCGwaTs2TZR2KyGxeTGTXZ1Gxr
-	bCONBbEowpwJzOIa3AyytEALDDDU8qm0iraIUSa4jg/5cFIcDItYJVLMsC1BS12vZpn/nDw5
-	v1+enD8ORyuq2bWcNuuQRp+l0ilZGZYFltemfJ63Xvu++UEKhIJGDJXnmlkwOioYGGxtQrDw
-	3EpDkesFhuDiXxJ4ej7KwuPf5hGYfNMslM0UYnhi+wmBxW+VwEz3ZxCY7GDgxcRDCkbDswiW
-	zPvh1zonC7W+CRo67T+w8KDkIg0j0yvAYzrJQmCokoK58yxUWUsRmKscGFz33BIYN5dSMGnz
-	YzC3rQFr2XEqNh5RYGrpoGDR1iiBvjPjGGwFCWDtH2Eg4kuD1sAtBjx/32Hgsb+UhcmbJxi4
-	VHBPAo6xbgTB2z4KjO4QBsf9WKXzbjJUVI+zcKXTg8G4FETQc3mKgsFrvQwMNw1iOPfQS4HH
-	0oDhlruFgfrRIQqc/X00hE/FQ8tcHQu/zPnRJ2phoegUFhqd7ZRQNLzECs3VzUgI1h+nhaKS
-	GBmcR4T63llWeBb6kxU6wzVYON2fIrgsExLBcPWuRKhxHBYMNwKM4LQnfZG8S/ahWqPT5mr0
-	7330rSwj8qwGZzvW5Z0ZtVAFyPBmMZJyhE8npqrndDHiXnKf4Zi4xnwC6S12syKzfCLxehdf
-	VuL4DWT2wsZiJONovi6etPxxnRE7q3gdCd9olYgs54FEG+xILCn4DkRun2hjXgUriadiGotM
-	80nEG52hRCnNx5OzUU5cS2MnjNX9SIu8mn+XXGu/SYkewk9JSZOxgX5181vkut2LSxBveU1r
-	eU1r+V9bg+hGpNBm5WaqtLr01Iz8LG1e6t4DmQ4U+1rbscjuy2h+cHsX4jmkXC7/sudtrYJR
-	5ebkZ3YhwtHKOHnCp+u0Crlalf+dRn/gG/1hnSanC8VzWLlGvjF8RK3g96kOafZrNNka/X8p
-	xUnXFqA9pxe+GkgdMMk8H38d/L6wxG+lEhPjElye5Ce/Lwtv7v75afvWZW0HQ+sjd5JdY6rs
-	gZPbNpsn79PlZ8tz03dsP4hG3th0dVNoZeFO1l617cqUdJdid23a1M5K8s/Y0cjIOx/MRaXl
-	3dSO3keBPb4tF9X01p4tR5tXDDvKhlZPuOcZJc7JUKUl0foc1b9rqkVSsQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0xbZRTGfe/73j80llwrsuvYNOmCkiVDIS4eJzH6aTdLtqgxcUGJa8aN
-	3LQU1jIEsyVlpUJQJ5QUspbNWlxFYIy1SGSk2LFRMxjbKtOhDgFTYQQYyaRs0NLaG2Pcl5Pf
-	Oc/znJwPh8OaOL2Vk40VksmoM2gZFVEdeNW6a1/VM/KLQ50F8EtNkEB0tZ5A2/luBup9p2i4
-	2dOFYDpaj+BBzIXBNpAksGkPsbC6/jsLyUAIQUvYjqG7r4aCv3sTDCxevo/AMRthoHWhhsCK
-	9zMEzjkXCwsje2F5epCG5NQ8BbfXlhB4IwkKIsE6BJstevjS42cgNn4DQ6vjJoKvZqcw3O1N
-	iX2hPxAEOk4w8FfjdxgmIulwK7rCwFXHpwwsh9souNfLgPtEgIbTLjsCa/t5BlpO+wgMzFxk
-	IbwYp+BOi52CLt9+mPbOERhr9FCp+1KuC1vA1WqlUuUuBY5zgxSseztZuNZ+h4DXkg2u8Qka
-	/uxwshCfzYOkuwxCXfMsTH3hINCzfIN+3YHEB7aTROz091Oi7adNRuw+043E2IYdiatnrVi0
-	Nabay0srWKz1fySeHVtixI3oz4wYWHMTcdQjiE3ju8QB5xQr1g79xr65p1BVUCwZ5ErJ9MJr
-	h1Ql8Q03Kfdtq2q/7aQsqDazAXGcwL8kXKs93oDSOMJnC2MNFxmFGf55YXJyHSuWDD5HWOrL
-	b0AqDvOeLOHc6CVa8TzJG4S1Kz2swmoehMS3HUgxafhBJNz65AL9r/CEcPVUhCiM+Z3CZGKB
-	UpZiPkv4JsEp47TUCb966rDCT/E7hGD/j1QjUjsfSTsfSTv/T7sR7kQZsrGyVCcbduea9SXV
-	Rrkq93BZqQ+lftJ7PN70PVqd2DuMeA5pH1cfDG2XNbSu0lxdOowEDmsz1NlvbJM16mJd9ceS
-	qewD01GDZB5GWRzRblHve1c6pOE/1FVIekkql0z/qRSXttWCrhx772hBRWHmyz35+R7LTPMr
-	6Q99b0dzFv30wPD8Y+k1Ujhel/t+buERlz6WbWwK0qEiOJPjj+lHdrxT2mxJPHvP5ZH3+0bn
-	8GDeTODwyeofirZfPxI8WJ9sO0bfL+6zft1sGhop6Ch/eo9Fbb1kux7+fPfD/oTkKyKxt57L
-	PKAl5hJd3k5sMuv+AScIleSPAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa2xTdRjG8z/3NlQPHZO/DI2pNjNVJkzQ18R4C4nni8a4xCyI0cYdXWPX
+	kTM2NiKkMIYTiK3VXTxls7twGKwIdgW34ZIxR3GXZoXN2kU6drNSt7mEbCW7sNkzYuTLm+d9
+	nie/vB9ejtTXMJs4i22vKNnMVgOjpbQz6+q2PHPwccvWrzwZED7UScHJ814G7i65SShrW6Xg
+	nivAwtzCHyysdgQQVF53keD1HyJgVjmBQI65WYhffRNmbl2m4ffENAJlcoWApeAACXVjURL8
+	gREEHU2HGfjTeZGEwcmHYGh+loGeiuMM/HOBAc/hDhpq3C4EpQ3nGais8VHQNtrOwvWpZQJu
+	VroIaPa9BbeUGAV9znoCquLJ1o8bwV1VSiTHbQIqzl0mYEE5y0J/w00KFLsR3MFBGsabZBaW
+	x7bBqicfoo4KCnpGwjT8ZB9lwTd8FcHc0BgB3hMxEsrb5ynwTSTTuqONFARaxwkYbD/JwIh3
+	lYZQZx8NN5pDyQsCvyYp8hkKxkYjNLQE+8nXcoSyG/cYwVvrRcLSogsJc6dKSaHMmVx/mZ4l
+	hVN904ywOP8bI3QkPJTQW4+Fr4NbhDY5ygoeX6FwpHuGFlqaTELDz3Hincxd2pdzRKulSJSe
+	e+Ujba4vECL2ND5RfGnCj+woio8hjsP8dtx4JvMY0qxJ+0QUqTbFG3Ft+4uqzfDpOBJZIFV7
+	A/80nvYn21qO5OvT8LneK7TaSeGtONH9A6tqHQ/4aP8yrZb0/N8IX3T6qfvBetzz3eSaJnkT
+	jqzECRVK8mn49Aqn2hr+JRxuca0xU/knceela4TKwXxMg8PyFLp/56P4SlOEciJefgArP4CV
+	/8d6EHkW6S22ojyzxbo9I7fEZinO+Dg/z4eST6scWH6/Fd0JZXUhnkOGdbrswGMWPW0uKijJ
+	60KYIw0bdMbXN1v0uhxzyX5Ryv9QKrSKBV0ojaMMG3WZiX05ev5T817xM1HcI0r/pQSn2WRH
+	O7/9QvI3HmeKCyt5FNghbT7iPbA1y5haYvNVL4ajw+LdmGmfktK6GNr9uStr11A8tffdDxyP
+	dL/xyXvPJoarUfOrT62kUM//JfelD1iH0r/cv0N5e6pGCkqFtZ0Oz7jGEa1WvklUDZR31WUW
+	Zz982/T97rYXssv1joPGC3fyr+00UAW55m0mUiow/wu4SwdtsAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0xTZxTPd7/7orPLtbLxKZtxNUSjwc1Ns7NHli1b4MbEjWQm6jYzm3kj
+	V0rBVhGWoMVaR5hzpVlLaFUYaEHAgm0lQwNBxDpUIo+JRKlYLSqTR6aAQ0pZ67LMf05+5/fK
+	+ePwWBVmFvGybpek12m0alZBKz7/wJS8cu9i+S13H4K+glYaJicKaThSX8dCoaeUgS53LYLB
+	yUIET2ecGMxNczTMWv0cTEzf4mCu2Y/A3m3FUOcroOBJQ4SFRxceI7AFQyyUDBfQMO46hMBx
+	38nB8MVUGB08x8Bc4AEFN6ZGELhCEQpCrT8gmLVnQFmFl4WZzmsYSmxdCH4NBjA8bIiKPv9t
+	BM3V+1kYspzB0Bt6Gf6YHGehw/YjC6PdRygYa2ChfH8zA0edVgSmynoW7Ec9NDTdOctB96Mw
+	BQN2KwW1nvUw6LpPwxVLBRW9L+o6nQDOEhMVHQ8psJ06R8G0q4aDq5UDNLiMSeDs7GXgbrWD
+	g3BwNcyVZ4G/9gEHgZ9tNLhHrzEf25D41HyYFmu8jZRo7pllxbpjdUiceWZF4sQJExbNluh6
+	YWQciwe8e8QTV0ZY8dnkdVZsniqnxcsVRCzuTBabHAFOPNByk0t7/yvFh9skrZwj6d/8aKsi
+	3ePvorKPL8ltvOdDRhQgRSiOJ8IaYrwXQEWI52khiRw7+26MZoVlpL9/GsfoeGE5GfG9XYQU
+	PBYqEsmpy+eZmGeBoCVT7W4uhpUCkINXw0zMpBL+ROSMxUf/K8wnHaWh5xgLK0h/ZJiKlWIh
+	kVRF+BgdJ7xH+rzW552vCEtJa+MlyoKUjhfSjhfSjv/T5QjXoHhZl5OpkbVrVxky0vN0cu6q
+	77IyPSj6k678cPFvaKI3tQ0JPFLPU27yvy6rGE2OIS+zDREeq+OVSZ+8JquU2zR530v6rG/1
+	u7WSoQ0l8rQ6Qbluo7RVJWzX7JIyJClb0v+nUnzcIiNKyZ6u+rL1SdpL2+mFZY9Nd/YuLZzB
+	r1r+2jJl8q9sGUv5Zd+AuequbvGenp4kb9rp4oadBz/bfD5i2ZGivl6p34eHNm7QlG1u/+bv
+	Hcaf3PX2ky1DN2/83rLzndS1h+xy8Ovx3QsWJuQOLEle193x6bxg/uHSLe1VYzg/f836NPfy
+	6i/eUNOGdM3qFVhv0PwDJjjDWY8DAAA=
 X-CFilter-Loop: Reflected
 
-On Wed, Nov 19, 2025 at 02:37:17PM +0000, Matthew Wilcox wrote:
-> On Wed, Nov 19, 2025 at 07:53:12PM +0900, Byungchul Park wrote:
-> > On Thu, Oct 02, 2025 at 05:12:44PM +0900, Byungchul Park wrote:
-> > > False positive reports have been observed since dept works with the
-> > > assumption that all the pages have the same dept class, but the class
-> > > should be split since the problematic call paths are different depending
-> > > on what the page is used for.
+On Thu, Nov 20, 2025 at 11:09:09AM +0900, Byungchul Park wrote:
+> On Wed, Nov 19, 2025 at 02:37:17PM +0000, Matthew Wilcox wrote:
+> > On Wed, Nov 19, 2025 at 07:53:12PM +0900, Byungchul Park wrote:
+> > > On Thu, Oct 02, 2025 at 05:12:44PM +0900, Byungchul Park wrote:
+> > > > False positive reports have been observed since dept works with the
+> > > > assumption that all the pages have the same dept class, but the class
+> > > > should be split since the problematic call paths are different depending
+> > > > on what the page is used for.
+> > > >
+> > > > At least, ones in block device's address_space and ones in regular
+> > > > file's address_space have exclusively different usages.
+> > > >
+> > > > Thus, define usage candidates like:
+> > > >
+> > > >    DEPT_PAGE_REGFILE_CACHE /* page in regular file's address_space */
+> > > >    DEPT_PAGE_BDEV_CACHE    /* page in block device's address_space */
+> > > >    DEPT_PAGE_DEFAULT       /* the others */
 > > >
-> > > At least, ones in block device's address_space and ones in regular
-> > > file's address_space have exclusively different usages.
+> > > 1. I'd like to annotate a page to DEPT_PAGE_REGFILE_CACHE when the page
+> > >    starts to be associated with a page cache for fs data.
 > > >
-> > > Thus, define usage candidates like:
+> > > 2. And I'd like to annotate a page to DEPT_PAGE_BDEV_CACHE when the page
+> > >    starts to be associated with meta data of fs e.g. super block.
 > > >
-> > >    DEPT_PAGE_REGFILE_CACHE /* page in regular file's address_space */
-> > >    DEPT_PAGE_BDEV_CACHE    /* page in block device's address_space */
-> > >    DEPT_PAGE_DEFAULT       /* the others */
-> >
-> > 1. I'd like to annotate a page to DEPT_PAGE_REGFILE_CACHE when the page
-> >    starts to be associated with a page cache for fs data.
-> >
-> > 2. And I'd like to annotate a page to DEPT_PAGE_BDEV_CACHE when the page
-> >    starts to be associated with meta data of fs e.g. super block.
-> >
-> > 3. Lastly, I'd like to reset the annotated value if any, that has been
-> >    set in the page, when the page ends the assoication with either page
-> >    cache or meta block of fs e.g. freeing the page.
-> >
-> > Can anyone suggest good places in code for the annotation 1, 2, 3?  It'd
-> > be totally appreciated. :-)
+> > > 3. Lastly, I'd like to reset the annotated value if any, that has been
+> > >    set in the page, when the page ends the assoication with either page
+> > >    cache or meta block of fs e.g. freeing the page.
+> > >
+> > > Can anyone suggest good places in code for the annotation 1, 2, 3?  It'd
+> > > be totally appreciated. :-)
+> > 
+> > I don't think it makes sense to track lock state in the page (nor
+> > folio).  Partly bcause there's just so many of them, but also because
+> > the locking rules don't really apply to individual folios so much as
+> > they do to the mappings (or anon_vmas) that contain folios.
 > 
-> I don't think it makes sense to track lock state in the page (nor
-> folio).  Partly bcause there's just so many of them, but also because
-> the locking rules don't really apply to individual folios so much as
-> they do to the mappings (or anon_vmas) that contain folios.
-
-Thank you for the suggestion!
-
-Since two folios associated to different mappings might appear in the
-same callpath that usually be classified to a single class, I need to
-think how to reflect the suggestion.
-
-I guess you wanted to tell me a folio can only be associated to a single
-mapping at once.  Right?  If so, sure, I should reflect it.
-
-> If you're looking to find deadlock scenarios, I think it makes more
-> sense to track all folio locks in a given mapping as the same lock
-> type rather than track each folio's lock status.
+> Thank you for the suggestion!
 > 
-> For example, let's suppose we did something like this in the
-> page fault path:
+> Since two folios associated to different mappings might appear in the
+> same callpath that usually be classified to a single class, I need to
+> think how to reflect the suggestion.
 > 
-> Look up and lock a folio (we need folios locked to insert them into
-> the page tables to avoid a race with truncate)
-> Try to allocate a page table
-> Go into reclaim, attempt to reclaim a folio from this mapping
+> I guess you wanted to tell me a folio can only be associated to a single
+> mapping at once.  Right?  If so, sure, I should reflect it.
 > 
-> We ought to detect that as a potential deadlock, regardless of which
-> folio in the mapping we attempt to reclaim.  So can we track folio
+> > If you're looking to find deadlock scenarios, I think it makes more
+> > sense to track all folio locks in a given mapping as the same lock
+> > type rather than track each folio's lock status.
+> > 
+> > For example, let's suppose we did something like this in the
+> > page fault path:
+> > 
+> > Look up and lock a folio (we need folios locked to insert them into
+> > the page tables to avoid a race with truncate)
+> > Try to allocate a page table
+> > Go into reclaim, attempt to reclaim a folio from this mapping
+> > 
+> > We ought to detect that as a potential deadlock, regardless of which
+> > folio in the mapping we attempt to reclaim.  So can we track folio
+> 
+> Did you mean 'regardless' for 'potential' detection, right?
+> 
+> > locking at the mapping/anon_vma level instead?
+> 
+> Piece of cake.  Even though it may increase the number of DEPT classes,
+> I hope it will be okay.  I just need to know the points in code where
+> folios start/end being associated to their specific mappings.
 
-Did you mean 'regardless' for 'potential' detection, right?
-
-> locking at the mapping/anon_vma level instead?
-
-Piece of cake.  Even though it may increase the number of DEPT classes,
-I hope it will be okay.  I just need to know the points in code where
-folios start/end being associated to their specific mappings.
+Assuming that I understand what you meant correctly, I can use the
+@mapping value in struct page as a second key in DEPT.  Of course, it
+doesn't guarantee unique ids of the mappings for ever.  However, I think
+it can be a good and quite simple start.
 
 	Byungchul
 
-> ---
+> 	Byungchul
 > 
-> My current understanding of folio locking rules:
-> 
-> If you hold a lock on folio A, you can take a lock on folio B if:
-> 
-> 1. A->mapping == B->mapping and A->index < B->index
->    (for example writeback; we take locks on all folios to be written
->     back in order)
-> 2. !S_ISBLK(A->mapping->host) and S_ISBLK(B->mapping->host)
-> 3. S_ISREG(A->mapping->host) and S_ISREG(B->mapping->host) with
->    inode_lock() held on both and A->index < B->index
->    (the remap_range code)
+> > ---
+> > 
+> > My current understanding of folio locking rules:
+> > 
+> > If you hold a lock on folio A, you can take a lock on folio B if:
+> > 
+> > 1. A->mapping == B->mapping and A->index < B->index
+> >    (for example writeback; we take locks on all folios to be written
+> >     back in order)
+> > 2. !S_ISBLK(A->mapping->host) and S_ISBLK(B->mapping->host)
+> > 3. S_ISREG(A->mapping->host) and S_ISREG(B->mapping->host) with
+> >    inode_lock() held on both and A->index < B->index
+> >    (the remap_range code)
 
