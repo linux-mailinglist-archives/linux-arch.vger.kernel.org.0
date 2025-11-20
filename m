@@ -1,110 +1,151 @@
-Return-Path: <linux-arch+bounces-14982-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14983-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC9BC72BF6
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 09:16:28 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28542C72D2F
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 09:26:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 75EC64E3540
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 08:16:27 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 852D235006A
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Nov 2025 08:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69ED01DED57;
-	Thu, 20 Nov 2025 08:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8045330DEB5;
+	Thu, 20 Nov 2025 08:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R2OCf8V8"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TZQTZgyB";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PbZwNbw9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440FE372AD7
-	for <linux-arch@vger.kernel.org>; Thu, 20 Nov 2025 08:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB95131AF3C;
+	Thu, 20 Nov 2025 08:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763626586; cv=none; b=DGytqDhVCKqo/mPCgNLyoSH0vamnCSzduMT2qMiHlcerrJz1pTeAxekTI4+jNG/FXHTlojAIa/27snRzX9k19cHfUZv5SwH7/sPgoXR1/xX4TSQWhkKCVlh9xaGefYLt0FreJEaRrnuxRI4XmQYLBQeTs21NG869Ain6FRUmaqQ=
+	t=1763626877; cv=none; b=cf8zOZ1Q9xIlyuxwNeNpfiZedS/9ZQtv7AoYCn2nR44jcbkeQvXkaIigldWiDGkruAng6zwGPxSG0C4RiP1W5lzqA+U9+IaCqXxJbhk3idEAIfnlGPU8noKaOsw42IHZ4ubAPcb54SqHtfCZdTObiJitjG8/E6zS6QD0Jlmeg3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763626586; c=relaxed/simple;
-	bh=9VmKx3DsKgccHbRLWpfhAqN6UYvAPmeZ2H8WDGmj584=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IoVMM+1rjE3/kc8gdn18JMD/6RANhr8UnCUK4DLHBfR4epm4UobHm0x+xNQPD0jd3MySaX13rYiXPKy+G8tohLfge3PF3CdYIa1pqM/2GuIwhJ5jp0smO5V3pN/Y7tUeBin6KdUIov6EU3ztNzou7Rl/yaf/5inLH1Ochz6qNns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R2OCf8V8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74D1C116C6
-	for <linux-arch@vger.kernel.org>; Thu, 20 Nov 2025 08:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763626585;
-	bh=9VmKx3DsKgccHbRLWpfhAqN6UYvAPmeZ2H8WDGmj584=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=R2OCf8V8n/AVVTmewIK8wGhN+MJ4LjCRQotC/Kl40ug/wluvo1RQ1d0QxHFar22jo
-	 nSPJFn/Q6hvjGA+WIR6ogG7MafAHB5leeNZvr0IdUnsSrC8lpZ7vNQdS1gHN5ao65Y
-	 B3U+uFFW6ATLeM486n8baDozMyZuY+DxfBfUV+ZQFQUO9E7WQ5+4SJSivc2oHfHMaR
-	 i8sb0+UPah217KGVqvtjRjyoSWFe9fhtEjcvAjtHU7d7bMdaspo1nS//wg1/qq1dJR
-	 Giwo0Hcr24MJJeBeYejQilg3vHJ6Yo36JNBajmydz7Sx1pRoO1ZhrzAHD3109310qZ
-	 YRR4HHRotr6TA==
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b73545723ebso116094566b.1
-        for <linux-arch@vger.kernel.org>; Thu, 20 Nov 2025 00:16:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUk+Ha8Kjl/LQFKtXQ5gtnhIKFHFBS6Zgd8lLqQMD/mMpCHmVDx8MtDX18zREpNX0K/8VaMsUUHyb5h@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaaUAf19v7qHIGJLiRdo3yJRSdzspTAx+FM82t+16wnu2fj8m4
-	dbEatrttodpS6OV3ajo/smCVDg44u1krU+DxVKOaggfWaA/QHLQwou00pTD6v+hXhTyZo85i8wk
-	uwsbT0r9bwSBHMdHSh1BJOwUcbNRqtb8=
-X-Google-Smtp-Source: AGHT+IHOAOXwgs9uq6iC/8iC5U2DujvoLlpN3kPnt3j5x/MXN7Xw7n2tHkKvyHkCMbQZ68l4jfPJfjD3DGhIDWmLWig=
-X-Received: by 2002:a17:906:c109:b0:b72:6b3c:1f0d with SMTP id
- a640c23a62f3a-b7654fc9810mr269896566b.35.1763626584534; Thu, 20 Nov 2025
- 00:16:24 -0800 (PST)
+	s=arc-20240116; t=1763626877; c=relaxed/simple;
+	bh=z/8pN91Ni5yt00D0aZA6TYxGreivp4v1oSml4t+EGnM=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=uv4HxegSEFAQz1g0nsGeb1TSGYf3Yzfd/wuISTapn9ViR6z7fWrKWNSa0bMErt6RpzBer1qKs+3ydjuOgiFD9wzvlZW7yUOn2lmr2UCucZTu2mLxux/YSLeb1IXzclfoiNjX+M9CYMVaH4H9wAlTgDuJlRdXKNGvr2580hpY1vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TZQTZgyB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PbZwNbw9; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 75B9114001B3;
+	Thu, 20 Nov 2025 03:21:13 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Thu, 20 Nov 2025 03:21:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1763626873;
+	 x=1763713273; bh=vw18kNyGCqDYWIxezAS79655AupPNhDVjKs/IhFQtF0=; b=
+	TZQTZgyBILHUJ/Tkesi3a1zooFztclctkFHwNarRQlD8uEvrSEz8/ZLMDC4YVKO3
+	vBgcZt3Y5KeAh88AncdKFX0j45BaEu5w3wRl7rUVnNXQNNL9c5BoKAi4gCc3RHgZ
+	GzHstWKMVePbJZl08umAQG4qsoSE30E/gfsfxBBRT8/gE9wXA05yeWnV73+W3/69
+	tIKQ2XWnEOSsO1MhJPfWqTesfkY7o9Pjyolj2Yr3YW8QQPzraqXSF/D0ZKbl7m2h
+	zNOrUyam0y7KkuPobpoYd6EMhZF+cYl3EAMq1QTMrSTiLzw4dTo8gqFAC/wjsm8u
+	yLBLWeKdI1ur6cVjX533Vg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763626873; x=
+	1763713273; bh=vw18kNyGCqDYWIxezAS79655AupPNhDVjKs/IhFQtF0=; b=P
+	bZwNbw94B6GBIFwYUFGKR0gpbLTJnTJw8PC7Iq1YH8wa6nbnTe5qlwr+gZbCEd4F
+	3jFyvOO9q5GQogti0O4oNJu+lDYTxPdSX2pBThnFX7al8Z5vbSw/tcdI9TvdDL6D
+	kAgUv3n06lzmg2KGSWf0bA8pL3EYsZ9sgz4AQ1H3ecywa37AlUWlbcOwupPFo0nt
+	UvzlN9Q72qyAZGIc3biQJqaW5dO0nZ599froyS7KX6D7wU4FTrKwlHBavsbTR5Df
+	gV0tHSW/79qkiFuBmZY/9/kkKBscLLTeYyj4nruj7pAteUw9BK4lm/FCsmZ6YNZ9
+	/vYGkcfMo3HGkEYUbA1uA==
+X-ME-Sender: <xms:ds8eafrt0XZ5raKkctIqJ3bsxTZsJ3_coyiCDR1B8glhoOeG1Us4hQ>
+    <xme:ds8eaUfDNz3nOUSqWwKQtDWBUysvMM-A3YbIjtOsSz-twhZmep6TXBlZfRGjd_2fc
+    3Nx4H7iv5dVD7m15wuSCwVRjPvZEgShvGtQ_mZim6x90Qsitp3V8hk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvvdeiheelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepfeekpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehmiiigrhgvrghrhiestdhpohhinhhtvghrrdguvgdprhgtphhtth
+    hopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopehgrhgrfhesrghmrgiiohhnrdgt
+    ohhmpdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhhouhhprd
+    gvuhdprhgtphhtthhopehjuhhlihgrnhdrshhtvggtkhhlihhnrgestgihsggvrhhushdq
+    thgvtghhnhholhhoghihrdguvgdprhgtphhtthhopegthihphhgrrhestgihphhhrghrrd
+    gtohhmpdhrtghpthhtohepnhhstghhihgthhgrnhesfhhrvggvsghogidrfhhrpdhrtghp
+    thhtoheprghnugihrdhshhgvvhgthhgvnhhkohesghhmrghilhdrtghomhdprhgtphhtth
+    hopegvmhgrihhlvdhtvghmrgesghhmrghilhdrtghomh
+X-ME-Proxy: <xmx:ds8eaU8GJMQFMXMY7ag887-iiAgPBvBEFvogn_AJx2SSSemdle75Yw>
+    <xmx:ds8eadDXsm5xeCIuZaqkJu9DxNh3McNmkrxSEQy7NrDKtfzGmmMoNw>
+    <xmx:ds8eaRqnVSFCVAf1pz7hTWqL9NJXmPlKn_-2-0xEekUQ-h7VVfpOcw>
+    <xmx:ds8eafEzw4fMambw9Ym5jvlE_UEbIKsbkhlkglFK2Ux7LBbh0KXi5g>
+    <xmx:ec8eaT7KiVhTF9AO3TSUH4nk64QGdvPiYBjgGQFexVwi-KIbNi5bYy8I>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 0C1AE700054; Thu, 20 Nov 2025 03:21:10 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118112728.571869-1-chenhuacai@loongson.cn>
- <20251118112728.571869-14-chenhuacai@loongson.cn> <20251120090846-746f973f-e08a-46ab-a00d-87a5be759941@linutronix.de>
-In-Reply-To: <20251120090846-746f973f-e08a-46ab-a00d-87a5be759941@linutronix.de>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 20 Nov 2025 16:16:25 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H52FAORNDM48nYjQUWjnDFxc7+RGUsOW+JNteJrpbF6ww@mail.gmail.com>
-X-Gm-Features: AWmQ_blKyIOJ5f9QG9XluvZKGjOdJIlJwU5_bDSgd8PEpdPgCaKn1AkBGV3rxuY
-Message-ID: <CAAhV-H52FAORNDM48nYjQUWjnDFxc7+RGUsOW+JNteJrpbF6ww@mail.gmail.com>
-Subject: Re: [PATCH V2 13/14] LoongArch: Adjust default config files for 32BIT/64BIT
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev, 
-	linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>, 
-	Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: AAVmrCFNBMTV
+Date: Thu, 20 Nov 2025 09:20:49 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Askar Safin" <safinaskar@gmail.com>, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Christian Brauner" <brauner@kernel.org>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan Kara" <jack@suse.cz>,
+ "Christoph Hellwig" <hch@lst.de>, "Jens Axboe" <axboe@kernel.dk>,
+ "Andy Shevchenko" <andy.shevchenko@gmail.com>,
+ "Aleksa Sarai" <cyphar@cyphar.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ "Julian Stecklina" <julian.stecklina@cyberus-technology.de>,
+ "Gao Xiang" <hsiangkao@linux.alibaba.com>,
+ "Art Nikpal" <email2tema@gmail.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Alexander Graf" <graf@amazon.com>, "Rob Landley" <rob@landley.net>,
+ "Lennart Poettering" <mzxreary@0pointer.de>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-block@vger.kernel.org,
+ initramfs@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-doc@vger.kernel.org, "Michal Simek" <monstr@monstr.eu>,
+ "Luis Chamberlain" <mcgrof@kernel.org>, "Kees Cook" <kees@kernel.org>,
+ "Thorsten Blum" <thorsten.blum@linux.dev>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "Dave Young" <dyoung@redhat.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Krzysztof Kozlowski" <krzk@kernel.org>,
+ "Borislav Petkov" <bp@alien8.de>, "Jessica Clarke" <jrtc27@jrtc27.com>,
+ "Nicolas Schichan" <nschichan@freebox.fr>,
+ "David Disseldorp" <ddiss@suse.de>, patches@lists.linux.dev
+Message-Id: <3e2d69f3-8b3a-4c41-8c5b-185c5f3a7b15@app.fastmail.com>
+In-Reply-To: <20251119222407.3333257-2-safinaskar@gmail.com>
+References: <20251119222407.3333257-1-safinaskar@gmail.com>
+ <20251119222407.3333257-2-safinaskar@gmail.com>
+Subject: Re: [PATCH v4 1/3] init: remove deprecated "load_ramdisk" and "prompt_ramdisk"
+ command line parameters
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi, Thomas,
-
-On Thu, Nov 20, 2025 at 4:11=E2=80=AFPM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
+On Wed, Nov 19, 2025, at 23:24, Askar Safin wrote:
+> ...which do nothing. They were deprecated (in documentation) in
+> 6b99e6e6aa62 ("Documentation/admin-guide: blockdev/ramdisk: remove use of
+> "rdev"") in 2020 and in kernel messages in c8376994c86c ("initrd: remove
+> support for multiple floppies") in 2020.
 >
-> On Tue, Nov 18, 2025 at 07:27:27PM +0800, Huacai Chen wrote:
-> > Add loongson32_defconfig (for 32BIT) and rename loongson3_defconfig to
-> > loongson64_defconfig (for 64BIT).
-> >
-> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  arch/loongarch/configs/loongson32_defconfig   | 1110 +++++++++++++++++
-> >  ...ongson3_defconfig =3D> loongson64_defconfig} |    0
-> >  2 files changed, 1110 insertions(+)
-> >  create mode 100644 arch/loongarch/configs/loongson32_defconfig
-> >  rename arch/loongarch/configs/{loongson3_defconfig =3D> loongson64_def=
-config} (100%)
->
-> KBUILD_DEFCONFIG also needs to be adapted to this rename.
-That is done in the last patch.
+> Signed-off-by: Askar Safin <safinaskar@gmail.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 4 ----
+>  arch/arm/configs/neponset_defconfig             | 2 +-
 
->
-> FYI the cover letter says the series is based on v6.16-rc6, but the serie=
-s
-> doesn't apply to it.
-Not 6.16-rc6, but 6.18-rc6, and the next version will be on top of 6.18-rc7=
-.
+For the arm defconfig:
 
-Huacai
-
->
-> (...)
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
