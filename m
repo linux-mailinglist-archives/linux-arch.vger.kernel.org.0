@@ -1,70 +1,77 @@
-Return-Path: <linux-arch+bounces-14997-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-14998-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66114C785E8
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 11:11:11 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7F76C785EB
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 11:11:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 059014EEC46
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 10:05:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E7B194EA4AE
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 10:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0C82DE6EF;
-	Fri, 21 Nov 2025 10:01:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D3162C029F;
+	Fri, 21 Nov 2025 10:01:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I9lY26Ih"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MYTYEi9j"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C522248B9
-	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 10:01:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B5B2F6922
+	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 10:01:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763719263; cv=none; b=Gdf+gTtH8cMORZIuHoTmRxCZe9oVTDo8e1GeoOXzhhxgNGRui0n2H35yB6JozJATdnCIOw9gOcZN4UzIBBtAvd4mFpWAXGBp0PQXVEGhXVX/cW8d9xJwL7+uMCFo6Xgb1qeJESSroniMUeCm4f/nKXPspZAXfzUETNtBFI6bIQs=
+	t=1763719269; cv=none; b=ARTYQiXGhNnAjFJ11sblQTa5bh7qbvPoTweX2pzji5vFs0WO2fGNxt1CTgkfasGfHYW1mUjkPQqgtMRGEbv9TAYV2qqwW9jVvYRgxBVRlH3iM+9n2C2pU+z5iux6U/Ws1xE775bh83gKrMKba38hu4ZDvRN/cU9hWrEKwye4+pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763719263; c=relaxed/simple;
-	bh=tEgSZvFijDEsSKDlHZkHTfovTwlrn3LypySy+/kDsPM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sd8dQthOBjYo4PyUavv4Oo5Sj3BnM39R+N0dQgiNip2JzkpzgBOJR3Tp/+V0moNfYkXh+dhQ6HmyP+OHT9jOV4hwWlWgTjVtwu5Y3d6a98vWCMr6F+Dx+cm+YA9/rDhPJHH7WYYdKZY2d4MvuSUihAcDx+gIlTNfr3ySYaLls4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I9lY26Ih; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1763719269; c=relaxed/simple;
+	bh=Cka2pXkveMFbrHgxTTmCWcgccG7G3JtklVVdOgKNGMc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OR7YSzdpVsxKZZo5ehFS0v6PTegNJgvqZLjM3XSIRSTKX7iGbTYots2Ab3wxwMGkwSZ6zkvqimAYOUaloyKiDl8Cz7H9WkRBdErGjN00exnP8w+PHFvjUzu116cRCpO9O8sghdr6CieC+657iNjQjDxq1VMnDj8kwvVruJKREBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MYTYEi9j; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763719260;
+	s=mimecast20190719; t=1763719264;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=95i1p9owPsncEna8IT6dFRMEiBK6JP9W4qSsbGs/sRs=;
-	b=I9lY26IhaZEu7UFcipkgZ1ECjhJ6VT9Ens1LmovCtk2m1rY2YzZZyiLiWRueVW+z+76zTW
-	8P+Na1pMxPL2dvcu5oyQ8YDICYIjhpoSjrGCissv4BVfdx8qkYbv9qrnlly254KhpXPFn/
-	D0IGYHCvRf/VIFRjZ3P0lj+IfciRJPM=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Xs9hFXjxHYcZUclg4NlpbaDnMsr/N1ltxM2HK/AdDKg=;
+	b=MYTYEi9jt1oOZP2FkmL/1OfquR3TRs55KdiNcmQyNqApFyYX+qb6cC9roYTKsofiYaN0EN
+	y2AcEcc3Nx+9LoJtdGZ5MwsS4+lbNfy8YsWL7yb6l+5AJPWrppkJMMy007LgM11c6iWGHT
+	W+FSdaXIxy0njD/n5VIMrU5Ly1F5ACA=
 Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-546-3nTmsyRbM6qtk_GlSnfP7w-1; Fri,
- 21 Nov 2025 05:00:58 -0500
-X-MC-Unique: 3nTmsyRbM6qtk_GlSnfP7w-1
-X-Mimecast-MFC-AGG-ID: 3nTmsyRbM6qtk_GlSnfP7w_1763719257
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-115-FZzLDDgsNCOYi9GiTjyANw-1; Fri,
+ 21 Nov 2025 05:01:02 -0500
+X-MC-Unique: FZzLDDgsNCOYi9GiTjyANw-1
+X-Mimecast-MFC-AGG-ID: FZzLDDgsNCOYi9GiTjyANw_1763719261
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C176B195609F;
-	Fri, 21 Nov 2025 10:00:56 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D859B1954B06;
+	Fri, 21 Nov 2025 10:01:00 +0000 (UTC)
 Received: from thuth-p1g4.redhat.com (unknown [10.44.32.78])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 08D6B1955F66;
-	Fri, 21 Nov 2025 10:00:53 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5758A1955F66;
+	Fri, 21 Nov 2025 10:00:57 +0000 (UTC)
 From: Thomas Huth <thuth@redhat.com>
 To: Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org,
 	linux-kbuild@vger.kernel.org,
-	Thomas Huth <thuth@redhat.com>
-Subject: [PATCH v4 0/9] treewide: Replace __ASSEMBLY__ with __ASSEMBLER__ in header files
-Date: Fri, 21 Nov 2025 11:00:35 +0100
-Message-ID: <20251121100044.282684-1-thuth@redhat.com>
+	Thomas Huth <thuth@redhat.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	linux-alpha@vger.kernel.org
+Subject: [PATCH v4 1/9] alpha: Replace __ASSEMBLY__ with __ASSEMBLER__ in the alpha headers
+Date: Fri, 21 Nov 2025 11:00:36 +0100
+Message-ID: <20251121100044.282684-2-thuth@redhat.com>
+In-Reply-To: <20251121100044.282684-1-thuth@redhat.com>
+References: <20251121100044.282684-1-thuth@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -74,237 +81,131 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
- Hi Arnd!
+From: Thomas Huth <thuth@redhat.com>
 
-Could you please help to get the remaining patches of this macro
-renaming series merged? I already got most patches from the initial
-version merged through the architecture specific trees (thanks to every
-maintainer who helped me here!), but for alpha and arm 32-bit, I did
-not manage to get the attention of the maintainers. Hexagon got an
-Acked-by by Brian, but the patches did not get merged yet.
+While the GCC and Clang compilers already define __ASSEMBLER__
+automatically when compiling assembly code, __ASSEMBLY__ is a
+macro that only gets defined by the Makefiles in the kernel.
+This can be very confusing when switching between userspace
+and kernelspace coding, or when dealing with uapi headers that
+rather should use __ASSEMBLER__ instead. So let's standardize now
+on the __ASSEMBLER__ macro that is provided by the compilers.
 
-Anyway, original patch series description follows:
+This is a completely mechanical patch (done with a simple "sed -i"
+statement).
 
-The kernel Makefiles define the __ASSEMBLY__ macro to provide
-a way to use headers in both, assembly and C source code.
-However, all the supported versions of the GCC and Clang compilers
-also define the macro __ASSEMBLER__ automatically already when compiling
-assembly code, so some kernel headers are using __ASSEMBLER__ instead.
-With regards to userspace code, this seems also to be constant source
-of confusion, see for example these links here:
+Cc: Richard Henderson <richard.henderson@linaro.org>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: linux-alpha@vger.kernel.org
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ arch/alpha/include/asm/console.h     | 4 ++--
+ arch/alpha/include/asm/page.h        | 4 ++--
+ arch/alpha/include/asm/pal.h         | 4 ++--
+ arch/alpha/include/asm/thread_info.h | 8 ++++----
+ 4 files changed, 10 insertions(+), 10 deletions(-)
 
- https://lore.kernel.org/kvm/20250222014526.2302653-1-seanjc@google.com/
- https://stackoverflow.com/questions/28924355/gcc-assembler-preprocessor-not-compatible-with-standard-headers
- https://forums.raspberrypi.com/viewtopic.php?p=1652944#p1653834
- https://github.com/riscv-software-src/opensbi/issues/199
-
-To avoid confusion in the future, it would make sense to standardize
-on the macro that gets defined by the compiler, so this patch series
-changes all occurances of __ASSEMBLY__ into __ASSEMBLER__ and
-finally removes the -D__ASSEMBLY__ from the Makefiles.
-
-I split the patches per architecture to ease the review, and I also
-split the uapi headers from the normal ones in case we decide that
-uapi needs to be treated differently from the normal headers here.
-
-v4:
-- Most patches from the original series got already merged via the
-  tree of the individual architectures, so the amount of patches here
-  has been greatly reduced
-- Rebased patches on top of linux-next, fixed conflicts and new
-  occurances
-
-Thomas Huth (9):
-  alpha: Replace __ASSEMBLY__ with __ASSEMBLER__ in the alpha headers
-  arm: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
-  arm: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
-  hexagon: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
-  hexagon: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
-  uapi: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
-  include: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
-  x86/headers: Replace __ASSEMBLY__ stragglers with __ASSEMBLER__
-  treewide: Stop defining __ASSEMBLY__ for assembler files
-
- Documentation/dev-tools/checkuapi.rst          |  2 +-
- Makefile                                       |  2 +-
- arch/alpha/include/asm/console.h               |  4 ++--
- arch/alpha/include/asm/page.h                  |  4 ++--
- arch/alpha/include/asm/pal.h                   |  4 ++--
- arch/alpha/include/asm/thread_info.h           |  8 ++++----
- arch/arm/include/asm/arch_gicv3.h              |  4 ++--
- arch/arm/include/asm/assembler.h               |  2 +-
- arch/arm/include/asm/barrier.h                 |  4 ++--
- arch/arm/include/asm/cache.h                   |  2 +-
- arch/arm/include/asm/cp15.h                    |  4 ++--
- arch/arm/include/asm/cputype.h                 |  4 ++--
- arch/arm/include/asm/current.h                 |  4 ++--
- arch/arm/include/asm/delay.h                   |  4 ++--
- arch/arm/include/asm/domain.h                  |  8 ++++----
- arch/arm/include/asm/fpstate.h                 |  2 +-
- arch/arm/include/asm/ftrace.h                  |  6 +++---
- arch/arm/include/asm/hardware/cache-b15-rac.h  |  2 +-
- arch/arm/include/asm/hardware/cache-l2x0.h     |  4 ++--
- arch/arm/include/asm/hardware/dec21285.h       |  2 +-
- arch/arm/include/asm/hardware/ioc.h            |  2 +-
- arch/arm/include/asm/hardware/iomd.h           |  4 ++--
- arch/arm/include/asm/hardware/memc.h           |  2 +-
- arch/arm/include/asm/hwcap.h                   |  2 +-
- arch/arm/include/asm/irq.h                     |  2 +-
- arch/arm/include/asm/jump_label.h              |  4 ++--
- arch/arm/include/asm/kexec.h                   |  4 ++--
- arch/arm/include/asm/kgdb.h                    |  4 ++--
- arch/arm/include/asm/mach/arch.h               |  2 +-
- arch/arm/include/asm/mcpm.h                    |  4 ++--
- arch/arm/include/asm/memory.h                  |  4 ++--
- arch/arm/include/asm/mpu.h                     |  4 ++--
- arch/arm/include/asm/opcodes.h                 | 12 ++++++------
- arch/arm/include/asm/page.h                    |  4 ++--
- arch/arm/include/asm/pgtable-2level.h          |  4 ++--
- arch/arm/include/asm/pgtable-3level.h          |  4 ++--
- arch/arm/include/asm/pgtable-nommu.h           |  4 ++--
- arch/arm/include/asm/pgtable.h                 | 10 +++++-----
- arch/arm/include/asm/probes.h                  |  4 ++--
- arch/arm/include/asm/proc-fns.h                |  4 ++--
- arch/arm/include/asm/ptrace.h                  |  4 ++--
- arch/arm/include/asm/system_info.h             |  4 ++--
- arch/arm/include/asm/system_misc.h             |  4 ++--
- arch/arm/include/asm/thread_info.h             |  2 +-
- arch/arm/include/asm/thread_notify.h           |  2 +-
- arch/arm/include/asm/tlbflush.h                | 10 +++++-----
- arch/arm/include/asm/tls.h                     |  4 ++--
- arch/arm/include/asm/unified.h                 |  6 +++---
- arch/arm/include/asm/unwind.h                  |  4 ++--
- arch/arm/include/asm/v7m.h                     |  4 ++--
- arch/arm/include/asm/vdso.h                    |  4 ++--
- arch/arm/include/asm/vdso/cp15.h               |  4 ++--
- arch/arm/include/asm/vdso/gettimeofday.h       |  4 ++--
- arch/arm/include/asm/vdso/processor.h          |  4 ++--
- arch/arm/include/asm/vdso/vsyscall.h           |  4 ++--
- arch/arm/include/asm/vfp.h                     |  2 +-
- arch/arm/include/asm/virt.h                    |  4 ++--
- arch/arm/include/uapi/asm/ptrace.h             |  4 ++--
- arch/arm/mach-at91/pm.h                        |  2 +-
- arch/arm/mach-exynos/smc.h                     |  4 ++--
- .../mach-footbridge/include/mach/hardware.h    |  2 +-
- arch/arm/mach-imx/hardware.h                   |  2 +-
- arch/arm/mach-imx/mxc.h                        |  2 +-
- arch/arm/mach-omap2/control.h                  |  8 ++++----
- arch/arm/mach-omap2/soc.h                      |  4 ++--
- arch/arm/mach-omap2/sram.h                     |  4 ++--
- arch/arm/mach-pxa/irqs.h                       |  2 +-
- arch/arm/mach-pxa/pxa-regs.h                   |  2 +-
- arch/arm/mach-s3c/map-base.h                   |  2 +-
- arch/arm/mach-sa1100/include/mach/bitfield.h   |  2 +-
- arch/arm/mach-sa1100/include/mach/hardware.h   |  2 +-
- arch/arm/mach-tegra/reset.h                    |  2 +-
- arch/arm/mach-tegra/sleep.h                    |  2 +-
- arch/arm/tools/gen-mach-types                  |  2 +-
- arch/arm64/kernel/vdso32/Makefile              |  1 -
- arch/hexagon/include/asm/hexagon_vm.h          |  4 ++--
- arch/hexagon/include/asm/mem-layout.h          |  6 +++---
- arch/hexagon/include/asm/page.h                |  4 ++--
- arch/hexagon/include/asm/processor.h           |  4 ++--
- arch/hexagon/include/asm/thread_info.h         | 12 ++++++------
- arch/hexagon/include/uapi/asm/registers.h      |  4 ++--
- arch/loongarch/vdso/Makefile                   |  2 +-
- arch/mips/boot/compressed/Makefile             |  2 +-
- arch/mips/vdso/Makefile                        |  2 +-
- arch/powerpc/boot/Makefile                     |  2 +-
- arch/powerpc/platforms/cell/spufs/Makefile     |  2 +-
- arch/s390/Makefile                             |  2 +-
- arch/x86/boot/Makefile                         |  2 +-
- arch/x86/boot/compressed/Makefile              |  2 +-
- arch/x86/include/asm/irqflags.h                |  4 ++--
- arch/x86/include/asm/percpu.h                  |  2 +-
- arch/x86/include/asm/runtime-const.h           |  6 +++---
- arch/x86/realmode/rm/Makefile                  |  2 +-
- arch/xtensa/kernel/Makefile                    |  2 +-
- drivers/firmware/efi/libstub/Makefile          |  2 +-
- drivers/memory/emif.h                          |  4 ++--
- drivers/net/wan/Makefile                       |  2 +-
- include/asm-generic/barrier.h                  |  4 ++--
- include/asm-generic/bug.h                      |  4 ++--
- include/asm-generic/current.h                  |  2 +-
- include/asm-generic/error-injection.h          |  2 +-
- include/asm-generic/fixmap.h                   |  4 ++--
- include/asm-generic/getorder.h                 |  4 ++--
- include/asm-generic/int-ll64.h                 |  6 +++---
- include/asm-generic/kprobes.h                  |  4 ++--
- include/asm-generic/memory_model.h             |  4 ++--
- include/asm-generic/mmu.h                      |  2 +-
- include/asm-generic/pgtable-nop4d.h            |  4 ++--
- include/asm-generic/pgtable-nopmd.h            |  4 ++--
- include/asm-generic/pgtable-nopud.h            |  4 ++--
- include/asm-generic/rwonce.h                   |  4 ++--
- include/asm-generic/signal.h                   |  4 ++--
- include/asm-generic/vdso/vsyscall.h            |  4 ++--
- include/linux/amba/serial.h                    |  4 ++--
- include/linux/annotate.h                       | 18 +++++++++---------
- include/linux/arm-smccc.h                      | 10 +++++-----
- include/linux/bitmap.h                         |  4 ++--
- include/linux/bits.h                           |  6 +++---
- include/linux/cfi_types.h                      |  6 +++---
- include/linux/compiler.h                       |  4 ++--
- include/linux/compiler_types.h                 |  4 ++--
- include/linux/edd.h                            |  4 ++--
- include/linux/err.h                            |  2 +-
- include/linux/export.h                         |  2 +-
- include/linux/init.h                           |  6 +++---
- include/linux/ioport.h                         |  4 ++--
- include/linux/irqchip/arm-gic-v3.h             |  2 +-
- include/linux/irqchip/arm-gic.h                |  4 ++--
- include/linux/jump_label.h                     | 10 +++++-----
- include/linux/kexec.h                          |  2 +-
- include/linux/linkage.h                        |  6 +++---
- include/linux/mem_encrypt.h                    |  4 ++--
- include/linux/mmzone.h                         |  4 ++--
- include/linux/objtool.h                        |  8 ++++----
- include/linux/objtool_types.h                  |  4 ++--
- include/linux/of_fdt.h                         |  4 ++--
- include/linux/pe.h                             |  4 ++--
- include/linux/percpu-defs.h                    |  4 ++--
- include/linux/pfn.h                            |  2 +-
- include/linux/pgtable.h                        |  4 ++--
- include/linux/platform_data/emif_plat.h        |  4 ++--
- include/linux/serial_s3c.h                     |  4 ++--
- include/linux/static_call_types.h              |  4 ++--
- include/linux/ti-emif-sram.h                   |  2 +-
- include/linux/types.h                          |  4 ++--
- include/soc/imx/cpu.h                          |  2 +-
- include/soc/tegra/flowctrl.h                   |  4 ++--
- include/soc/tegra/fuse.h                       |  4 ++--
- include/uapi/asm-generic/int-l64.h             |  4 ++--
- include/uapi/asm-generic/int-ll64.h            |  4 ++--
- include/uapi/asm-generic/signal-defs.h         |  2 +-
- include/uapi/asm-generic/signal.h              |  4 ++--
- include/uapi/linux/a.out.h                     |  4 ++--
- include/uapi/linux/const.h                     |  4 ++--
- include/uapi/linux/edd.h                       |  4 ++--
- include/uapi/linux/hdlc/ioctl.h                |  4 ++--
- include/uapi/linux/sched.h                     |  2 +-
- include/uapi/linux/types.h                     |  4 ++--
- include/vdso/datapage.h                        |  6 +++---
- include/vdso/helpers.h                         |  4 ++--
- include/vdso/processor.h                       |  4 ++--
- include/vdso/vsyscall.h                        |  4 ++--
- include/xen/arm/interface.h                    |  2 +-
- include/xen/interface/xen-mca.h                |  4 ++--
- include/xen/interface/xen.h                    |  8 ++++----
- scripts/Makefile.build                         |  2 +-
- scripts/gfp-translate                          |  2 +-
- tools/include/asm-generic/barrier.h            |  4 ++--
- tools/include/asm/alternative.h                |  2 +-
- tools/include/linux/bits.h                     |  6 +++---
- tools/include/linux/cfi_types.h                |  6 +++---
- tools/include/linux/compiler.h                 |  4 ++--
- tools/include/linux/objtool_types.h            |  4 ++--
- tools/include/linux/static_call_types.h        |  4 ++--
- tools/include/uapi/linux/const.h               |  4 ++--
- .../trace/beauty/include/uapi/linux/sched.h    |  2 +-
- .../testing/selftests/kvm/lib/riscv/handlers.S |  4 ----
- .../testing/selftests/vDSO/vgetrandom-chacha.S |  2 --
- 178 files changed, 342 insertions(+), 349 deletions(-)
-
+diff --git a/arch/alpha/include/asm/console.h b/arch/alpha/include/asm/console.h
+index 088b7b9eb15ae..1cabdb6064bbe 100644
+--- a/arch/alpha/include/asm/console.h
++++ b/arch/alpha/include/asm/console.h
+@@ -4,7 +4,7 @@
+ 
+ #include <uapi/asm/console.h>
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ extern long callback_puts(long unit, const char *s, long length);
+ extern long callback_getc(long unit);
+ extern long callback_open_console(void);
+@@ -26,5 +26,5 @@ struct crb_struct;
+ struct hwrpb_struct;
+ extern int callback_init_done;
+ extern void * callback_init(void *);
+-#endif /* __ASSEMBLY__ */
++#endif /* __ASSEMBLER__ */
+ #endif /* __AXP_CONSOLE_H */
+diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.h
+index 5ec4c77e432e0..d2c6667d73e9e 100644
+--- a/arch/alpha/include/asm/page.h
++++ b/arch/alpha/include/asm/page.h
+@@ -6,7 +6,7 @@
+ #include <asm/pal.h>
+ #include <vdso/page.h>
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ 
+ #define STRICT_MM_TYPECHECKS
+ 
+@@ -74,7 +74,7 @@ typedef struct page *pgtable_t;
+ #define PAGE_OFFSET		0xfffffc0000000000
+ #endif
+ 
+-#endif /* !__ASSEMBLY__ */
++#endif /* !__ASSEMBLER__ */
+ 
+ #define __pa(x)			((unsigned long) (x) - PAGE_OFFSET)
+ #define __va(x)			((void *)((unsigned long) (x) + PAGE_OFFSET))
+diff --git a/arch/alpha/include/asm/pal.h b/arch/alpha/include/asm/pal.h
+index db2b3b18b34c7..799a64c051984 100644
+--- a/arch/alpha/include/asm/pal.h
++++ b/arch/alpha/include/asm/pal.h
+@@ -4,7 +4,7 @@
+ 
+ #include <uapi/asm/pal.h>
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ 
+ extern void halt(void) __attribute__((noreturn));
+ #define __halt() __asm__ __volatile__ ("call_pal %0 #halt" : : "i" (PAL_halt))
+@@ -183,5 +183,5 @@ qemu_get_vmtime(void)
+ 	return v0;
+ }
+ 
+-#endif /* !__ASSEMBLY__ */
++#endif /* !__ASSEMBLER__ */
+ #endif /* __ALPHA_PAL_H */
+diff --git a/arch/alpha/include/asm/thread_info.h b/arch/alpha/include/asm/thread_info.h
+index 4a4d00b37986e..98ccbca64984c 100644
+--- a/arch/alpha/include/asm/thread_info.h
++++ b/arch/alpha/include/asm/thread_info.h
+@@ -4,14 +4,14 @@
+ 
+ #ifdef __KERNEL__
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ #include <asm/processor.h>
+ #include <asm/types.h>
+ #include <asm/hwrpb.h>
+ #include <asm/sysinfo.h>
+ #endif
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ struct thread_info {
+ 	struct pcb_struct	pcb;		/* palcode state */
+ 
+@@ -44,7 +44,7 @@ register struct thread_info *__current_thread_info __asm__("$8");
+ 
+ register unsigned long *current_stack_pointer __asm__ ("$30");
+ 
+-#endif /* __ASSEMBLY__ */
++#endif /* __ASSEMBLER__ */
+ 
+ /* Thread information allocation.  */
+ #define THREAD_SIZE_ORDER 1
+@@ -110,7 +110,7 @@ register unsigned long *current_stack_pointer __asm__ ("$30");
+ 	put_user(res, (int __user *)(value));				\
+ 	})
+ 
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ extern void __save_fpu(void);
+ 
+ static inline void save_fpu(void)
 -- 
 2.51.1
 
