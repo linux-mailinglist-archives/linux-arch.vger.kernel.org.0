@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-15006-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15005-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D055C78796
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 11:20:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC89FC7862A
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 11:12:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 1E63B3553E
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 10:07:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E32624E9B3F
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 10:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9942434D4CD;
-	Fri, 21 Nov 2025 10:01:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9DB34B691;
+	Fri, 21 Nov 2025 10:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ebk9NsO6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KPwtVfXQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517E134D392
-	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 10:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E693431FC
+	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 10:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763719300; cv=none; b=Ev/u+S9Dy/i1MuoOTiWghxTB32J0VhlQ1f47Q0EPiu4kYyqCfKYpiyS3h9y4cXrAuFZd4vQ3yLxKl+KNe0/ULq+Fz1vhgGcf9FVXFC8/azXXP5yTlmGeoCqr4QkexO605tOziTntD1f/KfsnDjnhmmJSDL7dRDbGWuGrEagfzb8=
+	t=1763719296; cv=none; b=Epi7ceGLafic/gS5bupK1x19/++k8YvNlC4rK+B7yM/Dqq/yobs8oEFUUa6RxMw3aHokVYQOXYDmN6dYxK/8Upp1hO8oTbOia1ihpUK6R3rjI6oQGiPJFlFGuzmXjn7Bq+MuOnvCR1a9nRAu1OPv+xyZbA1madI75Wh0QgGDQDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763719300; c=relaxed/simple;
-	bh=9/Ql+dAsUXEs4tc/9oTf/8u6Gf7/hz+bXrR8WKKb1cA=;
+	s=arc-20240116; t=1763719296; c=relaxed/simple;
+	bh=PiAEk0s52NxXA70ly+n3b9B4FbztsX9xtdW3LVNxUhU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MMEhVkP28wkRqEexMz1bzK6g+fvtNLzi7JyMAZVvYKv1KhDRD0yoYd+73Xr9a9/b0DIpDZ3G3mMVO65iPUE+4r8u0VuJchx6W8uANxgSUDMAmQeVzr9x/a9Ou/t7Priz0MH955TZXoMKsBp/ahoh84ATSlBVSkwL8NEMhNlHT3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ebk9NsO6; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=Vic0eRAeVTd4sJygwCudHQ5r3h7nDP6Gevc8+wvI+yXSIx9MyHTWXyxiDI3oq+6ufSKrdqH8YPy93WyoCHzYQ/BehxSEzDj9wJVUvPdyVjzOJN1ZezuZ7j9m88rnWa0un1+vOV+TGFwl2539WHzE96ipYNeFbgMnm/CVgkHI8Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KPwtVfXQ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763719296;
+	s=mimecast20190719; t=1763719293;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=HzjekNmgRaAQ18lyWUzsEgEEJcD+Pamj+FUs+1j6mw8=;
-	b=ebk9NsO6KsMHZdTPCBlbDOS4GilXwLDzrgqFtdtkf8usI/xq2jAl0k77mtnDzWbEl2BItl
-	Vl9Bq9Lu+oP5vVv6LrsQIPruXR1ykW3eSEYFiI3fDAf+umQYhxfMoUSyPbY+kKTPpx1rBS
-	DzEA7Ce7SgPl1wCiI+AE5akAEhjQkS8=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=8ShEWZDGVfSWGvaWH66N+yVtRbZoEirjG0NK4KU0DrU=;
+	b=KPwtVfXQJ+QO3K7mLbQMUpakW7X/bFccQnikyq9r6CVk13dUr2B85EBVQ8MzbR1k0o97r9
+	G61AiYB/OcOxj/WylrfPbeUaH8paE/c256SCWe+30WJSOmi/KWxF+GkgxO9h1cIoTCFt4q
+	l+CeWijYhIOnBAFIDJpEm1mONXO6cFs=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-147-KhGOA54LO2idn1_FQ3SIiw-1; Fri,
- 21 Nov 2025 05:01:27 -0500
-X-MC-Unique: KhGOA54LO2idn1_FQ3SIiw-1
-X-Mimecast-MFC-AGG-ID: KhGOA54LO2idn1_FQ3SIiw_1763719284
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-490-oIKYxLfKPImfcYbrMPco9A-1; Fri,
+ 21 Nov 2025 05:01:29 -0500
+X-MC-Unique: oIKYxLfKPImfcYbrMPco9A-1
+X-Mimecast-MFC-AGG-ID: oIKYxLfKPImfcYbrMPco9A_1763719288
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A83221954B1B;
-	Fri, 21 Nov 2025 10:01:24 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 80A7E195605B;
+	Fri, 21 Nov 2025 10:01:28 +0000 (UTC)
 Received: from thuth-p1g4.redhat.com (unknown [10.44.32.78])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9142E1955F66;
-	Fri, 21 Nov 2025 10:01:22 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5EFA71955F66;
+	Fri, 21 Nov 2025 10:01:25 +0000 (UTC)
 From: Thomas Huth <thuth@redhat.com>
 To: Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org,
@@ -64,9 +64,9 @@ To: Arnd Bergmann <arnd@arndb.de>,
 Cc: linux-arm-kernel@lists.infradead.org,
 	linux-kbuild@vger.kernel.org,
 	Thomas Huth <thuth@redhat.com>
-Subject: [PATCH v4 8/9] x86/headers: Replace __ASSEMBLY__ stragglers with __ASSEMBLER__
-Date: Fri, 21 Nov 2025 11:00:43 +0100
-Message-ID: <20251121100044.282684-9-thuth@redhat.com>
+Subject: [PATCH v4 9/9] treewide: Stop defining __ASSEMBLY__ for assembler files
+Date: Fri, 21 Nov 2025 11:00:44 +0100
+Message-ID: <20251121100044.282684-10-thuth@redhat.com>
 In-Reply-To: <20251121100044.282684-1-thuth@redhat.com>
 References: <20251121100044.282684-1-thuth@redhat.com>
 Precedence: bulk
@@ -80,84 +80,265 @@ X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
 From: Thomas Huth <thuth@redhat.com>
 
-After converting the __ASSEMBLY__ statements to __ASSEMBLER__ in
-commit 24a295e4ef1ca ("x86/headers: Replace __ASSEMBLY__ with
-__ASSEMBLER__ in non-UAPI headers"), some new code has been
-added that uses __ASSEMBLY__ again. Convert these stragglers, too.
-
-This is a mechanical patch, done with a simple "sed -i" command.
+All spots have been changed to __ASSEMBLER__ (i.e. the macro that
+gets defined by the compiler), so we don't have to manually define
+__ASSEMBLY__ now anymore.
 
 Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
- arch/x86/include/asm/irqflags.h      | 4 ++--
- arch/x86/include/asm/percpu.h        | 2 +-
- arch/x86/include/asm/runtime-const.h | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ Makefile                                         | 2 +-
+ arch/arm64/kernel/vdso32/Makefile                | 1 -
+ arch/loongarch/vdso/Makefile                     | 2 +-
+ arch/mips/boot/compressed/Makefile               | 2 +-
+ arch/mips/vdso/Makefile                          | 2 +-
+ arch/powerpc/boot/Makefile                       | 2 +-
+ arch/powerpc/platforms/cell/spufs/Makefile       | 2 +-
+ arch/s390/Makefile                               | 2 +-
+ arch/x86/boot/Makefile                           | 2 +-
+ arch/x86/boot/compressed/Makefile                | 2 +-
+ arch/x86/realmode/rm/Makefile                    | 2 +-
+ arch/xtensa/kernel/Makefile                      | 2 +-
+ drivers/firmware/efi/libstub/Makefile            | 2 +-
+ drivers/net/wan/Makefile                         | 2 +-
+ scripts/Makefile.build                           | 2 +-
+ scripts/gfp-translate                            | 2 +-
+ tools/testing/selftests/kvm/lib/riscv/handlers.S | 4 ----
+ tools/testing/selftests/vDSO/vgetrandom-chacha.S | 2 --
+ 18 files changed, 15 insertions(+), 22 deletions(-)
 
-diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-index b30e5474c18e1..5feaac1d235f0 100644
---- a/arch/x86/include/asm/irqflags.h
-+++ b/arch/x86/include/asm/irqflags.h
-@@ -77,7 +77,7 @@ static __always_inline void native_local_irq_restore(unsigned long flags)
- #endif
+diff --git a/Makefile b/Makefile
+index d6ee709e45e8b..8e20bd8b1b561 100644
+--- a/Makefile
++++ b/Makefile
+@@ -581,7 +581,7 @@ LINUXINCLUDE    := \
+ 		-I$(objtree)/include \
+ 		$(USERINCLUDE)
  
- #ifndef CONFIG_PARAVIRT
+-KBUILD_AFLAGS   := -D__ASSEMBLY__ -fno-PIE
++KBUILD_AFLAGS   := -fno-PIE
+ 
+ KBUILD_CFLAGS :=
+ KBUILD_CFLAGS += -std=gnu11
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index 9d0efed91414c..6e6295f5983dc 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -82,7 +82,6 @@ VDSO_CFLAGS += -marm
+ endif
+ 
+ VDSO_AFLAGS := $(VDSO_CAFLAGS)
+-VDSO_AFLAGS += -D__ASSEMBLY__
+ 
+ # From arm vDSO Makefile
+ VDSO_LDFLAGS += -Bsymbolic --no-undefined -soname=linux-vdso.so.1
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index c0cc3ca5da9f4..a5da5b862a3ec 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -24,7 +24,7 @@ cflags-vdso := $(ccflags-vdso) \
+ 	$(call cc-option, -fno-asynchronous-unwind-tables) \
+ 	$(call cc-option, -fno-stack-protector)
+ aflags-vdso := $(ccflags-vdso) \
+-	-D__ASSEMBLY__ -Wa,-gdwarf-2
++	-Wa,-gdwarf-2
+ 
+ ifneq ($(c-gettimeofday-y),)
+   CFLAGS_vgettimeofday.o += -include $(c-gettimeofday-y)
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index e0b8ec9a95162..41ec115d4795b 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -30,7 +30,7 @@ endif
+ KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ -D__DISABLE_EXPORTS \
+ 	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+ 
+-KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
++KBUILD_AFLAGS := $(KBUILD_AFLAGS) \
+ 	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
+ 	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
+ 
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index 69d4593f64fee..d6685a36c6b43 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -33,7 +33,7 @@ cflags-vdso := $(ccflags-vdso) \
+ 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+ 	$(call cc-option, -fno-asynchronous-unwind-tables)
+ aflags-vdso := $(ccflags-vdso) \
+-	-D__ASSEMBLY__ -Wa,-gdwarf-2
++	-Wa,-gdwarf-2
+ 
+ ifneq ($(c-gettimeofday-y),)
+ CFLAGS_vgettimeofday.o = -include $(c-gettimeofday-y)
+diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
+index f1a4761ebd44b..5a75d4fd468cb 100644
+--- a/arch/powerpc/boot/Makefile
++++ b/arch/powerpc/boot/Makefile
+@@ -80,7 +80,7 @@ BOOTCFLAGS	:= $(BOOTTARGETFLAGS) \
+ 		   $(call cc-option,-mno-spe) $(call cc-option,-mspe=no) \
+ 		   -fomit-frame-pointer -fno-builtin -fPIC
+ 
+-BOOTAFLAGS	:= $(BOOTTARGETFLAGS) -D__ASSEMBLY__
++BOOTAFLAGS	:= $(BOOTTARGETFLAGS)
+ 
+ BOOTARFLAGS	:= -crD
+ 
+diff --git a/arch/powerpc/platforms/cell/spufs/Makefile b/arch/powerpc/platforms/cell/spufs/Makefile
+index 52e4c80ec8d03..c13928aea20c6 100644
+--- a/arch/powerpc/platforms/cell/spufs/Makefile
++++ b/arch/powerpc/platforms/cell/spufs/Makefile
+@@ -16,7 +16,7 @@ SPU_AS		:= $(SPU_CROSS)gcc
+ SPU_LD		:= $(SPU_CROSS)ld
+ SPU_OBJCOPY	:= $(SPU_CROSS)objcopy
+ SPU_CFLAGS	:= -O2 -Wall -I$(srctree)/include -D__KERNEL__
+-SPU_AFLAGS	:= -c -D__ASSEMBLY__ -I$(srctree)/include -D__KERNEL__
++SPU_AFLAGS	:= -c -I$(srctree)/include -D__KERNEL__
+ SPU_LDFLAGS	:= -N -Ttext=0x0
+ 
+ $(obj)/switch.o: $(obj)/spu_save_dump.h $(obj)/spu_restore_dump.h
+diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+index 3005f5459f81b..da00d6953efae 100644
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@ -18,7 +18,7 @@ KBUILD_CFLAGS	+= -fPIC
+ LDFLAGS_vmlinux	:= $(call ld-option,-no-pie)
+ extra_tools	:= relocs
+ aflags_dwarf	:= -Wa,-gdwarf-2
+-KBUILD_AFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64 -D__ASSEMBLY__
++KBUILD_AFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64
+ ifndef CONFIG_AS_IS_LLVM
+ KBUILD_AFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),$(aflags_dwarf))
+ endif
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index 3f9fb3698d669..b343ef5ee9951 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -52,7 +52,7 @@ targets += cpustr.h
+ # ---------------------------------------------------------------------------
+ 
+ KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP
+-KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
++KBUILD_AFLAGS	:= $(KBUILD_CFLAGS)
+ KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
+ KBUILD_CFLAGS	+= $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+ 
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 68f9d7a1683b5..91c68ab20588d 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -52,7 +52,7 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+ # that the compiler finds it even with out-of-tree builds (make O=/some/path).
+ CFLAGS_sev-handle-vc.o += -I$(objtree)/arch/x86/lib/
+ 
+-KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
++KBUILD_AFLAGS  := $(KBUILD_CFLAGS)
+ 
+ KBUILD_LDFLAGS := -m elf_$(UTS_MACHINE)
+ KBUILD_LDFLAGS += $(call ld-option,--no-ld-generated-unwind-info)
+diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
+index a0fb39abc5c86..20bbe1af05acd 100644
+--- a/arch/x86/realmode/rm/Makefile
++++ b/arch/x86/realmode/rm/Makefile
+@@ -65,5 +65,5 @@ $(obj)/realmode.relocs: $(obj)/realmode.elf FORCE
+ 
+ KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP -D_WAKEUP \
+ 		   -I$(srctree)/arch/x86/boot
+-KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
++KBUILD_AFLAGS	:= $(KBUILD_CFLAGS)
+ KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
+diff --git a/arch/xtensa/kernel/Makefile b/arch/xtensa/kernel/Makefile
+index d3ef0407401f6..ece4ae6dea97d 100644
+--- a/arch/xtensa/kernel/Makefile
++++ b/arch/xtensa/kernel/Makefile
+@@ -39,7 +39,7 @@ sed-y = -e ':a; s/\*(\([^)]*\)\.text\.unlikely/*(\1.literal.unlikely .{text}.unl
+ 	-e 's/\.{text}/.text/g'
+ 
+ quiet_cmd__cpp_lds_S = LDS     $@
+-cmd__cpp_lds_S = $(CPP) $(cpp_flags) -P -C -Uxtensa -D__ASSEMBLY__ \
++cmd__cpp_lds_S = $(CPP) $(cpp_flags) -P -C -Uxtensa \
+ 		 -DLINKER_SCRIPT $< | sed $(sed-y) >$@
+ 
+ $(obj)/vmlinux.lds: $(src)/vmlinux.lds.S FORCE
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index 7d15a85d579fa..054051c685dd2 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -62,7 +62,7 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+ # `-fdata-sections` flag from KBUILD_CFLAGS_KERNEL
+ KBUILD_CFLAGS_KERNEL := $(filter-out -fdata-sections, $(KBUILD_CFLAGS_KERNEL))
+ 
+-KBUILD_AFLAGS			:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
++KBUILD_AFLAGS			:= $(KBUILD_CFLAGS)
+ 
+ lib-y				:= efi-stub-helper.o gop.o secureboot.o tpm.o \
+ 				   file.o mem.o random.o randomalloc.o pci.o \
+diff --git a/drivers/net/wan/Makefile b/drivers/net/wan/Makefile
+index 00e9b7ee1e012..4233143534465 100644
+--- a/drivers/net/wan/Makefile
++++ b/drivers/net/wan/Makefile
+@@ -57,7 +57,7 @@ $(obj)/wanxlfw.bin: $(obj)/wanxlfw.o FORCE
+ 	$(call if_changed,m68kld_bin_o)
+ 
+ quiet_cmd_m68kas_o_S = M68KAS  $@
+-      cmd_m68kas_o_S = $(M68KCC) -D__ASSEMBLY__ -Wp,-MD,$(depfile) -I$(srctree)/include/uapi -c -o $@ $<
++      cmd_m68kas_o_S = $(M68KCC) -Wp,-MD,$(depfile) -I$(srctree)/include/uapi -c -o $@ $<
+ 
+ $(obj)/wanxlfw.o: $(src)/wanxlfw.S FORCE
+ 	$(call if_changed_dep,m68kas_o_S)
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 52c08c4eb0b9a..09f0142a93656 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -437,7 +437,7 @@ targets += $(lib-y) $(always-y)
+ # ---------------------------------------------------------------------------
+ quiet_cmd_cpp_lds_S = LDS     $@
+       cmd_cpp_lds_S = $(CPP) $(cpp_flags) -P -U$(ARCH) \
+-	                     -D__ASSEMBLY__ -DLINKER_SCRIPT -o $@ $<
++	                     -DLINKER_SCRIPT -o $@ $<
+ 
+ $(obj)/%.lds: $(src)/%.lds.S FORCE
+ 	$(call if_changed_dep,cpp_lds_S)
+diff --git a/scripts/gfp-translate b/scripts/gfp-translate
+index 8385ae0d5af93..f6353795fdca3 100755
+--- a/scripts/gfp-translate
++++ b/scripts/gfp-translate
+@@ -73,7 +73,7 @@ echo Parsing: $GFPMASK
+ #include <stdio.h>
+ 
+ // Try to fool compiler.h into not including extra stuff
+-#define __ASSEMBLY__	1
++#define __ASSEMBLER__	1
+ 
+ #include <generated/autoconf.h>
+ #include <linux/gfp_types.h>
+diff --git a/tools/testing/selftests/kvm/lib/riscv/handlers.S b/tools/testing/selftests/kvm/lib/riscv/handlers.S
+index b787b982e922a..c8cc2d695f483 100644
+--- a/tools/testing/selftests/kvm/lib/riscv/handlers.S
++++ b/tools/testing/selftests/kvm/lib/riscv/handlers.S
+@@ -3,10 +3,6 @@
+  * Copyright (c) 2023 Intel Corporation
+  */
+ 
 -#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- /*
-  * Used in the idle loop; sti takes one instruction cycle
-  * to complete:
-@@ -95,7 +95,7 @@ static __always_inline void halt(void)
- {
- 	native_halt();
- }
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- #endif /* CONFIG_PARAVIRT */
+-#define __ASSEMBLY__
+-#endif
+-
+ #include <asm/csr.h>
  
- #ifdef CONFIG_PARAVIRT_XXL
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index 725d0eff7acdf..50f73a8df7f6c 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -20,7 +20,7 @@
+ .macro save_context
+diff --git a/tools/testing/selftests/vDSO/vgetrandom-chacha.S b/tools/testing/selftests/vDSO/vgetrandom-chacha.S
+index a4a82e1c28a90..cba930f1d0907 100644
+--- a/tools/testing/selftests/vDSO/vgetrandom-chacha.S
++++ b/tools/testing/selftests/vDSO/vgetrandom-chacha.S
+@@ -3,8 +3,6 @@
+  * Copyright (C) 2024 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+  */
  
- #define PER_CPU_VAR(var)	__percpu(var)__percpu_rel
- 
--#else /* !__ASSEMBLY__: */
-+#else /* !__ASSEMBLER__: */
- 
- #include <linux/args.h>
- #include <linux/bits.h>
-diff --git a/arch/x86/include/asm/runtime-const.h b/arch/x86/include/asm/runtime-const.h
-index e5a13dc8816e2..4cd94fdcb45e2 100644
---- a/arch/x86/include/asm/runtime-const.h
-+++ b/arch/x86/include/asm/runtime-const.h
-@@ -6,7 +6,7 @@
-   #error "Cannot use runtime-const infrastructure from modules"
- #endif
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- 
- .macro RUNTIME_CONST_PTR sym reg
- 	movq	$0x0123456789abcdef, %\reg
-@@ -16,7 +16,7 @@
- 	.popsection
- .endm
- 
--#else /* __ASSEMBLY__ */
-+#else /* __ASSEMBLER__ */
- 
- #define runtime_const_ptr(sym) ({				\
- 	typeof(sym) __ret;					\
-@@ -74,5 +74,5 @@ static inline void runtime_const_fixup(void (*fn)(void *, unsigned long),
- 	}
- }
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- #endif
+-#define __ASSEMBLY__
+-
+ #if defined(__aarch64__)
+ #include "../../../../arch/arm64/kernel/vdso/vgetrandom-chacha.S"
+ #elif defined(__loongarch__)
 -- 
 2.51.1
 
