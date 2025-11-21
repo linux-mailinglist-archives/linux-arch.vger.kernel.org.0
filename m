@@ -1,345 +1,218 @@
-Return-Path: <linux-arch+bounces-15005-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15007-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC89FC7862A
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 11:12:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E20CC787F0
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 11:24:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E32624E9B3F
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 10:07:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 7A5EA36DCC
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 10:10:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9DB34B691;
-	Fri, 21 Nov 2025 10:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3607A3431EC;
+	Fri, 21 Nov 2025 10:07:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KPwtVfXQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IRddzQfc";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="hVIKI4iu"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E693431FC
-	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 10:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512F930E823
+	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 10:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763719296; cv=none; b=Epi7ceGLafic/gS5bupK1x19/++k8YvNlC4rK+B7yM/Dqq/yobs8oEFUUa6RxMw3aHokVYQOXYDmN6dYxK/8Upp1hO8oTbOia1ihpUK6R3rjI6oQGiPJFlFGuzmXjn7Bq+MuOnvCR1a9nRAu1OPv+xyZbA1madI75Wh0QgGDQDI=
+	t=1763719641; cv=none; b=PCHq7qbWQW+uHIE4eBEPcI4sH1ZdnS3t6Qx+Y2ih9cACHoTdsFIb0f3PyNcyA0wjdh4bZMDU1bPPwNzJCi/kNjQIjGMg3pollvuUV5zIxStzdU8+kXNy0KGNIQ0mA6OuvxLfyYoCX1KT0CKL44MJKvZM97/aY1D/OgSXTuaL58I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763719296; c=relaxed/simple;
-	bh=PiAEk0s52NxXA70ly+n3b9B4FbztsX9xtdW3LVNxUhU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vic0eRAeVTd4sJygwCudHQ5r3h7nDP6Gevc8+wvI+yXSIx9MyHTWXyxiDI3oq+6ufSKrdqH8YPy93WyoCHzYQ/BehxSEzDj9wJVUvPdyVjzOJN1ZezuZ7j9m88rnWa0un1+vOV+TGFwl2539WHzE96ipYNeFbgMnm/CVgkHI8Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KPwtVfXQ; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1763719641; c=relaxed/simple;
+	bh=WphRJGGfukQrYBcMZ5MWr7QgRRKzcp/3Uhc7FhEdO5c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rRHa+iCRq6hJmdpwzat7nxL1Gt28AVlokorjOgGX8HbsW9jAIx/5u0kOym3+KYZwk8Og+3uqqEYt09hlm3+Go5pk9iq703hnlpvh7xalFiaw0XSQ3XUtWdjRHn8QMBPDXN9vvreKi8269WAMubQbzlHZhKOdyH/7lew5omOLk9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IRddzQfc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=hVIKI4iu; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763719293;
+	s=mimecast20190719; t=1763719638;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8ShEWZDGVfSWGvaWH66N+yVtRbZoEirjG0NK4KU0DrU=;
-	b=KPwtVfXQJ+QO3K7mLbQMUpakW7X/bFccQnikyq9r6CVk13dUr2B85EBVQ8MzbR1k0o97r9
-	G61AiYB/OcOxj/WylrfPbeUaH8paE/c256SCWe+30WJSOmi/KWxF+GkgxO9h1cIoTCFt4q
-	l+CeWijYhIOnBAFIDJpEm1mONXO6cFs=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-490-oIKYxLfKPImfcYbrMPco9A-1; Fri,
- 21 Nov 2025 05:01:29 -0500
-X-MC-Unique: oIKYxLfKPImfcYbrMPco9A-1
-X-Mimecast-MFC-AGG-ID: oIKYxLfKPImfcYbrMPco9A_1763719288
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 80A7E195605B;
-	Fri, 21 Nov 2025 10:01:28 +0000 (UTC)
-Received: from thuth-p1g4.redhat.com (unknown [10.44.32.78])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5EFA71955F66;
-	Fri, 21 Nov 2025 10:01:25 +0000 (UTC)
-From: Thomas Huth <thuth@redhat.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-kbuild@vger.kernel.org,
-	Thomas Huth <thuth@redhat.com>
-Subject: [PATCH v4 9/9] treewide: Stop defining __ASSEMBLY__ for assembler files
-Date: Fri, 21 Nov 2025 11:00:44 +0100
-Message-ID: <20251121100044.282684-10-thuth@redhat.com>
-In-Reply-To: <20251121100044.282684-1-thuth@redhat.com>
-References: <20251121100044.282684-1-thuth@redhat.com>
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=SwO77VZOzFTjZAvBz0g5FmwChhtiApIbRQIotLVXRho=;
+	b=IRddzQfcMg47UPY9F+7clkPXS5V2tilmIM87MVoj1XSjYjlhqEQmLhtwJcO6/Yt2ROEh8u
+	e69FTHxyYZlDowZWwvReDcHa4Dix36q6F9+TskezNms9yWQd1P8b7ZRFmC9skgRqWBX3k9
+	svcvf6kweOmksUoMe+yJ6QW5zv6iZdU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-146-iC5gh858OsOa6gFssA2YUA-1; Fri, 21 Nov 2025 05:07:16 -0500
+X-MC-Unique: iC5gh858OsOa6gFssA2YUA-1
+X-Mimecast-MFC-AGG-ID: iC5gh858OsOa6gFssA2YUA_1763719635
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4779b432aecso14110995e9.0
+        for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 02:07:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1763719635; x=1764324435; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=SwO77VZOzFTjZAvBz0g5FmwChhtiApIbRQIotLVXRho=;
+        b=hVIKI4iuK5NWJCr9/kIV+fzptT4/Aps74k/m9+Azou06vV0isxURee2qIG85Ct6Emg
+         J0G6Wb4DPs6S61KDbhXwMo4OPWlinfuRWbYMrlhfQpEfqinVLXc1eSW+XnJbrWv3Z2Ov
+         2HVCq1KBthR3ghCACrNhesyJKu5NOS76oWn6YrgKMS8XcXxRpSaB1O1Q0upJu9fiyxiF
+         JMJTy+HZVo0avowdsRhfNdHivII/Ay/z9Dzj+iljMzURFUoG6bwBFUbDFEnIOdgzkwyZ
+         ByfysJ+5d18rrzjv5bud4k1lGWpftHa4sop5KfzvSb3eW6pFQWxtXffCvAqHj5elFmgZ
+         0X/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763719635; x=1764324435;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SwO77VZOzFTjZAvBz0g5FmwChhtiApIbRQIotLVXRho=;
+        b=BAICqefjdk/L6fqeyn4f7RQeKYXMmqYP2sy+s1r4xEkRVgvNw8K6sCavz4NvG03v34
+         UmmtwusWEOwQngTSu70w0Z+5UT6E7zObrUsQCWPHhkW81/yivBFN6PNM7lBHJixpb43m
+         a8dRea3tn+zbcdXlme1NrKDKnoeRQaHpiFhBPOXDSAKz2YGuOGaGsI41VVT1zcK7IMB6
+         Faz73uZP1MAv+tkUd/YwFjnkL1epNpUavDU4SHKngFj7klm0+Nz3LYLysl5HbcURfGfv
+         xCXEVxrdewE1wRg8zX7yNWHsHI3C5hHQf7QreHGVjhdB+Y9ZjXAJXTkRo6yzwEK5L204
+         A+gw==
+X-Forwarded-Encrypted: i=1; AJvYcCX+2OyCJsj8rdRkr17rP6xHS/90E1wxtNkNTMboHfzrZlXyHAMXQIquzySy62ZPtnuKtxKV7Qy1u9x8@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKCS6c1I5j7rdI51QdjLHnB1GV8GxlOoVjpdeFyGTIVvfEgVmz
+	13JK3KLcH9EkjjenED9on+euy2p1gZkt7PDD73riXasmY/lSFDgAToVDXXdzHQ+hfTmRjG9gJiz
+	LZn0FgDhqJj9c1rY8K6iXNQ9Zt/1MHMDyNZdtQhyg7M967A43mXag/MMZ0vt45kM=
+X-Gm-Gg: ASbGncvgHp99Ml/RHYmJ7sBeRrTFpZpDlNdYqdiAnUPhQLdgfrWOWypTRxYONNYmT/y
+	Eh4YUqNLB+4mOK3N2O3JsbUtets7Uq3wQZtEAQudjcDBgZ4QgrGQPjLo++fyjQaQI6RxRaHpdfl
+	1gsbHdqpIT0mRucLYbV+K5/r1BBcufj0HR+HyCLO1cqmUlhrRMtpz9xm5FJ7YAG9gb+RR8H42Fr
+	PpBYAGksKYyd4FjhqZm4Povzb8gjJ5herd0QeAO/uh99kHb42XSGJ0pNu0ivUNiVomYwp3Q0qeB
+	MXvDfIas4DJSjA6BjCUZSY8/vgmzEhWuuSbLa0tMuuuyd7cZwRvIe/pbHSqeU3qmKuQLlhprigE
+	ah0WFNQ==
+X-Received: by 2002:a05:600c:1d0d:b0:475:dd9a:f791 with SMTP id 5b1f17b1804b1-477c1126d1emr15010465e9.28.1763719635368;
+        Fri, 21 Nov 2025 02:07:15 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFqoMD153kz/c03aS70gHVzf/BnaKJUbZBoP7k9YyW4edzStSR45m5QJCTapcyKzEEWA+6bGQ==
+X-Received: by 2002:a05:600c:1d0d:b0:475:dd9a:f791 with SMTP id 5b1f17b1804b1-477c1126d1emr15010165e9.28.1763719634864;
+        Fri, 21 Nov 2025 02:07:14 -0800 (PST)
+Received: from [192.168.0.5] ([47.64.114.57])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477a97213b8sm81828235e9.1.2025.11.21.02.07.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Nov 2025 02:07:14 -0800 (PST)
+Message-ID: <ba1499c3-47ca-42ed-a0d7-74c5ee768132@redhat.com>
+Date: Fri, 21 Nov 2025 11:07:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/9] treewide: Replace __ASSEMBLY__ with __ASSEMBLER__
+ in header files
+To: Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org
+References: <20251121100044.282684-1-thuth@redhat.com>
 From: Thomas Huth <thuth@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=thuth@redhat.com; keydata=
+ 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
+In-Reply-To: <20251121100044.282684-1-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-All spots have been changed to __ASSEMBLER__ (i.e. the macro that
-gets defined by the compiler), so we don't have to manually define
-__ASSEMBLY__ now anymore.
+On 21/11/2025 11.00, Thomas Huth wrote:
+>   Hi Arnd!
+> 
+> Could you please help to get the remaining patches of this macro
+> renaming series merged? I already got most patches from the initial
+> version merged through the architecture specific trees (thanks to every
+> maintainer who helped me here!), but for alpha and arm 32-bit, I did
+> not manage to get the attention of the maintainers. Hexagon got an
+> Acked-by by Brian, but the patches did not get merged yet.
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- Makefile                                         | 2 +-
- arch/arm64/kernel/vdso32/Makefile                | 1 -
- arch/loongarch/vdso/Makefile                     | 2 +-
- arch/mips/boot/compressed/Makefile               | 2 +-
- arch/mips/vdso/Makefile                          | 2 +-
- arch/powerpc/boot/Makefile                       | 2 +-
- arch/powerpc/platforms/cell/spufs/Makefile       | 2 +-
- arch/s390/Makefile                               | 2 +-
- arch/x86/boot/Makefile                           | 2 +-
- arch/x86/boot/compressed/Makefile                | 2 +-
- arch/x86/realmode/rm/Makefile                    | 2 +-
- arch/xtensa/kernel/Makefile                      | 2 +-
- drivers/firmware/efi/libstub/Makefile            | 2 +-
- drivers/net/wan/Makefile                         | 2 +-
- scripts/Makefile.build                           | 2 +-
- scripts/gfp-translate                            | 2 +-
- tools/testing/selftests/kvm/lib/riscv/handlers.S | 4 ----
- tools/testing/selftests/vDSO/vgetrandom-chacha.S | 2 --
- 18 files changed, 15 insertions(+), 22 deletions(-)
+Sorry, forgot to mention: csky and arm64 are still in linux-next and not in 
+Linus' master branch yet, so they need to get merged first.
 
-diff --git a/Makefile b/Makefile
-index d6ee709e45e8b..8e20bd8b1b561 100644
---- a/Makefile
-+++ b/Makefile
-@@ -581,7 +581,7 @@ LINUXINCLUDE    := \
- 		-I$(objtree)/include \
- 		$(USERINCLUDE)
- 
--KBUILD_AFLAGS   := -D__ASSEMBLY__ -fno-PIE
-+KBUILD_AFLAGS   := -fno-PIE
- 
- KBUILD_CFLAGS :=
- KBUILD_CFLAGS += -std=gnu11
-diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-index 9d0efed91414c..6e6295f5983dc 100644
---- a/arch/arm64/kernel/vdso32/Makefile
-+++ b/arch/arm64/kernel/vdso32/Makefile
-@@ -82,7 +82,6 @@ VDSO_CFLAGS += -marm
- endif
- 
- VDSO_AFLAGS := $(VDSO_CAFLAGS)
--VDSO_AFLAGS += -D__ASSEMBLY__
- 
- # From arm vDSO Makefile
- VDSO_LDFLAGS += -Bsymbolic --no-undefined -soname=linux-vdso.so.1
-diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
-index c0cc3ca5da9f4..a5da5b862a3ec 100644
---- a/arch/loongarch/vdso/Makefile
-+++ b/arch/loongarch/vdso/Makefile
-@@ -24,7 +24,7 @@ cflags-vdso := $(ccflags-vdso) \
- 	$(call cc-option, -fno-asynchronous-unwind-tables) \
- 	$(call cc-option, -fno-stack-protector)
- aflags-vdso := $(ccflags-vdso) \
--	-D__ASSEMBLY__ -Wa,-gdwarf-2
-+	-Wa,-gdwarf-2
- 
- ifneq ($(c-gettimeofday-y),)
-   CFLAGS_vgettimeofday.o += -include $(c-gettimeofday-y)
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index e0b8ec9a95162..41ec115d4795b 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -30,7 +30,7 @@ endif
- KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ -D__DISABLE_EXPORTS \
- 	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
- 
--KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
-+KBUILD_AFLAGS := $(KBUILD_AFLAGS) \
- 	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
- 	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
- 
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 69d4593f64fee..d6685a36c6b43 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -33,7 +33,7 @@ cflags-vdso := $(ccflags-vdso) \
- 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
- 	$(call cc-option, -fno-asynchronous-unwind-tables)
- aflags-vdso := $(ccflags-vdso) \
--	-D__ASSEMBLY__ -Wa,-gdwarf-2
-+	-Wa,-gdwarf-2
- 
- ifneq ($(c-gettimeofday-y),)
- CFLAGS_vgettimeofday.o = -include $(c-gettimeofday-y)
-diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
-index f1a4761ebd44b..5a75d4fd468cb 100644
---- a/arch/powerpc/boot/Makefile
-+++ b/arch/powerpc/boot/Makefile
-@@ -80,7 +80,7 @@ BOOTCFLAGS	:= $(BOOTTARGETFLAGS) \
- 		   $(call cc-option,-mno-spe) $(call cc-option,-mspe=no) \
- 		   -fomit-frame-pointer -fno-builtin -fPIC
- 
--BOOTAFLAGS	:= $(BOOTTARGETFLAGS) -D__ASSEMBLY__
-+BOOTAFLAGS	:= $(BOOTTARGETFLAGS)
- 
- BOOTARFLAGS	:= -crD
- 
-diff --git a/arch/powerpc/platforms/cell/spufs/Makefile b/arch/powerpc/platforms/cell/spufs/Makefile
-index 52e4c80ec8d03..c13928aea20c6 100644
---- a/arch/powerpc/platforms/cell/spufs/Makefile
-+++ b/arch/powerpc/platforms/cell/spufs/Makefile
-@@ -16,7 +16,7 @@ SPU_AS		:= $(SPU_CROSS)gcc
- SPU_LD		:= $(SPU_CROSS)ld
- SPU_OBJCOPY	:= $(SPU_CROSS)objcopy
- SPU_CFLAGS	:= -O2 -Wall -I$(srctree)/include -D__KERNEL__
--SPU_AFLAGS	:= -c -D__ASSEMBLY__ -I$(srctree)/include -D__KERNEL__
-+SPU_AFLAGS	:= -c -I$(srctree)/include -D__KERNEL__
- SPU_LDFLAGS	:= -N -Ttext=0x0
- 
- $(obj)/switch.o: $(obj)/spu_save_dump.h $(obj)/spu_restore_dump.h
-diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-index 3005f5459f81b..da00d6953efae 100644
---- a/arch/s390/Makefile
-+++ b/arch/s390/Makefile
-@@ -18,7 +18,7 @@ KBUILD_CFLAGS	+= -fPIC
- LDFLAGS_vmlinux	:= $(call ld-option,-no-pie)
- extra_tools	:= relocs
- aflags_dwarf	:= -Wa,-gdwarf-2
--KBUILD_AFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64 -D__ASSEMBLY__
-+KBUILD_AFLAGS_DECOMPRESSOR := $(CLANG_FLAGS) -m64
- ifndef CONFIG_AS_IS_LLVM
- KBUILD_AFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),$(aflags_dwarf))
- endif
-diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
-index 3f9fb3698d669..b343ef5ee9951 100644
---- a/arch/x86/boot/Makefile
-+++ b/arch/x86/boot/Makefile
-@@ -52,7 +52,7 @@ targets += cpustr.h
- # ---------------------------------------------------------------------------
- 
- KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP
--KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
-+KBUILD_AFLAGS	:= $(KBUILD_CFLAGS)
- KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
- KBUILD_CFLAGS	+= $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
- 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 68f9d7a1683b5..91c68ab20588d 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -52,7 +52,7 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
- # that the compiler finds it even with out-of-tree builds (make O=/some/path).
- CFLAGS_sev-handle-vc.o += -I$(objtree)/arch/x86/lib/
- 
--KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
-+KBUILD_AFLAGS  := $(KBUILD_CFLAGS)
- 
- KBUILD_LDFLAGS := -m elf_$(UTS_MACHINE)
- KBUILD_LDFLAGS += $(call ld-option,--no-ld-generated-unwind-info)
-diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
-index a0fb39abc5c86..20bbe1af05acd 100644
---- a/arch/x86/realmode/rm/Makefile
-+++ b/arch/x86/realmode/rm/Makefile
-@@ -65,5 +65,5 @@ $(obj)/realmode.relocs: $(obj)/realmode.elf FORCE
- 
- KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP -D_WAKEUP \
- 		   -I$(srctree)/arch/x86/boot
--KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
-+KBUILD_AFLAGS	:= $(KBUILD_CFLAGS)
- KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
-diff --git a/arch/xtensa/kernel/Makefile b/arch/xtensa/kernel/Makefile
-index d3ef0407401f6..ece4ae6dea97d 100644
---- a/arch/xtensa/kernel/Makefile
-+++ b/arch/xtensa/kernel/Makefile
-@@ -39,7 +39,7 @@ sed-y = -e ':a; s/\*(\([^)]*\)\.text\.unlikely/*(\1.literal.unlikely .{text}.unl
- 	-e 's/\.{text}/.text/g'
- 
- quiet_cmd__cpp_lds_S = LDS     $@
--cmd__cpp_lds_S = $(CPP) $(cpp_flags) -P -C -Uxtensa -D__ASSEMBLY__ \
-+cmd__cpp_lds_S = $(CPP) $(cpp_flags) -P -C -Uxtensa \
- 		 -DLINKER_SCRIPT $< | sed $(sed-y) >$@
- 
- $(obj)/vmlinux.lds: $(src)/vmlinux.lds.S FORCE
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index 7d15a85d579fa..054051c685dd2 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -62,7 +62,7 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
- # `-fdata-sections` flag from KBUILD_CFLAGS_KERNEL
- KBUILD_CFLAGS_KERNEL := $(filter-out -fdata-sections, $(KBUILD_CFLAGS_KERNEL))
- 
--KBUILD_AFLAGS			:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
-+KBUILD_AFLAGS			:= $(KBUILD_CFLAGS)
- 
- lib-y				:= efi-stub-helper.o gop.o secureboot.o tpm.o \
- 				   file.o mem.o random.o randomalloc.o pci.o \
-diff --git a/drivers/net/wan/Makefile b/drivers/net/wan/Makefile
-index 00e9b7ee1e012..4233143534465 100644
---- a/drivers/net/wan/Makefile
-+++ b/drivers/net/wan/Makefile
-@@ -57,7 +57,7 @@ $(obj)/wanxlfw.bin: $(obj)/wanxlfw.o FORCE
- 	$(call if_changed,m68kld_bin_o)
- 
- quiet_cmd_m68kas_o_S = M68KAS  $@
--      cmd_m68kas_o_S = $(M68KCC) -D__ASSEMBLY__ -Wp,-MD,$(depfile) -I$(srctree)/include/uapi -c -o $@ $<
-+      cmd_m68kas_o_S = $(M68KCC) -Wp,-MD,$(depfile) -I$(srctree)/include/uapi -c -o $@ $<
- 
- $(obj)/wanxlfw.o: $(src)/wanxlfw.S FORCE
- 	$(call if_changed_dep,m68kas_o_S)
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 52c08c4eb0b9a..09f0142a93656 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -437,7 +437,7 @@ targets += $(lib-y) $(always-y)
- # ---------------------------------------------------------------------------
- quiet_cmd_cpp_lds_S = LDS     $@
-       cmd_cpp_lds_S = $(CPP) $(cpp_flags) -P -U$(ARCH) \
--	                     -D__ASSEMBLY__ -DLINKER_SCRIPT -o $@ $<
-+	                     -DLINKER_SCRIPT -o $@ $<
- 
- $(obj)/%.lds: $(src)/%.lds.S FORCE
- 	$(call if_changed_dep,cpp_lds_S)
-diff --git a/scripts/gfp-translate b/scripts/gfp-translate
-index 8385ae0d5af93..f6353795fdca3 100755
---- a/scripts/gfp-translate
-+++ b/scripts/gfp-translate
-@@ -73,7 +73,7 @@ echo Parsing: $GFPMASK
- #include <stdio.h>
- 
- // Try to fool compiler.h into not including extra stuff
--#define __ASSEMBLY__	1
-+#define __ASSEMBLER__	1
- 
- #include <generated/autoconf.h>
- #include <linux/gfp_types.h>
-diff --git a/tools/testing/selftests/kvm/lib/riscv/handlers.S b/tools/testing/selftests/kvm/lib/riscv/handlers.S
-index b787b982e922a..c8cc2d695f483 100644
---- a/tools/testing/selftests/kvm/lib/riscv/handlers.S
-+++ b/tools/testing/selftests/kvm/lib/riscv/handlers.S
-@@ -3,10 +3,6 @@
-  * Copyright (c) 2023 Intel Corporation
-  */
- 
--#ifndef __ASSEMBLY__
--#define __ASSEMBLY__
--#endif
--
- #include <asm/csr.h>
- 
- .macro save_context
-diff --git a/tools/testing/selftests/vDSO/vgetrandom-chacha.S b/tools/testing/selftests/vDSO/vgetrandom-chacha.S
-index a4a82e1c28a90..cba930f1d0907 100644
---- a/tools/testing/selftests/vDSO/vgetrandom-chacha.S
-+++ b/tools/testing/selftests/vDSO/vgetrandom-chacha.S
-@@ -3,8 +3,6 @@
-  * Copyright (C) 2024 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-  */
- 
--#define __ASSEMBLY__
--
- #if defined(__aarch64__)
- #include "../../../../arch/arm64/kernel/vdso/vgetrandom-chacha.S"
- #elif defined(__loongarch__)
--- 
-2.51.1
+  Thomas
+
+
+> Anyway, original patch series description follows:
+> 
+> The kernel Makefiles define the __ASSEMBLY__ macro to provide
+> a way to use headers in both, assembly and C source code.
+> However, all the supported versions of the GCC and Clang compilers
+> also define the macro __ASSEMBLER__ automatically already when compiling
+> assembly code, so some kernel headers are using __ASSEMBLER__ instead.
+> With regards to userspace code, this seems also to be constant source
+> of confusion, see for example these links here:
+> 
+>   https://lore.kernel.org/kvm/20250222014526.2302653-1-seanjc@google.com/
+>   https://stackoverflow.com/questions/28924355/gcc-assembler-preprocessor-not-compatible-with-standard-headers
+>   https://forums.raspberrypi.com/viewtopic.php?p=1652944#p1653834
+>   https://github.com/riscv-software-src/opensbi/issues/199
+> 
+> To avoid confusion in the future, it would make sense to standardize
+> on the macro that gets defined by the compiler, so this patch series
+> changes all occurances of __ASSEMBLY__ into __ASSEMBLER__ and
+> finally removes the -D__ASSEMBLY__ from the Makefiles.
+> 
+> I split the patches per architecture to ease the review, and I also
+> split the uapi headers from the normal ones in case we decide that
+> uapi needs to be treated differently from the normal headers here.
+> 
+> v4:
+> - Most patches from the original series got already merged via the
+>    tree of the individual architectures, so the amount of patches here
+>    has been greatly reduced
+> - Rebased patches on top of linux-next, fixed conflicts and new
+>    occurances
+> 
+> Thomas Huth (9):
+>    alpha: Replace __ASSEMBLY__ with __ASSEMBLER__ in the alpha headers
+>    arm: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
+>    arm: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+>    hexagon: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
+>    hexagon: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+>    uapi: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi headers
+>    include: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+>    x86/headers: Replace __ASSEMBLY__ stragglers with __ASSEMBLER__
+>    treewide: Stop defining __ASSEMBLY__ for assembler files
 
 
