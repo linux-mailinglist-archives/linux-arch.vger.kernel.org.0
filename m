@@ -1,96 +1,96 @@
-Return-Path: <linux-arch+bounces-15013-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15014-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE6A4C7AF16
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 17:53:13 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00567C7B08A
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 18:18:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1B77F4F0A23
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 16:47:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E5FD54F16C0
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 17:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C43834B69F;
-	Fri, 21 Nov 2025 16:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB233469E2;
+	Fri, 21 Nov 2025 17:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="owZ8TKE8";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5bqFyex+";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="owZ8TKE8";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5bqFyex+"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="yDry+OsS";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SUPBLnRE";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="h7i6TXUY";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+uR5t++p"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B083B30AD04
-	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 16:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9572853E0
+	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 17:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763743620; cv=none; b=TjgK9of3uNLAUA9gwt+G8jAY2tO/7zaiLGMHIZ7p45d7zAY/om19RlgxnmyGRPebSiXZXSohjqtJgIAV95JyKFzojCo00GKFLG9ADyVhvmkyd8Idd1EtP71KFASFBG5CGD2K5lj1qHRG8vTmjMG4homCy2T8m4iLy2MxQa4DPxA=
+	t=1763745018; cv=none; b=fkrJJTls0n0zvPDaKFaEl+WAWTeSX5xrhzU8p5fAbt3F5gy+XrlJ2d2NPEgVL8dFr6u5D2KITIpo5brwjtGwlB2zZWpcaQ8/gEMV++JnPAI2ljTYAdZxf3ck8Yxs1CtkwBcEWWnWM4CzZrQYeyNp89Say4pSZD65/eHlN8Jndww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763743620; c=relaxed/simple;
-	bh=6Qcf6/95TX9jVFioSj7Zc5fKXEhnX1Bc/rO0mYSnoXU=;
+	s=arc-20240116; t=1763745018; c=relaxed/simple;
+	bh=wQmFGX0rACnVEkJzRZ4LA/53Rteu7arxwxEDaYCi1EQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AX/8/ViTBtf8ZpqgqWPJEWE1s5NycoEyT7YhMqCL3RM+T5wDsPil/5cTK3Hi8UicfpqJbF0jnIaQhEfBGOu2PAhIuxZ8H+I18YBW132luqfN3jjsNB2tZ8UoP72Nm5G231Mw/ZHvyZA5BG2tucZAxbDzL2It8HDUYNlhC0toIkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=owZ8TKE8; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5bqFyex+; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=owZ8TKE8; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5bqFyex+; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:Content-Type; b=okGAq7YLYb/ncRIHxUHrL1F98FHnIbFig+lm3Q2K662+6yGeja8DlmGwO6iA+0cFqkM0CTIXvKizZpjDiZUSHrtH33xM9/M75sQSK6F9uneuK2DLIn1AZ5Nv69cj80UhebX/5nDJM60IXNltSJh9LSW6Fy1GYZVHN7Vjd2E8zRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=yDry+OsS; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SUPBLnRE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=h7i6TXUY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+uR5t++p; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 0749F5BCC6;
-	Fri, 21 Nov 2025 16:46:55 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BDDAD21A02;
+	Fri, 21 Nov 2025 17:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1763743615; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1763745012; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=BtvP/Bv21zIJUn/ckdTnSK9vSZ3KC0jdHLL8cUGc008=;
-	b=owZ8TKE8Co04AWk/cw6g+Z+e+j7trgA5vvEbVKBTTFF6L2NUiWWtDca2BfsTo3Y13ZTREI
-	eP4tGlsP68nyzhNx+S8CMq6lpvBDi0Gw4cfVcVBMmwVA6vyOr5exSnQLAD9e3S9FUFuXn1
-	fH/eXQNDUwctqepqYen7/lzDGk8AUZA=
+	bh=IvYqDYULzOTgnw2r6/zPhQ1WOCd/M0ctrvyFGAsskZc=;
+	b=yDry+OsSnejyGuzZx8imEX/IE/bZ1JI+9hGiDHhoApVCyVWy4brLcy/4fEvxKdettU/z1U
+	Yrh1fY406hc6pvc3VMdcdBbXSsheFsUc3B80UiNhZqc28zCUgFU83IEsXsiizfeylBNWRi
+	3eLJNUyMxQqgfXfqb+XNSd4+W+OTsJU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1763743615;
+	s=susede2_ed25519; t=1763745012;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=BtvP/Bv21zIJUn/ckdTnSK9vSZ3KC0jdHLL8cUGc008=;
-	b=5bqFyex+miGqXTsQQxOschRQshWw1+ggMbZ+ie9Y7UzNONOuRzdjIZoE0yiud9Y/CAVSxc
-	11OUhTc5VgXS4DDw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=owZ8TKE8;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=5bqFyex+
+	bh=IvYqDYULzOTgnw2r6/zPhQ1WOCd/M0ctrvyFGAsskZc=;
+	b=SUPBLnRE9k/UMvWNaR6JMl+N0yIllEWyWk6DnIyiBlkort/SwnhcYXpuoBA9m0ypbug2II
+	rhUOCivyhbTyeaCw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=h7i6TXUY;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=+uR5t++p
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1763743615; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1763745011; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=BtvP/Bv21zIJUn/ckdTnSK9vSZ3KC0jdHLL8cUGc008=;
-	b=owZ8TKE8Co04AWk/cw6g+Z+e+j7trgA5vvEbVKBTTFF6L2NUiWWtDca2BfsTo3Y13ZTREI
-	eP4tGlsP68nyzhNx+S8CMq6lpvBDi0Gw4cfVcVBMmwVA6vyOr5exSnQLAD9e3S9FUFuXn1
-	fH/eXQNDUwctqepqYen7/lzDGk8AUZA=
+	bh=IvYqDYULzOTgnw2r6/zPhQ1WOCd/M0ctrvyFGAsskZc=;
+	b=h7i6TXUYfSuW0WzRgslqS2fymXU2sXrf4TwD7hQhKpoCs6DePTP5TiNoo6c4LvIA2soF/K
+	Ze7i0tmEB6pW+krbhud8WyH5DsDWQGBn8/UaENHXAmMykWC0hkH9h+PlWnc9KJmgcRp54a
+	ZvXP+/1LRC+58q0lyzVE1M7Otq2a4t0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1763743615;
+	s=susede2_ed25519; t=1763745011;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=BtvP/Bv21zIJUn/ckdTnSK9vSZ3KC0jdHLL8cUGc008=;
-	b=5bqFyex+miGqXTsQQxOschRQshWw1+ggMbZ+ie9Y7UzNONOuRzdjIZoE0yiud9Y/CAVSxc
-	11OUhTc5VgXS4DDw==
+	bh=IvYqDYULzOTgnw2r6/zPhQ1WOCd/M0ctrvyFGAsskZc=;
+	b=+uR5t++pwYwzlEM/52jTcJFIPrRpraOGnSeM+8XfV0i0K1pjd3rRhta7XuBVtu1y7eVXD7
+	RXFHYrKMt3A/srDA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8A7D53EA61;
-	Fri, 21 Nov 2025 16:46:54 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5310E3EA61;
+	Fri, 21 Nov 2025 17:10:11 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id aSd3IX6XIGmhHQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Fri, 21 Nov 2025 16:46:54 +0000
-Message-ID: <ebbd8d9b-03ca-499f-beae-7e8c4cc16300@suse.cz>
-Date: Fri, 21 Nov 2025 17:46:54 +0100
+	id QiXvE/OcIGneMwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Fri, 21 Nov 2025 17:10:11 +0000
+Message-ID: <e0fb91ad-736f-4ee9-979d-c2512ec0b544@suse.cz>
+Date: Fri, 21 Nov 2025 18:10:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -98,8 +98,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/16] mm: eliminate is_swap_pte() when
- softleaf_from_pte() suffices
+Subject: Re: [PATCH v3 05/16] mm: use leaf entries in debug pgtable + remove
+ is_swap_pte()
 Content-Language: en-US
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>
@@ -141,7 +141,7 @@ Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
  linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
  linux-mm@kvack.org, linux-arch@vger.kernel.org, damon@lists.linux.dev
 References: <cover.1762812360.git.lorenzo.stoakes@oracle.com>
- <92ebab9567978155116804c67babc3c64636c403.1762812360.git.lorenzo.stoakes@oracle.com>
+ <222f352e7a99191b4bdfa77e835f2fc0dd83fa72.1762812360.git.lorenzo.stoakes@oracle.com>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -182,16 +182,13 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <92ebab9567978155116804c67babc3c64636c403.1762812360.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <222f352e7a99191b4bdfa77e835f2fc0dd83fa72.1762812360.git.lorenzo.stoakes@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 0749F5BCC6
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: BDDAD21A02
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
 X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
+	BAYES_HAM(-3.00)[100.00%];
 	SUSPICIOUS_RECIPS(1.50)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
@@ -217,16 +214,26 @@ X-Spamd-Result: default: False [-3.01 / 50.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:email,suse.cz:mid,suse.cz:dkim]
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
 X-Spam-Score: -3.01
+X-Spam-Level: 
 
 On 11/10/25 23:21, Lorenzo Stoakes wrote:
-> In cases where we can simply utilise the fact that softleaf_from_pte()
-> treats present entries as if they were none entries and thus eliminate
-> spurious uses of is_swap_pte(), do so.
+> Remove invocations of is_swap_pte() in mm/debug_vm_pgtable.c and use
+> softleaf_from_pte() and softleaf_is_swap() as necessary to replace this
+> usage.
 > 
-> No functional change intended.
+> We update the test code to use a 'true' swap entry throughout so we are
+> guaranteed this is not a non-swap entry, so all asserts continue to operate
+> correctly.
 > 
+> With this change in place, we no longer use is_swap_pte() anywhere, so
+> remove it.
+
+Nice!
+
 > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
 Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
