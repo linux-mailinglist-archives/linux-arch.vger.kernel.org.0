@@ -1,185 +1,242 @@
-Return-Path: <linux-arch+bounces-15008-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15009-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F394C786D8
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 11:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E8B1DC78974
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 11:59:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8F93E4E92AB
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 10:12:39 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D0744E438E
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Nov 2025 10:59:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A20221F03;
-	Fri, 21 Nov 2025 10:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7795334253B;
+	Fri, 21 Nov 2025 10:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YOK+FY87";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VcrrlcZp"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A/n7F89w"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78738190477
-	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 10:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DD331DD8A
+	for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 10:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763719946; cv=none; b=ieV9iLe01poQuYD9hFLaZoZFOJXaSotGIdwyppEhdjdUOXG7rgwT739SHNdUcpS/UpdBGCbkkLZQlfr/8cUDVhaW3CG0OWRBmhEBZOl/CtrFq1appj2uhCCbCRMVkyGpbTqCBMgo/y1BGmOsZg0NLgjOFjeM9HnnY9me9WLu3w0=
+	t=1763722768; cv=none; b=QCqz5R9+Npoj8anfabHXnPzJwPbn2xnFYVvbNORaO0PIlN1G296RFP+a5UXkfkjm1hGpxZG96tQdXvkw48CB8qSBUElN/WGQt/TOxAZNBKnBoR1Ldlug3ExucvCjpuCOGfYp8OEkWVCMZE9LW+n6A7MunsmR+RL8TzNYvTi1t/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763719946; c=relaxed/simple;
-	bh=nIxOA6aOVr6gGSQiExzc8nNHFfpPye0obYzpAtlDgI8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Gbp+7CuJ+6u7+Kd09y9HbSAvfHwAvddTM/cyzFYc7yNoO0cAjrHpcUZbPPdJ/3klsWMl/eMTGhat/AqMjoqngBFbScbt5mwosrBfGVEGs+hlSlvvxtPgraw3DTnzt+YCRLzQWY1b4D5f1alLWVQPeL3mmmuivg/sj45vlrrHW4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YOK+FY87; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VcrrlcZp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763719942;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OZIk/6eiWFE7r0Pz8jIgtNeqgPIl4m+Z/Z67QWlEwbg=;
-	b=YOK+FY879Am7GnPXbNLmSgDD9+CwCE35ZTP111/C75w6L6OtMB75MILjDrXLsK9Yl7VOqd
-	9vkqDFih2SuH6BKKfbDoa82R2hHE2K5NtORIUpXT2hp6wqOPmxxN81vmwMRCetrS29N8wq
-	zHDfF3e3Mwkpx7biyfMKytTcPvPA2fs=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-577-RR-agMrCMlGOPMBSYwZbdQ-1; Fri, 21 Nov 2025 05:12:20 -0500
-X-MC-Unique: RR-agMrCMlGOPMBSYwZbdQ-1
-X-Mimecast-MFC-AGG-ID: RR-agMrCMlGOPMBSYwZbdQ_1763719940
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-429c5c8ae3bso1624740f8f.0
-        for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 02:12:20 -0800 (PST)
+	s=arc-20240116; t=1763722768; c=relaxed/simple;
+	bh=x7mxb9+ZtbZUyjZ/IS8MK20mY6I8mZIJ5wXVxz/viEU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dAozEZ9xAZ2EAxFgNjR1ClbdnYTtm2ZpNssQfOybfV5QVYJHYzwa1F47KlghU7pEfPx1hLGLpfX/iEqkmMwb1/IEgleGebpNWwxq1VOXG+PEE4TeVcXu+Tn4Rk3n/C/d1/ilUpK6VgNuiftDW5xEHcSolXIskF+4+7Hanj0hVdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A/n7F89w; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4ed67a143c5so276771cf.0
+        for <linux-arch@vger.kernel.org>; Fri, 21 Nov 2025 02:59:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763719939; x=1764324739; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OZIk/6eiWFE7r0Pz8jIgtNeqgPIl4m+Z/Z67QWlEwbg=;
-        b=VcrrlcZpFqyVhH8MmCt6P+yUSIwuWCfg120or1zJ+SviQuHZkBKw76xSxkUw070nSq
-         LLIPuo3x5gF3Nz0KqAweo9rjIbTif2nSxtgkZKDDUmPFcDYe+DyeIrcK3IQP6NAB1BQs
-         0dOIh4t2kIu+zu52MgQrBlenEpspUCY1vcWHLZqN2zZ5JGMSiOi6bH2A7E+o0IWTv0aR
-         Xvc5DHAj3OA/t8pR9c9poGBi6RQoJl6GgyiBM9qX0BQzYoGTBAviR24tiADBKIaamHj8
-         lt9q6jM10kh9K4TKEiVI/FVKqnac1TiXv28KnEV+bxJ1eTQDBqqjMoMzxKedLFZlhCND
-         sZgQ==
+        d=google.com; s=20230601; t=1763722765; x=1764327565; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3as/zwL6Z/tKLwDg8ef9gV3qAR4w2mHg/QSKe+6aQPM=;
+        b=A/n7F89wA8J26xCO9mqikzF49P1qMajD81m2ijH/+VTz4W+1JtjrBdjJlcxbjocNWS
+         VBtsaNy3OCr2p6wLQwMILHnhoTT0BwwgRs0+hOvBtTN+CP71oDDMrdmvtpepv47+p2LP
+         1lC685ME8KvjxkHQElhkzyLJbYgeYQbPPUS6JkxvdPF/f0kmN/y/FSd61P7q+oUNuJ30
+         LHfm3MoEyc/21cSHHu5hNy9JmgiLuNtqVIFhPSWg+pQ3bevhtq6zFwZS1Y815jFWdm+n
+         zx4Mi/ILsRvZOBdYENis9Iz8PpAtoy5qN19NQR0W+04NUPBBvloq6VSzgUZb+ajcu7yq
+         M7rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763719939; x=1764324739;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OZIk/6eiWFE7r0Pz8jIgtNeqgPIl4m+Z/Z67QWlEwbg=;
-        b=HHpug8mBaw3Z/k+4TQGpeotc1bErJKIWVAA9PY5KlP70oGiZGfeiHtK+v3m0GDpcVS
-         4Emzr/UkpGwG2pWIshUQukvv+mrTyOtF0vYWs2a64me166Sh3JYNHU0HtPbeuymLE36U
-         GVCwJZZ4zC9H5WONCzQsVB6KLqlyeByvcICCguLk42osi7P14n/8wiqa7KRJmcgrlRUz
-         Nz7iqiC+jlQf1LNm+o40GuaOjrgterN6NmqbClNjRhQfBkMsfYu0ytg432AUdQOiHZYA
-         bcGKgFelpPjAwCtx3OiSvRzcF3bZRhYqbIis269K5vZE3NAzDP41jhlSQ9J25fLNOcld
-         yJxg==
-X-Forwarded-Encrypted: i=1; AJvYcCUWm1zmBkORUQxizMdM3xEUaS0bW8u0ymZ9pItf7JeyH817OgVtTf0ZcqXvdel3g7SxjKKrxAXtFZXE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxv5AOoKFrIx6BjPgJQeQYdfevuIi0LLVeCvGmT7GU86hwLZMmj
-	UDAD1NBLAaYqCKayQY7Wa2WDYdeKu1kyqSU2hv1L6ZFICNOOb2vAwTdfMRUHsVF6HK0YVzfAC00
-	y3Ilmkz4C1/SJIJuNobreQ4Tlnb4TVUkpr5d1RNGnyuIV059Djt9HR33AZCqoJHE=
-X-Gm-Gg: ASbGncv+39AZ1ZrImYhIQivTEWxmaL9JHGpIVklEST+TA8zNMByYCBkbkDXRN+bZnOh
-	fgZWE1HYOQLEZJ3yBQyUe7I2+q9zGeH3w4nkwFPgTUufKIWHlUAX6UJbgO1YHKwdSqQNaJbsUAW
-	186Y9P1bSdF9D1K6NkTGf36tVzEuKj/K3NeUhQvhGuCNp3ISAAVE8qCrwbPotK07n1h2sPhC1HB
-	YNwC1CRZLExWXuhMf4OfvRo/06Ryci2CZqyhVxCo8jjqWoFc8HbUXs02opdXJ3b6H55E42cv3UL
-	AccJFqOLbYf34x1lMrBigkk1NwCRGLTX8PHCovoa8bzCdSuhVASlhTN0gdA9z49GmiQ3uDDn3Vm
-	JSy74Y80zB3jMZ2u0EqAR5pwp7TKGj6r4LM9Lhz2q9lRg/CzsXllWJecz2CjbMOgmAqOSJEo=
-X-Received: by 2002:a05:6000:1888:b0:42b:3ace:63c6 with SMTP id ffacd0b85a97d-42cc1cbcdfcmr1795892f8f.16.1763719939483;
-        Fri, 21 Nov 2025 02:12:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGQwvNnN1+6xkIr+bJK+olrvC0Z5OYdiF1L0OBTcrYbQMUdl7o+C2/hye3fKlSOf/cE5aQ8Qw==
-X-Received: by 2002:a05:6000:1888:b0:42b:3ace:63c6 with SMTP id ffacd0b85a97d-42cc1cbcdfcmr1795834f8f.16.1763719938945;
-        Fri, 21 Nov 2025 02:12:18 -0800 (PST)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-135-146.abo.bbox.fr. [213.44.135.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7f2e432sm9799426f8f.9.2025.11.21.02.12.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Nov 2025 02:12:18 -0800 (PST)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Andy Lutomirski <luto@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, linux-mm@kvack.org, rcu@vger.kernel.org,
- the arch/x86 maintainers <x86@kernel.org>,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Peter Zijlstra (Intel)"
- <peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Josh
- Poimboeuf <jpoimboe@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Arnd
- Bergmann <arnd@arndb.de>, Frederic Weisbecker <frederic@kernel.org>, "Paul
- E. McKenney" <paulmck@kernel.org>, Jason Baron <jbaron@akamai.com>, Steven
- Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Sami
- Tolvanen <samitolvanen@google.com>, "David S. Miller"
- <davem@davemloft.net>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel
- Fernandes <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>,
- Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mel Gorman
- <mgorman@suse.de>, Andrew Morton <akpm@linux-foundation.org>, Masahiro
- Yamada <masahiroy@kernel.org>, Han Shen <shenhan@google.com>, Rik van Riel
- <riel@surriel.com>, Jann Horn <jannh@google.com>, Dan Carpenter
- <dan.carpenter@linaro.org>, Oleg Nesterov <oleg@redhat.com>, Juri Lelli
- <juri.lelli@redhat.com>, Clark Williams <williams@redhat.com>, Yair
- Podemsky <ypodemsk@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>,
- Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
- Shrikanth Hegde <sshegde@linux.ibm.com>
-Subject: Re: [RFC PATCH v7 29/31] x86/mm/pti: Implement a TLB flush
- immediately after a switch to kernel CR3
-In-Reply-To: <91702ceb-afba-450e-819b-52d482d7bd11@app.fastmail.com>
-References: <20251114150133.1056710-1-vschneid@redhat.com>
- <20251114151428.1064524-9-vschneid@redhat.com>
- <65ae9404-5d7d-42a3-969e-7e2ceb56c433@app.fastmail.com>
- <xhsmhecpukowa.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <91702ceb-afba-450e-819b-52d482d7bd11@app.fastmail.com>
-Date: Fri, 21 Nov 2025 11:12:16 +0100
-Message-ID: <xhsmh8qfzu22n.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+        d=1e100.net; s=20230601; t=1763722765; x=1764327565;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3as/zwL6Z/tKLwDg8ef9gV3qAR4w2mHg/QSKe+6aQPM=;
+        b=riLMIM5un0sd4PFXlDw1JS3E469ZrBRUDltEjIYKBhopREUZyRIAztfucr0egiusNU
+         G9qXUX7nDO2HP3MCYSmCEblq8pA0mumvFXr2EbM2cmORWfeDY0tHLxDIAOjnnLoNtxO4
+         bdKyCycWc6KP4GgcI0q5CInaFyRMce64p71Ygc0kuXOIveHEFVU629UVCMYvn9cec73P
+         Koz5scT/JGHYlm2ixzzUaiimgbZuLSfleg1ClVJQE9ncjNnbk0EnAfWhS3wx8byQbR2O
+         +QGBILNRWfNQvGpu+VQgkQVLy7mFrWXbHR0PZV6cPXBGZh4THipG9Rl+WHObF2+afRV+
+         I4kA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZNe04MbPHCDjwqO6P1wGa3B+bYosv/p9oV+dGEFtjU/TAnnAP9lHgnEj67tc4FtkPxeFUuyCtUgBK@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNBZh3B/8P9Hp1YJxLlWnWYAIk1YF5EHBc7aScOVBcDRwLcLnq
+	sZsUXDkBYiBDWC6EiBUxPMeIwzPLEQmfDi0JZq1z9f+lYYUbBKm8RI38cA1dgsTNSCazy/sFz8f
+	2gmTrY36iOexCb+ZCc/DG/FDHKtaopDqj5eYCj8pQ
+X-Gm-Gg: ASbGncuTHeTQknqf603xgw7+aWAz88TRnHqTTPCC+X8vlqDseumzeg4Z3ieJOEW1DWf
+	qtbPQVSEkRsI7lEw5D0kqw6jlTQcMZDNuIwXZqp+ABO8TuSrnMHw+DW6FbkOJ1ceWBtaV8AKG0O
+	Akw6JOjEiiv00NPwRpwOeg36tOaw6fp6K6XS+LFFgFBRkc/n49c0wYtRj1NG3JD0Zg8Gwudc5Ka
+	1TjIrxZt5H8JMeohMMy8xwOnrbHtL82ovWWsCQXxMCc4PNwPR/k23qzqqV9j4JBBKrMkCnh
+X-Google-Smtp-Source: AGHT+IFqoz0PdegFx77o5Cbkb7zdB4EKmBVSIafDlI+XYBOkjjJ2/Vh8/jJp8UHl+laKuG8FludapTDQWp3scNARbI4=
+X-Received: by 2002:a05:622a:1444:b0:4e5:7827:f4b9 with SMTP id
+ d75a77b69052e-4ee586c69bfmr3215551cf.3.1763722765259; Fri, 21 Nov 2025
+ 02:59:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20251116182839.939139-1-lrizzo@google.com> <20251116182839.939139-4-lrizzo@google.com>
+ <87seec78yf.ffs@tglx> <87bjl06yij.ffs@tglx> <CAMOZA0+rA-ys1JSb=GxpPEFS7W8TJGz23gSuUWi0Kv7TX2FfSg@mail.gmail.com>
+ <878qg37n8p.ffs@tglx> <CAMOZA0+K73YbPqq_vTS2sMkbV-0Fh5GSCt3ABfReV3DYk1CO2g@mail.gmail.com>
+ <87pl9fmhe5.ffs@tglx> <CAMOZA0JXv1ERyGOJ8fmwefnc6XKbGGy-E4p_d+BFr6KPzoOUZw@mail.gmail.com>
+ <CAMOZA0Jj=BYXx1QYxFQRbtmFYfZeQBySqDS6n1skHFEYD=1EZQ@mail.gmail.com> <877bvmm6b2.ffs@tglx>
+In-Reply-To: <877bvmm6b2.ffs@tglx>
+From: Luigi Rizzo <lrizzo@google.com>
+Date: Fri, 21 Nov 2025 11:58:49 +0100
+X-Gm-Features: AWmQ_blC1WCpoDfGTonFYEeoFgQ2Ff1JVpgDStnQRBuJsy0QFzUoIFm-mwN1dr0
+Message-ID: <CAMOZA0L3+ohfgNfDr50-rcNNnssK0q8Snde8FrWnfn8YcWH=Ew@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] genirq: soft_moderation: implement fixed moderation
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>, Luigi Rizzo <rizzo.unipi@gmail.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Sean Christopherson <seanjc@google.com>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, 
+	Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 19/11/25 09:31, Andy Lutomirski wrote:
-> Let's consider what we're worried about:
+On Wed, Nov 19, 2025 at 3:43=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
 >
-> 1. Architectural access to a kernel virtual address that has been unmapped, in asm or early C.  If it hasn't been remapped, then we oops anyway.  If it has, then that means we're accessing a pointer where either the pointer has changed or the pointee has been remapped while we're in user mode, and that's a very strange thing to do for anything that the asm points to or that early C points to, unless RCU is involved.  But RCU is already disallowed in the entry paths that might be in extended quiescent states, so I think this is mostly a nonissue.
+...
 >
-> 2. Non-speculative access via GDT access, etc.  We can't control this at all, but we're not avoid to move the GDT, IDT, LDT etc of a running task while that task is in user mode.  We do move the LDT, but that's quite thoroughly synchronized via IPI.  (Should probably be double checked.  I wrote that code, but that doesn't mean I remember it exactly.)
+> What you really want is to define the semantics and requirements of this
+> moderation mechanism versus (no particular order):
 >
-> 3. Speculative TLB fills.  We can't control this at all.  We have had actual machine checks, on AMD IIRC, due to messing this up.  This is why we can't defer a flush after freeing a page table.
+>     1) The existing semantics of handle_edge_irq() and
+>        handle_fasteoi_irq(), which need to be guaranteed.
 >
-> 4. Speculative or other nonarchitectural loads.  One would hope that these are not dangerous.  For example, an early version of TDX would machine check if we did a speculative load from TDX memory, but that was fixed.  I don't see why this would be materially different between actual userspace execution (without LASS, anyway), kernel asm, and kernel C.
+>        That's one of the most crucial points because edge type
+>        interrupts have fire and forget semantics on the device side and
+>        there is no guarantee that the device will send another one in
+>        time. People including me wasted tons of time to decode such
+>        problems in the past.
 >
-> 5. Writes to page table dirty bits.  I don't think we use these.
+>     2) The existing semantics of disable/enable_irq(), irq_shutdown(),
+>        synchronize_irq(), which need to be preserved.
 >
-> In any case, the current implementation in your series is really, really,
-> utterly horrifically slow.
-
-Quite so :-)
-
-> It's probably fine for a task that genuinely sits in usermode forever,
-> but I don't think it's likely to be something that we'd be willing to
-> enable for normal kernels and normal tasks.  And it would be really nice
-> for the don't-interrupt-user-code still to move toward being always
-> available rather than further from it.
+>     3) Teardown of an interrupt, which also relates to shutdown and
+>        synchronizing.
 >
-
-Well following Frederic's suggestion of using the "is NOHZ_FULL actually in
-use" static key in the ASM bits, none of the ugly bits get involved unless
-you do have 'nohz_full=' on the cmdline - not perfect, but it's something.
-
-RHEL kernels ship with NO_HZ_FULL=y [1], so we do care about that not impacting
-performance too much if it's just compiled-in and not actually used.
-
-[1]: https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-10/-/blob/main/redhat/configs/common/generic/CONFIG_NO_HZ_FULL
+>     4) Interrupts coming in while in moderated state and "masked". That
+>        can be spurious interrupts or happen due to unmasking by
+>        management code, e.g. enable_irq().
 >
-> I admit that I'm kind of with dhansen: Zen 3+ can use INVLPGB and doesn't
-> need any of this.  Some Intel CPUs support RAR and will eventually be
-> able to use RAR, possibly even for sync_core().
+>     5) CPU hotunplug. Define the exact point where the list has to be
+>        cleaned out and the timer canceled and it's guaranteed that
+>        there can't be interrupts added back to the moderation list.
+>
+>     6) Affinity changes. Are there any implications when the descriptor
+>        is enqueued on the old target and waiting for the timer to unmask
+>        it? That assumes that CPU hotunplug related affinity changes are
+>        not affected because those interrupts are guaranteed not to be
+>        moderated.
+>
+>     7) Suspend/resume. That needs some deep analysis of the potential
+>        state space.
+>
+>     8) Eligibility beyond edge, single target, etc. That might need
+>        actual opt-in support from the interrupt chip hierarchy as
+>        otherwise this is going to end up in a continous stream of
+>        undecodable bug reports, which others have to deal with :(
+>        See my remark vs. unmaskable MSI above.
+>
+> Once you figured all of that out, it becomes pretty clear how the
+> implementation has to look like and you can start building it up piece
+> wise by doing the necessary refactoring and preparatory changes first so
+> that the actual functionality falls into place at the end.
+>
+> If you start the other way round by glueing the functionality somewhere
+> into interrupt handling first and then trying to address the resulting
+> fallout, you'll get nowhere. Trust me that a lot of smart people have
+> failed that way.
+>
+> That said, I'm happy to answer _informed_ questions about semantics,
+> rules and requirements if they are not obvious from the code.
 
-Yeah that INVLPGB thing looks really nice, and AFAICT arm64 is similarly
-covered with TLBI VMALLE1IS.
+Addressing your bullets above here is the design,
+if you have time let me know what you think,
 
-My goal here is to poke around and find out what's the minimal amount of
-ugly we can get away with to suppress those IPIs on existing fleets, but
-there's still too much ugly :/
+BASIC MECHANISM
+The basic control mechanism changes interrupt state as follows:
 
+- for moderated interrupts, call __disable_irq(desc) and put the desc
+  in a per-CPU list with IRQD_IRQ_INPROGRESS set.
+  Set the _IRQ_DISABLE_UNLAZY status flag so disable will also
+  mask the interrupt (it works even without that, but experiments
+  with greedy NVME devices show clear benefits).
+
+  NOTE: we need to patch irq_can_handle_pm() so it will return false
+  on irqdesc that are in a moderation list, otherwise we have
+  a deadlock when an interrupt (generated before the mask) comes in.
+
+- when the moderation timer fires, remove the irqdesc from the list,
+  clear IRQD_IRQ_INPROGRESS and call __enable_irq(desc).
+
+RATIONALE:
+- why disable/enable instead of mask/unmask:
+  disable/enable already supports call from different layers
+  (infrastructure and interrupt handlers), blocks stray interrupts,
+  and reissues pending events on enable. If I were to use mask/unmask
+  directly, I would have to replicate most of the disable logic and risk
+  introducing subtle bugs.
+
+  Setting _IRQ_DISABLE_UNLAZY makes the mask immediate, which based on
+  tests (greedy NVME devices) seems beneficial.
+
+- why IRQD_IRQ_INPROGRESS instead of using another flag:
+  IRQD_IRQ_INPROGRESS seems the way to implement synchronization with
+  infrastructure events (shutdown etc.). We can argue that when an
+  irqdesc is in the timer list it is not "inprogress" and could be
+  preempted (with huge pain, as it could be on a different CPU),
+  but for practical purposes most of the actions that block on INPROGRESS
+  should also wait for the irqdesc to come off the timer list.
+
+- what about spurious interrupts:
+  there is no way to block a device from sending them one after another,
+  so using the existing protection (don't call the handler if disabled)
+  seems the easiest way to deal with them.
+
+HANDLING OF VARIOUS EVENTS:
+
+INTERRUPT TEARDOWN
+  free_irq() uses synchronize_irq() before proceeding, which waits until
+  IRQD_IRQ_INPROGRESS is clear. This guarantees that a moderated interrupt
+  will not be destroyed while it is on the timer list.
+
+INTERRUPT MIGRATION
+  Migration changes the affinity mask, but it takes effect only when
+  trying to run the handler. That too is prevented by IRQD_IRQ_INPROGRESS
+  being set, so the new CPU will be used only after the interrupt exits
+  the timer list.
+
+HOTPLUG
+  During shutdown the system moves timers and reassigns interrupt affinity
+  to a new CPU. The easiest way to guarantee that pending events are
+  handled correctly is to use a per-CPU "moderation_on" flag managed as
+  follows by hotplug callbacks on CPUHP_ONLINE (or nearby)
+
+  - on setup, set the flag. Only now interrupts can be moderated.
+  - on shutdown, with interrupts disabled, clear the flag thus preventing
+    more interrupts to be moderated on that CPU; process the list of modera=
+ted
+    interrupts (as if the timer had fired), and cancel the timer.
+
+  This avoids depending on a specific state: no moderation before fully
+  online, and cleanup before any teardown may interfere with moderation
+  timers.
+
+
+SUSPEND
+  The hotplug callbacks are also invoked during deep suspend so that
+makes it safe.
+
+BOOT PROCESSOR
+  Hotplug callbacks are not invoked for the boot processor. However the
+  boot processor is the last one to go, and since there is no other place
+  to run the timer callbacks, they will be run where they are supposed to.
+
+---
+cheers
+luigi
 
