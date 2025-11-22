@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-15044-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15045-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB020C7C68F
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DF4DC7C69E
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:42:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D02AA34E8AB
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:40:55 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A2BBB350567
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:41:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7C425334B;
-	Sat, 22 Nov 2025 04:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0D6925334B;
+	Sat, 22 Nov 2025 04:41:25 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18F223A58B;
-	Sat, 22 Nov 2025 04:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B4F1B4244;
+	Sat, 22 Nov 2025 04:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763786451; cv=none; b=G96O1oEhSMQluWelF9Gfd/8vbcnKUwfa9xsNlPOslrSpNz4atUn3VRo2NNnvf5NTM+LpeWu3TkTwn0i0ASLLP9FEOB5bzTDn2EfXeAIVhhmI7+HrmgW4+miaTDQ7Z6KKXtBs6U8lxzN6NWg8ftzGMAK2nUf0zyVUkb7mB4j8Sz4=
+	t=1763786485; cv=none; b=ShxNaRPsfIanuooZE8w8wFzMjCDxboC8Mw0GraqeNthh2UiyrifXCjXmy2XsUs8eYAp2EQ8Cov+nGDPmUFnS05j+8+eE1F3ZnBlMB1fhnv68bS8d8Lfi1xxinqQobOu6JSaWyT0YVw/2IodGyCuLxSQw2dOyaRpvAEWpZ/5BSR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763786451; c=relaxed/simple;
-	bh=o9qF1skZzzh/Vu0bNKiK4qbazRnAbN1q6TucGfD/FsA=;
+	s=arc-20240116; t=1763786485; c=relaxed/simple;
+	bh=ZWdljuUwL9qh/uCfFS2wv5ubKmxATrRkFda//e3Gx8M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yv8tPeVAUwaczfFw6UP6Np+TkGX6JA9jPrXAtNkyCA1zJii79CsSMwGN3hhqnbK88yMYntJOckdh+9OTIBpWWS4njSN++Txr5g+5xL6vUWiQClJmMgoUj8+rGZW6jOhWff5zfpbtCLq+r9l1SiSjy7hbF4lRhyk6S9SwE5PdKMg=
+	 MIME-Version; b=bRPYf/282nypib+AvXaF0TgYXYoMKa37L8NCkWcZUMxr+XBtOFIYUiaI6Hmx5KomCOTi3CGQmxK9leq+k8LwNK5TsGXJBeho1ecov9LWUT8DY49YBG8IZxs14pg4I05urHIYnJHM+/m+0foO3srRaH4ZOouZ9fx9EEv1hJlGqB8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC7CC4CEF5;
-	Sat, 22 Nov 2025 04:40:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24BDDC4CEF5;
+	Sat, 22 Nov 2025 04:41:21 +0000 (UTC)
 From: Huacai Chen <chenhuacai@loongson.cn>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Huacai Chen <chenhuacai@kernel.org>
@@ -40,9 +40,9 @@ Cc: loongarch@lists.linux.dev,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-kernel@vger.kernel.org,
 	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V3 10/14] LoongArch: Adjust user accessors for 32BIT/64BIT
-Date: Sat, 22 Nov 2025 12:36:30 +0800
-Message-ID: <20251122043634.3447854-11-chenhuacai@loongson.cn>
+Subject: [PATCH V3 11/14] LoongArch: Adjust misc routines for 32BIT/64BIT
+Date: Sat, 22 Nov 2025 12:36:31 +0800
+Message-ID: <20251122043634.3447854-12-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251122043634.3447854-1-chenhuacai@loongson.cn>
 References: <20251122043634.3447854-1-chenhuacai@loongson.cn>
@@ -54,243 +54,358 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adjust user accessors for both 32BIT and 64BIT, including: get_user(),
-put_user(), copy_user(), clear_user(), etc.
+Adjust misc routines for both 32BIT and 64BIT, including: checksum,
+jump label, unaligned access emulator, sleep/wakeup routines, etc.
 
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/uaccess.h | 63 ++++++++++++++++++++++++++--
- arch/loongarch/lib/clear_user.S      | 22 ++++++----
- arch/loongarch/lib/copy_user.S       | 28 ++++++++-----
- 3 files changed, 91 insertions(+), 22 deletions(-)
+ arch/loongarch/include/asm/checksum.h   |  4 ++
+ arch/loongarch/include/asm/jump_label.h | 12 ++++-
+ arch/loongarch/include/asm/string.h     |  2 +
+ arch/loongarch/kernel/unaligned.c       | 30 ++++++++---
+ arch/loongarch/lib/unaligned.S          | 72 ++++++++++++-------------
+ arch/loongarch/power/suspend_asm.S      | 72 ++++++++++++-------------
+ 6 files changed, 112 insertions(+), 80 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/uaccess.h b/arch/loongarch/include/asm/uaccess.h
-index 0d22991ae430..4e259d490e45 100644
---- a/arch/loongarch/include/asm/uaccess.h
-+++ b/arch/loongarch/include/asm/uaccess.h
-@@ -19,10 +19,16 @@
- #include <asm/asm-extable.h>
- #include <asm-generic/access_ok.h>
+diff --git a/arch/loongarch/include/asm/checksum.h b/arch/loongarch/include/asm/checksum.h
+index cabbf6af44c4..cc2754e0aa25 100644
+--- a/arch/loongarch/include/asm/checksum.h
++++ b/arch/loongarch/include/asm/checksum.h
+@@ -9,6 +9,8 @@
+ #include <linux/bitops.h>
+ #include <linux/in6.h>
  
-+#define __LSW	0
-+#define __MSW	1
-+
- extern u64 __ua_limit;
- 
--#define __UA_ADDR	".dword"
 +#ifdef CONFIG_64BIT
- #define __UA_LIMIT	__ua_limit
-+#else
-+#define __UA_LIMIT	0x80000000UL
++
+ #define _HAVE_ARCH_IPV6_CSUM
+ __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
+ 			const struct in6_addr *daddr,
+@@ -61,6 +63,8 @@ static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
+ extern unsigned int do_csum(const unsigned char *buff, int len);
+ #define do_csum do_csum
+ 
 +#endif
- 
- /*
-  * get_user: - Get a simple variable from user space.
-@@ -126,6 +132,7 @@ extern u64 __ua_limit;
-  *
-  * Returns zero on success, or -EFAULT on error.
-  */
 +
- #define __put_user(x, ptr) \
- ({									\
- 	int __pu_err = 0;						\
-@@ -146,7 +153,7 @@ do {									\
- 	case 1: __get_data_asm(val, "ld.b", ptr); break;		\
- 	case 2: __get_data_asm(val, "ld.h", ptr); break;		\
- 	case 4: __get_data_asm(val, "ld.w", ptr); break;		\
--	case 8: __get_data_asm(val, "ld.d", ptr); break;		\
-+	case 8: __get_data_asm_8(val, ptr); break;			\
- 	default: BUILD_BUG(); break;					\
- 	}								\
- } while (0)
-@@ -167,13 +174,39 @@ do {									\
- 	(val) = (__typeof__(*(ptr))) __gu_tmp;				\
- }
+ #include <asm-generic/checksum.h>
  
-+#ifdef CONFIG_64BIT
-+#define __get_data_asm_8(val, ptr) \
-+	__get_data_asm(val, "ld.d", ptr)
-+#else /* !CONFIG_64BIT */
-+#define __get_data_asm_8(val, ptr)					\
-+{									\
-+	u32 __lo, __hi;							\
-+	u32 __user *__ptr = (u32 __user *)(ptr);			\
-+									\
-+	__asm__ __volatile__ (						\
-+		"1:\n"							\
-+		"	ld.w %1, %3				\n"	\
-+		"2:\n"							\
-+		"	ld.w %2, %4				\n"	\
-+		"3:\n"							\
-+		_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 3b, %0, %1)		\
-+		_ASM_EXTABLE_UACCESS_ERR_ZERO(2b, 3b, %0, %1)		\
-+		: "+r" (__gu_err), "=&r" (__lo), "=r" (__hi)		\
-+		: "m" (__ptr[__LSW]), "m" (__ptr[__MSW]));		\
-+	if (__gu_err)							\
-+		__hi = 0;						\
-+	(val) = (__typeof__(val))((__typeof__((val)-(val)))		\
-+		((((u64)__hi << 32) | __lo)));				\
-+}
-+#endif /* CONFIG_64BIT */
-+
- #define __put_user_common(ptr, size)					\
- do {									\
- 	switch (size) {							\
- 	case 1: __put_data_asm("st.b", ptr); break;			\
- 	case 2: __put_data_asm("st.h", ptr); break;			\
- 	case 4: __put_data_asm("st.w", ptr); break;			\
--	case 8: __put_data_asm("st.d", ptr); break;			\
-+	case 8: __put_data_asm_8(ptr); break;				\
- 	default: BUILD_BUG(); break;					\
- 	}								\
- } while (0)
-@@ -190,6 +223,30 @@ do {									\
- 	: "Jr" (__pu_val));						\
- }
+ #endif	/* __ASM_CHECKSUM_H */
+diff --git a/arch/loongarch/include/asm/jump_label.h b/arch/loongarch/include/asm/jump_label.h
+index 4000c7603d8e..dcaecf69ea5a 100644
+--- a/arch/loongarch/include/asm/jump_label.h
++++ b/arch/loongarch/include/asm/jump_label.h
+@@ -10,15 +10,23 @@
+ #ifndef __ASSEMBLER__
  
-+#ifdef CONFIG_64BIT
-+#define __put_data_asm_8(ptr) \
-+	__put_data_asm("st.d", ptr)
-+#else /* !CONFIG_64BIT */
-+#define __put_data_asm_8(ptr)						\
-+{									\
-+	u32 __user *__ptr = (u32 __user *)(ptr);			\
-+	u64 __x = (__typeof__((__pu_val)-(__pu_val)))(__pu_val);	\
-+									\
-+	__asm__ __volatile__ (						\
-+		"1:\n"							\
-+		"	st.w %z3, %1				\n"	\
-+		"2:\n"							\
-+		"	st.w %z4, %2				\n"	\
-+		"3:\n"							\
-+		_ASM_EXTABLE_UACCESS_ERR(1b, 3b, %0)			\
-+		_ASM_EXTABLE_UACCESS_ERR(2b, 3b, %0)			\
-+		: "+r" (__pu_err),					\
-+			"=m" (__ptr[__LSW]),				\
-+			"=m" (__ptr[__MSW])				\
-+		: "rJ" (__x), "rJ" (__x >> 32));			\
-+}
-+#endif /* CONFIG_64BIT */
-+
- #define __get_kernel_nofault(dst, src, type, err_label)			\
- do {									\
- 	int __gu_err = 0;						\
-diff --git a/arch/loongarch/lib/clear_user.S b/arch/loongarch/lib/clear_user.S
-index 7a0db643b286..58c667dde882 100644
---- a/arch/loongarch/lib/clear_user.S
-+++ b/arch/loongarch/lib/clear_user.S
-@@ -13,11 +13,15 @@
- #include <asm/unwind_hints.h>
+ #include <linux/types.h>
++#include <linux/stringify.h>
++#include <asm/asm.h>
  
- SYM_FUNC_START(__clear_user)
+ #define JUMP_LABEL_NOP_SIZE	4
+ 
 +#ifdef CONFIG_32BIT
-+	b		__clear_user_generic
++#define JUMP_LABEL_TYPE		".long "
 +#else
- 	/*
- 	 * Some CPUs support hardware unaligned access
- 	 */
- 	ALTERNATIVE	"b __clear_user_generic",	\
- 			"b __clear_user_fast", CPU_FEATURE_UAL
++#define JUMP_LABEL_TYPE		".quad "
 +#endif
- SYM_FUNC_END(__clear_user)
++
+ /* This macro is also expanded on the Rust side. */
+ #define JUMP_TABLE_ENTRY(key, label)			\
+ 	 ".pushsection	__jump_table, \"aw\"	\n\t"	\
+-	 ".align	3			\n\t"	\
++	 ".align	" __stringify(PTRLOG) "	\n\t"	\
+ 	 ".long		1b - ., " label " - .	\n\t"	\
+-	 ".quad		" key " - .		\n\t"	\
++	 JUMP_LABEL_TYPE  key " - .		\n\t"	\
+ 	 ".popsection				\n\t"
  
- EXPORT_SYMBOL(__clear_user)
-@@ -29,19 +33,20 @@ EXPORT_SYMBOL(__clear_user)
-  * a1: size
+ #define ARCH_STATIC_BRANCH_ASM(key, label)		\
+diff --git a/arch/loongarch/include/asm/string.h b/arch/loongarch/include/asm/string.h
+index 5bb5a90d2681..bfa3fd879c7f 100644
+--- a/arch/loongarch/include/asm/string.h
++++ b/arch/loongarch/include/asm/string.h
+@@ -5,6 +5,7 @@
+ #ifndef _ASM_STRING_H
+ #define _ASM_STRING_H
+ 
++#ifdef CONFIG_64BIT
+ #define __HAVE_ARCH_MEMSET
+ extern void *memset(void *__s, int __c, size_t __count);
+ extern void *__memset(void *__s, int __c, size_t __count);
+@@ -16,6 +17,7 @@ extern void *__memcpy(void *__to, __const__ void *__from, size_t __n);
+ #define __HAVE_ARCH_MEMMOVE
+ extern void *memmove(void *__dest, __const__ void *__src, size_t __n);
+ extern void *__memmove(void *__dest, __const__ void *__src, size_t __n);
++#endif
+ 
+ #if defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__)
+ 
+diff --git a/arch/loongarch/kernel/unaligned.c b/arch/loongarch/kernel/unaligned.c
+index 487be604b96a..cc929c9fe7e9 100644
+--- a/arch/loongarch/kernel/unaligned.c
++++ b/arch/loongarch/kernel/unaligned.c
+@@ -27,12 +27,21 @@ static u32 unaligned_instructions_user;
+ static u32 unaligned_instructions_kernel;
+ #endif
+ 
+-static inline unsigned long read_fpr(unsigned int idx)
++static inline u64 read_fpr(unsigned int idx)
+ {
++#ifdef CONFIG_64BIT
+ #define READ_FPR(idx, __value)		\
+ 	__asm__ __volatile__("movfr2gr.d %0, $f"#idx"\n\t" : "=r"(__value));
+-
+-	unsigned long __value;
++#else
++#define READ_FPR(idx, __value)								\
++{											\
++	u32 __value_lo, __value_hi;							\
++	__asm__ __volatile__("movfr2gr.s  %0, $f"#idx"\n\t" : "=r"(__value_lo));	\
++	__asm__ __volatile__("movfrh2gr.s %0, $f"#idx"\n\t" : "=r"(__value_hi));	\
++	__value = (__value_lo | ((u64)__value_hi << 32));				\
++}
++#endif
++	u64 __value;
+ 
+ 	switch (idx) {
+ 	case 0:
+@@ -138,11 +147,20 @@ static inline unsigned long read_fpr(unsigned int idx)
+ 	return __value;
+ }
+ 
+-static inline void write_fpr(unsigned int idx, unsigned long value)
++static inline void write_fpr(unsigned int idx, u64 value)
+ {
++#ifdef CONFIG_64BIT
+ #define WRITE_FPR(idx, value)		\
+ 	__asm__ __volatile__("movgr2fr.d $f"#idx", %0\n\t" :: "r"(value));
+-
++#else
++#define WRITE_FPR(idx, value)							\
++{										\
++	u32 value_lo = value;							\
++	u32 value_hi = value >> 32;						\
++	__asm__ __volatile__("movgr2fr.w  $f"#idx", %0\n\t" :: "r"(value_lo));	\
++	__asm__ __volatile__("movgr2frh.w $f"#idx", %0\n\t" :: "r"(value_hi));	\
++}
++#endif
+ 	switch (idx) {
+ 	case 0:
+ 		WRITE_FPR(0, value);
+@@ -252,7 +270,7 @@ void emulate_load_store_insn(struct pt_regs *regs, void __user *addr, unsigned i
+ 	bool sign, write;
+ 	bool user = user_mode(regs);
+ 	unsigned int res, size = 0;
+-	unsigned long value = 0;
++	u64 value = 0;
+ 	union loongarch_instruction insn;
+ 
+ 	perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS, 1, regs, 0);
+diff --git a/arch/loongarch/lib/unaligned.S b/arch/loongarch/lib/unaligned.S
+index 185f82d85810..470c0bfa3463 100644
+--- a/arch/loongarch/lib/unaligned.S
++++ b/arch/loongarch/lib/unaligned.S
+@@ -24,35 +24,35 @@
+  * a3: sign
   */
- SYM_FUNC_START(__clear_user_generic)
--	beqz	a1, 2f
-+	beqz		a1, 2f
+ SYM_FUNC_START(unaligned_read)
+-	beqz	a2, 5f
++	beqz		a2, 5f
  
--1:	st.b	zero, a0, 0
--	addi.d	a0, a0, 1
--	addi.d	a1, a1, -1
--	bgtz	a1, 1b
-+1:	st.b		zero, a0, 0
-+	PTR_ADDI	a0, a0, 1
-+	PTR_ADDI	a1, a1, -1
-+	bgtz		a1, 1b
+-	li.w	t2, 0
+-	addi.d	t0, a2, -1
+-	slli.d	t1, t0, 3
+-	add.d 	a0, a0, t0
++	li.w		t2, 0
++	LONG_ADDI	t0, a2, -1
++	PTR_SLLI	t1, t0, LONGLOG
++	PTR_ADD		a0, a0, t0
  
--2:	move	a0, a1
+-	beqz	a3, 2f
+-1:	ld.b	t3, a0, 0
+-	b	3f
++	beqz		a3, 2f
++1:	ld.b		t3, a0, 0
++	b		3f
+ 
+-2:	ld.bu	t3, a0, 0
+-3:	sll.d	t3, t3, t1
+-	or	t2, t2, t3
+-	addi.d	t1, t1, -8
+-	addi.d	a0, a0, -1
+-	addi.d	a2, a2, -1
+-	bgtz	a2, 2b
+-4:	st.d	t2, a1, 0
++2:	ld.bu		t3, a0, 0
++3:	LONG_SLLV	t3, t3, t1
++	or		t2, t2, t3
++	LONG_ADDI	t1, t1, -8
++	PTR_ADDI	a0, a0, -1
++	PTR_ADDI	a2, a2, -1
++	bgtz		a2, 2b
++4:	LONG_S		t2, a1, 0
+ 
+-	move	a0, a2
 -	jr	ra
-+2:	move		a0, a1
++	move		a0, a2
 +	jr		ra
  
--	_asm_extable 1b, 2b
-+	_asm_extable 	1b, 2b
- SYM_FUNC_END(__clear_user_generic)
+-5:	li.w    a0, -EFAULT
+-	jr	ra
++5:	li.w		a0, -EFAULT
++	jr		ra
  
-+#ifdef CONFIG_64BIT
+-	_asm_extable 1b, .L_fixup_handle_unaligned
+-	_asm_extable 2b, .L_fixup_handle_unaligned
+-	_asm_extable 4b, .L_fixup_handle_unaligned
++	_asm_extable	1b, .L_fixup_handle_unaligned
++	_asm_extable	2b, .L_fixup_handle_unaligned
++	_asm_extable	4b, .L_fixup_handle_unaligned
+ SYM_FUNC_END(unaligned_read)
+ 
  /*
-  * unsigned long __clear_user_fast(void *addr, unsigned long size)
-  *
-@@ -207,3 +212,4 @@ SYM_FUNC_START(__clear_user_fast)
- SYM_FUNC_END(__clear_user_fast)
- 
- STACK_FRAME_NON_STANDARD __clear_user_fast
-+#endif
-diff --git a/arch/loongarch/lib/copy_user.S b/arch/loongarch/lib/copy_user.S
-index 095ce9181c6c..c7264b779f6e 100644
---- a/arch/loongarch/lib/copy_user.S
-+++ b/arch/loongarch/lib/copy_user.S
-@@ -13,11 +13,15 @@
- #include <asm/unwind_hints.h>
- 
- SYM_FUNC_START(__copy_user)
-+#ifdef CONFIG_32BIT
-+	b		__copy_user_generic
-+#else
- 	/*
- 	 * Some CPUs support hardware unaligned access
- 	 */
- 	ALTERNATIVE	"b __copy_user_generic",	\
- 			"b __copy_user_fast", CPU_FEATURE_UAL
-+#endif
- SYM_FUNC_END(__copy_user)
- 
- EXPORT_SYMBOL(__copy_user)
-@@ -30,22 +34,23 @@ EXPORT_SYMBOL(__copy_user)
+@@ -63,21 +63,21 @@ SYM_FUNC_END(unaligned_read)
   * a2: n
   */
- SYM_FUNC_START(__copy_user_generic)
+ SYM_FUNC_START(unaligned_write)
 -	beqz	a2, 3f
 +	beqz		a2, 3f
  
--1:	ld.b	t0, a1, 0
--2:	st.b	t0, a0, 0
--	addi.d	a0, a0, 1
--	addi.d	a1, a1, 1
+-	li.w	t0, 0
+-1:	srl.d	t1, a1, t0
+-2:	st.b	t1, a0, 0
+-	addi.d	t0, t0, 8
 -	addi.d	a2, a2, -1
+-	addi.d	a0, a0, 1
 -	bgtz	a2, 1b
-+1:	ld.b		t0, a1, 0
-+2:	st.b		t0, a0, 0
-+	PTR_ADDI	a0, a0, 1
-+	PTR_ADDI	a1, a1, 1
++	li.w		t0, 0
++1:	LONG_SRLV	t1, a1, t0
++2:	st.b		t1, a0, 0
++	LONG_ADDI	t0, t0, 8
 +	PTR_ADDI	a2, a2, -1
++	PTR_ADDI	a0, a0, 1
 +	bgtz		a2, 1b
  
--3:	move	a0, a2
+-	move	a0, a2
 -	jr	ra
-+3:	move		a0, a2
++	move		a0, a2
 +	jr		ra
  
--	_asm_extable 1b, 3b
--	_asm_extable 2b, 3b
-+	_asm_extable	1b, 3b
-+	_asm_extable	2b, 3b
- SYM_FUNC_END(__copy_user_generic)
+-3:	li.w    a0, -EFAULT
+-	jr	ra
++3:	li.w		a0, -EFAULT
++	jr		ra
  
-+#ifdef CONFIG_64BIT
- /*
-  * unsigned long __copy_user_fast(void *to, const void *from, unsigned long n)
-  *
-@@ -281,3 +286,4 @@ SYM_FUNC_START(__copy_user_fast)
- SYM_FUNC_END(__copy_user_fast)
+-	_asm_extable 2b, .L_fixup_handle_unaligned
++	_asm_extable	2b, .L_fixup_handle_unaligned
+ SYM_FUNC_END(unaligned_write)
+diff --git a/arch/loongarch/power/suspend_asm.S b/arch/loongarch/power/suspend_asm.S
+index df0865df26fa..c8119ad5fb2c 100644
+--- a/arch/loongarch/power/suspend_asm.S
++++ b/arch/loongarch/power/suspend_asm.S
+@@ -14,41 +14,41 @@
  
- STACK_FRAME_NON_STANDARD __copy_user_fast
-+#endif
+ /* preparatory stuff */
+ .macro	SETUP_SLEEP
+-	addi.d		sp, sp, -PT_SIZE
+-	st.d		$r1, sp, PT_R1
+-	st.d		$r2, sp, PT_R2
+-	st.d		$r3, sp, PT_R3
+-	st.d		$r4, sp, PT_R4
+-	st.d		$r21, sp, PT_R21
+-	st.d		$r22, sp, PT_R22
+-	st.d		$r23, sp, PT_R23
+-	st.d		$r24, sp, PT_R24
+-	st.d		$r25, sp, PT_R25
+-	st.d		$r26, sp, PT_R26
+-	st.d		$r27, sp, PT_R27
+-	st.d		$r28, sp, PT_R28
+-	st.d		$r29, sp, PT_R29
+-	st.d		$r30, sp, PT_R30
+-	st.d		$r31, sp, PT_R31
++	PTR_ADDI	sp, sp, -PT_SIZE
++	REG_S		$r1, sp, PT_R1
++	REG_S		$r2, sp, PT_R2
++	REG_S		$r3, sp, PT_R3
++	REG_S		$r4, sp, PT_R4
++	REG_S		$r21, sp, PT_R21
++	REG_S		$r22, sp, PT_R22
++	REG_S		$r23, sp, PT_R23
++	REG_S		$r24, sp, PT_R24
++	REG_S		$r25, sp, PT_R25
++	REG_S		$r26, sp, PT_R26
++	REG_S		$r27, sp, PT_R27
++	REG_S		$r28, sp, PT_R28
++	REG_S		$r29, sp, PT_R29
++	REG_S		$r30, sp, PT_R30
++	REG_S		$r31, sp, PT_R31
+ .endm
+ 
+ .macro SETUP_WAKEUP
+-	ld.d		$r1, sp, PT_R1
+-	ld.d		$r2, sp, PT_R2
+-	ld.d		$r3, sp, PT_R3
+-	ld.d		$r4, sp, PT_R4
+-	ld.d		$r21, sp, PT_R21
+-	ld.d		$r22, sp, PT_R22
+-	ld.d		$r23, sp, PT_R23
+-	ld.d		$r24, sp, PT_R24
+-	ld.d		$r25, sp, PT_R25
+-	ld.d		$r26, sp, PT_R26
+-	ld.d		$r27, sp, PT_R27
+-	ld.d		$r28, sp, PT_R28
+-	ld.d		$r29, sp, PT_R29
+-	ld.d		$r30, sp, PT_R30
+-	ld.d		$r31, sp, PT_R31
+-	addi.d		sp, sp, PT_SIZE
++	REG_L		$r1, sp, PT_R1
++	REG_L		$r2, sp, PT_R2
++	REG_L		$r3, sp, PT_R3
++	REG_L		$r4, sp, PT_R4
++	REG_L		$r21, sp, PT_R21
++	REG_L		$r22, sp, PT_R22
++	REG_L		$r23, sp, PT_R23
++	REG_L		$r24, sp, PT_R24
++	REG_L		$r25, sp, PT_R25
++	REG_L		$r26, sp, PT_R26
++	REG_L		$r27, sp, PT_R27
++	REG_L		$r28, sp, PT_R28
++	REG_L		$r29, sp, PT_R29
++	REG_L		$r30, sp, PT_R30
++	REG_L		$r31, sp, PT_R31
++	PTR_ADDI	sp, sp, PT_SIZE
+ .endm
+ 
+ 	.text
+@@ -59,15 +59,15 @@ SYM_FUNC_START(loongarch_suspend_enter)
+ 	SETUP_SLEEP
+ 
+ 	la.pcrel	t0, acpi_saved_sp
+-	st.d		sp, t0, 0
++	REG_S		sp, t0, 0
+ 
+ 	bl		__flush_cache_all
+ 
+ 	/* Pass RA and SP to BIOS */
+-	addi.d		a1, sp, 0
++	PTR_ADDI	a1, sp, 0
+ 	la.pcrel	a0, loongarch_wakeup_start
+ 	la.pcrel	t0, loongarch_suspend_addr
+-	ld.d		t0, t0, 0
++	REG_L		t0, t0, 0
+ 	jirl		ra, t0, 0 /* Call BIOS's STR sleep routine */
+ 
+ 	/*
+@@ -83,7 +83,7 @@ SYM_INNER_LABEL(loongarch_wakeup_start, SYM_L_GLOBAL)
+ 	csrwr		t0, LOONGARCH_CSR_CRMD
+ 
+ 	la.pcrel	t0, acpi_saved_sp
+-	ld.d		sp, t0, 0
++	REG_L		sp, t0, 0
+ 
+ 	SETUP_WAKEUP
+ 	jr		ra
 -- 
 2.47.3
 
