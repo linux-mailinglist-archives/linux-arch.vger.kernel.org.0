@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-15037-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15038-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 551D6C7C638
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:38:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3866EC7C63E
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:38:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1C4C3A186B
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:38:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D06073A6512
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:38:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C3C1F130B;
-	Sat, 22 Nov 2025 04:38:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC856227E83;
+	Sat, 22 Nov 2025 04:38:21 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265911B4244;
-	Sat, 22 Nov 2025 04:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBEB91E492D;
+	Sat, 22 Nov 2025 04:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763786280; cv=none; b=BC4hDTRZs6nZTi3G1VgI6ynZpbnD0KWTxC9MeVkcWIxyuHguyaAUbKsbrS03rTOz9I87/5uAU7GOLTZCvZpedZRY9CAOcpMVROnO3NtWwJv5Aq7KyJDFYoul43ipirxOk/VVrgb4g/HSj9i67vXSEuDZqFuxChM8LijFK27TQ+I=
+	t=1763786301; cv=none; b=X6DWcfZONBrBuhDpxFQPNMorZY5ODKAxbrv/wnYua0OXGUHGzk3l/5pjNGld4l50/0Zj+MXbVI5M2mNXpujbxoqm6xD0s46yzkYKQH+3CmEncPpdy7f5/3a4AygPZi3tukf5yAhYiJAa7NLaGf0w5xrqm4PaEam9BnQW2fCuHD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763786280; c=relaxed/simple;
-	bh=0ipcE2TnloIliQQo1lais9sCjwyI/Z09Y6UUSKm68sE=;
+	s=arc-20240116; t=1763786301; c=relaxed/simple;
+	bh=yVLLkfvBK6ET3pf+Fx3YeXZbfPRJbowKmrNyCD1j6YA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iaPVjr00jBKjUb8JXaPrJGLtoLmSHmsdYZsCBwHcpTZ3JmGrcrrsXMgDPtNGrwn7gRlAlOgij3KRwgWrEmJAXjW7WkbnUt/aug1O1rQE5M29JGbg73cpOVgvmDMltEq55DR0GWy0RASA56eQMz2Ios6ZO8czFX0gCXYmo8EeNQY=
+	 MIME-Version; b=O9mYyRkkuhLH9n6o0V6nOxkK9HEi78G5cbXSrDAWr/tG1aq3OB9YnwNl+pHD6lGh/c8vP3TVh5c6hI1PCLZWJjw9ZYX9FjKNr/GeOcl6TZG6sMUlnlJLbF1CAU+BtTR9Kb1qAEOj4WvzgzjakyHhrQrkG6mcbN4oTv3MW5HQ9MM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00152C4CEF5;
-	Sat, 22 Nov 2025 04:37:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03590C4CEF5;
+	Sat, 22 Nov 2025 04:38:18 +0000 (UTC)
 From: Huacai Chen <chenhuacai@loongson.cn>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Huacai Chen <chenhuacai@kernel.org>
@@ -40,9 +40,9 @@ Cc: loongarch@lists.linux.dev,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-kernel@vger.kernel.org,
 	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V3 03/14] LoongArch: Adjust common macro definitions for 32BIT/64BIT
-Date: Sat, 22 Nov 2025 12:36:23 +0800
-Message-ID: <20251122043634.3447854-4-chenhuacai@loongson.cn>
+Subject: [PATCH V3 04/14] LoongArch: Adjust boot & setup for 32BIT/64BIT
+Date: Sat, 22 Nov 2025 12:36:24 +0800
+Message-ID: <20251122043634.3447854-5-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251122043634.3447854-1-chenhuacai@loongson.cn>
 References: <20251122043634.3447854-1-chenhuacai@loongson.cn>
@@ -54,428 +54,215 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Most common macros are defined in asm.h, asmmacro.h and stackframe.h.
-Adjust these macros for both 32BIT and 64BIT.
+Adjust boot & setup for both 32BIT and 64BIT, including: efi header
+definition, MAX_IO_PICS definition, kernel entry and environment setup
+routines, etc.
 
-Add SETUP_TWINS (Setup Trampoline Windows) and SETUP_MODES (Setup CRMD/
-PRMD/EUEN) which will be used later.
+Add a fallback path in fdt_cpu_clk_init() to avoid 0MHz in /proc/cpuinfo
+if there is no valid clock freq from firmware.
 
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/asm.h        |  77 ++++++++++++----
- arch/loongarch/include/asm/asmmacro.h   | 117 ++++++++++++++++++------
- arch/loongarch/include/asm/stackframe.h |  34 +++++--
- 3 files changed, 173 insertions(+), 55 deletions(-)
+ arch/loongarch/include/asm/addrspace.h |  2 +-
+ arch/loongarch/include/asm/irq.h       |  5 ++++
+ arch/loongarch/kernel/efi-header.S     |  4 +++
+ arch/loongarch/kernel/efi.c            |  4 ++-
+ arch/loongarch/kernel/env.c            |  5 +++-
+ arch/loongarch/kernel/head.S           | 39 +++++++++++---------------
+ arch/loongarch/kernel/relocate.c       |  9 +++++-
+ 7 files changed, 42 insertions(+), 26 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/asm.h b/arch/loongarch/include/asm/asm.h
-index f018d26fc995..719cab1a0ad8 100644
---- a/arch/loongarch/include/asm/asm.h
-+++ b/arch/loongarch/include/asm/asm.h
-@@ -72,11 +72,11 @@
- #define INT_SUB		sub.w
- #define INT_L		ld.w
- #define INT_S		st.w
--#define INT_SLL		slli.w
-+#define INT_SLLI	slli.w
- #define INT_SLLV	sll.w
--#define INT_SRL		srli.w
-+#define INT_SRLI	srli.w
- #define INT_SRLV	srl.w
--#define INT_SRA		srai.w
-+#define INT_SRAI	srai.w
- #define INT_SRAV	sra.w
+diff --git a/arch/loongarch/include/asm/addrspace.h b/arch/loongarch/include/asm/addrspace.h
+index e739dbc6329d..9766a100504a 100644
+--- a/arch/loongarch/include/asm/addrspace.h
++++ b/arch/loongarch/include/asm/addrspace.h
+@@ -42,7 +42,7 @@ extern unsigned long vm_map_base;
  #endif
  
-@@ -86,11 +86,11 @@
- #define INT_SUB		sub.d
- #define INT_L		ld.d
- #define INT_S		st.d
--#define INT_SLL		slli.d
-+#define INT_SLLI	slli.d
- #define INT_SLLV	sll.d
--#define INT_SRL		srli.d
-+#define INT_SRLI	srli.d
- #define INT_SRLV	srl.d
--#define INT_SRA		srai.d
-+#define INT_SRAI	srai.d
- #define INT_SRAV	sra.d
- #endif
+ #define DMW_PABITS	48
+-#define TO_PHYS_MASK	((1ULL << DMW_PABITS) - 1)
++#define TO_PHYS_MASK	((_ULL(1) << _ULL(DMW_PABITS)) - 1)
  
-@@ -100,15 +100,23 @@
- #if (__SIZEOF_LONG__ == 4)
- #define LONG_ADD	add.w
- #define LONG_ADDI	addi.w
-+#define LONG_ALSL	alsl.w
-+#define LONG_BSTRINS	bstrins.w
-+#define LONG_BSTRPICK	bstrpick.w
- #define LONG_SUB	sub.w
- #define LONG_L		ld.w
-+#define LONG_LI		li.w
-+#define LONG_LPTR	ld.w
- #define LONG_S		st.w
--#define LONG_SLL	slli.w
-+#define LONG_SPTR	st.w
-+#define LONG_SLLI	slli.w
- #define LONG_SLLV	sll.w
--#define LONG_SRL	srli.w
-+#define LONG_SRLI	srli.w
- #define LONG_SRLV	srl.w
--#define LONG_SRA	srai.w
-+#define LONG_SRAI	srai.w
- #define LONG_SRAV	sra.w
-+#define LONG_ROTR	rotr.w
-+#define LONG_ROTRI	rotri.w
+ /*
+  * Memory above this physical address will be considered highmem.
+diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
+index 12bd15578c33..cf6c82a9117b 100644
+--- a/arch/loongarch/include/asm/irq.h
++++ b/arch/loongarch/include/asm/irq.h
+@@ -53,7 +53,12 @@ void spurious_interrupt(void);
+ #define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
+ void arch_trigger_cpumask_backtrace(const struct cpumask *mask, int exclude_cpu);
  
- #ifdef __ASSEMBLER__
- #define LONG		.word
-@@ -121,15 +129,23 @@
- #if (__SIZEOF_LONG__ == 8)
- #define LONG_ADD	add.d
- #define LONG_ADDI	addi.d
-+#define LONG_ALSL	alsl.d
-+#define LONG_BSTRINS	bstrins.d
-+#define LONG_BSTRPICK	bstrpick.d
- #define LONG_SUB	sub.d
- #define LONG_L		ld.d
-+#define LONG_LI		li.d
-+#define LONG_LPTR	ldptr.d
- #define LONG_S		st.d
--#define LONG_SLL	slli.d
-+#define LONG_SPTR	stptr.d
-+#define LONG_SLLI	slli.d
- #define LONG_SLLV	sll.d
--#define LONG_SRL	srli.d
-+#define LONG_SRLI	srli.d
- #define LONG_SRLV	srl.d
--#define LONG_SRA	srai.d
-+#define LONG_SRAI	srai.d
- #define LONG_SRAV	sra.d
-+#define LONG_ROTR	rotr.d
-+#define LONG_ROTRI	rotri.d
- 
- #ifdef __ASSEMBLER__
- #define LONG		.dword
-@@ -145,16 +161,23 @@
- #if (__SIZEOF_POINTER__ == 4)
- #define PTR_ADD		add.w
- #define PTR_ADDI	addi.w
-+#define PTR_ALSL	alsl.w
-+#define PTR_BSTRINS	bstrins.w
-+#define PTR_BSTRPICK	bstrpick.w
- #define PTR_SUB		sub.w
- #define PTR_L		ld.w
--#define PTR_S		st.w
- #define PTR_LI		li.w
--#define PTR_SLL		slli.w
-+#define PTR_LPTR	ld.w
-+#define PTR_S		st.w
-+#define PTR_SPTR	st.w
-+#define PTR_SLLI	slli.w
- #define PTR_SLLV	sll.w
--#define PTR_SRL		srli.w
-+#define PTR_SRLI	srli.w
- #define PTR_SRLV	srl.w
--#define PTR_SRA		srai.w
-+#define PTR_SRAI	srai.w
- #define PTR_SRAV	sra.w
-+#define PTR_ROTR	rotr.w
-+#define PTR_ROTRI	rotri.w
- 
- #define PTR_SCALESHIFT	2
- 
-@@ -168,16 +191,23 @@
- #if (__SIZEOF_POINTER__ == 8)
- #define PTR_ADD		add.d
- #define PTR_ADDI	addi.d
-+#define PTR_ALSL	alsl.d
-+#define PTR_BSTRINS	bstrins.d
-+#define PTR_BSTRPICK	bstrpick.d
- #define PTR_SUB		sub.d
- #define PTR_L		ld.d
--#define PTR_S		st.d
- #define PTR_LI		li.d
--#define PTR_SLL		slli.d
-+#define PTR_LPTR	ldptr.d
-+#define PTR_S		st.d
-+#define PTR_SPTR	stptr.d
-+#define PTR_SLLI	slli.d
- #define PTR_SLLV	sll.d
--#define PTR_SRL		srli.d
-+#define PTR_SRLI	srli.d
- #define PTR_SRLV	srl.d
--#define PTR_SRA		srai.d
-+#define PTR_SRAI	srai.d
- #define PTR_SRAV	sra.d
-+#define PTR_ROTR	rotr.d
-+#define PTR_ROTRI	rotri.d
- 
- #define PTR_SCALESHIFT	3
- 
-@@ -190,10 +220,17 @@
- 
- /* Annotate a function as being unsuitable for kprobes. */
- #ifdef CONFIG_KPROBES
 +#ifdef CONFIG_32BIT
-+#define _ASM_NOKPROBE(name)				\
-+	.pushsection "_kprobe_blacklist", "aw";		\
-+	.long	name;					\
-+	.popsection
++#define MAX_IO_PICS 1
 +#else
- #define _ASM_NOKPROBE(name)				\
- 	.pushsection "_kprobe_blacklist", "aw";		\
- 	.quad	name;					\
- 	.popsection
+ #define MAX_IO_PICS 8
 +#endif
- #else
- #define _ASM_NOKPROBE(name)
++
+ #define NR_IRQS	(64 + NR_VECTORS * (NR_CPUS + MAX_IO_PICS))
+ 
+ struct acpi_vector_group {
+diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/efi-header.S
+index ba0bdbf86aa8..6df56241cb95 100644
+--- a/arch/loongarch/kernel/efi-header.S
++++ b/arch/loongarch/kernel/efi-header.S
+@@ -9,7 +9,11 @@
+ 	.macro	__EFI_PE_HEADER
+ 	.long	IMAGE_NT_SIGNATURE
+ .Lcoff_header:
++#ifdef CONFIG_32BIT
++	.short	IMAGE_FILE_MACHINE_LOONGARCH32		/* Machine */
++#else
+ 	.short	IMAGE_FILE_MACHINE_LOONGARCH64		/* Machine */
++#endif
+ 	.short	.Lsection_count				/* NumberOfSections */
+ 	.long	0 					/* TimeDateStamp */
+ 	.long	0					/* PointerToSymbolTable */
+diff --git a/arch/loongarch/kernel/efi.c b/arch/loongarch/kernel/efi.c
+index 860a3bc030e0..52c21c895318 100644
+--- a/arch/loongarch/kernel/efi.c
++++ b/arch/loongarch/kernel/efi.c
+@@ -115,7 +115,9 @@ void __init efi_init(void)
+ 
+ 	efi_systab_report_header(&efi_systab->hdr, efi_systab->fw_vendor);
+ 
+-	set_bit(EFI_64BIT, &efi.flags);
++	if (IS_ENABLED(CONFIG_64BIT))
++		set_bit(EFI_64BIT, &efi.flags);
++
+ 	efi_nr_tables	 = efi_systab->nr_tables;
+ 	efi_config_table = (unsigned long)efi_systab->tables;
+ 
+diff --git a/arch/loongarch/kernel/env.c b/arch/loongarch/kernel/env.c
+index 23bd5ae2212c..841206fde3ab 100644
+--- a/arch/loongarch/kernel/env.c
++++ b/arch/loongarch/kernel/env.c
+@@ -72,9 +72,12 @@ static int __init fdt_cpu_clk_init(void)
+ 
+ 	clk = of_clk_get(np, 0);
+ 	of_node_put(np);
++	cpu_clock_freq = 200 * 1000 * 1000;
+ 
+-	if (IS_ERR(clk))
++	if (IS_ERR(clk)) {
++		pr_warn("No valid CPU clock freq, assume 200MHz.\n");
+ 		return -ENODEV;
++	}
+ 
+ 	cpu_clock_freq = clk_get_rate(clk);
+ 	clk_put(clk);
+diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+index e3865e92a917..aba548db2446 100644
+--- a/arch/loongarch/kernel/head.S
++++ b/arch/loongarch/kernel/head.S
+@@ -43,36 +43,29 @@ SYM_DATA(kernel_fsize, .long _kernel_fsize);
+ 
+ SYM_CODE_START(kernel_entry)			# kernel entry point
+ 
+-	/* Config direct window and set PG */
+-	SETUP_DMWINS	t0
++	SETUP_TWINS
++	SETUP_MODES	t0
+ 	JUMP_VIRT_ADDR	t0, t1
+-
+-	/* Enable PG */
+-	li.w		t0, 0xb0		# PLV=0, IE=0, PG=1
+-	csrwr		t0, LOONGARCH_CSR_CRMD
+-	li.w		t0, 0x04		# PLV=0, PIE=1, PWE=0
+-	csrwr		t0, LOONGARCH_CSR_PRMD
+-	li.w		t0, 0x00		# FPE=0, SXE=0, ASXE=0, BTE=0
+-	csrwr		t0, LOONGARCH_CSR_EUEN
++	SETUP_DMWINS	t0
+ 
+ 	la.pcrel	t0, __bss_start		# clear .bss
+-	st.d		zero, t0, 0
++	LONG_S		zero, t0, 0
+ 	la.pcrel	t1, __bss_stop - LONGSIZE
+ 1:
+-	addi.d		t0, t0, LONGSIZE
+-	st.d		zero, t0, 0
++	PTR_ADDI	t0, t0, LONGSIZE
++	LONG_S		zero, t0, 0
+ 	bne		t0, t1, 1b
+ 
+ 	la.pcrel	t0, fw_arg0
+-	st.d		a0, t0, 0		# firmware arguments
++	PTR_S		a0, t0, 0		# firmware arguments
+ 	la.pcrel	t0, fw_arg1
+-	st.d		a1, t0, 0
++	PTR_S		a1, t0, 0
+ 	la.pcrel	t0, fw_arg2
+-	st.d		a2, t0, 0
++	PTR_S		a2, t0, 0
+ 
+ #ifdef CONFIG_PAGE_SIZE_4KB
+-	li.d		t0, 0
+-	li.d		t1, CSR_STFILL
++	LONG_LI		t0, 0
++	LONG_LI		t1, CSR_STFILL
+ 	csrxchg		t0, t1, LOONGARCH_CSR_IMPCTL1
  #endif
-diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
-index 8d7f501b0a12..33becf3f987d 100644
---- a/arch/loongarch/include/asm/asmmacro.h
-+++ b/arch/loongarch/include/asm/asmmacro.h
-@@ -5,43 +5,54 @@
- #ifndef _ASM_ASMMACRO_H
- #define _ASM_ASMMACRO_H
+ 	/* KSave3 used for percpu base, initialized as 0 */
+@@ -98,7 +91,7 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
  
-+#include <linux/sizes.h>
- #include <asm/asm-offsets.h>
- #include <asm/regdef.h>
- #include <asm/fpregdef.h>
- #include <asm/loongarch.h>
+ 	/* Jump to the new kernel: new_pc = current_pc + random_offset */
+ 	pcaddi		t0, 0
+-	add.d		t0, t0, a0
++	PTR_ADD		t0, t0, a0
+ 	jirl		zero, t0, 0xc
+ #endif /* CONFIG_RANDOMIZE_BASE */
  
+@@ -121,12 +114,14 @@ SYM_CODE_END(kernel_entry)
+  */
+ SYM_CODE_START(smpboot_entry)
+ 
+-	SETUP_DMWINS	t0
++	SETUP_TWINS
++	SETUP_MODES	t0
+ 	JUMP_VIRT_ADDR	t0, t1
++	SETUP_DMWINS	t0
+ 
+ #ifdef CONFIG_PAGE_SIZE_4KB
+-	li.d		t0, 0
+-	li.d		t1, CSR_STFILL
++	LONG_LI		t0, 0
++	LONG_LI		t1, CSR_STFILL
+ 	csrxchg		t0, t1, LOONGARCH_CSR_IMPCTL1
+ #endif
+ 	/* Enable PG */
+diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
+index b5e2312a2fca..c28ba45d80d6 100644
+--- a/arch/loongarch/kernel/relocate.c
++++ b/arch/loongarch/kernel/relocate.c
+@@ -68,18 +68,25 @@ static inline void __init relocate_absolute(long random_offset)
+ 
+ 	for (p = begin; (void *)p < end; p++) {
+ 		long v = p->symvalue;
+-		uint32_t lu12iw, ori, lu32id, lu52id;
++		uint32_t lu12iw, ori;
 +#ifdef CONFIG_64BIT
-+#define TASK_STRUCT_OFFSET 0
-+#else
-+#define TASK_STRUCT_OFFSET SZ_1K
++		uint32_t lu32id, lu52id;
 +#endif
-+
- 	.macro	cpu_save_nonscratch thread
--	stptr.d	s0, \thread, THREAD_REG23
--	stptr.d	s1, \thread, THREAD_REG24
--	stptr.d	s2, \thread, THREAD_REG25
--	stptr.d	s3, \thread, THREAD_REG26
--	stptr.d	s4, \thread, THREAD_REG27
--	stptr.d	s5, \thread, THREAD_REG28
--	stptr.d	s6, \thread, THREAD_REG29
--	stptr.d	s7, \thread, THREAD_REG30
--	stptr.d	s8, \thread, THREAD_REG31
--	stptr.d	sp, \thread, THREAD_REG03
--	stptr.d	fp, \thread, THREAD_REG22
-+	LONG_SPTR	s0, \thread, (THREAD_REG23 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	s1, \thread, (THREAD_REG24 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	s2, \thread, (THREAD_REG25 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	s3, \thread, (THREAD_REG26 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	s4, \thread, (THREAD_REG27 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	s5, \thread, (THREAD_REG28 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	s6, \thread, (THREAD_REG29 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	s7, \thread, (THREAD_REG30 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	s8, \thread, (THREAD_REG31 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	sp, \thread, (THREAD_REG03 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	fp, \thread, (THREAD_REG22 - TASK_STRUCT_OFFSET)
- 	.endm
+ 		union loongarch_instruction *insn = (void *)p->pc;
  
- 	.macro	cpu_restore_nonscratch thread
--	ldptr.d	s0, \thread, THREAD_REG23
--	ldptr.d	s1, \thread, THREAD_REG24
--	ldptr.d	s2, \thread, THREAD_REG25
--	ldptr.d	s3, \thread, THREAD_REG26
--	ldptr.d	s4, \thread, THREAD_REG27
--	ldptr.d	s5, \thread, THREAD_REG28
--	ldptr.d	s6, \thread, THREAD_REG29
--	ldptr.d	s7, \thread, THREAD_REG30
--	ldptr.d	s8, \thread, THREAD_REG31
--	ldptr.d	ra, \thread, THREAD_REG01
--	ldptr.d	sp, \thread, THREAD_REG03
--	ldptr.d	fp, \thread, THREAD_REG22
-+	LONG_LPTR	s0, \thread, (THREAD_REG23 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	s1, \thread, (THREAD_REG24 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	s2, \thread, (THREAD_REG25 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	s3, \thread, (THREAD_REG26 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	s4, \thread, (THREAD_REG27 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	s5, \thread, (THREAD_REG28 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	s6, \thread, (THREAD_REG29 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	s7, \thread, (THREAD_REG30 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	s8, \thread, (THREAD_REG31 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	ra, \thread, (THREAD_REG01 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	sp, \thread, (THREAD_REG03 - TASK_STRUCT_OFFSET)
-+	LONG_LPTR	fp, \thread, (THREAD_REG22 - TASK_STRUCT_OFFSET)
- 	.endm
- 
- 	.macro fpu_save_csr thread tmp
- 	movfcsr2gr	\tmp, fcsr0
-+#ifdef CONFIG_32BIT
-+	st.w		\tmp, \thread, THREAD_FCSR
-+#else
- 	stptr.w		\tmp, \thread, THREAD_FCSR
-+#endif
- #ifdef CONFIG_CPU_HAS_LBT
- 	/* TM bit is always 0 if LBT not supported */
- 	andi		\tmp, \tmp, FPU_CSR_TM
-@@ -56,7 +67,11 @@
- 	.endm
- 
- 	.macro fpu_restore_csr thread tmp0 tmp1
-+#ifdef CONFIG_32BIT
-+	ld.w		\tmp0, \thread, THREAD_FCSR
-+#else
- 	ldptr.w		\tmp0, \thread, THREAD_FCSR
-+#endif
- 	movgr2fcsr	fcsr0, \tmp0
- #ifdef CONFIG_CPU_HAS_LBT
- 	/* TM bit is always 0 if LBT not supported */
-@@ -88,9 +103,52 @@
- #endif
- 	.endm
- 
-+#ifdef CONFIG_32BIT
- 	.macro fpu_save_cc thread tmp0 tmp1
- 	movcf2gr	\tmp0, $fcc0
--	move	\tmp1, \tmp0
-+	move		\tmp1, \tmp0
-+	movcf2gr	\tmp0, $fcc1
-+	bstrins.w	\tmp1, \tmp0, 15, 8
-+	movcf2gr	\tmp0, $fcc2
-+	bstrins.w	\tmp1, \tmp0, 23, 16
-+	movcf2gr	\tmp0, $fcc3
-+	bstrins.w	\tmp1, \tmp0, 31, 24
-+	st.w		\tmp1, \thread, THREAD_FCC
-+	movcf2gr	\tmp0, $fcc4
-+	move		\tmp1, \tmp0
-+	movcf2gr	\tmp0, $fcc5
-+	bstrins.w	\tmp1, \tmp0, 15, 8
-+	movcf2gr	\tmp0, $fcc6
-+	bstrins.w	\tmp1, \tmp0, 23, 16
-+	movcf2gr	\tmp0, $fcc7
-+	bstrins.w	\tmp1, \tmp0, 31, 24
-+	st.w		\tmp1, \thread, (THREAD_FCC + 4)
-+	.endm
-+
-+	.macro fpu_restore_cc thread tmp0 tmp1
-+	ld.w		\tmp0, \thread, THREAD_FCC
-+	bstrpick.w	\tmp1, \tmp0, 7, 0
-+	movgr2cf	$fcc0, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 15, 8
-+	movgr2cf	$fcc1, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 23, 16
-+	movgr2cf	$fcc2, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 31, 24
-+	movgr2cf	$fcc3, \tmp1
-+	ld.w		\tmp0, \thread, (THREAD_FCC + 4)
-+	bstrpick.w	\tmp1, \tmp0, 7, 0
-+	movgr2cf	$fcc4, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 15, 8
-+	movgr2cf	$fcc5, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 23, 16
-+	movgr2cf	$fcc6, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 31, 24
-+	movgr2cf	$fcc7, \tmp1
-+	.endm
-+#else
-+	.macro fpu_save_cc thread tmp0 tmp1
-+	movcf2gr	\tmp0, $fcc0
-+	move		\tmp1, \tmp0
- 	movcf2gr	\tmp0, $fcc1
- 	bstrins.d	\tmp1, \tmp0, 15, 8
- 	movcf2gr	\tmp0, $fcc2
-@@ -109,7 +167,7 @@
- 	.endm
- 
- 	.macro fpu_restore_cc thread tmp0 tmp1
--	ldptr.d	\tmp0, \thread, THREAD_FCC
-+	ldptr.d		\tmp0, \thread, THREAD_FCC
- 	bstrpick.d	\tmp1, \tmp0, 7, 0
- 	movgr2cf	$fcc0, \tmp1
- 	bstrpick.d	\tmp1, \tmp0, 15, 8
-@@ -127,6 +185,7 @@
- 	bstrpick.d	\tmp1, \tmp0, 63, 56
- 	movgr2cf	$fcc7, \tmp1
- 	.endm
-+#endif
- 
- 	.macro	fpu_save_double thread tmp
- 	li.w	\tmp, THREAD_FPR0
-@@ -606,12 +665,14 @@
- 	766:
- 	lu12i.w	\reg, 0
- 	ori	\reg, \reg, 0
+ 		lu12iw = (v >> 12) & 0xfffff;
+ 		ori    = v & 0xfff;
 +#ifdef CONFIG_64BIT
- 	lu32i.d	\reg, 0
- 	lu52i.d	\reg, \reg, 0
+ 		lu32id = (v >> 32) & 0xfffff;
+ 		lu52id = v >> 52;
 +#endif
- 	.pushsection ".la_abs", "aw", %progbits
--	.p2align 3
--	.dword	766b
--	.dword	\sym
-+	.p2align PTRLOG
-+	PTR	766b
-+	PTR	\sym
- 	.popsection
- #endif
- .endm
-diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
-index 5cb568a60cf8..b44930fbb675 100644
---- a/arch/loongarch/include/asm/stackframe.h
-+++ b/arch/loongarch/include/asm/stackframe.h
-@@ -38,22 +38,42 @@
- 	cfi_restore \reg \offset \docfi
- 	.endm
  
-+	.macro SETUP_TWINS temp
-+	pcaddi	t0, 0
-+	PTR_LI	t1, ~TO_PHYS_MASK
-+	and	t0, t0, t1
-+	ori	t0, t0, (1 << 4 | 1)
-+	csrwr	t0, LOONGARCH_CSR_DMWIN0
-+	PTR_LI	t0, CSR_DMW1_INIT
-+	csrwr	t0, LOONGARCH_CSR_DMWIN1
-+	.endm
-+
-+	.macro SETUP_MODES temp
-+	/* Enable PG */
-+	li.w	\temp, 0xb0		# PLV=0, IE=0, PG=1
-+	csrwr	\temp, LOONGARCH_CSR_CRMD
-+	li.w	\temp, 0x04		# PLV=0, PIE=1, PWE=0
-+	csrwr	\temp, LOONGARCH_CSR_PRMD
-+	li.w	\temp, 0x00		# FPE=0, SXE=0, ASXE=0, BTE=0
-+	csrwr	\temp, LOONGARCH_CSR_EUEN
-+	.endm
-+
- 	.macro SETUP_DMWINS temp
--	li.d	\temp, CSR_DMW0_INIT	# WUC, PLV0, 0x8000 xxxx xxxx xxxx
-+	PTR_LI	\temp, CSR_DMW0_INIT	# WUC, PLV0, 0x8000 xxxx xxxx xxxx
- 	csrwr	\temp, LOONGARCH_CSR_DMWIN0
--	li.d	\temp, CSR_DMW1_INIT	# CAC, PLV0, 0x9000 xxxx xxxx xxxx
-+	PTR_LI	\temp, CSR_DMW1_INIT	# CAC, PLV0, 0x9000 xxxx xxxx xxxx
- 	csrwr	\temp, LOONGARCH_CSR_DMWIN1
--	li.d	\temp, CSR_DMW2_INIT	# WUC, PLV0, 0xa000 xxxx xxxx xxxx
-+	PTR_LI	\temp, CSR_DMW2_INIT	# WUC, PLV0, 0xa000 xxxx xxxx xxxx
- 	csrwr	\temp, LOONGARCH_CSR_DMWIN2
--	li.d	\temp, CSR_DMW3_INIT	# 0x0, unused
-+	PTR_LI	\temp, CSR_DMW3_INIT	# 0x0, unused
- 	csrwr	\temp, LOONGARCH_CSR_DMWIN3
- 	.endm
+ 		insn[0].reg1i20_format.immediate = lu12iw;
+ 		insn[1].reg2i12_format.immediate = ori;
++#ifdef CONFIG_64BIT
+ 		insn[2].reg1i20_format.immediate = lu32id;
+ 		insn[3].reg2i12_format.immediate = lu52id;
++#endif
+ 	}
+ }
  
- /* Jump to the runtime virtual address. */
- 	.macro JUMP_VIRT_ADDR temp1 temp2
--	li.d	\temp1, CACHE_BASE
-+	PTR_LI	\temp1, CACHE_BASE
- 	pcaddi	\temp2, 0
--	bstrins.d  \temp1, \temp2, (DMW_PABITS - 1), 0
-+	PTR_BSTRINS  \temp1, \temp2, (DMW_PABITS - 1), 0
- 	jirl	zero, \temp1, 0xc
- 	.endm
- 
-@@ -171,7 +191,7 @@
- 	andi	t0, t0, 0x3	/* extract pplv bit */
- 	beqz	t0, 9f
- 
--	li.d	tp, ~_THREAD_MASK
-+	LONG_LI	tp, ~_THREAD_MASK
- 	and	tp, tp, sp
- 	cfi_st  u0, PT_R21, \docfi
- 	csrrd	u0, PERCPU_BASE_KS
 -- 
 2.47.3
 
