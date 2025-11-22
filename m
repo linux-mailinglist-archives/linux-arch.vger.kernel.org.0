@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-15036-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15037-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2883FC7C632
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:37:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 551D6C7C638
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:38:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BFED73614DB
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:37:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1C4C3A186B
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:38:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E633322128D;
-	Sat, 22 Nov 2025 04:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C3C1F130B;
+	Sat, 22 Nov 2025 04:38:00 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BE02135AD;
-	Sat, 22 Nov 2025 04:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265911B4244;
+	Sat, 22 Nov 2025 04:37:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763786249; cv=none; b=T2/j3O8lEiP6L0+N5+dV6wdL6BkGzEgRBrbBGpe8vrdj1iYa7L1yEn/zaRdDhWLYH/QAjtUu8Yx2+DSpA8202bKMDVuaAd1lJKAZ9RUKu3uTXG7ZJga/Ov30tLAH+VUqxJey2b0M4P+SPlzwxnnr1Ch7SkG3d1ZXu8DlbJBPorw=
+	t=1763786280; cv=none; b=BC4hDTRZs6nZTi3G1VgI6ynZpbnD0KWTxC9MeVkcWIxyuHguyaAUbKsbrS03rTOz9I87/5uAU7GOLTZCvZpedZRY9CAOcpMVROnO3NtWwJv5Aq7KyJDFYoul43ipirxOk/VVrgb4g/HSj9i67vXSEuDZqFuxChM8LijFK27TQ+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763786249; c=relaxed/simple;
-	bh=TUZW0Zlb6l31YjTEdTm+SgMmxGwmueWw+i6tiufLldg=;
+	s=arc-20240116; t=1763786280; c=relaxed/simple;
+	bh=0ipcE2TnloIliQQo1lais9sCjwyI/Z09Y6UUSKm68sE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OVwijAu4ALrMsID6tcSkEPR2T/7NNj3rLGd8BS/YXwdnVLV3aqADbEjg21+15BHTtF4bsuk8S4SFtWEvThauU6zxD01gfCEmwahhtErYBNenjJhjhTVYFmxhxI2ZSEaYZzhrm/2JzE127Ie+/cyDYAoemIOxSyVCOBaLlnlFYbQ=
+	 MIME-Version; b=iaPVjr00jBKjUb8JXaPrJGLtoLmSHmsdYZsCBwHcpTZ3JmGrcrrsXMgDPtNGrwn7gRlAlOgij3KRwgWrEmJAXjW7WkbnUt/aug1O1rQE5M29JGbg73cpOVgvmDMltEq55DR0GWy0RASA56eQMz2Ios6ZO8czFX0gCXYmo8EeNQY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A110C4CEF5;
-	Sat, 22 Nov 2025 04:37:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00152C4CEF5;
+	Sat, 22 Nov 2025 04:37:56 +0000 (UTC)
 From: Huacai Chen <chenhuacai@loongson.cn>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Huacai Chen <chenhuacai@kernel.org>
@@ -40,9 +40,9 @@ Cc: loongarch@lists.linux.dev,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-kernel@vger.kernel.org,
 	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V3 02/14] LoongArch: Add adaptive CSR accessors for 32BIT/64BIT
-Date: Sat, 22 Nov 2025 12:36:22 +0800
-Message-ID: <20251122043634.3447854-3-chenhuacai@loongson.cn>
+Subject: [PATCH V3 03/14] LoongArch: Adjust common macro definitions for 32BIT/64BIT
+Date: Sat, 22 Nov 2025 12:36:23 +0800
+Message-ID: <20251122043634.3447854-4-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251122043634.3447854-1-chenhuacai@loongson.cn>
 References: <20251122043634.3447854-1-chenhuacai@loongson.cn>
@@ -54,424 +54,428 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-32BIT platforms only have 32bit CSR/IOCSR registers, 64BIT platforms
-have both 32bit/64bit CSR/IOCSR registers. Now there are both 32bit and
-64bit CSR accessors:
+Most common macros are defined in asm.h, asmmacro.h and stackframe.h.
+Adjust these macros for both 32BIT and 64BIT.
 
-csr_read32()/csr_write32()/csr_xchg32();
-csr_read64()/csr_write64()/csr_xchg64();
-
-Some CSR registers (address and timer registers) are 32bit length on
-32BIT platform and 64bit length on 64BIT platform. To avoid #ifdefs here
-and there, they need adaptive accessors, so we define and use:
-
-csr_read()/csr_write()/csr_xchg();
-
-IOCSR doesn't have a "natural length", which means a 64bit register can
-be treated as two 32bit registers, so we just use two 32bit accessors to
-emulate a 64bit accessors.
+Add SETUP_TWINS (Setup Trampoline Windows) and SETUP_MODES (Setup CRMD/
+PRMD/EUEN) which will be used later.
 
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/loongarch.h   | 46 +++++++++++++++---------
- arch/loongarch/include/asm/percpu.h      |  2 +-
- arch/loongarch/kernel/cpu-probe.c        |  7 ++++
- arch/loongarch/kernel/time.c             | 16 ++++-----
- arch/loongarch/kernel/traps.c            | 15 ++++----
- arch/loongarch/lib/dump_tlb.c            |  6 ++--
- arch/loongarch/mm/tlb.c                  | 10 +++---
- arch/loongarch/power/hibernate.c         |  6 ++--
- arch/loongarch/power/suspend.c           | 24 ++++++-------
- drivers/firmware/efi/libstub/loongarch.c |  8 ++---
- 10 files changed, 81 insertions(+), 59 deletions(-)
+ arch/loongarch/include/asm/asm.h        |  77 ++++++++++++----
+ arch/loongarch/include/asm/asmmacro.h   | 117 ++++++++++++++++++------
+ arch/loongarch/include/asm/stackframe.h |  34 +++++--
+ 3 files changed, 173 insertions(+), 55 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index 3de03cb864b2..9f71a79271da 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -182,6 +182,16 @@
- #define csr_xchg32(val, mask, reg) __csrxchg_w(val, mask, reg)
- #define csr_xchg64(val, mask, reg) __csrxchg_d(val, mask, reg)
+diff --git a/arch/loongarch/include/asm/asm.h b/arch/loongarch/include/asm/asm.h
+index f018d26fc995..719cab1a0ad8 100644
+--- a/arch/loongarch/include/asm/asm.h
++++ b/arch/loongarch/include/asm/asm.h
+@@ -72,11 +72,11 @@
+ #define INT_SUB		sub.w
+ #define INT_L		ld.w
+ #define INT_S		st.w
+-#define INT_SLL		slli.w
++#define INT_SLLI	slli.w
+ #define INT_SLLV	sll.w
+-#define INT_SRL		srli.w
++#define INT_SRLI	srli.w
+ #define INT_SRLV	srl.w
+-#define INT_SRA		srai.w
++#define INT_SRAI	srai.w
+ #define INT_SRAV	sra.w
+ #endif
+ 
+@@ -86,11 +86,11 @@
+ #define INT_SUB		sub.d
+ #define INT_L		ld.d
+ #define INT_S		st.d
+-#define INT_SLL		slli.d
++#define INT_SLLI	slli.d
+ #define INT_SLLV	sll.d
+-#define INT_SRL		srli.d
++#define INT_SRLI	srli.d
+ #define INT_SRLV	srl.d
+-#define INT_SRA		srai.d
++#define INT_SRAI	srai.d
+ #define INT_SRAV	sra.d
+ #endif
+ 
+@@ -100,15 +100,23 @@
+ #if (__SIZEOF_LONG__ == 4)
+ #define LONG_ADD	add.w
+ #define LONG_ADDI	addi.w
++#define LONG_ALSL	alsl.w
++#define LONG_BSTRINS	bstrins.w
++#define LONG_BSTRPICK	bstrpick.w
+ #define LONG_SUB	sub.w
+ #define LONG_L		ld.w
++#define LONG_LI		li.w
++#define LONG_LPTR	ld.w
+ #define LONG_S		st.w
+-#define LONG_SLL	slli.w
++#define LONG_SPTR	st.w
++#define LONG_SLLI	slli.w
+ #define LONG_SLLV	sll.w
+-#define LONG_SRL	srli.w
++#define LONG_SRLI	srli.w
+ #define LONG_SRLV	srl.w
+-#define LONG_SRA	srai.w
++#define LONG_SRAI	srai.w
+ #define LONG_SRAV	sra.w
++#define LONG_ROTR	rotr.w
++#define LONG_ROTRI	rotri.w
+ 
+ #ifdef __ASSEMBLER__
+ #define LONG		.word
+@@ -121,15 +129,23 @@
+ #if (__SIZEOF_LONG__ == 8)
+ #define LONG_ADD	add.d
+ #define LONG_ADDI	addi.d
++#define LONG_ALSL	alsl.d
++#define LONG_BSTRINS	bstrins.d
++#define LONG_BSTRPICK	bstrpick.d
+ #define LONG_SUB	sub.d
+ #define LONG_L		ld.d
++#define LONG_LI		li.d
++#define LONG_LPTR	ldptr.d
+ #define LONG_S		st.d
+-#define LONG_SLL	slli.d
++#define LONG_SPTR	stptr.d
++#define LONG_SLLI	slli.d
+ #define LONG_SLLV	sll.d
+-#define LONG_SRL	srli.d
++#define LONG_SRLI	srli.d
+ #define LONG_SRLV	srl.d
+-#define LONG_SRA	srai.d
++#define LONG_SRAI	srai.d
+ #define LONG_SRAV	sra.d
++#define LONG_ROTR	rotr.d
++#define LONG_ROTRI	rotri.d
+ 
+ #ifdef __ASSEMBLER__
+ #define LONG		.dword
+@@ -145,16 +161,23 @@
+ #if (__SIZEOF_POINTER__ == 4)
+ #define PTR_ADD		add.w
+ #define PTR_ADDI	addi.w
++#define PTR_ALSL	alsl.w
++#define PTR_BSTRINS	bstrins.w
++#define PTR_BSTRPICK	bstrpick.w
+ #define PTR_SUB		sub.w
+ #define PTR_L		ld.w
+-#define PTR_S		st.w
+ #define PTR_LI		li.w
+-#define PTR_SLL		slli.w
++#define PTR_LPTR	ld.w
++#define PTR_S		st.w
++#define PTR_SPTR	st.w
++#define PTR_SLLI	slli.w
+ #define PTR_SLLV	sll.w
+-#define PTR_SRL		srli.w
++#define PTR_SRLI	srli.w
+ #define PTR_SRLV	srl.w
+-#define PTR_SRA		srai.w
++#define PTR_SRAI	srai.w
+ #define PTR_SRAV	sra.w
++#define PTR_ROTR	rotr.w
++#define PTR_ROTRI	rotri.w
+ 
+ #define PTR_SCALESHIFT	2
+ 
+@@ -168,16 +191,23 @@
+ #if (__SIZEOF_POINTER__ == 8)
+ #define PTR_ADD		add.d
+ #define PTR_ADDI	addi.d
++#define PTR_ALSL	alsl.d
++#define PTR_BSTRINS	bstrins.d
++#define PTR_BSTRPICK	bstrpick.d
+ #define PTR_SUB		sub.d
+ #define PTR_L		ld.d
+-#define PTR_S		st.d
+ #define PTR_LI		li.d
+-#define PTR_SLL		slli.d
++#define PTR_LPTR	ldptr.d
++#define PTR_S		st.d
++#define PTR_SPTR	stptr.d
++#define PTR_SLLI	slli.d
+ #define PTR_SLLV	sll.d
+-#define PTR_SRL		srli.d
++#define PTR_SRLI	srli.d
+ #define PTR_SRLV	srl.d
+-#define PTR_SRA		srai.d
++#define PTR_SRAI	srai.d
+ #define PTR_SRAV	sra.d
++#define PTR_ROTR	rotr.d
++#define PTR_ROTRI	rotri.d
+ 
+ #define PTR_SCALESHIFT	3
+ 
+@@ -190,10 +220,17 @@
+ 
+ /* Annotate a function as being unsuitable for kprobes. */
+ #ifdef CONFIG_KPROBES
++#ifdef CONFIG_32BIT
++#define _ASM_NOKPROBE(name)				\
++	.pushsection "_kprobe_blacklist", "aw";		\
++	.long	name;					\
++	.popsection
++#else
+ #define _ASM_NOKPROBE(name)				\
+ 	.pushsection "_kprobe_blacklist", "aw";		\
+ 	.quad	name;					\
+ 	.popsection
++#endif
+ #else
+ #define _ASM_NOKPROBE(name)
+ #endif
+diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
+index 8d7f501b0a12..33becf3f987d 100644
+--- a/arch/loongarch/include/asm/asmmacro.h
++++ b/arch/loongarch/include/asm/asmmacro.h
+@@ -5,43 +5,54 @@
+ #ifndef _ASM_ASMMACRO_H
+ #define _ASM_ASMMACRO_H
+ 
++#include <linux/sizes.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/regdef.h>
+ #include <asm/fpregdef.h>
+ #include <asm/loongarch.h>
+ 
++#ifdef CONFIG_64BIT
++#define TASK_STRUCT_OFFSET 0
++#else
++#define TASK_STRUCT_OFFSET SZ_1K
++#endif
++
+ 	.macro	cpu_save_nonscratch thread
+-	stptr.d	s0, \thread, THREAD_REG23
+-	stptr.d	s1, \thread, THREAD_REG24
+-	stptr.d	s2, \thread, THREAD_REG25
+-	stptr.d	s3, \thread, THREAD_REG26
+-	stptr.d	s4, \thread, THREAD_REG27
+-	stptr.d	s5, \thread, THREAD_REG28
+-	stptr.d	s6, \thread, THREAD_REG29
+-	stptr.d	s7, \thread, THREAD_REG30
+-	stptr.d	s8, \thread, THREAD_REG31
+-	stptr.d	sp, \thread, THREAD_REG03
+-	stptr.d	fp, \thread, THREAD_REG22
++	LONG_SPTR	s0, \thread, (THREAD_REG23 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	s1, \thread, (THREAD_REG24 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	s2, \thread, (THREAD_REG25 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	s3, \thread, (THREAD_REG26 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	s4, \thread, (THREAD_REG27 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	s5, \thread, (THREAD_REG28 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	s6, \thread, (THREAD_REG29 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	s7, \thread, (THREAD_REG30 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	s8, \thread, (THREAD_REG31 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	sp, \thread, (THREAD_REG03 - TASK_STRUCT_OFFSET)
++	LONG_SPTR	fp, \thread, (THREAD_REG22 - TASK_STRUCT_OFFSET)
+ 	.endm
+ 
+ 	.macro	cpu_restore_nonscratch thread
+-	ldptr.d	s0, \thread, THREAD_REG23
+-	ldptr.d	s1, \thread, THREAD_REG24
+-	ldptr.d	s2, \thread, THREAD_REG25
+-	ldptr.d	s3, \thread, THREAD_REG26
+-	ldptr.d	s4, \thread, THREAD_REG27
+-	ldptr.d	s5, \thread, THREAD_REG28
+-	ldptr.d	s6, \thread, THREAD_REG29
+-	ldptr.d	s7, \thread, THREAD_REG30
+-	ldptr.d	s8, \thread, THREAD_REG31
+-	ldptr.d	ra, \thread, THREAD_REG01
+-	ldptr.d	sp, \thread, THREAD_REG03
+-	ldptr.d	fp, \thread, THREAD_REG22
++	LONG_LPTR	s0, \thread, (THREAD_REG23 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	s1, \thread, (THREAD_REG24 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	s2, \thread, (THREAD_REG25 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	s3, \thread, (THREAD_REG26 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	s4, \thread, (THREAD_REG27 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	s5, \thread, (THREAD_REG28 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	s6, \thread, (THREAD_REG29 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	s7, \thread, (THREAD_REG30 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	s8, \thread, (THREAD_REG31 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	ra, \thread, (THREAD_REG01 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	sp, \thread, (THREAD_REG03 - TASK_STRUCT_OFFSET)
++	LONG_LPTR	fp, \thread, (THREAD_REG22 - TASK_STRUCT_OFFSET)
+ 	.endm
+ 
+ 	.macro fpu_save_csr thread tmp
+ 	movfcsr2gr	\tmp, fcsr0
++#ifdef CONFIG_32BIT
++	st.w		\tmp, \thread, THREAD_FCSR
++#else
+ 	stptr.w		\tmp, \thread, THREAD_FCSR
++#endif
+ #ifdef CONFIG_CPU_HAS_LBT
+ 	/* TM bit is always 0 if LBT not supported */
+ 	andi		\tmp, \tmp, FPU_CSR_TM
+@@ -56,7 +67,11 @@
+ 	.endm
+ 
+ 	.macro fpu_restore_csr thread tmp0 tmp1
++#ifdef CONFIG_32BIT
++	ld.w		\tmp0, \thread, THREAD_FCSR
++#else
+ 	ldptr.w		\tmp0, \thread, THREAD_FCSR
++#endif
+ 	movgr2fcsr	fcsr0, \tmp0
+ #ifdef CONFIG_CPU_HAS_LBT
+ 	/* TM bit is always 0 if LBT not supported */
+@@ -88,9 +103,52 @@
+ #endif
+ 	.endm
  
 +#ifdef CONFIG_32BIT
-+#define csr_read(reg) csr_read32(reg)
-+#define csr_write(val, reg) csr_write32(val, reg)
-+#define csr_xchg(val, mask, reg) csr_xchg32(val, mask, reg)
-+#else
-+#define csr_read(reg) csr_read64(reg)
-+#define csr_write(val, reg) csr_write64(val, reg)
-+#define csr_xchg(val, mask, reg) csr_xchg64(val, mask, reg)
-+#endif
+ 	.macro fpu_save_cc thread tmp0 tmp1
+ 	movcf2gr	\tmp0, $fcc0
+-	move	\tmp1, \tmp0
++	move		\tmp1, \tmp0
++	movcf2gr	\tmp0, $fcc1
++	bstrins.w	\tmp1, \tmp0, 15, 8
++	movcf2gr	\tmp0, $fcc2
++	bstrins.w	\tmp1, \tmp0, 23, 16
++	movcf2gr	\tmp0, $fcc3
++	bstrins.w	\tmp1, \tmp0, 31, 24
++	st.w		\tmp1, \thread, THREAD_FCC
++	movcf2gr	\tmp0, $fcc4
++	move		\tmp1, \tmp0
++	movcf2gr	\tmp0, $fcc5
++	bstrins.w	\tmp1, \tmp0, 15, 8
++	movcf2gr	\tmp0, $fcc6
++	bstrins.w	\tmp1, \tmp0, 23, 16
++	movcf2gr	\tmp0, $fcc7
++	bstrins.w	\tmp1, \tmp0, 31, 24
++	st.w		\tmp1, \thread, (THREAD_FCC + 4)
++	.endm
 +
- /* IOCSR */
- #define iocsr_read32(reg) __iocsrrd_w(reg)
- #define iocsr_read64(reg) __iocsrrd_d(reg)
-@@ -1223,6 +1233,7 @@ static inline unsigned int get_csr_cpuid(void)
- 	return csr_read32(LOONGARCH_CSR_CPUID);
- }
- 
-+#ifdef CONFIG_64BIT
- static inline void csr_any_send(unsigned int addr, unsigned int data,
- 				unsigned int data_mask, unsigned int cpu)
- {
-@@ -1234,6 +1245,7 @@ static inline void csr_any_send(unsigned int addr, unsigned int data,
- 	val |= ((uint64_t)data << IOCSR_ANY_SEND_BUF_SHIFT);
- 	iocsr_write64(val, LOONGARCH_IOCSR_ANY_SEND);
- }
-+#endif
- 
- static inline unsigned int read_csr_excode(void)
- {
-@@ -1257,22 +1269,22 @@ static inline void write_csr_pagesize(unsigned int size)
- 
- static inline unsigned int read_csr_tlbrefill_pagesize(void)
- {
--	return (csr_read64(LOONGARCH_CSR_TLBREHI) & CSR_TLBREHI_PS) >> CSR_TLBREHI_PS_SHIFT;
-+	return (csr_read(LOONGARCH_CSR_TLBREHI) & CSR_TLBREHI_PS) >> CSR_TLBREHI_PS_SHIFT;
- }
- 
- static inline void write_csr_tlbrefill_pagesize(unsigned int size)
- {
--	csr_xchg64(size << CSR_TLBREHI_PS_SHIFT, CSR_TLBREHI_PS, LOONGARCH_CSR_TLBREHI);
-+	csr_xchg(size << CSR_TLBREHI_PS_SHIFT, CSR_TLBREHI_PS, LOONGARCH_CSR_TLBREHI);
- }
- 
- #define read_csr_asid()			csr_read32(LOONGARCH_CSR_ASID)
- #define write_csr_asid(val)		csr_write32(val, LOONGARCH_CSR_ASID)
--#define read_csr_entryhi()		csr_read64(LOONGARCH_CSR_TLBEHI)
--#define write_csr_entryhi(val)		csr_write64(val, LOONGARCH_CSR_TLBEHI)
--#define read_csr_entrylo0()		csr_read64(LOONGARCH_CSR_TLBELO0)
--#define write_csr_entrylo0(val)		csr_write64(val, LOONGARCH_CSR_TLBELO0)
--#define read_csr_entrylo1()		csr_read64(LOONGARCH_CSR_TLBELO1)
--#define write_csr_entrylo1(val)		csr_write64(val, LOONGARCH_CSR_TLBELO1)
-+#define read_csr_entryhi()		csr_read(LOONGARCH_CSR_TLBEHI)
-+#define write_csr_entryhi(val)		csr_write(val, LOONGARCH_CSR_TLBEHI)
-+#define read_csr_entrylo0()		csr_read(LOONGARCH_CSR_TLBELO0)
-+#define write_csr_entrylo0(val)		csr_write(val, LOONGARCH_CSR_TLBELO0)
-+#define read_csr_entrylo1()		csr_read(LOONGARCH_CSR_TLBELO1)
-+#define write_csr_entrylo1(val)		csr_write(val, LOONGARCH_CSR_TLBELO1)
- #define read_csr_ecfg()			csr_read32(LOONGARCH_CSR_ECFG)
- #define write_csr_ecfg(val)		csr_write32(val, LOONGARCH_CSR_ECFG)
- #define read_csr_estat()		csr_read32(LOONGARCH_CSR_ESTAT)
-@@ -1282,20 +1294,20 @@ static inline void write_csr_tlbrefill_pagesize(unsigned int size)
- #define read_csr_euen()			csr_read32(LOONGARCH_CSR_EUEN)
- #define write_csr_euen(val)		csr_write32(val, LOONGARCH_CSR_EUEN)
- #define read_csr_cpuid()		csr_read32(LOONGARCH_CSR_CPUID)
--#define read_csr_prcfg1()		csr_read64(LOONGARCH_CSR_PRCFG1)
--#define write_csr_prcfg1(val)		csr_write64(val, LOONGARCH_CSR_PRCFG1)
--#define read_csr_prcfg2()		csr_read64(LOONGARCH_CSR_PRCFG2)
--#define write_csr_prcfg2(val)		csr_write64(val, LOONGARCH_CSR_PRCFG2)
--#define read_csr_prcfg3()		csr_read64(LOONGARCH_CSR_PRCFG3)
--#define write_csr_prcfg3(val)		csr_write64(val, LOONGARCH_CSR_PRCFG3)
-+#define read_csr_prcfg1()		csr_read(LOONGARCH_CSR_PRCFG1)
-+#define write_csr_prcfg1(val)		csr_write(val, LOONGARCH_CSR_PRCFG1)
-+#define read_csr_prcfg2()		csr_read(LOONGARCH_CSR_PRCFG2)
-+#define write_csr_prcfg2(val)		csr_write(val, LOONGARCH_CSR_PRCFG2)
-+#define read_csr_prcfg3()		csr_read(LOONGARCH_CSR_PRCFG3)
-+#define write_csr_prcfg3(val)		csr_write(val, LOONGARCH_CSR_PRCFG3)
- #define read_csr_stlbpgsize()		csr_read32(LOONGARCH_CSR_STLBPGSIZE)
- #define write_csr_stlbpgsize(val)	csr_write32(val, LOONGARCH_CSR_STLBPGSIZE)
- #define read_csr_rvacfg()		csr_read32(LOONGARCH_CSR_RVACFG)
- #define write_csr_rvacfg(val)		csr_write32(val, LOONGARCH_CSR_RVACFG)
- #define write_csr_tintclear(val)	csr_write32(val, LOONGARCH_CSR_TINTCLR)
--#define read_csr_impctl1()		csr_read64(LOONGARCH_CSR_IMPCTL1)
--#define write_csr_impctl1(val)		csr_write64(val, LOONGARCH_CSR_IMPCTL1)
--#define write_csr_impctl2(val)		csr_write64(val, LOONGARCH_CSR_IMPCTL2)
-+#define read_csr_impctl1()		csr_read(LOONGARCH_CSR_IMPCTL1)
-+#define write_csr_impctl1(val)		csr_write(val, LOONGARCH_CSR_IMPCTL1)
-+#define write_csr_impctl2(val)		csr_write(val, LOONGARCH_CSR_IMPCTL2)
- 
- #define read_csr_perfctrl0()		csr_read64(LOONGARCH_CSR_PERFCTRL0)
- #define read_csr_perfcntr0()		csr_read64(LOONGARCH_CSR_PERFCNTR0)
-diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
-index 1619c1d15e6b..44a8aea2b0e5 100644
---- a/arch/loongarch/include/asm/percpu.h
-+++ b/arch/loongarch/include/asm/percpu.h
-@@ -27,7 +27,7 @@ register unsigned long __my_cpu_offset __asm__("$r21");
- static inline void set_my_cpu_offset(unsigned long off)
- {
- 	__my_cpu_offset = off;
--	csr_write64(off, PERCPU_BASE_KS);
-+	csr_write(off, PERCPU_BASE_KS);
- }
- 
- #define __my_cpu_offset					\
-diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-index a2060a24b39f..3726cd0885b6 100644
---- a/arch/loongarch/kernel/cpu-probe.c
-+++ b/arch/loongarch/kernel/cpu-probe.c
-@@ -298,8 +298,15 @@ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int
- 		return;
- 	}
- 
-+#ifdef CONFIG_64BIT
- 	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
- 	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
++	.macro fpu_restore_cc thread tmp0 tmp1
++	ld.w		\tmp0, \thread, THREAD_FCC
++	bstrpick.w	\tmp1, \tmp0, 7, 0
++	movgr2cf	$fcc0, \tmp1
++	bstrpick.w	\tmp1, \tmp0, 15, 8
++	movgr2cf	$fcc1, \tmp1
++	bstrpick.w	\tmp1, \tmp0, 23, 16
++	movgr2cf	$fcc2, \tmp1
++	bstrpick.w	\tmp1, \tmp0, 31, 24
++	movgr2cf	$fcc3, \tmp1
++	ld.w		\tmp0, \thread, (THREAD_FCC + 4)
++	bstrpick.w	\tmp1, \tmp0, 7, 0
++	movgr2cf	$fcc4, \tmp1
++	bstrpick.w	\tmp1, \tmp0, 15, 8
++	movgr2cf	$fcc5, \tmp1
++	bstrpick.w	\tmp1, \tmp0, 23, 16
++	movgr2cf	$fcc6, \tmp1
++	bstrpick.w	\tmp1, \tmp0, 31, 24
++	movgr2cf	$fcc7, \tmp1
++	.endm
 +#else
-+	*vendor = iocsr_read32(LOONGARCH_IOCSR_VENDOR) |
-+		(u64)iocsr_read32(LOONGARCH_IOCSR_VENDOR + 4) << 32;
-+	*cpuname = iocsr_read32(LOONGARCH_IOCSR_CPUNAME) |
-+		(u64)iocsr_read32(LOONGARCH_IOCSR_CPUNAME + 4) << 32;
++	.macro fpu_save_cc thread tmp0 tmp1
++	movcf2gr	\tmp0, $fcc0
++	move		\tmp1, \tmp0
+ 	movcf2gr	\tmp0, $fcc1
+ 	bstrins.d	\tmp1, \tmp0, 15, 8
+ 	movcf2gr	\tmp0, $fcc2
+@@ -109,7 +167,7 @@
+ 	.endm
+ 
+ 	.macro fpu_restore_cc thread tmp0 tmp1
+-	ldptr.d	\tmp0, \thread, THREAD_FCC
++	ldptr.d		\tmp0, \thread, THREAD_FCC
+ 	bstrpick.d	\tmp1, \tmp0, 7, 0
+ 	movgr2cf	$fcc0, \tmp1
+ 	bstrpick.d	\tmp1, \tmp0, 15, 8
+@@ -127,6 +185,7 @@
+ 	bstrpick.d	\tmp1, \tmp0, 63, 56
+ 	movgr2cf	$fcc7, \tmp1
+ 	.endm
 +#endif
  
- 	if (!__cpu_full_name[cpu]) {
- 		if (((char *)vendor)[0] == 0)
-diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
-index 6fb92cc1a4c9..1c31bf3a16ed 100644
---- a/arch/loongarch/kernel/time.c
-+++ b/arch/loongarch/kernel/time.c
-@@ -50,10 +50,10 @@ static int constant_set_state_oneshot(struct clock_event_device *evt)
+ 	.macro	fpu_save_double thread tmp
+ 	li.w	\tmp, THREAD_FPR0
+@@ -606,12 +665,14 @@
+ 	766:
+ 	lu12i.w	\reg, 0
+ 	ori	\reg, \reg, 0
++#ifdef CONFIG_64BIT
+ 	lu32i.d	\reg, 0
+ 	lu52i.d	\reg, \reg, 0
++#endif
+ 	.pushsection ".la_abs", "aw", %progbits
+-	.p2align 3
+-	.dword	766b
+-	.dword	\sym
++	.p2align PTRLOG
++	PTR	766b
++	PTR	\sym
+ 	.popsection
+ #endif
+ .endm
+diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
+index 5cb568a60cf8..b44930fbb675 100644
+--- a/arch/loongarch/include/asm/stackframe.h
++++ b/arch/loongarch/include/asm/stackframe.h
+@@ -38,22 +38,42 @@
+ 	cfi_restore \reg \offset \docfi
+ 	.endm
  
- 	raw_spin_lock(&state_lock);
- 
--	timer_config = csr_read64(LOONGARCH_CSR_TCFG);
-+	timer_config = csr_read(LOONGARCH_CSR_TCFG);
- 	timer_config |= CSR_TCFG_EN;
- 	timer_config &= ~CSR_TCFG_PERIOD;
--	csr_write64(timer_config, LOONGARCH_CSR_TCFG);
-+	csr_write(timer_config, LOONGARCH_CSR_TCFG);
- 
- 	raw_spin_unlock(&state_lock);
- 
-@@ -70,7 +70,7 @@ static int constant_set_state_periodic(struct clock_event_device *evt)
- 	period = const_clock_freq / HZ;
- 	timer_config = period & CSR_TCFG_VAL;
- 	timer_config |= (CSR_TCFG_PERIOD | CSR_TCFG_EN);
--	csr_write64(timer_config, LOONGARCH_CSR_TCFG);
-+	csr_write(timer_config, LOONGARCH_CSR_TCFG);
- 
- 	raw_spin_unlock(&state_lock);
- 
-@@ -83,9 +83,9 @@ static int constant_set_state_shutdown(struct clock_event_device *evt)
- 
- 	raw_spin_lock(&state_lock);
- 
--	timer_config = csr_read64(LOONGARCH_CSR_TCFG);
-+	timer_config = csr_read(LOONGARCH_CSR_TCFG);
- 	timer_config &= ~CSR_TCFG_EN;
--	csr_write64(timer_config, LOONGARCH_CSR_TCFG);
-+	csr_write(timer_config, LOONGARCH_CSR_TCFG);
- 
- 	raw_spin_unlock(&state_lock);
- 
-@@ -98,7 +98,7 @@ static int constant_timer_next_event(unsigned long delta, struct clock_event_dev
- 
- 	delta &= CSR_TCFG_VAL;
- 	timer_config = delta | CSR_TCFG_EN;
--	csr_write64(timer_config, LOONGARCH_CSR_TCFG);
-+	csr_write(timer_config, LOONGARCH_CSR_TCFG);
- 
- 	return 0;
- }
-@@ -137,7 +137,7 @@ void save_counter(void)
- void sync_counter(void)
- {
- 	/* Ensure counter begin at 0 */
--	csr_write64(init_offset, LOONGARCH_CSR_CNTC);
-+	csr_write(init_offset, LOONGARCH_CSR_CNTC);
- }
- 
- int constant_clockevent_init(void)
-@@ -235,7 +235,7 @@ void __init time_init(void)
- 	else
- 		const_clock_freq = calc_const_freq();
- 
--	init_offset = -(drdtime() - csr_read64(LOONGARCH_CSR_CNTC));
-+	init_offset = -(drdtime() - csr_read(LOONGARCH_CSR_CNTC));
- 
- 	constant_clockevent_init();
- 	constant_clocksource_init();
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index da5926fead4a..004b8ebf0051 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -625,7 +625,7 @@ asmlinkage void noinstr do_bce(struct pt_regs *regs)
- 	bool user = user_mode(regs);
- 	bool pie = regs_irqs_disabled(regs);
- 	unsigned long era = exception_era(regs);
--	u64 badv = 0, lower = 0, upper = ULONG_MAX;
-+	unsigned long badv = 0, lower = 0, upper = ULONG_MAX;
- 	union loongarch_instruction insn;
- 	irqentry_state_t state = irqentry_enter(regs);
- 
-@@ -1070,10 +1070,13 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
- 
- asmlinkage void cache_parity_error(void)
- {
-+	u32 merrctl = csr_read32(LOONGARCH_CSR_MERRCTL);
-+	unsigned long merrera = csr_read(LOONGARCH_CSR_MERRERA);
++	.macro SETUP_TWINS temp
++	pcaddi	t0, 0
++	PTR_LI	t1, ~TO_PHYS_MASK
++	and	t0, t0, t1
++	ori	t0, t0, (1 << 4 | 1)
++	csrwr	t0, LOONGARCH_CSR_DMWIN0
++	PTR_LI	t0, CSR_DMW1_INIT
++	csrwr	t0, LOONGARCH_CSR_DMWIN1
++	.endm
 +
- 	/* For the moment, report the problem and hang. */
- 	pr_err("Cache error exception:\n");
--	pr_err("csr_merrctl == %08x\n", csr_read32(LOONGARCH_CSR_MERRCTL));
--	pr_err("csr_merrera == %016lx\n", csr_read64(LOONGARCH_CSR_MERRERA));
-+	pr_err("csr_merrctl == %08x\n", merrctl);
-+	pr_err("csr_merrera == %016lx\n", merrera);
- 	panic("Can't handle the cache error!");
- }
++	.macro SETUP_MODES temp
++	/* Enable PG */
++	li.w	\temp, 0xb0		# PLV=0, IE=0, PG=1
++	csrwr	\temp, LOONGARCH_CSR_CRMD
++	li.w	\temp, 0x04		# PLV=0, PIE=1, PWE=0
++	csrwr	\temp, LOONGARCH_CSR_PRMD
++	li.w	\temp, 0x00		# FPE=0, SXE=0, ASXE=0, BTE=0
++	csrwr	\temp, LOONGARCH_CSR_EUEN
++	.endm
++
+ 	.macro SETUP_DMWINS temp
+-	li.d	\temp, CSR_DMW0_INIT	# WUC, PLV0, 0x8000 xxxx xxxx xxxx
++	PTR_LI	\temp, CSR_DMW0_INIT	# WUC, PLV0, 0x8000 xxxx xxxx xxxx
+ 	csrwr	\temp, LOONGARCH_CSR_DMWIN0
+-	li.d	\temp, CSR_DMW1_INIT	# CAC, PLV0, 0x9000 xxxx xxxx xxxx
++	PTR_LI	\temp, CSR_DMW1_INIT	# CAC, PLV0, 0x9000 xxxx xxxx xxxx
+ 	csrwr	\temp, LOONGARCH_CSR_DMWIN1
+-	li.d	\temp, CSR_DMW2_INIT	# WUC, PLV0, 0xa000 xxxx xxxx xxxx
++	PTR_LI	\temp, CSR_DMW2_INIT	# WUC, PLV0, 0xa000 xxxx xxxx xxxx
+ 	csrwr	\temp, LOONGARCH_CSR_DMWIN2
+-	li.d	\temp, CSR_DMW3_INIT	# 0x0, unused
++	PTR_LI	\temp, CSR_DMW3_INIT	# 0x0, unused
+ 	csrwr	\temp, LOONGARCH_CSR_DMWIN3
+ 	.endm
  
-@@ -1130,9 +1133,9 @@ static void configure_exception_vector(void)
- 	eentry    = (unsigned long)exception_handlers;
- 	tlbrentry = (unsigned long)exception_handlers + 80*VECSIZE;
+ /* Jump to the runtime virtual address. */
+ 	.macro JUMP_VIRT_ADDR temp1 temp2
+-	li.d	\temp1, CACHE_BASE
++	PTR_LI	\temp1, CACHE_BASE
+ 	pcaddi	\temp2, 0
+-	bstrins.d  \temp1, \temp2, (DMW_PABITS - 1), 0
++	PTR_BSTRINS  \temp1, \temp2, (DMW_PABITS - 1), 0
+ 	jirl	zero, \temp1, 0xc
+ 	.endm
  
--	csr_write64(eentry, LOONGARCH_CSR_EENTRY);
--	csr_write64(__pa(eentry), LOONGARCH_CSR_MERRENTRY);
--	csr_write64(__pa(tlbrentry), LOONGARCH_CSR_TLBRENTRY);
-+	csr_write(eentry, LOONGARCH_CSR_EENTRY);
-+	csr_write(__pa(eentry), LOONGARCH_CSR_MERRENTRY);
-+	csr_write(__pa(tlbrentry), LOONGARCH_CSR_TLBRENTRY);
- }
+@@ -171,7 +191,7 @@
+ 	andi	t0, t0, 0x3	/* extract pplv bit */
+ 	beqz	t0, 9f
  
- void per_cpu_trap_init(int cpu)
-diff --git a/arch/loongarch/lib/dump_tlb.c b/arch/loongarch/lib/dump_tlb.c
-index 0b886a6e260f..116f21ea4e2c 100644
---- a/arch/loongarch/lib/dump_tlb.c
-+++ b/arch/loongarch/lib/dump_tlb.c
-@@ -20,9 +20,9 @@ void dump_tlb_regs(void)
- 
- 	pr_info("Index    : 0x%0x\n", read_csr_tlbidx());
- 	pr_info("PageSize : 0x%0x\n", read_csr_pagesize());
--	pr_info("EntryHi  : 0x%0*lx\n", field, read_csr_entryhi());
--	pr_info("EntryLo0 : 0x%0*lx\n", field, read_csr_entrylo0());
--	pr_info("EntryLo1 : 0x%0*lx\n", field, read_csr_entrylo1());
-+	pr_info("EntryHi  : 0x%0*lx\n", field, (unsigned long)read_csr_entryhi());
-+	pr_info("EntryLo0 : 0x%0*lx\n", field, (unsigned long)read_csr_entrylo0());
-+	pr_info("EntryLo1 : 0x%0*lx\n", field, (unsigned long)read_csr_entrylo1());
- }
- 
- static void dump_tlb(int first, int last)
-diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-index 3b427b319db2..6e474469e210 100644
---- a/arch/loongarch/mm/tlb.c
-+++ b/arch/loongarch/mm/tlb.c
-@@ -229,11 +229,11 @@ static void setup_ptwalker(void)
- 	if (cpu_has_ptw)
- 		pwctl1 |= CSR_PWCTL1_PTW;
- 
--	csr_write64(pwctl0, LOONGARCH_CSR_PWCTL0);
--	csr_write64(pwctl1, LOONGARCH_CSR_PWCTL1);
--	csr_write64((long)swapper_pg_dir, LOONGARCH_CSR_PGDH);
--	csr_write64((long)invalid_pg_dir, LOONGARCH_CSR_PGDL);
--	csr_write64((long)smp_processor_id(), LOONGARCH_CSR_TMID);
-+	csr_write(pwctl0, LOONGARCH_CSR_PWCTL0);
-+	csr_write(pwctl1, LOONGARCH_CSR_PWCTL1);
-+	csr_write((long)swapper_pg_dir, LOONGARCH_CSR_PGDH);
-+	csr_write((long)invalid_pg_dir, LOONGARCH_CSR_PGDL);
-+	csr_write((long)smp_processor_id(), LOONGARCH_CSR_TMID);
- }
- 
- static void output_pgtable_bits_defines(void)
-diff --git a/arch/loongarch/power/hibernate.c b/arch/loongarch/power/hibernate.c
-index e7b7346592cb..817270410ef9 100644
---- a/arch/loongarch/power/hibernate.c
-+++ b/arch/loongarch/power/hibernate.c
-@@ -10,7 +10,7 @@ static u32 saved_crmd;
- static u32 saved_prmd;
- static u32 saved_euen;
- static u32 saved_ecfg;
--static u64 saved_pcpu_base;
-+static unsigned long saved_pcpu_base;
- struct pt_regs saved_regs;
- 
- void save_processor_state(void)
-@@ -20,7 +20,7 @@ void save_processor_state(void)
- 	saved_prmd = csr_read32(LOONGARCH_CSR_PRMD);
- 	saved_euen = csr_read32(LOONGARCH_CSR_EUEN);
- 	saved_ecfg = csr_read32(LOONGARCH_CSR_ECFG);
--	saved_pcpu_base = csr_read64(PERCPU_BASE_KS);
-+	saved_pcpu_base = csr_read(PERCPU_BASE_KS);
- 
- 	if (is_fpu_owner())
- 		save_fp(current);
-@@ -33,7 +33,7 @@ void restore_processor_state(void)
- 	csr_write32(saved_prmd, LOONGARCH_CSR_PRMD);
- 	csr_write32(saved_euen, LOONGARCH_CSR_EUEN);
- 	csr_write32(saved_ecfg, LOONGARCH_CSR_ECFG);
--	csr_write64(saved_pcpu_base, PERCPU_BASE_KS);
-+	csr_write(saved_pcpu_base, PERCPU_BASE_KS);
- 
- 	if (is_fpu_owner())
- 		restore_fp(current);
-diff --git a/arch/loongarch/power/suspend.c b/arch/loongarch/power/suspend.c
-index c9e594925c47..7e3d79f8bbd4 100644
---- a/arch/loongarch/power/suspend.c
-+++ b/arch/loongarch/power/suspend.c
-@@ -20,24 +20,24 @@ u64 loongarch_suspend_addr;
- struct saved_registers {
- 	u32 ecfg;
- 	u32 euen;
--	u64 pgd;
--	u64 kpgd;
- 	u32 pwctl0;
- 	u32 pwctl1;
--	u64 pcpu_base;
-+	unsigned long pgd;
-+	unsigned long kpgd;
-+	unsigned long pcpu_base;
- };
- static struct saved_registers saved_regs;
- 
- void loongarch_common_suspend(void)
- {
- 	save_counter();
--	saved_regs.pgd = csr_read64(LOONGARCH_CSR_PGDL);
--	saved_regs.kpgd = csr_read64(LOONGARCH_CSR_PGDH);
-+	saved_regs.pgd = csr_read(LOONGARCH_CSR_PGDL);
-+	saved_regs.kpgd = csr_read(LOONGARCH_CSR_PGDH);
- 	saved_regs.pwctl0 = csr_read32(LOONGARCH_CSR_PWCTL0);
- 	saved_regs.pwctl1 = csr_read32(LOONGARCH_CSR_PWCTL1);
- 	saved_regs.ecfg = csr_read32(LOONGARCH_CSR_ECFG);
- 	saved_regs.euen = csr_read32(LOONGARCH_CSR_EUEN);
--	saved_regs.pcpu_base = csr_read64(PERCPU_BASE_KS);
-+	saved_regs.pcpu_base = csr_read(PERCPU_BASE_KS);
- 
- 	loongarch_suspend_addr = loongson_sysconf.suspend_addr;
- }
-@@ -46,17 +46,17 @@ void loongarch_common_resume(void)
- {
- 	sync_counter();
- 	local_flush_tlb_all();
--	csr_write64(eentry, LOONGARCH_CSR_EENTRY);
--	csr_write64(eentry, LOONGARCH_CSR_MERRENTRY);
--	csr_write64(tlbrentry, LOONGARCH_CSR_TLBRENTRY);
-+	csr_write(eentry, LOONGARCH_CSR_EENTRY);
-+	csr_write(eentry, LOONGARCH_CSR_MERRENTRY);
-+	csr_write(tlbrentry, LOONGARCH_CSR_TLBRENTRY);
- 
--	csr_write64(saved_regs.pgd, LOONGARCH_CSR_PGDL);
--	csr_write64(saved_regs.kpgd, LOONGARCH_CSR_PGDH);
-+	csr_write(saved_regs.pgd, LOONGARCH_CSR_PGDL);
-+	csr_write(saved_regs.kpgd, LOONGARCH_CSR_PGDH);
- 	csr_write32(saved_regs.pwctl0, LOONGARCH_CSR_PWCTL0);
- 	csr_write32(saved_regs.pwctl1, LOONGARCH_CSR_PWCTL1);
- 	csr_write32(saved_regs.ecfg, LOONGARCH_CSR_ECFG);
- 	csr_write32(saved_regs.euen, LOONGARCH_CSR_EUEN);
--	csr_write64(saved_regs.pcpu_base, PERCPU_BASE_KS);
-+	csr_write(saved_regs.pcpu_base, PERCPU_BASE_KS);
- }
- 
- int loongarch_acpi_suspend(void)
-diff --git a/drivers/firmware/efi/libstub/loongarch.c b/drivers/firmware/efi/libstub/loongarch.c
-index 3782d0a187d1..9825f5218137 100644
---- a/drivers/firmware/efi/libstub/loongarch.c
-+++ b/drivers/firmware/efi/libstub/loongarch.c
-@@ -72,10 +72,10 @@ efi_status_t efi_boot_kernel(void *handle, efi_loaded_image_t *image,
- 		    desc_ver, priv.runtime_map);
- 
- 	/* Config Direct Mapping */
--	csr_write64(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
--	csr_write64(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
--	csr_write64(CSR_DMW2_INIT, LOONGARCH_CSR_DMWIN2);
--	csr_write64(CSR_DMW3_INIT, LOONGARCH_CSR_DMWIN3);
-+	csr_write(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
-+	csr_write(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
-+	csr_write(CSR_DMW2_INIT, LOONGARCH_CSR_DMWIN2);
-+	csr_write(CSR_DMW3_INIT, LOONGARCH_CSR_DMWIN3);
- 
- 	real_kernel_entry = (void *)kernel_entry_address(kernel_addr, image);
- 
+-	li.d	tp, ~_THREAD_MASK
++	LONG_LI	tp, ~_THREAD_MASK
+ 	and	tp, tp, sp
+ 	cfi_st  u0, PT_R21, \docfi
+ 	csrrd	u0, PERCPU_BASE_KS
 -- 
 2.47.3
 
