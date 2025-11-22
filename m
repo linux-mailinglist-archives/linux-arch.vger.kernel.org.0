@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-15040-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15041-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C140EC7C647
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:39:17 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D45C2C7C66B
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:40:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D2DB3A76B1
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:39:16 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 752C2362934
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:39:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48CB23ABAA;
-	Sat, 22 Nov 2025 04:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6944D264612;
+	Sat, 22 Nov 2025 04:39:40 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4898227E83;
-	Sat, 22 Nov 2025 04:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4D3258EFF;
+	Sat, 22 Nov 2025 04:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763786352; cv=none; b=PxmhFqXb6OnvWAn5oaxZvrEo5IpajwJHCm8YJWGII/N58WNQ8m4p6OF4qJpqc30fVjIjTvhzsaKOntoJikfIiesD/OUo4SJhVdNs3QvS9yuoZE2hgMONjHPSLJBgVDTh/i/8nTw2WY2JecWF0R2KrNRX68I1ZLLH7Q87cKDry80=
+	t=1763786380; cv=none; b=s9sqBx+LXM8zis2Y99G9uFmuuqeV9pUq8lv1X37+qaC65iSdAjIwC0CZ/MfXwS8m04fG0z6NJHQEmk7vLxcECtVK4s5MbFcnXALMqavd85L6OjXPloer/tl22V4vP78ZbDQHkuBIslsOjWjicmupvvKtNMorrNv1CjtECVBjeFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763786352; c=relaxed/simple;
-	bh=4YFbGx5q/RMi9wGNVEFxbMVzORBij6W/nE0PcOUwRaY=;
+	s=arc-20240116; t=1763786380; c=relaxed/simple;
+	bh=2DyTattMOJ+L/fwbFXGMUTdkSAAP2m/xEF9Ja56dRI8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fIr5M1+Jf+ukQxG6uNbxddByhEbvFJiEfGickGgzZ8P2OsDnCZE4DHQl/lmTa35xOtHkV+sCJM2e7HjlcHDqXQN3fHbc3Nj4z547II1quBcmUTkDa8b1in+6Zxr2LoaQwVnlZ2L7kWq1d5M7x5UUEfEkqJCr4BYnyHKkDZjGri4=
+	 MIME-Version; b=gmeNYXRY1Kp9Q4lEXZAUUZ0ZtklX8ENO7jt3zrgAynTATWiRmTOl48ggJfmhq0IwT+qyY5LR66AvdjBBOK9Iq08Mf0Xei/MOfiGBVX9WiQlJExt8KT1Jmf8ZKj9gEGOmGpQAubJ6bddjm9EPlqcpZhnu3oGdTUAvarJv77pTJKE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 874EAC4CEF5;
-	Sat, 22 Nov 2025 04:39:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AE0C4CEF5;
+	Sat, 22 Nov 2025 04:39:37 +0000 (UTC)
 From: Huacai Chen <chenhuacai@loongson.cn>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Huacai Chen <chenhuacai@kernel.org>
@@ -40,9 +40,9 @@ Cc: loongarch@lists.linux.dev,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-kernel@vger.kernel.org,
 	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V3 06/14] LoongArch: Adjust process management for 32BIT/64BIT
-Date: Sat, 22 Nov 2025 12:36:26 +0800
-Message-ID: <20251122043634.3447854-7-chenhuacai@loongson.cn>
+Subject: [PATCH V3 07/14] LoongArch: Adjust time routines for 32BIT/64BIT
+Date: Sat, 22 Nov 2025 12:36:27 +0800
+Message-ID: <20251122043634.3447854-8-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251122043634.3447854-1-chenhuacai@loongson.cn>
 References: <20251122043634.3447854-1-chenhuacai@loongson.cn>
@@ -54,335 +54,264 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adjust memory management for both 32BIT and 64BIT, including: CPU
-context switching, FPU loading/restoring, process dumping and process
-tracing routines.
+Adjust time routines for both 32BIT and 64BIT, including: rdtime_h() /
+rdtime_l() definitions for 32BIT and rdtime_d() definition for 64BIT,
+get_cycles() and get_cycles64() definitions for 32BIT/64BIT, show time
+frequency info ("CPU MHz" and "BogoMIPS") in /proc/cpuinfo, etc.
 
-Q: Why modify switch.S?
-A: LoongArch32 has no ldptr.d/stptr.d instructions, and asm offsets of
-   thead_struct members are too large to be filled in the 12b immediate
-   field of ld.w/st.w.
+Use do_div() for division which works on both 32BIT and 64BIT platforms.
 
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/elf.h         |   1 +
- arch/loongarch/include/asm/inst.h        |  12 ++-
- arch/loongarch/include/uapi/asm/ptrace.h |  10 ++
- arch/loongarch/kernel/fpu.S              | 111 +++++++++++++++++++++++
- arch/loongarch/kernel/process.c          |   6 +-
- arch/loongarch/kernel/ptrace.c           |   5 +
- arch/loongarch/kernel/switch.S           |  25 +++--
- 7 files changed, 157 insertions(+), 13 deletions(-)
+ arch/loongarch/include/asm/loongarch.h | 32 ++++++++++++++++++++++++-
+ arch/loongarch/include/asm/timex.h     | 33 +++++++++++++++++++++++++-
+ arch/loongarch/kernel/proc.c           | 10 ++++----
+ arch/loongarch/kernel/syscall.c        |  2 +-
+ arch/loongarch/kernel/time.c           | 15 ++++++------
+ arch/loongarch/kvm/vcpu.c              |  5 ++--
+ 6 files changed, 80 insertions(+), 17 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/elf.h
-index f16bd42456e4..1b6489427e30 100644
---- a/arch/loongarch/include/asm/elf.h
-+++ b/arch/loongarch/include/asm/elf.h
-@@ -156,6 +156,7 @@ typedef elf_greg_t elf_gregset_t[ELF_NGREG];
- typedef double elf_fpreg_t;
- typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
+diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+index 804341bd8d2e..19e3f2c183fe 100644
+--- a/arch/loongarch/include/asm/loongarch.h
++++ b/arch/loongarch/include/asm/loongarch.h
+@@ -1238,7 +1238,35 @@
  
-+void loongarch_dump_regs32(u32 *uregs, const struct pt_regs *regs);
- void loongarch_dump_regs64(u64 *uregs, const struct pt_regs *regs);
+ #ifndef __ASSEMBLER__
  
- #ifdef CONFIG_32BIT
-diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
-index 55e64a12a124..f9f207082d0e 100644
---- a/arch/loongarch/include/asm/inst.h
-+++ b/arch/loongarch/include/asm/inst.h
-@@ -438,8 +438,10 @@ static inline bool is_branch_ins(union loongarch_instruction *ip)
- 
- static inline bool is_ra_save_ins(union loongarch_instruction *ip)
- {
--	/* st.d $ra, $sp, offset */
--	return ip->reg2i12_format.opcode == std_op &&
-+	const u32 opcode = IS_ENABLED(CONFIG_32BIT) ? stw_op : std_op;
-+
-+	/* st.w / st.d $ra, $sp, offset */
-+	return ip->reg2i12_format.opcode == opcode &&
- 		ip->reg2i12_format.rj == LOONGARCH_GPR_SP &&
- 		ip->reg2i12_format.rd == LOONGARCH_GPR_RA &&
- 		!is_imm12_negative(ip->reg2i12_format.immediate);
-@@ -447,8 +449,10 @@ static inline bool is_ra_save_ins(union loongarch_instruction *ip)
- 
- static inline bool is_stack_alloc_ins(union loongarch_instruction *ip)
- {
--	/* addi.d $sp, $sp, -imm */
--	return ip->reg2i12_format.opcode == addid_op &&
-+	const u32 opcode = IS_ENABLED(CONFIG_32BIT) ? addiw_op : addid_op;
-+
-+	/* addi.w / addi.d $sp, $sp, -imm */
-+	return ip->reg2i12_format.opcode == opcode &&
- 		ip->reg2i12_format.rj == LOONGARCH_GPR_SP &&
- 		ip->reg2i12_format.rd == LOONGARCH_GPR_SP &&
- 		is_imm12_negative(ip->reg2i12_format.immediate);
-diff --git a/arch/loongarch/include/uapi/asm/ptrace.h b/arch/loongarch/include/uapi/asm/ptrace.h
-index 215e0f9e8aa3..b35c794323bc 100644
---- a/arch/loongarch/include/uapi/asm/ptrace.h
-+++ b/arch/loongarch/include/uapi/asm/ptrace.h
-@@ -61,8 +61,13 @@ struct user_lbt_state {
- struct user_watch_state {
- 	__u64 dbg_info;
- 	struct {
-+#if __BITS_PER_LONG == 32
-+		__u32    addr;
-+		__u32    mask;
-+#else
- 		__u64    addr;
- 		__u64    mask;
-+#endif
- 		__u32    ctrl;
- 		__u32    pad;
- 	} dbg_regs[8];
-@@ -71,8 +76,13 @@ struct user_watch_state {
- struct user_watch_state_v2 {
- 	__u64 dbg_info;
- 	struct {
-+#if __BITS_PER_LONG == 32
-+		__u32    addr;
-+		__u32    mask;
-+#else
- 		__u64    addr;
- 		__u64    mask;
-+#endif
- 		__u32    ctrl;
- 		__u32    pad;
- 	} dbg_regs[14];
-diff --git a/arch/loongarch/kernel/fpu.S b/arch/loongarch/kernel/fpu.S
-index 28caf416ae36..f225dcc5b530 100644
---- a/arch/loongarch/kernel/fpu.S
-+++ b/arch/loongarch/kernel/fpu.S
-@@ -96,6 +96,49 @@
- 	EX	fld.d	$f31, \base, (31 * FPU_REG_WIDTH)
- 	.endm
- 
+-static __always_inline u64 drdtime(void)
 +#ifdef CONFIG_32BIT
-+	.macro sc_save_fcc thread tmp0 tmp1
-+	movcf2gr	\tmp0, $fcc0
-+	move		\tmp1, \tmp0
-+	movcf2gr	\tmp0, $fcc1
-+	bstrins.w	\tmp1, \tmp0, 15, 8
-+	movcf2gr	\tmp0, $fcc2
-+	bstrins.w	\tmp1, \tmp0, 23, 16
-+	movcf2gr	\tmp0, $fcc3
-+	bstrins.w	\tmp1, \tmp0, 31, 24
-+	EX	st.w	\tmp1, \thread, THREAD_FCC
-+	movcf2gr	\tmp0, $fcc4
-+	move		\tmp1, \tmp0
-+	movcf2gr	\tmp0, $fcc5
-+	bstrins.w	\tmp1, \tmp0, 15, 8
-+	movcf2gr	\tmp0, $fcc6
-+	bstrins.w	\tmp1, \tmp0, 23, 16
-+	movcf2gr	\tmp0, $fcc7
-+	bstrins.w	\tmp1, \tmp0, 31, 24
-+	EX	st.w	\tmp1, \thread, (THREAD_FCC + 4)
-+	.endm
 +
-+	.macro sc_restore_fcc thread tmp0 tmp1
-+	EX	ld.w	\tmp0, \thread, THREAD_FCC
-+	bstrpick.w	\tmp1, \tmp0, 7, 0
-+	movgr2cf	$fcc0, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 15, 8
-+	movgr2cf	$fcc1, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 23, 16
-+	movgr2cf	$fcc2, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 31, 24
-+	movgr2cf	$fcc3, \tmp1
-+	EX	ld.w	\tmp0, \thread, (THREAD_FCC + 4)
-+	bstrpick.w	\tmp1, \tmp0, 7, 0
-+	movgr2cf	$fcc4, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 15, 8
-+	movgr2cf	$fcc5, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 23, 16
-+	movgr2cf	$fcc6, \tmp1
-+	bstrpick.w	\tmp1, \tmp0, 31, 24
-+	movgr2cf	$fcc7, \tmp1
-+	.endm
++static __always_inline u32 rdtime_h(void)
++{
++	u32 val = 0;
++
++	__asm__ __volatile__(
++		"rdtimeh.w %0, $zero\n\t"
++		: "=r"(val)
++		:
++		);
++	return val;
++}
++
++static __always_inline u32 rdtime_l(void)
++{
++	u32 val = 0;
++
++	__asm__ __volatile__(
++		"rdtimel.w %0, $zero\n\t"
++		: "=r"(val)
++		:
++		);
++	return val;
++}
++
 +#else
- 	.macro sc_save_fcc base, tmp0, tmp1
- 	movcf2gr	\tmp0, $fcc0
- 	move		\tmp1, \tmp0
-@@ -135,6 +178,7 @@
- 	bstrpick.d	\tmp1, \tmp0, 63, 56
- 	movgr2cf	$fcc7, \tmp1
- 	.endm
-+#endif
++
++static __always_inline u64 rdtime_d(void)
+ {
+ 	u64 val = 0;
  
- 	.macro sc_save_fcsr base, tmp0
- 	movfcsr2gr	\tmp0, fcsr0
-@@ -410,6 +454,72 @@ SYM_FUNC_START(_init_fpu)
- 
- 	li.w	t1, -1				# SNaN
- 
-+#ifdef CONFIG_32BIT
-+	movgr2fr.w	$f0, t1
-+	movgr2frh.w	$f0, t1
-+	movgr2fr.w	$f1, t1
-+	movgr2frh.w	$f1, t1
-+	movgr2fr.w	$f2, t1
-+	movgr2frh.w	$f2, t1
-+	movgr2fr.w	$f3, t1
-+	movgr2frh.w	$f3, t1
-+	movgr2fr.w	$f4, t1
-+	movgr2frh.w	$f4, t1
-+	movgr2fr.w	$f5, t1
-+	movgr2frh.w	$f5, t1
-+	movgr2fr.w	$f6, t1
-+	movgr2frh.w	$f6, t1
-+	movgr2fr.w	$f7, t1
-+	movgr2frh.w	$f7, t1
-+	movgr2fr.w	$f8, t1
-+	movgr2frh.w	$f8, t1
-+	movgr2fr.w	$f9, t1
-+	movgr2frh.w	$f9, t1
-+	movgr2fr.w	$f10, t1
-+	movgr2frh.w	$f10, t1
-+	movgr2fr.w	$f11, t1
-+	movgr2frh.w	$f11, t1
-+	movgr2fr.w	$f12, t1
-+	movgr2frh.w	$f12, t1
-+	movgr2fr.w	$f13, t1
-+	movgr2frh.w	$f13, t1
-+	movgr2fr.w	$f14, t1
-+	movgr2frh.w	$f14, t1
-+	movgr2fr.w	$f15, t1
-+	movgr2frh.w	$f15, t1
-+	movgr2fr.w	$f16, t1
-+	movgr2frh.w	$f16, t1
-+	movgr2fr.w	$f17, t1
-+	movgr2frh.w	$f17, t1
-+	movgr2fr.w	$f18, t1
-+	movgr2frh.w	$f18, t1
-+	movgr2fr.w	$f19, t1
-+	movgr2frh.w	$f19, t1
-+	movgr2fr.w	$f20, t1
-+	movgr2frh.w	$f20, t1
-+	movgr2fr.w	$f21, t1
-+	movgr2frh.w	$f21, t1
-+	movgr2fr.w	$f22, t1
-+	movgr2frh.w	$f22, t1
-+	movgr2fr.w	$f23, t1
-+	movgr2frh.w	$f23, t1
-+	movgr2fr.w	$f24, t1
-+	movgr2frh.w	$f24, t1
-+	movgr2fr.w	$f25, t1
-+	movgr2frh.w	$f25, t1
-+	movgr2fr.w	$f26, t1
-+	movgr2frh.w	$f26, t1
-+	movgr2fr.w	$f27, t1
-+	movgr2frh.w	$f27, t1
-+	movgr2fr.w	$f28, t1
-+	movgr2frh.w	$f28, t1
-+	movgr2fr.w	$f29, t1
-+	movgr2frh.w	$f29, t1
-+	movgr2fr.w	$f30, t1
-+	movgr2frh.w	$f30, t1
-+	movgr2fr.w	$f31, t1
-+	movgr2frh.w	$f31, t1
-+#else
- 	movgr2fr.d	$f0, t1
- 	movgr2fr.d	$f1, t1
- 	movgr2fr.d	$f2, t1
-@@ -442,6 +552,7 @@ SYM_FUNC_START(_init_fpu)
- 	movgr2fr.d	$f29, t1
- 	movgr2fr.d	$f30, t1
- 	movgr2fr.d	$f31, t1
-+#endif
- 
- 	jr	ra
- SYM_FUNC_END(_init_fpu)
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index efd9edf65603..d01af0e9ec7c 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -377,8 +377,11 @@ void arch_trigger_cpumask_backtrace(const cpumask_t *mask, int exclude_cpu)
- 	nmi_trigger_cpumask_backtrace(mask, exclude_cpu, raise_backtrace);
+@@ -1250,6 +1278,8 @@ static __always_inline u64 drdtime(void)
+ 	return val;
  }
  
--#ifdef CONFIG_64BIT
-+#ifdef CONFIG_32BIT
-+void loongarch_dump_regs32(u32 *uregs, const struct pt_regs *regs)
-+#else
- void loongarch_dump_regs64(u64 *uregs, const struct pt_regs *regs)
 +#endif
- {
- 	unsigned int i;
- 
-@@ -395,4 +398,3 @@ void loongarch_dump_regs64(u64 *uregs, const struct pt_regs *regs)
- 	uregs[LOONGARCH_EF_CSR_ECFG] = regs->csr_ecfg;
- 	uregs[LOONGARCH_EF_CSR_ESTAT] = regs->csr_estat;
- }
--#endif /* CONFIG_64BIT */
-diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
-index 8edd0954e55a..bea376e87d4e 100644
---- a/arch/loongarch/kernel/ptrace.c
-+++ b/arch/loongarch/kernel/ptrace.c
-@@ -650,8 +650,13 @@ static int ptrace_hbp_set_addr(unsigned int note_type,
- 	struct perf_event_attr attr;
- 
- 	/* Kernel-space address cannot be monitored by user-space */
-+#ifdef CONFIG_32BIT
-+	if ((unsigned long)addr >= KPRANGE1)
-+		return -EINVAL;
-+#else
- 	if ((unsigned long)addr >= XKPRANGE)
- 		return -EINVAL;
-+#endif
- 
- 	bp = ptrace_hbp_get_initialised_bp(note_type, tsk, idx);
- 	if (IS_ERR(bp))
-diff --git a/arch/loongarch/kernel/switch.S b/arch/loongarch/kernel/switch.S
-index 9c23cb7e432f..46ba46bcd467 100644
---- a/arch/loongarch/kernel/switch.S
-+++ b/arch/loongarch/kernel/switch.S
-@@ -16,18 +16,26 @@
-  */
- 	.align	5
- SYM_FUNC_START(__switch_to)
--	csrrd	t1, LOONGARCH_CSR_PRMD
--	stptr.d	t1, a0, THREAD_CSRPRMD
-+#ifdef CONFIG_32BIT
-+	PTR_ADDI	a0, a0, TASK_STRUCT_OFFSET
-+#endif
-+	csrrd		t1, LOONGARCH_CSR_PRMD
-+	LONG_SPTR	t1, a0, (THREAD_CSRPRMD - TASK_STRUCT_OFFSET)
- 
- 	cpu_save_nonscratch a0
--	stptr.d	ra, a0, THREAD_REG01
--	stptr.d a3, a0, THREAD_SCHED_RA
--	stptr.d a4, a0, THREAD_SCHED_CFA
-+	LONG_SPTR	ra, a0, (THREAD_REG01 - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	a3, a0, (THREAD_SCHED_RA - TASK_STRUCT_OFFSET)
-+	LONG_SPTR	a4, a0, (THREAD_SCHED_CFA - TASK_STRUCT_OFFSET)
 +
- #if defined(CONFIG_STACKPROTECTOR) && !defined(CONFIG_SMP)
- 	la	t7, __stack_chk_guard
- 	LONG_L	t8, a1, TASK_STACK_CANARY
- 	LONG_S	t8, t7, 0
+ static inline unsigned int get_csr_cpuid(void)
+ {
+ 	return csr_read32(LOONGARCH_CSR_CPUID);
+diff --git a/arch/loongarch/include/asm/timex.h b/arch/loongarch/include/asm/timex.h
+index fb41e9e7a222..9ea52fad9690 100644
+--- a/arch/loongarch/include/asm/timex.h
++++ b/arch/loongarch/include/asm/timex.h
+@@ -18,7 +18,38 @@ typedef unsigned long cycles_t;
+ 
+ static inline cycles_t get_cycles(void)
+ {
+-	return drdtime();
++#ifdef CONFIG_32BIT
++	return rdtime_l();
++#else
++	return rdtime_d();
++#endif
++}
++
++#ifdef CONFIG_32BIT
++
++#define get_cycles_hi get_cycles_hi
++
++static inline cycles_t get_cycles_hi(void)
++{
++	return rdtime_h();
++}
++
++#endif
++
++static inline u64 get_cycles64(void)
++{
++#ifdef CONFIG_32BIT
++	u32 hi, lo;
++
++	do {
++		hi = rdtime_h();
++		lo = rdtime_l();
++	} while (hi != rdtime_h());
++
++	return ((u64)hi << 32) | lo;
++#else
++	return rdtime_d();
++#endif
+ }
+ 
+ #endif /* __KERNEL__ */
+diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
+index 63d2b7e7e844..a8800d20e11b 100644
+--- a/arch/loongarch/kernel/proc.c
++++ b/arch/loongarch/kernel/proc.c
+@@ -20,11 +20,14 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 	unsigned int prid = cpu_data[n].processor_id;
+ 	unsigned int version = cpu_data[n].processor_id & 0xff;
+ 	unsigned int fp_version = cpu_data[n].fpu_vers;
++	u64 freq = cpu_clock_freq, bogomips = lpj_fine * cpu_clock_freq;
+ 
+ #ifdef CONFIG_SMP
+ 	if (!cpu_online(n))
+ 		return 0;
  #endif
-+
-+#ifdef CONFIG_32BIT
-+	PTR_ADDI	a1, a1, TASK_STRUCT_OFFSET
-+#endif
- 	move	tp, a2
- 	cpu_restore_nonscratch a1
++	do_div(freq, 10000);
++	do_div(bogomips, const_clock_freq * (5000/HZ));
  
-@@ -35,8 +43,11 @@ SYM_FUNC_START(__switch_to)
- 	PTR_ADD		t0, t0, tp
- 	set_saved_sp	t0, t1, t2
+ 	/*
+ 	 * For the first processor also print the system type
+@@ -41,11 +44,8 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 	seq_printf(m, "PRID\t\t\t: %s (%08x)\n", id_to_core_name(prid), prid);
+ 	seq_printf(m, "CPU Revision\t\t: 0x%02x\n", version);
+ 	seq_printf(m, "FPU Revision\t\t: 0x%02x\n", fp_version);
+-	seq_printf(m, "CPU MHz\t\t\t: %llu.%02llu\n",
+-		      cpu_clock_freq / 1000000, (cpu_clock_freq / 10000) % 100);
+-	seq_printf(m, "BogoMIPS\t\t: %llu.%02llu\n",
+-		      (lpj_fine * cpu_clock_freq / const_clock_freq) / (500000/HZ),
+-		      ((lpj_fine * cpu_clock_freq / const_clock_freq) / (5000/HZ)) % 100);
++	seq_printf(m, "CPU MHz\t\t\t: %u.%02u\n", (u32)freq / 100, (u32)freq % 100);
++	seq_printf(m, "BogoMIPS\t\t: %u.%02u\n", (u32)bogomips / 100, (u32)bogomips % 100);
+ 	seq_printf(m, "TLB Entries\t\t: %d\n", cpu_data[n].tlbsize);
+ 	seq_printf(m, "Address Sizes\t\t: %d bits physical, %d bits virtual\n",
+ 		      cpu_pabits + 1, cpu_vabits + 1);
+diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/syscall.c
+index 168bd97540f8..ab94eb5ce039 100644
+--- a/arch/loongarch/kernel/syscall.c
++++ b/arch/loongarch/kernel/syscall.c
+@@ -75,7 +75,7 @@ void noinstr __no_stack_protector do_syscall(struct pt_regs *regs)
+ 	 *
+ 	 * The resulting 6 bits of entropy is seen in SP[9:4].
+ 	 */
+-	choose_random_kstack_offset(drdtime());
++	choose_random_kstack_offset(get_cycles());
  
--	ldptr.d	t1, a1, THREAD_CSRPRMD
--	csrwr	t1, LOONGARCH_CSR_PRMD
-+	LONG_LPTR	t1, a1, (THREAD_CSRPRMD - TASK_STRUCT_OFFSET)
-+	csrwr		t1, LOONGARCH_CSR_PRMD
+ 	syscall_exit_to_user_mode(regs);
+ }
+diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
+index 1c31bf3a16ed..5892f6da07a5 100644
+--- a/arch/loongarch/kernel/time.c
++++ b/arch/loongarch/kernel/time.c
+@@ -18,6 +18,7 @@
+ #include <asm/loongarch.h>
+ #include <asm/paravirt.h>
+ #include <asm/time.h>
++#include <asm/timex.h>
  
-+#ifdef CONFIG_32BIT
-+	PTR_ADDI	a0, a0, -TASK_STRUCT_OFFSET
-+#endif
- 	jr	ra
- SYM_FUNC_END(__switch_to)
+ u64 cpu_clock_freq;
+ EXPORT_SYMBOL(cpu_clock_freq);
+@@ -62,12 +63,12 @@ static int constant_set_state_oneshot(struct clock_event_device *evt)
+ 
+ static int constant_set_state_periodic(struct clock_event_device *evt)
+ {
+-	unsigned long period;
+ 	unsigned long timer_config;
++	u64 period = const_clock_freq;
+ 
+ 	raw_spin_lock(&state_lock);
+ 
+-	period = const_clock_freq / HZ;
++	do_div(period, HZ);
+ 	timer_config = period & CSR_TCFG_VAL;
+ 	timer_config |= (CSR_TCFG_PERIOD | CSR_TCFG_EN);
+ 	csr_write(timer_config, LOONGARCH_CSR_TCFG);
+@@ -120,7 +121,7 @@ static int arch_timer_dying(unsigned int cpu)
+ 
+ static unsigned long get_loops_per_jiffy(void)
+ {
+-	unsigned long lpj = (unsigned long)const_clock_freq;
++	u64 lpj = const_clock_freq;
+ 
+ 	do_div(lpj, HZ);
+ 
+@@ -131,7 +132,7 @@ static long init_offset;
+ 
+ void save_counter(void)
+ {
+-	init_offset = drdtime();
++	init_offset = get_cycles();
+ }
+ 
+ void sync_counter(void)
+@@ -197,12 +198,12 @@ int constant_clockevent_init(void)
+ 
+ static u64 read_const_counter(struct clocksource *clk)
+ {
+-	return drdtime();
++	return get_cycles64();
+ }
+ 
+ static noinstr u64 sched_clock_read(void)
+ {
+-	return drdtime();
++	return get_cycles64();
+ }
+ 
+ static struct clocksource clocksource_const = {
+@@ -235,7 +236,7 @@ void __init time_init(void)
+ 	else
+ 		const_clock_freq = calc_const_freq();
+ 
+-	init_offset = -(drdtime() - csr_read(LOONGARCH_CSR_CNTC));
++	init_offset = -(get_cycles() - csr_read(LOONGARCH_CSR_CNTC));
+ 
+ 	constant_clockevent_init();
+ 	constant_clocksource_init();
+diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+index 1245a6b35896..803224d297eb 100644
+--- a/arch/loongarch/kvm/vcpu.c
++++ b/arch/loongarch/kvm/vcpu.c
+@@ -9,6 +9,7 @@
+ #include <asm/loongarch.h>
+ #include <asm/setup.h>
+ #include <asm/time.h>
++#include <asm/timex.h>
+ 
+ #define CREATE_TRACE_POINTS
+ #include "trace.h"
+@@ -811,7 +812,7 @@ static int kvm_get_one_reg(struct kvm_vcpu *vcpu,
+ 	case KVM_REG_LOONGARCH_KVM:
+ 		switch (reg->id) {
+ 		case KVM_REG_LOONGARCH_COUNTER:
+-			*v = drdtime() + vcpu->kvm->arch.time_offset;
++			*v = get_cycles() + vcpu->kvm->arch.time_offset;
+ 			break;
+ 		case KVM_REG_LOONGARCH_DEBUG_INST:
+ 			*v = INSN_HVCL | KVM_HCALL_SWDBG;
+@@ -906,7 +907,7 @@ static int kvm_set_one_reg(struct kvm_vcpu *vcpu,
+ 			 * only set for the first time for smp system
+ 			 */
+ 			if (vcpu->vcpu_id == 0)
+-				vcpu->kvm->arch.time_offset = (signed long)(v - drdtime());
++				vcpu->kvm->arch.time_offset = (signed long)(v - get_cycles());
+ 			break;
+ 		case KVM_REG_LOONGARCH_VCPU_RESET:
+ 			vcpu->arch.st.guest_addr = 0;
 -- 
 2.47.3
 
