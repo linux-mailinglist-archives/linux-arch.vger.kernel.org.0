@@ -1,34 +1,34 @@
-Return-Path: <linux-arch+bounces-15035-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15036-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B8BCC7C629
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:37:14 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2883FC7C632
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:37:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0D58D4E202D
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:37:13 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BFED73614DB
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:37:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453261C5D77;
-	Sat, 22 Nov 2025 04:37:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E633322128D;
+	Sat, 22 Nov 2025 04:37:29 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2338F381AF;
-	Sat, 22 Nov 2025 04:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BE02135AD;
+	Sat, 22 Nov 2025 04:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763786223; cv=none; b=Rr6cN0nGJA79QZKh51n2gpf+6LNP+vwPg5i6nRySSI1KME/GB0G75c1XHBaW2oxqEEC0hW7rNd4BGJnY1Zy8p3sYR8NJdeD0fPMNMAYtDI2HRiIb73PBt/aMu32TOlgOZP9frTO1H0x9uQJZ/IAWUskhEJdVV7HSiY0HIeuFSXw=
+	t=1763786249; cv=none; b=T2/j3O8lEiP6L0+N5+dV6wdL6BkGzEgRBrbBGpe8vrdj1iYa7L1yEn/zaRdDhWLYH/QAjtUu8Yx2+DSpA8202bKMDVuaAd1lJKAZ9RUKu3uTXG7ZJga/Ov30tLAH+VUqxJey2b0M4P+SPlzwxnnr1Ch7SkG3d1ZXu8DlbJBPorw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763786223; c=relaxed/simple;
-	bh=F8slmda6vCjyF6xh0edwI5ZDt99WD9OHTx/+q2HuiJI=;
+	s=arc-20240116; t=1763786249; c=relaxed/simple;
+	bh=TUZW0Zlb6l31YjTEdTm+SgMmxGwmueWw+i6tiufLldg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GGHk0Xrn5xiiZ8qYO9Iorb3kkhhoCq6F+KmveSQOcRBBcOgCYZJRYCxOw25TP/vza3MiJzsJJ7moCTkrSLGSngFudliEmki9etuCpYKZxMTl+uTH8hBUXOc8aEjtEjI7/1+5eLiKGqweGL1Fu2q/tYqTpGbtCshPUOZCVSR6bbU=
+	 MIME-Version; b=OVwijAu4ALrMsID6tcSkEPR2T/7NNj3rLGd8BS/YXwdnVLV3aqADbEjg21+15BHTtF4bsuk8S4SFtWEvThauU6zxD01gfCEmwahhtErYBNenjJhjhTVYFmxhxI2ZSEaYZzhrm/2JzE127Ie+/cyDYAoemIOxSyVCOBaLlnlFYbQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34F50C4CEF5;
-	Sat, 22 Nov 2025 04:37:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A110C4CEF5;
+	Sat, 22 Nov 2025 04:37:26 +0000 (UTC)
 From: Huacai Chen <chenhuacai@loongson.cn>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Huacai Chen <chenhuacai@kernel.org>
@@ -40,9 +40,9 @@ Cc: loongarch@lists.linux.dev,
 	Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	linux-kernel@vger.kernel.org,
 	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V3 01/14] LoongArch: Add atomic operations for 32BIT/64BIT
-Date: Sat, 22 Nov 2025 12:36:21 +0800
-Message-ID: <20251122043634.3447854-2-chenhuacai@loongson.cn>
+Subject: [PATCH V3 02/14] LoongArch: Add adaptive CSR accessors for 32BIT/64BIT
+Date: Sat, 22 Nov 2025 12:36:22 +0800
+Message-ID: <20251122043634.3447854-3-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251122043634.3447854-1-chenhuacai@loongson.cn>
 References: <20251122043634.3447854-1-chenhuacai@loongson.cn>
@@ -54,810 +54,424 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-LoongArch64 has both AMO and LL/SC instructions, while LoongArch32 only
-has LL/SC intstructions. So we add a Kconfig option CPU_HAS_AMO here and
-implement atomic operations (also including local operations and percpu
-operations) for both 32BIT and 64BIT platforms.
+32BIT platforms only have 32bit CSR/IOCSR registers, 64BIT platforms
+have both 32bit/64bit CSR/IOCSR registers. Now there are both 32bit and
+64bit CSR accessors:
+
+csr_read32()/csr_write32()/csr_xchg32();
+csr_read64()/csr_write64()/csr_xchg64();
+
+Some CSR registers (address and timer registers) are 32bit length on
+32BIT platform and 64bit length on 64BIT platform. To avoid #ifdefs here
+and there, they need adaptive accessors, so we define and use:
+
+csr_read()/csr_write()/csr_xchg();
+
+IOCSR doesn't have a "natural length", which means a 64bit register can
+be treated as two 32bit registers, so we just use two 32bit accessors to
+emulate a 64bit accessors.
 
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/Kconfig                   |   4 +
- arch/loongarch/include/asm/atomic-amo.h  | 206 +++++++++++++++++++++++
- arch/loongarch/include/asm/atomic-llsc.h | 100 +++++++++++
- arch/loongarch/include/asm/atomic.h      | 197 ++--------------------
- arch/loongarch/include/asm/cmpxchg.h     |  48 ++++--
- arch/loongarch/include/asm/local.h       |  37 ++++
- arch/loongarch/include/asm/percpu.h      |  40 +++--
- 7 files changed, 413 insertions(+), 219 deletions(-)
- create mode 100644 arch/loongarch/include/asm/atomic-amo.h
- create mode 100644 arch/loongarch/include/asm/atomic-llsc.h
+ arch/loongarch/include/asm/loongarch.h   | 46 +++++++++++++++---------
+ arch/loongarch/include/asm/percpu.h      |  2 +-
+ arch/loongarch/kernel/cpu-probe.c        |  7 ++++
+ arch/loongarch/kernel/time.c             | 16 ++++-----
+ arch/loongarch/kernel/traps.c            | 15 ++++----
+ arch/loongarch/lib/dump_tlb.c            |  6 ++--
+ arch/loongarch/mm/tlb.c                  | 10 +++---
+ arch/loongarch/power/hibernate.c         |  6 ++--
+ arch/loongarch/power/suspend.c           | 24 ++++++-------
+ drivers/firmware/efi/libstub/loongarch.c |  8 ++---
+ 10 files changed, 81 insertions(+), 59 deletions(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index a672f689cb03..730f34214519 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -568,6 +568,10 @@ config ARCH_STRICT_ALIGN
- 	  to run kernel only on systems with h/w unaligned access support in
- 	  order to optimise for performance.
+diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+index 3de03cb864b2..9f71a79271da 100644
+--- a/arch/loongarch/include/asm/loongarch.h
++++ b/arch/loongarch/include/asm/loongarch.h
+@@ -182,6 +182,16 @@
+ #define csr_xchg32(val, mask, reg) __csrxchg_w(val, mask, reg)
+ #define csr_xchg64(val, mask, reg) __csrxchg_d(val, mask, reg)
  
-+config CPU_HAS_AMO
-+	bool
-+	default 64BIT
-+
- config CPU_HAS_FPU
- 	bool
- 	default y
-diff --git a/arch/loongarch/include/asm/atomic-amo.h b/arch/loongarch/include/asm/atomic-amo.h
-new file mode 100644
-index 000000000000..d5efa5252d56
---- /dev/null
-+++ b/arch/loongarch/include/asm/atomic-amo.h
-@@ -0,0 +1,206 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Atomic operations (AMO).
-+ *
-+ * Copyright (C) 2020-2025 Loongson Technology Corporation Limited
-+ */
-+
-+#ifndef _ASM_ATOMIC_AMO_H
-+#define _ASM_ATOMIC_AMO_H
-+
-+#include <linux/types.h>
-+#include <asm/barrier.h>
-+#include <asm/cmpxchg.h>
-+
-+#define ATOMIC_OP(op, I, asm_op)					\
-+static inline void arch_atomic_##op(int i, atomic_t *v)			\
-+{									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op".w" " $zero, %1, %0	\n"				\
-+	: "+ZB" (v->counter)						\
-+	: "r" (I)							\
-+	: "memory");							\
-+}
-+
-+#define ATOMIC_OP_RETURN(op, I, asm_op, c_op, mb, suffix)		\
-+static inline int arch_atomic_##op##_return##suffix(int i, atomic_t *v)	\
-+{									\
-+	int result;							\
-+									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op#mb".w" " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)				\
-+	: "r" (I)							\
-+	: "memory");							\
-+									\
-+	return result c_op I;						\
-+}
-+
-+#define ATOMIC_FETCH_OP(op, I, asm_op, mb, suffix)			\
-+static inline int arch_atomic_fetch_##op##suffix(int i, atomic_t *v)	\
-+{									\
-+	int result;							\
-+									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op#mb".w" " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)				\
-+	: "r" (I)							\
-+	: "memory");							\
-+									\
-+	return result;							\
-+}
-+
-+#define ATOMIC_OPS(op, I, asm_op, c_op)					\
-+	ATOMIC_OP(op, I, asm_op)					\
-+	ATOMIC_OP_RETURN(op, I, asm_op, c_op, _db,         )		\
-+	ATOMIC_OP_RETURN(op, I, asm_op, c_op,    , _relaxed)		\
-+	ATOMIC_FETCH_OP(op, I, asm_op, _db,         )			\
-+	ATOMIC_FETCH_OP(op, I, asm_op,    , _relaxed)
-+
-+ATOMIC_OPS(add, i, add, +)
-+ATOMIC_OPS(sub, -i, add, +)
-+
-+#define arch_atomic_add_return		arch_atomic_add_return
-+#define arch_atomic_add_return_acquire	arch_atomic_add_return
-+#define arch_atomic_add_return_release	arch_atomic_add_return
-+#define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
-+#define arch_atomic_sub_return		arch_atomic_sub_return
-+#define arch_atomic_sub_return_acquire	arch_atomic_sub_return
-+#define arch_atomic_sub_return_release	arch_atomic_sub_return
-+#define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
-+#define arch_atomic_fetch_add		arch_atomic_fetch_add
-+#define arch_atomic_fetch_add_acquire	arch_atomic_fetch_add
-+#define arch_atomic_fetch_add_release	arch_atomic_fetch_add
-+#define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
-+#define arch_atomic_fetch_sub		arch_atomic_fetch_sub
-+#define arch_atomic_fetch_sub_acquire	arch_atomic_fetch_sub
-+#define arch_atomic_fetch_sub_release	arch_atomic_fetch_sub
-+#define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
-+
-+#undef ATOMIC_OPS
-+
-+#define ATOMIC_OPS(op, I, asm_op)					\
-+	ATOMIC_OP(op, I, asm_op)					\
-+	ATOMIC_FETCH_OP(op, I, asm_op, _db,         )			\
-+	ATOMIC_FETCH_OP(op, I, asm_op,    , _relaxed)
-+
-+ATOMIC_OPS(and, i, and)
-+ATOMIC_OPS(or, i, or)
-+ATOMIC_OPS(xor, i, xor)
-+
-+#define arch_atomic_fetch_and		arch_atomic_fetch_and
-+#define arch_atomic_fetch_and_acquire	arch_atomic_fetch_and
-+#define arch_atomic_fetch_and_release	arch_atomic_fetch_and
-+#define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
-+#define arch_atomic_fetch_or		arch_atomic_fetch_or
-+#define arch_atomic_fetch_or_acquire	arch_atomic_fetch_or
-+#define arch_atomic_fetch_or_release	arch_atomic_fetch_or
-+#define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
-+#define arch_atomic_fetch_xor		arch_atomic_fetch_xor
-+#define arch_atomic_fetch_xor_acquire	arch_atomic_fetch_xor
-+#define arch_atomic_fetch_xor_release	arch_atomic_fetch_xor
-+#define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
-+
-+#undef ATOMIC_OPS
-+#undef ATOMIC_FETCH_OP
-+#undef ATOMIC_OP_RETURN
-+#undef ATOMIC_OP
-+
-+#ifdef CONFIG_64BIT
-+
-+#define ATOMIC64_OP(op, I, asm_op)					\
-+static inline void arch_atomic64_##op(long i, atomic64_t *v)		\
-+{									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op".d " " $zero, %1, %0	\n"			\
-+	: "+ZB" (v->counter)						\
-+	: "r" (I)							\
-+	: "memory");							\
-+}
-+
-+#define ATOMIC64_OP_RETURN(op, I, asm_op, c_op, mb, suffix)			\
-+static inline long arch_atomic64_##op##_return##suffix(long i, atomic64_t *v)	\
-+{										\
-+	long result;								\
-+	__asm__ __volatile__(							\
-+	"am"#asm_op#mb".d " " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)					\
-+	: "r" (I)								\
-+	: "memory");								\
-+										\
-+	return result c_op I;							\
-+}
-+
-+#define ATOMIC64_FETCH_OP(op, I, asm_op, mb, suffix)				\
-+static inline long arch_atomic64_fetch_##op##suffix(long i, atomic64_t *v)	\
-+{										\
-+	long result;								\
-+										\
-+	__asm__ __volatile__(							\
-+	"am"#asm_op#mb".d " " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)					\
-+	: "r" (I)								\
-+	: "memory");								\
-+										\
-+	return result;								\
-+}
-+
-+#define ATOMIC64_OPS(op, I, asm_op, c_op)				      \
-+	ATOMIC64_OP(op, I, asm_op)					      \
-+	ATOMIC64_OP_RETURN(op, I, asm_op, c_op, _db,         )		      \
-+	ATOMIC64_OP_RETURN(op, I, asm_op, c_op,    , _relaxed)		      \
-+	ATOMIC64_FETCH_OP(op, I, asm_op, _db,         )			      \
-+	ATOMIC64_FETCH_OP(op, I, asm_op,    , _relaxed)
-+
-+ATOMIC64_OPS(add, i, add, +)
-+ATOMIC64_OPS(sub, -i, add, +)
-+
-+#define arch_atomic64_add_return		arch_atomic64_add_return
-+#define arch_atomic64_add_return_acquire	arch_atomic64_add_return
-+#define arch_atomic64_add_return_release	arch_atomic64_add_return
-+#define arch_atomic64_add_return_relaxed	arch_atomic64_add_return_relaxed
-+#define arch_atomic64_sub_return		arch_atomic64_sub_return
-+#define arch_atomic64_sub_return_acquire	arch_atomic64_sub_return
-+#define arch_atomic64_sub_return_release	arch_atomic64_sub_return
-+#define arch_atomic64_sub_return_relaxed	arch_atomic64_sub_return_relaxed
-+#define arch_atomic64_fetch_add			arch_atomic64_fetch_add
-+#define arch_atomic64_fetch_add_acquire		arch_atomic64_fetch_add
-+#define arch_atomic64_fetch_add_release		arch_atomic64_fetch_add
-+#define arch_atomic64_fetch_add_relaxed		arch_atomic64_fetch_add_relaxed
-+#define arch_atomic64_fetch_sub			arch_atomic64_fetch_sub
-+#define arch_atomic64_fetch_sub_acquire		arch_atomic64_fetch_sub
-+#define arch_atomic64_fetch_sub_release		arch_atomic64_fetch_sub
-+#define arch_atomic64_fetch_sub_relaxed		arch_atomic64_fetch_sub_relaxed
-+
-+#undef ATOMIC64_OPS
-+
-+#define ATOMIC64_OPS(op, I, asm_op)					      \
-+	ATOMIC64_OP(op, I, asm_op)					      \
-+	ATOMIC64_FETCH_OP(op, I, asm_op, _db,         )			      \
-+	ATOMIC64_FETCH_OP(op, I, asm_op,    , _relaxed)
-+
-+ATOMIC64_OPS(and, i, and)
-+ATOMIC64_OPS(or, i, or)
-+ATOMIC64_OPS(xor, i, xor)
-+
-+#define arch_atomic64_fetch_and		arch_atomic64_fetch_and
-+#define arch_atomic64_fetch_and_acquire	arch_atomic64_fetch_and
-+#define arch_atomic64_fetch_and_release	arch_atomic64_fetch_and
-+#define arch_atomic64_fetch_and_relaxed	arch_atomic64_fetch_and_relaxed
-+#define arch_atomic64_fetch_or		arch_atomic64_fetch_or
-+#define arch_atomic64_fetch_or_acquire	arch_atomic64_fetch_or
-+#define arch_atomic64_fetch_or_release	arch_atomic64_fetch_or
-+#define arch_atomic64_fetch_or_relaxed	arch_atomic64_fetch_or_relaxed
-+#define arch_atomic64_fetch_xor		arch_atomic64_fetch_xor
-+#define arch_atomic64_fetch_xor_acquire	arch_atomic64_fetch_xor
-+#define arch_atomic64_fetch_xor_release	arch_atomic64_fetch_xor
-+#define arch_atomic64_fetch_xor_relaxed	arch_atomic64_fetch_xor_relaxed
-+
-+#undef ATOMIC64_OPS
-+#undef ATOMIC64_FETCH_OP
-+#undef ATOMIC64_OP_RETURN
-+#undef ATOMIC64_OP
-+
-+#endif
-+
-+#endif /* _ASM_ATOMIC_AMO_H */
-diff --git a/arch/loongarch/include/asm/atomic-llsc.h b/arch/loongarch/include/asm/atomic-llsc.h
-new file mode 100644
-index 000000000000..b4f5670b85cf
---- /dev/null
-+++ b/arch/loongarch/include/asm/atomic-llsc.h
-@@ -0,0 +1,100 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Atomic operations (LLSC).
-+ *
-+ * Copyright (C) 2024-2025 Loongson Technology Corporation Limited
-+ */
-+
-+#ifndef _ASM_ATOMIC_LLSC_H
-+#define _ASM_ATOMIC_LLSC_H
-+
-+#include <linux/types.h>
-+#include <asm/barrier.h>
-+#include <asm/cmpxchg.h>
-+
-+#define ATOMIC_OP(op, I, asm_op)					\
-+static inline void arch_atomic_##op(int i, atomic_t *v)			\
-+{									\
-+	int temp;							\
-+									\
-+	__asm__ __volatile__(						\
-+	"1:	ll.w		%0, %1      #atomic_" #op "	\n"	\
-+	"       " #asm_op "	%0, %0, %2			\n"	\
-+	"	sc.w		%0, %1				\n"	\
-+	"       beq		%0, $r0, 1b			\n"	\
-+	:"=&r" (temp) , "+ZB"(v->counter)				\
-+	:"r" (I)							\
-+	);								\
-+}
-+
-+#define ATOMIC_OP_RETURN(op, I, asm_op)					\
-+static inline int arch_atomic_##op##_return_relaxed(int i, atomic_t *v)	\
-+{									\
-+	int result, temp;						\
-+									\
-+	__asm__ __volatile__(						\
-+	"1:     ll.w		%1, %2      # atomic_" #op "_return \n"	\
-+	"       " #asm_op "	%0, %1, %3                          \n"	\
-+	"       sc.w		%0, %2                              \n"	\
-+	"       beq		%0, $r0 ,1b                         \n"	\
-+	"       " #asm_op "	%0, %1, %3                          \n"	\
-+	: "=&r" (result), "=&r" (temp),	"+ZB"(v->counter)		\
-+	: "r" (I));							\
-+									\
-+	return result;							\
-+}
-+
-+#define ATOMIC_FETCH_OP(op, I, asm_op)					\
-+static inline int arch_atomic_fetch_##op##_relaxed(int i, atomic_t *v)	\
-+{									\
-+	int result, temp;						\
-+									\
-+	__asm__ __volatile__(						\
-+	"1:     ll.w		%1, %2      # atomic_fetch_" #op "  \n"	\
-+	"       " #asm_op "	%0, %1, %3                          \n" \
-+	"       sc.w		%0, %2                              \n"	\
-+	"       beq		%0, $r0 ,1b                         \n"	\
-+	"       add.w		%0, %1  ,$r0                        \n"	\
-+	: "=&r" (result), "=&r" (temp), "+ZB" (v->counter)		\
-+	: "r" (I));							\
-+									\
-+	return result;							\
-+}
-+
-+#define ATOMIC_OPS(op,I ,asm_op, c_op)					\
-+	ATOMIC_OP(op, I, asm_op)					\
-+	ATOMIC_OP_RETURN(op, I , asm_op)				\
-+	ATOMIC_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC_OPS(add, i , add.w ,+=)
-+ATOMIC_OPS(sub, -i , add.w ,+=)
-+
-+#define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
-+#define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
-+#define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
-+#define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
-+
-+#undef ATOMIC_OPS
-+
-+#define ATOMIC_OPS(op, I, asm_op)					\
-+	ATOMIC_OP(op, I, asm_op)					\
-+	ATOMIC_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC_OPS(and, i, and)
-+ATOMIC_OPS(or, i, or)
-+ATOMIC_OPS(xor, i, xor)
-+
-+#define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
-+#define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
-+#define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
-+
-+#undef ATOMIC_OPS
-+#undef ATOMIC_FETCH_OP
-+#undef ATOMIC_OP_RETURN
-+#undef ATOMIC_OP
-+
-+#ifdef CONFIG_64BIT
-+#error "64-bit LLSC atomic operations are not supported"
-+#endif
-+
-+#endif /* _ASM_ATOMIC_LLSC_H */
-diff --git a/arch/loongarch/include/asm/atomic.h b/arch/loongarch/include/asm/atomic.h
-index c86f0ab922ec..444b9ddcd004 100644
---- a/arch/loongarch/include/asm/atomic.h
-+++ b/arch/loongarch/include/asm/atomic.h
-@@ -11,6 +11,16 @@
- #include <asm/barrier.h>
- #include <asm/cmpxchg.h>
- 
-+#ifdef CONFIG_CPU_HAS_AMO
-+#include <asm/atomic-amo.h>
++#ifdef CONFIG_32BIT
++#define csr_read(reg) csr_read32(reg)
++#define csr_write(val, reg) csr_write32(val, reg)
++#define csr_xchg(val, mask, reg) csr_xchg32(val, mask, reg)
 +#else
-+#include <asm/atomic-llsc.h>
++#define csr_read(reg) csr_read64(reg)
++#define csr_write(val, reg) csr_write64(val, reg)
++#define csr_xchg(val, mask, reg) csr_xchg64(val, mask, reg)
 +#endif
 +
-+#ifdef CONFIG_GENERIC_ATOMIC64
-+#include <asm-generic/atomic64.h>
-+#endif
-+
- #if __SIZEOF_LONG__ == 4
- #define __LL		"ll.w	"
- #define __SC		"sc.w	"
-@@ -34,100 +44,6 @@
- #define arch_atomic_read(v)	READ_ONCE((v)->counter)
- #define arch_atomic_set(v, i)	WRITE_ONCE((v)->counter, (i))
- 
--#define ATOMIC_OP(op, I, asm_op)					\
--static inline void arch_atomic_##op(int i, atomic_t *v)			\
--{									\
--	__asm__ __volatile__(						\
--	"am"#asm_op".w" " $zero, %1, %0	\n"				\
--	: "+ZB" (v->counter)						\
--	: "r" (I)							\
--	: "memory");							\
--}
--
--#define ATOMIC_OP_RETURN(op, I, asm_op, c_op, mb, suffix)		\
--static inline int arch_atomic_##op##_return##suffix(int i, atomic_t *v)	\
--{									\
--	int result;							\
--									\
--	__asm__ __volatile__(						\
--	"am"#asm_op#mb".w" " %1, %2, %0		\n"			\
--	: "+ZB" (v->counter), "=&r" (result)				\
--	: "r" (I)							\
--	: "memory");							\
--									\
--	return result c_op I;						\
--}
--
--#define ATOMIC_FETCH_OP(op, I, asm_op, mb, suffix)			\
--static inline int arch_atomic_fetch_##op##suffix(int i, atomic_t *v)	\
--{									\
--	int result;							\
--									\
--	__asm__ __volatile__(						\
--	"am"#asm_op#mb".w" " %1, %2, %0		\n"			\
--	: "+ZB" (v->counter), "=&r" (result)				\
--	: "r" (I)							\
--	: "memory");							\
--									\
--	return result;							\
--}
--
--#define ATOMIC_OPS(op, I, asm_op, c_op)					\
--	ATOMIC_OP(op, I, asm_op)					\
--	ATOMIC_OP_RETURN(op, I, asm_op, c_op, _db,         )		\
--	ATOMIC_OP_RETURN(op, I, asm_op, c_op,    , _relaxed)		\
--	ATOMIC_FETCH_OP(op, I, asm_op, _db,         )			\
--	ATOMIC_FETCH_OP(op, I, asm_op,    , _relaxed)
--
--ATOMIC_OPS(add, i, add, +)
--ATOMIC_OPS(sub, -i, add, +)
--
--#define arch_atomic_add_return		arch_atomic_add_return
--#define arch_atomic_add_return_acquire	arch_atomic_add_return
--#define arch_atomic_add_return_release	arch_atomic_add_return
--#define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
--#define arch_atomic_sub_return		arch_atomic_sub_return
--#define arch_atomic_sub_return_acquire	arch_atomic_sub_return
--#define arch_atomic_sub_return_release	arch_atomic_sub_return
--#define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
--#define arch_atomic_fetch_add		arch_atomic_fetch_add
--#define arch_atomic_fetch_add_acquire	arch_atomic_fetch_add
--#define arch_atomic_fetch_add_release	arch_atomic_fetch_add
--#define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
--#define arch_atomic_fetch_sub		arch_atomic_fetch_sub
--#define arch_atomic_fetch_sub_acquire	arch_atomic_fetch_sub
--#define arch_atomic_fetch_sub_release	arch_atomic_fetch_sub
--#define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
--
--#undef ATOMIC_OPS
--
--#define ATOMIC_OPS(op, I, asm_op)					\
--	ATOMIC_OP(op, I, asm_op)					\
--	ATOMIC_FETCH_OP(op, I, asm_op, _db,         )			\
--	ATOMIC_FETCH_OP(op, I, asm_op,    , _relaxed)
--
--ATOMIC_OPS(and, i, and)
--ATOMIC_OPS(or, i, or)
--ATOMIC_OPS(xor, i, xor)
--
--#define arch_atomic_fetch_and		arch_atomic_fetch_and
--#define arch_atomic_fetch_and_acquire	arch_atomic_fetch_and
--#define arch_atomic_fetch_and_release	arch_atomic_fetch_and
--#define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
--#define arch_atomic_fetch_or		arch_atomic_fetch_or
--#define arch_atomic_fetch_or_acquire	arch_atomic_fetch_or
--#define arch_atomic_fetch_or_release	arch_atomic_fetch_or
--#define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
--#define arch_atomic_fetch_xor		arch_atomic_fetch_xor
--#define arch_atomic_fetch_xor_acquire	arch_atomic_fetch_xor
--#define arch_atomic_fetch_xor_release	arch_atomic_fetch_xor
--#define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
--
--#undef ATOMIC_OPS
--#undef ATOMIC_FETCH_OP
--#undef ATOMIC_OP_RETURN
--#undef ATOMIC_OP
--
- static inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
- {
-        int prev, rc;
-@@ -194,99 +110,6 @@ static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
- #define arch_atomic64_read(v)	READ_ONCE((v)->counter)
- #define arch_atomic64_set(v, i)	WRITE_ONCE((v)->counter, (i))
- 
--#define ATOMIC64_OP(op, I, asm_op)					\
--static inline void arch_atomic64_##op(long i, atomic64_t *v)		\
--{									\
--	__asm__ __volatile__(						\
--	"am"#asm_op".d " " $zero, %1, %0	\n"			\
--	: "+ZB" (v->counter)						\
--	: "r" (I)							\
--	: "memory");							\
--}
--
--#define ATOMIC64_OP_RETURN(op, I, asm_op, c_op, mb, suffix)			\
--static inline long arch_atomic64_##op##_return##suffix(long i, atomic64_t *v)	\
--{										\
--	long result;								\
--	__asm__ __volatile__(							\
--	"am"#asm_op#mb".d " " %1, %2, %0		\n"			\
--	: "+ZB" (v->counter), "=&r" (result)					\
--	: "r" (I)								\
--	: "memory");								\
--										\
--	return result c_op I;							\
--}
--
--#define ATOMIC64_FETCH_OP(op, I, asm_op, mb, suffix)				\
--static inline long arch_atomic64_fetch_##op##suffix(long i, atomic64_t *v)	\
--{										\
--	long result;								\
--										\
--	__asm__ __volatile__(							\
--	"am"#asm_op#mb".d " " %1, %2, %0		\n"			\
--	: "+ZB" (v->counter), "=&r" (result)					\
--	: "r" (I)								\
--	: "memory");								\
--										\
--	return result;								\
--}
--
--#define ATOMIC64_OPS(op, I, asm_op, c_op)				      \
--	ATOMIC64_OP(op, I, asm_op)					      \
--	ATOMIC64_OP_RETURN(op, I, asm_op, c_op, _db,         )		      \
--	ATOMIC64_OP_RETURN(op, I, asm_op, c_op,    , _relaxed)		      \
--	ATOMIC64_FETCH_OP(op, I, asm_op, _db,         )			      \
--	ATOMIC64_FETCH_OP(op, I, asm_op,    , _relaxed)
--
--ATOMIC64_OPS(add, i, add, +)
--ATOMIC64_OPS(sub, -i, add, +)
--
--#define arch_atomic64_add_return		arch_atomic64_add_return
--#define arch_atomic64_add_return_acquire	arch_atomic64_add_return
--#define arch_atomic64_add_return_release	arch_atomic64_add_return
--#define arch_atomic64_add_return_relaxed	arch_atomic64_add_return_relaxed
--#define arch_atomic64_sub_return		arch_atomic64_sub_return
--#define arch_atomic64_sub_return_acquire	arch_atomic64_sub_return
--#define arch_atomic64_sub_return_release	arch_atomic64_sub_return
--#define arch_atomic64_sub_return_relaxed	arch_atomic64_sub_return_relaxed
--#define arch_atomic64_fetch_add			arch_atomic64_fetch_add
--#define arch_atomic64_fetch_add_acquire		arch_atomic64_fetch_add
--#define arch_atomic64_fetch_add_release		arch_atomic64_fetch_add
--#define arch_atomic64_fetch_add_relaxed		arch_atomic64_fetch_add_relaxed
--#define arch_atomic64_fetch_sub			arch_atomic64_fetch_sub
--#define arch_atomic64_fetch_sub_acquire		arch_atomic64_fetch_sub
--#define arch_atomic64_fetch_sub_release		arch_atomic64_fetch_sub
--#define arch_atomic64_fetch_sub_relaxed		arch_atomic64_fetch_sub_relaxed
--
--#undef ATOMIC64_OPS
--
--#define ATOMIC64_OPS(op, I, asm_op)					      \
--	ATOMIC64_OP(op, I, asm_op)					      \
--	ATOMIC64_FETCH_OP(op, I, asm_op, _db,         )			      \
--	ATOMIC64_FETCH_OP(op, I, asm_op,    , _relaxed)
--
--ATOMIC64_OPS(and, i, and)
--ATOMIC64_OPS(or, i, or)
--ATOMIC64_OPS(xor, i, xor)
--
--#define arch_atomic64_fetch_and		arch_atomic64_fetch_and
--#define arch_atomic64_fetch_and_acquire	arch_atomic64_fetch_and
--#define arch_atomic64_fetch_and_release	arch_atomic64_fetch_and
--#define arch_atomic64_fetch_and_relaxed	arch_atomic64_fetch_and_relaxed
--#define arch_atomic64_fetch_or		arch_atomic64_fetch_or
--#define arch_atomic64_fetch_or_acquire	arch_atomic64_fetch_or
--#define arch_atomic64_fetch_or_release	arch_atomic64_fetch_or
--#define arch_atomic64_fetch_or_relaxed	arch_atomic64_fetch_or_relaxed
--#define arch_atomic64_fetch_xor		arch_atomic64_fetch_xor
--#define arch_atomic64_fetch_xor_acquire	arch_atomic64_fetch_xor
--#define arch_atomic64_fetch_xor_release	arch_atomic64_fetch_xor
--#define arch_atomic64_fetch_xor_relaxed	arch_atomic64_fetch_xor_relaxed
--
--#undef ATOMIC64_OPS
--#undef ATOMIC64_FETCH_OP
--#undef ATOMIC64_OP_RETURN
--#undef ATOMIC64_OP
--
- static inline long arch_atomic64_fetch_add_unless(atomic64_t *v, long a, long u)
- {
-        long prev, rc;
-diff --git a/arch/loongarch/include/asm/cmpxchg.h b/arch/loongarch/include/asm/cmpxchg.h
-index 979fde61bba8..0494c2ab553e 100644
---- a/arch/loongarch/include/asm/cmpxchg.h
-+++ b/arch/loongarch/include/asm/cmpxchg.h
-@@ -9,17 +9,33 @@
- #include <linux/build_bug.h>
- #include <asm/barrier.h>
- 
--#define __xchg_asm(amswap_db, m, val)		\
-+#define __xchg_amo_asm(amswap_db, m, val)	\
- ({						\
--		__typeof(val) __ret;		\
-+	__typeof(val) __ret;			\
- 						\
--		__asm__ __volatile__ (		\
--		" "amswap_db" %1, %z2, %0 \n"	\
--		: "+ZB" (*m), "=&r" (__ret)	\
--		: "Jr" (val)			\
--		: "memory");			\
-+	__asm__ __volatile__ (			\
-+	" "amswap_db" %1, %z2, %0 \n"		\
-+	: "+ZB" (*m), "=&r" (__ret)		\
-+	: "Jr" (val)				\
-+	: "memory");				\
- 						\
--		__ret;				\
-+	__ret;					\
-+})
-+
-+#define __xchg_llsc_asm(ld, st, m, val)			\
-+({							\
-+	__typeof(val) __ret, __tmp;			\
-+							\
-+	asm volatile (					\
-+	"1:	ll.w	%0, %3		\n"		\
-+	"	move	%1, %z4		\n"		\
-+	"	sc.w	%1, %2		\n"		\
-+	"	beqz	%1, 1b		\n"		\
-+	: "=&r" (__ret), "=&r" (__tmp), "=ZC" (*m)	\
-+	: "ZC" (*m), "Jr" (val)				\
-+	: "memory");					\
-+							\
-+	__ret;						\
- })
- 
- static inline unsigned int __xchg_small(volatile void *ptr, unsigned int val,
-@@ -67,13 +83,23 @@ __arch_xchg(volatile void *ptr, unsigned long x, int size)
- 	switch (size) {
- 	case 1:
- 	case 2:
--		return __xchg_small(ptr, x, size);
-+		return __xchg_small((volatile void *)ptr, x, size);
- 
- 	case 4:
--		return __xchg_asm("amswap_db.w", (volatile u32 *)ptr, (u32)x);
-+#ifdef CONFIG_CPU_HAS_AMO
-+		return __xchg_amo_asm("amswap_db.w", (volatile u32 *)ptr, (u32)x);
-+#else
-+		return __xchg_llsc_asm("ll.w", "sc.w", (volatile u32 *)ptr, (u32)x);
-+#endif /* CONFIG_CPU_HAS_AMO */
- 
-+#ifdef CONFIG_64BIT
- 	case 8:
--		return __xchg_asm("amswap_db.d", (volatile u64 *)ptr, (u64)x);
-+#ifdef CONFIG_CPU_HAS_AMO
-+		return __xchg_amo_asm("amswap_db.d", (volatile u64 *)ptr, (u64)x);
-+#else
-+		return __xchg_llsc_asm("ll.d", "sc.d", (volatile u64 *)ptr, (u64)x);
-+#endif /* CONFIG_CPU_HAS_AMO */
-+#endif /* CONFIG_64BIT */
- 
- 	default:
- 		BUILD_BUG();
-diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
-index f53ea653af76..65ace8e4350a 100644
---- a/arch/loongarch/include/asm/local.h
-+++ b/arch/loongarch/include/asm/local.h
-@@ -8,6 +8,7 @@
- #include <linux/percpu.h>
- #include <linux/bitops.h>
- #include <linux/atomic.h>
-+#include <asm/asm.h>
- #include <asm/cmpxchg.h>
- 
- typedef struct {
-@@ -27,6 +28,7 @@ typedef struct {
- /*
-  * Same as above, but return the result value
-  */
-+#ifdef CONFIG_CPU_HAS_AMO
- static inline long local_add_return(long i, local_t *l)
- {
- 	unsigned long result;
-@@ -55,6 +57,41 @@ static inline long local_sub_return(long i, local_t *l)
- 
- 	return result;
+ /* IOCSR */
+ #define iocsr_read32(reg) __iocsrrd_w(reg)
+ #define iocsr_read64(reg) __iocsrrd_d(reg)
+@@ -1223,6 +1233,7 @@ static inline unsigned int get_csr_cpuid(void)
+ 	return csr_read32(LOONGARCH_CSR_CPUID);
  }
-+#else
-+static inline long local_add_return(long i, local_t * l)
-+{
-+        unsigned long result, temp;
-+
-+        __asm__ __volatile__(
-+        "1:"    __LL    "%1, %2         # local_add_return      \n"
-+        __stringify(LONG_ADD) "   %0, %1, %3                    \n"
-+                __SC    "%0, %2                                 \n"
-+        "       beq     %0, $r0, 1b                             \n"
-+        __stringify(LONG_ADD) "   %0, %1, %3                    \n"
-+        : "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
-+        : "r" (i), "m" (l->a.counter)
-+        : "memory");
-+
-+        return result;
-+}
-+
-+static inline long local_sub_return(long i, local_t * l)
-+{
-+        unsigned long result, temp;
-+
-+        __asm__ __volatile__(
-+        "1:"    __LL    "%1, %2         # local_sub_return      \n"
-+        __stringify(LONG_SUB) "   %0, %1, %3                    \n"
-+                __SC    "%0, %2                                 \n"
-+        "       beq     %0, $r0, 1b                             \n"
-+	__stringify(LONG_SUB) "   %0, %1, %3                    \n"
-+        : "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
-+        : "r" (i), "m" (l->a.counter)
-+        : "memory");
-+
-+        return result;
-+}
+ 
++#ifdef CONFIG_64BIT
+ static inline void csr_any_send(unsigned int addr, unsigned int data,
+ 				unsigned int data_mask, unsigned int cpu)
+ {
+@@ -1234,6 +1245,7 @@ static inline void csr_any_send(unsigned int addr, unsigned int data,
+ 	val |= ((uint64_t)data << IOCSR_ANY_SEND_BUF_SHIFT);
+ 	iocsr_write64(val, LOONGARCH_IOCSR_ANY_SEND);
+ }
 +#endif
  
- static inline long local_cmpxchg(local_t *l, long old, long new)
+ static inline unsigned int read_csr_excode(void)
  {
+@@ -1257,22 +1269,22 @@ static inline void write_csr_pagesize(unsigned int size)
+ 
+ static inline unsigned int read_csr_tlbrefill_pagesize(void)
+ {
+-	return (csr_read64(LOONGARCH_CSR_TLBREHI) & CSR_TLBREHI_PS) >> CSR_TLBREHI_PS_SHIFT;
++	return (csr_read(LOONGARCH_CSR_TLBREHI) & CSR_TLBREHI_PS) >> CSR_TLBREHI_PS_SHIFT;
+ }
+ 
+ static inline void write_csr_tlbrefill_pagesize(unsigned int size)
+ {
+-	csr_xchg64(size << CSR_TLBREHI_PS_SHIFT, CSR_TLBREHI_PS, LOONGARCH_CSR_TLBREHI);
++	csr_xchg(size << CSR_TLBREHI_PS_SHIFT, CSR_TLBREHI_PS, LOONGARCH_CSR_TLBREHI);
+ }
+ 
+ #define read_csr_asid()			csr_read32(LOONGARCH_CSR_ASID)
+ #define write_csr_asid(val)		csr_write32(val, LOONGARCH_CSR_ASID)
+-#define read_csr_entryhi()		csr_read64(LOONGARCH_CSR_TLBEHI)
+-#define write_csr_entryhi(val)		csr_write64(val, LOONGARCH_CSR_TLBEHI)
+-#define read_csr_entrylo0()		csr_read64(LOONGARCH_CSR_TLBELO0)
+-#define write_csr_entrylo0(val)		csr_write64(val, LOONGARCH_CSR_TLBELO0)
+-#define read_csr_entrylo1()		csr_read64(LOONGARCH_CSR_TLBELO1)
+-#define write_csr_entrylo1(val)		csr_write64(val, LOONGARCH_CSR_TLBELO1)
++#define read_csr_entryhi()		csr_read(LOONGARCH_CSR_TLBEHI)
++#define write_csr_entryhi(val)		csr_write(val, LOONGARCH_CSR_TLBEHI)
++#define read_csr_entrylo0()		csr_read(LOONGARCH_CSR_TLBELO0)
++#define write_csr_entrylo0(val)		csr_write(val, LOONGARCH_CSR_TLBELO0)
++#define read_csr_entrylo1()		csr_read(LOONGARCH_CSR_TLBELO1)
++#define write_csr_entrylo1(val)		csr_write(val, LOONGARCH_CSR_TLBELO1)
+ #define read_csr_ecfg()			csr_read32(LOONGARCH_CSR_ECFG)
+ #define write_csr_ecfg(val)		csr_write32(val, LOONGARCH_CSR_ECFG)
+ #define read_csr_estat()		csr_read32(LOONGARCH_CSR_ESTAT)
+@@ -1282,20 +1294,20 @@ static inline void write_csr_tlbrefill_pagesize(unsigned int size)
+ #define read_csr_euen()			csr_read32(LOONGARCH_CSR_EUEN)
+ #define write_csr_euen(val)		csr_write32(val, LOONGARCH_CSR_EUEN)
+ #define read_csr_cpuid()		csr_read32(LOONGARCH_CSR_CPUID)
+-#define read_csr_prcfg1()		csr_read64(LOONGARCH_CSR_PRCFG1)
+-#define write_csr_prcfg1(val)		csr_write64(val, LOONGARCH_CSR_PRCFG1)
+-#define read_csr_prcfg2()		csr_read64(LOONGARCH_CSR_PRCFG2)
+-#define write_csr_prcfg2(val)		csr_write64(val, LOONGARCH_CSR_PRCFG2)
+-#define read_csr_prcfg3()		csr_read64(LOONGARCH_CSR_PRCFG3)
+-#define write_csr_prcfg3(val)		csr_write64(val, LOONGARCH_CSR_PRCFG3)
++#define read_csr_prcfg1()		csr_read(LOONGARCH_CSR_PRCFG1)
++#define write_csr_prcfg1(val)		csr_write(val, LOONGARCH_CSR_PRCFG1)
++#define read_csr_prcfg2()		csr_read(LOONGARCH_CSR_PRCFG2)
++#define write_csr_prcfg2(val)		csr_write(val, LOONGARCH_CSR_PRCFG2)
++#define read_csr_prcfg3()		csr_read(LOONGARCH_CSR_PRCFG3)
++#define write_csr_prcfg3(val)		csr_write(val, LOONGARCH_CSR_PRCFG3)
+ #define read_csr_stlbpgsize()		csr_read32(LOONGARCH_CSR_STLBPGSIZE)
+ #define write_csr_stlbpgsize(val)	csr_write32(val, LOONGARCH_CSR_STLBPGSIZE)
+ #define read_csr_rvacfg()		csr_read32(LOONGARCH_CSR_RVACFG)
+ #define write_csr_rvacfg(val)		csr_write32(val, LOONGARCH_CSR_RVACFG)
+ #define write_csr_tintclear(val)	csr_write32(val, LOONGARCH_CSR_TINTCLR)
+-#define read_csr_impctl1()		csr_read64(LOONGARCH_CSR_IMPCTL1)
+-#define write_csr_impctl1(val)		csr_write64(val, LOONGARCH_CSR_IMPCTL1)
+-#define write_csr_impctl2(val)		csr_write64(val, LOONGARCH_CSR_IMPCTL2)
++#define read_csr_impctl1()		csr_read(LOONGARCH_CSR_IMPCTL1)
++#define write_csr_impctl1(val)		csr_write(val, LOONGARCH_CSR_IMPCTL1)
++#define write_csr_impctl2(val)		csr_write(val, LOONGARCH_CSR_IMPCTL2)
+ 
+ #define read_csr_perfctrl0()		csr_read64(LOONGARCH_CSR_PERFCTRL0)
+ #define read_csr_perfcntr0()		csr_read64(LOONGARCH_CSR_PERFCNTR0)
 diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
-index 87be9b14e9da..1619c1d15e6b 100644
+index 1619c1d15e6b..44a8aea2b0e5 100644
 --- a/arch/loongarch/include/asm/percpu.h
 +++ b/arch/loongarch/include/asm/percpu.h
-@@ -36,6 +36,8 @@ static inline void set_my_cpu_offset(unsigned long off)
- 	__my_cpu_offset;				\
- })
+@@ -27,7 +27,7 @@ register unsigned long __my_cpu_offset __asm__("$r21");
+ static inline void set_my_cpu_offset(unsigned long off)
+ {
+ 	__my_cpu_offset = off;
+-	csr_write64(off, PERCPU_BASE_KS);
++	csr_write(off, PERCPU_BASE_KS);
+ }
  
-+#ifdef CONFIG_CPU_HAS_AMO
-+
- #define PERCPU_OP(op, asm_op, c_op)					\
- static __always_inline unsigned long __percpu_##op(void *ptr,		\
- 			unsigned long val, int size)			\
-@@ -68,25 +70,9 @@ PERCPU_OP(and, and, &)
- PERCPU_OP(or, or, |)
- #undef PERCPU_OP
+ #define __my_cpu_offset					\
+diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
+index a2060a24b39f..3726cd0885b6 100644
+--- a/arch/loongarch/kernel/cpu-probe.c
++++ b/arch/loongarch/kernel/cpu-probe.c
+@@ -298,8 +298,15 @@ static inline void cpu_probe_loongson(struct cpuinfo_loongarch *c, unsigned int
+ 		return;
+ 	}
  
--static __always_inline unsigned long __percpu_xchg(void *ptr, unsigned long val, int size)
--{
--	switch (size) {
--	case 1:
--	case 2:
--		return __xchg_small((volatile void *)ptr, val, size);
--
--	case 4:
--		return __xchg_asm("amswap.w", (volatile u32 *)ptr, (u32)val);
--
--	case 8:
--		return __xchg_asm("amswap.d", (volatile u64 *)ptr, (u64)val);
-+#endif
- 
--	default:
--		BUILD_BUG();
--	}
--
--	return 0;
--}
 +#ifdef CONFIG_64BIT
- 
- #define __pcpu_op_1(op)		op ".b "
- #define __pcpu_op_2(op)		op ".h "
-@@ -115,6 +101,10 @@ do {									\
- 		: "memory");						\
- } while (0)
- 
+ 	*vendor = iocsr_read64(LOONGARCH_IOCSR_VENDOR);
+ 	*cpuname = iocsr_read64(LOONGARCH_IOCSR_CPUNAME);
++#else
++	*vendor = iocsr_read32(LOONGARCH_IOCSR_VENDOR) |
++		(u64)iocsr_read32(LOONGARCH_IOCSR_VENDOR + 4) << 32;
++	*cpuname = iocsr_read32(LOONGARCH_IOCSR_CPUNAME) |
++		(u64)iocsr_read32(LOONGARCH_IOCSR_CPUNAME + 4) << 32;
 +#endif
-+
-+#define __percpu_xchg __arch_xchg
-+
- /* this_cpu_cmpxchg */
- #define _protect_cmpxchg_local(pcp, o, n)			\
- ({								\
-@@ -135,6 +125,8 @@ do {									\
- 	__retval;						\
- })
  
-+#ifdef CONFIG_CPU_HAS_AMO
-+
- #define _percpu_add(pcp, val) \
- 	_pcp_protect(__percpu_add, pcp, val)
+ 	if (!__cpu_full_name[cpu]) {
+ 		if (((char *)vendor)[0] == 0)
+diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
+index 6fb92cc1a4c9..1c31bf3a16ed 100644
+--- a/arch/loongarch/kernel/time.c
++++ b/arch/loongarch/kernel/time.c
+@@ -50,10 +50,10 @@ static int constant_set_state_oneshot(struct clock_event_device *evt)
  
-@@ -146,9 +138,6 @@ do {									\
- #define _percpu_or(pcp, val) \
- 	_pcp_protect(__percpu_or, pcp, val)
+ 	raw_spin_lock(&state_lock);
  
--#define _percpu_xchg(pcp, val) ((typeof(pcp)) \
--	_pcp_protect(__percpu_xchg, pcp, (unsigned long)(val)))
--
- #define this_cpu_add_4(pcp, val) _percpu_add(pcp, val)
- #define this_cpu_add_8(pcp, val) _percpu_add(pcp, val)
+-	timer_config = csr_read64(LOONGARCH_CSR_TCFG);
++	timer_config = csr_read(LOONGARCH_CSR_TCFG);
+ 	timer_config |= CSR_TCFG_EN;
+ 	timer_config &= ~CSR_TCFG_PERIOD;
+-	csr_write64(timer_config, LOONGARCH_CSR_TCFG);
++	csr_write(timer_config, LOONGARCH_CSR_TCFG);
  
-@@ -161,6 +150,10 @@ do {									\
- #define this_cpu_or_4(pcp, val) _percpu_or(pcp, val)
- #define this_cpu_or_8(pcp, val) _percpu_or(pcp, val)
+ 	raw_spin_unlock(&state_lock);
  
-+#endif
-+
-+#ifdef CONFIG_64BIT
-+
- #define this_cpu_read_1(pcp) _percpu_read(1, pcp)
- #define this_cpu_read_2(pcp) _percpu_read(2, pcp)
- #define this_cpu_read_4(pcp) _percpu_read(4, pcp)
-@@ -171,6 +164,11 @@ do {									\
- #define this_cpu_write_4(pcp, val) _percpu_write(4, pcp, val)
- #define this_cpu_write_8(pcp, val) _percpu_write(8, pcp, val)
+@@ -70,7 +70,7 @@ static int constant_set_state_periodic(struct clock_event_device *evt)
+ 	period = const_clock_freq / HZ;
+ 	timer_config = period & CSR_TCFG_VAL;
+ 	timer_config |= (CSR_TCFG_PERIOD | CSR_TCFG_EN);
+-	csr_write64(timer_config, LOONGARCH_CSR_TCFG);
++	csr_write(timer_config, LOONGARCH_CSR_TCFG);
  
-+#endif
+ 	raw_spin_unlock(&state_lock);
+ 
+@@ -83,9 +83,9 @@ static int constant_set_state_shutdown(struct clock_event_device *evt)
+ 
+ 	raw_spin_lock(&state_lock);
+ 
+-	timer_config = csr_read64(LOONGARCH_CSR_TCFG);
++	timer_config = csr_read(LOONGARCH_CSR_TCFG);
+ 	timer_config &= ~CSR_TCFG_EN;
+-	csr_write64(timer_config, LOONGARCH_CSR_TCFG);
++	csr_write(timer_config, LOONGARCH_CSR_TCFG);
+ 
+ 	raw_spin_unlock(&state_lock);
+ 
+@@ -98,7 +98,7 @@ static int constant_timer_next_event(unsigned long delta, struct clock_event_dev
+ 
+ 	delta &= CSR_TCFG_VAL;
+ 	timer_config = delta | CSR_TCFG_EN;
+-	csr_write64(timer_config, LOONGARCH_CSR_TCFG);
++	csr_write(timer_config, LOONGARCH_CSR_TCFG);
+ 
+ 	return 0;
+ }
+@@ -137,7 +137,7 @@ void save_counter(void)
+ void sync_counter(void)
+ {
+ 	/* Ensure counter begin at 0 */
+-	csr_write64(init_offset, LOONGARCH_CSR_CNTC);
++	csr_write(init_offset, LOONGARCH_CSR_CNTC);
+ }
+ 
+ int constant_clockevent_init(void)
+@@ -235,7 +235,7 @@ void __init time_init(void)
+ 	else
+ 		const_clock_freq = calc_const_freq();
+ 
+-	init_offset = -(drdtime() - csr_read64(LOONGARCH_CSR_CNTC));
++	init_offset = -(drdtime() - csr_read(LOONGARCH_CSR_CNTC));
+ 
+ 	constant_clockevent_init();
+ 	constant_clocksource_init();
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+index da5926fead4a..004b8ebf0051 100644
+--- a/arch/loongarch/kernel/traps.c
++++ b/arch/loongarch/kernel/traps.c
+@@ -625,7 +625,7 @@ asmlinkage void noinstr do_bce(struct pt_regs *regs)
+ 	bool user = user_mode(regs);
+ 	bool pie = regs_irqs_disabled(regs);
+ 	unsigned long era = exception_era(regs);
+-	u64 badv = 0, lower = 0, upper = ULONG_MAX;
++	unsigned long badv = 0, lower = 0, upper = ULONG_MAX;
+ 	union loongarch_instruction insn;
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
+@@ -1070,10 +1070,13 @@ asmlinkage void noinstr do_reserved(struct pt_regs *regs)
+ 
+ asmlinkage void cache_parity_error(void)
+ {
++	u32 merrctl = csr_read32(LOONGARCH_CSR_MERRCTL);
++	unsigned long merrera = csr_read(LOONGARCH_CSR_MERRERA);
 +
-+#define _percpu_xchg(pcp, val) ((typeof(pcp)) \
-+	_pcp_protect(__percpu_xchg, pcp, (unsigned long)(val)))
-+
- #define this_cpu_xchg_1(pcp, val) _percpu_xchg(pcp, val)
- #define this_cpu_xchg_2(pcp, val) _percpu_xchg(pcp, val)
- #define this_cpu_xchg_4(pcp, val) _percpu_xchg(pcp, val)
+ 	/* For the moment, report the problem and hang. */
+ 	pr_err("Cache error exception:\n");
+-	pr_err("csr_merrctl == %08x\n", csr_read32(LOONGARCH_CSR_MERRCTL));
+-	pr_err("csr_merrera == %016lx\n", csr_read64(LOONGARCH_CSR_MERRERA));
++	pr_err("csr_merrctl == %08x\n", merrctl);
++	pr_err("csr_merrera == %016lx\n", merrera);
+ 	panic("Can't handle the cache error!");
+ }
+ 
+@@ -1130,9 +1133,9 @@ static void configure_exception_vector(void)
+ 	eentry    = (unsigned long)exception_handlers;
+ 	tlbrentry = (unsigned long)exception_handlers + 80*VECSIZE;
+ 
+-	csr_write64(eentry, LOONGARCH_CSR_EENTRY);
+-	csr_write64(__pa(eentry), LOONGARCH_CSR_MERRENTRY);
+-	csr_write64(__pa(tlbrentry), LOONGARCH_CSR_TLBRENTRY);
++	csr_write(eentry, LOONGARCH_CSR_EENTRY);
++	csr_write(__pa(eentry), LOONGARCH_CSR_MERRENTRY);
++	csr_write(__pa(tlbrentry), LOONGARCH_CSR_TLBRENTRY);
+ }
+ 
+ void per_cpu_trap_init(int cpu)
+diff --git a/arch/loongarch/lib/dump_tlb.c b/arch/loongarch/lib/dump_tlb.c
+index 0b886a6e260f..116f21ea4e2c 100644
+--- a/arch/loongarch/lib/dump_tlb.c
++++ b/arch/loongarch/lib/dump_tlb.c
+@@ -20,9 +20,9 @@ void dump_tlb_regs(void)
+ 
+ 	pr_info("Index    : 0x%0x\n", read_csr_tlbidx());
+ 	pr_info("PageSize : 0x%0x\n", read_csr_pagesize());
+-	pr_info("EntryHi  : 0x%0*lx\n", field, read_csr_entryhi());
+-	pr_info("EntryLo0 : 0x%0*lx\n", field, read_csr_entrylo0());
+-	pr_info("EntryLo1 : 0x%0*lx\n", field, read_csr_entrylo1());
++	pr_info("EntryHi  : 0x%0*lx\n", field, (unsigned long)read_csr_entryhi());
++	pr_info("EntryLo0 : 0x%0*lx\n", field, (unsigned long)read_csr_entrylo0());
++	pr_info("EntryLo1 : 0x%0*lx\n", field, (unsigned long)read_csr_entrylo1());
+ }
+ 
+ static void dump_tlb(int first, int last)
+diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
+index 3b427b319db2..6e474469e210 100644
+--- a/arch/loongarch/mm/tlb.c
++++ b/arch/loongarch/mm/tlb.c
+@@ -229,11 +229,11 @@ static void setup_ptwalker(void)
+ 	if (cpu_has_ptw)
+ 		pwctl1 |= CSR_PWCTL1_PTW;
+ 
+-	csr_write64(pwctl0, LOONGARCH_CSR_PWCTL0);
+-	csr_write64(pwctl1, LOONGARCH_CSR_PWCTL1);
+-	csr_write64((long)swapper_pg_dir, LOONGARCH_CSR_PGDH);
+-	csr_write64((long)invalid_pg_dir, LOONGARCH_CSR_PGDL);
+-	csr_write64((long)smp_processor_id(), LOONGARCH_CSR_TMID);
++	csr_write(pwctl0, LOONGARCH_CSR_PWCTL0);
++	csr_write(pwctl1, LOONGARCH_CSR_PWCTL1);
++	csr_write((long)swapper_pg_dir, LOONGARCH_CSR_PGDH);
++	csr_write((long)invalid_pg_dir, LOONGARCH_CSR_PGDL);
++	csr_write((long)smp_processor_id(), LOONGARCH_CSR_TMID);
+ }
+ 
+ static void output_pgtable_bits_defines(void)
+diff --git a/arch/loongarch/power/hibernate.c b/arch/loongarch/power/hibernate.c
+index e7b7346592cb..817270410ef9 100644
+--- a/arch/loongarch/power/hibernate.c
++++ b/arch/loongarch/power/hibernate.c
+@@ -10,7 +10,7 @@ static u32 saved_crmd;
+ static u32 saved_prmd;
+ static u32 saved_euen;
+ static u32 saved_ecfg;
+-static u64 saved_pcpu_base;
++static unsigned long saved_pcpu_base;
+ struct pt_regs saved_regs;
+ 
+ void save_processor_state(void)
+@@ -20,7 +20,7 @@ void save_processor_state(void)
+ 	saved_prmd = csr_read32(LOONGARCH_CSR_PRMD);
+ 	saved_euen = csr_read32(LOONGARCH_CSR_EUEN);
+ 	saved_ecfg = csr_read32(LOONGARCH_CSR_ECFG);
+-	saved_pcpu_base = csr_read64(PERCPU_BASE_KS);
++	saved_pcpu_base = csr_read(PERCPU_BASE_KS);
+ 
+ 	if (is_fpu_owner())
+ 		save_fp(current);
+@@ -33,7 +33,7 @@ void restore_processor_state(void)
+ 	csr_write32(saved_prmd, LOONGARCH_CSR_PRMD);
+ 	csr_write32(saved_euen, LOONGARCH_CSR_EUEN);
+ 	csr_write32(saved_ecfg, LOONGARCH_CSR_ECFG);
+-	csr_write64(saved_pcpu_base, PERCPU_BASE_KS);
++	csr_write(saved_pcpu_base, PERCPU_BASE_KS);
+ 
+ 	if (is_fpu_owner())
+ 		restore_fp(current);
+diff --git a/arch/loongarch/power/suspend.c b/arch/loongarch/power/suspend.c
+index c9e594925c47..7e3d79f8bbd4 100644
+--- a/arch/loongarch/power/suspend.c
++++ b/arch/loongarch/power/suspend.c
+@@ -20,24 +20,24 @@ u64 loongarch_suspend_addr;
+ struct saved_registers {
+ 	u32 ecfg;
+ 	u32 euen;
+-	u64 pgd;
+-	u64 kpgd;
+ 	u32 pwctl0;
+ 	u32 pwctl1;
+-	u64 pcpu_base;
++	unsigned long pgd;
++	unsigned long kpgd;
++	unsigned long pcpu_base;
+ };
+ static struct saved_registers saved_regs;
+ 
+ void loongarch_common_suspend(void)
+ {
+ 	save_counter();
+-	saved_regs.pgd = csr_read64(LOONGARCH_CSR_PGDL);
+-	saved_regs.kpgd = csr_read64(LOONGARCH_CSR_PGDH);
++	saved_regs.pgd = csr_read(LOONGARCH_CSR_PGDL);
++	saved_regs.kpgd = csr_read(LOONGARCH_CSR_PGDH);
+ 	saved_regs.pwctl0 = csr_read32(LOONGARCH_CSR_PWCTL0);
+ 	saved_regs.pwctl1 = csr_read32(LOONGARCH_CSR_PWCTL1);
+ 	saved_regs.ecfg = csr_read32(LOONGARCH_CSR_ECFG);
+ 	saved_regs.euen = csr_read32(LOONGARCH_CSR_EUEN);
+-	saved_regs.pcpu_base = csr_read64(PERCPU_BASE_KS);
++	saved_regs.pcpu_base = csr_read(PERCPU_BASE_KS);
+ 
+ 	loongarch_suspend_addr = loongson_sysconf.suspend_addr;
+ }
+@@ -46,17 +46,17 @@ void loongarch_common_resume(void)
+ {
+ 	sync_counter();
+ 	local_flush_tlb_all();
+-	csr_write64(eentry, LOONGARCH_CSR_EENTRY);
+-	csr_write64(eentry, LOONGARCH_CSR_MERRENTRY);
+-	csr_write64(tlbrentry, LOONGARCH_CSR_TLBRENTRY);
++	csr_write(eentry, LOONGARCH_CSR_EENTRY);
++	csr_write(eentry, LOONGARCH_CSR_MERRENTRY);
++	csr_write(tlbrentry, LOONGARCH_CSR_TLBRENTRY);
+ 
+-	csr_write64(saved_regs.pgd, LOONGARCH_CSR_PGDL);
+-	csr_write64(saved_regs.kpgd, LOONGARCH_CSR_PGDH);
++	csr_write(saved_regs.pgd, LOONGARCH_CSR_PGDL);
++	csr_write(saved_regs.kpgd, LOONGARCH_CSR_PGDH);
+ 	csr_write32(saved_regs.pwctl0, LOONGARCH_CSR_PWCTL0);
+ 	csr_write32(saved_regs.pwctl1, LOONGARCH_CSR_PWCTL1);
+ 	csr_write32(saved_regs.ecfg, LOONGARCH_CSR_ECFG);
+ 	csr_write32(saved_regs.euen, LOONGARCH_CSR_EUEN);
+-	csr_write64(saved_regs.pcpu_base, PERCPU_BASE_KS);
++	csr_write(saved_regs.pcpu_base, PERCPU_BASE_KS);
+ }
+ 
+ int loongarch_acpi_suspend(void)
+diff --git a/drivers/firmware/efi/libstub/loongarch.c b/drivers/firmware/efi/libstub/loongarch.c
+index 3782d0a187d1..9825f5218137 100644
+--- a/drivers/firmware/efi/libstub/loongarch.c
++++ b/drivers/firmware/efi/libstub/loongarch.c
+@@ -72,10 +72,10 @@ efi_status_t efi_boot_kernel(void *handle, efi_loaded_image_t *image,
+ 		    desc_ver, priv.runtime_map);
+ 
+ 	/* Config Direct Mapping */
+-	csr_write64(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
+-	csr_write64(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
+-	csr_write64(CSR_DMW2_INIT, LOONGARCH_CSR_DMWIN2);
+-	csr_write64(CSR_DMW3_INIT, LOONGARCH_CSR_DMWIN3);
++	csr_write(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
++	csr_write(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
++	csr_write(CSR_DMW2_INIT, LOONGARCH_CSR_DMWIN2);
++	csr_write(CSR_DMW3_INIT, LOONGARCH_CSR_DMWIN3);
+ 
+ 	real_kernel_entry = (void *)kernel_entry_address(kernel_addr, image);
+ 
 -- 
 2.47.3
 
