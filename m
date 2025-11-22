@@ -1,175 +1,135 @@
-Return-Path: <linux-arch+bounces-15052-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15053-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF881C7CF00
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 12:57:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF4E2C7CF12
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 12:58:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 098D63554B8
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 11:57:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE6D53AA091
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 11:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B54C2F3C02;
-	Sat, 22 Nov 2025 11:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8573E2FCBE3;
+	Sat, 22 Nov 2025 11:58:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="IX2e92f5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QnVaF7rx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyMF9bSj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D192FA0E9;
-	Sat, 22 Nov 2025 11:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D1D2857C1
+	for <linux-arch@vger.kernel.org>; Sat, 22 Nov 2025 11:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763812649; cv=none; b=uZX48L8u+sbcxyhXKQtHnZzj5TzQojwdpN67lIgntGV7D+iNW9VzbqsLqTEJI5A9vuLYjZ4RmAJMG9lSTwGx3s4QnTn5DintDiq2m5mIZ37BZbR/VaD59p5D/1kNUrFEMqU5f3z/fIqcmTGrwiPjXHtxN3NhKQ+1K2QU0/a6wEE=
+	t=1763812724; cv=none; b=J//qxqJ3ALkwCPIZ20xTYm0G6V1758tS1H7TyUqrzh6DjF8W4TPmzOncnzZ0ik6kgnrbP3eDQNqfgT8wZnQ+V4GjZvURWAvyq002mrdKzD911RbUOZkb6phKvhODU9fl6gB1FygpZ7pi+ubsg3fTv69Yy9l4f1tJ4p14YNNgZKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763812649; c=relaxed/simple;
-	bh=mZcm+0V7eo21fakAtLMCCoVtRwTR6UO4b55wipxHxyU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=HJgWIzC7Emkdk+SinSk9g34o1qN2HNSVrJPsnPxGjDBGUfbmd6dnkTWc8CH8YlUc9Bo+YOydeCv/b0Fvo7CaOC0FJaJKopmxTHY+6g6lp5DSXNJ2AILL2FEYHNMBEvk8IKLNHNYx7Cl2V71JWcGm8K5bQJFtkid4Jdc/PHz89kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=IX2e92f5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QnVaF7rx; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 419A61D0014F;
-	Sat, 22 Nov 2025 06:57:26 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Sat, 22 Nov 2025 06:57:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1763812646;
-	 x=1763899046; bh=k9NvlEaBtVcuxazixF9pIt28NlkS+zYWHRHO9Ac5XQA=; b=
-	IX2e92f5+iaQ86D2jXreWxxSWxbBioZMlPGfrxsQabrFtVK/xC8Zz8doXBr8I7eU
-	2HINAkmkukeBbMHObYXxHOgbn1wG6LfFBz7qIW2b0ruor/iBbAc92yawVVBKQF5m
-	v79BFLQO2hWwslq8uiMP1HtuNfgT+kJlfcWRN3SLFW20eT3P1eF+gh8Nd/HpPT3S
-	SKqk4usy7cD5wp0FqTlTkqXiHubeCyXKfc1t3MT+SiuTxgvduKplE4pWM5mdQRFb
-	huzeRgAIvA8jTy4TEucER2K1ML6EmUEpXcFKJzcRIhyDEKUtQ7y6uSfEM5wgAPQQ
-	mYfwLFZQ9dKF1kMAFQXu+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763812646; x=
-	1763899046; bh=k9NvlEaBtVcuxazixF9pIt28NlkS+zYWHRHO9Ac5XQA=; b=Q
-	nVaF7rxc6PbmPBfAMq2MxEAkQ5kJ0ljrP9ZBxfFBTmB7XfxDj+Dx08pE2/1uybaK
-	jKIRsRGbPENyhnbbdWnWPPnUqu2GkwTbAiCMRnBhzxYgfGyJZgyCWwUed/luSPyA
-	w9Zpm2eSnWlwogcGjzZmAP0hORER50xy7i7Kjk0soocJ49TZUKDEME2MjgVLh1Aj
-	Aw5N9cohxQSvuYBKBqS8ToFtHf3HAI+TQzs+Ez9HyNduhf2k8/c2pQjh9Vsq8F9o
-	GC4py4/tDoaqocfoBfbOCZol/4n8vi1k8HaC+ReOBZcrzfzP7wud+DLgXm5TvO5O
-	6JZs16zL6rTJsnu5Es4Xg==
-X-ME-Sender: <xms:JaUhaYA4D_re064N8xBZx_6CWup3r6PzaewaJKRFZR-1NRHXHh3YpQ>
-    <xme:JaUhaVXizBZGdoSgw_N3Puuypy6SFZh4y5EdKosujDzYA53DSEqKr4eoX0h9lioek
-    m8r2kweNxCYsOke71Z5rJGJm7e_e9wu1Ejj0AlBl11xkNVXi7smBOE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfedvjeekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtg
-    hpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehg
-    uhhorhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhoohhnghgrrhgthheslh
-    hishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopegthhgvnhhhuhgrtggriheslhho
-    ohhnghhsohhnrdgtnhdprhgtphhtthhopehlihiguhgvfhgvnhhgsehlohhonhhgshhonh
-    drtghnpdhrtghpthhtohepthhhohhmrghssehtqdektghhrdguvgdprhgtphhtthhopehl
-    ihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlih
-    hnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:JaUhabmA01_oCrg_ln_mfVLcfi9v3yxmUootQDWXBk4PmApGjxMySw>
-    <xmx:JaUhaXAVsq2zvBJjyEpd968TqtUCypSrfCZjJvPifteV4_UD5BOpDA>
-    <xmx:JaUhadOC0GCsl5zwx35Awfjrz7CB3k3V7J4JUapq31bg05QTEVxw8Q>
-    <xmx:JaUhaePLTYV1k-WEoHRxWdGNydDf-m5InXB2JSPnT3qKqsjAF8M8sA>
-    <xmx:JqUhaXvD5NsX9ahRx1UeHmyPoYVRNKamBSgWLWnvvLHiwfMepON79V2o>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0151F700054; Sat, 22 Nov 2025 06:57:24 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1763812724; c=relaxed/simple;
+	bh=lVscBSlapZVI6h7fcPrKOthynCe/yoerdT+HBvoA1IE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jxnAw9IgZdMx9tb/LzeVc3LAar+0m0/yE9hp3bMSNMDn6/JZt+Wu4jEs8lWb5QTdfvwV49U5gUNh3cKJEjtp7b9ZCESRbM/jTWToU482A/57BfnGMlDbtk2RD0xkIYUih/afWipu/wbofFvWDu8dAqo4XU2aqeaJBMB88EFi/ZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyMF9bSj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E694C4CEF5
+	for <linux-arch@vger.kernel.org>; Sat, 22 Nov 2025 11:58:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763812724;
+	bh=lVscBSlapZVI6h7fcPrKOthynCe/yoerdT+HBvoA1IE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=XyMF9bSjIb2hXn2QCBA3D9dXiv6pSaTJxlSyhgKMPDYeHJfkUd4gNmlbfC/4QMXTM
+	 HIpv1qk3H3ceKFBbSm7uHPXn0PNBawuaCVUWTxqmZvy9+s3qyl/W78VhMw6rCco/EN
+	 KuDIidZfZqi8XgSGO5bjyNqMJr/KVlRf1xq2T8esBQWNFrQR+yP4Fe15qI3/5BIrQ/
+	 h3I4c9/RmjdPlz3HphVftJagWxdHX//TxPw3NMEuVfO65wQA6XFVwPurPwUdORhs9n
+	 GP6n/Pad7gJ+CPlyisqyDf7+OV8M8OhUUoNXfDyW6Y7bH8jFkgnJtVnmXDJ0fFpqy0
+	 v/JCd3eAeV1ug==
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b735b7326e5so677223766b.0
+        for <linux-arch@vger.kernel.org>; Sat, 22 Nov 2025 03:58:43 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXhCScjsOE8lN5ByTOH7OcZeC0XLq59Jq7qYN5ZL+V80JXny+NUIpjuO+HBKytWFvIEFNFGBDHxh5Ag@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ26vCPLZEM20ce7Qicxp9ngO2J3L67O1InZFvu7lSQkNv9AxC
+	yRmPg/33DFPZVjIF+FeJ0nFfSDcDgy3kIVr4fdKDC+IAC32OS9+yJgw5L2J7Ws+51hKJ35WCzd4
+	SN/gYJcFJzTEIPHyQnIqiadlUTLl6x0I=
+X-Google-Smtp-Source: AGHT+IGgnpCPWwC88qvrkNTQwdV68kX+zS0kEjc6D2juT1eXO1UBemE3YTKBcQaY5+VvMKgQWqfVYNN/l56dh94YuSo=
+X-Received: by 2002:a17:907:7e89:b0:b3f:f6d:1d9e with SMTP id
+ a640c23a62f3a-b76571386d9mr1071695466b.6.1763812722662; Sat, 22 Nov 2025
+ 03:58:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AsIcsmVbKmaR
-Date: Sat, 22 Nov 2025 12:56:53 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
- "Huacai Chen" <chenhuacai@loongson.cn>
-Cc: "Huacai Chen" <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
- Linux-Arch <linux-arch@vger.kernel.org>,
- "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
- "WANG Xuerui" <kernel@xen0n.name>, "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
- linux-kernel@vger.kernel.org
-Message-Id: <3407d536-a9b5-48e8-a9cf-4bb590941d0a@app.fastmail.com>
-In-Reply-To: <0b2bf90e-f148-46ad-92e4-b177d412fd11@t-8ch.de>
 References: <20251122043634.3447854-1-chenhuacai@loongson.cn>
- <20251122043634.3447854-14-chenhuacai@loongson.cn>
- <0b2bf90e-f148-46ad-92e4-b177d412fd11@t-8ch.de>
+ <20251122043634.3447854-14-chenhuacai@loongson.cn> <0b2bf90e-f148-46ad-92e4-b177d412fd11@t-8ch.de>
+In-Reply-To: <0b2bf90e-f148-46ad-92e4-b177d412fd11@t-8ch.de>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 22 Nov 2025 19:58:24 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4Vemxni8PrMCeubUwWcOFAV-j6AFJg4oPdxs-VNBiUGw@mail.gmail.com>
+X-Gm-Features: AWmQ_bm5gJZLzWULsM4bN1MBHln4HX0yEDFKZgU33ohqm4S5SUKK-Low_szzd24
+Message-ID: <CAAhV-H4Vemxni8PrMCeubUwWcOFAV-j6AFJg4oPdxs-VNBiUGw@mail.gmail.com>
 Subject: Re: [PATCH V3 13/14] LoongArch: Adjust default config files for 32BIT/64BIT
-Content-Type: text/plain; charset=utf-8
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev, 
+	linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>, 
+	Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 22, 2025, at 10:45, Thomas Wei=C3=9Fschuh wrote:
+Hi, Thomas,
+
+On Sat, Nov 22, 2025 at 5:45=E2=80=AFPM Thomas Wei=C3=9Fschuh <thomas@t-8ch=
+.de> wrote:
+>
 > On 2025-11-22 12:36:33+0800, Huacai Chen wrote:
->> Add loongson32_defconfig (for 32BIT) and rename loongson3_defconfig to
->> loongson64_defconfig (for 64BIT).
->>=20
->> Also adjust graphics drivers, such as FB_EFI is replaced with EFIDRM.
->>=20
->> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->> ---
->>  arch/loongarch/Makefile                       |    7 +-
->>  arch/loongarch/configs/loongson32_defconfig   | 1104 +++++++++++++++=
-++
->>  ...ongson3_defconfig =3D> loongson64_defconfig} |    6 +-
->>  3 files changed, 1113 insertions(+), 4 deletions(-)
->>  create mode 100644 arch/loongarch/configs/loongson32_defconfig
->>  rename arch/loongarch/configs/{loongson3_defconfig =3D> loongson64_d=
-efconfig} (99%)
->>=20
->> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
->> index 96ca1a688984..cf9373786969 100644
->> --- a/arch/loongarch/Makefile
->> +++ b/arch/loongarch/Makefile
->> @@ -5,7 +5,12 @@
->> =20
->>  boot	:=3D arch/loongarch/boot
->> =20
->> -KBUILD_DEFCONFIG :=3D loongson3_defconfig
->> +ifdef CONFIG_32BIT
+> > Add loongson32_defconfig (for 32BIT) and rename loongson3_defconfig to
+> > loongson64_defconfig (for 64BIT).
+> >
+> > Also adjust graphics drivers, such as FB_EFI is replaced with EFIDRM.
+> >
+> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  arch/loongarch/Makefile                       |    7 +-
+> >  arch/loongarch/configs/loongson32_defconfig   | 1104 +++++++++++++++++
+> >  ...ongson3_defconfig =3D> loongson64_defconfig} |    6 +-
+> >  3 files changed, 1113 insertions(+), 4 deletions(-)
+> >  create mode 100644 arch/loongarch/configs/loongson32_defconfig
+> >  rename arch/loongarch/configs/{loongson3_defconfig =3D> loongson64_def=
+config} (99%)
+> >
+> > diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> > index 96ca1a688984..cf9373786969 100644
+> > --- a/arch/loongarch/Makefile
+> > +++ b/arch/loongarch/Makefile
+> > @@ -5,7 +5,12 @@
+> >
+> >  boot :=3D arch/loongarch/boot
+> >
+> > -KBUILD_DEFCONFIG :=3D loongson3_defconfig
+> > +ifdef CONFIG_32BIT
 >
-> Testing for CONFIG options here doesn't make sense, as the config is n=
-ot yet
-> created.
-
-Right
-
-> Either test for $(ARCH) or uname or just use one unconditionally.
-
-I don't really like the $(ARCH) hacks, nobody is going to build kernels
-natively on loongarch32, and for the rest it's fine to set the option.
-
+> Testing for CONFIG options here doesn't make sense, as the config is not =
+yet
+> created. Either test for $(ARCH) or uname or just use one unconditionally=
+.
 > Also as mentioned before, snippets can reduce the duplication.
+Thank you for your clarification. But $(ARCH) also doesn't make sense
+because it is always "loongarch".
+
+'uname' is an option but I think it doesn't work for cross compile?
+
+
+Huacai
+
 >
->> +KBUILD_DEFCONFIG :=3D loongson32_defconfig
->> +else
->> +KBUILD_DEFCONFIG :=3D loongson64_defconfig
->> +endif
->> +
-
-This is also not the change I had suggested in my review. I think this
-should be a fragment along the lines of arch/mips/configs/generic/32r2.c=
-onfig
-and arch/powerpc/configs/book3s_32.config.
-
-See arch/powerpc/Makefile for the integration into the build system.
-
-      Arnd
+> > +KBUILD_DEFCONFIG :=3D loongson32_defconfig
+> > +else
+> > +KBUILD_DEFCONFIG :=3D loongson64_defconfig
+> > +endif
+> > +
+> >  KBUILD_DTBS      :=3D dtbs
+> >
+> >  image-name-y                 :=3D vmlinux
+>
+> (...)
 
