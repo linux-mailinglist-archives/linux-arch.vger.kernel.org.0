@@ -1,68 +1,68 @@
-Return-Path: <linux-arch+bounces-15049-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15050-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C048C7C70D
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 05:56:38 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF0A6C7CA61
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 08:55:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ACF83A732E
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 04:56:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 58FDC349622
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Nov 2025 07:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1B72868BD;
-	Sat, 22 Nov 2025 04:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABE7F230BE9;
+	Sat, 22 Nov 2025 07:55:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TIfsmA3Y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QVM9mC5G"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509C314B08A;
-	Sat, 22 Nov 2025 04:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3C317A2F0;
+	Sat, 22 Nov 2025 07:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763787394; cv=none; b=jSisR09eok3zkyjfGBJGLhLz/JJBqTbIUZJ9vBgiCUHJ9htYiD2UWjMARJY4OKhFNanDfPUTu2z6w6IbRFml2KKBzyfQ8eP5HWpuhA8EpHPDXgidBFb8nmuOHktPAp0yyRpJpkAdjTGb6UETVyQYQDddBsozRCMdXLk3kUkGtlE=
+	t=1763798150; cv=none; b=b2ddTg2nFDuufs2PyzaR+lk50IpAQCePpdwrZTg8lxliMKazMG9CB/2Q1/WkVG7JH8k4+q/dpOPy3mFMSTGWBTGiU8+cKufaUCnTDO9Ov9+De82/fzou6djYp5YYOjoIb7juqQLEd1baBNfAYXqyKKsfGcSUY0FYrjh6qW0Vh4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763787394; c=relaxed/simple;
-	bh=RpAta5pW7pTRynNxwbJLZvj/eo8rVxs+scWqmeP4VCc=;
+	s=arc-20240116; t=1763798150; c=relaxed/simple;
+	bh=SXw40nk81lfewjY1S+9hPKCWNPlyLR4zHML4HwWfuNQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hO7MQTwC4du9XR2ZlFuRpHXtLIDjmuYZG7eSoJ/meelHLzq3gDVlxbT61w1lVgNCCYijgGtZiHO8/I8px1oR+UwoPKz9IMkyi2d8uM6JJk6AaPGyupYjM7JJe89tTZOjJKL8tH9OYTLXaYZGlgkJzGRVnlAtrLtEFDabFJ9hVX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TIfsmA3Y; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=nsLp58wfJS/P4Mv7EIxVIQFjnd1rP7rRaNsCePRqPdydqSZTVKX8gJ9KCYW1PM/n7fTO1aBCNeYrAgWTBJwMIgOGnl1VnnaCUslJZxlvWAYcvl1knUsCUQFABLdhSa5RfSQT9dXaF90ocm+nzRRKAYHG21OANbUx5BZAgFmnjMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QVM9mC5G; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763787392; x=1795323392;
+  t=1763798149; x=1795334149;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=RpAta5pW7pTRynNxwbJLZvj/eo8rVxs+scWqmeP4VCc=;
-  b=TIfsmA3YELRqdFOG5kxNyY0mJGGhIihCuuoMxgnKm/x/KxOATUDDlKDZ
-   YGDS9E0/TQiqBjH97czx8oouMdfk4wW4R2LNCnOtv7HKx8MFHAE26QcZs
-   THQRWW0YuRLu5jwpiG6yzmnlWJVWWJcNKYQm9LVBnPArV8x0wMoCA+3yf
-   boCx5zf483+05Oa4FSOBAaFxPzgBlvQfBFjx5II0lPL6CxMas+fSkRGHV
-   EhS+xwdxvnLcAxLugtJEimVfUd6mJswhibtzT+p29Ft7JIeqUKbRDiRjf
-   9aH9KtzIPjbj/8Izemi7kU4Ko4VHZnET1njnShpjmQnSw1ZrNf8IhFIo8
-   Q==;
-X-CSE-ConnectionGUID: rWB4kyrkSV+oh35eT8kL1w==
-X-CSE-MsgGUID: bXU6oBRESLq77OoCC8z9bA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="65068435"
+  bh=SXw40nk81lfewjY1S+9hPKCWNPlyLR4zHML4HwWfuNQ=;
+  b=QVM9mC5GJ0P1V3L2M/VZh8bvwnbxYhpmWtr7FeFr+cRdbghWKhXAjUMq
+   nnmT6oTArYPZ2Z3woTbDhCbFA18yi6oeLw+knEOivXmaGf/V1Gh1gKH2i
+   2h3Wdarrpv1sm5J4aoGlBntQVFqdjpRAFMBqEZ0U1GXxGv7Ecgj/8+uvC
+   2oOkvmzMnWq3yTbrpsgxL3A2DamMS7n6bUmrPHKuu73BIqMa6CDiOAxgH
+   sMCiBihE3WaJQlx760FIZULJbH25La+HHUn6Qo2Oi5UL6hwszdi3TJUuW
+   2bH9ke2PDrVDLuDR6UPzAEwEXnFMYKWKusQx+DGdEt5zHZE5dfjKVsBf2
+   A==;
+X-CSE-ConnectionGUID: d4b1Iu1hTJeJdzQgIiiBfg==
+X-CSE-MsgGUID: ZCqV2pBfQ8KuUS2MaLu7Ag==
+X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="69748450"
 X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="65068435"
+   d="scan'208";a="69748450"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 20:56:31 -0800
-X-CSE-ConnectionGUID: TyUuip1jSRSAWl7cfJynJA==
-X-CSE-MsgGUID: rNBLW3izQzutdtYWUy0/fw==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 23:55:48 -0800
+X-CSE-ConnectionGUID: wOeO3mLQSJuDwYi3qD24uQ==
+X-CSE-MsgGUID: AycttFy4TB+6j12x7ifhWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="222811795"
+   d="scan'208";a="222833433"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 21 Nov 2025 20:56:26 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 21 Nov 2025 23:55:43 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vMffc-0007AZ-1E;
-	Sat, 22 Nov 2025 04:56:24 +0000
-Date: Sat, 22 Nov 2025 12:55:58 +0800
+	id 1vMiT6-0007Gp-1a;
+	Sat, 22 Nov 2025 07:55:40 +0000
+Date: Sat, 22 Nov 2025 15:54:59 +0800
 From: kernel test robot <lkp@intel.com>
 To: Eugen Hristev <eugen.hristev@linaro.org>, linux-arm-msm@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -77,7 +77,7 @@ Cc: oe-kbuild-all@lists.linux.dev, tudor.ambarus@linaro.org,
 	linux-arch@vger.kernel.org, tony.luck@intel.com, kees@kernel.org,
 	Eugen Hristev <eugen.hristev@linaro.org>
 Subject: Re: [PATCH 23/26] soc: qcom: Add minidump driver
-Message-ID: <202511221252.PPEXScZ2-lkp@intel.com>
+Message-ID: <202511221521.2OINSDPK-lkp@intel.com>
 References: <20251119154427.1033475-24-eugen.hristev@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -104,14 +104,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Eugen-Hristev/kernel-Intr
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock.git fixes
 patch link:    https://lore.kernel.org/r/20251119154427.1033475-24-eugen.hristev%40linaro.org
 patch subject: [PATCH 23/26] soc: qcom: Add minidump driver
-config: nios2-randconfig-r123-20251122 (https://download.01.org/0day-ci/archive/20251122/202511221252.PPEXScZ2-lkp@intel.com/config)
+config: nios2-randconfig-r123-20251122 (https://download.01.org/0day-ci/archive/20251122/202511221521.2OINSDPK-lkp@intel.com/config)
 compiler: nios2-linux-gcc (GCC) 11.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221252.PPEXScZ2-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221521.2OINSDPK-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511221252.PPEXScZ2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511221521.2OINSDPK-lkp@intel.com/
 
 sparse warnings: (new ones prefixed by >>)
 >> drivers/soc/qcom/minidump.c:108:35: sparse: sparse: restricted __le32 degrades to integer
