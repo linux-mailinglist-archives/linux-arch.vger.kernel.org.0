@@ -1,69 +1,73 @@
-Return-Path: <linux-arch+bounces-15084-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15085-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AD07C8932C
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 11:11:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2270BC8963C
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 11:50:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6DC03B1FBE
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 10:11:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DDB53B94B1
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 10:48:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7612FFDE0;
-	Wed, 26 Nov 2025 10:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4377731E0E6;
+	Wed, 26 Nov 2025 10:47:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oZNWcYAL"
+	dkim=pass (1024-bit key) header.d=anirudhrb.com header.i=anirudh@anirudhrb.com header.b="GjLHrdFl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender3-of-o54.zoho.com (sender3-of-o54.zoho.com [136.143.184.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FB31096F;
-	Wed, 26 Nov 2025 10:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764151897; cv=none; b=OvKpZ2XaHwGYkba0GqYDFgIJfBgps3QuRCv6aapo0IE/GY4e3vJaK3V1ukEAIQ1adOix1AGcoSIub9TmWs1i/vnNcftg7jjjBjX8RlkldkXpR/amwoaNUzdOJY7FwHC1ItDSFiyMjxB7hWSMvLAWJRBlqDqY1Qw8ld1lcBOMaV8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764151897; c=relaxed/simple;
-	bh=kdG/ZRqhPgBjoMhG3fiqvya54/gxQE7eHn54iqnwW6o=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF25D3242D7;
+	Wed, 26 Nov 2025 10:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764154026; cv=pass; b=dreBZjZGgFYDb4HzKlAm9iVu3bikBlN7pzQ9zDSPRH60K1jW7nR4W0gv4jpgMJBdk+RZvoY8wUYijmAPIoBJZCDrrwWYDL7hqqmSFrp38JSYm2ObAdyG3Y2I15q3p8FvhGWrtHLsbPfqTlunprcwdvxaGAlz+NReVdqcP+ZYOmI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764154026; c=relaxed/simple;
+	bh=M+zjAZsrQYDnMsG5FXD7DZiUF/GmcJWIUWpKOgYUwvo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UNS2zK34WLuYhNDbchgsWw24BwShM3FRIqbgu5eZv99RQQUMREdRErT6FOpXrKtbsQVslticRq+ha4bz3y2ScXhO+8qIdrs7dYjW61o/KMRCIEleWzrNRFesIuAyw3x1wFqYuNkrKm9ou0UyAvO60cAK2kBLbNtoUE9KYkYs3F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oZNWcYAL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D8FC116D0;
-	Wed, 26 Nov 2025 10:11:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764151896;
-	bh=kdG/ZRqhPgBjoMhG3fiqvya54/gxQE7eHn54iqnwW6o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oZNWcYALKbLE8wIN2Apm5e446XWKO36td7TLExKiVzT9j3PnN73vV3lnUwGhJdwf1
-	 0QQMgAl5Nc3Jp7iciP4CuK3gn5YjVNgNOZmMrF1bH3L8cOWy9+hRAgFLqXzXQvNwSM
-	 Gpo43KQzvclMTVZbZYrqH+TQOX9S9IWerUHRrmrs16akGQyiBewUm3CeVaSQviJWaI
-	 USptLH/XbL9t26k0AWZdGrB4o3mq1qZB4Yu8PIqU5uQSFzk2agscdNmee0iL+VoABf
-	 Ef6LVGAR01WW+k9TJljX3e6Cdw8AP8789dq6tG+O3gLJiznjgF6gCwXZX0pe12ONCj
-	 wbMS+UEV4TB8A==
-Date: Wed, 26 Nov 2025 10:11:30 +0000
-From: Simon Horman <horms@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v7 3/5] net: devmem: implement autorelease token
- management
-Message-ID: <aSbSUre5TNChO4Ah@horms.kernel.org>
-References: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
- <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-3-1abc8467354c@meta.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CMpP3HbUC8hQbavF4gQlRZaE/yoNpp4vKjYb2Rn6AXiJigqh5OORg52CuTslz9IPpaFCI01/MIR6b72ZFD+9xVa2h5ZtVA7qsBWpxgA3z8/13iGHbd40V9J0gFZ8o2S6qotl8eSKY5outQalnkUvV1v7cJQ3JcvmVNxCGsPHY7g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anirudhrb.com; spf=pass smtp.mailfrom=anirudhrb.com; dkim=pass (1024-bit key) header.d=anirudhrb.com header.i=anirudh@anirudhrb.com header.b=GjLHrdFl; arc=pass smtp.client-ip=136.143.184.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anirudhrb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=anirudhrb.com
+ARC-Seal: i=1; a=rsa-sha256; t=1764153999; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=SUtnv6J7VsnEM7W/tPWaAY59MO76NcqiqWLy59E4stpw0Oy/UoQu/9x5KWlWm6p+XmkPpbVbaRwEVfqvVSo8MPTkQGjtP96pRr2cEfN1amil6n/gpsbQ5x5L5/MGEFiHgyaqZgeoi6qGxlz3vs7bbQfI2pilJ5iDZMNdg8MDUAw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1764153999; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=JQa7pr2d2LWfMGLERrFlEKDeH19thDdsNOy8z01FBYg=; 
+	b=RGG3sMdrXFgh+ACK59yNKbWfUlgf3Xw8ab1jH2jy1YZcunteDjaeLXR6tBuN/KK9yxgcGroPLEGVhQvDenfKjYN8u5foLnS4MkYL0hmsdWFr9WbudSL7izeledchIbfm+PcCf4mYJI96Oaosa5OfrwLjA/zVf3T4vzR16tFwN7s=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=anirudhrb.com;
+	spf=pass  smtp.mailfrom=anirudh@anirudhrb.com;
+	dmarc=pass header.from=<anirudh@anirudhrb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1764153999;
+	s=zoho; d=anirudhrb.com; i=anirudh@anirudhrb.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=JQa7pr2d2LWfMGLERrFlEKDeH19thDdsNOy8z01FBYg=;
+	b=GjLHrdFlCRbKQosUewtLukpsHWYOb1Q/Zw4/NlQxgEGfHGJiVw4DAm6MhlPCBDB0
+	80W0hYhphDDhtGxj4WlqgsDBPLev+nRAmE1NUKmIduuP57b4WfPRbw1mJ8QcfQKosMR
+	uycMbEuEGlqVDGsxpHB0wrEeYYRpaG0guYCZU/g4=
+Received: by mx.zohomail.com with SMTPS id 1764153997500477.0715187596991;
+	Wed, 26 Nov 2025 02:46:37 -0800 (PST)
+Date: Wed, 26 Nov 2025 10:46:31 +0000
+From: Anirudh Rayabharam <anirudh@anirudhrb.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, longli@microsoft.com, catalin.marinas@arm.com,
+	will@kernel.org, tglx@linutronix.de, Arnd Bergmann <arnd@arndb.de>,
+	akpm@linux-foundation.org, agordeev@linux.ibm.com,
+	guoweikang.kernel@gmail.com, osandov@fb.com, bsz@amazon.de,
+	linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 2/3] irqchip/gic-v3: allocate one SGI for MSHV
+Message-ID: <aSbahzqu_3GN-PPJ@anirudh-surface.localdomain>
+References: <20251125170124.2443340-1-anirudh@anirudhrb.com>
+ <20251125170124.2443340-3-anirudh@anirudhrb.com>
+ <86bjkqq9dp.wl-maz@kernel.org>
+ <aSa_rxG80LDXDlhr@anirudh-surface.localdomain>
+ <86a509qi8p.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -72,80 +76,90 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-3-1abc8467354c@meta.com>
+In-Reply-To: <86a509qi8p.wl-maz@kernel.org>
+X-ZohoMailClient: External
 
-On Wed, Nov 19, 2025 at 07:37:10PM -0800, Bobby Eshleman wrote:
+On Wed, Nov 26, 2025 at 09:02:30AM +0000, Marc Zyngier wrote:
+> On Wed, 26 Nov 2025 08:51:59 +0000,
+> Anirudh Rayabharam <anirudh@anirudhrb.com> wrote:
+> > 
+> > On Tue, Nov 25, 2025 at 06:01:38PM +0000, Marc Zyngier wrote:
+> > > On Tue, 25 Nov 2025 17:01:23 +0000,
+> > > Anirudh Raybharam <anirudh@anirudhrb.com> wrote:
+> > > > 
+> > > > From: Anirudh Rayabharam <anirudh@anirudhrb.com>
+> > > > 
+> > > > From: Anirudh Rayabharam (Microsoft) <anirudh@anirudhrb.com>
+> > > > 
+> > > > Currently SGIs are allocated only for the smp subsystem. The MSHV
+> > > > (Microsoft Hypervisor aka Hyper-V) code also needs an SGI that can be
+> > > > programmed into the SYNIC to receive intercepts from the hypervisor. The
+> > > > hypervisor would then assert this SGI whenever there is a guest
+> > > > VMEXIT.
+> > > > 
+> > > > Allocate one SGI for MSHV use in addition to the SGIs allocated for
+> > > > IPIs. When running under MSHV, the full SGI range can be used i.e. no
+> > > > need to reserve SGIs 8-15 for the secure firmware.
+> > > > 
+> > > > Since this SGI is needed only when running as a parent partition (i.e.
+> > > > we can create guest partitions), check for it before allocating an SGI.
+> > > 
+> > > Sorry, but that's not an acceptable situation.
+> > > 
+> > > SGIs are for Linux to use, nobody else, and that allocation must be
+> > 
+> > Why does this restriction exist? In the code SGIs 8-15 are left for
+> > secure firmware. So, things other than Linux can use SGIs. Why not MSHV
+> > then?
+> 
+> Because SGIs are for *internal* usage. Not usage from another random
+> piece of SW. The ACPI tables explicitly don't describe SGIs. DT
+> explicitly don't describe SGIs. Do you get the clue?
 
-...
+The name Software Generated Interrupts suggests that it is supposed to be
+used by pieces of SW.
 
-> @@ -292,25 +327,67 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+Yes, ACPI/DT don't describe SGIs because they're not supposed to be used
+by devices. SW has full control over SGIs and it is up to the SW to
+assign meaning to them, isn't it?
 
-...
+> 
+> > > the same irrespective of whether Linux runs virtualised or not. This
+> > > also won't work with GICv5 (there are no SGIs at all), so this is
+> > > doomed from the very start, and would immediately create technical
+> > > debt.
+> > 
+> > Hyper-V always presents a GICv3 so we don't need to worry about GICv5.
+> 
+> Well, that's pretty short sighted of you, and eventually you'll have
+> to support it, or just die. So do the right thing from the beginning.
 
-> +	/* Enforce system-wide autorelease mode consistency for RX bindings.
-> +	 * TX bindings don't use autorelease (always false) since tokens aren't
-> +	 * leaked in TX path. Only RX bindings must all have the same
-> +	 * autorelease mode, never mixed.
-> +	 *
-> +	 * We use the xarray's lock to atomically check xa_empty() and toggle
-> +	 * the static key, avoiding the race where two new bindings may try to
-> +	 * set the static key to different states.
-> +	 */
-> +	xa_lock(&net_devmem_dmabuf_bindings);
-> +
-> +	if (direction == DMA_FROM_DEVICE) {
-> +		if (!xa_empty(&net_devmem_dmabuf_bindings)) {
-> +			bool mode;
-> +
-> +			mode = static_key_enabled(&tcp_devmem_ar_key);
-> +
-> +			/* When bindings exist, enforce that the mode does not
-> +			 * change.
-> +			 */
-> +			if (mode != autorelease) {
-> +				NL_SET_ERR_MSG_FMT(extack,
-> +						   "System already configured with autorelease=%d",
-> +						   mode);
-> +				err = -EINVAL;
-> +				goto err_unlock_xa;
-> +			}
-> +		} else {
-> +			/* First binding sets the mode for all subsequent
-> +			 * bindings.
-> +			 */
-> +			if (autorelease)
-> +				static_branch_enable(&tcp_devmem_ar_key);
-> +			else
-> +				static_branch_disable(&tcp_devmem_ar_key);
+Well, we don't when or if that will happen. But if it does happen, we
+can solve it in a way that makes sense for GICv5. If there are no SGIs
+at all, great, maybe we'll have a nicer solution then.
 
-Hi Bobby,
+> 
+> > >
+> > > If you want to signal an interrupt to Linux, expose a device with an
+> > > interrupt in a firmware table (i.e. not an SGI), and use that in your
+> > > driver.
+> > 
+> > You mean in the ACPI tables? That would require us to modify the
+> > firmware to expose this virtual device right?
+> 
+> Yes. How is that surprising?
 
-This code runs inside xa_lock, which is a spinlock.
+It's not ideal that we would need some custom firmware to run Linux on
+MSHV (as a parent). Do you think there could be some other possible solution
+for handling this in the kernel? Maybe by thinking of it as a platform specific
+quirk or something?
 
-But static_branch_enable() and static_branch_disable()
-may sleep due to some combination of taking a mutex
-and cpu_read_lock.
+Thanks,
+Anirudh.
 
-Flagged by Claude Code with https://github.com/masoncl/review-prompts/
-
-> +		}
-> +	}
-> +
-> +	err = __xa_alloc_cyclic(&net_devmem_dmabuf_bindings, &binding->id,
-> +				binding, xa_limit_32b, &id_alloc_next,
-> +				GFP_KERNEL);
->  	if (err < 0)
-> -		goto err_free_chunks;
-> +		goto err_unlock_xa;
-> +
-> +	xa_unlock(&net_devmem_dmabuf_bindings);
->  
->  	list_add(&binding->list, &priv->bindings);
->  
->  	return binding;
->  
-> +err_unlock_xa:
-> +	xa_unlock(&net_devmem_dmabuf_bindings);
-
-...
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.
 
