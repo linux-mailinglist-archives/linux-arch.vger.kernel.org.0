@@ -1,165 +1,197 @@
-Return-Path: <linux-arch+bounces-15085-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15086-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2270BC8963C
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 11:50:56 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF74FC8C048
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 22:27:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DDB53B94B1
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 10:48:22 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 65CFD343E06
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 21:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4377731E0E6;
-	Wed, 26 Nov 2025 10:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56775288C2F;
+	Wed, 26 Nov 2025 21:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=anirudhrb.com header.i=anirudh@anirudhrb.com header.b="GjLHrdFl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oanYzg0+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from sender3-of-o54.zoho.com (sender3-of-o54.zoho.com [136.143.184.54])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF25D3242D7;
-	Wed, 26 Nov 2025 10:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764154026; cv=pass; b=dreBZjZGgFYDb4HzKlAm9iVu3bikBlN7pzQ9zDSPRH60K1jW7nR4W0gv4jpgMJBdk+RZvoY8wUYijmAPIoBJZCDrrwWYDL7hqqmSFrp38JSYm2ObAdyG3Y2I15q3p8FvhGWrtHLsbPfqTlunprcwdvxaGAlz+NReVdqcP+ZYOmI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764154026; c=relaxed/simple;
-	bh=M+zjAZsrQYDnMsG5FXD7DZiUF/GmcJWIUWpKOgYUwvo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CMpP3HbUC8hQbavF4gQlRZaE/yoNpp4vKjYb2Rn6AXiJigqh5OORg52CuTslz9IPpaFCI01/MIR6b72ZFD+9xVa2h5ZtVA7qsBWpxgA3z8/13iGHbd40V9J0gFZ8o2S6qotl8eSKY5outQalnkUvV1v7cJQ3JcvmVNxCGsPHY7g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anirudhrb.com; spf=pass smtp.mailfrom=anirudhrb.com; dkim=pass (1024-bit key) header.d=anirudhrb.com header.i=anirudh@anirudhrb.com header.b=GjLHrdFl; arc=pass smtp.client-ip=136.143.184.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anirudhrb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=anirudhrb.com
-ARC-Seal: i=1; a=rsa-sha256; t=1764153999; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=SUtnv6J7VsnEM7W/tPWaAY59MO76NcqiqWLy59E4stpw0Oy/UoQu/9x5KWlWm6p+XmkPpbVbaRwEVfqvVSo8MPTkQGjtP96pRr2cEfN1amil6n/gpsbQ5x5L5/MGEFiHgyaqZgeoi6qGxlz3vs7bbQfI2pilJ5iDZMNdg8MDUAw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1764153999; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=JQa7pr2d2LWfMGLERrFlEKDeH19thDdsNOy8z01FBYg=; 
-	b=RGG3sMdrXFgh+ACK59yNKbWfUlgf3Xw8ab1jH2jy1YZcunteDjaeLXR6tBuN/KK9yxgcGroPLEGVhQvDenfKjYN8u5foLnS4MkYL0hmsdWFr9WbudSL7izeledchIbfm+PcCf4mYJI96Oaosa5OfrwLjA/zVf3T4vzR16tFwN7s=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=anirudhrb.com;
-	spf=pass  smtp.mailfrom=anirudh@anirudhrb.com;
-	dmarc=pass header.from=<anirudh@anirudhrb.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1764153999;
-	s=zoho; d=anirudhrb.com; i=anirudh@anirudhrb.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=JQa7pr2d2LWfMGLERrFlEKDeH19thDdsNOy8z01FBYg=;
-	b=GjLHrdFlCRbKQosUewtLukpsHWYOb1Q/Zw4/NlQxgEGfHGJiVw4DAm6MhlPCBDB0
-	80W0hYhphDDhtGxj4WlqgsDBPLev+nRAmE1NUKmIduuP57b4WfPRbw1mJ8QcfQKosMR
-	uycMbEuEGlqVDGsxpHB0wrEeYYRpaG0guYCZU/g4=
-Received: by mx.zohomail.com with SMTPS id 1764153997500477.0715187596991;
-	Wed, 26 Nov 2025 02:46:37 -0800 (PST)
-Date: Wed, 26 Nov 2025 10:46:31 +0000
-From: Anirudh Rayabharam <anirudh@anirudhrb.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, longli@microsoft.com, catalin.marinas@arm.com,
-	will@kernel.org, tglx@linutronix.de, Arnd Bergmann <arnd@arndb.de>,
-	akpm@linux-foundation.org, agordeev@linux.ibm.com,
-	guoweikang.kernel@gmail.com, osandov@fb.com, bsz@amazon.de,
-	linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7BB12B93;
+	Wed, 26 Nov 2025 21:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764192439; cv=none; b=LGjexNz9hVOAvlFrjmAUdJMY7j5hgdierz7jP7mn5dTJ5W1K8bq8anDc+XCHtwdmOD1pvvpOyP586NtOZr5YDpE0FF0V2UUgYiuXhcZAEOVvzdWWWQxoz//bRERW3g0RLrn3/12FbD1SQAtbZAOujL03enb3HmA3TfOnvGho0BY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764192439; c=relaxed/simple;
+	bh=UQnLWxc/wM1eSVgZ7FgjAB7Jt2Jd2XH4TEEk2eldkFE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=q/zuBW0GdDnCVHq61/bP7r/mg0s/FKEW5liZHVie5l8npQsQj/V1yN6GHjGgF2oURYDDGZlvj60nElE1BvOsXv4oRlFhUHJFHA/098troPYQDq0bRxRTpirdcYyhOPTj1/LuYBkQqEY5thHv4MH9t4D+tiI7Ouvmj86QLUBU5/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oanYzg0+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF23C4CEF7;
+	Wed, 26 Nov 2025 21:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764192438;
+	bh=UQnLWxc/wM1eSVgZ7FgjAB7Jt2Jd2XH4TEEk2eldkFE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oanYzg0+6qQ6bkc5msMLK23EZpc5t7l3oAAM0cDZap+sXWaFe6qamvPE3j7NAWahy
+	 v5GaDqN0z8F9SL3BZWpCHx+siUz3P41tyRsMTRCmSmT44bPSrWGPAC4lOxeOK/T/Fw
+	 JNyqaKR5CWbGDhvnGsR33e81HTibzU9xvH7K+5/dVKw2DyAWsYnuzHGc8pnJYpYI1m
+	 Pnklm7wqgie49eoz7UxUBldhzW1xfRslCt+3XSAckF9hrXNY8JaqrHS8dOzGSNQ1SW
+	 3iiC3J5aaZbnti0Xe5Yzr8kmJs8FhExih/A2TAKKR3YHnWyf33OnzwtWEKIKd+uOHJ
+	 HmyBMZRYhkrQQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vON2i-00000008c68-0hch;
+	Wed, 26 Nov 2025 21:27:16 +0000
+Date: Wed, 26 Nov 2025 21:27:15 +0000
+Message-ID: <87bjkofpsc.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Anirudh Rayabharam <anirudh@anirudhrb.com>
+Cc: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	longli@microsoft.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	tglx@linutronix.de,
+	Arnd Bergmann <arnd@arndb.de>,
+	akpm@linux-foundation.org,
+	agordeev@linux.ibm.com,
+	guoweikang.kernel@gmail.com,
+	osandov@fb.com,
+	bsz@amazon.de,
+	linux-hyperv@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org
 Subject: Re: [PATCH 2/3] irqchip/gic-v3: allocate one SGI for MSHV
-Message-ID: <aSbahzqu_3GN-PPJ@anirudh-surface.localdomain>
+In-Reply-To: <aSbahzqu_3GN-PPJ@anirudh-surface.localdomain>
 References: <20251125170124.2443340-1-anirudh@anirudhrb.com>
- <20251125170124.2443340-3-anirudh@anirudhrb.com>
- <86bjkqq9dp.wl-maz@kernel.org>
- <aSa_rxG80LDXDlhr@anirudh-surface.localdomain>
- <86a509qi8p.wl-maz@kernel.org>
+	<20251125170124.2443340-3-anirudh@anirudhrb.com>
+	<86bjkqq9dp.wl-maz@kernel.org>
+	<aSa_rxG80LDXDlhr@anirudh-surface.localdomain>
+	<86a509qi8p.wl-maz@kernel.org>
+	<aSbahzqu_3GN-PPJ@anirudh-surface.localdomain>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86a509qi8p.wl-maz@kernel.org>
-X-ZohoMailClient: External
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: anirudh@anirudhrb.com, kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, longli@microsoft.com, catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, arnd@arndb.de, akpm@linux-foundation.org, agordeev@linux.ibm.com, guoweikang.kernel@gmail.com, osandov@fb.com, bsz@amazon.de, linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, Nov 26, 2025 at 09:02:30AM +0000, Marc Zyngier wrote:
-> On Wed, 26 Nov 2025 08:51:59 +0000,
-> Anirudh Rayabharam <anirudh@anirudhrb.com> wrote:
-> > 
-> > On Tue, Nov 25, 2025 at 06:01:38PM +0000, Marc Zyngier wrote:
-> > > On Tue, 25 Nov 2025 17:01:23 +0000,
-> > > Anirudh Raybharam <anirudh@anirudhrb.com> wrote:
-> > > > 
-> > > > From: Anirudh Rayabharam <anirudh@anirudhrb.com>
-> > > > 
-> > > > From: Anirudh Rayabharam (Microsoft) <anirudh@anirudhrb.com>
-> > > > 
-> > > > Currently SGIs are allocated only for the smp subsystem. The MSHV
-> > > > (Microsoft Hypervisor aka Hyper-V) code also needs an SGI that can be
-> > > > programmed into the SYNIC to receive intercepts from the hypervisor. The
-> > > > hypervisor would then assert this SGI whenever there is a guest
-> > > > VMEXIT.
-> > > > 
-> > > > Allocate one SGI for MSHV use in addition to the SGIs allocated for
-> > > > IPIs. When running under MSHV, the full SGI range can be used i.e. no
-> > > > need to reserve SGIs 8-15 for the secure firmware.
-> > > > 
-> > > > Since this SGI is needed only when running as a parent partition (i.e.
-> > > > we can create guest partitions), check for it before allocating an SGI.
+On Wed, 26 Nov 2025 10:46:31 +0000,
+Anirudh Rayabharam <anirudh@anirudhrb.com> wrote:
+> 
+> On Wed, Nov 26, 2025 at 09:02:30AM +0000, Marc Zyngier wrote:
+> > On Wed, 26 Nov 2025 08:51:59 +0000,
+> > Anirudh Rayabharam <anirudh@anirudhrb.com> wrote:
 > > > 
-> > > Sorry, but that's not an acceptable situation.
+> > > On Tue, Nov 25, 2025 at 06:01:38PM +0000, Marc Zyngier wrote:
+> > > > On Tue, 25 Nov 2025 17:01:23 +0000,
+> > > > Anirudh Raybharam <anirudh@anirudhrb.com> wrote:
+> > > > > 
+> > > > > From: Anirudh Rayabharam <anirudh@anirudhrb.com>
+> > > > > 
+> > > > > From: Anirudh Rayabharam (Microsoft) <anirudh@anirudhrb.com>
+> > > > > 
+> > > > > Currently SGIs are allocated only for the smp subsystem. The MSHV
+> > > > > (Microsoft Hypervisor aka Hyper-V) code also needs an SGI that can be
+> > > > > programmed into the SYNIC to receive intercepts from the hypervisor. The
+> > > > > hypervisor would then assert this SGI whenever there is a guest
+> > > > > VMEXIT.
+> > > > > 
+> > > > > Allocate one SGI for MSHV use in addition to the SGIs allocated for
+> > > > > IPIs. When running under MSHV, the full SGI range can be used i.e. no
+> > > > > need to reserve SGIs 8-15 for the secure firmware.
+> > > > > 
+> > > > > Since this SGI is needed only when running as a parent partition (i.e.
+> > > > > we can create guest partitions), check for it before allocating an SGI.
+> > > > 
+> > > > Sorry, but that's not an acceptable situation.
+> > > > 
+> > > > SGIs are for Linux to use, nobody else, and that allocation must be
 > > > 
-> > > SGIs are for Linux to use, nobody else, and that allocation must be
+> > > Why does this restriction exist? In the code SGIs 8-15 are left for
+> > > secure firmware. So, things other than Linux can use SGIs. Why not MSHV
+> > > then?
 > > 
-> > Why does this restriction exist? In the code SGIs 8-15 are left for
-> > secure firmware. So, things other than Linux can use SGIs. Why not MSHV
-> > then?
+> > Because SGIs are for *internal* usage. Not usage from another random
+> > piece of SW. The ACPI tables explicitly don't describe SGIs. DT
+> > explicitly don't describe SGIs. Do you get the clue?
 > 
-> Because SGIs are for *internal* usage. Not usage from another random
-> piece of SW. The ACPI tables explicitly don't describe SGIs. DT
-> explicitly don't describe SGIs. Do you get the clue?
+> The name Software Generated Interrupts suggests that it is supposed to be
+> used by pieces of SW.
 
-The name Software Generated Interrupts suggests that it is supposed to be
-used by pieces of SW.
+I'm so glad you spell it out for me, I had no idea. I can't help but
+notice that it is not called SGIFRPOSIDKA (Software Generated
+Interrupt From Random Piece Of Software I Don't Know About).
 
-Yes, ACPI/DT don't describe SGIs because they're not supposed to be used
-by devices. SW has full control over SGIs and it is up to the SW to
-assign meaning to them, isn't it?
+Linux owns the SGIs, full stop. If you want to generate interrupts
+from outside of Linux, use a standard interrupts. Not rocket science.
 
-> 
-> > > the same irrespective of whether Linux runs virtualised or not. This
-> > > also won't work with GICv5 (there are no SGIs at all), so this is
-> > > doomed from the very start, and would immediately create technical
-> > > debt.
+> Yes, ACPI/DT don't describe SGIs because they're not supposed to be used
+> by devices. SW has full control over SGIs and it is up to the SW to
+> assign meaning to them, isn't it?
+
+No. It means that a single *consistent* software agent *owns* these
+interrupts and doesn't have to let *anyone* else use them from outer
+space.
+
+> > > > the same irrespective of whether Linux runs virtualised or not. This
+> > > > also won't work with GICv5 (there are no SGIs at all), so this is
+> > > > doomed from the very start, and would immediately create technical
+> > > > debt.
+> > > 
+> > > Hyper-V always presents a GICv3 so we don't need to worry about GICv5.
 > > 
-> > Hyper-V always presents a GICv3 so we don't need to worry about GICv5.
+> > Well, that's pretty short sighted of you, and eventually you'll have
+> > to support it, or just die. So do the right thing from the beginning.
 > 
-> Well, that's pretty short sighted of you, and eventually you'll have
-> to support it, or just die. So do the right thing from the beginning.
+> Well, we don't when or if that will happen. But if it does happen, we
+> can solve it in a way that makes sense for GICv5. If there are no SGIs
+> at all, great, maybe we'll have a nicer solution then.
 
-Well, we don't when or if that will happen. But if it does happen, we
-can solve it in a way that makes sense for GICv5. If there are no SGIs
-at all, great, maybe we'll have a nicer solution then.
+Great. See you then. In the meantime, I have no interest in this sort
+of sorry hacks polluting the stuff I maintain.
 
-> 
-> > >
-> > > If you want to signal an interrupt to Linux, expose a device with an
-> > > interrupt in a firmware table (i.e. not an SGI), and use that in your
-> > > driver.
+> > > > If you want to signal an interrupt to Linux, expose a device with an
+> > > > interrupt in a firmware table (i.e. not an SGI), and use that in your
+> > > > driver.
+> > > 
+> > > You mean in the ACPI tables? That would require us to modify the
+> > > firmware to expose this virtual device right?
 > > 
-> > You mean in the ACPI tables? That would require us to modify the
-> > firmware to expose this virtual device right?
+> > Yes. How is that surprising?
 > 
-> Yes. How is that surprising?
+> It's not ideal that we would need some custom firmware to run Linux on
+> MSHV (as a parent). Do you think there could be some other possible solution
+> for handling this in the kernel? Maybe by thinking of it as a platform specific
+> quirk or something?
 
-It's not ideal that we would need some custom firmware to run Linux on
-MSHV (as a parent). Do you think there could be some other possible solution
-for handling this in the kernel? Maybe by thinking of it as a platform specific
-quirk or something?
+You either do it the *correct* way, by exposing a virtual device, with
+an edge-triggered PPI, just like other hypervisors have done, or you
+keep your toy to yourself.  It is that simple. We don't have to accept
+ugly crap in Linux just for the sake of you not having to do the right
+thing in your firmware.
 
-Thanks,
-Anirudh.
+Feel free to post a new series once you have something that matches
+the above expectations.
 
-> 
-> 	M.
-> 
-> -- 
-> Without deviation from the norm, progress is not possible.
+	M.
+
+-- 
+Jazz isn't dead. It just smells funny.
 
