@@ -1,153 +1,161 @@
-Return-Path: <linux-arch+bounces-15082-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15083-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B653CC88D13
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 10:02:39 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43CBFC892D8
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 11:04:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFB7F3AEB0C
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 09:02:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 981DA4EB9A8
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Nov 2025 10:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EA232DC77F;
-	Wed, 26 Nov 2025 09:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25852F83BC;
+	Wed, 26 Nov 2025 10:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o5pDOtOv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mDUJPW63"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506B343AA4;
-	Wed, 26 Nov 2025 09:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB952E54CC;
+	Wed, 26 Nov 2025 10:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764147754; cv=none; b=caL4v0mvlby6i26SCgxJ8q8zdN2TG0fswCAk7D/2CS2rajatS622zTkH5pr9NwQ418Y8oLKMa3GUhFa4+kXmTbSK3oUzQR+kBDzfDt9rUzeXQyIDmPOR6JntUKKznJvX8z0duK2rTjlUyBTNAeAwOe4o5mkjE9PXt1jvXr6w+T8=
+	t=1764151378; cv=none; b=ewEIN5EF90JdA4uHfFgUGzjPPg/O29xHh61QpgMw3D+Et1OdBhOz9PDZB4BndbZWN0tgqBeShYoWe6RDBIxGzV8FNDnulNqKPo9Ht6NVLpQp5sMRNg8Lote+qGxwMhWFfoYgxByC2rnHnnhqXnB7V6O4TgZ/7yjJESfotGzYwr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764147754; c=relaxed/simple;
-	bh=da7KtwaPpYJL6ys46RLfYQrGnoIrLvUeVYdDADOmUZc=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F1J6d3QDvsWunObzOX3ee9NJ7tHGUWDSWJYKNc+E8nA2s0wLdOW2MiqArOy1zTnhInq/fncL66P4dJcNVrxf46120KmxqCqQkJUUgeQxj18QDsd1E860vJ8G8D8yyL54vFB1pf4RnhzLSMqkfPHedR4833DcCUV7dJNENjRD/eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o5pDOtOv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF365C113D0;
-	Wed, 26 Nov 2025 09:02:33 +0000 (UTC)
+	s=arc-20240116; t=1764151378; c=relaxed/simple;
+	bh=xXqrJ8HIf4HVKSwlHfvo9uZclOBEXwWRwuyFr3etAuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZycCwP5+jc9jZ6rrTK3Bda2NKDEwshbA9M6xarkj6zbnIj86ar5M872gMmzvTp4OwgigZJ24FN9Uo8AxSkx7P4lkZ+HnJO1k9bJ8Gju+MGLGsziFOoIzFBo5lrwqiNtG+04zBfsA5mWHNCdjM/2Bkay1aMqa0IKTsMKK6X/i3E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mDUJPW63; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A107C113D0;
+	Wed, 26 Nov 2025 10:02:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764147753;
-	bh=da7KtwaPpYJL6ys46RLfYQrGnoIrLvUeVYdDADOmUZc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=o5pDOtOvRWeBbj8Ny5ot/Xu06OYNQCyMdki0HjcPU5NP0dFTUgPuIhN+/6GzUQpof
-	 xXCqdTXMdG0aZQquWYlG9nBsraM0WlDg7N0/hEi8Qu9qizScUln2SqE2/dSXLTt1qJ
-	 fQuTRClLShSFl4JA/jtrX4kXQYWsrzn3IHitpuzSXalEPavHrzAMQ6RdvYAmdDHCre
-	 1JaNNsEzy76G3GgpqApOYx3tsbCe8gkGZbmTi3FcLik53rGoBuDeefDUzHfXtV6+QZ
-	 IqC8BiHhKwqyuA8eitsE8ft8ZXf0fibv89lf1EGRx6SF7XyiZ5tPaNPGTzVB1wjPVA
-	 GUksw5QQ5FsiQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vOBPz-00000008PYJ-1GDV;
-	Wed, 26 Nov 2025 09:02:31 +0000
-Date: Wed, 26 Nov 2025 09:02:30 +0000
-Message-ID: <86a509qi8p.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Anirudh Rayabharam <anirudh@anirudhrb.com>
-Cc: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	longli@microsoft.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	tglx@linutronix.de,
-	Arnd Bergmann <arnd@arndb.de>,
-	akpm@linux-foundation.org,
-	agordeev@linux.ibm.com,
-	guoweikang.kernel@gmail.com,
-	osandov@fb.com,
-	bsz@amazon.de,
-	linux-hyperv@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH 2/3] irqchip/gic-v3: allocate one SGI for MSHV
-In-Reply-To: <aSa_rxG80LDXDlhr@anirudh-surface.localdomain>
-References: <20251125170124.2443340-1-anirudh@anirudhrb.com>
-	<20251125170124.2443340-3-anirudh@anirudhrb.com>
-	<86bjkqq9dp.wl-maz@kernel.org>
-	<aSa_rxG80LDXDlhr@anirudh-surface.localdomain>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1764151378;
+	bh=xXqrJ8HIf4HVKSwlHfvo9uZclOBEXwWRwuyFr3etAuY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mDUJPW63F05Xi9Y5/6dzbh7U30QKG3Y01WmA/wIbiTZght2Tbvc6aKKW9G3n2eNdN
+	 KUzsEmRda97EPGv+1LP6eGFO+bMCi1FsJK9YjyPO7LZ+CTbI/0hFUy+DhZFsE6c/qb
+	 pWZEGlBYFi2N7yfN2xN5mF+5B14DXDl0zSkGqf59lU92vqIibm7iIIYOHJpDnU/u4Y
+	 orr6NGWHXKzjgyHxJbg8ep4iElE/xB3Y/xe+rvyWAPkZjwJR3LI8o+BfB+Hm7qYZ/u
+	 iGESbT5Dsv+RuzoKFwN4lsTEi29bI9XFTHzVuxmlrPyF6GKcU9LBLatv/sZ6QM9gMO
+	 ddNAvxlLGbA6w==
+Date: Wed, 26 Nov 2025 10:02:51 +0000
+From: Simon Horman <horms@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v7 5/5] selftests: drv-net: devmem: add
+ autorelease tests
+Message-ID: <aSbQS5HqMkfDhktz@horms.kernel.org>
+References: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
+ <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-5-1abc8467354c@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: anirudh@anirudhrb.com, kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, longli@microsoft.com, catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, arnd@arndb.de, akpm@linux-foundation.org, agordeev@linux.ibm.com, guoweikang.kernel@gmail.com, osandov@fb.com, bsz@amazon.de, linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-5-1abc8467354c@meta.com>
 
-On Wed, 26 Nov 2025 08:51:59 +0000,
-Anirudh Rayabharam <anirudh@anirudhrb.com> wrote:
+On Wed, Nov 19, 2025 at 07:37:12PM -0800, Bobby Eshleman wrote:
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
 > 
-> On Tue, Nov 25, 2025 at 06:01:38PM +0000, Marc Zyngier wrote:
-> > On Tue, 25 Nov 2025 17:01:23 +0000,
-> > Anirudh Raybharam <anirudh@anirudhrb.com> wrote:
-> > > 
-> > > From: Anirudh Rayabharam <anirudh@anirudhrb.com>
-> > > 
-> > > From: Anirudh Rayabharam (Microsoft) <anirudh@anirudhrb.com>
-> > > 
-> > > Currently SGIs are allocated only for the smp subsystem. The MSHV
-> > > (Microsoft Hypervisor aka Hyper-V) code also needs an SGI that can be
-> > > programmed into the SYNIC to receive intercepts from the hypervisor. The
-> > > hypervisor would then assert this SGI whenever there is a guest
-> > > VMEXIT.
-> > > 
-> > > Allocate one SGI for MSHV use in addition to the SGIs allocated for
-> > > IPIs. When running under MSHV, the full SGI range can be used i.e. no
-> > > need to reserve SGIs 8-15 for the secure firmware.
-> > > 
-> > > Since this SGI is needed only when running as a parent partition (i.e.
-> > > we can create guest partitions), check for it before allocating an SGI.
-> > 
-> > Sorry, but that's not an acceptable situation.
-> > 
-> > SGIs are for Linux to use, nobody else, and that allocation must be
+> Add tests cases that check the autorelease modes (on and off).  The new
+> tests are the same as the old ones, but just pass a flag to ncdevmem to
+> select the autorelease mode.
 > 
-> Why does this restriction exist? In the code SGIs 8-15 are left for
-> secure firmware. So, things other than Linux can use SGIs. Why not MSHV
-> then?
-
-Because SGIs are for *internal* usage. Not usage from another random
-piece of SW. The ACPI tables explicitly don't describe SGIs. DT
-explicitly don't describe SGIs. Do you get the clue?
-
-> > the same irrespective of whether Linux runs virtualised or not. This
-> > also won't work with GICv5 (there are no SGIs at all), so this is
-> > doomed from the very start, and would immediately create technical
-> > debt.
+> Only for RX tests is autorelease checked, as the autorelease ncdevmem
+> flag is unused in the TX case and doesn't apply to TX bind operations.
 > 
-> Hyper-V always presents a GICv3 so we don't need to worry about GICv5.
-
-Well, that's pretty short sighted of you, and eventually you'll have
-to support it, or just die. So do the right thing from the beginning.
-
-> >
-> > If you want to signal an interrupt to Linux, expose a device with an
-> > interrupt in a firmware table (i.e. not an SGI), and use that in your
-> > driver.
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> ---
+> Note: I tested successfully with kperf, but I'm troubleshooting
+> some mlx5 issues with ncdevmem so this patch, though simple, is not
+> fully validated. Will respond to this thread when solve the issue.
 > 
-> You mean in the ACPI tables? That would require us to modify the
-> firmware to expose this virtual device right?
+> Changes in v7:
+> - use autorelease netlink
+> - remove sockopt tests
+> ---
+>  tools/testing/selftests/drivers/net/hw/devmem.py  | 22 ++++++++++++++++++++--
+>  tools/testing/selftests/drivers/net/hw/ncdevmem.c | 19 +++++++++++++------
+>  2 files changed, 33 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
+> index 45c2d49d55b6..dddb9d77cb28 100755
+> --- a/tools/testing/selftests/drivers/net/hw/devmem.py
+> +++ b/tools/testing/selftests/drivers/net/hw/devmem.py
+> @@ -25,7 +25,23 @@ def check_rx(cfg) -> None:
+>  
+>      port = rand_port()
+>      socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},bind={cfg.remote_baddr}:{port}"
+> -    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7"
+> +    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7 -a 0"
+> +
+> +    with bkg(listen_cmd, exit_wait=True) as ncdevmem:
+> +        wait_port_listen(port)
+> +        cmd(f"yes $(echo -e \x01\x02\x03\x04\x05\x06) | \
+> +            head -c 1K | {socat}", host=cfg.remote, shell=True)
+> +
+> +    ksft_eq(ncdevmem.ret, 0)
+> +
+> +
+> +@ksft_disruptive
+> +def check_rx_autorelease(cfg) -> None:
+> +    require_devmem(cfg)
+> +
+> +    port = rand_port()
+> +    socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},bind={cfg.remote_baddr}:{port}"
+> +    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7 -a 1"
+>  
+>      with bkg(listen_cmd, exit_wait=True) as ncdevmem:
+>          wait_port_listen(port)
+> @@ -68,7 +84,9 @@ def main() -> None:
+>          cfg.bin_local = path.abspath(path.dirname(__file__) + "/ncdevmem")
+>          cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
+>  
+> -        ksft_run([check_rx, check_tx, check_tx_chunks],
+> +        ksft_run([check_rx, check_rx_autorelease,
+> +                  check_tx, check_tx_autorelease,
+> +                  check_tx_chunks, check_tx_chunks_autorelease],
+>                   args=(cfg, ))
+>      ksft_exit()
+>  
 
-Yes. How is that surprising?
+Hi Bobby,
 
-	M.
+Sorry if this is a duplicate: I drafted this before bit AFAIKT
+I accidently hit the worng key and deleted it.
 
--- 
-Without deviation from the norm, progress is not possible.
+I see that check_rx_autorelease is implemented above,
+but I don't see an implementatoin of check_tx_autorelease
+or check_tx_chunks_autorelease. Perhaps they should be added too?
+
+Flagged by pylint and ruff.
+Also confirmed by running devmem.py using vng (possibly incorrectly).
+
+
+This patch also adds some other pylint warnings, about missing
+documentation and lines that are too long. Although there are
+already instances of the same warning in this file. So I'm not
+sure how we should feel about that.
+
+...
 
