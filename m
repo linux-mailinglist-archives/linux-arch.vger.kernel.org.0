@@ -1,180 +1,239 @@
-Return-Path: <linux-arch+bounces-15091-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15093-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DF98C8DCE3
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Nov 2025 11:37:45 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A749C8F931
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Nov 2025 18:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47BAC3A1FA0
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Nov 2025 10:37:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 004F134B6F8
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Nov 2025 17:00:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76E89329C5E;
-	Thu, 27 Nov 2025 10:37:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7F63595D;
+	Thu, 27 Nov 2025 17:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TAvjUIxc"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ERSHELQl";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mQ3Y28wU";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ERSHELQl";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mQ3Y28wU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D3A2D73A8;
-	Thu, 27 Nov 2025 10:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C6E2D6621
+	for <linux-arch@vger.kernel.org>; Thu, 27 Nov 2025 17:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764239853; cv=none; b=dN0NJvVR0i4Vbdez762LyxxqA3MnxTU1+1aP4xrdsJq9EZVDbmsuJ25OjJFsa7rZR+7DDutWA7PlWWJIa2krxRBlYeBHb5a6xXpnW6ivNo+Kzq5agNiV43/NZ/5D2ULjTwgLqemN9ibJxd8EgacC1bQ2E3L14jzCLeQ0IjrWi5U=
+	t=1764262822; cv=none; b=u3rbfL8pG23Sv4WeJEidXP973Jme41k6nnXqWFXoTb5mAKAQGjidwPOqHHuKAdEPcF9mXsJdyF6ULxzjN5O0jUSvKvd4T0rnJ+D/1X3Y2koaMGvIhmBcGZrj3MN4lXAbjZVTahY3IQs2pELUeNt1G/JaMiTU1VahwsKXTaAno4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764239853; c=relaxed/simple;
-	bh=298HmZaKryM6YUgv6+BFvsUO13W/yAJhJzw3DpfAASo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pudDiZAUEu9tVf/A3FmUsHI8I0COTEY16vTtgd0WSpixwfwdBTWzza6PR+cTb1GOuYcjvpPey9CR9WnO+C5xbi2MIQjb09ZpYZZqrn7m3VWffau/okHsgJ+4xY8I98vOrE45bYq7E75aFyEOZG19HfPYN65obt2xviqk+epT9fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TAvjUIxc; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764239851; x=1795775851;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=298HmZaKryM6YUgv6+BFvsUO13W/yAJhJzw3DpfAASo=;
-  b=TAvjUIxcGFAWe/AOL4NIaUr2Qqxk0AULnz8B00P5GvPUMqsV8CPh6Ef2
-   +x4B2RZ48q1QyEVeSw5enm4ac9sbrWThV5cBTVrpuXCEqcc8KFIz+JsZ9
-   AkfN762UiMBlb2uWVrMoe3Rmxehq4bOMXupTb2/5+bT+USuDWsEGXCQSg
-   RO20uek6SHXcQfhKY/BBxGBpGee98xOx57eS4Vfm1AjuxGfferOPO19m7
-   wmBssG5dx/zD3LuuBiPeQjjfl1JF5MZG1WfdmY+M6+avQ/dk1v4oUQLSw
-   uCK6TDl4rjJ4600EVVlB8F1az43wRiAMPG4gDEZJiJFh9jfvZAVwOQ4Re
-   A==;
-X-CSE-ConnectionGUID: LIMs9fY/RCWYUf4BvtvqyA==
-X-CSE-MsgGUID: l41r6AWERYKgyNR4hSNuJg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="70152327"
-X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
-   d="scan'208";a="70152327"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 02:37:30 -0800
-X-CSE-ConnectionGUID: PVw/j0thSQOqNYTgAo7j0g==
-X-CSE-MsgGUID: YKIKj3LKRsiMpyIfcDMjDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
-   d="scan'208";a="193422642"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 27 Nov 2025 02:37:25 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vOZNL-000000004XB-19Il;
-	Thu, 27 Nov 2025 10:37:23 +0000
-Date: Thu, 27 Nov 2025 18:36:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anirudh Raybharam <anirudh@anirudhrb.com>, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	longli@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
-	maz@kernel.org, tglx@linutronix.de, Arnd Bergmann <arnd@arndb.de>,
-	akpm@linux-foundation.org, agordeev@linux.ibm.com,
-	guoweikang.kernel@gmail.com, osandov@fb.com, bsz@amazon.de,
-	linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 1/3] arm64: hyperv: move hyperv detection earlier in boot
-Message-ID: <202511271709.lBS024jA-lkp@intel.com>
-References: <20251125170124.2443340-2-anirudh@anirudhrb.com>
+	s=arc-20240116; t=1764262822; c=relaxed/simple;
+	bh=+hnO4TY9T+nASXSErYan2fnxZNfKsWigWvdgMEPcEEA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j6rooZEIePVjzDlf9flum38f4qpeM7VBOfZD9XT5GJ6gPgonVDxALlI+tlYvfiVLxIs48wrjIybQ3UWnbWW31eRYFB2Wvy81Rhs+7wNoFN+cxPEmtlGTyxk3gq3kJfdWlYFJtQwkmj6GIBmd3ePyyXFRwLOlwmUoeW/QxoP9k+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ERSHELQl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mQ3Y28wU; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ERSHELQl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mQ3Y28wU; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0A45C219DE;
+	Thu, 27 Nov 2025 17:00:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1764262819; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=c67LjBa5JtjIC6K1nDTL3mxFIcVdzFmTVEnOKZiAqm0=;
+	b=ERSHELQlwm+nOrI/ThkX2ZfyikTLfFaEdEBlYZL621PydLzMEqLue3TNr21gxrJa9xFsuT
+	vzvjbbUfU5FiOyhTT19/BR48mkipPX+vKodF9hyy/tMS0ujzic2icA1Mm0q12YMZM+0D92
+	ttl1KAljZYswsKkIiBKic2Nq98Qg38A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1764262819;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=c67LjBa5JtjIC6K1nDTL3mxFIcVdzFmTVEnOKZiAqm0=;
+	b=mQ3Y28wUbEcgjAao8nV4G4bYlJDbYfrr5KCqwBi0QG2NpYPSoc9TbbJW/FzojbY4sE81RN
+	AwnCSb9k9hWR7UCQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1764262819; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=c67LjBa5JtjIC6K1nDTL3mxFIcVdzFmTVEnOKZiAqm0=;
+	b=ERSHELQlwm+nOrI/ThkX2ZfyikTLfFaEdEBlYZL621PydLzMEqLue3TNr21gxrJa9xFsuT
+	vzvjbbUfU5FiOyhTT19/BR48mkipPX+vKodF9hyy/tMS0ujzic2icA1Mm0q12YMZM+0D92
+	ttl1KAljZYswsKkIiBKic2Nq98Qg38A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1764262819;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=c67LjBa5JtjIC6K1nDTL3mxFIcVdzFmTVEnOKZiAqm0=;
+	b=mQ3Y28wUbEcgjAao8nV4G4bYlJDbYfrr5KCqwBi0QG2NpYPSoc9TbbJW/FzojbY4sE81RN
+	AwnCSb9k9hWR7UCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 82D643EA63;
+	Thu, 27 Nov 2025 17:00:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ujPmHqKDKGm3IQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 27 Nov 2025 17:00:18 +0000
+Message-ID: <67da7b44-6975-44c2-b37d-9fadf7dceff8@suse.cz>
+Date: Thu, 27 Nov 2025 18:00:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251125170124.2443340-2-anirudh@anirudhrb.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 11/16] mm: introduce pmd_is_huge() and use where
+ appropriate
+Content-Language: en-US
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ David Hildenbrand <david@redhat.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, Peter Xu <peterx@redhat.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Arnd Bergmann <arnd@arndb.de>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Nico Pache
+ <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Oscar Salvador <osalvador@suse.de>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Matthew Brost <matthew.brost@intel.com>,
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
+ Ying Huang <ying.huang@linux.alibaba.com>,
+ Alistair Popple <apopple@nvidia.com>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Kairui Song <kasong@tencent.com>, Nhat Pham <nphamcs@gmail.com>,
+ Baoquan He <bhe@redhat.com>, Chris Li <chrisl@kernel.org>,
+ SeongJae Park <sj@kernel.org>, Matthew Wilcox <willy@infradead.org>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>,
+ Jann Horn <jannh@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
+ Naoya Horiguchi <nao.horiguchi@gmail.com>, Pedro Falcato <pfalcato@suse.de>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, Rik van Riel <riel@surriel.com>,
+ Harry Yoo <harry.yoo@oracle.com>, Hugh Dickins <hughd@google.com>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-arch@vger.kernel.org, damon@lists.linux.dev
+References: <cover.1762812360.git.lorenzo.stoakes@oracle.com>
+ <00f79db3b15293cac8f7040a48d69c52d00117e4.1762812360.git.lorenzo.stoakes@oracle.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <00f79db3b15293cac8f7040a48d69c52d00117e4.1762812360.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	TAGGED_RCPT(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linux.ibm.com,redhat.com,zeniv.linux.org.uk,kernel.org,suse.cz,arndb.de,nvidia.com,linux.alibaba.com,oracle.com,arm.com,linux.dev,suse.de,google.com,suse.com,intel.com,gmail.com,sk.com,gourry.net,huaweicloud.com,tencent.com,infradead.org,ziepe.ca,zte.com.cn,huawei.com,soleen.com,surriel.com,vger.kernel.org,kvack.org,lists.linux.dev];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[65];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:email]
+X-Spam-Level: 
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-Hi Anirudh,
+On 11/10/25 23:21, Lorenzo Stoakes wrote:
+> The leaf entry PMD case is confusing as only migration entries and
+> device private entries are valid at PMD level, not true swap entries.
+> 
+> We repeatedly perform checks of the form is_swap_pmd() || pmd_trans_huge()
+> which is itself confusing - it implies that leaf entries at PMD level exist
+> and are different from huge entries.
+> 
+> Address this confusion by introduced pmd_is_huge() which checks for either
+> case. Sadly due to header dependency issues (huge_mm.h is included very
+> early on in headers and cannot really rely on much else) we cannot use
+> pmd_is_valid_softleaf() here.
+> 
+> However since these are the only valid, handled cases the function is still
+> achieving what it intends to do.
+> 
+> We then replace all instances of is_swap_pmd() || pmd_trans_huge() with
+> pmd_is_huge() invocations and adjust logic accordingly to accommodate
+> this.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-[auto build test WARNING on next-20251125]
-[also build test WARNING on v6.18-rc7]
-[cannot apply to arm64/for-next/core tip/irq/core arnd-asm-generic/master linus/master v6.18-rc7 v6.18-rc6 v6.18-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Anirudh-Raybharam/arm64-hyperv-move-hyperv-detection-earlier-in-boot/20251126-011057
-base:   next-20251125
-patch link:    https://lore.kernel.org/r/20251125170124.2443340-2-anirudh%40anirudhrb.com
-patch subject: [PATCH 1/3] arm64: hyperv: move hyperv detection earlier in boot
-config: arm64-randconfig-003-20251127 (https://download.01.org/0day-ci/archive/20251127/202511271709.lBS024jA-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 9.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511271709.lBS024jA-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511271709.lBS024jA-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/arm64/include/asm/mshyperv.h:66,
-                    from arch/arm64/kernel/setup.c:57:
-   include/asm-generic/mshyperv.h:326:38: error: return type is an incomplete type
-     326 | static inline enum hv_isolation_type hv_get_isolation_type(void)
-         |                                      ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/mshyperv.h: In function 'hv_get_isolation_type':
-   include/asm-generic/mshyperv.h:328:9: error: 'HV_ISOLATION_TYPE_NONE' undeclared (first use in this function)
-     328 |  return HV_ISOLATION_TYPE_NONE;
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/mshyperv.h:328:9: note: each undeclared identifier is reported only once for each function it appears in
->> include/asm-generic/mshyperv.h:328:9: warning: 'return' with a value, in function returning void [-Wreturn-type]
-   include/asm-generic/mshyperv.h:326:38: note: declared here
-     326 | static inline enum hv_isolation_type hv_get_isolation_type(void)
-         |                                      ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/return +328 include/asm-generic/mshyperv.h
-
-7ad9bb9d0f357d Wei Liu                  2021-09-10  289  
-3817854ba89201 Nuno Das Neves           2025-03-14  290  #define _hv_status_fmt(fmt) "%s: Hyper-V status: %#x = %s: " fmt
-3817854ba89201 Nuno Das Neves           2025-03-14  291  #define hv_status_printk(level, status, fmt, ...) \
-3817854ba89201 Nuno Das Neves           2025-03-14  292  do { \
-3817854ba89201 Nuno Das Neves           2025-03-14  293  	u64 __status = (status); \
-3817854ba89201 Nuno Das Neves           2025-03-14  294  	pr_##level(_hv_status_fmt(fmt), __func__, hv_result(__status), \
-3817854ba89201 Nuno Das Neves           2025-03-14  295  		   hv_result_to_string(__status), ##__VA_ARGS__); \
-3817854ba89201 Nuno Das Neves           2025-03-14  296  } while (0)
-3817854ba89201 Nuno Das Neves           2025-03-14  297  #define hv_status_err(status, fmt, ...) \
-3817854ba89201 Nuno Das Neves           2025-03-14  298  	hv_status_printk(err, status, fmt, ##__VA_ARGS__)
-3817854ba89201 Nuno Das Neves           2025-03-14  299  #define hv_status_debug(status, fmt, ...) \
-3817854ba89201 Nuno Das Neves           2025-03-14  300  	hv_status_printk(debug, status, fmt, ##__VA_ARGS__)
-3817854ba89201 Nuno Das Neves           2025-03-14  301  
-3817854ba89201 Nuno Das Neves           2025-03-14  302  const char *hv_result_to_string(u64 hv_status);
-9d8731a1757bef Nuno Das Neves           2025-02-21  303  int hv_result_to_errno(u64 status);
-f3a99e761efa61 Tianyu Lan               2020-04-06  304  void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die);
-765e33f5211ab6 Michael Kelley           2019-05-30  305  bool hv_is_hyperv_initialized(void);
-b96f86534fa310 Dexuan Cui               2019-11-19  306  bool hv_is_hibernation_supported(void);
-a6c76bb08dc7f7 Andrea Parri (Microsoft  2021-02-01  307) enum hv_isolation_type hv_get_isolation_type(void);
-a6c76bb08dc7f7 Andrea Parri (Microsoft  2021-02-01  308) bool hv_is_isolation_supported(void);
-0cc4f6d9f0b9f2 Tianyu Lan               2021-10-25  309  bool hv_isolation_type_snp(void);
-20c89a559e00df Tianyu Lan               2021-10-25  310  u64 hv_ghcb_hypercall(u64 control, void *input, void *output, u32 input_size);
-d6e0228d265f29 Dexuan Cui               2023-08-24  311  u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2);
-3e1b611515d286 Tianyu Lan               2025-09-18  312  void hv_enable_coco_interrupt(unsigned int cpu, unsigned int vector, bool set);
-a156ad8c508209 Roman Kisel              2025-10-08  313  void hv_para_set_sint_proxy(bool enable);
-e6eeb3c782739c Roman Kisel              2025-10-08  314  u64 hv_para_get_synic_register(unsigned int reg);
-e6eeb3c782739c Roman Kisel              2025-10-08  315  void hv_para_set_synic_register(unsigned int reg, u64 val);
-765e33f5211ab6 Michael Kelley           2019-05-30  316  void hyperv_cleanup(void);
-6dc2a774cb4fdb Sunil Muthuswamy         2021-03-23  317  bool hv_query_ext_cap(u64 cap_query);
-37200078ed6aa2 Michael Kelley           2022-03-24  318  void hv_setup_dma_ops(struct device *dev, bool coherent);
-765e33f5211ab6 Michael Kelley           2019-05-30  319  #else /* CONFIG_HYPERV */
-db912b8954c23a Nuno Das Neves           2025-02-21  320  static inline void hv_identify_partition_type(void) {}
-765e33f5211ab6 Michael Kelley           2019-05-30  321  static inline bool hv_is_hyperv_initialized(void) { return false; }
-b96f86534fa310 Dexuan Cui               2019-11-19  322  static inline bool hv_is_hibernation_supported(void) { return false; }
-765e33f5211ab6 Michael Kelley           2019-05-30  323  static inline void hyperv_cleanup(void) {}
-f2580a907e5c0e Michael Kelley           2024-03-18  324  static inline void ms_hyperv_late_init(void) {}
-0cc4f6d9f0b9f2 Tianyu Lan               2021-10-25  325  static inline bool hv_is_isolation_supported(void) { return false; }
-0cc4f6d9f0b9f2 Tianyu Lan               2021-10-25  326  static inline enum hv_isolation_type hv_get_isolation_type(void)
-0cc4f6d9f0b9f2 Tianyu Lan               2021-10-25  327  {
-0cc4f6d9f0b9f2 Tianyu Lan               2021-10-25 @328  	return HV_ISOLATION_TYPE_NONE;
-0cc4f6d9f0b9f2 Tianyu Lan               2021-10-25  329  }
-765e33f5211ab6 Michael Kelley           2019-05-30  330  #endif /* CONFIG_HYPERV */
-765e33f5211ab6 Michael Kelley           2019-05-30  331  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
