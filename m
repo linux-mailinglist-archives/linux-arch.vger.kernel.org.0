@@ -1,159 +1,278 @@
-Return-Path: <linux-arch+bounces-15106-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15104-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB780C902E3
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Nov 2025 22:14:14 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07AD2C900DA
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Nov 2025 20:48:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C75B3AA9AB
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Nov 2025 21:14:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C2F334EBB95
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Nov 2025 19:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9804230FC10;
-	Thu, 27 Nov 2025 21:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khkgOJ3j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B9B30C379;
+	Thu, 27 Nov 2025 19:44:25 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5515C770FE;
-	Thu, 27 Nov 2025 21:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953EE306B1B;
+	Thu, 27 Nov 2025 19:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764278050; cv=none; b=M4jzvk+AOKyB8+xVmO+bQTqF9PgW1FOwrgFKo1OA9f83lnNaWAmwHGuK026evj72mtDjEXIOrVIiJAFmgLl+7Fpt7hlDyPxUgNbAawN0VdCQ5Ln38+oP/9uC0NySvHzKe7cMJSUHMOQj1XNF3fNHavOUF7NVFGYsUvRMNBSqq7I=
+	t=1764272665; cv=none; b=g+K8/xxkSIQFx0vGLRFv1SYoM1GtbiR7Jl3u5o59dURCTCtPUNti9VLSzTGf4/YaNckyHsvogbKUqjZXzGtfjtlAKEMT9JeL6HDHktAUcNJMuNlwx+Yc2R7MATBvNKQC3rdmmDEp/8NN0L3oINNeiXs3J96aLVaWeKXEX3YZsnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764278050; c=relaxed/simple;
-	bh=Fi9uBpjCD9vm8iluPdYQEZRrTQxH47uO4POYpNrObW4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=IWU72LE3VW5wKl0TjsBgjSmJITKR9+8tAg+WddshZs4oZUlxNqyq7eaUUZvcsaUCzopisIbolI6rEmfqbiP39Soyi+Wi7zzxKc96lRJhuzNGyXWMErO33zyGbUvjwlZlPNuemZ8cRCbxpfI6Mbhr1myZOZDldyERvdc+1rmXFt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khkgOJ3j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDA79C4CEF8;
-	Thu, 27 Nov 2025 21:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764278049;
-	bh=Fi9uBpjCD9vm8iluPdYQEZRrTQxH47uO4POYpNrObW4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=khkgOJ3jyY5Z1bRFubXx8+PfzwwpzTLhKmfop/KpcKgOZsNorgafnpms8HWthBlZm
-	 Qjd+fBibf2KNWHwA60kRIHSzeqjIvG22F7oj5vdloc93fv9hv4l8KaBkJrRVc+ix3A
-	 qNW9H3ZKe0qRJMBV3nBa8qM1pz0GxGYSnGlezZ1NnfqTcyE8nX44WgR2tKPkYUEgbJ
-	 3hnD1zdApuKj+qKpcUvRaPdSb99IEx4ut3J/Re5H872dPTVyRnff2sxsVeH6S+e7Jz
-	 l8F4gH+/wnKZ+XCg81W1LX+OH0VsQa/DCQaWbyYoHg+PnmOL68kDGpGTByinNHagPP
-	 od+aoTIJWdbgg==
-Date: Thu, 27 Nov 2025 14:14:03 -0700 (MST)
-From: Paul Walmsley <pjw@kernel.org>
-To: linux-riscv@lists.infradead.org
-cc: Deepak Gupta <debug@rivosinc.com>, tglx@linutronix.de, mingo@redhat.com, 
-    bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-    akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz, 
-    lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com, palmer@dabbelt.com, 
-    aou@eecs.berkeley.edu, conor@kernel.org, robh@kernel.org, 
-    krzk+dt@kernel.org, arnd@arndb.de, brauner@kernel.org, 
-    peterz@infradead.org, oleg@redhat.com, ebiederm@xmission.com, 
-    kees@kernel.org, corbet@lwn.net, shuah@kernel.org, jannh@google.com, 
-    conor+dt@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com, 
-    boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
-    a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
-    lossin@kernel.org, linux-kernel@vger.kernel.org, 
-    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-    devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
-    linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
-    andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
-    atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
-    alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
-    rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
-    zong.li@sifive.com, david@redhat.com, cmirabil@redhat.com
-Subject: Re: [PATCH v23 00/28] riscv control-flow integrity for usermode
-In-Reply-To: <176423222224.2476283.17736612090314280039.git-patchwork-notify@kernel.org>
-Message-ID: <b82ffcca-3173-8c07-4a8a-c42d8d092a72@kernel.org>
-References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com> <176423222224.2476283.17736612090314280039.git-patchwork-notify@kernel.org>
+	s=arc-20240116; t=1764272665; c=relaxed/simple;
+	bh=ih8mhx9ZUYqxUJxdKJrNoi4Uv2tzaS11zzBWElSIY+s=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RnZNEu/dlV+9AoA8JR0W3np6Njtb5AXT3/ZwCnhmWS8TQA7B7+OrHM5hMsBYCa3IZPaWlonr7Hb4W4PJXyuD1ao2P4gsVBsiDiUddiW7z03OJVNkPsTF35altakhD/bhn4KQgoUBzswvs5tRbWbAHEAzGqORpweKuih9S39wkyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dHRgF0BHbzJ467k;
+	Fri, 28 Nov 2025 03:43:21 +0800 (CST)
+Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5D4AF14010D;
+	Fri, 28 Nov 2025 03:44:18 +0800 (CST)
+Received: from localhost.localdomain (10.123.70.40) by
+ mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 27 Nov 2025 22:44:17 +0300
+From: Anatoly Stepanov <stepanov.anatoly@huawei.com>
+To: <peterz@infradead.org>, <boqun.feng@gmail.com>, <longman@redhat.com>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	<hpa@zytor.com>, <arnd@arndb.de>, <dvhart@infradead.org>,
+	<dave@stgolabs.net>, <andrealmeid@igalia.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<guohanjun@huawei.com>, <wangkefeng.wang@huawei.com>,
+	<weiyongjun1@huawei.com>, <yusongping@huawei.com>, <leijitang@huawei.com>,
+	<artem.kuzin@huawei.com>, <fedorov.nikita@h-partners.com>,
+	<kang.sun@huawei.com>, Anatoly Stepanov <stepanov.anatoly@huawei.com>
+Subject: [RFC PATCH 0/1] Introduce Hierarchical Queued NUMA-aware spinlock
+Date: Fri, 28 Nov 2025 11:26:17 +0800
+Message-ID: <20251128032618.811617-1-stepanov.anatoly@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: mscpeml100003.china.huawei.com (10.199.174.67) To
+ mscpeml500003.china.huawei.com (7.188.49.51)
 
-On Thu, 27 Nov 2025, patchwork-bot+linux-riscv@kernel.org wrote:
+[Introduction & Motivation]
 
-> This series was applied to riscv/linux.git (for-next)
-> by Paul Walmsley <pjw@kernel.org>:
-> 
+In a high contention case, existing Linux kernel spinlock implementations can become
+inefficient on modern NUMA-systems due to frequent and expensive
+cross-NUMA cache-line transfers.
 
-[ the RISC-V CFI patch series ]
+This might happen due to following reasons:
+ - on "contender enqueue" each lock contender updates a shared lock structure
+ - on "MCS handoff" cross-NUMA cache-line transfer occurs when
+two contenders are from different NUMA nodes.
 
-> 
-> Here is the summary with links:
->   - [v23,01/28] mm: VM_SHADOW_STACK definition for riscv
->     https://git.kernel.org/riscv/c/ae8460ac9db2
->   - [v23,02/28] dt-bindings: riscv: zicfilp and zicfiss in dt-bindings (extensions.yaml)
->     https://git.kernel.org/riscv/c/b32ccfc268db
->   - [v23,03/28] riscv: zicfiss / zicfilp enumeration
->     https://git.kernel.org/riscv/c/55a811a7f304
->   - [v23,04/28] riscv: zicfiss / zicfilp extension csr and bit definitions
->     https://git.kernel.org/riscv/c/92c96b16548e
->   - [v23,05/28] riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
->     https://git.kernel.org/riscv/c/7720cdd21962
->   - [v23,06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
->     https://git.kernel.org/riscv/c/e60eb198b13d
->   - [v23,07/28] riscv/mm: manufacture shadow stack pte
->     https://git.kernel.org/riscv/c/f8fcb7b5bf30
->   - [v23,08/28] riscv/mm: teach pte_mkwrite to manufacture shadow stack PTEs
->     https://git.kernel.org/riscv/c/0276a5ea1105
->   - [v23,09/28] riscv/mm: write protect and shadow stack
->     https://git.kernel.org/riscv/c/ae615676bc37
->   - [v23,10/28] riscv/mm: Implement map_shadow_stack() syscall
->     https://git.kernel.org/riscv/c/d291fd38f841
->   - [v23,11/28] riscv/shstk: If needed allocate a new shadow stack on clone
->     https://git.kernel.org/riscv/c/d209ea2fa4bb
->   - [v23,12/28] riscv: Implements arch agnostic shadow stack prctls
->     https://git.kernel.org/riscv/c/8b49f512abc2
->   - [v23,13/28] prctl: arch-agnostic prctl for indirect branch tracking
->     https://git.kernel.org/riscv/c/3363a8d1044e
->   - [v23,14/28] riscv: Implements arch agnostic indirect branch tracking prctls
->     https://git.kernel.org/riscv/c/0177891ccdb7
->   - [v23,15/28] riscv/traps: Introduce software check exception and uprobe handling
->     https://git.kernel.org/riscv/c/6f71171a7448
->   - [v23,16/28] riscv: signal: abstract header saving for setup_sigcontext
->     (no matching commit)
->   - [v23,17/28] riscv/signal: save and restore of shadow stack for signal
->     https://git.kernel.org/riscv/c/4f9da7ad3478
->   - [v23,18/28] riscv/kernel: update __show_regs to print shadow stack register
->     https://git.kernel.org/riscv/c/320c96a55d73
->   - [v23,19/28] riscv/ptrace: riscv cfi status and state via ptrace and in core files
->     https://git.kernel.org/riscv/c/7a39f89a817e
->   - [v23,20/28] riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
->     https://git.kernel.org/riscv/c/c09b490a9267
->   - [v23,21/28] riscv: kernel command line option to opt out of user cfi
->     https://git.kernel.org/riscv/c/6e0dc40ceb45
->   - [v23,22/28] riscv: enable kernel access to shadow stack memory via FWFT sbi call
->     https://git.kernel.org/riscv/c/dfd087078357
->   - [v23,23/28] arch/riscv: compile vdso with landing pad and shadow stack note
->     https://git.kernel.org/riscv/c/2cfe57e3bd9b
->   - [v23,24/28] arch/riscv: dual vdso creation logic and select vdso based on hw
->     https://git.kernel.org/riscv/c/418316aa61e8
->   - [v23,25/28] riscv: create a config for shadow stack and landing pad instr support
->     https://git.kernel.org/riscv/c/c5f5ce714457
->   - [v23,26/28] riscv: Documentation for landing pad / indirect branch tracking
->     https://git.kernel.org/riscv/c/73d0ccec35b8
->   - [v23,27/28] riscv: Documentation for shadow stack on riscv
->     https://git.kernel.org/riscv/c/6b8214c8cbd6
->   - [v23,28/28] kselftest/riscv: kselftest for user mode cfi
->     https://git.kernel.org/riscv/c/0f226cf6026f
+We introduce Hierarchical Queued Spinlock (HQ spinlock), aiming to
+reduce cross-NUMA cache line traffic and thus improving lock/unlock throughput
+for high-contention cases.
 
-As I noted with the SSE series (before we removed it from for-next), I may 
-not ultimately send this in a PR this merge window, for several reasons.  
-The series has been around for a while, and although I know some vendors 
-have tested it privately, I'd really like to have more public testing of 
-this code, particularly on hardware emulation platforms or unreleased 
-silicon.  It would be good to see some Tested-by:s. 
+This idea might be considered as a combination of cohort-locking
+by Dave Dice and Linux kernel queued spinlock.
 
-Thanks to everyone who has helped test this so far over the past few weeks 
-- particularly Joel Stanley of TensTorrent.
+[Design and workflow]
 
+The contenders are organized into 2-level scheme where each NUMA-node
+has it's own FIFO contender queue.
 
-- Paul
+NUMA-queues are linked into single-linked list alike structure, while
+maintaining FIFO order between them.
+When there're no contenders left in a NUMA-queue, the queue is removed from
+the list.
+
+Contenders try to enqueue to local NUMA-queue first and if there's
+no such queue - link it to the list.
+As for "qspinlock" only the first contender is spinning globally,
+all others - MCS-spinning.
+
+"Handoff" operation becomes two-staged:
+- local handoff: between contenders in a single NUMA-queue
+- remote handoff: between different NUMA-queues.
+
+If "remote handoff" reaches the end of the NUMA-queue linked list it goes to
+the list head.
+
+To avoid potential starvation issues, we use handoff thresholds.
+
+Key challenge here was keeping the same "qspinlock" structure size
+and "bind" a given lock to related NUMA-queues.
+
+We came up with dynamic lock metadata concept, where we can
+dynamically "bind" a given lock to it's NUMA-related metadata, and
+then "unbind" when the lock is released.
+
+This approach allows to avoid metadata reservation for every lock in advance,
+thus giving the upperbound of metadata instance number to ~ (NR_CPUS x nr_contexts / 2).
+Which corresponds to maximum amount of different locks falling into the slowpath.
+
+[Dynamic mode switching]
+
+HQ-lock supports switching between "default qspinlock" mode to "NUMA-aware lock" mode and backwards.
+Here we introduce simple scheme: when the contention is high enough a lock switches to NUMA-aware mode
+until it is completely released.
+
+If for some reason "NUMA-aware" mode cannot be enabled we fallback to default qspinlock mode.
+
+[Usage]
+
+If someone wants to try the HQ-lock in some subsystem, just
+change lock initialization code from "spin_lock_init()" to "spin_lock_init_hq()".
+The dedicated bit in the lock structure is used to distiguish between the two lock types.
+
+[Performance measurements]
+
+Performance measurements were done on x86 (AMD EPYC) and arm64 (Kunpeng 920)
+platforms with the following scenarious:
+- Locktorture benchmark
+- Memcached + memtier benchmark
+- Ngnix + Wrk benchmark
+
+[Locktorture]
+
+NPS stands for "Nodes per socket"
++------------------------------+-----------------------+-------+-------+--------+
+| AMD EPYC 9654									|
++------------------------------+-----------------------+-------+-------+--------+
+| 192 cores (x2 hyper-threads) |                       |       |       |        |
+| 2 sockets                    |                       |       |       |        |
+| Locktorture 60 sec.          | NUMA nodes per-socket |       |       |        |
+| Average gain (single lock)   | 1 NPS                 | 2 NPS | 4 NPS | 12 NPS |
+| Total contender threads      |                       |       |       |        |
+| 8                            | 19%                   | 21%   | 12%   | 12%    |
+| 16                           | 13%                   | 18%   | 34%   | 75%    |
+| 32                           | 8%                    | 14%   | 25%   | 112%   |
+| 64                           | 11%                   | 12%   | 30%   | 152%   |
+| 128                          | 9%                    | 17%   | 37%   | 163%   |
+| 256                          | 2%                    | 16%   | 40%   | 168%   |
+| 384                          | -1%                   | 14%   | 44%   | 186%   |
++------------------------------+-----------------------+-------+-------+--------+
+
++-----------------+-------+-------+-------+--------+
+| Fairness factor | 1 NPS | 2 NPS | 4 NPS | 12 NPS |
++-----------------+-------+-------+-------+--------+
+| 8               | 0.54  | 0.57  | 0.57  | 0.55   |
+| 16              | 0.52  | 0.53  | 0.60  | 0.58   |
+| 32              | 0.53  | 0.53  | 0.53  | 0.61   |
+| 64              | 0.52  | 0.56  | 0.54  | 0.56   |
+| 128             | 0.51  | 0.54  | 0.54  | 0.53   |
+| 256             | 0.52  | 0.52  | 0.52  | 0.52   |
+| 384             | 0.51  | 0.51  | 0.51  | 0.51   |
++-----------------+-------+-------+-------+--------+
+
++-------------------------+--------------+
+| Kunpeng 920 (arm64)     |              |
++-------------------------+--------------+
+| 96 cores (no MT)        |              |
+| 2 sockets, 4 NUMA nodes |              |
+| Locktorture 60 sec.     |              |
+|                         |              |
+| Total contender threads | Average gain |
+| 8                       | 93%          |
+| 16                      | 142%         |
+| 32                      | 129%         |
+| 64                      | 152%         |
+| 96                      | 158%         |
++-------------------------+--------------+
+
+[Memcached]
+
++---------------------------------+-----------------+-------------------+
+| AMD EPYC 9654                   |                 |                   |
++---------------------------------+-----------------+-------------------+
+| 192 cores (x2 hyper-threads)    |                 |                   |
+| 2 sockets, NPS=4                |                 |                   |
+|                                 |                 |                   |
+| Memtier+memcached 1:1 R/W ratio |                 |                   |
+| Workers                         | Throughput gain | Latency reduction |
+| 32                              | 1%              | -1%               |
+| 64                              | 1%              | -1%               |
+| 128                             | 3%              | -4%               |
+| 256                             | 7%              | -6%               |
+| 384                             | 10%             | -8%               |
++---------------------------------+-----------------+-------------------+
+
++---------------------------------+-----------------+-------------------+
+| Kunpeng 920 (arm64)             |                 |                   |
++---------------------------------+-----------------+-------------------+
+| 96 cores (no MT)                |                 |                   |
+| 2 sockets, 4 NUMA nodes         |                 |                   |
+|                                 |                 |                   |
+| Memtier+memcached 1:1 R/W ratio |                 |                   |
+| Workers                         | Throughput gain | Latency reduction |
+| 32                              | 4%              | -3%               |
+| 64                              | 6%              | -6%               |
+| 80                              | 8%              | -7%               |
+| 96                              | 8%              | -8%               |
++---------------------------------+-----------------+-------------------+
+
+[Nginx]
+
++-----------------------------------------------------------------------+-----------------+
+| Kunpeng 920 (arm64)                                                   |                 |
++-----------------------------------------------------------------------+-----------------+
+| 96 cores (no MT)                                                      |                 |
+| 2 sockets, 4 NUMA nodes                                               |                 |
+|                                                                       |                 |
+| Nginx + WRK benchmark, single file (lockref spinlock contention case) |                 |
+| Workers                                                               | Throughput gain |
+| 32                                                                    | 1%              |
+| 64                                                                    | 68%             |
+| 80                                                                    | 72%             |
+| 96                                                                    | 78%             |
++-----------------------------------------------------------------------+-----------------+
+Despite, the test is a single-file test, it can be related to real-life cases, when some
+html-pages are accessed much more frequently than others (index.html, etc.)
+
+[Low contention remarks]
+
+With the simple contention detection scheme presented in the patch we observe
+some degradation, compared to "qspinlock" in low-contention scenraios (< 8 contenders).
+
+We're working on more sophisticated and effective contention-detection method, that
+addresses the issue.
+
+Anatoly Stepanov, Nikita Fedorov (1):
+  HQspinlock - (NUMA-aware) Hierarchical Queued spinlock
+
+ arch/arm64/Kconfig                    |  28 +
+ arch/arm64/include/asm/qspinlock.h    |  37 ++
+ arch/x86/Kconfig                      |  28 +
+ arch/x86/include/asm/qspinlock.h      |  38 +-
+ include/asm-generic/qspinlock.h       |  23 +-
+ include/asm-generic/qspinlock_types.h |  52 +-
+ include/linux/lockref.h               |   2 +-
+ include/linux/spinlock.h              |  26 +
+ include/linux/spinlock_types.h        |  26 +
+ include/linux/spinlock_types_raw.h    |  20 +
+ init/main.c                           |   4 +
+ kernel/futex/core.c                   |   2 +-
+ kernel/locking/hqlock_core.h          | 832 ++++++++++++++++++++++++++
+ kernel/locking/hqlock_meta.h          | 477 +++++++++++++++
+ kernel/locking/hqlock_proc.h          |  88 +++
+ kernel/locking/hqlock_types.h         | 118 ++++
+ kernel/locking/qspinlock.c            |  67 ++-
+ kernel/locking/qspinlock.h            |   4 +-
+ kernel/locking/spinlock_debug.c       |  20 +
+ 19 files changed, 1862 insertions(+), 30 deletions(-)
+ create mode 100644 arch/arm64/include/asm/qspinlock.h
+ create mode 100644 kernel/locking/hqlock_core.h
+ create mode 100644 kernel/locking/hqlock_meta.h
+ create mode 100644 kernel/locking/hqlock_proc.h
+ create mode 100644 kernel/locking/hqlock_types.h
+
+-- 
+2.34.1
+
 
