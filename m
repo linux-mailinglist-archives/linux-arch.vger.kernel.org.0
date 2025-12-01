@@ -1,230 +1,349 @@
-Return-Path: <linux-arch+bounces-15122-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15123-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EBFCC95FB0
-	for <lists+linux-arch@lfdr.de>; Mon, 01 Dec 2025 08:18:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0016EC98086
+	for <lists+linux-arch@lfdr.de>; Mon, 01 Dec 2025 16:23:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2251C4E0EEC
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Dec 2025 07:18:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0EDB634256B
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Dec 2025 15:23:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E3F29A326;
-	Mon,  1 Dec 2025 07:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA7532B9BA;
+	Mon,  1 Dec 2025 15:23:10 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A89029AB02;
-	Mon,  1 Dec 2025 07:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A62532B9B9;
+	Mon,  1 Dec 2025 15:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764573525; cv=none; b=jFheUykKVUrzXLbVncfUApvjKYpAkcEtoOFBlNwv8Nk0nlS8umKLo9Wq3oyu4LPNhoSeHu0ARbD79gudy972LXBvKt8F2CXYzTnixfCh6oD8YcCbFwU0ARgiAX0zMBBRIZpovBpC/xZ3fYp043mkHhNWrelmWeTabX+5bQAKAnE=
+	t=1764602590; cv=none; b=BsGlS9jl97yVlm9BZOt+FQYjT7SEWx+u4RVH2tOYtyu850Tkj2foD8ma3004LyujrQLWVWZfz7FtEIyeatWlCD3w4bq+2egDhYUXfjhClf2D0SW+UMY7FcMpU2jjDEzYabMGpMMpcKMWFlJEILD6SBvJxCUq7zomNlDVaa+TzjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764573525; c=relaxed/simple;
-	bh=9mfff0zf0WYT7Y1m0h9SwdlbThjNAg6ePi3np+RzYlQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XmUiSbkKbWlqc5X6aqvcAoucppiqP33xsXrqcYdIrAc6QoIFYuffmDXyurpkeMaQ2f4eUt6YCoLWqYWCYNh62mCgsVqHWzEZuv7i93fQlZvslTDZBIayc3utQjD/AuRDerEARxqkm3xIWp9v069umj4iLac9QoIzL85ySxpSQfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-83-692d41486292
-Date: Mon, 1 Dec 2025 16:18:27 +0900
-From: Byungchul Park <byungchul@sk.com>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-	tytso@mit.edu, david@fromorbit.com, amir73il@gmail.com,
-	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
-	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
-	hannes@cmpxchg.org, vdavydov.dev@gmail.com, sj@kernel.org,
-	jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-	ngupta@vflare.org, linux-block@vger.kernel.org,
-	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
-	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-	djwong@kernel.org, dri-devel@lists.freedesktop.org,
-	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
-	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
-	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
-	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
-	yeoreum.yun@arm.com, netdev@vger.kernel.org,
-	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
-	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
-	sumit.semwal@linaro.org, gustavo@padovan.org,
-	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
-	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
-	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
-	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
-	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
-	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
-	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
-	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
-	yuzhao@google.com, baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com, joel.granados@kernel.org,
-	richard.weiyang@gmail.com, geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com, linux@treblig.org,
-	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
-	chenhuacai@kernel.org, francesco@valla.it,
-	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
-	masahiroy@kernel.org, brauner@kernel.org,
-	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
-	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 44/47] dept: introduce APIs to set page usage and use
- subclasses_evt for the usage
-Message-ID: <20251201071827.GA70324@system.software.com>
-References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-45-byungchul@sk.com>
- <20251119105312.GA11582@system.software.com>
- <aR3WHf9QZ_dizNun@casper.infradead.org>
+	s=arc-20240116; t=1764602590; c=relaxed/simple;
+	bh=65T3+ELmkSO7iyGOUlTIWigWCU0kNSD8HMMI4WsoyoM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Y6dyHUtjmryOlMGySELaDwiGQ05qO98/CfF7v3caPkjpy3EqkRTKMc3J7VhiXu/Mngm3hIucZruyz7opKVz2HBrunch4lTwAey/hlAQHuCH9hSnrPrQxO24JKnVvQXTpbr7egowXNh54aQQCy8p1ZHDdyh3CmiNAC0XC6cN7h0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dKnhr6XDFzJ46XN;
+	Mon,  1 Dec 2025 23:22:52 +0800 (CST)
+Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5CE3940565;
+	Mon,  1 Dec 2025 23:22:56 +0800 (CST)
+Received: from [10.123.123.226] (10.123.123.226) by
+ mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 1 Dec 2025 18:22:55 +0300
+Message-ID: <c2b0c29d-0d65-4ecd-b7dd-dc3690936a07@huawei.com>
+Date: Mon, 1 Dec 2025 18:22:55 +0300
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aR3WHf9QZ_dizNun@casper.infradead.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTZxTHfe597tPbjppr5+QO3OLqFjYcbDg+nET34pLF6zcz/KDbktnI
-	jXQrxRRFWGLCpih2jkGXQiwvwTK6hncBCYidlWGxvsSCDDoDxWoHY6WSCK1vtbV3xsxvv5z/
-	P7+ckxyWVtWTFFar3y8a9BqdmiiwIpRkzdi2JUP7/qm5JAgvl2Oo62wj4OloRTATLkdQNhDH
-	8MTkkkHc4UJQPWqiYakrRiD4xz0EZn+AwKLtBIL5i1thMrKAwBaIURBwHkNQY/YgcNh/IHAj
-	sBLGw4sE3OYfCYRG6yi420WgvtaE4HBTJ4HRYJSCqWoTBTO2WQw18wSqTydDbc1hCh7aWmRw
-	tWkKQ9SfBfHGAnC1zslg+mczBrdvgoHgrInAzMhRBpbH/RSUnw1j6L6TCBw3N8DJhikC5xxu
-	DOVPlhG4+m9TcKLrDAO+tjgDpbX3GRhr9WC44rqE4frZdgaaJ0cp8N/yMtBz7SoNkYpU8FT9
-	xIC38m8E7XetidMjNhps4UUZjDkbqU9yhftlFVho6emjhLaGNiQ8fmRCQlllgo70HBSarywQ
-	4VH4TyJUXcsQBizTMqGx+4BwZDjECD32dKHp3Dwl3Ax+KHS3HCfbN3yh2Jwr6rRFouG9j3Yr
-	8qYrl/G+wdeLLWMfl6LZZCOSszyXzdtb/eQ5zw0ZKYkx9yZf7/DJJCZcGu/1PqSNiGVXc2/z
-	C70bjUjB0pw1lW+/fIGROi9zOj4y3PFfX8kBf+P3DloqqbhBxI8fPc08C1bx7pMBLDHNpfPe
-	2DwlSWkulf8txkpjeWKHv6zHaIlf4dbzzr4RSvLw3G05750M0c8WfZW/YPfiSsRZXtBaXtBa
-	/tc2IroFqbT6onyNVpedmVei1xZn7inI70aJp7Udin7Zj+55coYQxyJ1kvISvKtVMZqiwpL8
-	IcSztHq1Ul2cGClzNSXfiYaCrw0HdGLhEEplsTpZuTFyMFfF7dXsF78VxX2i4XlKsfKUUtQ8
-	8XiJ8772zs6R6Bvu2L++rcKEHHfZ085s7t/DpH1a7ZFT/3yQs2bTul2bhCyS6VxheaniutM9
-	8v3ayRWXnb+49Au/horOH+q9deer7OBSThyqjNt2ftbQa36rJnJqQCXboewbXptdxzWtubjl
-	85S8CiZ9av3gg3XWVbs7v3mwMupT48I8TVY6bSjUPAXJGGhesAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0xTZxjOd77vXOhWc8ZYOIFkP+rM0Igbi0ve3S8/1i8zW/ZvixpHM462
-	tlzSYge6LVxkYFlYaVKILUxWY2VQELlFJCUVJ5s6xFIvbLMi2IGMW8IKCpR27ZZl/nnzvM/l
-	zfPjFXByhE0TdHmFsjFPY1BxCqL48LXyTPpOpu7FR20quFXqI7AcriLQcMbDQVXncRaut7ci
-	GF+uQvBw3Ymhoi9GYMM2xEN49XceYt4hBHV+GwZPdykDf3VEOZi9uITAPhHioH6mlMCi+xsE
-	jiknDzOX1DA/3s9CLDjNwO2VOQTuUJSBkK8SwUadHk64ujhYHx7BUG+/juD7iSCGBx1xsXvo
-	LgJvcxkHf1h7MARCm+DG8iIHl+3VHMz7GxhY6OCgqczLQqPThqD85BkO6ho7CfTdO8+DfzbC
-	wJ06GwOtnR/AuHuKwFWri4n3i7vOpoKzvpyJjwcM2Nv6GVh1t/Dwy8k7BNwlW8A5HGBhstnB
-	Q2QiC2JN+TDUOs1D8Fs7gfb5EfZtO6IPK2oIbenqZWjF6AZHPd95EF1fsyEaPlWOaYU1vl6c
-	W8T0aNfn9NTVOY6uLd/kqHelidArLonWDmfSPkeQp0cHfuM/enW34vUc2aAzy8YX3sxWaIPW
-	MCnof7bIMfpWCZpKtaAkQRJ3StODFiaBific1Oi9yycwJz4vjY2tYgsShBQxQ5rrfsmCFAIW
-	XelS25ULbMLztGiQVn5s/8evFEEKDLTjhClZ7EfSja/Psv8KT0mXj4dIAmNxmzQWnWESR7GY
-	Lp2OCgk6Kd7hV1clTuBnxM2Sr/cnxoqUjsfSjsfSjv/TTQi3oBRdnjlXozO8vMOk1xbn6Yp2
-	fJaf24niP+n+MlJ7DoUD6kEkCkj1pNKXtV2XzGrMpuLcQSQJWJWiVBXFKWWOpviwbMz/1HjI
-	IJsGUbpAVKnK9z+Ws5PFA5pCWS/LBbLxP5URktJK0KUv+gw379uqLT0/74vM9h47uLB1tDn7
-	vVfozO0cbYqbS8uoqVnV7iI7B7aqf2iIXdsYOFK2J0N9f+Keb61Mv3tL4ea9ud1Lfx6RGw9W
-	F+yvqZy/9u4bS/vMh4NVZv9X0U88PXseHTpREqhd2zSyt239Qv2Cfpf3Ftq/3R89P3nsiUm1
-	ipi0mqxt2GjS/A2TVMQejwMAAA==
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/1] Introduce Hierarchical Queued NUMA-aware spinlock
+To: Waiman Long <llong@redhat.com>
+CC: <peterz@infradead.org>, <boqun.feng@gmail.com>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+	<arnd@arndb.de>, <dvhart@infradead.org>, <dave@stgolabs.net>,
+	<andrealmeid@igalia.com>, <linux-kernel@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <guohanjun@huawei.com>,
+	<wangkefeng.wang@huawei.com>, <weiyongjun1@huawei.com>,
+	<yusongping@huawei.com>, <leijitang@huawei.com>, <artem.kuzin@huawei.com>,
+	<fedorov.nikita@h-partners.com>, <kang.sun@huawei.com>
+References: <20251128032618.811617-1-stepanov.anatoly@huawei.com>
+ <aad84044-a9d3-4806-a966-4770a3634b03@redhat.com>
+Content-Language: en-US
+From: Stepanov Anatoly <stepanov.anatoly@huawei.com>
+In-Reply-To: <aad84044-a9d3-4806-a966-4770a3634b03@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: mscpeml500004.china.huawei.com (7.188.26.250) To
+ mscpeml500003.china.huawei.com (7.188.49.51)
 
-On Wed, Nov 19, 2025 at 02:37:17PM +0000, Matthew Wilcox wrote:
-> On Wed, Nov 19, 2025 at 07:53:12PM +0900, Byungchul Park wrote:
-> > On Thu, Oct 02, 2025 at 05:12:44PM +0900, Byungchul Park wrote:
-> > > False positive reports have been observed since dept works with the
-> > > assumption that all the pages have the same dept class, but the class
-> > > should be split since the problematic call paths are different depending
-> > > on what the page is used for.
-> > >
-> > > At least, ones in block device's address_space and ones in regular
-> > > file's address_space have exclusively different usages.
-> > >
-> > > Thus, define usage candidates like:
-> > >
-> > >    DEPT_PAGE_REGFILE_CACHE /* page in regular file's address_space */
-> > >    DEPT_PAGE_BDEV_CACHE    /* page in block device's address_space */
-> > >    DEPT_PAGE_DEFAULT       /* the others */
-> >
-> > 1. I'd like to annotate a page to DEPT_PAGE_REGFILE_CACHE when the page
-> >    starts to be associated with a page cache for fs data.
-> >
-> > 2. And I'd like to annotate a page to DEPT_PAGE_BDEV_CACHE when the page
-> >    starts to be associated with meta data of fs e.g. super block.
-> >
-> > 3. Lastly, I'd like to reset the annotated value if any, that has been
-> >    set in the page, when the page ends the assoication with either page
-> >    cache or meta block of fs e.g. freeing the page.
-> >
-> > Can anyone suggest good places in code for the annotation 1, 2, 3?  It'd
-> > be totally appreciated. :-)
+On 11/30/2025 7:04 PM, Waiman Long wrote:
+> On 11/27/25 10:26 PM, Anatoly Stepanov wrote:
+>> [Introduction & Motivation]
+>>
+>> In a high contention case, existing Linux kernel spinlock implementations can become
+>> inefficient on modern NUMA-systems due to frequent and expensive
+>> cross-NUMA cache-line transfers.
+>>
+>> This might happen due to following reasons:
+>>   - on "contender enqueue" each lock contender updates a shared lock structure
+>>   - on "MCS handoff" cross-NUMA cache-line transfer occurs when
+>> two contenders are from different NUMA nodes.
+>>
+>> We introduce Hierarchical Queued Spinlock (HQ spinlock), aiming to
+>> reduce cross-NUMA cache line traffic and thus improving lock/unlock throughput
+>> for high-contention cases.
+>>
+>> This idea might be considered as a combination of cohort-locking
+>> by Dave Dice and Linux kernel queued spinlock.
+>>
+>> [Design and workflow]
+>>
+>> The contenders are organized into 2-level scheme where each NUMA-node
+>> has it's own FIFO contender queue.
+>>
+>> NUMA-queues are linked into single-linked list alike structure, while
+>> maintaining FIFO order between them.
+>> When there're no contenders left in a NUMA-queue, the queue is removed from
+>> the list.
+>>
+>> Contenders try to enqueue to local NUMA-queue first and if there's
+>> no such queue - link it to the list.
+>> As for "qspinlock" only the first contender is spinning globally,
+>> all others - MCS-spinning.
+>>
+>> "Handoff" operation becomes two-staged:
+>> - local handoff: between contenders in a single NUMA-queue
+>> - remote handoff: between different NUMA-queues.
+>>
+>> If "remote handoff" reaches the end of the NUMA-queue linked list it goes to
+>> the list head.
+>>
+>> To avoid potential starvation issues, we use handoff thresholds.
+>>
+>> Key challenge here was keeping the same "qspinlock" structure size
+>> and "bind" a given lock to related NUMA-queues.
+>>
+>> We came up with dynamic lock metadata concept, where we can
+>> dynamically "bind" a given lock to it's NUMA-related metadata, and
+>> then "unbind" when the lock is released.
+>>
+>> This approach allows to avoid metadata reservation for every lock in advance,
+>> thus giving the upperbound of metadata instance number to ~ (NR_CPUS x nr_contexts / 2).
+>> Which corresponds to maximum amount of different locks falling into the slowpath.
+>>
+>> [Dynamic mode switching]
+>>
+>> HQ-lock supports switching between "default qspinlock" mode to "NUMA-aware lock" mode and backwards.
+>> Here we introduce simple scheme: when the contention is high enough a lock switches to NUMA-aware mode
+>> until it is completely released.
+>>
+>> If for some reason "NUMA-aware" mode cannot be enabled we fallback to default qspinlock mode.
+>>
+>> [Usage]
+>>
+>> If someone wants to try the HQ-lock in some subsystem, just
+>> change lock initialization code from "spin_lock_init()" to "spin_lock_init_hq()".
+>> The dedicated bit in the lock structure is used to distiguish between the two lock types.
+>>
+>> [Performance measurements]
+>>
+>> Performance measurements were done on x86 (AMD EPYC) and arm64 (Kunpeng 920)
+>> platforms with the following scenarious:
+>> - Locktorture benchmark
+>> - Memcached + memtier benchmark
+>> - Ngnix + Wrk benchmark
+>>
+>> [Locktorture]
+>>
+>> NPS stands for "Nodes per socket"
+>> +------------------------------+-----------------------+-------+-------+--------+
+>> | AMD EPYC 9654                                    |
+>> +------------------------------+-----------------------+-------+-------+--------+
+>> | 192 cores (x2 hyper-threads) |                       |       |       |        |
+>> | 2 sockets                    |                       |       |       |        |
+>> | Locktorture 60 sec.          | NUMA nodes per-socket |       |       |        |
+>> | Average gain (single lock)   | 1 NPS                 | 2 NPS | 4 NPS | 12 NPS |
+>> | Total contender threads      |                       |       |       |        |
+>> | 8                            | 19%                   | 21%   | 12%   | 12%    |
+>> | 16                           | 13%                   | 18%   | 34%   | 75%    |
+>> | 32                           | 8%                    | 14%   | 25%   | 112%   |
+>> | 64                           | 11%                   | 12%   | 30%   | 152%   |
+>> | 128                          | 9%                    | 17%   | 37%   | 163%   |
+>> | 256                          | 2%                    | 16%   | 40%   | 168%   |
+>> | 384                          | -1%                   | 14%   | 44%   | 186%   |
+>> +------------------------------+-----------------------+-------+-------+--------+
+>>
+>> +-----------------+-------+-------+-------+--------+
+>> | Fairness factor | 1 NPS | 2 NPS | 4 NPS | 12 NPS |
+>> +-----------------+-------+-------+-------+--------+
+>> | 8               | 0.54  | 0.57  | 0.57  | 0.55   |
+>> | 16              | 0.52  | 0.53  | 0.60  | 0.58   |
+>> | 32              | 0.53  | 0.53  | 0.53  | 0.61   |
+>> | 64              | 0.52  | 0.56  | 0.54  | 0.56   |
+>> | 128             | 0.51  | 0.54  | 0.54  | 0.53   |
+>> | 256             | 0.52  | 0.52  | 0.52  | 0.52   |
+>> | 384             | 0.51  | 0.51  | 0.51  | 0.51   |
+>> +-----------------+-------+-------+-------+--------+
+>>
+>> +-------------------------+--------------+
+>> | Kunpeng 920 (arm64)     |              |
+>> +-------------------------+--------------+
+>> | 96 cores (no MT)        |              |
+>> | 2 sockets, 4 NUMA nodes |              |
+>> | Locktorture 60 sec.     |              |
+>> |                         |              |
+>> | Total contender threads | Average gain |
+>> | 8                       | 93%          |
+>> | 16                      | 142%         |
+>> | 32                      | 129%         |
+>> | 64                      | 152%         |
+>> | 96                      | 158%         |
+>> +-------------------------+--------------+
+>>
+>> [Memcached]
+>>
+>> +---------------------------------+-----------------+-------------------+
+>> | AMD EPYC 9654                   |                 |                   |
+>> +---------------------------------+-----------------+-------------------+
+>> | 192 cores (x2 hyper-threads)    |                 |                   |
+>> | 2 sockets, NPS=4                |                 |                   |
+>> |                                 |                 |                   |
+>> | Memtier+memcached 1:1 R/W ratio |                 |                   |
+>> | Workers                         | Throughput gain | Latency reduction |
+>> | 32                              | 1%              | -1%               |
+>> | 64                              | 1%              | -1%               |
+>> | 128                             | 3%              | -4%               |
+>> | 256                             | 7%              | -6%               |
+>> | 384                             | 10%             | -8%               |
+>> +---------------------------------+-----------------+-------------------+
+>>
+>> +---------------------------------+-----------------+-------------------+
+>> | Kunpeng 920 (arm64)             |                 |                   |
+>> +---------------------------------+-----------------+-------------------+
+>> | 96 cores (no MT)                |                 |                   |
+>> | 2 sockets, 4 NUMA nodes         |                 |                   |
+>> |                                 |                 |                   |
+>> | Memtier+memcached 1:1 R/W ratio |                 |                   |
+>> | Workers                         | Throughput gain | Latency reduction |
+>> | 32                              | 4%              | -3%               |
+>> | 64                              | 6%              | -6%               |
+>> | 80                              | 8%              | -7%               |
+>> | 96                              | 8%              | -8%               |
+>> +---------------------------------+-----------------+-------------------+
+>>
+>> [Nginx]
+>>
+>> +-----------------------------------------------------------------------+-----------------+
+>> | Kunpeng 920 (arm64)                                                   |                 |
+>> +-----------------------------------------------------------------------+-----------------+
+>> | 96 cores (no MT)                                                      |                 |
+>> | 2 sockets, 4 NUMA nodes                                               |                 |
+>> |                                                                       |                 |
+>> | Nginx + WRK benchmark, single file (lockref spinlock contention case) |                 |
+>> | Workers                                                               | Throughput gain |
+>> | 32                                                                    | 1%              |
+>> | 64                                                                    | 68%             |
+>> | 80                                                                    | 72%             |
+>> | 96                                                                    | 78%             |
+>> +-----------------------------------------------------------------------+-----------------+
+>> Despite, the test is a single-file test, it can be related to real-life cases, when some
+>> html-pages are accessed much more frequently than others (index.html, etc.)
+>>
+>> [Low contention remarks]
+>>
+>> With the simple contention detection scheme presented in the patch we observe
+>> some degradation, compared to "qspinlock" in low-contention scenraios (< 8 contenders).
+>>
+>> We're working on more sophisticated and effective contention-detection method, that
+>> addresses the issue.
+>>
+>> Anatoly Stepanov, Nikita Fedorov (1):
+>>    HQspinlock - (NUMA-aware) Hierarchical Queued spinlock
+>>
+>>   arch/arm64/Kconfig                    |  28 +
+>>   arch/arm64/include/asm/qspinlock.h    |  37 ++
+>>   arch/x86/Kconfig                      |  28 +
+>>   arch/x86/include/asm/qspinlock.h      |  38 +-
+>>   include/asm-generic/qspinlock.h       |  23 +-
+>>   include/asm-generic/qspinlock_types.h |  52 +-
+>>   include/linux/lockref.h               |   2 +-
+>>   include/linux/spinlock.h              |  26 +
+>>   include/linux/spinlock_types.h        |  26 +
+>>   include/linux/spinlock_types_raw.h    |  20 +
+>>   init/main.c                           |   4 +
+>>   kernel/futex/core.c                   |   2 +-
+>>   kernel/locking/hqlock_core.h          | 832 ++++++++++++++++++++++++++
+>>   kernel/locking/hqlock_meta.h          | 477 +++++++++++++++
+>>   kernel/locking/hqlock_proc.h          |  88 +++
+>>   kernel/locking/hqlock_types.h         | 118 ++++
+>>   kernel/locking/qspinlock.c            |  67 ++-
+>>   kernel/locking/qspinlock.h            |   4 +-
+>>   kernel/locking/spinlock_debug.c       |  20 +
+>>   19 files changed, 1862 insertions(+), 30 deletions(-)
+>>   create mode 100644 arch/arm64/include/asm/qspinlock.h
+>>   create mode 100644 kernel/locking/hqlock_core.h
+>>   create mode 100644 kernel/locking/hqlock_meta.h
+>>   create mode 100644 kernel/locking/hqlock_proc.h
+>>   create mode 100644 kernel/locking/hqlock_types.h
 > 
-> I don't think it makes sense to track lock state in the page (nor
-> folio).  Partly bcause there's just so many of them, but also because
-> the locking rules don't really apply to individual folios so much as
-> they do to the mappings (or anon_vmas) that contain folios.
-
-I've been trying to fully understand what you meant but maybe failed.
-
-FWIW, dept is working based on classification, not instance by instance,
-that is similar to lockdep.  This patch is for resolving issues that
-might come from the fact that there is a **single class** for PG_locked,
-by splitting the class to several ones according to their usages.
-
-> If you're looking to find deadlock scenarios, I think it makes more
-> sense to track all folio locks in a given mapping as the same lock
-> type rather than track each folio's lock status.
+> There was a past attempt to make qspinlock NUMA-aware.
 > 
-> For example, let's suppose we did something like this in the
-> page fault path:
+> https://lore.kernel.org/lkml/20210514200743.3026725-1-alex.kogan@oracle.com/
 > 
-> Look up and lock a folio (we need folios locked to insert them into
-> the page tables to avoid a race with truncate)
-> Try to allocate a page table
-> Go into reclaim, attempt to reclaim a folio from this mapping
+> I am not sure if you had seen that as you didn't mention about this patch.
+>
 
-I think you are talking about nested lock patterns involving PG_locked.
+Hi, thanks for your feedback and comments!
 
-Even though dept can do much more jobs than just tracking nested lock
-patterns within a single context, of course, nested lock patterns
-involving PG_locked should be handled appropriately, maybe with the
-useful information you gave.  When I work on handling nested locks esp.
-involving PG_locked, I will try to get you again.  Thanks.
+Regarding CNA-lock
+(https://lore.kernel.org/lkml/20210514200743.3026725-1-alex.kogan@oracle.com/),
+of course we know and compared CNA vs HQ-lock.
 
-However, I have no choice but to keep this approach for the **single
-class** issue.  Feel free to ask if any.
+Agree, it should have been mentioned right away.
 
-	Byungchul
+For AMD EPYC9654, locktorture+CNA showed same results as default qspinlock.
+This part is interesting, as we did many attempts to make sure everything is correct
+in the testing procedure.
 
-> We ought to detect that as a potential deadlock, regardless of which
-> folio in the mapping we attempt to reclaim.  So can we track folio
-> locking at the mapping/anon_vma level instead?
+So exact same results as for "HQ-lock" vs "qspinlock".
+ 
+For "Kunpeng 920", CNA-lock shows performance improvement, compared to qspinlock, 
+but anyway HQ-lock outperforms CNA-lock, here the "locktorture" results:
+
++-------------------------+--------------+
+| HQ-lock vs CNA-lock     |              |
++-------------------------+--------------+
+| Kunpeng 920 (arm64)     |              |
+| 96 cores (no MT)        |              |
+| 2 sockets, 4 NUMA nodes |              |
+|                         |              |
+| Locktorture             |              |
+| Threads                 | HQ-lock gain |
+| 32                      | 26%          |
+| 64                      | 32%          |
+| 80                      | 35%          |
+| 96                      | 31%          |
++-------------------------+--------------+
+
+ 
+> That previous patch differs from yours in the following ways:
 > 
-> ---
+> 1) It can coexist with pvspinlock and is activated only if running on bare metal and on systems with 2 or more NUMA nodes. Your patch is mutually exhaustive with pvqspinlock.
+We can support such limitation too.
+
 > 
-> My current understanding of folio locking rules:
+> 2) Once the NUMA-aware lock is activated, all the spinlocks will use it instead of using a separate init call to enable its use.
 > 
-> If you hold a lock on folio A, you can take a lock on folio B if:
+> 3) Your patch can dynamically switch between the qspinlock and HQ lock mode which the previous one doesn't.
 > 
-> 1. A->mapping == B->mapping and A->index < B->index
->    (for example writeback; we take locks on all folios to be written
->     back in order)
-> 2. !S_ISBLK(A->mapping->host) and S_ISBLK(B->mapping->host)
-> 3. S_ISREG(A->mapping->host) and S_ISREG(B->mapping->host) with
->    inode_lock() held on both and A->index < B->index
->    (the remap_range code)
+> There are pros and cons in both cases.
+> 
+> I also have some general comments about this patch.
+> 
+> Your patch is too large to review as a single patch. I would suggest breaking it up in multiple smaller patches to make it easier to review. Also the cover letter won't be included if the patch is merged, but the patch description in that single patch is not informative at all. I would suggest putting the design and the performance information shown in this cover letter to the individual patches and with a relatively brief cover letter.
+> 
+> I have more comments about the actual content of your patch 1 in another email.
+
+We'll going to address all the issues you mentioned and re-send RFC-v2 this week.
+
+> Cheers,
+> Longman
+> 
+> 
+
+-- 
+Anatoly Stepanov, Huawei
 
