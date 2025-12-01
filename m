@@ -1,55 +1,55 @@
-Return-Path: <linux-arch+bounces-15113-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15114-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02FD6C95F2A
-	for <lists+linux-arch@lfdr.de>; Mon, 01 Dec 2025 08:06:51 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D82D2C95F33
+	for <lists+linux-arch@lfdr.de>; Mon, 01 Dec 2025 08:07:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 33CC94E148D
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Dec 2025 07:06:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A86184E175F
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Dec 2025 07:06:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3976728A3FA;
-	Mon,  1 Dec 2025 07:06:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2651928B415;
+	Mon,  1 Dec 2025 07:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nhrDDeu4";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YMk4aXqb"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2tyy+OG8";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="njaTiSIx"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F76628CF6F;
-	Mon,  1 Dec 2025 07:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C74C28CF6F;
+	Mon,  1 Dec 2025 07:06:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764572764; cv=none; b=FHM1RLhW1P24HKYuGcsr+lu0QCSjzmiquBOB4ol/VmWBJ45pY75eaFxvwHYNQd9kSxkXtUk8OjCMjyn6kBg2mSzE9R3kOmv4F9Te9ev2Ft53jqkrzXajmIJ2lfe/noojGcYZCKADY44sNkRxtSzgFEDuKqHoGvdp5mwPRW2kprs=
+	t=1764572771; cv=none; b=pQHkJtdTQu7CVcIMsAJdcZtWj01IgJSyUUf3FYjpADWUnlAItyU5+w8tKdLqYGk6rEveBRsi+3QjyMTZwz75bQe9GBVm7zKOoJaRKFIagUm3Cq0ubU8RRSAXXJeTt4Ln+LTTb+MVuazk5a2ryIgnhw19O7QQfWltVrqj9OaLuFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764572764; c=relaxed/simple;
-	bh=sCIUOv3Pc5Bi8qejXKpGiXcetCSWnbvRoMyDZQmLMJY=;
+	s=arc-20240116; t=1764572771; c=relaxed/simple;
+	bh=AnihXQ4fmqBvXlFc15AUvU1tdSTze+6028HKSUHK62c=;
 	h=Message-ID:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Date; b=R49jJ4+rL6c0g/XcjBvqrAxou7h7JJy/9qBvRwRBudVpkBSl4FX4aU2h2EG7j5ZxV/6Vgb31My0EuQ1xnPsmTYE1zVfFOWMHCQzJ/ANRv6oBMqwrwdMwLv9V9GymbJpa/2ixx315fmlPVXzLV2gSEcBlXUz7nqxUrx4JDPENR+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nhrDDeu4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YMk4aXqb; arc=none smtp.client-ip=193.142.43.55
+	 Content-Type:Date; b=tf459tID0I78zytA56g8sAc1wh9enrLwUcbvnqFZsNp7d6kR11KAkzXNQhmB9C80mdQYmxXUNNk7Q9Bjdn2WvI8/5v0loSycxW/2cWCrRKfxnU3RkOLB8BV7eG/c2OPy4wtd7nL1Xy4NqOnViLC61EyDY63qi9wo/hwxQFmAIoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2tyy+OG8; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=njaTiSIx; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Message-ID: <20251128230240.840699861@linutronix.de>
+Message-ID: <20251128230240.903586115@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1764572760;
+	s=2020; t=1764572767;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=kGoBtb87LQvvEeMEt7z1mXVJHPOZKvaBorLUBvllkfA=;
-	b=nhrDDeu4L3bx2uNPZxPSRDA/ezkglufUN1xv3xLB8J2YhPV/uXnnbOqBTCNi4UKQ6kWlNQ
-	R/SxqpZtHeRbbKjgBprfQq9L4ZioKdwqgMCa+VOLcpx4PQloihn5LWlv3TBm9jtzmK4vtm
-	bL8FSwOR+nMO4YC8dVTtwiLalCfq10jnicT7CC3FppFDCre4vEeQQGxbJdgKdXZUbTpMmc
-	rQTppJL/SsIQFeyixa8zoztpceNlBeJ/KVmUecLcn12oqUJfw+LPtpEc+CFRtscO+G9oZ7
-	vCmYQMMf97XkGHBG2jDfhL2YQZvmi8wzEX6iYZYqPnVEfEam3mvYk/VU8y48rg==
+	 references:references; bh=M6rIH1sVgm4hkbS8s7yHptCUB8/BYixYD15veKyakwY=;
+	b=2tyy+OG8IvJsUJZFDAVuznLSbvOjVSXCrr+URdyqSxSQDi9LpnkmoxzLsc323G2mCxADVT
+	iqICyRssG7QP7hitZeciI7Sni0OvtCTDSnMlJB4QZVGfAA9/gU3jO/41okg8cj+WVYfc96
+	iTAa8idPU/wBIYGX2J/DpymPuNLcVjHlj22JDv7mcnq2riyu+KtTiIhaPfZFmpl5x1g7jj
+	kdLEl4fJWAPq0x39aqoFCB3ffTKBwHNfN9vrSeOZj5HrcIUJXQxO+wvUDdvO3JO787PLNg
+	hIt8cCHk0liF7A+gJQcrdXvAfCdGZeO36zUh8GlX2O267AT1XCPfgLQ0Sy5ZIA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1764572760;
+	s=2020e; t=1764572767;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=kGoBtb87LQvvEeMEt7z1mXVJHPOZKvaBorLUBvllkfA=;
-	b=YMk4aXqbI90rVTKr8jTNQC4jHvtB86bQhOrWBUITqSGzsBI2ulirWPf4AAufoa2qznFVEP
-	zcWI2nIgoPx+EIDQ==
+	 references:references; bh=M6rIH1sVgm4hkbS8s7yHptCUB8/BYixYD15veKyakwY=;
+	b=njaTiSIxGnpyxcerxA7cJpRaKqCQY3k2ScgVVSlpwb1ZkQcK5mUJhqplgXSIqszwk8p4JW
+	60Gg4gvOUx8X/XDQ==
 From: Thomas Gleixner <tglx@linutronix.de>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
@@ -67,7 +67,7 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  Peter Zijlstra <peterz@infradead.org>,
  Ron Geva <rongevarg@gmail.com>,
  Waiman Long <longman@redhat.com>
-Subject: [patch V5 03/11] rseq: Add statistics for time slice extensions
+Subject: [patch V5 04/11] rseq: Add prctl() to enable time slice extensions
 References: <20251128225931.959481199@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -76,61 +76,152 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Mon,  1 Dec 2025 08:05:54 +0100 (CET)
+Date: Mon,  1 Dec 2025 08:06:00 +0100 (CET)
 
-Extend the quick statistics with time slice specific fields.
+Implement a prctl() so that tasks can enable the time slice extension
+mechanism. This fails, when time slice extensions are disabled at compile
+time or on the kernel command line and when no rseq pointer is registered
+in the kernel.
+
+That allows to implement a single trivial check in the exit to user mode
+hotpath, to decide whether the whole mechanism needs to be invoked.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
 ---
-V5: Add s_aborted to account for arbitrary syscalls
+V3: Use -ENOTSUPP for the stub inline - Sebastian
 ---
- include/linux/rseq_entry.h |    5 +++++
- kernel/rseq.c              |   14 ++++++++++++++
- 2 files changed, 19 insertions(+)
+ include/linux/rseq.h       |    9 +++++++
+ include/uapi/linux/prctl.h |   10 ++++++++
+ kernel/rseq.c              |   52 +++++++++++++++++++++++++++++++++++++++++++++
+ kernel/sys.c               |    6 +++++
+ 4 files changed, 77 insertions(+)
 
---- a/include/linux/rseq_entry.h
-+++ b/include/linux/rseq_entry.h
-@@ -15,6 +15,11 @@ struct rseq_stats {
- 	unsigned long	cs;
- 	unsigned long	clear;
- 	unsigned long	fixup;
-+	unsigned long	s_granted;
-+	unsigned long	s_expired;
-+	unsigned long	s_revoked;
-+	unsigned long	s_yielded;
-+	unsigned long	s_aborted;
- };
+--- a/include/linux/rseq.h
++++ b/include/linux/rseq.h
+@@ -163,4 +163,13 @@ void rseq_syscall(struct pt_regs *regs);
+ static inline void rseq_syscall(struct pt_regs *regs) { }
+ #endif /* !CONFIG_DEBUG_RSEQ */
  
- DECLARE_PER_CPU(struct rseq_stats, rseq_stats);
++#ifdef CONFIG_RSEQ_SLICE_EXTENSION
++int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3);
++#else /* CONFIG_RSEQ_SLICE_EXTENSION */
++static inline int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3)
++{
++	return -ENOTSUPP;
++}
++#endif /* !CONFIG_RSEQ_SLICE_EXTENSION */
++
+ #endif /* _LINUX_RSEQ_H */
+--- a/include/uapi/linux/prctl.h
++++ b/include/uapi/linux/prctl.h
+@@ -386,4 +386,14 @@ struct prctl_mm_map {
+ # define PR_FUTEX_HASH_SET_SLOTS	1
+ # define PR_FUTEX_HASH_GET_SLOTS	2
+ 
++/* RSEQ time slice extensions */
++#define PR_RSEQ_SLICE_EXTENSION			79
++# define PR_RSEQ_SLICE_EXTENSION_GET		1
++# define PR_RSEQ_SLICE_EXTENSION_SET		2
++/*
++ * Bits for RSEQ_SLICE_EXTENSION_GET/SET
++ * PR_RSEQ_SLICE_EXT_ENABLE:	Enable
++ */
++# define PR_RSEQ_SLICE_EXT_ENABLE		0x01
++
+ #endif /* _LINUX_PRCTL_H */
 --- a/kernel/rseq.c
 +++ b/kernel/rseq.c
-@@ -138,6 +138,13 @@ static int rseq_stats_show(struct seq_fi
- 		stats.cs	+= data_race(per_cpu(rseq_stats.cs, cpu));
- 		stats.clear	+= data_race(per_cpu(rseq_stats.clear, cpu));
- 		stats.fixup	+= data_race(per_cpu(rseq_stats.fixup, cpu));
-+		if (IS_ENABLED(CONFIG_RSEQ_SLICE_EXTENSION)) {
-+			stats.s_granted	+= data_race(per_cpu(rseq_stats.s_granted, cpu));
-+			stats.s_expired	+= data_race(per_cpu(rseq_stats.s_expired, cpu));
-+			stats.s_revoked	+= data_race(per_cpu(rseq_stats.s_revoked, cpu));
-+			stats.s_yielded	+= data_race(per_cpu(rseq_stats.s_yielded, cpu));
-+			stats.s_aborted	+= data_race(per_cpu(rseq_stats.s_aborted, cpu));
-+		}
- 	}
+@@ -71,6 +71,7 @@
+ #define RSEQ_BUILD_SLOW_PATH
  
- 	seq_printf(m, "exit:   %16lu\n", stats.exit);
-@@ -148,6 +155,13 @@ static int rseq_stats_show(struct seq_fi
- 	seq_printf(m, "cs:     %16lu\n", stats.cs);
- 	seq_printf(m, "clear:  %16lu\n", stats.clear);
- 	seq_printf(m, "fixup:  %16lu\n", stats.fixup);
-+	if (IS_ENABLED(CONFIG_RSEQ_SLICE_EXTENSION)) {
-+		seq_printf(m, "sgrant: %16lu\n", stats.s_granted);
-+		seq_printf(m, "sexpir: %16lu\n", stats.s_expired);
-+		seq_printf(m, "srevok: %16lu\n", stats.s_revoked);
-+		seq_printf(m, "syield: %16lu\n", stats.s_yielded);
-+		seq_printf(m, "sabort: %16lu\n", stats.s_aborted);
+ #include <linux/debugfs.h>
++#include <linux/prctl.h>
+ #include <linux/ratelimit.h>
+ #include <linux/rseq_entry.h>
+ #include <linux/sched.h>
+@@ -501,6 +502,57 @@ SYSCALL_DEFINE4(rseq, struct rseq __user
+ #ifdef CONFIG_RSEQ_SLICE_EXTENSION
+ DEFINE_STATIC_KEY_TRUE(rseq_slice_extension_key);
+ 
++int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3)
++{
++	switch (arg2) {
++	case PR_RSEQ_SLICE_EXTENSION_GET:
++		if (arg3)
++			return -EINVAL;
++		return current->rseq.slice.state.enabled ? PR_RSEQ_SLICE_EXT_ENABLE : 0;
++
++	case PR_RSEQ_SLICE_EXTENSION_SET: {
++		u32 rflags, valid = RSEQ_CS_FLAG_SLICE_EXT_AVAILABLE;
++		bool enable = !!(arg3 & PR_RSEQ_SLICE_EXT_ENABLE);
++
++		if (arg3 & ~PR_RSEQ_SLICE_EXT_ENABLE)
++			return -EINVAL;
++		if (!rseq_slice_extension_enabled())
++			return -ENOTSUPP;
++		if (!current->rseq.usrptr)
++			return -ENXIO;
++
++		/* No change? */
++		if (enable == !!current->rseq.slice.state.enabled)
++			return 0;
++
++		if (get_user(rflags, &current->rseq.usrptr->flags))
++			goto die;
++
++		if (current->rseq.slice.state.enabled)
++			valid |= RSEQ_CS_FLAG_SLICE_EXT_ENABLED;
++
++		if ((rflags & valid) != valid)
++			goto die;
++
++		rflags &= ~RSEQ_CS_FLAG_SLICE_EXT_ENABLED;
++		rflags |= RSEQ_CS_FLAG_SLICE_EXT_AVAILABLE;
++		if (enable)
++			rflags |= RSEQ_CS_FLAG_SLICE_EXT_ENABLED;
++
++		if (put_user(rflags, &current->rseq.usrptr->flags))
++			goto die;
++
++		current->rseq.slice.state.enabled = enable;
++		return 0;
 +	}
- 	return 0;
- }
++	default:
++		return -EINVAL;
++	}
++die:
++	force_sig(SIGSEGV);
++	return -EFAULT;
++}
++
+ static int __init rseq_slice_cmdline(char *str)
+ {
+ 	bool on;
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -53,6 +53,7 @@
+ #include <linux/time_namespace.h>
+ #include <linux/binfmts.h>
+ #include <linux/futex.h>
++#include <linux/rseq.h>
  
+ #include <linux/sched.h>
+ #include <linux/sched/autogroup.h>
+@@ -2868,6 +2869,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsi
+ 	case PR_FUTEX_HASH:
+ 		error = futex_hash_prctl(arg2, arg3, arg4);
+ 		break;
++	case PR_RSEQ_SLICE_EXTENSION:
++		if (arg4 || arg5)
++			return -EINVAL;
++		error = rseq_slice_extension_prctl(arg2, arg3);
++		break;
+ 	default:
+ 		trace_task_prctl_unknown(option, arg2, arg3, arg4, arg5);
+ 		error = -EINVAL;
 
 
