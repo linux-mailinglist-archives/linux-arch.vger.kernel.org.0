@@ -1,55 +1,55 @@
-Return-Path: <linux-arch+bounces-15119-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15120-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73A26C95F4E
-	for <lists+linux-arch@lfdr.de>; Mon, 01 Dec 2025 08:08:25 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BE2DC95F58
+	for <lists+linux-arch@lfdr.de>; Mon, 01 Dec 2025 08:08:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 33281342B10
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Dec 2025 07:07:55 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 82EB13433A7
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Dec 2025 07:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 873C4296BB8;
-	Mon,  1 Dec 2025 07:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6BC1293B5F;
+	Mon,  1 Dec 2025 07:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FIHs8N8W";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="T3gwg+gp"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="g2H+9FLJ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DDj5aq0N"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C143E28A3FA;
-	Mon,  1 Dec 2025 07:06:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4C528A3FA;
+	Mon,  1 Dec 2025 07:06:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764572797; cv=none; b=evoY1aPH/lMAbqaVsCOQNIaLxlozP9o+0XUDjORveI+tE2+iR44JFsCYX2LWK0K/xEfEvChp2nAhVfNipkOgFpKmBoDSYXjJpBKMb4sNS4LLivOBz5/i2XB0Fa+q8CZ5Pgxy0wFw5W345eGjlL83WFTZE8fYw3KfHkXkC1Pubg8=
+	t=1764572803; cv=none; b=P3Y8UWiheMcXw6PktyFIVF864XvUtIKCzpAn0aAFELnIoQfHndeiE3ToNdrOSabunGE2ZD7rvYw1+KXB7+zTlgHvPooq0j8oKlyz9zdCGn95X1kZrlJzcuP63e1EdmX8HuHTEu9FR2rCXl7d5qqUOvfiW+37eGc08wKrMInLBTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764572797; c=relaxed/simple;
-	bh=zo3y6UKb9B8H3wK9BfKUAIc2W00uNgtSLnRsbyzTS+U=;
+	s=arc-20240116; t=1764572803; c=relaxed/simple;
+	bh=RhXdOrpmvWhEXZAJBOlVp00/Ibtc92pO9VfibfnzKL4=;
 	h=Message-ID:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Date; b=S3ocdyj93VdYzAjFsmQVEpPKi8S88sdyMfUKf3OdMc5gN+gJrQ9/bgMrvjTxxmAqc0QNElYhGQ1lyh9NyhkwysIwrxYP+jQFbJsOWGwE4xCYzo6QGcVUEuSuLHVP959a8k0oiHJ75/OXQ1b20F4cVcGykUsMpCXs1K6gXtTT58U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FIHs8N8W; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=T3gwg+gp; arc=none smtp.client-ip=193.142.43.55
+	 Content-Type:Date; b=ULlOUcJjLjKBOgC/oPBIa7S7sAuuc7ApX8rZrmIbPYnUeFZVA0V8huK2Y3Dgi1NWu83MPRPoL3T16JY3vO5d9H/QG6/CNcsjUfZwlKEzEX//btcrFkwOtkC5t12NacdRMtoP1tO380q2NPcVgzmBHZ/TTlAJSMzOa5movkzUw58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=g2H+9FLJ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DDj5aq0N; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Message-ID: <20251128230241.221238006@linutronix.de>
+Message-ID: <20251128230241.286446179@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1764572794;
+	s=2020; t=1764572800;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=jyplSMgmu6LFbP90hCL/N0V3uhwnSyZCXyDNo0nZ7IQ=;
-	b=FIHs8N8Wf8cPlI0f9gm7MZCtJq1T6a1TFocxfHKDYKteBaIfVJ7JfHctk7IXHUEfInj3zz
-	TXgVTtg8XnCbhlcHElPqXK7w7xcOCf8C7dvFPCyUj1mpf/aJp6+nnXRF9b0bAPXSA1FEHB
-	FIJpmeanXS5aoC4aDGRwpzBUSsikhg/6GPn7R+4CpLKb8xvFDy1Gd0p92NKWB/rHpm3/FE
-	woG31MGSUzqz/NYVep4zVoaQKrtTXzoFNixelYHS84C9MpJJgR5UxTDjg531p3+Nt0PUUO
-	PkPpt+uiFrEjTFI6LHYmKlW4BxPxriZYBIY2fRjlwGO3n+EhSU4zeu+CZ+UYRQ==
+	 references:references; bh=gQFvLoA+8aqRp49/IJYirlydqYT+cxE6z9BZ2w2sdfQ=;
+	b=g2H+9FLJ3AAr6TEx4aZfUVSaTpTVBfsKjuSbJlQv86I7HS6524njxNg6yfv+5hvwcAKDG+
+	bJmUyCYFPWvp77IqZ6PBVH+/AqI3Ps0zwgDkAniRx3krJ1S0IEbNgDILdyv1tfdGzwHcFs
+	SAGbqO4FHK5BQcWTSKpNQFa0s2jkbJcyonFI7b6XMV0gaE5PMZ8di2oLKvPQTAdYtDOPfC
+	rZiShMZX6LoNODqOCTWRSXs5CI/lJCea+D/Q7kgdnFuFCsK0Z6/0rCAlatZXfls+MmIgSV
+	Rq5XJOb4zniuvgNFRFS8/cWY0Me7F8QK/tfe6tFeu+WkG4HO88ir5CXfPaWt6g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1764572794;
+	s=2020e; t=1764572800;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=jyplSMgmu6LFbP90hCL/N0V3uhwnSyZCXyDNo0nZ7IQ=;
-	b=T3gwg+gp4uKTHGMYRoPEP4djEPV8jBuqTlG5QY6zbHu7El8BX5TJVFNtGQVlmp3JXdX5vb
-	1V0it22xiHAklnDg==
+	 references:references; bh=gQFvLoA+8aqRp49/IJYirlydqYT+cxE6z9BZ2w2sdfQ=;
+	b=DDj5aq0N+lEuEWEEUTTW8X37QPJtm4RsenK1IZCcDuCxDe1G2SvuUgHLAh9RbOLlJvM7rt
+	c1iMRVWzA3vG5FAQ==
 From: Thomas Gleixner <tglx@linutronix.de>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
@@ -67,7 +67,7 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  Peter Zijlstra <peterz@infradead.org>,
  Ron Geva <rongevarg@gmail.com>,
  Waiman Long <longman@redhat.com>
-Subject: [patch V5 09/11] rseq: Implement rseq_grant_slice_extension()
+Subject: [patch V5 10/11] entry: Hook up rseq time slice extension
 References: <20251128225931.959481199@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -76,40 +76,9 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Mon,  1 Dec 2025 08:06:28 +0100 (CET)
+Date: Mon,  1 Dec 2025 08:06:35 +0100 (CET)
 
-Provide the actual decision function, which decides whether a time slice
-extension is granted in the exit to user mode path when NEED_RESCHED is
-evaluated.
-
-The decision is made in two stages. First an inline quick check to avoid
-going into the actual decision function. This checks whether:
-
- #1 the functionality is enabled
-
- #2 the exit is a return from interrupt to user mode
-
- #3 any TIF bit, which causes extra work is set. That includes TIF_RSEQ,
-    which means the task was already scheduled out.
- 
-The slow path, which implements the actual user space ABI, is invoked
-when:
-
-  A) #1 is true, #2 is true and #3 is false
-
-     It checks whether user space requested a slice extension by setting
-     the request bit in the rseq slice_ctrl field. If so, it grants the
-     extension and stores the slice expiry time, so that the actual exit
-     code can double check whether the slice is already exhausted before
-     going back.
-
-  B) #1 - #3 are true _and_ a slice extension was granted in a previous
-     loop iteration
-
-     In this case the grant is revoked.
-
-In case that the user space access faults or invalid state is detected, the
-task is terminated with SIGSEGV.
+Wire the grant decision function up in exit_to_user_mode_loop()
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
@@ -117,145 +86,38 @@ Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: Boqun Feng <boqun.feng@gmail.com>
 ---
-V2: Provide an extra stub for the !RSEQ case - Prateek
----
- include/linux/rseq_entry.h |  108 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
+ kernel/entry/common.c |   14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
---- a/include/linux/rseq_entry.h
-+++ b/include/linux/rseq_entry.h
-@@ -42,6 +42,7 @@ DECLARE_PER_CPU(struct rseq_stats, rseq_
- #ifdef CONFIG_RSEQ
- #include <linux/jump_label.h>
- #include <linux/rseq.h>
-+#include <linux/sched/signal.h>
- #include <linux/uaccess.h>
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -17,6 +17,14 @@ void __weak arch_do_signal_or_restart(st
+ #define EXIT_TO_USER_MODE_WORK_LOOP	(EXIT_TO_USER_MODE_WORK)
+ #endif
  
- #include <linux/tracepoint-defs.h>
-@@ -109,10 +110,116 @@ static __always_inline void rseq_slice_c
- 	t->rseq.slice.state.granted = false;
- }
++/* TIF bits, which prevent a time slice extension. */
++#ifdef CONFIG_PREEMPT_RT
++# define TIF_SLICE_EXT_SCHED	(_TIF_NEED_RESCHED_LAZY)
++#else
++# define TIF_SLICE_EXT_SCHED	(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY)
++#endif
++#define TIF_SLICE_EXT_DENY	(EXIT_TO_USER_MODE_WORK & ~TIF_SLICE_EXT_SCHED)
++
+ static __always_inline unsigned long __exit_to_user_mode_loop(struct pt_regs *regs,
+ 							      unsigned long ti_work)
+ {
+@@ -28,8 +36,10 @@ static __always_inline unsigned long __e
  
-+static __always_inline bool rseq_grant_slice_extension(bool work_pending)
-+{
-+	struct task_struct *curr = current;
-+	struct rseq_slice_ctrl usr_ctrl;
-+	union rseq_slice_state state;
-+	struct rseq __user *rseq;
-+
-+	if (!rseq_slice_extension_enabled())
-+		return false;
-+
-+	/* If not enabled or not a return from interrupt, nothing to do. */
-+	state = curr->rseq.slice.state;
-+	state.enabled &= curr->rseq.event.user_irq;
-+	if (likely(!state.state))
-+		return false;
-+
-+	rseq = curr->rseq.usrptr;
-+	scoped_user_rw_access(rseq, efault) {
-+
-+		/*
-+		 * Quick check conditions where a grant is not possible or
-+		 * needs to be revoked.
-+		 *
-+		 *  1) Any TIF bit which needs to do extra work aside of
-+		 *     rescheduling prevents a grant.
-+		 *
-+		 *  2) A previous rescheduling request resulted in a slice
-+		 *     extension grant.
-+		 */
-+		if (unlikely(work_pending || state.granted)) {
-+			/* Clear user control unconditionally. No point for checking */
-+			unsafe_put_user(0U, &rseq->slice_ctrl.all, efault);
-+			rseq_slice_clear_grant(curr);
-+			return false;
+ 		local_irq_enable_exit_to_user(ti_work);
+ 
+-		if (ti_work & (_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY))
+-			schedule();
++		if (ti_work & (_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY)) {
++			if (!rseq_grant_slice_extension(ti_work & TIF_SLICE_EXT_DENY))
++				schedule();
 +		}
-+
-+		unsafe_get_user(usr_ctrl.all, &rseq->slice_ctrl.all, efault);
-+		if (likely(!(usr_ctrl.request)))
-+			return false;
-+
-+		/* Grant the slice extention */
-+		usr_ctrl.request = 0;
-+		usr_ctrl.granted = 1;
-+		unsafe_put_user(usr_ctrl.all, &rseq->slice_ctrl.all, efault);
-+	}
-+
-+	rseq_stat_inc(rseq_stats.s_granted);
-+
-+	curr->rseq.slice.state.granted = true;
-+	/* Store expiry time for arming the timer on the way out */
-+	curr->rseq.slice.expires = data_race(rseq_slice_ext_nsecs) + ktime_get_mono_fast_ns();
-+	/*
-+	 * This is racy against a remote CPU setting TIF_NEED_RESCHED in
-+	 * several ways:
-+	 *
-+	 * 1)
-+	 *	CPU0			CPU1
-+	 *	clear_tsk()
-+	 *				set_tsk()
-+	 *	clear_preempt()
-+	 *				Raise scheduler IPI on CPU0
-+	 *	--> IPI
-+	 *	    fold_need_resched() -> Folds correctly
-+	 * 2)
-+	 *	CPU0			CPU1
-+	 *				set_tsk()
-+	 *	clear_tsk()
-+	 *	clear_preempt()
-+	 *				Raise scheduler IPI on CPU0
-+	 *	--> IPI
-+	 *	    fold_need_resched() <- NOOP as TIF_NEED_RESCHED is false
-+	 *
-+	 * #1 is not any different from a regular remote reschedule as it
-+	 *    sets the previously not set bit and then raises the IPI which
-+	 *    folds it into the preempt counter
-+	 *
-+	 * #2 is obviously incorrect from a scheduler POV, but it's not
-+	 *    differently incorrect than the code below clearing the
-+	 *    reschedule request with the safety net of the timer.
-+	 *
-+	 * The important part is that the clearing is protected against the
-+	 * scheduler IPI and also against any other interrupt which might
-+	 * end up waking up a task and setting the bits in the middle of
-+	 * the operation:
-+	 *
-+	 *	clear_tsk()
-+	 *	---> Interrupt
-+	 *		wakeup_on_this_cpu()
-+	 *		set_tsk()
-+	 *		set_preempt()
-+	 *	clear_preempt()
-+	 *
-+	 * which would be inconsistent state.
-+	 */
-+	scoped_guard(irq) {
-+		clear_tsk_need_resched(curr);
-+		clear_preempt_need_resched();
-+	}
-+	return true;
-+
-+efault:
-+	force_sig(SIGSEGV);
-+	return false;
-+}
-+
- #else /* CONFIG_RSEQ_SLICE_EXTENSION */
- static inline bool rseq_slice_extension_enabled(void) { return false; }
- static inline bool rseq_arm_slice_extension_timer(void) { return false; }
- static inline void rseq_slice_clear_grant(struct task_struct *t) { }
-+static inline bool rseq_grant_slice_extension(bool work_pending) { return false; }
- #endif /* !CONFIG_RSEQ_SLICE_EXTENSION */
  
- bool rseq_debug_update_user_cs(struct task_struct *t, struct pt_regs *regs, unsigned long csaddr);
-@@ -671,6 +778,7 @@ static inline void rseq_syscall_exit_to_
- static inline void rseq_irqentry_exit_to_user_mode(void) { }
- static inline void rseq_exit_to_user_mode_legacy(void) { }
- static inline void rseq_debug_syscall_return(struct pt_regs *regs) { }
-+static inline bool rseq_grant_slice_extension(bool work_pending) { return false; }
- #endif /* !CONFIG_RSEQ */
- 
- #endif /* _LINUX_RSEQ_ENTRY_H */
+ 		if (ti_work & _TIF_UPROBE)
+ 			uprobe_notify_resume(regs);
 
 
