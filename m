@@ -1,254 +1,205 @@
-Return-Path: <linux-arch+bounces-15225-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15226-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E468CA6EB8
-	for <lists+linux-arch@lfdr.de>; Fri, 05 Dec 2025 10:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CAAD9CA8CB2
+	for <lists+linux-arch@lfdr.de>; Fri, 05 Dec 2025 19:28:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C0CE63195D7B
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Dec 2025 09:28:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9B34930C2B8B
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Dec 2025 18:24:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF4B3314C1;
-	Fri,  5 Dec 2025 09:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A44733FE23;
+	Fri,  5 Dec 2025 18:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YRrD1Ibi"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="N4VXFbW5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B926E3164D3;
-	Fri,  5 Dec 2025 09:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BADB4341670
+	for <linux-arch@vger.kernel.org>; Fri,  5 Dec 2025 18:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764926887; cv=none; b=BG46cNz3JwOs33ZpLgEv3YkN197PiWn4c0jY6s3ZndW0iTKepVbKLm0yUkpNS1b+Sq2cISr2yR4sH5CVLTUFsCsmNOv/J+aLK70saXpEh9/2fwlfZ0qNkLotjyjk3EQLYugBBTcKzlV/zfA8YXoruIMjwn8SXDmFZsd7DU/ZnRE=
+	t=1764959058; cv=none; b=CSZgQ1mVYBnwfVcSHI6ZAzlLbt7KQVt5hFzvnZPk40Ofv9mnv222sPOHC4Gkn0dJgkWWB6JCoXPmtg92jsbvTZUm6jla3oNbc3hH/eewtMUsX7tHVinwDk5K+qtFfLRnxMCgCZYMaMOUXGG9Zur+dpq6VEPCkuX/sgYSW3xhh1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764926887; c=relaxed/simple;
-	bh=/3K8i488KBtohoPjUWcmwxOuPxkVYp8UF2/iPAPxq7Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lKw9+O+uy/86AULuO8cYBWv9WjJg32FgE8adnVGu+x0KUkv8vXjCALTH7R7Qm2KLjVWDLmFzt0F0BZ1i6zm90WF8asFEd0AwxKHzVhJ73sTnKBIVACqtPjRmrsj/H6mFSEtB3dD6YP6YWZkbDDBmU0QnuKPuZVuE0deb7pwnMgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YRrD1Ibi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3F54C4CEF1;
-	Fri,  5 Dec 2025 09:27:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764926885;
-	bh=/3K8i488KBtohoPjUWcmwxOuPxkVYp8UF2/iPAPxq7Y=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=YRrD1IbijzZtM+qkYdKqMCtJSY7HW/b2RS+RGwoFe9bPK/qWFg3n6jePfSjkEJ252
-	 CAstxESV1t5hIfHaNpivukj3cMXOpAMg0/UqoCgsIZzotoaILL21oKFa9ikkMb7YNl
-	 qqNVditrpYtGa7rGlqrjiS8gpKMFlw9u1U78kVXNQ6fZ18DGyDH2qOcSrxYOJtk1WN
-	 dF0rZn265IWR71TmnUtnGq8SAs1Q/6QTETPixkqjPtVt06ZheKAgeGXqIyF47v2gee
-	 2OnhEW5m8+31fx4RYUVZM3XYN7ukMj5estutAcl9/Ron0WYtClPzGLKIvzh03vv/vR
-	 FOpwVUcjkVvvA==
-Message-ID: <cd65b963dd4edade3afb2e7d27eb33af1c62682e.camel@kernel.org>
-Subject: Re: [PATCH v18 41/42] SUNRPC: relocate struct rcu_head to the first
- field of struct rpc_xprt
-From: Jeff Layton <jlayton@kernel.org>
-To: Byungchul Park <byungchul@sk.com>, linux-kernel@vger.kernel.org
-Cc: kernel_team@skhynix.com, torvalds@linux-foundation.org, 
-	damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org, 
-	adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org, mingo@redhat.com, 
-	peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
- rostedt@goodmis.org, 	joel@joelfernandes.org, sashal@kernel.org,
- daniel.vetter@ffwll.ch, 	duyuyang@gmail.com, johannes.berg@intel.com,
- tj@kernel.org, tytso@mit.edu, 	willy@infradead.org, david@fromorbit.com,
- amir73il@gmail.com, 	gregkh@linuxfoundation.org, kernel-team@lge.com,
- linux-mm@kvack.org, 	akpm@linux-foundation.org, mhocko@kernel.org,
- minchan@kernel.org, 	hannes@cmpxchg.org, vdavydov.dev@gmail.com,
- sj@kernel.org, jglisse@redhat.com, 	dennis@kernel.org, cl@linux.com,
- penberg@kernel.org, rientjes@google.com, 	vbabka@suse.cz,
- ngupta@vflare.org, linux-block@vger.kernel.org, 	josef@toxicpanda.com,
- linux-fsdevel@vger.kernel.org, jack@suse.cz, 	dan.j.williams@intel.com,
- hch@infradead.org, djwong@kernel.org, 	dri-devel@lists.freedesktop.org,
- rodrigosiqueiramelo@gmail.com, 	melissa.srw@gmail.com,
- hamohammed.sa@gmail.com, harry.yoo@oracle.com, 	chris.p.wilson@intel.com,
- gwan-gyeong.mun@intel.com, 	max.byungchul.park@gmail.com,
- boqun.feng@gmail.com, longman@redhat.com, 	yunseong.kim@ericsson.com,
- ysk@kzalloc.com, yeoreum.yun@arm.com, 	netdev@vger.kernel.org,
- matthew.brost@intel.com, her0gyugyu@gmail.com, 	corbet@lwn.net,
- catalin.marinas@arm.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com, 
-	luto@kernel.org, sumit.semwal@linaro.org, gustavo@padovan.org, 
-	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de, 
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, rppt@kernel.org, 
-	surenb@google.com, mcgrof@kernel.org, petr.pavlu@suse.com,
- da.gomez@kernel.org, 	samitolvanen@google.com, paulmck@kernel.org,
- frederic@kernel.org, 	neeraj.upadhyay@kernel.org, joelagnelf@nvidia.com,
- josh@joshtriplett.org, 	urezki@gmail.com, mathieu.desnoyers@efficios.com,
- jiangshanlai@gmail.com, 	qiang.zhang@linux.dev, juri.lelli@redhat.com,
- vincent.guittot@linaro.org, 	dietmar.eggemann@arm.com, bsegall@google.com,
- mgorman@suse.de, vschneid@redhat.com, 	chuck.lever@oracle.com,
- neil@brown.name, okorniev@redhat.com, Dai.Ngo@oracle.com, 	tom@talpey.com,
- trondmy@kernel.org, anna@kernel.org, kees@kernel.org, 
-	bigeasy@linutronix.de, clrkwllms@kernel.org, mark.rutland@arm.com, 
-	ada.coupriediaz@arm.com, kristina.martsenko@arm.com,
- wangkefeng.wang@huawei.com, 	broonie@kernel.org, kevin.brodsky@arm.com,
- dwmw@amazon.co.uk, 	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
- yuzhao@google.com, 	baolin.wang@linux.alibaba.com, usamaarif642@gmail.com,
- joel.granados@kernel.org, 	richard.weiyang@gmail.com,
- geert+renesas@glider.be, tim.c.chen@linux.intel.com, 	linux@treblig.org,
- alexander.shishkin@linux.intel.com, lillian@star-ark.net, 
-	chenhuacai@kernel.org, francesco@valla.it, guoweikang.kernel@gmail.com, 
-	link@vivo.com, jpoimboe@kernel.org, masahiroy@kernel.org,
- brauner@kernel.org, 	thomas.weissschuh@linutronix.de, oleg@redhat.com,
- mjguzik@gmail.com, 	andrii@kernel.org, wangfushuai@baidu.com,
- linux-doc@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
- linux-media@vger.kernel.org, 	linaro-mm-sig@lists.linaro.org,
- linux-i2c@vger.kernel.org, 	linux-arch@vger.kernel.org,
- linux-modules@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- 2407018371@qq.com, 	dakr@kernel.org, miguel.ojeda.sandonis@gmail.com,
- neilb@ownmail.net, 	bagasdotme@gmail.com, wsa+renesas@sang-engineering.com,
- dave.hansen@intel.com, 	geert@linux-m68k.org, ojeda@kernel.org,
- alex.gaynor@gmail.com, gary@garyguo.net, 	bjorn3_gh@protonmail.com,
- lossin@kernel.org, a.hindborg@kernel.org, 	aliceryhl@google.com,
- tmgross@umich.edu, rust-for-linux@vger.kernel.org
-Date: Fri, 05 Dec 2025 04:27:52 -0500
-In-Reply-To: <20251205071855.72743-42-byungchul@sk.com>
-References: <20251205071855.72743-1-byungchul@sk.com>
-	 <20251205071855.72743-42-byungchul@sk.com>
-Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
- keydata=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
- QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	s=arc-20240116; t=1764959058; c=relaxed/simple;
+	bh=NVR+U3jG2tQbxbWsFur6YJo3TCvjT6tp/C+uJQCGLEE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B6LmTBxq/Ax6ta2al/H6/UNiVndyh966wPlKqvBxYJmqP2AYGPwvY7LYe8PmlcDTD1qQ0ZW8MJ7P7GlpCzQd2/2eSH6XVjlXrULngWcUG8Qn8PnMvfIbZXF6qHOroICvIpQ4v5w/gLG5/Ct8t3UDGvICENAH/gEbh9kjptIu2lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=N4VXFbW5; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-298250d7769so19794035ad.0
+        for <linux-arch@vger.kernel.org>; Fri, 05 Dec 2025 10:24:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc.com; s=google; t=1764959055; x=1765563855; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R8W7GJchcQ4zk/poJ1GR6L1BtfcBrmnZJJRAQLqexSM=;
+        b=N4VXFbW52VVrQmp8Uuu7vQuE1a3Et5buPSLuzNdHCCAyg7nc/qiIyWzT8/SreCHd5S
+         m8VQNza1Guld4QsxgE3GrczagDJcSuWWeQ/2mWhbjmn7++weUnqqNo1n8CIPoNy1Qif6
+         4L3ziOogGMN9AGdDD/RYVMmXac8LKMIteAt1x+OMzUjs8gPaR3BFeL8IThAdRuNWstj3
+         /rLT1VOsaqQSz1ShQ95wQqfwHOxvvfHHzQoUx+sWJ6mPNChCC3203ZiSATfR0xVX7FoA
+         hXPF8SUy7ib/7ttMhHa3XBA9PP+00NUiIQqPm3gIR5mtdm1EWNKPmjUW2PK3S42VtL5I
+         Uo4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764959055; x=1765563855;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R8W7GJchcQ4zk/poJ1GR6L1BtfcBrmnZJJRAQLqexSM=;
+        b=wsMhOBgpIUsJHmyTCIuATMem+37OcQ7PhzwaMCrCGv4nIVAKozmB2n9+0y0A5BM1b5
+         fgghaKaOld4sHywfU6epyMa6WLaX9WSig6f//BP5soER/84VLTYSA7nlA3zlMMcix5gc
+         um79mFZwOJLGWAILFS/Kkpc6jACNu+X62BwuyqIGbIN1VoOMi7Ssb3wy5wJ328H8eymS
+         W3hLxPXRqTypXmPoRWpBOpDf8dD3PMjlMISXuBQ2sKXGpZy0uElTUtsigRrdJegyP4lA
+         0BjDHWTNfuJJjefyNdEjctit0Q0UpOCyIL+lIGPOA9rFuSLig49pV2AqPYIAhZyvlHWR
+         uYew==
+X-Forwarded-Encrypted: i=1; AJvYcCUon0kAq3pnSqu6ksjbviwh3IL5nXp+g2+Z8pBqXRDGNSMgwaYUUtwMHI8dQzdugAf9dfPAHoOdKS2f@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVOA/E6D/wPl/3TERis4Zaer/oUiUMbfxO16dawXM1FcLZlBXE
+	k1CqE4TApLOOU1gQp2Ez2QBV9QrZMygJVDRRRnW8+EZ9IiiA3hkk+e1A7wONFvuEoVE=
+X-Gm-Gg: ASbGnctx+Hl540f9BNAkz+2WMtMX4YLhyFF63hnefrYx8Be3fuMac3+DUzsIRcdFLrQ
+	hYHTPgNunRizft1AnII01RKxappELgHwFd3zOKOey4DAb4KIyxtpGkQRWNnjJ8tOh5Y8wkDHW7C
+	5iHIHBCFrHmOePudpwKYl4UhV6nDqUhKsWR5+x7lkiFbMVJM7akVmO1xpBTJAXIjPfSx/iSRNfk
+	dY0XP0kAJamesBIMlCu/V2y6rTOTy/A3qGDKoew/YVW3aNkeonQtb9TTjeoqHzEN2dVMAqwpKbz
+	4XC2+y+G8h/EBHLg5ZzXclYhwynOpiyHRqOZHnpHuvVx7GFyPC9FCOknWvNFqTifBFdxy6Vo/up
+	x8vppjKLythCzAda/CfJauvCfVnLsU4mWuK7Xuc/9zvJwVxjiOKV41aQXddpb2rxzLJK6KI8bhu
+	+OimNcjhpINwoFm62QcubY
+X-Google-Smtp-Source: AGHT+IHZMCsXUTCjOVQ3AFVu8onlvt7po3LO4OEVVdk3jTNgtLDl44M+FmDz1C3tnLg32Vfv9eEpZQ==
+X-Received: by 2002:a17:903:11c8:b0:269:4759:904b with SMTP id d9443c01a7336-29d6848df81mr135161565ad.58.1764959054851;
+        Fri, 05 Dec 2025 10:24:14 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29dae4a13d2sm54863235ad.9.2025.12.05.10.24.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Dec 2025 10:24:14 -0800 (PST)
+Date: Fri, 5 Dec 2025 10:24:11 -0800
+From: Deepak Gupta <debug@rivosinc.com>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
+	richard.henderson@linaro.org, jim.shu@sifive.com,
+	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+	alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	Zong Li <zong.li@sifive.com>,
+	Andreas Korb <andreas.korb@aisec.fraunhofer.de>,
+	Valentin Haudiquet <valentin.haudiquet@canonical.com>
+Subject: Re: [PATCH v24 25/28] riscv: create a config for shadow stack and
+ landing pad instr support
+Message-ID: <aTMjS-Ok-DrJJjQY@debug.ba.rivosinc.com>
+References: <20251204-v5_user_cfi_series-v24-0-ada7a3ba14dc@rivosinc.com>
+ <20251204-v5_user_cfi_series-v24-25-ada7a3ba14dc@rivosinc.com>
+ <b5feba48-7e7c-4ab9-a193-072f3980f525@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <b5feba48-7e7c-4ab9-a193-072f3980f525@infradead.org>
 
-On Fri, 2025-12-05 at 16:18 +0900, Byungchul Park wrote:
-> While compiling Linux kernel with DEPT on, the following error was
-> observed:
->=20
->    ./include/linux/rcupdate.h:1084:17: note: in expansion of macro
->    =E2=80=98BUILD_BUG_ON=E2=80=99
->    1084 | BUILD_BUG_ON(offsetof(typeof(*(ptr)), rhf) >=3D 4096);	\
->         | ^~~~~~~~~~~~
->    ./include/linux/rcupdate.h:1047:29: note: in expansion of macro
->    'kvfree_rcu_arg_2'
->    1047 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
->         |                             ^~~~~~~~~~~~~~~~
->    net/sunrpc/xprt.c:1856:9: note: in expansion of macro 'kfree_rcu'
->    1856 | kfree_rcu(xprt, rcu);
->         | ^~~~~~~~~
->     CC net/kcm/kcmproc.o
->    make[4]: *** [scripts/Makefile.build:203: net/sunrpc/xprt.o] Error 1
->=20
-> Since kfree_rcu() assumes 'offset of struct rcu_head in a rcu-managed
-> struct < 4096', the offest of struct rcu_head in struct rpc_xprt should
-> not exceed 4096 but does, due to the debug information added by DEPT.
->=20
-> Relocate struct rcu_head to the first field of struct rpc_xprt from an
-> arbitrary location to avoid the issue and meet the assumption.
->=20
-> Reported-by: Yunseong Kim <ysk@kzalloc.com>
-> Signed-off-by: Byungchul Park <byungchul@sk.com>
-> ---
->  include/linux/sunrpc/xprt.h | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->=20
-> diff --git a/include/linux/sunrpc/xprt.h b/include/linux/sunrpc/xprt.h
-> index f46d1fb8f71a..666e42a17a31 100644
-> --- a/include/linux/sunrpc/xprt.h
-> +++ b/include/linux/sunrpc/xprt.h
-> @@ -211,6 +211,14 @@ enum xprt_transports {
-> =20
->  struct rpc_sysfs_xprt;
->  struct rpc_xprt {
-> +	/*
-> +	 * Place struct rcu_head within the first 4096 bytes of struct
-> +	 * rpc_xprt if sizeof(struct rpc_xprt) > 4096, so that
-> +	 * kfree_rcu() can simply work assuming that.  See the comment
-> +	 * in kfree_rcu().
-> +	 */
-> +	struct rcu_head		rcu;
-> +
->  	struct kref		kref;		/* Reference count */
->  	const struct rpc_xprt_ops *ops;		/* transport methods */
->  	unsigned int		id;		/* transport id */
-> @@ -317,7 +325,6 @@ struct rpc_xprt {
->  #if IS_ENABLED(CONFIG_SUNRPC_DEBUG)
->  	struct dentry		*debugfs;		/* debugfs directory */
->  #endif
-> -	struct rcu_head		rcu;
->  	const struct xprt_class	*xprt_class;
->  	struct rpc_sysfs_xprt	*xprt_sysfs;
->  	bool			main; /*mark if this is the 1st transport */
+On Thu, Dec 04, 2025 at 02:17:27PM -0800, Randy Dunlap wrote:
+>
+>
+>On 12/4/25 12:04 PM, Deepak Gupta wrote:
+>> This patch creates a config for shadow stack support and landing pad instr
+>> support. Shadow stack support and landing instr support can be enabled by
+>> selecting `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wires
+>> up path to enumerate CPU support and if cpu support exists, kernel will
+>> support cpu assisted user mode cfi.
+>>
+>> If CONFIG_RISCV_USER_CFI is selected, select `ARCH_USES_HIGH_VMA_FLAGS`,
+>> `ARCH_HAS_USER_SHADOW_STACK` and DYNAMIC_SIGFRAME for riscv.
+>>
+>> Reviewed-by: Zong Li <zong.li@sifive.com>
+>> Tested-by: Andreas Korb <andreas.korb@aisec.fraunhofer.de>
+>> Tested-by: Valentin Haudiquet <valentin.haudiquet@canonical.com>
+>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> ---
+>>  arch/riscv/Kconfig                  | 22 ++++++++++++++++++++++
+>>  arch/riscv/configs/hardening.config |  4 ++++
+>>  2 files changed, 26 insertions(+)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 0c6038dc5dfd..f5574c6f66d8 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -1146,6 +1146,28 @@ config RANDOMIZE_BASE
+>>
+>>            If unsure, say N.
+>>
+>> +config RISCV_USER_CFI
+>> +	def_bool y
+>> +	bool "riscv userspace control flow integrity"
+>> +	depends on 64BIT && \
+>> +		$(cc-option,-mabi=lp64 -march=rv64ima_zicfiss_zicfilp -fcf-protection=full)
+>> +	depends on RISCV_ALTERNATIVE
+>> +	select RISCV_SBI
+>> +	select ARCH_HAS_USER_SHADOW_STACK
+>> +	select ARCH_USES_HIGH_VMA_FLAGS
+>> +	select DYNAMIC_SIGFRAME
+>> +	help
+>> +	  Provides CPU assisted control flow integrity to userspace tasks.
+>
+>	           CPU-assisted
+>
+>> +	  Control flow integrity is provided by implementing shadow stack for
+>> +	  backward edge and indirect branch tracking for forward edge in program.
+>> +	  Shadow stack protection is a hardware feature that detects function
+>> +	  return address corruption. This helps mitigate ROP attacks.
+>> +	  Indirect branch tracking enforces that all indirect branches must land
+>> +	  on a landing pad instruction else CPU will fault. This mitigates against
+>> +	  JOP / COP attacks. Applications must be enabled to use it, and old user-
+>> +	  space does not get protection "for free".
+>> +	  default y.
+>
+>	  Default is y if hardware supports it.
+>?
 
-Seems fine to me.
+No default Y means support is built in the kernel for cfi.
+If hardware doesn't support CFI instructions, then kernel will do following
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+- prctls to manage shadow stack/landing pad enable/disable will fail.
+- vDSO will not have shadow stack instructions in it.
+
+
+>
+>> +
+>>  endmenu # "Kernel features"
+>
+>
+>-- 
+>~Randy
+>
 
