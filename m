@@ -1,32 +1,32 @@
-Return-Path: <linux-arch+bounces-15296-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15298-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BCFECA9E5C
-	for <lists+linux-arch@lfdr.de>; Sat, 06 Dec 2025 03:22:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A70CA9EB2
+	for <lists+linux-arch@lfdr.de>; Sat, 06 Dec 2025 03:28:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8B1103158F1C
-	for <lists+linux-arch@lfdr.de>; Sat,  6 Dec 2025 02:18:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D7D123241986
+	for <lists+linux-arch@lfdr.de>; Sat,  6 Dec 2025 02:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D9A25B1DA;
-	Sat,  6 Dec 2025 02:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCF325C818;
+	Sat,  6 Dec 2025 02:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="bdEcVnFr"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="M7+aYeR7"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDFD25A354;
-	Sat,  6 Dec 2025 02:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576FE258EE9;
+	Sat,  6 Dec 2025 02:26:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764987536; cv=none; b=gVAhrHGkIPIDCPu/9jWERt6i/fXwIIg50p8xfm8w/W4pwohnAz5BLLG1FOucj8EOdq0R/S8KOMg1Q/ocO9ieDdts0kwWGi8HvEcvN2YaAGd5q1edQDpoXILmvU7a0KFGLrm/4z+n7ryu3U5jIG+9IWYORwG4wxG35IKSTXQwjsc=
+	t=1764987997; cv=none; b=ih3IqLjAL3On85V/hrWKJVMJevdMOrzjtTL2oRQ14k1WrW/U3e6cakl8HN41FNmH4cPtKW9oBd6m4vZsx3JcPzNrs+qgzh6K4f2cZQ/dUFLWAB3p5gpR0MFkRNcFvK+jf7jDSOHZ9SolqEonejPV6lZeoVwLkh6N52CE5TWghA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764987536; c=relaxed/simple;
-	bh=vAiD+sW2byU1J2Xu/2qEmRZszPnNdC5pgRnrIbr+nS8=;
+	s=arc-20240116; t=1764987997; c=relaxed/simple;
+	bh=4YraZ21sr3pEy95zok5HC/hyqaMU3Jyx/mXxfjHFQH0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EcUtjebDASIl1o6VENGgy43PVkgPQhQQq6X5X0YIEneA+zFA3qPRUY0I43OYOl5+KYhZBBwY/8ibfeEsWfQmHrB9v6ZsOD9Texh0ZDoOjaCQoYN2FUs7QJFsPebGlDMwcwaNbucqtwrY1l/jmxbPnLdXNhpZJ0MFIEpggpowaKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=bdEcVnFr; arc=none smtp.client-ip=96.67.55.147
+	 Content-Type:MIME-Version; b=KECKCzaz8+XbMpqZEv9cLrEAagMbGBopPXJYK8VGVQ41GZal0sZYLYCGShBHSKemaUAcJSxT/r5ZEkqYNGvNo4P+Cq1OBMcSnZGJrs1rGueB0N1PJB/oRmc7+TD812d4FMawf5s3T0Cn3jyCGT2M4/0vjxaLQ6V9ZKJWpoa0rsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=M7+aYeR7; arc=none smtp.client-ip=96.67.55.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
@@ -35,20 +35,21 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=vAiD+sW2byU1J2Xu/2qEmRZszPnNdC5pgRnrIbr+nS8=; b=bdEcVnFr5FdsRzdBiToyXg4M6L
-	9UzyFFjENZ0VvozJLjwVlq6h5vpBpkvllZJKjFbp3ZPsb3nWYR6IhOUjhUOFcSGKWpUWFzdxsfn0v
-	5OLmjJCigQHm/jwbfIJFcokNEH34ciXvglrCyjP9S/i9MYk1we/KkcbPFo69OROB7r6RrLRGW3x9X
-	Qa9KANlompuLXa0Xp2Dfe+QV0shTgOPqriL5/1difEYhYw1i6QpE9cVa7TfvvTI4+Vbhn2AwTE96U
-	GPcVX0FQiuNMTav30l/h+blrNgufFSu4PhjkZBewKz4/6EsaW1z2I86OxHmQRps6Y+2A8MOou0Nmb
-	QWWrYFtw==;
+	bh=4YraZ21sr3pEy95zok5HC/hyqaMU3Jyx/mXxfjHFQH0=; b=M7+aYeR7DGAortFobUdduH7USL
+	LqdGydqLAv5JwVi6Z45lZw6tnqK6pZpUfN2NQ1TdRS9BDRO7ZJeff9FPq0dxgDtAt1d9TiZkh3TGL
+	u6y/fMcbZi/MceBbe+isJywhaPpBCK/S+1Mqx+GB3qf1iE4AtxTaqWlNluJq4nbAtk2n1ONmZuAL6
+	mWNsGo3ebZIJfkUX4UpMcaJjgGHUP5BMIOphaokkON24yOu9PUxA4uxAbsABd4wdcQbs9IZXt/41p
+	TotVDCa9I4va5CrG2V5d4Yk/Pm3kcEm89iCBYnwB1aiGX4i55xbx4mun1YvgielcqcAy039yAekuX
+	An+kvVsQ==;
 Received: from fangorn.home.surriel.com ([10.0.13.7])
 	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.97.1)
 	(envelope-from <riel@surriel.com>)
-	id 1vRhs3-000000005W6-1y18;
-	Fri, 05 Dec 2025 21:18:04 -0500
-Message-ID: <414f56e94f641aff9bb3db2c4feac70997580d45.camel@surriel.com>
-Subject: Re: [PATCH v1 1/4] mm/hugetlb: fix hugetlb_pmd_shared()
+	id 1vRhzu-000000005aL-3EMY;
+	Fri, 05 Dec 2025 21:26:11 -0500
+Message-ID: <bf3c6fc4118c5d63b87ace078d94848b19aa16d2.camel@surriel.com>
+Subject: Re: [PATCH v1 2/4] mm/hugetlb: fix two comments related to
+ huge_pmd_unshare()
 From: Rik van Riel <riel@surriel.com>
 To: "David Hildenbrand (Red Hat)" <david@kernel.org>, 
 	linux-kernel@vger.kernel.org
@@ -62,11 +63,11 @@ Cc: linux-arch@vger.kernel.org, linux-mm@kvack.org, Will Deacon
  <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, Harry Yoo	
  <harry.yoo@oracle.com>, Laurence Oberman <loberman@redhat.com>, Prakash
  Sangappa <prakash.sangappa@oracle.com>, Nadav Amit <nadav.amit@gmail.com>,
- stable@vger.kernel.org,  Liu Shixin <liushixin2@huawei.com>
-Date: Fri, 05 Dec 2025 21:18:04 -0500
-In-Reply-To: <20251205213558.2980480-2-david@kernel.org>
+ Liu Shixin	 <liushixin2@huawei.com>
+Date: Fri, 05 Dec 2025 21:26:11 -0500
+In-Reply-To: <20251205213558.2980480-3-david@kernel.org>
 References: <20251205213558.2980480-1-david@kernel.org>
-	 <20251205213558.2980480-2-david@kernel.org>
+	 <20251205213558.2980480-3-david@kernel.org>
 Autocrypt: addr=riel@surriel.com; prefer-encrypt=mutual;
  keydata=mQENBFIt3aUBCADCK0LicyCYyMa0E1lodCDUBf6G+6C5UXKG1jEYwQu49cc/gUBTTk33A
  eo2hjn4JinVaPF3zfZprnKMEGGv4dHvEOCPWiNhlz5RtqH3SKJllq2dpeMS9RqbMvDA36rlJIIo47
@@ -103,17 +104,14 @@ MIME-Version: 1.0
 
 On Fri, 2025-12-05 at 22:35 +0100, David Hildenbrand (Red Hat) wrote:
 >=20
-> Fix it by properly using ptdesc_pmd_is_shared() in
-> hugetlb_pmd_shared().
+> So let's simplify the comments a bit.
 >=20
 > Fixes: 59d9094df3d7 ("mm: hugetlb: independent PMD page table shared
 > count")
-> Cc: <stable@vger.kernel.org>
 > Cc: Liu Shixin <liushixin2@huawei.com>
 > Signed-off-by: David Hildenbrand (Red Hat) <david@kernel.org>
->=20
-Reviewed-by: Rik van Riel <riel@surriel.com>
 
+Reviewed-by: Rik van Riel <riel@surriel.com>
 
 --=20
 All Rights Reversed.
