@@ -1,32 +1,32 @@
-Return-Path: <linux-arch+bounces-15298-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15299-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73A70CA9EB2
-	for <lists+linux-arch@lfdr.de>; Sat, 06 Dec 2025 03:28:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 539DBCA9F36
+	for <lists+linux-arch@lfdr.de>; Sat, 06 Dec 2025 03:51:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D7D123241986
-	for <lists+linux-arch@lfdr.de>; Sat,  6 Dec 2025 02:26:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4C47730C6A63
+	for <lists+linux-arch@lfdr.de>; Sat,  6 Dec 2025 02:51:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCF325C818;
-	Sat,  6 Dec 2025 02:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381411D9A54;
+	Sat,  6 Dec 2025 02:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="M7+aYeR7"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="JxwpmNur"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576FE258EE9;
-	Sat,  6 Dec 2025 02:26:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43C33B8D6C;
+	Sat,  6 Dec 2025 02:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764987997; cv=none; b=ih3IqLjAL3On85V/hrWKJVMJevdMOrzjtTL2oRQ14k1WrW/U3e6cakl8HN41FNmH4cPtKW9oBd6m4vZsx3JcPzNrs+qgzh6K4f2cZQ/dUFLWAB3p5gpR0MFkRNcFvK+jf7jDSOHZ9SolqEonejPV6lZeoVwLkh6N52CE5TWghA8=
+	t=1764989479; cv=none; b=CumfmEfOSS1wnCMt2nh23Q2uuxwqR38rNZx3N0talj3Gdgmle+cpYksQcdDmTE7SLFetCi3pPmZc95wBombBOUjLmNNy42dSDDcPMSDaBJ8lmUexDtzHiTjg82Rel5UPwx1moprvedGif0ijs/DzJev8LHpTxdFXgrKCFbtUMQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764987997; c=relaxed/simple;
-	bh=4YraZ21sr3pEy95zok5HC/hyqaMU3Jyx/mXxfjHFQH0=;
+	s=arc-20240116; t=1764989479; c=relaxed/simple;
+	bh=46i4JdpR+8kUV3f1SyUYziYHtT5tVVSL7qw/bHAaonY=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KECKCzaz8+XbMpqZEv9cLrEAagMbGBopPXJYK8VGVQ41GZal0sZYLYCGShBHSKemaUAcJSxT/r5ZEkqYNGvNo4P+Cq1OBMcSnZGJrs1rGueB0N1PJB/oRmc7+TD812d4FMawf5s3T0Cn3jyCGT2M4/0vjxaLQ6V9ZKJWpoa0rsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=M7+aYeR7; arc=none smtp.client-ip=96.67.55.147
+	 Content-Type:MIME-Version; b=FzTi5gSUcmCOUlq+lyutvEAWQJlVJelZoG7NTtqf7wfB49RU+bOni/D9K0jq6d/wNmbO/DIk/JWQVNpM80d8TUtdtn6UB8Nub+aF3G4SDI6vxpB9dMzLqB889If56wU9GX5tWwKgo/jOfCqExtaFjCeW0GopBqNdsjhsovMy/do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=JxwpmNur; arc=none smtp.client-ip=96.67.55.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
@@ -35,20 +35,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=4YraZ21sr3pEy95zok5HC/hyqaMU3Jyx/mXxfjHFQH0=; b=M7+aYeR7DGAortFobUdduH7USL
-	LqdGydqLAv5JwVi6Z45lZw6tnqK6pZpUfN2NQ1TdRS9BDRO7ZJeff9FPq0dxgDtAt1d9TiZkh3TGL
-	u6y/fMcbZi/MceBbe+isJywhaPpBCK/S+1Mqx+GB3qf1iE4AtxTaqWlNluJq4nbAtk2n1ONmZuAL6
-	mWNsGo3ebZIJfkUX4UpMcaJjgGHUP5BMIOphaokkON24yOu9PUxA4uxAbsABd4wdcQbs9IZXt/41p
-	TotVDCa9I4va5CrG2V5d4Yk/Pm3kcEm89iCBYnwB1aiGX4i55xbx4mun1YvgielcqcAy039yAekuX
-	An+kvVsQ==;
+	bh=46i4JdpR+8kUV3f1SyUYziYHtT5tVVSL7qw/bHAaonY=; b=JxwpmNurKOPe7xdTaNKzFhbUjz
+	2+atJh5c6Ubg+NoOSUMWKObtHEXfymc0DOnXNL9yoRkLTddJBv9ByFJora6bNy+4zaRGadNIeq+B6
+	PvsNpOvYjWvx6JWKquKqNviKIfYR8B8MoL12pssq2YGmc1w7cJGcfo85AI0YdZK+4qkIVfqNtfKOX
+	9/0JxASVFchfnYmChRw9HqRTcWdVCfksTa5td5XVJnMZ28AvMNOFQOUZJulQYnZ+e2X/DpoTrhtoM
+	d6PXJIsYMBsGZl62IGOokOSKG8qcmFYy7VMdGY5L3E96qGFxp0/CSCfj9Hx+9VDxvPbPHcib0Yu/7
+	pEkRM8xA==;
 Received: from fangorn.home.surriel.com ([10.0.13.7])
 	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.97.1)
 	(envelope-from <riel@surriel.com>)
-	id 1vRhzu-000000005aL-3EMY;
-	Fri, 05 Dec 2025 21:26:11 -0500
-Message-ID: <bf3c6fc4118c5d63b87ace078d94848b19aa16d2.camel@surriel.com>
-Subject: Re: [PATCH v1 2/4] mm/hugetlb: fix two comments related to
+	id 1vRiNo-000000005lS-0ehm;
+	Fri, 05 Dec 2025 21:50:53 -0500
+Message-ID: <3a574abe86703f925c9ce8b751ca5fb1370d1ce2.camel@surriel.com>
+Subject: Re: [PATCH v1 3/4] mm/rmap: fix two comments related to
  huge_pmd_unshare()
 From: Rik van Riel <riel@surriel.com>
 To: "David Hildenbrand (Red Hat)" <david@kernel.org>, 
@@ -64,10 +64,10 @@ Cc: linux-arch@vger.kernel.org, linux-mm@kvack.org, Will Deacon
  <harry.yoo@oracle.com>, Laurence Oberman <loberman@redhat.com>, Prakash
  Sangappa <prakash.sangappa@oracle.com>, Nadav Amit <nadav.amit@gmail.com>,
  Liu Shixin	 <liushixin2@huawei.com>
-Date: Fri, 05 Dec 2025 21:26:11 -0500
-In-Reply-To: <20251205213558.2980480-3-david@kernel.org>
+Date: Fri, 05 Dec 2025 21:50:53 -0500
+In-Reply-To: <20251205213558.2980480-4-david@kernel.org>
 References: <20251205213558.2980480-1-david@kernel.org>
-	 <20251205213558.2980480-3-david@kernel.org>
+	 <20251205213558.2980480-4-david@kernel.org>
 Autocrypt: addr=riel@surriel.com; prefer-encrypt=mutual;
  keydata=mQENBFIt3aUBCADCK0LicyCYyMa0E1lodCDUBf6G+6C5UXKG1jEYwQu49cc/gUBTTk33A
  eo2hjn4JinVaPF3zfZprnKMEGGv4dHvEOCPWiNhlz5RtqH3SKJllq2dpeMS9RqbMvDA36rlJIIo47
@@ -103,15 +103,23 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Fri, 2025-12-05 at 22:35 +0100, David Hildenbrand (Red Hat) wrote:
+> PMD page table unsharing no longer touches the refcount of a PMD page
+> table. Also, it is not about dropping the refcount of a "PMD page"
+> but
+> the "PMD page table".
 >=20
-> So let's simplify the comments a bit.
+> Let's just simplify by saying that the PMD page table was unmapped,
+> consequently also unmapping the folio that was mapped into this page.
+>=20
+> This code should be deduplicated in the future.
 >=20
 > Fixes: 59d9094df3d7 ("mm: hugetlb: independent PMD page table shared
 > count")
 > Cc: Liu Shixin <liushixin2@huawei.com>
 > Signed-off-by: David Hildenbrand (Red Hat) <david@kernel.org>
-
+>=20
 Reviewed-by: Rik van Riel <riel@surriel.com>
+
 
 --=20
 All Rights Reversed.
