@@ -1,109 +1,59 @@
-Return-Path: <linux-arch+bounces-15300-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15291-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9661CAA1A2
-	for <lists+linux-arch@lfdr.de>; Sat, 06 Dec 2025 06:56:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1184ACA98F1
+	for <lists+linux-arch@lfdr.de>; Sat, 06 Dec 2025 00:00:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C377F30DA707
-	for <lists+linux-arch@lfdr.de>; Sat,  6 Dec 2025 05:56:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5474130EBB6F
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Dec 2025 22:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4F21241696;
-	Sat,  6 Dec 2025 05:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fgEHZqtn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61ED62D5944;
+	Fri,  5 Dec 2025 22:58:22 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0332D0C7F
-	for <linux-arch@vger.kernel.org>; Sat,  6 Dec 2025 05:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488532F069D;
+	Fri,  5 Dec 2025 22:58:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765000570; cv=none; b=XFYPp/fzJ7vHx3vX6veIhyBtTQ1vyfMC0TGgwRfAqbGtACVz1kCf5tAt0aSfLXJgqv4az4YhjXxYOXWXy14bcp+Mo+WuJcQnjR1JH+9hHnfsVNuiTVwND45kU2fo6RN2Fep7+9m+PfQw3CQirSKEWL0gJWrvUSPOign7YIcftTU=
+	t=1764975502; cv=none; b=ternPQq1E3xqfrkmW0tURdA8qYAPVS5NzO7baJh+SYwdXBm5omc4XXNuZS0Vw2Ta3YtQmu0jVDcdLHSgoJGQaZlroCrKH7A9+B1mm+1dUKTC48Gqy4j1X0aVNpaAUQLKRKf3gGBN8sqri+M5d3FdlTqE6TJFe5Le36ZaqVSFoDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765000570; c=relaxed/simple;
-	bh=Q2UpzGVzQ7GyqvIfwF3lOwJ/eL4xbQ28HO+AIZXRBVM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uuhfp6iyPRBmvpGAQDVJwLDMAzcZ7icVhq6mUL41PrnoMTgpskzukhDet3Gz0piUg4eIjJjSvIEFVh/ceXvwtHBdiHE/j10MKtR3Umcl8vq+qEXT5PKGRyqYLq9QCI/6MsmgPSiI9Vbz9E2fnznSXBUkLsxSmNydmJ/B89Yghz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fgEHZqtn; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-29555415c5fso33587415ad.1
-        for <linux-arch@vger.kernel.org>; Fri, 05 Dec 2025 21:56:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765000566; x=1765605366; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YrbaEeZyFtbngXF37obLkCJVhms+uI4jT2nngSTJ7L0=;
-        b=fgEHZqtn9cOuPfRdjwJa3T+eCv/ElVEiS5tcrFKJiAYYbebMiPWGDmXH5gzQncypt4
-         yFamfoqTx/xPTSDnFCQUoHfufd3INIFdMlJj1opkap+9QoYKTspiioWO1fZ55kFYcPTd
-         7/AuYG1nBA9se9UIPMa/5EAFhHlPsN/XyjNvPopUHPRxhY1YONEBmtGJqZkDmdJ1oovF
-         5gkz05uXtvL1n5ZdIZqaLyPYLOeMtlI2ejC9yhxCLlGJAlpgsNzcoiLFCoecegHoBVts
-         Qs7CJUr7cDOlimmUeQDBVa2di/BMQgAikW1F8L/bxpPLwNysfGFqqiUG6/7+YX/heTuc
-         N3ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765000566; x=1765605366;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YrbaEeZyFtbngXF37obLkCJVhms+uI4jT2nngSTJ7L0=;
-        b=Nu2ND6k2Kx5ZEBBqW33QwvqPcZf9KeUso0rS1xjO5kfi0KIQpTnediy4T79ZRW2NUV
-         7TcSCZlovslcKP3mOlBhSdpcMSl4Gp3eqXQJQpa3wwYr1hCbkenUZ9cuVl5WripYQSlK
-         cgYZZDqfJ1yNhtQdQZmCKoYHKPBzbVzcFRbS3R5ehq6vBu9tmp9oATc1BMhQJtEpnkHb
-         TbDUpKALXE8Pb18qzE0d3t8P+bHi6j1n2kRqN/RpESORRWbce4ZOScopugTzxX5UGLPI
-         QF/mocDOxkWZLBj9y36DwVs6c9u5/St/Il/aV6DU9WpnN5cS7DdPJy24l8Z1qLu+VkJK
-         dI0g==
-X-Forwarded-Encrypted: i=1; AJvYcCWTYeHA95cEdg6vlUS1ZT8kyJaAPxdoGwJJiPkCEniqYS9f86W8K5tzkFXY3+Cznu+41SeRy/O6mq9V@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQJhCfjP8cf3evkrU+40ZaFiHXt/h/1XguMvrQyGbekov7vaj3
-	0+zPcB6HrZcK9yQcK+rp0XoorkC+54mlxQafzf8Ff3KO+W9kleD3lEiD
-X-Gm-Gg: ASbGncvKt/R0eTQMGPuACe9pThtzk8nf5eXPhKKOlQDm8yTcr/9DLLhqAt2VfEBndBL
-	vK8oDfaZkcaUsE08oMXMfRRUCeqrRDrxS+RTHqw0fdzUyejCqFHPVYgx61hAd4toYWO3TLmeQ3u
-	K7yso675fX3FtPpPXqzXLsbUOIUaIme3rwLU5psMcf45uUmfrLV0EnPdamNsFQwZ4+9hzZvgOcR
-	ki04VYVkIHyJyeh2/fEr9s9IWR5NGzUb8DVrNf2PQiSALA0FgvWglA7YUtSrXhWY0l681JJESRw
-	HTwjLLo9wy/bfjmWC3NL+98uyBQjBXTdChagmWYVOXV1tA/cQVa+6iBtBhx4jVxGCkTVGSxDxts
-	7rj6+GZRK+cHpf4Hr0bfnDaER5wlzVODuD3vofpnXB9GOlPTyuUcV2s6oG4+TjcDpD6Kp6GKA2w
-	==
-X-Google-Smtp-Source: AGHT+IEClIJqnfu4ac1OktA9MDlfbK7+ctU0dMbbXWjgWORZv1YG8Z3vrYDot57qQm9pxIBtqkyn+Q==
-X-Received: by 2002:a17:903:1a68:b0:299:f838:a279 with SMTP id d9443c01a7336-29df547233bmr13933795ad.2.1765000566526;
-        Fri, 05 Dec 2025 21:56:06 -0800 (PST)
-Received: from localhost.localdomain ([2403:2c80:6::3077])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29daeaab9c0sm65407775ad.68.2025.12.05.21.56.00
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 05 Dec 2025 21:56:06 -0800 (PST)
-From: Lance Yang <ioworker0@gmail.com>
-To: david@kernel.org
-Cc: Liam.Howlett@oracle.com,
-	akpm@linux-foundation.org,
-	aneesh.kumar@kernel.org,
-	arnd@arndb.de,
-	harry.yoo@oracle.com,
-	jannh@google.com,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	liushixin2@huawei.com,
-	loberman@redhat.com,
-	lorenzo.stoakes@oracle.com,
-	muchun.song@linux.dev,
-	nadav.amit@gmail.com,
-	npiggin@gmail.com,
-	osalvador@suse.de,
-	peterz@infradead.org,
-	pfalcato@suse.de,
-	prakash.sangappa@oracle.com,
-	riel@surriel.com,
-	stable@vger.kernel.org,
-	vbabka@suse.cz,
-	will@kernel.org,
-	Lance Yang <lance.yang@linux.dev>
-Subject: Re: [PATCH v1 1/4] mm/hugetlb: fix hugetlb_pmd_shared()
-Date: Sat,  6 Dec 2025 13:55:53 +0800
-Message-ID: <20251206055553.21759-1-ioworker0@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20251205213558.2980480-2-david@kernel.org>
-References: <20251205213558.2980480-2-david@kernel.org>
+	s=arc-20240116; t=1764975502; c=relaxed/simple;
+	bh=YtujnNaI4qdEQnCWht2sddTydCGelUqClJ7dV8ifLmI=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cd7j6Sb/RZERZVWd3ZOwxmdi4A17lS09fbvxsLacnyyvRc3LeJ9aVoagIcfqKTkj/aeQ0ZEZeJFkUHNUYKSZYv4u1kydnGr27G/5ZyOnWmFwFWbQo4c088BH9N5KrvTkE6dXnojIAqvmenZdqoZGfKnWSU34KSCwLHOC09xODQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dNRBZ2xQGzHnGcx;
+	Sat,  6 Dec 2025 06:39:18 +0800 (CST)
+Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
+	by mail.maildlp.com (Postfix) with ESMTPS id C89B040539;
+	Sat,  6 Dec 2025 06:39:20 +0800 (CST)
+Received: from localhost.localdomain (10.123.70.40) by
+ mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 6 Dec 2025 01:39:20 +0300
+From: Anatoly Stepanov <stepanov.anatoly@huawei.com>
+To: <peterz@infradead.org>, <boqun.feng@gmail.com>, <longman@redhat.com>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	<hpa@zytor.com>, <arnd@arndb.de>, <dvhart@infradead.org>,
+	<dave@stgolabs.net>, <andrealmeid@igalia.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<guohanjun@huawei.com>, <wangkefeng.wang@huawei.com>,
+	<weiyongjun1@huawei.com>, <yusongping@huawei.com>, <leijitang@huawei.com>,
+	<artem.kuzin@huawei.com>, <fedorov.nikita@h-partners.com>,
+	<kang.sun@huawei.com>, Anatoly Stepanov <stepanov.anatoly@huawei.com>
+Subject: [RFC PATCH v2 0/5] Introduce Hierarchical Queued NUMA-aware spinlock
+Date: Sat, 6 Dec 2025 14:21:01 +0800
+Message-ID: <20251206062106.2109014-1-stepanov.anatoly@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <aad84044-a9d3-4806-a966-4770a3634b03@redhat.com>
+References: <aad84044-a9d3-4806-a966-4770a3634b03@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -111,52 +61,87 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: mscpeml500004.china.huawei.com (7.188.26.250) To
+ mscpeml500003.china.huawei.com (7.188.49.51)
 
-From: Lance Yang <lance.yang@linux.dev>
+[Introduction & Motivation]
 
+In a high contention case, existing Linux kernel spinlock implementations can become
+inefficient on modern NUMA-systems due to frequent and expensive
+cross-NUMA cache-line transfers.
 
-On Fri,  5 Dec 2025 22:35:55 +0100, David Hildenbrand (Red Hat) wrote:
-> We switched from (wrongly) using the page count to an independent
-> shared count. Now, shared page tables have a refcount of 1 (excluding
-> speculative references) and instead use ptdesc->pt_share_count to
-> identify sharing.
-> 
-> We didn't convert hugetlb_pmd_shared(), so right now, we would never
-> detect a shared PMD table as such, because sharing/unsharing no longer
-> touches the refcount of a PMD table.
-> 
-> Page migration, like mbind() or migrate_pages() would allow for migrating
-> folios mapped into such shared PMD tables, even though the folios are
-> not exclusive. In smaps we would account them as "private" although they
-> are "shared", and we would be wrongly setting the PM_MMAP_EXCLUSIVE in the
-> pagemap interface.
-> 
-> Fix it by properly using ptdesc_pmd_is_shared() in hugetlb_pmd_shared().
-> 
-> Fixes: 59d9094df3d7 ("mm: hugetlb: independent PMD page table shared count")
-> Cc: <stable@vger.kernel.org>
-> Cc: Liu Shixin <liushixin2@huawei.com>
-> Signed-off-by: David Hildenbrand (Red Hat) <david@kernel.org>
-> ---
+This might happen due to following reasons:
+ - on "contender enqueue" each lock contender updates a shared lock structure
+ - on "MCS handoff" cross-NUMA cache-line transfer occurs when
+two contenders are from different NUMA nodes.
 
-Good catch! Feel free to add:
+We introduce new NUMA-aware spinlock in the kernel - Hierarchical Queued
+spinlock (HQ-spinlock).
 
-Reviewed-by: Lance yang <lance.yang@linux.dev>
+Previous work regarding NUMA-aware spinlock in Linux kernel is CNA-lock:
+https://lore.kernel.org/lkml/20210514200743.3026725-1-alex.kogan@oracle.com/
 
->  include/linux/hugetlb.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index 019a1c5281e4e..03c8725efa289 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -1326,7 +1326,7 @@ static inline __init void hugetlb_cma_reserve(int order)
->  #ifdef CONFIG_HUGETLB_PMD_PAGE_TABLE_SHARING
->  static inline bool hugetlb_pmd_shared(pte_t *pte)
->  {
-> -	return page_count(virt_to_page(pte)) > 1;
-> +	return ptdesc_pmd_is_shared(virt_to_ptdesc(pte));
->  }
->  #else
->  static inline bool hugetlb_pmd_shared(pte_t *pte)
+Despite being better than default qspinlock (handoff-wise), CNA still has
+shared-lock variable modification on every new contender arrival.
+
+HQ-lock has completely different design concept: kind of cohort-lock and
+queued-spinlock hybrid.
+
+Which is of course bulkier, but at the same time outperforms CNA in high-contention cases.
+
+Locktorture on "Kunpeng 920" for example:
++-------------------------+--------------+
+| HQ-lock vs CNA-lock     |              |
++-------------------------+--------------+
+| Kunpeng 920 (arm64)     |              |
+| 96 cores (no MT)        |              |
+| 2 sockets, 4 NUMA nodes |              |
+|                         |              |
+| Locktorture             |              |
+| Threads                 | HQ-lock gain |
+| 32                      | 26%          |
+| 64                      | 32%          |
+| 80                      | 35%          |
+| 96                      | 31%          |
++-------------------------+--------------+
+
+ All other design and implementation details can be found in following
+patches.
+
+Anatoly Stepanov, Nikita Fedorov (5):
+  kernel: introduce Hierarchical Queued spinlock
+  hq-spinlock: proc tunables and debug stats
+  kernel: introduce general hq-lock support
+  lockref: use hq-spinlock
+  kernel: futex: use HQ-spinlock for hash-buckets
+
+ arch/arm64/include/asm/qspinlock.h    |  37 ++
+ arch/x86/include/asm/qspinlock.h      |  38 +-
+ include/asm-generic/qspinlock.h       |  23 +-
+ include/asm-generic/qspinlock_types.h |  54 +-
+ include/linux/lockref.h               |   2 +-
+ include/linux/spinlock.h              |  26 +
+ include/linux/spinlock_types.h        |  26 +
+ include/linux/spinlock_types_raw.h    |  20 +
+ init/main.c                           |   4 +
+ kernel/Kconfig.locks                  |  29 +
+ kernel/futex/core.c                   |   2 +-
+ kernel/locking/hqlock_core.h          | 812 ++++++++++++++++++++++++++
+ kernel/locking/hqlock_meta.h          | 477 +++++++++++++++
+ kernel/locking/hqlock_proc.h          |  88 +++
+ kernel/locking/hqlock_types.h         | 118 ++++
+ kernel/locking/qspinlock.c            |  65 ++-
+ kernel/locking/qspinlock.h            |   4 +-
+ kernel/locking/spinlock_debug.c       |  20 +
+ 18 files changed, 1816 insertions(+), 29 deletions(-)
+ create mode 100644 arch/arm64/include/asm/qspinlock.h
+ create mode 100644 kernel/locking/hqlock_core.h
+ create mode 100644 kernel/locking/hqlock_meta.h
+ create mode 100644 kernel/locking/hqlock_proc.h
+ create mode 100644 kernel/locking/hqlock_types.h
+
+-- 
+2.34.1
+
 
