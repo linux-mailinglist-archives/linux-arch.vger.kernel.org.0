@@ -1,42 +1,43 @@
-Return-Path: <linux-arch+bounces-15309-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15310-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF58CAEE92
-	for <lists+linux-arch@lfdr.de>; Tue, 09 Dec 2025 06:11:40 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E45C3CAEE9B
+	for <lists+linux-arch@lfdr.de>; Tue, 09 Dec 2025 06:11:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EC791302DB58
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Dec 2025 05:11:38 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 335B23003862
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Dec 2025 05:11:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D4D26561E;
-	Tue,  9 Dec 2025 05:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3CE827F75F;
+	Tue,  9 Dec 2025 05:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="RoTBUhJR"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="i3ChbI+4"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CA82264BA;
-	Tue,  9 Dec 2025 05:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52E4F2264BA;
+	Tue,  9 Dec 2025 05:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765257097; cv=none; b=uiz/q+npeWi09c181rcwgxBDiXHYu7f09HF6JSDE/QWptJEJokxw47znl/EOY4fXhtIvksLQrXntpgoS9fOVLypbK3ygw5R+pRpjTnqjifHJIB7DhcDj6ujAmS2/jIW/sH6NHUw2Lwnr08XzzyJRv5LUqdKEQRXof3FwMk/1F7I=
+	t=1765257102; cv=none; b=AAQLes4IF1MUxFFod8ZgX1kXTD7A26jYytkqCjQTx1P+b49HtG5wOmRU63Jqsdk+xG6CDr2qjYdzY3s+izAtS42Uq/+YCuSKrxnSPnHrE1GjqTjtDcRHyX54rzAkHatABMrhmKOMJ59DWn9yP0ayUCiG+vsTKr4EoJJYNzZfP+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765257097; c=relaxed/simple;
-	bh=YlS1lX2SuhkJ8xqnIY2o4bySf5QLWSEKS6WSbIPDFng=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f7MLu9BBYZ2W7tS83oJuMSY9PIlZrCbTl6G8e8Dg6//HCMuylk+7g5ynBLAVUMCaz20HDVTrzz8Wn2pWK6xMaXgfVn0nrm3U62gbl7D5yMkudC2i0BJtj8dJuttgb/mI/jH7inWzvH17Fu8NhkZcGqFNlRBAKM6LHZjEhlKmgyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=RoTBUhJR; arc=none smtp.client-ip=13.77.154.182
+	s=arc-20240116; t=1765257102; c=relaxed/simple;
+	bh=+3p143fMjSAppT2Qj7LdMPmEhdytqzIMC8YXkd/Gslo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Fmbdaq/SAFGaP9xWafdJ4U5TN1yrFsPcEAOMJbG34GLVtsnGjqPnlafJ+sez+ZNo7AVnGk2vi5EXEHjXcJTK39wtUzqQxqjWCBq6Se1eISzMVO3vq9eZPKgklKLM36EgkYPYlL4rTBv+zHaQeFh7vDQP/juD1FRu8NjU2iU80y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=i3ChbI+4; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from zhangyu-hyperv.mshome.net (unknown [167.220.232.230])
-	by linux.microsoft.com (Postfix) with ESMTPSA id CCBE22015683;
-	Mon,  8 Dec 2025 21:11:30 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CCBE22015683
+	by linux.microsoft.com (Postfix) with ESMTPSA id 3B0AB201568D;
+	Mon,  8 Dec 2025 21:11:36 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3B0AB201568D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1765257094;
-	bh=OQ6TLAOaCSprKnv/FtE/IFGdid/GlGde9q0jlRuJG7Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=RoTBUhJRME3T4HDvDodDoQ0le+W6QkKdb+n8SJvjdabYDw+6MHiKQALBxtlPyHgVk
-	 pirtkMqgVypjzwbZrgudCOx4/iSWBuH0lOo+JbWMdAUpg9vDrZ2gvRfP8ru22Q08gK
-	 F7zLWpWyER0eG4s6xLY8qwSrDEPt3OFLI0KaUw1Q=
+	s=default; t=1765257100;
+	bh=UvO9DsqrHAa+vgyuca9m8lV/Z4f5gmA9KXFanQPw9dI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=i3ChbI+4CtB4IYKTOGVQl/4hLhMCQy38sL9A+5KxkZ2VFTF+5GHh63mnUNj1LN66t
+	 /FqojnkhWLVQdb8KEqD62aUYJ+RgL8TpytZo2DGDUDa5evOPiJwPaT4SeRsvEL/ojB
+	 mMZSpfoz8yYQO768MaHBYSTPQdonf0LzUxL1n824=
 From: Yu Zhang <zhangyu1@linux.microsoft.com>
 To: linux-kernel@vger.kernel.org,
 	linux-hyperv@vger.kernel.org,
@@ -62,10 +63,12 @@ Cc: kys@microsoft.com,
 	mhklinux@outlook.com,
 	peterz@infradead.org,
 	linux-arch@vger.kernel.org
-Subject: [RFC v1 0/5] Hyper-V: Add para-virtualized IOMMU support for Linux guests
-Date: Tue,  9 Dec 2025 13:11:23 +0800
-Message-ID: <20251209051128.76913-1-zhangyu1@linux.microsoft.com>
+Subject: [RFC v1 1/5] PCI: hv: Create and export hv_build_logical_dev_id()
+Date: Tue,  9 Dec 2025 13:11:24 +0800
+Message-ID: <20251209051128.76913-2-zhangyu1@linux.microsoft.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251209051128.76913-1-zhangyu1@linux.microsoft.com>
+References: <20251209051128.76913-1-zhangyu1@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -74,109 +77,87 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series introduces a para-virtualized IOMMU driver for
-Linux guests running on Microsoft Hyper-V. The primary objective
-is to enable hardware-assisted DMA isolation and scalable device
-assignment for Hyper-V child partitions, bypassing the performance
-overhead and complexity associated with emulated IOMMU hardware.
+From: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
 
-The driver implements the following core functionality:
-*   Hypercall-based Enumeration
-    Unlike traditional ACPI-based discovery (e.g., DMAR/IVRS),
-    this driver enumerates the Hyper-V IOMMU capabilities directly
-    via hypercalls. This approach allows the guest to discover
-    IOMMU presence and features without requiring specific virtual
-    firmware extensions or modifications.
+Hyper-V uses a logical device ID to identify a PCI endpoint device for
+child partitions. This ID will also be required for future hypercalls
+used by the Hyper-V IOMMU driver.
 
-*   Domain Management
-    The driver manages IOMMU domains through a new set of Hyper-V
-    hypercall interfaces, handling domain allocation, attachment,
-    and detachment for endpoint devices.
+Refactor the logic for building this logical device ID into a standalone
+helper function and export the interface for wider use.
 
-*   IOTLB Invalidation
-    IOTLB invalidation requests are marshaled and issued to the
-    hypervisor through the same hypercall mechanism.
+Signed-off-by: Easwar Hariharan <easwar.hariharan@linux.microsoft.com>
+Signed-off-by: Yu Zhang <zhangyu1@linux.microsoft.com>
+---
+ drivers/pci/controller/pci-hyperv.c | 28 ++++++++++++++++++++--------
+ include/asm-generic/mshyperv.h      |  2 ++
+ 2 files changed, 22 insertions(+), 8 deletions(-)
 
-*   Nested Translation Support
-    This implementation leverages guest-managed stage-1 I/O page
-    tables nested with host stage-2 translations. It is built
-    upon the consolidated IOMMU page table framework designed by
-    Jason Gunthorpe [1]. This design eliminates the need for complex
-    emulation during map operations and ensures scalability across
-    different architectures.
-
-Implementation Notes:
-*   Architecture Independence
-    While the current implementation only supports x86 platforms (Intel
-    VT-d and AMD IOMMU), the driver design aims to be as architecture-
-    agnostic as possible. To achieve this, initialization occurs via
-    `device_initcall` rather than `x86_init.iommu.iommu_init`, and shutdown
-    is handled via `syscore_ops` instead of `x86_platform.iommu_shutdown`.
-
-*   MSI Region Handling
-    In this RFC, the hardware MSI region is hard-coded to the standard
-    x86 interrupt range (0xfee00000 - 0xfeefffff). Future updates may
-    allow this configuration to be queried via hypercalls if new hardware
-    platforms are to be supported.
-
-*   Reserved Regions (RMRR)
-    There is currently no requirement to support assigned devices with
-    ACPI RMRR limitations. Consequently, this patch series does not specify
-    or query reserved memory regions.
-
-Testing:
-This series has been validated using dmatest with Intel DSA devices
-assigned to the child partition. The tests confirmed successful DMA
-transactions under the para-virtualized IOMMU.
-
-Future Work:
-*   Page-selective IOTLB Invalidation
-    The current implementation relies on full-domain flushes. Support
-    for page-selective invalidation is planned for a future series.
-
-*   Advanced Features
-    Support for vSVA and virtual PRI will be addressed in subsequent
-    updates.
-
-*   Root Partition Co-existence
-    Ensure compatibility with the distinct para-virtualized IOMMU driver
-    used by Hyper-V's Linux root partition, in which the DMA remapping
-    is not achieved by stage-1 IO page tables and another set of iommu
-    ops is provided.
-
-[1] https://github.com/jgunthorpe/linux/tree/iommu_pt_all
-
-Easwar Hariharan (2):
-  PCI: hv: Create and export hv_build_logical_dev_id()
-  iommu: Move Hyper-V IOMMU driver to its own subdirectory
-
-Wei Liu (1):
-  hyperv: Introduce new hypercall interfaces used by Hyper-V guest IOMMU
-
-Yu Zhang (2):
-  hyperv: allow hypercall output pages to be allocated for child
-    partitions
-  iommu/hyperv: Add para-virtualized IOMMU support for Hyper-V guest
-
- drivers/hv/hv_common.c                        |  21 +-
- drivers/iommu/Kconfig                         |  10 +-
- drivers/iommu/Makefile                        |   2 +-
- drivers/iommu/hyperv/Kconfig                  |  24 +
- drivers/iommu/hyperv/Makefile                 |   3 +
- drivers/iommu/hyperv/iommu.c                  | 608 ++++++++++++++++++
- drivers/iommu/hyperv/iommu.h                  |  53 ++
- .../irq_remapping.c}                          |   2 +-
- drivers/pci/controller/pci-hyperv.c           |  28 +-
- include/asm-generic/mshyperv.h                |   2 +
- include/hyperv/hvgdk_mini.h                   |   8 +
- include/hyperv/hvhdk_mini.h                   | 123 ++++
- 12 files changed, 850 insertions(+), 34 deletions(-)
- create mode 100644 drivers/iommu/hyperv/Kconfig
- create mode 100644 drivers/iommu/hyperv/Makefile
- create mode 100644 drivers/iommu/hyperv/iommu.c
- create mode 100644 drivers/iommu/hyperv/iommu.h
- rename drivers/iommu/{hyperv-iommu.c => hyperv/irq_remapping.c} (99%)
-
+diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+index 146b43981b27..4b82e06b5d93 100644
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -598,15 +598,31 @@ static unsigned int hv_msi_get_int_vector(struct irq_data *data)
+ 
+ #define hv_msi_prepare		pci_msi_prepare
+ 
++/**
++ * Build a "Device Logical ID" out of this PCI bus's instance GUID and the
++ * function number of the device.
++ */
++u64 hv_build_logical_dev_id(struct pci_dev *pdev)
++{
++	struct pci_bus *pbus = pdev->bus;
++	struct hv_pcibus_device *hbus = container_of(pbus->sysdata,
++						struct hv_pcibus_device, sysdata);
++
++	return (u64)((hbus->hdev->dev_instance.b[5] << 24) |
++		     (hbus->hdev->dev_instance.b[4] << 16) |
++		     (hbus->hdev->dev_instance.b[7] << 8)  |
++		     (hbus->hdev->dev_instance.b[6] & 0xf8) |
++		     PCI_FUNC(pdev->devfn));
++}
++EXPORT_SYMBOL_GPL(hv_build_logical_dev_id);
++
+ /**
+  * hv_irq_retarget_interrupt() - "Unmask" the IRQ by setting its current
+  * affinity.
+  * @data:	Describes the IRQ
+  *
+  * Build new a destination for the MSI and make a hypercall to
+- * update the Interrupt Redirection Table. "Device Logical ID"
+- * is built out of this PCI bus's instance GUID and the function
+- * number of the device.
++ * update the Interrupt Redirection Table.
+  */
+ static void hv_irq_retarget_interrupt(struct irq_data *data)
+ {
+@@ -642,11 +658,7 @@ static void hv_irq_retarget_interrupt(struct irq_data *data)
+ 	params->int_entry.source = HV_INTERRUPT_SOURCE_MSI;
+ 	params->int_entry.msi_entry.address.as_uint32 = int_desc->address & 0xffffffff;
+ 	params->int_entry.msi_entry.data.as_uint32 = int_desc->data;
+-	params->device_id = (hbus->hdev->dev_instance.b[5] << 24) |
+-			   (hbus->hdev->dev_instance.b[4] << 16) |
+-			   (hbus->hdev->dev_instance.b[7] << 8) |
+-			   (hbus->hdev->dev_instance.b[6] & 0xf8) |
+-			   PCI_FUNC(pdev->devfn);
++	params->device_id = hv_build_logical_dev_id(pdev);
+ 	params->int_target.vector = hv_msi_get_int_vector(data);
+ 
+ 	if (hbus->protocol_version >= PCI_PROTOCOL_VERSION_1_2) {
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 64ba6bc807d9..1a205ed69435 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -71,6 +71,8 @@ extern enum hv_partition_type hv_curr_partition_type;
+ extern void * __percpu *hyperv_pcpu_input_arg;
+ extern void * __percpu *hyperv_pcpu_output_arg;
+ 
++extern u64 hv_build_logical_dev_id(struct pci_dev *pdev);
++
+ u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
+ u64 hv_do_fast_hypercall8(u16 control, u64 input8);
+ u64 hv_do_fast_hypercall16(u16 control, u64 input1, u64 input2);
 -- 
 2.49.0
 
