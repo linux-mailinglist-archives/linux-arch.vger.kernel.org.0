@@ -1,220 +1,146 @@
-Return-Path: <linux-arch+bounces-15342-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15343-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CA8BCB63C4
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Dec 2025 15:44:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74E7FCB6A11
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Dec 2025 18:13:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4E849303B2C1
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Dec 2025 14:43:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D16683011A4D
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Dec 2025 17:13:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E9D9256C6D;
-	Thu, 11 Dec 2025 14:43:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA22314B75;
+	Thu, 11 Dec 2025 17:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="e6f64MLd"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D91A5275B0F;
-	Thu, 11 Dec 2025 14:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFFD313E21
+	for <linux-arch@vger.kernel.org>; Thu, 11 Dec 2025 17:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765464180; cv=none; b=OV17hMWvYH6IesanJDx/EaqIBR21L3o/6ZxwtJuLuVRRS2fm2bosMaIbzbPIOwXy2JH2RkIi+qSrmE7N2nX3LS9bXTxyzNL3+djMtTTE3YNIu7BSFLT4Sx6x//9q8BWvmAfcoKMZ4en09Jra8Kh+mVLS2aMw50/mfaejFCYBEAY=
+	t=1765473203; cv=none; b=pjm/nod+A6JTrwb2/IUcUFSApm9cIHKB6GnQ2A3xEJiJWyHYHZEkwvc69lrUU3Ce8gSWYPCbatoZNPurzZi84u/2n2kJb3A4POmDr6m70R8MVGvvW1VxXZ6wVYEy9UGrF6LFItSDDZXRxS0Uyyo0z+P2FSHBpF+i3PcMVeA5Biw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765464180; c=relaxed/simple;
-	bh=VY9EjX2PJsbDTAqmYEZVlNCobfg+kabT2DMzb63a5co=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WKyBjZwN84+x2ptW4dCaOPo97vr6wjoTiN1NxVCp3I6ZQ04o2/3qb8b0omZIWTgIPhdiCj6NYxjPPravG22hKOoSWF0Ox/sExDji0Z2LZPAzU85yh8qK0jXXzFlp/l1D81FjF2N42SqubfHoYdHOaQ568dZMzAHnqIl69TVpuyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [223.64.68.219])
-	by gateway (Coremail) with SMTP id _____8Cxbb9n2DppQVotAA--.31007S3;
-	Thu, 11 Dec 2025 22:42:47 +0800 (CST)
-Received: from localhost.localdomain (unknown [223.64.68.219])
-	by front1 (Coremail) with SMTP id qMiowJBxD8JW2Dppmi1IAQ--.1472S2;
-	Thu, 11 Dec 2025 22:42:41 +0800 (CST)
-From: Huacai Chen <chenhuacai@loongson.cn>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guo Ren <guoren@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch changes for v6.19
-Date: Thu, 11 Dec 2025 22:42:19 +0800
-Message-ID: <20251211144219.2282231-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1765473203; c=relaxed/simple;
+	bh=8eJeVSDMC2OXA8/c1hedw2Ay8kqSusEdqdEXbNb4yss=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rbT0B03JuXysm9GilPRZ9HypV7CxlADNyHr1MObPI0pBi0RV66kYrpzm+NjzVrQerPVmzVFbNsKvkFa3e5b19YNH+ap9yAj4HR/sZ+VyicAW3GbRDy8/cztcePbzoPScrbTDcbitEKAVmvqDPJU54r2tLW+xXHG5V98616bUcNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=e6f64MLd; arc=none smtp.client-ip=74.125.224.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-64475c16a11so405364d50.1
+        for <linux-arch@vger.kernel.org>; Thu, 11 Dec 2025 09:13:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc.com; s=google; t=1765473200; x=1766078000; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XgsqjP5OdKf2pfViq8wHSszLchDHEA8k2q0YnXN+A5g=;
+        b=e6f64MLd2MbEBff4BHorsHzanEbrMQAu8wJXMFvB5usQtYutEDcxhEAG9rFaanAo7M
+         SlIMSfbi/CvsCZpN0IkOUEwAv5EuWNPrrc7z2HrxxnTThwWz13oqN9+fwU6QQkCawE9v
+         KIn2GIqp2ruyHGxMV6X4q/JDLzQimoMsHz+1+RoPuAvTNSSJAayZEEbhrD1YFctw12VL
+         hyuU4oZ0W3A2PKZa6TaacLnq43A1Du6F8AMlyw0IQyCcYEtMaJL7cCz+aoCTGOziUpqg
+         O8bxAFT2rvuq47dSG93/Hw5wgQH/PXNZx73lJAb8zDzj3nrInoQj0ZCuvngwDEglabuE
+         ZyMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765473200; x=1766078000;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XgsqjP5OdKf2pfViq8wHSszLchDHEA8k2q0YnXN+A5g=;
+        b=xRKPVcV2K9+Nlkkj2ifQiSpAorxXaqwdxDbjqCc5JwQMLKd7RAMosEaXtMR6jruoeV
+         RzDPxWxoSHcRR/aExQ/L9o8nBj9567fs9To0II0IJvafe8VXRRCvDGE/AuY4md9lqxTc
+         SQQHE4ufI44aEfP/xUtmC3KO42Xwh5wA0pGUongqqs9T71M8qfBTRTR3DoPOZv/te94v
+         67te0HF9QpPGMeixw7TByDtNj8KUYBcPbe/ypSHXkJU7wG8BmovUQ7CrmGlp1qU78h+D
+         IVjCXujXIwsrQZKo8eMazHyXKhnKfpxZ8cHof3/oeLGJfM5p3ecWS2pjtelLn8Gfgw9E
+         d4Og==
+X-Forwarded-Encrypted: i=1; AJvYcCXfQugv8tbhwB2dXQZq930+5QKOpga3jMT0bEd5aaFESTd5T5G6f/SRPeCogFOEfXz4+0zr+XpitOiI@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCNlMqlQCJ9f4WauHOaEtxjTKs1P9jDFNk4O4IzwhJXdp3zJl1
+	1HDrpXtvrw5sXQia7V9SWyCZxr7/ocAjv/DtioJ6cz/+LuzNtvEUSbmMmrWRrrXC7D/feEWqsHY
+	A/95wQDj++F+Xbx/G3RQBZ/dN5Z4uI+pxI24MVadPNw==
+X-Gm-Gg: AY/fxX4CJFWsyEVJ3zWQgqCdNegVRd+KG6LWLRYiMQ398Hp5gqCaNc3gQnNSYSqnWaQ
+	7mejSa6mo0mY5OWKozNtoNEG2FCEyARmoZbKvBPHEbjOASmyHOAa9VnMyfRa0fW9xD+5rRoSN/c
+	Eb8rGMj3m0AMtCgW5oP7BcaHqjPLTaFzNXI8v6y/ulLuaLkx7qmaXdy1VAF3xk+/7HySOyIi+IK
+	HI1ZNJWqTiijQKs+JCE5FEmy1qmQgIfh5hhFZBb45tjDN4rWqaBSWUP2/X+oMqPkN324Iae
+X-Google-Smtp-Source: AGHT+IEDvxO44/POz7bnaB+zrKXCNOOS/WPSTW3GIVXm1upC0YATz2kq4R7kn6XsCe0YNeacKDOWMUqKTxb574ExUiM=
+X-Received: by 2002:a05:690e:2514:20b0:63b:8e09:7a47 with SMTP id
+ 956f58d0204a3-6446e97b295mr4684556d50.19.1765473200251; Thu, 11 Dec 2025
+ 09:13:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBxD8JW2Dppmi1IAQ--.1472S2
-X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxtF45ur4DWr17Ar47XFWUAwc_yoWxGw1fpF
-	9xZrnrJF48Grn3Awnrt3s8ur1DAryxGr12q3WayFy8CF47ZryUZr1kJr97XFyUt395JrW0
-	qr1rG34aqF4kJwbCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-	AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
+References: <20251205-v5_user_cfi_series-v25-0-1a07c0127361@rivosinc.com>
+ <20251205-v5_user_cfi_series-v25-6-1a07c0127361@rivosinc.com> <b2acb9ca-1320-ab42-3937-2ea17153fac2@kernel.org>
+In-Reply-To: <b2acb9ca-1320-ab42-3937-2ea17153fac2@kernel.org>
+From: Deepak Gupta <debug@rivosinc.com>
+Date: Thu, 11 Dec 2025 09:13:01 -0800
+X-Gm-Features: AQt7F2rXBhYBRubaxsEthZTktAJEjMnbT8BXdFrJ84aaWwsz26es8ubAplXa-kc
+Message-ID: <CAKC1njTfn-5ZeAV7x5819kXUqitVgO0HkKQi1S6UvZyiuroxvg@mail.gmail.com>
+Subject: Re: [PATCH v25 06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+To: Paul Walmsley <pjw@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	rust-for-linux@vger.kernel.org, Zong Li <zong.li@sifive.com>, 
+	Andreas Korb <andreas.korb@aisec.fraunhofer.de>, 
+	Valentin Haudiquet <valentin.haudiquet@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 7d0a66e4bb9081d75c82ec4957c50034cb0ea449:
+On Thu, Dec 11, 2025 at 12:47=E2=80=AFAM Paul Walmsley <pjw@kernel.org> wro=
+te:
+>
+> On Fri, 5 Dec 2025, Deepak Gupta via B4 Relay wrote:
+>
+> > From: Deepak Gupta <debug@rivosinc.com>
+> >
+> > `arch_calc_vm_prot_bits` is implemented on risc-v to return VM_READ |
+> > VM_WRITE if PROT_WRITE is specified. Similarly `riscv_sys_mmap` is
+> > updated to convert all incoming PROT_WRITE to (PROT_WRITE | PROT_READ).
+> > This is to make sure that any existing apps using PROT_WRITE still work=
+.
+> >
+> > Earlier `protection_map[VM_WRITE]` used to pick read-write PTE encoding=
+s.
+> > Now `protection_map[VM_WRITE]` will always pick PAGE_SHADOWSTACK PTE
+> > encodings for shadow stack. Above changes ensure that existing apps
+> > continue to work because underneath kernel will be picking
+> > `protection_map[VM_WRITE|VM_READ]` PTE encodings.
+> >
+> > Reviewed-by: Zong Li <zong.li@sifive.com>
+> > Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> This Signed-off-by: doesn't look right.  It doesn't look like Arnd
+> developed this patch, and it doesn't appear that he replied with a
+> Signed-off-by: to the list regarding a patch that you wrote.  Did I miss
+> it?  Did you mean Co-developed-by: or some other tag?
+>
 
-  Linux 6.18 (2025-11-30 14:42:10 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.19
-
-for you to fetch changes up to be77cf43d2fd6eca150594e997e40ca7df90f251:
-
-  LoongArch: Adjust default config files for 32BIT/64BIT (2025-12-08 18:09:17 +0800)
-
-----------------------------------------------------------------
-LoongArch changes for v6.19
-
-1, Add basic LoongArch32 support;
-2, Select HAVE_ARCH_BITREVERSE in Kconfig;
-3, Fix build and boot for CONFIG_RANDSTRUCT;
-4, Correct the calculation logic of thread_count;
-5, Some bug fixes and other small changes.
-
-Note: Build infrastructures of LoongArch32 are not enabled yet, because
-we need to adjust irqchip drivers and wait for GNU toolchain be upstream
-first.
-
-----------------------------------------------------------------
-Huacai Chen (16):
-      LoongArch: Fix build errors for CONFIG_RANDSTRUCT
-      LoongArch: Fix arch_dup_task_struct() for CONFIG_RANDSTRUCT
-      LoongArch: Add new PCI ID for pci_fixup_vgadev()
-      LoongArch: Add atomic operations for 32BIT/64BIT
-      LoongArch: Add adaptive CSR accessors for 32BIT/64BIT
-      LoongArch: Adjust common macro definitions for 32BIT/64BIT
-      LoongArch: Adjust boot & setup for 32BIT/64BIT
-      LoongArch: Adjust memory management for 32BIT/64BIT
-      LoongArch: Adjust process management for 32BIT/64BIT
-      LoongArch: Adjust time routines for 32BIT/64BIT
-      LoongArch: Adjust module loader for 32BIT/64BIT
-      LoongArch: Adjust system call for 32BIT/64BIT
-      LoongArch: Adjust user accessors for 32BIT/64BIT
-      LoongArch: Adjust misc routines for 32BIT/64BIT
-      LoongArch: Adjust VDSO/VSYSCALL for 32BIT/64BIT
-      LoongArch: Adjust default config files for 32BIT/64BIT
-
-Qiang Ma (1):
-      LoongArch: Correct the calculation logic of thread_count
-
-Song Gao (1):
-      LoongArch: Add and use some macros for AVEC
-
-Tiezhu Yang (1):
-      LoongArch: Use unsigned long for _end and _text
-
-Xi Ruoyao (2):
-      LoongArch: Select HAVE_ARCH_BITREVERSE in Kconfig
-      LoongArch: Simplify __arch_bitrev32() implementation
-
-Yuli Wang (1):
-      LoongArch: Use __pmd()/__pte() for swap entry conversions
-
- arch/loongarch/Kconfig                             |    5 +
- arch/loongarch/Makefile                            |    7 +-
- arch/loongarch/configs/loongson32_defconfig        | 1105 ++++++++++++++++++++
- .../{loongson3_defconfig => loongson64_defconfig}  |    7 +-
- arch/loongarch/include/asm/Kbuild                  |    1 +
- arch/loongarch/include/asm/addrspace.h             |   15 +-
- arch/loongarch/include/asm/asm.h                   |   77 +-
- arch/loongarch/include/asm/asmmacro.h              |  118 ++-
- arch/loongarch/include/asm/atomic-amo.h            |  206 ++++
- arch/loongarch/include/asm/atomic-llsc.h           |  100 ++
- arch/loongarch/include/asm/atomic.h                |  197 +---
- arch/loongarch/include/asm/bitops.h                |   11 +
- arch/loongarch/include/asm/bitrev.h                |    2 +-
- arch/loongarch/include/asm/checksum.h              |    4 +
- arch/loongarch/include/asm/cmpxchg.h               |   48 +-
- arch/loongarch/include/asm/cpu-features.h          |    3 -
- arch/loongarch/include/asm/dmi.h                   |    2 +-
- arch/loongarch/include/asm/elf.h                   |   31 +
- arch/loongarch/include/asm/inst.h                  |   12 +-
- arch/loongarch/include/asm/irq.h                   |   12 +
- arch/loongarch/include/asm/jump_label.h            |   12 +-
- arch/loongarch/include/asm/local.h                 |   37 +
- arch/loongarch/include/asm/loongarch.h             |  102 +-
- arch/loongarch/include/asm/module.h                |   11 +
- arch/loongarch/include/asm/page.h                  |    2 +-
- arch/loongarch/include/asm/percpu.h                |   44 +-
- arch/loongarch/include/asm/pgtable-bits.h          |   36 +-
- arch/loongarch/include/asm/pgtable.h               |   79 +-
- arch/loongarch/include/asm/stackframe.h            |   34 +-
- arch/loongarch/include/asm/string.h                |    2 +
- arch/loongarch/include/asm/timex.h                 |   33 +-
- arch/loongarch/include/asm/uaccess.h               |   63 +-
- arch/loongarch/include/asm/vdso/gettimeofday.h     |    4 +
- arch/loongarch/include/uapi/asm/Kbuild             |    1 +
- arch/loongarch/include/uapi/asm/ptrace.h           |   10 +
- arch/loongarch/include/uapi/asm/unistd.h           |    6 +
- arch/loongarch/kernel/Makefile.syscalls            |    1 +
- arch/loongarch/kernel/cpu-probe.c                  |   13 +-
- arch/loongarch/kernel/efi-header.S                 |    4 +
- arch/loongarch/kernel/efi.c                        |    4 +-
- arch/loongarch/kernel/entry.S                      |   22 +-
- arch/loongarch/kernel/env.c                        |    5 +-
- arch/loongarch/kernel/fpu.S                        |  111 ++
- arch/loongarch/kernel/head.S                       |   39 +-
- arch/loongarch/kernel/module-sections.c            |    1 +
- arch/loongarch/kernel/module.c                     |  204 +++-
- arch/loongarch/kernel/proc.c                       |   10 +-
- arch/loongarch/kernel/process.c                    |   11 +-
- arch/loongarch/kernel/ptrace.c                     |    5 +
- arch/loongarch/kernel/relocate.c                   |   13 +-
- arch/loongarch/kernel/setup.c                      |    8 +-
- arch/loongarch/kernel/switch.S                     |   28 +-
- arch/loongarch/kernel/syscall.c                    |   15 +-
- arch/loongarch/kernel/time.c                       |   31 +-
- arch/loongarch/kernel/traps.c                      |   15 +-
- arch/loongarch/kernel/unaligned.c                  |   30 +-
- arch/loongarch/kvm/vcpu.c                          |    5 +-
- arch/loongarch/lib/bswapdi.c                       |   13 +
- arch/loongarch/lib/bswapsi.c                       |   13 +
- arch/loongarch/lib/clear_user.S                    |   22 +-
- arch/loongarch/lib/copy_user.S                     |   28 +-
- arch/loongarch/lib/dump_tlb.c                      |   14 +-
- arch/loongarch/lib/unaligned.S                     |   72 +-
- arch/loongarch/mm/init.c                           |    4 +-
- arch/loongarch/mm/page.S                           |  118 +--
- arch/loongarch/mm/tlb.c                            |   12 +-
- arch/loongarch/mm/tlbex.S                          |  322 ++++--
- arch/loongarch/pci/pci.c                           |    2 +
- arch/loongarch/power/hibernate.c                   |    6 +-
- arch/loongarch/power/platform.c                    |    4 +-
- arch/loongarch/power/suspend.c                     |   24 +-
- arch/loongarch/power/suspend_asm.S                 |   72 +-
- arch/loongarch/vdso/Makefile                       |    7 +-
- arch/loongarch/vdso/vdso.lds.S                     |    4 +-
- arch/loongarch/vdso/vgetcpu.c                      |    8 +
- drivers/firmware/efi/libstub/loongarch.c           |    8 +-
- drivers/irqchip/irq-loongarch-avec.c               |    5 +-
- 77 files changed, 3001 insertions(+), 771 deletions(-)
- create mode 100644 arch/loongarch/configs/loongson32_defconfig
- rename arch/loongarch/configs/{loongson3_defconfig => loongson64_defconfig} (99%)
- create mode 100644 arch/loongarch/include/asm/atomic-amo.h
- create mode 100644 arch/loongarch/include/asm/atomic-llsc.h
- create mode 100644 arch/loongarch/lib/bswapdi.c
- create mode 100644 arch/loongarch/lib/bswapsi.c
-
+Seems like b4 messed it up. I'll fix it up.
 
