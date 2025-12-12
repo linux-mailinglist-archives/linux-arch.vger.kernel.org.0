@@ -1,171 +1,185 @@
-Return-Path: <linux-arch+bounces-15383-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15384-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B433BCB8809
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 10:41:21 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 152FCCB9926
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 19:33:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4D5FB300855B
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 09:41:20 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 06D77300B905
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 18:33:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9162D314A89;
-	Fri, 12 Dec 2025 09:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00DB6308F3A;
+	Fri, 12 Dec 2025 18:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b="GKPh8o1P"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="FSKlyM7e"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-00364e01.pphosted.com (mx0a-00364e01.pphosted.com [148.163.135.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B463128D5
-	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 09:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575F43090C0
+	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 18:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765532478; cv=none; b=pn+sgwovoINIxVOuLudk/kAcR8hfHlO9RPJ3Z8ckpGljpHQTVUQu2e2fOVOF5xqD3m/GcV3cC4yDgQzDyFvkSiZzoqMC/wVnbw1HowRmLFVtw1Jv+tHY1vDBReJBWXhpj/lQKna8hF8gOjzNS53pqGQcPFQpM6aopKM5687t1Ts=
+	t=1765564402; cv=none; b=BdeBOvgr4rvBJ3MW+qtRyEAo5VKbauViHso3gnUe4WZoRdkWgXj3CsNOAGlJ3IQNFmwwpq6sbyuLkuTGLTxRowZILKjNTKIHwH+kFv6IqqEWFQ/oxhKeAbzKM2dIeslVie+KWsXzv+Dv6G1zxV0V9iu6fE0wfXlhS1FZO2dnlS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765532478; c=relaxed/simple;
-	bh=EmdTK/fRZopBGWpziuNMPd4s3SKCTzTlZFLJE/4064U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tw28yeSJ2L8hqU9Ua6Cl/0N9XjAZxDa+2DLm/YEFsU2yWBwOvJGUXg2XJqgzzM2dTaQgPOigUt4zRE1rN4RXMAFhRwr7oFsU4AyiRUDcPb672qpmRQmWFpGrODm5kgiQ/poZiFu8hyiur1/sK8M1ahdLLKCNPhHAWAunPA8o0Zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu; spf=pass smtp.mailfrom=columbia.edu; dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b=GKPh8o1P; arc=none smtp.client-ip=148.163.135.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=columbia.edu
-Received: from pps.filterd (m0167068.ppops.net [127.0.0.1])
-	by mx0a-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BC90Tvx3221103
-	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 04:14:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps01; bh=avil
-	WIry9gTxLFV5dzlklnHAwp0+Z25pb6ACZiTI8wE=; b=GKPh8o1P17lf0KKJKa9b
-	Q5yu+41K5zsh7QbMxnvFsPzmmtTfVAoCBEmC6sjCjGByGvsEzk3/DMBEKAf0ZXIX
-	Zb8wQnlthE3Op2+W4xfZ+fURt0FX+jOqmcOkgBxFf0h6ILh3m2uD4d3JnLLrinqv
-	dGLeCrsHQFgqRtgdgmk1kn3Q7Yyq5M2S1LYhjbeT3W6AWWhlcB5tcaTXwiZmyTOo
-	PjLyfN4w162BRPpXH8VPtnkJPcfY1tnnBm8mCT8d2CrCrXQIxo3N1mzDL4956LCw
-	q5e9jRMy6e1wl2yPsS+7aeLHX+/FlKiHn/q2TeYWhW/sVPcXm3FR+lR+WOEUlfu1
-	dQ==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-00364e01.pphosted.com (PPS) with ESMTPS id 4b02g1mqqj-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 04:14:00 -0500 (EST)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-340ad9349b3so2060971a91.1
-        for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 01:14:00 -0800 (PST)
+	s=arc-20240116; t=1765564402; c=relaxed/simple;
+	bh=v8LGo5rep+oNiHljlHrcb1/qPP3q5ouQwFXofTc8V8E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L5OV3HX6GcT18rc1LjbGocWHLmw3GVfIfG3qgoziCJAD2LFaenu7Jv/E0XZtuUFUUoAMYTHhATZAPCQtCTdl56voGHHMTValkDkZuYO+UuzUB+++5EOEZAMpBIsI06G+x9avlfjLL7KG/OWk5bGZjuDAluN1+gXoRbrNfCPyqwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=FSKlyM7e; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2984dfae0acso27883835ad.0
+        for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 10:33:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc.com; s=google; t=1765564401; x=1766169201; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eUSGmEJqTzYByGnUlGU1GkRTgZG6xNYZQ+XlXEoFmO0=;
+        b=FSKlyM7eSovvmr5cj3Hu93OFhDLQSJZWqkQ3xqj/yrR8BnMb4QZW8ArYGL+QIEeDLa
+         meBncfDWtcrvqRkgIYrSzSAnW4JcmFxZnuuCZuysf2HN5I63zIFyy5mUQGIPsJ7qOcjM
+         5Oi1AFHY8QS+1yGNUzFcR1k0oXNA1hjSu3RbCdG6d0XHg1Z7LYCWmB+fCWDA10KVMyzF
+         JvTS5XbYQZ8qdZEu4mQqoo6mBGvuKZ/M6eWiCRd8h5xG/mDVZMyvJ+wRF1LAkmnqq3xI
+         GCoFNKwjXxXdqUgutKTzFoBpsK3oDgdyriyYdIa2dTmqMucgVcvy2qeySSy/xL2EsNJ4
+         kGKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765530840; x=1766135640;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=avilWIry9gTxLFV5dzlklnHAwp0+Z25pb6ACZiTI8wE=;
-        b=SFdlvuITbqKXWPfti4yKgzYBXuZem1P8Iy2P66VuY3YlGIW3+SIwY3upfG/lSbckYD
-         1qdDxj04Vh8V/loRzoSDfYyPqN29hG50E2xJUhHN4BSDkRTI8LT/3/J9QCuwt2BxgoPP
-         pQNqt5AxFvCh1VCOXsN6M8erpjetQjks/ksNLHflZk2i4xb0nR7FycUzgHKCEnYqiTFC
-         S9RtXyujM5UQW6OisWVkguoAUwpAGBKdmErwZa0eU2BXcWPoRowb/punNlkU3+33c1AT
-         lQG2Wz/PBDBId27J9zVic8Me3bVx/HL2WPS7RIpFIP95hFa746ECjygZZ3AE2Vz7rnxl
-         u0SQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgPULEsenfqZkoHvuBvzwxGlVtqdfysKT893c55OmEssrZllXIA3FuKsQOcfgpDFqpN9lhD2kA1c53@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvrJGJ3pYvt8n34CJzmkBg0//ZI72j3g+hFOe5MKzM6M/IPmQW
-	+MpzSFfx+qfJ6OKGTNwumceneyJmhWEkPgs+Ih7VdWVTXVIr9zE4s+HLhnDbFxOd2r5tobzNt8N
-	5LaX2Bm+YNjp2zfdt6K9INi59wR7nWNy8zYGdkI3xatD1aDZK2gtTrYtFaws=
-X-Gm-Gg: AY/fxX6ru5Fl+mo5gsfCSvuJ3So1dgzpm1VwnpPymvcXr0HmP9Ft1by0q8jyGkdiwKo
-	AON/ounwWdQcmKADy3mL95DgTNIOB3fCwV7bFNRW4dRd+mEzUW/1Lxs6H8PmbogIW1XqLumXqrN
-	e1BWLGAm7TViKk9lnj7yBVFrfX9tSUNm+kLEp8ZbWh1aQhRLz58JC/BFUd218LfGC6l57lbmekW
-	UavV4mLDw+jBDFc6DCj5OYBeEyY8AYABBc2IQ2Nd4sLaHpYmIDkUogu3so51wG6P7PpclCx+Hsd
-	+6eB4hv3XkPhWi6E2CjUlxfh/TwoLTZ3+Z+xRhf1g7tatlz8U2ub/oh+gqB4XyUBLr9yu1zzXfO
-	wMY1f6dwDDlLrgagQZDjRUCvqa1GlZ9DXl+57q58c6Hky/jVFK/0wqZTy
-X-Received: by 2002:a05:6a20:918d:b0:366:14ac:e1f7 with SMTP id adf61e73a8af0-369b07ab627mr1259525637.73.1765530840058;
-        Fri, 12 Dec 2025 01:14:00 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IELRX7SnPRiviMlTSgk/0tB6eCplpLNDZWHl3aivotSRf1ij/an8wIly2PXn4fRkPYXltl+Rg==
-X-Received: by 2002:a05:6a20:918d:b0:366:14ac:e1f7 with SMTP id adf61e73a8af0-369b07ab627mr1259504637.73.1765530839512;
-        Fri, 12 Dec 2025 01:13:59 -0800 (PST)
-Received: from [127.0.1.1] (p99250-ipoefx.ipoe.ocn.ne.jp. [153.246.134.249])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29eea016e57sm48497255ad.63.2025.12.12.01.13.54
+        d=1e100.net; s=20230601; t=1765564401; x=1766169201;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eUSGmEJqTzYByGnUlGU1GkRTgZG6xNYZQ+XlXEoFmO0=;
+        b=Y+sBb0P2fsMIJvSgc4932SkGQrd0G6RpX2IX3FuaS3TJgCHqQyzSfRoQbOFCL6ZL8V
+         mLg+uL46klZd51jkJCYgYyfGgRHdTdc3JQvMsEDR72PrnM7/Spgd80LRWtuOMRXQceSS
+         W59TS098hbwm0vVWZWYaJcFDi5b1BO1IdYO7o0B1ktEuO3eVLtrqKX67ImAhE2sCXwl3
+         YDzD5RMDHPfNtxJHVTuhuOdWqqg23+RyGIzBkAW0bM41nIH1ey8d+7iwYTcGARS/C49t
+         6iElzqJMLOkxc06b1Ex9KDsVyVVU6Ogzh/oJIA8UZpHZzQ8MzwkkxZF/fHopc/iPB9qM
+         Z0HA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2UYi93L9Ejdqdo+DNisbulIR/+iuFcvMbYmQUEKiwEU5HZ/3JVyDbQRnqLfo8e+GGzBRgqZM302Yu@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAUiEdPqQGOmq5IOLDXfF05MLOQ9Mbk3WJYp+TprJg7OVH7jPV
+	X7dEsR/o15mm6Riaj+dO62Z3TuvjrweSyZl76cUmVLalJUom5T73rstRi5oeMh4JtNw=
+X-Gm-Gg: AY/fxX5TluzePXh2Abd/6oUQvBejAaQkA/Yendme2OtDreHqrbUhLjVxNihT2dj9bAI
+	TZ2ZUHcmEsmqSF9iGfQ/+WwgXlGtgciHzb+voJQ14X55bpY6P/pGMujtyn1Gi2ZSqxFJgmQM3CM
+	B3AEKimP0uauSR7tOVTcARHNh9HBUBfQ4PnqQntxBiKlBoAYvXK0HVE+akDq/l9JS+WKhYU/s4y
+	ionqlAmKUuaqpl+T0sdBhBtuCErJQrCbC9jOn0rIN3TIDGRsrmnRaxzvH7FOIzBUwpikVykFwHs
+	av60FSvMAlEeK4HwqUTimzgE3DRJhXgx5sMu9JcECl8/YSsNLdBMODImSW0wrar5WWf+sHrG5o7
+	fDZiqqKGMD57xf7fibS5mZQZ+3fZ1OhzXrnRAgEaKLWU1nvnT2j8gVllVdexEjaN9BLQLPGUABu
+	nlRcOl/AIhNW5AFsF+iN34
+X-Google-Smtp-Source: AGHT+IFtnl41QfJeu3IJ/uV+L4EiFBX8zP0ux5EampS/J9pJIP4sBjIMESLAF9z1UPcxbBQKr8xzaw==
+X-Received: by 2002:a17:903:22cc:b0:29f:2456:8cde with SMTP id d9443c01a7336-29f245690bdmr29337135ad.4.1765564400511;
+        Fri, 12 Dec 2025 10:33:20 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29eea04b7bdsm59970265ad.85.2025.12.12.10.33.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Dec 2025 01:13:59 -0800 (PST)
-From: Tal Zussman <tz2294@columbia.edu>
-Date: Fri, 12 Dec 2025 04:08:08 -0500
-Subject: [PATCH v2 2/2] mm: Remove tlb_flush_reason::NR_TLB_FLUSH_REASONS
+        Fri, 12 Dec 2025 10:33:20 -0800 (PST)
+Date: Fri, 12 Dec 2025 10:33:16 -0800
+From: Deepak Gupta <debug@rivosinc.com>
+To: Paul Walmsley <pjw@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
+	richard.henderson@linaro.org, jim.shu@sifive.com,
+	Andy Chiu <andybnac@gmail.com>, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+	Zong Li <zong.li@sifive.com>, David Hildenbrand <david@redhat.com>,
+	Andreas Korb <andreas.korb@aisec.fraunhofer.de>,
+	Valentin Haudiquet <valentin.haudiquet@canonical.com>,
+	Charles Mirabile <cmirabil@redhat.com>
+Subject: Re: [PATCH v26 00/28] riscv control-flow integrity for usermode
+Message-ID: <aTxf7IGlkGLgHgI2@debug.ba.rivosinc.com>
+References: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com>
+ <e052745b-6bf0-c2a3-21b2-5ecd8b04ec70@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251212-tlb-trace-fix-v2-2-d322e0ad9b69@columbia.edu>
-References: <20251212-tlb-trace-fix-v2-0-d322e0ad9b69@columbia.edu>
-In-Reply-To: <20251212-tlb-trace-fix-v2-0-d322e0ad9b69@columbia.edu>
-To: Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Ingo Molnar <mingo@kernel.org>, Rik van Riel <riel@surriel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        x86@kernel.org, Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
-        David Hildenbrand <david@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        Tal Zussman <tz2294@columbia.edu>,
-        David Hildenbrand <david@kernel.org>
-X-Mailer: b4 0.14.3-dev-d7477
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1765530499; l=689;
- i=tz2294@columbia.edu; s=20250528; h=from:subject:message-id;
- bh=EmdTK/fRZopBGWpziuNMPd4s3SKCTzTlZFLJE/4064U=;
- b=UsUA/XaWe7PQ81AUFd/Djoo4VpRjtMdRkW6w61JAXpaFzEpvAYddwkNn4lF34ddKsrIvtCT5K
- qasOL1ORuYzAbPIRlACXAmu8BfEbBJOoUBeMiE+Sy0LjYBxhUHo3KIn
-X-Developer-Key: i=tz2294@columbia.edu; a=ed25519;
- pk=BIj5KdACscEOyAC0oIkeZqLB3L94fzBnDccEooxeM5Y=
-X-Authority-Analysis: v=2.4 cv=LoGfC3dc c=1 sm=1 tr=0 ts=693bdcd8 cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=gC7H+NTNV8TiHuUi9Bl0tg==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=x7bEGLp0ZPQA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=20KFwNOVAAAA:8 a=fwyzoN0nAAAA:8
- a=pHWCnKJda-1CI8IbBYIA:9 a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22
- a=Sc3RvPAMVtkGz6dGeUiH:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEyMDA2OSBTYWx0ZWRfX7mdIz2qTPG3u
- J/FHcPxN0MvxqrtVke7mwcvWePGTjKYwWHM7b42+Mh3D4YvpzUFEepLm3JNE3HkCSpRKQmzBYKk
- Nuft7Pk5P95S6Op1Yj6b4Qoy3H26cAPfh6xcNYwmsSDj5Nq90+Adc9EBlAmrEps7yjMgvBY24fh
- Q80yhNCXqvvJSlSq6MyGme5ZG2AyrUalqLC1S7uOgnw1zSpt3utGwVrNMlZTn6PopylMrnzEOMq
- blI8VPG29tLhfSZ/vHOlDh7Wr3vgTJTQ97zpAJx4AteT2wepTCV+YvXN+shw6mrYFrJABWJLiP0
- 2HFB6hrjS4V94ZNNaV+I1C1ZlHA5tNPIzr4RtzjxBHvh4ESTYLFTeMRlwyhjQ3d1cQI+xS1QI7n
- sv0vb9tcUBQdW80RGYewRKAdfHTXiA==
-X-Proofpoint-GUID: 8IxE69xdED4glPEKovR1J8xAskwa3t9n
-X-Proofpoint-ORIG-GUID: 8IxE69xdED4glPEKovR1J8xAskwa3t9n
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11639
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 clxscore=1011 impostorscore=10
- lowpriorityscore=10 spamscore=0 bulkscore=10 phishscore=0 malwarescore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2512120069
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <e052745b-6bf0-c2a3-21b2-5ecd8b04ec70@kernel.org>
 
-This has been unused since it was added 11 years ago in commit
-d17d8f9dedb9 ("x86/mm: Add tracepoints for TLB flushes").
+On Fri, Dec 12, 2025 at 01:30:29AM -0700, Paul Walmsley wrote:
+>On Thu, 11 Dec 2025, Deepak Gupta via B4 Relay wrote:
+>
+>> v26: CONFIG_RISCV_USER_CFI depends on CONFIG_MMU (dependency of shadow stack
+>> on MMU). Used b4 to pick tags, apparantly it messed up some tag picks. Fixing it
+>
+>Deepak: I'm now (at least) the third person to tell you to stop resending
+>this entire series over and over again.
 
-Acked-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Rik van Riel <riel@surriel.com>
-Signed-off-by: Tal Zussman <tz2294@columbia.edu>
----
- include/linux/mm_types.h | 1 -
- 1 file changed, 1 deletion(-)
+To be very honest I also feel very bad doing and DOSing the lists. Sorry to you
+and everyone else.
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 9f6de068295d..42af2292951d 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -1631,7 +1631,6 @@ enum tlb_flush_reason {
- 	TLB_LOCAL_MM_SHOOTDOWN,
- 	TLB_REMOTE_SEND_IPI,
- 	TLB_REMOTE_WRONG_CPU,
--	NR_TLB_FLUSH_REASONS,
- };
- 
- /**
+But I have been sitting on this patch series for last 3-4 merge windows with
+patches being exactly same/similar. So I have been a little more than desperate
+to get it in.
 
--- 
-2.39.5
+I really haven't had any meaningful feedback on patch series except stalling
+just before each merge window for reasons which really shouldn't stall its
+merge. Sure that's the nature of open source development and it's maintainer's
+call at the end of the day. And I am new to this. I'll improve.
 
+>
+>First, a modified version of the CFI v23 series was ALREADY SITTING IN
+>LINUX-NEXT.  So there's no reason you should be resending the entire
+>series, UNLESS your intention for me is to drop the entire existing series
+>and wait for another merge window.
+>
+>Second: when someone asks you questions about an individual patch, and you
+>want to answer those questions, it's NOT GOOD for you to resend the entire
+>28 series as the response!  You are DDOSing a bunch of lists and E-mail
+>inboxes.  Just answer the question in a single E-mail.  If you want to
+>update a single patch, just send that one patch.
+
+Noted. I wasn't sure about it. I'll explicitly ask next time if you want me to
+send another one.
+
+>
+>If you don't start paying attention to these rules then people are going
+>to start ignoring you -- at best! -- and it's going to give the entire
+>community a bad reputation.
+
+Even before this, this patch series has been ignored largely. I don't know
+how to get attention. All I wanted was either feedback or get it in. And as I
+said I've been desparate to get it in. Also as I said, I'll improve.
+
+>
+>Please acknowledge that you understand this,
+
+ACKed.
+
+>
+>
+>- Paul
 
