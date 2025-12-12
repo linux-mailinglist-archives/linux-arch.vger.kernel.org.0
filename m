@@ -1,87 +1,87 @@
-Return-Path: <linux-arch+bounces-15382-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15383-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D722CCB87D6
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 10:37:19 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id B433BCB8809
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 10:41:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A7506300A224
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 09:37:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4D5FB300855B
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 09:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9990E1E5B63;
-	Fri, 12 Dec 2025 09:37:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9162D314A89;
+	Fri, 12 Dec 2025 09:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b="SUefY2h+"
+	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b="GKPh8o1P"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-00364e01.pphosted.com (mx0b-00364e01.pphosted.com [148.163.139.74])
+Received: from mx0a-00364e01.pphosted.com (mx0a-00364e01.pphosted.com [148.163.135.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D892DC354
-	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 09:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.139.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B463128D5
+	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 09:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765532235; cv=none; b=gtyQETtZWXFIvqZUonNClfpK8ZcLwgsv8rkdftOa6x50glguRnnOgc60JqxRQhq4rI+j2G9+tO9qKLkzCOEB+pSN1eP6wF1Oht/iMl2ab8P0tfw0IRUE8B9bXFzUUm05qaElnMYOAq5LaRgkrMTHy7/3tjIP3BYdG9KXLXaEpfA=
+	t=1765532478; cv=none; b=pn+sgwovoINIxVOuLudk/kAcR8hfHlO9RPJ3Z8ckpGljpHQTVUQu2e2fOVOF5xqD3m/GcV3cC4yDgQzDyFvkSiZzoqMC/wVnbw1HowRmLFVtw1Jv+tHY1vDBReJBWXhpj/lQKna8hF8gOjzNS53pqGQcPFQpM6aopKM5687t1Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765532235; c=relaxed/simple;
-	bh=3RXsGKqukvEhsXy2ryEgjMGzkVB8QVOoAFGKjU+lkAo=;
+	s=arc-20240116; t=1765532478; c=relaxed/simple;
+	bh=EmdTK/fRZopBGWpziuNMPd4s3SKCTzTlZFLJE/4064U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UNq/BPYzNWfcwAKgB37pu/gj4tKDF4GMu+Nlj5r1Q+eME41M6MDI7ROivETkKyZ4hk3OrmYBUTz5n5AlhvZ1USaIB31AHGDfFjSMzw8fe7F3ajomp8nIVckDAkNZ/Fn3CpdFOo8cV6hiMihlPc8IHTrjb9N5U66MmNPxstK9BQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu; spf=pass smtp.mailfrom=columbia.edu; dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b=SUefY2h+; arc=none smtp.client-ip=148.163.139.74
+	 In-Reply-To:To:Cc; b=tw28yeSJ2L8hqU9Ua6Cl/0N9XjAZxDa+2DLm/YEFsU2yWBwOvJGUXg2XJqgzzM2dTaQgPOigUt4zRE1rN4RXMAFhRwr7oFsU4AyiRUDcPb672qpmRQmWFpGrODm5kgiQ/poZiFu8hyiur1/sK8M1ahdLLKCNPhHAWAunPA8o0Zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu; spf=pass smtp.mailfrom=columbia.edu; dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b=GKPh8o1P; arc=none smtp.client-ip=148.163.135.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=columbia.edu
-Received: from pps.filterd (m0499198.ppops.net [127.0.0.1])
-	by mx0b-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BC90c4P145931
-	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 04:13:56 -0500
+Received: from pps.filterd (m0167068.ppops.net [127.0.0.1])
+	by mx0a-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BC90Tvx3221103
+	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 04:14:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps01; bh=s1cT
-	Pmb/E3ED4jNPhT8P6htYkPi/ZEzeet04bZUSBAw=; b=SUefY2h+X+0yV5h9UDKf
-	0L/P4l74lqkcaH0AfwtOqJvXh9ZG/pfMqujyu20Ftb4CVkk6J+1RC5lzd9o/25I7
-	fafQTEqH0vIvoUHqBkOKBZOgxQSWiutsZbsGEEKnx3mWq2jPLYlqCkRceS1YyRQs
-	6g+X+xm/foRjPN1An4/Lpo+e+BGfMfvGzU/WvYaNR55GBetwqVHOkFHWJL6C+L/i
-	xIbtfsofl5qhY4V7kRx8weBnBodlUlQmyC1YbISzVWba6/k+IHT3+9DdGcUoVM84
-	jAXmn+5ZSw1Q3dt6e0NbHq7BY6R6NB0whQVK70XDP1g3sMkwKKK2VeUN40FVUItt
-	BQ==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0b-00364e01.pphosted.com (PPS) with ESMTPS id 4b07h2j11v-1
+	:message-id:mime-version:references:subject:to; s=pps01; bh=avil
+	WIry9gTxLFV5dzlklnHAwp0+Z25pb6ACZiTI8wE=; b=GKPh8o1P17lf0KKJKa9b
+	Q5yu+41K5zsh7QbMxnvFsPzmmtTfVAoCBEmC6sjCjGByGvsEzk3/DMBEKAf0ZXIX
+	Zb8wQnlthE3Op2+W4xfZ+fURt0FX+jOqmcOkgBxFf0h6ILh3m2uD4d3JnLLrinqv
+	dGLeCrsHQFgqRtgdgmk1kn3Q7Yyq5M2S1LYhjbeT3W6AWWhlcB5tcaTXwiZmyTOo
+	PjLyfN4w162BRPpXH8VPtnkJPcfY1tnnBm8mCT8d2CrCrXQIxo3N1mzDL4956LCw
+	q5e9jRMy6e1wl2yPsS+7aeLHX+/FlKiHn/q2TeYWhW/sVPcXm3FR+lR+WOEUlfu1
+	dQ==
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	by mx0a-00364e01.pphosted.com (PPS) with ESMTPS id 4b02g1mqqj-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 04:13:55 -0500 (EST)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-29f26fc6476so6932855ad.1
-        for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 01:13:55 -0800 (PST)
+	for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 04:14:00 -0500 (EST)
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-340ad9349b3so2060971a91.1
+        for <linux-arch@vger.kernel.org>; Fri, 12 Dec 2025 01:14:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765530835; x=1766135635;
+        d=1e100.net; s=20230601; t=1765530840; x=1766135640;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=s1cTPmb/E3ED4jNPhT8P6htYkPi/ZEzeet04bZUSBAw=;
-        b=PYej0UUnD3zNm3vAISC5NMJ0HsgXjGeK7IzXCnOykc3RveBikVIxGIkjADSEZcH87Q
-         0qBTyh0CtYGlg6YAwQi7HV0aSpmJp1sEJQpxp/kwRynirQ5++pEB1JJC5idpfPw2jpBl
-         o2wR8pjPTElU7CULJOWaINhfOWUr698ROGUioJI1poSw0XfEoR0XmiRNgY/knNFy1E8/
-         Xi0eB8TvC65UTluMXG7xf78Ti9OMenayaiq/4BeySS7LIV+xmAGMbsfUImUj43Jf9mAL
-         s47NDlasgqByRhfAy0+tQG/+CQtMwxWu3Eiv3a5LlRdroDoz7aWix/0qfR2jkK3CEi0N
-         RtAw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0k6g3mNhRWfXvWr7Ar1KoExfOA+Ya5q2Rs8LYGLoM6NZNGz4zEPjJDbSleSZHM+UMeE9S+HmB2waK@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCq41IhH6Zwvyv9zoL8Uny2M+Jqljammt3ib066GZiKJEWpqJb
-	pZ50sHeE8qhg4I+Y8cMzacPiLBvUcZTkALIbE/hkmI3+Zb1d2amtCGUFRv0VB8/wZdD67FleomN
-	bMAGTLkAo+04GTo9mHsdMR15Ya5KCb6EivKalXVdeO1XTpf9x0+phmPyM2Mk=
-X-Gm-Gg: AY/fxX7AiwzkGIxBZ9vVNU51iCbod6x+wra7qyaW0XDeag94Xyh72mRY9BInWWcQ5RY
-	de2qiWwhQJJoGWTZn3l/5xgSx+6MDh97gCUrBlBKtiwBE27dQW/GctcwBE7b3gmARgdckd/7bnS
-	hjsSmbCriplN9+YtcgsA2Ehd/9y/Y5H059lShGYD22rZHKpeLQbIE1ILXBPj/LDJjY+/vsSLk0X
-	SEWAqeysnp9yGENICJhEL9ODtz59y8dikceFlgfA/oc8eV/ev7MxNssL1gh7LXTFLJDaK7eqd2V
-	0Fw/JleI2m7n+bKTBypjsxP+Aaf7xmw0c7QvzDGHWeUFHXqTLIz/y9EbKP+1yCLubGZbDQMQw3C
-	m6mY9C47e87LgTUWJGJZR/DDlIoKVKQmRxRW8IHu3M27wVIlNL/UfQlNW
-X-Received: by 2002:a17:902:e80f:b0:297:e66a:2065 with SMTP id d9443c01a7336-29f244bcf85mr18583015ad.56.1765530834988;
-        Fri, 12 Dec 2025 01:13:54 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHwvOAURq/suPyQQI1KUWuzlf+xBV7BfHZ9tWHXTmC5W67Xs98SEZvrSF3mE+NsgMan4KBjtg==
-X-Received: by 2002:a17:902:e80f:b0:297:e66a:2065 with SMTP id d9443c01a7336-29f244bcf85mr18582605ad.56.1765530834512;
-        Fri, 12 Dec 2025 01:13:54 -0800 (PST)
+        bh=avilWIry9gTxLFV5dzlklnHAwp0+Z25pb6ACZiTI8wE=;
+        b=SFdlvuITbqKXWPfti4yKgzYBXuZem1P8Iy2P66VuY3YlGIW3+SIwY3upfG/lSbckYD
+         1qdDxj04Vh8V/loRzoSDfYyPqN29hG50E2xJUhHN4BSDkRTI8LT/3/J9QCuwt2BxgoPP
+         pQNqt5AxFvCh1VCOXsN6M8erpjetQjks/ksNLHflZk2i4xb0nR7FycUzgHKCEnYqiTFC
+         S9RtXyujM5UQW6OisWVkguoAUwpAGBKdmErwZa0eU2BXcWPoRowb/punNlkU3+33c1AT
+         lQG2Wz/PBDBId27J9zVic8Me3bVx/HL2WPS7RIpFIP95hFa746ECjygZZ3AE2Vz7rnxl
+         u0SQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWgPULEsenfqZkoHvuBvzwxGlVtqdfysKT893c55OmEssrZllXIA3FuKsQOcfgpDFqpN9lhD2kA1c53@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvrJGJ3pYvt8n34CJzmkBg0//ZI72j3g+hFOe5MKzM6M/IPmQW
+	+MpzSFfx+qfJ6OKGTNwumceneyJmhWEkPgs+Ih7VdWVTXVIr9zE4s+HLhnDbFxOd2r5tobzNt8N
+	5LaX2Bm+YNjp2zfdt6K9INi59wR7nWNy8zYGdkI3xatD1aDZK2gtTrYtFaws=
+X-Gm-Gg: AY/fxX6ru5Fl+mo5gsfCSvuJ3So1dgzpm1VwnpPymvcXr0HmP9Ft1by0q8jyGkdiwKo
+	AON/ounwWdQcmKADy3mL95DgTNIOB3fCwV7bFNRW4dRd+mEzUW/1Lxs6H8PmbogIW1XqLumXqrN
+	e1BWLGAm7TViKk9lnj7yBVFrfX9tSUNm+kLEp8ZbWh1aQhRLz58JC/BFUd218LfGC6l57lbmekW
+	UavV4mLDw+jBDFc6DCj5OYBeEyY8AYABBc2IQ2Nd4sLaHpYmIDkUogu3so51wG6P7PpclCx+Hsd
+	+6eB4hv3XkPhWi6E2CjUlxfh/TwoLTZ3+Z+xRhf1g7tatlz8U2ub/oh+gqB4XyUBLr9yu1zzXfO
+	wMY1f6dwDDlLrgagQZDjRUCvqa1GlZ9DXl+57q58c6Hky/jVFK/0wqZTy
+X-Received: by 2002:a05:6a20:918d:b0:366:14ac:e1f7 with SMTP id adf61e73a8af0-369b07ab627mr1259525637.73.1765530840058;
+        Fri, 12 Dec 2025 01:14:00 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IELRX7SnPRiviMlTSgk/0tB6eCplpLNDZWHl3aivotSRf1ij/an8wIly2PXn4fRkPYXltl+Rg==
+X-Received: by 2002:a05:6a20:918d:b0:366:14ac:e1f7 with SMTP id adf61e73a8af0-369b07ab627mr1259504637.73.1765530839512;
+        Fri, 12 Dec 2025 01:13:59 -0800 (PST)
 Received: from [127.0.1.1] (p99250-ipoefx.ipoe.ocn.ne.jp. [153.246.134.249])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29eea016e57sm48497255ad.63.2025.12.12.01.13.49
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29eea016e57sm48497255ad.63.2025.12.12.01.13.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Dec 2025 01:13:54 -0800 (PST)
+        Fri, 12 Dec 2025 01:13:59 -0800 (PST)
 From: Tal Zussman <tz2294@columbia.edu>
-Date: Fri, 12 Dec 2025 04:08:07 -0500
-Subject: [PATCH v2 1/2] x86/tlb/trace: Export the TLB_REMOTE_WRONG_CPU enum
+Date: Fri, 12 Dec 2025 04:08:08 -0500
+Subject: [PATCH v2 2/2] mm: Remove tlb_flush_reason::NR_TLB_FLUSH_REASONS
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -90,7 +90,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251212-tlb-trace-fix-v2-1-d322e0ad9b69@columbia.edu>
+Message-Id: <20251212-tlb-trace-fix-v2-2-d322e0ad9b69@columbia.edu>
 References: <20251212-tlb-trace-fix-v2-0-d322e0ad9b69@columbia.edu>
 In-Reply-To: <20251212-tlb-trace-fix-v2-0-d322e0ad9b69@columbia.edu>
 To: Steven Rostedt <rostedt@goodmis.org>,
@@ -111,67 +111,59 @@ Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Tal Zussman <tz2294@columbia.edu>,
         David Hildenbrand <david@kernel.org>
 X-Mailer: b4 0.14.3-dev-d7477
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1765530499; l=1293;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1765530499; l=689;
  i=tz2294@columbia.edu; s=20250528; h=from:subject:message-id;
- bh=3RXsGKqukvEhsXy2ryEgjMGzkVB8QVOoAFGKjU+lkAo=;
- b=u8Ap52Jd1shp/j5YC1M4uPMvXwfjjDYnAsVA6o3090sKSZmF8nxXTd4XMzAAufSFFftag/Sds
- I9zmJSMnLejCrmyrOBBN0KHmXvL13pBcYyuqAhhaNXDrChF9WQe589R
+ bh=EmdTK/fRZopBGWpziuNMPd4s3SKCTzTlZFLJE/4064U=;
+ b=UsUA/XaWe7PQ81AUFd/Djoo4VpRjtMdRkW6w61JAXpaFzEpvAYddwkNn4lF34ddKsrIvtCT5K
+ qasOL1ORuYzAbPIRlACXAmu8BfEbBJOoUBeMiE+Sy0LjYBxhUHo3KIn
 X-Developer-Key: i=tz2294@columbia.edu; a=ed25519;
  pk=BIj5KdACscEOyAC0oIkeZqLB3L94fzBnDccEooxeM5Y=
-X-Proofpoint-ORIG-GUID: txGfypJdgfLJeYZvfVR25s4kE5d0r2Mg
-X-Authority-Analysis: v=2.4 cv=Vd/6/Vp9 c=1 sm=1 tr=0 ts=693bdcd3 cx=c_pps
- a=JL+w9abYAAE89/QcEU+0QA==:117 a=gC7H+NTNV8TiHuUi9Bl0tg==:17
+X-Authority-Analysis: v=2.4 cv=LoGfC3dc c=1 sm=1 tr=0 ts=693bdcd8 cx=c_pps
+ a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=gC7H+NTNV8TiHuUi9Bl0tg==:17
  a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=x7bEGLp0ZPQA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=20KFwNOVAAAA:8
- a=fwyzoN0nAAAA:8 a=tN_j7I10ly-BD7A3SNgA:9 a=QEXdDO2ut3YA:10
- a=324X-CrmTo6CU4MGRt3R:22 a=2JgSa4NbpEOStq-L5dxp:22 a=Sc3RvPAMVtkGz6dGeUiH:22
-X-Proofpoint-GUID: txGfypJdgfLJeYZvfVR25s4kE5d0r2Mg
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEyMDA2OSBTYWx0ZWRfX5UKVAYooqOKp
- JFxRVH9GGAOjjm2IpuHVQIg/Wiol07JTlRaJFzimK+9J67ZE7yHuUYYdNuW2/J90lqrCU800j1A
- iaEfjP/fGnxKYV+sBXW+/mhkisNRAEES9ULZaax5qtX2CXUL3GQR/DJK9C72Rgkzl/Tw3wz/i6S
- zsZxN+tS80AxRC9Q7XdQEI+jvmXslu41V4+LyeYIKCWBjg+V7kbrj9GN3F0TI1mkdzQ17HzKT2U
- wfuWDPZmdyEosAnLx25Cf6KuRIZId3nHtD5BocRaVHmzWkWyy7/FfVSonVRlXN60aJQakq5Lx7a
- hHRVa5e6Vq8FmswnO4l73AeDBoA9TGd4brw9sRGFd0dIizxy76NN1jeeQye1MIGM33UpeEL35tl
- 9D/SsUL5tbiR/3NBcGYtweie0cmFQw==
+ a=VkNPw1HP01LnGYTKEx00:22 a=20KFwNOVAAAA:8 a=fwyzoN0nAAAA:8
+ a=pHWCnKJda-1CI8IbBYIA:9 a=QEXdDO2ut3YA:10 a=uKXjsCUrEbL0IQVhDsJ9:22
+ a=Sc3RvPAMVtkGz6dGeUiH:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEyMDA2OSBTYWx0ZWRfX7mdIz2qTPG3u
+ J/FHcPxN0MvxqrtVke7mwcvWePGTjKYwWHM7b42+Mh3D4YvpzUFEepLm3JNE3HkCSpRKQmzBYKk
+ Nuft7Pk5P95S6Op1Yj6b4Qoy3H26cAPfh6xcNYwmsSDj5Nq90+Adc9EBlAmrEps7yjMgvBY24fh
+ Q80yhNCXqvvJSlSq6MyGme5ZG2AyrUalqLC1S7uOgnw1zSpt3utGwVrNMlZTn6PopylMrnzEOMq
+ blI8VPG29tLhfSZ/vHOlDh7Wr3vgTJTQ97zpAJx4AteT2wepTCV+YvXN+shw6mrYFrJABWJLiP0
+ 2HFB6hrjS4V94ZNNaV+I1C1ZlHA5tNPIzr4RtzjxBHvh4ESTYLFTeMRlwyhjQ3d1cQI+xS1QI7n
+ sv0vb9tcUBQdW80RGYewRKAdfHTXiA==
+X-Proofpoint-GUID: 8IxE69xdED4glPEKovR1J8xAskwa3t9n
+X-Proofpoint-ORIG-GUID: 8IxE69xdED4glPEKovR1J8xAskwa3t9n
 X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11639
  signatures=596818
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=10 bulkscore=10 priorityscore=1501 adultscore=0
- lowpriorityscore=10 phishscore=0 malwarescore=0 clxscore=1015 spamscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ priorityscore=1501 suspectscore=0 clxscore=1011 impostorscore=10
+ lowpriorityscore=10 spamscore=0 bulkscore=10 phishscore=0 malwarescore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
  definitions=main-2512120069
 
-When the TLB_REMOTE_WRONG_CPU enum was introduced for the tlb_flush
-tracepoint, the enum was not exported to userspace. Add it to the
-appropriate macro definition to enable parsing by userspace tools, as
-per [0].
+This has been unused since it was added 11 years ago in commit
+d17d8f9dedb9 ("x86/mm: Add tracepoints for TLB flushes").
 
-[0] Link: https://lore.kernel.org/all/20150403013802.220157513@goodmis.org
-
-Fixes: 2815a56e4b72 ("x86/mm/tlb: Add tracepoint for TLB flush IPI to stale CPU")
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 Reviewed-by: Rik van Riel <riel@surriel.com>
 Signed-off-by: Tal Zussman <tz2294@columbia.edu>
 ---
- include/trace/events/tlb.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/mm_types.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/trace/events/tlb.h b/include/trace/events/tlb.h
-index b4d8e7dc38f8..725a75720a23 100644
---- a/include/trace/events/tlb.h
-+++ b/include/trace/events/tlb.h
-@@ -13,7 +13,8 @@
- 	EM(  TLB_REMOTE_SHOOTDOWN,	"remote shootdown" )		\
- 	EM(  TLB_LOCAL_SHOOTDOWN,	"local shootdown" )		\
- 	EM(  TLB_LOCAL_MM_SHOOTDOWN,	"local mm shootdown" )		\
--	EMe( TLB_REMOTE_SEND_IPI,	"remote ipi send" )
-+	EM(  TLB_REMOTE_SEND_IPI,	"remote ipi send" )		\
-+	EMe( TLB_REMOTE_WRONG_CPU,	"remote wrong CPU" )
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 9f6de068295d..42af2292951d 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -1631,7 +1631,6 @@ enum tlb_flush_reason {
+ 	TLB_LOCAL_MM_SHOOTDOWN,
+ 	TLB_REMOTE_SEND_IPI,
+ 	TLB_REMOTE_WRONG_CPU,
+-	NR_TLB_FLUSH_REASONS,
+ };
  
- /*
-  * First define the enums in TLB_FLUSH_REASON to be exported to userspace
+ /**
 
 -- 
 2.39.5
