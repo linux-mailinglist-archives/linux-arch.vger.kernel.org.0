@@ -1,48 +1,70 @@
-Return-Path: <linux-arch+bounces-15373-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15374-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AB7DCB7F84
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 06:53:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F387BCB814C
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 08:12:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 093213018996
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 05:53:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 618E730783A6
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Dec 2025 07:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05D14244692;
-	Fri, 12 Dec 2025 05:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E65832F5A3B;
+	Fri, 12 Dec 2025 07:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AyO/BSfw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f3JaFo7U"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E823C465;
-	Fri, 12 Dec 2025 05:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D3E1F12F8;
+	Fri, 12 Dec 2025 07:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765518802; cv=none; b=ls8Bs8YjOTnJtho1gY+NFjisv4S2hK4tY9xBaECDiZmX7moo0eMkFsL+8fxIbY+wVsIz7DMZx2e0vvrESuoXn+dsNbt/MTU8k97SauT0SA67QHsvrYbrytcZt/yIuz+UfMjXd77g0TCj6qIFhBvAYZy7pM6Sxd6+WtVjMQN0+gM=
+	t=1765523424; cv=none; b=aLo9MlKLSW2e6P+6TbfutCFLeQ7mlfq3rOAJHTKulnhPPSwEu9RIZU1M1AfLFT8Nv0m/KLSV7HyXkE4Kazl+xDwD6zDMO+4Ux0bY8AiAgC/8MmWp0X67CuCyFLphEBLN2dGS7XD7hoPZjh15M2En9HiFii6p710AMezqM6mFQsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765518802; c=relaxed/simple;
-	bh=hqZiXxUv6smJHZEauESfPalDA9+KANqTpadXMEusfNw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UtSESvPkb/iSuX3SpjXZjQYcz5M0VIDGRnSVTJhdoyrs5Bi5tJfutSTpmE0Eixc8gKJ+XepFxKYjQDHI5BQCpqtJasYvaQmOaFN3QgInhQiuuC9pwYnKICIwru0JM+f34FyQLq5I7ynY1OS3eQnlMydMCH/qUQNh2CQLNHU0rZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AyO/BSfw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E4EAC4CEF1;
-	Fri, 12 Dec 2025 05:53:22 +0000 (UTC)
+	s=arc-20240116; t=1765523424; c=relaxed/simple;
+	bh=dqVIubbkQVRJernqv5F3ELaqr4N3SUKjeivqxVsqbc4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nv9JQsBvIeWyF3ug1k+nv9r+2f3CCHCf8GwUlKy8HOPMvq1m1O6BrfFuljNWsgcQH+7/173BxiI8CL/gpLy3ixXkel34dcQ8XE0p+JL5C9wBiBQP1NW7Yp5Jc6/g2rNAobgwDgvjhAAwvrPAug+hhY0pnCaRBsl/T9CuZNABlqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f3JaFo7U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C211C4CEF1;
+	Fri, 12 Dec 2025 07:10:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765518802;
-	bh=hqZiXxUv6smJHZEauESfPalDA9+KANqTpadXMEusfNw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=AyO/BSfwTPEnPYiKTNe49XE5ReOcZayLHxn1jhIueisyharCn+IGjtVnILr1TyT4G
-	 nKspnHRVYrODD0i8/slxWhZO45GVoryW8+V/nxlc/cl74nTuJRbLhh3ggNHZOEBuYb
-	 QDmLjiWrVjXjswh87/9uwuRkEI8eFewPySbNTeNTwGLTcMN1WG3UEMMW4dyWT3R8WC
-	 usqvWUjSdiWX6RPs7TcBpBmWUvNqIWTkoQltHM7P5Np0sArdIfW5uDHthsrsmogOdO
-	 hIkW5ifAR2CVWEU0QaSLWbDYhAy2B4dDGsH3opzA5PTXmucpnskg1uCN7anY9zjNbX
-	 o+vLEGqelWAfA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F34E13809A37;
-	Fri, 12 Dec 2025 05:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1765523424;
+	bh=dqVIubbkQVRJernqv5F3ELaqr4N3SUKjeivqxVsqbc4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=f3JaFo7UNgQ1cS+tGpxQlQlH1Sdo1Fg6Esq7jGLZmQx4SnuABcKWUEiiAOvNYl99G
+	 8GMkZzyMNFS8wxZ5qdAPs6tbEevDiwFqkhD3xQOieDms+iq8ESZqxQ8PuJH1M68h7r
+	 R79RosnaRONJ+nN3JYvRUQ5V78dgIF1gEg2Ak5EY2iADIk8Q1qU9B6C2v2aVCimv0w
+	 7+BRkpmK53dtEDF45oj//0VTQsqmtyYCegCUMUbV58F/xryXFrXxM8+iM+kio4pvy/
+	 an5aeJB30efMoSJ1ijOs1Z1cR1IJGaRbl0+i1f6caBQXTcvfz9RPPPodCeOXEJltk2
+	 hoYGctWHYUbIQ==
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	"David Hildenbrand (Red Hat)" <david@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nick Piggin <npiggin@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>,
+	Rik van Riel <riel@surriel.com>,
+	Harry Yoo <harry.yoo@oracle.com>,
+	Laurence Oberman <loberman@redhat.com>,
+	Prakash Sangappa <prakash.sangappa@oracle.com>,
+	Nadav Amit <nadav.amit@gmail.com>
+Subject: [PATCH v2 0/4] mm/hugetlb: fixes for PMD table sharing (incl. using mmu_gather)
+Date: Fri, 12 Dec 2025 08:10:15 +0100
+Message-ID: <20251212071019.471146-1-david@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -50,114 +72,91 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v26 00/28] riscv control-flow integrity for usermode
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <176551861579.2032148.13920544388182691102.git-patchwork-notify@kernel.org>
-Date: Fri, 12 Dec 2025 05:50:15 +0000
-References: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com>
-In-Reply-To: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz,
- lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, conor@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- arnd@arndb.de, brauner@kernel.org, peterz@infradead.org, oleg@redhat.com,
- ebiederm@xmission.com, kees@kernel.org, corbet@lwn.net, shuah@kernel.org,
- jannh@google.com, conor+dt@kernel.org, ojeda@kernel.org,
- alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
- bjorn3_gh@protonmail.com, a.hindborg@kernel.org, aliceryhl@google.com,
- tmgross@umich.edu, lossin@kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
- andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
- atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
- alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
- rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
- zong.li@sifive.com, david@redhat.com, andreas.korb@aisec.fraunhofer.de,
- valentin.haudiquet@canonical.com, cmirabil@redhat.com
 
-Hello:
+One functional fix, one performance regression fix, and two related
+comment fixes.
 
-This series was applied to riscv/linux.git (for-next)
-by Paul Walmsley <pjw@kernel.org>:
+I cleaned up my prototype I recently shared [1] for the performance fix,
+deferring most of the cleanups I had in the prototype to a later point.
+While doing that I identified the other things.
 
-On Thu, 11 Dec 2025 09:20:33 -0800 you wrote:
-> v26: CONFIG_RISCV_USER_CFI depends on CONFIG_MMU (dependency of shadow stack
-> on MMU). Used b4 to pick tags, apparantly it messed up some tag picks. Fixing it
-> 
-> v25: Removal of `riscv_nousercfi` from `cpufeature.c` and instead placing
-> it as extern in `usercfi.h` was leading to build error whene cfi config
-> is not selected. Placed `riscv_nousercfi` outside cfi config ifdef block
-> in `usercfi.h`
-> 
-> [...]
+The goal of this patch set is to be backported to stable trees "fairly"
+easily. At least patch #1 and #4.
 
-Here is the summary with links:
-  - [v26,01/28] mm: VM_SHADOW_STACK definition for riscv
-    https://git.kernel.org/riscv/c/e53803e4a8c5
-  - [v26,02/28] dt-bindings: riscv: zicfilp and zicfiss in dt-bindings (extensions.yaml)
-    https://git.kernel.org/riscv/c/d6c9672baa77
-  - [v26,03/28] riscv: zicfiss / zicfilp enumeration
-    (no matching commit)
-  - [v26,04/28] riscv: zicfiss / zicfilp extension csr and bit definitions
-    (no matching commit)
-  - [v26,05/28] riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
-    https://git.kernel.org/riscv/c/2acf75f432dc
-  - [v26,06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
-    https://git.kernel.org/riscv/c/813c549f5b08
-  - [v26,07/28] riscv/mm: manufacture shadow stack pte
-    https://git.kernel.org/riscv/c/d3cea05f52a7
-  - [v26,08/28] riscv/mm: teach pte_mkwrite to manufacture shadow stack PTEs
-    https://git.kernel.org/riscv/c/444404ff99bf
-  - [v26,09/28] riscv/mm: write protect and shadow stack
-    https://git.kernel.org/riscv/c/5da46726825d
-  - [v26,10/28] riscv/mm: Implement map_shadow_stack() syscall
-    (no matching commit)
-  - [v26,11/28] riscv/shstk: If needed allocate a new shadow stack on clone
-    (no matching commit)
-  - [v26,12/28] riscv: Implements arch agnostic shadow stack prctls
-    https://git.kernel.org/riscv/c/46f2da262367
-  - [v26,13/28] prctl: arch-agnostic prctl for indirect branch tracking
-    https://git.kernel.org/riscv/c/5b23a2d70976
-  - [v26,14/28] riscv: Implements arch agnostic indirect branch tracking prctls
-    https://git.kernel.org/riscv/c/2b1bd48147c5
-  - [v26,15/28] riscv/traps: Introduce software check exception and uprobe handling
-    (no matching commit)
-  - [v26,16/28] riscv: signal: abstract header saving for setup_sigcontext
-    (no matching commit)
-  - [v26,17/28] riscv/signal: save and restore of shadow stack for signal
-    (no matching commit)
-  - [v26,18/28] riscv/kernel: update __show_regs to print shadow stack register
-    https://git.kernel.org/riscv/c/35d89b5390a9
-  - [v26,19/28] riscv/ptrace: riscv cfi status and state via ptrace and in core files
-    (no matching commit)
-  - [v26,20/28] riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
-    (no matching commit)
-  - [v26,21/28] riscv: kernel command line option to opt out of user cfi
-    (no matching commit)
-  - [v26,22/28] riscv: enable kernel access to shadow stack memory via FWFT sbi call
-    https://git.kernel.org/riscv/c/ef83c58ab12f
-  - [v26,23/28] arch/riscv: compile vdso with landing pad and shadow stack note
-    (no matching commit)
-  - [v26,24/28] arch/riscv: dual vdso creation logic and select vdso based on hw
-    https://git.kernel.org/riscv/c/fbe7823a03f1
-  - [v26,25/28] riscv: create a config for shadow stack and landing pad instr support
-    (no matching commit)
-  - [v26,26/28] riscv: Documentation for landing pad / indirect branch tracking
-    (no matching commit)
-  - [v26,27/28] riscv: Documentation for shadow stack on riscv
-    (no matching commit)
-  - [v26,28/28] kselftest/riscv: kselftest for user mode cfi
-    (no matching commit)
+Patch #1 fixes hugetlb_pmd_shared() not detecting any sharing
+Patch #2 + #3 are simple comment fixes that patch #4 interacts with.
+Patch #4 is a fix for the reported performance regression due to excessive
+IPI broadcasts during fork()+exit().
 
-You are awesome, thank you!
+The last patch is all about TLB flushes, IPIs and mmu_gather.
+Read: complicated
+
+I added as much comments + description that I possibly could, and I am
+hoping for review from Jann.
+
+There are plenty of cleanups in the future to be had + one reasonable
+optimization on x86. But that's all out of scope for this series.
+
+Compile tested on plenty of architectures.
+
+Runtime tested, with a focus on fixing the performance regression using
+the original reproducer [2] on x86.
+
+I'm still busy with more testing (making sure that my TLB flushing changes
+are good), but sending this out already so people can test and review
+while I am soon heading for LPC.
+
+[1] https://lore.kernel.org/all/8cab934d-4a56-44aa-b641-bfd7e23bd673@kernel.org/
+[2] https://lore.kernel.org/all/8cab934d-4a56-44aa-b641-bfd7e23bd673@kernel.org/
+
+--
+
+v1 -> v2:
+* Picked RB's/ACK's, hopefully I didn't miss any
+* Added the initialization of fully_unshared_tables in __tlb_gather_mmu()
+  (Thanks Nadav!)
+* Refined some comments based on Lorenzo's feedback.
+
+Sending it out already as I have some spare minutes and we should start
+queuing the fixed version. Maybe there will be some more comment changes
+later based on the discussion with Lorenzo.
+
+Cc: Will Deacon <will@kernel.org>
+Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nick Piggin <npiggin@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Jann Horn <jannh@google.com>
+Cc: Pedro Falcato <pfalcato@suse.de>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Harry Yoo <harry.yoo@oracle.com>
+Cc: Uschakow, Stanislav" <suschako@amazon.de>
+Cc: Laurence Oberman <loberman@redhat.com>
+Cc: Prakash Sangappa <prakash.sangappa@oracle.com>
+Cc: Nadav Amit <nadav.amit@gmail.com>
+
+David Hildenbrand (Red Hat) (4):
+  mm/hugetlb: fix hugetlb_pmd_shared()
+  mm/hugetlb: fix two comments related to huge_pmd_unshare()
+  mm/rmap: fix two comments related to huge_pmd_unshare()
+  mm/hugetlb: fix excessive IPI broadcasts when unsharing PMD tables
+    using mmu_gather
+
+ include/asm-generic/tlb.h |  74 +++++++++++++++++++++-
+ include/linux/hugetlb.h   |  21 ++++---
+ mm/hugetlb.c              | 129 ++++++++++++++++++++------------------
+ mm/mmu_gather.c           |   7 +++
+ mm/mprotect.c             |   2 +-
+ mm/rmap.c                 |  45 +++++++------
+ 6 files changed, 184 insertions(+), 94 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.52.0
 
 
