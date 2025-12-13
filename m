@@ -1,50 +1,67 @@
-Return-Path: <linux-arch+bounces-15387-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15388-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC2ACCBA642
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Dec 2025 07:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA1BCBA670
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Dec 2025 08:10:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3692C307DC79
-	for <lists+linux-arch@lfdr.de>; Sat, 13 Dec 2025 06:57:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 614813091A36
+	for <lists+linux-arch@lfdr.de>; Sat, 13 Dec 2025 07:10:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EB041DF25C;
-	Sat, 13 Dec 2025 06:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E766A23BCF7;
+	Sat, 13 Dec 2025 07:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="2Wp77FJW"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="a+SWfhFi"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D1C19E992;
-	Sat, 13 Dec 2025 06:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18465212B0A;
+	Sat, 13 Dec 2025 07:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.35.192.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765609042; cv=none; b=TaIX2YSN9nsNUc/XREgZNaEVFx/XeAiUbzfta1zMJK8ALvQW7ArEthighigLlw1o49ZekqEdFHXetDzXwDBbPrK7kGGK6lmQPxHhxEYbhkSX4PgtyTTRncxyk5s9ddJO6KeH8j69AgWtjoDMWknGhR+RJ30+fqg9LzL7ZJVtF1I=
+	t=1765609840; cv=none; b=fC8sHE088tZ1XbGh2MBU/pL+Nifi0QV4rJyK2lptx+OEWs1RXvv7KJPAWndtQyl4IYiYgEJPx2b9IiPuwfnMMOk4754BfW3v+0aWzuJaRl9MvmObxJUVLgmCHCr0ExLn4qquz+GYehcuUcteSCDfBOMAOy52jMOZYPbgshqIREk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765609042; c=relaxed/simple;
-	bh=Qj0khJmUFOHX1x+G6h6dTnfGsEgUD6DX7A42tG3lZz4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B8Y+KWaqTFHFflelpJrYzPLvWMB41v4rTflviIqeWbRAC6s35+tTbLUJZC20hsxwgeUNUGJS8FPg5V9Y0oIM19WSMKt1ecdUwp5A9KWwjDRAclk4uLFX2XC2JQ8rl/wFun1gtjC8w3DHInvHTcHvIH2zmB5BwRtXn1hWyNxfRj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=2Wp77FJW; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=UxVyimGao7p0sqobtYKOAtYcaEFn3ktSbdCzD3T7UOM=; b=2Wp77FJW1QESi4u/Ikpi/5sH98
-	2n09GBbxkBnzNeqR7/bLDordnvS0VbZ3ISU+6B/iF2FyALRRwyWaFgYrLrm68hMGQ2TKr1AP03xBx
-	9Hj4cmilLnMyteyZVGWxdsdye3IzECUwZu/a632Vwt8dF5pSQQXA6Vn3bfCgeoTEFOd+la+5ycefT
-	XbQ4c0xVUBZFsNadBc+Mhun8jPAM8YcsnRiMciyE48aFXqkhLimuJLnXbledwuEV8VQe7Kvt83dHb
-	0NbFfYdlDF761J3TDFvi0J0e9S5TE6CgjsgfUs1TyQ6oCF4YjYcfpOL9wbOhOxqnSDYqSmSLGj2Ii
-	eejUXsVg==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vUJYx-00000001TgZ-1cAT;
-	Sat, 13 Dec 2025 06:57:07 +0000
-Message-ID: <5903a8e1-71c6-4546-ac50-35effa078dda@infradead.org>
-Date: Fri, 12 Dec 2025 22:57:02 -0800
+	s=arc-20240116; t=1765609840; c=relaxed/simple;
+	bh=o9fJXDtXoVKnzhNQS1ylDA8uNXeuK84gVZGRdlqfvSA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=O1St/QZQqe9uar8xYMcrmKSESTLOQvt7ordKJcT5RrK859aapBqqBWQCKM6ekJOHyGtQtYeEkYGpZ/4eeBR1hmSihtwV/S1v96SRdcjqLc4VKPFarfcdFYOf6njaQzCItiJvOXIsnhplGHOVASHNmiqMyCLeTQa8lnOHNO2Q7zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=a+SWfhFi; arc=none smtp.client-ip=52.35.192.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1765609839; x=1797145839;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=o9fJXDtXoVKnzhNQS1ylDA8uNXeuK84gVZGRdlqfvSA=;
+  b=a+SWfhFiXMgL08aqV6lOgN1M8bYD3xtA2fq/xgCcDe+A7kI2JSRIwt0a
+   Fp/RKuckDw/winljMCuNIsr3Or63Qk8F0UoZwuPZQgq3oLg01GJkHeybt
+   gxqjo52UoCV3/f9N3n9YfYjnKfxK+17yTpvIVJfzwcyQHKhCki0coqWhc
+   oNTR7MDUMxjkRF55+oNUVTsU2WCcXNczBKvUm6WBRTlW7RG4auwIFgOTo
+   5TYudDgSccEnyk2ElHy+bZWWCTEoivnyVqn8yGWDwyaXHnvj+vwFAWKvD
+   c7qT3RF1cxyDnU1i5UP6rYk7vdQYep2risGpqu2ibNDV6FSsVMj5jvfus
+   w==;
+X-CSE-ConnectionGUID: IArTKZvNTse5aI0KzG9AZQ==
+X-CSE-MsgGUID: kwnkf6iXRHa0M3DtExxWHQ==
+X-IronPort-AV: E=Sophos;i="6.21,145,1763424000"; 
+   d="scan'208";a="8795544"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2025 07:10:36 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:26686]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.45.135:2525] with esmtp (Farcaster)
+ id 0748e64d-5e43-4bf2-9d47-0b42a67cdd9d; Sat, 13 Dec 2025 07:10:36 +0000 (UTC)
+X-Farcaster-Flow-ID: 0748e64d-5e43-4bf2-9d47-0b42a67cdd9d
+Received: from EX19D020UWC004.ant.amazon.com (10.13.138.149) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
+ Sat, 13 Dec 2025 07:10:36 +0000
+Received: from [0.0.0.0] (172.19.99.218) by EX19D020UWC004.ant.amazon.com
+ (10.13.138.149) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Sat, 13 Dec 2025
+ 07:10:27 +0000
+Message-ID: <e4d1c333-7e22-47ee-81a0-2efc4ca6b17c@amazon.com>
+Date: Sat, 13 Dec 2025 16:10:22 +0900
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -52,128 +69,64 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/26] Introduce meminspect
-To: Eugen Hristev <eugen.hristev@linaro.org>, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, tglx@linutronix.de,
- andersson@kernel.org, pmladek@suse.com, corbet@lwn.net, david@redhat.com,
- mhocko@suse.com
-Cc: tudor.ambarus@linaro.org, mukesh.ojha@oss.qualcomm.com,
- linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
- jonechou@google.com, rostedt@goodmis.org, linux-doc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-arch@vger.kernel.org, tony.luck@intel.com, kees@kernel.org,
- Trilok Soni <tsoni@quicinc.com>, Kaushal Kumar <kaushalk@qti.qualcomm.com>,
- Shiraz Hashim <shashim@qti.qualcomm.com>,
- Peter Griffin <peter.griffin@linaro.org>, stephen.s.brennan@oracle.com,
- Will McVicker <willmcvicker@google.com>,
- "stefan.schmidt@linaro.org" <stefan.schmidt@linaro.org>
-References: <20251119154427.1033475-1-eugen.hristev@linaro.org>
- <bf00eec5-e9fe-41df-b758-7601815b24a0@linaro.org>
+Subject: Re: [RFC PATCH] liveupdate: list all file handler versions in vmlinux
+ section
+To: Pratyush Yadav <pratyush@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	"Pasha Tatashin" <pasha.tatashin@soleen.com>, Mike Rapoport
+	<rppt@kernel.org>, "Andrew Morton" <akpm@linux-foundation.org>, Dan Carpenter
+	<dan.carpenter@linaro.org>, Jason Gunthorpe <jgg@nvidia.com>, Samiullah
+ Khawaja <skhawaja@google.com>, David Matlack <dmatlack@google.com>, David
+ Rientjes <rientjes@google.com>, Jason Miu <jasonmiu@google.com>
+CC: <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <kexec@lists.infradead.org>
+References: <20251211042624.175517-1-pratyush@kernel.org>
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <bf00eec5-e9fe-41df-b758-7601815b24a0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Alexander Graf <graf@amazon.com>
+In-Reply-To: <20251211042624.175517-1-pratyush@kernel.org>
+X-ClientProxiedBy: EX19D036UWB004.ant.amazon.com (10.13.139.170) To
+ EX19D020UWC004.ant.amazon.com (10.13.138.149)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
 
-Hi,
-
-On 12/12/25 10:48 PM, Eugen Hristev wrote:
-> 
-> 
-> On 11/19/25 17:44, Eugen Hristev wrote:
->> meminspect is a mechanism which allows the kernel to mark specific memory
->> areas for memory dumping or specific inspection, statistics, usage.
->> Once regions are marked, meminspect keeps an internal list with the regions
->> in a dedicated table.
-> 
-> [...]
-> 
-> 
->> I will present this version at Plumbers conference in Tokyo on December 13th:
->> https://lpc.events/event/19/contributions/2080/
->> I am eager to discuss it there face to face.
-> 
-> Summary of the discussions at LPC talk on Dec 13th:
-> 
-> One main idea on the static variables annotation was to do some linker
-> magic, to create a list of variables in the tree, that would be parsed
-> by some script, the addresses and sizes would be then stored into the
-> dedicated section at the script level, without having any C code change.
-> Pros: no C code change, Cons: it would be hidden/masked from the code,
-> easy to miss out, which might lead to people's variables being annotated
-> without them knowing
-> 
-> Another idea was to have variables directly stored in a dedicated
-> section which would be added to the table.
-> e.g. static int __attribute(section (...)) nr_irqs;
-> Pros: no more meminspect section Cons: have to keep all interesting
-> variables in a separate section, which might not be okay for everyone.
-> 
-> On dynamic memory, the memblock flag marking did not receive any obvious
-> NAKs.
-> 
-> On dynamic memory that is bigger in size than one page, as the table
-> entries are registered by virtual address, this would be non-contiguous
-> in physical memory. How is this solved?
-> -> At the moment it's left for the consumer drivers to handle this
-> situation. If the region is a VA and the size > PAGE_SIZE, then the
-> driver needs to handle the way it handles it. Maybe the driver that
-> parses the entry needs to convert it into multiple contiguous entries,
-> or just have virtual address is enough. The inspection table does not
-> enforce or limit the entries to contiguous entries only.
-> 
-> On the traverse/notifier system, the implementation did not receive any
-> obvious NAKs
-> 
-> General comments:
-> 
-> Trilok Soni from Qualcomm mentioned they will be using this into their
-> software deliveries in production.
-> 
-> Someone suggested to have some mechanism to block specific data from
-> being added to the inspection table as being sensitive non-inspectable
-> data.
-> [Eugen]: Still have to figure out how that could be done. Stuff is not
-> being added to the table by default.
-> 
-> Another comment was about what use case there is in mind, is this for
-> servers, or for confidential computing, because each different use case
-> might have different requirements, like ignoring some regions is an
-> option in one case, but bloating the table in another case might not be
-> fine.
-> [Eugen]: The meminspect scenario should cover all cases and not be too
-> specific. If it is generic enough and customizable enough to care for
-> everyone's needs then I consider it being a success. It should not
-> specialize in neither of these two different cases, but rather be
-> tailored by each use case to provide the mandatory requirements for that
-> case.
-> 
-> Another comment mentioned that this usecase does not apply to many
-> people due to firmware or specific hardware needed.
-> [Eugen]: one interesting proposed usecase is to have a pstore
-> driver/implementation that would traverse the inspection table at panic
-> handler time, then gather data from there to store in the pstore
-> (ramoops, mtdoops or whatever backend) and have it available to the
-> userspace after reboot. This would be a nice use case that does not
-> require firmware nor specific hardware, just pstore backend support.
-> 
-> Ending note was whether this implementation is going in a good direction
-> and what would be the way to having it moving upstream.
-> 
-> Thanks everyone who attended and came up with ideas and comments.
-> There are a few comments which I may have missed, so please feel free to
-> reply to this email to start a discussion thread on the topic you are
-> interested in.
-> 
-> Eugen
-> 
-
-Maybe you or someone else has already mentioned this. If so, sorry I missed it.
-
-How does this compare or contrast to VMCOREINFO?
-
-thanks.
--- 
-~Randy
+SGkgUHJhdHl1c2gsCgpPbiAxMC4xMi4yNSAyMDoyNiwgUHJhdHl1c2ggWWFkYXYgd3JvdGU6Cj4g
+QXMgbGl2ZSB1cGRhdGUgZXZvbHZlcywgdGhlcmUgd2lsbCBiZSBhIG5lZWQgdG8gdXBkYXRlIHRo
+ZSBzZXJpYWxpemF0aW9uCj4gZm9ybWF0cyBmb3IgdGhlIGRpZmZlcmVudCBmaWxlIHR5cGVzLiBU
+aGlzIGNvdWxkIGJlIGZvciBhZGRpbmcgbmV3Cj4gZmVhdHVyZXMsIGZvciBzdXBwb3J0aW5nIGEg
+Y2hhbmdlIGluIGJlaGF2aW91ciwgb3IgdG8gZml4IGJ1Z3MuCj4KPiBJZiB0aGUgY3VycmVudCBr
+ZXJuZWwgZG9lcyBub3QgdW5kZXJzdGFuZCB0aGUgc2FtZSBzZXQgb2YgdmVyc2lvbnMgYXMKPiB0
+aGUgbmV4dCBrZXJuZWwsIGxpdmUgdXBkYXRlIHdpbGwgaW5ldml0YWJseSBmYWlsLiBUaGUgbmV4
+dCBrZXJuZWwgd2lsbAo+IGJlIHVuYWJsZSB0byB1bmRlcnN0YW5kIHRoZSBoYW5kZWQgb3ZlciBk
+YXRhIGFuZCB3aWxsIGJlIHVuYWJsZSB0bwo+IHJlc3RvcmUgbWVtb3J5LCBkZXZpY2VzLCBJT01N
+VSBwYWdlIHRhYmxlcywgZXRjLgo+Cj4gTGlzdCB0aGUgc2V0IG9mIHZlcnNpb25zIHRoZSBrZXJu
+ZWwgdW5kZXJzdGFuZHMgaW4gYSBzZWN0aW9uIGluIHZtbGludXguCj4gVGhpcyBjYW4gdGhlbiBi
+ZSB1c2VkIGJ5IHVzZXJzcGFjZSB0b29saW5nIHRvIG1ha2Ugc3VyZSB0aGUgc2V0IG9mIGZpbGUK
+PiBkZXNjcmlwdG9ycyBpdCB1c2VzIGhhdmUgdGhlIHNhbWUgdmVyc2lvbiBiZXR3ZWVuIGJvdGgg
+a2VybmVscy4gSWYgdGhlcmUKPiBpcyBhIG1pc21hdGNoLCB0aGUgdG9vbGluZyBjYW4gY2F0Y2gg
+dGhpcyBlYXJseSBhbmQgYWJvcnQgbGl2ZSB1cGRhdGUKPiBiZWZvcmUgaXQgaXMgdG9vIGxhdGUu
+Cj4KPiBUaGUgdmVyc2lvbnMgYXJlIGxpc3RlZCBpbiBhIHNlY3Rpb24gY2FsbGVkICIubGl2ZXVw
+ZGF0ZV92ZXJzaW9ucyIuIFRoZQo+IHNlY3Rpb24gaGFzIGEgaGVhZGVyIHRoYXQgY29udGFpbnMg
+YSBtYWdpYyBudW1iZXIgYW5kIHRoZSB2ZXJzaW9uIG9mIHRoZQo+IGRhdGEgZm9ybWF0LiBUaGUg
+bGlzdCBvZiB2ZXJzaW9uIHN0cmluZ3MgZGlyZWN0bHkgZm9sbG93IHRoaXMgaGVhZGVyLgo+IE9u
+bHkgdGhlIHZlcnNpb24gc3RyaW5ncyBhcmUgbGlzdGVkLCBhbmQgaXQgaXMgdXAgdG8gdXNlcnNw
+YWNlIHRvIG1hcAo+IHRoZW0gdG8gZmlsZSBkZXNjcmlwdG9yIHR5cGVzLgo+Cj4gVGhlIGZvcm1h
+dCBvZiB0aGUgc2VjdGlvbiBoYXMgdGhlIHNhbWUgQUJJIHJ1bGVzIGFzIHRoZSByZXN0IG9mIExV
+TyBBQkkuCj4KPiBJbnRyb2R1Y2UgYSBMSVZFVVBEQVRFX0ZJTEVfSEFORExFUiBtYWNybyB0aGF0
+IG1ha2VzIGl0IGVhc3kgdG8gZGVmaW5lIGEKPiBmaWxlIGhhbmRsZXIgd2hpbGUgYWxzbyBhZGRp
+bmcgaXRzIHZlcnNpb24gc3RyaW5nIHRvIHRoZSByaWdodCBzZWN0aW9uLgo+Cj4gU2lnbmVkLW9m
+Zi1ieTogUHJhdHl1c2ggWWFkYXYgPHByYXR5dXNoQGtlcm5lbC5vcmc+CgoKVG8gc3VwcG9ydCBt
+dWx0aS12ZXJzaW9uIHByZXNlcnZhdGlvbiBhbmQgcmVzdW1lLCBob3cgYWJvdXQgeW91IGFkZCBh
+IAoicHJvZmlsZSIgaGludCB0byB0aGUgaGFuZGxlcnM/IFRoZW4geW91IGNhbiB0YWcgdGhlIGhh
+bmRsZXJzIHdpdGggCiJjdXJyZW50IiBhbmQgYSAicHJldmlvdXMiLiBZb3UgdGhlbiBleHBvc2Ug
+b25lIHNlY3Rpb24gdGFibGUgd2l0aCAKc3VwcG9ydGVkIHZlcnNpb25zIHBlciBwcm9maWxlLiBB
+bmQgdGhhdCBtZWFucyB5b3UgY2FuIGZyb20gdXNlciBzcGFjZSAKc2VsZWN0IHRoZSBsb2NhbCBw
+cm9maWxlIHRvIHNlcmlhbGl6ZSBhbmQgbWF0Y2ggdGhhdCBhZ2FpbnN0IHRoZSB0YXJnZXQgCnBy
+b2ZpbGUgb2YgdGhlIHRhcmdldCBzeXN0ZW0uCgpJdCBhbHNvIGFsbG93cyB5b3UgdG8gc3VwcG9y
+dCBtb3JlICJwcm9maWxlcyIsIHN1Y2ggYXMgZWxhYm9yYXRlIApkb3duc3RyZWFtIHZlcnNpb24g
+Y29tYmluYXRpb25zLCB0aGF0IHVwc3RyZWFtIHdpbGwgbm90IGhhdmUgdG8gY2FyZSBhYm91dC4K
+CgpBbGV4CgoKCgoKQW1hem9uIFdlYiBTZXJ2aWNlcyBEZXZlbG9wbWVudCBDZW50ZXIgR2VybWFu
+eSBHbWJIClRhbWFyYS1EYW56LVN0ci4gMTMKMTAyNDMgQmVybGluCkdlc2NoYWVmdHNmdWVocnVu
+ZzogQ2hyaXN0b2YgSGVsbG1pcywgQW5kcmVhcyBTdGllZ2VyCkVpbmdldHJhZ2VuIGFtIEFtdHNn
+ZXJpY2h0IENoYXJsb3R0ZW5idXJnIHVudGVyIEhSQiAyNTc3NjQgQgpTaXR6OiBCZXJsaW4KVXN0
+LUlEOiBERSAzNjUgNTM4IDU5Nwo=
 
 
