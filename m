@@ -1,217 +1,110 @@
-Return-Path: <linux-arch+bounces-15417-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15418-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22B12CBE762
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 16:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8071ECBF2C1
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 18:12:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0AFB1305D9B8
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 14:55:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 597E630A35CC
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 17:03:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5120034A3C4;
-	Mon, 15 Dec 2025 14:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922E5342513;
+	Mon, 15 Dec 2025 16:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="niGNJ/9n"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1Zz73sIg";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DbTPDRX8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245AC263C7F;
-	Mon, 15 Dec 2025 14:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE392342506;
+	Mon, 15 Dec 2025 16:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765810085; cv=none; b=KJwhmbHHWv2tp4DOjqF79nal2L+hG1MKFaYQN2aWRZ5c4IZhmzclvTOlrr1kvypxB0tN+IX56rHtjALeQdhQUaF3InHk3OS5Za4XxWQn+AzQewe8LaDcF6uaGL5+EGStciPM+m3T1QMbw3XwJA867UN2ll3MCfYyeHgB/YTfc3w=
+	t=1765817527; cv=none; b=f7l8QextTC7T2R/2aJ0uNnt8A9LF+lY+CIqcLqxrP3VMreCxi5bODc5mpnD6FCDd8ADP3h2XLbn1Q8VlleU+WkZmGi7JHlAYBpu2YFg7sN6lOtasfde4bx5Ntpb9C4UptMcOd751smbTKphwATg/ty85Uo3k3fWCpfbr9Qxw9vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765810085; c=relaxed/simple;
-	bh=mV3B6xzBDJJhXBY0+MuZ/E/eWrtZv1dU8DuL0QrCJos=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dRddLCNc7MJfSRGiZuTumNaDs7P3NW/oAuHBgtMmWxOdpu0Fi+SAwSHUmBMAM8J0UWi6onuQnpjpRi88eCQNNcP9jbn8GdOe9IdtHGQ8V1xmah+GCA6NIq5+jjZrDsKhQGKh9nKK+YIC9Q9eEjHQ7tGXZfFLTDn9BTiTO0nrlWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=niGNJ/9n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7732C4CEF5;
-	Mon, 15 Dec 2025 14:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765810084;
-	bh=mV3B6xzBDJJhXBY0+MuZ/E/eWrtZv1dU8DuL0QrCJos=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=niGNJ/9nLNAcG7+GscG5rl1VsKZF8bJb/qYslvcYV+zGeLxb07aeoEgPu7HJ/Sthn
-	 mFTV0AClsXOnG6AmRKVOtCOwiVhUW36xovmM47DlfU7ZCIr6Z78vylhzbYZeYBBp0T
-	 KwZ9YbjhYZ2JsYtvfh/0rnU5uqCmztM9pKxAGGrGEP6Re38zxFnZcTuZ7jBF+M4+Nc
-	 Gw46iMjDQex4/+CrSySB+0oOSvSsgZjB1M6y6aarXaxSVBZ28Oz2q5IqAWk1XNGGNt
-	 liezIwU5PL2imabkYE7mALE09KoTRj0q+rKwxm0xnNvUyvIGkQmPtwj4PbFejZ6P4t
-	 3SE3nGyR6NsIg==
-Message-ID: <937a4525-910d-4596-a9c4-29e47ca53667@kernel.org>
-Date: Mon, 15 Dec 2025 15:47:57 +0100
+	s=arc-20240116; t=1765817527; c=relaxed/simple;
+	bh=qMC/3WaPWPsEC8GpkNEeJ/+onzOIu61ZnRMKgIhJqWs=;
+	h=Message-ID:From:To:Cc:Subject:Date; b=XalPmzL2nc5SMvutz7cbtYjzHoid7/Xb17nAZN9bCobg9HN9JaR9bGn54zA5JDRCFKnX+U5bnNjAVD+W3vPofd1MIBRc4lJOEB4pdB5IpVCXfuuW1x/61HI3LN7i8qOnRVEiKm39hVT8lhuMFnvwfkpL+zqF7t/HKRly41QpbzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1Zz73sIg; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DbTPDRX8; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Message-ID: <20251215155615.870031952@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1765817523;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc; bh=4dTT3aJAqWsVF4pZKsCUZEHviWLQKtu1DpUBLD2IFv0=;
+	b=1Zz73sIg28zTHw+N3V/dMtBvqjWBnpe2u3YcF8ZxGGFf1vFwKuXn5IDH7fPZq4kIsdHnzI
+	xHv66LXe17eFqjtHv0ImwlWGLWGqI1ZigMnYpJ1NVYlIsqZt+TU2R+Inu26UH1hZ5d2kRV
+	80OXRA1hU/SyyeEagufn6G1kSFphTK+UyWcLRf/xBkuVFpFHX//XM6j8PhswlwJB/EdO+v
+	HpsCUWyhyh8zT4cV6rxEHm3dRLdXF17EVO5xA+ItOORhawjdHmNMrv9Vh1yXammaCjt4h9
+	He4mOKg6RJJAXPwnowe3WX+234+/BNcBYGB5V+yrKUUmnY+NYa8A6H8fpfWQhg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1765817523;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc; bh=4dTT3aJAqWsVF4pZKsCUZEHviWLQKtu1DpUBLD2IFv0=;
+	b=DbTPDRX8V/wk1aGk4XNpgv2BMQj/dud4bYxkADcBo/cYvLv8X22zy/AeIldc7lWL4MOEv7
+	uB3PVEKGax3gp7DQ==
+From: Thomas Gleixner <tglx@linutronix.de>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Prakash Sangappa <prakash.sangappa@oracle.com>,
+ Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ron Geva <rongevarg@gmail.com>,
+ Waiman Long <longman@redhat.com>
+Subject: [patch V6 00/11] rseq: Implement time slice extension mechanism
+Date: Mon, 15 Dec 2025 17:52:01 +0100 (CET)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 4/4] mm/hugetlb: fix excessive IPI broadcasts when
- unsharing PMD tables using mmu_gather
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, Rik van Riel <riel@surriel.com>,
- Harry Yoo <harry.yoo@oracle.com>, Laurence Oberman <loberman@redhat.com>,
- Prakash Sangappa <prakash.sangappa@oracle.com>,
- Nadav Amit <nadav.amit@gmail.com>, stable@vger.kernel.org
-References: <20251205213558.2980480-1-david@kernel.org>
- <20251205213558.2980480-5-david@kernel.org>
- <c641335e-39aa-490a-b587-4a2586917bc9@lucifer.local>
- <9ac7c53e-04ae-49f3-976d-44d1e29587d1@kernel.org>
- <07e8b94e-b4a1-4541-84ed-a5d57058d5a1@lucifer.local>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-In-Reply-To: <07e8b94e-b4a1-4541-84ed-a5d57058d5a1@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+This is a follow up on the V5 version:
 
->>>
->>> As Nadav points out, should also initialise fully_unshared_tables.
->>
->> Right, but on an earlier init path, not on the range reset path here.
-> 
-> Shouldn't we reset it also?
-> 
-> I mean __tlb_reset_range() is also called by __tlb_gather_mmu() (invoked by
-> tlb_gather_mmu[_fullmm]()).
-> 
+     https://lore.kernel.org/20251128225931.959481199@linutronix.de
 
-__tlb_reset_range() is all about flushing the TLB.
+V1 contains a detailed explanation:
 
-In v2 I have:
+     https://lore.kernel.org/20250908225709.144709889@linutronix.de
 
-diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-index 247e3f9db6c7a..030a162a263ba 100644
---- a/mm/mmu_gather.c
-+++ b/mm/mmu_gather.c
-@@ -426,6 +426,7 @@ static void __tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
-  #endif
-         tlb->vma_pfn = 0;
-  
-+       tlb->fully_unshared_tables = 0;
-         __tlb_reset_range(tlb);
-         inc_tlb_flush_pending(tlb->mm);
-  }
+TLDR: Time slice extensions are an attempt to provide opportunistic
+priority ceiling without the overhead of an actual priority ceiling
+protocol, but also without the guarantees such a protocol provides.
 
+The intent is to avoid situations where a user space thread is interrupted
+in a critical section and scheduled out, while holding a resource on which
+the preempting thread or other threads in the system might block on. That
+obviously prevents those threads from making progress in the worst case for
+at least a full time slice. Especially in the context of user space
+spinlocks, which are a patently bad idea to begin with, but that's also
+true for other mechanisms.
 
->>
->>>
->>>>    	/*
->>>>    	 * Do not reset mmu_gather::vma_* fields here, we do not
->>>>    	 * call into tlb_start_vma() again to set them if there is an
->>>> @@ -484,7 +496,7 @@ static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
->>>>    	 * these bits.
->>>>    	 */
->>>>    	if (!(tlb->freed_tables || tlb->cleared_ptes || tlb->cleared_pmds ||
->>>> -	      tlb->cleared_puds || tlb->cleared_p4ds))
->>>> +	      tlb->cleared_puds || tlb->cleared_p4ds || tlb->unshared_tables))
->>>
->>> What about fully_unshared_tables? I guess though unshared_tables implies
->>> fully_unshared_tables.
->>
->> fully_unshared_tables is only for triggering IPIs and consequently not about
->> flushing TLBs.
->>
->> The TLB part is taken care of by unshared_tables, and we will always set
->> unshared_tables when unsharing any page tables (incl. fully unshared ones).
-> 
-> OK, so is there ever a situation where fully_unshared_tables would be set
-> without unshared_tables? Presumably not.
+This series uses the existing RSEQ user memory to implement it.
 
-tlb_unshare_pmd_ptdesc() will always set "unshared_tables" but only conditionally
-sets "fully_unshared_tables".
+Changes vs. V5:
 
-"unshared_tables" might get handled by a prior TLB flush,
-leaving only fully_unshared_tables set to perform the IPI in tlb_flush_unshared_tables().
+   - Rebase on v6.19-rc1
 
-So the important part is that whenever we unshare, we set "unshared_tables".
+   - Fold typo fixes - Sebastian
 
-[...]
+   - Switch to syscall number 471
 
->>>> +{
->>>> +	/*
->>>> +	 * As soon as the caller drops locks to allow for reuse of
->>>> +	 * previously-shared tables, these tables could get modified and
->>>> +	 * even reused outside of hugetlb context. So flush the TLB now.
->>>
->>> Hmm but you're doing this in both the case of unshare and fully unsharing, so is
->>> this the right place to make this comment?
->>
->> That's why I start the comment below with "Similarly", to make it clear that
->> the comments build up on each other.
->>
->> But I'm afraid I might not be getting your point fully here :/
-> 
-> what I mean is, if we are not at the point of the table being fully unshared,
-> nobody else can come in and reuse it right? Because we're still using it, just
-> dropped a ref + flushed tlb?
+The series is based on v6.19-rc1 and is also available from git:
 
-After we drop the lock, someone else could fully unshare it. And that other (MM) would
-not be able to flush the TLB for us -- in contrast to the IPI that would affect all
-CPUs.
+    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/slice
 
-> 
-> Isn't really the correct comment here that ranges that previously mapped the
-> shared pages might no longer, so we must clear the TLB? I may be missing
-> something :)
+Thanks,
 
-There are cases where we defer flushing the TLB until we dropped all (exclusive) locks.
-In particular, MADV_DONTNEED does that in some cases, essentially deferring the flush
-to the tlb_finish_mmu().
-
-free_pgtables() will also defer the flush, performing the TLB flush during tlb_finish_mmu(),
-before
-
-The point is (as I tried to make clear in the comment), for unsharing we have no control
-whenn the page table gets freed after we drop the lock.
-
-So we must flush the TLB now and cannot defer it like we do in the other cases.
-
-> 
-> Or maybe the right thing is 'we must always flush the TLB because <blahdyblah>,
-> and if we are fully unsharing tables we must avoid reuse of previously-shared
-> tables when the caller drops the locks' or something?
-
-I hope the description above made it clearer why I spell out that the TLB must be flushed
-now.
-
-> 
->>
->>>
->>> Surely here this is about flushing TLBs for the unsharer only as it no longer
->>> uses it?
->>>
->>>> +	 *
->>>> +	 * Note that we cannot defer the flush to a later point even if we are
->>>> +	 * not the last sharer of the page table.
->>>> +	 */
->>>
->>> Not hugely clear, some double negative here. Maybe worth saying something like:
->>>
->>> 'Even if we are not fully unsharing a PMD table, we must flush the TLB for the
->>> unsharer who no longer has access to this memory'
->>>
->>> Or something? Assuming this is accurate :)
->>
->> I'll adjust it to "Not that even if we are not fully unsharing a PMD table,
->> we must flush the TLB for the unsharer now.".
-> 
-> I guess you mean Note or that's even more confusing :P
-
-:) Yeah, I did that in v2.
-
--- 
-Cheers
-
-David
+	tglx
 
