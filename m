@@ -1,154 +1,110 @@
-Return-Path: <linux-arch+bounces-15431-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15432-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DED8CBF578
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 19:03:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DD2BCBF6CB
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 19:26:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 20662301FC27
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 18:00:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8F0843006629
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 18:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106C7325496;
-	Mon, 15 Dec 2025 18:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A47E268690;
+	Mon, 15 Dec 2025 18:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U0HKm0tB"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bU0vWHk7";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jgIDXhtN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9DB31ED72;
-	Mon, 15 Dec 2025 18:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979431ACEDF;
+	Mon, 15 Dec 2025 18:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765821654; cv=none; b=rl4aMh8ahCFgt7SnCV/mPko71E+LGIKNfi7n76UKo8yPdaEaCpgAQm8u6y9M6VsAGeNxQok4IXYBZNNchj+3XFYGxvtiXvnhCLMZ5AMcEiBeCwsOxNk5RkyYILDn+0lssmdhpFKx6dBmLGqxeCHC7Z+aM0X7RULLcah9E/mCOJs=
+	t=1765823079; cv=none; b=MNQ0+H/gG4ifXDKkwq/BvOreaGPHlTSqx6S/vW4+4TVM+IU14U5C1LXi0Y4LgnPMcMjozWQt015SC/1XcG+lr6w2/0gk1/6gi+ZDhsydAeal6jHmG2S37d26RiIIG8b121MlTCtx8BbIW3KEyeMwRo4SZON4t+OZZYA/nea+OS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765821654; c=relaxed/simple;
-	bh=xxgOgB20hanHcYFd7t7oP4Q0JQiogpWh4jHFCannRyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mA+9dwKSHaBFyYGFsrm9YcQyflkwoqHK3pTzVECycKP/ZlnxFQz6RmwwDqk7q0CTxzSm3RHkFNbu78rNDli7x8/dc5QT1AHAKQFJ3QzXkW8uw0fk/FTKCLRzd+5izw+4jJ/MyzElIF8zazumUi0KQS3munD8weM/+qIecvX/Trg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U0HKm0tB; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765821653; x=1797357653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xxgOgB20hanHcYFd7t7oP4Q0JQiogpWh4jHFCannRyA=;
-  b=U0HKm0tB6KgwH9/uMrCElXbI2REwlcOhWRR/VIPYuLTgCq5GMU8V6rFg
-   i9QkLLExUtpU3de5qjcCETVA+Jd0AluNxcQABFEYFUYCa8FNo9i5jCdQ/
-   eo2opB3wbDakKvhfIeGg12G9hL3FryL1aDT6zAwBkx7A0vtI/ca83gYfA
-   7miuU+aLKIMZxRxqz/fgehUtlu+mj/9GDJ1TfN8nXpP8QbE/UFFq4UjCg
-   PxSJIQjErxcWF9tqVJEEt/NX9AQqAFnX89HS7ezhf9q3GcYUaYwmpE336
-   MhOYIvcj/4gVrx6lUDxIAqXv8mGspjsOxMTZVR2DBzKwDJ5qTQhVRarYv
-   A==;
-X-CSE-ConnectionGUID: +O6cIh8VRIuD/zbHh+/hWw==
-X-CSE-MsgGUID: e6Hk1cqpSYCK8okdpIvzyw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="66915133"
-X-IronPort-AV: E=Sophos;i="6.21,151,1763452800"; 
-   d="scan'208";a="66915133"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 10:00:52 -0800
-X-CSE-ConnectionGUID: gyonBzQQS7KxnXu5g8+D5g==
-X-CSE-MsgGUID: Xp6e8NnbQCC0lFcwV4kLnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,151,1763452800"; 
-   d="scan'208";a="202199486"
-Received: from lkp-server02.sh.intel.com (HELO 034c7e8e53c3) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 15 Dec 2025 10:00:46 -0800
-Received: from kbuild by 034c7e8e53c3 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vVCrv-000000000aD-2VzS;
-	Mon, 15 Dec 2025 18:00:30 +0000
-Date: Tue, 16 Dec 2025 01:59:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, arnd@arndb.de, catalin.marinas@arm.com,
-	will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
-	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
-	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
-	Ankur Arora <ankur.a.arora@oracle.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Christoph Lameter <cl@linux-foundation.org>
-Subject: Re: [PATCH v8 03/12] arm64/delay: move some constants out to a
- separate header
-Message-ID: <202512160125.4rEePFm5-lkp@intel.com>
-References: <20251215044919.460086-4-ankur.a.arora@oracle.com>
+	s=arc-20240116; t=1765823079; c=relaxed/simple;
+	bh=qMC/3WaPWPsEC8GpkNEeJ/+onzOIu61ZnRMKgIhJqWs=;
+	h=Message-ID:From:To:Cc:Subject:Date; b=ipVfjT+KbqCRXpi9+wVfQNNxXr3pYVsiwup0oLl7jfe/vM7/pNWw+MTPD29U8fnBzJ096pJfhRZ5fGr4JhsjuMQplG6RwUvsU47OaEe5Pyqq3+JImv4Jh7qpmVEoxr4eAWrTZ4uGXzXXtP4HdCN3XkdwzSZqaJ/Fi1ub8lB6Y/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bU0vWHk7; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jgIDXhtN; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Message-ID: <20251215155615.870031952@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1765823074;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc; bh=4dTT3aJAqWsVF4pZKsCUZEHviWLQKtu1DpUBLD2IFv0=;
+	b=bU0vWHk7OyPo10w95SZQ43KVTDuobHID84tPcbamZ7dCVtDXHqARupRM3Ftyxrj+jAYGe9
+	4jQa+8gZ8Ie4PmNK+xhw+Ik6OtzBAx4nF68ZmmWqoL9pI0tiaMVu9972PZVLYzHByfFGfE
+	4NnZMG8COi55vsAAnr6N1efp+OSh26Lz+hxVuKHPkX6DxLBlbYy8O/MzJH8Ag508C1Rwu1
+	P3Ey01w6bzTxk+7GydFlVYivlCAeLiPpbbBx90sxk+0pvlr52SCZ/JftB1DtFYbAvaxtf9
+	PoWQ3UMRNMIgA4DSH+tiqc38U0X0vVWhPG+1JtDEkyXD//b91eFulMfiNNuSDg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1765823074;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc; bh=4dTT3aJAqWsVF4pZKsCUZEHviWLQKtu1DpUBLD2IFv0=;
+	b=jgIDXhtNsjOzNN3/7mREKkZ1wsORur0dcqQYA39B0B0ZK45CU+gF68ftLOdIy0fAMreEQo
+	VhktQEhzph02MaDw==
+From: Thomas Gleixner <tglx@linutronix.de>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Prakash Sangappa <prakash.sangappa@oracle.com>,
+ Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org,
+ Randy Dunlap <rdunlap@infradead.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Ron Geva <rongevarg@gmail.com>,
+ Waiman Long <longman@redhat.com>
+Subject: [patch V6 00/11] rseq: Implement time slice extension mechanism
+Date: Mon, 15 Dec 2025 19:24:33 +0100 (CET)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251215044919.460086-4-ankur.a.arora@oracle.com>
 
-Hi Ankur,
+This is a follow up on the V5 version:
 
-kernel test robot noticed the following build errors:
+     https://lore.kernel.org/20251128225931.959481199@linutronix.de
 
-[auto build test ERROR on bpf-next/master]
-[also build test ERROR on bpf/master linus/master arnd-asm-generic/master v6.19-rc1 next-20251215]
-[cannot apply to arm64/for-next/core bpf-next/net]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+V1 contains a detailed explanation:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ankur-Arora/asm-generic-barrier-Add-smp_cond_load_relaxed_timeout/20251215-130116
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20251215044919.460086-4-ankur.a.arora%40oracle.com
-patch subject: [PATCH v8 03/12] arm64/delay: move some constants out to a separate header
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20251216/202512160125.4rEePFm5-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251216/202512160125.4rEePFm5-lkp@intel.com/reproduce)
+     https://lore.kernel.org/20250908225709.144709889@linutronix.de
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512160125.4rEePFm5-lkp@intel.com/
+TLDR: Time slice extensions are an attempt to provide opportunistic
+priority ceiling without the overhead of an actual priority ceiling
+protocol, but also without the guarantees such a protocol provides.
 
-All errors (new ones prefixed by >>):
+The intent is to avoid situations where a user space thread is interrupted
+in a critical section and scheduled out, while holding a resource on which
+the preempting thread or other threads in the system might block on. That
+obviously prevents those threads from making progress in the worst case for
+at least a full time slice. Especially in the context of user space
+spinlocks, which are a patently bad idea to begin with, but that's also
+true for other mechanisms.
 
->> drivers/soc/qcom/rpmh-rsc.c:29:10: fatal error: asm/delay-const.h: No such file or directory
-      29 | #include <asm/delay-const.h>
-         |          ^~~~~~~~~~~~~~~~~~~
-   compilation terminated.
+This series uses the existing RSEQ user memory to implement it.
 
+Changes vs. V5:
 
-vim +29 drivers/soc/qcom/rpmh-rsc.c
+   - Rebase on v6.19-rc1
 
-     8	
-     9	#include <linux/atomic.h>
-    10	#include <linux/cpu_pm.h>
-    11	#include <linux/delay.h>
-    12	#include <linux/interrupt.h>
-    13	#include <linux/io.h>
-    14	#include <linux/iopoll.h>
-    15	#include <linux/kernel.h>
-    16	#include <linux/ktime.h>
-    17	#include <linux/list.h>
-    18	#include <linux/module.h>
-    19	#include <linux/notifier.h>
-    20	#include <linux/of.h>
-    21	#include <linux/of_irq.h>
-    22	#include <linux/of_platform.h>
-    23	#include <linux/platform_device.h>
-    24	#include <linux/pm_domain.h>
-    25	#include <linux/pm_runtime.h>
-    26	#include <linux/slab.h>
-    27	#include <linux/spinlock.h>
-    28	#include <linux/wait.h>
-  > 29	#include <asm/delay-const.h>
-    30	
+   - Fold typo fixes - Sebastian
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+   - Switch to syscall number 471
+
+The series is based on v6.19-rc1 and is also available from git:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git rseq/slice
+
+Thanks,
+
+	tglx
 
