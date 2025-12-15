@@ -1,53 +1,53 @@
-Return-Path: <linux-arch+bounces-15436-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15437-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73FCCCBF6A2
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 19:25:11 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA475CBF696
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 19:24:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 698B9301C0B1
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 18:24:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3C08C3002FD5
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 18:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82750326938;
-	Mon, 15 Dec 2025 18:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D6532693C;
+	Mon, 15 Dec 2025 18:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hLtGnp2B";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FqMRDpyT"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ozg1wO7j";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ecEIDLQg"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EE6268690;
-	Mon, 15 Dec 2025 18:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D222F0C49;
+	Mon, 15 Dec 2025 18:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765823089; cv=none; b=DCwWDfzjsEMnumLQ2FmiVHyMPnyZIguSVvHBVxRLOCVg3PwgpqlElTf3Y35RjmI6mBS6P1Gd2gRsLhCejkZswxpo5bXgKs8FML9I5F6KTDZct+JJ9/6O2Uh5kRbagBw513dNxl4RQNcCbrZmlXGsRWr2OkXUN5FWWwwRXROH/JY=
+	t=1765823090; cv=none; b=GwKG8UIvdPuOMbbv8JvhXU0rmd0Ftl4pY6azoIZbKo+3R9LA+uQwSekjnsJvK2DwfGDYvYpk5VpQHgT958rV+c0vnUdiYQjVLM/Y7sVFTwwKjRnkouCW51wb4go7e+ZKpmXlqTwQEGEfQhaU8nc8zIwFoVMqWSJce9KrjFxt20M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765823089; c=relaxed/simple;
-	bh=AnihXQ4fmqBvXlFc15AUvU1tdSTze+6028HKSUHK62c=;
+	s=arc-20240116; t=1765823090; c=relaxed/simple;
+	bh=D9nJKF8Oqv7+DIydjNF7h2q7ndWDXx9RH5Baj+3hR00=;
 	h=Message-ID:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Date; b=A5YFt0EBKY8/XDhXzIvjUdxFHWaWIZWB1uGfiK/Hbm3qgd2lf7L5VYCVWoNXpmo6fEg9IMKNWgN075Yo6sEI8pZyDMKNDCQacp6XiEKw+xnD3dBY2egm7t+9pqEiViPf6B9cgvqVgH42GQDOYMSwlP7cUZzMRm0pyv9rN+jGyLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hLtGnp2B; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FqMRDpyT; arc=none smtp.client-ip=193.142.43.55
+	 Content-Type:Date; b=NBl8RBvX/9IEqPR/mWRRaCoXCaP4Znncz3YRE1xjcz23btNvH2Wfb8bu+YuFlle8hzN1GwGEUKEf9mwyLzyOOQN9IYHmkm5/ZV0BhCROAoyv2nmgZ93MFHmeweC3eYxSIMGz8uBHFCf6W6c9RN7TmqS7z/wqcR7ZgD6i3q+dGXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ozg1wO7j; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ecEIDLQg; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Message-ID: <20251215155708.858717691@linutronix.de>
+Message-ID: <20251215155708.929634896@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1765823084;
+	s=2020; t=1765823087;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=M6rIH1sVgm4hkbS8s7yHptCUB8/BYixYD15veKyakwY=;
-	b=hLtGnp2BSDq7UcNq4y8JpLlXeFhab6gNND/0xEj6GNHYKa0+7phOqYgNVEIbp5RjjkjBw5
-	tP5L7IsS2WAS9giUgmObPQn1hVUrhyD6UCERPFbALVN/WF/QBUFWMqfsTy+d71SqRFpjI9
-	L+Y5l+bI/4gqh+3QDECnc2l7Pu5CGfqpadqGElYstf0XLJc5UBLvh5mPXPJ5XWJM8oxmHr
-	NaITQF/wWFVCpGDKF9H7RL3g332eKzBJ6z52A5+OJ45eUrVyELjmoVNvS3tkohhqENDoHN
-	BXZ558w3+h3rBHLSRmLe5zK0h5aMGHNMX5Z+LvVzVFltrld43C2fcHHvg97eag==
+	 references:references; bh=ZYZ7sqVmoUumqAk9t8SloO5Cf+1bvr/cdUILDfUfVzw=;
+	b=Ozg1wO7jBp30Mw380pg8Jacuh4kK6GFr8Z3Hu/T2KOvJnQHOf9M2Oj0lNjwzKAthICKIlL
+	cWegJiZIXB+UjnEAWH9aRTSUUsu4wWj9uD3rmEP8FnmpIodQIntbNRROlGT60tQTK3gWIE
+	TQN0EM6VKZm1VLW2WCV7Pj7qMY3mcotiXe4TErmqS8B115stbnOA/7PVaAHLMn5K3ozlHS
+	MXfwsUGoB/66YzROPuVb9lKNxACpkBoLuTR572ydRG9Xqs+Q4IipLAldkS63/EvpKRSC1N
+	uNUyGviLUQar7GSeHHsg+rvA6RX8EPjmPIaGmB/47cfy+P50W+t8z8XpFJGrUg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1765823084;
+	s=2020e; t=1765823087;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=M6rIH1sVgm4hkbS8s7yHptCUB8/BYixYD15veKyakwY=;
-	b=FqMRDpyTkhasUIvwLjPkOtmVtSVDr5a8CqHM2yUsVSIcgHrlc5cSNJzJ+VSsMzDB/EHyVP
-	cAaMLuFXV05UDIBw==
+	 references:references; bh=ZYZ7sqVmoUumqAk9t8SloO5Cf+1bvr/cdUILDfUfVzw=;
+	b=ecEIDLQgenH5OcuNOBI4BjRnmLoAEB57+looBG/Bm9FrnC5vbpYVXGRuHo0WY+Me4+2tYV
+	OhslGAZ8nJozWvDw==
 From: Thomas Gleixner <tglx@linutronix.de>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
@@ -65,7 +65,7 @@ Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  Peter Zijlstra <peterz@infradead.org>,
  Ron Geva <rongevarg@gmail.com>,
  Waiman Long <longman@redhat.com>
-Subject: [patch V6 04/11] rseq: Add prctl() to enable time slice extensions
+Subject: [patch V6 05/11] rseq: Implement sys_rseq_slice_yield()
 References: <20251215155615.870031952@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,152 +74,250 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 15 Dec 2025 19:24:43 +0100 (CET)
+Date: Mon, 15 Dec 2025 19:24:46 +0100 (CET)
 
-Implement a prctl() so that tasks can enable the time slice extension
-mechanism. This fails, when time slice extensions are disabled at compile
-time or on the kernel command line and when no rseq pointer is registered
-in the kernel.
+Provide a new syscall which has the only purpose to yield the CPU after the
+kernel granted a time slice extension.
 
-That allows to implement a single trivial check in the exit to user mode
-hotpath, to decide whether the whole mechanism needs to be invoked.
+sched_yield() is not suitable for that because it unconditionally
+schedules, but the end of the time slice extension is not required to
+schedule when the task was already preempted. This also allows to have a
+strict check for termination to catch user space invoking random syscalls
+including sched_yield() from a time slice extension region.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
 ---
-V3: Use -ENOTSUPP for the stub inline - Sebastian
+V6: Switch to syscall NR 471
+V5: Rework to adjust to support for arbitrary syscall changes
+    Use n32/n64/o32 for MIPS - Arnd
+V2: Use the proper name in sys_ni.c and add comment - Prateek
 ---
- include/linux/rseq.h       |    9 +++++++
- include/uapi/linux/prctl.h |   10 ++++++++
- kernel/rseq.c              |   52 +++++++++++++++++++++++++++++++++++++++++++++
- kernel/sys.c               |    6 +++++
- 4 files changed, 77 insertions(+)
+ arch/alpha/kernel/syscalls/syscall.tbl      |    1 +
+ arch/arm/tools/syscall.tbl                  |    1 +
+ arch/arm64/tools/syscall_32.tbl             |    1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |    1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |    1 +
+ arch/s390/kernel/syscalls/syscall.tbl       |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |    1 +
+ include/linux/rseq_types.h                  |    2 ++
+ include/linux/syscalls.h                    |    1 +
+ include/uapi/asm-generic/unistd.h           |    5 ++++-
+ kernel/rseq.c                               |   21 +++++++++++++++++++++
+ kernel/sys_ni.c                             |    1 +
+ scripts/syscall.tbl                         |    1 +
+ 22 files changed, 46 insertions(+), 1 deletion(-)
 
---- a/include/linux/rseq.h
-+++ b/include/linux/rseq.h
-@@ -163,4 +163,13 @@ void rseq_syscall(struct pt_regs *regs);
- static inline void rseq_syscall(struct pt_regs *regs) { }
- #endif /* !CONFIG_DEBUG_RSEQ */
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -510,3 +510,4 @@
+ 578	common	file_getattr			sys_file_getattr
+ 579	common	file_setattr			sys_file_setattr
+ 580	common	listns				sys_listns
++581	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -485,3 +485,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/arm64/tools/syscall_32.tbl
++++ b/arch/arm64/tools/syscall_32.tbl
+@@ -482,3 +482,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -470,3 +470,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -476,3 +476,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -409,3 +409,4 @@
+ 468	n32	file_getattr			sys_file_getattr
+ 469	n32	file_setattr			sys_file_setattr
+ 470	n32	listns				sys_listns
++471	n32	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -385,3 +385,4 @@
+ 468	n64	file_getattr			sys_file_getattr
+ 469	n64	file_setattr			sys_file_setattr
+ 470	n64	listns				sys_listns
++471	n64	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -458,3 +458,4 @@
+ 468	o32	file_getattr			sys_file_getattr
+ 469	o32	file_setattr			sys_file_setattr
+ 470	o32	listns				sys_listns
++471	o32	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -469,3 +469,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -561,3 +561,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	nospu	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -397,3 +397,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -474,3 +474,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -516,3 +516,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -476,3 +476,4 @@
+ 468	i386	file_getattr		sys_file_getattr
+ 469	i386	file_setattr		sys_file_setattr
+ 470	i386	listns			sys_listns
++471	i386	rseq_slice_yield	sys_rseq_slice_yield
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -395,6 +395,7 @@
+ 468	common	file_getattr		sys_file_getattr
+ 469	common	file_setattr		sys_file_setattr
+ 470	common	listns			sys_listns
++471	common	rseq_slice_yield	sys_rseq_slice_yield
  
-+#ifdef CONFIG_RSEQ_SLICE_EXTENSION
-+int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3);
-+#else /* CONFIG_RSEQ_SLICE_EXTENSION */
-+static inline int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3)
-+{
-+	return -ENOTSUPP;
-+}
-+#endif /* !CONFIG_RSEQ_SLICE_EXTENSION */
-+
- #endif /* _LINUX_RSEQ_H */
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -386,4 +386,14 @@ struct prctl_mm_map {
- # define PR_FUTEX_HASH_SET_SLOTS	1
- # define PR_FUTEX_HASH_GET_SLOTS	2
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -441,3 +441,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
+--- a/include/linux/rseq_types.h
++++ b/include/linux/rseq_types.h
+@@ -89,9 +89,11 @@ union rseq_slice_state {
+ /**
+  * struct rseq_slice - Status information for rseq time slice extension
+  * @state:	Time slice extension state
++ * @yielded:	Indicator for rseq_slice_yield()
+  */
+ struct rseq_slice {
+ 	union rseq_slice_state	state;
++	u8			yielded;
+ };
  
-+/* RSEQ time slice extensions */
-+#define PR_RSEQ_SLICE_EXTENSION			79
-+# define PR_RSEQ_SLICE_EXTENSION_GET		1
-+# define PR_RSEQ_SLICE_EXTENSION_SET		2
-+/*
-+ * Bits for RSEQ_SLICE_EXTENSION_GET/SET
-+ * PR_RSEQ_SLICE_EXT_ENABLE:	Enable
-+ */
-+# define PR_RSEQ_SLICE_EXT_ENABLE		0x01
+ /**
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -961,6 +961,7 @@ asmlinkage long sys_statx(int dfd, const
+ 			  unsigned mask, struct statx __user *buffer);
+ asmlinkage long sys_rseq(struct rseq __user *rseq, uint32_t rseq_len,
+ 			 int flags, uint32_t sig);
++asmlinkage long sys_rseq_slice_yield(void);
+ asmlinkage long sys_open_tree(int dfd, const char __user *path, unsigned flags);
+ asmlinkage long sys_open_tree_attr(int dfd, const char __user *path,
+ 				   unsigned flags,
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -860,8 +860,11 @@
+ #define __NR_listns 470
+ __SYSCALL(__NR_listns, sys_listns)
+ 
++#define __NR_rseq_slice_yield 471
++__SYSCALL(__NR_rseq_slice_yield, sys_rseq_slice_yield)
 +
- #endif /* _LINUX_PRCTL_H */
+ #undef __NR_syscalls
+-#define __NR_syscalls 471
++#define __NR_syscalls 472
+ 
+ /*
+  * 32 bit systems traditionally used different
 --- a/kernel/rseq.c
 +++ b/kernel/rseq.c
-@@ -71,6 +71,7 @@
- #define RSEQ_BUILD_SLOW_PATH
+@@ -553,6 +553,27 @@ int rseq_slice_extension_prctl(unsigned
+ 	return -EFAULT;
+ }
  
- #include <linux/debugfs.h>
-+#include <linux/prctl.h>
- #include <linux/ratelimit.h>
- #include <linux/rseq_entry.h>
- #include <linux/sched.h>
-@@ -501,6 +502,57 @@ SYSCALL_DEFINE4(rseq, struct rseq __user
- #ifdef CONFIG_RSEQ_SLICE_EXTENSION
- DEFINE_STATIC_KEY_TRUE(rseq_slice_extension_key);
- 
-+int rseq_slice_extension_prctl(unsigned long arg2, unsigned long arg3)
++/**
++ * sys_rseq_slice_yield - yield the current processor side effect free if a
++ *			  task granted with a time slice extension is done with
++ *			  the critical work before being forced out.
++ *
++ * Return: 1 if the task successfully yielded the CPU within the granted slice.
++ *         0 if the slice extension was either never granted or was revoked by
++ *	     going over the granted extension, using a syscall other than this one
++ *	     or being scheduled out earlier due to a subsequent interrupt.
++ *
++ * The syscall does not schedule because the syscall entry work immediately
++ * relinquishes the CPU and schedules if required.
++ */
++SYSCALL_DEFINE0(rseq_slice_yield)
 +{
-+	switch (arg2) {
-+	case PR_RSEQ_SLICE_EXTENSION_GET:
-+		if (arg3)
-+			return -EINVAL;
-+		return current->rseq.slice.state.enabled ? PR_RSEQ_SLICE_EXT_ENABLE : 0;
++	int yielded = !!current->rseq.slice.yielded;
 +
-+	case PR_RSEQ_SLICE_EXTENSION_SET: {
-+		u32 rflags, valid = RSEQ_CS_FLAG_SLICE_EXT_AVAILABLE;
-+		bool enable = !!(arg3 & PR_RSEQ_SLICE_EXT_ENABLE);
-+
-+		if (arg3 & ~PR_RSEQ_SLICE_EXT_ENABLE)
-+			return -EINVAL;
-+		if (!rseq_slice_extension_enabled())
-+			return -ENOTSUPP;
-+		if (!current->rseq.usrptr)
-+			return -ENXIO;
-+
-+		/* No change? */
-+		if (enable == !!current->rseq.slice.state.enabled)
-+			return 0;
-+
-+		if (get_user(rflags, &current->rseq.usrptr->flags))
-+			goto die;
-+
-+		if (current->rseq.slice.state.enabled)
-+			valid |= RSEQ_CS_FLAG_SLICE_EXT_ENABLED;
-+
-+		if ((rflags & valid) != valid)
-+			goto die;
-+
-+		rflags &= ~RSEQ_CS_FLAG_SLICE_EXT_ENABLED;
-+		rflags |= RSEQ_CS_FLAG_SLICE_EXT_AVAILABLE;
-+		if (enable)
-+			rflags |= RSEQ_CS_FLAG_SLICE_EXT_ENABLED;
-+
-+		if (put_user(rflags, &current->rseq.usrptr->flags))
-+			goto die;
-+
-+		current->rseq.slice.state.enabled = enable;
-+		return 0;
-+	}
-+	default:
-+		return -EINVAL;
-+	}
-+die:
-+	force_sig(SIGSEGV);
-+	return -EFAULT;
++	current->rseq.slice.yielded = 0;
++	return yielded;
 +}
 +
  static int __init rseq_slice_cmdline(char *str)
  {
  	bool on;
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -53,6 +53,7 @@
- #include <linux/time_namespace.h>
- #include <linux/binfmts.h>
- #include <linux/futex.h>
-+#include <linux/rseq.h>
+--- a/kernel/sys_ni.c
++++ b/kernel/sys_ni.c
+@@ -390,6 +390,7 @@ COND_SYSCALL(setuid16);
  
- #include <linux/sched.h>
- #include <linux/sched/autogroup.h>
-@@ -2868,6 +2869,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsi
- 	case PR_FUTEX_HASH:
- 		error = futex_hash_prctl(arg2, arg3, arg4);
- 		break;
-+	case PR_RSEQ_SLICE_EXTENSION:
-+		if (arg4 || arg5)
-+			return -EINVAL;
-+		error = rseq_slice_extension_prctl(arg2, arg3);
-+		break;
- 	default:
- 		trace_task_prctl_unknown(option, arg2, arg3, arg4, arg5);
- 		error = -EINVAL;
+ /* restartable sequence */
+ COND_SYSCALL(rseq);
++COND_SYSCALL(rseq_slice_yield);
+ 
+ COND_SYSCALL(uretprobe);
+ COND_SYSCALL(uprobe);
+--- a/scripts/syscall.tbl
++++ b/scripts/syscall.tbl
+@@ -411,3 +411,4 @@
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
+ 470	common	listns				sys_listns
++471	common	rseq_slice_yield		sys_rseq_slice_yield
 
 
