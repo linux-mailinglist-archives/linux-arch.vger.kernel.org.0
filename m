@@ -1,112 +1,154 @@
-Return-Path: <linux-arch+bounces-15430-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15431-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91016CBF548
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 19:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DED8CBF578
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 19:03:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB07F300EE53
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 17:59:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 20662301FC27
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 18:00:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D88F3246F1;
-	Mon, 15 Dec 2025 17:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 106C7325496;
+	Mon, 15 Dec 2025 18:00:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mWcISiYv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U0HKm0tB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62935309F1F
-	for <linux-arch@vger.kernel.org>; Mon, 15 Dec 2025 17:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9DB31ED72;
+	Mon, 15 Dec 2025 18:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765821584; cv=none; b=Ky9tQw5Vybma53K0r+HGvNgsN841hv2crYnwCVz4f8FI0HLlpC0VfgtJu7eAoAaDRXcZ2MydBjT8xajJ5QTwJIuhBGAGaDOT41hSrEDtzpPIzzddtamGU2wsiHNj0z3ARuYD8ANPX4KAwjRQMwB0dMJwJOx5dO2qq6NVBpLRge8=
+	t=1765821654; cv=none; b=rl4aMh8ahCFgt7SnCV/mPko71E+LGIKNfi7n76UKo8yPdaEaCpgAQm8u6y9M6VsAGeNxQok4IXYBZNNchj+3XFYGxvtiXvnhCLMZ5AMcEiBeCwsOxNk5RkyYILDn+0lssmdhpFKx6dBmLGqxeCHC7Z+aM0X7RULLcah9E/mCOJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765821584; c=relaxed/simple;
-	bh=rKVKnsmZY5Zk5WseCbLhC70tZU73oYSI0ZX68nvqOpU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OgNhlcnxX4w4PKrkTVsnYceKQ+eF4/FTUHGXa8VgEXtjjYWOjMItBIqVO9PKMlCmVTbGcxGPn4/6uUA3fZkIYH+4BCrSmFiN8JmIntPoaM/wSmcdyzSFHt86DxXlRpO8A+AINXOzdhme462ISn4ZyAdO+QkwwrDaZUhVlWFdkAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mWcISiYv; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5959b2f3fc9so4174751e87.2
-        for <linux-arch@vger.kernel.org>; Mon, 15 Dec 2025 09:59:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765821580; x=1766426380; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zIbn2oDFRSGWfD5W22SaWrURpraJkYSQ1nm0bbeV7eo=;
-        b=mWcISiYvQDMyWrcSRycAfbgC2LcfDHeiHNEwlrIHZIiej1AYC1xSGsNIQAQ09hrYkV
-         JX5RKvAXPuBpvT42pleeeJWKLBH2sgmOEqfv/KpJmG2j4MZwEb/VhmN2KUWZSKmpR4y8
-         W9Y9TRYiK/LUJSWBxJeCtVm6+grs9CMML+9OjkE4C8237semIawFtJN/0+n1tfa/B4sH
-         4PXZxM7CBczsbeXD5LrxS/cB7X27CZ/SgFLeQqgNRSooR0u6fqf5viqD1bfmET98d1BJ
-         y+OTGkBGOVpj54S8EoEEBS6SOazJkp5BEh/6fqKDGAxYCvW45iAXLY5VypDKgUjIZ0ta
-         NCVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765821580; x=1766426380;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zIbn2oDFRSGWfD5W22SaWrURpraJkYSQ1nm0bbeV7eo=;
-        b=eKoCWSJjpPg4Hu/qrcGgIRgXUEunSEK6Uh0GpRmFgHPYVdc0gq7CoA/TOSX6+vskYX
-         Hlx7n90l41xjAh0J3aAyPGYnhW9qSyQxYgcLarlUvoWV4qHag0vv8gLgckdrcgwfIkqs
-         rDfD/BFlX8MnMyyCfrIpCiYo8EtZHD65HbXNcQwpXSbFlREnzBMOrj7M1ccNMydvw6Yz
-         BWoWvnBP/WBFrOg5vNt0M3eOm7OKAgANvJze5urCy4JUEr00TaXA4hh6CmHIBGw+f3xM
-         4zkVtdMzGsk96/7Gt7VauDnhj6Mak9Ig/7dWZXwF1p0Xmas1seYqYvq2NKicxfHggnwF
-         K/RQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV5MxD6Tng4MSdb+hln36jy9MbmVjfOiU84HotILsz2dwxp3wGNOYlKVvHfZXu3RCbk0vj0phTV/7Q4@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw49kWZf1s3DPjvo/r82/m8zxS9r8+/6ky7XOhwHdHgghAmDvZk
-	TTV+CZA5cXVQGcg8v236CKr/nkfPlV99ACAGr3T2t0BxDtLDuAL7T4LH
-X-Gm-Gg: AY/fxX7V0ZsxNx5vzKlQorqNJ6muxcm15wBnYycBs6MHApSvJn4erQkBaYVqlTVfsms
-	Jo8pFK798ZguNlfkXAOBNbRDzUVEJJYp4gVhV4lKaail4lw6OCrFZp64cshpAXGj4zNt2xheBYx
-	aukOHK2A1Pr06a1//KGxzKhMB7sr4iIBEKnHPwJYfMqVJaapzM3jLinuEqmRnByGBsJLI/VesE6
-	TRJIpCtgZ35vBzEqtfRVd/5hORFd21oLy5do5q5Z8DXIY/k4HQ1KXYsb0keqjXy3/Rq6B5jBlFX
-	ibUwlVvexjj4akwyPl0dCIgG3ZCD3hnjQ52ue4ef/6krQvy/HcCZNz3OFzRri+k5yQdMhkMFTQU
-	C8sq8y1s2uOmhJrbb6KWkBHQZ/fYomHS2NXvxRFBABjBXwakuqLvyucKNlhbUzJrItVDyiAgmj/
-	alW93lDJnb
-X-Google-Smtp-Source: AGHT+IFsDUVoZATaLzj9N1/hjfRE03GZ2gIP+Qj4HQeX9tt2ONoJL779FMDFpau9DQULSPR5u/L2Cg==
-X-Received: by 2002:a05:6512:1154:b0:597:d59a:69ca with SMTP id 2adb3069b0e04-598faa4d5b5mr3889154e87.28.1765821580147;
-        Mon, 15 Dec 2025 09:59:40 -0800 (PST)
-Received: from localhost ([194.190.17.114])
-        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-5990da11dbfsm5648e87.13.2025.12.15.09.59.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Dec 2025 09:59:39 -0800 (PST)
-From: Askar Safin <safinaskar@gmail.com>
-To: rdunlap@infradead.org
-Cc: initramfs@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v4 1/3] init: remove deprecated "load_ramdisk" and "prompt_ramdisk" command line parameters
-Date: Mon, 15 Dec 2025 20:59:27 +0300
-Message-ID: <20251215175927.300936-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <5c3c4233-3572-4842-850e-0a88ce16eee3@infradead.org>
-References: <5c3c4233-3572-4842-850e-0a88ce16eee3@infradead.org>
+	s=arc-20240116; t=1765821654; c=relaxed/simple;
+	bh=xxgOgB20hanHcYFd7t7oP4Q0JQiogpWh4jHFCannRyA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mA+9dwKSHaBFyYGFsrm9YcQyflkwoqHK3pTzVECycKP/ZlnxFQz6RmwwDqk7q0CTxzSm3RHkFNbu78rNDli7x8/dc5QT1AHAKQFJ3QzXkW8uw0fk/FTKCLRzd+5izw+4jJ/MyzElIF8zazumUi0KQS3munD8weM/+qIecvX/Trg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U0HKm0tB; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765821653; x=1797357653;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xxgOgB20hanHcYFd7t7oP4Q0JQiogpWh4jHFCannRyA=;
+  b=U0HKm0tB6KgwH9/uMrCElXbI2REwlcOhWRR/VIPYuLTgCq5GMU8V6rFg
+   i9QkLLExUtpU3de5qjcCETVA+Jd0AluNxcQABFEYFUYCa8FNo9i5jCdQ/
+   eo2opB3wbDakKvhfIeGg12G9hL3FryL1aDT6zAwBkx7A0vtI/ca83gYfA
+   7miuU+aLKIMZxRxqz/fgehUtlu+mj/9GDJ1TfN8nXpP8QbE/UFFq4UjCg
+   PxSJIQjErxcWF9tqVJEEt/NX9AQqAFnX89HS7ezhf9q3GcYUaYwmpE336
+   MhOYIvcj/4gVrx6lUDxIAqXv8mGspjsOxMTZVR2DBzKwDJ5qTQhVRarYv
+   A==;
+X-CSE-ConnectionGUID: +O6cIh8VRIuD/zbHh+/hWw==
+X-CSE-MsgGUID: e6Hk1cqpSYCK8okdpIvzyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11643"; a="66915133"
+X-IronPort-AV: E=Sophos;i="6.21,151,1763452800"; 
+   d="scan'208";a="66915133"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2025 10:00:52 -0800
+X-CSE-ConnectionGUID: gyonBzQQS7KxnXu5g8+D5g==
+X-CSE-MsgGUID: Xp6e8NnbQCC0lFcwV4kLnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,151,1763452800"; 
+   d="scan'208";a="202199486"
+Received: from lkp-server02.sh.intel.com (HELO 034c7e8e53c3) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 15 Dec 2025 10:00:46 -0800
+Received: from kbuild by 034c7e8e53c3 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vVCrv-000000000aD-2VzS;
+	Mon, 15 Dec 2025 18:00:30 +0000
+Date: Tue, 16 Dec 2025 01:59:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, arnd@arndb.de, catalin.marinas@arm.com,
+	will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
+	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+	Ankur Arora <ankur.a.arora@oracle.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Christoph Lameter <cl@linux-foundation.org>
+Subject: Re: [PATCH v8 03/12] arm64/delay: move some constants out to a
+ separate header
+Message-ID: <202512160125.4rEePFm5-lkp@intel.com>
+References: <20251215044919.460086-4-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251215044919.460086-4-ankur.a.arora@oracle.com>
 
-Randy Dunlap <rdunlap@infradead.org>:
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Thanks.
+Hi Ankur,
 
-Thank you!
+kernel test robot noticed the following build errors:
 
-P. S. For unknown reasons I don't see your email in my Gmail. Not even in
-spam folder.
+[auto build test ERROR on bpf-next/master]
+[also build test ERROR on bpf/master linus/master arnd-asm-generic/master v6.19-rc1 next-20251215]
+[cannot apply to arm64/for-next/core bpf-next/net]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Ankur-Arora/asm-generic-barrier-Add-smp_cond_load_relaxed_timeout/20251215-130116
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251215044919.460086-4-ankur.a.arora%40oracle.com
+patch subject: [PATCH v8 03/12] arm64/delay: move some constants out to a separate header
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20251216/202512160125.4rEePFm5-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251216/202512160125.4rEePFm5-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512160125.4rEePFm5-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/soc/qcom/rpmh-rsc.c:29:10: fatal error: asm/delay-const.h: No such file or directory
+      29 | #include <asm/delay-const.h>
+         |          ^~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+
+vim +29 drivers/soc/qcom/rpmh-rsc.c
+
+     8	
+     9	#include <linux/atomic.h>
+    10	#include <linux/cpu_pm.h>
+    11	#include <linux/delay.h>
+    12	#include <linux/interrupt.h>
+    13	#include <linux/io.h>
+    14	#include <linux/iopoll.h>
+    15	#include <linux/kernel.h>
+    16	#include <linux/ktime.h>
+    17	#include <linux/list.h>
+    18	#include <linux/module.h>
+    19	#include <linux/notifier.h>
+    20	#include <linux/of.h>
+    21	#include <linux/of_irq.h>
+    22	#include <linux/of_platform.h>
+    23	#include <linux/platform_device.h>
+    24	#include <linux/pm_domain.h>
+    25	#include <linux/pm_runtime.h>
+    26	#include <linux/slab.h>
+    27	#include <linux/spinlock.h>
+    28	#include <linux/wait.h>
+  > 29	#include <asm/delay-const.h>
+    30	
 
 -- 
-Askar Safin
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
