@@ -1,384 +1,112 @@
-Return-Path: <linux-arch+bounces-15429-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15430-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82694CBF143
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 17:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 91016CBF548
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 19:00:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 77966304DEFA
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 16:53:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BB07F300EE53
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Dec 2025 17:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570313469EB;
-	Mon, 15 Dec 2025 16:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D88F3246F1;
+	Mon, 15 Dec 2025 17:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rI2MbOB0";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SuzbGbpe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mWcISiYv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879A134679B;
-	Mon, 15 Dec 2025 16:52:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62935309F1F
+	for <linux-arch@vger.kernel.org>; Mon, 15 Dec 2025 17:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765817559; cv=none; b=MutsADW/13HJbhoSzDBZRTGQN7OYNMuIpP2AOEkXtNvcYIcT5jbjRbk6/CssN8T43KzmfMei6YiocULucIvMia52DKjrb+x+5Iui8LRfaIvElJmVciGdSExEedyjvuARwtCiF655fA505tnGC97f0gWO/QdX3W9pvQQVkpXmmWc=
+	t=1765821584; cv=none; b=Ky9tQw5Vybma53K0r+HGvNgsN841hv2crYnwCVz4f8FI0HLlpC0VfgtJu7eAoAaDRXcZ2MydBjT8xajJ5QTwJIuhBGAGaDOT41hSrEDtzpPIzzddtamGU2wsiHNj0z3ARuYD8ANPX4KAwjRQMwB0dMJwJOx5dO2qq6NVBpLRge8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765817559; c=relaxed/simple;
-	bh=mlDYQ5n8bhVfsNm/esYE41I26RyQYDEnpwsB7BZ2LRY=;
-	h=Message-ID:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Date; b=LH1IEmHVjxHcHy8qVyxcsIRh2ZHzGFyGvdyKd/Yr/Qv72/9nXbcICQt0irZWjw8vj0d0VHh9YrPs+ZHWlDvDQQgpVrIpn8O4SybKiLIF/r6qoXnIg2A6q7nKVfQ5PtD05GI7bgmo4FgPi8kfiBqjUnbGnQpQa1KSI4JvaOh7QJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rI2MbOB0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SuzbGbpe; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Message-ID: <20251215155709.320325431@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1765817555;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=gaISJaYhwvKUtLeDBH+eWgC0D7lCaBeR04EPCSE/p/Y=;
-	b=rI2MbOB0TgLc1t2be8uNhNY5TBDCa/c6ysPOuGsPGy7g7HAXfMwJZrh96D0Lw55RGynbOB
-	HMvJSKbHUY2kduOXUTT2ak1lsik3Y56fIi+2BRxXVxuUC8JGtP0dLmS1fb2R+7tGlR47St
-	KN8UubJLssvNCQ6WX1qx+IkStWEDXKNpwqqgMW6aRrQRGJt8I8NKUWy/WEZR8Atx8dnBBU
-	cbGYjkCYhdQpLmegCuqPWV8ng9MDyuejYodDRgNrXecqlII5go0URiPZpTmJnuQSDwucm7
-	E2Yw7mgJV9Zi25swG9FcBtwhEl7Dub7tauxCYuabe7uGzOSD9qF8C24VSlxp6w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1765817555;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 references:references; bh=gaISJaYhwvKUtLeDBH+eWgC0D7lCaBeR04EPCSE/p/Y=;
-	b=SuzbGbpel3bRUbM+DRGxHxZEWTGVJXYZbcsZaHLg6fTXURKzGo9pCIvvIxcYOY4wYEl3FY
-	KsulKhhOv5XGZKDg==
-From: Thomas Gleixner <tglx@linutronix.de>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Prakash Sangappa <prakash.sangappa@oracle.com>,
- Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org,
- Randy Dunlap <rdunlap@infradead.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Ron Geva <rongevarg@gmail.com>,
- Waiman Long <longman@redhat.com>
-Subject: [patch V6 11/11] selftests/rseq: Implement time slice extension test
-References: <20251215155615.870031952@linutronix.de>
+	s=arc-20240116; t=1765821584; c=relaxed/simple;
+	bh=rKVKnsmZY5Zk5WseCbLhC70tZU73oYSI0ZX68nvqOpU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OgNhlcnxX4w4PKrkTVsnYceKQ+eF4/FTUHGXa8VgEXtjjYWOjMItBIqVO9PKMlCmVTbGcxGPn4/6uUA3fZkIYH+4BCrSmFiN8JmIntPoaM/wSmcdyzSFHt86DxXlRpO8A+AINXOzdhme462ISn4ZyAdO+QkwwrDaZUhVlWFdkAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mWcISiYv; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5959b2f3fc9so4174751e87.2
+        for <linux-arch@vger.kernel.org>; Mon, 15 Dec 2025 09:59:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765821580; x=1766426380; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zIbn2oDFRSGWfD5W22SaWrURpraJkYSQ1nm0bbeV7eo=;
+        b=mWcISiYvQDMyWrcSRycAfbgC2LcfDHeiHNEwlrIHZIiej1AYC1xSGsNIQAQ09hrYkV
+         JX5RKvAXPuBpvT42pleeeJWKLBH2sgmOEqfv/KpJmG2j4MZwEb/VhmN2KUWZSKmpR4y8
+         W9Y9TRYiK/LUJSWBxJeCtVm6+grs9CMML+9OjkE4C8237semIawFtJN/0+n1tfa/B4sH
+         4PXZxM7CBczsbeXD5LrxS/cB7X27CZ/SgFLeQqgNRSooR0u6fqf5viqD1bfmET98d1BJ
+         y+OTGkBGOVpj54S8EoEEBS6SOazJkp5BEh/6fqKDGAxYCvW45iAXLY5VypDKgUjIZ0ta
+         NCVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765821580; x=1766426380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=zIbn2oDFRSGWfD5W22SaWrURpraJkYSQ1nm0bbeV7eo=;
+        b=eKoCWSJjpPg4Hu/qrcGgIRgXUEunSEK6Uh0GpRmFgHPYVdc0gq7CoA/TOSX6+vskYX
+         Hlx7n90l41xjAh0J3aAyPGYnhW9qSyQxYgcLarlUvoWV4qHag0vv8gLgckdrcgwfIkqs
+         rDfD/BFlX8MnMyyCfrIpCiYo8EtZHD65HbXNcQwpXSbFlREnzBMOrj7M1ccNMydvw6Yz
+         BWoWvnBP/WBFrOg5vNt0M3eOm7OKAgANvJze5urCy4JUEr00TaXA4hh6CmHIBGw+f3xM
+         4zkVtdMzGsk96/7Gt7VauDnhj6Mak9Ig/7dWZXwF1p0Xmas1seYqYvq2NKicxfHggnwF
+         K/RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV5MxD6Tng4MSdb+hln36jy9MbmVjfOiU84HotILsz2dwxp3wGNOYlKVvHfZXu3RCbk0vj0phTV/7Q4@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw49kWZf1s3DPjvo/r82/m8zxS9r8+/6ky7XOhwHdHgghAmDvZk
+	TTV+CZA5cXVQGcg8v236CKr/nkfPlV99ACAGr3T2t0BxDtLDuAL7T4LH
+X-Gm-Gg: AY/fxX7V0ZsxNx5vzKlQorqNJ6muxcm15wBnYycBs6MHApSvJn4erQkBaYVqlTVfsms
+	Jo8pFK798ZguNlfkXAOBNbRDzUVEJJYp4gVhV4lKaail4lw6OCrFZp64cshpAXGj4zNt2xheBYx
+	aukOHK2A1Pr06a1//KGxzKhMB7sr4iIBEKnHPwJYfMqVJaapzM3jLinuEqmRnByGBsJLI/VesE6
+	TRJIpCtgZ35vBzEqtfRVd/5hORFd21oLy5do5q5Z8DXIY/k4HQ1KXYsb0keqjXy3/Rq6B5jBlFX
+	ibUwlVvexjj4akwyPl0dCIgG3ZCD3hnjQ52ue4ef/6krQvy/HcCZNz3OFzRri+k5yQdMhkMFTQU
+	C8sq8y1s2uOmhJrbb6KWkBHQZ/fYomHS2NXvxRFBABjBXwakuqLvyucKNlhbUzJrItVDyiAgmj/
+	alW93lDJnb
+X-Google-Smtp-Source: AGHT+IFsDUVoZATaLzj9N1/hjfRE03GZ2gIP+Qj4HQeX9tt2ONoJL779FMDFpau9DQULSPR5u/L2Cg==
+X-Received: by 2002:a05:6512:1154:b0:597:d59a:69ca with SMTP id 2adb3069b0e04-598faa4d5b5mr3889154e87.28.1765821580147;
+        Mon, 15 Dec 2025 09:59:40 -0800 (PST)
+Received: from localhost ([194.190.17.114])
+        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-5990da11dbfsm5648e87.13.2025.12.15.09.59.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Dec 2025 09:59:39 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: rdunlap@infradead.org
+Cc: initramfs@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev
+Subject: Re: [PATCH v4 1/3] init: remove deprecated "load_ramdisk" and "prompt_ramdisk" command line parameters
+Date: Mon, 15 Dec 2025 20:59:27 +0300
+Message-ID: <20251215175927.300936-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <5c3c4233-3572-4842-850e-0a88ce16eee3@infradead.org>
+References: <5c3c4233-3572-4842-850e-0a88ce16eee3@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 15 Dec 2025 17:52:34 +0100 (CET)
+Content-Transfer-Encoding: 8bit
 
-Provide an initial test case to evaluate the functionality. This needs to be
-extended to cover the ABI violations and expose the race condition between
-observing granted and arriving in rseq_slice_yield().
+Randy Dunlap <rdunlap@infradead.org>:
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> Thanks.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V5: Add a test for a random syscall
----
- tools/testing/selftests/rseq/.gitignore   |    1 
- tools/testing/selftests/rseq/Makefile     |    5 
- tools/testing/selftests/rseq/rseq-abi.h   |   27 +++
- tools/testing/selftests/rseq/slice_test.c |  219 ++++++++++++++++++++++++++++++
- 4 files changed, 251 insertions(+), 1 deletion(-)
+Thank you!
 
---- a/tools/testing/selftests/rseq/.gitignore
-+++ b/tools/testing/selftests/rseq/.gitignore
-@@ -10,3 +10,4 @@ param_test_mm_cid
- param_test_mm_cid_benchmark
- param_test_mm_cid_compare_twice
- syscall_errors_test
-+slice_test
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -17,7 +17,7 @@ OVERRIDE_TARGETS = 1
- TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
- 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
- 		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice \
--		syscall_errors_test
-+		syscall_errors_test slice_test
- 
- TEST_GEN_PROGS_EXTENDED = librseq.so
- 
-@@ -59,3 +59,6 @@ include ../lib.mk
- $(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(TEST_GEN_PROGS_EXTENDED) \
- 					rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
-+
-+$(OUTPUT)/slice_test: slice_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
---- a/tools/testing/selftests/rseq/rseq-abi.h
-+++ b/tools/testing/selftests/rseq/rseq-abi.h
-@@ -53,6 +53,27 @@ struct rseq_abi_cs {
- 	__u64 abort_ip;
- } __attribute__((aligned(4 * sizeof(__u64))));
- 
-+/**
-+ * rseq_abi_slice_ctrl - Time slice extension control structure
-+ * @all:	Compound value
-+ * @request:	Request for a time slice extension
-+ * @granted:	Granted time slice extension
-+ *
-+ * @request is set by user space and can be cleared by user space or kernel
-+ * space.  @granted is set and cleared by the kernel and must only be read
-+ * by user space.
-+ */
-+struct rseq_abi_slice_ctrl {
-+	union {
-+		__u32		all;
-+		struct {
-+			__u8	request;
-+			__u8	granted;
-+			__u16	__reserved;
-+		};
-+	};
-+};
-+
- /*
-  * struct rseq_abi is aligned on 4 * 8 bytes to ensure it is always
-  * contained within a single cache-line.
-@@ -165,6 +186,12 @@ struct rseq_abi {
- 	__u32 mm_cid;
- 
- 	/*
-+	 * Time slice extension control structure. CPU local updates from
-+	 * kernel and user space.
-+	 */
-+	struct rseq_abi_slice_ctrl slice_ctrl;
-+
-+	/*
- 	 * Flexible array member at end of structure, after last feature field.
- 	 */
- 	char end[];
---- /dev/null
-+++ b/tools/testing/selftests/rseq/slice_test.c
-@@ -0,0 +1,219 @@
-+// SPDX-License-Identifier: LGPL-2.1
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <unistd.h>
-+
-+#include <linux/prctl.h>
-+#include <sys/prctl.h>
-+#include <sys/time.h>
-+
-+#include "rseq.h"
-+
-+#include "../kselftest_harness.h"
-+
-+#ifndef __NR_rseq_slice_yield
-+# define __NR_rseq_slice_yield	471
-+#endif
-+
-+#define BITS_PER_INT	32
-+#define BITS_PER_BYTE	8
-+
-+#ifndef PR_RSEQ_SLICE_EXTENSION
-+# define PR_RSEQ_SLICE_EXTENSION		79
-+#  define PR_RSEQ_SLICE_EXTENSION_GET		1
-+#  define PR_RSEQ_SLICE_EXTENSION_SET		2
-+#  define PR_RSEQ_SLICE_EXT_ENABLE		0x01
-+#endif
-+
-+#ifndef RSEQ_SLICE_EXT_REQUEST_BIT
-+# define RSEQ_SLICE_EXT_REQUEST_BIT	0
-+# define RSEQ_SLICE_EXT_GRANTED_BIT	1
-+#endif
-+
-+#ifndef asm_inline
-+# define asm_inline	asm __inline
-+#endif
-+
-+#define NSEC_PER_SEC	1000000000L
-+#define NSEC_PER_USEC	      1000L
-+
-+struct noise_params {
-+	int64_t	noise_nsecs;
-+	int64_t	sleep_nsecs;
-+	int64_t	run;
-+};
-+
-+FIXTURE(slice_ext)
-+{
-+	pthread_t		noise_thread;
-+	struct noise_params	noise_params;
-+};
-+
-+FIXTURE_VARIANT(slice_ext)
-+{
-+	int64_t	total_nsecs;
-+	int64_t	slice_nsecs;
-+	int64_t	noise_nsecs;
-+	int64_t	sleep_nsecs;
-+	bool	no_yield;
-+};
-+
-+FIXTURE_VARIANT_ADD(slice_ext, n2_2_50)
-+{
-+	.total_nsecs	=  5 * NSEC_PER_SEC,
-+	.slice_nsecs	=  2 * NSEC_PER_USEC,
-+	.noise_nsecs    =  2 * NSEC_PER_USEC,
-+	.sleep_nsecs	= 50 * NSEC_PER_USEC,
-+};
-+
-+FIXTURE_VARIANT_ADD(slice_ext, n50_2_50)
-+{
-+	.total_nsecs	=  5 * NSEC_PER_SEC,
-+	.slice_nsecs	= 50 * NSEC_PER_USEC,
-+	.noise_nsecs    =  2 * NSEC_PER_USEC,
-+	.sleep_nsecs	= 50 * NSEC_PER_USEC,
-+};
-+
-+FIXTURE_VARIANT_ADD(slice_ext, n2_2_50_no_yield)
-+{
-+	.total_nsecs	=  5 * NSEC_PER_SEC,
-+	.slice_nsecs	=  2 * NSEC_PER_USEC,
-+	.noise_nsecs    =  2 * NSEC_PER_USEC,
-+	.sleep_nsecs	= 50 * NSEC_PER_USEC,
-+	.no_yield	= true,
-+};
-+
-+
-+static inline bool elapsed(struct timespec *start, struct timespec *now,
-+			   int64_t span)
-+{
-+	int64_t delta = now->tv_sec - start->tv_sec;
-+
-+	delta *= NSEC_PER_SEC;
-+	delta += now->tv_nsec - start->tv_nsec;
-+	return delta >= span;
-+}
-+
-+static void *noise_thread(void *arg)
-+{
-+	struct noise_params *p = arg;
-+
-+	while (RSEQ_READ_ONCE(p->run)) {
-+		struct timespec ts_start, ts_now;
-+
-+		clock_gettime(CLOCK_MONOTONIC, &ts_start);
-+		do {
-+			clock_gettime(CLOCK_MONOTONIC, &ts_now);
-+		} while (!elapsed(&ts_start, &ts_now, p->noise_nsecs));
-+
-+		ts_start.tv_sec = 0;
-+		ts_start.tv_nsec = p->sleep_nsecs;
-+		clock_nanosleep(CLOCK_MONOTONIC, 0, &ts_start, NULL);
-+	}
-+	return NULL;
-+}
-+
-+FIXTURE_SETUP(slice_ext)
-+{
-+	cpu_set_t affinity;
-+
-+	ASSERT_EQ(sched_getaffinity(0, sizeof(affinity), &affinity), 0);
-+
-+	/* Pin it on a single CPU. Avoid CPU 0 */
-+	for (int i = 1; i < CPU_SETSIZE; i++) {
-+		if (!CPU_ISSET(i, &affinity))
-+			continue;
-+
-+		CPU_ZERO(&affinity);
-+		CPU_SET(i, &affinity);
-+		ASSERT_EQ(sched_setaffinity(0, sizeof(affinity), &affinity), 0);
-+		break;
-+	}
-+
-+	ASSERT_EQ(rseq_register_current_thread(), 0);
-+
-+	ASSERT_EQ(prctl(PR_RSEQ_SLICE_EXTENSION, PR_RSEQ_SLICE_EXTENSION_SET,
-+			PR_RSEQ_SLICE_EXT_ENABLE, 0, 0), 0);
-+
-+	self->noise_params.noise_nsecs = variant->noise_nsecs;
-+	self->noise_params.sleep_nsecs = variant->sleep_nsecs;
-+	self->noise_params.run = 1;
-+
-+	ASSERT_EQ(pthread_create(&self->noise_thread, NULL, noise_thread, &self->noise_params), 0);
-+}
-+
-+FIXTURE_TEARDOWN(slice_ext)
-+{
-+	self->noise_params.run = 0;
-+	pthread_join(self->noise_thread, NULL);
-+}
-+
-+TEST_F(slice_ext, slice_test)
-+{
-+	unsigned long success = 0, yielded = 0, scheduled = 0, raced = 0;
-+	unsigned long total = 0, aborted = 0;
-+	struct rseq_abi *rs = rseq_get_abi();
-+	struct timespec ts_start, ts_now;
-+
-+	ASSERT_NE(rs, NULL);
-+
-+	clock_gettime(CLOCK_MONOTONIC, &ts_start);
-+	do {
-+		struct timespec ts_cs;
-+		bool req = false;
-+
-+		clock_gettime(CLOCK_MONOTONIC, &ts_cs);
-+
-+		total++;
-+		RSEQ_WRITE_ONCE(rs->slice_ctrl.request, 1);
-+		do {
-+			clock_gettime(CLOCK_MONOTONIC, &ts_now);
-+		} while (!elapsed(&ts_cs, &ts_now, variant->slice_nsecs));
-+
-+		/*
-+		 * request can be cleared unconditionally, but for making
-+		 * the stats work this is actually checking it first
-+		 */
-+		if (RSEQ_READ_ONCE(rs->slice_ctrl.request)) {
-+			RSEQ_WRITE_ONCE(rs->slice_ctrl.request, 0);
-+			/* Race between check and clear! */
-+			req = true;
-+			success++;
-+		}
-+
-+		if (RSEQ_READ_ONCE(rs->slice_ctrl.granted)) {
-+			/* The above raced against a late grant */
-+			if (req)
-+				success--;
-+			if (variant->no_yield) {
-+				syscall(__NR_getpid);
-+				aborted++;
-+			} else {
-+				yielded++;
-+				if (!syscall(__NR_rseq_slice_yield))
-+					raced++;
-+			}
-+		} else {
-+			if (!req)
-+				scheduled++;
-+		}
-+
-+		clock_gettime(CLOCK_MONOTONIC, &ts_now);
-+	} while (!elapsed(&ts_start, &ts_now, variant->total_nsecs));
-+
-+	printf("# Total     %12ld\n", total);
-+	printf("# Success   %12ld\n", success);
-+	printf("# Yielded   %12ld\n", yielded);
-+	printf("# Aborted   %12ld\n", aborted);
-+	printf("# Scheduled %12ld\n", scheduled);
-+	printf("# Raced     %12ld\n", raced);
-+}
-+
-+TEST_HARNESS_MAIN
+P. S. For unknown reasons I don't see your email in my Gmail. Not even in
+spam folder.
 
+
+-- 
+Askar Safin
 
