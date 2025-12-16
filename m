@@ -1,227 +1,170 @@
-Return-Path: <linux-arch+bounces-15453-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15454-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346D3CC139C
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Dec 2025 08:00:52 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 926C6CC140E
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Dec 2025 08:11:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 61FBB30239D7
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Dec 2025 07:00:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2D5DD3047B49
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Dec 2025 07:11:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB9F338905;
-	Tue, 16 Dec 2025 07:00:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBEC333BBD7;
+	Tue, 16 Dec 2025 07:04:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QJXU0ivI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQckP6np"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451DE225413;
-	Tue, 16 Dec 2025 07:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A127333BBD6
+	for <linux-arch@vger.kernel.org>; Tue, 16 Dec 2025 07:04:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765868438; cv=none; b=XSrHAMOHQu6PuoDTk7ndzAW4g0Jqak1klYBs/plcCwhzBfCZDov8P1gD2XGngVMf0dC4TakUjAvfYxAB/vT2mKcx5I/HwT3mcX+FBfkQpE66AHHHYpHKq1RqEEeclIsRUTodi1edAZNjRyz1AmkvquqMdvQBd2lVHfjaZFpQsck=
+	t=1765868693; cv=none; b=M1E45aG5y2cdXBjD2eYsy72ELy+U9hXzLQpFcrASxLODvWQvtBaZ2Pn9dO+JddYqWPMlYXvgIN+U1kXObkith/JE44ftjRB5VJi/DokhjYkUe4RQ8EP892flmQa1yw1O8+qKQxjjfoQC3m7H7QygrXHiWU7UTI5eAS0QwU5BMwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765868438; c=relaxed/simple;
-	bh=qY8QMfnRy/a3cs9SUvODsIarwko2nwg42PutdqdoI9s=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=TtxYymZGUOz1yh3HHvsnWSA9ocwGsDauHZiGcZ49ahxKwFW4rJtGrqXw/dhToRmpIfKj2wvLKZIxvEqozwafahQXIgQ+jbg3f3i6zxlMmWrJmtdJczRU08xLgk9Ur8fx+xxf77FhiwTMLVGLOvgH2TID/pS0H25RQQVKbADWVro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QJXU0ivI; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=ACLxWNBKlHzVYrQhk+bIPDxbMvRXgt1a0foI415LnX4=; b=QJXU0ivIeBSXYI/xeJMRaNszO/
-	3N07ehRAX6bpi9ocM0/RhO18PXW7yDlTSBZeY2KO/EzP7HrqEFfNMN+caN/TAlT0zTxOmhXJGKJGC
-	DFqJzmsU8Fi8N4yFEX/r/AOacAnnKIKh4nmIVmJbpUJkywLMkOCRnSYNF7OrmWCi/OIG1ObxhqRwi
-	n/IRgskUcjEfHp41IVygkeiJXsTqr7vxTO5scFMdybpHp4b3hnPPzNhX/EIzhPDuEpKyEwDdJstjq
-	h1X39dJKIHUTC+IqdNwmUHfo8E+U/j51fff9B9mT9yc0neDnekDPXsKfz7aX7iZfNa/QNy1EmvPDI
-	Lck+C40A==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vVP2w-00000004ojt-3TS1;
-	Tue, 16 Dec 2025 07:00:34 +0000
-Message-ID: <93682055-4a6d-4098-b74f-afef735d1699@infradead.org>
-Date: Mon, 15 Dec 2025 23:00:33 -0800
+	s=arc-20240116; t=1765868693; c=relaxed/simple;
+	bh=cTs6oU6Oo2QgwQL/Coafq9Ym3NDB+lSLyf/MAHwo5r4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ctcl0ehzgZ6wqcXJKjSeKi1WSMxA3VBCK0FKeaaKxH9Cj6LY2NTtlQ7OC9e1rFbD+jHc3t3H/FWOYvqPGzEGvb5xhkpWd3fz4QbL8TIZB5waZNn+5LW6juFACcKY705voOrfekQlPbC4QkZIvEyAF2Ir3qlssswhfPv/lP6uRxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQckP6np; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADEF3C2BCAF
+	for <linux-arch@vger.kernel.org>; Tue, 16 Dec 2025 07:04:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765868692;
+	bh=cTs6oU6Oo2QgwQL/Coafq9Ym3NDB+lSLyf/MAHwo5r4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=NQckP6npZK9/PfGYLKL2aZ9xnM51trELjK08fbM6ZNnT2JcOUdeaPaQP5f7cUSts2
+	 pshEJe7LM43vdQtr6wV2LWND1tmWHFyc0iUVADogRbcpI2Nf44RYOkpKu2M1QBnVoO
+	 htCz92hRouXrH0un9F2kuNd1PlVuqdF6RwfH7xsAkHe3JLEFK5U7vvZqTslSjw4jit
+	 bLCNIo2+uDOs2SYzATEa/VTHNzKCezB2Ccmy0Qpe7Ta8YhDYQTqQ5/hgrbv2PTgLoN
+	 5STdSI7CGFPV6yU1WcJvAbswDwzf0kt/LFkyd6c7WxNr8pYZOZnfyskkiKs0z5FDvz
+	 XPj53gmEv0Ahw==
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-47798ded6fcso27015615e9.1
+        for <linux-arch@vger.kernel.org>; Mon, 15 Dec 2025 23:04:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXqIxY3n23Fko62Do1XN30WkSrctWvEQrIrNDYWSb9rXQ62et4+bKgPQvHtPGPH86nBqr7WbzWAdTZV@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8jlG8oN6c0TF3T5IipW33qpVwfeEqh+BWjiGi1BBXUgdWnQW9
+	Kj70QXP7jNQoj9GN5dXLOMxv1J8633qFXdGVvtn4t8UxxfEiNPTUQojR4iTM9yLilBvCEIYAzSB
+	arGDWD3gLfq7SMa3KQ09yJiOsOwqoI0U=
+X-Google-Smtp-Source: AGHT+IGYHo9VOhcFYKNbjTNxHIdrTnMfwbE86A/62NJHlvWxMK0rZfN8i+x5ucAfLFPqBVfq3IUbZ92ZsgWOIViCDU0=
+X-Received: by 2002:a05:600c:860b:b0:47a:814c:eea1 with SMTP id
+ 5b1f17b1804b1-47a8f91d91fmr144344905e9.35.1765868691025; Mon, 15 Dec 2025
+ 23:04:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/26] Introduce meminspect
-From: Randy Dunlap <rdunlap@infradead.org>
-To: Eugen Hristev <eugen.hristev@linaro.org>, linux-arm-msm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, tglx@linutronix.de,
- andersson@kernel.org, pmladek@suse.com, corbet@lwn.net, david@redhat.com,
- mhocko@suse.com, linux-debuggers@vger.kernel.org
-Cc: tudor.ambarus@linaro.org, mukesh.ojha@oss.qualcomm.com,
- linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
- jonechou@google.com, rostedt@goodmis.org, linux-doc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-arch@vger.kernel.org, tony.luck@intel.com, kees@kernel.org,
- Trilok Soni <tsoni@quicinc.com>, Kaushal Kumar <kaushalk@qti.qualcomm.com>,
- Shiraz Hashim <shashim@qti.qualcomm.com>,
- Peter Griffin <peter.griffin@linaro.org>, stephen.s.brennan@oracle.com,
- Will McVicker <willmcvicker@google.com>,
- "stefan.schmidt@linaro.org" <stefan.schmidt@linaro.org>
-References: <20251119154427.1033475-1-eugen.hristev@linaro.org>
- <bf00eec5-e9fe-41df-b758-7601815b24a0@linaro.org>
- <5903a8e1-71c6-4546-ac50-35effa078dda@infradead.org>
- <c3db6ccd-dfc7-4a6a-82b7-3d615f8cab4f@linaro.org>
- <b74aef93-9138-413a-8327-36c746d67e10@infradead.org>
-Content-Language: en-US
-In-Reply-To: <b74aef93-9138-413a-8327-36c746d67e10@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1765866665.git.fthain@linux-m68k.org> <d6cd17b387fa4b4cf9f419ec586ac4756bc7aaeb.1765866665.git.fthain@linux-m68k.org>
+In-Reply-To: <d6cd17b387fa4b4cf9f419ec586ac4756bc7aaeb.1765866665.git.fthain@linux-m68k.org>
+From: Guo Ren <guoren@kernel.org>
+Date: Tue, 16 Dec 2025 15:04:38 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRH0bBO4cmoorSwPj5CqcfGp5kGj-QPxoS_AkfhjeACAA@mail.gmail.com>
+X-Gm-Features: AQt7F2pnUxgY4AQsmByAYEsFwtNZoW_GQoA8q9NUaqXwqiVHOjwuLnX2v2rGnfQ
+Message-ID: <CAJF2gTRH0bBO4cmoorSwPj5CqcfGp5kGj-QPxoS_AkfhjeACAA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] atomic: Specify alignment for atomic_t and atomic64_t
+To: Finn Thain <fthain@linux-m68k.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Will Deacon <will@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linux-csky@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	linux-openrisc@vger.kernel.org, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, linux-sh@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Dec 16, 2025 at 2:38=E2=80=AFPM Finn Thain <fthain@linux-m68k.org> =
+wrote:
+>
+> Some recent commits incorrectly assumed 4-byte alignment of locks.
+> That assumption fails on Linux/m68k (and, interestingly, would have
+> failed on Linux/cris also). The jump label implementation makes a
+> similar alignment assumption.
+>
+> The expectation that atomic_t and atomic64_t variables will be naturally
+> aligned seems reasonable, as indeed they are on 64-bit architectures.
+> But atomic64_t isn't naturally aligned on csky, m68k, microblaze, nios2,
+> openrisc and sh. Neither atomic_t nor atomic64_t are naturally aligned
+> on m68k.
+>
+> This patch brings a little uniformity by specifying natural alignment
+> for atomic types. One benefit is that atomic64_t variables do not get
+> split across a page boundary. The cost is that some structs grow which
+> leads to cache misses and wasted memory.
+>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: linux-csky@vger.kernel.org
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: linux-openrisc@vger.kernel.org
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: linux-sh@vger.kernel.org
+> Link: https://lore.kernel.org/lkml/CAFr9PX=3DMYUDGJS2kAvPMkkfvH+0-SwQB_kx=
+E4ea0J_wZ_pk=3D7w@mail.gmail.com
+> Link: https://lore.kernel.org/lkml/CAMuHMdW7Ab13DdGs2acMQcix5ObJK0O2dG_Fx=
+zr8_g58Rc1_0g@mail.gmail.com/
+> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+> ---
+> Changed since v2:
+>  - Specify natural alignment for atomic64_t.
+> Changed since v1:
+>  - atomic64_t now gets an __aligned attribute too.
+>  - The 'Fixes' tag has been dropped because Lance sent a different fix
+>    for commit e711faaafbe5 ("hung_task: replace blocker_mutex with encode=
+d
+>    blocker") that's suitable for -stable.
+> ---
+>  include/asm-generic/atomic64.h | 2 +-
+>  include/linux/types.h          | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/asm-generic/atomic64.h b/include/asm-generic/atomic6=
+4.h
+> index 100d24b02e52..f22ccfc0df98 100644
+> --- a/include/asm-generic/atomic64.h
+> +++ b/include/asm-generic/atomic64.h
+> @@ -10,7 +10,7 @@
+>  #include <linux/types.h>
+>
+>  typedef struct {
+> -       s64 counter;
+> +       s64 __aligned(sizeof(s64)) counter;
+This alignment is okay for all.
+
+Acked-by: Guo Ren <guoren@kernel.org>
+
+>  } atomic64_t;
+>
+>  #define ATOMIC64_INIT(i)       { (i) }
+> diff --git a/include/linux/types.h b/include/linux/types.h
+> index 6dfdb8e8e4c3..a225a518c2c3 100644
+> --- a/include/linux/types.h
+> +++ b/include/linux/types.h
+> @@ -179,7 +179,7 @@ typedef phys_addr_t resource_size_t;
+>  typedef unsigned long irq_hw_number_t;
+>
+>  typedef struct {
+> -       int counter;
+> +       int __aligned(sizeof(int)) counter;
+>  } atomic_t;
+>
+>  #define ATOMIC_INIT(i) { (i) }
+> --
+> 2.49.1
+>
 
 
-
-On 12/15/25 10:54 PM, Randy Dunlap wrote:
-> 
-> 
-> On 12/12/25 11:22 PM, Eugen Hristev wrote:
->>
->>
->> On 12/13/25 08:57, Randy Dunlap wrote:
->>> Hi,
->>>
->>> On 12/12/25 10:48 PM, Eugen Hristev wrote:
->>>>
->>>>
->>>> On 11/19/25 17:44, Eugen Hristev wrote:
->>>>> meminspect is a mechanism which allows the kernel to mark specific memory
->>>>> areas for memory dumping or specific inspection, statistics, usage.
->>>>> Once regions are marked, meminspect keeps an internal list with the regions
->>>>> in a dedicated table.
->>>>
->>>> [...]
->>>>
->>>>
->>>>> I will present this version at Plumbers conference in Tokyo on December 13th:
->>>>> https://lpc.events/event/19/contributions/2080/
->>>>> I am eager to discuss it there face to face.
->>>>
->>>> Summary of the discussions at LPC talk on Dec 13th:
->>>>
->>>> One main idea on the static variables annotation was to do some linker
->>>> magic, to create a list of variables in the tree, that would be parsed
->>>> by some script, the addresses and sizes would be then stored into the
->>>> dedicated section at the script level, without having any C code change.
->>>> Pros: no C code change, Cons: it would be hidden/masked from the code,
->>>> easy to miss out, which might lead to people's variables being annotated
->>>> without them knowing
->>>>
->>>> Another idea was to have variables directly stored in a dedicated
->>>> section which would be added to the table.
->>>> e.g. static int __attribute(section (...)) nr_irqs;
->>>> Pros: no more meminspect section Cons: have to keep all interesting
->>>> variables in a separate section, which might not be okay for everyone.
->>>>
->>>> On dynamic memory, the memblock flag marking did not receive any obvious
->>>> NAKs.
->>>>
->>>> On dynamic memory that is bigger in size than one page, as the table
->>>> entries are registered by virtual address, this would be non-contiguous
->>>> in physical memory. How is this solved?
->>>> -> At the moment it's left for the consumer drivers to handle this
->>>> situation. If the region is a VA and the size > PAGE_SIZE, then the
->>>> driver needs to handle the way it handles it. Maybe the driver that
->>>> parses the entry needs to convert it into multiple contiguous entries,
->>>> or just have virtual address is enough. The inspection table does not
->>>> enforce or limit the entries to contiguous entries only.
->>>>
->>>> On the traverse/notifier system, the implementation did not receive any
->>>> obvious NAKs
->>>>
->>>> General comments:
->>>>
->>>> Trilok Soni from Qualcomm mentioned they will be using this into their
->>>> software deliveries in production.
->>>>
->>>> Someone suggested to have some mechanism to block specific data from
->>>> being added to the inspection table as being sensitive non-inspectable
->>>> data.
->>>> [Eugen]: Still have to figure out how that could be done. Stuff is not
->>>> being added to the table by default.
->>>>
->>>> Another comment was about what use case there is in mind, is this for
->>>> servers, or for confidential computing, because each different use case
->>>> might have different requirements, like ignoring some regions is an
->>>> option in one case, but bloating the table in another case might not be
->>>> fine.
->>>> [Eugen]: The meminspect scenario should cover all cases and not be too
->>>> specific. If it is generic enough and customizable enough to care for
->>>> everyone's needs then I consider it being a success. It should not
->>>> specialize in neither of these two different cases, but rather be
->>>> tailored by each use case to provide the mandatory requirements for that
->>>> case.
->>>>
->>>> Another comment mentioned that this usecase does not apply to many
->>>> people due to firmware or specific hardware needed.
->>>> [Eugen]: one interesting proposed usecase is to have a pstore
->>>> driver/implementation that would traverse the inspection table at panic
->>>> handler time, then gather data from there to store in the pstore
->>>> (ramoops, mtdoops or whatever backend) and have it available to the
->>>> userspace after reboot. This would be a nice use case that does not
->>>> require firmware nor specific hardware, just pstore backend support.
->>>>
->>>> Ending note was whether this implementation is going in a good direction
->>>> and what would be the way to having it moving upstream.
->>>>
->>>> Thanks everyone who attended and came up with ideas and comments.
->>>> There are a few comments which I may have missed, so please feel free to
->>>> reply to this email to start a discussion thread on the topic you are
->>>> interested in.
->>>>
->>>> Eugen
->>>>
->>>
->>> Maybe you or someone else has already mentioned this. If so, sorry I missed it.
->>>
->>> How does this compare or contrast to VMCOREINFO?
->>>
->>> thanks.
->>
->> This inspection table could be created in an VMCOREINFO way, the patch
->> series here[1] is something that would fit it best .
->>
->> The drawbacks are :
->> some static variables have to be registered to VMCOREINFO in their file
->> of residence. This means including vmcoreinfo header and adding
->> functions/code there, and everywhere that would be needed , or , the
->> variables have to be un-static'ed , which is a no-go.
->> This received more negative opinions on that particular patch series.
->> The annotation idea seemed cleaner and simpler, and more generic.
->>
->> We could add more and more entries to the vmcoreinfo table, but that
->> would mean expanding it a lot, which it would maybe defy its purpose,
->> and be getting too big, especially for the cases where custom drivers
->> would like to register data.
->>
->> How I see it, is that maybe the vmcoreinfo init function, could also
->> parse the inspection table and create more entries if that is needed.
->> So somehow memory inspection is a superset or generalization , while
->> VMCOREINFO is a more particular use case that would fit here.
->>
->> Do you think of some better way to integrate the meminspect table into
->> VMCOREINFO ?
-> 
-> No, I just wanted to make sure that you or someone had looked into that.
-> Thanks for your summary.
-
-Although you copied Stephen Brennan on this, I think it would be a good idea
-to copy the linux-debuggers@vger.kernel.org mailing list also to see if
-there are any other comments about it. [now done]
-
->> [1]
->> https://lore.kernel.org/all/20250912150855.2901211-1-eugen.hristev@linaro.org/
-> 
-
--- 
-~Randy
-
+--=20
+Best Regards
+ Guo Ren
 
