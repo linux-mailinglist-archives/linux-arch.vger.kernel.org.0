@@ -1,157 +1,106 @@
-Return-Path: <linux-arch+bounces-15496-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15497-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD798CCC4B7
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Dec 2025 15:36:19 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6967CCC689
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Dec 2025 16:12:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AF8EF30275BD
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Dec 2025 14:36:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A28D930A67D3
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Dec 2025 15:06:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D141C2737F9;
-	Thu, 18 Dec 2025 14:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100512DC783;
+	Thu, 18 Dec 2025 15:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PpMbVtrz"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dLLE4R3b"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863C8257448
-	for <linux-arch@vger.kernel.org>; Thu, 18 Dec 2025 14:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317A124DD1F;
+	Thu, 18 Dec 2025 15:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766068576; cv=none; b=k/UHHce4dudmppsRan483Cyexl9qClfiuyMUaRHLDkI4NgInLB5vMzo1ZFqMegitIoLNJY1FcTZAHn4M2FzYwJxvqdexfgYPzt4hUvz5T7O2pfPGl4ddi+7JkE0Lkmar6gbULK/t1ZAx6minS4y60en/skn8HoI0EIUkAiNzhCo=
+	t=1766070342; cv=none; b=nb7EXNBhBj1DdfyTa87imX8xmL16PEiId3XBB2ew+uYD3iXjm5Utw99B6mcFKA8Sx9UmJYj7nZoUeaaRAQYRMjJJpZRLf8mdVq/QzmyvHKcwDhZ6phZOEWeYboel1GtUYQnwzJ8N7K5z2sIh2jpX+anDNmqtEDxk5EjYrcQJ7Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766068576; c=relaxed/simple;
-	bh=4KEVoBX1tq64wU+qAS265Rmxx0K+GFXcp+VSKNYxIp4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PVB21IaDVH0HJJEYRI6fKYG7VvK/eT31c1WklfzKFtxAD19nxPyxYrvx0BYsEhgLqwjB9zLYrSUmCsAzrCvZB+KbH6yY0iRZB6UcpOVxziWX9/71UkCeRdzixord3axGPVW3nBp0WelgsQ5rUoQXzaNd8Dk2PMFAxVDwylAtdbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PpMbVtrz; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <6fdf89ee-3f6a-420f-b4d6-b03e3e2c8c9b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766068571;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8/obYsmYE7DxZF0F7CimsIs8ULL/trNGoQu3yuIxJ4Q=;
-	b=PpMbVtrzF9RqtCYbqHrg5kVIozY0nQPPfUZDye+GfxYxEfRSyrmGid/c8J5DlSEP9uuEaZ
-	Rg366J3xLe78dFngON/IJ7OO8n1xI7PKzXlwpQYQvzYImbl3cCw37jX/Pq7r9o4a6Q0eDX
-	kD2GtDWnn4voFSAKU1hfnCKTYllD5wI=
-Date: Thu, 18 Dec 2025 22:35:59 +0800
+	s=arc-20240116; t=1766070342; c=relaxed/simple;
+	bh=r01wZaBj0VPKn3oBEMLPuntXAg3nmbcyznD01aHu/Po=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tgALl+7L8CW2XclzRyR8S1A6/++TRG6SLL53bOqSxQ0SGb7kuocG0su7XVc/N0TyeT3o58KPIkcczif0RS9e4c371CD4aJA2NMWkfQhDN9o7RpOynsNrVIynnLk5NrlkDgxf4YpgCjor66vtRqtyMuXOwZqPUSyhx6buU3aNChI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dLLE4R3b; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=wVHRy78R0B7MDh+3cNQB284F3wNlr+lFLKkcoS/2ySA=; b=dLLE4R3bzrshh2HSB+OHFP57TK
+	6Y7T5mPSIhr4Om8R+Q3J0lnaQxO6usDaV1iLDhjKplhyNTwcADMN97vwfHDu62WyiJxMwTIiNUSLB
+	BYlZuvo3dHBVsNvjZp3vp8kB+pnhssQ/CVFgwI48X3c7cfQJRYExzUyk1dRSO5vd59aAUI8DRFQ4F
+	Xo2IPm/EiEwk93/wxQ3tO8K+UtB+Yb7gD3ArQiNBeIftRuz6j4uV40pLjRyd+9xeyWL0sUK4TOt3d
+	3HqTVB/ZJEhwH7jpQS39b6a3GSJ6KCaCBsvqBPAsILyc8TmJaUu5Q550JE3nZr4SEYgMZCqskq6nE
+	DEf7kyPQ==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vWEhn-0000000919l-1NwY;
+	Thu, 18 Dec 2025 14:10:11 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A96D730056B; Thu, 18 Dec 2025 16:05:24 +0100 (CET)
+Date: Thu, 18 Dec 2025 16:05:24 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+	Prakash Sangappa <prakash.sangappa@oracle.com>,
+	Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ron Geva <rongevarg@gmail.com>, Waiman Long <longman@redhat.com>
+Subject: Re: [patch V6 07/11] rseq: Implement time slice extension
+ enforcement timer
+Message-ID: <20251218150524.GY3707837@noisy.programming.kicks-ass.net>
+References: <20251215155615.870031952@linutronix.de>
+ <20251215155709.068329497@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RFC 3/3] mm/khugepaged: skip redundant IPI in
- collapse_huge_page()
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
- peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
- lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
- Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
- shy828301@gmail.com, riel@surriel.com, jannh@google.com,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-References: <20251213080038.10917-1-lance.yang@linux.dev>
- <20251213080038.10917-4-lance.yang@linux.dev>
- <948d425a-2d6e-4439-a280-0ca9e7521b13@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <948d425a-2d6e-4439-a280-0ca9e7521b13@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251215155709.068329497@linutronix.de>
 
+On Mon, Dec 15, 2025 at 05:52:22PM +0100, Thomas Gleixner wrote:
 
+> V5: Document the slice extension range - PeterZ
 
-On 2025/12/18 21:13, David Hildenbrand (Red Hat) wrote:
-> On 12/13/25 09:00, Lance Yang wrote:
->> From: Lance Yang <lance.yang@linux.dev>
->>
->> Similar to the hugetlb PMD unsharing optimization, skip the second IPI
->> in collapse_huge_page() when the TLB flush already provides necessary
->> synchronization.
->>
->> Before commit a37259732a7d ("x86/mm: Make MMU_GATHER_RCU_TABLE_FREE
->> unconditional"), bare metal x86 didn't enable MMU_GATHER_RCU_TABLE_FREE.
->> In that configuration, tlb_remove_table_sync_one() was a NOP. GUP-fast
->> synchronization relied on IRQ disabling, which blocks TLB flush IPIs.
->>
->> When Rik made MMU_GATHER_RCU_TABLE_FREE unconditional to support AMD's
->> INVLPGB, all x86 systems started sending the second IPI. However, on
->> native x86 this is redundant:
->>
->>    - pmdp_collapse_flush() calls flush_tlb_range(), sending IPIs to all
->>      CPUs to invalidate TLB entries
->>
->>    - GUP-fast runs with IRQs disabled, so when the flush IPI completes,
->>      any concurrent GUP-fast must have finished
->>
->>    - tlb_remove_table_sync_one() provides no additional synchronization
->>
->> On x86, skip the second IPI when running native (without paravirt) and
->> without INVLPGB. For paravirt with non-native flush_tlb_multi and for
->> INVLPGB, conservatively keep both IPIs.
->>
->> Use tlb_table_flush_implies_ipi_broadcast(), consistent with the hugetlb
->> optimization.
->>
->> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
->> Signed-off-by: Lance Yang <lance.yang@linux.dev>
->> ---
->>   mm/khugepaged.c | 7 ++++++-
->>   1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->> index 97d1b2824386..06ea793a8190 100644
->> --- a/mm/khugepaged.c
->> +++ b/mm/khugepaged.c
->> @@ -1178,7 +1178,12 @@ static int collapse_huge_page(struct mm_struct 
->> *mm, unsigned long address,
->>       _pmd = pmdp_collapse_flush(vma, address, pmd);
->>       spin_unlock(pmd_ptl);
->>       mmu_notifier_invalidate_range_end(&range);
->> -    tlb_remove_table_sync_one();
->> +    /*
->> +     * Skip the second IPI if the TLB flush above already synchronized
->> +     * with concurrent GUP-fast via broadcast IPIs.
->> +     */
->> +    if (!tlb_table_flush_implies_ipi_broadcast())
->> +        tlb_remove_table_sync_one();
-> 
-> We end up calling
-> 
->      flush_tlb_range(vma, address, address + HPAGE_PMD_SIZE);
-> 
->      -> flush_tlb_mm_range(freed_tables = true)
-> 
->      -> flush_tlb_multi(mm_cpumask(mm), info);
-> 
-> So freed_tables=true and we should be doing the right thing.
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -1228,6 +1228,14 @@ reboot-cmd (SPARC only)
+>  ROM/Flash boot loader. Maybe to tell it what to do after
+>  rebooting. ???
+>  
+> +rseq_slice_extension_nsec
+> +=========================
+> +
+> +A task can request to delay its scheduling if it is in a critical section
+> +via the prctl(PR_RSEQ_SLICE_EXTENSION_SET) mechanism. This sets the maximum
+> +allowed extension in nanoseconds before scheduling of the task is enforced.
+> +Default value is 30000ns (30us). The possible range is 10000ns (10us) to
+> +50000ns (50us).
 
-Yep ;)
+The important bit: we're not going to increase these numbers. If
+anything, I would like the default to be 10us and taint the kernel if
+you up it.
 
-> BTW, I was wondering whether we should embed that 
-> tlb_table_flush_implies_ipi_broadcast() check in 
-> tlb_remove_table_sync_one() instead.
-> It then relies on the caller to do the right thing (flush with 
-> freed_tables=true or unshared_tables = true).
-> 
-> Thoughts?
+I also think we want some tracing/tool to find the actual length of the
+extension used (min/avg/max etc.). That is the time between the kernel
+finding the extension bit set and arming the timer and the slice_yield()
+syscall.
 
-Good point! Let me check the other callers to ensure they
-are all preceded by a flush with freed_tables=true (or unshared_tables).
-
-Will get back to you with what I find :)
-
-Cheers,
-Lance
 
