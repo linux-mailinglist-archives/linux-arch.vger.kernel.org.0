@@ -1,166 +1,164 @@
-Return-Path: <linux-arch+bounces-15512-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15513-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38F30CCEED4
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 09:14:41 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2444FCCEF65
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 09:25:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8C92B3030764
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 08:13:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DE1E5300764C
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 08:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC022EDD6C;
-	Fri, 19 Dec 2025 08:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086B128934F;
+	Fri, 19 Dec 2025 08:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bvV56RgS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f0IbDoos"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8507D2ECD2A;
-	Fri, 19 Dec 2025 08:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1DDE274B3C;
+	Fri, 19 Dec 2025 08:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766132000; cv=none; b=T2usEQbVEkNk7Gs2HflVXlAmyQkSMAWQa0fC2Zybh1BOflClonfH1EXJdBBoYudFrh/yd+IsiqhGZpC917uooOx42RHyRcVpM7sZwlXgQloujavYVj+ArLTZOBlNDizJpSc40+R1QmRDHP26NIEYAE4f2eYWvEYf9IdBP6TzmMk=
+	t=1766132752; cv=none; b=ggMJbJS/gc1DmmQDR9+Sfj+IitBL+m55ZyoqC++yEiwyyGvI2HnMHhKPlzIzUg5BmGAS5D/9WDMu71/c/6QAfr39NKBGek//0yzBa3jslubKfP6bjr9b+XHUr3Ebt43pR5TVKr5zFl1edhoNbeFde3ufpYyZkeCJyDgJSQouiWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766132000; c=relaxed/simple;
-	bh=c8UdFBb7F8dmejdnU77Se4Vh0A297D7YwvyeUjSzvGs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GnvKy6UkEc7gJVNe9wJTI2U7d8Wj/RkHX2oweCoF4St5h/IwXw+PusydnnvI6gALE3Iw+ZUJv+e5a3js7wwkau12xH1Litnd/fxiT9+lnU/GytiftCqr8rGTl5zLhoG4PV9ZCFEP8l53jbRzDihnJV+2aAVH6zs0/wGkMnEsReM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bvV56RgS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C38C116B1;
-	Fri, 19 Dec 2025 08:13:19 +0000 (UTC)
+	s=arc-20240116; t=1766132752; c=relaxed/simple;
+	bh=/RRZ3mRSlbHOY3u6KA/2jGTrq8Qaxhr/c/ozcV+Y+Fk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VS9afc6Sjh+K1DuADaJTi2fyrBisnpFtQ7cc0Og9+P+mE9p22/HsaF9CK+EobwGMwOZ+/K3YY4/VDF5kYB4XGAidunON7NW/fOFIb6fvlqnUTm6vmwbitBJ/eEYyzPt/o5gju61zmPtT9KKMsNoGlju1MR4s1RpjpLrvEfq4EVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f0IbDoos; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 870E8C4CEF1;
+	Fri, 19 Dec 2025 08:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766131999;
-	bh=c8UdFBb7F8dmejdnU77Se4Vh0A297D7YwvyeUjSzvGs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bvV56RgSwPdWBOuOtUPVcXSmtsttDdT6myfmjpB+QZDRMIVyr7unLn+z+isWBP0Wy
-	 Ny2hKlhPpLoymTC6JQ0DzSc0lTtu4IdOjoxflDk5ls0qr9rZjX4H6YN/PUpzbnQdAP
-	 YpBOlDFBUmVl0ocWFf3MbPKhlUbei8L4bQwXt0Rf0W+fKMNrpn0yKASpPBE+phUtE+
-	 eS0MjQp6QSCCa4q9q8ZjhuUYyTNuM7t+D6ja4QPtH8eUDpUit5SxogEKu15rseJwgW
-	 mLfXoM8WdWG/4ZWUCIaOk3MfOwvaMmfztq3vshIPQCpKqjoQqXVEii+dxxDbG6AI8Q
-	 Q/PUXYGj8Kqgg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B5B5D380AA50;
-	Fri, 19 Dec 2025 08:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1766132752;
+	bh=/RRZ3mRSlbHOY3u6KA/2jGTrq8Qaxhr/c/ozcV+Y+Fk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=f0IbDoosSzUY1ZyRHNqb732zfUiSXMvzWpxfK/unVQgAuPAwYWbNvqyCsfYWR5fit
+	 7+x6bgUuA3CtH3n0GAiOZL9xk/LUcL45zYnr8neQPOgJmqRyuHRUXmN9KjwkF4/Em/
+	 X5CM7WgFFQ4dCoKXPcyKh4BCKw5LCWWQhw9lRKCo0KAMJ1h2QwhHQq82iaCQMCm0ye
+	 wqoEM3v8Sx0pioqN8h1Y0r7hLBMCbHwEstBASeMw6n4X9rlqwiuTd6EnP3fE6I5lXH
+	 UlQ48qppsN89wNNrss1UqRXly3H5rtZ6QBQkUOt8ix1v5B1mqVfRl873piLgi80d/a
+	 6+kU8A1On/9mw==
+Message-ID: <6dcfeb2a-dba6-4de9-ac1b-39312c6bbcb6@kernel.org>
+Date: Fri, 19 Dec 2025 09:25:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 3/3] mm/khugepaged: skip redundant IPI in
+ collapse_huge_page()
+To: Lance Yang <lance.yang@linux.dev>
+Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+ peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
+ lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
+ shy828301@gmail.com, riel@surriel.com, jannh@google.com,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+References: <20251213080038.10917-1-lance.yang@linux.dev>
+ <20251213080038.10917-4-lance.yang@linux.dev>
+ <948d425a-2d6e-4439-a280-0ca9e7521b13@kernel.org>
+ <6fdf89ee-3f6a-420f-b4d6-b03e3e2c8c9b@linux.dev>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+In-Reply-To: <6fdf89ee-3f6a-420f-b4d6-b03e3e2c8c9b@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v7 00/31] context_tracking,x86: Defer some IPIs until a
- user->kernel transition
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <176613180853.3684357.18339473690014642605.git-patchwork-notify@kernel.org>
-Date: Fri, 19 Dec 2025 08:10:08 +0000
-References: <20251114150133.1056710-1-vschneid@redhat.com>
-In-Reply-To: <20251114150133.1056710-1-vschneid@redhat.com>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, rcu@vger.kernel.org, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linux-arch@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
- peterz@infradead.org, acme@kernel.org, jpoimboe@kernel.org,
- pbonzini@redhat.com, arnd@arndb.de, frederic@kernel.org, paulmck@kernel.org,
- jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
- samitolvanen@google.com, davem@davemloft.net, neeraj.upadhyay@kernel.org,
- joelagnelf@nvidia.com, josh@joshtriplett.org, boqun.feng@gmail.com,
- urezki@gmail.com, mathieu.desnoyers@efficios.com, mgorman@suse.de,
- akpm@linux-foundation.org, masahiroy@kernel.org, shenhan@google.com,
- riel@surriel.com, jannh@google.com, dan.carpenter@linaro.org,
- oleg@redhat.com, juri.lelli@redhat.com, williams@redhat.com,
- ypodemsk@redhat.com, mtosatti@redhat.com, dwagner@suse.de, ptesarik@suse.com,
- sshegde@linux.ibm.com
 
-Hello:
-
-This series was applied to riscv/linux.git (fixes)
-by Frederic Weisbecker <frederic@kernel.org>:
-
-On Fri, 14 Nov 2025 16:01:02 +0100 you wrote:
-> Context
-> =======
+On 12/18/25 15:35, Lance Yang wrote:
 > 
-> We've observed within Red Hat that isolated, NOHZ_FULL CPUs running a
-> pure-userspace application get regularly interrupted by IPIs sent from
-> housekeeping CPUs. Those IPIs are caused by activity on the housekeeping CPUs
-> leading to various on_each_cpu() calls, e.g.:
 > 
-> [...]
+> On 2025/12/18 21:13, David Hildenbrand (Red Hat) wrote:
+>> On 12/13/25 09:00, Lance Yang wrote:
+>>> From: Lance Yang <lance.yang@linux.dev>
+>>>
+>>> Similar to the hugetlb PMD unsharing optimization, skip the second IPI
+>>> in collapse_huge_page() when the TLB flush already provides necessary
+>>> synchronization.
+>>>
+>>> Before commit a37259732a7d ("x86/mm: Make MMU_GATHER_RCU_TABLE_FREE
+>>> unconditional"), bare metal x86 didn't enable MMU_GATHER_RCU_TABLE_FREE.
+>>> In that configuration, tlb_remove_table_sync_one() was a NOP. GUP-fast
+>>> synchronization relied on IRQ disabling, which blocks TLB flush IPIs.
+>>>
+>>> When Rik made MMU_GATHER_RCU_TABLE_FREE unconditional to support AMD's
+>>> INVLPGB, all x86 systems started sending the second IPI. However, on
+>>> native x86 this is redundant:
+>>>
+>>>     - pmdp_collapse_flush() calls flush_tlb_range(), sending IPIs to all
+>>>       CPUs to invalidate TLB entries
+>>>
+>>>     - GUP-fast runs with IRQs disabled, so when the flush IPI completes,
+>>>       any concurrent GUP-fast must have finished
+>>>
+>>>     - tlb_remove_table_sync_one() provides no additional synchronization
+>>>
+>>> On x86, skip the second IPI when running native (without paravirt) and
+>>> without INVLPGB. For paravirt with non-native flush_tlb_multi and for
+>>> INVLPGB, conservatively keep both IPIs.
+>>>
+>>> Use tlb_table_flush_implies_ipi_broadcast(), consistent with the hugetlb
+>>> optimization.
+>>>
+>>> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
+>>> Signed-off-by: Lance Yang <lance.yang@linux.dev>
+>>> ---
+>>>    mm/khugepaged.c | 7 ++++++-
+>>>    1 file changed, 6 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>>> index 97d1b2824386..06ea793a8190 100644
+>>> --- a/mm/khugepaged.c
+>>> +++ b/mm/khugepaged.c
+>>> @@ -1178,7 +1178,12 @@ static int collapse_huge_page(struct mm_struct
+>>> *mm, unsigned long address,
+>>>        _pmd = pmdp_collapse_flush(vma, address, pmd);
+>>>        spin_unlock(pmd_ptl);
+>>>        mmu_notifier_invalidate_range_end(&range);
+>>> -    tlb_remove_table_sync_one();
+>>> +    /*
+>>> +     * Skip the second IPI if the TLB flush above already synchronized
+>>> +     * with concurrent GUP-fast via broadcast IPIs.
+>>> +     */
+>>> +    if (!tlb_table_flush_implies_ipi_broadcast())
+>>> +        tlb_remove_table_sync_one();
+>>
+>> We end up calling
+>>
+>>       flush_tlb_range(vma, address, address + HPAGE_PMD_SIZE);
+>>
+>>       -> flush_tlb_mm_range(freed_tables = true)
+>>
+>>       -> flush_tlb_multi(mm_cpumask(mm), info);
+>>
+>> So freed_tables=true and we should be doing the right thing.
+> 
+> Yep ;)
+> 
+>> BTW, I was wondering whether we should embed that
+>> tlb_table_flush_implies_ipi_broadcast() check in
+>> tlb_remove_table_sync_one() instead.
+>> It then relies on the caller to do the right thing (flush with
+>> freed_tables=true or unshared_tables = true).
+>>
+>> Thoughts?
+> 
+> Good point! Let me check the other callers to ensure they
+> are all preceded by a flush with freed_tables=true (or unshared_tables).
+> 
+> Will get back to you with what I find :)
 
-Here is the summary with links:
-  - [v7,01/31] objtool: Make validate_call() recognize indirect calls to pv_ops[]
-    (no matching commit)
-  - [v7,02/31] objtool: Flesh out warning related to pv_ops[] calls
-    (no matching commit)
-  - [v7,03/31] rcu: Add a small-width RCU watching counter debug option
-    https://git.kernel.org/riscv/c/d1e6d2773898
-  - [v7,04/31] rcutorture: Make TREE04 use CONFIG_RCU_DYNTICKS_TORTURE
-    https://git.kernel.org/riscv/c/82a224498005
-  - [v7,05/31] jump_label: Add annotations for validating noinstr usage
-    (no matching commit)
-  - [v7,06/31] static_call: Add read-only-after-init static calls
-    (no matching commit)
-  - [v7,07/31] x86/paravirt: Mark pv_sched_clock static call as __ro_after_init
-    (no matching commit)
-  - [v7,08/31] x86/idle: Mark x86_idle static call as __ro_after_init
-    (no matching commit)
-  - [v7,09/31] x86/paravirt: Mark pv_steal_clock static call as __ro_after_init
-    (no matching commit)
-  - [v7,10/31] riscv/paravirt: Mark pv_steal_clock static call as __ro_after_init
-    (no matching commit)
-  - [v7,11/31] loongarch/paravirt: Mark pv_steal_clock static call as __ro_after_init
-    (no matching commit)
-  - [v7,12/31] arm64/paravirt: Mark pv_steal_clock static call as __ro_after_init
-    (no matching commit)
-  - [v7,13/31] arm/paravirt: Mark pv_steal_clock static call as __ro_after_init
-    (no matching commit)
-  - [v7,14/31] perf/x86/amd: Mark perf_lopwr_cb static call as __ro_after_init
-    (no matching commit)
-  - [v7,15/31] sched/clock: Mark sched_clock_running key as __ro_after_init
-    (no matching commit)
-  - [v7,16/31] KVM: VMX: Mark __kvm_is_using_evmcs static key as __ro_after_init
-    (no matching commit)
-  - [v7,17/31] x86/bugs: Mark cpu_buf_vm_clear key as allowed in .noinstr
-    (no matching commit)
-  - [v7,18/31] x86/speculation/mds: Mark cpu_buf_idle_clear key as allowed in .noinstr
-    (no matching commit)
-  - [v7,19/31] sched/clock, x86: Mark __sched_clock_stable key as allowed in .noinstr
-    (no matching commit)
-  - [v7,20/31] KVM: VMX: Mark vmx_l1d_should flush and vmx_l1d_flush_cond keys as allowed in .noinstr
-    (no matching commit)
-  - [v7,21/31] stackleack: Mark stack_erasing_bypass key as allowed in .noinstr
-    (no matching commit)
-  - [v7,22/31] objtool: Add noinstr validation for static branches/calls
-    (no matching commit)
-  - [v7,23/31] module: Add MOD_NOINSTR_TEXT mem_type
-    (no matching commit)
-  - [v7,24/31] context-tracking: Introduce work deferral infrastructure
-    (no matching commit)
-  - [v7,25/31] context_tracking,x86: Defer kernel text patching IPIs
-    (no matching commit)
-  - [v7,26/31] x86/jump_label: Add ASM support for static_branch_likely()
-    (no matching commit)
-  - [v7,27/31] x86/mm: Make INVPCID type macros available to assembly
-    (no matching commit)
-  - [RFC,v7,28/31] x86/mm/pti: Introduce a kernel/user CR3 software signal
-    (no matching commit)
-  - [RFC,v7,29/31] x86/mm/pti: Implement a TLB flush immediately after a switch to kernel CR3
-    (no matching commit)
-  - [RFC,v7,30/31] x86/mm, mm/vmalloc: Defer kernel TLB flush IPIs under CONFIG_COALESCE_TLBI=y
-    (no matching commit)
-  - [RFC,v7,31/31] x86/entry: Add an option to coalesce TLB flushes
-    (no matching commit)
+The use case in tlb_table_flush() is a bit confusing. But I would assume 
+that we have a TLB flush with remove_tables=true beforehand. Otherwise 
+we cannot possibly free the page table.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Cheers
 
-
+David
 
