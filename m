@@ -1,164 +1,174 @@
-Return-Path: <linux-arch+bounces-15513-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-15514-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2444FCCEF65
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 09:25:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B235FCCF49A
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 11:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DE1E5300764C
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 08:25:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 60C0C30AEE83
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Dec 2025 10:05:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086B128934F;
-	Fri, 19 Dec 2025 08:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A8AF1E1DE9;
+	Fri, 19 Dec 2025 10:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f0IbDoos"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ACcdzpdu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1DDE274B3C;
-	Fri, 19 Dec 2025 08:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659EF2ECE85;
+	Fri, 19 Dec 2025 10:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766132752; cv=none; b=ggMJbJS/gc1DmmQDR9+Sfj+IitBL+m55ZyoqC++yEiwyyGvI2HnMHhKPlzIzUg5BmGAS5D/9WDMu71/c/6QAfr39NKBGek//0yzBa3jslubKfP6bjr9b+XHUr3Ebt43pR5TVKr5zFl1edhoNbeFde3ufpYyZkeCJyDgJSQouiWM=
+	t=1766138737; cv=none; b=YH6VtR0C19RW8FL1tZY8wLGN1WOd/FPVvLBXjwTum7qyq/n7F+4k4l8+zXe/iBHEUjSYH3eAvVV+4b72+qxPOUKxXNg0WGYSwjrbhb9vi6TFS3SVpjTmsFj8Mn96kXLiE2vSEZrTNaXDHBqGn9r2Xi3oWzOxel9jLt5JERt3rj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766132752; c=relaxed/simple;
-	bh=/RRZ3mRSlbHOY3u6KA/2jGTrq8Qaxhr/c/ozcV+Y+Fk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VS9afc6Sjh+K1DuADaJTi2fyrBisnpFtQ7cc0Og9+P+mE9p22/HsaF9CK+EobwGMwOZ+/K3YY4/VDF5kYB4XGAidunON7NW/fOFIb6fvlqnUTm6vmwbitBJ/eEYyzPt/o5gju61zmPtT9KKMsNoGlju1MR4s1RpjpLrvEfq4EVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f0IbDoos; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 870E8C4CEF1;
-	Fri, 19 Dec 2025 08:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766132752;
-	bh=/RRZ3mRSlbHOY3u6KA/2jGTrq8Qaxhr/c/ozcV+Y+Fk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=f0IbDoosSzUY1ZyRHNqb732zfUiSXMvzWpxfK/unVQgAuPAwYWbNvqyCsfYWR5fit
-	 7+x6bgUuA3CtH3n0GAiOZL9xk/LUcL45zYnr8neQPOgJmqRyuHRUXmN9KjwkF4/Em/
-	 X5CM7WgFFQ4dCoKXPcyKh4BCKw5LCWWQhw9lRKCo0KAMJ1h2QwhHQq82iaCQMCm0ye
-	 wqoEM3v8Sx0pioqN8h1Y0r7hLBMCbHwEstBASeMw6n4X9rlqwiuTd6EnP3fE6I5lXH
-	 UlQ48qppsN89wNNrss1UqRXly3H5rtZ6QBQkUOt8ix1v5B1mqVfRl873piLgi80d/a
-	 6+kU8A1On/9mw==
-Message-ID: <6dcfeb2a-dba6-4de9-ac1b-39312c6bbcb6@kernel.org>
-Date: Fri, 19 Dec 2025 09:25:38 +0100
+	s=arc-20240116; t=1766138737; c=relaxed/simple;
+	bh=9dm8BaywtI/wsDAKb2LyWSSzdxIWbQnPRWdTdUPGpJc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ImKSIkIahh8lR3XSPwcsr0WHK1jDeCy+zykTri0GekWU3UFI9rjgJho1aBQ5Zed1+nN2SkYsR2ZW+v0ocbhscZYVygIfHOthZtOHe9UIQjtOPYo3Zmw3Zxo3k2uXjRjj4E4/hy+fsSwZKw++w1LBpQ1UcGofF3Fs9t/AznuB0kA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ACcdzpdu; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=LMappvxlAVQv3ofQFnpb3f7wYAH9H1sYPpsNVzsHQYk=; b=ACcdzpdu5HuC11809N+Y+Elbi+
+	AgOfGKB6Cpf3XyT7kZ7PKRZCF7eTenno6orvWfl9C+MpLTW1DLArKsAGpwcyFTE5cln7T0C/Ys0Sc
+	GLU9KVbaiaIJmDYRLvsSP1llaOMh7Gl5vcGA08Dc7ZSqpUF4SKUeYS6UnGsFMg6066vtWqjBIud9X
+	OMItdNNJk6+SN/OJ73LVprgL+HKDu4nBgF0/3KzHih/lNtN7AMPRDZxX9GiQQwkcy+XZUPgx6FHin
+	RkHrCfe1MqiYd+ASzYs9R/huKYKNA2+dCRlkB0ICX85otq2ZxLdQaCtpFYh9qDlMpGKztVbegdPiU
+	LpeUwtwg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vWXMN-00000007PPv-2oFJ;
+	Fri, 19 Dec 2025 10:05:20 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 7387030057C; Fri, 19 Dec 2025 11:05:17 +0100 (CET)
+Date: Fri, 19 Dec 2025 11:05:17 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+	Prakash Sangappa <prakash.sangappa@oracle.com>,
+	Madadi Vineeth Reddy <vineethr@linux.ibm.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ron Geva <rongevarg@gmail.com>, Waiman Long <longman@redhat.com>
+Subject: Re: [patch V6 07/11] rseq: Implement time slice extension
+ enforcement timer
+Message-ID: <20251219100517.GA1132199@noisy.programming.kicks-ass.net>
+References: <20251215155615.870031952@linutronix.de>
+ <20251215155709.068329497@linutronix.de>
+ <20251218150524.GY3707837@noisy.programming.kicks-ass.net>
+ <87ecorbccp.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 3/3] mm/khugepaged: skip redundant IPI in
- collapse_huge_page()
-To: Lance Yang <lance.yang@linux.dev>
-Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
- peterz@infradead.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
- lorenzo.stoakes@oracle.com, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
- Liam.Howlett@oracle.com, npache@redhat.com, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, ioworker0@gmail.com,
- shy828301@gmail.com, riel@surriel.com, jannh@google.com,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-References: <20251213080038.10917-1-lance.yang@linux.dev>
- <20251213080038.10917-4-lance.yang@linux.dev>
- <948d425a-2d6e-4439-a280-0ca9e7521b13@kernel.org>
- <6fdf89ee-3f6a-420f-b4d6-b03e3e2c8c9b@linux.dev>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-In-Reply-To: <6fdf89ee-3f6a-420f-b4d6-b03e3e2c8c9b@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=unknown-8bit
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <87ecorbccp.ffs@tglx>
 
-On 12/18/25 15:35, Lance Yang wrote:
+On Fri, Dec 19, 2025 at 12:26:46AM +0100, Thomas Gleixner wrote:
+> On Thu, Dec 18 2025 at 16:05, Peter Zijlstra wrote:
+> > On Mon, Dec 15, 2025 at 05:52:22PM +0100, Thomas Gleixner wrote:
+> >
+> >> V5: Document the slice extension range - PeterZ
+> >
+> >> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> >> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> >> @@ -1228,6 +1228,14 @@ reboot-cmd (SPARC only)
+> >>  ROM/Flash boot loader. Maybe to tell it what to do after
+> >>  rebooting. ???
+> >>  
+> >> +rseq_slice_extension_nsec
+> >> +=========================
+> >> +
+> >> +A task can request to delay its scheduling if it is in a critical section
+> >> +via the prctl(PR_RSEQ_SLICE_EXTENSION_SET) mechanism. This sets the maximum
+> >> +allowed extension in nanoseconds before scheduling of the task is enforced.
+> >> +Default value is 30000ns (30us). The possible range is 10000ns (10us) to
+> >> +50000ns (50us).
+> >
+> > The important bit: we're not going to increase these numbers. If
+> > anything, I would like the default to be 10us and taint the kernel if
+> > you up it.
 > 
-> 
-> On 2025/12/18 21:13, David Hildenbrand (Red Hat) wrote:
->> On 12/13/25 09:00, Lance Yang wrote:
->>> From: Lance Yang <lance.yang@linux.dev>
->>>
->>> Similar to the hugetlb PMD unsharing optimization, skip the second IPI
->>> in collapse_huge_page() when the TLB flush already provides necessary
->>> synchronization.
->>>
->>> Before commit a37259732a7d ("x86/mm: Make MMU_GATHER_RCU_TABLE_FREE
->>> unconditional"), bare metal x86 didn't enable MMU_GATHER_RCU_TABLE_FREE.
->>> In that configuration, tlb_remove_table_sync_one() was a NOP. GUP-fast
->>> synchronization relied on IRQ disabling, which blocks TLB flush IPIs.
->>>
->>> When Rik made MMU_GATHER_RCU_TABLE_FREE unconditional to support AMD's
->>> INVLPGB, all x86 systems started sending the second IPI. However, on
->>> native x86 this is redundant:
->>>
->>>     - pmdp_collapse_flush() calls flush_tlb_range(), sending IPIs to all
->>>       CPUs to invalidate TLB entries
->>>
->>>     - GUP-fast runs with IRQs disabled, so when the flush IPI completes,
->>>       any concurrent GUP-fast must have finished
->>>
->>>     - tlb_remove_table_sync_one() provides no additional synchronization
->>>
->>> On x86, skip the second IPI when running native (without paravirt) and
->>> without INVLPGB. For paravirt with non-native flush_tlb_multi and for
->>> INVLPGB, conservatively keep both IPIs.
->>>
->>> Use tlb_table_flush_implies_ipi_broadcast(), consistent with the hugetlb
->>> optimization.
->>>
->>> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
->>> Signed-off-by: Lance Yang <lance.yang@linux.dev>
->>> ---
->>>    mm/khugepaged.c | 7 ++++++-
->>>    1 file changed, 6 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->>> index 97d1b2824386..06ea793a8190 100644
->>> --- a/mm/khugepaged.c
->>> +++ b/mm/khugepaged.c
->>> @@ -1178,7 +1178,12 @@ static int collapse_huge_page(struct mm_struct
->>> *mm, unsigned long address,
->>>        _pmd = pmdp_collapse_flush(vma, address, pmd);
->>>        spin_unlock(pmd_ptl);
->>>        mmu_notifier_invalidate_range_end(&range);
->>> -    tlb_remove_table_sync_one();
->>> +    /*
->>> +     * Skip the second IPI if the TLB flush above already synchronized
->>> +     * with concurrent GUP-fast via broadcast IPIs.
->>> +     */
->>> +    if (!tlb_table_flush_implies_ipi_broadcast())
->>> +        tlb_remove_table_sync_one();
->>
->> We end up calling
->>
->>       flush_tlb_range(vma, address, address + HPAGE_PMD_SIZE);
->>
->>       -> flush_tlb_mm_range(freed_tables = true)
->>
->>       -> flush_tlb_multi(mm_cpumask(mm), info);
->>
->> So freed_tables=true and we should be doing the right thing.
-> 
-> Yep ;)
-> 
->> BTW, I was wondering whether we should embed that
->> tlb_table_flush_implies_ipi_broadcast() check in
->> tlb_remove_table_sync_one() instead.
->> It then relies on the caller to do the right thing (flush with
->> freed_tables=true or unshared_tables = true).
->>
->> Thoughts?
-> 
-> Good point! Let me check the other callers to ensure they
-> are all preceded by a flush with freed_tables=true (or unshared_tables).
-> 
-> Will get back to you with what I find :)
+> Fine with me.
 
-The use case in tlb_table_flush() is a bit confusing. But I would assume 
-that we have a TLB flush with remove_tables=true beforehand. Otherwise 
-we cannot possibly free the page table.
+Thanks; the thinking is that it will be very hard to shrink this number
+due to unknown workloads in the wild and all that, so starting on the
+small end is the conservative option.
 
--- 
-Cheers
+> > I also think we want some tracing/tool to find the actual length of the
+> > extension used (min/avg/max etc.). That is the time between the kernel
+> > finding the extension bit set and arming the timer and the slice_yield()
+> > syscall.
+> 
+> I could probably integrate that easily into the RSEQ stats mechanism.
 
-David
+I was thinking that perhaps the hrtimer tracepoints, filtered on this
+specific timer, might just do. Arming the timer is the point where the
+extension is granted, cancelling the timer is on the slice_yield() (or
+any other random syscall :/), and the timer actually firing is on fail.
+
+Normally I would suggest using a Poison distribution to find the
+'average', but this case is more complicated because the start of the
+extension is lost.
+
+Let me ask one of these fancy AI things. Ah, it says this is "a classic
+example of Length-Biased Sampling combined with Left-Truncation". It
+then further suggests:
+
+  If you cannot assume a distribution, you should use a Weighting
+  Method.  Since the probability of catching an event of length L is
+  proportional to L, you must weight each observation by 1/L.
+
+      1. For each event, record the observed duration d_i
+
+      2. Calculate the weighted mean:
+
+			    \Sum (d_i * 1/d_i)      n
+	      avg(x)_true = ------------------ = ----------
+				\Sum 1/d_i       \Sum 1/d_i
+
+      This is the Harmonic Mean of your observed durations. The harmonic
+      mean effectively "penalizes" the long events you were more likely to
+      catch.
+
+It also babbled something about an Inspection Paradox:
+
+  If your sampling rate is constant (a Poisson process) and the system is
+  in a "steady state," the most robust and mathematically elegant way to
+  find the true average duration (μ) is surprisingly simple.
+
+  In a steady-state system where you catch an event in progress:
+
+      The time from the start of the event to your arrival is U
+      (unobserved).
+
+      The time from your arrival to the end of the event is V (observed).
+
+  Under these specific conditions, the expected value of the observed
+  remaining duration (V) is exactly equal to the mean of the length-biased
+  distribution. However, because long events are over-sampled, the mean of
+  the durations you catch is actually higher than the true mean of all
+  events. For many common distributions (like the Exponential
+  distribution), the relationship is: μ=E[V]
+
+  Wait, if you ignore the part you missed (U) and only average the parts
+  you saw (V), you often arrive back at the true mean. This is known as
+  the Inspection Paradox.
+
+Now I suppose I should do the real research to see how much of that is a
+hallucination :-)
 
